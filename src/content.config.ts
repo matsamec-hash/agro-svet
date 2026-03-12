@@ -1,7 +1,8 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const novinky = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/novinky' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -16,7 +17,7 @@ const novinky = defineCollection({
 });
 
 const encyklopedie = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie' }),
   schema: z.object({
     name: z.string(),
     slug: z.string(),
@@ -32,7 +33,7 @@ const encyklopedie = defineCollection({
 });
 
 const znacky = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky' }),
   schema: z.object({
     name: z.string(),
     slug: z.string(),
@@ -46,7 +47,7 @@ const znacky = defineCollection({
 });
 
 const puda = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/puda' }),
   schema: z.object({
     title: z.string(),
     popis: z.string(),

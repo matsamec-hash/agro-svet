@@ -1,17 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const znacky = await getCollection('znacky');
   return znacky.map(z => ({
-    params: { slug: z.slug },
+    params: { slug: z.id },
     props: { znacka: z },
   }));
 }
 
 const { znacka } = Astro.props;
-const { Content } = await znacka.render();
+const { Content } = await render(znacka);
 ---
 
 <Layout title={znacka.data.name} description={znacka.data.popis}>

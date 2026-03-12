@@ -1,17 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const novinky = await getCollection('novinky');
   return novinky.map(article => ({
-    params: { slug: article.slug },
+    params: { slug: article.id },
     props: { article },
   }));
 }
 
 const { article } = Astro.props;
-const { Content } = await article.render();
+const { Content } = await render(article);
 
 const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(article.data.publishDate);
 const categoryLabels: Record<string, string> = {

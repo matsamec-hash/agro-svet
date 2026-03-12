@@ -21,7 +21,7 @@ const sorted = znacky.sort((a, b) => a.data.name.localeCompare(b.data.name, 'cs'
 
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px;">
       {sorted.map(znacka => (
-        <a href={`/znacky/${znacka.slug}/`} style="display:block; text-decoration:none; color:inherit; border:1px solid #ebebeb; border-radius:14px; padding:24px; background:#fff; transition:box-shadow .2s, transform .2s;" class="brand-card">
+        <a href={`/znacky/${znacka.id}/`} style="display:block; text-decoration:none; color:inherit; border:1px solid #ebebeb; border-radius:14px; padding:24px; background:#fff; transition:box-shadow .2s, transform .2s;" class="brand-card">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
             <h3 style="font-size:20px; font-weight:800; color:#1a1a1a;">{znacka.data.name}</h3>
             <span style="font-size:12px; color:#aaa; white-space:nowrap;">{znacka.data.zeme}</span>

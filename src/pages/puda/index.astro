@@ -20,7 +20,7 @@ const pudaItems = await getCollection('puda');
 
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;">
       {pudaItems.map(item => (
-        <a href={`/puda/${item.slug}/`} style="display:block; text-decoration:none; color:inherit; border:1px solid #ebebeb; border-radius:14px; padding:28px; background:#fff; transition:box-shadow .2s, transform .2s;" class="puda-card">
+        <a href={`/puda/${item.id}/`} style="display:block; text-decoration:none; color:inherit; border:1px solid #ebebeb; border-radius:14px; padding:28px; background:#fff; transition:box-shadow .2s, transform .2s;" class="puda-card">
           <div style="width:48px; height:48px; background:#FFFF00; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:16px;">🌱</div>
           <h3 style="font-size:18px; font-weight:800; color:#1a1a1a; margin-bottom:8px;">{item.data.title}</h3>
           <p style="font-size:14px; color:#666; line-height:1.55; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{item.data.popis}</p>

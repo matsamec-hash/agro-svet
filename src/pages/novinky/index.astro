@@ -42,7 +42,7 @@ const rest = sorted.filter(a => !a.data.featured);
             <ArticleCard
               title={article.data.title}
               description={article.data.description}
-              slug={article.slug}
+              slug={article.id}
               publishDate={article.data.publishDate}
               category={article.data.category}
               heroImage={article.data.heroImage}
@@ -66,7 +66,7 @@ const rest = sorted.filter(a => !a.data.featured);
             <ArticleCard
               title={article.data.title}
               description={article.data.description}
-              slug={article.slug}
+              slug={article.id}
               publishDate={article.data.publishDate}
               category={article.data.category}
               heroImage={article.data.heroImage}
