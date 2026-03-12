@@ -1,0 +1,93 @@
+backend:
+  name: github
+  repo: matsamec-hash/agro-svet
+  branch: master
+
+media_folder: public/images
+public_folder: /images
+
+locale: cs
+
+collections:
+  - name: novinky
+    label: Novinky
+    folder: src/content/novinky
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Nadpis, name: title, widget: string }
+      - { label: Popis (perex), name: description, widget: text }
+      - { label: Datum publikace, name: publishDate, widget: datetime, format: "YYYY-MM-DD", date_format: "DD. MM. YYYY", time_format: false }
+      - label: Kategorie
+        name: category
+        widget: select
+        options:
+          - { label: Technika, value: technika }
+          - { label: Dotace, value: dotace }
+          - { label: Trh, value: trh }
+          - { label: Legislativa, value: legislativa }
+          - { label: Značky, value: znacky }
+      - { label: Tagy, name: tags, widget: list, default: [] }
+      - { label: Značka (volitelné), name: znacka, widget: string, required: false }
+      - { label: Model (volitelné), name: model, widget: string, required: false }
+      - { label: Úvodní obrázek (URL), name: heroImage, widget: string, required: false }
+      - { label: Doporučený článek, name: featured, widget: boolean, default: false }
+      - { label: Obsah, name: body, widget: markdown }
+
+  - name: encyklopedie
+    label: Encyklopedie strojů
+    folder: src/content/encyklopedie
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Název stroje, name: name, widget: string }
+      - { label: Slug, name: slug, widget: string }
+      - { label: Značka, name: znacka, widget: string }
+      - label: Kategorie
+        name: kategorie
+        widget: select
+        options:
+          - { label: Traktor, value: traktor }
+          - { label: Kombajn, value: kombajn }
+          - { label: Stroj, value: stroj }
+          - { label: Půdní technika, value: puda-technika }
+      - { label: Výkon, name: vykon, widget: string }
+      - { label: Hmotnost, name: hmotnost, widget: string }
+      - { label: Rok uvedení, name: rok_uvedeni, widget: number }
+      - { label: Popis (krátký), name: popis, widget: text }
+      - { label: Úvodní obrázek (URL), name: heroImage, widget: string, required: false }
+      - { label: Klíčové vlastnosti, name: highlights, widget: list, default: [] }
+      - { label: Obsah, name: body, widget: markdown }
+
+  - name: znacky
+    label: Značky
+    folder: src/content/znacky
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Název, name: name, widget: string }
+      - { label: Slug, name: slug, widget: string }
+      - { label: Země původu, name: zeme, widget: string }
+      - { label: Rok založení, name: zalozena, widget: number }
+      - { label: Popis (krátký), name: popis, widget: text }
+      - { label: Web výrobce (URL), name: website, widget: string, required: false }
+      - { label: Kategorie strojů, name: kategorie, widget: list, default: [] }
+      - { label: Obsah, name: body, widget: markdown }
+
+  - name: puda
+    label: Půda
+    folder: src/content/puda
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Nadpis, name: title, widget: string }
+      - { label: Popis (krátký), name: popis, widget: text }
+      - { label: Obsah, name: body, widget: markdown }
