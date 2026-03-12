@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const znacky = await getCollection('znacky');
+  return znacky.map(z => ({
+    params: { slug: z.slug },
+    props: { znacka: z },
+  }));
+}
+
+const { znacka } = Astro.props;
+const { Content } = await znacka.render();
+---
+
+<Layout title={znacka.data.name} description={znacka.data.popis}>
+  <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
+
+    <div style="font-size:13px; color:#888; margin-bottom:28px;">
+      <a href="/znacky/" style="color:#888; text-decoration:none;">Značky</a>
+      <span style="margin:0 8px;">›</span>
+      <span>{znacka.data.name}</span>
+    </div>
+
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:32px;">
+      <div>
+        <h1 style="font-size:clamp(2.4rem,6vw,3.6rem); font-weight:900; letter-spacing:-1.5px; line-height:1; color:#1a1a1a; margin-bottom:12px;">{znacka.data.name}</h1>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span style="background:#FFFF00; color:#000; font-family:'Space Mono',monospace; font-size:11px; font-weight:700; padding:3px 10px; border-radius:4px;">{znacka.data.zeme}</span>
+          <span style="background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:4px;">Zal. {znacka.data.zalozena}</span>
+          {znacka.data.website && (
+            <a href={znacka.data.website} target="_blank" rel="noopener" style="background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:4px; text-decoration:none;">
+              ↗ Web výrobce
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:18px; color:#555; line-height:1.65; margin-bottom:40px; padding-bottom:32px; border-bottom:1px solid #ebebeb;">{znacka.data.popis}</p>
+
+    <div class="prose"><Content /></div>
+
+    <div style="margin-top:48px;">
+      <a href="/znacky/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:600; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
+        ← Zpět na značky
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .prose :global(h2) { font-size:1.5rem; font-weight:800; margin:2em 0 .75em; letter-spacing:-.3px; color:#1a1a1a; }
+  .prose :global(h3) { font-size:1.15rem; font-weight:700; margin:1.5em 0 .5em; color:#1a1a1a; }
+  .prose :global(p) { font-size:17px; line-height:1.75; color:#333; margin-bottom:1.25em; }
+  .prose :global(ul), .prose :global(ol) { padding-left:1.5em; margin-bottom:1.25em; }
+  .prose :global(li) { font-size:16px; line-height:1.7; color:#333; margin-bottom:.4em; }
+  .prose :global(strong) { font-weight:700; color:#1a1a1a; }
+</style>

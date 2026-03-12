@@ -1,0 +1,80 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const allNovinky = await getCollection('novinky');
+const sorted = allNovinky.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+
+const categories = ['technika', 'dotace', 'trh', 'legislativa', 'znacky'] as const;
+const categoryLabels: Record<string, string> = {
+  technika: 'Technika',
+  dotace: 'Dotace',
+  trh: 'Trh',
+  legislativa: 'Legislativa',
+  znacky: 'Značky',
+};
+
+const featured = sorted.filter(a => a.data.featured);
+const rest = sorted.filter(a => !a.data.featured);
+---
+
+<Layout title="Novinky" description="Aktuální zprávy ze světa zemědělské techniky — nové stroje, dotace, trh a legislativa.">
+  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+
+    <!-- Hero headline -->
+    <div style="margin-bottom:48px;">
+      <span style="font-family:'Space Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#888; display:block; margin-bottom:12px;">Novinky</span>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
+        Zemědělství v pohybu
+      </h1>
+      <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">
+        Sledujeme nové stroje, dotační programy, trhy i legislativní změny. Vše, co potřebujete vědět jako zemědělec.
+      </p>
+    </div>
+
+    <!-- Featured articles -->
+    {featured.length > 0 && (
+      <div style="margin-bottom:56px;">
+        <h2 style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Doporučujeme</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px;">
+          {featured.map(article => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              slug={article.slug}
+              publishDate={article.data.publishDate}
+              category={article.data.category}
+              heroImage={article.data.heroImage}
+            />
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Divider -->
+    {featured.length > 0 && rest.length > 0 && (
+      <hr style="border:none; border-top:1px solid #ebebeb; margin-bottom:40px;" />
+    )}
+
+    <!-- All articles -->
+    {rest.length > 0 && (
+      <div>
+        <h2 style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Všechny novinky</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
+          {rest.map(article => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              slug={article.slug}
+              publishDate={article.data.publishDate}
+              category={article.data.category}
+              heroImage={article.data.heroImage}
+            />
+          ))}
+        </div>
+      </div>
+    )}
+
+  </div>
+</Layout>

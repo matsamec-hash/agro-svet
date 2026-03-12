@@ -1,17 +1,119 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import ImageAccordion from '../components/ImageAccordion.astro';
+import { getCollection } from 'astro:content';
 
+const novinky = await getCollection('novinky');
+const latest = novinky
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+
+const stats = [
+  { value: '200+', label: 'Strojů v encyklopedii' },
+  { value: '50+', label: 'Novinky měsíčně' },
+  { value: '15+', label: 'Výrobců pokrytých' },
+  { value: '100%', label: 'Zdarma' },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="agro-svět.cz — zemědělská technika a novinky">
+
+  <!-- Hero -->
+  <section style="background:#1a1a1a; color:#fff; padding:clamp(60px,10vw,110px) 32px;">
+    <div style="max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;">
+      <div>
+        <div style="display:inline-block; background:#FFFF00; color:#000; font-family:'Space Mono',monospace; font-size:12px; font-weight:700; padding:5px 12px; border-radius:4px; margin-bottom:28px; text-transform:uppercase; letter-spacing:.5px;">
+          Zemědělská technika
+        </div>
+        <h1 style="font-size:clamp(2.4rem,5.5vw,4rem); font-weight:900; letter-spacing:-1.5px; line-height:1.05; margin-bottom:24px;">
+          Vše o<br />
+          <span style="color:#FFFF00;">zemědělských</span><br />
+          strojích
+        </h1>
+        <p style="font-size:18px; color:rgba(255,255,255,.65); line-height:1.65; max-width:440px; margin-bottom:36px;">
+          Novinky, encyklopedie strojů, profily výrobců a informace o půdě. Jeden zdroj pro moderního zemědělce.
+        </p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="/novinky/" style="background:#FFFF00; color:#000; font-family:'Space Mono',monospace; font-weight:700; font-size:14px; padding:14px 26px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+            Číst novinky
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/encyklopedie/" style="background:rgba(255,255,255,.08); color:#fff; font-weight:600; font-size:14px; padding:14px 26px; border-radius:8px; text-decoration:none; border:1px solid rgba(255,255,255,.15);">
+            Encyklopedie strojů
+          </a>
+        </div>
+      </div>
+      <!-- Stats grid -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        {stats.map(s => (
+          <div style="background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:28px 24px;">
+            <div style="font-family:'Space Mono',monospace; font-size:2.2rem; font-weight:700; color:#FFFF00; margin-bottom:6px;">{s.value}</div>
+            <div style="font-size:13px; color:rgba(255,255,255,.55);">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Accordion sekce -->
+  <section style="padding:72px 0 0;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 32px;">
+      <span style="font-family:'Space Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#888; display:block; margin-bottom:10px;">Sekce</span>
+      <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem); font-weight:900; letter-spacing:-.5px; color:#1a1a1a; margin-bottom:4px;">Prozkoumejte svět strojů</h2>
+      <p style="font-size:15px; color:#888; margin-bottom:32px;">Najeďte na kartu a otevřete sekci</p>
+    </div>
+    <ImageAccordion />
+  </section>
+
+  <!-- Latest novinky -->
+  <section style="max-width:1280px; margin:0 auto; padding:72px 32px 96px;">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <span style="font-family:'Space Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#888; display:block; margin-bottom:8px;">Novinky</span>
+        <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem); font-weight:900; letter-spacing:-.5px; color:#1a1a1a;">Nejnovější zprávy</h2>
+      </div>
+      <a href="/novinky/" style="font-family:'Space Mono',monospace; font-size:13px; font-weight:700; color:#1a1a1a; text-decoration:none; border-bottom:2px solid #FFFF00; padding-bottom:2px;">
+        Všechny novinky →
+      </a>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
+      {latest.map(article => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          slug={article.slug}
+          publishDate={article.data.publishDate}
+          category={article.data.category}
+          heroImage={article.data.heroImage}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section style="background:#FFFF00; padding:80px 32px;">
+    <div style="max-width:700px; margin:0 auto; text-align:center;">
+      <h2 style="font-size:clamp(2rem,5vw,3rem); font-weight:900; letter-spacing:-1px; color:#1a1a1a; margin-bottom:16px;">
+        Vždy aktuální informace pro zemědělce
+      </h2>
+      <p style="font-size:17px; color:rgba(0,0,0,.65); line-height:1.65; margin-bottom:36px; max-width:480px; margin-left:auto; margin-right:auto;">
+        Encyklopedie strojů, profily výrobců a novinky na jednom místě. Zdarma, bez registrace.
+      </p>
+      <a href="/novinky/" style="display:inline-flex; align-items:center; gap:10px; background:#1a1a1a; color:#fff; font-family:'Space Mono',monospace; font-weight:700; font-size:15px; padding:16px 32px; border-radius:10px; text-decoration:none;">
+        Začít číst
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  @media (max-width: 768px) {
+    section > div[style*="grid-template-columns:1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+      gap: 40px !important;
+    }
+  }
+</style>

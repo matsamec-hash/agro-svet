@@ -1,0 +1,110 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const videos = [
+  {
+    title: "Claas Lexion 8900 — rekordní sklizeň na Jižní Moravě",
+    channel: "Agro TV CZ",
+    thumbnail: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&auto=format&fit=crop&q=80",
+    duration: "18:42",
+    views: "124 tisíc",
+  },
+  {
+    title: "Fendt 1050 Vario — test v reálném provozu",
+    channel: "Traktorový svět",
+    thumbnail: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&auto=format&fit=crop&q=80",
+    duration: "31:07",
+    views: "87 tisíc",
+  },
+  {
+    title: "John Deere 8R — autonomní jízda bez řidiče",
+    channel: "AgriTech News CZ",
+    thumbnail: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&auto=format&fit=crop&q=80",
+    duration: "12:55",
+    views: "203 tisíc",
+  },
+  {
+    title: "Eroze půdy v ČR — dokument",
+    channel: "Zemědělec TV",
+    thumbnail: "https://images.unsplash.com/photo-1591086757064-2b6a0b2c4b18?w=600&auto=format&fit=crop&q=80",
+    duration: "44:18",
+    views: "56 tisíc",
+  },
+];
+
+const podcasts = [
+  {
+    title: "Zemědělec podcast #112 — Budoucnost autonomních traktorů",
+    duration: "58 min",
+    date: "15. 11. 2025",
+  },
+  {
+    title: "Agro Business #89 — Dotace 2025: jak na to?",
+    duration: "42 min",
+    date: "3. 10. 2025",
+  },
+  {
+    title: "Pole a stroje #34 — LNG traktory v praxi",
+    duration: "36 min",
+    date: "22. 9. 2025",
+  },
+];
+---
+
+<Layout title="Média" description="Videa, podcasty a galerie ze světa zemědělské techniky.">
+  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+
+    <div style="margin-bottom:48px;">
+      <span style="font-family:'Space Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#888; display:block; margin-bottom:12px;">Média</span>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
+        Videa a podcasty
+      </h1>
+      <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">
+        Výběr nejlepšího obsahu ze světa zemědělské techniky — testy, reportáže a dokumenty.
+      </p>
+    </div>
+
+    <!-- Videos -->
+    <h2 style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Doporučená videa</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; margin-bottom:56px;">
+      {videos.map(v => (
+        <div style="border-radius:14px; overflow:hidden; border:1px solid #ebebeb; background:#fff;">
+          <div style="position:relative; height:170px; overflow:hidden; background:#111;">
+            <img src={v.thumbnail} alt={v.title} loading="lazy" style="width:100%; height:100%; object-fit:cover;" />
+            <div style="position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,.75); color:#fff; font-family:'Space Mono',monospace; font-size:12px; font-weight:700; padding:2px 8px; border-radius:4px;">{v.duration}</div>
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+              <div style="width:48px; height:48px; background:rgba(255,255,0,.9); border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+            </div>
+          </div>
+          <div style="padding:16px;">
+            <h3 style="font-size:15px; font-weight:700; color:#1a1a1a; margin-bottom:6px; line-height:1.4;">{v.title}</h3>
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa;">
+              <span>{v.channel}</span>
+              <span>{v.views} zhlédnutí</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Podcasts -->
+    <h2 style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Podcasty</h2>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      {podcasts.map(p => (
+        <div style="display:flex; align-items:center; justify-content:space-between; border:1px solid #ebebeb; border-radius:12px; padding:18px 22px; background:#fff; gap:16px;">
+          <div style="display:flex; align-items:center; gap:16px; flex:1; min-width:0;">
+            <div style="width:44px; height:44px; background:#FFFF00; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:20px;">🎙️</div>
+            <div style="min-width:0;">
+              <div style="font-size:15px; font-weight:700; color:#1a1a1a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{p.title}</div>
+              <div style="font-size:12px; color:#aaa; margin-top:2px;">{p.date}</div>
+            </div>
+          </div>
+          <span style="font-family:'Space Mono',monospace; font-size:12px; font-weight:700; color:#555; white-space:nowrap;">{p.duration}</span>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</Layout>

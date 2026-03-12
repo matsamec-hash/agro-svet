@@ -1,0 +1,94 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const novinky = await getCollection('novinky');
+  return novinky.map(article => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await article.render();
+
+const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(article.data.publishDate);
+const categoryLabels: Record<string, string> = {
+  technika: 'Technika', dotace: 'Dotace', trh: 'Trh', legislativa: 'Legislativa', znacky: 'Značky',
+};
+---
+
+<Layout title={article.data.title} description={article.data.description}>
+
+  <!-- Hero image -->
+  {article.data.heroImage && (
+    <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
+      <img src={article.data.heroImage} alt={article.data.title} style="width:100%; height:100%; object-fit:cover;" />
+      <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.35));"></div>
+    </div>
+  )}
+
+  <div style="max-width:780px; margin:0 auto; padding:48px 32px 96px;">
+
+    <!-- Breadcrumb -->
+    <div style="font-size:13px; color:#888; margin-bottom:28px;">
+      <a href="/novinky/" style="color:#888; text-decoration:none;">Novinky</a>
+      <span style="margin:0 8px;">›</span>
+      <span>{article.data.title}</span>
+    </div>
+
+    <!-- Meta -->
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+      <span style="background:#FFFF00; color:#000; font-family:'Space Mono',monospace; font-weight:700; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:.5px;">
+        {categoryLabels[article.data.category] ?? article.data.category}
+      </span>
+      <time style="font-size:13px; color:#888;">{date}</time>
+    </div>
+
+    <!-- Headline -->
+    <h1 style="font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.5px; line-height:1.15; color:#1a1a1a; margin-bottom:16px;">
+      {article.data.title}
+    </h1>
+    <p style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;">
+      {article.data.description}
+    </p>
+
+    <!-- Article body -->
+    <div class="prose">
+      <Content />
+    </div>
+
+    <!-- Tags -->
+    {article.data.tags?.length > 0 && (
+      <div style="margin-top:48px; padding-top:24px; border-top:1px solid #ebebeb;">
+        <span style="font-size:12px; color:#aaa; margin-right:8px;">Tagy:</span>
+        {article.data.tags.map(tag => (
+          <span style="display:inline-block; background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:20px; margin:2px 4px;">{tag}</span>
+        ))}
+      </div>
+    )}
+
+    <!-- Back link -->
+    <div style="margin-top:48px;">
+      <a href="/novinky/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:600; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px; transition:background .15s;">
+        ← Zpět na novinky
+      </a>
+    </div>
+
+  </div>
+</Layout>
+
+<style>
+  .prose :global(h2) { font-size:1.5rem; font-weight:800; margin:2em 0 .75em; letter-spacing:-.3px; color:#1a1a1a; }
+  .prose :global(h3) { font-size:1.15rem; font-weight:700; margin:1.5em 0 .5em; color:#1a1a1a; }
+  .prose :global(p) { font-size:17px; line-height:1.75; color:#333; margin-bottom:1.25em; }
+  .prose :global(ul), .prose :global(ol) { padding-left:1.5em; margin-bottom:1.25em; }
+  .prose :global(li) { font-size:16px; line-height:1.7; color:#333; margin-bottom:.4em; }
+  .prose :global(strong) { font-weight:700; color:#1a1a1a; }
+  .prose :global(table) { width:100%; border-collapse:collapse; margin-bottom:1.5em; font-size:15px; }
+  .prose :global(th) { background:#f5f5f5; font-weight:700; padding:10px 14px; border:1px solid #e0e0e0; text-align:left; }
+  .prose :global(td) { padding:9px 14px; border:1px solid #ebebeb; }
+  .prose :global(blockquote) { border-left:4px solid #FFFF00; padding:8px 20px; margin:1.5em 0; background:#fafafa; }
+  .prose :global(code) { background:#f0f0f0; padding:2px 6px; border-radius:4px; font-size:.9em; font-family:'Space Mono',monospace; }
+</style>
