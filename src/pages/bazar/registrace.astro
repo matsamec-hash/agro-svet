@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { createAnonClient, createServerClient } from '../../lib/supabase';
+
+let error = '';
+let success = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const email = form.get('email')?.toString().trim() ?? '';
+  const password = form.get('password')?.toString() ?? '';
+  const name = form.get('name')?.toString().trim() ?? '';
+  const phone = form.get('phone')?.toString().trim() ?? '';
+  const location = form.get('location')?.toString().trim() ?? '';
+
+  if (!email || !password || !name || !phone) {
+    error = 'Vyplňte všechna povinná pole.';
+  } else if (password.length < 6) {
+    error = 'Heslo musí mít alespoň 6 znaků.';
+  } else {
+    const supabase = createAnonClient();
+    const { data, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { name, phone, location } },
+    });
+
+    if (authError) {
+      error = authError.message;
+    } else if (data.user) {
+      // Create profile
+      const server = createServerClient();
+      await server.from('bazar_users').insert({
+        id: data.user.id,
+        name,
+        phone,
+        email,
+        location,
+      });
+      success = 'Registrace úspěšná! Zkontrolujte email pro potvrzení účtu.';
+    }
+  }
+}
+---
+
+<Layout title="Registrace — Agro bazar">
+  <div style="max-width:500px; margin:0 auto; padding:64px 24px 96px;">
+    <span class="section-label">Agro bazar</span>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:32px;">Registrace</h1>
+
+    {error && <div class="form-error">{error}</div>}
+    {success && <div class="form-success">{success}</div>}
+
+    {!success && (
+      <form method="POST">
+        <div class="form-group">
+          <label for="name">Jméno / firma *</label>
+          <input type="text" id="name" name="name" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Heslo *</label>
+          <input type="password" id="password" name="password" class="form-input" minlength="6" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefon *</label>
+          <input type="tel" id="phone" name="phone" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label for="location">Město / okres</label>
+          <input type="text" id="location" name="location" class="form-input" />
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+          Zaregistrovat se
+        </button>
+      </form>
+    )}
+
+    <p style="text-align:center; margin-top:24px; font-size:14px; color:#666;">
+      Už máte účet? <a href="/bazar/prihlaseni/" class="link-underline">Přihlásit se</a>
+    </p>
+  </div>
+</Layout>

@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { createServerClient } from '../../lib/supabase';
+
+const user = Astro.locals.user!;
+const supabase = createServerClient();
+
+let error = '';
+let success = '';
+
+// Fetch profile
+const { data: profile } = await supabase
+  .from('bazar_users')
+  .select('*')
+  .eq('id', user.id)
+  .single();
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const name = form.get('name')?.toString().trim() ?? '';
+  const phone = form.get('phone')?.toString().trim() ?? '';
+  const email = form.get('email')?.toString().trim() ?? '';
+  const location = form.get('location')?.toString().trim() ?? '';
+
+  if (!name || !phone) {
+    error = 'Jméno a telefon jsou povinné.';
+  } else {
+    const { error: updateErr } = await supabase
+      .from('bazar_users')
+      .update({ name, phone, email, location })
+      .eq('id', user.id);
+
+    if (updateErr) {
+      error = 'Chyba při ukládání.';
+    } else {
+      success = 'Profil uložen.';
+    }
+  }
+}
+
+const p = profile ?? { name: '', phone: '', email: '', location: '' };
+---
+
+<Layout title="Profil — Agro bazar">
+  <div style="max-width:500px; margin:0 auto; padding:64px 24px 96px;">
+    <span class="section-label">Agro bazar</span>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:32px;">Můj profil</h1>
+
+    {error && <div class="form-error">{error}</div>}
+    {success && <div class="form-success">{success}</div>}
+
+    <form method="POST">
+      <div class="form-group">
+        <label for="name">Jméno / firma *</label>
+        <input type="text" id="name" name="name" class="form-input" value={p.name} required />
+      </div>
+      <div class="form-group">
+        <label for="phone">Telefon *</label>
+        <input type="tel" id="phone" name="phone" class="form-input" value={p.phone} required />
+      </div>
+      <div class="form-group">
+        <label for="email">Kontaktní email</label>
+        <input type="email" id="email" name="email" class="form-input" value={p.email} />
+      </div>
+      <div class="form-group">
+        <label for="location">Město / okres</label>
+        <input type="text" id="location" name="location" class="form-input" value={p.location} />
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+        Uložit profil
+      </button>
+    </form>
+
+    <a href="/bazar/moje/" style="display:block; text-align:center; margin-top:16px; font-size:14px; color:#888; text-decoration:none;">&larr; Zpět na moje inzeráty</a>
+  </div>
+</Layout>

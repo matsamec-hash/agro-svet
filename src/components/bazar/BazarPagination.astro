@@ -1,0 +1,77 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+function pageUrl(page: number): string {
+  const url = new URL(baseUrl);
+  if (page > 1) url.searchParams.set('page', String(page));
+  else url.searchParams.delete('page');
+  return url.pathname + url.search;
+}
+
+const pages: number[] = [];
+for (let i = 1; i <= totalPages; i++) {
+  if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+    pages.push(i);
+  }
+}
+---
+
+{totalPages > 1 && (
+  <nav class="pagination">
+    {currentPage > 1 && <a href={pageUrl(currentPage - 1)} class="page-link">&larr; Předchozí</a>}
+    {pages.map((page, idx) => (
+      <>
+        {idx > 0 && pages[idx - 1] !== page - 1 && <span class="page-dots">...</span>}
+        {page === currentPage
+          ? <span class="page-link active">{page}</span>
+          : <a href={pageUrl(page)} class="page-link">{page}</a>
+        }
+      </>
+    ))}
+    {currentPage < totalPages && <a href={pageUrl(currentPage + 1)} class="page-link">Další &rarr;</a>}
+  </nav>
+)}
+
+<style>
+  .pagination {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 0;
+  }
+
+  .page-link {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #555;
+    border: 1px solid #e0e0e0;
+    transition: background .15s;
+  }
+
+  .page-link:hover {
+    background: #f5f5f5;
+  }
+
+  .page-link.active {
+    background: var(--yellow);
+    color: #000;
+    font-weight: 600;
+    border-color: var(--yellow);
+  }
+
+  .page-dots {
+    font-size: 14px;
+    color: #aaa;
+    padding: 0 4px;
+  }
+</style>

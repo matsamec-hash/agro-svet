@@ -1,0 +1,56 @@
+---
+import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
+
+interface Props {
+  query?: string;
+  category?: string;
+  brand?: string;
+  location?: string;
+  priceFrom?: string;
+  priceTo?: string;
+}
+
+const { query = '', category = '', brand = '', location = '', priceFrom = '', priceTo = '' } = Astro.props;
+---
+
+<form method="GET" action="/bazar/" class="bazar-filters">
+  <input type="text" name="q" value={query} placeholder="Hledat inzerát..." class="form-input" />
+  <select name="category" class="form-select">
+    <option value="">Všechny kategorie</option>
+    {CATEGORIES.map(c => (
+      <option value={c.value} selected={c.value === category}>{c.label}</option>
+    ))}
+  </select>
+  <select name="brand" class="form-select">
+    <option value="">Všechny značky</option>
+    {BRANDS.map(b => (
+      <option value={b.value} selected={b.value === brand}>{b.label}</option>
+    ))}
+  </select>
+  <input type="text" name="location" value={location} placeholder="Lokalita" class="form-input" />
+  <input type="number" name="price_from" value={priceFrom} placeholder="Cena od" class="form-input" />
+  <input type="number" name="price_to" value={priceTo} placeholder="Cena do" class="form-input" />
+  <button type="submit" class="btn-primary">Hledat</button>
+</form>
+
+<style>
+  .bazar-filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    .bazar-filters {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .bazar-filters {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

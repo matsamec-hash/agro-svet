@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { getCollection } from 'astro:content';
@@ -24,8 +25,8 @@ const rest = sorted.filter(a => !a.data.featured);
 
     <!-- Hero headline -->
     <div style="margin-bottom:48px;">
-      <span style="font-family:'Space Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#888; display:block; margin-bottom:12px;">Novinky</span>
-      <h1 style="font-size:clamp(2rem,5vw,3.2rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
+      <span class="section-label">Novinky</span>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem); margin-bottom:16px;">
         Zemědělství v pohybu
       </h1>
       <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">
@@ -36,7 +37,7 @@ const rest = sorted.filter(a => !a.data.featured);
     <!-- Featured articles -->
     {featured.length > 0 && (
       <div style="margin-bottom:56px;">
-        <h2 style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Doporučujeme</h2>
+        <h2 style="font-size:13px; font-weight:400; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Doporučujeme</h2>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px;">
           {featured.map(article => (
             <ArticleCard
@@ -60,7 +61,7 @@ const rest = sorted.filter(a => !a.data.featured);
     <!-- All articles -->
     {rest.length > 0 && (
       <div>
-        <h2 style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Všechny novinky</h2>
+        <h2 style="font-size:13px; font-weight:400; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Všechny novinky</h2>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
           {rest.map(article => (
             <ArticleCard

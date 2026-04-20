@@ -1,0 +1,129 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BazarGallery from '../../components/bazar/BazarGallery.astro';
+import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
+import { createServerClient } from '../../lib/supabase';
+
+const { id } = Astro.params;
+const supabase = createServerClient();
+
+// Fetch listing with images and user
+const { data: listing } = await supabase
+  .from('bazar_listings')
+  .select('*, bazar_images(storage_path, position), bazar_users(name)')
+  .eq('id', id)
+  .single();
+
+if (!listing) {
+  return Astro.redirect('/bazar/');
+}
+
+// Increment views
+await supabase
+  .from('bazar_listings')
+  .update({ views: (listing.views ?? 0) + 1 })
+  .eq('id', id);
+
+// Resolve image URLs
+const images = (listing.bazar_images ?? []).map((img: any) => {
+  const { data } = supabase.storage.from('bazar-images').getPublicUrl(img.storage_path);
+  return { url: data.publicUrl, position: img.position };
+});
+
+const categoryLabel = CATEGORIES.find(c => c.value === listing.category)?.label ?? listing.category;
+const brandLabel = BRANDS.find(b => b.value === listing.brand)?.label ?? listing.brand;
+const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(listing.created_at));
+const priceText = listing.price ? `${listing.price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
+const sellerName = listing.bazar_users?.name ?? 'Neznámý';
+---
+
+<Layout title={`${listing.title} — Agro bazar`}>
+  <div style="max-width:1000px; margin:0 auto; padding:32px 24px 80px;">
+
+    <!-- Breadcrumb -->
+    <nav style="font-size:13px; color:#888; margin-bottom:20px;">
+      <a href="/bazar/" style="color:#888; text-decoration:none;">Bazar</a>
+      <span> &rarr; </span>
+      <a href={`/bazar/?category=${listing.category}`} style="color:#888; text-decoration:none;">{categoryLabel}</a>
+      <span> &rarr; </span>
+      <span style="color:#555;">{listing.title}</span>
+    </nav>
+
+    <!-- Gallery -->
+    <BazarGallery images={images} />
+
+    <!-- Content -->
+    <div class="detail-grid">
+      <div class="detail-main">
+        <h1 style="font-size:clamp(1.5rem,3vw,2rem); margin-bottom:12px;">{listing.title}</h1>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;">
+          <span class="tag">{categoryLabel}</span>
+          {brandLabel && <span class="tag">{brandLabel}</span>}
+        </div>
+
+        <div class="prose" set:html={listing.description.replace(/\n/g, '<br>')} />
+      </div>
+
+      <aside class="detail-sidebar">
+        <!-- Price -->
+        <div class="sidebar-box">
+          <div class="detail-price">{priceText}</div>
+        </div>
+
+        <!-- Contact -->
+        <div class="sidebar-box">
+          <h3 style="font-size:14px; margin-bottom:12px;">Kontakt</h3>
+          <p style="font-size:15px; margin-bottom:6px;"><strong>{sellerName}</strong></p>
+          {listing.phone && (
+            <p style="font-size:15px; margin-bottom:6px;">
+              <a href={`tel:${listing.phone}`} style="color:#1a1a1a; text-decoration:none;">Tel: {listing.phone}</a>
+            </p>
+          )}
+          {listing.email && (
+            <p style="font-size:15px;">
+              <a href={`mailto:${listing.email}`} style="color:#1a1a1a; text-decoration:none;">Email: {listing.email}</a>
+            </p>
+          )}
+        </div>
+
+        <!-- Info -->
+        <div class="sidebar-box" style="font-size:13px; color:#888;">
+          <p>Lokalita: {listing.location}</p>
+          <p>Datum: {date}</p>
+          <p>{listing.views ?? 0}x zobrazeno</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .sidebar-box {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+
+  .detail-price {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  @media (max-width: 768px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

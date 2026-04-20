@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ImageUpload from '../../components/bazar/ImageUpload.astro';
+import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
+import { createServerClient } from '../../lib/supabase';
+
+const user = Astro.locals.user!;
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const title = form.get('title')?.toString().trim() ?? '';
+  const description = form.get('description')?.toString().trim() ?? '';
+  const priceStr = form.get('price')?.toString().trim() ?? '';
+  const category = form.get('category')?.toString() ?? '';
+  const brand = form.get('brand')?.toString() || null;
+  const location = form.get('location')?.toString().trim() ?? '';
+  const phone = form.get('phone')?.toString().trim() ?? '';
+  const email = form.get('email')?.toString().trim() ?? '';
+  const imagePaths = JSON.parse(form.get('image_paths')?.toString() || '[]');
+
+  if (!title || !category || !phone) {
+    error = 'Vyplňte název, kategorii a telefon.';
+  } else {
+    const supabase = createServerClient();
+    const price = priceStr ? parseInt(priceStr) : null;
+
+    const { data: listing, error: insertErr } = await supabase
+      .from('bazar_listings')
+      .insert({
+        user_id: user.id,
+        title,
+        description,
+        price,
+        category,
+        brand,
+        location,
+        phone,
+        email,
+        status: 'active',
+      })
+      .select('id')
+      .single();
+
+    if (insertErr) {
+      error = 'Chyba při vkládání inzerátu.';
+    } else if (listing) {
+      // Save images
+      if (imagePaths.length > 0) {
+        const imageRows = imagePaths.map((path: string, idx: number) => ({
+          listing_id: listing.id,
+          storage_path: path,
+          position: idx + 1,
+        }));
+        await supabase.from('bazar_images').insert(imageRows);
+      }
+      return Astro.redirect(`/bazar/${listing.id}/`);
+    }
+  }
+}
+
+// Pre-fill contact from profile
+const supabase = createServerClient();
+const { data: profile } = await supabase
+  .from('bazar_users')
+  .select('phone, email, location')
+  .eq('id', user.id)
+  .single();
+---
+
+<Layout title="Nový inzerát — Agro bazar">
+  <meta slot="head" name="supabase-url" content={import.meta.env.PUBLIC_SUPABASE_URL} />
+  <meta slot="head" name="supabase-key" content={import.meta.env.PUBLIC_SUPABASE_ANON_KEY} />
+
+  <div style="max-width:600px; margin:0 auto; padding:64px 24px 96px;">
+    <span class="section-label">Agro bazar</span>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:32px;">Nový inzerát</h1>
+
+    {error && <div class="form-error">{error}</div>}
+
+    <form method="POST">
+      <div class="form-group">
+        <label for="title">Název inzerátu *</label>
+        <input type="text" id="title" name="title" class="form-input" required maxlength="120" />
+      </div>
+
+      <div class="form-group">
+        <label for="category">Kategorie *</label>
+        <select id="category" name="category" class="form-select" required>
+          <option value="">Vyberte kategorii</option>
+          {CATEGORIES.map(c => <option value={c.value}>{c.label}</option>)}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="brand">Značka</label>
+        <select id="brand" name="brand" class="form-select">
+          <option value="">Bez značky</option>
+          {BRANDS.map(b => <option value={b.value}>{b.label}</option>)}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Cena (Kč) — prázdné = dohodou</label>
+        <input type="number" id="price" name="price" class="form-input" min="0" />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Popis</label>
+        <textarea id="description" name="description" class="form-input" rows="6" style="resize:vertical;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Fotky (max 5)</label>
+        <ImageUpload />
+      </div>
+
+      <div class="form-group">
+        <label for="location">Lokalita *</label>
+        <input type="text" id="location" name="location" class="form-input" value={profile?.location ?? ''} required />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Telefon *</label>
+        <input type="tel" id="phone" name="phone" class="form-input" value={profile?.phone ?? ''} required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" class="form-input" value={profile?.email ?? ''} />
+      </div>
+
+      <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+        Vložit inzerát
+      </button>
+    </form>
+  </div>
+</Layout>

@@ -1,0 +1,114 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { CATEGORIES, BRANDS } from '../../../lib/bazar-constants';
+import { createServerClient } from '../../../lib/supabase';
+
+const user = Astro.locals.user!;
+const { id } = Astro.params;
+const supabase = createServerClient();
+
+// Fetch listing (only if owner)
+const { data: listing } = await supabase
+  .from('bazar_listings')
+  .select('*')
+  .eq('id', id)
+  .eq('user_id', user.id)
+  .single();
+
+if (!listing) {
+  return Astro.redirect('/bazar/moje/');
+}
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const title = form.get('title')?.toString().trim() ?? '';
+  const description = form.get('description')?.toString().trim() ?? '';
+  const priceStr = form.get('price')?.toString().trim() ?? '';
+  const category = form.get('category')?.toString() ?? '';
+  const brand = form.get('brand')?.toString() || null;
+  const location = form.get('location')?.toString().trim() ?? '';
+  const phone = form.get('phone')?.toString().trim() ?? '';
+  const email = form.get('email')?.toString().trim() ?? '';
+
+  if (!title || !category || !phone) {
+    error = 'Vyplňte název, kategorii a telefon.';
+  } else {
+    const price = priceStr ? parseInt(priceStr) : null;
+    const { error: updateErr } = await supabase
+      .from('bazar_listings')
+      .update({ title, description, price, category, brand, location, phone, email, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .eq('user_id', user.id);
+
+    if (updateErr) {
+      error = 'Chyba při ukládání.';
+    } else {
+      return Astro.redirect('/bazar/moje/');
+    }
+  }
+}
+---
+
+<Layout title="Upravit inzerát — Agro bazar">
+  <div style="max-width:600px; margin:0 auto; padding:64px 24px 96px;">
+    <span class="section-label">Agro bazar</span>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:32px;">Upravit inzerát</h1>
+
+    {error && <div class="form-error">{error}</div>}
+
+    <form method="POST">
+      <div class="form-group">
+        <label for="title">Název inzerátu *</label>
+        <input type="text" id="title" name="title" class="form-input" value={listing.title} required maxlength="120" />
+      </div>
+
+      <div class="form-group">
+        <label for="category">Kategorie *</label>
+        <select id="category" name="category" class="form-select" required>
+          {CATEGORIES.map(c => <option value={c.value} selected={c.value === listing.category}>{c.label}</option>)}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="brand">Značka</label>
+        <select id="brand" name="brand" class="form-select">
+          <option value="">Bez značky</option>
+          {BRANDS.map(b => <option value={b.value} selected={b.value === listing.brand}>{b.label}</option>)}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Cena (Kč) — prázdné = dohodou</label>
+        <input type="number" id="price" name="price" class="form-input" min="0" value={listing.price ?? ''} />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Popis</label>
+        <textarea id="description" name="description" class="form-input" rows="6" style="resize:vertical;">{listing.description}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="location">Lokalita *</label>
+        <input type="text" id="location" name="location" class="form-input" value={listing.location} required />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Telefon *</label>
+        <input type="tel" id="phone" name="phone" class="form-input" value={listing.phone} required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" class="form-input" value={listing.email} />
+      </div>
+
+      <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+        Uložit změny
+      </button>
+    </form>
+
+    <a href="/bazar/moje/" style="display:block; text-align:center; margin-top:16px; font-size:14px; color:#888; text-decoration:none;">&larr; Zpět na moje inzeráty</a>
+  </div>
+</Layout>
