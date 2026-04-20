@@ -1,31 +1,36 @@
 ---
-export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, render } from 'astro:content';
+import { createAnonClient } from '../../lib/supabase';
 
-export async function getStaticPaths() {
-  const novinky = await getCollection('novinky');
-  return novinky.map(article => ({
-    params: { slug: article.id },
-    props: { article },
-  }));
+const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
+const { slug } = Astro.params;
+const supabase = createAnonClient();
+
+const { data: article } = await supabase
+  .from('articles')
+  .select('*')
+  .eq('site_id', SITE_ID)
+  .eq('slug', slug)
+  .eq('status', 'published')
+  .single();
+
+if (!article) {
+  return Astro.redirect('/novinky/');
 }
 
-const { article } = Astro.props;
-const { Content } = await render(article);
-
-const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(article.data.publishDate);
+const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.published_at));
 const categoryLabels: Record<string, string> = {
   technika: 'Technika', dotace: 'Dotace', trh: 'Trh', legislativa: 'Legislativa', znacky: 'Značky',
+  psychologie: 'Psychologie', zdravi: 'Zdraví', finance: 'Finance', krasa: 'Krása',
 };
 ---
 
-<Layout title={article.data.title} description={article.data.description}>
+<Layout title={article.seo_title || article.title} description={article.seo_description || article.perex}>
 
   <!-- Hero image -->
-  {article.data.heroImage && (
+  {article.featured_image_url && (
     <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
-      <img src={article.data.heroImage} alt={article.data.title} style="width:100%; height:100%; object-fit:cover;" />
+      <img src={article.featured_image_url} alt={article.title} style="width:100%; height:100%; object-fit:cover;" />
       <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.35));"></div>
     </div>
   )}
@@ -36,35 +41,35 @@ const categoryLabels: Record<string, string> = {
     <div style="font-size:13px; color:#888; margin-bottom:28px;">
       <a href="/novinky/" style="color:#888; text-decoration:none;">Novinky</a>
       <span style="margin:0 8px;">›</span>
-      <span>{article.data.title}</span>
+      <span>{article.title}</span>
     </div>
 
     <!-- Meta -->
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
-      <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:.5px;">
-        {categoryLabels[article.data.category] ?? article.data.category}
-      </span>
+      {article.category && (
+        <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:.5px;">
+          {categoryLabels[article.category] ?? article.category}
+        </span>
+      )}
       <time style="font-size:13px; color:#888;">{date}</time>
     </div>
 
     <!-- Headline -->
     <h1 style="font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.5px; line-height:1.15; color:#1a1a1a; margin-bottom:16px;">
-      {article.data.title}
+      {article.title}
     </h1>
     <p style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;">
-      {article.data.description}
+      {article.perex}
     </p>
 
-    <!-- Article body -->
-    <div class="prose">
-      <Content />
-    </div>
+    <!-- Article body (HTML from CMS) -->
+    <div class="prose" set:html={article.content} />
 
     <!-- Tags -->
-    {article.data.tags?.length > 0 && (
+    {article.tags?.length > 0 && (
       <div style="margin-top:48px; padding-top:24px; border-top:1px solid #ebebeb;">
         <span style="font-size:12px; color:#aaa; margin-right:8px;">Tagy:</span>
-        {article.data.tags.map(tag => (
+        {article.tags.map((tag: string) => (
           <span style="display:inline-block; background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:20px; margin:2px 4px;">{tag}</span>
         ))}
       </div>
@@ -92,4 +97,5 @@ const categoryLabels: Record<string, string> = {
   .prose :global(td) { padding:9px 14px; border:1px solid #ebebeb; }
   .prose :global(blockquote) { border-left:4px solid #FFFF00; padding:8px 20px; margin:1.5em 0; background:#fafafa; }
   .prose :global(code) { background:#f0f0f0; padding:2px 6px; border-radius:4px; font-size:.9em; font-family:'Chakra Petch',sans-serif; }
+  .prose :global(img) { max-width:100%; height:auto; border-radius:12px; margin:1.5em 0; }
 </style>

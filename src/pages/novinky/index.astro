@@ -1,23 +1,19 @@
 ---
-export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
-import { getCollection } from 'astro:content';
+import { createAnonClient } from '../../lib/supabase';
 
-const allNovinky = await getCollection('novinky');
-const sorted = allNovinky.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
+const supabase = createAnonClient();
 
-const categories = ['technika', 'dotace', 'trh', 'legislativa', 'znacky'] as const;
-const categoryLabels: Record<string, string> = {
-  technika: 'Technika',
-  dotace: 'Dotace',
-  trh: 'Trh',
-  legislativa: 'Legislativa',
-  znacky: 'Značky',
-};
+const { data: articles } = await supabase
+  .from('articles')
+  .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+  .eq('site_id', SITE_ID)
+  .eq('status', 'published')
+  .order('published_at', { ascending: false });
 
-const featured = sorted.filter(a => a.data.featured);
-const rest = sorted.filter(a => !a.data.featured);
+const sorted = articles ?? [];
 ---
 
 <Layout title="Novinky" description="Aktuální zprávy ze světa zemědělské techniky — nové stroje, dotace, trh a legislativa.">
@@ -34,47 +30,22 @@ const rest = sorted.filter(a => !a.data.featured);
       </p>
     </div>
 
-    <!-- Featured articles -->
-    {featured.length > 0 && (
-      <div style="margin-bottom:56px;">
-        <h2 style="font-size:13px; font-weight:400; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Doporučujeme</h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px;">
-          {featured.map(article => (
-            <ArticleCard
-              title={article.data.title}
-              description={article.data.description}
-              slug={article.id}
-              publishDate={article.data.publishDate}
-              category={article.data.category}
-              heroImage={article.data.heroImage}
-            />
-          ))}
-        </div>
-      </div>
-    )}
-
-    <!-- Divider -->
-    {featured.length > 0 && rest.length > 0 && (
-      <hr style="border:none; border-top:1px solid #ebebeb; margin-bottom:40px;" />
-    )}
-
     <!-- All articles -->
-    {rest.length > 0 && (
-      <div>
-        <h2 style="font-size:13px; font-weight:400; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:20px;">Všechny novinky</h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
-          {rest.map(article => (
-            <ArticleCard
-              title={article.data.title}
-              description={article.data.description}
-              slug={article.id}
-              publishDate={article.data.publishDate}
-              category={article.data.category}
-              heroImage={article.data.heroImage}
-            />
-          ))}
-        </div>
+    {sorted.length > 0 ? (
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
+        {sorted.map(article => (
+          <ArticleCard
+            title={article.title}
+            description={article.perex}
+            slug={article.slug}
+            publishDate={new Date(article.published_at)}
+            category={article.category}
+            heroImage={article.featured_image_url}
+          />
+        ))}
       </div>
+    ) : (
+      <p style="color:#888; font-size:16px;">Zatím žádné novinky. Brzy zde najdete aktuální články.</p>
     )}
 
   </div>
