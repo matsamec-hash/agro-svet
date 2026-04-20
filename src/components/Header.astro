@@ -1,10 +1,11 @@
 ---
 const nav = [
-  { label: 'Novinky', href: '/novinky/' },
-  { label: 'Encyklopedie', href: '/encyklopedie/' },
-  { label: 'Značky', href: '/znacky/' },
-  { label: 'Půda', href: '/puda/' },
-  { label: 'Média', href: '/media/' },
+  { label: 'Traktory', href: '/encyklopedie/?kategorie=traktor' },
+  { label: 'Sklízecí mlátičky', href: '/encyklopedie/?kategorie=kombajn' },
+  { label: 'Zpracování půdy', href: '/encyklopedie/?kategorie=stroj' },
+  { label: 'Zemědělská půda', href: '/puda/' },
+  { label: 'Statistiky', href: '/statistiky/' },
+  { label: 'Agro bazar', href: '/bazar/' },
 ];
 const current = Astro.url.pathname;
 ---
@@ -12,15 +13,15 @@ const current = Astro.url.pathname;
 <header style="background:#fff; border-bottom:1px solid #e8e8e8; position:sticky; top:0; z-index:100;">
   <div style="max-width:1280px; margin:0 auto; padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:68px;">
 
-    <a href="/" style="display:inline-block; background:#FFFF00; padding:8px 14px; border-radius:4px; text-decoration:none;">
-      <span style="font-family:'Space Mono',monospace; font-weight:700; font-size:16px; color:#000; white-space:nowrap;">agro-svět.cz</span>
+    <a href="/" style="display:inline-block; background:#FFFF00; padding:10px 18px; border-radius:4px; text-decoration:none;">
+      <span style="font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:22px; color:#000; white-space:nowrap;">agro-svět.cz</span>
     </a>
 
-    <nav style="display:flex; align-items:center; gap:2px;" id="main-nav">
+    <nav class="nav-desktop" id="main-nav">
       {nav.map(item => (
         <a
           href={item.href}
-          style={`text-decoration:none; font-size:14px; font-weight:500; padding:8px 14px; border-radius:6px; white-space:nowrap; color:${current.startsWith(item.href) ? '#000' : '#555'}; background:${current.startsWith(item.href) ? '#f5f5f5' : 'transparent'};`}
+          class:list={['nav-link', { active: current.startsWith(item.href) }]}
         >
           {item.label}
         </a>
@@ -43,7 +44,7 @@ const current = Astro.url.pathname;
     {nav.map(item => (
       <a
         href={item.href}
-        style={`display:block; padding:12px 0; font-size:16px; font-weight:600; text-decoration:none; border-bottom:1px solid #f0f0f0; color:${current.startsWith(item.href) ? '#000' : '#444'};`}
+        style={`display:block; padding:12px 0; font-size:16px; font-weight:400; text-decoration:none; border-bottom:1px solid #f0f0f0; color:${current.startsWith(item.href) ? '#000' : '#444'};`}
       >
         {item.label}
       </a>
@@ -52,11 +53,68 @@ const current = Astro.url.pathname;
 </header>
 
 <style>
-  @media (max-width: 768px) {
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nav-link {
+    position: relative;
+    text-decoration: none;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 8px 14px;
+    white-space: nowrap;
+    color: #555;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .nav-link.active {
+    color: #000;
+  }
+
+  /* Double Line — top line */
+  .nav-link::before,
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #1a1a1a;
+    transform: translateX(-101%);
+    transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  .nav-link::before {
+    top: 0;
+  }
+
+  /* Double Line — bottom line (slides from opposite side) */
+  .nav-link::after {
+    bottom: 0;
+    transform: translateX(101%);
+  }
+
+  .nav-link:hover::before {
+    transform: translateX(0);
+  }
+
+  .nav-link:hover::after {
+    transform: translateX(0);
+  }
+
+  .nav-link:hover {
+    color: #000;
+  }
+
+  @media (max-width: 1025px) {
     #main-nav { display: none !important; }
     #hamburger { display: block !important; }
   }
-  header a:hover { background: #f0f0f0 !important; color: #000 !important; }
 </style>
 
 <script>

@@ -1,0 +1,1110 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import {
+  getCommodityStats,
+  getLatestFuelPrices,
+  getLivestockStats,
+  getCropProduction,
+  getCropAreas,
+  getFertilizerPrices,
+  getCommodityTimeSeries,
+  getFuelTimeSeries,
+  getFertilizerTimeSeries,
+  getRegionalCropData,
+} from '../../lib/czso';
+
+const [commodities, fuels, livestock, crops, areas, fertilizers, commodityTS, fuelTS, fertTS, regionalCrops] = await Promise.all([
+  getCommodityStats(),
+  getLatestFuelPrices(),
+  getLivestockStats(),
+  getCropProduction(),
+  getCropAreas(),
+  getFertilizerPrices(),
+  getCommodityTimeSeries(18),
+  getFuelTimeSeries(52),
+  getFertilizerTimeSeries(),
+  getRegionalCropData(),
+]);
+
+const latestCropYear = crops.length ? crops[crops.length - 1].year : '2023';
+const latestCrops = crops.filter(c => c.year === latestCropYear);
+const prevCrops = crops.filter(c => c.year === String(Number(latestCropYear) - 1));
+
+const allAreaYears = [...new Set(areas.map(a => a.year))].sort();
+const latestAreaYear = allAreaYears[allAreaYears.length - 1] || '2025';
+const latestAreas = areas.filter(a => a.year === latestAreaYear && a.crop !== 'Celkem');
+const totalArea = areas.find(a => a.year === latestAreaYear && a.crop === 'Celkem');
+
+const latestLivestock: typeof livestock = [];
+const seen = new Set<string>();
+for (let i = livestock.length - 1; i >= 0; i--) {
+  if (!seen.has(livestock[i].animal)) {
+    seen.add(livestock[i].animal);
+    latestLivestock.unshift(livestock[i]);
+  }
+}
+
+const allFertYears = [...new Set(fertilizers.map(f => f.year))].sort();
+const latestFertYear = allFertYears[allFertYears.length - 1] || '2024';
+const prevFertYear = allFertYears[allFertYears.length - 2] || '2023';
+const latestFerts = fertilizers.filter(f => f.year === latestFertYear);
+const prevFerts = fertilizers.filter(f => f.year === prevFertYear);
+
+function fmt(n: number): string { return n.toLocaleString('cs-CZ'); }
+function fmtChange(c: number | null): string {
+  if (c === null) return '—';
+  return `${c > 0 ? '+' : ''}${c.toFixed(1)}%`;
+}
+
+const nafta = fuels.find(f => f.fuel === 'Nafta');
+const nat95 = fuels.find(f => f.fuel === 'Natural 95');
+const lpg = fuels.find(f => f.fuel === 'LPG');
+
+const COLORS = {
+  yellow: '#FFFF00',
+  green: '#22a355',
+  red: '#d63031',
+  gray: '#888',
+};
+
+const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#00b894'];
+---
+
+<Layout title="Statistiky | agro-svět.cz">
+  <section class="sp">
+
+    <div class="sp-header">
+      <div class="sp-badge">LIVE DATA</div>
+      <h1>Zemědělské statistiky ČR</h1>
+      <p>Aktuální data z Českého statistického úřadu. Ceny komodit, sklizeň, osevní plochy, pohonné hmoty, stavy zvířat a hnojiva.</p>
+    </div>
+
+    <!-- ═══ FUEL TICKER ═══ -->
+    <div class="ticker">
+      {[nafta && { n: 'Nafta', p: nafta.price, u: 'Kč/l' },
+        nat95 && { n: 'Natural 95', p: nat95.price, u: 'Kč/l' },
+        lpg && { n: 'LPG', p: lpg.price, u: 'Kč/l' }
+      ].filter(Boolean).map(f => (
+        <div class="ticker-item">
+          <span class="ticker-dot"></span>
+          <span class="ticker-name">{f!.n}</span>
+          <span class="ticker-val">{f!.p.toFixed(2)}</span>
+          <span class="ticker-unit">{f!.u}</span>
+        </div>
+      ))}
+      {nafta && <span class="ticker-date">{nafta.week}</span>}
+    </div>
+
+    <!-- ═══ INTERACTIVE MAP ═══ -->
+    <div class="map-section">
+      <div class="block-head">
+        <h2>Sklizeň podle krajů</h2>
+        <span class="block-sub">Klikněte na kraj pro detail</span>
+      </div>
+
+      <div class="map-controls">
+        <button class="map-btn active" data-crop="Obiloviny na zrno">Obiloviny</button>
+        <button class="map-btn" data-crop="Pšenice">Pšenice</button>
+        <button class="map-btn" data-crop="Ječmen">Ječmen</button>
+        <button class="map-btn" data-crop="Řepka">Řepka</button>
+        <button class="map-btn" data-crop="Brambory">Brambory</button>
+        <button class="map-btn" data-crop="Řepa cukrová">Cukrovka</button>
+      </div>
+
+      <div class="map-layout">
+        <div class="map-container">
+          <svg id="czMap" viewBox="0 0 1000 369" xmlns="http://www.w3.org/2000/svg">
+            <path id="r-CZ-10" data-region="Hlavní město Praha" d="M360.9,130.8L365.0,131.8L362.9,134.0L369.7,132.9L370.7,136.4L378.7,137.5L378.8,139.8L386.0,142.0L385.3,145.0L376.5,147.2L377.0,149.4L380.3,149.9L378.7,150.3L379.8,154.4L377.3,154.2L376.5,156.6L364.2,153.4L350.1,159.7L341.2,160.2L340.5,164.2L331.8,163.3L329.9,161.7L332.6,160.4L330.3,159.6L332.7,156.9L327.9,156.5L326.9,151.2L322.9,151.0L321.8,147.5L318.8,147.0L324.9,144.2L314.9,140.5L327.0,136.5L328.8,136.6L328.0,138.6L335.2,138.4L336.2,133.7L351.3,132.9L351.1,130.5L360.9,130.8Z" />
+            <path id="r-CZ-20" data-region="Středočeský kraj" d="M353.5,81.0L356.1,82.9L357.5,80.4L362.9,82.4L367.4,80.2L369.2,85.6L384.1,84.6L389.3,79.0L398.2,80.3L400.0,77.2L404.2,76.7L406.8,71.4L415.7,68.7L414.5,66.8L418.6,64.3L425.0,68.3L430.6,66.5L435.6,72.3L439.1,71.3L443.8,73.8L444.6,77.0L450.6,77.9L446.6,81.4L451.3,85.6L449.2,89.1L452.8,91.0L453.1,95.3L450.1,96.0L450.9,98.4L445.1,99.9L449.5,102.0L449.2,104.6L454.6,104.5L461.8,108.5L460.4,112.0L475.2,114.0L482.1,111.6L485.8,113.8L484.8,122.0L488.4,126.8L482.5,131.0L485.1,132.6L481.3,134.1L495.7,137.3L495.0,140.7L489.0,141.4L493.1,142.6L489.5,142.7L491.0,146.3L485.5,147.2L489.4,148.6L484.4,149.9L493.0,154.3L497.7,154.0L497.8,155.9L500.1,155.3L498.5,157.8L508.4,161.1L506.2,164.1L509.1,166.3L503.5,170.5L503.9,175.8L498.7,179.5L495.7,178.3L492.0,180.3L491.2,182.1L494.5,184.4L492.5,186.1L486.4,185.1L481.2,189.6L469.0,192.3L467.6,190.5L463.3,191.3L461.9,195.6L456.7,198.5L456.5,203.3L464.5,205.0L466.8,210.0L462.6,212.5L455.1,212.5L453.8,216.1L446.7,212.9L438.0,215.4L426.8,213.6L425.3,215.1L427.8,217.5L420.9,217.6L421.7,220.7L416.5,222.9L411.7,216.4L407.0,218.1L395.3,211.4L389.4,215.7L390.9,222.1L383.0,223.6L376.8,228.8L375.8,226.4L368.2,226.5L369.2,222.8L364.1,224.6L352.7,222.5L350.8,224.6L342.2,220.7L343.3,223.8L331.2,225.4L331.6,223.5L322.7,219.5L315.7,220.0L313.1,224.6L300.1,223.6L300.6,225.2L292.8,225.0L292.9,220.9L287.9,220.4L283.5,221.8L281.8,226.5L274.8,226.6L272.2,229.1L263.3,225.6L258.7,227.8L256.0,225.3L247.7,227.5L247.3,222.5L243.3,222.6L245.7,211.5L239.0,210.3L237.6,208.8L240.3,207.8L235.9,205.4L241.9,202.9L235.1,203.3L233.7,200.3L243.2,195.1L246.8,197.1L255.4,191.7L250.0,190.8L252.5,187.9L251.1,184.9L254.0,183.5L252.3,180.5L253.7,175.0L257.6,175.0L255.2,169.0L257.2,166.3L244.2,164.4L244.8,160.7L237.9,160.8L231.2,155.3L218.5,156.4L208.6,152.4L213.5,151.2L210.4,149.4L193.4,150.8L195.5,146.5L198.0,146.4L194.3,141.1L202.7,139.9L203.8,136.2L206.8,136.8L206.5,131.1L215.1,127.3L224.2,127.3L225.4,124.6L233.4,121.2L245.2,122.6L254.5,116.8L258.7,120.1L262.2,119.8L264.0,115.8L273.2,114.3L275.1,110.3L280.9,110.9L279.5,106.4L283.3,104.5L303.1,106.9L309.0,104.7L319.1,107.1L322.7,103.3L336.1,103.8L338.0,97.1L335.6,92.5L343.4,93.5L344.5,88.8L351.9,89.3L349.4,82.3L353.5,81.0Z M360.9,130.8L351.1,130.5L351.3,132.9L336.2,133.7L335.2,138.4L328.0,138.6L328.8,136.6L327.0,136.5L314.9,140.5L324.9,144.2L318.8,147.0L321.8,147.5L322.9,151.0L326.9,151.2L327.9,156.5L332.7,156.9L330.3,159.6L332.6,160.4L329.9,161.7L331.8,163.3L340.5,164.2L341.2,160.2L350.1,159.7L364.2,153.4L376.5,156.6L377.3,154.2L379.8,154.4L378.7,150.3L380.3,149.9L377.0,149.4L376.5,147.2L385.3,145.0L386.0,142.0L378.8,139.8L378.7,137.5L370.7,136.4L369.7,132.9L362.9,134.0L365.0,131.8L360.9,130.8Z" fill-rule="evenodd" />
+            <path id="r-CZ-31" data-region="Jihočeský kraj" d="M247.5,227.2L256.0,225.3L258.7,227.8L263.3,225.6L272.2,229.1L274.8,226.6L281.8,226.5L283.5,221.8L287.9,220.4L292.9,220.9L292.8,225.0L300.6,225.2L300.1,223.6L313.1,224.6L315.7,220.0L322.7,219.5L331.6,223.5L331.2,225.4L343.3,223.8L342.2,220.7L350.8,224.6L352.7,222.5L364.1,224.6L369.2,222.8L368.2,226.5L375.8,226.4L376.8,228.8L383.0,223.6L390.9,222.1L389.4,215.7L395.3,211.4L407.0,218.1L410.3,215.8L413.8,221.4L419.9,221.8L421.6,225.2L415.2,227.0L420.0,231.6L413.4,247.4L419.8,251.1L415.7,253.9L418.8,257.1L426.8,262.4L434.7,259.3L439.1,262.9L445.1,263.2L444.8,266.3L441.0,265.6L448.1,266.5L450.5,270.3L454.4,271.1L458.0,268.1L467.7,270.8L467.1,272.7L480.4,271.0L481.7,274.5L479.6,278.3L492.5,285.6L495.1,283.4L499.0,285.4L513.6,284.0L514.5,285.8L512.0,286.0L517.3,287.5L517.9,292.1L511.6,291.6L510.9,296.6L507.5,297.4L508.8,299.2L501.9,303.3L515.6,308.0L516.5,310.9L509.8,316.5L499.1,310.1L492.8,310.1L484.1,305.6L473.8,305.9L471.1,303.7L468.6,309.8L463.1,308.8L453.6,311.4L454.9,308.6L452.1,305.8L453.0,303.9L429.3,300.7L429.5,304.2L426.4,307.5L428.7,317.0L425.6,321.9L427.6,326.2L425.7,326.2L422.9,333.9L426.9,336.6L423.3,338.6L412.2,335.3L401.7,335.5L401.5,342.2L389.5,349.1L387.4,354.5L388.6,361.7L385.7,364.5L380.3,364.6L377.9,360.5L374.3,361.0L372.2,357.7L365.0,361.3L356.4,359.4L351.5,354.8L347.8,355.5L349.4,358.3L345.7,363.6L339.3,362.9L339.6,366.0L335.0,365.7L331.4,369.0L322.3,364.7L292.0,362.6L292.3,360.9L288.3,360.0L289.1,357.7L283.8,356.2L289.9,354.1L290.9,351.0L287.2,350.6L282.6,345.9L275.7,345.2L263.5,337.2L254.4,336.2L254.7,332.8L251.5,328.1L247.2,327.3L243.4,319.8L233.6,320.7L226.4,312.0L227.5,310.5L224.3,312.2L220.7,307.7L215.8,307.7L213.7,305.1L216.9,297.3L223.7,294.7L220.1,287.4L222.7,287.0L221.4,281.4L228.0,282.7L231.6,279.5L237.0,278.9L236.6,275.3L240.7,274.1L236.1,269.4L242.1,264.9L238.9,264.9L237.8,261.7L241.6,262.0L243.0,259.8L241.1,257.3L248.5,255.1L251.2,249.2L246.4,243.7L249.9,238.7L247.0,234.9L248.1,231.5L244.8,230.3L247.5,227.2Z" />
+            <path id="r-CZ-32" data-region="Plzeňský kraj" d="M179.0,140.9L182.3,140.3L183.8,142.7L186.8,140.5L190.4,144.1L194.9,142.3L198.0,146.4L195.5,146.5L193.4,150.8L210.4,149.4L213.5,151.2L208.6,152.4L218.5,156.4L231.2,155.3L237.9,160.8L244.8,160.7L244.2,164.4L257.2,166.3L255.2,169.0L257.6,175.0L253.7,175.0L252.3,180.5L254.0,183.5L251.1,184.9L252.5,187.9L250.0,190.8L255.4,191.7L246.8,197.1L243.2,195.1L233.7,200.3L235.1,203.3L241.9,202.9L235.9,205.4L240.3,207.8L237.6,208.8L239.0,210.3L245.7,211.5L243.3,222.6L248.4,223.9L244.8,230.3L248.1,231.5L247.0,234.9L249.9,238.7L246.5,244.1L251.2,249.2L248.5,255.1L241.1,257.3L243.0,259.8L241.6,262.0L237.8,261.7L238.9,264.9L242.1,264.9L236.1,269.4L240.7,274.1L236.6,275.3L237.0,278.9L231.6,279.5L227.4,282.9L221.4,281.4L222.7,287.0L220.1,287.4L223.7,294.7L216.9,297.3L213.7,305.1L215.8,307.7L209.4,307.5L209.2,311.5L194.0,304.9L193.0,295.5L184.1,289.1L177.1,285.5L169.5,286.2L160.8,282.8L159.8,277.5L150.9,273.1L151.3,270.8L146.4,266.6L139.3,263.9L138.6,258.1L126.1,252.2L116.8,251.3L116.6,254.3L102.0,251.8L98.5,244.7L83.7,238.9L80.2,232.6L81.8,225.7L73.8,223.6L69.2,211.5L64.7,211.9L63.7,201.7L51.9,199.2L45.9,191.7L56.5,187.0L56.8,179.7L60.3,179.4L60.2,176.7L68.1,169.5L74.5,171.2L82.1,167.9L87.2,171.5L86.1,169.0L91.9,168.5L90.6,166.4L103.9,164.3L123.3,167.3L129.4,163.9L128.5,159.4L134.4,158.7L148.8,150.4L168.9,156.0L168.6,149.0L177.6,146.7L178.5,144.5L175.4,143.9L176.3,140.9L179.0,140.9Z" />
+            <path id="r-CZ-41" data-region="Karlovarský kraj" d="M126.7,95.9L130.7,98.0L148.9,99.1L149.1,103.1L151.5,104.3L165.4,102.3L169.4,106.0L166.2,115.0L168.9,115.4L169.3,118.9L167.2,119.9L172.1,122.1L168.8,124.9L173.0,125.3L176.8,130.8L173.6,132.4L176.2,135.2L171.4,134.0L168.4,135.8L174.8,136.7L179.0,140.9L176.3,140.9L175.4,143.9L178.5,144.5L177.6,146.7L168.6,149.0L168.9,156.0L148.8,150.4L134.4,158.7L128.5,159.4L129.4,163.9L123.7,167.2L103.9,164.3L90.6,166.4L91.9,168.5L86.1,169.0L87.2,171.5L82.1,167.9L74.5,171.2L57.4,165.0L56.1,163.5L60.4,159.7L59.1,158.3L54.7,156.3L50.5,157.8L50.4,155.2L35.1,150.8L33.6,147.8L25.3,147.0L27.3,144.3L16.3,139.4L15.4,134.5L18.5,130.7L15.7,126.2L10.1,124.1L8.8,120.8L0.0,118.4L7.3,114.7L2.0,108.2L13.9,108.0L16.5,115.5L25.8,117.5L21.9,119.1L29.5,123.2L27.2,126.6L29.4,129.5L36.4,130.1L34.4,125.1L35.5,119.9L39.0,120.7L39.7,115.0L45.6,112.4L45.4,108.3L50.4,108.0L55.9,103.2L59.0,104.0L58.6,100.9L62.3,97.1L86.0,94.1L90.7,97.0L95.3,91.8L104.1,89.3L106.3,92.0L107.6,87.8L126.7,95.9Z" />
+            <path id="r-CZ-42" data-region="Ústecký kraj" d="M373.7,29.1L366.1,32.1L363.7,38.0L347.7,36.0L349.7,40.6L345.3,42.7L343.7,46.1L345.6,47.1L337.9,49.4L338.0,53.7L332.9,57.3L347.2,77.5L351.7,77.9L354.0,80.8L349.4,82.3L351.9,89.3L344.5,88.8L343.4,93.5L335.6,92.5L338.0,97.1L336.1,103.8L322.7,103.3L319.1,107.1L309.0,104.7L303.1,106.9L283.3,104.5L279.5,106.4L280.9,110.9L275.1,110.3L273.2,114.3L264.0,115.8L262.2,119.8L258.7,120.1L254.5,116.8L245.2,122.6L233.4,121.2L225.4,124.6L224.2,127.3L213.5,127.8L206.5,131.1L206.8,136.8L203.8,136.2L203.0,139.7L197.2,139.6L192.6,143.6L188.8,143.7L186.8,140.5L182.4,142.6L182.3,140.3L178.0,140.8L174.8,136.7L168.4,135.8L171.4,134.0L176.2,135.2L173.6,132.4L176.8,130.8L173.0,125.3L168.8,124.9L172.1,122.1L167.2,119.9L169.3,118.9L168.9,115.4L166.2,115.0L169.4,106.0L165.4,102.3L151.5,104.3L149.1,103.1L148.9,99.1L130.7,98.0L125.5,95.1L137.5,89.4L139.0,80.5L147.0,81.9L153.8,79.1L163.0,81.4L170.8,68.4L182.1,70.1L182.4,66.0L190.0,63.1L189.3,59.7L195.8,64.7L203.4,66.6L211.8,61.5L210.3,59.2L214.6,55.7L212.2,51.5L232.6,47.7L238.9,49.8L246.3,47.1L259.6,48.6L261.7,46.1L267.1,45.8L265.4,42.2L267.9,38.5L272.9,39.0L280.6,34.7L286.8,37.1L293.5,35.9L315.2,28.8L316.6,24.8L321.5,23.6L327.0,25.3L339.3,23.2L340.8,17.6L328.0,14.7L327.0,13.2L330.7,12.1L330.2,10.4L324.1,11.6L320.5,9.9L320.6,6.9L324.4,4.1L322.6,2.6L326.7,0.1L332.1,2.5L335.7,1.5L342.7,5.4L349.3,2.8L354.9,4.7L356.0,1.3L355.8,4.9L361.1,7.6L365.5,6.7L370.9,11.1L365.7,20.2L378.1,18.2L378.5,22.1L373.7,29.1Z" />
+            <path id="r-CZ-51" data-region="Liberecký kraj" d="M508.7,40.6L509.4,43.8L514.6,47.1L512.2,50.5L515.9,59.3L513.3,61.6L518.8,65.0L514.2,69.9L517.6,70.9L517.5,73.9L523.3,78.2L516.9,78.9L517.6,80.4L513.0,78.0L509.0,79.8L502.8,78.2L503.1,76.1L500.4,75.0L500.5,77.0L494.6,78.4L496.6,82.4L492.5,84.5L487.9,84.8L486.0,80.6L484.6,82.5L469.2,78.0L465.6,82.2L462.3,82.5L444.6,77.0L443.8,73.8L439.1,71.3L435.6,72.3L430.6,66.5L425.0,68.3L418.6,64.3L414.5,66.8L415.7,68.7L406.8,71.4L404.2,76.7L400.0,77.2L398.2,80.3L389.3,79.0L384.1,84.6L369.2,85.6L367.4,80.2L362.9,82.4L357.5,80.4L356.1,82.9L351.7,77.9L347.2,77.5L342.1,68.9L335.3,63.0L335.4,59.0L332.7,58.6L338.0,53.7L337.9,49.4L345.6,47.1L343.7,46.1L345.3,42.7L349.7,40.6L348.5,35.6L363.7,38.0L366.1,32.1L373.7,29.1L395.7,34.8L400.1,34.4L405.1,26.9L430.1,27.8L430.7,22.3L428.3,19.7L433.1,13.1L430.9,10.3L425.2,9.6L432.9,4.6L445.4,6.6L445.4,9.7L450.2,9.3L450.9,6.6L454.9,5.3L456.5,10.7L465.1,8.4L465.4,10.6L470.3,11.2L473.0,15.0L469.5,18.2L470.8,24.4L484.0,32.3L485.4,41.1L494.5,36.5L508.7,40.6Z" />
+            <path id="r-CZ-52" data-region="Královéhradecký kraj" d="M663.7,134.4L649.9,131.1L644.1,136.9L628.2,141.7L630.0,144.1L623.6,146.4L626.7,149.6L614.3,149.2L614.3,147.4L606.4,149.7L602.4,146.4L588.7,142.7L587.1,139.0L579.2,139.0L579.2,134.2L576.4,132.3L565.3,130.4L553.4,136.2L548.9,135.0L549.7,132.0L544.9,129.8L531.5,137.1L525.7,134.8L516.5,135.9L513.8,133.4L507.1,135.5L507.0,138.3L496.9,141.3L494.4,139.2L495.7,137.3L491.3,135.1L481.3,134.1L485.1,132.6L482.5,131.0L488.4,126.8L484.8,122.0L484.3,119.1L486.7,118.0L485.5,113.5L482.1,111.6L475.2,114.0L460.4,112.0L461.8,108.5L454.6,104.5L449.2,104.6L449.5,102.0L445.1,99.9L450.9,98.4L450.1,96.0L452.9,95.5L453.6,92.6L449.2,89.1L451.3,85.6L446.6,81.4L451.6,78.5L464.9,82.6L469.2,78.0L484.6,82.5L486.0,80.6L489.4,84.8L496.6,82.4L494.4,78.7L500.5,77.0L500.4,75.0L507.7,79.6L523.0,78.6L517.5,73.9L517.6,70.9L514.2,69.9L518.8,65.0L513.3,61.6L515.9,59.3L512.2,50.5L514.6,47.1L509.4,43.8L508.7,40.6L518.6,41.0L534.1,46.9L550.4,44.4L557.1,56.1L576.1,54.7L580.8,62.7L575.6,65.1L581.0,67.3L586.2,65.4L587.7,61.2L593.0,57.8L602.7,60.4L604.5,63.0L609.8,62.0L612.2,56.6L628.2,57.9L643.2,70.2L637.3,71.7L638.3,74.8L634.9,75.6L636.9,77.5L630.9,81.6L623.8,80.9L621.2,84.9L615.8,84.8L610.4,87.9L611.7,90.2L609.1,89.0L606.6,91.8L608.8,95.0L615.0,95.9L619.0,101.5L622.7,99.1L631.0,99.6L631.2,104.2L634.3,107.1L642.0,108.2L649.8,116.6L660.2,122.9L660.2,130.4L663.7,134.4Z" />
+            <path id="r-CZ-53" data-region="Pardubický kraj" d="M705.5,126.3L699.9,138.4L696.6,139.6L699.3,143.0L695.7,145.3L698.1,147.0L697.6,150.9L688.3,156.3L682.9,155.7L691.1,173.9L686.7,176.1L686.4,180.7L696.5,189.8L694.8,191.3L697.6,192.7L694.3,195.8L700.6,195.4L702.9,197.4L702.7,202.6L696.3,206.3L698.8,211.1L696.5,214.6L693.2,215.1L683.3,211.3L659.7,210.0L657.5,216.0L649.8,214.4L643.5,216.4L642.1,214.7L637.6,218.5L629.1,212.6L620.0,211.6L606.4,202.8L593.0,202.2L588.0,197.7L580.3,197.2L579.0,194.3L573.4,196.8L571.9,201.1L565.1,201.8L555.2,197.1L557.6,193.3L544.4,191.5L545.5,188.0L538.9,188.2L528.3,182.8L517.1,183.8L503.3,176.0L503.5,170.5L509.1,166.3L506.2,164.1L508.4,161.1L498.5,157.8L500.1,155.3L497.8,155.9L497.7,154.0L493.0,154.3L484.3,149.2L489.4,148.6L486.2,146.7L491.0,146.3L489.5,142.7L493.1,142.6L489.0,141.4L490.6,139.8L499.1,140.8L513.8,133.4L516.5,135.9L525.7,134.8L531.5,137.1L544.9,129.8L549.7,132.0L548.9,135.0L553.4,136.2L565.3,130.4L576.4,132.3L579.2,134.2L579.2,139.0L587.1,139.0L588.7,142.7L602.4,146.4L606.4,149.7L614.3,147.4L614.3,149.2L626.7,149.6L623.6,146.4L630.0,144.1L628.2,141.7L644.1,136.9L649.9,131.1L682.0,141.2L688.1,135.6L693.6,134.1L697.9,127.2L703.0,124.9L705.5,126.3Z" />
+            <path id="r-CZ-63" data-region="Kraj Vysočina" d="M503.3,176.0L517.1,183.8L528.3,182.8L538.9,188.2L545.5,188.0L544.4,191.5L557.6,193.3L555.2,197.1L565.1,201.8L571.9,201.1L573.4,196.8L579.0,194.3L580.3,197.2L588.0,197.7L593.0,202.2L606.4,202.8L620.0,211.6L633.2,215.0L635.7,217.9L632.7,221.7L639.5,225.6L634.6,230.3L629.9,229.4L635.1,232.8L631.5,237.6L632.2,241.6L634.4,241.9L632.5,246.2L634.7,250.0L620.3,255.1L620.3,257.7L615.7,260.5L620.1,265.0L614.7,266.0L612.6,271.7L618.0,273.4L618.0,275.7L610.9,278.7L613.4,282.8L615.9,281.6L617.0,285.9L609.6,289.3L610.7,290.8L608.5,292.5L598.1,293.1L596.7,294.3L599.2,296.2L595.1,297.5L582.4,295.9L577.0,299.0L571.7,294.6L567.4,295.4L564.9,298.7L560.6,297.2L559.1,301.6L550.7,301.4L547.2,305.2L541.9,305.8L537.5,310.8L532.7,307.8L527.6,308.3L524.8,312.0L520.4,309.0L516.5,310.5L515.6,308.0L507.4,306.5L507.3,303.8L501.9,303.3L508.8,299.2L507.5,297.4L510.9,296.6L511.6,291.6L517.9,292.1L517.3,287.5L512.0,286.0L514.5,285.8L513.6,284.0L499.0,285.4L495.1,283.4L492.5,285.6L479.6,278.3L481.7,274.5L480.4,271.0L467.1,272.7L467.7,270.8L458.0,268.1L454.4,271.1L450.5,270.3L448.1,266.5L441.0,265.6L444.8,266.3L445.1,263.2L439.1,262.9L434.7,259.3L426.8,262.4L415.7,253.9L419.8,251.1L413.4,247.4L420.0,231.6L415.2,227.0L421.4,225.6L419.5,223.2L421.7,220.7L420.9,217.6L427.8,217.5L425.3,215.1L426.8,213.6L438.0,215.4L446.7,212.9L453.8,216.1L455.1,212.5L463.9,212.2L466.8,210.0L464.5,205.0L457.3,204.5L456.2,201.5L456.7,198.5L463.6,193.6L463.3,191.3L467.6,190.5L469.0,192.3L481.2,189.6L486.4,185.1L492.5,186.1L494.5,184.4L491.2,182.1L492.0,180.3L495.7,178.3L498.7,179.5L503.3,176.0Z" />
+            <path id="r-CZ-64" data-region="Jihomoravský kraj" d="M821.2,324.8L806.2,330.4L801.7,330.6L792.3,326.0L784.0,330.7L779.2,330.8L772.8,326.2L754.3,321.6L741.8,328.2L738.5,334.8L731.9,337.7L725.5,345.7L726.9,347.9L721.0,351.8L721.3,355.6L716.7,359.5L713.5,358.7L713.3,348.2L710.9,344.6L695.9,346.3L684.8,341.6L678.4,343.0L675.7,335.2L665.4,335.1L657.5,330.4L654.4,332.6L644.0,332.5L641.9,337.5L633.5,342.9L628.1,340.3L626.7,342.5L592.9,340.5L576.7,335.6L570.3,331.6L571.3,329.0L561.9,327.3L562.5,325.3L554.3,323.6L555.8,322.5L553.9,321.0L545.0,321.4L541.0,324.8L532.1,324.3L521.3,318.3L509.8,316.5L516.5,309.5L520.4,309.0L525.7,312.1L527.6,308.3L534.2,307.7L537.5,310.8L541.9,305.8L547.2,305.2L550.7,301.4L559.1,301.6L560.6,297.2L564.9,298.7L567.4,295.4L571.7,294.6L578.8,299.1L582.4,295.9L595.1,297.5L599.2,296.2L596.7,294.3L598.1,293.1L608.5,292.5L610.7,290.8L609.6,289.3L617.0,285.9L615.9,281.6L613.4,282.8L610.9,278.7L618.0,275.7L618.0,273.4L612.6,271.7L614.7,266.0L620.1,265.0L615.7,262.3L615.9,260.1L620.3,257.7L620.3,255.1L634.7,250.0L632.5,246.2L634.4,241.9L632.2,241.6L631.5,237.6L635.1,232.8L629.9,229.4L634.6,230.3L639.5,225.6L632.7,221.7L635.5,220.0L635.4,217.2L637.6,218.5L639.3,215.2L643.1,214.6L643.5,216.4L649.8,214.4L657.5,216.0L658.8,210.4L669.7,209.8L696.5,214.6L694.2,215.8L695.2,218.3L688.4,216.7L686.5,222.9L700.7,224.6L694.0,227.9L695.4,235.6L700.0,238.7L695.9,239.8L696.7,243.2L704.6,246.7L709.0,244.0L712.3,239.0L708.2,232.3L711.1,230.1L716.2,230.8L725.2,241.0L725.2,244.9L731.4,246.1L732.9,243.4L734.0,245.2L729.6,247.4L730.0,249.5L745.9,255.1L749.2,262.2L744.4,266.8L747.1,268.9L745.6,271.3L749.8,274.7L746.9,277.1L755.2,277.1L753.0,282.6L747.4,283.5L746.4,287.6L742.3,287.8L742.4,291.6L757.1,289.4L759.7,293.4L758.3,298.2L762.4,297.2L766.2,300.9L778.2,301.9L777.7,306.2L783.6,305.6L789.4,310.3L799.0,307.7L806.5,310.8L805.1,314.5L814.3,316.3L821.2,324.8Z" />
+            <path id="r-CZ-71" data-region="Olomoucký kraj" d="M789.1,118.0L787.0,124.5L781.5,122.7L777.1,127.5L771.3,127.9L761.2,134.4L762.5,137.5L758.2,140.3L760.1,146.3L750.6,153.5L750.6,157.3L748.2,158.1L755.4,162.9L749.2,167.2L751.2,168.7L746.9,173.2L752.8,178.4L758.5,176.3L757.2,182.4L761.0,181.2L773.2,185.4L778.1,183.2L788.7,191.6L796.7,191.1L802.1,193.9L804.3,190.8L812.0,194.6L819.3,192.1L828.2,194.6L826.8,202.5L831.9,204.9L835.4,203.2L840.3,209.8L845.6,211.3L853.4,218.1L849.8,219.9L852.7,222.6L855.6,219.6L859.3,220.1L860.8,223.4L858.4,227.6L850.0,225.9L849.0,228.8L841.6,231.2L843.5,233.6L839.2,238.2L831.8,238.4L826.0,234.8L823.4,238.2L817.6,236.7L821.5,241.7L818.5,244.0L799.8,243.8L801.5,246.4L795.3,250.6L791.5,247.1L780.6,246.9L782.3,243.3L777.7,242.7L774.6,246.5L777.9,252.3L766.4,259.4L753.6,259.4L751.6,263.5L746.5,259.3L745.9,255.1L730.0,249.5L729.6,247.4L733.7,244.5L729.3,246.3L725.2,244.9L725.2,241.0L716.5,230.9L711.1,230.1L708.2,232.3L712.3,239.0L704.6,246.7L695.3,242.2L695.9,239.8L700.0,238.7L695.4,235.6L694.0,227.9L700.7,224.6L686.5,222.9L688.4,216.7L696.3,217.8L694.2,215.8L698.8,211.1L696.3,206.3L702.7,202.6L702.9,197.4L700.6,195.4L694.3,195.8L697.6,192.7L694.8,191.3L696.5,189.8L686.4,180.7L686.7,176.1L691.1,173.9L682.9,155.7L688.3,156.3L697.6,150.9L698.1,147.0L695.7,145.3L699.3,143.0L696.6,139.6L699.9,138.4L705.5,126.3L709.1,123.6L719.0,122.7L721.9,119.5L725.2,123.6L729.6,121.8L725.8,117.7L728.5,114.6L726.0,111.0L717.7,109.1L712.1,98.2L704.6,95.5L707.9,90.3L741.6,95.8L746.5,99.3L755.4,98.6L755.0,101.8L762.1,106.5L768.6,108.6L777.1,107.1L775.4,109.3L777.7,110.0L775.7,113.7L777.2,116.4L783.2,113.8L787.8,114.7L789.1,118.0Z" />
+            <path id="r-CZ-72" data-region="Zlínský kraj" d="M821.2,324.8L814.3,316.3L805.1,314.5L806.5,310.8L799.0,307.7L789.4,310.3L783.6,305.6L777.7,306.2L778.2,301.9L766.2,300.9L762.4,297.2L758.3,298.2L759.7,293.4L757.1,289.4L742.4,291.6L742.3,287.8L746.4,287.6L747.4,283.5L753.0,282.6L755.2,277.1L746.9,277.1L749.8,274.7L745.6,271.3L747.1,268.9L744.7,266.3L748.8,262.5L751.6,263.5L753.6,259.4L766.4,259.4L777.9,252.3L774.6,246.5L777.7,242.7L782.3,243.3L780.6,246.9L791.5,247.1L795.3,250.6L801.5,246.4L799.8,243.8L818.5,244.0L821.5,241.7L817.6,236.7L823.4,238.2L826.0,234.8L831.8,238.4L839.7,238.0L843.5,233.6L841.6,231.2L849.0,228.8L850.0,225.9L858.4,227.6L860.6,223.6L869.1,223.7L872.7,228.7L891.8,226.3L897.4,226.8L902.9,230.8L917.7,230.8L918.6,234.5L927.3,239.3L927.1,243.2L933.0,244.6L934.5,248.7L928.4,254.7L900.9,260.6L900.6,263.1L895.1,266.4L896.0,271.1L889.5,283.3L890.3,289.4L883.5,297.7L862.8,300.1L860.1,301.8L856.0,313.8L841.0,314.4L829.3,323.9L821.2,324.8Z" />
+            <path id="r-CZ-80" data-region="Moravskoslezský kraj" d="M933.0,244.6L927.1,243.2L927.3,239.3L918.6,234.5L917.7,230.8L902.9,230.8L897.4,226.8L891.8,226.3L872.7,228.7L869.1,223.7L860.6,223.6L858.8,219.8L855.6,219.6L852.7,222.6L849.8,219.9L853.4,218.1L845.6,211.3L840.3,209.8L835.4,203.2L831.9,204.9L826.8,202.5L828.2,194.6L819.3,192.1L812.0,194.6L804.3,190.8L802.1,193.9L798.4,193.3L796.7,191.1L786.3,190.9L785.6,187.8L778.1,183.2L773.2,185.4L761.0,181.2L757.2,182.4L758.5,176.3L752.8,178.4L746.9,173.2L751.2,168.7L749.2,167.2L755.4,162.9L748.2,158.1L750.6,157.3L750.6,153.5L760.1,146.3L758.2,140.3L762.5,137.5L761.2,134.4L771.3,127.9L777.1,127.5L781.5,122.7L787.0,124.5L789.0,118.1L792.7,117.7L792.9,115.8L812.8,114.4L816.2,116.3L827.0,111.2L827.0,107.2L836.5,111.5L832.4,117.6L838.3,120.7L837.3,125.1L812.9,132.0L821.3,139.2L831.5,139.9L839.2,148.4L840.2,152.7L847.7,154.0L847.5,156.4L853.8,159.6L861.7,158.7L866.2,154.8L873.8,152.9L879.8,154.6L879.6,150.2L873.7,149.9L873.8,147.7L878.1,145.9L886.3,149.1L886.9,153.4L890.3,156.4L895.8,158.2L898.8,155.5L903.6,155.9L905.8,160.3L914.1,160.8L914.7,165.1L920.2,168.1L925.1,165.1L922.4,163.1L936.6,164.7L945.3,169.7L951.8,170.1L953.9,169.0L952.8,166.5L957.5,167.1L957.2,174.2L962.5,176.0L957.4,180.9L966.0,192.8L965.5,196.4L977.8,199.1L979.2,202.3L982.7,203.3L992.1,203.0L999.7,223.7L984.9,230.7L973.6,228.1L955.0,228.6L952.2,230.8L953.8,234.1L945.7,238.9L943.5,242.7L933.0,244.6Z" />
+          </svg>
+
+          <!-- Tooltip -->
+          <div id="mapTooltip" class="map-tooltip"></div>
+        </div>
+
+        <!-- Detail panel -->
+        <div class="map-detail" id="mapDetail">
+          <div class="detail-placeholder">
+            <div class="detail-icon">🗺️</div>
+            <p>Vyberte kraj na mapě</p>
+          </div>
+          <div class="detail-content" id="detailContent" style="display:none">
+            <h3 id="detailName"></h3>
+            <div class="detail-stat" id="detailStat"></div>
+            <canvas id="detailChart" height="160"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COMMODITY CARDS + CHART ═══ -->
+    <div class="block">
+      <div class="block-head">
+        <h2>Ceny komodit</h2>
+        <span class="block-sub">Měsíční průměry výrobců v ČR</span>
+      </div>
+
+      <div class="comm-grid">
+        {commodities.map(c => {
+          const isUp = c.change !== null && c.change > 0;
+          const isDown = c.change !== null && c.change < 0;
+          return (
+            <div class="comm-card">
+              <div class="comm-top">
+                <span class="comm-name">{c.name}</span>
+                {c.change !== null && (
+                  <span class={`comm-arrow ${isUp ? 'up' : 'down'}`}>
+                    {isUp ? '▲' : '▼'} {fmtChange(c.change)}
+                  </span>
+                )}
+              </div>
+              <div class="comm-price">{fmt(c.price)}</div>
+              <div class="comm-unit">{c.unit} · {c.month}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div class="chart-wrap">
+        <h3>Vývoj cen obilovin (18 měsíců)</h3>
+        <canvas id="commodityChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Expand button -->
+    <div class="expand-section" id="expandBtn">
+      <button class="expand-btn" onclick="document.getElementById('moreStats').style.display='block'; this.parentElement.style.display='none'; setTimeout(()=>window._initMoreCharts&&window._initMoreCharts(),100);">
+        Zobrazit další statistiky
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+
+    <div id="moreStats" style="display:none">
+
+    <!-- ═══ FUEL CHART ═══ -->
+    <div class="block">
+      <div class="block-head">
+        <h2>Nafta — vývoj ceny</h2>
+        <span class="block-sub">Týdenní průměr, posledních 52 týdnů</span>
+      </div>
+      <div class="chart-wrap compact">
+        <canvas id="fuelChart" height="160"></canvas>
+      </div>
+    </div>
+
+    <!-- ═══ CROP PRODUCTION + DONUT ═══ -->
+    <div class="two-col">
+      <div class="block">
+        <div class="block-head">
+          <h2>Sklizeň {latestCropYear}</h2>
+          <span class="block-sub">Produkce v tunách</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="cropChart" height="200"></canvas>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <h2>Osevní plochy {latestAreaYear}</h2>
+          {totalArea && <span class="block-sub">Celkem {fmt(totalArea.hectares)} ha</span>}
+        </div>
+        <div class="chart-wrap donut-wrap">
+          <canvas id="areaChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LIVESTOCK ═══ -->
+    <div class="block">
+      <div class="block-head">
+        <h2>Stavy hospodářských zvířat</h2>
+        <span class="block-sub">Pololetní data ČSÚ</span>
+      </div>
+      <div class="live-row">
+        {latestLivestock.map(l => (
+          <div class="live-card">
+            <div class="live-emoji">{l.animal === 'Skot' ? '🐄' : '🐖'}</div>
+            <div class="live-info">
+              <div class="live-name">{l.animal}</div>
+              <div class="live-num">{fmt(l.count)}</div>
+              <div class="live-date">{l.date}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- ═══ FERTILIZERS + CHART ═══ -->
+    <div class="block">
+      <div class="block-head">
+        <h2>Ceny hnojiv</h2>
+        <span class="block-sub">Roční průměr v Kč/t</span>
+      </div>
+
+      <div class="fert-row">
+        {latestFerts.map(f => {
+          const prev = prevFerts.find(p => p.name === f.name);
+          const ch = prev ? Math.round((f.price / prev.price - 1) * 1000) / 10 : null;
+          const isUp = ch !== null && ch > 0;
+          return (
+            <div class="fert-card">
+              <div class="fert-name">{f.name}</div>
+              <div class="fert-price">{fmt(f.price)}</div>
+              {ch !== null && (
+                <div class={`fert-ch ${isUp ? 'up' : 'down'}`}>{fmtChange(ch)}</div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div class="chart-wrap">
+        <h3>Vývoj cen hnojiv (2011–{latestFertYear})</h3>
+        <canvas id="fertChart" height="220"></canvas>
+      </div>
+    </div>
+
+    </div><!-- /moreStats -->
+
+    <div class="source">
+      Zdroj: <a href="https://data.csu.gov.cz" target="_blank" rel="noopener">Český statistický úřad</a> — DataStat API
+    </div>
+
+  </section>
+</Layout>
+
+<!-- Chart data -->
+<script type="application/json" id="chartData" set:html={JSON.stringify({ commodityTS, fuelTS, latestCrops, latestAreas, fertTS, regionalCrops })}></script>
+
+<!-- Chart.js -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+
+<script is:inline>
+  const _raw = JSON.parse(document.getElementById('chartData').textContent);
+  const commodityTS = _raw.commodityTS;
+  const fuelTS = _raw.fuelTS;
+  const latestCrops = _raw.latestCrops;
+  const latestAreas = _raw.latestAreas;
+  const fertTS = _raw.fertTS;
+
+  const COLORS = ['#FFFF00','#4ecdc4','#ff6b6b','#a29bfe','#fd79a8','#00b894','#636e72','#e17055'];
+  const gridColor = 'rgba(0,0,0,.06)';
+  const fontFamily = "'Chakra Petch', sans-serif";
+
+  Chart.defaults.font.family = fontFamily;
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#888';
+
+  // ── Commodity line chart ──
+  const commCtx = document.getElementById('commodityChart');
+  if (commCtx && commodityTS.length) {
+    const labels = commodityTS[0].data.map(d => d.label);
+    new Chart(commCtx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: commodityTS.map((s, i) => ({
+          label: s.name,
+          data: s.data.map(d => d.value),
+          borderColor: COLORS[i],
+          backgroundColor: COLORS[i] + '18',
+          borderWidth: 2.5,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          tension: .35,
+          fill: false,
+        })),
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { usePointStyle: true, padding: 16, font: { size: 13 } } },
+          tooltip: {
+            backgroundColor: '#1a1a1a',
+            titleFont: { size: 13 },
+            bodyFont: { size: 13 },
+            padding: 12,
+            cornerRadius: 10,
+            callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('cs-CZ')} Kč/t` },
+          },
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 11 } } },
+          y: { grid: { color: gridColor }, ticks: { callback: v => v.toLocaleString('cs-CZ') } },
+        },
+      },
+    });
+  }
+
+  // ── Lazy charts (rendered when "Zobrazit další" clicked) ──
+  window._initMoreCharts = function() {
+    if (window._moreChartsInit) return;
+    window._moreChartsInit = true;
+
+  // ── Fuel line chart ──
+  const fuelCtx = document.getElementById('fuelChart');
+  if (fuelCtx && fuelTS.length) {
+    new Chart(fuelCtx, {
+      type: 'line',
+      data: {
+        labels: fuelTS.map(d => d.label),
+        datasets: [{
+          label: 'Nafta (Kč/l)',
+          data: fuelTS.map(d => d.value),
+          borderColor: '#ff6b6b',
+          backgroundColor: 'rgba(255,107,107,.08)',
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          tension: .3,
+          fill: true,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1a1a1a',
+            padding: 12,
+            cornerRadius: 10,
+            callbacks: { label: ctx => `${ctx.parsed.y.toFixed(2)} Kč/l` },
+          },
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 12, font: { size: 10 } } },
+          y: { grid: { color: gridColor }, ticks: { callback: v => v + ' Kč' } },
+        },
+      },
+    });
+  }
+
+  // ── Crop production horizontal bar ──
+  const cropCtx = document.getElementById('cropChart');
+  if (cropCtx && latestCrops.length) {
+    const sorted = [...latestCrops].sort((a, b) => b.tonnes - a.tonnes);
+    new Chart(cropCtx, {
+      type: 'bar',
+      data: {
+        labels: sorted.map(c => c.crop),
+        datasets: [{
+          data: sorted.map(c => c.tonnes),
+          backgroundColor: sorted.map((_, i) => COLORS[i % COLORS.length] + 'cc'),
+          borderRadius: 6,
+          barThickness: 28,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1a1a1a',
+            padding: 12,
+            cornerRadius: 10,
+            callbacks: { label: ctx => `${ctx.parsed.x.toLocaleString('cs-CZ')} t` },
+          },
+        },
+        scales: {
+          x: { grid: { color: gridColor }, ticks: { callback: v => (v / 1e6).toFixed(1) + 'M t' } },
+          y: { grid: { display: false }, ticks: { font: { size: 13 } } },
+        },
+      },
+    });
+  }
+
+  // ── Crop areas donut ──
+  const areaCtx = document.getElementById('areaChart');
+  if (areaCtx && latestAreas.length) {
+    new Chart(areaCtx, {
+      type: 'doughnut',
+      data: {
+        labels: latestAreas.map(a => a.crop),
+        datasets: [{
+          data: latestAreas.map(a => a.hectares),
+          backgroundColor: latestAreas.map((_, i) => COLORS[i % COLORS.length]),
+          borderWidth: 0,
+          hoverOffset: 8,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '60%',
+        plugins: {
+          legend: { position: 'bottom', labels: { usePointStyle: true, padding: 14, font: { size: 12 } } },
+          tooltip: {
+            backgroundColor: '#1a1a1a',
+            padding: 12,
+            cornerRadius: 10,
+            callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed.toLocaleString('cs-CZ')} ha` },
+          },
+        },
+      },
+    });
+  }
+
+  // ── Fertilizer line chart ──
+  const fertCtx = document.getElementById('fertChart');
+  if (fertCtx && fertTS.length) {
+    const years = fertTS[0].data.map(d => d.year);
+    new Chart(fertCtx, {
+      type: 'line',
+      data: {
+        labels: years,
+        datasets: fertTS.map((s, i) => ({
+          label: s.name,
+          data: s.data.map(d => d.price),
+          borderColor: COLORS[i % COLORS.length],
+          borderWidth: 2,
+          pointRadius: 2,
+          pointHoverRadius: 5,
+          tension: .3,
+          fill: false,
+        })),
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { usePointStyle: true, padding: 14, font: { size: 11 } } },
+          tooltip: {
+            backgroundColor: '#1a1a1a',
+            padding: 12,
+            cornerRadius: 10,
+            callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('cs-CZ')} Kč/t` },
+          },
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: { grid: { color: gridColor }, ticks: { callback: v => (v / 1000).toFixed(0) + ' tis' } },
+        },
+      },
+    });
+  }
+
+  }; // end _initMoreCharts
+
+  // ── Interactive Map ──
+  const regionalCrops = _raw.regionalCrops;
+  const mapPaths = document.querySelectorAll('#czMap path');
+  const tooltip = document.getElementById('mapTooltip');
+  const detailPanel = document.getElementById('detailContent');
+  const detailPlaceholder = document.querySelector('.detail-placeholder');
+  const detailName = document.getElementById('detailName');
+  const detailStat = document.getElementById('detailStat');
+  let detailChartInstance = null;
+  let selectedCrop = 'Obiloviny na zrno';
+  let selectedRegion = null;
+
+  // Color scale
+  function getColor(val, min, max) {
+    if (max === min) return '#FFFF00';
+    const t = (val - min) / (max - min);
+    const r = Math.round(255 - t * 30);
+    const g = Math.round(255 - t * 55);
+    const b = Math.round(80 - t * 80);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  function colorMap() {
+    const data = regionalCrops.filter(d => d.crop === selectedCrop && d.year === '2023');
+    const valMap = {};
+    data.forEach(d => { valMap[d.region] = d.tonnes; });
+    const vals = Object.values(valMap).filter(v => v > 0);
+    const min = Math.min(...vals);
+    const max = Math.max(...vals);
+
+    mapPaths.forEach(path => {
+      const region = path.getAttribute('data-region');
+      const val = valMap[region];
+      if (val !== undefined && val > 0) {
+        path.style.fill = getColor(val, min, max);
+      } else {
+        path.style.fill = '#e8e8e8';
+      }
+    });
+  }
+
+  // Tooltip
+  mapPaths.forEach(path => {
+    path.addEventListener('mouseenter', e => {
+      const region = path.getAttribute('data-region');
+      const data = regionalCrops.filter(d => d.crop === selectedCrop && d.year === '2023' && d.region === region);
+      const val = data.length ? data[0].tonnes : 0;
+      tooltip.innerHTML = `<strong>${region}</strong><br>${selectedCrop}: ${val.toLocaleString('cs-CZ')} t`;
+      tooltip.style.display = 'block';
+      path.style.strokeWidth = '2';
+      path.style.stroke = '#1a1a1a';
+    });
+
+    path.addEventListener('mousemove', e => {
+      const rect = document.getElementById('czMap').closest('.map-container').getBoundingClientRect();
+      tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (e.clientY - rect.top - 40) + 'px';
+    });
+
+    path.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+      if (path.getAttribute('data-region') !== selectedRegion) {
+        path.style.strokeWidth = '0.5';
+        path.style.stroke = '#fff';
+      }
+    });
+
+    // Click → show detail
+    path.addEventListener('click', () => {
+      const region = path.getAttribute('data-region');
+      selectedRegion = region;
+
+      // Reset all strokes
+      mapPaths.forEach(p => { p.style.strokeWidth = '0.5'; p.style.stroke = '#fff'; });
+      path.style.strokeWidth = '2.5'; path.style.stroke = '#1a1a1a';
+
+      // Show detail
+      detailPlaceholder.style.display = 'none';
+      detailPanel.style.display = 'block';
+      detailName.textContent = region;
+
+      // Get all crops for this region in 2023
+      const regionData = regionalCrops.filter(d => d.region === region && d.year === '2023');
+      const statHtml = regionData.map(d =>
+        `<div class="detail-row"><span>${d.crop}</span><span>${d.tonnes.toLocaleString('cs-CZ')} t</span></div>`
+      ).join('');
+      detailStat.innerHTML = statHtml;
+
+      // Chart: selected crop over years for this region
+      const yearData = regionalCrops
+        .filter(d => d.region === region && d.crop === selectedCrop)
+        .sort((a, b) => parseInt(a.year) - parseInt(b.year));
+
+      if (detailChartInstance) detailChartInstance.destroy();
+      const ctx = document.getElementById('detailChart');
+      detailChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: yearData.map(d => d.year),
+          datasets: [{
+            label: selectedCrop,
+            data: yearData.map(d => d.tonnes),
+            backgroundColor: '#FFFF00cc',
+            borderRadius: 4,
+            barThickness: 20,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1a1a1a', padding: 10, cornerRadius: 8,
+              callbacks: { label: ctx => ctx.parsed.y.toLocaleString('cs-CZ') + ' t' },
+            },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { grid: { color: 'rgba(0,0,0,.06)' }, ticks: { callback: v => (v/1e6).toFixed(1)+'M' } },
+          },
+        },
+      });
+    });
+  });
+
+  // Crop selector buttons
+  document.querySelectorAll('.map-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCrop = btn.getAttribute('data-crop');
+      colorMap();
+      if (selectedRegion) {
+        document.querySelector(`[data-region="${selectedRegion}"]`).click();
+      }
+    });
+  });
+
+  // Initial color
+  colorMap();
+</script>
+
+<style>
+  .sp {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* ── Map section ── */
+  .map-section { margin-bottom: 40px; }
+
+  .map-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .map-btn {
+    padding: 6px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background: #fff;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 400;
+    color: #888;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .map-btn:hover { border-color: #1a1a1a; color: #1a1a1a; }
+  .map-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+  .map-layout {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .map-container {
+    position: relative;
+    background: #fafafa;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+  }
+
+  #czMap {
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+    display: block;
+  }
+
+  #czMap path {
+    fill: #e8e8e8;
+    stroke: #fff;
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: fill .3s, stroke-width .15s;
+  }
+
+  #czMap path:hover {
+    filter: brightness(1.1);
+  }
+
+  .map-tooltip {
+    display: none;
+    position: absolute;
+    background: #1a1a1a;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 12px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 10;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .map-detail {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .detail-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: #aaa;
+    font-family: var(--font-heading);
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .detail-icon { font-size: 40px; }
+
+  .detail-content h3 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    color: #1a1a1a;
+    margin: 0 0 14px;
+  }
+
+  .detail-stat {
+    margin-bottom: 16px;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+    color: #555;
+  }
+
+  .detail-row span:last-child {
+    font-family: var(--font-heading);
+    color: #1a1a1a;
+  }
+
+  #detailChart {
+    width: 100% !important;
+  }
+
+  /* ── Header ── */
+  .sp-header { margin-bottom: 32px; }
+
+  .sp-badge {
+    display: inline-block;
+    background: #22a355;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 10px;
+    font-weight: 400;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+
+  .sp-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .sp-header p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    max-width: 650px;
+  }
+
+  /* ── Ticker ── */
+  .ticker {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    background: #1a1a1a;
+    padding: 16px 24px;
+    border-radius: 14px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    flex-wrap: wrap;
+  }
+
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .ticker-dot {
+    width: 8px;
+    height: 8px;
+    background: #22a355;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .4; }
+  }
+
+  .ticker-name {
+    color: #888;
+    font-family: var(--font-heading);
+    font-size: 13px;
+  }
+
+  .ticker-val {
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .ticker-unit {
+    color: #555;
+    font-size: 12px;
+  }
+
+  .ticker-date {
+    margin-left: auto;
+    color: #555;
+    font-size: 11px;
+  }
+
+  /* ── Block ── */
+  .block {
+    margin-bottom: 40px;
+  }
+
+  .block-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .block-head h2 {
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .block-sub {
+    font-size: 13px;
+    color: #888;
+  }
+
+  /* ── Commodity cards ── */
+  .comm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .comm-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    transition: transform .2s;
+  }
+
+  .comm-card:hover { transform: translateY(-2px); }
+
+  .comm-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .comm-name {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    color: #888;
+  }
+
+  .comm-arrow {
+    font-size: 11px;
+    font-family: var(--font-heading);
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+
+  .comm-arrow.up { color: #22a355; background: rgba(34,163,85,.08); }
+  .comm-arrow.down { color: #d63031; background: rgba(214,48,49,.08); }
+
+  .comm-price {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    color: #1a1a1a;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .comm-unit {
+    font-size: 11px;
+    color: #aaa;
+  }
+
+  /* ── Chart ── */
+  .chart-wrap {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    position: relative;
+  }
+
+  .chart-wrap.compact { padding: 20px 24px; }
+
+  .chart-wrap h3 {
+    font-size: 14px;
+    color: #888;
+    margin: 0 0 12px;
+    font-weight: 400;
+  }
+
+  .chart-wrap canvas {
+    width: 100% !important;
+    max-height: 260px !important;
+  }
+
+  /* ── Two col ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .donut-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── Livestock ── */
+  .live-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .live-card {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px 24px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+  }
+
+  .live-emoji { font-size: 36px; }
+
+  .live-name {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    color: #888;
+  }
+
+  .live-num {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    color: #1a1a1a;
+    line-height: 1.2;
+  }
+
+  .live-date {
+    font-size: 11px;
+    color: #aaa;
+  }
+
+  /* ── Fertilizer row ── */
+  .fert-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .fert-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+  }
+
+  .fert-name {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 6px;
+  }
+
+  .fert-price {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+  }
+
+  .fert-ch {
+    font-family: var(--font-heading);
+    font-size: 11px;
+  }
+
+  .fert-ch.up { color: #d63031; }
+  .fert-ch.down { color: #22a355; }
+
+  /* ── Expand ── */
+  .expand-section {
+    text-align: center;
+    margin: 32px 0;
+  }
+
+  .expand-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 32px;
+    border: 1px solid #e0e0e0;
+    border-radius: 24px;
+    background: #fff;
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 400;
+    color: #555;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .expand-btn:hover {
+    border-color: #1a1a1a;
+    color: #1a1a1a;
+  }
+
+  /* ── Source ── */
+  .source {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ebebeb;
+    font-size: 12px;
+    color: #aaa;
+  }
+
+  .source a { color: #888; text-decoration: underline; }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .sp { padding: 24px 16px 60px; }
+    .ticker { flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px 18px; }
+    .two-col { grid-template-columns: 1fr; }
+    .comm-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .live-row { flex-direction: column; }
+    .fert-row { grid-template-columns: 1fr 1fr; }
+    .map-layout { grid-template-columns: 1fr; }
+    .map-controls { gap: 6px; }
+    .map-btn { font-size: 11px; padding: 5px 12px; }
+  }
+</style>
