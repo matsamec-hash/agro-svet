@@ -1,0 +1,156 @@
+---
+interface Props {
+  id?: string;
+  name?: string;
+  value?: string;
+  required?: boolean;
+}
+
+const { id = 'phone', name = 'phone', value = '', required = false } = Astro.props;
+
+// Split existing value into prefix + number, if possible
+function split(raw: string): { prefix: string; number: string } {
+  if (!raw) return { prefix: '+420', number: '' };
+  const trimmed = raw.replace(/\s+/g, '');
+  if (trimmed.startsWith('+420')) return { prefix: '+420', number: trimmed.slice(4) };
+  if (trimmed.startsWith('+421')) return { prefix: '+421', number: trimmed.slice(4) };
+  if (trimmed.startsWith('+')) {
+    // Unknown prefix — keep up to 3-4 digits as prefix
+    const m = trimmed.match(/^\+(\d{1,4})(.*)$/);
+    if (m) return { prefix: `+${m[1]}`, number: m[2] };
+    return { prefix: '+', number: trimmed.slice(1) };
+  }
+  // No prefix — assume CZ
+  return { prefix: '+420', number: trimmed };
+}
+
+const { prefix: initialPrefix, number: initialNumber } = split(value);
+---
+
+<div class="phone-input" id={`${id}-wrap`}>
+  <div class="phone-row">
+    <select id={`${id}-prefix`} class="form-input phone-prefix" aria-label="Předvolba">
+      <option value="+420" selected={initialPrefix === '+420'}>🇨🇿 +420</option>
+      <option value="+421" selected={initialPrefix === '+421'}>🇸🇰 +421</option>
+      <option value="custom" selected={initialPrefix !== '+420' && initialPrefix !== '+421'}>🌍 Jiná</option>
+    </select>
+    <input
+      type="tel"
+      id={`${id}-custom`}
+      class="form-input phone-custom"
+      placeholder="+XX"
+      value={initialPrefix !== '+420' && initialPrefix !== '+421' ? initialPrefix : ''}
+      style={initialPrefix !== '+420' && initialPrefix !== '+421' ? '' : 'display:none;'}
+      maxlength="5"
+    />
+    <input
+      type="tel"
+      id={`${id}-number`}
+      class="form-input phone-number"
+      placeholder="602 123 456"
+      value={initialNumber}
+      inputmode="tel"
+      autocomplete="tel-national"
+    />
+  </div>
+  <input type="hidden" id={id} name={name} value={value} required={required} />
+  <small class="phone-hint" id={`${id}-hint`}></small>
+</div>
+
+<script is:inline define:vars={{ id, required }}>
+(function() {
+  const wrap = document.getElementById(`${id}-wrap`);
+  const prefix = document.getElementById(`${id}-prefix`);
+  const custom = document.getElementById(`${id}-custom`);
+  const number = document.getElementById(`${id}-number`);
+  const hidden = document.getElementById(id);
+  const hint = document.getElementById(`${id}-hint`);
+  if (!wrap || !prefix || !custom || !number || !hidden || !hint) return;
+
+  function activePrefix() {
+    if (prefix.value === 'custom') {
+      const raw = (custom.value || '').replace(/\s+/g, '');
+      return raw.startsWith('+') ? raw : (raw ? `+${raw}` : '');
+    }
+    return prefix.value;
+  }
+
+  function validate() {
+    const p = activePrefix();
+    const digits = (number.value || '').replace(/\D/g, '');
+    let msg = '';
+    let ok = true;
+    if (p === '+420' || p === '+421') {
+      if (digits.length !== 0 && digits.length !== 9) {
+        msg = `Telefonní číslo má mít 9 číslic (zadáno ${digits.length}).`;
+        ok = false;
+      }
+    }
+    if (required && digits.length === 0) ok = false;
+    hint.textContent = msg;
+    hint.style.color = ok ? '#888' : '#c00';
+    return ok;
+  }
+
+  function sync() {
+    const p = activePrefix();
+    const digits = (number.value || '').replace(/\D/g, '');
+    hidden.value = digits ? `${p} ${digits}` : '';
+    validate();
+  }
+
+  prefix.addEventListener('change', () => {
+    custom.style.display = prefix.value === 'custom' ? '' : 'none';
+    if (prefix.value !== 'custom') custom.value = '';
+    sync();
+  });
+  custom.addEventListener('input', sync);
+  number.addEventListener('input', () => {
+    // Format 3-3-3 grouping for CZ/SK display (keeps value)
+    const digits = number.value.replace(/\D/g, '').slice(0, 12);
+    if (prefix.value === '+420' || prefix.value === '+421') {
+      const parts = [digits.slice(0, 3), digits.slice(3, 6), digits.slice(6, 9)].filter(Boolean);
+      number.value = parts.join(' ');
+    } else {
+      number.value = digits;
+    }
+    sync();
+  });
+
+  // Intercept form submit to block invalid
+  const form = wrap.closest('form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      sync();
+      if (!validate()) {
+        e.preventDefault();
+        number.focus();
+      }
+    });
+  }
+
+  sync();
+})();
+</script>
+
+<style>
+  .phone-input { margin-bottom: 0; }
+  .phone-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 8px;
+  }
+  .phone-row:has(.phone-custom:not([style*='display:none'])) {
+    grid-template-columns: 120px 90px 1fr;
+  }
+  .phone-prefix {
+    text-align: center;
+  }
+  .phone-hint {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+    min-height: 14px;
+  }
+</style>

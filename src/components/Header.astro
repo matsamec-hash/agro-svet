@@ -27,6 +27,28 @@ const current = Astro.url.pathname;
       ))}
     </nav>
 
+    <!-- User menu (client-rendered based on /api/bazar/me) -->
+    <div id="user-menu" class="user-menu" hidden>
+      <button id="user-btn" class="user-btn" aria-haspopup="true" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+        <span id="user-name">Účet</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div id="user-dropdown" class="user-dropdown" hidden>
+        <a href="/bazar/moje/" class="user-dropdown-item">Moje inzeráty</a>
+        <a href="/bazar/novy/" class="user-dropdown-item">+ Nový inzerát</a>
+        <a href="/bazar/profil/" class="user-dropdown-item">Profil</a>
+        <div class="user-dropdown-sep"></div>
+        <a href="/bazar/odhlaseni/" class="user-dropdown-item">Odhlásit se</a>
+      </div>
+    </div>
+
+    <!-- Guest link (shown when not logged in) -->
+    <a href="/bazar/prihlaseni/" id="guest-link" class="guest-link" hidden>Přihlásit</a>
+
     <!-- Mobile hamburger -->
     <button id="hamburger" style="display:none; background:none; border:none; cursor:pointer; padding:8px;" aria-label="Menu">
       <svg id="icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round">
@@ -112,6 +134,64 @@ const current = Astro.url.pathname;
     color: #000;
   }
 
+  /* User menu */
+  .user-menu {
+    position: relative;
+    margin-left: 8px;
+  }
+  .user-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px 6px 8px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .user-btn:hover { border-color: #FFFF00; box-shadow: 0 0 0 3px rgba(255,255,0,.3); }
+  .user-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 200px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    z-index: 110;
+    padding: 6px;
+  }
+  .user-dropdown-item {
+    display: block;
+    padding: 9px 12px;
+    font-size: 14px;
+    color: #1a1a1a;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+  .user-dropdown-item:hover { background: #FFFF00; }
+  .user-dropdown-sep {
+    height: 1px;
+    background: #eee;
+    margin: 4px 8px;
+  }
+  .guest-link {
+    margin-left: 8px;
+    padding: 6px 14px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    background: #1a1a1a;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+  }
+  .guest-link:hover { background: #000; }
+
   @media (max-width: 1025px) {
     #main-nav { display: none !important; }
     #hamburger { display: block !important; }
@@ -131,4 +211,35 @@ const current = Astro.url.pathname;
     iconOpen!.style.display = open ? 'none' : 'block';
     iconClose!.style.display = open ? 'block' : 'none';
   });
+
+  // User menu — fetch auth state from /api/bazar/me
+  (async () => {
+    const menu = document.getElementById('user-menu') as HTMLElement | null;
+    const guest = document.getElementById('guest-link') as HTMLElement | null;
+    const btn = document.getElementById('user-btn');
+    const dropdown = document.getElementById('user-dropdown');
+    const nameSpan = document.getElementById('user-name');
+    if (!menu || !guest) return;
+
+    try {
+      const res = await fetch('/api/bazar/me', { credentials: 'same-origin' });
+      const data = await res.json();
+      if (data.logged_in) {
+        menu.hidden = false;
+        if (nameSpan && data.name) nameSpan.textContent = data.name;
+        btn?.addEventListener('click', () => {
+          if (!dropdown) return;
+          dropdown.hidden = !dropdown.hidden;
+          btn.setAttribute('aria-expanded', String(!dropdown.hidden));
+        });
+        document.addEventListener('click', (e) => {
+          if (!menu.contains(e.target as Node) && dropdown) dropdown.hidden = true;
+        });
+      } else {
+        guest.hidden = false;
+      }
+    } catch {
+      guest.hidden = false;
+    }
+  })();
 </script>

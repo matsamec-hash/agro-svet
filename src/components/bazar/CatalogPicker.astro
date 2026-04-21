@@ -79,48 +79,106 @@ const optionsJson = JSON.stringify(options);
     return attr && val ? { attr, val } : null;
   }
 
+  function sortOptions(list) {
+    // Sort: year_from DESC (newest first), then power_hp DESC
+    return [...list].sort((a, b) => {
+      const yA = a.year_from ?? 0;
+      const yB = b.year_from ?? 0;
+      if (yB !== yA) return yB - yA;
+      const pA = a.power_hp ?? 0;
+      const pB = b.power_hp ?? 0;
+      return pB - pA;
+    });
+  }
+
   function filterOptions(q) {
     const filter = getFilter();
     const needle = q.trim().toLowerCase();
     let pool = OPTIONS;
     if (filter) pool = pool.filter((o) => o[filter.attr] === filter.val);
-    if (!needle) return pool.slice(0, 50);
-    return pool
-      .filter((o) => String(o.label).toLowerCase().includes(needle))
-      .slice(0, 50);
+    if (needle) pool = pool.filter((o) => String(o.label).toLowerCase().includes(needle));
+    return sortOptions(pool).slice(0, 100);
+  }
+
+  // Flatten items + group headers into a single navigable array.
+  // Each entry is either { type: 'header', label, key } or { type: 'item', option, idx }
+  // Only 'item' entries are selectable.
+  function buildRows(items) {
+    const rows = [];
+    let lastGroup = '';
+    items.forEach((o) => {
+      const brandName = o.brand_name || '';
+      const seriesName = o.series_name || '';
+      const groupKey = `${o.brand_slug || ''}::${o.series_slug || ''}`;
+      if (groupKey !== lastGroup) {
+        lastGroup = groupKey;
+        rows.push({ type: 'header', label: seriesName ? `${brandName} — ${seriesName}` : brandName, key: groupKey });
+      }
+      rows.push({ type: 'item', option: o });
+    });
+    return rows;
+  }
+
+  function selectableCount(rows) {
+    return rows.filter((r) => r.type === 'item').length;
+  }
+
+  function nthSelectable(rows, n) {
+    let i = -1;
+    for (const r of rows) {
+      if (r.type === 'item') {
+        i++;
+        if (i === n) return r.option;
+      }
+    }
+    return null;
   }
 
   function render() {
     list.innerHTML = '';
+    const rows = buildRows(current);
+
     if (current.length === 0) {
       const li = document.createElement('li');
       li.className = 'picker-empty';
       li.textContent = 'Žádný model nenalezen.';
       list.appendChild(li);
     } else {
-      current.forEach((o, idx) => {
-        const li = document.createElement('li');
-        li.className = 'picker-item' + (idx === activeIdx ? ' active' : '');
-        li.dataset.slug = o.slug;
-        li.dataset.label = o.label;
-        li.innerHTML = `<span class="picker-item-label">${o.label}</span>` + (o.power_hp ? `<span class="picker-item-meta">${o.power_hp} k</span>` : '');
-        li.addEventListener('mousedown', (e) => {
-          e.preventDefault();
-          select(o);
-        });
-        list.appendChild(li);
+      let selectableIdx = 0;
+      rows.forEach((row) => {
+        if (row.type === 'header') {
+          const header = document.createElement('li');
+          header.className = 'picker-group-header';
+          header.textContent = row.label;
+          list.appendChild(header);
+        } else {
+          const o = row.option;
+          const myIdx = selectableIdx++;
+          const li = document.createElement('li');
+          li.className = 'picker-item' + (myIdx === activeIdx ? ' active' : '');
+          li.dataset.slug = o.slug;
+          li.dataset.label = o.label;
+          const yr = o.year_from ? (o.year_to ? ` · ${o.year_from}–${o.year_to}` : ` · ${o.year_from}–`) : '';
+          const hp = o.power_hp ? `${o.power_hp} k` : '';
+          li.innerHTML =
+            `<span class="picker-item-label">${o.name || o.label}</span>` +
+            (hp || yr ? `<span class="picker-item-meta">${hp}${yr}</span>` : '');
+          li.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            select(o);
+          });
+          list.appendChild(li);
+        }
       });
     }
-    // "Ostatní" option at bottom — always available
+
+    // "Ostatní" always at bottom (ostatní = activeIdx === current.length)
     const ostatniLi = document.createElement('li');
     ostatniLi.className = 'picker-item picker-ostatni' + (activeIdx === current.length ? ' active' : '');
     ostatniLi.textContent = ostatniLabel;
     ostatniLi.addEventListener('mousedown', (e) => {
       e.preventDefault();
-      hidden.value = '';
-      input.value = '';
-      hint.textContent = 'Vybráno: Ostatní — upřesněte v popisu inzerátu.';
-      close();
+      selectOstatni();
     });
     list.appendChild(ostatniLi);
   }
@@ -141,6 +199,19 @@ const optionsJson = JSON.stringify(options);
     input.value = option.label;
     hint.textContent = `Vybráno: ${option.label}`;
     close();
+    // Dispatch selection event so parent can auto-fill related fields
+    wrap.dispatchEvent(new CustomEvent('catalog-picker-selected', {
+      detail: { option },
+      bubbles: true,
+    }));
+  }
+
+  function selectOstatni() {
+    hidden.value = '';
+    input.value = '';
+    hint.textContent = 'Vybráno: Ostatní — upřesněte v popisu inzerátu.';
+    close();
+    wrap.dispatchEvent(new CustomEvent('catalog-picker-cleared', { bubbles: true }));
   }
 
   input.addEventListener('focus', open);
@@ -168,10 +239,7 @@ const optionsJson = JSON.stringify(options);
         if (activeIdx < current.length) {
           select(current[activeIdx]);
         } else {
-          hidden.value = '';
-          input.value = '';
-          hint.textContent = 'Vybráno: Ostatní — upřesněte v popisu inzerátu.';
-          close();
+          selectOstatni();
         }
       }
     } else if (e.key === 'Escape') {
@@ -180,10 +248,8 @@ const optionsJson = JSON.stringify(options);
   });
 
   clear?.addEventListener('click', () => {
-    hidden.value = '';
-    input.value = '';
+    selectOstatni();
     hint.textContent = 'Pokud model není v seznamu, ponechte pole prázdné.';
-    close();
   });
 
   // Cross-component filter update (e.g. category change filters models)
@@ -259,8 +325,17 @@ const optionsJson = JSON.stringify(options);
     color: #000;
   }
   .picker-item-label { color: #1a1a1a; }
-  .picker-item-meta { font-size: 12px; color: #666; }
+  .picker-item-meta { font-size: 12px; color: #666; white-space: nowrap; }
   .picker-item:hover .picker-item-meta, .picker-item.active .picker-item-meta { color: #333; }
+  .picker-group-header {
+    padding: 8px 12px 4px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #888;
+    background: transparent;
+  }
   .picker-ostatni {
     border-top: 1px solid #f0f0f0;
     margin-top: 4px;

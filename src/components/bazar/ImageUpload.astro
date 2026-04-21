@@ -93,25 +93,43 @@
 
   async function handleFiles(files: FileList) {
     for (const file of files) {
-      if (uploadedPaths.length >= MAX_FILES) break;
+      if (uploadedPaths.length >= MAX_FILES) { alert(`Maximálně ${MAX_FILES} fotek.`); break; }
       if (file.size > MAX_SIZE) { alert(`${file.name} je příliš velký (max 5MB)`); continue; }
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) continue;
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+        alert(`${file.name} — nepodporovaný formát (povoleno JPG, PNG, WEBP).`);
+        continue;
+      }
 
-      const path = `${crypto.randomUUID()}/${file.name}`;
+      // Sanitize filename — Supabase Storage rejects spaces, diacritics, special chars
+      const safeName = file.name
+        .normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-zA-Z0-9.\-_]/g, '_');
+      const path = `${crypto.randomUUID()}/${safeName}`;
 
-      const res = await fetch(`${supabaseUrl}/storage/v1/object/bazar-images/${path}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${supabaseKey}`,
-          'Content-Type': file.type,
-        },
-        body: file,
-      });
+      try {
+        const res = await fetch(`${supabaseUrl}/storage/v1/object/bazar-images/${path}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${supabaseKey}`,
+            'apikey': supabaseKey,
+            'Content-Type': file.type,
+            'x-upsert': 'false',
+          },
+          body: file,
+        });
 
-      if (res.ok) {
-        uploadedPaths.push(path);
-        addPreview(file, path);
-        updateInput();
+        if (res.ok) {
+          uploadedPaths.push(path);
+          addPreview(file, path);
+          updateInput();
+        } else {
+          const err = await res.text().catch(() => '');
+          console.error('[upload] failed', res.status, err);
+          alert(`Nahrávání selhalo (${res.status}). ${err || 'Zkus menší fotku nebo jiný formát.'}`);
+        }
+      } catch (e) {
+        console.error('[upload] network error', e);
+        alert('Chyba sítě při nahrávání fotky.');
       }
     }
   }
