@@ -16,27 +16,39 @@ const categoryLabels: Record<string, string> = {
   trh: 'Trh',
   legislativa: 'Legislativa',
   znacky: 'Značky',
+  novinky: 'Novinky',
 };
 
 const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(publishDate);
 ---
 
-<a href={`/novinky/${slug}/`} class="card">
-  <div class="card-img">
-    {heroImage
-      ? <img src={heroImage} alt={title} loading="lazy" />
-      : <span>📰</span>
-    }
-    <span class="tag">{categoryLabels[category] ?? category}</span>
-  </div>
-  <div class="card-body">
-    <h3>{title}</h3>
-    <p>{description}</p>
-    <time>{date}</time>
-  </div>
-</a>
+<div class="card-wrap">
+  <a href={`/novinky/${slug}/`} class="card">
+    <div class="card-img">
+      {heroImage
+        ? <img src={heroImage} alt={title} loading="lazy" />
+        : <span>📰</span>
+      }
+    </div>
+    <div class="card-body">
+      <h3>{title}</h3>
+      <p>{description}</p>
+      <time>{date}</time>
+    </div>
+  </a>
+  <a
+    href={`/novinky/?kategorie=${category}`}
+    class="tag"
+    title={`Všechny články v kategorii ${categoryLabels[category] ?? category}`}
+  >
+    {categoryLabels[category] ?? category}
+  </a>
+</div>
 
 <style>
+  .card-wrap {
+    position: relative;
+  }
   .card {
     display: block;
     text-decoration: none;
@@ -67,15 +79,23 @@ const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', y
     position: absolute;
     bottom: 12px;
     left: 12px;
+    z-index: 2;
     background: #FFFF00;
     color: #000;
     font-size: 11px;
     font-weight: 400;
     font-family: 'Chakra Petch', sans-serif;
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 6px;
     text-transform: uppercase;
     letter-spacing: .4px;
+    text-decoration: none;
+    transition: background .15s, transform .15s;
+    cursor: pointer;
+  }
+  .tag:hover {
+    background: #1a1a1a;
+    color: #FFFF00;
   }
 
   .card-body { padding: 18px 18px 20px; }

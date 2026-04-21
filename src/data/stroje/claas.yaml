@@ -1,0 +1,976 @@
+slug: claas
+name: CLAAS
+country: Německo
+founded: 1913
+website: https://www.claas.com
+description: >
+  Německá rodinná firma založená 1913 bratry Claasovými. Světová jednička v kombajnech
+  (řada Lexion) a sklízecích řezačkách Jaguar. Traktory CLAAS pokračují v dědictví francouzského
+  Renault Agriculture (odkoupení 2003). Sídlo v Harsewinkelu.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== Ares (Renault legacy, 2002-2008) ==========
+      - slug: ares
+        name: "Ares (2002–2008)"
+        year_from: 2002
+        year_to: 2008
+        description: >
+          Po akvizici Renault Agriculture (2003) pokračující řada zděděná od francouzského
+          výrobce. Motor John Deere 4- a 6-válec.
+        models:
+          - slug: claas-ares-547
+            name: "Ares 547"
+            year_from: 2002
+            year_to: 2008
+            power_hp: 100
+            power_kw: 74
+          - slug: claas-ares-557
+            name: "Ares 557"
+            year_from: 2002
+            year_to: 2008
+            power_hp: 110
+            power_kw: 81
+          - slug: claas-ares-567
+            name: "Ares 567"
+            year_from: 2002
+            year_to: 2008
+            power_hp: 120
+            power_kw: 88
+          - slug: claas-ares-577
+            name: "Ares 577"
+            year_from: 2002
+            year_to: 2008
+            power_hp: 130
+            power_kw: 96
+          - slug: claas-ares-657
+            name: "Ares 657"
+            year_from: 2002
+            year_to: 2008
+            power_hp: 145
+            power_kw: 107
+          - slug: claas-ares-697
+            name: "Ares 697"
+            year_from: 2002
+            year_to: 2008
+            power_hp: 170
+            power_kw: 125
+
+      # ========== Atles (big, 2003-2007) ==========
+      - slug: atles
+        name: "Atles (2003–2007)"
+        year_from: 2003
+        year_to: 2007
+        description: >
+          Velká vlajková řada před příchodem Axion. Motor DPS 6-válec 7,4 L.
+        models:
+          - slug: claas-atles-926-rz
+            name: "Atles 926 RZ"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 190
+            power_kw: 140
+          - slug: claas-atles-936-rz
+            name: "Atles 936 RZ"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 215
+            power_kw: 158
+          - slug: claas-atles-946-rz
+            name: "Atles 946 RZ"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 240
+            power_kw: 177
+          - slug: claas-atles-956-rz
+            name: "Atles 956 RZ"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 265
+            power_kw: 195
+
+      # ========== Celtis (entry-level, 2003-2010) ==========
+      - slug: celtis
+        name: "Celtis (2003–2010)"
+        year_from: 2003
+        year_to: 2010
+        description: >
+          Cenově dostupná entry řada zděděná z Renaultu. Motor Perkins 4-válec.
+        models:
+          - slug: claas-celtis-426
+            name: "Celtis 426"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 72
+            power_kw: 53
+          - slug: claas-celtis-436
+            name: "Celtis 436"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 82
+            power_kw: 60
+          - slug: claas-celtis-446
+            name: "Celtis 446"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 92
+            power_kw: 68
+          - slug: claas-celtis-456
+            name: "Celtis 456"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 102
+            power_kw: 75
+
+      # ========== Elios (2008+) ==========
+      - slug: elios
+        name: "Elios (2008–dosud)"
+        year_from: 2008
+        year_to: null
+        description: >
+          Kompaktní utility řada. Motor FPT 4-válec, jednoduchá mechanická převodovka.
+        models:
+          - slug: claas-elios-210
+            name: "Elios 210"
+            year_from: 2008
+            year_to: null
+            power_hp: 80
+            power_kw: 59
+          - slug: claas-elios-220
+            name: "Elios 220"
+            year_from: 2008
+            year_to: null
+            power_hp: 90
+            power_kw: 66
+          - slug: claas-elios-230
+            name: "Elios 230"
+            year_from: 2008
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: claas-elios-240
+            name: "Elios 240"
+            year_from: 2014
+            year_to: null
+            power_hp: 110
+            power_kw: 81
+
+      # ========== Atos (2014+) ==========
+      - slug: atos
+        name: "Atos (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Utility traktor s převodovkou Revershift a hydraulikou Power Shuttle.
+        models:
+          - slug: claas-atos-220
+            name: "Atos 220"
+            year_from: 2014
+            year_to: null
+            power_hp: 88
+            power_kw: 65
+          - slug: claas-atos-230
+            name: "Atos 230"
+            year_from: 2014
+            year_to: null
+            power_hp: 97
+            power_kw: 71
+          - slug: claas-atos-240
+            name: "Atos 240"
+            year_from: 2014
+            year_to: null
+            power_hp: 103
+            power_kw: 76
+          - slug: claas-atos-330
+            name: "Atos 330"
+            year_from: 2016
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: claas-atos-340
+            name: "Atos 340"
+            year_from: 2016
+            year_to: null
+            power_hp: 109
+            power_kw: 80
+          - slug: claas-atos-350
+            name: "Atos 350"
+            year_from: 2016
+            year_to: null
+            power_hp: 118
+            power_kw: 87
+
+      # ========== Nexos (úzký, 2011+) ==========
+      - slug: nexos
+        name: "Nexos (2011–dosud)"
+        year_from: 2011
+        year_to: null
+        description: >
+          Úzká specializovaná řada pro sady a vinice. Motor FPT NEF 4-válec.
+        models:
+          - slug: claas-nexos-210-vl
+            name: "Nexos 210 VL"
+            year_from: 2011
+            year_to: null
+            power_hp: 79
+            power_kw: 58
+          - slug: claas-nexos-220-f
+            name: "Nexos 220 F"
+            year_from: 2011
+            year_to: null
+            power_hp: 88
+            power_kw: 65
+          - slug: claas-nexos-230-vl
+            name: "Nexos 230 VL"
+            year_from: 2014
+            year_to: null
+            power_hp: 97
+            power_kw: 71
+          - slug: claas-nexos-240-vl
+            name: "Nexos 240 VL"
+            year_from: 2014
+            year_to: null
+            power_hp: 106
+            power_kw: 78
+
+      # ========== Arion (2007+) ==========
+      - slug: arion-gen1
+        name: "Arion 500/600 (2007–2013)"
+        year_from: 2007
+        year_to: 2013
+        description: >
+          Univerzální prémiová řada pro smíšené farmy. Motor DPS Perkins, převodovka QuadriShift
+          nebo HexaShift.
+        models:
+          - slug: claas-arion-510
+            name: "Arion 510"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 125
+            power_kw: 92
+          - slug: claas-arion-520
+            name: "Arion 520"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 140
+            power_kw: 103
+          - slug: claas-arion-530
+            name: "Arion 530"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 155
+            power_kw: 114
+          - slug: claas-arion-540
+            name: "Arion 540"
+            year_from: 2008
+            year_to: 2013
+            power_hp: 170
+            power_kw: 125
+          - slug: claas-arion-610
+            name: "Arion 610"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 140
+            power_kw: 103
+          - slug: claas-arion-620
+            name: "Arion 620"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 165
+            power_kw: 121
+          - slug: claas-arion-630
+            name: "Arion 630"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 180
+            power_kw: 132
+          - slug: claas-arion-640
+            name: "Arion 640"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 195
+            power_kw: 143
+
+      - slug: arion-gen2
+        name: "Arion 400/500/600 Gen2 (2013–dosud)"
+        year_from: 2013
+        year_to: null
+        description: >
+          Modernizovaná řada. Motor FPT/DPS, převodovka HexaShift nebo CMATIC (CVT). Kabina
+          PANORAMIC s panoramatickou prosklenou střechou pro přední nakladač.
+        models:
+          - slug: claas-arion-410
+            name: "Arion 410"
+            year_from: 2013
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: claas-arion-420
+            name: "Arion 420"
+            year_from: 2013
+            year_to: null
+            power_hp: 110
+            power_kw: 81
+          - slug: claas-arion-430
+            name: "Arion 430"
+            year_from: 2013
+            year_to: null
+            power_hp: 120
+            power_kw: 88
+          - slug: claas-arion-440
+            name: "Arion 440"
+            year_from: 2013
+            year_to: null
+            power_hp: 130
+            power_kw: 96
+          - slug: claas-arion-450
+            name: "Arion 450"
+            year_from: 2013
+            year_to: null
+            power_hp: 140
+            power_kw: 103
+          - slug: claas-arion-460
+            name: "Arion 460"
+            year_from: 2015
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: claas-arion-510-gen2
+            name: "Arion 510 Gen2"
+            year_from: 2013
+            year_to: null
+            power_hp: 125
+            power_kw: 92
+          - slug: claas-arion-530-gen2
+            name: "Arion 530 Gen2"
+            year_from: 2013
+            year_to: null
+            power_hp: 145
+            power_kw: 107
+          - slug: claas-arion-550-gen2
+            name: "Arion 550 Gen2"
+            year_from: 2013
+            year_to: null
+            power_hp: 165
+            power_kw: 121
+          - slug: claas-arion-620-gen2
+            name: "Arion 620 Gen2"
+            year_from: 2013
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: claas-arion-630-gen2
+            name: "Arion 630 Gen2"
+            year_from: 2013
+            year_to: null
+            power_hp: 170
+            power_kw: 125
+          - slug: claas-arion-640-gen2
+            name: "Arion 640 Gen2"
+            year_from: 2013
+            year_to: null
+            power_hp: 190
+            power_kw: 140
+          - slug: claas-arion-650-gen2
+            name: "Arion 650 Gen2"
+            year_from: 2013
+            year_to: null
+            power_hp: 205
+            power_kw: 151
+          - slug: claas-arion-660-gen2
+            name: "Arion 660 Gen2"
+            year_from: 2016
+            year_to: null
+            power_hp: 220
+            power_kw: 162
+
+      # ========== Axion (2007+) ==========
+      - slug: axion-800-900
+        name: "Axion 800/900 (2007–dosud)"
+        year_from: 2007
+        year_to: null
+        description: >
+          Vlajková velká řada. Motor FPT Cursor 9 (8,7 L) a Cursor 16 (Axion 900). Převodovka
+          CMATIC (CVT) s ProDrive technologií. Axion 960 = 445 k, vlajkový model CLAAS traktor.
+        models:
+          - slug: claas-axion-810
+            name: "Axion 810"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 205
+            power_kw: 151
+          - slug: claas-axion-820
+            name: "Axion 820"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 215
+            power_kw: 158
+          - slug: claas-axion-830
+            name: "Axion 830"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 235
+            power_kw: 173
+          - slug: claas-axion-840
+            name: "Axion 840"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 255
+            power_kw: 187
+          - slug: claas-axion-850
+            name: "Axion 850"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 275
+            power_kw: 202
+          - slug: claas-axion-870
+            name: "Axion 870"
+            year_from: 2014
+            year_to: null
+            power_hp: 295
+            power_kw: 217
+          - slug: claas-axion-930
+            name: "Axion 930"
+            year_from: 2013
+            year_to: null
+            power_hp: 335
+            power_kw: 246
+          - slug: claas-axion-940
+            name: "Axion 940"
+            year_from: 2013
+            year_to: null
+            power_hp: 365
+            power_kw: 269
+          - slug: claas-axion-950
+            name: "Axion 950"
+            year_from: 2013
+            year_to: null
+            power_hp: 410
+            power_kw: 302
+          - slug: claas-axion-960
+            name: "Axion 960"
+            year_from: 2015
+            year_to: null
+            power_hp: 445
+            power_kw: 327
+
+      # ========== Xerion (1997+) ==========
+      - slug: xerion
+        name: "Xerion (1997–dosud)"
+        year_from: 1997
+        year_to: null
+        description: >
+          Systémový traktor s reverzním řízením (otočná kabina Trac VC), 4 stejně velká kola,
+          CVT převodovka. Specialita pro pastvinářské a siláž. Varianty Trac (standardní) a
+          Saddle Trac (pevně umístěná kabina).
+        models:
+          - slug: claas-xerion-3000
+            name: "Xerion 3000"
+            year_from: 1997
+            year_to: 2008
+            power_hp: 268
+            power_kw: 197
+          - slug: claas-xerion-3300
+            name: "Xerion 3300"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 335
+            power_kw: 246
+          - slug: claas-xerion-3800
+            name: "Xerion 3800"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 379
+            power_kw: 279
+          - slug: claas-xerion-4000
+            name: "Xerion 4000"
+            year_from: 2014
+            year_to: null
+            power_hp: 408
+            power_kw: 300
+          - slug: claas-xerion-4200
+            name: "Xerion 4200"
+            year_from: 2019
+            year_to: null
+            power_hp: 431
+            power_kw: 317
+          - slug: claas-xerion-4500
+            name: "Xerion 4500"
+            year_from: 2014
+            year_to: null
+            power_hp: 462
+            power_kw: 340
+          - slug: claas-xerion-5000
+            name: "Xerion 5000"
+            year_from: 2014
+            year_to: null
+            power_hp: 530
+            power_kw: 390
+
+  kombajny:
+    name: Kombajny
+
+    series:
+      # ========== Dominator (historické) ==========
+      - slug: dominator
+        name: "Dominator (1970–2002)"
+        year_from: 1970
+        year_to: 2002
+        description: >
+          Legendární konvenční kombajny, které vynesly CLAAS na špici. V CZ ještě běžně vídané
+          v menších provozech.
+        models:
+          - slug: claas-dominator-96
+            name: "Dominator 96"
+            year_from: 1990
+            year_to: 1996
+            power_hp: 120
+            power_kw: 88
+            grain_tank_l: 4500
+          - slug: claas-dominator-106
+            name: "Dominator 106"
+            year_from: 1990
+            year_to: 1996
+            power_hp: 145
+            power_kw: 107
+            grain_tank_l: 6000
+          - slug: claas-dominator-116
+            name: "Dominator 116"
+            year_from: 1990
+            year_to: 1996
+            power_hp: 165
+            power_kw: 121
+            grain_tank_l: 6500
+          - slug: claas-dominator-204
+            name: "Dominator 204"
+            year_from: 1996
+            year_to: 2002
+            power_hp: 190
+            power_kw: 140
+            grain_tank_l: 7500
+          - slug: claas-dominator-208
+            name: "Dominator 208"
+            year_from: 1996
+            year_to: 2002
+            power_hp: 225
+            power_kw: 165
+            grain_tank_l: 8500
+
+      # ========== Mega (1995-2008) ==========
+      - slug: mega
+        name: "Mega (1995–2008)"
+        year_from: 1995
+        year_to: 2008
+        description: >
+          Střední třída konvenčních kombajnů. Motor Mercedes-Benz 6-válec. Technologie APS
+          pro vyšší propustnost.
+        models:
+          - slug: claas-mega-202
+            name: "Mega 202"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 185
+            power_kw: 136
+            grain_tank_l: 6800
+          - slug: claas-mega-208
+            name: "Mega 208"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 225
+            power_kw: 165
+            grain_tank_l: 8500
+          - slug: claas-mega-218
+            name: "Mega 218"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 260
+            power_kw: 191
+            grain_tank_l: 9500
+          - slug: claas-mega-360
+            name: "Mega 360"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 230
+            power_kw: 169
+            grain_tank_l: 8500
+          - slug: claas-mega-370
+            name: "Mega 370"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 275
+            power_kw: 202
+            grain_tank_l: 9500
+
+      # ========== Avero (2007+) ==========
+      - slug: avero
+        name: "Avero (2007–dosud)"
+        year_from: 2007
+        year_to: null
+        description: >
+          Cenově dostupná vstupní řada pro menší farmy. Motor John Deere 4-válec.
+        models:
+          - slug: claas-avero-160
+            name: "Avero 160"
+            year_from: 2007
+            year_to: null
+            power_hp: 144
+            power_kw: 106
+            grain_tank_l: 4200
+          - slug: claas-avero-240
+            name: "Avero 240"
+            year_from: 2007
+            year_to: null
+            power_hp: 204
+            power_kw: 150
+            grain_tank_l: 5600
+
+      # ========== Tucano (2008+) ==========
+      - slug: tucano
+        name: "Tucano (2008–dosud)"
+        year_from: 2008
+        year_to: null
+        description: >
+          Střední třída. Konvenční varianty Tucano 300-500 nebo rotorové hybridní 400 série
+          s jedním rotorem APS HYBRID.
+        models:
+          - slug: claas-tucano-320
+            name: "Tucano 320"
+            year_from: 2008
+            year_to: null
+            power_hp: 204
+            power_kw: 150
+            grain_tank_l: 6500
+          - slug: claas-tucano-340
+            name: "Tucano 340"
+            year_from: 2008
+            year_to: null
+            power_hp: 235
+            power_kw: 173
+            grain_tank_l: 7500
+          - slug: claas-tucano-430
+            name: "Tucano 430"
+            year_from: 2013
+            year_to: null
+            power_hp: 286
+            power_kw: 210
+            grain_tank_l: 8000
+          - slug: claas-tucano-440
+            name: "Tucano 440"
+            year_from: 2013
+            year_to: null
+            power_hp: 306
+            power_kw: 225
+            grain_tank_l: 9000
+          - slug: claas-tucano-450
+            name: "Tucano 450"
+            year_from: 2015
+            year_to: null
+            power_hp: 326
+            power_kw: 240
+            grain_tank_l: 9000
+          - slug: claas-tucano-460
+            name: "Tucano 460"
+            year_from: 2015
+            year_to: null
+            power_hp: 345
+            power_kw: 254
+            grain_tank_l: 9000
+          - slug: claas-tucano-470
+            name: "Tucano 470"
+            year_from: 2015
+            year_to: null
+            power_hp: 374
+            power_kw: 275
+            grain_tank_l: 9000
+          - slug: claas-tucano-570
+            name: "Tucano 570"
+            year_from: 2015
+            year_to: null
+            power_hp: 394
+            power_kw: 290
+            grain_tank_l: 11000
+
+      # ========== Lexion (1995+) vlajkový ==========
+      - slug: lexion-400-500-600-700
+        name: "Lexion 400/500/600/700 (1995–2019)"
+        year_from: 1995
+        year_to: 2019
+        description: >
+          Vlajková řada CLAAS. Revoluce s technologií APS + 2 rotory v řadě 580+. Motor
+          Mercedes-Benz / Caterpillar.
+        models:
+          - slug: claas-lexion-460
+            name: "Lexion 460"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 260
+            power_kw: 191
+            grain_tank_l: 8500
+          - slug: claas-lexion-480
+            name: "Lexion 480"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 360
+            power_kw: 265
+            grain_tank_l: 10500
+          - slug: claas-lexion-580
+            name: "Lexion 580"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 420
+            power_kw: 309
+            grain_tank_l: 11000
+          - slug: claas-lexion-600
+            name: "Lexion 600"
+            year_from: 2006
+            year_to: 2019
+            power_hp: 530
+            power_kw: 390
+            grain_tank_l: 13500
+          - slug: claas-lexion-660
+            name: "Lexion 660"
+            year_from: 2010
+            year_to: 2019
+            power_hp: 328
+            power_kw: 241
+            grain_tank_l: 10000
+          - slug: claas-lexion-670
+            name: "Lexion 670"
+            year_from: 2010
+            year_to: 2019
+            power_hp: 408
+            power_kw: 300
+            grain_tank_l: 11000
+          - slug: claas-lexion-740
+            name: "Lexion 740"
+            year_from: 2014
+            year_to: 2019
+            power_hp: 408
+            power_kw: 300
+            grain_tank_l: 11500
+          - slug: claas-lexion-750
+            name: "Lexion 750"
+            year_from: 2014
+            year_to: 2019
+            power_hp: 435
+            power_kw: 320
+            grain_tank_l: 11500
+          - slug: claas-lexion-770
+            name: "Lexion 770"
+            year_from: 2010
+            year_to: 2019
+            power_hp: 598
+            power_kw: 440
+            grain_tank_l: 12500
+          - slug: claas-lexion-780
+            name: "Lexion 780"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 625
+            power_kw: 460
+            grain_tank_l: 13500
+          - slug: claas-lexion-8900
+            name: "Lexion 8900"
+            year_from: 2016
+            year_to: 2019
+            power_hp: 790
+            power_kw: 581
+            grain_tank_l: 13500
+
+      - slug: lexion-5000-8000
+        name: "Lexion 5000/6000/7000/8000 (2019–dosud)"
+        year_from: 2019
+        year_to: null
+        description: >
+          Kompletně nová platforma. Design Volker Groth (BMW), APS Synflow 755 mm mláticí bubnu,
+          Cemos Auto Threshing / Cleaning / Separation, FieldScanner. Řada 8000 má APS HYBRID
+          s 2 rotory, 5000 je konvenční. Lexion 8900 s 790 k je nejvýkonnější kombajn na světě.
+        models:
+          - slug: claas-lexion-5300
+            name: "Lexion 5300"
+            year_from: 2019
+            year_to: null
+            power_hp: 341
+            power_kw: 251
+            grain_tank_l: 9000
+          - slug: claas-lexion-5400
+            name: "Lexion 5400"
+            year_from: 2019
+            year_to: null
+            power_hp: 381
+            power_kw: 280
+            grain_tank_l: 10000
+          - slug: claas-lexion-5500
+            name: "Lexion 5500"
+            year_from: 2019
+            year_to: null
+            power_hp: 415
+            power_kw: 305
+            grain_tank_l: 10000
+          - slug: claas-lexion-6600
+            name: "Lexion 6600"
+            year_from: 2019
+            year_to: null
+            power_hp: 408
+            power_kw: 300
+            grain_tank_l: 11000
+          - slug: claas-lexion-6700
+            name: "Lexion 6700"
+            year_from: 2019
+            year_to: null
+            power_hp: 435
+            power_kw: 320
+            grain_tank_l: 11000
+          - slug: claas-lexion-6800
+            name: "Lexion 6800"
+            year_from: 2019
+            year_to: null
+            power_hp: 490
+            power_kw: 360
+            grain_tank_l: 12000
+          - slug: claas-lexion-6900
+            name: "Lexion 6900"
+            year_from: 2019
+            year_to: null
+            power_hp: 547
+            power_kw: 402
+            grain_tank_l: 12500
+          - slug: claas-lexion-7400
+            name: "Lexion 7400"
+            year_from: 2019
+            year_to: null
+            power_hp: 408
+            power_kw: 300
+            grain_tank_l: 11000
+          - slug: claas-lexion-7500
+            name: "Lexion 7500"
+            year_from: 2019
+            year_to: null
+            power_hp: 435
+            power_kw: 320
+            grain_tank_l: 11000
+          - slug: claas-lexion-7600
+            name: "Lexion 7600"
+            year_from: 2019
+            year_to: null
+            power_hp: 462
+            power_kw: 340
+            grain_tank_l: 11000
+          - slug: claas-lexion-7700
+            name: "Lexion 7700"
+            year_from: 2019
+            year_to: null
+            power_hp: 507
+            power_kw: 373
+            grain_tank_l: 12500
+          - slug: claas-lexion-7800
+            name: "Lexion 7800"
+            year_from: 2019
+            year_to: null
+            power_hp: 547
+            power_kw: 402
+            grain_tank_l: 12500
+          - slug: claas-lexion-8600
+            name: "Lexion 8600"
+            year_from: 2019
+            year_to: null
+            power_hp: 585
+            power_kw: 430
+            grain_tank_l: 13500
+          - slug: claas-lexion-8700
+            name: "Lexion 8700"
+            year_from: 2019
+            year_to: null
+            power_hp: 625
+            power_kw: 460
+            grain_tank_l: 13500
+          - slug: claas-lexion-8800
+            name: "Lexion 8800"
+            year_from: 2019
+            year_to: null
+            power_hp: 707
+            power_kw: 520
+            grain_tank_l: 15000
+          - slug: claas-lexion-8900-new
+            name: "Lexion 8900 (new)"
+            year_from: 2019
+            year_to: null
+            power_hp: 790
+            power_kw: 581
+            grain_tank_l: 18000
+
+      # ========== Trion (2021+) ==========
+      - slug: trion
+        name: "Trion (2021–dosud)"
+        year_from: 2021
+        year_to: null
+        description: >
+          Nástupce Tucano. Kompletně nová platforma mezi Tucano a Lexion. APS / APS HYBRID
+          varianty, Trion Montana s vyrovnáváním svahů do 18%.
+        models:
+          - slug: claas-trion-520
+            name: "Trion 520"
+            year_from: 2021
+            year_to: null
+            power_hp: 258
+            power_kw: 190
+            grain_tank_l: 6500
+          - slug: claas-trion-530
+            name: "Trion 530"
+            year_from: 2021
+            year_to: null
+            power_hp: 299
+            power_kw: 220
+            grain_tank_l: 8000
+          - slug: claas-trion-540
+            name: "Trion 540"
+            year_from: 2021
+            year_to: null
+            power_hp: 341
+            power_kw: 251
+            grain_tank_l: 8000
+          - slug: claas-trion-620
+            name: "Trion 620"
+            year_from: 2021
+            year_to: null
+            power_hp: 299
+            power_kw: 220
+            grain_tank_l: 9000
+          - slug: claas-trion-640
+            name: "Trion 640"
+            year_from: 2021
+            year_to: null
+            power_hp: 341
+            power_kw: 251
+            grain_tank_l: 9000
+          - slug: claas-trion-660
+            name: "Trion 660"
+            year_from: 2021
+            year_to: null
+            power_hp: 381
+            power_kw: 280
+            grain_tank_l: 9000
+          - slug: claas-trion-720
+            name: "Trion 720"
+            year_from: 2021
+            year_to: null
+            power_hp: 367
+            power_kw: 270
+            grain_tank_l: 10000
+          - slug: claas-trion-730
+            name: "Trion 730"
+            year_from: 2021
+            year_to: null
+            power_hp: 408
+            power_kw: 300
+            grain_tank_l: 10000
+          - slug: claas-trion-750
+            name: "Trion 750"
+            year_from: 2021
+            year_to: null
+            power_hp: 435
+            power_kw: 320
+            grain_tank_l: 10000

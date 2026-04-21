@@ -6,28 +6,75 @@ import { createAnonClient } from '../../lib/supabase';
 const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const supabase = createAnonClient();
 
-const { data: articles } = await supabase
+const category = Astro.url.searchParams.get('kategorie') ?? '';
+
+let q = supabase
   .from('articles')
   .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
   .eq('site_id', SITE_ID)
   .eq('status', 'published')
   .order('published_at', { ascending: false });
 
+if (category) q = q.eq('category', category);
+
+const { data: articles } = await q;
 const sorted = articles ?? [];
+
+// Available categories (for filter pills) — always shown, even when filtered
+const { data: allForCats } = await supabase
+  .from('articles')
+  .select('category')
+  .eq('site_id', SITE_ID)
+  .eq('status', 'published');
+const catCounts = new Map<string, number>();
+for (const a of allForCats ?? []) {
+  const c = (a.category as string) || 'novinky';
+  catCounts.set(c, (catCounts.get(c) ?? 0) + 1);
+}
+const categoryLabels: Record<string, string> = {
+  technika: 'Technika',
+  dotace: 'Dotace',
+  trh: 'Trh',
+  legislativa: 'Legislativa',
+  znacky: 'Značky',
+  novinky: 'Novinky',
+};
+const catPills = [...catCounts.entries()]
+  .map(([slug, count]) => ({ slug, label: categoryLabels[slug] ?? slug, count }))
+  .sort((a, b) => b.count - a.count);
+
+const activeLabel = category ? (categoryLabels[category] ?? category) : null;
 ---
 
-<Layout title="Novinky" description="Aktuální zprávy ze světa zemědělské techniky — nové stroje, dotace, trh a legislativa.">
+<Layout
+  title={activeLabel ? `Aktuality: ${activeLabel}` : 'Aktuality'}
+  description={activeLabel ? `Články v kategorii ${activeLabel}.` : 'Aktuální zprávy ze světa zemědělské techniky — nové stroje, dotace, trh a legislativa.'}
+>
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
 
     <!-- Hero headline -->
-    <div style="margin-bottom:48px;">
-      <span class="section-label">Novinky</span>
+    <div style="margin-bottom:24px;">
+      <span class="section-label">Aktuality</span>
       <h1 style="font-size:clamp(2rem,5vw,3.2rem); margin-bottom:16px;">
-        Zemědělství v pohybu
+        {activeLabel ? `Kategorie: ${activeLabel}` : 'Zemědělství v pohybu'}
       </h1>
-      <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">
-        Sledujeme nové stroje, dotační programy, trhy i legislativní změny. Vše, co potřebujete vědět jako zemědělec.
-      </p>
+      {!activeLabel && (
+        <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">
+          Sledujeme nové stroje, dotační programy, trhy i legislativní změny. Vše, co potřebujete vědět jako zemědělec.
+        </p>
+      )}
+    </div>
+
+    <!-- Category pills -->
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px;">
+      <a href="/novinky/" class:list={["pill", { active: !category }]}>
+        Vše <span class="pill-count">{allForCats?.length ?? 0}</span>
+      </a>
+      {catPills.map((c) => (
+        <a href={`/novinky/?kategorie=${c.slug}`} class:list={["pill", { active: c.slug === category }]}>
+          {c.label} <span class="pill-count">{c.count}</span>
+        </a>
+      ))}
     </div>
 
     <!-- All articles -->
@@ -45,8 +92,47 @@ const sorted = articles ?? [];
         ))}
       </div>
     ) : (
-      <p style="color:#888; font-size:16px;">Zatím žádné novinky. Brzy zde najdete aktuální články.</p>
+      <p style="color:#888; font-size:16px;">
+        {activeLabel ? `V kategorii „${activeLabel}" zatím žádné články.` : 'Zatím žádné novinky. Brzy zde najdete aktuální články.'}
+        {activeLabel && <> <a href="/novinky/" style="color:#1a1a1a;">Zobrazit všechny</a>.</>}
+      </p>
     )}
-
   </div>
+
+  <style>
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 999px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 13px;
+      color: #1a1a1a;
+      text-decoration: none;
+      transition: background .15s, border-color .15s;
+    }
+    .pill:hover {
+      background: #fff0a8;
+      border-color: #FFFF00;
+    }
+    .pill.active {
+      background: #1a1a1a;
+      border-color: #1a1a1a;
+      color: #fff;
+    }
+    .pill-count {
+      font-size: 11px;
+      color: #888;
+      background: rgba(0,0,0,.06);
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+    .pill.active .pill-count {
+      color: #FFFF00;
+      background: rgba(255,255,0,.16);
+    }
+  </style>
 </Layout>

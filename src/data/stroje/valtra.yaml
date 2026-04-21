@@ -1,0 +1,599 @@
+slug: valtra
+name: Valtra
+country: Finsko
+founded: 1951
+website: https://www.valtra.cz
+description: >
+  Finský výrobce traktorů s dlouhou tradicí (dříve Valmet). Součást koncernu AGCO od roku 2004.
+  Známý robustní konstrukcí pro severské podmínky, reverzním systémem TwinTrac (kabina
+  s otočným sedadlem pro práci zezadu) a personalizací — každý traktor se vyrábí na míru
+  zákaznickým požadavkům. Kombajny nevyrábí.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== VALMET legacy (do 2001) ==========
+      - slug: valmet-6000-8000
+        name: "Valmet 6000/8000 Series (1987–1999)"
+        year_from: 1987
+        year_to: 1999
+        description: >
+          Poslední generace pod značkou Valmet před přejmenováním na Valtra (2001). Motor Valmet
+          4- a 6-válec, převodovka synchronizovaná 30/30. Oblíbené v CZ pro jednoduchost a dostupnost.
+        models:
+          - slug: valtra-valmet-6100
+            name: "Valmet 6100"
+            year_from: 1987
+            year_to: 1995
+            power_hp: 81
+            power_kw: 60
+          - slug: valtra-valmet-6200
+            name: "Valmet 6200"
+            year_from: 1987
+            year_to: 1995
+            power_hp: 92
+            power_kw: 68
+          - slug: valtra-valmet-6300
+            name: "Valmet 6300"
+            year_from: 1987
+            year_to: 1995
+            power_hp: 105
+            power_kw: 77
+          - slug: valtra-valmet-6400
+            name: "Valmet 6400"
+            year_from: 1987
+            year_to: 1995
+            power_hp: 115
+            power_kw: 85
+          - slug: valtra-valmet-8050
+            name: "Valmet 8050"
+            year_from: 1990
+            year_to: 1999
+            power_hp: 115
+            power_kw: 85
+          - slug: valtra-valmet-8150
+            name: "Valmet 8150"
+            year_from: 1990
+            year_to: 1999
+            power_hp: 136
+            power_kw: 100
+          - slug: valtra-valmet-8350
+            name: "Valmet 8350"
+            year_from: 1995
+            year_to: 1999
+            power_hp: 165
+            power_kw: 121
+          - slug: valtra-valmet-8450
+            name: "Valmet 8450"
+            year_from: 1995
+            year_to: 1999
+            power_hp: 180
+            power_kw: 132
+          - slug: valtra-valmet-8750
+            name: "Valmet 8750"
+            year_from: 1995
+            year_to: 1999
+            power_hp: 200
+            power_kw: 147
+
+      # ========== HiTech / HiShift (1999-2009) ==========
+      - slug: hitech
+        name: "HiTech Series (1999–2009)"
+        year_from: 1999
+        year_to: 2009
+        description: >
+          První generace pod značkou Valtra (od 2001). Motor Sisu Power 4- a 6-válec, převodovka
+          HiShift s elektronickým řazením 40/40. Dostupný reverzní systém TwinTrac.
+        models:
+          - slug: valtra-6250
+            name: "6250 HiTech"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 90
+            power_kw: 66
+          - slug: valtra-6350
+            name: "6350 HiTech"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 105
+            power_kw: 77
+          - slug: valtra-6400
+            name: "6400 HiTech"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 115
+            power_kw: 85
+          - slug: valtra-6600
+            name: "6600 HiTech"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 130
+            power_kw: 96
+          - slug: valtra-6800
+            name: "6800 HiTech"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 150
+            power_kw: 110
+          - slug: valtra-6850
+            name: "6850 HiTech"
+            year_from: 2001
+            year_to: 2004
+            power_hp: 165
+            power_kw: 121
+
+      # ========== Direct (CVT, 2004+) ==========
+      - slug: direct-legacy
+        name: "Valtra Direct (2004–2009)"
+        year_from: 2004
+        year_to: 2009
+        description: >
+          První Valtra s plynulou variátorovou převodovkou (CVT). Revoluční technologie pro
+          výrobce historicky založeného na mechanických převodovkách.
+        models:
+          - slug: valtra-t140-direct
+            name: "T140 Direct"
+            year_from: 2004
+            year_to: 2009
+            power_hp: 150
+            power_kw: 110
+          - slug: valtra-t160-direct
+            name: "T160 Direct"
+            year_from: 2004
+            year_to: 2009
+            power_hp: 170
+            power_kw: 125
+          - slug: valtra-t180-direct
+            name: "T180 Direct"
+            year_from: 2004
+            year_to: 2009
+            power_hp: 190
+            power_kw: 140
+
+      # ========== N Series Gen 1 (2008-2014) ==========
+      - slug: n-gen1
+        name: "N Series (2008–2014)"
+        year_from: 2008
+        year_to: 2014
+        description: >
+          Nová univerzální řada. Motor AGCO Power 4-válec, převodovka HiTech 5 / Versu Powershift
+          36/36 / Direct CVT. Kabina vyvinutá s průmyslovým designérem.
+        models:
+          - slug: valtra-n82
+            name: "N82"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 88
+            power_kw: 65
+          - slug: valtra-n92
+            name: "N92"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 99
+            power_kw: 73
+          - slug: valtra-n101
+            name: "N101"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 111
+            power_kw: 82
+          - slug: valtra-n111
+            name: "N111"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 123
+            power_kw: 90
+          - slug: valtra-n121
+            name: "N121"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 134
+            power_kw: 98
+          - slug: valtra-n141
+            name: "N141"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 150
+            power_kw: 110
+          - slug: valtra-n161
+            name: "N161"
+            year_from: 2010
+            year_to: 2014
+            power_hp: 166
+            power_kw: 122
+
+      # ========== N Series Gen 2 (2014+) ==========
+      - slug: n-gen2
+        name: "N Series Gen2/Gen3 (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Druhá generace. Motor AGCO Power 4,4 L (4-válec) nebo 4,9 L (4-válec), Stage IV/V.
+          Verze Active (mechanická), Versu (Powershift) a Direct (CVT). Kabina s SkyView
+          střechou pro přední nakladač.
+        models:
+          - slug: valtra-n104
+            name: "N104"
+            year_from: 2014
+            year_to: null
+            power_hp: 105
+            power_kw: 77
+          - slug: valtra-n114
+            name: "N114"
+            year_from: 2014
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+          - slug: valtra-n124
+            name: "N124"
+            year_from: 2014
+            year_to: null
+            power_hp: 135
+            power_kw: 99
+          - slug: valtra-n134
+            name: "N134"
+            year_from: 2014
+            year_to: null
+            power_hp: 145
+            power_kw: 107
+          - slug: valtra-n144
+            name: "N144"
+            year_from: 2014
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: valtra-n154
+            name: "N154"
+            year_from: 2014
+            year_to: null
+            power_hp: 165
+            power_kw: 121
+          - slug: valtra-n174
+            name: "N174"
+            year_from: 2016
+            year_to: null
+            power_hp: 185
+            power_kw: 136
+
+      # ========== T Series Gen 1 (2003-2014) ==========
+      - slug: t-gen1
+        name: "T Series (2003–2014)"
+        year_from: 2003
+        year_to: 2014
+        description: >
+          Vlajková row-crop řada. Motor Sisu/AGCO Power 6-válec 6,6 L a 7,4 L. Verze HiTech,
+          HiTech 5, Versu (Powershift) a Direct (CVT).
+        models:
+          - slug: valtra-t130
+            name: "T130"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 135
+            power_kw: 99
+          - slug: valtra-t140
+            name: "T140"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 148
+            power_kw: 109
+          - slug: valtra-t150
+            name: "T150"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 155
+            power_kw: 114
+          - slug: valtra-t160
+            name: "T160"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 165
+            power_kw: 121
+          - slug: valtra-t170
+            name: "T170"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 180
+            power_kw: 132
+          - slug: valtra-t180
+            name: "T180"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 195
+            power_kw: 143
+          - slug: valtra-t131
+            name: "T131"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 141
+            power_kw: 104
+          - slug: valtra-t151
+            name: "T151"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 161
+            power_kw: 118
+          - slug: valtra-t171
+            name: "T171"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 181
+            power_kw: 133
+          - slug: valtra-t191
+            name: "T191"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 201
+            power_kw: 148
+          - slug: valtra-t213
+            name: "T213"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 223
+            power_kw: 164
+
+      # ========== T Series Gen 2/3 (2014+) ==========
+      - slug: t-gen2
+        name: "T Series Gen4/5 (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          4. a 5. generace. Motor AGCO Power 6-válec 7,4 L, převodovka HiTech 5, Active,
+          Versu (Powershift 5x5), Direct (CVT). Kabina SmartTouch (2015+) — integrovaný 9"
+          displej a joystick s OLED symboly.
+        models:
+          - slug: valtra-t144
+            name: "T144"
+            year_from: 2014
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: valtra-t154
+            name: "T154"
+            year_from: 2014
+            year_to: null
+            power_hp: 165
+            power_kw: 121
+          - slug: valtra-t174
+            name: "T174"
+            year_from: 2014
+            year_to: null
+            power_hp: 190
+            power_kw: 140
+          - slug: valtra-t194
+            name: "T194"
+            year_from: 2014
+            year_to: null
+            power_hp: 210
+            power_kw: 155
+          - slug: valtra-t214
+            name: "T214"
+            year_from: 2014
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+          - slug: valtra-t234
+            name: "T234"
+            year_from: 2014
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+          - slug: valtra-t254
+            name: "T254"
+            year_from: 2015
+            year_to: null
+            power_hp: 271
+            power_kw: 199
+
+      # ========== S Series (big, 2009+) ==========
+      - slug: s-gen1
+        name: "S Series Gen1 (2009–2014)"
+        year_from: 2009
+        year_to: 2014
+        description: >
+          První generace S Series. Motor AGCO Power 8,4 L, převodovka Direct CVT, kabina
+          TwinTrac (reverzní).
+        models:
+          - slug: valtra-s232
+            name: "S232"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 250
+            power_kw: 184
+          - slug: valtra-s262
+            name: "S262"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 280
+            power_kw: 206
+          - slug: valtra-s292
+            name: "S292"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 310
+            power_kw: 228
+          - slug: valtra-s322
+            name: "S322"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 340
+            power_kw: 250
+          - slug: valtra-s352
+            name: "S352"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 370
+            power_kw: 272
+
+      - slug: s-gen5
+        name: "S Series Gen5 (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          5. generace. Motor AGCO Power 8,4 L Stage V, převodovka AGCO PowerSplit CVT.
+          Kabina SmartTouch.
+        models:
+          - slug: valtra-s274
+            name: "S274"
+            year_from: 2014
+            year_to: null
+            power_hp: 290
+            power_kw: 213
+          - slug: valtra-s294
+            name: "S294"
+            year_from: 2014
+            year_to: null
+            power_hp: 310
+            power_kw: 228
+          - slug: valtra-s324
+            name: "S324"
+            year_from: 2014
+            year_to: null
+            power_hp: 340
+            power_kw: 250
+          - slug: valtra-s354
+            name: "S354"
+            year_from: 2014
+            year_to: null
+            power_hp: 370
+            power_kw: 272
+          - slug: valtra-s374
+            name: "S374"
+            year_from: 2019
+            year_to: null
+            power_hp: 400
+            power_kw: 294
+          - slug: valtra-s394
+            name: "S394"
+            year_from: 2019
+            year_to: null
+            power_hp: 420
+            power_kw: 309
+
+      # ========== A Series (2015+) — utility ==========
+      - slug: a-series
+        name: "A Series (2015–dosud)"
+        year_from: 2015
+        year_to: null
+        description: >
+          Utility řada pro menší farmy a komunály. Motor AGCO Power 3,3 L a 4,4 L, převodovka
+          Mechanical / HiTech, reverzor Power Shuttle.
+        models:
+          - slug: valtra-a74
+            name: "A74"
+            year_from: 2015
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: valtra-a84
+            name: "A84"
+            year_from: 2015
+            year_to: null
+            power_hp: 85
+            power_kw: 63
+          - slug: valtra-a94
+            name: "A94"
+            year_from: 2015
+            year_to: null
+            power_hp: 95
+            power_kw: 70
+          - slug: valtra-a104
+            name: "A104"
+            year_from: 2015
+            year_to: null
+            power_hp: 105
+            power_kw: 77
+          - slug: valtra-a114
+            name: "A114"
+            year_from: 2015
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+          - slug: valtra-a124
+            name: "A124"
+            year_from: 2018
+            year_to: null
+            power_hp: 125
+            power_kw: 92
+          - slug: valtra-a134
+            name: "A134"
+            year_from: 2018
+            year_to: null
+            power_hp: 135
+            power_kw: 99
+
+      # ========== G Series (2021+) ==========
+      - slug: g-series
+        name: "G Series (2021–dosud)"
+        year_from: 2021
+        year_to: null
+        description: >
+          Mid-class mezi A a N. Motor AGCO Power 4,4 L Stage V, kompaktní rozměry s moderní
+          kabinou SmartTouch (volitelná) nebo Classic.
+        models:
+          - slug: valtra-g115
+            name: "G115"
+            year_from: 2021
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+          - slug: valtra-g125
+            name: "G125"
+            year_from: 2021
+            year_to: null
+            power_hp: 125
+            power_kw: 92
+          - slug: valtra-g135
+            name: "G135"
+            year_from: 2021
+            year_to: null
+            power_hp: 135
+            power_kw: 99
+          - slug: valtra-g145
+            name: "G145"
+            year_from: 2021
+            year_to: null
+            power_hp: 145
+            power_kw: 107
+
+      # ========== Q Series (2022+) ==========
+      - slug: q-series
+        name: "Q Series (2022–dosud)"
+        year_from: 2022
+        year_to: null
+        description: >
+          Nejnovější řada mezi T a S. Motor AGCO Power 7,4 L Stage V, převodovka PowerSplit CVT
+          s novou technologií, kabina SmartTouch 3, Valtra SmartControl.
+        models:
+          - slug: valtra-q225
+            name: "Q225"
+            year_from: 2022
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+          - slug: valtra-q245
+            name: "Q245"
+            year_from: 2022
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+          - slug: valtra-q265
+            name: "Q265"
+            year_from: 2022
+            year_to: null
+            power_hp: 270
+            power_kw: 199
+          - slug: valtra-q285
+            name: "Q285"
+            year_from: 2022
+            year_to: null
+            power_hp: 290
+            power_kw: 213
+          - slug: valtra-q305
+            name: "Q305"
+            year_from: 2022
+            year_to: null
+            power_hp: 305
+            power_kw: 224
+  # Valtra kombajny nevyrábí
