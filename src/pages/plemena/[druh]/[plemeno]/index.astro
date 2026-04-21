@@ -1,0 +1,119 @@
+---
+export const prerender = true;
+import Layout from '../../../../layouts/Layout.astro';
+import { getAllDruhy, getPlemeno, UZITKOVOST_LABELS } from '../../../../lib/plemena';
+
+export async function getStaticPaths() {
+  const paths: { params: { druh: string; plemeno: string } }[] = [];
+  for (const d of getAllDruhy()) {
+    for (const p of d.plemena || []) {
+      paths.push({ params: { druh: d.slug, plemeno: p.slug } });
+    }
+  }
+  return paths;
+}
+
+const { druh: druhSlug, plemeno: plemenoSlug } = Astro.params;
+const found = getPlemeno(druhSlug!, plemenoSlug!);
+if (!found) return Astro.redirect('/plemena/');
+const { druh, plemeno } = found;
+
+const related = druh.plemena.filter((p) => p.slug !== plemeno.slug).slice(0, 6);
+
+const specRows: { label: string; value: string }[] = [];
+specRows.push({ label: 'Druh', value: druh.name });
+specRows.push({ label: 'Původ', value: plemeno.origin_country });
+if (plemeno.alternative_names && plemeno.alternative_names.length > 0) specRows.push({ label: 'Jiné názvy', value: plemeno.alternative_names.join(', ') });
+if (plemeno.year_registered) specRows.push({ label: 'Uznání plemene', value: `${plemeno.year_registered}` });
+specRows.push({ label: 'Užitkovost', value: plemeno.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ') });
+if (plemeno.color) specRows.push({ label: 'Zbarvení', value: plemeno.color });
+if (plemeno.weight_male_kg) specRows.push({ label: 'Hmotnost samec', value: `${plemeno.weight_male_kg.toLocaleString('cs-CZ')} kg` });
+if (plemeno.weight_female_kg) specRows.push({ label: 'Hmotnost samice', value: `${plemeno.weight_female_kg.toLocaleString('cs-CZ')} kg` });
+if (plemeno.height_cm) specRows.push({ label: 'Výška v kohoutku', value: `${plemeno.height_cm} cm` });
+if (plemeno.milk_yield_kg_year) specRows.push({ label: 'Mléčná užitkovost', value: `${plemeno.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok` });
+
+const pageTitle = plemeno.name;
+const pageDesc = plemeno.description.slice(0, 160);
+---
+
+<Layout title={`${pageTitle} — plemeno ${druh.name.toLowerCase()}`} description={pageDesc}>
+  <div style="max-width:1080px; margin:0 auto; padding:48px 32px 80px;">
+    <div style="margin-bottom:8px; font-size:13px; color:#666;">
+      <a href="/plemena/" style="color:#666; text-decoration:none;">Katalog plemen</a>
+      <span style="margin:0 6px;">/</span>
+      <a href={`/plemena/${druh.slug}/`} style="color:#666; text-decoration:none;">{druh.name_plural}</a>
+      <span style="margin:0 6px;">/</span>
+      <span style="color:#1a1a1a;">{plemeno.name}</span>
+    </div>
+
+    <div style="margin-bottom:32px;">
+      <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+        <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
+          {druh.name}
+        </span>
+        {plemeno.uzitkovost.map((u) => (
+          <span style="background:#1a1a1a; color:#fff; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
+            {UZITKOVOST_LABELS[u] ?? u}
+          </span>
+        ))}
+      </div>
+      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:6px;">
+        {plemeno.name}
+      </h1>
+      {plemeno.alternative_names && plemeno.alternative_names.length > 0 && (
+        <div style="font-size:15px; color:#888; font-style:italic; margin-bottom:14px;">{plemeno.alternative_names.join(' · ')}</div>
+      )}
+    </div>
+
+    <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:24px; margin-bottom:24px;">
+      <p style="font-size:16px; line-height:1.7; color:#333; margin:0;">{plemeno.description}</p>
+    </div>
+
+    <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; overflow:hidden; margin-bottom:32px;">
+      <div style="background:#fafafa; padding:16px 20px; border-bottom:1px solid #e8e8e8;">
+        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a;">Charakteristika plemene</h2>
+      </div>
+      <table style="width:100%; border-collapse:collapse; font-size:14px;">
+        <tbody>
+          {specRows.map((row, idx) => (
+            <tr style={`border-bottom:${idx < specRows.length - 1 ? '1px solid #f0f0f0' : 'none'};`}>
+              <td style="padding:12px 20px; color:#666; width:40%;">{row.label}</td>
+              <td style="padding:12px 20px; color:#1a1a1a; font-weight:500;">{row.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-bottom:32px;">
+      <a href={`/bazar/?kategorie=zvirata&q=${encodeURIComponent(plemeno.name)}`} style="display:block; text-decoration:none; background:#FFFF00; color:#000; border-radius:18px; padding:24px; text-align:center;">
+        <div style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; margin-bottom:4px;">Hledat v bazaru</div>
+        <div style="font-size:13px; color:#333;">Aktuální nabídky {plemeno.name}</div>
+      </a>
+      <a href={`/plemena/${druh.slug}/`} style="display:block; text-decoration:none; background:#fff; border:1px solid #e8e8e8; color:#1a1a1a; border-radius:18px; padding:24px; text-align:center;">
+        <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; margin-bottom:4px;">Další {druh.name_plural.toLowerCase()}</div>
+        <div style="font-size:13px; color:#666;">{druh.plemena.length} plemen</div>
+      </a>
+    </div>
+
+    {related.length > 0 && (
+      <section style="margin-top:48px;">
+        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:16px;">
+          Další plemena
+        </h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px;">
+          {related.map((p) => (
+            <a href={`/plemena/${druh.slug}/${p.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:box-shadow .2s, transform .2s;" class="rel-card">
+              <div style="font-family:'Chakra Petch',sans-serif; font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">{p.name}</div>
+              <div style="font-size:12px; color:#666;">🌍 {p.origin_country}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <style>
+    .rel-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
+  </style>
+</Layout>

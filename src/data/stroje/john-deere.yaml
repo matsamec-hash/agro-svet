@@ -1,0 +1,1653 @@
+slug: john-deere
+name: John Deere
+country: USA
+founded: 1837
+website: https://www.deere.com
+description: >
+  Největší výrobce zemědělské techniky na světě. Americká společnost se zelenými
+  traktory a žlutou hvězdou dominuje trhu v Severní Americe, Evropě i Asii.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== 5 SERIES (kompaktní / utility) ==========
+      - slug: "5000"
+        name: "5000 Series (1992–1997)"
+        year_from: 1992
+        year_to: 1997
+        description: >
+          První utility traktory pro evropský trh vyráběné v Mannheimu. Výkony 40–75 k,
+          jednoduchá koncepce určená pro menší farmy a komunální nasazení.
+        models:
+          - slug: john-deere-5200
+            name: "5200"
+            year_from: 1992
+            year_to: 1997
+            power_hp: 40
+            power_kw: 30
+            engine: "3-válec 2.9 L"
+          - slug: john-deere-5300
+            name: "5300"
+            year_from: 1992
+            year_to: 1997
+            power_hp: 50
+            power_kw: 37
+            engine: "3-válec 2.9 L"
+          - slug: john-deere-5400
+            name: "5400"
+            year_from: 1992
+            year_to: 1997
+            power_hp: 60
+            power_kw: 45
+            engine: "3-válec 2.9 L"
+          - slug: john-deere-5500
+            name: "5500"
+            year_from: 1992
+            year_to: 1997
+            power_hp: 75
+            power_kw: 55
+            engine: "4-válec 3.9 L"
+
+      - slug: 5010-5020-5030
+        name: "5010/5020/5030 Series (1997–2013)"
+        year_from: 1997
+        year_to: 2013
+        description: >
+          Postupně vylepšované generace utility traktorů. Motory PowerTech, plně synchronizovaná
+          převodovka SyncShuttle 9x3.
+        models:
+          - slug: john-deere-5615
+            name: "5615"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 75
+            power_kw: 55
+          - slug: john-deere-5715
+            name: "5715"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 85
+            power_kw: 63
+          - slug: john-deere-5820
+            name: "5820"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 89
+            power_kw: 66
+          - slug: john-deere-5100m
+            name: "5100M"
+            year_from: 2012
+            year_to: 2020
+            power_hp: 100
+            power_kw: 74
+
+      - slug: 5m
+        name: "5M Series (2012–dosud)"
+        year_from: 2012
+        year_to: null
+        description: >
+          Moderní utility řada s motorem PowerTech a elektronicky řízenou hydraulikou.
+          Varianty pro farmáře, sadaře i městské služby.
+        models:
+          - slug: john-deere-5075m
+            name: "5075M"
+            year_from: 2012
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: john-deere-5090m
+            name: "5090M"
+            year_from: 2012
+            year_to: null
+            power_hp: 90
+            power_kw: 66
+          - slug: john-deere-5100m-2020
+            name: "5100M (2020)"
+            year_from: 2020
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: john-deere-5115m
+            name: "5115M"
+            year_from: 2015
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+          - slug: john-deere-5125m
+            name: "5125M"
+            year_from: 2020
+            year_to: null
+            power_hp: 125
+            power_kw: 92
+
+      - slug: 5r
+        name: "5R Series (2013–dosud)"
+        year_from: 2013
+        year_to: null
+        description: >
+          Prémiová utility řada s technologiemi vyšších tříd — CommandArm, IVT převodovka,
+          plná kabinová konektivita.
+        models:
+          - slug: john-deere-5090r
+            name: "5090R"
+            year_from: 2013
+            year_to: null
+            power_hp: 90
+            power_kw: 66
+          - slug: john-deere-5100r
+            name: "5100R"
+            year_from: 2013
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: john-deere-5115r
+            name: "5115R"
+            year_from: 2013
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+          - slug: john-deere-5125r
+            name: "5125R"
+            year_from: 2016
+            year_to: null
+            power_hp: 125
+            power_kw: 92
+
+      # ========== 6 SERIES (střední) ==========
+      - slug: "6000"
+        name: "6000 Series (1992–1998)"
+        year_from: 1992
+        year_to: 1998
+        description: >
+          Průlomová řada středních traktorů vyráběná v Mannheimu. Ikonická kabina SG2 a první
+          elektronický ovládací panel CommandCenter v této třídě.
+        models:
+          - slug: john-deere-6100
+            name: "6100"
+            year_from: 1992
+            year_to: 1998
+            power_hp: 75
+            power_kw: 55
+          - slug: john-deere-6200
+            name: "6200"
+            year_from: 1992
+            year_to: 1998
+            power_hp: 85
+            power_kw: 63
+          - slug: john-deere-6300
+            name: "6300"
+            year_from: 1992
+            year_to: 1998
+            power_hp: 95
+            power_kw: 70
+          - slug: john-deere-6400
+            name: "6400"
+            year_from: 1992
+            year_to: 1998
+            power_hp: 100
+            power_kw: 74
+          - slug: john-deere-6500
+            name: "6500"
+            year_from: 1994
+            year_to: 1998
+            power_hp: 110
+            power_kw: 81
+          - slug: john-deere-6600
+            name: "6600"
+            year_from: 1994
+            year_to: 1998
+            power_hp: 125
+            power_kw: 92
+          - slug: john-deere-6800
+            name: "6800"
+            year_from: 1994
+            year_to: 1998
+            power_hp: 135
+            power_kw: 99
+          - slug: john-deere-6900
+            name: "6900"
+            year_from: 1994
+            year_to: 1998
+            power_hp: 145
+            power_kw: 107
+
+      - slug: 6010
+        name: "6010 Series (1998–2002)"
+        year_from: 1998
+        year_to: 2002
+        description: >
+          Nástupce řady 6000, motory PowerTech, převodovka PowrQuad Plus 16x16.
+          Rozšířený výběr od 80 do 150 koní.
+        models:
+          - slug: john-deere-6110
+            name: "6110"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 80
+            power_kw: 59
+          - slug: john-deere-6210
+            name: "6210"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 90
+            power_kw: 66
+          - slug: john-deere-6310
+            name: "6310"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 100
+            power_kw: 74
+          - slug: john-deere-6410
+            name: "6410"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 110
+            power_kw: 81
+          - slug: john-deere-6510
+            name: "6510"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 115
+            power_kw: 85
+          - slug: john-deere-6610
+            name: "6610"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 125
+            power_kw: 92
+          - slug: john-deere-6810
+            name: "6810"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 135
+            power_kw: 99
+          - slug: john-deere-6910
+            name: "6910"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 150
+            power_kw: 110
+
+      - slug: 6020
+        name: "6020 Series (2002–2007)"
+        year_from: 2002
+        year_to: 2007
+        description: >
+          Kompletně nová platforma. Kabina ComfortGard, motor PowerTech Plus s common-rail,
+          volitelná převodovka AutoQuad Plus a hydraulika s detekcí zátěže (load sensing).
+        models:
+          - slug: john-deere-6120
+            name: "6120"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 85
+            power_kw: 63
+          - slug: john-deere-6220
+            name: "6220"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 95
+            power_kw: 70
+          - slug: john-deere-6320
+            name: "6320"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 105
+            power_kw: 77
+          - slug: john-deere-6420
+            name: "6420"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 115
+            power_kw: 85
+          - slug: john-deere-6520
+            name: "6520"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 125
+            power_kw: 92
+          - slug: john-deere-6620
+            name: "6620"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 135
+            power_kw: 99
+          - slug: john-deere-6820
+            name: "6820"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 145
+            power_kw: 107
+          - slug: john-deere-6920
+            name: "6920"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 155
+            power_kw: 114
+
+      - slug: 6030-premium
+        name: "6030 Premium (2006–2012)"
+        year_from: 2006
+        year_to: 2012
+        description: >
+          Prémiová řada s technologií AutoPowr (CVT), plná odpružení přední nápravy TLS,
+          kabina Premium a integrace s GreenStar 2.
+        models:
+          - slug: john-deere-6230-premium
+            name: "6230 Premium"
+            year_from: 2006
+            year_to: 2012
+            power_hp: 95
+            power_kw: 70
+          - slug: john-deere-6330-premium
+            name: "6330 Premium"
+            year_from: 2006
+            year_to: 2012
+            power_hp: 105
+            power_kw: 77
+          - slug: john-deere-6430-premium
+            name: "6430 Premium"
+            year_from: 2006
+            year_to: 2012
+            power_hp: 120
+            power_kw: 88
+          - slug: john-deere-6530-premium
+            name: "6530 Premium"
+            year_from: 2006
+            year_to: 2012
+            power_hp: 130
+            power_kw: 96
+          - slug: john-deere-6630-premium
+            name: "6630 Premium"
+            year_from: 2006
+            year_to: 2012
+            power_hp: 140
+            power_kw: 103
+          - slug: john-deere-6830-premium
+            name: "6830 Premium"
+            year_from: 2006
+            year_to: 2012
+            power_hp: 155
+            power_kw: 114
+          - slug: john-deere-6930-premium
+            name: "6930 Premium"
+            year_from: 2006
+            year_to: 2012
+            power_hp: 165
+            power_kw: 121
+
+      - slug: 6m
+        name: "6M Series (2012–dosud)"
+        year_from: 2012
+        year_to: null
+        description: >
+          Univerzální řada pro smíšené farmy. Motor PowerTech 4,5 / 6,8 L, převodovka
+          AutoQuad nebo CommandQuad, emisní norma Stage V (2019+).
+        models:
+          - slug: john-deere-6090m
+            name: "6090M"
+            year_from: 2020
+            year_to: null
+            power_hp: 90
+            power_kw: 66
+          - slug: john-deere-6095m
+            name: "6095M"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 95
+            power_kw: 70
+          - slug: john-deere-6100m
+            name: "6100M"
+            year_from: 2012
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: john-deere-6110m
+            name: "6110M"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 110
+            power_kw: 81
+          - slug: john-deere-6120m
+            name: "6120M"
+            year_from: 2020
+            year_to: null
+            power_hp: 120
+            power_kw: 88
+          - slug: john-deere-6130m
+            name: "6130M"
+            year_from: 2012
+            year_to: null
+            power_hp: 130
+            power_kw: 96
+          - slug: john-deere-6140m
+            name: "6140M"
+            year_from: 2020
+            year_to: null
+            power_hp: 140
+            power_kw: 103
+          - slug: john-deere-6145m
+            name: "6145M"
+            year_from: 2020
+            year_to: null
+            power_hp: 145
+            power_kw: 107
+          - slug: john-deere-6150m
+            name: "6150M"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 150
+            power_kw: 110
+          - slug: john-deere-6155m
+            name: "6155M"
+            year_from: 2020
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: john-deere-6170m
+            name: "6170M"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 170
+            power_kw: 125
+          - slug: john-deere-6175m
+            name: "6175M"
+            year_from: 2020
+            year_to: null
+            power_hp: 175
+            power_kw: 129
+          - slug: john-deere-6195m
+            name: "6195M"
+            year_from: 2020
+            year_to: null
+            power_hp: 195
+            power_kw: 143
+
+      - slug: 6r
+        name: "6R Series (2012–dosud)"
+        year_from: 2012
+        year_to: null
+        description: >
+          Prémiová všestranná řada. Motor PowerTech PSS/PVS, převodovka AutoPowr IVT nebo
+          CommandPro, plné odpružení TLS Plus, kabina CommandView III, displeje Gen 4.
+        models:
+          - slug: john-deere-6105r
+            name: "6105R"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 105
+            power_kw: 77
+          - slug: john-deere-6110r
+            name: "6110R"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 110
+            power_kw: 81
+          - slug: john-deere-6120r
+            name: "6120R"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 120
+            power_kw: 88
+          - slug: john-deere-6130r
+            name: "6130R"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 130
+            power_kw: 96
+          - slug: john-deere-6140r
+            name: "6140R"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 140
+            power_kw: 103
+          - slug: john-deere-6145r
+            name: "6145R"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 145
+            power_kw: 107
+          - slug: john-deere-6150r
+            name: "6150R"
+            year_from: 2012
+            year_to: 2015
+            power_hp: 150
+            power_kw: 110
+          - slug: john-deere-6155r
+            name: "6155R"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 155
+            power_kw: 114
+          - slug: john-deere-6170r
+            name: "6170R"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 170
+            power_kw: 125
+          - slug: john-deere-6175r
+            name: "6175R"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 175
+            power_kw: 129
+          - slug: john-deere-6190r
+            name: "6190R"
+            year_from: 2012
+            year_to: 2015
+            power_hp: 190
+            power_kw: 140
+          - slug: john-deere-6195r
+            name: "6195R"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 195
+            power_kw: 143
+          - slug: john-deere-6210r
+            name: "6210R"
+            year_from: 2012
+            year_to: 2015
+            power_hp: 210
+            power_kw: 155
+          - slug: john-deere-6215r
+            name: "6215R"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 215
+            power_kw: 158
+          - slug: john-deere-6230r
+            name: "6230R"
+            year_from: 2019
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+          - slug: john-deere-6250r
+            name: "6250R"
+            year_from: 2016
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+
+      # ========== 7 SERIES ==========
+      - slug: "7000"
+        name: "7000 Series (1992–1997)"
+        year_from: 1992
+        year_to: 1997
+        description: >
+          První generace row-crop traktorů nad 150 koní vyráběná ve Waterloo.
+          Základ pro všechny následné řady 7R.
+        models:
+          - slug: john-deere-7600
+            name: "7600"
+            year_from: 1992
+            year_to: 1997
+            power_hp: 145
+            power_kw: 107
+          - slug: john-deere-7700
+            name: "7700"
+            year_from: 1992
+            year_to: 1997
+            power_hp: 160
+            power_kw: 118
+          - slug: john-deere-7800
+            name: "7800"
+            year_from: 1992
+            year_to: 1997
+            power_hp: 170
+            power_kw: 125
+
+      - slug: 7010
+        name: "7010 Series (1997–2003)"
+        year_from: 1997
+        year_to: 2003
+        description: >
+          Row-crop traktory druhé generace, motor PowerTech 6,8 L, převodovka PowrQuad Plus
+          nebo AutoQuad.
+        models:
+          - slug: john-deere-7210
+            name: "7210"
+            year_from: 1997
+            year_to: 2003
+            power_hp: 115
+            power_kw: 85
+          - slug: john-deere-7410
+            name: "7410"
+            year_from: 1997
+            year_to: 2003
+            power_hp: 125
+            power_kw: 92
+          - slug: john-deere-7510
+            name: "7510"
+            year_from: 1997
+            year_to: 2003
+            power_hp: 135
+            power_kw: 99
+          - slug: john-deere-7610
+            name: "7610"
+            year_from: 1997
+            year_to: 2003
+            power_hp: 145
+            power_kw: 107
+          - slug: john-deere-7710
+            name: "7710"
+            year_from: 1997
+            year_to: 2003
+            power_hp: 165
+            power_kw: 121
+          - slug: john-deere-7810
+            name: "7810"
+            year_from: 1997
+            year_to: 2003
+            power_hp: 175
+            power_kw: 129
+
+      - slug: 7020
+        name: "7020 Series (2003–2007)"
+        year_from: 2003
+        year_to: 2007
+        description: >
+          Motor PowerTech Plus s elektronickým vstřikováním. Volitelná převodovka AutoPowr IVT
+          (plynulá variátorová) — první v této třídě u John Deere.
+        models:
+          - slug: john-deere-7220
+            name: "7220"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 125
+            power_kw: 92
+          - slug: john-deere-7320
+            name: "7320"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 135
+            power_kw: 99
+          - slug: john-deere-7420
+            name: "7420"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 145
+            power_kw: 107
+          - slug: john-deere-7520
+            name: "7520"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 155
+            power_kw: 114
+          - slug: john-deere-7720
+            name: "7720"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 170
+            power_kw: 125
+          - slug: john-deere-7820
+            name: "7820"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 185
+            power_kw: 136
+          - slug: john-deere-7920
+            name: "7920"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 200
+            power_kw: 147
+
+      - slug: 7030
+        name: "7030 Premium (2007–2011)"
+        year_from: 2007
+        year_to: 2011
+        description: >
+          Emisní norma Tier 3, motor PowerTech Plus 6,8 L s 24-ventilovou hlavou.
+          Kabina Premium s ventilací, klimatizací a elektronicky ovládaným sedadlem.
+        models:
+          - slug: john-deere-7130-premium
+            name: "7130 Premium"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 130
+            power_kw: 96
+          - slug: john-deere-7230-premium
+            name: "7230 Premium"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 140
+            power_kw: 103
+          - slug: john-deere-7330-premium
+            name: "7330 Premium"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 150
+            power_kw: 110
+          - slug: john-deere-7430-premium
+            name: "7430 Premium"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 165
+            power_kw: 121
+          - slug: john-deere-7530-premium
+            name: "7530 Premium"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 180
+            power_kw: 132
+          - slug: john-deere-7630
+            name: "7630"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 155
+            power_kw: 114
+          - slug: john-deere-7730
+            name: "7730"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 175
+            power_kw: 129
+          - slug: john-deere-7830
+            name: "7830"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 200
+            power_kw: 147
+          - slug: john-deere-7930
+            name: "7930"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 220
+            power_kw: 162
+
+      - slug: 7r
+        name: "7R Series (2011–dosud)"
+        year_from: 2011
+        year_to: null
+        description: >
+          Vlajková row-crop řada střední velikosti. Motor PowerTech PSS 6,8/9,0 L, převodovka
+          e23 PowerShift nebo AutoPowr IVT, kabina CommandView III, AutoTrac, AutoPath.
+        models:
+          - slug: john-deere-7200r
+            name: "7200R"
+            year_from: 2011
+            year_to: 2015
+            power_hp: 200
+            power_kw: 147
+          - slug: john-deere-7210r
+            name: "7210R"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 210
+            power_kw: 155
+          - slug: john-deere-7215r
+            name: "7215R"
+            year_from: 2011
+            year_to: 2015
+            power_hp: 215
+            power_kw: 158
+          - slug: john-deere-7230r
+            name: "7230R"
+            year_from: 2011
+            year_to: 2019
+            power_hp: 230
+            power_kw: 169
+          - slug: john-deere-7250r
+            name: "7250R"
+            year_from: 2015
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+          - slug: john-deere-7260r
+            name: "7260R"
+            year_from: 2011
+            year_to: 2015
+            power_hp: 260
+            power_kw: 191
+          - slug: john-deere-7270r
+            name: "7270R"
+            year_from: 2015
+            year_to: null
+            power_hp: 270
+            power_kw: 199
+          - slug: john-deere-7280r
+            name: "7280R"
+            year_from: 2011
+            year_to: 2015
+            power_hp: 280
+            power_kw: 206
+          - slug: john-deere-7290r
+            name: "7290R"
+            year_from: 2015
+            year_to: null
+            power_hp: 290
+            power_kw: 213
+          - slug: john-deere-7310r
+            name: "7310R"
+            year_from: 2015
+            year_to: null
+            power_hp: 310
+            power_kw: 228
+          - slug: john-deere-7r-350
+            name: "7R 350"
+            year_from: 2020
+            year_to: null
+            power_hp: 350
+            power_kw: 257
+
+      # ========== 8 SERIES ==========
+      - slug: "8000"
+        name: "8000 Series (1994–1999)"
+        year_from: 1994
+        year_to: 1999
+        description: >
+          Legendární "velká zelená". První row-crop nad 200 koní s moderní kabinou,
+          elektronicky řízenou hydraulikou a PowerShift 16/4.
+        models:
+          - slug: john-deere-8100
+            name: "8100"
+            year_from: 1994
+            year_to: 1999
+            power_hp: 185
+            power_kw: 136
+          - slug: john-deere-8200
+            name: "8200"
+            year_from: 1994
+            year_to: 1999
+            power_hp: 210
+            power_kw: 155
+          - slug: john-deere-8300
+            name: "8300"
+            year_from: 1994
+            year_to: 1999
+            power_hp: 230
+            power_kw: 169
+          - slug: john-deere-8400
+            name: "8400"
+            year_from: 1994
+            year_to: 1999
+            power_hp: 250
+            power_kw: 184
+
+      - slug: 8010
+        name: "8010 Series (1999–2002)"
+        year_from: 1999
+        year_to: 2002
+        description: >
+          Motor PowerTech 8,1 L, převodovka PowerShift 16/4, kabina ComfortGard Plus.
+        models:
+          - slug: john-deere-8110
+            name: "8110"
+            year_from: 1999
+            year_to: 2002
+            power_hp: 185
+            power_kw: 136
+          - slug: john-deere-8210
+            name: "8210"
+            year_from: 1999
+            year_to: 2002
+            power_hp: 210
+            power_kw: 155
+          - slug: john-deere-8310
+            name: "8310"
+            year_from: 1999
+            year_to: 2002
+            power_hp: 235
+            power_kw: 173
+          - slug: john-deere-8410
+            name: "8410"
+            year_from: 1999
+            year_to: 2002
+            power_hp: 260
+            power_kw: 191
+
+      - slug: 8020
+        name: "8020 Series (2002–2005)"
+        year_from: 2002
+        year_to: 2005
+        description: >
+          Nová generace s motorem PowerTech Plus, volitelná IVT převodovka AutoPowr,
+          aktivní odpružení přední nápravy ILS.
+        models:
+          - slug: john-deere-8120
+            name: "8120"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 200
+            power_kw: 147
+          - slug: john-deere-8220
+            name: "8220"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 225
+            power_kw: 165
+          - slug: john-deere-8320
+            name: "8320"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 255
+            power_kw: 187
+          - slug: john-deere-8420
+            name: "8420"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 280
+            power_kw: 206
+          - slug: john-deere-8520
+            name: "8520"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 305
+            power_kw: 224
+
+      - slug: 8030
+        name: "8030 Series (2005–2009)"
+        year_from: 2005
+        year_to: 2009
+        description: >
+          Emisní norma Tier 3, IntelliSteer navádění, displej GreenStar 2 1800.
+        models:
+          - slug: john-deere-8130
+            name: "8130"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 205
+            power_kw: 151
+          - slug: john-deere-8230
+            name: "8230"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 230
+            power_kw: 169
+          - slug: john-deere-8330
+            name: "8330"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 255
+            power_kw: 187
+          - slug: john-deere-8430
+            name: "8430"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 280
+            power_kw: 206
+          - slug: john-deere-8530
+            name: "8530"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 310
+            power_kw: 228
+
+      - slug: 8r-gen1
+        name: "8R / 8RT (2009–2019)"
+        year_from: 2009
+        year_to: 2019
+        description: >
+          První generace 8R s volitelným pásovým podvozkem 8RT. Motor PowerTech PSS 9,0 L,
+          převodovka e23 PowerShift nebo AutoPowr IVT, kabina CommandView II/III.
+        models:
+          - slug: john-deere-8225r
+            name: "8225R"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 225
+            power_kw: 165
+          - slug: john-deere-8235r
+            name: "8235R"
+            year_from: 2009
+            year_to: 2019
+            power_hp: 235
+            power_kw: 173
+          - slug: john-deere-8260r
+            name: "8260R"
+            year_from: 2009
+            year_to: 2019
+            power_hp: 260
+            power_kw: 191
+          - slug: john-deere-8270r
+            name: "8270R"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 270
+            power_kw: 199
+          - slug: john-deere-8285r
+            name: "8285R"
+            year_from: 2009
+            year_to: 2019
+            power_hp: 285
+            power_kw: 210
+          - slug: john-deere-8295r
+            name: "8295R"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 295
+            power_kw: 217
+          - slug: john-deere-8310r
+            name: "8310R"
+            year_from: 2009
+            year_to: 2019
+            power_hp: 310
+            power_kw: 228
+          - slug: john-deere-8320r
+            name: "8320R"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 320
+            power_kw: 235
+          - slug: john-deere-8335r
+            name: "8335R"
+            year_from: 2009
+            year_to: 2019
+            power_hp: 335
+            power_kw: 246
+          - slug: john-deere-8345r
+            name: "8345R"
+            year_from: 2009
+            year_to: 2014
+            power_hp: 345
+            power_kw: 254
+          - slug: john-deere-8360r
+            name: "8360R"
+            year_from: 2009
+            year_to: 2019
+            power_hp: 360
+            power_kw: 265
+          - slug: john-deere-8370r
+            name: "8370R"
+            year_from: 2014
+            year_to: 2019
+            power_hp: 370
+            power_kw: 272
+          - slug: john-deere-8400r
+            name: "8400R"
+            year_from: 2014
+            year_to: 2019
+            power_hp: 400
+            power_kw: 294
+
+      - slug: 8r-gen2
+        name: "8R Series (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Kompletně nová platforma, motor PowerTech PSS 9,0 L, převodovka e23 / IVT /
+          DirectDrive, kabina CommandView 4, pásové verze 8RT a kolové 8R. AutoPath a autonomní
+          řízení (CES 2022).
+        models:
+          - slug: john-deere-8r-230
+            name: "8R 230"
+            year_from: 2020
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+          - slug: john-deere-8r-250
+            name: "8R 250"
+            year_from: 2020
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+          - slug: john-deere-8r-280
+            name: "8R 280"
+            year_from: 2020
+            year_to: null
+            power_hp: 280
+            power_kw: 206
+          - slug: john-deere-8r-310
+            name: "8R 310"
+            year_from: 2020
+            year_to: null
+            power_hp: 310
+            power_kw: 228
+          - slug: john-deere-8r-340
+            name: "8R 340"
+            year_from: 2020
+            year_to: null
+            power_hp: 340
+            power_kw: 250
+          - slug: john-deere-8r-370
+            name: "8R 370"
+            year_from: 2020
+            year_to: null
+            power_hp: 370
+            power_kw: 272
+          - slug: john-deere-8r-410
+            name: "8R 410"
+            year_from: 2022
+            year_to: null
+            power_hp: 410
+            power_kw: 301
+            engine: "PowerTech PSX 9.0 L, 6-válec Stage V"
+            transmission: "e23 / IVT / DirectDrive 16x5"
+            weight_kg: 14200
+            description: >
+              Vlajkový model. Kabina CommandView 4, AutoPath, hydraulika 435 l/min,
+              zadní závěs 12 000 kg. IVT Boost do 428 k.
+            specs:
+              hydraulika_l_min: 435
+              zadni_zaves_kg: 12000
+              predni_zaves_kg: 5500
+
+      # ========== 9 SERIES (terénní velké) ==========
+      - slug: "9000"
+        name: "9000 Series (1996–2001)"
+        year_from: 1996
+        year_to: 2001
+        description: >
+          Kloubové traktory 4WD pro rozsáhlé farmy. Motor PowerTech 12,5 L a PowerShift 12/3.
+        models:
+          - slug: john-deere-9100
+            name: "9100"
+            year_from: 1996
+            year_to: 2001
+            power_hp: 260
+            power_kw: 191
+          - slug: john-deere-9200
+            name: "9200"
+            year_from: 1996
+            year_to: 2001
+            power_hp: 310
+            power_kw: 228
+          - slug: john-deere-9300
+            name: "9300"
+            year_from: 1996
+            year_to: 2001
+            power_hp: 360
+            power_kw: 265
+          - slug: john-deere-9400
+            name: "9400"
+            year_from: 1996
+            year_to: 2001
+            power_hp: 425
+            power_kw: 313
+
+      - slug: 9020
+        name: "9020 Series (2001–2006)"
+        year_from: 2001
+        year_to: 2006
+        description: >
+          Motor PowerTech 12,5 L, volitelný pásový podvozek 9000T, Greenstar 2.
+        models:
+          - slug: john-deere-9120
+            name: "9120"
+            year_from: 2001
+            year_to: 2006
+            power_hp: 280
+            power_kw: 206
+          - slug: john-deere-9220
+            name: "9220"
+            year_from: 2001
+            year_to: 2006
+            power_hp: 325
+            power_kw: 239
+          - slug: john-deere-9320
+            name: "9320"
+            year_from: 2001
+            year_to: 2006
+            power_hp: 375
+            power_kw: 276
+          - slug: john-deere-9420
+            name: "9420"
+            year_from: 2001
+            year_to: 2006
+            power_hp: 425
+            power_kw: 313
+          - slug: john-deere-9520
+            name: "9520"
+            year_from: 2001
+            year_to: 2006
+            power_hp: 475
+            power_kw: 349
+          - slug: john-deere-9620
+            name: "9620"
+            year_from: 2001
+            year_to: 2006
+            power_hp: 500
+            power_kw: 368
+
+      - slug: 9030
+        name: "9030 Series (2007–2011)"
+        year_from: 2007
+        year_to: 2011
+        description: >
+          Motor PowerTech Plus 13,5 L, AutoTrac Universal, GreenStar 3.
+        models:
+          - slug: john-deere-9230
+            name: "9230"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 325
+            power_kw: 239
+          - slug: john-deere-9330
+            name: "9330"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 375
+            power_kw: 276
+          - slug: john-deere-9430
+            name: "9430"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 425
+            power_kw: 313
+          - slug: john-deere-9530
+            name: "9530"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 475
+            power_kw: 349
+          - slug: john-deere-9630
+            name: "9630"
+            year_from: 2007
+            year_to: 2011
+            power_hp: 530
+            power_kw: 390
+
+      - slug: 9r-gen1
+        name: "9R / 9RT / 9RX (2012–2021)"
+        year_from: 2012
+        year_to: 2021
+        description: >
+          První generace označení 9R. Motor Cummins QSX 15,0 L, pásové verze 9RT (dvě gumové
+          housenky) a 9RX (čtyři gumové housenky).
+        models:
+          - slug: john-deere-9370r
+            name: "9370R"
+            year_from: 2012
+            year_to: 2021
+            power_hp: 370
+            power_kw: 272
+          - slug: john-deere-9420r
+            name: "9420R"
+            year_from: 2012
+            year_to: 2021
+            power_hp: 420
+            power_kw: 309
+          - slug: john-deere-9470r
+            name: "9470R"
+            year_from: 2012
+            year_to: 2021
+            power_hp: 470
+            power_kw: 346
+          - slug: john-deere-9520r
+            name: "9520R"
+            year_from: 2012
+            year_to: 2021
+            power_hp: 520
+            power_kw: 382
+          - slug: john-deere-9570r
+            name: "9570R"
+            year_from: 2012
+            year_to: 2021
+            power_hp: 570
+            power_kw: 419
+          - slug: john-deere-9620r
+            name: "9620R"
+            year_from: 2012
+            year_to: 2021
+            power_hp: 620
+            power_kw: 456
+
+      - slug: 9r-gen2
+        name: "9R / 9RT / 9RX (2022–dosud)"
+        year_from: 2022
+        year_to: null
+        description: >
+          Generace s motorem JD 13,6 L a 18,0 L, kabina nové generace, e18 PowerShift,
+          autonomní řízení, pásové verze 9RX s pěti variantami výkonu.
+        models:
+          - slug: john-deere-9r-390
+            name: "9R 390"
+            year_from: 2022
+            year_to: null
+            power_hp: 390
+            power_kw: 287
+          - slug: john-deere-9r-440
+            name: "9R 440"
+            year_from: 2022
+            year_to: null
+            power_hp: 440
+            power_kw: 324
+          - slug: john-deere-9r-490
+            name: "9R 490"
+            year_from: 2022
+            year_to: null
+            power_hp: 490
+            power_kw: 360
+          - slug: john-deere-9r-540
+            name: "9R 540"
+            year_from: 2022
+            year_to: null
+            power_hp: 540
+            power_kw: 397
+          - slug: john-deere-9rx-590
+            name: "9RX 590"
+            year_from: 2022
+            year_to: null
+            power_hp: 590
+            power_kw: 434
+          - slug: john-deere-9rx-640
+            name: "9RX 640"
+            year_from: 2022
+            year_to: null
+            power_hp: 640
+            power_kw: 471
+          - slug: john-deere-9rx-710
+            name: "9RX 710"
+            year_from: 2023
+            year_to: null
+            power_hp: 710
+            power_kw: 522
+          - slug: john-deere-9rx-770
+            name: "9RX 770"
+            year_from: 2023
+            year_to: null
+            power_hp: 770
+            power_kw: 566
+          - slug: john-deere-9rx-830
+            name: "9RX 830"
+            year_from: 2024
+            year_to: null
+            power_hp: 830
+            power_kw: 611
+
+  kombajny:
+    name: Kombajny
+
+    series:
+      - slug: cts
+        name: "CTS Series (1993–2000)"
+        year_from: 1993
+        year_to: 2000
+        description: >
+          Hybridní technologie CTS (Cylinder Tine Separator) — kombinace konvenčního bubnu
+          a dvou rotorů. Nástupce řady 9000/9500/9600.
+        models:
+          - slug: john-deere-cts-2
+            name: "CTS II"
+            year_from: 1997
+            year_to: 2000
+            power_hp: 290
+            power_kw: 213
+            grain_tank_l: 8800
+
+      - slug: "9000-kombajn"
+        name: "9000 Series Combines (1989–2001)"
+        year_from: 1989
+        year_to: 2001
+        description: >
+          Konvenční buben-slaměník, typická americká těžká řada.
+        models:
+          - slug: john-deere-9500
+            name: "9500"
+            year_from: 1989
+            year_to: 2001
+            power_hp: 215
+            power_kw: 158
+            grain_tank_l: 7000
+          - slug: john-deere-9510
+            name: "9510"
+            year_from: 1997
+            year_to: 2001
+            power_hp: 240
+            power_kw: 177
+            grain_tank_l: 8000
+          - slug: john-deere-9600
+            name: "9600"
+            year_from: 1989
+            year_to: 2001
+            power_hp: 260
+            power_kw: 191
+            grain_tank_l: 8800
+          - slug: john-deere-9610
+            name: "9610"
+            year_from: 1997
+            year_to: 2001
+            power_hp: 290
+            power_kw: 213
+            grain_tank_l: 9000
+
+      - slug: wts
+        name: "WTS Series (2002–2007)"
+        year_from: 2002
+        year_to: 2007
+        description: >
+          Evropská generace kombajnů, konvenční systém separace s vylepšenými slaměníky
+          a rotačním doséparem.
+        models:
+          - slug: john-deere-9640-wts
+            name: "9640 WTS"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 260
+            power_kw: 191
+            grain_tank_l: 8000
+          - slug: john-deere-9660-wts
+            name: "9660 WTS"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 290
+            power_kw: 213
+            grain_tank_l: 8800
+          - slug: john-deere-9680-wts
+            name: "9680 WTS"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 320
+            power_kw: 235
+            grain_tank_l: 9500
+          - slug: john-deere-9780-cts-ii
+            name: "9780 CTS II"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 360
+            power_kw: 265
+            grain_tank_l: 10600
+
+      - slug: "9000-sts"
+        name: "STS Series (2001–2011)"
+        year_from: 2001
+        year_to: 2011
+        description: >
+          Revoluční single-rotor technologie STS (Single Tine Separator). Od 9660 STS po 9880i STS.
+        models:
+          - slug: john-deere-9560-sts
+            name: "9560 STS"
+            year_from: 2006
+            year_to: 2011
+            power_hp: 275
+            power_kw: 202
+            grain_tank_l: 8800
+          - slug: john-deere-9660-sts
+            name: "9660 STS"
+            year_from: 2001
+            year_to: 2011
+            power_hp: 300
+            power_kw: 221
+            grain_tank_l: 9200
+          - slug: john-deere-9760-sts
+            name: "9760 STS"
+            year_from: 2001
+            year_to: 2011
+            power_hp: 375
+            power_kw: 276
+            grain_tank_l: 10600
+          - slug: john-deere-9860-sts
+            name: "9860 STS"
+            year_from: 2004
+            year_to: 2011
+            power_hp: 425
+            power_kw: 313
+            grain_tank_l: 11500
+          - slug: john-deere-9880i-sts
+            name: "9880i STS"
+            year_from: 2004
+            year_to: 2011
+            power_hp: 475
+            power_kw: 349
+            grain_tank_l: 11500
+
+      - slug: s-series
+        name: "S Series (2012–dosud)"
+        year_from: 2012
+        year_to: null
+        description: >
+          Prémiová řada single-rotor kombajnů. Motor JD PowerTech / Cummins 13,5 L,
+          hydrostatický pohon, ActiveYield, HarvestSmart automatika, displej Gen 4.
+        models:
+          - slug: john-deere-s660
+            name: "S660"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 325
+            power_kw: 239
+            grain_tank_l: 10600
+          - slug: john-deere-s670
+            name: "S670"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 360
+            power_kw: 265
+            grain_tank_l: 11100
+          - slug: john-deere-s680
+            name: "S680"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 473
+            power_kw: 348
+            grain_tank_l: 14100
+          - slug: john-deere-s685
+            name: "S685"
+            year_from: 2016
+            year_to: 2019
+            power_hp: 500
+            power_kw: 368
+            grain_tank_l: 14100
+          - slug: john-deere-s690
+            name: "S690"
+            year_from: 2012
+            year_to: 2019
+            power_hp: 543
+            power_kw: 400
+            grain_tank_l: 14100
+          - slug: john-deere-s770
+            name: "S770"
+            year_from: 2020
+            year_to: null
+            power_hp: 410
+            power_kw: 302
+            grain_tank_l: 11100
+          - slug: john-deere-s780
+            name: "S780"
+            year_from: 2020
+            year_to: null
+            power_hp: 473
+            power_kw: 348
+            grain_tank_l: 14100
+          - slug: john-deere-s785
+            name: "S785"
+            year_from: 2021
+            year_to: null
+            power_hp: 500
+            power_kw: 368
+            grain_tank_l: 14100
+          - slug: john-deere-s790
+            name: "S790"
+            year_from: 2020
+            year_to: null
+            power_hp: 543
+            power_kw: 400
+            grain_tank_l: 14800
+
+      - slug: t-series
+        name: "T Series (2007–dosud)"
+        year_from: 2007
+        year_to: null
+        description: >
+          Evropský konvenční kombajn se slaměníky (Walker). Motor JD PowerTech 6,8/9,0/13,5 L,
+          ProDrive převodovka, pětislaměník.
+        models:
+          - slug: john-deere-t550
+            name: "T550"
+            year_from: 2012
+            year_to: null
+            power_hp: 238
+            power_kw: 175
+            grain_tank_l: 8000
+          - slug: john-deere-t560
+            name: "T560"
+            year_from: 2012
+            year_to: null
+            power_hp: 270
+            power_kw: 199
+            grain_tank_l: 9000
+          - slug: john-deere-t660
+            name: "T660"
+            year_from: 2012
+            year_to: null
+            power_hp: 330
+            power_kw: 243
+            grain_tank_l: 10600
+          - slug: john-deere-t670
+            name: "T670"
+            year_from: 2012
+            year_to: null
+            power_hp: 360
+            power_kw: 265
+            grain_tank_l: 11000
+
+      - slug: w-series
+        name: "W Series (2007–dosud)"
+        year_from: 2007
+        year_to: null
+        description: >
+          Ekonomická evropská řada s konvenční separací, 4 až 5 slaměníky, motor
+          JD PowerTech 6,8 L.
+        models:
+          - slug: john-deere-w330
+            name: "W330"
+            year_from: 2012
+            year_to: null
+            power_hp: 220
+            power_kw: 162
+            grain_tank_l: 6500
+          - slug: john-deere-w440
+            name: "W440"
+            year_from: 2012
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+            grain_tank_l: 7500
+          - slug: john-deere-w540
+            name: "W540"
+            year_from: 2012
+            year_to: null
+            power_hp: 260
+            power_kw: 191
+            grain_tank_l: 8000
+          - slug: john-deere-w550
+            name: "W550"
+            year_from: 2012
+            year_to: null
+            power_hp: 300
+            power_kw: 221
+            grain_tank_l: 8500
+
+      - slug: x-series
+        name: "X Series (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Revoluční dvou-rotorový systém Dual Separator. Největší průchodnost a nejnižší
+          ztráty ve třídě. Motor JD PowerTech 13,6 L, AutoMaintain, HarvestVision.
+        models:
+          - slug: john-deere-x9-1000
+            name: "X9 1000"
+            year_from: 2020
+            year_to: null
+            power_hp: 650
+            power_kw: 478
+            grain_tank_l: 14800
+          - slug: john-deere-x9-1100
+            name: "X9 1100"
+            year_from: 2020
+            year_to: null
+            power_hp: 690
+            power_kw: 508
+            grain_tank_l: 16200

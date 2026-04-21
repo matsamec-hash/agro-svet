@@ -1,0 +1,184 @@
+---
+export const prerender = true;
+import Layout from '../../../../../layouts/Layout.astro';
+import { getAllBrands, getSeries, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
+
+export async function getStaticPaths() {
+  const paths: { params: { brand: string; series: string; model: string }; props: { modelSlug: string } }[] = [];
+  for (const brand of getAllBrands()) {
+    for (const cat of Object.values(brand.categories || {})) {
+      for (const s of cat.series || []) {
+        for (const m of s.models || []) {
+          const short = m.slug.startsWith(brand.slug + '-') ? m.slug.slice(brand.slug.length + 1) : m.slug;
+          paths.push({
+            params: { brand: brand.slug, series: s.slug, model: short },
+            props: { modelSlug: m.slug },
+          });
+        }
+      }
+    }
+  }
+  return paths;
+}
+
+const { brand: brandSlug, series: seriesSlug } = Astro.params;
+const { modelSlug } = Astro.props as { modelSlug: string };
+const found = getSeries(brandSlug!, seriesSlug!);
+if (!found) return Astro.redirect('/stroje/');
+const { brand, category, series } = found;
+const model: StrojModel | undefined = series.models.find((m) => m.slug === modelSlug);
+if (!model) return Astro.redirect(`/stroje/${brandSlug}/${seriesSlug}/`);
+
+const categoryLabels: Record<StrojKategorie, string> = {
+  traktory: 'Traktory',
+  kombajny: 'Kombajny',
+};
+const categorySingular: Record<StrojKategorie, string> = {
+  traktory: 'traktor',
+  kombajny: 'kombajn',
+};
+
+const yr = model.year_from ? (model.year_to ? `${model.year_from}–${model.year_to}` : `${model.year_from}–dosud`) : '';
+const seriesYr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
+
+// Related models in same series
+const related = series.models.filter((m) => m.slug !== model.slug).slice(0, 6);
+
+function modelUrlPart(slug: string): string {
+  return slug.startsWith(brand.slug + '-') ? slug.slice(brand.slug.length + 1) : slug;
+}
+
+// Spec rows
+const specRows: { label: string; value: string | number }[] = [];
+if (model.power_hp) specRows.push({ label: 'Výkon', value: `${model.power_hp} k${model.power_kw ? ` (${model.power_kw} kW)` : ''}` });
+if (model.engine) specRows.push({ label: 'Motor', value: model.engine });
+if (model.transmission) specRows.push({ label: 'Převodovka', value: model.transmission });
+if (model.weight_kg) specRows.push({ label: 'Hmotnost', value: `${model.weight_kg.toLocaleString('cs-CZ')} kg` });
+if (model.cutting_width_m) specRows.push({ label: 'Záběr žacího stolu', value: `${model.cutting_width_m} m` });
+if (model.grain_tank_l) specRows.push({ label: 'Objem bunkru', value: `${model.grain_tank_l.toLocaleString('cs-CZ')} l` });
+if (yr) specRows.push({ label: 'Roky výroby', value: yr });
+if (model.specs) {
+  const specLabels: Record<string, string> = {
+    hydraulika_l_min: 'Hydraulika',
+    zadni_zaves_kg: 'Zadní závěs',
+    predni_zaves_kg: 'Přední závěs',
+    emise: 'Emisní norma',
+    kabina: 'Kabina',
+  };
+  const specUnits: Record<string, string> = {
+    hydraulika_l_min: ' l/min',
+    zadni_zaves_kg: ' kg',
+    predni_zaves_kg: ' kg',
+  };
+  for (const [k, v] of Object.entries(model.specs)) {
+    if (v === null || v === undefined || v === '') continue;
+    const label = specLabels[k] ?? k.replace(/_/g, ' ');
+    const unit = specUnits[k] ?? '';
+    const formatted = typeof v === 'number' ? v.toLocaleString('cs-CZ') + unit : String(v);
+    specRows.push({ label, value: formatted });
+  }
+}
+
+const pageTitle = `${brand.name} ${model.name}`;
+const pageDesc = model.description
+  ? model.description.slice(0, 160)
+  : `${pageTitle} — ${categorySingular[category]} s výkonem ${model.power_hp ?? '?'} k, roky výroby ${yr}. Technické parametry a nabídka v bazaru.`;
+---
+
+<Layout title={`${pageTitle} — parametry a cena`} description={pageDesc}>
+  <div style="max-width:1080px; margin:0 auto; padding:48px 32px 80px;">
+
+    <div style="margin-bottom:8px; font-size:13px; color:#666;">
+      <a href="/stroje/" style="color:#666; text-decoration:none;">Katalog</a>
+      <span style="margin:0 6px;">/</span>
+      <a href={`/stroje/${brand.slug}/`} style="color:#666; text-decoration:none;">{brand.name}</a>
+      <span style="margin:0 6px;">/</span>
+      <a href={`/stroje/${brand.slug}/${series.slug}/`} style="color:#666; text-decoration:none;">{series.name}</a>
+      <span style="margin:0 6px;">/</span>
+      <span style="color:#1a1a1a;">{model.name}</span>
+    </div>
+
+    <div style="margin-bottom:32px;">
+      <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+        <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
+          {brand.name}
+        </span>
+        <span style="background:#1a1a1a; color:#fff; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
+          {categoryLabels[category]}
+        </span>
+        <span style="background:#f0f0f0; color:#555; font-size:11px; padding:3px 10px; border-radius:3px;">
+          Řada: {series.name}
+        </span>
+      </div>
+      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">
+        {brand.name} {model.name}
+      </h1>
+      {model.power_hp && (
+        <div style="display:inline-block; background:#1a1a1a; color:#FFFF00; padding:10px 18px; border-radius:10px; font-family:'Chakra Petch',sans-serif; font-size:24px; font-weight:700; margin-bottom:16px;">
+          {model.power_hp} k {model.power_kw ? `· ${model.power_kw} kW` : ''}
+        </div>
+      )}
+    </div>
+
+    {model.description && (
+      <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:24px; margin-bottom:24px;">
+        <p style="font-size:16px; line-height:1.7; color:#333; margin:0;">{model.description}</p>
+      </div>
+    )}
+
+    <div style="display:grid; grid-template-columns:1fr; gap:24px; margin-bottom:32px;">
+      <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; overflow:hidden;">
+        <div style="background:#fafafa; padding:16px 20px; border-bottom:1px solid #e8e8e8;">
+          <h2 style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a;">Technické parametry</h2>
+        </div>
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+          <tbody>
+            {specRows.map((row, idx) => (
+              <tr style={`border-bottom:${idx < specRows.length - 1 ? '1px solid #f0f0f0' : 'none'};`}>
+                <td style="padding:12px 20px; color:#666; width:40%;">{row.label}</td>
+                <td style="padding:12px 20px; color:#1a1a1a; font-weight:500;">{row.value}</td>
+              </tr>
+            ))}
+            {specRows.length === 0 && (
+              <tr><td style="padding:24px 20px; color:#999; font-style:italic;" colspan="2">Detailní parametry budou doplněny.</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px;">
+        <a href={`/bazar/?znacka=${encodeURIComponent(brand.name)}&q=${encodeURIComponent(model.name)}`} style="display:block; text-decoration:none; background:#FFFF00; color:#000; border-radius:18px; padding:24px; text-align:center;">
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; margin-bottom:4px;">Hledat v bazaru</div>
+          <div style="font-size:13px; color:#333;">Aktuální nabídky {brand.name} {model.name}</div>
+        </a>
+        <a href={`/stroje/${brand.slug}/${series.slug}/`} style="display:block; text-decoration:none; background:#fff; border:1px solid #e8e8e8; color:#1a1a1a; border-radius:18px; padding:24px; text-align:center;">
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; margin-bottom:4px;">Celá řada {series.name}</div>
+          <div style="font-size:13px; color:#666;">{series.models.length} modelů · {seriesYr}</div>
+        </a>
+      </div>
+    </div>
+
+    {related.length > 0 && (
+      <section style="margin-top:48px;">
+        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:16px;">
+          Další modely z řady {series.name}
+        </h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px;">
+          {related.map((m) => (
+            <a href={`/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:box-shadow .2s, transform .2s;" class="rel-card">
+              <div style="font-family:'Chakra Petch',sans-serif; font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">{m.name}</div>
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:#666;">
+                <span>⚡ {m.power_hp ? `${m.power_hp} k` : '—'}</span>
+                <span>{m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : ''}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <style>
+    .rel-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
+  </style>
+</Layout>

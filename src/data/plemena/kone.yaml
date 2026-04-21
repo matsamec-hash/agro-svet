@@ -1,0 +1,275 @@
+slug: kone
+name: Koně
+name_plural: Plemena koní
+description: >
+  Plemena koní v České republice — teplokrevní sportovní, chladnokrevní tažní,
+  pony, ušlechtilí a regionální rasy. Zahrnuje domácí i importovaná plemena.
+
+plemena:
+  # ========== TEPLOKREVNÍ / SPORTOVNÍ ==========
+  - slug: cesky-teplokrevnik
+    name: Český teplokrevník
+    alternative_names: [ČT]
+    origin_country: Česká republika
+    year_registered: 1990
+    uzitkovost: [sportovni, jezdecke]
+    color: "různé — převažuje hnědák, ryzák, bělouš"
+    height_cm: 168
+    weight_male_kg: 600
+    description: >
+      Hlavní české sportovní plemeno. Šlechtěno od roku 1990 křížením starokladrubského,
+      furioso-north-star, hannoverského a dalších teplokrevných plemen. Vhodné pro
+      skokové i drezurní disciplíny.
+
+  - slug: hannoversky-kun
+    name: Hannoverský kůň
+    alternative_names: [Hanoverian]
+    origin_country: Německo
+    year_registered: 1735
+    uzitkovost: [sportovni, jezdecke]
+    color: "hnědák, vraník, bělouš"
+    height_cm: 170
+    description: >
+      Jedno z nejvýkonnějších světových sportovních plemen. Dominuje na olympijských
+      skokových a drezurních soutěžích. Elegantní, inteligentní, výkonný.
+
+  - slug: holsteiner
+    name: Holštýnský kůň
+    origin_country: Německo
+    uzitkovost: [sportovni, jezdecke]
+    height_cm: 170
+    description: >
+      Německé sportovní plemeno z oblasti Holstein. Specializace na parkurové skákání —
+      výborný technický skok, odvaha, síla. Patří mezi nejžádanější skokové koně světa.
+
+  - slug: oldenburg
+    name: Oldenburský kůň
+    origin_country: Německo
+    uzitkovost: [sportovni, jezdecke]
+    height_cm: 170
+    description: >
+      Vysoce šlechtěné německé sportovní plemeno. Původně tažný kůň, dnes drezurní a
+      skokový. Elegantní pohyb, přátelská povaha.
+
+  - slug: kws
+    name: Nizozemský teplokrevník
+    alternative_names: [KWPN]
+    origin_country: Nizozemsko
+    uzitkovost: [sportovni, jezdecke]
+    height_cm: 168
+    description: >
+      Nejpočetnější sportovní plemeno světa. Ideální pro drezuru i parkur. V ČR jedno
+      z nejvíce žádaných plemen pro vrcholový sport.
+
+  # ========== UŠLECHTILÍ / PLNOKREVNÍCI ==========
+  - slug: anglicky-plnokrevnik
+    name: Anglický plnokrevník
+    alternative_names: [Thoroughbred]
+    origin_country: Velká Británie
+    year_registered: 1791
+    uzitkovost: [sportovni, jezdecke]
+    color: "hnědák, ryzák, vraník"
+    height_cm: 162
+    description: >
+      Nejrychlejší plemeno na světě. Základ klasických dostihů. Používán i k zušlechťování
+      ostatních teplokrevných plemen. V ČR chován pro rovinové i překážkové dostihy.
+
+  - slug: arab
+    name: Arab
+    alternative_names: [Arabský plnokrevník]
+    origin_country: Arabský poloostrov
+    uzitkovost: [sportovni, jezdecke]
+    color: "šedák, ryzák, hnědák, vraník"
+    height_cm: 152
+    description: >
+      Nejstarší kulturní plemeno světa, vzniklo na Arabském poloostrově. Vytrvalost,
+      inteligence a elegance. Základ pro vytrvalostní jezdectví (endurance).
+
+  - slug: starokladrubsky-kun
+    name: Starokladrubský kůň
+    origin_country: Česká republika (Kladruby)
+    year_registered: 1572
+    uzitkovost: [tazne, sportovni]
+    color: "bělouš nebo vraník"
+    height_cm: 170
+    weight_male_kg: 700
+    description: >
+      Nejstarší české kulturní plemeno. Chov v Národním hřebčíně Kladruby nad Labem od
+      roku 1579 (UNESCO). Slavnostní kočárový kůň habsburského dvora. Bělouši slouží
+      v ceremoniálech, vraníci u obřadů.
+
+  # ========== CHLADNOKREVNÍ / TAŽNÍ ==========
+  - slug: slezsky-norik
+    name: Slezský norik
+    origin_country: Česká republika
+    year_registered: 1940
+    uzitkovost: [tazne]
+    color: "strakatý — vraník, ryzák, bělouš"
+    height_cm: 160
+    weight_male_kg: 800
+    description: >
+      Český tažný kůň — místní varianta Norika. Silný, spolehlivý, vhodný pro lesní práce
+      a tradiční zemědělství. V ČR chráněné plemeno.
+
+  - slug: norik
+    name: Norik
+    alternative_names: [Noriker]
+    origin_country: Rakousko (Alpy)
+    uzitkovost: [tazne]
+    color: "vraník, ryzák, bělouš, strakatý"
+    height_cm: 162
+    weight_male_kg: 850
+    description: >
+      Alpské tažné plemeno staré přes 2000 let. Odolné, vyrovnané, silné. V ČR chováno
+      pro těžkou tahovou práci a v lesnictví. Chráněná genetická rezerva.
+
+  - slug: ardenny
+    name: Ardenský kůň
+    alternative_names: [Ardennais]
+    origin_country: Belgie / Francie
+    uzitkovost: [tazne]
+    color: "ryzák, bělouš, plavák"
+    height_cm: 160
+    weight_male_kg: 900
+    description: >
+      Jedno z nejstarších tažných plemen Evropy. Mohutný, klidný, mimořádně silný.
+      Historicky používaný v armádě jako dělostřelecký tah.
+
+  - slug: czech-moravsky-kun
+    name: Českomoravský belgik
+    alternative_names: [ČMB]
+    origin_country: Česká republika
+    year_registered: 1920
+    uzitkovost: [tazne]
+    color: "ryzák s bílou hřívou, bělouš"
+    height_cm: 165
+    weight_male_kg: 900
+    description: >
+      České tažné plemeno odvozené z belgického chladnokrevníka. Mohutný, klidný, silný,
+      vhodný pro těžkou tahovou práci i v moderním lesnictví.
+
+  - slug: shire
+    name: Shire
+    origin_country: Velká Británie
+    uzitkovost: [tazne]
+    color: "vraník, hnědák, strakatý"
+    height_cm: 178
+    weight_male_kg: 1100
+    description: >
+      Největší plemeno koní na světě. Historicky britský pivovarský a zemědělský tah.
+      V ČR chov minoritní, převážně pro přehlídky a slavnostní použití.
+
+  - slug: perseron
+    name: Perseron
+    alternative_names: [Percheron]
+    origin_country: Francie
+    uzitkovost: [tazne]
+    color: "šedák, vraník"
+    height_cm: 168
+    weight_male_kg: 900
+    description: >
+      Francouzské tažné plemeno. Silné, inteligentní, snadno ovladatelné. V ČR vzácný,
+      ale chován ve specializovaných hřebčínech.
+
+  # ========== PONY / MENŠÍ ==========
+  - slug: hucul
+    name: Hucul
+    origin_country: Karpaty (ČR / Polsko / Rumunsko)
+    uzitkovost: [jezdecke, tazne]
+    color: "ryzák, plavák, hnědák, strakatý"
+    height_cm: 138
+    description: >
+      Horský karpatský pony. Nenáročné, odolné, vytrvalé. Vhodné pro hipoterapii,
+      turistiku a rodinné ježdění. Chráněné plemeno v ČR.
+
+  - slug: shetlandsky-pony
+    name: Shetlandský pony
+    origin_country: Shetlandské ostrovy
+    uzitkovost: [jezdecke]
+    color: "vraník, ryzák, strakatý"
+    height_cm: 105
+    description: >
+      Nejmenší britský pony. Mimořádně silný v poměru k velikosti. Ideální pro dětské
+      jezdectví a hobby chovy.
+
+  - slug: welsh-pony
+    name: Welsh pony
+    origin_country: Wales (UK)
+    uzitkovost: [jezdecke, sportovni]
+    color: "různé"
+    height_cm: 140
+    description: >
+      Britský pony ze čtyř sekcí (A, B, C, D). Vhodný pro dětské jezdectví i dospělé.
+      Elegantní pohyb, vynikající temperament.
+
+  - slug: haflinger
+    name: Haflinger
+    alternative_names: [Haflink]
+    origin_country: Rakousko (Tyroly)
+    year_registered: 1946
+    uzitkovost: [jezdecke, tazne]
+    color: "ryzák s bílou hřívou"
+    height_cm: 148
+    weight_male_kg: 500
+    description: >
+      Tyrolské horské plemeno. Vyrovnaný, nenáročný, všestranný. Používán pro rekreační
+      jezdectví, hipoterapii, tahovou práci i přehlídky.
+
+  - slug: islandsky-kun
+    name: Islandský kůň
+    origin_country: Island
+    uzitkovost: [jezdecke]
+    color: "různé — všechny barvy"
+    height_cm: 140
+    description: >
+      Prastaré plemeno z Islandu. Pětichodý kůň — kromě kroku, klusu, cvalu má i tölt
+      a pas. Mimořádná vytrvalost. V ČR rostoucí obliba u vytrvalostních jezdců.
+
+  # ========== OSTATNÍ ==========
+  - slug: fjordsky-kun
+    name: Fjordský kůň
+    origin_country: Norsko
+    uzitkovost: [jezdecke, tazne]
+    color: "plavák s úhoří pruh"
+    height_cm: 145
+    description: >
+      Starobylé norské plemeno s charakteristickým zbarvením a hřívou. Silné, klidné,
+      vhodné pro práci i rekreační jezdectví.
+
+  - slug: friz
+    name: Fríský kůň
+    alternative_names: [Friesian]
+    origin_country: Nizozemsko (Frísko)
+    uzitkovost: [jezdecke, sportovni]
+    color: "čistě vraník, dlouhá hříva a ocas"
+    height_cm: 160
+    description: >
+      Nizozemské barokní plemeno s elegantním vzezřením. Používáno pro drezuru a
+      slavnostní kočáry. V ČR populární pro showring a filmovou produkci.
+
+  - slug: quarter-horse
+    name: American Quarter Horse
+    origin_country: USA
+    uzitkovost: [sportovni, jezdecke]
+    color: "různé, často ryzák"
+    height_cm: 152
+    description: >
+      Americké všestranné plemeno — základ western jezdectví. Excelentní v reiningu,
+      cuttingu, ranch worku. V ČR jedno z nejrozšířenějších western plemen.
+
+  - slug: appaloosa
+    name: Appaloosa
+    origin_country: USA
+    uzitkovost: [jezdecke, sportovni]
+    color: "strakatá s typickými leopardími skvrnami"
+    height_cm: 152
+    description: >
+      Americké plemeno charakteristické leopardím vzorováním. Vhodné pro western,
+      vytrvalostní jezdectví i rekreaci.
+
+  - slug: ostatni
+    name: Ostatní plemena
+    origin_country: různé
+    uzitkovost: [ostatni]
+    description: >
+      Menšinová, regionální nebo křížená plemena neuvedená výše.

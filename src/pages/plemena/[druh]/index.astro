@@ -1,0 +1,63 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { getAllDruhy, getDruh, UZITKOVOST_LABELS } from '../../../lib/plemena';
+
+export async function getStaticPaths() {
+  return getAllDruhy().map((d) => ({ params: { druh: d.slug } }));
+}
+
+const { druh: druhSlug } = Astro.params;
+const druh = getDruh(druhSlug!);
+if (!druh) return Astro.redirect('/plemena/');
+
+const sorted = [...druh.plemena].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+---
+
+<Layout
+  title={`${druh.name_plural} — katalog plemen`}
+  description={`Přehled plemen druhu ${druh.name.toLowerCase()}. ${druh.description.slice(0, 140)}`}
+>
+  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+    <div style="margin-bottom:8px;">
+      <a href="/plemena/" style="font-size:13px; color:#666; text-decoration:none;">← Katalog plemen</a>
+    </div>
+
+    <div style="margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid #e8e8e8;">
+      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">
+        {druh.name_plural}
+      </h1>
+      <p style="font-size:16px; color:#444; max-width:820px; line-height:1.65;">{druh.description}</p>
+      <div style="margin-top:14px; font-size:14px; color:#666;">📚 {sorted.length} plemen v databázi</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px;">
+      {sorted.map((p) => {
+        const uzit = p.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ');
+        return (
+          <a href={`/plemena/${druh.slug}/${p.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:20px; transition:box-shadow .2s, transform .2s;" class="plemeno-card">
+            <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;">
+              <span style="background:#f0f0f0; color:#555; font-size:10px; padding:2px 8px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">{uzit}</span>
+            </div>
+            <h3 style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; color:#1a1a1a; margin-bottom:6px;">{p.name}</h3>
+            {p.alternative_names && p.alternative_names.length > 0 && (
+              <div style="font-size:12px; color:#999; margin-bottom:8px; font-style:italic;">{p.alternative_names.join(', ')}</div>
+            )}
+            <div style="font-size:13px; color:#666; margin-bottom:10px;">🌍 {p.origin_country}</div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:#555; margin-bottom:10px;">
+              {p.weight_male_kg && <span>♂ {p.weight_male_kg} kg</span>}
+              {p.weight_female_kg && <span>♀ {p.weight_female_kg} kg</span>}
+              {p.milk_yield_kg_year && <span>🥛 {p.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok</span>}
+              {p.height_cm && <span>📏 {p.height_cm} cm</span>}
+            </div>
+            <p style="font-size:13px; color:#666; line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{p.description}</p>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+
+  <style>
+    .plemeno-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
+  </style>
+</Layout>

@@ -1,0 +1,240 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getAllDruhy, getAllPlemena, UZITKOVOST_LABELS, type PlemenoUzitkovost } from '../../lib/plemena';
+
+const druhy = getAllDruhy();
+const plemena = getAllPlemena();
+
+const totalPlemena = plemena.length;
+const countries = new Set(plemena.map((p) => p.origin_country)).size;
+
+const plemenaJson = JSON.stringify(
+  plemena.map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    druh_slug: p.druh_slug,
+    druh_name: p.druh_name,
+    origin_country: p.origin_country,
+    uzitkovost: p.uzitkovost,
+    year_registered: p.year_registered ?? null,
+    weight_male_kg: p.weight_male_kg ?? null,
+    weight_female_kg: p.weight_female_kg ?? null,
+    milk_yield_kg_year: p.milk_yield_kg_year ?? null,
+    height_cm: p.height_cm ?? null,
+    description: p.description,
+  })),
+);
+
+// Collect all unique uzitkovost values present in data
+const allUzitkovost = new Set<PlemenoUzitkovost>();
+for (const p of plemena) for (const u of p.uzitkovost) allUzitkovost.add(u);
+const uzitkovostOptions = (Array.from(allUzitkovost) as PlemenoUzitkovost[]).sort();
+
+const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).sort();
+---
+
+<Layout
+  title="Katalog plemen hospodářských zvířat"
+  description="Databáze plemen hovězího dobytka, ovcí a koní — původ, užitkovost, hmotnost, mléčná dojivost. Filtrujte podle druhu a užitkovosti."
+>
+  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+    <div style="margin-bottom:32px;">
+      <span class="section-label">Katalog plemen</span>
+      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
+        Plemena zvířat
+      </h1>
+      <p style="font-size:16px; color:#666; max-width:640px; line-height:1.6;">
+        Databáze {totalPlemena}+ plemen hospodářských zvířat — hovězí dobytek, ovce, koně.
+        Původ, užitkovost, hmotnost, mléčná dojivost a popisy plemen.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:32px;">
+      <div style="background:#1a1a1a; color:#fff; padding:20px; border-radius:18px;">
+        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700; color:#FFFF00;">{totalPlemena}</div>
+        <div style="font-size:13px; color:rgba(255,255,255,.6);">plemen v databázi</div>
+      </div>
+      <div style="background:#f5f5f5; padding:20px; border-radius:18px;">
+        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700;">{druhy.length}</div>
+        <div style="font-size:13px; color:#666;">druhů zvířat</div>
+      </div>
+      <div style="background:#f5f5f5; padding:20px; border-radius:18px;">
+        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700;">{countries}</div>
+        <div style="font-size:13px; color:#666;">zemí původu</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:20px; margin-bottom:24px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:12px;">
+        <label style="font-size:13px; color:#333;">
+          <div style="margin-bottom:6px; font-weight:500;">Druh</div>
+          <select id="f-druh" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; background:#fff;">
+            <option value="">Všechny druhy</option>
+            {druhy.map((d) => <option value={d.slug}>{d.name}</option>)}
+          </select>
+        </label>
+        <label style="font-size:13px; color:#333;">
+          <div style="margin-bottom:6px; font-weight:500;">Užitkovost</div>
+          <select id="f-uzit" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; background:#fff;">
+            <option value="">Všechny</option>
+            {uzitkovostOptions.map((u) => <option value={u}>{UZITKOVOST_LABELS[u]}</option>)}
+          </select>
+        </label>
+        <label style="font-size:13px; color:#333;">
+          <div style="margin-bottom:6px; font-weight:500;">Země původu</div>
+          <select id="f-country" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; background:#fff;">
+            <option value="">Všechny</option>
+            {countryList.map((c) => <option value={c}>{c}</option>)}
+          </select>
+        </label>
+        <label style="font-size:13px; color:#333;">
+          <div style="margin-bottom:6px; font-weight:500;">Hledat</div>
+          <input id="f-search" type="search" placeholder="např. charolais, merino" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px;" />
+        </label>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div id="result-count" style="font-size:13px; color:#666;"></div>
+        <button id="f-reset" style="background:none; border:1px solid #ddd; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer;">Resetovat</button>
+      </div>
+    </div>
+
+    <!-- Druh cards (default view) -->
+    <div id="druh-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin-bottom:32px;">
+      {druhy.map((d) => {
+        const count = d.plemena.length;
+        return (
+          <a href={`/plemena/${d.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:24px; transition:box-shadow .2s, transform .2s;" class="druh-card">
+            <h3 style="font-family:'Chakra Petch',sans-serif; font-size:24px; font-weight:700; color:#1a1a1a; margin-bottom:10px;">{d.name}</h3>
+            <div style="font-size:13px; color:#666; margin-bottom:12px;">{count} plemen</div>
+            <p style="font-size:14px; color:#555; line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{d.description}</p>
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Filtered results -->
+    <div id="results-grid" style="display:none; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px;"></div>
+  </div>
+
+  <script is:inline set:html={`window.__PLEMENA_DATA__ = ${plemenaJson};`}></script>
+  <script is:inline set:html={`window.__UZITKOVOST_LABELS__ = ${JSON.stringify(UZITKOVOST_LABELS)};`}></script>
+
+  <script>
+    type P = {
+      slug: string;
+      name: string;
+      druh_slug: string;
+      druh_name: string;
+      origin_country: string;
+      uzitkovost: string[];
+      year_registered: number | null;
+      weight_male_kg: number | null;
+      weight_female_kg: number | null;
+      milk_yield_kg_year: number | null;
+      description: string;
+    };
+
+    const PLEMENA: P[] = (window as any).__PLEMENA_DATA__ ?? [];
+    const U_LABELS: Record<string, string> = (window as any).__UZITKOVOST_LABELS__ ?? {};
+
+    const el = {
+      druh: document.getElementById('f-druh') as HTMLSelectElement,
+      uzit: document.getElementById('f-uzit') as HTMLSelectElement,
+      country: document.getElementById('f-country') as HTMLSelectElement,
+      search: document.getElementById('f-search') as HTMLInputElement,
+      reset: document.getElementById('f-reset') as HTMLButtonElement,
+      count: document.getElementById('result-count') as HTMLElement,
+      druhGrid: document.getElementById('druh-grid') as HTMLElement,
+      resultsGrid: document.getElementById('results-grid') as HTMLElement,
+    };
+
+    function anyActive() {
+      return Boolean(el.druh.value || el.uzit.value || el.country.value || el.search.value.trim());
+    }
+
+    function card(p: P): string {
+      const uzit = p.uzitkovost.map((u) => U_LABELS[u] ?? u).join(', ');
+      const wt = p.weight_male_kg ? `♂ ${p.weight_male_kg} kg` : (p.weight_female_kg ? `♀ ${p.weight_female_kg} kg` : '');
+      const milk = p.milk_yield_kg_year ? ` · 🥛 ${p.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok` : '';
+      return `
+        <a href="/plemena/${p.druh_slug}/${p.slug}/" style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:box-shadow .2s, transform .2s;" class="pl-card">
+          <div style="display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;">
+            <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:10px; font-weight:400; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">${p.druh_name}</span>
+            <span style="background:#f0f0f0; color:#555; font-size:10px; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">${uzit}</span>
+          </div>
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">${p.name}</div>
+          <div style="font-size:12px; color:#888; margin-bottom:8px;">🌍 ${p.origin_country}</div>
+          <div style="font-size:12px; color:#555;">${wt}${milk}</div>
+        </a>`;
+    }
+
+    function apply() {
+      const d = el.druh.value;
+      const u = el.uzit.value;
+      const c = el.country.value;
+      const q = el.search.value.trim().toLowerCase();
+
+      const filtered = PLEMENA.filter((p) => {
+        if (d && p.druh_slug !== d) return false;
+        if (u && !p.uzitkovost.includes(u)) return false;
+        if (c && p.origin_country !== c) return false;
+        if (q) {
+          const hay = (p.name + ' ' + p.druh_name + ' ' + (p.description || '')).toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (anyActive()) {
+        el.druhGrid.style.display = 'none';
+        el.resultsGrid.style.display = 'grid';
+        el.resultsGrid.innerHTML = filtered.length > 0
+          ? filtered.map(card).join('')
+          : '<div style="grid-column:1/-1; padding:48px; text-align:center; color:#999;">Žádná plemena neodpovídají filtrům.</div>';
+        el.count.textContent = `Nalezeno ${filtered.length} plemen`;
+      } else {
+        el.druhGrid.style.display = 'grid';
+        el.resultsGrid.style.display = 'none';
+        el.count.textContent = '';
+      }
+    }
+
+    [el.druh, el.uzit, el.country, el.search].forEach((e) => {
+      e.addEventListener('input', apply);
+      e.addEventListener('change', apply);
+    });
+    el.reset.addEventListener('click', () => {
+      el.druh.value = '';
+      el.uzit.value = '';
+      el.country.value = '';
+      el.search.value = '';
+      apply();
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('druh')) el.druh.value = params.get('druh')!;
+    if (params.get('uzitkovost')) el.uzit.value = params.get('uzitkovost')!;
+    if (params.get('zeme')) el.country.value = params.get('zeme')!;
+    if (params.get('q')) el.search.value = params.get('q')!;
+    apply();
+  </script>
+
+  <style>
+    .section-label {
+      display: inline-block;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      background: #FFFF00;
+      padding: 4px 10px;
+      border-radius: 3px;
+      margin-bottom: 14px;
+    }
+    .druh-card:hover, .pl-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
+  </style>
+</Layout>

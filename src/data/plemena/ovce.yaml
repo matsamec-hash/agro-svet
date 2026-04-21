@@ -1,0 +1,185 @@
+slug: ovce
+name: Ovce
+name_plural: Plemena ovcí
+description: >
+  Plemena ovcí chovaná v České republice — masná, vlnařská, mléčná a kombinovaná.
+  Kromě komerčních plemen zahrnuje i české regionální a krajové rasy.
+
+plemena:
+  # ========== MASNÁ PLEMENA ==========
+  - slug: suffolk
+    name: Suffolk
+    origin_country: Velká Británie
+    year_registered: 1859
+    uzitkovost: [maso]
+    color: "černá hlava a nohy, bílé tělo"
+    weight_male_kg: 140
+    weight_female_kg: 85
+    description: >
+      Nejrozšířenější masné plemeno ovcí v Evropě. Rychlý růst, výborná jatečná
+      výtěžnost, masivní svalnatá stavba. V ČR hlavní plemeno pro masnou produkci.
+
+  - slug: texel
+    name: Texel
+    origin_country: Nizozemsko (ostrov Texel)
+    year_registered: 1909
+    uzitkovost: [maso]
+    color: "čistě bílá"
+    weight_male_kg: 130
+    weight_female_kg: 75
+    description: >
+      Vynikající masné plemeno s extrémně svalnatou stavbou. Nízký obsah tuku, vysoký
+      podíl libového masa. Vhodné i pro drsné pastviny.
+
+  - slug: charollais
+    name: Charollais
+    origin_country: Francie
+    year_registered: 1974
+    uzitkovost: [maso]
+    color: "bílá až krémová, růžový čumák"
+    weight_male_kg: 130
+    weight_female_kg: 80
+    description: >
+      Francouzské masné plemeno ze stejnojmenné oblasti. Rychlý růst jehňat, jemné maso
+      s vynikající chutí.
+
+  - slug: hampshire
+    name: Hampshire
+    origin_country: Velká Británie
+    year_registered: 1889
+    uzitkovost: [maso]
+    color: "hnědá až černá hlava a nohy"
+    weight_male_kg: 130
+    weight_female_kg: 80
+    description: >
+      Anglické masné plemeno, často používané v křížení pro zlepšení masné užitkovosti.
+      Silná kostra, dobrá plodnost.
+
+  - slug: beltex
+    name: Beltex
+    origin_country: Belgie
+    uzitkovost: [maso]
+    color: "bílá, svalnatá stavba"
+    weight_male_kg: 110
+    weight_female_kg: 70
+    description: >
+      Belgické masné plemeno vzniklé křížením Texelu. Extrémně svalnatá záď,
+      ideální pro produkci jehněčího masa prémiové kvality.
+
+  # ========== VLNAŘSKÁ ==========
+  - slug: merino
+    name: Merino
+    alternative_names: [Merinoovce]
+    origin_country: Španělsko / Austrálie
+    year_registered: 1788
+    uzitkovost: [vlna]
+    color: "bílá, jemná vlna"
+    weight_male_kg: 90
+    weight_female_kg: 55
+    description: >
+      Nejznámější vlnařské plemeno na světě. Velmi jemná vlna (18–24 mikronů) vysoké
+      kvality. V ČR minoritní, v Austrálii základ vlnařského průmyslu.
+
+  - slug: merinolandschaf
+    name: Merinolandschaf
+    alternative_names: [Württemberská merina]
+    origin_country: Německo
+    uzitkovost: [vlna, maso]
+    color: "bílá"
+    weight_male_kg: 120
+    weight_female_kg: 75
+    description: >
+      Německá kombinovaná varianta merina. Dobrá plodnost (180 %), kvalitní vlna i maso.
+      V ČR uznávané plemeno s rostoucím zastoupením.
+
+  # ========== MLÉČNÁ ==========
+  - slug: vychodofrizska
+    name: Východofríská
+    alternative_names: [East Friesian]
+    origin_country: Německo
+    uzitkovost: [mleko]
+    color: "bílá, bezvlnatý ocas"
+    weight_male_kg: 110
+    weight_female_kg: 70
+    milk_yield_kg_year: 600
+    description: >
+      Nejvýkonnější mléčné plemeno ovcí. Průměrná užitkovost 500–700 litrů mléka za
+      laktaci (210–300 dní). Základ specializovaných mléčných chovů pro výrobu ovčího
+      sýra a brynzy.
+
+  - slug: lacaune
+    name: Lacaune
+    origin_country: Francie
+    uzitkovost: [mleko]
+    color: "bílá, bezvlnné břicho"
+    weight_female_kg: 70
+    milk_yield_kg_year: 300
+    description: >
+      Francouzské mléčné plemeno — základ pro výrobu sýra Roquefort. Nižší užitkovost
+      než východofríská ovce ale vyšší odolnost a adaptabilita.
+
+  # ========== ČESKÁ A REGIONÁLNÍ ==========
+  - slug: sumavska
+    name: Šumavská ovce
+    origin_country: Česká republika
+    uzitkovost: [kombinovane, vlna]
+    color: "bílá"
+    weight_male_kg: 80
+    weight_female_kg: 50
+    description: >
+      České původní plemeno z šumavské oblasti. Chráněná genetická rezerva — menšinové
+      plemeno. Nenáročné, odolné vůči drsnému počasí, vhodné pro extenzivní pastvu.
+
+  - slug: valaska
+    name: Valaška
+    alternative_names: [Carpathian Mountain Sheep]
+    origin_country: Česká republika / Slovensko
+    uzitkovost: [mleko, vlna, maso]
+    color: "bílá nebo černá"
+    weight_male_kg: 60
+    weight_female_kg: 40
+    milk_yield_kg_year: 120
+    description: >
+      Tradiční horské plemeno Karpat. Nenáročné, odolné, trojstranně užitkové.
+      Základ pro výrobu pravé ovčí brynzy a valaského salašnického ruchu.
+
+  # ========== OSTATNÍ ==========
+  - slug: romanov
+    name: Romanovská
+    origin_country: Rusko
+    uzitkovost: [kombinovane]
+    color: "černé jehně, šedé dospělé"
+    weight_male_kg: 75
+    weight_female_kg: 50
+    description: >
+      Ruské plemeno s vysokou plodností (2–4 jehňata ve vrhu). Odolné vůči chladu,
+      rychlý růst, 2 vrhy za rok. V ČR používáno pro zvýšení plodnosti při křížení.
+
+  - slug: dorper
+    name: Dorper
+    origin_country: Jihoafrická republika
+    uzitkovost: [maso]
+    color: "bílá s černou hlavou, bezvlnná"
+    weight_male_kg: 120
+    weight_female_kg: 80
+    description: >
+      Africké masné plemeno s výjimečnou adaptabilitou. Neroste vlna — opadává přirozeně.
+      Odolné vůči suchu a teplu. V ČR rostoucí zastoupení pro udržitelné pastvinářství.
+
+  - slug: ovce-kamerunske
+    name: Kamerunská ovce
+    origin_country: Kamerun
+    uzitkovost: [ostatni]
+    color: "hnědá s černými znaky"
+    weight_male_kg: 60
+    weight_female_kg: 40
+    description: >
+      Africké bezvlné plemeno. V ČR chováno jako okrasné nebo pro malé hobby chovy.
+      Nenáročné, odolné proti parazitům.
+
+  - slug: ostatni
+    name: Ostatní plemena
+    origin_country: různé
+    uzitkovost: [ostatni]
+    description: >
+      Menšinová, regionální nebo křížená plemena neuvedená výše.

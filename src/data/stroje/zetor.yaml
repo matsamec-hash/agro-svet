@@ -1,0 +1,565 @@
+slug: zetor
+name: Zetor
+country: Česká republika
+founded: 1946
+website: https://www.zetor.cz
+description: >
+  Tradiční český výrobce traktorů z Brna. Ikona československého zemědělství od roku 1946.
+  Modelové řady Major, Proxima, Forterra a Crystal pokrývají traktory od 50 do 170 koní.
+  Značka je vyhlášená jednoduchou údržbou, spolehlivostí a dostupnou cenou.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== Unifikovaná řada (historie do 90. let) ==========
+      - slug: ur-i
+        name: "UR I — Unifikovaná řada I (1968–1998)"
+        year_from: 1968
+        year_to: 1998
+        description: >
+          Ikonická unifikovaná řada — kostra českého zemědělství. V 90. letech stále masivně
+          prodávaná a vyráběná souběžně s nástupci. Motory Zetor 5201/5201.1, převodovka 10/2,
+          jednoduchá konstrukce, proslulá nezničitelnost.
+        models:
+          - slug: zetor-5211
+            name: "5211"
+            year_from: 1980
+            year_to: 1998
+            power_hp: 46
+            power_kw: 34
+            engine: "Zetor 7201, 3-válec 3,12 L"
+          - slug: zetor-6211
+            name: "6211"
+            year_from: 1988
+            year_to: 1998
+            power_hp: 60
+            power_kw: 44
+            engine: "Zetor 7201, 3-válec 3,12 L"
+          - slug: zetor-6245
+            name: "6245"
+            year_from: 1988
+            year_to: 1998
+            power_hp: 60
+            power_kw: 44
+          - slug: zetor-7211
+            name: "7211"
+            year_from: 1980
+            year_to: 1998
+            power_hp: 67
+            power_kw: 49
+          - slug: zetor-7245
+            name: "7245"
+            year_from: 1980
+            year_to: 1998
+            power_hp: 70
+            power_kw: 52
+          - slug: zetor-7245-horal
+            name: "7245 Horal"
+            year_from: 1980
+            year_to: 1998
+            power_hp: 70
+            power_kw: 52
+            description: "Speciální horská verze se zvýšenou stabilitou."
+          - slug: zetor-7711
+            name: "7711"
+            year_from: 1988
+            year_to: 1998
+            power_hp: 75
+            power_kw: 55
+          - slug: zetor-7745
+            name: "7745"
+            year_from: 1980
+            year_to: 1998
+            power_hp: 77
+            power_kw: 57
+            engine: "Zetor 7401, 4-válec 4,15 L"
+          - slug: zetor-7745-turbo
+            name: "7745 Turbo"
+            year_from: 1988
+            year_to: 1998
+            power_hp: 85
+            power_kw: 63
+
+      - slug: ur-ii
+        name: "UR II — Unifikovaná řada II (1980–2002)"
+        year_from: 1980
+        year_to: 2002
+        description: >
+          Větší a výkonnější unifikovaná řada pro střední a větší farmy. Motory Zetor 8001/8101,
+          6-válec, převodovka 10/2 nebo 16/8 s plazivým převodem.
+        models:
+          - slug: zetor-8011
+            name: "8011"
+            year_from: 1980
+            year_to: 1998
+            power_hp: 80
+            power_kw: 59
+          - slug: zetor-8111
+            name: "8111"
+            year_from: 1988
+            year_to: 2002
+            power_hp: 85
+            power_kw: 63
+          - slug: zetor-8211
+            name: "8211"
+            year_from: 1980
+            year_to: 1998
+            power_hp: 85
+            power_kw: 63
+          - slug: zetor-8245
+            name: "8245"
+            year_from: 1980
+            year_to: 2002
+            power_hp: 85
+            power_kw: 63
+          - slug: zetor-9111
+            name: "9111"
+            year_from: 1988
+            year_to: 2002
+            power_hp: 92
+            power_kw: 68
+          - slug: zetor-9540
+            name: "9540"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 92
+            power_kw: 68
+          - slug: zetor-10011
+            name: "10011"
+            year_from: 1980
+            year_to: 1998
+            power_hp: 100
+            power_kw: 74
+          - slug: zetor-10111
+            name: "10111"
+            year_from: 1988
+            year_to: 2002
+            power_hp: 100
+            power_kw: 74
+          - slug: zetor-10145
+            name: "10145"
+            year_from: 1980
+            year_to: 2002
+            power_hp: 105
+            power_kw: 77
+          - slug: zetor-10540
+            name: "10540"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 105
+            power_kw: 77
+          - slug: zetor-11441
+            name: "11441"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 113
+            power_kw: 83
+          - slug: zetor-11741
+            name: "11741"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 120
+            power_kw: 88
+          - slug: zetor-12145
+            name: "12145"
+            year_from: 1988
+            year_to: 2002
+            power_hp: 125
+            power_kw: 92
+          - slug: zetor-12245
+            name: "12245"
+            year_from: 1988
+            year_to: 2002
+            power_hp: 125
+            power_kw: 92
+          - slug: zetor-16245
+            name: "16245"
+            year_from: 1988
+            year_to: 2002
+            power_hp: 160
+            power_kw: 118
+            description: "Nejvýkonnější model UR II, 6-válec turbo."
+
+      # ========== Super řada (99–04) ==========
+      - slug: super
+        name: "Super (1999–2004)"
+        year_from: 1999
+        year_to: 2004
+        description: >
+          Modernizace UR II s novou kabinou a motorem Zetor Z 1505. Mezistupeň k řadě Forterra.
+        models:
+          - slug: zetor-8540-super
+            name: "8540 Super"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 85
+            power_kw: 63
+          - slug: zetor-9540-super
+            name: "9540 Super"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 92
+            power_kw: 68
+          - slug: zetor-10540-super
+            name: "10540 Super"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 105
+            power_kw: 77
+
+      # ========== Forterra ==========
+      - slug: forterra
+        name: "Forterra (2000–2014)"
+        year_from: 2000
+        year_to: 2014
+        description: >
+          Vlajková řada — moderní kabina Horizon II, plně synchronizovaná převodovka 24/18
+          s reverzérem a 4WD. Motor Zetor Z 1505/1605 s turbem a mezichladičem.
+        models:
+          - slug: zetor-8641-forterra
+            name: "Forterra 8641"
+            year_from: 2000
+            year_to: 2005
+            power_hp: 83
+            power_kw: 61
+          - slug: zetor-9641-forterra
+            name: "Forterra 9641"
+            year_from: 2000
+            year_to: 2005
+            power_hp: 90
+            power_kw: 66
+          - slug: zetor-10641-forterra
+            name: "Forterra 10641"
+            year_from: 2000
+            year_to: 2005
+            power_hp: 100
+            power_kw: 74
+          - slug: zetor-11441-forterra
+            name: "Forterra 11441"
+            year_from: 2000
+            year_to: 2005
+            power_hp: 113
+            power_kw: 83
+          - slug: zetor-11741-forterra
+            name: "Forterra 11741"
+            year_from: 2000
+            year_to: 2005
+            power_hp: 120
+            power_kw: 88
+          - slug: zetor-12441-forterra
+            name: "Forterra 12441"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 125
+            power_kw: 92
+          - slug: zetor-100-hsx
+            name: "Forterra 100 HSX"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 98
+            power_kw: 72
+          - slug: zetor-110-hsx
+            name: "Forterra 110 HSX"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 108
+            power_kw: 79
+          - slug: zetor-125-hsx
+            name: "Forterra 125 HSX"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 122
+            power_kw: 90
+          - slug: zetor-135-hsx
+            name: "Forterra 135 HSX"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 136
+            power_kw: 100
+          - slug: zetor-140-hsx
+            name: "Forterra 140 HSX"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 147
+            power_kw: 108
+
+      - slug: forterra-hsx-hd-cl
+        name: "Forterra HSX / HD / CL (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Modernizace Forterra s novou kapotou, displejem a motorem Zetor Stage IV / V.
+          Varianty HSX (power shift), HD (prémium), CL (klasická).
+        models:
+          - slug: zetor-forterra-cl-100
+            name: "Forterra CL 100"
+            year_from: 2014
+            year_to: null
+            power_hp: 97
+            power_kw: 71
+          - slug: zetor-forterra-cl-110
+            name: "Forterra CL 110"
+            year_from: 2014
+            year_to: null
+            power_hp: 107
+            power_kw: 79
+          - slug: zetor-forterra-hd-130
+            name: "Forterra HD 130"
+            year_from: 2014
+            year_to: null
+            power_hp: 134
+            power_kw: 99
+          - slug: zetor-forterra-hd-140
+            name: "Forterra HD 140"
+            year_from: 2014
+            year_to: null
+            power_hp: 144
+            power_kw: 106
+          - slug: zetor-forterra-hsx-130
+            name: "Forterra HSX 130"
+            year_from: 2014
+            year_to: null
+            power_hp: 134
+            power_kw: 99
+          - slug: zetor-forterra-hsx-140
+            name: "Forterra HSX 140"
+            year_from: 2014
+            year_to: null
+            power_hp: 144
+            power_kw: 106
+          - slug: zetor-forterra-hsx-150
+            name: "Forterra HSX 150"
+            year_from: 2016
+            year_to: null
+            power_hp: 147
+            power_kw: 108
+
+      # ========== Proxima ==========
+      - slug: proxima-gen1
+        name: "Proxima (2004–2012)"
+        year_from: 2004
+        year_to: 2012
+        description: >
+          Nástupce Super řady. Cenově dostupný traktor pro menší farmy. Motor Z 1205,
+          synchronizovaná převodovka 10/10 nebo 20/20 s reverzérem.
+        models:
+          - slug: zetor-6441-proxima
+            name: "Proxima 6441"
+            year_from: 2004
+            year_to: 2008
+            power_hp: 65
+            power_kw: 48
+          - slug: zetor-7441-proxima
+            name: "Proxima 7441"
+            year_from: 2004
+            year_to: 2008
+            power_hp: 70
+            power_kw: 52
+          - slug: zetor-8441-proxima
+            name: "Proxima 8441"
+            year_from: 2004
+            year_to: 2008
+            power_hp: 82
+            power_kw: 60
+          - slug: zetor-9441-proxima
+            name: "Proxima 9441"
+            year_from: 2004
+            year_to: 2008
+            power_hp: 91
+            power_kw: 67
+          - slug: zetor-10441-proxima
+            name: "Proxima 10441"
+            year_from: 2004
+            year_to: 2008
+            power_hp: 102
+            power_kw: 75
+          - slug: zetor-proxima-85
+            name: "Proxima 85"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 82
+            power_kw: 60
+          - slug: zetor-proxima-95
+            name: "Proxima 95"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 91
+            power_kw: 67
+          - slug: zetor-proxima-105
+            name: "Proxima 105"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 102
+            power_kw: 75
+
+      - slug: proxima-cl-gp-hs
+        name: "Proxima CL / GP / HS / Power / Plus (2012–dosud)"
+        year_from: 2012
+        year_to: null
+        description: >
+          Aktuální generace Proximy ve více variantách — CL (classic), GP (general purpose),
+          HS (high spec), Power a Plus. Motor Zetor 1204 / 1605 Stage V.
+        models:
+          - slug: zetor-proxima-cl-80
+            name: "Proxima CL 80"
+            year_from: 2012
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: zetor-proxima-cl-90
+            name: "Proxima CL 90"
+            year_from: 2012
+            year_to: null
+            power_hp: 88
+            power_kw: 64
+          - slug: zetor-proxima-cl-100
+            name: "Proxima CL 100"
+            year_from: 2012
+            year_to: null
+            power_hp: 98
+            power_kw: 72
+          - slug: zetor-proxima-gp-80
+            name: "Proxima GP 80"
+            year_from: 2015
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: zetor-proxima-gp-90
+            name: "Proxima GP 90"
+            year_from: 2015
+            year_to: null
+            power_hp: 88
+            power_kw: 64
+          - slug: zetor-proxima-gp-100
+            name: "Proxima GP 100"
+            year_from: 2015
+            year_to: null
+            power_hp: 98
+            power_kw: 72
+          - slug: zetor-proxima-hs-110
+            name: "Proxima HS 110"
+            year_from: 2018
+            year_to: null
+            power_hp: 108
+            power_kw: 79
+          - slug: zetor-proxima-hs-120
+            name: "Proxima HS 120"
+            year_from: 2018
+            year_to: null
+            power_hp: 117
+            power_kw: 86
+          - slug: zetor-proxima-power-110
+            name: "Proxima Power 110"
+            year_from: 2020
+            year_to: null
+            power_hp: 108
+            power_kw: 79
+          - slug: zetor-proxima-power-120
+            name: "Proxima Power 120"
+            year_from: 2020
+            year_to: null
+            power_hp: 117
+            power_kw: 86
+            description: >
+              Zetor Proxima Power 120 nová generace (2024+) — nový motor, kabina, digitální displej.
+              Inspirace italským Foton/Same designem.
+
+      # ========== Crystal ==========
+      - slug: crystal
+        name: "Crystal HD (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Návrat legendárního jména Crystal. Nejvýkonnější Zetor — až 170 koní, motor Deutz
+          4-válec turbo, převodovka ZF 16/16 s PowerShift.
+        models:
+          - slug: zetor-crystal-hd-150
+            name: "Crystal HD 150"
+            year_from: 2014
+            year_to: null
+            power_hp: 150
+            power_kw: 110
+          - slug: zetor-crystal-hd-160
+            name: "Crystal HD 160"
+            year_from: 2014
+            year_to: null
+            power_hp: 163
+            power_kw: 120
+          - slug: zetor-crystal-hd-170
+            name: "Crystal HD 170"
+            year_from: 2017
+            year_to: null
+            power_hp: 171
+            power_kw: 126
+
+      # ========== Major ==========
+      - slug: major
+        name: "Major (2013–dosud)"
+        year_from: 2013
+        year_to: null
+        description: >
+          Nejmenší řada Zetoru — utility traktor pro komunály, sady a drobné hospodářství.
+          Motor Zetor 4-válec 4,2 L, převodovka 12/12 synchronizovaná.
+        models:
+          - slug: zetor-major-60
+            name: "Major 60"
+            year_from: 2013
+            year_to: null
+            power_hp: 60
+            power_kw: 44
+          - slug: zetor-major-70
+            name: "Major 70"
+            year_from: 2013
+            year_to: null
+            power_hp: 70
+            power_kw: 51
+          - slug: zetor-major-80
+            name: "Major 80"
+            year_from: 2013
+            year_to: null
+            power_hp: 77
+            power_kw: 57
+          - slug: zetor-major-cl-80
+            name: "Major CL 80"
+            year_from: 2018
+            year_to: null
+            power_hp: 77
+            power_kw: 57
+          - slug: zetor-major-ht-80
+            name: "Major HT 80"
+            year_from: 2018
+            year_to: null
+            power_hp: 77
+            power_kw: 57
+
+      # ========== Utilix / Compax ==========
+      - slug: utilix-compax
+        name: "Utilix a Compax (2013–2020)"
+        year_from: 2013
+        year_to: 2020
+        description: >
+          Kompaktní traktory pro komunální a specializované nasazení. Výroba byla ukončena
+          a nahrazena řadou Major.
+        models:
+          - slug: zetor-utilix-hs-45
+            name: "Utilix HS 45"
+            year_from: 2013
+            year_to: 2020
+            power_hp: 45
+            power_kw: 33
+          - slug: zetor-utilix-ht-55
+            name: "Utilix HT 55"
+            year_from: 2013
+            year_to: 2020
+            power_hp: 55
+            power_kw: 40
+          - slug: zetor-compax-hs-45
+            name: "Compax HS 45"
+            year_from: 2013
+            year_to: 2020
+            power_hp: 45
+            power_kw: 33
+
+  # Zetor kombajny nevyrábí — pouze traktory.

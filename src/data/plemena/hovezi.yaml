@@ -1,0 +1,291 @@
+slug: hovezi
+name: Hovězí dobytek
+name_plural: Hovězí plemena
+description: >
+  Přehled hovězích plemen chovaných v České republice a Evropě. Mléčná, masná,
+  kombinovaná a menšinová regionální plemena. Data zahrnují původ, hmotnost,
+  mléčnou užitkovost a hlavní chovné znaky.
+
+plemena:
+  # ========== MASNÁ PLEMENA ==========
+  - slug: charolais
+    name: Charolais
+    origin_country: Francie
+    year_registered: 1864
+    uzitkovost: [maso]
+    color: "bílá až krémová"
+    weight_male_kg: 1200
+    weight_female_kg: 800
+    height_cm: 145
+    description: >
+      Jedno z nejvýznamnějších masných plemen na světě. Francouzské plemeno proslulé
+      výbornou masnou užitkovostí, rychlým růstem a velkou porcí libového masa. V ČR
+      druhé nejpočetnější masné plemeno po Aberdeen-Angus.
+
+  - slug: limousine
+    name: Limousine
+    alternative_names: [Limousinský skot]
+    origin_country: Francie
+    year_registered: 1886
+    uzitkovost: [maso]
+    color: "červenohnědá"
+    weight_male_kg: 1100
+    weight_female_kg: 700
+    description: >
+      Středně velké francouzské masné plemeno z regionu Limousin. Vysoká jatečná
+      výtěžnost (až 68 %), jemné a šťavnaté maso, snadné porody. V ČR populární pro
+      pastevní chov v podhorských oblastech.
+
+  - slug: aberdeen-angus
+    name: Aberdeen Angus
+    alternative_names: [Angus, Čes. červený angus]
+    origin_country: Skotsko
+    year_registered: 1862
+    uzitkovost: [maso]
+    color: "černá nebo červená, bezrohá"
+    weight_male_kg: 1000
+    weight_female_kg: 650
+    description: >
+      Nejpočetnější masné plemeno v ČR. Bezrohé skotské plemeno s výjimečnou kvalitou
+      mramorovaného masa (prémiové hovězí Aberdeen Angus Beef). Nenáročné, odolné,
+      výborná plodnost a mateřské vlastnosti.
+
+  - slug: hereford
+    name: Hereford
+    origin_country: Velká Británie
+    year_registered: 1846
+    uzitkovost: [maso]
+    color: "červená s bílou hlavou"
+    weight_male_kg: 1100
+    weight_female_kg: 700
+    description: >
+      Anglické masné plemeno s charakteristickou bílou hlavou a červeným tělem. Nenáročné
+      na krmení, výborné pro extenzivní pastvinářství. Historicky nejvíce rozšířené masné
+      plemeno světa.
+
+  - slug: gasconne
+    name: Gasconne
+    alternative_names: [Gaskoňský skot]
+    origin_country: Francie (Pyreneje)
+    year_registered: 1894
+    uzitkovost: [maso]
+    color: "stříbrno-šedá"
+    weight_male_kg: 950
+    weight_female_kg: 650
+    description: >
+      Francouzské plemeno z pyrenejských hor. Extrémně odolné vůči nepříznivým klimatickým
+      podmínkám, výborné pro horské pastviny. Kvalitní maso s vysokou výtěžností.
+
+  - slug: salers
+    name: Salers
+    origin_country: Francie
+    year_registered: 1908
+    uzitkovost: [maso, kombinovane]
+    color: "tmavě červená"
+    weight_male_kg: 1100
+    weight_female_kg: 750
+    description: >
+      Francouzské plemeno z pohoří Cantal. Původně kombinované, dnes převážně masné.
+      Výborné mateřské vlastnosti, snadné porody, vysoká plodnost.
+
+  - slug: belgicke-modrobile
+    name: Belgické modrobílé
+    alternative_names: [Belgian Blue, BBB]
+    origin_country: Belgie
+    year_registered: 1919
+    uzitkovost: [maso]
+    color: "modrobílá mramorovaná"
+    weight_male_kg: 1250
+    weight_female_kg: 800
+    description: >
+      Mimořádně svalnaté belgické masné plemeno — genetická mutace zajišťuje tzv. "dvojí
+      osvalení". Nejvyšší jatečná výtěžnost na světě (70–75 %). Vyžaduje specializovanou
+      péči při porodu.
+
+  - slug: piemontese
+    name: Piemontese
+    origin_country: Itálie (Piemont)
+    year_registered: 1887
+    uzitkovost: [maso]
+    color: "bílá s tmavými skvrnami"
+    weight_male_kg: 1150
+    weight_female_kg: 700
+    description: >
+      Italské masné plemeno se zvýšenou svalovou hmotou. Jemné a libové maso s nízkým
+      obsahem tuku. V ČR chov minoritní, ale rostoucí.
+
+  - slug: maso-simental
+    name: Masný simentál
+    origin_country: Švýcarsko / Německo
+    uzitkovost: [maso]
+    color: "strakatá červenobílá"
+    weight_male_kg: 1300
+    weight_female_kg: 850
+    description: >
+      Masná varianta simentálského skotu. Vysoká masná užitkovost, dobrá plodnost.
+      Oblíbené u českých chovatelů díky kombinaci velikosti a kvality masa.
+
+  - slug: galloway
+    name: Galloway
+    origin_country: Skotsko
+    year_registered: 1878
+    uzitkovost: [maso]
+    color: "černá, červená nebo plavá, dlouhá srst"
+    weight_male_kg: 850
+    weight_female_kg: 550
+    description: >
+      Prastaré skotské plemeno s dvojitou hustou srstí. Extrémně odolné vůči chladu a
+      nepříznivému počasí, ideální pro celoroční venkovní chov. Výborná kvalita masa.
+
+  - slug: highland
+    name: Highland
+    alternative_names: [Skotský horský skot]
+    origin_country: Skotsko
+    year_registered: 1884
+    uzitkovost: [maso]
+    color: "červenohnědá, dlouhá srst a rohy"
+    weight_male_kg: 800
+    weight_female_kg: 500
+    description: >
+      Charakteristický skotský horský skot s dlouhou srstí a impozantními rohy.
+      Extrémně odolný, nenáročný, pomalu rostoucí. Používá se i pro extenzivní pastvu
+      v chráněných krajinných oblastech.
+
+  # ========== MLÉČNÁ PLEMENA ==========
+  - slug: holsteinske
+    name: Holštýnský skot
+    alternative_names: [Holstein-Friesian, Holstein]
+    origin_country: Nizozemsko / USA
+    year_registered: 1879
+    uzitkovost: [mleko]
+    color: "černostrakatá, méně často červenostrakatá"
+    weight_male_kg: 1000
+    weight_female_kg: 650
+    milk_yield_kg_year: 10500
+    description: >
+      Nejproduktivnější dojné plemeno na světě. V ČR dominantní mléčné plemeno s
+      průměrnou užitkovostí přes 10 000 kg mléka za rok. Základ velkochovů s moderní
+      technologií dojení.
+
+  - slug: cervenostrakate
+    name: České strakaté
+    alternative_names: [Český strakatý skot, ČS]
+    origin_country: Česká republika
+    year_registered: 1906
+    uzitkovost: [kombinovane]
+    color: "červenostrakatá"
+    weight_male_kg: 1100
+    weight_female_kg: 700
+    milk_yield_kg_year: 7500
+    description: >
+      Národní české kombinované plemeno. Původ v simentálském skotu šlechtěném v českých
+      zemích od 19. století. Dvojí užitkovost — mléko (7–8 tis. kg/rok) i maso. Výborná
+      odolnost, dlouhověkost, snadné porody.
+
+  - slug: jersey
+    name: Jersey
+    origin_country: Jersey (UK)
+    year_registered: 1866
+    uzitkovost: [mleko]
+    color: "světle hnědá až tmavě hnědá"
+    weight_male_kg: 700
+    weight_female_kg: 450
+    milk_yield_kg_year: 6500
+    description: >
+      Malé britské ostrovní plemeno. Mléko s nejvyšším obsahem tuku (5 %) a bílkovin (3,9 %).
+      Vhodné pro malé farmy a sýrařství. Nenáročné na krmení, vysoká efektivita.
+
+  - slug: montbeliarde
+    name: Montbéliarde
+    origin_country: Francie
+    year_registered: 1889
+    uzitkovost: [kombinovane, mleko]
+    color: "červenostrakatá s bílou hlavou"
+    weight_male_kg: 1100
+    weight_female_kg: 700
+    milk_yield_kg_year: 8500
+    description: >
+      Francouzské kombinované plemeno — základ pro výrobu sýrů Comté a Gruyère. V ČR
+      rostoucí zastoupení pro kombinaci mléčné užitkovosti a kvalitního masa.
+
+  - slug: brown-swiss
+    name: Švýcarský hnědý skot
+    alternative_names: [Brown Swiss, BSS]
+    origin_country: Švýcarsko
+    year_registered: 1860
+    uzitkovost: [mleko, kombinovane]
+    color: "jednobarevná světle až tmavě hnědá"
+    weight_male_kg: 1100
+    weight_female_kg: 650
+    milk_yield_kg_year: 8000
+    description: >
+      Tradiční horské plemeno ze švýcarských Alp. Vhodné pro alpskou i podhorskou pastvu.
+      Mléko se syrárenskými vlastnostmi ideálními pro sýry. V ČR méně rozšířené.
+
+  - slug: cervene-strakate-nizinne
+    name: Red Holstein
+    alternative_names: [RH, Červený holštýn]
+    origin_country: Nizozemsko / USA
+    uzitkovost: [mleko]
+    color: "červenostrakatá"
+    weight_female_kg: 600
+    milk_yield_kg_year: 9500
+    description: >
+      Červená linie holštýnského skotu. V ČR rostoucí zastoupení ve velkochovech,
+      nabízí mírně nižší užitkovost než černá varianta ale vyšší odolnost.
+
+  - slug: normande
+    name: Normande
+    origin_country: Francie (Normandie)
+    year_registered: 1883
+    uzitkovost: [kombinovane, mleko]
+    color: "trojbarevná — hnědá, bílá, černé skvrny"
+    weight_female_kg: 750
+    milk_yield_kg_year: 7000
+    description: >
+      Francouzské kombinované plemeno z Normandie. Mléko základ pro sýry Camembert,
+      Livarot a Pont-l'Évêque. V ČR pouze v malých specializovaných chovech.
+
+  # ========== KOMBINOVANÁ & OSTATNÍ ==========
+  - slug: simental
+    name: Simentál
+    origin_country: Švýcarsko
+    year_registered: 1890
+    uzitkovost: [kombinovane]
+    color: "žlutostrakatá až červenostrakatá"
+    weight_male_kg: 1200
+    weight_female_kg: 750
+    milk_yield_kg_year: 7500
+    description: >
+      Prastaré švýcarské plemeno ze Simmentalu. Základ pro české strakaté plemeno.
+      Kombinuje mléčnou užitkovost (7–8 tis. kg) s velmi dobrou masnou užitkovostí.
+
+  - slug: blonde-aquitaine
+    name: Blonde d'Aquitaine
+    origin_country: Francie
+    year_registered: 1962
+    uzitkovost: [maso]
+    color: "pšeničná / plavá"
+    weight_male_kg: 1300
+    weight_female_kg: 850
+    description: >
+      Velké francouzské masné plemeno z jihozápadní Francie. Vysoká jatečná výtěžnost,
+      pevné a jemné maso. Snadné porody díky úzké hrudní kosti.
+
+  - slug: masna-plavaci
+    name: Plavé české plemeno
+    alternative_names: [Česká červinka]
+    origin_country: Česká republika
+    uzitkovost: [maso, kombinovane]
+    color: "jednobarevná plavá"
+    description: >
+      Regionální české plemeno — pozůstatek původního domácího skotu. Chováno v malém
+      množství jako genetická rezerva a pro zachování biodiverzity.
+
+  - slug: ostatni
+    name: Ostatní plemena
+    origin_country: různé
+    uzitkovost: [ostatni]
+    description: >
+      Menšinová, regionální nebo křížená plemena neuvedená výše. V bazaru a inzercích
+      lze upřesnit volným textem.

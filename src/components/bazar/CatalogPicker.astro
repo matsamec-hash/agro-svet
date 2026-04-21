@@ -1,0 +1,281 @@
+---
+interface PickerOption {
+  slug: string;
+  label: string;
+  [key: string]: unknown;
+}
+
+interface Props {
+  id: string;
+  name: string;
+  label: string;
+  placeholder?: string;
+  options: PickerOption[];
+  value?: string | null;
+  valueLabel?: string | null;
+  filterAttr?: string;
+  filterValue?: string;
+  ostatniLabel?: string;
+}
+
+const {
+  id,
+  name,
+  label,
+  placeholder = 'Začněte psát pro vyhledání…',
+  options,
+  value = null,
+  valueLabel = null,
+  filterAttr,
+  filterValue,
+  ostatniLabel = 'Není v seznamu (ostatní)',
+} = Astro.props;
+
+const optionsJson = JSON.stringify(options);
+---
+
+<div class="catalog-picker" data-picker-id={id} data-filter-attr={filterAttr ?? ''} data-filter-value={filterValue ?? ''}>
+  <label for={`${id}-input`}>{label}</label>
+  <div class="picker-wrap">
+    <input
+      type="text"
+      id={`${id}-input`}
+      class="form-input picker-input"
+      placeholder={placeholder}
+      value={valueLabel ?? ''}
+      autocomplete="off"
+    />
+    <input type="hidden" id={`${id}-value`} name={name} value={value ?? ''} />
+    <button type="button" class="picker-clear" id={`${id}-clear`} aria-label="Vymazat" tabindex="-1">✕</button>
+    <div class="picker-dropdown" id={`${id}-dropdown`} hidden>
+      <ul class="picker-list" id={`${id}-list`}></ul>
+    </div>
+  </div>
+  <small class="picker-hint" id={`${id}-hint`}>
+    {value ? `Vybráno: ${valueLabel ?? value}` : 'Pokud model není v seznamu, ponechte pole prázdné — popis doplníte v názvu a popisku.'}
+  </small>
+</div>
+
+<script is:inline define:vars={{ id, optionsJson, ostatniLabel }}>
+(function() {
+  const OPTIONS = JSON.parse(optionsJson);
+
+  const input = document.getElementById(`${id}-input`);
+  const hidden = document.getElementById(`${id}-value`);
+  const dropdown = document.getElementById(`${id}-dropdown`);
+  const list = document.getElementById(`${id}-list`);
+  const clear = document.getElementById(`${id}-clear`);
+  const hint = document.getElementById(`${id}-hint`);
+  const wrap = input?.closest('.catalog-picker');
+
+  if (!input || !hidden || !dropdown || !list || !wrap) return;
+
+  let activeIdx = -1;
+  let current = [];
+
+  function getFilter() {
+    const attr = wrap.dataset.filterAttr;
+    const val = wrap.dataset.filterValue;
+    return attr && val ? { attr, val } : null;
+  }
+
+  function filterOptions(q) {
+    const filter = getFilter();
+    const needle = q.trim().toLowerCase();
+    let pool = OPTIONS;
+    if (filter) pool = pool.filter((o) => o[filter.attr] === filter.val);
+    if (!needle) return pool.slice(0, 50);
+    return pool
+      .filter((o) => String(o.label).toLowerCase().includes(needle))
+      .slice(0, 50);
+  }
+
+  function render() {
+    list.innerHTML = '';
+    if (current.length === 0) {
+      const li = document.createElement('li');
+      li.className = 'picker-empty';
+      li.textContent = 'Žádný model nenalezen.';
+      list.appendChild(li);
+    } else {
+      current.forEach((o, idx) => {
+        const li = document.createElement('li');
+        li.className = 'picker-item' + (idx === activeIdx ? ' active' : '');
+        li.dataset.slug = o.slug;
+        li.dataset.label = o.label;
+        li.innerHTML = `<span class="picker-item-label">${o.label}</span>` + (o.power_hp ? `<span class="picker-item-meta">${o.power_hp} k</span>` : '');
+        li.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          select(o);
+        });
+        list.appendChild(li);
+      });
+    }
+    // "Ostatní" option at bottom — always available
+    const ostatniLi = document.createElement('li');
+    ostatniLi.className = 'picker-item picker-ostatni' + (activeIdx === current.length ? ' active' : '');
+    ostatniLi.textContent = ostatniLabel;
+    ostatniLi.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      hidden.value = '';
+      input.value = '';
+      hint.textContent = 'Vybráno: Ostatní — upřesněte v popisu inzerátu.';
+      close();
+    });
+    list.appendChild(ostatniLi);
+  }
+
+  function open() {
+    dropdown.hidden = false;
+    current = filterOptions(input.value);
+    activeIdx = -1;
+    render();
+  }
+
+  function close() {
+    dropdown.hidden = true;
+  }
+
+  function select(option) {
+    hidden.value = option.slug;
+    input.value = option.label;
+    hint.textContent = `Vybráno: ${option.label}`;
+    close();
+  }
+
+  input.addEventListener('focus', open);
+  input.addEventListener('input', () => {
+    hidden.value = ''; // typing clears selection until user picks
+    current = filterOptions(input.value);
+    activeIdx = -1;
+    render();
+    dropdown.hidden = false;
+  });
+  input.addEventListener('blur', () => setTimeout(close, 150));
+  input.addEventListener('keydown', (e) => {
+    const total = current.length + 1; // +1 for ostatní
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIdx = Math.min(activeIdx + 1, total - 1);
+      render();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIdx = Math.max(activeIdx - 1, -1);
+      render();
+    } else if (e.key === 'Enter') {
+      if (activeIdx >= 0) {
+        e.preventDefault();
+        if (activeIdx < current.length) {
+          select(current[activeIdx]);
+        } else {
+          hidden.value = '';
+          input.value = '';
+          hint.textContent = 'Vybráno: Ostatní — upřesněte v popisu inzerátu.';
+          close();
+        }
+      }
+    } else if (e.key === 'Escape') {
+      close();
+    }
+  });
+
+  clear?.addEventListener('click', () => {
+    hidden.value = '';
+    input.value = '';
+    hint.textContent = 'Pokud model není v seznamu, ponechte pole prázdné.';
+    close();
+  });
+
+  // Cross-component filter update (e.g. category change filters models)
+  wrap.addEventListener('catalog-filter-change', (e) => {
+    const detail = e.detail || {};
+    wrap.dataset.filterAttr = detail.attr || '';
+    wrap.dataset.filterValue = detail.val || '';
+    if (input.value) {
+      const filter = getFilter();
+      if (filter && hidden.value) {
+        // Check if currently selected option still matches filter
+        const currentSelected = OPTIONS.find((o) => o.slug === hidden.value);
+        if (currentSelected && currentSelected[filter.attr] !== filter.val) {
+          hidden.value = '';
+          input.value = '';
+          hint.textContent = 'Filtr se změnil — vyberte znovu.';
+        }
+      }
+    }
+  });
+})();
+</script>
+
+<style>
+  .catalog-picker { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .catalog-picker > label {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+  }
+  .picker-wrap { position: relative; }
+  .picker-input { width: 100%; padding-right: 36px; }
+  .picker-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #999;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px 6px;
+  }
+  .picker-clear:hover { color: #000; }
+  .picker-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 280px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    z-index: 20;
+  }
+  .picker-list { list-style: none; margin: 0; padding: 4px; }
+  .picker-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .picker-item:hover, .picker-item.active {
+    background: #FFFF00;
+    color: #000;
+  }
+  .picker-item-label { color: #1a1a1a; }
+  .picker-item-meta { font-size: 12px; color: #666; }
+  .picker-item:hover .picker-item-meta, .picker-item.active .picker-item-meta { color: #333; }
+  .picker-ostatni {
+    border-top: 1px solid #f0f0f0;
+    margin-top: 4px;
+    color: #666;
+    font-style: italic;
+  }
+  .picker-empty {
+    padding: 12px;
+    color: #999;
+    font-size: 13px;
+    font-style: italic;
+  }
+  .picker-hint {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.4;
+  }
+</style>
