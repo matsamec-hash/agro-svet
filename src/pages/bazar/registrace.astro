@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { createAnonClient, createServerClient, getPublicSupabaseConfig } from '../../lib/supabase';
+import { CZ_LOCATIONS } from '../../lib/cz-locations';
 
 let error = '';
 let success = '';
@@ -78,7 +79,10 @@ if (Astro.request.method === 'POST') {
         </div>
         <div class="form-group">
           <label for="location">Město / okres</label>
-          <input type="text" id="location" name="location" class="form-input" />
+          <input type="text" id="location" name="location" class="form-input" list="cz-locations" autocomplete="off" />
+          <datalist id="cz-locations">
+            {CZ_LOCATIONS.map(loc => <option value={loc}></option>)}
+          </datalist>
         </div>
         <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
           Zaregistrovat se

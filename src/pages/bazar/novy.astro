@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ImageUpload from '../../components/bazar/ImageUpload.astro';
 import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
+import { CZ_LOCATIONS } from '../../lib/cz-locations';
 import { createServerClient, getPublicSupabaseConfig } from '../../lib/supabase';
 
 const user = Astro.locals.user!;
@@ -118,7 +119,10 @@ const { data: profile } = await supabase
 
       <div class="form-group">
         <label for="location">Lokalita *</label>
-        <input type="text" id="location" name="location" class="form-input" value={profile?.location ?? ''} required />
+        <input type="text" id="location" name="location" class="form-input" value={profile?.location ?? ''} list="cz-locations" autocomplete="off" required />
+        <datalist id="cz-locations">
+          {CZ_LOCATIONS.map(loc => <option value={loc}></option>)}
+        </datalist>
       </div>
 
       <div class="form-group">
