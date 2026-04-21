@@ -1,12 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ImageUpload from '../../components/bazar/ImageUpload.astro';
+import CatalogPicker from '../../components/bazar/CatalogPicker.astro';
 import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
 import { CZ_LOCATIONS } from '../../lib/cz-locations';
 import { createServerClient, getPublicSupabaseConfig } from '../../lib/supabase';
+import { getModelOptions, getPlemenoOptions } from '../../lib/bazar-catalog';
 
 const user = Astro.locals.user!;
 let error = '';
+
+const modelOptions = getModelOptions();
+const plemenoOptions = getPlemenoOptions();
 
 if (Astro.request.method === 'POST') {
   const form = await Astro.request.formData();
@@ -20,11 +25,25 @@ if (Astro.request.method === 'POST') {
   const email = form.get('email')?.toString().trim() ?? '';
   const imagePaths = JSON.parse(form.get('image_paths')?.toString() || '[]');
 
+  // New catalog fields
+  const modelSlug = form.get('model_slug')?.toString().trim() || null;
+  const plemenoSlug = form.get('plemeno_slug')?.toString().trim() || null;
+  const yearStr = form.get('year_of_manufacture')?.toString().trim() ?? '';
+  const powerStr = form.get('power_hp')?.toString().trim() ?? '';
+  const hoursStr = form.get('hours_operated')?.toString().trim() ?? '';
+  const cutStr = form.get('cutting_width_m')?.toString().trim() ?? '';
+
   if (!title || !category || !phone) {
     error = 'Vyplňte název, kategorii a telefon.';
   } else {
     const supabase = createServerClient();
     const price = priceStr ? parseInt(priceStr) : null;
+    // model_slug is used for both machines and breeds (single text column in DB)
+    const finalModelSlug = modelSlug || plemenoSlug || null;
+    const year = yearStr ? parseInt(yearStr) : null;
+    const power = powerStr ? parseInt(powerStr) : null;
+    const hours = hoursStr ? parseInt(hoursStr) : null;
+    const cuttingWidth = cutStr ? parseFloat(cutStr) : null;
 
     const { data: listing, error: insertErr } = await supabase
       .from('bazar_listings')
@@ -39,6 +58,11 @@ if (Astro.request.method === 'POST') {
         phone,
         email,
         status: 'active',
+        model_slug: finalModelSlug,
+        year_of_manufacture: year,
+        power_hp: power,
+        hours_operated: hours,
+        cutting_width_m: cuttingWidth,
       })
       .select('id')
       .single();
@@ -46,7 +70,6 @@ if (Astro.request.method === 'POST') {
     if (insertErr) {
       error = 'Chyba při vkládání inzerátu.';
     } else if (listing) {
-      // Save images
       if (imagePaths.length > 0) {
         const imageRows = imagePaths.map((path: string, idx: number) => ({
           listing_id: listing.id,
@@ -92,6 +115,49 @@ const { data: profile } = await supabase
           <option value="">Vyberte kategorii</option>
           {CATEGORIES.map(c => <option value={c.value}>{c.label}</option>)}
         </select>
+      </div>
+
+      <!-- Machine fields (shown for traktory / kombajny) -->
+      <div id="machine-fields" style="display:none;">
+        <CatalogPicker
+          id="model-picker"
+          name="model_slug"
+          label="Model z katalogu"
+          placeholder="např. John Deere 8R 410, Zetor Proxima…"
+          options={modelOptions}
+          filterAttr="category"
+        />
+
+        <div class="form-group">
+          <label for="year_of_manufacture">Rok výroby</label>
+          <input type="number" id="year_of_manufacture" name="year_of_manufacture" class="form-input" min="1950" max="2030" placeholder="např. 2015" />
+        </div>
+
+        <div class="form-group">
+          <label for="power_hp">Výkon (k)</label>
+          <input type="number" id="power_hp" name="power_hp" class="form-input" min="0" placeholder="např. 120" />
+        </div>
+
+        <div class="form-group">
+          <label for="hours_operated">Motohodiny</label>
+          <input type="number" id="hours_operated" name="hours_operated" class="form-input" min="0" placeholder="např. 4500" />
+        </div>
+
+        <div class="form-group" id="cutting-width-group" style="display:none;">
+          <label for="cutting_width_m">Záběr žacího stolu (m)</label>
+          <input type="number" id="cutting_width_m" name="cutting_width_m" class="form-input" min="0" step="0.1" placeholder="např. 7.5" />
+        </div>
+      </div>
+
+      <!-- Breed fields (shown for zvirata) -->
+      <div id="breed-fields" style="display:none;">
+        <CatalogPicker
+          id="breed-picker"
+          name="plemeno_slug"
+          label="Plemeno z katalogu"
+          placeholder="např. Aberdeen Angus, Suffolk, Hafling…"
+          options={plemenoOptions}
+        />
       </div>
 
       <div class="form-group">
@@ -140,4 +206,33 @@ const { data: profile } = await supabase
       </button>
     </form>
   </div>
+
+  <script is:inline>
+    (function() {
+      const cat = document.getElementById('category');
+      const machine = document.getElementById('machine-fields');
+      const breed = document.getElementById('breed-fields');
+      const cutting = document.getElementById('cutting-width-group');
+      const modelPicker = document.querySelector('.catalog-picker[data-picker-id="model-picker"]');
+
+      function sync() {
+        const v = cat.value;
+        const isMachine = v === 'traktory' || v === 'kombajny';
+        const isBreed = v === 'zvirata';
+        machine.style.display = isMachine ? 'block' : 'none';
+        breed.style.display = isBreed ? 'block' : 'none';
+        cutting.style.display = v === 'kombajny' ? 'block' : 'none';
+
+        // Propagate filter to model picker
+        if (isMachine && modelPicker) {
+          modelPicker.dispatchEvent(new CustomEvent('catalog-filter-change', {
+            detail: { attr: 'category', val: v },
+          }));
+        }
+      }
+
+      cat.addEventListener('change', sync);
+      sync();
+    })();
+  </script>
 </Layout>

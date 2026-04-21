@@ -1,11 +1,17 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import CatalogPicker from '../../../components/bazar/CatalogPicker.astro';
 import { CATEGORIES, BRANDS } from '../../../lib/bazar-constants';
 import { createServerClient } from '../../../lib/supabase';
+import { getModelOptions, getPlemenoOptions, resolveModelLabel } from '../../../lib/bazar-catalog';
+import { getAllPlemena } from '../../../lib/plemena';
 
 const user = Astro.locals.user!;
 const { id } = Astro.params;
 const supabase = createServerClient();
+
+const modelOptions = getModelOptions();
+const plemenoOptions = getPlemenoOptions();
 
 // Fetch listing (only if owner)
 const { data: listing } = await supabase
@@ -32,13 +38,41 @@ if (Astro.request.method === 'POST') {
   const phone = form.get('phone')?.toString().trim() ?? '';
   const email = form.get('email')?.toString().trim() ?? '';
 
+  const modelSlug = form.get('model_slug')?.toString().trim() || null;
+  const plemenoSlug = form.get('plemeno_slug')?.toString().trim() || null;
+  const yearStr = form.get('year_of_manufacture')?.toString().trim() ?? '';
+  const powerStr = form.get('power_hp')?.toString().trim() ?? '';
+  const hoursStr = form.get('hours_operated')?.toString().trim() ?? '';
+  const cutStr = form.get('cutting_width_m')?.toString().trim() ?? '';
+
   if (!title || !category || !phone) {
     error = 'Vyplňte název, kategorii a telefon.';
   } else {
     const price = priceStr ? parseInt(priceStr) : null;
+    const finalModelSlug = modelSlug || plemenoSlug || null;
+    const year = yearStr ? parseInt(yearStr) : null;
+    const power = powerStr ? parseInt(powerStr) : null;
+    const hours = hoursStr ? parseInt(hoursStr) : null;
+    const cuttingWidth = cutStr ? parseFloat(cutStr) : null;
+
     const { error: updateErr } = await supabase
       .from('bazar_listings')
-      .update({ title, description, price, category, brand, location, phone, email, updated_at: new Date().toISOString() })
+      .update({
+        title,
+        description,
+        price,
+        category,
+        brand,
+        location,
+        phone,
+        email,
+        updated_at: new Date().toISOString(),
+        model_slug: finalModelSlug,
+        year_of_manufacture: year,
+        power_hp: power,
+        hours_operated: hours,
+        cutting_width_m: cuttingWidth,
+      })
       .eq('id', id)
       .eq('user_id', user.id);
 
@@ -48,6 +82,20 @@ if (Astro.request.method === 'POST') {
       return Astro.redirect('/bazar/moje/');
     }
   }
+}
+
+// Resolve label for prefill
+const isMachine = listing.category === 'traktory' || listing.category === 'kombajny';
+const isBreed = listing.category === 'zvirata';
+
+let modelLabel: string | null = null;
+let plemenoLabel: string | null = null;
+if (isMachine && listing.model_slug) {
+  modelLabel = resolveModelLabel(listing.model_slug)?.label ?? null;
+}
+if (isBreed && listing.model_slug) {
+  const found = getAllPlemena().find((p) => p.slug === listing.model_slug);
+  plemenoLabel = found?.name ?? null;
 }
 ---
 
@@ -69,6 +117,52 @@ if (Astro.request.method === 'POST') {
         <select id="category" name="category" class="form-select" required>
           {CATEGORIES.map(c => <option value={c.value} selected={c.value === listing.category}>{c.label}</option>)}
         </select>
+      </div>
+
+      <div id="machine-fields" style={isMachine ? '' : 'display:none;'}>
+        <CatalogPicker
+          id="model-picker"
+          name="model_slug"
+          label="Model z katalogu"
+          placeholder="např. John Deere 8R 410, Zetor Proxima…"
+          options={modelOptions}
+          value={isMachine ? listing.model_slug : null}
+          valueLabel={modelLabel}
+          filterAttr="category"
+          filterValue={isMachine ? listing.category : undefined}
+        />
+
+        <div class="form-group">
+          <label for="year_of_manufacture">Rok výroby</label>
+          <input type="number" id="year_of_manufacture" name="year_of_manufacture" class="form-input" min="1950" max="2030" value={listing.year_of_manufacture ?? ''} />
+        </div>
+
+        <div class="form-group">
+          <label for="power_hp">Výkon (k)</label>
+          <input type="number" id="power_hp" name="power_hp" class="form-input" min="0" value={listing.power_hp ?? ''} />
+        </div>
+
+        <div class="form-group">
+          <label for="hours_operated">Motohodiny</label>
+          <input type="number" id="hours_operated" name="hours_operated" class="form-input" min="0" value={listing.hours_operated ?? ''} />
+        </div>
+
+        <div class="form-group" id="cutting-width-group" style={listing.category === 'kombajny' ? '' : 'display:none;'}>
+          <label for="cutting_width_m">Záběr žacího stolu (m)</label>
+          <input type="number" id="cutting_width_m" name="cutting_width_m" class="form-input" min="0" step="0.1" value={listing.cutting_width_m ?? ''} />
+        </div>
+      </div>
+
+      <div id="breed-fields" style={isBreed ? '' : 'display:none;'}>
+        <CatalogPicker
+          id="breed-picker"
+          name="plemeno_slug"
+          label="Plemeno z katalogu"
+          placeholder="např. Aberdeen Angus, Suffolk, Hafling…"
+          options={plemenoOptions}
+          value={isBreed ? listing.model_slug : null}
+          valueLabel={plemenoLabel}
+        />
       </div>
 
       <div class="form-group">
@@ -111,4 +205,31 @@ if (Astro.request.method === 'POST') {
 
     <a href="/bazar/moje/" style="display:block; text-align:center; margin-top:16px; font-size:14px; color:#888; text-decoration:none;">&larr; Zpět na moje inzeráty</a>
   </div>
+
+  <script is:inline>
+    (function() {
+      const cat = document.getElementById('category');
+      const machine = document.getElementById('machine-fields');
+      const breed = document.getElementById('breed-fields');
+      const cutting = document.getElementById('cutting-width-group');
+      const modelPicker = document.querySelector('.catalog-picker[data-picker-id="model-picker"]');
+
+      function sync() {
+        const v = cat.value;
+        const isMachine = v === 'traktory' || v === 'kombajny';
+        const isBreed = v === 'zvirata';
+        machine.style.display = isMachine ? 'block' : 'none';
+        breed.style.display = isBreed ? 'block' : 'none';
+        cutting.style.display = v === 'kombajny' ? 'block' : 'none';
+
+        if (isMachine && modelPicker) {
+          modelPicker.dispatchEvent(new CustomEvent('catalog-filter-change', {
+            detail: { attr: 'category', val: v },
+          }));
+        }
+      }
+
+      cat.addEventListener('change', sync);
+    })();
+  </script>
 </Layout>

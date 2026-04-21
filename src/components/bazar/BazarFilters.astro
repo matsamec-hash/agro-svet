@@ -9,9 +9,20 @@ interface Props {
   location?: string;
   priceFrom?: string;
   priceTo?: string;
+  yearFrom?: string;
+  yearTo?: string;
+  powerFrom?: string;
+  powerTo?: string;
 }
 
-const { query = '', category = '', brand = '', location = '', priceFrom = '', priceTo = '' } = Astro.props;
+const {
+  query = '', category = '', brand = '', location = '',
+  priceFrom = '', priceTo = '',
+  yearFrom = '', yearTo = '',
+  powerFrom = '', powerTo = '',
+} = Astro.props;
+
+const showMachineFilters = category === 'traktory' || category === 'kombajny' || !category;
 
 const activeFilters: { label: string; removeParams: string[] }[] = [];
 if (query) activeFilters.push({ label: `"${query}"`, removeParams: ['q'] });
@@ -29,6 +40,14 @@ if (priceFrom || priceTo) {
   const to = priceTo ? `${parseInt(priceTo).toLocaleString('cs-CZ')} Kč` : '';
   const label = from && to ? `${from} – ${to}` : from ? `od ${from}` : `do ${to}`;
   activeFilters.push({ label, removeParams: ['price_from', 'price_to'] });
+}
+if (yearFrom || yearTo) {
+  const label = yearFrom && yearTo ? `${yearFrom} – ${yearTo}` : yearFrom ? `od ${yearFrom}` : `do ${yearTo}`;
+  activeFilters.push({ label: `Rok: ${label}`, removeParams: ['year_from', 'year_to'] });
+}
+if (powerFrom || powerTo) {
+  const label = powerFrom && powerTo ? `${powerFrom} – ${powerTo} k` : powerFrom ? `od ${powerFrom} k` : `do ${powerTo} k`;
+  activeFilters.push({ label: `Výkon: ${label}`, removeParams: ['power_from', 'power_to'] });
 }
 
 function buildRemoveUrl(params: string[]): string {
@@ -90,6 +109,28 @@ function buildRemoveUrl(params: string[]): string {
 
     <button type="submit" class="btn-apply">Použít</button>
   </div>
+
+  {showMachineFilters && (
+    <div class="filter-row filter-row-machine">
+      <div class="field field-price">
+        <span class="field-label">Rok výroby</span>
+        <div class="price-group">
+          <input type="number" name="year_from" value={yearFrom} placeholder="Od" class="field-input" min="1950" max="2030" />
+          <span class="price-dash">–</span>
+          <input type="number" name="year_to" value={yearTo} placeholder="Do" class="field-input" min="1950" max="2030" />
+        </div>
+      </div>
+
+      <div class="field field-price">
+        <span class="field-label">Výkon (k)</span>
+        <div class="price-group">
+          <input type="number" name="power_from" value={powerFrom} placeholder="Od" class="field-input" min="0" />
+          <span class="price-dash">–</span>
+          <input type="number" name="power_to" value={powerTo} placeholder="Do" class="field-input" min="0" />
+        </div>
+      </div>
+    </div>
+  )}
 
   <datalist id="cz-locations">
     {CZ_LOCATIONS.map(loc => <option value={loc}></option>)}
@@ -168,6 +209,10 @@ function buildRemoveUrl(params: string[]): string {
     grid-template-columns: 1.2fr 1fr 1.2fr 1.6fr auto;
     gap: 10px;
     align-items: end;
+  }
+
+  .filter-row-machine {
+    grid-template-columns: 1.6fr 1.6fr;
   }
 
   .field {

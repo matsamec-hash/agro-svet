@@ -15,6 +15,11 @@ const brand = url.searchParams.get('brand') ?? '';
 const location = url.searchParams.get('location') ?? '';
 const priceFrom = url.searchParams.get('price_from') ?? '';
 const priceTo = url.searchParams.get('price_to') ?? '';
+const yearFrom = url.searchParams.get('year_from') ?? '';
+const yearTo = url.searchParams.get('year_to') ?? '';
+const powerFrom = url.searchParams.get('power_from') ?? '';
+const powerTo = url.searchParams.get('power_to') ?? '';
+const modelSlug = url.searchParams.get('model') ?? '';
 const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1'));
 
 const supabase = createServerClient();
@@ -22,7 +27,7 @@ const supabase = createServerClient();
 // Build query
 let dbQuery = supabase
   .from('bazar_listings')
-  .select('id, title, price, location, category, brand, created_at, bazar_images(storage_path, position)', { count: 'exact' })
+  .select('id, title, price, location, category, brand, created_at, model_slug, year_of_manufacture, power_hp, hours_operated, bazar_images(storage_path, position)', { count: 'exact' })
   .eq('status', 'active')
   .order('created_at', { ascending: false })
   .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
@@ -33,6 +38,11 @@ if (brand) dbQuery = dbQuery.eq('brand', brand);
 if (location) dbQuery = dbQuery.ilike('location', `%${location}%`);
 if (priceFrom) dbQuery = dbQuery.gte('price', parseInt(priceFrom));
 if (priceTo) dbQuery = dbQuery.lte('price', parseInt(priceTo));
+if (yearFrom) dbQuery = dbQuery.gte('year_of_manufacture', parseInt(yearFrom));
+if (yearTo) dbQuery = dbQuery.lte('year_of_manufacture', parseInt(yearTo));
+if (powerFrom) dbQuery = dbQuery.gte('power_hp', parseInt(powerFrom));
+if (powerTo) dbQuery = dbQuery.lte('power_hp', parseInt(powerTo));
+if (modelSlug) dbQuery = dbQuery.eq('model_slug', modelSlug);
 
 const { data: listings, count } = await dbQuery;
 
@@ -60,7 +70,7 @@ function getImageUrl(listing: any): string | null {
       </a>
     </div>
 
-    <BazarFilters query={query} category={category} brand={brand} location={location} priceFrom={priceFrom} priceTo={priceTo} />
+    <BazarFilters query={query} category={category} brand={brand} location={location} priceFrom={priceFrom} priceTo={priceTo} yearFrom={yearFrom} yearTo={yearTo} powerFrom={powerFrom} powerTo={powerTo} />
 
     <!-- Category pills -->
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;">
