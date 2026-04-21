@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ImageUpload from '../../components/bazar/ImageUpload.astro';
 import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
-import { createServerClient } from '../../lib/supabase';
+import { createServerClient, getPublicSupabaseConfig } from '../../lib/supabase';
 
 const user = Astro.locals.user!;
 let error = '';
@@ -22,7 +22,7 @@ if (Astro.request.method === 'POST') {
   if (!title || !category || !phone) {
     error = 'Vyplňte název, kategorii a telefon.';
   } else {
-    const supabase = createServerClient((Astro.locals as any).runtime?.env);
+    const supabase = createServerClient();
     const price = priceStr ? parseInt(priceStr) : null;
 
     const { data: listing, error: insertErr } = await supabase
@@ -60,10 +60,8 @@ if (Astro.request.method === 'POST') {
 }
 
 // Pre-fill contact from profile
-const runtimeEnv = (Astro.locals as any).runtime?.env;
-const supabase = createServerClient(runtimeEnv);
-const publicSupabaseUrl = runtimeEnv?.PUBLIC_SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
-const publicSupabaseKey = runtimeEnv?.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createServerClient();
+const { url: publicSupabaseUrl, anonKey: publicSupabaseKey } = getPublicSupabaseConfig();
 const { data: profile } = await supabase
   .from('bazar_users')
   .select('phone, email, location')

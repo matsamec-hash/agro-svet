@@ -17,7 +17,7 @@ const priceFrom = url.searchParams.get('price_from') ?? '';
 const priceTo = url.searchParams.get('price_to') ?? '';
 const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1'));
 
-const supabase = createServerClient((Astro.locals as any).runtime?.env);
+const supabase = createServerClient();
 
 // Build query
 let dbQuery = supabase
