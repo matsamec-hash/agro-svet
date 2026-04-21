@@ -1,0 +1,356 @@
+slug: deutz-fahr
+name: Deutz-Fahr
+country: Německo / Itálie
+founded: 1864
+website: https://www.deutz-fahr.com
+description: >
+  Německá značka s dlouhou tradicí od roku 1864 (Deutz), fúze s Fahr 1969. Součást SDF Group
+  (Same Deutz-Fahr) s italskou součástí. Traktory vyráběné v Lauingenu (Německo) a Treviglio
+  (Itálie). Výrazné zelené zbarvení. Silná pozice v řadě 5G a 6G v ČR, vlajkový je 9 Series.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== AgroXtra / Agrotron (historické, 1991-2005) ==========
+      - slug: agroxtra
+        name: "AgroXtra (1991–1995)"
+        year_from: 1991
+        year_to: 1995
+        description: >
+          Přechodná řada mezi AgroStar a Agrotron. Motor Deutz 6-válec vzduchem chlazený (BF6L).
+        models:
+          - slug: deutz-fahr-agroxtra-4-47
+            name: "AgroXtra 4.47"
+            year_from: 1991
+            year_to: 1995
+            power_hp: 70
+            power_kw: 52
+          - slug: deutz-fahr-agroxtra-4-57
+            name: "AgroXtra 4.57"
+            year_from: 1991
+            year_to: 1995
+            power_hp: 80
+            power_kw: 59
+          - slug: deutz-fahr-agroxtra-6-07
+            name: "AgroXtra 6.07"
+            year_from: 1991
+            year_to: 1995
+            power_hp: 90
+            power_kw: 66
+          - slug: deutz-fahr-agroxtra-6-17
+            name: "AgroXtra 6.17"
+            year_from: 1991
+            year_to: 1995
+            power_hp: 110
+            power_kw: 81
+
+      - slug: agrotron-legacy
+        name: "Agrotron (1995–2005)"
+        year_from: 1995
+        year_to: 2005
+        description: >
+          Ikonická generace Agrotron s revoluční kabinou a vzduchem chlazeným motorem Deutz.
+          V 2000 představen Agrotron TTV s CVT (plynulá variátorová).
+        models:
+          - slug: deutz-fahr-agrotron-4-70
+            name: "Agrotron 4.70"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 70
+            power_kw: 52
+          - slug: deutz-fahr-agrotron-4-85
+            name: "Agrotron 4.85"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 85
+            power_kw: 63
+          - slug: deutz-fahr-agrotron-6-05
+            name: "Agrotron 6.05"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 100
+            power_kw: 74
+          - slug: deutz-fahr-agrotron-6-30
+            name: "Agrotron 6.30"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 120
+            power_kw: 88
+          - slug: deutz-fahr-agrotron-6-45
+            name: "Agrotron 6.45"
+            year_from: 1995
+            year_to: 2002
+            power_hp: 135
+            power_kw: 99
+          - slug: deutz-fahr-agrotron-200
+            name: "Agrotron 200"
+            year_from: 2000
+            year_to: 2005
+            power_hp: 200
+            power_kw: 147
+          - slug: deutz-fahr-agrotron-260
+            name: "Agrotron 260"
+            year_from: 2000
+            year_to: 2005
+            power_hp: 260
+            power_kw: 191
+
+      # ========== 5G Series (utility, 2013+) ==========
+      - slug: 5g
+        name: "5G Series (2013–dosud)"
+        year_from: 2013
+        year_to: null
+        description: >
+          Utility řada pro malé a střední farmy. Motor Deutz TCD 3.6 / 4.1 L 4-válec, převodovka
+          Powershift 60/60 (5 stupňů x 4 skupiny x 3 reverzor).
+        models:
+          - slug: deutz-fahr-5090-4g
+            name: "5090.4 G"
+            year_from: 2013
+            year_to: null
+            power_hp: 90
+            power_kw: 66
+          - slug: deutz-fahr-5100-4g
+            name: "5100.4 G"
+            year_from: 2013
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: deutz-fahr-5110-4g
+            name: "5110.4 G"
+            year_from: 2013
+            year_to: null
+            power_hp: 110
+            power_kw: 81
+          - slug: deutz-fahr-5120
+            name: "5120"
+            year_from: 2013
+            year_to: null
+            power_hp: 116
+            power_kw: 85
+          - slug: deutz-fahr-5125
+            name: "5125"
+            year_from: 2013
+            year_to: null
+            power_hp: 126
+            power_kw: 93
+
+      # ========== 6G Series (2013+) ==========
+      - slug: 6g
+        name: "6G Series (2013–dosud)"
+        year_from: 2013
+        year_to: null
+        description: >
+          Univerzální střední řada. Motor Deutz TCD 4.1 L / 6.1 L, převodovka Powershift 6x6
+          nebo RCShift 50/50 s reverzorem, volitelná CVT (TTV varianta).
+        models:
+          - slug: deutz-fahr-6140
+            name: "6140"
+            year_from: 2013
+            year_to: null
+            power_hp: 140
+            power_kw: 103
+          - slug: deutz-fahr-6155
+            name: "6155"
+            year_from: 2013
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: deutz-fahr-6165
+            name: "6165"
+            year_from: 2013
+            year_to: null
+            power_hp: 171
+            power_kw: 126
+          - slug: deutz-fahr-6175
+            name: "6175"
+            year_from: 2013
+            year_to: null
+            power_hp: 181
+            power_kw: 133
+          - slug: deutz-fahr-6185
+            name: "6185"
+            year_from: 2016
+            year_to: null
+            power_hp: 191
+            power_kw: 140
+          - slug: deutz-fahr-6205
+            name: "6205"
+            year_from: 2018
+            year_to: null
+            power_hp: 207
+            power_kw: 152
+          - slug: deutz-fahr-6215
+            name: "6215"
+            year_from: 2018
+            year_to: null
+            power_hp: 226
+            power_kw: 166
+
+      # ========== 7 Series ==========
+      - slug: 7
+        name: "7 Series (2012–dosud)"
+        year_from: 2012
+        year_to: null
+        description: >
+          Prémiová row-crop. Motor Deutz TCD 6.1 L, převodovka Powershift nebo CVT (TTV).
+          Design Giugiaro (italský).
+        models:
+          - slug: deutz-fahr-7210-ttv
+            name: "7210 TTV"
+            year_from: 2012
+            year_to: null
+            power_hp: 210
+            power_kw: 155
+          - slug: deutz-fahr-7230-ttv
+            name: "7230 TTV"
+            year_from: 2012
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+          - slug: deutz-fahr-7250-ttv
+            name: "7250 TTV"
+            year_from: 2012
+            year_to: null
+            power_hp: 263
+            power_kw: 193
+
+      # ========== 8 Series ==========
+      - slug: 8
+        name: "8 Series (2024–dosud)"
+        year_from: 2024
+        year_to: null
+        description: >
+          Nová generace po dlouhé absenci v této třídě. Motor Deutz TCD 9.0 L, převodovka
+          TTV CVT. Nová kabina MaxiView.
+        models:
+          - slug: deutz-fahr-8280-ttv
+            name: "8280 TTV"
+            year_from: 2024
+            year_to: null
+            power_hp: 287
+            power_kw: 211
+          - slug: deutz-fahr-8310-ttv
+            name: "8310 TTV"
+            year_from: 2024
+            year_to: null
+            power_hp: 310
+            power_kw: 228
+
+      # ========== 9 Series ==========
+      - slug: 9
+        name: "9 Series (2012–dosud)"
+        year_from: 2012
+        year_to: null
+        description: >
+          Vlajková row-crop. Motor Deutz TCD 7.8 L, převodovka CVT (TTV). Design Giugiaro.
+          Kabina MaxiVision 4 s panoramatickou prosklenou střechou.
+        models:
+          - slug: deutz-fahr-9290-ttv
+            name: "9290 TTV"
+            year_from: 2012
+            year_to: null
+            power_hp: 287
+            power_kw: 211
+          - slug: deutz-fahr-9310-ttv
+            name: "9310 TTV"
+            year_from: 2012
+            year_to: null
+            power_hp: 310
+            power_kw: 228
+          - slug: deutz-fahr-9340-ttv
+            name: "9340 TTV"
+            year_from: 2012
+            year_to: null
+            power_hp: 336
+            power_kw: 247
+
+  kombajny:
+    name: Kombajny
+
+    series:
+      # ========== Historické (Topliner, Starliner) ==========
+      - slug: topliner
+        name: "Topliner (1980–2000)"
+        year_from: 1980
+        year_to: 2000
+        description: >
+          Legendární konvenční kombajny. V 90. letech dominantní na středoevropském trhu.
+        models:
+          - slug: deutz-fahr-topliner-4065
+            name: "Topliner 4065"
+            year_from: 1990
+            year_to: 1998
+            power_hp: 145
+            power_kw: 107
+            grain_tank_l: 6000
+          - slug: deutz-fahr-topliner-4080
+            name: "Topliner 4080"
+            year_from: 1990
+            year_to: 1998
+            power_hp: 170
+            power_kw: 125
+            grain_tank_l: 6500
+
+      # ========== C Series (2005-2018) ==========
+      - slug: c-series-old
+        name: "C Series (2005–2018)"
+        year_from: 2005
+        year_to: 2018
+        description: >
+          Střední a velké konvenční kombajny. Motor MTU/Deutz, rotační separátor.
+        models:
+          - slug: deutz-fahr-5650-h
+            name: "5650 H"
+            year_from: 2010
+            year_to: 2016
+            power_hp: 185
+            power_kw: 136
+            grain_tank_l: 6500
+          - slug: deutz-fahr-c6205-ts
+            name: "C6205 TS"
+            year_from: 2012
+            year_to: 2018
+            power_hp: 205
+            power_kw: 151
+            grain_tank_l: 7500
+          - slug: deutz-fahr-c9205-ts
+            name: "C9205 TS"
+            year_from: 2012
+            year_to: 2018
+            power_hp: 330
+            power_kw: 243
+            grain_tank_l: 9500
+
+      # ========== C/C9000 Series (2018+) ==========
+      - slug: c-series-new
+        name: "C/C9000/C7000/C6000 (2019–dosud)"
+        year_from: 2019
+        year_to: null
+        description: >
+          Nová generace kombajnů. Motor Deutz TCD 6.1 L a 12.0 L, hybridní systém u vlajkového
+          C9000 (APS + rotor).
+        models:
+          - slug: deutz-fahr-c6000
+            name: "C6000"
+            year_from: 2019
+            year_to: null
+            power_hp: 204
+            power_kw: 150
+            grain_tank_l: 7500
+          - slug: deutz-fahr-c7000
+            name: "C7000"
+            year_from: 2019
+            year_to: null
+            power_hp: 306
+            power_kw: 225
+            grain_tank_l: 9500
+          - slug: deutz-fahr-c9000
+            name: "C9000"
+            year_from: 2019
+            year_to: null
+            power_hp: 449
+            power_kw: 330
+            grain_tank_l: 11500

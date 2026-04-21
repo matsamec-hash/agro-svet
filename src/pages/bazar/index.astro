@@ -27,7 +27,7 @@ const supabase = createServerClient();
 // Build query
 let dbQuery = supabase
   .from('bazar_listings')
-  .select('id, title, price, location, category, brand, created_at, model_slug, year_of_manufacture, power_hp, hours_operated, bazar_images(storage_path, position)', { count: 'exact' })
+  .select('id, title, price, location, category, brand, created_at, views, model_slug, year_of_manufacture, power_hp, hours_operated, bazar_images(storage_path, position)', { count: 'exact' })
   .eq('status', 'active')
   .order('created_at', { ascending: false })
   .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
@@ -89,6 +89,7 @@ function getImageUrl(listing: any): string | null {
                 brand={listing.brand}
                 imageUrl={getImageUrl(listing)}
                 createdAt={listing.created_at}
+                views={listing.views}
               />
             ))}
           </div>

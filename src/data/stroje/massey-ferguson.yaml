@@ -1,0 +1,482 @@
+slug: massey-ferguson
+name: Massey Ferguson
+country: USA / Francie
+founded: 1847
+website: https://www.masseyferguson.com
+description: >
+  Tradiční kanadsko-americká značka, součást koncernu AGCO. Traktory vyráběné v Beauvais
+  (Francie). Známá trojúhelníkovým logem a číslováním řad (3000, 4700, 5700, 6700, 7700,
+  8700, 9000). Kombajny pod značkou MF historicky Activa/Beta/Delta, dnes součást Fendt IDEAL.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== 3000/3600 (pre-2005) ==========
+      - slug: 3000
+        name: "3000 Series (1986–2003)"
+        year_from: 1986
+        year_to: 2003
+        description: >
+          Dlouhá řada středních a výkonnějších traktorů. Motor Perkins 4- a 6-válec, převodovka
+          Speedshift.
+        models:
+          - slug: massey-ferguson-3060
+            name: "3060"
+            year_from: 1990
+            year_to: 1995
+            power_hp: 80
+            power_kw: 59
+          - slug: massey-ferguson-3070
+            name: "3070"
+            year_from: 1990
+            year_to: 1995
+            power_hp: 90
+            power_kw: 66
+          - slug: massey-ferguson-3080
+            name: "3080"
+            year_from: 1990
+            year_to: 1995
+            power_hp: 100
+            power_kw: 74
+          - slug: massey-ferguson-3090
+            name: "3090"
+            year_from: 1990
+            year_to: 1995
+            power_hp: 115
+            power_kw: 85
+          - slug: massey-ferguson-3095
+            name: "3095"
+            year_from: 1995
+            year_to: 2003
+            power_hp: 115
+            power_kw: 85
+          - slug: massey-ferguson-3115
+            name: "3115"
+            year_from: 1995
+            year_to: 2003
+            power_hp: 125
+            power_kw: 92
+          - slug: massey-ferguson-3125
+            name: "3125"
+            year_from: 1995
+            year_to: 2003
+            power_hp: 135
+            power_kw: 99
+
+      # ========== 6000/7000/8000 Dyna (1999-2009) ==========
+      - slug: 6000-dyna
+        name: "6000 Dyna Series (1999–2009)"
+        year_from: 1999
+        year_to: 2009
+        description: >
+          Střední row-crop. Motor Perkins 1100 6-válec, převodovka Dyna-4/Dyna-6 Powershift.
+        models:
+          - slug: massey-ferguson-6465
+            name: "6465"
+            year_from: 2002
+            year_to: 2009
+            power_hp: 110
+            power_kw: 81
+          - slug: massey-ferguson-6475
+            name: "6475"
+            year_from: 2002
+            year_to: 2009
+            power_hp: 120
+            power_kw: 88
+          - slug: massey-ferguson-6485
+            name: "6485"
+            year_from: 2002
+            year_to: 2009
+            power_hp: 130
+            power_kw: 96
+          - slug: massey-ferguson-6495
+            name: "6495"
+            year_from: 2002
+            year_to: 2009
+            power_hp: 160
+            power_kw: 118
+
+      - slug: 7000-dyna
+        name: "7000 Dyna Series (2005–2009)"
+        year_from: 2005
+        year_to: 2009
+        description: >
+          Střední prémiová řada. Motor Perkins / Sisu, převodovka Dyna-VT (CVT) nebo Dyna-6.
+        models:
+          - slug: massey-ferguson-7465
+            name: "7465"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 150
+            power_kw: 110
+          - slug: massey-ferguson-7475
+            name: "7475"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 165
+            power_kw: 121
+          - slug: massey-ferguson-7485
+            name: "7485"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 180
+            power_kw: 132
+          - slug: massey-ferguson-7495
+            name: "7495"
+            year_from: 2005
+            year_to: 2009
+            power_hp: 200
+            power_kw: 147
+
+      # ========== 3700/4700/5700/6700/7700/8700 (moderní, 2014+) ==========
+      - slug: 3700
+        name: "3700 Series (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Úzká utility třída pro sady a komunály. Motor AGCO Power 3-válec 3,3 L.
+        models:
+          - slug: massey-ferguson-3707
+            name: "3707"
+            year_from: 2014
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: massey-ferguson-3708
+            name: "3708"
+            year_from: 2014
+            year_to: null
+            power_hp: 82
+            power_kw: 60
+          - slug: massey-ferguson-3709
+            name: "3709"
+            year_from: 2014
+            year_to: null
+            power_hp: 88
+            power_kw: 65
+          - slug: massey-ferguson-3710
+            name: "3710"
+            year_from: 2016
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+
+      - slug: 4700
+        name: "4700 Series (2015–dosud)"
+        year_from: 2015
+        year_to: null
+        description: >
+          Utility řada. Motor AGCO Power 4-válec 4,4 L, převodovka 12/12 synchronizovaná.
+        models:
+          - slug: massey-ferguson-4707
+            name: "4707"
+            year_from: 2015
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: massey-ferguson-4708
+            name: "4708"
+            year_from: 2015
+            year_to: null
+            power_hp: 82
+            power_kw: 60
+          - slug: massey-ferguson-4709
+            name: "4709"
+            year_from: 2015
+            year_to: null
+            power_hp: 95
+            power_kw: 70
+          - slug: massey-ferguson-4710
+            name: "4710"
+            year_from: 2015
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+
+      - slug: 5700
+        name: "5700 Series (2013–dosud)"
+        year_from: 2013
+        year_to: null
+        description: >
+          Univerzální střední řada. Motor AGCO Power 4-válec 4,4 L a 4,9 L, převodovka Dyna-4.
+        models:
+          - slug: massey-ferguson-5709-m
+            name: "5709 M"
+            year_from: 2013
+            year_to: null
+            power_hp: 95
+            power_kw: 70
+          - slug: massey-ferguson-5710-m
+            name: "5710 M"
+            year_from: 2013
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: massey-ferguson-5711-m
+            name: "5711 M"
+            year_from: 2013
+            year_to: null
+            power_hp: 110
+            power_kw: 81
+          - slug: massey-ferguson-5712-m
+            name: "5712 M"
+            year_from: 2013
+            year_to: null
+            power_hp: 120
+            power_kw: 88
+          - slug: massey-ferguson-5713-m
+            name: "5713 M"
+            year_from: 2015
+            year_to: null
+            power_hp: 130
+            power_kw: 96
+
+      - slug: 6700
+        name: "6700 Series (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Prémiová univerzální. Motor AGCO Power 4,9 L nebo 6,6 L, převodovka Dyna-4 nebo
+          Dyna-6 Powershift, volitelná Dyna-VT (CVT).
+        models:
+          - slug: massey-ferguson-6712-s
+            name: "6712 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 120
+            power_kw: 88
+          - slug: massey-ferguson-6713-s
+            name: "6713 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 130
+            power_kw: 96
+          - slug: massey-ferguson-6714-s
+            name: "6714 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 140
+            power_kw: 103
+          - slug: massey-ferguson-6715-s
+            name: "6715 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 150
+            power_kw: 110
+          - slug: massey-ferguson-6716-s
+            name: "6716 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 160
+            power_kw: 118
+          - slug: massey-ferguson-6718-s
+            name: "6718 S"
+            year_from: 2018
+            year_to: null
+            power_hp: 180
+            power_kw: 132
+
+      - slug: 7700
+        name: "7700 Series (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Row-crop s motorem AGCO Power 7,4 L. Varianty S (mechanická), Dyna-6 Powershift
+          a Dyna-VT (CVT).
+        models:
+          - slug: massey-ferguson-7715-s
+            name: "7715 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 150
+            power_kw: 110
+          - slug: massey-ferguson-7716-s
+            name: "7716 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 160
+            power_kw: 118
+          - slug: massey-ferguson-7718-s
+            name: "7718 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 180
+            power_kw: 132
+          - slug: massey-ferguson-7719-s
+            name: "7719 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 190
+            power_kw: 140
+          - slug: massey-ferguson-7720-s
+            name: "7720 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 200
+            power_kw: 147
+          - slug: massey-ferguson-7722-s
+            name: "7722 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 220
+            power_kw: 162
+          - slug: massey-ferguson-7724-s
+            name: "7724 S"
+            year_from: 2014
+            year_to: null
+            power_hp: 240
+            power_kw: 177
+
+      - slug: 8700
+        name: "8700 Series (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Vlajková row-crop. Motor AGCO Power 8,4 L, převodovka Dyna-VT CVT, kabina MF 8700 S
+          s panoramatickou prosklenou střechou.
+        models:
+          - slug: massey-ferguson-8727
+            name: "8727"
+            year_from: 2014
+            year_to: null
+            power_hp: 270
+            power_kw: 199
+          - slug: massey-ferguson-8730
+            name: "8730"
+            year_from: 2014
+            year_to: null
+            power_hp: 300
+            power_kw: 221
+          - slug: massey-ferguson-8732
+            name: "8732"
+            year_from: 2014
+            year_to: null
+            power_hp: 320
+            power_kw: 235
+          - slug: massey-ferguson-8735
+            name: "8735"
+            year_from: 2014
+            year_to: null
+            power_hp: 350
+            power_kw: 257
+          - slug: massey-ferguson-8737
+            name: "8737"
+            year_from: 2014
+            year_to: null
+            power_hp: 370
+            power_kw: 272
+          - slug: massey-ferguson-8740-s
+            name: "8740 S"
+            year_from: 2018
+            year_to: null
+            power_hp: 400
+            power_kw: 294
+
+  kombajny:
+    name: Kombajny
+
+    series:
+      # ========== Historické ==========
+      - slug: activa
+        name: "MF Activa (2005–2015)"
+        year_from: 2005
+        year_to: 2015
+        description: >
+          Střední konvenční kombajny. Motor AGCO Sisu Power 6-válec 6,6 L, 5 slaměníků.
+        models:
+          - slug: massey-ferguson-7244-activa
+            name: "7244 Activa"
+            year_from: 2008
+            year_to: 2015
+            power_hp: 204
+            power_kw: 150
+            grain_tank_l: 6500
+          - slug: massey-ferguson-7245-activa
+            name: "7245 Activa"
+            year_from: 2008
+            year_to: 2015
+            power_hp: 225
+            power_kw: 165
+            grain_tank_l: 7000
+          - slug: massey-ferguson-7246-activa
+            name: "7246 Activa"
+            year_from: 2008
+            year_to: 2015
+            power_hp: 250
+            power_kw: 184
+            grain_tank_l: 8000
+
+      - slug: beta
+        name: "MF Beta (2005–2017)"
+        year_from: 2005
+        year_to: 2017
+        description: >
+          Vyšší třída konvenčních kombajnů. APS Plus rotor.
+        models:
+          - slug: massey-ferguson-7347-s-beta
+            name: "7347 S Beta"
+            year_from: 2012
+            year_to: 2017
+            power_hp: 306
+            power_kw: 225
+            grain_tank_l: 9500
+          - slug: massey-ferguson-7370-pl-beta
+            name: "7370 PL Beta"
+            year_from: 2012
+            year_to: 2017
+            power_hp: 360
+            power_kw: 265
+            grain_tank_l: 9500
+
+      - slug: delta
+        name: "MF Delta (2008–2017)"
+        year_from: 2008
+        year_to: 2017
+        description: >
+          Hybridní systém APS + rotor. Motor AGCO Power 7,4 L.
+        models:
+          - slug: massey-ferguson-9280-delta
+            name: "9280 Delta"
+            year_from: 2012
+            year_to: 2017
+            power_hp: 370
+            power_kw: 272
+            grain_tank_l: 12500
+          - slug: massey-ferguson-9380-delta
+            name: "9380 Delta"
+            year_from: 2012
+            year_to: 2017
+            power_hp: 450
+            power_kw: 331
+            grain_tank_l: 12500
+
+      - slug: ideal-mf
+        name: "IDEAL (2018–dosud)"
+        year_from: 2018
+        year_to: null
+        description: >
+          Sdílená platforma s Fendt IDEAL. Varianty 7, 8, 9 pod značkou MF pro AGCO síť.
+        models:
+          - slug: massey-ferguson-ideal-7
+            name: "IDEAL 7 (MF)"
+            year_from: 2018
+            year_to: null
+            power_hp: 451
+            power_kw: 332
+            grain_tank_l: 12500
+          - slug: massey-ferguson-ideal-8
+            name: "IDEAL 8 (MF)"
+            year_from: 2018
+            year_to: null
+            power_hp: 538
+            power_kw: 396
+            grain_tank_l: 17100
+          - slug: massey-ferguson-ideal-9
+            name: "IDEAL 9 (MF)"
+            year_from: 2018
+            year_to: null
+            power_hp: 626
+            power_kw: 461
+            grain_tank_l: 17100

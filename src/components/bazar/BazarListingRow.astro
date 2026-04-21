@@ -8,9 +8,10 @@ interface Props {
   brand: string | null;
   imageUrl: string | null;
   createdAt: string;
+  views?: number | null;
 }
 
-const { id, title, price, location, category, brand, imageUrl, createdAt } = Astro.props;
+const { id, title, price, location, category, brand, imageUrl, createdAt, views } = Astro.props;
 
 const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long' }).format(new Date(createdAt));
 const priceText = price ? `${price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
@@ -31,6 +32,9 @@ const priceText = price ? `${price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
       <span class="listing-location">{location}</span>
       <span class="listing-date">{date}</span>
       {brand && <span class="tag">{brand}</span>}
+      {typeof views === 'number' && views > 0 && (
+        <span class="listing-views" title={`${views.toLocaleString('cs-CZ')} zobrazení`}>👁 {views.toLocaleString('cs-CZ')}</span>
+      )}
     </div>
   </div>
   <div class="listing-price">{priceText}</div>
@@ -89,6 +93,11 @@ const priceText = price ? `${price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
     align-items: center;
     font-size: 13px;
     color: #888;
+    flex-wrap: wrap;
+  }
+  .listing-views {
+    font-size: 12px;
+    color: #999;
   }
 
   .listing-price {

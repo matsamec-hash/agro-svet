@@ -7,6 +7,10 @@ const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const supabase = createAnonClient();
 
 const category = Astro.url.searchParams.get('kategorie') ?? '';
+const query = Astro.url.searchParams.get('q') ?? '';
+const dateFrom = Astro.url.searchParams.get('od') ?? '';
+const dateTo = Astro.url.searchParams.get('do') ?? '';
+const tag = Astro.url.searchParams.get('tag') ?? '';
 
 let q = supabase
   .from('articles')
@@ -16,20 +20,33 @@ let q = supabase
   .order('published_at', { ascending: false });
 
 if (category) q = q.eq('category', category);
+if (query) q = q.or(`title.ilike.%${query}%,perex.ilike.%${query}%`);
+if (dateFrom) q = q.gte('published_at', dateFrom);
+if (dateTo) {
+  const end = new Date(dateTo);
+  end.setHours(23, 59, 59, 999);
+  q = q.lte('published_at', end.toISOString());
+}
+if (tag) q = q.contains('tags', [tag]);
 
 const { data: articles } = await q;
 const sorted = articles ?? [];
 
-// Available categories (for filter pills) — always shown, even when filtered
-const { data: allForCats } = await supabase
+// Category counts (across all articles) + available tags
+const { data: allForMeta } = await supabase
   .from('articles')
-  .select('category')
+  .select('category, tags')
   .eq('site_id', SITE_ID)
   .eq('status', 'published');
+
 const catCounts = new Map<string, number>();
-for (const a of allForCats ?? []) {
+const tagCounts = new Map<string, number>();
+for (const a of allForMeta ?? []) {
   const c = (a.category as string) || 'novinky';
   catCounts.set(c, (catCounts.get(c) ?? 0) + 1);
+  for (const t of (a.tags as string[]) ?? []) {
+    tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+  }
 }
 const categoryLabels: Record<string, string> = {
   technika: 'Technika',
@@ -42,33 +59,63 @@ const categoryLabels: Record<string, string> = {
 const catPills = [...catCounts.entries()]
   .map(([slug, count]) => ({ slug, label: categoryLabels[slug] ?? slug, count }))
   .sort((a, b) => b.count - a.count);
+const topTags = [...tagCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 20);
 
 const activeLabel = category ? (categoryLabels[category] ?? category) : null;
+const hasFilters = Boolean(category || query || dateFrom || dateTo || tag);
+const totalAll = allForMeta?.length ?? 0;
 ---
 
 <Layout
-  title={activeLabel ? `Aktuality: ${activeLabel}` : 'Aktuality'}
+  title={activeLabel ? `Novinky: ${activeLabel}` : (query ? `Novinky: „${query}"` : 'Novinky')}
   description={activeLabel ? `Články v kategorii ${activeLabel}.` : 'Aktuální zprávy ze světa zemědělské techniky — nové stroje, dotace, trh a legislativa.'}
 >
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
 
-    <!-- Hero headline -->
     <div style="margin-bottom:24px;">
-      <span class="section-label">Aktuality</span>
+      <span class="section-label">Novinky</span>
       <h1 style="font-size:clamp(2rem,5vw,3.2rem); margin-bottom:16px;">
-        {activeLabel ? `Kategorie: ${activeLabel}` : 'Zemědělství v pohybu'}
+        {activeLabel ? `Kategorie: ${activeLabel}` : (query ? `Hledáte: „${query}"` : 'Zemědělství v pohybu')}
       </h1>
-      {!activeLabel && (
+      {!hasFilters && (
         <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">
           Sledujeme nové stroje, dotační programy, trhy i legislativní změny. Vše, co potřebujete vědět jako zemědělec.
         </p>
       )}
     </div>
 
+    <!-- Filter bar -->
+    <form method="GET" action="/novinky/" class="nov-filter">
+      <div class="nov-search-row">
+        <div class="nov-search-wrap">
+          <svg class="nov-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input type="search" name="q" value={query} placeholder="Hledat v názvech a perexech…" class="nov-search-input" />
+        </div>
+        <button type="submit" class="btn-primary">Hledat</button>
+      </div>
+      <div class="nov-date-row">
+        <label class="nov-date-field">
+          <span class="nov-date-label">Od</span>
+          <input type="date" name="od" value={dateFrom} class="nov-date-input" />
+        </label>
+        <label class="nov-date-field">
+          <span class="nov-date-label">Do</span>
+          <input type="date" name="do" value={dateTo} class="nov-date-input" />
+        </label>
+        {category && <input type="hidden" name="kategorie" value={category} />}
+        {tag && <input type="hidden" name="tag" value={tag} />}
+        {hasFilters && <a href="/novinky/" class="nov-reset">Vymazat vše</a>}
+      </div>
+    </form>
+
     <!-- Category pills -->
-    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px;">
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
       <a href="/novinky/" class:list={["pill", { active: !category }]}>
-        Vše <span class="pill-count">{allForCats?.length ?? 0}</span>
+        Vše <span class="pill-count">{totalAll}</span>
       </a>
       {catPills.map((c) => (
         <a href={`/novinky/?kategorie=${c.slug}`} class:list={["pill", { active: c.slug === category }]}>
@@ -77,29 +124,119 @@ const activeLabel = category ? (categoryLabels[category] ?? category) : null;
       ))}
     </div>
 
-    <!-- All articles -->
-    {sorted.length > 0 ? (
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
-        {sorted.map(article => (
-          <ArticleCard
-            title={article.title}
-            description={article.perex}
-            slug={article.slug}
-            publishDate={new Date(article.published_at)}
-            category={article.category}
-            heroImage={article.featured_image_url}
-          />
+    <!-- Tag cloud -->
+    {topTags.length > 0 && (
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:32px; padding-top:8px; border-top:1px solid #f0f0f0;">
+        <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#888; padding:8px 0;">Témata:</span>
+        {topTags.map(([t, count]) => (
+          <a href={`/novinky/?tag=${encodeURIComponent(t)}`} class:list={["nov-tag", { active: t === tag }]}>
+            #{t} <span class="nov-tag-count">{count}</span>
+          </a>
         ))}
       </div>
+    )}
+
+    <!-- Results -->
+    {sorted.length > 0 ? (
+      <>
+        <div style="margin-bottom:14px; font-size:13px; color:#888;">
+          Nalezeno {sorted.length} článků{hasFilters ? ' odpovídajících filtrům' : ''}.
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
+          {sorted.map(article => (
+            <ArticleCard
+              title={article.title}
+              description={article.perex}
+              slug={article.slug}
+              publishDate={new Date(article.published_at)}
+              category={article.category}
+              heroImage={article.featured_image_url}
+            />
+          ))}
+        </div>
+      </>
     ) : (
-      <p style="color:#888; font-size:16px;">
-        {activeLabel ? `V kategorii „${activeLabel}" zatím žádné články.` : 'Zatím žádné novinky. Brzy zde najdete aktuální články.'}
-        {activeLabel && <> <a href="/novinky/" style="color:#1a1a1a;">Zobrazit všechny</a>.</>}
+      <p style="color:#888; font-size:16px; padding:48px 0; text-align:center;">
+        Žádné články neodpovídají filtrům.
+        {hasFilters && <> <a href="/novinky/" style="color:#1a1a1a;">Vymazat filtry</a>.</>}
       </p>
     )}
   </div>
 
   <style>
+    .nov-filter {
+      margin-bottom: 18px;
+      padding: 16px;
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 14px;
+    }
+    .nov-search-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .nov-search-wrap {
+      position: relative;
+      flex: 1;
+    }
+    .nov-search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .nov-search-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 16px 0 44px;
+      font-family: inherit;
+      font-size: 14px;
+      background: #fff;
+      border: 1px solid #d9d9d9;
+      border-radius: 10px;
+    }
+    .nov-search-input:focus {
+      outline: none;
+      border-color: #1a1a1a;
+      box-shadow: 0 0 0 3px rgba(255,255,0,.4);
+    }
+    .nov-date-row {
+      display: flex;
+      gap: 12px;
+      align-items: end;
+      flex-wrap: wrap;
+    }
+    .nov-date-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .nov-date-label {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #888;
+    }
+    .nov-date-input {
+      height: 38px;
+      padding: 0 10px;
+      font-size: 13px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .nov-reset {
+      margin-left: auto;
+      align-self: center;
+      font-size: 13px;
+      color: #888;
+      text-decoration: underline;
+    }
+    .nov-reset:hover { color: #000; }
+
     .pill {
       display: inline-flex;
       align-items: center;
@@ -114,15 +251,8 @@ const activeLabel = category ? (categoryLabels[category] ?? category) : null;
       text-decoration: none;
       transition: background .15s, border-color .15s;
     }
-    .pill:hover {
-      background: #fff0a8;
-      border-color: #FFFF00;
-    }
-    .pill.active {
-      background: #1a1a1a;
-      border-color: #1a1a1a;
-      color: #fff;
-    }
+    .pill:hover { background: #fff0a8; border-color: #FFFF00; }
+    .pill.active { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
     .pill-count {
       font-size: 11px;
       color: #888;
@@ -134,5 +264,25 @@ const activeLabel = category ? (categoryLabels[category] ?? category) : null;
       color: #FFFF00;
       background: rgba(255,255,0,.16);
     }
+
+    .nov-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+    }
+    .nov-tag:hover { background: #fff0a8; border-color: #FFFF00; color: #1a1a1a; }
+    .nov-tag.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .nov-tag-count {
+      font-size: 10px;
+      color: #aaa;
+    }
+    .nov-tag.active .nov-tag-count { color: #FFFF00; }
   </style>
 </Layout>

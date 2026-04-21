@@ -1,0 +1,272 @@
+slug: kubota
+name: Kubota
+country: Japonsko
+founded: 1890
+website: https://www.kubota.cz
+description: >
+  Japonský výrobce s bohatou tradicí. Silná pozice v segmentu kompaktních a středních traktorů,
+  historicky známý pro sady, vinice a komunální služby. V posledních letech expanduje i do
+  row-crop třídy (M Series nad 130 koní). Kombajny pod Kubota v ČR minoritní (řada DC),
+  primárně pro japonský/asijský trh.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== BX Series (sub-compact) ==========
+      - slug: bx
+        name: "BX Series (2000–dosud)"
+        year_from: 2000
+        year_to: null
+        description: >
+          Sub-kompaktní traktory pro zahrady, komunální služby a hobby farmy. Motor Kubota
+          3-válec dieselový, hydrostatická převodovka (HST).
+        models:
+          - slug: kubota-bx231
+            name: "BX231"
+            year_from: 2014
+            year_to: null
+            power_hp: 23
+            power_kw: 17
+          - slug: kubota-bx2380
+            name: "BX2380"
+            year_from: 2017
+            year_to: null
+            power_hp: 23
+            power_kw: 17
+          - slug: kubota-bx25
+            name: "BX25"
+            year_from: 2010
+            year_to: 2017
+            power_hp: 23
+            power_kw: 17
+
+      # ========== L Series (kompakt) ==========
+      - slug: l
+        name: "L Series (2000–dosud)"
+        year_from: 2000
+        year_to: null
+        description: >
+          Kompaktní utility třída 20–60 koní. Motor Kubota 3-válec, převodovka HST nebo
+          synchronizovaná.
+        models:
+          - slug: kubota-l1361
+            name: "L1361"
+            year_from: 2014
+            year_to: null
+            power_hp: 36
+            power_kw: 26
+          - slug: kubota-l1501
+            name: "L1501"
+            year_from: 2014
+            year_to: null
+            power_hp: 45
+            power_kw: 33
+          - slug: kubota-l5040
+            name: "L5040"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 50
+            power_kw: 37
+          - slug: kubota-l5240
+            name: "L5240"
+            year_from: 2014
+            year_to: null
+            power_hp: 55
+            power_kw: 40
+          - slug: kubota-l6060
+            name: "L6060"
+            year_from: 2014
+            year_to: null
+            power_hp: 62
+            power_kw: 46
+
+      # ========== M4002 / M5 / M5001 (utility) ==========
+      - slug: m4002
+        name: "M4002 Series (2021–dosud)"
+        year_from: 2021
+        year_to: null
+        description: >
+          Cenově dostupná utility třída. Motor Kubota V3307 4-válec 3,3 L.
+        models:
+          - slug: kubota-m4062
+            name: "M4062"
+            year_from: 2021
+            year_to: null
+            power_hp: 66
+            power_kw: 49
+          - slug: kubota-m4072
+            name: "M4072"
+            year_from: 2021
+            year_to: null
+            power_hp: 74
+            power_kw: 54
+
+      - slug: m5
+        name: "M5 Series (2015–dosud)"
+        year_from: 2015
+        year_to: null
+        description: >
+          Populární utility řada 95–115 koní. Motor Kubota V3800 4-válec turbo, převodovka
+          Speed-Shift 36/36. Kabina Premium.
+        models:
+          - slug: kubota-m5-091
+            name: "M5-091"
+            year_from: 2015
+            year_to: null
+            power_hp: 95
+            power_kw: 70
+          - slug: kubota-m5-101
+            name: "M5-101"
+            year_from: 2015
+            year_to: null
+            power_hp: 105
+            power_kw: 77
+          - slug: kubota-m5-111
+            name: "M5-111"
+            year_from: 2015
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+
+      # ========== M6 Series ==========
+      - slug: m6
+        name: "M6 Series (2015–dosud)"
+        year_from: 2015
+        year_to: null
+        description: >
+          Střední prémiová řada. Motor Kubota V6108 4-válec 6,1 L, převodovka Powershift 24/24,
+          volitelná CVT (MGX řada).
+        models:
+          - slug: kubota-m6-131
+            name: "M6-131"
+            year_from: 2015
+            year_to: null
+            power_hp: 133
+            power_kw: 98
+          - slug: kubota-m6-141
+            name: "M6-141"
+            year_from: 2015
+            year_to: null
+            power_hp: 143
+            power_kw: 105
+          - slug: kubota-m6-152
+            name: "M6-152"
+            year_from: 2019
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: kubota-m6-162
+            name: "M6-162"
+            year_from: 2019
+            year_to: null
+            power_hp: 165
+            power_kw: 121
+          - slug: kubota-m6-172
+            name: "M6-172"
+            year_from: 2019
+            year_to: null
+            power_hp: 175
+            power_kw: 129
+
+      # ========== M7 (flagship) ==========
+      - slug: m7
+        name: "M7 Series (2015–dosud)"
+        year_from: 2015
+        year_to: null
+        description: >
+          Vlajková row-crop řada — první Kubota v kategorii nad 150 k. Motor Kubota V6108
+          6,1 L common-rail, převodovka Powershift 24/24 nebo KVT (CVT). Vyráběné v Bierne, Francie.
+        models:
+          - slug: kubota-m7131
+            name: "M7131"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 130
+            power_kw: 96
+          - slug: kubota-m7151
+            name: "M7151"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 150
+            power_kw: 110
+          - slug: kubota-m7171
+            name: "M7171"
+            year_from: 2015
+            year_to: 2019
+            power_hp: 170
+            power_kw: 125
+          - slug: kubota-m7-152
+            name: "M7-152"
+            year_from: 2020
+            year_to: null
+            power_hp: 150
+            power_kw: 110
+          - slug: kubota-m7-172
+            name: "M7-172"
+            year_from: 2020
+            year_to: null
+            power_hp: 170
+            power_kw: 125
+          - slug: kubota-m7-192
+            name: "M7-192"
+            year_from: 2022
+            year_to: null
+            power_hp: 190
+            power_kw: 140
+
+      # ========== MK (narrow/specialty) ==========
+      - slug: mk
+        name: "MK / M5N Series (úzké, 2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Úzké varianty pro vinice a sady. Motor Kubota 4-válec 3,8 L, šířka od 1,2 m.
+        models:
+          - slug: kubota-m5n-091
+            name: "M5N-091 Narrow"
+            year_from: 2018
+            year_to: null
+            power_hp: 95
+            power_kw: 70
+          - slug: kubota-m5n-101
+            name: "M5N-101 Narrow"
+            year_from: 2018
+            year_to: null
+            power_hp: 105
+            power_kw: 77
+
+  kombajny:
+    name: Kombajny
+
+    series:
+      - slug: dc
+        name: "DC Series (2010–dosud)"
+        year_from: 2010
+        year_to: null
+        description: >
+          Menší kompaktní kombajny primárně pro asijské trhy, v CZ minoritní. Vhodné pro
+          rýži, pšenici, sóju.
+        models:
+          - slug: kubota-dc70
+            name: "DC70"
+            year_from: 2010
+            year_to: null
+            power_hp: 70
+            power_kw: 52
+            grain_tank_l: 1500
+          - slug: kubota-dc93g
+            name: "DC93G"
+            year_from: 2015
+            year_to: null
+            power_hp: 93
+            power_kw: 68
+            grain_tank_l: 1800
+          - slug: kubota-dc105x
+            name: "DC105X"
+            year_from: 2018
+            year_to: null
+            power_hp: 105
+            power_kw: 77
+            grain_tank_l: 2200

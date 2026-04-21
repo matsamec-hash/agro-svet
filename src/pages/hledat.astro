@@ -1,0 +1,219 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { createAnonClient } from '../lib/supabase';
+import { getAllModels } from '../lib/stroje';
+import { getAllPlemena } from '../lib/plemena';
+
+const query = (Astro.url.searchParams.get('q') ?? '').trim();
+const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
+
+type ResultItem = {
+  title: string;
+  url: string;
+  snippet?: string;
+  meta?: string;
+};
+
+type Group = {
+  id: string;
+  label: string;
+  icon: string;
+  items: ResultItem[];
+  moreLink?: { href: string; label: string };
+};
+
+const groups: Group[] = [];
+let totalHits = 0;
+
+if (query.length >= 2) {
+  const needle = query.toLowerCase();
+
+  // Articles (fulltext on title + perex)
+  const supabase = createAnonClient();
+  const { data: articles } = await supabase
+    .from('articles')
+    .select('title, slug, perex, category, published_at')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .or(`title.ilike.%${query}%,perex.ilike.%${query}%`)
+    .order('published_at', { ascending: false })
+    .limit(10);
+
+  if (articles && articles.length > 0) {
+    groups.push({
+      id: 'novinky',
+      label: 'Novinky',
+      icon: '📰',
+      items: articles.map((a: any) => ({
+        title: a.title,
+        url: `/novinky/${a.slug}/`,
+        snippet: a.perex,
+        meta: a.category,
+      })),
+      moreLink: { href: `/novinky/?q=${encodeURIComponent(query)}`, label: 'Všechny články' },
+    });
+    totalHits += articles.length;
+  }
+
+  // Stroje (client of static YAML)
+  const modelMatches = getAllModels().filter((m) => {
+    const hay = `${m.brand_name} ${m.name} ${m.series_name}`.toLowerCase();
+    return hay.includes(needle);
+  });
+  if (modelMatches.length > 0) {
+    groups.push({
+      id: 'stroje',
+      label: 'Technika',
+      icon: '🚜',
+      items: modelMatches.slice(0, 15).map((m) => {
+        const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
+        return {
+          title: `${m.brand_name} ${m.name}`,
+          url: `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`,
+          snippet: m.description?.slice(0, 140) ?? undefined,
+          meta: `${m.series_name}${m.power_hp ? ` · ${m.power_hp} k` : ''}${m.year_from ? ` · ${m.year_from}${m.year_to ? '–' + m.year_to : '–dosud'}` : ''}`,
+        };
+      }),
+      moreLink: modelMatches.length > 15 ? { href: `/stroje/?q=${encodeURIComponent(query)}`, label: `Všech ${modelMatches.length} modelů` } : undefined,
+    });
+    totalHits += modelMatches.length;
+  }
+
+  // Plemena
+  const plemenaMatches = getAllPlemena().filter((p) => {
+    const hay = `${p.name} ${(p.alternative_names ?? []).join(' ')} ${p.origin_country}`.toLowerCase();
+    return hay.includes(needle);
+  });
+  if (plemenaMatches.length > 0) {
+    groups.push({
+      id: 'plemena',
+      label: 'Zvířata',
+      icon: '🐄',
+      items: plemenaMatches.slice(0, 12).map((p) => ({
+        title: p.name,
+        url: `/plemena/${p.druh_slug}/${p.slug}/`,
+        snippet: p.description?.slice(0, 140),
+        meta: `${p.druh_name} · 🌍 ${p.origin_country}`,
+      })),
+      moreLink: plemenaMatches.length > 12 ? { href: `/plemena/?q=${encodeURIComponent(query)}`, label: `Všech ${plemenaMatches.length} plemen` } : undefined,
+    });
+    totalHits += plemenaMatches.length;
+  }
+
+  // Bazar listings (fulltext on title)
+  const { data: listings } = await supabase
+    .from('bazar_listings')
+    .select('id, title, price, location, category, brand, year_of_manufacture, power_hp, created_at')
+    .eq('status', 'active')
+    .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  if (listings && listings.length > 0) {
+    groups.push({
+      id: 'bazar',
+      label: 'Agro bazar',
+      icon: '💰',
+      items: listings.map((l: any) => ({
+        title: l.title,
+        url: `/bazar/${l.id}/`,
+        snippet: `${l.location}${l.year_of_manufacture ? ` · rok ${l.year_of_manufacture}` : ''}${l.power_hp ? ` · ${l.power_hp} k` : ''}`,
+        meta: l.price ? `${l.price.toLocaleString('cs-CZ')} Kč` : 'Dohodou',
+      })),
+      moreLink: { href: `/bazar/?q=${encodeURIComponent(query)}`, label: 'Všechny inzeráty' },
+    });
+    totalHits += listings.length;
+  }
+}
+---
+
+<Layout title={query ? `Hledám: „${query}"` : 'Vyhledávání'} description="Vyhledávání v novinkách, katalogu techniky a plemen, i v bazaru.">
+  <div style="max-width:1000px; margin:0 auto; padding:48px 32px 80px;">
+    <div style="margin-bottom:24px;">
+      <span class="section-label">Vyhledávání</span>
+      <h1 style="font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:14px;">
+        {query ? `Výsledky: „${query}"` : 'Vyhledávání'}
+      </h1>
+    </div>
+
+    <form method="GET" action="/hledat/" style="margin-bottom:32px;">
+      <div style="position:relative;">
+        <svg style="position:absolute; left:20px; top:50%; transform:translateY(-50%); pointer-events:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input
+          type="search"
+          name="q"
+          value={query}
+          placeholder="Zadej hledaný výraz — značka, model, plemeno, inzerát…"
+          autofocus
+          style="width:100%; height:56px; padding:0 20px 0 52px; font-size:17px; background:#fff; border:1px solid #d9d9d9; border-radius:14px;"
+        />
+      </div>
+      {query.length >= 1 && query.length < 2 && (
+        <p style="font-size:13px; color:#aaa; margin-top:8px;">Zadej alespoň 2 znaky.</p>
+      )}
+    </form>
+
+    {query.length >= 2 && (
+      <>
+        {totalHits > 0 ? (
+          <div style="margin-bottom:14px; font-size:14px; color:#888;">
+            Nalezeno celkem {totalHits} výsledků ve {groups.length} sekcích.
+          </div>
+        ) : (
+          <div style="padding:48px 0; text-align:center; color:#888;">
+            <p style="font-size:16px;">Pro „{query}" nic nenalezeno.</p>
+            <p style="font-size:13px; margin-top:8px;">Zkus jiný výraz nebo obecnější termín.</p>
+          </div>
+        )}
+
+        {groups.map((g) => (
+          <section style="margin-bottom:36px;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:12px;">
+              <h2 style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; color:#1a1a1a;">
+                {g.icon} {g.label} <span style="font-size:14px; font-weight:400; color:#888;">({g.items.length})</span>
+              </h2>
+              {g.moreLink && <a href={g.moreLink.href} class="link-underline">{g.moreLink.label} →</a>}
+            </div>
+            <div style="border:1px solid #e8e8e8; border-radius:14px; background:#fff; overflow:hidden;">
+              {g.items.map((item, idx) => (
+                <a
+                  href={item.url}
+                  style={`display:block; padding:14px 18px; text-decoration:none; color:inherit; border-bottom:${idx < g.items.length - 1 ? '1px solid #f2f2f2' : 'none'};`}
+                  class="search-result"
+                >
+                  <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline; flex-wrap:wrap;">
+                    <div style="font-family:'Chakra Petch',sans-serif; font-size:15px; font-weight:700; color:#1a1a1a;">{item.title}</div>
+                    {item.meta && <div style="font-size:12px; color:#888;">{item.meta}</div>}
+                  </div>
+                  {item.snippet && (
+                    <div style="font-size:13px; color:#666; line-height:1.5; margin-top:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                      {item.snippet}
+                    </div>
+                  )}
+                </a>
+              ))}
+            </div>
+          </section>
+        ))}
+      </>
+    )}
+
+    {!query && (
+      <div style="padding:32px 0; color:#666; line-height:1.6; font-size:15px;">
+        <p>Hledání prohledává:</p>
+        <ul style="margin-top:10px; padding-left:22px;">
+          <li>Články v <strong>Novinkách</strong> (název + perex)</li>
+          <li><strong>Katalog techniky</strong> (značka + model + řada)</li>
+          <li><strong>Katalog plemen</strong> (název + původ + alternativy)</li>
+          <li><strong>Inzeráty v bazaru</strong> (název + popis)</li>
+        </ul>
+      </div>
+    )}
+  </div>
+
+  <style>
+    .search-result:hover { background: #fafafa; }
+  </style>
+</Layout>
