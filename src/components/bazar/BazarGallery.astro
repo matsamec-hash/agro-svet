@@ -12,12 +12,19 @@ const thumbs = sorted.slice(1);
 {sorted.length > 0 && (
   <div class="gallery">
     <div class="gallery-main">
-      <img id="gallery-main-img" src={main.url} alt="Hlavní fotka" />
+      <img
+        id="gallery-main-img"
+        src={main.url}
+        alt="Hlavní fotka"
+        data-lightbox={main.url}
+        data-gallery="listing-photos"
+        style="cursor:zoom-in;"
+      />
     </div>
     {thumbs.length > 0 && (
       <div class="gallery-thumbs">
         {sorted.map((img, idx) => (
-          <button class="gallery-thumb" data-src={img.url} data-idx={idx}>
+          <button class="gallery-thumb" data-src={img.url} data-idx={idx} data-lightbox={img.url} data-gallery="listing-photos">
             <img src={img.url} alt={`Fotka ${idx + 1}`} loading="lazy" />
           </button>
         ))}
@@ -75,12 +82,17 @@ const thumbs = sorted.slice(1);
 </style>
 
 <script>
-  document.querySelectorAll('.gallery-thumb').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.querySelectorAll('.gallery-thumb').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      // Swap main image instead of opening lightbox on thumb click
+      e.stopPropagation();
       const src = (btn as HTMLElement).dataset.src;
-      const main = document.getElementById('gallery-main-img') as HTMLImageElement;
-      if (src && main) main.src = src;
-      document.querySelectorAll('.gallery-thumb').forEach(b => b.classList.remove('active'));
+      const main = document.getElementById('gallery-main-img') as HTMLImageElement | null;
+      if (src && main) {
+        main.src = src;
+        main.setAttribute('data-lightbox', src);
+      }
+      document.querySelectorAll('.gallery-thumb').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
     });
   });

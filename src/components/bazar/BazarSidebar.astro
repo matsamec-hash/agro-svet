@@ -142,6 +142,7 @@ function buildRemoveUrl(params: string[]): string {
       <button type="submit" class="btn-primary sf-apply">Použít filtry</button>
       {activeFilters.length > 0 && <a href="/bazar/" class="sf-reset">Vymazat vše</a>}
     </div>
+    <small class="sf-auto-hint">Filtry se aplikují automaticky po změně.</small>
 
     {activeFilters.length > 0 && (
       <div class="sf-active">
@@ -184,6 +185,33 @@ function buildRemoveUrl(params: string[]): string {
     toggle.addEventListener('click', openDrawer);
     closeBtn?.addEventListener('click', closeDrawer);
     overlay?.addEventListener('click', closeDrawer);
+
+    // Auto-apply: submit form via URL update (no full submit button needed).
+    // Debounce text inputs, immediate for selects.
+    let debounceTimer = null;
+    function applyNow() {
+      const fd = new FormData(form);
+      const params = new URLSearchParams();
+      for (const [k, v] of fd.entries()) {
+        const s = String(v).trim();
+        if (s) params.set(k, s);
+      }
+      const qs = params.toString();
+      const target = qs ? `/bazar/?${qs}` : '/bazar/';
+      if (target === window.location.pathname + window.location.search) return;
+      window.location.href = target;
+    }
+
+    form.querySelectorAll('select').forEach((el) => {
+      el.addEventListener('change', applyNow);
+    });
+    form.querySelectorAll('input').forEach((el) => {
+      el.addEventListener('change', applyNow);
+      el.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(applyNow, 450);
+      });
+    });
   })();
 </script>
 
@@ -302,6 +330,13 @@ function buildRemoveUrl(params: string[]): string {
     text-decoration: underline;
   }
   .sf-reset:hover { color: #000; }
+  .sf-auto-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #aaa;
+    font-style: italic;
+  }
 
   .sf-active {
     margin-top: 16px;

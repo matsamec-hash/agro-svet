@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllBrands, getBrand, type StrojKategorie } from '../../../lib/stroje';
+import { getAllBrands, getBrand, seriesFamily, familyLabel, type StrojKategorie } from '../../../lib/stroje';
 
 export async function getStaticPaths() {
   return getAllBrands().map((b) => ({ params: { brand: b.slug } }));
@@ -16,103 +16,80 @@ const categoryLabels: Record<StrojKategorie, string> = {
   kombajny: 'Kombajny',
 };
 
-function seriesFamily(slug: string): string {
-  if (/^\d/.test(slug)) return slug[0];
-  const m = slug.match(/^([a-z]+)/);
-  return m ? m[1] : slug;
-}
-
-function familyLabel(family: string): string {
-  if (/^\d+$/.test(family)) return `${family}. řada`;
-  if (family.length <= 4) return family.toUpperCase();
-  return family[0].toUpperCase() + family.slice(1);
-}
-
-// Flatten per-category + derive family
-function flattenCategory(catKey: StrojKategorie) {
+function buildFamilyTiles(catKey: StrojKategorie) {
   const cat = brand.categories?.[catKey];
   if (!cat) return [];
-  const rows: Array<{
-    slug: string;
-    name: string;
-    series_slug: string;
-    series_name: string;
+  type Tile = {
     family: string;
-    year_from: number | null;
-    year_to: number | null;
-    power_hp: number | null;
-    power_kw: number | null;
-    weight_kg: number | null;
-    urlSlug: string;
-  }> = [];
+    label: string;
+    modelCount: number;
+    seriesCount: number;
+    seriesNames: string[];
+    minHp: number | null;
+    maxHp: number | null;
+    minYear: number | null;
+    maxYear: number | null;
+  };
+  const byFamily = new Map<string, Tile>();
   for (const s of cat.series ?? []) {
     const fam = seriesFamily(s.slug);
-    for (const m of s.models ?? []) {
-      const urlSlug = m.slug.startsWith(brand.slug + '-') ? m.slug.slice(brand.slug.length + 1) : m.slug;
-      rows.push({
-        slug: m.slug,
-        name: m.name,
-        series_slug: s.slug,
-        series_name: s.name,
+    let t = byFamily.get(fam);
+    if (!t) {
+      t = {
         family: fam,
-        year_from: m.year_from,
-        year_to: m.year_to,
-        power_hp: m.power_hp,
-        power_kw: m.power_kw,
-        weight_kg: m.weight_kg ?? null,
-        urlSlug,
-      });
+        label: familyLabel(fam),
+        modelCount: 0,
+        seriesCount: 0,
+        seriesNames: [],
+        minHp: null,
+        maxHp: null,
+        minYear: null,
+        maxYear: null,
+      };
+      byFamily.set(fam, t);
+    }
+    t.seriesCount += 1;
+    t.seriesNames.push(s.name);
+    for (const m of s.models ?? []) {
+      t.modelCount += 1;
+      if (m.power_hp !== null) {
+        t.minHp = t.minHp === null ? m.power_hp : Math.min(t.minHp, m.power_hp);
+        t.maxHp = t.maxHp === null ? m.power_hp : Math.max(t.maxHp, m.power_hp);
+      }
+      if (m.year_from !== null) {
+        t.minYear = t.minYear === null ? m.year_from : Math.min(t.minYear, m.year_from);
+      }
+      if (m.year_to !== null) {
+        t.maxYear = t.maxYear === null ? m.year_to : Math.max(t.maxYear, m.year_to);
+      } else if (m.year_from !== null) {
+        // Still in production
+        t.maxYear = null;
+      }
     }
   }
-  return rows;
+  return [...byFamily.values()].sort((a, b) => {
+    const aDigit = /^\d+$/.test(a.family);
+    const bDigit = /^\d+$/.test(b.family);
+    if (aDigit && bDigit) return parseInt(a.family) - parseInt(b.family);
+    if (aDigit) return -1;
+    if (bDigit) return 1;
+    return a.family.localeCompare(b.family, 'cs');
+  });
 }
 
-function familiesForCategory(catKey: StrojKategorie, models: ReturnType<typeof flattenCategory>) {
-  const byFamily = new Map<string, { count: number; hps: number[]; yrs: number[] }>();
-  for (const m of models) {
-    const e = byFamily.get(m.family) ?? { count: 0, hps: [], yrs: [] };
-    e.count++;
-    if (m.power_hp !== null) e.hps.push(m.power_hp);
-    if (m.year_from !== null) e.yrs.push(m.year_from);
-    byFamily.set(m.family, e);
-  }
-  return [...byFamily.entries()]
-    .map(([family, e]) => ({
-      family,
-      label: familyLabel(family),
-      count: e.count,
-      minHp: e.hps.length ? Math.min(...e.hps) : null,
-      maxHp: e.hps.length ? Math.max(...e.hps) : null,
-      minYear: e.yrs.length ? Math.min(...e.yrs) : null,
-    }))
-    .sort((a, b) => {
-      // Digit families sorted numeric asc; letter families alphabetical
-      const aDigit = /^\d+$/.test(a.family);
-      const bDigit = /^\d+$/.test(b.family);
-      if (aDigit && bDigit) return parseInt(a.family) - parseInt(b.family);
-      if (aDigit) return -1;
-      if (bDigit) return 1;
-      return a.family.localeCompare(b.family, 'cs');
-    });
-}
+const categoriesData = (Object.entries(brand.categories ?? {}) as [StrojKategorie, any][]).map(([catKey, cat]) => ({
+  slug: catKey,
+  name: categoryLabels[catKey] ?? cat.name,
+  tiles: buildFamilyTiles(catKey),
+  totalModels: (cat.series ?? []).reduce((acc: number, s: any) => acc + (s.models?.length ?? 0), 0),
+}));
 
-const categoriesData = (Object.entries(brand.categories ?? {}) as [StrojKategorie, any][]).map(([catKey, cat]) => {
-  const models = flattenCategory(catKey);
-  return {
-    slug: catKey,
-    name: categoryLabels[catKey] ?? cat.name,
-    series: cat.series,
-    models,
-    families: familiesForCategory(catKey, models),
-  };
-});
-
-const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
+const totalModels = categoriesData.reduce((acc, c) => acc + c.totalModels, 0);
 ---
 
 <Layout
   title={`${brand.name} — katalog strojů`}
-  description={`Kompletní přehled traktorů a kombajnů značky ${brand.name}. Všechny řady a modely s výkony a roky výroby, filtrovatelné.`}
+  description={`Přehled modelových řad značky ${brand.name}. Dlaždice pro každou řadu s počtem modelů a rozsahem výkonů.`}
 >
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px;">
@@ -133,342 +110,143 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
         </div>
         {brand.description && <p style="font-size:15px; color:#444; max-width:720px; line-height:1.6;">{brand.description}</p>}
       </div>
-      <a href={`/bazar/?znacka=${encodeURIComponent(brand.name)}`} style="background:#FFFF00; color:#000; padding:12px 20px; border-radius:10px; text-decoration:none; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; white-space:nowrap;">
+      <a href={`/bazar/?brand=${encodeURIComponent(brand.slug)}`} style="background:#FFFF00; color:#000; padding:12px 20px; border-radius:10px; text-decoration:none; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; white-space:nowrap;">
         Hledat v bazaru →
       </a>
     </div>
 
-    {categoriesData.map((cat) => {
-      const hpValues = cat.models.map(m => m.power_hp).filter((x): x is number => x !== null);
-      const minHp = hpValues.length ? Math.min(...hpValues) : 0;
-      const maxHp = hpValues.length ? Math.max(...hpValues) : 0;
-      const yearValues = cat.models.map(m => m.year_from).filter((x): x is number => x !== null);
-      const minYear = yearValues.length ? Math.min(...yearValues) : 1990;
-
-      const dataAttr = JSON.stringify(cat.models);
-
-      return (
-        <section id={`cat-${cat.slug}`} class="cat-section" data-models={dataAttr}>
-          <header style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:16px;">
-            <h2 style="font-family:'Chakra Petch',sans-serif; font-size:26px; font-weight:700; color:#1a1a1a;">
-              {cat.name}
-            </h2>
-            <div style="font-size:13px; color:#888;">
-              <span>{cat.models.length} modelů</span>
-              <span style="margin:0 6px;">·</span>
-              <span>{minHp}–{maxHp} k</span>
-              <span style="margin:0 6px;">·</span>
-              <span>{cat.series.length} řad</span>
-            </div>
-          </header>
-
-          <!-- Family tabs -->
-          <div class="family-tabs">
-            <button type="button" class="family-tab active" data-family="">
-              <span class="family-tab-label">Vše</span>
-              <span class="family-tab-count">{cat.models.length}</span>
-            </button>
-            {cat.families.map((f) => (
-              <button type="button" class="family-tab" data-family={f.family}>
-                <span class="family-tab-label">{f.label}</span>
-                <span class="family-tab-count">{f.count}</span>
-                {f.minHp !== null && f.maxHp !== null && (
-                  <span class="family-tab-meta">{f.minHp === f.maxHp ? `${f.minHp} k` : `${f.minHp}–${f.maxHp} k`}</span>
-                )}
-              </button>
-            ))}
+    {categoriesData.map((cat) => (
+      <section style="margin-bottom:48px;">
+        <header style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:20px;">
+          <h2 style="font-family:'Chakra Petch',sans-serif; font-size:26px; font-weight:700; color:#1a1a1a;">
+            {cat.name}
+          </h2>
+          <div style="font-size:13px; color:#888;">
+            <span>{cat.totalModels} modelů</span>
+            <span style="margin:0 6px;">·</span>
+            <span>{cat.tiles.length} řad</span>
           </div>
+        </header>
 
-          <!-- Filter bar (compact secondary filters) -->
-          <div class="cat-filters">
-            <label class="cat-field">
-              <span class="cat-field-label">Rok od</span>
-              <input type="number" class="form-input cat-f-year-min" min="1950" max="2030" placeholder={`${minYear}`} />
-            </label>
-            <label class="cat-field">
-              <span class="cat-field-label">Rok do</span>
-              <input type="number" class="form-input cat-f-year-max" min="1950" max="2030" placeholder="2026" />
-            </label>
-            <label class="cat-field">
-              <span class="cat-field-label">Výkon od (k)</span>
-              <input type="number" class="form-input cat-f-hp-min" min="0" placeholder={`${minHp}`} />
-            </label>
-            <label class="cat-field">
-              <span class="cat-field-label">Výkon do (k)</span>
-              <input type="number" class="form-input cat-f-hp-max" min="0" placeholder={`${maxHp}`} />
-            </label>
-            <label class="cat-field cat-field-search">
-              <span class="cat-field-label">Hledat model</span>
-              <input type="search" class="form-input cat-f-search" placeholder="např. 8R 410" />
-            </label>
-          </div>
-
-          <!-- Table of models -->
-          <div class="cat-table-wrap">
-            <table class="cat-table">
-              <thead>
-                <tr>
-                  <th>Model</th>
-                  <th>Řada</th>
-                  <th>Rok výroby</th>
-                  <th>Výkon</th>
-                  <th>Detail</th>
-                </tr>
-              </thead>
-              <tbody class="cat-tbody"></tbody>
-            </table>
-            <div class="cat-empty" hidden>Žádné modely neodpovídají filtrům.</div>
-            <div class="cat-count" aria-live="polite"></div>
-          </div>
-        </section>
-      );
-    })}
+        <div class="family-grid">
+          {cat.tiles.map((tile) => {
+            const hpStr = tile.minHp !== null && tile.maxHp !== null
+              ? (tile.minHp === tile.maxHp ? `${tile.minHp} k` : `${tile.minHp}–${tile.maxHp} k`)
+              : '';
+            const yrStr = tile.minYear !== null
+              ? (tile.maxYear === null ? `${tile.minYear}–dosud` : `${tile.minYear}–${tile.maxYear}`)
+              : '';
+            return (
+              <a href={`/stroje/${brand.slug}/rada/${tile.family}/?cat=${cat.slug}`} class="family-tile">
+                <div class="family-tile-img" aria-hidden="true">
+                  <div class="family-tile-placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      {cat.slug === 'traktory' ? (
+                        <>
+                          <circle cx="7" cy="17" r="2"/>
+                          <circle cx="18" cy="17" r="3"/>
+                          <path d="M4 17H3v-4l2-2h4l3-4h5v10h-2"/>
+                        </>
+                      ) : (
+                        <>
+                          <rect x="3" y="9" width="18" height="9" rx="1"/>
+                          <path d="M3 9V7c0-1 1-2 2-2h14c1 0 2 1 2 2v2"/>
+                          <circle cx="7" cy="18" r="2"/>
+                          <circle cx="17" cy="18" r="2"/>
+                        </>
+                      )}
+                    </svg>
+                  </div>
+                </div>
+                <div class="family-tile-body">
+                  <h3 class="family-tile-title">{tile.label}</h3>
+                  <div class="family-tile-meta">
+                    <span>{tile.modelCount} {tile.modelCount === 1 ? 'model' : tile.modelCount < 5 ? 'modely' : 'modelů'}</span>
+                    {hpStr && <><span>·</span><span>⚡ {hpStr}</span></>}
+                  </div>
+                  {yrStr && <div class="family-tile-year">{yrStr}</div>}
+                  {tile.seriesCount > 1 && (
+                    <div class="family-tile-series">{tile.seriesCount} generací</div>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    ))}
   </div>
 
-  <script is:inline define:vars={{ brandSlug: brand.slug }}>
-    document.querySelectorAll('.cat-section').forEach((section) => {
-      const models = JSON.parse(section.dataset.models || '[]');
-      const tbody = section.querySelector('.cat-tbody');
-      const emptyEl = section.querySelector('.cat-empty');
-      const countEl = section.querySelector('.cat-count');
-      const tabs = section.querySelectorAll('.family-tab');
-      const fYearMin = section.querySelector('.cat-f-year-min');
-      const fYearMax = section.querySelector('.cat-f-year-max');
-      const fHpMin = section.querySelector('.cat-f-hp-min');
-      const fHpMax = section.querySelector('.cat-f-hp-max');
-      const fSearch = section.querySelector('.cat-f-search');
-      let activeFamily = '';
-
-      function row(m) {
-        const tr = document.createElement('tr');
-        const yr = m.year_from
-          ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`)
-          : '—';
-        const hp = m.power_hp ? `<strong>${m.power_hp} k</strong>${m.power_kw ? ` <span style="color:#888;font-size:12px;">(${m.power_kw} kW)</span>` : ''}` : '—';
-        tr.innerHTML = `
-          <td class="cat-c-name"><a href="/stroje/${brandSlug}/${m.series_slug}/${m.urlSlug}/">${m.name}</a></td>
-          <td class="cat-c-series">${m.series_name}</td>
-          <td class="cat-c-year">${yr}</td>
-          <td class="cat-c-hp">${hp}</td>
-          <td class="cat-c-action"><a href="/stroje/${brandSlug}/${m.series_slug}/${m.urlSlug}/" class="cat-btn">Detail →</a></td>
-        `;
-        return tr;
-      }
-
-      function apply() {
-        const yMin = parseInt(fYearMin.value, 10);
-        const yMax = parseInt(fYearMax.value, 10);
-        const hMin = parseInt(fHpMin.value, 10);
-        const hMax = parseInt(fHpMax.value, 10);
-        const q = fSearch.value.trim().toLowerCase();
-
-        const filtered = models
-          .filter((m) => {
-            if (activeFamily && m.family !== activeFamily) return false;
-            if (!isNaN(yMin) && (m.year_to ?? m.year_from ?? 0) < yMin) return false;
-            if (!isNaN(yMax) && (m.year_from ?? 99999) > yMax) return false;
-            if (!isNaN(hMin) && (m.power_hp ?? 0) < hMin) return false;
-            if (!isNaN(hMax) && (m.power_hp ?? 99999) > hMax) return false;
-            if (q && !(`${m.name} ${m.series_name}`.toLowerCase().includes(q))) return false;
-            return true;
-          })
-          .sort((a, b) => {
-            if (a.series_slug !== b.series_slug) {
-              return models.findIndex(x => x.series_slug === a.series_slug) - models.findIndex(x => x.series_slug === b.series_slug);
-            }
-            return (b.power_hp ?? 0) - (a.power_hp ?? 0);
-          });
-
-        tbody.innerHTML = '';
-        if (filtered.length === 0) {
-          emptyEl.hidden = false;
-          countEl.textContent = '';
-        } else {
-          emptyEl.hidden = true;
-          let lastSeries = '';
-          filtered.forEach((m) => {
-            if (m.series_slug !== lastSeries) {
-              lastSeries = m.series_slug;
-              const header = document.createElement('tr');
-              header.className = 'cat-series-header';
-              header.innerHTML = `<td colspan="5">${m.series_name}</td>`;
-              tbody.appendChild(header);
-            }
-            tbody.appendChild(row(m));
-          });
-          countEl.textContent = `${filtered.length} z ${models.length} modelů`;
-        }
-      }
-
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          activeFamily = tab.dataset.family || '';
-          tabs.forEach((t) => t.classList.toggle('active', t === tab));
-          apply();
-        });
-      });
-
-      [fYearMin, fYearMax, fHpMin, fHpMax, fSearch].forEach((el) => {
-        el.addEventListener('input', apply);
-        el.addEventListener('change', apply);
-      });
-      apply();
-    });
-  </script>
-
   <style>
-    .cat-section {
-      margin-bottom: 48px;
-    }
-
-    /* Family tabs — biggest navigational signal */
-    .family-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-    .family-tab {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 999px;
-      cursor: pointer;
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 14px;
-      color: #1a1a1a;
-      transition: background .15s, border-color .15s, transform .1s;
-    }
-    .family-tab:hover { border-color: #FFFF00; background: #fffcd9; }
-    .family-tab.active {
-      background: #1a1a1a;
-      border-color: #1a1a1a;
-      color: #fff;
-    }
-    .family-tab.active .family-tab-count,
-    .family-tab.active .family-tab-meta {
-      color: #FFFF00;
-    }
-    .family-tab-label {
-      font-weight: 700;
-    }
-    .family-tab-count {
-      font-size: 11px;
-      color: #888;
-      background: rgba(0,0,0,.05);
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-    .family-tab.active .family-tab-count { background: rgba(255,255,0,.18); }
-    .family-tab-meta {
-      font-size: 11px;
-      color: #888;
-      font-weight: 400;
-    }
-
-    .cat-filters {
+    .family-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
-      gap: 8px;
-      padding: 14px;
-      background: #fafafa;
-      border: 1px solid #e8e8e8;
-      border-radius: 14px;
-      margin-bottom: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
     }
-    @media (max-width: 900px) {
-      .cat-filters { grid-template-columns: 1fr 1fr; }
-      .cat-field-search { grid-column: 1 / -1; }
-    }
-    .cat-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-    .cat-field-label {
-      font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: #888;
-    }
-    .cat-field .form-input {
-      height: 38px;
-      padding: 0 10px;
-      font-size: 13px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+    .family-tile {
+      display: block;
       background: #fff;
-    }
-    select.form-input {
-      appearance: none;
-      padding-right: 24px;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'><path d='m6 9 6 6 6-6'/></svg>");
-      background-repeat: no-repeat;
-      background-position: right 8px center;
-    }
-    .cat-table-wrap {
       border: 1px solid #e8e8e8;
-      border-radius: 14px;
+      border-radius: 18px;
       overflow: hidden;
-      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .2s, box-shadow .2s, transform .1s;
     }
-    .cat-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
+    .family-tile:hover {
+      border-color: #FFFF00;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+      transform: translateY(-2px);
     }
-    .cat-table th {
-      text-align: left;
-      padding: 12px 16px;
+    .family-tile-img {
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #bbb;
+    }
+    .family-tile:hover .family-tile-img {
+      background: linear-gradient(135deg, #fffcd9 0%, #FFFF00 100%);
+      color: #1a1a1a;
+    }
+    .family-tile-placeholder {
+      opacity: .6;
+    }
+    .family-tile:hover .family-tile-placeholder { opacity: 1; }
+    .family-tile-body {
+      padding: 16px 18px 18px;
+    }
+    .family-tile-title {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      color: #666;
-      background: #fafafa;
-      border-bottom: 1px solid #e8e8e8;
-    }
-    .cat-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid #f2f2f2;
-    }
-    .cat-table tr:last-child td { border-bottom: none; }
-    .cat-table tr:hover:not(.cat-series-header) { background: #fcfcfc; }
-    .cat-c-name a {
-      font-family: 'Chakra Petch', sans-serif;
+      font-size: 22px;
       font-weight: 700;
       color: #1a1a1a;
-      text-decoration: none;
+      margin-bottom: 8px;
     }
-    .cat-c-name a:hover { text-decoration: underline; }
-    .cat-series-header td {
-      font-family: 'Chakra Petch', sans-serif;
+    .family-tile-meta {
+      display: flex;
+      gap: 6px;
+      font-size: 13px;
+      color: #555;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .family-tile-meta span { color: #555; }
+    .family-tile-year {
       font-size: 12px;
-      font-weight: 500;
+      color: #888;
+    }
+    .family-tile-series {
+      margin-top: 8px;
+      font-size: 11px;
       letter-spacing: .05em;
       text-transform: uppercase;
       color: #888;
-      background: #f7f7f0;
-      padding: 8px 16px;
-    }
-    .cat-btn {
-      font-size: 12px;
-      color: #1a1a1a;
-      text-decoration: none;
-      border: 1px solid #ddd;
-      padding: 5px 10px;
-      border-radius: 6px;
-      white-space: nowrap;
-    }
-    .cat-btn:hover { background: #FFFF00; border-color: #FFFF00; }
-    .cat-empty {
-      padding: 48px 16px;
-      text-align: center;
-      color: #888;
-    }
-    .cat-count {
-      padding: 10px 16px;
-      border-top: 1px solid #f2f2f2;
-      font-size: 12px;
-      color: #888;
       background: #fafafa;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
     }
   </style>
 </Layout>

@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Header from '../components/Header.astro';
+import Lightbox from '../components/bazar/Lightbox.astro';
 
 interface Props {
   title: string;
@@ -25,6 +26,7 @@ const { title, description = 'Novinky ze světa zemědělství, encyklopedie str
   <main>
     <slot />
   </main>
+  <Lightbox />
   <footer style="background:#1a1a1a; color:rgba(255,255,255,0.5); text-align:center; padding:32px 24px; font-size:13px;">
     <div style="margin-bottom:12px;">
       <a href="/" style="display:inline-block; background:#FFFF00; padding:8px 16px; border-radius:4px; text-decoration:none;">

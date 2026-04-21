@@ -132,6 +132,18 @@ export function getSeries(brandSlug: string, seriesSlug: string): { brand: Stroj
   return undefined;
 }
 
+export function seriesFamily(slug: string): string {
+  if (/^\d/.test(slug)) return slug[0];
+  const m = slug.match(/^([a-z]+)/);
+  return m ? m[1] : slug;
+}
+
+export function familyLabel(family: string): string {
+  if (/^\d+$/.test(family)) return `${family}. řada`;
+  if (family.length <= 4) return family.toUpperCase();
+  return family[0].toUpperCase() + family.slice(1);
+}
+
 export function formatPowerRange(models: StrojModel[]): string {
   const hps = models.map((m) => m.power_hp).filter((x): x is number => typeof x === 'number');
   if (hps.length === 0) return '';

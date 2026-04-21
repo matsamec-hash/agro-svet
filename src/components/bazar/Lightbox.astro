@@ -1,0 +1,138 @@
+---
+// Global single-instance lightbox used by BazarGallery + ImageUpload.
+// Any image (<img data-lightbox data-gallery="id">) will trigger it on click.
+---
+
+<div id="lb-root" class="lb-root" hidden role="dialog" aria-modal="true" aria-label="Galerie fotek">
+  <button type="button" class="lb-close" aria-label="Zavřít (Esc)">✕</button>
+  <button type="button" class="lb-prev" aria-label="Předchozí">‹</button>
+  <button type="button" class="lb-next" aria-label="Další">›</button>
+  <div class="lb-stage">
+    <img id="lb-img" alt="" />
+  </div>
+  <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<script is:inline>
+(function() {
+  const root = document.getElementById('lb-root');
+  const img = document.getElementById('lb-img');
+  const counter = document.getElementById('lb-counter');
+  const closeBtn = root?.querySelector('.lb-close');
+  const prevBtn = root?.querySelector('.lb-prev');
+  const nextBtn = root?.querySelector('.lb-next');
+  if (!root || !img) return;
+
+  let gallery = [];
+  let idx = 0;
+
+  function open(srcs, start) {
+    gallery = srcs;
+    idx = Math.max(0, Math.min(start, srcs.length - 1));
+    render();
+    root.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    root.hidden = true;
+    document.body.style.overflow = '';
+    gallery = [];
+  }
+  function render() {
+    if (gallery.length === 0) return;
+    img.src = gallery[idx];
+    counter.textContent = `${idx + 1} / ${gallery.length}`;
+    prevBtn.style.visibility = gallery.length > 1 ? '' : 'hidden';
+    nextBtn.style.visibility = gallery.length > 1 ? '' : 'hidden';
+  }
+  function prev() { idx = (idx - 1 + gallery.length) % gallery.length; render(); }
+  function next() { idx = (idx + 1) % gallery.length; render(); }
+
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+  root.addEventListener('click', (e) => { if (e.target === root) close(); });
+  document.addEventListener('keydown', (e) => {
+    if (root.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowRight') next();
+  });
+
+  // Expose a global API other components can call
+  window.__lightbox = { open, close };
+
+  // Auto-wire images marked with data-lightbox + data-gallery
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest?.('[data-lightbox]');
+    if (!el) return;
+    e.preventDefault();
+    const galleryKey = el.dataset.gallery || '__default';
+    const group = Array.from(document.querySelectorAll(`[data-lightbox][data-gallery="${galleryKey}"]`));
+    const srcs = group.map((n) => n.dataset.lightbox || n.currentSrc || n.src);
+    const start = group.indexOf(el);
+    open(srcs, start < 0 ? 0 : start);
+  });
+})();
+</script>
+
+<style>
+  .lb-root {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 15, 15, .94);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lb-stage {
+    max-width: 95vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lb-stage img {
+    max-width: 95vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 4px 40px rgba(0,0,0,.5);
+  }
+  .lb-close, .lb-prev, .lb-next {
+    position: absolute;
+    background: rgba(255,255,255,.12);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s, transform .15s;
+  }
+  .lb-close:hover, .lb-prev:hover, .lb-next:hover {
+    background: rgba(255,255,0,.9);
+    color: #000;
+  }
+  .lb-close { top: 20px; right: 20px; }
+  .lb-prev { left: 20px; top: 50%; transform: translateY(-50%); font-size: 32px; }
+  .lb-next { right: 20px; top: 50%; transform: translateY(-50%); font-size: 32px; }
+  .lb-counter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,.7);
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    background: rgba(0,0,0,.4);
+    padding: 6px 14px;
+    border-radius: 999px;
+  }
+</style>
