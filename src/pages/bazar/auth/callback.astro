@@ -1,0 +1,65 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getPublicSupabaseConfig } from '../../../lib/supabase';
+
+const { url: supabaseUrl, anonKey: supabaseKey } = getPublicSupabaseConfig();
+---
+
+<Layout title="Přihlašování…">
+  <div style="min-height:60vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px;">
+    <div class="spinner"></div>
+    <p id="status" style="color:#666; font-size:14px;">Dokončujeme přihlášení…</p>
+  </div>
+
+  <style>
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #eee;
+      border-top-color: #1a1a1a;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <script type="module" define:vars={{ supabaseUrl, supabaseKey }}>
+    const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2.48.1');
+    const statusEl = document.getElementById('status');
+
+    function fail(msg) {
+      statusEl.textContent = msg;
+      setTimeout(() => { window.location.href = '/bazar/prihlaseni/?error=oauth'; }, 1500);
+    }
+
+    try {
+      const supabase = createClient(supabaseUrl, supabaseKey, {
+        auth: { detectSessionInUrl: true, flowType: 'pkce', persistSession: true },
+      });
+
+      // Give the SDK a tick to process the URL code
+      await new Promise(r => setTimeout(r, 200));
+
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data.session) {
+        fail('Přihlášení se nezdařilo.');
+      } else {
+        const res = await fetch('/api/bazar/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token,
+          }),
+        });
+        if (res.ok) {
+          window.location.href = '/bazar/moje/';
+        } else {
+          fail('Chyba při ukládání session.');
+        }
+      }
+    } catch (e) {
+      fail('Neočekávaná chyba.');
+    }
+  </script>
+</Layout>
