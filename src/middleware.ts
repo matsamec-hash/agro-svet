@@ -10,7 +10,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const refreshToken = cookies.get('sb-refresh-token')?.value;
 
   if (accessToken && refreshToken) {
-    const supabase = createAnonClient();
+    const supabase = createAnonClient((locals as any).runtime?.env);
     const { data } = await supabase.auth.setSession({
       access_token: accessToken,
       refresh_token: refreshToken,

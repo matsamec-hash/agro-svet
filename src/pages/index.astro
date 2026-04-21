@@ -5,7 +5,7 @@ import ImageAccordion from '../components/ImageAccordion.astro';
 import { createAnonClient } from '../lib/supabase';
 
 const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
-const supabase = createAnonClient();
+const supabase = createAnonClient((Astro.locals as any).runtime?.env);
 
 const { data: articles } = await supabase
   .from('articles')

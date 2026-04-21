@@ -12,7 +12,7 @@ if (Astro.request.method === 'POST') {
   if (!email || !password) {
     error = 'Vyplňte email a heslo.';
   } else {
-    const supabase = createAnonClient();
+    const supabase = createAnonClient((Astro.locals as any).runtime?.env);
     const { data, error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,

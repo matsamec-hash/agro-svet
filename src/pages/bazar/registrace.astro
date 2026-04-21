@@ -18,7 +18,7 @@ if (Astro.request.method === 'POST') {
   } else if (password.length < 6) {
     error = 'Heslo musí mít alespoň 6 znaků.';
   } else {
-    const supabase = createAnonClient();
+    const supabase = createAnonClient((Astro.locals as any).runtime?.env);
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -29,7 +29,7 @@ if (Astro.request.method === 'POST') {
       error = authError.message;
     } else if (data.user) {
       // Create profile
-      const server = createServerClient();
+      const server = createServerClient((Astro.locals as any).runtime?.env);
       await server.from('bazar_users').insert({
         id: data.user.id,
         name,

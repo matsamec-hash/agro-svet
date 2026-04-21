@@ -22,7 +22,7 @@ if (Astro.request.method === 'POST') {
   if (!title || !category || !phone) {
     error = 'Vyplňte název, kategorii a telefon.';
   } else {
-    const supabase = createServerClient();
+    const supabase = createServerClient((Astro.locals as any).runtime?.env);
     const price = priceStr ? parseInt(priceStr) : null;
 
     const { data: listing, error: insertErr } = await supabase
@@ -60,7 +60,10 @@ if (Astro.request.method === 'POST') {
 }
 
 // Pre-fill contact from profile
-const supabase = createServerClient();
+const runtimeEnv = (Astro.locals as any).runtime?.env;
+const supabase = createServerClient(runtimeEnv);
+const publicSupabaseUrl = runtimeEnv?.PUBLIC_SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
+const publicSupabaseKey = runtimeEnv?.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 const { data: profile } = await supabase
   .from('bazar_users')
   .select('phone, email, location')
@@ -69,8 +72,8 @@ const { data: profile } = await supabase
 ---
 
 <Layout title="Nový inzerát — Agro bazar">
-  <meta slot="head" name="supabase-url" content={import.meta.env.PUBLIC_SUPABASE_URL} />
-  <meta slot="head" name="supabase-key" content={import.meta.env.PUBLIC_SUPABASE_ANON_KEY} />
+  <meta slot="head" name="supabase-url" content={publicSupabaseUrl} />
+  <meta slot="head" name="supabase-key" content={publicSupabaseKey} />
 
   <div style="max-width:600px; margin:0 auto; padding:64px 24px 96px;">
     <span class="section-label">Agro bazar</span>

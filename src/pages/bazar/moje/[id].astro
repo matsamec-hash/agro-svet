@@ -5,7 +5,7 @@ import { createServerClient } from '../../../lib/supabase';
 
 const user = Astro.locals.user!;
 const { id } = Astro.params;
-const supabase = createServerClient();
+const supabase = createServerClient((Astro.locals as any).runtime?.env);
 
 // Fetch listing (only if owner)
 const { data: listing } = await supabase

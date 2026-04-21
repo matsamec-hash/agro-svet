@@ -5,7 +5,7 @@ import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
 import { createServerClient } from '../../lib/supabase';
 
 const { id } = Astro.params;
-const supabase = createServerClient();
+const supabase = createServerClient((Astro.locals as any).runtime?.env);
 
 // Fetch listing with images and user
 const { data: listing } = await supabase

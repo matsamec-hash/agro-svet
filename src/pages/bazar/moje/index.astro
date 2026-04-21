@@ -4,7 +4,7 @@ import { createServerClient } from '../../../lib/supabase';
 import { CATEGORIES } from '../../../lib/bazar-constants';
 
 const user = Astro.locals.user!;
-const supabase = createServerClient();
+const supabase = createServerClient((Astro.locals as any).runtime?.env);
 
 // Handle actions (POST)
 if (Astro.request.method === 'POST') {
