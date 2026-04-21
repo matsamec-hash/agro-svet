@@ -2,6 +2,12 @@ name = "agro-svet-web"
 compatibility_date = "2026-04-20"
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+SUPABASE_URL = "https://obhypfuzmknvmknskdwh.supabase.co"
+SUPABASE_ANON_KEY = "sb_publishable_CZvwsQ3DbmlOD8ErVuv9iQ_LjZJb6yD"
+PUBLIC_SUPABASE_URL = "https://obhypfuzmknvmknskdwh.supabase.co"
+PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_CZvwsQ3DbmlOD8ErVuv9iQ_LjZJb6yD"
+
 [assets]
 directory = "./dist/client/"
 
