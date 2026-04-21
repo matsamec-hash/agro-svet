@@ -1,10 +1,11 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import CatalogPicker from '../../../components/bazar/CatalogPicker.astro';
+import CascadingPicker from '../../../components/bazar/CascadingPicker.astro';
 import PhoneInput from '../../../components/bazar/PhoneInput.astro';
 import { CATEGORIES, BRANDS } from '../../../lib/bazar-constants';
 import { createServerClient } from '../../../lib/supabase';
-import { getModelOptions, getPlemenoOptions, resolveModelLabel } from '../../../lib/bazar-catalog';
+import { getModelOptions, getPlemenoOptions } from '../../../lib/bazar-catalog';
+import { getModelBySlug } from '../../../lib/stroje';
 import { getAllPlemena } from '../../../lib/plemena';
 
 const user = Astro.locals.user!;
@@ -85,18 +86,23 @@ if (Astro.request.method === 'POST') {
   }
 }
 
-// Resolve label for prefill
+// Resolve cascading prefill
 const isMachine = listing.category === 'traktory' || listing.category === 'kombajny';
 const isBreed = listing.category === 'zvirata';
 
-let modelLabel: string | null = null;
-let plemenoLabel: string | null = null;
+let modelL1: string | null = null;
+let modelL2: string | null = null;
+let breedL1: string | null = null;
 if (isMachine && listing.model_slug) {
-  modelLabel = resolveModelLabel(listing.model_slug)?.label ?? null;
+  const m = getModelBySlug(listing.model_slug);
+  if (m) {
+    modelL1 = m.brand_slug;
+    modelL2 = m.series_slug;
+  }
 }
 if (isBreed && listing.model_slug) {
-  const found = getAllPlemena().find((p) => p.slug === listing.model_slug);
-  plemenoLabel = found?.name ?? null;
+  const p = getAllPlemena().find((x) => x.slug === listing.model_slug);
+  if (p) breedL1 = p.druh_slug;
 }
 ---
 
@@ -121,16 +127,16 @@ if (isBreed && listing.model_slug) {
       </div>
 
       <div id="machine-fields" style={isMachine ? '' : 'display:none;'}>
-        <CatalogPicker
+        <CascadingPicker
           id="model-picker"
           name="model_slug"
+          mode="stroje"
           label="Model z katalogu"
-          placeholder="např. John Deere 8R 410, Zetor Proxima…"
           options={modelOptions}
           value={isMachine ? listing.model_slug : null}
-          valueLabel={modelLabel}
-          filterAttr="category"
-          filterValue={isMachine ? listing.category : undefined}
+          valueLevel1={modelL1}
+          valueLevel2={modelL2}
+          category={isMachine ? listing.category : null}
         />
 
         <div class="form-group">
@@ -155,14 +161,14 @@ if (isBreed && listing.model_slug) {
       </div>
 
       <div id="breed-fields" style={isBreed ? '' : 'display:none;'}>
-        <CatalogPicker
+        <CascadingPicker
           id="breed-picker"
           name="plemeno_slug"
+          mode="plemena"
           label="Plemeno z katalogu"
-          placeholder="např. Aberdeen Angus, Suffolk, Hafling…"
           options={plemenoOptions}
           value={isBreed ? listing.model_slug : null}
-          valueLabel={plemenoLabel}
+          valueLevel1={breedL1}
         />
       </div>
 

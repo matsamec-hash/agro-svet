@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ImageUpload from '../../components/bazar/ImageUpload.astro';
-import CatalogPicker from '../../components/bazar/CatalogPicker.astro';
+import CascadingPicker from '../../components/bazar/CascadingPicker.astro';
 import PhoneInput from '../../components/bazar/PhoneInput.astro';
 import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
 import { CZ_LOCATIONS } from '../../lib/cz-locations';
@@ -120,13 +120,13 @@ const { data: profile } = await supabase
 
       <!-- Machine fields (shown for traktory / kombajny) -->
       <div id="machine-fields" style="display:none;">
-        <CatalogPicker
+        <CascadingPicker
           id="model-picker"
           name="model_slug"
+          mode="stroje"
           label="Model z katalogu"
-          placeholder="např. John Deere 8R 410, Zetor Proxima…"
           options={modelOptions}
-          filterAttr="category"
+          category=""
         />
 
         <div class="form-group">
@@ -152,11 +152,11 @@ const { data: profile } = await supabase
 
       <!-- Breed fields (shown for zvirata) -->
       <div id="breed-fields" style="display:none;">
-        <CatalogPicker
+        <CascadingPicker
           id="breed-picker"
           name="plemeno_slug"
+          mode="plemena"
           label="Plemeno z katalogu"
-          placeholder="např. Aberdeen Angus, Suffolk, Hafling…"
           options={plemenoOptions}
         />
       </div>

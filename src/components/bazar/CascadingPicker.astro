@@ -1,0 +1,358 @@
+---
+interface Option {
+  slug: string;
+  name: string;
+  brand_slug?: string;
+  brand_name?: string;
+  series_slug?: string;
+  series_name?: string;
+  category?: string;
+  power_hp?: number | null;
+  year_from?: number | null;
+  year_to?: number | null;
+  druh_slug?: string;
+  druh_name?: string;
+}
+
+interface Props {
+  id: string;
+  name: string;
+  label?: string;
+  mode: 'stroje' | 'plemena';
+  options: Option[];
+  value?: string | null;
+  valueLevel1?: string | null;
+  valueLevel2?: string | null;
+  category?: string | null;
+  ostatniLabel?: string;
+}
+
+const {
+  id,
+  name,
+  label = 'Model z katalogu',
+  mode,
+  options,
+  value = null,
+  valueLevel1 = null,
+  valueLevel2 = null,
+  category = null,
+  ostatniLabel = 'Není v seznamu (ostatní)',
+} = Astro.props;
+
+const optionsJson = JSON.stringify(options);
+const isStroje = mode === 'stroje';
+
+const level1Label = isStroje ? 'Značka' : 'Druh';
+const level2Label = isStroje ? 'Řada / série' : 'Plemeno';
+const level3Label = isStroje ? 'Model' : '';
+---
+
+<div class="cascading" data-picker-id={id} data-mode={mode} data-category={category ?? ''}>
+  <div class="cascading-label">{label}</div>
+
+  <div class={`cascading-row ${isStroje ? 'three' : 'two'}`}>
+    <label class="cascading-field">
+      <span class="cascading-sub">{level1Label}</span>
+      <select id={`${id}-l1`} class="form-select">
+        <option value="">{isStroje ? 'Vyber značku…' : 'Vyber druh…'}</option>
+      </select>
+    </label>
+
+    <label class="cascading-field">
+      <span class="cascading-sub">{level2Label}</span>
+      <select id={`${id}-l2`} class="form-select" disabled>
+        <option value="">—</option>
+      </select>
+    </label>
+
+    {isStroje && (
+      <label class="cascading-field">
+        <span class="cascading-sub">{level3Label}</span>
+        <select id={`${id}-l3`} class="form-select" disabled>
+          <option value="">—</option>
+        </select>
+      </label>
+    )}
+  </div>
+
+  <input type="hidden" name={name} id={`${id}-value`} value={value ?? ''} />
+
+  <div class="cascading-actions">
+    <button type="button" class="cascading-ostatni" id={`${id}-ostatni`}>
+      {ostatniLabel}
+    </button>
+    <small class="cascading-hint" id={`${id}-hint`}>
+      {value ? `Vybráno (slug: ${value})` : 'Pokud model/plemeno není v seznamu, klikni na "Ostatní" a upřesni v názvu a popisu.'}
+    </small>
+  </div>
+</div>
+
+<script is:inline define:vars={{ id, optionsJson, mode, valueLevel1, valueLevel2, initialValue: value }}>
+(function() {
+  const OPTIONS = JSON.parse(optionsJson);
+  const isStroje = mode === 'stroje';
+
+  const wrap = document.querySelector(`.cascading[data-picker-id="${id}"]`);
+  const l1 = document.getElementById(`${id}-l1`);
+  const l2 = document.getElementById(`${id}-l2`);
+  const l3 = isStroje ? document.getElementById(`${id}-l3`) : null;
+  const hidden = document.getElementById(`${id}-value`);
+  const hint = document.getElementById(`${id}-hint`);
+  const ostatniBtn = document.getElementById(`${id}-ostatni`);
+
+  if (!wrap || !l1 || !l2 || !hidden || !hint || !ostatniBtn) return;
+
+  function currentCategory() {
+    return wrap.dataset.category || '';
+  }
+
+  function pool() {
+    let p = OPTIONS;
+    if (isStroje) {
+      const cat = currentCategory();
+      if (cat) p = p.filter((o) => o.category === cat);
+    }
+    return p;
+  }
+
+  function uniqueBy(arr, keyFn, labelFn) {
+    const seen = new Map();
+    for (const item of arr) {
+      const k = keyFn(item);
+      if (!k || seen.has(k)) continue;
+      seen.set(k, { slug: k, label: labelFn(item) });
+    }
+    return [...seen.values()].sort((a, b) => a.label.localeCompare(b.label, 'cs'));
+  }
+
+  function populateL1() {
+    const items = isStroje
+      ? uniqueBy(pool(), (o) => o.brand_slug, (o) => o.brand_name)
+      : uniqueBy(pool(), (o) => o.druh_slug, (o) => o.druh_name);
+    renderSelect(l1, items, isStroje ? 'Vyber značku…' : 'Vyber druh…');
+    l1.disabled = false;
+  }
+
+  function populateL2(l1value) {
+    if (!l1value) {
+      resetSelect(l2);
+      if (l3) resetSelect(l3);
+      return;
+    }
+    const items = isStroje
+      ? uniqueBy(
+          pool().filter((o) => o.brand_slug === l1value),
+          (o) => o.series_slug,
+          (o) => o.series_name,
+        )
+      : pool()
+          .filter((o) => o.druh_slug === l1value)
+          .map((o) => ({ slug: o.slug, label: o.name }))
+          .sort((a, b) => a.label.localeCompare(b.label, 'cs'));
+    renderSelect(l2, items, isStroje ? 'Vyber řadu…' : 'Vyber plemeno…');
+    l2.disabled = false;
+  }
+
+  function populateL3(l1value, l2value) {
+    if (!l3) return;
+    if (!l1value || !l2value) {
+      resetSelect(l3);
+      return;
+    }
+    const models = pool()
+      .filter((o) => o.brand_slug === l1value && o.series_slug === l2value)
+      .sort((a, b) => {
+        const yA = a.year_from ?? 0;
+        const yB = b.year_from ?? 0;
+        if (yB !== yA) return yB - yA;
+        return (b.power_hp ?? 0) - (a.power_hp ?? 0);
+      })
+      .map((o) => {
+        const hp = o.power_hp ? ` · ${o.power_hp} k` : '';
+        const yr = o.year_from
+          ? ` · ${o.year_from}${o.year_to ? '–' + o.year_to : '–dosud'}`
+          : '';
+        return { slug: o.slug, label: `${o.name}${hp}${yr}` };
+      });
+    renderSelect(l3, models, 'Vyber model…');
+    l3.disabled = false;
+  }
+
+  function renderSelect(sel, items, placeholder) {
+    sel.innerHTML = '';
+    const first = document.createElement('option');
+    first.value = '';
+    first.textContent = placeholder;
+    sel.appendChild(first);
+    for (const it of items) {
+      const opt = document.createElement('option');
+      opt.value = it.slug;
+      opt.textContent = it.label;
+      sel.appendChild(opt);
+    }
+  }
+
+  function resetSelect(sel) {
+    sel.innerHTML = '<option value="">—</option>';
+    sel.disabled = true;
+  }
+
+  function commitSelection() {
+    if (isStroje) {
+      const slug = l3 ? l3.value : '';
+      if (slug) {
+        const opt = OPTIONS.find((o) => o.slug === slug);
+        if (opt) {
+          hidden.value = slug;
+          hint.textContent = `Vybráno: ${opt.brand_name} ${opt.name}`;
+          wrap.dispatchEvent(new CustomEvent('catalog-picker-selected', {
+            detail: { option: opt },
+            bubbles: true,
+          }));
+          return;
+        }
+      }
+      hidden.value = '';
+    } else {
+      const slug = l2.value;
+      if (slug) {
+        const opt = OPTIONS.find((o) => o.slug === slug);
+        if (opt) {
+          hidden.value = slug;
+          hint.textContent = `Vybráno: ${opt.name}`;
+          wrap.dispatchEvent(new CustomEvent('catalog-picker-selected', {
+            detail: { option: opt },
+            bubbles: true,
+          }));
+          return;
+        }
+      }
+      hidden.value = '';
+    }
+  }
+
+  l1.addEventListener('change', () => {
+    populateL2(l1.value);
+    if (l3) resetSelect(l3);
+    commitSelection();
+  });
+  l2.addEventListener('change', () => {
+    if (l3) populateL3(l1.value, l2.value);
+    commitSelection();
+  });
+  if (l3) l3.addEventListener('change', commitSelection);
+
+  ostatniBtn.addEventListener('click', () => {
+    l1.value = '';
+    resetSelect(l2);
+    if (l3) resetSelect(l3);
+    hidden.value = '';
+    hint.textContent = 'Vybráno: Ostatní — upřesni v názvu a popisu inzerátu.';
+    wrap.dispatchEvent(new CustomEvent('catalog-picker-cleared', { bubbles: true }));
+  });
+
+  // React to category change from outside
+  wrap.addEventListener('catalog-filter-change', (e) => {
+    const detail = e.detail || {};
+    if (detail.val !== undefined) {
+      wrap.dataset.category = detail.val || '';
+    }
+    // Keep current selection if still valid, otherwise rebuild
+    const prevL1 = l1.value;
+    const prevL2 = l2.value;
+    const prevL3 = l3 ? l3.value : '';
+    populateL1();
+    if (prevL1 && [...l1.options].some((o) => o.value === prevL1)) {
+      l1.value = prevL1;
+      populateL2(prevL1);
+      if (prevL2 && [...l2.options].some((o) => o.value === prevL2)) {
+        l2.value = prevL2;
+        if (l3) {
+          populateL3(prevL1, prevL2);
+          if (prevL3 && [...l3.options].some((o) => o.value === prevL3)) {
+            l3.value = prevL3;
+          }
+        }
+      }
+    } else {
+      hidden.value = '';
+    }
+    commitSelection();
+  });
+
+  // Initial population + prefill for edit form
+  populateL1();
+  if (valueLevel1) {
+    l1.value = valueLevel1;
+    populateL2(valueLevel1);
+    if (valueLevel2) {
+      l2.value = valueLevel2;
+      if (l3 && initialValue) {
+        populateL3(valueLevel1, valueLevel2);
+        l3.value = initialValue;
+      }
+      if (!isStroje && initialValue) {
+        l2.value = initialValue;
+      }
+    }
+    commitSelection();
+  }
+})();
+</script>
+
+<style>
+  .cascading { margin-bottom: 18px; }
+  .cascading-label {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  .cascading-row {
+    display: grid;
+    gap: 8px;
+  }
+  .cascading-row.three {
+    grid-template-columns: 1fr 1.2fr 1.6fr;
+  }
+  .cascading-row.two {
+    grid-template-columns: 1fr 1.6fr;
+  }
+  @media (max-width: 680px) {
+    .cascading-row.three,
+    .cascading-row.two { grid-template-columns: 1fr; }
+  }
+  .cascading-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .cascading-sub {
+    font-size: 11px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #888;
+  }
+  .cascading-field .form-select { width: 100%; }
+  .cascading-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .cascading-ostatni {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+  }
+  .cascading-ostatni:hover { background: #fff0a8; border-color: #FFFF00; color: #000; }
+  .cascading-hint { font-size: 12px; color: #888; flex: 1; }
+</style>
