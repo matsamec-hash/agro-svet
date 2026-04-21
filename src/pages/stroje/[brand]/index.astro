@@ -16,7 +16,19 @@ const categoryLabels: Record<StrojKategorie, string> = {
   kombajny: 'Kombajny',
 };
 
-// Flatten per-category for JSON hand-off to client filter
+function seriesFamily(slug: string): string {
+  if (/^\d/.test(slug)) return slug[0];
+  const m = slug.match(/^([a-z]+)/);
+  return m ? m[1] : slug;
+}
+
+function familyLabel(family: string): string {
+  if (/^\d+$/.test(family)) return `${family}. řada`;
+  if (family.length <= 4) return family.toUpperCase();
+  return family[0].toUpperCase() + family.slice(1);
+}
+
+// Flatten per-category + derive family
 function flattenCategory(catKey: StrojKategorie) {
   const cat = brand.categories?.[catKey];
   if (!cat) return [];
@@ -25,6 +37,7 @@ function flattenCategory(catKey: StrojKategorie) {
     name: string;
     series_slug: string;
     series_name: string;
+    family: string;
     year_from: number | null;
     year_to: number | null;
     power_hp: number | null;
@@ -33,6 +46,7 @@ function flattenCategory(catKey: StrojKategorie) {
     urlSlug: string;
   }> = [];
   for (const s of cat.series ?? []) {
+    const fam = seriesFamily(s.slug);
     for (const m of s.models ?? []) {
       const urlSlug = m.slug.startsWith(brand.slug + '-') ? m.slug.slice(brand.slug.length + 1) : m.slug;
       rows.push({
@@ -40,6 +54,7 @@ function flattenCategory(catKey: StrojKategorie) {
         name: m.name,
         series_slug: s.slug,
         series_name: s.name,
+        family: fam,
         year_from: m.year_from,
         year_to: m.year_to,
         power_hp: m.power_hp,
@@ -52,12 +67,45 @@ function flattenCategory(catKey: StrojKategorie) {
   return rows;
 }
 
-const categoriesData = (Object.entries(brand.categories ?? {}) as [StrojKategorie, any][]).map(([catKey, cat]) => ({
-  slug: catKey,
-  name: categoryLabels[catKey] ?? cat.name,
-  series: cat.series,
-  models: flattenCategory(catKey),
-}));
+function familiesForCategory(catKey: StrojKategorie, models: ReturnType<typeof flattenCategory>) {
+  const byFamily = new Map<string, { count: number; hps: number[]; yrs: number[] }>();
+  for (const m of models) {
+    const e = byFamily.get(m.family) ?? { count: 0, hps: [], yrs: [] };
+    e.count++;
+    if (m.power_hp !== null) e.hps.push(m.power_hp);
+    if (m.year_from !== null) e.yrs.push(m.year_from);
+    byFamily.set(m.family, e);
+  }
+  return [...byFamily.entries()]
+    .map(([family, e]) => ({
+      family,
+      label: familyLabel(family),
+      count: e.count,
+      minHp: e.hps.length ? Math.min(...e.hps) : null,
+      maxHp: e.hps.length ? Math.max(...e.hps) : null,
+      minYear: e.yrs.length ? Math.min(...e.yrs) : null,
+    }))
+    .sort((a, b) => {
+      // Digit families sorted numeric asc; letter families alphabetical
+      const aDigit = /^\d+$/.test(a.family);
+      const bDigit = /^\d+$/.test(b.family);
+      if (aDigit && bDigit) return parseInt(a.family) - parseInt(b.family);
+      if (aDigit) return -1;
+      if (bDigit) return 1;
+      return a.family.localeCompare(b.family, 'cs');
+    });
+}
+
+const categoriesData = (Object.entries(brand.categories ?? {}) as [StrojKategorie, any][]).map(([catKey, cat]) => {
+  const models = flattenCategory(catKey);
+  return {
+    slug: catKey,
+    name: categoryLabels[catKey] ?? cat.name,
+    series: cat.series,
+    models,
+    families: familiesForCategory(catKey, models),
+  };
+});
 
 const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
 ---
@@ -114,15 +162,25 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
             </div>
           </header>
 
-          <!-- Filter bar -->
+          <!-- Family tabs -->
+          <div class="family-tabs">
+            <button type="button" class="family-tab active" data-family="">
+              <span class="family-tab-label">Vše</span>
+              <span class="family-tab-count">{cat.models.length}</span>
+            </button>
+            {cat.families.map((f) => (
+              <button type="button" class="family-tab" data-family={f.family}>
+                <span class="family-tab-label">{f.label}</span>
+                <span class="family-tab-count">{f.count}</span>
+                {f.minHp !== null && f.maxHp !== null && (
+                  <span class="family-tab-meta">{f.minHp === f.maxHp ? `${f.minHp} k` : `${f.minHp}–${f.maxHp} k`}</span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          <!-- Filter bar (compact secondary filters) -->
           <div class="cat-filters">
-            <label class="cat-field">
-              <span class="cat-field-label">Řada</span>
-              <select class="form-input cat-f-series">
-                <option value="">Všechny řady</option>
-                {cat.series.map((s) => <option value={s.slug}>{s.name}</option>)}
-              </select>
-            </label>
             <label class="cat-field">
               <span class="cat-field-label">Rok od</span>
               <input type="number" class="form-input cat-f-year-min" min="1950" max="2030" placeholder={`${minYear}`} />
@@ -140,7 +198,7 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
               <input type="number" class="form-input cat-f-hp-max" min="0" placeholder={`${maxHp}`} />
             </label>
             <label class="cat-field cat-field-search">
-              <span class="cat-field-label">Hledat</span>
+              <span class="cat-field-label">Hledat model</span>
               <input type="search" class="form-input cat-f-search" placeholder="např. 8R 410" />
             </label>
           </div>
@@ -173,12 +231,13 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
       const tbody = section.querySelector('.cat-tbody');
       const emptyEl = section.querySelector('.cat-empty');
       const countEl = section.querySelector('.cat-count');
-      const fSeries = section.querySelector('.cat-f-series');
+      const tabs = section.querySelectorAll('.family-tab');
       const fYearMin = section.querySelector('.cat-f-year-min');
       const fYearMax = section.querySelector('.cat-f-year-max');
       const fHpMin = section.querySelector('.cat-f-hp-min');
       const fHpMax = section.querySelector('.cat-f-hp-max');
       const fSearch = section.querySelector('.cat-f-search');
+      let activeFamily = '';
 
       function row(m) {
         const tr = document.createElement('tr');
@@ -197,7 +256,6 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
       }
 
       function apply() {
-        const ser = fSeries.value;
         const yMin = parseInt(fYearMin.value, 10);
         const yMax = parseInt(fYearMax.value, 10);
         const hMin = parseInt(fHpMin.value, 10);
@@ -206,7 +264,7 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
 
         const filtered = models
           .filter((m) => {
-            if (ser && m.series_slug !== ser) return false;
+            if (activeFamily && m.family !== activeFamily) return false;
             if (!isNaN(yMin) && (m.year_to ?? m.year_from ?? 0) < yMin) return false;
             if (!isNaN(yMax) && (m.year_from ?? 99999) > yMax) return false;
             if (!isNaN(hMin) && (m.power_hp ?? 0) < hMin) return false;
@@ -215,7 +273,6 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
             return true;
           })
           .sort((a, b) => {
-            // Sort by series (as listed in YAML) then by power DESC
             if (a.series_slug !== b.series_slug) {
               return models.findIndex(x => x.series_slug === a.series_slug) - models.findIndex(x => x.series_slug === b.series_slug);
             }
@@ -243,7 +300,15 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
         }
       }
 
-      [fSeries, fYearMin, fYearMax, fHpMin, fHpMax, fSearch].forEach((el) => {
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          activeFamily = tab.dataset.family || '';
+          tabs.forEach((t) => t.classList.toggle('active', t === tab));
+          apply();
+        });
+      });
+
+      [fYearMin, fYearMax, fHpMin, fHpMax, fSearch].forEach((el) => {
         el.addEventListener('input', apply);
         el.addEventListener('change', apply);
       });
@@ -255,9 +320,58 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.models.length, 0);
     .cat-section {
       margin-bottom: 48px;
     }
+
+    /* Family tabs — biggest navigational signal */
+    .family-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .family-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 14px;
+      color: #1a1a1a;
+      transition: background .15s, border-color .15s, transform .1s;
+    }
+    .family-tab:hover { border-color: #FFFF00; background: #fffcd9; }
+    .family-tab.active {
+      background: #1a1a1a;
+      border-color: #1a1a1a;
+      color: #fff;
+    }
+    .family-tab.active .family-tab-count,
+    .family-tab.active .family-tab-meta {
+      color: #FFFF00;
+    }
+    .family-tab-label {
+      font-weight: 700;
+    }
+    .family-tab-count {
+      font-size: 11px;
+      color: #888;
+      background: rgba(0,0,0,.05);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .family-tab.active .family-tab-count { background: rgba(255,255,0,.18); }
+    .family-tab-meta {
+      font-size: 11px;
+      color: #888;
+      font-weight: 400;
+    }
+
     .cat-filters {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
       gap: 8px;
       padding: 14px;
       background: #fafafa;

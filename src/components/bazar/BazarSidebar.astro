@@ -1,0 +1,366 @@
+---
+import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
+import { CZ_LOCATIONS } from '../../lib/cz-locations';
+
+interface Props {
+  query?: string;
+  category?: string;
+  brand?: string;
+  location?: string;
+  priceFrom?: string;
+  priceTo?: string;
+  yearFrom?: string;
+  yearTo?: string;
+  powerFrom?: string;
+  powerTo?: string;
+}
+
+const {
+  query = '', category = '', brand = '', location = '',
+  priceFrom = '', priceTo = '',
+  yearFrom = '', yearTo = '',
+  powerFrom = '', powerTo = '',
+} = Astro.props;
+
+const showMachineFilters = category === 'traktory' || category === 'kombajny' || !category;
+
+const activeFilters: { label: string; removeParams: string[] }[] = [];
+if (query) activeFilters.push({ label: `"${query}"`, removeParams: ['q'] });
+if (category) {
+  const cat = CATEGORIES.find(c => c.value === category);
+  if (cat) activeFilters.push({ label: cat.label, removeParams: ['category'] });
+}
+if (brand) {
+  const br = BRANDS.find(b => b.value === brand);
+  if (br) activeFilters.push({ label: br.label, removeParams: ['brand'] });
+}
+if (location) activeFilters.push({ label: `📍 ${location}`, removeParams: ['location'] });
+if (priceFrom || priceTo) {
+  const from = priceFrom ? `${parseInt(priceFrom).toLocaleString('cs-CZ')} Kč` : '';
+  const to = priceTo ? `${parseInt(priceTo).toLocaleString('cs-CZ')} Kč` : '';
+  const label = from && to ? `${from} – ${to}` : from ? `od ${from}` : `do ${to}`;
+  activeFilters.push({ label, removeParams: ['price_from', 'price_to'] });
+}
+if (yearFrom || yearTo) {
+  const label = yearFrom && yearTo ? `${yearFrom} – ${yearTo}` : yearFrom ? `od ${yearFrom}` : `do ${yearTo}`;
+  activeFilters.push({ label: `Rok: ${label}`, removeParams: ['year_from', 'year_to'] });
+}
+if (powerFrom || powerTo) {
+  const label = powerFrom && powerTo ? `${powerFrom} – ${powerTo} k` : powerFrom ? `od ${powerFrom} k` : `do ${powerTo} k`;
+  activeFilters.push({ label: `Výkon: ${label}`, removeParams: ['power_from', 'power_to'] });
+}
+
+function buildRemoveUrl(params: string[]): string {
+  const sp = new URLSearchParams(Astro.url.search);
+  for (const p of params) sp.delete(p);
+  sp.delete('page');
+  const qs = sp.toString();
+  return qs ? `/bazar/?${qs}` : '/bazar/';
+}
+---
+
+<aside class="bazar-sidebar">
+  <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="Zobrazit filtry">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 6h18M7 12h10M11 18h2"/>
+    </svg>
+    <span>Filtry</span>
+    {activeFilters.length > 0 && <span class="sidebar-badge">{activeFilters.length}</span>}
+  </button>
+
+  <form method="GET" action="/bazar/" class="sidebar-form" id="sidebar-form">
+    <div class="sidebar-header">
+      <h3 class="sidebar-title">Filtry</h3>
+      <button type="button" class="sidebar-close" id="sidebar-close" aria-label="Skrýt">✕</button>
+    </div>
+
+    <div class="sf-field">
+      <label for="sf-q">Hledat</label>
+      <input type="search" id="sf-q" name="q" value={query} placeholder="Název inzerátu…" class="form-input" />
+    </div>
+
+    <div class="sf-field">
+      <label for="sf-category">Kategorie</label>
+      <select id="sf-category" name="category" class="form-input">
+        <option value="">Všechny</option>
+        {CATEGORIES.map(c => (
+          <option value={c.value} selected={c.value === category}>{c.label}</option>
+        ))}
+      </select>
+    </div>
+
+    <div class="sf-field">
+      <label for="sf-brand">Značka</label>
+      <select id="sf-brand" name="brand" class="form-input">
+        <option value="">Všechny</option>
+        {BRANDS.map(b => (
+          <option value={b.value} selected={b.value === brand}>{b.label}</option>
+        ))}
+      </select>
+    </div>
+
+    <div class="sf-field">
+      <label for="sf-location">Lokalita</label>
+      <input type="text" id="sf-location" name="location" value={location} placeholder="Město, kraj…" class="form-input" list="cz-locations-sidebar" autocomplete="off" />
+      <datalist id="cz-locations-sidebar">
+        {CZ_LOCATIONS.map(loc => <option value={loc}></option>)}
+      </datalist>
+    </div>
+
+    <div class="sf-field">
+      <label>Cena (Kč)</label>
+      <div class="sf-range">
+        <input type="number" name="price_from" value={priceFrom} placeholder="Od" class="form-input" min="0" />
+        <span>–</span>
+        <input type="number" name="price_to" value={priceTo} placeholder="Do" class="form-input" min="0" />
+      </div>
+    </div>
+
+    {showMachineFilters && (
+      <>
+        <div class="sf-section">Parametry stroje</div>
+        <div class="sf-field">
+          <label>Rok výroby</label>
+          <div class="sf-range">
+            <input type="number" name="year_from" value={yearFrom} placeholder="Od" class="form-input" min="1950" max="2030" />
+            <span>–</span>
+            <input type="number" name="year_to" value={yearTo} placeholder="Do" class="form-input" min="1950" max="2030" />
+          </div>
+        </div>
+        <div class="sf-field">
+          <label>Výkon (k)</label>
+          <div class="sf-range">
+            <input type="number" name="power_from" value={powerFrom} placeholder="Od" class="form-input" min="0" />
+            <span>–</span>
+            <input type="number" name="power_to" value={powerTo} placeholder="Do" class="form-input" min="0" />
+          </div>
+        </div>
+      </>
+    )}
+
+    <div class="sf-actions">
+      <button type="submit" class="btn-primary sf-apply">Použít filtry</button>
+      {activeFilters.length > 0 && <a href="/bazar/" class="sf-reset">Vymazat vše</a>}
+    </div>
+
+    {activeFilters.length > 0 && (
+      <div class="sf-active">
+        <div class="sf-active-label">Aktivní filtry</div>
+        <div class="sf-chips">
+          {activeFilters.map(f => (
+            <a href={buildRemoveUrl(f.removeParams)} class="sf-chip">
+              {f.label}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <path d="M18 6 6 18M6 6l12 12"/>
+              </svg>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </form>
+
+  <div class="sidebar-overlay" id="sidebar-overlay" hidden></div>
+</aside>
+
+<script is:inline>
+  (function() {
+    const form = document.getElementById('sidebar-form');
+    const toggle = document.getElementById('sidebar-toggle');
+    const closeBtn = document.getElementById('sidebar-close');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (!form || !toggle) return;
+
+    function openDrawer() {
+      form.classList.add('open');
+      if (overlay) overlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      form.classList.remove('open');
+      if (overlay) overlay.hidden = true;
+      document.body.style.overflow = '';
+    }
+    toggle.addEventListener('click', openDrawer);
+    closeBtn?.addEventListener('click', closeDrawer);
+    overlay?.addEventListener('click', closeDrawer);
+  })();
+</script>
+
+<style>
+  .bazar-sidebar { position: relative; }
+
+  .sidebar-toggle {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .sidebar-badge {
+    background: #FFFF00;
+    color: #000;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .sidebar-form {
+    position: sticky;
+    top: 76px;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 14px;
+    padding: 18px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .sidebar-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .sidebar-close {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #888;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+
+  .sf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .sf-field label {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #888;
+  }
+  .sf-field .form-input {
+    height: 40px;
+    padding: 0 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    width: 100%;
+  }
+  .sf-range {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 6px;
+    align-items: center;
+  }
+  .sf-range span { color: #888; }
+  .sf-section {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 12px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #888;
+    margin: 10px 0 8px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f0f0;
+  }
+  .sf-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .sf-apply {
+    flex: 1;
+    justify-content: center;
+  }
+  .sf-reset {
+    font-size: 12px;
+    color: #888;
+    text-decoration: underline;
+  }
+  .sf-reset:hover { color: #000; }
+
+  .sf-active {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f0f0;
+  }
+  .sf-active-label {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 8px;
+  }
+  .sf-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .sf-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px 4px 10px;
+    background: #f3f3f3;
+    border: 1px solid #e4e4e4;
+    border-radius: 999px;
+    font-size: 12px;
+    color: #1a1a1a;
+    text-decoration: none;
+  }
+  .sf-chip:hover {
+    background: #fff0a8;
+    border-color: #FFFF00;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 90;
+  }
+
+  /* Mobile: drawer */
+  @media (max-width: 900px) {
+    .sidebar-toggle { display: inline-flex; }
+    .sidebar-form {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      bottom: 0;
+      width: min(320px, 88vw);
+      max-height: 100vh;
+      border-radius: 0;
+      z-index: 100;
+      transition: left .25s ease;
+      overflow-y: auto;
+    }
+    .sidebar-form.open { left: 0; box-shadow: 4px 0 16px rgba(0,0,0,.15); }
+    .sidebar-close { display: block; }
+  }
+</style>

@@ -74,9 +74,6 @@
   const pathsInput = document.getElementById('image-paths-input') as HTMLInputElement;
   const placeholder = document.getElementById('upload-placeholder')!;
 
-  const supabaseUrl = (document.querySelector('meta[name="supabase-url"]') as HTMLMetaElement)?.content ?? '';
-  const supabaseKey = (document.querySelector('meta[name="supabase-key"]') as HTMLMetaElement)?.content ?? '';
-
   let uploadedPaths: string[] = [];
   const MAX_FILES = 5;
   const MAX_SIZE = 5 * 1024 * 1024;
@@ -100,32 +97,24 @@
         continue;
       }
 
-      // Sanitize filename — Supabase Storage rejects spaces, diacritics, special chars
-      const safeName = file.name
-        .normalize('NFD').replace(/[̀-ͯ]/g, '')
-        .replace(/[^a-zA-Z0-9.\-_]/g, '_');
-      const path = `${crypto.randomUUID()}/${safeName}`;
+      const fd = new FormData();
+      fd.append('file', file);
 
       try {
-        const res = await fetch(`${supabaseUrl}/storage/v1/object/bazar-images/${path}`, {
+        const res = await fetch('/api/bazar/upload', {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${supabaseKey}`,
-            'apikey': supabaseKey,
-            'Content-Type': file.type,
-            'x-upsert': 'false',
-          },
-          body: file,
+          body: fd,
+          credentials: 'same-origin',
         });
+        const data = await res.json().catch(() => ({ error: 'Odpověď serveru neobsahuje JSON' }));
 
-        if (res.ok) {
-          uploadedPaths.push(path);
-          addPreview(file, path);
+        if (res.ok && data.path) {
+          uploadedPaths.push(data.path);
+          addPreview(file, data.path);
           updateInput();
         } else {
-          const err = await res.text().catch(() => '');
-          console.error('[upload] failed', res.status, err);
-          alert(`Nahrávání selhalo (${res.status}). ${err || 'Zkus menší fotku nebo jiný formát.'}`);
+          console.error('[upload] failed', res.status, data);
+          alert(`Nahrávání selhalo (${res.status}). ${data.error || 'Zkus menší fotku nebo jiný formát.'}`);
         }
       } catch (e) {
         console.error('[upload] network error', e);
