@@ -11,10 +11,10 @@ const current = Astro.url.pathname;
 ---
 
 <header style="background:#fff; border-bottom:1px solid #e8e8e8; position:sticky; top:0; z-index:100;">
-  <div style="max-width:1280px; margin:0 auto; padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:68px;">
+  <div style="max-width:1280px; margin:0 auto; padding:0 32px; display:flex; align-items:center; gap:48px; height:60px;">
 
-    <a href="/" style="display:inline-block; background:#FFFF00; padding:10px 18px; border-radius:4px; text-decoration:none;">
-      <span style="font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:22px; color:#000; white-space:nowrap;">agro-svět.cz</span>
+    <a href="/" style="display:inline-block; background:#FFFF00; padding:6px 12px; border-radius:4px; text-decoration:none;">
+      <span style="font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:17px; color:#000; white-space:nowrap;">agro-svět.cz</span>
     </a>
 
     <nav class="nav-desktop" id="main-nav">
@@ -56,16 +56,18 @@ const current = Astro.url.pathname;
   .nav-desktop {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
+    margin-left: auto;
   }
 
   .nav-link {
     position: relative;
     text-decoration: none;
     font-family: 'Chakra Petch', sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 400;
-    padding: 8px 14px;
+    letter-spacing: 0.01em;
+    padding: 6px 12px;
     white-space: nowrap;
     color: #555;
     background: transparent;
