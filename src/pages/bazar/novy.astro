@@ -229,6 +229,15 @@ const { data: profile } = await supabase
         breed.style.display = isBreed ? 'block' : 'none';
         cutting.style.display = v === 'kombajny' ? 'block' : 'none';
 
+        // Legacy "Značka" dropdown is redundant when cascading picker
+        // is present (traktory/kombajny) or irrelevant (zvířata).
+        if (isMachine || isBreed) {
+          brandGroup.style.display = 'none';
+        } else {
+          brandGroup.style.display = '';
+          brandHint.style.display = 'none';
+        }
+
         if (isMachine && modelPicker) {
           modelPicker.dispatchEvent(new CustomEvent('catalog-filter-change', {
             detail: { attr: 'category', val: v },

@@ -240,12 +240,22 @@ if (isBreed && listing.model_slug) {
         breed.style.display = isBreed ? 'block' : 'none';
         cutting.style.display = v === 'kombajny' ? 'block' : 'none';
 
+        if (isMachine || isBreed) {
+          brandGroup.style.display = 'none';
+        } else {
+          brandGroup.style.display = '';
+          brandHint.style.display = 'none';
+        }
+
         if (isMachine && modelPicker) {
           modelPicker.dispatchEvent(new CustomEvent('catalog-filter-change', {
             detail: { attr: 'category', val: v },
           }));
         }
       }
+
+      // Run once on load to apply the correct visibility
+      sync();
 
       cat.addEventListener('change', sync);
 
