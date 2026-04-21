@@ -1,0 +1,846 @@
+slug: case-ih
+name: Case IH
+country: USA / UK
+founded: 1842
+website: https://www.caseih.com
+description: >
+  Americká značka s kořeny v Case Corporation (1842) a International Harvester (1902),
+  fúzovaná 1985. Pod koncernem CNH Industrial. Charakteristická červená barva a vlajková řada
+  Magnum, oceňovaná pro robustnost a CVT převodovky. Kombajny Axial-Flow drží prvenství
+  v jednorotorové konstrukci od roku 1977.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== 7100 Magnum (historické, 1988-1996) ==========
+      - slug: 7100-magnum
+        name: "7100 Magnum (1988–1996)"
+        year_from: 1988
+        year_to: 1996
+        description: >
+          Legendární první generace Magnum — první traktor značky Case IH po fúzi. Motor
+          Case 5,9 L turbo, převodovka Powershift 18/2.
+        models:
+          - slug: case-ih-7110
+            name: "7110"
+            year_from: 1988
+            year_to: 1993
+            power_hp: 155
+            power_kw: 114
+          - slug: case-ih-7120
+            name: "7120"
+            year_from: 1988
+            year_to: 1993
+            power_hp: 170
+            power_kw: 125
+          - slug: case-ih-7130
+            name: "7130"
+            year_from: 1988
+            year_to: 1993
+            power_hp: 195
+            power_kw: 143
+          - slug: case-ih-7140
+            name: "7140"
+            year_from: 1988
+            year_to: 1993
+            power_hp: 215
+            power_kw: 158
+          - slug: case-ih-7150
+            name: "7150"
+            year_from: 1993
+            year_to: 1996
+            power_hp: 180
+            power_kw: 132
+          - slug: case-ih-7210
+            name: "7210"
+            year_from: 1993
+            year_to: 1996
+            power_hp: 175
+            power_kw: 129
+          - slug: case-ih-7220
+            name: "7220"
+            year_from: 1993
+            year_to: 1996
+            power_hp: 195
+            power_kw: 143
+          - slug: case-ih-7230
+            name: "7230"
+            year_from: 1993
+            year_to: 1996
+            power_hp: 215
+            power_kw: 158
+          - slug: case-ih-7240
+            name: "7240"
+            year_from: 1993
+            year_to: 1996
+            power_hp: 245
+            power_kw: 180
+          - slug: case-ih-7250
+            name: "7250"
+            year_from: 1993
+            year_to: 1996
+            power_hp: 265
+            power_kw: 195
+
+      # ========== 8900 Magnum (1996-1998) ==========
+      - slug: 8900-magnum
+        name: "8900 Magnum (1996–1998)"
+        year_from: 1996
+        year_to: 1998
+        description: >
+          Krátká generace mezi 7000 a MX. Motor Case 8,3 L s vyšším výkonem.
+        models:
+          - slug: case-ih-8910
+            name: "8910"
+            year_from: 1996
+            year_to: 1998
+            power_hp: 180
+            power_kw: 132
+          - slug: case-ih-8920
+            name: "8920"
+            year_from: 1996
+            year_to: 1998
+            power_hp: 200
+            power_kw: 147
+          - slug: case-ih-8930
+            name: "8930"
+            year_from: 1996
+            year_to: 1998
+            power_hp: 225
+            power_kw: 165
+          - slug: case-ih-8940
+            name: "8940"
+            year_from: 1996
+            year_to: 1998
+            power_hp: 250
+            power_kw: 184
+          - slug: case-ih-8950
+            name: "8950"
+            year_from: 1996
+            year_to: 1998
+            power_hp: 275
+            power_kw: 202
+
+      # ========== MX Magnum (1998-2005) ==========
+      - slug: mx-magnum
+        name: "MX Magnum (1998–2005)"
+        year_from: 1998
+        year_to: 2005
+        description: >
+          Nová generace Magnum s označením MX. Motor Case 8,3 L common-rail, převodovka
+          18/4 PowerShift nebo 8/2 ClutchPak.
+        models:
+          - slug: case-ih-mx200
+            name: "MX200"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 210
+            power_kw: 155
+          - slug: case-ih-mx220
+            name: "MX220"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 240
+            power_kw: 177
+          - slug: case-ih-mx240
+            name: "MX240"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 265
+            power_kw: 195
+          - slug: case-ih-mx270
+            name: "MX270"
+            year_from: 1998
+            year_to: 2002
+            power_hp: 295
+            power_kw: 217
+          - slug: case-ih-mx210
+            name: "MX210"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 215
+            power_kw: 158
+          - slug: case-ih-mx230
+            name: "MX230"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 245
+            power_kw: 180
+          - slug: case-ih-mx255
+            name: "MX255"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 265
+            power_kw: 195
+          - slug: case-ih-mx285
+            name: "MX285"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 305
+            power_kw: 224
+
+      # ========== CS Series (1998-2003) ==========
+      - slug: cs-series
+        name: "CS Series (1998–2003)"
+        year_from: 1998
+        year_to: 2003
+        description: >
+          Utility třída ze St. Valentin. Motor Case 4-válec 4,0 L, převodovka Synchro-Shuttle
+          16/8.
+        models:
+          - slug: case-ih-cs86
+            name: "CS86"
+            year_from: 1998
+            year_to: 2003
+            power_hp: 85
+            power_kw: 63
+          - slug: case-ih-cs94
+            name: "CS94"
+            year_from: 1998
+            year_to: 2003
+            power_hp: 95
+            power_kw: 70
+          - slug: case-ih-cs105
+            name: "CS105"
+            year_from: 1998
+            year_to: 2003
+            power_hp: 105
+            power_kw: 77
+
+      # ========== CX Series (1998-2004) ==========
+      - slug: cx-series
+        name: "CX Series (1998–2004)"
+        year_from: 1998
+        year_to: 2004
+        description: >
+          Utility traktory pro malé a střední farmy. Motor Case 4-válec, hydraulika 80 l/min.
+        models:
+          - slug: case-ih-cx50
+            name: "CX50"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 50
+            power_kw: 37
+          - slug: case-ih-cx60
+            name: "CX60"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 60
+            power_kw: 44
+          - slug: case-ih-cx70
+            name: "CX70"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 70
+            power_kw: 52
+          - slug: case-ih-cx80
+            name: "CX80"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 80
+            power_kw: 59
+          - slug: case-ih-cx90
+            name: "CX90"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 90
+            power_kw: 66
+          - slug: case-ih-cx100
+            name: "CX100"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 100
+            power_kw: 74
+
+      # ========== Farmall (moderní utility, 2006+) ==========
+      - slug: farmall
+        name: "Farmall / Farmall C/U (2006–dosud)"
+        year_from: 2006
+        year_to: null
+        description: >
+          Utility řada navazující na slavné jméno Farmall ze 70. let IH. Motor FPT 3- až 4-válec,
+          převodovka mechanická nebo ActiveDrive. Lokálně vyráběné v Itálii i Turecku.
+        models:
+          - slug: case-ih-farmall-75c
+            name: "Farmall 75C"
+            year_from: 2013
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: case-ih-farmall-85c
+            name: "Farmall 85C"
+            year_from: 2013
+            year_to: null
+            power_hp: 86
+            power_kw: 63
+          - slug: case-ih-farmall-95c
+            name: "Farmall 95C"
+            year_from: 2013
+            year_to: null
+            power_hp: 99
+            power_kw: 73
+          - slug: case-ih-farmall-105c
+            name: "Farmall 105C"
+            year_from: 2013
+            year_to: null
+            power_hp: 107
+            power_kw: 79
+          - slug: case-ih-farmall-115c
+            name: "Farmall 115C"
+            year_from: 2015
+            year_to: null
+            power_hp: 117
+            power_kw: 86
+          - slug: case-ih-farmall-75u
+            name: "Farmall 75U"
+            year_from: 2014
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: case-ih-farmall-95u
+            name: "Farmall 95U"
+            year_from: 2014
+            year_to: null
+            power_hp: 95
+            power_kw: 70
+          - slug: case-ih-farmall-115u
+            name: "Farmall 115U"
+            year_from: 2014
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+
+      # ========== Maxxum (moderní, 2006+) ==========
+      - slug: maxxum
+        name: "Maxxum (2006–dosud)"
+        year_from: 2006
+        year_to: null
+        description: >
+          Střední řada pro smíšené farmy. Motor FPT NEF 6,7 L, převodovka 16/16 Electro Command
+          nebo ActiveDrive 8 (nová verze s dvojitou spojkou), volitelná CVT (CVXDrive).
+        models:
+          - slug: case-ih-maxxum-110
+            name: "Maxxum 110"
+            year_from: 2013
+            year_to: null
+            power_hp: 116
+            power_kw: 85
+          - slug: case-ih-maxxum-115
+            name: "Maxxum 115"
+            year_from: 2013
+            year_to: null
+            power_hp: 117
+            power_kw: 86
+          - slug: case-ih-maxxum-120
+            name: "Maxxum 120"
+            year_from: 2013
+            year_to: null
+            power_hp: 126
+            power_kw: 93
+          - slug: case-ih-maxxum-125
+            name: "Maxxum 125"
+            year_from: 2013
+            year_to: null
+            power_hp: 131
+            power_kw: 96
+          - slug: case-ih-maxxum-130
+            name: "Maxxum 130"
+            year_from: 2013
+            year_to: null
+            power_hp: 136
+            power_kw: 100
+          - slug: case-ih-maxxum-140
+            name: "Maxxum 140"
+            year_from: 2013
+            year_to: null
+            power_hp: 146
+            power_kw: 107
+          - slug: case-ih-maxxum-145
+            name: "Maxxum 145"
+            year_from: 2015
+            year_to: null
+            power_hp: 151
+            power_kw: 111
+          - slug: case-ih-maxxum-150
+            name: "Maxxum 150"
+            year_from: 2015
+            year_to: null
+            power_hp: 161
+            power_kw: 118
+
+      # ========== Puma (2006+) ==========
+      - slug: puma
+        name: "Puma (2006–dosud)"
+        year_from: 2006
+        year_to: null
+        description: >
+          Prémiová univerzální řada. Motor FPT NEF 6,7 L (do Puma 220), Cursor 9 (Puma 230+),
+          převodovka Full Powershift 18/6 nebo CVXDrive (CVT). Kabina MultiControl armrest.
+        models:
+          - slug: case-ih-puma-140
+            name: "Puma 140"
+            year_from: 2007
+            year_to: null
+            power_hp: 140
+            power_kw: 103
+          - slug: case-ih-puma-155
+            name: "Puma 155"
+            year_from: 2012
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: case-ih-puma-165
+            name: "Puma 165"
+            year_from: 2007
+            year_to: null
+            power_hp: 165
+            power_kw: 121
+          - slug: case-ih-puma-175
+            name: "Puma 175"
+            year_from: 2015
+            year_to: null
+            power_hp: 175
+            power_kw: 129
+          - slug: case-ih-puma-180
+            name: "Puma 180"
+            year_from: 2007
+            year_to: null
+            power_hp: 180
+            power_kw: 132
+          - slug: case-ih-puma-185
+            name: "Puma 185"
+            year_from: 2015
+            year_to: null
+            power_hp: 185
+            power_kw: 136
+          - slug: case-ih-puma-200
+            name: "Puma 200"
+            year_from: 2007
+            year_to: null
+            power_hp: 200
+            power_kw: 147
+          - slug: case-ih-puma-210
+            name: "Puma 210"
+            year_from: 2012
+            year_to: null
+            power_hp: 210
+            power_kw: 155
+          - slug: case-ih-puma-220
+            name: "Puma 220"
+            year_from: 2012
+            year_to: null
+            power_hp: 220
+            power_kw: 162
+          - slug: case-ih-puma-230
+            name: "Puma 230"
+            year_from: 2012
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+          - slug: case-ih-puma-240
+            name: "Puma 240"
+            year_from: 2015
+            year_to: null
+            power_hp: 240
+            power_kw: 177
+
+      # ========== Magnum (moderní, 2006+) ==========
+      - slug: magnum
+        name: "Magnum (2006–dosud)"
+        year_from: 2006
+        year_to: null
+        description: >
+          Vlajková row-crop řada. Motor FPT Cursor 9 (8,7 L) a Cursor 13 (12,9 L), převodovka
+          Full Powershift 19/4 nebo CVXDrive. AFS AccuTurn, Rowtrac pásové varianty.
+        models:
+          - slug: case-ih-magnum-180
+            name: "Magnum 180"
+            year_from: 2013
+            year_to: null
+            power_hp: 180
+            power_kw: 132
+          - slug: case-ih-magnum-210
+            name: "Magnum 210"
+            year_from: 2013
+            year_to: null
+            power_hp: 210
+            power_kw: 155
+          - slug: case-ih-magnum-220
+            name: "Magnum 220"
+            year_from: 2015
+            year_to: null
+            power_hp: 220
+            power_kw: 162
+          - slug: case-ih-magnum-240
+            name: "Magnum 240"
+            year_from: 2013
+            year_to: null
+            power_hp: 240
+            power_kw: 177
+          - slug: case-ih-magnum-250
+            name: "Magnum 250"
+            year_from: 2015
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+          - slug: case-ih-magnum-260
+            name: "Magnum 260"
+            year_from: 2013
+            year_to: null
+            power_hp: 260
+            power_kw: 191
+          - slug: case-ih-magnum-280
+            name: "Magnum 280"
+            year_from: 2013
+            year_to: null
+            power_hp: 280
+            power_kw: 206
+          - slug: case-ih-magnum-290
+            name: "Magnum 290"
+            year_from: 2015
+            year_to: null
+            power_hp: 290
+            power_kw: 213
+          - slug: case-ih-magnum-310
+            name: "Magnum 310"
+            year_from: 2013
+            year_to: null
+            power_hp: 310
+            power_kw: 228
+          - slug: case-ih-magnum-315
+            name: "Magnum 315"
+            year_from: 2015
+            year_to: null
+            power_hp: 315
+            power_kw: 232
+          - slug: case-ih-magnum-340
+            name: "Magnum 340"
+            year_from: 2013
+            year_to: null
+            power_hp: 340
+            power_kw: 250
+          - slug: case-ih-magnum-380
+            name: "Magnum 380"
+            year_from: 2015
+            year_to: null
+            power_hp: 380
+            power_kw: 279
+          - slug: case-ih-magnum-400
+            name: "Magnum 400"
+            year_from: 2017
+            year_to: null
+            power_hp: 400
+            power_kw: 294
+          - slug: case-ih-magnum-435
+            name: "Magnum 435"
+            year_from: 2020
+            year_to: null
+            power_hp: 435
+            power_kw: 320
+
+      # ========== Optum CVX (2014+) ==========
+      - slug: optum
+        name: "Optum CVX (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Mezi Magnum a Puma — kompaktní row-crop s CVT. Motor FPT Cursor 9, převodovka CVXDrive
+          (plynulá).
+        models:
+          - slug: case-ih-optum-270-cvx
+            name: "Optum 270 CVX"
+            year_from: 2014
+            year_to: null
+            power_hp: 270
+            power_kw: 199
+          - slug: case-ih-optum-300-cvx
+            name: "Optum 300 CVX"
+            year_from: 2014
+            year_to: null
+            power_hp: 300
+            power_kw: 221
+          - slug: case-ih-optum-340-cvx
+            name: "Optum 340 CVX"
+            year_from: 2020
+            year_to: null
+            power_hp: 340
+            power_kw: 250
+
+      # ========== Steiger (kloubové, 1990+) ==========
+      - slug: steiger
+        name: "Steiger (kloubové, 1990–dosud)"
+        year_from: 1990
+        year_to: null
+        description: >
+          Kloubové 4WD traktory pro velkofarmy. Rovný podvozek (Steiger) nebo pásový (Quadtrac).
+          Motor FPT Cursor 13 (12,9 L) a Cursor 16 (16 L) v aktuálních modelech.
+        models:
+          - slug: case-ih-steiger-9270
+            name: "Steiger 9270 (9000 series)"
+            year_from: 1996
+            year_to: 1999
+            power_hp: 270
+            power_kw: 199
+          - slug: case-ih-steiger-9380
+            name: "Steiger 9380"
+            year_from: 1996
+            year_to: 1999
+            power_hp: 380
+            power_kw: 280
+          - slug: case-ih-steiger-stx275
+            name: "Steiger STX 275"
+            year_from: 2000
+            year_to: 2006
+            power_hp: 275
+            power_kw: 202
+          - slug: case-ih-steiger-stx450
+            name: "Steiger STX 450"
+            year_from: 2000
+            year_to: 2006
+            power_hp: 450
+            power_kw: 331
+          - slug: case-ih-steiger-335
+            name: "Steiger 335"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 335
+            power_kw: 246
+          - slug: case-ih-steiger-385
+            name: "Steiger 385"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 385
+            power_kw: 283
+          - slug: case-ih-steiger-435
+            name: "Steiger 435"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 435
+            power_kw: 320
+          - slug: case-ih-steiger-485
+            name: "Steiger 485"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 485
+            power_kw: 357
+          - slug: case-ih-steiger-500
+            name: "Steiger 500"
+            year_from: 2014
+            year_to: null
+            power_hp: 500
+            power_kw: 368
+          - slug: case-ih-steiger-540
+            name: "Steiger 540"
+            year_from: 2014
+            year_to: null
+            power_hp: 540
+            power_kw: 397
+          - slug: case-ih-steiger-580
+            name: "Steiger 580"
+            year_from: 2014
+            year_to: null
+            power_hp: 580
+            power_kw: 427
+          - slug: case-ih-steiger-620
+            name: "Steiger 620"
+            year_from: 2014
+            year_to: null
+            power_hp: 620
+            power_kw: 456
+          - slug: case-ih-steiger-715
+            name: "Steiger 715"
+            year_from: 2023
+            year_to: null
+            power_hp: 715
+            power_kw: 526
+
+  kombajny:
+    name: Kombajny
+
+    series:
+      # ========== Axial-Flow (1977+, single-rotor) ==========
+      - slug: axial-flow-16-21-series
+        name: "Axial-Flow 1600/1800/2100/2300 (1990–2003)"
+        year_from: 1990
+        year_to: 2003
+        description: >
+          Legendární jednorotorová konstrukce — Case IH vynalezl axiální mlátičku v roce 1977.
+          Řady 1660, 1666, 1680, 1688, 2166, 2188, 2366, 2388 měly přes 20 let ve výrobě
+          a dodnes se v CZ běžně prodávají na sekundárním trhu.
+        models:
+          - slug: case-ih-1660
+            name: "Axial-Flow 1660"
+            year_from: 1990
+            year_to: 1994
+            power_hp: 175
+            power_kw: 129
+            grain_tank_l: 6100
+          - slug: case-ih-1680
+            name: "Axial-Flow 1680"
+            year_from: 1990
+            year_to: 1994
+            power_hp: 230
+            power_kw: 169
+            grain_tank_l: 7900
+          - slug: case-ih-1688
+            name: "Axial-Flow 1688"
+            year_from: 1994
+            year_to: 1998
+            power_hp: 250
+            power_kw: 184
+            grain_tank_l: 7900
+          - slug: case-ih-2166
+            name: "Axial-Flow 2166"
+            year_from: 1996
+            year_to: 2000
+            power_hp: 220
+            power_kw: 162
+            grain_tank_l: 6800
+          - slug: case-ih-2188
+            name: "Axial-Flow 2188"
+            year_from: 1996
+            year_to: 2003
+            power_hp: 260
+            power_kw: 191
+            grain_tank_l: 8200
+          - slug: case-ih-2388
+            name: "Axial-Flow 2388"
+            year_from: 1998
+            year_to: 2003
+            power_hp: 280
+            power_kw: 206
+            grain_tank_l: 8700
+          - slug: case-ih-2588
+            name: "Axial-Flow 2588"
+            year_from: 2001
+            year_to: 2003
+            power_hp: 305
+            power_kw: 224
+            grain_tank_l: 9300
+
+      - slug: axial-flow-80-series
+        name: "Axial-Flow 80 Series (2003–2012)"
+        year_from: 2003
+        year_to: 2012
+        description: >
+          Pokračování Axial-Flow řady. Motor Iveco/FPT 8,3 a 10,3 L, vylepšené mláticí ústrojí.
+        models:
+          - slug: case-ih-7088
+            name: "Axial-Flow 7088"
+            year_from: 2009
+            year_to: 2012
+            power_hp: 305
+            power_kw: 224
+            grain_tank_l: 8400
+          - slug: case-ih-8088
+            name: "Axial-Flow 8088"
+            year_from: 2009
+            year_to: 2012
+            power_hp: 358
+            power_kw: 263
+            grain_tank_l: 10600
+          - slug: case-ih-9088
+            name: "Axial-Flow 9088"
+            year_from: 2009
+            year_to: 2012
+            power_hp: 460
+            power_kw: 338
+            grain_tank_l: 12300
+
+      - slug: axial-flow-130-140-series
+        name: "Axial-Flow 130/140 Series (2012–2020)"
+        year_from: 2012
+        year_to: 2020
+        description: >
+          Motory FPT Tier 4, AFS Harvest Command, variabilní rotor. 140 série pro náročný
+          provoz.
+        models:
+          - slug: case-ih-5130
+            name: "Axial-Flow 5130"
+            year_from: 2012
+            year_to: 2018
+            power_hp: 273
+            power_kw: 201
+            grain_tank_l: 8810
+          - slug: case-ih-6130
+            name: "Axial-Flow 6130"
+            year_from: 2012
+            year_to: 2018
+            power_hp: 320
+            power_kw: 235
+            grain_tank_l: 9510
+          - slug: case-ih-7130
+            name: "Axial-Flow 7130"
+            year_from: 2012
+            year_to: 2018
+            power_hp: 370
+            power_kw: 272
+            grain_tank_l: 10570
+          - slug: case-ih-7140
+            name: "Axial-Flow 7140"
+            year_from: 2015
+            year_to: 2020
+            power_hp: 380
+            power_kw: 279
+            grain_tank_l: 10570
+          - slug: case-ih-8240
+            name: "Axial-Flow 8240"
+            year_from: 2015
+            year_to: 2020
+            power_hp: 489
+            power_kw: 360
+            grain_tank_l: 12330
+          - slug: case-ih-9240
+            name: "Axial-Flow 9240"
+            year_from: 2015
+            year_to: 2020
+            power_hp: 625
+            power_kw: 460
+            grain_tank_l: 14441
+
+      - slug: axial-flow-150-250-series
+        name: "Axial-Flow 150/250 Series (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Nejmodernější generace. AFS Harvest Command Automation s AI, FPT Cursor 9/13 motory
+          Stage V, plně automatická rotace mláticího ústrojí podle plodiny. Vlajkový 9250 je
+          nejvýkonnější Case IH kombajn.
+        models:
+          - slug: case-ih-5150
+            name: "Axial-Flow 5150"
+            year_from: 2020
+            year_to: null
+            power_hp: 306
+            power_kw: 225
+            grain_tank_l: 9510
+          - slug: case-ih-6150
+            name: "Axial-Flow 6150"
+            year_from: 2020
+            year_to: null
+            power_hp: 360
+            power_kw: 265
+            grain_tank_l: 10570
+          - slug: case-ih-7150
+            name: "Axial-Flow 7150"
+            year_from: 2020
+            year_to: null
+            power_hp: 431
+            power_kw: 317
+            grain_tank_l: 11100
+          - slug: case-ih-8250
+            name: "Axial-Flow 8250"
+            year_from: 2020
+            year_to: null
+            power_hp: 498
+            power_kw: 367
+            grain_tank_l: 12330
+          - slug: case-ih-9250
+            name: "Axial-Flow 9250"
+            year_from: 2020
+            year_to: null
+            power_hp: 634
+            power_kw: 466
+            grain_tank_l: 14441

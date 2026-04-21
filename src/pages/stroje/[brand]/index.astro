@@ -137,7 +137,7 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.totalModels, 0);
               ? (tile.maxYear === null ? `${tile.minYear}–dosud` : `${tile.minYear}–${tile.maxYear}`)
               : '';
             return (
-              <a href={`/stroje/${brand.slug}/rada/${tile.family}/?cat=${cat.slug}`} class="family-tile">
+              <a href={`/stroje/${brand.slug}/rada/${cat.slug}/${tile.family}/`} class="family-tile">
                 <div class="family-tile-img" aria-hidden="true">
                   <div class="family-tile-placeholder">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

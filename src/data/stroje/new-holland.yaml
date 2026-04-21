@@ -1,0 +1,836 @@
+slug: new-holland
+name: New Holland
+country: Itálie / USA
+founded: 1895
+website: https://agriculture.newholland.com
+description: >
+  Italsko-americká značka pod koncernem CNH Industrial (s Case IH). Traktory vyráběné v Bazileji
+  a St. Valentin, kombajny z Zedelgem (Belgie). Charakteristická modrá barva a série Ford-based
+  z 90. let. Dnes pokrývají T4 (40 k) až T9 (700+ k), kombajny CR dominují ve třídě rotorových mlátiček.
+
+categories:
+  traktory:
+    name: Traktory
+
+    series:
+      # ========== 40/60 Series (Ford-based, 1991-1999) ==========
+      - slug: 40-series
+        name: "40 Series (1991–1996)"
+        year_from: 1991
+        year_to: 1996
+        description: >
+          První generace po fúzi Ford Tractors + New Holland (1991). Motor Ford/Genesis 7,5 L,
+          pohon 4WD, mechanická převodovka 16/9.
+        models:
+          - slug: new-holland-8240
+            name: "8240"
+            year_from: 1991
+            year_to: 1996
+            power_hp: 95
+            power_kw: 70
+          - slug: new-holland-8340
+            name: "8340"
+            year_from: 1991
+            year_to: 1996
+            power_hp: 110
+            power_kw: 81
+          - slug: new-holland-8360
+            name: "8360"
+            year_from: 1994
+            year_to: 1996
+            power_hp: 125
+            power_kw: 92
+
+      - slug: 60-series
+        name: "60 Series (1993–1999)"
+        year_from: 1993
+        year_to: 1999
+        description: >
+          Nástupce 40 Series s vylepšenou hydraulikou a převodovkou ElectroShift. Motor Genesis
+          s intercoolerem.
+        models:
+          - slug: new-holland-8160
+            name: "8160"
+            year_from: 1994
+            year_to: 1999
+            power_hp: 100
+            power_kw: 74
+          - slug: new-holland-8260
+            name: "8260"
+            year_from: 1994
+            year_to: 1999
+            power_hp: 115
+            power_kw: 85
+          - slug: new-holland-8360-60s
+            name: "8360 (60-series)"
+            year_from: 1994
+            year_to: 1999
+            power_hp: 125
+            power_kw: 92
+          - slug: new-holland-8560
+            name: "8560"
+            year_from: 1994
+            year_to: 1999
+            power_hp: 145
+            power_kw: 107
+
+      # ========== TS Series (1997-2007) ==========
+      - slug: ts
+        name: "TS Series (1997–2004)"
+        year_from: 1997
+        year_to: 2004
+        description: >
+          Kompaktnější utility třída. Motor Ford Genesis 4-válec 4,5 L, převodovka Synchro Shuttle
+          nebo Electro Command 16/16.
+        models:
+          - slug: new-holland-ts90
+            name: "TS90"
+            year_from: 1997
+            year_to: 2004
+            power_hp: 90
+            power_kw: 66
+          - slug: new-holland-ts100
+            name: "TS100"
+            year_from: 1997
+            year_to: 2004
+            power_hp: 100
+            power_kw: 74
+          - slug: new-holland-ts110
+            name: "TS110"
+            year_from: 1997
+            year_to: 2004
+            power_hp: 110
+            power_kw: 81
+          - slug: new-holland-ts115
+            name: "TS115"
+            year_from: 1999
+            year_to: 2004
+            power_hp: 115
+            power_kw: 85
+
+      - slug: ts-a
+        name: "TS-A / TS-Plus (2004–2007)"
+        year_from: 2004
+        year_to: 2007
+        description: >
+          Vylepšená TS-A s novou kabinou, motor 4,5 L s common-rail, emise Tier 2.
+        models:
+          - slug: new-holland-ts100a
+            name: "TS100A"
+            year_from: 2004
+            year_to: 2007
+            power_hp: 105
+            power_kw: 77
+          - slug: new-holland-ts110a
+            name: "TS110A"
+            year_from: 2004
+            year_to: 2007
+            power_hp: 115
+            power_kw: 85
+          - slug: new-holland-ts115a
+            name: "TS115A"
+            year_from: 2004
+            year_to: 2007
+            power_hp: 125
+            power_kw: 92
+          - slug: new-holland-ts125a
+            name: "TS125A"
+            year_from: 2004
+            year_to: 2007
+            power_hp: 135
+            power_kw: 99
+          - slug: new-holland-ts135a
+            name: "TS135A"
+            year_from: 2004
+            year_to: 2007
+            power_hp: 145
+            power_kw: 107
+
+      # ========== TM Series (1997-2007) ==========
+      - slug: tm
+        name: "TM Series (1997–2007)"
+        year_from: 1997
+        year_to: 2007
+        description: >
+          Větší row-crop řada. Motor Ford Genesis 6-válec 7,5 L, převodovka Range Command
+          nebo Power Command 18/6.
+        models:
+          - slug: new-holland-tm115
+            name: "TM115"
+            year_from: 1997
+            year_to: 2002
+            power_hp: 115
+            power_kw: 85
+          - slug: new-holland-tm125
+            name: "TM125"
+            year_from: 1997
+            year_to: 2002
+            power_hp: 125
+            power_kw: 92
+          - slug: new-holland-tm135
+            name: "TM135"
+            year_from: 1997
+            year_to: 2002
+            power_hp: 135
+            power_kw: 99
+          - slug: new-holland-tm150
+            name: "TM150"
+            year_from: 1997
+            year_to: 2002
+            power_hp: 150
+            power_kw: 110
+          - slug: new-holland-tm165
+            name: "TM165"
+            year_from: 1997
+            year_to: 2002
+            power_hp: 165
+            power_kw: 121
+          - slug: new-holland-tm175
+            name: "TM175"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 175
+            power_kw: 129
+          - slug: new-holland-tm190
+            name: "TM190"
+            year_from: 2002
+            year_to: 2007
+            power_hp: 190
+            power_kw: 140
+
+      # ========== TL Series (utility, 2002+) ==========
+      - slug: tl
+        name: "TL Series (2002–2013)"
+        year_from: 2002
+        year_to: 2013
+        description: >
+          Cenově dostupná utility řada. Motor 4-válec 4,5 L, převodovka Synchro Shuttle 12/12.
+        models:
+          - slug: new-holland-tl70
+            name: "TL70"
+            year_from: 2002
+            year_to: 2010
+            power_hp: 70
+            power_kw: 52
+          - slug: new-holland-tl80
+            name: "TL80"
+            year_from: 2002
+            year_to: 2010
+            power_hp: 80
+            power_kw: 59
+          - slug: new-holland-tl90
+            name: "TL90"
+            year_from: 2002
+            year_to: 2010
+            power_hp: 90
+            power_kw: 66
+          - slug: new-holland-tl100
+            name: "TL100"
+            year_from: 2002
+            year_to: 2010
+            power_hp: 100
+            power_kw: 74
+
+      # ========== TG Series (heavy utility, 2003-2007) ==========
+      - slug: tg
+        name: "TG Series (2003–2007)"
+        year_from: 2003
+        year_to: 2007
+        description: >
+          Top řada před příchodem T8. Motor Iveco Cursor 9 6-válec 8,7 L, převodovka Ultra Command.
+        models:
+          - slug: new-holland-tg210
+            name: "TG210"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 210
+            power_kw: 155
+          - slug: new-holland-tg230
+            name: "TG230"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 230
+            power_kw: 169
+          - slug: new-holland-tg255
+            name: "TG255"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 255
+            power_kw: 187
+          - slug: new-holland-tg285
+            name: "TG285"
+            year_from: 2003
+            year_to: 2007
+            power_hp: 285
+            power_kw: 210
+
+      # ========== T4 Series (2010+) ==========
+      - slug: t4
+        name: "T4 Series (2011–dosud)"
+        year_from: 2011
+        year_to: null
+        description: >
+          Utility řada pro menší farmy, sady a vinice. Motor Iveco F5C 3,4 L, převodovka Dual
+          Command / Electro Command, emise Tier 4B / Stage V.
+        models:
+          - slug: new-holland-t4-55
+            name: "T4.55"
+            year_from: 2011
+            year_to: null
+            power_hp: 58
+            power_kw: 43
+          - slug: new-holland-t4-65
+            name: "T4.65"
+            year_from: 2011
+            year_to: null
+            power_hp: 68
+            power_kw: 50
+          - slug: new-holland-t4-75
+            name: "T4.75"
+            year_from: 2011
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: new-holland-t4-85
+            name: "T4.85"
+            year_from: 2011
+            year_to: null
+            power_hp: 86
+            power_kw: 63
+          - slug: new-holland-t4-95
+            name: "T4.95"
+            year_from: 2011
+            year_to: null
+            power_hp: 99
+            power_kw: 73
+          - slug: new-holland-t4-105
+            name: "T4.105"
+            year_from: 2013
+            year_to: null
+            power_hp: 107
+            power_kw: 79
+          - slug: new-holland-t4-115
+            name: "T4.115"
+            year_from: 2015
+            year_to: null
+            power_hp: 117
+            power_kw: 86
+
+      # ========== T5 Series (2011+) ==========
+      - slug: t5
+        name: "T5 Series (2011–dosud)"
+        year_from: 2011
+        year_to: null
+        description: >
+          Univerzální řada pro živočišnou i rostlinnou výrobu. Motor FPT NEF 4,5 L, převodovka
+          Dual/Electro Command 24/24. V roce 2024 uvedena třetí generace T5 DynamicCommand
+          s výkonem až 140 k.
+        models:
+          - slug: new-holland-t5-80
+            name: "T5.80"
+            year_from: 2011
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+          - slug: new-holland-t5-100
+            name: "T5.100"
+            year_from: 2011
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+          - slug: new-holland-t5-110
+            name: "T5.110"
+            year_from: 2011
+            year_to: null
+            power_hp: 117
+            power_kw: 86
+          - slug: new-holland-t5-115
+            name: "T5.115"
+            year_from: 2013
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+          - slug: new-holland-t5-120
+            name: "T5.120"
+            year_from: 2015
+            year_to: null
+            power_hp: 125
+            power_kw: 92
+          - slug: new-holland-t5-130
+            name: "T5.130"
+            year_from: 2020
+            year_to: null
+            power_hp: 135
+            power_kw: 99
+          - slug: new-holland-t5-140
+            name: "T5.140"
+            year_from: 2020
+            year_to: null
+            power_hp: 145
+            power_kw: 107
+
+      # ========== T6 Series (2008+) ==========
+      - slug: t6
+        name: "T6 Series (2008–dosud)"
+        year_from: 2008
+        year_to: null
+        description: >
+          Nejprodávanější řada. Motor FPT NEF 6,7 L, převodovka Electro Command (16/16) nebo
+          Auto Command CVT (plynulá). Metan varianta T6 Methane Power od 2020 — první sériový
+          traktor na biometan.
+        models:
+          - slug: new-holland-t6-120
+            name: "T6.120"
+            year_from: 2013
+            year_to: null
+            power_hp: 125
+            power_kw: 92
+          - slug: new-holland-t6-140
+            name: "T6.140"
+            year_from: 2013
+            year_to: null
+            power_hp: 140
+            power_kw: 103
+          - slug: new-holland-t6-150
+            name: "T6.150"
+            year_from: 2013
+            year_to: null
+            power_hp: 150
+            power_kw: 110
+          - slug: new-holland-t6-160
+            name: "T6.160"
+            year_from: 2013
+            year_to: null
+            power_hp: 160
+            power_kw: 118
+          - slug: new-holland-t6-165
+            name: "T6.165"
+            year_from: 2015
+            year_to: null
+            power_hp: 165
+            power_kw: 121
+          - slug: new-holland-t6-175
+            name: "T6.175"
+            year_from: 2015
+            year_to: null
+            power_hp: 175
+            power_kw: 129
+          - slug: new-holland-t6-180
+            name: "T6.180"
+            year_from: 2018
+            year_to: null
+            power_hp: 180
+            power_kw: 132
+          - slug: new-holland-t6-methane-power
+            name: "T6 Methane Power"
+            year_from: 2020
+            year_to: null
+            power_hp: 180
+            power_kw: 132
+
+      # ========== T7 Series (2007+) ==========
+      - slug: t7
+        name: "T7 Series (2007–dosud)"
+        year_from: 2007
+        year_to: null
+        description: >
+          Prémiová row-crop řada nahrazující TM. Motor FPT NEF 6,7 L (T7.170–T7.245) nebo
+          FPT Cursor 9 (T7.260+). Převodovka Range Command 18/6 nebo Auto Command CVT.
+          Třída SideWinder II s joystickem a AutoCommand.
+        models:
+          - slug: new-holland-t7-175
+            name: "T7.175"
+            year_from: 2007
+            year_to: 2012
+            power_hp: 175
+            power_kw: 129
+          - slug: new-holland-t7-185
+            name: "T7.185"
+            year_from: 2013
+            year_to: null
+            power_hp: 185
+            power_kw: 136
+          - slug: new-holland-t7-190
+            name: "T7.190"
+            year_from: 2007
+            year_to: null
+            power_hp: 190
+            power_kw: 140
+          - slug: new-holland-t7-200
+            name: "T7.200"
+            year_from: 2012
+            year_to: null
+            power_hp: 200
+            power_kw: 147
+          - slug: new-holland-t7-210
+            name: "T7.210"
+            year_from: 2007
+            year_to: null
+            power_hp: 210
+            power_kw: 155
+          - slug: new-holland-t7-220
+            name: "T7.220"
+            year_from: 2012
+            year_to: null
+            power_hp: 220
+            power_kw: 162
+          - slug: new-holland-t7-230
+            name: "T7.230"
+            year_from: 2012
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+          - slug: new-holland-t7-240
+            name: "T7.240"
+            year_from: 2015
+            year_to: null
+            power_hp: 240
+            power_kw: 177
+          - slug: new-holland-t7-245
+            name: "T7.245"
+            year_from: 2012
+            year_to: null
+            power_hp: 245
+            power_kw: 180
+          - slug: new-holland-t7-260
+            name: "T7.260"
+            year_from: 2012
+            year_to: null
+            power_hp: 260
+            power_kw: 191
+          - slug: new-holland-t7-270
+            name: "T7.270"
+            year_from: 2012
+            year_to: null
+            power_hp: 270
+            power_kw: 199
+          - slug: new-holland-t7-290
+            name: "T7.290"
+            year_from: 2015
+            year_to: null
+            power_hp: 290
+            power_kw: 213
+          - slug: new-holland-t7-315
+            name: "T7.315"
+            year_from: 2017
+            year_to: null
+            power_hp: 315
+            power_kw: 232
+
+      # ========== T8 Series (2010+) ==========
+      - slug: t8
+        name: "T8 Series (2010–dosud)"
+        year_from: 2010
+        year_to: null
+        description: >
+          Vlajková row-crop řada. Motor FPT Cursor 9 8,7 L, převodovka Ultra Command 18/4 nebo
+          Auto Command CVT. IntelliSense, SmartTrax (pásy T8 SmartTrax).
+        models:
+          - slug: new-holland-t8-275
+            name: "T8.275"
+            year_from: 2010
+            year_to: null
+            power_hp: 275
+            power_kw: 202
+          - slug: new-holland-t8-300
+            name: "T8.300"
+            year_from: 2010
+            year_to: null
+            power_hp: 300
+            power_kw: 221
+          - slug: new-holland-t8-320
+            name: "T8.320"
+            year_from: 2010
+            year_to: null
+            power_hp: 320
+            power_kw: 235
+          - slug: new-holland-t8-330
+            name: "T8.330"
+            year_from: 2010
+            year_to: null
+            power_hp: 330
+            power_kw: 243
+          - slug: new-holland-t8-350
+            name: "T8.350"
+            year_from: 2010
+            year_to: null
+            power_hp: 350
+            power_kw: 257
+          - slug: new-holland-t8-360
+            name: "T8.360"
+            year_from: 2013
+            year_to: null
+            power_hp: 360
+            power_kw: 265
+          - slug: new-holland-t8-390
+            name: "T8.390"
+            year_from: 2013
+            year_to: null
+            power_hp: 390
+            power_kw: 287
+          - slug: new-holland-t8-410
+            name: "T8.410"
+            year_from: 2015
+            year_to: null
+            power_hp: 410
+            power_kw: 302
+          - slug: new-holland-t8-435
+            name: "T8.435"
+            year_from: 2017
+            year_to: null
+            power_hp: 435
+            power_kw: 320
+
+      # ========== T9 Series (kloubové, 2010+) ==========
+      - slug: t9
+        name: "T9 Series (2010–dosud)"
+        year_from: 2010
+        year_to: null
+        description: >
+          Kloubové 4WD traktory pro velkofarmy a USA trh. Motor FPT Cursor 13 (12,9 L) nebo
+          Cursor 16 (16 L), převodovka 16/4 PowerShift. Pásové varianty SmartTrax.
+        models:
+          - slug: new-holland-t9-390
+            name: "T9.390"
+            year_from: 2010
+            year_to: 2014
+            power_hp: 390
+            power_kw: 287
+          - slug: new-holland-t9-435
+            name: "T9.435"
+            year_from: 2010
+            year_to: null
+            power_hp: 435
+            power_kw: 320
+          - slug: new-holland-t9-450
+            name: "T9.450"
+            year_from: 2010
+            year_to: 2014
+            power_hp: 450
+            power_kw: 331
+          - slug: new-holland-t9-480
+            name: "T9.480"
+            year_from: 2014
+            year_to: null
+            power_hp: 480
+            power_kw: 353
+          - slug: new-holland-t9-505
+            name: "T9.505"
+            year_from: 2010
+            year_to: 2014
+            power_hp: 505
+            power_kw: 371
+          - slug: new-holland-t9-530
+            name: "T9.530"
+            year_from: 2014
+            year_to: null
+            power_hp: 530
+            power_kw: 390
+          - slug: new-holland-t9-560
+            name: "T9.560"
+            year_from: 2010
+            year_to: 2014
+            power_hp: 560
+            power_kw: 412
+          - slug: new-holland-t9-600
+            name: "T9.600"
+            year_from: 2014
+            year_to: null
+            power_hp: 600
+            power_kw: 441
+          - slug: new-holland-t9-645
+            name: "T9.645"
+            year_from: 2016
+            year_to: null
+            power_hp: 645
+            power_kw: 474
+          - slug: new-holland-t9-700
+            name: "T9.700"
+            year_from: 2019
+            year_to: null
+            power_hp: 700
+            power_kw: 515
+
+  kombajny:
+    name: Kombajny
+
+    series:
+      # ========== TX Series (1990s-2000s) ==========
+      - slug: tx
+        name: "TX Series (1989–2002)"
+        year_from: 1989
+        year_to: 2002
+        description: >
+          Konvenční kombajny se slaměníky. Motor NH/FPT 6-válec 7,5 L, 5 slaměníků, rotační
+          doséparátor.
+        models:
+          - slug: new-holland-tx62
+            name: "TX62"
+            year_from: 1989
+            year_to: 1994
+            power_hp: 190
+            power_kw: 140
+            grain_tank_l: 6500
+          - slug: new-holland-tx63
+            name: "TX63"
+            year_from: 1989
+            year_to: 1994
+            power_hp: 225
+            power_kw: 165
+            grain_tank_l: 8000
+          - slug: new-holland-tx65plus
+            name: "TX65 Plus"
+            year_from: 1999
+            year_to: 2002
+            power_hp: 250
+            power_kw: 184
+            grain_tank_l: 8500
+          - slug: new-holland-tx68plus
+            name: "TX68 Plus"
+            year_from: 1999
+            year_to: 2002
+            power_hp: 285
+            power_kw: 210
+            grain_tank_l: 9500
+
+      # ========== CX Series (konvenční, 2002+) ==========
+      - slug: cx
+        name: "CX Series (2002–dosud)"
+        year_from: 2002
+        year_to: null
+        description: >
+          Konvenční vlajková řada (buben + 5 slaměníků). V Zedelgem od roku 2002, několikrát
+          modernizovaná. CX7 / CX8 / CX8.91 — největší v kategorii konvenčních.
+        models:
+          - slug: new-holland-cx5-80
+            name: "CX5.80"
+            year_from: 2014
+            year_to: null
+            power_hp: 272
+            power_kw: 200
+            grain_tank_l: 8000
+          - slug: new-holland-cx5-90
+            name: "CX5.90"
+            year_from: 2014
+            year_to: null
+            power_hp: 300
+            power_kw: 221
+            grain_tank_l: 9000
+          - slug: new-holland-cx6-80
+            name: "CX6.80"
+            year_from: 2014
+            year_to: null
+            power_hp: 300
+            power_kw: 221
+            grain_tank_l: 9000
+          - slug: new-holland-cx6-90
+            name: "CX6.90"
+            year_from: 2014
+            year_to: null
+            power_hp: 360
+            power_kw: 265
+            grain_tank_l: 10500
+          - slug: new-holland-cx7-80
+            name: "CX7.80"
+            year_from: 2016
+            year_to: null
+            power_hp: 374
+            power_kw: 275
+            grain_tank_l: 11000
+          - slug: new-holland-cx7-90
+            name: "CX7.90"
+            year_from: 2016
+            year_to: null
+            power_hp: 408
+            power_kw: 300
+            grain_tank_l: 11500
+          - slug: new-holland-cx8-70
+            name: "CX8.70"
+            year_from: 2016
+            year_to: null
+            power_hp: 421
+            power_kw: 310
+            grain_tank_l: 12000
+          - slug: new-holland-cx8-80
+            name: "CX8.80"
+            year_from: 2016
+            year_to: null
+            power_hp: 442
+            power_kw: 325
+            grain_tank_l: 12500
+          - slug: new-holland-cx8-90
+            name: "CX8.90"
+            year_from: 2016
+            year_to: null
+            power_hp: 490
+            power_kw: 360
+            grain_tank_l: 12500
+
+      # ========== CR Series (rotorové, 2002+) ==========
+      - slug: cr
+        name: "CR Series (2002–dosud)"
+        year_from: 2002
+        year_to: null
+        description: >
+          Dvourotorová vlajková řada. Revoluční konstrukce Twin Rotor — dva podélné rotory
+          s variabilním vyvážením. CR11 (uvedena 2023) drží světový rekord v denní produktivitě.
+        models:
+          - slug: new-holland-cr7-80
+            name: "CR7.80"
+            year_from: 2014
+            year_to: null
+            power_hp: 374
+            power_kw: 275
+            grain_tank_l: 10500
+          - slug: new-holland-cr7-90
+            name: "CR7.90"
+            year_from: 2014
+            year_to: null
+            power_hp: 449
+            power_kw: 330
+            grain_tank_l: 11500
+          - slug: new-holland-cr8-80
+            name: "CR8.80"
+            year_from: 2014
+            year_to: null
+            power_hp: 476
+            power_kw: 350
+            grain_tank_l: 12500
+          - slug: new-holland-cr8-90
+            name: "CR8.90"
+            year_from: 2014
+            year_to: null
+            power_hp: 523
+            power_kw: 385
+            grain_tank_l: 14500
+          - slug: new-holland-cr9-80
+            name: "CR9.80"
+            year_from: 2014
+            year_to: null
+            power_hp: 530
+            power_kw: 390
+            grain_tank_l: 12500
+          - slug: new-holland-cr9-90
+            name: "CR9.90"
+            year_from: 2014
+            year_to: null
+            power_hp: 571
+            power_kw: 420
+            grain_tank_l: 14500
+          - slug: new-holland-cr10-90
+            name: "CR10.90"
+            year_from: 2014
+            year_to: null
+            power_hp: 652
+            power_kw: 480
+            grain_tank_l: 14500
+          - slug: new-holland-cr11
+            name: "CR11"
+            year_from: 2023
+            year_to: null
+            power_hp: 775
+            power_kw: 570
+            grain_tank_l: 20000
+            description: >
+              Vlajkový model CR11 nahrazuje CR10.90. Motor Cursor 16 s 16 L zdvihem, IntelliSense
+              AI optimalizace, až 20 000 l bunkr. Drží světový rekord v sklizni kukuřice.
