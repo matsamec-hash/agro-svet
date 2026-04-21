@@ -1,0 +1,149 @@
+---
+export const prerender = false;
+import Layout from '../../../../layouts/Layout.astro';
+import ArticleCard from '../../../../components/ArticleCard.astro';
+import { createAnonClient } from '../../../../lib/supabase';
+
+const { kat } = Astro.params;
+if (!kat) return Astro.redirect('/novinky/');
+
+const categoryLabels: Record<string, string> = {
+  technika: 'Technika',
+  dotace: 'Dotace',
+  trh: 'Trh',
+  legislativa: 'Legislativa',
+  znacky: 'Značky',
+  novinky: 'Novinky',
+};
+const categoryDescriptions: Record<string, string> = {
+  technika: 'Novinky ze zemědělské techniky — traktory, kombajny, postřikovače, secí stroje a další stroje.',
+  dotace: 'Dotační programy, podpora zemědělství, Společná zemědělská politika EU, národní dotace.',
+  trh: 'Vývoj cen zemědělských komodit, trh s mlékem, masem, obilím, trendy a analýzy.',
+  legislativa: 'Novely zákonů, nařízení a vyhlášky pro zemědělce, pachty, udržitelnost.',
+  znacky: 'Zprávy od výrobců zemědělské techniky, tiskové zprávy, nové modely.',
+  novinky: 'Obecné zemědělské novinky.',
+};
+const label = categoryLabels[kat] ?? kat;
+const description = categoryDescriptions[kat] ?? `Články v kategorii ${label}.`;
+
+const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
+const supabase = createAnonClient();
+
+const { data: articles } = await supabase
+  .from('articles')
+  .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+  .eq('site_id', SITE_ID)
+  .eq('status', 'published')
+  .eq('category', kat)
+  .order('published_at', { ascending: false });
+
+const items = articles ?? [];
+
+// Top tags within this category
+const tagCounts = new Map<string, number>();
+for (const a of items) {
+  for (const t of (a.tags as string[]) ?? []) {
+    tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+  }
+}
+const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16);
+---
+
+<Layout title={`${label} — agro-svět.cz`} description={description}>
+  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+    <div style="margin-bottom:8px; font-size:13px; color:#666;">
+      <a href="/novinky/" style="color:#666; text-decoration:none;">Novinky</a>
+      <span style="margin:0 6px;">/</span>
+      <span style="color:#1a1a1a;">{label}</span>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <span class="section-label">Kategorie</span>
+      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-top:10px; margin-bottom:10px;">
+        {label}
+      </h1>
+      <p style="font-size:15px; color:#666; line-height:1.65; max-width:720px;">
+        {description}
+      </p>
+      <p style="font-size:13px; color:#888; margin-top:8px;">
+        {items.length === 0
+          ? 'Zatím žádné články v této kategorii.'
+          : `${items.length} ${items.length === 1 ? 'článek' : items.length < 5 ? 'články' : 'článků'}.`}
+      </p>
+    </div>
+
+    {topTags.length > 0 && (
+      <details style="margin-bottom:24px;" open={false}>
+        <summary class="kat-topics-summary">
+          <span>🏷 Témata v této kategorii</span>
+          <span class="kat-topics-count">{topTags.length}</span>
+        </summary>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;">
+          {topTags.map(([t, count]) => (
+            <a href={`/novinky/tema/${encodeURIComponent(t)}/`} class="nov-tag">
+              #{t} <span class="nov-tag-count">{count}</span>
+            </a>
+          ))}
+        </div>
+      </details>
+    )}
+
+    {items.length > 0 ? (
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
+        {items.map((a: any) => (
+          <ArticleCard
+            title={a.title}
+            description={a.perex}
+            slug={a.slug}
+            publishDate={new Date(a.published_at)}
+            category={a.category}
+            heroImage={a.featured_image_url}
+          />
+        ))}
+      </div>
+    ) : (
+      <p style="padding:48px 0; text-align:center; color:#888;">
+        <a href="/novinky/" style="color:#1a1a1a;">← Zpět na novinky</a>
+      </p>
+    )}
+  </div>
+
+  <style>
+    .kat-topics-summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 12px;
+      color: #555;
+      list-style: none;
+    }
+    .kat-topics-summary::-webkit-details-marker { display: none; }
+    .kat-topics-summary:hover { background: #fff0a8; border-color: #FFFF00; }
+    .kat-topics-count {
+      background: rgba(0,0,0,.06);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+    .nov-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+    }
+    .nov-tag:hover { background: #fff0a8; border-color: #FFFF00; color: #1a1a1a; }
+    .nov-tag-count { font-size: 10px; color: #aaa; }
+  </style>
+</Layout>

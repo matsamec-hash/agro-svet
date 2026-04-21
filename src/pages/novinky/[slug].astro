@@ -71,7 +71,7 @@ const categoryLabels: Record<string, string> = {
         <span style="font-size:12px; color:#aaa; margin-right:8px;">Tagy:</span>
         {article.tags.map((tag: string) => (
           <a
-            href={`/novinky/?tag=${encodeURIComponent(tag)}`}
+            href={`/novinky/tema/${encodeURIComponent(tag)}/`}
             class="article-tag"
             title={`Další články s tagem „${tag}"`}
           >

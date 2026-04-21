@@ -59,7 +59,7 @@ const bazarCatLabels = Object.fromEntries(BAZAR_CATEGORIES.map((c) => [c.value, 
           </a>
           <div class="hero-tags">
             <a href="/novinky/" class="hero-tag">Novinky</a>
-            {featured.category && <a href={`/novinky/?kategorie=${featured.category}`} class="hero-tag">{featured.category}</a>}
+            {featured.category && <a href={`/novinky/kategorie/${featured.category}/`} class="hero-tag">{featured.category}</a>}
           </div>
         </div>
       )}
@@ -77,7 +77,7 @@ const bazarCatLabels = Object.fromEntries(BAZAR_CATEGORIES.map((c) => [c.value, 
               <h3>{article.title}</h3>
             </div>
           </a>
-          <a href={article.category ? `/novinky/?kategorie=${article.category}` : '/novinky/'} class="hero-tag">
+          <a href={article.category ? `/novinky/kategorie/${article.category}/` : '/novinky/'} class="hero-tag">
             {article.category ?? 'Novinky'}
           </a>
         </div>
