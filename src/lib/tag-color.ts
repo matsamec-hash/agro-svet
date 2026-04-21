@@ -11,7 +11,7 @@ const CATEGORY_COLORS: Record<string, ColorPair> = {
   dotace: { bg: '#FFF9C4', fg: '#5D4E00', border: '#FDD835' },
   trh: { bg: '#E8F5E9', fg: '#1B5E20', border: '#81C784' },
   legislativa: { bg: '#F3E5F5', fg: '#4A148C', border: '#BA68C8' },
-  znacky: { bg: '#FFEBEE', fg: '#B71C1C', border: '#EF9A9A' },
+  znacky: { bg: '#FFE8D1', fg: '#9A3E00', border: '#FFB074' },
   novinky: { bg: '#ECEFF1', fg: '#37474F', border: '#B0BEC5' },
 };
 
