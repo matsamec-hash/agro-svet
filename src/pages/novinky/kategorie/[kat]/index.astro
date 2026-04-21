@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import { createAnonClient } from '../../../../lib/supabase';
+import { tagStyle, categoryStyle, getCategoryColor } from '../../../../lib/tag-color';
 
 const { kat } = Astro.params;
 if (!kat) return Astro.redirect('/novinky/');
@@ -58,9 +59,9 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
     </div>
 
     <div style="margin-bottom:24px;">
-      <span class="section-label">Kategorie</span>
+      <span class="section-label" style={categoryStyle(kat!)}>Kategorie</span>
       <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-top:10px; margin-bottom:10px;">
-        {label}
+        <span style={`color:${getCategoryColor(kat).fg};`}>{label}</span>
       </h1>
       <p style="font-size:15px; color:#666; line-height:1.65; max-width:720px;">
         {description}
@@ -80,7 +81,7 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
         </summary>
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;">
           {topTags.map(([t, count]) => (
-            <a href={`/novinky/tema/${encodeURIComponent(t)}/`} class="nov-tag">
+            <a href={`/novinky/tema/${encodeURIComponent(t)}/`} class="nov-tag" style={tagStyle(t)}>
               #{t} <span class="nov-tag-count">{count}</span>
             </a>
           ))}

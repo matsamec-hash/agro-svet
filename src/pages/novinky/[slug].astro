@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { createAnonClient } from '../../lib/supabase';
+import { tagStyle } from '../../lib/tag-color';
 
 const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const { slug } = Astro.params;
@@ -73,6 +74,7 @@ const categoryLabels: Record<string, string> = {
           <a
             href={`/novinky/tema/${encodeURIComponent(tag)}/`}
             class="article-tag"
+            style={tagStyle(tag)}
             title={`Další články s tagem „${tag}"`}
           >
             #{tag}
@@ -104,21 +106,15 @@ const categoryLabels: Record<string, string> = {
   .prose :global(blockquote) { border-left:4px solid #FFFF00; padding:8px 20px; margin:1.5em 0; background:#fafafa; }
   .article-tag {
     display: inline-block;
-    background: #f5f5f5;
-    color: #555;
     font-size: 12px;
     padding: 4px 12px;
     border-radius: 20px;
     margin: 2px 4px;
     text-decoration: none;
     border: 1px solid transparent;
-    transition: background .15s, color .15s, border-color .15s;
+    transition: filter .15s, transform .1s;
   }
-  .article-tag:hover {
-    background: #FFFF00;
-    color: #000;
-    border-color: #1a1a1a;
-  }
+  .article-tag:hover { filter: brightness(.94); transform: translateY(-1px); }
   .prose :global(code) { background:#f0f0f0; padding:2px 6px; border-radius:4px; font-size:.9em; font-family:'Chakra Petch',sans-serif; }
   .prose :global(img) { max-width:100%; height:auto; border-radius:12px; margin:1.5em 0; }
 </style>

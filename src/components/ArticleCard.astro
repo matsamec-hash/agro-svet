@@ -1,4 +1,6 @@
 ---
+import { categoryStyle } from '../lib/tag-color';
+
 interface Props {
   title: string;
   description: string;
@@ -39,6 +41,7 @@ const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', y
   <a
     href={`/novinky/kategorie/${category}/`}
     class="tag"
+    style={categoryStyle(category)}
     title={`Všechny články v kategorii ${categoryLabels[category] ?? category}`}
   >
     {categoryLabels[category] ?? category}
@@ -80,22 +83,21 @@ const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', y
     top: 168px; /* card-img is 200px — puts tag at bottom-left of image */
     left: 12px;
     z-index: 2;
-    background: #FFFF00;
-    color: #000;
     font-size: 11px;
     font-weight: 400;
     font-family: 'Chakra Petch', sans-serif;
     padding: 4px 10px;
     border-radius: 6px;
+    border: 1px solid transparent;
     text-transform: uppercase;
     letter-spacing: .4px;
     text-decoration: none;
-    transition: background .15s, transform .15s;
+    transition: filter .15s, transform .1s;
     cursor: pointer;
   }
   .tag:hover {
-    background: #1a1a1a;
-    color: #FFFF00;
+    filter: brightness(.92);
+    transform: translateY(-1px);
   }
 
   .card-body { padding: 18px 18px 20px; }

@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import { createAnonClient } from '../../../../lib/supabase';
+import { tagStyle, categoryStyle, getTagColor } from '../../../../lib/tag-color';
 
 const { tag } = Astro.params;
 if (!tag) return Astro.redirect('/novinky/');
@@ -63,9 +64,9 @@ const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.len
     </div>
 
     <div style="margin-bottom:24px;">
-      <span class="section-label">Téma</span>
+      <span class="section-label" style={tagStyle(tag!)}>Téma</span>
       <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-top:10px; margin-bottom:10px;">
-        #{tag}
+        <span style={`color:${getTagColor(tag!).fg};`}>#{tag}</span>
       </h1>
       <p style="font-size:15px; color:#666; line-height:1.6;">
         {items.length === 0
@@ -78,7 +79,7 @@ const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.len
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;">
         <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#888; padding:8px 0;">V kategoriích:</span>
         {catFacets.map((c) => (
-          <a href={`/novinky/kategorie/${c.slug}/`} class="pill">
+          <a href={`/novinky/kategorie/${c.slug}/`} class="pill" style={categoryStyle(c.slug)}>
             {c.label} <span class="pill-count">{c.count}</span>
           </a>
         ))}
@@ -111,7 +112,7 @@ const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.len
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap;">
           {relatedTags.map(([t, count]) => (
-            <a href={`/novinky/tema/${encodeURIComponent(t)}/`} class="nov-tag">
+            <a href={`/novinky/tema/${encodeURIComponent(t)}/`} class="nov-tag" style={tagStyle(t)}>
               #{t} <span class="nov-tag-count">{count}</span>
             </a>
           ))}

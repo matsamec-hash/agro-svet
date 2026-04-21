@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { createAnonClient } from '../../lib/supabase';
+import { categoryStyle, tagStyle } from '../../lib/tag-color';
 
 const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const supabase = createAnonClient();
@@ -127,7 +128,11 @@ const totalAll = allForMeta?.length ?? 0;
             </div>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
               {topTags.map(([t, count]) => (
-                <a href={`/novinky/tema/${encodeURIComponent(t)}/`} class:list={["nov-tag", { active: t === tag }]}>
+                <a
+                  href={`/novinky/tema/${encodeURIComponent(t)}/`}
+                  class:list={["nov-tag", { active: t === tag }]}
+                  style={t !== tag ? tagStyle(t) : ''}
+                >
                   #{t} <span class="nov-tag-count">{count}</span>
                 </a>
               ))}
@@ -143,7 +148,11 @@ const totalAll = allForMeta?.length ?? 0;
         Vše <span class="pill-count">{totalAll}</span>
       </a>
       {catPills.map((c) => (
-        <a href={`/novinky/kategorie/${c.slug}/`} class:list={["pill", { active: c.slug === category }]}>
+        <a
+          href={`/novinky/kategorie/${c.slug}/`}
+          class:list={["pill", { active: c.slug === category }]}
+          style={c.slug !== category ? categoryStyle(c.slug) : ''}
+        >
           {c.label} <span class="pill-count">{c.count}</span>
         </a>
       ))}
