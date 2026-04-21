@@ -87,13 +87,13 @@ const totalAll = allForMeta?.length ?? 0;
     </div>
 
     <!-- Collapsible advanced filter bar — closed by default -->
-    <details class="nov-filter-details" open={Boolean(query || dateFrom || dateTo)}>
+    <details class="nov-filter-details" open={Boolean(query || dateFrom || dateTo || tag)}>
       <summary class="nov-filter-summary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <path d="M3 6h18M7 12h10M11 18h2"/>
         </svg>
         <span>Rozšířené filtry</span>
-        {(query || dateFrom || dateTo) && <span class="nov-filter-badge">aktivní</span>}
+        {(query || dateFrom || dateTo || tag) && <span class="nov-filter-badge">aktivní</span>}
         <svg class="nov-filter-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
       </summary>
       <form method="GET" action="/novinky/" class="nov-filter">
@@ -119,6 +119,21 @@ const totalAll = allForMeta?.length ?? 0;
           {tag && <input type="hidden" name="tag" value={tag} />}
           {hasFilters && <a href="/novinky/" class="nov-reset">Vymazat vše</a>}
         </div>
+
+        {topTags.length > 0 && (
+          <div style="margin-top:16px; padding-top:14px; border-top:1px solid #eee;">
+            <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#888; margin-bottom:8px;">
+              🏷 Témata
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              {topTags.map(([t, count]) => (
+                <a href={`/novinky/?tag=${encodeURIComponent(t)}`} class:list={["nov-tag", { active: t === tag }]}>
+                  #{t} <span class="nov-tag-count">{count}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </form>
     </details>
 
@@ -134,24 +149,6 @@ const totalAll = allForMeta?.length ?? 0;
       ))}
     </div>
 
-    <!-- Tag cloud (collapsed by default) -->
-    {topTags.length > 0 && (
-      <details class="nov-topics-details" open={Boolean(tag)}>
-        <summary class="nov-topics-summary">
-          <span>🏷 Témata</span>
-          <span class="nov-topics-count">{topTags.length}</span>
-          {tag && <span class="nov-filter-badge">aktivní</span>}
-          <svg class="nov-filter-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-        </summary>
-        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;">
-          {topTags.map(([t, count]) => (
-            <a href={`/novinky/?tag=${encodeURIComponent(t)}`} class:list={["nov-tag", { active: t === tag }]}>
-              #{t} <span class="nov-tag-count">{count}</span>
-            </a>
-          ))}
-        </div>
-      </details>
-    )}
 
     <!-- Results -->
     {sorted.length > 0 ? (

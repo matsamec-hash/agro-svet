@@ -1,0 +1,12 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import CategoryBrowse from '../../../components/stroje/CategoryBrowse.astro';
+---
+
+<Layout
+  title="Traktory — katalog"
+  description="Přehled traktorů všech značek — John Deere, Zetor, Fendt, New Holland, Case IH, CLAAS, Valtra, Massey Ferguson, Kubota, Deutz-Fahr. Modelové řady od 5. řady po 9. řadu."
+>
+  <CategoryBrowse category="traktory" />
+</Layout>

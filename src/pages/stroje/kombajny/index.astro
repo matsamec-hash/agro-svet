@@ -1,0 +1,12 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import CategoryBrowse from '../../../components/stroje/CategoryBrowse.astro';
+---
+
+<Layout
+  title="Kombajny — katalog"
+  description="Přehled kombajnů všech značek — John Deere, CLAAS, New Holland, Case IH, Fendt, Massey Ferguson, Deutz-Fahr a další. Konvenční, hybridní i rotorové mlátičky."
+>
+  <CategoryBrowse category="kombajny" />
+</Layout>

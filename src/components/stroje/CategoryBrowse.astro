@@ -1,0 +1,291 @@
+---
+import { getAllBrands, seriesFamily, familyLabel, type StrojKategorie } from '../../lib/stroje';
+
+interface Props {
+  category: StrojKategorie;
+}
+const { category } = Astro.props;
+
+const categoryLabels: Record<StrojKategorie, string> = {
+  traktory: 'Traktory',
+  kombajny: 'Kombajny',
+};
+
+type Tile = {
+  family: string;
+  label: string;
+  modelCount: number;
+  seriesCount: number;
+  minHp: number | null;
+  maxHp: number | null;
+  minYear: number | null;
+  maxYear: number | null;
+  hasCurrent: boolean;
+};
+
+type BrandSection = {
+  slug: string;
+  name: string;
+  country: string;
+  description?: string;
+  modelCount: number;
+  minHp: number | null;
+  maxHp: number | null;
+  tiles: Tile[];
+};
+
+function buildTilesForCategory(brand: any): Tile[] {
+  const cat = brand.categories?.[category];
+  if (!cat) return [];
+  const byFamily = new Map<string, Tile>();
+  for (const s of cat.series ?? []) {
+    const fam = seriesFamily(s.slug);
+    let t = byFamily.get(fam);
+    if (!t) {
+      t = {
+        family: fam,
+        label: familyLabel(fam),
+        modelCount: 0,
+        seriesCount: 0,
+        minHp: null,
+        maxHp: null,
+        minYear: null,
+        maxYear: null,
+        hasCurrent: false,
+      };
+      byFamily.set(fam, t);
+    }
+    t.seriesCount += 1;
+    for (const m of s.models ?? []) {
+      t.modelCount += 1;
+      if (m.power_hp !== null) {
+        t.minHp = t.minHp === null ? m.power_hp : Math.min(t.minHp, m.power_hp);
+        t.maxHp = t.maxHp === null ? m.power_hp : Math.max(t.maxHp, m.power_hp);
+      }
+      if (m.year_from !== null) {
+        t.minYear = t.minYear === null ? m.year_from : Math.min(t.minYear, m.year_from);
+      }
+      if (m.year_to === null && m.year_from !== null) {
+        t.hasCurrent = true;
+      } else if (m.year_to !== null) {
+        t.maxYear = t.maxYear === null ? m.year_to : Math.max(t.maxYear, m.year_to);
+      }
+    }
+  }
+  return [...byFamily.values()].sort((a, b) => {
+    const aDigit = /^\d+$/.test(a.family);
+    const bDigit = /^\d+$/.test(b.family);
+    if (aDigit && bDigit) return parseInt(a.family) - parseInt(b.family);
+    if (aDigit) return -1;
+    if (bDigit) return 1;
+    return a.family.localeCompare(b.family, 'cs');
+  });
+}
+
+const sections: BrandSection[] = [];
+for (const b of getAllBrands()) {
+  const tiles = buildTilesForCategory(b);
+  if (tiles.length === 0) continue; // Skip brands with no models of this category
+  const modelCount = tiles.reduce((acc, t) => acc + t.modelCount, 0);
+  const hpAll = tiles.flatMap((t) => [t.minHp, t.maxHp]).filter((x): x is number => x !== null);
+  sections.push({
+    slug: b.slug,
+    name: b.name,
+    country: b.country,
+    description: b.description,
+    modelCount,
+    minHp: hpAll.length ? Math.min(...hpAll) : null,
+    maxHp: hpAll.length ? Math.max(...hpAll) : null,
+    tiles,
+  });
+}
+sections.sort((a, b) => b.modelCount - a.modelCount);
+
+const totalModels = sections.reduce((acc, s) => acc + s.modelCount, 0);
+const totalBrands = sections.length;
+const allHp = sections.flatMap((s) => [s.minHp, s.maxHp]).filter((x): x is number => x !== null);
+const minHp = allHp.length ? Math.min(...allHp) : null;
+const maxHp = allHp.length ? Math.max(...allHp) : null;
+
+const catLabel = categoryLabels[category];
+---
+
+<div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+  <div style="margin-bottom:8px;">
+    <a href="/stroje/" style="font-size:13px; color:#666; text-decoration:none;">← Katalog strojů</a>
+  </div>
+
+  <div style="margin-bottom:32px;">
+    <span class="section-label">Technika</span>
+    <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">
+      {catLabel}
+    </h1>
+    <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:14px; color:#666;">
+      <span>🔢 {totalModels} modelů</span>
+      <span>🏭 {totalBrands} značek</span>
+      {minHp !== null && maxHp !== null && <span>⚡ {minHp}–{maxHp} k</span>}
+    </div>
+  </div>
+
+  <!-- Brand quick-nav (jump links) -->
+  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px;">
+    {sections.map((s) => (
+      <a href={`#${s.slug}`} class="brand-nav-pill">
+        {s.name} <span class="brand-nav-count">{s.modelCount}</span>
+      </a>
+    ))}
+  </div>
+
+  {sections.map((s) => (
+    <section id={s.slug} style="margin-bottom:48px; padding-top:8px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
+        <div>
+          <h2 style="font-family:'Chakra Petch',sans-serif; font-size:24px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">
+            <a href={`/stroje/${s.slug}/`} style="color:#1a1a1a; text-decoration:none;">{s.name}</a>
+          </h2>
+          <div style="font-size:13px; color:#888;">
+            <span>{s.modelCount} modelů</span>
+            {s.minHp !== null && s.maxHp !== null && <>
+              <span style="margin:0 6px;">·</span>
+              <span>{s.minHp === s.maxHp ? `${s.minHp} k` : `${s.minHp}–${s.maxHp} k`}</span>
+            </>}
+            <span style="margin:0 6px;">·</span>
+            <span>{s.tiles.length} řad</span>
+          </div>
+        </div>
+        <a href={`/stroje/${s.slug}/`} style="font-size:13px; color:#1a1a1a; text-decoration:none; border:1px solid #ddd; padding:6px 12px; border-radius:6px; white-space:nowrap;">
+          Všechny modely {s.name} →
+        </a>
+      </div>
+
+      <div class="family-grid">
+        {s.tiles.map((t) => {
+          const hpStr = t.minHp !== null && t.maxHp !== null
+            ? (t.minHp === t.maxHp ? `${t.minHp} k` : `${t.minHp}–${t.maxHp} k`)
+            : '';
+          const yrStr = t.minYear !== null
+            ? (t.hasCurrent ? `${t.minYear}–dosud` : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
+            : '';
+          return (
+            <a href={`/stroje/${s.slug}/rada/${category}/${t.family}/`} class="family-tile">
+              <div class="family-tile-img" aria-hidden="true">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  {category === 'traktory' ? (
+                    <>
+                      <circle cx="7" cy="17" r="2"/>
+                      <circle cx="18" cy="17" r="3"/>
+                      <path d="M4 17H3v-4l2-2h4l3-4h5v10h-2"/>
+                    </>
+                  ) : (
+                    <>
+                      <rect x="3" y="9" width="18" height="9" rx="1"/>
+                      <path d="M3 9V7c0-1 1-2 2-2h14c1 0 2 1 2 2v2"/>
+                      <circle cx="7" cy="18" r="2"/>
+                      <circle cx="17" cy="18" r="2"/>
+                    </>
+                  )}
+                </svg>
+              </div>
+              <div class="family-tile-body">
+                <div class="family-tile-title">{t.label}</div>
+                <div class="family-tile-meta">
+                  <span>{t.modelCount} modelů</span>
+                  {hpStr && <><span>·</span><span>⚡ {hpStr}</span></>}
+                </div>
+                {yrStr && <div class="family-tile-year">{yrStr}</div>}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  ))}
+</div>
+
+<style>
+  .brand-nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 999px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 12px;
+    color: #1a1a1a;
+    text-decoration: none;
+    transition: background .15s, border-color .15s;
+  }
+  .brand-nav-pill:hover {
+    background: #fff0a8;
+    border-color: #FFFF00;
+  }
+  .brand-nav-count {
+    background: rgba(0,0,0,.06);
+    color: #666;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 11px;
+  }
+
+  .family-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .family-tile {
+    display: flex;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s, box-shadow .15s, transform .1s;
+  }
+  .family-tile:hover {
+    border-color: #FFFF00;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+    transform: translateY(-1px);
+  }
+  .family-tile-img {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: #fafafa;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+  }
+  .family-tile:hover .family-tile-img {
+    background: #FFFF00;
+    color: #1a1a1a;
+  }
+  .family-tile-body {
+    min-width: 0;
+    flex: 1;
+  }
+  .family-tile-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+  }
+  .family-tile-meta {
+    display: flex;
+    gap: 6px;
+    font-size: 12px;
+    color: #666;
+    flex-wrap: wrap;
+  }
+  .family-tile-year {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+  }
+</style>

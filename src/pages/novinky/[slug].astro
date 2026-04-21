@@ -65,12 +65,18 @@ const categoryLabels: Record<string, string> = {
     <!-- Article body (HTML from CMS) -->
     <div class="prose" set:html={article.content} />
 
-    <!-- Tags -->
+    <!-- Tags (clickable — navigate to filtered novinky) -->
     {article.tags?.length > 0 && (
       <div style="margin-top:48px; padding-top:24px; border-top:1px solid #ebebeb;">
         <span style="font-size:12px; color:#aaa; margin-right:8px;">Tagy:</span>
         {article.tags.map((tag: string) => (
-          <span style="display:inline-block; background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:20px; margin:2px 4px;">{tag}</span>
+          <a
+            href={`/novinky/?tag=${encodeURIComponent(tag)}`}
+            class="article-tag"
+            title={`Další články s tagem „${tag}"`}
+          >
+            #{tag}
+          </a>
         ))}
       </div>
     )}
@@ -96,6 +102,23 @@ const categoryLabels: Record<string, string> = {
   .prose :global(th) { background:#f5f5f5; font-weight:600; padding:10px 14px; border:1px solid #e0e0e0; text-align:left; }
   .prose :global(td) { padding:9px 14px; border:1px solid #ebebeb; }
   .prose :global(blockquote) { border-left:4px solid #FFFF00; padding:8px 20px; margin:1.5em 0; background:#fafafa; }
+  .article-tag {
+    display: inline-block;
+    background: #f5f5f5;
+    color: #555;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin: 2px 4px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .article-tag:hover {
+    background: #FFFF00;
+    color: #000;
+    border-color: #1a1a1a;
+  }
   .prose :global(code) { background:#f0f0f0; padding:2px 6px; border-radius:4px; font-size:.9em; font-family:'Chakra Petch',sans-serif; }
   .prose :global(img) { max-width:100%; height:auto; border-radius:12px; margin:1.5em 0; }
 </style>
