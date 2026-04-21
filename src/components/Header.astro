@@ -247,7 +247,6 @@ const current = Astro.url.pathname;
 
   /* Search */
   .search-container {
-    position: relative;
     display: inline-flex;
     align-items: center;
     margin-left: 4px;
@@ -273,12 +272,14 @@ const current = Astro.url.pathname;
     top: 60px;
     left: 0;
     right: 0;
+    width: 100%;
     background: #fff;
     border-top: 1px solid #e8e8e8;
     border-bottom: 1px solid #e8e8e8;
     padding: 14px 32px;
     z-index: 120;
     box-shadow: 0 6px 16px rgba(0,0,0,.06);
+    box-sizing: border-box;
   }
   .search-field {
     display: block;
