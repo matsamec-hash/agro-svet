@@ -86,31 +86,41 @@ const totalAll = allForMeta?.length ?? 0;
       )}
     </div>
 
-    <!-- Filter bar -->
-    <form method="GET" action="/novinky/" class="nov-filter">
-      <div class="nov-search-row">
-        <div class="nov-search-wrap">
-          <svg class="nov-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-          </svg>
-          <input type="search" name="q" value={query} placeholder="Hledat v názvech a perexech…" class="nov-search-input" />
+    <!-- Collapsible advanced filter bar — closed by default -->
+    <details class="nov-filter-details" open={Boolean(query || dateFrom || dateTo)}>
+      <summary class="nov-filter-summary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 6h18M7 12h10M11 18h2"/>
+        </svg>
+        <span>Rozšířené filtry</span>
+        {(query || dateFrom || dateTo) && <span class="nov-filter-badge">aktivní</span>}
+        <svg class="nov-filter-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <form method="GET" action="/novinky/" class="nov-filter">
+        <div class="nov-search-row">
+          <div class="nov-search-wrap">
+            <svg class="nov-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input type="search" name="q" value={query} placeholder="Hledat v názvech a perexech…" class="nov-search-input" />
+          </div>
+          <button type="submit" class="btn-primary">Hledat</button>
         </div>
-        <button type="submit" class="btn-primary">Hledat</button>
-      </div>
-      <div class="nov-date-row">
-        <label class="nov-date-field">
-          <span class="nov-date-label">Od</span>
-          <input type="date" name="od" value={dateFrom} class="nov-date-input" />
-        </label>
-        <label class="nov-date-field">
-          <span class="nov-date-label">Do</span>
-          <input type="date" name="do" value={dateTo} class="nov-date-input" />
-        </label>
-        {category && <input type="hidden" name="kategorie" value={category} />}
-        {tag && <input type="hidden" name="tag" value={tag} />}
-        {hasFilters && <a href="/novinky/" class="nov-reset">Vymazat vše</a>}
-      </div>
-    </form>
+        <div class="nov-date-row">
+          <label class="nov-date-field">
+            <span class="nov-date-label">Od</span>
+            <input type="date" name="od" value={dateFrom} class="nov-date-input" />
+          </label>
+          <label class="nov-date-field">
+            <span class="nov-date-label">Do</span>
+            <input type="date" name="do" value={dateTo} class="nov-date-input" />
+          </label>
+          {category && <input type="hidden" name="kategorie" value={category} />}
+          {tag && <input type="hidden" name="tag" value={tag} />}
+          {hasFilters && <a href="/novinky/" class="nov-reset">Vymazat vše</a>}
+        </div>
+      </form>
+    </details>
 
     <!-- Category pills -->
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
@@ -164,8 +174,40 @@ const totalAll = allForMeta?.length ?? 0;
   </div>
 
   <style>
+    .nov-filter-details {
+      margin-bottom: 16px;
+    }
+    .nov-filter-summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 13px;
+      color: #1a1a1a;
+      list-style: none;
+      transition: background .15s, border-color .15s;
+    }
+    .nov-filter-summary::-webkit-details-marker { display: none; }
+    .nov-filter-summary:hover { background: #fff0a8; border-color: #FFFF00; }
+    .nov-filter-badge {
+      background: #FFFF00;
+      color: #000;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .nov-filter-caret { transition: transform .2s; opacity: .6; }
+    .nov-filter-details[open] .nov-filter-caret { transform: rotate(180deg); }
+
     .nov-filter {
-      margin-bottom: 18px;
+      margin-top: 12px;
       padding: 16px;
       background: #fafafa;
       border: 1px solid #e8e8e8;

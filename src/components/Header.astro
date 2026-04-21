@@ -266,21 +266,32 @@ const current = Astro.url.pathname;
     transition: border-color .15s, box-shadow .15s;
   }
   .search-icon-btn:hover { border-color: #FFFF00; box-shadow: 0 0 0 3px rgba(255,255,0,.3); }
+
+  /* Slide-down search panel: fills header width, doesn't collide with nav */
   .search-form {
     position: absolute;
-    right: 44px;
-    top: 0;
-    width: 260px;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 14px 32px;
+    z-index: 120;
+    box-shadow: 0 6px 16px rgba(0,0,0,.06);
   }
   .search-field {
+    display: block;
+    max-width: 720px;
+    margin: 0 auto;
     width: 100%;
-    height: 36px;
-    padding: 0 14px;
+    height: 44px;
+    padding: 0 16px;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 15px;
     background: #fff;
     border: 1px solid #1a1a1a;
-    border-radius: 8px;
+    border-radius: 10px;
     outline: none;
   }
   .search-field:focus { box-shadow: 0 0 0 3px rgba(255,255,0,.4); }
