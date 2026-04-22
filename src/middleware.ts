@@ -1,7 +1,15 @@
 import { defineMiddleware } from 'astro:middleware';
 import { createAnonClient } from './lib/supabase';
 
-const PROTECTED_PATHS = ['/bazar/novy', '/bazar/moje', '/bazar/profil'];
+const PROTECTED_PATHS = [
+  '/bazar/novy',
+  '/bazar/moje',
+  '/bazar/profil',
+  '/fotosoutez/nahrat',
+  '/fotosoutez/moje',
+];
+
+const ADMIN_PATHS = ['/admin/'];
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
@@ -46,7 +54,27 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Protect routes
   const isProtected = PROTECTED_PATHS.some(p => url.pathname.startsWith(p));
   if (isProtected && !locals.user) {
-    return redirect('/bazar/prihlaseni/');
+    const redirectTarget = url.pathname.startsWith('/fotosoutez')
+      ? `/bazar/prihlaseni/?redirect=${encodeURIComponent(url.pathname)}`
+      : '/bazar/prihlaseni/';
+    return redirect(redirectTarget);
+  }
+
+  const isAdmin = ADMIN_PATHS.some(p => url.pathname.startsWith(p));
+  if (isAdmin) {
+    if (!locals.user) {
+      return redirect('/bazar/prihlaseni/?redirect=' + encodeURIComponent(url.pathname));
+    }
+    const sb = createAnonClient();
+    const { data } = await sb
+      .from('bazar_users')
+      .select('is_admin')
+      .eq('id', locals.user.id)
+      .maybeSingle();
+    const isAdminUser = (data as { is_admin?: boolean } | null)?.is_admin === true;
+    if (!isAdminUser) {
+      return new Response('Forbidden', { status: 403 });
+    }
   }
 
   return next();
