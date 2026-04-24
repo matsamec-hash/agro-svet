@@ -41,9 +41,40 @@ function getListingImage(listing: any): string | null {
 
 import { CATEGORIES as BAZAR_CATEGORIES } from '../lib/bazar-constants';
 const bazarCatLabels = Object.fromEntries(BAZAR_CATEGORIES.map((c) => [c.value, c.label]));
+
+const homeDescription = 'Zemědělská technika, encyklopedie traktorů a kombajnů, plemena hospodářských zvířat, bazar agro strojů zdarma a aktuální novinky ze světa zemědělství.';
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'agro-svět.cz',
+  alternateName: 'agro-svet.cz',
+  url: 'https://agro-svet.cz/',
+  inLanguage: 'cs-CZ',
+  description: homeDescription,
+  publisher: {
+    '@type': 'Organization',
+    name: 'agro-svět.cz',
+    url: 'https://agro-svet.cz/',
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://agro-svet.cz/hledat?q={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
 ---
 
-<Layout title="agro-svět.cz — zemědělská technika a novinky">
+<Layout
+  title="agro-svět.cz — zemědělská technika, bazar a novinky"
+  description={homeDescription}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(websiteJsonLd)} />
+
+  <h1 class="visually-hidden">agro-svět.cz — zemědělská technika, bazar a novinky</h1>
 
   <!-- Hero — featured articles grid matching WP layout -->
   <section class="hero-section">
