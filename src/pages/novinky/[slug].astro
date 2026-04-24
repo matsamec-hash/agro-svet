@@ -27,7 +27,7 @@ const categoryLabels: Record<string, string> = {
 };
 ---
 
-<Layout title={article.seo_title || article.title} description={article.seo_description || article.perex}>
+<Layout title={article.seo_title || article.title} description={article.seo_description || article.perex} ogImage={article.featured_image_url || undefined}>
 
   <!-- Hero image -->
   {article.featured_image_url && (

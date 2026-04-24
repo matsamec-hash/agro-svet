@@ -1,0 +1,135 @@
+import type { APIRoute } from 'astro';
+import { getCollection } from 'astro:content';
+import { getAllBrands } from '../lib/stroje';
+import { getAllDruhy } from '../lib/plemena';
+import { createAnonClient } from '../lib/supabase';
+
+const SITE_URL = 'https://agro-svet.cz';
+const NOVINKY_SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
+const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky'];
+
+interface UrlEntry {
+  loc: string;
+  lastmod?: string;
+  changefreq?: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  priority?: string;
+}
+
+const XML_ESCAPES: Record<string, string> = {
+  '<': '&lt;',
+  '>': '&gt;',
+  '&': '&amp;',
+  "'": '&apos;',
+  '"': '&quot;',
+};
+
+function xmlEscape(s: string): string {
+  return s.replace(/[<>&'"]/g, (c) => XML_ESCAPES[c]);
+}
+
+function renderUrl(u: UrlEntry): string {
+  const parts = [`    <loc>${xmlEscape(u.loc)}</loc>`];
+  if (u.lastmod) parts.push(`    <lastmod>${u.lastmod.slice(0, 10)}</lastmod>`);
+  if (u.changefreq) parts.push(`    <changefreq>${u.changefreq}</changefreq>`);
+  if (u.priority) parts.push(`    <priority>${u.priority}</priority>`);
+  return `  <url>\n${parts.join('\n')}\n  </url>`;
+}
+
+export const GET: APIRoute = async () => {
+  const urls: UrlEntry[] = [];
+
+  const staticPaths: Array<[string, UrlEntry['changefreq'], string?]> = [
+    ['/', 'daily', '1.0'],
+    ['/novinky/', 'daily', '0.9'],
+    ['/bazar/', 'daily', '0.7'],
+    ['/stroje/', 'weekly', '0.9'],
+    ['/stroje/traktory/', 'weekly'],
+    ['/stroje/kombajny/', 'weekly'],
+    ['/znacky/', 'weekly', '0.8'],
+    ['/encyklopedie/', 'weekly'],
+    ['/plemena/', 'weekly'],
+    ['/puda/', 'weekly'],
+    ['/fotosoutez/', 'weekly', '0.8'],
+    ['/fotosoutez/archiv/', 'monthly'],
+    ['/fotosoutez/pravidla/', 'yearly'],
+    ['/fotosoutez/gdpr/', 'yearly'],
+    ['/statistiky/', 'weekly'],
+    ['/media/', 'monthly'],
+  ];
+  for (const [path, changefreq, priority] of staticPaths) {
+    urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority });
+  }
+
+  for (const cat of NOVINKY_CATEGORIES) {
+    urls.push({ loc: `${SITE_URL}/novinky/kategorie/${cat}/`, changefreq: 'weekly' });
+  }
+
+  for (const brand of getAllBrands()) {
+    urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/`, changefreq: 'monthly', priority: '0.7' });
+    for (const cat of Object.values(brand.categories || {})) {
+      for (const s of cat.series || []) {
+        urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/`, changefreq: 'monthly' });
+        for (const m of s.models || []) {
+          const short = m.slug.startsWith(brand.slug + '-') ? m.slug.slice(brand.slug.length + 1) : m.slug;
+          urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/${short}/`, changefreq: 'monthly' });
+        }
+      }
+    }
+  }
+
+  const [znacky, encyklopedie, puda] = await Promise.all([
+    getCollection('znacky'),
+    getCollection('encyklopedie'),
+    getCollection('puda'),
+  ]);
+
+  for (const z of znacky) {
+    urls.push({ loc: `${SITE_URL}/znacky/${z.id}/`, changefreq: 'monthly' });
+  }
+  for (const e of encyklopedie) {
+    urls.push({ loc: `${SITE_URL}/encyklopedie/${e.id}/`, changefreq: 'monthly' });
+  }
+  for (const p of puda) {
+    urls.push({ loc: `${SITE_URL}/puda/${p.id}/`, changefreq: 'monthly' });
+  }
+
+  for (const d of getAllDruhy()) {
+    urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/`, changefreq: 'monthly' });
+    for (const p of d.plemena) {
+      urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/${p.slug}/`, changefreq: 'monthly' });
+    }
+  }
+
+  try {
+    const supabase = createAnonClient();
+    const { data: articles } = await supabase
+      .from('articles')
+      .select('slug, published_at')
+      .eq('site_id', NOVINKY_SITE_ID)
+      .eq('status', 'published')
+      .order('published_at', { ascending: false })
+      .limit(2000);
+    for (const a of articles || []) {
+      urls.push({
+        loc: `${SITE_URL}/novinky/${a.slug}/`,
+        lastmod: a.published_at || undefined,
+        changefreq: 'weekly',
+      });
+    }
+  } catch {
+    // Static sitemap is still useful without dynamic articles
+  }
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap-0.9">
+${urls.map(renderUrl).join('\n')}
+</urlset>`;
+
+  return new Response(xml, {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+    },
+  });
+};
