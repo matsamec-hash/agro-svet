@@ -1,0 +1,82 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { createServerClient } from '../../../lib/supabase';
+
+const sb = createServerClient();
+const { count: pendingCount } = await sb
+  .from('contest_entries')
+  .select('id', { count: 'exact', head: true })
+  .eq('status', 'pending');
+const { data: activeRound } = await sb
+  .from('contest_rounds')
+  .select('*')
+  .in('status', ['upload_open', 'voting_open', 'closed'])
+  .maybeSingle();
+---
+<Layout title="Admin — Fotosoutěž" description="Administrace fotosoutěže">
+  <main class="admin-home">
+    <h1>Fotosoutěž — admin</h1>
+    <div class="grid">
+      <a class="tile" href="/admin/fotosoutez/moderace/">
+        <h3>Moderace</h3>
+        <p class="big">{pendingCount ?? 0}</p>
+        <p class="caption">čeká na schválení</p>
+      </a>
+      <div class="tile static">
+        <h3>Aktivní kolo</h3>
+        <p class="medium">{activeRound?.title ?? '—'}</p>
+        <p class="caption">{activeRound?.status ?? ''}</p>
+      </div>
+      <div class="tile static">
+        <h3>Kola</h3>
+        <p class="caption">Správa přes Supabase SQL editor (MVP)</p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .admin-home {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .admin-home h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0 0 28px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .tile {
+    display: block;
+    text-decoration: none;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 24px;
+    border-radius: 18px;
+    border: 2px solid transparent;
+    transition: border-color .15s;
+  }
+  .tile:hover:not(.static) { border-color: #FFFF00; }
+  .tile h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0 0 8px;
+  }
+  .tile .big {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 900;
+    color: #FFFF00;
+    font-size: 36px;
+    margin: 0;
+  }
+  .tile .medium { font-size: 16px; margin: 0; }
+  .tile .caption { font-size: 13px; color: #888; margin: 4px 0 0; }
+</style>

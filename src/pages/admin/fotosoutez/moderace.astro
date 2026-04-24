@@ -1,0 +1,142 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { getPendingEntries, getPublicPhotoUrl } from '../../../lib/contest-supabase';
+
+const entries = await getPendingEntries(50);
+const withUrls = await Promise.all(
+  entries.map(async (e) => ({ entry: e, url: await getPublicPhotoUrl(e.photo_path) })),
+);
+---
+<Layout title="Moderace — Fotosoutěž admin" description="Moderace čekajících fotek">
+  <main class="moderation-page">
+    <a href="/admin/fotosoutez/" class="back">← Přehled</a>
+    <h1>Moderace ({entries.length})</h1>
+
+    {entries.length === 0 && <p class="empty">Žádné čekající fotky.</p>}
+
+    <div class="grid">
+      {withUrls.map(({ entry, url }) => (
+        <div class="card" data-entry-card data-entry-id={entry.id}>
+          <img src={url} alt="" />
+          <div class="body">
+            <h3>{entry.title}</h3>
+            <p class="meta">Autor: {entry.author_display_name}</p>
+            {entry.caption && <p class="caption">{entry.caption}</p>}
+            {!entry.exif_has_metadata && <span class="warn-badge">Chybí EXIF</span>}
+            <div class="actions">
+              <button type="button" class="approve" data-approve>Schválit</button>
+              <button type="button" class="reject" data-reject>Odmítnout</button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <script>
+      document.querySelectorAll<HTMLElement>('[data-entry-card]').forEach((card) => {
+        const id = card.dataset.entryId!;
+        const approveBtn = card.querySelector<HTMLButtonElement>('[data-approve]')!;
+        const rejectBtn = card.querySelector<HTMLButtonElement>('[data-reject]')!;
+
+        async function moderate(action: 'approve' | 'reject') {
+          const reason = action === 'reject' ? prompt('Důvod odmítnutí:') : null;
+          if (action === 'reject' && !reason) return;
+          const fd = new FormData();
+          fd.append('entry_id', id);
+          fd.append('action', action);
+          if (reason) fd.append('reason', reason);
+          const res = await fetch('/admin/fotosoutez/api/moderate', { method: 'POST', body: fd });
+          if (res.ok) card.remove();
+          else alert('Chyba moderace');
+        }
+
+        approveBtn.addEventListener('click', () => moderate('approve'));
+        rejectBtn.addEventListener('click', () => moderate('reject'));
+      });
+    </script>
+  </main>
+</Layout>
+
+<style>
+  .moderation-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .back { font-size: 14px; color: #888; text-decoration: none; }
+  .back:hover { color: #1a1a1a; }
+  .moderation-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    margin: 12px 0 24px;
+  }
+  .empty { color: #888; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+  .card .body {
+    padding: 14px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0;
+  }
+  .meta { color: #aaa; font-size: 13px; margin: 0; }
+  .caption {
+    color: #ccc;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .warn-badge {
+    align-self: flex-start;
+    background: #ff8c00;
+    color: #fff;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+  .actions { display: flex; gap: 8px; margin-top: 4px; }
+  .actions button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .actions .approve { background: #2e7d32; }
+  .actions .approve:hover { background: #1b5e20; }
+  .actions .reject { background: #c62828; }
+  .actions .reject:hover { background: #b71c1c; }
+</style>
