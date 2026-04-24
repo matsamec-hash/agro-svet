@@ -13,6 +13,191 @@ categories:
     name: Traktory
 
     series:
+      # ========== DX Series (historické, 1978-1995) ==========
+      - slug: dx
+        name: "DX Series (1978–1995)"
+        year_from: 1978
+        year_to: 1995
+        description: >
+          Historická klasika Deutz-Fahr se vzduchem chlazenými motory Deutz F3L / F4L / F6L
+          912 a 913. Ikonická řada rozdělená do tříd DX 3 (kompaktní 3-válec), DX 4 (4-válec),
+          DX 6 (6-válec) a vlajkových DX 7/8. V roce 1983 modernizace s vyšším výkonem.
+        models:
+          - slug: deutz-fahr-dx-3-10
+            name: "DX 3.10"
+            year_from: 1987
+            year_to: 1996
+            power_hp: 46
+            power_kw: 34
+            engine: "Deutz F3L 912 3-válec vzduchem chlazený 2.8 L"
+          - slug: deutz-fahr-dx-3-30
+            name: "DX 3.30"
+            year_from: 1987
+            year_to: 1996
+            power_hp: 54
+            power_kw: 40
+            engine: "Deutz 3-válec vzduchem chlazený 2.8 L"
+          - slug: deutz-fahr-dx-3-50
+            name: "DX 3.50"
+            year_from: 1987
+            year_to: 1996
+            power_hp: 61
+            power_kw: 45
+            engine: "Deutz 4-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-3-60
+            name: "DX 3.60"
+            year_from: 1986
+            year_to: 1995
+            power_hp: 65
+            power_kw: 48
+            engine: "Deutz 4-válec vzduchem chlazený 3.8 L"
+          - slug: deutz-fahr-dx-3-70
+            name: "DX 3.70"
+            year_from: 1986
+            year_to: 1995
+            power_hp: 70
+            power_kw: 52
+            engine: "Deutz 4-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-3-90
+            name: "DX 3.90"
+            year_from: 1986
+            year_to: 1995
+            power_hp: 75
+            power_kw: 55
+            engine: "Deutz 4-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-4-10
+            name: "DX 4.10"
+            year_from: 1983
+            year_to: 1990
+            power_hp: 68
+            power_kw: 51
+            engine: "Deutz 4-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-4-30
+            name: "DX 4.30"
+            year_from: 1983
+            year_to: 1990
+            power_hp: 74
+            power_kw: 55
+            engine: "Deutz 4-válec vzduchem chlazený 4.1 L"
+          - slug: deutz-fahr-dx-4-50
+            name: "DX 4.50"
+            year_from: 1983
+            year_to: 1990
+            power_hp: 80
+            power_kw: 60
+            engine: "Deutz 4-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-4-70
+            name: "DX 4.70"
+            year_from: 1983
+            year_to: 1990
+            power_hp: 90
+            power_kw: 67
+            engine: "Deutz 4-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-6-05
+            name: "DX 6.05"
+            year_from: 1987
+            year_to: 1991
+            power_hp: 98
+            power_kw: 73
+            engine: "Deutz 6-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-6-10
+            name: "DX 6.10"
+            year_from: 1983
+            year_to: 1990
+            power_hp: 100
+            power_kw: 74
+            engine: "Deutz 6-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-6-30
+            name: "DX 6.30"
+            year_from: 1983
+            year_to: 1990
+            power_hp: 115
+            power_kw: 85
+            engine: "Deutz 6-válec vzduchem chlazený"
+          - slug: deutz-fahr-dx-6-50
+            name: "DX 6.50"
+            year_from: 1983
+            year_to: 1990
+            power_hp: 137
+            power_kw: 101
+            engine: "Deutz 6-válec vzduchem chlazený turbo"
+          - slug: deutz-fahr-dx-7-10
+            name: "DX 7.10"
+            year_from: 1984
+            year_to: 1989
+            power_hp: 160
+            power_kw: 118
+            engine: "Deutz 6-válec vzduchem chlazený turbo"
+          - slug: deutz-fahr-dx-8-30
+            name: "DX 8.30"
+            year_from: 1984
+            year_to: 1991
+            power_hp: 220
+            power_kw: 162
+            engine: "Deutz 6-válec vzduchem chlazený turbo intercooler"
+
+      # ========== AgroStar (1991-1998) ==========
+      - slug: agrostar
+        name: "AgroStar (1991–1998)"
+        year_from: 1991
+        year_to: 1998
+        description: >
+          Předchůdce řady Agrotron. Modernizovaný nástupce DX řady se vzduchem
+          chlazenými motory Deutz. Reprezentativní "hvězda" 90. let s charakteristickým
+          designem a otevřenou kabinou StarCab.
+        models:
+          - slug: deutz-fahr-agrostar-4-71
+            name: "AgroStar 4.71"
+            year_from: 1990
+            year_to: 1993
+            power_hp: 95
+            power_kw: 71
+          - slug: deutz-fahr-agrostar-4-78
+            name: "AgroStar 4.78"
+            year_from: 1990
+            year_to: 1993
+            power_hp: 100
+            power_kw: 75
+          - slug: deutz-fahr-agrostar-6-08
+            name: "AgroStar 6.08"
+            year_from: 1994
+            year_to: 1995
+            power_hp: 107
+            power_kw: 79
+            engine: "Deutz 6-válec vzduchem chlazený"
+          - slug: deutz-fahr-agrostar-6-28
+            name: "AgroStar 6.28"
+            year_from: 1991
+            year_to: 1995
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrostar-6-38
+            name: "AgroStar 6.38"
+            year_from: 1994
+            year_to: 1995
+            power_hp: 125
+            power_kw: 92
+            engine: "Deutz 6-válec vzduchem chlazený turbo"
+          - slug: deutz-fahr-agrostar-6-61
+            name: "AgroStar 6.61"
+            year_from: 1991
+            year_to: 1995
+            power_hp: null
+            power_kw: null
+            engine: "Deutz BF6L913T 6-válec turbo"
+          - slug: deutz-fahr-agrostar-6-81
+            name: "AgroStar 6.81"
+            year_from: 1991
+            year_to: 1998
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrostar-8-31
+            name: "AgroStar 8.31"
+            year_from: 1993
+            year_to: 1998
+            power_hp: null
+            power_kw: null
+
       # ========== AgroXtra / Agrotron (historické, 1991-2005) ==========
       - slug: agroxtra
         name: "AgroXtra (1991–1995)"
@@ -96,6 +281,299 @@ categories:
             year_to: 2005
             power_hp: 260
             power_kw: 191
+
+      # ========== Agroplus (2001-2015, kompaktní utility) ==========
+      - slug: agroplus
+        name: "Agroplus (1996–2015)"
+        year_from: 1996
+        year_to: 2015
+        description: >
+          Kompaktní utility traktory založené na technice SAME. První generace 60/70/80
+          se vzduchem chlazenými Deutz motory (1996–2004), druhá generace 75/85/95/100
+          s vodou chlazenými turbo motory. Agroplus 100 byl první 6-válec v kompaktní třídě.
+          Varianty S (specialty úzké) pro vinařství a sadařství, F Keyline pro úzké práce.
+        models:
+          - slug: deutz-fahr-agroplus-60
+            name: "Agroplus 60"
+            year_from: 1996
+            year_to: 2004
+            power_hp: 60
+            power_kw: 45
+            engine: "Deutz 3-válec 3.1 L vzduchem chlazený"
+          - slug: deutz-fahr-agroplus-70
+            name: "Agroplus 70"
+            year_from: 1996
+            year_to: 2004
+            power_hp: 70
+            power_kw: 52
+            engine: "Deutz 4-válec 4.1 L vzduchem chlazený"
+          - slug: deutz-fahr-agroplus-75
+            name: "Agroplus 75"
+            year_from: 2001
+            year_to: 2010
+            power_hp: 75
+            power_kw: 56
+            engine: "Deutz 4-válec turbo"
+          - slug: deutz-fahr-agroplus-85
+            name: "Agroplus 85"
+            year_from: 2001
+            year_to: 2010
+            power_hp: 85
+            power_kw: 63
+            engine: "Deutz 4-válec turbo"
+          - slug: deutz-fahr-agroplus-95
+            name: "Agroplus 95"
+            year_from: 2001
+            year_to: 2010
+            power_hp: 95
+            power_kw: 70
+            engine: "Deutz 4-válec turbo"
+          - slug: deutz-fahr-agroplus-100
+            name: "Agroplus 100"
+            year_from: 2001
+            year_to: 2010
+            power_hp: 99
+            power_kw: 74
+            engine: "Deutz 6-válec"
+          - slug: deutz-fahr-agroplus-s70
+            name: "Agroplus S70 (specialty)"
+            year_from: 2008
+            year_to: 2015
+            power_hp: 70
+            power_kw: 52
+          - slug: deutz-fahr-agroplus-s75
+            name: "Agroplus S75 (specialty)"
+            year_from: 2008
+            year_to: 2015
+            power_hp: 75
+            power_kw: 56
+          - slug: deutz-fahr-agroplus-s90
+            name: "Agroplus S90 (specialty)"
+            year_from: 2008
+            year_to: 2015
+            power_hp: 90
+            power_kw: 66
+          - slug: deutz-fahr-agroplus-s100
+            name: "Agroplus S100 (specialty)"
+            year_from: 2008
+            year_to: 2015
+            power_hp: 97
+            power_kw: 71
+
+      # ========== Agrofarm (2008-2015, entry-level) ==========
+      - slug: agrofarm
+        name: "Agrofarm (2008–dosud)"
+        year_from: 2008
+        year_to: null
+        description: >
+          Entry-level utility řada pro menší farmy. První generace 85/95/100 a 410/420/430
+          (2008-2013) s motory Deutz Tier 3, pokročilejší TTV varianta s CVT převodovkou.
+          Od 2018 G-series (85/100/115) s moderními SDF motory a Stage V emisemi.
+        models:
+          - slug: deutz-fahr-agrofarm-85
+            name: "Agrofarm 85"
+            year_from: 2008
+            year_to: 2013
+            power_hp: 85
+            power_kw: 63
+          - slug: deutz-fahr-agrofarm-100
+            name: "Agrofarm 100"
+            year_from: 2008
+            year_to: 2013
+            power_hp: 100
+            power_kw: 74
+          - slug: deutz-fahr-agrofarm-410
+            name: "Agrofarm 410"
+            year_from: 2008
+            year_to: 2013
+            power_hp: 86
+            power_kw: 63
+          - slug: deutz-fahr-agrofarm-420
+            name: "Agrofarm 420"
+            year_from: 2008
+            year_to: 2013
+            power_hp: 99
+            power_kw: 73
+          - slug: deutz-fahr-agrofarm-430
+            name: "Agrofarm 430"
+            year_from: 2008
+            year_to: 2013
+            power_hp: 109
+            power_kw: 80
+          - slug: deutz-fahr-agrofarm-420-ttv
+            name: "Agrofarm 420 TTV"
+            year_from: 2010
+            year_to: 2014
+            power_hp: 99
+            power_kw: 72
+            transmission: "CVT TTV"
+          - slug: deutz-fahr-agrofarm-430-ttv
+            name: "Agrofarm 430 TTV"
+            year_from: 2010
+            year_to: 2014
+            power_hp: 109
+            power_kw: 79
+            transmission: "CVT TTV"
+          - slug: deutz-fahr-agrofarm-g-85
+            name: "Agrofarm 85 G"
+            year_from: 2018
+            year_to: null
+            power_hp: 85
+            power_kw: 63
+            engine: "SDF 1000.4 W 4-válec 4.0 L"
+          - slug: deutz-fahr-agrofarm-g-100
+            name: "Agrofarm 100 G"
+            year_from: 2018
+            year_to: null
+            power_hp: 102
+            power_kw: 75
+            engine: "SDF 1000.4 WT 4-válec 4.0 L turbo"
+          - slug: deutz-fahr-agrofarm-g-115
+            name: "Agrofarm 115 G"
+            year_from: 2018
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+            engine: "SDF 4-válec 4.0 L turbo intercooler"
+          - slug: deutz-fahr-agrofarm-g-410
+            name: "Agrofarm 410 G"
+            year_from: 2018
+            year_to: null
+            power_hp: 88
+            power_kw: 65
+          - slug: deutz-fahr-agrofarm-g-430
+            name: "Agrofarm 430 G"
+            year_from: 2018
+            year_to: null
+            power_hp: 102
+            power_kw: 75
+
+      # ========== Agrotron M Series (2006-2013) ==========
+      - slug: agrotron-m
+        name: "Agrotron M Series (2006–2013)"
+        year_from: 2006
+        year_to: 2013
+        description: >
+          Prémiová středně-velká řada. M410/M420 jsou 4-válcové, M600-M650 jsou
+          6-válcové s motory Deutz TCD 2012 / TCD 2013 a DCR (Deutz Common Rail)
+          vstřikováním. Dostupné také ve variantě Profiline.
+        models:
+          - slug: deutz-fahr-agrotron-m410
+            name: "Agrotron M410"
+            year_from: 2010
+            year_to: 2012
+            power_hp: 134
+            power_kw: 98
+            engine: "Deutz TCD 2012 L04 4V 4-válec"
+          - slug: deutz-fahr-agrotron-m420
+            name: "Agrotron M420"
+            year_from: 2010
+            year_to: 2012
+            power_hp: 154
+            power_kw: 113
+            engine: "Deutz TCD 2012 4-válec"
+          - slug: deutz-fahr-agrotron-m600
+            name: "Agrotron M600"
+            year_from: 2007
+            year_to: 2012
+            power_hp: 131
+            power_kw: 96
+          - slug: deutz-fahr-agrotron-m610
+            name: "Agrotron M610"
+            year_from: 2007
+            year_to: 2012
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-m615
+            name: "Agrotron M615"
+            year_from: 2007
+            year_to: 2012
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-m620
+            name: "Agrotron M620"
+            year_from: 2007
+            year_to: 2012
+            power_hp: 155
+            power_kw: 116
+          - slug: deutz-fahr-agrotron-m625
+            name: "Agrotron M625"
+            year_from: 2007
+            year_to: 2012
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-m640
+            name: "Agrotron M640"
+            year_from: 2007
+            year_to: 2012
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-m650
+            name: "Agrotron M650"
+            year_from: 2007
+            year_to: 2012
+            power_hp: null
+            power_kw: null
+
+      # ========== Agrotron K Series (2005-2013) ==========
+      - slug: agrotron-k
+        name: "Agrotron K Series (2005–2013)"
+        year_from: 2005
+        year_to: 2013
+        description: >
+          Nástupce nejmenších Agrotron MK3. 4-válcové traktory s elektronicky řízenými
+          vodou chlazenými Deutz motory. Verze Profiline s automatickou powershift,
+          load-sensing hydraulikou a headland management automatizací.
+        models:
+          - slug: deutz-fahr-agrotron-k90
+            name: "Agrotron K90"
+            year_from: 2005
+            year_to: 2008
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-k100
+            name: "Agrotron K100"
+            year_from: 2005
+            year_to: 2008
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-k110
+            name: "Agrotron K110"
+            year_from: 2005
+            year_to: 2008
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-k120
+            name: "Agrotron K120"
+            year_from: 2005
+            year_to: 2008
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-k410
+            name: "Agrotron K410"
+            year_from: 2009
+            year_to: 2013
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-k420
+            name: "Agrotron K420"
+            year_from: 2009
+            year_to: 2013
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-agrotron-k430
+            name: "Agrotron K430"
+            year_from: 2008
+            year_to: 2013
+            power_hp: 130
+            power_kw: 96
+            engine: "4-válec 4.0 L common rail"
+          - slug: deutz-fahr-agrotron-k610
+            name: "Agrotron K610"
+            year_from: 2009
+            year_to: 2013
+            power_hp: null
+            power_kw: null
 
       # ========== 5G Series (utility, 2013+) ==========
       - slug: 5g
@@ -267,10 +745,214 @@ categories:
             power_hp: 336
             power_kw: 247
 
+      # ========== 9 Warrior special edition (2018+) ==========
+      - slug: 9-warrior
+        name: "9 Series Warrior (2018–dosud)"
+        year_from: 2018
+        year_to: null
+        description: >
+          Speciální edice Warrior vlajkové řady 9. LED osvětlovací paket 4. generace,
+          pohodlné sedadlo Evolution Active, automatická klimatizace, podložka DEUTZ-FAHR
+          v černé. Dostupné i v klasické zelené barvě.
+        models:
+          - slug: deutz-fahr-9340-ttv-warrior
+            name: "9340 TTV Warrior"
+            year_from: 2018
+            year_to: null
+            power_hp: 336
+            power_kw: 247
+            transmission: "CVT TTV"
+
+      # ========== 6C Series (2020+, kompaktní) ==========
+      - slug: 6c
+        name: "6C Series (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Kompaktní 4-válcová řada 6 Series se Stage V motory a kabinou TopVision. Tři
+          varianty převodovky: Powershift 3-stupňový, RVshift full-powershift 20F/16R
+          nebo CVT TTV. Load-sensing hydraulika 120 l/min, výkon zadního zvedáku 7000 kg.
+        models:
+          - slug: deutz-fahr-6115c
+            name: "6115 C"
+            year_from: 2020
+            year_to: null
+            power_hp: 126
+            power_kw: 93
+          - slug: deutz-fahr-6125c
+            name: "6125 C"
+            year_from: 2020
+            year_to: null
+            power_hp: 136
+            power_kw: 100
+          - slug: deutz-fahr-6135c
+            name: "6135 C"
+            year_from: 2020
+            year_to: null
+            power_hp: 143
+            power_kw: 105
+
+      # ========== 5D Keyline (Stage V, 2018+) ==========
+      - slug: 5d
+        name: "5D Keyline Series (2018–dosud)"
+        year_from: 2018
+        year_to: null
+        description: >
+          Entry-level řada s motorem FARMotion 35 (3-válec) v souladu se Stage V emisemi.
+          Elektronický common-rail 2000 bar, recirkulace spalin, intercooler a DOC.
+          Dvě mechanické 5-rychlostní převodovky (15+15 nebo 30+15), max. 40 km/h při 1870 ot/min.
+        models:
+          - slug: deutz-fahr-5070d-keyline
+            name: "5070D Keyline"
+            year_from: 2018
+            year_to: null
+            power_hp: 65
+            power_kw: 48
+            engine: "FARMotion 35 3-válec Stage V"
+          - slug: deutz-fahr-5080d-keyline
+            name: "5080D Keyline"
+            year_from: 2018
+            year_to: null
+            power_hp: 75
+            power_kw: 55
+            engine: "FARMotion 35 3-válec Stage V"
+          - slug: deutz-fahr-5090d-keyline
+            name: "5090D Keyline"
+            year_from: 2018
+            year_to: null
+            power_hp: 88
+            power_kw: 65
+            engine: "FARMotion 35 3-válec Stage V"
+          - slug: deutz-fahr-5100d-keyline
+            name: "5100D Keyline"
+            year_from: 2018
+            year_to: null
+            power_hp: 97
+            power_kw: 71
+            engine: "FARMotion 35 3-válec Stage V"
+
   kombajny:
     name: Kombajny
 
     series:
+      # ========== Historické M-series (1987-1994) ==========
+      - slug: m-series-old
+        name: "M Series (1987–1994)"
+        year_from: 1987
+        year_to: 1994
+        description: >
+          Starší generace klasických konvenčních kombajnů před modernizací na Topliner.
+          Vzduchem chlazené Deutz diesely F5L / F6L 912 a 913. Modely M1080, M2385,
+          M2480, M2580, M2680, M2685, M2780 a M34 / M36 pro velké farmy.
+        models:
+          - slug: deutz-fahr-m1080
+            name: "M 1080"
+            year_from: 1992
+            year_to: 1993
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-m2385
+            name: "M 2385"
+            year_from: 1988
+            year_to: 1994
+            power_hp: 110
+            power_kw: 81
+            engine: "Deutz F5L912 6-válec vzduchem chlazený"
+            grain_tank_l: 3200
+          - slug: deutz-fahr-m2480
+            name: "M 2480"
+            year_from: 1988
+            year_to: 1994
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-m2580
+            name: "M 2580"
+            year_from: 1988
+            year_to: 1994
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-m2680
+            name: "M 2680"
+            year_from: 1988
+            year_to: 1994
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-m2780
+            name: "M 2780"
+            year_from: 1988
+            year_to: 1994
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-m34-80
+            name: "M 34.80"
+            year_from: 1992
+            year_to: 1993
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-m36-10
+            name: "M 36.10 H"
+            year_from: 1992
+            year_to: 1994
+            power_hp: null
+            power_kw: null
+
+      # ========== Starliner (1992-2001) ==========
+      - slug: starliner
+        name: "Starliner (1992–2001)"
+        year_from: 1992
+        year_to: 2001
+        description: >
+          Střední konvenční kombajny Starliner. Klasické 5-klávesové slámové drtiče
+          s přímým řemenovým pohonem. Paralelní generace ke Topliner pro menší výkonovou třídu.
+        models:
+          - slug: deutz-fahr-starliner-4035h
+            name: "Starliner 4035 H"
+            year_from: 1992
+            year_to: 2001
+            power_hp: null
+            power_kw: null
+          - slug: deutz-fahr-starliner-4045h
+            name: "Starliner 4045 H"
+            year_from: 1995
+            year_to: 2001
+            power_hp: 160
+            power_kw: 118
+            grain_tank_l: 5200
+
+      # ========== HTS Series (2008-2014) ==========
+      - slug: htc-old
+        name: "HTS Series (1999–2014)"
+        year_from: 1999
+        year_to: 2014
+        description: >
+          Velké konvenční kombajny s APS (Advanced Propulsion System) systémem — dvojitý
+          urychlovací buben a dlouhé vytřásadla. Mezi modely 5690 HTS a 6090 HTS byl
+          nejvýkonnější 7545 RTS s rotační separací.
+        models:
+          - slug: deutz-fahr-5690-hts
+            name: "5690 HTS"
+            year_from: 1999
+            year_to: 2011
+            power_hp: 299
+            power_kw: 220
+            grain_tank_l: 8500
+          - slug: deutz-fahr-6090-hts
+            name: "6090 HTS"
+            year_from: 2011
+            year_to: 2014
+            power_hp: 310
+            power_kw: 246
+            engine: "Deutz TCD 7.8 L 6-válec"
+            grain_tank_l: 9500
+          - slug: deutz-fahr-7545-rts
+            name: "7545 RTS"
+            year_from: 2008
+            year_to: 2018
+            power_hp: 450
+            power_kw: 331
+            engine: "Deutz TCD 2015 V6 4V 11.9 L"
+            grain_tank_l: 9000
+
       # ========== Historické (Topliner, Starliner) ==========
       - slug: topliner
         name: "Topliner (1980–2000)"
