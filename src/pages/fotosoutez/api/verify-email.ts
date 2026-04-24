@@ -40,7 +40,7 @@ export const GET: APIRoute = async ({ url, cookies, clientAddress, request, redi
   cookies.set(CONTEST_CONFIG.VOTER_COOKIE, voter.cookie_id, {
     path: '/',
     httpOnly: true,
-    secure: true,
+    secure: import.meta.env.PROD,
     sameSite: 'lax',
     expires: round ? new Date(round.voting_ends_at) : undefined,
   });

@@ -31,20 +31,15 @@ if (Astro.request.method === 'POST') {
     if (authError) {
       error = 'Nesprávný email nebo heslo.';
     } else if (data.session) {
-      Astro.cookies.set('sb-access-token', data.session.access_token, {
+      const cookieOpts = {
         path: '/',
         httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
+        secure: import.meta.env.PROD,
+        sameSite: 'lax' as const,
         maxAge: 60 * 60 * 24 * 7,
-      });
-      Astro.cookies.set('sb-refresh-token', data.session.refresh_token!, {
-        path: '/',
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7,
-      });
+      };
+      Astro.cookies.set('sb-access-token', data.session.access_token, cookieOpts);
+      Astro.cookies.set('sb-refresh-token', data.session.refresh_token!, cookieOpts);
       return Astro.redirect(postLoginPath);
     }
   }

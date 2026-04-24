@@ -27,22 +27,19 @@ export const onRequest = defineMiddleware(async (context, next) => {
     if (data.session) {
       locals.user = data.session.user;
 
-      // Refresh tokens if they changed
+      // Refresh tokens if they changed.
+      // secure=true would be ignored on http://localhost in dev — gate it
+      // on PROD so dev login cookies actually persist in the browser.
       if (data.session.access_token !== accessToken) {
-        cookies.set('sb-access-token', data.session.access_token, {
+        const cookieOpts = {
           path: '/',
           httpOnly: true,
-          secure: true,
-          sameSite: 'lax',
+          secure: import.meta.env.PROD,
+          sameSite: 'lax' as const,
           maxAge: 60 * 60 * 24 * 7,
-        });
-        cookies.set('sb-refresh-token', data.session.refresh_token!, {
-          path: '/',
-          httpOnly: true,
-          secure: true,
-          sameSite: 'lax',
-          maxAge: 60 * 60 * 24 * 7,
-        });
+        };
+        cookies.set('sb-access-token', data.session.access_token, cookieOpts);
+        cookies.set('sb-refresh-token', data.session.refresh_token!, cookieOpts);
       }
     } else {
       locals.user = null;
