@@ -121,9 +121,20 @@ const catLabel = categoryLabels[category];
       {catLabel}
     </h1>
     <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:14px; color:#666;">
-      <span>🔢 {totalModels} modelů</span>
-      <span>🏭 {totalBrands} značek</span>
-      {minHp !== null && maxHp !== null && <span>⚡ {minHp}–{maxHp} k</span>}
+      <span style="display:inline-flex; align-items:center; gap:6px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+        {totalModels} modelů
+      </span>
+      <span style="display:inline-flex; align-items:center; gap:6px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21V7l-9-4-9 4v14"/><path d="M9 21v-6h6v6"/><path d="M11 11h2"/></svg>
+        {totalBrands} značek
+      </span>
+      {minHp !== null && maxHp !== null && (
+        <span style="display:inline-flex; align-items:center; gap:6px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          {minHp}–{maxHp} k
+        </span>
+      )}
     </div>
   </div>
 
@@ -190,7 +201,15 @@ const catLabel = categoryLabels[category];
                 <div class="family-tile-title">{t.label}</div>
                 <div class="family-tile-meta">
                   <span>{t.modelCount} modelů</span>
-                  {hpStr && <><span>·</span><span>⚡ {hpStr}</span></>}
+                  {hpStr && (
+                    <>
+                      <span>·</span>
+                      <span style="display:inline-flex; align-items:center; gap:4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        {hpStr}
+                      </span>
+                    </>
+                  )}
                 </div>
                 {yrStr && <div class="family-tile-year">{yrStr}</div>}
               </div>

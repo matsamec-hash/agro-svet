@@ -103,10 +103,24 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.totalModels, 0);
           {brand.name}
         </h1>
         <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:14px; color:#666; margin-bottom:12px;">
-          <span>🌍 {brand.country}</span>
-          <span>📅 Založeno {brand.founded}</span>
-          <span>🔢 {totalModels} modelů v katalogu</span>
-          {brand.website && <a href={brand.website} target="_blank" rel="noopener" style="color:#1a1a1a; text-decoration:underline;">🔗 {brand.website.replace(/^https?:\/\//, '')}</a>}
+          <span style="display:inline-flex; align-items:center; gap:6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            {brand.country}
+          </span>
+          <span style="display:inline-flex; align-items:center; gap:6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Založeno {brand.founded}
+          </span>
+          <span style="display:inline-flex; align-items:center; gap:6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+            {totalModels} modelů v katalogu
+          </span>
+          {brand.website && (
+            <a href={brand.website} target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:6px; color:#1a1a1a; text-decoration:underline;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              {brand.website.replace(/^https?:\/\//, '')}
+            </a>
+          )}
         </div>
         {brand.description && <p style="font-size:15px; color:#444; max-width:720px; line-height:1.6;">{brand.description}</p>}
       </div>
@@ -162,7 +176,15 @@ const totalModels = categoriesData.reduce((acc, c) => acc + c.totalModels, 0);
                   <h3 class="family-tile-title">{tile.label}</h3>
                   <div class="family-tile-meta">
                     <span>{tile.modelCount} {tile.modelCount === 1 ? 'model' : tile.modelCount < 5 ? 'modely' : 'modelů'}</span>
-                    {hpStr && <><span>·</span><span>⚡ {hpStr}</span></>}
+                    {hpStr && (
+                      <>
+                        <span>·</span>
+                        <span style="display:inline-flex; align-items:center; gap:4px;">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                          {hpStr}
+                        </span>
+                      </>
+                    )}
                   </div>
                   {yrStr && <div class="family-tile-year">{yrStr}</div>}
                   {tile.seriesCount > 1 && (

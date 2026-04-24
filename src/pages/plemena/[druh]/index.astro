@@ -43,12 +43,25 @@ const sorted = [...druh.plemena].sort((a, b) => a.name.localeCompare(b.name, 'cs
             {p.alternative_names && p.alternative_names.length > 0 && (
               <div style="font-size:12px; color:#767676; margin-bottom:8px; font-style:italic;">{p.alternative_names.join(', ')}</div>
             )}
-            <div style="font-size:13px; color:#666; margin-bottom:10px;">🌍 {p.origin_country}</div>
+            <div style="display:inline-flex; align-items:center; gap:6px; font-size:13px; color:#666; margin-bottom:10px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              {p.origin_country}
+            </div>
             <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:#555; margin-bottom:10px;">
               {p.weight_male_kg && <span>♂ {p.weight_male_kg} kg</span>}
               {p.weight_female_kg && <span>♀ {p.weight_female_kg} kg</span>}
-              {p.milk_yield_kg_year && <span>🥛 {p.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok</span>}
-              {p.height_cm && <span>📏 {p.height_cm} cm</span>}
+              {p.milk_yield_kg_year && (
+                <span style="display:inline-flex; align-items:center; gap:4px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                  {p.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok
+                </span>
+              )}
+              {p.height_cm && (
+                <span style="display:inline-flex; align-items:center; gap:4px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 8-4-4-4 4"/><path d="M14 4v16"/><path d="m6 16 4 4 4-4"/></svg>
+                  {p.height_cm} cm
+                </span>
+              )}
             </div>
             <p style="font-size:13px; color:#666; line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{p.description}</p>
           </a>

@@ -26,12 +26,12 @@ const items = [
 <div class="ia-wrap">
   <div class="ia-row">
     {items.map((item) => (
-      <a class="ia-panel" href={item.href}>
-        <img src={item.img} alt={item.label} class="ia-img" />
+      <a class="ia-panel" href={item.href} aria-label={`${item.label} — klepněte pro náhled`}>
+        <img src={item.img} alt={item.label} class="ia-img" width="640" height="480" loading="lazy" />
         <div class="ia-overlay"></div>
         <div class="ia-content">
           <h3>{item.label}</h3>
-          <span class="ia-btn">Navštívit sekci</span>
+          <span class="ia-btn">Přejít na sekci →</span>
         </div>
       </a>
     ))}
@@ -48,7 +48,7 @@ const items = [
   .ia-row {
     display: flex;
     gap: 10px;
-    height: min(35vh, 300px);
+    height: min(30vh, 255px);
   }
 
   .ia-panel {
@@ -58,13 +58,16 @@ const items = [
     overflow: hidden;
     cursor: pointer;
     text-decoration: none;
-    transition: flex 2s ease;
+    transition: flex .6s cubic-bezier(.4, 0, .2, 1), box-shadow .3s;
     min-width: 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, .12);
   }
 
-  .ia-panel:hover {
-    flex: 2;
+  /* Hover-expand only on devices with hover capability (desktop) */
+  @media (hover: hover) {
+    .ia-panel:hover {
+      flex: 2;
+    }
   }
 
   .ia-img {
@@ -76,10 +79,6 @@ const items = [
     transition: transform 1s cubic-bezier(.4, 0, .2, 1);
   }
 
-  .ia-panel:hover .ia-img {
-    transform: scale(1.08);
-  }
-
   .ia-overlay {
     position: absolute;
     inset: 0;
@@ -88,11 +87,6 @@ const items = [
     transition: background .6s;
   }
 
-  .ia-panel:hover .ia-overlay {
-    background: rgba(0, 0, 0, .45);
-  }
-
-  /* Centered content wrapper */
   .ia-content {
     position: absolute;
     inset: 0;
@@ -102,51 +96,93 @@ const items = [
     align-items: center;
     justify-content: center;
     gap: 14px;
+    padding: 16px;
   }
 
   .ia-content h3 {
     color: #fff;
     font-family: 'Chakra Petch', sans-serif;
     font-size: 22px;
-    font-weight: 300;
+    font-weight: 600;
     font-style: italic;
     margin: 0;
     text-align: center;
-    text-shadow: 0 1px 6px rgba(0, 0, 0, .35);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, .5);
     opacity: 0;
     transform: translateY(-30px);
-    transition: opacity .5s .1s, transform .5s .1s;
-  }
-
-  .ia-panel:hover .ia-content h3 {
-    opacity: 1;
-    transform: translateY(0);
+    transition: opacity .4s .05s, transform .4s .05s;
   }
 
   .ia-btn {
-    color: #fff;
+    background: #FFFF00;
+    color: #1a1a1a;
     font-family: 'Chakra Petch', sans-serif;
-    font-size: 12px;
-    font-weight: 300;
-    padding: 7px 18px;
-    border: 1px solid rgba(255, 255, 255, .75);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 8px;
     text-align: center;
     white-space: nowrap;
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity .5s .1s, transform .5s .1s;
+    transition: opacity .4s .1s, transform .4s .1s;
   }
 
-  .ia-panel:hover .ia-btn {
+  /* Expanded state — triggered by :hover on desktop OR .is-expanded class on touch */
+  .ia-panel:hover .ia-img,
+  .ia-panel.is-expanded .ia-img {
+    transform: scale(1.08);
+  }
+  .ia-panel:hover .ia-overlay,
+  .ia-panel.is-expanded .ia-overlay {
+    background: rgba(0, 0, 0, .55);
+  }
+  .ia-panel:hover .ia-content h3,
+  .ia-panel.is-expanded .ia-content h3 {
     opacity: 1;
     transform: translateY(0);
   }
+  .ia-panel:hover .ia-btn,
+  .ia-panel.is-expanded .ia-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ia-panel.is-expanded {
+    box-shadow: 0 0 0 3px #FFFF00, 0 8px 24px rgba(0, 0, 0, .25);
+  }
 
-  /* Mobile */
+  /* Mobile — stacked tiles with tap-to-expand */
   @media (max-width: 768px) {
     .ia-wrap { padding: 0 16px; }
-    .ia-row { flex-direction: column; height: auto; gap: 6px; }
-    .ia-panel { height: 100px; flex: none !important; border-radius: 16px; }
-    .ia-panel:hover { height: 220px; }
+    .ia-row { flex-direction: column; height: auto; gap: 10px; }
+    .ia-panel { height: 110px; flex: none !important; border-radius: 16px; transition: height .35s cubic-bezier(.4, 0, .2, 1), box-shadow .3s; }
+    .ia-panel.is-expanded { height: 180px; }
+    .ia-content h3 { font-size: 20px; }
   }
 </style>
+
+<script>
+  const panels = document.querySelectorAll<HTMLAnchorElement>('.ia-panel');
+  const canHover = window.matchMedia('(hover: hover)').matches;
+
+  if (!canHover) {
+    panels.forEach((panel) => {
+      panel.addEventListener('click', (e) => {
+        if (!panel.classList.contains('is-expanded')) {
+          e.preventDefault();
+          panels.forEach((p) => p.classList.remove('is-expanded'));
+          panel.classList.add('is-expanded');
+        }
+        // Already expanded — allow default navigation
+      });
+    });
+
+    // Close expanded on outside tap
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.ia-panel')) {
+        panels.forEach((p) => p.classList.remove('is-expanded'));
+      }
+    });
+  }
+</script>

@@ -149,8 +149,25 @@ const breadcrumbJsonLd = {
               <span style="font-size:12px; color:#767676;">{b.country}</span>
             </div>
             <div style="display:flex; gap:12px; font-size:13px; color:#666; margin-bottom:10px;">
-              {traktoryCount > 0 && <span>🚜 {traktoryCount} traktorů</span>}
-              {kombajnyCount > 0 && <span>🌾 {kombajnyCount} kombajnů</span>}
+              {traktoryCount > 0 && (
+                <span style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="7" cy="17" r="2"/><circle cx="18" cy="17" r="3"/>
+                    <path d="M4 17H3v-4l2-2h4l3-4h5v10h-2"/>
+                  </svg>
+                  {traktoryCount} traktorů
+                </span>
+              )}
+              {kombajnyCount > 0 && (
+                <span style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="9" width="18" height="9" rx="1"/>
+                    <path d="M3 9V7c0-1 1-2 2-2h14c1 0 2 1 2 2v2"/>
+                    <circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>
+                  </svg>
+                  {kombajnyCount} kombajnů
+                </span>
+              )}
             </div>
             {brandHp.length > 0 && (
               <div style="font-size:12px; color:#666;">
@@ -224,11 +241,25 @@ const breadcrumbJsonLd = {
           <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">${m.name}</div>
           <div style="font-size:12px; color:#666; margin-bottom:8px;">${m.series_name}</div>
           <div style="display:flex; justify-content:space-between; font-size:13px; color:#555;">
-            <span>⚡ ${hp}${kw}</span>
+            <span style="display:inline-flex; align-items:center; gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>${hp}${kw}</span>
             <span>${yr}</span>
           </div>
         </a>
       `;
+    }
+
+    function syncUrl() {
+      const params = new URLSearchParams();
+      if (el.category.value) params.set('kategorie', el.category.value);
+      if (el.brand.value) params.set('znacka', el.brand.value);
+      if (el.hpMin.value) params.set('vykon_od', el.hpMin.value);
+      if (el.hpMax.value) params.set('vykon_do', el.hpMax.value);
+      if (el.yearMin.value) params.set('rok_od', el.yearMin.value);
+      if (el.yearMax.value) params.set('rok_do', el.yearMax.value);
+      if (el.search.value.trim()) params.set('q', el.search.value.trim());
+      const qs = params.toString();
+      const newUrl = window.location.pathname + (qs ? '?' + qs : '');
+      window.history.replaceState(null, '', newUrl);
     }
 
     function applyFilters() {
@@ -239,6 +270,7 @@ const breadcrumbJsonLd = {
       const yearMin = parseInt(el.yearMin.value, 10);
       const yearMax = parseInt(el.yearMax.value, 10);
       const q = el.search.value.trim().toLowerCase();
+      syncUrl();
 
       const filtered = MODELS.filter((m) => {
         if (cat && m.category !== cat) return false;
