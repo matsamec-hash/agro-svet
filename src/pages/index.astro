@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import ImageAccordion from '../components/ImageAccordion.astro';
+import Newsletter from '../components/Newsletter.astro';
 import { createAnonClient } from '../lib/supabase';
 
 const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
@@ -111,6 +112,9 @@ const bazarCatLabels = Object.fromEntries(BAZAR_CATEGORIES.map((c) => [c.value, 
       ))}
     </div>
   </section>
+
+  <!-- Newsletter signup -->
+  <Newsletter />
 
   <!-- Fresh bazar listings -->
   {freshListings && freshListings.length > 0 && (

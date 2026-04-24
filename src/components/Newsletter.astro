@@ -1,0 +1,190 @@
+---
+import { getEnvVar } from '../lib/env';
+
+const SUPABASE_URL = getEnvVar('PUBLIC_SUPABASE_URL') ?? 'https://obhypfuzmknvmknskdwh.supabase.co';
+const SUPABASE_ANON_KEY = getEnvVar('PUBLIC_SUPABASE_ANON_KEY') ?? 'sb_publishable_CZvwsQ3DbmlOD8ErVuv9iQ_LjZJb6yD';
+const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
+
+const variant = Astro.props.variant ?? 'full';
+---
+
+<section class={`newsletter newsletter--${variant}`}>
+  <div class="newsletter-box">
+    <div class="newsletter-text">
+      <span class="newsletter-eyebrow">Newsletter</span>
+      <h2 class="newsletter-title">Novinky z agro světa do mailu</h2>
+      <p class="newsletter-perex">
+        Jednou týdně to nejdůležitější ze zemědělství, techniky, dotací a trhu — přímo do schránky.
+      </p>
+    </div>
+    <form id="newsletter-form" class="newsletter-form">
+      <input
+        id="newsletter-email"
+        type="email"
+        placeholder="Váš e-mail"
+        required
+        autocomplete="email"
+        class="newsletter-input"
+      />
+      <button type="submit" id="newsletter-btn" class="newsletter-btn">
+        Odebírat
+      </button>
+    </form>
+    <p id="newsletter-msg" class="newsletter-msg">Žádný spam. Odhlášení kdykoliv.</p>
+  </div>
+</section>
+
+<style>
+  .newsletter {
+    padding: 56px 32px;
+  }
+  .newsletter--compact {
+    padding: 40px 24px;
+  }
+  .newsletter-box {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #1a1a1a;
+    border-radius: 22px;
+    padding: 40px 36px;
+    text-align: center;
+    border: 3px solid #FFFF00;
+    position: relative;
+    overflow: hidden;
+  }
+  .newsletter-box::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: #FFFF00;
+    opacity: 0.08;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .newsletter-eyebrow {
+    display: inline-block;
+    background: #FFFF00;
+    color: #1a1a1a;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .newsletter-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: #fff;
+    margin: 0 0 12px;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+  }
+  .newsletter-perex {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 16px;
+    color: #ddd;
+    margin: 0 0 24px;
+    line-height: 1.5;
+  }
+  .newsletter-form {
+    display: flex;
+    gap: 10px;
+    max-width: 460px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .newsletter-input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #fff;
+    color: #1a1a1a;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .newsletter-input:focus {
+    border-color: #FFFF00;
+    box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.25);
+  }
+  .newsletter-btn {
+    background: #FFFF00;
+    color: #1a1a1a;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 12px 22px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .newsletter-btn:hover { background: #f0f000; }
+  .newsletter-btn:active { transform: translateY(1px); }
+  .newsletter-btn:disabled { opacity: 0.6; cursor: wait; }
+  .newsletter-msg {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 12px;
+    color: #888;
+    margin: 14px 0 0;
+  }
+  @media (max-width: 520px) {
+    .newsletter-form { flex-direction: column; }
+    .newsletter-btn { width: 100%; }
+  }
+</style>
+
+<script define:vars={{ SUPABASE_URL, SUPABASE_ANON_KEY, SITE_ID }}>
+  document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const emailInput = document.getElementById('newsletter-email');
+    const btn = document.getElementById('newsletter-btn');
+    const msg = document.getElementById('newsletter-msg');
+    const email = emailInput.value.trim();
+    if (!email) return;
+
+    btn.disabled = true;
+    btn.textContent = '...';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/newsletter_subscribers`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({ site_id: SITE_ID, email }),
+      });
+
+      if (res.ok) {
+        msg.textContent = 'Děkujeme! Brzy se ozveme.';
+        msg.style.color = '#FFFF00';
+        emailInput.value = '';
+      } else if (res.status === 409) {
+        msg.textContent = 'Tento e-mail už odebírá.';
+        msg.style.color = '#FFCC00';
+      } else {
+        throw new Error('subscribe failed');
+      }
+    } catch {
+      msg.textContent = 'Něco se pokazilo. Zkuste to znovu.';
+      msg.style.color = '#FF6B6B';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Odebírat';
+    }
+  });
+</script>
