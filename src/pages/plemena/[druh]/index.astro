@@ -31,7 +31,7 @@ const sorted = [...druh.plemena].sort((a, b) => a.name.localeCompare(b.name, 'cs
       <div style="margin-top:14px; font-size:14px; color:#666;">📚 {sorted.length} plemen v databázi</div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr)); gap:16px;">
       {sorted.map((p) => {
         const uzit = p.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ');
         return (
@@ -41,7 +41,7 @@ const sorted = [...druh.plemena].sort((a, b) => a.name.localeCompare(b.name, 'cs
             </div>
             <h3 style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; color:#1a1a1a; margin-bottom:6px;">{p.name}</h3>
             {p.alternative_names && p.alternative_names.length > 0 && (
-              <div style="font-size:12px; color:#999; margin-bottom:8px; font-style:italic;">{p.alternative_names.join(', ')}</div>
+              <div style="font-size:12px; color:#767676; margin-bottom:8px; font-style:italic;">{p.alternative_names.join(', ')}</div>
             )}
             <div style="font-size:13px; color:#666; margin-bottom:10px;">🌍 {p.origin_country}</div>
             <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:#555; margin-bottom:10px;">

@@ -25,11 +25,11 @@ const sorted = znacky.sort((a, b) => a.data.name.localeCompare(b.data.name, 'cs'
         <a href={`/znacky/${znacka.id}/`} style="display:block; text-decoration:none; color:inherit; border:none; border-radius:14px; padding:24px; background:#fff; box-shadow:0 0 10px rgba(0,0,0,.12); transition:box-shadow .2s, transform .2s;" class="brand-card">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
             <h3 style="font-size:20px; font-weight:400; color:#1a1a1a;">{znacka.data.name}</h3>
-            <span style="font-size:12px; color:#aaa; white-space:nowrap;">{znacka.data.zeme}</span>
+            <span style="font-size:12px; color:#767676; white-space:nowrap;">{znacka.data.zeme}</span>
           </div>
           <p style="font-size:14px; color:#666; line-height:1.55; margin-bottom:16px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{znacka.data.popis}</p>
           <div style="display:flex; align-items:center; justify-content:space-between;">
-            <span style="font-size:12px; color:#aaa;">od {znacka.data.zalozena}</span>
+            <span style="font-size:12px; color:#767676;">od {znacka.data.zalozena}</span>
             <div style="display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end;">
               {znacka.data.kategorie.slice(0,2).map(k => (
                 <span style="background:#f5f5f5; color:#555; font-size:11px; padding:2px 8px; border-radius:20px;">{k}</span>

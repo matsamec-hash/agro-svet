@@ -178,7 +178,7 @@ if (isBreed && listing.model_slug) {
           <option value="">Bez značky</option>
           {BRANDS.map(b => <option value={b.value} selected={b.value === listing.brand}>{b.label}</option>)}
         </select>
-        <small id="brand-hint" style={isMachine && listing.model_slug ? 'display:block; font-size:12px; color:#888;' : 'display:none;'}>
+        <small id="brand-hint" style={isMachine && listing.model_slug ? 'display:block; font-size:12px; color:#666;' : 'display:none;'}>
           {isMachine && listing.model_slug ? 'Značka určena modelem z katalogu.' : ''}
         </small>
       </div>
@@ -213,7 +213,7 @@ if (isBreed && listing.model_slug) {
       </button>
     </form>
 
-    <a href="/bazar/moje/" style="display:block; text-align:center; margin-top:16px; font-size:14px; color:#888; text-decoration:none;">&larr; Zpět na moje inzeráty</a>
+    <a href="/bazar/moje/" style="display:block; text-align:center; margin-top:16px; font-size:14px; color:#666; text-decoration:none;">&larr; Zpět na moje inzeráty</a>
   </div>
 
   <script is:inline>

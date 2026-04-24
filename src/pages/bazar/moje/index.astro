@@ -59,7 +59,7 @@ const { data: listings } = await supabase
                 <a href={`/bazar/${listing.id}/`} style="text-decoration:none; color:inherit;">
                   <h3 style="font-size:16px; margin-bottom:4px;">{listing.title}</h3>
                 </a>
-                <div style="font-size:13px; color:#888; display:flex; gap:12px;">
+                <div style="font-size:13px; color:#666; display:flex; gap:12px;">
                   <span>{categoryLabel}</span>
                   <span>{priceText}</span>
                   <span>{date}</span>
@@ -83,14 +83,14 @@ const { data: listings } = await supabase
         })}
       </div>
     ) : (
-      <div style="text-align:center; padding:64px 0; color:#888;">
+      <div style="text-align:center; padding:64px 0; color:#666;">
         <p>Zatím nemáte žádné inzeráty.</p>
         <a href="/bazar/novy/" class="btn-primary" style="margin-top:16px; display:inline-flex;">+ Přidat inzerát</a>
       </div>
     )}
 
     <div style="margin-top:32px; text-align:center;">
-      <a href="/bazar/odhlaseni/" class="link-underline" style="font-size:13px; color:#888;">Odhlásit se</a>
+      <a href="/bazar/odhlaseni/" class="link-underline" style="font-size:13px; color:#666;">Odhlásit se</a>
     </div>
   </div>
 </Layout>

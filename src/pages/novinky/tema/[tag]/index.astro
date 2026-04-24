@@ -58,7 +58,7 @@ const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.len
     <div style="margin-bottom:8px; font-size:13px; color:#666;">
       <a href="/novinky/" style="color:#666; text-decoration:none;">Novinky</a>
       <span style="margin:0 6px;">/</span>
-      <span style="color:#888;">Téma</span>
+      <span style="color:#666;">Téma</span>
       <span style="margin:0 6px;">/</span>
       <span style="color:#1a1a1a;">{tag}</span>
     </div>
@@ -77,7 +77,7 @@ const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.len
 
     {catFacets.length > 1 && (
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;">
-        <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#888; padding:8px 0;">V kategoriích:</span>
+        <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; padding:8px 0;">V kategoriích:</span>
         {catFacets.map((c) => (
           <a href={`/novinky/kategorie/${c.slug}/`} class="pill" style={categoryStyle(c.slug)}>
             {c.label} <span class="pill-count">{c.count}</span>
@@ -100,14 +100,14 @@ const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.len
         ))}
       </div>
     ) : (
-      <p style="padding:48px 0; text-align:center; color:#888;">
+      <p style="padding:48px 0; text-align:center; color:#666;">
         <a href="/novinky/" style="color:#1a1a1a;">← Zpět na novinky</a>
       </p>
     )}
 
     {relatedTags.length > 0 && (
       <aside style="margin-top:48px; padding-top:24px; border-top:1px solid #eee;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#888; margin-bottom:12px;">
+        <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; margin-bottom:12px;">
           Související témata
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap;">
@@ -156,6 +156,6 @@ const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.len
       text-decoration: none;
     }
     .nov-tag:hover { background: #fff0a8; border-color: #FFFF00; color: #1a1a1a; }
-    .nov-tag-count { font-size: 10px; color: #aaa; }
+    .nov-tag-count { font-size: 10px; color: #767676; }
   </style>
 </Layout>

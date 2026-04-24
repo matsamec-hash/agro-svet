@@ -65,7 +65,7 @@ function getImageUrl(listing: any): string | null {
         <span class="section-label">Agro bazar</span>
         <h1 style="font-size:clamp(1.8rem,4vw,2.5rem);">Inzeráty</h1>
         {count !== null && count !== undefined && (
-          <p style="color:#888; font-size:14px; margin-top:4px;">Nalezeno {count.toLocaleString('cs-CZ')} inzerátů</p>
+          <p style="color:#666; font-size:14px; margin-top:4px;">Nalezeno {count.toLocaleString('cs-CZ')} inzerátů</p>
         )}
       </div>
       <a href="/bazar/novy/" class="btn-primary">
@@ -94,7 +94,7 @@ function getImageUrl(listing: any): string | null {
             ))}
           </div>
         ) : (
-          <div style="text-align:center; padding:64px 0; color:#888; background:#fafafa; border-radius:14px;">
+          <div style="text-align:center; padding:64px 0; color:#666; background:#fafafa; border-radius:14px;">
             <p style="font-size:18px;">Žádné inzeráty nenalezeny.</p>
             <p style="font-size:14px; margin-top:8px;">Zkuste změnit filtry nebo <a href="/bazar/novy/" class="link-underline">vložte první inzerát</a>.</p>
           </div>

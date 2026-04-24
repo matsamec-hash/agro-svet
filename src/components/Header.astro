@@ -102,11 +102,17 @@ const current = Astro.url.pathname;
     <a href="/bazar/prihlaseni/" id="guest-link" class="guest-link" hidden>Přihlásit</a>
 
     <!-- Mobile hamburger -->
-    <button id="hamburger" style="display:none; background:none; border:none; cursor:pointer; padding:8px;" aria-label="Menu">
-      <svg id="icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round">
+    <button
+      id="hamburger"
+      class="hamburger-btn"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <svg id="icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round">
         <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
-      <svg id="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" style="display:none;">
+      <svg id="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" style="display:none;">
         <line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/>
       </svg>
     </button>
@@ -361,9 +367,23 @@ const current = Astro.url.pathname;
   }
   .guest-link:hover { background: #000; }
 
+  .hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+  }
+  .hamburger-btn:hover { background: rgba(0, 0, 0, .04); }
+
   @media (max-width: 1025px) {
     #main-nav { display: none !important; }
-    #hamburger { display: block !important; }
+    .hamburger-btn { display: inline-flex !important; }
   }
 </style>
 
@@ -379,6 +399,7 @@ const current = Astro.url.pathname;
     mobileNav!.style.display = open ? 'block' : 'none';
     iconOpen!.style.display = open ? 'none' : 'block';
     iconClose!.style.display = open ? 'block' : 'none';
+    hamburger.setAttribute('aria-expanded', String(open));
   });
 
   // Search toggle

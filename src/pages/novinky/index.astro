@@ -123,7 +123,7 @@ const totalAll = allForMeta?.length ?? 0;
 
         {topTags.length > 0 && (
           <div style="margin-top:16px; padding-top:14px; border-top:1px solid #eee;">
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#888; margin-bottom:8px;">
+            <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; margin-bottom:8px;">
               🏷 Témata
             </div>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
@@ -162,7 +162,7 @@ const totalAll = allForMeta?.length ?? 0;
     <!-- Results -->
     {sorted.length > 0 ? (
       <>
-        <div style="margin-bottom:14px; font-size:13px; color:#888;">
+        <div style="margin-bottom:14px; font-size:13px; color:#666;">
           Nalezeno {sorted.length} článků{hasFilters ? ' odpovídajících filtrům' : ''}.
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
@@ -179,7 +179,7 @@ const totalAll = allForMeta?.length ?? 0;
         </div>
       </>
     ) : (
-      <p style="color:#888; font-size:16px; padding:48px 0; text-align:center;">
+      <p style="color:#666; font-size:16px; padding:48px 0; text-align:center;">
         Žádné články neodpovídají filtrům.
         {hasFilters && <> <a href="/novinky/" style="color:#1a1a1a;">Vymazat filtry</a>.</>}
       </p>
@@ -303,7 +303,7 @@ const totalAll = allForMeta?.length ?? 0;
       font-size: 10px;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: #888;
+      color: #666;
     }
     .nov-date-input {
       height: 38px;
@@ -317,7 +317,7 @@ const totalAll = allForMeta?.length ?? 0;
       margin-left: auto;
       align-self: center;
       font-size: 13px;
-      color: #888;
+      color: #666;
       text-decoration: underline;
     }
     .nov-reset:hover { color: #000; }
@@ -340,7 +340,7 @@ const totalAll = allForMeta?.length ?? 0;
     .pill.active { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
     .pill-count {
       font-size: 11px;
-      color: #888;
+      color: #666;
       background: rgba(0,0,0,.06);
       padding: 1px 7px;
       border-radius: 10px;
@@ -366,7 +366,7 @@ const totalAll = allForMeta?.length ?? 0;
     .nov-tag.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
     .nov-tag-count {
       font-size: 10px;
-      color: #aaa;
+      color: #767676;
     }
     .nov-tag.active .nov-tag-count { color: #FFFF00; }
   </style>

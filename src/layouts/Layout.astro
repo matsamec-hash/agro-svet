@@ -44,8 +44,9 @@ const { title, description = 'Novinky ze světa zemědělství, encyklopedie str
   />
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Přeskočit na obsah</a>
   <Header />
-  <main>
+  <main id="main-content" tabindex="-1">
     <slot />
   </main>
   <Lightbox />

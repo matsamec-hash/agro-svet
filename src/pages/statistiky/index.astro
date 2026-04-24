@@ -120,7 +120,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
             <div class="legend-bar"></div>
             <span class="legend-hi">vysoká</span>
           </div>
-          <svg id="czMap" viewBox="-10 -10 1020 389" xmlns="http://www.w3.org/2000/svg">
+          <svg id="czMap" viewBox="-10 -10 1020 389" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mapa krajů České republiky s daty o sklizni. Kliknutím na kraj zobrazíte detail.">
             <defs>
               <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
               <filter id="shadow"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity=".15"/></filter>
@@ -518,6 +518,25 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
   // ── Interactive Map ──
   const regionalCrops = _raw.regionalCrops;
   const mapPaths = document.querySelectorAll('#czMap path');
+
+  // Accessibility: add <title>, role=button, tabindex to region paths
+  mapPaths.forEach(path => {
+    const region = path.getAttribute('data-region');
+    if (!region) return;
+    const titleEl = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    titleEl.textContent = region;
+    path.appendChild(titleEl);
+    path.setAttribute('role', 'button');
+    path.setAttribute('tabindex', '0');
+    path.setAttribute('aria-label', region);
+    path.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        path.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      }
+    });
+  });
+
   const tooltip = document.getElementById('mapTooltip');
   const detailPanel = document.getElementById('detailContent');
   const detailPlaceholder = document.querySelector('.detail-placeholder');
@@ -673,14 +692,15 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
   }
 
   .map-btn {
-    padding: 6px 16px;
+    min-height: 44px;
+    padding: 10px 16px;
     border: 1px solid #e0e0e0;
-    border-radius: 20px;
+    border-radius: 22px;
     background: #fff;
     font-family: var(--font-heading);
     font-size: 13px;
     font-weight: 400;
-    color: #888;
+    color: #555;
     cursor: pointer;
     transition: all .2s;
   }
@@ -710,8 +730,8 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
     justify-content: flex-end;
     margin-bottom: 8px;
     font-family: var(--font-heading);
-    font-size: 10px;
-    color: #888;
+    font-size: 11px;
+    color: #666;
   }
 
   .legend-bar {
@@ -784,7 +804,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
     align-items: center;
     justify-content: center;
     flex: 1;
-    color: #aaa;
+    color: #767676;
     font-family: var(--font-heading);
     font-size: 14px;
     gap: 8px;
@@ -885,7 +905,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
   }
 
   .ticker-name {
-    color: #888;
+    color: #bbb;
     font-family: var(--font-heading);
     font-size: 13px;
   }
@@ -898,13 +918,13 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
   }
 
   .ticker-unit {
-    color: #555;
+    color: #bbb;
     font-size: 12px;
   }
 
   .ticker-date {
     margin-left: auto;
-    color: #555;
+    color: #bbb;
     font-size: 11px;
   }
 
@@ -928,7 +948,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
 
   .block-sub {
     font-size: 13px;
-    color: #888;
+    color: #666;
   }
 
   /* ── Commodity cards ── */
@@ -959,7 +979,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
   .comm-name {
     font-family: var(--font-heading);
     font-size: 13px;
-    color: #888;
+    color: #666;
   }
 
   .comm-arrow {
@@ -982,7 +1002,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
 
   .comm-unit {
     font-size: 11px;
-    color: #aaa;
+    color: #767676;
   }
 
   /* ── Chart ── */
@@ -998,7 +1018,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
 
   .chart-wrap h3 {
     font-size: 14px;
-    color: #888;
+    color: #666;
     margin: 0 0 12px;
     font-weight: 400;
   }
@@ -1045,7 +1065,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
   .live-name {
     font-family: var(--font-heading);
     font-size: 13px;
-    color: #888;
+    color: #666;
   }
 
   .live-num {
@@ -1057,7 +1077,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
 
   .live-date {
     font-size: 11px;
-    color: #aaa;
+    color: #767676;
   }
 
   /* ── Fertilizer row ── */
@@ -1078,7 +1098,7 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
   .fert-name {
     font-family: var(--font-heading);
     font-size: 12px;
-    color: #888;
+    color: #666;
     margin-bottom: 6px;
   }
 
@@ -1130,10 +1150,10 @@ const CHART_COLORS = ['#FFFF00', '#4ecdc4', '#ff6b6b', '#a29bfe', '#fd79a8', '#0
     padding-top: 20px;
     border-top: 1px solid #ebebeb;
     font-size: 12px;
-    color: #aaa;
+    color: #767676;
   }
 
-  .source a { color: #888; text-decoration: underline; }
+  .source a { color: #555; text-decoration: underline; }
 
   /* ── Mobile ── */
   @media (max-width: 768px) {

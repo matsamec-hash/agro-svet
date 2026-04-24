@@ -61,10 +61,10 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
   <div style="max-width:1000px; margin:0 auto; padding:32px 24px 80px;">
 
     <!-- Breadcrumb -->
-    <nav style="font-size:13px; color:#888; margin-bottom:20px;">
-      <a href="/bazar/" style="color:#888; text-decoration:none;">Bazar</a>
+    <nav style="font-size:13px; color:#666; margin-bottom:20px;">
+      <a href="/bazar/" style="color:#666; text-decoration:none;">Bazar</a>
       <span> &rarr; </span>
-      <a href={`/bazar/?category=${listing.category}`} style="color:#888; text-decoration:none;">{categoryLabel}</a>
+      <a href={`/bazar/?category=${listing.category}`} style="color:#666; text-decoration:none;">{categoryLabel}</a>
       <span> &rarr; </span>
       <span style="color:#555;">{listing.title}</span>
     </nav>
@@ -133,7 +133,7 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
         </div>
 
         <!-- Info -->
-        <div class="sidebar-box" style="font-size:13px; color:#888;">
+        <div class="sidebar-box" style="font-size:13px; color:#666;">
           <p>Lokalita: {listing.location}</p>
           <p>Datum: {date}</p>
           <p>{listing.views ?? 0}x zobrazeno</p>
@@ -181,7 +181,7 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #888;
+    color: #666;
     margin-bottom: 4px;
   }
 

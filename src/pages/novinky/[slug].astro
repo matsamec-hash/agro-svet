@@ -40,8 +40,8 @@ const categoryLabels: Record<string, string> = {
   <div style="max-width:780px; margin:0 auto; padding:48px 32px 96px;">
 
     <!-- Breadcrumb -->
-    <div style="font-size:13px; color:#888; margin-bottom:28px;">
-      <a href="/novinky/" style="color:#888; text-decoration:none;">Novinky</a>
+    <div style="font-size:13px; color:#666; margin-bottom:28px;">
+      <a href="/novinky/" style="color:#666; text-decoration:none;">Novinky</a>
       <span style="margin:0 8px;">›</span>
       <span>{article.title}</span>
     </div>
@@ -53,7 +53,7 @@ const categoryLabels: Record<string, string> = {
           {categoryLabels[article.category] ?? article.category}
         </span>
       )}
-      <time style="font-size:13px; color:#888;">{date}</time>
+      <time style="font-size:13px; color:#666;">{date}</time>
     </div>
 
     <!-- Headline -->
@@ -70,7 +70,7 @@ const categoryLabels: Record<string, string> = {
     <!-- Tags (clickable — navigate to filtered novinky) -->
     {article.tags?.length > 0 && (
       <div style="margin-top:48px; padding-top:24px; border-top:1px solid #ebebeb;">
-        <span style="font-size:12px; color:#aaa; margin-right:8px;">Tagy:</span>
+        <span style="font-size:12px; color:#767676; margin-right:8px;">Tagy:</span>
         {article.tags.map((tag: string) => (
           <a
             href={`/novinky/tema/${encodeURIComponent(tag)}/`}

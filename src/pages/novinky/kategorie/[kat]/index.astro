@@ -66,7 +66,7 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
       <p style="font-size:15px; color:#666; line-height:1.65; max-width:720px;">
         {description}
       </p>
-      <p style="font-size:13px; color:#888; margin-top:8px;">
+      <p style="font-size:13px; color:#666; margin-top:8px;">
         {items.length === 0
           ? 'Zatím žádné články v této kategorii.'
           : `${items.length} ${items.length === 1 ? 'článek' : items.length < 5 ? 'články' : 'článků'}.`}
@@ -103,7 +103,7 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
         ))}
       </div>
     ) : (
-      <p style="padding:48px 0; text-align:center; color:#888;">
+      <p style="padding:48px 0; text-align:center; color:#666;">
         <a href="/novinky/" style="color:#1a1a1a;">← Zpět na novinky</a>
       </p>
     )}
@@ -145,6 +145,6 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
       text-decoration: none;
     }
     .nov-tag:hover { background: #fff0a8; border-color: #FFFF00; color: #1a1a1a; }
-    .nov-tag-count { font-size: 10px; color: #aaa; }
+    .nov-tag-count { font-size: 10px; color: #767676; }
   </style>
 </Layout>

@@ -166,7 +166,7 @@ const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).so
             <span style="background:#f0f0f0; color:#555; font-size:10px; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">${uzit}</span>
           </div>
           <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">${p.name}</div>
-          <div style="font-size:12px; color:#888; margin-bottom:8px;">🌍 ${p.origin_country}</div>
+          <div style="font-size:12px; color:#666; margin-bottom:8px;">🌍 ${p.origin_country}</div>
           <div style="font-size:12px; color:#555;">${wt}${milk}</div>
         </a>`;
     }
@@ -193,7 +193,7 @@ const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).so
         el.resultsGrid.style.display = 'grid';
         el.resultsGrid.innerHTML = filtered.length > 0
           ? filtered.map(card).join('')
-          : '<div style="grid-column:1/-1; padding:48px; text-align:center; color:#999;">Žádná plemena neodpovídají filtrům.</div>';
+          : '<div style="grid-column:1/-1; padding:48px; text-align:center; color:#767676;">Žádná plemena neodpovídají filtrům.</div>';
         el.count.textContent = `Nalezeno ${filtered.length} plemen`;
       } else {
         el.druhGrid.style.display = 'grid';
