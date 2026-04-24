@@ -6,10 +6,10 @@
 // Middleware already gates /admin/* routes; this is the second line of
 // defence against a bug elsewhere stripping the gate.
 import type { APIRoute } from 'astro';
-import { env } from 'cloudflare:workers';
 import { createServerClient } from '../../../../lib/supabase';
 import { getEntry } from '../../../../lib/contest-supabase';
 import { sendContestEmail } from '../../../../lib/contest-email';
+import { getEnvVar } from '../../../../lib/env';
 
 export const prerender = false;
 
@@ -67,7 +67,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   if (owner?.email) {
     const displayName = owner.contest_display_name ?? owner.name ?? undefined;
     const roundTitle = round?.title ?? '';
-    const apiKey = (env as any).RESEND_API_KEY;
+    const apiKey = getEnvVar('RESEND_API_KEY') ?? '';
     if (action === 'approve') {
       sendContestEmail(apiKey, {
         kind: 'upload_approved',

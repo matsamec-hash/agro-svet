@@ -3,12 +3,12 @@
 // Voter pastes their email → we (re)generate a token, store it on the
 // voter row, and dispatch a magic_link email via Resend.
 import type { APIRoute } from 'astro';
-import { env } from 'cloudflare:workers';
 import { createServerClient } from '../../../lib/supabase';
 import { getActiveRound, getEntry } from '../../../lib/contest-supabase';
 import { verifyTurnstile } from '../../../lib/contest-turnstile';
 import { generateVerificationToken } from '../../../lib/contest-voting';
 import { sendContestEmail } from '../../../lib/contest-email';
+import { getEnvVar } from '../../../lib/env';
 
 export const prerender = false;
 
@@ -22,7 +22,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return json({ error: 'invalid_email' }, 400);
   }
   if (!entryId) return json({ error: 'missing_entry' }, 400);
-  if (!(await verifyTurnstile((env as any).TURNSTILE_SECRET_KEY, turnstile, clientAddress))) {
+  if (!(await verifyTurnstile(getEnvVar('TURNSTILE_SECRET_KEY') ?? '', turnstile, clientAddress))) {
     return json({ error: 'captcha_failed' }, 400);
   }
 
@@ -71,7 +71,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   const verifyUrl = `https://agro-svet.cz/fotosoutez/api/verify-email?token=${token}&entry=${entryId}`;
 
-  await sendContestEmail((env as any).RESEND_API_KEY, {
+  await sendContestEmail(getEnvVar('RESEND_API_KEY') ?? '', {
     kind: 'magic_link',
     to: email,
     verification_url: verifyUrl,

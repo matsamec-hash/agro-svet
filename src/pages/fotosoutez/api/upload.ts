@@ -10,13 +10,13 @@
 //   7. insert pending entry → upload to storage → patch path
 //   8. fire-and-forget upload_pending email
 import type { APIRoute } from 'astro';
-import { env } from 'cloudflare:workers';
 import { createServerClient } from '../../../lib/supabase';
 import { getActiveRound, countUserEntriesInRound } from '../../../lib/contest-supabase';
 import { validateUpload, buildStoragePath } from '../../../lib/contest-images';
 import { verifyTurnstile } from '../../../lib/contest-turnstile';
 import { sendContestEmail } from '../../../lib/contest-email';
 import { CONTEST_CONFIG } from '../../../lib/contest-config';
+import { getEnvVar } from '../../../lib/env';
 
 export const prerender = false;
 
@@ -30,7 +30,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
 
   const turnstileToken = String(form.get('turnstile_token') ?? '');
   const okTurnstile = await verifyTurnstile(
-    (env as any).TURNSTILE_SECRET_KEY,
+    getEnvVar('TURNSTILE_SECRET_KEY') ?? '',
     turnstileToken,
     clientAddress,
   );
@@ -120,12 +120,12 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
 
   // Fire-and-forget — failing to email must not fail the upload.
   if (user.email) {
-    sendContestEmail((env as any).RESEND_API_KEY, {
+    sendContestEmail(getEnvVar('RESEND_API_KEY') ?? '', {
       kind: 'upload_pending',
       to: user.email,
       display_name: displayName,
       entry_title: title,
-    }).catch(err => console.error('[upload] email failed', err));
+    }).catch((err) => console.error('[upload] email failed', err));
   }
 
   return json({ ok: true, entry_id: inserted.id });
