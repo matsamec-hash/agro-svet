@@ -1,0 +1,235 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { getActiveRound } from '../../lib/contest-supabase';
+import { getAllBrands } from '../../lib/stroje';
+import { getKraje } from '../../lib/lokality';
+import { computeRoundPhase } from '../../lib/contest-config';
+
+const user = Astro.locals.user;
+const round = await getActiveRound();
+const phase = round ? computeRoundPhase(round) : null;
+const canUpload = phase === 'upload_open';
+
+const brands = getAllBrands();
+const kraje = getKraje();
+const turnstileSiteKey = (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? '';
+---
+<Layout title="Nahrát fotku — Fotosoutěž Agro-svět" description="Nahrajte svou fotografii do aktuálního kola">
+  <main class="upload-page">
+    <a href="/fotosoutez/" class="back">← Zpět</a>
+    <h1>Nahrát fotku</h1>
+
+    {!canUpload && (
+      <p class="closed">Upload je aktuálně uzavřen. Přijďte zpět, až bude nové kolo otevřeno.</p>
+    )}
+
+    {canUpload && round && (
+      <>
+        <p class="round-tag">Kolo: <strong>{round.title}</strong></p>
+        <form id="upload-form" enctype="multipart/form-data">
+          <div class="field">
+            <label>Fotografie *</label>
+            <input type="file" name="photo" accept="image/jpeg,image/png,image/webp,image/heic" required />
+            <p class="hint">Max 20 MB, JPG / PNG / WebP / HEIC</p>
+          </div>
+
+          <div class="field">
+            <label>Název fotky *</label>
+            <input type="text" name="title" required maxlength="80" />
+          </div>
+
+          <div class="field">
+            <label>Popisek (volitelné)</label>
+            <textarea name="caption" maxlength="500" rows="3"></textarea>
+          </div>
+
+          <div class="field">
+            <label>Jméno pod fotkou *</label>
+            <input type="text" name="author_display_name" required maxlength="80" value={user?.user_metadata?.name ?? ''} />
+          </div>
+
+          <details class="extras">
+            <summary>Dodatečné údaje (pomohou vyhledat fotku v archivu)</summary>
+            <div class="extras-body">
+              <div class="field">
+                <label>Značka</label>
+                <select name="brand_slug">
+                  <option value="">— vyberte —</option>
+                  {brands.map((b) => <option value={b.slug}>{b.name}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label>Kraj</label>
+                <select name="location_kraj_slug" id="kraj-select">
+                  <option value="">— vyberte —</option>
+                  {kraje.map((k) => <option value={k.slug}>{k.name}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label>Okres</label>
+                <select name="location_okres_slug" id="okres-select" disabled>
+                  <option value="">— nejprve vyberte kraj —</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Rok pořízení</label>
+                <input type="number" name="year_taken" min="1900" max="2030" />
+              </div>
+            </div>
+          </details>
+
+          <div class="consents">
+            <label>
+              <input type="checkbox" name="confirm_self_author" required />
+              <span>Fotku jsem pořídil(a) sám/sama a není generovaná umělou inteligencí. *</span>
+            </label>
+            <label>
+              <input type="checkbox" name="confirm_rules" required />
+              <span>Souhlasím s <a href="/fotosoutez/pravidla/">pravidly soutěže</a> a <a href="/fotosoutez/gdpr/">zpracováním osobních údajů</a>. *</span>
+            </label>
+            <label>
+              <input type="checkbox" name="license_merch_print" />
+              <span>Dobrovolně souhlasím s případným použitím fotky v kalendáři Agro-svět 2027 a merchandise.</span>
+            </label>
+          </div>
+
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+
+          <button type="submit" class="submit-btn">Nahrát fotku</button>
+          <p id="upload-message" hidden></p>
+        </form>
+
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+        <script is:inline define:vars={{ kraje }}>
+          const krajSelect = document.getElementById('kraj-select');
+          const okresSelect = document.getElementById('okres-select');
+          krajSelect?.addEventListener('change', () => {
+            const k = kraje.find((x) => x.slug === krajSelect.value);
+            okresSelect.innerHTML = '<option value="">— vyberte —</option>';
+            if (k && Array.isArray(k.okresy)) {
+              okresSelect.disabled = false;
+              for (const o of k.okresy) {
+                const opt = document.createElement('option');
+                opt.value = o.slug;
+                opt.textContent = o.name;
+                okresSelect.appendChild(opt);
+              }
+            } else {
+              okresSelect.disabled = true;
+            }
+          });
+        </script>
+
+        <script>
+          const form = document.getElementById('upload-form') as HTMLFormElement | null;
+          const msg = document.getElementById('upload-message') as HTMLElement | null;
+          form?.addEventListener('submit', async (ev) => {
+            ev.preventDefault();
+            if (!msg) return;
+            const fd = new FormData(form);
+            const tsToken = (form.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]'))?.value;
+            if (tsToken) fd.append('turnstile_token', tsToken);
+            msg.textContent = 'Nahrávám…';
+            msg.hidden = false;
+            const res = await fetch('/fotosoutez/api/upload', { method: 'POST', body: fd });
+            const json = await res.json();
+            if (res.ok) {
+              msg.textContent = '✓ Fotka nahrána, čeká na schválení. Přesměrovávám…';
+              setTimeout(() => { location.href = '/fotosoutez/moje/'; }, 1500);
+            } else {
+              msg.textContent = `Chyba: ${json.error ?? 'neznámá'} ${json.reason ?? ''}`;
+            }
+          });
+        </script>
+      </>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .upload-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .back { font-size: 14px; color: #888; text-decoration: none; }
+  .back:hover { color: #1a1a1a; }
+  .upload-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 12px 0 8px;
+  }
+  .closed {
+    background: #f5f5f5;
+    padding: 16px 18px;
+    border-radius: 10px;
+    color: #666;
+  }
+  .round-tag { color: #888; margin-bottom: 24px; }
+  form { display: flex; flex-direction: column; gap: 18px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .field input[type="text"],
+  .field input[type="number"],
+  .field input[type="email"],
+  .field textarea,
+  .field select {
+    padding: 12px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus { outline: none; border-color: #FFFF00; }
+  .hint { font-size: 12px; color: #888; margin: 4px 0 0; }
+  .extras {
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .extras summary {
+    cursor: pointer;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+  }
+  .extras-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .consents { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .consents label {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+  }
+  .consents input[type="checkbox"] { margin-top: 4px; }
+  .consents a { color: #1a1a1a; text-decoration: underline; }
+  .submit-btn {
+    background: #FFFF00;
+    color: #000;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .submit-btn:hover { background: #fff700; }
+  #upload-message { font-size: 14px; color: #555; margin: 0; }
+</style>
