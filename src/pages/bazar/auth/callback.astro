@@ -53,7 +53,17 @@ const { url: supabaseUrl, anonKey: supabaseKey } = getPublicSupabaseConfig();
           }),
         });
         if (res.ok) {
-          window.location.href = '/bazar/moje/';
+          // Pick up the destination stashed by prihlaseni.astro before the
+          // Google round-trip. Validate it as a same-origin path.
+          let target = '/bazar/moje/';
+          try {
+            const stashed = sessionStorage.getItem('postLoginRedirect');
+            if (stashed && stashed.startsWith('/') && !stashed.startsWith('//')) {
+              target = stashed;
+            }
+            sessionStorage.removeItem('postLoginRedirect');
+          } catch {}
+          window.location.href = target;
         } else {
           fail('Chyba při ukládání session.');
         }
