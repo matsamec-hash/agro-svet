@@ -1,0 +1,62 @@
+---
+interface Props {
+  url: string;
+  title: string;
+}
+const { url, title } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const encodedText = encodeURIComponent(`${title} — hlasujte ve Fotosoutěži Agro-svět!`);
+---
+<div class="share-row">
+  <span class="share-label">Sdílet:</span>
+  <a target="_blank" rel="noopener" class="share-btn fb" href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}>Facebook</a>
+  <a target="_blank" rel="noopener" class="share-btn wa" href={`https://wa.me/?text=${encodedText}%20${encodedUrl}`}>WhatsApp</a>
+  <a target="_blank" rel="noopener" class="share-btn tg" href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`}>Telegram</a>
+  <a target="_blank" rel="noopener" class="share-btn x" href={`https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`}>X</a>
+  <button type="button" class="share-btn copy" data-share-copy={url}>Zkopírovat odkaz</button>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-share-copy]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const url = btn.dataset.shareCopy!;
+      navigator.clipboard.writeText(url).then(() => {
+        const old = btn.textContent;
+        btn.textContent = 'Zkopírováno!';
+        setTimeout(() => { if (old) btn.textContent = old; }, 1500);
+      });
+    });
+  });
+</script>
+
+<style>
+  .share-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .share-label {
+    font-size: 14px;
+    color: #888;
+    margin-right: 4px;
+  }
+  .share-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: filter .15s, transform .1s;
+  }
+  .share-btn:hover { filter: brightness(.92); transform: translateY(-1px); }
+  .share-btn.fb { background: #1877F2; }
+  .share-btn.wa { background: #25D366; }
+  .share-btn.tg { background: #229ED9; }
+  .share-btn.x { background: #1a1a1a; }
+  .share-btn.copy { background: #555; }
+</style>
