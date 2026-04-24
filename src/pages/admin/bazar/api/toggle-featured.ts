@@ -3,7 +3,7 @@
 // Middleware gate-uje /admin/* přes is_admin, tady je druhá kontrola defense-in-depth.
 import type { APIRoute } from 'astro';
 import { createServerClient } from '../../../../lib/supabase';
-import { computeFeaturedUntil, planToDays, type FeaturedPlan } from '../../../../lib/bazar-featured';
+import { planToDays, type FeaturedPlan } from '../../../../lib/bazar-featured';
 
 export const prerender = false;
 
@@ -57,13 +57,20 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return json({ error: 'bad_request', message: 'Invalid plan' }, 400);
     }
     const days = planToDays(body.plan);
-    const currentUntil = listing.featured_until ? new Date(listing.featured_until) : null;
-    const newUntil = computeFeaturedUntil(currentUntil, days);
-    update = {
-      featured: true,
-      featured_until: newUntil.toISOString(),
-      featured_plan: body.plan,
-    };
+    // Atomic update via RPC — avoids read-then-write race on rapid double-clicks.
+    // The GREATEST(now, COALESCE(featured_until, now)) + days happens inside the UPDATE.
+    const { data: rpcResult, error: rpcError } = await sb.rpc('bazar_extend_featured', {
+      p_listing_id: body.listingId,
+      p_days: days,
+      p_plan: body.plan,
+    });
+    if (rpcError) {
+      console.error('[toggle-featured] rpc failed', rpcError);
+      return json({ error: 'server_error' }, 500);
+    }
+    const updated = Array.isArray(rpcResult) ? rpcResult[0] : rpcResult;
+    if (!updated) return json({ error: 'not_found' }, 404);
+    return json({ ok: true, listing: updated });
   } else if (body.action === 'custom') {
     if (!body.until) return json({ error: 'bad_request', message: 'Missing until' }, 400);
     const untilDate = new Date(body.until);

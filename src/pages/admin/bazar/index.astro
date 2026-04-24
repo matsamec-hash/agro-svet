@@ -30,7 +30,12 @@ if (filter === 'active') {
 }
 
 if (search) {
-  dbQuery = dbQuery.or(`title.ilike.%${search}%,bazar_users.email.ilike.%${search}%`);
+  // Sanitize: strip characters that have meaning in Supabase filter syntax (.or() separator).
+  // Without this, ?q=,featured.eq.true could inject extra filter conditions.
+  const safeSearch = search.replace(/[,()*]/g, '');
+  if (safeSearch) {
+    dbQuery = dbQuery.or(`title.ilike.%${safeSearch}%,bazar_users.email.ilike.%${safeSearch}%`);
+  }
 }
 
 const { data: listings, count } = await dbQuery;
