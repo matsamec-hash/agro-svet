@@ -74,8 +74,9 @@ const turnstileSiteKey = (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | 
                 </select>
               </div>
               <div class="field">
-                <label>Rok pořízení</label>
-                <input type="number" name="year_taken" min="1900" max="2030" />
+                <label>Rok výroby stroje</label>
+                <input type="number" name="year_taken" min="1900" max="2030" placeholder="např. 2018" />
+                <p class="hint">Pomáhá propojit fotku s katalogem strojů</p>
               </div>
             </div>
           </details>
