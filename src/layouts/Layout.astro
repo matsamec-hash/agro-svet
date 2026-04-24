@@ -13,7 +13,8 @@ interface Props {
 const { title, description = 'Novinky ze světa zemědělství, encyklopedie strojů, značky a agro bazar.', ogImage, canonical } = Astro.props;
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
-const canonicalUrl = canonical ?? new URL(Astro.url.pathname, SITE_ORIGIN).toString();
+const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString();
 ---
 
 <!DOCTYPE html>
