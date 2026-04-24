@@ -17,6 +17,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const user = locals.user;
   if (!user) return json({ error: 'unauthenticated' }, 401);
 
+  const origin = new URL(request.url).origin;
+
   const sb = createServerClient();
   const { data: profile } = await sb
     .from('bazar_users')
@@ -75,7 +77,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         display_name: displayName,
         entry_title: entry.title,
         round_title: roundTitle,
-        share_url: `https://agro-svet.cz/fotosoutez/foto/${entry.id}/`,
+        share_url: `${origin}/fotosoutez/foto/${entry.id}/`,
       }).catch((e) => console.error('[moderate] email failed', e));
     } else {
       sendContestEmail(apiKey, {

@@ -69,7 +69,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     voterId = created.id;
   }
 
-  const verifyUrl = `https://agro-svet.cz/fotosoutez/api/verify-email?token=${token}&entry=${entryId}`;
+  // Build verify URL from the actual request origin so dev (localhost) and
+  // production (agro-svet.cz) both work without env-specific config.
+  const origin = new URL(request.url).origin;
+  const verifyUrl = `${origin}/fotosoutez/api/verify-email?token=${token}&entry=${entryId}`;
 
   await sendContestEmail(getEnvVar('RESEND_API_KEY') ?? '', {
     kind: 'magic_link',
