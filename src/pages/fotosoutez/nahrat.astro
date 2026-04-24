@@ -6,6 +6,7 @@ import { getActiveRound } from '../../lib/contest-supabase';
 import { getAllBrands } from '../../lib/stroje';
 import { getKraje } from '../../lib/lokality';
 import { computeRoundPhase } from '../../lib/contest-config';
+import { getEnvVar } from '../../lib/env';
 
 const user = Astro.locals.user;
 const round = await getActiveRound();
@@ -14,7 +15,10 @@ const canUpload = phase === 'upload_open';
 
 const brands = getAllBrands();
 const kraje = getKraje();
-const turnstileSiteKey = (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? '';
+// Read at request time (Worker env in prod, Vite .env in dev). Reading via
+// import.meta.env directly would inline the dev .env testing key into the
+// production bundle.
+const turnstileSiteKey = getEnvVar('PUBLIC_TURNSTILE_SITE_KEY') ?? '';
 ---
 <Layout title="Nahrát fotku — Fotosoutěž Agro-svět" description="Nahrajte svou fotografii do aktuálního kola">
   <main class="upload-page">

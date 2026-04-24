@@ -9,6 +9,7 @@ import { createServerClient } from '../../../lib/supabase';
 import { formatLokalita } from '../../../lib/lokality';
 import { computeRoundPhase } from '../../../lib/contest-config';
 import { getModelBySlug, getBrand } from '../../../lib/stroje';
+import { getEnvVar } from '../../../lib/env';
 
 const id = Astro.params.id;
 if (!id) return Astro.redirect('/fotosoutez/');
@@ -32,7 +33,9 @@ const model = entry.model_slug ? getModelBySlug(entry.model_slug) : null;
 
 const siteUrl = `https://agro-svet.cz/fotosoutez/foto/${entry.id}`;
 const ogUrl = `https://agro-svet.cz/fotosoutez/api/og/${entry.id}.png`;
-const turnstileSiteKey = (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? '';
+// Runtime env (Worker env in prod, Vite .env in dev) — direct
+// import.meta.env would inline the dev testing key into the prod bundle.
+const turnstileSiteKey = getEnvVar('PUBLIC_TURNSTILE_SITE_KEY') ?? '';
 ---
 <Layout
   title={`${entry.title} — Fotosoutěž Agro-svět`}
