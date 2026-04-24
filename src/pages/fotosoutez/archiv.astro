@@ -1,0 +1,97 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { createServerClient } from '../../lib/supabase';
+
+const sb = createServerClient();
+const { data: rounds } = await sb
+  .from('contest_rounds')
+  .select('id, slug, title, theme, year, month, status, hero_image, winner_entry_id')
+  .in('status', ['announced', 'closed'])
+  .order('year', { ascending: false })
+  .order('month', { ascending: false });
+
+const winners: Record<string, { photo_path: string; title: string; author_display_name: string }> = {};
+const winnerIds = (rounds ?? []).map((r) => r.winner_entry_id).filter(Boolean) as string[];
+if (winnerIds.length > 0) {
+  const { data: winnerEntries } = await sb
+    .from('contest_entries')
+    .select('id, photo_path, title, author_display_name')
+    .in('id', winnerIds);
+  for (const w of winnerEntries ?? []) {
+    winners[w.id] = w;
+  }
+}
+
+const PHOTO_BASE = 'https://obhypfuzmknvmknskdwh.supabase.co/storage/v1/object/public/contest-photos/';
+---
+<Layout title="Archiv — Fotosoutěž Agro-svět" description="Všechna historická kola a výherci">
+  <main class="archive-page">
+    <h1>Archiv kol</h1>
+    {(!rounds || rounds.length === 0) && <p class="empty">Archiv je zatím prázdný.</p>}
+    <div class="grid">
+      {(rounds ?? []).map((r) => {
+        const w = r.winner_entry_id ? winners[r.winner_entry_id] : null;
+        return (
+          <a href={`/fotosoutez/${r.slug}/`} class="round-card">
+            {w && <img src={`${PHOTO_BASE}${w.photo_path}`} alt="" />}
+            <div class="body">
+              <h3>{r.title}</h3>
+              <p class="theme">{r.theme}</p>
+              {w && <p class="winner">{w.title} — {w.author_display_name}</p>}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .archive-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .archive-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0 0 28px;
+  }
+  .empty { color: #888; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .round-card {
+    display: block;
+    text-decoration: none;
+    color: #fff;
+    background: #1a1a1a;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .round-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0,0,0,.18);
+  }
+  .round-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+  .round-card .body { padding: 14px 16px 18px; }
+  .round-card h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    margin: 0;
+  }
+  .theme { font-size: 13px; color: #aaa; margin: 4px 0 0; }
+  .winner { font-size: 12px; color: #FFFF00; margin: 8px 0 0; }
+</style>
