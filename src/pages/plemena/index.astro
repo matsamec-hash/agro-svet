@@ -32,12 +32,22 @@ for (const p of plemena) for (const u of p.uzitkovost) allUzitkovost.add(u);
 const uzitkovostOptions = (Array.from(allUzitkovost) as PlemenoUzitkovost[]).sort();
 
 const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).sort();
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Katalog plemen', item: 'https://agro-svet.cz/plemena/' },
+  ],
+};
 ---
 
 <Layout
   title="Katalog plemen hospodářských zvířat"
   description="Databáze plemen hovězího dobytka, ovcí a koní — původ, užitkovost, hmotnost, mléčná dojivost. Filtrujte podle druhu a užitkovosti."
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:32px;">
       <span class="section-label">Katalog plemen</span>

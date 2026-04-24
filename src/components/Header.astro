@@ -2,7 +2,7 @@
 type NavItem = { label: string; href: string; children?: { label: string; href: string }[] };
 const nav: NavItem[] = [
   {
-    label: 'Novinky',
+    label: 'Téma',
     href: '/novinky/',
     children: [
       { label: 'Všechny novinky', href: '/novinky/' },
@@ -11,6 +11,7 @@ const nav: NavItem[] = [
       { label: 'Trh', href: '/novinky/kategorie/trh/' },
       { label: 'Legislativa', href: '/novinky/kategorie/legislativa/' },
       { label: 'Značky', href: '/novinky/kategorie/znacky/' },
+      { label: 'Zemědělská půda', href: '/puda/' },
     ],
   },
   {
@@ -24,7 +25,6 @@ const nav: NavItem[] = [
     ],
   },
   { label: 'Zvířata', href: '/plemena/' },
-  { label: 'Zemědělská půda', href: '/puda/' },
   { label: 'Data', href: '/statistiky/' },
   { label: 'Agro bazar', href: '/bazar/' },
   { label: 'Fotosoutěž', href: '/fotosoutez/' },
