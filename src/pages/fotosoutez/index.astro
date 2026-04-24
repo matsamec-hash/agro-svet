@@ -2,128 +2,86 @@
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
-import ContestRoundHeader from '../../components/contest/ContestRoundHeader.astro';
-import ContestEntryCard from '../../components/contest/ContestEntryCard.astro';
-import ContestLiveLeaderboard from '../../components/contest/ContestLiveLeaderboard.astro';
-import { getActiveRound, getApprovedEntries, getPublicPhotoUrl } from '../../lib/contest-supabase';
-import { computeRoundPhase } from '../../lib/contest-config';
-
-const round = await getActiveRound();
-const entries = round ? await getApprovedEntries(round.id, { limit: 12 }) : [];
-const phase = round ? computeRoundPhase(round) : null;
-
-const leaderboard = await Promise.all(
-  entries.slice(0, 10).map(async (e, i) => ({
-    id: e.id,
-    rank: i + 1,
-    title: e.title,
-    author: e.author_display_name,
-    vote_count: e.vote_count,
-    photo_url: await getPublicPhotoUrl(e.photo_path),
-  })),
-);
 ---
 <Layout
   title="Fotosoutěž Agro-svět 2026"
   description="Měsíční fotosoutěž o zemědělské technice. Hlavní cena 5 000 Kč + zarámovaný print."
 >
   <main class="contest-hub">
-    {!round && (
-      <section class="empty-state">
-        <h1>Fotosoutěž brzy začne</h1>
-        <p>Sledujte nás na sociálních sítích.</p>
-      </section>
-    )}
-    {round && (
-      <>
-        <ContestRoundHeader round={round} />
-        <div class="hub-grid">
-          <section>
-            <h2 class="section-heading">Galerie</h2>
-            {entries.length === 0 && (
-              <p class="empty-msg">Zatím žádné schválené fotky — buďte první!</p>
-            )}
-            <div class="entries-grid">
-              {entries.map((e, i) => (
-                <ContestEntryCard entry={e} rank={phase === 'voting_open' ? i + 1 : undefined} />
-              ))}
-            </div>
-            {entries.length > 0 && (
-              <a href={`/fotosoutez/${round.slug}/`} class="see-all-link">Zobrazit všechny →</a>
-            )}
-          </section>
-          {phase === 'voting_open' && leaderboard.length > 0 && (
-            <ContestLiveLeaderboard roundSlug={round.slug} initialEntries={leaderboard} />
-          )}
-        </div>
-        <section class="quick-links">
-          <a href="/fotosoutez/pravidla/">Pravidla soutěže</a>
-          <a href="/fotosoutez/archiv/">Archiv kol</a>
-          <a href="/fotosoutez/moje/">Moje fotky</a>
-        </section>
-      </>
-    )}
+    <section class="status-card">
+      <span class="tag">Fotosoutěž 2026</span>
+      <h1>Čekáme na otevření dalšího kola</h1>
+      <p class="lead">
+        Pracujeme na spuštění dalšího měsíčního kola fotosoutěže.
+        Informace o tématu, cenách a přesných datech zveřejníme
+        <strong>nejpozději do 1. června 2026</strong>.
+      </p>
+      <p class="sub">
+        Mezitím si můžete přečíst
+        <a href="/fotosoutez/pravidla/">herní řád</a>
+        nebo projít
+        <a href="/fotosoutez/archiv/">archiv minulých kol</a>.
+      </p>
+    </section>
   </main>
 </Layout>
 
 <style>
   .contest-hub {
-    max-width: 1200px;
+    max-width: 820px;
     margin: 0 auto;
-    padding: 32px 24px 80px;
+    padding: 64px 24px 96px;
   }
-  .empty-state { text-align: center; padding: 80px 0; }
-  .empty-state h1 {
-    font-family: 'Chakra Petch', sans-serif;
-    font-size: 36px;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-  .empty-state p { color: #888; }
-  .hub-grid {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 32px;
-  }
-  @media (max-width: 900px) {
-    .hub-grid { grid-template-columns: 1fr; }
-  }
-  .section-heading {
-    font-family: 'Chakra Petch', sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    margin: 0 0 18px;
-  }
-  .entries-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
-  }
-  .empty-msg { color: #888; padding: 32px 0; }
-  .see-all-link {
-    display: inline-block;
-    margin-top: 24px;
-    color: #888;
-    text-decoration: none;
-  }
-  .see-all-link:hover { color: #1a1a1a; }
-  .quick-links {
-    margin-top: 48px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px;
-  }
-  .quick-links a {
-    display: block;
+  .status-card {
     background: #1a1a1a;
     color: #fff;
-    padding: 18px 22px;
-    border-radius: 18px;
-    text-decoration: none;
+    border-radius: 22px;
+    padding: 48px 40px;
+    text-align: center;
+  }
+  .status-card .tag {
+    display: inline-block;
+    background: #FFFF00;
+    color: #1a1a1a;
     font-family: 'Chakra Petch', sans-serif;
     font-weight: 600;
-    border: 2px solid transparent;
-    transition: border-color .15s, transform .15s;
+    font-size: 13px;
+    letter-spacing: .05em;
+    padding: 6px 14px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
   }
-  .quick-links a:hover { border-color: #FFFF00; transform: translateY(-2px); }
+  .status-card h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 1.2;
+    margin: 0 0 20px;
+    color: inherit;
+  }
+  .status-card .lead {
+    font-size: 17px;
+    line-height: 1.55;
+    margin: 0 auto 20px;
+    max-width: 560px;
+    color: #e5e5e5;
+  }
+  .status-card .lead strong { color: #FFFF00; font-weight: 600; }
+  .status-card .sub {
+    font-size: 15px;
+    color: #bbb;
+    margin: 0;
+  }
+  .status-card .sub a {
+    color: #FFFF00;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  @media (max-width: 640px) {
+    .contest-hub { padding: 40px 16px 64px; }
+    .status-card { padding: 36px 24px; }
+    .status-card h1 { font-size: 26px; }
+    .status-card .lead { font-size: 16px; }
+  }
 </style>
