@@ -1,0 +1,110 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="Zpracování osobních údajů — Fotosoutěž Agro-svět"
+  description="GDPR dokument fotosoutěže"
+>
+  <main class="legal-page">
+    <h1>Zpracování osobních údajů — Fotosoutěž Agro-svět 2026</h1>
+
+    <h2>1. Správce</h2>
+    <p>{`{{POŘADATEL}}`} (dále „Správce") — IČ {`{{IC}}`}, sídlo {`{{ADRESA}}`}, e-mail {`{{KONTAKT}}`}.</p>
+
+    <h2>2. Zpracovávané údaje</h2>
+    <h3>2.1 Od účastníků (uploaderů)</h3>
+    <ul>
+      <li>Jméno a příjmení (nebo přezdívka)</li>
+      <li>E-mail, heslo (hashované)</li>
+      <li>Telefon, adresa, číslo účtu — pouze při výhře</li>
+      <li>Fotografie včetně EXIF metadat</li>
+      <li>IP adresa, user agent (anti-fraud)</li>
+    </ul>
+    <h3>2.2 Od voterů</h3>
+    <ul>
+      <li>E-mail (pro ověření hlasu)</li>
+      <li>IP adresa, user agent, cookie identifier</li>
+    </ul>
+
+    <h2>3. Právní základ</h2>
+    <ul>
+      <li>Plnění smlouvy — účast v soutěži</li>
+      <li>Oprávněný zájem — anti-fraud</li>
+      <li>Souhlas — marketing (opt-in)</li>
+      <li>Právní povinnost — daňové povinnosti</li>
+    </ul>
+
+    <h2>4. Doba uchování</h2>
+    <ul>
+      <li>Účastnická data: po dobu soutěže + 3 roky</li>
+      <li>Fotografie: po dobu soutěže + 3 roky (licence)</li>
+      <li>Hlasovací data: 2 roky</li>
+      <li>Marketing souhlas: do odvolání</li>
+    </ul>
+
+    <h2>5. Příjemci</h2>
+    <ul>
+      <li>Resend.com (email delivery) — USA, Standard Contractual Clauses</li>
+      <li>Supabase (hosting dat) — EU/USA, SCC</li>
+      <li>Cloudflare (CDN, hosting) — globální</li>
+    </ul>
+
+    <h2>6. Práva subjektu</h2>
+    <ul>
+      <li>Přístup (čl. 15), oprava (16), výmaz (17), omezení zpracování (18), přenositelnost (20), námitka (21)</li>
+      <li>Odvolání souhlasu kdykoli</li>
+    </ul>
+    <p>Žádosti na {`{{KONTAKT}}`} — vyřízení do 30 dnů.</p>
+
+    <h2>7. Stížnost</h2>
+    <p>U Úřadu pro ochranu osobních údajů (www.uoou.cz).</p>
+
+    <h2>8. Cookies</h2>
+    <ul>
+      <li><code>sb-access-token</code>, <code>sb-refresh-token</code> — auth (Supabase)</li>
+      <li><code>contest_voter_id</code> — identifikace voltera v kole</li>
+      <li><code>cf-turnstile</code> — anti-bot Cloudflare</li>
+    </ul>
+
+    <p><strong>Účinnost:</strong> 1. ledna 2026</p>
+  </main>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.7;
+    color: #222;
+  }
+  .legal-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+  .legal-page h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 36px 0 12px;
+  }
+  .legal-page h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 24px 0 8px;
+  }
+  .legal-page p { margin: 0 0 14px; }
+  .legal-page ul { margin: 0 0 14px; padding-left: 22px; }
+  .legal-page li { margin-bottom: 4px; }
+  .legal-page code {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: .9em;
+    font-family: 'Chakra Petch', monospace;
+  }
+</style>

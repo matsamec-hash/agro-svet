@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="Pravidla soutěže — Fotosoutěž Agro-svět 2026"
+  description="Úplná pravidla fotosoutěže Agro-svět 2026"
+>
+  <main class="legal-page">
+    <h1>Pravidla soutěže „Fotograf roku Agro-svět 2026"</h1>
+    <p><strong>Účinnost:</strong> 1. ledna 2026<br /><strong>Verze:</strong> 1.0</p>
+
+    <h2>1. Pořadatel</h2>
+    <p>Pořadatelem soutěže je <strong>{`{{POŘADATEL_JMENO}}`}</strong>, IČ: {`{{IC}}`}, se sídlem {`{{ADRESA}}`}, e-mail: {`{{KONTAKT}}`}.</p>
+
+    <h2>2. Termín konání</h2>
+    <p>Soutěž probíhá od 1. ledna 2026 do 31. prosince 2026. Skládá se z 12 měsíčních kol a Grande Finále (1.–20. prosince).</p>
+
+    <h2>3. Kdo se může zúčastnit</h2>
+    <ul>
+      <li>Fyzická osoba starší 18 let</li>
+      <li>S trvalým bydlištěm v České republice nebo SR</li>
+      <li>Ne zaměstnanci pořadatele ani osoby s nimi spojené</li>
+    </ul>
+
+    <h2>4. Mechanika</h2>
+    <h3>4.1 Upload</h3>
+    <p>Účastník se zaregistruje a v každém měsíčním kole může nahrát <strong>maximálně 3 fotografie</strong> odpovídající tématu kola. Fotografie musí být původní, účastníkem pořízená, nesmí být generovaná umělou inteligencí.</p>
+    <h3>4.2 Fáze měsíce</h3>
+    <ul>
+      <li>Dny 1–10: nahrávání</li>
+      <li>Dny 11–28: hlasování veřejnosti</li>
+      <li>Dny 29–30: vyhlášení</li>
+    </ul>
+    <h3>4.3 Hlasování</h3>
+    <p>Hlasovat může každý, kdo ověří svůj e-mail (1× za kolo) přes zaslaný odkaz. Po ověření lze hlasovat <strong>1× za hodinu</strong> pro libovolnou fotografii. Nelze hlasovat pro vlastní fotografii.</p>
+    <h3>4.4 Vyhodnocení</h3>
+    <p>V každém kole vítězí fotografie s nejvyšším počtem platných hlasů. TOP 3 z každého kola postupují do Grande Finále, kde se rozhoduje o ceně 5 000 Kč + fyzických cenách.</p>
+
+    <h2>5. Ceny</h2>
+    <h3>5.1 Měsíční</h3>
+    <ul>
+      <li>1. místo: 1 000 Kč + triko Agro-svět + rozhovor</li>
+      <li>2. místo: 500 Kč + triko</li>
+      <li>3. místo: 300 Kč + triko</li>
+    </ul>
+    <h3>5.2 Hlavní cena (Grande Finále)</h3>
+    <ul>
+      <li>1. místo: <strong>5 000 Kč + zarámovaný A2 tisk + merch balíček + voucher</strong></li>
+      <li>2. místo: 2 000 Kč + tisk + merch</li>
+      <li>3. místo: 1 000 Kč + merch</li>
+    </ul>
+    <h3>5.3 Daňové aspekty</h3>
+    <p>Výhry z veřejných soutěží jsou osvobozeny od daně z příjmů fyzických osob dle § 10 odst. 1 písm. h) zákona č. 586/1992 Sb., pokud nepřesáhnou 10 000 Kč. Hlavní cena 5 000 Kč je tedy osvobozena a výherce ji nemusí danit.</p>
+    <h3>5.4 Doručení ceny</h3>
+    <p>Finanční cenu zasíláme převodem na účet, fyzické ceny poštou na adresu v ČR/SR. Výherce je povinen dodat údaje do 14 dnů od vyhlášení, jinak cena propadá.</p>
+
+    <h2>6. Autorská práva a licence</h2>
+    <p>Nahráním fotografie účastník prohlašuje, že fotografii pořídil sám, vlastní ji, není AI generovaná. Uděluje pořadateli <strong>nevýhradní bezplatnou licenci</strong> k použití na agro-svet.cz a sociálních sítích Agro-svět s atribucí autora do 31. 12. 2029. Volitelně lze udělit souhlas s použitím v kalendáři 2027 / merchandise.</p>
+
+    <h2>7. Ochrana proti podvodům</h2>
+    <p>Pořadatel si vyhrazuje právo diskvalifikovat fotografii nebo zrušit hlasy při podezření z manipulace, botů nebo porušení pravidel. Případný sousední v pořadí pak postupuje namísto diskvalifikovaného.</p>
+
+    <h2>8. Ochrana osobních údajů</h2>
+    <p>Podrobně v <a href="/fotosoutez/gdpr/">Zpracování osobních údajů</a>.</p>
+
+    <h2>9. Reklamace</h2>
+    <p>Stížnosti zasílejte na {`{{KONTAKT}}`}. Pořadatel vyřídí do 30 dnů. Mimosoudní řešení sporů: Česká obchodní inspekce (www.coi.cz).</p>
+
+    <h2>10. Závěrečná ustanovení</h2>
+    <p>Pořadatel si vyhrazuje právo měnit pravidla se zveřejněním na této stránce. Účast je dobrovolná a bezplatná.</p>
+
+    <p><strong>Kontakt:</strong> {`{{KONTAKT}}`}<br /><strong>Poslední změna:</strong> 2026-01-01</p>
+  </main>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.7;
+    color: #222;
+  }
+  .legal-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+  .legal-page h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 36px 0 12px;
+  }
+  .legal-page h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 24px 0 8px;
+  }
+  .legal-page p { margin: 0 0 14px; }
+  .legal-page ul { margin: 0 0 14px; padding-left: 22px; }
+  .legal-page li { margin-bottom: 4px; }
+  .legal-page a { color: #1a1a1a; text-decoration: underline; }
+</style>
