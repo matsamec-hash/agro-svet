@@ -1,0 +1,150 @@
+---
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import ContestVoteButton from '../../../components/contest/ContestVoteButton.astro';
+import ContestShareButtons from '../../../components/contest/ContestShareButtons.astro';
+import { getEntry, getPublicPhotoUrl } from '../../../lib/contest-supabase';
+import { createServerClient } from '../../../lib/supabase';
+import { formatLokalita } from '../../../lib/lokality';
+import { computeRoundPhase } from '../../../lib/contest-config';
+import { getModelBySlug, getBrand } from '../../../lib/stroje';
+
+const id = Astro.params.id;
+if (!id) return Astro.redirect('/fotosoutez/');
+
+const entry = await getEntry(id);
+if (!entry || entry.status !== 'approved') return Astro.redirect('/fotosoutez/');
+
+const sb = createServerClient();
+const { data: round } = await sb
+  .from('contest_rounds')
+  .select('*')
+  .eq('id', entry.round_id)
+  .single();
+
+const phase = round ? computeRoundPhase(round) : 'closed';
+const canVoteNow = phase === 'voting_open';
+const photoUrl = await getPublicPhotoUrl(entry.photo_path);
+const lokalita = formatLokalita(entry.location_kraj_slug, entry.location_okres_slug);
+const brand = entry.brand_slug ? getBrand(entry.brand_slug) : null;
+const model = entry.model_slug ? getModelBySlug(entry.model_slug) : null;
+
+const siteUrl = `https://agro-svet.cz/fotosoutez/foto/${entry.id}`;
+const ogUrl = `https://agro-svet.cz/fotosoutez/api/og/${entry.id}.png`;
+const turnstileSiteKey = (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? '';
+---
+<Layout
+  title={`${entry.title} — Fotosoutěž Agro-svět`}
+  description={entry.caption ?? `Foto od ${entry.author_display_name}. Hlasujte!`}
+  ogImage={ogUrl}
+>
+  <main class="entry-page">
+    <a href={round ? `/fotosoutez/${round.slug}/` : '/fotosoutez/'} class="back-link">← Zpět do galerie</a>
+
+    <div class="photo-frame">
+      <img src={photoUrl} alt={entry.title} />
+    </div>
+
+    <div class="entry-grid">
+      <div>
+        <h1>{entry.title}</h1>
+        <p class="author">Foto: <strong>{entry.author_display_name}</strong>{lokalita && ` • ${lokalita}`}</p>
+        {entry.caption && <p class="caption">{entry.caption}</p>}
+
+        <dl class="specs">
+          {brand && <><dt>Značka</dt><dd>{brand.name}</dd></>}
+          {model && <><dt>Model</dt><dd>{model.name}</dd></>}
+          {entry.year_taken && <><dt>Rok fotky</dt><dd>{entry.year_taken}</dd></>}
+        </dl>
+
+        <div class="share-block">
+          <ContestShareButtons url={siteUrl} title={entry.title} />
+        </div>
+      </div>
+
+      <aside class="vote-aside">
+        {canVoteNow ? (
+          <ContestVoteButton entryId={entry.id} voteCount={entry.vote_count} turnstileSiteKey={turnstileSiteKey} />
+        ) : (
+          <div class="vote-closed">
+            <p class="big">{entry.vote_count}</p>
+            <p class="label">hlasů</p>
+            <p class="status">{phase === 'announced' ? 'Výsledky vyhlášeny' : 'Hlasování zatím neběží'}</p>
+          </div>
+        )}
+      </aside>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .entry-page {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 24px 24px 80px;
+  }
+  .back-link {
+    font-size: 14px;
+    color: #888;
+    text-decoration: none;
+  }
+  .back-link:hover { color: #1a1a1a; }
+  .photo-frame {
+    margin-top: 16px;
+    border-radius: 22px;
+    overflow: hidden;
+    background: #000;
+  }
+  .photo-frame img {
+    width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    display: block;
+  }
+  .entry-grid {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 32px;
+  }
+  @media (max-width: 800px) { .entry-grid { grid-template-columns: 1fr; } }
+  .entry-grid h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .author { color: #666; margin: 8px 0 0; }
+  .caption {
+    margin: 18px 0 0;
+    color: #333;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  .specs {
+    margin: 24px 0 0;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 6px 16px;
+    font-size: 14px;
+  }
+  .specs dt { color: #888; }
+  .specs dd { margin: 0; }
+  .share-block { margin-top: 28px; }
+  .vote-closed {
+    background: #f5f5f5;
+    border-radius: 18px;
+    padding: 24px;
+    text-align: center;
+  }
+  .vote-closed .big {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 900;
+    font-size: 42px;
+    margin: 0;
+  }
+  .vote-closed .label { color: #666; margin: 4px 0 12px; }
+  .vote-closed .status { color: #999; font-size: 13px; margin: 0; }
+</style>
