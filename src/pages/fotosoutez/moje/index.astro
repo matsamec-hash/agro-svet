@@ -1,0 +1,110 @@
+---
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import { getMyEntries, getPublicPhotoUrl } from '../../../lib/contest-supabase';
+
+const user = Astro.locals.user!;
+const entries = await getMyEntries(user.id);
+
+const statusLabels: Record<string, { text: string; color: string; bg: string }> = {
+  pending:      { text: 'Čeká na schválení', color: '#856404', bg: '#fff3cd' },
+  approved:     { text: 'V galerii',         color: '#155724', bg: '#d4edda' },
+  rejected:     { text: 'Zamítnuto',         color: '#721c24', bg: '#f8d7da' },
+  disqualified: { text: 'Diskvalifikováno',  color: '#383d41', bg: '#e2e3e5' },
+};
+
+const withUrls = await Promise.all(
+  entries.map(async (e) => ({ entry: e, url: await getPublicPhotoUrl(e.photo_path) })),
+);
+---
+<Layout title="Moje fotky — Fotosoutěž Agro-svět" description="Vaše příspěvky">
+  <main class="moje-page">
+    <h1>Moje fotky</h1>
+    {entries.length === 0 && (
+      <p class="empty">
+        Zatím jste nenahráli žádnou fotku.
+        <a href="/fotosoutez/nahrat/">Nahrát první →</a>
+      </p>
+    )}
+    <div class="grid">
+      {withUrls.map(({ entry, url }) => {
+        const label = statusLabels[entry.status] ?? statusLabels.pending;
+        return (
+          <div class="entry-card">
+            <img src={url} alt="" />
+            <div class="body">
+              <span class="status-badge" style={`color:${label.color}; background:${label.bg};`}>{label.text}</span>
+              <h3>{entry.title}</h3>
+              {entry.status === 'approved' && <p class="votes">{entry.vote_count} hlasů</p>}
+              {entry.rejection_reason && <p class="reason">Důvod: {entry.rejection_reason}</p>}
+              {entry.status === 'approved' && (
+                <a href={`/fotosoutez/foto/${entry.id}/`} class="view-link">Zobrazit v galerii →</a>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .moje-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .moje-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0 0 24px;
+  }
+  .empty { color: #666; }
+  .empty a { color: #1a1a1a; text-decoration: underline; margin-left: 6px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .entry-card {
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .entry-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+  .entry-card .body { padding: 14px 16px 18px; }
+  .status-badge {
+    display: inline-block;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .entry-card h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 8px 0 6px;
+  }
+  .votes { font-size: 13px; color: #aaa; margin: 0; }
+  .reason { font-size: 13px; color: #ff6b6b; margin: 6px 0 0; }
+  .view-link {
+    display: inline-block;
+    margin-top: 8px;
+    color: #FFFF00;
+    font-size: 13px;
+    text-decoration: none;
+  }
+  .view-link:hover { text-decoration: underline; }
+</style>
