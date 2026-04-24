@@ -7,6 +7,7 @@ import { createServerClient } from '../../../lib/supabase';
 import { getModelOptions, getPlemenoOptions } from '../../../lib/bazar-catalog';
 import { getModelBySlug } from '../../../lib/stroje';
 import { getAllPlemena } from '../../../lib/plemena';
+import { isFeaturedActive, formatFeaturedUntil } from '../../../lib/bazar-featured';
 
 const user = Astro.locals.user!;
 const { id } = Astro.params;
@@ -110,6 +111,24 @@ if (isBreed && listing.model_slug) {
   <div style="max-width:600px; margin:0 auto; padding:64px 24px 96px;">
     <span class="section-label">Agro bazar</span>
     <h1 style="font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:32px;">Upravit inzerát</h1>
+
+    {listing.featured && (
+      <div class="edit-top-box">
+        <span class="edit-top-icon">⭐</span>
+        <div>
+          <strong>
+            {isFeaturedActive(listing)
+              ? 'Tento inzerát je propagován jako TOP'
+              : 'TOP propagace expirovala'}
+          </strong>
+          <div class="edit-top-meta">
+            {isFeaturedActive(listing)
+              ? `Aktivní do: ${formatFeaturedUntil(listing.featured_until)}`
+              : `Expirovalo: ${formatFeaturedUntil(listing.featured_until)}`}
+          </div>
+        </div>
+      </div>
+    )}
 
     {error && <div class="form-error">{error}</div>}
 
@@ -279,4 +298,26 @@ if (isBreed && listing.model_slug) {
       });
     })();
   </script>
+
+  <style>
+    .edit-top-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 20px;
+      padding: 14px 18px;
+      background: #fffef8;
+      border: 2px solid #FFFF00;
+      border-radius: 14px;
+    }
+    .edit-top-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .edit-top-meta {
+      font-size: 13px;
+      color: #666;
+      margin-top: 2px;
+    }
+  </style>
 </Layout>
