@@ -1,0 +1,116 @@
+---
+interface LeaderboardEntry {
+  id: string;
+  rank: number;
+  title: string;
+  author: string;
+  vote_count: number;
+  photo_url: string;
+}
+interface Props {
+  roundSlug: string;
+  initialEntries: LeaderboardEntry[];
+}
+const { roundSlug, initialEntries } = Astro.props;
+---
+<aside class="leaderboard" data-leaderboard data-round-slug={roundSlug}>
+  <h2 class="lb-heading">TOP {initialEntries.length}</h2>
+  <ol class="lb-list" data-leaderboard-list>
+    {initialEntries.map((e) => (
+      <li class="lb-row" data-entry-id={e.id}>
+        <span class="lb-rank" data-rank>{e.rank}</span>
+        <img src={e.photo_url} alt="" loading="lazy" class="lb-thumb" />
+        <div class="lb-info">
+          <a href={`/fotosoutez/foto/${e.id}/`} class="lb-title">{e.title}</a>
+          <p class="lb-meta">{e.author} • <span data-votes>{e.vote_count}</span> hlasů</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+  <p class="lb-footer">Aktualizuje se každých 30 s</p>
+</aside>
+
+<script>
+  const board = document.querySelector<HTMLElement>('[data-leaderboard]');
+  if (board) {
+    const roundSlug = board.dataset.roundSlug!;
+    const refresh = async () => {
+      if (document.hidden) return;
+      try {
+        const res = await fetch(`/fotosoutez/api/leaderboard?round=${roundSlug}&limit=10`);
+        if (!res.ok) return;
+        const json = await res.json();
+        const list = board.querySelector<HTMLElement>('[data-leaderboard-list]');
+        if (!list) return;
+        for (const e of json.entries) {
+          const li = list.querySelector<HTMLElement>(`[data-entry-id="${e.id}"]`);
+          if (!li) continue;
+          const rankEl = li.querySelector<HTMLElement>('[data-rank]');
+          const votesEl = li.querySelector<HTMLElement>('[data-votes]');
+          if (rankEl) rankEl.textContent = String(e.rank);
+          if (votesEl) votesEl.textContent = String(e.vote_count);
+        }
+      } catch (err) {
+        console.warn('leaderboard refresh failed', err);
+      }
+    };
+    setInterval(refresh, 30_000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
+  }
+</script>
+
+<style>
+  .leaderboard {
+    border-radius: 18px;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 20px;
+  }
+  .lb-heading {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    margin: 0 0 16px;
+    color: #fff;
+  }
+  .lb-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .lb-row { display: flex; align-items: center; gap: 12px; }
+  .lb-rank {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 900;
+    color: #FFFF00;
+    font-size: 22px;
+    width: 32px;
+    text-align: center;
+  }
+  .lb-thumb {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .lb-info { flex: 1; min-width: 0; }
+  .lb-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .lb-title:hover { color: #FFFF00; }
+  .lb-meta {
+    font-size: 12px;
+    color: #888;
+    margin: 2px 0 0;
+  }
+  .lb-footer {
+    font-size: 11px;
+    color: #555;
+    margin: 16px 0 0;
+    text-align: center;
+  }
+</style>

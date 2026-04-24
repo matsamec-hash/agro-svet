@@ -1,0 +1,150 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { createServerClient } from '../../../lib/supabase';
+
+const sb = createServerClient();
+const { count: pendingCount } = await sb
+  .from('contest_entries')
+  .select('id', { count: 'exact', head: true })
+  .eq('status', 'pending');
+const { data: activeRound } = await sb
+  .from('contest_rounds')
+  .select('*')
+  .in('status', ['upload_open', 'voting_open', 'closed'])
+  .maybeSingle();
+const { data: allRounds } = await sb
+  .from('contest_rounds')
+  .select('id, slug, title, status, year, month')
+  .order('year', { ascending: false })
+  .order('month', { ascending: false })
+  .limit(24);
+---
+<Layout title="Admin — Fotosoutěž" description="Administrace fotosoutěže">
+  <main class="admin-home">
+    <h1>Fotosoutěž — admin</h1>
+    <div class="grid">
+      <a class="tile" href="/admin/fotosoutez/moderace/">
+        <h3>Moderace</h3>
+        <p class="big">{pendingCount ?? 0}</p>
+        <p class="caption">čeká na schválení</p>
+      </a>
+      {activeRound ? (
+        <a class="tile" href={`/admin/fotosoutez/kolo/${activeRound.slug}/`}>
+          <h3>Aktivní kolo</h3>
+          <p class="medium">{activeRound.title}</p>
+          <p class="caption">{activeRound.status}</p>
+        </a>
+      ) : (
+        <div class="tile static">
+          <h3>Aktivní kolo</h3>
+          <p class="medium">—</p>
+          <p class="caption">žádné aktivní kolo</p>
+        </div>
+      )}
+      <div class="tile static">
+        <h3>Kola</h3>
+        <p class="caption">Správa přes Supabase SQL editor (MVP)</p>
+      </div>
+    </div>
+
+    {allRounds && allRounds.length > 0 && (
+      <section class="rounds">
+        <h2>Všechna kola</h2>
+        <ul>
+          {allRounds.map((r) => (
+            <li>
+              <a href={`/admin/fotosoutez/kolo/${r.slug}/`}>
+                <span class="r-title">{r.title}</span>
+                <span class={`r-status status-${r.status}`}>{r.status}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .admin-home {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .admin-home h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0 0 28px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .tile {
+    display: block;
+    text-decoration: none;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 24px;
+    border-radius: 18px;
+    border: 2px solid transparent;
+    transition: border-color .15s;
+  }
+  .tile:hover:not(.static) { border-color: #FFFF00; }
+  .tile h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0 0 8px;
+    color: #fff;
+  }
+  .tile .big {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 900;
+    color: #FFFF00;
+    font-size: 36px;
+    margin: 0;
+  }
+  .tile .medium { font-size: 16px; margin: 0; color: #fff; }
+  .tile .caption { font-size: 13px; color: #aaa; margin: 4px 0 0; }
+  .rounds {
+    margin-top: 40px;
+  }
+  .rounds h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0 0 12px;
+  }
+  .rounds ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .rounds a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #1a1a1a;
+    background: #f5f5f5;
+    padding: 10px 16px;
+    border-radius: 10px;
+  }
+  .rounds a:hover { background: #ebebeb; }
+  .r-title { font-weight: 600; }
+  .r-status {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #ddd;
+    color: #333;
+  }
+  .r-status.status-upload_open { background: #FFFF00; color: #1a1a1a; }
+  .r-status.status-voting_open { background: #2e7d32; color: #fff; }
+  .r-status.status-announced { background: #1a1a1a; color: #FFFF00; }
+  .r-status.status-closed { background: #c62828; color: #fff; }
+</style>

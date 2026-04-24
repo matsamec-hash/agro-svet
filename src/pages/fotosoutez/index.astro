@@ -1,0 +1,87 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="Fotosoutěž Agro-svět 2026"
+  description="Měsíční fotosoutěž o zemědělské technice. Hlavní cena 5 000 Kč + zarámovaný print."
+>
+  <main class="contest-hub">
+    <section class="status-card">
+      <span class="tag">Fotosoutěž 2026</span>
+      <h1>Čekáme na otevření dalšího kola</h1>
+      <p class="lead">
+        Pracujeme na spuštění dalšího měsíčního kola fotosoutěže.
+        Informace o tématu, cenách a přesných datech zveřejníme
+        <strong>nejpozději do 1. června 2026</strong>.
+      </p>
+      <p class="sub">
+        Mezitím si můžete přečíst
+        <a href="/fotosoutez/pravidla/">herní řád</a>
+        nebo projít
+        <a href="/fotosoutez/archiv/">archiv minulých kol</a>.
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .contest-hub {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+  }
+  .status-card {
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 22px;
+    padding: 48px 40px;
+    text-align: center;
+  }
+  .status-card .tag {
+    display: inline-block;
+    background: #FFFF00;
+    color: #1a1a1a;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: .05em;
+    padding: 6px 14px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .status-card h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 1.2;
+    margin: 0 0 20px;
+    color: inherit;
+  }
+  .status-card .lead {
+    font-size: 17px;
+    line-height: 1.55;
+    margin: 0 auto 20px;
+    max-width: 560px;
+    color: #e5e5e5;
+  }
+  .status-card .lead strong { color: #FFFF00; font-weight: 600; }
+  .status-card .sub {
+    font-size: 15px;
+    color: #bbb;
+    margin: 0;
+  }
+  .status-card .sub a {
+    color: #FFFF00;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  @media (max-width: 640px) {
+    .contest-hub { padding: 40px 16px 64px; }
+    .status-card { padding: 36px 24px; }
+    .status-card h1 { font-size: 26px; }
+    .status-card .lead { font-size: 16px; }
+  }
+</style>

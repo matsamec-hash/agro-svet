@@ -42,7 +42,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const cookieOpts = {
     path: '/',
     httpOnly: true,
-    secure: true,
+    secure: import.meta.env.PROD,
     sameSite: 'lax' as const,
     maxAge: 60 * 60 * 24 * 7,
   };

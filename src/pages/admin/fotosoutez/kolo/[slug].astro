@@ -1,0 +1,271 @@
+---
+// Admin — round detail. Shows stats, TOP 10 leaderboard by vote_count,
+// and "Vyhlásit výherce" action that sets winner/runner_up/third_place
+// on the round and transitions status to 'announced'.
+//
+// Middleware already enforces admin-only access on /admin/*.
+export const prerender = false;
+
+import Layout from '../../../../layouts/Layout.astro';
+import { createServerClient } from '../../../../lib/supabase';
+import { getPublicPhotoUrl } from '../../../../lib/contest-supabase';
+
+const slug = Astro.params.slug;
+if (!slug) return Astro.redirect('/admin/fotosoutez/');
+
+const sb = createServerClient();
+const { data: round } = await sb
+  .from('contest_rounds')
+  .select('*')
+  .eq('slug', slug)
+  .maybeSingle();
+
+if (!round) return Astro.redirect('/admin/fotosoutez/');
+
+const { count: pendingCount } = await sb
+  .from('contest_entries')
+  .select('id', { count: 'exact', head: true })
+  .eq('round_id', round.id)
+  .eq('status', 'pending');
+
+const { count: approvedCount } = await sb
+  .from('contest_entries')
+  .select('id', { count: 'exact', head: true })
+  .eq('round_id', round.id)
+  .eq('status', 'approved');
+
+const { count: rejectedCount } = await sb
+  .from('contest_entries')
+  .select('id', { count: 'exact', head: true })
+  .eq('round_id', round.id)
+  .eq('status', 'rejected');
+
+const { data: topEntries } = await sb
+  .from('contest_entries')
+  .select('id, title, author_display_name, photo_path, vote_count')
+  .eq('round_id', round.id)
+  .eq('status', 'approved')
+  .order('vote_count', { ascending: false })
+  .order('created_at', { ascending: true })
+  .limit(10);
+
+const top = topEntries ?? [];
+const topWithUrls = await Promise.all(
+  top.map(async (e) => ({ ...e, url: await getPublicPhotoUrl(e.photo_path) })),
+);
+
+const alreadyAnnounced = round.status === 'announced';
+---
+<Layout title={`${round.title} — Admin`} description="Administrace kola">
+  <main class="round-admin">
+    <a href="/admin/fotosoutez/" class="back">← Přehled</a>
+    <h1>{round.title}</h1>
+    <p class="meta">{round.theme} · status: <strong>{round.status}</strong></p>
+
+    <div class="stats">
+      <div class="stat">
+        <p class="label">Schváleno</p>
+        <p class="num">{approvedCount ?? 0}</p>
+      </div>
+      <div class="stat">
+        <p class="label">Čeká</p>
+        <p class="num">{pendingCount ?? 0}</p>
+      </div>
+      <div class="stat">
+        <p class="label">Odmítnuto</p>
+        <p class="num">{rejectedCount ?? 0}</p>
+      </div>
+    </div>
+
+    <h2>TOP 10</h2>
+    {top.length === 0 && <p class="empty">Zatím žádné schválené fotky.</p>}
+    {top.length > 0 && (
+      <ol class="leaderboard">
+        {topWithUrls.map((e, i) => (
+          <li>
+            <span class="rank">#{i + 1}</span>
+            <img src={e.url} alt="" />
+            <div class="info">
+              <p class="title">{e.title}</p>
+              <p class="author">{e.author_display_name}</p>
+            </div>
+            <span class="votes">{e.vote_count} hlasů</span>
+          </li>
+        ))}
+      </ol>
+    )}
+
+    {!alreadyAnnounced && top.length > 0 && (
+      <section class="announce">
+        <h2>Vyhlásit výherce</h2>
+        <p class="hint">Nastaví 1./2./3. místo a status kola na <code>announced</code>. Odešle e-maily všem finalistům.</p>
+        <form id="announce-form">
+          <input type="hidden" name="round_id" value={round.id} />
+          <label>
+            <span>1. místo (vítěz)</span>
+            <select name="winner_entry_id" required>
+              <option value="">— vyberte —</option>
+              {topWithUrls.map((e, i) => (
+                <option value={e.id} selected={i === 0}>#{i + 1} · {e.title} — {e.author_display_name} ({e.vote_count})</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span>2. místo</span>
+            <select name="runner_up_entry_id">
+              <option value="">—</option>
+              {topWithUrls.map((e, i) => (
+                <option value={e.id} selected={i === 1}>#{i + 1} · {e.title} — {e.author_display_name} ({e.vote_count})</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span>3. místo</span>
+            <select name="third_place_entry_id">
+              <option value="">—</option>
+              {topWithUrls.map((e, i) => (
+                <option value={e.id} selected={i === 2}>#{i + 1} · {e.title} — {e.author_display_name} ({e.vote_count})</option>
+              ))}
+            </select>
+          </label>
+          <button type="submit" class="submit">Vyhlásit výherce</button>
+        </form>
+      </section>
+    )}
+
+    {alreadyAnnounced && (
+      <section class="announce done">
+        <h2>Kolo vyhlášeno</h2>
+        <p>Výherci už jsou zveřejněni.</p>
+      </section>
+    )}
+
+    <script>
+      const form = document.getElementById('announce-form') as HTMLFormElement | null;
+      if (form) {
+        form.addEventListener('submit', async (ev) => {
+          ev.preventDefault();
+          if (!confirm('Opravdu vyhlásit výherce? Tato akce odešle e-maily a kolo přepne na "announced".')) return;
+          const fd = new FormData(form);
+          const res = await fetch('/admin/fotosoutez/api/announce', { method: 'POST', body: fd });
+          if (res.ok) {
+            alert('Výherci vyhlášeni.');
+            window.location.reload();
+          } else {
+            const body = await res.json().catch(() => ({}));
+            alert('Chyba: ' + (body.error ?? res.status));
+          }
+        });
+      }
+    </script>
+  </main>
+</Layout>
+
+<style>
+  .round-admin {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .back { font-size: 14px; color: #888; text-decoration: none; }
+  .round-admin h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 12px 0 4px;
+  }
+  .round-admin h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 28px 0 12px;
+  }
+  .meta { color: #666; font-size: 14px; margin: 0 0 24px; }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .stat {
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 14px;
+    padding: 16px 20px;
+  }
+  .stat .label { color: #888; font-size: 12px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: .04em; }
+  .stat .num {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    color: #FFFF00;
+    margin: 0;
+  }
+  .empty { color: #888; }
+  .leaderboard {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .leaderboard li {
+    display: grid;
+    grid-template-columns: 40px 64px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    background: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 12px;
+  }
+  .leaderboard .rank {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+  }
+  .leaderboard img {
+    width: 64px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  .leaderboard .info .title { font-weight: 700; margin: 0; font-size: 14px; }
+  .leaderboard .info .author { color: #666; font-size: 12px; margin: 2px 0 0; }
+  .leaderboard .votes { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 14px; }
+
+  .announce {
+    margin-top: 8px;
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 18px;
+    padding: 24px;
+  }
+  .announce.done { background: #2e7d32; }
+  .announce .hint { color: #bbb; font-size: 13px; margin: 0 0 16px; }
+  .announce code { background: #333; padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+  .announce form { display: flex; flex-direction: column; gap: 12px; }
+  .announce label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+  .announce label span { color: #bbb; }
+  .announce select {
+    padding: 10px 12px;
+    border: 1px solid #444;
+    background: #0f0f0f;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .announce .submit {
+    margin-top: 8px;
+    background: #FFFF00;
+    color: #1a1a1a;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .announce .submit:hover { background: #e6e600; }
+</style>

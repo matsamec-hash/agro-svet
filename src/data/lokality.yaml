@@ -1,0 +1,134 @@
+kraje:
+  - slug: praha
+    name: "Hlavní město Praha"
+    okresy:
+      - slug: praha
+        name: "Praha"
+
+  - slug: stredocesky
+    name: "Středočeský kraj"
+    okresy:
+      - { slug: benesov, name: "Benešov" }
+      - { slug: beroun, name: "Beroun" }
+      - { slug: kladno, name: "Kladno" }
+      - { slug: kolin, name: "Kolín" }
+      - { slug: kutna-hora, name: "Kutná Hora" }
+      - { slug: melnik, name: "Mělník" }
+      - { slug: mlada-boleslav, name: "Mladá Boleslav" }
+      - { slug: nymburk, name: "Nymburk" }
+      - { slug: praha-vychod, name: "Praha-východ" }
+      - { slug: praha-zapad, name: "Praha-západ" }
+      - { slug: pribram, name: "Příbram" }
+      - { slug: rakovnik, name: "Rakovník" }
+
+  - slug: jihocesky
+    name: "Jihočeský kraj"
+    okresy:
+      - { slug: ceske-budejovice, name: "České Budějovice" }
+      - { slug: cesky-krumlov, name: "Český Krumlov" }
+      - { slug: jindrichuv-hradec, name: "Jindřichův Hradec" }
+      - { slug: pisek, name: "Písek" }
+      - { slug: prachatice, name: "Prachatice" }
+      - { slug: strakonice, name: "Strakonice" }
+      - { slug: tabor, name: "Tábor" }
+
+  - slug: plzensky
+    name: "Plzeňský kraj"
+    okresy:
+      - { slug: domazlice, name: "Domažlice" }
+      - { slug: klatovy, name: "Klatovy" }
+      - { slug: plzen-mesto, name: "Plzeň-město" }
+      - { slug: plzen-jih, name: "Plzeň-jih" }
+      - { slug: plzen-sever, name: "Plzeň-sever" }
+      - { slug: rokycany, name: "Rokycany" }
+      - { slug: tachov, name: "Tachov" }
+
+  - slug: karlovarsky
+    name: "Karlovarský kraj"
+    okresy:
+      - { slug: cheb, name: "Cheb" }
+      - { slug: karlovy-vary, name: "Karlovy Vary" }
+      - { slug: sokolov, name: "Sokolov" }
+
+  - slug: ustecky
+    name: "Ústecký kraj"
+    okresy:
+      - { slug: decin, name: "Děčín" }
+      - { slug: chomutov, name: "Chomutov" }
+      - { slug: litomerice, name: "Litoměřice" }
+      - { slug: louny, name: "Louny" }
+      - { slug: most, name: "Most" }
+      - { slug: teplice, name: "Teplice" }
+      - { slug: usti-nad-labem, name: "Ústí nad Labem" }
+
+  - slug: liberecky
+    name: "Liberecký kraj"
+    okresy:
+      - { slug: ceska-lipa, name: "Česká Lípa" }
+      - { slug: jablonec-nad-nisou, name: "Jablonec nad Nisou" }
+      - { slug: liberec, name: "Liberec" }
+      - { slug: semily, name: "Semily" }
+
+  - slug: kralovehradecky
+    name: "Královéhradecký kraj"
+    okresy:
+      - { slug: hradec-kralove, name: "Hradec Králové" }
+      - { slug: jicin, name: "Jičín" }
+      - { slug: nachod, name: "Náchod" }
+      - { slug: rychnov-nad-kneznou, name: "Rychnov nad Kněžnou" }
+      - { slug: trutnov, name: "Trutnov" }
+
+  - slug: pardubicky
+    name: "Pardubický kraj"
+    okresy:
+      - { slug: chrudim, name: "Chrudim" }
+      - { slug: pardubice, name: "Pardubice" }
+      - { slug: svitavy, name: "Svitavy" }
+      - { slug: usti-nad-orlici, name: "Ústí nad Orlicí" }
+
+  - slug: vysocina
+    name: "Kraj Vysočina"
+    okresy:
+      - { slug: havlickuv-brod, name: "Havlíčkův Brod" }
+      - { slug: jihlava, name: "Jihlava" }
+      - { slug: pelhrimov, name: "Pelhřimov" }
+      - { slug: trebic, name: "Třebíč" }
+      - { slug: zdar-nad-sazavou, name: "Žďár nad Sázavou" }
+
+  - slug: jihomoravsky
+    name: "Jihomoravský kraj"
+    okresy:
+      - { slug: blansko, name: "Blansko" }
+      - { slug: brno-mesto, name: "Brno-město" }
+      - { slug: brno-venkov, name: "Brno-venkov" }
+      - { slug: breclav, name: "Břeclav" }
+      - { slug: hodonin, name: "Hodonín" }
+      - { slug: vyskov, name: "Vyškov" }
+      - { slug: znojmo, name: "Znojmo" }
+
+  - slug: olomoucky
+    name: "Olomoucký kraj"
+    okresy:
+      - { slug: jesenik, name: "Jeseník" }
+      - { slug: olomouc, name: "Olomouc" }
+      - { slug: prerov, name: "Přerov" }
+      - { slug: prostejov, name: "Prostějov" }
+      - { slug: sumperk, name: "Šumperk" }
+
+  - slug: zlinsky
+    name: "Zlínský kraj"
+    okresy:
+      - { slug: kromeriz, name: "Kroměříž" }
+      - { slug: uherske-hradiste, name: "Uherské Hradiště" }
+      - { slug: vsetin, name: "Vsetín" }
+      - { slug: zlin, name: "Zlín" }
+
+  - slug: moravskoslezsky
+    name: "Moravskoslezský kraj"
+    okresy:
+      - { slug: bruntal, name: "Bruntál" }
+      - { slug: frydek-mistek, name: "Frýdek-Místek" }
+      - { slug: karvina, name: "Karviná" }
+      - { slug: nova-jicin, name: "Nový Jičín" }
+      - { slug: opava, name: "Opava" }
+      - { slug: ostrava-mesto, name: "Ostrava-město" }

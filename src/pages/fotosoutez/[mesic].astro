@@ -1,0 +1,76 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import ContestRoundHeader from '../../components/contest/ContestRoundHeader.astro';
+import ContestEntryCard from '../../components/contest/ContestEntryCard.astro';
+import ContestLiveLeaderboard from '../../components/contest/ContestLiveLeaderboard.astro';
+import { getRoundBySlug, getApprovedEntries, getPublicPhotoUrl } from '../../lib/contest-supabase';
+import { computeRoundPhase } from '../../lib/contest-config';
+
+const slug = Astro.params.mesic;
+if (!slug) return Astro.redirect('/fotosoutez/');
+
+const round = await getRoundBySlug(slug);
+if (!round) return Astro.redirect('/fotosoutez/');
+
+const entries = await getApprovedEntries(round.id, { limit: 120 });
+const phase = computeRoundPhase(round);
+const leaderboard = await Promise.all(
+  entries.slice(0, 10).map(async (e, i) => ({
+    id: e.id,
+    rank: i + 1,
+    title: e.title,
+    author: e.author_display_name,
+    vote_count: e.vote_count,
+    photo_url: await getPublicPhotoUrl(e.photo_path),
+  })),
+);
+---
+<Layout title={`${round.title} — Fotosoutěž Agro-svět`} description={round.description}>
+  <main class="round-page">
+    <ContestRoundHeader round={round} />
+    <div class="grid">
+      <section>
+        <h2>Galerie ({entries.length})</h2>
+        <div class="entries">
+          {entries.map((e, i) => (
+            <ContestEntryCard entry={e} rank={phase === 'voting_open' ? i + 1 : undefined} />
+          ))}
+        </div>
+        {entries.length === 0 && <p class="empty">Zatím žádné schválené fotky.</p>}
+      </section>
+      {phase === 'voting_open' && leaderboard.length > 0 && (
+        <ContestLiveLeaderboard roundSlug={round.slug} initialEntries={leaderboard} />
+      )}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .round-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+  }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .grid section h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    margin: 0 0 18px;
+  }
+  .entries {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .empty { color: #888; padding: 32px 0; }
+</style>

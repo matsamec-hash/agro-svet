@@ -1,0 +1,513 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { getActiveRound } from '../../lib/contest-supabase';
+import { getAllBrands } from '../../lib/stroje';
+import { getKraje } from '../../lib/lokality';
+import { computeRoundPhase } from '../../lib/contest-config';
+import { getEnvVar } from '../../lib/env';
+
+const user = Astro.locals.user;
+const round = await getActiveRound();
+const phase = round ? computeRoundPhase(round) : null;
+const canUpload = phase === 'upload_open';
+
+const brands = getAllBrands();
+const kraje = getKraje();
+// Read at request time (Worker env in prod, Vite .env in dev). Reading via
+// import.meta.env directly would inline the dev .env testing key into the
+// production bundle.
+const turnstileSiteKey = getEnvVar('PUBLIC_TURNSTILE_SITE_KEY') ?? '';
+---
+<Layout title="Nahrát fotku — Fotosoutěž Agro-svět" description="Nahrajte svou fotografii do aktuálního kola">
+  <main class="upload-page">
+    <a href="/fotosoutez/" class="back">← Zpět</a>
+    <h1>Nahrát fotku</h1>
+
+    {!canUpload && (
+      <p class="closed">Upload je aktuálně uzavřen. Přijďte zpět, až bude nové kolo otevřeno.</p>
+    )}
+
+    {canUpload && round && (
+      <>
+        <p class="round-tag">Kolo: <strong>{round.title}</strong></p>
+
+        <div id="success-screen" class="success-screen" hidden>
+          <div class="success-icon">✓</div>
+          <h2>Fotka úspěšně nahrána!</h2>
+          <p>Tvá fotka teď čeká na schválení moderátorem. Pošleme ti e-mail, jakmile bude v galerii (obvykle do 24 h).</p>
+          <div class="success-actions">
+            <a href="/fotosoutez/moje/" class="primary-link">Zobrazit moje fotky</a>
+            <button type="button" id="upload-another" class="secondary-link">Nahrát další fotku</button>
+          </div>
+        </div>
+
+        <form id="upload-form" enctype="multipart/form-data">
+          <div class="field">
+            <label>Fotografie *</label>
+            <label class="file-drop" id="file-drop">
+              <input type="file" name="photo" accept="image/jpeg,image/png,image/webp,image/heic" required id="photo-input" />
+              <div class="file-drop-content" id="file-drop-content">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="9" cy="9" r="2" />
+                  <path d="m21 15-5-5L5 21" />
+                </svg>
+                <p class="file-drop-primary">Klikni nebo přetáhni fotku sem</p>
+                <p class="file-drop-secondary">JPG, PNG, WebP nebo HEIC, max 20 MB</p>
+              </div>
+              <div class="file-drop-preview" id="file-drop-preview" hidden>
+                <img id="file-preview-img" alt="Náhled" />
+                <div>
+                  <p class="file-name" id="file-name"></p>
+                  <button type="button" id="file-clear" class="file-clear-btn">Vyměnit fotku</button>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Název fotky *</label>
+            <input type="text" name="title" required maxlength="80" />
+          </div>
+
+          <div class="field">
+            <label>Popisek (volitelné)</label>
+            <textarea name="caption" maxlength="500" rows="3"></textarea>
+          </div>
+
+          <div class="field">
+            <label>Jméno pod fotkou *</label>
+            <input type="text" name="author_display_name" required maxlength="80" value={user?.user_metadata?.name ?? ''} />
+          </div>
+
+          <details class="extras">
+            <summary>Dodatečné údaje (pomohou vyhledat fotku v archivu)</summary>
+            <div class="extras-body">
+              <div class="field">
+                <label>Značka</label>
+                <select name="brand_slug">
+                  <option value="">— vyberte —</option>
+                  {brands.map((b) => <option value={b.slug}>{b.name}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label>Kraj</label>
+                <select name="location_kraj_slug" id="kraj-select">
+                  <option value="">— vyberte —</option>
+                  {kraje.map((k) => <option value={k.slug}>{k.name}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label>Okres</label>
+                <select name="location_okres_slug" id="okres-select" disabled>
+                  <option value="">— nejprve vyberte kraj —</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Rok výroby stroje</label>
+                <input type="number" name="year_taken" min="1900" max="2030" placeholder="např. 2018" />
+                <p class="hint">Pomáhá propojit fotku s katalogem strojů</p>
+              </div>
+            </div>
+          </details>
+
+          <div class="consents">
+            <label>
+              <input type="checkbox" name="confirm_self_author" required />
+              <span>Fotku jsem pořídil(a) sám/sama a není generovaná umělou inteligencí. *</span>
+            </label>
+            <label>
+              <input type="checkbox" name="confirm_rules" required />
+              <span>Souhlasím s <a href="/fotosoutez/pravidla/">pravidly soutěže</a> a <a href="/fotosoutez/gdpr/">zpracováním osobních údajů</a>. *</span>
+            </label>
+            <label>
+              <input type="checkbox" name="license_merch_print" />
+              <span>Dobrovolně souhlasím s případným použitím fotky v kalendáři Agro-svět 2027 a merchandise.</span>
+            </label>
+          </div>
+
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+
+          <button type="submit" class="submit-btn">Nahrát fotku</button>
+          <p id="upload-message" hidden></p>
+        </form>
+
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+        <script is:inline define:vars={{ kraje }}>
+          const krajSelect = document.getElementById('kraj-select');
+          const okresSelect = document.getElementById('okres-select');
+          krajSelect?.addEventListener('change', () => {
+            const k = kraje.find((x) => x.slug === krajSelect.value);
+            okresSelect.innerHTML = '<option value="">— vyberte —</option>';
+            if (k && Array.isArray(k.okresy)) {
+              okresSelect.disabled = false;
+              for (const o of k.okresy) {
+                const opt = document.createElement('option');
+                opt.value = o.slug;
+                opt.textContent = o.name;
+                okresSelect.appendChild(opt);
+              }
+            } else {
+              okresSelect.disabled = true;
+            }
+          });
+        </script>
+
+        <script>
+          // File-drop preview wiring
+          const photoInput = document.getElementById('photo-input') as HTMLInputElement | null;
+          const dropZone = document.getElementById('file-drop') as HTMLLabelElement | null;
+          const dropContent = document.getElementById('file-drop-content') as HTMLElement | null;
+          const previewWrap = document.getElementById('file-drop-preview') as HTMLElement | null;
+          const previewImg = document.getElementById('file-preview-img') as HTMLImageElement | null;
+          const fileNameEl = document.getElementById('file-name') as HTMLElement | null;
+          const clearBtn = document.getElementById('file-clear') as HTMLButtonElement | null;
+
+          function renderFile(file: File | null) {
+            if (!dropContent || !previewWrap || !previewImg || !fileNameEl) return;
+            if (!file) {
+              dropContent.hidden = false;
+              previewWrap.hidden = true;
+              previewImg.src = '';
+              return;
+            }
+            dropContent.hidden = true;
+            previewWrap.hidden = false;
+            fileNameEl.textContent = `${file.name} • ${(file.size / 1024 / 1024).toFixed(1)} MB`;
+            const reader = new FileReader();
+            reader.onload = (e) => { previewImg.src = String(e.target?.result ?? ''); };
+            reader.readAsDataURL(file);
+          }
+
+          photoInput?.addEventListener('change', () => {
+            renderFile(photoInput.files?.[0] ?? null);
+          });
+
+          clearBtn?.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            if (!photoInput) return;
+            photoInput.value = '';
+            renderFile(null);
+          });
+
+          // Drag & drop
+          if (dropZone) {
+            dropZone.addEventListener('dragover', (ev) => {
+              ev.preventDefault();
+              dropZone.classList.add('drag-active');
+            });
+            dropZone.addEventListener('dragleave', () => {
+              dropZone.classList.remove('drag-active');
+            });
+            dropZone.addEventListener('drop', (ev) => {
+              ev.preventDefault();
+              dropZone.classList.remove('drag-active');
+              const file = ev.dataTransfer?.files?.[0];
+              if (file && photoInput) {
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                photoInput.files = dt.files;
+                renderFile(file);
+              }
+            });
+          }
+
+          // Submit
+          const form = document.getElementById('upload-form') as HTMLFormElement | null;
+          const msg = document.getElementById('upload-message') as HTMLElement | null;
+          const submitBtn = form?.querySelector<HTMLButtonElement>('button[type="submit"]') ?? null;
+          const successScreen = document.getElementById('success-screen') as HTMLElement | null;
+          const uploadAnother = document.getElementById('upload-another') as HTMLButtonElement | null;
+
+          uploadAnother?.addEventListener('click', () => {
+            successScreen!.hidden = true;
+            form!.hidden = false;
+            form!.reset();
+            renderFile(null);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+
+          const errorLabels: Record<string, string> = {
+            unauthenticated: 'Musíš být přihlášen.',
+            missing_photo: 'Vyber fotografii.',
+            captcha_failed: 'Ověření Cloudflare Turnstile selhalo. Zkus to znovu.',
+            upload_closed: 'Upload tohoto kola je zavřený.',
+            entry_limit: 'Dosáhl jsi maxima 3 fotky v tomto kole.',
+            invalid_image: 'Soubor není podporovaný formát nebo je poškozený.',
+            missing_title: 'Vyplň název fotky.',
+            missing_display_name: 'Vyplň jméno pod fotkou.',
+            missing_consent: 'Musíš odsouhlasit povinné checkboxy.',
+            db_insert_failed: 'Selhalo uložení do databáze. Zkus to znovu.',
+            storage_upload_failed: 'Selhalo nahrání souboru. Zkus menší fotku.',
+          };
+
+          form?.addEventListener('submit', async (ev) => {
+            ev.preventDefault();
+            if (!msg || !submitBtn) return;
+            const fd = new FormData(form);
+            const tsToken = (form.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]'))?.value;
+            if (tsToken) fd.append('turnstile_token', tsToken);
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Nahrávám…';
+            msg.hidden = true;
+
+            try {
+              const res = await fetch('/fotosoutez/api/upload', { method: 'POST', body: fd });
+              const json = await res.json().catch(() => ({}));
+              if (res.ok) {
+                form.hidden = true;
+                if (successScreen) successScreen.hidden = false;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                const human = errorLabels[json.error] ?? `Chyba: ${json.error ?? 'neznámá'} ${json.reason ?? ''}`;
+                msg.textContent = human;
+                msg.hidden = false;
+                msg.className = 'error-msg';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Nahrát fotku';
+              }
+            } catch (err) {
+              msg.textContent = 'Síťová chyba. Zkontroluj připojení a zkus to znovu.';
+              msg.hidden = false;
+              msg.className = 'error-msg';
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Nahrát fotku';
+            }
+          });
+        </script>
+      </>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .upload-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .back { font-size: 14px; color: #888; text-decoration: none; }
+  .back:hover { color: #1a1a1a; }
+  .upload-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 12px 0 8px;
+  }
+  .closed {
+    background: #f5f5f5;
+    padding: 16px 18px;
+    border-radius: 10px;
+    color: #666;
+  }
+  .round-tag { color: #888; margin-bottom: 24px; }
+  form { display: flex; flex-direction: column; gap: 18px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .field input[type="text"],
+  .field input[type="number"],
+  .field input[type="email"],
+  .field textarea,
+  .field select {
+    padding: 12px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus { outline: none; border-color: #FFFF00; }
+  .hint { font-size: 12px; color: #888; margin: 4px 0 0; }
+  .extras {
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .extras summary {
+    cursor: pointer;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+  }
+  .extras-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .consents { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .consents label {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+  }
+  .consents input[type="checkbox"] { margin-top: 4px; }
+  .consents a { color: #1a1a1a; text-decoration: underline; }
+  .submit-btn {
+    background: #FFFF00;
+    color: #000;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .submit-btn:hover { background: #fff700; }
+  .submit-btn:disabled { background: #ccc; color: #666; cursor: wait; }
+  #upload-message { font-size: 14px; color: #555; margin: 0; }
+  #upload-message.error-msg {
+    background: #fff0f0;
+    border: 1px solid #ffcdd2;
+    color: #c62828;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  /* File drop zone */
+  .file-drop {
+    display: block;
+    border: 2px dashed #d0d0d0;
+    border-radius: 14px;
+    background: #fafafa;
+    padding: 32px 24px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .file-drop:hover { border-color: #FFFF00; background: #fffff0; }
+  .file-drop.drag-active { border-color: #FFFF00; background: #fffff0; }
+  .file-drop input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .file-drop-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+  .file-drop-content svg { opacity: .55; margin-bottom: 4px; }
+  .file-drop-primary {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #1a1a1a;
+    margin: 0;
+  }
+  .file-drop-secondary {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+  }
+  .file-drop-preview {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .file-drop-preview img {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .file-name {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    margin: 0 0 6px;
+    word-break: break-all;
+  }
+  .file-clear-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #1a1a1a;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .file-clear-btn:hover { color: #c62828; }
+
+  /* Success screen */
+  .success-screen {
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 22px;
+    padding: 48px 32px;
+    text-align: center;
+  }
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    background: #FFFF00;
+    color: #000;
+    font-size: 38px;
+    font-weight: 900;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .success-screen h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    margin: 0 0 12px;
+    color: #fff;
+  }
+  .success-screen p {
+    color: #ccc;
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0 auto 28px;
+  }
+  .success-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .success-actions .primary-link {
+    background: #FFFF00;
+    color: #000;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+  }
+  .success-actions .primary-link:hover { background: #fff700; }
+  .success-actions .secondary-link {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #555;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .success-actions .secondary-link:hover { border-color: #FFFF00; color: #FFFF00; }
+</style>

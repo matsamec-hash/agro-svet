@@ -1,0 +1,96 @@
+---
+import type { ContestEntry } from '../../lib/contest-supabase';
+import { formatLokalita } from '../../lib/lokality';
+
+interface Props { entry: ContestEntry; rank?: number }
+const { entry, rank } = Astro.props;
+const photoUrl = `https://obhypfuzmknvmknskdwh.supabase.co/storage/v1/object/public/contest-photos/${entry.photo_path}`;
+const lokalita = formatLokalita(entry.location_kraj_slug, entry.location_okres_slug);
+---
+<a href={`/fotosoutez/foto/${entry.id}/`} class="entry-card">
+  <div class="entry-img-wrap">
+    <img src={photoUrl} alt={entry.title} loading="lazy" class="entry-img" />
+    {rank && rank <= 3 && <span class="entry-rank">{rank}</span>}
+    <span class="entry-votes">{entry.vote_count} hlasů</span>
+  </div>
+  <div class="entry-body">
+    <h3 class="entry-title">{entry.title}</h3>
+    <p class="entry-author">Foto: {entry.author_display_name}{lokalita && ` • ${lokalita}`}</p>
+  </div>
+</a>
+
+<style>
+  .entry-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #1a1a1a;
+    color: #fff;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .entry-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0,0,0,.18);
+  }
+  .entry-img-wrap {
+    aspect-ratio: 4 / 3;
+    position: relative;
+    overflow: hidden;
+    background: #0a0a0a;
+  }
+  .entry-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .5s;
+  }
+  .entry-card:hover .entry-img { transform: scale(1.04); }
+  .entry-rank {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #FFFF00;
+    color: #000;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 900;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .entry-votes {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0,0,0,.78);
+    color: #fff;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .entry-body { padding: 14px 16px 18px; }
+  .entry-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.3;
+    margin: 0 0 6px;
+    color: #fff;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .entry-author {
+    font-size: 13px;
+    color: #999;
+    margin: 0;
+  }
+</style>

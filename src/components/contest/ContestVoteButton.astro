@@ -1,0 +1,157 @@
+---
+interface Props {
+  entryId: string;
+  voteCount: number;
+  turnstileSiteKey: string;
+}
+const { entryId, voteCount, turnstileSiteKey } = Astro.props;
+---
+<div class="vote-widget" data-vote-widget data-entry-id={entryId}>
+  <button type="button" class="vote-btn" data-vote-btn>
+    Hlasovat (<span data-vote-count>{voteCount}</span> hlasů)
+  </button>
+  <p class="vote-message" data-vote-message hidden></p>
+
+  <dialog class="email-modal" data-email-modal>
+    <h3>Pro hlasování zadejte e-mail</h3>
+    <p>Pošleme vám ověřovací odkaz. Po kliknutí se váš hlas započítá a budete moci hlasovat 1× za hodinu po zbytek kola.</p>
+    <form data-email-form>
+      <input type="email" name="email" required placeholder="vas@email.cz" />
+      <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+      <div class="actions">
+        <button type="submit" class="primary">Poslat odkaz</button>
+        <button type="button" data-close-modal class="secondary">Zrušit</button>
+      </div>
+      <p class="error" data-email-error hidden></p>
+    </form>
+  </dialog>
+</div>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script>
+  const widget = document.querySelector<HTMLElement>('[data-vote-widget]');
+  if (widget) {
+    const entryId = widget.dataset.entryId!;
+    const btn = widget.querySelector<HTMLButtonElement>('[data-vote-btn]')!;
+    const modal = widget.querySelector<HTMLDialogElement>('[data-email-modal]')!;
+    const form = widget.querySelector<HTMLFormElement>('[data-email-form]')!;
+    const errorEl = widget.querySelector<HTMLElement>('[data-email-error]')!;
+    const messageEl = widget.querySelector<HTMLElement>('[data-vote-message]')!;
+    const countEl = widget.querySelector<HTMLElement>('[data-vote-count]')!;
+    const closeBtn = widget.querySelector<HTMLButtonElement>('[data-close-modal]')!;
+
+    closeBtn.addEventListener('click', () => modal.close());
+
+    const showMsg = (txt: string) => {
+      messageEl.textContent = txt;
+      messageEl.hidden = false;
+    };
+
+    async function castVote() {
+      const fd = new FormData();
+      fd.append('entry_id', entryId);
+      const res = await fetch('/fotosoutez/api/vote', { method: 'POST', body: fd });
+      const json = await res.json();
+      if (res.ok) {
+        countEl.textContent = String(json.vote_count);
+        btn.disabled = true;
+        showMsg('Hlas započítán! Další hlas za 1 h.');
+      } else if (json.action === 'request_verification') {
+        modal.showModal();
+      } else if (json.error === 'cooldown') {
+        const mins = Math.ceil((json.retry_after_ms ?? 3_600_000) / 60_000);
+        showMsg(`Hlasovat lze znovu za ${mins} min.`);
+      } else if (json.error === 'own_entry') {
+        showMsg('Pro vlastní fotku nelze hlasovat.');
+      } else {
+        showMsg('Hlasování selhalo.');
+      }
+    }
+
+    btn.addEventListener('click', () => castVote());
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const fd = new FormData(form);
+      fd.append('entry_id', entryId);
+      const tokenInput = form.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]');
+      fd.append('turnstile_token', tokenInput?.value ?? '');
+      const res = await fetch('/fotosoutez/api/request-verification', { method: 'POST', body: fd });
+      const json = await res.json();
+      if (res.ok) {
+        modal.close();
+        showMsg('Zkontrolujte svůj e-mail a klikněte na ověřovací odkaz.');
+      } else {
+        errorEl.textContent = `Chyba: ${json.error ?? 'neznámá'}`;
+        errorEl.hidden = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .vote-widget { display: flex; flex-direction: column; gap: 12px; }
+  .vote-btn {
+    width: 100%;
+    padding: 16px;
+    background: #FFFF00;
+    color: #000;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  .vote-btn:hover:not(:disabled) { background: #fff700; transform: translateY(-1px); }
+  .vote-btn:disabled { background: #ddd; color: #666; cursor: not-allowed; }
+  .vote-message { font-size: 14px; color: #555; margin: 0; }
+  .email-modal {
+    border-radius: 18px;
+    border: 1px solid #e0e0e0;
+    padding: 32px;
+    max-width: 440px;
+    width: 90%;
+    font-family: inherit;
+  }
+  .email-modal::backdrop { background: rgba(0,0,0,.5); }
+  .email-modal h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0 0 12px;
+  }
+  .email-modal p { color: #666; margin: 0 0 16px; font-size: 14px; line-height: 1.5; }
+  .email-modal form { display: flex; flex-direction: column; gap: 14px; }
+  .email-modal input[type="email"] {
+    padding: 12px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+  }
+  .email-modal input[type="email"]:focus { outline: none; border-color: #FFFF00; }
+  .email-modal .actions { display: flex; gap: 8px; }
+  .email-modal .primary {
+    flex: 1;
+    background: #FFFF00;
+    color: #000;
+    font-weight: 700;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Chakra Petch', sans-serif;
+  }
+  .email-modal .secondary {
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .email-modal .error { font-size: 13px; color: #c62828; margin: 0; }
+</style>

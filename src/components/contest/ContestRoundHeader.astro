@@ -1,0 +1,119 @@
+---
+import type { ContestRound } from '../../lib/contest-supabase';
+import { computeRoundPhase, formatCountdown, msUntil } from '../../lib/contest-config';
+
+interface Props { round: ContestRound }
+const { round } = Astro.props;
+const phase = computeRoundPhase(round);
+const now = new Date();
+
+const labels: Record<string, string> = {
+  upcoming: 'Brzy',
+  upload_open: 'Nahrávání otevřené',
+  between: 'Upload uzavřen — brzy hlasování',
+  voting_open: 'Hlasování otevřené',
+  closed: 'Hlasování uzavřeno',
+  announced: 'Výsledky vyhlášeny',
+};
+
+let countdownTarget: string | null = null;
+let countdownLabel = '';
+if (phase === 'upload_open') {
+  countdownTarget = String(round.upload_ends_at);
+  countdownLabel = 'Upload končí za';
+} else if (phase === 'voting_open') {
+  countdownTarget = String(round.voting_ends_at);
+  countdownLabel = 'Hlasování končí za';
+} else if (phase === 'upcoming') {
+  countdownTarget = String(round.upload_starts_at);
+  countdownLabel = 'Začíná za';
+}
+const remaining = countdownTarget ? formatCountdown(msUntil(countdownTarget, now)) : '';
+---
+<section class="round-header">
+  {round.hero_image && <img src={round.hero_image} alt="" class="round-hero-img" />}
+  <div class="round-meta">
+    <span class="round-status-badge">{labels[phase]}</span>
+    <span class="round-theme">{round.theme}</span>
+  </div>
+  <h1 class="round-title">{round.title}</h1>
+  <p class="round-description">{round.description}</p>
+  {countdownTarget && (
+    <p class="round-countdown">{countdownLabel}: <strong>{remaining}</strong></p>
+  )}
+  {phase === 'upload_open' && (
+    <a href="/fotosoutez/nahrat/" class="round-cta">Nahrát fotku</a>
+  )}
+</section>
+
+<style>
+  .round-header {
+    border-radius: 22px;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .round-hero-img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 18px;
+    margin-bottom: 24px;
+    display: block;
+  }
+  .round-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .round-status-badge {
+    background: #FFFF00;
+    color: #000;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+  .round-theme {
+    color: #aaa;
+    font-size: 14px;
+  }
+  .round-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1.15;
+  }
+  .round-description {
+    color: #ccc;
+    max-width: 720px;
+    line-height: 1.6;
+  }
+  .round-countdown {
+    margin-top: 24px;
+    font-size: 18px;
+  }
+  .round-countdown strong {
+    color: #FFFF00;
+    font-family: 'Chakra Petch', sans-serif;
+  }
+  .round-cta {
+    display: inline-block;
+    margin-top: 24px;
+    background: #FFFF00;
+    color: #000;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+  }
+  .round-cta:hover { background: #fff700; }
+</style>

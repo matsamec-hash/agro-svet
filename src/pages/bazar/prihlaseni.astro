@@ -6,6 +6,14 @@ let error = '';
 const { url: supabaseUrl, anonKey: supabaseKey } = getPublicSupabaseConfig();
 if (Astro.url.searchParams.get('error') === 'oauth') error = 'Přihlášení přes Google selhalo, zkuste to znovu.';
 
+// Honour ?redirect= so the user lands back on the page they were trying to
+// reach (e.g. /fotosoutez/nahrat/ or /admin/fotosoutez/). Restrict to
+// same-origin paths to avoid open-redirect.
+const rawRedirect = Astro.url.searchParams.get('redirect');
+const postLoginPath = rawRedirect && rawRedirect.startsWith('/') && !rawRedirect.startsWith('//')
+  ? rawRedirect
+  : '/bazar/moje/';
+
 if (Astro.request.method === 'POST') {
   const form = await Astro.request.formData();
   const email = form.get('email')?.toString().trim() ?? '';
@@ -23,21 +31,16 @@ if (Astro.request.method === 'POST') {
     if (authError) {
       error = 'Nesprávný email nebo heslo.';
     } else if (data.session) {
-      Astro.cookies.set('sb-access-token', data.session.access_token, {
+      const cookieOpts = {
         path: '/',
         httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
+        secure: import.meta.env.PROD,
+        sameSite: 'lax' as const,
         maxAge: 60 * 60 * 24 * 7,
-      });
-      Astro.cookies.set('sb-refresh-token', data.session.refresh_token!, {
-        path: '/',
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7,
-      });
-      return Astro.redirect('/bazar/moje/');
+      };
+      Astro.cookies.set('sb-access-token', data.session.access_token, cookieOpts);
+      Astro.cookies.set('sb-refresh-token', data.session.refresh_token!, cookieOpts);
+      return Astro.redirect(postLoginPath);
     }
   }
 }
@@ -100,12 +103,15 @@ if (Astro.request.method === 'POST') {
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e4e4e4; }
   </style>
 
-  <script type="module" define:vars={{ supabaseUrl, supabaseKey }}>
+  <script type="module" define:vars={{ supabaseUrl, supabaseKey, postLoginPath }}>
     const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2.48.1');
     const supabase = createClient(supabaseUrl, supabaseKey, {
       auth: { flowType: 'pkce', persistSession: true, detectSessionInUrl: true },
     });
     document.getElementById('google-btn')?.addEventListener('click', async () => {
+      // Stash the post-login destination so callback.astro can pick it up
+      // after Google bounces us back through Supabase OAuth.
+      try { sessionStorage.setItem('postLoginRedirect', postLoginPath); } catch {}
       await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: `${location.origin}/bazar/auth/callback/` },

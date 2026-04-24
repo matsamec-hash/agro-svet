@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Newsletter from '../../components/Newsletter.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { tagStyle } from '../../lib/tag-color';
 
@@ -91,6 +92,9 @@ const categoryLabels: Record<string, string> = {
     </div>
 
   </div>
+
+  <!-- Newsletter signup -->
+  <Newsletter />
 </Layout>
 
 <style>
