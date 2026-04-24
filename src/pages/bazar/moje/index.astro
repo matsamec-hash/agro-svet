@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import { createServerClient } from '../../../lib/supabase';
 import { CATEGORIES } from '../../../lib/bazar-constants';
+import { isFeaturedActive, formatFeaturedUntil } from '../../../lib/bazar-featured';
 
 const user = Astro.locals.user!;
 const supabase = createServerClient();
@@ -26,7 +27,7 @@ if (Astro.request.method === 'POST') {
 
 const { data: listings } = await supabase
   .from('bazar_listings')
-  .select('id, title, price, category, status, created_at, views')
+  .select('id, title, price, category, status, created_at, views, featured, featured_until')
   .eq('user_id', user.id)
   .order('created_at', { ascending: false });
 ---
@@ -54,11 +55,21 @@ const { data: listings } = await supabase
           const statusColors = { active: '#4caf50', sold: '#ff9800', expired: '#999' } as any;
           const statusLabels = { active: 'Aktivní', sold: 'Prodáno', expired: 'Expirováno' } as any;
           return (
-            <div class="my-listing-row">
+            <div class={`my-listing-row ${listing.featured && isFeaturedActive(listing) ? 'is-featured' : ''}`}>
               <div class="my-listing-info">
                 <a href={`/bazar/${listing.id}/`} style="text-decoration:none; color:inherit;">
                   <h3 style="font-size:16px; margin-bottom:4px;">{listing.title}</h3>
                 </a>
+                {listing.featured && isFeaturedActive(listing) && (
+                  <div class="top-badge-row">
+                    <span class="top-badge-active">⭐ TOP do {formatFeaturedUntil(listing.featured_until)}</span>
+                  </div>
+                )}
+                {listing.featured && !isFeaturedActive(listing) && listing.featured_until && (
+                  <div class="top-badge-row">
+                    <span class="top-badge-expired">TOP expirovalo {formatFeaturedUntil(listing.featured_until)}</span>
+                  </div>
+                )}
                 <div style="font-size:13px; color:#666; display:flex; gap:12px;">
                   <span>{categoryLabel}</span>
                   <span>{priceText}</span>
@@ -89,6 +100,10 @@ const { data: listings } = await supabase
       </div>
     )}
 
+    <div style="margin-top:48px; padding:20px; border:1px dashed #e0e0e0; border-radius:14px; text-align:center; color:#666; font-size:13px;">
+      Topování inzerátů nabízíme po domluvě — kontaktujte nás na <a href="mailto:info@agro-svet.cz" class="link-underline">info@agro-svet.cz</a>.
+    </div>
+
     <div style="margin-top:32px; text-align:center;">
       <a href="/bazar/odhlaseni/" class="link-underline" style="font-size:13px; color:#666;">Odhlásit se</a>
     </div>
@@ -109,7 +124,35 @@ const { data: listings } = await supabase
     border-bottom: 1px solid #f0f0f0;
   }
   .my-listing-row:last-child { border-bottom: none; }
+  .my-listing-row.is-featured {
+    border-left: 4px solid #FFFF00;
+    padding-left: 16px;
+  }
   .my-listing-info { flex: 1; min-width: 0; }
+  .top-badge-row {
+    margin: 4px 0 6px;
+  }
+  .top-badge-active {
+    display: inline-block;
+    background: #1a1a1a;
+    color: #FFFF00;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .top-badge-expired {
+    display: inline-block;
+    background: #f0f0f0;
+    color: #888;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
 
   .status-badge {
     font-family: 'Chakra Petch', sans-serif;
