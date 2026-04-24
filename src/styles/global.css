@@ -22,27 +22,27 @@ body {
 
 /* ===== Typography ===== */
 
-/* Page titles (h1) */
+/* Page titles (h1) — color inherits so dark cards (color:#fff parent) work */
 h1 {
   font-family: var(--font-heading);
   font-weight: 400;
   letter-spacing: -0.3px;
   line-height: 1.2;
-  color: var(--black);
+  color: inherit;
 }
 
 /* Section headings (h2) */
 h2 {
   font-family: var(--font-heading);
   font-weight: 400;
-  color: var(--black);
+  color: inherit;
 }
 
 /* Card/item headings (h3) */
 h3 {
   font-family: var(--font-heading);
   font-weight: 400;
-  color: var(--black);
+  color: inherit;
 }
 
 /* Category tags */
