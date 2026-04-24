@@ -13,9 +13,34 @@ export async function getStaticPaths() {
 
 const { znacka } = Astro.props;
 const { Content } = await render(znacka);
+
+const canonical = `https://agro-svet.cz/znacky/${znacka.id}/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      name: znacka.data.name,
+      description: znacka.data.popis,
+      url: canonical,
+      ...(znacka.data.website && { sameAs: [znacka.data.website] }),
+      ...(znacka.data.logo && { logo: znacka.data.logo.startsWith('http') ? znacka.data.logo : `https://agro-svet.cz${znacka.data.logo}` }),
+      ...(znacka.data.zalozena && { foundingDate: String(znacka.data.zalozena) }),
+      ...(znacka.data.zeme && { address: { '@type': 'PostalAddress', addressCountry: znacka.data.zeme } }),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Značky', item: 'https://agro-svet.cz/znacky/' },
+        { '@type': 'ListItem', position: 2, name: znacka.data.name, item: canonical },
+      ],
+    },
+  ],
+};
 ---
 
 <Layout title={znacka.data.name} description={znacka.data.popis}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:28px;">

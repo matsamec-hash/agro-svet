@@ -25,9 +25,47 @@ const categoryLabels: Record<string, string> = {
   technika: 'Technika', dotace: 'Dotace', trh: 'Trh', legislativa: 'Legislativa', znacky: 'Značky',
   psychologie: 'Psychologie', zdravi: 'Zdraví', finance: 'Finance', krasa: 'Krása',
 };
+
+const canonical = `https://agro-svet.cz/novinky/${article.slug}/`;
+const publisher = {
+  '@type': 'Organization',
+  name: 'agro-svět.cz',
+  url: 'https://agro-svet.cz',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://agro-svet.cz/apple-touch-icon.png',
+  },
+};
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'NewsArticle',
+      headline: article.title,
+      description: article.seo_description || article.perex,
+      ...(article.featured_image_url && { image: [article.featured_image_url] }),
+      datePublished: article.published_at,
+      dateModified: article.published_at,
+      url: canonical,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+      author: publisher,
+      publisher,
+      ...(article.category && { articleSection: categoryLabels[article.category] || article.category }),
+      ...(article.tags?.length > 0 && { keywords: article.tags.join(', ') }),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Novinky', item: 'https://agro-svet.cz/novinky/' },
+        { '@type': 'ListItem', position: 2, name: article.title, item: canonical },
+      ],
+    },
+  ],
+};
 ---
 
 <Layout title={article.seo_title || article.title} description={article.seo_description || article.perex} ogImage={article.featured_image_url || undefined}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
   <!-- Hero image -->
   {article.featured_image_url && (
