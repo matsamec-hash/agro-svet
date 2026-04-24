@@ -14,6 +14,83 @@ categories:
     name: Traktory
 
     series:
+      # ========== B Series (historické + aktuální kompakty) ==========
+      - slug: b
+        name: "B Series (1997–dosud)"
+        year_from: 1997
+        year_to: null
+        description: >
+          Kompaktní traktory do 30 koní pro zahrady, sady, komunální služby a hobby
+          farmy. Motor Kubota 3-válec diesel, převodovka HST nebo převodová. Aktuální
+          modelová řada B01 (B2301, B2601) navazuje na historické B7500/B2920/B3350.
+        models:
+          - slug: kubota-b1700
+            name: "B1700"
+            year_from: 1997
+            year_to: 2003
+            power_hp: 17
+            power_kw: 13
+          - slug: kubota-b7500
+            name: "B7500"
+            year_from: 2001
+            year_to: 2003
+            power_hp: 21
+            power_kw: 15
+          - slug: kubota-b7510
+            name: "B7510"
+            year_from: 2004
+            year_to: 2007
+            power_hp: 21
+            power_kw: 15
+          - slug: kubota-b2710
+            name: "B2710"
+            year_from: 1999
+            year_to: 2003
+            power_hp: 27
+            power_kw: 20
+          - slug: kubota-b2920
+            name: "B2920"
+            year_from: 2008
+            year_to: 2015
+            power_hp: 29
+            power_kw: 21
+          - slug: kubota-b3150
+            name: "B3150"
+            year_from: 2014
+            year_to: 2024
+            power_hp: 31
+            power_kw: 23
+          - slug: kubota-b3350
+            name: "B3350"
+            year_from: 2013
+            year_to: null
+            power_hp: 33
+            power_kw: 25
+          - slug: kubota-b3350su
+            name: "B3350SU Special Utility"
+            year_from: 2013
+            year_to: null
+            power_hp: 33
+            power_kw: 25
+          - slug: kubota-b2301
+            name: "B2301"
+            year_from: 2014
+            year_to: null
+            power_hp: 21
+            power_kw: 15
+          - slug: kubota-b2601
+            name: "B2601"
+            year_from: 2014
+            year_to: null
+            power_hp: 24
+            power_kw: 18
+          - slug: kubota-b2650
+            name: "B2650"
+            year_from: 2014
+            year_to: null
+            power_hp: 26
+            power_kw: 19
+
       # ========== BX Series (sub-compact) ==========
       - slug: bx
         name: "BX Series (2000–dosud)"
@@ -81,6 +158,159 @@ categories:
             year_to: null
             power_hp: 62
             power_kw: 46
+
+      # ========== STa Series (malotraktory) ==========
+      - slug: sta
+        name: "STa Series (2002–2005)"
+        year_from: 2002
+        year_to: 2005
+        description: >
+          Malotraktory kompaktní třídy s dieselovým 3-válcem. Určené pro komunální
+          služby, zahrady a menší hobby farmy. Pohon 4x4 MFWD, synchronizovaná
+          převodovka a rám ROPS.
+        models:
+          - slug: kubota-sta-30
+            name: "STa-30"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 30
+            power_kw: 22
+          - slug: kubota-sta-35
+            name: "STa-35"
+            year_from: 2002
+            year_to: 2005
+            power_hp: 36
+            power_kw: 27
+
+      # ========== ME Series (utility Japan export) ==========
+      - slug: me
+        name: "ME Series (cca 2000–2008)"
+        year_from: 2000
+        year_to: 2008
+        description: >
+          Utility řada určená především pro japonský a asijský trh s exportem i do
+          Evropy. Vhodná pro sady, vinice a polní práce. Narrow verze DTN
+          s omezenou šířkou pro specializované sadařské nasazení.
+        models:
+          - slug: kubota-me5700
+            name: "ME5700"
+            year_from: 2000
+            year_to: 2008
+            power_hp: 58
+            power_kw: 43
+          - slug: kubota-me8200
+            name: "ME8200"
+            year_from: 2000
+            year_to: 2008
+            power_hp: 87
+            power_kw: 65
+          - slug: kubota-me9000
+            name: "ME9000"
+            year_from: 2000
+            year_to: 2008
+            power_hp: 94
+            power_kw: 70
+
+      # ========== M60 / M60 ROPS legacy ==========
+      - slug: m60-legacy
+        name: "M Utility legacy (2007–2016)"
+        year_from: 2007
+        year_to: 2016
+        description: >
+          Starší utility třída 60–100 koní. První generace M6040/M7040/M8540/M9540
+          (2007–2013) s motorem V3300/V3800, následně vyměněna za modernější
+          M6060/M7060/M8560/M9960 s Common Rail a Tier IV emisemi.
+        models:
+          - slug: kubota-m6040
+            name: "M6040"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 63
+            power_kw: 47
+          - slug: kubota-m7040
+            name: "M7040"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 68
+            power_kw: 50
+          - slug: kubota-m8540
+            name: "M8540"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 85
+            power_kw: 63
+          - slug: kubota-m9540
+            name: "M9540"
+            year_from: 2007
+            year_to: 2013
+            power_hp: 95
+            power_kw: 70
+          - slug: kubota-m6060
+            name: "M6060"
+            year_from: 2013
+            year_to: null
+            power_hp: 63
+            power_kw: 47
+          - slug: kubota-m7060
+            name: "M7060"
+            year_from: 2013
+            year_to: null
+            power_hp: 71
+            power_kw: 52
+          - slug: kubota-m8560
+            name: "M8560"
+            year_from: 2013
+            year_to: null
+            power_hp: 86
+            power_kw: 63
+          - slug: kubota-m9960
+            name: "M9960"
+            year_from: 2013
+            year_to: null
+            power_hp: 100
+            power_kw: 74
+
+      # ========== MGX Series (CVT/Powershift utility) ==========
+      - slug: mgx
+        name: "MGX Series (2012–2020)"
+        year_from: 2012
+        year_to: 2020
+        description: >
+          Tzv. „M Grand X" — vyšší utility třída s 8-stupňovým Powershift převodem
+          a širokou kabinou. Motor V3800 (100/110 HP) a V6108 (126/135 HP).
+          Generace označované MGX, MGX-II, MGX-III a MGX-IV s postupnými inovacemi
+          (Stage IIIB → Stage V, FSS odpružení přední nápravy na S verzi).
+        models:
+          - slug: kubota-m100gx
+            name: "M100GX"
+            year_from: 2012
+            year_to: 2020
+            power_hp: 100
+            power_kw: 74
+          - slug: kubota-m110gx
+            name: "M110GX"
+            year_from: 2012
+            year_to: 2020
+            power_hp: 110
+            power_kw: 81
+          - slug: kubota-m126gx
+            name: "M126GX"
+            year_from: 2012
+            year_to: 2020
+            power_hp: 125
+            power_kw: 92
+          - slug: kubota-m135gx
+            name: "M135GX"
+            year_from: 2012
+            year_to: 2020
+            power_hp: 135
+            power_kw: 99
+          - slug: kubota-m135gxs
+            name: "M135GX-S (FSS)"
+            year_from: 2015
+            year_to: 2020
+            power_hp: 135
+            power_kw: 99
 
       # ========== M4002 / M5 / M5001 (utility) ==========
       - slug: m4002
@@ -170,6 +400,65 @@ categories:
             power_hp: 175
             power_kw: 129
 
+      # ========== M5002 Series (modernizace M5) ==========
+      - slug: m5002
+        name: "M5002 Series (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Modernizace populární řady M5 splňující emisní normu Stage V. Motor Kubota
+          V3800 4-válec turbo 3,8 L, převodovka Speed-Shift 36/36. Dostupná i jako
+          M5002 Narrow pro sady a vinice.
+        models:
+          - slug: kubota-m5-092
+            name: "M5-092"
+            year_from: 2020
+            year_to: null
+            power_hp: 95
+            power_kw: 70
+          - slug: kubota-m5-102
+            name: "M5-102"
+            year_from: 2020
+            year_to: null
+            power_hp: 105
+            power_kw: 77
+          - slug: kubota-m5-112
+            name: "M5-112"
+            year_from: 2020
+            year_to: null
+            power_hp: 115
+            power_kw: 85
+
+      # ========== M6002 Series (modernizace M6) ==========
+      - slug: m6002
+        name: "M6002 Series (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Nástupce původní řady M6, představen na FIMA 2020 v Zaragoze. Motor Kubota
+          V6108-TIEF5 4-válec 6,1 L s boost funkcí, převodovka 24/24 s elektronickým
+          řazením tří skupin a 8 load-shift stupni. Rozvor 2 690 mm, Bi-speed systém
+          pro zmenšení poloměru otáčení.
+        models:
+          - slug: kubota-m6-122
+            name: "M6-122"
+            year_from: 2020
+            year_to: null
+            power_hp: 123
+            power_kw: 90
+          - slug: kubota-m6-132
+            name: "M6-132"
+            year_from: 2020
+            year_to: null
+            power_hp: 133
+            power_kw: 98
+          - slug: kubota-m6-142
+            name: "M6-142"
+            year_from: 2020
+            year_to: null
+            power_hp: 143
+            power_kw: 105
+
       # ========== M7 (flagship) ==========
       - slug: m7
         name: "M7 Series (2015–dosud)"
@@ -216,6 +505,60 @@ categories:
             power_hp: 190
             power_kw: 140
 
+      # ========== M7002 (Stage V, předchozí M7 generace) ==========
+      - slug: m7002
+        name: "M7002 Series (2018–2022)"
+        year_from: 2018
+        year_to: 2022
+        description: >
+          Generace vlajkové M7 řady splňující emisní normu Stage V. Motor Kubota
+          V6108 TIER V 6,1 L s optimalizovanou charakteristikou výkonu. Nová
+          6-stupňová Powershift převodovka 30F/15R, případně 54F/27R s plazivou
+          redukcí. Nástupce M7-1/M7001, vystřídán generací M7-4 (2023+).
+        models:
+          - slug: kubota-m7-133
+            name: "M7-133"
+            year_from: 2018
+            year_to: 2022
+            power_hp: 130
+            power_kw: 96
+          - slug: kubota-m7-153
+            name: "M7-153"
+            year_from: 2018
+            year_to: 2022
+            power_hp: 150
+            power_kw: 110
+          - slug: kubota-m7-173
+            name: "M7-173"
+            year_from: 2018
+            year_to: 2022
+            power_hp: 170
+            power_kw: 125
+
+      # ========== M8 Series (flagship utility, Buhler kooperace) ==========
+      - slug: m8
+        name: "M8 Series (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Největší zemědělský traktor v historii Kubota. Výsledek spolupráce
+          s kanadskou firmou Buhler Industries (výrobce Versatile), montáž ve
+          Winnipegu. Motor Cummins B6.7 6-válec Tier 4 Final bez EGR (SCR + DPF),
+          volitelný Semi-Powershift 30x15 nebo Variable Transmission (CVT).
+        models:
+          - slug: kubota-m8-191
+            name: "M8-191"
+            year_from: 2020
+            year_to: null
+            power_hp: 190
+            power_kw: 140
+          - slug: kubota-m8-211
+            name: "M8-211"
+            year_from: 2020
+            year_to: null
+            power_hp: 210
+            power_kw: 155
+
       # ========== MK (narrow/specialty) ==========
       - slug: mk
         name: "MK / M5N Series (úzké, 2014–dosud)"
@@ -241,6 +584,36 @@ categories:
     name: Kombajny
 
     series:
+      # ========== SR Series (rýže/pšenice, japonský trh) ==========
+      - slug: sr
+        name: "SR Series (Japan)"
+        year_from: null
+        year_to: null
+        description: >
+          Řada kompaktních kombajnů primárně pro japonský a asijský trh, určená
+          především pro rýži, pšenici a ječmen. Na evropském trhu se nevyskytují,
+          dovoz probíhá jen okrajově skrze japonské second-hand obchodníky.
+        models:
+          - slug: kubota-sr55
+            name: "SR55"
+            year_from: null
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: kubota-sr65
+            name: "SR65"
+            year_from: null
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: kubota-sr75
+            name: "SR75"
+            year_from: null
+            year_to: null
+            power_hp: 100
+            power_kw: 75
+            cutting_width_m: 2.1
+
       - slug: dc
         name: "DC Series (2010–dosud)"
         year_from: 2010
