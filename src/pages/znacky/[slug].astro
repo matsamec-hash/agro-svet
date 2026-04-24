@@ -39,7 +39,7 @@ const jsonLd = {
 };
 ---
 
-<Layout title={znacka.data.name} description={znacka.data.popis}>
+<Layout title={znacka.data.name} description={znacka.data.popis} canonical={canonical}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
 

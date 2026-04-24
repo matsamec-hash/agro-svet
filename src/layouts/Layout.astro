@@ -7,9 +7,13 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  canonical?: string;
 }
 
-const { title, description = 'Novinky ze světa zemědělství, encyklopedie strojů, značky a agro bazar.', ogImage } = Astro.props;
+const { title, description = 'Novinky ze světa zemědělství, encyklopedie strojů, značky a agro bazar.', ogImage, canonical } = Astro.props;
+
+const SITE_ORIGIN = 'https://agro-svet.cz';
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, SITE_ORIGIN).toString();
 ---
 
 <!DOCTYPE html>
@@ -23,9 +27,16 @@ const { title, description = 'Novinky ze světa zemědělství, encyklopedie str
   <title>{title} | agro-svět.cz</title>
   <meta name="description" content={description} />
 
+  <link rel="canonical" href={canonicalUrl} />
+  <link rel="alternate" hreflang="cs" href={canonicalUrl} />
+  <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:locale" content="cs_CZ" />
+  <meta property="og:site_name" content="agro-svět.cz" />
   {ogImage && <meta property="og:image" content={ogImage} />}
   {ogImage && <meta property="og:image:width" content="1200" />}
   {ogImage && <meta property="og:image:height" content="630" />}

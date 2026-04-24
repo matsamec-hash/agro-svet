@@ -64,7 +64,7 @@ const jsonLd = {
 };
 ---
 
-<Layout title={article.seo_title || article.title} description={article.seo_description || article.perex} ogImage={article.featured_image_url || undefined}>
+<Layout title={article.seo_title || article.title} description={article.seo_description || article.perex} ogImage={article.featured_image_url || undefined} canonical={canonical}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
   <!-- Hero image -->
