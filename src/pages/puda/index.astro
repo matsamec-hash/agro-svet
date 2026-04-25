@@ -420,22 +420,32 @@ const donutSegs = struktura.map((s) => {
   .donut-legend li { padding:8px 10px; border-radius:8px; cursor:pointer; transition: background .15s; }
   .donut-legend li:hover, .donut-legend li.is-active { background: #f5f3ea; }
 
-  /* Threats + crops bars — width fly-in */
-  .threat-bar { width: 0 !important; transition: width 1.0s cubic-bezier(.6,.05,.3,1); }
-  .crop-bar { width: 0 !important; transition: width 1.0s cubic-bezier(.6,.05,.3,1); }
+  /* Threats + crops bars — width fly-in + hover lift */
+  .threat-bar, .crop-bar {
+    width: 0 !important;
+    transition: width 1.0s cubic-bezier(.6,.05,.3,1), filter .15s, transform .15s;
+    cursor: pointer;
+  }
   .reveal.in-view .threat-bar { width: var(--w) !important; }
   .reveal.in-view .crop-bar { width: var(--final-w, var(--w, 0)) !important; }
+  .threat-bar:hover, .crop-bar:hover {
+    filter: brightness(1.10) saturate(1.15);
+    transform: translateX(2px);
+  }
+  .threat { transition: opacity .15s; }
+  .threats:has(.threat-bar:hover) .threat:not(:has(.threat-bar:hover)) { opacity: .55; }
 
-  /* Tooltip */
+  /* Tooltip — shared. Default above element, .below variant pod ním (auto-flip pokud point u top) */
   .puda-tooltip {
     position: fixed; z-index: 999; pointer-events: none;
-    background: #1a1a1a; color: #fff; padding: 8px 12px; border-radius: 8px;
-    font-size: 13px; line-height: 1.4; white-space: nowrap;
+    background: #1a1a1a; color: #fff; padding: 9px 13px; border-radius: 8px;
+    font-size: 13px; line-height: 1.45; white-space: nowrap;
     box-shadow: 0 4px 14px rgba(0,0,0,.25);
     opacity: 0; transform: translate(-50%, -120%) translateY(6px);
     transition: opacity .15s, transform .15s;
   }
   .puda-tooltip.is-visible { opacity: 1; transform: translate(-50%, -120%); }
+  .puda-tooltip.is-visible.below { transform: translate(-50%, 20%); }
   .puda-tooltip strong { color: #FFFF00; }
 </style>
 
@@ -468,6 +478,8 @@ const donutSegs = struktura.map((s) => {
       tip.innerHTML = html;
       tip.style.left = x + 'px';
       tip.style.top = y + 'px';
+      // Auto-flip: pokud je point blízko top viewport, dej tooltip POD něj
+      tip.classList.toggle('below', y < 80);
       tip.classList.add('is-visible');
     }
     function hideTip() { tip.classList.remove('is-visible'); }
@@ -527,25 +539,42 @@ const donutSegs = struktura.map((s) => {
       });
     });
 
-    // ── Threats bars: tooltip ──
+    // ── Threats bars: tooltip s detail ke každému typu ohrožení ──
+    const threatDetails = {
+      'Vodní eroze': 'Hlavně Vysočina a Hanácká nížina. ~21 mil. tun ornice ročně.',
+      'Zhutnění': 'Těžká mechanizace + intenzivní zpracování. VÚMOP odhad 50 %.',
+      'Větrná eroze': 'Hlavně jižní Morava. Nejvyšší stupeň 4 %.',
+      'Dehumifikace (5–15 % pokles humusu)': 'Pokles chovu zvířat → méně organických hnojiv → ztráta humusu.',
+    };
     document.querySelectorAll('.threat-bar[data-final]').forEach(bar => {
-      bar.addEventListener('mouseenter', (ev) => {
+      bar.addEventListener('mouseenter', () => {
         const lbl = bar.parentElement.querySelector('.threat-lbl')?.textContent ?? '';
-        showTip(`<strong>${lbl}</strong>: ${bar.dataset.final} % zemědělské půdy`, ev.clientX, ev.clientY);
+        const detail = threatDetails[lbl] ?? '';
+        const r = bar.getBoundingClientRect();
+        showTip(`<strong>${lbl}</strong><br>${bar.dataset.final} % zemědělské půdy ČR${detail ? '<br><span style="opacity:.75;font-size:11px">' + detail + '</span>' : ''}`,
+          r.left + r.width - 30, r.top);
       });
-      bar.addEventListener('mousemove', (ev) => { tip.style.left = ev.clientX + 'px'; tip.style.top = (ev.clientY - 14) + 'px'; });
       bar.addEventListener('mouseleave', hideTip);
     });
 
     // ── Crop bars: tooltip ──
+    const cropDetails = {
+      'Pšenice ozimá': 'Hlavní obilovina ČR. Výnos 6,4–6,9 t/ha.',
+      'Řepka ozimá': '16 % všech polí ČR (vs. EU průměr 6,3 %). 2024 -9,4 % YoY.',
+      'Ječmen': 'Sladovnický + krmný. 2024 -4 % YoY.',
+      'Kukuřice na zrno': '2024 +11 %. Jihomoravský kraj +32 % ploch.',
+      'Ostatní obiloviny + okopaniny': 'Žito, oves, brambory, řepa cukrová.',
+    };
     document.querySelectorAll('.crop-bar').forEach(bar => {
       const row = bar.closest('.crop-row');
       const name = row?.querySelector('.crop-name')?.textContent ?? '';
       const valEl = row?.querySelector('.crop-val')?.textContent ?? '';
-      bar.addEventListener('mouseenter', (ev) => {
-        showTip(`<strong>${name}</strong>: ${valEl}`, ev.clientX, ev.clientY);
+      const detail = cropDetails[name] ?? '';
+      bar.addEventListener('mouseenter', () => {
+        const r = bar.getBoundingClientRect();
+        showTip(`<strong>${name}</strong><br>${valEl}${detail ? '<br><span style="opacity:.75;font-size:11px">' + detail + '</span>' : ''}`,
+          r.left + r.width - 30, r.top);
       });
-      bar.addEventListener('mousemove', (ev) => { tip.style.left = ev.clientX + 'px'; tip.style.top = (ev.clientY - 14) + 'px'; });
       bar.addEventListener('mouseleave', hideTip);
     });
   })();

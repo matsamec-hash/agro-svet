@@ -19,7 +19,7 @@ const page = Math.max(1, parseInt(Astro.url.searchParams.get('page') ?? '1'));
 
 let q = supabase
   .from('articles')
-  .select('id, title, slug, perex, featured_image_url, category, tags, published_at', { count: 'exact' })
+  .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at', { count: 'exact' })
   .eq('site_id', SITE_ID)
   .eq('status', 'published')
   .order('published_at', { ascending: false })
@@ -191,6 +191,7 @@ const breadcrumbJsonLd = {
               publishDate={new Date(article.published_at)}
               category={article.category}
               heroImage={article.featured_image_url}
+              focalPoint={article.focal_point}
             />
           ))}
         </div>
