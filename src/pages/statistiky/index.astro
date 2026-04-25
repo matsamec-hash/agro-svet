@@ -27,6 +27,7 @@ import {
   livestockMilestone,
 } from '../../lib/agro-derived';
 import { AGRO_EVENTS } from '../../data/agro-events';
+import { getLivestockHistoricalCombined } from '../../lib/eurostat';
 
 import Hero from '../../components/statistiky/Hero.astro';
 import SparklineTicker from '../../components/statistiky/SparklineTicker.astro';
@@ -60,7 +61,7 @@ const [
   getCommodityStats(),
   getLatestFuelPrices(),
   getLivestockStats(),
-  getLivestockHistorical(),
+  getLivestockHistoricalCombined(), // Eurostat fallback (ČSÚ má jen aktuální 2 datapoints)
   getCropProduction(),
   getCropAreas(),
   getFertilizerPrices(),
