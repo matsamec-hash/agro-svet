@@ -4,33 +4,375 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const pudaItems = await getCollection('puda');
+
+// Time series cena půdy 2000-2025 (FARMY.CZ Index, Tomáš Valka)
+const cenaPudy = [
+  { rok: 2000, cena: 60 },
+  { rok: 2010, cena: 90 },
+  { rok: 2014, cena: 150 },
+  { rok: 2019, cena: 250 },
+  { rok: 2020, cena: 265 },
+  { rok: 2021, cena: 290 },
+  { rok: 2022, cena: 340 },
+  { rok: 2023, cena: 350 },
+  { rok: 2024, cena: 360 },
+  { rok: 2025, cena: 372.55 },
+];
+const cenaMin = 0;
+const cenaMax = 400;
+const cenaW = 720;
+const cenaH = 280;
+const cenaPad = { l: 50, r: 20, t: 20, b: 30 };
+const cenaPlotW = cenaW - cenaPad.l - cenaPad.r;
+const cenaPlotH = cenaH - cenaPad.t - cenaPad.b;
+const cenaPoints = cenaPudy.map((d) => {
+  const x = cenaPad.l + ((d.rok - 2000) / 25) * cenaPlotW;
+  const y = cenaPad.t + cenaPlotH - ((d.cena - cenaMin) / (cenaMax - cenaMin)) * cenaPlotH;
+  return { ...d, x, y };
+});
+const cenaPath = cenaPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+const cenaArea = `${cenaPath} L${cenaPoints[cenaPoints.length - 1].x.toFixed(1)},${(cenaPad.t + cenaPlotH).toFixed(1)} L${cenaPoints[0].x.toFixed(1)},${(cenaPad.t + cenaPlotH).toFixed(1)} Z`;
+
+// Struktura ZPF (donut)
+const struktura = [
+  { name: 'Orná půda', pct: 71, ha: 2525, color: '#FFD700' },
+  { name: 'Travní porosty (TTP)', pct: 27, ha: 969, color: '#7CB342' },
+  { name: 'Sady, vinice, zahrady', pct: 2, ha: 70, color: '#FF7043' },
+];
+const donutR = 80;
+const donutCx = 100;
+const donutCy = 100;
+let cumPct = 0;
+const donutSegs = struktura.map((s) => {
+  const startAngle = (cumPct / 100) * 2 * Math.PI - Math.PI / 2;
+  cumPct += s.pct;
+  const endAngle = (cumPct / 100) * 2 * Math.PI - Math.PI / 2;
+  const x1 = donutCx + donutR * Math.cos(startAngle);
+  const y1 = donutCy + donutR * Math.sin(startAngle);
+  const x2 = donutCx + donutR * Math.cos(endAngle);
+  const y2 = donutCy + donutR * Math.sin(endAngle);
+  const largeArc = s.pct > 50 ? 1 : 0;
+  return {
+    ...s,
+    path: `M${donutCx},${donutCy} L${x1.toFixed(2)},${y1.toFixed(2)} A${donutR},${donutR} 0 ${largeArc},1 ${x2.toFixed(2)},${y2.toFixed(2)} Z`,
+  };
+});
 ---
 
-<Layout title="Půda" description="Vše o zemědělské půdě — ornice, eroze, zpracování, výživa a ochrana půdního fondu.">
-  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+<Layout title="Zemědělská půda v ČR — fakta, ceny, eroze" description="Aktuální data o zemědělské půdě v ČR: cena 372 550 Kč/ha, úbytek 10,8 ha denně, 60 % polí ohroženo vodní erozí. Ornice, eroze, výživa a ochrana půdního fondu.">
+  <div class="puda-root">
 
-    <div style="margin-bottom:48px;">
-      <span style="" class="section-label" style="">Půda</span>
-      <h1 style="font-size:clamp(2rem,5vw,3.2rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
-        Zemědělská půda
-      </h1>
-      <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">
-        Ornice, eroze, zpracování a výživa. Vše, co potřebujete vědět o nejcennějším zemědělském zdroji.
+    <!-- Hero -->
+    <section class="hero">
+      <span class="kicker">Půda · Datová pover-mapa</span>
+      <h1>Zemědělská <em>půda</em></h1>
+      <p class="lede">
+        Půda je nejcennější zemědělský zdroj — a v Česku jí ubývá rekordním tempem. Sledujte aktuální ceny, vývoj výměry,
+        ohrožení erozí a strukturální fakta o českém zemědělském půdním fondu.
       </p>
-    </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;">
-      {pudaItems.map(item => (
-        <a href={`/puda/${item.id}/`} style="display:block; text-decoration:none; color:inherit; border:none; border-radius:14px; padding:28px; background:#fff; box-shadow:0 0 10px rgba(0,0,0,.12); transition:box-shadow .2s, transform .2s;" class="puda-card">
-          <div style="width:48px; height:48px; background:#FFFF00; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:16px;">🌱</div>
-          <h3 style="font-size:18px; font-weight:400; color:#1a1a1a; margin-bottom:8px;">{item.data.title}</h3>
-          <p style="font-size:14px; color:#666; line-height:1.55; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{item.data.popis}</p>
-        </a>
-      ))}
-    </div>
+      <div class="big-numbers">
+        <div class="bn">
+          <span class="bn-val">372&nbsp;550<span class="bn-unit"> Kč/ha</span></span>
+          <span class="bn-lbl">Průměrná tržní cena orné půdy</span>
+          <span class="bn-trend">+3,4 % YoY · 2025</span>
+        </div>
+        <div class="bn">
+          <span class="bn-val">+517&nbsp;%</span>
+          <span class="bn-lbl">Růst ceny půdy za 25 let</span>
+          <span class="bn-trend">2000 → 2025</span>
+        </div>
+        <div class="bn">
+          <span class="bn-val">10,8<span class="bn-unit"> ha/den</span></span>
+          <span class="bn-lbl">Úbytek zemědělské půdy</span>
+          <span class="bn-trend">Dlouhodobý průměr od 1999</span>
+        </div>
+        <div class="bn">
+          <span class="bn-val">>50&nbsp;%</span>
+          <span class="bn-lbl">Polí ohroženo vodní erozí</span>
+          <span class="bn-trend">VÚMOP, novější odhad až 60 %</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cena půdy graf -->
+    <section class="chart-section">
+      <header>
+        <h2>Cena zemědělské půdy 2000–2025</h2>
+        <span class="sub">Průměrná tržní cena hektaru orné půdy v tis. Kč. Zdroj: FARMY.CZ Index farmářské půdy + studie Tomáš Valka.</span>
+      </header>
+      <div class="chart-wrap">
+        <svg viewBox={`0 0 ${cenaW} ${cenaH}`} class="chart-svg" role="img" aria-label="Vývoj ceny zemědělské půdy 2000-2025">
+          <!-- Y axis labels -->
+          {[0, 100, 200, 300, 400].map((v) => {
+            const y = cenaPad.t + cenaPlotH - ((v - cenaMin) / (cenaMax - cenaMin)) * cenaPlotH;
+            return (
+              <>
+                <line x1={cenaPad.l} y1={y} x2={cenaW - cenaPad.r} y2={y} stroke="#eee" stroke-width="1"/>
+                <text x={cenaPad.l - 6} y={y + 4} text-anchor="end" font-size="11" fill="#888">{v}</text>
+              </>
+            );
+          })}
+          <!-- Area + line -->
+          <path d={cenaArea} fill="rgba(255, 215, 0, .25)"/>
+          <path d={cenaPath} stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Points + labels -->
+          {cenaPoints.map((p, i) => (
+            <>
+              <circle cx={p.x} cy={p.y} r="4" fill="#FFFF00" stroke="#1a1a1a" stroke-width="1.5"/>
+              {(i === 0 || i === cenaPoints.length - 1 || i % 2 === 0) && (
+                <text x={p.x} y={cenaPad.t + cenaPlotH + 18} text-anchor="middle" font-size="11" fill="#666">{p.rok}</text>
+              )}
+            </>
+          ))}
+        </svg>
+        <div class="chart-insight">
+          Z 60 tis. Kč/ha v roce 2000 na <strong>372 550 Kč/ha v 2025</strong> — sedminásobný růst za jednu generaci.
+          Po raketovém růstu 2014–2022 (+10–15 % p.a.) přichází mírná stagnace, růst zpomalil na 3,4 % v 2025.
+        </div>
+      </div>
+    </section>
+
+    <!-- Struktura ZPF + Eroze -->
+    <section class="two-col">
+      <div class="card-chart">
+        <h3>Struktura zemědělského půdního fondu</h3>
+        <span class="sub">3 535 tis. ha = 45 % rozlohy ČR (2024)</span>
+        <div class="donut-wrap">
+          <svg viewBox="0 0 200 200" class="donut-svg" role="img" aria-label="Struktura ZPF">
+            {donutSegs.map((s) => (
+              <path d={s.path} fill={s.color} stroke="#fff" stroke-width="1"/>
+            ))}
+            <circle cx={donutCx} cy={donutCy} r="40" fill="#fff"/>
+            <text x={donutCx} y={donutCy - 4} text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">3 535</text>
+            <text x={donutCx} y={donutCy + 12} text-anchor="middle" font-size="10" fill="#666">tis. ha</text>
+          </svg>
+          <ul class="donut-legend">
+            {struktura.map((s) => (
+              <li>
+                <span class="dot" style={`background:${s.color}`}></span>
+                <span class="lbl">{s.name}</span>
+                <span class="val"><strong>{s.pct} %</strong> · {s.ha} tis. ha</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p class="card-note">Trvalé travní porosty rostou: z 23 % (2002) na 27 % (2024) — důsledek dotační politiky a ochrany proti erozi.</p>
+      </div>
+
+      <div class="card-chart">
+        <h3>Ohrožení půdy</h3>
+        <span class="sub">Procento zemědělské půdy ČR (VÚMOP)</span>
+        <div class="threats">
+          <div class="threat">
+            <div class="threat-bar" style="--w:60%; --c:#E53935"><span>60 %</span></div>
+            <span class="threat-lbl">Vodní eroze</span>
+          </div>
+          <div class="threat">
+            <div class="threat-bar" style="--w:50%; --c:#FB8C00"><span>50 %</span></div>
+            <span class="threat-lbl">Zhutnění</span>
+          </div>
+          <div class="threat">
+            <div class="threat-bar" style="--w:30%; --c:#FFB300"><span>30 %</span></div>
+            <span class="threat-lbl">Větrná eroze</span>
+          </div>
+          <div class="threat">
+            <div class="threat-bar" style="--w:15%; --c:#FFC107"><span>15 %</span></div>
+            <span class="threat-lbl">Dehumifikace (5–15 % pokles humusu)</span>
+          </div>
+        </div>
+        <p class="card-note">Hlavní rizika: jižní Morava (větrná), Vysočina a Hanácká nížina (vodní). Dehumifikace souvisí s poklesem chovu zvířat → méně statkových hnojiv.</p>
+      </div>
+    </section>
+
+    <!-- Vlastnictví + Pacht fakta -->
+    <section class="facts-grid">
+      <div class="fact">
+        <span class="fact-val">3,2 mil.</span>
+        <span class="fact-lbl">vlastníků zemědělské půdy v ČR</span>
+        <span class="fact-note">Drtivá většina pronajímá. Průměr na osobu jen ~1 ha.</span>
+      </div>
+      <div class="fact">
+        <span class="fact-val">~60 %</span>
+        <span class="fact-lbl">pronajímané orné půdy</span>
+        <span class="fact-note">Před 10 lety to bylo až 90 %. Trend: vlastní podíl podniků roste.</span>
+      </div>
+      <div class="fact">
+        <span class="fact-val">3 000–7 000<span class="fact-unit"> Kč/ha/rok</span></span>
+        <span class="fact-lbl">Pachtovné</span>
+        <span class="fact-note">Top kvality přes 10 000 Kč/ha. Roční růst ~1 000 Kč/ha.</span>
+      </div>
+      <div class="fact">
+        <span class="fact-val">130<span class="fact-unit"> ha</span></span>
+        <span class="fact-lbl">Průměrná česká farma</span>
+        <span class="fact-note">Největší v EU (průměr EU 16,6 ha, Polsko 11 ha). Dědictví JZD.</span>
+      </div>
+      <div class="fact">
+        <span class="fact-val">25 %</span>
+        <span class="fact-lbl">katastrů s dokončenými KPÚ</span>
+        <span class="fact-note">NKÚ: zbývajících 75 % potrvá ~50 let a bude stát ~150 mld. Kč.</span>
+      </div>
+      <div class="fact">
+        <span class="fact-val">16,4 %</span>
+        <span class="fact-lbl">ekologicky obhospodařované půdy</span>
+        <span class="fact-note">618 313 ha (LPIS 2025). Cíl MZe: 22 % do 2027.</span>
+      </div>
+    </section>
+
+    <!-- Hlavní plodiny -->
+    <section class="crops-section">
+      <header>
+        <h2>Hlavní plodiny na orné půdě (2024)</h2>
+        <span class="sub">Sklizeň 7 525 tis. tun obilovin, soběstačnost 164,6 %.</span>
+      </header>
+      <div class="crops-bars">
+        {[
+          { name: 'Pšenice ozimá', ha: 780, color: '#FFD700' },
+          { name: 'Řepka ozimá', ha: 344, color: '#FFB300' },
+          { name: 'Ječmen', ha: 321, color: '#7CB342' },
+          { name: 'Kukuřice na zrno', ha: 280, color: '#FB8C00' },
+          { name: 'Ostatní obiloviny + okopaniny', ha: 800, color: '#9E9E9E' },
+        ].map((c) => (
+          <div class="crop-row">
+            <span class="crop-name">{c.name}</span>
+            <div class="crop-bar-wrap">
+              <div class="crop-bar" style={`width:${(c.ha / 800) * 100}%; background:${c.color}`}></div>
+              <span class="crop-val">{c.ha} tis. ha</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="section-note">
+        ČR má extrémní podíl řepky: <strong>16 % všech polí</strong> oseto řepkou (vs. EU průměr 6,3 %). Kukuřice rapidně roste,
+        v Jihomoravském kraji +32 % ploch v 2024.
+      </p>
+    </section>
+
+    <!-- Témata (původní karty) -->
+    <section class="topics-section">
+      <h2>Hloubkově k tématům</h2>
+      <div class="topics-grid">
+        {pudaItems.map(item => (
+          <a href={`/puda/${item.id}/`} class="puda-card">
+            <div class="card-icon">🌱</div>
+            <h3>{item.data.title}</h3>
+            <p>{item.data.popis}</p>
+            <span class="card-cta">Číst dál →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Zdroje -->
+    <section class="sources-section">
+      <h3>Zdroje dat</h3>
+      <ul>
+        <li><a href="https://www.farmy.cz/informace_kolik_stoji_puda" target="_blank" rel="noopener">FARMY.CZ — Index farmářské půdy</a></li>
+        <li><a href="https://csu.gov.cz/zemedelske-pudy-je-zase-mene" target="_blank" rel="noopener">ČSÚ — Statistika a my (úbytek ZPF)</a></li>
+        <li><a href="https://www.vumop.cz/eroze-pudy/" target="_blank" rel="noopener">VÚMOP — Eroze půdy</a></li>
+        <li><a href="https://eagri.cz/public/web/mze/puda/" target="_blank" rel="noopener">MZe — Půda a krajina</a></li>
+        <li><a href="https://www.zememeric.cz/cuzk-souhrnna-zprava-o-pudnim-fondu-za-rok-2024/" target="_blank" rel="noopener">ČÚZK — Souhrnná zpráva o půdním fondu 2024</a></li>
+        <li><a href="https://www.tomasvalka.cz/vyvoj-cen-zemedelske-pudy-za-poslednich-25-let/" target="_blank" rel="noopener">Tomáš Valka — Vývoj cen půdy</a></li>
+        <li><a href="https://www.asz.cz/" target="_blank" rel="noopener">ASZ ČR — Asociace soukromého zemědělství</a></li>
+      </ul>
+      <p class="updated">Datová pover-mapa naposledy aktualizována: duben 2026.</p>
+    </section>
+
   </div>
 </Layout>
 
 <style>
+  .puda-root { max-width: 1280px; margin: 0 auto; padding: 48px 32px 96px; }
+
+  /* Hero */
+  .hero { margin-bottom: 56px; }
+  .kicker { display:inline-block; font-size:13px; color:#888; text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px; font-family:'Chakra Petch',sans-serif; }
+  .hero h1 { font-size: clamp(2.4rem, 5.5vw, 3.6rem); font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; color: #1a1a1a; margin: 0 0 18px; }
+  .hero h1 em { font-style:italic; color:#1a1a1a; }
+  .lede { font-size: 17px; color: #555; max-width: 720px; line-height: 1.65; margin: 0 0 36px; }
+
+  .big-numbers { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; }
+  .bn { padding:24px; border-radius:14px; background:#fff; border:1px solid #ebebeb; display:flex; flex-direction:column; gap:6px; }
+  .bn-val { font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700; color:#1a1a1a; line-height:1; }
+  .bn-unit { font-size:14px; color:#888; font-weight:400; }
+  .bn-lbl { font-size:14px; color:#1a1a1a; font-weight:600; margin-top:6px; }
+  .bn-trend { font-size:12px; color:#888; }
+
+  /* Chart sections */
+  .chart-section { margin: 64px 0; padding: 36px; background:#fff; border-radius:14px; border:1px solid #ebebeb; }
+  .chart-section header { margin-bottom: 24px; }
+  .chart-section h2 { font-size: 24px; font-weight:700; margin:0 0 6px; color:#1a1a1a; }
+  .chart-section .sub { font-size:13px; color:#888; }
+  .chart-wrap { display:flex; flex-direction:column; gap:16px; }
+  .chart-svg { width:100%; max-width:720px; height:auto; }
+  .chart-insight { font-size:14px; color:#444; line-height:1.6; padding:14px 18px; background:#fafafa; border-left:3px solid #FFFF00; border-radius:6px; }
+
+  /* Two-column */
+  .two-col { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px; margin: 36px 0; }
+  .card-chart { padding:28px; background:#fff; border-radius:14px; border:1px solid #ebebeb; }
+  .card-chart h3 { font-size:18px; font-weight:700; margin:0 0 4px; color:#1a1a1a; }
+  .card-chart .sub { font-size:13px; color:#888; display:block; margin-bottom:20px; }
+  .card-note { font-size:13px; color:#666; line-height:1.55; margin:18px 0 0; }
+
+  .donut-wrap { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+  .donut-svg { width:200px; height:200px; flex-shrink:0; }
+  .donut-legend { list-style:none; padding:0; margin:0; flex:1; min-width:180px; display:flex; flex-direction:column; gap:8px; }
+  .donut-legend li { display:flex; align-items:center; gap:10px; font-size:13px; }
+  .donut-legend .dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
+  .donut-legend .lbl { color:#444; flex:1; }
+  .donut-legend .val { color:#666; font-size:12px; }
+
+  /* Threats bars */
+  .threats { display:flex; flex-direction:column; gap:14px; }
+  .threat { display:flex; flex-direction:column; gap:4px; }
+  .threat-bar { height:24px; background:var(--c); width:var(--w); border-radius:4px; position:relative; min-width:36px; transition: width .8s ease; }
+  .threat-bar span { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:12px; color:#fff; font-weight:700; }
+  .threat-lbl { font-size:13px; color:#444; }
+
+  /* Facts grid */
+  .facts-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin: 56px 0; }
+  .fact { padding:24px; background:#fff; border-radius:12px; border:1px solid #ebebeb; }
+  .fact-val { font-family:'Chakra Petch',sans-serif; font-size:28px; font-weight:700; color:#1a1a1a; line-height:1; display:block; }
+  .fact-unit { font-size:14px; color:#888; font-weight:400; }
+  .fact-lbl { font-size:14px; color:#1a1a1a; font-weight:600; margin-top:8px; display:block; }
+  .fact-note { font-size:12px; color:#666; margin-top:6px; display:block; line-height:1.5; }
+
+  /* Crops */
+  .crops-section { margin: 56px 0; padding:36px; background:#fff; border-radius:14px; border:1px solid #ebebeb; }
+  .crops-section header { margin-bottom: 24px; }
+  .crops-section h2 { font-size:24px; font-weight:700; margin:0 0 6px; color:#1a1a1a; }
+  .crops-section .sub { font-size:13px; color:#888; }
+  .crops-bars { display:flex; flex-direction:column; gap:12px; }
+  .crop-row { display:grid; grid-template-columns:200px 1fr; gap:16px; align-items:center; }
+  .crop-name { font-size:14px; color:#444; }
+  .crop-bar-wrap { display:flex; align-items:center; gap:12px; }
+  .crop-bar { height:22px; border-radius:4px; min-width:24px; transition: width .8s ease; }
+  .crop-val { font-size:13px; color:#666; white-space:nowrap; }
+  .section-note { font-size:14px; color:#444; line-height:1.6; padding:14px 18px; background:#fafafa; border-left:3px solid #FFFF00; border-radius:6px; margin-top:24px; }
+
+  /* Topics */
+  .topics-section { margin: 56px 0; }
+  .topics-section h2 { font-size:24px; font-weight:700; margin:0 0 24px; color:#1a1a1a; }
+  .topics-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px; }
+  .puda-card { display:block; text-decoration:none; color:inherit; border-radius:14px; padding:28px; background:#fff; border:1px solid #ebebeb; transition: box-shadow .2s, transform .2s; }
   .puda-card:hover { box-shadow:0 6px 20px rgba(0,0,0,.09); transform:translateY(-2px); }
+  .card-icon { width:48px; height:48px; background:#FFFF00; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:16px; }
+  .puda-card h3 { font-size:18px; font-weight:700; color:#1a1a1a; margin:0 0 8px; }
+  .puda-card p { font-size:14px; color:#666; line-height:1.55; margin:0 0 14px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .card-cta { font-size:13px; color:#1a1a1a; font-weight:600; }
+
+  /* Sources */
+  .sources-section { margin-top:72px; padding-top:32px; border-top:1px solid #ebebeb; }
+  .sources-section h3 { font-size:16px; font-weight:700; margin:0 0 16px; color:#1a1a1a; }
+  .sources-section ul { padding:0; margin:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .sources-section li { font-size:13px; }
+  .sources-section a { color:#555; text-decoration:underline; text-decoration-color:#ccc; text-underline-offset:2px; }
+  .sources-section a:hover { color:#1a1a1a; text-decoration-color:#FFFF00; }
+  .updated { font-size:12px; color:#888; margin-top:18px; }
+
+  @media (max-width: 768px) {
+    .puda-root { padding: 32px 16px 64px; }
+    .crop-row { grid-template-columns:1fr; gap:6px; }
+    .chart-section, .crops-section, .card-chart { padding:20px; }
+  }
 </style>

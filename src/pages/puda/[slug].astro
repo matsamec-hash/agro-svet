@@ -3,15 +3,14 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
-export async function getStaticPaths() {
-  const items = await getCollection('puda');
-  return items.map(item => ({
-    params: { slug: item.id },
-    props: { item },
-  }));
+const { slug } = Astro.params;
+const items = await getCollection('puda');
+const item = items.find(i => i.id === slug);
+
+if (!item) {
+  return Astro.redirect('/puda/');
 }
 
-const { item } = Astro.props;
 const { Content } = await render(item);
 ---
 
