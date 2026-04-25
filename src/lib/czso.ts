@@ -418,3 +418,32 @@ export async function getFertilizerTimeSeries(): Promise<FertilizerTimeSeries[]>
   }
   return results;
 }
+
+// Vrací full historii pro všech 9 komodit z COMMODITY_MAP. Použito pro long-term annotated graf.
+export async function getCommodityFullSeries(): Promise<CommodityTimeSeries[]> {
+  const all = await getCommodityPrices();
+  const byName = new Map<string, CommodityPrice[]>();
+  for (const p of all) {
+    if (!byName.has(p.name)) byName.set(p.name, []);
+    byName.get(p.name)!.push(p);
+  }
+
+  const ALL_NAMES = ['Pšenice','Ječmen','Řepka','Kukuřice','Mléko','Vepřové','Hovězí','Vejce','Mák'];
+  const results: CommodityTimeSeries[] = [];
+
+  for (const name of ALL_NAMES) {
+    const prices = byName.get(name);
+    if (!prices || prices.length === 0) continue;
+    const sorted = prices
+      .map(p => {
+        const d = parseMonthStr(p.month);
+        if (!d) return null;
+        return { label: `${MONTH_SHORT[d.month]} ${d.year}`, value: p.price, sortKey: d.year * 12 + d.month };
+      })
+      .filter(Boolean) as TimeSeriesPoint[];
+    sorted.sort((a, b) => a.sortKey - b.sortKey);
+    const unit = prices[0].unit;
+    results.push({ name, unit, data: sorted });
+  }
+  return results;
+}
