@@ -1,5 +1,6 @@
 import { getAllModels, getModelBySlug } from './stroje';
 import { getAllPlemena } from './plemena';
+import { BAZAR_TO_CATALOG_SUBCATEGORIES } from './bazar-constants';
 
 export interface ModelOption {
   slug: string;
@@ -25,8 +26,16 @@ export interface PlemenoOption {
   series_slug?: string;
 }
 
-export function getModelOptions(): ModelOption[] {
-  return getAllModels().map((m) => ({
+export function getModelOptions(bazarCategory?: string, subcategory?: string): ModelOption[] {
+  let models = getAllModels();
+  if (bazarCategory) {
+    const allowed = BAZAR_TO_CATALOG_SUBCATEGORIES[bazarCategory] ?? [];
+    models = models.filter((m) => allowed.includes(m.category));
+  }
+  if (subcategory) {
+    models = models.filter((m) => m.category === subcategory);
+  }
+  return models.map((m) => ({
     slug: m.slug,
     label: `${m.brand_name} ${m.name}`,
     name: m.name,
