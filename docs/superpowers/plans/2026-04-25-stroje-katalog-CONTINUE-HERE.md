@@ -1,9 +1,9 @@
 ---
 plan: 2026-04-25-stroje-katalog
-status: paused (foundation complete, awaiting user resume)
-last_updated: 2026-04-25T14:18:01+0200
-last_commit: 05529ba
-total_commits_made: 9
+status: Phase 6 complete (with gaps in BazarSidebar UI), awaiting user resume
+last_updated: 2026-04-25T16:05:00+0200
+last_commit: fbfcbfb
+total_commits_made: 16 (foundation 9 + Phase 6 7)
 ---
 
 # Continue here — Stroje katalog implementace
@@ -30,22 +30,45 @@ User aktivně paralelně pracuje na: photos pipeline (audit/credit/wikimedia met
 
 **Tests:** 65/65 PASS. **Build:** clean s Node 22 (`source ~/.nvm/nvm.sh && nvm use 22`).
 
+## Phase 6 completed (2026-04-25 afternoon)
+
+7 commits (`f134125` → `fbfcbfb`) + 1 user refinement (`e2e647d`) implementující bazar integraci:
+
+| Commit | Task | Co dělá |
+|---|---|---|
+| `7b92344` | 6.4 | `bazar-catalog.ts` getModelOptions(category?, subcategory?) + 7 nových testů |
+| `f134125` | 6.5 | `CatalogPicker.astro` — 2-úrovňový filter (subcategoryOptions prop, secondary filter) |
+| `e5f87d2` + user `e2e647d` | 6.6 | `BazarFilters.astro` — conditional řady (záběr/nosnost/objem). User refinement: `_from/_to` konvence místo plánovaného `_od/_do`, permissive `!category ||` logika |
+| `4ce6a88` | 6.7 | `BazarListingRow.astro` — render nosnost/objem/záběr chips |
+| `8e08314` | 6.8 | `bazar/novy.astro` + `moje/[id].astro` — conditional form fields, JS toggle, POST handler s subcategory derivation |
+| `2d5b643` | 6.9 | `bazar/[id].astro` — spec strip + catalog link rozšířen na všechny stroje kategorie |
+| `fbfcbfb` | 6.10 | `bazar/index.astro` — URL params + dbQuery filtry pro nové fields |
+
+**Tests**: 72/72 PASS (z 65 baseline + 7 nových testů pro getModelOptions filtering).
+
 ## Remaining work
 
-### Priority HIGH — high value, low risk
-- **Phase 0.5+**: Per-brand scrapery (12 značek po vzoru existujícího `scripts/fendt-api-scrape.mjs`). Lemken/Pöttinger/Kuhn/Amazone/Krone/Horsch/Vaderstad/Bednar/Manitou/JCB/Joskin/Kverneland nemají Fendt-like undocumented API — potřebují sitemap+JSON-LD scraping nebo per-výrobce HTML scraping. Output: `scripts/<brand>-api-data.json` + apply skript do YAML. Time: 2-4h per značka.
+### Priority HIGH — Phase 6 GAPS (must address before deploy)
 
-### Priority MEDIUM
-- **Phase 6.4-6.10**: Bazar pages
-  - `src/lib/bazar-catalog.ts` UPDATE: `getModelOptions(category, subcategory?)` (Task 6.4)
-  - `src/components/bazar/CatalogPicker.astro` UPDATE: 2-úrovňový filter (Task 6.5)
-  - `src/components/bazar/BazarFilters.astro` UPDATE: conditional filtry per kategorie (záběr, nosnost, objem) (Task 6.6)
-  - `src/components/bazar/BazarListingRow.astro` UPDATE: render nových polí (Task 6.7)
-  - `src/pages/bazar/novy.astro` + `bazar/moje/[id]/index.astro` UPDATE: conditional form fields per category (Task 6.8)
-  - `src/pages/bazar/[id].astro` UPDATE: spec strip + catalog-link box (Task 6.9)
-  - `src/pages/bazar/index.astro` UPDATE: query rozšíří, filter URL sync (Task 6.10)
+Final integration review identified that 2 z plánovaných komponent jsou orphan (nikde neimportovány):
 
-  **RISK:** některé bazar files mohou být v user's WIP. Před dispatch zkontroluj `git status --short | grep bazar`.
+- **BazarSidebar.astro NENÍ rozšířen** — `bazar/index.astro:91` používá `BazarSidebar`, ne `BazarFilters` (na kterém Task 6.6 pracoval). Důsledek: nové URL filtry (zaber/nosnost/objem/subcategory) fungují přes direct URL ale nemají UI controls a NEPROPISUJÍ SE do active-filter chipů. Round-trip filter preservation je rozbitý — user otevře `/bazar/?nosnost_from=3000`, klikne na jiný filter → nosnost se ztratí (sidebar form to nedrží).
+
+  **Fix options**:
+  1. Rozšířit `BazarSidebar.astro` o stejné rozšíření jako Task 6.6 přidalo do BazarFilters (zaberFrom/zaberTo props, conditional rows, active chips)
+  2. Nebo přepnout `bazar/index.astro:91` na `BazarFilters` a smazat BazarSidebar (riziko: rozdílné mobile drawer chování)
+
+- **BazarFilters.astro je dead code** — nikde neimportován po Task 6.6. Buď wireup do bazar/index.astro nebo delete.
+- **CatalogPicker.astro je dead code** — nikde neimportován. Forms používají `CascadingPicker`. Task 6.5 práce je orphan. Buď wireup (např. do BazarSidebar pro 2-level filter) nebo delete.
+
+### Priority MEDIUM — small bugs from final review
+
+- **`bazar/novy.astro:255` + `moje/[id].astro:266`** — `STROJE_CATEGORIES` duplikováno inline. Mělo by být odvozeno z `Object.keys(BAZAR_TO_CATALOG_SUBCATEGORIES)` v bazar-constants.ts.
+- **`bazar/novy.astro:295` + `moje/[id].astro:304`** — `BRANDS_SET` hardcoded jen na 10 původních traktor značek. Nové stroje brands (lemken, pottinger, kuhn, atd.) nebudou triggerovat auto-fill brand behavior. Build z `BRANDS` constanty.
+- **`subcategory` neviditelný** — persisted, filterable via URL, ale není zobrazený nikde (BazarListingRow chip, [id].astro spec strip, breadcrumb). Pokud user chce to surfaceovat, je třeba přidat.
+
+### Priority HIGH — Per-brand scrapery (Phase 0.5+)
+12 značek po vzoru existujícího `scripts/fendt-api-scrape.mjs`. Lemken/Pöttinger/Kuhn/Amazone/Krone/Horsch/Vaderstad/Bednar/Manitou/JCB/Joskin/Kverneland nemají Fendt-like undocumented API — potřebují sitemap+JSON-LD scraping nebo per-výrobce HTML scraping. Output: `scripts/<brand>-api-data.json` + apply skript do YAML. Time: 2-4h per značka.
 
 ### Priority LOW
 - **Phase 8 deploy**: aplikace migrace 005 + 006 v Supabase SQL editoru, `npx wrangler deploy`, smoke test produkce.
@@ -85,11 +108,13 @@ Bazar UI integration je separately:
 
 **Volba:**
 
-1. **Continue per-brand scrapery** (HIGH value): start s `scripts/lemken-api-scrape.mjs` po vzoru `scripts/fendt-api-scrape.mjs` (171 řádků). Lemken nemá undocumented API — použij sitemap (`https://lemken.com/sitemap.xml`) + JSON-LD scraping pro product detail pages. Rate 1 req/s, custom UA. Output `scripts/lemken-api-data.json`. Pak apply skript do `src/data/stroje/lemken.yaml`.
+1. **Address Phase 6 gaps** (HIGHEST priority — bazar je broken UX bez tohoto): rozšířit `BazarSidebar.astro` o nové conditional rows (zaber/nosnost/objem) + active chips, identicky jak Task 6.6 udělal v BazarFilters. Pak smazat orphan BazarFilters.astro (nebo přepnout index.astro). Plus quick fixes: BRANDS_SET z konstant, STROJE_CATEGORIES dedup. Estimate: 1h.
 
-2. **Continue Phase 6 bazar pages**: nejdřív `git status --short | grep bazar` pro check WIP. Pokud čisté, dispatch subagent pro Tasks 6.4 (bazar-catalog.ts) → 6.5 (CatalogPicker) → 6.6 (BazarFilters) → 6.7-6.10 (forms, detail, index).
+2. **Continue per-brand scrapery** (HIGH value): start s `scripts/lemken-api-scrape.mjs` po vzoru `scripts/fendt-api-scrape.mjs` (171 řádků). Lemken nemá undocumented API — použij sitemap (`https://lemken.com/sitemap.xml`) + JSON-LD scraping pro product detail pages. Rate 1 req/s, custom UA. Output `scripts/lemken-api-data.json`. Pak apply skript do `src/data/stroje/lemken.yaml`.
 
-3. **Pause longer**: user pracuje na photos pipeline + statistiky redesign. Až dokončí + commitne, pak pokračovat s 1 nebo 2.
+3. **Phase 8 deploy**: aplikace migrace 005 + 006 v Supabase SQL editoru, `npx wrangler deploy`, smoke test produkce. NETESTOVAT před addressed Phase 6 gaps — bazar by byl broken.
+
+4. **Pause longer**: user pracuje na photos pipeline + statistiky redesign. Až dokončí + commitne, pak pokračovat.
 
 ## Resume instructions
 
