@@ -47,6 +47,9 @@ if (Astro.request.method === 'POST') {
   const powerStr = form.get('power_hp')?.toString().trim() ?? '';
   const hoursStr = form.get('hours_operated')?.toString().trim() ?? '';
   const cutStr = form.get('cutting_width_m')?.toString().trim() ?? '';
+  const zaberStr = form.get('pracovni_zaber_m')?.toString().trim() ?? '';
+  const nosnostStr = form.get('nosnost_kg')?.toString().trim() ?? '';
+  const objemStr = form.get('objem_nadrze_l')?.toString().trim() ?? '';
 
   if (!title || !category || !phone) {
     error = 'Vyplňte název, kategorii a telefon.';
@@ -57,6 +60,10 @@ if (Astro.request.method === 'POST') {
     const power = powerStr ? parseInt(powerStr) : null;
     const hours = hoursStr ? parseInt(hoursStr) : null;
     const cuttingWidth = cutStr ? parseFloat(cutStr) : null;
+    const pracovniZaber = zaberStr ? parseFloat(zaberStr) : null;
+    const nosnost = nosnostStr ? parseInt(nosnostStr) : null;
+    const objemNadrze = objemStr ? parseInt(objemStr) : null;
+    const subcategory = modelSlug ? (getModelBySlug(modelSlug)?.category ?? null) : null;
 
     const { error: updateErr } = await supabase
       .from('bazar_listings')
@@ -75,6 +82,10 @@ if (Astro.request.method === 'POST') {
         power_hp: power,
         hours_operated: hours,
         cutting_width_m: cuttingWidth,
+        pracovni_zaber_m: pracovniZaber,
+        nosnost_kg: nosnost,
+        objem_nadrze_l: objemNadrze,
+        subcategory,
       })
       .eq('id', id)
       .eq('user_id', user.id);
@@ -90,6 +101,8 @@ if (Astro.request.method === 'POST') {
 // Resolve cascading prefill
 const isMachine = listing.category === 'traktory' || listing.category === 'kombajny';
 const isBreed = listing.category === 'zvirata';
+const STROJE_CATEGORIES = ['zpracovani-pudy','seti','hnojeni','ochrana-rostlin','sklizen-picnin','sklizen-okopanin','manipulace','doprava','staj-chov','komunal-les'];
+const isStroje = STROJE_CATEGORIES.includes(listing.category);
 
 let modelL1: string | null = null;
 let modelL2: string | null = null;
@@ -179,6 +192,23 @@ if (isBreed && listing.model_slug) {
         </div>
       </div>
 
+      <div id="stroje-spec-fields" style={isStroje ? '' : 'display:none;'}>
+        <div class="form-group" data-categories="zpracovani-pudy,seti,ochrana-rostlin,sklizen-picnin" style={['zpracovani-pudy','seti','ochrana-rostlin','sklizen-picnin'].includes(listing.category) ? '' : 'display:none;'}>
+          <label for="pracovni_zaber_m">Pracovní záběr (m)</label>
+          <input type="number" id="pracovni_zaber_m" name="pracovni_zaber_m" class="form-input" step="0.1" min="0" max="50" value={listing.pracovni_zaber_m ?? ''} />
+        </div>
+
+        <div class="form-group" data-categories="manipulace,doprava" style={['manipulace','doprava'].includes(listing.category) ? '' : 'display:none;'}>
+          <label for="nosnost_kg">Nosnost (kg)</label>
+          <input type="number" id="nosnost_kg" name="nosnost_kg" class="form-input" step="100" min="0" value={listing.nosnost_kg ?? ''} />
+        </div>
+
+        <div class="form-group" data-categories="hnojeni,ochrana-rostlin" style={['hnojeni','ochrana-rostlin'].includes(listing.category) ? '' : 'display:none;'}>
+          <label for="objem_nadrze_l">Objem nádrže (l)</label>
+          <input type="number" id="objem_nadrze_l" name="objem_nadrze_l" class="form-input" step="100" min="0" value={listing.objem_nadrze_l ?? ''} />
+        </div>
+      </div>
+
       <div id="breed-fields" style={isBreed ? '' : 'display:none;'}>
         <CascadingPicker
           id="breed-picker"
@@ -241,6 +271,7 @@ if (isBreed && listing.model_slug) {
       const machine = document.getElementById('machine-fields');
       const breed = document.getElementById('breed-fields');
       const cutting = document.getElementById('cutting-width-group');
+      const strojeFields = document.getElementById('stroje-spec-fields');
       const modelPicker = document.querySelector('.cascading[data-picker-id="model-picker"]');
       const brandGroup = document.getElementById('brand-group');
       const brandSelect = document.getElementById('brand');
@@ -251,13 +282,21 @@ if (isBreed && listing.model_slug) {
         'john-deere','claas','fendt','zetor','new-holland','kubota','case-ih','massey-ferguson','deutz-fahr','valtra',
       ]);
 
+      const STROJE_CATEGORIES = ['zpracovani-pudy','seti','hnojeni','ochrana-rostlin','sklizen-picnin','sklizen-okopanin','manipulace','doprava','staj-chov','komunal-les'];
+
       function sync() {
         const v = cat.value;
         const isMachine = v === 'traktory' || v === 'kombajny';
         const isBreed = v === 'zvirata';
+        const isStroje = STROJE_CATEGORIES.includes(v);
         machine.style.display = isMachine ? 'block' : 'none';
         breed.style.display = isBreed ? 'block' : 'none';
         cutting.style.display = v === 'kombajny' ? 'block' : 'none';
+        strojeFields.style.display = isStroje ? 'block' : 'none';
+        strojeFields.querySelectorAll('.form-group[data-categories]').forEach((g) => {
+          const cats = (g.getAttribute('data-categories') || '').split(',');
+          g.style.display = cats.includes(v) ? '' : 'none';
+        });
 
         if (isMachine || isBreed) {
           brandGroup.style.display = 'none';
