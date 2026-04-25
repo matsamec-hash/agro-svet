@@ -15,7 +15,7 @@ const { items } = Astro.props;
 <style>
   .sp-pills {
     --yellow:#FFEA00; --ink:#0A0A0B; --line:#EAEAEC; --bg:rgba(255,255,255,.92);
-    position:sticky;top:152px;z-index:25;
+    position:sticky;top:88px;z-index:25;
     background:var(--bg);backdrop-filter:saturate(1.4) blur(14px);
     border:1px solid var(--line);border-radius:14px;
     padding:8px 12px;margin:0 0 28px;
@@ -30,7 +30,7 @@ const { items } = Astro.props;
   .sp-pill:hover{background:#FFF6A8;border-color:var(--yellow);transform:translateY(-1px)}
   .sp-pill.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-  @media (max-width:768px){.sp-pills{top:130px;flex-wrap:nowrap}}
+  @media (max-width:768px){.sp-pills{top:72px;flex-wrap:nowrap}}
 </style>
 
 <script>
