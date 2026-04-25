@@ -29,7 +29,10 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
     maxAge: 600,
   });
 
-  const callback = `${url.origin}/admin-oauth/callback`;
+  // Trailing slash kvůli Astro trailingSlash:'always' — bez něj GitHub zredirektne
+  // na /admin-oauth/callback → 308 → /admin-oauth/callback/, a OAuth state cookie
+  // se může v tom hop ztratit. Plus exact match s GitHub OAuth App callback URL.
+  const callback = `${url.origin}/admin-oauth/callback/`;
   const ghUrl = new URL('https://github.com/login/oauth/authorize');
   ghUrl.searchParams.set('client_id', clientId);
   ghUrl.searchParams.set('redirect_uri', callback);
