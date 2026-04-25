@@ -2,6 +2,7 @@
 export const prerender = false;
 import Layout from '../../../../../layouts/Layout.astro';
 import { getAllBrands, getSeries, seriesFamily, familyLabel, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
+import { createServerClient } from '../../../../../lib/supabase';
 
 export async function getStaticPaths() {
   const paths: { params: { brand: string; series: string; model: string }; props: { modelSlug: string } }[] = [];
@@ -55,6 +56,18 @@ const brandColors: Record<string, [string, string]> = {
   zetor: ['#E93A3A', '#A01818'],
 };
 const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
+
+// Live count inzerátů tohoto konkrétního modelu
+let modelBazarCount = 0;
+try {
+  const supabase = createServerClient();
+  const { count } = await supabase
+    .from('bazar_listings')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'active')
+    .eq('model_slug', model.slug);
+  modelBazarCount = count ?? 0;
+} catch {}
 
 const family = (series as any).family || seriesFamily(series.slug);
 const familyLab = familyLabel(family);
@@ -189,7 +202,9 @@ const jsonLd = {
 
         <div class="hero-actions">
           <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`}>
-            Hledat {model.name} v bazaru
+            {modelBazarCount > 0
+              ? `${modelBazarCount} ${modelBazarCount === 1 ? 'inzerát' : modelBazarCount < 5 ? 'inzeráty' : 'inzerátů'} v bazaru`
+              : `Hledat ${model.name} v bazaru`}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
           <a class="cta-secondary" href={`/stroje/${brand.slug}/${series.slug}/`}>
@@ -301,11 +316,11 @@ const jsonLd = {
 
       <aside class="content-aside">
         <div class="aside-card primary-cta-card">
-          <span class="acc-kicker">Aktuální nabídky</span>
+          <span class="acc-kicker">{modelBazarCount > 0 ? `${modelBazarCount} ${modelBazarCount === 1 ? 'aktuální inzerát' : modelBazarCount < 5 ? 'aktuální inzeráty' : 'aktuálních inzerátů'}` : 'Aktuální nabídky'}</span>
           <h3>{brand.name} {model.name}<br/>v Agro bazaru</h3>
-          <p>Filtrujte podle modelu, výkonu a roku. Kontakt přímo na prodejce, bez provize.</p>
+          <p>{modelBazarCount > 0 ? 'Konkrétně tento model. Kontakt přímo na prodejce, bez provize.' : 'Filtrujte podle modelu, výkonu a roku. Kontakt přímo na prodejce, bez provize.'}</p>
           <a href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`} class="aside-btn primary">
-            Otevřít bazar
+            {modelBazarCount > 0 ? `Zobrazit ${modelBazarCount === 1 ? 'inzerát' : 'inzeráty'}` : 'Otevřít bazar'}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
           <a href="/bazar/novy/" class="aside-btn ghost-light">Přidat vlastní inzerát</a>
