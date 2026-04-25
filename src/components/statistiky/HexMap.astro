@@ -7,15 +7,15 @@ interface Props {
 }
 const { data } = Astro.props;
 
-// 14 hexů, hand-positioned grid. col/row se vytvářejí v 4-column flat-top hex grid.
+// 13 hexů, hand-positioned grid. col/row se vytvářejí v 4-column flat-top hex grid.
 // Pozice (col, row) navrženy tak, aby zhruba odpovídaly geografii ČR.
+// Praha vynechaná — geometrický overlap se Středočeským krajem a zanedbatelná zem. produkce.
 const HEX_LAYOUT: { region: string; col: number; row: number }[] = [
   { region: 'Karlovarský kraj',     col: 0, row: 1 },
   { region: 'Ústecký kraj',         col: 1, row: 0 },
   { region: 'Liberecký kraj',       col: 3, row: 0 },
   { region: 'Plzeňský kraj',        col: 1, row: 2 },
   { region: 'Středočeský kraj',     col: 2, row: 1 },
-  { region: 'Hlavní město Praha',   col: 2, row: 1.5 },
   { region: 'Královéhradecký kraj', col: 3, row: 1 },
   { region: 'Pardubický kraj',      col: 4, row: 1 },
   { region: 'Jihočeský kraj',       col: 2, row: 3 },
@@ -58,7 +58,7 @@ const VB_H = Y_OFFSET * 2 + (maxRow + 1) * HEX_H;
 <section class="sp-section" id="regiony">
   <header class="sp-section-head">
     <h2>Regiony — produkce po krajích</h2>
-    <span class="sp-section-sub">14 krajů, sklizeň v tunách. Klikněte na kraj pro detail.</span>
+    <span class="sp-section-sub">13 krajů (kromě Prahy), sklizeň v tunách. Klikněte na kraj pro detail.</span>
   </header>
 
   <div class="sp-map-controls">
