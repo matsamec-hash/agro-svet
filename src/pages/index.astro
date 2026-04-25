@@ -175,12 +175,7 @@ const websiteJsonLd = {
     </div>
   </section>
 
-  <!-- Půdní stav (Open-Meteo) — pod novinky -->
-  <div style="max-width:1280px; margin:0 auto; padding:0 32px;">
-    <AgroWeather mode="puda" />
-  </div>
-
-  <!-- Data — Zemědělská půda (přesunuto NAD Trhy a komodity) -->
+  <!-- Data: Zemědělská půda — Open-Meteo card s nadpisem -->
   <section style="max-width:1280px; margin:0 auto; padding:24px 32px;">
     <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
       <div>
@@ -188,38 +183,10 @@ const websiteJsonLd = {
       </div>
       <a href="/puda/" class="link-cta">Zobrazit celou sekci →</a>
     </div>
-    <div class="hp-puda-facts">
-      {[
-        { val: '3,2 mil.', lbl: 'vlastníků zemědělské půdy v ČR', note: 'Drtivá většina pronajímá. Průměr na osobu jen ~1 ha.' },
-        { val: '~60 %', lbl: 'pronajímané orné půdy', note: 'Před 10 lety to bylo až 90 %. Trend: vlastní podíl podniků roste.' },
-        { val: '3 000–7 000', unit: ' Kč/ha/rok', lbl: 'Pachtovné', note: 'Top kvality přes 10 000 Kč/ha. Roční růst ~1 000 Kč/ha.' },
-        { val: '130', unit: ' ha', lbl: 'Průměrná česká farma', note: 'Největší v EU (průměr EU 16,6 ha, Polsko 11 ha). Dědictví JZD.' },
-        { val: '77 %', lbl: 'orné půdy v rukou ~3 000 největších podniků', note: 'Koncentrace ZPF: 3 % podniků hospodaří na ~77 % výměry. Pozůstatek velkých JZD.' },
-        { val: '30', unit: ' ha', lbl: 'maximální blok jedné plodiny', note: 'DZES 7 (od 2024): na svahu nad 7° max. 10 ha. Cíl: snížit větrnou a vodní erozi.' },
-        { val: '25 %', lbl: 'katastrů s dokončenými KPÚ', note: 'NKÚ: zbývajících 75 % potrvá ~50 let a bude stát ~150 mld. Kč.' },
-        { val: '16,4 %', lbl: 'ekologicky obhospodařované půdy', note: '618 313 ha (LPIS 2025). Cíl MZe: 22 % do 2027.' },
-      ].map((f) => (
-        <div class="hp-puda-fact">
-          <span class="hpf-val">{f.val.replace(/ /g, ' ')}{f.unit && <span class="hpf-unit">{f.unit}</span>}</span>
-          <span class="hpf-lbl">{f.lbl}</span>
-          <span class="hpf-note">{f.note}</span>
-        </div>
-      ))}
-    </div>
+    <AgroWeather mode="puda" />
   </section>
 
   <style is:inline>
-    .hp-puda-facts { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; }
-    .hp-puda-fact {
-      padding:22px 24px; background:#fff; border-radius:18px; border:1px solid #EAEAEC;
-      box-shadow:0 1px 2px rgba(10,10,12,.04);
-      display:flex; flex-direction:column; gap:6px;
-    }
-    .hpf-val { font:700 28px/1 'Chakra Petch',sans-serif; color:#0A0A0B; letter-spacing:-.02em; display:block; }
-    .hpf-unit { font-size:14px; color:#6B6B72; font-weight:400; }
-    .hpf-lbl { font:600 14px 'Chakra Petch',sans-serif; color:#0A0A0B; margin-top:8px; display:block; }
-    .hpf-note { font-size:12.5px; color:#6B6B72; margin-top:6px; display:block; line-height:1.5; }
-
     .link-cta {
       display:inline-flex; align-items:center; gap:8px;
       font:700 14px 'Chakra Petch',sans-serif; letter-spacing:.02em;
@@ -256,11 +223,6 @@ const websiteJsonLd = {
       fiveYearAvg={fiveYearAvgs}
     />
   </section>
-
-  <!-- Počasí pro pole — strip (nad bazar) -->
-  <div style="padding:32px 32px 0;">
-    <AgroWeather mode="strip" />
-  </div>
 
   <!-- Fresh bazar listings -->
   {freshListings && freshListings.length > 0 && (
@@ -319,6 +281,11 @@ const websiteJsonLd = {
       </div>
     </section>
   )}
+
+  <!-- Počasí pro pole — strip (pod bazar) -->
+  <div style="padding:32px 32px 0;">
+    <AgroWeather mode="strip" />
+  </div>
 
   <!-- Newsletter signup (always last before footer) -->
   <Newsletter />
