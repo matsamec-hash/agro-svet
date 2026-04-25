@@ -14,6 +14,11 @@ SITE_GATE_PASSCODE = "007700"
 
 [assets]
 directory = "./dist/client/"
+# Force every request through the Worker first so the site-gate middleware
+# can intercept pre-rendered static pages too. Without this, /stroje/* and
+# other prerendered HTML files are served directly from the Assets binding,
+# bypassing middleware (and the gate).
+run_worker_first = true
 
 [observability]
 enabled = true
