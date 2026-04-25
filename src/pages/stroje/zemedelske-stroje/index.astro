@@ -2,9 +2,28 @@
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from '../../../lib/stroje';
+import { createServerClient } from '../../../lib/supabase';
 
 const brands = getAllBrands();
 const allModels = getAllModels();
+
+// Live counts inzerátů per brand z bazar_listings
+const bazarCountByBrand: Record<string, number> = {};
+try {
+  const supabase = createServerClient();
+  const { data: bazarRows } = await supabase
+    .from('bazar_listings')
+    .select('brand')
+    .eq('status', 'active')
+    .not('brand', 'is', null);
+  if (bazarRows) {
+    for (const r of bazarRows as { brand: string | null }[]) {
+      if (r.brand) bazarCountByBrand[r.brand] = (bazarCountByBrand[r.brand] ?? 0) + 1;
+    }
+  }
+} catch {
+  // graceful: bez countu pokud Supabase nedostupné
+}
 
 // Only non-traktor / non-kombajn models
 const strojeModels = allModels.filter((m) => m.category !== 'traktory' && m.category !== 'kombajny');
@@ -133,17 +152,27 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
         <div class="sz-brand-grid">
           {strojeBrands.map((b) => {
             const bCount = strojeModels.filter((m) => m.brand_slug === b.slug).length;
+            const bazarCount = bazarCountByBrand[b.slug] ?? 0;
             return (
-              <a href={`/stroje/${b.slug}/`} class="sz-brand-card">
-                <div class="sz-brand-logo" data-letter={b.name.charAt(0).toUpperCase()}>
-                  <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="56" height="56" onerror="this.remove()" />
-                </div>
-                <div class="sz-brand-info">
-                  <strong>{b.name}</strong>
-                  <span>{b.country} · {bCount} {bCount === 1 ? 'model' : bCount < 5 ? 'modely' : 'modelů'}</span>
-                </div>
-                <svg class="sz-brand-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
+              <div class="sz-brand-card-wrap">
+                <a href={`/stroje/${b.slug}/`} class="sz-brand-card">
+                  <div class="sz-brand-logo" data-letter={b.name.charAt(0).toUpperCase()}>
+                    <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="56" height="56" onerror="this.remove()" />
+                  </div>
+                  <div class="sz-brand-info">
+                    <strong>{b.name}</strong>
+                    <span>{b.country} · {bCount} {bCount === 1 ? 'model' : bCount < 5 ? 'modely' : 'modelů'}</span>
+                  </div>
+                  <svg class="sz-brand-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+                {bazarCount > 0 && (
+                  <a href={`/bazar/?brand=${b.slug}`} class="sz-brand-bazar">
+                    <span class="sz-brand-bazar-count">{bazarCount}</span>
+                    <span class="sz-brand-bazar-lbl">{bazarCount === 1 ? 'inzerát' : bazarCount < 5 ? 'inzeráty' : 'inzerátů'} v bazaru</span>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </a>
+                )}
+              </div>
             );
           })}
         </div>
@@ -360,6 +389,41 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 12px;
     }
+    .sz-brand-card-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sz-brand-bazar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: #FFF6A8;
+      border: 1px solid #FFEA00;
+      border-radius: 10px;
+      font: 600 12px 'Chakra Petch', sans-serif;
+      color: #1a1a1a;
+      text-decoration: none;
+      transition: background .15s, transform .15s, box-shadow .15s;
+      align-self: flex-start;
+    }
+    .sz-brand-bazar:hover {
+      background: #FFEA00;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px -4px rgba(255, 234, 0, .5);
+    }
+    .sz-brand-bazar-count {
+      background: #1a1a1a;
+      color: #FFEA00;
+      padding: 1px 7px;
+      border-radius: 6px;
+      font-size: 11px;
+      letter-spacing: .04em;
+    }
+    .sz-brand-bazar-lbl { color: #1a1a1a; }
+    .sz-brand-bazar svg { color: #1a1a1a; transition: transform .15s; }
+    .sz-brand-bazar:hover svg { transform: translateX(2px); }
     .sz-brand-card {
       display: flex;
       align-items: center;
