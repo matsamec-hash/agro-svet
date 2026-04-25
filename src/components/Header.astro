@@ -6,7 +6,6 @@ const nav: NavItem[] = [
     href: '/novinky/',
     children: [
       { label: 'Zvířata', href: '/plemena/' },
-      { label: 'Zemědělská půda', href: '/puda/' },
       { label: 'Všechny novinky', href: '/novinky/' },
       { label: 'Technika', href: '/novinky/kategorie/technika/' },
       { label: 'Dotace', href: '/novinky/kategorie/dotace/' },
@@ -26,7 +25,14 @@ const nav: NavItem[] = [
       { label: 'Značky', href: '/stroje/#znacky' },
     ],
   },
-  { label: 'Data', href: '/statistiky/' },
+  {
+    label: 'Data',
+    href: '/statistiky/',
+    children: [
+      { label: 'Trhy a komodity', href: '/statistiky/' },
+      { label: 'Zemědělská půda', href: '/puda/' },
+    ],
+  },
   { label: 'Agro bazar', href: '/bazar/' },
   { label: 'Fotosoutěž', href: '/fotosoutez/' },
 ];
@@ -41,12 +47,13 @@ const current = Astro.url.pathname;
     </a>
 
     <nav class="nav-desktop" id="main-nav">
-      {nav.map(item => (
-        item.children ? (
+      {nav.map(item => {
+        const itemActive = current.startsWith(item.href) || (item.children?.some((c) => current.startsWith(c.href)) ?? false);
+        return item.children ? (
           <div class="nav-item-wrap">
             <a
               href={item.href}
-              class:list={['nav-link', { active: current.startsWith(item.href) }]}
+              class:list={['nav-link', { active: itemActive }]}
             >
               {item.label}
               <svg class="nav-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -60,12 +67,12 @@ const current = Astro.url.pathname;
         ) : (
           <a
             href={item.href}
-            class:list={['nav-link', { active: current.startsWith(item.href) }]}
+            class:list={['nav-link', { active: itemActive }]}
           >
             {item.label}
           </a>
-        )
-      ))}
+        );
+      })}
     </nav>
 
     <!-- Search (toggles input) -->
