@@ -56,7 +56,7 @@ const brandColors: Record<string, [string, string]> = {
 };
 const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
 
-const family = seriesFamily(series.slug);
+const family = (series as any).family || seriesFamily(series.slug);
 const familyLab = familyLabel(family);
 
 const yr = model.year_from ? (model.year_to ? `${model.year_from}–${model.year_to}` : `${model.year_from}–dosud`) : '';

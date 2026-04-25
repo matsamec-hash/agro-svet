@@ -8,7 +8,7 @@ export async function getStaticPaths() {
   for (const b of getAllBrands()) {
     for (const [catKey, cat] of Object.entries(b.categories ?? {})) {
       const families = new Set<string>();
-      for (const s of cat.series ?? []) families.add(seriesFamily(s.slug));
+      for (const s of cat.series ?? []) families.add((s as any).family || seriesFamily(s.slug));
       for (const f of families) {
         paths.push({ params: { brand: b.slug, category: catKey, family: f } });
       }
@@ -35,7 +35,7 @@ const catHeroFallback = categoryHero[categorySlug as StrojKategorie] ?? '/images
 const cat = brand.categories?.[categorySlug as StrojKategorie];
 if (!cat) return Astro.redirect(`/stroje/${brand.slug}/`);
 
-const matchingSeries = (cat.series ?? []).filter((s: any) => seriesFamily(s.slug) === family);
+const matchingSeries = (cat.series ?? []).filter((s: any) => (s.family || seriesFamily(s.slug)) === family);
 if (matchingSeries.length === 0) return Astro.redirect(`/stroje/${brand.slug}/`);
 
 const brandColors: Record<string, [string, string]> = {

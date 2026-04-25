@@ -43,7 +43,7 @@ const brandColors: Record<string, [string, string]> = {
 };
 const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
 
-const family = seriesFamily(series.slug);
+const family = (series as any).family || seriesFamily(series.slug);
 const familyLab = familyLabel(family);
 
 const yr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
@@ -73,7 +73,7 @@ function modelUrlPart(slug: string): string {
 // Sibling generations in same family
 const sameCategory = brand.categories?.[category];
 const siblings = (sameCategory?.series ?? [])
-  .filter((s) => s.slug !== series.slug && seriesFamily(s.slug) === family)
+  .filter((s) => s.slug !== series.slug && ((s as any).family || seriesFamily(s.slug)) === family)
   .map((s) => {
     const sHpAll = (s.models ?? []).map((m) => m.power_hp).filter((x): x is number => x !== null);
     const sIsCurrent = (s.models ?? []).some((m) => m.year_to === null && m.year_from !== null);
