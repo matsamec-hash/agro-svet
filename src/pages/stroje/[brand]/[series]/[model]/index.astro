@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../../../../layouts/Layout.astro';
-import { getAllBrands, getSeries, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
+import { getAllBrands, getSeries, seriesFamily, familyLabel, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
 
 export async function getStaticPaths() {
   const paths: { params: { brand: string; series: string; model: string }; props: { modelSlug: string } }[] = [];
@@ -37,27 +37,66 @@ const categorySingular: Record<StrojKategorie, string> = {
   traktory: 'traktor',
   kombajny: 'kombajn',
 };
+const categoryHero: Record<StrojKategorie, string> = {
+  traktory: '/images/traktor.webp',
+  kombajny: '/images/kombajn.webp',
+};
+
+const brandColors: Record<string, [string, string]> = {
+  'john-deere': ['#4A9838', '#2E6B22'],
+  fendt: ['#3FA85D', '#0E6730'],
+  claas: ['#9C9532', '#65601A'],
+  'deutz-fahr': ['#2BA84A', '#1a5e2a'],
+  kubota: ['#FF6B1A', '#C24414'],
+  'new-holland': ['#3874AC', '#1A4370'],
+  'case-ih': ['#D62A2A', '#8F1818'],
+  'massey-ferguson': ['#D62A2A', '#8F1818'],
+  valtra: ['#1F1F1F', '#0A0A0A'],
+  zetor: ['#E93A3A', '#A01818'],
+};
+const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
+
+const family = seriesFamily(series.slug);
+const familyLab = familyLabel(family);
 
 const yr = model.year_from ? (model.year_to ? `${model.year_from}–${model.year_to}` : `${model.year_from}–dosud`) : '';
+const isCurrent = model.year_to === null && model.year_from !== null;
+const seriesNameClean = series.name.replace(/\s*\([^)]*\)\s*$/, '');
 const seriesYr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
 
 // Related models in same series
-const related = series.models.filter((m) => m.slug !== model.slug).slice(0, 6);
+const related = series.models
+  .filter((m) => m.slug !== model.slug)
+  .sort((a, b) => Math.abs((a.power_hp ?? 0) - (model.power_hp ?? 0)) - Math.abs((b.power_hp ?? 0) - (model.power_hp ?? 0)))
+  .slice(0, 6);
 
 function modelUrlPart(slug: string): string {
   return slug.startsWith(brand.slug + '-') ? slug.slice(brand.slug.length + 1) : slug;
 }
 
-// Spec rows
-const specRows: { label: string; value: string | number }[] = [];
-if (model.power_hp) specRows.push({ label: 'Výkon', value: `${model.power_hp} k${model.power_kw ? ` (${model.power_kw} kW)` : ''}` });
-if (model.engine) specRows.push({ label: 'Motor', value: model.engine });
-if (model.transmission) specRows.push({ label: 'Převodovka', value: model.transmission });
-if (model.weight_kg) specRows.push({ label: 'Hmotnost', value: `${model.weight_kg.toLocaleString('cs-CZ')} kg` });
-if (model.cutting_width_m) specRows.push({ label: 'Záběr žacího stolu', value: `${model.cutting_width_m} m` });
-if (model.grain_tank_l) specRows.push({ label: 'Objem bunkru', value: `${model.grain_tank_l.toLocaleString('cs-CZ')} l` });
-if (yr) specRows.push({ label: 'Roky výroby', value: yr });
+// Build categorized spec rows
+type SpecRow = { label: string; value: string };
+const performanceSpecs: SpecRow[] = [];
+const drivetrainSpecs: SpecRow[] = [];
+const dimensionSpecs: SpecRow[] = [];
+const otherSpecs: SpecRow[] = [];
+
+if (model.power_hp) performanceSpecs.push({ label: 'Výkon', value: `${model.power_hp} k${model.power_kw ? ` (${model.power_kw} kW)` : ''}` });
+if (model.engine) drivetrainSpecs.push({ label: 'Motor', value: model.engine });
+if (model.transmission) drivetrainSpecs.push({ label: 'Převodovka', value: model.transmission });
+if (model.weight_kg) dimensionSpecs.push({ label: 'Hmotnost', value: `${model.weight_kg.toLocaleString('cs-CZ')} kg` });
+if (model.cutting_width_m) dimensionSpecs.push({ label: 'Záběr žacího stolu', value: `${model.cutting_width_m} m` });
+if (model.grain_tank_l) dimensionSpecs.push({ label: 'Objem bunkru', value: `${model.grain_tank_l.toLocaleString('cs-CZ')} l` });
+if (yr) performanceSpecs.push({ label: 'Roky výroby', value: yr });
+
 if (model.specs) {
+  const specGroups: Record<string, 'perf' | 'drive' | 'dim' | 'other'> = {
+    hydraulika_l_min: 'drive',
+    zadni_zaves_kg: 'dim',
+    predni_zaves_kg: 'dim',
+    emise: 'drive',
+    kabina: 'other',
+  };
   const specLabels: Record<string, string> = {
     hydraulika_l_min: 'Hydraulika',
     zadni_zaves_kg: 'Zadní závěs',
@@ -75,170 +114,470 @@ if (model.specs) {
     const label = specLabels[k] ?? k.replace(/_/g, ' ');
     const unit = specUnits[k] ?? '';
     const formatted = typeof v === 'number' ? v.toLocaleString('cs-CZ') + unit : String(v);
-    specRows.push({ label, value: formatted });
+    const row = { label, value: formatted };
+    const grp = specGroups[k] ?? 'other';
+    if (grp === 'perf') performanceSpecs.push(row);
+    else if (grp === 'drive') drivetrainSpecs.push(row);
+    else if (grp === 'dim') dimensionSpecs.push(row);
+    else otherSpecs.push(row);
   }
 }
+
+const totalSpecCount = performanceSpecs.length + drivetrainSpecs.length + dimensionSpecs.length + otherSpecs.length;
+
+const heroPhoto = (series as any).image_url || categoryHero[category] || '/images/traktor.webp';
 
 const pageTitle = `${brand.name} ${model.name}`;
 const pageDesc = model.description
   ? model.description.slice(0, 160)
   : `${pageTitle} — ${categorySingular[category]} s výkonem ${model.power_hp ?? '?'} k, roky výroby ${yr}. Technické parametry a nabídka v bazaru.`;
 
-const canonical = `https://agro-svet.cz/stroje/${brand.slug}/${series.slug}/${modelSlug.startsWith(brand.slug + '-') ? modelSlug.slice(brand.slug.length + 1) : modelSlug}/`;
+const canonical = `https://agro-svet.cz/stroje/${brand.slug}/${series.slug}/${modelUrlPart(model.slug)}/`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Katalog', item: 'https://agro-svet.cz/stroje/' },
-    { '@type': 'ListItem', position: 2, name: brand.name, item: `https://agro-svet.cz/stroje/${brand.slug}/` },
-    { '@type': 'ListItem', position: 3, name: series.name, item: `https://agro-svet.cz/stroje/${brand.slug}/${series.slug}/` },
-    { '@type': 'ListItem', position: 4, name: model.name, item: canonical },
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz/stroje/${brand.slug}/` },
+    { '@type': 'ListItem', position: 4, name: seriesNameClean, item: `https://agro-svet.cz/stroje/${brand.slug}/${series.slug}/` },
+    { '@type': 'ListItem', position: 5, name: model.name, item: canonical },
   ],
 };
 ---
 
 <Layout title={`${pageTitle} — parametry a cena`} description={pageDesc} canonical={canonical}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
-  <div style="max-width:1080px; margin:0 auto; padding:48px 32px 80px;">
+  <div class="model-page">
 
-    <div style="margin-bottom:8px; font-size:13px; color:#666;">
-      <a href="/stroje/" style="color:#666; text-decoration:none;">Katalog</a>
-      <span style="margin:0 6px;">/</span>
-      <a href={`/stroje/${brand.slug}/`} style="color:#666; text-decoration:none;">{brand.name}</a>
-      <span style="margin:0 6px;">/</span>
-      <a href={`/stroje/${brand.slug}/${series.slug}/`} style="color:#666; text-decoration:none;">{series.name}</a>
-      <span style="margin:0 6px;">/</span>
-      <span style="color:#1a1a1a;">{model.name}</span>
-    </div>
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/stroje/">Technika</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href={`/stroje/${brand.slug}/`}>{brand.name}</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href={`/stroje/${brand.slug}/${series.slug}/`}>{seriesNameClean}</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">{model.name}</span>
+    </nav>
 
-    <div style="margin-bottom:32px;">
-      <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
-        <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
-          {brand.name}
-        </span>
-        <span style="background:#1a1a1a; color:#fff; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
-          {categoryLabels[category]}
-        </span>
-        <span style="background:#f0f0f0; color:#555; font-size:11px; padding:3px 10px; border-radius:3px;">
-          Řada: {series.name}
-        </span>
-      </div>
-      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">
-        {brand.name} {model.name}
-      </h1>
-      {model.power_hp && (
-        <div style="display:inline-block; background:#1a1a1a; color:#FFFF00; padding:10px 18px; border-radius:10px; font-family:'Chakra Petch',sans-serif; font-size:24px; font-weight:700; margin-bottom:16px;">
-          {model.power_hp} k {model.power_kw ? `· ${model.power_kw} kW` : ''}
+    <section class="hero" style={`--brand-c1:${brandC1};--brand-c2:${brandC2};`}>
+      <div class="hero-left">
+        <div class="hero-tags">
+          <span class="tag tag-brand">{brand.name}</span>
+          <span class="tag tag-cat">{categoryLabels[category]}</span>
+          <span class="tag tag-series">{seriesNameClean}</span>
+          {isCurrent ? (
+            <span class="tag tag-current"><span class="dot"></span>Aktuální v prodeji</span>
+          ) : (
+            <span class="tag tag-legacy">Historie</span>
+          )}
         </div>
-      )}
-    </div>
+        <h1>{model.name}</h1>
+        {yr && <div class="hero-year">{yr}</div>}
 
-    {model.description && (
-      <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:24px; margin-bottom:24px;">
-        <p style="font-size:16px; line-height:1.7; color:#333; margin:0;">{model.description}</p>
-      </div>
-    )}
+        {model.power_hp && (
+          <div class="power-pill">
+            <span class="pp-num">{model.power_hp}</span>
+            <span class="pp-unit">k</span>
+            {model.power_kw && <span class="pp-kw">· {model.power_kw} kW</span>}
+          </div>
+        )}
 
-    <div style="display:grid; grid-template-columns:1fr; gap:24px; margin-bottom:32px;">
-      <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; overflow:hidden;">
-        <div style="background:#fafafa; padding:16px 20px; border-bottom:1px solid #e8e8e8;">
-          <h2 style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a;">Technické parametry</h2>
+        {model.description && <p class="hero-lede">{model.description}</p>}
+
+        <div class="hero-actions">
+          <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`}>
+            Hledat {model.name} v bazaru
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-secondary" href={`/stroje/${brand.slug}/${series.slug}/`}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            Celá řada {seriesNameClean}
+          </a>
         </div>
-        <table class="spec-table">
-          <tbody>
-            {specRows.map((row, idx) => (
-              <tr class={idx < specRows.length - 1 ? 'spec-row spec-row-divider' : 'spec-row'}>
-                <td class="spec-label">{row.label}</td>
-                <td class="spec-value">{row.value}</td>
-              </tr>
-            ))}
-            {specRows.length === 0 && (
-              <tr><td class="spec-empty" colspan="2">Detailní parametry budou doplněny.</td></tr>
-            )}
-          </tbody>
-        </table>
       </div>
 
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px;">
-        <a href={`/bazar/?znacka=${encodeURIComponent(brand.name)}&q=${encodeURIComponent(model.name)}`} style="display:block; text-decoration:none; background:#FFFF00; color:#000; border-radius:18px; padding:24px; text-align:center;">
-          <div style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; margin-bottom:4px;">Hledat v bazaru</div>
-          <div style="font-size:13px; color:#333;">Aktuální nabídky {brand.name} {model.name}</div>
-        </a>
-        <a href={`/stroje/${brand.slug}/${series.slug}/`} style="display:block; text-decoration:none; background:#fff; border:1px solid #e8e8e8; color:#1a1a1a; border-radius:18px; padding:24px; text-align:center;">
-          <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; margin-bottom:4px;">Celá řada {series.name}</div>
-          <div style="font-size:13px; color:#666;">{series.models.length} modelů · {seriesYr}</div>
-        </a>
+      <div class="hero-right">
+        <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
+          <div class="hero-photo-badge">
+            <span class="n">{model.name}</span>
+            {model.power_hp && <span class="pwr">{model.power_hp} k</span>}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    {related.length > 0 && (
-      <section style="margin-top:48px;">
-        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:16px;">
-          Další modely z řady {series.name}
-        </h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px;">
-          {related.map((m) => (
-            <a href={`/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:box-shadow .2s, transform .2s;" class="rel-card">
-              <div style="font-family:'Chakra Petch',sans-serif; font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">{m.name}</div>
-              <div style="display:flex; justify-content:space-between; font-size:12px; color:#666;">
-                <span style="display:inline-flex; align-items:center; gap:4px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                  {m.power_hp ? `${m.power_hp} k` : '—'}
-                </span>
-                <span>{m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : ''}</span>
+    <div class="content-grid">
+      <div class="content-main">
+        {totalSpecCount > 0 ? (
+          <section class="spec-card">
+            <div class="card-head">
+              <h2>Technické parametry</h2>
+              <span class="card-head-meta">{totalSpecCount} {totalSpecCount === 1 ? 'parametr' : totalSpecCount < 5 ? 'parametry' : 'parametrů'}</span>
+            </div>
+
+            {performanceSpecs.length > 0 && (
+              <div class="spec-group">
+                <div class="spec-group-label">Výkon &amp; provoz</div>
+                <dl class="spec-list">
+                  {performanceSpecs.map((row) => (
+                    <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
+                  ))}
+                </dl>
               </div>
-            </a>
-          ))}
+            )}
+
+            {drivetrainSpecs.length > 0 && (
+              <div class="spec-group">
+                <div class="spec-group-label">Pohon &amp; motor</div>
+                <dl class="spec-list">
+                  {drivetrainSpecs.map((row) => (
+                    <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
+                  ))}
+                </dl>
+              </div>
+            )}
+
+            {dimensionSpecs.length > 0 && (
+              <div class="spec-group">
+                <div class="spec-group-label">Rozměry &amp; kapacita</div>
+                <dl class="spec-list">
+                  {dimensionSpecs.map((row) => (
+                    <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
+                  ))}
+                </dl>
+              </div>
+            )}
+
+            {otherSpecs.length > 0 && (
+              <div class="spec-group">
+                <div class="spec-group-label">Vybavení</div>
+                <dl class="spec-list">
+                  {otherSpecs.map((row) => (
+                    <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
+                  ))}
+                </dl>
+              </div>
+            )}
+          </section>
+        ) : (
+          <section class="spec-card spec-empty">
+            <h2>Technické parametry</h2>
+            <p>Detailní parametry budou doplněny.</p>
+          </section>
+        )}
+
+        {related.length > 0 && (
+          <section class="related-card">
+            <div class="card-head">
+              <h2>Další modely v řadě {seriesNameClean}</h2>
+              <a class="card-head-link" href={`/stroje/${brand.slug}/${series.slug}/`}>Všechny modely →</a>
+            </div>
+            <div class="rel-grid">
+              {related.map((m) => {
+                const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '';
+                const mIsCurrent = m.year_to === null && m.year_from !== null;
+                return (
+                  <a href={`/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`} class="rel-card">
+                    <div class="rel-title">
+                      {m.name}
+                      {mIsCurrent && <span class="dot-current" title="Aktuální"></span>}
+                    </div>
+                    <div class="rel-meta">
+                      <span class="rel-power">
+                        {m.power_hp !== null ? <><strong>{m.power_hp} k</strong></> : '—'}
+                      </span>
+                      <span class="rel-year">{mYr}</span>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        )}
+      </div>
+
+      <aside class="content-aside">
+        <div class="aside-card primary-cta-card">
+          <span class="acc-kicker">Aktuální nabídky</span>
+          <h3>{brand.name} {model.name}<br/>v Agro bazaru</h3>
+          <p>Filtrujte podle modelu, výkonu a roku. Kontakt přímo na prodejce, bez provize.</p>
+          <a href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`} class="aside-btn primary">
+            Otevřít bazar
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="/bazar/novy/" class="aside-btn ghost-light">Přidat vlastní inzerát</a>
         </div>
-      </section>
-    )}
+
+        <div class="aside-card nav-card">
+          <span class="acc-label">Kontext</span>
+          <a href={`/stroje/${brand.slug}/`} class="aside-link">
+            <span class="al-label">Značka</span>
+            <span class="al-value">{brand.name}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href={`/stroje/${brand.slug}/rada/${category}/${family}/`} class="aside-link">
+            <span class="al-label">Řada</span>
+            <span class="al-value">{familyLab}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href={`/stroje/${brand.slug}/${series.slug}/`} class="aside-link">
+            <span class="al-label">Generace</span>
+            <span class="al-value">{seriesNameClean}{seriesYr ? ` · ${seriesYr}` : ''}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+      </aside>
+    </div>
+
   </div>
-
-  <style>
-    .rel-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
-
-    .spec-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    .spec-row-divider { border-bottom: 1px solid #f0f0f0; }
-    .spec-label {
-      padding: 12px 20px;
-      color: #666;
-      width: 40%;
-      vertical-align: top;
-    }
-    .spec-value {
-      padding: 12px 20px;
-      color: #1a1a1a;
-      font-weight: 500;
-    }
-    .spec-empty {
-      padding: 24px 20px;
-      color: #767676;
-      font-style: italic;
-    }
-
-    /* Mobile: stack label/value vertically */
-    @media (max-width: 560px) {
-      .spec-table, .spec-table tbody, .spec-row, .spec-label, .spec-value {
-        display: block;
-        width: 100%;
-      }
-      .spec-row-divider { border-bottom: 1px solid #f0f0f0; padding: 8px 0; }
-      .spec-row { padding: 8px 0; }
-      .spec-label {
-        padding: 10px 16px 2px;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        color: #767676;
-      }
-      .spec-value {
-        padding: 0 16px 10px;
-        font-size: 15px;
-      }
-    }
-  </style>
 </Layout>
+
+<style>
+  .model-page{
+    --yellow:#FFEA00;
+    --yellow-soft:#FFF6A8;
+    --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B;
+    --body:#1E1E22;
+    --muted:#6B6B72;
+    --muted-2:#9A9AA3;
+    --line:#EAEAEC;
+    --line-2:#DFDFE3;
+    --bg-cream:#FBFAF4;
+    --card:#FFFFFF;
+    --green:#0B7A3B;
+    --green-soft:#E3F3EA;
+    --legacy:#7A6B0B;
+    --legacy-soft:#F5EFC8;
+    --r-xl:24px;
+    --r-lg:18px;
+    --r-md:12px;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px;margin:0 auto;padding:26px 24px 96px;
+    color:var(--body);
+  }
+
+  .model-page .breadcrumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .model-page .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s}
+  .model-page .breadcrumb a:hover{color:#000}
+  .model-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2);flex-shrink:0}
+  .model-page .breadcrumb .current{color:#000;font-weight:600}
+
+  .model-page .hero{
+    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+    background:
+      radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, color-mix(in srgb, var(--brand-c1) 36%, transparent), transparent 60%),
+      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+    padding:44px 44px 38px;margin-bottom:22px;
+    box-shadow:var(--sh-3);
+    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
+  }
+  .model-page .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .model-page .hero-left{position:relative;z-index:2}
+
+  .model-page .hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .model-page .tag{
+    display:inline-flex;align-items:center;gap:6px;
+    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.14em;text-transform:uppercase;
+    padding:6px 11px;border-radius:6px;
+  }
+  .model-page .tag-brand{background:var(--yellow);color:#0A0A0B}
+  .model-page .tag-cat{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.16)}
+  .model-page .tag-series{background:rgba(255,255,255,.06);color:#c8c8d0;border:1px solid rgba(255,255,255,.12)}
+  .model-page .tag-current{background:rgba(11,180,90,.16);color:#5cdc8c;border:1px solid rgba(11,180,90,.4)}
+  .model-page .tag-current .dot{width:7px;height:7px;background:#5cdc8c;border-radius:50%;box-shadow:0 0 0 3px rgba(92,220,140,.18)}
+  .model-page .tag-legacy{background:rgba(180,160,80,.16);color:#dccc78;border:1px solid rgba(180,160,80,.32)}
+
+  .model-page .hero h1{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    font-size:clamp(2.4rem,5.5vw,4.4rem);color:#fff;line-height:.96;letter-spacing:-.03em;margin:0;
+  }
+  .model-page .hero-year{margin-top:8px;font:500 16px 'Chakra Petch',sans-serif;color:var(--yellow);letter-spacing:.04em}
+  .model-page .hero-lede{max-width:580px;font-size:15.5px;color:#c8c8d0;margin:14px 0 22px;line-height:1.65}
+
+  .model-page .power-pill{
+    display:inline-flex;align-items:baseline;gap:8px;margin-top:18px;
+    background:rgba(255,234,0,.1);border:1px solid rgba(255,234,0,.4);
+    color:var(--yellow);padding:14px 22px;border-radius:14px;
+    font-family:'Chakra Petch',sans-serif;
+    box-shadow:0 8px 30px -10px rgba(255,234,0,.4), inset 0 0 30px rgba(255,234,0,.08);
+  }
+  .model-page .pp-num{font-size:42px;font-weight:700;letter-spacing:-.04em;line-height:1}
+  .model-page .pp-unit{font-size:18px;font-weight:600}
+  .model-page .pp-kw{font-size:14px;color:#fff;opacity:.7;font-weight:500;margin-left:4px}
+
+  .model-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .model-page .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--yellow);color:#0A0A0B;
+    padding:13px 18px;border-radius:12px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    transition:transform .15s, box-shadow .15s;
+    box-shadow:0 14px 40px -10px var(--yellow-glow);
+  }
+  .model-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+  .model-page .cta-secondary{
+    display:inline-flex;align-items:center;gap:8px;
+    color:#c8c8d0;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    padding:13px 16px;border-radius:12px;text-decoration:none;
+    font:500 13px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    transition:.15s;
+  }
+  .model-page .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+
+  .model-page .hero-right{position:relative;z-index:1;min-height:300px;display:flex;align-items:center;justify-content:center}
+  .model-page .hero-photo{
+    width:100%;height:100%;min-height:300px;
+    background-size:cover;background-position:center;
+    border-radius:18px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
+    position:relative;overflow:hidden;
+  }
+  .model-page .hero-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, color-mix(in srgb, var(--brand-c1) 24%, transparent) 100%);
+  }
+  .model-page .hero-photo-badge{
+    position:absolute;left:16px;bottom:16px;right:16px;z-index:2;
+    background:rgba(10,10,11,.78);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.1);
+    color:#fff;padding:11px 14px;border-radius:10px;
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    font-family:'Chakra Petch',sans-serif;
+  }
+  .model-page .hero-photo-badge .n{font-weight:700;font-size:15px}
+  .model-page .hero-photo-badge .pwr{color:var(--yellow);font-weight:700;font-size:14px}
+
+  .model-page .content-grid{display:grid;grid-template-columns:1fr 320px;gap:22px}
+
+  .model-page .content-main{display:flex;flex-direction:column;gap:22px}
+
+  .model-page .spec-card, .model-page .related-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);
+    padding:24px 24px 22px;box-shadow:var(--sh-1);
+  }
+  .model-page .card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  .model-page .card-head h2{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.1;color:var(--ink)}
+  .model-page .card-head-meta{font:600 12px 'Chakra Petch',sans-serif;color:var(--muted);background:#FBFAF4;padding:5px 10px;border-radius:8px}
+  .model-page .card-head-link{font:600 13px 'Chakra Petch',sans-serif;color:#0A0A0B;text-decoration:none}
+  .model-page .card-head-link:hover{color:#000;text-decoration:underline}
+
+  .model-page .spec-group{margin-bottom:18px}
+  .model-page .spec-group:last-child{margin-bottom:0}
+  .model-page .spec-group-label{
+    font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:10px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .model-page .spec-group-label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .model-page .spec-list{
+    display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0;
+    margin:0;padding:0;
+  }
+  .model-page .spec-item{
+    display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+    padding:11px 0;border-bottom:1px dashed var(--line);
+  }
+  .model-page .spec-item:last-child{border-bottom:0}
+  .model-page .spec-item dt{
+    font:500 12.5px 'Chakra Petch',sans-serif;color:var(--muted);
+    letter-spacing:.02em;text-transform:none;margin:0;
+  }
+  .model-page .spec-item dd{
+    font:600 14px 'Chakra Petch',sans-serif;color:var(--ink);
+    letter-spacing:-.005em;margin:0;text-align:right;
+  }
+  .model-page .spec-empty p{color:var(--muted);font-style:italic;margin:0}
+
+  .model-page .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+  .model-page .rel-card{
+    display:block;text-decoration:none;color:inherit;
+    background:#FBFAF4;border:1px solid var(--line);border-radius:var(--r-md);
+    padding:12px 14px;transition:.18s;
+  }
+  .model-page .rel-card:hover{background:#fff;transform:translateY(-2px);box-shadow:var(--sh-1);border-color:var(--yellow)}
+  .model-page .rel-title{
+    font:700 16px 'Chakra Petch',sans-serif;color:var(--ink);
+    letter-spacing:-.005em;margin-bottom:6px;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .model-page .rel-title .dot-current{width:6px;height:6px;background:var(--green);border-radius:50%;animation:mp-pulse 2s infinite}
+  .model-page .rel-meta{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted);font-family:'Chakra Petch',sans-serif}
+  .model-page .rel-power strong{color:var(--ink);font-weight:700}
+  @keyframes mp-pulse{0%,100%{box-shadow:0 0 0 0 rgba(11,122,59,.4)}50%{box-shadow:0 0 0 4px rgba(11,122,59,0)}}
+
+  .model-page .content-aside{display:flex;flex-direction:column;gap:14px;align-self:start;position:sticky;top:104px}
+  .model-page .aside-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:18px;box-shadow:var(--sh-1);
+  }
+  .model-page .primary-cta-card{
+    background:linear-gradient(180deg, #0A0A0B 0%, #18181C 100%);color:#fff;border-color:transparent;
+  }
+  .model-page .acc-kicker{
+    display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--yellow);background:rgba(255,234,0,.12);padding:5px 10px;border-radius:999px;margin-bottom:10px;
+    border:1px solid rgba(255,234,0,.25);
+  }
+  .model-page .primary-cta-card h3{
+    font-family:'Chakra Petch',sans-serif;font-size:19px;font-weight:700;line-height:1.2;
+    letter-spacing:-.01em;margin:0 0 8px;color:#fff;
+  }
+  .model-page .primary-cta-card p{font-size:13px;color:#c8c8d0;line-height:1.5;margin:0 0 14px}
+  .model-page .aside-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+    padding:11px 14px;border-radius:10px;text-decoration:none;
+    font:700 13px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+    transition:.15s;margin-bottom:8px;box-sizing:border-box;
+  }
+  .model-page .aside-btn:last-child{margin-bottom:0}
+  .model-page .aside-btn.primary{background:var(--yellow);color:#0A0A0B}
+  .model-page .aside-btn.primary:hover{transform:translateY(-1px);box-shadow:0 10px 30px -8px var(--yellow-glow)}
+  .model-page .aside-btn.ghost-light{background:rgba(255,255,255,.06);color:#c8c8d0;border:1px solid rgba(255,255,255,.16)}
+  .model-page .aside-btn.ghost-light:hover{background:rgba(255,255,255,.12);color:#fff}
+
+  .model-page .nav-card .acc-label{
+    display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:10px;
+  }
+  .model-page .aside-link{
+    display:flex;align-items:center;gap:10px;
+    padding:11px 12px;border:1px solid var(--line);border-radius:var(--r-md);
+    text-decoration:none;color:var(--ink);background:#FBFAF4;
+    margin-bottom:8px;transition:.15s;
+  }
+  .model-page .aside-link:last-child{margin-bottom:0}
+  .model-page .aside-link:hover{background:var(--yellow-soft);border-color:var(--yellow)}
+  .model-page .al-label{font:500 11px 'Chakra Petch',sans-serif;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+  .model-page .al-value{
+    font:700 13.5px 'Chakra Petch',sans-serif;color:var(--ink);
+    flex:1;text-align:right;letter-spacing:-.005em;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .model-page .aside-link svg{width:14px;height:14px;color:var(--muted);flex-shrink:0}
+
+  @media (max-width:960px){
+    .model-page .hero{grid-template-columns:1fr;padding:30px 24px 26px;gap:18px}
+    .model-page .hero-right{min-height:220px;order:2}
+    .model-page .hero-photo{min-height:220px}
+    .model-page .content-grid{grid-template-columns:1fr}
+    .model-page .content-aside{position:static;top:auto}
+  }
+  @media (max-width:600px){
+    .model-page{padding:20px 16px 60px}
+    .model-page .spec-card, .model-page .related-card{padding:18px}
+    .model-page .pp-num{font-size:34px}
+  }
+</style>

@@ -15,41 +15,66 @@ const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',
   kombajny: 'Kombajny',
 };
+const categoryHero: Record<StrojKategorie, string> = {
+  traktory: '/images/traktor.webp',
+  kombajny: '/images/kombajn.webp',
+};
 
-function buildFamilyTiles(catKey: StrojKategorie) {
+const brandColors: Record<string, [string, string]> = {
+  'john-deere': ['#4A9838', '#2E6B22'],
+  fendt: ['#3FA85D', '#0E6730'],
+  claas: ['#9C9532', '#65601A'],
+  'deutz-fahr': ['#2BA84A', '#1a5e2a'],
+  kubota: ['#FF6B1A', '#C24414'],
+  'new-holland': ['#3874AC', '#1A4370'],
+  'case-ih': ['#D62A2A', '#8F1818'],
+  'massey-ferguson': ['#D62A2A', '#8F1818'],
+  valtra: ['#1F1F1F', '#0A0A0A'],
+  zetor: ['#E93A3A', '#A01818'],
+};
+function brandTone(slug: string): [string, string] {
+  return brandColors[slug] ?? ['#2a2a30', '#0a0a0b'];
+}
+
+type Tile = {
+  family: string;
+  label: string;
+  modelCount: number;
+  seriesCount: number;
+  minHp: number | null;
+  maxHp: number | null;
+  minYear: number | null;
+  maxYear: number | null;
+  hasCurrent: boolean;
+  coverImage: string | null;
+};
+
+function buildTilesForCategory(catKey: StrojKategorie): Tile[] {
   const cat = brand.categories?.[catKey];
   if (!cat) return [];
-  type Tile = {
-    family: string;
-    label: string;
-    modelCount: number;
-    seriesCount: number;
-    seriesNames: string[];
-    minHp: number | null;
-    maxHp: number | null;
-    minYear: number | null;
-    maxYear: number | null;
-  };
   const byFamily = new Map<string, Tile>();
   for (const s of cat.series ?? []) {
-    const fam = seriesFamily(s.slug);
+    const fam = (s as any).family || seriesFamily(s.slug);
+    const labelOverride = (s as any).family_label;
     let t = byFamily.get(fam);
     if (!t) {
       t = {
         family: fam,
-        label: familyLabel(fam),
+        label: labelOverride || familyLabel(fam),
         modelCount: 0,
         seriesCount: 0,
-        seriesNames: [],
         minHp: null,
         maxHp: null,
         minYear: null,
         maxYear: null,
+        hasCurrent: false,
+        coverImage: null,
       };
       byFamily.set(fam, t);
     }
     t.seriesCount += 1;
-    t.seriesNames.push(s.name);
+    if (labelOverride) t.label = labelOverride;
+    if (!t.coverImage && (s as any).image_url) t.coverImage = (s as any).image_url;
     for (const m of s.models ?? []) {
       t.modelCount += 1;
       if (m.power_hp !== null) {
@@ -59,216 +84,652 @@ function buildFamilyTiles(catKey: StrojKategorie) {
       if (m.year_from !== null) {
         t.minYear = t.minYear === null ? m.year_from : Math.min(t.minYear, m.year_from);
       }
-      if (m.year_to !== null) {
+      if (m.year_to === null && m.year_from !== null) {
+        t.hasCurrent = true;
+      } else if (m.year_to !== null) {
         t.maxYear = t.maxYear === null ? m.year_to : Math.max(t.maxYear, m.year_to);
-      } else if (m.year_from !== null) {
-        // Still in production
-        t.maxYear = null;
       }
     }
   }
-  return [...byFamily.values()].sort((a, b) => {
-    const aDigit = /^\d+$/.test(a.family);
-    const bDigit = /^\d+$/.test(b.family);
-    if (aDigit && bDigit) return parseInt(a.family) - parseInt(b.family);
-    if (aDigit) return -1;
-    if (bDigit) return 1;
-    return a.family.localeCompare(b.family, 'cs');
+  return [...byFamily.values()];
+}
+
+function tileSort(a: Tile, b: Tile): number {
+  if (a.hasCurrent !== b.hasCurrent) return a.hasCurrent ? -1 : 1;
+  const aMax = a.maxHp ?? 0;
+  const bMax = b.maxHp ?? 0;
+  if (aMax !== bMax) return bMax - aMax;
+  if (a.modelCount !== b.modelCount) return b.modelCount - a.modelCount;
+  return a.family.localeCompare(b.family, 'cs');
+}
+
+function familySublabel(family: string): string {
+  if (/^\d+$/.test(family)) return `${family}. řada`;
+  return '';
+}
+
+type CategorySection = {
+  slug: StrojKategorie;
+  name: string;
+  totalModels: number;
+  totalSeries: number;
+  minHp: number | null;
+  maxHp: number | null;
+  currentTiles: Tile[];
+  legacyTiles: Tile[];
+  hpMaxForBar: number;
+  heroFallback: string;
+};
+
+const categories: CategorySection[] = [];
+for (const [catKey, cat] of Object.entries(brand.categories ?? {}) as [StrojKategorie, any][]) {
+  const tiles = buildTilesForCategory(catKey);
+  if (tiles.length === 0) continue;
+  const sorted = [...tiles].sort(tileSort);
+  const currentTiles = sorted.filter((t) => t.hasCurrent);
+  // Display strongest-on-the-right (ASC by max hp) for natural left-to-right reading
+  currentTiles.sort((a, b) => (a.maxHp ?? 0) - (b.maxHp ?? 0));
+  const legacyTiles = sorted.filter((t) => !t.hasCurrent);
+  legacyTiles.sort((a, b) => (b.minYear ?? 0) - (a.minYear ?? 0));
+
+  const totalModels = (cat.series ?? []).reduce((acc: number, s: any) => acc + (s.models?.length ?? 0), 0);
+  const totalSeries = (cat.series ?? []).length;
+  const hpAll = tiles.flatMap((t) => [t.minHp, t.maxHp]).filter((x): x is number => x !== null);
+  categories.push({
+    slug: catKey,
+    name: categoryLabels[catKey] ?? cat.name,
+    totalModels,
+    totalSeries,
+    minHp: hpAll.length ? Math.min(...hpAll) : null,
+    maxHp: hpAll.length ? Math.max(...hpAll) : null,
+    currentTiles,
+    legacyTiles,
+    hpMaxForBar: catKey === 'traktory' ? 620 : 700,
+    heroFallback: categoryHero[catKey],
   });
 }
 
-const categoriesData = (Object.entries(brand.categories ?? {}) as [StrojKategorie, any][]).map(([catKey, cat]) => ({
-  slug: catKey,
-  name: categoryLabels[catKey] ?? cat.name,
-  tiles: buildFamilyTiles(catKey),
-  totalModels: (cat.series ?? []).reduce((acc: number, s: any) => acc + (s.models?.length ?? 0), 0),
-}));
+const totalModels = categories.reduce((acc, c) => acc + c.totalModels, 0);
+const totalSeries = categories.reduce((acc, c) => acc + c.totalSeries, 0);
+const allHp = categories.flatMap((c) => [c.minHp, c.maxHp]).filter((x): x is number => x !== null);
+const minHp = allHp.length ? Math.min(...allHp) : null;
+const maxHp = allHp.length ? Math.max(...allHp) : null;
 
-const totalModels = categoriesData.reduce((acc, c) => acc + c.totalModels, 0);
+// Pick the most prominent current series cover for hero (highest max hp tile that has cover)
+let heroPhoto: string | null = null;
+for (const c of categories) {
+  for (const t of [...c.currentTiles].sort((a, b) => (b.maxHp ?? 0) - (a.maxHp ?? 0))) {
+    if (t.coverImage) {
+      heroPhoto = t.coverImage;
+      break;
+    }
+  }
+  if (heroPhoto) break;
+}
+if (!heroPhoto) heroPhoto = categories[0]?.heroFallback ?? '/images/traktor.webp';
+
+function hpBar(min: number | null, max: number | null, hpMax: number): { from: number; span: number } {
+  if (min === null || max === null) return { from: 0, span: 0 };
+  const from = Math.max(0, Math.min(100, (min / hpMax) * 100));
+  const to = Math.max(0, Math.min(100, (max / hpMax) * 100));
+  return { from, span: Math.max(2, to - from) };
+}
+
+const [brandC1, brandC2] = brandTone(brand.slug);
+
+const websiteHost = brand.website ? brand.website.replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
 ---
 
 <Layout
-  title={`${brand.name} — katalog strojů`}
-  description={`Přehled modelových řad značky ${brand.name}. Dlaždice pro každou řadu s počtem modelů a rozsahem výkonů.`}
+  title={`${brand.name} — katalog modelů a řad`}
+  description={`${brand.name} (${brand.country}, založeno ${brand.founded}) — kompletní přehled ${totalModels} modelů ve ${totalSeries} řadách. Aktuální produkce i historické modely pro bazarový průzkum.`}
 >
-  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
-    <div style="margin-bottom:8px;">
-      <a href="/stroje/" style="font-size:13px; color:#666; text-decoration:none;">← Katalog strojů</a>
-    </div>
+  <div class="brand-page">
 
-    <!-- Brand hero -->
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap; margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid #e8e8e8;">
-      <div>
-        <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:10px;">
-          {brand.name}
-        </h1>
-        <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:14px; color:#666; margin-bottom:12px;">
-          <span style="display:inline-flex; align-items:center; gap:6px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            {brand.country}
-          </span>
-          <span style="display:inline-flex; align-items:center; gap:6px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-            Založeno {brand.founded}
-          </span>
-          <span style="display:inline-flex; align-items:center; gap:6px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-            {totalModels} modelů v katalogu
-          </span>
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/stroje/">Technika</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">{brand.name}</span>
+    </nav>
+
+    <section class="hero" style={`--brand-c1:${brandC1};--brand-c2:${brandC2};`}>
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Značka · Technika</span>
+        <h1>{brand.name} <em>katalog</em></h1>
+        {brand.description && <p class="hero-lede">{brand.description}</p>}
+
+        <div class="hero-stats">
+          <div class="s"><span class="n">{totalModels}+</span><span class="l">modelů</span></div>
+          <div class="s"><span class="n">{totalSeries}</span><span class="l">řad</span></div>
+          {minHp !== null && maxHp !== null && (
+            <div class="s"><span class="n">{minHp}–{maxHp} k</span><span class="l">výkon</span></div>
+          )}
+          <div class="s"><span class="n">{brand.founded}</span><span class="l">založeno · {brand.country}</span></div>
+        </div>
+
+        <div class="hero-actions">
+          <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}`}>
+            Hledat {brand.name} v bazaru
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
           {brand.website && (
-            <a href={brand.website} target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:6px; color:#1a1a1a; text-decoration:underline;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              {brand.website.replace(/^https?:\/\//, '')}
+            <a class="cta-secondary" href={brand.website} target="_blank" rel="noopener noreferrer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              {websiteHost}
             </a>
           )}
         </div>
-        {brand.description && <p style="font-size:15px; color:#444; max-width:720px; line-height:1.6;">{brand.description}</p>}
       </div>
-      <a href={`/bazar/?brand=${encodeURIComponent(brand.slug)}`} style="background:#FFFF00; color:#000; padding:12px 20px; border-radius:10px; text-decoration:none; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; white-space:nowrap;">
-        Hledat v bazaru →
-      </a>
-    </div>
 
-    {categoriesData.map((cat) => (
-      <section style="margin-bottom:48px;">
-        <header style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:20px;">
-          <h2 style="font-family:'Chakra Petch',sans-serif; font-size:26px; font-weight:700; color:#1a1a1a;">
-            {cat.name}
-          </h2>
-          <div style="font-size:13px; color:#666;">
-            <span>{cat.totalModels} modelů</span>
-            <span style="margin:0 6px;">·</span>
-            <span>{cat.tiles.length} řad</span>
+      <div class="hero-right">
+        <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
+          <div class="hero-photo-logo">
+            <img src={`/images/stroje/brands/${brand.slug}.png`} alt={`${brand.name} logo`} loading="eager" />
           </div>
-        </header>
-
-        <div class="family-grid">
-          {cat.tiles.map((tile) => {
-            const hpStr = tile.minHp !== null && tile.maxHp !== null
-              ? (tile.minHp === tile.maxHp ? `${tile.minHp} k` : `${tile.minHp}–${tile.maxHp} k`)
-              : '';
-            const yrStr = tile.minYear !== null
-              ? (tile.maxYear === null ? `${tile.minYear}–dosud` : `${tile.minYear}–${tile.maxYear}`)
-              : '';
-            return (
-              <a href={`/stroje/${brand.slug}/rada/${cat.slug}/${tile.family}/`} class="family-tile">
-                <div class="family-tile-img" aria-hidden="true">
-                  <div class="family-tile-placeholder">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                      {cat.slug === 'traktory' ? (
-                        <>
-                          <circle cx="7" cy="17" r="2"/>
-                          <circle cx="18" cy="17" r="3"/>
-                          <path d="M4 17H3v-4l2-2h4l3-4h5v10h-2"/>
-                        </>
-                      ) : (
-                        <>
-                          <rect x="3" y="9" width="18" height="9" rx="1"/>
-                          <path d="M3 9V7c0-1 1-2 2-2h14c1 0 2 1 2 2v2"/>
-                          <circle cx="7" cy="18" r="2"/>
-                          <circle cx="17" cy="18" r="2"/>
-                        </>
-                      )}
-                    </svg>
-                  </div>
-                </div>
-                <div class="family-tile-body">
-                  <h3 class="family-tile-title">{tile.label}</h3>
-                  <div class="family-tile-meta">
-                    <span>{tile.modelCount} {tile.modelCount === 1 ? 'model' : tile.modelCount < 5 ? 'modely' : 'modelů'}</span>
-                    {hpStr && (
-                      <>
-                        <span>·</span>
-                        <span style="display:inline-flex; align-items:center; gap:4px;">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                          {hpStr}
-                        </span>
-                      </>
-                    )}
-                  </div>
-                  {yrStr && <div class="family-tile-year">{yrStr}</div>}
-                  {tile.seriesCount > 1 && (
-                    <div class="family-tile-series">{tile.seriesCount} generací</div>
-                  )}
-                </div>
-              </a>
-            );
-          })}
+          <div class="hero-photo-badge"><span class="n">{totalModels}+</span> modelů v katalogu</div>
         </div>
+      </div>
+    </section>
+
+    {categories.length > 1 && (
+      <div class="split-bar">
+        <div class="split-inner">
+          <nav class="cat-pills" aria-label="Kategorie">
+            {categories.map((c, i) => (
+              <a class:list={['pill', { active: i === 0 }]} href={`#${c.slug}`}>{c.name} <span class="c">{c.totalModels}</span></a>
+            ))}
+          </nav>
+        </div>
+      </div>
+    )}
+
+    {categories.map((cat) => (
+      <section class="cat" id={cat.slug}>
+        <div class="cat-head">
+          <div class="cat-title">
+            <h2>{cat.name}</h2>
+            <div class="cat-meta">
+              <strong>{cat.totalModels} modelů</strong> <span>v {cat.totalSeries} řadách</span>
+              {cat.minHp !== null && cat.maxHp !== null && (<><span class="sep"></span><strong>{cat.minHp}–{cat.maxHp} k</strong></>)}
+            </div>
+          </div>
+          <a class="cat-cta" href={`/stroje/${cat.slug}/`}>
+            Všechny značky
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        {cat.currentTiles.length > 0 && (
+          <>
+            <div class="block-label">
+              <span class="status current"><span class="dot"></span>Aktuální v prodeji</span>
+            </div>
+            <div class="family-grid">
+              {cat.currentTiles.map((t) => {
+                const bar = hpBar(t.minHp, t.maxHp, cat.hpMaxForBar);
+                const yearStr = t.minYear !== null
+                  ? (t.hasCurrent ? `${t.minYear}–dosud` : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
+                  : '';
+                const sub = familySublabel(t.family);
+                const hpStr = t.minHp !== null && t.maxHp !== null
+                  ? (t.minHp === t.maxHp ? `${t.minHp} k` : `${t.minHp}–${t.maxHp} k`)
+                  : '';
+                const coverStyle = t.coverImage
+                  ? `background-image:url('${t.coverImage}'); background-color:#FFFFFF; background-size:cover; background-position:center;`
+                  : `background:linear-gradient(135deg, ${brandC1} 0%, ${brandC2} 100%)`;
+                return (
+                  <a class="family-tile" href={`/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`}>
+                    <div class="ft-cover" data-has-photo={t.coverImage ? 'true' : 'false'} style={coverStyle}>
+                      {!t.coverImage && (
+                        <svg class="ft-silhouette" width="120" height="68" viewBox="0 0 140 80" fill="rgba(0,0,0,.18)" aria-hidden="true">
+                          {cat.slug === 'traktory' ? (
+                            <>
+                              <circle cx="100" cy="58" r="16"/><circle cx="42" cy="60" r="11"/>
+                              <path d="M26 54 Q32 28 54 26 L78 22 L86 12 L112 11 L120 22 L132 32 L132 54 Z"/>
+                            </>
+                          ) : (
+                            <>
+                              <rect x="20" y="42" width="100" height="22" rx="3"/>
+                              <path d="M20 42 Q25 24 50 22 L110 22 Q120 24 120 42 Z"/>
+                              <circle cx="40" cy="68" r="8"/><circle cx="100" cy="68" r="8"/>
+                            </>
+                          )}
+                        </svg>
+                      )}
+                    </div>
+                    <div class="ft-body">
+                      <div class="ft-head">
+                        <div>
+                          <div class="ft-title">{t.label}</div>
+                          {sub && <div class="ft-sub">{sub}</div>}
+                        </div>
+                        <span class="ft-count">{t.modelCount} {t.modelCount === 1 ? 'model' : t.modelCount < 5 ? 'modely' : 'modelů'}</span>
+                      </div>
+                      {hpStr && (
+                        <div class="ft-bar-wrap">
+                          <div class="ft-bar-row"><span>Výkon</span><span class="v">{hpStr}</span></div>
+                          <div class="ft-bar" style={`--from:${bar.from}%;--span:${bar.span}%`}></div>
+                        </div>
+                      )}
+                      <div class="ft-foot">
+                        <span class="year">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+                          {yearStr}
+                        </span>
+                        <span class="go">Řada →</span>
+                      </div>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </>
+        )}
+
+        {cat.legacyTiles.length > 0 && (
+          <>
+            <div class="block-label legacy-label">
+              <span class="status legacy"><span class="dot"></span>Starší řady · historie</span>
+            </div>
+            <div class="family-grid family-grid-legacy">
+              {cat.legacyTiles.map((t) => {
+                const bar = hpBar(t.minHp, t.maxHp, cat.hpMaxForBar);
+                const yearStr = t.minYear !== null
+                  ? (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`)
+                  : '';
+                const sub = familySublabel(t.family);
+                const hpStr = t.minHp !== null && t.maxHp !== null
+                  ? (t.minHp === t.maxHp ? `${t.minHp} k` : `${t.minHp}–${t.maxHp} k`)
+                  : '';
+                const coverStyle = t.coverImage
+                  ? `background-image:url('${t.coverImage}'); background-color:#FFFFFF; background-size:cover; background-position:center;`
+                  : `background:linear-gradient(135deg, ${brandC1} 0%, ${brandC2} 100%)`;
+                return (
+                  <a class="family-tile is-legacy" href={`/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`}>
+                    <div class="ft-cover" data-has-photo={t.coverImage ? 'true' : 'false'} style={coverStyle}>
+                      {!t.coverImage && (
+                        <svg class="ft-silhouette" width="120" height="68" viewBox="0 0 140 80" fill="rgba(0,0,0,.22)" aria-hidden="true">
+                          {cat.slug === 'traktory' ? (
+                            <>
+                              <circle cx="100" cy="58" r="16"/><circle cx="42" cy="60" r="11"/>
+                              <path d="M26 54 Q32 28 54 26 L78 22 L86 12 L112 11 L120 22 L132 32 L132 54 Z"/>
+                            </>
+                          ) : (
+                            <>
+                              <rect x="20" y="42" width="100" height="22" rx="3"/>
+                              <path d="M20 42 Q25 24 50 22 L110 22 Q120 24 120 42 Z"/>
+                              <circle cx="40" cy="68" r="8"/><circle cx="100" cy="68" r="8"/>
+                            </>
+                          )}
+                        </svg>
+                      )}
+                    </div>
+                    <div class="ft-body">
+                      <div class="ft-head">
+                        <div>
+                          <div class="ft-title">{t.label}</div>
+                          {sub && <div class="ft-sub">{sub}</div>}
+                        </div>
+                        <span class="ft-count">{t.modelCount} {t.modelCount === 1 ? 'model' : t.modelCount < 5 ? 'modely' : 'modelů'}</span>
+                      </div>
+                      {hpStr && (
+                        <div class="ft-bar-wrap">
+                          <div class="ft-bar-row"><span>Výkon</span><span class="v">{hpStr}</span></div>
+                          <div class="ft-bar" style={`--from:${bar.from}%;--span:${bar.span}%`}></div>
+                        </div>
+                      )}
+                      <div class="ft-foot">
+                        <span class="year">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+                          {yearStr}
+                        </span>
+                        <span class="go">Řada →</span>
+                      </div>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </>
+        )}
       </section>
     ))}
-  </div>
 
-  <style>
-    .family-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-    }
-    .family-tile {
-      display: block;
-      background: #fff;
-      border: 1px solid #e8e8e8;
-      border-radius: 18px;
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color .2s, box-shadow .2s, transform .1s;
-    }
-    .family-tile:hover {
-      border-color: #FFFF00;
-      box-shadow: 0 8px 24px rgba(0,0,0,.08);
-      transform: translateY(-2px);
-    }
-    .family-tile-img {
-      aspect-ratio: 4 / 3;
-      background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #bbb;
-    }
-    .family-tile:hover .family-tile-img {
-      background: linear-gradient(135deg, #fffcd9 0%, #FFFF00 100%);
-      color: #1a1a1a;
-    }
-    .family-tile-placeholder {
-      opacity: .6;
-    }
-    .family-tile:hover .family-tile-placeholder { opacity: 1; }
-    .family-tile-body {
-      padding: 16px 18px 18px;
-    }
-    .family-tile-title {
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: #1a1a1a;
-      margin-bottom: 8px;
-    }
-    .family-tile-meta {
-      display: flex;
-      gap: 6px;
-      font-size: 13px;
-      color: #555;
-      flex-wrap: wrap;
-      margin-bottom: 4px;
-    }
-    .family-tile-meta span { color: #555; }
-    .family-tile-year {
-      font-size: 12px;
-      color: #666;
-    }
-    .family-tile-series {
-      margin-top: 8px;
-      font-size: 11px;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      color: #666;
-      background: #fafafa;
-      padding: 4px 8px;
-      border-radius: 6px;
-      display: inline-block;
-    }
-  </style>
+    <section class="big-cta">
+      <div>
+        <span class="cta-kicker">Hledáte konkrétní model?</span>
+        <h2>{brand.name} v Agro bazaru<br />— inzeráty od soukromých prodejců i dealerů.</h2>
+        <p>Filtrujte podle řady, výkonu a roku. Kontakt přímo na prodejce, bez provize.</p>
+        <div class="cta-actions">
+          <a class="cta-btn primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}`}>
+            Otevřít bazar {brand.name}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-btn ghost" href="/bazar/novy/">Přidat vlastní inzerát</a>
+        </div>
+      </div>
+      <div class="cta-right">
+        <div class="cta-photo" style={`background-image:url('${heroPhoto}')`}></div>
+      </div>
+    </section>
+
+  </div>
 </Layout>
+
+<style>
+  .brand-page{
+    --yellow:#FFEA00;
+    --yellow-soft:#FFF6A8;
+    --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B;
+    --body:#1E1E22;
+    --muted:#6B6B72;
+    --muted-2:#9A9AA3;
+    --line:#EAEAEC;
+    --line-2:#DFDFE3;
+    --bg-cream:#FBFAF4;
+    --card:#FFFFFF;
+    --green:#0B7A3B;
+    --green-soft:#E3F3EA;
+    --legacy:#7A6B0B;
+    --legacy-soft:#F5EFC8;
+    --r-xl:24px;
+    --r-lg:18px;
+    --r-md:12px;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-2:0 4px 14px rgba(10,10,12,.06), 0 0 0 1px rgba(10,10,12,.04);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px;margin:0 auto;padding:26px 24px 96px;
+    color:var(--body);
+  }
+
+  .brand-page .breadcrumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px}
+  .brand-page .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s}
+  .brand-page .breadcrumb a:hover{color:#000}
+  .brand-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2)}
+  .brand-page .breadcrumb .current{color:#000;font-weight:600}
+
+  .brand-page .hero{
+    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+    background:
+      radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, color-mix(in srgb, var(--brand-c1) 36%, transparent), transparent 60%),
+      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+    padding:48px 48px 40px;margin-bottom:22px;
+    box-shadow:var(--sh-3);
+    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
+  }
+  .brand-page .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .brand-page .hero-left{position:relative;z-index:2}
+  .brand-page .kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--yellow);margin-bottom:18px;
+    padding:8px 14px;border:1px solid rgba(255,234,0,.4);border-radius:999px;
+    background:rgba(255,234,0,.06);
+  }
+  .brand-page .kicker .dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;box-shadow:0 0 0 3px rgba(255,234,0,.2)}
+  .brand-page .hero h1{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    font-size:clamp(2.2rem,5vw,4rem);color:#fff;line-height:.98;letter-spacing:-.03em;margin:0;
+  }
+  .brand-page .hero h1 em{font-style:normal;color:var(--yellow);text-shadow:0 0 40px rgba(255,234,0,.5)}
+  .brand-page .hero-lede{max-width:560px;font-size:16.5px;color:#c8c8d0;margin:18px 0 22px;line-height:1.55}
+
+  .brand-page .hero-stats{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:24px;font-family:'Chakra Petch',sans-serif}
+  .brand-page .hero-stats .s{display:flex;flex-direction:column;gap:3px}
+  .brand-page .hero-stats .n{font-size:26px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
+  .brand-page .hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .brand-page .hero-stats .s + .s{padding-left:28px;border-left:1px solid rgba(255,255,255,.12)}
+
+  .brand-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .brand-page .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--yellow);color:#0A0A0B;
+    padding:13px 18px;border-radius:12px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    transition:transform .15s, box-shadow .15s;
+    box-shadow:0 14px 40px -10px var(--yellow-glow);
+  }
+  .brand-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+  .brand-page .cta-primary svg{width:14px;height:14px}
+  .brand-page .cta-secondary{
+    display:inline-flex;align-items:center;gap:8px;
+    color:#c8c8d0;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    padding:13px 16px;border-radius:12px;text-decoration:none;
+    font:500 13px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    transition:.15s;
+  }
+  .brand-page .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+  .brand-page .cta-secondary svg{width:14px;height:14px;opacity:.7}
+
+  .brand-page .hero-right{position:relative;z-index:1;min-height:300px;display:flex;align-items:center;justify-content:center}
+  .brand-page .hero-photo{
+    width:100%;height:100%;min-height:300px;
+    background-size:cover;background-position:center;
+    border-radius:18px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
+    position:relative;overflow:hidden;
+  }
+  .brand-page .hero-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, color-mix(in srgb, var(--brand-c1) 24%, transparent) 100%);
+  }
+  .brand-page .hero-photo-logo{
+    position:absolute;left:16px;top:16px;z-index:2;
+    width:64px;height:64px;border-radius:14px;
+    background:#fff;padding:8px;
+    box-shadow:0 10px 30px -8px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.1);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .brand-page .hero-photo-logo img{max-width:100%;max-height:100%;object-fit:contain}
+  .brand-page .hero-photo-badge{
+    position:absolute;left:16px;bottom:16px;z-index:2;
+    background:rgba(10,10,11,.72);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.1);
+    color:#fff;padding:9px 13px;border-radius:10px;
+    font:500 12px 'Chakra Petch',sans-serif;
+    display:flex;align-items:center;gap:8px;
+  }
+  .brand-page .hero-photo-badge .n{font-weight:700;color:var(--yellow)}
+
+  .brand-page .split-bar{
+    position:sticky;top:88px;z-index:30;
+    background:rgba(255,255,255,.88);backdrop-filter:saturate(1.4) blur(14px);
+    border:1px solid var(--line);border-radius:14px;
+    padding:10px 14px;margin:0 0 22px;
+  }
+  .brand-page .split-inner{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brand-page .cat-pills{display:flex;gap:6px;flex-wrap:wrap}
+  .brand-page .pill{
+    display:inline-flex;align-items:center;gap:6px;padding:6px 12px;
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    font:500 13px 'Chakra Petch',sans-serif;color:#17171A;text-decoration:none;
+    transition:.15s;
+  }
+  .brand-page .pill:hover{background:var(--yellow-soft);border-color:var(--yellow);transform:translateY(-1px)}
+  .brand-page .pill.active{background:#0A0A0B;color:#fff;border-color:#0A0A0B}
+  .brand-page .pill .c{background:rgba(0,0,0,.06);color:#4a4a50;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:600}
+  .brand-page .pill.active .c{background:var(--yellow);color:#000}
+
+  .brand-page .cat{
+    margin:36px 0;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--r-xl);padding:24px 24px 22px;
+    scroll-margin-top:160px;
+    box-shadow:var(--sh-1);
+  }
+  .brand-page .cat-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px;flex-wrap:wrap}
+  .brand-page .cat-title h2{font-family:'Chakra Petch',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.1;color:var(--ink)}
+  .brand-page .cat-meta{display:flex;gap:8px;font-size:13px;color:var(--muted);align-items:center;margin-top:6px;flex-wrap:wrap}
+  .brand-page .cat-meta .sep{width:3px;height:3px;background:var(--muted-2);border-radius:50%}
+  .brand-page .cat-meta strong{color:#17171A;font-weight:600}
+  .brand-page .cat-cta{
+    font:600 13px 'Chakra Petch',sans-serif;color:#000;text-decoration:none;
+    background:var(--yellow);padding:11px 16px;border-radius:10px;
+    display:inline-flex;align-items:center;gap:8px;transition:.15s;
+  }
+  .brand-page .cat-cta:hover{transform:translateY(-1px);box-shadow:0 10px 30px -8px var(--yellow-glow)}
+  .brand-page .cat-cta svg{width:14px;height:14px}
+
+  .brand-page .block-label{
+    font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);display:flex;align-items:center;gap:12px;margin:8px 0 14px;
+  }
+  .brand-page .block-label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .brand-page .block-label.legacy-label{margin-top:24px}
+  .brand-page .block-label .status{
+    display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:999px;
+    font-size:11px;letter-spacing:.14em;
+  }
+  .brand-page .block-label .status.current{background:var(--green-soft);color:var(--green)}
+  .brand-page .block-label .status.current .dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:bp-pulse 2s infinite}
+  .brand-page .block-label .status.legacy{background:var(--legacy-soft);color:var(--legacy)}
+  .brand-page .block-label .status.legacy .dot{width:7px;height:7px;background:var(--legacy);border-radius:50%}
+  @keyframes bp-pulse{0%,100%{box-shadow:0 0 0 0 rgba(11,122,59,.4)}50%{box-shadow:0 0 0 5px rgba(11,122,59,0)}}
+
+  .brand-page .family-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .brand-page .family-tile{
+    position:relative;display:flex;flex-direction:column;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    overflow:hidden;text-decoration:none;color:inherit;
+    transition:.25s cubic-bezier(.2,.7,.2,1);
+  }
+  .brand-page .family-tile:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
+  .brand-page .family-tile:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+  .brand-page .family-tile.is-legacy{background:#FBFAF4}
+  .brand-page .family-tile.is-legacy .ft-cover{filter:saturate(.85)}
+  .brand-page .ft-cover{
+    height:140px;position:relative;overflow:hidden;
+    background-size:cover;background-position:center;background-color:#2a2a30;
+    display:flex;align-items:flex-end;
+  }
+  .brand-page .ft-cover::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.02) 50%, rgba(0,0,0,.4) 100%);
+  }
+  .brand-page .ft-silhouette{
+    position:absolute;left:8px;bottom:8px;width:120px;height:auto;
+    opacity:.85;pointer-events:none;
+  }
+  .brand-page .ft-body{padding:14px 16px 14px;display:flex;flex-direction:column;gap:9px;flex:1}
+  .brand-page .ft-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .brand-page .ft-title{font:700 18px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em;line-height:1.1}
+  .brand-page .ft-sub{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.35}
+  .brand-page .ft-count{
+    font:600 11px 'Chakra Petch',sans-serif;color:#17171A;
+    background:#F4F2E9;padding:3px 8px;border-radius:6px;letter-spacing:.04em;
+    white-space:nowrap;
+  }
+
+  .brand-page .ft-bar-wrap{display:flex;flex-direction:column;gap:4px}
+  .brand-page .ft-bar-row{display:flex;justify-content:space-between;align-items:center;
+    font:500 11px 'Chakra Petch',sans-serif;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+  .brand-page .ft-bar-row .v{font:600 12px 'Chakra Petch',sans-serif;color:#17171A;text-transform:none;letter-spacing:-.01em}
+  .brand-page .ft-bar{height:5px;background:#F1EFE7;border-radius:999px;overflow:hidden;position:relative}
+  .brand-page .ft-bar::before{
+    content:"";position:absolute;top:0;bottom:0;
+    left:var(--from,0%);width:var(--span,30%);
+    background:linear-gradient(90deg,var(--yellow) 0%,#FFD400 100%);
+    border-radius:999px;box-shadow:0 0 6px rgba(255,212,0,.6);
+  }
+
+  .brand-page .ft-foot{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:auto;padding-top:9px;border-top:1px dashed var(--line);
+    font-size:12.5px;color:var(--muted);
+  }
+  .brand-page .ft-foot .year{display:inline-flex;align-items:center;gap:5px;font:500 12px 'Chakra Petch',sans-serif;color:#17171A}
+  .brand-page .ft-foot .year svg{width:13px;height:13px;color:var(--muted)}
+  .brand-page .ft-foot .go{font:700 13px 'Chakra Petch',sans-serif;color:#0A0A0B;display:inline-flex;align-items:center;gap:4px;transition:transform .15s}
+  .brand-page .family-tile:hover .ft-foot .go{transform:translateX(2px)}
+
+  .brand-page .big-cta{
+    margin-top:32px;padding:36px;border-radius:var(--r-xl);
+    background:linear-gradient(135deg,var(--yellow) 0%,#FFD400 100%);
+    display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:center;
+    position:relative;overflow:hidden;box-shadow:0 10px 30px -8px var(--yellow-glow);
+  }
+  .brand-page .big-cta::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(400px 300px at 100% 100%, rgba(0,0,0,.12), transparent);
+  }
+  .brand-page .big-cta h2{font-family:'Chakra Petch',sans-serif;font-size:30px;line-height:1.05;letter-spacing:-.02em;position:relative;z-index:2;color:#0A0A0B;margin:0}
+  .brand-page .big-cta p{color:#2a2a2a;margin-top:10px;font-size:15px;position:relative;z-index:2}
+  .brand-page .cta-kicker{
+    display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.2em;text-transform:uppercase;
+    color:#0A0A0B;background:rgba(0,0,0,.08);padding:6px 12px;border-radius:999px;margin-bottom:14px;position:relative;z-index:2;
+  }
+  .brand-page .cta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:2}
+  .brand-page .cta-btn{
+    padding:15px 24px;border-radius:14px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+    display:inline-flex;align-items:center;gap:10px;
+    transition:.15s;
+  }
+  .brand-page .cta-btn.primary{background:#0A0A0B;color:#fff}
+  .brand-page .cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
+  .brand-page .cta-btn.ghost{background:rgba(255,255,255,.4);color:#0A0A0B;border:1px solid rgba(0,0,0,.15)}
+  .brand-page .cta-btn.ghost:hover{background:rgba(255,255,255,.7)}
+  .brand-page .cta-btn svg{width:14px;height:14px}
+  .brand-page .cta-right{position:relative;z-index:2;min-height:200px;display:flex;align-items:center;justify-content:center}
+  .brand-page .cta-photo{
+    width:100%;height:200px;border-radius:16px;
+    background-size:cover;background-position:center;
+    box-shadow:0 20px 40px -12px rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.1);
+    position:relative;overflow:hidden;
+  }
+  .brand-page .cta-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(0,0,0,.15))}
+
+  @media (max-width:960px){
+    .brand-page .hero{grid-template-columns:1fr;padding:32px 24px 28px;gap:18px}
+    .brand-page .hero-right{min-height:200px;order:2}
+    .brand-page .hero-photo{min-height:200px}
+    .brand-page .big-cta{grid-template-columns:1fr;padding:28px}
+    .brand-page .cta-right{min-height:0}
+    .brand-page .cta-photo{height:180px}
+    .brand-page .hero-stats .s + .s{padding-left:0;border-left:0}
+  }
+  @media (max-width:600px){
+    .brand-page{padding:20px 16px 60px}
+    .brand-page .cat{padding:18px}
+    .brand-page .cat-head{align-items:flex-start}
+    .brand-page .split-bar{top:72px}
+  }
+</style>
+
+<script>
+  const pills = document.querySelectorAll<HTMLAnchorElement>('.brand-page .cat-pills .pill');
+  const sections = document.querySelectorAll<HTMLElement>('.brand-page .cat[id]');
+  if (pills.length && sections.length && 'IntersectionObserver' in window) {
+    const byId = new Map<string, HTMLAnchorElement>();
+    pills.forEach((p) => {
+      const href = p.getAttribute('href') || '';
+      if (href.startsWith('#')) byId.set(href.slice(1), p);
+    });
+    const io = new IntersectionObserver((entries) => {
+      let topMost: { id: string; top: number } | null = null;
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const target = e.target as HTMLElement;
+          const top = e.boundingClientRect.top;
+          if (!topMost || top < topMost.top) topMost = { id: target.id, top };
+        }
+      });
+      if (topMost) {
+        pills.forEach((p) => p.classList.remove('active'));
+        const t = topMost as { id: string; top: number };
+        byId.get(t.id)?.classList.add('active');
+      }
+    }, { rootMargin: '-160px 0px -60% 0px', threshold: 0 });
+    sections.forEach((s) => io.observe(s));
+  }
+</script>

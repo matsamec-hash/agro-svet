@@ -19,6 +19,9 @@ const maxHp = hpValues.length ? Math.max(...hpValues) : 0;
 const years = models.map((m) => m.year_from).filter((x): x is number => x !== null);
 const minYear = years.length ? Math.min(...years) : 1990;
 
+const traktoryCount = models.filter((m) => m.category === 'traktory').length;
+const kombajnyCount = models.filter((m) => m.category === 'kombajny').length;
+
 const modelsJson = JSON.stringify(
   models.map((m) => ({
     slug: m.slug,
@@ -41,9 +44,26 @@ const breadcrumbJsonLd = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Katalog strojů', item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
   ],
 };
+
+// Brand cards data
+const brandCards = brands.map((b) => {
+  const bModels = models.filter((m) => m.brand_slug === b.slug);
+  const bHp = bModels.map((m) => m.power_hp).filter((x): x is number => x !== null);
+  return {
+    slug: b.slug,
+    name: b.name,
+    country: b.country,
+    founded: b.founded,
+    modelCount: bModels.length,
+    traktoryCount: bModels.filter((m) => m.category === 'traktory').length,
+    kombajnyCount: bModels.filter((m) => m.category === 'kombajny').length,
+    minHp: bHp.length ? Math.min(...bHp) : null,
+    maxHp: bHp.length ? Math.max(...bHp) : null,
+  };
+}).sort((a, b) => b.modelCount - a.modelCount);
 ---
 
 <Layout
@@ -51,136 +71,170 @@ const breadcrumbJsonLd = {
   description="Kompletní databáze traktorů a kombajnů — John Deere, Zetor, Fendt, New Holland, Case IH, Valtra, CLAAS a další. Filtrujte podle značky, výkonu a roku výroby."
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
-    <div style="margin-bottom:32px;">
-      <span class="section-label">Katalog strojů</span>
-      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
-        Traktory a kombajny
-      </h1>
-      <p style="font-size:16px; color:#666; max-width:640px; line-height:1.6;">
-        Databáze {totalModels}+ modelů zemědělské techniky z {brands.length} značek od roku {minYear} až po současnost.
-        Filtrujte podle značky, výkonu, roku výroby a řady.
-      </p>
-    </div>
+  <div class="catalog-root">
 
-    <!-- Stats strip -->
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:32px;">
-      <div style="background:#1a1a1a; color:#fff; padding:20px; border-radius:18px;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700; color:#FFFF00;">{totalModels}</div>
-        <div style="font-size:13px; color:rgba(255,255,255,.6);">modelů v databázi</div>
-      </div>
-      <div style="background:#f5f5f5; padding:20px; border-radius:18px;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700;">{brands.length}</div>
-        <div style="font-size:13px; color:#666;">značek</div>
-      </div>
-      <div style="background:#f5f5f5; padding:20px; border-radius:18px;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700;">{totalSeries}</div>
-        <div style="font-size:13px; color:#666;">řad (serií)</div>
-      </div>
-      <div style="background:#f5f5f5; padding:20px; border-radius:18px;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700;">{minHp}–{maxHp}</div>
-        <div style="font-size:13px; color:#666;">k (rozsah výkonů)</div>
-      </div>
-    </div>
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">Technika</span>
+    </nav>
 
-    <!-- Filter panel -->
-    <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:20px; margin-bottom:24px;">
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:12px;">
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Kategorie</div>
-          <select id="f-category" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; background:#fff;">
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Katalog · Technika</span>
+        <h1>Zemědělská <em>technika</em></h1>
+        <p class="hero-lede">
+          Kompletní databáze {totalModels}+ modelů traktorů a kombajnů z {brands.length} značek
+          od roku {minYear} až po současnost. Aktuální produkce i historické modely pro bazarový průzkum.
+        </p>
+
+        <div class="hero-stats">
+          <div class="s"><span class="n">{totalModels}+</span><span class="l">modelů</span></div>
+          <div class="s"><span class="n">{brands.length}</span><span class="l">značek</span></div>
+          <div class="s"><span class="n">{totalSeries}</span><span class="l">řad</span></div>
+          <div class="s"><span class="n">{minHp}–{maxHp} k</span><span class="l">výkon</span></div>
+        </div>
+
+        <div class="hero-actions">
+          <a class="cta-primary" href="/stroje/traktory/">
+            Traktory <span class="cta-c">{traktoryCount}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-primary" href="/stroje/kombajny/">
+            Kombajny <span class="cta-c">{kombajnyCount}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-secondary" href="#znacky">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            Značky
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-photo-stack">
+          <div class="hsp-tile hsp-traktor" style="background-image:url('/images/traktor.webp')">
+            <div class="hsp-label"><span>Traktory</span><span class="c">{traktoryCount}</span></div>
+          </div>
+          <div class="hsp-tile hsp-kombajn" style="background-image:url('/images/kombajn.webp')">
+            <div class="hsp-label"><span>Kombajny</span><span class="c">{kombajnyCount}</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="filter-card" aria-labelledby="filter-title">
+      <div class="fc-head">
+        <h2 id="filter-title">Filtr katalogu</h2>
+        <span class="fc-sub">Filtrujte podle kategorie, značky, výkonu a roku</span>
+      </div>
+      <div class="fc-grid">
+        <label class="fc-field">
+          <span class="fc-label">Kategorie</span>
+          <select id="f-category">
             <option value="">Všechny kategorie</option>
             <option value="traktory">Traktory</option>
             <option value="kombajny">Kombajny</option>
           </select>
         </label>
 
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Značka</div>
-          <select id="f-brand" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; background:#fff;">
+        <label class="fc-field">
+          <span class="fc-label">Značka</span>
+          <select id="f-brand">
             <option value="">Všechny značky</option>
             {brands.map((b) => <option value={b.slug}>{b.name}</option>)}
           </select>
         </label>
 
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Výkon od (k)</div>
-          <input id="f-hp-min" type="number" min="0" placeholder={`${minHp}`} style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px;" />
+        <label class="fc-field">
+          <span class="fc-label">Výkon od (k)</span>
+          <input id="f-hp-min" type="number" min="0" placeholder={`${minHp}`} />
         </label>
 
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Výkon do (k)</div>
-          <input id="f-hp-max" type="number" min="0" placeholder={`${maxHp}`} style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px;" />
+        <label class="fc-field">
+          <span class="fc-label">Výkon do (k)</span>
+          <input id="f-hp-max" type="number" min="0" placeholder={`${maxHp}`} />
         </label>
 
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Rok od</div>
-          <input id="f-year-min" type="number" min="1950" max="2030" placeholder={`${minYear}`} style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px;" />
+        <label class="fc-field">
+          <span class="fc-label">Rok od</span>
+          <input id="f-year-min" type="number" min="1950" max="2030" placeholder={`${minYear}`} />
         </label>
 
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Rok do</div>
-          <input id="f-year-max" type="number" min="1950" max="2030" placeholder="2026" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px;" />
+        <label class="fc-field">
+          <span class="fc-label">Rok do</span>
+          <input id="f-year-max" type="number" min="1950" max="2030" placeholder="2026" />
         </label>
 
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Hledat model</div>
-          <input id="f-search" type="search" placeholder="např. 8R 410" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px;" />
+        <label class="fc-field fc-field-search">
+          <span class="fc-label">Hledat model</span>
+          <input id="f-search" type="search" placeholder={`např. "Zetor Proxima 120"`} />
         </label>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-        <div id="result-count" style="font-size:13px; color:#666;"></div>
-        <button id="f-reset" style="background:none; border:1px solid #ddd; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer;">Resetovat filtry</button>
+      <div class="fc-foot">
+        <span id="result-count" class="fc-count"></span>
+        <button id="f-reset" type="button">Resetovat filtry</button>
       </div>
-    </div>
+    </section>
 
-    <h2 id="znacky" style="font-family:'Chakra Petch',sans-serif; font-size:24px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">Značky</h2>
-    <!-- Brand grid (when no filters) -->
-    <div id="brand-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; margin-bottom:32px;">
-      {brands.map((b) => {
-        const brandModels = models.filter((m) => m.brand_slug === b.slug);
-        const brandHp = brandModels.map((m) => m.power_hp).filter((x): x is number => x !== null);
-        const traktoryCount = brandModels.filter((m) => m.category === 'traktory').length;
-        const kombajnyCount = brandModels.filter((m) => m.category === 'kombajny').length;
-        return (
-          <a href={`/stroje/${b.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:20px; transition:box-shadow .2s, transform .2s;" class="brand-card">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-              <h3 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a;">{b.name}</h3>
-              <span style="font-size:12px; color:#767676;">{b.country}</span>
+    <h2 id="znacky-heading" class="section-title">Značky <span class="section-title-c">{brands.length}</span></h2>
+    <h2 id="results-heading" class="section-title results-heading">Výsledky <span id="results-heading-c" class="section-title-c"></span></h2>
+    <div id="brand-grid" class="brand-grid">
+      {brandCards.map((b) => (
+        <a href={`/stroje/${b.slug}/`} class="brand-card">
+          <div class="bc-head">
+            <div class="bc-logo">
+              <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="64" height="64" />
             </div>
-            <div style="display:flex; gap:12px; font-size:13px; color:#666; margin-bottom:10px;">
-              {traktoryCount > 0 && (
-                <span style="display:inline-flex; align-items:center; gap:6px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="7" cy="17" r="2"/><circle cx="18" cy="17" r="3"/>
-                    <path d="M4 17H3v-4l2-2h4l3-4h5v10h-2"/>
-                  </svg>
-                  {traktoryCount} traktorů
-                </span>
-              )}
-              {kombajnyCount > 0 && (
-                <span style="display:inline-flex; align-items:center; gap:6px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="3" y="9" width="18" height="9" rx="1"/>
-                    <path d="M3 9V7c0-1 1-2 2-2h14c1 0 2 1 2 2v2"/>
-                    <circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>
-                  </svg>
-                  {kombajnyCount} kombajnů
-                </span>
-              )}
+            <div class="bc-title">
+              <h3>{b.name}</h3>
+              <span class="bc-meta-1">{b.country} · od <strong>{b.founded}</strong></span>
             </div>
-            {brandHp.length > 0 && (
-              <div style="font-size:12px; color:#666;">
-                Výkon: {Math.min(...brandHp)}–{Math.max(...brandHp)} k
+          </div>
+          <div class="bc-stats">
+            <div class="bc-stat">
+              <span class="bc-stat-n">{b.modelCount}</span>
+              <span class="bc-stat-l">modelů</span>
+            </div>
+            {b.minHp !== null && b.maxHp !== null && (
+              <div class="bc-stat">
+                <span class="bc-stat-n">{b.minHp}–{b.maxHp} <em>k</em></span>
+                <span class="bc-stat-l">výkon</span>
               </div>
             )}
-          </a>
-        );
-      })}
+          </div>
+          <div class="bc-cats">
+            {b.traktoryCount > 0 && <span class="bc-cat">Traktory <strong>{b.traktoryCount}</strong></span>}
+            {b.kombajnyCount > 0 && <span class="bc-cat">Kombajny <strong>{b.kombajnyCount}</strong></span>}
+          </div>
+          <div class="bc-foot">
+            <span>Detail značky</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+      ))}
     </div>
 
-    <!-- Filtered results grid (hidden by default, shown when filters applied) -->
-    <div id="results-grid" style="display:none; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px;"></div>
+    <div id="results-grid" class="results-grid"></div>
+
+    <section class="big-cta">
+      <div>
+        <span class="cta-kicker">Prodáváte techniku?</span>
+        <h2>Inzerát v Agro bazaru<br />zdarma a bez provize.</h2>
+        <p>30 dní inzerát · až 5 fotek · kontakt přímo na prodejce · žádný poplatek za zveřejnění.</p>
+        <div class="cta-actions">
+          <a class="cta-btn primary" href="/bazar/novy/">
+            Přidat inzerát zdarma
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-btn ghost" href="/bazar/">Procházet bazar</a>
+        </div>
+      </div>
+      <div class="cta-right">
+        <div class="cta-photo" style="background-image:url('/images/traktor.webp')"></div>
+      </div>
+    </section>
+
   </div>
 
   <script is:inline set:html={`window.__STROJE_DATA__ = ${modelsJson};`}></script>
@@ -214,6 +268,9 @@ const breadcrumbJsonLd = {
       count: document.getElementById('result-count') as HTMLElement,
       brandGrid: document.getElementById('brand-grid') as HTMLElement,
       resultsGrid: document.getElementById('results-grid') as HTMLElement,
+      znackyHeading: document.getElementById('znacky-heading') as HTMLElement,
+      resultsHeading: document.getElementById('results-heading') as HTMLElement,
+      resultsHeadingCount: document.getElementById('results-heading-c') as HTMLElement,
     };
 
     function anyFilterActive(): boolean {
@@ -230,19 +287,21 @@ const breadcrumbJsonLd = {
 
     function renderCard(m: Model): string {
       const hp = m.power_hp ? `${m.power_hp} k` : '—';
-      const kw = m.power_kw ? ` (${m.power_kw} kW)` : '';
+      const kw = m.power_kw ? ` · ${m.power_kw} kW` : '';
       const yr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '';
+      const isCurrent = m.year_to === null && m.year_from !== null;
       return `
-        <a href="${modelUrl(m)}" style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:box-shadow .2s, transform .2s;" class="model-card">
-          <div style="display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;">
-            <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:10px; font-weight:400; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">${m.brand_name}</span>
-            <span style="background:#f0f0f0; color:#555; font-size:10px; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">${m.category === 'traktory' ? 'Traktor' : 'Kombajn'}</span>
+        <a href="${modelUrl(m)}" class="rc-card">
+          <div class="rc-tags">
+            <span class="rc-tag rc-tag-brand">${m.brand_name}</span>
+            <span class="rc-tag rc-tag-cat">${m.category === 'traktory' ? 'Traktor' : 'Kombajn'}</span>
+            ${isCurrent ? '<span class="rc-tag rc-tag-current"><span class="rc-dot"></span>Aktuální</span>' : ''}
           </div>
-          <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">${m.name}</div>
-          <div style="font-size:12px; color:#666; margin-bottom:8px;">${m.series_name}</div>
-          <div style="display:flex; justify-content:space-between; font-size:13px; color:#555;">
-            <span style="display:inline-flex; align-items:center; gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>${hp}${kw}</span>
-            <span>${yr}</span>
+          <div class="rc-name">${m.name}</div>
+          <div class="rc-series">${m.series_name}</div>
+          <div class="rc-foot">
+            <span class="rc-power"><strong>${hp}</strong>${kw}</span>
+            <span class="rc-year">${yr}</span>
           </div>
         </a>
       `;
@@ -290,14 +349,19 @@ const breadcrumbJsonLd = {
       if (active) {
         el.brandGrid.style.display = 'none';
         el.resultsGrid.style.display = 'grid';
+        el.znackyHeading.style.display = 'none';
+        el.resultsHeading.style.display = 'inline-flex';
         const sorted = filtered.sort((a, b) => (b.power_hp ?? 0) - (a.power_hp ?? 0));
         el.resultsGrid.innerHTML = sorted.length > 0
           ? sorted.map(renderCard).join('')
-          : '<div style="grid-column:1/-1; padding:48px; text-align:center; color:#767676;">Žádné modely neodpovídají filtrům.</div>';
+          : '<div class="rg-empty">Žádné modely neodpovídají filtrům. Zkuste je rozvolnit nebo resetovat.</div>';
         el.count.textContent = `Nalezeno ${filtered.length} modelů`;
+        el.resultsHeadingCount.textContent = String(filtered.length);
       } else {
         el.brandGrid.style.display = 'grid';
         el.resultsGrid.style.display = 'none';
+        el.znackyHeading.style.display = 'inline-flex';
+        el.resultsHeading.style.display = 'none';
         el.count.textContent = '';
       }
     }
@@ -317,7 +381,6 @@ const breadcrumbJsonLd = {
       applyFilters();
     });
 
-    // Apply filters from URL query params on load
     const params = new URLSearchParams(window.location.search);
     if (params.get('kategorie')) el.category.value = params.get('kategorie')!;
     if (params.get('znacka')) el.brand.value = params.get('znacka')!;
@@ -330,19 +393,280 @@ const breadcrumbJsonLd = {
   </script>
 
   <style>
-    .section-label {
-      display: inline-block;
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #1a1a1a;
-      background: #FFFF00;
-      padding: 4px 10px;
-      border-radius: 3px;
-      margin-bottom: 14px;
+    .catalog-root{
+      --yellow:#FFEA00;
+      --yellow-soft:#FFF6A8;
+      --yellow-glow:rgba(255,234,0,.35);
+      --ink:#0A0A0B;
+      --body:#1E1E22;
+      --muted:#6B6B72;
+      --muted-2:#9A9AA3;
+      --line:#EAEAEC;
+      --line-2:#DFDFE3;
+      --bg-cream:#FBFAF4;
+      --card:#FFFFFF;
+      --green:#0B7A3B;
+      --green-soft:#E3F3EA;
+      --r-xl:24px;
+      --r-lg:18px;
+      --r-md:12px;
+      --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+      --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+      max-width:1280px;margin:0 auto;padding:26px 24px 96px;
+      color:var(--body);
     }
-    .brand-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
-    .model-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
+
+    .catalog-root .breadcrumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px}
+    .catalog-root .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s}
+    .catalog-root .breadcrumb a:hover{color:#000}
+    .catalog-root .breadcrumb svg{width:14px;height:14px;color:var(--muted-2)}
+    .catalog-root .breadcrumb .current{color:#000;font-weight:600}
+
+    .catalog-root .hero{
+      position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+      background:radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+        radial-gradient(700px 400px at 90% 90%, rgba(80,80,90,.4), transparent 60%),
+        linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+      padding:48px 48px 40px;margin-bottom:22px;
+      box-shadow:var(--sh-3);
+      display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
+    }
+    .catalog-root .hero::before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+      background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size:48px 48px;
+      mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+    }
+    .catalog-root .hero-left{position:relative;z-index:2}
+    .catalog-root .kicker{
+      display:inline-flex;align-items:center;gap:10px;
+      font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.22em;text-transform:uppercase;
+      color:var(--yellow);margin-bottom:18px;
+      padding:8px 14px;border:1px solid rgba(255,234,0,.4);border-radius:999px;
+      background:rgba(255,234,0,.06);
+    }
+    .catalog-root .kicker .dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;box-shadow:0 0 0 3px rgba(255,234,0,.2)}
+    .catalog-root .hero h1{
+      font-family:'Chakra Petch',sans-serif;font-weight:700;
+      font-size:clamp(2.4rem,5.5vw,4.4rem);color:#fff;line-height:.96;letter-spacing:-.03em;margin:0;
+    }
+    .catalog-root .hero h1 em{font-style:normal;color:var(--yellow);text-shadow:0 0 40px rgba(255,234,0,.5)}
+    .catalog-root .hero-lede{max-width:580px;font-size:16px;color:#c8c8d0;margin:18px 0 22px;line-height:1.6}
+
+    .catalog-root .hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px;font-family:'Chakra Petch',sans-serif}
+    .catalog-root .hero-stats .s{display:flex;flex-direction:column;gap:3px}
+    .catalog-root .hero-stats .n{font-size:24px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
+    .catalog-root .hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+    .catalog-root .hero-stats .s + .s{padding-left:24px;border-left:1px solid rgba(255,255,255,.12)}
+
+    .catalog-root .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .catalog-root .cta-primary{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--yellow);color:#0A0A0B;padding:13px 18px;border-radius:12px;text-decoration:none;
+      font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+      transition:transform .15s, box-shadow .15s;
+      box-shadow:0 14px 40px -10px var(--yellow-glow);
+    }
+    .catalog-root .cta-primary .cta-c{
+      background:#0A0A0B;color:var(--yellow);font-size:11px;padding:2px 7px;border-radius:6px;letter-spacing:.06em;
+    }
+    .catalog-root .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+    .catalog-root .cta-secondary{
+      display:inline-flex;align-items:center;gap:8px;
+      color:#c8c8d0;background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      padding:13px 16px;border-radius:12px;text-decoration:none;
+      font:500 13px 'Chakra Petch',sans-serif;
+      transition:.15s;
+    }
+    .catalog-root .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+
+    .catalog-root .hero-right{position:relative;z-index:1;min-height:300px}
+    .catalog-root .hero-photo-stack{
+      display:grid;grid-template-rows:1fr 1fr;gap:10px;height:100%;min-height:300px;
+    }
+    .catalog-root .hsp-tile{
+      position:relative;border-radius:14px;overflow:hidden;
+      background-size:cover;background-position:center;
+      box-shadow:0 14px 40px -16px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.08);
+    }
+    .catalog-root .hsp-tile::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,.05) 30%, rgba(0,0,0,.6) 100%);
+    }
+    .catalog-root .hsp-label{
+      position:absolute;left:14px;bottom:12px;z-index:2;
+      display:flex;align-items:center;gap:8px;
+      color:#fff;font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.04em;text-transform:uppercase;
+    }
+    .catalog-root .hsp-label .c{
+      background:var(--yellow);color:#0A0A0B;font-size:12px;padding:3px 8px;border-radius:6px;
+    }
+
+    .catalog-root .filter-card{
+      background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);
+      padding:22px;margin-bottom:24px;box-shadow:var(--sh-1);
+    }
+    .catalog-root .fc-head{margin-bottom:14px}
+    .catalog-root .fc-head h2{font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.01em;margin:0;color:var(--ink)}
+    .catalog-root .fc-sub{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+
+    .catalog-root .fc-grid{
+      display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;
+    }
+    .catalog-root .fc-field-search{grid-column:span 2}
+    .catalog-root .fc-field{display:flex;flex-direction:column;gap:6px}
+    .catalog-root .fc-label{font:600 11px 'Chakra Petch',sans-serif;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+    .catalog-root .fc-field input, .catalog-root .fc-field select{
+      width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;
+      background:#FBFAF4;font:500 14px 'Roboto Condensed',sans-serif;color:var(--ink);
+      transition:.15s;
+    }
+    .catalog-root .fc-field input:focus, .catalog-root .fc-field select:focus{
+      outline:0;border-color:var(--yellow);background:#fff;
+      box-shadow:0 0 0 4px rgba(255,234,0,.2);
+    }
+    .catalog-root .fc-foot{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+    }
+    .catalog-root .fc-count{font:600 13px 'Chakra Petch',sans-serif;color:var(--ink)}
+    .catalog-root #f-reset{
+      background:#FBFAF4;border:1px solid var(--line);padding:9px 14px;border-radius:10px;
+      font:600 13px 'Chakra Petch',sans-serif;color:var(--ink);cursor:pointer;transition:.15s;
+    }
+    .catalog-root #f-reset:hover{background:var(--yellow-soft);border-color:var(--yellow)}
+
+    .catalog-root .section-title{
+      font-family:'Chakra Petch',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;
+      margin:14px 0 14px;color:var(--ink);
+      display:inline-flex;align-items:center;gap:10px;
+    }
+    .catalog-root .section-title-c{
+      font-size:14px;background:var(--yellow);color:#0A0A0B;padding:3px 10px;border-radius:8px;letter-spacing:.04em;
+    }
+
+    .catalog-root .brand-grid{
+      display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:14px;
+    }
+    .catalog-root .brand-card{
+      display:flex;flex-direction:column;
+      background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+      padding:18px;text-decoration:none;color:inherit;
+      transition:.22s cubic-bezier(.2,.7,.2,1);
+    }
+    .catalog-root .brand-card:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
+    .catalog-root .bc-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+    .catalog-root .bc-logo{
+      width:56px;height:56px;border-radius:12px;background:#fff;
+      border:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:8px;
+      flex-shrink:0;
+    }
+    .catalog-root .bc-logo img{max-width:100%;max-height:100%;object-fit:contain}
+    .catalog-root .bc-title h3{font:700 19px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em;margin:0;line-height:1.1}
+    .catalog-root .bc-meta-1{font-size:12px;color:var(--muted);margin-top:3px;display:block}
+    .catalog-root .bc-meta-1 strong{color:var(--ink);font-weight:600}
+
+    .catalog-root .bc-stats{display:flex;gap:18px;margin-bottom:12px;font-family:'Chakra Petch',sans-serif}
+    .catalog-root .bc-stat{display:flex;flex-direction:column}
+    .catalog-root .bc-stat-n{font-size:18px;font-weight:700;color:var(--ink);line-height:1;white-space:nowrap}
+    .catalog-root .bc-stat-n em{font-style:normal;font-size:14px;font-weight:600;color:var(--muted);margin-left:1px}
+    .catalog-root .bc-stat-l{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+
+    .catalog-root .bc-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+    .catalog-root .bc-cat{
+      font:500 11.5px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:.04em;
+      background:#FBFAF4;border:1px solid var(--line);padding:4px 9px;border-radius:6px;
+    }
+    .catalog-root .bc-cat strong{color:#0A0A0B;font-weight:700;margin-left:3px}
+
+    .catalog-root .bc-foot{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-top:auto;padding-top:12px;border-top:1px dashed var(--line);
+      font:700 13px 'Chakra Petch',sans-serif;color:var(--ink);
+    }
+    .catalog-root .bc-foot svg{transition:transform .15s}
+    .catalog-root .brand-card:hover .bc-foot svg{transform:translateX(3px)}
+
+    .catalog-root .results-grid{
+      display:none;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:12px;
+    }
+    .catalog-root .results-heading{display:none}
+    .catalog-root :global(.rc-card){
+      display:block;text-decoration:none;color:inherit;
+      background:#FFFFFF;border:1px solid #EAEAEC;border-radius:18px;
+      padding:14px 16px;transition:.18s;
+    }
+    .catalog-root :global(.rc-card:hover){transform:translateY(-2px);box-shadow:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);border-color:#FFEA00}
+    .catalog-root :global(.rc-tags){display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+    .catalog-root :global(.rc-tag){
+      font:600 10px 'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;
+      padding:3px 7px;border-radius:5px;
+    }
+    .catalog-root :global(.rc-tag-brand){background:#FFEA00;color:#0A0A0B}
+    .catalog-root :global(.rc-tag-cat){background:#FBFAF4;color:#6B6B72;border:1px solid #EAEAEC}
+    .catalog-root :global(.rc-tag-current){background:#E3F3EA;color:#0B7A3B;display:inline-flex;align-items:center;gap:4px}
+    .catalog-root :global(.rc-dot){width:5px;height:5px;background:#0B7A3B;border-radius:50%}
+    .catalog-root :global(.rc-name){font:700 18px 'Chakra Petch',sans-serif;color:#0A0A0B;letter-spacing:-.01em;margin-bottom:3px}
+    .catalog-root :global(.rc-series){font-size:12px;color:#6B6B72;margin-bottom:10px}
+    .catalog-root :global(.rc-foot){display:flex;justify-content:space-between;align-items:baseline;font-family:'Chakra Petch',sans-serif;font-size:13px}
+    .catalog-root :global(.rc-power strong){color:#0A0A0B;font-weight:700}
+    .catalog-root :global(.rc-power){color:#6B6B72}
+    .catalog-root :global(.rc-year){color:#6B6B72}
+    .catalog-root :global(.rg-empty){
+      grid-column:1/-1;padding:40px;text-align:center;color:#6B6B72;
+      background:#FFFFFF;border:1px dashed #EAEAEC;border-radius:18px;
+    }
+
+    .catalog-root .big-cta{
+      margin-top:32px;padding:36px;border-radius:var(--r-xl);
+      background:linear-gradient(135deg,var(--yellow) 0%,#FFD400 100%);
+      display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:center;
+      position:relative;overflow:hidden;box-shadow:0 10px 30px -8px var(--yellow-glow);
+    }
+    .catalog-root .big-cta::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(400px 300px at 100% 100%, rgba(0,0,0,.12), transparent);
+    }
+    .catalog-root .big-cta h2{font-family:'Chakra Petch',sans-serif;font-size:30px;line-height:1.05;letter-spacing:-.02em;position:relative;z-index:2;color:#0A0A0B;margin:0}
+    .catalog-root .big-cta p{color:#2a2a2a;margin-top:10px;font-size:15px;position:relative;z-index:2}
+    .catalog-root .cta-kicker{
+      display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.2em;text-transform:uppercase;
+      color:#0A0A0B;background:rgba(0,0,0,.08);padding:6px 12px;border-radius:999px;margin-bottom:14px;position:relative;z-index:2;
+    }
+    .catalog-root .cta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:2}
+    .catalog-root .cta-btn{
+      padding:15px 24px;border-radius:14px;text-decoration:none;
+      font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+      display:inline-flex;align-items:center;gap:10px;transition:.15s;
+    }
+    .catalog-root .cta-btn.primary{background:#0A0A0B;color:#fff}
+    .catalog-root .cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
+    .catalog-root .cta-btn.ghost{background:rgba(255,255,255,.4);color:#0A0A0B;border:1px solid rgba(0,0,0,.15)}
+    .catalog-root .cta-btn.ghost:hover{background:rgba(255,255,255,.7)}
+    .catalog-root .cta-right{position:relative;z-index:2;min-height:200px}
+    .catalog-root .cta-photo{
+      width:100%;height:200px;border-radius:16px;
+      background-size:cover;background-position:center;
+      box-shadow:0 20px 40px -12px rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.1);
+      position:relative;overflow:hidden;
+    }
+    .catalog-root .cta-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(0,0,0,.15))}
+
+    @media (max-width:960px){
+      .catalog-root .hero{grid-template-columns:1fr;padding:32px 24px 28px;gap:18px}
+      .catalog-root .hero-right{min-height:240px;order:2}
+      .catalog-root .hero-photo-stack{min-height:240px}
+      .catalog-root .big-cta{grid-template-columns:1fr;padding:28px}
+      .catalog-root .cta-right{min-height:0}
+      .catalog-root .cta-photo{height:180px}
+      .catalog-root .hero-stats .s + .s{padding-left:0;border-left:0}
+      .catalog-root .fc-field-search{grid-column:auto}
+    }
+    @media (max-width:600px){
+      .catalog-root{padding:20px 16px 60px}
+      .catalog-root .filter-card{padding:18px}
+    }
   </style>
 </Layout>

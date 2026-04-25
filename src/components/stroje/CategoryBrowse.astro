@@ -10,6 +10,63 @@ const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',
   kombajny: 'Kombajny',
 };
+const categoryHero: Record<StrojKategorie, string> = {
+  traktory: '/images/traktor.webp',
+  kombajny: '/images/kombajn.webp',
+};
+const categoryLede: Record<StrojKategorie, string> = {
+  traktory:
+    'Kompletní encyklopedie modelových řad — od zahradních „jednadvacítek“ po 620k obry na polích. Aktuální produkce i historické modely pro bazarový průzkum.',
+  kombajny:
+    'Přehled sklízecích mlátiček — od kompaktních 4-bubnových po hybridy s rotorem. Kapacita zásobníku, šířka záběru, motorizace per modelová řada.',
+};
+
+const brandCreditUrl: Record<string, string> = {
+  'john-deere': 'https://www.deere.cz/cs/traktory/',
+  fendt: 'https://www.fendt.com/cz/traktory',
+  claas: 'https://www.claas.com/cs-cz/zemedelske-stroje/traktory',
+  zetor: 'https://www.zetor.com/cs/zetor-products',
+};
+function brandCreditLabel(slug: string): string {
+  const url = brandCreditUrl[slug];
+  if (!url) return '';
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+const brandColors: Record<string, [string, string]> = {
+  'john-deere': ['#4A9838', '#2E6B22'],
+  fendt: ['#3FA85D', '#0E6730'],
+  claas: ['#9C9532', '#65601A'],
+  'deutz-fahr': ['#2BA84A', '#1a5e2a'],
+  kubota: ['#FF6B1A', '#C24414'],
+  'new-holland': ['#3874AC', '#1A4370'],
+  'case-ih': ['#D62A2A', '#8F1818'],
+  'massey-ferguson': ['#D62A2A', '#8F1818'],
+  valtra: ['#1F1F1F', '#0A0A0A'],
+  zetor: ['#E93A3A', '#A01818'],
+};
+const brandInitials: Record<string, string> = {
+  'john-deere': 'JD',
+  fendt: 'F',
+  claas: 'C',
+  'deutz-fahr': 'DF',
+  kubota: 'K',
+  'new-holland': 'NH',
+  'case-ih': 'CI',
+  'massey-ferguson': 'MF',
+  valtra: 'V',
+  zetor: 'Z',
+};
+function brandTone(slug: string): [string, string] {
+  return brandColors[slug] ?? ['#2a2a30', '#0a0a0b'];
+}
+function brandInitial(slug: string, name: string): string {
+  return brandInitials[slug] ?? name.slice(0, 2).toUpperCase();
+}
 
 type Tile = {
   family: string;
@@ -21,30 +78,40 @@ type Tile = {
   minYear: number | null;
   maxYear: number | null;
   hasCurrent: boolean;
+  coverImage: string | null;
 };
 
 type BrandSection = {
   slug: string;
   name: string;
   country: string;
-  description?: string;
+  founded: number;
   modelCount: number;
+  seriesCount: number;
   minHp: number | null;
   maxHp: number | null;
-  tiles: Tile[];
+  topTiles: Tile[];
+  legacyCount: number;
+  legacyModelCount: number;
+  legacyExamples: string[];
 };
+
+const HP_MAX_FOR_BAR = category === 'traktory' ? 620 : 700;
+const TOP_TILES = 4;
+const PRIORITY_BRANDS = ['john-deere', 'fendt', 'claas'];
 
 function buildTilesForCategory(brand: any): Tile[] {
   const cat = brand.categories?.[category];
   if (!cat) return [];
   const byFamily = new Map<string, Tile>();
   for (const s of cat.series ?? []) {
-    const fam = seriesFamily(s.slug);
+    const fam = (s as any).family || seriesFamily(s.slug);
+    const labelOverride = (s as any).family_label;
     let t = byFamily.get(fam);
     if (!t) {
       t = {
         family: fam,
-        label: familyLabel(fam),
+        label: labelOverride || familyLabel(fam),
         modelCount: 0,
         seriesCount: 0,
         minHp: null,
@@ -52,10 +119,13 @@ function buildTilesForCategory(brand: any): Tile[] {
         minYear: null,
         maxYear: null,
         hasCurrent: false,
+        coverImage: null,
       };
       byFamily.set(fam, t);
     }
     t.seriesCount += 1;
+    if (labelOverride) t.label = labelOverride;
+    if (!t.coverImage && (s as any).image_url) t.coverImage = (s as any).image_url;
     for (const m of s.models ?? []) {
       t.modelCount += 1;
       if (m.power_hp !== null) {
@@ -72,34 +142,69 @@ function buildTilesForCategory(brand: any): Tile[] {
       }
     }
   }
-  return [...byFamily.values()].sort((a, b) => {
-    const aDigit = /^\d+$/.test(a.family);
-    const bDigit = /^\d+$/.test(b.family);
-    if (aDigit && bDigit) return parseInt(a.family) - parseInt(b.family);
-    if (aDigit) return -1;
-    if (bDigit) return 1;
-    return a.family.localeCompare(b.family, 'cs');
-  });
+  return [...byFamily.values()];
+}
+
+function tileSort(a: Tile, b: Tile): number {
+  if (a.hasCurrent !== b.hasCurrent) return a.hasCurrent ? -1 : 1;
+  const aMax = a.maxHp ?? 0;
+  const bMax = b.maxHp ?? 0;
+  if (aMax !== bMax) return bMax - aMax;
+  if (a.modelCount !== b.modelCount) return b.modelCount - a.modelCount;
+  return a.family.localeCompare(b.family, 'cs');
+}
+
+function familySublabel(family: string): string {
+  if (/^\d+$/.test(family)) return `${family}. řada`;
+  return '';
+}
+
+function hpBar(min: number | null, max: number | null): { from: number; span: number } {
+  if (min === null || max === null) return { from: 0, span: 0 };
+  const from = Math.max(0, Math.min(100, (min / HP_MAX_FOR_BAR) * 100));
+  const to = Math.max(0, Math.min(100, (max / HP_MAX_FOR_BAR) * 100));
+  return { from, span: Math.max(2, to - from) };
 }
 
 const sections: BrandSection[] = [];
-for (const b of getAllBrands()) {
+for (const b of getAllBrands() as any[]) {
   const tiles = buildTilesForCategory(b);
-  if (tiles.length === 0) continue; // Skip brands with no models of this category
+  if (tiles.length === 0) continue;
+  const sorted = [...tiles].sort(tileSort);
+  const currentSorted = sorted.filter((t) => t.hasCurrent);
+  const legacyTiles = sorted.filter((t) => !t.hasCurrent);
+  const topTiles = currentSorted.slice(0, TOP_TILES);
+  // Display strongest-on-the-right (ASC by max hp) for natural left-to-right reading
+  topTiles.sort((a, b) => (a.maxHp ?? 0) - (b.maxHp ?? 0));
+  if (topTiles.length === 0) continue;
   const modelCount = tiles.reduce((acc, t) => acc + t.modelCount, 0);
+  const seriesCount = tiles.reduce((acc, t) => acc + t.seriesCount, 0);
   const hpAll = tiles.flatMap((t) => [t.minHp, t.maxHp]).filter((x): x is number => x !== null);
+  const legacyModelCount = legacyTiles.reduce((acc, t) => acc + t.modelCount, 0);
+
   sections.push({
     slug: b.slug,
     name: b.name,
     country: b.country,
-    description: b.description,
+    founded: b.founded,
     modelCount,
+    seriesCount,
     minHp: hpAll.length ? Math.min(...hpAll) : null,
     maxHp: hpAll.length ? Math.max(...hpAll) : null,
-    tiles,
+    topTiles,
+    legacyCount: legacyTiles.length,
+    legacyModelCount,
+    legacyExamples: legacyTiles.slice(0, 4).map((t) => t.label),
   });
 }
-sections.sort((a, b) => b.modelCount - a.modelCount);
+sections.sort((a, b) => {
+  const aPrio = PRIORITY_BRANDS.indexOf(a.slug);
+  const bPrio = PRIORITY_BRANDS.indexOf(b.slug);
+  if (aPrio !== -1 && bPrio !== -1) return aPrio - bPrio;
+  if (aPrio !== -1) return -1;
+  if (bPrio !== -1) return 1;
+  return b.modelCount - a.modelCount;
+});
 
 const totalModels = sections.reduce((acc, s) => acc + s.modelCount, 0);
 const totalBrands = sections.length;
@@ -108,203 +213,507 @@ const minHp = allHp.length ? Math.min(...allHp) : null;
 const maxHp = allHp.length ? Math.max(...allHp) : null;
 
 const catLabel = categoryLabels[category];
+const catHeroImage = categoryHero[category];
+const catLede = categoryLede[category];
 ---
 
-<div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
-  <div style="margin-bottom:8px;">
-    <a href="/stroje/" style="font-size:13px; color:#666; text-decoration:none;">← Katalog strojů</a>
-  </div>
+<div class="catalog-page">
 
-  <div style="margin-bottom:32px;">
-    <span class="section-label">Technika</span>
-    <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">
-      {catLabel}
-    </h1>
-    <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:14px; color:#666;">
-      <span style="display:inline-flex; align-items:center; gap:6px;">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-        {totalModels} modelů
-      </span>
-      <span style="display:inline-flex; align-items:center; gap:6px;">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21V7l-9-4-9 4v14"/><path d="M9 21v-6h6v6"/><path d="M11 11h2"/></svg>
-        {totalBrands} značek
-      </span>
-      {minHp !== null && maxHp !== null && (
-        <span style="display:inline-flex; align-items:center; gap:6px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          {minHp}–{maxHp} k
-        </span>
-      )}
+  <nav class="breadcrumb" aria-label="Cesta">
+    <a href="/">Domů</a>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    <a href="/stroje/">Technika</a>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    <span class="current">{catLabel}</span>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <span class="kicker"><span class="dot"></span>Katalog · Technika</span>
+      <h1>{catLabel} <em>všech značek</em></h1>
+      <p class="hero-lede">{catLede}</p>
+
+      <div class="hero-stats">
+        <div class="s"><span class="n">{totalModels}+</span><span class="l">modelů</span></div>
+        <div class="s"><span class="n">{totalBrands}</span><span class="l">značek</span></div>
+        {minHp !== null && maxHp !== null && (
+          <div class="s"><span class="n">{minHp}–{maxHp} k</span><span class="l">výkon</span></div>
+        )}
+      </div>
+
+      <form class="search" role="search" action="/hledat/" method="GET">
+        <input type="search" name="q" placeholder={`Hledejte model, řadu nebo značku — např. "Zetor Proxima 120"`} aria-label="Vyhledat" />
+        <button type="submit">
+          Hledat
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-photo" style={`background-image:url('${catHeroImage}')`}>
+        <div class="hero-photo-badge"><span class="n">{totalModels}+</span> modelů v katalogu</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="split-bar">
+    <div class="split-inner">
+      <nav class="brand-pills" aria-label="Značky">
+        {sections.map((s, i) => (
+          <a class:list={['pill', { active: i === 0 }]} href={`#${s.slug}`}>{s.name} <span class="c">{s.modelCount}</span></a>
+        ))}
+      </nav>
     </div>
   </div>
 
-  <!-- Brand quick-nav (jump links) -->
-  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px;">
-    {sections.map((s) => (
-      <a href={`#${s.slug}`} class="brand-nav-pill">
-        {s.name} <span class="brand-nav-count">{s.modelCount}</span>
-      </a>
-    ))}
-  </div>
-
-  {sections.map((s) => (
-    <section id={s.slug} style="margin-bottom:48px; padding-top:8px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
-        <div>
-          <h2 style="font-family:'Chakra Petch',sans-serif; font-size:24px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">
-            <a href={`/stroje/${s.slug}/`} style="color:#1a1a1a; text-decoration:none;">{s.name}</a>
-          </h2>
-          <div style="font-size:13px; color:#666;">
-            <span>{s.modelCount} modelů</span>
-            {s.minHp !== null && s.maxHp !== null && <>
-              <span style="margin:0 6px;">·</span>
-              <span>{s.minHp === s.maxHp ? `${s.minHp} k` : `${s.minHp}–${s.maxHp} k`}</span>
-            </>}
-            <span style="margin:0 6px;">·</span>
-            <span>{s.tiles.length} řad</span>
-          </div>
-        </div>
-        <a href={`/stroje/${s.slug}/`} style="font-size:13px; color:#1a1a1a; text-decoration:none; border:1px solid #ddd; padding:6px 12px; border-radius:6px; white-space:nowrap;">
-          Všechny modely {s.name} →
-        </a>
-      </div>
-
-      <div class="family-grid">
-        {s.tiles.map((t) => {
-          const hpStr = t.minHp !== null && t.maxHp !== null
-            ? (t.minHp === t.maxHp ? `${t.minHp} k` : `${t.minHp}–${t.maxHp} k`)
-            : '';
-          const yrStr = t.minYear !== null
-            ? (t.hasCurrent ? `${t.minYear}–dosud` : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
-            : '';
-          return (
-            <a href={`/stroje/${s.slug}/rada/${category}/${t.family}/`} class="family-tile">
-              <div class="family-tile-img" aria-hidden="true">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  {category === 'traktory' ? (
-                    <>
-                      <circle cx="7" cy="17" r="2"/>
-                      <circle cx="18" cy="17" r="3"/>
-                      <path d="M4 17H3v-4l2-2h4l3-4h5v10h-2"/>
-                    </>
-                  ) : (
-                    <>
-                      <rect x="3" y="9" width="18" height="9" rx="1"/>
-                      <path d="M3 9V7c0-1 1-2 2-2h14c1 0 2 1 2 2v2"/>
-                      <circle cx="7" cy="18" r="2"/>
-                      <circle cx="17" cy="18" r="2"/>
-                    </>
-                  )}
-                </svg>
+  {sections.map((s) => {
+    const [c1, c2] = brandTone(s.slug);
+    return (
+      <section class="brand" id={s.slug}>
+        <div class="brand-head">
+          <div class="brand-title">
+            <div class="brand-logo">
+              <img src={`/images/stroje/brands/${s.slug}.png`} alt={`${s.name} logo`} loading="lazy" />
+            </div>
+            <div class="brand-name">
+              <h2><a href={`/stroje/${s.slug}/`}>{s.name}</a></h2>
+              <div class="brand-meta">
+                <span>{s.country} · od <strong>{s.founded}</strong></span><span class="sep"></span>
+                <strong>{s.modelCount} modelů</strong> <span>v {s.seriesCount} řadách</span>
+                {s.minHp !== null && s.maxHp !== null && (<><span class="sep"></span><strong>{s.minHp}–{s.maxHp} k</strong></>)}
+                {brandCreditUrl[s.slug] && (
+                  <>
+                    <span class="sep"></span>
+                    <span class="brand-credit">Foto: <a href={brandCreditUrl[s.slug]} target="_blank" rel="noopener">{brandCreditLabel(s.slug)}</a></span>
+                  </>
+                )}
               </div>
-              <div class="family-tile-body">
-                <div class="family-tile-title">{t.label}</div>
-                <div class="family-tile-meta">
-                  <span>{t.modelCount} modelů</span>
-                  {hpStr && (
-                    <>
-                      <span>·</span>
-                      <span style="display:inline-flex; align-items:center; gap:4px;">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                        {hpStr}
-                      </span>
-                    </>
+            </div>
+          </div>
+          <a class="brand-cta" href={`/stroje/${s.slug}/`}>
+            Všechny modely
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="block-label">
+          <span class="status current"><span class="dot"></span>Aktuální v prodeji</span>
+        </div>
+
+        <div class="family-grid">
+          {s.topTiles.map((t) => {
+            const bar = hpBar(t.minHp, t.maxHp);
+            const yearStr = t.minYear !== null
+              ? (t.hasCurrent ? `${t.minYear}–dosud` : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
+              : '';
+            const sub = familySublabel(t.family);
+            const hpStr = t.minHp !== null && t.maxHp !== null
+              ? (t.minHp === t.maxHp ? `${t.minHp} k` : `${t.minHp}–${t.maxHp} k`)
+              : '';
+            const coverStyle = t.coverImage
+              ? `background-image:url('${t.coverImage}'); background-color:#FFFFFF; background-size:cover; background-position:center;`
+              : `background:linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
+            return (
+              <a class="family-tile" href={`/stroje/${s.slug}/rada/${category}/${t.family}/`}>
+                <div class="ft-cover" data-has-photo={t.coverImage ? 'true' : 'false'} style={coverStyle}>
+                  {!t.coverImage && (
+                    <svg class="ft-silhouette" width="120" height="68" viewBox="0 0 140 80" fill="rgba(0,0,0,.18)" aria-hidden="true">
+                      {category === 'traktory' ? (
+                        <>
+                          <circle cx="100" cy="58" r="16"/><circle cx="42" cy="60" r="11"/>
+                          <path d="M26 54 Q32 28 54 26 L78 22 L86 12 L112 11 L120 22 L132 32 L132 54 Z"/>
+                        </>
+                      ) : (
+                        <>
+                          <rect x="20" y="42" width="100" height="22" rx="3"/>
+                          <path d="M20 42 Q25 24 50 22 L110 22 Q120 24 120 42 Z"/>
+                          <circle cx="40" cy="68" r="8"/><circle cx="100" cy="68" r="8"/>
+                        </>
+                      )}
+                    </svg>
                   )}
                 </div>
-                {yrStr && <div class="family-tile-year">{yrStr}</div>}
-              </div>
-            </a>
-          );
-        })}
-      </div>
-    </section>
-  ))}
+                <div class="ft-body">
+                  <div class="ft-head">
+                    <div>
+                      <div class="ft-title">{t.label}</div>
+                      {sub && <div class="ft-sub">{sub}</div>}
+                    </div>
+                    <span class="ft-count">{t.modelCount} {t.modelCount === 1 ? 'model' : t.modelCount < 5 ? 'modely' : 'modelů'}</span>
+                  </div>
+                  {hpStr && (
+                    <div class="ft-bar-wrap">
+                      <div class="ft-bar-row"><span>Výkon</span><span class="v">{hpStr}</span></div>
+                      <div class="ft-bar" style={`--from:${bar.from}%;--span:${bar.span}%`}></div>
+                    </div>
+                  )}
+                  <div class="ft-foot">
+                    <span class="year">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+                      {yearStr}
+                    </span>
+                    <span class="go">Řada →</span>
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        <a href={`/stroje/${s.slug}/`} class="show-all-cta">
+          <span class="sac-t">
+            Zobrazit všech <strong>{s.modelCount} modelů</strong> {s.name}
+            {s.legacyCount > 0 && (
+              <span class="sac-d">· včetně starších řad{s.legacyExamples.length > 0 ? ` (${s.legacyExamples.join(', ')})` : ''}</span>
+            )}
+          </span>
+          <span class="sac-arrow">
+            Všechny modely
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      </section>
+    );
+  })}
+
+  <section class="big-cta">
+    <div>
+      <span class="cta-kicker">Nenašli jste svůj model?</span>
+      <h2>Prodáváte {category === 'traktory' ? 'traktor' : 'kombajn'}?<br />Inzerát v Agro bazaru zdarma.</h2>
+      <p>30 dní inzerát · až 5 fotek · kontakt přímo na prodejce · bez provize.</p>
+      <a class="cta-btn" href="/bazar/novy/">
+        Přidat inzerát zdarma
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+    <div class="cta-right">
+      <div class="cta-photo" style={`background-image:url('${catHeroImage}')`}></div>
+    </div>
+  </section>
+
 </div>
 
 <style>
-  .brand-nav-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 999px;
-    font-family: 'Chakra Petch', sans-serif;
-    font-size: 12px;
-    color: #1a1a1a;
-    text-decoration: none;
-    transition: background .15s, border-color .15s;
-  }
-  .brand-nav-pill:hover {
-    background: #fff0a8;
-    border-color: #FFFF00;
-  }
-  .brand-nav-count {
-    background: rgba(0,0,0,.06);
-    color: #666;
-    padding: 1px 7px;
-    border-radius: 10px;
-    font-size: 11px;
+  .catalog-page{
+    --yellow:#FFEA00;
+    --yellow-soft:#FFF6A8;
+    --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B;
+    --body:#1E1E22;
+    --muted:#6B6B72;
+    --muted-2:#9A9AA3;
+    --line:#EAEAEC;
+    --line-2:#DFDFE3;
+    --bg-cream:#FBFAF4;
+    --card:#FFFFFF;
+    --green:#0B7A3B;
+    --green-soft:#E3F3EA;
+    --r-xl:24px;
+    --r-lg:18px;
+    --r-md:12px;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-2:0 4px 14px rgba(10,10,12,.06), 0 0 0 1px rgba(10,10,12,.04);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px;margin:0 auto;padding:26px 24px 96px;
+    color:var(--body);
   }
 
-  .family-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
+  .catalog-page .breadcrumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px}
+  .catalog-page .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s}
+  .catalog-page .breadcrumb a:hover{color:#000}
+  .catalog-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2)}
+  .catalog-page .breadcrumb .current{color:#000;font-weight:600}
+
+  .catalog-page .hero{
+    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+    background:radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(80,80,90,.4), transparent 60%),
+      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+    padding:48px 48px 40px;margin-bottom:22px;
+    box-shadow:var(--sh-3);
+    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
   }
-  .family-tile {
-    display: flex;
-    gap: 12px;
-    padding: 12px 14px;
-    background: #fff;
-    border: 1px solid #e8e8e8;
-    border-radius: 14px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color .15s, box-shadow .15s, transform .1s;
+  .catalog-page .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
   }
-  .family-tile:hover {
-    border-color: #FFFF00;
-    box-shadow: 0 4px 14px rgba(0,0,0,.06);
-    transform: translateY(-1px);
+  .catalog-page .hero-left{position:relative;z-index:2}
+  .catalog-page .kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--yellow);margin-bottom:18px;
+    padding:8px 14px;border:1px solid rgba(255,234,0,.4);border-radius:999px;
+    background:rgba(255,234,0,.06);
   }
-  .family-tile-img {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-    background: #fafafa;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #bbb;
+  .catalog-page .kicker .dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;box-shadow:0 0 0 3px rgba(255,234,0,.2)}
+  .catalog-page .hero h1{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    font-size:clamp(2.2rem,5vw,4rem);color:#fff;line-height:.98;letter-spacing:-.03em;margin:0;
   }
-  .family-tile:hover .family-tile-img {
-    background: #FFFF00;
-    color: #1a1a1a;
+  .catalog-page .hero h1 em{font-style:normal;color:var(--yellow);text-shadow:0 0 40px rgba(255,234,0,.5)}
+  .catalog-page .hero-lede{max-width:560px;font-size:16.5px;color:#c8c8d0;margin:18px 0 22px;line-height:1.55}
+
+  .catalog-page .hero-stats{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:24px;font-family:'Chakra Petch',sans-serif}
+  .catalog-page .hero-stats .s{display:flex;flex-direction:column;gap:3px}
+  .catalog-page .hero-stats .n{font-size:26px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
+  .catalog-page .hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .catalog-page .hero-stats .s + .s{padding-left:28px;border-left:1px solid rgba(255,255,255,.12)}
+
+  .catalog-page .search{display:flex;gap:8px;background:#fff;border-radius:14px;padding:6px;max-width:600px;
+    box-shadow:0 14px 40px -10px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.1);
   }
-  .family-tile-body {
-    min-width: 0;
-    flex: 1;
+  .catalog-page .search input{flex:1;border:0;outline:0;padding:14px 16px 14px 46px;
+    font:400 15px 'Roboto Condensed',sans-serif;border-radius:10px;color:#0A0A0B;
+    background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%236B6B72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>') no-repeat 14px center;
   }
-  .family-tile-title {
-    font-family: 'Chakra Petch', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin-bottom: 2px;
+  .catalog-page .search input::placeholder{color:#9A9AA3}
+  .catalog-page .search button{
+    background:linear-gradient(180deg,#17171A 0%,#0A0A0B 100%);color:#fff;border:0;
+    border-radius:10px;padding:0 22px;font:600 14px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:transform .15s;
   }
-  .family-tile-meta {
-    display: flex;
-    gap: 6px;
-    font-size: 12px;
-    color: #666;
-    flex-wrap: wrap;
+  .catalog-page .search button:hover{transform:translateY(-1px)}
+  .catalog-page .search button svg{width:16px;height:16px}
+
+  .catalog-page .hero-right{position:relative;z-index:1;min-height:300px;display:flex;align-items:center;justify-content:center}
+  .catalog-page .hero-photo{
+    width:100%;height:100%;min-height:300px;
+    background-size:cover;background-position:center;
+    border-radius:18px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
+    position:relative;overflow:hidden;
   }
-  .family-tile-year {
-    font-size: 11px;
-    color: #767676;
-    margin-top: 2px;
+  .catalog-page .hero-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, rgba(255,234,0,.12) 100%);
+  }
+  .catalog-page .hero-photo-badge{
+    position:absolute;left:16px;bottom:16px;z-index:2;
+    background:rgba(10,10,11,.72);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.1);
+    color:#fff;padding:9px 13px;border-radius:10px;
+    font:500 12px 'Chakra Petch',sans-serif;
+    display:flex;align-items:center;gap:8px;
+  }
+  .catalog-page .hero-photo-badge .n{font-weight:700;color:var(--yellow)}
+
+  .catalog-page .split-bar{
+    position:sticky;top:88px;z-index:30;
+    background:rgba(255,255,255,.88);backdrop-filter:saturate(1.4) blur(14px);
+    border:1px solid var(--line);border-radius:14px;
+    padding:10px 14px;margin:0 0 22px;
+  }
+  .catalog-page .split-inner{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .catalog-page .brand-pills{display:flex;gap:6px;flex-wrap:wrap}
+  .catalog-page .pill{
+    display:inline-flex;align-items:center;gap:6px;padding:6px 12px;
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    font:500 13px 'Chakra Petch',sans-serif;color:#17171A;text-decoration:none;
+    transition:.15s;
+  }
+  .catalog-page .pill:hover{background:var(--yellow-soft);border-color:var(--yellow);transform:translateY(-1px)}
+  .catalog-page .pill.active{background:#0A0A0B;color:#fff;border-color:#0A0A0B}
+  .catalog-page .pill .c{background:rgba(0,0,0,.06);color:#4a4a50;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:600}
+  .catalog-page .pill.active .c{background:var(--yellow);color:#000}
+
+  .catalog-page .brand{
+    margin:36px 0;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--r-xl);padding:24px 24px 22px;
+    scroll-margin-top:160px;
+    box-shadow:var(--sh-1);
+  }
+  .catalog-page .brand-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px;flex-wrap:wrap}
+  .catalog-page .brand-title{display:flex;align-items:center;gap:14px}
+  .catalog-page .brand-logo{
+    width:72px;height:72px;border-radius:14px;background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);box-shadow:var(--sh-1);
+    flex-shrink:0;padding:10px;
+  }
+  .catalog-page .brand-logo img{
+    max-width:100%;max-height:100%;object-fit:contain;
+  }
+  .catalog-page .brand-name h2{font-family:'Chakra Petch',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.1}
+  .catalog-page .brand-name h2 a{color:var(--ink);text-decoration:none}
+  .catalog-page .brand-name h2 a:hover{color:#000;text-decoration:underline}
+  .catalog-page .brand-meta{display:flex;gap:8px;font-size:13px;color:var(--muted);align-items:center;margin-top:4px;flex-wrap:wrap}
+  .catalog-page .brand-meta .sep{width:3px;height:3px;background:var(--muted-2);border-radius:50%}
+  .catalog-page .brand-meta strong{color:#17171A;font-weight:600}
+  .catalog-page .brand-cta{
+    font:600 13px 'Chakra Petch',sans-serif;color:#000;text-decoration:none;
+    background:var(--yellow);padding:11px 16px;border-radius:10px;
+    display:inline-flex;align-items:center;gap:8px;transition:.15s;
+  }
+  .catalog-page .brand-cta:hover{transform:translateY(-1px);box-shadow:0 10px 30px -8px var(--yellow-glow)}
+  .catalog-page .brand-cta svg{width:14px;height:14px}
+
+  .catalog-page .block-label{
+    font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);display:flex;align-items:center;gap:12px;margin:4px 0 14px;
+  }
+  .catalog-page .block-label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .catalog-page .block-label .status{
+    display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:999px;
+    font-size:11px;letter-spacing:.14em;
+  }
+  .catalog-page .block-label .status.current{background:var(--green-soft);color:var(--green)}
+  .catalog-page .block-label .status.current .dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:cb-pulse 2s infinite}
+  @keyframes cb-pulse{0%,100%{box-shadow:0 0 0 0 rgba(11,122,59,.4)}50%{box-shadow:0 0 0 5px rgba(11,122,59,0)}}
+
+  .catalog-page .family-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .catalog-page .family-tile{
+    position:relative;display:flex;flex-direction:column;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    overflow:hidden;text-decoration:none;color:inherit;
+    transition:.25s cubic-bezier(.2,.7,.2,1);
+  }
+  .catalog-page .family-tile:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
+  .catalog-page .family-tile:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+  .catalog-page .ft-cover{
+    height:140px;position:relative;overflow:hidden;
+    background-size:cover;background-position:center;background-color:#2a2a30;
+    display:flex;align-items:flex-end;
+  }
+  .catalog-page .ft-cover::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.02) 50%, rgba(0,0,0,.4) 100%);
+  }
+  .catalog-page .ft-silhouette{
+    position:absolute;left:8px;bottom:8px;width:120px;height:auto;
+    opacity:.85;pointer-events:none;
+  }
+  .catalog-page .brand-credit{font-size:12px;color:var(--muted)}
+  .catalog-page .brand-credit a{color:var(--muted);text-decoration:underline;text-decoration-color:var(--line-2)}
+  .catalog-page .brand-credit a:hover{color:#000;text-decoration-color:#000}
+  .catalog-page .ft-body{padding:14px 16px 14px;display:flex;flex-direction:column;gap:9px;flex:1}
+  .catalog-page .ft-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .catalog-page .ft-title{font:700 18px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em;line-height:1.1}
+  .catalog-page .ft-sub{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.35}
+  .catalog-page .ft-count{
+    font:600 11px 'Chakra Petch',sans-serif;color:#17171A;
+    background:#F4F2E9;padding:3px 8px;border-radius:6px;letter-spacing:.04em;
+    white-space:nowrap;
+  }
+
+  .catalog-page .ft-bar-wrap{display:flex;flex-direction:column;gap:4px}
+  .catalog-page .ft-bar-row{display:flex;justify-content:space-between;align-items:center;
+    font:500 11px 'Chakra Petch',sans-serif;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+  .catalog-page .ft-bar-row .v{font:600 12px 'Chakra Petch',sans-serif;color:#17171A;text-transform:none;letter-spacing:-.01em}
+  .catalog-page .ft-bar{height:5px;background:#F1EFE7;border-radius:999px;overflow:hidden;position:relative}
+  .catalog-page .ft-bar::before{
+    content:"";position:absolute;top:0;bottom:0;
+    left:var(--from,0%);width:var(--span,30%);
+    background:linear-gradient(90deg,var(--yellow) 0%,#FFD400 100%);
+    border-radius:999px;box-shadow:0 0 6px rgba(255,212,0,.6);
+  }
+
+  .catalog-page .ft-foot{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:auto;padding-top:9px;border-top:1px dashed var(--line);
+    font-size:12.5px;color:var(--muted);
+  }
+  .catalog-page .ft-foot .year{display:inline-flex;align-items:center;gap:5px;font:500 12px 'Chakra Petch',sans-serif;color:#17171A}
+  .catalog-page .ft-foot .year svg{width:13px;height:13px;color:var(--muted)}
+  .catalog-page .ft-foot .go{font:700 13px 'Chakra Petch',sans-serif;color:#0A0A0B;display:inline-flex;align-items:center;gap:4px;transition:transform .15s}
+  .catalog-page .family-tile:hover .ft-foot .go{transform:translateX(2px)}
+
+  .catalog-page .show-all-cta{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    margin-top:14px;padding:13px 18px;
+    background:transparent;color:#17171A;text-decoration:none;
+    border:1px dashed var(--line-2);border-radius:var(--r-md);
+    transition:.15s;flex-wrap:wrap;
+  }
+  .catalog-page .show-all-cta:hover{background:var(--yellow-soft);border-color:var(--yellow);border-style:solid}
+  .catalog-page .sac-t{font:600 14px 'Chakra Petch',sans-serif;color:#17171A;letter-spacing:-.01em}
+  .catalog-page .sac-t strong{color:#000;font-weight:700}
+  .catalog-page .sac-d{font-size:13px;color:var(--muted);margin-left:4px;font-weight:500}
+  .catalog-page .sac-arrow{
+    display:inline-flex;align-items:center;justify-content:center;
+    color:#0A0A0B;font:700 13px 'Chakra Petch',sans-serif;gap:6px;white-space:nowrap;
+  }
+  .catalog-page .sac-arrow svg{width:14px;height:14px;transition:transform .15s}
+  .catalog-page .show-all-cta:hover .sac-arrow svg{transform:translateX(3px)}
+
+  .catalog-page .big-cta{
+    margin-top:32px;padding:36px;border-radius:var(--r-xl);
+    background:linear-gradient(135deg,var(--yellow) 0%,#FFD400 100%);
+    display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:center;
+    position:relative;overflow:hidden;box-shadow:0 10px 30px -8px var(--yellow-glow);
+  }
+  .catalog-page .big-cta::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(400px 300px at 100% 100%, rgba(0,0,0,.12), transparent);
+  }
+  .catalog-page .big-cta h2{font-family:'Chakra Petch',sans-serif;font-size:30px;line-height:1.05;letter-spacing:-.02em;position:relative;z-index:2;color:#0A0A0B;margin:0}
+  .catalog-page .big-cta p{color:#2a2a2a;margin-top:10px;font-size:15px;position:relative;z-index:2}
+  .catalog-page .cta-kicker{
+    display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.2em;text-transform:uppercase;
+    color:#0A0A0B;background:rgba(0,0,0,.08);padding:6px 12px;border-radius:999px;margin-bottom:14px;position:relative;z-index:2;
+  }
+  .catalog-page .cta-btn{
+    background:#0A0A0B;color:#fff;padding:15px 24px;border-radius:14px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+    display:inline-flex;align-items:center;gap:10px;margin-top:18px;
+    transition:.15s;position:relative;z-index:2;
+  }
+  .catalog-page .cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
+  .catalog-page .cta-btn svg{width:14px;height:14px}
+  .catalog-page .cta-right{position:relative;z-index:2;min-height:200px;display:flex;align-items:center;justify-content:center}
+  .catalog-page .cta-photo{
+    width:100%;height:200px;border-radius:16px;
+    background-size:cover;background-position:center;
+    box-shadow:0 20px 40px -12px rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.1);
+    position:relative;overflow:hidden;
+  }
+  .catalog-page .cta-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(0,0,0,.15))}
+
+  @media (max-width:960px){
+    .catalog-page .hero{grid-template-columns:1fr;padding:32px 24px 28px;gap:18px}
+    .catalog-page .hero-right{min-height:200px;order:2}
+    .catalog-page .hero-photo{min-height:200px}
+    .catalog-page .big-cta{grid-template-columns:1fr;padding:28px}
+    .catalog-page .cta-right{min-height:0}
+    .catalog-page .cta-photo{height:180px}
+    .catalog-page .hero-stats .s + .s{padding-left:0;border-left:0}
+  }
+  @media (max-width:600px){
+    .catalog-page{padding:20px 16px 60px}
+    .catalog-page .brand{padding:18px}
+    .catalog-page .brand-head{align-items:flex-start}
+    .catalog-page .show-all-cta{flex-direction:column;align-items:flex-start;gap:8px}
+    .catalog-page .split-bar{top:72px}
   }
 </style>
+
+<script>
+  const pills = document.querySelectorAll<HTMLAnchorElement>('.catalog-page .brand-pills .pill');
+  const sections = document.querySelectorAll<HTMLElement>('.catalog-page .brand[id]');
+  if (pills.length && sections.length && 'IntersectionObserver' in window) {
+    const byId = new Map<string, HTMLAnchorElement>();
+    pills.forEach((p) => {
+      const href = p.getAttribute('href') || '';
+      if (href.startsWith('#')) byId.set(href.slice(1), p);
+    });
+    const io = new IntersectionObserver((entries) => {
+      let topMost: { id: string; top: number } | null = null;
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const target = e.target as HTMLElement;
+          const top = e.boundingClientRect.top;
+          if (!topMost || top < topMost.top) topMost = { id: target.id, top };
+        }
+      });
+      if (topMost) {
+        pills.forEach((p) => p.classList.remove('active'));
+        const t = topMost as { id: string; top: number };
+        byId.get(t.id)?.classList.add('active');
+      }
+    }, { rootMargin: '-160px 0px -60% 0px', threshold: 0 });
+    sections.forEach((s) => io.observe(s));
+  }
+</script>

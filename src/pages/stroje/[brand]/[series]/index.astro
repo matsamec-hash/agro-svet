@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../../../layouts/Layout.astro';
-import { getAllBrands, getSeries, type StrojKategorie } from '../../../../lib/stroje';
+import { getAllBrands, getSeries, seriesFamily, familyLabel, type StrojKategorie } from '../../../../lib/stroje';
 
 export async function getStaticPaths() {
   const paths: { params: { brand: string; series: string } }[] = [];
@@ -24,110 +24,486 @@ const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',
   kombajny: 'Kombajny',
 };
+const categoryHero: Record<StrojKategorie, string> = {
+  traktory: '/images/traktor.webp',
+  kombajny: '/images/kombajn.webp',
+};
+
+const brandColors: Record<string, [string, string]> = {
+  'john-deere': ['#4A9838', '#2E6B22'],
+  fendt: ['#3FA85D', '#0E6730'],
+  claas: ['#9C9532', '#65601A'],
+  'deutz-fahr': ['#2BA84A', '#1a5e2a'],
+  kubota: ['#FF6B1A', '#C24414'],
+  'new-holland': ['#3874AC', '#1A4370'],
+  'case-ih': ['#D62A2A', '#8F1818'],
+  'massey-ferguson': ['#D62A2A', '#8F1818'],
+  valtra: ['#1F1F1F', '#0A0A0A'],
+  zetor: ['#E93A3A', '#A01818'],
+};
+const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
+
+const family = seriesFamily(series.slug);
+const familyLab = familyLabel(family);
 
 const yr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
-const hpValues = series.models.map((m) => m.power_hp).filter((x): x is number => x !== null);
-const hpRange = hpValues.length ? (Math.min(...hpValues) === Math.max(...hpValues) ? `${Math.min(...hpValues)} k` : `${Math.min(...hpValues)}–${Math.max(...hpValues)} k`) : '—';
+const isCurrent = series.year_to === null && series.year_from !== null;
+const seriesNameClean = series.name.replace(/\s*\([^)]*\)\s*$/, '');
 
-const sortedModels = [...series.models].sort((a, b) => (a.power_hp ?? 0) - (b.power_hp ?? 0));
+const hpValues = series.models.map((m) => m.power_hp).filter((x): x is number => x !== null);
+const minHp = hpValues.length ? Math.min(...hpValues) : null;
+const maxHp = hpValues.length ? Math.max(...hpValues) : null;
+const hpRange = minHp !== null && maxHp !== null
+  ? (minHp === maxHp ? `${minHp} k` : `${minHp}–${maxHp} k`)
+  : '';
+
+// Pull engine/transmission from any model (typically shared within a series)
+const engines = Array.from(new Set(series.models.map((m) => m.engine).filter((x): x is string => !!x)));
+const transmissions = Array.from(new Set(series.models.map((m) => m.transmission).filter((x): x is string => !!x)));
+const sharedEngine = engines.length === 1 ? engines[0] : engines.length > 1 ? `${engines.length} variant motoru` : '';
+const sharedTransmission = transmissions.length === 1 ? transmissions[0] : transmissions.length > 1 ? `${transmissions.length} variant převodovky` : '';
+
+const sortedModels = [...series.models].sort((a, b) => (b.power_hp ?? 0) - (a.power_hp ?? 0));
+const categoryHasGrainTank = category === 'kombajny';
 
 function modelUrlPart(slug: string): string {
   return slug.startsWith(brand.slug + '-') ? slug.slice(brand.slug.length + 1) : slug;
 }
+
+// Sibling generations in same family
+const sameCategory = brand.categories?.[category];
+const siblings = (sameCategory?.series ?? [])
+  .filter((s) => s.slug !== series.slug && seriesFamily(s.slug) === family)
+  .map((s) => {
+    const sHpAll = (s.models ?? []).map((m) => m.power_hp).filter((x): x is number => x !== null);
+    const sIsCurrent = (s.models ?? []).some((m) => m.year_to === null && m.year_from !== null);
+    const sYr = s.year_from ? (s.year_to ? `${s.year_from}–${s.year_to}` : `${s.year_from}–dosud`) : '';
+    return {
+      slug: s.slug,
+      name: s.name.replace(/\s*\([^)]*\)\s*$/, ''),
+      year_from: s.year_from,
+      yr: sYr,
+      modelCount: (s.models ?? []).length,
+      minHp: sHpAll.length ? Math.min(...sHpAll) : null,
+      maxHp: sHpAll.length ? Math.max(...sHpAll) : null,
+      isCurrent: sIsCurrent,
+    };
+  })
+  .sort((a, b) => (b.year_from ?? 0) - (a.year_from ?? 0));
+
+const heroPhoto = (series as any).image_url || categoryHero[category] || '/images/traktor.webp';
 ---
 
 <Layout
   title={`${brand.name} ${series.name} — všechny modely`}
-  description={`Přehled všech modelů řady ${brand.name} ${series.name}. Výkony ${hpRange}, roky výroby ${yr}.`}
+  description={`Přehled všech modelů řady ${brand.name} ${series.name}. Výkony ${hpRange || '—'}, roky výroby ${yr || '—'}.`}
 >
-  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
-    <div style="margin-bottom:8px; font-size:13px; color:#666;">
-      <a href="/stroje/" style="color:#666; text-decoration:none;">Katalog</a>
-      <span style="margin:0 6px;">/</span>
-      <a href={`/stroje/${brand.slug}/`} style="color:#666; text-decoration:none;">{brand.name}</a>
-      <span style="margin:0 6px;">/</span>
-      <span style="color:#1a1a1a;">{series.name}</span>
-    </div>
+  <div class="series-page">
 
-    <div style="margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid #e8e8e8;">
-      <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 8px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
-        {brand.name} · {categoryLabels[category]}
-      </span>
-      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(1.8rem,4.5vw,2.8rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-top:10px; margin-bottom:14px;">
-        {series.name}
-      </h1>
-      <div style="display:flex; gap:20px; flex-wrap:wrap; font-size:14px; color:#666; margin-bottom:14px;">
-        <span style="display:inline-flex; align-items:center; gap:6px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-          {yr}
-        </span>
-        <span style="display:inline-flex; align-items:center; gap:6px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          {hpRange}
-        </span>
-        <span style="display:inline-flex; align-items:center; gap:6px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-          {series.models.length} modelů
-        </span>
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/stroje/">Technika</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href={`/stroje/${brand.slug}/`}>{brand.name}</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href={`/stroje/${brand.slug}/rada/${category}/${family}/`}>{familyLab}</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">{seriesNameClean}</span>
+    </nav>
+
+    <section class="hero" style={`--brand-c1:${brandC1};--brand-c2:${brandC2};`}>
+      <div class="hero-left">
+        <div class="hero-tags">
+          <span class="tag tag-brand">{brand.name}</span>
+          <span class="tag tag-cat">{categoryLabels[category]}</span>
+          <span class="tag tag-fam">{familyLab}</span>
+          {isCurrent ? (
+            <span class="tag tag-current"><span class="dot"></span>Aktuální v prodeji</span>
+          ) : (
+            <span class="tag tag-legacy">Historie</span>
+          )}
+        </div>
+        <h1>{seriesNameClean}</h1>
+        {yr && <div class="hero-year">{yr}</div>}
+        {series.description && <p class="hero-lede">{series.description}</p>}
+
+        <div class="hero-stats">
+          <div class="s"><span class="n">{series.models.length}</span><span class="l">{series.models.length === 1 ? 'model' : series.models.length < 5 ? 'modely' : 'modelů'}</span></div>
+          {hpRange && <div class="s"><span class="n">{hpRange}</span><span class="l">výkon</span></div>}
+          {sharedEngine && <div class="s"><span class="n n-text">{engines.length === 1 ? engines[0].split(' ').slice(0, 2).join(' ') : `${engines.length}×`}</span><span class="l">motor</span></div>}
+          {sharedTransmission && <div class="s"><span class="n n-text">{transmissions.length === 1 ? transmissions[0].split(' ').slice(0, 2).join(' ') : `${transmissions.length}×`}</span><span class="l">převodovka</span></div>}
+        </div>
+
+        <div class="hero-actions">
+          <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>
+            Hledat {seriesNameClean} v bazaru
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-secondary" href={`/stroje/${brand.slug}/rada/${category}/${family}/`}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            Všechny generace {familyLab}
+          </a>
+        </div>
       </div>
-      {series.description && <p style="font-size:15px; color:#444; max-width:820px; line-height:1.65;">{series.description}</p>}
-    </div>
 
-    <div style="overflow-x:auto; border:1px solid #e8e8e8; border-radius:18px; background:#fff;">
-      <table style="width:100%; border-collapse:collapse; font-size:14px;">
-        <thead>
-          <tr style="background:#fafafa; text-align:left;">
-            <th style="padding:14px 16px; font-weight:500; color:#333; border-bottom:1px solid #e8e8e8;">Model</th>
-            <th style="padding:14px 16px; font-weight:500; color:#333; border-bottom:1px solid #e8e8e8;">Výkon</th>
-            <th style="padding:14px 16px; font-weight:500; color:#333; border-bottom:1px solid #e8e8e8;">Roky výroby</th>
-            {category === 'kombajny' && <th style="padding:14px 16px; font-weight:500; color:#333; border-bottom:1px solid #e8e8e8;">Bunkr</th>}
-            <th style="padding:14px 16px; font-weight:500; color:#333; border-bottom:1px solid #e8e8e8;">Motor</th>
-            <th style="padding:14px 16px; border-bottom:1px solid #e8e8e8;"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedModels.map((m) => {
-            const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '—';
-            return (
-              <tr style="border-bottom:1px solid #f0f0f0;" class="row-hover">
-                <td style="padding:14px 16px;">
-                  <a href={`/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`} style="color:#1a1a1a; text-decoration:none; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px;">
-                    {m.name}
-                  </a>
-                </td>
-                <td style="padding:14px 16px;">
-                  {m.power_hp ? <>
+      <div class="hero-right">
+        <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
+          {series.models.length > 0 && (
+            <div class="hero-photo-badge"><span class="n">{series.models.length}</span> {series.models.length === 1 ? 'model' : series.models.length < 5 ? 'modely' : 'modelů'}</div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section class="models-section">
+      <div class="ms-head">
+        <div>
+          <h2>Modely v řadě</h2>
+          <p class="ms-sub">Seřazeno podle výkonu — od nejsilnějšího po nejslabší.</p>
+        </div>
+        {hpRange && <div class="ms-summary"><strong>{series.models.length}</strong> {series.models.length === 1 ? 'model' : series.models.length < 5 ? 'modely' : 'modelů'} · {hpRange}</div>}
+      </div>
+
+      <div class="models-table">
+        <div class="mt-head">
+          <span>Model</span>
+          <span class="mt-col-power">Výkon</span>
+          <span class="mt-col-year">Roky výroby</span>
+          {categoryHasGrainTank && <span class="mt-col-tank">Bunkr</span>}
+          <span class="mt-col-engine">Motor</span>
+          <span class="mt-col-action"></span>
+        </div>
+        {sortedModels.map((m) => {
+          const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '—';
+          const mIsCurrent = m.year_to === null && m.year_from !== null;
+          return (
+            <a href={`/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`} class="mt-row">
+              <span class="mt-name">
+                {m.name}
+                {mIsCurrent && <span class="dot-current" title="Aktuální"></span>}
+              </span>
+              <span class="mt-power">
+                {m.power_hp !== null ? (
+                  <>
                     <strong>{m.power_hp} k</strong>
-                    {m.power_kw && <span style="color:#666; font-size:12px;"> ({m.power_kw} kW)</span>}
-                  </> : '—'}
-                </td>
-                <td style="padding:14px 16px; color:#666;">{mYr}</td>
-                {category === 'kombajny' && (
-                  <td style="padding:14px 16px; color:#666;">
-                    {m.grain_tank_l ? `${m.grain_tank_l.toLocaleString('cs-CZ')} l` : '—'}
-                  </td>
-                )}
-                <td style="padding:14px 16px; color:#666; font-size:13px;">{m.engine ?? '—'}</td>
-                <td style="padding:14px 16px; text-align:right;">
-                  <a href={`/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`} style="font-size:12px; color:#666; text-decoration:none; border:1px solid #ddd; padding:6px 10px; border-radius:6px;">
-                    Detail →
-                  </a>
-                </td>
-              </tr>
+                    {m.power_kw && <span class="kw"> · {m.power_kw} kW</span>}
+                  </>
+                ) : '—'}
+              </span>
+              <span class="mt-year">{mYr}</span>
+              {categoryHasGrainTank && (
+                <span class="mt-tank">{m.grain_tank_l ? `${m.grain_tank_l.toLocaleString('cs-CZ')} l` : '—'}</span>
+              )}
+              <span class="mt-engine">{m.engine ?? '—'}</span>
+              <span class="mt-go">Detail →</span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    {siblings.length > 0 && (
+      <section class="siblings">
+        <div class="sib-head">
+          <h2>Další generace {familyLab}</h2>
+          <a class="sib-all" href={`/stroje/${brand.slug}/rada/${category}/${family}/`}>Všechny generace →</a>
+        </div>
+        <div class="sib-grid">
+          {siblings.map((s) => {
+            const sHp = s.minHp !== null && s.maxHp !== null
+              ? (s.minHp === s.maxHp ? `${s.minHp} k` : `${s.minHp}–${s.maxHp} k`)
+              : '';
+            return (
+              <a class="sib-card" href={`/stroje/${brand.slug}/${s.slug}/`}>
+                <div class="sib-title-row">
+                  <span class="sib-title">{s.name}</span>
+                  {s.isCurrent ? (
+                    <span class="sib-badge current"><span class="dot"></span>Aktuální</span>
+                  ) : (
+                    <span class="sib-badge legacy">Historie</span>
+                  )}
+                </div>
+                <div class="sib-meta">
+                  <span><strong>{s.modelCount}</strong> {s.modelCount === 1 ? 'model' : s.modelCount < 5 ? 'modely' : 'modelů'}</span>
+                  {sHp && <><span class="sep"></span><span>{sHp}</span></>}
+                  {s.yr && <><span class="sep"></span><span>{s.yr}</span></>}
+                </div>
+              </a>
             );
           })}
-        </tbody>
-      </table>
-    </div>
+        </div>
+      </section>
+    )}
 
-    <div style="margin-top:32px; text-align:center;">
-      <a href={`/bazar/?znacka=${encodeURIComponent(brand.name)}`} style="display:inline-block; background:#FFFF00; color:#000; padding:14px 24px; border-radius:10px; text-decoration:none; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px;">
-        Hledat {brand.name} v bazaru →
-      </a>
-    </div>
+    <section class="big-cta">
+      <div>
+        <span class="cta-kicker">Hledáte konkrétní model?</span>
+        <h2>{brand.name} {seriesNameClean} v Agro bazaru<br />— inzeráty od soukromých prodejců i dealerů.</h2>
+        <p>Filtrujte podle modelu, výkonu a roku. Kontakt přímo na prodejce, bez provize.</p>
+        <div class="cta-actions">
+          <a class="cta-btn primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>
+            Otevřít bazar
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-btn ghost" href="/bazar/novy/">Přidat vlastní inzerát</a>
+        </div>
+      </div>
+      <div class="cta-right">
+        <div class="cta-photo" style={`background-image:url('${heroPhoto}')`}></div>
+      </div>
+    </section>
+
   </div>
-
-  <style>
-    .row-hover:hover { background: #fafafa; }
-  </style>
 </Layout>
+
+<style>
+  .series-page{
+    --yellow:#FFEA00;
+    --yellow-soft:#FFF6A8;
+    --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B;
+    --body:#1E1E22;
+    --muted:#6B6B72;
+    --muted-2:#9A9AA3;
+    --line:#EAEAEC;
+    --line-2:#DFDFE3;
+    --bg-cream:#FBFAF4;
+    --card:#FFFFFF;
+    --green:#0B7A3B;
+    --green-soft:#E3F3EA;
+    --legacy:#7A6B0B;
+    --legacy-soft:#F5EFC8;
+    --r-xl:24px;
+    --r-lg:18px;
+    --r-md:12px;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px;margin:0 auto;padding:26px 24px 96px;
+    color:var(--body);
+  }
+
+  .series-page .breadcrumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .series-page .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s}
+  .series-page .breadcrumb a:hover{color:#000}
+  .series-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2);flex-shrink:0}
+  .series-page .breadcrumb .current{color:#000;font-weight:600}
+
+  .series-page .hero{
+    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+    background:
+      radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, color-mix(in srgb, var(--brand-c1) 36%, transparent), transparent 60%),
+      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+    padding:44px 44px 38px;margin-bottom:22px;
+    box-shadow:var(--sh-3);
+    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
+  }
+  .series-page .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .series-page .hero-left{position:relative;z-index:2}
+
+  .series-page .hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .series-page .tag{
+    display:inline-flex;align-items:center;gap:6px;
+    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.14em;text-transform:uppercase;
+    padding:6px 11px;border-radius:6px;
+  }
+  .series-page .tag-brand{background:var(--yellow);color:#0A0A0B}
+  .series-page .tag-cat{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.16)}
+  .series-page .tag-fam{background:rgba(255,255,255,.06);color:#c8c8d0;border:1px solid rgba(255,255,255,.12)}
+  .series-page .tag-current{background:rgba(11,180,90,.16);color:#5cdc8c;border:1px solid rgba(11,180,90,.4)}
+  .series-page .tag-current .dot{width:7px;height:7px;background:#5cdc8c;border-radius:50%;box-shadow:0 0 0 3px rgba(92,220,140,.18)}
+  .series-page .tag-legacy{background:rgba(180,160,80,.16);color:#dccc78;border:1px solid rgba(180,160,80,.32)}
+
+  .series-page .hero h1{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    font-size:clamp(2.1rem,4.6vw,3.6rem);color:#fff;line-height:.98;letter-spacing:-.025em;margin:0;
+  }
+  .series-page .hero-year{
+    margin-top:8px;font:500 16px 'Chakra Petch',sans-serif;color:var(--yellow);letter-spacing:.04em;
+  }
+  .series-page .hero-lede{max-width:580px;font-size:15.5px;color:#c8c8d0;margin:14px 0 22px;line-height:1.6}
+
+  .series-page .hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:22px;font-family:'Chakra Petch',sans-serif}
+  .series-page .hero-stats .s{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .series-page .hero-stats .n{font-size:24px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
+  .series-page .hero-stats .n-text{font-size:14px;font-weight:600;line-height:1.2;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .series-page .hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .series-page .hero-stats .s + .s{padding-left:24px;border-left:1px solid rgba(255,255,255,.12)}
+
+  .series-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .series-page .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--yellow);color:#0A0A0B;
+    padding:13px 18px;border-radius:12px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    transition:transform .15s, box-shadow .15s;
+    box-shadow:0 14px 40px -10px var(--yellow-glow);
+  }
+  .series-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+  .series-page .cta-secondary{
+    display:inline-flex;align-items:center;gap:8px;
+    color:#c8c8d0;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    padding:13px 16px;border-radius:12px;text-decoration:none;
+    font:500 13px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    transition:.15s;
+  }
+  .series-page .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+
+  .series-page .hero-right{position:relative;z-index:1;min-height:280px;display:flex;align-items:center;justify-content:center}
+  .series-page .hero-photo{
+    width:100%;height:100%;min-height:280px;
+    background-size:cover;background-position:center;
+    border-radius:18px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
+    position:relative;overflow:hidden;
+  }
+  .series-page .hero-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, color-mix(in srgb, var(--brand-c1) 24%, transparent) 100%);
+  }
+  .series-page .hero-photo-badge{
+    position:absolute;left:16px;bottom:16px;z-index:2;
+    background:rgba(10,10,11,.72);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.1);
+    color:#fff;padding:9px 13px;border-radius:10px;
+    font:500 12px 'Chakra Petch',sans-serif;
+  }
+  .series-page .hero-photo-badge .n{font-weight:700;color:var(--yellow)}
+
+  .series-page .models-section{
+    margin:24px 0;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--r-xl);padding:24px 24px 22px;
+    box-shadow:var(--sh-1);
+  }
+  .series-page .ms-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:18px;flex-wrap:wrap}
+  .series-page .ms-head h2{font-family:'Chakra Petch',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.1;color:var(--ink)}
+  .series-page .ms-sub{font-size:13px;color:var(--muted);margin-top:4px}
+  .series-page .ms-summary{font:600 13px 'Chakra Petch',sans-serif;color:var(--muted);background:#FBFAF4;padding:8px 12px;border-radius:8px}
+  .series-page .ms-summary strong{color:var(--ink);font-weight:700}
+
+  .series-page .models-table{
+    background:#FBFAF4;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;
+  }
+  .series-page .mt-head, .series-page .mt-row{
+    display:grid;
+    grid-template-columns:1.6fr .9fr .9fr 1.4fr auto;
+    gap:12px;align-items:center;padding:11px 16px;
+  }
+  .series-page .mt-head{
+    background:#F4F2E9;border-bottom:1px solid var(--line);
+    font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  }
+  .series-page[data-cat="kombajny"] .mt-head, .series-page[data-cat="kombajny"] .mt-row{
+    grid-template-columns:1.4fr .9fr .9fr .8fr 1.2fr auto;
+  }
+  .series-page .mt-row{
+    border-bottom:1px solid var(--line);text-decoration:none;color:var(--body);
+    transition:background .12s;font:500 14px 'Roboto Condensed',sans-serif;
+  }
+  .series-page .mt-row:last-child{border-bottom:0}
+  .series-page .mt-row:hover{background:#fff}
+  .series-page .mt-name{font:700 16px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.005em;display:inline-flex;align-items:center;gap:8px}
+  .series-page .mt-name .dot-current{width:6px;height:6px;background:var(--green);border-radius:50%;animation:sp-pulse 2s infinite;flex-shrink:0}
+  .series-page .mt-power strong{color:var(--ink);font-family:'Chakra Petch',sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em}
+  .series-page .mt-power .kw{color:var(--muted);font-size:12px}
+  .series-page .mt-year{color:var(--muted);font-family:'Chakra Petch',sans-serif;font-size:13.5px}
+  .series-page .mt-tank{font-family:'Chakra Petch',sans-serif;font-size:13.5px;color:var(--ink)}
+  .series-page .mt-engine{color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .series-page .mt-go{
+    font:700 12.5px 'Chakra Petch',sans-serif;color:#0A0A0B;
+    padding:6px 11px;border:1px solid var(--line-2);border-radius:8px;
+    background:#fff;transition:.15s;white-space:nowrap;
+  }
+  .series-page .mt-row:hover .mt-go{background:var(--yellow);border-color:var(--yellow);transform:translateX(2px)}
+  @keyframes sp-pulse{0%,100%{box-shadow:0 0 0 0 rgba(11,122,59,.4)}50%{box-shadow:0 0 0 4px rgba(11,122,59,0)}}
+
+  .series-page .siblings{margin:32px 0 0}
+  .series-page .sib-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .series-page .sib-head h2{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0;color:var(--ink)}
+  .series-page .sib-all{font:600 13px 'Chakra Petch',sans-serif;color:#0A0A0B;text-decoration:none;background:#fff;border:1px solid var(--line);padding:9px 14px;border-radius:10px;transition:.15s}
+  .series-page .sib-all:hover{background:var(--yellow-soft);border-color:var(--yellow)}
+  .series-page .sib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .series-page .sib-card{
+    display:block;text-decoration:none;color:inherit;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:14px 16px;transition:.18s;
+  }
+  .series-page .sib-card:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
+  .series-page .sib-title-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+  .series-page .sib-title{font:700 16px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em}
+  .series-page .sib-badge{
+    display:inline-flex;align-items:center;gap:5px;padding:2px 7px;border-radius:999px;
+    font:600 10px 'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .series-page .sib-badge.current{background:var(--green-soft);color:var(--green)}
+  .series-page .sib-badge.current .dot{width:5px;height:5px;background:var(--green);border-radius:50%}
+  .series-page .sib-badge.legacy{background:var(--legacy-soft);color:var(--legacy)}
+  .series-page .sib-meta{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+  .series-page .sib-meta .sep{width:3px;height:3px;background:var(--muted-2);border-radius:50%}
+  .series-page .sib-meta strong{color:var(--ink);font-weight:700}
+
+  .series-page .big-cta{
+    margin-top:32px;padding:36px;border-radius:var(--r-xl);
+    background:linear-gradient(135deg,var(--yellow) 0%,#FFD400 100%);
+    display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:center;
+    position:relative;overflow:hidden;box-shadow:0 10px 30px -8px var(--yellow-glow);
+  }
+  .series-page .big-cta::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(400px 300px at 100% 100%, rgba(0,0,0,.12), transparent);
+  }
+  .series-page .big-cta h2{font-family:'Chakra Petch',sans-serif;font-size:30px;line-height:1.05;letter-spacing:-.02em;position:relative;z-index:2;color:#0A0A0B;margin:0}
+  .series-page .big-cta p{color:#2a2a2a;margin-top:10px;font-size:15px;position:relative;z-index:2}
+  .series-page .cta-kicker{
+    display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.2em;text-transform:uppercase;
+    color:#0A0A0B;background:rgba(0,0,0,.08);padding:6px 12px;border-radius:999px;margin-bottom:14px;position:relative;z-index:2;
+  }
+  .series-page .cta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:2}
+  .series-page .cta-btn{
+    padding:15px 24px;border-radius:14px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+    display:inline-flex;align-items:center;gap:10px;transition:.15s;
+  }
+  .series-page .cta-btn.primary{background:#0A0A0B;color:#fff}
+  .series-page .cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
+  .series-page .cta-btn.ghost{background:rgba(255,255,255,.4);color:#0A0A0B;border:1px solid rgba(0,0,0,.15)}
+  .series-page .cta-btn.ghost:hover{background:rgba(255,255,255,.7)}
+  .series-page .cta-right{position:relative;z-index:2;min-height:200px;display:flex;align-items:center;justify-content:center}
+  .series-page .cta-photo{
+    width:100%;height:200px;border-radius:16px;
+    background-size:cover;background-position:center;
+    box-shadow:0 20px 40px -12px rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.1);
+    position:relative;overflow:hidden;
+  }
+  .series-page .cta-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(0,0,0,.15))}
+
+  @media (max-width:960px){
+    .series-page .hero{grid-template-columns:1fr;padding:30px 24px 26px;gap:18px}
+    .series-page .hero-right{min-height:200px;order:2}
+    .series-page .hero-photo{min-height:200px}
+    .series-page .big-cta{grid-template-columns:1fr;padding:28px}
+    .series-page .cta-right{min-height:0}
+    .series-page .cta-photo{height:180px}
+    .series-page .hero-stats .s + .s{padding-left:0;border-left:0}
+  }
+  @media (max-width:780px){
+    .series-page .mt-head, .series-page .mt-row{
+      grid-template-columns:1.4fr 1fr auto;gap:10px;
+    }
+    .series-page .mt-col-year, .series-page .mt-year,
+    .series-page .mt-col-engine, .series-page .mt-engine,
+    .series-page .mt-col-tank, .series-page .mt-tank{display:none}
+  }
+  @media (max-width:600px){
+    .series-page{padding:20px 16px 60px}
+    .series-page .models-section{padding:18px}
+  }
+</style>

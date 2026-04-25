@@ -11,66 +11,307 @@ const { druh: druhSlug } = Astro.params;
 const druh = getDruh(druhSlug!);
 if (!druh) return Astro.redirect('/plemena/');
 
+const druhEmoji: Record<string, string> = { hovezi: '🐄', ovce: '🐑', kone: '🐎' };
+const druhTone: Record<string, [string, string]> = {
+  hovezi: ['#7A5230', '#3F2A18'],
+  ovce: ['#C9A876', '#7A6240'],
+  kone: ['#8B5A3B', '#4D2E1C'],
+};
+const [druhC1, druhC2] = druhTone[druh.slug] ?? ['#5a4a30', '#2a2218'];
+
 const sorted = [...druh.plemena].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+
+// Aggregate stats
+const countries = Array.from(new Set(sorted.map((p) => p.origin_country))).sort();
+const uzitSet = new Set<string>();
+for (const p of sorted) for (const u of p.uzitkovost) uzitSet.add(u);
+const uzitList = Array.from(uzitSet).sort();
 ---
 
 <Layout
   title={`${druh.name_plural} — katalog plemen`}
   description={`Přehled plemen druhu ${druh.name.toLowerCase()}. ${druh.description.slice(0, 140)}`}
 >
-  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
-    <div style="margin-bottom:8px;">
-      <a href="/plemena/" style="font-size:13px; color:#666; text-decoration:none;">← Katalog plemen</a>
-    </div>
+  <div class="druh-page">
 
-    <div style="margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid #e8e8e8;">
-      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">
-        {druh.name_plural}
-      </h1>
-      <p style="font-size:16px; color:#444; max-width:820px; line-height:1.65;">{druh.description}</p>
-      <div style="margin-top:14px; font-size:14px; color:#666;">📚 {sorted.length} plemen v databázi</div>
-    </div>
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/plemena/">Zvířata</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">{druh.name_plural}</span>
+    </nav>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr)); gap:16px;">
+    <section class="hero" style={`--druh-c1:${druhC1};--druh-c2:${druhC2};`}>
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Druh · {druh.name}</span>
+        <h1>{druh.name_plural}</h1>
+        <p class="hero-lede">{druh.description}</p>
+
+        <div class="hero-stats">
+          <div class="s"><span class="n">{sorted.length}</span><span class="l">plemen</span></div>
+          <div class="s"><span class="n">{countries.length}</span><span class="l">zemí původu</span></div>
+          {uzitList.length > 0 && <div class="s"><span class="n">{uzitList.length}</span><span class="l">typů užitkovosti</span></div>}
+        </div>
+
+        <div class="hero-actions">
+          <a class="cta-primary" href={`/bazar/?category=zvirata&druh=${druh.slug}`}>
+            Hledat v bazaru
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-secondary" href="/plemena/">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            Všechny druhy
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-emoji-card">
+          <div class="hec-emoji" aria-hidden="true">{druhEmoji[druh.slug] ?? '🐾'}</div>
+          <div class="hec-info">
+            <div class="hec-title">{druh.name_plural}</div>
+            <div class="hec-c">{sorted.length} plemen v databázi</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Plemena <span class="section-title-c">{sorted.length}</span></h2>
+
+    <div class="plemena-grid">
       {sorted.map((p) => {
-        const uzit = p.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ');
+        const uzit = p.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u);
         return (
-          <a href={`/plemena/${druh.slug}/${p.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:20px; transition:box-shadow .2s, transform .2s;" class="plemeno-card">
-            <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;">
-              <span style="background:#f0f0f0; color:#555; font-size:10px; padding:2px 8px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">{uzit}</span>
+          <a href={`/plemena/${druh.slug}/${p.slug}/`} class="plemeno-card">
+            <div class="pc-tags">
+              {uzit.map((u) => <span class="pc-tag">{u}</span>)}
             </div>
-            <h3 style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; color:#1a1a1a; margin-bottom:6px;">{p.name}</h3>
+            <h3 class="pc-name">{p.name}</h3>
             {p.alternative_names && p.alternative_names.length > 0 && (
-              <div style="font-size:12px; color:#767676; margin-bottom:8px; font-style:italic;">{p.alternative_names.join(', ')}</div>
+              <div class="pc-altnames">{p.alternative_names.join(', ')}</div>
             )}
-            <div style="display:inline-flex; align-items:center; gap:6px; font-size:13px; color:#666; margin-bottom:10px;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              {p.origin_country}
+            <div class="pc-country">📍 {p.origin_country}{p.year_registered ? ` · ${p.year_registered}` : ''}</div>
+            {(p.weight_male_kg || p.weight_female_kg || p.milk_yield_kg_year || p.height_cm) && (
+              <div class="pc-stats">
+                {p.weight_male_kg && <span class="pc-stat">♂ <strong>{p.weight_male_kg}</strong> kg</span>}
+                {p.weight_female_kg && <span class="pc-stat">♀ <strong>{p.weight_female_kg}</strong> kg</span>}
+                {p.milk_yield_kg_year && (
+                  <span class="pc-stat pc-stat-milk">
+                    <strong>{p.milk_yield_kg_year.toLocaleString('cs-CZ')}</strong> kg/rok
+                  </span>
+                )}
+                {p.height_cm && <span class="pc-stat">↕ <strong>{p.height_cm}</strong> cm</span>}
+              </div>
+            )}
+            <p class="pc-desc">{p.description}</p>
+            <div class="pc-foot">
+              <span>Detail plemene</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </div>
-            <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:#555; margin-bottom:10px;">
-              {p.weight_male_kg && <span>♂ {p.weight_male_kg} kg</span>}
-              {p.weight_female_kg && <span>♀ {p.weight_female_kg} kg</span>}
-              {p.milk_yield_kg_year && (
-                <span style="display:inline-flex; align-items:center; gap:4px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                  {p.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok
-                </span>
-              )}
-              {p.height_cm && (
-                <span style="display:inline-flex; align-items:center; gap:4px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 8-4-4-4 4"/><path d="M14 4v16"/><path d="m6 16 4 4 4-4"/></svg>
-                  {p.height_cm} cm
-                </span>
-              )}
-            </div>
-            <p style="font-size:13px; color:#666; line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{p.description}</p>
           </a>
         );
       })}
     </div>
-  </div>
 
-  <style>
-    .plemeno-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
-  </style>
+    <section class="big-cta">
+      <div>
+        <span class="cta-kicker">Prodáváte zvířata?</span>
+        <h2>{druh.name_plural} v Agro bazaru<br />— zdarma a bez provize.</h2>
+        <p>Inzerát na 30 dní, kontakt přímo na chovatele, žádný poplatek za zveřejnění.</p>
+        <div class="cta-actions">
+          <a class="cta-btn primary" href="/bazar/novy/">
+            Přidat inzerát zdarma
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-btn ghost" href={`/bazar/?category=zvirata&druh=${druh.slug}`}>Procházet bazar</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
 </Layout>
+
+<style>
+  .druh-page{
+    --yellow:#FFEA00;
+    --yellow-soft:#FFF6A8;
+    --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B;
+    --body:#1E1E22;
+    --muted:#6B6B72;
+    --muted-2:#9A9AA3;
+    --line:#EAEAEC;
+    --line-2:#DFDFE3;
+    --bg-cream:#FBFAF4;
+    --card:#FFFFFF;
+    --green:#0B7A3B;
+    --green-soft:#E3F3EA;
+    --r-xl:24px;
+    --r-lg:18px;
+    --r-md:12px;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px;margin:0 auto;padding:26px 24px 96px;
+    color:var(--body);
+  }
+
+  .druh-page .breadcrumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .druh-page .breadcrumb a{color:var(--muted);text-decoration:none}
+  .druh-page .breadcrumb a:hover{color:#000}
+  .druh-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2);flex-shrink:0}
+  .druh-page .breadcrumb .current{color:#000;font-weight:600}
+
+  .druh-page .hero{
+    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+    background:
+      radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, color-mix(in srgb, var(--druh-c1) 36%, transparent), transparent 60%),
+      linear-gradient(135deg, #14110E 0%, #1F1A14 60%, #2A2218 100%);
+    padding:44px 44px 38px;margin-bottom:22px;
+    box-shadow:var(--sh-3);
+    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
+  }
+  .druh-page .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .druh-page .hero-left{position:relative;z-index:2}
+  .druh-page .kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--yellow);margin-bottom:18px;
+    padding:8px 14px;border:1px solid rgba(255,234,0,.4);border-radius:999px;
+    background:rgba(255,234,0,.06);
+  }
+  .druh-page .kicker .dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;box-shadow:0 0 0 3px rgba(255,234,0,.2)}
+  .druh-page .hero h1{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    font-size:clamp(2.4rem,5.5vw,4.4rem);color:#fff;line-height:.96;letter-spacing:-.03em;margin:0;
+  }
+  .druh-page .hero-lede{max-width:580px;font-size:16px;color:#c8c8d0;margin:18px 0 22px;line-height:1.6}
+
+  .druh-page .hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:22px;font-family:'Chakra Petch',sans-serif}
+  .druh-page .hero-stats .s{display:flex;flex-direction:column;gap:3px}
+  .druh-page .hero-stats .n{font-size:24px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
+  .druh-page .hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .druh-page .hero-stats .s + .s{padding-left:24px;border-left:1px solid rgba(255,255,255,.12)}
+
+  .druh-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .druh-page .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--yellow);color:#0A0A0B;
+    padding:13px 18px;border-radius:12px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    transition:transform .15s, box-shadow .15s;
+    box-shadow:0 14px 40px -10px var(--yellow-glow);
+  }
+  .druh-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+  .druh-page .cta-secondary{
+    display:inline-flex;align-items:center;gap:8px;
+    color:#c8c8d0;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    padding:13px 16px;border-radius:12px;text-decoration:none;
+    font:500 13px 'Chakra Petch',sans-serif;
+    transition:.15s;
+  }
+  .druh-page .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+
+  .druh-page .hero-right{position:relative;z-index:1;min-height:280px;display:flex;align-items:center;justify-content:center}
+  .druh-page .hero-emoji-card{
+    width:100%;min-height:280px;
+    background:linear-gradient(135deg, color-mix(in srgb, var(--druh-c1) 32%, transparent) 0%, color-mix(in srgb, var(--druh-c2) 24%, transparent) 100%);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+    padding:24px;
+  }
+  .druh-page .hec-emoji{font-size:120px;line-height:1;filter:drop-shadow(0 12px 30px rgba(0,0,0,.4))}
+  .druh-page .hec-info{text-align:center}
+  .druh-page .hec-title{font:700 22px 'Chakra Petch',sans-serif;color:#fff;letter-spacing:-.01em;margin-bottom:4px}
+  .druh-page .hec-c{font:500 13px 'Chakra Petch',sans-serif;color:var(--yellow);letter-spacing:.06em}
+
+  .druh-page .section-title{
+    font-family:'Chakra Petch',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;
+    margin:14px 0 14px;color:var(--ink);
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .druh-page .section-title-c{
+    font-size:14px;background:var(--yellow);color:#0A0A0B;padding:3px 10px;border-radius:8px;letter-spacing:.04em;
+  }
+
+  .druh-page .plemena-grid{
+    display:grid;grid-template-columns:repeat(auto-fill, minmax(min(280px, 100%), 1fr));gap:14px;
+  }
+  .druh-page .plemeno-card{
+    display:flex;flex-direction:column;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:18px;text-decoration:none;color:inherit;
+    transition:.22s cubic-bezier(.2,.7,.2,1);
+  }
+  .druh-page .plemeno-card:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
+  .druh-page .pc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+  .druh-page .pc-tag{
+    font:600 10.5px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:.1em;text-transform:uppercase;
+    background:#FBFAF4;border:1px solid var(--line);padding:3px 8px;border-radius:5px;
+  }
+  .druh-page .pc-name{font:700 20px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em;margin:0 0 4px}
+  .druh-page .pc-altnames{font:400 12px/1.4 'Roboto Condensed',sans-serif;color:var(--muted);font-style:italic;margin-bottom:8px}
+  .druh-page .pc-country{font:500 12.5px 'Chakra Petch',sans-serif;color:var(--ink);margin-bottom:10px;letter-spacing:.02em}
+  .druh-page .pc-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;font-family:'Chakra Petch',sans-serif}
+  .druh-page .pc-stat{font-size:12px;color:var(--muted);letter-spacing:.04em}
+  .druh-page .pc-stat strong{color:var(--ink);font-weight:700;font-size:13px}
+  .druh-page .pc-stat-milk strong{color:var(--green)}
+  .druh-page .pc-desc{
+    font-size:13.5px;color:#3a3a40;line-height:1.55;margin:0 0 14px;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .druh-page .pc-foot{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:auto;padding-top:12px;border-top:1px dashed var(--line);
+    font:700 13px 'Chakra Petch',sans-serif;color:var(--ink);
+  }
+  .druh-page .pc-foot svg{transition:transform .15s}
+  .druh-page .plemeno-card:hover .pc-foot svg{transform:translateX(3px)}
+
+  .druh-page .big-cta{
+    margin-top:32px;padding:36px;border-radius:var(--r-xl);
+    background:linear-gradient(135deg,var(--yellow) 0%,#FFD400 100%);
+    position:relative;overflow:hidden;box-shadow:0 10px 30px -8px var(--yellow-glow);
+  }
+  .druh-page .big-cta::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(400px 300px at 100% 100%, rgba(0,0,0,.12), transparent);
+  }
+  .druh-page .big-cta h2{font-family:'Chakra Petch',sans-serif;font-size:28px;line-height:1.05;letter-spacing:-.02em;position:relative;z-index:2;color:#0A0A0B;margin:0}
+  .druh-page .big-cta p{color:#2a2a2a;margin-top:10px;font-size:15px;position:relative;z-index:2;max-width:600px}
+  .druh-page .cta-kicker{
+    display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.2em;text-transform:uppercase;
+    color:#0A0A0B;background:rgba(0,0,0,.08);padding:6px 12px;border-radius:999px;margin-bottom:14px;position:relative;z-index:2;
+  }
+  .druh-page .cta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:2}
+  .druh-page .cta-btn{
+    padding:15px 24px;border-radius:14px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+    display:inline-flex;align-items:center;gap:10px;transition:.15s;
+  }
+  .druh-page .cta-btn.primary{background:#0A0A0B;color:#fff}
+  .druh-page .cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
+  .druh-page .cta-btn.ghost{background:rgba(255,255,255,.4);color:#0A0A0B;border:1px solid rgba(0,0,0,.15)}
+  .druh-page .cta-btn.ghost:hover{background:rgba(255,255,255,.7)}
+
+  @media (max-width:960px){
+    .druh-page .hero{grid-template-columns:1fr;padding:30px 24px 26px;gap:18px}
+    .druh-page .hero-right{min-height:200px;order:2}
+    .druh-page .hero-emoji-card{min-height:200px}
+    .druh-page .hec-emoji{font-size:84px}
+    .druh-page .hero-stats .s + .s{padding-left:0;border-left:0}
+  }
+  @media (max-width:600px){
+    .druh-page{padding:20px 16px 60px}
+  }
+</style>

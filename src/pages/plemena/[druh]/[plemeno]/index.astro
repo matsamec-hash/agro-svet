@@ -18,105 +18,403 @@ const found = getPlemeno(druhSlug!, plemenoSlug!);
 if (!found) return Astro.redirect('/plemena/');
 const { druh, plemeno } = found;
 
-const related = druh.plemena.filter((p) => p.slug !== plemeno.slug).slice(0, 6);
+const druhEmoji: Record<string, string> = { hovezi: '🐄', ovce: '🐑', kone: '🐎' };
+const druhTone: Record<string, [string, string]> = {
+  hovezi: ['#7A5230', '#3F2A18'],
+  ovce: ['#C9A876', '#7A6240'],
+  kone: ['#8B5A3B', '#4D2E1C'],
+};
+const [druhC1, druhC2] = druhTone[druh.slug] ?? ['#5a4a30', '#2a2218'];
 
-const specRows: { label: string; value: string }[] = [];
-specRows.push({ label: 'Druh', value: druh.name });
-specRows.push({ label: 'Původ', value: plemeno.origin_country });
-if (plemeno.alternative_names && plemeno.alternative_names.length > 0) specRows.push({ label: 'Jiné názvy', value: plemeno.alternative_names.join(', ') });
-if (plemeno.year_registered) specRows.push({ label: 'Uznání plemene', value: `${plemeno.year_registered}` });
-specRows.push({ label: 'Užitkovost', value: plemeno.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ') });
-if (plemeno.color) specRows.push({ label: 'Zbarvení', value: plemeno.color });
-if (plemeno.weight_male_kg) specRows.push({ label: 'Hmotnost samec', value: `${plemeno.weight_male_kg.toLocaleString('cs-CZ')} kg` });
-if (plemeno.weight_female_kg) specRows.push({ label: 'Hmotnost samice', value: `${plemeno.weight_female_kg.toLocaleString('cs-CZ')} kg` });
-if (plemeno.height_cm) specRows.push({ label: 'Výška v kohoutku', value: `${plemeno.height_cm} cm` });
-if (plemeno.milk_yield_kg_year) specRows.push({ label: 'Mléčná užitkovost', value: `${plemeno.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok` });
+const related = druh.plemena
+  .filter((p) => p.slug !== plemeno.slug)
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 6);
+
+// Categorized spec rows
+type SpecRow = { label: string; value: string };
+const originSpecs: SpecRow[] = [];
+const physicalSpecs: SpecRow[] = [];
+const productionSpecs: SpecRow[] = [];
+
+originSpecs.push({ label: 'Druh', value: druh.name });
+originSpecs.push({ label: 'Původ', value: plemeno.origin_country });
+if (plemeno.alternative_names && plemeno.alternative_names.length > 0) originSpecs.push({ label: 'Jiné názvy', value: plemeno.alternative_names.join(', ') });
+if (plemeno.year_registered) originSpecs.push({ label: 'Uznání plemene', value: `${plemeno.year_registered}` });
+
+const uzitVal = plemeno.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ');
+if (uzitVal) productionSpecs.push({ label: 'Užitkovost', value: uzitVal });
+if (plemeno.milk_yield_kg_year) productionSpecs.push({ label: 'Mléčná užitkovost', value: `${plemeno.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok` });
+
+if (plemeno.color) physicalSpecs.push({ label: 'Zbarvení', value: plemeno.color });
+if (plemeno.weight_male_kg) physicalSpecs.push({ label: 'Hmotnost samec', value: `${plemeno.weight_male_kg.toLocaleString('cs-CZ')} kg` });
+if (plemeno.weight_female_kg) physicalSpecs.push({ label: 'Hmotnost samice', value: `${plemeno.weight_female_kg.toLocaleString('cs-CZ')} kg` });
+if (plemeno.height_cm) physicalSpecs.push({ label: 'Výška v kohoutku', value: `${plemeno.height_cm} cm` });
+
+const totalSpecCount = originSpecs.length + physicalSpecs.length + productionSpecs.length;
 
 const pageTitle = plemeno.name;
 const pageDesc = plemeno.description.slice(0, 160);
+const canonical = `https://agro-svet.cz/plemena/${druh.slug}/${plemeno.slug}/`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Zvířata', item: 'https://agro-svet.cz/plemena/' },
+    { '@type': 'ListItem', position: 3, name: druh.name_plural, item: `https://agro-svet.cz/plemena/${druh.slug}/` },
+    { '@type': 'ListItem', position: 4, name: plemeno.name, item: canonical },
+  ],
+};
 ---
 
-<Layout title={`${pageTitle} — plemeno ${druh.name.toLowerCase()}`} description={pageDesc}>
-  <div style="max-width:1080px; margin:0 auto; padding:48px 32px 80px;">
-    <div style="margin-bottom:8px; font-size:13px; color:#666;">
-      <a href="/plemena/" style="color:#666; text-decoration:none;">Katalog plemen</a>
-      <span style="margin:0 6px;">/</span>
-      <a href={`/plemena/${druh.slug}/`} style="color:#666; text-decoration:none;">{druh.name_plural}</a>
-      <span style="margin:0 6px;">/</span>
-      <span style="color:#1a1a1a;">{plemeno.name}</span>
-    </div>
+<Layout title={`${pageTitle} — plemeno ${druh.name.toLowerCase()}`} description={pageDesc} canonical={canonical}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <div class="plemeno-page">
 
-    <div style="margin-bottom:32px;">
-      <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
-        <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
-          {druh.name}
-        </span>
-        {plemeno.uzitkovost.map((u) => (
-          <span style="background:#1a1a1a; color:#fff; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:1px;">
-            {UZITKOVOST_LABELS[u] ?? u}
-          </span>
-        ))}
-      </div>
-      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:6px;">
-        {plemeno.name}
-      </h1>
-      {plemeno.alternative_names && plemeno.alternative_names.length > 0 && (
-        <div style="font-size:15px; color:#666; font-style:italic; margin-bottom:14px;">{plemeno.alternative_names.join(' · ')}</div>
-      )}
-    </div>
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/plemena/">Zvířata</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href={`/plemena/${druh.slug}/`}>{druh.name_plural}</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">{plemeno.name}</span>
+    </nav>
 
-    <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:24px; margin-bottom:24px;">
-      <p style="font-size:16px; line-height:1.7; color:#333; margin:0;">{plemeno.description}</p>
-    </div>
-
-    <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; overflow:hidden; margin-bottom:32px;">
-      <div style="background:#fafafa; padding:16px 20px; border-bottom:1px solid #e8e8e8;">
-        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a;">Charakteristika plemene</h2>
-      </div>
-      <table style="width:100%; border-collapse:collapse; font-size:14px;">
-        <tbody>
-          {specRows.map((row, idx) => (
-            <tr style={`border-bottom:${idx < specRows.length - 1 ? '1px solid #f0f0f0' : 'none'};`}>
-              <td style="padding:12px 20px; color:#666; width:40%;">{row.label}</td>
-              <td style="padding:12px 20px; color:#1a1a1a; font-weight:500;">{row.value}</td>
-            </tr>
+    <section class="hero" style={`--druh-c1:${druhC1};--druh-c2:${druhC2};`}>
+      <div class="hero-left">
+        <div class="hero-tags">
+          <span class="tag tag-druh">{druh.name}</span>
+          {plemeno.uzitkovost.map((u) => (
+            <span class="tag tag-uzit">{UZITKOVOST_LABELS[u] ?? u}</span>
           ))}
-        </tbody>
-      </table>
-    </div>
-
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-bottom:32px;">
-      <a href={`/bazar/?kategorie=zvirata&q=${encodeURIComponent(plemeno.name)}`} style="display:block; text-decoration:none; background:#FFFF00; color:#000; border-radius:18px; padding:24px; text-align:center;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; margin-bottom:4px;">Hledat v bazaru</div>
-        <div style="font-size:13px; color:#333;">Aktuální nabídky {plemeno.name}</div>
-      </a>
-      <a href={`/plemena/${druh.slug}/`} style="display:block; text-decoration:none; background:#fff; border:1px solid #e8e8e8; color:#1a1a1a; border-radius:18px; padding:24px; text-align:center;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; margin-bottom:4px;">Další {druh.name_plural.toLowerCase()}</div>
-        <div style="font-size:13px; color:#666;">{druh.plemena.length} plemen</div>
-      </a>
-    </div>
-
-    {related.length > 0 && (
-      <section style="margin-top:48px;">
-        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:16px;">
-          Další plemena
-        </h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px;">
-          {related.map((p) => (
-            <a href={`/plemena/${druh.slug}/${p.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:box-shadow .2s, transform .2s;" class="rel-card">
-              <div style="font-family:'Chakra Petch',sans-serif; font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">{p.name}</div>
-              <div style="display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#666;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                {p.origin_country}
-              </div>
-            </a>
-          ))}
+          <span class="tag tag-country">📍 {plemeno.origin_country}</span>
         </div>
-      </section>
-    )}
-  </div>
+        <h1>{plemeno.name}</h1>
+        {plemeno.alternative_names && plemeno.alternative_names.length > 0 && (
+          <div class="hero-altnames">{plemeno.alternative_names.join(' · ')}</div>
+        )}
+        <p class="hero-lede">{plemeno.description}</p>
 
-  <style>
-    .rel-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
-  </style>
+        <div class="hero-actions">
+          <a class="cta-primary" href={`/bazar/?category=zvirata&q=${encodeURIComponent(plemeno.name)}`}>
+            Hledat {plemeno.name} v bazaru
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="cta-secondary" href={`/plemena/${druh.slug}/`}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            Všechna {druh.name_plural.toLowerCase()}
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-emoji-card">
+          <div class="hec-emoji" aria-hidden="true">{druhEmoji[druh.slug] ?? '🐾'}</div>
+          <div class="hec-name">{plemeno.name}</div>
+          {plemeno.year_registered && <div class="hec-year">Uznáno {plemeno.year_registered}</div>}
+        </div>
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <div class="content-main">
+        <section class="spec-card">
+          <div class="card-head">
+            <h2>Charakteristika plemene</h2>
+            <span class="card-head-meta">{totalSpecCount} {totalSpecCount === 1 ? 'parametr' : totalSpecCount < 5 ? 'parametry' : 'parametrů'}</span>
+          </div>
+
+          {originSpecs.length > 0 && (
+            <div class="spec-group">
+              <div class="spec-group-label">Původ &amp; identita</div>
+              <dl class="spec-list">
+                {originSpecs.map((row) => (
+                  <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
+                ))}
+              </dl>
+            </div>
+          )}
+
+          {productionSpecs.length > 0 && (
+            <div class="spec-group">
+              <div class="spec-group-label">Užitkovost &amp; produkce</div>
+              <dl class="spec-list">
+                {productionSpecs.map((row) => (
+                  <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
+                ))}
+              </dl>
+            </div>
+          )}
+
+          {physicalSpecs.length > 0 && (
+            <div class="spec-group">
+              <div class="spec-group-label">Fyzické vlastnosti</div>
+              <dl class="spec-list">
+                {physicalSpecs.map((row) => (
+                  <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
+                ))}
+              </dl>
+            </div>
+          )}
+        </section>
+
+        {related.length > 0 && (
+          <section class="related-card">
+            <div class="card-head">
+              <h2>Další {druh.name_plural.toLowerCase()}</h2>
+              <a class="card-head-link" href={`/plemena/${druh.slug}/`}>Všechna plemena →</a>
+            </div>
+            <div class="rel-grid">
+              {related.map((p) => (
+                <a href={`/plemena/${druh.slug}/${p.slug}/`} class="rel-card">
+                  <div class="rel-name">{p.name}</div>
+                  <div class="rel-country">📍 {p.origin_country}</div>
+                  {p.uzitkovost.length > 0 && (
+                    <div class="rel-uzit">{p.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(' · ')}</div>
+                  )}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+
+      <aside class="content-aside">
+        <div class="aside-card primary-cta-card">
+          <span class="acc-kicker">Aktuální nabídky</span>
+          <h3>{plemeno.name} v Agro bazaru</h3>
+          <p>Nabídky chovných zvířat přímo od chovatelů. Bez provize, kontakt napřímo.</p>
+          <a href={`/bazar/?category=zvirata&q=${encodeURIComponent(plemeno.name)}`} class="aside-btn primary">
+            Otevřít bazar
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="/bazar/novy/" class="aside-btn ghost-light">Přidat vlastní inzerát</a>
+        </div>
+
+        <div class="aside-card nav-card">
+          <span class="acc-label">Kontext</span>
+          <a href="/plemena/" class="aside-link">
+            <span class="al-label">Katalog</span>
+            <span class="al-value">Všechna zvířata</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href={`/plemena/${druh.slug}/`} class="aside-link">
+            <span class="al-label">Druh</span>
+            <span class="al-value">{druh.name_plural}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+      </aside>
+    </div>
+
+  </div>
 </Layout>
+
+<style>
+  .plemeno-page{
+    --yellow:#FFEA00;
+    --yellow-soft:#FFF6A8;
+    --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B;
+    --body:#1E1E22;
+    --muted:#6B6B72;
+    --muted-2:#9A9AA3;
+    --line:#EAEAEC;
+    --line-2:#DFDFE3;
+    --bg-cream:#FBFAF4;
+    --card:#FFFFFF;
+    --green:#0B7A3B;
+    --green-soft:#E3F3EA;
+    --r-xl:24px;
+    --r-lg:18px;
+    --r-md:12px;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px;margin:0 auto;padding:26px 24px 96px;
+    color:var(--body);
+  }
+
+  .plemeno-page .breadcrumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .plemeno-page .breadcrumb a{color:var(--muted);text-decoration:none}
+  .plemeno-page .breadcrumb a:hover{color:#000}
+  .plemeno-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2);flex-shrink:0}
+  .plemeno-page .breadcrumb .current{color:#000;font-weight:600}
+
+  .plemeno-page .hero{
+    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+    background:
+      radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, color-mix(in srgb, var(--druh-c1) 36%, transparent), transparent 60%),
+      linear-gradient(135deg, #14110E 0%, #1F1A14 60%, #2A2218 100%);
+    padding:44px 44px 38px;margin-bottom:22px;
+    box-shadow:var(--sh-3);
+    display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center;
+  }
+  .plemeno-page .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .plemeno-page .hero-left{position:relative;z-index:2}
+
+  .plemeno-page .hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .plemeno-page .tag{
+    display:inline-flex;align-items:center;gap:6px;
+    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.14em;text-transform:uppercase;
+    padding:6px 11px;border-radius:6px;
+  }
+  .plemeno-page .tag-druh{background:var(--yellow);color:#0A0A0B}
+  .plemeno-page .tag-uzit{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.16)}
+  .plemeno-page .tag-country{background:rgba(255,255,255,.06);color:#c8c8d0;border:1px solid rgba(255,255,255,.12)}
+
+  .plemeno-page .hero h1{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    font-size:clamp(2.4rem,5.5vw,4.4rem);color:#fff;line-height:.96;letter-spacing:-.03em;margin:0;
+  }
+  .plemeno-page .hero-altnames{
+    margin-top:8px;font:400 17px 'Roboto Condensed',sans-serif;color:var(--yellow);font-style:italic;
+  }
+  .plemeno-page .hero-lede{max-width:600px;font-size:15.5px;color:#c8c8d0;margin:14px 0 22px;line-height:1.7}
+
+  .plemeno-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .plemeno-page .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--yellow);color:#0A0A0B;
+    padding:13px 18px;border-radius:12px;text-decoration:none;
+    font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    transition:transform .15s, box-shadow .15s;
+    box-shadow:0 14px 40px -10px var(--yellow-glow);
+  }
+  .plemeno-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+  .plemeno-page .cta-secondary{
+    display:inline-flex;align-items:center;gap:8px;
+    color:#c8c8d0;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    padding:13px 16px;border-radius:12px;text-decoration:none;
+    font:500 13px 'Chakra Petch',sans-serif;
+    transition:.15s;
+  }
+  .plemeno-page .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+
+  .plemeno-page .hero-right{position:relative;z-index:1;min-height:280px;display:flex;align-items:center;justify-content:center}
+  .plemeno-page .hero-emoji-card{
+    width:100%;min-height:280px;
+    background:linear-gradient(135deg, color-mix(in srgb, var(--druh-c1) 32%, transparent) 0%, color-mix(in srgb, var(--druh-c2) 24%, transparent) 100%);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+    padding:24px;
+  }
+  .plemeno-page .hec-emoji{font-size:120px;line-height:1;filter:drop-shadow(0 12px 30px rgba(0,0,0,.4))}
+  .plemeno-page .hec-name{font:700 22px 'Chakra Petch',sans-serif;color:#fff;letter-spacing:-.01em;text-align:center}
+  .plemeno-page .hec-year{font:500 12px 'Chakra Petch',sans-serif;color:var(--yellow);letter-spacing:.06em}
+
+  .plemeno-page .content-grid{display:grid;grid-template-columns:1fr 320px;gap:22px}
+  .plemeno-page .content-main{display:flex;flex-direction:column;gap:22px}
+
+  .plemeno-page .spec-card, .plemeno-page .related-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);
+    padding:24px 24px 22px;box-shadow:var(--sh-1);
+  }
+  .plemeno-page .card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  .plemeno-page .card-head h2{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.1;color:var(--ink)}
+  .plemeno-page .card-head-meta{font:600 12px 'Chakra Petch',sans-serif;color:var(--muted);background:#FBFAF4;padding:5px 10px;border-radius:8px}
+  .plemeno-page .card-head-link{font:600 13px 'Chakra Petch',sans-serif;color:#0A0A0B;text-decoration:none}
+  .plemeno-page .card-head-link:hover{color:#000;text-decoration:underline}
+
+  .plemeno-page .spec-group{margin-bottom:18px}
+  .plemeno-page .spec-group:last-child{margin-bottom:0}
+  .plemeno-page .spec-group-label{
+    font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px;
+  }
+  .plemeno-page .spec-group-label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .plemeno-page .spec-list{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0;margin:0;padding:0}
+  .plemeno-page .spec-item{
+    display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+    padding:11px 0;border-bottom:1px dashed var(--line);
+  }
+  .plemeno-page .spec-item:last-child{border-bottom:0}
+  .plemeno-page .spec-item dt{font:500 12.5px 'Chakra Petch',sans-serif;color:var(--muted);letter-spacing:.02em;margin:0}
+  .plemeno-page .spec-item dd{font:600 14px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.005em;margin:0;text-align:right}
+
+  .plemeno-page .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+  .plemeno-page .rel-card{
+    display:block;text-decoration:none;color:inherit;
+    background:#FBFAF4;border:1px solid var(--line);border-radius:var(--r-md);
+    padding:14px 16px;transition:.18s;
+  }
+  .plemeno-page .rel-card:hover{background:#fff;transform:translateY(-2px);box-shadow:var(--sh-1);border-color:var(--yellow)}
+  .plemeno-page .rel-name{font:700 16px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.005em;margin-bottom:5px}
+  .plemeno-page .rel-country{font-size:12px;color:var(--muted);font-family:'Chakra Petch',sans-serif;margin-bottom:4px}
+  .plemeno-page .rel-uzit{font:500 11px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:.05em}
+
+  .plemeno-page .content-aside{display:flex;flex-direction:column;gap:14px;align-self:start;position:sticky;top:104px}
+  .plemeno-page .aside-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:18px;box-shadow:var(--sh-1);
+  }
+  .plemeno-page .primary-cta-card{
+    background:linear-gradient(180deg, #0A0A0B 0%, #18181C 100%);color:#fff;border-color:transparent;
+  }
+  .plemeno-page .acc-kicker{
+    display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--yellow);background:rgba(255,234,0,.12);padding:5px 10px;border-radius:999px;margin-bottom:10px;
+    border:1px solid rgba(255,234,0,.25);
+  }
+  .plemeno-page .primary-cta-card h3{
+    font-family:'Chakra Petch',sans-serif;font-size:19px;font-weight:700;line-height:1.2;
+    letter-spacing:-.01em;margin:0 0 8px;color:#fff;
+  }
+  .plemeno-page .primary-cta-card p{font-size:13px;color:#c8c8d0;line-height:1.5;margin:0 0 14px}
+  .plemeno-page .aside-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+    padding:11px 14px;border-radius:10px;text-decoration:none;
+    font:700 13px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+    transition:.15s;margin-bottom:8px;box-sizing:border-box;
+  }
+  .plemeno-page .aside-btn:last-child{margin-bottom:0}
+  .plemeno-page .aside-btn.primary{background:var(--yellow);color:#0A0A0B}
+  .plemeno-page .aside-btn.primary:hover{transform:translateY(-1px);box-shadow:0 10px 30px -8px var(--yellow-glow)}
+  .plemeno-page .aside-btn.ghost-light{background:rgba(255,255,255,.06);color:#c8c8d0;border:1px solid rgba(255,255,255,.16)}
+  .plemeno-page .aside-btn.ghost-light:hover{background:rgba(255,255,255,.12);color:#fff}
+
+  .plemeno-page .nav-card .acc-label{
+    display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:10px;
+  }
+  .plemeno-page .aside-link{
+    display:flex;align-items:center;gap:10px;
+    padding:11px 12px;border:1px solid var(--line);border-radius:var(--r-md);
+    text-decoration:none;color:var(--ink);background:#FBFAF4;
+    margin-bottom:8px;transition:.15s;
+  }
+  .plemeno-page .aside-link:last-child{margin-bottom:0}
+  .plemeno-page .aside-link:hover{background:var(--yellow-soft);border-color:var(--yellow)}
+  .plemeno-page .al-label{font:500 11px 'Chakra Petch',sans-serif;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+  .plemeno-page .al-value{
+    font:700 13.5px 'Chakra Petch',sans-serif;color:var(--ink);
+    flex:1;text-align:right;letter-spacing:-.005em;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .plemeno-page .aside-link svg{width:14px;height:14px;color:var(--muted);flex-shrink:0}
+
+  @media (max-width:960px){
+    .plemeno-page .hero{grid-template-columns:1fr;padding:30px 24px 26px;gap:18px}
+    .plemeno-page .hero-right{min-height:220px;order:2}
+    .plemeno-page .hero-emoji-card{min-height:220px}
+    .plemeno-page .hec-emoji{font-size:84px}
+    .plemeno-page .content-grid{grid-template-columns:1fr}
+    .plemeno-page .content-aside{position:static;top:auto}
+  }
+  @media (max-width:600px){
+    .plemeno-page{padding:20px 16px 60px}
+    .plemeno-page .spec-card, .plemeno-page .related-card{padding:18px}
+  }
+</style>
