@@ -111,14 +111,13 @@ const donutSegs = struktura.map((s) => {
     </section>
 
     <!-- Cena půdy graf -->
-    <section class="chart-section">
+    <section class="chart-section reveal" data-reveal="line">
       <header>
         <h2>Cena zemědělské půdy 2000–2025</h2>
         <span class="sub">Průměrná tržní cena hektaru orné půdy v tis. Kč. Zdroj: FARMY.CZ Index farmářské půdy + studie Tomáš Valka.</span>
       </header>
       <div class="chart-wrap">
         <svg viewBox={`0 0 ${cenaW} ${cenaH}`} class="chart-svg" role="img" aria-label="Vývoj ceny zemědělské půdy 2000-2025">
-          <!-- Y axis labels -->
           {[0, 100, 200, 300, 400].map((v) => {
             const y = cenaPad.t + cenaPlotH - ((v - cenaMin) / (cenaMax - cenaMin)) * cenaPlotH;
             return (
@@ -128,13 +127,12 @@ const donutSegs = struktura.map((s) => {
               </>
             );
           })}
-          <!-- Area + line -->
-          <path d={cenaArea} fill="rgba(255, 215, 0, .25)"/>
-          <path d={cenaPath} stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <!-- Points + labels -->
+          <path d={cenaArea} fill="rgba(255, 215, 0, .25)" class="line-area"/>
+          <path d={cenaPath} stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round" class="line-path"/>
           {cenaPoints.map((p, i) => (
             <>
-              <circle cx={p.x} cy={p.y} r="4" fill="#FFFF00" stroke="#1a1a1a" stroke-width="1.5"/>
+              <circle cx={p.x} cy={p.y} r="9" fill="transparent" class="line-point-hit" data-rok={p.rok} data-cena={p.cena}/>
+              <circle cx={p.x} cy={p.y} r="4" fill="#FFFF00" stroke="#1a1a1a" stroke-width="1.5" class="line-point" data-rok={p.rok}/>
               {(i === 0 || i === cenaPoints.length - 1 || i % 2 === 0) && (
                 <text x={p.x} y={cenaPad.t + cenaPlotH + 18} text-anchor="middle" font-size="11" fill="#666">{p.rok}</text>
               )}
@@ -150,21 +148,21 @@ const donutSegs = struktura.map((s) => {
 
     <!-- Struktura ZPF + Eroze -->
     <section class="two-col">
-      <div class="card-chart">
+      <div class="card-chart reveal" data-reveal="donut">
         <h3>Struktura zemědělského půdního fondu</h3>
         <span class="sub">3 535 tis. ha = 45 % rozlohy ČR (2024)</span>
         <div class="donut-wrap">
           <svg viewBox="0 0 200 200" class="donut-svg" role="img" aria-label="Struktura ZPF">
             {donutSegs.map((s) => (
-              <path d={s.path} fill={s.color} stroke="#fff" stroke-width="1"/>
+              <path d={s.path} fill={s.color} stroke="#fff" stroke-width="1" data-name={s.name} data-pct={s.pct} data-ha={s.ha}/>
             ))}
             <circle cx={donutCx} cy={donutCy} r="40" fill="#fff"/>
-            <text x={donutCx} y={donutCy - 4} text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">3 535</text>
-            <text x={donutCx} y={donutCy + 12} text-anchor="middle" font-size="10" fill="#666">tis. ha</text>
+            <text x={donutCx} y={donutCy - 4} text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a" class="donut-center">3 535</text>
+            <text x={donutCx} y={donutCy + 12} text-anchor="middle" font-size="10" fill="#666" class="donut-center">tis. ha</text>
           </svg>
           <ul class="donut-legend">
             {struktura.map((s) => (
-              <li>
+              <li data-name={s.name}>
                 <span class="dot" style={`background:${s.color}`}></span>
                 <span class="lbl">{s.name}</span>
                 <span class="val"><strong>{s.pct} %</strong> · {s.ha} tis. ha</span>
@@ -175,24 +173,24 @@ const donutSegs = struktura.map((s) => {
         <p class="card-note">Trvalé travní porosty rostou: z 23 % (2002) na 27 % (2024) — důsledek dotační politiky a ochrany proti erozi.</p>
       </div>
 
-      <div class="card-chart">
+      <div class="card-chart reveal" data-reveal="bars">
         <h3>Ohrožení půdy</h3>
         <span class="sub">Procento zemědělské půdy ČR (VÚMOP)</span>
         <div class="threats">
           <div class="threat">
-            <div class="threat-bar" style="--w:60%; --c:#E53935"><span>60 %</span></div>
+            <div class="threat-bar" style="--w:60%; --c:#E53935" data-final="60"><span>60 %</span></div>
             <span class="threat-lbl">Vodní eroze</span>
           </div>
           <div class="threat">
-            <div class="threat-bar" style="--w:50%; --c:#FB8C00"><span>50 %</span></div>
+            <div class="threat-bar" style="--w:50%; --c:#FB8C00" data-final="50"><span>50 %</span></div>
             <span class="threat-lbl">Zhutnění</span>
           </div>
           <div class="threat">
-            <div class="threat-bar" style="--w:30%; --c:#FFB300"><span>30 %</span></div>
+            <div class="threat-bar" style="--w:30%; --c:#FFB300" data-final="30"><span>30 %</span></div>
             <span class="threat-lbl">Větrná eroze</span>
           </div>
           <div class="threat">
-            <div class="threat-bar" style="--w:15%; --c:#FFC107"><span>15 %</span></div>
+            <div class="threat-bar" style="--w:15%; --c:#FFC107" data-final="15"><span>15 %</span></div>
             <span class="threat-lbl">Dehumifikace (5–15 % pokles humusu)</span>
           </div>
         </div>
@@ -235,7 +233,7 @@ const donutSegs = struktura.map((s) => {
     </section>
 
     <!-- Hlavní plodiny -->
-    <section class="crops-section">
+    <section class="crops-section reveal" data-reveal="bars">
       <header>
         <h2>Hlavní plodiny na orné půdě (2024)</h2>
         <span class="sub">Sklizeň 7 525 tis. tun obilovin, soběstačnost 164,6 %.</span>
@@ -375,4 +373,162 @@ const donutSegs = struktura.map((s) => {
     .crop-row { grid-template-columns:1fr; gap:6px; }
     .chart-section, .crops-section, .card-chart { padding:20px; }
   }
+
+  /* ===== Interaktivita ===== */
+
+  /* Line chart — stroke draw on scroll */
+  .chart-svg .line-path { stroke-dasharray: 1500; stroke-dashoffset: 1500; }
+  .chart-svg .line-area { opacity: 0; }
+  .reveal.in-view .line-path { animation: drawLine 1.6s cubic-bezier(.6,.05,.3,1) forwards; }
+  .reveal.in-view .line-area { animation: fadeIn .8s .8s ease forwards; }
+  @keyframes drawLine { to { stroke-dashoffset: 0; } }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* Line points — pulse on hover */
+  .line-point { transition: r .15s, fill .15s; pointer-events: none; }
+  .line-point-hit { cursor: crosshair; }
+  .line-point-hit:hover ~ .line-point,
+  .line-point.is-hover { r: 7; fill: #1a1a1a; stroke: #FFFF00; stroke-width: 2; }
+
+  /* Donut — radial reveal + hover scale */
+  .donut-svg { overflow: visible; }
+  .donut-svg path { transform-origin: 100px 100px; transition: transform .25s cubic-bezier(.5,0,.3,1), opacity .2s; cursor: pointer; }
+  .donut-svg path { stroke-dasharray: 600; stroke-dashoffset: 600; }
+  .reveal.in-view .donut-svg path { animation: dash 1.0s cubic-bezier(.6,.05,.3,1) forwards; }
+  .reveal.in-view .donut-svg path:nth-child(2) { animation-delay: .15s; }
+  .reveal.in-view .donut-svg path:nth-child(3) { animation-delay: .3s; }
+  @keyframes dash { to { stroke-dashoffset: 0; } }
+  .donut-svg path:hover, .donut-svg path.is-active { transform: scale(1.06); }
+  .donut-svg.has-active path:not(.is-active) { opacity: .35; }
+  .donut-center { opacity: 0; transition: opacity .35s ease .9s; }
+  .reveal.in-view .donut-center { opacity: 1; }
+
+  /* Donut legend sync */
+  .donut-legend li { padding:8px 10px; border-radius:8px; cursor:pointer; transition: background .15s; }
+  .donut-legend li:hover, .donut-legend li.is-active { background: #f5f3ea; }
+
+  /* Threats + crops bars — width fly-in */
+  .threat-bar { width: 0 !important; transition: width 1.0s cubic-bezier(.6,.05,.3,1); }
+  .crop-bar { width: 0 !important; transition: width 1.0s cubic-bezier(.6,.05,.3,1); }
+  .reveal.in-view .threat-bar { width: var(--w) !important; }
+  .reveal.in-view .crop-bar { width: var(--final-w, var(--w, 0)) !important; }
+
+  /* Tooltip */
+  .puda-tooltip {
+    position: fixed; z-index: 999; pointer-events: none;
+    background: #1a1a1a; color: #fff; padding: 8px 12px; border-radius: 8px;
+    font-size: 13px; line-height: 1.4; white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,.25);
+    opacity: 0; transform: translate(-50%, -120%) translateY(6px);
+    transition: opacity .15s, transform .15s;
+  }
+  .puda-tooltip.is-visible { opacity: 1; transform: translate(-50%, -120%); }
+  .puda-tooltip strong { color: #FFFF00; }
 </style>
+
+<script is:inline>
+  (function () {
+    // ── IntersectionObserver: trigger .in-view on reveal sekce ──
+    const reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('in-view');
+            io.unobserve(e.target);
+          }
+        }
+      }, { rootMargin: '0px 0px -60px 0px', threshold: 0.15 });
+      reveals.forEach(el => io.observe(el));
+    } else {
+      reveals.forEach(el => el.classList.add('in-view'));
+    }
+
+    // ── Tooltip helper ──
+    let tip = document.querySelector('.puda-tooltip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.className = 'puda-tooltip';
+      document.body.appendChild(tip);
+    }
+    function showTip(html, x, y) {
+      tip.innerHTML = html;
+      tip.style.left = x + 'px';
+      tip.style.top = y + 'px';
+      tip.classList.add('is-visible');
+    }
+    function hideTip() { tip.classList.remove('is-visible'); }
+
+    // ── Line chart points: hover tooltip ──
+    document.querySelectorAll('.line-point-hit').forEach(pt => {
+      pt.addEventListener('mouseenter', (ev) => {
+        const r = pt.getBoundingClientRect();
+        const rok = pt.dataset.rok;
+        const cena = parseFloat(pt.dataset.cena);
+        showTip(`<strong>${rok}</strong>: ${cena.toLocaleString('cs-CZ')} tis. Kč/ha`, r.left + r.width/2, r.top);
+        // hover the visible point
+        const visible = pt.parentElement.querySelector(`.line-point[data-rok="${rok}"]`);
+        if (visible) visible.classList.add('is-hover');
+      });
+      pt.addEventListener('mouseleave', () => {
+        hideTip();
+        document.querySelectorAll('.line-point.is-hover').forEach(p => p.classList.remove('is-hover'));
+      });
+      pt.addEventListener('mousemove', (ev) => {
+        tip.style.left = ev.clientX + 'px';
+        tip.style.top = (ev.clientY - 14) + 'px';
+      });
+    });
+
+    // ── Donut: hover slice ↔ legend sync + tooltip ──
+    document.querySelectorAll('.donut-svg').forEach(svg => {
+      const paths = svg.querySelectorAll('path[data-name]');
+      const legend = svg.parentElement.querySelector('.donut-legend');
+      const items = legend ? legend.querySelectorAll('li[data-name]') : [];
+
+      function activate(name) {
+        if (name) svg.classList.add('has-active');
+        else svg.classList.remove('has-active');
+        paths.forEach(p => p.classList.toggle('is-active', p.dataset.name === name));
+        items.forEach(li => li.classList.toggle('is-active', li.dataset.name === name));
+      }
+
+      paths.forEach(p => {
+        p.addEventListener('mouseenter', (ev) => {
+          activate(p.dataset.name);
+          const ha = parseInt(p.dataset.ha);
+          showTip(`<strong>${p.dataset.name}</strong><br>${p.dataset.pct} % · ${ha.toLocaleString('cs-CZ')} tis. ha`, ev.clientX, ev.clientY);
+        });
+        p.addEventListener('mousemove', (ev) => { tip.style.left = ev.clientX + 'px'; tip.style.top = (ev.clientY - 14) + 'px'; });
+        p.addEventListener('mouseleave', () => { activate(null); hideTip(); });
+      });
+
+      items.forEach(li => {
+        li.addEventListener('mouseenter', () => activate(li.dataset.name));
+        li.addEventListener('mouseleave', () => activate(null));
+      });
+    });
+
+    // ── Threats bars: tooltip ──
+    document.querySelectorAll('.threat-bar[data-final]').forEach(bar => {
+      bar.addEventListener('mouseenter', (ev) => {
+        const lbl = bar.parentElement.querySelector('.threat-lbl')?.textContent ?? '';
+        showTip(`<strong>${lbl}</strong>: ${bar.dataset.final} % zemědělské půdy`, ev.clientX, ev.clientY);
+      });
+      bar.addEventListener('mousemove', (ev) => { tip.style.left = ev.clientX + 'px'; tip.style.top = (ev.clientY - 14) + 'px'; });
+      bar.addEventListener('mouseleave', hideTip);
+    });
+
+    // ── Crop bars: tooltip ──
+    document.querySelectorAll('.crop-bar').forEach(bar => {
+      const row = bar.closest('.crop-row');
+      const name = row?.querySelector('.crop-name')?.textContent ?? '';
+      const valEl = row?.querySelector('.crop-val')?.textContent ?? '';
+      bar.addEventListener('mouseenter', (ev) => {
+        showTip(`<strong>${name}</strong>: ${valEl}`, ev.clientX, ev.clientY);
+      });
+      bar.addEventListener('mousemove', (ev) => { tip.style.left = ev.clientX + 'px'; tip.style.top = (ev.clientY - 14) + 'px'; });
+      bar.addEventListener('mouseleave', hideTip);
+    });
+  })();
+</script>
