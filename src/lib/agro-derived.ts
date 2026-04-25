@@ -1,5 +1,5 @@
 // src/lib/agro-derived.ts
-import type { CommodityPrice, FertilizerPrice, FuelPrice } from './czso';
+import type { CommodityPrice, FertilizerPrice, FuelPrice, CommodityStat } from './czso';
 
 const MONTH_LABELS = ['leden','únor','březen','duben','květen','červen','červenec','srpen','září','říjen','listopad','prosinec'];
 
@@ -116,4 +116,33 @@ export function priceScissors(
     }
   }
   return points;
+}
+
+// Vrátí klouzavý 60-měsíční průměr cen komodity končící na měsíci `endMonth`.
+// Vrátí null, pokud je v okně méně než 60 měsíců dat.
+export function fiveYearAverage(prices: CommodityPrice[], endMonth: string): number | null {
+  const target = parseMonth(endMonth);
+  if (!target) return null;
+  const targetKey = target.year * 12 + target.month;
+  const window: number[] = [];
+  for (const p of prices) {
+    const d = parseMonth(p.month);
+    if (!d) continue;
+    const key = d.year * 12 + d.month;
+    if (key <= targetKey && key > targetKey - 60) {
+      window.push(p.price);
+    }
+  }
+  if (window.length < 60) return null;
+  return window.reduce((a, b) => a + b, 0) / window.length;
+}
+
+// Vrátí komoditu s největší absolutní hodnotou meziroční změny (`change`).
+export function biggestMomChange(stats: CommodityStat[]): CommodityStat | null {
+  let best: CommodityStat | null = null;
+  for (const s of stats) {
+    if (s.change === null) continue;
+    if (!best || Math.abs(s.change) > Math.abs(best.change!)) best = s;
+  }
+  return best;
 }

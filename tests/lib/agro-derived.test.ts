@@ -1,6 +1,6 @@
 // tests/lib/agro-derived.test.ts
 import { describe, it, expect } from 'vitest';
-import { priceScissors } from '../../src/lib/agro-derived';
+import { priceScissors, fiveYearAverage, biggestMomChange } from '../../src/lib/agro-derived';
 
 describe('priceScissors', () => {
   it('returns indexed series with base year = 100', () => {
@@ -33,5 +33,46 @@ describe('priceScissors', () => {
   it('returns empty array if base year missing', () => {
     const result = priceScissors([], [], [], 2015);
     expect(result).toEqual([]);
+  });
+});
+
+const MONTHS = ['leden','únor','březen','duben','květen','červen','červenec','srpen','září','říjen','listopad','prosinec'];
+
+describe('fiveYearAverage', () => {
+  it('computes rolling average of 60 months ending at given month', () => {
+    // 60 měsíců s konstantní cenou 100, 61. měsíc je 200
+    const prices = Array.from({ length: 60 }, (_, i) => ({
+      name: 'Pšenice',
+      month: `${MONTHS[i % 12]} ${2018 + Math.floor(i / 12)}`,
+      price: 100,
+      unit: 'Kč/t',
+    }));
+    prices.push({ name: 'Pšenice', month: 'leden 2023', price: 200, unit: 'Kč/t' });
+
+    expect(fiveYearAverage(prices, 'leden 2023')).toBe(100);
+    // pro prosinec 2022 (před skokem) = 100
+    expect(fiveYearAverage(prices, 'prosinec 2022')).toBe(100);
+  });
+
+  it('returns null when fewer than 60 months available', () => {
+    const prices = [{ name: 'Pšenice', month: 'leden 2023', price: 100, unit: 'Kč/t' }];
+    expect(fiveYearAverage(prices, 'leden 2023')).toBeNull();
+  });
+});
+
+describe('biggestMomChange', () => {
+  it('finds commodity with largest abs month-over-month change', () => {
+    const stats = [
+      { name: 'Pšenice', price: 5200, change: 4.2, prevYearPrice: 5000, month: 'duben 2026', unit: 'Kč/t' },
+      { name: 'Mléko', price: 9.85, change: -1.5, prevYearPrice: 10, month: 'duben 2026', unit: 'Kč/l' },
+      { name: 'Vejce', price: 4.5, change: 12.0, prevYearPrice: 4, month: 'duben 2026', unit: 'Kč/ks' },
+    ];
+    const result = biggestMomChange(stats);
+    expect(result?.name).toBe('Vejce');
+    expect(result?.change).toBe(12.0);
+  });
+
+  it('returns null when no commodities have change', () => {
+    expect(biggestMomChange([])).toBeNull();
   });
 });
