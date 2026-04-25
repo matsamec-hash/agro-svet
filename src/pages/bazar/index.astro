@@ -13,6 +13,7 @@ const PER_PAGE = 20;
 const url = Astro.url;
 const query = url.searchParams.get('q') ?? '';
 const category = url.searchParams.get('category') ?? '';
+const subcategory = url.searchParams.get('subcategory') ?? '';
 const brand = url.searchParams.get('brand') ?? '';
 const location = url.searchParams.get('location') ?? '';
 const priceFrom = url.searchParams.get('price_from') ?? '';
@@ -21,6 +22,12 @@ const yearFrom = url.searchParams.get('year_from') ?? '';
 const yearTo = url.searchParams.get('year_to') ?? '';
 const powerFrom = url.searchParams.get('power_from') ?? '';
 const powerTo = url.searchParams.get('power_to') ?? '';
+const zaberFrom = url.searchParams.get('zaber_from') ?? '';
+const zaberTo = url.searchParams.get('zaber_to') ?? '';
+const nosnostFrom = url.searchParams.get('nosnost_from') ?? '';
+const nosnostTo = url.searchParams.get('nosnost_to') ?? '';
+const objemFrom = url.searchParams.get('objem_from') ?? '';
+const objemTo = url.searchParams.get('objem_to') ?? '';
 const modelSlug = url.searchParams.get('model') ?? '';
 const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1'));
 
@@ -29,7 +36,7 @@ const supabase = createServerClient();
 // Build query
 let dbQuery = supabase
   .from('bazar_listings')
-  .select('id, title, price, location, category, brand, created_at, views, model_slug, year_of_manufacture, power_hp, hours_operated, featured, featured_until, bazar_images(storage_path, position)', { count: 'exact' })
+  .select('id, title, price, location, category, subcategory, brand, created_at, views, model_slug, year_of_manufacture, power_hp, hours_operated, featured, featured_until, pracovni_zaber_m, nosnost_kg, objem_nadrze_l, bazar_images(storage_path, position)', { count: 'exact' })
   .eq('status', 'active')
   .order('featured', { ascending: false })
   .order('created_at', { ascending: false })
@@ -37,6 +44,7 @@ let dbQuery = supabase
 
 if (query) dbQuery = dbQuery.ilike('title', `%${query}%`);
 if (category) dbQuery = dbQuery.eq('category', category);
+if (subcategory) dbQuery = dbQuery.eq('subcategory', subcategory);
 if (brand) dbQuery = dbQuery.eq('brand', brand);
 if (location) dbQuery = dbQuery.ilike('location', `%${location}%`);
 if (priceFrom) dbQuery = dbQuery.gte('price', parseInt(priceFrom));
@@ -45,6 +53,12 @@ if (yearFrom) dbQuery = dbQuery.gte('year_of_manufacture', parseInt(yearFrom));
 if (yearTo) dbQuery = dbQuery.lte('year_of_manufacture', parseInt(yearTo));
 if (powerFrom) dbQuery = dbQuery.gte('power_hp', parseInt(powerFrom));
 if (powerTo) dbQuery = dbQuery.lte('power_hp', parseInt(powerTo));
+if (zaberFrom) dbQuery = dbQuery.gte('pracovni_zaber_m', parseFloat(zaberFrom));
+if (zaberTo) dbQuery = dbQuery.lte('pracovni_zaber_m', parseFloat(zaberTo));
+if (nosnostFrom) dbQuery = dbQuery.gte('nosnost_kg', parseInt(nosnostFrom));
+if (nosnostTo) dbQuery = dbQuery.lte('nosnost_kg', parseInt(nosnostTo));
+if (objemFrom) dbQuery = dbQuery.gte('objem_nadrze_l', parseInt(objemFrom));
+if (objemTo) dbQuery = dbQuery.lte('objem_nadrze_l', parseInt(objemTo));
 if (modelSlug) dbQuery = dbQuery.eq('model_slug', modelSlug);
 
 const { data: listings, count } = await dbQuery;
@@ -132,6 +146,9 @@ function getImageUrl(listing: any): string | null {
                 createdAt={listing.created_at}
                 views={listing.views}
                 featured={isFeaturedActive(listing)}
+                pracovniZaberM={listing.pracovni_zaber_m}
+                nosnostKg={listing.nosnost_kg}
+                objemNadrzeL={listing.objem_nadrze_l}
               />
             ))}
           </div>
