@@ -47,7 +47,7 @@ function buildSparklinePath(series: TimeSeriesPoint[], width: number, height: nu
     const range = maxVal - minVal || 1;
     const lastY = 24 - ((lastVal - minVal) / range) * 24;
     return (
-      <a class="sp-ticker-card" href={m.anchor} aria-label={`${m.name}, ${fmt(m.value)} ${m.unit}, změna ${m.changePct ?? 0}%`}>
+      <a class="sp-ticker-card" href={m.anchor} aria-label={m.changePct !== null ? `${m.name}, ${fmt(m.value)} ${m.unit}, změna ${m.changePct.toFixed(1)}%` : `${m.name}, ${fmt(m.value)} ${m.unit}`}>
         <span class="sp-ticker-name">{m.name}</span>
         <span class="sp-ticker-value">{fmt(m.value)}<small> {m.unit}</small></span>
         {m.changePct !== null && (
