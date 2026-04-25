@@ -13,6 +13,12 @@ interface Props {
   yearTo?: string;
   powerFrom?: string;
   powerTo?: string;
+  zaberFrom?: string;
+  zaberTo?: string;
+  nosnostFrom?: string;
+  nosnostTo?: string;
+  objemFrom?: string;
+  objemTo?: string;
 }
 
 const {
@@ -20,9 +26,15 @@ const {
   priceFrom = '', priceTo = '',
   yearFrom = '', yearTo = '',
   powerFrom = '', powerTo = '',
+  zaberFrom = '', zaberTo = '',
+  nosnostFrom = '', nosnostTo = '',
+  objemFrom = '', objemTo = '',
 } = Astro.props;
 
 const showMachineFilters = category === 'traktory' || category === 'kombajny' || !category;
+const showZaberFilter = !category || ['zpracovani-pudy', 'seti', 'ochrana-rostlin', 'sklizen-picnin'].includes(category);
+const showNosnostFilter = !category || ['manipulace', 'doprava'].includes(category);
+const showObjemFilter = !category || ['hnojeni', 'ochrana-rostlin'].includes(category);
 
 const activeFilters: { label: string; removeParams: string[] }[] = [];
 if (query) activeFilters.push({ label: `"${query}"`, removeParams: ['q'] });
@@ -48,6 +60,18 @@ if (yearFrom || yearTo) {
 if (powerFrom || powerTo) {
   const label = powerFrom && powerTo ? `${powerFrom} – ${powerTo} k` : powerFrom ? `od ${powerFrom} k` : `do ${powerTo} k`;
   activeFilters.push({ label: `Výkon: ${label}`, removeParams: ['power_from', 'power_to'] });
+}
+if (zaberFrom || zaberTo) {
+  const label = zaberFrom && zaberTo ? `${zaberFrom} – ${zaberTo} m` : zaberFrom ? `od ${zaberFrom} m` : `do ${zaberTo} m`;
+  activeFilters.push({ label: `Záběr: ${label}`, removeParams: ['zaber_from', 'zaber_to'] });
+}
+if (nosnostFrom || nosnostTo) {
+  const label = nosnostFrom && nosnostTo ? `${nosnostFrom} – ${nosnostTo} kg` : nosnostFrom ? `od ${nosnostFrom} kg` : `do ${nosnostTo} kg`;
+  activeFilters.push({ label: `Nosnost: ${label}`, removeParams: ['nosnost_from', 'nosnost_to'] });
+}
+if (objemFrom || objemTo) {
+  const label = objemFrom && objemTo ? `${objemFrom} – ${objemTo} l` : objemFrom ? `od ${objemFrom} l` : `do ${objemTo} l`;
+  activeFilters.push({ label: `Objem nádrže: ${label}`, removeParams: ['objem_from', 'objem_to'] });
 }
 
 function buildRemoveUrl(params: string[]): string {
@@ -135,6 +159,42 @@ function buildRemoveUrl(params: string[]): string {
             <input type="number" name="power_to" value={powerTo} placeholder="Do" class="form-input" min="0" />
           </div>
         </div>
+      </>
+    )}
+
+    {(showZaberFilter || showNosnostFilter || showObjemFilter) && (
+      <>
+        <div class="sf-section">Parametry nářadí</div>
+        {showZaberFilter && (
+          <div class="sf-field">
+            <label>Pracovní záběr (m)</label>
+            <div class="sf-range">
+              <input type="number" name="zaber_from" value={zaberFrom} placeholder="Od" class="form-input" min="0" max="50" step="0.1" />
+              <span>–</span>
+              <input type="number" name="zaber_to" value={zaberTo} placeholder="Do" class="form-input" min="0" max="50" step="0.1" />
+            </div>
+          </div>
+        )}
+        {showNosnostFilter && (
+          <div class="sf-field">
+            <label>Nosnost (kg)</label>
+            <div class="sf-range">
+              <input type="number" name="nosnost_from" value={nosnostFrom} placeholder="Od" class="form-input" min="0" step="100" />
+              <span>–</span>
+              <input type="number" name="nosnost_to" value={nosnostTo} placeholder="Do" class="form-input" min="0" step="100" />
+            </div>
+          </div>
+        )}
+        {showObjemFilter && (
+          <div class="sf-field">
+            <label>Objem nádrže (l)</label>
+            <div class="sf-range">
+              <input type="number" name="objem_from" value={objemFrom} placeholder="Od" class="form-input" min="0" step="100" />
+              <span>–</span>
+              <input type="number" name="objem_to" value={objemTo} placeholder="Do" class="form-input" min="0" step="100" />
+            </div>
+          </div>
+        )}
       </>
     )}
 
