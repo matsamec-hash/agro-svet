@@ -31,10 +31,10 @@ for (const p of plemena) for (const u of p.uzitkovost) allUzitkovost.add(u);
 const uzitkovostOptions = (Array.from(allUzitkovost) as PlemenoUzitkovost[]).sort();
 const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).sort();
 
-const druhEmoji: Record<string, string> = {
-  hovezi: '🐄',
-  ovce: '🐑',
-  kone: '🐎',
+const druhPhoto: Record<string, string> = {
+  hovezi: '/images/druhy/hovezi.webp',
+  ovce: '/images/druhy/ovce.webp',
+  kone: '/images/druhy/kone.webp',
 };
 
 const breadcrumbJsonLd = {
@@ -144,7 +144,12 @@ const breadcrumbJsonLd = {
       {druhy.map((d) => (
         <a href={`/plemena/${d.slug}/`} class="druh-card">
           <div class="dc-head">
-            <div class="dc-emoji" aria-hidden="true">{druhEmoji[d.slug] ?? '🐾'}</div>
+            <div class="dc-photo" aria-hidden="true">
+              {druhPhoto[d.slug]
+                ? <img src={druhPhoto[d.slug]} alt={d.name_plural} width="64" height="64" loading="lazy" />
+                : <span style="font-size:32px;">🐾</span>
+              }
+            </div>
             <div class="dc-title">
               <h3>{d.name_plural}</h3>
               <span class="dc-count"><strong>{d.plemena.length}</strong> plemen</span>
@@ -453,7 +458,8 @@ const breadcrumbJsonLd = {
     }
     .plemena-root .druh-card:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
     .plemena-root .dc-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-    .plemena-root .dc-emoji{font-size:48px;line-height:1;flex-shrink:0}
+    .plemena-root .dc-photo{width:64px;height:64px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#f0f0f0;display:flex;align-items:center;justify-content:center}
+    .plemena-root .dc-photo img{width:100%;height:100%;object-fit:cover;display:block}
     .plemena-root .dc-title h3{font:700 22px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em;margin:0;line-height:1.1}
     .plemena-root .dc-count{font-size:13px;color:var(--muted);margin-top:3px;display:block}
     .plemena-root .dc-count strong{color:var(--ink);font-weight:700}

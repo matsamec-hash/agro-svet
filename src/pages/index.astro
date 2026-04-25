@@ -3,26 +3,55 @@ import Layout from '../layouts/Layout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import ImageAccordion from '../components/ImageAccordion.astro';
 import Newsletter from '../components/Newsletter.astro';
+import CommodityChart from '../components/statistiky/CommodityChart.astro';
 import { createAnonClient } from '../lib/supabase';
+import { getCommodityFullSeries, getCommodityPrices } from '../lib/czso';
+import { fiveYearAverage } from '../lib/agro-derived';
+import { AGRO_EVENTS } from '../data/agro-events';
 
 const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const supabase = createAnonClient();
 
-const { data: articles } = await supabase
-  .from('articles')
-  .select('id, title, slug, perex, featured_image_url, category, tags, published_at, featured')
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published')
-  .order('featured', { ascending: false })
-  .order('published_at', { ascending: false })
-  .limit(20);
+const [{ data: articles }, commodityFull, commodityPrices] = await Promise.all([
+  supabase
+    .from('articles')
+    .select('id, title, slug, perex, featured_image_url, category, tags, published_at, featured')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .order('featured', { ascending: false })
+    .order('published_at', { ascending: false })
+    .limit(20),
+  getCommodityFullSeries(),
+  getCommodityPrices(),
+]);
 
 const sorted = articles ?? [];
 
 // Hero: first article as featured + next 4
 const featured = sorted[0];
 const heroRight = sorted.slice(1, 5);
-const latest = sorted.slice(5, 11);
+const latest = sorted.slice(5, 8);
+
+// 5letý průměr per komodita pro CommodityChart (stejná logika jako /statistiky/)
+const fiveYearAvgs: Record<string, { label: string; avg: number }[] | null> = {};
+for (const s of commodityFull) {
+  const points: { label: string; avg: number }[] = [];
+  for (const d of s.data) {
+    const original = commodityPrices.find(p => p.name === s.name && (() => {
+      const SHORT2LONG: Record<string, string> = {
+        'Led':'leden','Úno':'únor','Bře':'březen','Dub':'duben','Kvě':'květen','Čvn':'červen',
+        'Čvc':'červenec','Srp':'srpen','Zář':'září','Říj':'říjen','Lis':'listopad','Pro':'prosinec'
+      };
+      const [shortM, year] = d.label.split(' ');
+      return p.month.startsWith(SHORT2LONG[shortM] ?? '') && p.month.endsWith(year);
+    })());
+    if (original) {
+      const avg = fiveYearAverage(commodityPrices.filter(p => p.name === s.name), original.month);
+      if (avg !== null) points.push({ label: d.label, avg });
+    }
+  }
+  fiveYearAvgs[s.name] = points.length > 0 ? points : null;
+}
 
 // Fresh bazar listings (latest 6; when topování lands, featured go first)
 const { data: freshListings } = await supabase
