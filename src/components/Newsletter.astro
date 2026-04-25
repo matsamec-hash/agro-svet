@@ -36,67 +36,69 @@ const variant = Astro.props.variant ?? 'full';
 
 <style>
   .newsletter {
-    padding: 56px 32px;
+    background: #FFFF00;
+    padding: 72px 32px;
+    position: relative;
+    overflow: hidden;
   }
-  .newsletter--compact {
-    padding: 40px 24px;
+  .newsletter--compact { padding: 48px 24px; }
+  .newsletter::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 380px; height: 380px;
+    background: rgba(0,0,0,.06); border-radius: 50%;
+    pointer-events: none;
+  }
+  .newsletter::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -100px;
+    width: 300px; height: 300px;
+    background: rgba(0,0,0,.04); border-radius: 50%;
+    pointer-events: none;
   }
   .newsletter-box {
     max-width: 720px;
     margin: 0 auto;
-    background: #1a1a1a;
-    border-radius: 22px;
-    padding: 40px 36px;
     text-align: center;
-    border: 3px solid #FFFF00;
     position: relative;
-    overflow: hidden;
-  }
-  .newsletter-box::before {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background: #FFFF00;
-    opacity: 0.08;
-    border-radius: 50%;
-    pointer-events: none;
+    z-index: 1;
   }
   .newsletter-eyebrow {
     display: inline-block;
-    background: #FFFF00;
-    color: #1a1a1a;
+    background: #1a1a1a;
+    color: #FFFF00;
     font-family: 'Chakra Petch', sans-serif;
-    font-weight: 600;
-    font-size: 12px;
-    letter-spacing: 1.5px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: .22em;
     text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 4px;
-    margin-bottom: 16px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 18px;
   }
   .newsletter-title {
     font-family: 'Chakra Petch', sans-serif;
-    font-weight: 600;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    color: #fff;
-    margin: 0 0 12px;
-    line-height: 1.2;
-    letter-spacing: -0.3px;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: #0A0A0B;
+    margin: 0 0 14px;
+    line-height: 1.05;
+    letter-spacing: -.03em;
   }
   .newsletter-perex {
     font-family: 'Roboto Condensed', sans-serif;
-    font-size: 16px;
-    color: #ddd;
-    margin: 0 0 24px;
-    line-height: 1.5;
+    font-size: 17px;
+    color: rgba(0,0,0,.72);
+    margin: 0 auto 28px;
+    line-height: 1.55;
+    max-width: 540px;
   }
   .newsletter-form {
     display: flex;
     gap: 10px;
-    max-width: 460px;
+    max-width: 480px;
     margin: 0 auto;
     position: relative;
     z-index: 1;
@@ -104,40 +106,42 @@ const variant = Astro.props.variant ?? 'full';
   .newsletter-input {
     flex: 1;
     min-width: 0;
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(0,0,0,.18);
     background: #fff;
-    color: #1a1a1a;
+    color: #0A0A0B;
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 15px;
     outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color .15s, box-shadow .15s;
   }
   .newsletter-input:focus {
-    border-color: #FFFF00;
-    box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.25);
+    border-color: #0A0A0B;
+    box-shadow: 0 0 0 4px rgba(10,10,12,.12);
   }
   .newsletter-btn {
-    background: #FFFF00;
-    color: #1a1a1a;
+    background: #0A0A0B;
+    color: #FFFF00;
     font-family: 'Chakra Petch', sans-serif;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 15px;
-    padding: 12px 22px;
+    letter-spacing: .02em;
+    padding: 14px 26px;
     border: 0;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    transition: transform .12s, box-shadow .12s, background .15s;
+    box-shadow: 0 6px 16px -6px rgba(10,10,12,.4);
   }
-  .newsletter-btn:hover { background: #f0f000; }
-  .newsletter-btn:active { transform: translateY(1px); }
+  .newsletter-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 26px -8px rgba(10,10,12,.4); }
+  .newsletter-btn:active { transform: translateY(0); }
   .newsletter-btn:disabled { opacity: 0.6; cursor: wait; }
   .newsletter-msg {
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 13px;
-    color: #bbb;
-    margin: 14px 0 0;
+    color: rgba(0,0,0,.55);
+    margin: 16px 0 0;
   }
   @media (max-width: 520px) {
     .newsletter-form { flex-direction: column; }
@@ -171,17 +175,20 @@ const variant = Astro.props.variant ?? 'full';
 
       if (res.ok) {
         msg.textContent = 'Děkujeme! Brzy se ozveme.';
-        msg.style.color = '#FFFF00';
+        msg.style.color = '#0B7A3B';
+        msg.style.fontWeight = '700';
         emailInput.value = '';
       } else if (res.status === 409) {
         msg.textContent = 'Tento e-mail už odebírá.';
-        msg.style.color = '#FFCC00';
+        msg.style.color = '#0A0A0B';
+        msg.style.fontWeight = '700';
       } else {
         throw new Error('subscribe failed');
       }
     } catch {
       msg.textContent = 'Něco se pokazilo. Zkuste to znovu.';
-      msg.style.color = '#FF6B6B';
+      msg.style.color = '#C24414';
+      msg.style.fontWeight = '700';
     } finally {
       btn.disabled = false;
       btn.textContent = 'Odebírat';
