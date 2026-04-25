@@ -55,9 +55,10 @@ const sellerName = listing.bazar_users?.name ?? 'Neznámý';
 const isMachine = listing.category === 'traktory' || listing.category === 'kombajny';
 const isBreed = listing.category === 'zvirata';
 let catalogLink: { label: string; url: string } | null = null;
-if (isMachine && listing.model_slug) {
+if (listing.model_slug && !isBreed) {
   catalogLink = resolveModelLabel(listing.model_slug);
-} else if (isBreed && listing.model_slug) {
+}
+if (!catalogLink && isBreed && listing.model_slug) {
   const p = getAllPlemena().find((x) => x.slug === listing.model_slug);
   if (p) catalogLink = { label: p.name, url: `/plemena/${p.druh_slug}/${p.slug}/` };
 }
@@ -68,6 +69,9 @@ if (listing.year_of_manufacture) specItems.push({ label: 'Rok výroby', value: `
 if (listing.power_hp) specItems.push({ label: 'Výkon', value: `${listing.power_hp} k` });
 if (listing.hours_operated !== null && listing.hours_operated !== undefined) specItems.push({ label: 'Motohodiny', value: listing.hours_operated.toLocaleString('cs-CZ') });
 if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listing.cutting_width_m} m` });
+if (listing.pracovni_zaber_m) specItems.push({ label: 'Pracovní záběr', value: `${listing.pracovni_zaber_m} m` });
+if (listing.nosnost_kg) specItems.push({ label: 'Nosnost', value: `${listing.nosnost_kg.toLocaleString('cs-CZ')} kg` });
+if (listing.objem_nadrze_l) specItems.push({ label: 'Objem nádrže', value: `${listing.objem_nadrze_l.toLocaleString('cs-CZ')} l` });
 ---
 
 <Layout title={`${listing.title} — Agro bazar`}>
@@ -110,7 +114,7 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
           <a href={catalogLink.url} class="catalog-link-box">
             <div>
               <div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#666; margin-bottom:2px;">
-                {isMachine ? 'Model z katalogu' : 'Plemeno z katalogu'}
+                {isBreed ? 'Plemeno z katalogu' : 'Model z katalogu'}
               </div>
               <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a;">
                 {catalogLink.label}
