@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import DataSegmentNav from '../../components/DataSegmentNav.astro';
 import PillsNav from '../../components/statistiky/PillsNav.astro';
+import AgroWeather from '../../components/AgroWeather.astro';
 import { getCollection } from 'astro:content';
 
 const PUDA_PILLS = [
@@ -137,6 +138,8 @@ const donutSegs = struktura.map((s) => {
     </section>
 
     <PillsNav items={PUDA_PILLS} />
+
+    <AgroWeather mode="puda" />
 
     <!-- Témata (na začátek) -->
     <section class="topics-section" id="temata">

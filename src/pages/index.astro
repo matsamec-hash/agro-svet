@@ -4,6 +4,7 @@ import ArticleCard from '../components/ArticleCard.astro';
 import ImageAccordion from '../components/ImageAccordion.astro';
 import Newsletter from '../components/Newsletter.astro';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
+import AgroWeather from '../components/AgroWeather.astro';
 import { createAnonClient } from '../lib/supabase';
 import { getCommodityFullSeries, getCommodityPrices } from '../lib/czso';
 import { fiveYearAverage } from '../lib/agro-derived';
@@ -146,6 +147,11 @@ const websiteJsonLd = {
       ))}
     </div>
   </section>
+
+  <!-- Počasí pro pole — strip -->
+  <div style="padding:28px 32px 0;">
+    <AgroWeather mode="strip" />
+  </div>
 
   <!-- Accordion sekce -->
   <section style="padding:28px 0 0;">
