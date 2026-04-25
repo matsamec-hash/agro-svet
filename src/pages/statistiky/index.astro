@@ -821,6 +821,23 @@ const PILLS = [
   .sp-page :global(.sp-hex-detail .d-bar > span){display:block;height:100%;background:linear-gradient(90deg,#FFEA00,#FFD400);border-radius:3px}
   .sp-page :global(.sp-hex-detail .d-val){font:600 12px 'Chakra Petch',sans-serif;color:#0A0A0B}
 
+  /* Chart height bounds — Chart.js responsive=true bez maintainAspectRatio jinak roste donekonečna.
+     Wrapper-relative styling: canvas má max-height per chart typ.  */
+  .sp-page :global(.sp-chart-card){position:relative}
+  .sp-page :global(.sp-chart-card canvas){max-height:360px !important;width:100% !important}
+  .sp-page :global(#commodityLongChart){max-height:380px !important}
+  .sp-page :global(#scissorsChart){max-height:440px !important}
+  .sp-page :global(#fuelLongChart),
+  .sp-page :global(#fertLongChart){max-height:260px !important}
+  .sp-page :global(#cropProductionChart),
+  .sp-page :global(#cropAreasChart){max-height:300px !important}
+  .sp-page :global(#livestockSlopeChart){max-height:360px !important}
+
+  @media (max-width:768px){
+    .sp-page :global(.sp-chart-card canvas){max-height:280px !important}
+    .sp-page :global(#scissorsChart){max-height:340px !important}
+  }
+
   @media (max-width:600px){
     .sp-page{padding:20px 16px 60px}
   }
