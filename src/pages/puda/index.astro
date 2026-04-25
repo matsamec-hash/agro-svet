@@ -1,7 +1,18 @@
 ---
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
+import DataSegmentNav from '../../components/DataSegmentNav.astro';
+import PillsNav from '../../components/statistiky/PillsNav.astro';
 import { getCollection } from 'astro:content';
+
+const PUDA_PILLS = [
+  { label: 'Témata', href: '#temata' },
+  { label: 'Cena', href: '#cena' },
+  { label: 'Struktura', href: '#struktura' },
+  { label: 'Ohrožení', href: '#ohrozeni' },
+  { label: 'Vlastnictví', href: '#vlastnictvi' },
+  { label: 'Plodiny', href: '#plodiny' },
+];
 
 const pudaItems = await getCollection('puda');
 
@@ -62,6 +73,8 @@ const donutSegs = struktura.map((s) => {
 <Layout title="Zemědělská půda v ČR — fakta, ceny, eroze" description="Aktuální data o zemědělské půdě v ČR: cena 372 550 Kč/ha, úbytek 10,8 ha denně, 60 % polí ohroženo vodní erozí. Ornice, eroze, výživa a ochrana půdního fondu.">
   <div class="puda-root">
 
+    <DataSegmentNav active="puda" />
+
     <!-- Hero -->
     <section class="hero">
       <span class="kicker">Půda · Datová pover-mapa</span>
@@ -72,31 +85,53 @@ const donutSegs = struktura.map((s) => {
       </p>
 
       <div class="big-numbers">
-        <div class="bn">
-          <span class="bn-val">372&nbsp;550<span class="bn-unit"> Kč/ha</span></span>
-          <span class="bn-lbl">Průměrná tržní cena orné půdy</span>
-          <span class="bn-trend">+3,4 % YoY · 2025</span>
-        </div>
-        <div class="bn">
-          <span class="bn-val">+517&nbsp;%</span>
-          <span class="bn-lbl">Růst ceny půdy za 25 let</span>
-          <span class="bn-trend">2000 → 2025</span>
-        </div>
-        <div class="bn">
-          <span class="bn-val">10,8<span class="bn-unit"> ha/den</span></span>
-          <span class="bn-lbl">Úbytek zemědělské půdy</span>
-          <span class="bn-trend">Dlouhodobý průměr od 1999</span>
-        </div>
-        <div class="bn">
-          <span class="bn-val">>50&nbsp;%</span>
-          <span class="bn-lbl">Polí ohroženo vodní erozí</span>
-          <span class="bn-trend">VÚMOP, novější odhad až 60 %</span>
-        </div>
+        {[
+          {
+            val: '372 550', unit: ' Kč/ha',
+            lbl: 'Průměrná tržní cena orné půdy',
+            trend: '+3,4 % YoY · 2025',
+            source: 'FARMY.CZ Index farmářské půdy',
+            url: 'https://www.farmy.cz/cena-pudy/',
+          },
+          {
+            val: '+517 %', unit: '',
+            lbl: 'Růst ceny půdy za 25 let',
+            trend: '2000 → 2025',
+            source: 'FARMY.CZ + studie Tomáš Valka (ČZU)',
+            url: 'https://www.farmy.cz/cena-pudy/',
+          },
+          {
+            val: '10,8', unit: ' ha/den',
+            lbl: 'Úbytek zemědělské půdy',
+            trend: 'Dlouhodobý průměr od 1999',
+            source: 'ČÚZK + MZe Zelená zpráva',
+            url: 'https://eagri.cz/public/web/mze/zemedelstvi/publikace-a-dokumenty/zelene-zpravy/',
+          },
+          {
+            val: '>50 %', unit: '',
+            lbl: 'Polí ohroženo vodní erozí',
+            trend: 'VÚMOP, novější odhad až 60 %',
+            source: 'VÚMOP — Monitoring eroze',
+            url: 'https://www.vumop.cz/projekty/monitoring-eroze',
+          },
+        ].map((b) => (
+          <div class="bn">
+            <span class="bn-val">{b.val.replace(/ /g, ' ')}{b.unit && <span class="bn-unit">{b.unit}</span>}</span>
+            <span class="bn-lbl">{b.lbl}</span>
+            <span class="bn-trend">{b.trend}</span>
+            <a class="bn-source" href={b.url} target="_blank" rel="noopener noreferrer">
+              <span class="bn-source-prefix">Zdroj:</span> {b.source}
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+          </div>
+        ))}
       </div>
     </section>
 
+    <PillsNav items={PUDA_PILLS} />
+
     <!-- Témata (na začátek) -->
-    <section class="topics-section">
+    <section class="topics-section" id="temata">
       <h2>Hloubkově k tématům</h2>
       <div class="topics-grid">
         {pudaItems.map(item => (
@@ -111,10 +146,11 @@ const donutSegs = struktura.map((s) => {
     </section>
 
     <!-- Cena půdy graf -->
-    <section class="chart-section reveal" data-reveal="line">
+    <section class="chart-section reveal" data-reveal="line" id="cena">
       <header>
         <h2>Cena zemědělské půdy 2000–2025</h2>
-        <span class="sub">Průměrná tržní cena hektaru orné půdy v tis. Kč. Zdroj: FARMY.CZ Index farmářské půdy + studie Tomáš Valka.</span>
+        <span class="sub">Průměrná tržní cena hektaru orné půdy v tis. Kč.</span>
+        <a class="src-link" href="https://www.farmy.cz/cena-pudy/" target="_blank" rel="noopener noreferrer">Zdroj: FARMY.CZ Index + studie Tomáš Valka (ČZU) <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
       </header>
       <div class="chart-wrap">
         <svg viewBox={`0 0 ${cenaW} ${cenaH}`} class="chart-svg" role="img" aria-label="Vývoj ceny zemědělské půdy 2000-2025">
@@ -144,6 +180,7 @@ const donutSegs = struktura.map((s) => {
                       stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3 3" opacity="0"
                       class="line-guide" data-rok-line={p.rok}/>
                 <circle cx={p.x} cy={p.y} r="5" fill="#FFFF00" stroke="#1a1a1a" stroke-width="2" class="line-point" data-rok={p.rok}/>
+                <text x={p.x} y={p.y - 14} text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a" class="line-price-label">{Math.round(p.cena)}</text>
                 {(i === 0 || i === cenaPoints.length - 1 || i % 2 === 0) && (
                   <text x={p.x} y={cenaPad.t + cenaPlotH + 22} text-anchor="middle" font-size="13" fill="#666">{p.rok}</text>
                 )}
@@ -159,10 +196,11 @@ const donutSegs = struktura.map((s) => {
     </section>
 
     <!-- Struktura ZPF + Eroze -->
-    <section class="two-col">
+    <section class="two-col" id="struktura">
       <div class="card-chart reveal" data-reveal="donut">
         <h3>Struktura zemědělského půdního fondu</h3>
         <span class="sub">3 535 tis. ha = 45 % rozlohy ČR (2024)</span>
+        <a class="src-link" href="https://csu.gov.cz/zemedelstvi" target="_blank" rel="noopener noreferrer">Zdroj: ČSÚ — Statistika zemědělství <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
         <div class="donut-wrap">
           <svg viewBox="0 0 200 200" class="donut-svg" role="img" aria-label="Struktura ZPF">
             {donutSegs.map((s) => (
@@ -185,9 +223,10 @@ const donutSegs = struktura.map((s) => {
         <p class="card-note">Trvalé travní porosty rostou: z 23 % (2002) na 27 % (2024) — důsledek dotační politiky a ochrany proti erozi.</p>
       </div>
 
-      <div class="card-chart reveal" data-reveal="bars">
+      <div class="card-chart reveal" data-reveal="bars" id="ohrozeni">
         <h3>Ohrožení půdy</h3>
-        <span class="sub">Procento zemědělské půdy ČR (VÚMOP)</span>
+        <span class="sub">Procento zemědělské půdy ČR.</span>
+        <a class="src-link" href="https://www.vumop.cz/projekty/monitoring-eroze" target="_blank" rel="noopener noreferrer">Zdroj: VÚMOP — Monitoring eroze <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
         <div class="threats">
           <div class="threat">
             <div class="threat-bar" style="--w:60%; --c:#E53935" data-final="60"><span>60 %</span></div>
@@ -211,41 +250,87 @@ const donutSegs = struktura.map((s) => {
     </section>
 
     <!-- Vlastnictví + Pacht fakta -->
-    <section class="facts-grid">
-      <div class="fact">
-        <span class="fact-val">3,2 mil.</span>
-        <span class="fact-lbl">vlastníků zemědělské půdy v ČR</span>
-        <span class="fact-note">Drtivá většina pronajímá. Průměr na osobu jen ~1 ha.</span>
-      </div>
-      <div class="fact">
-        <span class="fact-val">~60 %</span>
-        <span class="fact-lbl">pronajímané orné půdy</span>
-        <span class="fact-note">Před 10 lety to bylo až 90 %. Trend: vlastní podíl podniků roste.</span>
-      </div>
-      <div class="fact">
-        <span class="fact-val">3 000–7 000<span class="fact-unit"> Kč/ha/rok</span></span>
-        <span class="fact-lbl">Pachtovné</span>
-        <span class="fact-note">Top kvality přes 10 000 Kč/ha. Roční růst ~1 000 Kč/ha.</span>
-      </div>
-      <div class="fact">
-        <span class="fact-val">130<span class="fact-unit"> ha</span></span>
-        <span class="fact-lbl">Průměrná česká farma</span>
-        <span class="fact-note">Největší v EU (průměr EU 16,6 ha, Polsko 11 ha). Dědictví JZD.</span>
-      </div>
-      <div class="fact">
-        <span class="fact-val">25 %</span>
-        <span class="fact-lbl">katastrů s dokončenými KPÚ</span>
-        <span class="fact-note">NKÚ: zbývajících 75 % potrvá ~50 let a bude stát ~150 mld. Kč.</span>
-      </div>
-      <div class="fact">
-        <span class="fact-val">16,4 %</span>
-        <span class="fact-lbl">ekologicky obhospodařované půdy</span>
-        <span class="fact-note">618 313 ha (LPIS 2025). Cíl MZe: 22 % do 2027.</span>
-      </div>
+    <section class="facts-grid" id="vlastnictvi">
+      {[
+        {
+          val: '3,2 mil.',
+          unit: '',
+          lbl: 'vlastníků zemědělské půdy v ČR',
+          note: 'Drtivá většina pronajímá. Průměr na osobu jen ~1 ha.',
+          source: 'ČÚZK — katastr nemovitostí',
+          url: 'https://www.cuzk.gov.cz/Periodika-a-publikace/Statisticke-udaje/Souhrne-prehledy-pudniho-fondu.aspx',
+        },
+        {
+          val: '~60 %',
+          unit: '',
+          lbl: 'pronajímané orné půdy',
+          note: 'Před 10 lety to bylo až 90 %. Trend: vlastní podíl podniků roste.',
+          source: 'ČSÚ — Strukturální šetření v zemědělství 2020',
+          url: 'https://csu.gov.cz/strukturalni-setreni-v-zemedelstvi-2020',
+        },
+        {
+          val: '3 000–7 000',
+          unit: ' Kč/ha/rok',
+          lbl: 'Pachtovné',
+          note: 'Top kvality přes 10 000 Kč/ha. Roční růst ~1 000 Kč/ha.',
+          source: 'FARMY.CZ Index + ČSÚ',
+          url: 'https://www.farmy.cz/cena-pudy/',
+        },
+        {
+          val: '130',
+          unit: ' ha',
+          lbl: 'Průměrná česká farma',
+          note: 'Největší v EU (průměr EU 16,6 ha, Polsko 11 ha). Dědictví JZD.',
+          source: 'Eurostat — Farm structure survey 2020',
+          url: 'https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Farms_and_farmland_in_the_European_Union_-_statistics',
+        },
+        {
+          val: '77 %',
+          unit: '',
+          lbl: 'orné půdy v rukou ~3 000 největších podniků',
+          note: 'Koncentrace ZPF: 3 % podniků hospodaří na ~77 % výměry. Pozůstatek velkých JZD.',
+          source: 'ČSÚ + MZe Zelená zpráva 2023',
+          url: 'https://eagri.cz/public/web/mze/zemedelstvi/publikace-a-dokumenty/zelene-zpravy/',
+        },
+        {
+          val: '30',
+          unit: ' ha',
+          lbl: 'maximální blok jedné plodiny',
+          note: 'DZES 7 (od 2024): na svahu nad 7° max. 10 ha. Cíl: snížit větrnou a vodní erozi.',
+          source: 'MZe — Strategický plán SZP 2023–2027',
+          url: 'https://eagri.cz/public/web/mze/dotace/szp-pro-obdobi-2023-2027/',
+        },
+        {
+          val: '25 %',
+          unit: '',
+          lbl: 'katastrů s dokončenými KPÚ',
+          note: 'NKÚ: zbývajících 75 % potrvá ~50 let a bude stát ~150 mld. Kč.',
+          source: 'NKÚ — kontrolní závěr 23/15 (2023)',
+          url: 'https://www.nku.cz/cz/pro-media/tiskove-zpravy/komplexni-pozemkove-upravy-id12863/',
+        },
+        {
+          val: '16,4 %',
+          unit: '',
+          lbl: 'ekologicky obhospodařované půdy',
+          note: '618 313 ha (LPIS 2025). Cíl MZe: 22 % do 2027.',
+          source: 'ÚKZÚZ LPIS + MZe',
+          url: 'https://eagri.cz/public/web/mze/zemedelstvi/ekologicke-zemedelstvi/',
+        },
+      ].map((f) => (
+        <div class="fact">
+          <span class="fact-val">{f.val}{f.unit && <span class="fact-unit">{f.unit}</span>}</span>
+          <span class="fact-lbl">{f.lbl}</span>
+          <span class="fact-note">{f.note}</span>
+          <a class="fact-source" href={f.url} target="_blank" rel="noopener noreferrer">
+            <span class="fact-source-prefix">Zdroj:</span> {f.source}
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+        </div>
+      ))}
     </section>
 
     <!-- Hlavní plodiny -->
-    <section class="crops-section reveal" data-reveal="bars">
+    <section class="crops-section reveal" data-reveal="bars" id="plodiny">
       <header>
         <h2>Hlavní plodiny na orné půdě (2024)</h2>
         <span class="sub">Sklizeň 7 525 tis. tun obilovin, soběstačnost 164,6 %.</span>
@@ -261,7 +346,7 @@ const donutSegs = struktura.map((s) => {
           <div class="crop-row">
             <span class="crop-name">{c.name}</span>
             <div class="crop-bar-wrap">
-              <div class="crop-bar" style={`width:${(c.ha / 800) * 100}%; background:${c.color}`}></div>
+              <div class="crop-bar" style={`--w:${(c.ha / 800) * 100}%; background:${c.color}`}></div>
               <span class="crop-val">{c.ha} tis. ha</span>
             </div>
           </div>
@@ -302,11 +387,25 @@ const donutSegs = struktura.map((s) => {
   .lede { font-size: 17px; color: #555; max-width: 720px; line-height: 1.65; margin: 0 0 36px; }
 
   .big-numbers { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; }
-  .bn { padding:24px; border-radius:14px; background:#fff; border:1px solid #ebebeb; display:flex; flex-direction:column; gap:6px; }
+  .bn { padding:24px; border-radius:14px; background:#fff; border:1px solid #ebebeb; display:flex; flex-direction:column; gap:6px; position:relative; }
   .bn-val { font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700; color:#1a1a1a; line-height:1; }
   .bn-unit { font-size:14px; color:#888; font-weight:400; }
   .bn-lbl { font-size:14px; color:#1a1a1a; font-weight:600; margin-top:6px; }
   .bn-trend { font-size:12px; color:#888; }
+  .bn-source, .fact-source {
+    display:inline-flex;align-items:center;gap:4px;
+    margin-top:auto;padding-top:10px;
+    font-size:11px;color:#888;text-decoration:none;
+    border-top:1px dashed #ebebeb;
+    opacity:0;transition:opacity .15s, color .15s;
+    align-self:flex-start;
+  }
+  .bn-source svg, .fact-source svg { color:#aaa;transition:transform .15s }
+  .bn:hover .bn-source, .bn:focus-within .bn-source,
+  .fact:hover .fact-source, .fact:focus-within .fact-source { opacity:1 }
+  .bn-source:hover, .fact-source:hover { color:#1a1a1a }
+  .bn-source:hover svg, .fact-source:hover svg { color:#1a1a1a;transform:translate(1px,-1px) }
+  .bn-source-prefix, .fact-source-prefix { color:#aaa;margin-right:2px }
 
   /* Chart sections */
   .chart-section { margin: 64px 0; padding: 36px; background:#fff; border-radius:14px; border:1px solid #ebebeb; }
@@ -341,7 +440,7 @@ const donutSegs = struktura.map((s) => {
 
   /* Facts grid */
   .facts-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin: 56px 0; }
-  .fact { padding:24px; background:#fff; border-radius:12px; border:1px solid #ebebeb; }
+  .fact { padding:24px; background:#fff; border-radius:12px; border:1px solid #ebebeb; display:flex; flex-direction:column; }
   .fact-val { font-family:'Chakra Petch',sans-serif; font-size:28px; font-weight:700; color:#1a1a1a; line-height:1; display:block; }
   .fact-unit { font-size:14px; color:#888; font-weight:400; }
   .fact-lbl { font-size:14px; color:#1a1a1a; font-weight:600; margin-top:8px; display:block; }
