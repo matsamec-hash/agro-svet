@@ -1,6 +1,7 @@
 // POST /api/admin/clanky/toggle-featured
 // Admin akce: pin/unpin článku jako featured na HP hero gridu.
-// Defense in depth — middleware už gate-uje /admin/*, tady druhá kontrola.
+// Pozor: tento endpoint je pod /api/admin/ (NE /admin/), middleware ho NEgate-uje.
+// is_admin kontrola níže je THE gate, ne defense-in-depth.
 // Site filter v UPDATE chrání proti cross-site featured by mistake (sdílená tabulka).
 import type { APIRoute } from 'astro';
 import { createServerClient } from '../../../../lib/supabase';
