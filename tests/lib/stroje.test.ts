@@ -31,9 +31,14 @@ describe('stroje lib — schema rozšíření', () => {
     expect(getFunctionalGroupForCategory('kombajny')).toBe(null);
   });
 
-  it('všechny FUNCTIONAL_GROUPS.categories obsahují validní StrojKategorie', () => {
+  it('všechny FUNCTIONAL_GROUPS.categories obsahují validní StrojKategorie (46 unique)', () => {
     const allCats = Object.values(FUNCTIONAL_GROUPS).flatMap((g) => g.categories);
-    expect(allCats.length).toBe(45);
-    expect(new Set(allCats).size).toBe(45); // všechny unique
+    expect(allCats.length).toBe(46);
+    expect(new Set(allCats).size).toBe(46); // všechny unique
+  });
+
+  it('seti obsahuje 5 sub-kategorií včetně sazecky-brambor', () => {
+    expect(FUNCTIONAL_GROUPS['seti'].categories).toHaveLength(5);
+    expect(FUNCTIONAL_GROUPS['seti'].categories).toContain('sazecky-brambor');
   });
 });

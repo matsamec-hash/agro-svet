@@ -89,7 +89,7 @@ export const FUNCTIONAL_GROUPS = {
   'seti': {
     name: 'Setí a sázení',
     description: 'Secí stroje (mechanické, pneumatické, přesné), sázečky',
-    categories: ['seci-stroje-mechanicke', 'seci-stroje-pneumaticke', 'seci-stroje-presne', 'seci-kombinace'] as StrojKategorie[],
+    categories: ['seci-stroje-mechanicke', 'seci-stroje-pneumaticke', 'seci-stroje-presne', 'seci-kombinace', 'sazecky-brambor'] as StrojKategorie[],
   },
   'hnojeni': {
     name: 'Hnojení',
