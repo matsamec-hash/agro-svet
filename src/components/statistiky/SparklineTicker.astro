@@ -71,8 +71,10 @@ function buildSparklinePath(series: TimeSeriesPoint[], width: number, height: nu
 <style>
   .sp-ticker {
     --yellow:#FFEA00; --ink:#0A0A0B; --line:#EAEAEC; --muted:#6B6B72;
-    position:sticky;top:88px;z-index:30;
-    background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(14px);
+    /* Sticky vypnuto — kolidovalo s sticky headerem (top:88px ale skutečná
+       výška header byla větší kvůli border + padding). Karty teď scrollují
+       s contentem normálně. */
+    background:#fff;
     border:1px solid var(--line);border-radius:14px;
     padding:10px 14px;margin:0 0 22px;
     display:flex;gap:10px;overflow-x:auto;scrollbar-width:thin;

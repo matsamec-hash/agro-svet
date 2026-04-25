@@ -12,17 +12,27 @@ const { points, insight, baseYear } = Astro.props;
 
 <section class="sp-section" id="cenove-nuzky">
   <header class="sp-section-head">
-    <h2>⚡ Cenové nůžky — vstupy × výstupy</h2>
-    <span class="sp-section-sub">Index cen vstupů (nafta + NPK) vs. cen výstupů (4 hlavní komodity), {baseYear} = 100</span>
+    <h2>⚡ Cenové nůžky — co dražší: vstupy nebo výstupy?</h2>
+    <span class="sp-section-sub">
+      Vývoj cen vstupů (nafta + NPK hnojivo) a výstupů (4 hlavní komodity: pšenice, ječmen, řepka, kukuřice).
+      Hodnota {baseYear} = 100 (oba indexy začínají na 100). Když rostou vstupy rychleji, nůžky se rozevírají
+      a farmář vydělává méně.
+    </span>
   </header>
 
   <div class="sp-chart-card">
     <canvas id="scissorsChart" height="380"></canvas>
+    <div class="scissors-legend">
+      <span class="sl-item"><span class="sl-dot" style="background:#C24414"></span>Vstupy (nafta + NPK)</span>
+      <span class="sl-item"><span class="sl-dot" style="background:#0B7A3B"></span>Výstupy (4 komodity)</span>
+      <span class="sl-item sl-fill"><span class="sl-dot" style="background:rgba(194,68,20,.18);border:1px dashed #C24414"></span>Marže záporná (vstupy &gt; výstupy)</span>
+    </div>
     <div class="sp-chart-insight" data-tone="warn">⚠ {insight}</div>
     <p class="sp-chart-help">
-      Spojnice ukazuje pohyb v čase. Pokud křivka uhne <strong>dolů-doprava</strong>,
-      marže farmáře se zužuje (vstupy rostou rychleji než výstupy).
-      Šedá diagonála = rovnováha.
+      <strong>Jak číst:</strong> obě čáry začínají v roce {baseYear} na hodnotě 100.
+      Když se čáry rozevřou (nafta-NPK červená nahoru, komodity zelená dole), farmář
+      <strong>doplácí</strong> — vstupy zdražily víc než to, co prodá. V roce 2022 vstupy
+      vyletěly o 96&nbsp;%, ale komodity jen o 75&nbsp;% → klasické cenové nůžky.
     </p>
   </div>
 </section>
@@ -44,4 +54,8 @@ const { points, insight, baseYear } = Astro.props;
   }
   .sp-chart-insight[data-tone="warn"]{background:rgba(194,68,20,.08);color:#7A2A0E}
   .sp-chart-help{margin:10px 0 0;font-size:13px;color:#6B6B72;line-height:1.55}
+  .scissors-legend{display:flex;flex-wrap:wrap;gap:18px;margin:12px 0 4px;font-size:13px;color:#3a3a40}
+  .sl-item{display:inline-flex;align-items:center;gap:7px;font-family:'Chakra Petch',sans-serif;font-weight:500}
+  .sl-dot{display:inline-block;width:14px;height:14px;border-radius:3px}
+  .sl-fill .sl-dot{border-radius:3px}
 </style>

@@ -392,62 +392,76 @@ const PILLS = [
     const { points } = JSON.parse(dataEl.textContent);
     if (!points.length) return;
 
-    const xs = points.map(p => p.x);
-    const ys = points.map(p => p.y);
-    const min = Math.min(...xs, ...ys, 80);
-    const max = Math.max(...xs, ...ys, 200);
+    // Sort by year asc — points jsou už sortované, ale safety
+    points.sort((a, b) => a.year - b.year);
+    const labels = points.map(p => String(p.year));
+    const inputs = points.map(p => p.x);
+    const outputs = points.map(p => p.y);
+    // Difference area: zelená když výstupy >= vstupy (zisk), červená když < (ztráta)
+    // Vyplníme oblast mezi linkami
+    const RED = '#C24414';
+    const GREEN = '#0B7A3B';
 
     new Chart(el, {
-      type: 'scatter',
+      type: 'line',
       data: {
+        labels,
         datasets: [
           {
-            label: 'Roky',
-            data: points.map(p => ({ x: p.x, y: p.y, year: p.year })),
-            backgroundColor: YELLOW,
-            borderColor: INK,
-            borderWidth: 2,
-            pointRadius: 6,
-            pointHoverRadius: 9,
-            showLine: true,
-            tension: 0.0,
+            label: 'Vstupy (nafta + NPK)',
+            data: inputs,
+            borderColor: RED,
+            backgroundColor: 'rgba(194,68,20,.20)',
+            borderWidth: 2.5,
+            pointRadius: 4,
+            pointHoverRadius: 7,
+            tension: 0.25,
+            fill: '+1', // fill mezi inputs a další dataset (outputs)
           },
-          // Diagonála (rovnováha)
           {
-            label: 'Rovnováha (vstupy = výstupy)',
-            data: [{ x: min, y: min }, { x: max, y: max }],
-            borderColor: 'rgba(107,107,114,.4)',
-            borderWidth: 1,
-            borderDash: [4, 4],
-            pointRadius: 0,
-            showLine: true,
+            label: 'Výstupy (4 komodity)',
+            data: outputs,
+            borderColor: GREEN,
+            backgroundColor: 'rgba(11,122,59,.10)',
+            borderWidth: 2.5,
+            pointRadius: 4,
+            pointHoverRadius: 7,
+            tension: 0.25,
             fill: false,
           },
         ],
       },
       options: {
         responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { display: false },
+          legend: { display: false }, // používáme custom legendu nahoře
           tooltip: {
             backgroundColor: INK, padding: 12, cornerRadius: 10,
             callbacks: {
-              title: ctx => ctx[0].raw?.year ? `Rok ${ctx[0].raw.year}` : '',
-              label: ctx => ctx.raw.year !== undefined
-                ? `Vstupy: ${ctx.parsed.x.toFixed(0)} · Výstupy: ${ctx.parsed.y.toFixed(0)}`
-                : '',
+              title: ctx => `Rok ${ctx[0].label}`,
+              label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}`,
+              afterBody: ctx => {
+                if (ctx.length < 2) return '';
+                const ins = ctx.find(c => c.dataset.label.startsWith('Vstupy'))?.parsed.y;
+                const outs = ctx.find(c => c.dataset.label.startsWith('Výstupy'))?.parsed.y;
+                if (ins == null || outs == null) return '';
+                const diff = outs - ins;
+                const sign = diff >= 0 ? '+' : '';
+                const txt = diff >= 0 ? 'farmář vydělává' : 'farmář ztrácí na marži';
+                return `\nMarže: ${sign}${diff.toFixed(0)} bodů — ${txt}`;
+              },
             },
-          },
-          annotation: {
-            annotations: Object.fromEntries(points.map((p, i) => [
-              'pt' + i,
-              { type: 'label', xValue: p.x, yValue: p.y, content: String(p.year), font: { size: 10, weight: 600 }, color: INK, yAdjust: -16 },
-            ])),
           },
         },
         scales: {
-          x: { type: 'linear', title: { display: true, text: 'Index cen vstupů (nafta + NPK)', font: { size: 12 } }, grid: { color: 'rgba(10,10,12,.06)' } },
-          y: { type: 'linear', title: { display: true, text: 'Index cen výstupů (4 hlavní komodity)', font: { size: 12 } }, grid: { color: 'rgba(10,10,12,.06)' } },
+          x: { grid: { display: false }, ticks: { font: { size: 12 } } },
+          y: {
+            beginAtZero: false,
+            title: { display: true, text: 'Index cen (2017 = 100)', font: { size: 12 } },
+            grid: { color: 'rgba(10,10,12,.06)' },
+            ticks: { callback: v => v },
+          },
         },
       },
     });
