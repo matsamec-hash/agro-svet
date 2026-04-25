@@ -1,9 +1,9 @@
 ---
 plan: 2026-04-25-stroje-katalog
-status: Phase 6 complete (with gaps in BazarSidebar UI), awaiting user resume
-last_updated: 2026-04-25T16:05:00+0200
-last_commit: fbfcbfb
-total_commits_made: 16 (foundation 9 + Phase 6 7)
+status: Phase 6 complete (with gaps in BazarSidebar UI), session paused
+last_updated: 2026-04-25T16:13:09+0200
+last_commit: bcb8a07
+total_commits_made: 17 (foundation 9 + Phase 6 7 + handoff update 1)
 ---
 
 # Continue here — Stroje katalog implementace
@@ -132,3 +132,29 @@ Klíčové soubory pro orientaci:
 - Tento handoff: `docs/superpowers/plans/2026-04-25-stroje-katalog-CONTINUE-HERE.md`
 
 Před dispatch jakéhokoli subagenta — vždy nejdřív `git status --short` a check user WIP. Per-task TodoWrite.
+
+## Session-end snapshot (2026-04-25 odpoledne)
+
+**Co se v této session stalo:**
+- Volba: "Option 2 — Bazar pages" (Phase 6.4-6.10) — uživatel potvrdil doporučení místo per-brand scraperů
+- Subagent-driven execution: 5 implementer subagentů + 4 reviewer subagenti přes Tasks 6.4 → 6.10
+- 1× hit rate limit subagent uprostřed Task 6.5 — work commitnut ručně
+- 1× user paralelně commitnul refinement BazarFilters.astro (`e2e647d`) konvertující `_od/_do` → `_from/_to` + permissive `!category ||` (consistent s rest of file)
+- 1× user paralelně commitnul `8bfbdb4 fix(stroje): používat YAML family field`
+- Final integration review odhalil gapy: BazarSidebar.astro neaktualizován (live komponent), BazarFilters/CatalogPicker orphans
+
+**Klíčové učení pro fresh session:**
+- `bazar/index.astro:91` používá `BazarSidebar`, NE `BazarFilters`. Plán Task 6.6 měl pracovat na Sidebaru, ne Filters. Před pokračováním ověř který filter komponent je skutečně wired.
+- Forms používají `CascadingPicker`, ne `CatalogPicker`. Task 6.5 práce je orphan dokud nezdraj Sidebar.
+- User preferuje `_from/_to` URL convention (consistency s `price_from/year_from/power_from`), ne plánovaný `_od/_do`.
+- User permissive logiku (`!category ||`) preferuje pro UX (filtry viditelné na default `/bazar/` view).
+- Migrace 005 + 006 NEJSOU aplikované na Supabase — kód columns používá ale v produkci by selhalo. Apply před deploy.
+
+**Aktivní paralel user WIP** (NEDOTÝKAT, viz `feedback-parallel-sessions.md`):
+- 9 starých brand YAMLs (case-ih, claas, deutz-fahr, fendt, john-deere, kubota, massey-ferguson, new-holland, valtra, zetor) — photos pipeline
+- `CategoryBrowse.astro`, `middleware.ts`, `index.astro`, `[brand]/index.astro`, `wrangler.toml`
+- nové scripts: `mf-api-*`, `photos-*`
+- ~20 různých `src/pages/*.astro` souborů — obsahují unrelated user changes
+- IDE měl otevřený `massey-ferguson.yaml` (pravděpodobně active edit)
+
+**Doporučený další krok:** Address Phase 6 gaps před deploy. BazarSidebar.astro extension je nejvyšší priorita (round-trip filter preservation broken bez něj). Pak per-brand scrapery + deploy.
