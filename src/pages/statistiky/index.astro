@@ -6,6 +6,7 @@ import {
   getCommodityStats,
   getLatestFuelPrices,
   getLivestockStats,
+  getLivestockHistorical,
   getCropProduction,
   getCropAreas,
   getFertilizerPrices,
@@ -43,6 +44,7 @@ const [
   commodityStats,
   latestFuels,
   livestock,
+  livestockHistorical,
   crops,
   areas,
   fertilizers,
@@ -56,6 +58,7 @@ const [
   getCommodityStats(),
   getLatestFuelPrices(),
   getLivestockStats(),
+  getLivestockHistorical(),
   getCropProduction(),
   getCropAreas(),
   getFertilizerPrices(),
@@ -197,9 +200,9 @@ const latestCropYear = (() => {
   return ys[ys.length - 1] ?? '2023';
 })();
 
-// Livestock insight
+// Livestock insight (z plné historické řady)
 const livestockInsight = (() => {
-  const skot = livestock.filter(l => l.animal === 'Skot').sort((a, b) => a.date.localeCompare(b.date));
+  const skot = livestockHistorical.filter(l => l.animal === 'Skot').sort((a, b) => a.date.localeCompare(b.date));
   if (skot.length < 2) return 'Pololetní data ČSÚ — viz graf níže.';
   const first = skot[0];
   const last = skot[skot.length - 1];
@@ -207,7 +210,7 @@ const livestockInsight = (() => {
   return `Stav skotu: ${first.count.toLocaleString('cs-CZ')} → ${last.count.toLocaleString('cs-CZ')} ks (${drop.toFixed(0)} %).`;
 })();
 const livestockFromYear = (() => {
-  const dates = livestock.map(l => parseInt(l.date.match(/\d{4}/)?.[0] ?? '0')).filter(n => n > 1900);
+  const dates = livestockHistorical.map(l => parseInt(l.date.match(/\d{4}/)?.[0] ?? '0')).filter(n => n > 1900);
   return dates.length ? Math.min(...dates) : null;
 })();
 
@@ -263,7 +266,7 @@ const PILLS = [
 
     <HexMap data={regional} />
 
-    <LivestockSlope livestock={livestock} insight={livestockInsight} fromYear={livestockFromYear} />
+    <LivestockSlope livestock={livestockHistorical} insight={livestockInsight} fromYear={livestockFromYear} />
 
     <StoryCards />
 

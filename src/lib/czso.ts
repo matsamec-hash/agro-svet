@@ -216,6 +216,23 @@ export async function getLivestockStats(): Promise<LivestockStat[]> {
   return result;
 }
 
+// Plná historie stavů zvířat (skot, prasata) — bez truncace, pro slope chart.
+export async function getLivestockHistorical(): Promise<LivestockStat[]> {
+  const rows = await fetchSelection('WZEM02AT01');
+  const items: LivestockStat[] = [];
+  for (const row of rows) {
+    if (row[1] !== 'Česko') continue;
+    const val = parseFloat(row[3]);
+    if (isNaN(val)) continue;
+    let animal = '';
+    if (row[0].includes('turů')) animal = 'Skot';
+    else if (row[0].includes('prasat')) animal = 'Prasata';
+    else continue;
+    items.push({ animal, count: Math.round(val), date: row[2] });
+  }
+  return items;
+}
+
 // ── Crop Production (tonnes) ──
 export interface CropProduction {
   crop: string;
