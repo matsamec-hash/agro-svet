@@ -1,0 +1,167 @@
+---
+// src/components/statistiky/HexMap.astro
+import type { RegionCrop } from '../../lib/czso';
+
+interface Props {
+  data: RegionCrop[];   // všechna regional data, plný řez
+}
+const { data } = Astro.props;
+
+// 13 hexů, hand-positioned grid. col/row se vytvářejí v 4-column flat-top hex grid.
+// Pozice (col, row) navrženy tak, aby zhruba odpovídaly geografii ČR.
+// Praha vynechaná — geometrický overlap se Středočeským krajem a zanedbatelná zem. produkce.
+const HEX_LAYOUT: { region: string; col: number; row: number }[] = [
+  { region: 'Karlovarský kraj',     col: 0, row: 1 },
+  { region: 'Ústecký kraj',         col: 1, row: 0 },
+  { region: 'Liberecký kraj',       col: 3, row: 0 },
+  { region: 'Plzeňský kraj',        col: 1, row: 2 },
+  { region: 'Středočeský kraj',     col: 2, row: 1 },
+  { region: 'Královéhradecký kraj', col: 3, row: 1 },
+  { region: 'Pardubický kraj',      col: 4, row: 1 },
+  { region: 'Jihočeský kraj',       col: 2, row: 3 },
+  { region: 'Kraj Vysočina',        col: 3, row: 2 },
+  { region: 'Olomoucký kraj',       col: 5, row: 1 },
+  { region: 'Jihomoravský kraj',    col: 4, row: 3 },
+  { region: 'Zlínský kraj',         col: 5, row: 2 },
+  { region: 'Moravskoslezský kraj', col: 6, row: 1 },
+];
+
+const CROPS = ['Obiloviny na zrno','Pšenice','Ječmen','Řepka','Brambory','Řepa cukrová','Kukuřice na zeleno'];
+const allYears = [...new Set(data.map(d => d.year))].sort();
+const latestYear = allYears[allYears.length - 1];
+
+// Generování hex pozic: flat-top hex, šířka 100, výška 86.6
+const HEX_W = 110;
+const HEX_H = 95;
+const X_OFFSET = 60;
+const Y_OFFSET = 60;
+function hexCenter(col: number, row: number): { cx: number; cy: number } {
+  const cx = X_OFFSET + col * (HEX_W * 0.75);
+  const cy = Y_OFFSET + row * HEX_H + (col % 2 ? HEX_H / 2 : 0);
+  return { cx, cy };
+}
+function hexPath(cx: number, cy: number, size = 50): string {
+  const pts = [];
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI / 3) * i;
+    pts.push(`${(cx + size * Math.cos(a)).toFixed(1)},${(cy + size * Math.sin(a)).toFixed(1)}`);
+  }
+  return `M${pts.join(' L')} Z`;
+}
+
+const maxCol = Math.max(...HEX_LAYOUT.map(h => h.col));
+const maxRow = Math.max(...HEX_LAYOUT.map(h => h.row));
+const VB_W = X_OFFSET * 2 + maxCol * (HEX_W * 0.75) + HEX_W;
+const VB_H = Y_OFFSET * 2 + (maxRow + 1) * HEX_H;
+---
+
+<section class="sp-section" id="regiony">
+  <header class="sp-section-head">
+    <h2>Regiony — produkce po krajích</h2>
+    <span class="sp-section-sub">13 krajů (kromě Prahy), sklizeň v tunách. Klikněte na kraj pro detail.</span>
+  </header>
+
+  <div class="sp-map-controls">
+    <div class="sp-pills-row" role="tablist">
+      {CROPS.map((c, i) => (
+        <button class:list={['sp-mini-pill', { active: i === 0 }]} data-crop={c} type="button">{c}</button>
+      ))}
+    </div>
+    <div class="sp-year-row" role="tablist">
+      {allYears.slice(-6).map((y, i, arr) => (
+        <button class:list={['sp-year-btn', { active: i === arr.length - 1 }]} data-year={y} type="button">{y}</button>
+      ))}
+    </div>
+  </div>
+
+  <div class="sp-map-layout">
+    <div class="sp-hex-container">
+      <svg class="sp-hex-svg" viewBox={`0 0 ${VB_W.toFixed(0)} ${VB_H.toFixed(0)}`} role="img" aria-label="Hexagonová mapa krajů">
+        {HEX_LAYOUT.map(({ region, col, row }) => {
+          const { cx, cy } = hexCenter(col, row);
+          return (
+            <g class="hex-cell" data-region={region} role="button" tabindex="0" aria-label={region}>
+              <path d={hexPath(cx, cy)} class="hex-shape" />
+              <text x={cx} y={cy - 14} class="hex-region" text-anchor="middle">{region.replace(/ kraj$/, '').replace('Hlavní město ', '')}</text>
+              <text x={cx} y={cy + 4} class="hex-value" text-anchor="middle"></text>
+              <text x={cx} y={cy + 22} class="hex-unit" text-anchor="middle">tis. t</text>
+              <rect x={cx - 30} y={cy + 28} width="60" height="4" rx="2" class="hex-bar-bg"/>
+              <rect x={cx - 30} y={cy + 28} width="0" height="4" rx="2" class="hex-bar-fill"/>
+            </g>
+          );
+        })}
+      </svg>
+      <div class="sp-hex-legend">
+        <span>nízká</span>
+        <div class="legend-grad"></div>
+        <span>vysoká</span>
+      </div>
+    </div>
+    <aside class="sp-hex-detail" id="hexDetail">
+      <div class="placeholder">
+        <span class="placeholder-icon">🗺️</span>
+        <p>Vyberte kraj na mapě</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script type="application/json" id="hexMapData" set:html={JSON.stringify({ data, defaultYear: latestYear })}></script>
+
+<style>
+  .sp-section{margin:32px 0 36px;scroll-margin-top:200px}
+  .sp-section-head{margin-bottom:14px}
+  .sp-section-head h2{font:700 24px 'Chakra Petch',sans-serif;letter-spacing:-.02em;margin:0;color:#0A0A0B}
+  .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
+  .sp-map-controls{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .sp-pills-row{display:flex;gap:6px;flex-wrap:wrap}
+  .sp-mini-pill{
+    padding:6px 12px;background:#fff;border:1px solid #EAEAEC;border-radius:999px;
+    font:500 13px 'Chakra Petch',sans-serif;color:#0A0A0B;cursor:pointer;transition:.15s;
+  }
+  .sp-mini-pill:hover{background:#FFF6A8;border-color:#FFEA00}
+  .sp-mini-pill.active{background:#0A0A0B;color:#fff;border-color:#0A0A0B}
+  .sp-year-row{display:flex;gap:4px;background:#F4F2E9;border-radius:999px;padding:3px}
+  .sp-year-btn{
+    padding:5px 12px;background:transparent;border:0;border-radius:999px;
+    font:600 12px 'Chakra Petch',sans-serif;color:#6B6B72;cursor:pointer;
+  }
+  .sp-year-btn.active{background:#fff;color:#0A0A0B;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+  .sp-map-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;align-items:start}
+  .sp-hex-container{
+    background:#fff;border:1px solid #EAEAEC;border-radius:18px;padding:20px 22px;
+    box-shadow:0 1px 2px rgba(10,10,12,.04);position:relative;
+  }
+  .sp-hex-svg{width:100%;height:auto;display:block}
+  .hex-cell{cursor:pointer;transition:opacity .2s}
+  .hex-cell:hover .hex-shape{stroke:#0A0A0B;stroke-width:2}
+  .hex-cell.selected .hex-shape{stroke:#0A0A0B;stroke-width:3}
+  .hex-shape{fill:#E3F3EA;stroke:#fff;stroke-width:1.5;transition:fill .3s}
+  .hex-region{font:600 9px 'Chakra Petch',sans-serif;fill:#0A0A0B}
+  .hex-value{font:700 14px 'Chakra Petch',sans-serif;fill:#0A0A0B}
+  .hex-unit{font:500 8px 'Chakra Petch',sans-serif;fill:#6B6B72;letter-spacing:.06em}
+  .hex-bar-bg{fill:rgba(0,0,0,.08)}
+  .hex-bar-fill{fill:#FFEA00;transition:width .3s}
+
+  .sp-hex-legend{
+    display:flex;align-items:center;gap:8px;justify-content:flex-end;
+    margin-top:8px;font:500 11px 'Chakra Petch',sans-serif;color:#6B6B72;
+  }
+  .sp-hex-legend .legend-grad{
+    width:120px;height:8px;border-radius:4px;
+    background:linear-gradient(90deg,#E3F3EA,#0B7A3B);
+  }
+
+  .sp-hex-detail{
+    background:#fff;border:1px solid #EAEAEC;border-radius:18px;padding:20px 22px;
+    box-shadow:0 1px 2px rgba(10,10,12,.04);min-height:300px;
+  }
+  .sp-hex-detail .placeholder{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:8px;padding:60px 0;color:#6B6B72;font:500 14px 'Chakra Petch',sans-serif;
+  }
+  .placeholder-icon{font-size:38px}
+
+  @media (max-width:960px){.sp-map-layout{grid-template-columns:1fr}}
+</style>

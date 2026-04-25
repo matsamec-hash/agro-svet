@@ -1,0 +1,62 @@
+---
+// src/components/statistiky/StoryCards.astro
+const STORIES = [
+  {
+    icon: '✂️',
+    title: 'Cenové nůžky 2022–2025',
+    teaser: 'Vstupy explodovaly, výstupy taky — ale poměr horší. Kdo zaplatil válku?',
+    anchor: '#cenove-nuzky',
+  },
+  {
+    icon: '🐄',
+    title: 'Mizející kráva',
+    teaser: '35 let úbytku skotu. Vstup do EU, mléčná krize — jak se příběh vyvíjel.',
+    anchor: '#zvirata',
+  },
+  {
+    icon: '🌾',
+    title: 'Které kraje krmí Česko?',
+    teaser: 'Vysočina pšenice, Polabí cukrovka. Kdo dělá co — interaktivní mapa.',
+    anchor: '#regiony',
+  },
+];
+---
+
+<section class="sp-section" id="pribehy">
+  <header class="sp-section-head">
+    <h2>Příběhy v datech</h2>
+    <span class="sp-section-sub">Vybrané narativy — co data vlastně říkají</span>
+  </header>
+
+  <div class="sp-stories-grid">
+    {STORIES.map(s => (
+      <a class="sp-story-card" href={s.anchor}>
+        <span class="story-icon">{s.icon}</span>
+        <h3>{s.title}</h3>
+        <p>{s.teaser}</p>
+        <span class="cta">Zobrazit graf →</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .sp-section{margin:32px 0 36px;scroll-margin-top:200px}
+  .sp-section-head{margin-bottom:14px}
+  .sp-section-head h2{font:700 24px 'Chakra Petch',sans-serif;letter-spacing:-.02em;margin:0;color:#0A0A0B}
+  .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
+  .sp-stories-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .sp-story-card{
+    display:flex;flex-direction:column;gap:10px;
+    background:linear-gradient(135deg,#FBFAF4 0%,#fff 100%);
+    border:1px solid #EAEAEC;border-radius:18px;padding:24px;
+    text-decoration:none;color:#0A0A0B;
+    transition:transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .sp-story-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px -10px rgba(10,10,12,.18);border-color:#FFEA00}
+  .story-icon{font-size:32px}
+  .sp-story-card h3{font:700 18px 'Chakra Petch',sans-serif;margin:0;letter-spacing:-.01em}
+  .sp-story-card p{font-size:14px;color:#1E1E22;line-height:1.5;margin:0;flex:1}
+  .sp-story-card .cta{font:700 13px 'Chakra Petch',sans-serif;color:#0A0A0B}
+  @media (max-width:960px){.sp-stories-grid{grid-template-columns:1fr}}
+</style>
