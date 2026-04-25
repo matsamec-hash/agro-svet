@@ -4,7 +4,7 @@ country: Švédsko
 founded: 1962
 website: https://www.vaderstad.com/
 description: >
-  Švédský výrobce vysokovýkonných secích strojů (Tempo, Rapid, Spirit, Inspire, Proceed) a strojů na zpracování půdy (Carrier, Cultus, TopDown, Opus, NZ Aggressive). Globální lídr precizního setí kukuřice se systémem Tempo.
+  Švédský výrobce vysokovýkonných secích strojů (Tempo, Rapid, Spirit, Inspire, Proceed) a strojů na zpracování půdy (Carrier, Cultus, TopDown, Opus, NZ Aggressive). Globální lídr precizního setí kukuřice se systémem Tempo, který drží světové rekordy v rychlosti přesného setí (až 20 km/h). Sídlo ve švédském Väderstadu, robustní konstrukce a precizní agronomické řešení jsou poznávacím znamením značky.
 categories:
   seti:
     name: Setí a sázení
@@ -14,114 +14,204 @@ categories:
         family: inspire
         subcategory: seci-stroje-pneumaticke
         description: |
-          Inspire — pneumatický secí stroj pro malé a střední farmy.
+          Inspire 1200S je univerzální tažený pneumatický secí stroj pro malé a střední farmy. Kombinuje předzpracování půdy (disky a packer) s přesným ukládáním osiva v jednom přejezdu. Pracovní záběr 12 m, kapacita zásobníku 6300 l a hydraulicky řízený coulter pressure umožňují flexibilní setí v různých technologiích zpracování půdy.
         models:
           - slug: inspire-1200s
             name: Inspire 1200S
             url: https://www.vaderstad.com/en/products/seed-drills/inspire/
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 330
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
       - slug: proceed
         name: Proceed
         family: proceed
         subcategory: seci-stroje-presne
         description: |
-          Proceed V — nový precision platform pro pšenici, sóju a další plodiny.
+          Proceed V je nová precizní platforma Väderstad pro setí pšenice, sóji, řepky a dalších plodin s individuální kontrolou každého zrna. Singulace zrna v každém řádku přináší úsporu osiva 20-40 % oproti klasickému řádkovému setí a vyrovnaný porost. Vrcholná novinka v portfoliu, Proceed přenáší principy precision plantingu z kukuřice na drobnozrnné plodiny.
         models:
           - slug: proceed-v
             name: Proceed V
             url: https://www.vaderstad.com/en/products/seed-drills/proceed/
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 300
+            typ_zavesu: tazeny
       - slug: rapid-a
         name: Rapid A
         family: rapid
         subcategory: seci-kombinace
         description: |
-          Rapid A — tažený universal seed drill, vlajková Väderstad řada.
+          Rapid A je tažený univerzální secí stroj, vlajková řada Väderstad pro velké farmy. Pracovní záběry 4-9 m, OffSet system přesného ukládání osiva a System Disc pro předzpracování půdy zvládají setí v mulčovaných i klasicky zpracovaných půdách. Velkokapacitní zásobník 3900-5500 l minimalizuje prostoje při doplňování osiva a hnojiva.
         models:
           - slug: rapid-a-400s
             name: Rapid A 400S
             url: https://www.vaderstad.com/en/products/seed-drills/rapid-a/
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 180
+            prikon_traktor_hp_max: 220
+            typ_zavesu: tazeny
+          - slug: rapid-a-600s
+            name: Rapid A 600S
+            url: https://www.vaderstad.com/en/products/seed-drills/rapid-a/
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 220
+            prikon_traktor_hp_max: 300
+            typ_zavesu: tazeny
+          - slug: rapid-a-800s
+            name: Rapid A 800S
+            url: https://www.vaderstad.com/en/products/seed-drills/rapid-a/
+            pracovni_zaber_m: 8
+            prikon_traktor_hp_min: 300
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
       - slug: rapid-rd
         name: Rapid RD
         family: rapid
         subcategory: seci-kombinace
         description: |
-          Rapid RD — pneumatický secí stroj pro intenzivní setí.
+          Rapid RD 300-400C je nesený pneumatický secí stroj pro intenzivní setí na středních a menších plochách. Kombinuje pasivní zpracování půdy disky s přesným ukládáním osiva. Pracovní záběry 3-4 m, hmotnost přizpůsobená pro středně výkonné traktory a osvědčené Väderstad coulter zaručují kvalitní porost i v náročných podmínkách.
         models:
           - slug: rapid-rd-300c
             name: Rapid RD 300C
             url: https://www.vaderstad.com/en/products/seed-drills/rapid-rd/
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 120
+            prikon_traktor_hp_max: 160
+            typ_zavesu: neseny
+          - slug: rapid-rd-400c
+            name: Rapid RD 400C
+            url: https://www.vaderstad.com/en/products/seed-drills/rapid-rd/
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 140
+            prikon_traktor_hp_max: 180
+            typ_zavesu: neseny
       - slug: spirit
         name: Spirit
         family: spirit
         subcategory: seci-kombinace
         description: |
-          Spirit — výkonný secí stroj s velkými pracovními záběry (8-12 m).
+          Spirit je výkonný tažený secí stroj s velkými pracovními záběry 6-9 m pro velkoplošné farmy. System Disc Aggressive a Crossboard Heavy zajišťují přípravu půdy v jednom přejezdu i v náročných podmínkách. Velkokapacitní zásobník 5000 l a precizní pneumatický distribuční systém zvládají vysokovýkonné setí obilovin a řepky.
         models:
+          - slug: spirit-600s
+            name: Spirit 600S
+            url: https://www.vaderstad.com/en/products/seed-drills/spirit/
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 280
+            typ_zavesu: tazeny
           - slug: spirit-800c
             name: Spirit 800C
             url: https://www.vaderstad.com/en/products/seed-drills/spirit/
+            pracovni_zaber_m: 8
+            prikon_traktor_hp_min: 280
+            prikon_traktor_hp_max: 350
+            typ_zavesu: tazeny
+          - slug: spirit-900c
+            name: Spirit 900C
+            url: https://www.vaderstad.com/en/products/seed-drills/spirit/
+            pracovni_zaber_m: 9
+            prikon_traktor_hp_min: 320
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
       - slug: spirit-r
         name: Spirit R
         family: spirit
         subcategory: seci-kombinace
         description: |
-          Spirit R — radličková verze Spirit s active row coulter.
+          Spirit R je radličková verze Spirit s active row coulter, určená pro setí v technologii minimum tillage a no-till. Pracovní záběry 3-4 m, individuálně řízený přítlak na každý radličkový coulter zajišťuje rovnoměrnou hloubku setí. Vhodný pro intenzivní porosty obilovin, řepky a luskovin v rotacích s redukovaným zpracováním půdy.
         models:
           - slug: spirit-r-300s
             name: Spirit R 300S
             url: https://www.vaderstad.com/en/products/seed-drills/spirit-r/
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 200
+            typ_zavesu: tazeny
+          - slug: spirit-r-400s
+            name: Spirit R 400S
+            url: https://www.vaderstad.com/en/products/seed-drills/spirit-r/
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 180
+            prikon_traktor_hp_max: 220
+            typ_zavesu: tazeny
       - slug: tempo-f
         name: Tempo F
         family: tempo
         subcategory: seci-stroje-presne
         description: |
-          Tempo F — precision planter front-mounted varianta.
+          Tempo F je čelně nesený precision planter pro kombinaci s nesenou Rapid sečkou na zadním tříbodovém závěsu. Umožňuje současné setí kukuřice nebo slunečnice s aplikací startovacího hnojiva v jednom přejezdu. PowerShoot systém Väderstad zajišťuje přesné ukládání zrn i při rychlostech 12-15 km/h.
         models:
           - slug: tempo-f-8
             name: Tempo F 8
             url: https://www.vaderstad.com/en/products/precision-planters/tempo-f/
-      - slug: tempo-k
-        name: Tempo K
-        family: tempo
-        subcategory: seci-stroje-presne
-        description: |
-          Tempo K — kompaktní precision planter pro střední farmy.
-        models:
-          - slug: tempo-k
-            name: Tempo K
-            url: https://www.vaderstad.com/en/products/precision-planters/tempo-k/
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 220
+            typ_zavesu: neseny
       - slug: tempo-l
         name: Tempo L
         family: tempo
         subcategory: seci-stroje-presne
         description: |
-          Tempo L — vlajkový precision planter, top z Tempo řady.
+          Tempo L je vlajkový tažený precision planter Väderstad, dostupný v konfiguracích 6, 8, 12, 16 a 18 řad. PowerShoot systém s aktivní výsevací jednotkou drží precizní singulaci zrna i při rekordních rychlostech 15-20 km/h, dvojnásobek tradičních secích strojů. Light pulse seed monitoring kontroluje každé zrno v reálném čase a přizpůsobuje výsev podmínkám pole.
         models:
           - slug: tempo-l-8
             name: Tempo L 8
             url: https://www.vaderstad.com/en/products/precision-planters/tempo-l/
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 280
+            typ_zavesu: tazeny
           - slug: tempo-l-12
             name: Tempo L 12
             url: https://www.vaderstad.com/en/products/precision-planters/tempo-l/
+            pracovni_zaber_m: 9
+            prikon_traktor_hp_min: 280
+            prikon_traktor_hp_max: 380
+            typ_zavesu: tazeny
+          - slug: tempo-l-16
+            name: Tempo L 16
+            url: https://www.vaderstad.com/en/products/precision-planters/tempo-l/
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 350
+            prikon_traktor_hp_max: 450
+            typ_zavesu: tazeny
       - slug: tempo-r
         name: Tempo R
         family: tempo
         subcategory: seci-stroje-presne
         description: |
-          Tempo R — rigid frame precision planter.
+          Tempo R je tažený precision planter s rigidním rámem, určený pro středně velké farmy v záběru 6-8 řad. Robustní konstrukce a PowerShoot výsevací jednotka zajišťují vysokou produktivitu při setí kukuřice, slunečnice, sóji a řepky. Snadná údržba a kompaktní transportní rozměry díky pevnému rámu.
         models:
           - slug: tempo-r
             name: Tempo R
             url: https://www.vaderstad.com/en/products/precision-planters/tempo-r/
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 250
+            typ_zavesu: tazeny
       - slug: tempo-v
         name: Tempo V
         family: tempo
         subcategory: seci-stroje-presne
         description: |
-          Tempo V — varianta pro evropský trh.
+          Tempo V je nesená varianta precision planteru s 6-8 řadami, vhodná pro evropské farmy s menší výměrou. Hydraulické skládání zajišťuje transportní šířku pod 3 m. PowerShoot výsevní jednotka a aktivní depth control udržují konzistentní hloubku setí 1-7 cm při rychlosti 12-18 km/h.
         models:
           - slug: tempo-v-6
             name: Tempo V 6
             url: https://www.vaderstad.com/en/products/precision-planters/tempo-v/
+            pracovni_zaber_m: 4.5
+            prikon_traktor_hp_min: 120
+            prikon_traktor_hp_max: 160
+            typ_zavesu: neseny
+          - slug: tempo-v-8
+            name: Tempo V 8
+            url: https://www.vaderstad.com/en/products/precision-planters/tempo-v/
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 200
+            typ_zavesu: neseny
   zpracovani-pudy:
     name: Zpracování půdy
     series:
@@ -130,110 +220,173 @@ categories:
         family: carrier
         subcategory: podmitace-diskove
         description: |
-          Carrier — diskový podmítač Väderstad, vlajková řada.
+          Carrier je vlajková diskovka Väderstad pro mělké až středně hluboké zpracování strniště, mulčování posklizňových zbytků a přípravu seťového lůžka. Kovaný 450-510 mm CrossCutter Disc nebo TrueCut disk řeže slámu i při vysokých rychlostech 12-20 km/h. Modulární řada od 3 m (Carrier základ) až po 12 m (Carrier XL/XT) pro libovolnou velikost farmy.
         models:
           - slug: carrier
             name: Carrier (base)
             url: https://www.vaderstad.com/en/products/disc-cultivators/carrier/
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 100
+            prikon_traktor_hp_max: 180
+            typ_zavesu: neseny
           - slug: carrier-l
             name: Carrier L
             url: https://www.vaderstad.com/en/products/disc-cultivators/carrier-l/
+            pracovni_zaber_m: 4.25
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 250
+            typ_zavesu: tazeny
           - slug: carrier-x
             name: Carrier X
             url: https://www.vaderstad.com/en/products/disc-cultivators/carrier-x/
+            pracovni_zaber_m: 6.25
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 350
+            typ_zavesu: tazeny
           - slug: carrier-xl
             name: Carrier XL
             url: https://www.vaderstad.com/en/products/disc-cultivators/carrier-xl/
+            pracovni_zaber_m: 8.25
+            prikon_traktor_hp_min: 280
+            prikon_traktor_hp_max: 450
+            typ_zavesu: tazeny
           - slug: carrier-xt
             name: Carrier XT
             url: https://www.vaderstad.com/en/products/disc-cultivators/carrier-xt/
+            pracovni_zaber_m: 12.25
+            prikon_traktor_hp_min: 350
+            prikon_traktor_hp_max: 500
+            typ_zavesu: tazeny
       - slug: crosscutter-disc
         name: CrossCutter Disc
         family: crosscutter
         subcategory: podmitace-diskove
         description: |
-          CrossCutter Disc — ultra-mělká diskovka pro mělké odezvy.
+          CrossCutter Disc je ultra-mělká diskovka pro plošné podříznutí strniště v hloubce 2-5 cm a podporu klíčení výdrolu i plevelů. Speciálně tvarované disky s konkávou 14° agresivně řežou bez zbytečného mísení vrstev půdy. Klíčový stroj pro stub management v rámci CTF a regenerativního zemědělství. Pracovní záběry 5-12 m při rychlosti až 20 km/h.
         models:
           - slug: crosscutter-disc
             name: CrossCutter Disc
             url: https://www.vaderstad.com/en/products/disc-cultivators/crosscutter-disc/
+            pracovni_zaber_m: 6.25
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
       - slug: cultus
         name: Cultus
         family: cultus
         subcategory: podmitace-radlickove
         description: |
-          Cultus — radličkový podmítač pro střední hloubky.
+          Cultus CS je univerzální radličkový kypřič pro střední hloubky 5-25 cm. 80 cm rozteč mezi nosníky a jištěné pružinové slupice se 600 kg uvolňovací silou zaručují průchodnost i v kamenitých půdách. 3-řadé uspořádání slupic minimalizuje ucpávání rostlinnými zbytky. Vhodný pro podmítku, hluboké kypření i přípravu seťového lůžka v jednom stroji.
         models:
           - slug: cultus-cs
             name: Cultus CS
             url: https://www.vaderstad.com/en/products/cultivators/cultus/
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 180
+            prikon_traktor_hp_max: 350
+            typ_zavesu: tazeny
       - slug: swift
         name: Swift
         family: swift
         subcategory: podmitace-radlickove
         description: |
-          Swift — vysokorychlostní radličkový podmítač.
+          Swift je vysokorychlostní radličkový podmítač pro mělké zpracování strniště v hloubce 3-15 cm. Pracovní rychlost 12-20 km/h zajišťuje vysokou plošnou výkonnost při nízké spotřebě paliva. Kombinace 2 řad slupic s úzkými 50 mm radličkami a koncovým válcem v jednom přejezdu kompletuje povrchové zpracování i osivové lůžko.
         models:
           - slug: swift-870
             name: Swift 870
             url: https://www.vaderstad.com/en/products/cultivators/swift/
+            pracovni_zaber_m: 8.7
+            prikon_traktor_hp_min: 250
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
       - slug: opus
         name: Opus
         family: opus
         subcategory: kyprice
         description: |
-          Opus — hloubkový kypřič Väderstad.
+          Opus L500 je hloubkový kypřič Väderstad pro intenzivní kypření do hloubky 35 cm. Hydraulicky jištěné slupice s uvolňovací silou až 850 kg a 80 cm rozteč mezi řadami zvládají rozrušení utuženého půdního profilu i v těžkých půdách. Dvouřadé válcové vybavení vrací půdu do struktury vhodné pro setí v jednom přejezdu.
         models:
           - slug: opus-l500
             name: Opus L500
             url: https://www.vaderstad.com/en/products/cultivators/opus/
+            pracovni_zaber_m: 5
+            prikon_traktor_hp_min: 300
+            prikon_traktor_hp_max: 500
+            typ_zavesu: tazeny
       - slug: topdown
         name: TopDown
         family: topdown
         subcategory: kyprice
         description: |
-          TopDown — kombinovaný stroj disky+radličky pro one-pass tillage.
+          TopDown je kombinovaný stroj pro one-pass tillage spojující 4 pracovní operace v jednom přejezdu: disky pro mělké promísení, hloubkové slupice (až 30 cm), srovnávací disky a koncový válec. Ideální pro přechod z konvenčního zpracování na minimum tillage. Pracovní záběry 3-7 m, hloubka kypření plynule nastavitelná hydraulicky z kabiny.
         models:
           - slug: topdown-700
             name: TopDown 700
             url: https://www.vaderstad.com/en/products/cultivators/topdown/
+            pracovni_zaber_m: 7
+            prikon_traktor_hp_min: 300
+            prikon_traktor_hp_max: 500
+            typ_zavesu: tazeny
       - slug: nz-aggressive
         name: NZ Aggressive
         family: nz
         subcategory: kompaktomaty
         description: |
-          NZ Aggressive — kompaktomat s hlubšími orgány.
+          NZ Aggressive je výkonný kompaktomat s pružinovými slupicemi pro intenzivní přípravu seťového lůžka v hloubce 3-10 cm. Pracovní záběry 5-10 m a 4-řadé uspořádání slupic zajišťují jemné drobení a srovnání povrchu i po hluboké orbě. Vhodný pro jarní i podzimní přípravu osivového lůžka pod obiloviny, řepku a okopaniny.
         models:
           - slug: nz-aggressive-1000
             name: NZ Aggressive 1000
             url: https://www.vaderstad.com/en/products/cultivators/nz-aggressive/
+            pracovni_zaber_m: 10
+            prikon_traktor_hp_min: 220
+            prikon_traktor_hp_max: 350
+            typ_zavesu: tazeny
       - slug: rexius
         name: Rexius
         family: rexius
         subcategory: valce
         description: |
-          Rexius — válec pro reconsolidaci po orbě.
+          Rexius je těžký posklizňový a předseťový válec Väderstad pro reconsolidaci půdy a urovnání povrchu po orbě nebo kypření. Pracovní záběry 6.2-12.4 m, 600 kg/m provozní hmotnost rozdrobí hroudy a vytváří optimální kapilaritu pro klíčení. CrossBoard Heavy přední equalizer srovnává nerovnosti.
         models:
           - slug: rexius-820
             name: Rexius 820
             url: https://www.vaderstad.com/en/products/rollers/rexius/
+            pracovni_zaber_m: 8.2
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 250
+            typ_zavesu: tazeny
       - slug: rexius-twin
         name: Rexius Twin
         family: rexius
         subcategory: valce
         description: |
-          Rexius Twin — dvojitý válec pro extra reconsolidaci.
+          Rexius Twin je dvojitý válec se dvěma řadami CambridgeRing kroužků (Ø 470 + 510 mm) pro extra reconsolidaci a maximální kapilaritu půdy. Vyšší hmotnost a dvojnásobný kontakt s půdou zajišťují jistější založení porostu obilovin a řepky. Vhodný pro náročné minimum tillage technologie a regenerační zemědělství.
         models:
           - slug: rexius-twin
             name: Rexius Twin
             url: https://www.vaderstad.com/en/products/rollers/rexius-twin/
+            pracovni_zaber_m: 8.3
+            prikon_traktor_hp_min: 180
+            prikon_traktor_hp_max: 300
+            typ_zavesu: tazeny
       - slug: rollex
         name: Rollex
         family: rollex
         subcategory: valce
         description: |
-          Rollex — kompaktní válec pro menší a střední farmy.
+          Rollex je kompaktní pneumaticky tažený válec pro menší a střední farmy v záběru 6.2-12.4 m. Lehčí konstrukce než Rexius umožňuje agregaci s traktory od 120 hp. Standardně osazen 470 mm Cambridge nebo CrossKill kroužky pro různé pracovní podmínky. Hydraulické skládání pro transport pod 3 m.
         models:
           - slug: rollex-620
             name: Rollex 620
             url: https://www.vaderstad.com/en/products/rollers/rollex/
+            pracovni_zaber_m: 6.2
+            prikon_traktor_hp_min: 120
+            prikon_traktor_hp_max: 180
+            typ_zavesu: tazeny
+          - slug: rollex-820
+            name: Rollex 820
+            url: https://www.vaderstad.com/en/products/rollers/rollex/
+            pracovni_zaber_m: 8.2
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 220
+            typ_zavesu: tazeny

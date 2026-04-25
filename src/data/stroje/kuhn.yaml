@@ -4,66 +4,78 @@ country: Francie
 founded: 1828
 website: https://www.kuhn.com/
 description: >
-  Francouzský výrobce s nejširším portfoliem zemědělské techniky — pluhy Master, secí stroje Espro, postřikovače Aero, rozmetadla Axis, lisy VB/SB, žací stroje GMD, krmné vozy Euromix.
+  Francouzský výrobce s nejširším portfoliem zemědělské techniky — pluhy Master a Vari-Master, secí stroje Espro a Venta, postřikovače Altis/Metris/Oceanis, rozmetadla Axis a Aero, lisy VB/LSB, žací stroje GMD, krmné vozy Euromix a Profile.
 categories:
   hnojeni:
     name: Hnojení
     series:
       - slug: aero
-        name: Aero 32.2
+        name: Aero
         family: aero
         subcategory: rozmetadla-mineralni
         description: |
-          Aero 32.2 — rozmetadla minerálních hnojiv značky Kuhn.
+          Pneumatická rozmetadla minerálních hnojiv s rozdělovacím ramenem v záběru až 27 m.
+          Aero využívá vzduchový rozvod místo odstředivých kotoučů, což zaručuje extrémní
+          přesnost dávkování i u průmyslových hnojiv. Vhodné pro tram-line aplikace
+          a sektorové vypínání. Tažená provedení s objemem nad 3 m³.
         models:
           - slug: aero-32-2
             name: Aero 32.2
-            tagline: Pneumatic fertiliser spreader
+            tagline: Tažené pneumatické rozmetadlo se záběrem 18–27 m
             url: https://www.kuhn.com/en-int/products/fertilisation/mineral-fertiliser-spreaders/aero-32-2
       - slug: axis
         name: AXIS
         family: axis
         subcategory: rozmetadla-mineralni
         description: |
-          AXIS — rozmetadla minerálních hnojiv značky Kuhn.
+          Vlajková řada nesených odstředivých rozmetadel s elektronickým systémem EMC,
+          který kontinuálně měří moment každého kotouče a koriguje dávku v reálném čase.
+          Záběry 12–50 m, kapacity zásobníku 1000–4500 l. Verze H s kontinuálním vážením
+          pro nejvyšší přesnost při proměnlivém terénu a sklonu.
         models:
           - slug: axis-h-emc-w
             name: AXIS H EMC W
-            tagline: Mounted disc spreader with weighing
+            tagline: Nesené rozmetadlo s vážením, EMC regulací a záběrem až 50 m
             url: https://www.kuhn.com/en-int/products/fertilisation/mineral-fertiliser-spreaders/axis-h-emc-w
           - slug: axis-m-emc
             name: AXIS M EMC
-            tagline: Mounted disc spreader with EMC control
+            tagline: Nesené rozmetadlo s EMC regulací průtoku
             url: https://www.kuhn.com/en-int/products/fertilisation/mineral-fertiliser-spreaders/axis-m-emc
           - slug: axent-100-1
             name: AXENT 100.1
-            tagline: Trailed large-capacity spreader
+            tagline: Tažené velkokapacitní rozmetadlo, zásobník až 9300 l
             url: https://www.kuhn.com/en-int/products/fertilisation/mineral-fertiliser-spreaders/axent-100-1
-      - slug: profile
-        name: Profile
-        family: profile
+      - slug: msp
+        name: Profile (rozmetadla statková)
+        family: msp
         subcategory: rozmetadla-statkova
         description: |
-          Profile — rozmetadla statkových hnojiv značky Kuhn.
+          Univerzální rozmetadla statkových hnojiv s vertikálními bubny nebo talíři.
+          Konstrukce s nízko posazeným těžištěm a hydraulickým zadním šoupátkem
+          umožňuje rovnoměrnou aplikaci chlévské mrvy, kompostu i digestátu.
+          Modely s objemem korby 8–24 m³, ISOBUS kompatibilní.
         models:
           - slug: profile-15-2
             name: Profile 15.2
-            tagline: Universal manure spreader
+            tagline: Univerzální rozmetadlo statkových hnojiv, 15 m³
             url: https://www.kuhn.com/en-int/products/fertilisation/manure-spreaders/profile-15-2
           - slug: pro-twin-slinger
             name: Pro-Twin Slinger
-            tagline: Side-discharge manure spreader
+            tagline: Boční rozmetadlo polotekutých hnojiv
             url: https://www.kuhn.com/en-int/products/fertilisation/manure-spreaders/pro-twin-slinger
       - slug: pul
-        name: PUL 160
+        name: PUL
         family: pul
         subcategory: cisterny-kejda
         description: |
-          PUL 160 — cisterny na kejdu značky Kuhn.
+          Nesené i tažené cisterny na kejdu s objemem 7–28 m³. Standardní je vakuové
+          plnění a možnost kombinace s aplikátory (vlečné hadice, diskové, slot-injektor).
+          Kompatibilní s ISOBUS a sekčním vypínáním pro přesnou aplikaci na pozemcích
+          v ochranných pásmech.
         models:
           - slug: pul-160
             name: PUL 160
-            tagline: Single-axle slurry tanker
+            tagline: Jednoosá kejdová cisterna 16 000 l
             url: https://www.kuhn.com/en-int/products/fertilisation/slurry-tankers/pul-160
   komunal-les:
     name: Komunál a les
@@ -73,84 +85,101 @@ categories:
         family: bp
         subcategory: mulcovace
         description: |
-          BP — mulčovače značky Kuhn.
+          Univerzální mulčovače pro údržbu travních ploch, krajnic a strniště.
+          Záběry 1,8–3,2 m s plovoucím kloubem pro kopírování nerovností.
+          Reverzibilní BPR varianty umožňují přední i zadní montáž a jsou vhodné
+          pro nasazení s komunální technikou.
         models:
           - slug: bp-280
             name: BP 280
-            tagline: Front and rear mounted shredder
+            tagline: Mulčovač přední/zadní s pracovním záběrem 2,8 m
             url: https://www.kuhn.com/en-int/products/landscape-maintenance/shredders/bp-280
           - slug: bpr-305
             name: BPR 305
-            tagline: Reversible shredder
+            tagline: Reverzibilní mulčovač se záběrem 3,05 m
             url: https://www.kuhn.com/en-int/products/landscape-maintenance/shredders/bpr-305
       - slug: tbe
-        name: TBE 22
+        name: TBE
         family: tbe
         subcategory: mulcovace
         description: |
-          TBE 22 — mulčovače značky Kuhn.
+          Výložníkové mulčovače pro údržbu příkopů, krajnic a živých plotů.
+          Hydraulické rameno s dosahem 5–8 m a kyvným mulčovacím adaptérem.
+          Standardně proporcionální joystickové ovládání a bezpečnostní float
+          systém proti nárazům.
         models:
           - slug: tbe-22
             name: TBE 22
-            tagline: Reach arm hedge cutter
+            tagline: Výložníkový mulčovač s ramenem 5,2 m
             url: https://www.kuhn.com/en-int/products/landscape-maintenance/shredders/tbe-22
   ochrana-rostlin:
     name: Ochrana rostlin
     series:
       - slug: altis
-        name: Altis 1302
+        name: Altis
         family: altis
         subcategory: postrikovace-nesene
         description: |
-          Altis 1302 — nesené postřikovače značky Kuhn.
+          Nesené polní postřikovače s nádrží 1000–1800 l a záběrem ramen 18–28 m.
+          Hydraulicky ovládaná ocelová ramena s odpružením a sekčním vypínáním.
+          Vhodné pro středně velké podniky a kombinaci s předním zásobníkem
+          pro zvýšení kapacity.
         models:
           - slug: altis-1302
             name: Altis 1302
-            tagline: Mounted field sprayer
+            tagline: Nesený postřikovač 1300 l, ramena 18–24 m
             url: https://www.kuhn.com/en-int/products/crop-protection/mounted-sprayers/altis-1302
       - slug: deltis
-        name: Deltis 2
+        name: Deltis
         family: deltis
         subcategory: postrikovace-nesene
         description: |
-          Deltis 2 — nesené postřikovače značky Kuhn.
+          Kompaktní nesené postřikovače pro menší a střední podniky. Nádrž 600–1300 l,
+          ramena 12–24 m s ručním nebo hydraulickým rozkládáním. Standardně počítač
+          DPAE pro přesné dávkování závislé na rychlosti.
         models:
           - slug: deltis-2
             name: Deltis 2
-            tagline: Mounted sprayer with 18-28 m boom
+            tagline: Nesený postřikovač s rameny 18–28 m
             url: https://www.kuhn.com/en-int/products/crop-protection/mounted-sprayers/deltis-2
       - slug: lexis
         name: Lexis
         family: lexis
         subcategory: postrikovace-tazene
         description: |
-          Lexis — tažené postřikovače značky Kuhn.
+          Kompaktní tažený postřikovač vstupní třídy s nádrží 2400–3000 l a rameny
+          18–24 m. Jednoosé šasi, mechanicky řízená oj a snadná údržba.
+          Vhodný pro středně velké provozy hledající první tažený stroj.
         models:
           - slug: lexis
             name: Lexis
-            tagline: Compact trailed sprayer
+            tagline: Kompaktní tažený postřikovač 2400–3000 l
             url: https://www.kuhn.com/en-int/products/crop-protection/trailed-sprayers/lexis
       - slug: metris
-        name: Metris 2
+        name: Metris
         family: metris
         subcategory: postrikovace-tazene
         description: |
-          Metris 2 — tažené postřikovače značky Kuhn.
+          Tažený postřikovač střední třídy s objemem nádrže 3200–4100 l a rameny
+          18–30 m. Vybaven systémem stabilizace ramen Equilibra a aktivním sekčním
+          řízením. ISOBUS s mapovými aplikacemi a možností Auto-Section.
         models:
           - slug: metris-2
             name: Metris 2
-            tagline: Trailed sprayer up to 4100 L
+            tagline: Tažený postřikovač do 4100 l, ramena 18–30 m
             url: https://www.kuhn.com/en-int/products/crop-protection/trailed-sprayers/metris-2
       - slug: oceanis
-        name: Oceanis 2
+        name: Oceanis
         family: oceanis
         subcategory: postrikovace-tazene
         description: |
-          Oceanis 2 — tažené postřikovače značky Kuhn.
+          Vlajková řada tažených postřikovačů s nádrží 4600–7700 l a hliníkovými
+          rameny do 44 m. Pneumatické odpružení, řízená náprava a stabilizace ramen
+          Equilibra+. Plně ISOBUS, kompatibilní s GPS sekcionálem a PWM tryskami.
         models:
           - slug: oceanis-2
             name: Oceanis 2
-            tagline: Trailed sprayer up to 7700 L
+            tagline: Tažený postřikovač do 7700 l, ramena až 44 m
             url: https://www.kuhn.com/en-int/products/crop-protection/trailed-sprayers/oceanis-2
   seti:
     name: Setí a sázení
@@ -160,56 +189,67 @@ categories:
         family: espro
         subcategory: seci-stroje-pneumaticke
         description: |
-          Espro — secí stroje značky Kuhn.
+          Tažené diskové secí kombinace pro minimalizační i konvenční technologii.
+          Dvouřadé disky s úhlem nastavení, válce TF s pěchovacím účinkem
+          a paralelogram výsevních botek. Záběry 3–8 m, jedno- nebo dvoukomorové
+          zásobníky pro setí směsí a meziplodin.
         models:
           - slug: espro-3000
             name: Espro 3000
-            tagline: Compact disc seed drill
+            tagline: Nesený disk-secí stroj se záběrem 3 m
             url: https://www.kuhn.com/en-int/products/sowing/seed-drills/espro-3000
           - slug: espro-6000-r
             name: Espro 6000 R
-            tagline: Trailed precision seed drill
+            tagline: Tažený secí stroj 6 m s předním kotoučem
             url: https://www.kuhn.com/en-int/products/sowing/seed-drills/espro-6000-r
           - slug: espro-8000-rc
             name: Espro 8000 RC
-            tagline: Wide trailed seed drill
+            tagline: Tažený secí stroj se záběrem 8 m a dvoukomorovým zásobníkem
             url: https://www.kuhn.com/en-int/products/sowing/seed-drills/espro-8000-rc
       - slug: maxima
         name: Maxima
         family: maxima
         subcategory: seci-stroje-presne
         description: |
-          Maxima — přesné secí stroje značky Kuhn.
+          Přesné secí stroje pro řádkové plodiny — kukuřici, slunečnici, řepku
+          a cukrovku. Elektrický pohon výsevního ústrojí s individuálním vypínáním
+          řádků a singulárním výběrem zrn. Záběr 4–18 řádků, řízení přes ISOBUS
+          terminál CCI.
         models:
           - slug: maxima-3
             name: Maxima 3
-            tagline: Precision planter
+            tagline: Přesný secí stroj 4–12 řádků, elektrický pohon
             url: https://www.kuhn.com/en-int/products/sowing/precision-planters/maxima-3
           - slug: planter-3
             name: Planter 3
-            tagline: Precision row crop planter
+            tagline: Přesný secí stroj se širokým rozsahem plodin
             url: https://www.kuhn.com/en-int/products/sowing/precision-planters/planter-3
       - slug: sitera
-        name: Sitera 3000
+        name: Sitera
         family: sitera
-        subcategory: seci-stroje-pneumaticke
+        subcategory: seci-stroje-mechanicke
         description: |
-          Sitera 3000 — secí stroje značky Kuhn.
+          Mechanické secí stroje na kombinaci s rotační bránou HR. Botkový výsevní
+          systém Suprapack nebo diskový CD pro různé půdní podmínky. Hydraulický
+          přesun do dopravní polohy a možnost dohnojování. Záběr 3–4 m.
         models:
           - slug: sitera-3000
             name: Sitera 3000
-            tagline: Mechanical seed drill
+            tagline: Mechanický secí stroj 3 m pro kombinaci s rotační bránou
             url: https://www.kuhn.com/en-int/products/sowing/seed-drills/sitera-3000
       - slug: venta
-        name: Venta 3030
+        name: Venta
         family: venta
         subcategory: seci-stroje-pneumaticke
         description: |
-          Venta 3030 — secí stroje značky Kuhn.
+          Pneumatické secí stroje pro kombinaci s aktivním nářadím. Centrální
+          dávkování s elektrickým pohonem, pneumatický rozvod do botek a velký
+          zásobník až 1500 l. Vhodné pro intenzivní provozy s kombinací
+          rotační brány a secího stroje v jednom přejezdu.
         models:
           - slug: venta-3030
             name: Venta 3030
-            tagline: Pneumatic seed drill
+            tagline: Pneumatický secí stroj 3 m s centrálním dávkováním
             url: https://www.kuhn.com/en-int/products/sowing/seed-drills/venta-3030
   sklizen-picnin:
     name: Sklizeň pícnin a slámy
@@ -219,212 +259,235 @@ categories:
         family: fc
         subcategory: zaci-stroje
         description: |
-          FC — žací stroje značky Kuhn.
+          Žací stroje s kondicionérem (ocelovými prsty nebo válci) pro urychlení
+          schnutí pícnin. Záběry 2,4–13,4 m v provedení nesené, čelní i triple.
+          Nesymetrický pohon Optidisc a hydropneumatické odlehčení Lift-Control
+          pro šetrnou práci na nerovném terénu.
         models:
           - slug: fc-3125-d
             name: FC 3125 D
-            tagline: Mower-conditioner with steel rolls
+            tagline: Žací stroj s kondicionérem (válce) se záběrem 3,1 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/disc-mowers/fc-3125-d
           - slug: fc-13460-rgc
             name: FC 13460 RGC
-            tagline: Triple mower-conditioner 13.4 m
+            tagline: Triple kombinace žacích strojů se záběrem 13,4 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/disc-mowers/fc-13460-rgc
       - slug: ga
         name: GA
         family: ga
         subcategory: shrnovace
         description: |
-          GA — shrnovače značky Kuhn.
+          Shrnovače píce s jedním, dvěma nebo čtyřmi rotory. Záběry 3,2–15 m,
+          řiditelný podvozek MASTER DRIVE GIII pro extrémní životnost a 3D pendlování
+          rotorů kopírující terén. Modely 9531/15131 jsou vlajkovou řadou pro velké
+          provozy a profesionální senáže.
         models:
           - slug: ga-4231
             name: GA 4231
-            tagline: Single-rotor rake
+            tagline: Jednorotorový shrnovač se záběrem 4,2 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/rakes/ga-4231
           - slug: ga-9531
             name: GA 9531
-            tagline: Twin-rotor centre delivery rake
+            tagline: Dvourotorový shrnovač do středu, záběr 9,5 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/rakes/ga-9531
           - slug: ga-15131
             name: GA 15131
-            tagline: Four-rotor rake 15 m
+            tagline: Čtyřrotorový shrnovač se záběrem 15 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/rakes/ga-15131
       - slug: gf
         name: GF
         family: gf
         subcategory: obracece
         description: |
-          GF — obraceče značky Kuhn.
+          Obraceče píce se záběry 4,5–17 m a 4–14 rotory. Hydraulická úprava úhlu
+          rozhozu pro různé typy plodin a šetrné obracení i mladé píce.
+          Pendlovací digihead pro stabilitu na svazích a noční transport
+          ve sklopené poloze.
         models:
           - slug: gf-7902
             name: GF 7902
-            tagline: Trailed tedder 7.8 m
+            tagline: Tažený obraceč se záběrem 7,8 m, 6 rotorů
             url: https://www.kuhn.com/en-int/products/harvesting-forage/tedders/gf-7902
           - slug: gf-13003
             name: GF 13003
-            tagline: Wide working width tedder 13 m
+            tagline: Velkozáběrový obraceč 13 m, 12 rotorů
             url: https://www.kuhn.com/en-int/products/harvesting-forage/tedders/gf-13003
       - slug: gmd
         name: GMD
         family: gmd
         subcategory: zaci-stroje
         description: |
-          GMD — žací stroje značky Kuhn.
+          Diskové žací stroje bez kondicionéru pro nesené i tažené aplikace.
+          Žací lišta Optidisc Elite s velkým rozestupem disků pro plynulý odhoz
+          materiálu. Záběry 1,7–9,5 m, nesené i triple varianty s automatickým
+          obtokem překážek (NSH).
         models:
           - slug: gmd-310
             name: GMD 310
-            tagline: Mounted disc mower 3.1 m
+            tagline: Nesený diskový žací stroj 3,1 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/disc-mowers/gmd-310
           - slug: gmd-3525
             name: GMD 3525
-            tagline: Trailed disc mower 3.5 m
+            tagline: Tažený diskový žací stroj 3,5 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/disc-mowers/gmd-3525
           - slug: gmd-9530
             name: GMD 9530
-            tagline: Triple disc mower 9.5 m
+            tagline: Triple diskový žací stroj 9,5 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/disc-mowers/gmd-9530
       - slug: lsb
-        name: LSB 870
+        name: LSB
         family: lsb
         subcategory: lisy-hranolove
         description: |
-          LSB 870 — hranolové lisy značky Kuhn.
+          Hranolové lisy střední třídy s komorou 80×70 nebo 80×90 cm. Pickup šíře
+          2,3 m a integrované řezací zařízení do 23 nožů. Vhodné pro slámu, seno
+          i senáž s vysokou hustotou balíku a nízkými provozními náklady.
         models:
           - slug: lsb-870
             name: LSB 870
-            tagline: Large square baler
+            tagline: Hranolový lis s komorou 80×70 cm
             url: https://www.kuhn.com/en-int/products/harvesting-forage/square-balers/lsb-870
       - slug: merge-maxx
-        name: Merge Maxx 950
+        name: Merge Maxx
         family: merge-maxx
         subcategory: shrnovace
         description: |
-          Merge Maxx 950 — shrnovače značky Kuhn.
+          Pásový shrnovač (merger) s pickupem a dopravním pásem místo rotorů.
+          Šetrná manipulace s pící bez kontaminace zeminou — ideální pro luxusní
+          senáže a osivářské porosty. Záběr 9,5 m s možností shrnování doprava,
+          doleva i na obě strany.
         models:
           - slug: merge-maxx-950
             name: Merge Maxx 950
-            tagline: Pick-up belt merger
+            tagline: Pásový shrnovač se záběrem 9,5 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/rakes/merge-maxx-950
-      - slug: profile-trailer
+      - slug: profile-fs
         name: Profile FS
-        family: profile-trailer
+        family: profile-fs
         subcategory: samosberaci-vozy
         description: |
-          Profile FS — samosběrací vozy značky Kuhn.
+          Samosběrací vůz s velkokapacitním ložným prostorem 36–58 m³ DIN.
+          Pickup šíře 2 m a nožový rotor s 35–46 noži pro krátké řezání pícnin.
+          Tandemová náprava s odpružením a hydraulická vyhazovací podlaha.
         models:
           - slug: profile-fs
             name: Profile FS
-            tagline: Self-loading forage wagon
+            tagline: Samosběrací vůz s nožovým rotorem
             url: https://www.kuhn.com/en-int/products/harvesting-forage/loader-wagons/profile-fs
       - slug: rw
-        name: RW 1410
+        name: RW
         family: rw
         subcategory: obalovace
         description: |
-          RW 1410 — obalovače balíků značky Kuhn.
+          Tažené obalovače balíků pro kulaté i hranolové balíky. Dvojité předpínací
+          jednotky 500/750 mm a hydraulické sklápění balíku do polohy pro plynulou
+          práci s nakladačem. Modely RW 1410/1610 patří mezi nejprodávanější
+          v Evropě.
         models:
           - slug: rw-1410
             name: RW 1410
-            tagline: Trailed bale wrapper
+            tagline: Tažený obalovač balíků s automatickým ovládáním
             url: https://www.kuhn.com/en-int/products/harvesting-forage/bale-wrappers/rw-1410
-      - slug: sb
-        name: SB
-        family: sb
-        subcategory: lisy-hranolove
-        description: |
-          SB — hranolové lisy značky Kuhn.
-        models:
-          - slug: sb-1290-id
-            name: SB 1290 iD
-            tagline: High-density large square baler
-            url: https://www.kuhn.com/en-int/products/harvesting-forage/square-balers/sb-1290-id
-          - slug: sb-890
-            name: SB 890
-            tagline: Mid-size square baler
-            url: https://www.kuhn.com/en-int/products/harvesting-forage/square-balers/sb-890
       - slug: vb
         name: VB
         family: vb
         subcategory: lisy-valcove
         description: |
-          VB — válcové lisy značky Kuhn.
+          Válcové lisy s variabilní komorou pro balíky o průměru 0,8–1,85 m.
+          Nový rotor Integral pro vysoký výkon i ve vlhkém materiálu, řezací zařízení
+          OptiCut s 14, 23 nebo 25 noži. VBP varianty kombinují lis s obalovačem
+          v jednom průjezdu.
         models:
           - slug: vb-3160
             name: VB 3160
-            tagline: Variable chamber round baler
+            tagline: Válcový lis s variabilní komorou do 1,6 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/round-balers/vb-3160
           - slug: vb-7190
             name: VB 7190
-            tagline: Variable chamber baler 1.85 m bale
+            tagline: Válcový lis s komorou až 1,85 m
             url: https://www.kuhn.com/en-int/products/harvesting-forage/round-balers/vb-7190
           - slug: vbp-3160
             name: VBP 3160
-            tagline: Baler-wrapper combination
+            tagline: Kombinace lisu a obalovače v jednom stroji
             url: https://www.kuhn.com/en-int/products/harvesting-forage/round-balers/vbp-3160
           - slug: fb-3130
             name: FB 3130
-            tagline: Fixed chamber round baler
+            tagline: Válcový lis s pevnou komorou
             url: https://www.kuhn.com/en-int/products/harvesting-forage/round-balers/fb-3130
   staj-chov:
     name: Stáj a chov
     series:
       - slug: euromix
-        name: Euromix I
+        name: Euromix
         family: euromix
         subcategory: krmne-vozy
         description: |
-          Euromix I — mixérové krmné vozy značky Kuhn.
+          Horizontální krmné mixovací vozy se 2–4 šneky/lopatkami a objemem 8–24 m³.
+          Mírná míchací akce vhodná pro míchání TMR s podílem dlouhostébelné píce
+          a sena. Standardně programovatelné vážení s pamětí receptur.
         models:
           - slug: euromix-i
             name: Euromix I
-            tagline: Horizontal-paddle mixer wagon
+            tagline: Horizontální mixovací vůz s lopatkami
             url: https://www.kuhn.com/en-int/products/livestock/mixer-wagons/euromix-i
       - slug: primor
-        name: Primor 3570 M
+        name: Primor
         family: primor
         subcategory: podestylace
         description: |
-          Primor 3570 M — podestýlací stroje značky Kuhn.
+          Stroje pro rozdružování a foukání slámy do stájí — bale shredder. Boční
+          výhoz až 18 m, otočný komín pro foukání slámy do hlubokých stájí.
+          Modely od 1,3 do 5,7 m³ s pickupem na velké balíky 120×120 cm.
         models:
           - slug: primor-3570-m
             name: Primor 3570 M
-            tagline: Bale shredder / straw blower
+            tagline: Stroj na rozdružování slámy s bočním výhozem
             url: https://www.kuhn.com/en-int/products/livestock/straw-blowers/primor-3570-m
-      - slug: profile
-        name: Profile
-        family: profile
+      - slug: profile-mixer
+        name: Profile (krmné vozy)
+        family: profile-mixer
         subcategory: krmne-vozy
         description: |
-          Profile — mixérové krmné vozy značky Kuhn.
+          Vertikální krmné mixovací vozy s jedním nebo dvěma šneky a objemem
+          12–46 m³. Šnek s ostrými noži pro rychlé zpracování velkých balíků
+          a senáže. Verze Plus přidává programovatelné vážení, ISOBUS rozhraní
+          a režim eco-drive.
         models:
           - slug: profile-1880
             name: Profile 1880
-            tagline: Twin-auger vertical mixer
+            tagline: Dvojšnekový vertikální mixer 18 m³
             url: https://www.kuhn.com/en-int/products/livestock/mixer-wagons/profile-1880
           - slug: profile-plus
             name: Profile Plus
-            tagline: Premium vertical mixer wagon
+            tagline: Prémiový vertikální mixovací vůz s vážením
             url: https://www.kuhn.com/en-int/products/livestock/mixer-wagons/profile-plus
       - slug: spv
-        name: SPV Power
+        name: SPV
         family: spv
         subcategory: krmne-vozy
         description: |
-          SPV Power — mixérové krmné vozy značky Kuhn.
+          Samojízdné mixovací vozy s integrovaným nakládacím frézovým ramenem
+          a objemem 12–27 m³. Hydrostatický pohon, kabina s 360° výhledem
+          a možnost konfigurace pohonu 4×4 nebo 4×4×4 s řízenou zadní nápravou.
+          Vhodné pro velkochovy s denním krmením 200+ kusů.
         models:
           - slug: spv-power
             name: SPV Power
-            tagline: Self-propelled mixer wagon
+            tagline: Samojízdný mixovací vůz s frézou
             url: https://www.kuhn.com/en-int/products/livestock/mixer-wagons/spv-power
       - slug: tks
-        name: TKS FeedRobot K2
+        name: TKS
         family: tks
         subcategory: krmne-vozy
         description: |
-          TKS FeedRobot K2 — mixérové krmné vozy značky Kuhn.
+          Automatický krmný systém na bázi robotického vozu na kolejnici stropu
+          stáje. Naváží se zásobníkem TMR a programovaně objíždí krmný stůl
+          v nastavených časech. Snižuje náklady na práci a stabilizuje denní
+          dávku — vhodné pro mléčné farmy s automatickou dojicí stájí.
         models:
           - slug: tks-feedrobot
             name: TKS FeedRobot K2
-            tagline: Automatic feeding robot
+            tagline: Automatický krmný robot na kolejnici
             url: https://www.kuhn.com/en-int/products/livestock/mixer-wagons/tks-feedrobot
   zpracovani-pudy:
     name: Zpracování půdy
@@ -434,107 +497,114 @@ categories:
         family: cultimer
         subcategory: podmitace-radlickove
         description: |
-          Cultimer — radličkové podmítače značky Kuhn.
+          Radličkové podmítače s 2–4 řadami slupic a hydraulickou ochranou
+          Non-Stop. Záběry 3–6 m v neseném i 6–10 m v taženém provedení.
+          Vyměnitelné radličky umožňují adaptaci od mělké podmítky 5 cm
+          po hluboké kypření 35 cm.
         models:
           - slug: cultimer-l-300
             name: Cultimer L 300
-            tagline: Mounted stubble cultivator
+            tagline: Nesený radličkový podmítač 3 m
             url: https://www.kuhn.com/en-int/products/soil-preparation/stubble-cultivators/cultimer-l-300
           - slug: cultimer-l-1000
             name: Cultimer L 1000
-            tagline: Trailed stubble cultivator
+            tagline: Tažený radličkový podmítač 10 m
             url: https://www.kuhn.com/en-int/products/soil-preparation/stubble-cultivators/cultimer-l-1000
           - slug: performer
             name: Performer
-            tagline: Trailed disc and tine cultivator
+            tagline: Tažený kombinovaný diskovo-radličkový kypřič
             url: https://www.kuhn.com/en-int/products/soil-preparation/stubble-cultivators/performer
       - slug: discover-xm2
         name: Discover XM2
         family: discover-xm2
         subcategory: podmitace-diskove
         description: |
-          Discover XM2 — diskové podmítače značky Kuhn.
+          Krátký diskový podmítač pro mělkou podmítku a urovnání povrchu.
+          Disky 510 mm s nezávislým uložením a hydraulickou ochranou.
+          Vhodný pro vysokovýkonný provoz s traktory 150+ HP a rychlosti
+          práce 12–15 km/h. Záběry 3–6 m.
         models:
           - slug: discover-xm2
             name: Discover XM2
-            tagline: Mounted disc harrow
+            tagline: Nesený krátký diskový podmítač
             url: https://www.kuhn.com/en-int/products/soil-preparation/disc-harrows/discover-xm2
       - slug: hr
         name: HR
         family: hr
         subcategory: rotacni-brany
         description: |
-          HR — rotační brány značky Kuhn.
+          Rotační brány s aktivními roztoči pro kvalitní přípravu seťového
+          lůžka. Záběry 3–8 m, nesené i sklopné varianty s pevnou rychlostní
+          převodovkou nebo Speedline volbou. Standardně Maxipack válec
+          a možnost kombinace s mechanickým či pneumatickým secím strojem.
         models:
           - slug: hr-1004
             name: HR 1004
-            tagline: Mounted power harrow
+            tagline: Nesená rotační brána se záběrem 4 m
             url: https://www.kuhn.com/en-int/products/soil-preparation/power-harrows/hr-1004
           - slug: hr-4004
             name: HR 4004
-            tagline: Folding power harrow
+            tagline: Sklopná rotační brána 4 m
             url: https://www.kuhn.com/en-int/products/soil-preparation/power-harrows/hr-4004
           - slug: hr-6004
             name: HR 6004
-            tagline: Large folding power harrow
+            tagline: Velkozáběrová sklopná rotační brána 6 m
             url: https://www.kuhn.com/en-int/products/soil-preparation/power-harrows/hr-6004
       - slug: master
         name: Master
         family: master
         subcategory: pluhy
         description: |
-          Master — pluhy značky Kuhn.
+          Otočné nesené i polonesené pluhy s 3–8 radlicemi. Modely Master 103/153
+          nabízí mechanické nebo hydraulické nastavení záběru, Vari-Master plynulé
+          nastavení šíře brázdy 30–55 cm. Slupice z bórové oceli s rezervou
+          pro hluboké orby do 35 cm.
         models:
           - slug: master-103
             name: Master 103
-            tagline: Mounted reversible plough
+            tagline: Nesený otočný pluh, mechanické nastavení záběru
             url: https://www.kuhn.com/en-int/products/soil-preparation/ploughs/master-103
           - slug: master-153
             name: Master 153
-            tagline: Mounted reversible plough
+            tagline: Nesený otočný pluh, hydraulické nastavení
             url: https://www.kuhn.com/en-int/products/soil-preparation/ploughs/master-153
           - slug: vari-master-l
             name: Vari-Master L
-            tagline: Variable-width semi-mounted plough
+            tagline: Polonesený pluh s plynulou změnou záběru
             url: https://www.kuhn.com/en-int/products/soil-preparation/ploughs/vari-master-l
           - slug: challenger
             name: Challenger
-            tagline: On-land semi-mounted plough
+            tagline: On-land polonesený pluh pro orbu mimo brázdu
             url: https://www.kuhn.com/en-int/products/soil-preparation/ploughs/challenger
       - slug: optimer
         name: Optimer
         family: optimer
         subcategory: podmitace-diskove
         description: |
-          Optimer — diskové podmítače značky Kuhn.
+          Krátké diskové podmítače určené pro mělkou podmítku po sklizni.
+          Disky 510 mm s individuálním uložením na pryžových silentblocích.
+          Záběry 3–7,5 m v nesené i tažené verzi. Hydraulické nastavení hloubky
+          z kabiny pro adaptaci na různé typy půd.
         models:
           - slug: optimer-l-7503
             name: Optimer L 7503
-            tagline: Trailed compact disc harrow
+            tagline: Tažený krátký diskový podmítač 7,5 m
             url: https://www.kuhn.com/en-int/products/soil-preparation/disc-harrows/optimer-l-7503
           - slug: optimer-103
             name: Optimer 103
-            tagline: Mounted compact disc harrow
+            tagline: Nesený krátký diskový podmítač 3 m
             url: https://www.kuhn.com/en-int/products/soil-preparation/disc-harrows/optimer-103
       - slug: prolander
         name: Prolander
         family: prolander
         subcategory: kyprice
         description: |
-          Prolander — hlubinné kypřiče značky Kuhn.
+          Sluepicový kypřič pro mělkou podmítku a přípravu seťového lůžka.
+          Šest řad slupic ve formátu 6 cm rozteče zaručuje rovnoměrný profil
+          práce a kvalitní zapravení posklizňových zbytků. Záběry 3–7,5 m,
+          nesené i tažené.
         models:
           - slug: prolander
             name: Prolander
-            tagline: Tine cultivator for shallow tillage
+            tagline: Slupicový kypřič pro mělkou podmítku
             url: https://www.kuhn.com/en-int/products/soil-preparation/subsoilers/prolander
-      - slug: venta
-        name: Venta Seedbed
-        family: venta
-        subcategory: kompaktomaty
-        description: |
-          Venta Seedbed — kompaktomaty značky Kuhn.
-        models:
-          - slug: venta-seedbed
-            name: Venta Seedbed
-            tagline: Integrated seedbed combination
-            url: https://www.kuhn.com/en-int/products/soil-preparation/seedbed-cultivators/venta

@@ -4,61 +4,99 @@ country: Německo
 founded: 1984
 website: https://www.horsch.com/
 description: >
-  Německý průkopník no-till technologií. Diskové a pneumatické secí stroje Pronto, přesné secí stroje Maestro, hloubkové kypřiče Tiger, radličkové podmítače Terrano, diskové podmítače Joker a samojízdné postřikovače Leeb.
+  Německý průkopník no-till a minimum-till technologií se sídlem v Schwandorfu (Bavorsko). Pneumatické secí stroje Pronto a Sprinter, přesné secí stroje Maestro, no-till disková sečka Avatar, hloubkové kypřiče Tiger, radličkové podmítače Terrano, diskové podmítače Joker a postřikovače Leeb (tažené i samojízdné PT/VL).
 categories:
   ochrana-rostlin:
     name: Ochrana rostlin
     series:
-      - slug: leeb-4-lt
-        name: Leeb 4 LT
+      - slug: leeb-ax
+        name: Leeb AX
         family: leeb
         subcategory: postrikovace-tazene
         description: |
-          Leeb 4 LT — tažený postřikovač, nádrž 4 000 l.
+          Leeb AX — tažený postřikovač pro střední farmy, navazuje na předchozí řadu Leeb LT (4 000 a 6 000 l). Nabízí postřikový rám BoomControl s aktivním tlumením, přesnou regulaci jednotlivých trysek (PrecisionSpray) a izobus terminál SmartTouch. Kompromis mezi cenou a špičkovou aplikací typickou pro Horsch.
         models:
-          - slug: leeb-4-lt
-            name: Leeb 4 LT
-            url: https://www.horsch.com/en/products/crop-care/leeb-lt
-      - slug: leeb-6-lt
-        name: Leeb 6 LT
+          - slug: leeb-4-ax
+            name: Leeb 4 AX
+            url: https://www.horsch.com/en/products/crop-care/leeb-ax
+            pracovni_zaber_m: 27
+            specs:
+              objem_nadrze_l: 4000
+              typ_ramu: BoomControl
+          - slug: leeb-5-ax
+            name: Leeb 5 AX
+            url: https://www.horsch.com/en/products/crop-care/leeb-ax
+            pracovni_zaber_m: 30
+            specs:
+              objem_nadrze_l: 5000
+              typ_ramu: BoomControl
+      - slug: leeb-gs
+        name: Leeb GS
         family: leeb
         subcategory: postrikovace-tazene
         description: |
-          Leeb 6 LT — tažený postřikovač, nádrž 6 000 l.
+          Leeb GS — tažený postřikovač velké kapacity (6 000 a 8 000 l) pro velké výměry. Sériový BoomControl Pro s ultrazvukovými senzory drží postřikový rám 30–50 cm nad porostem i v rychlosti přes 15 km/h. CCS Pro vnitřní cirkulace umožňuje rychlý přechod mezi přípravky bez kontaminace. Postřikový rám až do 42 m.
         models:
-          - slug: leeb-6-lt
-            name: Leeb 6 LT
-            url: https://www.horsch.com/en/products/crop-care/leeb-lt
-      - slug: leeb-8-gs
-        name: Leeb 8 GS
-        family: leeb
-        subcategory: postrikovace-tazene
-        description: |
-          Leeb 8 GS — tažený postřikovač s velkou nádrží 8 000 l.
-        models:
+          - slug: leeb-6-gs
+            name: Leeb 6 GS
+            url: https://www.horsch.com/en/products/crop-care/leeb-gs
+            pracovni_zaber_m: 36
+            specs:
+              objem_nadrze_l: 6000
+              typ_ramu: BoomControl Pro
           - slug: leeb-8-gs
             name: Leeb 8 GS
             url: https://www.horsch.com/en/products/crop-care/leeb-gs
+            pracovni_zaber_m: 42
+            specs:
+              objem_nadrze_l: 8000
+              typ_ramu: BoomControl Pro
       - slug: leeb-pt
         name: Leeb PT
         family: leeb
         subcategory: postrikovace-samojizdne
         description: |
-          Leeb PT — samojízdný postřikovač pro velké farmy.
+          Leeb PT — samojízdný postřikovač pro velké farmy a aplikační služby. Nádrž 6 000 nebo 8 000 l, pracovní záběr 24–42 m. Hydropneumatické odpružení rámu i nápravy, plynulá regulace světlosti a převodovka HydroDrive. Vlajková loď segmentu samojízdných postřikovačů Horsch.
         models:
-          - slug: leeb-pt
-            name: Leeb PT
+          - slug: leeb-6-pt
+            name: Leeb 6 PT
             url: https://www.horsch.com/en/products/crop-care/leeb-pt
+            pracovni_zaber_m: 36
+            specs:
+              objem_nadrze_l: 6000
+          - slug: leeb-8-pt
+            name: Leeb 8 PT
+            url: https://www.horsch.com/en/products/crop-care/leeb-pt
+            pracovni_zaber_m: 42
+            specs:
+              objem_nadrze_l: 8000
+          - slug: leeb-12-pt
+            name: Leeb 12 PT
+            url: https://www.horsch.com/en/products/crop-care/leeb-pt
+            pracovni_zaber_m: 42
+            specs:
+              objem_nadrze_l: 12000
       - slug: leeb-vl
         name: Leeb VL
         family: leeb
         subcategory: postrikovace-samojizdne
         description: |
-          Leeb VL — samojízdný postřikovač s vyšší světlostí.
+          Leeb VL — samojízdný postřikovač s vyšší světlostí (až 165 cm) určený pro aplikace ve vzrostlých kulturách jako kukuřice, slunečnice a brambor. Nádrž 5 000 nebo 6 000 l, hydraulicky nastavitelný rozchod kol 1,80–2,25 m. Konfigurace mezi PT a postřikovačem typu high-clearance.
         models:
-          - slug: leeb-vl
-            name: Leeb VL
+          - slug: leeb-5-vl
+            name: Leeb 5 VL
             url: https://www.horsch.com/en/products/crop-care/leeb-vl
+            pracovni_zaber_m: 30
+            specs:
+              objem_nadrze_l: 5000
+              svetlost_cm: 165
+          - slug: leeb-6-vl
+            name: Leeb 6 VL
+            url: https://www.horsch.com/en/products/crop-care/leeb-vl
+            pracovni_zaber_m: 36
+            specs:
+              objem_nadrze_l: 6000
+              svetlost_cm: 165
   seti:
     name: Setí a sázení
     series:
@@ -67,90 +105,177 @@ categories:
         family: avatar
         subcategory: seci-stroje-pneumaticke
         description: |
-          Avatar — pneumatický secí stroj pro přímé setí (no-till).
+          Avatar — tažený pneumatický secí stroj pro přímé setí (no-till) do nezpracované půdy a meziplodin. Disková botka SingleDisc s přítlakem až 350 kg zvládne i pevné strniště. Provedení SD je řadové se dvěma nádržemi, SL je s velkokapacitní nádrží pro hnojivo (varianta solo nebo duo). Pracovní záběr 6, 8, 10 a 12 m.
         models:
           - slug: avatar-sd
             name: Avatar SD
-            url: https://www.horsch.com/en/products/seed-drills/avatar
+            url: https://www.horsch.com/en/products/seed-drills/avatar-sd
+            pracovni_zaber_m: 8
+            prikon_traktor_hp_min: 250
+            typ_zavesu: tazeny
+          - slug: avatar-sl
+            name: Avatar SL
+            url: https://www.horsch.com/en/products/seed-drills/avatar-sl
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 350
+            typ_zavesu: tazeny
       - slug: express
         name: Express
         family: express
         subcategory: seci-kombinace
         description: |
-          Express — secí kombinace s rotačními bránami.
+          Express — secí kombinace s aktivním rotačním smykem (KR) nebo turbo diskovým kypřičem (TD). Nesené provedení 3, 3,5 a 4 m pro tradiční přípravu seťového lůžka v jedné jízdě s traktorem střední hp třídy. Botky TurboDisc 2.0 zaručují přesné uložení osiva.
         models:
           - slug: express-kr
             name: Express KR
-            url: https://www.horsch.com/en/products/seed-drills/express
+            url: https://www.horsch.com/en/products/seed-drills/express-kr
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 130
+            typ_zavesu: neseny
+          - slug: express-td
+            name: Express TD
+            url: https://www.horsch.com/en/products/seed-drills/express-td
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 180
+            typ_zavesu: neseny
       - slug: focus
         name: Focus
         family: focus
         subcategory: seci-kombinace
         description: |
-          Focus — secí kombinace s integrovaným kypřičem.
+          Focus TD — tažená secí kombinace s integrovaným hloubkovým kypřičem (TerraGrip), botkami pro hnojivo a secími botkami TurboDisc 2.0. Strip-till v jedné operaci: kypří, hnojí pod osivo a seje. Pracovní záběr 4 a 6 m, varianta Focus s nádrží PPF pro hnojivo.
         models:
           - slug: focus-td
             name: Focus TD
-            url: https://www.horsch.com/en/products/seed-drills/focus
+            url: https://www.horsch.com/en/products/seed-drills/focus-td
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 280
+            typ_zavesu: tazeny
       - slug: maestro
         name: Maestro
         family: maestro
         subcategory: seci-stroje-presne
         description: |
-          Maestro — přesný secí stroj pro kukuřici, slunečnici a řepu.
+          Maestro — přesný secí stroj pro kukuřici, slunečnici, řepu a sóju s elektrickým výsevním ústrojím AirVac (CV/CX) nebo AirSpeed (SV/SX) až do 15 km/h. CV/SV jsou klasické s centrální nádrží na hnojivo, CX/SX mají individuální zásobníky. RV je tažené provedení s velkou centrální nádrží PPF. Záběr 6–24 m, řádky 45/50/70/75/80 cm.
         models:
           - slug: maestro-cv
             name: Maestro CV
             url: https://www.horsch.com/en/products/seed-drills/maestro-cv
+            pracovni_zaber_m: 8
+            prikon_traktor_hp_min: 180
+            typ_zavesu: neseny
+          - slug: maestro-cx
+            name: Maestro CX
+            url: https://www.horsch.com/en/products/seed-drills/maestro-cx
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 150
+            typ_zavesu: neseny
+          - slug: maestro-sv
+            name: Maestro SV
+            url: https://www.horsch.com/en/products/seed-drills/maestro-sv
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 250
+            typ_zavesu: tazeny
           - slug: maestro-sx
             name: Maestro SX
             url: https://www.horsch.com/en/products/seed-drills/maestro-sx
+            pracovni_zaber_m: 16
+            prikon_traktor_hp_min: 300
+            typ_zavesu: tazeny
+          - slug: maestro-rv
+            name: Maestro RV
+            url: https://www.horsch.com/en/products/seed-drills/maestro-rv
+            pracovni_zaber_m: 24
+            prikon_traktor_hp_min: 400
+            typ_zavesu: tazeny
       - slug: pronto
         name: Pronto
         family: pronto
         subcategory: seci-stroje-pneumaticke
         description: |
-          Pronto — pneumatický universal seed drill, vlajková řada Horsch.
+          Pronto DC — vlajková řada pneumatických universálních secích strojů Horsch. Sériová kombinace předního pneumatika, diskového kypřiče, packerového válce a botek TurboDisc 2.0 umožňuje setí do mulče i připravené orby v jedné jízdě. Nesené 3 m i tažené až 9 m verze, zaberou 5 až 18 ha za hodinu.
         models:
           - slug: pronto-3-dc
             name: Pronto 3 DC
             url: https://www.horsch.com/en/products/seed-drills/pronto-dc
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 110
+            typ_zavesu: neseny
+          - slug: pronto-4-dc
+            name: Pronto 4 DC
+            url: https://www.horsch.com/en/products/seed-drills/pronto-dc
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 140
+            typ_zavesu: tazeny
           - slug: pronto-6-dc
             name: Pronto 6 DC
             url: https://www.horsch.com/en/products/seed-drills/pronto-dc
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 200
+            typ_zavesu: tazeny
           - slug: pronto-9-dc
             name: Pronto 9 DC
             url: https://www.horsch.com/en/products/seed-drills/pronto-dc
+            pracovni_zaber_m: 9
+            prikon_traktor_hp_min: 320
+            typ_zavesu: tazeny
       - slug: serto
         name: Serto
         family: serto
         subcategory: seci-stroje-pneumaticke
         description: |
-          Serto — pneumatický secí stroj pro velké pracovní záběry.
+          Serto SC — tažený pneumatický secí stroj s krátkou stavbou a dvouřadým uspořádáním botek TurboDisc s individuálním přítlakem 5–120 kg. Vhodný pro vysoké rychlosti setí do mulče i orby s vysokým podílem zbytků. Pracovní záběr 10 a 12 m.
         models:
-          - slug: serto-sc
-            name: Serto SC
-            url: https://www.horsch.com/en/products/seed-drills/serto
+          - slug: serto-10-sc
+            name: Serto 10 SC
+            url: https://www.horsch.com/en/products/seed-drills/serto-sc
+            pracovni_zaber_m: 10
+            prikon_traktor_hp_min: 280
+            typ_zavesu: tazeny
+          - slug: serto-12-sc
+            name: Serto 12 SC
+            url: https://www.horsch.com/en/products/seed-drills/serto-sc
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 340
+            typ_zavesu: tazeny
       - slug: sprinter
         name: Sprinter
         family: sprinter
         subcategory: seci-stroje-pneumaticke
         description: |
-          Sprinter — tine seeder pro nedotčené strniště.
+          Sprinter ST/NT — pneumatický secí stroj s pružnými hřebovými radlicemi typu tine seeder pro setí do nedotčeného strniště, mělce zpracované půdy nebo meziplodin. ST má pevný rám 6 m, NT skládací rám až 12 m s pracovní rychlostí přes 12 km/h. Vhodný pro suché oblasti a jednoduchou no-till technologii.
         models:
-          - slug: sprinter-st
-            name: Sprinter ST
-            url: https://www.horsch.com/en/products/seed-drills/sprinter
+          - slug: sprinter-6-st
+            name: Sprinter 6 ST
+            url: https://www.horsch.com/en/products/seed-drills/sprinter-st
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 200
+            typ_zavesu: tazeny
+          - slug: sprinter-12-nt
+            name: Sprinter 12 NT
+            url: https://www.horsch.com/en/products/seed-drills/sprinter-nt
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 380
+            typ_zavesu: tazeny
       - slug: versa
         name: Versa
         family: versa
         subcategory: seci-stroje-pneumaticke
         description: |
-          Versa — pneumatický secí stroj se zvýšenou flexibilitou.
+          Versa KR — nesená pneumatická secí kombinace s aktivními rotačními bránami pro malé a střední farmy. Univerzální nasazení v různých půdních podmínkách bez nutnosti přípravy seťového lůžka samostatným strojem. Pracovní záběr 3 a 4 m.
         models:
-          - slug: versa-kr
-            name: Versa KR
-            url: https://www.horsch.com/en/products/seed-drills/versa
+          - slug: versa-3-kr
+            name: Versa 3 KR
+            url: https://www.horsch.com/en/products/seed-drills/versa-kr
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 130
+            typ_zavesu: neseny
+          - slug: versa-4-kr
+            name: Versa 4 KR
+            url: https://www.horsch.com/en/products/seed-drills/versa-kr
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 180
+            typ_zavesu: neseny
   zpracovani-pudy:
     name: Zpracování půdy
     series:
@@ -159,66 +284,105 @@ categories:
         family: cruiser
         subcategory: podmitace-radlickove
         description: |
-          Cruiser — radličkový podmítač pro mělkou kultivaci.
+          Cruiser SL/XL — radličkový podmítač pro mělkou kultivaci 3–15 cm s úzkými radličkami v 5–6 řadách s roztečí 15 cm. SL je nesené provedení 5 a 6 m, XL je tažené až 12 m. Vhodný pro rychlou intenzivní podmítku po sklizni a urychlení rozkladu rostlinných zbytků.
         models:
+          - slug: cruiser-sl
+            name: Cruiser SL
+            url: https://www.horsch.com/en/products/soil-cultivation/cruiser-sl
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 180
+            typ_zavesu: neseny
           - slug: cruiser-xl
             name: Cruiser XL
             url: https://www.horsch.com/en/products/soil-cultivation/cruiser-xl
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 350
+            typ_zavesu: tazeny
       - slug: finer
         name: Finer
         family: finer
         subcategory: kompaktomaty
         description: |
-          Finer — kompaktomat pro přípravu seťového lůžka.
+          Finer SL — kompaktomat pro přípravu jemného seťového lůžka s kombinací pružinových a radličkových smyků a packerového válce. Nesené provedení s pracovním záběrem 6 m, hloubka 2–10 cm. Slouží převážně k jarní přípravě před setím cukrovky a kukuřice.
         models:
           - slug: finer-sl
             name: Finer SL
             url: https://www.horsch.com/en/products/soil-cultivation/finer
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 160
+            typ_zavesu: neseny
       - slug: joker
         name: Joker
         family: joker
         subcategory: podmitace-diskove
         description: |
-          Joker — diskový podmítač Horsch, krátká diskovka.
+          Joker CT/RT/HT — kompaktní diskový podmítač s talíři 52 cm v X-uspořádání pro mělkou kultivaci 3–12 cm. CT je nesené 3–6 m s pevným rámem, RT je tažené 4–12 m s pneumatikovým packerem, HT je tažené 8–12 m s velkokapacitními pneumatiky pro vyšší rychlost (až 18 km/h). Ideální pro intenzivní podmítku po sklizni obilí.
         models:
           - slug: joker-ct
             name: Joker CT
             url: https://www.horsch.com/en/products/soil-cultivation/joker-ct
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 180
+            typ_zavesu: neseny
           - slug: joker-rt
             name: Joker RT
             url: https://www.horsch.com/en/products/soil-cultivation/joker-rt
+            pracovni_zaber_m: 8
+            prikon_traktor_hp_min: 240
+            typ_zavesu: tazeny
           - slug: joker-ht
             name: Joker HT
             url: https://www.horsch.com/en/products/soil-cultivation/joker-ht
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 380
+            typ_zavesu: tazeny
       - slug: terrano
         name: Terrano
         family: terrano
         subcategory: podmitace-radlickove
         description: |
-          Terrano — radličkový podmítač Horsch, vlajková řada.
+          Terrano FX/GX/MT — vlajková řada radličkových podmítačů Horsch pro středně hlubokou kultivaci 5–30 cm. FX (3 a 4 m, nesené), GX (5 a 6 m, tažené poloneseně) a MT (5–8 m, tažené s rychlým TerraGrip systémem). Univerzální stroj pro podmítku, hlubší kypření i přípravu před setím.
         models:
           - slug: terrano-fx
             name: Terrano FX
             url: https://www.horsch.com/en/products/soil-cultivation/terrano-fx
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 200
+            typ_zavesu: neseny
           - slug: terrano-gx
             name: Terrano GX
             url: https://www.horsch.com/en/products/soil-cultivation/terrano-gx
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 280
+            typ_zavesu: poloneseny
           - slug: terrano-mt
             name: Terrano MT
             url: https://www.horsch.com/en/products/soil-cultivation/terrano-mt
+            pracovni_zaber_m: 8
+            prikon_traktor_hp_min: 380
+            typ_zavesu: tazeny
       - slug: tiger
         name: Tiger
         family: tiger
         subcategory: kyprice
         description: |
-          Tiger — hloubkový kypřič pro zpracování až do hloubky 35 cm.
+          Tiger MT/AS/LT — hloubkový kypřič pro intenzivní zpracování až do hloubky 35 cm. MT (4 a 6 m) má TerraGrip radličky pro maximální průchodnost organické hmoty, AS (kombinovaný 4–8 m) přidává disky a packer pro plnou přípravu lůžka v jedné jízdě, LT (10 a 12 m) je velkokapacitní tažené provedení pro největší farmy. Nahrazuje pluh v minimum-till systémech.
         models:
           - slug: tiger-mt
             name: Tiger MT
             url: https://www.horsch.com/en/products/soil-cultivation/tiger-mt
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 320
+            typ_zavesu: tazeny
           - slug: tiger-as
             name: Tiger AS
             url: https://www.horsch.com/en/products/soil-cultivation/tiger-as
+            pracovni_zaber_m: 8
+            prikon_traktor_hp_min: 400
+            typ_zavesu: tazeny
           - slug: tiger-lt
             name: Tiger LT
             url: https://www.horsch.com/en/products/soil-cultivation/tiger-lt
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 500
+            typ_zavesu: tazeny

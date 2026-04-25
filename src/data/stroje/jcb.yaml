@@ -4,214 +4,338 @@ country: Spojené království
 founded: 1945
 website: https://www.jcb.com/
 description: >
-  Britský výrobce manipulační techniky. Loadall teleskopické manipulátory (525-60 až 560-80), kompaktní teleskopy TM, smykové nakladače Robot.
+  Britský rodinný výrobce stavebních a zemědělských strojů založený Josephem Cyrilem Bamfordem. Pro zemědělství vyrábí ikonické teleskopické manipulátory Loadall (od kompaktních 525-60 po heavy-duty 560-80), kompaktní pivot-steer manipulátory TM Telemaster, kompaktní kolové nakladače řady 400 a unikátní vysokorychlostní traktory Fastrac s pruženým podvozkem a 70 km/h cestovní rychlostí.
 categories:
   manipulace:
     name: Manipulace a nakládání
     series:
       - slug: compact-wheel-loader
         name: Compact Wheel Loader
-        family: compact-wheel-loader
+        family: cwl
         subcategory: kolove-nakladace
         description: |
-          Compact Wheel Loader — kompaktní kolové nakladače značky JCB.
+          Kompaktní kolové nakladače JCB řady 400 pro práci na dvoře, krmné chodbě a v úzkých prostorách stáje. Nabízí výbornou viditelnost přes nízkou kapotu, malý poloměr otáčení a kloubový rám pro manévrování ve stísněných prostorech. Modely od 2,6 t (403) po 10,3 t (417) pokrývají farmy všech velikostí.
         models:
           - slug: 403-agri
             name: Compact Wheel Loader 403 Agri
             tagline: "Compact yard loader, 2.6 t operating weight"
+            description: "Nejmenší kolový nakladač JCB pro malé farmy a stísněné dvory, 2,6 t pohotovostní hmotnosti, ideální na manipulaci s balíky a krmením."
+            specs:
+              operating_weight_kg: 2600
             url: https://www.jcb.com/en-gb/products/compact-wheel-loaders/403-agri
           - slug: 406-agri
             name: Compact Wheel Loader 406 Agri
             tagline: "Compact yard loader, 5.2 t operating weight"
+            description: "Střední třída kompaktních nakladačů, 5,2 t hmotnosti, vhodná pro středně velké rodinné farmy a krmnou logistiku."
+            specs:
+              operating_weight_kg: 5200
             url: https://www.jcb.com/en-gb/products/compact-wheel-loaders/406-agri
+          - slug: 407-agri
+            name: Wheel Loader 407 Agri
+            tagline: "Compact yard loader, 5.6 t operating weight"
+            description: "Vyšší výkonová varianta kompaktního nakladače pro náročnější dvorové práce a manipulaci s objemnými balíky."
+            specs:
+              operating_weight_kg: 5600
+            url: https://www.jcb.com/en-gb/products/wheel-loaders/407-agri
           - slug: 411-agri
             name: Wheel Loader 411 Agri
             tagline: "Mid-size yard loader, 9.1 t operating weight"
+            description: "Větší kolový nakladač pro velké farmy a družstva, 9,1 t hmotnosti, vyšší zdvihová síla pro silážní práce a nakládku přívěsů."
+            specs:
+              operating_weight_kg: 9100
             url: https://www.jcb.com/en-gb/products/wheel-loaders/411-agri
           - slug: 417-agri
             name: Wheel Loader 417 Agri
             tagline: "Yard loader for large farms, 10.3 t operating weight"
+            description: "Vrcholový kolový nakladač řady 400, 10,3 t pohotovostní hmotnosti, určený pro nejtěžší dvorové operace a silážní jámy."
+            specs:
+              operating_weight_kg: 10300
             url: https://www.jcb.com/en-gb/products/wheel-loaders/417-agri
       - slug: loadall-525
-        name: Loadall 525 series
-        family: loadall-525
+        name: Loadall 525-60
+        family: loadall
         subcategory: teleskopy
         description: |
-          Loadall 525 series — teleskopické manipulátory loadall značky JCB.
+          Nejkompaktnější Loadall — teleskopický manipulátor s šířkou jen 1,84 m a výškou 1,9 m, ideální pro nízké stáje a úzké průjezdy. Nosnost 2,5 t a dosah 6 m pokrývá běžnou manipulaci s balíky, paletami i krmením. Charakteristický 360° výhled z kabiny CommandPlus díky nízkému ramenu vlevo od řidiče.
         models:
-          - slug: 525-60
-            name: Loadall 525-60
-            tagline: "Compact telescopic handler, 2.5 t lift, 6 m reach"
-            url: https://www.jcb.com/en-gb/products/loadall/525-60
           - slug: 525-60-agri
             name: Loadall 525-60 Agri
-            tagline: Compact agricultural telescopic handler
+            tagline: "Compact telescopic handler, 2.5 t lift, 6 m reach"
+            description: "Základní zemědělská verze nejmenšího Loadall — nosnost 2,5 t, max výška 6 m, motor 75 hp."
+            specs:
+              lift_capacity_kg: 2500
+              max_lift_height_m: 6.0
             url: https://www.jcb.com/en-gb/products/loadall/525-60-agri
       - slug: loadall-527
-        name: Loadall 527 series
-        family: loadall-527
+        name: Loadall 527-58
+        family: loadall
         subcategory: teleskopy
         description: |
-          Loadall 527 series — teleskopické manipulátory loadall značky JCB.
+          Kompaktní Loadall pro střední farmy — vyšší nosnost 2,7 t než 525 při zachování kompaktních rozměrů a výborné viditelnosti. Dosah 5,8 m a nízká přepravní výška dělají z 527-58 oblíbený stroj pro práci ve starších stájích a budovách s nízkými průjezdy.
         models:
           - slug: 527-58-agri
             name: Loadall 527-58 Agri
             tagline: "Compact agri loader, 2.7 t lift, 5.8 m reach"
+            description: "Kompaktní zemědělský teleskop s nosností 2,7 t a dosahem 5,8 m, výborný pro práci v krmných uličkách a starších stájích."
+            specs:
+              lift_capacity_kg: 2700
+              max_lift_height_m: 5.8
             url: https://www.jcb.com/en-gb/products/loadall/527-58-agri
       - slug: loadall-532
-        name: Loadall 532 series
-        family: loadall-532
+        name: Loadall 532
+        family: loadall
         subcategory: teleskopy
         description: |
-          Loadall 532 series — teleskopické manipulátory loadall značky JCB.
+          Střední Loadall s nosností 3,2 t — nejprodávanější velikost v rámci řady, dostupná ve dvou délkách ramene (6 m a 7 m). Vhodný pro většinu mainstream zemědělských operací: balíky, krmení, nakládání hnoje, paletizace. Dostupný v trim levels Agri, Agri Plus, Agri Super, Agri Pro a Agri Xtra podle požadavků na převodovku a komfort.
         models:
           - slug: 532-60-agri
             name: Loadall 532-60 Agri
             tagline: "3.2 t lift, 6 m reach agri telehandler"
+            description: "Základní trim s nosností 3,2 t a dosahem 6 m, mechanická hydrostatická převodovka."
+            specs:
+              lift_capacity_kg: 3200
+              max_lift_height_m: 6.0
             url: https://www.jcb.com/en-gb/products/loadall/532-60-agri
           - slug: 532-70-agri
             name: Loadall 532-70 Agri
             tagline: "3.2 t lift, 7 m reach agri telehandler"
+            description: "Verze s delším ramenem 7 m pro nakládání vyšších přívěsů a stohování balíků do větší výšky."
+            specs:
+              lift_capacity_kg: 3200
+              max_lift_height_m: 7.0
+              power_hp: 145
             url: https://www.jcb.com/en-gb/products/loadall/532-70-agri
       - slug: loadall-536
-        name: Loadall 536 series
-        family: loadall-536
+        name: Loadall 536
+        family: loadall
         subcategory: teleskopy
         description: |
-          Loadall 536 series — teleskopické manipulátory loadall značky JCB.
+          Středně-velký Loadall s nosností 3,6 t — populární u středních a větších farem pro vyšší zdvihovou kapacitu při zachování středních rozměrů. K dispozici s ramenem 6 m i 7 m a v různých trim leveles od základního Agri po Agri Pro s DualTech VT převodovkou.
         models:
           - slug: 536-60-agri
             name: Loadall 536-60 Agri
             tagline: "3.6 t lift, 6 m reach agri telehandler"
+            description: "Středně-velký teleskop s nosností 3,6 t a dosahem 6 m, hydrostatická převodovka pro plynulé nakládání."
+            specs:
+              lift_capacity_kg: 3600
+              max_lift_height_m: 6.0
             url: https://www.jcb.com/en-gb/products/loadall/536-60-agri
           - slug: 536-70-agri
             name: Loadall 536-70 Agri
             tagline: "3.6 t lift, 7 m reach agri telehandler"
+            description: "Delší rameno 7 m pro nakládání návěsů a manipulaci ve vyšších stozích."
+            specs:
+              lift_capacity_kg: 3600
+              max_lift_height_m: 7.0
             url: https://www.jcb.com/en-gb/products/loadall/536-70-agri
       - slug: loadall-538
-        name: Loadall 538 series
-        family: loadall-538
+        name: Loadall 538
+        family: loadall
         subcategory: teleskopy
         description: |
-          Loadall 538 series — teleskopické manipulátory loadall značky JCB.
+          Compact Loadall s nejvyšší nosností v řadě 3,8 t při zachování kompaktních rozměrů (šířka pod 2,3 m). Dostupný s ramenem 6 m i 7 m, u trim levelu Agri Plus přidává komfortnější kabinu a hydraulické funkce. Oblíbená velikost pro mléčné farmy s krmným vozem.
         models:
           - slug: 538-60-agri
             name: Loadall 538-60 Agri
             tagline: "3.8 t lift, 6 m reach agri telehandler"
+            description: "Kompaktní Loadall s vysokou nosností 3,8 t, dosah 6 m, vhodný do nízkých stájí."
+            specs:
+              lift_capacity_kg: 3800
+              max_lift_height_m: 6.0
             url: https://www.jcb.com/en-gb/products/loadall/538-60-agri
           - slug: 538-70-agri
             name: Loadall 538-70 Agri
             tagline: "3.8 t lift, 7 m reach agri telehandler"
+            description: "Verze s delším ramenem 7 m, kombinace vysoké nosnosti a dobrého dosahu pro krmné práce."
+            specs:
+              lift_capacity_kg: 3800
+              max_lift_height_m: 7.0
             url: https://www.jcb.com/en-gb/products/loadall/538-70-agri
-      - slug: loadall-agri-pro
-        name: Loadall Agri Pro
-        family: loadall-agri-pro
+      - slug: loadall-542
+        name: Loadall 542-70
+        family: loadall
         subcategory: teleskopy
         description: |
-          Loadall Agri Pro — teleskopické manipulátory loadall značky JCB.
+          Heavy-duty Loadall s nosností 4,2 t a dosahem 7 m — přechod do těžké třídy. K dispozici v top trim levelech Agri Pro (DualTech VT převodovka), Agri Super (hydrostatická) a Agri Xtra (powershift) pro nasazení od mainstream farem po dopravní kontraktory.
         models:
           - slug: 542-70-agri-pro
             name: Loadall 542-70 Agri Pro
             tagline: "4.2 t lift, 7 m reach, DualTech VT transmission"
+            description: "Top trim s patentovanou DualTech VT převodovkou kombinující hydrostat a powershift, optimální pro mix nakládání a transportu."
+            specs:
+              lift_capacity_kg: 4200
+              max_lift_height_m: 7.0
+              power_hp: 173
+              top_speed_kmh: 40
             url: https://www.jcb.com/en-gb/products/loadall/542-70-agri-pro
-          - slug: 550-80-agri-pro
-            name: Loadall 550-80 Agri Pro
-            tagline: "5.0 t lift, 8.1 m reach, DualTech VT transmission"
-            url: https://www.jcb.com/en-gb/products/loadall/550-80-agri-pro
-          - slug: 560-80-agri-pro
-            name: Loadall 560-80 Agri Pro
-            tagline: "6.0 t lift, 8.1 m reach, top of range agri telehandler"
-            url: https://www.jcb.com/en-gb/products/loadall/560-80-agri-pro
-      - slug: loadall-agri-super
-        name: Loadall Agri Super
-        family: loadall-agri-super
-        subcategory: teleskopy
-        description: |
-          Loadall Agri Super — teleskopické manipulátory loadall značky JCB.
-        models:
           - slug: 542-70-agri-super
             name: Loadall 542-70 Agri Super
             tagline: "4.2 t lift, 7 m reach, hydrostatic transmission"
+            description: "Hydrostatická převodovka pro plynulou kontrolu při nakládání, vhodný pro převahu manipulačních prací."
+            specs:
+              lift_capacity_kg: 4200
+              max_lift_height_m: 7.0
             url: https://www.jcb.com/en-gb/products/loadall/542-70-agri-super
-          - slug: 550-80-agri-super
-            name: Loadall 550-80 Agri Super
-            tagline: "5.0 t lift, 8.1 m reach, hydrostatic transmission"
-            url: https://www.jcb.com/en-gb/products/loadall/550-80-agri-super
-      - slug: loadall-agri-xtra
-        name: Loadall Agri Xtra
-        family: loadall-agri-xtra
-        subcategory: teleskopy
-        description: |
-          Loadall Agri Xtra — teleskopické manipulátory loadall značky JCB.
-        models:
           - slug: 542-70-agri-xtra
             name: Loadall 542-70 Agri Xtra
             tagline: "4.2 t lift, 7 m reach powershift telehandler"
+            description: "Powershift převodovka pro maximální transportní efektivitu a tažení návěsů na delší vzdálenosti."
+            specs:
+              lift_capacity_kg: 4200
+              max_lift_height_m: 7.0
+              top_speed_kmh: 40
             url: https://www.jcb.com/en-gb/products/loadall/542-70-agri-xtra
-      - slug: loadall-tm
-        name: "Loadall TM (Telemaster)"
-        family: loadall-tm
+      - slug: loadall-550
+        name: Loadall 550-80
+        family: loadall
         subcategory: teleskopy
         description: |
-          Loadall TM (Telemaster) — teleskopické manipulátory loadall značky JCB.
+          Heavy-duty Loadall s nosností 5 t a dosahem 8,1 m — určený pro velké farmy, družstva a kontraktory. Schopen stohovat balíky do 8 výšky a nakládat i nejvyšší silážní vozy. K dispozici v trim levelech Agri Pro (DualTech VT) a Agri Super (hydrostatická).
+        models:
+          - slug: 550-80-agri-pro
+            name: Loadall 550-80 Agri Pro
+            tagline: "5.0 t lift, 8.1 m reach, DualTech VT transmission"
+            description: "Top trim s DualTech VT převodovkou pro mix nakládání a rychlé jízdy mezi pracovišti."
+            specs:
+              lift_capacity_kg: 5000
+              max_lift_height_m: 8.1
+              power_hp: 173
+              top_speed_kmh: 40
+            url: https://www.jcb.com/en-gb/products/loadall/550-80-agri-pro
+          - slug: 550-80-agri-super
+            name: Loadall 550-80 Agri Super
+            tagline: "5.0 t lift, 8.1 m reach, hydrostatic transmission"
+            description: "Hydrostatická převodovka, ideální pro převahu manipulačních prací s vyšší přesností."
+            specs:
+              lift_capacity_kg: 5000
+              max_lift_height_m: 8.1
+            url: https://www.jcb.com/en-gb/products/loadall/550-80-agri-super
+      - slug: loadall-555
+        name: Loadall 555-95
+        family: loadall
+        subcategory: teleskopy
+        description: |
+          Heavy-duty Loadall s extra dlouhým ramenem 9,5 m a nosností 5,5 t — speciálně pro vysoké silážní jámy, vysoké stohování balíků a nakládku do vysokých zásobníků. Nejvyšší dosah v řadě Loadall.
+        models:
+          - slug: 555-95-agri-pro
+            name: Loadall 555-95 Agri Pro
+            tagline: "5.5 t lift, 9.5 m reach, longest reach in Loadall range"
+            description: "Loadall s nejdelším ramenem 9,5 m, nosnost 5,5 t, určený pro vysoké stohování a nakládku vysokých sil."
+            specs:
+              lift_capacity_kg: 5500
+              max_lift_height_m: 9.5
+              power_hp: 173
+            url: https://www.jcb.com/en-gb/products/loadall/555-95-agri-pro
+      - slug: loadall-560
+        name: Loadall 560-80
+        family: loadall
+        subcategory: teleskopy
+        description: |
+          Vrcholový Loadall s nosností 6 t a dosahem 8,1 m — největší a nejsilnější agri teleskop v nabídce JCB. Určen pro nejtěžší aplikace: nakládku přívěsů s obilím, manipulaci s těžkými balíky biomasy a kontraktorské operace. K dispozici výhradně v trim Agri Pro s DualTech VT převodovkou.
+        models:
+          - slug: 560-80-agri-pro
+            name: Loadall 560-80 Agri Pro
+            tagline: "6.0 t lift, 8.1 m reach, top of range agri telehandler"
+            description: "Vrcholový Loadall s nosností 6 t a dosahem 8,1 m, DualTech VT převodovka, motor 173 hp — vlajková loď zemědělských teleskopů JCB."
+            specs:
+              lift_capacity_kg: 6000
+              max_lift_height_m: 8.1
+              power_hp: 173
+              top_speed_kmh: 40
+            url: https://www.jcb.com/en-gb/products/loadall/560-80-agri-pro
+      - slug: loadall-tm
+        name: "Loadall TM (Telemaster)"
+        family: tm
+        subcategory: teleskopy
+        description: |
+          Telemaster — kloubové (pivot-steer) teleskopické nakladače JCB, hybrid mezi kolovým nakladačem a teleskopem. Kloubové řízení nabízí extrémní obratnost ve stísněných stájích, teleskopické rameno přidává dosah do výšky. Ideální pro mléčné farmy s úzkými krmnými chodbami. Modely TM 220, TM 320 a TM 420 pokrývají nosnosti od 2,1 do 4,1 t.
         models:
           - slug: tm-220-agri
             name: Loadall TM 220 Agri
-            tagline: Telemaster compact pivot-steer telescopic loader
+            tagline: "Telemaster pivot-steer, 2.1 t lift, 4.6 m reach"
+            description: "Nejkompaktnější Telemaster, kloubové řízení, nosnost 2,1 t — ideální pro malé stáje a krmné chodby."
+            specs:
+              lift_capacity_kg: 2100
+              max_lift_height_m: 4.6
             url: https://www.jcb.com/en-gb/products/loadall/tm-220-agri
           - slug: tm-320-agri
             name: Loadall TM 320 Agri
-            tagline: "Telemaster compact pivot-steer, 3.2 t lift"
+            tagline: "Telemaster pivot-steer, 3.2 t lift"
+            description: "Středně-velký Telemaster s nosností 3,2 t, kombinace obratnosti kolového nakladače a dosahu teleskopu."
+            specs:
+              lift_capacity_kg: 3200
+              max_lift_height_m: 5.2
             url: https://www.jcb.com/en-gb/products/loadall/tm-320-agri
           - slug: tm-420-agri
             name: Loadall TM 420 Agri
             tagline: "Telemaster pivot-steer, 4.1 t lift, 4.8 m reach"
+            description: "Největší Telemaster s nosností 4,1 t, vhodný pro velké mléčné farmy s těžkým krmným vozem a velkými balíky."
+            specs:
+              lift_capacity_kg: 4100
+              max_lift_height_m: 4.8
             url: https://www.jcb.com/en-gb/products/loadall/tm-420-agri
   traktory:
     name: Traktory
     series:
-      - slug: fastrac
-        name: Fastrac
+      - slug: fastrac-4000
+        name: Fastrac 4000 series
         family: fastrac
         subcategory: traktory
         description: |
-          Fastrac — traktory fastrac značky JCB.
-        models:
-          - slug: fastrac-iconic
-            name: Fastrac Iconic
-            tagline: Limited edition Fastrac flagship
-            url: https://www.jcb.com/en-gb/products/fastrac/iconic
-      - slug: fastrac-4000
-        name: Fastrac 4000 series
-        family: fastrac-4000
-        subcategory: traktory
-        description: |
-          Fastrac 4000 series — traktory fastrac značky JCB.
+          Středně-výkonová řada vysokorychlostních traktorů Fastrac (160-235 hp) s plně pruženým podvozkem (přední i zadní pneumatické pružení), 4-kolovým řízením a cestovní rychlostí 60 km/h. Symetrická konstrukce s kabinou uprostřed nabízí 50/50 rozložení hmotnosti, dvojité brzdy a flatbed za kabinou pro nesené nářadí. Unikát na trhu — jediný traktor použitelný i pro silniční transport rychlostí osobního auta.
         models:
           - slug: fastrac-4160
             name: Fastrac 4160
-            tagline: "175 hp high-speed tractor, full suspension"
+            tagline: "160 hp high-speed tractor, full suspension"
+            description: "Základní model Fastrac 4000, 160 hp, plně pružený podvozek, 60 km/h cestovní rychlost."
+            specs:
+              power_hp: 160
+              top_speed_kmh: 60
             url: https://www.jcb.com/en-gb/products/fastrac/4160
           - slug: fastrac-4190
             name: Fastrac 4190
-            tagline: "207 hp high-speed tractor, full suspension"
+            tagline: "190 hp high-speed tractor, full suspension"
+            description: "Střední model Fastrac 4000 s výkonem 190 hp pro tažení větších návěsů a nářadí."
+            specs:
+              power_hp: 190
+              top_speed_kmh: 60
             url: https://www.jcb.com/en-gb/products/fastrac/4190
           - slug: fastrac-4220
             name: Fastrac 4220
-            tagline: "235 hp high-speed tractor, full suspension, ICON cab"
+            tagline: "220 hp high-speed tractor, ICON cab, 60 km/h"
+            description: "Vrcholový Fastrac 4000, 220 hp, nová ICON kabina s panoramatickým výhledem, 60 km/h."
+            specs:
+              power_hp: 220
+              top_speed_kmh: 60
             url: https://www.jcb.com/en-gb/products/fastrac/4220
       - slug: fastrac-8000
         name: Fastrac 8000 series
-        family: fastrac-8000
+        family: fastrac
         subcategory: traktory
         description: |
-          Fastrac 8000 series — traktory fastrac značky JCB.
+          Vlajková řada Fastrac s výkony 290-348 hp a rekordní cestovní rychlostí 70 km/h — nejrychlejší sériový traktor na světě. CVT převodovka, plné pružení a nosnost 18 t pro nesené nářadí dělají z 8000 ideální stroj pro kontraktory, kombinaci polních prací a transport silážní hmoty na velké vzdálenosti. Limitovaná edice Iconic oslavuje historii Fastracu.
         models:
           - slug: fastrac-8290
             name: Fastrac 8290
-            tagline: "306 hp high-speed tractor, 70 km/h road speed"
+            tagline: "290 hp high-speed tractor, 70 km/h road speed, CVT"
+            description: "Základní model řady 8000 s výkonem 290 hp a CVT převodovkou, cestovní rychlost 70 km/h."
+            specs:
+              power_hp: 290
+              top_speed_kmh: 70
             url: https://www.jcb.com/en-gb/products/fastrac/8290
           - slug: fastrac-8330
             name: Fastrac 8330
-            tagline: "348 hp flagship high-speed tractor"
+            tagline: "330 hp flagship high-speed tractor, 70 km/h"
+            description: "Vlajková loď Fastrac s výkonem 330 hp, CVT, 70 km/h — nejvýkonnější a nejrychlejší sériový traktor na trhu."
+            specs:
+              power_hp: 330
+              top_speed_kmh: 70
             url: https://www.jcb.com/en-gb/products/fastrac/8330
+          - slug: fastrac-iconic
+            name: Fastrac 8330 Iconic
+            tagline: "Limited edition Fastrac 8330 flagship"
+            description: "Limitovaná edice Fastrac 8330 s exkluzivní výbavou a designem oslavující historii řady Fastrac od jejího uvedení v roce 1991."
+            specs:
+              power_hp: 330
+              top_speed_kmh: 70
+            url: https://www.jcb.com/en-gb/products/fastrac/iconic

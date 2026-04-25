@@ -4,151 +4,258 @@ country: Francie
 founded: 1953
 website: https://www.manitou-group.com/
 description: >
-  Francouzský lídr v teleskopických manipulátorech. Řada MLT NewAg pro zemědělství, kloubové nakladače MLA-T, smykové nakladače R/RT.
+  Francouzský lídr v teleskopických manipulátorech a nakladačích pro zemědělství. Vlajková řada MLT NewAg
+  (heavy-duty teleskopy 6-10 m, nosnost 2,5-6 t) s prémiovou kabinou, EasyManager telematikou a Stage V
+  motory 75-160 hp. Compact řada MT-X pro malé farmy, kloubové MLA-T pro stáje, čelní nakladače MAC
+  a smykové R/RT pro univerzální nasazení.
 categories:
   manipulace:
-    name: Manipulace
+    name: Manipulace a nakládání
     series:
       - slug: mlt-625
         name: MLT 625
         family: mlt
         subcategory: teleskopy
         description: |
-          MLT 625 — teleskopický manipulátor pro zemědělství, max výška 6,1 m, nosnost 2,5 t.
+          MLT 625 — vstupní heavy-duty teleskopický manipulátor řady NewAg. Max výška 6,1 m, nosnost 2,5 t.
+          Stage V motor 75 hp, hydrostatická převodovka, kabina NewAg s panoramatickým výhledem.
+          Vhodný pro malé až střední farmy s manipulací balíků slámy, krmiv a paletovaného zboží.
         models:
           - slug: mlt-625-75-h
             name: MLT 625-75 H
+            tagline: "2,5 t lift, 6,1 m výška, 75 hp Stage V"
+            power_hp: 75
             url: https://www.manitou.com/en/products/mlt-625-75-h
           - slug: mlt-625-75-h-classic
             name: MLT 625-75 H Classic
+            tagline: "Cenově dostupná classic varianta"
+            power_hp: 75
             url: https://www.manitou.com/en/products/mlt-625-75-h-classic
       - slug: mlt-730
         name: MLT 730
         family: mlt
         subcategory: teleskopy
         description: |
-          MLT 730 — kompaktní teleskopický manipulátor, max výška 7 m.
+          MLT 730 — kompaktní heavy-duty teleskopický manipulátor NewAg s dosahem 7 m a nosností 3 t.
+          K dispozici v provedení 115 hp (D — direct drive) a 130 hp (PS+ — powershift). Kabina NewAg,
+          JSM joystick, EasyManager telematika. Univerzální stroj pro střední farmy a družstva.
         models:
           - slug: mlt-730-115-d
             name: MLT 730-115 D
+            tagline: "3 t lift, 7 m výška, 115 hp direct drive"
+            power_hp: 115
+            url: https://www.manitou.com/en/products/mlt-730
+          - slug: mlt-730-130-ps-plus
+            name: MLT 730-130 PS+
+            tagline: "3 t lift, 7 m výška, 130 hp powershift"
+            power_hp: 130
             url: https://www.manitou.com/en/products/mlt-730
       - slug: mlt-737
         name: MLT 737
         family: mlt
         subcategory: teleskopy
         description: |
-          MLT 737 — výška 7 m, nosnost 3,7 t.
+          MLT 737 — heavy-duty teleskop NewAg s dosahem 7 m a vyšší nosností 3,7 t pro náročnější
+          manipulaci s objemnými balíky a hnojem. Stage V motor 130 hp, PS+ powershift převodovka,
+          kabina NewAg. Oblíbený stroj na velkých farmách s mléčnou produkcí.
         models:
-          - slug: mlt-737-130-ps
+          - slug: mlt-737-130-ps-plus
             name: MLT 737-130 PS+
+            tagline: "3,7 t lift, 7 m výška, 130 hp PS+"
+            power_hp: 130
             url: https://www.manitou.com/en/products/mlt-737
       - slug: mlt-840
         name: MLT 840
         family: mlt
         subcategory: teleskopy
         description: |
-          MLT 840 — heavy-duty teleskopický manipulátor pro velké farmy, výška 7,5 m, nosnost 4 t.
+          MLT 840 — heavy-duty teleskopický manipulátor NewAg pro velké farmy. Max výška 7,55 m,
+          nosnost 4 t, motor 145 hp Stage V s PS+ powershiftem. Kabina NewAg s pneumatickým sedadlem,
+          EasyManager telematika, vhodný pro náročné celodenní nasazení a krmné dvory.
         models:
-          - slug: mlt-840-145-ps
+          - slug: mlt-840-145-ps-plus
             name: MLT 840-145 PS+
+            tagline: "4 t lift, 7,55 m výška, 145 hp PS+"
+            power_hp: 145
             url: https://www.manitou.com/en/products/mlt-840
       - slug: mlt-940
         name: MLT 940
         family: mlt
         subcategory: teleskopy
         description: |
-          MLT 940 — výška 9 m, nosnost 4 t, top z heavy-duty řady.
+          MLT 940 — vrcholný teleskop heavy-duty řady NewAg s dosahem 9 m a nosností 4 t.
+          Vario hydrostatická převodovka V+, motor 140 hp Stage V, prémiová kabina NewAg. Ideální pro
+          stohování velkých balíků, plnění žlabů a manipulaci ve velkých skladech.
         models:
           - slug: mlt-940-140-v-plus
             name: MLT 940-140 V+
+            tagline: "4 t lift, 9 m výška, 140 hp Vario+"
+            power_hp: 140
             url: https://www.manitou.com/en/products/mlt-940
       - slug: mlt-961
         name: MLT 961
         family: mlt
         subcategory: teleskopy
         description: |
-          MLT 961 — výška 9 m, nosnost 6 t, pro nejtěžší práci.
+          MLT 961 — extra těžký teleskop NewAg s nosností 6 t a dosahem 9 m, určený pro nejnáročnější
+          provoz. Motor 145 hp Stage V s Vario+ převodovkou, posílený zdvihací mechanismus. Stohování
+          objemných balíků, manipulace s těžkými paletami v bioplynkách a kompostárnách.
         models:
-          - slug: mlt-961-160-v-plus
-            name: MLT 961-160 V+
+          - slug: mlt-961-145-v-plus
+            name: MLT 961-145 V+
+            tagline: "6 t lift, 9 m výška, 145 hp Vario+"
+            power_hp: 145
             url: https://www.manitou.com/en/products/mlt-961
       - slug: mlt-1041
         name: MLT 1041
         family: mlt
         subcategory: teleskopy
         description: |
-          MLT 1041 — vlajkový teleskopický manipulátor, výška 10 m, nosnost 4,1 t.
+          MLT 1041 — vlajkový heavy-duty teleskopický manipulátor NewAg s rekordním dosahem 9,65 m
+          a nosností 4,1 t. Motor 145 hp Stage V, PS+ powershift, prémiová kabina NewAg. Pro velké
+          provozy, kde je potřeba dosáhnout do nejvyšších pater stohů a sil.
         models:
-          - slug: mlt-1041-140-ps-plus
-            name: MLT 1041-140 PS+
+          - slug: mlt-1041-145-ps-plus
+            name: MLT 1041-145 PS+
+            tagline: "4,1 t lift, 9,65 m výška, 145 hp PS+"
+            power_hp: 145
             url: https://www.manitou.com/en/products/mlt-1041
       - slug: mt-x-420
         name: MT-X 420
         family: mt-x
         subcategory: teleskopy
         description: |
-          MT-X 420 — compact telescopic, výška 4,3 m, nosnost 2 t.
+          MT-X 420 — kompaktní teleskopický manipulátor pro malé farmy a stísněné prostory.
+          Max výška 4,3 m, nosnost 2 t, šířka pod 1,8 m pro průjezd nízkými stájemi. Motor 75 hp,
+          hydrostatická převodovka, jednoduchá obsluha pro každodenní práci ve dvoře.
         models:
           - slug: mt-x-420-h
             name: MT-X 420 H
+            tagline: "2 t lift, 4,3 m výška, 75 hp compact"
+            power_hp: 75
             url: https://www.manitou.com/en/products/mt-x-420
       - slug: mt-x-625
         name: MT-X 625
         family: mt-x
         subcategory: teleskopy
         description: |
-          MT-X 625 — compact telescopic.
+          MT-X 625 — kompaktní teleskop s dosahem 6 m a nosností 2,5 t, vhodný pro střední farmy
+          s důrazem na manévrovatelnost. Motor 75 hp Stage V, hydrostatická převodovka,
+          čtyřkolové řízení s režimy souběžné a krabí jízdy.
         models:
           - slug: mt-x-625-h
             name: MT-X 625 H
+            tagline: "2,5 t lift, 6 m výška, 75 hp compact"
+            power_hp: 75
             url: https://www.manitou.com/en/products/mt-x-625
       - slug: mt-x-730
         name: MT-X 730
         family: mt-x
         subcategory: teleskopy
         description: |
-          MT-X 730 — compact telescopic, top z MT-X řady.
+          MT-X 730 — top model compact řady MT-X s dosahem 7 m a nosností 3 t. Motor 75 hp Stage V,
+          hydrostatický pohon, kompaktní rozměry pro nízké stáje a úzké průjezdy.
+          Ideální kombinace dosahu a manévrovatelnosti pro středně velké farmy.
         models:
           - slug: mt-x-730-h
             name: MT-X 730 H
+            tagline: "3 t lift, 7 m výška, 75 hp compact"
+            power_hp: 75
             url: https://www.manitou.com/en/products/mt-x-730
       - slug: mac-50
         name: MAC 50
         family: mac
         subcategory: celni-nakladace
         description: |
-          MAC 50 — kompaktní kolový nakladač pro zemědělství.
+          MAC 50 — kompaktní kolový čelní nakladač pro zemědělství s nosností 5 t a vyklápěcí výškou
+          přes 3 m. Motor Stage V, hydrostatická převodovka, kabina s panoramatickým výhledem.
+          Vhodný pro nakládání hnoje, krmiv a sypkých materiálů ve dvoře.
         models:
           - slug: mac-50
             name: MAC 50
+            tagline: "Compact wheel loader, 5 t nosnost"
             url: https://www.manitou.com/en/products/mac-50
       - slug: mac-60
         name: MAC 60
         family: mac
         subcategory: celni-nakladace
         description: |
-          MAC 60 — kompaktní kolový nakladač.
+          MAC 60 — větší varianta kompaktního kolového nakladače MAC s nosností 6 t. Vyšší vyklápěcí
+          výška a větší objem lžíce, motor Stage V s hydrostatickou převodovkou. Pro střední a velké
+          farmy s pravidelnou manipulací s objemnými materiály.
         models:
           - slug: mac-60
             name: MAC 60
+            tagline: "Compact wheel loader, 6 t nosnost"
             url: https://www.manitou.com/en/products/mac-60
       - slug: mla-t-516
         name: MLA-T 516
         family: mla-t
         subcategory: kloubove-nakladace
         description: |
-          MLA-T 516 — kloubový teleskopický nakladač.
+          MLA-T 516 — kloubový teleskopický nakladač pro zemědělství s nosností 1,6 t a dosahem 5 m.
+          Kombinuje výhody čelního nakladače (manévrovatelnost, krátký rádius) s teleskopickým
+          výsuvem. Stage V motor, hydrostatický pohon, ideální pro práci v úzkých stájích.
         models:
           - slug: mla-t-516-h
             name: MLA-T 516 H
+            tagline: "1,6 t lift, 5 m výška, kloubový teleskop"
             url: https://www.manitou.com/en/products/mla-t-516
       - slug: mla-t-533
         name: MLA-T 533
         family: mla-t
         subcategory: kloubove-nakladace
         description: |
-          MLA-T 533 — kloubový teleskopický nakladač, top z MLA-T řady.
+          MLA-T 533 — top kloubový teleskopický nakladač s nosností 3,3 t a dosahem 5 m. Varianty
+          PS+ (powershift) a V+ (Vario hydrostat) s motorem 130 nebo 145 hp Stage V. Kabina s JSM
+          joystickem, EasyManager telematika. Vhodný pro velké stáje a krmné dvory.
         models:
+          - slug: mla-t-533-130-ps-plus
+            name: MLA-T 533-130 PS+
+            tagline: "3,3 t lift, 5 m výška, 130 hp PS+"
+            power_hp: 130
+            url: https://www.manitou.com/en/products/mla-t-533
           - slug: mla-t-533-145-v-plus
             name: MLA-T 533-145 V+
+            tagline: "3,3 t lift, 5 m výška, 145 hp Vario+"
+            power_hp: 145
             url: https://www.manitou.com/en/products/mla-t-533
+      - slug: rr-13
+        name: RR 13
+        family: rr
+        subcategory: smykove-nakladace
+        description: |
+          RR 13 — kompaktní smykový nakladač s nosností 1,3 t pro práci v úzkých prostorách stájí
+          a hospodářských budov. Stage V motor, vertikální zdvih, široká nabídka adaptérů
+          (lžíce, vidle, košťata). Ideální pro každodenní úklid a manipulaci s krmivy.
+        models:
+          - slug: rr-13
+            name: RR 13
+            tagline: "Skid steer 1,3 t, kompaktní"
+            url: https://www.manitou.com/en/products/rr-13
+      - slug: rr-16
+        name: RR 16
+        family: rr
+        subcategory: smykove-nakladace
+        description: |
+          RR 16 — středně velký smykový nakladač s nosností 1,6 t a vertikálním zdvihem.
+          Motor Stage V, robustní konstrukce, kompatibilita s celou škálou Manitou adaptérů.
+          Vhodný pro střední farmy s denní manipulací s objemnými materiály.
+        models:
+          - slug: rr-16
+            name: RR 16
+            tagline: "Skid steer 1,6 t"
+            url: https://www.manitou.com/en/products/rr-16
+      - slug: rr-18
+        name: RR 18
+        family: rr
+        subcategory: smykove-nakladace
+        description: |
+          RR 18 — top smykový nakladač řady RR s nosností 1,8 t. Vyšší výkon motoru, robustní rám
+          a vertikální zdvih pro maximální dosah. Pro velké farmy a univerzální nasazení s těžkými
+          adaptéry (kartáče, sněhové radlice, vidle na balíky).
+        models:
+          - slug: rr-18
+            name: RR 18
+            tagline: "Skid steer 1,8 t, top model RR"
+            url: https://www.manitou.com/en/products/rr-18

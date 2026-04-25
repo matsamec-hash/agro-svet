@@ -4,165 +4,356 @@ country: Česko
 founded: 1997
 website: https://www.bednar-machinery.com/
 description: >
-  Český výrobce prémiových strojů pro zpracování půdy a setí. Hloubkové kypřiče Terraland, kompaktomaty Swifter, podmítače Atlas, secí stroje Omega, strip-till Strip-Master.
+  BEDNAR FMT je český výrobce prémiových strojů pro zpracování půdy, setí a aplikaci hnojiv,
+  založený v roce 1997 v Rychnově nad Kněžnou. Firma vyrábí robustní stroje pro velké provozy
+  s důrazem na pracovní záběr 3–18 m a vysokou plošnou výkonnost. Vlajkové řady tvoří hloubkové
+  kypřiče TERRALAND, kompaktomaty SWIFTER, diskové podmítače ATLAS a univerzální secí stroje OMEGA.
+  Bednar dodává do více než 40 zemí světa a patří mezi nejvýznamnější české značky zemědělské techniky.
 categories:
   seti:
     name: Setí a sázení
     series:
-      - slug: corsa
-        name: CORSA
-        family: corsa
-        subcategory: seci-stroje-presne
-        description: |
-          CORSA — přesný secí stroj Bednar pro kukuřici, slunečnici a řepu.
-        models:
-          - slug: corsa-cn
-            name: CORSA CN
-            url: https://www.bednar-machinery.com/en/products/corsa
-      - slug: ferox
-        name: FEROX
-        family: ferox
-        subcategory: seci-stroje-pneumaticke
-        description: |
-          FEROX — pneumatický secí stroj na vyšší rychlosti.
-        models:
-          - slug: ferox-fo
-            name: FEROX FO
-            url: https://www.bednar-machinery.com/en/products/ferox
       - slug: omega
         name: OMEGA
         family: omega
         subcategory: seci-stroje-pneumaticke
         description: |
-          OMEGA — pneumatický universal seed drill, vlajková Bednar řada.
+          OMEGA je vlajkový univerzální pneumatický secí stroj BEDNAR pro min-till, mulch-till
+          i konvenční technologie. Pracovní záběr 3–9 m, dvojkotoučové secí botky CrossBoard Heavy
+          a centrální zásobník 3 000–5 000 l. Modely OO (tažený) a OF (s předradličkami) umožňují
+          setí do mulče, slámy i kompaktního strniska. Stroj je oblíbený mezi velkými farmami
+          v České republice i východní Evropě.
         models:
           - slug: omega-oo
             name: OMEGA OO
             url: https://www.bednar-machinery.com/en/products/omega
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 350
+            typ_zavesu: tazeny
           - slug: omega-of
             name: OMEGA OF
             url: https://www.bednar-machinery.com/en/products/omega
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 220
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
+      - slug: ferox
+        name: FEROX
+        family: ferox
+        subcategory: seci-stroje-pneumaticke
+        description: |
+          FEROX je rychlostní pneumatický secí stroj BEDNAR optimalizovaný pro vysoké pracovní
+          rychlosti až 18 km/h. Krátká pracovní délka, agresivní disková sekce a přesné dávkování
+          umožňují vysokou plošnou výkonnost na velkých honech. Záběr 4–6 m, ideální pro
+          kombinaci s předzpracováním půdy.
+        models:
+          - slug: ferox-fo
+            name: FEROX FO
+            url: https://www.bednar-machinery.com/en/products/ferox
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 180
+            prikon_traktor_hp_max: 300
+            typ_zavesu: tazeny
+      - slug: corsa
+        name: CORSA
+        family: corsa
+        subcategory: seci-stroje-presne
+        description: |
+          CORSA je přesný secí stroj BEDNAR pro setí kukuřice, slunečnice, řepy a sóji. Pneumatická
+          singulace, elektrický pohon výsevních jednotek a sekce s individuální kontrolou přítlaku.
+          Záběr od 4,5 m při meziřádkové vzdálenosti 70 cm, určený pro precizní zemědělství
+          s ISOBUS terminálem.
+        models:
+          - slug: corsa-cn
+            name: CORSA CN
+            url: https://www.bednar-machinery.com/en/products/corsa
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 250
+            typ_zavesu: tazeny
+      - slug: combo
+        name: COMBO
+        family: combo
+        subcategory: seci-kombinace
+        description: |
+          COMBO LO je kombinovaný secí stroj BEDNAR spojující předzpracování půdy s přesným
+          výsevem v jedné jízdě. Disková sekce, kompaktomatový kotouč a pneumatická secí jednotka
+          umožňují setí do nezpracované půdy nebo po podmítce. Záběr 4–6 m, vhodný pro mulch-till
+          systémy.
+        models:
+          - slug: combo-lo
+            name: COMBO LO
+            url: https://www.bednar-machinery.com/en/products/combo
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 350
+            typ_zavesu: tazeny
+      - slug: ferti-box
+        name: FERTI-BOX
+        family: ferti-box
+        subcategory: seci-kombinace
+        description: |
+          FERTI-BOX FB je čelně nesený zásobník hnojiv BEDNAR pro doplnění secích strojů
+          o aplikaci minerálních hnojiv při setí. Objem 1 700–3 000 l, pneumatický transport
+          hnojiva potrubím k secí jednotce vzadu. Umožňuje strip-till hnojení a startovací
+          dávky pro kukuřici a řepku.
+        models:
+          - slug: ferti-box-fb
+            name: FERTI-BOX FB
+            url: https://www.bednar-machinery.com/en/products/ferti-box
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 400
+            typ_zavesu: neseny
   zpracovani-pudy:
     name: Zpracování půdy
     series:
-      - slug: atlas
-        name: ATLAS
-        family: atlas
-        subcategory: podmitace-diskove
-        description: |
-          ATLAS — diskový podmítač Bednar, krátká diskovka.
-        models:
-          - slug: atlas-ao
-            name: ATLAS AO
-            url: https://www.bednar-machinery.com/en/products/atlas
-          - slug: atlas-an
-            name: ATLAS AN
-            url: https://www.bednar-machinery.com/en/products/atlas
-          - slug: atlas-am
-            name: ATLAS AM
-            url: https://www.bednar-machinery.com/en/products/atlas
-      - slug: fenix
-        name: FENIX
-        family: fenix
-        subcategory: podmitace-radlickove
-        description: |
-          FENIX — radličkový podmítač pro mělkou kultivaci.
-        models:
-          - slug: fenix-fn
-            name: FENIX FN
-            url: https://www.bednar-machinery.com/en/products/fenix
-          - slug: fenix-fo
-            name: FENIX FO
-            url: https://www.bednar-machinery.com/en/products/fenix
-      - slug: galaxy
-        name: GALAXY
-        family: galaxy
-        subcategory: valce
-        description: |
-          GALAXY — válec pro reconsolidaci po orbě či kultivaci.
-        models:
-          - slug: galaxy-go
-            name: GALAXY GO
-            url: https://www.bednar-machinery.com/en/products/galaxy
-      - slug: kor
-        name: KOR
-        family: kor
-        subcategory: podmitace-diskove
-        description: |
-          KOR — kompaktní diskový podmítač.
-        models:
-          - slug: kor-ko
-            name: KOR KO
-            url: https://www.bednar-machinery.com/en/products/kor
-      - slug: mulchfarmer
-        name: MULCHFARMER
-        family: mulchfarmer
-        subcategory: kyprice
-        description: |
-          MULCHFARMER — kombinovaný stroj pro mulčování s kultivací.
-        models:
-          - slug: mulchfarmer-mf
-            name: MULCHFARMER MF
-            url: https://www.bednar-machinery.com/en/products/mulchfarmer
-      - slug: presspack
-        name: PRESSPACK
-        family: presspack
-        subcategory: valce
-        description: |
-          PRESSPACK — pres-válec za pluhem.
-        models:
-          - slug: presspack-pp
-            name: PRESSPACK PP
-            url: https://www.bednar-machinery.com/en/products/presspack
-      - slug: strip-master
-        name: STRIP-MASTER
-        family: strip-master
-        subcategory: kyprice
-        description: |
-          STRIP-MASTER — strip-till stroj Bednar pro pásové zpracování.
-        models:
-          - slug: strip-master-sm
-            name: STRIP-MASTER SM
-            url: https://www.bednar-machinery.com/en/products/strip-master
-      - slug: swifter
-        name: SWIFTER
-        family: swifter
-        subcategory: kompaktomaty
-        description: |
-          SWIFTER — vlajkový kompaktomat Bednar pro přípravu seťového lůžka.
-        models:
-          - slug: swifter-so
-            name: SWIFTER SO
-            url: https://www.bednar-machinery.com/en/products/swifter
-          - slug: swifter-sm
-            name: SWIFTER SM
-            url: https://www.bednar-machinery.com/en/products/swifter
-          - slug: swifter-sn
-            name: SWIFTER SN
-            url: https://www.bednar-machinery.com/en/products/swifter
       - slug: terraland
         name: TERRALAND
         family: terraland
         subcategory: kyprice
         description: |
-          TERRALAND — hloubkový kypřič Bednar, vlajková řada pro hluboké kypření.
+          TERRALAND je vlajková řada hloubkových kypřičů BEDNAR pro hluboké kypření až do 65 cm
+          bez obracení půdy. Robustní rám, slzičkovité dláto Active-Mix a zadní pěch CrossBoard
+          zajišťují promíchání rostlinných zbytků a strukturu půdy. Modely TN (nesený), TO (tažený)
+          a DO (tažený s diskovou sekcí) pokrývají záběry 3–7 m a vyžadují traktor 200–500 HP.
         models:
           - slug: terraland-tn
             name: TERRALAND TN
             url: https://www.bednar-machinery.com/en/products/terraland
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 350
+            typ_zavesu: neseny
           - slug: terraland-to
             name: TERRALAND TO
             url: https://www.bednar-machinery.com/en/products/terraland
+            pracovni_zaber_m: 5
+            prikon_traktor_hp_min: 300
+            prikon_traktor_hp_max: 450
+            typ_zavesu: tazeny
           - slug: terraland-do
             name: TERRALAND DO
             url: https://www.bednar-machinery.com/en/products/terraland
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 350
+            prikon_traktor_hp_max: 500
+            typ_zavesu: tazeny
+      - slug: swifter
+        name: SWIFTER
+        family: swifter
+        subcategory: kompaktomaty
+        description: |
+          SWIFTER je vlajkový kompaktomat BEDNAR pro přípravu seťového lůžka v jedné jízdě.
+          Kombinace přední smyk, kompaktomatové sekce, prutové brány a zadní pěch zajišťují
+          rovinný a strukturovaný profil pro setí. Záběry 6–18 m podle modelu (SO nesený,
+          SM střední, SN tažený) patří mezi nejširší v kategorii.
+        models:
+          - slug: swifter-so
+            name: SWIFTER SO
+            url: https://www.bednar-machinery.com/en/products/swifter
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 250
+            typ_zavesu: neseny
+          - slug: swifter-sm
+            name: SWIFTER SM
+            url: https://www.bednar-machinery.com/en/products/swifter
+            pracovni_zaber_m: 10
+            prikon_traktor_hp_min: 250
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
+          - slug: swifter-sn
+            name: SWIFTER SN
+            url: https://www.bednar-machinery.com/en/products/swifter
+            pracovni_zaber_m: 15
+            prikon_traktor_hp_min: 350
+            prikon_traktor_hp_max: 500
+            typ_zavesu: tazeny
+      - slug: atlas
+        name: ATLAS
+        family: atlas
+        subcategory: podmitace-diskove
+        description: |
+          ATLAS je řada krátkých diskových podmítačů BEDNAR pro mělkou kultivaci 5–15 cm
+          a podmítku po sklizni. Velké disky 620–660 mm s individuálním uložením v pryžových
+          silentblocích zvládají i tvrdé strniska. Záběry 3–15 m podle modelu: AO (nesený),
+          AN (tažený střední) a AM (tažený velký) pokrývají farmy od 200 do 5 000 ha.
+        models:
+          - slug: atlas-ao
+            name: ATLAS AO
+            url: https://www.bednar-machinery.com/en/products/atlas
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 250
+            typ_zavesu: neseny
+          - slug: atlas-an
+            name: ATLAS AN
+            url: https://www.bednar-machinery.com/en/products/atlas
+            pracovni_zaber_m: 8
+            prikon_traktor_hp_min: 250
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
+          - slug: atlas-am
+            name: ATLAS AM
+            url: https://www.bednar-machinery.com/en/products/atlas
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 400
+            prikon_traktor_hp_max: 600
+            typ_zavesu: tazeny
+      - slug: fenix
+        name: FENIX
+        family: fenix
+        subcategory: podmitace-radlickove
+        description: |
+          FENIX je radličkový podmítač BEDNAR pro mělkou až střední kultivaci 8–25 cm. Šípovité
+          radlice se širokým přesahem zajišťují celoplošné podříznutí a promíchání rostlinných
+          zbytků. Model FN je nesený do 4 m záběru, FO tažený 4–7 m. Vhodný pro podmítku, jarní
+          kypření i přípravu před setím.
+        models:
+          - slug: fenix-fn
+            name: FENIX FN
+            url: https://www.bednar-machinery.com/en/products/fenix
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 250
+            typ_zavesu: neseny
+          - slug: fenix-fo
+            name: FENIX FO
+            url: https://www.bednar-machinery.com/en/products/fenix
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 250
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
       - slug: versatill
         name: VERSATILL
         family: versatill
         subcategory: podmitace-radlickove
         description: |
-          VERSATILL — universal radličkový stroj.
+          VERSATILL je univerzální radličkový kypřič BEDNAR pro střední hloubku 10–35 cm
+          s rychlovýměnným systémem dlát. Díky modulární konstrukci zvládá podmítku, prokypření
+          i přípravu seťového lůžka. Záběr 3–6 m, model VO v neseném i taženém provedení.
         models:
           - slug: versatill-vo
             name: VERSATILL VO
             url: https://www.bednar-machinery.com/en/products/versatill
+            pracovni_zaber_m: 5
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 350
+            typ_zavesu: tazeny
+      - slug: kor
+        name: KOR
+        family: kor
+        subcategory: podmitace-diskove
+        description: |
+          KOR je kompaktní nesený diskový podmítač BEDNAR pro menší a střední farmy. Disky 510 mm
+          v X-uspořádání zajišťují agresivní řez a promíchání. Záběr 2,5–4 m, vhodný pro traktory
+          od 100 HP. Model KO je dostupný pouze v neseném provedení.
+        models:
+          - slug: kor-ko
+            name: KOR KO
+            url: https://www.bednar-machinery.com/en/products/kor
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 100
+            prikon_traktor_hp_max: 200
+            typ_zavesu: neseny
+      - slug: mulchfarmer
+        name: MULCHFARMER
+        family: mulchfarmer
+        subcategory: kyprice
+        description: |
+          MULCHFARMER je kombinovaný kypřič BEDNAR navržený pro mulch-till technologii. Spojuje
+          diskovou sekci, radličky a pěch v jedné jízdě, což umožňuje přípravu půdy s vysokým
+          podílem rostlinných zbytků. Záběr 4–6 m, model MF zvládá náročné podmínky po kukuřici
+          a řepce.
+        models:
+          - slug: mulchfarmer-mf
+            name: MULCHFARMER MF
+            url: https://www.bednar-machinery.com/en/products/mulchfarmer
+            pracovni_zaber_m: 5
+            prikon_traktor_hp_min: 250
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
+      - slug: strip-master
+        name: STRIP-MASTER
+        family: strip-master
+        subcategory: kyprice
+        description: |
+          STRIP-MASTER je strip-till stroj BEDNAR pro pásové zpracování půdy s aplikací hnojiva.
+          Kypří pouze pás 20 cm široký v rozteči 45–80 cm, mezi pásy zachovává mulč. Umožňuje
+          úsporu paliva, ochranu půdy proti erozi a přesnou výživu. Model SM v záběru 3–6 m
+          s integrovaným zásobníkem nebo napojením na FERTI-BOX.
+        models:
+          - slug: strip-master-sm
+            name: STRIP-MASTER SM
+            url: https://www.bednar-machinery.com/en/products/strip-master
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 250
+            prikon_traktor_hp_max: 400
+            typ_zavesu: tazeny
+      - slug: row-master
+        name: ROW-MASTER
+        family: row-master
+        subcategory: kyprice
+        description: |
+          ROW-MASTER RN je meziřádková plečka BEDNAR pro mechanické ošetření kukuřice, slunečnice,
+          řepy a sóji. Sekce s nožovými radličkami a kotouči pro přesné vedení v meziřádku
+          45–80 cm. Možnost doplnění o aplikaci kapalných hnojiv nebo páskového dohnojení.
+          Záběr 6–12 m.
+        models:
+          - slug: row-master-rn
+            name: ROW-MASTER RN
+            url: https://www.bednar-machinery.com/en/products/row-master
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 100
+            prikon_traktor_hp_max: 200
+            typ_zavesu: neseny
+      - slug: galaxy
+        name: GALAXY
+        family: galaxy
+        subcategory: valce
+        description: |
+          GALAXY je řada těžkých válců BEDNAR pro reconsolidaci půdy po orbě, kultivaci nebo
+          v jarním období na pšenici. Cambridge nebo Crosskill segmenty s průměrem 530–630 mm,
+          záběry 6–18 m. Model GO se sklápěcím rámem pro velkoplošné nasazení.
+        models:
+          - slug: galaxy-go
+            name: GALAXY GO
+            url: https://www.bednar-machinery.com/en/products/galaxy
+            pracovni_zaber_m: 12
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 300
+            typ_zavesu: tazeny
+      - slug: presspack
+        name: PRESSPACK
+        family: presspack
+        subcategory: valce
+        description: |
+          PRESSPACK je nesený pres-válec BEDNAR za pluhem nebo kypřičem pro okamžitou
+          reconsolidaci a uzavření profilu. Pryžové nebo ocelové prstence o průměru 700–900 mm
+          s vysokou hmotností pro hluboké působení. Model PP v záběrech 3–6 m, montáž na zadní
+          tříbodový závěs nebo přímo na nářadí.
+        models:
+          - slug: presspack-pp
+            name: PRESSPACK PP
+            url: https://www.bednar-machinery.com/en/products/presspack
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 100
+            prikon_traktor_hp_max: 250
+            typ_zavesu: neseny
+      - slug: presser
+        name: PRESSER
+        family: presser
+        subcategory: valce
+        description: |
+          PRESSER PE je tažený pres-válec BEDNAR za pluhem pro průběžnou reconsolidaci ornice
+          během orby. Eliminuje druhý přejezd s válcem a umožňuje rovnou návaznost na setí.
+          Záběry odpovídají velikosti pluhu, model PE pro 5–9 radlicové pluhy.
+        models:
+          - slug: presser-pe
+            name: PRESSER PE
+            url: https://www.bednar-machinery.com/en/products/presser
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 150
+            prikon_traktor_hp_max: 300
+            typ_zavesu: tazeny

@@ -12,20 +12,56 @@
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import sharp from 'sharp';
 
-// Mapa kombajn-řada → { sourceUrl, maxHp z john-deere.yaml }
-// URL doplň postupně jak budou k dispozici z deere.cz nebo Wikimedia Commons
+// Mapa kombajn-řada → { sourceUrl, maxHp z john-deere.yaml, credit info }
 const PHOTOS = {
   'x-series': {
     maxHp: 690,
     url: 'https://www.deere.cz/assets/images/region-2/products/combines/x-series/1_r2g017677_large_large_6ee4881be97478d689a9fa242240d445788a66e1.jpg',
+    credit: 'Deere & Company',
+    license: 'Editorial / press use',
   },
-  // 's-series':     { maxHp: 543, url: '...' },
-  // 't-series':     { maxHp: 360, url: '...' },
-  // 'w-series':     { maxHp: 300, url: '...' },
-  // '9000-sts':     { maxHp: 475, url: '...' },
-  // 'wts':          { maxHp: 360, url: '...' },
-  // '9000-kombajn': { maxHp: 290, url: '...' },
-  // 'cts':          { maxHp: 290, url: '...' },
+  's-series': {
+    maxHp: 543,
+    url: 'https://images.unsplash.com/photo-1635174815469-6efd052297d4?q=80&w=2012&auto=format&fit=crop',
+    credit: 'Unsplash',
+    license: 'Unsplash License',
+  },
+  't-series': {
+    maxHp: 360,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/John_Deere_T670i_at_harvest%2C_Boston%2C_Lincolnshire%2C_2011_a.jpg',
+    credit: 'Wikimedia Commons',
+    license: 'CC BY-SA 3.0',
+  },
+  'w-series': {
+    maxHp: 300,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/d/db/Olimac_Sonnenblumenpfl%C3%BCcker_Drago_Gold_an_John_Deere_M%C3%A4hdrescher.jpg',
+    credit: 'Wikimedia Commons',
+    license: 'CC BY-SA 4.0',
+  },
+  '9000-sts': {
+    maxHp: 475,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/7/73/John_Deere_9870_STS_with_625D.JPG',
+    credit: 'Wikimedia Commons',
+    license: 'CC BY-SA 3.0',
+  },
+  'wts': {
+    maxHp: 360,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/d/db/John_Deere_9680_WTS.JPG',
+    credit: 'Wikimedia Commons',
+    license: 'CC BY-SA 3.0',
+  },
+  '9000-kombajn': {
+    maxHp: 290,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Johndeere9600.JPG',
+    credit: 'Wikimedia Commons',
+    license: 'CC BY-SA 3.0',
+  },
+  'cts': {
+    maxHp: 290,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Cosechadora_John_Deere_9780_CTS%2C._Lugar_Delta_del_Ebro_%28Espa%C3%B1a%29.jpg',
+    credit: 'Wikimedia Commons',
+    license: 'CC BY-SA 4.0',
+  },
 };
 
 const OUT_DIR = 'public/images/stroje/john-deere';
@@ -62,7 +98,11 @@ for (const slug of onlySlugs) {
   try {
     console.log(`→ ${slug}: stahuji ${meta.url.replace(/^https?:\/\/[^/]+/, '')}`);
     const res = await fetch(meta.url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 agro-svet-photo-bot/1.0 (matejsamec@example.com)' },
+      headers: {
+        // Wikimedia má strict UA policy — vyžaduje Mozilla-style + kontakt URL
+        'User-Agent': 'agro-svet-bot/1.0 (https://agro-svet.cz; matejsamec@seznam.cz) sharp/webp',
+        'Accept': 'image/webp,image/avif,image/jpeg,image/*,*/*;q=0.8',
+      },
     });
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
     const buf = Buffer.from(await res.arrayBuffer());

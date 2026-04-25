@@ -4,7 +4,7 @@ country: Rakousko
 founded: 1871
 website: https://www.poettinger.at/cs_cz/
 description: >
-  Rakouský výrobce s širokým portfoliem strojů pro zpracování půdy (Servo pluhy, Terradisc), setí (Aerosem, Terrasem) a sklizeň pícnin (Novacat žačky, Impress lisy, Jumbo samosběrací vozy).
+  Rakouský rodinný výrobce s širokým portfoliem strojů pro zpracování půdy (Servo pluhy, Terradisc, Synkro, Lion), setí (Aerosem, Terrasem, Vitasem) a zejména sklizeň pícnin (Novacat žačky, Top shrnovače, Hit obraceče, Impress lisy, Jumbo a Faro samosběrací vozy). Sídlo Grieskirchen, výrobní závody v Rakousku, ČR (Vodňany), Německu a Polsku.
 categories:
   seti:
     name: Setí a sázení
@@ -14,49 +14,80 @@ categories:
         family: aerosem
         subcategory: seci-stroje-pneumaticke
         url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+        year_from: 2008
+        year_to: null
         description: |
-          AEROSEM — pneumatické secí stroje značky Pöttinger.
+          AEROSEM jsou pneumatické secí stroje Pöttinger určené pro nasazení v kombinaci s rotační bránou (Lion) nebo solo. Vyznačují se centrálním distributorem, technologií IDS pro vypínání kolejových řádků a unikátní funkcí PCS (Precision Combi Seeding) pro setí kukuřice v rámci univerzálního secího stroje. Cílovou skupinou jsou středně velké a velké podniky, které potřebují všestranný stroj pro obilniny i řádkové plodiny.
         models:
           - slug: aerosem-vt
             name: AEROSEM VT
-            tagline: Pneumatický secí stroj nesený
+            tagline: Tažený pneumatický secí stroj 5–6 m
             url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 150
+            typ_zavesu: tazeny
           - slug: aerosem-fdd
             name: AEROSEM FDD
             tagline: Pneumatický secí stroj v kombinaci s rotační bránou
             url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 130
+            typ_zavesu: neseny
+          - slug: aerosem-adv
+            name: AEROSEM ADV
+            tagline: Pneumatický secí stroj s automatickou kalibrací
+            url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 110
+            typ_zavesu: neseny
       - slug: terrasem
         name: TERRASEM
         family: terrasem
         subcategory: seci-kombinace
         url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+        year_from: 2002
+        year_to: null
         description: |
-          TERRASEM — secí kombinace s krátkým diskovým podmítačem značky Pöttinger.
+          TERRASEM je vlajková řada secích kombinací Pöttinger s integrovaným krátkým diskovým podmítačem, pěchovacími pneumatikami a botkami DUAL DISC. Stroj v jednom přejezdu provádí mělké zpracování, urovnání, pěchování a setí, čímž šetří čas i náklady. Tažené verze C a V jsou určeny pro velké podniky a profesionální agrofirmy s důrazem na výkon a univerzálnost (obilí, řepka, kukuřice s ISOBUS systémem výsevu).
         models:
           - slug: terrasem-c
             name: TERRASEM C
-            tagline: Tažený secí stroj 3-9 m
+            tagline: Tažená secí kombinace 4–6 m s pevným rámem
             url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 140
+            typ_zavesu: tazeny
           - slug: terrasem-v
             name: TERRASEM V
-            tagline: Variabilní výsevní jednotky
+            tagline: Sklopná secí kombinace 6–9 m
             url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+            pracovni_zaber_m: 9
+            prikon_traktor_hp_min: 220
+            typ_zavesu: tazeny
       - slug: vitasem
         name: VITASEM
         family: vitasem
         subcategory: seci-stroje-mechanicke
         url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+        year_from: 2000
+        year_to: null
         description: |
-          VITASEM — mechanické secí stroje značky Pöttinger.
+          VITASEM jsou klasické mechanické secí stroje Pöttinger s ozubeným výsevním ústrojím a možností agregace s rotační bránou Lion (varianta M). Spolehlivá technologie pro malé a střední farmy, které vyžadují jednoduchou obsluhu, nízkou pořizovací cenu a univerzální použití pro obilí i drobnosemenné plodiny. Záběry 2,5–4 m pokrývají potřeby naprosté většiny rodinných farem.
         models:
           - slug: vitasem-a
             name: VITASEM A
-            tagline: Mechanický secí stroj nesený
+            tagline: Mechanický secí stroj nesený samostatně 2,5–4 m
             url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 70
+            typ_zavesu: neseny
           - slug: vitasem-m
             name: VITASEM M
             tagline: Mechanický secí stroj pro kombinaci s rotační bránou
             url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 110
+            typ_zavesu: neseny
   sklizen-picnin:
     name: Sklizeň pícnin a slámy
     series:
@@ -65,137 +96,231 @@ categories:
         family: eurocat
         subcategory: zaci-stroje
         url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        year_from: 1995
+        year_to: 2020
         description: |
-          EUROCAT — bubnové žací stroje značky Pöttinger.
+          EUROCAT byly bubnové žací stroje Pöttinger určené pro horské oblasti a malé farmy s lehkými traktory. Bubnová konstrukce odolávala kamenům a nerovnostem lépe než diskové žačky, ale měla vyšší spotřebu energie. Řada byla postupně nahrazena moderními diskovými stroji NOVACAT a NOVADISC, které nabízejí nižší hmotnost a lepší kvalitu řezu. Stroje jsou stále v provozu na tisících horských farem v Rakousku a Bavorsku.
         models:
           - slug: eurocat-311
             name: EUROCAT 311
-            tagline: Bubnový žací stroj nesený
+            tagline: Bubnový žací stroj nesený 3,1 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 3.1
+            prikon_traktor_hp_min: 60
+            typ_zavesu: neseny
+            year_from: 1995
+            year_to: 2018
           - slug: eurocat-315
             name: EUROCAT 315
-            tagline: Bubnový žací stroj nesený
+            tagline: Bubnový žací stroj nesený 3,15 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 3.15
+            prikon_traktor_hp_min: 65
+            typ_zavesu: neseny
+            year_from: 2000
+            year_to: 2020
       - slug: hit
         name: HIT
         family: hit
         subcategory: obracece
         url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        year_from: 1990
+        year_to: null
         description: |
-          HIT — obraceče píce značky Pöttinger.
+          HIT (HEUTEDDER) jsou obraceče píce Pöttinger v širokém spektru záběrů od 4,5 m (4 rotory) až po 12,7 m (12 rotorů). Klíčové technologie zahrnují systém DYNATECH s aerodynamickým tvarem rotorů pro šetrné obracení a LIFTMATIC pro plynulé zvedání rotorů na souvratích bez kontaktu s drnem. Cílem je maximální kvalita píce s minimálními ztrátami listů u jetelovin a vojtěšky.
         models:
           - slug: hit-v
             name: HIT V
-            tagline: Tažený obraceč velkých záběrů
+            tagline: Tažený obraceč 10,5–12,7 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 12.7
+            prikon_traktor_hp_min: 90
+            typ_zavesu: tazeny
           - slug: hit-t
             name: HIT T
-            tagline: Tažený obraceč
+            tagline: Tažený obraceč 6,9–11 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 11
+            prikon_traktor_hp_min: 75
+            typ_zavesu: tazeny
           - slug: hit-n
             name: HIT N
-            tagline: Nesený obraceč
+            tagline: Nesený obraceč 4,5–8,9 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 8.9
+            prikon_traktor_hp_min: 50
+            typ_zavesu: neseny
       - slug: impress
         name: IMPRESS
         family: impress
         subcategory: lisy-valcove
         url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        year_from: 2017
+        year_to: null
         description: |
-          IMPRESS — lisy na kulaté balíky značky Pöttinger, varianty F (fix-chamber) a V (vario-chamber).
+          IMPRESS je první generace válcových lisů Pöttinger uvedená v roce 2017, navržená kompletně na zelené louce. Klíčovou inovací je technologie LIFTUP s rotorem v horní pozici (lis se otevírá nahoru), díky níž má lis nejkratší dráhu materiálu a vysokou propustnost. Dostupné varianty F (fix-chamber 125 cm), V (variabilní 155/185 cm) a kombinace s obalovačkou (FC PRO, VC PRO). Cílová skupina jsou náročné podniky a služby, které vyžadují vysoký výkon a špičkovou hustotu balíku.
         models:
           - slug: impress-125-f
             name: IMPRESS 125 F
-            tagline: Lis na kulaté balíky s pevnou komorou
+            tagline: Lis na kulaté balíky s pevnou komorou 125 cm
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            prikon_traktor_hp_min: 70
+            typ_zavesu: tazeny
           - slug: impress-155-v
             name: IMPRESS 155 V
-            tagline: Lis na kulaté balíky s variabilní komorou
+            tagline: Lis na kulaté balíky s variabilní komorou 90–155 cm
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            prikon_traktor_hp_min: 90
+            typ_zavesu: tazeny
           - slug: impress-185-vc-pro
-            name: IMPRESS 185 VC PRO
-            tagline: Lis-obalovač s variabilní komorou
+            name: IMPRESS 185 V MASTER
+            tagline: Lis-obalovač s variabilní komorou až 185 cm
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            prikon_traktor_hp_min: 120
+            typ_zavesu: tazeny
       - slug: jumbo
         name: JUMBO
         family: jumbo
         subcategory: samosberaci-vozy
         url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        year_from: 2000
+        year_to: null
         description: |
-          JUMBO — samosběrací vozy značky Pöttinger, vlajková řada s nejvyššími objemy.
+          JUMBO je vlajková řada samosběracích vozů Pöttinger s nejvyššími objemy v portfoliu (38–50 m³ DIN). Stroje jsou určeny pro velké podniky a služby, které potřebují maximální výkon při sběru pícnin. Klíčové vlastnosti: krátká dráha plodiny, řezací ústrojí s 45 noži (4 cm délka řezu), automatické broušení, tříosé nápravy s nuceným řízením a hydraulické odpružení. Modernizace 2022 přinesla nové HMI a integraci s ISOBUS sekčním řízením.
         models:
           - slug: jumbo-7000
             name: JUMBO 7000
-            tagline: Samosběrací vůz 38 m³
+            tagline: Samosběrací vůz 38 m³ DIN
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            prikon_traktor_hp_min: 180
+            typ_zavesu: tazeny
           - slug: jumbo-8000
             name: JUMBO 8000
-            tagline: Samosběrací vůz 43 m³
+            tagline: Samosběrací vůz 43 m³ DIN
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            prikon_traktor_hp_min: 220
+            typ_zavesu: tazeny
           - slug: jumbo-10000
             name: JUMBO 10000
-            tagline: Samosběrací vůz 50 m³
+            tagline: Samosběrací vůz 50 m³ DIN
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            prikon_traktor_hp_min: 260
+            typ_zavesu: tazeny
+      - slug: faro
+        name: FARO
+        family: faro
+        subcategory: samosberaci-vozy
+        url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        year_from: 2005
+        year_to: null
+        description: |
+          FARO jsou středně velké samosběrací vozy Pöttinger určené pro střední podniky, které nepotřebují kapacitu vlajkové řady JUMBO. Objem 25–35 m³ DIN, řezací ústrojí s 31 noži, dvouosé nápravy. Cenově výhodnější alternativa s nižšími nároky na traktor (od 100 hp). Varianta COMBILINE umožňuje použití jako samosběrací i jako přepravní vůz pro řezanku z řezačky.
+        models:
+          - slug: faro-3510
+            name: FARO 3510
+            tagline: Samosběrací vůz 25 m³ DIN
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            prikon_traktor_hp_min: 100
+            typ_zavesu: tazeny
+          - slug: faro-4510
+            name: FARO 4510
+            tagline: Samosběrací vůz 31 m³ DIN
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            prikon_traktor_hp_min: 130
+            typ_zavesu: tazeny
       - slug: novacat
         name: NOVACAT
         family: novacat
         subcategory: zaci-stroje
         url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        year_from: 1996
+        year_to: null
         description: |
-          NOVACAT — diskové žací stroje značky Pöttinger, nesené i tažené varianty.
+          NOVACAT je klíčová řada diskových žacích strojů Pöttinger pokrývající celé spektrum od malých nesených strojů 2,6 m až po žací kombinace 10 m s předním a dvojicí zadních žacích strojů. Klíčové technologie: Y DRIVE pohon s prostorem pro promíchání píce, hydraulické odlehčení (Hydraulic Compensation), kondicionér ED (prsty) nebo RC (válcový) a systém kolizní ochrany NONSTOP LIFT. Vlajkový model A10 nabízí variabilní záběr 9,52–10,02 m s automatickou kontrolou překrytí.
         models:
           - slug: novacat-302
             name: NOVACAT 302
             tagline: Nesený diskový žací stroj 3,04 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 3.04
+            prikon_traktor_hp_min: 70
+            typ_zavesu: neseny
           - slug: novacat-352
             name: NOVACAT 352
             tagline: Nesený diskový žací stroj 3,46 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 3.46
+            prikon_traktor_hp_min: 80
+            typ_zavesu: neseny
           - slug: novacat-a10
             name: NOVACAT A10
-            tagline: Žací kombinace 9,52-10,02 m
+            tagline: Žací kombinace 9,52–10,02 m s variabilním záběrem
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 10.02
+            prikon_traktor_hp_min: 200
+            typ_zavesu: neseny
           - slug: novacat-v10
             name: NOVACAT V10
-            tagline: Žací kombinace s variabilním záběrem
+            tagline: Žací kombinace s variabilním překrytím 9,1–10 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 10
+            prikon_traktor_hp_min: 220
+            typ_zavesu: neseny
       - slug: novadisc
         name: NOVADISC
         family: novadisc
         subcategory: zaci-stroje
         url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        year_from: 2002
+        year_to: null
         description: |
-          NOVADISC — lehké diskové žací stroje bez kondicionéru značky Pöttinger.
+          NOVADISC jsou lehké diskové žací stroje Pöttinger bez kondicionéru, určené pro horské oblasti, malé farmy a chovatele koní, kteří preferují prosychání píce v přirozeném řádku. Nízká hmotnost (250–500 kg) umožňuje nasazení i na traktory od 40 hp. Záběry 2,2–3,5 m, 4–7 disků. Cenově dostupná alternativa k NOVACATu pro extenzivní hospodaření.
         models:
           - slug: novadisc-262
             name: NOVADISC 262
-            tagline: Diskový žací stroj 2,62 m
+            tagline: Diskový žací stroj 2,62 m bez kondicionéru
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 2.62
+            prikon_traktor_hp_min: 50
+            typ_zavesu: neseny
           - slug: novadisc-302
             name: NOVADISC 302
-            tagline: Diskový žací stroj 3,04 m
+            tagline: Diskový žací stroj 3,04 m bez kondicionéru
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 3.04
+            prikon_traktor_hp_min: 60
+            typ_zavesu: neseny
       - slug: top
         name: TOP
         family: top
         subcategory: shrnovace
         url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        year_from: 1985
+        year_to: null
         description: |
-          TOP — shrnovače píce značky Pöttinger, jednorotorové i čtyřrotorové.
+          TOP je nejširší řada shrnovačů Pöttinger zahrnující jednorotorové (3,4–4,6 m), dvourotorové s bočním ukládáním (6,8–9,5 m), čtyřrotorové s centrálním ukládáním (8,8–12,5 m) a jeden středový shrnovač pro maximální záběr. Klíčové technologie: TOPTECH PLUS pro převodovku v olejové lázni, MULTITAST kopírovací kolo pro šetrné kopírování terénu a hydraulické sklápění do transportní pozice. Široké pokrytí potřeb od malých farem až po profesionální podniky.
         models:
           - slug: top-422
             name: TOP 422
-            tagline: Jednorotorový shrnovač
+            tagline: Jednorotorový shrnovač 4,2 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 4.2
+            prikon_traktor_hp_min: 40
+            typ_zavesu: neseny
           - slug: top-722
             name: TOP 722
-            tagline: Dvourotorový shrnovač
+            tagline: Dvourotorový shrnovač 6,8–7,3 m
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 7.3
+            prikon_traktor_hp_min: 75
+            typ_zavesu: tazeny
           - slug: top-1252-c
             name: TOP 1252 C
-            tagline: Čtyřrotorový shrnovač s centrálním ukládáním
+            tagline: Čtyřrotorový shrnovač 8,8–12,5 m s centrálním ukládáním
             url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+            pracovni_zaber_m: 12.5
+            prikon_traktor_hp_min: 130
+            typ_zavesu: tazeny
   zpracovani-pudy:
     name: Zpracování půdy
     series:
@@ -204,86 +329,170 @@ categories:
         family: fox
         subcategory: kompaktomaty
         url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        year_from: 2010
+        year_to: null
         description: |
-          FOX — kompaktní kombinace pro přípravu seťového lůžka značky Pöttinger.
+          FOX je vstupní řada kompaktomatů Pöttinger určená pro malé a střední farmy s traktory 80–130 hp. Kombinace předních smykových lišt, dvou řad disků a zadního pěchu zajišťuje přípravu seťového lůžka v jednom přejezdu. Záběr 3 m, nesené provedení. Cenově atraktivní řešení pro farmy, které nepotřebují širokozáběrové stroje TERRADISC nebo TERRIA.
         models:
           - slug: fox-300-d
             name: FOX 300 D
-            tagline: Kompaktní kombinace 3 m
+            tagline: Kompaktní kombinace 3 m nesená
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 80
+            typ_zavesu: neseny
       - slug: lion
         name: LION
         family: lion
         subcategory: rotacni-brany
         url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        year_from: 1990
+        year_to: null
         description: |
-          LION — rotační brány značky Pöttinger pro náročnou přípravu seťového lůžka.
+          LION je řada robustních rotačních bran Pöttinger pro náročnou přípravu seťového lůžka, zejména po orbě, na těžkých půdách a v kombinaci se secími stroji AEROSEM nebo VITASEM. Záběry 2,5–6 m, převodovky pro výkony až 360 hp. Verze CLASSIC, MASTER a SUPERIOR se liší robustností a maximálním přípustným výkonem traktoru. Klíčové vlastnosti: rychlovýměnné nože QUICKFIT, integrované přední pěchy a kompatibilita s 3-bodovým systémem secích strojů.
         models:
           - slug: lion-303
             name: LION 303
-            tagline: Rotační brána 3 m
+            tagline: Rotační brána 3 m, do 180 hp
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 90
+            prikon_traktor_hp_max: 180
+            typ_zavesu: neseny
           - slug: lion-403
             name: LION 403
-            tagline: Rotační brána 4 m
+            tagline: Rotační brána 4 m, do 250 hp
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 130
+            prikon_traktor_hp_max: 250
+            typ_zavesu: neseny
           - slug: lion-503
             name: LION 503
-            tagline: Rotační brána 5 m
+            tagline: Rotační brána 5 m sklopná, do 360 hp
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 5
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 360
+            typ_zavesu: neseny
       - slug: servo
         name: SERVO
         family: servo
         subcategory: pluhy
         url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        year_from: 1995
+        year_to: null
         description: |
-          SERVO — otočné pluhy značky Pöttinger, nesené i tažené.
+          SERVO je vlajková řada otočných pluhů Pöttinger, dlouhodobě uznávaná jako jeden z nejkvalitnějších pluhů na trhu. Sortiment zahrnuje nesené pluhy (3–6 radlic), polonesené (5–9 radlic) a tažené (až 14 radlic). Klíčové technologie: TRACTION CONTROL pro automatickou regulaci přítlaku, SERVOMATIC plus pro jednoduché nastavení záběru a sklonu, hydraulické zajištění proti přetížení NONSTOP a univerzální orniční tělesa pro různé typy půd. Generace SERVO 3000/4000 (2020+) přinesla 50% nárůst tuhosti rámu.
         models:
           - slug: servo-45
             name: SERVO 45
-            tagline: Nesený otočný pluh 3-5 radlic
+            tagline: Nesený otočný pluh 3–5 radlic
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            prikon_traktor_hp_min: 100
+            prikon_traktor_hp_max: 200
+            typ_zavesu: neseny
           - slug: servo-t-2500
             name: SERVO T 2500
-            tagline: Polonesený otočný pluh
+            tagline: Polonesený otočný pluh 6–9 radlic
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            prikon_traktor_hp_min: 240
+            prikon_traktor_hp_max: 380
+            typ_zavesu: poloneseny
           - slug: servo-3000
             name: SERVO 3000
-            tagline: Otočný pluh nové generace
+            tagline: Otočný pluh nové generace 4–6 radlic
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            year_from: 2020
+            year_to: null
+            prikon_traktor_hp_min: 140
+            prikon_traktor_hp_max: 280
+            typ_zavesu: neseny
+          - slug: servo-4000
+            name: SERVO 4000
+            tagline: Polonesený pluh nové generace 5–9 radlic
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            year_from: 2022
+            year_to: null
+            prikon_traktor_hp_min: 200
+            prikon_traktor_hp_max: 400
+            typ_zavesu: poloneseny
       - slug: synkro
         name: SYNKRO
         family: synkro
         subcategory: podmitace-radlickove
         url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        year_from: 2000
+        year_to: null
         description: |
-          SYNKRO — radličkové kypřiče značky Pöttinger pro mělké i hluboké zpracování.
+          SYNKRO jsou víceřadé radličkové kypřiče Pöttinger pro mělké podmítání i hluboké kypření do 30 cm. K dispozici 2-, 3- a 4-řadé varianty se záběry 2,5–6 m (nesené) a až 8 m (tažené). Klíčové vlastnosti: hydraulické zajištění proti přetížení NONSTOP, široká nabídka radlic (úzké/široké/dláta) a zadní pěch (tubový, prstový, gumový). Univerzální stroj pro celý cyklus zpracování půdy mezi sklizní a setím.
         models:
           - slug: synkro-3030
             name: SYNKRO 3030
-            tagline: Radličkový kypřič nesený 3 m
+            tagline: Radličkový kypřič nesený 3 m, 3 řady
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 110
+            typ_zavesu: neseny
           - slug: synkro-5030-t
             name: SYNKRO 5030 T
-            tagline: Tažený radličkový kypřič 5 m
+            tagline: Tažený radličkový kypřič 5 m, sklopný
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 5
+            prikon_traktor_hp_min: 180
+            typ_zavesu: tazeny
       - slug: terradisc
         name: TERRADISC
         family: terradisc
         subcategory: podmitace-diskove
         url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        year_from: 2005
+        year_to: null
         description: |
-          TERRADISC — krátké diskové podmítače značky Pöttinger.
+          TERRADISC je řada krátkých diskových podmítačů Pöttinger pro rychlé a kvalitní mělké zpracování strniště (5–15 cm). Velké disky (510 nebo 580 mm) s individuálním uložením v gumových silentblocích zajišťují dobré kopírování terénu i v kamenitých půdách. Záběry 3–6 m (nesené, sklopné, tažené). Vlajkový stroj pro střední a velké podniky pro likvidaci strniště, zapravení organických hnojiv a přípravu k setí ozimů.
         models:
           - slug: terradisc-3001
             name: TERRADISC 3001
             tagline: Nesený diskový podmítač 3 m
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 3
+            prikon_traktor_hp_min: 90
+            typ_zavesu: neseny
           - slug: terradisc-4001-k
             name: TERRADISC 4001 K
             tagline: Sklopný diskový podmítač 4 m
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 130
+            typ_zavesu: neseny
           - slug: terradisc-6001-t
             name: TERRADISC 6001 T
             tagline: Tažený diskový podmítač 6 m
             url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 200
+            typ_zavesu: tazeny
+      - slug: terria
+        name: TERRIA
+        family: terria
+        subcategory: kyprice
+        url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        year_from: 2020
+        year_to: null
+        description: |
+          TERRIA je nová řada hloubkových radličkových kypřičů Pöttinger uvedená v roce 2020, určená pro hluboké zpracování půdy 5–35 cm. Čtyřřadá konstrukce s velkou roztečí mezi řadami (95 cm) zajišťuje vynikající průchod organické hmoty a slámy. Robustní konstrukce s rychlovýměnnými radlicemi a širokým spektrem zadních pěchů. Cílovou skupinou jsou velké podniky a profesionální zemědělci preferující bezorebné a minimalizační technologie.
+        models:
+          - slug: terria-4040
+            name: TERRIA 4040
+            tagline: Hloubkový kypřič nesený 4 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 4
+            prikon_traktor_hp_min: 180
+            typ_zavesu: neseny
+          - slug: terria-6040
+            name: TERRIA 6040
+            tagline: Hloubkový kypřič tažený sklopný 6 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+            pracovni_zaber_m: 6
+            prikon_traktor_hp_min: 280
+            typ_zavesu: tazeny

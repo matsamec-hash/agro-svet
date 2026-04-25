@@ -4,7 +4,16 @@ country: Norsko
 founded: 1879
 website: https://www.kverneland.com/
 description: >
-  Norská skupina (od 2012 vlastněná Kubota Corporation) s portfoliem tradičních pluhů (řady 150, 2300, ED, EG, PB100), diskových podmítačů Qualidisc, radličkových podmítačů Enduro/CTC, přesných secích strojů Optima, secích strojů e-drill a u-drill, postřikovačů iXter / iXtrack / iXdrive a rozmetadel Exacta s technologií GEOSPREAD. Kverneland Group sdružuje i značky Vicon, Roc a Kubota Implements.
+  Norský výrobce zemědělské techniky založený 1879 v Kvernelandu (Jæren), od roku 2012
+  součást japonské skupiny Kubota Corporation. Tradičně označovaný jako "king of plows" —
+  klasické pluhy 150 / 2300 / ED / EG, semi-mounted PB100 / 6300 a jejich slupice
+  z patentované Kverneland oceli jsou globálním etalonem orby. Doplňkově diskové
+  podmítače Qualidisc Pro/Farmer, radličkové Enduro / CTC / Turbo, rotační brány NG-S/H,
+  válce Actiroll a precizní secí stroje Optima (přesné), e-drill / u-drill / Accord
+  (pneumatické) a TS-Evo (mechanické). Pro hnojení rozmetadla Exacta CL / TL / HL
+  s exkluzivní technologií GEOSPREAD pro section control až 1 m úsek po úseku.
+  Ochrana rostlin: nesené iXter B/A, tažené iXtrack T3/T4/T6 a samojízdné iXdrive
+  4180–5240. Kverneland Group sdružuje i sesterské značky Vicon, Roc a Kubota Implements.
 categories:
   zpracovani-pudy:
     name: Zpracování půdy
@@ -13,104 +22,214 @@ categories:
         name: 150
         family: 150
         subcategory: pluhy
+        working_width_m: "0.30-0.50"
         description: |
-          Kverneland 150 — klasický nesený pluh, vlajková řada.
+          Kverneland 150 — klasický nesený otočný pluh pro 3–6 radlic, vlajková řada
+          pro malé a střední farmy. Verze B (mechanické nastavení záběru), S (Shear-bolt
+          jištění proti přetížení) a V (Vari-Width plynulé nastavení šíře brázdy
+          30–50 cm hydraulicky z kabiny). Slupice ze speciální Kverneland oceli s vysokou
+          životností a univerzální geometrií pro orbu do hloubky 30 cm.
         models:
           - slug: 150-b
             name: 150 B
+            tagline: Nesený otočný pluh s mechanickým nastavením záběru
             url: https://www.kverneland.com/products/ploughs/mounted-reversible-ploughs/150-b
           - slug: 150-s
             name: 150 S
+            tagline: Otočný pluh s Shear-bolt jištěním
             url: https://www.kverneland.com/products/ploughs/mounted-reversible-ploughs/150-s
+          - slug: 150-v
+            name: 150 V
+            tagline: Vari-Width — plynulé nastavení šíře brázdy z kabiny
+            url: https://www.kverneland.com/products/ploughs/mounted-reversible-ploughs/150-b
       - slug: plough-2300
         name: 2300
         family: 2300
         subcategory: pluhy
+        working_width_m: "0.30-0.55"
         description: |
-          Kverneland 2300 — 5-7 radlicový pluh pro střední farmy.
+          Kverneland 2300 — nesený otočný pluh pro 5–7 radlic určený pro střední a větší
+          farmy s traktory 130–280 hp. Robustní rám s automatickým odjištěním Auto-reset
+          (verze S) chrání slupice při najetí na kámen a po překonání překážky se vrátí
+          do pracovní polohy bez nutnosti zastavení. Vari-Width systém umožňuje
+          plynulou změnu šíře brázdy 30–55 cm pro adaptaci na různé půdní podmínky.
         models:
           - slug: 2300-s
             name: 2300 S
+            tagline: Otočný pluh 5-7 radlic se Shear-bolt
             url: https://www.kverneland.com/products/ploughs/2300-s
       - slug: plough-ed
         name: ED
         family: ed
         subcategory: pluhy
+        working_width_m: "0.30-0.50"
         description: |
-          Kverneland ED — kompaktní nesený pluh.
+          Kverneland ED — kompaktní nesený otočný pluh pro 3–5 radlic, vhodný pro malé
+          farmy a traktory 80–150 hp. Lehká konstrukce s nízkou hmotností a jednoduchá
+          obsluha kombinovaná se slupicí Kverneland zaručují kvalitní orbu i v podmínkách
+          běžných pro středoevropské farmy. K dispozici varianty s mechanickým nebo
+          hydraulickým nastavením pracovního záběru.
         models:
           - slug: ed-100
             name: ED 100
+            tagline: Kompaktní nesený pluh 3-5 radlic
             url: https://www.kverneland.com/products/ploughs/ed-100
       - slug: plough-eg
         name: EG
         family: eg
         subcategory: pluhy
+        working_width_m: "0.30-0.55"
         description: |
-          Kverneland EG — semi-mounted pluh pro velké výkony.
+          Kverneland EG — heavy-duty nesený otočný pluh pro 5–7 radlic určený pro velké
+          farmy s traktory 180–360 hp. Mohutný rám 200×200 mm a Auto-reset jištění
+          umožňují orbu i v kamenitých půdách bez prostojů. Vari-Width verze nabízí
+          plynulou změnu šířky brázdy z kabiny, šroubové verze X-Bolt jištění pevné
+          nastavení s vyšší propustností.
         models:
           - slug: eg-100
             name: EG 100
+            tagline: Nesený heavy-duty pluh 5-7 radlic
             url: https://www.kverneland.com/products/ploughs/eg-100
       - slug: plough-pb100
         name: PB100
         family: pb100
         subcategory: pluhy
+        working_width_m: "0.30-0.55"
         description: |
-          Kverneland PB100 — semi-mounted pluh, vlajková řada pro velké farmy.
+          Kverneland PB100 — semi-mounted (polonesený) otočný pluh pro 6–9 radlic,
+          vlajková řada pro velké farmy a kontraktory. Vlastní pojezdové kolo přenáší
+          část hmotnosti, takže traktor 200–360 hp dokáže orat plně i s velkým záběrem
+          bez přetížení zadní nápravy. Auto-reset jištění a Vari-Width pro plynulou
+          změnu šířky brázdy 30–55 cm jsou standardem. Robustní rám pro celoroční
+          intenzivní nasazení.
         models:
           - slug: pb100
             name: PB100
+            tagline: Polonesený pluh 6-9 radlic pro velké farmy
             url: https://www.kverneland.com/products/ploughs/pb100
+      - slug: plough-6300
+        name: 6300
+        family: 6300
+        subcategory: pluhy
+        working_width_m: "0.35-0.55"
+        description: |
+          Kverneland 6300 — heavy-duty semi-mounted otočný pluh pro 7–12 radlic,
+          vrcholná řada určená pro velké pole a kontraktory s traktory 280–500 hp.
+          Hydraulicky řízený transportní systém, masivní hlavový kloub a robustní rám
+          umožňují velké pracovní záběry až 6,6 m. Auto-reset hydraulické jištění
+          a Vari-Width nastavení šíře brázdy z kabiny zaručují maximální efektivitu
+          a životnost při intenzivním celoročním nasazení.
+        models:
+          - slug: 6300-s
+            name: 6300 S
+            tagline: Heavy-duty semi-mounted pluh 7-12 radlic
+            url: https://www.kverneland.com/products/ploughs/6300-s
       - slug: qualidisc
         name: Qualidisc
         family: qualidisc
         subcategory: podmitace-diskove
+        working_width_m: "3.0-12.0"
         description: |
-          Qualidisc — diskový podmítač Kverneland.
+          Qualidisc — diskové podmítače Kverneland s X-konfigurací disků pro mělké
+          zpracování strniště a zapracování posklizňových zbytků. Verze Pro
+          (heavy-duty s pracovní hloubkou 3–15 cm a záběrem 3–7 m, nesené i tažené)
+          a Farmer (lehčí, pro střední farmy). Velké disky s průměrem 510 mm
+          a hydraulicky nastavitelný úhel umožňují práci i ve zbytcích kukuřičné slámy
+          při rychlosti 8–15 km/h.
         models:
           - slug: qualidisc-pro
             name: Qualidisc Pro
+            tagline: Heavy-duty diskový podmítač s disky 510 mm
             url: https://www.kverneland.com/products/soil/qualidisc-pro
+          - slug: qualidisc-farmer
+            name: Qualidisc Farmer
+            tagline: Diskový podmítač pro střední farmy
+            url: https://www.kverneland.com/products/soil/qualidisc-farmer
       - slug: enduro
         name: Enduro
         family: enduro
         subcategory: podmitace-radlickove
+        working_width_m: "3.0-6.0"
         description: |
-          Enduro — radličkový podmítač s aktivními dlátky.
+          Enduro — radličkový podmítač Kverneland pro střední a hluboké zpracování
+          půdy do 30 cm. Tři až čtyři řady šípových radlic s automatickým hydraulickým
+          jištěním Triflex chrání před poškozením v kamenitých půdách. Záběr 3–6 m,
+          k dispozici nesené i tažené verze. Vhodné pro mulčované setí i tradiční
+          zpracování s následným přípravkem půdy.
         models:
           - slug: enduro
             name: Enduro
+            tagline: Radličkový podmítač s Triflex jištěním
             url: https://www.kverneland.com/products/soil/enduro
       - slug: ctc
         name: CTC
         family: ctc
         subcategory: podmitace-radlickove
+        working_width_m: "4.0-6.0"
         description: |
-          CTC — heavy-duty radličkový podmítač pro hluboké zpracování.
+          CTC (Conventional Tillage Cultivator) — heavy-duty radličkový podmítač
+          Kverneland pro hluboké zpracování až 35 cm. Čtyři řady šípových radlic
+          s velkými roztečemi (95 cm mezi řadami) zajišťují vysokou propustnost
+          posklizňových zbytků bez ucpávání. Robustní rám s hydraulickým jištěním
+          a velký prosvit umožňují kvalitní zpracování i v těžkých jílovitých půdách
+          s velkým objemem slámy.
         models:
           - slug: ctc
             name: CTC
+            tagline: Heavy-duty kypřič pro hloubku až 35 cm
             url: https://www.kverneland.com/products/soil/ctc
+      - slug: turbo
+        name: Turbo
+        family: turbo
+        subcategory: podmitace-radlickove
+        working_width_m: "3.0-6.0"
+        description: |
+          Turbo — radličkový mělký podmítač Kverneland pro rychlé zpracování strniště
+          do hloubky 5–15 cm. Husté osazení úzkých radlic (3 řady, rozteč 27 cm)
+          zaručuje 100% průchod profilu a kvalitní podříznutí strniště i drobných
+          plevelů. Ideální stroj pro mělkou podmítku ihned po sklizni s následným
+          osetím meziplodin nebo bez přípravy seťového lůžka.
+        models:
+          - slug: turbo
+            name: Turbo
+            tagline: Mělký podmítač pro rychlou podmítku strniště
+            url: https://www.kverneland.com/products/soil/turbo
       - slug: ng
         name: NG
         family: ng
         subcategory: rotacni-brany
+        working_width_m: "2.5-6.0"
         description: |
-          NG — rotační brány Kverneland.
+          NG — rotační brány Kverneland pro přípravu seťového lůžka v kombinaci
+          se secími stroji. Verze NG-S (compact, pro traktory do 180 hp, záběr
+          2,5–4,0 m), NG-H (heavy-duty, do 250 hp, záběr 3,0–4,5 m) a NG-M
+          (sklopné, záběr až 6 m). Robustní převodovka, snadno vyměnitelné nože
+          a Quick-Fit systém pro rychlé připojení válcového a secího stroje
+          v jednom přejezdu.
         models:
+          - slug: ng-s
+            name: NG-S
+            tagline: Compact rotační brány do 180 hp
+            url: https://www.kverneland.com/products/soil/ng-s
           - slug: ng-h
             name: NG-H
+            tagline: Heavy-duty rotační brány do 250 hp
             url: https://www.kverneland.com/products/soil/ng-h
       - slug: actiroll
         name: Actiroll
         family: actiroll
         subcategory: valce
+        working_width_m: "6.3-12.3"
         description: |
-          Actiroll — válec Kverneland pro reconsolidaci.
+          Actiroll — tažený válec Kverneland pro reconsolidaci půdy po orbě nebo
+          podmítce. Pracovní záběry 6,3 / 8,3 / 9,9 / 12,3 m, sklopná konstrukce
+          pro transport. K dispozici Cambridge prstencové kroužky (522 mm) nebo
+          Crosskill (550 mm) pro různé půdní podmínky. Centrální hydraulická regulace
+          přítlaku z kabiny umožňuje přizpůsobení vlhkosti půdy.
         models:
           - slug: actiroll
             name: Actiroll
+            tagline: Cambridge / Crosskill válec, záběr 6.3-12.3 m
             url: https://www.kverneland.com/products/soil/actiroll
   seti:
     name: Setí a sázení
@@ -119,54 +238,107 @@ categories:
         name: Optima
         family: optima
         subcategory: seci-stroje-presne
+        working_width_m: "3.0-12.0"
         description: |
-          Optima — přesný secí stroj Kverneland pro kukuřici, slunečnici, řepu.
+          Optima — přesný (precision) secí stroj Kverneland pro setí kukuřice,
+          slunečnice, řepy, sóji a dalších širokořádkových plodin. Verze TF Profi
+          (tažený rám pro vysokou rychlost), SX (e-drive elektrický pohon výsevního
+          ústrojí), HD-II (heavy-duty pneumatický disk) a M (mechanická). Singulace
+          osiva probíhá v každé sekci individuálně, GEOCONTROL section control
+          umožňuje vypínání sekcí na souvratích. Pracovní záběry 3–12 m, rozteč
+          řádků 45–80 cm.
         models:
           - slug: optima-tf-profi
             name: Optima TF Profi
+            tagline: Tažený přesný secí stroj pro vysoké rychlosti
             url: https://www.kverneland.com/products/seeding/optima-tf-profi
-          - slug: optima-r
-            name: Optima R
-            url: https://www.kverneland.com/products/seeding/optima-r
+          - slug: optima-sx
+            name: Optima SX
+            tagline: e-drive elektrický pohon, GEOCONTROL section control
+            url: https://www.kverneland.com/products/seeding/optima-sx
+          - slug: optima-hd-ii
+            name: Optima HD-II
+            tagline: Heavy-duty pneumatický přesný secí stroj
+            url: https://www.kverneland.com/products/seeding/optima-hd-ii
+          - slug: optima-m
+            name: Optima M
+            tagline: Mechanický přesný secí stroj
+            url: https://www.kverneland.com/products/seeding/optima-m
       - slug: e-drill
         name: e-drill
         family: e-drill
         subcategory: seci-stroje-pneumaticke
+        working_width_m: "3.0-4.0"
         description: |
-          e-drill — elektrický pneumatický secí stroj.
+          e-drill — kompaktní nesený pneumatický secí stroj Kverneland pro malé
+          a střední farmy. Elektrický pohon výsevního ústrojí umožňuje plynulou
+          variabilní dávku osiva (VRT) z ISOBUS terminálu bez nutnosti mechanické
+          převodovky. Pracovní záběr 3–4 m, zásobník 1100 l, k dispozici verze
+          maxi (větší zásobník) a compact (lehčí konstrukce). Ideální pro setí
+          do připraveného seťového lůžka v kombinaci s rotační bránou NG.
         models:
-          - slug: e-drill
-            name: e-drill
+          - slug: e-drill-maxi
+            name: e-drill maxi
+            tagline: Pneumatický secí stroj s elektrickým pohonem
             url: https://www.kverneland.com/products/seeding/e-drill
       - slug: u-drill
         name: u-drill
         family: u-drill
         subcategory: seci-stroje-pneumaticke
+        working_width_m: "3.0-6.0"
         description: |
-          u-drill — universal pneumatický secí stroj.
+          u-drill — universal tažený pneumatický secí stroj Kverneland pro setí
+          do mulče i klasicky zpracované půdy. Krátká konstrukce s diskovými
+          radličkami CX-II umožňuje práci v posklizňových zbytcích bez ucpávání.
+          Verze Pro (Plus s velkým zásobníkem 4350 l a děleným fronthopperem
+          pro hnojivo) a standard pro pracovní záběry 3, 4 a 6 m. Tlak na radličky
+          až 200 kg pro spolehlivé umístění semene.
         models:
-          - slug: u-drill
-            name: u-drill
+          - slug: u-drill-pro
+            name: u-drill Pro
+            tagline: Tažený mulchsecí stroj se zásobníkem 1900 l
+            url: https://www.kverneland.com/products/seeding/u-drill
+          - slug: u-drill-plus
+            name: u-drill Plus
+            tagline: Universal mulchsecí stroj se zásobníkem 4350 l
             url: https://www.kverneland.com/products/seeding/u-drill
       - slug: accord
         name: Accord
         family: accord
         subcategory: seci-stroje-pneumaticke
+        working_width_m: "3.0-6.0"
         description: |
-          Accord — tradiční pneumatický secí stroj Kverneland.
+          Accord — tradiční pneumatická secí jednotka Kverneland s integrovaným
+          výsevním ústrojím a CX-II radličkami. Modely DA (nesený, záběr 3 m
+          v kombinaci s rotační bránou) a MSC (Mounted Seedline Combination,
+          modulární kombinace s NG-H bránou). Osvědčená technologie od 80. let
+          stále používaná v Evropě pro spolehlivé setí obilovin a řepky
+          v intenzivních systémech.
         models:
           - slug: accord-da
             name: Accord DA
+            tagline: Nesený pneumatický secí stroj 3 m
             url: https://www.kverneland.com/products/seeding/accord-da
+          - slug: accord-msc
+            name: Accord MSC
+            tagline: Modulární pneumatický secí stroj
+            url: https://www.kverneland.com/products/seeding/accord-msc
       - slug: ts-evo
         name: TS-Evo
         family: ts-evo
         subcategory: seci-stroje-mechanicke
+        working_width_m: "2.5-4.0"
         description: |
-          TS-Evo — mechanický secí stroj.
+          TS-Evo — mechanický secí stroj Kverneland s gravitační dávkou osiva
+          pro malé a střední farmy. Pracovní záběry 2,5 / 3,0 / 4,0 m, jednoduchá
+          obsluha bez ISOBUS, robustní převodovka Norton. Ideální pro setí
+          obilovin, jetelovin a meziplodin v podmínkách, kde není potřeba
+          variabilní dávka. K dispozici nesený nebo v kombinaci s NG bránou
+          jako TS-Drill.
         models:
           - slug: ts-evo
             name: TS-Evo
+            tagline: Mechanický secí stroj s Norton převodovkou
             url: https://www.kverneland.com/products/seeding/ts-evo
   hnojeni:
     name: Hnojení
@@ -175,17 +347,28 @@ categories:
         name: Exacta
         family: exacta
         subcategory: rozmetadla-mineralni
+        working_width_m: "9.0-54.0"
+        tank_capacity_l: "750-3900"
         description: |
-          Exacta — rozmetadlo minerálních hnojiv s technologií GEOSPREAD pro precision farming.
+          Exacta — rozmetadlo minerálních hnojiv Kverneland s exkluzivní technologií
+          GEOSPREAD pro přesné dávkování po sekcích (až 1 m úsek po úseku) řízené
+          přes GPS. Verze CL (compact, 750–1900 l, záběr 9–28 m), TL (medium,
+          1100–2700 l, záběr 12–42 m) a HL (heavy, 1500–3900 l, záběr 18–54 m).
+          Dvojité disky s ProfShape lopatkami zaručují rovnoměrný rozhoz
+          se symetrickým vějířem i při hraničním rozhozu (Border-spread). ISOBUS
+          standard, integrace s farm management software pro variabilní aplikaci (VRA).
         models:
           - slug: exacta-cl-geospread
             name: Exacta CL GEOSPREAD
+            tagline: Compact rozmetadlo 750-1900 l, záběr 9-28 m
             url: https://www.kverneland.com/products/spreading/exacta-cl
           - slug: exacta-tl-geospread
             name: Exacta TL GEOSPREAD
+            tagline: Medium rozmetadlo 1100-2700 l, záběr 12-42 m
             url: https://www.kverneland.com/products/spreading/exacta-tl
-          - slug: exacta-hl
-            name: Exacta HL
+          - slug: exacta-hl-geospread
+            name: Exacta HL GEOSPREAD
+            tagline: Heavy rozmetadlo 1500-3900 l, záběr 18-54 m
             url: https://www.kverneland.com/products/spreading/exacta-hl
   ochrana-rostlin:
     name: Ochrana rostlin
@@ -194,31 +377,72 @@ categories:
         name: iXter
         family: ixter
         subcategory: postrikovace-nesene
+        working_width_m: "15.0-30.0"
+        tank_capacity_l: "1000-1800"
         description: |
-          iXter — nesený postřikovač Kverneland.
+          iXter — nesené postřikovače Kverneland pro malé a střední farmy.
+          Verze iXter B (compact, 1000–1800 l, záběr 15–28 m) a iXter A (advanced,
+          ISOBUS, BoomGuide automatic boom levelling, 1500 l). Hliníkové ramena
+          HC s pneumatickým zavěšením, iXflow-Air kontinuální cirkulace pro rychlé
+          přepnutí mezi přípravky bez výplachu. SectionControl pro vypínání sekcí
+          dle GPS na souvratích.
         models:
           - slug: ixter-b
             name: iXter B
+            tagline: Compact nesený postřikovač 1000-1800 l
             url: https://www.kverneland.com/products/spraying/ixter-b
+          - slug: ixter-a
+            name: iXter A
+            tagline: Advanced nesený postřikovač s ISOBUS a BoomGuide
+            url: https://www.kverneland.com/products/spraying/ixter-a
       - slug: ixtrack
         name: iXtrack
         family: ixtrack
         subcategory: postrikovace-tazene
+        working_width_m: "18.0-40.0"
+        tank_capacity_l: "2400-6400"
         description: |
-          iXtrack — tažený postřikovač Kverneland.
+          iXtrack — tažené postřikovače Kverneland pro střední a velké farmy.
+          Verze T3 (compact, 2400–3400 l, záběr 18–30 m), T4 (medium, 3400–4600 l,
+          záběr 24–36 m) a T6 (heavy, 4600–6400 l, záběr 27–40 m). Aluminium
+          ramena HC s BoomGuide ProActive pro přesné kopírování porostu, iXflow-Air
+          kontinuální cirkulace a integrovaný ISOBUS terminál Tellus PRO.
+          Hydropneumatické zavěšení nápravy a TrailControl řízení pojezdu.
         models:
+          - slug: ixtrack-t3
+            name: iXtrack T3
+            tagline: Compact tažený postřikovač 2400-3400 l
+            url: https://www.kverneland.com/products/spraying/ixtrack-t3
           - slug: ixtrack-t4
             name: iXtrack T4
+            tagline: Medium tažený postřikovač 3400-4600 l
             url: https://www.kverneland.com/products/spraying/ixtrack-t4
+          - slug: ixtrack-t6
+            name: iXtrack T6
+            tagline: Heavy tažený postřikovač 4600-6400 l
+            url: https://www.kverneland.com/products/spraying/ixtrack-t6
       - slug: ixdrive
         name: iXdrive
         family: ixdrive
         subcategory: postrikovace-samojizdne
+        working_width_m: "24.0-40.0"
+        tank_capacity_l: "4000-5200"
+        power_hp: "180-220"
         description: |
-          iXdrive — samojízdný postřikovač Kverneland.
+          iXdrive — samojízdné postřikovače Kverneland s vlastním motorem a kabinou.
+          Modely 4180 (4000 l, 180 hp) a 5240 (5200 l, 220 hp) s pracovními záběry
+          24–40 m. Hydrostatický pohon všech čtyř kol, světlá výška 1,25 m a stavitelný
+          rozchod 1,80–2,25 m umožňují vjezd do vyšších porostů. Vzduchem
+          odpružená kabina, automatický řízení BoomGuide ProActive a iXflow-Air
+          cirkulace. Ideální pro velké farmy a kontraktory s velkými výkony aplikace.
         models:
-          - slug: ixdrive
-            name: iXdrive
+          - slug: ixdrive-4180
+            name: iXdrive 4180
+            tagline: Samojízdný postřikovač 4000 l, 180 hp
+            url: https://www.kverneland.com/products/spraying/ixdrive
+          - slug: ixdrive-5240
+            name: iXdrive 5240
+            tagline: Samojízdný postřikovač 5200 l, 220 hp
             url: https://www.kverneland.com/products/spraying/ixdrive
   sklizen-picnin:
     name: Sklizeň pícnin
@@ -227,12 +451,40 @@ categories:
         name: 5000 M
         family: 5000-m
         subcategory: zaci-stroje
+        working_width_m: "2.4-3.2"
         description: |
-          Kverneland 5000 M — žací stroje s diskovou žací lištou.
+          Kverneland 5000 M — zadně nesené diskové žací stroje s pracovními záběry
+          2,4–3,2 m (modely 5087 M / 5095 M / 53100 M). Robustní žací lišta
+          s 6–8 disky, ProLine geometrie nožů pro čistý řez a snadnou výměnu.
+          QuattroLink závěs zajišťuje ideální kopírování terénu i ve svazích.
+          Volitelné kondicionéry s prstovým nebo válcovým rotorem zrychlují
+          zavadání pokosené hmoty.
         models:
           - slug: 5087-m
             name: 5087 M
+            tagline: Diskový žací stroj záběr 2.40 m
             url: https://www.kverneland.com/products/forage/5087-m
           - slug: 5095-m
             name: 5095 M
+            tagline: Diskový žací stroj záběr 2.80 m
             url: https://www.kverneland.com/products/forage/5095-m
+          - slug: 53100-m
+            name: 53100 M
+            tagline: Diskový žací stroj záběr 3.16 m
+            url: https://www.kverneland.com/products/forage/53100-m
+      - slug: 51000-mt
+        name: 51000 MT
+        family: 51000
+        subcategory: zaci-stroje
+        working_width_m: "2.8-3.2"
+        description: |
+          Kverneland 51000 MT — čelně nesený diskový žací stroj pro kombinaci
+          s motýlkovou zadní žacku 53100 MT a celkový záběr až 9 m. Pull-type
+          závěs zajišťuje ideální kopírování terénu i v zatáčkách, ProtectionDrive
+          chrání převodovku při najetí na překážku. Vhodný pro kontraktory
+          a velké farmy s intenzivní sklizní pícnin.
+        models:
+          - slug: 51000-mt
+            name: 51000 MT
+            tagline: Čelně nesený diskový žací stroj 2.8-3.2 m
+            url: https://www.kverneland.com/products/forage/51000-mt

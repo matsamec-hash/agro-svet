@@ -4,7 +4,7 @@ country: Belgie
 founded: 1968
 website: https://www.joskin.com/
 description: >
-  Belgický specialista na cisterny na kejdu a zemědělské návěsy. Cisterny Modulo 2, Quadra, Komfort 2, Volumetra, X-Trem, návěsy Trans-CAP, Trans-SPACE, Drakkar, aplikátory Pendislide a rozmetadla statkových hnojiv Tornado.
+  Belgický specialista na cisterny na kejdu a zemědělské návěsy. Cisterny Modulo 2, Quadra, Komfort 2, Volumetra, X-Trem, Cargo a EuroLiner, návěsy Trans-CAP, Trans-KTP, Trans-SPACE, Trans-EX a Drakkar, aplikátory Pendislide, Pendiwing, Solodisc a Multitwist a rozmetadla statkových hnojiv Tornado3, Ferti-CAP a Siroko.
 categories:
   doprava:
     name: Doprava
@@ -14,41 +14,112 @@ categories:
         family: drakkar
         subcategory: navesy-posuvne-dno
         description: |
-          Drakkar — návěs s posuvným dnem pro siláž a obilí.
+          Drakkar je velkoobjemový návěs s posuvným dnem pro siláž, senáž, obilí a štěpku. Robustní šasi s tandemovou nebo tridem nápravou zvládne až 38 m³ objemu a 30 t užitné hmotnosti. Hydraulicky poháněný řetězový dopravník umožňuje rychlé a šetrné vyprázdnění bez zvedání korby, což je ideální pro nízké haly a bioplynové stanice. Pneumaticky tlumené nápravy a hydraulické řízení zajišťují stabilitu i při vysokých rychlostech.
+        tech_highlights:
+          load_capacity_kg: 24000-30000
+          tank_capacity_l: 28000-38000
         models:
-          - slug: drakkar
-            name: Drakkar
+          - slug: drakkar-7600
+            name: Drakkar 7600
+            url: https://www.joskin.com/en/range/drakkar/
+          - slug: drakkar-8600
+            name: Drakkar 8600
+            url: https://www.joskin.com/en/range/drakkar/
+          - slug: drakkar-9000
+            name: Drakkar 9000
             url: https://www.joskin.com/en/range/drakkar/
       - slug: trans-cap
         name: Trans-CAP
         family: trans-cap
         subcategory: navesy-sklapeci
         description: |
-          Trans-CAP — třístranný sklápěcí návěs Joskin.
+          Trans-CAP je třístranný sklápěcí návěs střední třídy pro univerzální farmářské použití. Hydraulicky ovládané sklápění do tří stran umožňuje pohodlnou vykládku na úzkých prostorech. Korba je vyrobena z vysokopevnostní oceli HARDOX a uzpůsobena pro přepravu obilí, řepy, brambor i organických hnojiv. Pneumaticky brzděné nápravy a komerční pneumatiky zaručují bezpečný transport po silnici.
+        tech_highlights:
+          load_capacity_kg: 12000-20000
+          tank_capacity_l: 14000-22000
         models:
-          - slug: trans-cap
-            name: Trans-CAP
+          - slug: trans-cap-5000
+            name: Trans-CAP 5000
+            url: https://www.joskin.com/en/range/trans-cap/
+          - slug: trans-cap-5500
+            name: Trans-CAP 5500
+            url: https://www.joskin.com/en/range/trans-cap/
+          - slug: trans-cap-6000
+            name: Trans-CAP 6000
             url: https://www.joskin.com/en/range/trans-cap/
       - slug: trans-ktp
         name: Trans-KTP
         family: trans-ktp
         subcategory: navesy-sklapeci
         description: |
-          Trans-KTP — heavy-duty sklápěcí návěs.
+          Trans-KTP je heavy-duty zadní sklápěč určený pro nejtěžší přepravní úkoly v zemědělství i stavebnictví. Robustní monocoque korba z 6 mm HARDOX plechu odolá kamenům, štěrku i zmrzlé hlíně. Tridem náprava se samořiditelnou poslední nápravou snižuje opotřebení pneumatik a zvyšuje obratnost. Hydraulické zadní čelo s automatickým otevíráním urychluje vykládku.
+        tech_highlights:
+          load_capacity_kg: 18000-30000
+          tank_capacity_l: 19000-27000
         models:
-          - slug: trans-ktp
-            name: Trans-KTP
+          - slug: trans-ktp-22-50
+            name: Trans-KTP 22/50
+            url: https://www.joskin.com/en/range/trans-ktp/
+          - slug: trans-ktp-27-55
+            name: Trans-KTP 27/55
+            url: https://www.joskin.com/en/range/trans-ktp/
+          - slug: trans-ktp-32-60
+            name: Trans-KTP 32/60
             url: https://www.joskin.com/en/range/trans-ktp/
       - slug: trans-space
         name: Trans-SPACE
         family: trans-space
         subcategory: navesy-posuvne-dno
         description: |
-          Trans-SPACE — návěs s posuvnou stěnou pro velké objemy.
+          Trans-SPACE je velkoobjemový návěs s posuvnou čelní stěnou pro maximální využití nákladového prostoru. Konstrukce s rovnou podlahou a hladkými hliníkovými bočnicemi minimalizuje rezidua a usnadňuje čištění. Hydraulicky poháněná čelní stěna postupně tlačí náklad ven, což je šetrné k materiálu i k samotnému stroji. Ideální pro siláž, senáž, brambory nebo cukrovku.
+        tech_highlights:
+          load_capacity_kg: 20000-28000
+          tank_capacity_l: 30000-50000
         models:
-          - slug: trans-space
-            name: Trans-SPACE
+          - slug: trans-space-6000
+            name: Trans-SPACE 6000
             url: https://www.joskin.com/en/range/trans-space/
+          - slug: trans-space-7000
+            name: Trans-SPACE 7000
+            url: https://www.joskin.com/en/range/trans-space/
+          - slug: trans-space-8000
+            name: Trans-SPACE 8000
+            url: https://www.joskin.com/en/range/trans-space/
+      - slug: trans-ex
+        name: Trans-EX
+        family: trans-ex
+        subcategory: navesy-sklapeci
+        description: |
+          Trans-EX je ekonomický sklápěcí návěs vstupní třídy pro malé a střední farmy. Jednonápravová nebo tandemová varianta je optimalizovaná pro nízké pořizovací náklady při zachování kvality Joskin. Hydraulické sklápění dozadu nebo do tří stran pokryje běžné transportní úlohy. Boky korby jsou snadno demontovatelné pro přestavbu na valník.
+        tech_highlights:
+          load_capacity_kg: 8000-16000
+          tank_capacity_l: 9000-18000
+        models:
+          - slug: trans-ex-4500
+            name: Trans-EX 4500
+            url: https://www.joskin.com/en/range/trans-ex/
+          - slug: trans-ex-5000
+            name: Trans-EX 5000
+            url: https://www.joskin.com/en/range/trans-ex/
+          - slug: trans-ex-5500
+            name: Trans-EX 5500
+            url: https://www.joskin.com/en/range/trans-ex/
+      - slug: euroliner
+        name: EuroLiner
+        family: euroliner
+        subcategory: navesy-posuvne-dno
+        description: |
+          EuroLiner je dálkový návěs s posuvným dnem určený pro silniční přepravu siláže a štěpky mezi farmami a bioplynkami. Aerodynamická hliníková nástavba snižuje hmotnost a spotřebu. Tridem náprava s air-suspension umožňuje legální silniční transport rychlostí až 60 km/h. Posuvné dno s pomalým tempem vyložení šetří podlahu i řetězy.
+        tech_highlights:
+          load_capacity_kg: 24000-32000
+          tank_capacity_l: 38000-55000
+        models:
+          - slug: euroliner-7500
+            name: EuroLiner 7500
+            url: https://www.joskin.com/en/range/euroliner/
+          - slug: euroliner-9000
+            name: EuroLiner 9000
+            url: https://www.joskin.com/en/range/euroliner/
   hnojeni:
     name: Hnojení
     series:
@@ -57,118 +128,272 @@ categories:
         family: cargo
         subcategory: cisterny-kejda
         description: |
-          Cargo — cisterna na kejdu pro malé a střední farmy.
+          Cargo je kompaktní cisterna na kejdu pro malé a střední farmy s objemy 2700 až 7100 litrů. Jednonápravová konstrukce s nízkým těžištěm umožňuje práci na svažitých pozemcích. Standardní výbavou je odstředivé čerpadlo Joskin a samonasávací systém pro rychlé plnění. Cisterna je kompatibilní s celou řadou aplikátorů Joskin včetně Pendislide a Solodisc.
+        tech_highlights:
+          tank_capacity_l: 2700-7100
         models:
-          - slug: cargo
-            name: Cargo
+          - slug: cargo-2700
+            name: Cargo 2700
+            url: https://www.joskin.com/en/range/cargo/
+          - slug: cargo-4000
+            name: Cargo 4000
+            url: https://www.joskin.com/en/range/cargo/
+          - slug: cargo-5400
+            name: Cargo 5400
+            url: https://www.joskin.com/en/range/cargo/
+          - slug: cargo-7100
+            name: Cargo 7100
             url: https://www.joskin.com/en/range/cargo/
       - slug: ferti-cap
         name: Ferti-CAP
         family: ferti-cap
         subcategory: rozmetadla-statkova
         description: |
-          Ferti-CAP — rozmetadlo statkových hnojiv s kompaktním designem.
+          Ferti-CAP je kompaktní rozmetadlo statkových hnojiv s vertikálními rotory pro rovnoměrnou distribuci hnoje, kompostu nebo digestátu. Robustní podlaha z HARDOX 450 odolá abrazivním materiálům. Hydraulicky regulovaná rychlost dopravního řetězu umožňuje přesné dávkování v kg/ha. Pracovní záběr 6-12 m je ideální pro malé a střední farmy.
+        tech_highlights:
+          working_width_m: 6-12
+          load_capacity_kg: 8000-14000
+          tank_capacity_l: 9000-16000
         models:
-          - slug: ferti-cap
-            name: Ferti-CAP
+          - slug: ferti-cap-4011
+            name: Ferti-CAP 4011
+            url: https://www.joskin.com/en/range/ferti-cap/
+          - slug: ferti-cap-5011
+            name: Ferti-CAP 5011
+            url: https://www.joskin.com/en/range/ferti-cap/
+          - slug: ferti-cap-6011
+            name: Ferti-CAP 6011
             url: https://www.joskin.com/en/range/ferti-cap/
       - slug: komfort-2
         name: Komfort 2
         family: komfort
         subcategory: cisterny-kejda
         description: |
-          Komfort 2 — cisterna na kejdu se zlepšeným komfortem.
+          Komfort 2 je cisterna na kejdu střední třídy s důrazem na komfort obsluhy a snadnou údržbu. Centralizovaný hydraulický panel sdružuje všechny ovládací prvky na jednom místě. Pneumatické brzdy a výkyvná oj se vzduchovým odpružením tlumí nárazy při polní práci. Standardní výbava zahrnuje vakuovou pumpu Battioni nebo odstředivé čerpadlo Joskin.
+        tech_highlights:
+          tank_capacity_l: 8000-14000
         models:
-          - slug: komfort-2
-            name: Komfort 2
+          - slug: komfort-2-8000
+            name: Komfort 2 8000
+            url: https://www.joskin.com/en/range/komfort-2/
+          - slug: komfort-2-10000
+            name: Komfort 2 10000
+            url: https://www.joskin.com/en/range/komfort-2/
+          - slug: komfort-2-12000
+            name: Komfort 2 12000
+            url: https://www.joskin.com/en/range/komfort-2/
+          - slug: komfort-2-14000
+            name: Komfort 2 14000
             url: https://www.joskin.com/en/range/komfort-2/
       - slug: modulo-2
         name: Modulo 2
         family: modulo
         subcategory: cisterny-kejda
         description: |
-          Modulo 2 — vlajková cisterna Joskin pro kejdu, modulární konstrukce.
+          Modulo 2 je vlajková cisterna Joskin pro kejdu s modulární konstrukcí, která pokrývá objemy od 4500 do 18000 litrů. Galvanizovaná ocelová nádrž s tloušťkou 6 mm odolá korozi i nejagresivnější kejdě po desítky let. Tandem nebo tridem náprava s pneumatickým odpružením umožňuje rychlou silniční přepravu. Široké portfolio aplikátorů (Pendislide, Pendiwing, Solodisc, Multitwist) z ní dělá univerzální řešení pro každou farmu.
+        tech_highlights:
+          tank_capacity_l: 4500-18000
         models:
-          - slug: modulo-2
-            name: Modulo 2
+          - slug: modulo-2-4500
+            name: Modulo 2 4500
+            url: https://www.joskin.com/en/range/modulo-2/
+          - slug: modulo-2-5400
+            name: Modulo 2 5400
+            url: https://www.joskin.com/en/range/modulo-2/
+          - slug: modulo-2-6000
+            name: Modulo 2 6000
+            url: https://www.joskin.com/en/range/modulo-2/
+          - slug: modulo-2-8400
+            name: Modulo 2 8400
+            url: https://www.joskin.com/en/range/modulo-2/
+          - slug: modulo-2-11000
+            name: Modulo 2 11000
+            url: https://www.joskin.com/en/range/modulo-2/
+          - slug: modulo-2-14000
+            name: Modulo 2 14000
+            url: https://www.joskin.com/en/range/modulo-2/
+          - slug: modulo-2-18000
+            name: Modulo 2 18000
             url: https://www.joskin.com/en/range/modulo-2/
       - slug: pendislide
         name: Pendislide
         family: pendislide
         subcategory: aplikatory-kejda
         description: |
-          Pendislide — vlečné hadice pro aplikaci kejdy do plodin.
+          Pendislide je vlečný hadicový aplikátor kejdy pro přesnou aplikaci přímo k zemi mezi rostliny. Ocelové smyky na konci každé hadice rozhrnují porost a kladou kejdu přímo na povrch půdy, čímž minimalizují ztráty amoniaku. Hydraulicky sklopná ramena zajišťují kompaktní transportní rozměry. Vhodný pro kukuřici, obilniny i trvalé travní porosty.
+        tech_highlights:
+          working_width_m: 6-15
         models:
-          - slug: pendislide
-            name: Pendislide
+          - slug: pendislide-pro-7-5
+            name: Pendislide Pro 7.5 m
+            url: https://www.joskin.com/en/range/pendislide/
+          - slug: pendislide-pro-9
+            name: Pendislide Pro 9 m
+            url: https://www.joskin.com/en/range/pendislide/
+          - slug: pendislide-pro-12
+            name: Pendislide Pro 12 m
+            url: https://www.joskin.com/en/range/pendislide/
+          - slug: pendislide-pro-15
+            name: Pendislide Pro 15 m
             url: https://www.joskin.com/en/range/pendislide/
       - slug: pendiwing
         name: Pendiwing
         family: pendiwing
         subcategory: aplikatory-kejda
         description: |
-          Pendiwing — flexibilní vlečné hadice pro úzké aplikace.
+          Pendiwing je flexibilní hadicový aplikátor s teleskopicky stavitelnými rameny pro úzkořádkové i širokořádkové plodiny. Patentovaný systém TerraFlex automaticky kopíruje terénní nerovnosti pro rovnoměrnou aplikaci. Pulzátor zaručuje konstantní průtok ve všech hadicích bez ucpávání. Ideální pro úzké lány, sady a nerovné pozemky.
+        tech_highlights:
+          working_width_m: 9-24
         models:
-          - slug: pendiwing
-            name: Pendiwing
+          - slug: pendiwing-9
+            name: Pendiwing 9 m
+            url: https://www.joskin.com/en/range/pendiwing/
+          - slug: pendiwing-12
+            name: Pendiwing 12 m
+            url: https://www.joskin.com/en/range/pendiwing/
+          - slug: pendiwing-15
+            name: Pendiwing 15 m
+            url: https://www.joskin.com/en/range/pendiwing/
+          - slug: pendiwing-18
+            name: Pendiwing 18 m
             url: https://www.joskin.com/en/range/pendiwing/
       - slug: quadra
         name: Quadra
         family: quadra
         subcategory: cisterny-kejda
         description: |
-          Quadra — quad-axle cisterna na kejdu pro velké farmy.
+          Quadra je heavy-duty čtyřnápravová cisterna na kejdu pro největší farmy a aplikační družstva. Ocelová nádrž o objemu až 28000 litrů je nesena čtyřmi řízenými nápravami pro minimální zhutnění půdy. Dva páry řízených náprav (přední i zadní) umožňují manévrování i s plně naloženým strojem. Standardně osazena turbínovým plnicím ramenem s průtokem až 12000 l/min.
+        tech_highlights:
+          tank_capacity_l: 22000-28000
         models:
-          - slug: quadra
-            name: Quadra
+          - slug: quadra-22000
+            name: Quadra 22000
+            url: https://www.joskin.com/en/range/quadra/
+          - slug: quadra-25000
+            name: Quadra 25000
+            url: https://www.joskin.com/en/range/quadra/
+          - slug: quadra-28000
+            name: Quadra 28000
             url: https://www.joskin.com/en/range/quadra/
       - slug: siroko
         name: Siroko
         family: siroko
         subcategory: rozmetadla-statkova
         description: |
-          Siroko — rozmetadlo statkových hnojiv s velkým záběrem.
+          Siroko je univerzální rozmetadlo statkových hnojiv s horizontálními rotory pro pracovní záběr až 18 m. Hydraulicky regulovatelná rychlost dopravního řetězu umožňuje přesné dávkování od 5 do 60 t/ha. Robustní konstrukce z HARDOX 450 zvládne hnůj, kompost, kuřinec i digestát. Volitelný ISOBUS terminál umožňuje GPS section control pro úsporu hnojiv.
+        tech_highlights:
+          working_width_m: 8-18
+          load_capacity_kg: 10000-18000
+          tank_capacity_l: 12000-20000
         models:
-          - slug: siroko
-            name: Siroko
+          - slug: siroko-4011
+            name: Siroko 4011
+            url: https://www.joskin.com/en/range/siroko/
+          - slug: siroko-5011
+            name: Siroko 5011
+            url: https://www.joskin.com/en/range/siroko/
+          - slug: siroko-6011
+            name: Siroko 6011
+            url: https://www.joskin.com/en/range/siroko/
+          - slug: siroko-7011
+            name: Siroko 7011
             url: https://www.joskin.com/en/range/siroko/
       - slug: solodisc
         name: Solodisc
         family: solodisc
         subcategory: aplikatory-kejda
         description: |
-          Solodisc — diskový aplikátor kejdy.
+          Solodisc je diskový aplikátor kejdy s injektážními kotouči, které zaorávají kejdu mělce do půdy a tím dramaticky snižují emise amoniaku. Každý kotouč je pružinou nezávisle odpružený pro kopírování terénu. Hydraulicky sklopná ramena umožňují transportní šířku pod 3 m. Ideální pro strniska, podmítku a aplikace v souladu s dusíkatou direktivou EU.
+        tech_highlights:
+          working_width_m: 6-12
         models:
-          - slug: solodisc
-            name: Solodisc
+          - slug: solodisc-6
+            name: Solodisc 6 m
             url: https://www.joskin.com/en/range/solodisc/
+          - slug: solodisc-7-5
+            name: Solodisc 7.5 m
+            url: https://www.joskin.com/en/range/solodisc/
+          - slug: solodisc-9
+            name: Solodisc 9 m
+            url: https://www.joskin.com/en/range/solodisc/
+          - slug: solodisc-12
+            name: Solodisc 12 m
+            url: https://www.joskin.com/en/range/solodisc/
+      - slug: multitwist
+        name: Multitwist
+        family: multitwist
+        subcategory: aplikatory-kejda
+        description: |
+          Multitwist je rotační rozdělovač pro hadicové aplikátory kejdy zajišťující rovnoměrný průtok mezi všemi hadicemi. Patentovaný systém s rotujícím nožem řeže pevné částice a brání ucpávání. Robustní litinová konstrukce má servisní intervaly delší než 5000 hektarů. Kompatibilní se všemi cisternami Joskin Modulo 2, Komfort 2 a Volumetra.
+        models:
+          - slug: multitwist-pro
+            name: Multitwist Pro
+            url: https://www.joskin.com/en/range/multitwist/
       - slug: tornado3
         name: Tornado3
         family: tornado
         subcategory: rozmetadla-statkova
         description: |
-          Tornado3 — třetí generace vlajkového rozmetadla statkových hnojiv.
+          Tornado3 je třetí generace vlajkového rozmetadla statkových hnojiv s vertikálními nebo horizontálními rotory dle volby. Maximální užitné zatížení 24 tun a pracovní záběr až 24 m činí z Tornado3 nejvýkonnější stroj ve své třídě. Hydraulická korba s posuvným dnem je vyrobena z 8 mm HARDOX. ISOBUS s automatickým GPS section control umožňuje precizní aplikaci proměnlivými dávkami dle agronomické mapy.
+        tech_highlights:
+          working_width_m: 8-24
+          load_capacity_kg: 14000-24000
+          tank_capacity_l: 15000-25000
         models:
-          - slug: tornado3
-            name: Tornado3
+          - slug: tornado3-t5500
+            name: Tornado3 T5500
+            url: https://www.joskin.com/en/range/tornado3/
+          - slug: tornado3-t7000
+            name: Tornado3 T7000
+            url: https://www.joskin.com/en/range/tornado3/
+          - slug: tornado3-t8500
+            name: Tornado3 T8500
+            url: https://www.joskin.com/en/range/tornado3/
+          - slug: tornado3-t10500
+            name: Tornado3 T10500
+            url: https://www.joskin.com/en/range/tornado3/
+          - slug: tornado3-t11500
+            name: Tornado3 T11500
             url: https://www.joskin.com/en/range/tornado3/
       - slug: volumetra
         name: Volumetra
         family: volumetra
         subcategory: cisterny-kejda
         description: |
-          Volumetra — velkoobjemová cisterna na kejdu.
+          Volumetra je velkoobjemová cisterna na kejdu s objemy od 12000 do 30000 litrů určená pro velké zemědělské podniky a aplikační družstva. Tridem náprava s pneumatickým odpružením a všechny řízené nápravy zajišťují obratnost i s plnou nádrží. Standardní výbava zahrnuje turbínové plnicí rameno s pamětí poslední polohy. Galvanizovaná ocelová nádrž 6 mm odolá nejagresivnější kejdě i digestátu po desetiletí.
+        tech_highlights:
+          tank_capacity_l: 12000-30000
         models:
-          - slug: volumetra
-            name: Volumetra
+          - slug: volumetra-12000
+            name: Volumetra 12000
+            url: https://www.joskin.com/en/range/volumetra/
+          - slug: volumetra-16000
+            name: Volumetra 16000
+            url: https://www.joskin.com/en/range/volumetra/
+          - slug: volumetra-20000
+            name: Volumetra 20000
+            url: https://www.joskin.com/en/range/volumetra/
+          - slug: volumetra-24000
+            name: Volumetra 24000
+            url: https://www.joskin.com/en/range/volumetra/
+          - slug: volumetra-30000
+            name: Volumetra 30000
             url: https://www.joskin.com/en/range/volumetra/
       - slug: x-trem
         name: X-Trem
         family: x-trem
         subcategory: cisterny-kejda
         description: |
-          X-Trem — extreme-capacity cisterna pro nejnáročnější aplikace.
+          X-Trem je nejvýkonnější cisterna v portfoliu Joskin pro nejnáročnější aplikace na velkých farmách a v aplikačních družstvech. Extrémní objemy přes 30000 litrů kombinované s heavy-duty čtyřnápravovým podvozkem dovolují aplikovat 200 ha za den. Patentovaný systém TridemAxle s nezávislým řízením všech tří náprav minimalizuje stopy v poli. Volitelný GPS auto-steering a section control pro plně automatickou aplikaci.
+        tech_highlights:
+          tank_capacity_l: 26000-32000
         models:
-          - slug: x-trem
-            name: X-Trem
+          - slug: x-trem-26000
+            name: X-Trem 26000
+            url: https://www.joskin.com/en/range/x-trem/
+          - slug: x-trem-30000
+            name: X-Trem 30000
+            url: https://www.joskin.com/en/range/x-trem/
+          - slug: x-trem-32000
+            name: X-Trem 32000
             url: https://www.joskin.com/en/range/x-trem/

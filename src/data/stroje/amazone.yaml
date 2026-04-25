@@ -4,82 +4,151 @@ country: Německo
 founded: 1883
 website: https://amazone.de/
 description: >
-  Německý specialista na setí (Cirrus, Cayena, Citan, Precea), postřikovače (UF, UX, Pantera) a rozmetadla minerálních hnojiv (ZA-V, ZA-TS) plus podmítače Catros.
+  Německý specialista (sídlo Hasbergen-Gaste) na rozmetadla minerálních hnojiv (řady ZA-V, ZA-TS, ZG-TS),
+  postřikovače (UF, UX, samojízdná Pantera), secí stroje (Cataya, Centaya, Cirrus, Precea, Primera DMC)
+  a zpracování půdy (diskové podmítače Catros/Catros XL, radličkové Cenius/Cenio, hlubinný Cobra,
+  rotační brány KE/KG/KX). Známý technologiemi ArgusTwin (rozmetadla) a SmartSprayer (postřikovače).
 categories:
   hnojeni:
     name: Hnojení
     series:
-      - slug: za-m
-        name: ZA-M
-        family: za-m
-        subcategory: rozmetadla-mineralni
-        url: https://amazone.de/de/produkte/duengetechnik/za-m
-        description: |
-          ZA-M — nesené rozmetadlo minerálních hnojiv s pracovním záběrem 10–36 m, objem 1000–3000 l.
-        models:
-          - slug: za-m-1001
-            name: ZA-M 1001
-            url: https://amazone.de/de/produkte/duengetechnik/za-m/za-m-1001
-          - slug: za-m-1501
-            name: ZA-M 1501
-            url: https://amazone.de/de/produkte/duengetechnik/za-m/za-m-1501
-      - slug: za-ts
-        name: ZA-TS
-        family: za-ts
-        subcategory: rozmetadla-mineralni
-        url: https://amazone.de/de/produkte/duengetechnik/za-ts
-        description: |
-          ZA-TS — nesené rozmetadlo s ArgusTwin a AutoTS pro precizní rozhoz až do 54 m.
-        models:
-          - slug: za-ts-1700
-            name: ZA-TS 1700
-            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-1700
-          - slug: za-ts-2200
-            name: ZA-TS 2200
-            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-2200
-          - slug: za-ts-3200
-            name: ZA-TS 3200
-            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-3200
-          - slug: za-ts-4200
-            name: ZA-TS 4200
-            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-4200
       - slug: za-v
         name: ZA-V
         family: za-v
         subcategory: rozmetadla-mineralni
         url: https://amazone.de/de/produkte/duengetechnik/za-v
         description: |
-          ZA-V — nesené rozmetadlo s pracovním záběrem 10–36 m a objemem 1400–4200 l, lehčí třída.
+          ZA-V — nesené diskové rozmetadlo minerálních hnojiv pro střední a větší farmy.
+          Pracovní záběr 10–36 m, objem zásobníku 1400–4200 l podle nástavby. Hmotnostní
+          regulace dávky systémem AMADOS+, hraniční rozhoz BorderTS. Výhodný poměr
+          cena/výkon, ideální pro farmy 100–500 ha. Vážení a sekční rozhoz volitelně.
         models:
           - slug: za-v-1400
             name: ZA-V 1400
             url: https://amazone.de/de/produkte/duengetechnik/za-v/za-v-1400
+            pracovni_zaber_m: 36
+            specs:
+              tank_capacity_l: 1400
+              typ: nesene
           - slug: za-v-2200
             name: ZA-V 2200
             url: https://amazone.de/de/produkte/duengetechnik/za-v/za-v-2200
+            pracovni_zaber_m: 36
+            specs:
+              tank_capacity_l: 2200
+              typ: nesene
           - slug: za-v-3200
             name: ZA-V 3200
             url: https://amazone.de/de/produkte/duengetechnik/za-v/za-v-3200
+            pracovni_zaber_m: 36
+            specs:
+              tank_capacity_l: 3200
+              typ: nesene
           - slug: za-v-4200
             name: ZA-V 4200
             url: https://amazone.de/de/produkte/duengetechnik/za-v/za-v-4200
+            pracovni_zaber_m: 36
+            specs:
+              tank_capacity_l: 4200
+              typ: nesene
+      - slug: za-ts
+        name: ZA-TS
+        family: za-ts
+        subcategory: rozmetadla-mineralni
+        url: https://amazone.de/de/produkte/duengetechnik/za-ts
+        description: |
+          ZA-TS — vlajková loď nesených rozmetadel pro precizní aplikaci. Pracovní
+          záběr až 54 m, objem 1400–4200 l. Systém ArgusTwin neustále kontroluje úhel
+          dopadu hnojiva čtyřmi radary a koriguje pozici lopatek pro homogenní rozhoz.
+          AutoTS umožňuje automatický hraniční a souvraťový rozhoz bez výměny lopatek.
+          Vhodné pro variabilní aplikaci dle GPS map.
+        models:
+          - slug: za-ts-1700
+            name: ZA-TS 1700
+            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-1700
+            pracovni_zaber_m: 54
+            specs:
+              tank_capacity_l: 1700
+              typ: nesene
+          - slug: za-ts-2200
+            name: ZA-TS 2200
+            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-2200
+            pracovni_zaber_m: 54
+            specs:
+              tank_capacity_l: 2200
+              typ: nesene
+          - slug: za-ts-3200
+            name: ZA-TS 3200
+            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-3200
+            pracovni_zaber_m: 54
+            specs:
+              tank_capacity_l: 3200
+              typ: nesene
+          - slug: za-ts-4200
+            name: ZA-TS 4200
+            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-4200
+            pracovni_zaber_m: 54
+            specs:
+              tank_capacity_l: 4200
+              typ: nesene
+      - slug: za-m
+        name: ZA-M
+        family: za-m
+        subcategory: rozmetadla-mineralni
+        url: https://amazone.de/de/produkte/duengetechnik/za-m
+        description: |
+          ZA-M — vstupní řada nesených rozmetadel s pracovním záběrem 10–36 m a objemem
+          1000–3000 l. Jednoduchá konstrukce s mechanickým nebo hydraulickým ovládáním
+          šoupátek. Vhodné pro menší farmy a komunální nasazení (hnojení parků, sůl
+          v zimě). Cenově nejdostupnější model v portfoliu.
+        models:
+          - slug: za-m-1001
+            name: ZA-M 1001
+            url: https://amazone.de/de/produkte/duengetechnik/za-m/za-m-1001
+            pracovni_zaber_m: 36
+            specs:
+              tank_capacity_l: 1000
+              typ: nesene
+          - slug: za-m-1501
+            name: ZA-M 1501
+            url: https://amazone.de/de/produkte/duengetechnik/za-m/za-m-1501
+            pracovni_zaber_m: 36
+            specs:
+              tank_capacity_l: 1500
+              typ: nesene
       - slug: zg-ts
         name: ZG-TS
         family: zg-ts
         subcategory: rozmetadla-mineralni
         url: https://amazone.de/de/produkte/duengetechnik/zg-ts
         description: |
-          ZG-TS — tažené velkoplošné rozmetadlo minerálních hnojiv s objemem 5500–10500 l.
+          ZG-TS — tažené velkoplošné rozmetadlo pro nejnáročnější provoz. Objem
+          5500–10500 l, pracovní záběr až 54 m s ArgusTwin a AutoTS. Hydraulický
+          podvozek s odpružením, sekční rozhoz pro variabilní aplikaci dle GPS.
+          Určeno pro farmy nad 500 ha a hnojicí servisy. Možnost ISOBUS Section
+          Control v kombinaci s navigací traktoru.
         models:
           - slug: zg-ts-5500
             name: ZG-TS 5500
             url: https://amazone.de/de/produkte/duengetechnik/zg-ts/zg-ts-5500
+            pracovni_zaber_m: 54
+            specs:
+              tank_capacity_l: 5500
+              typ: tazene
           - slug: zg-ts-7500
             name: ZG-TS 7500
             url: https://amazone.de/de/produkte/duengetechnik/zg-ts/zg-ts-7500
+            pracovni_zaber_m: 54
+            specs:
+              tank_capacity_l: 7500
+              typ: tazene
           - slug: zg-ts-10001
             name: ZG-TS 10001
             url: https://amazone.de/de/produkte/duengetechnik/zg-ts/zg-ts-10001
+            pracovni_zaber_m: 54
+            specs:
+              tank_capacity_l: 10500
+              typ: tazene
   ochrana-rostlin:
     name: Ochrana rostlin
     series:
@@ -89,57 +158,125 @@ categories:
         subcategory: postrikovace-samojizdne
         url: https://amazone.de/de/produkte/pflanzenschutz/pantera
         description: |
-          Pantera 4504 — samojízdný postřikovač s nádrží 4500 l a záběrem 24–40 m.
+          Pantera — samojízdný postřikovač s nádrží 4500 l a pracovním záběrem 24–40 m.
+          Verze H s hydropneumatickým podvozkem 1,25 m, W s vyšší světlou výškou pro
+          aplikaci do vzrostlých kultur (kukuřice, slunečnice). Motor Deutz 6válec
+          o výkonu 218 hp (4503) nebo 250 hp (4504). Hydrostatický pohon všech kol,
+          GPS navigace a sekční vypínání AmaSwitch v ceně. Volitelně AmaSelect pro
+          přepínání trysek za jízdy.
         models:
+          - slug: pantera-4503
+            name: Pantera 4503
+            url: https://amazone.de/de/produkte/pflanzenschutz/pantera/pantera-4503
+            power_hp: 218
+            pracovni_zaber_m: 40
+            specs:
+              tank_capacity_l: 4500
+              typ: samojizdny
           - slug: pantera-4504-h
             name: Pantera 4504 H
             url: https://amazone.de/de/produkte/pflanzenschutz/pantera/pantera-4504-h
+            power_hp: 250
+            pracovni_zaber_m: 40
+            specs:
+              tank_capacity_l: 4500
+              typ: samojizdny
+              svetla_vyska_cm: 125
           - slug: pantera-4504-w
             name: Pantera 4504 W
             url: https://amazone.de/de/produkte/pflanzenschutz/pantera/pantera-4504-w
-      - slug: uf
-        name: UF
-        family: uf
-        subcategory: postrikovace-nesene
-        url: https://amazone.de/de/produkte/pflanzenschutz/uf
-        description: |
-          UF — nesený postřikovač s nádrží 1002–2002 l a záběrem 12–30 m.
-        models:
-          - slug: uf-02
-            name: UF 02
-            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-02
-          - slug: uf-1302
-            name: UF 1302
-            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-1302
-          - slug: uf-1602
-            name: UF 1602
-            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-1602
-          - slug: uf-2002
-            name: UF 2002
-            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-2002
+            power_hp: 250
+            pracovni_zaber_m: 40
+            specs:
+              tank_capacity_l: 4500
+              typ: samojizdny
+              svetla_vyska_cm: 200
       - slug: ux
         name: UX
         family: ux
         subcategory: postrikovace-tazene
         url: https://amazone.de/de/produkte/pflanzenschutz/ux
         description: |
-          UX — tažený postřikovač s objemem nádrže 4200–11200 l a záběrem 21–42 m.
+          UX — tažený postřikovač pro střední a velké farmy. Objem nádrže 4200–11200 l,
+          pracovní záběr 21–42 m. Verze Super s aktivním řízením nápravy, ContourControl
+          pro automatické kopírování terénu rampou. SmartCenter ovládací centrum
+          s indukčním plněním. Vhodné pro intenzivní obilnářství a olejniny.
         models:
           - slug: ux-4201-super
             name: UX 4201 Super
             url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-4201-super
+            pracovni_zaber_m: 30
+            specs:
+              tank_capacity_l: 4200
+              typ: tazeny
           - slug: ux-5201-super
             name: UX 5201 Super
             url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-5201-super
+            pracovni_zaber_m: 36
+            specs:
+              tank_capacity_l: 5200
+              typ: tazeny
           - slug: ux-6201-super
             name: UX 6201 Super
             url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-6201-super
+            pracovni_zaber_m: 40
+            specs:
+              tank_capacity_l: 6200
+              typ: tazeny
           - slug: ux-7601-super
             name: UX 7601 Super
             url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-7601-super
+            pracovni_zaber_m: 42
+            specs:
+              tank_capacity_l: 7600
+              typ: tazeny
           - slug: ux-11201-super
             name: UX 11201 Super
             url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-11201-super
+            pracovni_zaber_m: 42
+            specs:
+              tank_capacity_l: 11200
+              typ: tazeny
+      - slug: uf
+        name: UF
+        family: uf
+        subcategory: postrikovace-nesene
+        url: https://amazone.de/de/produkte/pflanzenschutz/uf
+        description: |
+          UF — nesený postřikovač s objemem nádrže 1002–2002 l a záběrem 12–30 m.
+          Kompaktní rozměry pro malé až střední farmy nebo jako doplněk k samojízdnému
+          stroji. Ovládací centrum DC nebo TC, kompatibilní s AmaSelect a AmaSwitch.
+          Volitelně přední nádrž FT 1502 pro zvýšení kapacity až na 3500 l bez ztráty
+          manévrovatelnosti.
+        models:
+          - slug: uf-1002
+            name: UF 1002
+            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-1002
+            pracovni_zaber_m: 21
+            specs:
+              tank_capacity_l: 1000
+              typ: neseny
+          - slug: uf-1302
+            name: UF 1302
+            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-1302
+            pracovni_zaber_m: 24
+            specs:
+              tank_capacity_l: 1300
+              typ: neseny
+          - slug: uf-1602
+            name: UF 1602
+            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-1602
+            pracovni_zaber_m: 28
+            specs:
+              tank_capacity_l: 1600
+              typ: neseny
+          - slug: uf-2002
+            name: UF 2002
+            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-2002
+            pracovni_zaber_m: 30
+            specs:
+              tank_capacity_l: 2000
+              typ: neseny
   seti:
     name: Setí a sázení
     series:
@@ -149,139 +286,193 @@ categories:
         subcategory: seci-stroje-mechanicke
         url: https://amazone.de/de/produkte/saemaschinen/cataya
         description: |
-          Cataya — nesený mechanický secí stroj s pracovním záběrem 3,0–4,0 m pro nasazení v kombinaci s rotační bránou.
+          Cataya — nesený mechanický secí stroj pro kombinaci s rotační bránou KE nebo
+          kompaktomatem KG. Pracovní záběr 3,0–4,0 m, dávkovací ústrojí s elektrickým
+          pohonem (eDrive) pro variabilní dávku dle mapy. Botky WS (kotoučové) nebo
+          RoTeC pro zaříznuté setí v různých podmínkách. Verze Special pro klasické
+          nasazení, Super s předdávkovacím systémem a vyšším komfortem.
         models:
           - slug: cataya-3000-special
             name: Cataya 3000 Special
             url: https://amazone.de/de/produkte/saemaschinen/cataya/cataya-3000-special
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
           - slug: cataya-3000-super
             name: Cataya 3000 Super
             url: https://amazone.de/de/produkte/saemaschinen/cataya/cataya-3000-super
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
           - slug: cataya-4000-super
             name: Cataya 4000 Super
             url: https://amazone.de/de/produkte/saemaschinen/cataya/cataya-4000-super
-      - slug: cayena
-        name: Cayena
-        family: cayena
-        subcategory: seci-stroje-pneumaticke
-        url: https://amazone.de/de/produkte/saemaschinen/cayena
-        description: |
-          Cayena 6001-C — tažený secí stroj s radličkovými botkami pro mulčované setí, záběr 6 m.
-        models:
-          - slug: cayena-6001-c
-            name: Cayena 6001-C
-            url: https://amazone.de/de/produkte/saemaschinen/cayena/cayena-6001-c
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: neseny
       - slug: centaya
         name: Centaya
         family: centaya
         subcategory: seci-stroje-pneumaticke
         url: https://amazone.de/de/produkte/saemaschinen/centaya
         description: |
-          Centaya — nesený pneumatický secí stroj se záběrem 3,0–4,0 m pro kombinaci s rotační bránou.
+          Centaya — nesený pneumatický secí stroj se záběrem 3,0–4,0 m pro kombinaci
+          s rotační bránou KE/KG nebo s kompaktomatem KX. Centrální dávkování
+          s distribuční hlavou, botky TwinTeC s tlakem až 70 kg na botku pro spolehlivé
+          uložení do tvrdé půdy. Verze Super s předdávkováním pro plynulé dotáčení
+          souvratí, ISOBUS standard. Centaya 6000-2 Super (variant 2C) je tažená
+          dvouřadá verze pro velké farmy se záběrem 6 m.
         models:
           - slug: centaya-3000-special
             name: Centaya 3000 Special
             url: https://amazone.de/de/produkte/saemaschinen/centaya/centaya-3000-special
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
           - slug: centaya-3000-super
             name: Centaya 3000 Super
             url: https://amazone.de/de/produkte/saemaschinen/centaya/centaya-3000-super
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
           - slug: centaya-4000-super
             name: Centaya 4000 Super
             url: https://amazone.de/de/produkte/saemaschinen/centaya/centaya-4000-super
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: neseny
+          - slug: centaya-6000-2-super
+            name: Centaya 6000-2 Super
+            url: https://amazone.de/de/produkte/saemaschinen/centaya/centaya-6000-2-super
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
       - slug: cirrus
         name: Cirrus
         family: cirrus
         subcategory: seci-kombinace
         url: https://amazone.de/de/produkte/saemaschinen/cirrus
         description: |
-          Cirrus — tažený univerzální secí stroj se záběrem 3–9 m, vhodný pro mulčované i konvenční setí.
+          Cirrus — tažená univerzální secí kombinace pro mulčované i konvenční setí.
+          Záběr 3–9 m, kotoučové botky TwinTeC se sníženou tažnou silou a tlakem až
+          50 kg/botku. Verze 02 (jednoduchá), 2C (dva zásobníky pro osivo + hnojivo
+          pro Maťkovu aplikaci hnojiva pod patu) a 2CC (kombinace plus mikrogranulát).
+          Aktuální generace 9004-2C a 6004-2C nahradila starší 9003-2 modely.
+          ISOBUS, sekční vypínání, GPS pro variabilní dávku.
         models:
           - slug: cirrus-3003-compact
             name: Cirrus 3003 Compact
             url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-3003-compact
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: tazeny
           - slug: cirrus-3503-compact
             name: Cirrus 3503 Compact
             url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-3503-compact
+            pracovni_zaber_m: 3.5
+            specs:
+              typ: tazeny
           - slug: cirrus-4003-2
             name: Cirrus 4003-2
             url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-4003-2
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: tazeny
           - slug: cirrus-6003-2
             name: Cirrus 6003-2
             url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-6003-2
-          - slug: cirrus-6003-2c
-            name: Cirrus 6003-2C
-            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-6003-2c
-          - slug: cirrus-6003-2cc
-            name: Cirrus 6003-2CC
-            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-6003-2cc
-          - slug: cirrus-9003-2
-            name: Cirrus 9003-2
-            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-9003-2
-      - slug: citan
-        name: Citan
-        family: citan
-        subcategory: seci-stroje-pneumaticke
-        url: https://amazone.de/de/produkte/saemaschinen/citan
-        description: |
-          Citan — tažený velkoplošný secí stroj se záběrem 9–12 m a zásobníkem až 8000 l.
-        models:
-          - slug: citan-9001-c
-            name: Citan 9001-C
-            url: https://amazone.de/de/produkte/saemaschinen/citan/citan-9001-c
-          - slug: citan-12001-c
-            name: Citan 12001-C
-            url: https://amazone.de/de/produkte/saemaschinen/citan/citan-12001-c
-      - slug: condor
-        name: Condor
-        family: condor
-        subcategory: seci-stroje-pneumaticke
-        url: https://amazone.de/de/produkte/saemaschinen/condor
-        description: |
-          Condor — tažený velkoplošný secí stroj se záběrem 12 a 15 m pro suché podmínky.
-        models:
-          - slug: condor-12001-c
-            name: Condor 12001-C
-            url: https://amazone.de/de/produkte/saemaschinen/condor/condor-12001-c
-          - slug: condor-15001-c
-            name: Condor 15001-C
-            url: https://amazone.de/de/produkte/saemaschinen/condor/condor-15001-c
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
+          - slug: cirrus-6004-2c
+            name: Cirrus 6004-2C
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-6004-2c
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
+              zasobnik_l: 4000
+          - slug: cirrus-9004-2c
+            name: Cirrus 9004-2C
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-9004-2c
+            pracovni_zaber_m: 9.0
+            specs:
+              typ: tazeny
+              zasobnik_l: 5000
       - slug: precea
         name: Precea
         family: precea
         subcategory: seci-stroje-presne
         url: https://amazone.de/de/produkte/saemaschinen/precea
         description: |
-          Precea — přesný secí stroj pro kukuřici, slunečnici a řepu se záběrem 3–6 m.
+          Precea — přesný secí stroj nové generace pro kukuřici, slunečnici, řepu
+          a další širokořádkové plodiny. Záběr 3–6 m, dávkovací ústrojí
+          s vakuovou turbínou pracující až do 15 km/h. Verze 3000-A (nesená), 4500-2
+          a 6000-2 (tažené dvouřadé), 6000-2CC (s mikrogranulátem) a TCC (s velkokapacitním
+          zásobníkem na hnojivo). FertiSpot pro bodovou aplikaci hnojiva pod patu.
+          Nahrazuje staré řady ED a EDX.
         models:
           - slug: precea-3000-a
             name: Precea 3000-A
             url: https://amazone.de/de/produkte/saemaschinen/precea/precea-3000-a
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
+              radky: 4
           - slug: precea-4500-2
             name: Precea 4500-2
             url: https://amazone.de/de/produkte/saemaschinen/precea/precea-4500-2
+            pracovni_zaber_m: 4.5
+            specs:
+              typ: tazeny
+              radky: 6
           - slug: precea-6000-2
             name: Precea 6000-2
             url: https://amazone.de/de/produkte/saemaschinen/precea/precea-6000-2
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
+              radky: 8
           - slug: precea-6000-2cc
             name: Precea 6000-2CC
             url: https://amazone.de/de/produkte/saemaschinen/precea/precea-6000-2cc
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
+              radky: 8
           - slug: precea-6000-tcc
             name: Precea 6000-TCC
             url: https://amazone.de/de/produkte/saemaschinen/precea/precea-6000-tcc
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
+              radky: 8
+              zasobnik_hnojivo_l: 2000
       - slug: primera-dmc
         name: Primera DMC
         family: primera-dmc
         subcategory: seci-stroje-pneumaticke
         url: https://amazone.de/de/produkte/saemaschinen/primera-dmc
         description: |
-          Primera DMC — tažený secí stroj pro přímé setí do mulče i strniště, záběr 6–9 m.
+          Primera DMC — tažený secí stroj specialista na přímé setí (no-till)
+          do mulče i strniště. Záběr 6–9 m, radličkové botky s tlakem až 130 kg
+          pro průnik do tvrdé suché půdy. Velkokapacitní zásobník 4200–5000 l,
+          ISOBUS standard. Vyhledávaný model v aridních oblastech (jih ČR, Maďarsko)
+          a u farem s konzervační agrotechnikou.
         models:
           - slug: primera-dmc-6000
             name: Primera DMC 6000
             url: https://amazone.de/de/produkte/saemaschinen/primera-dmc/primera-dmc-6000
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
+              zasobnik_l: 4200
           - slug: primera-dmc-9000
             name: Primera DMC 9000
             url: https://amazone.de/de/produkte/saemaschinen/primera-dmc/primera-dmc-9000
+            pracovni_zaber_m: 9.0
+            specs:
+              typ: tazeny
+              zasobnik_l: 5000
   zpracovani-pudy:
     name: Zpracování půdy
     series:
@@ -291,150 +482,273 @@ categories:
         subcategory: podmitace-diskove
         url: https://amazone.de/de/produkte/bodenbearbeitung/catros
         description: |
-          Catros — kompaktní diskový podmítač se záběrem 3–12 m pro mělké zpracování strniště.
+          Catros — kompaktní diskový podmítač pro mělké zpracování strniště do
+          hloubky 5–12 cm. Záběr 3–12 m, disky 510 mm v X-uspořádání s vlastním
+          zavěšením každého disku. Bezúdržbové ložisko, válce volitelné (klec, zubový,
+          gumový, dvojitý). Verze 2TX (tažená dvouosá) a 2TS (tažená pro velké záběry
+          s podvozkem). Vhodné pro slámu, řepku a meziplodiny.
         models:
           - slug: catros-3003
             name: Catros 3003
             url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-3003
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
           - slug: catros-4003-2
             name: Catros 4003-2
             url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-4003-2
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: neseny
           - slug: catros-6003-2tx
             name: Catros 6003-2TX
             url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-6003-2tx
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
           - slug: catros-7503-2tx
             name: Catros 7503-2TX
             url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-7503-2tx
+            pracovni_zaber_m: 7.5
+            specs:
+              typ: tazeny
           - slug: catros-12003-2ts
             name: Catros 12003-2TS
             url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-12003-2ts
+            pracovni_zaber_m: 12.0
+            specs:
+              typ: tazeny
       - slug: catros-xl
         name: Catros XL
         family: catros-xl
         subcategory: podmitace-diskove
         url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl
         description: |
-          Catros XL — diskový podmítač s většími disky 610 mm pro hlubší zpracování až 15 cm.
+          Catros XL — verze s většími disky 610 mm pro hlubší zpracování až 15 cm
+          a lepší průnik do tvrdé půdy. Záběr 3–9 m, vyšší tlak na disk pro řezání
+          objemných posklizňových zbytků (kukuřice, slunečnice). Doporučeno pro
+          první podmítku po sklizni nebo zelené hnojení s objemnou hmotou.
         models:
           - slug: catros-xl-3003
             name: Catros XL 3003
             url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl/catros-xl-3003
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
           - slug: catros-xl-4003-2
             name: Catros XL 4003-2
             url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl/catros-xl-4003-2
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: neseny
           - slug: catros-xl-6003-2tx
             name: Catros XL 6003-2TX
             url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl/catros-xl-6003-2tx
-      - slug: ceus
-        name: Ceus
-        family: ceus
-        subcategory: kyprice
-        url: https://amazone.de/de/produkte/bodenbearbeitung/ceus
-        description: |
-          Ceus — kombinovaný kypřič disky + radličky pro hloubku 10–30 cm, záběr 4–7 m.
-        models:
-          - slug: ceus-4000-2tx
-            name: Ceus 4000-2TX
-            url: https://amazone.de/de/produkte/bodenbearbeitung/ceus/ceus-4000-2tx
-          - slug: ceus-7000-2tx
-            name: Ceus 7000-2TX
-            url: https://amazone.de/de/produkte/bodenbearbeitung/ceus/ceus-7000-2tx
-      - slug: cenio
-        name: Cenio
-        family: cenio
-        subcategory: podmitace-radlickove
-        url: https://amazone.de/de/produkte/bodenbearbeitung/cenio
-        description: |
-          Cenio — nesený radličkový podmítač se záběrem 3–4 m pro mělké zpracování strniště.
-        models:
-          - slug: cenio-3000-special
-            name: Cenio 3000 Special
-            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-3000-special
-          - slug: cenio-3000-super
-            name: Cenio 3000 Super
-            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-3000-super
-          - slug: cenio-4000-super
-            name: Cenio 4000 Super
-            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-4000-super
+            pracovni_zaber_m: 6.0
+            specs:
+              typ: tazeny
+          - slug: catros-xl-9003-2tx
+            name: Catros XL 9003-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl/catros-xl-9003-2tx
+            pracovni_zaber_m: 9.0
+            specs:
+              typ: tazeny
       - slug: cenius
         name: Cenius
         family: cenius
         subcategory: podmitace-radlickove
         url: https://amazone.de/de/produkte/bodenbearbeitung/cenius
         description: |
-          Cenius — radličkový podmítač/kypřič se záběrem 3–8 m pro hloubku 5–30 cm.
+          Cenius — radličkový podmítač/kypřič pro střední hloubky 5–30 cm. Záběr
+          3–8 m, tříbodový rám s rozteči 28,5 cm. Volitelně bezpečnostní jištění
+          C-Mix Shear (střižný šroub) nebo Cenius Super (vinutá pružina pro kamenité
+          podmínky). Univerzální stroj pro podmítku, předseťovou přípravu i hlubší
+          kypření. Verze 2TX dvouosá tažená pro záběry 4 m a více.
         models:
           - slug: cenius-3003-special
             name: Cenius 3003 Special
             url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-3003-special
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
           - slug: cenius-3003-super
             name: Cenius 3003 Super
             url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-3003-super
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
           - slug: cenius-4003-2
             name: Cenius 4003-2
             url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-4003-2
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: neseny
           - slug: cenius-4003-2tx
             name: Cenius 4003-2TX
             url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-4003-2tx
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: tazeny
           - slug: cenius-7003-2tx
             name: Cenius 7003-2TX
             url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-7003-2tx
+            pracovni_zaber_m: 7.0
+            specs:
+              typ: tazeny
           - slug: cenius-8003-2tx
             name: Cenius 8003-2TX
             url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-8003-2tx
+            pracovni_zaber_m: 8.0
+            specs:
+              typ: tazeny
+      - slug: cenio
+        name: Cenio
+        family: cenio
+        subcategory: podmitace-radlickove
+        url: https://amazone.de/de/produkte/bodenbearbeitung/cenio
+        description: |
+          Cenio — kompaktní nesený radličkový podmítač představený 2022 jako vstupní
+          model pod Cenius. Záběr 3–4 m, čtyřřadý rám s radličkami pro mělkou podmítku
+          5–15 cm. Verze Special s pevnými radlicemi, Super s pružinovým jištěním
+          C-Mix Pro pro kamenité půdy. Vhodné pro malé a střední farmy.
+        models:
+          - slug: cenio-3000-special
+            name: Cenio 3000 Special
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-3000-special
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
+          - slug: cenio-3000-super
+            name: Cenio 3000 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-3000-super
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
+          - slug: cenio-4000-super
+            name: Cenio 4000 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-4000-super
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: neseny
+      - slug: ceus
+        name: Ceus
+        family: ceus
+        subcategory: kyprice
+        url: https://amazone.de/de/produkte/bodenbearbeitung/ceus
+        description: |
+          Ceus — kombinovaný kypřič kombinující dvě řady kotoučů a tři řady radliček
+          pro hloubku 10–30 cm na jeden přejezd. Záběr 4–7 m, tažená dvouosá
+          konstrukce. Šetří přejezdy: nahrazuje samostatnou podmítku a hluboké
+          kypření. Vhodné jako alternativa k pluhu při bezorebných systémech.
+        models:
+          - slug: ceus-4000-2tx
+            name: Ceus 4000-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ceus/ceus-4000-2tx
+            pracovni_zaber_m: 4.0
+            specs:
+              typ: tazeny
+          - slug: ceus-7000-2tx
+            name: Ceus 7000-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ceus/ceus-7000-2tx
+            pracovni_zaber_m: 7.0
+            specs:
+              typ: tazeny
       - slug: cobra
         name: Cobra
         family: cobra
         subcategory: kyprice
         url: https://amazone.de/de/produkte/bodenbearbeitung/cobra
         description: |
-          Cobra — hlubinný kypřič s pracovní hloubkou až 40 cm, záběr 3 m.
+          Cobra — hlubinný kypřič pro narušení utuženého podorničí do hloubky 40 cm.
+          Pracovní záběr 3 m, sedm úzkých radlic s nízkým tažným odporem. Šetří
+          strukturu povrchu — narušuje hlubokou vrstvu, ale nemíchá horizonty.
+          Doporučeno pro dlouhodobě bezorebné půdy nebo po sklizni cukrovky.
         models:
           - slug: cobra-3000
             name: Cobra 3000
             url: https://amazone.de/de/produkte/bodenbearbeitung/cobra/cobra-3000
-      - slug: ke
-        name: KE
-        family: ke
-        subcategory: rotacni-brany
-        url: https://amazone.de/de/produkte/bodenbearbeitung/ke
-        description: |
-          KE — rotační brána se záběrem 3,0–4,0 m, klasické řešení pro kombinaci se secím strojem.
-        models:
-          - slug: ke-3001-special
-            name: KE 3001 Special
-            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-3001-special
-          - slug: ke-3002-190-super
-            name: KE 3002-190 Super
-            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-3002-190-super
-          - slug: ke-4002-190-super
-            name: KE 4002-190 Super
-            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-4002-190-super
+            pracovni_zaber_m: 3.0
+            specs:
+              typ: neseny
+              hloubka_cm: 40
       - slug: kg
         name: KG
         family: kg
         subcategory: rotacni-brany
         url: https://amazone.de/de/produkte/bodenbearbeitung/kg
         description: |
-          KG — rotační brána pro výkonné traktory, záběr 3,0–6,0 m.
+          KG — výkonná rotační brána pro výkonné traktory 130–360 hp. Záběr 3,0–6,0 m,
+          šestihranná převodovka, rotory s rychloupínacími hroty QuickChange. Verze
+          2 (KG 4001-2, KG 6001-2) jsou skládané pro velké záběry. Ideální partner
+          pro Centaya/Cataya při kombinovaném setí.
         models:
           - slug: kg-3001-super
             name: KG 3001 Super
             url: https://amazone.de/de/produkte/bodenbearbeitung/kg/kg-3001-super
+            pracovni_zaber_m: 3.0
+            prikon_traktor_hp_max: 250
+            specs:
+              typ: neseny
           - slug: kg-4001-2
             name: KG 4001-2
             url: https://amazone.de/de/produkte/bodenbearbeitung/kg/kg-4001-2
+            pracovni_zaber_m: 4.0
+            prikon_traktor_hp_max: 300
+            specs:
+              typ: neseny
           - slug: kg-6001-2
             name: KG 6001-2
             url: https://amazone.de/de/produkte/bodenbearbeitung/kg/kg-6001-2
+            pracovni_zaber_m: 6.0
+            prikon_traktor_hp_max: 360
+            specs:
+              typ: neseny
+      - slug: ke
+        name: KE
+        family: ke
+        subcategory: rotacni-brany
+        url: https://amazone.de/de/produkte/bodenbearbeitung/ke
+        description: |
+          KE — rotační brána pro střední třídu výkonu (do 200 hp). Záběr 3,0–4,0 m,
+          klasické řešení pro kombinaci se secím strojem Cataya nebo Centaya. Verze
+          Special s šoupátkovou převodovkou, Super s plovoucím zavěšením a integrovaným
+          válcem. Označení 190 znamená převodovku pro 190 hp.
+        models:
+          - slug: ke-3001-special
+            name: KE 3001 Special
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-3001-special
+            pracovni_zaber_m: 3.0
+            prikon_traktor_hp_max: 140
+            specs:
+              typ: neseny
+          - slug: ke-3002-190-super
+            name: KE 3002-190 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-3002-190-super
+            pracovni_zaber_m: 3.0
+            prikon_traktor_hp_max: 190
+            specs:
+              typ: neseny
+          - slug: ke-4002-190-super
+            name: KE 4002-190 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-4002-190-super
+            pracovni_zaber_m: 4.0
+            prikon_traktor_hp_max: 190
+            specs:
+              typ: neseny
       - slug: kx
         name: KX
         family: kx
         subcategory: rotacni-brany
         url: https://amazone.de/de/produkte/bodenbearbeitung/kx
         description: |
-          KX — rotační brána pro střední třídu výkonu, záběr 3,0 m.
+          KX — rotační brána pro střední třídu, kompaktnější verze než KG. Pracovní
+          záběr 3,0 m, příkon traktoru do 190 hp. Lehčí konstrukce, vhodné pro
+          farmy s traktory 100–180 hp jako kombinace se secím strojem.
         models:
           - slug: kx-3001
             name: KX 3001
             url: https://amazone.de/de/produkte/bodenbearbeitung/kx/kx-3001
+            pracovni_zaber_m: 3.0
+            prikon_traktor_hp_max: 190
+            specs:
+              typ: neseny
