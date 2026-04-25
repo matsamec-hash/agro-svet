@@ -1,0 +1,102 @@
+---
+// src/components/statistiky/Hero.astro
+interface Props {
+  datasetCount: number;
+  yearsCovered: number;
+  regionCount: number;
+  lastUpdated: string;
+}
+const { datasetCount, yearsCovered, regionCount, lastUpdated } = Astro.props;
+---
+
+<section class="sp-hero">
+  <div class="sp-hero-left">
+    <span class="sp-kicker"><span class="dot"></span>LIVE DATA · ČESKÁ ZEMĚDĚLSKÁ DATA</span>
+    <h1>Co stojí české <em>zemědělství</em></h1>
+    <p class="sp-hero-lede">
+      Aktuální ceny komodit, sklizeň, vstupní náklady a regionální produkce
+      z Českého statistického úřadu — každý měsíc aktualizovaná data.
+    </p>
+    <div class="sp-hero-stats">
+      <div class="s"><span class="n">{datasetCount}</span><span class="l">datasetů</span></div>
+      <div class="s"><span class="n">{yearsCovered}</span><span class="l">let</span></div>
+      <div class="s"><span class="n">{regionCount}</span><span class="l">krajů</span></div>
+    </div>
+  </div>
+  <div class="sp-hero-right">
+    <div class="sp-hero-photo" style="background-image:url('/images/traktor.webp')">
+      <div class="sp-hero-photo-badge">Aktualizováno {lastUpdated}</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sp-hero {
+    --yellow:#FFEA00; --ink:#0A0A0B; --r-xl:24px;
+    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+    background:radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(80,80,90,.4), transparent 60%),
+      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+    padding:48px 48px 40px;margin-bottom:22px;
+    box-shadow:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
+  }
+  .sp-hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .sp-hero-left{position:relative;z-index:2}
+  .sp-kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--yellow);margin-bottom:18px;
+    padding:8px 14px;border:1px solid rgba(255,234,0,.4);border-radius:999px;
+    background:rgba(255,234,0,.06);
+  }
+  .sp-kicker .dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;
+    box-shadow:0 0 0 3px rgba(255,234,0,.2);
+    animation:sp-pulse 2s infinite;
+  }
+  @keyframes sp-pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .sp-hero h1{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    font-size:clamp(2.2rem,5vw,4rem);color:#fff;line-height:.98;letter-spacing:-.03em;margin:0;
+  }
+  .sp-hero h1 em{font-style:normal;color:var(--yellow);text-shadow:0 0 40px rgba(255,234,0,.5)}
+  .sp-hero-lede{max-width:560px;font-size:16.5px;color:#c8c8d0;margin:18px 0 22px;line-height:1.55}
+  .sp-hero-stats{display:flex;gap:28px;flex-wrap:wrap;font-family:'Chakra Petch',sans-serif}
+  .sp-hero-stats .s{display:flex;flex-direction:column;gap:3px}
+  .sp-hero-stats .n{font-size:32px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
+  .sp-hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .sp-hero-stats .s + .s{padding-left:28px;border-left:1px solid rgba(255,255,255,.12)}
+
+  .sp-hero-right{position:relative;z-index:1;min-height:300px;display:flex;align-items:center;justify-content:center}
+  .sp-hero-photo{
+    width:100%;height:100%;min-height:300px;
+    background-size:cover;background-position:center;
+    border-radius:18px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
+    position:relative;overflow:hidden;
+  }
+  .sp-hero-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, rgba(255,234,0,.12) 100%);
+  }
+  .sp-hero-photo-badge{
+    position:absolute;left:16px;bottom:16px;z-index:2;
+    background:rgba(10,10,11,.72);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.1);
+    color:#fff;padding:9px 13px;border-radius:10px;
+    font:500 12px 'Chakra Petch',sans-serif;
+  }
+
+  @media (max-width:960px){
+    .sp-hero{grid-template-columns:1fr;padding:32px 24px 28px;gap:18px}
+    .sp-hero-right{min-height:200px;order:2}
+    .sp-hero-photo{min-height:200px}
+    .sp-hero-stats .s + .s{padding-left:0;border-left:0}
+  }
+</style>
