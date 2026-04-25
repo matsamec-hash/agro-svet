@@ -1,0 +1,101 @@
+---
+// src/components/statistiky/SparklineTicker.astro
+import type { TimeSeriesPoint } from '../../lib/czso';
+
+export interface SparklineMetric {
+  name: string;
+  value: number;
+  unit: string;
+  changePct: number | null;     // m/m %
+  series: TimeSeriesPoint[];    // 12 bodů, posledních 12 měsíců
+  anchor: string;               // např. "#trh"
+}
+
+interface Props {
+  metrics: SparklineMetric[];
+}
+const { metrics } = Astro.props;
+
+function fmt(n: number): string {
+  if (n >= 1000) return n.toLocaleString('cs-CZ', { maximumFractionDigits: 0 });
+  return n.toLocaleString('cs-CZ', { maximumFractionDigits: 2 });
+}
+
+function buildSparklinePath(series: TimeSeriesPoint[], width: number, height: number): string {
+  if (series.length < 2) return '';
+  const values = series.map(s => s.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+  const stepX = width / (series.length - 1);
+  return series
+    .map((p, i) => {
+      const x = i * stepX;
+      const y = height - ((p.value - min) / range) * height;
+      return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(' ');
+}
+---
+
+<nav class="sp-ticker" aria-label="Aktuální ceny — rychlý přehled">
+  {metrics.map(m => {
+    const path = buildSparklinePath(m.series, 100, 24);
+    const lastVal = m.series.length > 0 ? m.series[m.series.length - 1].value : m.value;
+    const minVal = m.series.length > 0 ? Math.min(...m.series.map(s => s.value)) : m.value;
+    const maxVal = m.series.length > 0 ? Math.max(...m.series.map(s => s.value)) : m.value;
+    const range = maxVal - minVal || 1;
+    const lastY = 24 - ((lastVal - minVal) / range) * 24;
+    return (
+      <a class="sp-ticker-card" href={m.anchor} aria-label={m.changePct !== null ? `${m.name}, ${fmt(m.value)} ${m.unit}, změna ${m.changePct.toFixed(1)}%` : `${m.name}, ${fmt(m.value)} ${m.unit}`}>
+        <span class="sp-ticker-name">{m.name}</span>
+        <span class="sp-ticker-value">{fmt(m.value)}<small> {m.unit}</small></span>
+        {m.changePct !== null && (
+          <span class={`sp-ticker-delta ${m.changePct >= 0 ? 'up' : 'down'}`}>
+            {m.changePct >= 0 ? '▲' : '▼'} {Math.abs(m.changePct).toFixed(1)}%
+          </span>
+        )}
+        {path && (
+          <svg class="sp-ticker-spark" viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true">
+            <path d={path} fill="none" stroke="#FFEA00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="100" cy={lastY.toFixed(1)} r="1.8" fill="#FFEA00">
+              <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        )}
+      </a>
+    );
+  })}
+</nav>
+
+<style>
+  .sp-ticker {
+    --yellow:#FFEA00; --ink:#0A0A0B; --line:#EAEAEC; --muted:#6B6B72;
+    position:sticky;top:88px;z-index:30;
+    background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(14px);
+    border:1px solid var(--line);border-radius:14px;
+    padding:10px 14px;margin:0 0 22px;
+    display:flex;gap:10px;overflow-x:auto;scrollbar-width:thin;
+  }
+  .sp-ticker-card {
+    flex:1 1 160px;min-width:150px;
+    display:grid;grid-template-rows:auto auto auto;gap:2px;padding:10px 12px;
+    background:#fff;border:1px solid var(--line);border-radius:10px;
+    text-decoration:none;color:var(--ink);
+    transition:transform .15s, border-color .15s;
+    position:relative;
+  }
+  .sp-ticker-card:hover{transform:translateY(-1px);border-color:var(--yellow)}
+  .sp-ticker-name{font:500 11px 'Chakra Petch',sans-serif;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+  .sp-ticker-value{font:700 18px 'Chakra Petch',sans-serif;color:var(--ink);line-height:1.1}
+  .sp-ticker-value small{font-size:10px;color:var(--muted);font-weight:500;margin-left:3px}
+  .sp-ticker-delta{font:600 11px 'Chakra Petch',sans-serif;width:fit-content;padding:1px 6px;border-radius:6px}
+  .sp-ticker-delta.up{color:#0B7A3B;background:rgba(11,122,59,.08)}
+  .sp-ticker-delta.down{color:#C24414;background:rgba(194,68,20,.08)}
+  .sp-ticker-spark{position:absolute;right:8px;top:30px;width:60px;height:24px;opacity:.85}
+
+  @media (max-width:768px){
+    .sp-ticker{top:72px}
+    .sp-ticker-card{min-width:140px;flex:0 0 auto}
+  }
+</style>

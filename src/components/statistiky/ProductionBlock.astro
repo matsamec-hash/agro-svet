@@ -1,0 +1,49 @@
+---
+// src/components/statistiky/ProductionBlock.astro
+import type { CropProduction, CropArea } from '../../lib/czso';
+
+interface Props {
+  crops: CropProduction[];      // plný historický řez
+  areas: CropArea[];
+  latestYear: string;
+}
+const { crops, areas, latestYear } = Astro.props;
+
+const latestCrops = crops.filter(c => c.year === latestYear);
+const latestAreas = areas.filter(a => a.year === latestYear && a.crop !== 'Celkem');
+const totalArea = areas.find(a => a.year === latestYear && a.crop === 'Celkem');
+---
+
+<section class="sp-section" id="produkce">
+  <header class="sp-section-head">
+    <h2>Produkce — sklizeň a osevní plochy {latestYear}</h2>
+    <span class="sp-section-sub">Tuny / hektary v Česku</span>
+  </header>
+
+  <div class="sp-prod-grid">
+    <div class="sp-chart-card">
+      <h3>Sklizeň podle plodin (tun)</h3>
+      <canvas id="cropProductionChart" height="280"></canvas>
+    </div>
+    <div class="sp-chart-card">
+      <h3>Osevní plochy ({totalArea ? totalArea.hectares.toLocaleString('cs-CZ') : '–'} ha celkem)</h3>
+      <canvas id="cropAreasChart" height="280"></canvas>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="productionData" set:html={JSON.stringify({ latestCrops, latestAreas })}></script>
+
+<style>
+  .sp-section{margin:32px 0 36px;scroll-margin-top:200px}
+  .sp-section-head{margin-bottom:14px}
+  .sp-section-head h2{font:700 24px 'Chakra Petch',sans-serif;letter-spacing:-.02em;margin:0;color:#0A0A0B}
+  .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
+  .sp-prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .sp-chart-card{
+    background:#fff;border:1px solid #EAEAEC;border-radius:18px;padding:20px 22px;
+    box-shadow:0 1px 2px rgba(10,10,12,.04);
+  }
+  .sp-chart-card h3{font:600 14px 'Chakra Petch',sans-serif;color:#1E1E22;margin:0 0 10px}
+  @media (max-width:960px){.sp-prod-grid{grid-template-columns:1fr}}
+</style>

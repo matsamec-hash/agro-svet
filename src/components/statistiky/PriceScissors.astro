@@ -1,0 +1,47 @@
+---
+// src/components/statistiky/PriceScissors.astro
+import type { PriceScissorsPoint } from '../../lib/agro-derived';
+
+interface Props {
+  points: PriceScissorsPoint[];
+  insight: string;   // generovaný text, např. "V 2022 vstupy +120%, výstupy +95% → marže -15%"
+  baseYear: number;
+}
+const { points, insight, baseYear } = Astro.props;
+---
+
+<section class="sp-section" id="cenove-nuzky">
+  <header class="sp-section-head">
+    <h2>⚡ Cenové nůžky — vstupy × výstupy</h2>
+    <span class="sp-section-sub">Index cen vstupů (nafta + NPK) vs. cen výstupů (4 hlavní komodity), {baseYear} = 100</span>
+  </header>
+
+  <div class="sp-chart-card">
+    <canvas id="scissorsChart" height="380"></canvas>
+    <div class="sp-chart-insight" data-tone="warn">⚠ {insight}</div>
+    <p class="sp-chart-help">
+      Spojnice ukazuje pohyb v čase. Pokud křivka uhne <strong>dolů-doprava</strong>,
+      marže farmáře se zužuje (vstupy rostou rychleji než výstupy).
+      Šedá diagonála = rovnováha.
+    </p>
+  </div>
+</section>
+
+<script type="application/json" id="scissorsData" set:html={JSON.stringify({ points })}></script>
+
+<style>
+  .sp-section{margin:32px 0 36px;scroll-margin-top:200px}
+  .sp-section-head{margin-bottom:14px}
+  .sp-section-head h2{font:700 24px 'Chakra Petch',sans-serif;letter-spacing:-.02em;margin:0;color:#0A0A0B}
+  .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
+  .sp-chart-card{
+    background:#fff;border:1px solid #EAEAEC;border-radius:18px;padding:24px 26px;
+    box-shadow:0 1px 2px rgba(10,10,12,.04);
+  }
+  .sp-chart-insight{
+    margin-top:14px;padding:12px 16px;border-radius:10px;
+    font:500 13.5px 'Chakra Petch',sans-serif;
+  }
+  .sp-chart-insight[data-tone="warn"]{background:rgba(194,68,20,.08);color:#7A2A0E}
+  .sp-chart-help{margin:10px 0 0;font-size:13px;color:#6B6B72;line-height:1.55}
+</style>

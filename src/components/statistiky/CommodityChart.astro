@@ -1,0 +1,76 @@
+---
+// src/components/statistiky/CommodityChart.astro
+import type { CommodityTimeSeries } from '../../lib/czso';
+import type { AgroEvent } from '../../data/agro-events';
+
+interface Props {
+  series: CommodityTimeSeries[];   // všech 9 komodit s plnou historií
+  events: AgroEvent[];             // historické anotace
+  fiveYearAvg: Record<string, { label: string; avg: number }[] | null>; // klíč = jméno komodity
+}
+const { series, events, fiveYearAvg } = Astro.props;
+
+const namedSeries = series.map(s => ({
+  name: s.name,
+  data: s.data.map(d => ({ label: d.label, value: d.value })),
+  unit: s.unit,
+}));
+const default0 = namedSeries[0]?.name ?? 'Pšenice';
+---
+
+<section class="sp-section" id="trh">
+  <header class="sp-section-head">
+    <h2>Trh — Ceny komodit</h2>
+    <span class="sp-section-sub">Měsíční průměry výrobců, anotované historickými událostmi</span>
+  </header>
+
+  <div class="sp-controls">
+    <div class="sp-pills-row" role="tablist" aria-label="Komodita">
+      {namedSeries.map((s, i) => (
+        <button class:list={['sp-mini-pill', { active: i === 0 }]} data-commodity={s.name} type="button">{s.name}</button>
+      ))}
+    </div>
+    <div class="sp-time-row" role="tablist" aria-label="Časové okno">
+      <button class="sp-time-btn" data-window="1y" type="button">1 rok</button>
+      <button class="sp-time-btn active" data-window="5y" type="button">5 let</button>
+      <button class="sp-time-btn" data-window="all" type="button">Vše</button>
+    </div>
+  </div>
+
+  <div class="sp-chart-card">
+    <canvas id="commodityLongChart" height="320"></canvas>
+    <div class="sp-chart-insight" id="commodityInsight"></div>
+  </div>
+</section>
+
+<script type="application/json" id="commodityChartData" set:html={JSON.stringify({ series: namedSeries, events, fiveYearAvg, default0 })}></script>
+
+<style>
+  .sp-section{margin:32px 0 36px;scroll-margin-top:200px}
+  .sp-section-head{margin-bottom:14px}
+  .sp-section-head h2{font:700 24px 'Chakra Petch',sans-serif;letter-spacing:-.02em;margin:0;color:#0A0A0B}
+  .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
+  .sp-controls{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .sp-pills-row{display:flex;gap:6px;flex-wrap:wrap}
+  .sp-mini-pill{
+    padding:6px 12px;background:#fff;border:1px solid #EAEAEC;border-radius:999px;
+    font:500 13px 'Chakra Petch',sans-serif;color:#0A0A0B;cursor:pointer;
+    transition:.15s;
+  }
+  .sp-mini-pill:hover{background:#FFF6A8;border-color:#FFEA00}
+  .sp-mini-pill.active{background:#0A0A0B;color:#fff;border-color:#0A0A0B}
+  .sp-time-row{display:flex;gap:4px;background:#F4F2E9;border-radius:999px;padding:3px}
+  .sp-time-btn{
+    padding:5px 12px;background:transparent;border:0;border-radius:999px;
+    font:600 12px 'Chakra Petch',sans-serif;color:#6B6B72;cursor:pointer;
+  }
+  .sp-time-btn.active{background:#fff;color:#0A0A0B;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .sp-chart-card{
+    background:#fff;border:1px solid #EAEAEC;border-radius:18px;padding:20px 22px;
+    box-shadow:0 1px 2px rgba(10,10,12,.04);
+  }
+  .sp-chart-insight{
+    margin-top:12px;padding:10px 14px;background:#FFF6A8;border-radius:10px;
+    font:500 13px 'Chakra Petch',sans-serif;color:#0A0A0B;
+  }
+</style>

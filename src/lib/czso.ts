@@ -216,6 +216,23 @@ export async function getLivestockStats(): Promise<LivestockStat[]> {
   return result;
 }
 
+// Plná historie stavů zvířat (skot, prasata) — bez truncace, pro slope chart.
+export async function getLivestockHistorical(): Promise<LivestockStat[]> {
+  const rows = await fetchSelection('WZEM02AT01');
+  const items: LivestockStat[] = [];
+  for (const row of rows) {
+    if (row[1] !== 'Česko') continue;
+    const val = parseFloat(row[3]);
+    if (isNaN(val)) continue;
+    let animal = '';
+    if (row[0].includes('turů')) animal = 'Skot';
+    else if (row[0].includes('prasat')) animal = 'Prasata';
+    else continue;
+    items.push({ animal, count: Math.round(val), date: row[2] });
+  }
+  return items;
+}
+
 // ── Crop Production (tonnes) ──
 export interface CropProduction {
   crop: string;
@@ -415,6 +432,35 @@ export async function getFertilizerTimeSeries(): Promise<FertilizerTimeSeries[]>
   for (const [name, data] of byName) {
     data.sort((a, b) => parseInt(a.year) - parseInt(b.year));
     results.push({ name, data });
+  }
+  return results;
+}
+
+// Vrací full historii pro všech 9 komodit z COMMODITY_MAP. Použito pro long-term annotated graf.
+export async function getCommodityFullSeries(): Promise<CommodityTimeSeries[]> {
+  const all = await getCommodityPrices();
+  const byName = new Map<string, CommodityPrice[]>();
+  for (const p of all) {
+    if (!byName.has(p.name)) byName.set(p.name, []);
+    byName.get(p.name)!.push(p);
+  }
+
+  const ALL_NAMES = ['Pšenice','Ječmen','Řepka','Kukuřice','Mléko','Vepřové','Hovězí','Vejce','Mák'];
+  const results: CommodityTimeSeries[] = [];
+
+  for (const name of ALL_NAMES) {
+    const prices = byName.get(name);
+    if (!prices || prices.length === 0) continue;
+    const sorted = prices
+      .map(p => {
+        const d = parseMonthStr(p.month);
+        if (!d) return null;
+        return { label: `${MONTH_SHORT[d.month]} ${d.year}`, value: p.price, sortKey: d.year * 12 + d.month };
+      })
+      .filter(Boolean) as TimeSeriesPoint[];
+    sorted.sort((a, b) => a.sortKey - b.sortKey);
+    const unit = prices[0].unit;
+    results.push({ name, unit, data: sorted });
   }
   return results;
 }
