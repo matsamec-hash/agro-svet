@@ -285,8 +285,8 @@ const catLede = categoryLede[category];
       <section class="brand" id={s.slug}>
         <div class="brand-head">
           <div class="brand-title">
-            <div class="brand-logo">
-              <img src={`/images/stroje/brands/${s.slug}.png`} alt={`${s.name} logo`} loading="lazy" />
+            <div class="brand-logo" data-letter={s.name.charAt(0).toUpperCase()}>
+              <img src={`/images/stroje/brands/${s.slug}.png`} alt={`${s.name} logo`} loading="lazy" onerror="this.remove()" />
             </div>
             <div class="brand-name">
               <h2><a href={`/stroje/${s.slug}/`}>{s.name}</a></h2>
@@ -555,13 +555,21 @@ const catLede = categoryLede[category];
   .catalog-page .brand-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px;flex-wrap:wrap}
   .catalog-page .brand-title{display:flex;align-items:center;gap:14px}
   .catalog-page .brand-logo{
-    width:72px;height:72px;border-radius:14px;background:#fff;
+    width:72px;height:72px;border-radius:14px;background:#FBFAF4;
     display:flex;align-items:center;justify-content:center;
     border:1px solid var(--line);box-shadow:var(--sh-1);
-    flex-shrink:0;padding:10px;
+    flex-shrink:0;padding:10px;position:relative;
+    font:700 28px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.02em;
+  }
+  .catalog-page .brand-logo::before{
+    content:attr(data-letter);
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    pointer-events:none;
   }
   .catalog-page .brand-logo img{
     max-width:100%;max-height:100%;object-fit:contain;
+    position:relative;z-index:1;background:#fff;border-radius:8px;
   }
   .catalog-page .brand-name h2{font-family:'Chakra Petch',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.1}
   .catalog-page .brand-name h2 a{color:var(--ink);text-decoration:none}

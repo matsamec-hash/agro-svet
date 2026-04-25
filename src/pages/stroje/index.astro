@@ -183,8 +183,8 @@ const brandCards = brands.map((b) => {
       {brandCards.map((b) => (
         <a href={`/stroje/${b.slug}/`} class="brand-card">
           <div class="bc-head">
-            <div class="bc-logo">
-              <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="64" height="64" />
+            <div class="bc-logo" data-letter={b.name.charAt(0).toUpperCase()}>
+              <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="64" height="64" onerror="this.remove()" />
             </div>
             <div class="bc-title">
               <h3>{b.name}</h3>
@@ -559,11 +559,21 @@ const brandCards = brands.map((b) => {
     .catalog-root .brand-card:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
     .catalog-root .bc-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
     .catalog-root .bc-logo{
-      width:56px;height:56px;border-radius:12px;background:#fff;
+      width:56px;height:56px;border-radius:12px;background:#FBFAF4;
       border:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:8px;
-      flex-shrink:0;
+      flex-shrink:0;position:relative;
+      font:700 24px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.02em;
     }
-    .catalog-root .bc-logo img{max-width:100%;max-height:100%;object-fit:contain}
+    .catalog-root .bc-logo::before{
+      content:attr(data-letter);
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      pointer-events:none;
+    }
+    .catalog-root .bc-logo img{
+      max-width:100%;max-height:100%;object-fit:contain;
+      position:relative;z-index:1;background:#fff;border-radius:6px;
+    }
     .catalog-root .bc-title h3{font:700 19px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em;margin:0;line-height:1.1}
     .catalog-root .bc-meta-1{font-size:12px;color:var(--muted);margin-top:3px;display:block}
     .catalog-root .bc-meta-1 strong{color:var(--ink);font-weight:600}
