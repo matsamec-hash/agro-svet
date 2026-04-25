@@ -135,8 +135,8 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
             const bCount = strojeModels.filter((m) => m.brand_slug === b.slug).length;
             return (
               <a href={`/stroje/${b.slug}/`} class="sz-brand-card">
-                <div class="sz-brand-logo">
-                  <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="56" height="56" />
+                <div class="sz-brand-logo" data-letter={b.name.charAt(0).toUpperCase()}>
+                  <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="56" height="56" onerror="this.remove()" />
                 </div>
                 <div class="sz-brand-info">
                   <strong>{b.name}</strong>
@@ -381,15 +381,36 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
       width: 52px;
       height: 52px;
       border-radius: 10px;
-      background: #fff;
+      background: #FBFAF4;
       border: 1px solid #e8e8e8;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 6px;
       flex-shrink: 0;
+      position: relative;
+      font: 700 22px 'Chakra Petch', sans-serif;
+      color: #1a1a1a;
+      letter-spacing: -.02em;
     }
-    .sz-brand-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .sz-brand-logo::before {
+      content: attr(data-letter);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .sz-brand-logo img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      border-radius: 6px;
+    }
     .sz-brand-info {
       display: flex;
       flex-direction: column;
