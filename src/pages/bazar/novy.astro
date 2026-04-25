@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import ImageUpload from '../../components/bazar/ImageUpload.astro';
 import CascadingPicker from '../../components/bazar/CascadingPicker.astro';
 import PhoneInput from '../../components/bazar/PhoneInput.astro';
-import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
+import { CATEGORIES, BRANDS, BAZAR_TO_CATALOG_SUBCATEGORIES } from '../../lib/bazar-constants';
 import { CZ_LOCATIONS } from '../../lib/cz-locations';
 import { createServerClient, getPublicSupabaseConfig } from '../../lib/supabase';
 import { getModelOptions, getPlemenoOptions } from '../../lib/bazar-catalog';
@@ -14,6 +14,9 @@ let error = '';
 
 const modelOptions = getModelOptions();
 const plemenoOptions = getPlemenoOptions();
+
+const STROJE_CATEGORIES = Object.keys(BAZAR_TO_CATALOG_SUBCATEGORIES).filter(k => k !== 'traktory' && k !== 'kombajny');
+const BRAND_VALUES = BRANDS.map(b => b.value).filter(v => v !== 'jina');
 
 if (Astro.request.method === 'POST') {
   const form = await Astro.request.formData();
@@ -239,7 +242,7 @@ const { data: profile } = await supabase
     </form>
   </div>
 
-  <script is:inline>
+  <script is:inline define:vars={{ STROJE_CATEGORIES, BRAND_VALUES }}>
     (function() {
       const cat = document.getElementById('category');
       const machine = document.getElementById('machine-fields');
@@ -252,7 +255,7 @@ const { data: profile } = await supabase
       const brandHint = document.getElementById('brand-hint');
       const powerInput = document.getElementById('power_hp');
 
-      const STROJE_CATEGORIES = ['zpracovani-pudy','seti','hnojeni','ochrana-rostlin','sklizen-picnin','sklizen-okopanin','manipulace','doprava','staj-chov','komunal-les'];
+      const BRANDS_SET = new Set(BRAND_VALUES);
 
       function sync() {
         const v = cat.value;
@@ -308,10 +311,6 @@ const { data: profile } = await supabase
         brandHint.style.display = 'none';
         brandSelect.value = '';
       });
-
-      const BRANDS_SET = new Set([
-        'john-deere','claas','fendt','zetor','new-holland','kubota','case-ih','massey-ferguson','deutz-fahr','valtra',
-      ]);
     })();
   </script>
 </Layout>
