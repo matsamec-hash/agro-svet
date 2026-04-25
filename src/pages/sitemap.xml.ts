@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { getAllBrands, seriesFamily } from '../lib/stroje';
+import { getAllBrands, seriesFamily, FUNCTIONAL_GROUPS } from '../lib/stroje';
 import { getAllDruhy } from '../lib/plemena';
 import { createAnonClient } from '../lib/supabase';
 
@@ -45,6 +45,7 @@ export const GET: APIRoute = async () => {
     ['/stroje/', 'weekly', '0.9'],
     ['/stroje/traktory/', 'weekly'],
     ['/stroje/kombajny/', 'weekly'],
+    ['/stroje/zemedelske-stroje/', 'weekly', '0.85'],
     ['/znacky/', 'weekly', '0.8'],
     ['/encyklopedie/', 'weekly'],
     ['/plemena/', 'weekly'],
@@ -62,6 +63,17 @@ export const GET: APIRoute = async () => {
 
   for (const cat of NOVINKY_CATEGORIES) {
     urls.push({ loc: `${SITE_URL}/novinky/kategorie/${cat}/`, changefreq: 'weekly' });
+  }
+
+  // Stroje funkční skupiny (hub → groups)
+  for (const groupSlug of Object.keys(FUNCTIONAL_GROUPS)) {
+    urls.push({ loc: `${SITE_URL}/stroje/zemedelske-stroje/${groupSlug}/`, changefreq: 'weekly', priority: '0.75' });
+  }
+
+  // Stroje sub-kategorie (cross-brand pages /stroje/<subcategory>/)
+  const allSubcategories = Object.values(FUNCTIONAL_GROUPS).flatMap((g) => g.categories);
+  for (const subcat of allSubcategories) {
+    urls.push({ loc: `${SITE_URL}/stroje/${subcat}/`, changefreq: 'weekly', priority: '0.7' });
   }
 
   for (const brand of getAllBrands()) {
