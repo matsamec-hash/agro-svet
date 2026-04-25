@@ -5,6 +5,11 @@ interface PickerOption {
   [key: string]: unknown;
 }
 
+interface SubcategoryOption {
+  value: string;
+  label: string;
+}
+
 interface Props {
   id: string;
   name: string;
@@ -16,6 +21,8 @@ interface Props {
   filterAttr?: string;
   filterValue?: string;
   ostatniLabel?: string;
+  subcategoryOptions?: SubcategoryOption[];
+  subcategoryLabel?: string;
 }
 
 const {
@@ -29,13 +36,27 @@ const {
   filterAttr,
   filterValue,
   ostatniLabel = 'Není v seznamu (ostatní)',
+  subcategoryOptions = [],
+  subcategoryLabel = 'Sub-kategorie',
 } = Astro.props;
 
 const optionsJson = JSON.stringify(options);
+const hasSubcategory = Array.isArray(subcategoryOptions) && subcategoryOptions.length > 0;
 ---
 
 <div class="catalog-picker" data-picker-id={id} data-filter-attr={filterAttr ?? ''} data-filter-value={filterValue ?? ''}>
   <label for={`${id}-input`}>{label}</label>
+  {hasSubcategory && (
+    <div class="picker-subcategory-wrap">
+      <label for={`${id}-subcategory`} class="picker-subcategory-label">{subcategoryLabel}</label>
+      <select id={`${id}-subcategory`} class="form-input picker-subcategory">
+        <option value="">Všechny sub-kategorie</option>
+        {subcategoryOptions.map((s) => (
+          <option value={s.value}>{s.label}</option>
+        ))}
+      </select>
+    </div>
+  )}
   <div class="picker-wrap">
     <input
       type="text"
@@ -66,6 +87,7 @@ const optionsJson = JSON.stringify(options);
   const list = document.getElementById(`${id}-list`);
   const clear = document.getElementById(`${id}-clear`);
   const hint = document.getElementById(`${id}-hint`);
+  const subSelect = document.getElementById(`${id}-subcategory`);
   const wrap = input?.closest('.catalog-picker');
 
   if (!input || !hidden || !dropdown || !list || !wrap) return;
@@ -77,6 +99,10 @@ const optionsJson = JSON.stringify(options);
     const attr = wrap.dataset.filterAttr;
     const val = wrap.dataset.filterValue;
     return attr && val ? { attr, val } : null;
+  }
+
+  function getSubcategory() {
+    return subSelect ? subSelect.value : '';
   }
 
   function sortOptions(list) {
@@ -93,9 +119,11 @@ const optionsJson = JSON.stringify(options);
 
   function filterOptions(q) {
     const filter = getFilter();
+    const subcat = getSubcategory();
     const needle = q.trim().toLowerCase();
     let pool = OPTIONS;
     if (filter) pool = pool.filter((o) => o[filter.attr] === filter.val);
+    if (subcat) pool = pool.filter((o) => o.category === subcat);
     if (needle) pool = pool.filter((o) => String(o.label).toLowerCase().includes(needle));
     return sortOptions(pool).slice(0, 100);
   }
@@ -117,21 +145,6 @@ const optionsJson = JSON.stringify(options);
       rows.push({ type: 'item', option: o });
     });
     return rows;
-  }
-
-  function selectableCount(rows) {
-    return rows.filter((r) => r.type === 'item').length;
-  }
-
-  function nthSelectable(rows, n) {
-    let i = -1;
-    for (const r of rows) {
-      if (r.type === 'item') {
-        i++;
-        if (i === n) return r.option;
-      }
-    }
-    return null;
   }
 
   function render() {
@@ -252,11 +265,34 @@ const optionsJson = JSON.stringify(options);
     hint.textContent = 'Pokud model není v seznamu, ponechte pole prázdné.';
   });
 
-  // Cross-component filter update (e.g. category change filters models)
+  // Subcategory narrowing — re-filter when user picks a sub-kategorie.
+  subSelect?.addEventListener('change', () => {
+    current = filterOptions(input.value);
+    activeIdx = -1;
+    render();
+  });
+
+  // Cross-component filter update (e.g. brand/category change filters models)
   wrap.addEventListener('catalog-filter-change', (e) => {
     const detail = e.detail || {};
     wrap.dataset.filterAttr = detail.attr || '';
     wrap.dataset.filterValue = detail.val || '';
+
+    // Optionally repopulate subcategory <select> (e.g. bazar high-level
+    // category changed → available sub-kategorie changes too).
+    // If subcategoryOptions is omitted or non-array, leave the select as-is.
+    if (Array.isArray(detail.subcategoryOptions) && subSelect) {
+      const opts = detail.subcategoryOptions;
+      let html = '<option value="">Všechny sub-kategorie</option>';
+      for (const s of opts) {
+        const v = String(s.value ?? '').replace(/"/g, '&quot;');
+        const l = String(s.label ?? '');
+        html += `<option value="${v}">${l}</option>`;
+      }
+      subSelect.innerHTML = html;
+      subSelect.value = '';
+    }
+
     if (input.value) {
       const filter = getFilter();
       if (filter && hidden.value) {
@@ -280,6 +316,34 @@ const optionsJson = JSON.stringify(options);
     font-size: 13px;
     font-weight: 500;
     color: #333;
+  }
+  .picker-subcategory-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .picker-subcategory-label {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .picker-subcategory {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .picker-subcategory:focus {
+    outline: none;
+    border-color: #FFFF00;
+    box-shadow: 0 0 0 2px rgba(255, 255, 0, .25);
   }
   .picker-wrap { position: relative; }
   .picker-input { width: 100%; padding-right: 36px; }
