@@ -33,14 +33,15 @@ const totalPrecipAhead = agro ? Math.round(agro.daily.precipMm.reduce((a, b) => 
 ---
 
 {mode === 'strip' && cities.length > 0 && (
-  <section class="aw-strip" aria-label="Aktuální počasí pro pole — 6 měst">
+  <section class="aw-strip" aria-label="Počasí pro pole" data-aw-strip>
     <div class="aw-strip-inner">
       <div class="aw-strip-label">
         <span class="aw-dot"></span>
-        <span class="aw-label-text">Počasí pro pole</span>
-        <span class="aw-label-sub">Aktuální · 6 měst</span>
+        <span class="aw-label-text" data-aw-title>Počasí pro pole</span>
+        <span class="aw-label-sub" data-aw-subtitle>Aktuální · 6 měst</span>
       </div>
-      <div class="aw-cities">
+
+      <div class="aw-cities" data-aw-cities>
         {cities.map((c) => (
           <div class="aw-city">
             <span class="aw-city-icon" aria-hidden="true">{weatherEmoji(c.weatherCode)}</span>
@@ -52,12 +53,160 @@ const totalPrecipAhead = agro ? Math.round(agro.daily.precipMm.reduce((a, b) => 
           </div>
         ))}
       </div>
-      <a class="aw-strip-src" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">
-        Open-Meteo
-      </a>
+
+      <div class="aw-user" data-aw-user hidden></div>
+
+      <div class="aw-actions">
+        <button type="button" class="aw-geo-btn" data-aw-locate>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.5 8 12 8 12s8-6.5 8-12a8 8 0 0 0-8-8z"/></svg>
+          <span data-aw-locate-label>Moje pole</span>
+        </button>
+        <button type="button" class="aw-reset-btn" data-aw-reset hidden>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+        <a class="aw-strip-src" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
+      </div>
     </div>
   </section>
 )}
+
+<script is:inline>
+  (function(){
+    const el = document.querySelector('[data-aw-strip]');
+    if (!el) return;
+    const cities = el.querySelector('[data-aw-cities]');
+    const user = el.querySelector('[data-aw-user]');
+    const title = el.querySelector('[data-aw-title]');
+    const subtitle = el.querySelector('[data-aw-subtitle]');
+    const btn = el.querySelector('[data-aw-locate]');
+    const btnLabel = el.querySelector('[data-aw-locate-label]');
+    const reset = el.querySelector('[data-aw-reset]');
+    const STORAGE = 'aw-user-loc-v1';
+    const TTL_MS = 60 * 60 * 1000; // 1h cache
+
+    const WMO = {
+      0:['☀️','Jasno'],1:['🌤️','Polojasno'],2:['⛅','Polojasno'],3:['☁️','Zataženo'],
+      45:['🌫️','Mlha'],48:['🌫️','Námraza'],
+      51:['🌦️','Mrholení'],53:['🌦️','Mrholení'],55:['🌧️','Silné mrholení'],
+      61:['🌧️','Slabý déšť'],63:['🌧️','Déšť'],65:['🌧️','Silný déšť'],
+      71:['🌨️','Slabé sněžení'],73:['🌨️','Sněžení'],75:['❄️','Silné sněžení'],
+      80:['🌦️','Přeháňky'],81:['🌧️','Přeháňky'],82:['⛈️','Silné přeháňky'],
+      95:['⛈️','Bouřka'],96:['⛈️','Bouřka s krupobitím'],99:['⛈️','Silná bouřka']
+    };
+    const dayCs = (iso) => {
+      const d = new Date(iso + 'T12:00:00');
+      return ['ne','po','út','st','čt','pá','so'][d.getDay()];
+    };
+
+    async function reverseGeo(lat, lon) {
+      try {
+        const res = await fetch('https://geocoding-api.open-meteo.com/v1/reverse?latitude=' + lat + '&longitude=' + lon + '&count=1&language=cs');
+        if (!res.ok) return null;
+        const j = await res.json();
+        const r = j.results && j.results[0];
+        return r ? (r.name || r.admin1 || null) : null;
+      } catch { return null; }
+    }
+
+    async function fetchForecast(lat, lon) {
+      const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
+        '&current=temperature_2m,weather_code,wind_speed_10m,precipitation' +
+        '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,weather_code' +
+        '&forecast_days=5&timezone=Europe%2FPrague';
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('forecast fetch failed');
+      return res.json();
+    }
+
+    function renderUser(loc, data) {
+      const cur = data.current || {};
+      const d = data.daily || {};
+      const wc = WMO[cur.weather_code] || ['🌡️','—'];
+      const cards = (d.time || []).map((iso, i) => {
+        const code = d.weather_code[i];
+        const w = WMO[code] || ['🌡️','—'];
+        const rain = d.precipitation_sum[i];
+        return '<div class="aw-day5">' +
+          '<span class="aw-d5-name">' + (i === 0 ? 'Dnes' : dayCs(iso)) + '</span>' +
+          '<span class="aw-d5-icon" title="' + w[1] + '">' + w[0] + '</span>' +
+          '<span class="aw-d5-tmax">' + Math.round(d.temperature_2m_max[i]) + '°</span>' +
+          '<span class="aw-d5-tmin">' + Math.round(d.temperature_2m_min[i]) + '°</span>' +
+          (rain > 0 ? '<span class="aw-d5-rain">' + (Math.round(rain * 10) / 10) + ' mm</span>' : '') +
+        '</div>';
+      }).join('');
+
+      user.innerHTML = cards;
+      user.hidden = false;
+      cities.hidden = true;
+      title.textContent = 'Vaše pole · ' + (loc.name || 'aktuální poloha');
+      subtitle.textContent = 'Nyní ' + Math.round(cur.temperature_2m) + '° · ' + wc[1] + ' · ' + Math.round(cur.wind_speed_10m) + ' km/h';
+      btnLabel.textContent = 'Aktualizovat';
+      reset.hidden = false;
+    }
+
+    function showCities() {
+      user.hidden = true;
+      cities.hidden = false;
+      title.textContent = 'Počasí pro pole';
+      subtitle.textContent = 'Aktuální · 6 měst';
+      btnLabel.textContent = 'Moje pole';
+      reset.hidden = true;
+    }
+
+    async function load(lat, lon, name) {
+      btn.disabled = true;
+      btnLabel.textContent = 'Načítám…';
+      try {
+        const data = await fetchForecast(lat, lon);
+        const cityName = name || await reverseGeo(lat, lon);
+        const loc = { lat: lat, lon: lon, name: cityName, ts: Date.now() };
+        localStorage.setItem(STORAGE, JSON.stringify(loc));
+        renderUser(loc, data);
+      } catch (e) {
+        btnLabel.textContent = 'Chyba — zkusit znovu';
+        setTimeout(() => { btnLabel.textContent = 'Moje pole'; }, 2500);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      const cached = localStorage.getItem(STORAGE);
+      if (cached) {
+        try {
+          const loc = JSON.parse(cached);
+          if (loc.lat && loc.lon) { load(loc.lat, loc.lon, loc.name); return; }
+        } catch {}
+      }
+      if (!navigator.geolocation) {
+        btnLabel.textContent = 'Geolokace nedostupná';
+        return;
+      }
+      btnLabel.textContent = 'Žádám polohu…';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => load(pos.coords.latitude, pos.coords.longitude, null),
+        () => { btnLabel.textContent = 'Povolení odmítnuto'; setTimeout(() => { btnLabel.textContent = 'Moje pole'; }, 2500); },
+        { timeout: 8000, maximumAge: 5 * 60 * 1000 }
+      );
+    });
+
+    reset.addEventListener('click', () => {
+      localStorage.removeItem(STORAGE);
+      showCities();
+    });
+
+    // Auto-restore from cache on load (if fresh)
+    const cached = localStorage.getItem(STORAGE);
+    if (cached) {
+      try {
+        const loc = JSON.parse(cached);
+        if (loc.lat && loc.lon && (Date.now() - (loc.ts || 0) < TTL_MS)) {
+          fetchForecast(loc.lat, loc.lon).then((data) => renderUser(loc, data)).catch(() => {});
+        }
+      } catch {}
+    }
+  })();
+</script>
 
 {(mode === 'puda' || mode === 'commodity') && agro && (
   <section class="aw-card" aria-label="Počasí pro pole">
@@ -219,6 +368,53 @@ const totalPrecipAhead = agro ? Math.round(agro.daily.precipMm.reduce((a, b) => 
     border-bottom: 1px dotted rgba(255,255,255,.2); padding-bottom: 1px;
   }
   .aw-strip-src:hover { color: #FFEA00; border-bottom-color: #FFEA00; }
+
+  /* Geolocation actions */
+  .aw-actions {
+    display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto;
+  }
+  .aw-geo-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; background: rgba(255,234,0,.12);
+    border: 1px solid rgba(255,234,0,.4); border-radius: 10px;
+    color: #FFEA00; cursor: pointer;
+    font: 700 12.5px 'Chakra Petch', sans-serif; letter-spacing: .02em;
+    transition: background .15s, border-color .15s;
+  }
+  .aw-geo-btn:hover { background: rgba(255,234,0,.22); border-color: #FFEA00; }
+  .aw-geo-btn:disabled { opacity: .6; cursor: wait; }
+  .aw-reset-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; padding: 0;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 8px; color: #c8c8d0; cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .aw-reset-btn:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+  /* User-location 5-day cards */
+  .aw-user {
+    display: flex; gap: 10px; flex-wrap: wrap; flex: 1;
+  }
+  .aw-day5 {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 8px 12px; min-width: 70px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+  }
+  .aw-d5-name {
+    font: 700 10.5px 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase;
+    color: #FFEA00;
+  }
+  .aw-d5-icon { font-size: 22px; line-height: 1; margin: 2px 0; }
+  .aw-d5-tmax {
+    font: 700 16px 'Chakra Petch', sans-serif; color: #fff; letter-spacing: -.01em;
+  }
+  .aw-d5-tmin { font: 500 11px 'Chakra Petch', sans-serif; color: #8a8a92; }
+  .aw-d5-rain {
+    font: 600 10px 'Chakra Petch', sans-serif; color: #6FB3F0; letter-spacing: .04em;
+    margin-top: 2px;
+  }
 
   @media (max-width: 800px) {
     .aw-strip-label { border-right: 0; padding-right: 0; padding-bottom: 8px; }
