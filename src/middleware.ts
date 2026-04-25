@@ -17,6 +17,15 @@ const PROTECTED_PATHS = [
 
 const ADMIN_PATHS = ['/admin/'];
 
+function applyGateHeaders(response: Response): Response {
+  // Apply on all gated responses (200 + redirects) to prevent CF/browser cache.
+  response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
+  response.headers.set('Pragma', 'no-cache');
+  response.headers.set('Vary', 'Cookie');
+  return response;
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
 
@@ -27,14 +36,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   if (gateOn) {
     if (url.pathname === '/sitemap.xml') {
-      return new Response('Not Found', { status: 404 });
+      return applyGateHeaders(new Response('Not Found', { status: 404 }));
     }
     if (!isGateBypassed(url.pathname)) {
       const cookieVal = cookies.get(GATE_COOKIE_NAME)?.value;
       const expected = await expectedGateHash();
       if (cookieVal !== expected) {
         const nextPath = url.pathname + url.search;
-        return redirect(`/unlock/?next=${encodeURIComponent(nextPath)}`);
+        // Apply headers on the redirect — Astro's redirect() returns a Response we can mutate.
+        return applyGateHeaders(redirect(`/unlock/?next=${encodeURIComponent(nextPath)}`));
       }
     }
   }
@@ -103,15 +113,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const response = await next();
 
   if (gateOn) {
-    response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
-    // CRITICAL: prevent Cloudflare/browser from caching gated responses.
-    // Without this, CF caches a 200 (returned to a session with cookie) and
-    // then serves it to everyone — gate leaks. It also caches the 302→/unlock/
-    // for the cookieless first visit, so even after the user gets a cookie
-    // their next navigation hits the cached redirect.
-    response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
-    response.headers.set('Pragma', 'no-cache');
-    response.headers.set('Vary', 'Cookie');
+    applyGateHeaders(response);
   }
 
   return response;
