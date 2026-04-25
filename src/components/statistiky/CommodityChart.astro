@@ -38,7 +38,9 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
   </div>
 
   <div class="sp-chart-card">
-    <canvas id="commodityLongChart" height="320"></canvas>
+    <div class="sp-chart-canvas-wrap">
+      <canvas id="commodityLongChart"></canvas>
+    </div>
     <div class="sp-chart-insight" id="commodityInsight"></div>
   </div>
 </section>
@@ -204,6 +206,12 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
     background:#fff;border:1px solid #EAEAEC;border-radius:18px;padding:20px 22px;
     box-shadow:0 1px 2px rgba(10,10,12,.04);
   }
+  /* Fix Chart.js infinite vertical growth bug — canvas wrap musí mít explicit max height
+     (responsive:true + maintainAspectRatio:false jinak roste do nekonečna) */
+  .sp-chart-canvas-wrap{
+    position:relative;height:380px;max-height:60vh;width:100%;
+  }
+  .sp-chart-canvas-wrap canvas{display:block;width:100% !important;height:100% !important}
   .sp-chart-insight{
     margin-top:12px;padding:10px 14px;background:#FFF6A8;border-radius:10px;
     font:500 13px 'Chakra Petch',sans-serif;color:#0A0A0B;

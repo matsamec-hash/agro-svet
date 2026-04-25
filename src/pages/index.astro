@@ -15,7 +15,7 @@ const supabase = createAnonClient();
 const [{ data: articles }, commodityFull, commodityPrices] = await Promise.all([
   supabase
     .from('articles')
-    .select('id, title, slug, perex, featured_image_url, category, tags, published_at, featured')
+    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
     .eq('site_id', SITE_ID)
     .eq('status', 'published')
     .order('featured', { ascending: false })
@@ -113,7 +113,7 @@ const websiteJsonLd = {
       {featured && (
         <div class="hero-card hero-main hero-wrap">
           <a href={`/novinky/${featured.slug}/`} class="hero-link">
-            {featured.featured_image_url && <img src={featured.featured_image_url} alt={featured.title} width="800" height="600" />}
+            {featured.featured_image_url && <img src={featured.featured_image_url} alt={featured.title} width="800" height="600" style={`object-position: ${featured.focal_point?.x ?? 50}% ${featured.focal_point?.y ?? 50}%;`} />}
             <div class="hero-overlay"></div>
             <div class="hero-card-content">
               <h2>{featured.title}</h2>

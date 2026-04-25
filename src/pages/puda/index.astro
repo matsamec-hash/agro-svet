@@ -20,8 +20,8 @@ const cenaPudy = [
 ];
 const cenaMin = 0;
 const cenaMax = 400;
-const cenaW = 720;
-const cenaH = 280;
+const cenaW = 1200;
+const cenaH = 360;
 const cenaPad = { l: 50, r: 20, t: 20, b: 30 };
 const cenaPlotW = cenaW - cenaPad.l - cenaPad.r;
 const cenaPlotH = cenaH - cenaPad.t - cenaPad.b;
@@ -123,21 +123,33 @@ const donutSegs = struktura.map((s) => {
             return (
               <>
                 <line x1={cenaPad.l} y1={y} x2={cenaW - cenaPad.r} y2={y} stroke="#eee" stroke-width="1"/>
-                <text x={cenaPad.l - 6} y={y + 4} text-anchor="end" font-size="11" fill="#888">{v}</text>
+                <text x={cenaPad.l - 8} y={y + 5} text-anchor="end" font-size="13" fill="#888">{v}</text>
               </>
             );
           })}
           <path d={cenaArea} fill="rgba(255, 215, 0, .25)" class="line-area"/>
-          <path d={cenaPath} stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round" class="line-path"/>
-          {cenaPoints.map((p, i) => (
-            <>
-              <circle cx={p.x} cy={p.y} r="9" fill="transparent" class="line-point-hit" data-rok={p.rok} data-cena={p.cena}/>
-              <circle cx={p.x} cy={p.y} r="4" fill="#FFFF00" stroke="#1a1a1a" stroke-width="1.5" class="line-point" data-rok={p.rok}/>
-              {(i === 0 || i === cenaPoints.length - 1 || i % 2 === 0) && (
-                <text x={p.x} y={cenaPad.t + cenaPlotH + 18} text-anchor="middle" font-size="11" fill="#666">{p.rok}</text>
-              )}
-            </>
-          ))}
+          <path d={cenaPath} stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round" class="line-path"/>
+          {cenaPoints.map((p, i) => {
+            // Vertikální hover sloupec — Voronoi-style: půlka cesty k sousedovi
+            const prevX = i > 0 ? cenaPoints[i-1].x : p.x - 50;
+            const nextX = i < cenaPoints.length - 1 ? cenaPoints[i+1].x : p.x + 50;
+            const colX = (prevX + p.x) / 2;
+            const colW = (nextX - prevX) / 2;
+            return (
+              <>
+                <rect x={colX} y={cenaPad.t} width={colW} height={cenaPlotH}
+                      fill="transparent" class="line-point-hit"
+                      data-rok={p.rok} data-cena={p.cena} data-x={p.x} data-y={p.y}/>
+                <line x1={p.x} y1={cenaPad.t} x2={p.x} y2={cenaPad.t + cenaPlotH}
+                      stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3 3" opacity="0"
+                      class="line-guide" data-rok-line={p.rok}/>
+                <circle cx={p.x} cy={p.y} r="5" fill="#FFFF00" stroke="#1a1a1a" stroke-width="2" class="line-point" data-rok={p.rok}/>
+                {(i === 0 || i === cenaPoints.length - 1 || i % 2 === 0) && (
+                  <text x={p.x} y={cenaPad.t + cenaPlotH + 22} text-anchor="middle" font-size="13" fill="#666">{p.rok}</text>
+                )}
+              </>
+            );
+          })}
         </svg>
         <div class="chart-insight">
           Z 60 tis. Kč/ha v roce 2000 na <strong>372 550 Kč/ha v 2025</strong> — sedminásobný růst za jednu generaci.
@@ -302,7 +314,7 @@ const donutSegs = struktura.map((s) => {
   .chart-section h2 { font-size: 24px; font-weight:700; margin:0 0 6px; color:#1a1a1a; }
   .chart-section .sub { font-size:13px; color:#888; }
   .chart-wrap { display:flex; flex-direction:column; gap:16px; }
-  .chart-svg { width:100%; max-width:720px; height:auto; }
+  .chart-svg { width:100%; height:auto; display:block; }
   .chart-insight { font-size:14px; color:#444; line-height:1.6; padding:14px 18px; background:#fafafa; border-left:3px solid #FFFF00; border-radius:6px; }
 
   /* Two-column */
@@ -387,8 +399,9 @@ const donutSegs = struktura.map((s) => {
   /* Line points — pulse on hover */
   .line-point { transition: r .15s, fill .15s; pointer-events: none; }
   .line-point-hit { cursor: crosshair; }
-  .line-point-hit:hover ~ .line-point,
-  .line-point.is-hover { r: 7; fill: #1a1a1a; stroke: #FFFF00; stroke-width: 2; }
+  .line-point.is-hover { r: 8; fill: #1a1a1a; stroke: #FFFF00; stroke-width: 2.5; }
+  .line-guide { transition: opacity .15s; pointer-events: none; }
+  .line-guide.is-hover { opacity: .5; }
 
   /* Donut — radial reveal + hover scale */
   .donut-svg { overflow: visible; }
@@ -459,24 +472,29 @@ const donutSegs = struktura.map((s) => {
     }
     function hideTip() { tip.classList.remove('is-visible'); }
 
-    // ── Line chart points: hover tooltip ──
+    // ── Line chart hit columns (Voronoi-style): hover tooltip + guide line + point pulse ──
     document.querySelectorAll('.line-point-hit').forEach(pt => {
-      pt.addEventListener('mouseenter', (ev) => {
-        const r = pt.getBoundingClientRect();
+      pt.addEventListener('mouseenter', () => {
         const rok = pt.dataset.rok;
         const cena = parseFloat(pt.dataset.cena);
-        showTip(`<strong>${rok}</strong>: ${cena.toLocaleString('cs-CZ')} tis. Kč/ha`, r.left + r.width/2, r.top);
-        // hover the visible point
-        const visible = pt.parentElement.querySelector(`.line-point[data-rok="${rok}"]`);
-        if (visible) visible.classList.add('is-hover');
+        const cenaKc = (cena * 1000).toLocaleString('cs-CZ');
+        // Tooltip: pozice nad datapointem v SVG (ne kde je kurzor — Voronoi sloupec je široký)
+        const svg = pt.closest('svg');
+        const ptRect = svg.getBoundingClientRect();
+        const dx = parseFloat(pt.dataset.x);
+        const dy = parseFloat(pt.dataset.y);
+        const vbW = svg.viewBox.baseVal.width;
+        const vbH = svg.viewBox.baseVal.height;
+        const screenX = ptRect.left + (dx / vbW) * ptRect.width;
+        const screenY = ptRect.top + (dy / vbH) * ptRect.height;
+        showTip(`<strong>${rok}</strong><br>${cena.toLocaleString('cs-CZ')} tis. Kč/ha<br><span style="opacity:.7;font-size:11px">${cenaKc} Kč/ha</span>`, screenX, screenY);
+        // Pulse visible point + guide line
+        svg.querySelectorAll('.line-point').forEach(p => p.classList.toggle('is-hover', p.dataset.rok === rok));
+        svg.querySelectorAll('.line-guide').forEach(g => g.classList.toggle('is-hover', g.dataset.rokLine === rok));
       });
       pt.addEventListener('mouseleave', () => {
         hideTip();
-        document.querySelectorAll('.line-point.is-hover').forEach(p => p.classList.remove('is-hover'));
-      });
-      pt.addEventListener('mousemove', (ev) => {
-        tip.style.left = ev.clientX + 'px';
-        tip.style.top = (ev.clientY - 14) + 'px';
+        document.querySelectorAll('.line-point.is-hover, .line-guide.is-hover').forEach(p => p.classList.remove('is-hover'));
       });
     });
 
