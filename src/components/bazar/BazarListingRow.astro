@@ -9,15 +9,17 @@ interface Props {
   imageUrl: string | null;
   createdAt: string;
   views?: number | null;
+  featured?: boolean;
 }
 
-const { id, title, price, location, category, brand, imageUrl, createdAt, views } = Astro.props;
+const { id, title, price, location, category, brand, imageUrl, createdAt, views, featured } = Astro.props;
 
 const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long' }).format(new Date(createdAt));
 const priceText = price ? `${price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
 ---
 
 <a href={`/bazar/${id}/`} class="listing-row">
+  {featured && <span class="listing-top-badge">TOP</span>}
   <div class="listing-img">
     {imageUrl
       ? <img src={imageUrl} alt={title} loading="lazy" width="120" height="90" />
@@ -55,9 +57,25 @@ const priceText = price ? `${price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
     color: inherit;
     border-bottom: 1px solid #f0f0f0;
     transition: background .15s;
+    position: relative;
   }
   .listing-row:hover {
     background: #f9f9f9;
+  }
+
+  .listing-top-badge {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: #FFFF00;
+    color: #1a1a1a;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    z-index: 2;
+    letter-spacing: 0.5px;
   }
 
   .listing-img {

@@ -1,0 +1,428 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { createServerClient } from '../../../lib/supabase';
+import { isFeaturedActive, formatFeaturedUntil } from '../../../lib/bazar-featured';
+
+const url = Astro.url;
+const filter = (url.searchParams.get('filter') ?? 'all') as 'all' | 'active' | 'expired' | 'none';
+const search = url.searchParams.get('q') ?? '';
+const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1'));
+const PER_PAGE = 30;
+
+const supabase = createServerClient();
+const nowIso = new Date().toISOString();
+
+let dbQuery = supabase
+  .from('bazar_listings')
+  .select('id, title, price, status, featured, featured_until, featured_plan, created_at, bazar_users!inner(email)', { count: 'exact' })
+  .order('featured', { ascending: false })
+  .order('featured_until', { ascending: true, nullsFirst: false })
+  .order('created_at', { ascending: false })
+  .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
+
+if (filter === 'active') {
+  dbQuery = dbQuery.eq('featured', true).gt('featured_until', nowIso);
+} else if (filter === 'expired') {
+  dbQuery = dbQuery.eq('featured', true).lte('featured_until', nowIso);
+} else if (filter === 'none') {
+  dbQuery = dbQuery.eq('featured', false);
+}
+
+if (search) {
+  // Sanitize: strip characters that have meaning in Supabase filter syntax (.or() separator).
+  // Without this, ?q=,featured.eq.true could inject extra filter conditions.
+  const safeSearch = search.replace(/[,()*]/g, '');
+  if (safeSearch) {
+    dbQuery = dbQuery.or(`title.ilike.%${safeSearch}%,bazar_users.email.ilike.%${safeSearch}%`);
+  }
+}
+
+const { data: listings, count } = await dbQuery;
+const totalPages = Math.ceil((count ?? 0) / PER_PAGE);
+
+function topStatus(listing: any): { label: string; tone: 'active' | 'expired' | 'none' } {
+  if (!listing.featured) return { label: 'Nepropagován', tone: 'none' };
+  if (isFeaturedActive(listing)) return { label: `Aktivní TOP · do ${formatFeaturedUntil(listing.featured_until)}`, tone: 'active' };
+  return { label: `Expirovalo ${formatFeaturedUntil(listing.featured_until)}`, tone: 'expired' };
+}
+
+function priceText(price: number | null): string {
+  return price ? `${price.toLocaleString('cs-CZ')} Kč` : '—';
+}
+---
+
+<Layout title="Admin — Topování bazaru" description="Admin správa TOP inzerátů">
+  <main class="admin-bazar">
+    <a href="/admin/" class="back-link">← Admin přehled</a>
+    <h1>Topování bazaru</h1>
+
+    <form method="GET" class="filters">
+      <div class="filter-chips">
+        <a href="?filter=all" class={`chip ${filter === 'all' ? 'chip-active' : ''}`}>Vše</a>
+        <a href="?filter=active" class={`chip ${filter === 'active' ? 'chip-active' : ''}`}>Aktivní TOP</a>
+        <a href="?filter=expired" class={`chip ${filter === 'expired' ? 'chip-active' : ''}`}>Expirované</a>
+        <a href="?filter=none" class={`chip ${filter === 'none' ? 'chip-active' : ''}`}>Non-featured</a>
+      </div>
+      <input type="search" name="q" value={search} placeholder="Hledat titulek / email autora…" class="search-input" />
+      {filter !== 'all' && <input type="hidden" name="filter" value={filter} />}
+      <button type="submit" class="btn-primary">Hledat</button>
+    </form>
+
+    {listings && listings.length > 0 ? (
+      <div class="admin-table">
+        <div class="table-head">
+          <div class="col-title">Titulek</div>
+          <div class="col-author">Autor</div>
+          <div class="col-price">Cena</div>
+          <div class="col-status">TOP stav</div>
+          <div class="col-actions">Akce</div>
+        </div>
+        {listings.map((listing: any) => {
+          const status = topStatus(listing);
+          const authorEmail = listing.bazar_users?.email ?? '—';
+          return (
+            <div class="table-row" data-listing-id={listing.id}>
+              <div class="col-title">
+                <a href={`/bazar/${listing.id}/`} target="_blank" rel="noopener">{listing.title}</a>
+              </div>
+              <div class="col-author">{authorEmail}</div>
+              <div class="col-price">{priceText(listing.price)}</div>
+              <div class={`col-status status-${status.tone}`} data-status>{status.label}</div>
+              <div class="col-actions">
+                <button type="button" class="btn-sm" data-action="extend" data-plan="7d">+7d</button>
+                <button type="button" class="btn-sm" data-action="extend" data-plan="30d">+30d</button>
+                <button type="button" class="btn-sm" data-action="extend" data-plan="60d">+60d</button>
+                <button type="button" class="btn-sm" data-action="custom">Custom…</button>
+                {listing.featured && (
+                  <button type="button" class="btn-sm btn-danger" data-action="clear">Zrušit</button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    ) : (
+      <p class="empty">Žádné inzeráty nenalezeny.</p>
+    )}
+
+    <nav class="pagination">
+      {page > 1 && <a href={`?filter=${filter}${search ? '&q=' + encodeURIComponent(search) : ''}&page=${page - 1}`}>← Předchozí</a>}
+      <span>Strana {page} / {totalPages || 1}</span>
+      {page < totalPages && <a href={`?filter=${filter}${search ? '&q=' + encodeURIComponent(search) : ''}&page=${page + 1}`}>Další →</a>}
+    </nav>
+  </main>
+
+  <dialog id="custom-modal">
+    <form method="dialog" class="custom-form">
+      <h3>Topovat do konkrétního data</h3>
+      <label>
+        Datum a čas:
+        <input type="datetime-local" id="custom-until" required />
+      </label>
+      <div class="modal-actions">
+        <button type="button" id="custom-cancel">Zrušit</button>
+        <button type="button" id="custom-confirm" class="btn-primary">Uložit</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const modal = document.getElementById('custom-modal') as HTMLDialogElement;
+    const customUntilInput = document.getElementById('custom-until') as HTMLInputElement;
+    const customConfirm = document.getElementById('custom-confirm')!;
+    const customCancel = document.getElementById('custom-cancel')!;
+    let pendingRow: HTMLElement | null = null;
+
+    async function callApi(listingId: string, body: any): Promise<any> {
+      const res = await fetch('/admin/bazar/api/toggle-featured', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ listingId, ...body }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message ?? data.error ?? 'Request failed');
+      return data;
+    }
+
+    function updateRow(row: HTMLElement, listing: any) {
+      const statusCell = row.querySelector<HTMLElement>('[data-status]')!;
+      if (!listing.featured) {
+        statusCell.className = 'col-status status-none';
+        statusCell.textContent = 'Nepropagován';
+      } else {
+        const until = new Date(listing.featured_until);
+        const isActive = until.getTime() > Date.now();
+        const fmt = `${until.getDate()}. ${until.getMonth() + 1}. ${until.getFullYear()}`;
+        if (isActive) {
+          statusCell.className = 'col-status status-active';
+          statusCell.textContent = `Aktivní TOP · do ${fmt}`;
+        } else {
+          statusCell.className = 'col-status status-expired';
+          statusCell.textContent = `Expirovalo ${fmt}`;
+        }
+      }
+      const actionsCell = row.querySelector<HTMLElement>('.col-actions')!;
+      const existingClear = actionsCell.querySelector('[data-action="clear"]');
+      if (listing.featured && !existingClear) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-sm btn-danger';
+        btn.dataset.action = 'clear';
+        btn.textContent = 'Zrušit';
+        actionsCell.appendChild(btn);
+        wireButton(btn);
+      } else if (!listing.featured && existingClear) {
+        existingClear.remove();
+      }
+    }
+
+    function wireButton(btn: HTMLElement) {
+      btn.addEventListener('click', async () => {
+        const row = btn.closest<HTMLElement>('[data-listing-id]')!;
+        const listingId = row.dataset.listingId!;
+        const action = btn.dataset.action!;
+
+        if (action === 'custom') {
+          pendingRow = row;
+          const defaultDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+          customUntilInput.value = defaultDate.toISOString().slice(0, 16);
+          modal.showModal();
+          return;
+        }
+
+        const originalText = btn.textContent;
+        btn.textContent = '…';
+        (btn as HTMLButtonElement).disabled = true;
+        try {
+          let body: any;
+          if (action === 'extend') {
+            body = { action: 'extend', plan: btn.dataset.plan };
+          } else if (action === 'clear') {
+            body = { action: 'clear' };
+          }
+          const data = await callApi(listingId, body);
+          updateRow(row, data.listing);
+        } catch (err: any) {
+          alert(`Chyba: ${err.message}`);
+        } finally {
+          btn.textContent = originalText;
+          (btn as HTMLButtonElement).disabled = false;
+        }
+      });
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-action]').forEach(wireButton);
+
+    customCancel.addEventListener('click', () => {
+      modal.close();
+      pendingRow = null;
+    });
+
+    customConfirm.addEventListener('click', async () => {
+      if (!pendingRow) return;
+      const listingId = pendingRow.dataset.listingId!;
+      const untilLocal = customUntilInput.value;
+      if (!untilLocal) {
+        alert('Zadejte datum');
+        return;
+      }
+      const untilDate = new Date(untilLocal);
+      try {
+        const data = await callApi(listingId, { action: 'custom', until: untilDate.toISOString() });
+        updateRow(pendingRow, data.listing);
+        modal.close();
+        pendingRow = null;
+      } catch (err: any) {
+        alert(`Chyba: ${err.message}`);
+      }
+    });
+  </script>
+
+  <style>
+    .admin-bazar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    .back-link {
+      font-size: 13px;
+      color: #666;
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+    h1 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 2rem;
+      margin: 12px 0 24px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-block;
+      padding: 6px 14px;
+      font-size: 13px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fff;
+      text-decoration: none;
+      color: #555;
+    }
+    .chip:hover { background: #f5f5f5; }
+    .chip-active {
+      background: #FFFF00;
+      border-color: #FFFF00;
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+    .search-input {
+      padding: 8px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      min-width: 240px;
+      flex: 1;
+    }
+
+    .admin-table {
+      border: 1px solid #e8e8e8;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .table-head,
+    .table-row {
+      display: grid;
+      grid-template-columns: 3fr 2fr 1fr 2fr 3fr;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+    }
+    .table-head {
+      background: #fafafa;
+      border-bottom: 1px solid #e8e8e8;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #666;
+      letter-spacing: 0.5px;
+    }
+    .table-row {
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+    }
+    .table-row:last-child { border-bottom: none; }
+    .col-title a { color: #1a1a1a; text-decoration: none; }
+    .col-title a:hover { text-decoration: underline; }
+    .col-author { color: #666; font-size: 13px; word-break: break-word; }
+    .col-price { font-family: 'Chakra Petch', sans-serif; font-weight: 600; white-space: nowrap; }
+    .col-status { font-size: 13px; }
+    .status-active { color: #2e7d32; font-weight: 600; }
+    .status-expired { color: #c62828; }
+    .status-none { color: #999; }
+    .col-actions {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .btn-sm {
+      font-size: 12px;
+      padding: 5px 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      color: #333;
+      font-family: var(--font-body);
+    }
+    .btn-sm:hover { background: #f5f5f5; }
+    .btn-sm:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-danger { color: #c62828; border-color: #ffcdd2; }
+    .btn-danger:hover { background: #fff0f0; }
+
+    .pagination {
+      margin-top: 24px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .pagination a { color: #1a1a1a; }
+
+    .empty {
+      text-align: center;
+      padding: 64px 0;
+      color: #666;
+      background: #fafafa;
+      border-radius: 14px;
+    }
+
+    dialog {
+      border: none;
+      border-radius: 14px;
+      padding: 0;
+      min-width: 360px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    dialog::backdrop {
+      background: rgba(0,0,0,0.4);
+    }
+    .custom-form {
+      padding: 24px;
+    }
+    .custom-form h3 {
+      margin: 0 0 16px;
+      font-family: 'Chakra Petch', sans-serif;
+    }
+    .custom-form label {
+      display: block;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #666;
+    }
+    .custom-form input[type="datetime-local"] {
+      display: block;
+      margin-top: 6px;
+      padding: 8px 12px;
+      width: 100%;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .modal-actions button {
+      padding: 8px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .table-head { display: none; }
+      .table-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .col-actions { justify-content: flex-start; }
+    }
+  </style>
+</Layout>

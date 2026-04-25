@@ -1,0 +1,156 @@
+---
+interface FeaturedListing {
+  id: string;
+  title: string;
+  price: number | null;
+  location: string;
+  imageUrl: string | null;
+}
+
+interface Props {
+  listings: FeaturedListing[];
+}
+
+const { listings } = Astro.props;
+
+function priceText(price: number | null): string {
+  return price ? `${price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
+}
+---
+
+{listings.length > 0 && (
+  <section class="featured-section">
+    <h2 class="featured-heading">⭐ Doporučené inzeráty</h2>
+    <div class="featured-grid">
+      {listings.map(listing => (
+        <a href={`/bazar/${listing.id}/`} class="featured-card">
+          <div class="featured-img">
+            {listing.imageUrl
+              ? <img src={listing.imageUrl} alt={listing.title} loading="lazy" />
+              : <div class="featured-placeholder">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                </div>
+            }
+            <span class="featured-badge">TOP</span>
+          </div>
+          <div class="featured-body">
+            <h3 class="featured-title">{listing.title}</h3>
+            <div class="featured-meta">
+              <span class="featured-price">{priceText(listing.price)}</span>
+              <span class="featured-location">{listing.location}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .featured-section {
+    border: 2px solid #FFFF00;
+    border-radius: 18px;
+    padding: 20px;
+    background: #fffef8;
+    margin-bottom: 32px;
+  }
+  .featured-heading {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 16px;
+    color: #1a1a1a;
+  }
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 768px) {
+    .featured-grid { grid-template-columns: 1fr; }
+  }
+
+  .featured-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .featured-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  .featured-img {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .featured-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .featured-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #FFFF00;
+    color: #1a1a1a;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .featured-body {
+    padding: 12px 14px 14px;
+  }
+  .featured-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: #1a1a1a;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+    min-height: 2.6em;
+  }
+  .featured-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .featured-price {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .featured-location {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: #666;
+  }
+</style>

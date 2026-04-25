@@ -1,0 +1,67 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Admin — agro-svet" description="Admin rozcestník">
+  <main class="admin-home">
+    <h1>Admin</h1>
+    <div class="tiles">
+      <a href="/admin/fotosoutez/" class="tile">
+        <h2>Fotosoutěž</h2>
+        <p>Moderace, kola, vítězové</p>
+      </a>
+      <a href="/admin/bazar/" class="tile">
+        <h2>Agro bazar — Topování</h2>
+        <p>TOP inzeráty, aktivace, prodloužení</p>
+      </a>
+      <a href="/admin/clanky/" class="tile">
+        <h2>Články — featured na HP</h2>
+        <p>Pin článků nahoru hero gridu</p>
+      </a>
+    </div>
+  </main>
+
+  <style>
+    .admin-home {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    h1 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 2rem;
+      margin: 0 0 32px;
+    }
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .tile {
+      display: block;
+      padding: 28px 24px;
+      border: 1px solid #e8e8e8;
+      border-radius: 14px;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .tile:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      border-color: #FFFF00;
+    }
+    .tile h2 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.25rem;
+      margin: 0 0 6px;
+    }
+    .tile p {
+      color: #666;
+      font-size: 13px;
+      margin: 0;
+    }
+  </style>
+</Layout>

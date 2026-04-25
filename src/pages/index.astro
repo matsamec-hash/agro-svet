@@ -10,9 +10,10 @@ const supabase = createAnonClient();
 
 const { data: articles } = await supabase
   .from('articles')
-  .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+  .select('id, title, slug, perex, featured_image_url, category, tags, published_at, featured')
   .eq('site_id', SITE_ID)
   .eq('status', 'published')
+  .order('featured', { ascending: false })
   .order('published_at', { ascending: false })
   .limit(20);
 
