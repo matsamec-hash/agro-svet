@@ -161,7 +161,9 @@ if (skotMile) {
 }
 
 // Cenové nůžky
-const BASE_YEAR = 2015;
+// BASE_YEAR = 2017 — Nafta data začínají 2016, NPK + komodity dostupné od ~2010,
+// 2017 je první rok kde mají všechny 3 vstupy (4 komodity + NPK + Nafta) full coverage.
+const BASE_YEAR = 2017;
 const scissorsPoints = priceScissors(commodityPrices, fertilizers, fuelPrices, BASE_YEAR);
 const scissorsInsight = (() => {
   if (scissorsPoints.length < 2) return 'Nedostatek dat pro výpočet cenových nůžek.';
