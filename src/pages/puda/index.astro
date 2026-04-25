@@ -95,6 +95,21 @@ const donutSegs = struktura.map((s) => {
       </div>
     </section>
 
+    <!-- Témata (na začátek) -->
+    <section class="topics-section">
+      <h2>Hloubkově k tématům</h2>
+      <div class="topics-grid">
+        {pudaItems.map(item => (
+          <a href={`/puda/${item.id}/`} class="puda-card">
+            <div class="card-icon">🌱</div>
+            <h3>{item.data.title}</h3>
+            <p>{item.data.popis}</p>
+            <span class="card-cta">Číst dál →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
     <!-- Cena půdy graf -->
     <section class="chart-section">
       <header>
@@ -246,21 +261,6 @@ const donutSegs = struktura.map((s) => {
         ČR má extrémní podíl řepky: <strong>16 % všech polí</strong> oseto řepkou (vs. EU průměr 6,3 %). Kukuřice rapidně roste,
         v Jihomoravském kraji +32 % ploch v 2024.
       </p>
-    </section>
-
-    <!-- Témata (původní karty) -->
-    <section class="topics-section">
-      <h2>Hloubkově k tématům</h2>
-      <div class="topics-grid">
-        {pudaItems.map(item => (
-          <a href={`/puda/${item.id}/`} class="puda-card">
-            <div class="card-icon">🌱</div>
-            <h3>{item.data.title}</h3>
-            <p>{item.data.popis}</p>
-            <span class="card-cta">Číst dál →</span>
-          </a>
-        ))}
-      </div>
     </section>
 
     <!-- Zdroje -->
