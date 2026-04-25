@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin | agro-svět.cz</title>
   <script>
-    // Manual init s celou config v JS — Decap v3.12 ignoruje auth_type: pkce z config.yml
-    // a redirekuje na api.netlify.com/auth (legacy Netlify Identity) → Not Found.
+    // Manual init s celou config v JS — Decap GitHub backend NEPODPORUJE PKCE,
+    // takže používáme self-hosted OAuth proxy na /admin-oauth/* (Cloudflare Worker route).
     window.CMS_MANUAL_INIT = true;
   </script>
 </head>
@@ -21,8 +21,8 @@
           name: 'github',
           repo: 'matsamec-hash/agro-svet',
           branch: 'master',
-          auth_type: 'pkce',
-          app_id: 'Ov23lib8uYlQwKryiO3b'
+          base_url: 'https://agro-svet.cz',
+          auth_endpoint: 'admin-oauth/auth'
         },
         media_folder: 'public/images',
         public_folder: '/images',
