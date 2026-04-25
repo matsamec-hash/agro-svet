@@ -3,944 +3,1164 @@ name: Fendt
 country: Německo
 founded: 1937
 website: https://www.fendt.com
-description: >
-  Prémiová německá značka traktorů známá CVT převodovkou Vario. Vlastněná koncernem AGCO od roku 1997.
-  Vario technologie (bezstupňová převodovka) debutovala v roce 1995 a dnes pokrývá celou nabídku —
-  od malých 200 Vario až po vlajkový 1000 Vario. Kombajny IDEAL patří mezi nejpokročilejší na světě.
-
+description: |
+  Prémiová německá značka traktorů známá CVT převodovkou Vario. Vlastněná koncernem AGCO od roku 1997. Vario technologie (bezstupňová převodovka) debutovala v roce 1995 a dnes pokrývá celou nabídku — od malých 200 Vario až po vlajkový 1000 Vario. Kombajny IDEAL patří mezi nejpokročilejší na světě.
 categories:
   traktory:
     name: Traktory
-
     series:
-      # ========== HISTORICKÉ (pre-Vario, 80-90. léta) ==========
       - slug: farmer-300-400-lsa
-        name: "Farmer 300/400 LSA (1988–1997)"
+        name: Farmer 300/400 LSA (1988–1997)
+        image_url: /images/stroje/fendt/fendt-farmer-115k.webp
         year_from: 1988
         year_to: 1997
-        description: >
-          Střední a větší třída Farmer s mechanickou převodovkou. Motor MWM/Deutz,
-          synchronizovaná převodovka 21/6 nebo 24/8. Robustní koncepce, dodnes oblíbené
-          v drobném a sadařském hospodářství.
+        description: |
+          Střední a větší třída Farmer s mechanickou převodovkou. Motor MWM/Deutz, synchronizovaná převodovka 21/6 nebo 24/8. Robustní koncepce, dodnes oblíbené v drobném a sadařském hospodářství.
         models:
           - slug: fendt-306-lsa
-            name: "Farmer 306 LSA"
+            name: Farmer 306 LSA
             year_from: 1988
             year_to: 1993
             power_hp: 68
             power_kw: 50
           - slug: fendt-307-lsa
-            name: "Farmer 307 LSA"
+            name: Farmer 307 LSA
             year_from: 1988
             year_to: 1993
             power_hp: 72
             power_kw: 53
           - slug: fendt-308-lsa
-            name: "Farmer 308 LSA"
+            name: Farmer 308 LSA
             year_from: 1988
             year_to: 1993
             power_hp: 81
             power_kw: 60
           - slug: fendt-309-lsa
-            name: "Farmer 309 LSA"
+            name: Farmer 309 LSA
             year_from: 1988
             year_to: 1993
             power_hp: 89
             power_kw: 65
           - slug: fendt-310-lsa
-            name: "Farmer 310 LSA"
+            name: Farmer 310 LSA
             year_from: 1993
             year_to: 1997
             power_hp: 95
             power_kw: 70
           - slug: fendt-311-lsa
-            name: "Farmer 311 LSA"
+            name: Farmer 311 LSA
             year_from: 1993
             year_to: 1997
             power_hp: 102
             power_kw: 75
           - slug: fendt-312-lsa
-            name: "Farmer 312 LSA"
+            name: Farmer 312 LSA
             year_from: 1993
             year_to: 1997
             power_hp: 115
             power_kw: 85
           - slug: fendt-410-lsa
-            name: "Farmer 410 LSA"
+            name: Farmer 410 LSA
             year_from: 1988
             year_to: 1993
             power_hp: 102
             power_kw: 75
           - slug: fendt-411-lsa
-            name: "Farmer 411 LSA"
+            name: Farmer 411 LSA
             year_from: 1988
             year_to: 1993
             power_hp: 115
             power_kw: 85
-
       - slug: xylon
-        name: "Xylon 520/522/524 (1993–2000)"
+        name: Xylon 520/522/524 (1993–2000)
+        image_url: /images/stroje/fendt/fendt-xylon-140k.webp
         year_from: 1993
         year_to: 2000
-        description: >
-          Specialita Fendtu — univerzální systémový traktor se středovou kabinou, reverzním
-          řízením a třemi závěsy (přední, střední, zadní). Pro komunální a specializované nasazení.
+        description: |
+          Specialita Fendtu — univerzální systémový traktor se středovou kabinou, reverzním řízením a třemi závěsy (přední, střední, zadní). Pro komunální a specializované nasazení.
         models:
           - slug: fendt-xylon-520
-            name: "Xylon 520"
+            name: Xylon 520
             year_from: 1993
             year_to: 2000
             power_hp: 110
             power_kw: 81
           - slug: fendt-xylon-522
-            name: "Xylon 522"
+            name: Xylon 522
             year_from: 1995
             year_to: 2000
             power_hp: 125
             power_kw: 92
           - slug: fendt-xylon-524
-            name: "Xylon 524"
+            name: Xylon 524
             year_from: 1995
             year_to: 2000
             power_hp: 140
             power_kw: 103
-
       - slug: favorit-500-c
-        name: "Favorit 500 C (1990–1995)"
+        name: Favorit 500 C (1990–1995)
         year_from: 1990
         year_to: 1995
-        description: >
-          Mechanická převodovka 44/44 TurboMatik, před příchodem Vario technologie.
-          Motor MWM 6-válec 6,2 L.
+        description: |
+          Mechanická převodovka 44/44 TurboMatik, před příchodem Vario technologie. Motor MWM 6-válec 6,2 L.
         models:
           - slug: fendt-509-c
-            name: "Favorit 509 C"
+            name: Favorit 509 C
             year_from: 1990
             year_to: 1995
             power_hp: 105
             power_kw: 77
           - slug: fendt-510-c
-            name: "Favorit 510 C"
+            name: Favorit 510 C
             year_from: 1990
             year_to: 1995
             power_hp: 115
             power_kw: 85
           - slug: fendt-511-c
-            name: "Favorit 511 C"
+            name: Favorit 511 C
             year_from: 1990
             year_to: 1995
             power_hp: 125
             power_kw: 92
           - slug: fendt-512-c
-            name: "Favorit 512 C"
+            name: Favorit 512 C
             year_from: 1990
             year_to: 1995
             power_hp: 135
             power_kw: 99
           - slug: fendt-514-c
-            name: "Favorit 514 C"
+            name: Favorit 514 C
             year_from: 1990
             year_to: 1995
             power_hp: 145
             power_kw: 107
           - slug: fendt-515-c
-            name: "Favorit 515 C"
+            name: Favorit 515 C
             year_from: 1990
             year_to: 1995
             power_hp: 150
             power_kw: 110
-
-      # ========== FAVORIT VARIO (první generace CVT, 1995+) ==========
       - slug: favorit-500-vario
-        name: "Favorit 500 Vario (1995–2000)"
+        name: Favorit 500 Vario (1995–2000)
         year_from: 1995
         year_to: 2000
-        description: >
-          **Historický milník** — první sériově vyráběný traktor na světě s plynulou variátorovou
-          převodovkou (CVT). Převodovka ML70 Vario pracuje bez řadících stupňů, s neomezeně
-          plynulou změnou rychlosti od 0 do 40 km/h. Zlom v konstrukci traktorů.
+        description: |
+          **Historický milník** — první sériově vyráběný traktor na světě s plynulou variátorovou převodovkou (CVT). Převodovka ML70 Vario pracuje bez řadících stupňů, s neomezeně plynulou změnou rychlosti od 0 do 40 km/h. Zlom v konstrukci traktorů.
         models:
           - slug: fendt-509-vario
-            name: "Favorit 509 Vario"
+            name: Favorit 509 Vario
             year_from: 1995
             year_to: 2000
             power_hp: 105
             power_kw: 77
           - slug: fendt-510-vario-favorit
-            name: "Favorit 510 Vario"
+            name: Favorit 510 Vario
             year_from: 1995
             year_to: 2000
             power_hp: 115
             power_kw: 85
           - slug: fendt-511-vario-favorit
-            name: "Favorit 511 Vario"
+            name: Favorit 511 Vario
             year_from: 1995
             year_to: 2000
             power_hp: 125
             power_kw: 92
           - slug: fendt-512-vario-favorit
-            name: "Favorit 512 Vario"
+            name: Favorit 512 Vario
             year_from: 1995
             year_to: 2000
             power_hp: 135
             power_kw: 99
           - slug: fendt-514-vario-favorit
-            name: "Favorit 514 Vario"
+            name: Favorit 514 Vario
             year_from: 1995
             year_to: 2000
             power_hp: 145
             power_kw: 107
           - slug: fendt-515-vario-favorit
-            name: "Favorit 515 Vario"
+            name: Favorit 515 Vario
             year_from: 1995
             year_to: 2000
             power_hp: 150
             power_kw: 110
-
       - slug: favorit-700-vario
-        name: "Favorit 700 Vario (1998–2004)"
+        name: Favorit 700 Vario (1998–2004)
+        image_url: /images/stroje/fendt/fendt-favorit-700-175k.webp
         year_from: 1998
         year_to: 2004
-        description: >
-          Vlajková řada po Favorit 500/600. Motor MAN 6-válec 6,9 L, převodovka ML85 Vario
-          s plynulou změnou 0–50 km/h.
+        description: |
+          Vlajková řada po Favorit 500/600. Motor MAN 6-válec 6,9 L, převodovka ML85 Vario s plynulou změnou 0–50 km/h.
         models:
           - slug: fendt-711-vario-favorit
-            name: "Favorit 711 Vario"
+            name: Favorit 711 Vario
             year_from: 1998
             year_to: 2004
             power_hp: 125
             power_kw: 92
           - slug: fendt-712-vario-favorit
-            name: "Favorit 712 Vario"
+            name: Favorit 712 Vario
             year_from: 1998
             year_to: 2004
             power_hp: 140
             power_kw: 103
           - slug: fendt-714-vario-favorit
-            name: "Favorit 714 Vario"
+            name: Favorit 714 Vario
             year_from: 1998
             year_to: 2004
             power_hp: 160
             power_kw: 118
           - slug: fendt-716-vario-favorit
-            name: "Favorit 716 Vario"
+            name: Favorit 716 Vario
             year_from: 1998
             year_to: 2004
             power_hp: 175
             power_kw: 129
-
       - slug: favorit-800-vario
-        name: "Favorit 800 Vario (1998–2005)"
+        name: Favorit 800 Vario (1998–2005)
         year_from: 1998
         year_to: 2005
-        description: >
+        description: |
           Velká prémiová řada. Motor MAN 6-válec 7,1 L, převodovka ML100 Vario.
         models:
           - slug: fendt-815-vario-favorit
-            name: "Favorit 815 Vario"
+            name: Favorit 815 Vario
             year_from: 1998
             year_to: 2005
             power_hp: 170
             power_kw: 125
           - slug: fendt-818-vario-favorit
-            name: "Favorit 818 Vario"
+            name: Favorit 818 Vario
             year_from: 1998
             year_to: 2005
             power_hp: 180
             power_kw: 132
           - slug: fendt-820-vario-favorit
-            name: "Favorit 820 Vario"
+            name: Favorit 820 Vario
             year_from: 1998
             year_to: 2005
             power_hp: 205
             power_kw: 151
           - slug: fendt-822-vario-favorit
-            name: "Favorit 822 Vario"
+            name: Favorit 822 Vario
             year_from: 1998
             year_to: 2005
             power_hp: 220
             power_kw: 162
           - slug: fendt-824-vario-favorit
-            name: "Favorit 824 Vario"
+            name: Favorit 824 Vario
             year_from: 1998
             year_to: 2005
             power_hp: 240
             power_kw: 177
-
       - slug: favorit-900-vario
-        name: "Favorit 900 Vario (1995–2006)"
+        name: Favorit 900 Vario (1995–2006)
         year_from: 1995
         year_to: 2006
-        description: >
-          Vlajková řada pro velkofarmy. Motor MAN 6-válec 10,5 L, převodovka ML150 Vario.
-          První traktor s Vario nad 200 k.
+        description: |
+          Vlajková řada pro velkofarmy. Motor MAN 6-válec 10,5 L, převodovka ML150 Vario. První traktor s Vario nad 200 k.
         models:
           - slug: fendt-916-vario-favorit
-            name: "Favorit 916 Vario"
+            name: Favorit 916 Vario
             year_from: 1995
             year_to: 2006
             power_hp: 180
             power_kw: 132
           - slug: fendt-920-vario-favorit
-            name: "Favorit 920 Vario"
+            name: Favorit 920 Vario
             year_from: 1996
             year_to: 2006
             power_hp: 200
             power_kw: 147
           - slug: fendt-924-vario-favorit
-            name: "Favorit 924 Vario"
+            name: Favorit 924 Vario
             year_from: 1996
             year_to: 2006
             power_hp: 240
             power_kw: 177
           - slug: fendt-926-vario-favorit
-            name: "Favorit 926 Vario"
+            name: Favorit 926 Vario
             year_from: 2000
             year_to: 2006
             power_hp: 260
             power_kw: 191
-
-      # ========== 200 VARIO (kompaktní / sadařský, 2008+) ==========
       - slug: 200-vario
-        name: "200 Vario (2008–dosud)"
+        name: 200 Vario (2008–dosud)
         year_from: 2008
         year_to: null
-        description: >
-          Nejmenší Fendt. Varianta pro sady, vinice a komunální nasazení. Kompaktní kabina,
-          Vario převodovka, motor AGCO Power 3-válec.
+        image_url: /images/stroje/fendt/fendt-200-130k.webp
+        description: |
+          Nejmenší Fendt. Varianta pro sady, vinice a komunální nasazení. Kompaktní kabina, Vario převodovka, motor AGCO Power 3-válec.
         models:
           - slug: fendt-207-vario
-            name: "207 Vario"
+            name: 207 Vario
             year_from: 2008
             year_to: null
-            power_hp: 70
-            power_kw: 52
+            power_hp: 79
+            power_kw: 58
           - slug: fendt-208-vario
-            name: "208 Vario"
+            name: 208 Vario
             year_from: 2008
             year_to: null
-            power_hp: 80
-            power_kw: 59
+            power_hp: 84
+            power_kw: 62
           - slug: fendt-209-vario
-            name: "209 Vario"
+            name: 209 Vario
             year_from: 2008
             year_to: null
-            power_hp: 90
-            power_kw: 66
+            power_hp: 94
+            power_kw: 69
           - slug: fendt-210-vario
-            name: "210 Vario"
-            year_from: 2012
+            name: 210 Vario
+            year_from: 2008
             year_to: null
-            power_hp: 102
-            power_kw: 75
+            power_hp: 104
+            power_kw: 77
           - slug: fendt-211-vario
-            name: "211 Vario"
-            year_from: 2012
+            name: 211 Vario
+            year_from: 2008
             year_to: null
-            power_hp: 114
-            power_kw: 84
-
-      # ========== 300 VARIO ==========
+            power_hp: 124
+            power_kw: 91
+        family: "2"
+        family_label: 200 Vario
       - slug: 300-vario-gen1
-        name: "300 Vario (2007–2012)"
+        name: 300 Vario (2007–2012)
         year_from: 2007
         year_to: 2012
-        description: >
-          Utility řada Vario. Motor Deutz 4-válec 4,0 L turbo s intercoolerem, převodovka
-          ML75 Vario, kabina Visio Plus.
+        description: |
+          Utility řada Vario. Motor Deutz 4-válec 4,0 L turbo s intercoolerem, převodovka ML75 Vario, kabina Visio Plus.
         models:
           - slug: fendt-309-vario
-            name: "309 Vario"
+            name: 309 Vario
             year_from: 2007
             year_to: 2012
             power_hp: 95
             power_kw: 70
           - slug: fendt-310-vario
-            name: "310 Vario"
+            name: 310 Vario
             year_from: 2007
             year_to: 2012
             power_hp: 105
             power_kw: 77
           - slug: fendt-311-vario
-            name: "311 Vario"
+            name: 311 Vario
             year_from: 2007
             year_to: 2012
             power_hp: 115
             power_kw: 85
           - slug: fendt-312-vario
-            name: "312 Vario"
+            name: 312 Vario
             year_from: 2007
             year_to: 2012
             power_hp: 125
             power_kw: 92
           - slug: fendt-313-vario
-            name: "313 Vario"
+            name: 313 Vario
             year_from: 2007
             year_to: 2012
             power_hp: 135
             power_kw: 99
-
       - slug: 300-vario-gen2
-        name: "300 Vario S4 (2013–dosud)"
+        name: 300 Vario S4 (2013–dosud)
         year_from: 2013
         year_to: null
-        description: >
-          S4 generace s novou kabinou Visio Cab, displejem VarioTerminal 7" a Tier 4 motorem
-          AGCO Power 4,4 L.
+        image_url: /images/stroje/fendt/fendt-300-165k.webp
+        description: |
+          S4 generace s novou kabinou Visio Cab, displejem VarioTerminal 7" a Tier 4 motorem AGCO Power 4,4 L.
         models:
-          - slug: fendt-310-vario-s4
-            name: "310 Vario S4"
+          - slug: fendt-310-vario
+            name: 310 Vario
             year_from: 2013
             year_to: null
-            power_hp: 105
-            power_kw: 77
-          - slug: fendt-311-vario-s4
-            name: "311 Vario S4"
+            power_hp: 113
+            power_kw: 83
+          - slug: fendt-311-vario
+            name: 311 Vario
             year_from: 2013
             year_to: null
-            power_hp: 115
-            power_kw: 85
-          - slug: fendt-312-vario-s4
-            name: "312 Vario S4"
+            power_hp: 123
+            power_kw: 90
+          - slug: fendt-312-vario
+            name: 312 Vario
             year_from: 2013
             year_to: null
-            power_hp: 125
-            power_kw: 92
-          - slug: fendt-313-vario-s4
-            name: "313 Vario S4"
+            power_hp: 133
+            power_kw: 98
+          - slug: fendt-313-vario
+            name: 313 Vario
             year_from: 2013
             year_to: null
-            power_hp: 135
-            power_kw: 99
-          - slug: fendt-314-vario-s4
-            name: "314 Vario S4"
-            year_from: 2014
+            power_hp: 143
+            power_kw: 105
+          - slug: fendt-314-vario
+            name: 314 Vario
+            year_from: 2013
             year_to: null
-            power_hp: 145
-            power_kw: 107
-
-      # ========== 500 VARIO ==========
+            power_hp: 152
+            power_kw: 112
+        family: "3"
+        family_label: 300 Vario
       - slug: 500-vario-gen1
-        name: "500 Vario (2006–2012)"
+        name: 500 Vario (2006–2012)
         year_from: 2006
         year_to: 2012
-        description: >
+        description: |
           Střední řada. Motor Deutz 4-válec 4,0 L, převodovka ML90 Vario.
         models:
           - slug: fendt-512-vario
-            name: "512 Vario"
+            name: 512 Vario
             year_from: 2006
             year_to: 2012
             power_hp: 125
             power_kw: 92
           - slug: fendt-513-vario
-            name: "513 Vario"
+            name: 513 Vario
             year_from: 2006
             year_to: 2012
             power_hp: 135
             power_kw: 99
           - slug: fendt-514-vario
-            name: "514 Vario"
+            name: 514 Vario
             year_from: 2006
             year_to: 2012
             power_hp: 145
             power_kw: 107
           - slug: fendt-516-vario
-            name: "516 Vario"
+            name: 516 Vario
             year_from: 2006
             year_to: 2012
             power_hp: 165
             power_kw: 121
-
       - slug: 500-vario-s4
-        name: "500 Vario S4/Gen3 (2014–dosud)"
+        name: 500 Vario S4/Gen3 (2014–dosud)
         year_from: 2014
         year_to: null
-        description: >
-          S4/Gen3 generace. Motor Deutz 4-válec 4,0 L Stage IV/V, kabina Visio Cab, displej 7",
-          FendtONE farmer terminal od 2021.
+        image_url: /images/stroje/fendt/fendt-500-210k.webp
+        description: |
+          S4/Gen3 generace. Motor Deutz 4-válec 4,0 L Stage IV/V, kabina Visio Cab, displej 7", FendtONE farmer terminal od 2021.
         models:
-          - slug: fendt-512-vario-s4
-            name: "512 Vario S4"
+          - slug: fendt-513-vario
+            name: 513 Vario
             year_from: 2014
             year_to: null
-            power_hp: 125
-            power_kw: 92
-          - slug: fendt-513-vario-s4
-            name: "513 Vario S4"
+            power_hp: 144
+            power_kw: 106
+          - slug: fendt-514-vario
+            name: 514 Vario
             year_from: 2014
             year_to: null
-            power_hp: 135
-            power_kw: 99
-          - slug: fendt-514-vario-s4
-            name: "514 Vario S4"
+            power_hp: 154
+            power_kw: 113
+          - slug: fendt-515-vario
+            name: 515 Vario
             year_from: 2014
             year_to: null
-            power_hp: 145
-            power_kw: 107
-          - slug: fendt-516-vario-s4
-            name: "516 Vario S4"
-            year_from: 2014
-            year_to: null
-            power_hp: 165
+            power_hp: 164
             power_kw: 121
-          - slug: fendt-518-vario-s4
-            name: "518 Vario Gen3"
-            year_from: 2020
+          - slug: fendt-516-vario
+            name: 516 Vario
+            year_from: 2014
             year_to: null
-            power_hp: 185
-            power_kw: 136
-
-      # ========== 700 VARIO ==========
+            power_hp: 174
+            power_kw: 128
+        family: "5"
+        family_label: 500 Vario
       - slug: 700-vario-gen1
-        name: "700 Vario (2003–2014)"
+        name: 700 Vario (2003–2014)
         year_from: 2003
         year_to: 2014
-        description: >
-          Nejprodávanější prémiová řada v Evropě. Motor Deutz 6-válec 6,1 L, převodovka ML120
-          Vario. Ikonické uspořádání.
+        description: |
+          Nejprodávanější prémiová řada v Evropě. Motor Deutz 6-válec 6,1 L, převodovka ML120 Vario. Ikonické uspořádání.
         models:
           - slug: fendt-712-vario-gen1
-            name: "712 Vario"
+            name: 712 Vario
             year_from: 2003
             year_to: 2014
             power_hp: 125
             power_kw: 92
           - slug: fendt-714-vario-gen1
-            name: "714 Vario"
+            name: 714 Vario
             year_from: 2003
             year_to: 2014
             power_hp: 145
             power_kw: 107
           - slug: fendt-716-vario-gen1
-            name: "716 Vario"
+            name: 716 Vario
             year_from: 2003
             year_to: 2014
             power_hp: 165
             power_kw: 121
           - slug: fendt-718-vario-gen1
-            name: "718 Vario"
+            name: 718 Vario
             year_from: 2003
             year_to: 2014
             power_hp: 180
             power_kw: 132
           - slug: fendt-720-vario-gen1
-            name: "720 Vario"
+            name: 720 Vario
             year_from: 2003
             year_to: 2014
             power_hp: 200
             power_kw: 147
           - slug: fendt-722-vario-gen1
-            name: "722 Vario"
+            name: 722 Vario
             year_from: 2005
             year_to: 2014
             power_hp: 220
             power_kw: 162
           - slug: fendt-724-vario-gen1
-            name: "724 Vario"
+            name: 724 Vario
             year_from: 2005
             year_to: 2014
             power_hp: 240
             power_kw: 177
-
       - slug: 700-vario-s4
-        name: "700 Vario S4/Gen6 (2014–2022)"
+        name: 700 Vario S4/Gen6 (2014–2022)
         year_from: 2014
         year_to: 2022
-        description: >
-          S4 a Gen6 generace. Motor Deutz 6-válec 6,1 L Stage IV/V, kabina VisioPlus, displej
-          VarioGuide + TI Headland. Rekordní prodeje v CZ a SK.
+        description: |
+          S4 a Gen6 generace. Motor Deutz 6-válec 6,1 L Stage IV/V, kabina VisioPlus, displej VarioGuide + TI Headland. Rekordní prodeje v CZ a SK.
         models:
           - slug: fendt-714-vario
-            name: "714 Vario Gen6"
+            name: 714 Vario Gen6
             year_from: 2014
             year_to: 2022
             power_hp: 147
             power_kw: 108
           - slug: fendt-716-vario-s4
-            name: "716 Vario Gen6"
+            name: 716 Vario Gen6
             year_from: 2014
             year_to: 2022
             power_hp: 163
             power_kw: 120
           - slug: fendt-718-vario-s4
-            name: "718 Vario Gen6"
+            name: 718 Vario Gen6
             year_from: 2014
             year_to: 2022
             power_hp: 180
             power_kw: 132
           - slug: fendt-720-vario-s4
-            name: "720 Vario Gen6"
+            name: 720 Vario Gen6
             year_from: 2014
             year_to: 2022
             power_hp: 203
             power_kw: 149
           - slug: fendt-722-vario-s4
-            name: "722 Vario Gen6"
+            name: 722 Vario Gen6
             year_from: 2014
             year_to: 2022
             power_hp: 222
             power_kw: 163
           - slug: fendt-724-vario
-            name: "724 Vario Gen6"
+            name: 724 Vario Gen6
             year_from: 2014
             year_to: 2022
             power_hp: 246
             power_kw: 181
-
       - slug: 700-vario-gen7
-        name: "700 Vario Gen7 (2023–dosud)"
+        name: 700 Vario Gen7 (2023–dosud)
         year_from: 2023
+        image_url: /images/stroje/fendt/fendt-700-310k.webp
         year_to: null
-        description: >
-          Kompletně nová platforma. Motor AGCO Power 7,5 L Core75 s eHybrid systémem
-          (48V generator), převodovka Vario TA 150, kabina FendtONE, dynamická řídicí osa VarioDrive.
-          Výkon do 303 k, zcela nová designová linie.
+        description: |
+          Kompletně nová platforma. Motor AGCO Power 7,5 L Core75 s eHybrid systémem (48V generator), převodovka Vario TA 150, kabina FendtONE, dynamická řídicí osa VarioDrive. Výkon do 303 k, zcela nová designová linie.
         models:
-          - slug: fendt-720-vario-gen7
-            name: "720 Vario Gen7"
-            year_from: 2023
-            year_to: null
-            power_hp: 203
-            power_kw: 149
-          - slug: fendt-722-vario-gen7
-            name: "722 Vario Gen7"
+          - slug: fendt-720-vario
+            name: 720 Vario
             year_from: 2023
             year_to: null
             power_hp: 223
             power_kw: 164
-          - slug: fendt-724-vario-gen7
-            name: "724 Vario Gen7"
+          - slug: fendt-722-vario
+            name: 722 Vario
             year_from: 2023
             year_to: null
             power_hp: 243
             power_kw: 179
-          - slug: fendt-726-vario-gen7
-            name: "726 Vario Gen7"
+          - slug: fendt-724-vario
+            name: 724 Vario
             year_from: 2023
             year_to: null
-            power_hp: 263
+            power_hp: 262
             power_kw: 193
-          - slug: fendt-728-vario-gen7
-            name: "728 Vario Gen7"
+          - slug: fendt-726-vario
+            name: 726 Vario
             year_from: 2023
             year_to: null
-            power_hp: 283
-            power_kw: 208
-          - slug: fendt-730-vario-gen7
-            name: "730 Vario Gen7"
-            year_from: 2024
+            power_hp: 282
+            power_kw: 206
+          - slug: fendt-728-vario
+            name: 728 Vario
+            year_from: 2023
             year_to: null
             power_hp: 303
             power_kw: 223
-
-      # ========== 800 VARIO ==========
+        family: "7"
+        family_label: 700 Vario
       - slug: 800-vario-gen1
-        name: "800 Vario (2006–2014)"
+        name: 800 Vario (2006–2014)
         year_from: 2006
         year_to: 2014
-        description: >
+        description: |
           Velká row-crop řada. Motor Deutz 6-válec 7,8 L, převodovka ML130 Vario.
         models:
           - slug: fendt-815-vario
-            name: "815 Vario"
+            name: 815 Vario
             year_from: 2006
             year_to: 2010
             power_hp: 165
             power_kw: 121
           - slug: fendt-817-vario
-            name: "817 Vario"
+            name: 817 Vario
             year_from: 2006
             year_to: 2010
             power_hp: 175
             power_kw: 129
           - slug: fendt-818-vario
-            name: "818 Vario"
+            name: 818 Vario
             year_from: 2006
             year_to: 2010
             power_hp: 190
             power_kw: 140
           - slug: fendt-820-vario
-            name: "820 Vario"
+            name: 820 Vario
             year_from: 2006
             year_to: 2014
             power_hp: 205
             power_kw: 151
           - slug: fendt-822-vario-gen1
-            name: "822 Vario"
+            name: 822 Vario
             year_from: 2006
             year_to: 2014
             power_hp: 220
             power_kw: 162
           - slug: fendt-824-vario-gen1
-            name: "824 Vario"
+            name: 824 Vario
             year_from: 2006
             year_to: 2014
             power_hp: 240
             power_kw: 177
-
       - slug: 800-vario-s4
-        name: "800 Vario S4 (2014–dosud)"
+        name: 800 Vario Gen5 (2014–dosud)
+        family: "8"
+        family_label: 800 Vario
+        image_url: /images/stroje/fendt/fendt-800-340k.webp
         year_from: 2014
         year_to: null
-        description: >
-          S4 a Gen6 generace. Motor Deutz 6-válec 7,8 L Stage IV/V, kabina ProfiPlus,
-          ConceptCab (2020+).
+        description: |
+          Gen5/Gen6 generace. Motor Deutz 6-válec 7,8 L Stage V, kabina ProfiPlus, ConceptCab. Současný lineup: 826/829/832 Vario.
         models:
-          - slug: fendt-822-vario-s4
-            name: "822 Vario S4"
+          - slug: fendt-826-vario
+            name: 826 Vario
             year_from: 2014
             year_to: null
-            power_hp: 226
-            power_kw: 166
-          - slug: fendt-824-vario-s4
-            name: "824 Vario S4"
+            power_hp: 283
+            power_kw: 208
+          - slug: fendt-829-vario
+            name: 829 Vario
             year_from: 2014
             year_to: null
-            power_hp: 246
-            power_kw: 181
-          - slug: fendt-826-vario-s4
-            name: "826 Vario S4"
+            power_hp: 313
+            power_kw: 230
+          - slug: fendt-832-vario
+            name: 832 Vario
             year_from: 2014
             year_to: null
-            power_hp: 266
-            power_kw: 196
-          - slug: fendt-828-vario-s4
-            name: "828 Vario S4"
-            year_from: 2014
-            year_to: null
-            power_hp: 287
-            power_kw: 211
-
-      # ========== 900 VARIO ==========
+            power_hp: 343
+            power_kw: 252
       - slug: 900-vario-gen2
-        name: "900 Vario (2013–2019)"
+        name: 900 Vario (2013–2019)
         year_from: 2013
         year_to: 2019
-        description: >
-          2. generace řady 900. Motor MAN 6-válec 9,0 L, převodovka ML260 Vario, hydraulika
-          220 l/min, přední odpružení.
+        description: |
+          2. generace řady 900. Motor MAN 6-válec 9,0 L, převodovka ML260 Vario, hydraulika 220 l/min, přední odpružení.
         models:
           - slug: fendt-927-vario-gen2
-            name: "927 Vario"
+            name: 927 Vario
             year_from: 2013
             year_to: 2019
             power_hp: 270
             power_kw: 199
           - slug: fendt-930-vario-gen2
-            name: "930 Vario"
+            name: 930 Vario
             year_from: 2013
             year_to: 2019
             power_hp: 300
             power_kw: 221
           - slug: fendt-933-vario-gen2
-            name: "933 Vario"
+            name: 933 Vario
             year_from: 2013
             year_to: 2019
             power_hp: 330
             power_kw: 243
           - slug: fendt-936-vario-gen2
-            name: "936 Vario"
+            name: 936 Vario
             year_from: 2013
             year_to: 2019
             power_hp: 360
             power_kw: 265
           - slug: fendt-939-vario-gen2
-            name: "939 Vario"
+            name: 939 Vario
             year_from: 2013
             year_to: 2019
             power_hp: 396
             power_kw: 291
-
       - slug: 900-vario-gen3
-        name: "900 Vario Gen6/Gen7 (2020–dosud)"
+        name: 900 Vario Gen6/Gen7 (2020–dosud)
+        family: "9"
+        family_label: 900 Vario
         year_from: 2020
         year_to: null
-        description: >
-          Kompletně nová generace — MAN D3876 6-válec 9,0 L, VarioDrive, FendtONE, kompletní
-          digitalizace. Nejvýkonnější 942 s 415 k je nejvyšším Vario v konvenčním kolovém traktoru.
+        image_url: /images/stroje/fendt/fendt-900-415k.webp
+        description: |
+          Kompletně nová generace — MAN D3876 6-válec 9,0 L, VarioDrive, FendtONE, kompletní digitalizace. Nejvýkonnější 942 s 415 k je nejvyšším Vario v konvenčním kolovém traktoru.
         models:
-          - slug: fendt-930-vario-gen3
-            name: "930 Vario Gen6"
+          - slug: fendt-930-vario
+            name: 930 Vario
             year_from: 2020
             year_to: null
             power_hp: 296
-            power_kw: 218
-          - slug: fendt-933-vario-gen3
-            name: "933 Vario Gen6"
+            power_kw: 217
+          - slug: fendt-933-vario
+            name: 933 Vario
             year_from: 2020
             year_to: null
             power_hp: 326
-            power_kw: 240
-          - slug: fendt-936-vario-gen3
-            name: "936 Vario Gen6"
+            power_kw: 239
+          - slug: fendt-936-vario
+            name: 936 Vario
             year_from: 2020
             year_to: null
             power_hp: 355
             power_kw: 261
-          - slug: fendt-939-vario-gen3
-            name: "939 Vario Gen6"
+          - slug: fendt-939-vario
+            name: 939 Vario
             year_from: 2020
             year_to: null
-            power_hp: 396
-            power_kw: 291
+            power_hp: 385
+            power_kw: 283
           - slug: fendt-942-vario
-            name: "942 Vario Gen6"
+            name: 942 Vario
             year_from: 2020
             year_to: null
             power_hp: 415
             power_kw: 305
-
-      # ========== 1000 VARIO ==========
       - slug: 1000-vario
-        name: "1000 Vario (2015–dosud)"
+        name: 1000 Vario (2015–dosud)
+        family: "1000"
+        family_label: 1000 Vario
         year_from: 2015
+        image_url: /images/stroje/fendt/fendt-1000-517k.webp
         year_to: null
-        description: >
-          Největší Fendt — kompletně nová platforma. Motor MAN D4276 6-válec 12,4 L,
-          VarioDrive pohon s elektronicky řízenými nápravami, převodovka TA300 Vario.
-          Hmotnost 14 t, nejvýkonnější kolový traktor ve standardní konfiguraci.
+        description: |
+          Největší Fendt — kompletně nová platforma. Motor MAN D4276 6-válec 12,4 L, VarioDrive pohon s elektronicky řízenými nápravami, převodovka TA300 Vario. Hmotnost 14 t, nejvýkonnější kolový traktor ve standardní konfiguraci.
         models:
           - slug: fendt-1038-vario
-            name: "1038 Vario"
+            name: 1038 Vario
             year_from: 2015
             year_to: null
             power_hp: 396
             power_kw: 291
-          - slug: fendt-1042-vario
-            name: "1042 Vario"
-            year_from: 2015
-            year_to: null
-            power_hp: 435
-            power_kw: 320
           - slug: fendt-1046-vario
-            name: "1046 Vario"
+            name: 1046 Vario
             year_from: 2015
             year_to: null
             power_hp: 476
             power_kw: 350
+          - slug: fendt-1042-vario
+            name: 1042 Vario
+            year_from: 2015
+            year_to: null
+            power_hp: 435
+            power_kw: 320
           - slug: fendt-1050-vario
-            name: "1050 Vario"
+            name: 1050 Vario
             year_from: 2015
             year_to: null
             power_hp: 517
             power_kw: 380
-
-  kombajny:
-    name: Kombajny
-
-    series:
-      # ========== C / L série (2011-2017, převzaté z Laverda/AGCO) ==========
-      - slug: c-series
-        name: "C-Series (2012–2017)"
-        year_from: 2012
-        year_to: 2017
-        description: >
-          Ekonomická řada konvenčních kombajnů převzatá z Laverda (AGCO). Vhodné pro střední
-          farmy. Motor AGCO Power 6,6 L.
-        models:
-          - slug: fendt-c5305
-            name: "C5305"
-            year_from: 2012
-            year_to: 2017
-            power_hp: 240
-            power_kw: 177
-            grain_tank_l: 7500
-          - slug: fendt-c5306
-            name: "C5306"
-            year_from: 2012
-            year_to: 2017
-            power_hp: 270
-            power_kw: 199
-            grain_tank_l: 8500
-
-      - slug: l-series
-        name: "L-Series (2012–2018)"
-        year_from: 2012
-        year_to: 2018
-        description: >
-          Konvenční kombajny Laverda s Fendt značením. 6-slaměníkový systém, rotační doséparátor.
-          Motor AGCO SISU Power 7,4 L.
-        models:
-          - slug: fendt-l5270
-            name: "L5270"
-            year_from: 2012
-            year_to: 2018
-            power_hp: 310
-            power_kw: 228
-            grain_tank_l: 9500
-          - slug: fendt-l5280
-            name: "L5280"
-            year_from: 2014
-            year_to: 2018
-            power_hp: 350
-            power_kw: 257
-            grain_tank_l: 10000
-
-      # ========== IDEAL (2018+) — vlajková řada ==========
-      - slug: ideal
-        name: "IDEAL (2018–dosud)"
+      - slug: 1100-vario-mt
+        name: 1100 Vario MT (2018–dosud)
+        family: "1100"
+        family_label: 1100 Vario MT
         year_from: 2018
         year_to: null
-        description: >
-          Revoluční platforma vyvíjená 7 let společně AGCO + MIT. Dva 600mm rotory HARVEST CORE,
-          IDEALharvest optimalizace pomocí AI, uhlíkové konstrukce. Varianty 7, 8, 9, 10 podle výkonu.
-          Pásové verze -T pro méně zhutněnou půdu.
+        image_url: /images/stroje/fendt/fendt-1100-mt-673k.webp
+        description: |
+          Pásový traktor (Caterpillar tractor) — vlajková loď Fendt. Motor MAN, gumové pásy MTrack, převodovka VarioDrive. Pro velké zemědělské a stavební nasazení.
+        models:
+          - slug: fendt-1151-vario-mt
+            name: 1151 Vario MT
+            year_from: 2018
+            year_to: null
+            power_hp: 511
+            power_kw: 376
+          - slug: fendt-1156-vario-mt
+            name: 1156 Vario MT
+            year_from: 2018
+            year_to: null
+            power_hp: 564
+            power_kw: 415
+          - slug: fendt-1162-vario-mt
+            name: 1162 Vario MT
+            year_from: 2018
+            year_to: null
+            power_hp: 618
+            power_kw: 455
+          - slug: fendt-1167-vario-mt
+            name: 1167 Vario MT
+            year_from: 2018
+            year_to: null
+            power_hp: 673
+            power_kw: 495
+      - slug: 600-vario
+        name: 600 Vario (2024–dosud)
+        family: "6"
+        family_label: 600 Vario
+        image_url: /images/stroje/fendt/fendt-600-224k.webp
+        year_from: 2024
+        year_to: null
+        description: Aktuální Fendt 600 Vario — data synchronizována z api.fendt.com.
+        models:
+          - slug: fendt-614-vario
+            name: 614 Vario
+            year_from: 2024
+            year_to: null
+            power_hp: 164
+            power_kw: 121
+          - slug: fendt-616-vario
+            name: 616 Vario
+            year_from: 2024
+            year_to: null
+            power_hp: 184
+            power_kw: 135
+          - slug: fendt-618-vario
+            name: 618 Vario
+            year_from: 2024
+            year_to: null
+            power_hp: 204
+            power_kw: 150
+          - slug: fendt-620-vario
+            name: 620 Vario
+            year_from: 2024
+            year_to: null
+            power_hp: 224
+            power_kw: 165
+      - slug: 900-vario-mt
+        name: 900 Vario MT (2018–dosud)
+        family: "9"
+        family_label: 900 Vario
+        image_url: /images/stroje/fendt/fendt-900-mt-431k.webp
+        year_from: 2018
+        year_to: null
+        description: Aktuální Fendt 900 Vario MT — data synchronizována z api.fendt.com.
+        models:
+          - slug: fendt-938-vario-mt-gen2
+            name: 938 Vario MT Gen2
+            year_from: 2018
+            year_to: null
+            power_hp: 380
+            power_kw: 279
+          - slug: fendt-940-vario-mt-gen2
+            name: 940 Vario MT Gen2
+            year_from: 2018
+            year_to: null
+            power_hp: 405
+            power_kw: 298
+          - slug: fendt-943-vario-mt-gen2
+            name: 943 Vario MT Gen2
+            year_from: 2018
+            year_to: null
+            power_hp: 431
+            power_kw: 317
+      - slug: 1000-vario-gen4
+        name: 1000 Vario Gen4 (2023–dosud)
+        family: "1000"
+        family_label: 1000 Vario
+        image_url: /images/stroje/fendt/fendt-1000-gen4-550k.webp
+        year_from: 2023
+        year_to: null
+        description: Aktuální Fendt 1000 Vario Gen4 — data synchronizována z api.fendt.com.
+        models:
+          - slug: fendt-1040-vario
+            name: 1040 Vario
+            year_from: 2023
+            year_to: null
+            power_hp: 426
+            power_kw: 313
+          - slug: fendt-1044-vario
+            name: 1044 Vario
+            year_from: 2023
+            year_to: null
+            power_hp: 466
+            power_kw: 343
+          - slug: fendt-1048-vario
+            name: 1048 Vario
+            year_from: 2023
+            year_to: null
+            power_hp: 507
+            power_kw: 373
+          - slug: fendt-1052-vario
+            name: 1052 Vario
+            year_from: 2023
+            year_to: null
+            power_hp: 550
+            power_kw: 405
+  kombajny:
+    name: Kombajny
+    series:
+      - slug: c-series
+        name: C-Series (2012–dosud)
+        family: c
+        family_label: C-Series
+        image_url: /images/stroje/fendt/fendt-c-series.webp
+        year_from: 2012
+        year_to: null
+        description: |
+          Ekonomická řada konvenčních kombajnů převzatá z Laverda (AGCO). Vhodné pro střední farmy. Motor AGCO Power 6,6 L.
+        models:
+          - slug: fendt-5275-c
+            name: 5275 C
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-5275-c-pl
+            name: 5275 C PL
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-5275-c-pli
+            name: 5275 C PLI
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-5275-c-sl
+            name: 5275 C SL
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-5275-c-rice
+            name: 5275 C Rice
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-6335-c
+            name: 6335 C
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-6335-c-pl
+            name: 6335 C PL
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-6335-c-pli
+            name: 6335 C PLI
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-6335-c-rice
+            name: 6335 C Rice
+            year_from: 2012
+            year_to: null
+            power_hp: null
+            power_kw: null
+      - slug: l-series
+        name: L-Series (2012–dosud)
+        family: l
+        family_label: L-Series
+        image_url: /images/stroje/fendt/fendt-l-series.webp
+        year_from: 2012
+        year_to: null
+        description: |
+          Konvenční kombajny Laverda s Fendt značením. 6-slaměníkový systém, rotační doséparátor. Motor AGCO SISU Power 7,4 L.
+        models:
+          - slug: fendt-5255-l
+            name: 5255 L
+            year_from: 2014
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-5255-l-mcs
+            name: 5255 L MCS
+            year_from: 2014
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-5255-l-mcs-rice
+            name: 5255 L MCS Rice
+            year_from: 2014
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-5255-l-mcs-pl
+            name: 5255 L MCS PL
+            year_from: 2014
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-6275-l
+            name: 6275 L
+            year_from: 2014
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-6275-l-mcs
+            name: 6275 L MCS
+            year_from: 2014
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-6275-l-mcs-rice
+            name: 6275 L MCS Rice
+            year_from: 2014
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-6275-l-mcs-pl
+            name: 6275 L MCS PL
+            year_from: 2014
+            year_to: null
+            power_hp: null
+            power_kw: null
+      - slug: ideal
+        name: IDEAL (2017–dosud)
+        family: ideal
+        family_label: IDEAL
+        image_url: /images/stroje/fendt/fendt-ideal.webp
+        year_from: 2017
+        year_to: null
+        description: |
+          Revoluční platforma vyvíjená 7 let společně AGCO + MIT. Dva 600mm rotory HARVEST CORE, IDEALharvest optimalizace pomocí AI, uhlíkové konstrukce. Varianty 7, 8, 9, 10 podle výkonu. Pásové verze -T pro méně zhutněnou půdu.
         models:
           - slug: fendt-ideal-7
-            name: "IDEAL 7"
-            year_from: 2018
+            name: IDEAL 7
+            year_from: 2017
             year_to: null
-            power_hp: 451
-            power_kw: 332
-            grain_tank_l: 12500
+            power_hp: null
+            power_kw: null
+          - slug: fendt-ideal-7pl
+            name: IDEAL 7PL
+            year_from: 2017
+            year_to: null
+            power_hp: null
+            power_kw: null
           - slug: fendt-ideal-7t
-            name: "IDEAL 7 T"
-            year_from: 2018
+            name: IDEAL 7T
+            year_from: 2017
             year_to: null
-            power_hp: 451
-            power_kw: 332
-            grain_tank_l: 12500
+            power_hp: null
+            power_kw: null
           - slug: fendt-ideal-8
-            name: "IDEAL 8"
-            year_from: 2018
+            name: IDEAL 8
+            year_from: 2017
             year_to: null
-            power_hp: 538
-            power_kw: 396
-            grain_tank_l: 17100
+            power_hp: null
+            power_kw: null
+          - slug: fendt-ideal-8pl
+            name: IDEAL 8PL
+            year_from: 2017
+            year_to: null
+            power_hp: null
+            power_kw: null
           - slug: fendt-ideal-8t
-            name: "IDEAL 8 T"
-            year_from: 2018
+            name: IDEAL 8T
+            year_from: 2017
             year_to: null
-            power_hp: 538
-            power_kw: 396
-            grain_tank_l: 17100
+            power_hp: null
+            power_kw: null
           - slug: fendt-ideal-9
-            name: "IDEAL 9"
-            year_from: 2018
+            name: IDEAL 9
+            year_from: 2017
             year_to: null
-            power_hp: 626
-            power_kw: 461
-            grain_tank_l: 17100
+            power_hp: null
+            power_kw: null
+          - slug: fendt-ideal-9pl
+            name: IDEAL 9PL
+            year_from: 2017
+            year_to: null
+            power_hp: null
+            power_kw: null
           - slug: fendt-ideal-9t
-            name: "IDEAL 9 T"
-            year_from: 2018
+            name: IDEAL 9T
+            year_from: 2017
             year_to: null
-            power_hp: 626
-            power_kw: 461
-            grain_tank_l: 17100
-          - slug: fendt-ideal-10
-            name: "IDEAL 10"
-            year_from: 2020
-            year_to: null
-            power_hp: 790
-            power_kw: 581
-            grain_tank_l: 17100
+            power_hp: null
+            power_kw: null
           - slug: fendt-ideal-10t
-            name: "IDEAL 10 T"
-            year_from: 2020
+            name: IDEAL 10T
+            year_from: 2017
             year_to: null
-            power_hp: 790
-            power_kw: 581
-            grain_tank_l: 17100
+            power_hp: null
+            power_kw: null
+      - slug: corus-500
+        name: CORUS 500 (2022–dosud)
+        family: corus
+        family_label: CORUS 500
+        image_url: /images/stroje/fendt/fendt-corus-500.webp
+        year_from: 2022
+        year_to: null
+        description: Aktuální Fendt CORUS 500 — data synchronizována z api.fendt.com.
+        models:
+          - slug: fendt-corus-518
+            name: Corus 518
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-corus-518-mcs
+            name: Corus 518 MCS
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-corus-518-mcs-rice
+            name: Corus 518 MCS Rice
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-corus-522
+            name: Corus 522
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-corus-522-mcs
+            name: Corus 522 MCS
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-corus-522-mcs-rice
+            name: Corus 522 MCS Rice
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-corus-526
+            name: Corus 526
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-corus-526-mcs
+            name: Corus 526 MCS
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
+          - slug: fendt-corus-526-mcs-rice
+            name: Corus 526 MCS Rice
+            year_from: 2022
+            year_to: null
+            power_hp: null
+            power_kw: null
