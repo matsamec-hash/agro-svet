@@ -26,6 +26,7 @@ const brandCreditUrl: Record<string, string> = {
   fendt: 'https://www.fendt.com/cz/traktory',
   claas: 'https://www.claas.com/cs-cz/zemedelske-stroje/traktory',
   zetor: 'https://www.zetor.com/cs/zetor-products',
+  'massey-ferguson': 'https://www.masseyferguson.com/en.html',
 };
 function brandCreditLabel(slug: string): string {
   const url = brandCreditUrl[slug];
@@ -79,6 +80,9 @@ type Tile = {
   maxYear: number | null;
   hasCurrent: boolean;
   coverImage: string | null;
+  coverCreditUrl: string | null;
+  coverCreditAuthor: string | null;
+  coverCreditLicense: string | null;
 };
 
 type BrandSection = {
@@ -120,12 +124,20 @@ function buildTilesForCategory(brand: any): Tile[] {
         maxYear: null,
         hasCurrent: false,
         coverImage: null,
+        coverCreditUrl: null,
+        coverCreditAuthor: null,
+        coverCreditLicense: null,
       };
       byFamily.set(fam, t);
     }
     t.seriesCount += 1;
     if (labelOverride) t.label = labelOverride;
-    if (!t.coverImage && (s as any).image_url) t.coverImage = (s as any).image_url;
+    if (!t.coverImage && (s as any).image_url) {
+      t.coverImage = (s as any).image_url;
+      t.coverCreditUrl = (s as any).image_credit_url || null;
+      t.coverCreditAuthor = (s as any).image_credit || null;
+      t.coverCreditLicense = (s as any).image_license || null;
+    }
     for (const m of s.models ?? []) {
       t.modelCount += 1;
       if (m.power_hp !== null) {
@@ -317,6 +329,20 @@ const catLede = categoryLede[category];
             return (
               <a class="family-tile" href={`/stroje/${s.slug}/rada/${category}/${t.family}/`}>
                 <div class="ft-cover" data-has-photo={t.coverImage ? 'true' : 'false'} style={coverStyle}>
+                  {t.coverImage && (() => {
+                    const url = t.coverCreditUrl || brandCreditUrl[s.slug];
+                    if (!url) return null;
+                    let host = '';
+                    try { host = new URL(url).hostname.replace(/^www\./, ''); } catch {}
+                    if (!host) return null;
+                    // For Wikipedia/CC photos, show author + license
+                    if (t.coverCreditAuthor && t.coverCreditLicense) {
+                      const short = t.coverCreditAuthor.length > 30 ? t.coverCreditAuthor.slice(0, 28) + '…' : t.coverCreditAuthor;
+                      const titleAttr = `Foto: ${t.coverCreditAuthor} (${t.coverCreditLicense}) via ${host}\n${url}`;
+                      return <span class="ft-credit" title={titleAttr}>© {short} / {t.coverCreditLicense}</span>;
+                    }
+                    return <span class="ft-credit" title={`Foto: ${host} (${url})`}>Foto: {host}</span>;
+                  })()}
                   {!t.coverImage && (
                     <svg class="ft-silhouette" width="120" height="68" viewBox="0 0 140 80" fill="rgba(0,0,0,.18)" aria-hidden="true">
                       {category === 'traktory' ? (
@@ -586,6 +612,15 @@ const catLede = categoryLede[category];
     position:absolute;left:8px;bottom:8px;width:120px;height:auto;
     opacity:.85;pointer-events:none;
   }
+  .catalog-page .ft-credit{
+    position:absolute;right:6px;bottom:6px;z-index:2;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(4px);
+    color:#0A0A0B;font:500 9px 'Chakra Petch',sans-serif;
+    padding:3px 7px;border-radius:4px;letter-spacing:.04em;
+    opacity:0;transition:opacity .15s;pointer-events:none;
+    white-space:nowrap;
+  }
+  .catalog-page .family-tile:hover .ft-credit{opacity:1}
   .catalog-page .brand-credit{font-size:12px;color:var(--muted)}
   .catalog-page .brand-credit a{color:var(--muted);text-decoration:underline;text-decoration-color:var(--line-2)}
   .catalog-page .brand-credit a:hover{color:#000;text-decoration-color:#000}
