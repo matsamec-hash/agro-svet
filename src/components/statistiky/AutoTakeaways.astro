@@ -1,0 +1,71 @@
+---
+// src/components/statistiky/AutoTakeaways.astro
+export interface Takeaway {
+  category: 'trh' | 'vstupy' | 'zvirata';
+  title: string;       // např. "Pšenice"
+  insight: string;     // např. "+4.2 % m/m, nejvíc od března 2022"
+  anchor: string;      // např. "#trh"
+}
+
+interface Props {
+  takeaways: Takeaway[];
+}
+const { takeaways } = Astro.props;
+
+const ICONS = {
+  trh: '📈',
+  vstupy: '⚠️',
+  zvirata: '🐄',
+} as const;
+const LABELS = {
+  trh: 'TRH',
+  vstupy: 'VSTUPY',
+  zvirata: 'STAVY ZVÍŘAT',
+} as const;
+---
+
+<section class="sp-takeaways" aria-labelledby="takeaways-h">
+  <h2 id="takeaways-h" class="sp-section-h">Co dnes říkají data</h2>
+  <div class="sp-takeaways-grid">
+    {takeaways.map(t => (
+      <a class={`sp-take-card cat-${t.category}`} href={t.anchor}>
+        <span class="cat-label">{ICONS[t.category]} {LABELS[t.category]}</span>
+        <h3>{t.title}</h3>
+        <p>{t.insight}</p>
+        <span class="cta">Detail →</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .sp-takeaways{margin:32px 0 28px}
+  .sp-section-h{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:24px;letter-spacing:-.02em;
+    color:#0A0A0B;margin:0 0 16px;
+  }
+  .sp-takeaways-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .sp-take-card{
+    display:flex;flex-direction:column;gap:8px;
+    background:#fff;border:1px solid #EAEAEC;border-left-width:4px;border-radius:14px;
+    padding:18px 20px;text-decoration:none;color:#0A0A0B;
+    transition:transform .15s, box-shadow .15s;
+    box-shadow:0 1px 2px rgba(10,10,12,.04);
+  }
+  .sp-take-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px -6px rgba(10,10,12,.12)}
+  .sp-take-card.cat-trh{border-left-color:#FFEA00}
+  .sp-take-card.cat-vstupy{border-left-color:#C24414}
+  .sp-take-card.cat-zvirata{border-left-color:#0B7A3B}
+  .cat-label{
+    font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;color:#6B6B72;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .sp-take-card h3{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.01em;margin:0;
+  }
+  .sp-take-card p{font-size:14px;color:#1E1E22;line-height:1.45;margin:0}
+  .sp-take-card .cta{
+    margin-top:auto;font:700 13px 'Chakra Petch',sans-serif;color:#0A0A0B;letter-spacing:.02em;
+  }
+  @media (max-width:960px){.sp-takeaways-grid{grid-template-columns:1fr}}
+</style>
