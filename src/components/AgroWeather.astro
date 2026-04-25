@@ -308,118 +308,143 @@ const totalPrecipAhead = agro ? Math.round(agro.daily.precipMm.reduce((a, b) => 
 {(mode !== 'strip' && !agro) && null}
 
 <style>
-  /* ─── STRIP (homepage) ─── */
+  /* ─── STRIP (homepage) — neo-brutal light ─── */
   .aw-strip {
-    background: linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
-    color: #fff;
+    background: #fff;
+    color: #0A0A0B;
     border-radius: 16px;
-    padding: 14px 20px;
+    padding: 0;
     margin: 0 auto 28px;
     max-width: 1280px;
-    box-shadow: 0 14px 36px -16px rgba(10,10,12,.25);
-    border: 1px solid rgba(255,255,255,.08);
-    position: relative;
+    border: 1.5px solid #0A0A0B;
+    box-shadow: 4px 4px 0 #0A0A0B;
     overflow: hidden;
   }
-  .aw-strip::before {
-    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
-    background: radial-gradient(400px 200px at 10% 50%, rgba(255,234,0,.12), transparent 60%);
-  }
   .aw-strip-inner {
-    position: relative; z-index: 1;
-    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: stretch;
+    gap: 0;
   }
   .aw-strip-label {
-    display: flex; flex-direction: column; gap: 1px; flex-shrink: 0;
-    padding-right: 16px; border-right: 1px solid rgba(255,255,255,.12);
+    display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    padding: 14px 18px;
+    background: #FFFF00;
+    border-right: 1.5px solid #0A0A0B;
+    flex-shrink: 0;
   }
   .aw-label-text {
-    font: 700 14px 'Chakra Petch', sans-serif; letter-spacing: -.01em; color: #FFEA00;
+    font: 700 14px 'Chakra Petch', sans-serif; letter-spacing: -.01em;
+    color: #0A0A0B; display: inline-flex; align-items: center;
   }
   .aw-label-sub {
-    font: 500 11px 'Chakra Petch', sans-serif; letter-spacing: .14em;
-    color: #8a8a92; text-transform: uppercase;
+    font: 600 10px 'Chakra Petch', sans-serif; letter-spacing: .14em;
+    color: #0A0A0B; text-transform: uppercase; opacity: .7;
   }
   .aw-dot {
-    display: inline-block; width: 7px; height: 7px; background: #FFEA00; border-radius: 50%;
-    box-shadow: 0 0 0 3px rgba(255,234,0,.2); margin-right: 6px;
+    display: inline-block; width: 7px; height: 7px; background: #0A0A0B; border-radius: 50%;
+    margin-right: 7px;
     animation: aw-pulse 2s infinite;
   }
-  @keyframes aw-pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+  @keyframes aw-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
   .aw-cities {
-    display: flex; gap: 14px; flex-wrap: wrap; flex: 1;
+    display: flex; gap: 0; flex-wrap: nowrap; overflow-x: auto;
+    align-items: stretch;
   }
   .aw-city {
-    display: flex; align-items: center; gap: 8px;
-    padding: 4px 10px; background: rgba(255,255,255,.04);
-    border: 1px solid rgba(255,255,255,.06); border-radius: 10px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px;
+    border-right: 1px solid #EAEAEC;
+    flex-shrink: 0;
+    transition: background .15s;
   }
+  .aw-city:last-child { border-right: 0; }
+  .aw-city:hover { background: #FBFAF4; }
   .aw-city-icon { font-size: 22px; line-height: 1; }
-  .aw-city-data { display: flex; flex-direction: column; gap: 0; line-height: 1.1; }
-  .aw-city-name { font: 600 11px 'Chakra Petch', sans-serif; color: #c8c8d0; letter-spacing: .04em; }
-  .aw-city-temp { font: 700 16px 'Chakra Petch', sans-serif; color: #fff; letter-spacing: -.01em; }
+  .aw-city-data { display: flex; flex-direction: column; gap: 0; line-height: 1.15; }
+  .aw-city-name {
+    font: 600 11px 'Chakra Petch', sans-serif; color: #6B6B72;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+  .aw-city-temp { font: 700 17px 'Chakra Petch', sans-serif; color: #0A0A0B; letter-spacing: -.01em; }
   .aw-city-rain {
-    font: 600 10px 'Chakra Petch', sans-serif; color: #6FB3F0; letter-spacing: .04em;
-    margin-top: 2px;
+    font: 600 10px 'Chakra Petch', sans-serif; color: #1976D2; letter-spacing: .04em;
+    margin-top: 1px;
   }
-  .aw-strip-src {
-    font-size: 11px; color: #8a8a92; text-decoration: none; flex-shrink: 0;
-    border-bottom: 1px dotted rgba(255,255,255,.2); padding-bottom: 1px;
-  }
-  .aw-strip-src:hover { color: #FFEA00; border-bottom-color: #FFEA00; }
 
   /* Geolocation actions */
   .aw-actions {
-    display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto;
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    border-left: 1.5px solid #0A0A0B;
+    background: #FBFAF4;
+    flex-shrink: 0;
   }
   .aw-geo-btn {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 12px; background: rgba(255,234,0,.12);
-    border: 1px solid rgba(255,234,0,.4); border-radius: 10px;
-    color: #FFEA00; cursor: pointer;
+    padding: 8px 14px; background: #FFFF00;
+    border: 1.5px solid #0A0A0B; border-radius: 10px;
+    color: #0A0A0B; cursor: pointer;
     font: 700 12.5px 'Chakra Petch', sans-serif; letter-spacing: .02em;
-    transition: background .15s, border-color .15s;
+    box-shadow: 2px 2px 0 #0A0A0B;
+    transition: transform .15s, box-shadow .15s, background .15s;
   }
-  .aw-geo-btn:hover { background: rgba(255,234,0,.22); border-color: #FFEA00; }
+  .aw-geo-btn:hover {
+    transform: translate(-1px,-1px); box-shadow: 3px 3px 0 #0A0A0B; background: #FFEA00;
+  }
+  .aw-geo-btn:active { transform: translate(0,0); box-shadow: 0 0 0 #0A0A0B; }
   .aw-geo-btn:disabled { opacity: .6; cursor: wait; }
   .aw-reset-btn {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 28px; height: 28px; padding: 0;
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
-    border-radius: 8px; color: #c8c8d0; cursor: pointer;
-    transition: background .15s, color .15s;
+    width: 30px; height: 30px; padding: 0;
+    background: #fff; border: 1.5px solid #0A0A0B;
+    border-radius: 8px; color: #0A0A0B; cursor: pointer;
+    transition: background .15s;
   }
-  .aw-reset-btn:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .aw-reset-btn:hover { background: #FFFF00; }
+  .aw-strip-src {
+    font-size: 10.5px; color: #6B6B72; text-decoration: none;
+    border-bottom: 1px dotted #c0c0c5; padding-bottom: 1px;
+  }
+  .aw-strip-src:hover { color: #0A0A0B; border-bottom-color: #0A0A0B; }
 
   /* User-location 5-day cards */
   .aw-user {
-    display: flex; gap: 10px; flex-wrap: wrap; flex: 1;
+    display: flex; gap: 0; align-items: stretch; overflow-x: auto;
   }
   .aw-day5 {
     display: flex; flex-direction: column; align-items: center; gap: 2px;
-    padding: 8px 12px; min-width: 70px;
-    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
-    border-radius: 12px;
+    padding: 10px 14px; min-width: 76px;
+    border-right: 1px solid #EAEAEC;
+    flex-shrink: 0;
   }
+  .aw-day5:last-child { border-right: 0; }
   .aw-d5-name {
     font: 700 10.5px 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase;
-    color: #FFEA00;
+    color: #6B6B72;
   }
   .aw-d5-icon { font-size: 22px; line-height: 1; margin: 2px 0; }
   .aw-d5-tmax {
-    font: 700 16px 'Chakra Petch', sans-serif; color: #fff; letter-spacing: -.01em;
+    font: 700 16px 'Chakra Petch', sans-serif; color: #0A0A0B; letter-spacing: -.01em;
   }
-  .aw-d5-tmin { font: 500 11px 'Chakra Petch', sans-serif; color: #8a8a92; }
+  .aw-d5-tmin { font: 500 11px 'Chakra Petch', sans-serif; color: #6B6B72; }
   .aw-d5-rain {
-    font: 600 10px 'Chakra Petch', sans-serif; color: #6FB3F0; letter-spacing: .04em;
+    font: 600 10px 'Chakra Petch', sans-serif; color: #1976D2; letter-spacing: .04em;
     margin-top: 2px;
   }
 
   @media (max-width: 800px) {
-    .aw-strip-label { border-right: 0; padding-right: 0; padding-bottom: 8px; }
-    .aw-cities { gap: 10px; }
-    .aw-city { padding: 4px 8px; }
+    .aw-strip-inner { grid-template-columns: 1fr; }
+    .aw-strip-label {
+      border-right: 0; border-bottom: 1.5px solid #0A0A0B;
+      padding: 10px 16px; flex-direction: row; align-items: baseline; gap: 10px;
+    }
+    .aw-actions {
+      border-left: 0; border-top: 1.5px solid #0A0A0B;
+      justify-content: space-between;
+    }
+    .aw-city { padding: 10px 12px; }
   }
 
   /* ─── CARD (puda / commodity) ─── */
