@@ -1,6 +1,6 @@
 // tests/lib/agro-derived.test.ts
 import { describe, it, expect } from 'vitest';
-import { priceScissors, fiveYearAverage, biggestMomChange } from '../../src/lib/agro-derived';
+import { priceScissors, fiveYearAverage, biggestYoyChange } from '../../src/lib/agro-derived';
 
 describe('priceScissors', () => {
   it('returns indexed series with base year = 100', () => {
@@ -60,20 +60,20 @@ describe('fiveYearAverage', () => {
   });
 });
 
-describe('biggestMomChange', () => {
-  it('finds commodity with largest abs month-over-month change', () => {
+describe('biggestYoyChange', () => {
+  it('finds commodity with largest abs year-over-year change', () => {
     const stats = [
       { name: 'Pšenice', price: 5200, change: 4.2, prevYearPrice: 5000, month: 'duben 2026', unit: 'Kč/t' },
       { name: 'Mléko', price: 9.85, change: -1.5, prevYearPrice: 10, month: 'duben 2026', unit: 'Kč/l' },
       { name: 'Vejce', price: 4.5, change: 12.0, prevYearPrice: 4, month: 'duben 2026', unit: 'Kč/ks' },
     ];
-    const result = biggestMomChange(stats);
+    const result = biggestYoyChange(stats);
     expect(result?.name).toBe('Vejce');
     expect(result?.change).toBe(12.0);
   });
 
   it('returns null when no commodities have change', () => {
-    expect(biggestMomChange([])).toBeNull();
+    expect(biggestYoyChange([])).toBeNull();
   });
 });
 

@@ -20,7 +20,7 @@ import {
 import {
   priceScissors,
   fiveYearAverage,
-  biggestMomChange,
+  biggestYoyChange,
   inputCostInflation,
   livestockMilestone,
 } from '../../lib/agro-derived';
@@ -105,7 +105,7 @@ const sparkMetrics = [
 ].filter(Boolean) as any[];
 
 // Auto-takeaways
-const big = biggestMomChange(commodityStats);
+const big = biggestYoyChange(commodityStats);
 const inflPct = inputCostInflation(fertilizers, 'NPK 15-15-15', 2019);
 const skotMile = livestockMilestone(livestock, 'Skot', 1300000);
 
@@ -115,7 +115,7 @@ if (big && big.change !== null && Math.abs(big.change) >= 1) {
   takeaways.push({
     category: 'trh',
     title: big.name,
-    insight: `${dir}${big.change.toFixed(1)} % m/m. Aktuální cena ${big.price.toLocaleString('cs-CZ')} ${big.unit}.`,
+    insight: `${dir}${big.change.toFixed(1)} % r/r. Aktuální cena ${big.price.toLocaleString('cs-CZ')} ${big.unit}.`,
     anchor: '#trh',
   });
 } else if (psenice) {

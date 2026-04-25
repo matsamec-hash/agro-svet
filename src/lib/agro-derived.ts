@@ -138,7 +138,7 @@ export function fiveYearAverage(prices: CommodityPrice[], endMonth: string): num
 }
 
 // Vrátí komoditu s největší absolutní hodnotou meziroční změny (`change`).
-export function biggestMomChange(stats: CommodityStat[]): CommodityStat | null {
+export function biggestYoyChange(stats: CommodityStat[]): CommodityStat | null {
   let best: CommodityStat | null = null;
   for (const s of stats) {
     if (s.change === null) continue;
