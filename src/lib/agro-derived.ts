@@ -1,5 +1,5 @@
 // src/lib/agro-derived.ts
-import type { CommodityPrice, FertilizerPrice, FuelPrice, CommodityStat } from './czso';
+import type { CommodityPrice, FertilizerPrice, FuelPrice, CommodityStat, LivestockStat } from './czso';
 
 const MONTH_LABELS = ['leden','únor','březen','duben','květen','červen','červenec','srpen','září','říjen','listopad','prosinec'];
 
@@ -145,4 +145,47 @@ export function biggestMomChange(stats: CommodityStat[]): CommodityStat | null {
     if (!best || Math.abs(s.change) > Math.abs(best.change!)) best = s;
   }
   return best;
+}
+
+// Inflace vstupu: % změna ceny hnojiva v posledním dostupném roce vs. baseYear.
+export function inputCostInflation(
+  fertilizers: FertilizerPrice[],
+  fertName: string,
+  baseYear: number,
+): number | null {
+  const filtered = fertilizers
+    .filter(f => f.name === fertName)
+    .map(f => ({ year: parseInt(f.year), price: f.price }))
+    .filter(f => !isNaN(f.year) && f.price > 0)
+    .sort((a, b) => a.year - b.year);
+  if (filtered.length === 0) return null;
+  const base = filtered.find(f => f.year === baseYear);
+  const latest = filtered[filtered.length - 1];
+  if (!base || !latest) return null;
+  return ((latest.price / base.price) - 1) * 100;
+}
+
+// Detekce "milníku": pokud poslední hodnota stavu zvířete poprvé klesla pod threshold.
+export interface LivestockMilestone {
+  animal: string;
+  breached: boolean;
+  latestCount: number;
+  threshold: number;
+}
+
+export function livestockMilestone(
+  livestock: LivestockStat[],
+  animal: string,
+  threshold: number,
+): LivestockMilestone | null {
+  const filtered = livestock.filter(l => l.animal === animal);
+  if (filtered.length === 0) return null;
+  const latest = filtered[filtered.length - 1];
+  if (latest.count >= threshold) return null;
+  return {
+    animal,
+    breached: true,
+    latestCount: latest.count,
+    threshold,
+  };
 }

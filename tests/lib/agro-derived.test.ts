@@ -76,3 +76,37 @@ describe('biggestMomChange', () => {
     expect(biggestMomChange([])).toBeNull();
   });
 });
+
+import { inputCostInflation, livestockMilestone } from '../../src/lib/agro-derived';
+
+describe('inputCostInflation', () => {
+  it('returns percent change of latest year vs base year for given fertilizer', () => {
+    const ferts = [
+      { name: 'NPK 15-15-15', year: '2019', price: 10000 },
+      { name: 'NPK 15-15-15', year: '2024', price: 13500 },
+      { name: 'Močovina', year: '2019', price: 8000 },
+    ];
+    expect(inputCostInflation(ferts, 'NPK 15-15-15', 2019)).toBeCloseTo(35, 1);
+  });
+
+  it('returns null if base or latest year missing', () => {
+    expect(inputCostInflation([], 'NPK 15-15-15', 2019)).toBeNull();
+  });
+});
+
+describe('livestockMilestone', () => {
+  it('detects when latest count is below threshold for first time in series', () => {
+    const livestock = [
+      { animal: 'Skot', count: 1500000, date: '1.1.2018' },
+      { animal: 'Skot', count: 1400000, date: '1.1.2020' },
+      { animal: 'Skot', count: 1280000, date: '1.1.2024' },
+    ];
+    const result = livestockMilestone(livestock, 'Skot', 1300000);
+    expect(result).toMatchObject({ animal: 'Skot', breached: true });
+  });
+
+  it('returns null if threshold never breached', () => {
+    const livestock = [{ animal: 'Skot', count: 1500000, date: '1.1.2024' }];
+    expect(livestockMilestone(livestock, 'Skot', 1000000)).toBeNull();
+  });
+});
