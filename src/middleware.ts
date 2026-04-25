@@ -1,5 +1,11 @@
 import { defineMiddleware } from 'astro:middleware';
 import { createAnonClient } from './lib/supabase';
+import {
+  gateActive,
+  isGateBypassed,
+  expectedGateHash,
+  GATE_COOKIE_NAME,
+} from './lib/site-gate';
 
 const PROTECTED_PATHS = [
   '/bazar/novy',
@@ -13,6 +19,26 @@ const ADMIN_PATHS = ['/admin/'];
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
+
+  // ---- Site gate: runs FIRST, above everything else -------------------------
+  // To disable: unset SITE_GATE_PASSCODE env var and redeploy.
+  const gateOn = gateActive();
+  (locals as { siteGateActive?: boolean }).siteGateActive = gateOn;
+
+  if (gateOn) {
+    if (url.pathname === '/sitemap.xml') {
+      return new Response('Not Found', { status: 404 });
+    }
+    if (!isGateBypassed(url.pathname)) {
+      const cookieVal = cookies.get(GATE_COOKIE_NAME)?.value;
+      const expected = await expectedGateHash();
+      if (cookieVal !== expected) {
+        const nextPath = url.pathname + url.search;
+        return redirect(`/unlock/?next=${encodeURIComponent(nextPath)}`);
+      }
+    }
+  }
+  // ---------------------------------------------------------------------------
 
   const accessToken = cookies.get('sb-access-token')?.value;
   const refreshToken = cookies.get('sb-refresh-token')?.value;
@@ -74,5 +100,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
-  return next();
+  const response = await next();
+
+  if (gateOn) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  }
+
+  return response;
 });

@@ -1,0 +1,93 @@
+---
+export const prerender = true;
+import Layout from '../../../../layouts/Layout.astro';
+import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug, type StrojKategorie } from '../../../../lib/stroje';
+
+export async function getStaticPaths() {
+  return Object.keys(FUNCTIONAL_GROUPS).map((slug) => ({ params: { group: slug } }));
+}
+
+const { group: groupSlug } = Astro.params;
+const group = FUNCTIONAL_GROUPS[groupSlug as FunctionalGroupSlug];
+if (!group) return Astro.redirect('/stroje/zemedelske-stroje/');
+
+const allBrands = getAllBrands();
+const allModels = getAllModels();
+const groupCats = group.categories as readonly StrojKategorie[];
+const groupModels = allModels.filter((m) => groupCats.includes(m.category));
+const groupBrands = [...new Set(groupModels.map((m) => m.brand_slug))]
+  .map((slug) => allBrands.find((b) => b.slug === slug))
+  .filter((b): b is NonNullable<typeof b> => Boolean(b));
+
+// Sub-category stats with pretty name
+type SubcatStat = { slug: StrojKategorie; name: string; modelCount: number; brandCount: number };
+const subcategoryStats: SubcatStat[] = groupCats.map((cat) => {
+  const cModels = groupModels.filter((m) => m.category === cat);
+  const cBrands = new Set(cModels.map((m) => m.brand_slug));
+  // Lookup pretty CZ name from any brand that has this category
+  let prettyName: string = cat;
+  for (const brand of allBrands) {
+    const catData = brand.categories?.[cat];
+    if (catData?.name) { prettyName = catData.name; break; }
+  }
+  return { slug: cat, name: prettyName, modelCount: cModels.length, brandCount: cBrands.size };
+});
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Katalog strojů', item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 3, name: 'Zemědělské stroje', item: 'https://agro-svet.cz/stroje/zemedelske-stroje/' },
+    { '@type': 'ListItem', position: 4, name: group.name, item: `https://agro-svet.cz/stroje/zemedelske-stroje/${groupSlug}/` },
+  ],
+};
+---
+
+<Layout
+  title={`${group.name} — katalog strojů`}
+  description={`${group.description}. ${groupModels.length} modelů od ${groupBrands.length} značek.`}
+  canonical={`https://agro-svet.cz/stroje/zemedelske-stroje/${groupSlug}/`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+    <div style="margin-bottom:8px;">
+      <a href="/stroje/zemedelske-stroje/" style="font-size:13px; color:#666; text-decoration:none;">← Zemědělské stroje</a>
+    </div>
+
+    <div style="margin-bottom:32px;">
+      <span style="display:inline-block; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#1a1a1a; background:#FFFF00; padding:4px 10px; border-radius:3px; margin-bottom:14px;">Zemědělské stroje</span>
+      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">{group.name}</h1>
+      <p style="font-size:16px; color:#666; max-width:720px; line-height:1.6;">{group.description}</p>
+    </div>
+
+    <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">Sub-kategorie</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-bottom:40px;">
+      {subcategoryStats.map((s) => (
+        <a href={`/stroje/${s.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:border-color .2s, box-shadow .2s;" class="subcat-card">
+          <h3 style="font-family:'Chakra Petch',sans-serif; font-size:17px; font-weight:700; color:#1a1a1a; margin-bottom:6px;">{s.name}</h3>
+          <div style="font-size:12px; color:#767676;">
+            {s.modelCount > 0 ? `${s.modelCount} modelů · ${s.brandCount} značek` : 'Připravujeme'}
+          </div>
+        </a>
+      ))}
+    </div>
+
+    {groupBrands.length > 0 && (
+      <>
+        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">Značky v kategorii</h2>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          {groupBrands.map((b) => (
+            <a href={`/stroje/${b.slug}/`} style="padding:6px 14px; border:1px solid #e0e0e0; border-radius:999px; font-size:13px; color:#1a1a1a; text-decoration:none; transition:background .15s, border-color .15s;" class="brand-pill">{b.name}</a>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+
+  <style>
+    .subcat-card:hover { border-color: #FFFF00 !important; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+    .brand-pill:hover { background: #FFFF00; border-color: #FFFF00; }
+  </style>
+</Layout>

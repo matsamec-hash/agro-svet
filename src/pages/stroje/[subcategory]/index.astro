@@ -1,0 +1,104 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, getFunctionalGroupForCategory, type StrojKategorie } from '../../../lib/stroje';
+
+export async function getStaticPaths() {
+  // Generate path per stroje sub-category (not traktory/kombajny — they have own static pages)
+  const allCats = Object.values(FUNCTIONAL_GROUPS).flatMap((g) => g.categories);
+  return allCats.map((cat) => ({ params: { subcategory: cat } }));
+}
+
+const { subcategory } = Astro.params;
+const subcat = subcategory as StrojKategorie;
+
+const allBrands = getAllBrands();
+const allModels = getAllModels();
+const subcatModels = allModels.filter((m) => m.category === subcat);
+const subcatBrands = [...new Set(subcatModels.map((m) => m.brand_slug))]
+  .map((slug) => allBrands.find((b) => b.slug === slug))
+  .filter((b): b is NonNullable<typeof b> => Boolean(b));
+
+// Pretty name
+let prettyName: string = subcat;
+for (const brand of allBrands) {
+  const catData = brand.categories?.[subcat];
+  if (catData?.name) { prettyName = catData.name; break; }
+}
+
+const groupSlug = getFunctionalGroupForCategory(subcat);
+const group = groupSlug ? FUNCTIONAL_GROUPS[groupSlug] : null;
+
+const breadcrumbItems: any[] = [
+  { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+  { '@type': 'ListItem', position: 2, name: 'Katalog strojů', item: 'https://agro-svet.cz/stroje/' },
+];
+if (group && groupSlug) {
+  breadcrumbItems.push({ '@type': 'ListItem', position: 3, name: 'Zemědělské stroje', item: 'https://agro-svet.cz/stroje/zemedelske-stroje/' });
+  breadcrumbItems.push({ '@type': 'ListItem', position: 4, name: group.name, item: `https://agro-svet.cz/stroje/zemedelske-stroje/${groupSlug}/` });
+  breadcrumbItems.push({ '@type': 'ListItem', position: 5, name: prettyName, item: `https://agro-svet.cz/stroje/${subcat}/` });
+} else {
+  breadcrumbItems.push({ '@type': 'ListItem', position: 3, name: prettyName, item: `https://agro-svet.cz/stroje/${subcat}/` });
+}
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbItems,
+};
+---
+
+<Layout
+  title={`${prettyName} — katalog značek a modelů`}
+  description={`Přehled všech značek vyrábějících ${prettyName}. ${subcatModels.length} modelů od ${subcatBrands.length} značek.`}
+  canonical={`https://agro-svet.cz/stroje/${subcat}/`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
+    <div style="margin-bottom:8px;">
+      {group && groupSlug ? (
+        <a href={`/stroje/zemedelske-stroje/${groupSlug}/`} style="font-size:13px; color:#666; text-decoration:none;">← {group.name}</a>
+      ) : (
+        <a href="/stroje/zemedelske-stroje/" style="font-size:13px; color:#666; text-decoration:none;">← Zemědělské stroje</a>
+      )}
+    </div>
+
+    <div style="margin-bottom:32px;">
+      <span style="display:inline-block; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#1a1a1a; background:#FFFF00; padding:4px 10px; border-radius:3px; margin-bottom:14px;">{group?.name ?? 'Stroje'}</span>
+      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">{prettyName}</h1>
+      <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:14px; color:#666;">
+        <span>{subcatModels.length} modelů</span>
+        <span>·</span>
+        <span>{subcatBrands.length} značek</span>
+      </div>
+    </div>
+
+    {subcatBrands.length === 0 ? (
+      <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:40px; text-align:center;">
+        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; color:#1a1a1a; margin-bottom:10px;">Připravujeme</h2>
+        <p style="color:#666;">Této kategorii zatím nemáme přiřazené značky. Brzy přibudou Lemken, Pöttinger, Kuhn, Amazone, Krone a další.</p>
+      </div>
+    ) : (
+      <>
+        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">Značky vyrábějící {prettyName.toLowerCase()}</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px;">
+          {subcatBrands.map((b) => {
+            const brandCatModels = subcatModels.filter((m) => m.brand_slug === b.slug);
+            const seriesCount = new Set(brandCatModels.map((m) => m.series_slug)).size;
+            return (
+              <a href={`/stroje/${b.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:border-color .2s, box-shadow .2s;" class="brand-card">
+                <h3 style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a; margin-bottom:6px;">{b.name}</h3>
+                <div style="font-size:12px; color:#767676;">{b.country ?? ''}</div>
+                <div style="font-size:12px; color:#666; margin-top:8px;">{brandCatModels.length} modelů · {seriesCount} řad</div>
+              </a>
+            );
+          })}
+        </div>
+      </>
+    )}
+  </div>
+
+  <style>
+    .brand-card:hover { border-color: #FFFF00 !important; box-shadow: 0 6px 20px rgba(0,0,0,.08); transform: translateY(-2px); }
+  </style>
+</Layout>
