@@ -2,22 +2,61 @@
 // src/components/statistiky/StoryCards.astro
 const STORIES = [
   {
+    id: 'pribeh-nuzky',
     icon: '✂️',
+    kicker: 'Trh & vstupy',
     title: 'Cenové nůžky 2022–2025',
-    teaser: 'Vstupy explodovaly, výstupy taky — ale poměr horší. Kdo zaplatil válku?',
+    lede: 'Vstupy explodovaly. Výstupy taky — ale méně. Kdo zaplatil válku za hnojiva a naftu?',
+    paragraphs: [
+      'Cenové nůžky popisují poměr mezi cenami vstupů (nafta, hnojiva, energie, krmiva) a výstupů (obiloviny, mléko, maso). Když se otevřou — vstupy rostou rychleji než ceny komodit — farmář vydělává méně, i když má stejnou produkci. V letech 2014–2021 byl poměr stabilní; v roce 2022 se rozevřel rekordním tempem.',
+      'Spouštěč 2022 byla ruská invaze na Ukrajinu: cena zemního plynu (ze kterého se vyrábí 80 % dusíkatých hnojiv) vystřelila +250 % YoY, motorová nafta překročila 47 Kč/l, NPK hnojiva přes 30 Kč/kg. Pšenice se sice krátkodobě dostala na 9 800 Kč/t (rekord), ale v roce 2023 spadla pod 5 000 Kč/t — zatímco vstupy zůstaly vysoké.',
+      'V roce 2024 vstupy klesly přibližně o 15 %, výstupy ale propadly o víc — řepka z 18 000 na 11 000 Kč/t, mléko z 11 na 8,5 Kč/l. Podle Zelené zprávy MZe 2023 čistý zisk podniků klesl meziročně o ~40 %, počet podniků v ekonomické tísni dosáhl 18 %. V 2025 dochází ke stabilizaci, ale poměr je stále horší než 2017–2021 — zhruba o 12 procentních bodů.',
+    ],
+    insight: 'Index nůžek (2017 = 100): vstupy 165, výstupy 142 v roce 2024. Rozdíl 23 bodů zaplatili primárně živočišní výrobci (mléko, vepřové) — krmiva tvoří 60 % nákladů.',
+    sources: [
+      { label: 'ČSÚ — Indexy cen v zemědělství', url: 'https://csu.gov.cz/zemedelstvi' },
+      { label: 'MZe — Zelená zpráva 2023', url: 'https://eagri.cz/public/web/mze/zemedelstvi/publikace-a-dokumenty/zelene-zpravy/' },
+    ],
     anchor: '#cenove-nuzky',
+    cta: 'Skok na graf cenových nůžek',
   },
   {
+    id: 'pribeh-krava',
     icon: '🐄',
+    kicker: 'Zvířata',
     title: 'Mizející kráva',
-    teaser: '35 let úbytku skotu. Vstup do EU, mléčná krize — jak se příběh vyvíjel.',
+    lede: '35 let úbytku skotu. Z 3,4 milionu na 1,3 milionu kusů. Co stojí za nejhlubším propadem v Evropě?',
+    paragraphs: [
+      'V roce 1990 chovala ČR 3,42 mil. ks skotu, z toho 1,24 mil. dojnic. Začátek 90. let byl řezem: transformace JZD a státních statků, ztráta odbytu na východních trzích, otevření trhu evropským dovozcům. Mezi 1990–1995 stádo skotu kleslo o 38 %, dojnic o 32 %. Žádné jiné odvětví českého zemědělství neutrpělo tolik.',
+      'Vstup do EU v roce 2004 přinesl mléčné kvóty a dotace, ale i konkurenci. Stádo se kvazistabilizovalo na ~1,4 mil. ks. V roce 2015 EU kvóty zrušila — krátký skok produkce, ale následoval pád výkupních cen mléka pod 7 Kč/l (2016 mléčná krize). Mnoho farem skončilo s mlékem, část přešla na masný skot (Aberdeen Angus, Charolais), ale celkový stav skotu stále klesá.',
+      'V roce 2025 je skot na ~1,3 mil. ks (Eurostat), z toho ~310 tis. dojnic. Specializace: dojnice koncentrovány do Vysočiny, Pardubicka, Jihočeského kraje. Masný skot drží Beskydy, Šumavu, Krkonoše — využívá horské pastviny pro krajinotvorbu. Důsledky úbytku: méně statkových hnojiv → dehumifikace orné půdy (pokles humusu o 5–15 % za 30 let), oslabená biodiverzita pastvin.',
+    ],
+    insight: 'Spotřeba hovězího v ČR je 8,2 kg/os./rok — nejnižší v EU. Vepřového Češi snědí 42 kg/os./rok. Soběstačnost ČR v hovězím je ~110 %, v mléce 145 %, ale ve vepřovém jen 50 %.',
+    sources: [
+      { label: 'Eurostat — Livestock statistics', url: 'https://ec.europa.eu/eurostat/web/agriculture/database' },
+      { label: 'ČSÚ — Pololetní soupisy hospodářských zvířat', url: 'https://csu.gov.cz/zemedelstvi' },
+    ],
     anchor: '#zvirata',
+    cta: 'Skok na vývoj stavů zvířat',
   },
   {
+    id: 'pribeh-regiony',
     icon: '🌾',
+    kicker: 'Regiony',
     title: 'Které kraje krmí Česko?',
-    teaser: 'Vysočina pšenice, Polabí cukrovka. Kdo dělá co — interaktivní mapa.',
+    lede: 'Vysočina pšenice. Polabí cukrovka. Jih víno. Specializace krajů a co diktuje, co kde roste.',
+    paragraphs: [
+      'České zemědělství dělí 4 výrobní oblasti, vymezené nadmořskou výškou, srážkami a kvalitou půdy. Kukuřičná oblast (do 200 m, jih Moravy + Polabí) — nejlepší černozemě, kukuřice, cukrovka, vinice, ovocnářství. Řepařská (200–350 m, střední Čechy) — pšenice ozimá, řepka, cukrovka. Bramborářská (350–600 m, Vysočina, Českomoravská) — brambory, ječmen, oves, pícniny. Pícninářská (nad 600 m, hory) — TTP, pastviny, masný skot.',
+      'Středočeský kraj je obilnice: 17 % české pšenice + 20 % cukrovky. Jihomoravský kraj má 90 % vinic ČR (18 600 ha) a +32 % nárůst ploch kukuřice 2020–2024 — kvůli bioplynkám. Vysočina je největší producent brambor (35 %) a mléka (18 %). Olomoucký kraj — chmel a mák. Karlovarský — nejmenší zemědělská produkce (3 % ZPF), naopak nejvíc lesa.',
+      'Trend posledních 10 let: rozšíření kukuřice v nížinách (energetika), úbytek cukrovky (zrušené kvóty 2017), růst řepky (biopaliva, cíl ~344 tis. ha). Brambory ustupují kvůli importu z Polska a Německa. Vinařství zažívá comeback — v roce 2024 ČR vyprodukovala 600 tis. hl vína, dvojnásobek oproti 2010. Klimaticky se hranice "kukuřičné oblasti" posouvá na sever zhruba o 50 km za 25 let.',
+    ],
+    insight: 'Soběstačnost ČR podle plodin (2024): obiloviny 165 %, řepka 215 %, mléko 145 %, hovězí 110 %, vepřové 50 %, ovoce 35 %, zelenina 30 %. Importujeme zejména to, co rostlo dřív v Polabí — rajčata, papriky, jablka.',
+    sources: [
+      { label: 'ČSÚ — Definitivní údaje o sklizni 2024', url: 'https://csu.gov.cz/produkty/definitivni-udaje-o-sklizni-zemedelskych-plodin' },
+      { label: 'MZe — Situační a výhledové zprávy', url: 'https://eagri.cz/public/web/mze/zemedelstvi/publikace-a-dokumenty/situacni-a-vyhledove-zpravy/' },
+    ],
     anchor: '#regiony',
+    cta: 'Skok na regionální mapu',
   },
 ];
 ---
@@ -25,38 +64,134 @@ const STORIES = [
 <section class="sp-section" id="pribehy">
   <header class="sp-section-head">
     <h2>Příběhy v datech</h2>
-    <span class="sp-section-sub">Vybrané narativy — co data vlastně říkají</span>
+    <span class="sp-section-sub">Tři analýzy nad daty — kontext, který graf sám neukáže</span>
   </header>
 
-  <div class="sp-stories-grid">
-    {STORIES.map(s => (
-      <a class="sp-story-card" href={s.anchor}>
-        <span class="story-icon">{s.icon}</span>
-        <h3>{s.title}</h3>
-        <p>{s.teaser}</p>
-        <span class="cta">Zobrazit graf →</span>
-      </a>
+  <div class="sp-stories-stack">
+    {STORIES.map((s) => (
+      <article class="sp-story" id={s.id}>
+        <header class="sp-story-head">
+          <span class="story-icon" aria-hidden="true">{s.icon}</span>
+          <div class="sp-story-titles">
+            <span class="story-kicker">{s.kicker}</span>
+            <h3>{s.title}</h3>
+          </div>
+        </header>
+
+        <p class="story-lede">{s.lede}</p>
+
+        <div class="story-body">
+          {s.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+
+        <div class="story-insight">
+          <span class="story-insight-label">Klíčový poznatek</span>
+          <p>{s.insight}</p>
+        </div>
+
+        <footer class="story-foot">
+          <a class="story-cta" href={s.anchor}>{s.cta} →</a>
+          <div class="story-sources">
+            <span class="story-sources-label">Zdroje:</span>
+            {s.sources.map((src, i) => (
+              <>
+                {i > 0 && <span class="src-sep">·</span>}
+                <a class="story-src" href={src.url} target="_blank" rel="noopener noreferrer">
+                  {src.label}
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+                </a>
+              </>
+            ))}
+          </div>
+        </footer>
+      </article>
     ))}
   </div>
 </section>
 
 <style>
   .sp-section{margin:32px 0 36px;scroll-margin-top:200px}
-  .sp-section-head{margin-bottom:14px}
+  .sp-section-head{margin-bottom:18px}
   .sp-section-head h2{font:700 24px 'Chakra Petch',sans-serif;letter-spacing:-.02em;margin:0;color:#0A0A0B}
   .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
-  .sp-stories-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  .sp-story-card{
-    display:flex;flex-direction:column;gap:10px;
-    background:linear-gradient(135deg,#FBFAF4 0%,#fff 100%);
-    border:1px solid #EAEAEC;border-radius:18px;padding:24px;
-    text-decoration:none;color:#0A0A0B;
-    transition:transform .15s, box-shadow .15s, border-color .15s;
+
+  .sp-stories-stack{display:flex;flex-direction:column;gap:18px}
+
+  .sp-story{
+    background:linear-gradient(180deg,#FBFAF4 0%,#fff 100%);
+    border:1px solid #EAEAEC;border-radius:20px;padding:32px;
+    scroll-margin-top:200px;
+    transition:border-color .2s, box-shadow .2s;
   }
-  .sp-story-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px -10px rgba(10,10,12,.18);border-color:#FFEA00}
-  .story-icon{font-size:32px}
-  .sp-story-card h3{font:700 18px 'Chakra Petch',sans-serif;margin:0;letter-spacing:-.01em}
-  .sp-story-card p{font-size:14px;color:#1E1E22;line-height:1.5;margin:0;flex:1}
-  .sp-story-card .cta{font:700 13px 'Chakra Petch',sans-serif;color:#0A0A0B}
-  @media (max-width:960px){.sp-stories-grid{grid-template-columns:1fr}}
+  .sp-story:hover{border-color:#FFEA00;box-shadow:0 14px 36px -16px rgba(10,10,12,.18)}
+
+  .sp-story-head{display:flex;gap:16px;align-items:center;margin-bottom:14px}
+  .story-icon{font-size:36px;line-height:1;flex-shrink:0}
+  .sp-story-titles{display:flex;flex-direction:column;gap:2px}
+  .story-kicker{
+    font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:#6B6B72;
+  }
+  .sp-story h3{
+    font:700 24px 'Chakra Petch',sans-serif;margin:0;letter-spacing:-.015em;
+    color:#0A0A0B;line-height:1.15;
+  }
+
+  .story-lede{
+    font:500 17px/1.55 'Roboto Condensed',sans-serif;
+    color:#1E1E22;margin:0 0 18px;
+    padding:0 0 16px;border-bottom:1px solid #EAEAEC;
+  }
+
+  .story-body{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+  .story-body p{
+    font-size:15px;line-height:1.65;color:#1E1E22;margin:0;
+  }
+
+  .story-insight{
+    background:#FFF6A8;border:1px solid #FFEA00;border-radius:12px;
+    padding:14px 16px;margin-bottom:18px;
+  }
+  .story-insight-label{
+    display:block;font:700 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:#0A0A0B;margin-bottom:6px;
+  }
+  .story-insight p{
+    font-size:14px;line-height:1.55;color:#0A0A0B;margin:0;font-weight:500;
+  }
+
+  .story-foot{
+    display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
+    padding-top:14px;border-top:1px dashed #EAEAEC;
+  }
+  .story-cta{
+    font:700 13.5px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    color:#0A0A0B;text-decoration:none;
+    background:#fff;border:1px solid #EAEAEC;border-radius:10px;
+    padding:9px 14px;transition:.15s;
+  }
+  .story-cta:hover{background:#FFEA00;border-color:#FFEA00;transform:translateY(-1px)}
+
+  .story-sources{
+    display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;
+    font-size:12px;color:#6B6B72;
+  }
+  .story-sources-label{font-weight:600;color:#0A0A0B}
+  .story-src{
+    display:inline-flex;align-items:center;gap:3px;
+    color:#6B6B72;text-decoration:none;
+    border-bottom:1px dotted #c0c0c5;padding-bottom:1px;
+    transition:color .15s, border-color .15s;
+  }
+  .story-src:hover{color:#0A0A0B;border-bottom-color:#0A0A0B}
+  .story-src svg{color:#a0a0a8;transition:transform .15s}
+  .story-src:hover svg{color:#0A0A0B;transform:translate(1px,-1px)}
+  .src-sep{color:#c0c0c5}
+
+  @media (max-width:720px){
+    .sp-story{padding:22px}
+    .sp-story h3{font-size:20px}
+    .story-lede{font-size:15.5px}
+    .story-body p{font-size:14px}
+  }
 </style>

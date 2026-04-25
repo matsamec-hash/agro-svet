@@ -29,6 +29,7 @@ import {
 import { AGRO_EVENTS } from '../../data/agro-events';
 import { getLivestockHistoricalCombined } from '../../lib/eurostat';
 
+import DataSegmentNav from '../../components/DataSegmentNav.astro';
 import Hero from '../../components/statistiky/Hero.astro';
 import SparklineTicker from '../../components/statistiky/SparklineTicker.astro';
 import AutoTakeaways from '../../components/statistiky/AutoTakeaways.astro';
@@ -244,6 +245,7 @@ const PILLS = [
   })} />
 
   <main class="sp-page">
+    <DataSegmentNav active="komodity" />
     <Hero
       datasetCount={datasetCount}
       yearsCovered={yearsCovered}
