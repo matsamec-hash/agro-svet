@@ -22,6 +22,7 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
   <header class="sp-section-head">
     <h2>Trh — Ceny komodit</h2>
     <span class="sp-section-sub">Měsíční průměry výrobců, anotované historickými událostmi</span>
+    <a class="sp-src" href="https://csu.gov.cz/zemedelstvi" target="_blank" rel="noopener noreferrer">Zdroj: ČSÚ — Indexy cen výrobců v zemědělství <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
   </header>
 
   <div class="sp-controls">
@@ -187,6 +188,15 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
   .sp-section-head{margin-bottom:14px}
   .sp-section-head h2{font:700 24px 'Chakra Petch',sans-serif;letter-spacing:-.02em;margin:0;color:#0A0A0B}
   .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
+  .sp-src{
+    display:inline-flex;align-items:center;gap:4px;margin-top:6px;
+    font-size:11.5px;color:#888;text-decoration:none;
+    border-bottom:1px dotted #c0c0c5;padding-bottom:1px;
+    transition:color .15s, border-color .15s;
+  }
+  .sp-src:hover{color:#0A0A0B;border-bottom-color:#0A0A0B}
+  .sp-src svg{color:#a0a0a8;transition:transform .15s}
+  .sp-src:hover svg{color:#0A0A0B;transform:translate(1px,-1px)}
   .sp-controls{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
   .sp-pills-row{display:flex;gap:6px;flex-wrap:wrap}
   .sp-mini-pill{

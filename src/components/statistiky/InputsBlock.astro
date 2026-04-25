@@ -13,6 +13,7 @@ const { fuelSeries, fertSeries } = Astro.props;
   <header class="sp-section-head">
     <h2>Vstupy — Pohonné hmoty a hnojiva</h2>
     <span class="sp-section-sub">Týdenní cena nafty a roční ceny hnojiv</span>
+    <a class="sp-src" href="https://csu.gov.cz/zemedelstvi" target="_blank" rel="noopener noreferrer">Zdroj: ČSÚ — Indexy spotřebitelských cen, MPO Energostat <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
   </header>
 
   <div class="sp-inputs-grid">
@@ -34,6 +35,15 @@ const { fuelSeries, fertSeries } = Astro.props;
   .sp-section-head{margin-bottom:14px}
   .sp-section-head h2{font:700 24px 'Chakra Petch',sans-serif;letter-spacing:-.02em;margin:0;color:#0A0A0B}
   .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
+  .sp-src{
+    display:inline-flex;align-items:center;gap:4px;margin-top:6px;
+    font-size:11.5px;color:#888;text-decoration:none;
+    border-bottom:1px dotted #c0c0c5;padding-bottom:1px;
+    transition:color .15s, border-color .15s;
+  }
+  .sp-src:hover{color:#0A0A0B;border-bottom-color:#0A0A0B}
+  .sp-src svg{color:#a0a0a8;transition:transform .15s}
+  .sp-src:hover svg{color:#0A0A0B;transform:translate(1px,-1px)}
   .sp-inputs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .sp-chart-card{
     background:#fff;border:1px solid #EAEAEC;border-radius:18px;padding:20px 22px;
