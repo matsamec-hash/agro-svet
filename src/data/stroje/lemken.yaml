@@ -6,369 +6,391 @@ website: https://lemken.com/
 description: >
   Německý výrobce zemědělské techniky pro zpracování půdy a setí. Klasické nesené pluhy Juwel a Diamant, podmítače Rubin, kypřiče Karat, secí stroje Solitair.
 categories:
+  hnojeni:
+    name: Hnojení
+    series:
+      - slug: polaris
+        name: POLARIS
+        family: polaris
+        subcategory: rozmetadla-mineralni
+        description: |
+          POLARIS — rozmetadla minerálních hnojiv značky Lemken.
+        models:
+          - slug: polaris
+            name: POLARIS
+            tagline: "Fertiliser Spreader for Max. Precision & Efficiency"
+            url: https://lemken.com/en-en/agricultural-machines/cropcare/fertiliser-spreaders/polaris
+      - slug: spica
+        name: "LEMKEN Fertiliser spreader SPICA 8 - Simple & convenient"
+        family: spica
+        subcategory: rozmetadla-mineralni
+        description: |
+          LEMKEN Fertiliser spreader SPICA 8 - Simple & convenient — rozmetadla minerálních hnojiv značky Lemken.
+        models:
+          - slug: spica
+            name: "LEMKEN Fertiliser spreader SPICA 8 - Simple & convenient"
+            url: https://lemken.com/en-en/agricultural-machines/cropcare/fertiliser-spreaders/spica
+      - slug: tauri
+        name: TAURI
+        family: tauri
+        subcategory: rozmetadla-mineralni
+        description: |
+          TAURI — rozmetadla minerálních hnojiv značky Lemken.
+        models:
+          - slug: tauri
+            name: TAURI
+            tagline: Fertiliser Spreader for High Impact Power
+            url: https://lemken.com/en-en/agricultural-machines/cropcare/fertiliser-spreaders/tauri
   seti:
     name: Setí a sázení
     series:
       - slug: azurit
-        name: Azurit
+        name: Practical Trial
         family: azurit
         subcategory: seci-stroje-presne
-        url: https://lemken.com/en-en/agricultural-machines/sowing/precision-seeding/azurit
         description: |
-          Řada Lemken Azurit v kategorii Přesné secí stroje.
+          Practical Trial — přesné secí stroje značky Lemken.
         models:
           - slug: practical-trial
             name: Practical Trial
             url: https://lemken.com/en-en/agricultural-machines/sowing/precision-seeding/azurit/practical-trial
       - slug: faya-mf
-        name: Faya Mf
+        name: Faya MF
         family: faya-mf
         subcategory: seci-stroje-presne
-        url: https://lemken.com/en-en/agricultural-machines/sowing/precision-seeding
         description: |
-          Řada Lemken Faya Mf v kategorii Přesné secí stroje.
+          Faya MF — přesné secí stroje značky Lemken.
         models:
           - slug: faya-mf
-            name: Faya Mf
+            name: Faya MF
             url: https://lemken.com/en-en/agricultural-machines/sowing/precision-seeding/faya-mf
       - slug: mechanical-seed-drills
-        name: Mechanical Seed Drills
+        name: Saphir
         family: mechanical-seed-drills
         subcategory: seci-stroje-mechanicke
-        url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/mechanical-seed-drills
         description: |
-          Řada Lemken Mechanical Seed Drills v kategorii Mechanické secí stroje.
+          Saphir — mechanické secí stroje značky Lemken.
         models:
           - slug: saphir-9
             name: Saphir 9
+            tagline: Mechanical Drill for Perfect Seed Placement
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/mechanical-seed-drills/saphir-9
           - slug: saphir-10
-            name: Saphir 10
+            name: Saphir 10 mechanical seed drill - High precision seeding
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/mechanical-seed-drills/saphir-10
       - slug: mounted-rigid-seed-drills
-        name: Mounted Rigid Seed Drills
+        name: Solitair MR
         family: mounted-rigid-seed-drills
         subcategory: seci-stroje-pneumaticke
-        url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/mounted-rigid-seed-drills
         description: |
-          Řada Lemken Mounted Rigid Seed Drills v kategorii Pneumatické secí stroje.
+          Solitair MR — pneumatické secí stroje značky Lemken.
         models:
           - slug: solitair-mr
-            name: Solitair Mr
+            name: Solitair MR
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/mounted-rigid-seed-drills/solitair-mr
       - slug: pneumatic-seed-drills
-        name: Pneumatic Seed Drills
+        name: Pneumatic
         family: pneumatic-seed-drills
         subcategory: seci-stroje-pneumaticke
-        url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills
         description: |
-          Řada Lemken Pneumatic Seed Drills v kategorii Pneumatické secí stroje.
+          Pneumatic — pneumatické secí stroje značky Lemken.
         models:
           - slug: optidisc-25
-            name: Optidisc 25
+            name: Pneumatic seed drill OptiDisc 25
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/optidisc-25
           - slug: solitair-9-1
-            name: Solitair 9 1
+            name: Solitair 9 Pneumatic Seed Drill - Versatile Applications
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/solitair-9-1
           - slug: solitair-25
             name: Solitair 25
+            tagline: Pneumatic Drill for Versatile Tillage
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/solitair-25
           - slug: solitair-f
-            name: Solitair F
+            name: Front tank Solitair F
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/solitair-f
           - slug: solitair-st
-            name: Solitair St
+            name: Solitair ST
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/solitair-st
           - slug: solitair-xmf
-            name: Solitair Xmf
+            name: Solitair XMF
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/solitair-xmf
       - slug: seeding-combinations
-        name: Seeding Combinations
+        name: Solitair
         family: seeding-combinations
         subcategory: seci-kombinace
-        url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/seeding-combinations
         description: |
-          Řada Lemken Seeding Combinations v kategorii Secí kombinace.
+          Solitair — secí kombinace značky Lemken.
         models:
           - slug: solitair-dt
-            name: Solitair Dt
+            name: Solitair DT
+            tagline: The new drill combination generation
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/seeding-combinations/solitair-dt
-          - slug: compact-solitair-9-z-kk
-            name: Compact Solitair 9 Z Kk
-            url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/seeding-combinations/compact-solitair-9-z-kk
           - slug: solitair-pt
-            name: Solitair Pt
+            name: Solitair PT
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/seeding-combinations/solitair-pt
       - slug: solitair-12-sw
-        name: Solitair 12 Sw
+        name: Solitair 12 SW
         family: solitair-12-sw
         subcategory: seci-stroje-presne
-        url: https://lemken.com/en-en/agricultural-machines/sowing/precision-seeding
         description: |
-          Řada Lemken Solitair 12 Sw v kategorii Přesné secí stroje.
+          Solitair 12 SW — přesné secí stroje značky Lemken.
         models:
           - slug: solitair-12-sw
-            name: Solitair 12 Sw
+            name: Solitair 12 SW
+            tagline: "Seed Wagon & Storage for Large Farms"
             url: https://lemken.com/en-en/agricultural-machines/sowing/precision-seeding/solitair-12-sw
       - slug: solitair-8-solitair-9
-        name: Solitair 8 Solitair 9
+        name: Pneumatic seed drill Solitair 8+
         family: solitair-8-solitair-9
         subcategory: seci-stroje-pneumaticke
-        url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/mounted-rigid-seed-drills/solitair-8-solitair-9
         description: |
-          Řada Lemken Solitair 8 Solitair 9 v kategorii Pneumatické secí stroje.
+          Pneumatic seed drill Solitair 8+ — pneumatické secí stroje značky Lemken.
         models:
           - slug: solitair-8
-            name: Solitair 8
+            name: Pneumatic seed drill Solitair 8+
             url: https://lemken.com/en-en/agricultural-machines/sowing/seed-drills/pneumatic-seed-drills/mounted-rigid-seed-drills/solitair-8-solitair-9/solitair-8
       - slug: solitair-nt
-        name: Solitair Nt
+        name: Solitair NT
         family: solitair-nt
         subcategory: seci-stroje-pneumaticke
-        url: https://lemken.com/en-en/agricultural-machines/sowing/direct-drilling
         description: |
-          Řada Lemken Solitair Nt v kategorii Stroje pro přímé setí.
+          Solitair NT — stroje pro přímé setí značky Lemken.
         models:
           - slug: solitair-nt
-            name: Solitair Nt
+            name: Solitair NT
             url: https://lemken.com/en-en/agricultural-machines/sowing/direct-drilling/solitair-nt
   zpracovani-pudy:
     name: Zpracování půdy
     series:
       - slug: compact-disc-harrows
-        name: Compact Disc Harrows
+        name: Rubin 12
         family: compact-disc-harrows
         subcategory: podmitace-diskove
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/compact-disc-harrows
         description: |
-          Řada Lemken Compact Disc Harrows v kategorii Diskové podmítače.
+          Rubin 12 — diskové podmítače značky Lemken.
         models:
           - slug: rubin-12
             name: Rubin 12
+            tagline: Compact Disc Harrow - Effective Depth Effect
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/compact-disc-harrows/rubin-12
       - slug: cultivators
-        name: Cultivators
+        name: Kristall
         family: cultivators
         subcategory: podmitace-radlickove
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/cultivators
         description: |
-          Řada Lemken Cultivators v kategorii Radličkové podmítače.
+          Kristall — radličkové podmítače značky Lemken.
         models:
           - slug: kristall-9
-            name: Kristall 9
+            name: Kristall compact cultivator
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/cultivators/kristall-9
           - slug: karat-12
-            name: Karat 12
+            name: Cultivator Karat 12 - Working width from 4 m to 7 m
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/cultivators/karat-12
           - slug: karat-10
-            name: Karat 10
+            name: Three-beam cultivator Karat 10
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/cultivators/karat-10
           - slug: koralin-9-kua
-            name: Koralin 9 Kua
+            name: "Koralin 9 KUA – Efficient Soil Protection & Cultivation"
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/cultivators/koralin-9-kua
           - slug: koralin-9-k
             name: Koralin 9 K
+            tagline: "Efficient Cultivation & Weed Control"
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/cultivators/koralin-9-k
       - slug: diamant
         name: Diamant
         family: diamant
         subcategory: pluhy
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/semi-mounted-ploughs/diamant
         description: |
-          Řada Lemken Diamant v kategorii Pluhy.
+          Diamant — pluhy značky Lemken.
         models:
           - slug: diamant-16
-            name: Diamant 16
+            name: Diamant 16 Plough
+            tagline: Featuring the New Adjustment System
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/semi-mounted-ploughs/diamant/diamant-16
           - slug: diamant-18
             name: Diamant 18
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/semi-mounted-ploughs/diamant/diamant-18
           - slug: optitrac
-            name: Optitrac
+            name: OptiTrac
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/semi-mounted-ploughs/diamant/optitrac
           - slug: optiline
-            name: Optiline
+            name: OptiLine
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/semi-mounted-ploughs/diamant/optiline
       - slug: equipment
-        name: Equipment
+        name: Wheels
         family: equipment
         subcategory: pluhy
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment
         description: |
-          Řada Lemken Equipment v kategorii Pluhy.
+          Wheels — pluhy značky Lemken.
         models:
           - slug: wheels-for-the-mounted-plough
-            name: Wheels For The Mounted Plough
+            name: Wheels for the mounted plough
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/wheels-for-the-mounted-plough
           - slug: optiquick
-            name: Optiquick
+            name: Optiquick adjustment system - Exact plough adjustments
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/optiquick
           - slug: disc-coulters
-            name: Disc Coulters
+            name: Disc coulters
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/disc-coulters
           - slug: bodies
-            name: Bodies
+            name: Plough bodies for every operation
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/bodies
           - slug: skimmers
-            name: Skimmers
+            name: Skimmers for all LEMKEN ploughs
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/skimmers
           - slug: onland
-            name: Onland
+            name: Ploughing onland - protecting the soil
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/onland
           - slug: subsoiler
             name: Subsoiler
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/subsoiler
       - slug: furrow-presses
-        name: Furrow Presses
+        name: FlexPack
         family: furrow-presses
         subcategory: valce
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/reconsolidation/furrow-presses
         description: |
-          Řada Lemken Furrow Presses v kategorii Válce a presy.
+          FlexPack — válce a presy značky Lemken.
         models:
           - slug: flexpack
-            name: Flexpack
+            name: FlexPack
+            tagline: Plough Press with Flexible Working Width
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/reconsolidation/furrow-presses/flexpack
           - slug: variopack
-            name: Variopack
+            name: VarioPack plough furrow presses
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/reconsolidation/furrow-presses/variopack
           - slug: variopack-in-front-attachment
-            name: Variopack In Front Attachment
+            name: VarioPack front furrow press
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/reconsolidation/furrow-presses/variopack-in-front-attachment
           - slug: variopack-furrow-press
-            name: Variopack Furrow Press
+            name: VarioPack furrow press
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/reconsolidation/furrow-presses/variopack-furrow-press
       - slug: heliodor-9
-        name: Heliodor 9
+        name: The dreamteam for spreading slurry
         family: heliodor-9
         subcategory: podmitace-diskove
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/compact-disc-harrows/heliodor-9
         description: |
-          Řada Lemken Heliodor 9 v kategorii Diskové podmítače.
+          The dreamteam for spreading slurry — diskové podmítače značky Lemken.
         models:
           - slug: spreading-slurry-slurrykit
-            name: Spreading Slurry Slurrykit
+            name: The dreamteam for spreading slurry
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/compact-disc-harrows/heliodor-9/spreading-slurry-slurrykit
       - slug: mounted-ploughs
-        name: Mounted Ploughs
+        name: Juwel
         family: mounted-ploughs
         subcategory: pluhy
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/mounted-ploughs
         description: |
-          Řada Lemken Mounted Ploughs v kategorii Pluhy.
+          Juwel — pluhy značky Lemken.
         models:
           - slug: juwel-10
-            name: Juwel 10
+            name: Juwel 10 for large tractors
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/mounted-ploughs/juwel-10
           - slug: juwel-8
-            name: Juwel 8
+            name: Juwel 8 Plough
+            tagline: Versatile Performance up to 333 hp
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/mounted-ploughs/juwel-8
           - slug: juwel-7
             name: Juwel 7
+            tagline: Light power when ploughing
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/mounted-ploughs/juwel-7
           - slug: juwel-6
-            name: Juwel 6
+            name: Juwel 6 Plough – Lightweight Efficiency for Every Field
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/mounted-ploughs/juwel-6
       - slug: overload-protection
-        name: Overload Protection
+        name: OptiStone
         family: overload-protection
         subcategory: pluhy
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/overload-protection
         description: |
-          Řada Lemken Overload Protection v kategorii Pluhy.
+          OptiStone — pluhy značky Lemken.
         models:
           - slug: optistone
-            name: Optistone
+            name: OptiStone
+            tagline: Overload Protection for Trouble-Free Ploughing
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/overload-protection/optistone
-          - slug: translate-to-english-mechanische-nonstop-ueberlastsicherung
-            name: Translate To English Mechanische Nonstop Ueberlastsicherung
-            url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/equipment/overload-protection/translate-to-english-mechanische-nonstop-ueberlastsicherung
       - slug: power-harrows
-        name: Power Harrows
+        name: Zirkon
         family: power-harrows
         subcategory: rotacni-brany
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/seedbed-preparation/power-harrows
         description: |
-          Řada Lemken Power Harrows v kategorii Rotační brány.
+          Zirkon — rotační brány značky Lemken.
         models:
           - slug: zirkon-12
             name: Zirkon 12
+            tagline: Power Harrow for Highest Continuous Load
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/seedbed-preparation/power-harrows/zirkon-12
           - slug: zirkon-8
-            name: Zirkon 8
+            name: Power harrow Zirkon 8 - For tractors from 60 to 175 hp
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/seedbed-preparation/power-harrows/zirkon-8
           - slug: zirkon-emr-xmr
-            name: Zirkon Emr Xmr
+            name: Zirkon EMR/XMR
+            tagline: High-Quality Power Harrows for Tillage
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/seedbed-preparation/power-harrows/zirkon-emr-xmr
       - slug: roller-range
-        name: Roller Range
+        name: Tracking Rollers
         family: roller-range
         subcategory: valce
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/reconsolidation
         description: |
-          Řada Lemken Roller Range v kategorii Válce a presy.
+          Tracking Rollers — válce a presy značky Lemken.
         models:
           - slug: roller-range
-            name: Roller Range
+            name: Tracking Rollers
+            tagline: Reliable Reconsolidation for Any Condition
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/reconsolidation/roller-range
       - slug: rubin-10
-        name: Rubin 10
+        name: Strong
         family: rubin-10
         subcategory: podmitace-diskove
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/compact-disc-harrows/rubin-10
         description: |
-          Řada Lemken Rubin 10 v kategorii Diskové podmítače.
+          Strong — diskové podmítače značky Lemken.
         models:
           - slug: rubin-10-1000
-            name: Rubin 10 1000
+            name: Strong performance in the field with Rubin 10/1000
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/compact-disc-harrows/rubin-10/rubin-10-1000
           - slug: rubin-10-tf-mr
-            name: Rubin 10 Tf Mr
+            name: Rubin 10 MR/TF – Powerful Disc Harrow for Every Field
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/compact-disc-harrows/rubin-10/rubin-10-tf-mr
       - slug: seedbed-combinations
-        name: Seedbed Combinations
+        name: System-Kompaktor
         family: seedbed-combinations
         subcategory: kompaktomaty
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/seedbed-preparation/seedbed-combinations
         description: |
-          Řada Lemken Seedbed Combinations v kategorii Kompaktomaty.
+          System-Kompaktor — kompaktomaty značky Lemken.
         models:
           - slug: system-kompaktor
-            name: System Kompaktor
+            name: System-Kompaktor - Passive seedbed combinations
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/seedbed-preparation/seedbed-combinations/system-kompaktor
           - slug: korund-8
             name: Korund 8
+            tagline: Versatile Seedbed Combination Options
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/seedbed-preparation/seedbed-combinations/korund-8
       - slug: semi-mounted-ploughs
-        name: Semi Mounted Ploughs
+        name: Titan 18
         family: semi-mounted-ploughs
         subcategory: pluhy
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/semi-mounted-ploughs
         description: |
-          Řada Lemken Semi Mounted Ploughs v kategorii Pluhy.
+          Titan 18 — pluhy značky Lemken.
         models:
           - slug: titan-18
             name: Titan 18
+            tagline: "High Working Output & Perfect Ploughing"
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/ploughing/semi-mounted-ploughs/titan-18
       - slug: subsoiler
-        name: Subsoiler
+        name: Onyx
         family: subsoiler
         subcategory: kyprice
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/subsoiler
         description: |
-          Řada Lemken Subsoiler v kategorii Kypřiče (hlubinné).
+          Onyx — hlubinné kypřiče značky Lemken.
         models:
           - slug: onyx
             name: Onyx
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/subsoiler/onyx
       - slug: system-carrier
-        name: System Carrier
+        name: Gigant System Carrier
         family: system-carrier
         subcategory: kyprice
-        url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/system-carrier
         description: |
-          Řada Lemken System Carrier v kategorii Kypřiče (systémové).
+          Gigant System Carrier — systémové kypřiče značky Lemken.
         models:
           - slug: gigant
-            name: Gigant
+            name: Gigant System Carrier
+            tagline: "High Performance & Low Consumption"
             url: https://lemken.com/en-en/agricultural-machines/soil-cultivation/stubble-cultivation/system-carrier/gigant
