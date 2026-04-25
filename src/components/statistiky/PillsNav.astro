@@ -1,0 +1,68 @@
+---
+// src/components/statistiky/PillsNav.astro
+interface Props {
+  items: { label: string; href: string }[];
+}
+const { items } = Astro.props;
+---
+
+<nav class="sp-pills" aria-label="Sekce stránky">
+  {items.map((it, i) => (
+    <a class:list={['sp-pill', { active: i === 0 }]} href={it.href} data-href={it.href}>{it.label}</a>
+  ))}
+</nav>
+
+<style>
+  .sp-pills {
+    --yellow:#FFEA00; --ink:#0A0A0B; --line:#EAEAEC; --bg:rgba(255,255,255,.92);
+    position:sticky;top:152px;z-index:25;
+    background:var(--bg);backdrop-filter:saturate(1.4) blur(14px);
+    border:1px solid var(--line);border-radius:14px;
+    padding:8px 12px;margin:0 0 28px;
+    display:flex;gap:6px;flex-wrap:wrap;overflow-x:auto;
+  }
+  .sp-pill{
+    display:inline-flex;align-items:center;padding:6px 14px;
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    font:500 13px 'Chakra Petch',sans-serif;color:var(--ink);text-decoration:none;
+    transition:.15s;white-space:nowrap;
+  }
+  .sp-pill:hover{background:#FFF6A8;border-color:var(--yellow);transform:translateY(-1px)}
+  .sp-pill.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  @media (max-width:768px){.sp-pills{top:130px;flex-wrap:nowrap}}
+</style>
+
+<script>
+  const pills = document.querySelectorAll<HTMLAnchorElement>('.sp-pills .sp-pill');
+  const targets: HTMLElement[] = [];
+  pills.forEach(p => {
+    const id = p.dataset.href?.replace('#', '');
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el) targets.push(el);
+  });
+  if (targets.length && 'IntersectionObserver' in window) {
+    const byId = new Map<string, HTMLAnchorElement>();
+    pills.forEach(p => {
+      const id = p.dataset.href?.replace('#', '');
+      if (id) byId.set(id, p);
+    });
+    const io = new IntersectionObserver(entries => {
+      let topMost: { id: string; top: number } | null = null;
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const t = e.target as HTMLElement;
+          const top = e.boundingClientRect.top;
+          if (!topMost || top < topMost.top) topMost = { id: t.id, top };
+        }
+      });
+      if (topMost) {
+        pills.forEach(p => p.classList.remove('active'));
+        const { id } = topMost as { id: string; top: number };
+        byId.get(id)?.classList.add('active');
+      }
+    }, { rootMargin: '-200px 0px -60% 0px', threshold: 0 });
+    targets.forEach(t => io.observe(t));
+  }
+</script>
