@@ -18,11 +18,12 @@ const found = getPlemeno(druhSlug!, plemenoSlug!);
 if (!found) return Astro.redirect('/plemena/');
 const { druh, plemeno } = found;
 
-const druhEmoji: Record<string, string> = { hovezi: '🐄', ovce: '🐑', kone: '🐎' };
+const druhEmoji: Record<string, string> = { hovezi: '🐄', ovce: '🐑', kone: '🐎', prasata: '🐖' };
 const druhTone: Record<string, [string, string]> = {
   hovezi: ['#7A5230', '#3F2A18'],
   ovce: ['#C9A876', '#7A6240'],
   kone: ['#8B5A3B', '#4D2E1C'],
+  prasata: ['#C68B7A', '#6B3D32'],
 };
 const [druhC1, druhC2] = druhTone[druh.slug] ?? ['#5a4a30', '#2a2218'];
 
