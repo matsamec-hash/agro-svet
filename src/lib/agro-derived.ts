@@ -129,7 +129,7 @@ export function fiveYearAverage(prices: CommodityPrice[], endMonth: string): num
     const d = parseMonth(p.month);
     if (!d) continue;
     const key = d.year * 12 + d.month;
-    if (key <= targetKey && key > targetKey - 60) {
+    if (key < targetKey && key >= targetKey - 60) {
       window.push(p.price);
     }
   }

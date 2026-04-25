@@ -40,13 +40,13 @@ const MONTHS = ['leden','únor','březen','duben','květen','červen','červenec
 
 describe('fiveYearAverage', () => {
   it('computes rolling average of 60 months ending at given month', () => {
-    // 60 měsíců s konstantní cenou 100, 61. měsíc je 200
-    const prices = Array.from({ length: 60 }, (_, i) => ({
-      name: 'Pšenice',
-      month: `${MONTHS[i % 12]} ${2018 + Math.floor(i / 12)}`,
-      price: 100,
-      unit: 'Kč/t',
-    }));
+    // 61 měsíců (prosinec 2017 → prosinec 2022) za 100, pak spike v leden 2023
+    const prices: { name: string; month: string; price: number; unit: string }[] = [];
+    for (let i = 0; i < 61; i++) {
+      const monthIdx = (i + 11) % 12; // start at Dec (idx 11)
+      const year = 2017 + Math.floor((i + 11) / 12);
+      prices.push({ name: 'Pšenice', month: `${MONTHS[monthIdx]} ${year}`, price: 100, unit: 'Kč/t' });
+    }
     prices.push({ name: 'Pšenice', month: 'leden 2023', price: 200, unit: 'Kč/t' });
 
     expect(fiveYearAverage(prices, 'leden 2023')).toBe(100);
