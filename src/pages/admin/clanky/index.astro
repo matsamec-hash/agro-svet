@@ -116,7 +116,7 @@ function fmtDate(timestamp: string): string {
         label.textContent = '…';
 
         try {
-          const res = await fetch('/api/admin/clanky/toggle-featured', {
+          const res = await fetch('/api/admin/clanky/toggle-featured/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ articleId, featured: newValue }),

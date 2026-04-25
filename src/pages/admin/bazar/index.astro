@@ -135,7 +135,7 @@ function priceText(price: number | null): string {
     let pendingRow: HTMLElement | null = null;
 
     async function callApi(listingId: string, body: any): Promise<any> {
-      const res = await fetch('/admin/bazar/api/toggle-featured', {
+      const res = await fetch('/admin/bazar/api/toggle-featured/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ listingId, ...body }),
