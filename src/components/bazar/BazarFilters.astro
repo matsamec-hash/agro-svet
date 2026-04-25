@@ -32,9 +32,9 @@ const {
 } = Astro.props;
 
 const showMachineFilters = category === 'traktory' || category === 'kombajny' || !category;
-const showZaberFilter = ['zpracovani-pudy', 'seti', 'ochrana-rostlin', 'sklizen-picnin'].includes(category);
-const showNosnostFilter = ['manipulace', 'doprava'].includes(category);
-const showObjemFilter = ['hnojeni', 'ochrana-rostlin'].includes(category);
+const showZaberFilter = !category || ['zpracovani-pudy', 'seti', 'ochrana-rostlin', 'sklizen-picnin'].includes(category);
+const showNosnostFilter = !category || ['manipulace', 'doprava'].includes(category);
+const showObjemFilter = !category || ['hnojeni', 'ochrana-rostlin'].includes(category);
 
 const activeFilters: { label: string; removeParams: string[] }[] = [];
 if (query) activeFilters.push({ label: `"${query}"`, removeParams: ['q'] });
@@ -63,15 +63,15 @@ if (powerFrom || powerTo) {
 }
 if (zaberFrom || zaberTo) {
   const label = zaberFrom && zaberTo ? `${zaberFrom} – ${zaberTo} m` : zaberFrom ? `od ${zaberFrom} m` : `do ${zaberTo} m`;
-  activeFilters.push({ label: `Záběr: ${label}`, removeParams: ['zaber_od', 'zaber_do'] });
+  activeFilters.push({ label: `Záběr: ${label}`, removeParams: ['zaber_from', 'zaber_to'] });
 }
 if (nosnostFrom || nosnostTo) {
   const label = nosnostFrom && nosnostTo ? `${nosnostFrom} – ${nosnostTo} kg` : nosnostFrom ? `od ${nosnostFrom} kg` : `do ${nosnostTo} kg`;
-  activeFilters.push({ label: `Nosnost: ${label}`, removeParams: ['nosnost_od', 'nosnost_do'] });
+  activeFilters.push({ label: `Nosnost: ${label}`, removeParams: ['nosnost_from', 'nosnost_to'] });
 }
 if (objemFrom || objemTo) {
   const label = objemFrom && objemTo ? `${objemFrom} – ${objemTo} l` : objemFrom ? `od ${objemFrom} l` : `do ${objemTo} l`;
-  activeFilters.push({ label: `Objem nádrže: ${label}`, removeParams: ['objem_od', 'objem_do'] });
+  activeFilters.push({ label: `Objem nádrže: ${label}`, removeParams: ['objem_from', 'objem_to'] });
 }
 
 function buildRemoveUrl(params: string[]): string {
@@ -162,9 +162,9 @@ function buildRemoveUrl(params: string[]): string {
         <div class="field field-price">
           <span class="field-label">Pracovní záběr (m)</span>
           <div class="price-group">
-            <input type="number" name="zaber_od" value={zaberFrom} placeholder="Od" class="field-input" min="0" max="50" step="0.1" />
+            <input type="number" name="zaber_from" value={zaberFrom} placeholder="Od" class="field-input" min="0" max="50" step="0.1" />
             <span class="price-dash">–</span>
-            <input type="number" name="zaber_do" value={zaberTo} placeholder="Do" class="field-input" min="0" max="50" step="0.1" />
+            <input type="number" name="zaber_to" value={zaberTo} placeholder="Do" class="field-input" min="0" max="50" step="0.1" />
           </div>
         </div>
       )}
@@ -172,9 +172,9 @@ function buildRemoveUrl(params: string[]): string {
         <div class="field field-price">
           <span class="field-label">Nosnost (kg)</span>
           <div class="price-group">
-            <input type="number" name="nosnost_od" value={nosnostFrom} placeholder="Od" class="field-input" min="0" step="100" />
+            <input type="number" name="nosnost_from" value={nosnostFrom} placeholder="Od" class="field-input" min="0" step="100" />
             <span class="price-dash">–</span>
-            <input type="number" name="nosnost_do" value={nosnostTo} placeholder="Do" class="field-input" min="0" step="100" />
+            <input type="number" name="nosnost_to" value={nosnostTo} placeholder="Do" class="field-input" min="0" step="100" />
           </div>
         </div>
       )}
@@ -182,9 +182,9 @@ function buildRemoveUrl(params: string[]): string {
         <div class="field field-price">
           <span class="field-label">Objem nádrže (l)</span>
           <div class="price-group">
-            <input type="number" name="objem_od" value={objemFrom} placeholder="Od" class="field-input" min="0" step="100" />
+            <input type="number" name="objem_from" value={objemFrom} placeholder="Od" class="field-input" min="0" step="100" />
             <span class="price-dash">–</span>
-            <input type="number" name="objem_do" value={objemTo} placeholder="Do" class="field-input" min="0" step="100" />
+            <input type="number" name="objem_to" value={objemTo} placeholder="Do" class="field-input" min="0" step="100" />
           </div>
         </div>
       )}
