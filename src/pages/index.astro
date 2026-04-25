@@ -153,11 +153,6 @@ const websiteJsonLd = {
     <ImageAccordion />
   </section>
 
-  <!-- Počasí pro pole — strip (nad novinky) -->
-  <div style="padding:48px 32px 0;">
-    <AgroWeather mode="strip" />
-  </div>
-
   <!-- Latest novinky -->
   <section style="max-width:1280px; margin:0 auto; padding:72px 32px 48px;">
     <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
@@ -180,28 +175,16 @@ const websiteJsonLd = {
     </div>
   </section>
 
-  <!-- Data — Ceny komodit -->
-  <section style="max-width:1280px; margin:0 auto; padding:48px 32px 24px;">
-    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
-      <div>
-        <span class="section-label">Data · Trhy a komodity</span>
-        <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem); margin-top:10px;">Ceny komodit, vstupy, sklizeň</h2>
-      </div>
-      <a href="/statistiky/" class="link-underline">Zobrazit celou sekci →</a>
-    </div>
-    <CommodityChart
-      series={commodityFull}
-      events={AGRO_EVENTS}
-      fiveYearAvg={fiveYearAvgs}
-    />
-  </section>
+  <!-- Půdní stav (Open-Meteo) — pod novinky -->
+  <div style="max-width:1280px; margin:0 auto; padding:0 32px;">
+    <AgroWeather mode="puda" />
+  </div>
 
-  <!-- Data — Zemědělská půda -->
-  <section style="max-width:1280px; margin:0 auto; padding:24px 32px 96px;">
+  <!-- Data — Zemědělská půda (přesunuto NAD Trhy a komodity) -->
+  <section style="max-width:1280px; margin:0 auto; padding:24px 32px;">
     <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
       <div>
-        <span class="section-label">Data · Zemědělská půda</span>
-        <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem); margin-top:10px;">Vlastnictví, pacht, koncentrace</h2>
+        <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Zemědělská půda</h2>
       </div>
       <a href="/puda/" class="link-underline">Zobrazit celou sekci →</a>
     </div>
@@ -237,6 +220,26 @@ const websiteJsonLd = {
     .hpf-lbl { font-size:14px; color:#0A0A0B; font-weight:600; margin-top:8px; display:block; }
     .hpf-note { font-size:12.5px; color:#6B6B72; margin-top:6px; display:block; line-height:1.5; }
   </style>
+
+  <!-- Data — Trhy a komodity (pod Půdou) -->
+  <section style="max-width:1280px; margin:0 auto; padding:24px 32px 48px;">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Trhy a komodity</h2>
+      </div>
+      <a href="/statistiky/" class="link-underline">Zobrazit celou sekci →</a>
+    </div>
+    <CommodityChart
+      series={commodityFull}
+      events={AGRO_EVENTS}
+      fiveYearAvg={fiveYearAvgs}
+    />
+  </section>
+
+  <!-- Počasí pro pole — strip (nad bazar) -->
+  <div style="padding:32px 32px 0;">
+    <AgroWeather mode="strip" />
+  </div>
 
   <!-- Fresh bazar listings -->
   {freshListings && freshListings.length > 0 && (
