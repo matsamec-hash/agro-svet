@@ -22,7 +22,7 @@ const sorted = articles ?? [];
 // Hero: first article as featured + next 4
 const featured = sorted[0];
 const heroRight = sorted.slice(1, 5);
-const latest = sorted.slice(0, 6);
+const latest = sorted.slice(5, 11);
 
 // Fresh bazar listings (latest 6; when topování lands, featured go first)
 const { data: freshListings } = await supabase

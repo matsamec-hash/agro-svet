@@ -104,6 +104,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   if (gateOn) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+    // CRITICAL: prevent Cloudflare/browser from caching gated responses.
+    // Without this, CF caches a 200 (returned to a session with cookie) and
+    // then serves it to everyone — gate leaks. It also caches the 302→/unlock/
+    // for the cookieless first visit, so even after the user gets a cookie
+    // their next navigation hits the cached redirect.
+    response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Vary', 'Cookie');
   }
 
   return response;

@@ -1,5 +1,5 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllBrands, getBrand, seriesFamily, familyLabel, type StrojKategorie } from '../../../lib/stroje';
 
@@ -47,6 +47,9 @@ type Tile = {
   maxYear: number | null;
   hasCurrent: boolean;
   coverImage: string | null;
+  coverCreditUrl: string | null;
+  coverCreditAuthor: string | null;
+  coverCreditLicense: string | null;
 };
 
 function buildTilesForCategory(catKey: StrojKategorie): Tile[] {
@@ -69,12 +72,20 @@ function buildTilesForCategory(catKey: StrojKategorie): Tile[] {
         maxYear: null,
         hasCurrent: false,
         coverImage: null,
+        coverCreditUrl: null,
+        coverCreditAuthor: null,
+        coverCreditLicense: null,
       };
       byFamily.set(fam, t);
     }
     t.seriesCount += 1;
     if (labelOverride) t.label = labelOverride;
-    if (!t.coverImage && (s as any).image_url) t.coverImage = (s as any).image_url;
+    if (!t.coverImage && (s as any).image_url) {
+      t.coverImage = (s as any).image_url;
+      t.coverCreditUrl = (s as any).image_credit_url || null;
+      t.coverCreditAuthor = (s as any).image_credit || null;
+      t.coverCreditLicense = (s as any).image_license || null;
+    }
     for (const m of s.models ?? []) {
       t.modelCount += 1;
       if (m.power_hp !== null) {
@@ -157,10 +168,16 @@ const maxHp = allHp.length ? Math.max(...allHp) : null;
 
 // Pick the most prominent current series cover for hero (highest max hp tile that has cover)
 let heroPhoto: string | null = null;
+let heroCreditUrl: string | null = null;
+let heroCreditAuthor: string | null = null;
+let heroCreditLicense: string | null = null;
 for (const c of categories) {
   for (const t of [...c.currentTiles].sort((a, b) => (b.maxHp ?? 0) - (a.maxHp ?? 0))) {
     if (t.coverImage) {
       heroPhoto = t.coverImage;
+      heroCreditUrl = t.coverCreditUrl;
+      heroCreditAuthor = t.coverCreditAuthor;
+      heroCreditLicense = t.coverCreditLicense;
       break;
     }
   }
@@ -240,6 +257,12 @@ const jsonLd = {
             <img src={`/images/stroje/brands/${brand.slug}.png`} alt={`${brand.name} logo`} loading="eager" />
           </div>
           <div class="hero-photo-badge"><span class="n">{totalModels}+</span> modelů v katalogu</div>
+          {heroCreditAuthor && heroCreditUrl && (
+            <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
+               title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons`}>
+              © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''}
+            </a>
+          )}
         </div>
       </div>
     </section>
@@ -552,6 +575,17 @@ const jsonLd = {
     display:flex;align-items:center;gap:8px;
   }
   .brand-page .hero-photo-badge .n{font-weight:700;color:var(--yellow)}
+  .brand-page .hero-photo-credit{
+    position:absolute;right:12px;bottom:12px;z-index:2;
+    background:rgba(10,10,11,.6);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.08);
+    color:rgba(255,255,255,.78);text-decoration:none;
+    padding:5px 9px;border-radius:7px;
+    font:500 10.5px/1 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    transition:.15s;
+  }
+  .brand-page .hero-photo-credit:hover{background:rgba(10,10,11,.85);color:#fff;border-color:rgba(255,255,255,.18)}
 
   .brand-page .split-bar{
     position:sticky;top:88px;z-index:30;
