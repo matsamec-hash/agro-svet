@@ -123,12 +123,25 @@ if (!heroPhoto) for (const s of seriesData) if (s.image_url) { heroPhoto = s.ima
 if (!heroPhoto) heroPhoto = catHeroFallback;
 
 const lede = seriesData.find((s) => s.description)?.description?.trim() ?? '';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz/stroje/${brand.slug}/` },
+    { '@type': 'ListItem', position: 4, name: catLabel, item: `https://agro-svet.cz/stroje/${categorySlug}/` },
+    { '@type': 'ListItem', position: 5, name: label, item: `https://agro-svet.cz/stroje/${brand.slug}/rada/${categorySlug}/${family}/` },
+  ],
+};
 ---
 
 <Layout
   title={`${brand.name} ${label} ${catLabel.toLowerCase()} — všechny modely`}
   description={`Všechny ${catLabel.toLowerCase()} řady ${brand.name} ${label}. ${totalModels} modelů${hpLine ? `, výkon ${hpLine}` : ''}${yearLine ? `, ${yearLine}` : ''}.`}
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   <div class="rada-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

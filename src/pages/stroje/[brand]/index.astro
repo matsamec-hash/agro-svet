@@ -178,12 +178,23 @@ function hpBar(min: number | null, max: number | null, hpMax: number): { from: n
 const [brandC1, brandC2] = brandTone(brand.slug);
 
 const websiteHost = brand.website ? brand.website.replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz/stroje/${brand.slug}/` },
+  ],
+};
 ---
 
 <Layout
   title={`${brand.name} — katalog modelů a řad`}
   description={`${brand.name} (${brand.country}, založeno ${brand.founded}) — kompletní přehled ${totalModels} modelů ve ${totalSeries} řadách. Aktuální produkce i historické modely pro bazarový průzkum.`}
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   <div class="brand-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

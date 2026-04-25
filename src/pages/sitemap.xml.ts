@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { getAllBrands } from '../lib/stroje';
+import { getAllBrands, seriesFamily } from '../lib/stroje';
 import { getAllDruhy } from '../lib/plemena';
 import { createAnonClient } from '../lib/supabase';
 
@@ -66,13 +66,18 @@ export const GET: APIRoute = async () => {
 
   for (const brand of getAllBrands()) {
     urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/`, changefreq: 'monthly', priority: '0.7' });
-    for (const cat of Object.values(brand.categories || {})) {
+    for (const [catKey, cat] of Object.entries(brand.categories || {})) {
+      const families = new Set<string>();
       for (const s of cat.series || []) {
+        families.add((s as any).family || seriesFamily(s.slug));
         urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/`, changefreq: 'monthly' });
         for (const m of s.models || []) {
           const short = m.slug.startsWith(brand.slug + '-') ? m.slug.slice(brand.slug.length + 1) : m.slug;
           urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/${short}/`, changefreq: 'monthly' });
         }
+      }
+      for (const fam of families) {
+        urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/rada/${catKey}/${fam}/`, changefreq: 'monthly', priority: '0.6' });
       }
     }
   }

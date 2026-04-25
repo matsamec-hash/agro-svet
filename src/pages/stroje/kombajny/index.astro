@@ -8,5 +8,14 @@ import CategoryBrowse from '../../../components/stroje/CategoryBrowse.astro';
   title="Kombajny — katalog"
   description="Přehled kombajnů všech značek — John Deere, CLAAS, New Holland, Case IH, Fendt, Massey Ferguson, Deutz-Fahr a další. Konvenční, hybridní i rotorové mlátičky."
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+      { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
+      { '@type': 'ListItem', position: 3, name: 'Kombajny', item: 'https://agro-svet.cz/stroje/kombajny/' },
+    ],
+  })} />
   <CategoryBrowse category="kombajny" />
 </Layout>
