@@ -1,0 +1,211 @@
+---
+import '../styles/global.css';
+
+const url = Astro.url;
+const next = url.searchParams.get('next') || '/';
+const error = url.searchParams.get('error');
+
+// Sanitize next: only allow same-site relative paths to avoid open redirects.
+const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/';
+---
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Stránka v přípravě | agro-svět.cz</title>
+  <meta name="description" content="Přístup pouze pro pozvané. Zadejte přístupový kód." />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
+  <meta name="theme-color" content="#FFFF00" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Roboto+Condensed:wght@400;500&display=swap"
+  />
+</head>
+<body class="gate-body">
+  <main class="gate-wrap">
+    <div class="gate-card">
+      <div class="gate-brand">
+        <span class="gate-logo">agro<span class="gate-logo-dash">-</span>svět<span class="gate-logo-tld">.cz</span></span>
+        <div class="gate-stripe" aria-hidden="true"></div>
+      </div>
+
+      <h1 class="gate-title">Stránka v&nbsp;přípravě</h1>
+      <p class="gate-lead">
+        Web je dočasně přístupný jen pozvaným.
+        Pokud máte přístupový kód, zadejte ho níže.
+      </p>
+
+      <form method="POST" action="/api/unlock/" class="gate-form" autocomplete="off">
+        <input type="hidden" name="next" value={safeNext} />
+        <label class="gate-label" for="passcode">Přístupový kód</label>
+        <input
+          id="passcode"
+          name="passcode"
+          type="password"
+          inputmode="numeric"
+          autocomplete="off"
+          required
+          autofocus
+          class="gate-input"
+          placeholder="••••••"
+        />
+        {error === '1' && (
+          <div class="gate-error" role="alert">Neplatný kód. Zkuste to znovu.</div>
+        )}
+        <button type="submit" class="gate-button">Vstoupit</button>
+      </form>
+
+      <p class="gate-foot">
+        © {new Date().getFullYear()} agro-svět.cz · Pre-launch
+      </p>
+    </div>
+  </main>
+
+  <style>
+    .gate-body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0f0f0f;
+      background-image:
+        radial-gradient(ellipse at top, rgba(255, 255, 0, 0.08), transparent 60%),
+        radial-gradient(ellipse at bottom, rgba(255, 255, 0, 0.04), transparent 70%);
+      color: #1a1a1a;
+      font-family: 'Roboto Condensed', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .gate-wrap {
+      width: 100%;
+      max-width: 440px;
+    }
+    .gate-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 40px 36px 32px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .gate-card::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 6px;
+      background: #FFFF00;
+    }
+    .gate-brand {
+      margin-bottom: 28px;
+    }
+    .gate-logo {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+      display: inline-block;
+    }
+    .gate-logo-dash { color: #1a1a1a; opacity: 0.4; margin: 0 1px; }
+    .gate-logo-tld { color: #888; font-weight: 500; font-size: 22px; }
+    .gate-stripe {
+      margin-top: 10px;
+      width: 56px;
+      height: 4px;
+      background: #FFFF00;
+      border-radius: 2px;
+    }
+    .gate-title {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 0 12px;
+      color: #1a1a1a;
+      letter-spacing: -0.01em;
+    }
+    .gate-lead {
+      font-size: 15px;
+      line-height: 1.55;
+      color: #666;
+      margin: 0 0 28px;
+    }
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .gate-label {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #666;
+    }
+    .gate-input {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.4em;
+      text-align: center;
+      padding: 16px 14px;
+      border: 2px solid #e5e5e5;
+      border-radius: 8px;
+      background: #fafafa;
+      color: #1a1a1a;
+      transition: border-color 0.15s, background 0.15s;
+      outline: none;
+    }
+    .gate-input::placeholder { color: #c0c0c0; letter-spacing: 0.3em; }
+    .gate-input:focus {
+      border-color: #FFFF00;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(255, 255, 0, 0.2);
+    }
+    .gate-error {
+      font-size: 14px;
+      color: #c92a2a;
+      background: #fff5f5;
+      border: 1px solid #ffd6d6;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-top: 4px;
+    }
+    .gate-button {
+      margin-top: 14px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: #FFFF00;
+      cursor: pointer;
+      transition: transform 0.08s, background 0.15s;
+    }
+    .gate-button:hover { background: #000; }
+    .gate-button:active { transform: translateY(1px); }
+    .gate-foot {
+      margin: 28px 0 0;
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+    @media (max-width: 480px) {
+      .gate-card { padding: 32px 24px 24px; }
+      .gate-title { font-size: 24px; }
+    }
+  </style>
+</body>
+</html>
