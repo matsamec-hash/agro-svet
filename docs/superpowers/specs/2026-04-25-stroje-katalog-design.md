@@ -394,7 +394,147 @@ Po MVP: **Farmet** (CZ symetrie s Bednar), **Grimme** (sklízeče brambor), **Ho
 
 ---
 
-## 7. Bazar integrace
+## 7. Data ingest strategie (Hybrid free)
+
+Místo čistě ručního seedu (~200 h) využijeme **legální tří-vrstvovou hybrid strategii**: strukturovaná open data + sitemap+JSON-LD scraping + PDF brochures + manual CZ finishing. Cíl: ~80 % automatizace technických polí, 100 % manuální pro CZ popisky.
+
+**Zjištění:** Žádný z 18 výrobců nemá veřejné katalogové API. Existující "developer/partner APIs" (CNH FieldOps, JD Operations Center, CLAAS Telematics, AGCO Connect, Manitou portal) jsou pro **telemetry/fleet zákaznických strojů** — ne katalog modelů. Jejich ToS výslovně zakazují re-use pro public katalog. **Nepoužíváme** dealer/partner APIs.
+
+### Vrstva 1 — Open structured data (zdarma, low-risk)
+
+**A) Wikidata SPARQL** (`query.wikidata.org/sparql`)
+- Použití: brand-level metadata (název, country, founded year, parent company, web)
+- Pokrytí: 95 % brand metadata pro 18 značek, 5-15 % model-level
+- Skript: 1× SPARQL query → JSON → generování brand frontmatter v YAML
+- Licence: CC0 (open domain)
+
+```sparql
+SELECT ?brand ?brandLabel ?country ?countryLabel ?founded ?web WHERE {
+  VALUES ?brand { wd:Q23316 wd:Q23410 wd:Q468085 wd:Q1791420 ... }  # 18 brands
+  OPTIONAL { ?brand wdt:P17 ?country }
+  OPTIONAL { ?brand wdt:P571 ?founded }
+  OPTIONAL { ?brand wdt:P856 ?web }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "cs,en". }
+}
+```
+
+**B) Fendt techdata endpoint** (`api.fendt.com/techdata/{REGION}/{LANG}/{ID}/{NAME}`)
+- Status: undocumented public, ne v oficiálních docs — **může kdykoli zmizet**
+- Confirmed model IDs: 1152593 (700 Vario Gen7), 1153083 (500), 1153774 (900), 1152748 (1000), 1152010 (IDEAL), 1152877 (1100 MT), 1153013 (300), 1153811 (900 MT), 1465241 (600), 1519937 (1000 Gen4), 1551551 (700 Gen7.1)
+- Response: HTML s techdata tabulkou (parser: cheerio)
+- Použití: 12-15 Fendt traktorových modelů automaticky
+- Rate: 1 req/s, custom UA `agro-svet-bot/1.0 (+https://agro-svet.cz/)`
+
+### Vrstva 2 — Sitemap + JSON-LD scraping (s respektem)
+
+Pro každého z 12 nových výrobců + 6 stávajících:
+1. `GET /robots.txt` — respektovat Disallow rules
+2. `GET /sitemap.xml` (a sitemap-index variants) — extrahovat URL detail produktových stránek
+3. Pro každou URL: hledat `<script type="application/ld+json">` s `Product` schema (řada agribrandů má JSON-LD pro SEO)
+4. Fallback: parse HTML tabulek techdat (selektory dle webu, custom adapter per výrobce)
+
+**Cílové weby s nejlepší strukturou:**
+- `shop.lemken.com` — má `/sitemap` s URL vzorem, JSON-LD na detail stranách
+- `horsch.com/us/products` — JSON-LD Product schema
+- `pottinger.at/cs_cz/produkte/` — strukturovaný HTML
+- `bednar.com/products/` — CZ web, ideální pro lokalizaci
+- `kuhn.com/en/agricultural-machinery` — kompletní portfolio
+
+**CZ velkodealeři** (preferovaný zdroj — kompletnější CZ-jazyčné katalogy):
+- Strom Praha (`strom.cz`) — JD, Bednar
+- AGROTEC (`agrotecgroup.cz`) — multi-brand
+- Pekass (`pekass.eu`) — JD, JCB
+- AGRALL Hlavečník — Väderstad, CLAAS
+- Daňhel Agro — Lemken
+- Mendel a.s. — multi-brand
+
+**Pravidla scraping:**
+- Rate **1 req/s** (1000ms throttle), nikdy paralelní requesty na stejný host
+- User-Agent: `agro-svet-bot/1.0 (+https://agro-svet.cz/)` — identifikace pro výrobce
+- Respect robots.txt Disallow rules **vždy**
+- Jen public stránky bez login
+- Cache responses lokálně (1 fetch = forever) — žádné re-fetch během dev
+
+### Vrstva 3 — PDF brochures (factual extraction)
+
+**Free zdroje:**
+- **Kverneland Group Download Centre** (`download.kvernelandgroup.com`) — free reg., bulk PDF/fotky pro Kverneland, Vicon, ROC
+- **AgriExpo PDF library** (`pdf.agriexpo.online`) — 20 000+ free brochures vč. Bednar, Amazone, Krone
+- Výrobcův web — `<brand>.com/.../brochure.pdf` linky
+
+**Pipeline:**
+1. Stáhnout PDF (lokální cache)
+2. Extract text + tabulek (`pdf-parse` Node.js, `pdfplumber` Python)
+3. LLM-based extraction (Claude API) pro normalizaci → unified YAML schema
+4. Manual review s confidence score per pole
+
+**Pravidla:**
+- Stahování PDF brochures **JE OK** (volně published)
+- Hostování PDF na našem serveru **NENÍ OK** — místo toho **linkovat na výrobcův URL**
+- Extrahovaná fakta (HP, weight, dimensions) **lze použít** — fakta nelze copyrightovat
+
+### Vrstva 4 — Manual CZ finishing
+
+100 % manuální:
+- CZ marketingový popisek (~150 slov per model) — vlastní text, ne překlad výrobce
+- Lokální dostupnost a CZ dealer (Strom/AGROTEC/Pekass kontakty)
+- Aktuální cenové orientace (přes CZ poptávku u dealera, pokud lze)
+- Kontextové tagy (vhodné pro malou farmu / velkostatek / vinici)
+
+### Pravidla legality (ZÁVAZNÁ pro implementaci)
+
+**CO SMÍME:**
+- ✓ Faktická data (HP, weight, year, dimensions) — fakta nejsou autorská dle EU/US zákonů
+- ✓ Public webpage HTML fetch s respektem robots.txt + 1 req/s + custom UA
+- ✓ JSON-LD Product schema extraction (web designed for crawl)
+- ✓ Sitemap.xml fetch (specificky published pro crawlers)
+- ✓ Wikidata SPARQL (CC0 open data)
+- ✓ Stahování PDF brochures z výrobce webu pro fakta
+- ✓ Linkování (NE rehosting) výrobcových PDF
+- ✓ Reformulace popisek (transformative — vlastní CZ text)
+
+**CO NESMÍME:**
+- ✗ Hostovat fotky výrobců bez licence (copyright na fotky platí)
+- ✗ Copy-paste popisek 1:1 (autorské texty)
+- ✗ Bulk scraping bez rate limitu
+- ✗ Použít dealer/partner APIs (CNH FieldOps, JD Operations Center, CLAAS Telematics, AGCO Connect, Manitou portal) — ToS-violation
+- ✗ Scrapovat lectura-specs.com bez licence (jejich byznys = data, agresivní ToS)
+- ✗ Login-protected scraping (i s dev účtem ToS zakazuje re-use)
+- ✗ Rehost PDF brochures na našem serveru
+
+**Fotky** — strategie:
+- Foto z **Pexels/Unsplash** (CC0) jako placeholder grid
+- Vlastní foto pokud uživatel nahraje (např. v bazaru)
+- **Žádné** fotky scrapnuté z výrobce webu na detail stránce — místo toho linkovat na výrobcův produktový web ("Foto na lemken.com →")
+- Výjimka: **Kverneland Download Centre** — free reg. dává license na použití pro KvG značky (Kverneland, Vicon, ROC)
+
+### Odhad pokrytí Hybrid free strategie
+
+| Pole | Coverage | Zdroj |
+|---|---|---|
+| Brand metadata (název, země, founded) | 95 % | Wikidata |
+| Model name + family | 80 % | Sitemap |
+| Výkon (HP/kW) | 60 % | Fendt API + JSON-LD + PDF |
+| Záběr (m) | 50 % | JSON-LD + PDF |
+| Hmotnost | 55 % | PDF brochures (LLM extraction) |
+| Rok výroby (od/do) | 30 % | PDF brochures |
+| Foto | 0-70 % | 0% scraped, Pexels/Unsplash placeholder, KvG Download Centre 100% pro Kverneland |
+| Ceny | <5 % | CZ dealer manual |
+| **CZ popisky** | **0 %** | Vždy ručně |
+
+### Časový odhad Hybrid free vs alternative
+
+| Cesta | Setup | Manual labor | Cena | Risk |
+|---|---|---|---|---|
+| Pure manual seed | 0 h | ~200 h | 0 | žádné |
+| **Hybrid free (doporučeno)** | 30-50 h | 50-80 h | 0 | nízké (dodržet pravidla výše) |
+| LECTURA API (komerční) | 80 h | minimal | €3-15k/rok | žádné |
+
+**Volíme Hybrid free** — kompromis čas vs. cena, plně legální při dodržení pravidel.
+
+---
+
+## 8. Bazar integrace
 
 ### Část A: Kategorie (12 → 19)
 
@@ -522,7 +662,7 @@ JS layer toggle viditelnost při změně kategorie. Existující implementace tr
 
 ---
 
-## 8. Page templates
+## 9. Page templates
 
 ### Hub `/stroje/zemedelske-stroje/`
 ```
@@ -571,7 +711,32 @@ Rozšířená — přidá sekce per category (pluhy, podmítače, ...) **seskupe
 
 ---
 
-## 9. Implementační plán
+## 10. Implementační plán
+
+### Fáze 0 — Data ingest pipeline (3-5 dní, NEW dle Hybrid free strategie)
+**Cíl**: Maximální automatizace seedu — ušetřit ~120 h ručního zadávání. Viz Sekce 7 pro plnou strategii a pravidla legality.
+
+| # | Soubor | Akce |
+|---|---|---|
+| 0.1 | `scripts/ingest/wikidata-brands.mjs` | NEW — SPARQL dotaz na Wikidata pro 18 značek (founded, country, parent, web). Output: `tmp/brands-wikidata.json`. |
+| 0.2 | `scripts/ingest/fendt-techdata.mjs` | NEW — fetch `api.fendt.com/techdata` pro confirmed Fendt model IDs (12-15 modelů). Parser HTML → spec map. Cache v `tmp/cache/fendt/`. Rate 1 req/s + custom UA. |
+| 0.3 | `scripts/ingest/sitemap-scraper.mjs` | NEW — generic sitemap-based scraper. Per-výrobce config v `scripts/ingest/sources/<brand>.mjs` (sitemap URL, JSON-LD selector, fallback HTML adapter). Respect robots.txt. Rate 1 req/s. UA `agro-svet-bot/1.0 (+https://agro-svet.cz/)`. Cache v `tmp/cache/<brand>/`. |
+| 0.4 | `scripts/ingest/sources/lemken.mjs`, `horsch.mjs`, `pottinger.mjs`, `bednar.mjs`, `kuhn.mjs`, `amazone.mjs`, `krone.mjs`, `vaderstad.mjs`, `manitou.mjs`, `joskin.mjs`, `kverneland.mjs`, `jcb.mjs` | NEW — adapter per výrobce: sitemap URL, JSON-LD extraction strategy, HTML fallback selector. |
+| 0.5 | `scripts/ingest/pdf-extract.mjs` | NEW — pipeline pro PDF brochures: stáhnout, `pdf-parse` text/tables, Claude API extraction → unified spec object. Confidence score per pole. |
+| 0.6 | `scripts/ingest/cz-dealers.mjs` | NEW — scraper CZ velkodealerů (Strom, AGROTEC, Pekass, AGRALL, Daňhel) pro CZ-jazyčné popisky a lokální specs. |
+| 0.7 | `scripts/ingest/build-yaml.mjs` | NEW — merger: kombinuje brand metadata (Wikidata) + model specs (Fendt API + sitemap + PDF) → výstup `tmp/seed-<brand>.yaml` pro ruční review. |
+| 0.8 | `scripts/ingest/legality-checks.mjs` | NEW — pre-flight: ověří že robots.txt nemá Disallow na cílové cesty, rate-limit konfigurace přítomná, žádné login-protected URL. Hard-fail při porušení. |
+
+**Pravidla legality** (závazná, viz Sekce 7):
+- ✓ Rate 1 req/s vždy, custom UA `agro-svet-bot/1.0`, respect robots.txt
+- ✓ Jen public stránky bez login
+- ✓ Faktická data (HP, weight, dimensions) — fakta nejsou autorská
+- ✓ Reformulace popisků (CZ vlastní text, ne copy-paste)
+- ✓ PDF brochures: link na výrobce, NE rehost
+- ✗ Žádné fotky scraping (Pexels/Unsplash placeholder, Kverneland Download Centre s licencí)
+- ✗ Žádné dealer/partner APIs (CNH, JD, CLAAS, AGCO, Manitou portal)
+
+**Output Fáze 0:** `tmp/seed-*.yaml` files s ~50-60 % pre-vyplněných specs. Manuální review + CZ popisky následují ve Fázi 2.
 
 ### Fáze 1 — Schema & loader (½ dne)
 | Soubor | Akce |
@@ -580,8 +745,13 @@ Rozšířená — přidá sekce per category (pluhy, podmítače, ...) **seskupe
 | `src/lib/stroje-filters.ts` | NEW — `SUBCATEGORY_FILTERS` mapa (subcategory → FilterSpec[]). |
 | `src/lib/spec-labels.ts` | NEW — pretty-print mapa specs klíčů na CZ labels. |
 
-### Fáze 2 — YAML seed (3-5 dní, hlavní práce)
-12 nových YAML souborů + update 6 stávajících (john-deere, claas, new-holland, massey-ferguson, fendt, case-ih). Detailní rozpis viz Sekce 6.
+### Fáze 2 — YAML seed finishing (1-2 dny — REDUKOVÁNO díky Fázi 0)
+Vstup: `tmp/seed-*.yaml` z Fáze 0 s pre-vyplněnými specs (~50-60 % polí). Manuální dokončení:
+- Review automaticky vyplněných polí (confidence check, korekce chyb LLM extraction)
+- Doplnění CZ popisků (~150 slov per model, vlastní text)
+- Doplnění chybějících specs (rok výroby, hmotnost) z PDF nebo manuálu
+- Lokální dostupnost / CZ dealer kontakt
+- Přesunout finální YAML z `tmp/seed-*.yaml` do `src/data/stroje/<brand>.yaml`
 
 ### Fáze 3 — Hub a category stránky (1 den)
 | Soubor | Akce |
@@ -638,19 +808,22 @@ Rozšířená — přidá sekce per category (pluhy, podmítače, ...) **seskupe
 ### Souhrnný odhad
 | Fáze | Odhad |
 |---|---|
+| 0. Data ingest pipeline (Hybrid free) | **3-5 dní** (setup) |
 | 1. Schema & loader | 0,5 dne |
-| 2. YAML seed | **3-5 dní** (hlavní práce) |
+| 2. YAML seed finishing | **1-2 dny** (REDUKOVÁNO díky Fázi 0) |
 | 3. Hub + category stránky | 1 den |
 | 4. Brand/model update | 0,5 dne |
 | 5. Header nav | 10 min |
 | 6. Bazar integrace | 1 den |
 | 7. SEO polish | 0,5 dne |
 | 8. Deploy | 0,5 dne |
-| **Total** | **7-9 dní** (cca 5 dní intenzivně) |
+| **Total** | **8-11 dní** (cca 6-8 dní intenzivně) |
+
+**Trade-off Hybrid free vs Pure manual:** +3-5 dní setup, −2-3 dny YAML seed → net +0-2 dny. Hodnota: ~120 h labor saved při budoucím rozšíření o další značky (pipeline znovu použitelný), plus konzistence dat (LLM extraction = stejný formát napříč značkami).
 
 ---
 
-## 10. Risk register
+## 11. Risk register
 
 | Riziko | Mitigace |
 |---|---|
@@ -659,10 +832,15 @@ Rozšířená — přidá sekce per category (pluhy, podmítače, ...) **seskupe
 | Bazar migrace 004 (rename kategorií) destruktivní | Pre-deploy backup tabulky `bazar_listings` (Supabase point-in-time recovery). Migrace idempotent (spuštěná podruhé nezpůsobí škodu — UPDATE už neodpovídá). |
 | Existující inzeráty s `cutting_width_m` zůstanou používat sloupec — UI labelling musí být kontextový | Render label dle `category` v komponentě. |
 | Některé funkční skupiny v MVP "tenké" (sklizeň okopanin = 0 značek) | Označit jako "Připravujeme" dlaždici v hub UI s linkem na fáze 2 backlog. |
+| **Fendt undocumented API (`api.fendt.com/techdata`) může kdykoli zmizet** | Cache responses lokálně (1 fetch = forever pro dev). Po Fázi 0 už máme data. Pokud zmizí před Fází 0, fallback na sitemap+JSON-LD scraping pro Fendt. |
+| **Sitemap scraping některých výrobců neúspěšný** (no JSON-LD, custom HTML) | Per-výrobce adapter v `scripts/ingest/sources/`. Pokud weby nemají strukturovaná data, fallback na PDF brochures + manual extrakce. Nikdy nelámat rate limit. |
+| **LLM extraction z PDF nepřesné** (Claude API občas misinterpretuje tabulky) | Confidence score per pole + manuální review. Nedůvěřovat hodnotám pod 0.7. Vždy cross-check s druhým zdrojem. |
+| **robots.txt update na výrobce webu mid-scraping** | Pre-flight `legality-checks.mjs` před každou ingest run. Hard-fail na nový Disallow. |
+| **Spam/abuse z výrobce webu** (rate misjudged → IP blocked) | Custom UA umožňuje výrobci kontaktovat (mailto v UA). 1 req/s konzervativně. Cache lokálně, žádné re-fetch. Když incident, manuálně uvarovit výrobce přes dealer kontakt. |
 
 ---
 
-## 11. Příští kroky
+## 12. Příští kroky
 
 1. **User review tohoto spec dokumentu** — zda nechybí něco podstatného, jiné značky/kategorie, jiné edge case rozhodnutí.
 2. **`writing-plans` skill** — vytvoří detailní implementační plán s task-level breakdown, dependency graph, atomic commits per task.
