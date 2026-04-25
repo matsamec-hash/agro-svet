@@ -159,7 +159,7 @@ const websiteJsonLd = {
       <div>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Novinky</h2>
       </div>
-      <a href="/novinky/" class="link-underline">Všechny novinky →</a>
+      <a href="/novinky/" class="link-cta">Všechny novinky →</a>
     </div>
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
       {latest.map(article => (
@@ -186,7 +186,7 @@ const websiteJsonLd = {
       <div>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Zemědělská půda</h2>
       </div>
-      <a href="/puda/" class="link-underline">Zobrazit celou sekci →</a>
+      <a href="/puda/" class="link-cta">Zobrazit celou sekci →</a>
     </div>
     <div class="hp-puda-facts">
       {[
@@ -217,8 +217,29 @@ const websiteJsonLd = {
     }
     .hpf-val { font:700 28px/1 'Chakra Petch',sans-serif; color:#0A0A0B; letter-spacing:-.02em; display:block; }
     .hpf-unit { font-size:14px; color:#6B6B72; font-weight:400; }
-    .hpf-lbl { font-size:14px; color:#0A0A0B; font-weight:600; margin-top:8px; display:block; }
+    .hpf-lbl { font:600 14px 'Chakra Petch',sans-serif; color:#0A0A0B; margin-top:8px; display:block; }
     .hpf-note { font-size:12.5px; color:#6B6B72; margin-top:6px; display:block; line-height:1.5; }
+
+    .link-cta {
+      display:inline-flex; align-items:center; gap:8px;
+      font:700 14px 'Chakra Petch',sans-serif; letter-spacing:.02em;
+      color:#0A0A0B; text-decoration:none;
+      background:#FFFF00;
+      padding:10px 18px; border-radius:12px;
+      border:1.5px solid #0A0A0B;
+      transition:transform .15s, box-shadow .15s, background .15s;
+      box-shadow:3px 3px 0 #0A0A0B;
+      white-space:nowrap;
+    }
+    .link-cta:hover {
+      transform:translate(-2px,-2px);
+      box-shadow:5px 5px 0 #0A0A0B;
+      background:#FFEA00;
+    }
+    .link-cta:active {
+      transform:translate(0,0);
+      box-shadow:0 0 0 #0A0A0B;
+    }
   </style>
 
   <!-- Data — Trhy a komodity (pod Půdou) -->
@@ -227,7 +248,7 @@ const websiteJsonLd = {
       <div>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Trhy a komodity</h2>
       </div>
-      <a href="/statistiky/" class="link-underline">Zobrazit celou sekci →</a>
+      <a href="/statistiky/" class="link-cta">Zobrazit celou sekci →</a>
     </div>
     <CommodityChart
       series={commodityFull}
@@ -250,7 +271,7 @@ const websiteJsonLd = {
             <span class="section-label">Agro bazar</span>
             <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem); margin-top:10px;">Čerstvé v bazaru</h2>
           </div>
-          <a href="/bazar/" class="link-underline">Všechny inzeráty →</a>
+          <a href="/bazar/" class="link-cta">Všechny inzeráty →</a>
         </div>
         <div class="fresh-grid">
           {freshListings.map((l: any) => {
