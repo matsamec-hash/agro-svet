@@ -1,0 +1,171 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="footer-logo" aria-label="agro-svět.cz domů">
+          <span>agro-svět.cz</span>
+        </a>
+        <p class="footer-tagline">
+          Zemědělská technika, novinky a encyklopedie. Bazar, statistiky, fotosoutěž — vše pro českého zemědělce.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Obsah</h3>
+        <ul>
+          <li><a href="/novinky/">Novinky</a></li>
+          <li><a href="/stroje/">Katalog techniky</a></li>
+          <li><a href="/plemena/">Plemena zvířat</a></li>
+          <li><a href="/puda/">Zemědělská půda</a></li>
+          <li><a href="/statistiky/">Data a statistiky</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Bazar</h3>
+        <ul>
+          <li><a href="/bazar/">Všechny inzeráty</a></li>
+          <li><a href="/bazar/novy/">Vložit inzerát</a></li>
+          <li><a href="/bazar/prihlaseni/">Přihlásit</a></li>
+          <li><a href="/bazar/registrace/">Registrace</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Fotosoutěž</h3>
+        <ul>
+          <li><a href="/fotosoutez/">Aktuální kolo</a></li>
+          <li><a href="/fotosoutez/archiv/">Archiv</a></li>
+          <li><a href="/fotosoutez/pravidla/">Pravidla</a></li>
+          <li><a href="/fotosoutez/gdpr/">Ochrana osobních údajů</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {year} agro-svět.cz · Provozováno samec.digital</p>
+      <div class="footer-bottom-links">
+        <a href="/hledat/">Hledat</a>
+        <span aria-hidden="true">·</span>
+        <a href="/fotosoutez/gdpr/">GDPR</a>
+        <span aria-hidden="true">·</span>
+        <a href="mailto:redakce@agro-svet.cz">Kontakt</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: #1a1a1a;
+    color: #bbb;
+    padding: 56px 24px 28px;
+    margin-top: 48px;
+  }
+  .footer-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+  .footer-col h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 14px;
+  }
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .footer-col li {
+    margin-bottom: 8px;
+  }
+  .footer-col a {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 14px;
+    color: #bbb;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .footer-col a:hover {
+    color: #FFFF00;
+  }
+  .footer-logo {
+    display: inline-block;
+    background: #FFFF00;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-bottom: 14px;
+  }
+  .footer-logo span {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #000;
+  }
+  .footer-tagline {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #999;
+    margin: 0;
+    max-width: 280px;
+  }
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: #999;
+  }
+  .footer-bottom p {
+    margin: 0;
+  }
+  .footer-bottom-links {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .footer-bottom-links a {
+    color: #bbb;
+    text-decoration: none;
+  }
+  .footer-bottom-links a:hover {
+    color: #FFFF00;
+  }
+  .footer-bottom-links span {
+    color: #555;
+  }
+
+  @media (max-width: 860px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .footer-col.footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 480px) {
+    .site-footer { padding: 40px 16px 24px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+</style>

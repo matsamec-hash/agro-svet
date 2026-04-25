@@ -43,7 +43,7 @@ if (query.length >= 2) {
     groups.push({
       id: 'novinky',
       label: 'Novinky',
-      icon: '📰',
+      icon: 'news',
       items: articles.map((a: any) => ({
         title: a.title,
         url: `/novinky/${a.slug}/`,
@@ -64,7 +64,7 @@ if (query.length >= 2) {
     groups.push({
       id: 'stroje',
       label: 'Technika',
-      icon: '🚜',
+      icon: 'tractor',
       items: modelMatches.slice(0, 15).map((m) => {
         const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
         return {
@@ -88,12 +88,12 @@ if (query.length >= 2) {
     groups.push({
       id: 'plemena',
       label: 'Zvířata',
-      icon: '🐄',
+      icon: 'animal',
       items: plemenaMatches.slice(0, 12).map((p) => ({
         title: p.name,
         url: `/plemena/${p.druh_slug}/${p.slug}/`,
         snippet: p.description?.slice(0, 140),
-        meta: `${p.druh_name} · 🌍 ${p.origin_country}`,
+        meta: `${p.druh_name} · ${p.origin_country}`,
       })),
       moreLink: plemenaMatches.length > 12 ? { href: `/plemena/?q=${encodeURIComponent(query)}`, label: `Všech ${plemenaMatches.length} plemen` } : undefined,
     });
@@ -113,7 +113,7 @@ if (query.length >= 2) {
     groups.push({
       id: 'bazar',
       label: 'Agro bazar',
-      icon: '💰',
+      icon: 'tag',
       items: listings.map((l: any) => ({
         title: l.title,
         url: `/bazar/${l.id}/`,
@@ -171,8 +171,20 @@ if (query.length >= 2) {
         {groups.map((g) => (
           <section style="margin-bottom:36px;">
             <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:12px;">
-              <h2 style="font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; color:#1a1a1a;">
-                {g.icon} {g.label} <span style="font-size:14px; font-weight:400; color:#666;">({g.items.length})</span>
+              <h2 style="display:inline-flex; align-items:center; gap:10px; font-family:'Chakra Petch',sans-serif; font-size:20px; font-weight:700; color:#1a1a1a;">
+                {g.icon === 'news' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></svg>
+                )}
+                {g.icon === 'tractor' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="17" r="2"/><circle cx="18" cy="17" r="3"/><path d="M4 17H3v-4l2-2h4l3-4h5v10h-2"/></svg>
+                )}
+                {g.icon === 'animal' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.96-1.45-2.344-2.5"/></svg>
+                )}
+                {g.icon === 'tag' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                )}
+                {g.label} <span style="font-size:14px; font-weight:400; color:#666;">({g.items.length})</span>
               </h2>
               {g.moreLink && <a href={g.moreLink.href} class="link-underline">{g.moreLink.label} →</a>}
             </div>

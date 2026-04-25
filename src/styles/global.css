@@ -72,28 +72,46 @@ img, video, iframe {
   top: 8px;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ===== Typography ===== */
 
 /* Page titles (h1) — color inherits so dark cards (color:#fff parent) work */
 h1 {
   font-family: var(--font-heading);
-  font-weight: 400;
-  letter-spacing: -0.3px;
-  line-height: 1.2;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
   color: inherit;
 }
 
 /* Section headings (h2) */
 h2 {
   font-family: var(--font-heading);
-  font-weight: 400;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: -0.3px;
+  line-height: 1.2;
   color: inherit;
 }
 
 /* Card/item headings (h3) */
 h3 {
   font-family: var(--font-heading);
-  font-weight: 400;
+  font-weight: 600;
+  font-size: 1.15rem;
+  line-height: 1.3;
   color: inherit;
 }
 

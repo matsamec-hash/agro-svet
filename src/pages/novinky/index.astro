@@ -1,8 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import BazarPagination from '../../components/bazar/BazarPagination.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { categoryStyle, tagStyle } from '../../lib/tag-color';
+
+const PER_PAGE = 24;
 
 const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const supabase = createAnonClient();
@@ -12,13 +15,15 @@ const query = Astro.url.searchParams.get('q') ?? '';
 const dateFrom = Astro.url.searchParams.get('od') ?? '';
 const dateTo = Astro.url.searchParams.get('do') ?? '';
 const tag = Astro.url.searchParams.get('tag') ?? '';
+const page = Math.max(1, parseInt(Astro.url.searchParams.get('page') ?? '1'));
 
 let q = supabase
   .from('articles')
-  .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+  .select('id, title, slug, perex, featured_image_url, category, tags, published_at', { count: 'exact' })
   .eq('site_id', SITE_ID)
   .eq('status', 'published')
-  .order('published_at', { ascending: false });
+  .order('published_at', { ascending: false })
+  .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
 
 if (category) q = q.eq('category', category);
 if (query) q = q.or(`title.ilike.%${query}%,perex.ilike.%${query}%`);
@@ -30,8 +35,9 @@ if (dateTo) {
 }
 if (tag) q = q.contains('tags', [tag]);
 
-const { data: articles } = await q;
+const { data: articles, count } = await q;
 const sorted = articles ?? [];
+const totalPages = Math.ceil((count ?? 0) / PER_PAGE);
 
 // Category counts (across all articles) + available tags
 const { data: allForMeta } = await supabase
@@ -67,12 +73,22 @@ const topTags = [...tagCounts.entries()]
 const activeLabel = category ? (categoryLabels[category] ?? category) : null;
 const hasFilters = Boolean(category || query || dateFrom || dateTo || tag);
 const totalAll = allForMeta?.length ?? 0;
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Novinky', item: 'https://agro-svet.cz/novinky/' },
+  ],
+};
 ---
 
 <Layout
   title={activeLabel ? `Novinky: ${activeLabel}` : (query ? `Novinky: „${query}"` : 'Novinky')}
   description={activeLabel ? `Články v kategorii ${activeLabel}.` : 'Aktuální zprávy ze světa zemědělské techniky — nové stroje, dotace, trh a legislativa.'}
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
 
     <div style="margin-bottom:24px;">
@@ -123,8 +139,9 @@ const totalAll = allForMeta?.length ?? 0;
 
         {topTags.length > 0 && (
           <div style="margin-top:16px; padding-top:14px; border-top:1px solid #eee;">
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; margin-bottom:8px;">
-              🏷 Témata
+            <div style="display:inline-flex; align-items:center; gap:6px; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; margin-bottom:8px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              Témata
             </div>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
               {topTags.map(([t, count]) => (
@@ -163,7 +180,7 @@ const totalAll = allForMeta?.length ?? 0;
     {sorted.length > 0 ? (
       <>
         <div style="margin-bottom:14px; font-size:13px; color:#666;">
-          Nalezeno {sorted.length} článků{hasFilters ? ' odpovídajících filtrům' : ''}.
+          Nalezeno {(count ?? 0).toLocaleString('cs-CZ')} článků{hasFilters ? ' odpovídajících filtrům' : ''}{totalPages > 1 ? ` · stránka ${page} z ${totalPages}` : ''}.
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
           {sorted.map(article => (
@@ -177,6 +194,7 @@ const totalAll = allForMeta?.length ?? 0;
             />
           ))}
         </div>
+        <BazarPagination currentPage={page} totalPages={totalPages} baseUrl={Astro.url.toString()} />
       </>
     ) : (
       <p style="color:#666; font-size:16px; padding:48px 0; text-align:center;">

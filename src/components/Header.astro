@@ -2,7 +2,7 @@
 type NavItem = { label: string; href: string; children?: { label: string; href: string }[] };
 const nav: NavItem[] = [
   {
-    label: 'Novinky',
+    label: 'Téma',
     href: '/novinky/',
     children: [
       { label: 'Všechny novinky', href: '/novinky/' },
@@ -11,6 +11,7 @@ const nav: NavItem[] = [
       { label: 'Trh', href: '/novinky/kategorie/trh/' },
       { label: 'Legislativa', href: '/novinky/kategorie/legislativa/' },
       { label: 'Značky', href: '/novinky/kategorie/znacky/' },
+      { label: 'Zemědělská půda', href: '/puda/' },
     ],
   },
   {
@@ -24,7 +25,6 @@ const nav: NavItem[] = [
     ],
   },
   { label: 'Zvířata', href: '/plemena/' },
-  { label: 'Zemědělská půda', href: '/puda/' },
   { label: 'Data', href: '/statistiky/' },
   { label: 'Agro bazar', href: '/bazar/' },
   { label: 'Fotosoutěž', href: '/fotosoutez/' },
@@ -33,10 +33,10 @@ const current = Astro.url.pathname;
 ---
 
 <header style="background:#fff; border-bottom:1px solid #e8e8e8; position:sticky; top:0; z-index:100;">
-  <div style="max-width:1280px; margin:0 auto; padding:0 32px; display:flex; align-items:center; gap:48px; height:88px;">
+  <div class="header-inner">
 
-    <a href="/" style="display:inline-block; background:#FFFF00; padding:8px 18px; border-radius:6px; text-decoration:none;">
-      <span style="font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:28px; color:#000; white-space:nowrap; letter-spacing:.005em;">agro-svět.cz</span>
+    <a href="/" class="header-logo">
+      <span>agro-svět.cz</span>
     </a>
 
     <nav class="nav-desktop" id="main-nav">
@@ -142,6 +142,33 @@ const current = Astro.url.pathname;
 </header>
 
 <style>
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    height: 88px;
+  }
+
+  .header-logo {
+    display: inline-block;
+    background: #FFFF00;
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    flex: none;
+  }
+  .header-logo span {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    color: #000;
+    white-space: nowrap;
+    letter-spacing: .005em;
+  }
+
   .nav-desktop {
     display: flex;
     align-items: center;
@@ -384,6 +411,27 @@ const current = Astro.url.pathname;
   @media (max-width: 1025px) {
     #main-nav { display: none !important; }
     .hamburger-btn { display: inline-flex !important; }
+  }
+
+  @media (max-width: 640px) {
+    .header-inner {
+      padding: 0 16px;
+      gap: 12px;
+      height: 72px;
+    }
+    .header-logo { padding: 6px 12px; }
+    .header-logo span { font-size: 22px; }
+    .search-icon-btn { width: 40px; height: 40px; }
+    .search-icon-btn svg { width: 18px; height: 18px; }
+    /* User button: icon only on mobile */
+    .user-btn { padding: 8px 10px; gap: 4px; }
+    .user-btn #user-name { display: none; }
+    .user-btn svg:last-child { display: none; }
+    .guest-link { padding: 8px 14px; font-size: 14px; }
+    /* Push search/user to right via auto-margin on first sibling after logo */
+    .search-container { margin-left: auto; }
+    /* Search form slide-down starts below new header height */
+    .search-form { top: 72px; padding: 10px 16px; }
   }
 </style>
 

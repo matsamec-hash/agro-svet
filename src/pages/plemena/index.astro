@@ -26,97 +26,156 @@ const plemenaJson = JSON.stringify(
   })),
 );
 
-// Collect all unique uzitkovost values present in data
 const allUzitkovost = new Set<PlemenoUzitkovost>();
 for (const p of plemena) for (const u of p.uzitkovost) allUzitkovost.add(u);
 const uzitkovostOptions = (Array.from(allUzitkovost) as PlemenoUzitkovost[]).sort();
-
 const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).sort();
+
+const druhEmoji: Record<string, string> = {
+  hovezi: '🐄',
+  ovce: '🐑',
+  kone: '🐎',
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Zvířata', item: 'https://agro-svet.cz/plemena/' },
+  ],
+};
 ---
 
 <Layout
   title="Katalog plemen hospodářských zvířat"
   description="Databáze plemen hovězího dobytka, ovcí a koní — původ, užitkovost, hmotnost, mléčná dojivost. Filtrujte podle druhu a užitkovosti."
 >
-  <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
-    <div style="margin-bottom:32px;">
-      <span class="section-label">Katalog plemen</span>
-      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
-        Plemena zvířat
-      </h1>
-      <p style="font-size:16px; color:#666; max-width:640px; line-height:1.6;">
-        Databáze {totalPlemena}+ plemen hospodářských zvířat — hovězí dobytek, ovce, koně.
-        Původ, užitkovost, hmotnost, mléčná dojivost a popisy plemen.
-      </p>
-    </div>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <div class="plemena-root">
 
-    <!-- Stats -->
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:32px;">
-      <div style="background:#1a1a1a; color:#fff; padding:20px; border-radius:18px;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700; color:#FFFF00;">{totalPlemena}</div>
-        <div style="font-size:13px; color:rgba(255,255,255,.6);">plemen v databázi</div>
-      </div>
-      <div style="background:#f5f5f5; padding:20px; border-radius:18px;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700;">{druhy.length}</div>
-        <div style="font-size:13px; color:#666;">druhů zvířat</div>
-      </div>
-      <div style="background:#f5f5f5; padding:20px; border-radius:18px;">
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700;">{countries}</div>
-        <div style="font-size:13px; color:#666;">zemí původu</div>
-      </div>
-    </div>
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">Zvířata</span>
+    </nav>
 
-    <!-- Filters -->
-    <div style="background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:20px; margin-bottom:24px;">
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:12px;">
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Druh</div>
-          <select id="f-druh" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; background:#fff;">
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Katalog · Zvířata</span>
+        <h1>Plemena <em>zvířat</em></h1>
+        <p class="hero-lede">
+          Databáze {totalPlemena}+ plemen hospodářských zvířat — hovězí dobytek, ovce a koně.
+          Původ, užitkovost, hmotnost, mléčná dojivost a popisy plemen pro chovatele i bazarový průzkum.
+        </p>
+
+        <div class="hero-stats">
+          <div class="s"><span class="n">{totalPlemena}+</span><span class="l">plemen</span></div>
+          <div class="s"><span class="n">{druhy.length}</span><span class="l">druhů zvířat</span></div>
+          <div class="s"><span class="n">{countries}</span><span class="l">zemí původu</span></div>
+        </div>
+
+        <div class="hero-actions">
+          {druhy.map((d) => (
+            <a class="cta-primary" href={`/plemena/${d.slug}/`}>
+              <span class="emoji" aria-hidden="true">{druhEmoji[d.slug] ?? ''}</span>
+              {d.name_plural} <span class="cta-c">{d.plemena.length}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-photo-stack">
+          {druhy.map((d) => (
+            <div class="hsp-tile" data-druh={d.slug}>
+              <div class="hsp-emoji" aria-hidden="true">{druhEmoji[d.slug] ?? '🐾'}</div>
+              <div class="hsp-info">
+                <span class="hsp-name">{d.name_plural}</span>
+                <span class="hsp-c">{d.plemena.length} plemen</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="filter-card" aria-labelledby="filter-title">
+      <div class="fc-head">
+        <h2 id="filter-title">Filtr plemen</h2>
+        <span class="fc-sub">Filtrujte podle druhu, užitkovosti a země původu</span>
+      </div>
+      <div class="fc-grid">
+        <label class="fc-field">
+          <span class="fc-label">Druh</span>
+          <select id="f-druh">
             <option value="">Všechny druhy</option>
             {druhy.map((d) => <option value={d.slug}>{d.name}</option>)}
           </select>
         </label>
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Užitkovost</div>
-          <select id="f-uzit" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; background:#fff;">
+        <label class="fc-field">
+          <span class="fc-label">Užitkovost</span>
+          <select id="f-uzit">
             <option value="">Všechny</option>
             {uzitkovostOptions.map((u) => <option value={u}>{UZITKOVOST_LABELS[u]}</option>)}
           </select>
         </label>
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Země původu</div>
-          <select id="f-country" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; background:#fff;">
+        <label class="fc-field">
+          <span class="fc-label">Země původu</span>
+          <select id="f-country">
             <option value="">Všechny</option>
             {countryList.map((c) => <option value={c}>{c}</option>)}
           </select>
         </label>
-        <label style="font-size:13px; color:#333;">
-          <div style="margin-bottom:6px; font-weight:500;">Hledat</div>
-          <input id="f-search" type="search" placeholder="např. charolais, merino" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px;" />
+        <label class="fc-field fc-field-search">
+          <span class="fc-label">Hledat plemeno</span>
+          <input id="f-search" type="search" placeholder="např. charolais, merino, lipicán" />
         </label>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div id="result-count" style="font-size:13px; color:#666;"></div>
-        <button id="f-reset" style="background:none; border:1px solid #ddd; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer;">Resetovat</button>
+      <div class="fc-foot">
+        <span id="result-count" class="fc-count"></span>
+        <button id="f-reset" type="button">Resetovat filtry</button>
       </div>
+    </section>
+
+    <h2 id="druhy-heading" class="section-title">Druhy zvířat <span class="section-title-c">{druhy.length}</span></h2>
+    <h2 id="results-heading" class="section-title results-heading">Výsledky <span id="results-heading-c" class="section-title-c"></span></h2>
+    <div id="druh-grid" class="druh-grid">
+      {druhy.map((d) => (
+        <a href={`/plemena/${d.slug}/`} class="druh-card">
+          <div class="dc-head">
+            <div class="dc-emoji" aria-hidden="true">{druhEmoji[d.slug] ?? '🐾'}</div>
+            <div class="dc-title">
+              <h3>{d.name_plural}</h3>
+              <span class="dc-count"><strong>{d.plemena.length}</strong> plemen</span>
+            </div>
+          </div>
+          <p class="dc-desc">{d.description}</p>
+          <div class="dc-foot">
+            <span>Otevřít katalog</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+      ))}
     </div>
 
-    <!-- Druh cards (default view) -->
-    <div id="druh-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin-bottom:32px;">
-      {druhy.map((d) => {
-        const count = d.plemena.length;
-        return (
-          <a href={`/plemena/${d.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:18px; padding:24px; transition:box-shadow .2s, transform .2s;" class="druh-card">
-            <h3 style="font-family:'Chakra Petch',sans-serif; font-size:24px; font-weight:700; color:#1a1a1a; margin-bottom:10px;">{d.name}</h3>
-            <div style="font-size:13px; color:#666; margin-bottom:12px;">{count} plemen</div>
-            <p style="font-size:14px; color:#555; line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{d.description}</p>
+    <div id="results-grid" class="results-grid"></div>
+
+    <section class="big-cta">
+      <div>
+        <span class="cta-kicker">Prodáváte hospodářská zvířata?</span>
+        <h2>Inzerát v Agro bazaru<br />zdarma a bez provize.</h2>
+        <p>30 dní inzerát · až 5 fotek · kontakt přímo na chovatele · žádný poplatek za zveřejnění.</p>
+        <div class="cta-actions">
+          <a class="cta-btn primary" href="/bazar/novy/">
+            Přidat inzerát zdarma
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-        );
-      })}
-    </div>
+          <a class="cta-btn ghost" href="/bazar/?category=zvirata">Procházet bazar</a>
+        </div>
+      </div>
+    </section>
 
-    <!-- Filtered results -->
-    <div id="results-grid" style="display:none; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px;"></div>
   </div>
 
   <script is:inline set:html={`window.__PLEMENA_DATA__ = ${plemenaJson};`}></script>
@@ -149,6 +208,9 @@ const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).so
       count: document.getElementById('result-count') as HTMLElement,
       druhGrid: document.getElementById('druh-grid') as HTMLElement,
       resultsGrid: document.getElementById('results-grid') as HTMLElement,
+      druhyHeading: document.getElementById('druhy-heading') as HTMLElement,
+      resultsHeading: document.getElementById('results-heading') as HTMLElement,
+      resultsHeadingCount: document.getElementById('results-heading-c') as HTMLElement,
     };
 
     function anyActive() {
@@ -156,19 +218,36 @@ const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).so
     }
 
     function card(p: P): string {
-      const uzit = p.uzitkovost.map((u) => U_LABELS[u] ?? u).join(', ');
-      const wt = p.weight_male_kg ? `♂ ${p.weight_male_kg} kg` : (p.weight_female_kg ? `♀ ${p.weight_female_kg} kg` : '');
-      const milk = p.milk_yield_kg_year ? ` · 🥛 ${p.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok` : '';
+      const uzit = p.uzitkovost.map((u) => U_LABELS[u] ?? u).join(' · ');
+      const wm = p.weight_male_kg ? `♂ ${p.weight_male_kg} kg` : '';
+      const wf = p.weight_female_kg ? `♀ ${p.weight_female_kg} kg` : '';
+      const milk = p.milk_yield_kg_year ? `${p.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok` : '';
       return `
-        <a href="/plemena/${p.druh_slug}/${p.slug}/" style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:box-shadow .2s, transform .2s;" class="pl-card">
-          <div style="display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;">
-            <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:10px; font-weight:400; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">${p.druh_name}</span>
-            <span style="background:#f0f0f0; color:#555; font-size:10px; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">${uzit}</span>
+        <a href="/plemena/${p.druh_slug}/${p.slug}/" class="rc-card">
+          <div class="rc-tags">
+            <span class="rc-tag rc-tag-druh">${p.druh_name}</span>
+            ${uzit ? `<span class="rc-tag rc-tag-uzit">${uzit}</span>` : ''}
           </div>
-          <div style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">${p.name}</div>
-          <div style="font-size:12px; color:#666; margin-bottom:8px;">🌍 ${p.origin_country}</div>
-          <div style="font-size:12px; color:#555;">${wt}${milk}</div>
-        </a>`;
+          <div class="rc-name">${p.name}</div>
+          <div class="rc-country">📍 ${p.origin_country}</div>
+          <div class="rc-foot">
+            ${wm ? `<span>${wm}</span>` : ''}
+            ${wf ? `<span>${wf}</span>` : ''}
+            ${milk ? `<span class="rc-milk">${milk}</span>` : ''}
+          </div>
+        </a>
+      `;
+    }
+
+    function syncUrl() {
+      const params = new URLSearchParams();
+      if (el.druh.value) params.set('druh', el.druh.value);
+      if (el.uzit.value) params.set('uzitkovost', el.uzit.value);
+      if (el.country.value) params.set('zeme', el.country.value);
+      if (el.search.value.trim()) params.set('q', el.search.value.trim());
+      const qs = params.toString();
+      const newUrl = window.location.pathname + (qs ? '?' + qs : '');
+      window.history.replaceState(null, '', newUrl);
     }
 
     function apply() {
@@ -176,6 +255,7 @@ const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).so
       const u = el.uzit.value;
       const c = el.country.value;
       const q = el.search.value.trim().toLowerCase();
+      syncUrl();
 
       const filtered = PLEMENA.filter((p) => {
         if (d && p.druh_slug !== d) return false;
@@ -191,13 +271,18 @@ const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).so
       if (anyActive()) {
         el.druhGrid.style.display = 'none';
         el.resultsGrid.style.display = 'grid';
+        el.druhyHeading.style.display = 'none';
+        el.resultsHeading.style.display = 'inline-flex';
         el.resultsGrid.innerHTML = filtered.length > 0
           ? filtered.map(card).join('')
-          : '<div style="grid-column:1/-1; padding:48px; text-align:center; color:#767676;">Žádná plemena neodpovídají filtrům.</div>';
+          : '<div class="rg-empty">Žádná plemena neodpovídají filtrům.</div>';
         el.count.textContent = `Nalezeno ${filtered.length} plemen`;
+        el.resultsHeadingCount.textContent = String(filtered.length);
       } else {
         el.druhGrid.style.display = 'grid';
         el.resultsGrid.style.display = 'none';
+        el.druhyHeading.style.display = 'inline-flex';
+        el.resultsHeading.style.display = 'none';
         el.count.textContent = '';
       }
     }
@@ -223,18 +308,229 @@ const countryList = Array.from(new Set(plemena.map((p) => p.origin_country))).so
   </script>
 
   <style>
-    .section-label {
-      display: inline-block;
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #1a1a1a;
-      background: #FFFF00;
-      padding: 4px 10px;
-      border-radius: 3px;
-      margin-bottom: 14px;
+    .plemena-root{
+      --yellow:#FFEA00;
+      --yellow-soft:#FFF6A8;
+      --yellow-glow:rgba(255,234,0,.35);
+      --ink:#0A0A0B;
+      --body:#1E1E22;
+      --muted:#6B6B72;
+      --muted-2:#9A9AA3;
+      --line:#EAEAEC;
+      --line-2:#DFDFE3;
+      --bg-cream:#FBFAF4;
+      --card:#FFFFFF;
+      --green:#0B7A3B;
+      --green-soft:#E3F3EA;
+      --r-xl:24px;
+      --r-lg:18px;
+      --r-md:12px;
+      --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+      --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+      max-width:1280px;margin:0 auto;padding:26px 24px 96px;
+      color:var(--body);
     }
-    .druh-card:hover, .pl-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); transform: translateY(-2px); border-color: #FFFF00; }
+
+    .plemena-root .breadcrumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px}
+    .plemena-root .breadcrumb a{color:var(--muted);text-decoration:none}
+    .plemena-root .breadcrumb a:hover{color:#000}
+    .plemena-root .breadcrumb svg{width:14px;height:14px;color:var(--muted-2)}
+    .plemena-root .breadcrumb .current{color:#000;font-weight:600}
+
+    .plemena-root .hero{
+      position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+      background:radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+        radial-gradient(700px 400px at 90% 90%, rgba(120,90,50,.42), transparent 60%),
+        linear-gradient(135deg, #14110E 0%, #1F1A14 60%, #2A2218 100%);
+      padding:48px 48px 40px;margin-bottom:22px;
+      box-shadow:var(--sh-3);
+      display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
+    }
+    .plemena-root .hero::before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+      background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size:48px 48px;
+      mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+    }
+    .plemena-root .hero-left{position:relative;z-index:2}
+    .plemena-root .kicker{
+      display:inline-flex;align-items:center;gap:10px;
+      font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.22em;text-transform:uppercase;
+      color:var(--yellow);margin-bottom:18px;
+      padding:8px 14px;border:1px solid rgba(255,234,0,.4);border-radius:999px;
+      background:rgba(255,234,0,.06);
+    }
+    .plemena-root .kicker .dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;box-shadow:0 0 0 3px rgba(255,234,0,.2)}
+    .plemena-root .hero h1{
+      font-family:'Chakra Petch',sans-serif;font-weight:700;
+      font-size:clamp(2.4rem,5.5vw,4.4rem);color:#fff;line-height:.96;letter-spacing:-.03em;margin:0;
+    }
+    .plemena-root .hero h1 em{font-style:normal;color:var(--yellow);text-shadow:0 0 40px rgba(255,234,0,.5)}
+    .plemena-root .hero-lede{max-width:580px;font-size:16px;color:#c8c8d0;margin:18px 0 22px;line-height:1.6}
+
+    .plemena-root .hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px;font-family:'Chakra Petch',sans-serif}
+    .plemena-root .hero-stats .s{display:flex;flex-direction:column;gap:3px}
+    .plemena-root .hero-stats .n{font-size:24px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
+    .plemena-root .hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+    .plemena-root .hero-stats .s + .s{padding-left:24px;border-left:1px solid rgba(255,255,255,.12)}
+
+    .plemena-root .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .plemena-root .cta-primary{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--yellow);color:#0A0A0B;padding:11px 16px;border-radius:12px;text-decoration:none;
+      font:700 13.5px 'Chakra Petch',sans-serif;letter-spacing:.02em;
+      transition:transform .15s, box-shadow .15s;
+      box-shadow:0 14px 40px -10px var(--yellow-glow);
+    }
+    .plemena-root .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+    .plemena-root .cta-primary .emoji{font-size:18px;line-height:1}
+    .plemena-root .cta-primary .cta-c{
+      background:#0A0A0B;color:var(--yellow);font-size:11px;padding:2px 7px;border-radius:6px;letter-spacing:.04em;
+    }
+
+    .plemena-root .hero-right{position:relative;z-index:1;min-height:300px}
+    .plemena-root .hero-photo-stack{display:grid;gap:10px;height:100%;min-height:300px}
+    .plemena-root .hsp-tile{
+      position:relative;border-radius:14px;overflow:hidden;
+      background:linear-gradient(135deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.01) 100%);
+      border:1px solid rgba(255,255,255,.08);
+      padding:16px 18px;display:flex;align-items:center;gap:14px;
+    }
+    .plemena-root .hsp-emoji{font-size:42px;line-height:1;flex-shrink:0}
+    .plemena-root .hsp-info{display:flex;flex-direction:column;gap:2px}
+    .plemena-root .hsp-name{font:700 17px 'Chakra Petch',sans-serif;color:#fff;letter-spacing:-.01em}
+    .plemena-root .hsp-c{font:500 12px 'Chakra Petch',sans-serif;color:#a8a8b0;letter-spacing:.06em}
+
+    .plemena-root .filter-card{
+      background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);
+      padding:22px;margin-bottom:24px;box-shadow:var(--sh-1);
+    }
+    .plemena-root .fc-head{margin-bottom:14px}
+    .plemena-root .fc-head h2{font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.01em;margin:0;color:var(--ink)}
+    .plemena-root .fc-sub{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+    .plemena-root .fc-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px}
+    .plemena-root .fc-field-search{grid-column:span 2}
+    .plemena-root .fc-field{display:flex;flex-direction:column;gap:6px}
+    .plemena-root .fc-label{font:600 11px 'Chakra Petch',sans-serif;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+    .plemena-root .fc-field input, .plemena-root .fc-field select{
+      width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;
+      background:#FBFAF4;font:500 14px 'Roboto Condensed',sans-serif;color:var(--ink);
+      transition:.15s;
+    }
+    .plemena-root .fc-field input:focus, .plemena-root .fc-field select:focus{
+      outline:0;border-color:var(--yellow);background:#fff;
+      box-shadow:0 0 0 4px rgba(255,234,0,.2);
+    }
+    .plemena-root .fc-foot{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+    }
+    .plemena-root .fc-count{font:600 13px 'Chakra Petch',sans-serif;color:var(--ink)}
+    .plemena-root #f-reset{
+      background:#FBFAF4;border:1px solid var(--line);padding:9px 14px;border-radius:10px;
+      font:600 13px 'Chakra Petch',sans-serif;color:var(--ink);cursor:pointer;transition:.15s;
+    }
+    .plemena-root #f-reset:hover{background:var(--yellow-soft);border-color:var(--yellow)}
+
+    .plemena-root .section-title{
+      font-family:'Chakra Petch',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;
+      margin:14px 0 14px;color:var(--ink);
+      display:inline-flex;align-items:center;gap:10px;
+    }
+    .plemena-root .section-title-c{
+      font-size:14px;background:var(--yellow);color:#0A0A0B;padding:3px 10px;border-radius:8px;letter-spacing:.04em;
+    }
+
+    .plemena-root .druh-grid{
+      display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:14px;
+    }
+    .plemena-root .druh-card{
+      display:flex;flex-direction:column;
+      background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+      padding:22px;text-decoration:none;color:inherit;
+      transition:.22s cubic-bezier(.2,.7,.2,1);
+    }
+    .plemena-root .druh-card:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
+    .plemena-root .dc-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+    .plemena-root .dc-emoji{font-size:48px;line-height:1;flex-shrink:0}
+    .plemena-root .dc-title h3{font:700 22px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em;margin:0;line-height:1.1}
+    .plemena-root .dc-count{font-size:13px;color:var(--muted);margin-top:3px;display:block}
+    .plemena-root .dc-count strong{color:var(--ink);font-weight:700}
+    .plemena-root .dc-desc{
+      font-size:14px;color:#3a3a40;line-height:1.55;margin:0 0 14px;
+      display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+    }
+    .plemena-root .dc-foot{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-top:auto;padding-top:14px;border-top:1px dashed var(--line);
+      font:700 13px 'Chakra Petch',sans-serif;color:var(--ink);
+    }
+    .plemena-root .dc-foot svg{transition:transform .15s}
+    .plemena-root .druh-card:hover .dc-foot svg{transform:translateX(3px)}
+
+    .plemena-root .results-grid{
+      display:none;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:12px;
+    }
+    .plemena-root .results-heading{display:none}
+    .plemena-root :global(.rc-card){
+      display:block;text-decoration:none;color:inherit;
+      background:#FFFFFF;border:1px solid #EAEAEC;border-radius:18px;
+      padding:14px 16px;transition:.18s;
+    }
+    .plemena-root :global(.rc-card:hover){transform:translateY(-2px);box-shadow:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);border-color:#FFEA00}
+    .plemena-root :global(.rc-tags){display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+    .plemena-root :global(.rc-tag){
+      font:600 10px 'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;
+      padding:3px 7px;border-radius:5px;
+    }
+    .plemena-root :global(.rc-tag-druh){background:#FFEA00;color:#0A0A0B}
+    .plemena-root :global(.rc-tag-uzit){background:#FBFAF4;color:#6B6B72;border:1px solid #EAEAEC}
+    .plemena-root :global(.rc-name){font:700 18px 'Chakra Petch',sans-serif;color:#0A0A0B;letter-spacing:-.01em;margin-bottom:4px}
+    .plemena-root :global(.rc-country){font-size:12px;color:#6B6B72;margin-bottom:10px;font-family:'Chakra Petch',sans-serif}
+    .plemena-root :global(.rc-foot){display:flex;gap:10px;flex-wrap:wrap;font-family:'Chakra Petch',sans-serif;font-size:12.5px;color:#0A0A0B}
+    .plemena-root :global(.rc-milk){color:#0B7A3B;font-weight:600}
+    .plemena-root :global(.rg-empty){
+      grid-column:1/-1;padding:40px;text-align:center;color:#6B6B72;
+      background:#FFFFFF;border:1px dashed #EAEAEC;border-radius:18px;
+    }
+
+    .plemena-root .big-cta{
+      margin-top:32px;padding:36px;border-radius:var(--r-xl);
+      background:linear-gradient(135deg,var(--yellow) 0%,#FFD400 100%);
+      position:relative;overflow:hidden;box-shadow:0 10px 30px -8px var(--yellow-glow);
+    }
+    .plemena-root .big-cta::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(400px 300px at 100% 100%, rgba(0,0,0,.12), transparent);
+    }
+    .plemena-root .big-cta h2{font-family:'Chakra Petch',sans-serif;font-size:30px;line-height:1.05;letter-spacing:-.02em;position:relative;z-index:2;color:#0A0A0B;margin:0}
+    .plemena-root .big-cta p{color:#2a2a2a;margin-top:10px;font-size:15px;position:relative;z-index:2;max-width:600px}
+    .plemena-root .cta-kicker{
+      display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.2em;text-transform:uppercase;
+      color:#0A0A0B;background:rgba(0,0,0,.08);padding:6px 12px;border-radius:999px;margin-bottom:14px;position:relative;z-index:2;
+    }
+    .plemena-root .cta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:2}
+    .plemena-root .cta-btn{
+      padding:15px 24px;border-radius:14px;text-decoration:none;
+      font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.04em;
+      display:inline-flex;align-items:center;gap:10px;transition:.15s;
+    }
+    .plemena-root .cta-btn.primary{background:#0A0A0B;color:#fff}
+    .plemena-root .cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
+    .plemena-root .cta-btn.ghost{background:rgba(255,255,255,.4);color:#0A0A0B;border:1px solid rgba(0,0,0,.15)}
+    .plemena-root .cta-btn.ghost:hover{background:rgba(255,255,255,.7)}
+
+    @media (max-width:960px){
+      .plemena-root .hero{grid-template-columns:1fr;padding:32px 24px 28px;gap:18px}
+      .plemena-root .hero-right{min-height:240px;order:2}
+      .plemena-root .hero-photo-stack{min-height:240px}
+      .plemena-root .hero-stats .s + .s{padding-left:0;border-left:0}
+      .plemena-root .fc-field-search{grid-column:auto}
+    }
+    @media (max-width:600px){
+      .plemena-root{padding:20px 16px 60px}
+      .plemena-root .filter-card{padding:18px}
+    }
   </style>
 </Layout>

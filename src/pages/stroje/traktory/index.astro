@@ -8,5 +8,14 @@ import CategoryBrowse from '../../../components/stroje/CategoryBrowse.astro';
   title="Traktory — katalog"
   description="Přehled traktorů všech značek — John Deere, Zetor, Fendt, New Holland, Case IH, CLAAS, Valtra, Massey Ferguson, Kubota, Deutz-Fahr. Modelové řady od 5. řady po 9. řadu."
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+      { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
+      { '@type': 'ListItem', position: 3, name: 'Traktory', item: 'https://agro-svet.cz/stroje/traktory/' },
+    ],
+  })} />
   <CategoryBrowse category="traktory" />
 </Layout>

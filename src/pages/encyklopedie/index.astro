@@ -41,7 +41,10 @@ const kategLabels: Record<string, string> = {
             </div>
             <h3 style="font-size:17px; font-weight:400; color:#1a1a1a; margin-bottom:6px;">{item.data.name}</h3>
             <p style="font-size:13px; color:#666; margin-bottom:14px; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">{item.data.popis}</p>
-            <div style="font-size:13px; color:#555; font-weight:400;">⚡ {item.data.vykon}</div>
+            <div style="display:inline-flex; align-items:center; gap:5px; font-size:13px; color:#555; font-weight:400;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              {item.data.vykon}
+            </div>
           </div>
         </a>
       ))}

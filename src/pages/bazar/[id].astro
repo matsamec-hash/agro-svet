@@ -20,11 +20,24 @@ if (!listing) {
   return Astro.redirect('/bazar/');
 }
 
-// Increment views
-await supabase
-  .from('bazar_listings')
-  .update({ views: (listing.views ?? 0) + 1 })
-  .eq('id', id);
+// Increment views (debounced — skip bots and recent visitors via cookie)
+const cookieName = `bv_${id}`;
+const userAgent = Astro.request.headers.get('user-agent') ?? '';
+const isBot = /bot|crawler|spider|crawl|google|bing|yandex|duckduck|baidu|slurp|facebook/i.test(userAgent);
+const recentlyViewed = Astro.cookies.has(cookieName);
+
+if (!isBot && !recentlyViewed) {
+  await supabase
+    .from('bazar_listings')
+    .update({ views: (listing.views ?? 0) + 1 })
+    .eq('id', id);
+  Astro.cookies.set(cookieName, '1', {
+    maxAge: 60 * 30,
+    httpOnly: true,
+    sameSite: 'lax',
+    path: '/',
+  });
+}
 
 // Resolve image URLs
 const images = (listing.bazar_images ?? []).map((img: any) => {
@@ -107,7 +120,7 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
           </a>
         )}
 
-        <div class="prose" set:html={listing.description.replace(/\n/g, '<br>')} />
+        <div class="bazar-description">{listing.description}</div>
       </div>
 
       <aside class="detail-sidebar">
@@ -116,20 +129,40 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
           <div class="detail-price">{priceText}</div>
         </div>
 
-        <!-- Contact -->
+        <!-- Contact (revealed on click — anti-spam) -->
         <div class="sidebar-box">
           <h3 style="font-size:14px; margin-bottom:12px;">Kontakt</h3>
-          <p style="font-size:15px; margin-bottom:6px;"><strong>{sellerName}</strong></p>
-          {listing.phone && (
-            <p style="font-size:15px; margin-bottom:6px;">
-              <a href={`tel:${listing.phone}`} style="color:#1a1a1a; text-decoration:none;">Tel: {listing.phone}</a>
-            </p>
-          )}
-          {listing.email && (
-            <p style="font-size:15px;">
-              <a href={`mailto:${listing.email}`} style="color:#1a1a1a; text-decoration:none;">Email: {listing.email}</a>
-            </p>
-          )}
+          <p style="font-size:15px; margin-bottom:12px;"><strong>{sellerName}</strong></p>
+
+          <button
+            id="contact-reveal-btn"
+            type="button"
+            class="contact-reveal-btn"
+            data-phone={listing.phone ? btoa(String(listing.phone)) : ''}
+            data-email={listing.email ? btoa(unescape(encodeURIComponent(String(listing.email)))) : ''}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            Zobrazit kontakt
+          </button>
+
+          <div id="contact-revealed" hidden style="margin-top:4px;">
+            {listing.phone && (
+              <p style="font-size:15px; margin-bottom:6px;">
+                <a id="contact-phone-link" href="#" style="color:#1a1a1a; text-decoration:none;">
+                  <strong>Tel:</strong> <span id="contact-phone-text"></span>
+                </a>
+              </p>
+            )}
+            {listing.email && (
+              <p style="font-size:15px; word-break:break-all;">
+                <a id="contact-email-link" href="#" style="color:#1a1a1a; text-decoration:none;">
+                  <strong>Email:</strong> <span id="contact-email-text"></span>
+                </a>
+              </p>
+            )}
+          </div>
         </div>
 
         <!-- Info -->
@@ -192,6 +225,35 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
     color: #1a1a1a;
   }
 
+  .bazar-description {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-reveal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+    padding: 12px 16px;
+    background: #FFFF00;
+    color: #1a1a1a;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  .contact-reveal-btn:hover { background: #f0f000; }
+  .contact-reveal-btn:active { transform: translateY(1px); }
+
   .catalog-link-box {
     display: flex;
     justify-content: space-between;
@@ -216,3 +278,33 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
     }
   }
 </style>
+
+<script>
+  const btn = document.getElementById('contact-reveal-btn') as HTMLButtonElement | null;
+  const revealed = document.getElementById('contact-revealed');
+  const phoneText = document.getElementById('contact-phone-text');
+  const phoneLink = document.getElementById('contact-phone-link') as HTMLAnchorElement | null;
+  const emailText = document.getElementById('contact-email-text');
+  const emailLink = document.getElementById('contact-email-link') as HTMLAnchorElement | null;
+
+  btn?.addEventListener('click', () => {
+    const phoneB64 = btn.dataset.phone ?? '';
+    const emailB64 = btn.dataset.email ?? '';
+    if (phoneB64 && phoneText && phoneLink) {
+      try {
+        const phone = atob(phoneB64);
+        phoneText.textContent = phone;
+        phoneLink.href = `tel:${phone.replace(/\s+/g, '')}`;
+      } catch {}
+    }
+    if (emailB64 && emailText && emailLink) {
+      try {
+        const email = decodeURIComponent(escape(atob(emailB64)));
+        emailText.textContent = email;
+        emailLink.href = `mailto:${email}`;
+      } catch {}
+    }
+    if (revealed) revealed.hidden = false;
+    btn.style.display = 'none';
+  });
+</script>
