@@ -13,6 +13,12 @@ interface Props {
   yearTo?: string;
   powerFrom?: string;
   powerTo?: string;
+  zaberFrom?: string;
+  zaberTo?: string;
+  nosnostFrom?: string;
+  nosnostTo?: string;
+  objemFrom?: string;
+  objemTo?: string;
 }
 
 const {
@@ -20,9 +26,15 @@ const {
   priceFrom = '', priceTo = '',
   yearFrom = '', yearTo = '',
   powerFrom = '', powerTo = '',
+  zaberFrom = '', zaberTo = '',
+  nosnostFrom = '', nosnostTo = '',
+  objemFrom = '', objemTo = '',
 } = Astro.props;
 
 const showMachineFilters = category === 'traktory' || category === 'kombajny' || !category;
+const showZaberFilter = ['zpracovani-pudy', 'seti', 'ochrana-rostlin', 'sklizen-picnin'].includes(category);
+const showNosnostFilter = ['manipulace', 'doprava'].includes(category);
+const showObjemFilter = ['hnojeni', 'ochrana-rostlin'].includes(category);
 
 const activeFilters: { label: string; removeParams: string[] }[] = [];
 if (query) activeFilters.push({ label: `"${query}"`, removeParams: ['q'] });
@@ -48,6 +60,18 @@ if (yearFrom || yearTo) {
 if (powerFrom || powerTo) {
   const label = powerFrom && powerTo ? `${powerFrom} – ${powerTo} k` : powerFrom ? `od ${powerFrom} k` : `do ${powerTo} k`;
   activeFilters.push({ label: `Výkon: ${label}`, removeParams: ['power_from', 'power_to'] });
+}
+if (zaberFrom || zaberTo) {
+  const label = zaberFrom && zaberTo ? `${zaberFrom} – ${zaberTo} m` : zaberFrom ? `od ${zaberFrom} m` : `do ${zaberTo} m`;
+  activeFilters.push({ label: `Záběr: ${label}`, removeParams: ['zaber_od', 'zaber_do'] });
+}
+if (nosnostFrom || nosnostTo) {
+  const label = nosnostFrom && nosnostTo ? `${nosnostFrom} – ${nosnostTo} kg` : nosnostFrom ? `od ${nosnostFrom} kg` : `do ${nosnostTo} kg`;
+  activeFilters.push({ label: `Nosnost: ${label}`, removeParams: ['nosnost_od', 'nosnost_do'] });
+}
+if (objemFrom || objemTo) {
+  const label = objemFrom && objemTo ? `${objemFrom} – ${objemTo} l` : objemFrom ? `od ${objemFrom} l` : `do ${objemTo} l`;
+  activeFilters.push({ label: `Objem nádrže: ${label}`, removeParams: ['objem_od', 'objem_do'] });
 }
 
 function buildRemoveUrl(params: string[]): string {
@@ -132,6 +156,41 @@ function buildRemoveUrl(params: string[]): string {
     </div>
   )}
 
+  {(showZaberFilter || showNosnostFilter || showObjemFilter) && (
+    <div class="filter-row filter-row-stroje">
+      {showZaberFilter && (
+        <div class="field field-price">
+          <span class="field-label">Pracovní záběr (m)</span>
+          <div class="price-group">
+            <input type="number" name="zaber_od" value={zaberFrom} placeholder="Od" class="field-input" min="0" max="50" step="0.1" />
+            <span class="price-dash">–</span>
+            <input type="number" name="zaber_do" value={zaberTo} placeholder="Do" class="field-input" min="0" max="50" step="0.1" />
+          </div>
+        </div>
+      )}
+      {showNosnostFilter && (
+        <div class="field field-price">
+          <span class="field-label">Nosnost (kg)</span>
+          <div class="price-group">
+            <input type="number" name="nosnost_od" value={nosnostFrom} placeholder="Od" class="field-input" min="0" step="100" />
+            <span class="price-dash">–</span>
+            <input type="number" name="nosnost_do" value={nosnostTo} placeholder="Do" class="field-input" min="0" step="100" />
+          </div>
+        </div>
+      )}
+      {showObjemFilter && (
+        <div class="field field-price">
+          <span class="field-label">Objem nádrže (l)</span>
+          <div class="price-group">
+            <input type="number" name="objem_od" value={objemFrom} placeholder="Od" class="field-input" min="0" step="100" />
+            <span class="price-dash">–</span>
+            <input type="number" name="objem_do" value={objemTo} placeholder="Do" class="field-input" min="0" step="100" />
+          </div>
+        </div>
+      )}
+    </div>
+  )}
+
   <datalist id="cz-locations">
     {CZ_LOCATIONS.map(loc => <option value={loc}></option>)}
   </datalist>
@@ -213,6 +272,10 @@ function buildRemoveUrl(params: string[]): string {
 
   .filter-row-machine {
     grid-template-columns: 1.6fr 1.6fr;
+  }
+
+  .filter-row-stroje {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 
   .field {
