@@ -1,0 +1,461 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from '../../../lib/stroje';
+
+const brands = getAllBrands();
+const allModels = getAllModels();
+
+// Only non-traktor / non-kombajn models
+const strojeModels = allModels.filter((m) => m.category !== 'traktory' && m.category !== 'kombajny');
+const totalModels = strojeModels.length;
+const strojeBrands = brands.filter((b) => strojeModels.some((m) => m.brand_slug === b.slug));
+const totalBrands = strojeBrands.length;
+
+// Per-group stats
+type GroupStats = {
+  slug: FunctionalGroupSlug;
+  name: string;
+  description: string;
+  categoryCount: number;
+  modelCount: number;
+  brandCount: number;
+};
+
+const groupStats: GroupStats[] = (Object.entries(FUNCTIONAL_GROUPS) as [FunctionalGroupSlug, typeof FUNCTIONAL_GROUPS[FunctionalGroupSlug]][]).map(([slug, group]) => {
+  const cats = group.categories as readonly string[];
+  const gModels = strojeModels.filter((m) => cats.includes(m.category));
+  const gBrands = new Set(gModels.map((m) => m.brand_slug)).size;
+  return {
+    slug,
+    name: group.name,
+    description: group.description,
+    categoryCount: cats.length,
+    modelCount: gModels.length,
+    brandCount: gBrands,
+  };
+});
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Katalog strojů', item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 3, name: 'Zemědělské stroje', item: 'https://agro-svet.cz/stroje/zemedelske-stroje/' },
+  ],
+};
+
+const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 'Horsch', 'Väderstad', 'Bednar', 'Manitou', 'JCB', 'Joskin', 'Kverneland'];
+---
+
+<Layout
+  title="Zemědělské stroje — pluhy, lisy, postřikovače, manipulátory"
+  description="Kompletní přehled zemědělských strojů: zpracování půdy, setí, hnojení, ochrana rostlin, sklizeň pícnin a okopanin, manipulace, doprava a chov. Filtrujte podle účelu nebo značky."
+  canonical="https://agro-svet.cz/stroje/zemedelske-stroje/"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="sz-root">
+
+    <nav class="sz-breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/stroje/">Katalog strojů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">Zemědělské stroje</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="sz-hero">
+      <div class="sz-hero-inner">
+        <span class="sz-kicker"><span class="sz-dot"></span>Katalog · Zemědělské stroje</span>
+        <h1>Zemědělské <em>stroje</em></h1>
+        <p class="sz-lede">
+          Přehled {groupStats.length} funkčních skupin zemědělských strojů — od zpracování půdy
+          přes setí, hnojení a ochranu rostlin až po sklizeň, manipulaci a dopravu.
+          {totalModels > 0 ? `Databáze obsahuje ${totalModels} modelů z ${totalBrands} značek.` : 'Databáze průběžně doplňována.'}
+        </p>
+        <div class="sz-stats">
+          <div class="sz-stat">
+            <span class="sz-stat-n">{groupStats.length}</span>
+            <span class="sz-stat-l">skupin</span>
+          </div>
+          <div class="sz-stat">
+            <span class="sz-stat-n">{groupStats.reduce((s, g) => s + g.categoryCount, 0)}</span>
+            <span class="sz-stat-l">kategorií</span>
+          </div>
+          <div class="sz-stat">
+            <span class="sz-stat-n">{totalModels > 0 ? `${totalModels}+` : '—'}</span>
+            <span class="sz-stat-l">modelů</span>
+          </div>
+          <div class="sz-stat">
+            <span class="sz-stat-n">{totalBrands > 0 ? totalBrands : PLACEHOLDER_BRANDS.length + '+'}</span>
+            <span class="sz-stat-l">značek</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Functional groups -->
+    <section class="sz-section" aria-labelledby="groups-title">
+      <h2 id="groups-title" class="sz-section-title">
+        <span class="sz-section-label">Hledáte podle účelu?</span>
+      </h2>
+      <p class="sz-section-sub">Vyberte funkční skupinu a procházejte stroje podle toho, k čemu je potřebujete.</p>
+      <div class="sz-group-grid">
+        {groupStats.map((g) => (
+          <a href={`/stroje/zemedelske-stroje/${g.slug}/`} class="sz-group-card">
+            <h3>{g.name}</h3>
+            <p>{g.description}</p>
+            <div class="sz-group-meta">
+              {g.modelCount > 0
+                ? <span>{g.categoryCount} {g.categoryCount === 1 ? 'kategorie' : g.categoryCount < 5 ? 'kategorie' : 'kategorií'} · {g.modelCount} {g.modelCount === 1 ? 'model' : g.modelCount < 5 ? 'modely' : 'modelů'} · {g.brandCount} {g.brandCount === 1 ? 'značka' : g.brandCount < 5 ? 'značky' : 'značek'}</span>
+                : <span class="sz-preparing">Připravujeme · {g.categoryCount} {g.categoryCount === 1 ? 'kategorie' : g.categoryCount < 5 ? 'kategorie' : 'kategorií'}</span>
+              }
+            </div>
+            <div class="sz-group-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Brands -->
+    <section class="sz-section" aria-labelledby="brands-title">
+      <h2 id="brands-title" class="sz-section-title">
+        <span class="sz-section-label">Nebo podle značky?</span>
+      </h2>
+      <p class="sz-section-sub">Přejděte přímo na katalog konkrétního výrobce zemědělské techniky.</p>
+
+      {strojeBrands.length > 0 ? (
+        <div class="sz-brand-grid">
+          {strojeBrands.map((b) => {
+            const bCount = strojeModels.filter((m) => m.brand_slug === b.slug).length;
+            return (
+              <a href={`/stroje/${b.slug}/`} class="sz-brand-card">
+                <div class="sz-brand-logo">
+                  <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="56" height="56" />
+                </div>
+                <div class="sz-brand-info">
+                  <strong>{b.name}</strong>
+                  <span>{b.country} · {bCount} {bCount === 1 ? 'model' : bCount < 5 ? 'modely' : 'modelů'}</span>
+                </div>
+                <svg class="sz-brand-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="sz-brands-placeholder">
+          <p class="sz-placeholder-title">Brzy přibudou značky:</p>
+          <div class="sz-placeholder-tags">
+            {PLACEHOLDER_BRANDS.map((name) => (
+              <span class="sz-placeholder-tag">{name}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+
+    <!-- Back link -->
+    <div class="sz-back">
+      <a href="/stroje/">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        Zpět na katalog techniky
+      </a>
+    </div>
+
+  </div>
+
+  <style>
+    .sz-root {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 26px 24px 96px;
+      color: #1E1E22;
+    }
+
+    /* Breadcrumb */
+    .sz-breadcrumb {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: #6B6B72;
+      margin-bottom: 22px;
+    }
+    .sz-breadcrumb a {
+      color: #6B6B72;
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .sz-breadcrumb a:hover { color: #000; }
+    .sz-breadcrumb svg { width: 14px; height: 14px; color: #9A9AA3; }
+    .sz-breadcrumb .current { color: #000; font-weight: 600; }
+
+    /* Hero */
+    .sz-hero {
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      border-radius: 24px;
+      background:
+        radial-gradient(600px 300px at 15% 20%, rgba(255,255,0,.14), transparent 60%),
+        radial-gradient(700px 400px at 90% 90%, rgba(80,80,90,.4), transparent 60%),
+        linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+      padding: 48px 48px 40px;
+      margin-bottom: 32px;
+      box-shadow: 0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    }
+    .sz-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .35;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+    }
+    .sz-hero-inner { position: relative; z-index: 2; }
+    .sz-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font: 600 11px/1 'Chakra Petch', sans-serif;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #FFFF00;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,0,.4);
+      border-radius: 999px;
+      background: rgba(255,255,0,.06);
+    }
+    .sz-dot {
+      width: 7px;
+      height: 7px;
+      background: #FFFF00;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(255,255,0,.2);
+    }
+    .sz-hero h1 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: #fff;
+      line-height: .96;
+      letter-spacing: -.03em;
+      margin: 0;
+    }
+    .sz-hero h1 em {
+      font-style: normal;
+      color: #FFFF00;
+      text-shadow: 0 0 40px rgba(255,255,0,.5);
+    }
+    .sz-lede {
+      max-width: 680px;
+      font-size: 16px;
+      color: #c8c8d0;
+      margin: 18px 0 22px;
+      line-height: 1.6;
+    }
+    .sz-stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-family: 'Chakra Petch', sans-serif;
+    }
+    .sz-stat { display: flex; flex-direction: column; gap: 3px; }
+    .sz-stat + .sz-stat { padding-left: 24px; border-left: 1px solid rgba(255,255,255,.12); }
+    .sz-stat-n { font-size: 24px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -.02em; }
+    .sz-stat-l { font-size: 11px; color: #8a8a92; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
+
+    /* Section */
+    .sz-section { margin-bottom: 48px; }
+    .sz-section-title {
+      margin: 0 0 6px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: #0A0A0B;
+    }
+    .sz-section-label {
+      background: #FFFF00;
+      color: #1a1a1a;
+      padding: 4px 10px;
+      border-radius: 3px;
+    }
+    .sz-section-sub {
+      font-size: 14px;
+      color: #6B6B72;
+      margin: 0 0 20px;
+    }
+
+    /* Group grid */
+    .sz-group-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .sz-group-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 18px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .2s, box-shadow .2s, transform .2s;
+    }
+    .sz-group-card:hover {
+      border-color: #FFFF00;
+      box-shadow: 0 6px 20px rgba(0,0,0,.08);
+      transform: translateY(-2px);
+    }
+    .sz-group-card h3 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      color: #0A0A0B;
+      margin: 0 0 6px;
+    }
+    .sz-group-card p {
+      font-size: 13px;
+      color: #6B6B72;
+      margin: 0 0 12px;
+      line-height: 1.55;
+      flex: 1;
+    }
+    .sz-group-meta {
+      font: 600 11.5px 'Chakra Petch', sans-serif;
+      color: #6B6B72;
+      letter-spacing: .04em;
+      margin-bottom: 14px;
+    }
+    .sz-preparing {
+      color: #9A9AA3;
+      font-style: italic;
+      font-weight: 500;
+    }
+    .sz-group-arrow {
+      display: flex;
+      justify-content: flex-end;
+      color: #0A0A0B;
+      transition: transform .15s;
+    }
+    .sz-group-card:hover .sz-group-arrow { transform: translateX(3px); }
+
+    /* Brand grid */
+    .sz-brand-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .sz-brand-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 18px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .2s, box-shadow .2s, transform .2s;
+    }
+    .sz-brand-card:hover {
+      border-color: #FFFF00;
+      box-shadow: 0 6px 20px rgba(0,0,0,.08);
+      transform: translateY(-2px);
+    }
+    .sz-brand-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      flex-shrink: 0;
+    }
+    .sz-brand-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .sz-brand-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+    }
+    .sz-brand-info strong {
+      font: 700 16px 'Chakra Petch', sans-serif;
+      color: #0A0A0B;
+      letter-spacing: -.01em;
+    }
+    .sz-brand-info span { font-size: 12px; color: #6B6B72; }
+    .sz-brand-arrow {
+      color: #9A9AA3;
+      flex-shrink: 0;
+      transition: transform .15s;
+    }
+    .sz-brand-card:hover .sz-brand-arrow { transform: translateX(3px); color: #0A0A0B; }
+
+    /* Placeholder brands */
+    .sz-brands-placeholder {
+      background: #fff;
+      border: 1px dashed #e8e8e8;
+      border-radius: 18px;
+      padding: 28px 24px;
+    }
+    .sz-placeholder-title {
+      font: 700 14px 'Chakra Petch', sans-serif;
+      color: #6B6B72;
+      margin: 0 0 14px;
+      letter-spacing: .04em;
+    }
+    .sz-placeholder-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .sz-placeholder-tag {
+      font: 500 13px 'Chakra Petch', sans-serif;
+      background: #FBFAF4;
+      border: 1px solid #EAEAEC;
+      color: #6B6B72;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    /* Back link */
+    .sz-back { margin-top: 48px; }
+    .sz-back a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font: 600 14px 'Chakra Petch', sans-serif;
+      color: #6B6B72;
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .sz-back a:hover { color: #0A0A0B; }
+
+    @media (max-width: 960px) {
+      .sz-hero { padding: 32px 24px 28px; }
+      .sz-stat + .sz-stat { padding-left: 0; border-left: 0; }
+    }
+    @media (max-width: 600px) {
+      .sz-root { padding: 20px 16px 60px; }
+      .sz-group-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</Layout>
