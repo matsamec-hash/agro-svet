@@ -5,4 +5,285 @@ founded: 1871
 website: https://www.poettinger.at/cs_cz/
 description: >
   Rakouský výrobce s širokým portfoliem strojů pro zpracování půdy (Servo pluhy, Terradisc), setí (Aerosem, Terrasem) a sklizeň pícnin (Novacat žačky, Impress lisy, Jumbo samosběrací vozy).
-categories: {}
+categories:
+  seti:
+    name: Setí a sázení
+    series:
+      - slug: aerosem
+        name: AEROSEM
+        family: aerosem
+        subcategory: seci-stroje-pneumaticke
+        url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+        description: |
+          AEROSEM — pneumatické secí stroje značky Pöttinger.
+        models:
+          - slug: aerosem-vt
+            name: AEROSEM VT
+            tagline: Pneumatický secí stroj nesený
+            url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+          - slug: aerosem-fdd
+            name: AEROSEM FDD
+            tagline: Pneumatický secí stroj v kombinaci s rotační bránou
+            url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+      - slug: terrasem
+        name: TERRASEM
+        family: terrasem
+        subcategory: seci-kombinace
+        url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+        description: |
+          TERRASEM — secí kombinace s krátkým diskovým podmítačem značky Pöttinger.
+        models:
+          - slug: terrasem-c
+            name: TERRASEM C
+            tagline: Tažený secí stroj 3-9 m
+            url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+          - slug: terrasem-v
+            name: TERRASEM V
+            tagline: Variabilní výsevní jednotky
+            url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+      - slug: vitasem
+        name: VITASEM
+        family: vitasem
+        subcategory: seci-stroje-mechanicke
+        url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+        description: |
+          VITASEM — mechanické secí stroje značky Pöttinger.
+        models:
+          - slug: vitasem-a
+            name: VITASEM A
+            tagline: Mechanický secí stroj nesený
+            url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+          - slug: vitasem-m
+            name: VITASEM M
+            tagline: Mechanický secí stroj pro kombinaci s rotační bránou
+            url: https://www.poettinger.at/cs_cz/produkty/vysevni-technika
+  sklizen-picnin:
+    name: Sklizeň pícnin a slámy
+    series:
+      - slug: eurocat
+        name: EUROCAT
+        family: eurocat
+        subcategory: zaci-stroje
+        url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        description: |
+          EUROCAT — bubnové žací stroje značky Pöttinger.
+        models:
+          - slug: eurocat-311
+            name: EUROCAT 311
+            tagline: Bubnový žací stroj nesený
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: eurocat-315
+            name: EUROCAT 315
+            tagline: Bubnový žací stroj nesený
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+      - slug: hit
+        name: HIT
+        family: hit
+        subcategory: obracece
+        url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        description: |
+          HIT — obraceče píce značky Pöttinger.
+        models:
+          - slug: hit-v
+            name: HIT V
+            tagline: Tažený obraceč velkých záběrů
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: hit-t
+            name: HIT T
+            tagline: Tažený obraceč
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: hit-n
+            name: HIT N
+            tagline: Nesený obraceč
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+      - slug: impress
+        name: IMPRESS
+        family: impress
+        subcategory: lisy-valcove
+        url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        description: |
+          IMPRESS — lisy na kulaté balíky značky Pöttinger, varianty F (fix-chamber) a V (vario-chamber).
+        models:
+          - slug: impress-125-f
+            name: IMPRESS 125 F
+            tagline: Lis na kulaté balíky s pevnou komorou
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: impress-155-v
+            name: IMPRESS 155 V
+            tagline: Lis na kulaté balíky s variabilní komorou
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: impress-185-vc-pro
+            name: IMPRESS 185 VC PRO
+            tagline: Lis-obalovač s variabilní komorou
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+      - slug: jumbo
+        name: JUMBO
+        family: jumbo
+        subcategory: samosberaci-vozy
+        url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        description: |
+          JUMBO — samosběrací vozy značky Pöttinger, vlajková řada s nejvyššími objemy.
+        models:
+          - slug: jumbo-7000
+            name: JUMBO 7000
+            tagline: Samosběrací vůz 38 m³
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: jumbo-8000
+            name: JUMBO 8000
+            tagline: Samosběrací vůz 43 m³
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: jumbo-10000
+            name: JUMBO 10000
+            tagline: Samosběrací vůz 50 m³
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+      - slug: novacat
+        name: NOVACAT
+        family: novacat
+        subcategory: zaci-stroje
+        url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        description: |
+          NOVACAT — diskové žací stroje značky Pöttinger, nesené i tažené varianty.
+        models:
+          - slug: novacat-302
+            name: NOVACAT 302
+            tagline: Nesený diskový žací stroj 3,04 m
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: novacat-352
+            name: NOVACAT 352
+            tagline: Nesený diskový žací stroj 3,46 m
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: novacat-a10
+            name: NOVACAT A10
+            tagline: Žací kombinace 9,52-10,02 m
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: novacat-v10
+            name: NOVACAT V10
+            tagline: Žací kombinace s variabilním záběrem
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+      - slug: novadisc
+        name: NOVADISC
+        family: novadisc
+        subcategory: zaci-stroje
+        url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        description: |
+          NOVADISC — lehké diskové žací stroje bez kondicionéru značky Pöttinger.
+        models:
+          - slug: novadisc-262
+            name: NOVADISC 262
+            tagline: Diskový žací stroj 2,62 m
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: novadisc-302
+            name: NOVADISC 302
+            tagline: Diskový žací stroj 3,04 m
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+      - slug: top
+        name: TOP
+        family: top
+        subcategory: shrnovace
+        url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+        description: |
+          TOP — shrnovače píce značky Pöttinger, jednorotorové i čtyřrotorové.
+        models:
+          - slug: top-422
+            name: TOP 422
+            tagline: Jednorotorový shrnovač
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: top-722
+            name: TOP 722
+            tagline: Dvourotorový shrnovač
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+          - slug: top-1252-c
+            name: TOP 1252 C
+            tagline: Čtyřrotorový shrnovač s centrálním ukládáním
+            url: https://www.poettinger.at/cs_cz/produkty/sklizen-picnin
+  zpracovani-pudy:
+    name: Zpracování půdy
+    series:
+      - slug: fox
+        name: FOX
+        family: fox
+        subcategory: kompaktomaty
+        url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        description: |
+          FOX — kompaktní kombinace pro přípravu seťového lůžka značky Pöttinger.
+        models:
+          - slug: fox-300-d
+            name: FOX 300 D
+            tagline: Kompaktní kombinace 3 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+      - slug: lion
+        name: LION
+        family: lion
+        subcategory: rotacni-brany
+        url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        description: |
+          LION — rotační brány značky Pöttinger pro náročnou přípravu seťového lůžka.
+        models:
+          - slug: lion-303
+            name: LION 303
+            tagline: Rotační brána 3 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+          - slug: lion-403
+            name: LION 403
+            tagline: Rotační brána 4 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+          - slug: lion-503
+            name: LION 503
+            tagline: Rotační brána 5 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+      - slug: servo
+        name: SERVO
+        family: servo
+        subcategory: pluhy
+        url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        description: |
+          SERVO — otočné pluhy značky Pöttinger, nesené i tažené.
+        models:
+          - slug: servo-45
+            name: SERVO 45
+            tagline: Nesený otočný pluh 3-5 radlic
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+          - slug: servo-t-2500
+            name: SERVO T 2500
+            tagline: Polonesený otočný pluh
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+          - slug: servo-3000
+            name: SERVO 3000
+            tagline: Otočný pluh nové generace
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+      - slug: synkro
+        name: SYNKRO
+        family: synkro
+        subcategory: podmitace-radlickove
+        url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        description: |
+          SYNKRO — radličkové kypřiče značky Pöttinger pro mělké i hluboké zpracování.
+        models:
+          - slug: synkro-3030
+            name: SYNKRO 3030
+            tagline: Radličkový kypřič nesený 3 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+          - slug: synkro-5030-t
+            name: SYNKRO 5030 T
+            tagline: Tažený radličkový kypřič 5 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+      - slug: terradisc
+        name: TERRADISC
+        family: terradisc
+        subcategory: podmitace-diskove
+        url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+        description: |
+          TERRADISC — krátké diskové podmítače značky Pöttinger.
+        models:
+          - slug: terradisc-3001
+            name: TERRADISC 3001
+            tagline: Nesený diskový podmítač 3 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+          - slug: terradisc-4001-k
+            name: TERRADISC 4001 K
+            tagline: Sklopný diskový podmítač 4 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy
+          - slug: terradisc-6001-t
+            name: TERRADISC 6001 T
+            tagline: Tažený diskový podmítač 6 m
+            url: https://www.poettinger.at/cs_cz/produkty/obdelavani-pudy

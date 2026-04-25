@@ -2,7 +2,344 @@ slug: krone
 name: Krone
 country: Německo
 founded: 1906
-website: https://www.krone-agriculture.com/
+website: https://landmaschinen.krone.de/
 description: >
   Německý specialista na sklizeň pícnin a slámy. Žací stroje EasyCut, lisy válcové Comprima a hranolové BiG Pack, samojízdné řezačky BiG X (až 1156 hp) a žací linka BiG M.
-categories: {}
+categories:
+  lisy-hranolove:
+    name: Hranolové lisy
+    series:
+      - slug: big-pack
+        name: BiG Pack
+        family: big-pack
+        subcategory: lisy-hranolove
+        url: https://landmaschinen.krone.de/en/products/big-balers
+        description: |
+          BiG Pack — vysokotlaké hranolové lisy značky Krone, vlajková řada (kanál až 120×130 cm).
+        models:
+          - slug: big-pack-870-hdp-ii
+            name: BiG Pack 870 HDP II
+            tagline: Vysokotlaký lis 80×70 cm
+          - slug: big-pack-1270-vc
+            name: BiG Pack 1270 VC
+            tagline: Hranolový lis s předkomorou
+          - slug: big-pack-1290-hdp-ii
+            name: BiG Pack 1290 HDP II
+            tagline: Vysokotlaký lis 120×90 cm
+          - slug: big-pack-4x4
+            name: BiG Pack 4×4
+            tagline: Hranolový lis 120×125 cm
+          - slug: big-pack-1290-hdp-vc
+            name: BiG Pack 1290 HDP VC
+            tagline: Vysokotlaký lis s VariCut
+  lisy-valcove:
+    name: Válcové lisy
+    series:
+      - slug: bellima
+        name: Bellima
+        family: bellima
+        subcategory: lisy-valcove
+        url: https://landmaschinen.krone.de/en/products/round-balers
+        description: |
+          Bellima — vstupní válcové lisy s pevnou komorou značky Krone.
+        models:
+          - slug: bellima-f-125
+            name: Bellima F 125
+            tagline: Vstupní pevná komora 1,25 m
+      - slug: comprima
+        name: Comprima
+        family: comprima
+        subcategory: lisy-valcove
+        url: https://landmaschinen.krone.de/en/products/round-balers
+        description: |
+          Comprima — válcové lisy s polovariabilní/variabilní komorou značky Krone (NovoGrip pásová komora).
+        models:
+          - slug: comprima-cv-150-xc
+            name: Comprima CV 150 XC
+            tagline: Válcový lis s pásovou variabilní komorou
+          - slug: comprima-v-150-xc
+            name: Comprima V 150 XC
+            tagline: Variabilní komora s nožovým rotorem
+          - slug: comprima-v-180-xc
+            name: Comprima V 180 XC
+            tagline: Variabilní komora 1,8 m
+          - slug: comprima-f-155-xc
+            name: Comprima F 155 XC
+            tagline: Pevná komora 1,55 m
+      - slug: fortima
+        name: Fortima
+        family: fortima
+        subcategory: lisy-valcove
+        url: https://landmaschinen.krone.de/en/products/round-balers
+        description: |
+          Fortima — válcové lisy s pevnou komorou značky Krone, řetězová komora s tyčemi.
+        models:
+          - slug: fortima-f-1250
+            name: Fortima F 1250
+            tagline: Pevná komora 1,25 m
+          - slug: fortima-f-1600
+            name: Fortima F 1600
+            tagline: Pevná komora 1,55 m
+          - slug: fortima-v-1500
+            name: Fortima V 1500
+            tagline: Variabilní komora 1,50 m
+      - slug: ultima
+        name: Ultima
+        family: ultima
+        subcategory: lisy-valcove
+        url: https://landmaschinen.krone.de/en/products/baler-wrapper-combinations
+        description: |
+          Ultima — non-stop lis-obalovač značky Krone (kontinuální lisování bez zastavení).
+        models:
+          - slug: ultima-cf-155-xc
+            name: Ultima CF 155 XC
+            tagline: Non-stop lis-obalovač pevná komora
+          - slug: ultima-f-155-xc
+            name: Ultima F 155 XC
+            tagline: Non-stop pevná komora
+  navesy-valnik:
+    name: Návěsy valníkové
+    series:
+      - slug: tx
+        name: TX
+        family: tx
+        subcategory: navesy-valnik
+        url: https://landmaschinen.krone.de/en/products/agricultural-trailers
+        description: |
+          TX — zemědělské návěsy značky Krone (přeprava sklizených pícnin a slámy).
+        models:
+          - slug: tx-460
+            name: TX 460
+            tagline: Zemědělský návěs 46 m3
+          - slug: tx-560
+            name: TX 560
+            tagline: Zemědělský návěs 56 m3
+  obracece:
+    name: Obraceče
+    series:
+      - slug: vendro
+        name: Vendro
+        family: vendro
+        subcategory: obracece
+        url: https://landmaschinen.krone.de/en/products/tedders
+        description: |
+          Vendro — obraceče značky Krone, pracovní záběr 4,7–13,1 m.
+        models:
+          - slug: vendro-470
+            name: Vendro 470
+            tagline: Nesený obraceč 4,7 m
+          - slug: vendro-560
+            name: Vendro 560
+            tagline: Nesený obraceč 5,6 m
+          - slug: vendro-680
+            name: Vendro 680
+            tagline: Nesený obraceč 6,8 m
+          - slug: vendro-790
+            name: Vendro 790
+            tagline: Nesený obraceč 7,7 m
+          - slug: vendro-820
+            name: Vendro 820
+            tagline: Tažený obraceč 8,2 m
+          - slug: vendro-1120
+            name: Vendro 1120
+            tagline: Tažený obraceč 11,2 m
+  rezacky-samojizdne:
+    name: Samojízdné řezačky
+    series:
+      - slug: big-x
+        name: BiG X
+        family: big-x
+        subcategory: rezacky-samojizdne
+        url: https://landmaschinen.krone.de/en/products/forage-harvesters
+        description: |
+          BiG X — samojízdné sklízecí řezačky značky Krone, výkon 490–1156 hp (vlajková řada BiG X 1180).
+        models:
+          - slug: big-x-480
+            name: BiG X 480
+            tagline: Samojízdná řezačka 490 hp
+          - slug: big-x-580
+            name: BiG X 580
+            tagline: Samojízdná řezačka 585 hp
+          - slug: big-x-680
+            name: BiG X 680
+            tagline: Samojízdná řezačka 686 hp
+          - slug: big-x-780
+            name: BiG X 780
+            tagline: Samojízdná řezačka 768 hp
+          - slug: big-x-880
+            name: BiG X 880
+            tagline: Samojízdná řezačka 884 hp
+          - slug: big-x-1080
+            name: BiG X 1080
+            tagline: Samojízdná řezačka 1078 hp
+          - slug: big-x-1180
+            name: BiG X 1180
+            tagline: Samojízdná řezačka 1156 hp
+  samosberaci-vozy:
+    name: Samosběrací vozy
+    series:
+      - slug: mx
+        name: MX
+        family: mx
+        subcategory: samosberaci-vozy
+        url: https://landmaschinen.krone.de/en/products/forage-wagons
+        description: |
+          MX — kombinované sběrací/dávkovací vozy značky Krone, objem 320–400 m3 nestlačeno.
+        models:
+          - slug: mx-320
+            name: MX 320 GD
+            tagline: Kombinovaný vůz 32 m3
+          - slug: mx-350
+            name: MX 350 GD
+            tagline: Kombinovaný vůz 35 m3
+          - slug: mx-400
+            name: MX 400 GD
+            tagline: Kombinovaný vůz 40 m3
+      - slug: rx
+        name: RX
+        family: rx
+        subcategory: samosberaci-vozy
+        url: https://landmaschinen.krone.de/en/products/forage-wagons
+        description: |
+          RX — výkonné samosběrací vozy značky Krone s velkým objemem.
+        models:
+          - slug: rx-360
+            name: RX 360 GD
+            tagline: Samosběrací vůz 36 m3
+          - slug: rx-400
+            name: RX 400 GD
+            tagline: Samosběrací vůz 40 m3
+          - slug: rx-430
+            name: RX 430 GD
+            tagline: Samosběrací vůz 43 m3
+          - slug: rx-490
+            name: RX 490 GD
+            tagline: Samosběrací vůz 49 m3
+      - slug: zx
+        name: ZX
+        family: zx
+        subcategory: samosberaci-vozy
+        url: https://landmaschinen.krone.de/en/products/forage-wagons
+        description: |
+          ZX — dvouosé samosběrací vozy značky Krone s vysokou nosností.
+        models:
+          - slug: zx-470-gd
+            name: ZX 470 GD
+            tagline: Samosběrací vůz 47 m3
+          - slug: zx-560-gd
+            name: ZX 560 GD
+            tagline: Samosběrací vůz 56 m3
+  shrnovace:
+    name: Shrnovače
+    series:
+      - slug: swadro-s
+        name: Swadro S
+        family: swadro
+        subcategory: shrnovace
+        url: https://landmaschinen.krone.de/en/products/rakes
+        description: |
+          Swadro S — jednorotorové shrnovače značky Krone.
+        models:
+          - slug: swadro-s-380
+            name: Swadro S 380
+            tagline: Jednorotorový shrnovač
+          - slug: swadro-s-420
+            name: Swadro S 420
+            tagline: Jednorotorový shrnovač
+          - slug: swadro-s-460
+            name: Swadro S 460
+            tagline: Jednorotorový shrnovač
+      - slug: swadro-tc
+        name: Swadro TC
+        family: swadro
+        subcategory: shrnovace
+        url: https://landmaschinen.krone.de/en/products/rakes
+        description: |
+          Swadro TC — dvourotorové shrnovače značky Krone (středový/boční řádek).
+        models:
+          - slug: swadro-tc-680
+            name: Swadro TC 680
+            tagline: Dvourotorový shrnovač s bočním řádkem
+          - slug: swadro-tc-760
+            name: Swadro TC 760
+            tagline: Dvourotorový shrnovač s bočním řádkem
+          - slug: swadro-tc-880
+            name: Swadro TC 880
+            tagline: Dvourotorový shrnovač se středovým řádkem
+          - slug: swadro-tc-930
+            name: Swadro TC 930
+            tagline: Dvourotorový shrnovač
+          - slug: swadro-tc-1250
+            name: Swadro TC 1250
+            tagline: Čtyřrotorový shrnovač
+  zaci-stroje:
+    name: Žací stroje
+    series:
+      - slug: big-m
+        name: BiG M
+        family: big-m
+        subcategory: zaci-stroje
+        url: https://landmaschinen.krone.de/en/products/self-propelled-mowers
+        description: |
+          BiG M — samojízdné motýlkové žací stroje s kondicionérem značky Krone, záběr až 13,2 m.
+        models:
+          - slug: big-m-450
+            name: BiG M 450
+            tagline: Samojízdný žací stroj 449 hp
+          - slug: big-m-500
+            name: BiG M 500
+            tagline: Samojízdný žací stroj 530 hp
+      - slug: easycut-b
+        name: EasyCut B
+        family: easycut
+        subcategory: zaci-stroje
+        url: https://landmaschinen.krone.de/en/products/mowers
+        description: |
+          EasyCut B — tažené žací stroje (boční / motýlkové) značky Krone, šíře záběru 3,2–10,1 m.
+        models:
+          - slug: easycut-b-870
+            name: EasyCut B 870
+            tagline: Boční tažený žací stroj
+          - slug: easycut-b-890
+            name: EasyCut B 890
+            tagline: Boční tažený žací stroj
+          - slug: easycut-b-950
+            name: EasyCut B 950 Collect
+            tagline: Boční tažený žací stroj se sběrnými pásy
+          - slug: easycut-b-1000
+            name: EasyCut B 1000
+            tagline: Motýlkový žací kombinát
+      - slug: easycut-f
+        name: EasyCut F
+        family: easycut
+        subcategory: zaci-stroje
+        url: https://landmaschinen.krone.de/en/products/mowers
+        description: |
+          EasyCut F — čelní nesené žací stroje značky Krone.
+        models:
+          - slug: easycut-f-320
+            name: EasyCut F 320 CV
+            tagline: Čelní žací stroj s prstovým kondicionérem
+          - slug: easycut-f-360
+            name: EasyCut F 360 CV
+            tagline: Čelní žací stroj s kondicionérem
+          - slug: easycut-f-400
+            name: EasyCut F 400 CV Collect
+            tagline: Čelní žací stroj se sběrnými pásy
+      - slug: easycut-r
+        name: EasyCut R
+        family: easycut
+        subcategory: zaci-stroje
+        url: https://landmaschinen.krone.de/en/products/mowers
+        description: |
+          EasyCut R — zadní nesené žací stroje značky Krone.
+        models:
+          - slug: easycut-r-280
+            name: EasyCut R 280
+            tagline: Zadní nesený žací stroj
+          - slug: easycut-r-320
+            name: EasyCut R 320
+            tagline: Zadní nesený žací stroj
+          - slug: easycut-r-360
+            name: EasyCut R 360 CV
+            tagline: Zadní nesený žací stroj s kondicionérem

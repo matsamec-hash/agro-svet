@@ -4,5 +4,236 @@ country: Švédsko
 founded: 1962
 website: https://www.vaderstad.com/
 description: >
-  Švédský výrobce vysokovýkonných secích strojů (Tempo, Rapid, Spirit) a kompaktomatů (Carrier, TopDown). Globální lídr precizního setí kukuřice.
-categories: {}
+  Švédský výrobce vysokovýkonných secích strojů (Tempo, Rapid, Spirit, Inspire, Proceed) a strojů na zpracování půdy (Carrier, Cultus, TopDown, Opus, NZ Aggressive). Globální lídr precizního setí kukuřice se systémem Tempo.
+categories:
+  seti:
+    name: Setí a sázení
+    series:
+      - slug: inspire
+        name: Inspire
+        family: inspire
+        subcategory: seci-stroje-pneumaticke
+        description: |
+          Inspire — pneumatický secí stroj pro malé a střední farmy.
+        models:
+          - slug: inspire-1200s
+            name: Inspire 1200S
+            url: https://www.vaderstad.com/en/products/seed-drills/inspire/
+      - slug: proceed
+        name: Proceed
+        family: proceed
+        subcategory: seci-stroje-presne
+        description: |
+          Proceed V — nový precision platform pro pšenici, sóju a další plodiny.
+        models:
+          - slug: proceed-v
+            name: Proceed V
+            url: https://www.vaderstad.com/en/products/seed-drills/proceed/
+      - slug: rapid-a
+        name: Rapid A
+        family: rapid
+        subcategory: seci-kombinace
+        description: |
+          Rapid A — tažený universal seed drill, vlajková Väderstad řada.
+        models:
+          - slug: rapid-a-400s
+            name: Rapid A 400S
+            url: https://www.vaderstad.com/en/products/seed-drills/rapid-a/
+      - slug: rapid-rd
+        name: Rapid RD
+        family: rapid
+        subcategory: seci-kombinace
+        description: |
+          Rapid RD — pneumatický secí stroj pro intenzivní setí.
+        models:
+          - slug: rapid-rd-300c
+            name: Rapid RD 300C
+            url: https://www.vaderstad.com/en/products/seed-drills/rapid-rd/
+      - slug: spirit
+        name: Spirit
+        family: spirit
+        subcategory: seci-kombinace
+        description: |
+          Spirit — výkonný secí stroj s velkými pracovními záběry (8-12 m).
+        models:
+          - slug: spirit-800c
+            name: Spirit 800C
+            url: https://www.vaderstad.com/en/products/seed-drills/spirit/
+      - slug: spirit-r
+        name: Spirit R
+        family: spirit
+        subcategory: seci-kombinace
+        description: |
+          Spirit R — radličková verze Spirit s active row coulter.
+        models:
+          - slug: spirit-r-300s
+            name: Spirit R 300S
+            url: https://www.vaderstad.com/en/products/seed-drills/spirit-r/
+      - slug: tempo-f
+        name: Tempo F
+        family: tempo
+        subcategory: seci-stroje-presne
+        description: |
+          Tempo F — precision planter front-mounted varianta.
+        models:
+          - slug: tempo-f-8
+            name: Tempo F 8
+            url: https://www.vaderstad.com/en/products/precision-planters/tempo-f/
+      - slug: tempo-k
+        name: Tempo K
+        family: tempo
+        subcategory: seci-stroje-presne
+        description: |
+          Tempo K — kompaktní precision planter pro střední farmy.
+        models:
+          - slug: tempo-k
+            name: Tempo K
+            url: https://www.vaderstad.com/en/products/precision-planters/tempo-k/
+      - slug: tempo-l
+        name: Tempo L
+        family: tempo
+        subcategory: seci-stroje-presne
+        description: |
+          Tempo L — vlajkový precision planter, top z Tempo řady.
+        models:
+          - slug: tempo-l-8
+            name: Tempo L 8
+            url: https://www.vaderstad.com/en/products/precision-planters/tempo-l/
+          - slug: tempo-l-12
+            name: Tempo L 12
+            url: https://www.vaderstad.com/en/products/precision-planters/tempo-l/
+      - slug: tempo-r
+        name: Tempo R
+        family: tempo
+        subcategory: seci-stroje-presne
+        description: |
+          Tempo R — rigid frame precision planter.
+        models:
+          - slug: tempo-r
+            name: Tempo R
+            url: https://www.vaderstad.com/en/products/precision-planters/tempo-r/
+      - slug: tempo-v
+        name: Tempo V
+        family: tempo
+        subcategory: seci-stroje-presne
+        description: |
+          Tempo V — varianta pro evropský trh.
+        models:
+          - slug: tempo-v-6
+            name: Tempo V 6
+            url: https://www.vaderstad.com/en/products/precision-planters/tempo-v/
+  zpracovani-pudy:
+    name: Zpracování půdy
+    series:
+      - slug: carrier
+        name: Carrier
+        family: carrier
+        subcategory: podmitace-diskove
+        description: |
+          Carrier — diskový podmítač Väderstad, vlajková řada.
+        models:
+          - slug: carrier
+            name: Carrier (base)
+            url: https://www.vaderstad.com/en/products/disc-cultivators/carrier/
+          - slug: carrier-l
+            name: Carrier L
+            url: https://www.vaderstad.com/en/products/disc-cultivators/carrier-l/
+          - slug: carrier-x
+            name: Carrier X
+            url: https://www.vaderstad.com/en/products/disc-cultivators/carrier-x/
+          - slug: carrier-xl
+            name: Carrier XL
+            url: https://www.vaderstad.com/en/products/disc-cultivators/carrier-xl/
+          - slug: carrier-xt
+            name: Carrier XT
+            url: https://www.vaderstad.com/en/products/disc-cultivators/carrier-xt/
+      - slug: crosscutter-disc
+        name: CrossCutter Disc
+        family: crosscutter
+        subcategory: podmitace-diskove
+        description: |
+          CrossCutter Disc — ultra-mělká diskovka pro mělké odezvy.
+        models:
+          - slug: crosscutter-disc
+            name: CrossCutter Disc
+            url: https://www.vaderstad.com/en/products/disc-cultivators/crosscutter-disc/
+      - slug: cultus
+        name: Cultus
+        family: cultus
+        subcategory: podmitace-radlickove
+        description: |
+          Cultus — radličkový podmítač pro střední hloubky.
+        models:
+          - slug: cultus-cs
+            name: Cultus CS
+            url: https://www.vaderstad.com/en/products/cultivators/cultus/
+      - slug: swift
+        name: Swift
+        family: swift
+        subcategory: podmitace-radlickove
+        description: |
+          Swift — vysokorychlostní radličkový podmítač.
+        models:
+          - slug: swift-870
+            name: Swift 870
+            url: https://www.vaderstad.com/en/products/cultivators/swift/
+      - slug: opus
+        name: Opus
+        family: opus
+        subcategory: kyprice
+        description: |
+          Opus — hloubkový kypřič Väderstad.
+        models:
+          - slug: opus-l500
+            name: Opus L500
+            url: https://www.vaderstad.com/en/products/cultivators/opus/
+      - slug: topdown
+        name: TopDown
+        family: topdown
+        subcategory: kyprice
+        description: |
+          TopDown — kombinovaný stroj disky+radličky pro one-pass tillage.
+        models:
+          - slug: topdown-700
+            name: TopDown 700
+            url: https://www.vaderstad.com/en/products/cultivators/topdown/
+      - slug: nz-aggressive
+        name: NZ Aggressive
+        family: nz
+        subcategory: kompaktomaty
+        description: |
+          NZ Aggressive — kompaktomat s hlubšími orgány.
+        models:
+          - slug: nz-aggressive-1000
+            name: NZ Aggressive 1000
+            url: https://www.vaderstad.com/en/products/cultivators/nz-aggressive/
+      - slug: rexius
+        name: Rexius
+        family: rexius
+        subcategory: valce
+        description: |
+          Rexius — válec pro reconsolidaci po orbě.
+        models:
+          - slug: rexius-820
+            name: Rexius 820
+            url: https://www.vaderstad.com/en/products/rollers/rexius/
+      - slug: rexius-twin
+        name: Rexius Twin
+        family: rexius
+        subcategory: valce
+        description: |
+          Rexius Twin — dvojitý válec pro extra reconsolidaci.
+        models:
+          - slug: rexius-twin
+            name: Rexius Twin
+            url: https://www.vaderstad.com/en/products/rollers/rexius-twin/
+      - slug: rollex
+        name: Rollex
+        family: rollex
+        subcategory: valce
+        description: |
+          Rollex — kompaktní válec pro menší a střední farmy.
+        models:
+          - slug: rollex-620
+            name: Rollex 620
+            url: https://www.vaderstad.com/en/products/rollers/rollex/

@@ -2,7 +2,237 @@ slug: kverneland
 name: Kverneland
 country: Norsko
 founded: 1879
-website: https://www.kvernelandgroup.com/
+website: https://www.kverneland.com/
 description: >
-  Norská skupina (vlastněná Kubota Corporation) s portfoliem pluhů (150-200 řada), přesných secích strojů Optima, postřikovačů iXdrive a rozmetadel GEOSPREAD.
-categories: {}
+  Norská skupina (od 2012 vlastněná Kubota Corporation) s portfoliem tradičních pluhů (řady 150, 2300, ED, EG, PB100), diskových podmítačů Qualidisc, radličkových podmítačů Enduro/CTC, přesných secích strojů Optima, secích strojů e-drill a u-drill, postřikovačů iXter / iXtrack / iXdrive a rozmetadel Exacta s technologií GEOSPREAD. Kverneland Group sdružuje i značky Vicon, Roc a Kubota Implements.
+categories:
+  zpracovani-pudy:
+    name: Zpracování půdy
+    series:
+      - slug: plough-150
+        name: 150
+        family: 150
+        subcategory: pluhy
+        description: |
+          Kverneland 150 — klasický nesený pluh, vlajková řada.
+        models:
+          - slug: 150-b
+            name: 150 B
+            url: https://www.kverneland.com/products/ploughs/mounted-reversible-ploughs/150-b
+          - slug: 150-s
+            name: 150 S
+            url: https://www.kverneland.com/products/ploughs/mounted-reversible-ploughs/150-s
+      - slug: plough-2300
+        name: 2300
+        family: 2300
+        subcategory: pluhy
+        description: |
+          Kverneland 2300 — 5-7 radlicový pluh pro střední farmy.
+        models:
+          - slug: 2300-s
+            name: 2300 S
+            url: https://www.kverneland.com/products/ploughs/2300-s
+      - slug: plough-ed
+        name: ED
+        family: ed
+        subcategory: pluhy
+        description: |
+          Kverneland ED — kompaktní nesený pluh.
+        models:
+          - slug: ed-100
+            name: ED 100
+            url: https://www.kverneland.com/products/ploughs/ed-100
+      - slug: plough-eg
+        name: EG
+        family: eg
+        subcategory: pluhy
+        description: |
+          Kverneland EG — semi-mounted pluh pro velké výkony.
+        models:
+          - slug: eg-100
+            name: EG 100
+            url: https://www.kverneland.com/products/ploughs/eg-100
+      - slug: plough-pb100
+        name: PB100
+        family: pb100
+        subcategory: pluhy
+        description: |
+          Kverneland PB100 — semi-mounted pluh, vlajková řada pro velké farmy.
+        models:
+          - slug: pb100
+            name: PB100
+            url: https://www.kverneland.com/products/ploughs/pb100
+      - slug: qualidisc
+        name: Qualidisc
+        family: qualidisc
+        subcategory: podmitace-diskove
+        description: |
+          Qualidisc — diskový podmítač Kverneland.
+        models:
+          - slug: qualidisc-pro
+            name: Qualidisc Pro
+            url: https://www.kverneland.com/products/soil/qualidisc-pro
+      - slug: enduro
+        name: Enduro
+        family: enduro
+        subcategory: podmitace-radlickove
+        description: |
+          Enduro — radličkový podmítač s aktivními dlátky.
+        models:
+          - slug: enduro
+            name: Enduro
+            url: https://www.kverneland.com/products/soil/enduro
+      - slug: ctc
+        name: CTC
+        family: ctc
+        subcategory: podmitace-radlickove
+        description: |
+          CTC — heavy-duty radličkový podmítač pro hluboké zpracování.
+        models:
+          - slug: ctc
+            name: CTC
+            url: https://www.kverneland.com/products/soil/ctc
+      - slug: ng
+        name: NG
+        family: ng
+        subcategory: rotacni-brany
+        description: |
+          NG — rotační brány Kverneland.
+        models:
+          - slug: ng-h
+            name: NG-H
+            url: https://www.kverneland.com/products/soil/ng-h
+      - slug: actiroll
+        name: Actiroll
+        family: actiroll
+        subcategory: valce
+        description: |
+          Actiroll — válec Kverneland pro reconsolidaci.
+        models:
+          - slug: actiroll
+            name: Actiroll
+            url: https://www.kverneland.com/products/soil/actiroll
+  seti:
+    name: Setí a sázení
+    series:
+      - slug: optima
+        name: Optima
+        family: optima
+        subcategory: seci-stroje-presne
+        description: |
+          Optima — přesný secí stroj Kverneland pro kukuřici, slunečnici, řepu.
+        models:
+          - slug: optima-tf-profi
+            name: Optima TF Profi
+            url: https://www.kverneland.com/products/seeding/optima-tf-profi
+          - slug: optima-r
+            name: Optima R
+            url: https://www.kverneland.com/products/seeding/optima-r
+      - slug: e-drill
+        name: e-drill
+        family: e-drill
+        subcategory: seci-stroje-pneumaticke
+        description: |
+          e-drill — elektrický pneumatický secí stroj.
+        models:
+          - slug: e-drill
+            name: e-drill
+            url: https://www.kverneland.com/products/seeding/e-drill
+      - slug: u-drill
+        name: u-drill
+        family: u-drill
+        subcategory: seci-stroje-pneumaticke
+        description: |
+          u-drill — universal pneumatický secí stroj.
+        models:
+          - slug: u-drill
+            name: u-drill
+            url: https://www.kverneland.com/products/seeding/u-drill
+      - slug: accord
+        name: Accord
+        family: accord
+        subcategory: seci-stroje-pneumaticke
+        description: |
+          Accord — tradiční pneumatický secí stroj Kverneland.
+        models:
+          - slug: accord-da
+            name: Accord DA
+            url: https://www.kverneland.com/products/seeding/accord-da
+      - slug: ts-evo
+        name: TS-Evo
+        family: ts-evo
+        subcategory: seci-stroje-mechanicke
+        description: |
+          TS-Evo — mechanický secí stroj.
+        models:
+          - slug: ts-evo
+            name: TS-Evo
+            url: https://www.kverneland.com/products/seeding/ts-evo
+  hnojeni:
+    name: Hnojení
+    series:
+      - slug: exacta
+        name: Exacta
+        family: exacta
+        subcategory: rozmetadla-mineralni
+        description: |
+          Exacta — rozmetadlo minerálních hnojiv s technologií GEOSPREAD pro precision farming.
+        models:
+          - slug: exacta-cl-geospread
+            name: Exacta CL GEOSPREAD
+            url: https://www.kverneland.com/products/spreading/exacta-cl
+          - slug: exacta-tl-geospread
+            name: Exacta TL GEOSPREAD
+            url: https://www.kverneland.com/products/spreading/exacta-tl
+          - slug: exacta-hl
+            name: Exacta HL
+            url: https://www.kverneland.com/products/spreading/exacta-hl
+  ochrana-rostlin:
+    name: Ochrana rostlin
+    series:
+      - slug: ixter
+        name: iXter
+        family: ixter
+        subcategory: postrikovace-nesene
+        description: |
+          iXter — nesený postřikovač Kverneland.
+        models:
+          - slug: ixter-b
+            name: iXter B
+            url: https://www.kverneland.com/products/spraying/ixter-b
+      - slug: ixtrack
+        name: iXtrack
+        family: ixtrack
+        subcategory: postrikovace-tazene
+        description: |
+          iXtrack — tažený postřikovač Kverneland.
+        models:
+          - slug: ixtrack-t4
+            name: iXtrack T4
+            url: https://www.kverneland.com/products/spraying/ixtrack-t4
+      - slug: ixdrive
+        name: iXdrive
+        family: ixdrive
+        subcategory: postrikovace-samojizdne
+        description: |
+          iXdrive — samojízdný postřikovač Kverneland.
+        models:
+          - slug: ixdrive
+            name: iXdrive
+            url: https://www.kverneland.com/products/spraying/ixdrive
+  sklizen-picnin:
+    name: Sklizeň pícnin
+    series:
+      - slug: 5000-m
+        name: 5000 M
+        family: 5000-m
+        subcategory: zaci-stroje
+        description: |
+          Kverneland 5000 M — žací stroje s diskovou žací lištou.
+        models:
+          - slug: 5087-m
+            name: 5087 M
+            url: https://www.kverneland.com/products/forage/5087-m
+          - slug: 5095-m
+            name: 5095 M
+            url: https://www.kverneland.com/products/forage/5095-m

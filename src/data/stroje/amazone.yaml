@@ -5,4 +5,436 @@ founded: 1883
 website: https://amazone.de/
 description: >
   Německý specialista na setí (Cirrus, Cayena, Citan, Precea), postřikovače (UF, UX, Pantera) a rozmetadla minerálních hnojiv (ZA-V, ZA-TS) plus podmítače Catros.
-categories: {}
+categories:
+  hnojeni:
+    name: Hnojení
+    series:
+      - slug: za-m
+        name: ZA-M
+        family: za-m
+        subcategory: rozmetadla-mineralni
+        url: https://amazone.de/de/produkte/duengetechnik/za-m
+        description: |
+          ZA-M — nesené rozmetadlo minerálních hnojiv s pracovním záběrem 10–36 m, objem 1000–3000 l.
+        models:
+          - slug: za-m-1001
+            name: ZA-M 1001
+            url: https://amazone.de/de/produkte/duengetechnik/za-m/za-m-1001
+          - slug: za-m-1501
+            name: ZA-M 1501
+            url: https://amazone.de/de/produkte/duengetechnik/za-m/za-m-1501
+      - slug: za-ts
+        name: ZA-TS
+        family: za-ts
+        subcategory: rozmetadla-mineralni
+        url: https://amazone.de/de/produkte/duengetechnik/za-ts
+        description: |
+          ZA-TS — nesené rozmetadlo s ArgusTwin a AutoTS pro precizní rozhoz až do 54 m.
+        models:
+          - slug: za-ts-1700
+            name: ZA-TS 1700
+            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-1700
+          - slug: za-ts-2200
+            name: ZA-TS 2200
+            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-2200
+          - slug: za-ts-3200
+            name: ZA-TS 3200
+            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-3200
+          - slug: za-ts-4200
+            name: ZA-TS 4200
+            url: https://amazone.de/de/produkte/duengetechnik/za-ts/za-ts-4200
+      - slug: za-v
+        name: ZA-V
+        family: za-v
+        subcategory: rozmetadla-mineralni
+        url: https://amazone.de/de/produkte/duengetechnik/za-v
+        description: |
+          ZA-V — nesené rozmetadlo s pracovním záběrem 10–36 m a objemem 1400–4200 l, lehčí třída.
+        models:
+          - slug: za-v-1400
+            name: ZA-V 1400
+            url: https://amazone.de/de/produkte/duengetechnik/za-v/za-v-1400
+          - slug: za-v-2200
+            name: ZA-V 2200
+            url: https://amazone.de/de/produkte/duengetechnik/za-v/za-v-2200
+          - slug: za-v-3200
+            name: ZA-V 3200
+            url: https://amazone.de/de/produkte/duengetechnik/za-v/za-v-3200
+          - slug: za-v-4200
+            name: ZA-V 4200
+            url: https://amazone.de/de/produkte/duengetechnik/za-v/za-v-4200
+      - slug: zg-ts
+        name: ZG-TS
+        family: zg-ts
+        subcategory: rozmetadla-mineralni
+        url: https://amazone.de/de/produkte/duengetechnik/zg-ts
+        description: |
+          ZG-TS — tažené velkoplošné rozmetadlo minerálních hnojiv s objemem 5500–10500 l.
+        models:
+          - slug: zg-ts-5500
+            name: ZG-TS 5500
+            url: https://amazone.de/de/produkte/duengetechnik/zg-ts/zg-ts-5500
+          - slug: zg-ts-7500
+            name: ZG-TS 7500
+            url: https://amazone.de/de/produkte/duengetechnik/zg-ts/zg-ts-7500
+          - slug: zg-ts-10001
+            name: ZG-TS 10001
+            url: https://amazone.de/de/produkte/duengetechnik/zg-ts/zg-ts-10001
+  ochrana-rostlin:
+    name: Ochrana rostlin
+    series:
+      - slug: pantera
+        name: Pantera
+        family: pantera
+        subcategory: postrikovace-samojizdne
+        url: https://amazone.de/de/produkte/pflanzenschutz/pantera
+        description: |
+          Pantera 4504 — samojízdný postřikovač s nádrží 4500 l a záběrem 24–40 m.
+        models:
+          - slug: pantera-4504-h
+            name: Pantera 4504 H
+            url: https://amazone.de/de/produkte/pflanzenschutz/pantera/pantera-4504-h
+          - slug: pantera-4504-w
+            name: Pantera 4504 W
+            url: https://amazone.de/de/produkte/pflanzenschutz/pantera/pantera-4504-w
+      - slug: uf
+        name: UF
+        family: uf
+        subcategory: postrikovace-nesene
+        url: https://amazone.de/de/produkte/pflanzenschutz/uf
+        description: |
+          UF — nesený postřikovač s nádrží 1002–2002 l a záběrem 12–30 m.
+        models:
+          - slug: uf-02
+            name: UF 02
+            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-02
+          - slug: uf-1302
+            name: UF 1302
+            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-1302
+          - slug: uf-1602
+            name: UF 1602
+            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-1602
+          - slug: uf-2002
+            name: UF 2002
+            url: https://amazone.de/de/produkte/pflanzenschutz/uf/uf-2002
+      - slug: ux
+        name: UX
+        family: ux
+        subcategory: postrikovace-tazene
+        url: https://amazone.de/de/produkte/pflanzenschutz/ux
+        description: |
+          UX — tažený postřikovač s objemem nádrže 4200–11200 l a záběrem 21–42 m.
+        models:
+          - slug: ux-4201-super
+            name: UX 4201 Super
+            url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-4201-super
+          - slug: ux-5201-super
+            name: UX 5201 Super
+            url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-5201-super
+          - slug: ux-6201-super
+            name: UX 6201 Super
+            url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-6201-super
+          - slug: ux-7601-super
+            name: UX 7601 Super
+            url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-7601-super
+          - slug: ux-11201-super
+            name: UX 11201 Super
+            url: https://amazone.de/de/produkte/pflanzenschutz/ux/ux-11201-super
+  seti:
+    name: Setí a sázení
+    series:
+      - slug: cataya
+        name: Cataya
+        family: cataya
+        subcategory: seci-stroje-mechanicke
+        url: https://amazone.de/de/produkte/saemaschinen/cataya
+        description: |
+          Cataya — nesený mechanický secí stroj s pracovním záběrem 3,0–4,0 m pro nasazení v kombinaci s rotační bránou.
+        models:
+          - slug: cataya-3000-special
+            name: Cataya 3000 Special
+            url: https://amazone.de/de/produkte/saemaschinen/cataya/cataya-3000-special
+          - slug: cataya-3000-super
+            name: Cataya 3000 Super
+            url: https://amazone.de/de/produkte/saemaschinen/cataya/cataya-3000-super
+          - slug: cataya-4000-super
+            name: Cataya 4000 Super
+            url: https://amazone.de/de/produkte/saemaschinen/cataya/cataya-4000-super
+      - slug: cayena
+        name: Cayena
+        family: cayena
+        subcategory: seci-stroje-pneumaticke
+        url: https://amazone.de/de/produkte/saemaschinen/cayena
+        description: |
+          Cayena 6001-C — tažený secí stroj s radličkovými botkami pro mulčované setí, záběr 6 m.
+        models:
+          - slug: cayena-6001-c
+            name: Cayena 6001-C
+            url: https://amazone.de/de/produkte/saemaschinen/cayena/cayena-6001-c
+      - slug: centaya
+        name: Centaya
+        family: centaya
+        subcategory: seci-stroje-pneumaticke
+        url: https://amazone.de/de/produkte/saemaschinen/centaya
+        description: |
+          Centaya — nesený pneumatický secí stroj se záběrem 3,0–4,0 m pro kombinaci s rotační bránou.
+        models:
+          - slug: centaya-3000-special
+            name: Centaya 3000 Special
+            url: https://amazone.de/de/produkte/saemaschinen/centaya/centaya-3000-special
+          - slug: centaya-3000-super
+            name: Centaya 3000 Super
+            url: https://amazone.de/de/produkte/saemaschinen/centaya/centaya-3000-super
+          - slug: centaya-4000-super
+            name: Centaya 4000 Super
+            url: https://amazone.de/de/produkte/saemaschinen/centaya/centaya-4000-super
+      - slug: cirrus
+        name: Cirrus
+        family: cirrus
+        subcategory: seci-kombinace
+        url: https://amazone.de/de/produkte/saemaschinen/cirrus
+        description: |
+          Cirrus — tažený univerzální secí stroj se záběrem 3–9 m, vhodný pro mulčované i konvenční setí.
+        models:
+          - slug: cirrus-3003-compact
+            name: Cirrus 3003 Compact
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-3003-compact
+          - slug: cirrus-3503-compact
+            name: Cirrus 3503 Compact
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-3503-compact
+          - slug: cirrus-4003-2
+            name: Cirrus 4003-2
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-4003-2
+          - slug: cirrus-6003-2
+            name: Cirrus 6003-2
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-6003-2
+          - slug: cirrus-6003-2c
+            name: Cirrus 6003-2C
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-6003-2c
+          - slug: cirrus-6003-2cc
+            name: Cirrus 6003-2CC
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-6003-2cc
+          - slug: cirrus-9003-2
+            name: Cirrus 9003-2
+            url: https://amazone.de/de/produkte/saemaschinen/cirrus/cirrus-9003-2
+      - slug: citan
+        name: Citan
+        family: citan
+        subcategory: seci-stroje-pneumaticke
+        url: https://amazone.de/de/produkte/saemaschinen/citan
+        description: |
+          Citan — tažený velkoplošný secí stroj se záběrem 9–12 m a zásobníkem až 8000 l.
+        models:
+          - slug: citan-9001-c
+            name: Citan 9001-C
+            url: https://amazone.de/de/produkte/saemaschinen/citan/citan-9001-c
+          - slug: citan-12001-c
+            name: Citan 12001-C
+            url: https://amazone.de/de/produkte/saemaschinen/citan/citan-12001-c
+      - slug: condor
+        name: Condor
+        family: condor
+        subcategory: seci-stroje-pneumaticke
+        url: https://amazone.de/de/produkte/saemaschinen/condor
+        description: |
+          Condor — tažený velkoplošný secí stroj se záběrem 12 a 15 m pro suché podmínky.
+        models:
+          - slug: condor-12001-c
+            name: Condor 12001-C
+            url: https://amazone.de/de/produkte/saemaschinen/condor/condor-12001-c
+          - slug: condor-15001-c
+            name: Condor 15001-C
+            url: https://amazone.de/de/produkte/saemaschinen/condor/condor-15001-c
+      - slug: precea
+        name: Precea
+        family: precea
+        subcategory: seci-stroje-presne
+        url: https://amazone.de/de/produkte/saemaschinen/precea
+        description: |
+          Precea — přesný secí stroj pro kukuřici, slunečnici a řepu se záběrem 3–6 m.
+        models:
+          - slug: precea-3000-a
+            name: Precea 3000-A
+            url: https://amazone.de/de/produkte/saemaschinen/precea/precea-3000-a
+          - slug: precea-4500-2
+            name: Precea 4500-2
+            url: https://amazone.de/de/produkte/saemaschinen/precea/precea-4500-2
+          - slug: precea-6000-2
+            name: Precea 6000-2
+            url: https://amazone.de/de/produkte/saemaschinen/precea/precea-6000-2
+          - slug: precea-6000-2cc
+            name: Precea 6000-2CC
+            url: https://amazone.de/de/produkte/saemaschinen/precea/precea-6000-2cc
+          - slug: precea-6000-tcc
+            name: Precea 6000-TCC
+            url: https://amazone.de/de/produkte/saemaschinen/precea/precea-6000-tcc
+      - slug: primera-dmc
+        name: Primera DMC
+        family: primera-dmc
+        subcategory: seci-stroje-pneumaticke
+        url: https://amazone.de/de/produkte/saemaschinen/primera-dmc
+        description: |
+          Primera DMC — tažený secí stroj pro přímé setí do mulče i strniště, záběr 6–9 m.
+        models:
+          - slug: primera-dmc-6000
+            name: Primera DMC 6000
+            url: https://amazone.de/de/produkte/saemaschinen/primera-dmc/primera-dmc-6000
+          - slug: primera-dmc-9000
+            name: Primera DMC 9000
+            url: https://amazone.de/de/produkte/saemaschinen/primera-dmc/primera-dmc-9000
+  zpracovani-pudy:
+    name: Zpracování půdy
+    series:
+      - slug: catros
+        name: Catros
+        family: catros
+        subcategory: podmitace-diskove
+        url: https://amazone.de/de/produkte/bodenbearbeitung/catros
+        description: |
+          Catros — kompaktní diskový podmítač se záběrem 3–12 m pro mělké zpracování strniště.
+        models:
+          - slug: catros-3003
+            name: Catros 3003
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-3003
+          - slug: catros-4003-2
+            name: Catros 4003-2
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-4003-2
+          - slug: catros-6003-2tx
+            name: Catros 6003-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-6003-2tx
+          - slug: catros-7503-2tx
+            name: Catros 7503-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-7503-2tx
+          - slug: catros-12003-2ts
+            name: Catros 12003-2TS
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros/catros-12003-2ts
+      - slug: catros-xl
+        name: Catros XL
+        family: catros-xl
+        subcategory: podmitace-diskove
+        url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl
+        description: |
+          Catros XL — diskový podmítač s většími disky 610 mm pro hlubší zpracování až 15 cm.
+        models:
+          - slug: catros-xl-3003
+            name: Catros XL 3003
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl/catros-xl-3003
+          - slug: catros-xl-4003-2
+            name: Catros XL 4003-2
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl/catros-xl-4003-2
+          - slug: catros-xl-6003-2tx
+            name: Catros XL 6003-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/catros-xl/catros-xl-6003-2tx
+      - slug: ceus
+        name: Ceus
+        family: ceus
+        subcategory: kyprice
+        url: https://amazone.de/de/produkte/bodenbearbeitung/ceus
+        description: |
+          Ceus — kombinovaný kypřič disky + radličky pro hloubku 10–30 cm, záběr 4–7 m.
+        models:
+          - slug: ceus-4000-2tx
+            name: Ceus 4000-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ceus/ceus-4000-2tx
+          - slug: ceus-7000-2tx
+            name: Ceus 7000-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ceus/ceus-7000-2tx
+      - slug: cenio
+        name: Cenio
+        family: cenio
+        subcategory: podmitace-radlickove
+        url: https://amazone.de/de/produkte/bodenbearbeitung/cenio
+        description: |
+          Cenio — nesený radličkový podmítač se záběrem 3–4 m pro mělké zpracování strniště.
+        models:
+          - slug: cenio-3000-special
+            name: Cenio 3000 Special
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-3000-special
+          - slug: cenio-3000-super
+            name: Cenio 3000 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-3000-super
+          - slug: cenio-4000-super
+            name: Cenio 4000 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenio/cenio-4000-super
+      - slug: cenius
+        name: Cenius
+        family: cenius
+        subcategory: podmitace-radlickove
+        url: https://amazone.de/de/produkte/bodenbearbeitung/cenius
+        description: |
+          Cenius — radličkový podmítač/kypřič se záběrem 3–8 m pro hloubku 5–30 cm.
+        models:
+          - slug: cenius-3003-special
+            name: Cenius 3003 Special
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-3003-special
+          - slug: cenius-3003-super
+            name: Cenius 3003 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-3003-super
+          - slug: cenius-4003-2
+            name: Cenius 4003-2
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-4003-2
+          - slug: cenius-4003-2tx
+            name: Cenius 4003-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-4003-2tx
+          - slug: cenius-7003-2tx
+            name: Cenius 7003-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-7003-2tx
+          - slug: cenius-8003-2tx
+            name: Cenius 8003-2TX
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cenius/cenius-8003-2tx
+      - slug: cobra
+        name: Cobra
+        family: cobra
+        subcategory: kyprice
+        url: https://amazone.de/de/produkte/bodenbearbeitung/cobra
+        description: |
+          Cobra — hlubinný kypřič s pracovní hloubkou až 40 cm, záběr 3 m.
+        models:
+          - slug: cobra-3000
+            name: Cobra 3000
+            url: https://amazone.de/de/produkte/bodenbearbeitung/cobra/cobra-3000
+      - slug: ke
+        name: KE
+        family: ke
+        subcategory: rotacni-brany
+        url: https://amazone.de/de/produkte/bodenbearbeitung/ke
+        description: |
+          KE — rotační brána se záběrem 3,0–4,0 m, klasické řešení pro kombinaci se secím strojem.
+        models:
+          - slug: ke-3001-special
+            name: KE 3001 Special
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-3001-special
+          - slug: ke-3002-190-super
+            name: KE 3002-190 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-3002-190-super
+          - slug: ke-4002-190-super
+            name: KE 4002-190 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/ke/ke-4002-190-super
+      - slug: kg
+        name: KG
+        family: kg
+        subcategory: rotacni-brany
+        url: https://amazone.de/de/produkte/bodenbearbeitung/kg
+        description: |
+          KG — rotační brána pro výkonné traktory, záběr 3,0–6,0 m.
+        models:
+          - slug: kg-3001-super
+            name: KG 3001 Super
+            url: https://amazone.de/de/produkte/bodenbearbeitung/kg/kg-3001-super
+          - slug: kg-4001-2
+            name: KG 4001-2
+            url: https://amazone.de/de/produkte/bodenbearbeitung/kg/kg-4001-2
+          - slug: kg-6001-2
+            name: KG 6001-2
+            url: https://amazone.de/de/produkte/bodenbearbeitung/kg/kg-6001-2
+      - slug: kx
+        name: KX
+        family: kx
+        subcategory: rotacni-brany
+        url: https://amazone.de/de/produkte/bodenbearbeitung/kx
+        description: |
+          KX — rotační brána pro střední třídu výkonu, záběr 3,0 m.
+        models:
+          - slug: kx-3001
+            name: KX 3001
+            url: https://amazone.de/de/produkte/bodenbearbeitung/kx/kx-3001
