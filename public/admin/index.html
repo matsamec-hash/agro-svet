@@ -5,26 +5,122 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin | agro-svět.cz</title>
   <script>
-    // Manual init vynutí PKCE auth bez ohledu na to jak Decap v3.12+ parsuje config.yml.
-    // Bez tohohle Decap ignoroval auth_type: pkce z config.yml a dělal redirect na
-    // api.netlify.com/auth (legacy Netlify Identity) → Not Found.
+    // Manual init s celou config v JS — Decap v3.12 ignoruje auth_type: pkce z config.yml
+    // a redirekuje na api.netlify.com/auth (legacy Netlify Identity) → Not Found.
     window.CMS_MANUAL_INIT = true;
   </script>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@3.4.1/dist/decap-cms.js"></script>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    // Backend config v JS — collections se pořád načtou z /admin/config.yml.
     CMS.init({
       config: {
-        load_config_file: true,
+        load_config_file: false,
+        locale: 'cs',
         backend: {
           name: 'github',
           repo: 'matsamec-hash/agro-svet',
           branch: 'master',
           auth_type: 'pkce',
           app_id: 'Ov23lib8uYlQwKryiO3b'
-        }
+        },
+        media_folder: 'public/images',
+        public_folder: '/images',
+        collections: [
+          {
+            name: 'novinky',
+            label: 'Novinky',
+            folder: 'src/content/novinky',
+            create: true,
+            slug: '{{slug}}',
+            extension: 'md',
+            format: 'frontmatter',
+            fields: [
+              { label: 'Nadpis', name: 'title', widget: 'string' },
+              { label: 'Popis (perex)', name: 'description', widget: 'text' },
+              { label: 'Datum publikace', name: 'publishDate', widget: 'datetime', format: 'YYYY-MM-DD', date_format: 'DD. MM. YYYY', time_format: false },
+              {
+                label: 'Kategorie', name: 'category', widget: 'select',
+                options: [
+                  { label: 'Technika', value: 'technika' },
+                  { label: 'Dotace', value: 'dotace' },
+                  { label: 'Trh', value: 'trh' },
+                  { label: 'Legislativa', value: 'legislativa' },
+                  { label: 'Značky', value: 'znacky' }
+                ]
+              },
+              { label: 'Tagy', name: 'tags', widget: 'list', default: [] },
+              { label: 'Značka (volitelné)', name: 'znacka', widget: 'string', required: false },
+              { label: 'Model (volitelné)', name: 'model', widget: 'string', required: false },
+              { label: 'Úvodní obrázek (URL)', name: 'heroImage', widget: 'string', required: false },
+              { label: 'Doporučený článek', name: 'featured', widget: 'boolean', default: false },
+              { label: 'Obsah', name: 'body', widget: 'markdown' }
+            ]
+          },
+          {
+            name: 'encyklopedie',
+            label: 'Encyklopedie strojů',
+            folder: 'src/content/encyklopedie',
+            create: true,
+            slug: '{{slug}}',
+            extension: 'md',
+            format: 'frontmatter',
+            fields: [
+              { label: 'Název stroje', name: 'name', widget: 'string' },
+              { label: 'Slug', name: 'slug', widget: 'string' },
+              { label: 'Značka', name: 'znacka', widget: 'string' },
+              {
+                label: 'Kategorie', name: 'kategorie', widget: 'select',
+                options: [
+                  { label: 'Traktor', value: 'traktor' },
+                  { label: 'Kombajn', value: 'kombajn' },
+                  { label: 'Stroj', value: 'stroj' },
+                  { label: 'Půdní technika', value: 'puda-technika' }
+                ]
+              },
+              { label: 'Výkon', name: 'vykon', widget: 'string' },
+              { label: 'Hmotnost', name: 'hmotnost', widget: 'string' },
+              { label: 'Rok uvedení', name: 'rok_uvedeni', widget: 'number' },
+              { label: 'Popis (krátký)', name: 'popis', widget: 'text' },
+              { label: 'Úvodní obrázek (URL)', name: 'heroImage', widget: 'string', required: false },
+              { label: 'Klíčové vlastnosti', name: 'highlights', widget: 'list', default: [] },
+              { label: 'Obsah', name: 'body', widget: 'markdown' }
+            ]
+          },
+          {
+            name: 'znacky',
+            label: 'Značky',
+            folder: 'src/content/znacky',
+            create: true,
+            slug: '{{slug}}',
+            extension: 'md',
+            format: 'frontmatter',
+            fields: [
+              { label: 'Název', name: 'name', widget: 'string' },
+              { label: 'Slug', name: 'slug', widget: 'string' },
+              { label: 'Země původu', name: 'zeme', widget: 'string' },
+              { label: 'Rok založení', name: 'zalozena', widget: 'number' },
+              { label: 'Popis (krátký)', name: 'popis', widget: 'text' },
+              { label: 'Web výrobce (URL)', name: 'website', widget: 'string', required: false },
+              { label: 'Kategorie strojů', name: 'kategorie', widget: 'list', default: [] },
+              { label: 'Obsah', name: 'body', widget: 'markdown' }
+            ]
+          },
+          {
+            name: 'puda',
+            label: 'Půda',
+            folder: 'src/content/puda',
+            create: true,
+            slug: '{{slug}}',
+            extension: 'md',
+            format: 'frontmatter',
+            fields: [
+              { label: 'Nadpis', name: 'title', widget: 'string' },
+              { label: 'Popis (krátký)', name: 'popis', widget: 'text' },
+              { label: 'Obsah', name: 'body', widget: 'markdown' }
+            ]
+          }
+        ]
       }
     });
   </script>
