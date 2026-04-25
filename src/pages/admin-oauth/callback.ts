@@ -52,34 +52,42 @@ export const GET: APIRoute = async ({ request, cookies }) => {
 };
 
 function successHtml(token: string): Response {
-  // Decap CMS očekává postMessage formátu:
-  // 'authorization:github:success:{"token":"...","provider":"github"}'
+  // Decap CMS protokol (decap-cms-lib-auth):
+  // 1. Popup posílá "authorizing:github" → parent registruje listener
+  // 2. Parent posílá "authorizing:github" zpět jako ACK
+  // 3. Popup posílá "authorization:github:success:<JSON>" → parent dokončí auth
   const payload = JSON.stringify({ token, provider: 'github' });
+  const successMsg = 'authorization:github:success:' + payload;
   const body = `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><title>Login OK</title></head>
 <body>
 <script>
 (function() {
-  function send(type) {
-    if (window.opener) {
-      window.opener.postMessage('authorization:github:' + type + ':' + ${JSON.stringify(payload)}, '*');
+  var SUCCESS_MSG = ${JSON.stringify(successMsg)};
+
+  function postToParent(msg) {
+    if (window.opener && !window.opener.closed) {
+      window.opener.postMessage(msg, '*');
     }
   }
-  // Decap protocol: send "authorizing" probe, wait for parent ready, then "success".
-  function listenOnce() {
-    window.addEventListener('message', function handler(e) {
-      if (e.data === 'authorizing:github') {
-        window.removeEventListener('message', handler);
-        send('success');
-        setTimeout(function() { window.close(); }, 200);
-      }
-    });
-  }
-  listenOnce();
-  // Trigger immediately too — older Decap versions don't probe.
-  send('success');
-  setTimeout(function() { window.close(); }, 1500);
+
+  // Krok 1: probe — řekneme parent oknu že popup čeká.
+  postToParent('authorizing:github');
+
+  // Krok 2: čekáme na ACK od parent okna.
+  window.addEventListener('message', function (e) {
+    if (typeof e.data !== 'string') return;
+    if (e.data === 'authorizing:github') {
+      // Parent ACK přijatý — pošli token.
+      postToParent(SUCCESS_MSG);
+      setTimeout(function () { window.close(); }, 200);
+    }
+  });
+
+  // Fallback: pokud parent neACKne do 1s, pošleme token "naslepo" (some Decap versions).
+  setTimeout(function () { postToParent(SUCCESS_MSG); }, 1000);
+  setTimeout(function () { window.close(); }, 3000);
 })();
 </script>
 <p>Login successful. Closing window…</p>
