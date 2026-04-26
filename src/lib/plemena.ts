@@ -1,4 +1,4 @@
-import jsyaml from 'js-yaml';
+// YAML imports parsed at compile-time by @modyfi/vite-plugin-yaml — no runtime js-yaml.
 
 export type PlemenoUzitkovost = 'maso' | 'mleko' | 'kombinovane' | 'tazne' | 'sportovni' | 'vlna' | 'jezdecke' | 'ostatni';
 
@@ -32,11 +32,11 @@ export interface PlemenoFlat extends Plemeno {
   druh_name: string;
 }
 
+// Vite plugin parses YAML at compile-time → default export is already an object.
 const druhModules = import.meta.glob('/src/data/plemena/*.yaml', {
   eager: true,
-  query: '?raw',
   import: 'default',
-}) as Record<string, string>;
+}) as Record<string, unknown>;
 
 let cachedDruhy: Druh[] | null = null;
 let cachedFlat: PlemenoFlat[] | null = null;
@@ -57,7 +57,7 @@ export function getAllDruhy(): Druh[] {
   if (cachedDruhy) return cachedDruhy;
   const out: Druh[] = [];
   for (const [path, raw] of Object.entries(druhModules)) {
-    const parsed = jsyaml.load(raw) as Druh;
+    const parsed = raw as Druh;
     if (!parsed?.slug) {
       console.warn(`[plemena] Missing druh slug in ${path}`);
       continue;

@@ -2,7 +2,7 @@
 // src/pages/statistiky/index.astro
 // prerender=false: nutné pro průchod gate middlewarem (viz reference-agro-svet-gate.md).
 // Až bude gate vypnutý, vrátit na true — statistiky je drahá SSR.
-export const prerender = false;
+export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import {
   getCommodityStats,

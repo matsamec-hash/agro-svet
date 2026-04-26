@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
+import yaml from '@modyfi/vite-plugin-yaml';
 
 export default defineConfig({
   output: 'server',
@@ -9,6 +10,6 @@ export default defineConfig({
   site: 'https://agro-svet.cz',
   trailingSlash: 'always',
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), yaml()],
   },
 });

@@ -1,4 +1,5 @@
-import jsyaml from 'js-yaml';
+// YAML imports parsed at compile-time by @modyfi/vite-plugin-yaml — no runtime js-yaml.
+import lokalityData from '../data/lokality.yaml';
 
 export interface Okres {
   slug: string;
@@ -15,21 +16,11 @@ interface LokalityYaml {
   kraje: Kraj[];
 }
 
-const raw = import.meta.glob('/src/data/lokality.yaml', {
-  eager: true,
-  query: '?raw',
-  import: 'default',
-}) as Record<string, string>;
-
 let cachedKraje: Kraj[] | null = null;
 
 function load(): Kraj[] {
   if (cachedKraje) return cachedKraje;
-  const firstRaw = Object.values(raw)[0];
-  if (!firstRaw) {
-    throw new Error('[lokality] Missing src/data/lokality.yaml');
-  }
-  const parsed = jsyaml.load(firstRaw) as LokalityYaml;
+  const parsed = lokalityData as LokalityYaml;
   cachedKraje = parsed.kraje.map(k => ({
     slug: String(k.slug),
     name: k.name,

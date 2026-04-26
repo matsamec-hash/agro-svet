@@ -1,10 +1,18 @@
 ---
-export const prerender = false;
+export const prerender = true;
 import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, getCategoryColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../../../../lib/config';
+
+// Prerender pro fixní enum kategorií. Articles content načteno build-time
+// per kategorie. Note: nově publikovaný článek se objeví až po dalším buildu.
+export function getStaticPaths() {
+  return ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'].map(
+    (kat) => ({ params: { kat } }),
+  );
+}
 
 const { kat } = Astro.params;
 if (!kat) return Astro.redirect('/novinky/');

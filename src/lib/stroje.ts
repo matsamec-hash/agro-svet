@@ -1,4 +1,4 @@
-import jsyaml from 'js-yaml';
+// YAML imports parsed at compile-time by @modyfi/vite-plugin-yaml — no runtime js-yaml.
 
 export type StrojKategorie =
   | 'traktory' | 'kombajny'
@@ -146,11 +146,11 @@ export function getFunctionalGroupForCategory(cat: StrojKategorie): FunctionalGr
   return null;
 }
 
+// Vite plugin parses YAML at compile-time → default export is already an object.
 const brandModules = import.meta.glob('/src/data/stroje/*.yaml', {
   eager: true,
-  query: '?raw',
   import: 'default',
-}) as Record<string, string>;
+}) as Record<string, unknown>;
 
 let cachedBrands: StrojBrand[] | null = null;
 let cachedFlat: StrojFlatModel[] | null = null;
@@ -176,7 +176,7 @@ export function getAllBrands(): StrojBrand[] {
   if (cachedBrands) return cachedBrands;
   const brands: StrojBrand[] = [];
   for (const [path, raw] of Object.entries(brandModules)) {
-    const parsed = jsyaml.load(raw) as StrojBrand;
+    const parsed = raw as StrojBrand;
     if (!parsed?.slug) {
       console.warn(`[stroje] Missing brand slug in ${path}`);
       continue;
