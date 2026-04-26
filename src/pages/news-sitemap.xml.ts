@@ -33,7 +33,7 @@ export const GET: APIRoute = async () => {
 
   const { data: articles } = await supabase
     .from('articles')
-    .select('slug, title, published_at, category, tags')
+    .select('slug, title, published_at, category, tags, featured_image_url')
     .eq('site_id', SITE_ID)
     .eq('status', 'published')
     .gte('published_at', cutoff)
@@ -42,8 +42,8 @@ export const GET: APIRoute = async () => {
 
   const items = (articles ?? []).map((a) => {
     const url = `${SITE_URL}/novinky/${a.slug}/`;
-    const section = a.category ? CATEGORY_LABELS[a.category] || a.category : undefined;
     const keywords = (a.tags as string[] | null)?.length ? (a.tags as string[]).join(', ') : undefined;
+    const imageUrl = (a as { featured_image_url?: string | null }).featured_image_url;
     return `  <url>
     <loc>${xmlEscape(url)}</loc>
     <news:news>
@@ -53,13 +53,18 @@ export const GET: APIRoute = async () => {
       </news:publication>
       <news:publication_date>${a.published_at}</news:publication_date>
       <news:title>${xmlEscape(a.title)}</news:title>
-${section ? `      <news:genres>Blog</news:genres>\n` : ''}${keywords ? `      <news:keywords>${xmlEscape(keywords)}</news:keywords>\n` : ''}    </news:news>
+${keywords ? `      <news:keywords>${xmlEscape(keywords)}</news:keywords>\n` : ''}    </news:news>${imageUrl ? `
+    <image:image>
+      <image:loc>${xmlEscape(imageUrl)}</image:loc>
+      <image:title>${xmlEscape(a.title)}</image:title>
+    </image:image>` : ''}
   </url>`;
   });
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap-0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${items.join('\n')}
 </urlset>`;
 

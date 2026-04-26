@@ -104,6 +104,8 @@ const jsonLd = {
         alt={article.title}
         width="1600"
         height="900"
+        fetchpriority="high"
+        decoding="async"
         style={`width:100%; height:100%; object-fit:cover; object-position: ${article.focal_point?.x ?? 50}% ${article.focal_point?.y ?? 50}%;`}
       />
       <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.35));"></div>

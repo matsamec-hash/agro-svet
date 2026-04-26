@@ -17,6 +17,13 @@ const PHOTOS = {
     credit: 'Valtra Oy Ab',
     license: 'CC0',
   },
+  'n-gen3': {
+    maxHp: 201,
+    url: 'https://www.valtra.cz/content/dam/Brands/Valtra/en/Products/NSeries/5th-gen-2021/valtra-n-series-tractor-5th-gen-hero-field-1600-900.jpg',
+    credit_url: 'https://www.valtra.cz/produkty/nserie.html',
+    credit: 'Valtra Oy Ab',
+    license: 'Editorial / press use',
+  },
 };
 
 const OUT_DIR = 'public/images/stroje/valtra';

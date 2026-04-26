@@ -134,7 +134,21 @@ export interface MachineModelForSchema {
   transmission?: string;
 }
 
-const VEHICLE_CATEGORIES = new Set(['traktory', 'kombajny']);
+// Categories that map to Schema.org Vehicle (self-propelled = vehicle).
+// Pulled implements (pluhy, postrikovace-tazene, etc.) stay as Product only.
+const VEHICLE_CATEGORIES = new Set([
+  'traktory',
+  'kombajny',
+  'postrikovace-samojizdne',
+  'rezacky-samojizdne',
+  'sklizece-brambor',
+  'sklizece-repy',
+  'teleskopy',
+  'kolove-nakladace',
+  'kloubove-nakladace',
+  'smykove-nakladace',
+  'lesni-vyvazecky',
+]);
 
 export function machineProductSchema(m: MachineModelForSchema) {
   const isVehicle = VEHICLE_CATEGORIES.has(m.category);
