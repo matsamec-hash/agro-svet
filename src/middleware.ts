@@ -17,6 +17,19 @@ const PROTECTED_PATHS = [
 
 const ADMIN_PATHS = ['/admin/'];
 
+// Static asset paths bypass gate + auth + custom cache headers.
+// `/admin/` is excluded (handled by ADMIN_PATHS auth check below).
+const STATIC_PREFIXES = ['/_astro/', '/fonts/', '/images/'];
+const STATIC_FILE_EXT = /\.(?:js|mjs|css|map|woff2?|ttf|eot|otf|svg|png|jpe?g|webp|avif|gif|ico|txt)$/i;
+
+function isStaticAsset(pathname: string): boolean {
+  if (pathname.startsWith('/admin/')) return false;
+  if (STATIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
+  // Top-level static files (favicon.ico, icon-192.png, robots.txt, google*.html etc.)
+  if (pathname.lastIndexOf('/') === 0 && STATIC_FILE_EXT.test(pathname)) return true;
+  return false;
+}
+
 function applyGateHeaders(response: Response, opts: { redirect?: boolean } = {}): Response {
   // Always: noindex (gate is pre-launch — don't index any of it)
   response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
@@ -36,6 +49,25 @@ function applyGateHeaders(response: Response, opts: { redirect?: boolean } = {})
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
+
+  // ---- Static assets: bypass gate + auth, set aggressive cache headers ------
+  // run_worker_first=true (wrangler.toml) routes ALL requests through us,
+  // including /_astro/*.js, fonts, images. Without this short-circuit, every
+  // CSS/font/image hit pays the gate + Supabase auth round-trip and gets
+  // no-store applied, killing CF edge cache. Skip middleware logic for
+  // static paths and tell CF to cache them.
+  if (isStaticAsset(url.pathname)) {
+    const response = await next();
+    if (url.pathname.startsWith('/_astro/')) {
+      // Hashed bundles — content-addressed, safe to cache forever
+      response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+    } else {
+      // Public dir assets (fonts, images, favicons) — long cache + SWR
+      response.headers.set('Cache-Control', 'public, max-age=2592000, stale-while-revalidate=604800');
+    }
+    return response;
+  }
+  // ---------------------------------------------------------------------------
 
   // ---- Site gate: runs FIRST, above everything else -------------------------
   // To disable: unset SITE_GATE_PASSCODE env var and redeploy.
