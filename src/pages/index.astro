@@ -10,6 +10,7 @@ import { getCommodityFullSeries, getCommodityPrices } from '../lib/czso';
 import { fiveYearAverage } from '../lib/agro-derived';
 import { AGRO_EVENTS } from '../data/agro-events';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../lib/config';
+import { organizationSchema } from '../lib/structured-data';
 
 const supabase = createAnonClient();
 
@@ -104,6 +105,7 @@ const websiteJsonLd = {
   description={homeDescription}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(websiteJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(organizationSchema())} />
 
   <h1 class="visually-hidden">agro-svět.cz — zemědělská technika, bazar a novinky</h1>
 

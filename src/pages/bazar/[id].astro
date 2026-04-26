@@ -5,6 +5,7 @@ import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
 import { createServerClient } from '../../lib/supabase';
 import { resolveModelLabel } from '../../lib/bazar-catalog';
 import { getAllPlemena } from '../../lib/plemena';
+import { bazarListingProductSchema, breadcrumbSchema } from '../../lib/structured-data';
 
 const { id } = Astro.params;
 const supabase = createServerClient();
@@ -72,9 +73,22 @@ if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listin
 if (listing.pracovni_zaber_m) specItems.push({ label: 'Pracovní záběr', value: `${listing.pracovni_zaber_m} m` });
 if (listing.nosnost_kg) specItems.push({ label: 'Nosnost', value: `${listing.nosnost_kg.toLocaleString('cs-CZ')} kg` });
 if (listing.objem_nadrze_l) specItems.push({ label: 'Objem nádrže', value: `${listing.objem_nadrze_l.toLocaleString('cs-CZ')} l` });
+
+const productJsonLd = bazarListingProductSchema(
+  listing,
+  images.map((img: { url: string }) => img.url),
+  sellerName,
+);
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Bazar', url: '/bazar/' },
+  { name: categoryLabel, url: `/bazar/?category=${listing.category}` },
+  { name: listing.title, url: `/bazar/${listing.id}/` },
+]);
 ---
 
-<Layout title={`${listing.title} — Agro bazar`}>
+<Layout title={`${listing.title} — Agro bazar`} ogImage={images[0]?.url}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <div style="max-width:1000px; margin:0 auto; padding:32px 24px 80px;">
 
     <!-- Breadcrumb -->
