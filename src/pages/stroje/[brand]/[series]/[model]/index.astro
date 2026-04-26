@@ -23,12 +23,17 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { brand: brandSlug, series: seriesSlug } = Astro.params;
-const { modelSlug } = Astro.props as { modelSlug: string };
+const { brand: brandSlug, series: seriesSlug, model: modelParam } = Astro.params;
+const { modelSlug: modelSlugFromProps } = (Astro.props ?? {}) as { modelSlug?: string };
 const found = getSeries(brandSlug!, seriesSlug!);
 if (!found) return Astro.redirect('/stroje/');
 const { brand, category, series } = found;
-const model: StrojModel | undefined = series.models.find((m) => m.slug === modelSlug);
+// SSR: props is empty (getStaticPaths not invoked), resolve from URL param.
+// Match against full slug (e.g. "john-deere-6195m") or short ("6195m").
+const candidate = modelSlugFromProps ?? modelParam ?? '';
+const model: StrojModel | undefined = series.models.find(
+  (m) => m.slug === candidate || m.slug === `${brand.slug}-${candidate}`,
+);
 if (!model) return Astro.redirect(`/stroje/${brandSlug}/${seriesSlug}/`);
 
 const categoryLabels: Record<StrojKategorie, string> = {
@@ -140,6 +145,9 @@ if (model.specs) {
 const totalSpecCount = performanceSpecs.length + drivetrainSpecs.length + dimensionSpecs.length + otherSpecs.length;
 
 const heroPhoto = (series as any).image_url || categoryHero[category] || '/images/traktor.webp';
+const heroCreditUrl: string | null = (series as any).image_url ? ((series as any).image_credit_url || null) : null;
+const heroCreditAuthor: string | null = (series as any).image_url ? ((series as any).image_credit || null) : null;
+const heroCreditLicense: string | null = (series as any).image_url ? ((series as any).image_license || null) : null;
 
 const pageTitle = `${brand.name} ${model.name}`;
 const pageDesc = model.description
@@ -229,6 +237,12 @@ const productJsonLd = machineProductSchema({
             <span class="n">{model.name}</span>
             {model.power_hp && <span class="pwr">{model.power_hp} k</span>}
           </div>
+          {heroCreditAuthor && heroCreditUrl && (
+            <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
+               title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons · upraveno (crop, konverze do WebP)`}>
+              © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''} · upraveno
+            </a>
+          )}
         </div>
       </div>
     </section>
@@ -483,6 +497,17 @@ const productJsonLd = machineProductSchema({
   }
   .model-page .hero-photo-badge .n{font-weight:700;font-size:15px}
   .model-page .hero-photo-badge .pwr{color:var(--yellow);font-weight:700;font-size:14px}
+  .model-page .hero-photo-credit{
+    position:absolute;right:12px;bottom:12px;z-index:2;
+    background:rgba(10,10,11,.6);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.08);
+    color:rgba(255,255,255,.78);text-decoration:none;
+    padding:5px 9px;border-radius:7px;
+    font:500 10.5px/1 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    transition:.15s;
+  }
+  .model-page .hero-photo-credit:hover{background:rgba(10,10,11,.85);color:#fff;border-color:rgba(255,255,255,.18)}
 
   .model-page .content-grid{display:grid;grid-template-columns:1fr 320px;gap:22px}
 

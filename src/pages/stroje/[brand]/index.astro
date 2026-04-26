@@ -272,8 +272,8 @@ const jsonLd = {
           <div class="hero-photo-badge"><span class="n">{totalModels}+</span> modelů v katalogu</div>
           {heroCreditAuthor && heroCreditUrl && (
             <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
-               title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons`}>
-              © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''}
+               title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons · upraveno (crop, konverze do WebP)`}>
+              © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''} · upraveno
             </a>
           )}
         </div>

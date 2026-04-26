@@ -92,6 +92,9 @@ const siblings = (sameCategory?.series ?? [])
   .sort((a, b) => (b.year_from ?? 0) - (a.year_from ?? 0));
 
 const heroPhoto = (series as any).image_url || categoryHero[category] || '/images/traktor.webp';
+const heroCreditUrl: string | null = (series as any).image_credit_url || null;
+const heroCreditAuthor: string | null = (series as any).image_credit || null;
+const heroCreditLicense: string | null = (series as any).image_license || null;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -163,6 +166,12 @@ const jsonLd = {
         <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
           {series.models.length > 0 && (
             <div class="hero-photo-badge"><span class="n">{series.models.length}</span> {series.models.length === 1 ? 'model' : series.models.length < 5 ? 'modely' : 'modelů'}</div>
+          )}
+          {heroCreditAuthor && heroCreditUrl && (
+            <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
+               title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons · upraveno (crop, konverze do WebP)`}>
+              © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''} · upraveno
+            </a>
           )}
         </div>
       </div>
@@ -389,6 +398,17 @@ const jsonLd = {
     font:500 12px 'Chakra Petch',sans-serif;
   }
   .series-page .hero-photo-badge .n{font-weight:700;color:var(--yellow)}
+  .series-page .hero-photo-credit{
+    position:absolute;right:12px;bottom:12px;z-index:2;
+    background:rgba(10,10,11,.6);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.08);
+    color:rgba(255,255,255,.78);text-decoration:none;
+    padding:5px 9px;border-radius:7px;
+    font:500 10.5px/1 'Chakra Petch',sans-serif;letter-spacing:.02em;
+    max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    transition:.15s;
+  }
+  .series-page .hero-photo-credit:hover{background:rgba(10,10,11,.85);color:#fff;border-color:rgba(255,255,255,.18)}
 
   .series-page .models-section{
     margin:24px 0;background:var(--card);border:1px solid var(--line);

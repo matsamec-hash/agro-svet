@@ -338,7 +338,7 @@ const catLede = categoryLede[category];
                     // For Wikipedia/CC photos, show author + license
                     if (t.coverCreditAuthor && t.coverCreditLicense) {
                       const short = t.coverCreditAuthor.length > 30 ? t.coverCreditAuthor.slice(0, 28) + '…' : t.coverCreditAuthor;
-                      const titleAttr = `Foto: ${t.coverCreditAuthor} (${t.coverCreditLicense}) via ${host}\n${url}`;
+                      const titleAttr = `Foto: ${t.coverCreditAuthor} (${t.coverCreditLicense}) via ${host} · upraveno (crop, WebP)\n${url}`;
                       return <span class="ft-credit" title={titleAttr}>© {short} / {t.coverCreditLicense}</span>;
                     }
                     return <span class="ft-credit" title={`Foto: ${host} (${url})`}>Foto: {host}</span>;
