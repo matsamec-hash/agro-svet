@@ -4,6 +4,7 @@ import Newsletter from '../../components/Newsletter.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { tagStyle } from '../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../../lib/config';
+import { injectLinks } from '../../lib/auto-linker';
 
 const { slug } = Astro.params;
 const supabase = createAnonClient();
@@ -136,8 +137,8 @@ const jsonLd = {
       {article.perex}
     </p>
 
-    <!-- Article body (HTML from CMS) -->
-    <div class="prose" set:html={article.content} />
+    <!-- Article body (HTML from CMS) — auto-linker injects internal links to brands/plemena/stroje hubs. -->
+    <div class="prose" set:html={injectLinks(article.content, `/novinky/${article.slug}/`)} />
 
     <!-- Tags (clickable — navigate to filtered novinky) -->
     {article.tags?.length > 0 && (
@@ -180,6 +181,10 @@ const jsonLd = {
   .prose :global(th) { background:#f5f5f5; font-weight:600; padding:10px 14px; border:1px solid #e0e0e0; text-align:left; }
   .prose :global(td) { padding:9px 14px; border:1px solid #ebebeb; }
   .prose :global(blockquote) { border-left:4px solid #FFFF00; padding:8px 20px; margin:1.5em 0; background:#fafafa; }
+  .prose :global(a) { color:#0A0A0B; text-decoration:underline; text-decoration-color:#FFFF00; text-decoration-thickness:2px; text-underline-offset:3px; transition:background .15s; }
+  .prose :global(a:hover) { background:#FFFF00; }
+  .prose :global(.auto-link) { text-decoration-color:#EAEAEC; text-decoration-style:dotted; }
+  .prose :global(.auto-link:hover) { background:#FFFF00; text-decoration-color:#0A0A0B; }
   .article-tag {
     display: inline-block;
     font-size: 12px;
