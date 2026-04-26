@@ -2,8 +2,8 @@
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { createServerClient } from '../../../lib/supabase';
+import { AGRO_SVET_SITE_ID } from '../../../lib/config';
 
-const AGRO_SVET_SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 
 const url = Astro.url;
 const filter = (url.searchParams.get('filter') ?? 'all') as 'all' | 'featured' | 'none';

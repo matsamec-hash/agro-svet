@@ -4,10 +4,10 @@ import ArticleCard from '../../components/ArticleCard.astro';
 import BazarPagination from '../../components/bazar/BazarPagination.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { categoryStyle, tagStyle } from '../../lib/tag-color';
+import { AGRO_SVET_SITE_ID as SITE_ID } from '../../lib/config';
 
 const PER_PAGE = 24;
 
-const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const supabase = createAnonClient();
 
 const category = Astro.url.searchParams.get('kategorie') ?? '';

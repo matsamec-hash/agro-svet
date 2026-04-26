@@ -17,12 +17,20 @@ const PROTECTED_PATHS = [
 
 const ADMIN_PATHS = ['/admin/'];
 
-function applyGateHeaders(response: Response): Response {
-  // Apply on all gated responses (200 + redirects) to prevent CF/browser cache.
+function applyGateHeaders(response: Response, opts: { redirect?: boolean } = {}): Response {
+  // Always: noindex (gate is pre-launch — don't index any of it)
   response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
-  response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
-  response.headers.set('Pragma', 'no-cache');
   response.headers.set('Vary', 'Cookie');
+  if (opts.redirect) {
+    // Hard no-store on the unlock redirect itself (don't cache the bounce)
+    response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
+    response.headers.set('Pragma', 'no-cache');
+  } else {
+    // Unlocked content — `private` keeps it off CF edge cache (cookie-gated),
+    // but browser may still serve from local cache + 304-revalidate.
+    // Better than no-store for back/forward nav and repeat visits.
+    response.headers.set('Cache-Control', 'private, max-age=0, must-revalidate');
+  }
   return response;
 }
 
@@ -36,15 +44,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   if (gateOn) {
     if (url.pathname === '/sitemap.xml') {
-      return applyGateHeaders(new Response('Not Found', { status: 404 }));
+      return applyGateHeaders(new Response('Not Found', { status: 404 }), { redirect: true });
     }
     if (!isGateBypassed(url.pathname)) {
       const cookieVal = cookies.get(GATE_COOKIE_NAME)?.value;
       const expected = await expectedGateHash();
       if (cookieVal !== expected) {
         const nextPath = url.pathname + url.search;
-        // Apply headers on the redirect — Astro's redirect() returns a Response we can mutate.
-        return applyGateHeaders(redirect(`/unlock/?next=${encodeURIComponent(nextPath)}`));
+        return applyGateHeaders(redirect(`/unlock/?next=${encodeURIComponent(nextPath)}`), { redirect: true });
       }
     }
   }

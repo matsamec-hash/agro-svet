@@ -3,9 +3,8 @@ import { getCollection } from 'astro:content';
 import { getAllBrands, seriesFamily, FUNCTIONAL_GROUPS } from '../lib/stroje';
 import { getAllDruhy } from '../lib/plemena';
 import { createAnonClient } from '../lib/supabase';
+import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 
-const SITE_URL = 'https://agro-svet.cz';
-const NOVINKY_SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky'];
 
 interface UrlEntry {

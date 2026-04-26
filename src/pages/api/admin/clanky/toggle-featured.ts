@@ -5,10 +5,10 @@
 // Site filter v UPDATE chrání proti cross-site featured by mistake (sdílená tabulka).
 import type { APIRoute } from 'astro';
 import { createServerClient } from '../../../../lib/supabase';
+import { AGRO_SVET_SITE_ID } from '../../../../lib/config';
 
 export const prerender = false;
 
-const AGRO_SVET_SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 
 type Body = { articleId: string; featured: boolean };
 

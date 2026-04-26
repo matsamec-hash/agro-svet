@@ -4,11 +4,11 @@ import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, categoryStyle, getTagColor } from '../../../../lib/tag-color';
+import { AGRO_SVET_SITE_ID as SITE_ID } from '../../../../lib/config';
 
 const { tag } = Astro.params;
 if (!tag) return Astro.redirect('/novinky/');
 
-const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const supabase = createAnonClient();
 
 const { data: articles } = await supabase

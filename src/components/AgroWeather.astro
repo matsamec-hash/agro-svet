@@ -409,27 +409,28 @@ const totalPrecipAhead = agro ? Math.round(agro.daily.precipMm.reduce((a, b) => 
   }
   .aw-strip-src:hover { color: #0A0A0B; border-bottom-color: #0A0A0B; }
 
-  /* User-location 5-day cards */
+  /* User-location 5-day cards — children are injected via innerHTML so they
+     never receive Astro's scope attribute; selectors must be :global. */
   .aw-user {
     display: flex; gap: 0; align-items: stretch; overflow-x: auto;
   }
-  .aw-day5 {
+  .aw-user :global(.aw-day5) {
     display: flex; flex-direction: column; align-items: center; gap: 2px;
     padding: 10px 14px; min-width: 76px;
     border-right: 1px solid #EAEAEC;
     flex-shrink: 0;
   }
-  .aw-day5:last-child { border-right: 0; }
-  .aw-d5-name {
+  .aw-user :global(.aw-day5:last-child) { border-right: 0; }
+  .aw-user :global(.aw-d5-name) {
     font: 700 10.5px 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase;
     color: #6B6B72;
   }
-  .aw-d5-icon { font-size: 22px; line-height: 1; margin: 2px 0; }
-  .aw-d5-tmax {
+  .aw-user :global(.aw-d5-icon) { font-size: 22px; line-height: 1; margin: 2px 0; }
+  .aw-user :global(.aw-d5-tmax) {
     font: 700 16px 'Chakra Petch', sans-serif; color: #0A0A0B; letter-spacing: -.01em;
   }
-  .aw-d5-tmin { font: 500 11px 'Chakra Petch', sans-serif; color: #6B6B72; }
-  .aw-d5-rain {
+  .aw-user :global(.aw-d5-tmin) { font: 500 11px 'Chakra Petch', sans-serif; color: #6B6B72; }
+  .aw-user :global(.aw-d5-rain) {
     font: 600 10px 'Chakra Petch', sans-serif; color: #1976D2; letter-spacing: .04em;
     margin-top: 2px;
   }

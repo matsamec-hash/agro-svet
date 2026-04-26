@@ -1,6 +1,21 @@
 import { createServerClient } from './supabase';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+// Explicit column lists — avoid select('*') to skip large unused fields
+// (metadata JSON on entries, required_fields/optional_fields JSON on rounds)
+// and reduce query payload + Worker memory.
+const ROUND_COLS =
+  'id,slug,title,theme,description,hero_image,year,month,is_final,' +
+  'upload_starts_at,upload_ends_at,voting_starts_at,voting_ends_at,announcement_at,' +
+  'prize_first,prize_second,prize_third,status,' +
+  'winner_entry_id,runner_up_entry_id,third_place_entry_id';
+
+const ENTRY_COLS =
+  'id,round_id,user_id,photo_path,photo_width,photo_height,' +
+  'title,caption,author_display_name,author_location,' +
+  'brand_slug,model_slug,series_slug,location_kraj_slug,location_okres_slug,' +
+  'year_taken,status,rejection_reason,vote_count,last_vote_at,license_merch_print,created_at';
+
 export interface ContestRound {
   id: string;
   slug: string;
@@ -57,7 +72,7 @@ export async function getActiveRound(client?: SupabaseClient): Promise<ContestRo
   const sb = client ?? createServerClient();
   const { data } = await sb
     .from('contest_rounds')
-    .select('*')
+    .select(ROUND_COLS)
     .in('status', ['upload_open', 'voting_open', 'closed'])
     .order('voting_starts_at', { ascending: false })
     .limit(1)
@@ -69,7 +84,7 @@ export async function getRoundBySlug(slug: string, client?: SupabaseClient): Pro
   const sb = client ?? createServerClient();
   const { data } = await sb
     .from('contest_rounds')
-    .select('*')
+    .select(ROUND_COLS)
     .eq('slug', slug)
     .maybeSingle();
   return data as ContestRound | null;
@@ -83,7 +98,7 @@ export async function getApprovedEntries(
   const sb = client ?? createServerClient();
   const { data } = await sb
     .from('contest_entries')
-    .select('*')
+    .select(ENTRY_COLS)
     .eq('round_id', roundId)
     .eq('status', 'approved')
     .order('vote_count', { ascending: false })
@@ -96,7 +111,7 @@ export async function getEntry(id: string, client?: SupabaseClient): Promise<Con
   const sb = client ?? createServerClient();
   const { data } = await sb
     .from('contest_entries')
-    .select('*')
+    .select(ENTRY_COLS)
     .eq('id', id)
     .maybeSingle();
   return data as ContestEntry | null;
@@ -121,7 +136,7 @@ export async function getMyEntries(userId: string, client?: SupabaseClient): Pro
   const sb = client ?? createServerClient();
   const { data } = await sb
     .from('contest_entries')
-    .select('*')
+    .select(ENTRY_COLS)
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
   return (data ?? []) as ContestEntry[];
@@ -131,7 +146,7 @@ export async function getPendingEntries(limit = 48, client?: SupabaseClient): Pr
   const sb = client ?? createServerClient();
   const { data } = await sb
     .from('contest_entries')
-    .select('*')
+    .select(ENTRY_COLS)
     .eq('status', 'pending')
     .order('created_at', { ascending: true })
     .limit(limit);

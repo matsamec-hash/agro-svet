@@ -3,9 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import { createAnonClient } from '../lib/supabase';
 import { getAllModels } from '../lib/stroje';
 import { getAllPlemena } from '../lib/plemena';
+import { AGRO_SVET_SITE_ID as SITE_ID } from '../lib/config';
 
 const query = (Astro.url.searchParams.get('q') ?? '').trim();
-const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 
 type ResultItem = {
   title: string;
