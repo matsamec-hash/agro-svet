@@ -73,13 +73,8 @@ const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString()
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <meta name="theme-color" content="#FFFF00" />
 
-  <!-- Google Fonts: Chakra Petch + Roboto Condensed (with latin-ext for Czech diacritics) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
-  />
+  <!-- Fonts self-hosted via @fontsource (imported in src/styles/global.css). -->
+  <!-- No external DNS lookup or third-party request — same-origin from CF Workers Assets. -->
 </head>
 <body>
   <a href="#main-content" class="skip-link">Přeskočit na obsah</a>
