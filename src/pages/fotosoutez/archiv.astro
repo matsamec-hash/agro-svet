@@ -35,7 +35,7 @@ const PHOTO_BASE = 'https://obhypfuzmknvmknskdwh.supabase.co/storage/v1/object/p
         const w = r.winner_entry_id ? winners[r.winner_entry_id] : null;
         return (
           <a href={`/fotosoutez/${r.slug}/`} class="round-card">
-            {w && <img src={`${PHOTO_BASE}${w.photo_path}`} alt="" />}
+            {w && <img src={`${PHOTO_BASE}${w.photo_path}`} alt={`Vítězná fotografie kola ${r.title}: ${w.title}`} loading="lazy" />}
             <div class="body">
               <h3>{r.title}</h3>
               <p class="theme">{r.theme}</p>

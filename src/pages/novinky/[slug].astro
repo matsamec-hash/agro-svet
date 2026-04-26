@@ -38,6 +38,11 @@ const publisher = {
     height: 512,
   },
 };
+const author = {
+  '@type': 'Organization',
+  name: 'Redakce agro-svět.cz',
+  url: 'https://agro-svet.cz/redakce/',
+};
 const articleSectionLabel = article.category ? (categoryLabels[article.category] || article.category) : undefined;
 const dateModified = article.updated_at || article.published_at;
 const jsonLd = {
@@ -59,7 +64,7 @@ const jsonLd = {
       dateModified,
       url: canonical,
       mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-      author: publisher,
+      author,
       publisher,
       inLanguage: 'cs-CZ',
       ...(articleSectionLabel && { articleSection: articleSectionLabel }),

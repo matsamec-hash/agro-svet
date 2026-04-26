@@ -52,6 +52,25 @@ const breadcrumbJsonLd = {
     { '@type': 'ListItem', position: 2, name: 'Zvířata', item: 'https://agro-svet.cz/plemena/' },
   ],
 };
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Katalog plemen hospodářských zvířat',
+  description: 'Databáze plemen hovězího dobytka, ovcí, koní a prasat.',
+  url: 'https://agro-svet.cz/plemena/',
+  inLanguage: 'cs-CZ',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: totalPlemena,
+    itemListElement: plemena.slice(0, 100).map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://agro-svet.cz/plemena/${p.druh_slug}/${p.slug}/`,
+      name: p.name,
+    })),
+  },
+};
 ---
 
 <Layout
@@ -59,6 +78,7 @@ const breadcrumbJsonLd = {
   description="Databáze plemen hovězího dobytka, ovcí a koní — původ, užitkovost, hmotnost, mléčná dojivost. Filtrujte podle druhu a užitkovosti."
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div class="plemena-root">
 
     <nav class="breadcrumb" aria-label="Cesta">

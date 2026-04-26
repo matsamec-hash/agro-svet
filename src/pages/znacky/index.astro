@@ -2,12 +2,39 @@
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { SITE_URL } from '../../lib/config';
+import { breadcrumbSchema } from '../../lib/structured-data';
 
 const znacky = await getCollection('znacky');
 const sorted = znacky.sort((a, b) => a.data.name.localeCompare(b.data.name, 'cs'));
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Značky', url: '/znacky/' },
+]);
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Výrobci zemědělské techniky',
+  description: 'Přehled světových i domácích výrobců zemědělských strojů.',
+  url: `${SITE_URL}/znacky/`,
+  inLanguage: 'cs-CZ',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: sorted.length,
+    itemListElement: sorted.map((z, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE_URL}/znacky/${z.id}/`,
+      name: z.data.name,
+    })),
+  },
+};
 ---
 
 <Layout title="Značky" description="Přehled světových výrobců zemědělské techniky — od Claas a John Deere po Fendt, New Holland a Zetor.">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
 
     <div style="margin-bottom:48px;">

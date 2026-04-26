@@ -1,0 +1,150 @@
+---
+export const prerender = true;
+import Layout from '../layouts/Layout.astro';
+import { SITE_URL } from '../lib/config';
+import { breadcrumbSchema } from '../lib/structured-data';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Redakce', url: '/redakce/' },
+]);
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsMediaOrganization',
+  name: 'Redakce agro-svět.cz',
+  url: `${SITE_URL}/redakce/`,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${SITE_URL}/icon-512.png`,
+    width: 512,
+    height: 512,
+  },
+  parentOrganization: {
+    '@type': 'Organization',
+    name: 'Samec Digital',
+  },
+  diversityPolicy: `${SITE_URL}/redakce/`,
+  ethicsPolicy: `${SITE_URL}/redakce/`,
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'editorial',
+    email: 'redakce@agro-svet.cz',
+    availableLanguage: 'Czech',
+  },
+};
+---
+
+<Layout
+  title="Redakce agro-svět.cz"
+  description="Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt."
+  canonical={`${SITE_URL}/redakce/`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
+
+  <main class="redakce">
+    <nav class="breadcrumb" aria-label="Drobečková navigace">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Redakce</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">O nás</span>
+      <h1>Redakce agro-svět.cz</h1>
+      <p class="lead">
+        Píšeme o zemědělství, technice, dotacích a životě na vesnici. Cílem je dávat zemědělcům
+        užitečné, ověřené a aktuální informace z domova i ze světa.
+      </p>
+    </header>
+
+    <section class="block">
+      <h2>Co děláme</h2>
+      <p>
+        Sledujeme novinky ze světa zemědělské techniky, evropské dotační politiky, vývoj cen
+        komodit a legislativní změny. Provozujeme rovněž encyklopedii traktorů a kombajnů,
+        databázi plemen hospodářských zvířat a bazar zemědělské techniky.
+      </p>
+    </section>
+
+    <section class="block">
+      <h2>Redakční zásady</h2>
+      <ul>
+        <li><strong>Ověřené zdroje.</strong> Vycházíme z oficiálních dat (ČSÚ, MZe, Eurostat) a tiskových zpráv výrobců.</li>
+        <li><strong>Korekce.</strong> Pokud se v textu objeví chyba, opravíme ji a označíme datum úpravy.</li>
+        <li><strong>Oddělení obsahu a inzerce.</strong> Komerční obsah je vždy zřetelně označen.</li>
+        <li><strong>Zpětná vazba.</strong> Podněty čtenářů vítáme a reagujeme na ně.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Kontakt</h2>
+      <p>
+        Pro tipy, tiskové zprávy a obecné dotazy napište na
+        <a href="mailto:redakce@agro-svet.cz">redakce@agro-svet.cz</a>.
+        Pro inzertní spolupráci využijte stejný kontakt s předmětem „Inzerce".
+      </p>
+      <p class="provoz">
+        Web provozuje <a href="https://samec.digital" target="_blank" rel="noopener">Samec Digital</a>.
+      </p>
+    </section>
+  </main>
+
+  <style>
+    .redakce {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px 96px;
+    }
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #FBFAF4;
+      border: 1.5px solid #0A0A0B;
+      border-radius: 10px;
+      font: 600 12px 'Chakra Petch', sans-serif;
+      color: #0A0A0B;
+      margin-bottom: 28px;
+      box-shadow: 2px 2px 0 #0A0A0B;
+    }
+    .breadcrumb a { color: #6B6B72; text-decoration: none; }
+    .breadcrumb a:hover { color: #0A0A0B; }
+    .breadcrumb span[aria-hidden] { color: #c0c0c5; }
+    .hero { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 2px dashed #EAEAEC; }
+    .kicker {
+      display: inline-block;
+      padding: 5px 11px;
+      background: #FFFF00;
+      border: 1.5px solid #0A0A0B;
+      border-radius: 8px;
+      box-shadow: 3px 3px 0 #0A0A0B;
+      font: 700 11px 'Chakra Petch', sans-serif;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #0A0A0B;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font: 800 clamp(2rem, 5vw, 3rem) 'Chakra Petch', sans-serif;
+      letter-spacing: -.025em;
+      color: #0A0A0B;
+      margin: 0 0 14px;
+      line-height: 1.1;
+    }
+    .lead { font-size: 17px; line-height: 1.65; color: #555; max-width: 620px; }
+    .block { margin-bottom: 36px; }
+    .block h2 {
+      font: 700 1.4rem 'Chakra Petch', sans-serif;
+      color: #0A0A0B;
+      margin-bottom: 12px;
+    }
+    .block p { font-size: 16px; line-height: 1.7; color: #444; margin-bottom: 12px; }
+    .block ul { padding-left: 1.2em; margin: 0 0 12px; }
+    .block li { font-size: 16px; line-height: 1.7; color: #444; margin-bottom: 8px; }
+    .block a { color: #0A0A0B; }
+    .provoz { font-size: 14px; color: #6B6B72; margin-top: 16px; }
+  </style>
+</Layout>

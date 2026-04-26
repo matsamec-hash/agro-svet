@@ -7,6 +7,8 @@ import BazarFeaturedGrid from '../../components/bazar/BazarFeaturedGrid.astro';
 import { CATEGORIES } from '../../lib/bazar-constants';
 import { createServerClient } from '../../lib/supabase';
 import { isFeaturedActive } from '../../lib/bazar-featured';
+import { SITE_URL } from '../../lib/config';
+import { breadcrumbSchema } from '../../lib/structured-data';
 
 const PER_PAGE = 20;
 
@@ -98,9 +100,30 @@ function getImageUrl(listing: any): string | null {
   const { data } = supabase.storage.from('bazar-images').getPublicUrl(sorted[0].storage_path);
   return data.publicUrl;
 }
+
+// JSON-LD: BreadcrumbList + ItemList of visible listings (first page only —
+// avoid duplicate ItemList signals across paginated views).
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Agro bazar', url: '/bazar/' },
+]);
+const itemListJsonLd = page === 1 && displayedListings.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Aktuální inzeráty agro bazaru',
+  numberOfItems: count ?? displayedListings.length,
+  itemListElement: displayedListings.slice(0, 30).map((l: any, i: number) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `${SITE_URL}/bazar/${l.id}/`,
+    name: l.title,
+  })),
+} : null;
 ---
 
 <Layout title="Agro bazar — inzeráty" description="Bazar zemědělské techniky, pozemků, zvířat a služeb. Vložte inzerát zdarma.">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:32px 32px 80px;">
 
     <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px;">

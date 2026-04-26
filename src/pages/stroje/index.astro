@@ -48,6 +48,25 @@ const breadcrumbJsonLd = {
   ],
 };
 
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Katalog zemědělských strojů',
+  description: 'Kompletní databáze traktorů a kombajnů od světových výrobců.',
+  url: 'https://agro-svet.cz/stroje/',
+  inLanguage: 'cs-CZ',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: brands.length,
+    itemListElement: brands.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://agro-svet.cz/stroje/${b.slug}/`,
+      name: b.name,
+    })),
+  },
+};
+
 // Brand cards data
 const brandCards = brands.map((b) => {
   const bModels = models.filter((m) => m.brand_slug === b.slug);
@@ -71,6 +90,7 @@ const brandCards = brands.map((b) => {
   description="Kompletní databáze traktorů a kombajnů — John Deere, Zetor, Fendt, New Holland, Case IH, Valtra, CLAAS a další. Filtrujte podle značky, výkonu a roku výroby."
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div class="catalog-root">
 
     <nav class="breadcrumb" aria-label="Cesta">

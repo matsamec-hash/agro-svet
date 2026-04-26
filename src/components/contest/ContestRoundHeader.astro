@@ -31,7 +31,7 @@ if (phase === 'upload_open') {
 const remaining = countdownTarget ? formatCountdown(msUntil(countdownTarget, now)) : '';
 ---
 <section class="round-header">
-  {round.hero_image && <img src={round.hero_image} alt="" class="round-hero-img" />}
+  {round.hero_image && <img src={round.hero_image} alt={round.title} class="round-hero-img" />}
   <div class="round-meta">
     <span class="round-status-badge">{labels[phase]}</span>
     <span class="round-theme">{round.theme}</span>

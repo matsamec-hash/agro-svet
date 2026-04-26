@@ -19,6 +19,7 @@ Disallow: /hledat
 Disallow: /unlock
 
 Sitemap: https://agro-svet.cz/sitemap.xml
+Sitemap: https://agro-svet.cz/news-sitemap.xml
 `;
 
 export const GET: APIRoute = ({ locals }) => {

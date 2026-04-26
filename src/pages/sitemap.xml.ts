@@ -55,6 +55,7 @@ export const GET: APIRoute = async () => {
     ['/fotosoutez/gdpr/', 'yearly'],
     ['/statistiky/', 'weekly'],
     ['/media/', 'monthly'],
+    ['/redakce/', 'monthly', '0.5'],
   ];
   for (const [path, changefreq, priority] of staticPaths) {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority });

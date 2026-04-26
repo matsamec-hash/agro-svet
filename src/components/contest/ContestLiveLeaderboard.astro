@@ -19,7 +19,7 @@ const { roundSlug, initialEntries } = Astro.props;
     {initialEntries.map((e) => (
       <li class="lb-row" data-entry-id={e.id}>
         <span class="lb-rank" data-rank>{e.rank}</span>
-        <img src={e.photo_url} alt="" loading="lazy" class="lb-thumb" />
+        <img src={e.photo_url} alt={`${e.title} — ${e.author}`} loading="lazy" class="lb-thumb" />
         <div class="lb-info">
           <a href={`/fotosoutez/foto/${e.id}/`} class="lb-title">{e.title}</a>
           <p class="lb-meta">{e.author} • <span data-votes>{e.vote_count}</span> hlasů</p>
