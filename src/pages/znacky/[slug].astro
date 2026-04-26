@@ -3,15 +3,10 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
-export async function getStaticPaths() {
-  const znacky = await getCollection('znacky');
-  return znacky.map(z => ({
-    params: { slug: z.id },
-    props: { znacka: z },
-  }));
-}
-
-const { znacka } = Astro.props;
+const { slug } = Astro.params;
+const znacky = await getCollection('znacky');
+const znacka = znacky.find((z) => z.id === slug);
+if (!znacka) return Astro.redirect('/znacky/');
 const { Content } = await render(znacka);
 
 const canonical = `https://agro-svet.cz/znacky/${znacka.id}/`;

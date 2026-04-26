@@ -6,7 +6,8 @@ import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, categoryStyle, getTagColor } from '../../../../lib/tag-color';
-import { AGRO_SVET_SITE_ID as SITE_ID } from '../../../../lib/config';
+import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
+import { breadcrumbSchema } from '../../../../lib/structured-data';
 
 const { tag } = Astro.params;
 if (!tag) return Astro.redirect('/novinky/');
@@ -53,9 +54,26 @@ const relatedTags = [...coTagCounts.entries()].sort((a, b) => b[1] - a[1]).slice
 
 const pageTitle = `Téma: ${tag}`;
 const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.length} článků${items.length === 0 ? '' : ' z kategorií ' + catFacets.map((c) => c.label).join(', ')}.`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Novinky', url: '/novinky/' },
+  { name: `#${tag}`, url: `/novinky/tema/${encodeURIComponent(tag!)}/` },
+]);
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: pageTitle,
+  description: pageDesc,
+  url: `${SITE_URL}/novinky/tema/${encodeURIComponent(tag!)}/`,
+  inLanguage: 'cs-CZ',
+  numberOfItems: items.length,
+};
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px; font-size:13px; color:#666;">
       <a href="/novinky/" style="color:#666; text-decoration:none;">Novinky</a>

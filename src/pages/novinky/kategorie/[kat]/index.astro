@@ -4,7 +4,8 @@ import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, getCategoryColor } from '../../../../lib/tag-color';
-import { AGRO_SVET_SITE_ID as SITE_ID } from '../../../../lib/config';
+import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
+import { breadcrumbSchema } from '../../../../lib/structured-data';
 
 // Prerender pro fixní enum kategorií. Articles content načteno build-time
 // per kategorie. Note: nově publikovaný článek se objeví až po dalším buildu.
@@ -36,6 +37,12 @@ const categoryDescriptions: Record<string, string> = {
 const label = categoryLabels[kat] ?? kat;
 const description = categoryDescriptions[kat] ?? `Články v kategorii ${label}.`;
 
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Novinky', url: '/novinky/' },
+  { name: label, url: `/novinky/kategorie/${kat}/` },
+]);
+
 const supabase = createAnonClient();
 
 const { data: articles } = await supabase
@@ -48,6 +55,16 @@ const { data: articles } = await supabase
 
 const items = articles ?? [];
 
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${label} — agro-svět.cz`,
+  description,
+  url: `${SITE_URL}/novinky/kategorie/${kat}/`,
+  inLanguage: 'cs-CZ',
+  numberOfItems: items.length,
+};
+
 // Top tags within this category
 const tagCounts = new Map<string, number>();
 for (const a of items) {
@@ -59,6 +76,8 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
 ---
 
 <Layout title={`${label} — agro-svět.cz`} description={description}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <nav class="kat-breadcrumb" aria-label="Drobečková navigace">
       <a href="/novinky/">Novinky</a>

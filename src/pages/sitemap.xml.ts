@@ -5,7 +5,7 @@ import { getAllDruhy } from '../lib/plemena';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 
-const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky'];
+const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
 interface UrlEntry {
   loc: string;
