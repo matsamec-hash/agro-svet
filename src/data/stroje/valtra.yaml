@@ -204,58 +204,94 @@ categories:
             power_hp: 166
             power_kw: 122
 
-      # ========== N Series Gen 2 (2014+) ==========
+      # ========== N Series Mk3 / "4. generace" (2014-2021) ==========
       - slug: n-gen2
-        name: "N Series Gen2/Gen3 (2014–dosud)"
+        name: "N Series Mk3 / 4. generace (2014–2021)"
         year_from: 2014
-        year_to: null
+        year_to: 2021
         description: >
-          Druhá generace. Motor AGCO Power 4,4 L (4-válec) nebo 4,9 L (4-válec), Stage IV/V.
-          Verze Active (mechanická), Versu (Powershift) a Direct (CVT). Kabina s SkyView
-          střechou pro přední nakladač.
+          Třetí generace N (Valtra ji marketingově označuje jako 4. generaci). Motor AGCO Power
+          4,4 L (4-válec) nebo 4,9 L (4-válec), Stage IV/V. Verze Active (mechanická),
+          Versu (Powershift) a Direct (CVT). Kabina s SkyView střechou pro přední nakladač.
+          Modely se sufixem -4 (N104, N114, …, N174).
         models:
           - slug: valtra-n104
             name: "N104"
             year_from: 2014
-            year_to: null
+            year_to: 2021
             power_hp: 105
             power_kw: 77
           - slug: valtra-n114
             name: "N114"
             year_from: 2014
-            year_to: null
+            year_to: 2021
             power_hp: 115
             power_kw: 85
           - slug: valtra-n124
             name: "N124"
             year_from: 2014
-            year_to: null
+            year_to: 2021
             power_hp: 135
             power_kw: 99
           - slug: valtra-n134
             name: "N134"
             year_from: 2014
-            year_to: null
+            year_to: 2021
             power_hp: 145
             power_kw: 107
           - slug: valtra-n144
             name: "N144"
             year_from: 2014
-            year_to: null
+            year_to: 2021
             power_hp: 155
             power_kw: 114
           - slug: valtra-n154
             name: "N154"
             year_from: 2014
-            year_to: null
+            year_to: 2021
             power_hp: 165
             power_kw: 121
           - slug: valtra-n174
             name: "N174"
             year_from: 2016
-            year_to: null
+            year_to: 2021
             power_hp: 185
             power_kw: 136
+
+      # ========== N Series Mk4 / 5. generace (2021+) ==========
+      - slug: n-gen3
+        name: "N Series Mk4 / 5. generace (2021–dosud)"
+        year_from: 2021
+        year_to: null
+        description: >
+          Čtvrtá generace N série (Valtra Unlimited). Motor AGCO Power 4,9 L Stage V, převodovka
+          Active / Versu (Powershift) / Direct (CVT). Kabina SmartTouch 3 s 9" displejem,
+          armrest s OLED tlačítky. Modely bez sufixu -4 (přejmenování na N135/N155/N175/N195).
+        models:
+          - slug: valtra-n135
+            name: "N135"
+            year_from: 2021
+            year_to: null
+            power_hp: 135
+            power_kw: 99
+          - slug: valtra-n155
+            name: "N155"
+            year_from: 2021
+            year_to: null
+            power_hp: 155
+            power_kw: 114
+          - slug: valtra-n175
+            name: "N175"
+            year_from: 2021
+            year_to: null
+            power_hp: 175
+            power_kw: 129
+          - slug: valtra-n195
+            name: "N195"
+            year_from: 2021
+            year_to: null
+            power_hp: 201
+            power_kw: 148
 
       # ========== T Series Gen 1 (2003-2014) ==========
       - slug: t-gen1

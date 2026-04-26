@@ -10,9 +10,31 @@ kategorie: ["Traktory", "Kombajny", "Sklízecí řezačky", "Teleskopické manip
 
 ## Historie
 
-New Holland vznikl v roce 1895 v Pensylvánii (USA) jako výrobce zemědělských strojů. V roce 1986 společnost koupil Ford a přejmenoval ji na Ford New Holland. V roce 1999 se spolu s Case Corporation stala součástí CNH Global (dnes CNH Industrial).
+### Začátky v Pensylvánii (1895–1947)
 
-Dnes má New Holland výrobní závody na čtyřech kontinentech a patří mezi pět největších výrobců zemědělské techniky na světě.
+V roce **1895** otevřel Abe Zimmermann malou opravárenskou dílnu na okraji městečka **New Holland** ve státě Pensylvánie, podle něhož později značka dostala jméno. V roce **1903** Zimmermann založil **New Holland Machine Company** a začal vyrábět mobilní šrotovníky obilí pro výrobu krmiva pro hospodářská zvířata.
+
+Po světové hospodářské krizi ve **30. letech** uvedl New Holland na trh **automatický lis na seno a slámu** — historicky první stroj na světě s automatickým plněním a vázacím systémem. Od **40. let** se firma specializovala na techniku pro sklizeň pícnin a v roce **1947** představila **Haybine** — žací stroj s úpravou píce, který znamenal přelom ve sklizni sena.
+
+### Sperry New Holland (1947–1986)
+
+V roce **1947** koupila New Holland Machine Company americká společnost **Sperry Corporation** a vznikla značka **Sperry New Holland**. V roce **1964** Sperry New Holland získala většinový podíl v belgické firmě **Claeys** — jednom z největších evropských výrobců kombajnů — čímž značka vstoupila na evropský trh. Závod v belgickém Zedelgemu vyrábí kombajny New Holland dodnes.
+
+### Ford a tradice Fordsonu (1917–1986)
+
+Historie traktorů Ford sahá až k **Henrymu Fordovi**, který představil první sériový zemědělský traktor **Fordson Model F** v roce **1917**. Stroj měl řadový čtyřválcový benzínový motor o výkonu **20 k** (14,7 kW) při 1000 ot./min, lamelovou spojku v olejové lázni a šnekový převod. V roce **1939** přišel **Ford 9N** se vznětovým čtyřválcem o objemu 1966 cm³ — historicky první traktor s **Ferguson System** tříbodovým závěsem. Jeho nástupců (Ford 2N, 8N, řad 600/800, NAA Jubilee) se vyrobily statisíce kusů.
+
+### Ford New Holland (1986–1991)
+
+V roce **1986** koupila Sperry New Holland společnost **Ford Motor Company** a sloučila ji s Ford Tractor Operations do nové značky **Ford New Holland**. Britské traktorové operace Ford již od roku **1964** sídlily v anglickém **Basildonu**, který se stal hlavním evropským traktorovým závodem značky. V 80. letech se zde vyráběla úspěšná **Series 10** — modely 2910 (44 k / 2,9 l), 4610 (64 k / 3,3 l), 7610 (103 k / 4,4 l) a 8210 (115 k / 6,6 l).
+
+V roce **1977** uvedl Ford ve spolupráci s firmou **Steiger** v Severní Dakotě řadu **FW** kloubových traktorů — čtyři typy s motory Cummins V8 a výkonem **210–335 k** v charakteristickém modro-bílém schématu. Partnerství skončilo v **1982** a Ford New Holland v roce **1987** převzal kanadský závod **Versatile** ve Winnipegu. Kloubový **Versatile 876** (1988) měl turbo Cummins, **280 k** a Powershift převodovku; pozdější **80 Series** (1994) pokrývala 250–400 k.
+
+### CNH Global a CNH Industrial (1991–dosud)
+
+V roce **1991** koupil Ford New Holland italský **Fiat**. V roce **1999** vznikl po fúzi s **Case Corporation** koncern **CNH Global** (dnes **CNH Industrial**). Z důvodu antimonopolních předpisů musel New Holland v roce **2000** prodat značku Versatile — tu dnes vyrábí kanadská společnost **Bühler Industries Inc.**
+
+Dnes má New Holland výrobní závody na čtyřech kontinentech a patří mezi pět největších výrobců zemědělské techniky na světě. Charakteristické modré-bílé barevné schéma je vyhrazeno výhradně značce New Holland.
 
 ## Portfolio strojů
 
