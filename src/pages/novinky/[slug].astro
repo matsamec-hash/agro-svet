@@ -21,6 +21,42 @@ if (!article) {
   return Astro.redirect('/novinky/');
 }
 
+// Related articles + prev/next nav: fetch a recent pool from same category
+// + same site, score by tag overlap (deterministic, SEO-friendly).
+// Single query keeps it cheap; pool is bounded for SSR latency.
+const { data: poolRaw } = await supabase
+  .from('articles')
+  .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+  .eq('site_id', SITE_ID)
+  .eq('status', 'published')
+  .neq('id', article.id)
+  .order('published_at', { ascending: false })
+  .limit(80);
+const pool = poolRaw ?? [];
+
+const articleTags: string[] = (article.tags as string[] | null) ?? [];
+function scoreRelated(other: typeof pool[number]): number {
+  let score = 0;
+  if (other.category && article.category && other.category === article.category) score += 5;
+  const tagSet = new Set(articleTags);
+  const otherTags = (other.tags as string[] | null) ?? [];
+  for (const t of otherTags) if (tagSet.has(t)) score += 3;
+  if (other.featured_image_url) score += 1;
+  return score;
+}
+const related = pool
+  .map((p) => ({ p, s: scoreRelated(p) }))
+  .filter(({ s }) => s > 0)
+  .sort((a, b) => b.s - a.s || (a.p.published_at < b.p.published_at ? 1 : -1))
+  .slice(0, 4)
+  .map(({ p }) => p);
+
+// Prev/next: chronological neighbors among published articles (any category).
+// `pool` is already DESC by published_at, so newer = before our article in the list.
+const articleDate = new Date(article.published_at).getTime();
+const prevArticle = pool.find((p) => new Date(p.published_at).getTime() < articleDate) ?? null; // older
+const nextArticle = [...pool].reverse().find((p) => new Date(p.published_at).getTime() > articleDate) ?? null; // newer
+
 const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.published_at));
 const categoryLabels: Record<string, string> = {
   technika: 'Technika', dotace: 'Dotace', trh: 'Trh', legislativa: 'Legislativa', znacky: 'Značky',
@@ -159,6 +195,24 @@ const jsonLd = {
       </div>
     )}
 
+    <!-- Prev / next chronological nav -->
+    {(prevArticle || nextArticle) && (
+      <nav class="prev-next" aria-label="Navigace mezi články">
+        {prevArticle ? (
+          <a href={`/novinky/${prevArticle.slug}/`} class="pn-link pn-prev" rel="prev">
+            <span class="pn-label">← Předchozí</span>
+            <span class="pn-title">{prevArticle.title}</span>
+          </a>
+        ) : <span></span>}
+        {nextArticle ? (
+          <a href={`/novinky/${nextArticle.slug}/`} class="pn-link pn-next" rel="next">
+            <span class="pn-label">Další →</span>
+            <span class="pn-title">{nextArticle.title}</span>
+          </a>
+        ) : <span></span>}
+      </nav>
+    )}
+
     <!-- Back link -->
     <div style="margin-top:48px;">
       <a href="/novinky/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px; transition:background .15s;">
@@ -167,6 +221,31 @@ const jsonLd = {
     </div>
 
   </div>
+
+  <!-- Related articles (topical clustering signal for Google) -->
+  {related.length > 0 && (
+    <aside class="related-section" aria-labelledby="related-heading">
+      <div class="related-inner">
+        <h2 id="related-heading">Další články k tématu</h2>
+        <div class="related-grid">
+          {related.map((r) => (
+            <a href={`/novinky/${r.slug}/`} class="related-card">
+              {r.featured_image_url && (
+                <div class="rc-img">
+                  <img src={r.featured_image_url} alt={r.title} loading="lazy" decoding="async" width="400" height="225" />
+                </div>
+              )}
+              <div class="rc-body">
+                {r.category && <span class="rc-cat">{categoryLabels[r.category] ?? r.category}</span>}
+                <h3>{r.title}</h3>
+                {r.perex && <p>{r.perex.length > 120 ? r.perex.slice(0, 120) + '…' : r.perex}</p>}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </aside>
+  )}
 
   <!-- Newsletter signup -->
   <Newsletter />
@@ -187,6 +266,117 @@ const jsonLd = {
   .prose :global(a:hover) { background:#FFFF00; }
   .prose :global(.auto-link) { text-decoration-color:#EAEAEC; text-decoration-style:dotted; }
   .prose :global(.auto-link:hover) { background:#FFFF00; text-decoration-color:#0A0A0B; }
+
+  /* Prev / next chronological nav */
+  .prev-next {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid #ebebeb;
+  }
+  .pn-link {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 18px;
+    background: #FBFAF4;
+    border: 1.5px solid #0A0A0B;
+    border-radius: 10px;
+    box-shadow: 2px 2px 0 #0A0A0B;
+    text-decoration: none;
+    color: #0A0A0B;
+    transition: transform .12s, box-shadow .12s, background .12s;
+  }
+  .pn-link:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 #0A0A0B; background: #FFFF00; }
+  .pn-next { text-align: right; }
+  .pn-label {
+    font: 600 11px 'Chakra Petch', sans-serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #6B6B72;
+  }
+  .pn-title {
+    font: 600 14px 'Chakra Petch', sans-serif;
+    line-height: 1.35;
+    color: #0A0A0B;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  @media (max-width: 600px) {
+    .prev-next { grid-template-columns: 1fr; }
+    .pn-next { text-align: left; }
+  }
+
+  /* Related articles section */
+  .related-section {
+    background: #FBFAF4;
+    border-top: 2px dashed #EAEAEC;
+    padding: 56px 24px 64px;
+    margin-top: 64px;
+  }
+  .related-inner { max-width: 1180px; margin: 0 auto; }
+  .related-section h2 {
+    font: 800 clamp(1.4rem, 3vw, 1.9rem) 'Chakra Petch', sans-serif;
+    letter-spacing: -.02em;
+    color: #0A0A0B;
+    margin: 0 0 28px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+  }
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1.5px solid #0A0A0B;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0 #0A0A0B;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .12s, box-shadow .12s;
+  }
+  .related-card:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 #0A0A0B; }
+  .rc-img { aspect-ratio: 16 / 9; overflow: hidden; background: #f0f0f0; }
+  .rc-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rc-body { padding: 14px 16px 18px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .rc-cat {
+    align-self: flex-start;
+    font: 700 10px 'Chakra Petch', sans-serif;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    background: #FFFF00;
+    color: #0A0A0B;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1.5px solid #0A0A0B;
+  }
+  .rc-body h3 {
+    font: 700 15px 'Chakra Petch', sans-serif;
+    line-height: 1.3;
+    color: #0A0A0B;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .rc-body p {
+    font-size: 13px;
+    color: #6B6B72;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .article-tag {
     display: inline-block;
     font-size: 12px;
