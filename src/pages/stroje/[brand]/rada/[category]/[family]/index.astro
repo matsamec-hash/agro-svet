@@ -1,5 +1,5 @@
 ---
-export const prerender = false;
+export const prerender = true;
 import Layout from '../../../../../../layouts/Layout.astro';
 import { getAllBrands, getBrand, seriesFamily, familyLabel, type StrojKategorie } from '../../../../../../lib/stroje';
 
@@ -8,7 +8,10 @@ export async function getStaticPaths() {
   for (const b of getAllBrands()) {
     for (const [catKey, cat] of Object.entries(b.categories ?? {})) {
       const families = new Set<string>();
-      for (const s of cat.series ?? []) families.add((s as any).family || seriesFamily(s.slug));
+      for (const s of cat.series ?? []) {
+        const fam = (s as any).family ?? seriesFamily(s.slug);
+        families.add(String(fam));
+      }
       for (const f of families) {
         paths.push({ params: { brand: b.slug, category: catKey, family: f } });
       }

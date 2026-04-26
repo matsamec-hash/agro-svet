@@ -80,7 +80,7 @@ const familyLab = familyLabel(family);
 
 const yr = model.year_from ? (model.year_to ? `${model.year_from}–${model.year_to}` : `${model.year_from}–dosud`) : '';
 const isCurrent = model.year_to === null && model.year_from !== null;
-const seriesNameClean = series.name.replace(/\s*\([^)]*\)\s*$/, '');
+const seriesNameClean = String(series.name).replace(/\s*\([^)]*\)\s*$/, '');
 const seriesYr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
 
 // Related models in same series

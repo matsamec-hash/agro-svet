@@ -30,11 +30,13 @@ V roce **1986** koupila Sperry New Holland společnost **Ford Motor Company** a 
 
 V roce **1977** uvedl Ford ve spolupráci s firmou **Steiger** v Severní Dakotě řadu **FW** kloubových traktorů — čtyři typy s motory Cummins V8 a výkonem **210–335 k** v charakteristickém modro-bílém schématu. Partnerství skončilo v **1982** a Ford New Holland v roce **1987** převzal kanadský závod **Versatile** ve Winnipegu. Kloubový **Versatile 876** (1988) měl turbo Cummins, **280 k** a Powershift převodovku; pozdější **80 Series** (1994) pokrývala 250–400 k.
 
-### CNH Global a CNH Industrial (1991–dosud)
+### Fiat a CNH (1991–dosud)
 
-V roce **1991** koupil Ford New Holland italský **Fiat**. V roce **1999** vznikl po fúzi s **Case Corporation** koncern **CNH Global** (dnes **CNH Industrial**). Z důvodu antimonopolních předpisů musel New Holland v roce **2000** prodat značku Versatile — tu dnes vyrábí kanadská společnost **Bühler Industries Inc.**
+V roce **1991** koupil Ford New Holland italský **Fiat**, který měl vlastní bohatou traktorovou historii sahající k modelu **702** z roku 1918 (první sériový traktor Fiatu) přes pásové stroje 30. let až po populární **Series 90** a **Winner** z 80. a 90. let. Fúze byla zformalizována vznikem **N.H. Geotech** (1991), přejmenována na **New Holland** v roce **1993** a oficiálně integrována na londýnské konferenci v **1994**.
 
-Dnes má New Holland výrobní závody na čtyřech kontinentech a patří mezi pět největších výrobců zemědělské techniky na světě. Charakteristické modré-bílé barevné schéma je vyhrazeno výhradně značce New Holland.
+V roce **1996** vzniklo společné podnikání **European Engine Alliance (EEA)** s Iveco a Cummins — základ dnešních motorů FPT (Fiat Powertrain Technologies). V roce **1999** se značka spojila s **Case Corporation** do koncernu **CNH Global** (dnes **CNH Industrial**). Z důvodu antimonopolních předpisů musel New Holland v roce **2000** prodat **Versatile** — tu dnes vyrábí **Bühler Industries Inc.** Od roku **2006** používá značka **jednotné označení** modelových řad bez výkonu v názvu (T4, T5, T6, T7, T8, T9).
+
+Dnes má New Holland výrobní závody na čtyřech kontinentech a patří mezi pět největších výrobců zemědělské techniky na světě. Charakteristické modro-bílé barevné schéma je vyhrazeno výhradně značce New Holland.
 
 ## Portfolio strojů
 

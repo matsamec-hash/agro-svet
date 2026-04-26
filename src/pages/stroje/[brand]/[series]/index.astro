@@ -1,5 +1,5 @@
 ---
-export const prerender = false;
+export const prerender = true;
 import Layout from '../../../../layouts/Layout.astro';
 import { getAllBrands, getSeries, seriesFamily, familyLabel, type StrojKategorie } from '../../../../lib/stroje';
 
@@ -48,7 +48,7 @@ const familyLab = familyLabel(family);
 
 const yr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
 const isCurrent = series.year_to === null && series.year_from !== null;
-const seriesNameClean = series.name.replace(/\s*\([^)]*\)\s*$/, '');
+const seriesNameClean = String(series.name).replace(/\s*\([^)]*\)\s*$/, '');
 
 const hpValues = series.models.map((m) => m.power_hp).filter((x): x is number => x !== null);
 const minHp = hpValues.length ? Math.min(...hpValues) : null;

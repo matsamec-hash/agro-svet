@@ -1,7 +1,12 @@
 ---
-export const prerender = false;
+export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const znacky = await getCollection('znacky');
+  return znacky.map((z) => ({ params: { slug: z.id } }));
+}
 
 const { slug } = Astro.params;
 const znacky = await getCollection('znacky');

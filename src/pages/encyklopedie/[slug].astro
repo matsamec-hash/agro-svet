@@ -1,9 +1,14 @@
 ---
-export const prerender = false;
+export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
+
+export async function getStaticPaths() {
+  const items = await getCollection('encyklopedie');
+  return items.map((i) => ({ params: { slug: i.id } }));
+}
 
 const { slug } = Astro.params;
 const items = await getCollection('encyklopedie');

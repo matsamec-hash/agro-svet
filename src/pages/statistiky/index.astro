@@ -1,8 +1,10 @@
 ---
 // src/pages/statistiky/index.astro
-// prerender=false: nutné pro průchod gate middlewarem (viz reference-agro-svet-gate.md).
-// Až bude gate vypnutý, vrátit na true — statistiky je drahá SSR.
-export const prerender = true;
+// prerender=false: ČSÚ + Eurostat API timeoutuje při buildu (Headers Timeout Error)
+// a blokuje deploy. SSR s edge cache (CF Workers s-maxage) je pragmatičtější —
+// data se aktualizují denně, ne realtime, ale SSR se vyrenderují na vyžádání.
+// Když ČSÚ API bude reliable, lze flipnout zpět na true pro lepší CWV.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import {
   getCommodityStats,
