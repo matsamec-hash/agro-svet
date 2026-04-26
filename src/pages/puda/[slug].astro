@@ -2,6 +2,8 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import { SITE_URL } from '../../lib/config';
+import { breadcrumbSchema } from '../../lib/structured-data';
 
 const { slug } = Astro.params;
 const items = await getCollection('puda');
@@ -12,9 +14,31 @@ if (!item) {
 }
 
 const { Content } = await render(item);
+
+const pageUrl = `${SITE_URL}/puda/${slug}/`;
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Zemědělská půda', url: '/puda/' },
+  { name: item.data.title, url: pageUrl },
+]);
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: item.data.title,
+  description: item.data.popis,
+  url: pageUrl,
+  inLanguage: 'cs-CZ',
+  publisher: {
+    '@type': 'Organization',
+    name: 'agro-svět.cz',
+    url: SITE_URL + '/',
+  },
+};
 ---
 
-<Layout title={item.data.title} description={item.data.popis}>
+<Layout title={item.data.title} description={item.data.popis} canonical={pageUrl}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <div style="max-width:780px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:28px;">
