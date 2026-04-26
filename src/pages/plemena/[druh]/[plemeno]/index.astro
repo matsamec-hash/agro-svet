@@ -27,10 +27,23 @@ const druhTone: Record<string, [string, string]> = {
 };
 const [druhC1, druhC2] = druhTone[druh.slug] ?? ['#5a4a30', '#2a2218'];
 
+// Related plemena: scored by uzitkovost overlap + origin country match (deterministic,
+// SEO-friendly — Google penalizes random "related" links as topically weak signal).
+function relatedScore(other: typeof plemeno): number {
+  let score = 0;
+  const a = new Set(plemeno.uzitkovost ?? []);
+  const b = other.uzitkovost ?? [];
+  for (const u of b) if (a.has(u)) score += 10;
+  if (other.origin_country && other.origin_country === plemeno.origin_country) score += 5;
+  if (other.image_url) score += 1;
+  return score;
+}
 const related = druh.plemena
   .filter((p) => p.slug !== plemeno.slug)
-  .sort(() => Math.random() - 0.5)
-  .slice(0, 6);
+  .map((p) => ({ p, score: relatedScore(p) }))
+  .sort((a, b) => b.score - a.score || a.p.name.localeCompare(b.p.name, 'cs'))
+  .slice(0, 6)
+  .map(({ p }) => p);
 
 // Categorized spec rows
 type SpecRow = { label: string; value: string };

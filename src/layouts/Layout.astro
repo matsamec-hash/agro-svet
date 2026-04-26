@@ -9,9 +9,26 @@ interface Props {
   description?: string;
   ogImage?: string;
   canonical?: string;
+  ogType?: 'website' | 'article' | 'product' | 'profile';
+  noindex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  articleSection?: string;
+  articleTags?: string[];
 }
 
-const { title, description = 'Novinky ze světa zemědělství, encyklopedie strojů, značky a agro bazar.', ogImage, canonical } = Astro.props;
+const {
+  title,
+  description = 'Novinky ze světa zemědělství, encyklopedie strojů, značky a agro bazar.',
+  ogImage,
+  canonical,
+  ogType = 'website',
+  noindex = false,
+  publishedTime,
+  modifiedTime,
+  articleSection,
+  articleTags,
+} = Astro.props;
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
 const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
@@ -28,6 +45,7 @@ const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString()
   <meta name="msvalidate.01" content="A401032123927401E73FAB1151E94F3D" />
   <title>{title} | agro-svět.cz</title>
   <meta name="description" content={description} />
+  <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
   <link rel="canonical" href={canonicalUrl} />
   <link rel="alternate" hreflang="cs" href={canonicalUrl} />
@@ -35,13 +53,18 @@ const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString()
 
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={ogType} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:locale" content="cs_CZ" />
   <meta property="og:site_name" content="agro-svět.cz" />
   {ogImage && <meta property="og:image" content={ogImage} />}
   {ogImage && <meta property="og:image:width" content="1200" />}
   {ogImage && <meta property="og:image:height" content="630" />}
+  {ogImage && <meta property="og:image:alt" content={title} />}
+  {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+  {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+  {articleSection && <meta property="article:section" content={articleSection} />}
+  {articleTags && articleTags.map((t) => <meta property="article:tag" content={t} />)}
   <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
   {ogImage && <meta name="twitter:image" content={ogImage} />}
 

@@ -33,9 +33,13 @@ const publisher = {
   url: 'https://agro-svet.cz',
   logo: {
     '@type': 'ImageObject',
-    url: 'https://agro-svet.cz/apple-touch-icon.png',
+    url: 'https://agro-svet.cz/icon-512.png',
+    width: 512,
+    height: 512,
   },
 };
+const articleSectionLabel = article.category ? (categoryLabels[article.category] || article.category) : undefined;
+const dateModified = article.updated_at || article.published_at;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -43,28 +47,47 @@ const jsonLd = {
       '@type': 'NewsArticle',
       headline: article.title,
       description: article.seo_description || article.perex,
-      ...(article.featured_image_url && { image: [article.featured_image_url] }),
+      ...(article.featured_image_url && {
+        image: {
+          '@type': 'ImageObject',
+          url: article.featured_image_url,
+          width: 1600,
+          height: 900,
+        },
+      }),
       datePublished: article.published_at,
-      dateModified: article.published_at,
+      dateModified,
       url: canonical,
       mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
       author: publisher,
       publisher,
-      ...(article.category && { articleSection: categoryLabels[article.category] || article.category }),
+      inLanguage: 'cs-CZ',
+      ...(articleSectionLabel && { articleSection: articleSectionLabel }),
       ...(article.tags?.length > 0 && { keywords: article.tags.join(', ') }),
     },
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Novinky', item: 'https://agro-svet.cz/novinky/' },
-        { '@type': 'ListItem', position: 2, name: article.title, item: canonical },
+        { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+        { '@type': 'ListItem', position: 2, name: 'Novinky', item: 'https://agro-svet.cz/novinky/' },
+        { '@type': 'ListItem', position: 3, name: article.title, item: canonical },
       ],
     },
   ],
 };
 ---
 
-<Layout title={article.seo_title || article.title} description={article.seo_description || article.perex} ogImage={article.featured_image_url || undefined} canonical={canonical}>
+<Layout
+  title={article.seo_title || article.title}
+  description={article.seo_description || article.perex}
+  ogImage={article.featured_image_url || undefined}
+  canonical={canonical}
+  ogType="article"
+  publishedTime={article.published_at}
+  modifiedTime={dateModified}
+  articleSection={articleSectionLabel}
+  articleTags={article.tags ?? undefined}
+>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
   <!-- Hero image -->

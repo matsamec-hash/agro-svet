@@ -2,6 +2,8 @@
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { SITE_URL } from '../../lib/config';
+import { breadcrumbSchema } from '../../lib/structured-data';
 
 const items = await getCollection('encyklopedie');
 const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, 'cs'));
@@ -9,9 +11,35 @@ const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, 'cs')
 const kategLabels: Record<string, string> = {
   traktor: 'Traktor', kombajn: 'Kombajn', stroj: 'Stroj', 'puda-technika': 'Půdní technika',
 };
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Encyklopedie', url: '/encyklopedie/' },
+]);
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Encyklopedie zemědělských strojů',
+  description: 'Databáze zemědělských strojů — traktory, kombajny, sklízecí mlátičky.',
+  url: `${SITE_URL}/encyklopedie/`,
+  inLanguage: 'cs-CZ',
+  numberOfItems: sorted.length,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: sorted.length,
+    itemListElement: sorted.slice(0, 100).map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE_URL}/encyklopedie/${item.id}/`,
+      name: item.data.name,
+    })),
+  },
+};
 ---
 
 <Layout title="Encyklopedie strojů" description="Databáze zemědělských strojů — traktory, kombajny, sklízecí mlátičky a stroje. Technické parametry, popis a srovnání.">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
 
     <div style="margin-bottom:48px;">

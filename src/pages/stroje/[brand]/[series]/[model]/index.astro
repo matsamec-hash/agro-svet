@@ -172,10 +172,17 @@ const productJsonLd = machineProductSchema({
   url: canonical,
   description: model.description ?? undefined,
   imageUrl: heroPhoto,
+  powerHp: model.power_hp,
+  powerKw: model.power_kw,
+  weightKg: model.weight_kg,
+  yearFrom: model.year_from,
+  yearTo: model.year_to,
+  engine: model.engine,
+  transmission: model.transmission,
 });
 ---
 
-<Layout title={`${pageTitle} — parametry a cena`} description={pageDesc} canonical={canonical} ogImage={heroPhoto}>
+<Layout title={`${pageTitle} — parametry a cena`} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <div class="model-page">

@@ -86,7 +86,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
 ]);
 ---
 
-<Layout title={`${listing.title} — Agro bazar`} ogImage={images[0]?.url}>
+<Layout title={`${listing.title} — Agro bazar`} ogImage={images[0]?.url} ogType="product">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <div style="max-width:1000px; margin:0 auto; padding:32px 24px 80px;">

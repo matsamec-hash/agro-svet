@@ -2,6 +2,8 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import { SITE_URL } from '../../lib/config';
+import { breadcrumbSchema } from '../../lib/structured-data';
 
 const { slug } = Astro.params;
 const items = await getCollection('encyklopedie');
@@ -12,9 +14,42 @@ const { Content } = await render(item);
 const kategLabels: Record<string, string> = {
   traktor: 'Traktor', kombajn: 'Kombajn', stroj: 'Stroj', 'puda-technika': 'Půdní technika',
 };
+
+const pageUrl = `${SITE_URL}/encyklopedie/${slug}/`;
+const heroImageAbs = item.data.heroImage
+  ? (item.data.heroImage.startsWith('http') ? item.data.heroImage : `${SITE_URL}${item.data.heroImage}`)
+  : undefined;
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Encyklopedie', url: '/encyklopedie/' },
+  { name: item.data.name, url: pageUrl },
+]);
+const articleJsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: item.data.name,
+  description: item.data.popis,
+  url: pageUrl,
+  inLanguage: 'cs-CZ',
+  about: {
+    '@type': 'Product',
+    name: item.data.name,
+    brand: { '@type': 'Brand', name: item.data.znacka },
+    category: kategLabels[item.data.kategorie] ?? item.data.kategorie,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'agro-svět.cz',
+    url: SITE_URL + '/',
+    logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png` },
+  },
+};
+if (heroImageAbs) articleJsonLd.image = heroImageAbs;
 ---
 
-<Layout title={item.data.name} description={item.data.popis}>
+<Layout title={item.data.name} description={item.data.popis} canonical={pageUrl} ogType="article" ogImage={heroImageAbs}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
 
   {item.data.heroImage && (
     <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">

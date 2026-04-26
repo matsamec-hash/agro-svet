@@ -1,0 +1,65 @@
+---
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+
+Astro.response.status = 404;
+---
+
+<Layout
+  title="Stránka nenalezena"
+  description="Hledaná stránka neexistuje. Zkuste přejít na novinky, katalog strojů nebo bazar."
+  noindex={true}
+>
+  <main style="max-width:760px; margin:0 auto; padding:64px 32px 96px; text-align:center;">
+    <div style="font-family:'Chakra Petch',sans-serif; font-size:clamp(5rem,18vw,9rem); font-weight:800; line-height:1; color:#0A0A0B; letter-spacing:-.04em;">
+      404
+    </div>
+    <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(1.6rem,4vw,2.4rem); font-weight:700; color:#0A0A0B; margin:8px 0 16px;">
+      Tato stránka neexistuje
+    </h1>
+    <p style="font-size:16px; color:#6B6B72; line-height:1.6; max-width:480px; margin:0 auto 36px;">
+      Mohla být přesunuta, smazána nebo jste se překlepli v adrese. Zkuste některou z hlavních sekcí.
+    </p>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:48px;">
+      <a href="/" class="kat-btn kat-btn-primary">← Domů</a>
+      <a href="/novinky/" class="kat-btn">Novinky</a>
+      <a href="/stroje/" class="kat-btn">Katalog techniky</a>
+      <a href="/bazar/" class="kat-btn">Bazar</a>
+      <a href="/plemena/" class="kat-btn">Plemena zvířat</a>
+      <a href="/hledat/" class="kat-btn">Hledat</a>
+    </div>
+
+    <div style="border-top:1px solid #EAEAEC; padding-top:24px; margin-top:24px;">
+      <p style="font-size:13px; color:#6B6B72;">
+        Pokud si myslíte, že jde o chybu, dejte nám vědět na
+        <a href="mailto:redakce@agro-svet.cz" style="color:#0A0A0B;">redakce@agro-svet.cz</a>.
+      </p>
+    </div>
+  </main>
+
+  <style>
+    .kat-btn {
+      display: inline-block;
+      padding: 10px 18px;
+      background: #fff;
+      border: 1.5px solid #0A0A0B;
+      border-radius: 8px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0A0A0B;
+      text-decoration: none;
+      box-shadow: 2px 2px 0 #0A0A0B;
+      transition: transform .12s, box-shadow .12s;
+    }
+    .kat-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 #0A0A0B;
+      background: #FFFF00;
+    }
+    .kat-btn-primary {
+      background: #FFFF00;
+    }
+  </style>
+</Layout>
