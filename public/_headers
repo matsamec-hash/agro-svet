@@ -1,0 +1,29 @@
+# Cloudflare Workers Assets binding reads this file (copied to dist/client/_headers
+# at build) and applies headers to matching asset responses BEFORE the worker
+# script runs. This works around `run_worker_first=true` (wrangler.toml) +
+# `app.manifest.assets.has()` short-circuit in the Astro CF adapter that
+# bypasses our middleware for built static assets.
+
+# Hashed Astro bundles — content-addressed, immortal cache
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted fonts — long cache, never change once shipped
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Public images (hero/category webp) — long cache + background revalidate
+/images/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+# Favicons + PWA icons (top-level)
+/favicon.ico
+  Cache-Control: public, max-age=2592000
+/favicon.svg
+  Cache-Control: public, max-age=2592000
+/apple-touch-icon.png
+  Cache-Control: public, max-age=2592000
+/icon-192.png
+  Cache-Control: public, max-age=2592000
+/icon-512.png
+  Cache-Control: public, max-age=2592000
