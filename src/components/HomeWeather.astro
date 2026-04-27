@@ -1,0 +1,362 @@
+---
+// Homepage-specific weather widgets — fetched client-side from cached
+// /api/weather/* endpoints. Zero SSR cost (avoids the 1102 incident pattern
+// where SSR fired 8+ Open-Meteo fetches per request). Re-uses CSS/markup
+// from AgroWeather; data is filled in by inline script after page load.
+
+interface Props {
+  mode: 'strip' | 'puda';
+}
+const { mode } = Astro.props;
+---
+
+{mode === 'puda' && (
+  <section class="aw-card" aria-label="Počasí pro pole" data-aw-puda-card hidden>
+    <header class="aw-card-head">
+      <div class="aw-card-titles">
+        <span class="aw-card-kicker">
+          <span class="aw-dot"></span>
+          Půda · vlhkost a srážky
+        </span>
+        <h3>Stav půdy a srážková bilance</h3>
+        <span class="aw-card-loc" data-aw-puda-loc>—</span>
+      </div>
+      <a class="aw-src" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Zdroj: Open-Meteo ↗</a>
+    </header>
+    <div class="aw-puda-grid" data-aw-puda-grid></div>
+  </section>
+)}
+
+{mode === 'strip' && (
+  <section class="aw-strip" aria-label="Počasí pro pole" data-aw-strip-lazy hidden>
+    <div class="aw-strip-inner">
+      <div class="aw-strip-label">
+        <span class="aw-dot"></span>
+        <span class="aw-label-text" data-aw-title>Počasí pro pole</span>
+        <span class="aw-label-sub" data-aw-subtitle>Aktuální · 6 měst</span>
+      </div>
+      <div class="aw-cities" data-aw-cities></div>
+      <div class="aw-user" data-aw-user hidden></div>
+      <div class="aw-actions">
+        <button type="button" class="aw-geo-btn" data-aw-locate>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.5 8 12 8 12s8-6.5 8-12a8 8 0 0 0-8-8z"/></svg>
+          <span data-aw-locate-label>Moje pole</span>
+        </button>
+        <button type="button" class="aw-reset-btn" data-aw-reset hidden>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+        <a class="aw-strip-src" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
+      </div>
+    </div>
+  </section>
+)}
+
+<script is:inline>
+  (function(){
+    const WMO = {
+      0:['☀️','Jasno'],1:['🌤️','Polojasno'],2:['⛅','Polojasno'],3:['☁️','Zataženo'],
+      45:['🌫️','Mlha'],48:['🌫️','Námraza'],
+      51:['🌦️','Mrholení'],53:['🌦️','Mrholení'],55:['🌧️','Silné mrholení'],
+      61:['🌧️','Slabý déšť'],63:['🌧️','Déšť'],65:['🌧️','Silný déšť'],
+      71:['🌨️','Slabé sněžení'],73:['🌨️','Sněžení'],75:['❄️','Silné sněžení'],
+      80:['🌦️','Přeháňky'],81:['🌧️','Přeháňky'],82:['⛈️','Silné přeháňky'],
+      95:['⛈️','Bouřka'],96:['⛈️','Bouřka s krupobitím'],99:['⛈️','Silná bouřka']
+    };
+
+    // ── STRIP widget — populate 6 cities from cached /api/weather/strip ──
+    const stripEl = document.querySelector('[data-aw-strip-lazy]');
+    if (stripEl) {
+      const citiesBox = stripEl.querySelector('[data-aw-cities]');
+      const subtitle = stripEl.querySelector('[data-aw-subtitle]');
+      fetch('/api/weather/strip', { credentials: 'omit' })
+        .then(r => r.ok ? r.json() : null)
+        .then(j => {
+          if (!j || !Array.isArray(j.cities) || j.cities.length === 0) return;
+          const html = j.cities.map((c) => {
+            const wc = WMO[c.weatherCode] || ['🌡️','—'];
+            const rain = c.precipMm > 0
+              ? '<span class="aw-city-rain">' + c.precipMm + ' mm</span>'
+              : '';
+            return '<div class="aw-city">' +
+              '<span class="aw-city-icon" aria-hidden="true">' + wc[0] + '</span>' +
+              '<div class="aw-city-data">' +
+                '<span class="aw-city-name">' + c.name + '</span>' +
+                '<span class="aw-city-temp">' + c.tempC + '°</span>' +
+                rain +
+              '</div>' +
+            '</div>';
+          }).join('');
+          citiesBox.innerHTML = html;
+          subtitle.textContent = 'Aktuální · ' + j.cities.length + ' měst';
+          stripEl.removeAttribute('hidden');
+        })
+        .catch(() => { /* keep hidden on failure */ });
+
+      // Geolocation override (existing pattern, untouched logic)
+      const STORAGE = 'aw-user-loc-v1';
+      const TTL_MS = 60 * 60 * 1000;
+      const user = stripEl.querySelector('[data-aw-user]');
+      const cities = stripEl.querySelector('[data-aw-cities]');
+      const title = stripEl.querySelector('[data-aw-title]');
+      const btn = stripEl.querySelector('[data-aw-locate]');
+      const btnLabel = stripEl.querySelector('[data-aw-locate-label]');
+      const reset = stripEl.querySelector('[data-aw-reset]');
+
+      const dayCs = (iso) => ['ne','po','út','st','čt','pá','so'][new Date(iso + 'T12:00:00').getDay()];
+
+      async function fetchForecast(lat, lon) {
+        const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
+          '&current=temperature_2m,weather_code,wind_speed_10m,precipitation' +
+          '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,weather_code' +
+          '&forecast_days=5&timezone=Europe%2FPrague';
+        const r = await fetch(url);
+        if (!r.ok) throw new Error('forecast');
+        return r.json();
+      }
+      async function reverseGeo(lat, lon) {
+        try {
+          const r = await fetch('https://geocoding-api.open-meteo.com/v1/reverse?latitude=' + lat + '&longitude=' + lon + '&count=1&language=cs');
+          if (!r.ok) return null;
+          const j = await r.json();
+          return j.results?.[0]?.name ?? j.results?.[0]?.admin1 ?? null;
+        } catch { return null; }
+      }
+      function renderUser(loc, data) {
+        const cur = data.current || {};
+        const d = data.daily || {};
+        const wc = WMO[cur.weather_code] || ['🌡️','—'];
+        const cards = (d.time || []).map((iso, i) => {
+          const w = WMO[d.weather_code[i]] || ['🌡️','—'];
+          const rain = d.precipitation_sum[i];
+          return '<div class="aw-day5">' +
+            '<span class="aw-d5-name">' + (i === 0 ? 'Dnes' : dayCs(iso)) + '</span>' +
+            '<span class="aw-d5-icon" title="' + w[1] + '">' + w[0] + '</span>' +
+            '<span class="aw-d5-tmax">' + Math.round(d.temperature_2m_max[i]) + '°</span>' +
+            '<span class="aw-d5-tmin">' + Math.round(d.temperature_2m_min[i]) + '°</span>' +
+            (rain > 0 ? '<span class="aw-d5-rain">' + (Math.round(rain * 10) / 10) + ' mm</span>' : '') +
+          '</div>';
+        }).join('');
+        user.innerHTML = cards;
+        user.hidden = false;
+        cities.hidden = true;
+        title.textContent = 'Vaše pole · ' + (loc.name || 'aktuální poloha');
+        subtitle.textContent = 'Nyní ' + Math.round(cur.temperature_2m) + '° · ' + wc[1] + ' · ' + Math.round(cur.wind_speed_10m) + ' km/h';
+        btnLabel.textContent = 'Aktualizovat';
+        reset.hidden = false;
+      }
+      async function loadUser(lat, lon, name) {
+        btn.disabled = true;
+        btnLabel.textContent = 'Načítám…';
+        try {
+          const data = await fetchForecast(lat, lon);
+          const cityName = name || await reverseGeo(lat, lon);
+          const loc = { lat, lon, name: cityName, ts: Date.now() };
+          localStorage.setItem(STORAGE, JSON.stringify(loc));
+          renderUser(loc, data);
+        } catch {
+          btnLabel.textContent = 'Chyba';
+          setTimeout(() => { btnLabel.textContent = 'Moje pole'; }, 2500);
+        } finally { btn.disabled = false; }
+      }
+      btn.addEventListener('click', () => {
+        const cached = localStorage.getItem(STORAGE);
+        if (cached) {
+          try {
+            const loc = JSON.parse(cached);
+            if (loc.lat && loc.lon) { loadUser(loc.lat, loc.lon, loc.name); return; }
+          } catch {}
+        }
+        if (!navigator.geolocation) { btnLabel.textContent = 'Geolokace nedostupná'; return; }
+        btnLabel.textContent = 'Žádám polohu…';
+        navigator.geolocation.getCurrentPosition(
+          (pos) => loadUser(pos.coords.latitude, pos.coords.longitude, null),
+          () => { btnLabel.textContent = 'Povolení odmítnuto'; setTimeout(() => { btnLabel.textContent = 'Moje pole'; }, 2500); },
+          { timeout: 8000, maximumAge: 5 * 60 * 1000 }
+        );
+      });
+      reset.addEventListener('click', () => {
+        localStorage.removeItem(STORAGE);
+        user.hidden = true;
+        cities.hidden = false;
+        title.textContent = 'Počasí pro pole';
+        subtitle.textContent = 'Aktuální · 6 měst';
+        btnLabel.textContent = 'Moje pole';
+        reset.hidden = true;
+      });
+      const cachedLoc = localStorage.getItem(STORAGE);
+      if (cachedLoc) {
+        try {
+          const loc = JSON.parse(cachedLoc);
+          if (loc.lat && loc.lon && (Date.now() - (loc.ts || 0) < TTL_MS)) {
+            fetchForecast(loc.lat, loc.lon).then((data) => renderUser(loc, data)).catch(() => {});
+          }
+        } catch {}
+      }
+    }
+
+    // ── PUDA widget — populate metrics from cached /api/weather/agro ──
+    const pudaEl = document.querySelector('[data-aw-puda-card]');
+    if (pudaEl) {
+      fetch('/api/weather/agro', { credentials: 'omit' })
+        .then(r => r.ok ? r.json() : null)
+        .then(j => {
+          if (!j || !j.agro) return;
+          const a = j.agro;
+          const droughtLabel = (mm) => mm < 5 ? 'Sucho' : mm < 15 ? 'Spíše sucho' : mm < 30 ? 'Normální' : 'Mokro';
+          const droughtColor = (mm) => mm < 5 ? '#C24414' : mm < 15 ? '#E89000' : mm < 30 ? '#0B7A3B' : '#1976D2';
+          const totalAhead = Math.round(a.daily.precipMm.reduce((x, y) => x + y, 0) * 10) / 10;
+          const rainyDays = a.daily.precipMm.filter((v) => v > 1).length;
+          const wc = WMO[a.current.weatherCode] || ['🌡️','—'];
+          const loc = pudaEl.querySelector('[data-aw-puda-loc]');
+          loc.textContent = a.city.name + ' · ' + a.current.tempC + '° · ' + wc[1];
+          const grid = pudaEl.querySelector('[data-aw-puda-grid]');
+          grid.innerHTML =
+            '<div class="aw-metric"><span class="aw-m-label">Půdní vlhkost 0–3 cm</span><span class="aw-m-val">' + (a.soil.moisture0_3cm * 100).toFixed(1) + '<span class="aw-m-unit"> %</span></span><span class="aw-m-hint">m³ vody / m³ půdy · povrch</span></div>' +
+            '<div class="aw-metric"><span class="aw-m-label">Půdní vlhkost 3–9 cm</span><span class="aw-m-val">' + (a.soil.moisture3_9cm * 100).toFixed(1) + '<span class="aw-m-unit"> %</span></span><span class="aw-m-hint">kořenová zóna obilnin a řepky</span></div>' +
+            '<div class="aw-metric"><span class="aw-m-label">Srážky · 7 dní zpět</span><span class="aw-m-val">' + a.past7d.precipSum + '<span class="aw-m-unit"> mm</span></span><span class="aw-m-hint" style="color:' + droughtColor(a.past7d.precipSum) + ';font-weight:600">' + droughtLabel(a.past7d.precipSum) + '</span></div>' +
+            '<div class="aw-metric"><span class="aw-m-label">Srážky · 7 dní vpřed</span><span class="aw-m-val">' + totalAhead + '<span class="aw-m-unit"> mm</span></span><span class="aw-m-hint">' + rainyDays + ' dnů s deštěm</span></div>' +
+            '<div class="aw-metric"><span class="aw-m-label">Teplota půdy · povrch</span><span class="aw-m-val">' + a.soil.temp0cm + '<span class="aw-m-unit"> °C</span></span><span class="aw-m-hint">6 cm: ' + a.soil.temp6cm + ' °C</span></div>' +
+            '<div class="aw-metric"><span class="aw-m-label">Teplota · průměr 7 dní</span><span class="aw-m-val">' + a.past7d.tempAvg.toFixed(1) + '<span class="aw-m-unit"> °C</span></span><span class="aw-m-hint">vegetační base 5 °C</span></div>';
+          pudaEl.removeAttribute('hidden');
+        })
+        .catch(() => { /* keep hidden */ });
+    }
+  })();
+</script>
+
+<style is:global>
+  /* Mirror of AgroWeather styles — kept :global so innerHTML-injected
+     children (cities, day cards, metric cells) match without scope attrs. */
+  [data-aw-strip-lazy], [data-aw-puda-card] { display: block; }
+  [data-aw-strip-lazy][hidden], [data-aw-puda-card][hidden] { display: none; }
+
+  [data-aw-strip-lazy].aw-strip {
+    background: #fff; color: #0A0A0B;
+    border-radius: 16px; padding: 0;
+    margin: 0 auto 28px; max-width: 1280px;
+    border: 1.5px solid #0A0A0B;
+    box-shadow: 4px 4px 0 #0A0A0B;
+    overflow: hidden;
+  }
+  [data-aw-strip-lazy] .aw-strip-inner {
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: stretch; gap: 0;
+  }
+  [data-aw-strip-lazy] .aw-strip-label {
+    display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    padding: 14px 18px;
+    background: #FFFF00;
+    border-right: 1.5px solid #0A0A0B;
+  }
+  [data-aw-strip-lazy] .aw-label-text {
+    font: 700 14px 'Chakra Petch', sans-serif; letter-spacing: -.01em;
+    color: #0A0A0B; display: inline-flex; align-items: center;
+  }
+  [data-aw-strip-lazy] .aw-label-sub {
+    font: 600 10px 'Chakra Petch', sans-serif; letter-spacing: .14em;
+    color: #0A0A0B; text-transform: uppercase; opacity: .7;
+  }
+  [data-aw-strip-lazy] .aw-dot,
+  [data-aw-puda-card] .aw-dot {
+    display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: #0A0A0B; margin-right: 7px;
+    animation: aw-pulse-lazy 2s infinite;
+  }
+  @keyframes aw-pulse-lazy { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  [data-aw-strip-lazy] .aw-cities {
+    display: flex; gap: 0; flex-wrap: nowrap; overflow-x: auto;
+    align-items: stretch;
+  }
+  [data-aw-strip-lazy] .aw-city {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; border-right: 1px solid #EAEAEC;
+  }
+  [data-aw-strip-lazy] .aw-city:last-child { border-right: 0; }
+  [data-aw-strip-lazy] .aw-city:hover { background: #FBFAF4; }
+  [data-aw-strip-lazy] .aw-city-icon { font-size: 22px; line-height: 1; }
+  [data-aw-strip-lazy] .aw-city-data { display: flex; flex-direction: column; gap: 0; line-height: 1.15; }
+  [data-aw-strip-lazy] .aw-city-name {
+    font: 600 11px 'Chakra Petch', sans-serif; color: #6B6B72;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+  [data-aw-strip-lazy] .aw-city-temp { font: 700 17px 'Chakra Petch', sans-serif; color: #0A0A0B; letter-spacing: -.01em; }
+  [data-aw-strip-lazy] .aw-city-rain { font: 600 10px 'Chakra Petch', sans-serif; color: #1976D2; letter-spacing: .04em; margin-top: 1px; }
+
+  [data-aw-strip-lazy] .aw-actions {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    border-left: 1.5px solid #0A0A0B; background: #FBFAF4;
+  }
+  [data-aw-strip-lazy] .aw-geo-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; background: #FFFF00;
+    border: 1.5px solid #0A0A0B; border-radius: 10px;
+    color: #0A0A0B; cursor: pointer;
+    font: 700 12.5px 'Chakra Petch', sans-serif; letter-spacing: .02em;
+    box-shadow: 2px 2px 0 #0A0A0B;
+  }
+  [data-aw-strip-lazy] .aw-geo-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 #0A0A0B; background: #FFEA00; }
+  [data-aw-strip-lazy] .aw-reset-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; padding: 0;
+    background: #fff; border: 1.5px solid #0A0A0B;
+    border-radius: 8px; color: #0A0A0B; cursor: pointer;
+  }
+  [data-aw-strip-lazy] .aw-strip-src { font-size: 10.5px; color: #6B6B72; text-decoration: none; }
+
+  [data-aw-strip-lazy] .aw-user { display: flex; gap: 0; align-items: stretch; overflow-x: auto; }
+  [data-aw-strip-lazy] .aw-day5 {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 10px 14px; min-width: 76px; border-right: 1px solid #EAEAEC;
+  }
+  [data-aw-strip-lazy] .aw-day5:last-child { border-right: 0; }
+  [data-aw-strip-lazy] .aw-d5-name { font: 700 10.5px 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #6B6B72; }
+  [data-aw-strip-lazy] .aw-d5-icon { font-size: 22px; line-height: 1; margin: 2px 0; }
+  [data-aw-strip-lazy] .aw-d5-tmax { font: 700 16px 'Chakra Petch', sans-serif; color: #0A0A0B; }
+  [data-aw-strip-lazy] .aw-d5-tmin { font: 500 11px 'Chakra Petch', sans-serif; color: #6B6B72; }
+  [data-aw-strip-lazy] .aw-d5-rain { font: 600 10px 'Chakra Petch', sans-serif; color: #1976D2; margin-top: 2px; }
+
+  @media (max-width: 800px) {
+    [data-aw-strip-lazy] .aw-strip-inner { grid-template-columns: 1fr; }
+    [data-aw-strip-lazy] .aw-strip-label { border-right: 0; border-bottom: 1.5px solid #0A0A0B; padding: 10px 16px; flex-direction: row; gap: 10px; }
+    [data-aw-strip-lazy] .aw-actions { border-left: 0; border-top: 1.5px solid #0A0A0B; justify-content: space-between; }
+  }
+
+  /* Puda card */
+  [data-aw-puda-card].aw-card {
+    background: #fff; border: 1px solid #EAEAEC;
+    border-radius: 18px; box-shadow: 0 1px 2px rgba(10,10,12,.04);
+    padding: 24px 26px; margin: 32px auto 36px;
+    max-width: 1280px;
+  }
+  [data-aw-puda-card] .aw-card-head {
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+    margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #F4F2E9;
+    flex-wrap: wrap;
+  }
+  [data-aw-puda-card] .aw-card-titles { display: flex; flex-direction: column; gap: 4px; }
+  [data-aw-puda-card] .aw-card-kicker {
+    font: 600 11px 'Chakra Petch', sans-serif; letter-spacing: .18em; text-transform: uppercase;
+    color: #6B6B72; display: flex; align-items: center;
+  }
+  [data-aw-puda-card] .aw-card-kicker .aw-dot { background: #0B7A3B; box-shadow: 0 0 0 3px rgba(11,122,59,.2); }
+  [data-aw-puda-card] h3 { font: 700 22px 'Chakra Petch', sans-serif; letter-spacing: -.02em; color: #0A0A0B; margin: 0; }
+  [data-aw-puda-card] .aw-card-loc { font: 500 13px 'Chakra Petch', sans-serif; color: #6B6B72; margin-top: 2px; }
+  [data-aw-puda-card] .aw-src { font-size: 11.5px; color: #888; text-decoration: none; }
+
+  [data-aw-puda-card] .aw-puda-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;
+  }
+  [data-aw-puda-card] .aw-metric {
+    background: #FBFAF4; border: 1px solid #EAEAEC; border-radius: 12px;
+    padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
+  }
+  [data-aw-puda-card] .aw-m-label {
+    font: 600 11px 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase;
+    color: #6B6B72;
+  }
+  [data-aw-puda-card] .aw-m-val { font: 700 26px 'Chakra Petch', sans-serif; letter-spacing: -.02em; color: #0A0A0B; line-height: 1; }
+  [data-aw-puda-card] .aw-m-unit { font-size: 13px; color: #6B6B72; font-weight: 400; }
+  [data-aw-puda-card] .aw-m-hint { font-size: 12px; color: #6B6B72; margin-top: 2px; }
+</style>

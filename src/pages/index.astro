@@ -4,6 +4,7 @@ import ArticleCard from '../components/ArticleCard.astro';
 import ImageAccordion from '../components/ImageAccordion.astro';
 import Newsletter from '../components/Newsletter.astro';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
+import HomeWeather from '../components/HomeWeather.astro';
 import { createAnonClient } from '../lib/supabase';
 import commoditiesData from '../data/commodities.json';
 import { AGRO_EVENTS } from '../data/agro-events';
@@ -178,6 +179,17 @@ const websiteJsonLd = {
     }
   </style>
 
+  <!-- Data: Zemědělská půda — Open-Meteo card s nadpisem (lazy, klient-side) -->
+  <section style="max-width:1280px; margin:0 auto; padding:24px 32px;">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Zemědělská půda</h2>
+      </div>
+      <a href="/puda/" class="link-cta">Zobrazit celou sekci →</a>
+    </div>
+    <HomeWeather mode="puda" />
+  </section>
+
   <!-- Data — Trhy a komodity (pod Půdou) -->
   <section style="max-width:1280px; margin:0 auto; padding:24px 32px 48px;">
     <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
@@ -250,6 +262,11 @@ const websiteJsonLd = {
       </div>
     </section>
   )}
+
+  <!-- Počasí pro pole — strip (pod bazar, lazy klient-side) -->
+  <div style="padding:32px 32px 0;">
+    <HomeWeather mode="strip" />
+  </div>
 
   <!-- Newsletter signup (always last before footer) -->
   <Newsletter />
