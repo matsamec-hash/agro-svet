@@ -4,7 +4,7 @@
 // headings (h1–h6), existing anchors, code/pre, script/style. Driven by
 // YAML catalogs already loaded via @modyfi/vite-plugin-yaml.
 
-import { getAllBrands, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from './stroje';
+import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from './stroje';
 import { getAllDruhy, getAllPlemena } from './plemena';
 
 interface GlossaryEntry {
@@ -17,7 +17,9 @@ interface GlossaryEntry {
 const PROTECTED_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'code', 'pre', 'script', 'style', 'figcaption']);
 const SELF_CLOSING = new Set(['br', 'hr', 'img', 'input', 'meta', 'link', 'source']);
 /** Hard cap per article — over-linking is a spam signal. */
-const MAX_LINKS_PER_ARTICLE = 8;
+const MAX_LINKS_PER_ARTICLE = 10;
+/** Min term length — filters out ambiguous short tokens like "T4", "CX50", "7110". */
+const MIN_TERM_LENGTH = 5;
 
 let cachedGlossary: GlossaryEntry[] | null = null;
 
@@ -26,6 +28,18 @@ function buildGlossary(): GlossaryEntry[] {
 
   for (const b of getAllBrands()) {
     entries.push({ term: b.name, url: `/stroje/${b.slug}/`, priority: 10 });
+  }
+
+  // Models: only currently-in-production (year_to === null), name >= MIN_TERM_LENGTH
+  // to avoid false positives on bare numbers like "7110" or short codes like "CX50".
+  for (const m of getAllModels()) {
+    if (!m.name || m.name.length < MIN_TERM_LENGTH) continue;
+    if (m.year_to !== null) continue;
+    entries.push({
+      term: m.name,
+      url: `/stroje/${m.brand_slug}/${m.series_slug}/${m.slug}/`,
+      priority: 12,
+    });
   }
 
   for (const d of getAllDruhy()) {
@@ -135,27 +149,32 @@ function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>): 
  */
 export function injectLinks(html: string, excludeUrl?: string): string {
   if (!html) return html;
-  const glossary = getGlossary();
-  const used = new Set<string>();
-  if (excludeUrl) used.add(excludeUrl);
+  try {
+    const glossary = getGlossary();
+    const used = new Set<string>();
+    if (excludeUrl) used.add(excludeUrl);
 
-  const tokens = tokenize(html);
-  let protectedDepth = 0;
-  const out: string[] = [];
+    const tokens = tokenize(html);
+    let protectedDepth = 0;
+    const out: string[] = [];
 
-  for (const tok of tokens) {
-    if (tok.type === 'tag' && tok.tagName && PROTECTED_TAGS.has(tok.tagName)) {
-      if (tok.isClosing) {
-        protectedDepth = Math.max(0, protectedDepth - 1);
-      } else if (!tok.isSelfClosing) {
-        protectedDepth++;
+    for (const tok of tokens) {
+      if (tok.type === 'tag' && tok.tagName && PROTECTED_TAGS.has(tok.tagName)) {
+        if (tok.isClosing) {
+          protectedDepth = Math.max(0, protectedDepth - 1);
+        } else if (!tok.isSelfClosing) {
+          protectedDepth++;
+        }
+        out.push(tok.value);
+      } else if (tok.type === 'text' && protectedDepth === 0) {
+        out.push(tryInject(tok.value, glossary, used));
+      } else {
+        out.push(tok.value);
       }
-      out.push(tok.value);
-    } else if (tok.type === 'text' && protectedDepth === 0) {
-      out.push(tryInject(tok.value, glossary, used));
-    } else {
-      out.push(tok.value);
     }
+    return out.join('');
+  } catch (e) {
+    console.error('[auto-linker] injectLinks failed, returning original HTML', e);
+    return html;
   }
-  return out.join('');
 }
