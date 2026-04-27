@@ -56,7 +56,7 @@ export const POST: APIRoute = async ({ request }) => {
       .eq('id', existing.id);
     if (updErr) {
       console.error('[newsletter/subscribe] update token failed', updErr);
-      return new Response(JSON.stringify({ error: 'db_error' }), { status: 500 });
+      return new Response(JSON.stringify({ error: 'db_error', detail: updErr.message }), { status: 500 });
     }
   } else {
     const { error: insErr } = await supabase
@@ -70,7 +70,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     if (insErr) {
       console.error('[newsletter/subscribe] insert failed', insErr);
-      return new Response(JSON.stringify({ error: 'db_error' }), { status: 500 });
+      return new Response(JSON.stringify({ error: 'db_error', detail: insErr.message }), { status: 500 });
     }
   }
 
