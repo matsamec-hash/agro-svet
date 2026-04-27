@@ -4,7 +4,6 @@ import ArticleCard from '../components/ArticleCard.astro';
 import ImageAccordion from '../components/ImageAccordion.astro';
 import Newsletter from '../components/Newsletter.astro';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
-import AgroWeather from '../components/AgroWeather.astro';
 import { createAnonClient } from '../lib/supabase';
 import { getCommodityFullSeries, getCommodityPrices } from '../lib/czso';
 import { fiveYearAverage } from '../lib/agro-derived';
@@ -177,17 +176,6 @@ const websiteJsonLd = {
     </div>
   </section>
 
-  <!-- Data: Zemědělská půda — Open-Meteo card s nadpisem -->
-  <section style="max-width:1280px; margin:0 auto; padding:24px 32px;">
-    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
-      <div>
-        <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Zemědělská půda</h2>
-      </div>
-      <a href="/puda/" class="link-cta">Zobrazit celou sekci →</a>
-    </div>
-    <AgroWeather mode="puda" />
-  </section>
-
   <style is:inline>
     .link-cta {
       display:inline-flex; align-items:center; gap:8px;
@@ -283,11 +271,6 @@ const websiteJsonLd = {
       </div>
     </section>
   )}
-
-  <!-- Počasí pro pole — strip (pod bazar) -->
-  <div style="padding:32px 32px 0;">
-    <AgroWeather mode="strip" />
-  </div>
 
   <!-- Newsletter signup (always last before footer) -->
   <Newsletter />
