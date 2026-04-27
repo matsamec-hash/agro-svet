@@ -44,7 +44,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
         'cache-control': `public, max-age=${CACHE_TTL}, s-maxage=${CACHE_TTL}`,
       },
     });
-    await tryCachePut(request, response, (locals as any).runtime?.ctx);
+    await tryCachePut(request, response, (locals as any).cfContext);
     return response;
   } catch (err) {
     return new Response(
