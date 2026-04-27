@@ -24,6 +24,27 @@ const PHOTOS = {
     credit: 'Valtra Oy Ab',
     license: 'Editorial / press use',
   },
+  'a-series': {
+    maxHp: 135,
+    url: 'https://www.valtra.cz/content/dam/Brands/Valtra/en/Products/ASeries/2025/valtra-a-series-tractors-75-10-115-hp-1600x900.jpg',
+    credit_url: 'https://www.valtra.cz/produkty/aserie.html',
+    credit: 'Valtra Oy Ab',
+    license: 'Editorial / press use',
+  },
+  'g-series': {
+    maxHp: 145,
+    url: 'https://www.valtra.cz/content/dam/Brands/Valtra/en/Products/gseries/2025/valtra-g-series-hero-2025_1600x900_1.jpg',
+    credit_url: 'https://www.valtra.cz/produkty/gserie.html',
+    credit: 'Valtra Oy Ab',
+    license: 'Editorial / press use',
+  },
+  'q-series': {
+    maxHp: 305,
+    url: 'https://www.valtra.cz/content/dam/Brands/Valtra/en/Products/QSeries/Valtra-Q-Series-high-horsepower-tractor-Hero-1600x900.jpg',
+    credit_url: 'https://www.valtra.cz/produkty/qserie.html',
+    credit: 'Valtra Oy Ab',
+    license: 'Editorial / press use',
+  },
 };
 
 const OUT_DIR = 'public/images/stroje/valtra';

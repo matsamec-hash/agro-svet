@@ -128,13 +128,18 @@ const VB_H = Y_OFFSET * 2 + (maxRow + 1) * HEX_H;
   .sp-mini-pill{
     padding:6px 12px;background:#fff;border:1px solid #EAEAEC;border-radius:999px;
     font:500 13px 'Chakra Petch',sans-serif;color:#0A0A0B;cursor:pointer;transition:.15s;
+    /* iOS Safari tap fix — manipulation eliminuje 300ms delay + tap cancel při drobném movementu */
+    touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,234,0,.3);
   }
   .sp-mini-pill:hover{background:#FFF6A8;border-color:#FFEA00}
   .sp-mini-pill.active{background:#0A0A0B;color:#fff;border-color:#0A0A0B}
   .sp-year-row{display:flex;gap:4px;background:#F4F2E9;border-radius:999px;padding:3px}
   .sp-year-btn{
-    padding:5px 12px;background:transparent;border:0;border-radius:999px;
-    font:600 12px 'Chakra Petch',sans-serif;color:#6B6B72;cursor:pointer;
+    padding:8px 14px;background:transparent;border:0;border-radius:999px;
+    font:600 13px 'Chakra Petch',sans-serif;color:#6B6B72;cursor:pointer;
+    /* iOS Safari tap fix — viz .sp-mini-pill. Plus min-height 36px pro spolehlivý tap target. */
+    touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,234,0,.3);
+    min-height:36px;
   }
   .sp-year-btn.active{background:#fff;color:#0A0A0B;box-shadow:0 1px 2px rgba(0,0,0,.06)}
 
