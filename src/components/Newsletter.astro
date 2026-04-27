@@ -1,11 +1,4 @@
 ---
-import { getEnvVar } from '../lib/env';
-
-import { AGRO_SVET_SITE_ID as SITE_ID } from '../lib/config';
-
-const SUPABASE_URL = getEnvVar('PUBLIC_SUPABASE_URL') ?? 'https://obhypfuzmknvmknskdwh.supabase.co';
-const SUPABASE_ANON_KEY = getEnvVar('PUBLIC_SUPABASE_ANON_KEY') ?? 'sb_publishable_CZvwsQ3DbmlOD8ErVuv9iQ_LjZJb6yD';
-
 const variant = Astro.props.variant ?? 'full';
 ---
 
@@ -150,12 +143,12 @@ const variant = Astro.props.variant ?? 'full';
   }
 </style>
 
-<script define:vars={{ SUPABASE_URL, SUPABASE_ANON_KEY, SITE_ID }}>
-  document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+<script>
+  document.getElementById('newsletter-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const emailInput = document.getElementById('newsletter-email');
-    const btn = document.getElementById('newsletter-btn');
-    const msg = document.getElementById('newsletter-msg');
+    const emailInput = document.getElementById('newsletter-email') as HTMLInputElement;
+    const btn = document.getElementById('newsletter-btn') as HTMLButtonElement;
+    const msg = document.getElementById('newsletter-msg') as HTMLElement;
     const email = emailInput.value.trim();
     if (!email) return;
 
@@ -163,28 +156,28 @@ const variant = Astro.props.variant ?? 'full';
     btn.textContent = '...';
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/newsletter_subscribers`, {
+      const res = await fetch('/api/newsletter/subscribe', {
         method: 'POST',
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=minimal',
-        },
-        body: JSON.stringify({ site_id: SITE_ID, email }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       });
+      const data = await res.json().catch(() => ({}));
 
-      if (res.ok) {
-        msg.textContent = 'Děkujeme! Brzy se ozveme.';
+      if (res.ok && data.status === 'pending_confirmation') {
+        msg.textContent = 'Zkontrolujte e-mail a klikněte na potvrzovací odkaz.';
         msg.style.color = '#0B7A3B';
         msg.style.fontWeight = '700';
         emailInput.value = '';
-      } else if (res.status === 409) {
-        msg.textContent = 'Tento e-mail už odebírá.';
+      } else if (res.ok && data.status === 'already_confirmed') {
+        msg.textContent = 'Tento e-mail už newsletter odebírá.';
         msg.style.color = '#0A0A0B';
         msg.style.fontWeight = '700';
+      } else if (data.error === 'invalid_email') {
+        msg.textContent = 'Zadejte platný e-mail.';
+        msg.style.color = '#C24414';
+        msg.style.fontWeight = '700';
       } else {
-        throw new Error('subscribe failed');
+        throw new Error(data.error || 'subscribe_failed');
       }
     } catch {
       msg.textContent = 'Něco se pokazilo. Zkuste to znovu.';

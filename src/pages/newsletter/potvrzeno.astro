@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const status = Astro.url.searchParams.get('status') ?? 'ok';
+
+const titles: Record<string, string> = {
+  ok: 'Odběr potvrzen — Agro-svět',
+  already: 'Odběr již potvrzen — Agro-svět',
+  invalid: 'Neplatný odkaz — Agro-svět',
+  error: 'Chyba potvrzení — Agro-svět',
+};
+
+const messages: Record<string, { h1: string; body: string; emoji: string }> = {
+  ok: {
+    emoji: '✅',
+    h1: 'Odběr potvrzen',
+    body: 'Děkujeme! Od teď budete dostávat newsletter Agro-svět — jednou týdně to nejdůležitější ze zemědělství, techniky, dotací a trhu.',
+  },
+  already: {
+    emoji: '👌',
+    h1: 'Odběr je už aktivní',
+    body: 'Tento odkaz jste už použili. Newsletter vám chodí, není potřeba nic dělat.',
+  },
+  invalid: {
+    emoji: '⚠️',
+    h1: 'Neplatný nebo expirovaný odkaz',
+    body: 'Odkaz pro potvrzení odběru se nepodařilo ověřit. Zkuste se přihlásit k odběru znovu, pošleme nový potvrzovací e-mail.',
+  },
+  error: {
+    emoji: '❌',
+    h1: 'Něco se pokazilo',
+    body: 'Při potvrzování odběru nastala chyba. Zkuste to prosím znovu nebo nám napište.',
+  },
+};
+
+const m = messages[status] ?? messages.error;
+const title = titles[status] ?? titles.error;
+---
+
+<Layout title={title} description="Stav potvrzení odběru newsletteru Agro-svět">
+  <div style="max-width:600px; margin:0 auto; padding:80px 24px; text-align:center;">
+    <div style="font-size:64px; margin-bottom:20px; line-height:1;">{m.emoji}</div>
+    <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,2.6rem); margin:0 0 16px; letter-spacing:-.02em;">
+      {m.h1}
+    </h1>
+    <p style="font-size:17px; line-height:1.6; color:#333; max-width:480px; margin:0 auto 32px;">
+      {m.body}
+    </p>
+    <a href="/" style="display:inline-block; background:#FFEA00; color:#0A0A0B; padding:14px 28px; border-radius:12px; text-decoration:none; font:700 15px 'Chakra Petch',sans-serif; letter-spacing:.02em;">
+      Zpět na Agro-svět
+    </a>
+  </div>
+</Layout>
