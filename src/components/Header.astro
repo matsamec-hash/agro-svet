@@ -10,7 +10,6 @@ const nav: NavItem[] = [
       { label: 'Dotace', href: '/novinky/kategorie/dotace/' },
       { label: 'Trh', href: '/novinky/kategorie/trh/' },
       { label: 'Legislativa', href: '/novinky/kategorie/legislativa/' },
-      { label: 'Značky', href: '/novinky/kategorie/znacky/' },
     ],
   },
   { label: 'Zvířata', href: '/plemena/' },
@@ -126,27 +125,49 @@ const current = Astro.url.pathname;
     </button>
   </div>
 
+  <!-- Mobile nav backdrop -->
+  <div id="mobile-nav-backdrop" class="mobile-nav-backdrop" hidden></div>
+
   <!-- Mobile nav drawer -->
-  <div id="mobile-nav" style="display:none; background:#fff; border-top:1px solid #e8e8e8; padding:12px 24px 20px;">
-    {nav.map(item => (
-      <>
-        <a
-          href={item.href}
-          style={`display:block; padding:12px 0; font-size:16px; font-weight:400; text-decoration:none; border-bottom:1px solid #f0f0f0; color:${current.startsWith(item.href) ? '#000' : '#444'};`}
-        >
-          {item.label}
-        </a>
-        {item.children && item.children.map((c) => (
-          <a
-            href={c.href}
-            style="display:block; padding:8px 0 8px 16px; font-size:14px; text-decoration:none; border-bottom:1px solid #f6f6f6; color:#666;"
-          >
-            › {c.label}
-          </a>
-        ))}
-      </>
-    ))}
-  </div>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Hlavní menu" hidden>
+    <ul class="mn-list">
+      {nav.map(item => {
+        const itemActive = current.startsWith(item.href) || (item.children?.some((c) => current.startsWith(c.href)) ?? false);
+        if (item.children) {
+          return (
+            <li class="mn-group">
+              <div class="mn-row">
+                <a href={item.href} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
+                <button
+                  type="button"
+                  class="mn-toggle"
+                  aria-expanded="false"
+                  aria-label={`Rozbalit ${item.label}`}
+                  data-mn-toggle
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+              </div>
+              <ul class="mn-sub" hidden>
+                {item.children.map((c) => (
+                  <li>
+                    <a href={c.href} class:list={['mn-sublink', { active: current.startsWith(c.href) }]}>{c.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          );
+        }
+        return (
+          <li>
+            <div class="mn-row">
+              <a href={item.href} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
 </header>
 
 <style>
@@ -421,6 +442,117 @@ const current = Astro.url.pathname;
     .hamburger-btn { display: inline-flex !important; }
   }
 
+  /* Mobile drawer — fixed full-height with internal scroll, backdrop, collapsible groups */
+  .mobile-nav-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 11, .45);
+    z-index: 90;
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .mobile-nav-backdrop:not([hidden]) { opacity: 1; }
+
+  .mobile-nav {
+    position: fixed;
+    top: 88px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    z-index: 95;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 8px 0 32px;
+    border-top: 1px solid #e8e8e8;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+    -webkit-overflow-scrolling: touch;
+  }
+  @media (max-width: 640px) {
+    .mobile-nav { top: 72px; }
+  }
+
+  .mn-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .mn-list > li {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .mn-row {
+    display: flex;
+    align-items: stretch;
+  }
+  .mn-link {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 12px 24px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-decoration: none;
+    letter-spacing: .005em;
+  }
+  .mn-link.active {
+    color: #000;
+    box-shadow: inset 4px 0 0 #FFFF00;
+  }
+  .mn-link:active { background: #fafafa; }
+
+  .mn-toggle {
+    flex: none;
+    width: 56px;
+    background: none;
+    border: none;
+    border-left: 1px solid #f0f0f0;
+    color: #1a1a1a;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mn-toggle svg {
+    transition: transform .2s;
+  }
+  .mn-toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+  .mn-toggle:active { background: #fafafa; }
+
+  .mn-sub {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0 10px;
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+  }
+  .mn-sublink {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 24px 8px 40px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #444;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+  }
+  .mn-sublink.active {
+    color: #000;
+    font-weight: 600;
+    border-left-color: #FFFF00;
+  }
+  .mn-sublink:active { background: #f0f0f0; }
+
+  body.mn-open {
+    overflow: hidden;
+  }
+
   @media (max-width: 640px) {
     .header-inner {
       padding: 0 16px;
@@ -446,17 +578,49 @@ const current = Astro.url.pathname;
 <script>
   const hamburger = document.getElementById('hamburger');
   const mobileNav = document.getElementById('mobile-nav');
+  const backdrop = document.getElementById('mobile-nav-backdrop');
   const iconOpen = document.getElementById('icon-open');
   const iconClose = document.getElementById('icon-close');
   let open = false;
 
-  hamburger?.addEventListener('click', () => {
-    open = !open;
-    mobileNav!.style.display = open ? 'block' : 'none';
-    iconOpen!.style.display = open ? 'none' : 'block';
-    iconClose!.style.display = open ? 'block' : 'none';
-    hamburger.setAttribute('aria-expanded', String(open));
+  function setMenu(state: boolean) {
+    open = state;
+    if (mobileNav) mobileNav.hidden = !open;
+    if (backdrop) backdrop.hidden = !open;
+    if (iconOpen) iconOpen.style.display = open ? 'none' : 'block';
+    if (iconClose) iconClose.style.display = open ? 'block' : 'none';
+    hamburger?.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('mn-open', open);
+  }
+
+  hamburger?.addEventListener('click', () => setMenu(!open));
+  backdrop?.addEventListener('click', () => setMenu(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && open) setMenu(false);
   });
+
+  // Collapsible groups inside drawer
+  document.querySelectorAll<HTMLButtonElement>('[data-mn-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const sub = btn.closest('.mn-group')?.querySelector<HTMLElement>('.mn-sub');
+      if (!sub) return;
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      sub.hidden = expanded;
+    });
+  });
+
+  // Auto-expand the group containing the active page so user lands oriented
+  const activeSub = document.querySelector('.mn-sublink.active');
+  if (activeSub) {
+    const group = activeSub.closest('.mn-group');
+    const toggle = group?.querySelector<HTMLButtonElement>('[data-mn-toggle]');
+    const sub = group?.querySelector<HTMLElement>('.mn-sub');
+    if (toggle && sub) {
+      toggle.setAttribute('aria-expanded', 'true');
+      sub.hidden = false;
+    }
+  }
 
   // Search toggle
   const searchToggle = document.getElementById('search-toggle');

@@ -11,7 +11,7 @@ const { mode } = Astro.props;
 ---
 
 {mode === 'puda' && (
-  <section class="aw-card" aria-label="Počasí pro pole" data-aw-puda-card hidden>
+  <section class="aw-card" aria-label="Předpověď počasí" data-aw-puda-card hidden>
     <header class="aw-card-head">
       <div class="aw-card-titles">
         <span class="aw-card-kicker">
@@ -46,11 +46,11 @@ const { mode } = Astro.props;
 )}
 
 {mode === 'strip' && (
-  <section class="aw-strip" aria-label="Počasí pro pole" data-aw-strip-lazy hidden>
+  <section class="aw-strip" aria-label="Předpověď počasí" data-aw-strip-lazy hidden>
     <div class="aw-strip-inner">
       <div class="aw-strip-label">
         <span class="aw-dot"></span>
-        <span class="aw-label-text" data-aw-title>Počasí pro pole</span>
+        <span class="aw-label-text" data-aw-title>Předpověď počasí</span>
         <span class="aw-label-sub" data-aw-subtitle>Aktuální · 6 měst</span>
       </div>
       <div class="aw-cities" data-aw-cities></div>
@@ -196,7 +196,7 @@ const { mode } = Astro.props;
         localStorage.removeItem(STORAGE);
         user.hidden = true;
         cities.hidden = false;
-        title.textContent = 'Počasí pro pole';
+        title.textContent = 'Předpověď počasí';
         subtitle.textContent = 'Aktuální · 6 měst';
         btnLabel.textContent = 'Moje pole';
         reset.hidden = true;

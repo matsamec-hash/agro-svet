@@ -13,7 +13,7 @@ export const AGRO_EVENTS: AgroEvent[] = [
   { date: '2015-04', label: 'Konec mléčných kvót', relevance: 'livestock' },
   { date: '2020-03', label: 'COVID-19', relevance: 'all' },
   { date: '2022-02', label: 'Invaze na Ukrajinu', relevance: 'commodity' },
-  { date: '2024-08', label: 'Sucho v jižní Moravě', relevance: 'commodity' },
+  { date: '2024-08', label: 'Sucho na jižní Moravě', relevance: 'commodity' },
 ];
 
 // Helper: vrací events relevantní pro daný typ grafu, filtruje podle časového okna grafu.

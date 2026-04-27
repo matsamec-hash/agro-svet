@@ -33,6 +33,7 @@ const items = [
           <h3>{item.label}</h3>
           <span class="ia-btn">Přejít na sekci →</span>
         </div>
+        <span class="ia-hint" aria-hidden="true">{item.label} →</span>
       </a>
     ))}
   </div>
@@ -151,6 +152,11 @@ const items = [
     box-shadow: 0 0 0 3px #FFFF00, 0 8px 24px rgba(0, 0, 0, .25);
   }
 
+  /* Hint label — only on mobile, viditelný hned (signál klikatelnosti) */
+  .ia-hint {
+    display: none;
+  }
+
   /* Mobile — stacked tiles with tap-to-expand */
   @media (max-width: 768px) {
     .ia-wrap { padding: 0 16px; }
@@ -158,6 +164,28 @@ const items = [
     .ia-panel { height: 110px; flex: none !important; border-radius: 16px; transition: height .35s cubic-bezier(.4, 0, .2, 1), box-shadow .3s; }
     .ia-panel.is-expanded { height: 180px; }
     .ia-content h3 { font-size: 20px; }
+
+    .ia-hint {
+      display: inline-block;
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      z-index: 3;
+      background: #FFFF00;
+      color: #1a1a1a;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 6px;
+      letter-spacing: .02em;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+      transition: opacity .25s;
+    }
+    .ia-panel.is-expanded .ia-hint {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 </style>
 
