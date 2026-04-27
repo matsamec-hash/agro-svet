@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { createServerClient } from '../../lib/supabase';
-import { CZ_LOCATIONS } from '../../lib/cz-locations';
+import LocationInput from '../../components/bazar/LocationInput.astro';
 
 const user = Astro.locals.user!;
 const supabase = createServerClient();
@@ -65,10 +65,7 @@ const p = profile ?? { name: '', phone: '', email: '', location: '' };
       </div>
       <div class="form-group">
         <label for="location">Město / okres</label>
-        <input type="text" id="location" name="location" class="form-input" value={p.location} list="cz-locations" autocomplete="off" />
-        <datalist id="cz-locations">
-          {CZ_LOCATIONS.map(loc => <option value={loc}></option>)}
-        </datalist>
+        <LocationInput id="location" name="location" value={p.location} />
       </div>
       <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
         Uložit profil

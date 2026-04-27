@@ -69,7 +69,6 @@ const specItems: { label: string; value: string }[] = [];
 if (listing.year_of_manufacture) specItems.push({ label: 'Rok výroby', value: `${listing.year_of_manufacture}` });
 if (listing.power_hp) specItems.push({ label: 'Výkon', value: `${listing.power_hp} k` });
 if (listing.hours_operated !== null && listing.hours_operated !== undefined) specItems.push({ label: 'Motohodiny', value: listing.hours_operated.toLocaleString('cs-CZ') });
-if (listing.cutting_width_m) specItems.push({ label: 'Záběr', value: `${listing.cutting_width_m} m` });
 if (listing.pracovni_zaber_m) specItems.push({ label: 'Pracovní záběr', value: `${listing.pracovni_zaber_m} m` });
 if (listing.nosnost_kg) specItems.push({ label: 'Nosnost', value: `${listing.nosnost_kg.toLocaleString('cs-CZ')} kg` });
 if (listing.objem_nadrze_l) specItems.push({ label: 'Objem nádrže', value: `${listing.objem_nadrze_l.toLocaleString('cs-CZ')} l` });

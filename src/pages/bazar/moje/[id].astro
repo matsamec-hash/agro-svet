@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import CascadingPicker from '../../../components/bazar/CascadingPicker.astro';
 import PhoneInput from '../../../components/bazar/PhoneInput.astro';
+import LocationInput from '../../../components/bazar/LocationInput.astro';
 import { CATEGORIES, BRANDS, BAZAR_TO_CATALOG_SUBCATEGORIES } from '../../../lib/bazar-constants';
 import { createServerClient } from '../../../lib/supabase';
 import { getModelOptions, getPlemenoOptions } from '../../../lib/bazar-catalog';
@@ -61,6 +62,7 @@ if (Astro.request.method === 'POST') {
     const hours = hoursStr ? parseInt(hoursStr) : null;
     const cuttingWidth = cutStr ? parseFloat(cutStr) : null;
     const pracovniZaber = zaberStr ? parseFloat(zaberStr) : null;
+    const zaberFinal = pracovniZaber ?? cuttingWidth;
     const nosnost = nosnostStr ? parseInt(nosnostStr) : null;
     const objemNadrze = objemStr ? parseInt(objemStr) : null;
     const subcategory = modelSlug ? (getModelBySlug(modelSlug)?.category ?? null) : null;
@@ -81,8 +83,7 @@ if (Astro.request.method === 'POST') {
         year_of_manufacture: year,
         power_hp: power,
         hours_operated: hours,
-        cutting_width_m: cuttingWidth,
-        pracovni_zaber_m: pracovniZaber,
+        pracovni_zaber_m: zaberFinal,
         nosnost_kg: nosnost,
         objem_nadrze_l: objemNadrze,
         subcategory,
@@ -91,7 +92,8 @@ if (Astro.request.method === 'POST') {
       .eq('user_id', user.id);
 
     if (updateErr) {
-      error = 'Chyba při ukládání.';
+      console.error('[bazar/moje/edit] update error', updateErr);
+      error = `Chyba při ukládání: ${updateErr.message}`;
     } else {
       return Astro.redirect('/bazar/moje/');
     }
@@ -189,7 +191,7 @@ if (isBreed && listing.model_slug) {
 
         <div class="form-group" id="cutting-width-group" style={listing.category === 'kombajny' ? '' : 'display:none;'}>
           <label for="cutting_width_m">Záběr žacího stolu (m)</label>
-          <input type="number" id="cutting_width_m" name="cutting_width_m" class="form-input" min="0" step="0.1" value={listing.cutting_width_m ?? ''} />
+          <input type="number" id="cutting_width_m" name="cutting_width_m" class="form-input" min="0" step="0.1" value={listing.pracovni_zaber_m ?? ''} />
         </div>
       </div>
 
@@ -245,7 +247,7 @@ if (isBreed && listing.model_slug) {
 
       <div class="form-group">
         <label for="location">Lokalita *</label>
-        <input type="text" id="location" name="location" class="form-input" value={listing.location} required />
+        <LocationInput id="location" name="location" value={listing.location} required />
       </div>
 
       <div class="form-group">

@@ -243,6 +243,40 @@ const collectionJsonLd = {
       return Boolean(el.druh.value || el.uzit.value || el.country.value || el.search.value.trim());
     }
 
+    function getValidValues(field: 'druh' | 'uzit' | 'country') {
+      const subset = PLEMENA.filter((p) => {
+        if (field !== 'druh' && el.druh.value && p.druh_slug !== el.druh.value) return false;
+        if (field !== 'uzit' && el.uzit.value && !p.uzitkovost.includes(el.uzit.value)) return false;
+        if (field !== 'country' && el.country.value && p.origin_country !== el.country.value) return false;
+        return true;
+      });
+      const out = new Set<string>();
+      if (field === 'druh') for (const p of subset) out.add(p.druh_slug);
+      else if (field === 'uzit') for (const p of subset) for (const u of p.uzitkovost) out.add(u);
+      else for (const p of subset) out.add(p.origin_country);
+      return out;
+    }
+
+    function refreshOptions() {
+      const validDruh = getValidValues('druh');
+      const validUzit = getValidValues('uzit');
+      const validCountry = getValidValues('country');
+
+      for (const opt of Array.from(el.druh.options)) {
+        if (opt.value !== '') opt.hidden = !validDruh.has(opt.value);
+      }
+      for (const opt of Array.from(el.uzit.options)) {
+        if (opt.value !== '') opt.hidden = !validUzit.has(opt.value);
+      }
+      for (const opt of Array.from(el.country.options)) {
+        if (opt.value !== '') opt.hidden = !validCountry.has(opt.value);
+      }
+
+      if (el.druh.value && !validDruh.has(el.druh.value)) el.druh.value = '';
+      if (el.uzit.value && !validUzit.has(el.uzit.value)) el.uzit.value = '';
+      if (el.country.value && !validCountry.has(el.country.value)) el.country.value = '';
+    }
+
     function card(p: P): string {
       const uzit = p.uzitkovost.map((u) => U_LABELS[u] ?? u).join(' · ');
       const wm = p.weight_male_kg ? `♂ ${p.weight_male_kg} kg` : '';
@@ -277,6 +311,7 @@ const collectionJsonLd = {
     }
 
     function apply() {
+      refreshOptions();
       const d = el.druh.value;
       const u = el.uzit.value;
       const c = el.country.value;

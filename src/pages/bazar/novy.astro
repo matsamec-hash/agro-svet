@@ -4,7 +4,7 @@ import ImageUpload from '../../components/bazar/ImageUpload.astro';
 import CascadingPicker from '../../components/bazar/CascadingPicker.astro';
 import PhoneInput from '../../components/bazar/PhoneInput.astro';
 import { CATEGORIES, BRANDS, BAZAR_TO_CATALOG_SUBCATEGORIES } from '../../lib/bazar-constants';
-import { CZ_LOCATIONS } from '../../lib/cz-locations';
+import LocationInput from '../../components/bazar/LocationInput.astro';
 import { createServerClient, getPublicSupabaseConfig } from '../../lib/supabase';
 import { getModelOptions, getPlemenoOptions } from '../../lib/bazar-catalog';
 import { getModelBySlug } from '../../lib/stroje';
@@ -53,6 +53,9 @@ if (Astro.request.method === 'POST') {
     const hours = hoursStr ? parseInt(hoursStr) : null;
     const cuttingWidth = cutStr ? parseFloat(cutStr) : null;
     const pracovniZaber = zaberStr ? parseFloat(zaberStr) : null;
+    // Migration 008 unified `cutting_width_m` (kombajny) and `pracovni_zaber_m` (stroje) into a single DB column.
+    // The form shows one OR the other based on category, so take whichever is set.
+    const zaberFinal = pracovniZaber ?? cuttingWidth;
     const nosnost = nosnostStr ? parseInt(nosnostStr) : null;
     const objemNadrze = objemStr ? parseInt(objemStr) : null;
     const subcategory = modelSlug ? (getModelBySlug(modelSlug)?.category ?? null) : null;
@@ -74,8 +77,7 @@ if (Astro.request.method === 'POST') {
         year_of_manufacture: year,
         power_hp: power,
         hours_operated: hours,
-        cutting_width_m: cuttingWidth,
-        pracovni_zaber_m: pracovniZaber,
+        pracovni_zaber_m: zaberFinal,
         nosnost_kg: nosnost,
         objem_nadrze_l: objemNadrze,
         subcategory,
@@ -84,7 +86,8 @@ if (Astro.request.method === 'POST') {
       .single();
 
     if (insertErr) {
-      error = 'Chyba při vkládání inzerátu.';
+      console.error('[bazar/novy] insert error', insertErr);
+      error = `Chyba při vkládání inzerátu: ${insertErr.message}`;
     } else if (listing) {
       if (imagePaths.length > 0) {
         const imageRows = imagePaths.map((path: string, idx: number) => ({
@@ -220,10 +223,7 @@ const { data: profile } = await supabase
 
       <div class="form-group">
         <label for="location">Lokalita *</label>
-        <input type="text" id="location" name="location" class="form-input" value={profile?.location ?? ''} list="cz-locations" autocomplete="off" required />
-        <datalist id="cz-locations">
-          {CZ_LOCATIONS.map(loc => <option value={loc}></option>)}
-        </datalist>
+        <LocationInput id="location" name="location" value={profile?.location ?? ''} required />
       </div>
 
       <div class="form-group">

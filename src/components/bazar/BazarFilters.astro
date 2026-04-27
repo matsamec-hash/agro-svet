@@ -1,6 +1,6 @@
 ---
 import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
-import { CZ_LOCATIONS } from '../../lib/cz-locations';
+import LocationInput from './LocationInput.astro';
 
 interface Props {
   query?: string;
@@ -119,7 +119,7 @@ function buildRemoveUrl(params: string[]): string {
 
     <label class="field">
       <span class="field-label">Lokalita</span>
-      <input type="text" name="location" value={location} placeholder="Město, kraj…" class="field-input" list="cz-locations" autocomplete="off" />
+      <LocationInput name="location" value={location} inputClass="field-input" />
     </label>
 
     <div class="field field-price">
@@ -190,10 +190,6 @@ function buildRemoveUrl(params: string[]): string {
       )}
     </div>
   )}
-
-  <datalist id="cz-locations">
-    {CZ_LOCATIONS.map(loc => <option value={loc}></option>)}
-  </datalist>
 
   {activeFilters.length > 0 && (
     <div class="active-chips">

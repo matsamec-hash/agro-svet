@@ -1,0 +1,132 @@
+---
+import { CZ_LOCATIONS } from '../../lib/cz-locations';
+
+interface Props {
+  id?: string;
+  name?: string;
+  value?: string;
+  placeholder?: string;
+  required?: boolean;
+  inputClass?: string;
+}
+
+const {
+  id = 'location',
+  name = 'location',
+  value = '',
+  placeholder = 'Město, kraj…',
+  required = false,
+  inputClass = 'form-input',
+} = Astro.props;
+
+const locationsJson = JSON.stringify(CZ_LOCATIONS);
+---
+
+<div class="loc-ac" data-loc-ac>
+  <input
+    type="text"
+    id={id}
+    name={name}
+    value={value}
+    placeholder={placeholder}
+    required={required}
+    class={inputClass}
+    autocomplete="off"
+    data-loc-input
+  />
+  <ul class="loc-ac-list" data-loc-list role="listbox" hidden></ul>
+</div>
+
+<script is:inline define:vars={{ locationsJson }}>
+  (function () {
+    const ALL = JSON.parse(locationsJson);
+    const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const ALL_NORM = ALL.map((v) => ({ raw: v, n: norm(v) }));
+
+    document.querySelectorAll('[data-loc-ac]').forEach((root) => {
+      if (root._locInit) return;
+      root._locInit = true;
+      const input = root.querySelector('[data-loc-input]');
+      const list = root.querySelector('[data-loc-list]');
+      let idx = -1;
+      let items = [];
+
+      const render = () => {
+        if (items.length === 0) {
+          list.hidden = true;
+          list.innerHTML = '';
+          idx = -1;
+          return;
+        }
+        list.hidden = false;
+        list.innerHTML = items
+          .map((it, i) => `<li role="option" data-i="${i}" class="loc-ac-item${i === idx ? ' active' : ''}">${it}</li>`)
+          .join('');
+      };
+
+      const filter = () => {
+        const q = norm(input.value.trim());
+        if (!q) {
+          items = ALL.slice(0, 12);
+        } else {
+          const starts = [];
+          const includes = [];
+          for (const { raw, n } of ALL_NORM) {
+            if (n.startsWith(q)) starts.push(raw);
+            else if (n.includes(q)) includes.push(raw);
+            if (starts.length >= 12) break;
+          }
+          items = [...starts, ...includes].slice(0, 12);
+        }
+        idx = items.length > 0 ? 0 : -1;
+        render();
+      };
+
+      const pick = (i) => {
+        if (i < 0 || i >= items.length) return;
+        input.value = items[i];
+        items = [];
+        render();
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+
+      input.addEventListener('input', filter);
+      input.addEventListener('focus', filter);
+      input.addEventListener('keydown', (e) => {
+        if (list.hidden) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); idx = Math.min(idx + 1, items.length - 1); render(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); idx = Math.max(idx - 1, 0); render(); }
+        else if (e.key === 'Enter' && idx >= 0) { e.preventDefault(); pick(idx); }
+        else if (e.key === 'Escape') { items = []; render(); }
+      });
+      list.addEventListener('mousedown', (e) => {
+        const li = e.target.closest('[data-i]');
+        if (!li) return;
+        e.preventDefault();
+        pick(parseInt(li.dataset.i, 10));
+      });
+      document.addEventListener('mousedown', (e) => {
+        if (!root.contains(e.target)) { items = []; render(); }
+      });
+    });
+  })();
+</script>
+
+<style>
+  .loc-ac { position: relative; }
+  .loc-ac-list {
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 50;
+    margin: 4px 0 0; padding: 4px;
+    list-style: none;
+    background: #fff; border: 1px solid #EAEAEC; border-radius: 10px;
+    box-shadow: 0 12px 30px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-height: 280px; overflow-y: auto;
+  }
+  .loc-ac-list[hidden] { display: none; }
+  :global(.loc-ac-item) {
+    padding: 8px 12px; border-radius: 6px; cursor: pointer;
+    font: 500 14px 'Roboto Condensed', sans-serif; color: #0A0A0B;
+  }
+  :global(.loc-ac-item.active),
+  :global(.loc-ac-item:hover) { background: #FFF6A8; }
+</style>
