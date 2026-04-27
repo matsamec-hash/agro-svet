@@ -73,6 +73,10 @@ const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString()
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <meta name="theme-color" content="#FFFF00" />
 
+  <!-- Preconnect: hero/article images + bazar listing photos. Šetří ~100ms TLS handshake na 1. requestu. -->
+  <link rel="preconnect" href="https://cdn.samecdigital.com" crossorigin />
+  <link rel="preconnect" href="https://obhypfuzmknvmknskdwh.supabase.co" crossorigin />
+
   <!-- Fonts self-hosted via @fontsource (imported in src/styles/global.css). -->
   <!-- No external DNS lookup or third-party request — same-origin from CF Workers Assets. -->
 </head>
