@@ -147,12 +147,40 @@ function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>): 
  * @param html — article HTML (CMS-rendered, may contain <p>, <h2>, <a>, <img>, etc.)
  * @param excludeUrl — current page URL path (e.g. `/stroje/fendt/`); the linker won't link to this.
  */
-export function injectLinks(html: string, excludeUrl?: string): string {
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Shared state used to dedupe links across multiple injectLinks() calls (e.g. perex + body). */
+export function createLinkContext(excludeUrl?: string): Set<string> {
+  const used = new Set<string>();
+  if (excludeUrl) used.add(excludeUrl);
+  return used;
+}
+
+/**
+ * Inject internal links into plain text (e.g. perex / lead). HTML-escapes input first
+ * so output is safe to use with `set:html`.
+ *
+ * Pass `used` from createLinkContext() to share dedup state with a subsequent injectLinks() call.
+ */
+export function injectLinksInText(text: string, excludeUrlOrUsed?: string | Set<string>): string {
+  if (!text) return text;
+  return injectLinks(escapeHtml(text), excludeUrlOrUsed);
+}
+
+export function injectLinks(html: string, excludeUrlOrUsed?: string | Set<string>): string {
   if (!html) return html;
   try {
     const glossary = getGlossary();
-    const used = new Set<string>();
-    if (excludeUrl) used.add(excludeUrl);
+    const used = excludeUrlOrUsed instanceof Set
+      ? excludeUrlOrUsed
+      : createLinkContext(excludeUrlOrUsed);
 
     const tokens = tokenize(html);
     let protectedDepth = 0;

@@ -4,7 +4,9 @@ import Newsletter from '../../components/Newsletter.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { tagStyle } from '../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../../lib/config';
-import { injectLinks } from '../../lib/auto-linker';
+import { injectLinks, injectLinksInText, createLinkContext } from '../../lib/auto-linker';
+import { getAllBrands } from '../../lib/stroje';
+import { getAllPlemena } from '../../lib/plemena';
 
 const { slug } = Astro.params;
 const supabase = createAnonClient();
@@ -20,6 +22,9 @@ const { data: article } = await supabase
 if (!article) {
   return Astro.redirect('/novinky/');
 }
+
+// Shared link-dedup state for perex + body so each entity is linked at most once per page.
+const linkCtx = createLinkContext(`/novinky/${article.slug}/`);
 
 // Related articles + prev/next nav: fetch a recent pool from same category
 // + same site, score by tag overlap (deterministic, SEO-friendly).
@@ -50,6 +55,39 @@ const related = pool
   .sort((a, b) => b.s - a.s || (a.p.published_at < b.p.published_at ? 1 : -1))
   .slice(0, 4)
   .map(({ p }) => p);
+
+// Detect dominant brand or plemeno in this article (by mention count in title+perex+content).
+// Then surface up to 4 other articles also mentioning that entity — bidirectional internal linking.
+function countMentions(haystack: string, term: string): number {
+  if (!term || term.length < 3) return 0;
+  const re = new RegExp(`(?<![\\p{L}\\p{N}_])${term.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}(?![\\p{L}\\p{N}_])`, 'giu');
+  return (haystack.match(re) || []).length;
+}
+const articleText = (article.title + ' ' + (article.perex ?? '') + ' ' + (article.content ?? '')).slice(0, 12000);
+type EntityHit = { kind: 'brand' | 'plemeno'; name: string; url: string; count: number };
+const entityHits: EntityHit[] = [];
+for (const b of getAllBrands()) {
+  const c = countMentions(articleText, b.name);
+  if (c > 0) entityHits.push({ kind: 'brand', name: b.name, url: `/stroje/${b.slug}/`, count: c });
+}
+for (const p of getAllPlemena()) {
+  const c = countMentions(articleText, p.name);
+  if (c > 0) entityHits.push({ kind: 'plemeno', name: p.name, url: `/plemena/${p.druh_slug}/${p.slug}/`, count: c });
+}
+entityHits.sort((a, b) => b.count - a.count);
+const topEntity = entityHits[0] ?? null;
+
+// Find other articles in pool that mention the same entity name in title or perex.
+const entityRelatedIds = new Set<string>();
+const entityRelated = topEntity
+  ? pool.filter((p) => {
+      const hay = (p.title + ' ' + (p.perex ?? '')).toLowerCase();
+      const needle = topEntity.name.toLowerCase();
+      if (!hay.includes(needle)) return false;
+      entityRelatedIds.add(p.id);
+      return true;
+    }).slice(0, 4)
+  : [];
 
 // Prev/next: chronological neighbors among published articles (any category).
 // `pool` is already DESC by published_at, so newer = before our article in the list.
@@ -171,12 +209,33 @@ const jsonLd = {
     <h1 style="font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.5px; line-height:1.15; color:#1a1a1a; margin-bottom:16px;">
       {article.title}
     </h1>
-    <p style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;">
-      {article.perex}
-    </p>
+    <p style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;" set:html={injectLinksInText(article.perex, linkCtx)} />
 
-    <!-- Article body (HTML from CMS) — auto-linker injects internal links to brands/plemena/stroje hubs. -->
-    <div class="prose" set:html={injectLinks(article.content, `/novinky/${article.slug}/`)} />
+    <!-- Article body (HTML from CMS) — auto-linker injects internal links to brands/plemena/stroje hubs. Shares used-set with perex above. -->
+    <div class="prose" set:html={injectLinks(article.content, linkCtx)} />
+
+    {topEntity && entityRelated.length > 0 && (
+      <aside class="entity-related" aria-labelledby="entity-related-h">
+        <h2 id="entity-related-h">
+          Další články o&nbsp;<a href={topEntity.url}>{topEntity.name}</a>
+        </h2>
+        <ul>
+          {entityRelated.map((r) => (
+            <li>
+              <a href={`/novinky/${r.slug}/`}>
+                <span class="er-title">{r.title}</span>
+                {r.perex && <span class="er-perex">{r.perex.length > 100 ? r.perex.slice(0, 100) + '…' : r.perex}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="entity-related-cta">
+          {topEntity.kind === 'brand'
+            ? <a href={topEntity.url}>Vše o značce {topEntity.name} →</a>
+            : <a href={topEntity.url}>Detail plemene {topEntity.name} →</a>}
+        </p>
+      </aside>
+    )}
 
     <!-- Tags (clickable — navigate to filtered novinky) -->
     {article.tags?.length > 0 && (
@@ -390,4 +449,66 @@ const jsonLd = {
   .article-tag:hover { filter: brightness(.94); transform: translateY(-1px); }
   .prose :global(code) { background:#f0f0f0; padding:2px 6px; border-radius:4px; font-size:.9em; font-family:'Chakra Petch',sans-serif; }
   .prose :global(img) { max-width:100%; height:auto; border-radius:12px; margin:1.5em 0; }
+
+  .entity-related {
+    margin-top: 48px;
+    padding: 24px 28px;
+    background: #FFF6A8;
+    border-radius: 16px;
+    border: 1px solid #FFEA00;
+  }
+  .entity-related h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: #0A0A0B;
+    letter-spacing: -.01em;
+  }
+  .entity-related h2 a {
+    color: #0A0A0B;
+    border-bottom: 2px solid rgba(10,10,12,.25);
+    text-decoration: none;
+  }
+  .entity-related h2 a:hover { border-bottom-color: #0A0A0B; }
+  .entity-related ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .entity-related li { margin: 0; }
+  .entity-related li a {
+    display: block;
+    padding: 10px 14px;
+    background: rgba(255,255,255,.7);
+    border-radius: 10px;
+    text-decoration: none;
+    color: #0A0A0B;
+    transition: background .15s, transform .1s;
+  }
+  .entity-related li a:hover {
+    background: #fff;
+    transform: translateY(-1px);
+  }
+  .entity-related .er-title {
+    display: block;
+    font-weight: 600;
+    font-size: 14.5px;
+    line-height: 1.35;
+  }
+  .entity-related .er-perex {
+    display: block;
+    font-size: 13px;
+    color: #555;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .entity-related-cta {
+    margin: 14px 0 0;
+    font-size: 13px;
+    text-align: right;
+  }
+  .entity-related-cta a {
+    color: #0A0A0B;
+    font-weight: 700;
+    font-family: 'Chakra Petch', sans-serif;
+    text-decoration: none;
+  }
+  .entity-related-cta a:hover { text-decoration: underline; }
 </style>
