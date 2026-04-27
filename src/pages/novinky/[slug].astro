@@ -56,24 +56,24 @@ const related = pool
   .slice(0, 4)
   .map(({ p }) => p);
 
-// Detect dominant brand or plemeno in this article (by mention count in title+perex+content).
-// Then surface up to 4 other articles also mentioning that entity — bidirectional internal linking.
-function countMentions(haystack: string, term: string): number {
-  if (!term || term.length < 3) return 0;
-  const re = new RegExp(`(?<![\\p{L}\\p{N}_])${term.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}(?![\\p{L}\\p{N}_])`, 'giu');
-  return (haystack.match(re) || []).length;
-}
-const articleText = (article.title + ' ' + (article.perex ?? '') + ' ' + (article.content ?? '')).slice(0, 12000);
+// Detect dominant brand or plemeno in this article. Cheap algorithm:
+// 1) lowercase haystack once (limited to 6 KB)
+// 2) String.includes() prefilter — skips ~90% of entities for free
+// 3) Only run regex on the survivors (typically 1–3 entities)
+const articleText = (article.title + ' ' + (article.perex ?? '') + ' ' + (article.content ?? '')).slice(0, 6000);
+const articleLower = articleText.toLowerCase();
 type EntityHit = { kind: 'brand' | 'plemeno'; name: string; url: string; count: number };
 const entityHits: EntityHit[] = [];
-for (const b of getAllBrands()) {
-  const c = countMentions(articleText, b.name);
-  if (c > 0) entityHits.push({ kind: 'brand', name: b.name, url: `/stroje/${b.slug}/`, count: c });
+function tryAdd(kind: 'brand' | 'plemeno', name: string, url: string) {
+  if (!name || name.length < 3) return;
+  const lower = name.toLowerCase();
+  if (!articleLower.includes(lower)) return;
+  const re = new RegExp(`(?<![\\p{L}\\p{N}_])${name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}(?![\\p{L}\\p{N}_])`, 'giu');
+  const count = (articleText.match(re) || []).length;
+  if (count > 0) entityHits.push({ kind, name, url, count });
 }
-for (const p of getAllPlemena()) {
-  const c = countMentions(articleText, p.name);
-  if (c > 0) entityHits.push({ kind: 'plemeno', name: p.name, url: `/plemena/${p.druh_slug}/${p.slug}/`, count: c });
-}
+for (const b of getAllBrands()) tryAdd('brand', b.name, `/stroje/${b.slug}/`);
+for (const p of getAllPlemena()) tryAdd('plemeno', p.name, `/plemena/${p.druh_slug}/${p.slug}/`);
 entityHits.sort((a, b) => b.count - a.count);
 const topEntity = entityHits[0] ?? null;
 
