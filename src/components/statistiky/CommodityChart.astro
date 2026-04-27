@@ -48,9 +48,11 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
 
 <script type="application/json" id="commodityChartData" set:html={JSON.stringify({ series: namedSeries, events, fiveYearAvg, default0 })}></script>
 
-<!-- Chart.js (lazy-loaded jen pokud ještě není) — komponenta self-contained, funguje samostatně i na HP, ne jen v /statistiky/ -->
+<!-- Chart.js — eager init if Chart už loaded (např. /statistiky/), jinak lazy přes
+     IntersectionObserver: na homepage se ~80KB Chart.js bundle neloaduje dokud
+     se uživatel nepřiblíží k chart sekci. -->
 <script is:inline>
-  (async function () {
+  (function () {
     const dataEl = document.getElementById('commodityChartData');
     const canvasEl = document.getElementById('commodityLongChart');
     if (!dataEl || !canvasEl) return;
@@ -68,14 +70,23 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
       });
     }
 
-    if (typeof Chart === 'undefined') {
-      await loadScript('https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js');
-      await loadScript('https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3');
+    async function ensureChart() {
+      if (typeof Chart === 'undefined') {
+        await loadScript('https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js');
+        await loadScript('https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3');
+      }
+      Chart.defaults.font.family = "'Chakra Petch', sans-serif";
+      Chart.defaults.font.size = 12;
+      Chart.defaults.color = '#6B6B72';
+      if (window['chartjs-plugin-annotation']) Chart.register(window['chartjs-plugin-annotation']);
     }
-    Chart.defaults.font.family = "'Chakra Petch', sans-serif";
-    Chart.defaults.font.size = 12;
-    Chart.defaults.color = '#6B6B72';
-    if (window['chartjs-plugin-annotation']) Chart.register(window['chartjs-plugin-annotation']);
+
+    async function bootstrap() {
+      await ensureChart();
+      run();
+    }
+
+    function run() {
 
     const SHORT_MONTHS = ['Led','Úno','Bře','Dub','Kvě','Čvn','Čvc','Srp','Zář','Říj','Lis','Pro'];
     const YELLOW = '#FFEA00';
@@ -180,6 +191,23 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
     });
 
     render();
+    }
+
+    // Eager init pokud Chart už načten (statistiky page má eager <script src=>),
+    // jinak počkat na IntersectionObserver — homepage tak neloaduje ~80KB Chart.js
+    // dokud user nedoscrolluje k chart sekci.
+    if (typeof Chart !== 'undefined') {
+      bootstrap();
+    } else if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        if (!entries.some(e => e.isIntersecting)) return;
+        obs.disconnect();
+        bootstrap();
+      }, { rootMargin: '300px' });
+      io.observe(canvasEl);
+    } else {
+      bootstrap();
+    }
   })();
 </script>
 
