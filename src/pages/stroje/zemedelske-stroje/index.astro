@@ -55,6 +55,10 @@ const groupStats: GroupStats[] = (Object.entries(FUNCTIONAL_GROUPS) as [Function
   };
 });
 
+// Skrýváme zatím skupiny bez obsahu (vrátíme až budou naplněné). Kontext: project memory.
+const readyGroups = groupStats.filter((g) => g.modelCount > 0);
+const readyCategoryCount = readyGroups.reduce((s, g) => s + g.categoryCount, 0);
+
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -91,19 +95,22 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
         <span class="sz-kicker"><span class="sz-dot"></span>Katalog · Zemědělské stroje</span>
         <h1>Zemědělské <em>stroje</em></h1>
         <p class="sz-lede">
-          Přehled {groupStats.length} funkčních skupin zemědělských strojů — od zpracování půdy
-          přes setí, hnojení a ochranu rostlin až po sklizeň, manipulaci a dopravu.
-          {totalModels > 0 ? `Databáze obsahuje ${totalModels} modelů z ${totalBrands} značek.` : 'Databáze průběžně doplňována.'}
+          Katalog zemědělské techniky podle značek a funkčních skupin.
+          {totalModels > 0 ? `Aktuálně ${totalModels} modelů z ${totalBrands} značek, databázi průběžně rozšiřujeme.` : 'Databáze průběžně doplňována.'}
         </p>
         <div class="sz-stats">
-          <div class="sz-stat">
-            <span class="sz-stat-n">{groupStats.length}</span>
-            <span class="sz-stat-l">skupin</span>
-          </div>
-          <div class="sz-stat">
-            <span class="sz-stat-n">{groupStats.reduce((s, g) => s + g.categoryCount, 0)}</span>
-            <span class="sz-stat-l">kategorií</span>
-          </div>
+          {readyGroups.length > 0 && (
+            <div class="sz-stat">
+              <span class="sz-stat-n">{readyGroups.length}</span>
+              <span class="sz-stat-l">{readyGroups.length === 1 ? 'skupina' : readyGroups.length < 5 ? 'skupiny' : 'skupin'}</span>
+            </div>
+          )}
+          {readyCategoryCount > 0 && (
+            <div class="sz-stat">
+              <span class="sz-stat-n">{readyCategoryCount}</span>
+              <span class="sz-stat-l">{readyCategoryCount === 1 ? 'kategorie' : readyCategoryCount < 5 ? 'kategorie' : 'kategorií'}</span>
+            </div>
+          )}
           <div class="sz-stat">
             <span class="sz-stat-n">{totalModels > 0 ? `${totalModels}+` : '—'}</span>
             <span class="sz-stat-l">modelů</span>
@@ -116,30 +123,29 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
       </div>
     </section>
 
-    <!-- Functional groups -->
-    <section class="sz-section" aria-labelledby="groups-title">
-      <h2 id="groups-title" class="sz-section-title">
-        <span class="sz-section-label">Hledáte podle účelu?</span>
-      </h2>
-      <p class="sz-section-sub">Vyberte funkční skupinu a procházejte stroje podle toho, k čemu je potřebujete.</p>
-      <div class="sz-group-grid">
-        {groupStats.map((g) => (
-          <a href={`/stroje/zemedelske-stroje/${g.slug}/`} class="sz-group-card">
-            <h3>{g.name}</h3>
-            <p>{g.description}</p>
-            <div class="sz-group-meta">
-              {g.modelCount > 0
-                ? <span>{g.categoryCount} {g.categoryCount === 1 ? 'kategorie' : g.categoryCount < 5 ? 'kategorie' : 'kategorií'} · {g.modelCount} {g.modelCount === 1 ? 'model' : g.modelCount < 5 ? 'modely' : 'modelů'} · {g.brandCount} {g.brandCount === 1 ? 'značka' : g.brandCount < 5 ? 'značky' : 'značek'}</span>
-                : <span class="sz-preparing">Připravujeme · {g.categoryCount} {g.categoryCount === 1 ? 'kategorie' : g.categoryCount < 5 ? 'kategorie' : 'kategorií'}</span>
-              }
-            </div>
-            <div class="sz-group-arrow">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
+    <!-- Functional groups — pouze skupiny s obsahem. Prázdné jsou skryté, vrátíme až budou naplněné (viz project memory). -->
+    {readyGroups.length > 0 && (
+      <section class="sz-section" aria-labelledby="groups-title">
+        <h2 id="groups-title" class="sz-section-title">
+          <span class="sz-section-label">Hledáte podle účelu?</span>
+        </h2>
+        <p class="sz-section-sub">Vyberte funkční skupinu a procházejte stroje podle toho, k čemu je potřebujete.</p>
+        <div class="sz-group-grid">
+          {readyGroups.map((g) => (
+            <a href={`/stroje/zemedelske-stroje/${g.slug}/`} class="sz-group-card">
+              <h3>{g.name}</h3>
+              <p>{g.description}</p>
+              <div class="sz-group-meta">
+                <span>{g.categoryCount} {g.categoryCount === 1 ? 'kategorie' : g.categoryCount < 5 ? 'kategorie' : 'kategorií'} · {g.modelCount} {g.modelCount === 1 ? 'model' : g.modelCount < 5 ? 'modely' : 'modelů'} · {g.brandCount} {g.brandCount === 1 ? 'značka' : g.brandCount < 5 ? 'značky' : 'značek'}</span>
+              </div>
+              <div class="sz-group-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- Brands -->
     <section class="sz-section" aria-labelledby="brands-title">

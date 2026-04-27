@@ -4,7 +4,12 @@ import Layout from '../../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug, type StrojKategorie } from '../../../../lib/stroje';
 
 export async function getStaticPaths() {
-  return Object.keys(FUNCTIONAL_GROUPS).map((slug) => ({ params: { group: slug } }));
+  // Generujeme jen skupiny s alespoň jedním modelem. Prázdné jsou skryté i v UI a sitemapě;
+  // vrátíme až budou naplněné (viz project memory).
+  const all = getAllModels();
+  return (Object.entries(FUNCTIONAL_GROUPS) as [string, typeof FUNCTIONAL_GROUPS[FunctionalGroupSlug]][])
+    .filter(([_, g]) => all.some((m) => (g.categories as readonly string[]).includes(m.category)))
+    .map(([slug]) => ({ params: { group: slug } }));
 }
 
 const { group: groupSlug } = Astro.params;

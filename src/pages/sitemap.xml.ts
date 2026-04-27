@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { getAllBrands, seriesFamily, FUNCTIONAL_GROUPS } from '../lib/stroje';
+import { getAllBrands, getAllModels, seriesFamily, FUNCTIONAL_GROUPS } from '../lib/stroje';
 import { getAllDruhy } from '../lib/plemena';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
@@ -65,14 +65,18 @@ export const GET: APIRoute = async () => {
     urls.push({ loc: `${SITE_URL}/novinky/kategorie/${cat}/`, changefreq: 'weekly' });
   }
 
-  // Stroje funkční skupiny (hub → groups)
-  for (const groupSlug of Object.keys(FUNCTIONAL_GROUPS)) {
+  // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.
+  // Prázdné skupiny jsou skryté i v UI; vrátíme až budou naplněné (viz project memory).
+  const allStrojeModels = getAllModels().filter((m) => m.category !== 'traktory' && m.category !== 'kombajny');
+  const groupsWithModels = (Object.entries(FUNCTIONAL_GROUPS) as [string, typeof FUNCTIONAL_GROUPS[keyof typeof FUNCTIONAL_GROUPS]][])
+    .filter(([_, group]) => allStrojeModels.some((m) => (group.categories as readonly string[]).includes(m.category)));
+  for (const [groupSlug] of groupsWithModels) {
     urls.push({ loc: `${SITE_URL}/stroje/zemedelske-stroje/${groupSlug}/`, changefreq: 'weekly', priority: '0.75' });
   }
 
-  // Stroje sub-kategorie (cross-brand pages /stroje/<subcategory>/)
-  const allSubcategories = Object.values(FUNCTIONAL_GROUPS).flatMap((g) => g.categories);
-  for (const subcat of allSubcategories) {
+  // Stroje sub-kategorie (cross-brand pages /stroje/<subcategory>/) — pouze ty s modely.
+  const subcategoriesWithModels = new Set(allStrojeModels.map((m) => m.category));
+  for (const subcat of subcategoriesWithModels) {
     urls.push({ loc: `${SITE_URL}/stroje/${subcat}/`, changefreq: 'weekly', priority: '0.7' });
   }
 
