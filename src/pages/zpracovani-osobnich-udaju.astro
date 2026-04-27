@@ -1,0 +1,188 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Zpracování osobních údajů — Agro-svět"
+  description="Zásady zpracování osobních údajů na Agro-svět.cz — kdo jsme, jaké údaje zpracováváme, jak dlouho, vaše práva."
+>
+  <main class="legal-page">
+    <h1>Zásady zpracování osobních údajů</h1>
+    <p class="lead">Jak zpracováváme osobní údaje uživatelů webu <strong>agro-svet.cz</strong> v souladu s nařízením GDPR (2016/679) a zákonem č. 110/2019 Sb.</p>
+
+    <h2>1. Správce osobních údajů</h2>
+    <p>
+      <strong>{`{{JMÉNO/NÁZEV}}`}</strong>, IČ {`{{IČ}}`}, se sídlem {`{{ADRESA}}`}.<br>
+      Kontakt: <a href="mailto:info@agro-svet.cz">info@agro-svet.cz</a>
+    </p>
+
+    <h2>2. Jaké údaje zpracováváme</h2>
+
+    <h3>2.1 Newsletter (odběr novinek)</h3>
+    <ul>
+      <li>E-mailová adresa</li>
+      <li>Datum přihlášení a potvrzení odběru</li>
+      <li>Časová razítka kliknutí na potvrzovací odkaz (anti-fraud)</li>
+    </ul>
+
+    <h3>2.2 Bazar — registrovaní uživatelé</h3>
+    <ul>
+      <li>Jméno (zobrazované u inzerátu)</li>
+      <li>E-mail (přihlašování, kontakt)</li>
+      <li>Telefon (kontakt na inzerent)</li>
+      <li>Lokalita (město/kraj)</li>
+      <li>Heslo (hashované, nikdy v plain textu)</li>
+    </ul>
+
+    <h3>2.3 Bazar — inzeráty</h3>
+    <ul>
+      <li>Obsah inzerátu (název, popis, cena, kategorie, fotky)</li>
+      <li>Kontaktní údaje uvedené v inzerátu</li>
+    </ul>
+
+    <h3>2.4 Fotosoutěž</h3>
+    <p>Pro fotosoutěž platí samostatné <a href="/fotosoutez/gdpr/">zásady zpracování</a>.</p>
+
+    <h3>2.5 Technické údaje (všichni návštěvníci)</h3>
+    <ul>
+      <li>IP adresa (anonymizovaná v logu, anti-fraud, max 30 dní)</li>
+      <li>User-agent prohlížeče (statistika, debugging)</li>
+      <li>Referer (z jakého webu jste přišli)</li>
+    </ul>
+
+    <h2>3. Účel a právní základ zpracování</h2>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Účel</th><th>Právní základ (GDPR čl. 6)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Zasílání newsletteru</td><td>Souhlas — odst. 1 písm. a)</td></tr>
+        <tr><td>Provoz uživatelského účtu (bazar)</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
+        <tr><td>Zveřejňování inzerátů</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
+        <tr><td>Anti-fraud, bezpečnost provozu</td><td>Oprávněný zájem — odst. 1 písm. f)</td></tr>
+        <tr><td>Plnění zákonných povinností (účetnictví u placených služeb)</td><td>Právní povinnost — odst. 1 písm. c)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Doba uchování</h2>
+    <ul>
+      <li><strong>Newsletter:</strong> do odvolání souhlasu (odhlášení) — pak 30 dní v unsubscribe listu pro prokázání odhlášení</li>
+      <li><strong>Účet bazaru:</strong> do smazání účtu uživatelem; neaktivní účty po 3 letech bez přihlášení mažeme</li>
+      <li><strong>Aktivní inzeráty:</strong> 30 dní (poté status „expired"), trvale 1 rok od smazání pro audit</li>
+      <li><strong>Logy a IP adresy:</strong> 30 dní</li>
+    </ul>
+
+    <h2>5. Komu údaje předáváme (zpracovatelé)</h2>
+    <ul>
+      <li><strong>Cloudflare, Inc.</strong> (USA) — hosting, CDN, anti-DDoS. Standardní smluvní doložky (SCC) podle čl. 46 GDPR.</li>
+      <li><strong>Supabase, Inc.</strong> (USA, EU regiony) — databáze a autentizace. SCC.</li>
+      <li><strong>Resend, Inc.</strong> (USA) — odesílání transakčních a newsletter e-mailů. SCC.</li>
+    </ul>
+    <p>Vaše osobní údaje neprodáváme ani nepředáváme třetím stranám pro marketingové účely.</p>
+
+    <h2>6. Vaše práva</h2>
+    <p>Podle GDPR máte právo na:</p>
+    <ul>
+      <li><strong>Přístup</strong> ke svým údajům (čl. 15)</li>
+      <li><strong>Opravu</strong> nepřesných údajů (čl. 16)</li>
+      <li><strong>Výmaz</strong> („právo být zapomenut", čl. 17)</li>
+      <li><strong>Omezení zpracování</strong> (čl. 18)</li>
+      <li><strong>Přenositelnost</strong> údajů (čl. 20)</li>
+      <li><strong>Námitku</strong> proti zpracování na základě oprávněného zájmu (čl. 21)</li>
+      <li><strong>Odvolání souhlasu</strong> kdykoli (čl. 7 odst. 3) — týká se newsletteru</li>
+    </ul>
+    <p>Žádost zašlete na <a href="mailto:info@agro-svet.cz">info@agro-svet.cz</a>. Vyřídíme ji do 30 dní.</p>
+
+    <h2>7. Odhlášení z newsletteru</h2>
+    <p>Odběr newsletteru můžete kdykoli odhlásit:</p>
+    <ul>
+      <li>Odpovědí na jakýkoli newsletter e-mail s textem „odhlásit"</li>
+      <li>E-mailem na <a href="mailto:info@agro-svet.cz">info@agro-svet.cz</a></li>
+    </ul>
+
+    <h2>8. Stížnost u dozorového úřadu</h2>
+    <p>
+      Pokud se domníváte, že zpracováním vašich osobních údajů porušujeme GDPR, můžete podat stížnost u
+      <strong>Úřadu pro ochranu osobních údajů</strong>, Pplk. Sochora 27, 170 00 Praha 7,
+      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+    </p>
+
+    <h2>9. Cookies</h2>
+    <p>Web používá technicky nezbytné cookies pro provoz (přihlašování, anti-fraud). Nepoužíváme marketingové ani trackovací cookies třetích stran bez vašeho výslovného souhlasu.</p>
+
+    <p class="effective"><strong>Účinnost:</strong> {`{{DATUM}}`}</p>
+  </main>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.7;
+    color: #222;
+  }
+  .legal-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin: 0 0 12px;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+  }
+  .legal-page .lead {
+    font-size: 16px;
+    color: #444;
+    margin: 0 0 32px;
+  }
+  .legal-page h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 32px 0 12px;
+    letter-spacing: -.01em;
+  }
+  .legal-page h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 20px 0 8px;
+  }
+  .legal-page ul {
+    padding-left: 22px;
+    margin: 8px 0 16px;
+  }
+  .legal-page li { margin: 4px 0; }
+  .legal-page a {
+    color: #0B7A3B;
+    text-decoration: underline;
+  }
+  .legal-page a:hover { color: #066027; }
+  .legal-page .legal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 14px;
+  }
+  .legal-page .legal-table th,
+  .legal-page .legal-table td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid #eaeaec;
+    vertical-align: top;
+  }
+  .legal-page .legal-table th {
+    background: #fbfaf4;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .legal-page .effective {
+    margin-top: 36px;
+    padding-top: 16px;
+    border-top: 1px solid #eaeaec;
+    font-size: 13px;
+    color: #666;
+  }
+</style>

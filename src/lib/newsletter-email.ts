@@ -30,7 +30,10 @@ export async function sendNewsletterConfirmation(
         <p style="font-size:13px;color:#666">Pokud tlačítko nefunguje, zkopírujte odkaz: <br><a href="${confirmUrl}">${confirmUrl}</a></p>
         <p style="font-size:13px;color:#666">Pokud jste o odběr nežádali, e-mail ignorujte — bez kliknutí na potvrzovací odkaz vám nic posílat nebudeme.</p>
         <hr style="border:0;border-top:1px solid #eaeaec;margin:24px 0">
-        <p style="font-size:12px;color:#999">Agro-svět · <a href="${SITE_URL}" style="color:#999">${SITE_URL}</a></p>
+        <p style="font-size:12px;color:#999;line-height:1.6">
+          Agro-svět · <a href="${SITE_URL}" style="color:#999">${SITE_URL}</a><br>
+          Vaše osobní údaje (e-mail) zpracováváme pro zasílání newsletteru na základě vašeho souhlasu (čl. 6 odst. 1 písm. a GDPR). Více v <a href="${SITE_URL}/zpracovani-osobnich-udaju/" style="color:#999">zásadách zpracování osobních údajů</a>. Odhlásit odběr můžete odpovědí na tento e-mail nebo na <a href="mailto:${REPLY_TO}" style="color:#999">${REPLY_TO}</a>.
+        </p>
       </div>
     `,
   });

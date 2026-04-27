@@ -25,6 +25,9 @@ const variant = Astro.props.variant ?? 'full';
       </button>
     </form>
     <p id="newsletter-msg" class="newsletter-msg">Žádný spam. Odhlášení kdykoliv.</p>
+    <p class="newsletter-gdpr">
+      Odebíráním souhlasíte se <a href="/zpracovani-osobnich-udaju/">zpracováním osobních údajů</a>. Odhlásit se můžete kdykoliv.
+    </p>
   </div>
 </section>
 
@@ -137,6 +140,18 @@ const variant = Astro.props.variant ?? 'full';
     color: rgba(0,0,0,.55);
     margin: 16px 0 0;
   }
+  .newsletter-gdpr {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 12px;
+    color: rgba(0,0,0,.5);
+    margin: 8px 0 0;
+    line-height: 1.5;
+  }
+  .newsletter-gdpr a {
+    color: rgba(0,0,0,.7);
+    text-decoration: underline;
+  }
+  .newsletter-gdpr a:hover { color: #0A0A0B; }
   @media (max-width: 520px) {
     .newsletter-form { flex-direction: column; }
     .newsletter-btn { width: 100%; }
