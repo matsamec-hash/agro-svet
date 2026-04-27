@@ -4,15 +4,11 @@ Stav po incidentu 1102 (2026-04-27). Dnes hotovo:
 - ✅ Phase 1 — CZSO data → build-time JSON, refresh přes `npm run commodities:refresh`
 - ✅ Phase 2 — weather widgety přes cached `/api/weather/*` endpointy + client-side fetch
 - ✅ Phase 3 — /statistiky/ static prerender z `agro-stats.json` (CZSO + Eurostat precomputed at build, scissorsPoints + fiveYearAvgs hotové). Refresh: `npm run stats:refresh`.
+- ✅ Phase 4 — /puda/ + /statistiky/ weather na client-fetch přes cached `/api/weather/agro`. HomeWeather rozšířen o `commodity` mode, AgroWeather.astro smazán (unused). Žádný Open-Meteo fetch v build/SSR.
 
 Níže priority-ranked seznam dalších optimalizací. Top 3 jsou nejvyšší pákový poměr.
 
 ---
-
-## 🔴 Priority 1 — Zbývající SSR weather
-
-### `/puda/` page volá AgroWeather v SSR
-Volá `<AgroWeather>` komponentu která dělá `fetchAgroWeather()` v SSR. Buď refactor na client-fetch (jako homepage HomeWeather), nebo použít CF Cache API přes `/api/weather/agro` endpoint (už existuje).
 
 ---
 

@@ -11,7 +11,7 @@ import { AGRO_EVENTS } from '../../data/agro-events';
 import statsData from '../../data/agro-stats.json';
 
 import DataSegmentNav from '../../components/DataSegmentNav.astro';
-import AgroWeather from '../../components/AgroWeather.astro';
+import HomeWeather from '../../components/HomeWeather.astro';
 import Hero from '../../components/statistiky/Hero.astro';
 import SparklineTicker from '../../components/statistiky/SparklineTicker.astro';
 import AutoTakeaways from '../../components/statistiky/AutoTakeaways.astro';
@@ -201,7 +201,7 @@ const PILLS = [
 
     <AutoTakeaways takeaways={takeaways} />
 
-    <AgroWeather mode="commodity" />
+    <HomeWeather mode="commodity" />
 
     <PillsNav items={PILLS} />
 
