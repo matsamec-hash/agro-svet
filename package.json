@@ -13,6 +13,7 @@
     "deploy": "wrangler deploy && node --env-file=.env scripts/cf-purge.mjs",
     "purge": "node --env-file=.env scripts/cf-purge.mjs",
     "commodities:refresh": "node scripts/fetch-commodities.mjs",
+    "stats:refresh": "node scripts/fetch-commodities.mjs && node scripts/fetch-stats.mjs",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },

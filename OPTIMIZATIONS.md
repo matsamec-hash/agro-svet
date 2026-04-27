@@ -3,22 +3,16 @@
 Stav po incidentu 1102 (2026-04-27). Dnes hotovo:
 - ✅ Phase 1 — CZSO data → build-time JSON, refresh přes `npm run commodities:refresh`
 - ✅ Phase 2 — weather widgety přes cached `/api/weather/*` endpointy + client-side fetch
+- ✅ Phase 3 — /statistiky/ static prerender z `agro-stats.json` (CZSO + Eurostat precomputed at build, scissorsPoints + fiveYearAvgs hotové). Refresh: `npm run stats:refresh`.
 
 Níže priority-ranked seznam dalších optimalizací. Top 3 jsou nejvyšší pákový poměr.
 
 ---
 
-## 🔴 Priority 1 — Stejný 1102 risk na jiných stránkách
+## 🔴 Priority 1 — Zbývající SSR weather
 
-### `/statistiky/` page má stejný anti-pattern
-`src/pages/statistiky/index.astro` má `prerender = false` + nutně volá CZSO API v SSR (CEN0203BT02 + další selection codes). Jakmile traffic na /statistiky/ vzroste nebo CZSO zpomalí, stejný 1102.
-
-**Fix:** rozšířit `scripts/fetch-commodities.mjs` o všechna potřebná pole (livestock, fuel, fertilizer, regional crop), generovat jeden `src/data/agro-stats.json` a /statistiky/ stránku přepsat na import + `prerender = true`. Refresh měsíčně přes GitHub Action.
-
-**Bonus:** /statistiky/ se stane 100% staticky cached HTML, 0ms TTFB, žádný Worker CPU.
-
-### `/puda/` page — stejně
-Volá `fetchAgroWeather()` v SSR. Buď refactor na client-fetch (jako homepage HomeWeather), nebo použít CF Cache API přes `/api/weather/agro` endpoint (už existuje).
+### `/puda/` page volá AgroWeather v SSR
+Volá `<AgroWeather>` komponentu která dělá `fetchAgroWeather()` v SSR. Buď refactor na client-fetch (jako homepage HomeWeather), nebo použít CF Cache API přes `/api/weather/agro` endpoint (už existuje).
 
 ---
 

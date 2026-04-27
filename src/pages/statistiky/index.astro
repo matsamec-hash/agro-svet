@@ -1,35 +1,14 @@
 ---
 // src/pages/statistiky/index.astro
-// prerender=false: ČSÚ + Eurostat API timeoutuje při buildu (Headers Timeout Error)
-// a blokuje deploy. SSR s edge cache (CF Workers s-maxage) je pragmatičtější —
-// data se aktualizují denně, ne realtime, ale SSR se vyrenderují na vyžádání.
-// Když ČSÚ API bude reliable, lze flipnout zpět na true pro lepší CWV.
-export const prerender = false;
+// prerender=true: data jsou precomputed v src/data/agro-stats.json (build-time fetch
+// CZSO + Eurostat přes `npm run stats:refresh`). Žádný API call v requestu, page je
+// 100% staticky cached na CF edge — žádný 1102 risk, 0 Worker CPU.
+// Refresh měsíčně (commodity data se aktualizují měsíčně/ročně).
+export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import {
-  getCommodityStats,
-  getLatestFuelPrices,
-  getLivestockStats,
-  getLivestockHistorical,
-  getCropProduction,
-  getCropAreas,
-  getFertilizerPrices,
-  getCommodityFullSeries,
-  getCommodityPrices,
-  getFuelTimeSeries,
-  getFuelPrices,
-  getFertilizerTimeSeries,
-  getRegionalCropData,
-} from '../../lib/czso';
-import {
-  priceScissors,
-  fiveYearAverage,
-  biggestYoyChange,
-  inputCostInflation,
-  livestockMilestone,
-} from '../../lib/agro-derived';
+import { biggestYoyChange, inputCostInflation, livestockMilestone } from '../../lib/agro-derived';
 import { AGRO_EVENTS } from '../../data/agro-events';
-import { getLivestockHistoricalCombined } from '../../lib/eurostat';
+import statsData from '../../data/agro-stats.json';
 
 import DataSegmentNav from '../../components/DataSegmentNav.astro';
 import AgroWeather from '../../components/AgroWeather.astro';
@@ -47,7 +26,7 @@ import StoryCards from '../../components/statistiky/StoryCards.astro';
 import MethodologyFooter from '../../components/statistiky/MethodologyFooter.astro';
 import BottomCTA from '../../components/statistiky/BottomCTA.astro';
 
-const [
+const {
   commodityStats,
   latestFuels,
   livestock,
@@ -56,26 +35,13 @@ const [
   areas,
   fertilizers,
   commodityFull,
-  commodityPrices,
   fuelSeries,
-  fuelPrices,
   fertSeries,
   regional,
-] = await Promise.all([
-  getCommodityStats(),
-  getLatestFuelPrices(),
-  getLivestockStats(),
-  getLivestockHistoricalCombined(), // Eurostat fallback (ČSÚ má jen aktuální 2 datapoints)
-  getCropProduction(),
-  getCropAreas(),
-  getFertilizerPrices(),
-  getCommodityFullSeries(),
-  getCommodityPrices(),
-  getFuelTimeSeries(52),
-  getFuelPrices(),
-  getFertilizerTimeSeries(),
-  getRegionalCropData(),
-]);
+  scissorsPoints,
+  fiveYearAvgs,
+  scissorsBaseYear: BASE_YEAR,
+} = statsData;
 
 // Hero stats
 const datasetCount = 6 + 1; // 6 hlavních + regional
@@ -165,11 +131,8 @@ if (skotMile) {
   });
 }
 
-// Cenové nůžky
-// BASE_YEAR = 2017 — Nafta data začínají 2016, NPK + komodity dostupné od ~2010,
-// 2017 je první rok kde mají všechny 3 vstupy (4 komodity + NPK + Nafta) full coverage.
-const BASE_YEAR = 2017;
-const scissorsPoints = priceScissors(commodityPrices, fertilizers, fuelPrices, BASE_YEAR);
+// Cenové nůžky — scissorsPoints precomputed v agro-stats.json (BASE_YEAR = 2017,
+// první rok kde mají všechny 3 vstupy full coverage)
 const scissorsInsight = (() => {
   if (scissorsPoints.length < 2) return 'Nedostatek dat pro výpočet cenových nůžek.';
   const last = scissorsPoints[scissorsPoints.length - 1];
@@ -179,29 +142,7 @@ const scissorsInsight = (() => {
   return `V ${last.year} vstupy ${last.x.toFixed(0)}, výstupy ${last.y.toFixed(0)} → marže neutrální.`;
 })();
 
-// 5letý průměr per komodita (pro CommodityChart)
-const fiveYearAvgs: Record<string, { label: string; avg: number }[] | null> = {};
-for (const s of commodityFull) {
-  const points: { label: string; avg: number }[] = [];
-  for (const d of s.data) {
-    // Najít odpovídající měsíc v commodityPrices
-    const original = commodityPrices.find(p => p.name === s.name && (() => {
-      const dd = d.label;
-      // d.label je např. "Led 2024" — převést zpět na "leden 2024" a porovnat
-      const SHORT2LONG: Record<string, string> = {
-        'Led':'leden','Úno':'únor','Bře':'březen','Dub':'duben','Kvě':'květen','Čvn':'červen',
-        'Čvc':'červenec','Srp':'srpen','Zář':'září','Říj':'říjen','Lis':'listopad','Pro':'prosinec'
-      };
-      const [shortM, year] = dd.split(' ');
-      return p.month.startsWith(SHORT2LONG[shortM] ?? '') && p.month.endsWith(year);
-    })());
-    if (original) {
-      const avg = fiveYearAverage(commodityPrices.filter(p => p.name === s.name), original.month);
-      if (avg !== null) points.push({ label: d.label, avg });
-    }
-  }
-  fiveYearAvgs[s.name] = points.length > 0 ? points : null;
-}
+// 5letý průměr per komodita — precomputed v agro-stats.json
 
 // Latest year for production
 const latestCropYear = (() => {
