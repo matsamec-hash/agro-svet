@@ -43,6 +43,10 @@ const znacky = defineCollection({
     popis: z.string(),
     website: z.string().optional(),
     kategorie: z.array(z.string()),
+    /** Wikipedia article URL (cs preferred). Used in JSON-LD sameAs. */
+    wikipedia: z.string().optional(),
+    /** Wikidata entity URL (Qxxxxx). Knowledge graph anchor. */
+    wikidata: z.string().optional(),
   }),
 });
 

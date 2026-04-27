@@ -5,6 +5,8 @@ zeme: Itálie / USA
 zalozena: 1895
 popis: New Holland Agriculture je jedním z největších světových výrobců zemědělské techniky. Značka je součástí koncernu CNH Industrial a nabízí kompletní portfolio od traktorů přes kombajny až po sklízecí řezačky. V posledních letech se New Holland soustředí na alternativní pohony — vodíkové traktory a LNG kombajny.
 website: https://www.newholland.com
+wikipedia: https://en.wikipedia.org/wiki/New_Holland_Agriculture
+wikidata: https://www.wikidata.org/wiki/Q1423217
 kategorie: ["Traktory", "Kombajny", "Sklízecí řezačky", "Teleskopické manipulátory"]
 ---
 

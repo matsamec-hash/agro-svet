@@ -69,6 +69,10 @@ export interface StrojBrand {
   website?: string;
   logo?: string;
   description?: string;
+  /** Wikipedia article URL (cs preferred, fallback en). Used in JSON-LD sameAs. */
+  wikipedia?: string;
+  /** Wikidata entity URL (https://www.wikidata.org/wiki/Qxxxxx). Knowledge graph anchor. */
+  wikidata?: string;
   categories: Partial<Record<StrojKategorie, { name: string; series: StrojSeries[] }>>;
 }
 

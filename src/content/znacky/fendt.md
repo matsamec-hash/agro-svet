@@ -5,6 +5,8 @@ zeme: "Německo"
 zalozena: 1930
 popis: "Fendt je bavorský výrobce traktorů proslulý bezstupňovou převodovkou Vario. Od roku 1997 je součástí skupiny AGCO. Synonymum pro prémiovou zemědělskou techniku."
 website: "https://www.fendt.com"
+wikipedia: https://en.wikipedia.org/wiki/Fendt
+wikidata: https://www.wikidata.org/wiki/Q666948
 kategorie: ["traktor", "kombajn", "stroj"]
 ---
 

@@ -209,14 +209,33 @@ try {
   bazarCount = count ?? 0;
 } catch {}
 
-const jsonLd = {
+const brandUrl = `https://agro-svet.cz/stroje/${brand.slug}/`;
+const sameAs: string[] = [];
+if ((brand as any).wikipedia) sameAs.push((brand as any).wikipedia);
+if ((brand as any).wikidata) sameAs.push((brand as any).wikidata);
+if (brand.website) sameAs.push(brand.website);
+
+const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
     { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
-    { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz/stroje/${brand.slug}/` },
+    { '@type': 'ListItem', position: 3, name: brand.name, item: brandUrl },
   ],
+};
+const brandJsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': ['Brand', 'Organization'],
+  name: brand.name,
+  url: brandUrl,
+  ...(brand.logo && { logo: brand.logo.startsWith('http') ? brand.logo : `https://agro-svet.cz${brand.logo}` }),
+  ...(brand.description && { description: brand.description }),
+  ...(brand.founded && { foundingDate: String(brand.founded) }),
+  ...(brand.country && {
+    foundingLocation: { '@type': 'Place', name: brand.country },
+  }),
+  ...(sameAs.length > 0 && { sameAs }),
 };
 ---
 
@@ -224,7 +243,8 @@ const jsonLd = {
   title={`${brand.name} — katalog modelů a řad`}
   description={`${brand.name} (${brand.country}, založeno ${brand.founded}) — kompletní přehled ${totalModels} modelů ve ${totalSeries} řadách. Aktuální produkce i historické modely pro bazarový průzkum.`}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(brandJsonLd)} />
   <div class="brand-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

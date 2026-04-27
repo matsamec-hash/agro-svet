@@ -3,10 +3,14 @@ name: Zetor
 country: Česká republika
 founded: 1946
 website: https://www.zetor.cz
+wikipedia: https://cs.wikipedia.org/wiki/Zetor
+wikidata: https://www.wikidata.org/wiki/Q196868
 description: >
-  Tradiční český výrobce traktorů z Brna. Ikona československého zemědělství od roku 1946.
-  Modelové řady Major, Proxima, Forterra a Crystal pokrývají traktory od 50 do 170 koní.
-  Značka je vyhlášená jednoduchou údržbou, spolehlivostí a dostupnou cenou.
+  Tradiční český výrobce traktorů z Brna, vzniklý 1946 ze Zbrojovky Brno (původně letecké motory
+  Aero/Avia). Jméno **Z**brojovka + trak**TOR**. Definující řada **UR I** (1962+) se stala
+  kostrou českého i východoevropského zemědělství. Současné řady **Major, Proxima, Forterra,
+  Crystal HD** pokrývají 53–170 k. Od roku 2018 spolupráce s John Deere. Vlastník: HTC
+  Investments. Export do více než 60 zemí.
 
 categories:
   traktory:
@@ -15,13 +19,14 @@ categories:
     series:
       # ========== Unifikovaná řada (historie do 90. let) ==========
       - slug: ur-i
-        name: "UR I — Unifikovaná řada I (1968–1998)"
-        year_from: 1968
+        name: "UR I — Unifikovaná řada I (1962–1998)"
+        year_from: 1962
         year_to: 1998
         description: >
-          Ikonická unifikovaná řada — kostra českého zemědělství. V 90. letech stále masivně
-          prodávaná a vyráběná souběžně s nástupci. Motory Zetor 5201/5201.1, převodovka 10/2,
-          jednoduchá konstrukce, proslulá nezničitelnost.
+          Ikonická unifikovaná řada uvedená 1962 modely 4011/5511/6711 — kostra českého
+          i východoevropského zemědělství. Modernizace 1980 přinesla novou kabinu a modely
+          5211/7211/7745 vyráběné až do 1998. Motory Zetor 5201 / 7201 (3-válec), převodovka
+          10/2, jednoduchá konstrukce, proslulá nezničitelnost.
         models:
           - slug: zetor-5211
             name: "5211"
@@ -74,7 +79,7 @@ categories:
             year_to: 1998
             power_hp: 77
             power_kw: 57
-            engine: "Zetor 7401, 4-válec 4,15 L"
+            engine: "Zetor 7201, 3-válec 3,12 L"
           - slug: zetor-7745-turbo
             name: "7745 Turbo"
             year_from: 1988
@@ -83,12 +88,14 @@ categories:
             power_kw: 63
 
       - slug: ur-ii
-        name: "UR II — Unifikovaná řada II (1980–2002)"
-        year_from: 1980
+        name: "UR II — Unifikovaná řada II (1968–2002)"
+        year_from: 1968
         year_to: 2002
         description: >
-          Větší a výkonnější unifikovaná řada pro střední a větší farmy. Motory Zetor 8001/8101,
-          6-válec, převodovka 10/2 nebo 16/8 s plazivým převodem.
+          Větší a výkonnější unifikovaná řada uvedená 1968 modely 8011/12011 (Crystal). Pro
+          střední a větší farmy — první šestiválcové Zetory. Motory Zetor 7401 (4-válec) a
+          8001/8101 (6-válec), převodovka 10/2 nebo 16/8 s plazivým převodem. Modernizace
+          1986 přinesla novou kabinu (8111/9111/10111).
         models:
           - slug: zetor-8011
             name: "8011"
@@ -472,7 +479,7 @@ categories:
             power_kw: 86
             description: >
               Zetor Proxima Power 120 nová generace (2024+) — nový motor, kabina, digitální displej.
-              Inspirace italským Foton/Same designem.
+              Inspirace italským designem SDF (Same Deutz-Fahr).
 
       # ========== Crystal ==========
       - slug: crystal
@@ -484,8 +491,9 @@ categories:
         image_credit: Fruitman cz
         image_license: CC BY-SA 4.0
         description: >
-          Návrat legendárního jména Crystal. Nejvýkonnější Zetor — až 170 koní, motor Deutz
-          4-válec turbo, převodovka ZF 16/16 s PowerShift.
+          Návrat legendárního jména Crystal (původní Crystal 8011/12011 v 70.–80. letech). Nejvýkonnější
+          současný Zetor — 150–170 koní, motor **Deutz TCD 6.1** (6-válec), převodovka ZF 16/16
+          s PowerShift, odpružená přední náprava.
         models:
           - slug: zetor-crystal-hd-150
             name: "Crystal HD 150"
@@ -517,7 +525,8 @@ categories:
         year_to: null
         description: >
           Nejmenší řada Zetoru — utility traktor pro komunály, sady a drobné hospodářství.
-          Motor Zetor 4-válec 4,2 L, převodovka 12/12 synchronizovaná.
+          Motor **Iveco F5C** (4-válec, 3,2 l), převodovka 12/12 synchronizovaná. Varianty
+          **CL** (Comfort Line) a **HT** (High Tech) přidány 2018.
         models:
           - slug: zetor-major-60
             name: "Major 60"
@@ -556,8 +565,9 @@ categories:
         year_from: 2013
         year_to: 2020
         description: >
-          Kompaktní traktory pro komunální a specializované nasazení. Výroba byla ukončena
-          a nahrazena řadou Major.
+          Kompaktní traktory 25–55 k pro komunální a specializované nasazení. OEM rebrandy
+          (Utilix HT z TYM Korea, Compax z TAFE Indie) prodávané pod Zetor značkou. Výroba
+          ukončena 2020 — třída zůstává v portfoliu nezastoupena (Major začíná na 53 k).
         models:
           - slug: zetor-utilix-hs-45
             name: "Utilix HS 45"

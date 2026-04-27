@@ -15,24 +15,30 @@ if (!znacka) return Astro.redirect('/znacky/');
 const { Content } = await render(znacka);
 
 const canonical = `https://agro-svet.cz/znacky/${znacka.id}/`;
+const sameAsList: string[] = [];
+if ((znacka.data as any).wikipedia) sameAsList.push((znacka.data as any).wikipedia);
+if ((znacka.data as any).wikidata) sameAsList.push((znacka.data as any).wikidata);
+if (znacka.data.website) sameAsList.push(znacka.data.website);
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'Organization',
+      '@type': ['Brand', 'Organization'],
       name: znacka.data.name,
       description: znacka.data.popis,
       url: canonical,
-      ...(znacka.data.website && { sameAs: [znacka.data.website] }),
+      ...(sameAsList.length > 0 && { sameAs: sameAsList }),
       ...(znacka.data.logo && { logo: znacka.data.logo.startsWith('http') ? znacka.data.logo : `https://agro-svet.cz${znacka.data.logo}` }),
       ...(znacka.data.zalozena && { foundingDate: String(znacka.data.zalozena) }),
-      ...(znacka.data.zeme && { address: { '@type': 'PostalAddress', addressCountry: znacka.data.zeme } }),
+      ...(znacka.data.zeme && { foundingLocation: { '@type': 'Place', name: znacka.data.zeme } }),
     },
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Značky', item: 'https://agro-svet.cz/znacky/' },
-        { '@type': 'ListItem', position: 2, name: znacka.data.name, item: canonical },
+        { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+        { '@type': 'ListItem', position: 2, name: 'Značky', item: 'https://agro-svet.cz/znacky/' },
+        { '@type': 'ListItem', position: 3, name: znacka.data.name, item: canonical },
       ],
     },
   ],
