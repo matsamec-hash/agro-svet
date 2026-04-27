@@ -27,8 +27,8 @@ JSON s 1713 datapointy = 256KB. Homepage potřebuje jen 1y range jako default, z
 
 ## 🟢 Priority 3 — Edge a runtime optimalizace
 
-### Edge cache homepage HTML (60s)
-Homepage články se mění jen při novém článku. Astro CF adapter může vrátit `Cache-Control: public, s-maxage=60, stale-while-revalidate=300`. Většina requestů cache HIT na CF edge → 0 Worker invocations. Trade-off: ~1min stale po publikaci článku — akceptovatelné.
+### ~~Edge cache homepage HTML (60s)~~ ✅ DONE
+Homepage `Astro.response.headers` nastavuje `cache-control: public, s-maxage=60, stale-while-revalidate=300`. Většina requestů HIT na CF edge → 0 Worker invocations. Po publikaci článku ručně `npm run purge` pokud potřeba okamžitě.
 
 Ideální by bylo invalidovat cache při novém článku (admin endpoint volá CF Cache Purge API), ale 60s SWR je 90% výhody bez složitosti.
 

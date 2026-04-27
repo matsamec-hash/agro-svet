@@ -11,6 +11,11 @@ import { AGRO_EVENTS } from '../data/agro-events';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../lib/config';
 import { organizationSchema } from '../lib/structured-data';
 
+// Edge cache: 60s s-maxage + 5min SWR. Většina requestů HIT na CF edge,
+// nový článek se objeví do ~1min (akceptovatelný trade-off vs 0 Worker
+// invocations). Po publikaci článku ručně `npm run purge` pokud potřeba okamžitě.
+Astro.response.headers.set('cache-control', 'public, s-maxage=60, stale-while-revalidate=300');
+
 const supabase = createAnonClient();
 
 const { data: articles } = await supabase
