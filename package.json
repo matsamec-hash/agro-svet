@@ -12,6 +12,7 @@
     "astro": "astro",
     "deploy": "wrangler deploy && node --env-file=.env scripts/cf-purge.mjs",
     "purge": "node --env-file=.env scripts/cf-purge.mjs",
+    "commodities:refresh": "node scripts/fetch-commodities.mjs",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
