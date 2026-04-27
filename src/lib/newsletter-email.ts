@@ -2,6 +2,7 @@ import { Resend } from 'resend';
 import { SITE_URL } from './config';
 
 const FROM = 'Agro-svět <newsletter@mail.agro-svet.cz>';
+const REPLY_TO = 'info@agro-svet.cz';
 
 export async function sendNewsletterConfirmation(
   apiKey: string,
@@ -16,6 +17,7 @@ export async function sendNewsletterConfirmation(
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to,
     subject: 'Potvrďte odběr newsletteru Agro-svět',
     html: `
