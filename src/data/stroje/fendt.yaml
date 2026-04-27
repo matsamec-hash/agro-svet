@@ -11,6 +11,232 @@ categories:
   traktory:
     name: Traktory
     series:
+      - slug: dieselross
+        name: Dieselross (1937–1958)
+        year_from: 1937
+        year_to: 1958
+        description: |
+          Původní traktor Fendtu — Hermann Fendt postavil první „diesel horse" v dílně svého otce v roce 1928 ze stacionárního motoru a staré sekačky. V roce 1937 byla firma zapsána do obchodního rejstříku jako Xaver Fendt & Co. a začala sériová výroba. Vzduchem chlazený jednoválcový diesel Deutz definoval německý vesnický traktor — jednoduchý, robustní, navržený pro malé farmy. Řada Dieselross běžela od 6 koní (F6) až po 40 koní (F40) a skončila v roce 1958, kdy byla nahrazena řadami Favorit, Farmer a Fix.
+        models:
+          - slug: fendt-dieselross-f6
+            name: Dieselross F6
+            year_from: 1937
+            year_to: 1942
+            power_hp: 6
+            power_kw: 4
+            engine: "Deutz, 1-válec vzduchem chlazený"
+            description: "První sériový Fendt — jednoválec 6 k položil základ celé značky."
+          - slug: fendt-dieselross-f12
+            name: Dieselross F12
+            year_from: 1939
+            year_to: 1949
+            power_hp: 12
+            power_kw: 9
+            engine: "Deutz, 1-válec vzduchem chlazený"
+          - slug: fendt-dieselross-f18
+            name: Dieselross F18
+            year_from: 1937
+            year_to: 1949
+            power_hp: 18
+            power_kw: 13
+            engine: "Deutz, 2-válec vzduchem chlazený"
+            description: "F18 byl prvním Fendtem s nezávislým vývodovým hřídelem (PTO)."
+          - slug: fendt-dieselross-f22
+            name: Dieselross F22
+            year_from: 1938
+            year_to: 1948
+            power_hp: 22
+            power_kw: 16
+            engine: "Deutz, 2-válec vzduchem chlazený"
+          - slug: fendt-dieselross-g25
+            name: Dieselross G25 (dřevoplynový)
+            year_from: 1942
+            year_to: 1949
+            power_hp: 25
+            power_kw: 18
+            engine: "Dřevoplynový, 2-válec"
+            description: "Válečná varianta na dřevoplyn — během války zákaz konstrukce kapalinových traktorů, vyrobeno 1 497 kusů."
+          - slug: fendt-dieselross-f25
+            name: Dieselross F25
+            year_from: 1951
+            year_to: 1958
+            power_hp: 28
+            power_kw: 21
+            engine: "MWM, 2-válec"
+          - slug: fendt-dieselross-f40
+            name: Dieselross F40
+            year_from: 1951
+            year_to: 1959
+            power_hp: 40
+            power_kw: 29
+            engine: "MWM, 4-válec"
+          - slug: fendt-farmer-1
+            name: Farmer 1
+            year_from: 1958
+            year_to: 1961
+            power_hp: 12
+            power_kw: 9
+            engine: "MWM, 1-válec přímý vstřik"
+            description: "První Fendt s přímým vstřikem nafty — průlom v účinnosti malých dieselů."
+      - slug: favorit-classic
+        name: Favorit 1–4 / 600 LS (1958–1992)
+        year_from: 1958
+        year_to: 1992
+        description: |
+          Legendární řada, která definovala prémiovou pozici Fendtu. Favorit 1 z roku 1958 byl prvním modelem s nově navrženou převodovkou, Favorit 4 byl prvním 6-válcem značky a Favorit 600 LS přinesl v roce 1979 hydrodynamickou Turbomatik (řízený rozjezd přes hydraulickou spojku) společně s plně synchronizovanou TriPower převodovkou. Vlajkový Favorit 626 LS Turbomatik s 252 koňmi a motorem MAN D2566 byl po mnoho let nejvýkonnějším traktorem značky — vyrobeno jen 66 kusů. Tato řada je přímým předchůdcem Favorit 500/700/800/900 z 90. let a stojí u zrodu prémiové reputace Fendtu.
+        models:
+          - slug: fendt-favorit-1
+            name: Favorit 1
+            year_from: 1958
+            year_to: 1962
+            power_hp: 40
+            power_kw: 29
+            engine: "MWM, 4-válec"
+          - slug: fendt-favorit-2
+            name: Favorit 2
+            year_from: 1959
+            year_to: 1963
+            power_hp: 46
+            power_kw: 34
+            engine: "MWM, 4-válec"
+          - slug: fendt-favorit-3
+            name: Favorit 3
+            year_from: 1964
+            year_to: 1967
+            power_hp: 52
+            power_kw: 38
+            engine: "MWM, 4-válec"
+          - slug: fendt-favorit-3s
+            name: Favorit 3S
+            year_from: 1967
+            year_to: 1970
+            power_hp: 62
+            power_kw: 46
+            engine: "MWM, 4-válec"
+          - slug: fendt-favorit-4
+            name: Favorit 4
+            year_from: 1966
+            year_to: 1967
+            power_hp: 80
+            power_kw: 59
+            engine: "MWM, 6-válec"
+            description: "První 6-válcový Fendt."
+          - slug: fendt-favorit-4s
+            name: Favorit 4S
+            year_from: 1967
+            year_to: 1973
+            power_hp: 90
+            power_kw: 66
+            engine: "MWM, 6-válec"
+          - slug: fendt-favorit-610-ls
+            name: Favorit 610 LS
+            year_from: 1979
+            year_to: 1984
+            power_hp: 95
+            power_kw: 70
+            engine: "Deutz F6L 912, 6-válec 5,65 L"
+          - slug: fendt-favorit-611-ls
+            name: Favorit 611 LS
+            year_from: 1979
+            year_to: 1984
+            power_hp: 105
+            power_kw: 77
+            engine: "Deutz, 6-válec"
+          - slug: fendt-favorit-612-ls
+            name: Favorit 612 LS
+            year_from: 1979
+            year_to: 1984
+            power_hp: 120
+            power_kw: 88
+            engine: "Deutz, 6-válec"
+          - slug: fendt-favorit-614-ls
+            name: Favorit 614 LS
+            year_from: 1980
+            year_to: 1991
+            power_hp: 135
+            power_kw: 99
+            engine: "Deutz, 6-válec turbo"
+          - slug: fendt-favorit-615-lsa
+            name: Favorit 615 LSA Turbomatik
+            year_from: 1981
+            year_to: 1992
+            power_hp: 150
+            power_kw: 110
+            engine: "Deutz, 6-válec turbo"
+            description: "Turbomatik hydrodynamická spojka pro řízený plynulý rozjezd."
+          - slug: fendt-favorit-622-ls
+            name: Favorit 622 LS Turbomatik
+            year_from: 1979
+            year_to: 1984
+            power_hp: 211
+            power_kw: 155
+            engine: "MAN D2566, 6-válec turbo"
+          - slug: fendt-favorit-626-lsa
+            name: Favorit 626 LSA Turbomatik
+            year_from: 1981
+            year_to: 1985
+            power_hp: 252
+            power_kw: 185
+            engine: "MAN D2566 MTE, 6-válec turbo 11,4 L"
+            description: "Tehdy nejvýkonnější Fendt — vyrobeno jen 66 kusů."
+      - slug: farmer-100-200
+        name: Farmer 100 / 200 (1968–1984)
+        year_from: 1968
+        year_to: 1984
+        description: |
+          Nástupce řady Dieselross v malé a střední třídě. Klasický Farmer s mechanickou synchronizovanou převodovkou, hojně dovážený do tehdejšího ČSSR a zemí RVHP po politickém uvolnění 60. let. V roce 1978 byla na DLG představena 100. série v provedeních S a LSA s mírně zvýšeným výkonem a kabinou Edition. Motor MWM AKD nebo Deutz F3L912 vzduchem chlazený byl typický spolehlivostí a nízkou údržbou. Řada 200 byla později nahrazena specializovanou compact řadou pro vinice a sady (1987+).
+        models:
+          - slug: fendt-farmer-102-ls
+            name: Farmer 102 LS
+            year_from: 1975
+            year_to: 1984
+            power_hp: 45
+            power_kw: 33
+            engine: "MWM AKD 311 Z, 2-válec vzduchem chlazený"
+          - slug: fendt-farmer-103-ls
+            name: Farmer 103 LS
+            year_from: 1975
+            year_to: 1984
+            power_hp: 50
+            power_kw: 37
+            engine: "MWM, 3-válec"
+          - slug: fendt-farmer-104-lsa
+            name: Farmer 104 LSA
+            year_from: 1977
+            year_to: 1984
+            power_hp: 55
+            power_kw: 40
+            engine: "MWM, 3-válec"
+            description: "LSA = LS s pohonem všech kol (Allrad)."
+          - slug: fendt-farmer-105-ls
+            name: Farmer 105 LS
+            year_from: 1977
+            year_to: 1985
+            power_hp: 59
+            power_kw: 43
+            engine: "MWM, 3-válec"
+          - slug: fendt-farmer-106-ls
+            name: Farmer 106 LS
+            year_from: 1977
+            year_to: 1980
+            power_hp: 64
+            power_kw: 47
+            engine: "MWM, 3-válec turbo"
+          - slug: fendt-farmer-108-ls
+            name: Farmer 108 LS
+            year_from: 1977
+            year_to: 1980
+            power_hp: 73
+            power_kw: 54
+            engine: "MWM, 4-válec"
+          - slug: fendt-farmer-200
+            name: Farmer 200
+            year_from: 1980
+            year_to: 1984
+            power_hp: 45
+            power_kw: 33
+            engine: "MWM, 3-válec"
+            description: "Kompaktní rozměry pro malé farmy a sadařské nasazení."
       - slug: farmer-300-400-lsa
         name: Farmer 300/400 LSA (1988–1997)
         image_url: /images/stroje/fendt/fendt-farmer-115k.webp
@@ -295,40 +521,40 @@ categories:
             power_hp: 260
             power_kw: 191
       - slug: 200-vario
-        name: 200 Vario (2008–dosud)
-        year_from: 2008
+        name: 200 Vario (2021–dosud)
+        year_from: 2021
         year_to: null
         image_url: /images/stroje/fendt/fendt-200-130k.webp
         description: |
-          Nejmenší Fendt. Varianta pro sady, vinice a komunální nasazení. Kompaktní kabina, Vario převodovka, motor AGCO Power 3-válec.
+          Nejmenší Fendt — Gen3 generace uvedená do prodeje od konce ledna 2021 (objednávky od října 2020) plně nahradila původní řadu z roku 2009. Varianta pro sady, vinice a komunální nasazení (V/F/P provedení). Kompaktní kabina s ovládáním FendtONE jako standardem, Vario převodovka, motor AGCO Power 3-válec 3,3 L Stage V.
         models:
           - slug: fendt-207-vario
             name: 207 Vario
-            year_from: 2008
+            year_from: 2021
             year_to: null
             power_hp: 79
             power_kw: 58
           - slug: fendt-208-vario
             name: 208 Vario
-            year_from: 2008
+            year_from: 2021
             year_to: null
             power_hp: 84
             power_kw: 62
           - slug: fendt-209-vario
             name: 209 Vario
-            year_from: 2008
+            year_from: 2021
             year_to: null
             power_hp: 94
             power_kw: 69
           - slug: fendt-210-vario
             name: 210 Vario
-            year_from: 2008
+            year_from: 2021
             year_to: null
             power_hp: 104
             power_kw: 77
           - slug: fendt-211-vario
             name: 211 Vario
-            year_from: 2008
+            year_from: 2021
             year_to: null
             power_hp: 124
             power_kw: 91

@@ -169,6 +169,83 @@ categories:
             power_hp: 62
             power_kw: 46
 
+      # ========== LX Series (kompakt utility, hobby + komunál) ==========
+      - slug: lx
+        name: "LX Series (2018–dosud)"
+        year_from: 2018
+        year_to: null
+        description: >
+          Kompaktní utility traktory 24–30 koní. Vstupní třída pro hobby farmáře
+          a komunální údržbu — pod 30 hp. Motor Kubota 3-válec diesel, hydrostatická
+          převodovka HST. Nahradili starší kompaktní L modely v segmentu pod 30 koní.
+        models:
+          - slug: kubota-lx2610
+            name: "LX2610"
+            year_from: 2018
+            year_to: null
+            power_hp: 25
+            power_kw: 18
+          - slug: kubota-lx2620
+            name: "LX2620"
+            year_from: 2022
+            year_to: null
+            power_hp: 25
+            power_kw: 18
+          - slug: kubota-lx3010
+            name: "LX3010"
+            year_from: 2022
+            year_to: null
+            power_hp: 30
+            power_kw: 22
+          - slug: kubota-lx3310
+            name: "LX3310"
+            year_from: 2018
+            year_to: null
+            power_hp: 31
+            power_kw: 23
+          - slug: kubota-lx3520
+            name: "LX3520"
+            year_from: 2022
+            year_to: null
+            power_hp: 34
+            power_kw: 25
+          - slug: kubota-lx3520sl
+            name: "LX3520Sl"
+            year_from: 2022
+            year_to: null
+            power_hp: 34
+            power_kw: 25
+
+      # ========== L02 Series (modernizace L, Stage V) ==========
+      - slug: l02
+        name: "L02 Series (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Nejnovější generace kompaktních traktorů řady L splňující emisní normu
+          Stage V. Modernizovaná kabina, podpora IsoBus, výkon 38–62 koní.
+          Prodávaná souběžně s LX (LX = jednodušší vstupní třída, L02 = plně
+          vybavená prémiová kompaktní třída).
+        models:
+          - slug: kubota-l3902
+            name: "L3902"
+            year_from: 2020
+            year_to: null
+            power_hp: 38
+            power_kw: 28
+          - slug: kubota-l4802
+            name: "L4802"
+            year_from: 2020
+            year_to: null
+            power_hp: 48
+            power_kw: 35
+          - slug: kubota-l5460
+            name: "L5460"
+            year_from: 2020
+            year_to: null
+            power_hp: 62
+            power_kw: 46
+
       # ========== STa Series (malotraktory) ==========
       - slug: sta
         name: "STa Series (2002–2005)"
@@ -220,6 +297,29 @@ categories:
             year_to: 2008
             power_hp: 94
             power_kw: 70
+
+      # ========== MX Series (mid-compact utility) ==========
+      - slug: mx
+        name: "MX Series (2017–dosud)"
+        year_from: 2017
+        year_to: null
+        description: >
+          Univerzální mid-size farmový traktor — mezi řadami B/L (kompaktní)
+          a M (velké). Motor Kubota Stage V, výkon 55–63 koní. Nahrazuje starší
+          utility řadu M5040/M5640/M6040.
+        models:
+          - slug: kubota-mx5400
+            name: "MX5400"
+            year_from: 2017
+            year_to: null
+            power_hp: 55
+            power_kw: 40
+          - slug: kubota-mx6000
+            name: "MX6000"
+            year_from: 2017
+            year_to: null
+            power_hp: 63
+            power_kw: 47
 
       # ========== M60 / M60 ROPS legacy ==========
       - slug: m60-legacy
