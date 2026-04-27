@@ -1021,3 +1021,237 @@ categories:
             power_hp: 435
             power_kw: 320
             grain_tank_l: 10000
+
+  rezacky:
+    name: Sklízecí řezačky
+
+    series:
+      # ========== Jaguar 60/70/80/690/695 (1973-1993) ==========
+      - slug: jaguar-700
+        name: "Jaguar 60/70/80/600/690 (1973–1993)"
+        year_from: 1973
+        year_to: 1993
+        description: >
+          První generace samojízdných řezaček Jaguar — uvedena 1973 modely Jaguar 60 SF,
+          70 SF a 80 SF. Ikonické stroje pro sklizeň kukuřičné siláže a travních pícnin
+          v 70. a 80. letech. Motor Mercedes-Benz 6-válec, mechanická 4-stupňová převodovka.
+          Pozdější modely 685/690/695 SL přinesly automatizaci a vyšší výkon. V ČSSR a později
+          ČR jedny z prvních dovážených moderních řezaček.
+        models:
+          - slug: claas-jaguar-60-sf
+            name: "Jaguar 60 SF"
+            year_from: 1973
+            year_to: 1985
+            power_hp: 175
+            power_kw: 129
+          - slug: claas-jaguar-70-sf
+            name: "Jaguar 70 SF"
+            year_from: 1973
+            year_to: 1985
+            power_hp: 220
+            power_kw: 162
+          - slug: claas-jaguar-80-sf
+            name: "Jaguar 80 SF"
+            year_from: 1976
+            year_to: 1985
+            power_hp: 280
+            power_kw: 206
+          - slug: claas-jaguar-685-sl
+            name: "Jaguar 685 SL"
+            year_from: 1985
+            year_to: 1993
+            power_hp: 245
+            power_kw: 180
+          - slug: claas-jaguar-690-sl
+            name: "Jaguar 690 SL"
+            year_from: 1985
+            year_to: 1993
+            power_hp: 305
+            power_kw: 224
+          - slug: claas-jaguar-695-sl
+            name: "Jaguar 695 SL"
+            year_from: 1989
+            year_to: 1993
+            power_hp: 360
+            power_kw: 265
+
+      # ========== Jaguar 800 series (1993-2007) ==========
+      - slug: jaguar-800
+        name: "Jaguar 800 Series (1993–2007)"
+        year_from: 1993
+        year_to: 2007
+        description: >
+          Modernizovaná generace s digitální regulací a širším řezacím bubnem (V-MAX).
+          Motor Mercedes-Benz OM441/OM442 6/8-válec, automatické broušení nožů. Modely
+          820/840/860/880/890/900 v rozsahu 286–605 hp. Druhá nejprodávanější Jaguar generace
+          v ČR (po 900).
+        models:
+          - slug: claas-jaguar-820
+            name: "Jaguar 820"
+            year_from: 1993
+            year_to: 2000
+            power_hp: 286
+            power_kw: 210
+          - slug: claas-jaguar-840
+            name: "Jaguar 840"
+            year_from: 1993
+            year_to: 2000
+            power_hp: 326
+            power_kw: 240
+          - slug: claas-jaguar-860
+            name: "Jaguar 860"
+            year_from: 1996
+            year_to: 2007
+            power_hp: 380
+            power_kw: 280
+          - slug: claas-jaguar-880
+            name: "Jaguar 880"
+            year_from: 1996
+            year_to: 2007
+            power_hp: 460
+            power_kw: 338
+          - slug: claas-jaguar-890
+            name: "Jaguar 890"
+            year_from: 1999
+            year_to: 2007
+            power_hp: 530
+            power_kw: 390
+          - slug: claas-jaguar-900
+            name: "Jaguar 900"
+            year_from: 1999
+            year_to: 2007
+            power_hp: 605
+            power_kw: 445
+
+      # ========== Jaguar 900 (2007-2020) ==========
+      - slug: jaguar-900-modern
+        name: "Jaguar 900 Series (2007–2020)"
+        year_from: 2007
+        year_to: 2020
+        description: >
+          Moderní generace s technologií **Dynamic Power** (variabilní výkon motoru podle
+          zátěže) a Auto Fill (automatické plnění návěsu). Motor Mercedes-Benz OM502 V8,
+          později MAN V12 (980). Modely 930/940/950/960/970/980/990, výkon 360–884 hp.
+          Vlajkový Jaguar 980 dlouho držel titul nejvýkonnější řezačky světa.
+        models:
+          - slug: claas-jaguar-930
+            name: "Jaguar 930"
+            year_from: 2007
+            year_to: 2020
+            power_hp: 354
+            power_kw: 260
+          - slug: claas-jaguar-940
+            name: "Jaguar 940"
+            year_from: 2007
+            year_to: 2020
+            power_hp: 449
+            power_kw: 330
+          - slug: claas-jaguar-950
+            name: "Jaguar 950"
+            year_from: 2007
+            year_to: 2020
+            power_hp: 510
+            power_kw: 375
+          - slug: claas-jaguar-960
+            name: "Jaguar 960"
+            year_from: 2007
+            year_to: 2020
+            power_hp: 585
+            power_kw: 430
+          - slug: claas-jaguar-970
+            name: "Jaguar 970"
+            year_from: 2010
+            year_to: 2020
+            power_hp: 776
+            power_kw: 571
+          - slug: claas-jaguar-980
+            name: "Jaguar 980"
+            year_from: 2010
+            year_to: 2020
+            power_hp: 884
+            power_kw: 650
+          - slug: claas-jaguar-990
+            name: "Jaguar 990"
+            year_from: 2018
+            year_to: 2020
+            power_hp: 925
+            power_kw: 680
+
+      # ========== Jaguar current (2020+) ==========
+      - slug: jaguar-current
+        name: "Jaguar 800/900/1000 (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Současná generace Stage V. Tři výkonové třídy: **Jaguar 800** (vstupní, 408–490 hp),
+          **Jaguar 900** (hlavní, 503–925 hp) a vlajkový **Jaguar 1000** (uveden 2023, 925 hp,
+          nejvýkonnější samojízdná řezačka světa). Motor MAN V12 24,2 L (1000), Mercedes-Benz
+          OM471/OM473 (900). CEMOS Auto Performance, Shredlage konzervace, Auto Fill 3D.
+          V ČR dominantní stroj pro sklizeň kukuřičné siláže.
+        models:
+          - slug: claas-jaguar-830-current
+            name: "Jaguar 830"
+            year_from: 2020
+            year_to: null
+            power_hp: 408
+            power_kw: 300
+          - slug: claas-jaguar-850-current
+            name: "Jaguar 850"
+            year_from: 2020
+            year_to: null
+            power_hp: 449
+            power_kw: 330
+          - slug: claas-jaguar-870-current
+            name: "Jaguar 870"
+            year_from: 2020
+            year_to: null
+            power_hp: 490
+            power_kw: 360
+          - slug: claas-jaguar-930-current
+            name: "Jaguar 930"
+            year_from: 2020
+            year_to: null
+            power_hp: 503
+            power_kw: 370
+          - slug: claas-jaguar-940-current
+            name: "Jaguar 940"
+            year_from: 2020
+            year_to: null
+            power_hp: 585
+            power_kw: 430
+          - slug: claas-jaguar-950-current
+            name: "Jaguar 950"
+            year_from: 2020
+            year_to: null
+            power_hp: 626
+            power_kw: 460
+          - slug: claas-jaguar-960-current
+            name: "Jaguar 960"
+            year_from: 2020
+            year_to: null
+            power_hp: 653
+            power_kw: 480
+          - slug: claas-jaguar-970-current
+            name: "Jaguar 970"
+            year_from: 2020
+            year_to: null
+            power_hp: 790
+            power_kw: 581
+          - slug: claas-jaguar-980-current
+            name: "Jaguar 980"
+            year_from: 2020
+            year_to: null
+            power_hp: 884
+            power_kw: 650
+          - slug: claas-jaguar-990-current
+            name: "Jaguar 990"
+            year_from: 2020
+            year_to: null
+            power_hp: 925
+            power_kw: 680
+          - slug: claas-jaguar-1000
+            name: "Jaguar 1000"
+            year_from: 2023
+            year_to: null
+            power_hp: 925
+            power_kw: 680

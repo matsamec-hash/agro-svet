@@ -11,6 +11,73 @@ categories:
   traktory:
     name: Traktory
     series:
+      - slug: "100"
+        name: 100 Series (1964–1976)
+        year_from: 1964
+        year_to: 1976
+        description: |
+          Nejikoničtější řada Massey Ferguson a klíčový milník značky pro západní Evropu. Modely **135, 148, 165, 175, 178, 185, 188** a další (130, 230, 235) představily moderní průmyslový design firmy Roberts & Sons z konce 50. let, hydraulický **Ferguson System** a spolehlivé motory Perkins. V 60. a 70. letech byly tyto MF masivně nasazené v zemědělských družstvech (JZD) v ČSSR a tvoří dodnes klíčový segment veterán-trhu. Jen modelu MF 135 se vyrobilo přes **350 000 kusů** — patří k nejprodávanějším traktorům v historii.
+        models:
+          - slug: massey-ferguson-130
+            name: "130"
+            year_from: 1965
+            year_to: 1975
+            power_hp: 31
+            power_kw: 23
+            engine: "Perkins 4.107, 4-válec"
+            description: "Pouze britský trh. Nejmenší ze 100 Series."
+          - slug: massey-ferguson-135
+            name: "135"
+            year_from: 1964
+            year_to: 1979
+            power_hp: 45
+            power_kw: 33
+            engine: "Perkins AD3.152, 3-válec 2,5 L"
+            description: "Vstupní model a bestseller řady — vyrobeno přes 350 000 kusů. V ČSSR jeden z nejčastějších západních traktorů v JZD."
+          - slug: massey-ferguson-148
+            name: "148"
+            year_from: 1971
+            year_to: 1979
+            power_hp: 47
+            power_kw: 35
+            engine: "Perkins AD3.152, 3-válec"
+          - slug: massey-ferguson-165
+            name: "165"
+            year_from: 1964
+            year_to: 1975
+            power_hp: 58
+            power_kw: 43
+            engine: "Perkins AD4.203, 4-válec 3,3 L"
+            description: "Střední třída řady. 4-válec Perkins, oblíbený pro orbu i transport."
+          - slug: massey-ferguson-175
+            name: "175"
+            year_from: 1964
+            year_to: 1971
+            power_hp: 66
+            power_kw: 49
+            engine: "Perkins AD4.236, 4-válec 3,9 L"
+          - slug: massey-ferguson-178
+            name: "178"
+            year_from: 1971
+            year_to: 1976
+            power_hp: 70
+            power_kw: 52
+            engine: "Perkins AD4.236, 4-válec 3,9 L"
+          - slug: massey-ferguson-185
+            name: "185"
+            year_from: 1971
+            year_to: 1976
+            power_hp: 74
+            power_kw: 55
+            engine: "Perkins A4.248, 4-válec"
+          - slug: massey-ferguson-188
+            name: "188"
+            year_from: 1971
+            year_to: 1979
+            power_hp: 78
+            power_kw: 58
+            engine: "Perkins A4.248, 4-válec 4,1 L"
+            description: "Vrchol řady 100 — 4-válec Perkins 4,1 L."
       - slug: "500"
         name: 500 Series (1977–1986)
         year_from: 1977
@@ -597,68 +664,6 @@ categories:
             year_to: 2002
             power_hp: 142
             power_kw: 104
-      - slug: 6000-dyna
-        name: 6000 Dyna Series (1999–2009)
-        year_from: 1999
-        year_to: 2009
-        description: |
-          Střední row-crop. Motor Perkins 1100 6-válec, převodovka Dyna-4/Dyna-6 Powershift.
-        models:
-          - slug: massey-ferguson-6465
-            name: "6465"
-            year_from: 2002
-            year_to: 2009
-            power_hp: 110
-            power_kw: 81
-          - slug: massey-ferguson-6475
-            name: "6475"
-            year_from: 2002
-            year_to: 2009
-            power_hp: 120
-            power_kw: 88
-          - slug: massey-ferguson-6485
-            name: "6485"
-            year_from: 2002
-            year_to: 2009
-            power_hp: 130
-            power_kw: 96
-          - slug: massey-ferguson-6495
-            name: "6495"
-            year_from: 2002
-            year_to: 2009
-            power_hp: 160
-            power_kw: 118
-      - slug: 7000-dyna
-        name: 7000 Dyna Series (2005–2009)
-        year_from: 2005
-        year_to: 2009
-        description: |
-          Střední prémiová řada. Motor Perkins / Sisu, převodovka Dyna-VT (CVT) nebo Dyna-6.
-        models:
-          - slug: massey-ferguson-7465
-            name: "7465"
-            year_from: 2005
-            year_to: 2009
-            power_hp: 150
-            power_kw: 110
-          - slug: massey-ferguson-7475
-            name: "7475"
-            year_from: 2005
-            year_to: 2009
-            power_hp: 165
-            power_kw: 121
-          - slug: massey-ferguson-7485
-            name: "7485"
-            year_from: 2005
-            year_to: 2009
-            power_hp: 180
-            power_kw: 132
-          - slug: massey-ferguson-7495
-            name: "7495"
-            year_from: 2005
-            year_to: 2009
-            power_hp: 200
-            power_kw: 147
       - slug: "3700"
         name: 3700 Series (2014–dosud)
         year_from: 2014
@@ -1174,6 +1179,435 @@ categories:
             year_to: null
             power_hp: 135
             power_kw: 99
+      - slug: "6400"
+        name: 6400 Series (2003–2014)
+        year_from: 2003
+        year_to: 2014
+        description: |
+          Střední row-crop řada s motorem Perkins / AGCO Power 4,4 L 4-válec. První **Dyna-VT** (CVT) ve své třídě u modelů s příponou „VT", varianty Dyna-6 Powershift a Dyna-4. Nahrazena řadou MF 6600 a posléze 6700.
+        models:
+          - slug: massey-ferguson-6445
+            name: "6445"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 95
+            power_kw: 70
+          - slug: massey-ferguson-6455
+            name: "6455"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 100
+            power_kw: 74
+          - slug: massey-ferguson-6460
+            name: "6460"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 110
+            power_kw: 81
+          - slug: massey-ferguson-6465
+            name: "6465"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 120
+            power_kw: 88
+          - slug: massey-ferguson-6470
+            name: "6470"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 125
+            power_kw: 92
+          - slug: massey-ferguson-6475
+            name: "6475"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 135
+            power_kw: 99
+          - slug: massey-ferguson-6480
+            name: "6480"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 145
+            power_kw: 107
+          - slug: massey-ferguson-6485
+            name: "6485"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 145
+            power_kw: 107
+          - slug: massey-ferguson-6490
+            name: "6490"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 160
+            power_kw: 118
+          - slug: massey-ferguson-6495
+            name: "6495"
+            year_from: 2003
+            year_to: 2010
+            power_hp: 160
+            power_kw: 118
+          - slug: massey-ferguson-6497
+            name: "6497"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 200
+            power_kw: 147
+          - slug: massey-ferguson-6499
+            name: "6499"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 215
+            power_kw: 158
+      - slug: "6600"
+        name: 6600 Series (2012–2014)
+        year_from: 2012
+        year_to: 2014
+        description: |
+          Mezigenerace mezi 6400 a 6700. Motor AGCO Power 4,9 L 4-válec a 6,6 L 6-válec, převodovka Dyna-4, Dyna-6 nebo Dyna-VT (CVT). Stage IIIB / Tier 4i emise.
+        models:
+          - slug: massey-ferguson-6612
+            name: "6612"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 120
+            power_kw: 88
+          - slug: massey-ferguson-6613
+            name: "6613"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 130
+            power_kw: 96
+          - slug: massey-ferguson-6614
+            name: "6614"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 140
+            power_kw: 103
+          - slug: massey-ferguson-6615
+            name: "6615"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 150
+            power_kw: 110
+          - slug: massey-ferguson-6616
+            name: "6616"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 160
+            power_kw: 118
+      - slug: "7400"
+        name: 7400 Series (2003–2014)
+        year_from: 2003
+        year_to: 2014
+        description: |
+          Premium row-crop s motorem Perkins / Sisu / AGCO Power 6,6 L a 7,4 L 6-válec, převodovka Dyna-6 Powershift nebo Dyna-VT (CVT) — generace s nejširším rozsahem výkonu pro středoevropské farmy. Nahrazena řadou 7600 / 7700.
+        models:
+          - slug: massey-ferguson-7465
+            name: "7465 (7400)"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 150
+            power_kw: 110
+          - slug: massey-ferguson-7475
+            name: "7475 (7400)"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 165
+            power_kw: 121
+          - slug: massey-ferguson-7480
+            name: "7480"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 175
+            power_kw: 129
+          - slug: massey-ferguson-7485
+            name: "7485 (7400)"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 180
+            power_kw: 132
+          - slug: massey-ferguson-7490
+            name: "7490"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 200
+            power_kw: 147
+          - slug: massey-ferguson-7495
+            name: "7495 (7400)"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 215
+            power_kw: 158
+          - slug: massey-ferguson-7497
+            name: "7497"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 215
+            power_kw: 158
+          - slug: massey-ferguson-7499
+            name: "7499"
+            year_from: 2007
+            year_to: 2014
+            power_hp: 235
+            power_kw: 173
+      - slug: "7600"
+        name: 7600 Series (2010–2014)
+        year_from: 2010
+        year_to: 2014
+        description: |
+          Modernizace 7400 Series s motorem AGCO Power 6,6 L a 7,4 L 6-válec splňujícím Stage IIIB. Převodovka Dyna-6 nebo Dyna-VT (CVT). Předchůdce 7700 Series.
+        models:
+          - slug: massey-ferguson-7614
+            name: "7614"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 140
+            power_kw: 103
+          - slug: massey-ferguson-7615
+            name: "7615"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 150
+            power_kw: 110
+          - slug: massey-ferguson-7616
+            name: "7616"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 160
+            power_kw: 118
+          - slug: massey-ferguson-7618
+            name: "7618"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 180
+            power_kw: 132
+          - slug: massey-ferguson-7619
+            name: "7619"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 190
+            power_kw: 140
+          - slug: massey-ferguson-7620
+            name: "7620"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 200
+            power_kw: 147
+          - slug: massey-ferguson-7622
+            name: "7622"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 220
+            power_kw: 162
+          - slug: massey-ferguson-7624
+            name: "7624"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 240
+            power_kw: 177
+          - slug: massey-ferguson-7626
+            name: "7626"
+            year_from: 2012
+            year_to: 2014
+            power_hp: 255
+            power_kw: 188
+      - slug: "8000"
+        name: 8000 Series (1986–2000)
+        year_from: 1986
+        year_to: 2000
+        description: |
+          Vlajková řada velkých row-crop traktorů 80. a 90. let. Motor Perkins / Sisu 6-válec, mechanická Powershift převodovka. Výkony **145–210 k**. Předchůdce 8100/8200/8400 řady.
+        models:
+          - slug: massey-ferguson-8110
+            name: "8110"
+            year_from: 1986
+            year_to: 1996
+            power_hp: 145
+            power_kw: 107
+          - slug: massey-ferguson-8120
+            name: "8120"
+            year_from: 1986
+            year_to: 1996
+            power_hp: 160
+            power_kw: 118
+          - slug: massey-ferguson-8130
+            name: "8130"
+            year_from: 1986
+            year_to: 1996
+            power_hp: 175
+            power_kw: 129
+          - slug: massey-ferguson-8140
+            name: "8140"
+            year_from: 1986
+            year_to: 1996
+            power_hp: 190
+            power_kw: 140
+          - slug: massey-ferguson-8150
+            name: "8150"
+            year_from: 1986
+            year_to: 2000
+            power_hp: 200
+            power_kw: 147
+          - slug: massey-ferguson-8160
+            name: "8160"
+            year_from: 1986
+            year_to: 2000
+            power_hp: 210
+            power_kw: 154
+      - slug: "8100"
+        name: 8100 Series (1996–2002)
+        year_from: 1996
+        year_to: 2002
+        description: |
+          Modernizace 8000 řady s novou kabinou, motorem Perkins 6-válec a převodovkou Dynashift 32/32 (Powershift). Výkony **160–230 k**.
+        models:
+          - slug: massey-ferguson-8120-8100
+            name: "8120 (8100)"
+            year_from: 1996
+            year_to: 2002
+            power_hp: 160
+            power_kw: 118
+          - slug: massey-ferguson-8130-8100
+            name: "8130 (8100)"
+            year_from: 1996
+            year_to: 2002
+            power_hp: 175
+            power_kw: 129
+          - slug: massey-ferguson-8140-8100
+            name: "8140 (8100)"
+            year_from: 1996
+            year_to: 2002
+            power_hp: 190
+            power_kw: 140
+          - slug: massey-ferguson-8150-8100
+            name: "8150 (8100)"
+            year_from: 1996
+            year_to: 2002
+            power_hp: 205
+            power_kw: 151
+          - slug: massey-ferguson-8160-8100
+            name: "8160 (8100)"
+            year_from: 1996
+            year_to: 2002
+            power_hp: 220
+            power_kw: 162
+          - slug: massey-ferguson-8170
+            name: "8170"
+            year_from: 1996
+            year_to: 2002
+            power_hp: 230
+            power_kw: 169
+      - slug: "8200"
+        name: 8200 Series (1998–2004)
+        year_from: 1998
+        year_to: 2004
+        description: |
+          Další generace velkých traktorů s aktualizovaným motorem Perkins 6-válec, převodovkou Dynashift Plus a integrovanou elektronickou regulací zvedacího mechanismu. Výkony **160–260 k**.
+        models:
+          - slug: massey-ferguson-8210
+            name: "8210"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 160
+            power_kw: 118
+          - slug: massey-ferguson-8220
+            name: "8220"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 180
+            power_kw: 132
+          - slug: massey-ferguson-8240
+            name: "8240"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 200
+            power_kw: 147
+          - slug: massey-ferguson-8250
+            name: "8250"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 215
+            power_kw: 158
+          - slug: massey-ferguson-8260
+            name: "8260"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 230
+            power_kw: 169
+          - slug: massey-ferguson-8270
+            name: "8270"
+            year_from: 1998
+            year_to: 2004
+            power_hp: 260
+            power_kw: 191
+      - slug: "8400"
+        name: 8400 Series (2002–2014)
+        year_from: 2002
+        year_to: 2014
+        description: |
+          Klíčová řada — **první sériové nasazení Dyna-VT (CVT)** v Massey Ferguson. Motor Sisu 8,4 L 6-válec, kabina Tech-Platform. Tato řada zavedla bezstupňové převodovky do mainstreamu MF a předznamenala 8600 a 8700.
+        models:
+          - slug: massey-ferguson-8450
+            name: "8450"
+            year_from: 2003
+            year_to: 2014
+            power_hp: 200
+            power_kw: 147
+          - slug: massey-ferguson-8460
+            name: "8460"
+            year_from: 2003
+            year_to: 2014
+            power_hp: 220
+            power_kw: 162
+          - slug: massey-ferguson-8470
+            name: "8470"
+            year_from: 2003
+            year_to: 2014
+            power_hp: 240
+            power_kw: 177
+          - slug: massey-ferguson-8480
+            name: "8480"
+            year_from: 2003
+            year_to: 2014
+            power_hp: 290
+            power_kw: 213
+      - slug: "8600"
+        name: 8600 Series (2008–2014)
+        year_from: 2008
+        year_to: 2014
+        description: |
+          Vlajková row-crop před 8700. Motor AGCO Sisu Power 8,4 L 6-válec s technologií e3 SCR (selektivní katalytická redukce — premiéra v segmentu velkých traktorů). Převodovka Dyna-VT. Výkony **270–370 k**.
+        models:
+          - slug: massey-ferguson-8650
+            name: "8650"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 270
+            power_kw: 199
+          - slug: massey-ferguson-8660
+            name: "8660"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 290
+            power_kw: 213
+          - slug: massey-ferguson-8670
+            name: "8670"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 320
+            power_kw: 235
+          - slug: massey-ferguson-8680
+            name: "8680"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 340
+            power_kw: 250
+          - slug: massey-ferguson-8690
+            name: "8690"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 370
+            power_kw: 272
   kombajny:
     name: Kombajny
     series:
@@ -1368,3 +1802,73 @@ categories:
             power_hp: 626
             power_kw: 461
             grain_tank_l: 17100
+      - slug: activa-s
+        name: Activa S (2017–dosud)
+        year_from: 2017
+        year_to: null
+        description: |
+          Modernizace řady Activa s 5 slaměníky. Motor AGCO Power 6,6 L 6-válec, mlátící buben Power Flow, drcení slámy V-Inox. Vstupní třída konvenčních kombajnů MF pro středně velké farmy. Modely 7340 S, 7344 S, 7345 S.
+        models:
+          - slug: massey-ferguson-7340-activa-s
+            name: 7340 Activa S
+            year_from: 2017
+            year_to: null
+            power_hp: 218
+            power_kw: 160
+            grain_tank_l: 6500
+          - slug: massey-ferguson-7344-activa-s
+            name: 7344 Activa S
+            year_from: 2017
+            year_to: null
+            power_hp: 238
+            power_kw: 175
+            grain_tank_l: 7000
+          - slug: massey-ferguson-7345-activa-s
+            name: 7345 Activa S
+            year_from: 2017
+            year_to: null
+            power_hp: 258
+            power_kw: 190
+            grain_tank_l: 7000
+      - slug: beta-s
+        name: Beta S (2017–dosud)
+        year_from: 2017
+        year_to: null
+        description: |
+          Vyšší třída konvenčních kombajnů s 5 slaměníky a systémem APS (Accelerated Pre-Separation). Motor AGCO Power 7,4 L 6-válec, větší zásobník zrna a vyšší propustnost než Activa S.
+        models:
+          - slug: massey-ferguson-7360-beta-s
+            name: 7360 Beta S
+            year_from: 2017
+            year_to: null
+            power_hp: 306
+            power_kw: 225
+            grain_tank_l: 8600
+          - slug: massey-ferguson-7370-beta-s
+            name: 7370 Beta S
+            year_from: 2017
+            year_to: null
+            power_hp: 360
+            power_kw: 265
+            grain_tank_l: 9500
+      - slug: delta-s
+        name: Delta S (2017–dosud)
+        year_from: 2017
+        year_to: null
+        description: |
+          Premium hybridní kombajny — kombinace APS rotoru a slaměníků. Motor AGCO Power 9,8 L 6-válec, převodovka ParaLevel u svahových variant. Top třída v MF konvenčním programu před nástupem IDEAL.
+        models:
+          - slug: massey-ferguson-9380-delta-s
+            name: 9380 Delta S
+            year_from: 2017
+            year_to: null
+            power_hp: 396
+            power_kw: 291
+            grain_tank_l: 12500
+          - slug: massey-ferguson-9385-delta-s
+            name: 9385 Delta S
+            year_from: 2017
+            year_to: null
+            power_hp: 462
+            power_kw: 340
+            grain_tank_l: 12500

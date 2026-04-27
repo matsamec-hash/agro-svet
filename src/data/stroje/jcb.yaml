@@ -279,6 +279,62 @@ categories:
   traktory:
     name: Traktory
     series:
+      - slug: fastrac-2000
+        name: "Fastrac 2000 Series (1995–2007)"
+        family: fastrac
+        subcategory: traktory
+        year_from: 1995
+        year_to: 2007
+        description: >
+          Druhá generace průkopnických vysokorychlostních traktorů JCB Fastrac s centrálně umístěnou
+          kabinou, předním i zadním pružením a ABS brzdami — koncept připomínající nákladní automobil
+          spíše než klasický traktor. Cestovní rychlost 75 km/h zásadně změnila logistiku farem,
+          protože stroj zvládl polní práci i silniční transport stejnou rychlostí jako kamion.
+          Modely 2115, 2125, 2135 a 2155 (později 2150 a 2170) s 6-válcovými motory Cummins
+          o výkonu 115–170 hp. Předchůdce dnešní řady Fastrac 4000/8000.
+        models:
+          - slug: fastrac-2115
+            name: Fastrac 2115
+            tagline: "115 hp high-speed tractor, 75 km/h, full suspension"
+            description: "Vstupní model druhé generace Fastrac, motor Cummins 6-válec 115 hp, plně pružený podvozek a cestovní rychlost 75 km/h."
+            specs:
+              power_hp: 115
+              top_speed_kmh: 75
+          - slug: fastrac-2125
+            name: Fastrac 2125
+            tagline: "125 hp high-speed tractor, 75 km/h"
+            description: "Středně-výkonová verze 2000 series s motorem Cummins 125 hp, oblíbená u kontraktorů pro kombinaci polních prací a silničního transportu."
+            specs:
+              power_hp: 125
+              top_speed_kmh: 75
+          - slug: fastrac-2135
+            name: Fastrac 2135
+            tagline: "135 hp high-speed tractor, 75 km/h"
+            description: "Vyšší střední třída, motor Cummins 6-válec 135 hp, plné pružení a 4-kolové řízení."
+            specs:
+              power_hp: 135
+              top_speed_kmh: 75
+          - slug: fastrac-2150
+            name: Fastrac 2150
+            tagline: "150 hp high-speed tractor, 75 km/h"
+            description: "Pozdější varianta s vyšším výkonem 150 hp, určená pro náročnější transportní operace a tažení větších návěsů."
+            specs:
+              power_hp: 150
+              top_speed_kmh: 75
+          - slug: fastrac-2155
+            name: Fastrac 2155
+            tagline: "155 hp high-speed tractor, 75 km/h"
+            description: "Top model počáteční generace 2000 series, motor Cummins 6-válec 155 hp s turbem."
+            specs:
+              power_hp: 155
+              top_speed_kmh: 75
+          - slug: fastrac-2170
+            name: Fastrac 2170
+            tagline: "170 hp flagship 2000 series, 75 km/h"
+            description: "Vrcholový model řady 2000, motor Cummins 6-válec 170 hp — nejvýkonnější Fastrac druhé generace, předzvěst pozdější řady 4000."
+            specs:
+              power_hp: 170
+              top_speed_kmh: 75
       - slug: fastrac-4000
         name: Fastrac 4000 series
         family: fastrac

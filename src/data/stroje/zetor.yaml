@@ -17,17 +17,88 @@ categories:
     name: Traktory
 
     series:
+      # ========== Pre-UR éra (1946–1968) ==========
+      - slug: z-25
+        name: "Z 25 / 25K / 25A (1946–1968)"
+        year_from: 1946
+        year_to: 1968
+        description: >
+          První traktor Zetoru, představený **1946** v Brně. Vznikl na půdě **Zbrojovky Brno**
+          (předválečné letecké motory Aero/Avia) a definoval **Zetorský systém** —
+          jednoduchá obsluha, dostupné servisování, jeden palivový systém pro celou řadu.
+          Verze **Z 25K** (1950, Konstrukčně upravený) přidala lepší kabinu, **Z 25A** (1952)
+          dostal hydraulický tříbodový závěs. Celkem vyrobeno přes **158 500 kusů** — definující
+          traktor poválečného československého zemědělství.
+        models:
+          - slug: zetor-25
+            name: "Z 25 (1946)"
+            year_from: 1946
+            year_to: 1949
+            power_hp: 25
+            power_kw: 18
+            engine: "Zetor, 2-válec diesel 2,1 L"
+            description: "Vůbec první sériový Zetor. Vyráběn 1946–1949 (cca 43 tis. ks)."
+          - slug: zetor-25k
+            name: "Z 25K (1950)"
+            year_from: 1950
+            year_to: 1958
+            power_hp: 25
+            power_kw: 18
+            engine: "Zetor, 2-válec diesel 2,1 L"
+            description: "Konstrukčně upravená verze — vylepšená kabina a uchycení nářadí."
+          - slug: zetor-25a
+            name: "Z 25A (1952)"
+            year_from: 1952
+            year_to: 1968
+            power_hp: 27
+            power_kw: 20
+            engine: "Zetor, 2-válec diesel 2,1 L"
+            description: "Nejvyspělejší Z 25 — hydraulický tříbodový závěs, modernizovaná hydraulika. Vyráběn paralelně s UR I až do 1968."
+
       # ========== Unifikovaná řada (historie do 90. let) ==========
       - slug: ur-i
         name: "UR I — Unifikovaná řada I (1962–1998)"
         year_from: 1962
         year_to: 1998
         description: >
-          Ikonická unifikovaná řada uvedená 1962 modely 4011/5511/6711 — kostra českého
-          i východoevropského zemědělství. Modernizace 1980 přinesla novou kabinu a modely
-          5211/7211/7745 vyráběné až do 1998. Motory Zetor 5201 / 7201 (3-válec), převodovka
-          10/2, jednoduchá konstrukce, proslulá nezničitelnost.
+          Ikonická unifikovaná řada uvedená **1962** modely 4011/5511/6711 — kostra českého
+          i východoevropského zemědělství. Původní generace (1962–1979) měla otevřenou
+          kabinu a motory Zetor 4001/5001 (4-válec); **modernizace 1980** přinesla novou
+          uzavřenou kabinu, nové motory Zetor 5201/7201 (3-válec) a modely 5211/7211/7745
+          vyráběné až do **1998**. Převodovka 10/2, jednoduchá konstrukce, proslulá nezničitelnost.
         models:
+          - slug: zetor-4011
+            name: "4011 (1962)"
+            year_from: 1962
+            year_to: 1976
+            power_hp: 38
+            power_kw: 28
+            engine: "Zetor 4001, 4-válec 4,0 L"
+            description: "První model UR I — vstupní třída. Definoval řadu spolu s 5511 a 6711."
+          - slug: zetor-5511
+            name: "5511 (1962)"
+            year_from: 1962
+            year_to: 1976
+            power_hp: 47
+            power_kw: 35
+            engine: "Zetor 4001, 4-válec 4,0 L"
+            description: "Středně velký UR I. Nejprodávanější model 60. let v ČSSR."
+          - slug: zetor-6711
+            name: "6711 (1966)"
+            year_from: 1966
+            year_to: 1979
+            power_hp: 54
+            power_kw: 40
+            engine: "Zetor 5001, 4-válec 4,56 L"
+            description: "Vyšší střední třída UR I. Doplněn 1966 jako reakce na rostoucí farmu."
+          - slug: zetor-7011
+            name: "7011 (1972)"
+            year_from: 1972
+            year_to: 1980
+            power_hp: 64
+            power_kw: 47
+            engine: "Zetor 5201, 4-válec 4,56 L"
+            description: "Vrchol původní UR I. Nahrazen 1980 modernizovaným 7211."
           - slug: zetor-5211
             name: "5211"
             year_from: 1980
@@ -92,11 +163,36 @@ categories:
         year_from: 1968
         year_to: 2002
         description: >
-          Větší a výkonnější unifikovaná řada uvedená 1968 modely 8011/12011 (Crystal). Pro
-          střední a větší farmy — první šestiválcové Zetory. Motory Zetor 7401 (4-válec) a
-          8001/8101 (6-válec), převodovka 10/2 nebo 16/8 s plazivým převodem. Modernizace
-          1986 přinesla novou kabinu (8111/9111/10111).
+          Větší a výkonnější unifikovaná řada uvedená **1968** modelem **Crystal 8011** —
+          první šestiválcový Zetor. **Crystal 12011** (1972) přidal turbo a získal kultovní
+          status v podobě **lesnické verze** pro odvoz dřeva. Pro střední a větší farmy.
+          Motory Zetor 7401 (4-válec) a 8001/8101 (6-válec), převodovka 10/2 nebo 16/8
+          s plazivým převodem. Modernizace 1986 přinesla novou kabinu (8111/9111/10111).
         models:
+          - slug: zetor-crystal-8011
+            name: "Crystal 8011 (1968)"
+            year_from: 1968
+            year_to: 1980
+            power_hp: 80
+            power_kw: 59
+            engine: "Zetor 8001, 6-válec 8,0 L"
+            description: "Vůbec první šestiválcový Zetor. Otevřel UR II éru a později předal jméno Crystal moderní řadě HD (2014+)."
+          - slug: zetor-crystal-10011
+            name: "Crystal 10011 (1972)"
+            year_from: 1972
+            year_to: 1980
+            power_hp: 100
+            power_kw: 74
+            engine: "Zetor 8001, 6-válec 8,0 L"
+            description: "Mezistupeň mezi 8011 a 12011. 6-válec atmosférický."
+          - slug: zetor-crystal-12011
+            name: "Crystal 12011 (1972)"
+            year_from: 1972
+            year_to: 1980
+            power_hp: 116
+            power_kw: 85
+            engine: "Zetor 8001, 6-válec 8,0 L turbo"
+            description: "Vrcholný Zetor 70. let. Lesnická verze (Lesní 12011) s ochranným rámem a navijákem byla ikonou československých lesů — používaná pro odvoz dřeva i v 21. století."
           - slug: zetor-8011
             name: "8011"
             year_from: 1980

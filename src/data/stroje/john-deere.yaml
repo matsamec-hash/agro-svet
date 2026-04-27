@@ -14,6 +14,302 @@ categories:
     name: Traktory
 
     series:
+      # ========== AMERICKÉ HISTORICKÉ ŘADY (Waterloo / Dubuque) ==========
+      - slug: new-generation-10-series
+        name: "New Generation 10 Series (1960–1972)"
+        year_from: 1960
+        year_to: 1972
+        description: >
+          Přelomová generace, která ukončila éru dvouválcových motorů John Deere („Johnny Popper").
+          Premiéra 30. srpna 1960 v Dallasu („Deere Day in Dallas") představila kompletně nové
+          víceválcové vznětové motory — řadové čtyřválce a šestiválce, novou převodovku
+          Synchro-Range a moderní hydrauliku. Ohromnou modernizaci provázel přesun produkce
+          do Waterloo (Iowa) a Dubuque. New Generation položila základ všem následujícím řadám
+          a definovala John Deere jako technologického lídra v zemědělství.
+        models:
+          - slug: john-deere-1010
+            name: "1010"
+            year_from: 1960
+            year_to: 1965
+            power_hp: 36
+            power_kw: 27
+            engine: "4-válec benzín / nafta 2.1 L"
+          - slug: john-deere-2010
+            name: "2010"
+            year_from: 1960
+            year_to: 1965
+            power_hp: 47
+            power_kw: 35
+            engine: "4-válec 2.4 L"
+          - slug: john-deere-3010
+            name: "3010"
+            year_from: 1960
+            year_to: 1963
+            power_hp: 59
+            power_kw: 44
+            engine: "4-válec 3.7 L"
+          - slug: john-deere-4010
+            name: "4010"
+            year_from: 1960
+            year_to: 1963
+            power_hp: 84
+            power_kw: 63
+            engine: "6-válec 6.1 L"
+          - slug: john-deere-5010
+            name: "5010"
+            year_from: 1962
+            year_to: 1965
+            power_hp: 121
+            power_kw: 90
+            engine: "6-válec 8.7 L"
+            description: >
+              První John Deere, který oficiálně překročil 100 koní. Velký terénní traktor
+              určený pro západní pláně USA.
+
+      - slug: 20-series-1963
+        name: "20 Series (1963–1972)"
+        year_from: 1963
+        year_to: 1972
+        description: >
+          Vylepšená generace 10 Series. Klíčový model 4020 (1963–1972) se stal jedním
+          z nejprodávanějších traktorů v historii John Deere — vyrobeno přes 184 000 kusů.
+          Disponoval volitelnou Power Shift převodovkou (8 rychlostí pod zatížením),
+          šestiválcovým motorem 6,6 L a později ikonickou „hex-shaped" kabinou (1972).
+          V roce 1965 zahájila továrna Mannheim (Německo) výrobu řady 20 pro evropský trh —
+          první evropská produkce John Deere.
+        models:
+          - slug: john-deere-1020
+            name: "1020"
+            year_from: 1965
+            year_to: 1973
+            power_hp: 39
+            power_kw: 29
+            engine: "3-válec 2.7 L"
+          - slug: john-deere-2020
+            name: "2020"
+            year_from: 1965
+            year_to: 1972
+            power_hp: 54
+            power_kw: 40
+            engine: "4-válec 3.3 L"
+          - slug: john-deere-3020
+            name: "3020"
+            year_from: 1963
+            year_to: 1972
+            power_hp: 71
+            power_kw: 53
+            engine: "4-válec 4.2 L"
+          - slug: john-deere-4020
+            name: "4020"
+            year_from: 1963
+            year_to: 1972
+            power_hp: 94
+            power_kw: 70
+            engine: "6-válec PowerTech 6.6 L"
+            description: >
+              Ikona americké zemědělské mechanizace 60. let. Power Shift převodovka
+              s 8 rychlostmi pod zatížením byla revoluční. Jeden z nejcennějších sběratelských
+              traktorů John Deere.
+          - slug: john-deere-5020
+            name: "5020"
+            year_from: 1965
+            year_to: 1972
+            power_hp: 133
+            power_kw: 99
+            engine: "6-válec 8.7 L"
+
+      - slug: 30-series-sound-gard
+        name: "30 Series Sound-Gard (1972–1977)"
+        year_from: 1972
+        year_to: 1977
+        description: >
+          Generace, která definovala pohodlí v zemědělství. V září 1972 představila John Deere
+          revoluční kabinu **Sound-Gard** — první integrovanou zvukově izolovanou kabinu
+          v zemědělské technice s klimatizací, topením a tlumením vibrací (max 80 dB(A)
+          uvnitř). Přezdívána „Generation II". Modely 4030/4230/4430/4630 nahradily úspěšné
+          řady 4020/4320/4520/4620 a stanovily nové standardy ergonomie pro celé odvětví.
+        models:
+          - slug: john-deere-4030
+            name: "4030"
+            year_from: 1972
+            year_to: 1977
+            power_hp: 80
+            power_kw: 60
+            engine: "6-válec 5.7 L"
+          - slug: john-deere-4230
+            name: "4230"
+            year_from: 1972
+            year_to: 1977
+            power_hp: 100
+            power_kw: 75
+            engine: "6-válec 6.6 L"
+          - slug: john-deere-4430
+            name: "4430"
+            year_from: 1972
+            year_to: 1977
+            power_hp: 125
+            power_kw: 93
+            engine: "6-válec turbo 6.6 L"
+            description: >
+              Bestseller éry Sound-Gard. Quad-Range nebo Power Shift převodovka,
+              turbo motor 125 k. Vyrobeno přes 95 000 kusů.
+          - slug: john-deere-4630
+            name: "4630"
+            year_from: 1973
+            year_to: 1977
+            power_hp: 150
+            power_kw: 112
+            engine: "6-válec turbo intercooler 6.6 L"
+
+      - slug: 40-series-iron-horse
+        name: "40 Series (1977–1982)"
+        year_from: 1977
+        year_to: 1982
+        description: >
+          Modernizace Sound-Gard kabiny (Sound-Gard II). Modely 4040/4240/4440/4640/4840
+          přinesly úspornější motory, vylepšenou hydrauliku a robustnější převodovky.
+          Ikonický **4440** s výkonem 130 k se stal nejprodávanějším modelem dekády
+          — vyrobeno přes 95 000 kusů. Přidán nejvýkonnější 4840 (180 k) jako vlajková loď.
+        models:
+          - slug: john-deere-4040
+            name: "4040"
+            year_from: 1977
+            year_to: 1982
+            power_hp: 90
+            power_kw: 67
+            engine: "6-válec 6.6 L"
+          - slug: john-deere-4240
+            name: "4240"
+            year_from: 1977
+            year_to: 1982
+            power_hp: 110
+            power_kw: 82
+            engine: "6-válec 6.6 L"
+          - slug: john-deere-4440
+            name: "4440"
+            year_from: 1977
+            year_to: 1982
+            power_hp: 130
+            power_kw: 97
+            engine: "6-válec turbo 7.6 L"
+            description: >
+              Nejikonnější John Deere 70. a 80. let. Power Shift, Sound-Gard II,
+              turbo 7,6 L. Synonymum spolehlivosti.
+          - slug: john-deere-4640
+            name: "4640"
+            year_from: 1977
+            year_to: 1982
+            power_hp: 156
+            power_kw: 116
+            engine: "6-válec turbo 7.6 L"
+          - slug: john-deere-4840
+            name: "4840"
+            year_from: 1977
+            year_to: 1982
+            power_hp: 180
+            power_kw: 134
+            engine: "6-válec turbo intercooler 7.6 L"
+
+      - slug: 50-series-1982
+        name: "50 Series (1982–1988)"
+        year_from: 1982
+        year_to: 1988
+        description: >
+          Pokračování úspěšné generace s důrazem na úspornost paliva a vylepšenou
+          převodovku **Quad-Range** (16 rychlostí). Motory s elektronickou regulací
+          otáček, nový displej v kabině a hydraulika s vyšším průtokem.
+          Modely 4050/4250/4450/4650/4850 pokrývaly 105–193 koní.
+        models:
+          - slug: john-deere-4050
+            name: "4050"
+            year_from: 1982
+            year_to: 1988
+            power_hp: 105
+            power_kw: 78
+            engine: "6-válec 6.6 L"
+          - slug: john-deere-4250
+            name: "4250"
+            year_from: 1982
+            year_to: 1988
+            power_hp: 120
+            power_kw: 90
+            engine: "6-válec turbo 6.6 L"
+          - slug: john-deere-4450
+            name: "4450"
+            year_from: 1982
+            year_to: 1988
+            power_hp: 140
+            power_kw: 104
+            engine: "6-válec turbo 7.6 L"
+          - slug: john-deere-4650
+            name: "4650"
+            year_from: 1982
+            year_to: 1988
+            power_hp: 165
+            power_kw: 123
+            engine: "6-válec turbo 7.6 L"
+          - slug: john-deere-4850
+            name: "4850"
+            year_from: 1982
+            year_to: 1988
+            power_hp: 193
+            power_kw: 144
+            engine: "6-válec turbo intercooler 7.6 L"
+
+      - slug: 55-series-1988
+        name: "55 Series (1988–1992)"
+        year_from: 1988
+        year_to: 1992
+        description: >
+          Poslední „čistá" row-crop generace před rozdělením na řady 7000 (row-crop)
+          a 8000 (vlajkové). Modely 4055/4255/4455/4555/4755/4955 přinesly elektronicky
+          řízené hydraulické zvedáky, vylepšený monitor PerformanceMonitor
+          a moderní vzhled kabiny. Špičkový **4955** (200 k) byl nejvýkonnější row-crop
+          John Deere své doby.
+        models:
+          - slug: john-deere-4055
+            name: "4055"
+            year_from: 1988
+            year_to: 1992
+            power_hp: 105
+            power_kw: 78
+            engine: "6-válec 6.8 L"
+          - slug: john-deere-4255
+            name: "4255"
+            year_from: 1988
+            year_to: 1992
+            power_hp: 120
+            power_kw: 90
+            engine: "6-válec turbo 6.8 L"
+          - slug: john-deere-4455
+            name: "4455"
+            year_from: 1988
+            year_to: 1992
+            power_hp: 140
+            power_kw: 104
+            engine: "6-válec turbo 7.6 L"
+          - slug: john-deere-4555
+            name: "4555"
+            year_from: 1988
+            year_to: 1992
+            power_hp: 155
+            power_kw: 116
+            engine: "6-válec turbo 7.6 L"
+          - slug: john-deere-4755
+            name: "4755"
+            year_from: 1988
+            year_to: 1992
+            power_hp: 175
+            power_kw: 130
+            engine: "6-válec turbo 7.6 L"
+          - slug: john-deere-4955
+            name: "4955"
+            year_from: 1988
+            year_to: 1992
+            power_hp: 200
+            power_kw: 149
+            engine: "6-válec turbo intercooler 7.6 L"
+
       # ========== 5 SERIES (kompaktní / utility) ==========
       - slug: "5000"
         name: "5000 Series (1992–1997)"
@@ -590,6 +886,95 @@ categories:
             power_hp: 250
             power_kw: 184
 
+      - slug: 6r-gen3
+        name: "6R Gen3 (2022–dosud)"
+        year_from: 2022
+        year_to: null
+        description: >
+          Třetí generace prémiové řady 6R, vyráběná v Mannheimu. Motor PowerTech 4,5 L
+          (4-válec) a 6,8 L (6-válec) Stage V s SCR a DPF, převodovka AutoPowr (CVT)
+          nebo CommandQuad Plus, kabina CommandView 4 s 12,8" displejem G5, plná
+          konektivita JDLink a podpora autonomních funkcí AutoTrac a AutoPath.
+          Modelové označení 6R 110 / 120 / 130 / 140 / 150 / 165 / 185 / 195 / 215 / 230 / 250.
+        models:
+          - slug: john-deere-6r-110
+            name: "6R 110"
+            year_from: 2022
+            year_to: null
+            power_hp: 110
+            power_kw: 81
+            engine: "PowerTech 4.5 L, 4-válec Stage V"
+          - slug: john-deere-6r-120
+            name: "6R 120"
+            year_from: 2022
+            year_to: null
+            power_hp: 120
+            power_kw: 88
+            engine: "PowerTech 4.5 L, 4-válec Stage V"
+          - slug: john-deere-6r-130
+            name: "6R 130"
+            year_from: 2022
+            year_to: null
+            power_hp: 130
+            power_kw: 96
+            engine: "PowerTech 4.5 L, 4-válec Stage V"
+          - slug: john-deere-6r-140
+            name: "6R 140"
+            year_from: 2022
+            year_to: null
+            power_hp: 140
+            power_kw: 103
+            engine: "PowerTech 4.5 L, 4-válec Stage V"
+          - slug: john-deere-6r-150
+            name: "6R 150"
+            year_from: 2022
+            year_to: null
+            power_hp: 150
+            power_kw: 110
+            engine: "PowerTech 6.8 L, 6-válec Stage V"
+          - slug: john-deere-6r-165
+            name: "6R 165"
+            year_from: 2022
+            year_to: null
+            power_hp: 165
+            power_kw: 121
+            engine: "PowerTech 6.8 L, 6-válec Stage V"
+          - slug: john-deere-6r-185
+            name: "6R 185"
+            year_from: 2022
+            year_to: null
+            power_hp: 185
+            power_kw: 136
+            engine: "PowerTech 6.8 L, 6-válec Stage V"
+          - slug: john-deere-6r-195
+            name: "6R 195"
+            year_from: 2022
+            year_to: null
+            power_hp: 195
+            power_kw: 143
+            engine: "PowerTech 6.8 L, 6-válec Stage V"
+          - slug: john-deere-6r-215
+            name: "6R 215"
+            year_from: 2022
+            year_to: null
+            power_hp: 215
+            power_kw: 158
+            engine: "PowerTech 6.8 L, 6-válec Stage V"
+          - slug: john-deere-6r-230-gen3
+            name: "6R 230"
+            year_from: 2022
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+            engine: "PowerTech 6.8 L, 6-válec Stage V"
+          - slug: john-deere-6r-250-gen3
+            name: "6R 250"
+            year_from: 2022
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+            engine: "PowerTech 6.8 L, 6-válec Stage V"
+
       # ========== 7 SERIES ==========
       - slug: "7000"
         name: "7000 Series (1992–1997)"
@@ -855,6 +1240,67 @@ categories:
             year_to: null
             power_hp: 350
             power_kw: 257
+
+      - slug: 7r-gen3
+        name: "7R Gen3 (2020–dosud)"
+        year_from: 2020
+        year_to: null
+        description: >
+          Aktuální generace 7R s motorem PowerTech PSS 9,0 L (6-válec, Stage V),
+          převodovkou e23 PowerShift (23 rychlostí) nebo AutoPowr IVT, kabinou
+          CommandView 4 s 10" displejem CommandCenter a 12,8" Gen 4 Extended.
+          Plná podpora AutoPath, AutoTrac SF7000 a JDLink. Modelová řada 7R 230
+          až 7R 350 v 60koňových krocích.
+        models:
+          - slug: john-deere-7r-230
+            name: "7R 230"
+            year_from: 2020
+            year_to: null
+            power_hp: 230
+            power_kw: 169
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-7r-250
+            name: "7R 250"
+            year_from: 2020
+            year_to: null
+            power_hp: 250
+            power_kw: 184
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-7r-270
+            name: "7R 270"
+            year_from: 2020
+            year_to: null
+            power_hp: 270
+            power_kw: 199
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-7r-290
+            name: "7R 290"
+            year_from: 2020
+            year_to: null
+            power_hp: 290
+            power_kw: 213
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-7r-310
+            name: "7R 310"
+            year_from: 2020
+            year_to: null
+            power_hp: 310
+            power_kw: 228
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-7r-330
+            name: "7R 330"
+            year_from: 2020
+            year_to: null
+            power_hp: 330
+            power_kw: 243
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-7r-350-gen3
+            name: "7R 350 Gen3"
+            year_from: 2020
+            year_to: null
+            power_hp: 350
+            power_kw: 257
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
 
       # ========== 8 SERIES ==========
       - slug: "8000"
@@ -1154,6 +1600,49 @@ categories:
               zadni_zaves_kg: 12000
               predni_zaves_kg: 5500
 
+      - slug: 8rx-4track
+        name: "8RX 4-track (2021–dosud)"
+        year_from: 2021
+        year_to: null
+        description: >
+          Průlomová pásová varianta řady 8R — první **čtyřpásový (four-track)** zemědělský
+          traktor v segmentu střední velikosti. Každé kolo nahrazuje samostatná gumová
+          housenka, což zajišťuje minimální tlak na půdu, vysoký tah a komfort srovnatelný
+          s kolovým traktorem. Sdílí motor PowerTech PSS 9,0 L a kabinu CommandView 4
+          s řadou 8R, převodovka e23 nebo IVT.
+        models:
+          - slug: john-deere-8rx-310
+            name: "8RX 310"
+            year_from: 2021
+            year_to: null
+            power_hp: 310
+            power_kw: 228
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-8rx-340
+            name: "8RX 340"
+            year_from: 2021
+            year_to: null
+            power_hp: 340
+            power_kw: 250
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-8rx-370
+            name: "8RX 370"
+            year_from: 2021
+            year_to: null
+            power_hp: 370
+            power_kw: 272
+            engine: "PowerTech PSS 9.0 L, 6-válec Stage V"
+          - slug: john-deere-8rx-410
+            name: "8RX 410"
+            year_from: 2022
+            year_to: null
+            power_hp: 410
+            power_kw: 301
+            engine: "PowerTech PSX 9.0 L, 6-válec Stage V"
+            description: >
+              Vlajkový čtyřpásový model. Stejný motor jako 8R 410, čtyři gumové
+              housenky pro maximální záběr a minimální zhutnění půdy.
+
       # ========== 9 SERIES (terénní velké) ==========
       - slug: "9000"
         name: "9000 Series (1996–2001)"
@@ -1380,6 +1869,46 @@ categories:
             year_to: null
             power_hp: 830
             power_kw: 611
+
+      - slug: 9rx
+        name: "9RX 4-track (2015–2021, samostatná řada)"
+        year_from: 2015
+        year_to: 2021
+        description: >
+          První generace průmyslově prvního **kloubového čtyřpásového** traktoru — uvedeno
+          2015 jako samostatná pásová verze řady 9R. Čtyři nezávislé gumové housenky
+          poskytují plynulé rozložení hmotnosti, minimální zhutnění půdy a tah srovnatelný
+          s nejtěžšími kolovými 9R. Motor Cummins QSX 15,0 L, 18sp PowerShift e18.
+          Od 2022 se 9RX integroval do nové Gen2 řady.
+        models:
+          - slug: john-deere-9rx-540
+            name: "9RX 540"
+            year_from: 2015
+            year_to: 2021
+            power_hp: 540
+            power_kw: 397
+            engine: "Cummins QSX 15.0 L, 6-válec"
+          - slug: john-deere-9rx-590-gen1
+            name: "9RX 590"
+            year_from: 2015
+            year_to: 2021
+            power_hp: 590
+            power_kw: 434
+            engine: "Cummins QSX 15.0 L, 6-válec"
+          - slug: john-deere-9rx-640-gen1
+            name: "9RX 640"
+            year_from: 2015
+            year_to: 2021
+            power_hp: 640
+            power_kw: 471
+            engine: "Cummins QSX 15.0 L, 6-válec"
+          - slug: john-deere-9rx-740
+            name: "9RX 740"
+            year_from: 2017
+            year_to: 2021
+            power_hp: 740
+            power_kw: 544
+            engine: "Cummins QSX 15.0 L, 6-válec"
 
   kombajny:
     name: Kombajny
@@ -1717,3 +2246,323 @@ categories:
             power_hp: 690
             power_kw: 508
             grain_tank_l: 16200
+
+  rezacky:
+    name: "Sklízecí řezačky"
+
+    series:
+      - slug: 6000-rezacky
+        name: "6000 Series (1993–2003)"
+        year_from: 1993
+        year_to: 2003
+        description: >
+          První moderní sklízecí řezačky John Deere vyráběné v Zweibrückenu (Německo).
+          Po akvizici německé firmy Hesston/Heesemann a know-how o pícninách. Motory
+          PowerTech 8,1–12,5 L, mechanický pohon válců, klasický kovový vyhazovač.
+        models:
+          - slug: john-deere-fh-6610
+            name: "6610"
+            year_from: 1993
+            year_to: 1999
+            power_hp: 240
+            power_kw: 177
+          - slug: john-deere-fh-6710
+            name: "6710"
+            year_from: 1996
+            year_to: 2003
+            power_hp: 290
+            power_kw: 213
+          - slug: john-deere-fh-6810
+            name: "6810"
+            year_from: 1996
+            year_to: 2003
+            power_hp: 360
+            power_kw: 265
+          - slug: john-deere-fh-6910
+            name: "6910"
+            year_from: 1999
+            year_to: 2003
+            power_hp: 425
+            power_kw: 313
+
+      - slug: 7000-rezacky
+        name: "7000 Series (2003–2008)"
+        year_from: 2003
+        year_to: 2008
+        description: >
+          Modernizace s elektronickým řízením žacího ústrojí, automatické nastavení
+          délky řezanky AutoLOC a vylepšeným systémem KernelStar pro drcení zrn kukuřice.
+          Tier 3 motor PowerTech, kabina ComfortGard.
+        models:
+          - slug: john-deere-fh-7300
+            name: "7300"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 295
+            power_kw: 217
+          - slug: john-deere-fh-7400
+            name: "7400"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 365
+            power_kw: 269
+          - slug: john-deere-fh-7500
+            name: "7500"
+            year_from: 2003
+            year_to: 2008
+            power_hp: 450
+            power_kw: 331
+          - slug: john-deere-fh-7700
+            name: "7700"
+            year_from: 2005
+            year_to: 2008
+            power_hp: 520
+            power_kw: 382
+          - slug: john-deere-fh-7800
+            name: "7800"
+            year_from: 2005
+            year_to: 2008
+            power_hp: 600
+            power_kw: 441
+
+      - slug: 7050-rezacky
+        name: "7050 Series (2008–2012)"
+        year_from: 2008
+        year_to: 2012
+        description: >
+          Generace 7050 přinesla AutoLOC II, HarvestLab NIR senzor pro analýzu sušiny
+          a živin v reálném čase a integraci s GreenStar 2. Motory Tier 3,
+          výkony 360 až 625 koní.
+        models:
+          - slug: john-deere-fh-7250
+            name: "7250"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 360
+            power_kw: 265
+          - slug: john-deere-fh-7350
+            name: "7350"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 425
+            power_kw: 313
+          - slug: john-deere-fh-7450
+            name: "7450"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 490
+            power_kw: 360
+          - slug: john-deere-fh-7550
+            name: "7550"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 565
+            power_kw: 416
+          - slug: john-deere-fh-7750
+            name: "7750"
+            year_from: 2008
+            year_to: 2012
+            power_hp: 625
+            power_kw: 460
+          - slug: john-deere-fh-7850
+            name: "7850"
+            year_from: 2010
+            year_to: 2012
+            power_hp: 700
+            power_kw: 515
+          - slug: john-deere-fh-7950
+            name: "7950"
+            year_from: 2010
+            year_to: 2012
+            power_hp: 812
+            power_kw: 597
+            description: >
+              Nejvýkonnější sklízecí řezačka své doby — přes 800 koní z 19,0 L motoru.
+
+      - slug: 8000-rezacky
+        name: "8000 Series (2013–2018)"
+        year_from: 2013
+        year_to: 2018
+        description: >
+          Generace 8000 přinesla úplně nový průchod stroje — žací ústrojí o 25 % větší,
+          nový systém KernelStar 2 (drtič zrna), HarvestLab 3000 a integrace s JDLink.
+          Motor JD PowerTech 9,0 / 13,5 / 19,0 L Tier 4.
+        models:
+          - slug: john-deere-fh-8100
+            name: "8100"
+            year_from: 2013
+            year_to: 2018
+            power_hp: 380
+            power_kw: 280
+          - slug: john-deere-fh-8200
+            name: "8200"
+            year_from: 2013
+            year_to: 2018
+            power_hp: 460
+            power_kw: 338
+          - slug: john-deere-fh-8300
+            name: "8300"
+            year_from: 2013
+            year_to: 2018
+            power_hp: 525
+            power_kw: 386
+          - slug: john-deere-fh-8400
+            name: "8400"
+            year_from: 2013
+            year_to: 2018
+            power_hp: 625
+            power_kw: 460
+          - slug: john-deere-fh-8500
+            name: "8500"
+            year_from: 2013
+            year_to: 2018
+            power_hp: 690
+            power_kw: 508
+          - slug: john-deere-fh-8600
+            name: "8600"
+            year_from: 2013
+            year_to: 2018
+            power_hp: 770
+            power_kw: 567
+          - slug: john-deere-fh-8700
+            name: "8700"
+            year_from: 2014
+            year_to: 2018
+            power_hp: 850
+            power_kw: 625
+          - slug: john-deere-fh-8800
+            name: "8800"
+            year_from: 2014
+            year_to: 2018
+            power_hp: 970
+            power_kw: 714
+
+      - slug: 9000-rezacky
+        name: "9000 Series (2018–dosud)"
+        year_from: 2018
+        year_to: null
+        description: >
+          Vlajková řada sklízecích řezaček. **9900** s motorem 24,2 L Liebherr a výkonem
+          nad 1 000 koní je nejvýkonnější sklízecí řezačka na světě. AutoLOC III, KernelStar 3,
+          HarvestLab 3000, plně integrované AutoTrac, kamerové systémy a JDLink Connect.
+        models:
+          - slug: john-deere-fh-9500
+            name: "9500"
+            year_from: 2018
+            year_to: null
+            power_hp: 625
+            power_kw: 460
+            engine: "JD PowerTech 13.5 L"
+          - slug: john-deere-fh-9600
+            name: "9600"
+            year_from: 2018
+            year_to: null
+            power_hp: 690
+            power_kw: 508
+            engine: "JD PowerTech 13.5 L"
+          - slug: john-deere-fh-9700
+            name: "9700"
+            year_from: 2018
+            year_to: null
+            power_hp: 770
+            power_kw: 567
+            engine: "JD PowerTech 13.5 L"
+          - slug: john-deere-fh-9800
+            name: "9800"
+            year_from: 2018
+            year_to: null
+            power_hp: 850
+            power_kw: 625
+            engine: "JD PowerTech 18.0 L"
+          - slug: john-deere-fh-9900
+            name: "9900"
+            year_from: 2018
+            year_to: null
+            power_hp: 970
+            power_kw: 714
+            engine: "Liebherr 24.2 L V12"
+            description: >
+              Vlajková sklízecí řezačka. V12 motor 24,2 L Liebherr, šířka záběru až 12 řádků,
+              průchodnost přes 400 t/h zelené hmoty. Symbol síly v evropském zemědělství.
+
+  postrikovace:
+    name: "Samojízdné postřikovače"
+
+    series:
+      - slug: 4730-postrikovace
+        name: "4030/4730/4830/4930 Series (2008–2017)"
+        year_from: 2008
+        year_to: 2017
+        description: >
+          První moderní generace samojízdných postřikovačů John Deere pro evropský trh.
+          Vyráběno ve Waterloo (USA) a v Horstu (Nizozemsko). Motor PowerTech, čtyři kola
+          s nezávislým pohonem (HydroHandle), nádrž 1 500–4 540 l. Modely 4730/4830/4930
+          poskytly výkonový rozsah od 200 do 360 koní.
+        models:
+          - slug: john-deere-4730
+            name: "4730"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 200
+            power_kw: 147
+            description: "Nádrž 3 000 l, ramena 24/27/28 m."
+          - slug: john-deere-4830
+            name: "4830"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 280
+            power_kw: 206
+            description: "Nádrž 3 800 l, ramena 27/30 m."
+          - slug: john-deere-4930
+            name: "4930"
+            year_from: 2008
+            year_to: 2014
+            power_hp: 360
+            power_kw: 265
+            description: "Nádrž 4 540 l, ramena 36 m."
+          - slug: john-deere-4940
+            name: "4940"
+            year_from: 2014
+            year_to: 2017
+            power_hp: 380
+            power_kw: 280
+            description: "Tier 4 Final. Nádrž 4 540 l."
+
+      - slug: r-series-postrikovace
+        name: "R Series (2014–dosud)"
+        year_from: 2014
+        year_to: null
+        description: >
+          Aktuální generace samojízdných postřikovačů. Modely R4030/R4040i/R4045i
+          a americká řada R4044/R4060/R4150. Motor JD PowerTech, BoomTrac Pro
+          (automatická regulace výšky ramen), individuální spínání trysek (ExactApply,
+          See & Spray), AutoTrac, integrace s Operations Center.
+        models:
+          - slug: john-deere-r4030
+            name: "R4030"
+            year_from: 2014
+            year_to: null
+            power_hp: 232
+            power_kw: 173
+            description: "Nádrž 3 000 l, ramena 24–28 m."
+          - slug: john-deere-r4040i
+            name: "R4040i"
+            year_from: 2016
+            year_to: null
+            power_hp: 286
+            power_kw: 213
+            description: "Nádrž 4 000 l, ramena 27–36 m, izolovaný systém."
+          - slug: john-deere-r4045i
+            name: "R4045i"
+            year_from: 2018
+            year_to: null
+            power_hp: 350
+            power_kw: 261
+            description: "Nádrž 4 500 l, ramena 30–40 m, ExactApply."
+          - slug: john-deere-r4150i
+            name: "R4150i"
+            year_from: 2022
+            year_to: null
+            power_hp: 460
+            power_kw: 343
+            description: "Vlajkový model. Nádrž 5 700 l, ramena 36–40 m, See & Spray Premium."
