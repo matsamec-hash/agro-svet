@@ -4,7 +4,7 @@
 // headings (h1–h6), existing anchors, code/pre, script/style. Driven by
 // YAML catalogs already loaded via @modyfi/vite-plugin-yaml.
 
-import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from './stroje';
+import { getAllBrands, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from './stroje';
 import { getAllDruhy, getAllPlemena } from './plemena';
 
 interface GlossaryEntry {
@@ -17,24 +17,7 @@ interface GlossaryEntry {
 const PROTECTED_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'code', 'pre', 'script', 'style', 'figcaption']);
 const SELF_CLOSING = new Set(['br', 'hr', 'img', 'input', 'meta', 'link', 'source']);
 /** Hard cap per article — over-linking is a spam signal. */
-const MAX_LINKS_PER_ARTICLE = 12;
-
-/**
- * Strip year/parenthetical suffix and produce match variants for a series name.
- * "T6 Series (2014–dosud)" → ["T6 Series", "T6"]
- * "Dieselross (1937–1958)" → ["Dieselross"]
- */
-function seriesNameVariants(name: string): string[] {
-  const stripped = name.replace(/\s*\([^)]*\)\s*$/, '').trim();
-  if (!stripped) return [];
-  const variants = [stripped];
-  const m = stripped.match(/^(.+?)\s+(Series|řada)$/i);
-  if (m) {
-    const base = m[1].trim();
-    if (base && base !== stripped) variants.push(base);
-  }
-  return variants;
-}
+const MAX_LINKS_PER_ARTICLE = 8;
 
 let cachedGlossary: GlossaryEntry[] | null = null;
 
@@ -43,25 +26,6 @@ function buildGlossary(): GlossaryEntry[] {
 
   for (const b of getAllBrands()) {
     entries.push({ term: b.name, url: `/stroje/${b.slug}/`, priority: 10 });
-    for (const cat of Object.values(b.categories || {})) {
-      for (const s of cat?.series ?? []) {
-        const url = `/stroje/${b.slug}/${s.slug}/`;
-        for (const variant of seriesNameVariants(s.name)) {
-          // Higher priority for the longer/canonical variant.
-          const isCanonical = variant.length === seriesNameVariants(s.name)[0].length;
-          entries.push({ term: variant, url, priority: isCanonical ? 11 : 8 });
-        }
-      }
-    }
-  }
-
-  for (const m of getAllModels()) {
-    if (!m.name || m.name.length < 3) continue;
-    entries.push({
-      term: m.name,
-      url: `/stroje/${m.brand_slug}/${m.series_slug}/${m.slug}/`,
-      priority: 12,
-    });
   }
 
   for (const d of getAllDruhy()) {
