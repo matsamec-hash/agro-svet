@@ -68,7 +68,7 @@ const { mode } = Astro.props;
     if (stripEl) {
       const citiesBox = stripEl.querySelector('[data-aw-cities]');
       const subtitle = stripEl.querySelector('[data-aw-subtitle]');
-      fetch('/api/weather/strip', { credentials: 'omit' })
+      fetch('/api/weather/strip/', { credentials: 'omit' })
         .then(r => r.ok ? r.json() : null)
         .then(j => {
           if (!j || !Array.isArray(j.cities) || j.cities.length === 0) return;
@@ -197,7 +197,7 @@ const { mode } = Astro.props;
     // ── PUDA widget — populate metrics from cached /api/weather/agro ──
     const pudaEl = document.querySelector('[data-aw-puda-card]');
     if (pudaEl) {
-      fetch('/api/weather/agro', { credentials: 'omit' })
+      fetch('/api/weather/agro/', { credentials: 'omit' })
         .then(r => r.ok ? r.json() : null)
         .then(j => {
           if (!j || !j.agro) return;
