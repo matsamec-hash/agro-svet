@@ -4,22 +4,32 @@ import { SITE_URL } from './config';
 const FROM = 'Agro-svět <newsletter@mail.agro-svet.cz>';
 const REPLY_TO = 'info@agro-svet.cz';
 
+export function buildUnsubscribeUrl(unsubscribeToken: string): string {
+  return `${SITE_URL}/api/newsletter/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}`;
+}
+
 export async function sendNewsletterConfirmation(
   apiKey: string,
   to: string,
-  token: string,
+  confirmationToken: string,
+  unsubscribeToken: string,
 ): Promise<void> {
   if (!apiKey) {
     console.warn('[newsletter-email] RESEND_API_KEY missing — skipping send', to);
     return;
   }
-  const confirmUrl = `${SITE_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
+  const confirmUrl = `${SITE_URL}/api/newsletter/confirm?token=${encodeURIComponent(confirmationToken)}`;
+  const unsubscribeUrl = buildUnsubscribeUrl(unsubscribeToken);
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
     from: FROM,
     replyTo: REPLY_TO,
     to,
     subject: 'Potvrďte odběr newsletteru Agro-svět',
+    headers: {
+      'List-Unsubscribe': `<${unsubscribeUrl}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
     html: `
       <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px">
         <h1 style="font-size:22px;color:#0A0A0B">Potvrďte odběr</h1>
@@ -32,7 +42,8 @@ export async function sendNewsletterConfirmation(
         <hr style="border:0;border-top:1px solid #eaeaec;margin:24px 0">
         <p style="font-size:12px;color:#999;line-height:1.6">
           Agro-svět · <a href="${SITE_URL}" style="color:#999">${SITE_URL}</a><br>
-          Vaše osobní údaje (e-mail) zpracováváme pro zasílání newsletteru na základě vašeho souhlasu (čl. 6 odst. 1 písm. a GDPR). Více v <a href="${SITE_URL}/zpracovani-osobnich-udaju/" style="color:#999">zásadách zpracování osobních údajů</a>. Odhlásit odběr můžete odpovědí na tento e-mail nebo na <a href="mailto:${REPLY_TO}" style="color:#999">${REPLY_TO}</a>.
+          Vaše osobní údaje (e-mail) zpracováváme pro zasílání newsletteru na základě vašeho souhlasu (čl. 6 odst. 1 písm. a GDPR). Více v <a href="${SITE_URL}/zpracovani-osobnich-udaju/" style="color:#999">zásadách zpracování osobních údajů</a>.<br>
+          <a href="${unsubscribeUrl}" style="color:#999">Odhlásit odběr</a> · <a href="mailto:${REPLY_TO}" style="color:#999">${REPLY_TO}</a>
         </p>
       </div>
     `,

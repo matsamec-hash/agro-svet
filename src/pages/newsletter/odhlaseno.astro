@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const status = Astro.url.searchParams.get('status') ?? 'ok';
+
+const titles: Record<string, string> = {
+  ok: 'Odběr odhlášen — Agro-svět',
+  already: 'Odběr již odhlášen — Agro-svět',
+  invalid: 'Neplatný odkaz — Agro-svět',
+  error: 'Chyba odhlášení — Agro-svět',
+};
+
+const messages: Record<string, { h1: string; body: string; emoji: string }> = {
+  ok: {
+    emoji: '👋',
+    h1: 'Odběr odhlášen',
+    body: 'Newsletter Agro-svět vám už nebudeme posílat. Pokud byste si to rozmyslel/a, můžete se kdykoli znovu přihlásit na hlavní stránce.',
+  },
+  already: {
+    emoji: '👌',
+    h1: 'Odběr je už odhlášený',
+    body: 'Tento odkaz jste už použili. Žádné další kroky nejsou potřeba.',
+  },
+  invalid: {
+    emoji: '⚠️',
+    h1: 'Neplatný odkaz',
+    body: 'Odkaz pro odhlášení se nepodařilo ověřit. Pokud chcete odhlásit odběr, napište nám na info@agro-svet.cz.',
+  },
+  error: {
+    emoji: '❌',
+    h1: 'Něco se pokazilo',
+    body: 'Při odhlašování nastala chyba. Zkuste odkaz znovu, nebo nám napište na info@agro-svet.cz.',
+  },
+};
+
+const m = messages[status] ?? messages.error;
+const title = titles[status] ?? titles.error;
+---
+
+<Layout title={title} description="Stav odhlášení odběru newsletteru Agro-svět">
+  <div style="max-width:600px; margin:0 auto; padding:80px 24px; text-align:center;">
+    <div style="font-size:64px; margin-bottom:20px; line-height:1;">{m.emoji}</div>
+    <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,2.6rem); margin:0 0 16px; letter-spacing:-.02em;">
+      {m.h1}
+    </h1>
+    <p style="font-size:17px; line-height:1.6; color:#333; max-width:480px; margin:0 auto 32px;">
+      {m.body}
+    </p>
+    <a href="/" style="display:inline-block; background:#FFEA00; color:#0A0A0B; padding:14px 28px; border-radius:12px; text-decoration:none; font:700 15px 'Chakra Petch',sans-serif; letter-spacing:.02em;">
+      Zpět na Agro-svět
+    </a>
+  </div>
+</Layout>

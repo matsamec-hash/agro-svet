@@ -29,22 +29,30 @@ export const POST: APIRoute = async ({ request }) => {
 
   const { data: existing } = await supabase
     .from('newsletter_subscribers')
-    .select('id, confirmed, confirmation_token')
+    .select('id, confirmed, unsubscribed_at, unsubscribe_token')
     .eq('site_id', AGRO_SVET_SITE_ID)
     .eq('email', email)
     .maybeSingle();
 
-  if (existing?.confirmed) {
+  // Confirmed and active subscriber → no-op.
+  if (existing?.confirmed && !existing?.unsubscribed_at) {
     return new Response(JSON.stringify({ status: 'already_confirmed' }), { status: 200 });
   }
 
-  const token = genToken();
+  const confirmationToken = genToken();
+  // Re-subscribe (after unsubscribe) reuses existing unsubscribe_token if present.
+  const unsubscribeToken: string = existing?.unsubscribe_token ?? genToken();
   const apiKey = getEnvVar('RESEND_API_KEY') ?? '';
 
   if (existing) {
     const { error: updErr } = await supabase
       .from('newsletter_subscribers')
-      .update({ confirmation_token: token })
+      .update({
+        confirmation_token: confirmationToken,
+        unsubscribe_token: unsubscribeToken,
+        confirmed: false,
+        unsubscribed_at: null,
+      })
       .eq('id', existing.id);
     if (updErr) {
       console.error('[newsletter/subscribe] update token failed', updErr);
@@ -53,7 +61,13 @@ export const POST: APIRoute = async ({ request }) => {
   } else {
     const { error: insErr } = await supabase
       .from('newsletter_subscribers')
-      .insert({ site_id: AGRO_SVET_SITE_ID, email, confirmed: false, confirmation_token: token });
+      .insert({
+        site_id: AGRO_SVET_SITE_ID,
+        email,
+        confirmed: false,
+        confirmation_token: confirmationToken,
+        unsubscribe_token: unsubscribeToken,
+      });
     if (insErr) {
       console.error('[newsletter/subscribe] insert failed', insErr);
       return new Response(JSON.stringify({ error: 'db_error' }), { status: 500 });
@@ -61,7 +75,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   try {
-    await sendNewsletterConfirmation(apiKey, email, token);
+    await sendNewsletterConfirmation(apiKey, email, confirmationToken, unsubscribeToken);
   } catch (e) {
     console.error('[newsletter/subscribe] email send failed', e);
     return new Response(JSON.stringify({ error: 'email_send_failed' }), { status: 502 });
