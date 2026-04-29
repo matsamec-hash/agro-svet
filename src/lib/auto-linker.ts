@@ -9,6 +9,10 @@ import { getAllDruhy, getAllPlemena } from './plemena';
 
 interface GlossaryEntry {
   term: string;
+  /** Lowercased term — used for cheap String.includes() prefilter in hot path. */
+  termLower: string;
+  /** Pre-compiled lookbehind/lookahead regex — built once at glossary load time. */
+  pattern: RegExp;
   url: string;
   /** Higher wins when terms overlap; longer terms also matched first by length. */
   priority: number;
@@ -23,11 +27,21 @@ const MIN_TERM_LENGTH = 5;
 
 let cachedGlossary: GlossaryEntry[] | null = null;
 
+function makeEntry(term: string, url: string, priority: number): GlossaryEntry {
+  return {
+    term,
+    termLower: term.toLowerCase(),
+    pattern: new RegExp(`(?<![\\p{L}\\p{N}_])(${escapeRegex(term)})(?![\\p{L}\\p{N}_])`, 'iu'),
+    url,
+    priority,
+  };
+}
+
 function buildGlossary(): GlossaryEntry[] {
   const entries: GlossaryEntry[] = [];
 
   for (const b of getAllBrands()) {
-    entries.push({ term: b.name, url: `/stroje/${b.slug}/`, priority: 10 });
+    entries.push(makeEntry(b.name, `/stroje/${b.slug}/`, 10));
   }
 
   // Models: only currently-in-production (year_to === null), name >= MIN_TERM_LENGTH
@@ -35,32 +49,28 @@ function buildGlossary(): GlossaryEntry[] {
   for (const m of getAllModels()) {
     if (!m.name || m.name.length < MIN_TERM_LENGTH) continue;
     if (m.year_to !== null) continue;
-    entries.push({
-      term: m.name,
-      url: `/stroje/${m.brand_slug}/${m.series_slug}/${m.slug}/`,
-      priority: 12,
-    });
+    entries.push(makeEntry(m.name, `/stroje/${m.brand_slug}/${m.series_slug}/${m.slug}/`, 12));
   }
 
   for (const d of getAllDruhy()) {
-    entries.push({ term: d.name_plural, url: `/plemena/${d.slug}/`, priority: 7 });
+    entries.push(makeEntry(d.name_plural, `/plemena/${d.slug}/`, 7));
     if (d.name && d.name !== d.name_plural) {
-      entries.push({ term: d.name, url: `/plemena/${d.slug}/`, priority: 6 });
+      entries.push(makeEntry(d.name, `/plemena/${d.slug}/`, 6));
     }
   }
 
   for (const p of getAllPlemena()) {
-    entries.push({ term: p.name, url: `/plemena/${p.druh_slug}/${p.slug}/`, priority: 9 });
+    entries.push(makeEntry(p.name, `/plemena/${p.druh_slug}/${p.slug}/`, 9));
     if (p.alternative_names) {
       for (const alt of p.alternative_names) {
         // Alt names are weaker — only link if no canonical name match found first.
-        entries.push({ term: alt, url: `/plemena/${p.druh_slug}/${p.slug}/`, priority: 5 });
+        entries.push(makeEntry(alt, `/plemena/${p.druh_slug}/${p.slug}/`, 5));
       }
     }
   }
 
   for (const [slug, group] of Object.entries(FUNCTIONAL_GROUPS) as Array<[FunctionalGroupSlug, typeof FUNCTIONAL_GROUPS[FunctionalGroupSlug]]>) {
-    entries.push({ term: group.name, url: `/stroje/zemedelske-stroje/${slug}/`, priority: 4 });
+    entries.push(makeEntry(group.name, `/stroje/zemedelske-stroje/${slug}/`, 4));
   }
 
   // Sort by term length DESC (so "John Deere" matches before "Deere"), priority DESC tie-break.
@@ -123,14 +133,17 @@ function escapeRegex(s: string): string {
 
 function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>): string {
   if (used.size >= MAX_LINKS_PER_ARTICLE) return text;
+  // Lowercase the haystack ONCE per text node, then String.includes() prefilter
+  // skips ~90% of glossary entries for free. Without this, 640 entries × N text nodes
+  // × lookbehind regex = CF Worker CPU spike → error 1102 (10ms free / 50ms paid limit).
+  // Pattern is precompiled at glossary build, so the only hot-path cost is includes().
+  const textLower = text.toLowerCase();
   let s = text;
   for (const entry of glossary) {
     if (used.size >= MAX_LINKS_PER_ARTICLE) break;
     if (used.has(entry.url)) continue;
-    // Word-boundary match using Unicode letter/number classes (covers Czech diacritics).
-    // Lookbehind/ahead ensure we don't match mid-word. Case-insensitive.
-    const pattern = new RegExp(`(?<![\\p{L}\\p{N}_])(${escapeRegex(entry.term)})(?![\\p{L}\\p{N}_])`, 'iu');
-    const match = pattern.exec(s);
+    if (!textLower.includes(entry.termLower)) continue;
+    const match = entry.pattern.exec(s);
     if (match) {
       const before = s.slice(0, match.index);
       const matched = match[0];
