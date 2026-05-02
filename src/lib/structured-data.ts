@@ -166,11 +166,17 @@ export function machineProductSchema(m: MachineModelForSchema) {
   // pointing at the schema.org Vehicle URL — keeps entity hint without inheriting
   // Product validation. Spec values go into additionalProperty (consumed by Knowledge
   // Graph / AI Overviews extractors without rich-result candidacy).
+  // Some callers pass modelName already prefixed with brand (encyklopedie content),
+  // others pass just the bare model (stroje [brand]/[series]/[model] route).
+  // Detect duplicate prefix to avoid "Zetor Zetor Proxima 120".
+  const fullName = m.modelName.toLowerCase().startsWith(m.brandName.toLowerCase())
+    ? m.modelName
+    : `${m.brandName} ${m.modelName}`;
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Thing',
     additionalType: isVehicle ? 'https://schema.org/Vehicle' : `https://agro-svet.cz/stroje/${m.category}/`,
-    name: `${m.brandName} ${m.modelName}`,
+    name: fullName,
     url,
     category: categoryLabel,
   };
