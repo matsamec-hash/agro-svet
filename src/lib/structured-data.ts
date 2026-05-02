@@ -160,48 +160,46 @@ export function machineProductSchema(m: MachineModelForSchema) {
   const url = m.url.startsWith('http') ? m.url : `${SITE_URL}${m.url}`;
   const categoryLabel = m.category === 'traktory' ? 'Traktor' : m.category === 'kombajny' ? 'Kombajn' : m.category;
 
-  // Non-transactional catalog — no offers/review/aggregateRating, so we avoid Product
-  // (Google's Product Snippets validator requires one of those three). For vehicles we
-  // emit Vehicle (Vehicle is sub-typed under Product but Google's Vehicle parser does not
-  // demand offers); for non-vehicles we emit Thing with descriptive properties.
+  // Non-transactional catalog: avoid the entire Product hierarchy (Vehicle is a Product
+  // subtype, so Google's Product Snippets validator triggers on it and demands
+  // offers/review/aggregateRating which we don't have). Use Thing with additionalType
+  // pointing at the schema.org Vehicle URL — keeps entity hint without inheriting
+  // Product validation. Spec values go into additionalProperty (consumed by Knowledge
+  // Graph / AI Overviews extractors without rich-result candidacy).
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': isVehicle ? 'Vehicle' : 'Thing',
-    name: m.modelName,
+    '@type': 'Thing',
+    additionalType: isVehicle ? 'https://schema.org/Vehicle' : `https://agro-svet.cz/stroje/${m.category}/`,
+    name: `${m.brandName} ${m.modelName}`,
     url,
-    brand: { '@type': 'Brand', name: m.brandName },
-    manufacturer: {
-      '@type': 'Organization',
-      name: m.brandName,
-      url: `${SITE_URL}/stroje/${m.brandSlug}/`,
-    },
     category: categoryLabel,
-    model: m.modelName,
-    isRelatedTo: { '@type': 'Thing', name: m.seriesName },
   };
 
   if (m.description) schema.description = m.description;
   if (m.imageUrl) schema.image = m.imageUrl.startsWith('http') ? m.imageUrl : `${SITE_URL}${m.imageUrl}`;
 
-  if (isVehicle) {
-    if (m.yearFrom) schema.productionDate = String(m.yearFrom);
-    if (m.yearFrom && m.yearTo) schema.vehicleModelDate = `${m.yearFrom}/${m.yearTo}`;
-    else if (m.yearFrom) schema.vehicleModelDate = String(m.yearFrom);
-    if (m.transmission) schema.vehicleTransmission = m.transmission;
-    if (m.weightKg) {
-      schema.weight = { '@type': 'QuantitativeValue', value: m.weightKg, unitCode: 'KGM' };
-    }
-
-    const enginePower: Array<Record<string, unknown>> = [];
-    if (m.powerHp) enginePower.push({ '@type': 'QuantitativeValue', value: m.powerHp, unitCode: 'BHP' });
-    if (m.powerKw) enginePower.push({ '@type': 'QuantitativeValue', value: m.powerKw, unitCode: 'KWT' });
-    if (enginePower.length > 0 || m.engine) {
-      const engineSpec: Record<string, unknown> = { '@type': 'EngineSpecification' };
-      if (enginePower.length > 0) engineSpec.enginePower = enginePower.length === 1 ? enginePower[0] : enginePower;
-      if (m.engine) engineSpec.name = m.engine;
-      schema.vehicleEngine = engineSpec;
-    }
+  // Brand and series as Thing references (non-Product types).
+  schema.subjectOf = {
+    '@type': 'Brand',
+    name: m.brandName,
+    url: `${SITE_URL}/stroje/${m.brandSlug}/`,
+  };
+  if (m.seriesName) {
+    schema.isPartOf = { '@type': 'Thing', name: m.seriesName };
   }
+
+  // Vehicle/machine specs as PropertyValue pairs — entity-rich without Product type.
+  const props: Array<Record<string, unknown>> = [];
+  if (m.powerHp) props.push({ '@type': 'PropertyValue', name: 'Výkon', value: m.powerHp, unitCode: 'BHP', unitText: 'k' });
+  if (m.powerKw) props.push({ '@type': 'PropertyValue', name: 'Výkon (kW)', value: m.powerKw, unitCode: 'KWT', unitText: 'kW' });
+  if (m.weightKg) props.push({ '@type': 'PropertyValue', name: 'Hmotnost', value: m.weightKg, unitCode: 'KGM', unitText: 'kg' });
+  if (m.engine) props.push({ '@type': 'PropertyValue', name: 'Motor', value: m.engine });
+  if (m.transmission) props.push({ '@type': 'PropertyValue', name: 'Převodovka', value: m.transmission });
+  if (m.yearFrom) {
+    const yearValue = m.yearTo ? `${m.yearFrom}–${m.yearTo}` : `${m.yearFrom}–dosud`;
+    props.push({ '@type': 'PropertyValue', name: 'Roky výroby', value: yearValue });
+  }
+  if (props.length > 0) schema.additionalProperty = props;
 
   return schema;
 }
