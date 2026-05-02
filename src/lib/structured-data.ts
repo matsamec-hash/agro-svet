@@ -57,9 +57,14 @@ export function bazarListingProductSchema(
 ) {
   const url = `${SITE_URL}/bazar/${listing.id}/`;
   const isVehicle = VEHICLE_BAZAR_CATEGORIES.has(listing.category);
+  const hasPrice = !!listing.price;
+  // Product Snippet requires offers/review/aggregateRating. Listings without price
+  // emit Vehicle/Thing only (entity-rich, valid for indexing without rich-result errors).
+  const typeWhenNoPrice = isVehicle ? 'Vehicle' : 'Thing';
+  const typeWhenPriced = isVehicle ? ['Product', 'Vehicle'] : 'Product';
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': isVehicle ? ['Product', 'Vehicle'] : 'Product',
+    '@type': hasPrice ? typeWhenPriced : typeWhenNoPrice,
     name: listing.title,
     url,
     description: listing.description ?? listing.title,
@@ -155,9 +160,13 @@ export function machineProductSchema(m: MachineModelForSchema) {
   const url = m.url.startsWith('http') ? m.url : `${SITE_URL}${m.url}`;
   const categoryLabel = m.category === 'traktory' ? 'Traktor' : m.category === 'kombajny' ? 'Kombajn' : m.category;
 
+  // Non-transactional catalog — no offers/review/aggregateRating, so we avoid Product
+  // (Google's Product Snippets validator requires one of those three). For vehicles we
+  // emit Vehicle (Vehicle is sub-typed under Product but Google's Vehicle parser does not
+  // demand offers); for non-vehicles we emit Thing with descriptive properties.
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': isVehicle ? ['Product', 'Vehicle'] : 'Product',
+    '@type': isVehicle ? 'Vehicle' : 'Thing',
     name: m.modelName,
     url,
     brand: { '@type': 'Brand', name: m.brandName },

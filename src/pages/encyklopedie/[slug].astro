@@ -178,20 +178,21 @@ const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOStr
       </section>
     )}
 
-    {(lastVerifiedFmt || item.data.sourceUrl) && (
-      <aside class="trust-bar" aria-label="Ověření obsahu">
-        {lastVerifiedFmt && (
-          <span class="trust-item">
-            Naposledy ověřeno: <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time>
-          </span>
-        )}
-        {item.data.sourceUrl && (
-          <a class="trust-item" href={item.data.sourceUrl} target="_blank" rel="noopener nofollow">
-            Zdroj: oficiální specifikace výrobce
-          </a>
-        )}
-      </aside>
-    )}
+    <aside class="trust-bar" aria-label="Ověření obsahu">
+      <span class="trust-item">
+        Zpracováno <a href="/redakce/" class="trust-link">redakcí agro-svět.cz</a>
+      </span>
+      {lastVerifiedFmt && (
+        <span class="trust-item">
+          Naposledy ověřeno: <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time>
+        </span>
+      )}
+      {item.data.sourceUrl && (
+        <a class="trust-item trust-link" href={item.data.sourceUrl} target="_blank" rel="noopener nofollow">
+          Zdroj: oficiální specifikace výrobce
+        </a>
+      )}
+    </aside>
 
     <div style="margin-top:48px;">
       <a href="/encyklopedie/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
@@ -234,6 +235,8 @@ const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOStr
 
   .trust-bar { margin-top:32px; display:flex; gap:18px; flex-wrap:wrap; padding:14px 18px; background:#f8f8f8; border-radius:10px; font-size:13px; color:#555; }
   .trust-bar .trust-item { display:inline-flex; align-items:center; gap:6px; color:#555; text-decoration:none; }
+  .trust-bar .trust-link { color:#1a1a1a; font-weight:600; text-decoration:none; }
+  .trust-bar .trust-link:hover { text-decoration:underline; }
   .trust-bar a.trust-item:hover { color:#1a1a1a; text-decoration:underline; }
   .trust-bar time { color:#1a1a1a; font-weight:600; }
 </style>

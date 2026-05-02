@@ -427,6 +427,14 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             </div>
           </section>
         )}
+
+        <aside class="editorial-bar" aria-label="Ověření obsahu">
+          <span class="eb-item">
+            Zpracováno <a href="/redakce/" class="eb-link">redakcí agro-svět.cz</a>
+          </span>
+          <span class="eb-sep" aria-hidden="true">·</span>
+          <span class="eb-item">Specifikace na základě veřejných materiálů výrobce</span>
+        </aside>
       </div>
 
       <aside class="content-aside">
@@ -624,6 +632,16 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   .model-page .comp-name .dot-current{width:6px;height:6px;background:var(--green);border-radius:50%}
   .model-page .comp-meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12.5px;color:var(--muted);font-family:'Chakra Petch',sans-serif;flex-wrap:wrap}
   .model-page .comp-power strong{color:var(--ink);font-weight:700}
+
+  .model-page .editorial-bar{
+    margin-top:8px;padding:14px 18px;
+    background:#FBFAF4;border:1px solid var(--line);border-radius:var(--r-md);
+    display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+    font-size:12.5px;color:var(--muted);
+  }
+  .model-page .eb-link{color:var(--ink);font-weight:600;text-decoration:none}
+  .model-page .eb-link:hover{text-decoration:underline}
+  .model-page .eb-sep{color:var(--muted-2)}
   .model-page .faq-list{margin:0;padding:0;display:flex;flex-direction:column}
   .model-page .faq-item{padding:16px 0;border-bottom:1px dashed var(--line)}
   .model-page .faq-item:last-child{border-bottom:0;padding-bottom:0}

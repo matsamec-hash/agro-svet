@@ -7,7 +7,7 @@ vykon: "120 k (88 kW)"
 hmotnost: "5 800 kg"
 rok_uvedeni: 2022
 popis: Zetor Proxima 120 je nejprodávanější traktor české výroby. Kombinuje výkon 120 k s jednoduchou obsluhou, spolehlivým motorem a dostupnou cenou. Ideální volba pro středně velké farmy, přičemž nová generace přináší motor Stage V a modernizovanou kabinu Crystal.
-heroImage: https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&auto=format&fit=crop&q=85
+heroImage: /images/stroje/zetor/zetor-proxima-120k.webp
 powerHp: 120
 powerKw: 88
 weightKg: 5800

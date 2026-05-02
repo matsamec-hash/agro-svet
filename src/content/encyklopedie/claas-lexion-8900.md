@@ -7,7 +7,7 @@ vykon: "790 k (581 kW)"
 hmotnost: "22 800 kg"
 rok_uvedeni: 2020
 popis: "Největší sklízecí mlátička světa s kapacitou zásobníku 18 000 litrů a systémem automatické optimalizace CEMOS AUTO."
-heroImage: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1200&auto=format&fit=crop&q=85"
+heroImage: "/images/stroje/claas/claas-lexion-5000-8000-790k.webp"
 powerHp: 790
 powerKw: 581
 weightKg: 22800
