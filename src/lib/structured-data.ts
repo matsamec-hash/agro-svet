@@ -196,3 +196,41 @@ export function machineProductSchema(m: MachineModelForSchema) {
 
   return schema;
 }
+
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
+export function faqPageSchema(items: FaqItem[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((it) => ({
+      '@type': 'Question',
+      name: it.q,
+      acceptedAnswer: { '@type': 'Answer', text: it.a },
+    })),
+  };
+}
+
+export interface ItemListEntry {
+  url: string;
+  name: string;
+}
+
+export function itemListSchema(entries: ItemListEntry[], listName?: string) {
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    numberOfItems: entries.length,
+    itemListElement: entries.map((e, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: e.url.startsWith('http') ? e.url : `${SITE_URL}${e.url}`,
+      name: e.name,
+    })),
+  };
+  if (listName) schema.name = listName;
+  return schema;
+}

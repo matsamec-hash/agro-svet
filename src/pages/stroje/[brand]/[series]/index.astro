@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from '../../../../layouts/Layout.astro';
 import { getAllBrands, getSeries, seriesFamily, familyLabel, type StrojKategorie } from '../../../../lib/stroje';
+import { itemListSchema } from '../../../../lib/structured-data';
 
 export async function getStaticPaths() {
   const paths: { params: { brand: string; series: string } }[] = [];
@@ -106,6 +107,15 @@ const jsonLd = {
     { '@type': 'ListItem', position: 5, name: seriesNameClean, item: `https://agro-svet.cz/stroje/${brand.slug}/${series.slug}/` },
   ],
 };
+const modelListJsonLd = sortedModels.length > 0
+  ? itemListSchema(
+      sortedModels.map((m) => ({
+        url: `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`,
+        name: `${brand.name} ${m.name}`,
+      })),
+      `Modely v řadě ${brand.name} ${seriesNameClean}`,
+    )
+  : null;
 ---
 
 <Layout
@@ -113,6 +123,7 @@ const jsonLd = {
   description={`Přehled všech modelů řady ${brand.name} ${series.name}. Výkony ${hpRange || '—'}, roky výroby ${yr || '—'}.`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  {modelListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(modelListJsonLd)} />}
   <div class="series-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

@@ -71,7 +71,7 @@ const pageTitle = plemeno.name;
 const pageDesc = plemeno.description.slice(0, 160);
 const canonical = `https://agro-svet.cz/plemena/${druh.slug}/${plemeno.slug}/`;
 
-const jsonLd = {
+const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
@@ -81,10 +81,32 @@ const jsonLd = {
     { '@type': 'ListItem', position: 4, name: plemeno.name, item: canonical },
   ],
 };
+// Thing schema — entity-rich description for AI Overviews + Knowledge Graph candidates.
+// Schema.org has no Breed type; Thing with additionalType points at Wikidata for animal breed
+// (Q38547 = breed). Editors crawling for breed data treat this as a structured anchor.
+const thingJsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Thing',
+  additionalType: 'https://www.wikidata.org/wiki/Q38547',
+  name: plemeno.name,
+  description: plemeno.description,
+  url: canonical,
+  inLanguage: 'cs-CZ',
+  ...(plemeno.alternative_names && plemeno.alternative_names.length > 0 && {
+    alternateName: plemeno.alternative_names,
+  }),
+  ...(plemeno.image_url && {
+    image: plemeno.image_url.startsWith('http') ? plemeno.image_url : `https://agro-svet.cz${plemeno.image_url}`,
+  }),
+  ...(plemeno.origin_country && {
+    countryOfOrigin: { '@type': 'Country', name: plemeno.origin_country },
+  }),
+};
 ---
 
 <Layout title={`${pageTitle} — plemeno ${druh.name.toLowerCase()}`} description={pageDesc} canonical={canonical}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(thingJsonLd)} />
   <div class="plemeno-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

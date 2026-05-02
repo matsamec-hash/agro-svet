@@ -2,6 +2,19 @@
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import CategoryBrowse from '../../../components/stroje/CategoryBrowse.astro';
+import { getAllBrands } from '../../../lib/stroje';
+import { itemListSchema } from '../../../lib/structured-data';
+
+const brandsWithKombajny = getAllBrands().filter((b) => (b.categories?.kombajny?.series?.length ?? 0) > 0);
+const brandListJsonLd = brandsWithKombajny.length > 0
+  ? itemListSchema(
+      brandsWithKombajny.map((b) => ({
+        url: `/stroje/${b.slug}/`,
+        name: `${b.name} kombajny`,
+      })),
+      'Značky kombajnů',
+    )
+  : null;
 ---
 
 <Layout
@@ -17,5 +30,6 @@ import CategoryBrowse from '../../../components/stroje/CategoryBrowse.astro';
       { '@type': 'ListItem', position: 3, name: 'Kombajny', item: 'https://agro-svet.cz/stroje/kombajny/' },
     ],
   })} />
+  {brandListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(brandListJsonLd)} />}
   <CategoryBrowse category="kombajny" />
 </Layout>

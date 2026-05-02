@@ -3,7 +3,9 @@ export const prerender = false;
 import Layout from '../../../../../layouts/Layout.astro';
 import { getAllBrands, getSeries, seriesFamily, familyLabel, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
 import { createServerClient } from '../../../../../lib/supabase';
-import { breadcrumbSchema, machineProductSchema } from '../../../../../lib/structured-data';
+import { breadcrumbSchema, machineProductSchema, faqPageSchema } from '../../../../../lib/structured-data';
+import { generateModelFaq } from '../../../../../lib/faq-generator';
+import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 
 export async function getStaticPaths() {
   const paths: { params: { brand: string; series: string; model: string }; props: { modelSlug: string } }[] = [];
@@ -180,11 +182,39 @@ const productJsonLd = machineProductSchema({
   engine: model.engine,
   transmission: model.transmission,
 });
+
+const faqItems = generateModelFaq({
+  brand,
+  model,
+  category,
+  categorySingular: categorySingular[category],
+  bazarCount: modelBazarCount,
+});
+const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
+
+// Competitors — cross-brand models in same category within ±15% power.
+const competitors = findCompetitors({
+  slug: model.slug,
+  brand_slug: brand.slug,
+  category,
+  power_hp: model.power_hp,
+  year_to: model.year_to,
+}, { limit: 6 });
+
+// Use-case description from data (no hand-written content per model).
+const useCase = useCaseDescription(category, model.power_hp);
+
+function competitorUrlPart(competitor: { slug: string; brand_slug: string }): string {
+  return competitor.slug.startsWith(competitor.brand_slug + '-')
+    ? competitor.slug.slice(competitor.brand_slug.length + 1)
+    : competitor.slug;
+}
 ---
 
 <Layout title={`${pageTitle} — parametry a cena`} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
   <div class="model-page">
 
     <nav class="breadcrumb" aria-label="Cesta">
@@ -311,6 +341,61 @@ const productJsonLd = machineProductSchema({
           <section class="spec-card spec-empty">
             <h2>Technické parametry</h2>
             <p>Detailní parametry budou doplněny.</p>
+          </section>
+        )}
+
+        {useCase && (
+          <section class="usecase-card">
+            <div class="card-head">
+              <h2>Pro jakou farmu se {brand.name} {model.name} hodí</h2>
+            </div>
+            <p class="usecase-text">{useCase}</p>
+          </section>
+        )}
+
+        {competitors.length > 0 && (
+          <section class="competitor-card">
+            <div class="card-head">
+              <h2>Konkurence ve výkonové třídě</h2>
+              <span class="card-head-meta">{competitors.length} {competitors.length === 1 ? 'model' : competitors.length < 5 ? 'modely' : 'modelů'}</span>
+            </div>
+            <p class="competitor-lede">Modely jiných značek s podobným výkonem (±15&nbsp;%) — pro porovnání před nákupem v bazaru.</p>
+            <div class="comp-grid">
+              {competitors.map((c) => {
+                const cUrl = `/stroje/${c.brand_slug}/${c.series_slug}/${competitorUrlPart(c)}/`;
+                const cYr = c.year_from ? (c.year_to ? `${c.year_from}–${c.year_to}` : `${c.year_from}–dosud`) : '';
+                const cIsCurrent = c.year_to === null && c.year_from !== null;
+                return (
+                  <a href={cUrl} class="comp-card">
+                    <div class="comp-brand">{c.brand_name}</div>
+                    <div class="comp-name">
+                      {c.name}
+                      {cIsCurrent && <span class="dot-current" title="Aktuální"></span>}
+                    </div>
+                    <div class="comp-meta">
+                      <span class="comp-power"><strong>{c.power_hp} k</strong>{c.power_kw ? ` · ${c.power_kw} kW` : ''}</span>
+                      {cYr && <span class="comp-year">{cYr}</span>}
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {faqItems && (
+          <section class="faq-card" aria-labelledby="faq-heading">
+            <div class="card-head">
+              <h2 id="faq-heading">Časté otázky</h2>
+            </div>
+            <dl class="faq-list">
+              {faqItems.map((qa) => (
+                <div class="faq-item">
+                  <dt>{qa.q}</dt>
+                  <dd>{qa.a}</dd>
+                </div>
+              ))}
+            </dl>
           </section>
         )}
 
@@ -520,10 +605,31 @@ const productJsonLd = machineProductSchema({
 
   .model-page .content-main{display:flex;flex-direction:column;gap:22px}
 
-  .model-page .spec-card, .model-page .related-card{
+  .model-page .spec-card, .model-page .related-card, .model-page .faq-card,
+  .model-page .usecase-card, .model-page .competitor-card{
     background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);
     padding:24px 24px 22px;box-shadow:var(--sh-1);
   }
+  .model-page .usecase-text{margin:0;font-size:16px;line-height:1.7;color:var(--body)}
+  .model-page .competitor-lede{margin:0 0 16px;font-size:14px;color:var(--muted);line-height:1.55}
+  .model-page .comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+  .model-page .comp-card{
+    display:block;text-decoration:none;color:inherit;
+    background:#FBFAF4;border:1px solid var(--line);border-radius:var(--r-md);
+    padding:14px;transition:.18s;
+  }
+  .model-page .comp-card:hover{background:#fff;transform:translateY(-2px);box-shadow:var(--sh-1);border-color:var(--yellow)}
+  .model-page .comp-brand{font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .model-page .comp-name{font:700 16px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.005em;margin-bottom:8px;display:inline-flex;align-items:center;gap:6px}
+  .model-page .comp-name .dot-current{width:6px;height:6px;background:var(--green);border-radius:50%}
+  .model-page .comp-meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12.5px;color:var(--muted);font-family:'Chakra Petch',sans-serif;flex-wrap:wrap}
+  .model-page .comp-power strong{color:var(--ink);font-weight:700}
+  .model-page .faq-list{margin:0;padding:0;display:flex;flex-direction:column}
+  .model-page .faq-item{padding:16px 0;border-bottom:1px dashed var(--line)}
+  .model-page .faq-item:last-child{border-bottom:0;padding-bottom:0}
+  .model-page .faq-item:first-child{padding-top:0}
+  .model-page .faq-item dt{font:600 16px/1.4 'Chakra Petch',sans-serif;color:var(--ink);margin:0 0 8px;letter-spacing:-.005em}
+  .model-page .faq-item dd{margin:0;font-size:15px;line-height:1.65;color:var(--body)}
   .model-page .card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
   .model-page .card-head h2{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.1;color:var(--ink)}
   .model-page .card-head-meta{font:600 12px 'Chakra Petch',sans-serif;color:var(--muted);background:#FBFAF4;padding:5px 10px;border-radius:8px}

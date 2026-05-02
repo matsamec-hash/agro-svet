@@ -2,13 +2,15 @@
 export const prerender = true;
 import Layout from '../../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug, type StrojKategorie } from '../../../../lib/stroje';
+import { itemListSchema } from '../../../../lib/structured-data';
 
 export async function getStaticPaths() {
   // Generujeme jen skupiny s alespoň jedním modelem. Prázdné jsou skryté i v UI a sitemapě;
   // vrátíme až budou naplněné (viz project memory).
+  // effective_category resolves series.subcategory (Kverneland-style) to the listing slug.
   const all = getAllModels();
   return (Object.entries(FUNCTIONAL_GROUPS) as [string, typeof FUNCTIONAL_GROUPS[FunctionalGroupSlug]][])
-    .filter(([_, g]) => all.some((m) => (g.categories as readonly string[]).includes(m.category)))
+    .filter(([_, g]) => all.some((m) => (g.categories as readonly string[]).includes(m.effective_category)))
     .map(([slug]) => ({ params: { group: slug } }));
 }
 
@@ -19,7 +21,7 @@ if (!group) return Astro.redirect('/stroje/zemedelske-stroje/');
 const allBrands = getAllBrands();
 const allModels = getAllModels();
 const groupCats = group.categories as readonly StrojKategorie[];
-const groupModels = allModels.filter((m) => groupCats.includes(m.category));
+const groupModels = allModels.filter((m) => groupCats.includes(m.effective_category));
 const groupBrands = [...new Set(groupModels.map((m) => m.brand_slug))]
   .map((slug) => allBrands.find((b) => b.slug === slug))
   .filter((b): b is NonNullable<typeof b> => Boolean(b));
@@ -27,7 +29,7 @@ const groupBrands = [...new Set(groupModels.map((m) => m.brand_slug))]
 // Sub-category stats with pretty name
 type SubcatStat = { slug: StrojKategorie; name: string; modelCount: number; brandCount: number };
 const subcategoryStats: SubcatStat[] = groupCats.map((cat) => {
-  const cModels = groupModels.filter((m) => m.category === cat);
+  const cModels = groupModels.filter((m) => m.effective_category === cat);
   const cBrands = new Set(cModels.map((m) => m.brand_slug));
   // Lookup pretty CZ name from any brand that has this category
   let prettyName: string = cat;
@@ -48,6 +50,16 @@ const breadcrumbJsonLd = {
     { '@type': 'ListItem', position: 4, name: group.name, item: `https://agro-svet.cz/stroje/zemedelske-stroje/${groupSlug}/` },
   ],
 };
+const subcatsWithModels = subcategoryStats.filter((s) => s.modelCount > 0);
+const subcatListJsonLd = subcatsWithModels.length > 0
+  ? itemListSchema(
+      subcatsWithModels.map((s) => ({
+        url: `/stroje/${s.slug}/`,
+        name: s.name,
+      })),
+      `${group.name} — sub-kategorie`,
+    )
+  : null;
 ---
 
 <Layout
@@ -56,6 +68,7 @@ const breadcrumbJsonLd = {
   canonical={`https://agro-svet.cz/stroje/zemedelske-stroje/${groupSlug}/`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  {subcatListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(subcatListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px;">
       <a href="/stroje/zemedelske-stroje/" style="font-size:13px; color:#666; text-decoration:none;">← Zemědělské stroje</a>

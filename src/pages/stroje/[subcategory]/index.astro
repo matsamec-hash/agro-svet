@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, getFunctionalGroupForCategory, type StrojKategorie } from '../../../lib/stroje';
+import { itemListSchema } from '../../../lib/structured-data';
 
 export async function getStaticPaths() {
   // Generate path per stroje sub-category (not traktory/kombajny — they have own static pages)
@@ -14,7 +15,9 @@ const subcat = subcategory as StrojKategorie;
 
 const allBrands = getAllBrands();
 const allModels = getAllModels();
-const subcatModels = allModels.filter((m) => m.category === subcat);
+// Use effective_category — covers both top-level brand categories (Case IH "traktory")
+// and series-level subcategory (Kverneland zpracovani-pudy / series.subcategory: pluhy).
+const subcatModels = allModels.filter((m) => m.effective_category === subcat);
 const subcatBrands = [...new Set(subcatModels.map((m) => m.brand_slug))]
   .map((slug) => allBrands.find((b) => b.slug === slug))
   .filter((b): b is NonNullable<typeof b> => Boolean(b));
@@ -46,6 +49,15 @@ const breadcrumbJsonLd = {
   '@type': 'BreadcrumbList',
   itemListElement: breadcrumbItems,
 };
+const brandsListJsonLd = subcatBrands.length > 0
+  ? itemListSchema(
+      subcatBrands.map((b) => ({
+        url: `/stroje/${b.slug}/`,
+        name: `${b.name} ${prettyName.toLowerCase()}`,
+      })),
+      `Značky vyrábějící ${prettyName.toLowerCase()}`,
+    )
+  : null;
 ---
 
 <Layout
@@ -54,6 +66,7 @@ const breadcrumbJsonLd = {
   canonical={`https://agro-svet.cz/stroje/${subcat}/`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  {brandsListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(brandsListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px;">
       {group && groupSlug ? (

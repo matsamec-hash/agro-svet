@@ -3,7 +3,7 @@ export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
-import { breadcrumbSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, machineProductSchema, faqPageSchema } from '../../lib/structured-data';
 
 export async function getStaticPaths() {
   const items = await getCollection('encyklopedie');
@@ -16,49 +16,79 @@ const item = items.find((i) => i.id === slug);
 if (!item) return Astro.redirect('/encyklopedie/');
 const { Content } = await render(item);
 
+// Related encyklopedie items: same znacka first, then same kategorie.
+const relatedSameZnacka = items.filter((i) => i.id !== item.id && i.data.znacka === item.data.znacka);
+const relatedSameCat = items.filter((i) => i.id !== item.id && i.data.znacka !== item.data.znacka && i.data.kategorie === item.data.kategorie);
+const relatedItems = [...relatedSameZnacka, ...relatedSameCat].slice(0, 4);
+const brandPrettyForLinks = item.data.znacka.charAt(0).toUpperCase() + item.data.znacka.slice(1);
+
 const kategLabels: Record<string, string> = {
   traktor: 'Traktor', kombajn: 'Kombajn', stroj: 'Stroj', 'puda-technika': 'Půdní technika',
+};
+// Map narrative singular categories to schema-helper plural slugs (Vehicle vs Product).
+const schemaCategory: Record<string, string> = {
+  traktor: 'traktory',
+  kombajn: 'kombajny',
+  stroj: 'zemedelske-stroje',
+  'puda-technika': 'zemedelske-stroje',
 };
 
 const pageUrl = `${SITE_URL}/encyklopedie/${slug}/`;
 const heroImageAbs = item.data.heroImage
   ? (item.data.heroImage.startsWith('http') ? item.data.heroImage : `${SITE_URL}${item.data.heroImage}`)
   : undefined;
+
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
   { name: 'Encyklopedie', url: '/encyklopedie/' },
   { name: item.data.name, url: pageUrl },
 ]);
-const articleJsonLd: Record<string, unknown> = {
-  '@context': 'https://schema.org',
-  '@type': 'TechArticle',
-  headline: item.data.name,
-  description: item.data.popis,
+
+// Vehicle/Product JSON-LD — entity-rich for AI Overviews and rich results.
+const brandPretty = item.data.znacka.charAt(0).toUpperCase() + item.data.znacka.slice(1);
+const productJsonLd = machineProductSchema({
+  brandName: brandPretty,
+  brandSlug: item.data.znacka,
+  seriesName: item.data.seriesName ?? item.data.name,
+  modelName: item.data.name,
+  modelSlug: item.data.slug,
+  category: schemaCategory[item.data.kategorie] ?? item.data.kategorie,
   url: pageUrl,
-  inLanguage: 'cs-CZ',
-  about: {
-    '@type': 'Product',
-    name: item.data.name,
-    brand: { '@type': 'Brand', name: item.data.znacka },
-    category: kategLabels[item.data.kategorie] ?? item.data.kategorie,
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: 'agro-svět.cz',
-    url: SITE_URL + '/',
-    logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png` },
-  },
-};
-if (heroImageAbs) articleJsonLd.image = heroImageAbs;
+  description: item.data.popis,
+  imageUrl: heroImageAbs,
+  powerHp: item.data.powerHp ?? null,
+  powerKw: item.data.powerKw ?? null,
+  weightKg: item.data.weightKg ?? null,
+  yearFrom: item.data.rok_uvedeni,
+  yearTo: item.data.yearTo ?? null,
+  engine: item.data.engine,
+  transmission: item.data.transmission,
+});
+
+const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
+
+const lastVerifiedFmt = item.data.lastVerified
+  ? new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
+  : null;
+const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : null;
 ---
 
-<Layout title={item.data.name} description={item.data.popis} canonical={pageUrl} ogType="article" ogImage={heroImageAbs}>
+<Layout title={item.data.name} description={item.data.popis} canonical={pageUrl} ogType="product" ogImage={heroImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
 
   {item.data.heroImage && (
     <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
-      <img src={item.data.heroImage} alt={item.data.name} style="width:100%; height:100%; object-fit:cover;" />
+      <img
+        src={item.data.heroImage}
+        alt={`${item.data.name} — ${kategLabels[item.data.kategorie] ?? item.data.kategorie}${item.data.powerHp ? `, ${item.data.powerHp} koní` : ''}, hlavní pohled`}
+        width="1200"
+        height="600"
+        fetchpriority="high"
+        decoding="async"
+        style="width:100%; height:100%; object-fit:cover;"
+      />
       <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.4));"></div>
     </div>
   )}
@@ -114,6 +144,55 @@ if (heroImageAbs) articleJsonLd.image = heroImageAbs;
       <Content />
     </div>
 
+    {item.data.faq && item.data.faq.length > 0 && (
+      <section class="faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">Časté otázky</h2>
+        <dl class="faq-list">
+          {item.data.faq.map((qa) => (
+            <div class="faq-item">
+              <dt>{qa.q}</dt>
+              <dd>{qa.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    {relatedItems.length > 0 && (
+      <section class="related" aria-labelledby="related-heading">
+        <h2 id="related-heading">Související modely</h2>
+        <div class="related-grid">
+          {relatedItems.map((r) => (
+            <a href={`/encyklopedie/${r.id}/`} class="related-card">
+              <div class="related-brand">{r.data.znacka.toUpperCase()}</div>
+              <div class="related-name">{r.data.name}</div>
+              <div class="related-meta">{r.data.vykon}{r.data.rok_uvedeni ? ` · ${r.data.rok_uvedeni}` : ''}</div>
+            </a>
+          ))}
+        </div>
+        <div class="related-cta">
+          <a href={`/stroje/${item.data.znacka}/`} class="related-link">
+            Celý katalog modelů {brandPrettyForLinks} →
+          </a>
+        </div>
+      </section>
+    )}
+
+    {(lastVerifiedFmt || item.data.sourceUrl) && (
+      <aside class="trust-bar" aria-label="Ověření obsahu">
+        {lastVerifiedFmt && (
+          <span class="trust-item">
+            Naposledy ověřeno: <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time>
+          </span>
+        )}
+        {item.data.sourceUrl && (
+          <a class="trust-item" href={item.data.sourceUrl} target="_blank" rel="noopener nofollow">
+            Zdroj: oficiální specifikace výrobce
+          </a>
+        )}
+      </aside>
+    )}
+
     <div style="margin-top:48px;">
       <a href="/encyklopedie/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
         ← Zpět na encyklopedii
@@ -132,4 +211,29 @@ if (heroImageAbs) articleJsonLd.image = heroImageAbs;
   .prose :global(table) { width:100%; border-collapse:collapse; margin-bottom:1.5em; font-size:15px; }
   .prose :global(th) { background:#f5f5f5; font-weight:600; padding:10px 14px; border:1px solid #e0e0e0; text-align:left; }
   .prose :global(td) { padding:9px 14px; border:1px solid #ebebeb; }
+
+  .faq { margin-top:48px; padding-top:32px; border-top:1px solid #ebebeb; }
+  .faq h2 { font-size:1.5rem; font-weight:700; margin:0 0 20px; letter-spacing:-.3px; color:#1a1a1a; }
+  .faq-list { margin:0; padding:0; }
+  .faq-item { padding:18px 0; border-bottom:1px dashed #e8e8e8; }
+  .faq-item:last-child { border-bottom:none; }
+  .faq-item dt { font-size:17px; font-weight:600; color:#1a1a1a; margin-bottom:8px; line-height:1.4; }
+  .faq-item dd { font-size:16px; line-height:1.7; color:#333; margin:0; }
+
+  .related { margin-top:48px; padding-top:32px; border-top:1px solid #ebebeb; }
+  .related h2 { font-size:1.5rem; font-weight:700; margin:0 0 20px; letter-spacing:-.3px; color:#1a1a1a; }
+  .related-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:18px; }
+  .related-card { display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #ebebeb; border-radius:10px; padding:14px 16px; transition:transform .15s, box-shadow .15s, border-color .15s; }
+  .related-card:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(0,0,0,.06); border-color:#FFE600; }
+  .related-brand { font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:#888; margin-bottom:6px; }
+  .related-name { font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:6px; line-height:1.3; }
+  .related-meta { font-size:13px; color:#666; }
+  .related-cta { margin-top:8px; }
+  .related-link { display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:600; color:#1a1a1a; text-decoration:none; padding:10px 16px; border:2px solid #1a1a1a; border-radius:8px; transition:background .15s, color .15s; }
+  .related-link:hover { background:#1a1a1a; color:#fff; }
+
+  .trust-bar { margin-top:32px; display:flex; gap:18px; flex-wrap:wrap; padding:14px 18px; background:#f8f8f8; border-radius:10px; font-size:13px; color:#555; }
+  .trust-bar .trust-item { display:inline-flex; align-items:center; gap:6px; color:#555; text-decoration:none; }
+  .trust-bar a.trust-item:hover { color:#1a1a1a; text-decoration:underline; }
+  .trust-bar time { color:#1a1a1a; font-weight:600; }
 </style>

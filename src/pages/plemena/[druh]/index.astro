@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllDruhy, getDruh, UZITKOVOST_LABELS } from '../../../lib/plemena';
+import { itemListSchema } from '../../../lib/structured-data';
 
 export async function getStaticPaths() {
   return getAllDruhy().map((d) => ({ params: { druh: d.slug } }));
@@ -37,6 +38,15 @@ const jsonLd = {
     { '@type': 'ListItem', position: 3, name: druh.name_plural, item: `https://agro-svet.cz/plemena/${druh.slug}/` },
   ],
 };
+const plemenaListJsonLd = sorted.length > 0
+  ? itemListSchema(
+      sorted.map((p) => ({
+        url: `/plemena/${druh.slug}/${p.slug}/`,
+        name: p.name,
+      })),
+      `Plemena druhu ${druh.name.toLowerCase()}`,
+    )
+  : null;
 ---
 
 <Layout
@@ -44,6 +54,7 @@ const jsonLd = {
   description={`Přehled plemen druhu ${druh.name.toLowerCase()}. ${druh.description.slice(0, 140)}`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  {plemenaListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(plemenaListJsonLd)} />}
   <div class="druh-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

@@ -23,12 +23,26 @@ const encyklopedie = defineCollection({
     slug: z.string(),
     znacka: z.string(),
     kategorie: z.enum(['traktor', 'kombajn', 'stroj', 'puda-technika']),
+    // Display strings (UI), kept for backwards compatibility.
     vykon: z.string(),
     hmotnost: z.string(),
     rok_uvedeni: z.number(),
     popis: z.string(),
     heroImage: z.string().optional(),
     highlights: z.array(z.string()),
+    // Structured numeric fields — feed Vehicle JSON-LD when present.
+    powerHp: z.number().optional(),
+    powerKw: z.number().optional(),
+    weightKg: z.number().optional(),
+    yearTo: z.number().optional(),
+    engine: z.string().optional(),
+    transmission: z.string().optional(),
+    seriesName: z.string().optional(),
+    // FAQ — generates FAQPage JSON-LD + on-page Q&A section.
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+    // Editorial trust signals.
+    lastVerified: z.date().optional(),
+    sourceUrl: z.string().optional(),
   }),
 });
 

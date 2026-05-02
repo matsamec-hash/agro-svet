@@ -58,6 +58,12 @@ export interface StrojSeries {
   year_to: number | null;
   description?: string;
   image_url?: string | null;
+  /**
+   * Sub-category override for brands organized by functional group (e.g. Kverneland uses
+   * categories.zpracovani-pudy with series.subcategory: "pluhy"). When set, this is the
+   * effective category for sitemap and listing-page routing.
+   */
+  subcategory?: StrojKategorie;
   models: StrojModel[];
 }
 
@@ -79,7 +85,10 @@ export interface StrojBrand {
 export interface StrojFlatModel extends StrojModel {
   brand_slug: string;
   brand_name: string;
+  /** Top-level category from YAML (e.g. "traktory" or "zpracovani-pudy"). */
   category: StrojKategorie;
+  /** Effective sub-category for listing routing — series.subcategory if set, else category. */
+  effective_category: StrojKategorie;
   series_slug: string;
   series_name: string;
 }
@@ -203,12 +212,14 @@ export function getAllModels(): StrojFlatModel[] {
     for (const [catKey, cat] of Object.entries(brand.categories || {})) {
       const category = catKey as StrojKategorie;
       for (const series of cat.series || []) {
+        const effective_category = (series.subcategory as StrojKategorie | undefined) ?? category;
         for (const model of series.models || []) {
           flat.push({
             ...model,
             brand_slug: brand.slug,
             brand_name: brand.name,
             category,
+            effective_category,
             series_slug: series.slug,
             series_name: series.name,
           });

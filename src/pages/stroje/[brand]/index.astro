@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllBrands, getBrand, seriesFamily, familyLabel, type StrojKategorie } from '../../../lib/stroje';
 import { createServerClient } from '../../../lib/supabase';
+import { itemListSchema } from '../../../lib/structured-data';
 
 export async function getStaticPaths() {
   return getAllBrands().map((b) => ({ params: { brand: b.slug } }));
@@ -237,6 +238,21 @@ const brandJsonLd: Record<string, unknown> = {
   }),
   ...(sameAs.length > 0 && { sameAs }),
 };
+
+// ItemList of all series across categories — feeds rich list results.
+const allSeries: Array<{ url: string; name: string }> = [];
+for (const cat of Object.values(brand.categories || {})) {
+  for (const s of cat.series || []) {
+    const seriesNameFmt = String(s.name).replace(/\s*\([^)]*\)\s*$/, '');
+    allSeries.push({
+      url: `/stroje/${brand.slug}/${s.slug}/`,
+      name: `${brand.name} ${seriesNameFmt}`,
+    });
+  }
+}
+const seriesListJsonLd = allSeries.length > 0
+  ? itemListSchema(allSeries, `Modelové řady ${brand.name}`)
+  : null;
 ---
 
 <Layout
@@ -245,6 +261,7 @@ const brandJsonLd: Record<string, unknown> = {
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(brandJsonLd)} />
+  {seriesListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(seriesListJsonLd)} />}
   <div class="brand-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import { itemListSchema } from '../../lib/structured-data';
 
 export async function getStaticPaths() {
   const znacky = await getCollection('znacky');
@@ -19,6 +20,9 @@ const sameAsList: string[] = [];
 if ((znacka.data as any).wikipedia) sameAsList.push((znacka.data as any).wikipedia);
 if ((znacka.data as any).wikidata) sameAsList.push((znacka.data as any).wikidata);
 if (znacka.data.website) sameAsList.push(znacka.data.website);
+
+const encyklopedie = await getCollection('encyklopedie');
+const brandModels = encyklopedie.filter((e) => e.data.znacka === znacka.id);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -43,10 +47,20 @@ const jsonLd = {
     },
   ],
 };
+const modelListJsonLd = brandModels.length > 0
+  ? itemListSchema(
+      brandModels.map((e) => ({
+        url: `/encyklopedie/${e.id}/`,
+        name: e.data.name,
+      })),
+      `Modely v encyklopedii — ${znacka.data.name}`,
+    )
+  : null;
 ---
 
 <Layout title={znacka.data.name} description={znacka.data.popis} canonical={canonical}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  {modelListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(modelListJsonLd)} />}
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:28px;">

@@ -12,6 +12,8 @@ interface UrlEntry {
   lastmod?: string;
   changefreq?: 'daily' | 'weekly' | 'monthly' | 'yearly';
   priority?: string;
+  /** Image URLs to expose via image:image — feeds Google Images and Lens. */
+  images?: string[];
 }
 
 const XML_ESCAPES: Record<string, string> = {
@@ -26,11 +28,21 @@ function xmlEscape(s: string): string {
   return s.replace(/[<>&'"]/g, (c) => XML_ESCAPES[c]);
 }
 
+function absImage(url: string): string {
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `${SITE_URL}${url.startsWith('/') ? url : `/${url}`}`;
+}
+
 function renderUrl(u: UrlEntry): string {
   const parts = [`    <loc>${xmlEscape(u.loc)}</loc>`];
   if (u.lastmod) parts.push(`    <lastmod>${u.lastmod.slice(0, 10)}</lastmod>`);
   if (u.changefreq) parts.push(`    <changefreq>${u.changefreq}</changefreq>`);
   if (u.priority) parts.push(`    <priority>${u.priority}</priority>`);
+  if (u.images && u.images.length > 0) {
+    for (const img of u.images) {
+      parts.push(`    <image:image>\n      <image:loc>${xmlEscape(absImage(img))}</image:loc>\n    </image:image>`);
+    }
+  }
   return `  <url>\n${parts.join('\n')}\n  </url>`;
 }
 
@@ -67,15 +79,19 @@ export const GET: APIRoute = async () => {
 
   // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.
   // Prázdné skupiny jsou skryté i v UI; vrátíme až budou naplněné (viz project memory).
-  const allStrojeModels = getAllModels().filter((m) => m.category !== 'traktory' && m.category !== 'kombajny');
+  // Use effective_category — Kverneland-style brands ("zpracovani-pudy" top-level + series.subcategory)
+  // map to subcategory slugs, not their top-level group key.
+  const allStrojeModels = getAllModels().filter(
+    (m) => m.effective_category !== 'traktory' && m.effective_category !== 'kombajny',
+  );
   const groupsWithModels = (Object.entries(FUNCTIONAL_GROUPS) as [string, typeof FUNCTIONAL_GROUPS[keyof typeof FUNCTIONAL_GROUPS]][])
-    .filter(([_, group]) => allStrojeModels.some((m) => (group.categories as readonly string[]).includes(m.category)));
+    .filter(([_, group]) => allStrojeModels.some((m) => (group.categories as readonly string[]).includes(m.effective_category)));
   for (const [groupSlug] of groupsWithModels) {
     urls.push({ loc: `${SITE_URL}/stroje/zemedelske-stroje/${groupSlug}/`, changefreq: 'weekly', priority: '0.75' });
   }
 
   // Stroje sub-kategorie (cross-brand pages /stroje/<subcategory>/) — pouze ty s modely.
-  const subcategoriesWithModels = new Set(allStrojeModels.map((m) => m.category));
+  const subcategoriesWithModels = new Set(allStrojeModels.map((m) => m.effective_category));
   for (const subcat of subcategoriesWithModels) {
     urls.push({ loc: `${SITE_URL}/stroje/${subcat}/`, changefreq: 'weekly', priority: '0.7' });
   }
@@ -86,10 +102,22 @@ export const GET: APIRoute = async () => {
       const families = new Set<string>();
       for (const s of cat.series || []) {
         families.add((s as any).family || seriesFamily(s.slug));
-        urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/`, changefreq: 'monthly' });
+        const seriesImg = (s as any).image_url as string | null | undefined;
+        urls.push({
+          loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/`,
+          changefreq: 'monthly',
+          images: seriesImg ? [seriesImg] : undefined,
+        });
         for (const m of s.models || []) {
           const short = m.slug.startsWith(brand.slug + '-') ? m.slug.slice(brand.slug.length + 1) : m.slug;
-          urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/${short}/`, changefreq: 'monthly' });
+          const modelImg = (m as any).image_url as string | null | undefined;
+          const fallback = seriesImg ?? null;
+          const imgUrl = modelImg ?? fallback;
+          urls.push({
+            loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/${short}/`,
+            changefreq: 'monthly',
+            images: imgUrl ? [imgUrl] : undefined,
+          });
         }
       }
       for (const fam of families) {
@@ -108,7 +136,13 @@ export const GET: APIRoute = async () => {
     urls.push({ loc: `${SITE_URL}/znacky/${z.id}/`, changefreq: 'monthly' });
   }
   for (const e of encyklopedie) {
-    urls.push({ loc: `${SITE_URL}/encyklopedie/${e.id}/`, changefreq: 'monthly' });
+    const heroImg = e.data.heroImage;
+    urls.push({
+      loc: `${SITE_URL}/encyklopedie/${e.id}/`,
+      changefreq: 'monthly',
+      lastmod: e.data.lastVerified ? e.data.lastVerified.toISOString().slice(0, 10) : undefined,
+      images: heroImg ? [heroImg] : undefined,
+    });
   }
   for (const p of puda) {
     urls.push({ loc: `${SITE_URL}/puda/${p.id}/`, changefreq: 'monthly' });
@@ -162,7 +196,8 @@ export const GET: APIRoute = async () => {
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap-0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap-0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls.map(renderUrl).join('\n')}
 </urlset>`;
 
