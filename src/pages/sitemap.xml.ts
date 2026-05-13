@@ -124,8 +124,8 @@ export const GET: APIRoute = async () => {
     for (const [catKey, cat] of Object.entries(brand.categories || {})) {
       const families = new Set<string>();
       for (const s of cat.series || []) {
-        families.add((s as any).family || seriesFamily(s.slug));
-        const seriesImg = (s as any).image_url as string | null | undefined;
+        families.add(s.family || seriesFamily(s.slug));
+        const seriesImg = s.image_url;
         urls.push({
           loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/`,
           changefreq: 'monthly',
@@ -133,7 +133,7 @@ export const GET: APIRoute = async () => {
         });
         for (const m of s.models || []) {
           const short = m.slug.startsWith(brand.slug + '-') ? m.slug.slice(brand.slug.length + 1) : m.slug;
-          const modelImg = (m as any).image_url as string | null | undefined;
+          const modelImg = m.image_url;
           const fallback = seriesImg ?? null;
           const imgUrl = modelImg ?? fallback;
           urls.push({

@@ -23,6 +23,10 @@ if (!article) {
   return Astro.rewrite('/404');
 }
 
+// Edge cache for 5 min — published articles rarely change. Editorial updates
+// trigger a CF cache purge via the same hook used after deploys.
+Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
+
 // Shared link-dedup state for perex + body so each entity is linked at most once per page.
 const linkCtx = createLinkContext(`/novinky/${article.slug}/`);
 

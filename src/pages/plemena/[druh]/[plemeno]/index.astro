@@ -84,6 +84,15 @@ const breadcrumbJsonLd = {
 // Thing schema — entity-rich description for AI Overviews + Knowledge Graph candidates.
 // Schema.org has no Breed type; Thing with additionalType points at Wikidata for animal breed
 // (Q38547 = breed). Editors crawling for breed data treat this as a structured anchor.
+const propertyValues: Array<{ '@type': 'PropertyValue'; name: string; value: string | number; unitText?: string }> = [];
+if (plemeno.weight_male_kg) propertyValues.push({ '@type': 'PropertyValue', name: 'Hmotnost samec', value: plemeno.weight_male_kg, unitText: 'kg' });
+if (plemeno.weight_female_kg) propertyValues.push({ '@type': 'PropertyValue', name: 'Hmotnost samice', value: plemeno.weight_female_kg, unitText: 'kg' });
+if (plemeno.height_cm) propertyValues.push({ '@type': 'PropertyValue', name: 'Výška v kohoutku', value: plemeno.height_cm, unitText: 'cm' });
+if (plemeno.milk_yield_kg_year) propertyValues.push({ '@type': 'PropertyValue', name: 'Mléčná užitkovost', value: plemeno.milk_yield_kg_year, unitText: 'kg/rok' });
+if (plemeno.year_registered) propertyValues.push({ '@type': 'PropertyValue', name: 'Uznáno', value: plemeno.year_registered });
+if (plemeno.color) propertyValues.push({ '@type': 'PropertyValue', name: 'Zbarvení', value: plemeno.color });
+if (plemeno.uzitkovost?.length > 0) propertyValues.push({ '@type': 'PropertyValue', name: 'Užitkovost', value: plemeno.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ') });
+
 const thingJsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': 'Thing',
@@ -101,6 +110,7 @@ const thingJsonLd: Record<string, unknown> = {
   ...(plemeno.origin_country && {
     countryOfOrigin: { '@type': 'Country', name: plemeno.origin_country },
   }),
+  ...(propertyValues.length > 0 && { additionalProperty: propertyValues }),
 };
 ---
 

@@ -13,6 +13,10 @@ const { brand: brandSlug } = Astro.params;
 const brand = getBrand(brandSlug!);
 if (!brand) return Astro.rewrite('/404');
 
+// Edge cache for 10 min — brand listing only changes when bazar inventory or
+// YAML data changes (rare). cf-purge runs after every deploy + new listing.
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=600');
+
 const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',
   kombajny: 'Kombajny',
@@ -59,8 +63,8 @@ function buildTilesForCategory(catKey: StrojKategorie): Tile[] {
   if (!cat) return [];
   const byFamily = new Map<string, Tile>();
   for (const s of cat.series ?? []) {
-    const fam = (s as any).family || seriesFamily(s.slug);
-    const labelOverride = (s as any).family_label;
+    const fam = s.family || seriesFamily(s.slug);
+    const labelOverride = s.family_label;
     let t = byFamily.get(fam);
     if (!t) {
       t = {
@@ -82,11 +86,11 @@ function buildTilesForCategory(catKey: StrojKategorie): Tile[] {
     }
     t.seriesCount += 1;
     if (labelOverride) t.label = labelOverride;
-    if (!t.coverImage && (s as any).image_url) {
-      t.coverImage = (s as any).image_url;
-      t.coverCreditUrl = (s as any).image_credit_url || null;
-      t.coverCreditAuthor = (s as any).image_credit || null;
-      t.coverCreditLicense = (s as any).image_license || null;
+    if (!t.coverImage && s.image_url) {
+      t.coverImage = s.image_url;
+      t.coverCreditUrl = s.image_credit_url || null;
+      t.coverCreditAuthor = s.image_credit || null;
+      t.coverCreditLicense = s.image_license || null;
     }
     for (const m of s.models ?? []) {
       t.modelCount += 1;
@@ -212,8 +216,8 @@ try {
 
 const brandUrl = `https://agro-svet.cz/stroje/${brand.slug}/`;
 const sameAs: string[] = [];
-if ((brand as any).wikipedia) sameAs.push((brand as any).wikipedia);
-if ((brand as any).wikidata) sameAs.push((brand as any).wikidata);
+if (brand.wikipedia) sameAs.push(brand.wikipedia);
+if (brand.wikidata) sameAs.push(brand.wikidata);
 if (brand.website) sameAs.push(brand.website);
 
 const breadcrumbJsonLd = {

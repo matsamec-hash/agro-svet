@@ -38,6 +38,9 @@ const model: StrojModel | undefined = series.models.find(
 );
 if (!model) return Astro.rewrite('/404');
 
+// Edge cache for 10 min — model detail only changes on YAML/bazar updates.
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=600');
+
 const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',
   kombajny: 'Kombajny',
@@ -77,7 +80,7 @@ try {
   modelBazarCount = count ?? 0;
 } catch {}
 
-const family = (series as any).family || seriesFamily(series.slug);
+const family = series.family || seriesFamily(series.slug);
 const familyLab = familyLabel(family);
 
 const yr = model.year_from ? (model.year_to ? `${model.year_from}–${model.year_to}` : `${model.year_from}–dosud`) : '';
@@ -146,10 +149,10 @@ if (model.specs) {
 
 const totalSpecCount = performanceSpecs.length + drivetrainSpecs.length + dimensionSpecs.length + otherSpecs.length;
 
-const heroPhoto = (series as any).image_url || categoryHero[category] || '/images/traktor.webp';
-const heroCreditUrl: string | null = (series as any).image_url ? ((series as any).image_credit_url || null) : null;
-const heroCreditAuthor: string | null = (series as any).image_url ? ((series as any).image_credit || null) : null;
-const heroCreditLicense: string | null = (series as any).image_url ? ((series as any).image_license || null) : null;
+const heroPhoto = series.image_url || categoryHero[category] || '/images/traktor.webp';
+const heroCreditUrl: string | null = series.image_url ? (series.image_credit_url || null) : null;
+const heroCreditAuthor: string | null = series.image_url ? (series.image_credit || null) : null;
+const heroCreditLicense: string | null = series.image_url ? (series.image_license || null) : null;
 
 const pageTitle = `${brand.name} ${model.name}`;
 const pageDesc = model.description

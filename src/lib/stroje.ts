@@ -43,6 +43,9 @@ export interface StrojModel {
   grain_tank_l?: number | null;
   description?: string;
   image_url?: string | null;
+  image_credit_url?: string | null;
+  image_credit?: string | null;
+  image_license?: string | null;
   specs?: Record<string, string | number | boolean | null>;
   // NEW optional fields
   pracovni_zaber_m?: number | null;
@@ -58,6 +61,15 @@ export interface StrojSeries {
   year_to: number | null;
   description?: string;
   image_url?: string | null;
+  image_credit_url?: string | null;
+  image_credit?: string | null;
+  image_license?: string | null;
+  /**
+   * Family grouping for tile aggregation on brand page. When omitted,
+   * seriesFamily(slug) computes a default from the slug.
+   */
+  family?: string;
+  family_label?: string;
   /**
    * Sub-category override for brands organized by functional group (e.g. Kverneland uses
    * categories.zpracovani-pudy with series.subcategory: "pluhy"). When set, this is the

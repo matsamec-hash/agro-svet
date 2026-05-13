@@ -18,7 +18,7 @@ const { data: listing } = await supabase
   .single();
 
 if (!listing) {
-  return Astro.redirect('/bazar/');
+  return Astro.rewrite('/404');
 }
 
 // Increment views (debounced — skip bots and recent visitors via cookie)

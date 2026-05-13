@@ -9,7 +9,7 @@ export async function getStaticPaths() {
     for (const [catKey, cat] of Object.entries(b.categories ?? {})) {
       const families = new Set<string>();
       for (const s of cat.series ?? []) {
-        const fam = (s as any).family ?? seriesFamily(s.slug);
+        const fam = s.family ?? seriesFamily(s.slug);
         families.add(String(fam));
       }
       for (const f of families) {
@@ -126,12 +126,12 @@ let heroCreditAuthor: string | null = null;
 let heroCreditLicense: string | null = null;
 function setHeroFrom(s: any) {
   heroPhoto = s.image_url;
-  heroCreditUrl = (s as any).image_credit_url || null;
-  heroCreditAuthor = (s as any).image_credit || null;
-  heroCreditLicense = (s as any).image_license || null;
+  heroCreditUrl = s.image_credit_url || null;
+  heroCreditAuthor = s.image_credit || null;
+  heroCreditLicense = s.image_license || null;
 }
-for (const s of matchingSeries) if ((s as any).image_url && (s.year_to === null || (s.models ?? []).some((m: any) => m.year_to === null))) { setHeroFrom(s); break; }
-if (!heroPhoto) for (const s of matchingSeries) if ((s as any).image_url) { setHeroFrom(s); break; }
+for (const s of matchingSeries) if (s.image_url && (s.year_to === null || (s.models ?? []).some((m: any) => m.year_to === null))) { setHeroFrom(s); break; }
+if (!heroPhoto) for (const s of matchingSeries) if (s.image_url) { setHeroFrom(s); break; }
 if (!heroPhoto) heroPhoto = catHeroFallback;
 
 const lede = seriesData.find((s) => s.description)?.description?.trim() ?? '';

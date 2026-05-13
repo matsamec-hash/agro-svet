@@ -1,5 +1,9 @@
 ---
 import '../styles/global.css';
+// Font preloads — Vite imports resolve to hashed CDN paths at build time.
+// Preloading the most-used latin weights cuts FOIT/CLS on first paint.
+import chakraPetch400 from '@fontsource/chakra-petch/files/chakra-petch-latin-400-normal.woff2?url';
+import chakraPetch700 from '@fontsource/chakra-petch/files/chakra-petch-latin-700-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Lightbox from '../components/bazar/Lightbox.astro';
@@ -82,7 +86,9 @@ const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString()
   <link rel="preconnect" href="https://obhypfuzmknvmknskdwh.supabase.co" crossorigin />
 
   <!-- Fonts self-hosted via @fontsource (imported in src/styles/global.css). -->
-  <!-- No external DNS lookup or third-party request — same-origin from CF Workers Assets. -->
+  <!-- Preload the two most-used Chakra Petch latin weights to cut first paint FOIT. -->
+  <link rel="preload" as="font" type="font/woff2" href={chakraPetch400} crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href={chakraPetch700} crossorigin />
 </head>
 <body>
   <a href="#main-content" class="skip-link">Přeskočit na obsah</a>
