@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 import { SITE_URL } from './config';
 
 const FROM = 'Agro-svět <newsletter@mail.agro-svet.cz>';
-const REPLY_TO = 'info@agro-svet.cz';
+const REPLY_TO = 'info@samecdigital.com';
 
 export function buildUnsubscribeUrl(unsubscribeToken: string): string {
   return `${SITE_URL}/api/newsletter/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}`;

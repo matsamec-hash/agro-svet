@@ -22,14 +22,27 @@ const orgJsonLd = {
   },
   parentOrganization: {
     '@type': 'Organization',
-    name: 'Samec Digital',
+    name: 'Samec Digital s.r.o.',
+    legalName: 'Samec Digital s.r.o.',
+    identifier: {
+      '@type': 'PropertyValue',
+      propertyID: 'IČO',
+      value: '29547539',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Na Břehu 378',
+      postalCode: '387 11',
+      addressLocality: 'Katovice',
+      addressCountry: 'CZ',
+    },
   },
   diversityPolicy: `${SITE_URL}/redakce/`,
   ethicsPolicy: `${SITE_URL}/redakce/`,
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'editorial',
-    email: 'redakce@agro-svet.cz',
+    email: 'info@samecdigital.com',
     availableLanguage: 'Czech',
   },
 };
@@ -82,11 +95,12 @@ const orgJsonLd = {
       <h2>Kontakt</h2>
       <p>
         Pro tipy, tiskové zprávy a obecné dotazy napište na
-        <a href="mailto:redakce@agro-svet.cz">redakce@agro-svet.cz</a>.
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
         Pro inzertní spolupráci využijte stejný kontakt s předmětem „Inzerce".
       </p>
       <p class="provoz">
-        Web provozuje <a href="https://samec.digital" target="_blank" rel="noopener">Samec Digital</a>.
+        Web provozuje <a href="https://samecdigital.com" target="_blank" rel="noopener">Samec Digital s.r.o.</a>,
+        IČO 29547539, se sídlem Na Břehu 378, 387 11 Katovice.
       </p>
     </section>
   </main>
