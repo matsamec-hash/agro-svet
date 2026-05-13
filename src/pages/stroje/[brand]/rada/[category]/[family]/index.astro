@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 
 const { brand: brandSlug, category: categorySlug, family } = Astro.params;
 const brand = getBrand(brandSlug!);
-if (!brand) return Astro.redirect('/stroje/');
+if (!brand) return Astro.rewrite('/404');
 
 const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',
@@ -36,10 +36,10 @@ const catLabel = categoryLabels[categorySlug as StrojKategorie] ?? categorySlug;
 const catHeroFallback = categoryHero[categorySlug as StrojKategorie] ?? '/images/traktor.webp';
 
 const cat = brand.categories?.[categorySlug as StrojKategorie];
-if (!cat) return Astro.redirect(`/stroje/${brand.slug}/`);
+if (!cat) return Astro.rewrite('/404');
 
 const matchingSeries = (cat.series ?? []).filter((s: any) => (s.family || seriesFamily(s.slug)) === family);
-if (matchingSeries.length === 0) return Astro.redirect(`/stroje/${brand.slug}/`);
+if (matchingSeries.length === 0) return Astro.rewrite('/404');
 
 const brandColors: Record<string, [string, string]> = {
   'john-deere': ['#4A9838', '#2E6B22'],

@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const items = await getCollection('encyklopedie');
 const item = items.find((i) => i.id === slug);
-if (!item) return Astro.redirect('/encyklopedie/');
+if (!item) return Astro.rewrite('/404');
 const { Content } = await render(item);
 
 // Related encyklopedie items: same znacka first, then same kategorie.
@@ -71,11 +71,36 @@ const lastVerifiedFmt = item.data.lastVerified
   ? new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
   : null;
 const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : null;
+
+// Article schema with explicit author + dateModified — E-E-A-T signal.
+// Lives alongside Vehicle/Product schema (entity-rich); Google handles multiple types.
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: item.data.name,
+  description: item.data.popis,
+  ...(heroImageAbs && { image: heroImageAbs }),
+  author: {
+    '@type': 'Organization',
+    name: 'Redakce agro-svět.cz',
+    url: 'https://agro-svet.cz/redakce/',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'agro-svět.cz',
+    url: 'https://agro-svet.cz',
+    logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' },
+  },
+  ...(lastVerifiedIso && { dateModified: lastVerifiedIso, datePublished: lastVerifiedIso }),
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  inLanguage: 'cs-CZ',
+};
 ---
 
 <Layout title={item.data.name} description={item.data.popis} canonical={pageUrl} ogType="product" ogImage={heroImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
 
   {item.data.heroImage && (
@@ -106,7 +131,20 @@ const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOStr
       <span style="font-size:13px; color:#767676;">{item.data.znacka.toUpperCase()} · od {item.data.rok_uvedeni}</span>
     </div>
 
-    <h1 style="font-size:clamp(2rem,5vw,3rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:24px;">{item.data.name}</h1>
+    <h1 style="font-size:clamp(2rem,5vw,3rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:12px;">{item.data.name}</h1>
+
+    <!-- Author byline (E-E-A-T signal above the fold) -->
+    <div class="byline" style="display:flex; gap:12px; align-items:center; font-size:13.5px; color:#5a5a62; margin-bottom:32px; padding-bottom:16px; border-bottom:1px solid #ebebeb; flex-wrap:wrap;">
+      <span>
+        Zpracováno <a href="/redakce/" style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">redakcí agro-svět.cz</a>
+      </span>
+      {lastVerifiedFmt && (
+        <>
+          <span style="color:#c0c0c8;" aria-hidden="true">·</span>
+          <span>Naposledy ověřeno <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time></span>
+        </>
+      )}
+    </div>
 
     <!-- Spec grid -->
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:40px;">

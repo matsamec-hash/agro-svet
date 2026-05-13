@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { druh: druhSlug, plemeno: plemenoSlug } = Astro.params;
 const found = getPlemeno(druhSlug!, plemenoSlug!);
-if (!found) return Astro.redirect('/plemena/');
+if (!found) return Astro.rewrite('/404');
 const { druh, plemeno } = found;
 
 const druhEmoji: Record<string, string> = { hovezi: '🐄', ovce: '🐑', kone: '🐎', prasata: '🐖' };

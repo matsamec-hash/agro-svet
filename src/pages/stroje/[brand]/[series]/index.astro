@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 
 const { brand: brandSlug, series: seriesSlug } = Astro.params;
 const found = getSeries(brandSlug!, seriesSlug!);
-if (!found) return Astro.redirect('/stroje/');
+if (!found) return Astro.rewrite('/404');
 const { brand, category, series } = found;
 
 const categoryLabels: Record<StrojKategorie, string> = {

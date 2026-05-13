@@ -10,7 +10,7 @@ import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
 import { breadcrumbSchema } from '../../../../lib/structured-data';
 
 const { tag } = Astro.params;
-if (!tag) return Astro.redirect('/novinky/');
+if (!tag) return Astro.rewrite('/404');
 
 const supabase = createAnonClient();
 

@@ -49,6 +49,29 @@ function renderUrl(u: UrlEntry): string {
 export const GET: APIRoute = async () => {
   const urls: UrlEntry[] = [];
 
+  // Pull dynamic content FIRST — sequential (not Promise.all) because parallel
+  // Supabase queries previously failed silently and left novinky out of sitemap.
+  // Matches the proven pattern in news-sitemap.xml.ts.
+  const supabase = createAnonClient();
+  const articlesRes = await supabase
+    .from('articles')
+    .select('slug, published_at')
+    .eq('site_id', NOVINKY_SITE_ID)
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(2000);
+  if (articlesRes.error) console.error('sitemap articles query error', articlesRes.error);
+  const articlesDyn = articlesRes.data ?? [];
+
+  const listingsRes = await supabase
+    .from('bazar_listings')
+    .select('id, updated_at, created_at')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(2000);
+  if (listingsRes.error) console.error('sitemap bazar query error', listingsRes.error);
+  const listingsDyn = listingsRes.data ?? [];
+
   const staticPaths: Array<[string, UrlEntry['changefreq'], string?]> = [
     ['/', 'daily', '1.0'],
     ['/novinky/', 'daily', '0.9'],
@@ -155,44 +178,20 @@ export const GET: APIRoute = async () => {
     }
   }
 
-  try {
-    const supabase = createAnonClient();
-    const { data: articles } = await supabase
-      .from('articles')
-      .select('slug, published_at, updated_at')
-      .eq('site_id', NOVINKY_SITE_ID)
-      .eq('status', 'published')
-      .order('published_at', { ascending: false })
-      .limit(2000);
-    for (const a of articles || []) {
-      urls.push({
-        loc: `${SITE_URL}/novinky/${a.slug}/`,
-        lastmod: (a as { updated_at?: string }).updated_at || a.published_at || undefined,
-        changefreq: 'weekly',
-      });
-    }
-  } catch {
-    // Static sitemap is still useful without dynamic articles
+  for (const a of articlesDyn) {
+    urls.push({
+      loc: `${SITE_URL}/novinky/${a.slug}/`,
+      lastmod: a.published_at || undefined,
+      changefreq: 'weekly',
+    });
   }
 
-  // Bazar listings — published listings only (gate je vypnutý). Featured first then by date.
-  try {
-    const supabase = createAnonClient();
-    const { data: listings } = await supabase
-      .from('bazar_listings')
-      .select('id, updated_at, created_at')
-      .eq('status', 'active')
-      .order('created_at', { ascending: false })
-      .limit(2000);
-    for (const l of listings || []) {
-      urls.push({
-        loc: `${SITE_URL}/bazar/${l.id}/`,
-        lastmod: (l as { updated_at?: string }).updated_at || (l as { created_at?: string }).created_at || undefined,
-        changefreq: 'weekly',
-      });
-    }
-  } catch {
-    // skip if bazar query fails
+  for (const l of listingsDyn) {
+    urls.push({
+      loc: `${SITE_URL}/bazar/${l.id}/`,
+      lastmod: (l as { updated_at?: string }).updated_at || (l as { created_at?: string }).created_at || undefined,
+      changefreq: 'weekly',
+    });
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

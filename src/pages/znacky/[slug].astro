@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const znacky = await getCollection('znacky');
 const znacka = znacky.find((z) => z.id === slug);
-if (!znacka) return Astro.redirect('/znacky/');
+if (!znacka) return Astro.rewrite('/404');
 const { Content } = await render(znacka);
 
 const canonical = `https://agro-svet.cz/znacky/${znacka.id}/`;

@@ -4,7 +4,9 @@ import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 
 const PUBLICATION_NAME = 'agro-svět.cz';
 const PUBLICATION_LANG = 'cs';
-const FRESHNESS_HOURS = 48;
+// Google News accepts up to 2 days strictly, but in practice indexes up to 30.
+// Wider window so sitemap is never empty between publishing cadences.
+const FRESHNESS_HOURS = 24 * 30;
 
 const XML_ESCAPES: Record<string, string> = {
   '<': '&lt;',

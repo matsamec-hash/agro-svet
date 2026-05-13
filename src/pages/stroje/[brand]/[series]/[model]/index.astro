@@ -28,7 +28,7 @@ export async function getStaticPaths() {
 const { brand: brandSlug, series: seriesSlug, model: modelParam } = Astro.params;
 const { modelSlug: modelSlugFromProps } = (Astro.props ?? {}) as { modelSlug?: string };
 const found = getSeries(brandSlug!, seriesSlug!);
-if (!found) return Astro.redirect('/stroje/');
+if (!found) return Astro.rewrite('/404');
 const { brand, category, series } = found;
 // SSR: props is empty (getStaticPaths not invoked), resolve from URL param.
 // Match against full slug (e.g. "john-deere-6195m") or short ("6195m").
@@ -36,7 +36,7 @@ const candidate = modelSlugFromProps ?? modelParam ?? '';
 const model: StrojModel | undefined = series.models.find(
   (m) => m.slug === candidate || m.slug === `${brand.slug}-${candidate}`,
 );
-if (!model) return Astro.redirect(`/stroje/${brandSlug}/${seriesSlug}/`);
+if (!model) return Astro.rewrite('/404');
 
 const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',

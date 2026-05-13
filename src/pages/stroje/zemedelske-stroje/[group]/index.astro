@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 
 const { group: groupSlug } = Astro.params;
 const group = FUNCTIONAL_GROUPS[groupSlug as FunctionalGroupSlug];
-if (!group) return Astro.redirect('/stroje/zemedelske-stroje/');
+if (!group) return Astro.rewrite('/404');
 
 const allBrands = getAllBrands();
 const allModels = getAllModels();

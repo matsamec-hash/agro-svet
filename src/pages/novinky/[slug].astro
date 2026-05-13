@@ -20,7 +20,7 @@ const { data: article } = await supabase
   .single();
 
 if (!article) {
-  return Astro.redirect('/novinky/');
+  return Astro.rewrite('/404');
 }
 
 // Shared link-dedup state for perex + body so each entity is linked at most once per page.
@@ -202,13 +202,27 @@ const jsonLd = {
           {categoryLabels[article.category] ?? article.category}
         </span>
       )}
-      <time style="font-size:13px; color:#666;">{date}</time>
+      <time datetime={article.published_at} style="font-size:13px; color:#666;">{date}</time>
     </div>
 
     <!-- Headline -->
-    <h1 style="font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.5px; line-height:1.15; color:#1a1a1a; margin-bottom:16px;">
+    <h1 style="font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.5px; line-height:1.15; color:#1a1a1a; margin-bottom:12px;">
       {article.title}
     </h1>
+
+    <!-- Author byline (E-E-A-T signal above the fold) -->
+    <div class="byline" style="display:flex; gap:10px; align-items:center; font-size:13.5px; color:#5a5a62; margin-bottom:28px;">
+      <span>
+        Napsala <a href="/redakce/" style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">redakce agro-svět.cz</a>
+      </span>
+      {article.updated_at && article.updated_at !== article.published_at && (
+        <>
+          <span style="color:#c0c0c8;" aria-hidden="true">·</span>
+          <span>Aktualizováno <time datetime={article.updated_at}>{new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.updated_at))}</time></span>
+        </>
+      )}
+    </div>
+
     <p style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;" set:html={injectLinksInText(article.perex, linkCtx)} />
 
     <!-- Article body (HTML from CMS) — auto-linker injects internal links to brands/plemena/stroje hubs. Shares used-set with perex above. -->

@@ -15,7 +15,7 @@ const items = await getCollection('puda');
 const item = items.find(i => i.id === slug);
 
 if (!item) {
-  return Astro.redirect('/puda/');
+  return Astro.rewrite('/404');
 }
 
 const { Content } = await render(item);

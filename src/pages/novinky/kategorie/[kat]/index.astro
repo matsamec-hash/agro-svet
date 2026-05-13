@@ -16,7 +16,7 @@ export function getStaticPaths() {
 }
 
 const { kat } = Astro.params;
-if (!kat) return Astro.redirect('/novinky/');
+if (!kat) return Astro.rewrite('/404');
 
 const categoryLabels: Record<string, string> = {
   technika: 'Technika',
