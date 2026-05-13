@@ -333,6 +333,37 @@ const seriesListJsonLd = allSeries.length > 0
       </div>
     )}
 
+    <!-- Brand-scope filter — power range + legacy toggle -->
+    <div class="bp-filter" id="bp-filter">
+      <div class="bp-filter-head">
+        <span class="bp-filter-title">Filtry</span>
+        <span class="bp-filter-result" id="bp-filter-result"></span>
+        <button type="button" class="bp-filter-reset" id="bp-filter-reset" hidden>Zrušit</button>
+      </div>
+      <div class="bp-filter-ctl">
+        <div class="bp-group">
+          <label class="bp-label" for="bp-hp-min">Výkon (k)</label>
+          <div class="bp-range">
+            <input type="number" id="bp-hp-min" class="bp-num" min="0" max="800" placeholder={`${minHp ?? 0}`} inputmode="numeric" aria-label="Minimální výkon" />
+            <span class="bp-sep">–</span>
+            <input type="number" id="bp-hp-max" class="bp-num" min="0" max="800" placeholder={`${maxHp ?? 700}`} inputmode="numeric" aria-label="Maximální výkon" />
+          </div>
+        </div>
+        <div class="bp-group">
+          <label class="bp-label" for="bp-year-min">Rok</label>
+          <div class="bp-range">
+            <input type="number" id="bp-year-min" class="bp-num" min="1950" max="2030" placeholder="—" inputmode="numeric" aria-label="Minimální rok" />
+            <span class="bp-sep">–</span>
+            <input type="number" id="bp-year-max" class="bp-num" min="1950" max="2030" placeholder="—" inputmode="numeric" aria-label="Maximální rok" />
+          </div>
+        </div>
+        <label class="bp-checkbox">
+          <input type="checkbox" id="bp-include-legacy" />
+          <span>Včetně starších řad</span>
+        </label>
+      </div>
+    </div>
+
     {categories.map((cat) => (
       <section class="cat" id={cat.slug}>
         <div class="cat-head">
@@ -368,7 +399,15 @@ const seriesListJsonLd = allSeries.length > 0
                   ? `background-image:url('${t.coverImage}'); background-color:#FFFFFF; background-size:cover; background-position:center;`
                   : `background:linear-gradient(135deg, ${brandC1} 0%, ${brandC2} 100%)`;
                 return (
-                  <a class="family-tile" href={`/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`}>
+                  <a
+                    class="family-tile"
+                    href={`/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`}
+                    data-min-hp={t.minHp ?? ''}
+                    data-max-hp={t.maxHp ?? ''}
+                    data-min-year={t.minYear ?? ''}
+                    data-max-year={t.maxYear ?? ''}
+                    data-current="1"
+                  >
                     <div class="ft-cover" data-has-photo={t.coverImage ? 'true' : 'false'} style={coverStyle}>
                       {!t.coverImage && (
                         <svg class="ft-silhouette" width="120" height="68" viewBox="0 0 140 80" fill="rgba(0,0,0,.18)" aria-hidden="true">
@@ -435,7 +474,15 @@ const seriesListJsonLd = allSeries.length > 0
                   ? `background-image:url('${t.coverImage}'); background-color:#FFFFFF; background-size:cover; background-position:center;`
                   : `background:linear-gradient(135deg, ${brandC1} 0%, ${brandC2} 100%)`;
                 return (
-                  <a class="family-tile is-legacy" href={`/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`}>
+                  <a
+                    class="family-tile is-legacy"
+                    href={`/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`}
+                    data-min-hp={t.minHp ?? ''}
+                    data-max-hp={t.maxHp ?? ''}
+                    data-min-year={t.minYear ?? ''}
+                    data-max-year={t.maxYear ?? ''}
+                    data-current="0"
+                  >
                     <div class="ft-cover" data-has-photo={t.coverImage ? 'true' : 'false'} style={coverStyle}>
                       {!t.coverImage && (
                         <svg class="ft-silhouette" width="120" height="68" viewBox="0 0 140 80" fill="rgba(0,0,0,.22)" aria-hidden="true">
@@ -484,6 +531,8 @@ const seriesListJsonLd = allSeries.length > 0
         )}
       </section>
     ))}
+
+    <div class="bp-empty" id="bp-empty">Žádné řady neodpovídají vašim filtrům. Zkuste rozšířit rozsah výkonu, povolit starší řady, nebo zrušit filtry.</div>
 
     <section class="big-cta">
       <div>
@@ -803,9 +852,151 @@ const seriesListJsonLd = allSeries.length > 0
     .brand-page .cat-head{align-items:flex-start}
     .brand-page .split-bar{top:72px}
   }
+
+  /* Brand-scope filter */
+  .brand-page .bp-filter{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 18px;margin:0 0 22px;box-shadow:var(--sh-1);
+  }
+  .brand-page .bp-filter-head{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding-bottom:10px;margin-bottom:12px;border-bottom:1px dashed var(--line);
+  }
+  .brand-page .bp-filter-title{font:700 13px 'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+  .brand-page .bp-filter-result{font:600 13px 'Chakra Petch',sans-serif;color:var(--muted);margin-left:auto}
+  .brand-page .bp-filter-result.is-filtered{color:var(--ink)}
+  .brand-page .bp-filter-reset{
+    background:var(--yellow-soft);border:1px solid var(--yellow);
+    color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer;
+    font:700 11.5px 'Chakra Petch',sans-serif;letter-spacing:.06em;transition:.15s;
+  }
+  .brand-page .bp-filter-reset:hover{background:var(--yellow);transform:translateY(-1px)}
+  .brand-page .bp-filter-ctl{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end}
+  .brand-page .bp-group{display:flex;flex-direction:column;gap:5px}
+  .brand-page .bp-label{font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .brand-page .bp-range{display:flex;align-items:center;gap:6px}
+  .brand-page .bp-num{
+    width:72px;padding:7px 10px;font:600 13px 'Chakra Petch',sans-serif;
+    background:#FBFAF4;border:1px solid var(--line);border-radius:7px;color:var(--ink);
+    outline:none;transition:.12s;
+  }
+  .brand-page .bp-num:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,234,0,.25);background:#fff}
+  .brand-page .bp-sep{color:var(--muted-2);font-size:12px}
+  .brand-page .bp-checkbox{
+    display:inline-flex;align-items:center;gap:8px;
+    font:600 13px 'Chakra Petch',sans-serif;color:var(--ink);cursor:pointer;
+    padding:8px 0;
+  }
+  .brand-page .bp-checkbox input{width:16px;height:16px;accent-color:var(--ink);cursor:pointer}
+  .brand-page .family-tile.is-hidden{display:none !important}
+  .brand-page .bp-empty{
+    background:#FBFAF4;border:1px dashed var(--line-2);
+    border-radius:14px;padding:36px 24px;text-align:center;
+    font:500 14.5px 'Chakra Petch',sans-serif;color:var(--muted);
+    display:none;
+  }
+  .brand-page .bp-empty.is-visible{display:block}
 </style>
 
 <script>
+  // ── Brand-scope filter ────────────────────────────────────────────────────
+  const bpFilter = document.getElementById('bp-filter');
+  const bpHpMin = document.getElementById('bp-hp-min') as HTMLInputElement | null;
+  const bpHpMax = document.getElementById('bp-hp-max') as HTMLInputElement | null;
+  const bpYearMin = document.getElementById('bp-year-min') as HTMLInputElement | null;
+  const bpYearMax = document.getElementById('bp-year-max') as HTMLInputElement | null;
+  const bpLegacy = document.getElementById('bp-include-legacy') as HTMLInputElement | null;
+  const bpReset = document.getElementById('bp-filter-reset');
+  const bpResult = document.getElementById('bp-filter-result');
+  const bpEmpty = document.getElementById('bp-empty');
+  const bpTiles = Array.from(document.querySelectorAll<HTMLElement>('.brand-page .family-tile'));
+
+  function bpReadState() {
+    return {
+      hpMin: bpHpMin?.value ? parseInt(bpHpMin.value, 10) || null : null,
+      hpMax: bpHpMax?.value ? parseInt(bpHpMax.value, 10) || null : null,
+      yearMin: bpYearMin?.value ? parseInt(bpYearMin.value, 10) || null : null,
+      yearMax: bpYearMax?.value ? parseInt(bpYearMax.value, 10) || null : null,
+      includeLegacy: bpLegacy?.checked ?? false,
+    };
+  }
+
+  function bpTileMatches(tile: HTMLElement, st: ReturnType<typeof bpReadState>): boolean {
+    if (!st.includeLegacy && tile.dataset.current !== '1') return false;
+    const tMinHp = parseInt(tile.dataset.minHp ?? '', 10);
+    const tMaxHp = parseInt(tile.dataset.maxHp ?? '', 10);
+    if (st.hpMin !== null && !Number.isNaN(tMaxHp) && tMaxHp < st.hpMin) return false;
+    if (st.hpMax !== null && !Number.isNaN(tMinHp) && tMinHp > st.hpMax) return false;
+    const tMinYear = parseInt(tile.dataset.minYear ?? '', 10);
+    const tMaxYear = parseInt(tile.dataset.maxYear ?? '', 10);
+    if (st.yearMin !== null && !Number.isNaN(tMaxYear) && tMaxYear < st.yearMin) return false;
+    if (st.yearMax !== null && !Number.isNaN(tMinYear) && tMinYear > st.yearMax) return false;
+    return true;
+  }
+
+  function bpIsFiltered(st: ReturnType<typeof bpReadState>): boolean {
+    return st.hpMin !== null || st.hpMax !== null || st.yearMin !== null || st.yearMax !== null || st.includeLegacy;
+  }
+
+  function bpApply() {
+    const st = bpReadState();
+    let visible = 0;
+    for (const t of bpTiles) {
+      const match = bpTileMatches(t, st);
+      t.classList.toggle('is-hidden', !match);
+      if (match) visible += 1;
+    }
+    if (bpResult) {
+      bpResult.textContent = `${visible} ${visible === 1 ? 'řada' : visible < 5 ? 'řady' : 'řad'}`;
+      bpResult.classList.toggle('is-filtered', bpIsFiltered(st));
+    }
+    if (bpReset) bpReset.hidden = !bpIsFiltered(st);
+    if (bpEmpty) bpEmpty.classList.toggle('is-visible', visible === 0);
+    bpSyncUrl(st);
+  }
+
+  function bpSyncUrl(st: ReturnType<typeof bpReadState>) {
+    if (!('replaceState' in history)) return;
+    const params = new URLSearchParams();
+    if (st.hpMin !== null) params.set('hp_min', String(st.hpMin));
+    if (st.hpMax !== null) params.set('hp_max', String(st.hpMax));
+    if (st.yearMin !== null) params.set('year_min', String(st.yearMin));
+    if (st.yearMax !== null) params.set('year_max', String(st.yearMax));
+    if (st.includeLegacy) params.set('legacy', '1');
+    const qs = params.toString();
+    history.replaceState(null, '', (qs ? `${location.pathname}?${qs}` : location.pathname) + location.hash);
+  }
+
+  function bpLoadFromUrl() {
+    const params = new URLSearchParams(location.search);
+    if (bpHpMin && params.has('hp_min')) bpHpMin.value = params.get('hp_min') ?? '';
+    if (bpHpMax && params.has('hp_max')) bpHpMax.value = params.get('hp_max') ?? '';
+    if (bpYearMin && params.has('year_min')) bpYearMin.value = params.get('year_min') ?? '';
+    if (bpYearMax && params.has('year_max')) bpYearMax.value = params.get('year_max') ?? '';
+    if (bpLegacy && params.get('legacy') === '1') bpLegacy.checked = true;
+  }
+
+  function bpResetAll() {
+    if (bpHpMin) bpHpMin.value = '';
+    if (bpHpMax) bpHpMax.value = '';
+    if (bpYearMin) bpYearMin.value = '';
+    if (bpYearMax) bpYearMax.value = '';
+    if (bpLegacy) bpLegacy.checked = false;
+    bpApply();
+  }
+
+  if (bpFilter) {
+    bpLoadFromUrl();
+    bpHpMin?.addEventListener('input', bpApply);
+    bpHpMax?.addEventListener('input', bpApply);
+    bpYearMin?.addEventListener('input', bpApply);
+    bpYearMax?.addEventListener('input', bpApply);
+    bpLegacy?.addEventListener('change', bpApply);
+    bpReset?.addEventListener('click', bpResetAll);
+    bpApply();
+  }
+
+  // ── Scroll-spy (existing) ─────────────────────────────────────────────────
   const pills = document.querySelectorAll<HTMLAnchorElement>('.brand-page .cat-pills .pill');
   const sections = document.querySelectorAll<HTMLElement>('.brand-page .cat[id]');
   if (pills.length && sections.length && 'IntersectionObserver' in window) {

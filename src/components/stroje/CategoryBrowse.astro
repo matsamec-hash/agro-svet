@@ -279,10 +279,63 @@ const catLede = categoryLede[category];
     </div>
   </div>
 
+  <!-- Filter bar — client-side filters tiles by power / year / current production / brand -->
+  <div class="filter-bar" id="filter-bar" data-min-hp={minHp ?? 0} data-max-hp={maxHp ?? (category === 'traktory' ? 620 : 700)}>
+    <div class="filter-head">
+      <span class="filter-title">Filtry</span>
+      <span class="filter-result" id="filter-result">{totalModels} modelů ve {totalBrands} značkách</span>
+      <button type="button" class="filter-reset" id="filter-reset" hidden>Zrušit filtry</button>
+    </div>
+    <div class="filter-controls">
+      <div class="filter-group filter-range">
+        <label class="filter-label" for="filter-hp-min">Výkon (k)</label>
+        <div class="range-inputs">
+          <input type="number" id="filter-hp-min" class="filter-num" min={minHp ?? 0} max={maxHp ?? 700} placeholder={`${minHp ?? 0}`} inputmode="numeric" aria-label="Minimální výkon" />
+          <span class="range-sep">–</span>
+          <input type="number" id="filter-hp-max" class="filter-num" min={minHp ?? 0} max={maxHp ?? 700} placeholder={`${maxHp ?? 700}`} inputmode="numeric" aria-label="Maximální výkon" />
+        </div>
+      </div>
+
+      <div class="filter-group filter-range">
+        <label class="filter-label" for="filter-year-min">Rok uvedení</label>
+        <div class="range-inputs">
+          <input type="number" id="filter-year-min" class="filter-num" min="1950" max="2030" placeholder="1990" inputmode="numeric" aria-label="Minimální rok" />
+          <span class="range-sep">–</span>
+          <input type="number" id="filter-year-max" class="filter-num" min="1950" max="2030" placeholder="2026" inputmode="numeric" aria-label="Maximální rok" />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-checkbox">
+          <input type="checkbox" id="filter-current" checked />
+          <span>Pouze v prodeji</span>
+        </label>
+      </div>
+
+      <details class="filter-group filter-brands">
+        <summary class="filter-brands-summary">Značky <span class="fb-count" id="filter-brand-count"></span></summary>
+        <div class="filter-brands-list">
+          {sections.map((s) => (
+            <label class="filter-checkbox">
+              <input type="checkbox" class="filter-brand-cb" value={s.slug} checked />
+              <span>{s.name} <span class="muted">({s.modelCount})</span></span>
+            </label>
+          ))}
+        </div>
+      </details>
+    </div>
+  </div>
+
   {sections.map((s) => {
     const [c1, c2] = brandTone(s.slug);
     return (
-      <section class="brand" id={s.slug}>
+      <section
+        class="brand"
+        id={s.slug}
+        data-brand={s.slug}
+        data-min-hp={s.minHp ?? ''}
+        data-max-hp={s.maxHp ?? ''}
+      >
         <div class="brand-head">
           <div class="brand-title">
             <div class="brand-logo" data-letter={s.name.charAt(0).toUpperCase()}>
@@ -327,7 +380,16 @@ const catLede = categoryLede[category];
               ? `background-image:url('${t.coverImage}'); background-color:#FFFFFF; background-size:cover; background-position:center;`
               : `background:linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
             return (
-              <a class="family-tile" href={`/stroje/${s.slug}/rada/${category}/${t.family}/`}>
+              <a
+                class="family-tile"
+                href={`/stroje/${s.slug}/rada/${category}/${t.family}/`}
+                data-brand={s.slug}
+                data-min-hp={t.minHp ?? ''}
+                data-max-hp={t.maxHp ?? ''}
+                data-min-year={t.minYear ?? ''}
+                data-max-year={t.maxYear ?? ''}
+                data-current={t.hasCurrent ? '1' : '0'}
+              >
                 <div class="ft-cover" data-has-photo={t.coverImage ? 'true' : 'false'} style={coverStyle}>
                   {t.coverImage && (() => {
                     const url = t.coverCreditUrl || brandCreditUrl[s.slug];
@@ -402,6 +464,11 @@ const catLede = categoryLede[category];
       </section>
     );
   })}
+
+  <div class="filter-empty" id="filter-empty">
+    <strong>Žádné modely neodpovídají filtrům.</strong>
+    Zkuste rozšířit rozsah výkonu nebo roku, nebo zrušte filtry.
+  </div>
 
   <section class="big-cta">
     <div>
@@ -731,9 +798,232 @@ const catLede = categoryLede[category];
     .catalog-page .show-all-cta{flex-direction:column;align-items:flex-start;gap:8px}
     .catalog-page .split-bar{top:72px}
   }
+
+  /* Filter bar */
+  .catalog-page .filter-bar{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 18px;margin:0 0 22px;box-shadow:var(--sh-1);
+  }
+  .catalog-page .filter-head{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding-bottom:10px;margin-bottom:12px;border-bottom:1px dashed var(--line);
+  }
+  .catalog-page .filter-title{font:700 13px 'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+  .catalog-page .filter-result{font:600 13px 'Chakra Petch',sans-serif;color:var(--muted);margin-left:auto}
+  .catalog-page .filter-result.is-filtered{color:var(--ink)}
+  .catalog-page .filter-reset{
+    background:var(--yellow-soft);border:1px solid var(--yellow);
+    color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer;
+    font:700 11.5px 'Chakra Petch',sans-serif;letter-spacing:.06em;transition:.15s;
+  }
+  .catalog-page .filter-reset:hover{background:var(--yellow);transform:translateY(-1px)}
+  .catalog-page .filter-controls{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  .catalog-page .filter-group{display:flex;flex-direction:column;gap:5px;min-width:140px}
+  .catalog-page .filter-label{font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .catalog-page .range-inputs{display:flex;align-items:center;gap:6px}
+  .catalog-page .filter-num{
+    width:72px;padding:7px 10px;font:600 13px 'Chakra Petch',sans-serif;
+    background:#FBFAF4;border:1px solid var(--line);border-radius:7px;color:var(--ink);
+    outline:none;transition:.12s;
+  }
+  .catalog-page .filter-num:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,234,0,.25);background:#fff}
+  .catalog-page .range-sep{color:var(--muted-2);font-size:12px}
+  .catalog-page .filter-checkbox{
+    display:inline-flex;align-items:center;gap:8px;
+    font:600 13px 'Chakra Petch',sans-serif;color:var(--ink);cursor:pointer;
+    padding:8px 0;
+  }
+  .catalog-page .filter-checkbox input{width:16px;height:16px;accent-color:var(--ink);cursor:pointer}
+  .catalog-page .filter-checkbox .muted{color:var(--muted);font-weight:500}
+  .catalog-page .filter-brands{position:relative}
+  .catalog-page .filter-brands-summary{
+    list-style:none;cursor:pointer;padding:7px 12px;background:#FBFAF4;
+    border:1px solid var(--line);border-radius:7px;font:600 13px 'Chakra Petch',sans-serif;
+    color:var(--ink);user-select:none;transition:.12s;
+  }
+  .catalog-page .filter-brands-summary::-webkit-details-marker{display:none}
+  .catalog-page .filter-brands[open] .filter-brands-summary{background:var(--yellow-soft);border-color:var(--yellow)}
+  .catalog-page .filter-brands-summary .fb-count{color:var(--muted);font-weight:500;margin-left:4px;font-size:12px}
+  .catalog-page .filter-brands-list{
+    position:absolute;top:100%;left:0;margin-top:6px;z-index:20;
+    background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:8px 12px;min-width:220px;max-height:320px;overflow-y:auto;
+    box-shadow:var(--sh-2);display:flex;flex-direction:column;gap:2px;
+  }
+
+  /* Filtered-out states */
+  .catalog-page .family-tile.is-hidden,
+  .catalog-page .brand.is-hidden,
+  .catalog-page .pill.is-hidden {
+    display:none !important;
+  }
+  .catalog-page .filter-empty{
+    background:var(--bg-cream);border:1px dashed var(--line-2);
+    border-radius:14px;padding:48px 32px;text-align:center;
+    font:500 15px 'Chakra Petch',sans-serif;color:var(--muted);
+    display:none;
+  }
+  .catalog-page .filter-empty.is-visible{display:block}
+  .catalog-page .filter-empty strong{color:var(--ink);display:block;margin-bottom:8px;font-size:18px}
+
+  @media (max-width:720px){
+    .catalog-page .filter-controls{flex-direction:column;align-items:stretch}
+    .catalog-page .filter-group{min-width:0}
+    .catalog-page .filter-brands-list{position:static;margin-top:8px;width:auto}
+    .catalog-page .filter-result{margin-left:0;width:100%}
+  }
 </style>
 
 <script>
+  // ── Filter logic ──────────────────────────────────────────────────────────
+  // Filters family tiles in-place; hides whole brand sections that lose all
+  // visible tiles. URL is updated via replaceState so the filter survives
+  // reload + back/forward.
+  const filterBar = document.getElementById('filter-bar');
+  const hpMinInput = document.getElementById('filter-hp-min') as HTMLInputElement | null;
+  const hpMaxInput = document.getElementById('filter-hp-max') as HTMLInputElement | null;
+  const yearMinInput = document.getElementById('filter-year-min') as HTMLInputElement | null;
+  const yearMaxInput = document.getElementById('filter-year-max') as HTMLInputElement | null;
+  const currentInput = document.getElementById('filter-current') as HTMLInputElement | null;
+  const brandCheckboxes = document.querySelectorAll<HTMLInputElement>('.filter-brand-cb');
+  const brandCountEl = document.getElementById('filter-brand-count');
+  const resetBtn = document.getElementById('filter-reset');
+  const resultEl = document.getElementById('filter-result');
+  const emptyEl = document.getElementById('filter-empty');
+  const tiles = Array.from(document.querySelectorAll<HTMLElement>('.catalog-page .family-tile'));
+  const brandSections = Array.from(document.querySelectorAll<HTMLElement>('.catalog-page .brand[id]'));
+  const brandPills = Array.from(document.querySelectorAll<HTMLAnchorElement>('.catalog-page .brand-pills .pill'));
+
+  type FilterState = {
+    hpMin: number | null;
+    hpMax: number | null;
+    yearMin: number | null;
+    yearMax: number | null;
+    currentOnly: boolean;
+    brands: Set<string>;
+  };
+
+  const allBrandSlugs = new Set(Array.from(brandCheckboxes, (cb) => cb.value));
+
+  function readState(): FilterState {
+    const checkedBrands = new Set<string>();
+    brandCheckboxes.forEach((cb) => { if (cb.checked) checkedBrands.add(cb.value); });
+    return {
+      hpMin: hpMinInput?.value ? parseInt(hpMinInput.value, 10) || null : null,
+      hpMax: hpMaxInput?.value ? parseInt(hpMaxInput.value, 10) || null : null,
+      yearMin: yearMinInput?.value ? parseInt(yearMinInput.value, 10) || null : null,
+      yearMax: yearMaxInput?.value ? parseInt(yearMaxInput.value, 10) || null : null,
+      currentOnly: currentInput?.checked ?? true,
+      brands: checkedBrands,
+    };
+  }
+
+  function tileMatches(tile: HTMLElement, st: FilterState): boolean {
+    if (!st.brands.has(tile.dataset.brand ?? '')) return false;
+    if (st.currentOnly && tile.dataset.current !== '1') return false;
+    const tMinHp = parseInt(tile.dataset.minHp ?? '', 10);
+    const tMaxHp = parseInt(tile.dataset.maxHp ?? '', 10);
+    if (st.hpMin !== null && !Number.isNaN(tMaxHp) && tMaxHp < st.hpMin) return false;
+    if (st.hpMax !== null && !Number.isNaN(tMinHp) && tMinHp > st.hpMax) return false;
+    const tMinYear = parseInt(tile.dataset.minYear ?? '', 10);
+    const tMaxYear = parseInt(tile.dataset.maxYear ?? '', 10);
+    if (st.yearMin !== null && !Number.isNaN(tMaxYear) && tMaxYear < st.yearMin) return false;
+    if (st.yearMax !== null && !Number.isNaN(tMinYear) && tMinYear > st.yearMax) return false;
+    return true;
+  }
+
+  function isFiltered(st: FilterState): boolean {
+    if (st.hpMin !== null || st.hpMax !== null) return true;
+    if (st.yearMin !== null || st.yearMax !== null) return true;
+    if (!st.currentOnly) return true;
+    if (st.brands.size !== allBrandSlugs.size) return true;
+    return false;
+  }
+
+  function applyFilters() {
+    const st = readState();
+    let visibleTiles = 0;
+    const visibleBrandSlugs = new Set<string>();
+    for (const tile of tiles) {
+      const match = tileMatches(tile, st);
+      tile.classList.toggle('is-hidden', !match);
+      if (match) {
+        visibleTiles += 1;
+        if (tile.dataset.brand) visibleBrandSlugs.add(tile.dataset.brand);
+      }
+    }
+    for (const sec of brandSections) {
+      const hide = !visibleBrandSlugs.has(sec.dataset.brand ?? '');
+      sec.classList.toggle('is-hidden', hide);
+    }
+    for (const pill of brandPills) {
+      const href = pill.getAttribute('href') ?? '';
+      const slug = href.startsWith('#') ? href.slice(1) : '';
+      pill.classList.toggle('is-hidden', slug !== '' && !visibleBrandSlugs.has(slug));
+    }
+    if (resultEl) {
+      const filtered = isFiltered(st);
+      resultEl.textContent = `${visibleTiles} řad ve ${visibleBrandSlugs.size} značkách`;
+      resultEl.classList.toggle('is-filtered', filtered);
+    }
+    if (resetBtn) resetBtn.hidden = !isFiltered(st);
+    if (emptyEl) emptyEl.classList.toggle('is-visible', visibleTiles === 0);
+    if (brandCountEl) {
+      brandCountEl.textContent = st.brands.size === allBrandSlugs.size ? '(vše)' : `(${st.brands.size})`;
+    }
+    syncUrl(st);
+  }
+
+  function syncUrl(st: FilterState) {
+    if (!('replaceState' in history)) return;
+    const params = new URLSearchParams();
+    if (st.hpMin !== null) params.set('hp_min', String(st.hpMin));
+    if (st.hpMax !== null) params.set('hp_max', String(st.hpMax));
+    if (st.yearMin !== null) params.set('year_min', String(st.yearMin));
+    if (st.yearMax !== null) params.set('year_max', String(st.yearMax));
+    if (!st.currentOnly) params.set('current', '0');
+    if (st.brands.size !== allBrandSlugs.size) params.set('brand', Array.from(st.brands).sort().join(','));
+    const qs = params.toString();
+    const url = qs ? `${location.pathname}?${qs}` : location.pathname;
+    history.replaceState(null, '', url + location.hash);
+  }
+
+  function loadFromUrl() {
+    const params = new URLSearchParams(location.search);
+    if (hpMinInput && params.has('hp_min')) hpMinInput.value = params.get('hp_min') ?? '';
+    if (hpMaxInput && params.has('hp_max')) hpMaxInput.value = params.get('hp_max') ?? '';
+    if (yearMinInput && params.has('year_min')) yearMinInput.value = params.get('year_min') ?? '';
+    if (yearMaxInput && params.has('year_max')) yearMaxInput.value = params.get('year_max') ?? '';
+    if (currentInput && params.get('current') === '0') currentInput.checked = false;
+    if (params.has('brand')) {
+      const wanted = new Set(params.get('brand')!.split(',').filter(Boolean));
+      brandCheckboxes.forEach((cb) => { cb.checked = wanted.has(cb.value); });
+    }
+  }
+
+  function resetFilters() {
+    if (hpMinInput) hpMinInput.value = '';
+    if (hpMaxInput) hpMaxInput.value = '';
+    if (yearMinInput) yearMinInput.value = '';
+    if (yearMaxInput) yearMaxInput.value = '';
+    if (currentInput) currentInput.checked = true;
+    brandCheckboxes.forEach((cb) => { cb.checked = true; });
+    applyFilters();
+  }
+
+  if (filterBar) {
+    loadFromUrl();
+    hpMinInput?.addEventListener('input', applyFilters);
+    hpMaxInput?.addEventListener('input', applyFilters);
+    yearMinInput?.addEventListener('input', applyFilters);
+    yearMaxInput?.addEventListener('input', applyFilters);
+    currentInput?.addEventListener('change', applyFilters);
+    brandCheckboxes.forEach((cb) => cb.addEventListener('change', applyFilters));
+    resetBtn?.addEventListener('click', resetFilters);
+    applyFilters();
+  }
+
+  // ── Scroll-spy for brand pills (existing behavior, preserved) ────────────
   const pills = document.querySelectorAll<HTMLAnchorElement>('.catalog-page .brand-pills .pill');
   const sections = document.querySelectorAll<HTMLElement>('.catalog-page .brand[id]');
   if (pills.length && sections.length && 'IntersectionObserver' in window) {
