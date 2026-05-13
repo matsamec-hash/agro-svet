@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { getAllBrands, getAllModels, seriesFamily, FUNCTIONAL_GROUPS } from '../lib/stroje';
 import { getAllDruhy } from '../lib/plemena';
+import { topComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 
@@ -89,6 +90,7 @@ export const GET: APIRoute = async () => {
     ['/fotosoutez/pravidla/', 'yearly'],
     ['/fotosoutez/gdpr/', 'yearly'],
     ['/statistiky/', 'weekly'],
+    ['/srovnani/', 'weekly', '0.85'],
     ['/media/', 'monthly'],
     ['/redakce/', 'monthly', '0.5'],
   ];
@@ -176,6 +178,11 @@ export const GET: APIRoute = async () => {
     for (const p of d.plemena) {
       urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/${p.slug}/`, changefreq: 'monthly' });
     }
+  }
+
+  // Comparison pairs — same list that generates /srovnani/[combo]/ routes.
+  for (const pair of topComparisonPairs(220)) {
+    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65' });
   }
 
   for (const a of articlesDyn) {

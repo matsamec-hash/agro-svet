@@ -1,0 +1,307 @@
+---
+export const prerender = true;
+
+import Layout from '../../../layouts/Layout.astro';
+import {
+  topComparisonPairs,
+  parsePairCombo,
+  findModelBySlug,
+  pairCombo,
+  modelDisplayName,
+  buildComparisonRows,
+  relatedComparisonsFor,
+  type ComparisonPair,
+} from '../../../lib/comparator';
+import { breadcrumbSchema, itemListSchema } from '../../../lib/structured-data';
+import { useCaseDescription } from '../../../lib/competitor-finder';
+import { getSeries } from '../../../lib/stroje';
+
+export async function getStaticPaths() {
+  const pairs = topComparisonPairs(220);
+  return pairs.map((p) => ({
+    params: { combo: p.combo },
+    props: { pair: p },
+  }));
+}
+
+const { combo } = Astro.params;
+const { pair: pairProp } = Astro.props as { pair?: ComparisonPair };
+
+// SSR fallback path (someone visits a non-prerendered pair URL): try to resolve
+// it dynamically from the slug. Hit 404 if either model is unknown or the slug
+// isn't in canonical order (we don't want duplicate content).
+let pair: ComparisonPair | null = pairProp ?? null;
+if (!pair) {
+  const parsed = parsePairCombo(combo!);
+  if (parsed) {
+    const a = findModelBySlug(parsed[0]);
+    const b = findModelBySlug(parsed[1]);
+    if (a && b && a.category === b.category && a.brand_slug !== b.brand_slug) {
+      const canonical = pairCombo(a, b);
+      if (canonical !== combo) return Astro.rewrite('/404');
+      pair = { a, b, combo: canonical };
+    }
+  }
+}
+if (!pair) return Astro.rewrite('/404');
+
+const { a, b } = pair;
+const aDisplay = modelDisplayName(a);
+const bDisplay = modelDisplayName(b);
+
+const rows = buildComparisonRows(a.category);
+
+// Look up series image fallbacks for hero photos.
+const aSeries = getSeries(a.brand_slug, a.series_slug);
+const bSeries = getSeries(b.brand_slug, b.series_slug);
+const categoryFallback = a.category === 'traktory' ? '/images/traktor.webp' : '/images/kombajn.webp';
+const aPhoto = a.image_url ?? aSeries?.series.image_url ?? categoryFallback;
+const bPhoto = b.image_url ?? bSeries?.series.image_url ?? categoryFallback;
+
+const aUseCase = useCaseDescription(a.category, a.power_hp);
+const bUseCase = useCaseDescription(b.category, b.power_hp);
+
+const canonical = `https://agro-svet.cz/srovnani/${pair.combo}/`;
+const categoryLabel = a.category === 'traktory' ? 'traktorů' : 'kombajnů';
+const title = `${aDisplay} vs ${bDisplay} — srovnání ${categoryLabel}`;
+const description = `Porovnání ${aDisplay} a ${bDisplay}: výkon, motor, převodovka, hmotnost a další parametry vedle sebe.`;
+
+const related = relatedComparisonsFor(a, 6).filter((p) => p.combo !== pair.combo).slice(0, 5);
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Srovnání', url: '/srovnani/' },
+  { name: `${aDisplay} vs ${bDisplay}`, url: canonical },
+]);
+const itemListJsonLd = itemListSchema(
+  [
+    { url: `/stroje/${a.brand_slug}/${a.series_slug}/${a.slug.startsWith(a.brand_slug + '-') ? a.slug.slice(a.brand_slug.length + 1) : a.slug}/`, name: aDisplay },
+    { url: `/stroje/${b.brand_slug}/${b.series_slug}/${b.slug.startsWith(b.brand_slug + '-') ? b.slug.slice(b.brand_slug.length + 1) : b.slug}/`, name: bDisplay },
+  ],
+  `Srovnání: ${aDisplay} vs ${bDisplay}`,
+);
+
+function formatCell(value: number | string | null | undefined, unit?: string): string {
+  if (value === null || value === undefined || value === '') return '—';
+  if (typeof value === 'number') return unit ? `${value.toLocaleString('cs-CZ')} ${unit}` : value.toLocaleString('cs-CZ');
+  return String(value);
+}
+
+function modelLink(m: typeof a): string {
+  const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
+  return `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`;
+}
+---
+
+<Layout title={title} description={description} canonical={canonical} ogImage={aPhoto}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+
+  <div class="cmp-page">
+
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="/srovnani/">Srovnání</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">{aDisplay} vs {bDisplay}</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Srovnání · {a.category === 'traktory' ? 'Traktory' : 'Kombajny'}</span>
+      <h1>{aDisplay} <em>vs</em> {bDisplay}</h1>
+      <p class="hero-lede">
+        Boční srovnání klíčových parametrů. Údaje vychází z technických specifikací výrobců;
+        skutečná výbava se může lišit dle konfigurace.
+      </p>
+    </header>
+
+    <section class="duo">
+      <article class="duo-card">
+        <div class="duo-photo" style={`background-image:url('${aPhoto}')`} role="img" aria-label={aDisplay}></div>
+        <div class="duo-body">
+          <span class="duo-brand">{a.brand_name}</span>
+          <h2 class="duo-name"><a href={modelLink(a)}>{a.name}</a></h2>
+          <div class="duo-stats">
+            {a.power_hp !== null && <span class="ds-hp">{a.power_hp} k</span>}
+            {a.year_from !== null && (
+              <span class="ds-year">{a.year_to === null ? `${a.year_from}–dosud` : `${a.year_from}–${a.year_to}`}</span>
+            )}
+          </div>
+          {aUseCase && <p class="duo-usecase">{aUseCase}</p>}
+        </div>
+      </article>
+
+      <div class="duo-vs" aria-hidden="true">VS</div>
+
+      <article class="duo-card">
+        <div class="duo-photo" style={`background-image:url('${bPhoto}')`} role="img" aria-label={bDisplay}></div>
+        <div class="duo-body">
+          <span class="duo-brand">{b.brand_name}</span>
+          <h2 class="duo-name"><a href={modelLink(b)}>{b.name}</a></h2>
+          <div class="duo-stats">
+            {b.power_hp !== null && <span class="ds-hp">{b.power_hp} k</span>}
+            {b.year_from !== null && (
+              <span class="ds-year">{b.year_to === null ? `${b.year_from}–dosud` : `${b.year_from}–${b.year_to}`}</span>
+            )}
+          </div>
+          {bUseCase && <p class="duo-usecase">{bUseCase}</p>}
+        </div>
+      </article>
+    </section>
+
+    <section class="spec-table-wrap" aria-labelledby="spec-table-h">
+      <h2 id="spec-table-h">Parametry vedle sebe</h2>
+      <div class="spec-table">
+        <div class="st-header">
+          <div class="st-th">Parametr</div>
+          <div class="st-th st-th-a">{aDisplay}</div>
+          <div class="st-th st-th-b">{bDisplay}</div>
+        </div>
+        {rows.map((row) => {
+          const aVal = row.get(a);
+          const bVal = row.get(b);
+          let aWin = false, bWin = false;
+          if (row.better === 'higher' && typeof aVal === 'number' && typeof bVal === 'number') {
+            if (aVal > bVal) aWin = true;
+            else if (bVal > aVal) bWin = true;
+          } else if (row.better === 'lower' && typeof aVal === 'number' && typeof bVal === 'number') {
+            if (aVal < bVal) aWin = true;
+            else if (bVal < aVal) bWin = true;
+          }
+          const aMissing = aVal === null || aVal === undefined || aVal === '';
+          const bMissing = bVal === null || bVal === undefined || bVal === '';
+          return (
+            <div class="st-row">
+              <div class="st-label">{row.label}</div>
+              <div class:list={['st-cell', aWin && 'is-winner', aMissing && 'is-missing']}>
+                {formatCell(aVal, row.unit)}
+              </div>
+              <div class:list={['st-cell', bWin && 'is-winner', bMissing && 'is-missing']}>
+                {formatCell(bVal, row.unit)}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p class="st-note">
+        Zelená značí lepší hodnotu v parametrech, kde je jednoznačné kritérium (vyšší výkon, nižší hmotnost).
+        Údaje typu motor a převodovka jsou kvalitativní — neutrální v zobrazení.
+      </p>
+    </section>
+
+    {related.length > 0 && (
+      <section class="related-cmp" aria-labelledby="related-h">
+        <h2 id="related-h">Další srovnání pro {a.name}</h2>
+        <ul class="related-list">
+          {related.map((r) => (
+            <li>
+              <a href={`/srovnani/${r.combo}/`}>
+                <span class="rl-pair">{modelDisplayName(r.a)} <em>vs</em> {modelDisplayName(r.b)}</span>
+                <span class="rl-cta">Otevřít →</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="big-cta">
+      <div>
+        <span class="bc-kicker">Hledáte konkrétní model?</span>
+        <h2>Najdi {a.name} nebo {b.name} v bazaru</h2>
+        <p>Inzeráty od dealerů i soukromých prodejců — kontakt napřímo, bez provize.</p>
+        <div class="bc-actions">
+          <a class="bc-btn primary" href={`/bazar/?brand=${encodeURIComponent(a.brand_slug)}`}>Bazar {a.brand_name}</a>
+          <a class="bc-btn ghost" href={`/bazar/?brand=${encodeURIComponent(b.brand_slug)}`}>Bazar {b.brand_name}</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</Layout>
+
+<style>
+  .cmp-page {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --green:#0B7A3B; --green-soft:#E3F3EA;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-2:0 4px 14px rgba(10,10,12,.06), 0 0 0 1px rgba(10,10,12,.04);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; flex-wrap:wrap; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:40px 44px; margin-bottom:22px; position:relative; overflow:hidden; box-shadow:var(--sh-3); }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; gap:8px; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(2rem,5vw,3.6rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:16px 0 0; line-height:1.05; position:relative; z-index:2; }
+  .hero h1 em { font-style:normal; color:var(--yellow); margin:0 14px; }
+  .hero-lede { color:#c8c8d0; max-width:680px; font-size:15.5px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
+
+  .duo { display:grid; grid-template-columns:1fr 80px 1fr; gap:18px; align-items:stretch; margin-bottom:32px; }
+  .duo-card { background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:var(--sh-1); display:flex; flex-direction:column; }
+  .duo-photo { width:100%; height:220px; background-size:cover; background-position:center; background-color:#FBFAF4; }
+  .duo-body { padding:18px 20px 22px; flex:1; display:flex; flex-direction:column; gap:10px; }
+  .duo-brand { font:700 11px 'Chakra Petch',sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .duo-name { font:700 22px 'Chakra Petch',sans-serif; color:var(--ink); margin:0; letter-spacing:-.01em; line-height:1.15; }
+  .duo-name a { color:inherit; text-decoration:none; }
+  .duo-name a:hover { text-decoration:underline; text-decoration-color:var(--yellow); text-decoration-thickness:3px; text-underline-offset:4px; }
+  .duo-stats { display:flex; gap:10px; flex-wrap:wrap; }
+  .ds-hp, .ds-year { font:600 13px 'Chakra Petch',sans-serif; padding:4px 10px; background:var(--yellow-soft); color:var(--ink); border-radius:6px; }
+  .ds-year { background:#FBFAF4; color:var(--muted); }
+  .duo-usecase { font-size:13.5px; color:#3a3a40; line-height:1.55; margin:0; }
+  .duo-vs { display:flex; align-items:center; justify-content:center; font:800 28px 'Chakra Petch',sans-serif; letter-spacing:.06em; color:var(--ink); background:var(--yellow); border-radius:50%; width:80px; height:80px; align-self:center; box-shadow:0 14px 40px -10px var(--yellow-glow); }
+
+  .spec-table-wrap { margin-bottom:36px; }
+  .spec-table-wrap h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0 0 16px; }
+  .spec-table { background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:var(--sh-1); }
+  .st-header { display:grid; grid-template-columns:200px 1fr 1fr; background:var(--bg-cream); border-bottom:1px solid var(--line); }
+  .st-th { padding:14px 18px; font:700 12px 'Chakra Petch',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .st-th-a, .st-th-b { color:var(--ink); }
+  .st-row { display:grid; grid-template-columns:200px 1fr 1fr; border-bottom:1px solid var(--line); }
+  .st-row:last-child { border-bottom:0; }
+  .st-label { padding:14px 18px; font:600 13.5px 'Chakra Petch',sans-serif; color:var(--muted); background:var(--bg-cream); }
+  .st-cell { padding:14px 18px; font:600 15px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:-.005em; }
+  .st-cell.is-winner { background:var(--green-soft); color:var(--green); position:relative; }
+  .st-cell.is-winner::after { content:"★"; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--green); font-size:12px; }
+  .st-cell.is-missing { color:var(--muted-2); font-weight:400; }
+  .st-note { font-size:12.5px; color:var(--muted); line-height:1.55; margin:12px 4px 0; }
+
+  .related-cmp { background:var(--bg-cream); border-radius:18px; padding:24px 28px; margin-bottom:24px; }
+  .related-cmp h2 { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.01em; color:var(--ink); margin:0 0 14px; }
+  .related-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+  .related-list a { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 14px; background:#fff; border:1px solid var(--line); border-radius:10px; text-decoration:none; color:var(--ink); transition:.15s; }
+  .related-list a:hover { background:var(--yellow-soft); border-color:var(--yellow); transform:translateY(-1px); }
+  .rl-pair { font:600 14px 'Chakra Petch',sans-serif; letter-spacing:-.005em; }
+  .rl-pair em { font-style:normal; color:var(--muted); margin:0 6px; }
+  .rl-cta { font:700 12px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:.04em; flex-shrink:0; }
+
+  .big-cta { background:linear-gradient(135deg, var(--yellow) 0%, #FFD400 100%); border-radius:24px; padding:30px 32px; box-shadow:0 10px 30px -8px var(--yellow-glow); }
+  .big-cta h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:#0A0A0B; margin:6px 0; }
+  .big-cta p { color:#2a2a2a; font-size:14px; margin:0 0 14px; }
+  .bc-kicker { display:inline-block; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:#0A0A0B; background:rgba(0,0,0,.08); padding:5px 11px; border-radius:999px; }
+  .bc-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  .bc-btn { padding:11px 18px; border-radius:10px; text-decoration:none; font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.04em; transition:.15s; }
+  .bc-btn.primary { background:#0A0A0B; color:#fff; }
+  .bc-btn.primary:hover { transform:translateY(-1px); }
+  .bc-btn.ghost { background:rgba(255,255,255,.5); color:#0A0A0B; border:1px solid rgba(0,0,0,.15); }
+  .bc-btn.ghost:hover { background:rgba(255,255,255,.8); }
+
+  @media (max-width:760px) {
+    .duo { grid-template-columns:1fr; }
+    .duo-vs { order:2; width:60px; height:60px; font-size:22px; }
+    .st-header, .st-row { grid-template-columns:1fr 1fr 1fr; }
+    .st-label { padding:10px 12px; font-size:11.5px; }
+    .st-th, .st-cell { padding:10px 12px; font-size:13.5px; }
+    .hero { padding:28px 22px; }
+    .hero h1 { font-size:1.8rem; }
+    .hero h1 em { margin:0 8px; }
+  }
+</style>

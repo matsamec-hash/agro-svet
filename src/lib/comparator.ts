@@ -1,0 +1,176 @@
+// Cross-brand model comparator. Generates canonical pair slugs and pulls
+// matching models for /srovnani/[combo]/.
+//
+// Pair slug format: `{a.slug}-vs-{b.slug}` where a.slug < b.slug alphabetically.
+// Canonical ordering means /a-vs-b and /b-vs-a both resolve to the same page —
+// the route uses a 301 from non-canonical permutations.
+
+import { getAllModels, type StrojFlatModel, type StrojKategorie } from './stroje';
+import { findCompetitors } from './competitor-finder';
+
+const PAIR_DELIMITER = '-vs-';
+
+export interface ComparisonPair {
+  a: StrojFlatModel;
+  b: StrojFlatModel;
+  /** Canonical combo slug `{a.slug}-vs-{b.slug}` with a.slug < b.slug. */
+  combo: string;
+}
+
+function canonicalOrder(a: StrojFlatModel, b: StrojFlatModel): [StrojFlatModel, StrojFlatModel] {
+  return a.slug < b.slug ? [a, b] : [b, a];
+}
+
+export function pairCombo(a: StrojFlatModel, b: StrojFlatModel): string;
+export function pairCombo(aSlug: string, bSlug: string): string;
+export function pairCombo(a: StrojFlatModel | string, b: StrojFlatModel | string): string {
+  const aSlug = typeof a === 'string' ? a : a.slug;
+  const bSlug = typeof b === 'string' ? b : b.slug;
+  const [first, second] = aSlug < bSlug ? [aSlug, bSlug] : [bSlug, aSlug];
+  return `${first}${PAIR_DELIMITER}${second}`;
+}
+
+export function parsePairCombo(combo: string): [string, string] | null {
+  const idx = combo.indexOf(PAIR_DELIMITER);
+  if (idx === -1) return null;
+  const a = combo.slice(0, idx);
+  const b = combo.slice(idx + PAIR_DELIMITER.length);
+  if (!a || !b || a === b) return null;
+  return [a, b];
+}
+
+/** Look up a flat model by its full slug (e.g. `john-deere-8r-410`). */
+export function findModelBySlug(slug: string): StrojFlatModel | null {
+  return getAllModels().find((m) => m.slug === slug) ?? null;
+}
+
+/**
+ * Build top N comparison pairs prerendered at build time.
+ *
+ * Strategy: iterate every currently-produced model (year_to=null), pull its top
+ * cross-brand competitors via findCompetitors(), then dedupe pairs by canonical
+ * combo and sort by combined popularity score (currently sum of power_hp as
+ * proxy for "buyer interest").
+ *
+ * Returns ~150–250 deterministic pairs covering high-power tractors and
+ * combines from every brand we hold data for.
+ */
+export function topComparisonPairs(limit = 200): ComparisonPair[] {
+  const all = getAllModels();
+  const activeModels = all.filter(
+    (m) => m.year_to === null && m.power_hp !== null && (m.category === 'traktory' || m.category === 'kombajny'),
+  );
+
+  const seen = new Map<string, ComparisonPair>();
+  for (const source of activeModels) {
+    const competitors = findCompetitors(
+      {
+        slug: source.slug,
+        brand_slug: source.brand_slug,
+        category: source.category,
+        power_hp: source.power_hp,
+        year_to: source.year_to,
+      },
+      { tolerancePct: 18, limit: 4 },
+    );
+    for (const competitor of competitors) {
+      const combo = pairCombo(source, competitor);
+      if (seen.has(combo)) continue;
+      const [a, b] = canonicalOrder(source, competitor);
+      seen.set(combo, { a, b, combo });
+    }
+  }
+
+  const pairs = [...seen.values()];
+  pairs.sort((x, y) => {
+    const scoreX = (x.a.power_hp ?? 0) + (x.b.power_hp ?? 0);
+    const scoreY = (y.a.power_hp ?? 0) + (y.b.power_hp ?? 0);
+    if (scoreX !== scoreY) return scoreY - scoreX;
+    return x.combo.localeCompare(y.combo);
+  });
+  return pairs.slice(0, limit);
+}
+
+/** Find competitor pairs that include the given model — used for "Related comparisons" cross-link. */
+export function relatedComparisonsFor(model: StrojFlatModel, limit = 6): ComparisonPair[] {
+  const pairs = topComparisonPairs(500);
+  return pairs.filter((p) => p.a.slug === model.slug || p.b.slug === model.slug).slice(0, limit);
+}
+
+/** Pretty display name for a model in pair UI ("John Deere 8R 410"). */
+export function modelDisplayName(m: StrojFlatModel): string {
+  if (m.name.toLowerCase().startsWith(m.brand_slug)) return m.name;
+  return `${m.brand_name} ${m.name}`;
+}
+
+export interface ComparisonRow {
+  label: string;
+  /** Higher value wins (or 'lower' for fields like weight where less = better). */
+  better?: 'higher' | 'lower' | 'none';
+  unit?: string;
+  format?: (v: number | string | null | undefined) => string;
+  get: (m: StrojFlatModel) => number | string | null | undefined;
+}
+
+export function buildComparisonRows(category: StrojKategorie): ComparisonRow[] {
+  const rows: ComparisonRow[] = [
+    {
+      label: 'Výkon',
+      better: 'higher',
+      unit: 'k',
+      get: (m) => m.power_hp,
+    },
+    {
+      label: 'Výkon (kW)',
+      better: 'higher',
+      unit: 'kW',
+      get: (m) => m.power_kw ?? (m.power_hp ? Math.round(m.power_hp * 0.7457) : null),
+    },
+    {
+      label: 'Roky výroby',
+      better: 'none',
+      get: (m) => {
+        if (m.year_from === null) return null;
+        return m.year_to === null ? `${m.year_from}–dosud` : `${m.year_from}–${m.year_to}`;
+      },
+    },
+    {
+      label: 'V prodeji',
+      better: 'none',
+      get: (m) => (m.year_to === null ? 'Ano' : 'Ne'),
+    },
+    {
+      label: 'Motor',
+      better: 'none',
+      get: (m) => m.engine ?? null,
+    },
+    {
+      label: 'Převodovka',
+      better: 'none',
+      get: (m) => m.transmission ?? null,
+    },
+    {
+      label: 'Hmotnost',
+      better: 'lower',
+      unit: 'kg',
+      get: (m) => m.weight_kg ?? null,
+    },
+  ];
+
+  if (category === 'kombajny') {
+    rows.push({
+      label: 'Záběr žacího stolu',
+      better: 'higher',
+      unit: 'm',
+      get: (m) => m.cutting_width_m ?? null,
+    });
+    rows.push({
+      label: 'Zásobník zrna',
+      better: 'higher',
+      unit: 'l',
+      get: (m) => m.grain_tank_l ?? null,
+    });
+  }
+
+  return rows;
+}

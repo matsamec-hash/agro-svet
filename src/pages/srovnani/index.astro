@@ -1,0 +1,185 @@
+---
+export const prerender = true;
+
+import Layout from '../../layouts/Layout.astro';
+import { topComparisonPairs, modelDisplayName } from '../../lib/comparator';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const pairs = topComparisonPairs(220);
+
+// Group by category for browse-friendly hub layout.
+const tractorPairs = pairs.filter((p) => p.a.category === 'traktory');
+const combinePairs = pairs.filter((p) => p.a.category === 'kombajny');
+
+// Group by brand combos for "by brand" browse
+const byBrandPair = new Map<string, typeof pairs>();
+for (const p of pairs) {
+  const key = [p.a.brand_slug, p.b.brand_slug].sort().join(' × ');
+  if (!byBrandPair.has(key)) byBrandPair.set(key, []);
+  byBrandPair.get(key)!.push(p);
+}
+const brandComboList = [...byBrandPair.entries()]
+  .map(([key, items]) => ({ key, count: items.length, items }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 12);
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Srovnání', url: '/srovnani/' },
+]);
+
+const itemListJsonLd = itemListSchema(
+  pairs.slice(0, 50).map((p) => ({
+    url: `/srovnani/${p.combo}/`,
+    name: `${modelDisplayName(p.a)} vs ${modelDisplayName(p.b)}`,
+  })),
+  'Srovnání zemědělských strojů',
+);
+
+const canonical = `${SITE_URL}/srovnani/`;
+---
+
+<Layout
+  title="Srovnání traktorů a kombajnů — boční porovnání parametrů"
+  description={`Boční srovnání ${pairs.length} kombinací traktorů a kombajnů. Výkon, motor, převodovka, hmotnost a další parametry vedle sebe — pro výběr stroje na míru.`}
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+
+  <div class="hub">
+
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">Srovnání</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Boční srovnání · cross-brand</span>
+      <h1>Srovnání zemědělských strojů</h1>
+      <p class="hero-lede">
+        Vyber dvě modely vedle sebe — výkon, motor, převodovka, hmotnost. Cílí podobné výkonnostní třídy
+        napříč značkami, takže porovnáváš srovnatelné stroje. {pairs.length} kombinací předem připravených.
+      </p>
+      <div class="hero-stats">
+        <div class="hs"><span class="n">{tractorPairs.length}</span><span class="l">srovnání traktorů</span></div>
+        <div class="hs"><span class="n">{combinePairs.length}</span><span class="l">srovnání kombajnů</span></div>
+        <div class="hs"><span class="n">{brandComboList.length}+</span><span class="l">kombinací značek</span></div>
+      </div>
+    </header>
+
+    {tractorPairs.length > 0 && (
+      <section class="grid-section">
+        <div class="gs-head">
+          <h2>Traktory</h2>
+          <span class="gs-count">{tractorPairs.length} srovnání</span>
+        </div>
+        <div class="card-grid">
+          {tractorPairs.slice(0, 30).map((p) => (
+            <a href={`/srovnani/${p.combo}/`} class="cmp-card">
+              <div class="cc-models">
+                <div class="cc-model">
+                  <div class="cc-brand">{p.a.brand_name}</div>
+                  <div class="cc-name">{p.a.name}</div>
+                  {p.a.power_hp !== null && <div class="cc-hp">{p.a.power_hp} k</div>}
+                </div>
+                <div class="cc-vs" aria-hidden="true">VS</div>
+                <div class="cc-model">
+                  <div class="cc-brand">{p.b.brand_name}</div>
+                  <div class="cc-name">{p.b.name}</div>
+                  {p.b.power_hp !== null && <div class="cc-hp">{p.b.power_hp} k</div>}
+                </div>
+              </div>
+              <div class="cc-cta">Porovnat →</div>
+            </a>
+          ))}
+        </div>
+        {tractorPairs.length > 30 && (
+          <p class="gs-more">Zobrazeno 30 z {tractorPairs.length}. Další srovnání naleznete na stránkách jednotlivých modelů.</p>
+        )}
+      </section>
+    )}
+
+    {combinePairs.length > 0 && (
+      <section class="grid-section">
+        <div class="gs-head">
+          <h2>Kombajny</h2>
+          <span class="gs-count">{combinePairs.length} srovnání</span>
+        </div>
+        <div class="card-grid">
+          {combinePairs.slice(0, 24).map((p) => (
+            <a href={`/srovnani/${p.combo}/`} class="cmp-card">
+              <div class="cc-models">
+                <div class="cc-model">
+                  <div class="cc-brand">{p.a.brand_name}</div>
+                  <div class="cc-name">{p.a.name}</div>
+                  {p.a.power_hp !== null && <div class="cc-hp">{p.a.power_hp} k</div>}
+                </div>
+                <div class="cc-vs" aria-hidden="true">VS</div>
+                <div class="cc-model">
+                  <div class="cc-brand">{p.b.brand_name}</div>
+                  <div class="cc-name">{p.b.name}</div>
+                  {p.b.power_hp !== null && <div class="cc-hp">{p.b.power_hp} k</div>}
+                </div>
+              </div>
+              <div class="cc-cta">Porovnat →</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+  </div>
+</Layout>
+
+<style>
+  .hub {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:44px 48px; margin-bottom:32px; position:relative; overflow:hidden; box-shadow:var(--sh-3); }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(2.2rem,5vw,3.6rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:18px 0 0; position:relative; z-index:2; line-height:1.05; }
+  .hero-lede { color:#c8c8d0; max-width:680px; font-size:16px; line-height:1.6; margin:14px 0 22px; position:relative; z-index:2; }
+  .hero-stats { display:flex; gap:28px; flex-wrap:wrap; position:relative; z-index:2; font-family:'Chakra Petch',sans-serif; }
+  .hero-stats .hs { display:flex; flex-direction:column; gap:3px; }
+  .hero-stats .n { font-size:26px; font-weight:700; color:#fff; letter-spacing:-.02em; }
+  .hero-stats .l { font-size:11px; color:#8a8a92; letter-spacing:.14em; text-transform:uppercase; }
+  .hero-stats .hs + .hs { padding-left:28px; border-left:1px solid rgba(255,255,255,.12); }
+
+  .grid-section { margin-bottom:40px; }
+  .gs-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:18px; gap:18px; flex-wrap:wrap; }
+  .gs-head h2 { font:700 28px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0; }
+  .gs-count { font:600 12px 'Chakra Petch',sans-serif; color:var(--muted); background:var(--bg-cream); padding:5px 11px; border-radius:8px; }
+  .gs-more { font-size:13px; color:var(--muted); margin:14px 0 0; }
+
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px; }
+  .cmp-card { display:flex; flex-direction:column; gap:10px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; text-decoration:none; color:inherit; transition:.18s; box-shadow:var(--sh-1); }
+  .cmp-card:hover { transform:translateY(-2px); border-color:var(--yellow); box-shadow:0 10px 30px -10px rgba(10,10,12,.18); }
+  .cc-models { display:grid; grid-template-columns:1fr 32px 1fr; gap:8px; align-items:center; }
+  .cc-model { display:flex; flex-direction:column; gap:2px; }
+  .cc-brand { font:700 10px 'Chakra Petch',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .cc-name { font:700 15px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:-.005em; line-height:1.15; }
+  .cc-hp { font:600 11.5px 'Chakra Petch',sans-serif; color:var(--ink); background:var(--yellow-soft); padding:2px 7px; border-radius:5px; align-self:flex-start; }
+  .cc-vs { font:800 13px 'Chakra Petch',sans-serif; color:var(--muted-2); text-align:center; letter-spacing:.04em; }
+  .cc-cta { font:700 12px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:.04em; text-align:right; }
+
+  @media (max-width:600px) {
+    .hub { padding:20px 16px 60px; }
+    .hero { padding:32px 24px; }
+    .hero-stats .hs + .hs { padding-left:0; border-left:0; }
+  }
+</style>
