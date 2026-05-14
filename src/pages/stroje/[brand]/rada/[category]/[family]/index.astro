@@ -38,7 +38,11 @@ const catHeroFallback = categoryHero[categorySlug as StrojKategorie] ?? '/images
 const cat = brand.categories?.[categorySlug as StrojKategorie];
 if (!cat) return Astro.rewrite('/404');
 
-const matchingSeries = (cat.series ?? []).filter((s: any) => (s.family || seriesFamily(s.slug)) === family);
+// String() cast on both sides — YAML `family:` may be numeric (e.g. 150) while
+// the route param is always a string, so a raw === would never match.
+const matchingSeries = (cat.series ?? []).filter(
+  (s: any) => String(s.family ?? seriesFamily(s.slug)) === family,
+);
 if (matchingSeries.length === 0) return Astro.rewrite('/404');
 
 const brandColors: Record<string, [string, string]> = {
@@ -84,7 +88,8 @@ const seriesData = matchingSeries.map((s: any) => {
   const seriesIsCurrent = rows.some((r) => r.isCurrent);
   return {
     slug: s.slug,
-    name: s.name,
+    // String() — YAML `name:` may be numeric for implement series (e.g. Kverneland 150).
+    name: String(s.name),
     description: s.description,
     image_url: s.image_url ?? null,
     year_from: s.year_from ?? null,
