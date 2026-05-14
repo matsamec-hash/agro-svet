@@ -1,0 +1,229 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getAllBrands } from '../../lib/stroje';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+// CZ importer / distributor per brand — used for the "kde koupit" pointer.
+// Sourced from the brand encyclopedia articles + public distributor info.
+// Where unknown, the official site's dealer locator is the fallback.
+const czImporter: Record<string, string> = {
+  'john-deere': 'Síť autorizovaných dealerů John Deere',
+  'case-ih': 'AGRI CS',
+  fendt: 'AGCO Czech Republic',
+  valtra: 'AGCO Czech Republic',
+  'massey-ferguson': 'AGCO Czech Republic',
+  'new-holland': 'AGROTEC a síť dealerů',
+  zetor: 'Zetor (výroba Brno) + dealerská síť',
+  claas: 'Síť autorizovaných dealerů CLAAS',
+  kubota: 'Kubota Czech',
+  'deutz-fahr': 'Síť autorizovaných dealerů Deutz-Fahr (SDF Group)',
+  kverneland: 'Síť dealerů Kverneland (koncern Kubota)',
+};
+
+const brands = getAllBrands();
+
+// Split into tractor/combine brands vs implement/specialist brands by what
+// categories the YAML holds — drives the two browse sections.
+const tractorSlugs = new Set<string>();
+for (const b of brands) {
+  const cats = Object.keys(b.categories ?? {});
+  if (cats.includes('traktory') || cats.includes('kombajny')) tractorSlugs.add(b.slug);
+}
+const tractorBrands = brands.filter((b) => tractorSlugs.has(b.slug));
+const implementBrands = brands.filter((b) => !tractorSlugs.has(b.slug));
+
+const canonical = `${SITE_URL}/prodejci/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kde koupit', url: '/prodejci/' },
+]);
+const itemListJsonLd = itemListSchema(
+  brands.map((b) => ({ url: `/stroje/${b.slug}/`, name: `${b.name} — katalog a prodejci` })),
+  'Značky zemědělské techniky — kde koupit',
+);
+
+function websiteHost(url: string | undefined): string {
+  if (!url) return '';
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+---
+
+<Layout
+  title="Kde koupit zemědělskou techniku — prodejci a značky v ČR"
+  description="Rozcestník prodejců zemědělské techniky v Česku. Oficiální zastoupení, dealerské sítě a katalog modelů pro 22 značek traktorů, kombajnů a strojů."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+
+  <div class="dealers-page">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">Kde koupit</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Prodejci · zastoupení v ČR</span>
+      <h1>Kde koupit zemědělskou techniku</h1>
+      <p class="hero-lede">
+        Rozcestník pro {brands.length} značek traktorů, kombajnů a strojů. U každé značky najdete
+        oficiální zastoupení, odkaz na dealerskou síť a katalog modelů na agro-svět.cz.
+        Pro konkrétní stroje z druhé ruky zkuste i&nbsp;<a href="/bazar/">Agro bazar</a>.
+      </p>
+    </header>
+
+    <section class="brand-section" aria-labelledby="tractors-h">
+      <div class="bs-head">
+        <h2 id="tractors-h">Traktory a kombajny</h2>
+        <span class="bs-count">{tractorBrands.length} značek</span>
+      </div>
+      <div class="dealer-grid">
+        {tractorBrands.map((b) => (
+          <article class="dealer-card">
+            <div class="dc-head">
+              <div class="dc-logo">
+                <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" onerror="this.remove()" />
+              </div>
+              <div class="dc-title">
+                <h3>{b.name}</h3>
+                <span class="dc-meta">{b.country} · od {b.founded}</span>
+              </div>
+            </div>
+            {czImporter[b.slug] && (
+              <p class="dc-importer"><span class="dc-importer-label">Zastoupení v ČR:</span> {czImporter[b.slug]}</p>
+            )}
+            <div class="dc-links">
+              <a class="dc-link primary" href={`/stroje/${b.slug}/`}>Katalog modelů</a>
+              <a class="dc-link" href={`/bazar/?brand=${encodeURIComponent(b.slug)}`}>V bazaru</a>
+              {b.website && (
+                <a class="dc-link external" href={b.website} target="_blank" rel="noopener noreferrer">
+                  {websiteHost(b.website)} ↗
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="brand-section" aria-labelledby="implements-h">
+      <div class="bs-head">
+        <h2 id="implements-h">Stroje a nářadí</h2>
+        <span class="bs-count">{implementBrands.length} značek</span>
+      </div>
+      <div class="dealer-grid">
+        {implementBrands.map((b) => (
+          <article class="dealer-card">
+            <div class="dc-head">
+              <div class="dc-logo">
+                <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" onerror="this.remove()" />
+              </div>
+              <div class="dc-title">
+                <h3>{b.name}</h3>
+                <span class="dc-meta">{b.country} · od {b.founded}</span>
+              </div>
+            </div>
+            {czImporter[b.slug] && (
+              <p class="dc-importer"><span class="dc-importer-label">Zastoupení v ČR:</span> {czImporter[b.slug]}</p>
+            )}
+            <div class="dc-links">
+              <a class="dc-link primary" href={`/stroje/${b.slug}/`}>Katalog modelů</a>
+              <a class="dc-link" href={`/bazar/?brand=${encodeURIComponent(b.slug)}`}>V bazaru</a>
+              {b.website && (
+                <a class="dc-link external" href={b.website} target="_blank" rel="noopener noreferrer">
+                  {websiteHost(b.website)} ↗
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="info-note">
+      <h2>Jak vybrat prodejce</h2>
+      <p>
+        Při nákupu nového stroje rozhoduje nejen cena, ale i dostupnost servisu a náhradních dílů.
+        Ověřte si vzdálenost nejbližšího autorizovaného servisu, reakční dobu a podmínky záruky.
+        U českých značek (Zetor, Bednar) bývá výhodou rychlá dostupnost dílů. U ojetých strojů
+        zvažte i nákup přímo od dealera — bývá dražší než soukromý prodej, ale stroj má obvykle
+        prověřenou historii a často i záruku.
+      </p>
+      <div class="info-actions">
+        <a class="ia-btn primary" href="/srovnani/">Porovnat modely</a>
+        <a class="ia-btn ghost" href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu</a>
+        <a class="ia-btn ghost" href="/bazar/">Agro bazar</a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .dealers-page {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:44px 48px; margin-bottom:32px; box-shadow:var(--sh-3); position:relative; overflow:hidden; }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(2.2rem,5vw,3.6rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:18px 0 0; line-height:1.05; position:relative; z-index:2; }
+  .hero-lede { color:#c8c8d0; max-width:720px; font-size:16px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
+  .hero-lede a { color:var(--yellow); text-decoration:none; }
+  .hero-lede a:hover { text-decoration:underline; }
+
+  .brand-section { margin-bottom:40px; }
+  .bs-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:18px; gap:18px; flex-wrap:wrap; }
+  .bs-head h2 { font:700 28px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0; }
+  .bs-count { font:600 12px 'Chakra Petch',sans-serif; color:var(--muted); background:var(--bg-cream); padding:5px 11px; border-radius:8px; }
+
+  .dealer-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:14px; }
+  .dealer-card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow:var(--sh-1); display:flex; flex-direction:column; gap:12px; transition:.18s; }
+  .dealer-card:hover { border-color:var(--yellow); transform:translateY(-2px); box-shadow:0 12px 32px -12px rgba(10,10,12,.15); }
+  .dc-head { display:flex; align-items:center; gap:14px; }
+  .dc-logo { width:56px; height:56px; flex-shrink:0; background:#FBFAF4; border:1px solid var(--line); border-radius:12px; display:flex; align-items:center; justify-content:center; padding:8px; }
+  .dc-logo img { max-width:100%; max-height:100%; object-fit:contain; background:#fff; border-radius:6px; }
+  .dc-title h3 { font:700 19px 'Chakra Petch',sans-serif; color:var(--ink); margin:0 0 2px; letter-spacing:-.01em; }
+  .dc-meta { font:500 12.5px 'Chakra Petch',sans-serif; color:var(--muted); }
+  .dc-importer { font-size:13px; color:#3a3a40; line-height:1.5; margin:0; padding:10px 12px; background:var(--bg-cream); border-radius:8px; }
+  .dc-importer-label { font-weight:700; color:var(--ink); }
+  .dc-links { display:flex; gap:7px; flex-wrap:wrap; margin-top:auto; }
+  .dc-link { font:700 12px 'Chakra Petch',sans-serif; letter-spacing:.02em; padding:8px 12px; border-radius:8px; text-decoration:none; transition:.15s; border:1px solid var(--line); color:var(--ink); background:#fff; }
+  .dc-link:hover { background:var(--yellow-soft); border-color:var(--yellow); }
+  .dc-link.primary { background:var(--yellow); border-color:var(--yellow); }
+  .dc-link.primary:hover { transform:translateY(-1px); }
+  .dc-link.external { color:var(--muted); }
+
+  .info-note { background:var(--bg-cream); border:1px solid var(--line); border-radius:18px; padding:28px 32px; }
+  .info-note h2 { font:700 22px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0 0 12px; }
+  .info-note p { font-size:14.5px; color:#3a3a40; line-height:1.7; margin:0 0 18px; max-width:780px; }
+  .info-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .ia-btn { padding:11px 18px; border-radius:10px; text-decoration:none; font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.04em; transition:.15s; }
+  .ia-btn.primary { background:#0A0A0B; color:#fff; }
+  .ia-btn.primary:hover { transform:translateY(-1px); }
+  .ia-btn.ghost { background:#fff; color:#0A0A0B; border:1px solid var(--line); }
+  .ia-btn.ghost:hover { background:var(--yellow-soft); border-color:var(--yellow); }
+
+  @media (max-width:600px) {
+    .dealers-page { padding:20px 16px 60px; }
+    .hero { padding:32px 24px; }
+    .info-note { padding:22px 20px; }
+  }
+</style>

@@ -94,6 +94,7 @@ export const GET: APIRoute = async () => {
     ['/kalkulacka/', 'monthly', '0.8'],
     ['/kalkulacka/leasing-traktoru/', 'monthly', '0.75'],
     ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75'],
+    ['/prodejci/', 'monthly', '0.8'],
     ['/media/', 'monthly'],
     ['/redakce/', 'monthly', '0.5'],
   ];
