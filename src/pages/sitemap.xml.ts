@@ -95,6 +95,8 @@ export const GET: APIRoute = async () => {
     ['/kalkulacka/leasing-traktoru/', 'monthly', '0.75'],
     ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75'],
     ['/prodejci/', 'monthly', '0.8'],
+    ['/dotace/', 'weekly', '0.85'],
+    ['/dotace/kalendar-kol/', 'weekly', '0.75'],
     ['/media/', 'monthly'],
     ['/redakce/', 'monthly', '0.5'],
   ];
@@ -175,6 +177,11 @@ export const GET: APIRoute = async () => {
   }
   for (const p of puda) {
     urls.push({ loc: `${SITE_URL}/puda/${p.id}/`, changefreq: 'monthly' });
+  }
+
+  const dotace = await getCollection('dotace');
+  for (const dt of dotace) {
+    urls.push({ loc: `${SITE_URL}/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8' });
   }
 
   for (const d of getAllDruhy()) {

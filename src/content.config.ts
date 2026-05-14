@@ -72,4 +72,34 @@ const puda = defineCollection({
   }),
 });
 
-export const collections = { novinky, encyklopedie, znacky, puda };
+// SZIF dotační tituly — evergreen průvodci. Žádná automatizace: SZIF nemá API,
+// cyklus výzev je pomalý (2× ročně), takže ruční revize 2-4× ročně stačí.
+const dotace = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/dotace' }),
+  schema: z.object({
+    name: z.string(),
+    slug: z.string(),
+    /** Intervence kód SP SZP 2023-2027, např. "33.73". */
+    intervence: z.string(),
+    popis: z.string(),
+    /** % dotace pro rostlinnou výrobu. */
+    procentoRostlinna: z.number().optional(),
+    /** % dotace pro živočišnou výrobu. */
+    procentoZivocisna: z.number().optional(),
+    /** Maximální výše dotace na projekt (Kč). */
+    stropDotace: z.number().optional(),
+    /** Minimální způsobilé výdaje (Kč). */
+    minVydaje: z.number().optional(),
+    /** Kdo může žádat. */
+    zadatel: z.string(),
+    /** True = výdaje na mobilní stroje max 49 % způsobilých výdajů. */
+    strojeMax49: z.boolean().default(false),
+    /** Odkaz na primární zdroj (Pravidla SZIF / MZe). */
+    primarniZdroj: z.string(),
+    aktualizovano: z.date(),
+    highlights: z.array(z.string()),
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+  }),
+});
+
+export const collections = { novinky, encyklopedie, znacky, puda, dotace };

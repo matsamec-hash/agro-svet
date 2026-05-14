@@ -1,0 +1,155 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import kolaData from '../../../data/dotace-kola.json';
+
+const kola = kolaData.kola;
+const canonical = `${SITE_URL}/dotace/kalendar-kol/`;
+
+function fmtDate(iso: string): string {
+  return new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
+}
+const statusLabel: Record<string, string> = { ocekavane: 'Očekávané', otevrene: 'Probíhá příjem', uzavrene: 'Uzavřené' };
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Dotace', url: '/dotace/' },
+  { name: 'Kalendář kol', url: '/dotace/kalendar-kol/' },
+]);
+---
+
+<Layout
+  title="Kalendář kol dotací SZIF 2026 — termíny příjmu žádostí"
+  description="Přehled termínů příjmu žádostí o dotace SZIF v rámci SP SZP 2023–2027. Investice do podniků, technologie snižující emise, zpracování produktů."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="kal-page">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="/dotace/">Dotace</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">Kalendář kol</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">SZIF · harmonogram příjmu žádostí</span>
+      <h1>Kalendář kol dotací</h1>
+      <p class="hero-lede">
+        Termíny příjmu žádostí o projektové dotace SP SZP 2023–2027. Příjem probíhá typicky
+        dvakrát ročně — na jaře a na podzim. Pravidla daného kola SZIF zveřejňuje přibližně
+        dva měsíce před zahájením příjmu.
+      </p>
+    </header>
+
+    <div class="disclaimer">
+      <strong>Orientační termíny.</strong> Kalendář vychází z předpokládaného harmonogramu MZe.
+      Závazné termíny a podmínky zveřejňuje SZIF v Pravidlech daného kola na
+      <a href="https://szif.gov.cz/cs/szp23" target="_blank" rel="noopener">szif.gov.cz</a>.
+      Aktualizováno: {kolaData.aktualizovano}.
+    </div>
+
+    <div class="kola-list">
+      {kola.map((k) => (
+        <article class="kolo-card">
+          <div class="kc-left">
+            <span class="kc-code">{k.intervence}</span>
+            <h2>{k.nazev}</h2>
+            <span class="kc-kolo">{k.kolo}</span>
+          </div>
+          <div class="kc-right">
+            <div class="kc-dates">
+              <span class="kc-dates-label">Příjem žádostí</span>
+              <span class="kc-dates-value">{fmtDate(k.prijemOd)} – {fmtDate(k.prijemDo)}</span>
+            </div>
+            <span class={`kc-status status-${k.status}`}>{statusLabel[k.status] ?? k.status}</span>
+            <a href={k.pravidlaUrl} target="_blank" rel="noopener nofollow" class="kc-link">Pravidla SZIF ↗</a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <section class="info-box">
+      <h2>Jak funguje cyklus výzev</h2>
+      <p>
+        Projektové dotace SP SZP 2023–2027 se podávají v <strong>kolech</strong> — vymezených obdobích
+        příjmu žádostí. Pro nákup zemědělské techniky jsou klíčové intervence
+        <a href="/dotace/investice-do-zemedelskych-podniku-33-73/">33.73 Investice do zemědělských podniků</a>
+        a <a href="/dotace/technologie-snizujici-emise-37-73/">37.73 Technologie snižující emise</a>.
+        Pravidla každého kola se zveřejňují přibližně dva měsíce předem — je to čas na přípravu projektu
+        a podnikatelského plánu. Tento kalendář revidujeme s každým novým harmonogramem MZe.
+      </p>
+      <div class="ib-actions">
+        <a class="ib-btn primary" href="/dotace/">Přehled dotačních titulů</a>
+        <a class="ib-btn ghost" href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu</a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .kal-page {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --green:#0B7A3B; --green-soft:#E3F3EA; --amber:#7A6B0B; --amber-soft:#F5EFC8;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:920px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; flex-wrap:wrap; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:40px 44px; margin-bottom:20px; box-shadow:var(--sh-3); position:relative; overflow:hidden; }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(2rem,5vw,3.2rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:16px 0 0; line-height:1.05; position:relative; z-index:2; }
+  .hero-lede { color:#c8c8d0; max-width:680px; font-size:15.5px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
+
+  .disclaimer { background:var(--amber-soft); border:1px solid #E0D38A; border-radius:12px; padding:14px 18px; font-size:13px; color:#5a4f12; line-height:1.6; margin-bottom:28px; }
+  .disclaimer strong { color:var(--amber); }
+  .disclaimer a { color:var(--amber); }
+
+  .kola-list { display:flex; flex-direction:column; gap:12px; margin-bottom:36px; }
+  .kolo-card { display:flex; justify-content:space-between; align-items:center; gap:24px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 26px; box-shadow:var(--sh-1); flex-wrap:wrap; }
+  .kc-left { display:flex; flex-direction:column; gap:5px; }
+  .kc-code { align-self:flex-start; font:700 11px 'Chakra Petch',sans-serif; letter-spacing:.06em; background:var(--yellow-soft); color:var(--ink); padding:3px 9px; border-radius:6px; }
+  .kc-left h2 { font:700 19px 'Chakra Petch',sans-serif; color:var(--ink); margin:0; letter-spacing:-.01em; }
+  .kc-kolo { font:500 13px 'Chakra Petch',sans-serif; color:var(--muted); }
+  .kc-right { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+  .kc-dates { display:flex; flex-direction:column; gap:3px; }
+  .kc-dates-label { font:600 10px 'Chakra Petch',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .kc-dates-value { font:700 14px 'Chakra Petch',sans-serif; color:var(--ink); }
+  .kc-status { font:700 11px 'Chakra Petch',sans-serif; padding:5px 11px; border-radius:999px; letter-spacing:.04em; }
+  .status-ocekavane { background:var(--amber-soft); color:var(--amber); }
+  .status-otevrene { background:var(--green-soft); color:var(--green); }
+  .status-uzavrene { background:#f0f0f0; color:var(--muted); }
+  .kc-link { font:700 12px 'Chakra Petch',sans-serif; color:var(--ink); text-decoration:none; white-space:nowrap; }
+  .kc-link:hover { text-decoration:underline; }
+
+  .info-box { background:var(--bg-cream); border:1px solid var(--line); border-radius:18px; padding:28px 32px; }
+  .info-box h2 { font:700 22px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0 0 12px; }
+  .info-box p { font-size:14.5px; color:#3a3a40; line-height:1.7; margin:0 0 18px; }
+  .info-box a { color:var(--green); }
+  .ib-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .ib-btn { padding:11px 18px; border-radius:10px; text-decoration:none; font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.04em; transition:.15s; }
+  .ib-btn.primary { background:#0A0A0B; color:#fff; }
+  .ib-btn.primary:hover { transform:translateY(-1px); }
+  .ib-btn.ghost { background:#fff; color:#0A0A0B; border:1px solid var(--line); }
+  .ib-btn.ghost:hover { background:var(--yellow-soft); border-color:var(--yellow); }
+
+  @media (max-width:640px) {
+    .kal-page { padding:20px 16px 60px; }
+    .hero { padding:30px 22px; }
+    .kolo-card { flex-direction:column; align-items:flex-start; gap:14px; }
+    .kc-right { gap:12px; }
+    .info-box { padding:22px 20px; }
+  }
+</style>
