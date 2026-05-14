@@ -1,0 +1,351 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+
+const canonical = `${SITE_URL}/kalkulacka/naklady-na-hektar/`;
+
+// Operation presets — typical field capacity (ha/h) and fuel use (l/h) for a
+// mid-power tractor + implement, or self-propelled machine. Conservative CZ
+// averages for 2026; real numbers vary with soil, terrain, working width.
+const operations = [
+  { id: 'orba', name: 'Orba (pluh)', haPerHour: 1.2, fuelPerHour: 22, note: 'Náročná operace — vysoká spotřeba, malý výkon plochy.' },
+  { id: 'podmitka', name: 'Podmítka / kypření', haPerHour: 3.5, fuelPerHour: 18, note: 'Mělké zpracování, vyšší pojezdová rychlost.' },
+  { id: 'seti', name: 'Setí (secí kombinace)', haPerHour: 4.0, fuelPerHour: 16, note: 'Široký záběr, střední spotřeba.' },
+  { id: 'postrik', name: 'Postřik', haPerHour: 12.0, fuelPerHour: 9, note: 'Velký záběr, nízká spotřeba — nejlevnější na hektar.' },
+  { id: 'hnojeni', name: 'Rozmetání hnojiv', haPerHour: 9.0, fuelPerHour: 10, note: 'Vysoký výkon plochy díky širokému rozhozu.' },
+  { id: 'sklizen-obili', name: 'Sklizeň obilí (kombajn)', haPerHour: 2.5, fuelPerHour: 38, note: 'Samojízdný stroj, vysoká spotřeba motoru.' },
+  { id: 'sklizen-pice', name: 'Sklizeň píce (řezačka/lis)', haPerHour: 3.0, fuelPerHour: 30, note: 'Energeticky náročná sklizňová operace.' },
+];
+
+const faqItems = [
+  {
+    q: 'Co všechno se počítá do nákladů na hektar?',
+    a: 'Tato kalkulačka pokrývá variabilní provozní náklady — palivo, práci obsluhy a paušál na opravy a údržbu. Nezahrnuje fixní náklady jako odpisy stroje, leasing, pojištění nebo garážování. Pro celkové náklady na hektar je třeba fixní náklady připočítat zvlášť.',
+  },
+  {
+    q: 'Proč je orba dražší než postřik?',
+    a: 'Orba je energeticky nejnáročnější operace — pluh klade velký tažný odpor, takže traktor spotřebuje hodně paliva a zvládne jen malou plochu za hodinu. Postřik má naopak široký záběr a malý odpor, takže stejná hodina práce pokryje mnohonásobně větší plochu.',
+  },
+  {
+    q: 'Jak přesné jsou výchozí hodnoty výkonu plochy?',
+    a: 'Přednastavené hodnoty (ha/h, l/h) jsou konzervativní české průměry pro stroj střední výkonové třídy. Skutečnost závisí na typu půdy, svažitosti, pracovní šířce nářadí a stylu jízdy. Hodnoty si proto upravte podle vlastní zkušenosti — kalkulačka je počítá dál automaticky.',
+  },
+  {
+    q: 'Jakou cenu nafty mám zadat?',
+    a: 'Zadejte cenu, za kterou reálně tankujete — zemědělci často využívají vratku spotřební daně z minerálních olejů (tzv. zelená nafta), takže efektivní cena bývá nižší než pumpová. Pro plánování použijte cenu po vratce.',
+  },
+];
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalkulačky', url: '/kalkulacka/' },
+  { name: 'Náklady na hektar', url: canonical },
+]);
+const faqJsonLd = faqPageSchema(faqItems);
+---
+
+<Layout
+  title="Kalkulačka provozních nákladů na hektar — palivo, práce, údržba"
+  description="Spočítejte provozní náklady na hektar pro orbu, setí, postřik nebo sklizeň. Spotřeba nafty, výkon plochy, práce obsluhy — Kč/ha pro plánování farmy."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="calc-page" data-operations={JSON.stringify(operations)}>
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="/kalkulacka/">Kalkulačky</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">Náklady na hektar</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Kalkulačka · ekonomika provozu</span>
+      <h1>Provozní náklady na hektar</h1>
+      <p class="hero-lede">
+        Vyberte operaci, upravte spotřebu a výkon plochy podle svých podmínek a doplňte ceny.
+        Kalkulačka spočítá variabilní náklady na hektar — palivo, práci obsluhy a paušál na údržbu.
+        Fixní náklady (odpisy, leasing, pojištění) je třeba připočítat zvlášť.
+      </p>
+    </header>
+
+    <div class="calc-layout">
+      <form class="calc-form" id="calc-form" autocomplete="off">
+        <div class="cf-group">
+          <label for="operation">Polní operace</label>
+          <select id="operation" class="cf-select">
+            {operations.map((op) => <option value={op.id}>{op.name}</option>)}
+          </select>
+          <output class="cf-hint" id="operation-note"></output>
+        </div>
+
+        <div class="cf-row">
+          <div class="cf-group">
+            <label for="ha-per-hour">Výkon plochy</label>
+            <div class="cf-input-unit">
+              <input type="number" id="ha-per-hour" min="0.1" max="40" step="0.1" inputmode="decimal" />
+              <span class="cf-unit">ha/h</span>
+            </div>
+          </div>
+          <div class="cf-group">
+            <label for="fuel-per-hour">Spotřeba nafty</label>
+            <div class="cf-input-unit">
+              <input type="number" id="fuel-per-hour" min="1" max="80" step="0.5" inputmode="decimal" />
+              <span class="cf-unit">l/h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cf-row">
+          <div class="cf-group">
+            <label for="fuel-price">Cena nafty (po vratce)</label>
+            <div class="cf-input-unit">
+              <input type="number" id="fuel-price" min="1" max="60" step="0.5" value="32" inputmode="decimal" />
+              <span class="cf-unit">Kč/l</span>
+            </div>
+          </div>
+          <div class="cf-group">
+            <label for="labor-cost">Práce obsluhy</label>
+            <div class="cf-input-unit">
+              <input type="number" id="labor-cost" min="0" max="2000" step="10" value="280" inputmode="numeric" />
+              <span class="cf-unit">Kč/h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cf-row">
+          <div class="cf-group">
+            <label for="maintenance">Údržba a opravy</label>
+            <div class="cf-input-unit">
+              <input type="number" id="maintenance" min="0" max="2000" step="10" value="150" inputmode="numeric" />
+              <span class="cf-unit">Kč/h</span>
+            </div>
+            <output class="cf-hint">Paušál na opravy, oleje, opotřebení dílů.</output>
+          </div>
+          <div class="cf-group">
+            <label for="area">Plocha (volitelné)</label>
+            <div class="cf-input-unit">
+              <input type="number" id="area" min="0" max="100000" step="1" value="100" inputmode="numeric" />
+              <span class="cf-unit">ha</span>
+            </div>
+            <output class="cf-hint">Pro výpočet celkových nákladů a času.</output>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-result">
+        <div class="cr-headline">
+          <span class="cr-label">Provozní náklady na hektar</span>
+          <span class="cr-value" id="result-per-ha">—</span>
+        </div>
+        <div class="cr-breakdown">
+          <div class="crb-row">
+            <span class="crb-label">Palivo</span>
+            <span class="crb-bar"><span class="crb-fill" id="bar-fuel"></span></span>
+            <span class="crb-value" id="result-fuel">—</span>
+          </div>
+          <div class="crb-row">
+            <span class="crb-label">Práce obsluhy</span>
+            <span class="crb-bar"><span class="crb-fill" id="bar-labor"></span></span>
+            <span class="crb-value" id="result-labor">—</span>
+          </div>
+          <div class="crb-row">
+            <span class="crb-label">Údržba</span>
+            <span class="crb-bar"><span class="crb-fill" id="bar-maint"></span></span>
+            <span class="crb-value" id="result-maint">—</span>
+          </div>
+        </div>
+        <div class="cr-grid">
+          <div class="cr-stat">
+            <span class="crs-label">Náklady celkem</span>
+            <span class="crs-value" id="result-total">—</span>
+          </div>
+          <div class="cr-stat">
+            <span class="crs-label">Čas práce</span>
+            <span class="crs-value" id="result-hours">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-h">
+      <h2 id="faq-h">Časté otázky</h2>
+      <dl class="faq-list">
+        {faqItems.map((qa) => (
+          <div class="faq-item">
+            <dt>{qa.q}</dt>
+            <dd>{qa.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section class="cross-cta">
+      <div>
+        <span class="cc-kicker">Plánujete pořízení stroje?</span>
+        <h2>Spočítejte si leasing nebo projděte katalog techniky</h2>
+        <div class="cc-actions">
+          <a class="cc-btn primary" href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu</a>
+          <a class="cc-btn ghost" href="/stroje/traktory/">Katalog traktorů</a>
+          <a class="cc-btn ghost" href="/stroje/kombajny/">Katalog kombajnů</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .calc-page {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --green:#0B7A3B;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; flex-wrap:wrap; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:40px 44px; margin-bottom:28px; box-shadow:var(--sh-3); position:relative; overflow:hidden; }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(2rem,5vw,3.4rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:16px 0 0; line-height:1.05; position:relative; z-index:2; }
+  .hero-lede { color:#c8c8d0; max-width:720px; font-size:15.5px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
+
+  .calc-layout { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:32px; }
+  .calc-form { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:26px 28px; box-shadow:var(--sh-1); display:flex; flex-direction:column; gap:18px; }
+  .cf-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .cf-group { display:flex; flex-direction:column; gap:7px; }
+  .cf-group label { font:600 12px 'Chakra Petch',sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .cf-input-unit { display:flex; align-items:stretch; border:1.5px solid var(--line); border-radius:10px; overflow:hidden; transition:.12s; }
+  .cf-input-unit:focus-within { border-color:var(--yellow); box-shadow:0 0 0 3px rgba(255,234,0,.25); }
+  .cf-input-unit input { flex:1; border:0; outline:0; padding:13px 14px; font:700 17px 'Chakra Petch',sans-serif; color:var(--ink); background:#fff; min-width:0; }
+  .cf-unit { display:flex; align-items:center; padding:0 13px; background:var(--bg-cream); font:600 12.5px 'Chakra Petch',sans-serif; color:var(--muted); border-left:1px solid var(--line); }
+  .cf-select { padding:13px 14px; font:700 16px 'Chakra Petch',sans-serif; color:var(--ink); background:#fff; border:1.5px solid var(--line); border-radius:10px; outline:none; cursor:pointer; transition:.12s; }
+  .cf-select:focus { border-color:var(--yellow); box-shadow:0 0 0 3px rgba(255,234,0,.25); }
+  .cf-hint { font-size:12px; color:var(--muted); font-family:'Chakra Petch',sans-serif; line-height:1.4; }
+
+  .calc-result { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 100%); color:#fff; border-radius:18px; padding:28px 30px; box-shadow:var(--sh-3); display:flex; flex-direction:column; gap:22px; }
+  .cr-headline { display:flex; flex-direction:column; gap:6px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,.12); }
+  .cr-label { font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.16em; text-transform:uppercase; color:#8a8a92; }
+  .cr-value { font:700 clamp(2rem,5vw,3rem) 'Chakra Petch',sans-serif; color:var(--yellow); letter-spacing:-.02em; line-height:1; }
+  .cr-breakdown { display:flex; flex-direction:column; gap:12px; }
+  .crb-row { display:grid; grid-template-columns:110px 1fr 90px; align-items:center; gap:12px; }
+  .crb-label { font:600 12px 'Chakra Petch',sans-serif; color:#c8c8d0; }
+  .crb-bar { height:8px; background:rgba(255,255,255,.1); border-radius:999px; overflow:hidden; }
+  .crb-fill { display:block; height:100%; background:linear-gradient(90deg, var(--yellow) 0%, #FFD400 100%); border-radius:999px; width:0%; transition:width .2s; }
+  .crb-value { font:700 14px 'Chakra Petch',sans-serif; color:#fff; text-align:right; }
+  .cr-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; padding-top:6px; border-top:1px solid rgba(255,255,255,.12); }
+  .cr-stat { display:flex; flex-direction:column; gap:4px; }
+  .crs-label { font:500 11px 'Chakra Petch',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:#8a8a92; }
+  .crs-value { font:700 19px 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.01em; }
+
+  .faq { margin-bottom:32px; }
+  .faq h2 { font:700 26px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0 0 16px; }
+  .faq-list { display:flex; flex-direction:column; gap:10px; }
+  .faq-item { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 22px; }
+  .faq-item dt { font:700 15.5px 'Chakra Petch',sans-serif; color:var(--ink); margin:0 0 7px; letter-spacing:-.005em; }
+  .faq-item dd { font-size:14px; color:#3a3a40; line-height:1.6; margin:0; }
+
+  .cross-cta { background:linear-gradient(135deg, var(--yellow) 0%, #FFD400 100%); border-radius:24px; padding:30px 34px; box-shadow:0 10px 30px -8px var(--yellow-glow); }
+  .cross-cta h2 { font:700 23px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:#0A0A0B; margin:6px 0 14px; }
+  .cc-kicker { display:inline-block; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:#0A0A0B; background:rgba(0,0,0,.08); padding:5px 11px; border-radius:999px; }
+  .cc-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .cc-btn { padding:11px 18px; border-radius:10px; text-decoration:none; font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.04em; transition:.15s; }
+  .cc-btn.primary { background:#0A0A0B; color:#fff; }
+  .cc-btn.primary:hover { transform:translateY(-1px); }
+  .cc-btn.ghost { background:rgba(255,255,255,.5); color:#0A0A0B; border:1px solid rgba(0,0,0,.15); }
+  .cc-btn.ghost:hover { background:rgba(255,255,255,.8); }
+
+  @media (max-width:820px) {
+    .calc-layout { grid-template-columns:1fr; }
+  }
+  @media (max-width:600px) {
+    .calc-page { padding:20px 16px 60px; }
+    .hero { padding:30px 22px; }
+    .cf-row { grid-template-columns:1fr; }
+    .cr-grid { grid-template-columns:1fr; }
+    .crb-row { grid-template-columns:90px 1fr 80px; }
+  }
+</style>
+
+<script>
+  // ── Cost-per-hectare calculator ───────────────────────────────────────────
+  const page = document.querySelector<HTMLElement>('.calc-page');
+  const operations: { id: string; name: string; haPerHour: number; fuelPerHour: number; note: string }[] =
+    JSON.parse(page?.dataset.operations ?? '[]');
+
+  const opEl = document.getElementById('operation') as HTMLSelectElement;
+  const haEl = document.getElementById('ha-per-hour') as HTMLInputElement;
+  const fuelHourEl = document.getElementById('fuel-per-hour') as HTMLInputElement;
+  const fuelPriceEl = document.getElementById('fuel-price') as HTMLInputElement;
+  const laborEl = document.getElementById('labor-cost') as HTMLInputElement;
+  const maintEl = document.getElementById('maintenance') as HTMLInputElement;
+  const areaEl = document.getElementById('area') as HTMLInputElement;
+  const opNote = document.getElementById('operation-note');
+
+  const fmtCZK = (n: number) =>
+    new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(Math.round(n));
+  const fmtCZK1 = (n: number) =>
+    new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 1 }).format(n);
+
+  /** When the operation changes, repopulate ha/h + l/h with the preset baseline. */
+  function applyPreset() {
+    const op = operations.find((o) => o.id === opEl.value) ?? operations[0];
+    haEl.value = String(op.haPerHour);
+    fuelHourEl.value = String(op.fuelPerHour);
+    if (opNote) opNote.textContent = op.note;
+    recalc();
+  }
+
+  function recalc() {
+    const haPerHour = Math.max(0.01, parseFloat(haEl.value) || 0.01);
+    const fuelPerHour = Math.max(0, parseFloat(fuelHourEl.value) || 0);
+    const fuelPrice = Math.max(0, parseFloat(fuelPriceEl.value) || 0);
+    const laborCost = Math.max(0, parseFloat(laborEl.value) || 0);
+    const maintCost = Math.max(0, parseFloat(maintEl.value) || 0);
+    const area = Math.max(0, parseFloat(areaEl.value) || 0);
+
+    // Per-hour costs → per-hectare by dividing by field capacity.
+    const fuelPerHa = (fuelPerHour * fuelPrice) / haPerHour;
+    const laborPerHa = laborCost / haPerHour;
+    const maintPerHa = maintCost / haPerHour;
+    const totalPerHa = fuelPerHa + laborPerHa + maintPerHa;
+
+    document.getElementById('result-per-ha')!.textContent = `${fmtCZK1(totalPerHa)}/ha`;
+    document.getElementById('result-fuel')!.textContent = `${fmtCZK1(fuelPerHa)}/ha`;
+    document.getElementById('result-labor')!.textContent = `${fmtCZK1(laborPerHa)}/ha`;
+    document.getElementById('result-maint')!.textContent = `${fmtCZK1(maintPerHa)}/ha`;
+
+    // Breakdown bars — share of total
+    const pct = (v: number) => (totalPerHa > 0 ? `${Math.round((v / totalPerHa) * 100)}%` : '0%');
+    (document.getElementById('bar-fuel') as HTMLElement).style.width = pct(fuelPerHa);
+    (document.getElementById('bar-labor') as HTMLElement).style.width = pct(laborPerHa);
+    (document.getElementById('bar-maint') as HTMLElement).style.width = pct(maintPerHa);
+
+    // Totals for the entered area
+    if (area > 0) {
+      const totalCost = totalPerHa * area;
+      const hours = area / haPerHour;
+      document.getElementById('result-total')!.textContent = fmtCZK(totalCost);
+      const h = Math.floor(hours);
+      const m = Math.round((hours - h) * 60);
+      document.getElementById('result-hours')!.textContent = `${h} h ${m} min`;
+    } else {
+      document.getElementById('result-total')!.textContent = '—';
+      document.getElementById('result-hours')!.textContent = '—';
+    }
+  }
+
+  opEl?.addEventListener('change', applyPreset);
+  [haEl, fuelHourEl, fuelPriceEl, laborEl, maintEl, areaEl].forEach((el) => el?.addEventListener('input', recalc));
+  applyPreset();
+</script>

@@ -1,0 +1,110 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const calculators = [
+  {
+    slug: 'leasing-traktoru',
+    name: 'Kalkulačka leasingu traktoru',
+    short: 'Leasing traktoru',
+    description: 'Spočítejte měsíční splátku, celkové náklady a RPSN. Porovnání ČSOB Leasing, John Deere Financial, AGRI CS a AGROTEC.',
+    icon: '💳',
+  },
+  {
+    slug: 'naklady-na-hektar',
+    name: 'Kalkulačka provozních nákladů na hektar',
+    short: 'Náklady na hektar',
+    description: 'Spotřeba nafty, výkon plochy a obsluha — celkové Kč/ha pro orbu, secí, postřik nebo sklizeň.',
+    icon: '🌾',
+  },
+];
+
+const canonical = `${SITE_URL}/kalkulacka/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalkulačky', url: '/kalkulacka/' },
+]);
+
+const itemListJsonLd = itemListSchema(
+  calculators.map((c) => ({ url: `/kalkulacka/${c.slug}/`, name: c.name })),
+  'Zemědělské kalkulačky',
+);
+---
+
+<Layout
+  title="Kalkulačky pro zemědělce — leasing, náklady na hektar"
+  description="Interaktivní kalkulačky pro plánování investic a provozu zemědělské techniky: leasing traktoru, provozní náklady na hektar."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+
+  <div class="hub">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">Kalkulačky</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Nástroje · ekonomika farmy</span>
+      <h1>Kalkulačky pro zemědělce</h1>
+      <p class="hero-lede">
+        Otevřené, transparentní nástroje pro plánování investic a denního provozu. Spočítejte si splátky a náklady
+        před tím, než zavoláte dealerovi — výsledky jsou jen pro orientaci, finální nabídku vždy ověřte u poskytovatele.
+      </p>
+    </header>
+
+    <div class="card-grid">
+      {calculators.map((c) => (
+        <a href={`/kalkulacka/${c.slug}/`} class="calc-card">
+          <div class="cc-icon" aria-hidden="true">{c.icon}</div>
+          <div class="cc-body">
+            <h2>{c.short}</h2>
+            <p>{c.description}</p>
+            <span class="cc-cta">Otevřít kalkulačku →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .hub {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:44px 48px; margin-bottom:28px; box-shadow:var(--sh-3); position:relative; overflow:hidden; }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(2.2rem,5vw,3.6rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:18px 0 0; line-height:1.05; position:relative; z-index:2; }
+  .hero-lede { color:#c8c8d0; max-width:700px; font-size:16px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
+
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:16px; }
+  .calc-card { display:flex; gap:18px; padding:24px 26px; background:var(--card); border:1px solid var(--line); border-radius:18px; text-decoration:none; color:inherit; box-shadow:var(--sh-1); transition:.18s; }
+  .calc-card:hover { transform:translateY(-2px); border-color:var(--yellow); box-shadow:0 16px 40px -12px rgba(10,10,12,.15); }
+  .cc-icon { width:64px; height:64px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:36px; background:var(--yellow-soft); border-radius:14px; }
+  .cc-body h2 { font:700 19px 'Chakra Petch',sans-serif; letter-spacing:-.01em; color:var(--ink); margin:0 0 6px; }
+  .cc-body p { font-size:14px; color:var(--muted); line-height:1.55; margin:0 0 10px; }
+  .cc-cta { font:700 12.5px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:.04em; }
+
+  @media (max-width:600px) {
+    .hub { padding:20px 16px 60px; }
+    .hero { padding:32px 22px; }
+    .calc-card { flex-direction:column; gap:14px; padding:22px; }
+  }
+</style>
