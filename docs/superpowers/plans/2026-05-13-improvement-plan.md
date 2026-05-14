@@ -207,3 +207,75 @@ Ztrácí traffic každý den. **Fix priority order:**
 - Codebase: `/Users/matejsamec/agro-svet/` Astro 6 + Cloudflare Workers, 22 brands × 2 564 modelů × 494 series × 78 plemen, build 21 s
 - Competitors: mechanizaceweb.cz, agroportal24h.cz, mascus.cz, lectura-specs.com, tractordata.com, agriaffaires.com, mascus.com, farm-equipment.com, agroseznam.cz, traktorbazar.cz, strom.cz, nasetraktory.eu
 - Trends: SZIF 2026, Stage V, Fendt e100 Vario, JD Operations Center, EU CAP post-2027
+
+---
+
+# STAV K 2026-05-14 — Sprint 1+2+3 KOMPLETNĚ SHIPPED
+
+**28 commitů za 2 dny, vše na produkci.** Shrnutí v `.continue-here.md`. Hotovo:
+- Sprint 1+1.5: 13 SEO/perf/TS fixů
+- Sprint 2: comparator, filtry, kalkulačky, newsletter sender, 5 encyklopedií
+- Sprint 3: 16 brand articles, 10 encyklopedie modelů, dealer locator, SZIF sekce, 59 fotek pro 12 značek
+
+User akce hotové: newsletter kampaň odeslaná, GSC sitemap resubmit + indexace vyžádaná.
+
+---
+
+# SPRINT 4 — Nice-to-have (žádné z toho není urgentní)
+
+Pořadí dle ROI. Vše lze dělat autonomně kromě SZIF monetizace (potřebuje affiliate partnera).
+
+## S4.1 — HowTo články (voice search + AI Overviews)
+**Co:** 5-8 článků formátu "Jak ..." do `src/content/novinky/` nebo nová `howto` collection. Schema.org `HowTo`.
+**Témata** (z research, nulová/nízká konkurence):
+- "Jak vybrat traktor pro malou farmu" — krok za krokem dle výměry
+- "Jak seřídit pluh — hloubka, šířka záběru, tažný bod"
+- "Co kontrolovat při koupi ojetého traktoru — 30-bodový checklist"
+- "Jak nastavit secí stroj — výsevek, hloubka, meziřádková vzdálenost"
+- "Jak číst štítek traktoru — výkon, rok, sériové číslo"
+- "Jak naplánovat dotaci na techniku — od záměru po žádost" (cross-link na /dotace/)
+**Effort:** S-M, ~3h per článek. Pattern: existující encyklopedie MD + `HowTo` schema helper (nutno přidat do `structured-data.ts`).
+**Jak začít:** `superpowers:brainstorm` na strukturu HowTo collection, pak generovat.
+
+## S4.2 — Dalších ~17 encyklopedie modelů (collection 20→37+)
+**Co:** Pokračovat ve W5/Sprint3 patternu. Kandidáti s dostupnými fotkami v `public/images/stroje/`:
+- John Deere: 7R 350, 9RX 830, X9 1100 (kombajn), S790 (kombajn)
+- Fendt: 728 Vario, 942 Vario, IDEAL (kombajn)
+- New Holland: T6.180, CX8.90 (kombajn)
+- Case IH: Puma 240, Optum 340, Quadtrac, Axial-Flow (kombajn)
+- Massey Ferguson: 7S, 6S, 5S
+- Deutz-Fahr: 7 Series, 6C Series
+- Kubota: M7-192, M6
+- Zetor: Crystal HD 170, Major 80
+**Effort:** ~30 min per model (data z YAML + series description). Pattern viz commity `0ea8b94`, `0fbf292`.
+**Jak začít:** Stejný postup jako Sprint 3 — extract specs z YAML, napsat ~600 slov + 5 FAQ + frontmatter.
+
+## S4.3 — Dynamic OG images per model/encyklopedie
+**Co:** Vygenerovat OG image (1200×630) per stránka s názvem modelu + klíčovými specs + brand barvou.
+**Riziko:** memory zmiňuje "CF Workers WASM omezení" — odloženo už v SEO overhaul. Možné cesty: build-time generování přes `sharp` (ne runtime), nebo Satori + resvg build-time.
+**Effort:** M. **Jak začít:** `superpowers:brainstorm` — ověřit jestli build-time sharp composition zvládne text overlay, nebo Satori.
+
+## S4.4 — SZIF monetizace (BLOCKED — potřebuje partnera)
+**Co:** Lead-gen formulář "Nezávazná konzultace k dotaci" na `/dotace/[slug]/` stránkách → předání leadu dotačnímu zpracovateli za provizi.
+**Blocker:** potřebuje affiliate partnera (grantex.cz / enovation.cz / regionální zpracovatel). Bez smlouvy nedělat.
+**Když bude partner:** formulář komponenta + Supabase tabulka `dotace_leads` + email notifikace. Eticky: transparentně "spolupracujeme s [partner]", neslibovat schválení.
+
+## S4.5 — Schema.org doplňky (drobné)
+- `/plemena/[druh]/[plemeno]/` — `sameAs` na Wikipedia článek plemene (pokud existuje)
+- `/stroje/[brand]/[series]/` — ItemList už je, ověřit konzistenci
+- VideoObject schema až budou video embedy (S4.6)
+
+## S4.6 — Video embedy (z původního plánu, odloženo)
+**Co:** YouTube embed na top 20 encyklopedie modelů (TV Zemědělec, Mascus, Agriaffaires reviews) + VideoObject schema.
+**Effort:** S (~6h). Manuální curate. **Jak začít:** najít per-model YouTube review, embed `<iframe>` do encyklopedie MD, preconnect youtube-nocookie.
+
+---
+
+## Jak pokračovat — doporučené pořadí
+1. **S4.2** (encyklopedie modely) — nejnižší riziko, proven pattern, přímý SEO impact
+2. **S4.1** (HowTo články) — vysoký ROI pro voice search, ale potřebuje `HowTo` schema helper
+3. **S4.6** (video embedy) — rychlé, ale manuální
+4. **S4.3** (OG images) — vyžaduje brainstorm na technickou cestu
+5. **S4.4** (SZIF monetizace) — až bude affiliate partner
+
+Po 7-14 dnech zkontrolovat GSC: indexované stránky z `/srovnani/`, `/kalkulacka/`, `/dotace/`, `/prodejci/` + nových encyklopedií/brand articles.
