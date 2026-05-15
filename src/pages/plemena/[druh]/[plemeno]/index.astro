@@ -112,6 +112,14 @@ const thingJsonLd: Record<string, unknown> = {
   }),
   ...(propertyValues.length > 0 && { additionalProperty: propertyValues }),
 };
+
+// sameAs — Wikipedia + Wikidata URLs anchor the breed to authoritative entities.
+// Knowledge Graph + AI Overviews use these to disambiguate identically named breeds
+// and pull cross-language metadata. Emit only when present.
+const sameAs: string[] = [];
+if (plemeno.wikipedia) sameAs.push(plemeno.wikipedia);
+if (plemeno.wikidata) sameAs.push(plemeno.wikidata);
+if (sameAs.length > 0) thingJsonLd.sameAs = sameAs;
 ---
 
 <Layout title={`${pageTitle} — plemeno ${druh.name.toLowerCase()}`} description={pageDesc} canonical={canonical}>

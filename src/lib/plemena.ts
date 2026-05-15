@@ -17,6 +17,10 @@ export interface Plemeno {
   height_cm?: number | null;
   image_url?: string | null;
   specs?: Record<string, string | number | null>;
+  /** Wikipedia URL (cs preferred). Feeds JSON-LD sameAs — Knowledge Graph signal. */
+  wikipedia?: string;
+  /** Wikidata Q-entity URL. Cross-language entity anchor for AI Overviews. */
+  wikidata?: string;
 }
 
 export interface Druh {
