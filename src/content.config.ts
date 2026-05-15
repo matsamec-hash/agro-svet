@@ -102,4 +102,31 @@ const dotace = defineCollection({
   }),
 });
 
-export const collections = { novinky, encyklopedie, znacky, puda, dotace };
+// HowTo průvodci — krok-za-krokem návody pro AI Overviews a voice search.
+// Strukturované kroky ve frontmatteru feedují HowTo JSON-LD i on-page seznam.
+const howto = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/howto' }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string(),
+    heroImage: z.string().optional(),
+    datePublished: z.date(),
+    lastVerified: z.date().optional(),
+    /** ISO 8601 duration, např. "PT30M", "PT2H". Feeduje HowTo.totalTime. */
+    totalTime: z.string().optional(),
+    /** Volné textové vyjádření náročnosti — zobrazeno v UI. */
+    obtiznost: z.string().optional(),
+    /** Nářadí potřebné k provedení. */
+    tools: z.array(z.string()).optional(),
+    /** Spotřební materiál. */
+    supplies: z.array(z.string()).optional(),
+    steps: z.array(z.object({ name: z.string(), text: z.string() })),
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+    /** Volitelný odkaz na související hub (např. /kalkulacka/, /dotace/). */
+    relatedUrl: z.string().optional(),
+    relatedLabel: z.string().optional(),
+  }),
+});
+
+export const collections = { novinky, encyklopedie, znacky, puda, dotace, howto };

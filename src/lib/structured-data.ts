@@ -227,6 +227,51 @@ export function faqPageSchema(items: FaqItem[]) {
   };
 }
 
+export interface HowToStep {
+  name: string;
+  text: string;
+}
+
+export interface HowToInput {
+  name: string;
+  description: string;
+  /** Absolute or site-relative URL of the HowTo page. */
+  url: string;
+  imageUrl?: string;
+  /** ISO 8601 duration, e.g. "PT30M" or "PT2H". */
+  totalTime?: string;
+  tools?: string[];
+  supplies?: string[];
+  steps: HowToStep[];
+}
+
+export function howToSchema(h: HowToInput) {
+  const url = h.url.startsWith('http') ? h.url : `${SITE_URL}${h.url}`;
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: h.name,
+    description: h.description,
+    inLanguage: 'cs-CZ',
+  };
+  if (h.imageUrl) schema.image = h.imageUrl.startsWith('http') ? h.imageUrl : `${SITE_URL}${h.imageUrl}`;
+  if (h.totalTime) schema.totalTime = h.totalTime;
+  if (h.tools && h.tools.length > 0) {
+    schema.tool = h.tools.map((t) => ({ '@type': 'HowToTool', name: t }));
+  }
+  if (h.supplies && h.supplies.length > 0) {
+    schema.supply = h.supplies.map((s) => ({ '@type': 'HowToSupply', name: s }));
+  }
+  schema.step = h.steps.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.name,
+    text: s.text,
+    url: `${url}#krok-${i + 1}`,
+  }));
+  return schema;
+}
+
 export interface ItemListEntry {
   url: string;
   name: string;

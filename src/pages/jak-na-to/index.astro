@@ -1,0 +1,88 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { SITE_URL } from '../../lib/config';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+
+const items = await getCollection('howto');
+const sorted = items.sort((a, b) => b.data.datePublished.getTime() - a.data.datePublished.getTime());
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Jak na to', url: '/jak-na-to/' },
+]);
+const listJsonLd = itemListSchema(
+  sorted.map((i) => ({ url: `/jak-na-to/${i.id}/`, name: i.data.title })),
+  'Praktické návody pro zemědělce',
+);
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Jak na to — praktické návody pro zemědělce',
+  description: 'Návody krok za krokem: výběr traktoru, seřízení pluhu, kontrola ojeté techniky, nastavení secího stroje a plánování dotace.',
+  url: `${SITE_URL}/jak-na-to/`,
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout
+  title="Jak na to — praktické návody pro zemědělce"
+  description="Návody krok za krokem: jak vybrat traktor pro malou farmu, seřídit pluh, zkontrolovat ojetý traktor, nastavit secí stroj, číst štítek traktoru a naplánovat dotaci na techniku."
+  canonical={`${SITE_URL}/jak-na-to/`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(listJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+
+  <div style="max-width:1100px; margin:0 auto; padding:48px 32px 80px;">
+
+    <div style="margin-bottom:44px;">
+      <span class="section-label">Jak na to</span>
+      <h1 style="font-size:clamp(2rem,5vw,3rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
+        Praktické návody pro zemědělce
+      </h1>
+      <p style="font-size:16px; color:#666; max-width:600px; line-height:1.6;">
+        Návody krok za krokem — od výběru traktoru přes seřízení nářadí až po plánování dotace. Každý návod má strukturovaný postup, nářadí a odpovědi na časté otázky.
+      </p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px;">
+      {sorted.map((item) => (
+        <a href={`/jak-na-to/${item.id}/`} class="howto-card">
+          {item.data.heroImage && (
+            <div style="height:170px; overflow:hidden;">
+              <img
+                src={item.data.heroImage}
+                alt={item.data.title}
+                loading="lazy"
+                decoding="async"
+                width="600"
+                height="340"
+                style="width:100%; height:100%; object-fit:cover;"
+              />
+            </div>
+          )}
+          <div style="padding:20px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+              <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:10px; padding:2px 8px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;">
+                {item.data.steps.length} kroků
+              </span>
+              {item.data.obtiznost && <span style="font-size:12px; color:#767676;">{item.data.obtiznost}</span>}
+            </div>
+            <h2 style="font-size:18px; font-weight:700; color:#1a1a1a; margin-bottom:8px; line-height:1.3;">{item.data.title}</h2>
+            <p style="font-size:13.5px; color:#666; margin:0; line-height:1.55; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{item.data.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .howto-card {
+    display:block; text-decoration:none; color:inherit; border-radius:14px; overflow:hidden;
+    background:#fff; box-shadow:0 0 10px rgba(0,0,0,.12); transition:box-shadow .2s, transform .2s;
+  }
+  .howto-card:hover { box-shadow:0 6px 20px rgba(0,0,0,.09); transform:translateY(-2px); }
+</style>

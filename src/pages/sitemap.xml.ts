@@ -97,6 +97,7 @@ export const GET: APIRoute = async () => {
     ['/prodejci/', 'monthly', '0.8'],
     ['/dotace/', 'weekly', '0.85'],
     ['/dotace/kalendar-kol/', 'weekly', '0.75'],
+    ['/jak-na-to/', 'weekly', '0.8'],
     ['/media/', 'monthly'],
     ['/redakce/', 'monthly', '0.5'],
   ];
@@ -177,6 +178,17 @@ export const GET: APIRoute = async () => {
   }
   for (const p of puda) {
     urls.push({ loc: `${SITE_URL}/puda/${p.id}/`, changefreq: 'monthly' });
+  }
+
+  const howto = await getCollection('howto');
+  for (const h of howto) {
+    urls.push({
+      loc: `${SITE_URL}/jak-na-to/${h.id}/`,
+      changefreq: 'monthly',
+      priority: '0.75',
+      lastmod: (h.data.lastVerified ?? h.data.datePublished).toISOString().slice(0, 10),
+      images: h.data.heroImage ? [h.data.heroImage] : undefined,
+    });
   }
 
   const dotace = await getCollection('dotace');
