@@ -37,6 +37,9 @@ const pageUrl = `${SITE_URL}/encyklopedie/${slug}/`;
 const heroImageAbs = item.data.heroImage
   ? (item.data.heroImage.startsWith('http') ? item.data.heroImage : `${SITE_URL}${item.data.heroImage}`)
   : undefined;
+// Pregenerated build-time OG image. Always exists for encyklopedie items
+// (scripts/build-og-images.mjs runs in `prebuild`).
+const ogImageAbs = `${SITE_URL}/og/encyklopedie-${slug}.png`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
@@ -108,7 +111,7 @@ const articleJsonLd = {
 };
 ---
 
-<Layout title={item.data.name} description={item.data.popis} canonical={pageUrl} ogType="product" ogImage={heroImageAbs}>
+<Layout title={item.data.name} description={item.data.popis} canonical={pageUrl} ogType="product" ogImage={ogImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />

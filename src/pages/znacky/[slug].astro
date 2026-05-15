@@ -58,7 +58,7 @@ const modelListJsonLd = brandModels.length > 0
   : null;
 ---
 
-<Layout title={znacka.data.name} description={znacka.data.popis} canonical={canonical}>
+<Layout title={znacka.data.name} description={znacka.data.popis} canonical={canonical} ogImage={`https://agro-svet.cz/og/znacka-${znacka.id}.png`}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   {modelListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(modelListJsonLd)} />}
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">

@@ -22,6 +22,7 @@ const pageUrl = `${SITE_URL}/jak-na-to/${slug}/`;
 const heroImageAbs = item.data.heroImage
   ? (item.data.heroImage.startsWith('http') ? item.data.heroImage : `${SITE_URL}${item.data.heroImage}`)
   : undefined;
+const ogImageAbs = `${SITE_URL}/og/howto-${slug}.png`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
@@ -74,7 +75,7 @@ const articleJsonLd = {
 };
 ---
 
-<Layout title={item.data.title} description={item.data.description} canonical={pageUrl} ogType="article" ogImage={heroImageAbs}>
+<Layout title={item.data.title} description={item.data.description} canonical={pageUrl} ogType="article" ogImage={ogImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />

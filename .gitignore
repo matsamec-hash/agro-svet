@@ -33,3 +33,6 @@ src/data/**/*.yaml.bak
 # Supabase CLI temp / session state
 supabase/.temp/
 supabase/.branches/
+
+# OG image build cache (fonts downloaded by scripts/build-og-images.mjs)
+.og-cache/

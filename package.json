@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/build-og-images.mjs && astro build",
+    "build:og": "node scripts/build-og-images.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "wrangler deploy && node --env-file=.env scripts/cf-purge.mjs",
@@ -29,8 +30,13 @@
   },
   "devDependencies": {
     "@modyfi/vite-plugin-yaml": "^1.1.1",
+    "@resvg/resvg-js": "^2.6.2",
     "@vitest/ui": "^4.1.5",
+    "gray-matter": "^4.0.3",
     "happy-dom": "^20.9.0",
-    "vitest": "^4.1.5"
+    "satori": "^0.26.0",
+    "satori-html": "^0.3.2",
+    "vitest": "^4.1.5",
+    "yaml": "^2.9.0"
   }
 }
