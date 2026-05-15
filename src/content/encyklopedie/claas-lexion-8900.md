@@ -16,6 +16,8 @@ transmission: "Hydrostatická, max. 30 km/h"
 seriesName: "Lexion 8000"
 lastVerified: 2026-05-02
 sourceUrl: "https://www.claas.com/cs-cz/produkty/sklizecmlaticky/lexion-8000-7000"
+youtubeId: "QrHPKtn2iLk"
+youtubeTitle: "CLAAS Lexion 8900 — walkaround sklízecí mlátičky"
 highlights:
   - "Motor Mercedes-Benz OM 473, 790 k"
   - "Zásobník zrna 18 000 litrů"

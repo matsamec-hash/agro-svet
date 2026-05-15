@@ -16,6 +16,8 @@ transmission: "Dyna-VT bezstupňová (CVT)"
 seriesName: "8S Series"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.masseyferguson.com/cs-cz/traktory/8s.html"
+youtubeId: "6dBSV7eT1rw"
+youtubeTitle: "Massey Ferguson 8S.305 — demo walkaround"
 highlights:
   - "Motor AGCO Power 7,4 L — 305 k ve vlajkovém modelu 8S.305"
   - "Bezstupňová převodovka Dyna-VT s Dynamic Tractor Management"

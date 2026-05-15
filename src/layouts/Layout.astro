@@ -85,6 +85,9 @@ const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString()
   <!-- Preconnect: hero/article images + bazar listing photos. Šetří ~100ms TLS handshake na 1. requestu. -->
   <link rel="preconnect" href="https://cdn.samecdigital.com" crossorigin />
   <link rel="preconnect" href="https://obhypfuzmknvmknskdwh.supabase.co" crossorigin />
+  <!-- YouTube facade na encyklopedii — preconnect šetří TLS handshake při kliknutí na video poster. -->
+  <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+  <link rel="preconnect" href="https://i.ytimg.com" />
 
   <!-- Fonts self-hosted via @fontsource (imported in src/styles/global.css). -->
   <!-- Preload the two most-used Chakra Petch latin weights to cut first paint FOIT. -->

@@ -16,6 +16,8 @@ transmission: "Vario CVT bezstupňová, max. 60 km/h"
 seriesName: "700 Vario Gen6"
 lastVerified: 2026-05-02
 sourceUrl: "https://www.fendt.com/cz/traktory/700-vario"
+youtubeId: "oyI4HWXMlAY"
+youtubeTitle: "Fendt 724 Vario Profi Plus — Cereals 2022"
 highlights:
   - "Bezstupňová převodovka Vario (6. generace)"
   - "Motor MAN D0836, 240 k (boost 260 k)"

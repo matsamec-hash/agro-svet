@@ -16,6 +16,8 @@ transmission: "DirectDrive 16/5 automatická, max. 40 km/h"
 seriesName: "8R"
 lastVerified: 2026-05-02
 sourceUrl: "https://www.deere.cz/cs/traktory/velke-traktory/8r-rada/"
+youtubeId: "K3WmtzFIUbA"
+youtubeTitle: "John Deere 8R 410 eAutoPowr — Power Meets Precision"
 highlights:
   - "Motor PowerTech PSX 9.0 L, 410 k"
   - "Automatická 16/5 převodovka DirectDrive"

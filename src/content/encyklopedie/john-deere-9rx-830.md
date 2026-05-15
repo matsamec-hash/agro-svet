@@ -16,6 +16,8 @@ transmission: "e18 PowerShift 18/6"
 seriesName: "9R/9RX"
 lastVerified: 2026-05-15
 sourceUrl: "https://www.deere.cz/cs/traktory/4wd-a-pasove-traktory/"
+youtubeId: "q_kyf7WExcc"
+youtubeTitle: "John Deere 9RX 830 Walkaround — most powerful production tractor"
 highlights:
   - "830 koní — nejvýkonnější traktor v nabídce John Deere"
   - "Kloubová konstrukce se čtyřmi nezávislými gumovými pásy"

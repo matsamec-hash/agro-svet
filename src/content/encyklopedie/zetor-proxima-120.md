@@ -16,6 +16,8 @@ transmission: "40/8 synchronizovaná, max. 40 km/h"
 seriesName: "Proxima"
 lastVerified: 2026-05-02
 sourceUrl: "https://www.zetor.com/cs/proxima"
+youtubeId: "13VJ2CAnnvU"
+youtubeTitle: "Zetor Proxima 120 — představení"
 highlights:
   - "Výkon 120 k s motorem Stage V — plnění nejpřísnějších emisních norem"
   - "Moderní kabina Crystal s klimatizací a ergonomickými ovládači"

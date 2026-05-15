@@ -3,7 +3,7 @@ export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
-import { breadcrumbSchema, machineProductSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchema } from '../../lib/structured-data';
 
 export async function getStaticPaths() {
   const items = await getCollection('encyklopedie');
@@ -67,6 +67,17 @@ const productJsonLd = machineProductSchema({
 
 const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
 
+// VideoObject JSON-LD only when an encyklopedie entry references a YouTube video.
+const videoJsonLd = item.data.youtubeId
+  ? videoObjectSchema({
+      youtubeId: item.data.youtubeId,
+      name: item.data.youtubeTitle ?? `${item.data.name} — video`,
+      description: item.data.popis,
+      pageUrl,
+      uploadDate: item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : undefined,
+    })
+  : null;
+
 const lastVerifiedFmt = item.data.lastVerified
   ? new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
   : null;
@@ -102,6 +113,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
+  {videoJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(videoJsonLd)} />}
 
   {item.data.heroImage && (
     <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
@@ -181,6 +193,33 @@ const articleJsonLd = {
     <div class="prose">
       <Content />
     </div>
+
+    {item.data.youtubeId && (
+      <section class="video" aria-labelledby="video-heading">
+        <h2 id="video-heading">Video — {item.data.youtubeTitle ?? `${item.data.name}`}</h2>
+        <div
+          class="yt-facade"
+          data-yt-id={item.data.youtubeId}
+          data-yt-title={item.data.youtubeTitle ?? item.data.name}
+          role="button"
+          tabindex="0"
+          aria-label={`Přehrát video: ${item.data.youtubeTitle ?? item.data.name}`}
+        >
+          <img
+            src={`https://i.ytimg.com/vi/${item.data.youtubeId}/hqdefault.jpg`}
+            alt=""
+            width="1280"
+            height="720"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="yt-play" aria-hidden="true">
+            <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74A8.02 8.02 0 0 0 60.96 2.18C56.06.83 34 .83 34 .83s-22.06 0-26.96 1.35A8.02 8.02 0 0 0 1.48 7.74C.13 12.64.13 24 .13 24s0 11.36 1.35 16.26a8.02 8.02 0 0 0 5.56 5.56C11.94 47.17 34 47.17 34 47.17s22.06 0 26.96-1.35a8.02 8.02 0 0 0 5.56-5.56C67.87 35.36 67.87 24 67.87 24s0-11.36-1.35-16.26z" fill="#ff0000"/><path d="M27.2 33.6L45.6 24 27.2 14.4z" fill="#fff"/></svg>
+          </div>
+        </div>
+        <p class="video-note">Načtením videa souhlasíte s podmínkami služby YouTube.</p>
+      </section>
+    )}
 
     {item.data.faq && item.data.faq.length > 0 && (
       <section class="faq" aria-labelledby="faq-heading">
@@ -277,4 +316,45 @@ const articleJsonLd = {
   .trust-bar .trust-link:hover { text-decoration:underline; }
   .trust-bar a.trust-item:hover { color:#1a1a1a; text-decoration:underline; }
   .trust-bar time { color:#1a1a1a; font-weight:600; }
+
+  .video { margin-top:48px; padding-top:32px; border-top:1px solid #ebebeb; }
+  .video h2 { font-size:1.5rem; font-weight:700; margin:0 0 16px; letter-spacing:-.3px; color:#1a1a1a; }
+  .yt-facade {
+    position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden;
+    background:#000; cursor:pointer; display:block;
+  }
+  .yt-facade img { width:100%; height:100%; object-fit:cover; display:block; transition:filter .2s; }
+  .yt-facade:hover img { filter:brightness(.85); }
+  .yt-play {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    pointer-events:none;
+  }
+  .yt-play svg { filter:drop-shadow(0 2px 4px rgba(0,0,0,.5)); transition:transform .15s; }
+  .yt-facade:hover .yt-play svg { transform:scale(1.08); }
+  .yt-facade:focus { outline:3px solid #FFEA00; outline-offset:3px; }
+  .video-note { font-size:12px; color:#888; margin:8px 0 0; }
 </style>
+<script is:inline>
+  // YouTube facade — load iframe only on click. Saves ~600KB JS + many requests per page view.
+  document.addEventListener('click', (e) => {
+    const t = e.target instanceof Element ? e.target.closest('.yt-facade') : null;
+    if (!t) return;
+    const id = t.getAttribute('data-yt-id');
+    const title = t.getAttribute('data-yt-title') ?? 'Video';
+    if (!id) return;
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+    iframe.title = title;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.style.cssText = 'width:100%; height:100%; border:0; display:block;';
+    t.replaceWith(iframe);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const t = e.target instanceof Element ? e.target.closest('.yt-facade') : null;
+    if (!t) return;
+    e.preventDefault();
+    t.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  });
+</script>

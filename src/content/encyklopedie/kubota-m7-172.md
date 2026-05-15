@@ -16,6 +16,8 @@ transmission: "Powershift 24/24 nebo KVT (bezstupňová)"
 seriesName: "M7 Series"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.kubota.cz/produkty/traktory/serie-m7"
+youtubeId: "qDVzGQYsPKM"
+youtubeTitle: "Kubota M7-172 — walk around and verdict"
 highlights:
   - "Motor Kubota V6108 6,1 L — vlastní vývoj výrobce"
   - "První Kubota v kategorii nad 150 koní"

@@ -16,6 +16,8 @@ transmission: "HM4 hydromechanická 4-mode CVT"
 seriesName: "Xerion"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/traktory/xerion"
+youtubeId: "ObI96Hc7skQ"
+youtubeTitle: "CLAAS Xerion 5000 — walkaround"
 highlights:
   - "Systémový traktor — 4 stejně velká kola pro rovnoměrné rozložení hmotnosti"
   - "Otočná kabina Trac VC — pracovní místo lze natočit o 180°"

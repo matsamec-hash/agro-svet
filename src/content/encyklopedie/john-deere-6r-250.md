@@ -16,6 +16,8 @@ transmission: "AutoPowr IVT (bezstupňová) nebo CommandPro Powershift"
 seriesName: "6R Series"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.deere.cz/cs/traktory/stredni/rada-6r/"
+youtubeId: "NtRf8VfCgkY"
+youtubeTitle: "John Deere 6R 250 in Action — Real Work, Real Results"
 highlights:
   - "Motor PowerTech PSS — 250 k ve vrcholu řady 6R"
   - "Volba převodovky: AutoPowr IVT bezstupňová nebo CommandPro Powershift"

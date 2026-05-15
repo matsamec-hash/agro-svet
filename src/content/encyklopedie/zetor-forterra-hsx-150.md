@@ -16,6 +16,8 @@ transmission: "Power shift (HSX)"
 seriesName: "Forterra HSX"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.zetor.com/cs/forterra"
+youtubeId: "VHg-REzI5Y4"
+youtubeTitle: "Zetor Forterra HSX 150 — práce s cisternou"
 highlights:
   - "Vlastní motor Zetor — značka patří k mála výrobcům s vlastní motorárnou"
   - "Power shift převodovka (varianta HSX)"

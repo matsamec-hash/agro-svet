@@ -16,6 +16,8 @@ transmission: "Ultra Command Powershift nebo Auto Command (CVT)"
 seriesName: "T8 Series"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.newholland.com/cs-cz/zemedelska-technika/produkty/traktory/t8"
+youtubeId: "BISfgcJj1bo"
+youtubeTitle: "New Holland T8.435 — interior and exterior walkaround"
 highlights:
   - "435 koní — vlajkový row-crop model New Holland"
   - "Motor FPT Cursor 9 o objemu 8,7 litru"

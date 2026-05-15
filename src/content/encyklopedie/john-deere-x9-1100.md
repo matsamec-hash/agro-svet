@@ -16,6 +16,8 @@ transmission: "Hydrostatický pojezd"
 seriesName: "X Series"
 lastVerified: 2026-05-15
 sourceUrl: "https://www.deere.cz/cs/sklizen/kombajny/"
+youtubeId: "OOXS1YoCsK4"
+youtubeTitle: "John Deere X9 1100 Combine — walkaround"
 highlights:
   - "Dvourotorový systém Dual Separator — nejvyšší propustnost ve třídě"
   - "Výkon 690 koní z motoru PowerTech 13,6 L"

@@ -16,6 +16,8 @@ transmission: "Hydrostatický pojezd"
 seriesName: "CR Series"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.newholland.com/cs-cz/zemedelska-technika/produkty/sklizne/kombajny/cr"
+youtubeId: "48CQ4BGsPmg"
+youtubeTitle: "New Holland CR11 — flagship combine with Dynamic Feed Roll"
 highlights:
   - "775 koní — vlajková sklízecí mlátička New Holland"
   - "Konstrukce Twin Rotor — dva podélné rotory s variabilním vyvážením"

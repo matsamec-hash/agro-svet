@@ -227,6 +227,32 @@ export function faqPageSchema(items: FaqItem[]) {
   };
 }
 
+export interface VideoObjectInput {
+  /** YouTube video ID (e.g. "K3WmtzFIUbA"). */
+  youtubeId: string;
+  name: string;
+  description: string;
+  /** Page URL where the video is embedded. */
+  pageUrl: string;
+  /** Optional ISO 8601 upload date; defaults to lastVerified or today. */
+  uploadDate?: string;
+}
+
+export function videoObjectSchema(v: VideoObjectInput) {
+  const thumbnail = `https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: v.name,
+    description: v.description,
+    thumbnailUrl: thumbnail,
+    uploadDate: v.uploadDate ?? new Date().toISOString().slice(0, 10),
+    contentUrl: `https://www.youtube.com/watch?v=${v.youtubeId}`,
+    embedUrl: `https://www.youtube-nocookie.com/embed/${v.youtubeId}`,
+    inLanguage: 'cs-CZ',
+  };
+}
+
 export interface HowToStep {
   name: string;
   text: string;

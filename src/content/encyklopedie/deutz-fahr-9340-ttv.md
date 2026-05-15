@@ -16,6 +16,8 @@ transmission: "TTV bezstupňová (CVT)"
 seriesName: "9 Series"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.deutz-fahr.com/cs-cz/produkty/traktory/serie-9"
+youtubeId: "qNiL1HWUwPE"
+youtubeTitle: "Deutz-Fahr 9340 TTV Warrior — hloubkové kypření v poli"
 highlights:
   - "Motor Deutz TCD 7.8 L — 336 k ve vlajkovém modelu řady"
   - "Bezstupňová převodovka TTV s max. rychlostí 60 km/h"

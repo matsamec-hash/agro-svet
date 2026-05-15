@@ -43,6 +43,9 @@ const encyklopedie = defineCollection({
     // Editorial trust signals.
     lastVerified: z.date().optional(),
     sourceUrl: z.string().optional(),
+    // Volitelný YouTube embed — feeduje VideoObject JSON-LD + lazy facade na detailu.
+    youtubeId: z.string().optional(),
+    youtubeTitle: z.string().optional(),
   }),
 });
 

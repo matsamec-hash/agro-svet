@@ -16,6 +16,8 @@ transmission: "TA300 Vario bezstupňová s VarioDrive"
 seriesName: "1000 Vario"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.fendt.com/cz/traktory/1000-vario"
+youtubeId: "ojRzfKwCxTY"
+youtubeTitle: "Fendt 1050 Vario — landwirt.com test"
 highlights:
   - "517 koní — nejvýkonnější standardní kolový traktor na světě"
   - "Motor MAN D4276 o objemu 12,4 litru"

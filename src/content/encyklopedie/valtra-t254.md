@@ -16,6 +16,8 @@ transmission: "HiTech / Active / Versu (Powershift 5×5) / Direct (CVT)"
 seriesName: "T Series"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.valtra.cz/traktory/t-serie.html"
+youtubeId: "1hA8Zy3bzQo"
+youtubeTitle: "Valtra T254 — walkaround"
 highlights:
   - "Motor AGCO Power 7,4 L — 271 k ve vlajkovém modelu T254"
   - "Čtyři varianty převodovky včetně bezstupňové Direct"

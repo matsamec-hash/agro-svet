@@ -16,6 +16,8 @@ transmission: "Full Powershift 19/4 nebo CVXDrive (bezstupňová)"
 seriesName: "Magnum"
 lastVerified: 2026-05-14
 sourceUrl: "https://www.caseih.com/emea/cs-cz/products/tractors/magnum-series"
+youtubeId: "66sq7LgV8jQ"
+youtubeTitle: "Case IH Magnum 380 AFS Connect — testdrive a walkaround"
 highlights:
   - "Motor FPT Cursor 13 (12,9 L) — 380 k jmenovitý výkon"
   - "Volba převodovky: Full Powershift 19/4 nebo bezstupňová CVXDrive"
