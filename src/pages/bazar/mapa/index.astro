@@ -1,0 +1,312 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { CATEGORIES } from '../../../lib/bazar-constants';
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: 'Bazar', item: 'https://agro-svet.cz/bazar/' },
+    { '@type': 'ListItem', position: 3, name: 'Mapa', item: 'https://agro-svet.cz/bazar/mapa/' },
+  ],
+};
+
+const categoryFilters = CATEGORIES.map((c) => ({ value: c.value, label: c.label }));
+---
+
+<Layout
+  title="Mapa inzerátů — Agro bazar"
+  description="Najděte zemědělskou techniku na mapě. Traktory, kombajny, stroje a další inzeráty z celé ČR s polohou prodejce."
+  canonical="https://agro-svet.cz/bazar/mapa/"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <!-- Leaflet styles (loaded via unpkg CDN; ~14KB gz). -->
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+    crossorigin=""
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+    crossorigin=""
+  />
+
+  <div class="bazar-mapa-root">
+    <header class="map-head">
+      <div class="map-head-left">
+        <nav class="breadcrumb" aria-label="Cesta">
+          <a href="/">Domů</a>
+          <span aria-hidden="true">›</span>
+          <a href="/bazar/">Bazar</a>
+          <span aria-hidden="true">›</span>
+          <span class="current">Mapa</span>
+        </nav>
+        <h1>Mapa inzerátů</h1>
+        <p class="lede">Inzeráty se zobrazují u města/PSČ, které prodejce vybral. Filtrujte podle kategorie nebo přibližujte na konkrétní oblast.</p>
+      </div>
+      <div class="map-head-right">
+        <a class="btn-secondary" href="/bazar/">← Seznam inzerátů</a>
+        <a class="btn-primary" href="/bazar/novy/">+ Nový inzerát</a>
+      </div>
+    </header>
+
+    <div class="map-filters" role="toolbar" aria-label="Filtry mapy">
+      <label class="filter-field">
+        <span class="filter-label">Kategorie</span>
+        <select id="map-filter-category">
+          <option value="">Všechny</option>
+          {categoryFilters.map((c) => <option value={c.value}>{c.label}</option>)}
+        </select>
+      </label>
+      <label class="filter-field">
+        <span class="filter-label">Cena do (Kč)</span>
+        <input type="number" id="map-filter-price-max" min="0" step="10000" placeholder="bez limitu" />
+      </label>
+      <div class="filter-status" id="map-filter-status" aria-live="polite">Načítám inzeráty…</div>
+    </div>
+
+    <div id="bazar-map" class="map-canvas" role="application" aria-label="Interaktivní mapa inzerátů bazaru"></div>
+
+    <p class="map-attribution">
+      Mapové dlaždice © <a href="https://www.openstreetmap.org/copyright" rel="external nofollow">OpenStreetMap</a> přispěvatelé.
+      Polohy inzerátů jsou orientační (centrum města nebo PSČ).
+    </p>
+  </div>
+
+  <script>
+    type Listing = {
+      id: string;
+      title: string;
+      price: number | null;
+      category: string;
+      brand: string | null;
+      location: string;
+      lat: number;
+      lng: number;
+      img?: string;
+      created_at: string;
+    };
+
+    // Loaded lazily so the page shell paints first.
+    function loadScript(src: string): Promise<void> {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.crossOrigin = '';
+        s.async = true;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('script_failed: ' + src));
+        document.head.appendChild(s);
+      });
+    }
+
+    async function init() {
+      await loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js');
+      await loadScript('https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js');
+      const L = (window as any).L;
+      if (!L) throw new Error('Leaflet failed to load');
+
+      // CZ-fitting initial view.
+      const map = L.map('bazar-map', { preferCanvas: true }).setView([49.8, 15.5], 7);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18,
+      }).addTo(map);
+
+      const cluster = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        spiderfyOnMaxZoom: true,
+        maxClusterRadius: 60,
+      });
+      map.addLayer(cluster);
+
+      const status = document.getElementById('map-filter-status') as HTMLElement;
+      const catFilter = document.getElementById('map-filter-category') as HTMLSelectElement;
+      const priceFilter = document.getElementById('map-filter-price-max') as HTMLInputElement;
+
+      const fmtPrice = (n: number | null) =>
+        n === null ? 'Cena dohodou' : `${n.toLocaleString('cs-CZ')} Kč`;
+
+      const popupHtml = (l: Listing) => `
+        <div style="font-family: system-ui, -apple-system, sans-serif; min-width: 200px; max-width: 260px;">
+          ${l.img ? `<img src="${l.img}" alt="" loading="lazy" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:8px;" />` : ''}
+          <div style="font-weight: 700; font-size: 14px; line-height: 1.3; margin-bottom: 4px;">
+            <a href="/bazar/${l.id}/" style="color: #0A0A0B; text-decoration: none;">${escapeHtml(l.title)}</a>
+          </div>
+          <div style="font-size: 13px; font-weight: 700; color: #0B7A3B; margin-bottom: 4px;">${fmtPrice(l.price)}</div>
+          <div style="font-size: 12px; color: #666; margin-bottom: 8px;">${escapeHtml(l.location)}${l.brand ? ` · ${escapeHtml(l.brand)}` : ''}</div>
+          <a href="/bazar/${l.id}/" style="display:inline-block; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:12px; padding:6px 12px; border-radius:4px; text-decoration:none;">Detail inzerátu →</a>
+        </div>
+      `;
+
+      function escapeHtml(s: string): string {
+        return s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c] as string));
+      }
+
+      let allListings: Listing[] = [];
+
+      function render() {
+        cluster.clearLayers();
+        const cat = catFilter.value;
+        const maxPrice = priceFilter.value ? parseInt(priceFilter.value, 10) : null;
+        let shown = 0;
+        for (const l of allListings) {
+          if (cat && l.category !== cat) continue;
+          if (maxPrice !== null && l.price !== null && l.price > maxPrice) continue;
+          const m = L.marker([l.lat, l.lng]);
+          m.bindPopup(popupHtml(l));
+          cluster.addLayer(m);
+          shown++;
+        }
+        status.textContent =
+          allListings.length === 0
+            ? 'Žádné inzeráty s polohou nejsou aktivní.'
+            : `${shown} z ${allListings.length} inzerátů`;
+      }
+
+      try {
+        const r = await fetch('/bazar/mapa/listings.json');
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        allListings = await r.json();
+        render();
+        if (allListings.length === 0) {
+          status.textContent = 'Žádné inzeráty s polohou. Vložte nový — zobrazí se zde.';
+        }
+      } catch (e) {
+        status.textContent = 'Načtení inzerátů se nepovedlo. Zkuste obnovit stránku.';
+        console.error('[bazar/mapa] load failed', e);
+      }
+
+      catFilter.addEventListener('change', render);
+      priceFilter.addEventListener('input', () => {
+        clearTimeout((priceFilter as any)._t);
+        (priceFilter as any)._t = setTimeout(render, 200);
+      });
+    }
+
+    // Defer init to first idle so the page paints quickly.
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => init().catch((e) => console.error(e)), { timeout: 1000 });
+    } else {
+      setTimeout(() => init().catch((e) => console.error(e)), 50);
+    }
+  </script>
+
+  <style>
+    .bazar-mapa-root {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    .map-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .map-head-left { flex: 1; min-width: 240px; }
+    .map-head-right { display: flex; gap: 8px; flex-wrap: wrap; }
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 4px 0 6px; }
+    .lede { color: #666; font-size: 14px; line-height: 1.5; margin: 0; max-width: 580px; }
+    .btn-primary,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1.5px solid transparent;
+    }
+    .btn-primary { background: #FFEA00; color: #0A0A0B; }
+    .btn-primary:hover { background: #FFE100; }
+    .btn-secondary { background: transparent; color: #0A0A0B; border-color: #DFDFE3; }
+    .btn-secondary:hover { border-color: #0A0A0B; }
+
+    .map-filters {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      padding: 16px;
+      background: #fafafa;
+      border: 1px solid #eaeaec;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    .filter-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px; }
+    .filter-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: #666;
+    }
+    .filter-field select,
+    .filter-field input {
+      padding: 8px 10px;
+      border: 1.5px solid #DFDFE3;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
+    }
+    .filter-status {
+      font-size: 13px;
+      color: #444;
+      margin-left: auto;
+      align-self: center;
+      font-weight: 600;
+    }
+
+    .map-canvas {
+      width: 100%;
+      height: clamp(420px, 70vh, 720px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(10, 10, 12, 0.04), 0 0 0 1px rgba(10, 10, 12, 0.06);
+      background: #f0f0f0;
+    }
+
+    .map-attribution {
+      font-size: 11px;
+      color: #999;
+      text-align: center;
+      margin-top: 12px;
+    }
+    .map-attribution a { color: #999; }
+
+    @media (max-width: 640px) {
+      .map-head { flex-direction: column; align-items: stretch; }
+      .map-head-right { justify-content: flex-start; }
+      .filter-status { margin-left: 0; width: 100%; }
+    }
+  </style>
+</Layout>

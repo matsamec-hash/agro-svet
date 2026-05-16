@@ -77,6 +77,7 @@ export const GET: APIRoute = async () => {
     ['/', 'daily', '1.0'],
     ['/novinky/', 'daily', '0.9'],
     ['/bazar/', 'daily', '0.7'],
+    ['/bazar/mapa/', 'daily', '0.65'],
     ['/stroje/', 'weekly', '0.9'],
     ['/stroje/traktory/', 'weekly'],
     ['/stroje/kombajny/', 'weekly'],
