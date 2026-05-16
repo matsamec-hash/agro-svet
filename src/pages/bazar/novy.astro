@@ -26,6 +26,12 @@ if (Astro.request.method === 'POST') {
   const category = form.get('category')?.toString() ?? '';
   const brand = form.get('brand')?.toString() || null;
   const location = form.get('location')?.toString().trim() ?? '';
+  const postalCodeRaw = form.get('postal_code')?.toString().trim() ?? '';
+  const postalCode = postalCodeRaw ? postalCodeRaw.replace(/\s+/g, '') : null;
+  // Geocoded by client-side JS before submit. Hidden fields, fall back to server-side
+  // geocode if missing (cheap local lookup; Nominatim only if there's a PSČ).
+  const latStr = form.get('latitude')?.toString().trim() ?? '';
+  const lngStr = form.get('longitude')?.toString().trim() ?? '';
   const phone = form.get('phone')?.toString().trim() ?? '';
   const email = form.get('email')?.toString().trim() ?? '';
   const imagePaths = JSON.parse(form.get('image_paths')?.toString() || '[]');
@@ -60,6 +66,23 @@ if (Astro.request.method === 'POST') {
     const objemNadrze = objemStr ? parseInt(objemStr) : null;
     const subcategory = modelSlug ? (getModelBySlug(modelSlug)?.category ?? null) : null;
 
+    // Resolve coords. Client should pre-fill hidden inputs from the local
+    // lookup; if that fails (rare city not in CZ_LOCATIONS_GEO), do a
+    // server-side fallback using PSČ if provided.
+    let latitude: number | null = latStr ? parseFloat(latStr) : null;
+    let longitude: number | null = lngStr ? parseFloat(lngStr) : null;
+    if ((latitude === null || longitude === null) && (location || postalCode)) {
+      try {
+        const { geocode } = await import('../../lib/geocode');
+        const geo = await geocode({ location, postalCode: postalCode ?? undefined });
+        if (geo) { latitude = geo.lat; longitude = geo.lng; }
+      } catch (e) {
+        console.warn('[bazar/novy] geocode fallback failed', e);
+      }
+    }
+    if (latitude !== null && (latitude < 48 || latitude > 52)) latitude = null;
+    if (longitude !== null && (longitude < 11 || longitude > 19)) longitude = null;
+
     const { data: listing, error: insertErr } = await supabase
       .from('bazar_listings')
       .insert({
@@ -70,6 +93,9 @@ if (Astro.request.method === 'POST') {
         category,
         brand,
         location,
+        postal_code: postalCode,
+        latitude,
+        longitude,
         phone,
         email,
         status: 'active',
@@ -224,7 +250,22 @@ const { data: profile } = await supabase
       <div class="form-group">
         <label for="location">Lokalita *</label>
         <LocationInput id="location" name="location" value={profile?.location ?? ''} required />
+        <small style="display:block; font-size:12px; color:#666; margin-top:6px;">
+          Vyberte město nebo kraj — inzerát se zobrazí na <a href="/bazar/mapa/">mapě bazaru</a>.
+        </small>
       </div>
+
+      <div class="form-group">
+        <label for="postal_code">PSČ <span style="color:#999; font-weight:400;">(volitelně)</span></label>
+        <input type="text" id="postal_code" name="postal_code" class="form-input" maxlength="6" pattern="\d{3} ?\d{2}" placeholder="např. 387 11" inputmode="numeric" />
+        <small style="display:block; font-size:12px; color:#666; margin-top:6px;">
+          PSČ upřesní polohu pinu na mapě (jinak je v centru města).
+        </small>
+      </div>
+
+      <!-- Hidden geocode outputs — vyplní klientský JS v <script> níže. -->
+      <input type="hidden" name="latitude" id="latitude" />
+      <input type="hidden" name="longitude" id="longitude" />
 
       <div class="form-group">
         <label for="phone">Telefon *</label>
@@ -311,6 +352,63 @@ const { data: profile } = await supabase
         brandHint.style.display = 'none';
         brandSelect.value = '';
       });
+    })();
+  </script>
+
+  <script>
+    // Client-side geocoding for the map pin. Runs on (debounced) location +
+    // PSČ change. Fills the hidden lat/lng inputs that the POST handler
+    // persists. Fails silently — server fallback handles unmatched inputs.
+    (function () {
+      const locationInput = document.getElementById('location') as HTMLInputElement | null;
+      const pscInput = document.getElementById('postal_code') as HTMLInputElement | null;
+      const latInput = document.getElementById('latitude') as HTMLInputElement | null;
+      const lngInput = document.getElementById('longitude') as HTMLInputElement | null;
+      if (!locationInput || !latInput || !lngInput) return;
+
+      let timer: ReturnType<typeof setTimeout> | null = null;
+      let lastQuery = '';
+
+      async function lookup(loc: string, psc: string) {
+        const params = new URLSearchParams();
+        if (loc) params.set('location', loc);
+        if (psc) params.set('psc', psc.replace(/\s+/g, ''));
+        const key = params.toString();
+        if (!key || key === lastQuery) return;
+        lastQuery = key;
+        try {
+          const r = await fetch(`/api/geocode?${params}`);
+          if (!r.ok) {
+            latInput.value = '';
+            lngInput.value = '';
+            return;
+          }
+          const j = await r.json();
+          if (typeof j.lat === 'number' && typeof j.lng === 'number') {
+            latInput.value = String(j.lat);
+            lngInput.value = String(j.lng);
+          }
+        } catch {
+          // Network failure → leave empty, server-side will retry.
+          latInput.value = '';
+          lngInput.value = '';
+        }
+      }
+
+      function schedule() {
+        if (timer) clearTimeout(timer);
+        const loc = locationInput.value.trim();
+        const psc = pscInput?.value.trim() ?? '';
+        timer = setTimeout(() => lookup(loc, psc), 400);
+      }
+
+      locationInput.addEventListener('change', schedule);
+      locationInput.addEventListener('blur', schedule);
+      pscInput?.addEventListener('change', schedule);
+      pscInput?.addEventListener('blur', schedule);
+
+      // Initial run if location was prefilled from the user profile.
+      if (locationInput.value.trim()) schedule();
     })();
   </script>
 </Layout>
