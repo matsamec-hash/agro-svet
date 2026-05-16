@@ -9,11 +9,10 @@ import Footer from '../components/Footer.astro';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 
-// Microsoft Clarity — session recordings + heatmaps. Zdarma, vyžaduje
-// jen project ID z clarity.microsoft.com. Pokud env CLARITY_PROJECT_ID
-// chybí, script se nepřipojí (no-op). Cookie-consent neblokuje (Clarity
-// běží anonymous bez PII a respektuje DNT).
-const clarityId = (import.meta.env.PUBLIC_CLARITY_PROJECT_ID ?? '').toString().trim();
+// Microsoft Clarity — session recordings + heatmaps. Project ID je veřejný
+// (zobrazí se v HTML), takže hardcoded je OK. Clarity respektuje DNT,
+// běží anonymous bez PII → neblokuje cookie consent.
+const clarityId = 'ws6puxcjnb';
 
 interface Props {
   title: string;
