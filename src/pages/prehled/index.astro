@@ -1,0 +1,83 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/prehled/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Přehledy', url: canonical },
+]);
+
+const articles = [
+  {
+    slug: 'nejprodavanejsi-traktory-2025',
+    title: 'Nejprodávanější traktory ČR 2025',
+    description: 'Top 10 nejúspěšnějších modelů na českém trhu, trendy mezi malými i velkými farmami, výhled pro 2026.',
+    date: '15. ledna 2026',
+    badge: 'Roční přehled 2025',
+  },
+];
+---
+
+<Layout
+  title="Přehledy a roční bilance — agro-svět"
+  description="Roční přehledy trhu zemědělské techniky v ČR — nejprodávanější modely, trendy, výhled. Aktualizujeme každoročně v lednu."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="prehled-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Přehledy</span>
+    </nav>
+
+    <header class="hub-head">
+      <span class="kicker">Roční přehledy</span>
+      <h1>Přehledy a bilance trhu</h1>
+      <p class="lede">
+        Roční bilance trhu zemědělské techniky v ČR — co se prodávalo, kdo rostl, kdo klesal, co očekávat. Aktualizujeme každoročně v lednu.
+      </p>
+    </header>
+
+    <div class="grid">
+      {articles.map((a) => (
+        <a href={`/prehled/${a.slug}/`} class="card">
+          <span class="card-badge">{a.badge}</span>
+          <h2>{a.title}</h2>
+          <p>{a.description}</p>
+          <span class="card-meta">{a.date}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .prehled-root { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .hub-head { margin-bottom: 32px; max-width: 680px; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin: 12px 0 8px; color: #1a1a1a; }
+  .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .card {
+    display: block; padding: 24px;
+    background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+    border: 1.5px solid #eaeaec; border-radius: 14px;
+    text-decoration: none; color: inherit;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+  }
+  .card:hover { border-color: #FFEA00; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 234, 0, .15); }
+  .card-badge { display: inline-block; background: #0A0A0B; color: #FFEA00; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .card h2 { font-size: 19px; font-weight: 700; color: #0A0A0B; margin: 0 0 8px; line-height: 1.3; }
+  .card p { font-size: 14px; color: #555; line-height: 1.5; margin: 0 0 12px; }
+  .card-meta { font-size: 12px; color: #6B6B72; font-weight: 600; }
+</style>

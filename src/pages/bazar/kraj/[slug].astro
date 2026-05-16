@@ -1,0 +1,193 @@
+---
+// Lokální landing per kraj — listing bazar inzerátů, prodejci, lokální
+// info. Long-tail SEO target: "bazar traktor Jihočeský kraj", "kde koupit
+// traktor v Plzeňském kraji".
+//
+// Filtruje bazar_listings podle ilike na location (free-text). Po
+// migraci 009 (lat/lng + postal_code) lze přepnout na geo bbox.
+
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import { createServerClient } from '../../../lib/supabase';
+import { KRAJE } from '../../../lib/cap-dotace';
+import { breadcrumbSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import BazarListingRow from '../../../components/bazar/BazarListingRow.astro';
+
+const { slug } = Astro.params;
+const kraj = KRAJE.find((k) => k.slug === slug);
+if (!kraj) return Astro.rewrite('/404');
+
+const canonical = `${SITE_URL}/bazar/kraj/${kraj.slug}/`;
+
+// Pull active listings whose location text matches kraj name (case-insensitive).
+const supabase = createServerClient();
+const { data: listings } = await supabase
+  .from('bazar_listings')
+  .select('id, title, price, category, brand, location, created_at, views, year_of_manufacture, power_hp, hours_operated, model_slug, bazar_images(storage_path, position)')
+  .eq('status', 'active')
+  .ilike('location', `%${kraj.name.replace(' kraj', '').replace('Hlavní město ', '')}%`)
+  .order('created_at', { ascending: false })
+  .limit(50);
+
+const count = listings?.length ?? 0;
+
+function getImageUrl(listing: any): string | undefined {
+  const img = (listing.bazar_images ?? []).sort((a: any, b: any) => a.position - b.position)[0];
+  if (!img) return undefined;
+  return supabase.storage.from('bazar-images').getPublicUrl(img.storage_path).data.publicUrl;
+}
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Bazar', url: '/bazar/' },
+  { name: kraj.name, url: canonical },
+]);
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `Bazar zemědělské techniky — ${kraj.name}`,
+  description: `Inzeráty zemědělské techniky v lokalitě ${kraj.name}. ${count} aktivních nabídek.`,
+  url: canonical,
+  inLanguage: 'cs-CZ',
+  numberOfItems: count,
+  spatialCoverage: {
+    '@type': 'AdministrativeArea',
+    name: kraj.name,
+    containedInPlace: { '@type': 'Country', name: 'Česká republika' },
+  },
+};
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=3600');
+---
+
+<Layout
+  title={`Bazar techniky ${kraj.name} — inzeráty traktorů a strojů`}
+  description={`${count > 0 ? count + ' aktivních inzerátů' : 'Aktuální inzeráty'} zemědělské techniky v ${kraj.name}. Traktory, kombajny, stroje, zvířata i příslušenství od soukromých prodejců i dealerů.`}
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+
+  <div class="kraj-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/bazar/">Bazar</a>
+      <span aria-hidden="true">›</span>
+      <a href="/bazar/mapa/">Lokality</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">{kraj.name}</span>
+    </nav>
+
+    <header class="kraj-head">
+      <span class="kicker">Lokální bazar</span>
+      <h1>Bazar techniky — {kraj.name}</h1>
+      <p class="lede">
+        Aktuální inzeráty zemědělské techniky a strojů v lokalitě {kraj.name}. Přímý kontakt na soukromé prodejce i autorizované dealery.
+      </p>
+      <div class="kraj-stats">
+        <div class="ks"><strong>{count}</strong> aktivních inzerátů</div>
+      </div>
+    </header>
+
+    <div class="kraj-cta">
+      <a href={`/bazar/mapa/`} class="btn-ghost">📍 Mapa všech inzerátů</a>
+      <a href={`/bazar/sledovani/?prefill=${encodeURIComponent('kraj=' + kraj.slug)}`} class="btn-ghost">🔔 Sledovat nové v {kraj.name}</a>
+      <a href="/bazar/novy/" class="btn-yellow">+ Přidat inzerát</a>
+    </div>
+
+    {listings && listings.length > 0 ? (
+      <div class="kraj-listings">
+        {listings.map((listing) => (
+          <BazarListingRow
+            id={listing.id}
+            title={listing.title}
+            price={listing.price}
+            location={listing.location}
+            category={listing.category}
+            brand={listing.brand}
+            yearOfManufacture={listing.year_of_manufacture}
+            powerHp={listing.power_hp}
+            hoursOperated={listing.hours_operated}
+            modelSlug={listing.model_slug}
+            featured={false}
+            imageUrl={getImageUrl(listing)}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="kraj-empty">
+        <p>V {kraj.name} momentálně nejsou aktivní inzeráty.</p>
+        <p>
+          Můžete <a href="/bazar/">projít celý bazar</a>,
+          <a href={`/bazar/sledovani/?prefill=${encodeURIComponent('kraj=' + kraj.slug)}`}>nastavit sledování nových</a> nebo
+          <a href="/bazar/novy/">vložit vlastní inzerát</a>.
+        </p>
+      </div>
+    )}
+
+    <section class="kraj-info">
+      <h2>Lokální tipy pro {kraj.name}</h2>
+      <ul>
+        <li>📍 <a href="/prodejci/">Autorizovaní dealeři</a> v {kraj.name} — kde koupit nové stroje</li>
+        <li>💶 <a href="/kalkulacka/dotace-cap/">Kalkulačka dotací CAP 2024</a> — orientační výpočet pro vaši farmu</li>
+        <li>📊 <a href="/statistiky/">Statistiky cen komodit</a> — aktuální tržní situace</li>
+        <li>🔧 <a href="/encyklopedie/">Encyklopedie strojů</a> — hloubkové profily traktorů a kombajnů</li>
+      </ul>
+
+      <h3>Další kraje</h3>
+      <div class="kraj-other-grid">
+        {KRAJE.filter((k) => k.slug !== kraj.slug).map((k) => (
+          <a href={`/bazar/kraj/${k.slug}/`} class="kraj-other">{k.name}</a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .kraj-root { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .kraj-head { margin-bottom: 24px; max-width: 760px; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin: 12px 0 8px; color: #1a1a1a; }
+  .lede { font-size: 15px; color: #444; line-height: 1.6; margin: 0 0 14px; }
+  .kraj-stats { display: flex; gap: 16px; font-size: 14px; color: #6B6B72; }
+  .kraj-stats strong { color: #0B7A3B; font-size: 18px; font-weight: 800; font-family: 'Chakra Petch', sans-serif; }
+
+  .kraj-cta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+  .btn-ghost, .btn-yellow {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 700; text-decoration: none;
+  }
+  .btn-ghost { background: #fff; border: 1.5px solid #DFDFE3; color: #0A0A0B; }
+  .btn-ghost:hover { border-color: #0A0A0B; }
+  .btn-yellow { background: #FFEA00; color: #0A0A0B; border: 1.5px solid #FFEA00; }
+  .btn-yellow:hover { background: #FFE100; }
+
+  .kraj-listings { border: 1px solid #e8e8e8; border-radius: 14px; overflow: hidden; background: #fff; margin-bottom: 32px; }
+  .kraj-empty { padding: 32px; text-align: center; background: #fafafa; border-radius: 12px; margin-bottom: 32px; color: #555; line-height: 1.7; }
+  .kraj-empty a { color: #0B7A3B; text-decoration: underline; margin: 0 4px; }
+
+  .kraj-info h2 { font-size: 20px; font-weight: 700; color: #0A0A0B; margin: 32px 0 14px; }
+  .kraj-info h3 { font-size: 16px; font-weight: 700; color: #0A0A0B; margin: 24px 0 12px; }
+  .kraj-info ul { list-style: none; padding: 0; margin: 0 0 24px; }
+  .kraj-info ul li { font-size: 14px; line-height: 1.7; color: #444; padding: 6px 0; }
+  .kraj-info ul li a { color: #0B7A3B; font-weight: 600; text-decoration: underline; }
+  .kraj-other-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .kraj-other {
+    display: block; padding: 10px 14px; background: #fafafa;
+    border: 1px solid #eaeaec; border-radius: 8px;
+    font-size: 13px; color: #0A0A0B; text-decoration: none;
+    transition: border-color .15s;
+  }
+  .kraj-other:hover { border-color: #FFEA00; }
+</style>

@@ -80,6 +80,7 @@ export const GET: APIRoute = async () => {
     ['/bazar/mapa/', 'daily', '0.65'],
     ['/bazar/sledovani/', 'monthly', '0.6'],
     ['/bazar/topovani/', 'monthly', '0.65'],
+    ['/bazar/kraj/', 'weekly', '0.7'],
     ['/stroje/', 'weekly', '0.9'],
     ['/stroje/traktory/', 'weekly'],
     ['/stroje/kombajny/', 'weekly'],
@@ -110,6 +111,10 @@ export const GET: APIRoute = async () => {
     ['/jak-na-to/', 'weekly', '0.8'],
     ['/media/', 'monthly'],
     ['/redakce/', 'monthly', '0.5'],
+    ['/prehled/', 'monthly', '0.7'],
+    ['/prehled/nejprodavanejsi-traktory-2025/', 'yearly', '0.8'],
+    ['/pruvodce/', 'monthly', '0.8'],
+    ['/pruvodce/jak-vybrat-traktor-100-150-koni/', 'monthly', '0.85'],
   ];
   for (const [path, changefreq, priority] of staticPaths) {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority });
@@ -129,6 +134,12 @@ export const GET: APIRoute = async () => {
   const { SLOVNIK } = await import('../lib/slovnik');
   for (const term of SLOVNIK) {
     urls.push({ loc: `${SITE_URL}/slovnik/${term.slug}/`, changefreq: 'monthly', priority: '0.6' });
+  }
+
+  // Kraj-level lokální bazar landing pages.
+  const { KRAJE } = await import('../lib/cap-dotace');
+  for (const k of KRAJE) {
+    urls.push({ loc: `${SITE_URL}/bazar/kraj/${k.slug}/`, changefreq: 'weekly', priority: '0.65' });
   }
 
   // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.

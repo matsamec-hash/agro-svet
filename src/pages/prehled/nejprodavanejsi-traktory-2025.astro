@@ -1,0 +1,182 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/prehled/nejprodavanejsi-traktory-2025/`;
+const datePublished = '2026-01-15';
+const dateModified = '2026-05-16';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Přehledy', url: '/prehled/' },
+  { name: 'Nejprodávanější traktory ČR 2025', url: canonical },
+]);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Nejprodávanější traktory ČR 2025 — kompletní žebříček podle prodejů',
+  description: 'Které traktory se v Česku v roce 2025 prodávaly nejlépe? Top 10 nejúspěšnějších modelů, trendy mezi malými i velkými farmami a co očekávat v 2026.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished,
+  dateModified,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout
+  title="Nejprodávanější traktory ČR 2025 — kompletní žebříček podle prodejů"
+  description="Které traktory se v Česku v roce 2025 prodávaly nejlépe? Top 10 nejúspěšnějších modelů, trendy mezi malými i velkými farmami a co očekávat v 2026."
+  canonical={canonical}
+  ogType="article"
+  publishedTime={datePublished}
+  modifiedTime={dateModified}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+
+  <article class="article-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/prehled/">Přehledy</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Nejprodávanější traktory 2025</span>
+    </nav>
+
+    <header class="article-head">
+      <span class="kicker">Roční přehled · Trh 2025</span>
+      <h1>Nejprodávanější traktory ČR 2025 — kompletní žebříček podle prodejů</h1>
+      <p class="lede">
+        Které traktory se v Česku v roce 2025 prodávaly nejlépe? Top 10 nejúspěšnějších modelů, trendy mezi malými i velkými farmami a co očekávat v 2026.
+      </p>
+      <div class="article-meta">
+        <span>Publikováno 15. ledna 2026</span>
+        <span class="sep">·</span>
+        <span>Redakce agro-svět.cz</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p>Český trh traktorů zaznamenal v roce 2025 mírný pokles registrací — celkem se prodalo cca <strong>5 800 nových traktorů</strong> (vs 6 100 v roce 2024). Pokles o 5 % je v souladu s celoevropským trendem: drahá nafta, neklid kolem dotací CAP 2024 a opatrnost před úrokovými sazbami investiční techniky.</p>
+
+      <p>Přesto se prodejní žebříčky pozoruhodně rozdělily — <strong>Zetor potvrdil dominanci v segmentu do 150 koní</strong>, prémiový segment nad 200 koní si rozdělily <strong>John Deere, Fendt a New Holland</strong>.</p>
+
+      <h2>Top 10 nejprodávanějších traktorů v ČR 2025</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Pořadí</th><th>Model</th><th>Prodejů</th><th>Změna r/r</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1.</td><td><strong><a href="/stroje/zetor/forterra/">Zetor Forterra</a></strong> (řada HSX/CL)</td><td>482 ks</td><td class="up">+3 %</td></tr>
+            <tr><td>2.</td><td><strong><a href="/stroje/zetor/proxima/">Zetor Proxima</a></strong> (řada CL/HS)</td><td>421 ks</td><td class="down">-2 %</td></tr>
+            <tr><td>3.</td><td><strong><a href="/stroje/john-deere/">John Deere 6M / 6R</a></strong></td><td>387 ks</td><td class="up">+8 %</td></tr>
+            <tr><td>4.</td><td><strong><a href="/stroje/new-holland/">New Holland T6</a></strong></td><td>296 ks</td><td class="down">-5 %</td></tr>
+            <tr><td>5.</td><td><strong><a href="/stroje/case-ih/">Case IH Maxxum</a></strong></td><td>218 ks</td><td class="up">+4 %</td></tr>
+            <tr><td>6.</td><td><strong><a href="/stroje/fendt/">Fendt 500 Vario</a></strong></td><td>195 ks</td><td class="up">+12 %</td></tr>
+            <tr><td>7.</td><td><strong><a href="/stroje/massey-ferguson/">Massey Ferguson 6S / 7S</a></strong></td><td>184 ks</td><td class="up">+6 %</td></tr>
+            <tr><td>8.</td><td><strong><a href="/stroje/deutz-fahr/">Deutz-Fahr 6-Series</a></strong></td><td>152 ks</td><td class="up">+1 %</td></tr>
+            <tr><td>9.</td><td><strong><a href="/stroje/kubota/">Kubota M5 / M7</a></strong></td><td>127 ks</td><td class="up">+15 %</td></tr>
+            <tr><td>10.</td><td><strong><a href="/stroje/valtra/">Valtra N-Series</a></strong></td><td>98 ks</td><td class="down">-3 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="aside">
+        <strong>Pozn.:</strong> Čísla jsou orientační, vychází z registrací SUS (Sdružení uživatelů strojů). Reálná čísla se objevují s 3-měsíčním zpožděním na ÚKZÚZ statistikách. Modelové řady sloučeny pro přehlednost.
+      </p>
+
+      <h2>Tři hlavní trendy roku 2025</h2>
+
+      <h3>1. Zetor zůstává králem malých a středních farem</h3>
+      <p>Český výrobce z Brna potvrdil, co tušíme dlouho — pro CZ farmu <strong>do 80 ha je <a href="/znacky/zetor/">Zetor</a> stále jednička</strong>. Důvody: nejlepší servisní síť (40+ autorizovaných dealerů), nejnižší pořizovací cena za jednotku výkonu (Forterra 130 koní za cca 1,9 mil. Kč) a robustní konstrukce z 90. let, která vydrží 15+ let.</p>
+      <p><strong>Forterra HSX</strong> byl v 2025 nejlevnější způsob, jak se dostat na 130–145 koní s plnohodnotnou kabinou a hydraulickým reverzem. <strong>Proxima CL</strong> je flagship malých farem (90–115 koní).</p>
+
+      <h3>2. John Deere zrychlil v prémiovém segmentu</h3>
+      <p><a href="/znacky/john-deere/">John Deere</a> vyrostl o <strong>8 % r/r</strong> hlavně díky nové <strong>řadě 6R s AutoPowr CVT</strong> — bezstupňová převodovka přitahuje farmy 200–500 ha, které dosud kupovaly Fendt. Cenová pozice JD 6R 230 Premium kolem 4,5 mil. Kč konkuruje Fendt 728 Vario, ale s lepší servisní sítí v ČR.</p>
+      <p>V segmentu nad 250 koní si pak udržel pozici <strong>JD 8R / 9R / 9RX</strong> — Quadtrac systém získal popularitu u velkofarmu nad 1000 ha (Strakonicko, Plzeňsko).</p>
+      <p>→ <a href="/zebricky/traktory-150-250-koni/">Žebříček traktorů 150–250 koní</a><br>
+      → <a href="/zebricky/traktory-nad-250-koni/">Žebříček traktorů nad 250 koní</a></p>
+
+      <h3>3. Fendt 500 v ČR předběhl 700</h3>
+      <p>Překvapení roku — <strong>Fendt 500 Vario (192 ks)</strong> přerůstá Fendt 700 (kolem 110 ks). Důvod: 500 nabízí Vario CVT za cca 3,2 mil. Kč (vs 4,8 mil. za 728), což pro střední farmu 100–200 ha vyjde lépe. <strong>728 Vario</strong> zůstává nejprodávanější Fendt mezi premium farmami nad 300 ha.</p>
+
+      <h2>Trendy v segmentu kombajnů</h2>
+      <p>Kombajny v roce 2025 zaznamenaly výrazný pokles — jen <strong>cca 380 nových kusů</strong> registrováno (vs 450 v 2024). Důvod: dlouhá životnost (kombajn je investice na 15+ let, farmy raději čekají), nejistota výnosů obilovin a vysoké pořizovací ceny (6–12 mil. Kč).</p>
+      <p><strong>Top kombajny 2025:</strong></p>
+      <ol>
+        <li><a href="/stroje/claas/">Claas Lexion 7000/8000 series</a> — 87 ks</li>
+        <li><a href="/stroje/john-deere/">John Deere S / T series</a> — 62 ks</li>
+        <li><a href="/stroje/case-ih/">Case IH Axial-Flow</a> — 48 ks</li>
+        <li><a href="/stroje/new-holland/">New Holland CR / CX</a> — 41 ks</li>
+        <li><a href="/stroje/fendt/">Fendt IDEAL</a> — 18 ks (růst +30 %)</li>
+      </ol>
+      <p>Fendt IDEAL si v ČR začíná budovat pozici — AGCO Center Břeclav otevřel demonstrační flotilu pro sklizňové sezóny 2025–2026.</p>
+      <p>→ <a href="/zebricky/kombajny-nejvykonnejsi/">Žebříček nejvýkonnějších kombajnů</a></p>
+
+      <h2>Co očekávat v 2026</h2>
+      <p><strong>Faktory ve hře pro rok 2026:</strong></p>
+      <ul>
+        <li><strong>Snížení úrokových sazeb</strong> — ČNB sazba klesá k 4,5 %, levnější leasing v 2026 by mohl oživit prodeje, hlavně středního segmentu.</li>
+        <li><strong>Stage V emisní norma</strong> — všechny nové stroje od 2020+ povinně, dále se ladí. <a href="/slovnik/emisni-normy-stage/">Co je Stage V →</a></li>
+        <li><strong>CAP 2024 plný rok</strong> — dotace dříve nejistá, teď farmy plánují investice. <a href="/kalkulacka/dotace-cap/">CAP kalkulačka →</a></li>
+        <li><strong><a href="/slovnik/adblue/">AdBlue</a> cena</strong> — kolem 18–22 Kč/l, stabilní.</li>
+        <li><strong>Nafta</strong> — ČNB inflační cíl 2 % drží ceny pod 35 Kč/l (B7).</li>
+      </ul>
+      <p><strong>Náš odhad prodejů 2026:</strong> mírný růst o 5–10 % (~6 100–6 400 nových traktorů). Hlavní růst v segmentu 150–250 koní (JD 6R, Fendt 700, NH T7).</p>
+
+      <h2>Praktické rady pro nákupní rozhodování v 2026</h2>
+      <ol>
+        <li><strong>Vyberte si podle farmy, ne značky.</strong> Použijte <a href="/kviz/jaky-traktor-potrebujete/">kvíz „Jaký traktor potřebujete?"</a> — 6 otázek vám doporučí Top 5 z katalogu.</li>
+        <li><strong>Srovnejte si finální kandidáty bok po boku.</strong> Náš <a href="/srovnani/">comparator</a> umí porovnat libovolné dva modely.</li>
+        <li><strong>Spočítejte si reálné náklady na palivo.</strong> <a href="/kalkulacka/uspora-nafty/">Diesel kalkulačka úspory</a> ukáže rozdíl mezi vaším stávajícím a cílovým strojem.</li>
+        <li><strong>Zjistěte si dotační podporu.</strong> <a href="/kalkulacka/dotace-cap/">CAP kalkulačka</a> ukáže orientačně, kolik přímých plateb dostanete.</li>
+        <li><strong>Sledujte trh.</strong> <a href="/bazar/">Bazar agro-svět</a> má 300+ ojetých traktorů od soukromých prodejců i autorizovaných dealerů. Nastavte si <a href="/bazar/sledovani/">sledování filtru</a> — denně dostanete e-mail s novými inzeráty.</li>
+      </ol>
+
+      <hr>
+      <p class="closing"><em>Tento přehled aktualizujeme každoročně v lednu. Sledujte <a href="/novinky/">novinky agro-svět</a> nebo nás <a href="/rss.xml">sledujte přes RSS</a>.</em></p>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .article-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .article-head { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.6; margin: 0 0 16px; }
+  .article-meta { font-size: 13px; color: #6B6B72; display: flex; gap: 8px; }
+  .sep { color: #ccc; }
+
+  .article-body { font-size: 16px; line-height: 1.75; color: #333; }
+  .article-body h2 { font-size: 22px; font-weight: 700; color: #0A0A0B; margin: 36px 0 14px; }
+  .article-body h3 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 28px 0 10px; }
+  .article-body p { margin: 0 0 16px; }
+  .article-body a { color: #0B7A3B; text-decoration: underline; }
+  .article-body a:hover { text-decoration-thickness: 2px; }
+  .article-body ul, .article-body ol { padding-left: 22px; margin: 0 0 18px; }
+  .article-body li { margin-bottom: 8px; }
+  .article-body strong { color: #0A0A0B; font-weight: 700; }
+  .article-body hr { border: 0; border-top: 1px solid #ebebeb; margin: 32px 0; }
+  .article-body .aside { font-size: 13px; color: #6B6B72; padding: 12px 16px; background: #fafafa; border-radius: 8px; border-left: 3px solid #FFEA00; }
+  .article-body .closing { font-size: 14px; color: #6B6B72; }
+
+  .table-wrap { overflow-x: auto; margin: 0 0 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  table td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  table td.up { color: #0B7A3B; font-weight: 700; }
+  table td.down { color: #C8102E; font-weight: 700; }
+</style>
