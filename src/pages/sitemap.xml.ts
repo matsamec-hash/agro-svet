@@ -92,6 +92,7 @@ export const GET: APIRoute = async () => {
     ['/fotosoutez/gdpr/', 'yearly'],
     ['/statistiky/', 'weekly'],
     ['/srovnani/', 'weekly', '0.85'],
+    ['/zebricky/', 'weekly', '0.8'],
     ['/kalkulacka/', 'monthly', '0.8'],
     ['/kalkulacka/leasing-traktoru/', 'monthly', '0.75'],
     ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75'],
@@ -108,6 +109,12 @@ export const GET: APIRoute = async () => {
 
   for (const cat of NOVINKY_CATEGORIES) {
     urls.push({ loc: `${SITE_URL}/novinky/kategorie/${cat}/`, changefreq: 'weekly' });
+  }
+
+  // Žebříčky — top-N seznamy generované z stroje dat.
+  const { TIER_LISTS } = await import('../lib/tier-lists');
+  for (const t of TIER_LISTS) {
+    urls.push({ loc: `${SITE_URL}/zebricky/${t.slug}/`, changefreq: 'weekly', priority: '0.75' });
   }
 
   // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.
@@ -207,6 +214,12 @@ export const GET: APIRoute = async () => {
   // Comparison pairs — same list that generates /srovnani/[combo]/ routes.
   for (const pair of topComparisonPairs(220)) {
     urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65' });
+  }
+
+  // Tier-list pages (top-10 lists per segment).
+  urls.push({ loc: `${SITE_URL}/srovnani/top/`, changefreq: 'weekly', priority: '0.8' });
+  for (const t of (await import('../lib/tier-lists')).TIER_LISTS) {
+    urls.push({ loc: `${SITE_URL}/srovnani/top/${t.slug}/`, changefreq: 'weekly', priority: '0.75' });
   }
 
   for (const a of articlesDyn) {

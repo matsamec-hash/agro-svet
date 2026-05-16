@@ -1,0 +1,267 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { TIER_LISTS, getTierList, rankForTierList } from '../../lib/tier-lists';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+export function getStaticPaths() {
+  return TIER_LISTS.map((t) => ({ params: { slug: t.slug } }));
+}
+
+const { slug } = Astro.params;
+const def = getTierList(slug!);
+if (!def) return Astro.rewrite('/404');
+
+const ranked = rankForTierList(def);
+const pageUrl = `${SITE_URL}/zebricky/${def.slug}/`;
+const catLabel = def.category === 'traktory' ? 'Traktor' : def.category === 'kombajny' ? 'Kombajn' : def.category;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Žebříčky', url: '/zebricky/' },
+  { name: def.title, url: pageUrl },
+]);
+
+const itemListJsonLd = itemListSchema(
+  ranked.map((r) => ({
+    url: `${SITE_URL}/stroje/${r.model.brand_slug}/${r.model.series_slug}/${
+      r.model.slug.startsWith(r.model.brand_slug + '-')
+        ? r.model.slug.slice(r.model.brand_slug.length + 1)
+        : r.model.slug
+    }/`,
+    name: `${r.model.brand_name} ${r.model.name}`,
+  })),
+  def.title,
+);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: def.title,
+  description: def.description,
+  author: {
+    '@type': 'Organization',
+    name: 'Redakce agro-svět.cz',
+    url: 'https://agro-svet.cz/redakce/',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'agro-svět.cz',
+    url: 'https://agro-svet.cz',
+    logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  inLanguage: 'cs-CZ',
+};
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+function modelUrl(m: typeof ranked[number]['model']): string {
+  const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
+  return `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`;
+}
+function yearRange(m: typeof ranked[number]['model']): string {
+  if (!m.year_from) return '';
+  if (m.year_to) return `${m.year_from}–${m.year_to}`;
+  return `${m.year_from}–dosud`;
+}
+---
+
+<Layout title={def.title} description={def.description} canonical={pageUrl} ogType="article">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+
+  <div class="zeb-detail-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/zebricky/">Žebříčky</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">{def.title}</span>
+    </nav>
+
+    <header class="zeb-d-head">
+      <span class="kicker">Žebříček · Top {ranked.length}</span>
+      <h1>{def.title}</h1>
+      <p class="lede">{def.description}</p>
+    </header>
+
+    <aside class="zeb-method">
+      <h2>Metodika</h2>
+      <p>{def.methodology}</p>
+      <p>{def.callToAction}</p>
+    </aside>
+
+    {ranked.length === 0 ? (
+      <p class="zeb-empty">Žádný model neodpovídá kritériím. Databáze rosteme — vraťte se brzy.</p>
+    ) : (
+      <ol class="zeb-list">
+        {ranked.map((r) => (
+          <li class="zeb-item">
+            <div class="zeb-rank">#{r.rank}</div>
+            <div class="zeb-body">
+              <div class="zeb-meta">
+                <span class="zeb-cat-chip">{catLabel}</span>
+                <a href={`/stroje/${r.model.brand_slug}/`} class="zeb-brand">{r.model.brand_name}</a>
+                <span class="zeb-sep">·</span>
+                <span class="zeb-series">{r.model.series_name}</span>
+                {yearRange(r.model) && (
+                  <>
+                    <span class="zeb-sep">·</span>
+                    <span class="zeb-year">{yearRange(r.model)}</span>
+                  </>
+                )}
+              </div>
+              <h3 class="zeb-name">
+                <a href={modelUrl(r.model)}>{r.model.brand_name} {r.model.name}</a>
+              </h3>
+              {r.model.description && (
+                <p class="zeb-shortdesc">{r.model.description.slice(0, 220)}{r.model.description.length > 220 ? '…' : ''}</p>
+              )}
+              <div class="zeb-specs">
+                {r.model.power_hp != null && <span class="spec"><strong>{r.model.power_hp}</strong> k</span>}
+                {r.model.power_kw != null && <span class="spec muted">{r.model.power_kw} kW</span>}
+                {r.model.weight_kg != null && <span class="spec">{r.model.weight_kg.toLocaleString('cs-CZ')} kg</span>}
+                {r.model.engine && <span class="spec">{r.model.engine}</span>}
+                {r.model.transmission && <span class="spec">{r.model.transmission}</span>}
+                {r.model.cutting_width_m != null && <span class="spec">{r.model.cutting_width_m} m záběr</span>}
+              </div>
+              <a href={modelUrl(r.model)} class="zeb-cta">
+                Detail modelu
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </li>
+        ))}
+      </ol>
+    )}
+
+    <section class="zeb-next">
+      <h2>Další žebříčky</h2>
+      <div class="zeb-next-grid">
+        {TIER_LISTS.filter((t) => t.slug !== def.slug).slice(0, 4).map((t) => (
+          <a href={`/zebricky/${t.slug}/`} class="zeb-next-card">
+            <span class="zeb-next-cat">{t.category === 'traktory' ? 'Traktory' : t.category === 'kombajny' ? 'Kombajny' : t.category}</span>
+            <span class="zeb-next-title">{t.title}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .zeb-detail-root { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 18px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .zeb-d-head { margin-bottom: 24px; }
+  .kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #6B6B72; font-weight: 700; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin: 8px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+  .zeb-method {
+    background: #fafafa;
+    border-left: 3px solid #FFEA00;
+    padding: 16px 20px;
+    margin: 24px 0 36px;
+    border-radius: 0 8px 8px 0;
+  }
+  .zeb-method h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #6B6B72; font-weight: 700; margin: 0 0 8px; }
+  .zeb-method p { font-size: 14px; color: #444; line-height: 1.6; margin: 0 0 6px; }
+  .zeb-method p:last-child { margin-bottom: 0; }
+
+  .zeb-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .zeb-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1.5px solid #eaeaec;
+    border-radius: 12px;
+    transition: border-color .15s;
+  }
+  .zeb-item:hover { border-color: #FFEA00; }
+  .zeb-rank {
+    flex: 0 0 60px;
+    font-size: 32px;
+    font-weight: 800;
+    font-family: 'Chakra Petch', sans-serif;
+    color: #FFEA00;
+    text-shadow: -1px -1px 0 #0A0A0B, 1px -1px 0 #0A0A0B, -1px 1px 0 #0A0A0B, 1px 1px 0 #0A0A0B;
+    line-height: 1;
+    align-self: flex-start;
+  }
+  .zeb-body { flex: 1; min-width: 0; }
+  .zeb-meta { display: flex; gap: 6px; align-items: center; font-size: 12px; color: #6B6B72; margin-bottom: 6px; flex-wrap: wrap; }
+  .zeb-cat-chip {
+    background: #0A0A0B;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .zeb-brand { color: #0B7A3B; text-decoration: none; font-weight: 700; }
+  .zeb-brand:hover { text-decoration: underline; }
+  .zeb-sep { color: #ccc; }
+  .zeb-name { font-size: 18px; font-weight: 700; line-height: 1.3; margin: 0 0 8px; }
+  .zeb-name a { color: #0A0A0B; text-decoration: none; }
+  .zeb-name a:hover { color: #0B7A3B; }
+  .zeb-shortdesc { font-size: 13px; color: #555; line-height: 1.55; margin: 0 0 10px; }
+  .zeb-specs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .spec {
+    font-size: 12px;
+    background: #f5f5f5;
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: #333;
+  }
+  .spec strong { color: #0A0A0B; font-weight: 700; }
+  .spec.muted { color: #888; }
+  .zeb-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0B7A3B;
+    text-decoration: none;
+  }
+  .zeb-cta:hover { text-decoration: underline; }
+  .zeb-empty { text-align: center; padding: 40px; color: #999; font-style: italic; }
+
+  .zeb-next { margin-top: 48px; }
+  .zeb-next h2 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 0 0 16px; }
+  .zeb-next-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .zeb-next-card {
+    display: block;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1.5px solid #eaeaec;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s;
+  }
+  .zeb-next-card:hover { border-color: #FFEA00; }
+  .zeb-next-cat {
+    display: inline-block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6B6B72;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .zeb-next-title { display: block; font-size: 14px; font-weight: 600; color: #0A0A0B; line-height: 1.3; }
+
+  @media (max-width: 640px) {
+    .zeb-item { padding: 14px; gap: 12px; }
+    .zeb-rank { flex-basis: 44px; font-size: 24px; }
+  }
+</style>
