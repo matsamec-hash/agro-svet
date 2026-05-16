@@ -217,6 +217,35 @@ async function main() {
     count++;
   }
 
+  // Default site OG + landing pages without a specific image
+  const LANDINGS = [
+    { slug: 'default', kicker: 'agro-svět', title: 'Zemědělství, technika a stroje', subtitle: 'Katalog · Magazín · Bazar', footerRight: 'agro-svet.cz' },
+    { slug: 'stroje', kicker: 'Katalog', title: 'Traktory a kombajny', subtitle: '1300+ modelů · 22 značek', footerRight: 'Filtrovat podle značky' },
+    { slug: 'encyklopedie', kicker: 'Encyklopedie', title: 'Encyklopedie strojů', subtitle: 'Hloubkové profily modelů', footerRight: 'Specifikace · FAQ · Historie' },
+    { slug: 'jak-na-to', kicker: 'Jak na to', title: 'Praktické návody', subtitle: 'Krok-za-krokem pro hospodáře', footerRight: 'Návody · Tipy · Triky' },
+    { slug: 'znacky', kicker: 'Značky', title: 'Značky a výrobci', subtitle: '22 světových výrobců', footerRight: 'Historie · Modely · Země' },
+    { slug: 'plemena', kicker: 'Plemena', title: 'Plemena hospodářských zvířat', subtitle: 'Skot · prasata · drůbež · ovce', footerRight: 'Profily plemen' },
+    { slug: 'dotace', kicker: 'Dotace', title: 'Zemědělské dotace', subtitle: 'SZIF · PRV · národní programy', footerRight: 'Termíny · Podmínky' },
+    { slug: 'prodejci', kicker: 'Prodejci', title: 'Prodejci techniky', subtitle: 'Autorizovaní dealeři v ČR', footerRight: 'Mapa · Kontakty' },
+    { slug: 'kalkulacka', kicker: 'Kalkulačka', title: 'Kalkulačky pro zemědělce', subtitle: 'Leasing · Náklady na hektar', footerRight: 'Spočítejte si' },
+    { slug: 'srovnani', kicker: 'Srovnání', title: 'Srovnání traktorů', subtitle: '220+ párů head-to-head', footerRight: 'Specifikace vs specifikace' },
+    { slug: 'bazar', kicker: 'Bazar', title: 'Agro bazar', subtitle: 'Inzerát zdarma · bez provize', footerRight: 'Traktory · Kombajny · Stroje' },
+    { slug: 'puda', kicker: 'Půda', title: 'Péče o půdu', subtitle: 'Hnojení · zúrodnění · plodiny', footerRight: 'Praktické poradenství' },
+  ];
+  for (const l of LANDINGS) {
+    const jsx = template({
+      kicker: l.kicker,
+      title: l.title,
+      subtitle: l.subtitle,
+      accentColor: DEFAULT_BRAND_COLOR,
+      footerLeft: 'agro-svět.cz',
+      footerRight: l.footerRight,
+    });
+    const png = await render(jsx, fonts);
+    writeFileSync(resolve(OUT_DIR, `${l.slug === 'default' ? 'default' : `landing-${l.slug}`}.png`), png);
+    count++;
+  }
+
   console.log(`\n✓ Generated ${count} OG images → public/og/`);
 }
 
