@@ -317,6 +317,14 @@ const canonical = `${SITE_URL}/srovnani/`;
           errEl.textContent = 'Vyberte dva různé modely.';
           return;
         }
+        const aModelObj = models.find((m) => m.slug === aSlug);
+        const bModelObj = models.find((m) => m.slug === bSlug);
+        if (sameCat.checked && aModelObj && bModelObj && aModelObj.category !== bModelObj.category) {
+          btn.disabled = true;
+          errEl.hidden = false;
+          errEl.textContent = 'Vybrané modely nemají stejnou kategorii (traktor vs kombajn). Buď odškrtněte "Jen stejnou kategorii", nebo zvolte modely ze stejné kategorie.';
+          return;
+        }
         btn.disabled = false;
       }
 

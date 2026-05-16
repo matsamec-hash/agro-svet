@@ -1,5 +1,11 @@
 ---
-export const prerender = true;
+// Hybrid: ~1500 nejlepších párů zůstávají prerendered (build-time generated
+// z expandedComparisonPairs). Pro ostatní validní páry (custom picker, nebo
+// libovolný kombinace přímo z URL) page funguje jako SSR fallback — combo
+// se parse-uje, modely se validují přes findModelBySlug, a pokud existují
+// oba, vyrenderuje se on-the-fly s 24h edge cache. Tím /srovnani/[anything]/
+// nevrací 404 navzdor tomu, že není v staticky vygenerovaných paths.
+export const prerender = false;
 
 import Layout from '../../../layouts/Layout.astro';
 import {
@@ -47,6 +53,9 @@ if (!pair) {
   }
 }
 if (!pair) return Astro.rewrite('/404');
+
+// 24h edge cache + 7d SWR — pair data se mění jen když přibudou modely.
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
 const { a, b } = pair;
 const aDisplay = modelDisplayName(a);
