@@ -84,6 +84,52 @@ export const TIER_LISTS: TierListDef[] = [
     score: (m) => m.power_hp ?? 0,
     limit: 12,
   },
+  {
+    slug: 'kombajny-do-300-koni',
+    title: 'Nejlepší kombajny do 300 koní',
+    description: 'Sklízecí mlátičky pro menší a střední farmy 50–500 ha. Třídy III–VI s výkonem do 300 koní — nižší pořizovací cena, dostatečná kapacita pro standardní žně.',
+    methodology: 'Modely seřazené podle výkonu motoru sestupně. Hlavně Claas Avero / Tucano / Trion, JD T-Series 500/600, Case Axial-Flow 4000/5000, NH TC/CX.',
+    callToAction: 'Pro velkofarmy nad 500 ha viz žebříček nejvýkonnějších kombajnů.',
+    category: 'kombajny',
+    filter: (m) => typeof m.power_hp === 'number' && m.power_hp > 0 && m.power_hp <= 300,
+    score: (m) => m.power_hp ?? 0,
+    limit: 12,
+  },
+  {
+    slug: 'kombajny-nad-500-koni',
+    title: 'Flagship kombajny nad 500 koní',
+    description: 'Špička trhu — kombajny s výkonem nad 500 koní pro velkofarmy a sklizňové podnikatele. Třída X+ s největšími žacími stoly (až 18 m) a zásobníky (14+ tisíc litrů).',
+    methodology: 'Sklízecí mlátičky seřazené podle výkonu motoru sestupně. Flagshipy Claas Lexion 8000/8900, JD X9, Case Axial-Flow 9250, NH CR10.90, Fendt IDEAL 9/10T.',
+    callToAction: 'Pro typickou českou farmu jsou tyto stroje předimenzované — viz nižší žebříčky.',
+    category: 'kombajny',
+    filter: (m) => typeof m.power_hp === 'number' && m.power_hp > 500,
+    score: (m) => m.power_hp ?? 0,
+    limit: 10,
+  },
+
+  // ── SPECIÁLNÍ ───────────────────────────────────────────────────────
+  {
+    slug: 'traktory-klasiky-pre-2000',
+    title: 'Klasické traktory před rokem 2000',
+    description: 'Žebříček historických traktorů uvedených před rokem 2000 — sběratelské a stále provozované klasiky. Často s mechanickými převodovkami a robustní konstrukcí, která vydrží.',
+    methodology: 'Modely s rokem uvedení do roku 1999, seřazené podle výkonu sestupně. De-dup per série pro přehled napříč značkami.',
+    callToAction: 'Hledáte aktuálně vyráběný stroj? Viz žebříčky podle výkonu.',
+    category: 'traktory',
+    filter: (m) => typeof m.year_from === 'number' && m.year_from < 2000 && typeof m.power_hp === 'number',
+    score: (m) => (m.power_hp ?? 0) + ((m.year_to ?? 1990) - 1970), // bonus za delší výrobu = popularita
+    limit: 15,
+  },
+  {
+    slug: 'traktory-male-kompaktni',
+    title: 'Nejlepší malé / kompaktní traktory (do 60 koní)',
+    description: 'Kompaktní traktory pro sady, vinohrady, komunální použití a hobby farmy. Výkon do 60 koní, kratší vůle, lepší manévrovatelnost.',
+    methodology: 'Modely s výkonem do 60 koní seřazené sestupně. Hlavně Kubota L-Series, JD 3R, Massey Ferguson 1700E, Iseki, Zetor Major.',
+    callToAction: 'Pro středně velké farmy viz žebříček traktorů do 100 koní.',
+    category: 'traktory',
+    filter: (m) => typeof m.power_hp === 'number' && m.power_hp > 0 && m.power_hp <= 60,
+    score: (m) => m.power_hp ?? 0,
+    limit: 12,
+  },
 ];
 
 export function getTierList(slug: string): TierListDef | undefined {

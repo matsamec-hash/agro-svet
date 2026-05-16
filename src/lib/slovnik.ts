@@ -1134,6 +1134,387 @@ Cena:
 Pozor: provoz s duals na silnici v EU = pokuta 5 000–20 000 Kč + ukončení jízdy. Vždy montáž jen těsně před vyjetím na pole, demontáž po dokončení. U flagship farem řeší rychlospojkami za 5–15 minut.`,
     related: ['allwheel-drive'],
   },
+
+  // ── DALŠÍ KOMBAJNY & SKLIZEŇ ────────────────────────────────────────
+  {
+    slug: 'rotor-kombajn',
+    term: 'Rotor / Rotorový kombajn',
+    alias: ['axial-flow', 'tangenciální', 'rotorová mlátička'],
+    kategorie: 'technologie',
+    shortDef: 'Rotorový kombajn (axial-flow) využívá podélný rotor místo klasického válcového mlátu — vyšší propustnost, menší poškození zrna, vyšší výkon.',
+    longDef: `Klasická sklízecí mlátička má **válcový mlat** (klasický cylindr s lopatkami) a **vytřásadla** pro separaci slámy. Rotorový kombajn nahrazuje obojí jedním **podélným rotorem** (axial-flow), kterým prochází celý slámový tok.
+
+Výhody rotoru:
+- **+15–25 % propustnost** ve sklizni vs válcový mlat stejné velikosti.
+- **Méně poškození zrna** — měkčí mlátění (delší dráha, nižší rázy).
+- **Lepší separace** za vlhkých podmínek (po dešti, ranní rosa).
+- **Jednodušší údržba** — méně součástí, méně klínových řemenů.
+
+Nevýhody:
+- **Vyšší spotřeba paliva** — rotor potřebuje víc energie.
+- **Horší v dlouhé slámě** — pokud chcete kvalitní stéblovou slámu pro balíky, tradiční mlat dělá lepší.
+- **Vyšší pořizovací cena** o 10–20 % vs ekvivalentní válcový mlat.
+
+Hlavní rotorové značky:
+- **Case IH Axial-Flow** — průkopník (od 1977), dnes dominantní v USA.
+- **John Deere S-Series** (od 2012) — single rotor.
+- **New Holland CR** — twin rotor (dva paralelní rotory).
+- **Fendt IDEAL** — dual helix rotor.
+- **Claas Lexion** — APS Hybrid (kombinace válcového mlatu + akcelerace + rotorové separace) — kompromis.
+
+V CZ: rotor preferuje 40 % farmářů, válcový 60 % (kvůli slámě a nižší ceně). Pro typickou farmu < 300 ha stačí klasický válcový.`,
+    related: ['kombajn-trida', 'mlatecka'],
+  },
+  {
+    slug: 'kombajn-trida',
+    term: 'Třída kombajnu',
+    alias: ['Class', 'Klassen'],
+    kategorie: 'technologie',
+    shortDef: 'Třída kombajnu (I–X+) je klasifikace velikosti a výkonu — vychází z plochy mlátícího bubnu a počtu vytřásadel. Vyšší třída = vyšší propustnost.',
+    longDef: `Třída sklízecí mlátičky je evropská klasifikace dle propustnosti a velikosti mlátícího ústrojí. Vychází hlavně z **plochy mlátícího bubnu** a **počtu vytřásadel** (u klasických) nebo **velikosti rotoru** (u rotorových).
+
+Přibližný přehled:
+- **Třída III**: 100–120 kW (135–160 k), záběr 4 m, zásobník 4 500 l.
+- **Třída IV**: 120–155 kW (160–210 k), záběr 4,5–5 m, zásobník 5 500 l.
+- **Třída V**: 155–185 kW (210–250 k), záběr 5–6 m, zásobník 6 500 l.
+- **Třída VI**: 185–230 kW (250–310 k), záběr 6–7,5 m, zásobník 7 500 l.
+- **Třída VII**: 230–270 kW (310–365 k), záběr 7,5–9 m, zásobník 9 000 l.
+- **Třída VIII**: 270–330 kW (365–445 k), záběr 9–10,5 m, zásobník 10 500 l.
+- **Třída IX**: 330–400 kW (445–540 k), záběr 10,5–12 m, zásobník 12 000 l.
+- **Třída X / X+**: 400+ kW (540+ k), záběr 12–18 m, zásobník 14 000+ l.
+
+Pro CZ farmu:
+- **50–200 ha obilí**: třída IV–V (Claas Avero, JD T560, Case 5140).
+- **200–500 ha**: třída VI–VII (Claas Tucano, JD T670, NH CX5/CX7).
+- **500–1500 ha**: třída VIII–IX (Claas Lexion 7000/8000, JD S780, Fendt IDEAL 8).
+- **1500+ ha nebo sklizňový podnik**: třída X (Claas Lexion 8900, JD X9, Fendt IDEAL 10T).
+
+Vyšší třída neznamená automaticky lepší — je to question of capacity. Předimenzovaný kombajn = neefektivní využití kapitálu.`,
+    related: ['rotor-kombajn'],
+  },
+  {
+    slug: 'header',
+    term: 'Hederové žací zařízení',
+    alias: ['header', 'žací stůl', 'cutting bar'],
+    kategorie: 'technologie',
+    shortDef: 'Hederové žací zařízení (header) je přední část kombajnu — žací stůl, který stříhá plodinu a dopravuje ji do mlátu. Záběr 4–18 m podle třídy kombajnu.',
+    longDef: `Hederové žací zařízení (header) je modulární přední nástavec sklízecí mlátičky. Existují **specializované hedery pro různé plodiny**:
+
+**Obiloviny / řepka** (universal grain header):
+- Záběr 4–18 m podle třídy kombajnu.
+- Variabilní lišta (Vario) pro řepku — prodloužení o 70–90 cm pro úzké řezání drobnozrnných plodin.
+- Cena 0,8–4 mil. Kč nový, ojetý 50 % ceny.
+
+**Kukuřice** (corn header):
+- 4-6-8-12 řádkové verze.
+- Hrubě upravený stůl s lapači, ne klasická lišta.
+- Cena 1,2–3,5 mil. Kč.
+
+**Pickup** (pro siláž z řádku, pre-sklizeň):
+- Sbírá řádky ze pole, žádné nové řezání.
+- Specifický pro travní senáže.
+
+**Sunflower header** (slunečnice):
+- Snapping rolls — odřezává hlavičku.
+- Vzácný v CZ, jen pro specialisty.
+
+Pravidla pro výběr:
+- **Záběr = 0,4× kombajn třída** (Třída V = 4,5–5 m header).
+- **Vyšší záběr ≠ vyšší výkon** — pokud kombajn nemá kapacitu na propustnost, larger header jen zpomalí.
+- **Transport** — všechny hedery nad 7 m vyžadují **rozkládací systém** nebo **vozík** pro silniční přepravu (záběr přes 2,55 m je nelegální bez záboru).
+
+Mnoho farmářů má dva hedery: **obilný + kukuřičný** s rychlospojkou (5–10 minut výměna).`,
+    related: ['kombajn-trida', 'rotor-kombajn'],
+  },
+
+  // ── DALŠÍ AGROTECHNIKA ─────────────────────────────────────────────
+  {
+    slug: 'orba',
+    term: 'Orba',
+    alias: ['hluboké zpracování', 'plow', 'orání'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Orba je hluboké obracení půdy pluhem do hloubky 20–35 cm. Tradiční základ podzimního zpracování — narušuje strukturu, ničí plevele, zaorá organickou hmotu.',
+    longDef: `Orba je nejtradičnější způsob zpracování půdy — pluh řeže a obrací 20–35 cm silnou vrstvu ornice. V ČR dominantní metoda od 19. století.
+
+**Typy pluhů**:
+- **Nesený pluh** — připevněn tříbodem, lehčí (do 4 radlic).
+- **Polonesený / tažený** — větší pluhy 5–12 radlic, opora kola.
+- **Variopluh** — proměnný záběr radlic za jízdy.
+- **Otočný pluh (reverse)** — obrátí radlice = orá oběma směry, žádné mezery v pásu.
+
+**Hloubka orby**:
+- **Mělká (15–20 cm)** — pro letní zpracování po sklizni.
+- **Střední (20–28 cm)** — standard pro podzimní orbu pod ozimy.
+- **Hluboká (28–35 cm)** — proti utužení podorničí, výjimečně 1× za 3–5 let.
+
+**Spotřeba** pluhu (orientačně):
+- 3-radlový pro 100 koní traktor: 12–18 l nafty/ha.
+- 5-radlový pro 200 koní: 18–25 l nafty/ha.
+- 8-radlový pro 350 koní: 22–30 l nafty/ha.
+
+**Trendy proti orbě**:
+- **No-till** / bezorebné — žádná orba, jen secí stroj přímo do strniště. Šetří palivo (5–10 l/ha) ale vyžaduje vyšší dávky herbicidů.
+- **Min-till** (minimum tillage) — jen mělké zpracování (5–15 cm) místo orby. Kompromis.
+- **Strip-till** — orba jen v řádcích, mezerydry zůstanou nedotknuté.
+
+V CZ aktuálně 60 % orby, 30 % min-till, 10 % no-till.`,
+    related: ['mezi-plodiny', 'eroze-pudy'],
+  },
+  {
+    slug: 'no-till',
+    term: 'No-till / Bezorebné zpracování',
+    alias: ['direct drilling', 'přímé setí'],
+    kategorie: 'agrotechnika',
+    shortDef: 'No-till (bezorebné zpracování) vynechává orbu — secí stroj seje přímo do strniště. Šetří palivo, chrání půdu před erozí, ale vyžaduje vyšší dávky herbicidů.',
+    longDef: `No-till je metoda zpracování půdy, která **úplně vynechává orbu** i jiné hluboké narušení půdy. Sázení (osiva) probíhá přímo do strniště předchozí plodiny pomocí **disko-secího stroje** nebo **dlátového secího**.
+
+Výhody:
+- **Úspora paliva 50–80 %** vs konvenční orba.
+- **Méně eroze** — povrch zůstává krytý, půda neodplavovaná.
+- **Vyšší obsah organické hmoty** — strniště + kořeny se rozkládají v půdě.
+- **Lepší zadržování vody** — vyšší kapilarita.
+- **Méně práce** — 1 operace místo 3–5 (orba + smyk + brány + setí).
+
+Nevýhody:
+- **Vyšší dávky herbicidů** — bez orby plevele nezničí, kompenzace glyfosátem.
+- **Pomalejší prohřátí půdy na jaře** — strniště drží chlad.
+- **Riziko půdních chorob** — patogenní zbytky ze strniště.
+- **Nutnost specializovaného secího stroje** — Horsch Avatar / Maestro, Väderstad Rapid, John Deere 750A. Cena 1,5–4 mil. Kč.
+
+V CZ:
+- Hlavně **Jižní Morava + Vysočina** (suché oblasti) — no-till funguje nejlépe v aridních podmínkách.
+- **Severní Čechy + horské oblasti** — orba dominantní (chladnější, vlhčí klima).
+- **EU subvence** preferují no-till přes EKO režim — premium 1100 Kč/ha navíc.
+
+Doporučujeme zkusit no-till na **části pole 2–3 sezóny** před plnou konverzí — výnosy mohou v prvním roce klesnout o 5–10 %, ale stabilizují se a dlouhodobě (5+ let) výrazně rostou.`,
+    related: ['orba', 'eroze-pudy'],
+  },
+  {
+    slug: 'pre-emergence',
+    term: 'Pre-emergence postřik',
+    alias: ['pre-emergent', 'před vzejitím'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Pre-emergence postřik se aplikuje na pole po setí, ale před vzejitím plodiny i plevele. Zničí klíčící plevele dřív, než vyrostou — klíčový pro čistý lán.',
+    longDef: `Pre-emergence (pre-em, "před vzejitím") je herbicidní strategie aplikace přípravků **po setí, ale před vzejitím plodiny i plevele**. Cílí na klíčící plevele v kritické fázi růstu.
+
+**Hlavní účinné látky**:
+- **Pendimethalin** (Stomp) — pro obiloviny, řepku, slunečnici.
+- **Prosulfocarb** (Defi) — proti psárce v obilovinách.
+- **Metribuzin** — pro brambory, sóju.
+- **S-Metolachlor + Mesotrione** — pro kukuřici.
+
+**Timing**:
+- **0–7 dní po setí** — záleží na rychlosti vzcházení.
+- **Půda musí být vlhká** — sucho = pre-em nefunguje (látka nepronikne k semenům plevele).
+- **Bez deště do 2 dnů** ideální — déšť by mohl smýt látku.
+
+Dávkování typicky 2–4 l/ha. Cena 200–600 Kč/ha za pre-em ošetření.
+
+**Výhody**:
+- **Zničí 70–90 % plevele** dřív, než vyklíčí.
+- **Snižuje nutnost post-em (potlivém) postřiku** — méně chemie celkově.
+- **Plodina vzejde do "čistého" pole** — vyšší výnos.
+
+**Omezení**:
+- **Selekce odolných plevelů** — opakované pre-em vede k rezistenci (zejména psárka, hnězdovka, břím v obilovinách).
+- **Citlivost na sucho** — bez deště ošetření selže.
+- **Některé plodiny špatně snášejí** — řepka je citlivá na pendimethalin.
+
+Pro CZ farmáře: pre-em je standard u řepky a obilovin. U jařin (sója, kukuřice) volba mezi pre-em a post-em.`,
+    related: ['orba', 'roundup'],
+  },
+  {
+    slug: 'osevni-postup',
+    term: 'Osevní postup',
+    alias: ['rotace plodin', 'crop rotation', 'střídání plodin'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Osevní postup je plánované střídání plodin na poli v různých letech. Klíčový princip udržitelného zemědělství — zlepšuje půdu, snižuje plevele a choroby.',
+    longDef: `Osevní postup je systematické střídání plodin na stejném pozemku v různých letech. Tradiční zemědělství základ — vědělo se to už ve středověku ("3-pole systém": ozim → jařina → úhor).
+
+**Typický CZ osevní postup** (čtyřletý):
+1. **Řepka** (ozim) — zlepšuje strukturu, hluboký kořen.
+2. **Pšenice ozimá** — standardní cash crop.
+3. **Cukrovka nebo brambory** — okopanina, narušuje plevele.
+4. **Jarní obilí (ječmen) nebo kukuřice** — uzavírá cyklus.
+
+Někdy přidáno **5. místo: vojtěška / jetel** (3 roky bez výsevu, regeneruje půdu, váže dusík).
+
+**Principy**:
+- **Nestavět stejnou plodinu po sobě** — riziko chorob (např. fuzariózy v pšenici).
+- **Střídat hluboký + mělký kořen** — řepka (hluboko) + obilí (mělko).
+- **Zařadit luskovinu** — sója, hrách, vikve = fixují dusík, šetří hnojivo.
+- **Okopanina (cukrovka, brambory)** = "čistič" — narušuje cykly plevele.
+
+**CAP 2024 pravidla**:
+- **GAEC 7**: zákaz monokultury 4+ let za sebou.
+- Maximum 75 % výměry stejnou plodinou v jednom roce.
+- **EKO premium** vyžaduje **min. 4 různé plodiny** na orné půdě.
+
+**Konsekvence porušení**:
+- **Kratší rotace** (např. pšenice → pšenice → kukuřice → pšenice) = vyšší výnosy krátkodobě, ale za 5–10 let pokles výnosů o 15–25 % kvůli půdním chorobám.
+- **Monokultura kukuřice** (extrém v USA, sporadicky CZ): vyžaduje masivní hnojení + insekticidy.
+
+Dobrý osevní postup je **nejlepší zemědělská praktika "zdarma"** — bez chemie, jen plánováním plodin.`,
+    related: ['mezi-plodiny', 'eko-platba', 'gaec'],
+  },
+
+  // ── PRECISE FARMING DALŠÍ ──────────────────────────────────────────
+  {
+    slug: 'section-control',
+    term: 'Section Control',
+    alias: ['automatické vypínání sekcí', 'TC-SC'],
+    kategorie: 'precise-farming',
+    shortDef: 'Section Control je GPS-řízené automatické vypínání sekcí postřikovače / sečky / secího stroje v souvratích, překrytí nebo v už ošetřených pásech. Šetří 5–15 % chemie/osiva.',
+    longDef: `Section Control (technicky **TC-SC** v ISOBUS — Task Controller Section Control) je systém automatického vypínání jednotlivých sekcí (částí) nářadí podle GPS pozice a předchozí stop pokryvu.
+
+**Aplikace**:
+- **Postřikovač** — 12–24 m rameno rozděleno na 6–24 sekcí, každá se vypne samostatně. V souvratích, na klínu, na zužujícím se konci pole.
+- **Secí stroj** — vypínání řádků v souvratích, kde už osivo padlo.
+- **Rozmetadlo hnojiv** — variabilní výsek pásu hnojiva podle pozice.
+
+**Princip**:
+1. RTK GPS přijímač pozice ±2 cm.
+2. ISOBUS TC-SC zaznamenává **as-applied map** — kde bylo aplikováno.
+3. Při dalším průjezdu (souvrať, klín) systém vypne sekce, které by aplikovaly do už pokrytého pásu.
+
+**Úspora**:
+- **Postřikovač**: 5–15 % chemie/sezónu (záleží na tvaru pole — pravidelný čtverec 5 %, nepravidelná pole 15+ %).
+- **Hnojivo**: 5–10 %.
+- **Osivo**: 3–8 %.
+
+**ROI** (orientačně, pro farmu 200 ha):
+- Cena Section Control retrofit: 80 000–250 000 Kč.
+- Úspora chemie 2 500 Kč/ha × 0,1 (10 %) = 250 Kč/ha × 200 ha = 50 000 Kč/rok.
+- ROI: 1,5–5 let.
+
+**Aktuálně**:
+- Standard u velkých moderních postřikovačů (Amazone UX, Horsch Leeb, Dammann).
+- ISOBUS TC-SC licence typicky 20–60 tisíc Kč u traktoru.
+- Retrofit u starých postřikovačů 100–200 tis. Kč.`,
+    related: ['isobus', 'gps-rtk', 'variable-rate'],
+  },
+
+  // ── EKONOMIKA & TRH ────────────────────────────────────────────────
+  {
+    slug: 'leasing-vs-uver',
+    term: 'Leasing vs úvěr',
+    alias: ['operativní leasing', 'finanční leasing'],
+    kategorie: 'dotace',
+    shortDef: 'Leasing a úvěr jsou dvě cesty financování traktoru. Leasing = pronájem s opcí odkupu na konci, úvěr = bankovní půjčka. Liší se DPH, vlastnictvím a flexibilitou.',
+    longDef: `**Finanční leasing** = pronájem s povinnou opcí odkupu na konci (typicky za 1–5 % zbytkové ceny).
+
+**Operativní leasing** = pronájem bez opce, na konci stroj vracíte. Vhodný pro krátké období (3–5 let), bez starostí o prodej.
+
+**Bankovní úvěr** = klasická půjčka, stroj je hned váš, ručíte zástavou.
+
+| | Finanční leasing | Operativní leasing | Bankovní úvěr |
+|---|---|---|---|
+| **Vlastnictví během** | leasingovka | leasingovka | vy (zástava bance) |
+| **Vlastnictví po splacení** | vy | leasingovka | vy |
+| **DPH** | rozložené po splátkách | jen na splátky (vždy) | celé předem |
+| **Akontace** | 0–30 % | 0–30 % | 0–20 % |
+| **Sazba (2026)** | 5,5–8 % p.a. | 6–9 % p.a. | 5–7 % p.a. |
+| **Doba** | 24–84 měs | 24–60 měs | 12–96 měs |
+| **Flexibilita** | nízká (penalty za předčasné ukončení) | nízká | vyšší (refinancování) |
+
+**Pro CZ farmáře**:
+- **Finanční leasing** je standard pro 70 % nákupů — předvídatelnost splátek, daňová optimalizace.
+- **Úvěr** se vyplatí pro **drahé stroje 5+ mil. Kč** s vysokou akontací — nižší celkový úrok.
+- **Operativní leasing** je výjimečný — vhodný pro **podnikatele v sklizňových službách** kde stroj 5 let intenzivně využívá a pak vrací.
+
+**Captive financování značky** (John Deere Financial, AGROTEC FS, AGRI CS Finance):
+- Často akční sazby 4–6 % na nové stroje vlastní značky.
+- Spojené s prodejcem — výhodné kombinovat s slevou na ceně stroje.
+- Pro ojeté stroje obvykle vyšší sazby než univerzální banky.
+
+→ [Kalkulačka leasingu traktoru](/kalkulacka/leasing-traktoru/) pro orientační výpočet měsíční splátky.`,
+    related: ['cap-2024'],
+  },
+
+  // ── BEZPEČNOST & REGULACE ────────────────────────────────────────────
+  {
+    slug: 'rolnicke-pravidla-silnicni',
+    term: 'Silniční pravidla pro traktory',
+    alias: ['STK traktoru', 'značení šíře', 'doprava na poli'],
+    kategorie: 'regulace',
+    shortDef: 'Traktor na veřejné silnici v CZ podléhá pravidlům: max šíře 2,55 m bez záboru, výška 4 m, povinné značení nářadí, STK 1× za 2 roky.',
+    longDef: `Provoz traktoru na veřejné silnici v ČR je regulován **zákonem 361/2000 Sb.** a **vyhláškou 341/2002 Sb.**
+
+**Maximální rozměry bez záboru veřejné komunikace**:
+- **Šířka**: 2,55 m (vyjímky pro zem. stroje 3 m, nad to nutný zábor).
+- **Výška**: 4 m (kabina + výfuk + výrobou nainstalované doplňky).
+- **Délka traktor + náves/nářadí**: 12 m (samostatný traktor), 16,5 m s návěsem.
+
+**Pokud překračujete** (širší nářadí, dvojmontáž, hluboké pluhy):
+- **Doprovodné vozidlo** s blikajícími signalisty.
+- **Zábor silnice** povolovaný policií, max 2 hodiny + plán objížďky.
+- Pokuta za nesplnění: 5 000–50 000 Kč.
+
+**Značení nářadí**:
+- **Tabulky 423 × 423 mm** s žlutými / červenými pásy na okrajích širokého nářadí.
+- **Reflexní pásy** v noci nebo za snížené viditelnosti.
+- **Blikající žluté světlo** povinné pro stroje širší 2,55 m.
+
+**STK (Stanice technické kontroly)**:
+- **Traktor s SPZ**: STK 1× za 2 roky.
+- **Bez SPZ** (jen pole): bez STK, ale provoz na silnici zakázán (i 10 m mezi sousedními poli).
+- **Test**: brzdy, světla, ozvučení (klakson), výfukový systém, kabina, sedadlo.
+
+**Řidičský průkaz**:
+- **T (traktor)** — od 17 let, povinný pro práci na poli i převoz.
+- **B (osobní)** — některé malé traktory do 50 km/h a do 7,5 t s B-čkem (kontroverze, vyžaduje upřesnění v RP).
+
+**Pojištění**:
+- **Povinné ručení** — i pro práci na poli (cca 4 000–12 000 Kč/rok).
+- **Havarijní** — volitelné, doporučené pro nové stroje (3–5 % z ceny ročně).`,
+    related: ['allwheel-drive', 'duala'],
+  },
+
+  // ── PLODINY ─────────────────────────────────────────────────────────
+  {
+    slug: 'ozim-jarin',
+    term: 'Ozimy vs jařiny',
+    alias: ['ozim', 'jařina', 'autumn vs spring crops'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Ozim se vysévá na podzim, jařina na jaře. Ozim využije zimní vlhko, dá vyšší výnosy. Jařina je kratší cyklus, vyšší riziko sucha.',
+    longDef: `Plodiny dělíme podle období setí:
+
+**Ozimy** (sejou se na podzim, září–říjen):
+- **Pšenice ozimá** — dominantní CZ obilí, 60 % výměry obilovin.
+- **Ječmen ozimý** — pro pivovary, vyšší výnos než jarní.
+- **Řepka ozimá** — strategická olejovina, výnos 3,5–4,5 t/ha.
+- **Žito ozimé** — pro chleba a krmiva, snáší slabší půdy.
+- **Tritikále** — kříženec pšenice + žita, robustní.
+
+Výhody ozimů:
+- Zimní vlhkost = stabilnější výnos.
+- Dřívější sklizeň (červenec) = uvolnění plochy pro meziplodiny.
+- Vyšší celkový výnos vs jařina (o 15–30 %).
+
+Rizika:
+- **Vymrznutí** v tuhé zimě bez sněhové pokrývky.
+- **Hlemýždí** napadení v podzimní vlhkém měsíci.
+
+**Jařiny** (sejí se na jaře, březen–duben):
+- **Ječmen jarní** — pro pivovary kvalitnější (sladovnický).
+- **Pšenice jarní** — okrajová, jen kde ozim vymrzl.
+- **Kukuřice** — letní zrnové i siláž.
+- **Sója, slunečnice** — letní olejoviny.
+- **Brambory, cukrovka** — okopaniny.
+- **Hrách, vikev** — luskoviny.
+
+Výhody jařin:
+- Krátký cyklus (3–4 měsíce).
+- Možnost reagovat na trh (sejete podle aktuálních cen).
+- Méně riziko zimního vymrznutí.
+
+Rizika:
+- **Sucho** v květnu–červnu = nízké výnosy.
+- **Vyšší koncentrace prací** v krátkém období.
+
+Pro CZ farmu je standardní **70 % ozimy + 30 % jařiny**.`,
+    related: ['osevni-postup', 'orba'],
+  },
 ];
 
 export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {
