@@ -1,0 +1,248 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import { createServerClient } from '../../../../lib/supabase';
+import { FEATURED_PLANS } from '../../../../lib/bazar-featured-pricing';
+import { isFeaturedActive, formatFeaturedUntil } from '../../../../lib/bazar-featured';
+
+export const prerender = false;
+
+const user = (Astro.locals as any).user;
+if (!user) {
+  return Astro.redirect('/bazar/prihlaseni/?next=' + encodeURIComponent(Astro.url.pathname));
+}
+
+const { id } = Astro.params;
+const supabase = createServerClient();
+const { data: listing } = await supabase
+  .from('bazar_listings')
+  .select('id, user_id, title, category, brand, price, location, status, featured, featured_until')
+  .eq('id', id)
+  .maybeSingle();
+
+if (!listing) return Astro.rewrite('/404');
+if (listing.user_id !== user.id) return Astro.rewrite('/404');
+
+// Načti případnou poslední pending žádost — UI ukáže banner místo plan selectoru.
+const { data: lastPending } = await supabase
+  .from('bazar_featured_orders')
+  .select('id, plan, days, price_czk, created_at')
+  .eq('listing_id', id)
+  .eq('status', 'pending')
+  .order('created_at', { ascending: false })
+  .limit(1)
+  .maybeSingle();
+
+const fmtCzk = (n: number) => n.toLocaleString('cs-CZ') + ' Kč';
+const isCurrentlyFeatured = isFeaturedActive(listing);
+---
+
+<Layout title={`Topovat: ${listing.title} — Agro bazar`} noindex>
+  <div class="topovat-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/bazar/">Bazar</a>
+      <span aria-hidden="true">›</span>
+      <a href="/bazar/moje/">Moje inzeráty</a>
+      <span aria-hidden="true">›</span>
+      <a href={`/bazar/moje/${listing.id}/`}>Detail</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Topovat</span>
+    </nav>
+
+    <header class="topo-head">
+      <span class="kicker">⭐ Topovat inzerát</span>
+      <h1>{listing.title}</h1>
+      <p class="lede">
+        Topovaný inzerát se ukáže v sekci <em>Doporučené</em> nahoře na bazaru a je vždy první ve výpise své kategorie. Vyberte délku zviditelnění.
+      </p>
+    </header>
+
+    {isCurrentlyFeatured && (
+      <div class="info-box info-box-success">
+        <span class="info-icon">⭐</span>
+        <div>
+          <strong>Inzerát je aktuálně topovaný do {formatFeaturedUntil(listing.featured_until)}.</strong>
+          <p>Pokud přikoupíte další plán, čas se přičte k aktuálnímu (nezačne od nuly).</p>
+        </div>
+      </div>
+    )}
+
+    {lastPending && (
+      <div class="info-box info-box-pending">
+        <span class="info-icon">⏳</span>
+        <div>
+          <strong>Žádost čeká na ověření</strong>
+          <p>
+            Plán {lastPending.plan} ({lastPending.days} dní) za {fmtCzk(lastPending.price_czk)} jste podali {' '}
+            {new Date(lastPending.created_at).toLocaleString('cs-CZ', { dateStyle: 'short', timeStyle: 'short' })}.
+            Aktivujeme ji manuálně do 24 hodin (chystáme platební bránu — zatím schvalujeme ručně).
+          </p>
+        </div>
+      </div>
+    )}
+
+    <div class="plans">
+      {FEATURED_PLANS.map((p) => (
+        <div class="plan-card" data-plan={p.plan}>
+          {p.plan === '30d' && <span class="plan-badge">Nejoblíbenější</span>}
+          {p.plan === '60d' && <span class="plan-badge plan-badge-deal">Nejlepší cena/den</span>}
+          <h2 class="plan-label">{p.label}</h2>
+          <div class="plan-price">{fmtCzk(p.priceCzk)}</div>
+          <div class="plan-perday">~ {p.perDayCzk} Kč/den</div>
+          <p class="plan-desc">{p.description}</p>
+          <button type="button" class="plan-btn" data-plan={p.plan} data-listing-id={listing.id}>
+            Požádat o topování →
+          </button>
+        </div>
+      ))}
+    </div>
+
+    <p class="topo-foot">
+      Účtujeme manuálně přes fakturu. Až bude na webu platební brána (Stripe), checkout proběhne během minuty.
+    </p>
+
+    <a class="topo-back" href={`/bazar/moje/${listing.id}/`}>← Zpět na úpravu inzerátu</a>
+  </div>
+
+  <script>
+    (function () {
+      const buttons = document.querySelectorAll<HTMLButtonElement>('.plan-btn');
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const plan = btn.getAttribute('data-plan');
+          const listingId = btn.getAttribute('data-listing-id');
+          if (!plan || !listingId) return;
+          const original = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = 'Odesílám…';
+          try {
+            const r = await fetch('/api/bazar/featured/request/', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ listingId, plan }),
+            });
+            const j = await r.json();
+            if (!r.ok) {
+              alert(`Chyba: ${j.message ?? j.error ?? 'unknown'}`);
+              btn.disabled = false;
+              btn.textContent = original;
+              return;
+            }
+            alert(j.message ?? 'Žádost přijata.');
+            window.location.reload();
+          } catch (e) {
+            alert('Nepodařilo se odeslat žádost. Zkuste prosím znovu.');
+            btn.disabled = false;
+            btn.textContent = original;
+          }
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .topovat-root { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+
+    .topo-head { margin-bottom: 28px; max-width: 720px; }
+    .kicker {
+      display: inline-block;
+      background: #FFEA00;
+      color: #0A0A0B;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.5px; margin: 12px 0 8px; line-height: 1.2; }
+    .lede { font-size: 15px; color: #444; line-height: 1.6; margin: 0; }
+    .lede em { font-style: normal; background: #fff8c4; padding: 0 4px; border-radius: 3px; }
+
+    .info-box {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1.5px solid;
+    }
+    .info-box-success { background: #f0fdf4; border-color: #86efac; }
+    .info-box-pending { background: #fffbeb; border-color: #fcd34d; }
+    .info-icon { font-size: 22px; line-height: 1; flex-shrink: 0; padding-top: 2px; }
+    .info-box strong { display: block; font-size: 15px; color: #0A0A0B; margin-bottom: 4px; }
+    .info-box p { font-size: 13px; color: #444; line-height: 1.55; margin: 0; }
+
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 28px 0 24px;
+    }
+    .plan-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 22px;
+      background: #fff;
+      border: 2px solid #eaeaec;
+      border-radius: 14px;
+      transition: border-color .15s, transform .15s, box-shadow .15s;
+    }
+    .plan-card:hover { border-color: #FFEA00; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 234, 0, .15); }
+    .plan-card[data-plan='30d'] { border-color: #FFEA00; }
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 16px;
+      background: #FFEA00;
+      color: #0A0A0B;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .plan-badge-deal { background: #0B7A3B; color: #fff; }
+    .plan-label { font-size: 16px; font-weight: 700; color: #0A0A0B; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .plan-price { font-size: 32px; font-weight: 800; color: #0A0A0B; line-height: 1; letter-spacing: -1px; font-family: 'Chakra Petch', sans-serif; }
+    .plan-perday { font-size: 12px; color: #6B6B72; margin: 4px 0 14px; }
+    .plan-desc { font-size: 13px; color: #444; line-height: 1.5; margin: 0 0 18px; flex: 1; }
+    .plan-btn {
+      width: 100%;
+      padding: 12px;
+      background: #0A0A0B;
+      color: #FFEA00;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .plan-btn:hover:not(:disabled) { background: #2a2a2f; }
+    .plan-btn:disabled { opacity: 0.6; cursor: wait; }
+
+    .topo-foot {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+      max-width: 540px;
+      margin: 0 auto 24px;
+      line-height: 1.5;
+    }
+    .topo-back {
+      display: inline-block;
+      font-size: 13px;
+      color: #666;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .topo-back:hover { color: #0A0A0B; }
+  </style>
+</Layout>

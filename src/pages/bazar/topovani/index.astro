@@ -1,0 +1,179 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { FEATURED_PLANS } from '../../../lib/bazar-featured-pricing';
+import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+
+const pageUrl = `${SITE_URL}/bazar/topovani/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Bazar', url: '/bazar/' },
+  { name: 'Topování', url: pageUrl },
+]);
+
+const faqs = [
+  { q: 'Jak topování funguje?', a: 'Vyberete plán (7, 30 nebo 60 dní), my po obdržení platby aktivujeme TOP placement. Váš inzerát se zobrazuje v sekci „Doporučené inzeráty" na hlavní stránce bazaru a v listingu má hvězdičku.' },
+  { q: 'Jak zaplatím?', a: 'Aktuálně platba bankovním převodem na účet Samec Digital s.r.o. (IČO 29547539). Po obdržení platby (obvykle do 1 pracovního dne) topování aktivujeme. Brzy spustíme i online platbu kartou.' },
+  { q: 'Co se stane, když inzerát skončí dřív, než vyprší topování?', a: 'TOP placement běží od aktivace, ne od přidání inzerátu. Pokud inzerát smažete dřív, topování zaniká bez nároku na vrácení peněz.' },
+  { q: 'Mohu prodloužit topování?', a: 'Ano — vytvořte další objednávku se stejným nebo jiným plánem. Nová doba se přičte k aktuálnímu featured_until.' },
+  { q: 'Vystavujete fakturu?', a: 'Pokud potřebujete fakturu, napište nám na info@samecdigital.com. Standardní e-mailové potvrzení slouží jako daňový doklad pro neplátce DPH.' },
+];
+const faqJsonLd = faqPageSchema(faqs);
+---
+
+<Layout
+  title="Topování inzerátů — Agro bazar"
+  description="Zviditelněte svůj inzerát v bazaru. Topování od 99 Kč za týden, 249 Kč za měsíc, 449 Kč za 2 měsíce. Inzerát se zobrazí v sekci Doporučené a v listingu má hvězdičku."
+  canonical={pageUrl}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="top-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/bazar/">Bazar</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Topování</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">⭐ TOP placement</span>
+      <h1>Zviditelněte inzerát v bazaru</h1>
+      <p class="lede">
+        Topované inzeráty se zobrazují v sekci „Doporučené inzeráty" na hlavní stránce bazaru a v listingu mají žlutou hvězdičku. Vyšší viditelnost = víc poptávek, rychlejší prodej.
+      </p>
+    </header>
+
+    <section class="plans" aria-labelledby="plans-heading">
+      <h2 id="plans-heading">Ceník</h2>
+      <div class="plan-grid">
+        {FEATURED_PLANS.map((p) => (
+          <article class={`plan-card ${p.plan === '30d' ? 'is-best' : ''}`}>
+            {p.plan === '30d' && <span class="plan-best">Nejoblíbenější</span>}
+            <h3>{p.label}</h3>
+            <div class="plan-price">
+              <strong>{p.priceCzk}</strong>
+              <span class="plan-unit">Kč</span>
+            </div>
+            <div class="plan-per-day">{p.perDayCzk} Kč / den</div>
+            <p class="plan-desc">{p.description}</p>
+          </article>
+        ))}
+      </div>
+      <p class="plans-note">Ceny jsou konečné (Samec Digital s.r.o. není plátce DPH).</p>
+    </section>
+
+    <section class="howto" aria-labelledby="howto-heading">
+      <h2 id="howto-heading">Jak topování objednat</h2>
+      <ol class="steps">
+        <li>
+          <strong>Otevřete svůj inzerát</strong> v sekci <a href="/bazar/moje/">Moje inzeráty</a>.
+        </li>
+        <li>
+          <strong>Klikněte na „Topovat inzerát"</strong> a vyberte plán.
+        </li>
+        <li>
+          <strong>Pošlete platbu</strong> bankovním převodem podle instrukcí, které vám zobrazíme. Variabilní symbol = první 8 znaků čísla objednávky.
+        </li>
+        <li>
+          <strong>Topování aktivujeme</strong> obvykle do 1 pracovního dne po obdržení platby. Dostanete e-mailem potvrzení.
+        </li>
+      </ol>
+      <p class="manual-note">
+        💡 Online platba kartou bude brzy. Mezitím přijímáme bankovní převody.
+      </p>
+    </section>
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Často kladené otázky</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <div class="cta-bar">
+      <a class="btn-primary" href="/bazar/moje/">Přejít na Moje inzeráty</a>
+      <a class="btn-secondary" href="/bazar/">Procházet bazar</a>
+    </div>
+  </div>
+
+  <style>
+    .top-root { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; color: #1a1a1a; }
+    .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:#666; margin-bottom:20px; flex-wrap:wrap; }
+    .breadcrumb a { color:#666; text-decoration:none; }
+    .breadcrumb a:hover { color:#000; }
+    .breadcrumb .current { color:#000; font-weight:600; }
+
+    .hero { margin-bottom: 40px; }
+    .kicker { display:inline-block; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:11px; padding:4px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:.5px; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 12px 0 12px; line-height: 1.15; letter-spacing: -0.5px; }
+    .lede { font-size: 16px; line-height: 1.6; color: #444; max-width: 720px; margin: 0; }
+
+    .plans { margin-bottom: 48px; }
+    .plans h2, .howto h2, .faq h2 { font-size: 22px; margin: 0 0 16px; }
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .plan-card {
+      position: relative;
+      padding: 24px 22px;
+      background: #fff;
+      border: 1.5px solid #eaeaec;
+      border-radius: 14px;
+      text-align: center;
+    }
+    .plan-card.is-best { border-color: #FFEA00; box-shadow: 0 8px 24px rgba(255, 234, 0, .25); }
+    .plan-best {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FFEA00;
+      color: #0A0A0B;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .plan-card h3 { font-size: 18px; margin: 0 0 12px; color: #0A0A0B; }
+    .plan-price { font-size: 16px; color: #666; }
+    .plan-price strong { font-size: 36px; font-weight: 700; color: #0A0A0B; }
+    .plan-unit { font-size: 18px; margin-left: 4px; }
+    .plan-per-day { font-size: 13px; color: #0B7A3B; font-weight: 700; margin: 4px 0 14px; }
+    .plan-desc { font-size: 13px; color: #555; line-height: 1.55; margin: 0; }
+    .plans-note { margin-top: 14px; font-size: 12px; color: #888; text-align: center; }
+
+    .howto { margin-bottom: 48px; padding: 24px; background: #fafafa; border-radius: 12px; }
+    .steps { padding-left: 24px; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+    .steps li { font-size: 14px; line-height: 1.6; color: #444; }
+    .steps a { color: #0A0A0B; font-weight: 700; }
+    .manual-note { margin: 16px 0 0; padding: 12px 16px; background: #fffce0; border-radius: 8px; font-size: 13px; color: #444; }
+
+    .faq { margin-bottom: 48px; }
+    .faq-list { display: flex; flex-direction: column; gap: 8px; }
+    .faq-list details { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 18px; }
+    .faq-list summary { font-weight: 700; cursor: pointer; font-size: 15px; }
+    .faq-list details[open] summary { margin-bottom: 8px; }
+    .faq-list p { font-size: 14px; line-height: 1.6; color: #444; margin: 0; }
+
+    .cta-bar { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-primary, .btn-secondary {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 12px 20px; border-radius: 8px; font-weight: 700; font-size: 14px;
+      text-decoration: none;
+    }
+    .btn-primary { background: #FFEA00; color: #0A0A0B; }
+    .btn-primary:hover { background: #FFE100; }
+    .btn-secondary { background: transparent; color: #0A0A0B; border: 1.5px solid #DFDFE3; }
+    .btn-secondary:hover { border-color: #0A0A0B; }
+  </style>
+</Layout>
