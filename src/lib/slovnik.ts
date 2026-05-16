@@ -653,6 +653,487 @@ Praktický příklad:
 Pro velké výnosy (kukuřice silážní, traviny na siláž) se počítá v t (1 t = 10 q), nikdy v q (čísla by byla nepraktická — 400 q/ha kukuřice).`,
     related: ['hektar'],
   },
+
+  // ── DALŠÍ TECHNOLOGIE / STROJE ──────────────────────────────────────
+  {
+    slug: 'turbodmychadlo',
+    term: 'Turbodmychadlo',
+    alias: ['turbo', 'turbocharger', 'přeplňování'],
+    kategorie: 'pohon',
+    shortDef: 'Turbodmychadlo využívá energii výfukových plynů k roztočení turbíny, která stlačí vzduch do válce — vyšší výkon ze stejné kubatury motoru.',
+    longDef: `Turbodmychadlo (turbo, turbocharger) je dvojice spojených oběžných kol — turbína na straně výfuku a kompresor na straně sání. Výfukové plyny roztáčí turbínu (až 200 000 ot/min), spojený hřídel pohání kompresor, který stlačí nasávaný vzduch před vstupem do válce.
+
+Důsledky pro motor:
+- **+30–50 % výkon ze stejné kubatury** vs atmosférický motor.
+- **Vyšší kroutivý moment v nízkých otáčkách** (key pro tahové práce).
+- **Lepší účinnost** ve vyšších nadmořských výškách (kompenzuje řidší vzduch).
+
+Moderní traktorové motory používají:
+- **VGT** (Variable Geometry Turbo) — měnitelná geometrie lopatek turbíny, optimální boost v širším pásmu otáček.
+- **Twin-turbo** (sériové nebo paralelní) u top motorů (Fendt 1000, JD 9R) — primární turbo pro nízké otáčky, sekundární pro vysoké.
+- **Intercooler** (mezichladič) za turbem — chladí stlačený horký vzduch, hustější náplň, vyšší výkon.
+
+Údržba: pravidelná výměna oleje (turbo má ložiska mazaná olejem motoru), po vypnutí motoru turbo doběhne 30+ sekund — proto nelze hned vypínat po plné zátěži (riziko zničení ložisek). Životnost při dobré údržbě 10 000+ motohodin.`,
+    related: ['common-rail', 'dpf'],
+  },
+  {
+    slug: 'egr',
+    term: 'EGR',
+    alias: ['Exhaust Gas Recirculation', 'recirkulace výfukových plynů'],
+    kategorie: 'pohon',
+    shortDef: 'EGR (Exhaust Gas Recirculation) vede část výfukových plynů zpět do sání — snižuje teplotu spalování a tím tvorbu oxidů dusíku (NOx).',
+    longDef: `EGR je systém čištění výfukových plynů, který recirkuluje 5–30 % výfukových plynů zpět do sacího potrubí. Důvod: nižší teplota spalování → méně NOx (oxidů dusíku) ve výfuku.
+
+Použití u traktorů:
+- **Stage IIIA–IIIB** (2006–2014): hlavní cesta snížení NOx. EGR + DPF.
+- **Stage IV+** (2014+): EGR doplněn nebo nahrazen SCR (AdBlue). Vyšší účinnost.
+
+Nevýhody EGR:
+- **Saze v sání** — recirkulované plyny obsahují PM, postupně se usazují v EGR ventilu a sacím potrubí. Po 5–8 000 motohodinách typicky vyžaduje čištění (5–15 000 Kč).
+- **Snížení výkonu o 3–5 %** — recirkulované plyny snižují koncentraci kyslíku.
+- **Vyšší spotřeba** o 2–4 % ve srovnání s motorem bez EGR.
+
+Proto výrobci u Stage V přešli na SCR jako dominantní cestu — vyšší pořizovací cena, ale nižší provozní (méně paliva, méně oprav).`,
+    related: ['scr-katalyzator', 'dpf', 'emisni-normy-stage'],
+  },
+  {
+    slug: 'biopal',
+    term: 'Biopalivo / Biodiesel',
+    alias: ['biodiesel', 'FAME', 'B100', 'B7'],
+    kategorie: 'pohon',
+    shortDef: 'Biodiesel je palivo z rostlinných olejů (řepkový metylester, FAME) — v ČR povinně přidáván do běžné nafty (B7 = 7 % FAME).',
+    longDef: `Biodiesel je obnovitelné palivo vyrobené esterifikací rostlinných olejů (nejčastěji řepkový olej v ČR, sójový v USA, palmový v Asii) nebo živočišných tuků s methanolem → FAME (Fatty Acid Methyl Ester).
+
+V Evropě:
+- **B7** — 7 % FAME v běžné motorové naftě. Standardní palivo na čerpacích stanicích od cca 2010. Kompatibilní se všemi moderními motory.
+- **B30 / B100** — 30 % nebo 100 % FAME. Vyžaduje specifické těsnění + olej, ne každý motor je certifikovaný. Slabší výhřevnost (cca −7 %) → vyšší spotřeba.
+
+Pro zemědělce:
+- **Modré nafty (z benzinky)** v ČR jsou vždy B7 = obsahují FAME.
+- **Vlastní biopaliva** (pěstuje + lisuje řepku) — možné, ale riziko zničení Common Rail vstřikovačů pokud nedostatečně očištěno.
+- **Stage V motory** typicky certifikované pro B7. Vyšší koncentrace (B30+) vyžadují schválení výrobce.
+
+Pozor: starší motory Common Rail mohou mít problém i s B7 — FAME má jiné lubrikační vlastnosti, vyšší vodivost (riziko galvanické koroze). U traktorů z 90. let s mechanickými čerpadly nehrozí.`,
+    related: ['common-rail'],
+  },
+  {
+    slug: 'powr-quad',
+    term: 'PowrQuad / Quad-Shift',
+    alias: ['power shuttle', 'IVT', 'AutoPowr'],
+    kategorie: 'technologie',
+    shortDef: 'PowrQuad je převodovka John Deere kombinující 4 mechanické řady × 4 hydraulicky řazené stupně = 16 vpřed / 16 vzad. Subset powershift převodovek.',
+    longDef: `PowrQuad (John Deere brand jméno) je převodovka s mechanickými hlavními řadami (range A, B, C, D) × 4 hydraulicky řazené stupně v každé řadě = 16×16 nebo 24×24 s další nadstavbou.
+
+Typy John Deere převodovek (od základu po flagship):
+1. **SyncReverser** — manuální řazení, mechanický reverz. Základ.
+2. **PowrReverser** — manuální řazení, hydraulický reverz (= power shuttle).
+3. **PowrQuad** — 4 mechanické × 4 powershift = 16×16. Standardní pro řadu 6M.
+4. **AutoQuad** — PowrQuad + automatické řazení stupňů. Komfortnější.
+5. **AutoPowr / IVT** — plně bezstupňová CVT. Flagship 6R+/7R/8R.
+
+Konkurence ekvivalenty:
+- Case IH Maxxum **ActiveDrive 8** (16×8 powershift).
+- New Holland **Range Command** (16×6 powershift).
+- Fendt **Vario** (CVT — ne powershift).
+
+Pro CZ farmáře: PowrQuad je sweet spot mezi cenou a komfortem — 200–300 tis. Kč levnější než AutoPowr CVT, ale řadí pod zátěží. Vyplatí se pro orbu a tahové práce, kde řidič řadí relativně málo.`,
+    related: ['cvt-prevodovka', 'powershift'],
+  },
+  {
+    slug: 'nase-fronta',
+    term: 'Front linkage / Přední tříbod',
+    alias: ['přední tříbod', 'frontale', 'front PTO'],
+    kategorie: 'technologie',
+    shortDef: 'Přední tříbod je hydraulický závěs nepovinně instalovaný před traktorem — umožňuje "sendvičové" nasazení nářadí vepředu i vzadu současně.',
+    longDef: `Přední tříbodový závěs (front linkage) je obdoba zadního tříbodu, instalovaný před přední nápravu. Často kombinovaný s předním PTO (vývodový hřídel).
+
+Hlavní využití:
+- **Sečka + lis** — front sečka řezá, zadní lis pakuje. Jednou jízdou = dvojnásobná produktivita.
+- **Front válce / brány + pluh** — paralelní zpracování půdy.
+- **Front válec po orbě + hnojivo seč** — kombinovaná jízda.
+- **Front naviják / lesní zařízení** — pro horské provozy.
+
+Specifikace:
+- **Zvedací kapacita** typicky 2 000–5 000 kg (méně než zadní 6 000–12 000 kg).
+- **Spouštěcí dráha** kratší (cca 700 mm) — front nářadí mívá menší výhled.
+- **PTO** stejné standardy (540 / 1000 ot/min).
+
+Cenová stránka:
+- Tovární front linkage 80 000–200 000 Kč příplatek.
+- Retrofit (od dodavatele jako Sauter, Hauer, Lely) 60 000–180 000 Kč + montáž.
+
+Pro CZ farmu < 50 ha málokdy návratný — vyplatí se hlavně při > 100 ha luk/jetelin nebo specializované práce.`,
+    related: ['tribod', 'pto'],
+  },
+
+  // ── PŘESNÉ ZEMĚDĚLSTVÍ ─────────────────────────────────────────────
+  {
+    slug: 'ndvi',
+    term: 'NDVI index',
+    alias: ['Normalized Difference Vegetation Index', 'satelitní index vegetace'],
+    kategorie: 'precise-farming',
+    shortDef: 'NDVI je satelitní index biomasy plodiny — vypočtený z poměru červeného a blízkého infračerveného světla. Hodnoty 0 (holá půda) až 1 (hustá zdravá vegetace).',
+    longDef: `NDVI (Normalized Difference Vegetation Index) je vegetační index používaný v dálkovém průzkumu Země. Vzorec: NDVI = (NIR − RED) / (NIR + RED), kde NIR = blízké infračervené světlo, RED = červené.
+
+Princip: zdravé rostliny silně reflektují NIR (kvůli buněčné struktuře listů) a absorbují RED (kvůli chlorofylu). Holá půda nebo nemocné rostliny reflektují obojí podobně → nízké NDVI.
+
+Hodnoty:
+- **NDVI < 0**: voda, sníh, mrak.
+- **0–0,2**: holá půda, kámen.
+- **0,2–0,4**: řídká vegetace, mladá plodina.
+- **0,4–0,6**: středně hustá plodina.
+- **0,6–0,8**: hustá zdravá plodina (vrchol vegetace).
+- **0,8+**: velmi hustý porost (les, vzrostlý lán).
+
+Pro zemědělství:
+- **Aplikační mapy** pro variabilní hnojení/postřik — kde je NDVI nízké, dej víc N.
+- **Monitoring vývoje plodiny** — sledování růstu vs očekávání.
+- **Detekce stresu** (sucho, choroba) — pokles NDVI uprostřed vegetační sezóny.
+
+Zdroje dat:
+- **Sentinel-2** (ESA, zdarma) — 10 m rozlišení, snímky každých 5 dní. Standard pro CZ farmáře.
+- **Planet Labs** ($, 3 m rozlišení) — denní snímky, pro precision farming.
+- **Drony** s multispektrální kamerou — vlastní lety, 5 cm rozlišení.`,
+    related: ['variable-rate', 'gps-rtk'],
+  },
+  {
+    slug: 'ctf',
+    term: 'CTF (Controlled Traffic Farming)',
+    alias: ['controlled traffic', 'řízené koleje'],
+    kategorie: 'precise-farming',
+    shortDef: 'CTF je metoda, kdy všechny stroje (traktor, postřikovač, kombajn) jezdí stále po stejných stálých kolejích — zbytek pole zůstává neutužený.',
+    longDef: `Controlled Traffic Farming (CTF) je princip přesného zemědělství, kde se omezuje plocha utužená koly strojů — všechny stroje jezdí po identických kolejích (tramlines), zbytek pole zůstává netknutý.
+
+Předpoklady:
+- **RTK GPS auto-steering** (centimetrová přesnost) — bez něj kola nedrží přesně koleje.
+- **Stejný / násobný stopový průměr** všech strojů — typicky 3 m (postřikovač) a 6 m (kombajn) = 6 m záběr postřiku + 6/12/24 m záběr secí.
+- **Stejný rozkolový rozchod** kol (track width) — typicky 2,25 m nebo 3,00 m.
+
+Výhody:
+- **Snížení utužení** o 60–80 % — zbytek pole nikdy nepojezdí kola.
+- **Vyšší výnosy** 5–15 % díky lepší struktuře půdy v meziřadech.
+- **Méně paliva** — méně práce na zpracování utužené půdy.
+- **Lepší zasakování vody** — méně erozí.
+
+Nevýhody:
+- **Vysoká počáteční investice** — RTK GPS systém + sjednocení strojů (rozkolu) může stát 500K – 2M Kč na farmu.
+- **Komplikace při výměně stroje** — nový kombajn musí mít stejný rozkol.
+- **V CZ málo rozšířené** — vyžaduje velké lány (>50 ha souvislých) pro ekonomický návratnost.`,
+    related: ['gps-rtk', 'auto-steering', 'variable-rate'],
+  },
+  {
+    slug: 'yield-monitor',
+    term: 'Yield monitor / Výnosový monitor',
+    alias: ['výnosový monitor', 'yield mapping'],
+    kategorie: 'precise-farming',
+    shortDef: 'Yield monitor je senzor v kombajnu, který během sklizně měří průtok zrna a GPS pozici → vytváří výnosovou mapu pole.',
+    longDef: `Yield monitor je integrovaný systém v kombajnu, který kontinuálně měří:
+1. **Hmotnost zrna** procházejícího skrz elevátor (typicky optický nebo nárazový senzor).
+2. **Vlhkost zrna** (kapacitní nebo NIR senzor) — pro přepočet na "suchou" hmotnost.
+3. **Záběr stolu** + **rychlost** = aktuální plocha za sekundu.
+4. **GPS pozice** každé 1–2 sekundy.
+
+Output: bodová data (lat, lng, kg/m²) → interpolace do mřížky → **výnosová mapa pole**.
+
+Klíčové značky:
+- **John Deere GreenStar / Operations Center** — dominantní v USA, OK v EU.
+- **Case IH AFS / NH IntelliView** — společný ekosystém CNH.
+- **Claas TELEMATICS** — premium EU.
+- **Trimble FmX / AGCO Fuse** — třetí strany, multi-brand kompatibilní.
+
+Pro CZ farmu:
+- **Bez yield monitoru kombajn za 8M Kč = jen sklizeč**, ne datová stanice.
+- Yield mapa za 1 sezónu = základ pro **VRA (variable rate)** příští rok — víc P/K kam to potřebuje, méně kam ne.
+- ROI 2–3 sezóny u farmy > 100 ha.
+
+Praktické tipy: kalibrace 1×/sezónu na váhové autě (chyba 1–3 %), vlhkostní senzor čistit denně (zaprášený senzor = posunutá data).`,
+    related: ['variable-rate', 'gps-rtk', 'ndvi'],
+  },
+
+  // ── HNOJIVA / AGROCHEMIE ────────────────────────────────────────────
+  {
+    slug: 'dap',
+    term: 'DAP (Diamonfosfát)',
+    alias: ['DAP', 'diamonfosfát', '18-46-0'],
+    kategorie: 'hnojivo',
+    shortDef: 'DAP (diamonfosfát) je granulované hnojivo s 18 % dusíku a 46 % fosforu (P₂O₅). Hlavní zdroj fosforu pro CZ zemědělství.',
+    longDef: `DAP je vysokokoncentrované fosforečné hnojivo (Diamonium Phosphate, chemicky (NH₄)₂HPO₄) s obsahem 18 % N a 46 % P₂O₅. Vyrábí se reakcí kyseliny fosforečné s amoniakem.
+
+Použití:
+- **Startovací do osiva** — 100–200 kg/ha, vstřikuje se s osivem do řádků. Vysoký fosfor podporuje rozvoj kořenového systému mladé rostliny.
+- **Podzimní pod ozimy** — 150–300 kg/ha, zaorá se. Fosfor se v půdě pohybuje pomalu, proto se aplikuje hluboko a předem.
+- **Jarní pod jařiny** — méně časté, fosfor by neměl zůstat na povrchu.
+
+Vlastnosti:
+- **Mírně kyselá reakce** v půdě (pH okolo 6) — vhodné pro neutrální až slabě zásadité půdy.
+- **Vysoká vodorozpustnost** — okamžitě dostupný pro plodinu (na rozdíl od MAP).
+- **Cena 2024**: cca 16 000–22 000 Kč/t.
+
+Pozor: na alkalické půdě (pH > 7,5) přechází fosfor rychle do nerozpustných forem (vápenaté soli) → krátká účinnost. V tom případě lepší použít MAP nebo superfosfát.`,
+    related: ['npk-hnojivo', 'pH-pudy'],
+  },
+  {
+    slug: 'roundup',
+    term: 'Roundup (glyfosát)',
+    alias: ['glyfosát', 'glyphosate', 'totální herbicid'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Glyfosát (komerční Roundup) je neselektivní systémový herbicid — zabíjí všechny rostliny po nástřiku. Dominantní herbicid CZ zemědělství pro úhor.',
+    longDef: `Glyfosát je nejpoužívanější herbicid na světě, prodávaný pod značkou Roundup (Monsanto/Bayer) i generikami. Neselektivní = zabíjí jakoukoli rostlinu, systémový = absorbuje se listy a transportuje do kořenů.
+
+Použití v CZ:
+- **Úhor před setím** — vyklidí pole od plevele a strniště.
+- **Pre-emergence** před vzejitím plodiny — 1–2 dny před.
+- **Desikace** (vysušení) ozimé řepky a obilovin před sklizní — urychlí dozrávání, ne v ČR oficiálně schváleno pro potraviny.
+- **Lesní porosty** — proti pasečnému plevelu.
+
+Cena (2024):
+- **Roundup Klasik 360 g/l** — cca 200–280 Kč/l v 20l kanystru. Dávka 3–4 l/ha.
+- **Generika** (Glyfogan, Touchdown, Clinic) — 150–220 Kč/l.
+
+Kontroverzy:
+- **EU autorizace** pro glyfosát byla 2023 prodloužena o 10 let (do 2033) — proti silné lobby (Greenpeace, IARC).
+- **IARC klasifikace** "pravděpodobně karcinogenní pro člověka" (2A) — kontroverzní, EU EFSA klasifikuje jako bezpečný při dodržení dávek.
+- **CZ Maloobchod**: bez restrikcí.
+- **Bio-zemědělství**: striktně zakázán.`,
+    related: ['mezi-plodiny'],
+  },
+
+  // ── DOTACE & REGULACE ─────────────────────────────────────────────
+  {
+    slug: 'jednotna-zadost',
+    term: 'Jednotná žádost',
+    alias: ['JŽ', 'kombinovaná žádost', 'SAPS žádost'],
+    kategorie: 'dotace',
+    shortDef: 'Jednotná žádost je každoroční formulář podávaný na SZIF přes Portál farmáře, který sdružuje všechny přímé platby CAP — BISS, CISS, EKO, ANC, VCS i Mladý zemědělec.',
+    longDef: `Jednotná žádost (JŽ) je centralizovaný způsob, jakým zemědělec žádá o přímé platby CAP. Před 2014 se podávalo víc samostatných žádostí — JŽ sjednotila proces.
+
+Co obsahuje:
+- **Identifikace žadatele** + IČO.
+- **LPIS bloky** užívané — výměra, kultura, plodiny.
+- **Žádost o BISS** (Základní platba) automaticky.
+- **Žádost o CISS** (Redistributivní) — automaticky, pokud výměra splňuje.
+- **EKO režim** — volba základní / premium + deklarace eko-praktik.
+- **ANC** (méně příznivé oblasti) — automaticky dle LPIS zařazení.
+- **VCS** (citlivé sektory) — deklarace ploch cukrové řepy, brambor, ovoce, zeleniny, chmele, lnu, bílkovin.
+- **Mladý zemědělec** bonus — deklarace věku a roku první žádosti.
+- **AEKO** smlouvy — víceletá agro-environmentální opatření.
+
+Podání:
+- **Termín**: typicky 1. dubna – 15. května (s tolerancí do 9. června s 1 % sankcí/den).
+- **Místo**: elektronicky přes [Portál farmáře](https://eagri.cz/public/web/mze/farmar/portal-farmare/) — vyžaduje datovou schránku nebo certifikát.
+- **Asistence**: regionální pracoviště SZIF zdarma, soukromí poradci 2 000–10 000 Kč.
+
+Po podání:
+- **Květen–červen**: SZIF kontroluje deklarace vs LPIS, satelitní monitoring (Copernicus / SISAEC).
+- **Říjen–prosinec**: vyplácení (vyšší zálohy už v říjnu, doplatky v prosinci).
+- **Sankce**: za nesprávnou deklaraci, překročení limitů, porušení greeningu → 1–100 % srážka.`,
+    related: ['biss', 'cap-2024', 'lpis'],
+  },
+  {
+    slug: 'aeko',
+    term: 'AEKO (Agro-environmentální opatření)',
+    alias: ['AEKO', 'agro-environmentální'],
+    kategorie: 'dotace',
+    shortDef: 'AEKO jsou víceleté (5-leté) dobrovolné smlouvy s ekologicky šetrnými praktikami — pastva, biopásy, zatravnění, sady ad. Vyšší dotace než EKO režim.',
+    longDef: `AEKO (Agro-environmentálně klimatická opatření) je samostatný dotační program v CAP 2024, který odměňuje 5-leté závazky k ekologicky šetrným praktikám. Vyšší sazby než EKO režim, ale tvrdší pravidla a sankce za porušení.
+
+Hlavní AEKO opatření v ČR 2024:
+- **Ošetřování travních porostů (TTP)** — sečení v pozdějších termínech (po hnízdění ptáků), 2 100–6 000 Kč/ha podle subtypu.
+- **Biopásy** — kvetoucí směsky na poli, ~10 000 Kč/ha (víc než EFA).
+- **Biokoridor** — souvislé linie krajinné zeleně, 8 000 Kč/ha.
+- **Ekologické zemědělství (EZ)** — certifikované bio, dodatečné sazby na hektar podle plodiny.
+- **Trvalá pastva** — 2 800–5 200 Kč/ha podle ANC kategorie.
+- **Vyšší zatravnění orné půdy** — převod orné na TTP, kompenzace ztracených tržeb.
+- **Sady extensivních ovocných druhů** — 5 200 Kč/ha.
+
+Pravidla:
+- **5-letá smlouva** — porušení = vrácení dotace za všechny předchozí roky.
+- **Inkompatibility** — některé subtypy nelze kombinovat (např. AEKO TTP + intenzivní pastva).
+- **Kontrola na místě** — SZIF inspekce 5–10 % žadatelů ročně + dálkový průzkum.
+
+Pro CZ farmáře:
+- AEKO se vyplatí, pokud má zemědělec dlouhodobou strategii (zaměření na bio, krajinotvorbu, ochranu vodních zdrojů).
+- Pro klasickou intenzivní farmu bývá ROI horší než EKO premium (víc paperwork, vyšší riziko sankcí).
+- Žadatelům doporučujeme nejprve podat **EKO režim premium** a pak postupně přidávat AEKO subtypy podle možností.`,
+    related: ['cap-2024', 'eko-platba', 'biopasy'],
+  },
+  {
+    slug: 'gaec',
+    term: 'GAEC (Dobrý zemědělský a environmentální stav)',
+    alias: ['GAEC', 'kondicionality', 'cross-compliance'],
+    kategorie: 'regulace',
+    shortDef: 'GAEC jsou povinné minimální standardy pro každého žadatele o přímé platby CAP — pravidla pro půdu, vodu, krajinu. Porušení = sankce.',
+    longDef: `GAEC (Good Agricultural and Environmental Conditions, česky Dobrý zemědělský a environmentální stav) je sada povinných standardů, které musí splnit každý žadatel o přímé platby CAP. Předtím se jim říkalo "cross-compliance" / "kondicionality".
+
+GAEC standardy v ČR 2024:
+- **GAEC 1**: Zachování trvalých travních porostů — zákaz orby TTP v Natura 2000 a celostátně nepřekročit 5% pokles z 2018.
+- **GAEC 2**: Ochrana mokřadů a rašelinišť — zákaz odvodňování + omezení orby v záplavovém území.
+- **GAEC 3**: Zákaz vypalování strniště — strniště lze jen mulčovat / zaorat / odstranit balíkem.
+- **GAEC 4**: Ochranné pásmy podél vodotečí — min. 3 m bez hnojiv/pesticidů, podél vodárenských zdrojů 25 m.
+- **GAEC 5**: Tank management proti erozi — povinné protierozní pásy / krycí plodiny na svažité orné nad určitým sklonem.
+- **GAEC 6**: Minimální půdní pokryv — strniště nebo krycí plodina od 1.11. do 28.2.
+- **GAEC 7**: Střídání plodin — max 75 % výměry stejnou plodinou + zákaz monokultury 4+ let.
+- **GAEC 8**: Neproduktivní plochy (EFA) — min. 7 % výměry v krajinných prvcích, biopásech, meziplodinách.
+- **GAEC 9**: Zákaz orby Natura 2000 lokalit.
+
+Sankce za porušení:
+- **Drobné** (1× nesplněný GAEC, opraveno do termínu): 1 % srážky.
+- **Standardní**: 3 % srážky z BISS + EKO.
+- **Vážné** (úmyslné porušení): 5–15 % srážky.
+- **Opakované**: 5 % + ztráta jiných dotací.
+
+Kontroly: 1–5 % žadatelů ročně formou fyzické inspekce + satelitní monitoring (Copernicus SISAEC, identifikuje porušení GAEC 5/6/7 z dálky).`,
+    related: ['cap-2024', 'biss', 'mezi-plodiny'],
+  },
+  {
+    slug: 'natura-2000',
+    term: 'Natura 2000',
+    alias: ['Natura', 'EVL', 'ptačí oblast'],
+    kategorie: 'regulace',
+    shortDef: 'Natura 2000 je evropská soustava chráněných území — v ČR cca 14 % výměry. Pro zemědělce znamená omezení (zákaz orby TTP, ochranná pásma) ale i bonusové dotace.',
+    longDef: `Natura 2000 je síť chráněných území v EU, vytvořená podle dvou směrnic: o stanovištích (1992) a o ptácích (1979). Cíl: zachovat biodiverzitu klíčových ekosystémů a druhů.
+
+Dva typy lokalit v ČR:
+- **EVL** (Evropsky významné lokality) — chrání stanoviště rostlin a hmyzu, vodní toky, mokřady.
+- **PO** (Ptačí oblasti) — hnízdiště a tahové cesty ohrožených druhů.
+
+Celkem ~14 % výměry ČR. Hlavní lokality: Krkonoše, Šumava, Třeboňsko, Pálava, Beskydy, Krušné hory, Moravský kras.
+
+Pro zemědělce:
+- **Zákaz orby TTP** (trvalé travní porosty) v Natura 2000 — striktnější než celostátní GAEC 1.
+- **Omezení hnojení a pesticidů** — některé EVL zákaz syntetických N, jen organické.
+- **Termíny sečení** — typicky až po 15.6. (po hnízdění chřástala polního).
+- **Povinný plán péče** — souhlas Správy CHKO před zásadní změnou.
+
+Bonusové dotace:
+- **AEKO subtypy** specificky pro Natura 2000 — vyšší sazby (až +30 %).
+- **Kompenzační platba** za ztrátu výnosů z omezení (typicky 1 000–3 000 Kč/ha).
+
+Konflikt: zemědělec vs Správa CHKO může být reálný — vždy si před zakoupením/nájmem půdy v Natura 2000 zkontrolujte LPIS a plán péče lokality (často kompletně mění hospodářský potenciál).`,
+    related: ['cap-2024', 'lpis', 'aeko'],
+  },
+
+  // ── PŮDA & EKOLOGIE ────────────────────────────────────────────────
+  {
+    slug: 'organicka-hmota',
+    term: 'Organická hmota v půdě',
+    alias: ['humus', 'organická složka', 'humus content'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Organická hmota (humus) je odumřelá rostlinná a živočišná hmota v půdě. Klíčový ukazatel zdraví půdy — udržuje vodu, živiny, strukturu, biodiverzitu.',
+    longDef: `Organická hmota (OH) v půdě je suma rozkladu rostlinných zbytků, kořenů, mikroorganismů a živočichů. Měří se jako "obsah humusu" v % sušiny ornice.
+
+Hodnoty v ČR:
+- **CZ orná půda průměr**: 1,5–2,5 % OH (relativně nízké, dříve i 3–4 % před intenzifikací).
+- **TTP / pastviny**: 4–8 % OH (vyšší díky stabilní vegetaci).
+- **Lesní půda**: 8–15 % OH.
+- **Černozem (jihomoravská)**: 3–4 % OH — nejlepší CZ orná půda.
+
+Funkce OH:
+- **Vodní kapacita** — 1 % OH = +15 l vody / m² zadržené v půdě.
+- **Živinová rezerva** — N, P, K se uvolňuje při rozkladu.
+- **Půdní struktura** — drobtovitá struktura, snadné zpracování.
+- **Mikrobiologie** — bakterie, houby, půdní fauna.
+- **Sekvestrace uhlíku** — 1 % zvýšení OH v 30 cm orničné vrstvě = 30 t C / ha vázáno v půdě.
+
+Zvyšování OH:
+- **Meziplodiny zaorané do půdy** — biomasa rozkladu se mění v humus.
+- **Stájový hnůj** — 25–40 t/ha jednou za 3–4 roky.
+- **Kompost** — pomalu uvolňuje, dlouhý efekt.
+- **Bezorebné technologie (no-till)** — méně narušuje strukturu, OH se akumuluje.
+- **TTP rotace** — pokud část výměry rotuje na TTP, OH dramaticky stoupá.
+
+Pokles OH:
+- **Intenzivní orba** — provzdušňuje, urychluje rozklad → ztráta OH.
+- **Monokultury** — neudržitelné dlouhodobě.
+- **Eroze** — odplaveno s nejhornější ornicí.`,
+    related: ['mezi-plodiny', 'pH-pudy'],
+  },
+  {
+    slug: 'eroze-pudy',
+    term: 'Eroze půdy',
+    alias: ['vodní eroze', 'větrná eroze', 'ztráta ornice'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Eroze půdy je proces, kdy voda (déšť, povodeň) nebo vítr odnáší ornici z pole. V ČR ohroženo cca 50 % orné půdy — hlavní příčina ztráty produktivity.',
+    longDef: `Eroze půdy je přírodní proces, který intenzivní zemědělství dramaticky urychluje. Dva hlavní typy v ČR:
+
+**Vodní eroze** (dominantní):
+- Déšť uvolní agregáty půdy → splach se stéká po svahu → ztráty 2–50 t ornice/ha/rok.
+- Nejvíce ohrožené: svažité pole nad 8°, dlouhé pozemky, řepka/cukrovka v širokých řádcích.
+- Po extrémních deštích (50+ mm/h) v jednom dni ztráta i 100+ t/ha — viditelné rýhy.
+
+**Větrná eroze**:
+- Sušší jižní Morava (Hodonínsko, Břeclav, Znojmo) — větry odnáší jemné částice.
+- Ztráty 1–10 t/ha/rok, méně dramatické ale konstantní.
+
+Důsledky:
+- **Ztráta nejúrodnější vrstvy** (ornice 0–30 cm má nejvíce OH a živin).
+- **Snížení výnosů** dlouhodobě 5–25 %.
+- **Eutrofizace vod** — splavený fosfor → květ řas v Brněnské přehradě, Vranově atd.
+- **Zaplavení obcí** — bahno z polí ucpává kanalizace.
+
+Ochrana proti vodní erozi (povinná podle GAEC 5):
+- **Protierozní pásy** — pásy plodin střídavě s TTP/meziplodinou napříč svahem.
+- **Strip-till / no-till** — bez orby, kořeny drží půdu.
+- **Konturní orba** — orba podél vrstevnic, ne po spádnici.
+- **Meziplodiny** přes zimu — povinné na erozně ohrožených DPB.
+- **Vegetační pásy** podél vodotečí.
+
+Pokud zemědělec nesplní GAEC 5 → 3–15 % sankce z BISS + EKO.`,
+    related: ['mezi-plodiny', 'organicka-hmota', 'gaec'],
+  },
+
+  // ── DALŠÍ TECHNICKÉ ────────────────────────────────────────────────
+  {
+    slug: 'allwheel-drive',
+    term: 'Pohon 4×4 / Pohon všech kol',
+    alias: ['MFWD', 'Mechanical Front Wheel Drive', '4WD'],
+    kategorie: 'technologie',
+    shortDef: 'Pohon 4×4 (MFWD) přidává pohon na přední nápravu — zvyšuje tažnou sílu, snižuje prokluz, lepší v rozbahněném terénu. Standard u 95 % moderních traktorů.',
+    longDef: `Pohon 4×4 u traktorů (technicky **MFWD** = Mechanical Front Wheel Drive) přidává pohon na přední řízenou nápravu. Standard u všech traktorů s výkonem nad 50 koní od 90. let.
+
+Konstrukce:
+- **Mechanický náhon** přes dlouhý hřídel z převodovky k přední diferenciálu.
+- **Spojka** v náboji nebo v diferenciálu — řidič může 4×4 vypnout (pro silniční jízdu šetří palivo + zamezí "vrtění" na rovných cestách).
+- **Stejně velká kola** vpředu i vzadu u tzv. **isodiametric** traktorů (rovněž zvané "Trike" — Fendt 1000, JD 9R) — zajistí dokonalou trakci, ale nutno rezervovat pozemek pro velký zatáčecí poloměr.
+
+Diference od osobního auta 4×4:
+- **Traktorová přední náprava** je výrazně vyšší a robustnější (kvůli velkým kolům).
+- **Přední diferenciál** typicky bez aktivního omezení (žádný Torsen / haldex).
+- **Diferenciální uzávěrka** zadní + přední — řidič zapne pro maximální trakci v blátě.
+
+Výhody:
+- **+25–40 % tažné síly** vs jen zadní pohon.
+- **Lepší stoupavost** — důležité pro horské pastviny a lesní práce.
+- **Méně prokluz** — méně utužení půdy + úspora paliva při těžkém tahu.
+
+Nevýhody:
+- **Vyšší pořizovací cena** o 100–300 tis. Kč vs 2×4 verze (které dnes téměř neexistují).
+- **Více součástí na servis** — kardany, diferenciál, dvě sady kol.
+- **Vyšší spotřeba** na silnici (proto možnost vypnutí).`,
+    related: ['cvt-prevodovka', 'tribod'],
+  },
+  {
+    slug: 'duala',
+    term: 'Duals / Dvojmontáž',
+    alias: ['dvojmontáž kol', 'duals'],
+    kategorie: 'technologie',
+    shortDef: 'Dvojmontáž (duals) je sada dvou kol na každé nápravě (celkem 4 zadní + 4 přední) — snižuje tlak na půdu, zvyšuje plovavost, používá se u flagship traktorů.',
+    longDef: `Dvojmontáž (duals, dual wheels) znamená montáž dvou kol vedle sebe na každé nápravě místo jednoho. U traktoru nad 250 koní téměř povinné pro polní práce.
+
+Princip: dvě kola = 2× větší kontaktní plocha → polovina měrného tlaku na půdu. Při hmotnosti 12 t traktoru bez duals je tlak 1,5–2 bar/cm² (utužující), s duals klesá na 0,7–1 bar/cm² (akceptovatelné).
+
+Použití:
+- **Velké traktory 250+ koní** — Fendt 900/1000, JD 8R/9R, NH T9, Case Steiger.
+- **Sady kol** — duals jen pro polní práce, demontáž pro silniční přepravu (širší než 2,55 m → překračuje EU normu pro veřejné komunikace).
+- **Trojnásobná montáž (triples)** u superflagship 600+ koní traktorů (rare v Evropě, běžné v USA).
+
+Cena:
+- **Duals adaptéry + ráfky + pneumatiky** typicky 250 000–500 000 Kč pro 4× zadní.
+- **Triples** 1 000 000+ Kč.
+
+Pozor: provoz s duals na silnici v EU = pokuta 5 000–20 000 Kč + ukončení jízdy. Vždy montáž jen těsně před vyjetím na pole, demontáž po dokončení. U flagship farem řeší rychlospojkami za 5–15 minut.`,
+    related: ['allwheel-drive'],
+  },
 ];
 
 export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {

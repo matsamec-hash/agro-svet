@@ -55,11 +55,14 @@ export function findModelBySlug(slug: string): StrojFlatModel | null {
  * Returns ~150–250 deterministic pairs covering high-power tractors and
  * combines from every brand we hold data for.
  */
-export function topComparisonPairs(limit = 200): ComparisonPair[] {
+export function topComparisonPairs(limit = 200, opts?: { tolerancePct?: number; perSourceLimit?: number }): ComparisonPair[] {
   const all = getAllModels();
   const activeModels = all.filter(
     (m) => m.year_to === null && m.power_hp !== null && (m.category === 'traktory' || m.category === 'kombajny'),
   );
+
+  const tolerancePct = opts?.tolerancePct ?? 18;
+  const perSourceLimit = opts?.perSourceLimit ?? 4;
 
   const seen = new Map<string, ComparisonPair>();
   for (const source of activeModels) {
@@ -71,7 +74,7 @@ export function topComparisonPairs(limit = 200): ComparisonPair[] {
         power_hp: source.power_hp,
         year_to: source.year_to,
       },
-      { tolerancePct: 18, limit: 4 },
+      { tolerancePct, limit: perSourceLimit },
     );
     for (const competitor of competitors) {
       const combo = pairCombo(source, competitor);
@@ -89,6 +92,15 @@ export function topComparisonPairs(limit = 200): ComparisonPair[] {
     return x.combo.localeCompare(y.combo);
   });
   return pairs.slice(0, limit);
+}
+
+/**
+ * Expanded pairs generator — wider tolerance + more competitors per source.
+ * Used by /srovnani/[combo]/ getStaticPaths() to maximize prerendered SEO surface.
+ * Aim 1000+ unique pairs. Caller still gets best-power-sorted output.
+ */
+export function expandedComparisonPairs(limit = 1500): ComparisonPair[] {
+  return topComparisonPairs(limit, { tolerancePct: 30, perSourceLimit: 10 });
 }
 
 /** Find competitor pairs that include the given model — used for "Related comparisons" cross-link. */

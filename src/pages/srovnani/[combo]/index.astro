@@ -4,6 +4,7 @@ export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import {
   topComparisonPairs,
+  expandedComparisonPairs,
   parsePairCombo,
   findModelBySlug,
   pairCombo,
@@ -17,7 +18,9 @@ import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
 
 export async function getStaticPaths() {
-  const pairs = topComparisonPairs(220);
+  // Expand z 220 na ~1500 párů — širší tolerance výkonu + víc konkurentů
+  // per source = každý model dostane víc smysluplných srovnání. Long-tail SEO.
+  const pairs = expandedComparisonPairs(1500);
   return pairs.map((p) => ({
     params: { combo: p.combo },
     props: { pair: p },
