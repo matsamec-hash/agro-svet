@@ -1,0 +1,370 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+import {
+  FARM_SIZE_LABELS, FARM_TYPE_LABELS, BUDGET_LABELS,
+  DRIVER_PREF_LABELS, USAGE_LABELS, SERVICE_PREF_LABELS,
+} from '../../lib/tractor-recommender';
+import { getAllModels, getAllBrands } from '../../lib/stroje';
+
+const canonical = `${SITE_URL}/kviz/jaky-traktor-potrebujete/`;
+
+// Embed catalog so klient-side recommender funguje bez extra fetch.
+const allModels = getAllModels()
+  .filter((m) => m.category === 'traktory' && m.power_hp !== null && m.year_to === null)
+  .map((m) => ({
+    slug: m.slug, name: m.name, brand_slug: m.brand_slug, brand_name: m.brand_name,
+    category: m.category, power_hp: m.power_hp, power_kw: m.power_kw,
+    year_from: m.year_from, year_to: m.year_to,
+    series_slug: m.series_slug, series_name: m.series_name,
+    engine: m.engine, transmission: m.transmission,
+  }));
+const modelsJson = JSON.stringify(allModels);
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kvízy', url: '/kviz/' },
+  { name: 'Jaký traktor potřebujete', url: canonical },
+]);
+
+const questions = [
+  {
+    key: 'farmSize',
+    title: 'Jak velkou farmu obhospodařujete?',
+    options: Object.entries(FARM_SIZE_LABELS),
+  },
+  {
+    key: 'farmType',
+    title: 'Jaký je hlavní typ provozu?',
+    options: Object.entries(FARM_TYPE_LABELS),
+  },
+  {
+    key: 'usage',
+    title: 'Pro co budete traktor nejvíc používat?',
+    options: Object.entries(USAGE_LABELS),
+  },
+  {
+    key: 'budget',
+    title: 'Jaký máte rozpočet?',
+    options: Object.entries(BUDGET_LABELS),
+  },
+  {
+    key: 'driverPref',
+    title: 'Co je pro vás u traktoru nejdůležitější?',
+    options: Object.entries(DRIVER_PREF_LABELS),
+  },
+  {
+    key: 'servicePref',
+    title: 'Jak důležitý je lokální servis a dostupnost dílů?',
+    options: Object.entries(SERVICE_PREF_LABELS),
+  },
+];
+---
+
+<Layout
+  title="Jaký traktor potřebujete? — kvíz s doporučením z katalogu"
+  description="6 otázek o vaší farmě (velikost, typ, rozpočet, využití) → Top 5 doporučených traktorů z aktuálního katalogu. Skore podle výkonu, ceny, dostupnosti v ČR."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="qr-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/kviz/">Kvízy</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Jaký traktor</span>
+    </nav>
+
+    <header class="qr-head">
+      <span class="kicker">Quiz · Doporučovač</span>
+      <h1>Jaký traktor potřebujete?</h1>
+      <p class="lede">
+        6 otázek o vaší farmě → seřazený seznam Top 5 traktorů z aktuálního katalogu. Skóre kombinuje výkonovou shodu, dostupnost značky v ČR, rozpočet a preference obsluhy.
+      </p>
+    </header>
+
+    <div id="qr-intro" class="qr-card">
+      <h2>Než začneme</h2>
+      <ul>
+        <li>6 otázek, každá s 4–5 možnostmi.</li>
+        <li>Po dokončení uvidíte Top 5 modelů + vysvětlení, proč zrovna tyhle.</li>
+        <li>Žádný login, žádné cookies. Doporučení = pure JS z katalogu strojů.</li>
+      </ul>
+      <button class="qr-start" id="qr-start">Spustit kvíz →</button>
+    </div>
+
+    <div id="qr-game" class="qr-card" hidden>
+      <div class="qr-progress">
+        <div class="qr-progress-bar"><div class="qr-progress-fill" id="qr-progress-fill" style="width:0%"></div></div>
+        <span class="qr-progress-text"><span id="qr-q-num">1</span> / {questions.length}</span>
+      </div>
+      <h2 id="qr-question">—</h2>
+      <div class="qr-options" id="qr-options"></div>
+      <button class="qr-back" id="qr-back" hidden>← Zpět na předchozí</button>
+    </div>
+
+    <div id="qr-result" class="qr-card" hidden>
+      <span class="qr-result-kicker">Top 5 doporučení</span>
+      <h2>Pro vaši farmu doporučujeme:</h2>
+      <div id="qr-list" class="qr-list"></div>
+      <div class="qr-result-cta">
+        <button class="qr-restart" id="qr-restart">Spustit kvíz znovu</button>
+        <a href="/srovnani/" class="qr-ghost">Srovnat modely</a>
+        <a href="/zebricky/" class="qr-ghost">Žebříčky top-N</a>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ modelsJson, questionsRaw: JSON.stringify(questions) }}>
+    (function () {
+      const QUESTIONS = JSON.parse(questionsRaw);
+      const MODELS = JSON.parse(modelsJson);
+
+      const intro = document.getElementById('qr-intro');
+      const game = document.getElementById('qr-game');
+      const result = document.getElementById('qr-result');
+      const startBtn = document.getElementById('qr-start');
+      const restartBtn = document.getElementById('qr-restart');
+      const backBtn = document.getElementById('qr-back');
+      const qNumEl = document.getElementById('qr-q-num');
+      const fillEl = document.getElementById('qr-progress-fill');
+      const titleEl = document.getElementById('qr-question');
+      const optsEl = document.getElementById('qr-options');
+      const listEl = document.getElementById('qr-list');
+
+      const answers = {};
+      let idx = 0;
+
+      function render() {
+        const q = QUESTIONS[idx];
+        qNumEl.textContent = idx + 1;
+        fillEl.style.width = (idx / QUESTIONS.length) * 100 + '%';
+        titleEl.textContent = q.title;
+        optsEl.innerHTML = '';
+        for (const [val, label] of q.options) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'qr-opt' + (answers[q.key] === val ? ' picked' : '');
+          btn.textContent = label;
+          btn.addEventListener('click', () => answer(q.key, val));
+          optsEl.appendChild(btn);
+        }
+        backBtn.hidden = idx === 0;
+      }
+
+      function answer(key, val) {
+        answers[key] = val;
+        if (idx < QUESTIONS.length - 1) {
+          idx++;
+          render();
+        } else {
+          fillEl.style.width = '100%';
+          finish();
+        }
+      }
+
+      function finish() {
+        game.hidden = true;
+        result.hidden = false;
+
+        const recs = scoreAndRank(answers, 5);
+        listEl.innerHTML = '';
+        recs.forEach((r, i) => {
+          const card = document.createElement('div');
+          card.className = 'qr-rec';
+          const modelUrl = '/stroje/' + r.model.brand_slug + '/' + r.model.series_slug + '/'
+            + (r.model.slug.startsWith(r.model.brand_slug + '-') ? r.model.slug.slice(r.model.brand_slug.length + 1) : r.model.slug) + '/';
+          card.innerHTML =
+            '<div class="qr-rec-rank">#' + (i + 1) + '</div>' +
+            '<div class="qr-rec-body">' +
+              '<a href="' + modelUrl + '" class="qr-rec-title"><strong>' + esc(r.model.brand_name) + ' ' + esc(r.model.name) + '</strong></a>' +
+              '<div class="qr-rec-meta">' + r.model.power_hp + ' k · ' + esc(r.model.series_name || '') + '</div>' +
+              (r.reasons.length ? '<ul class="qr-rec-reasons">' + r.reasons.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '') +
+              '<a href="' + modelUrl + '" class="qr-rec-cta">Detail modelu →</a>' +
+            '</div>';
+          listEl.appendChild(card);
+        });
+        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function esc(s) {
+        return String(s ?? '').replace(/[<>&"]/g, (c) => ({ '<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;' })[c]);
+      }
+
+      // ── scoring logic (mirroring lib/tractor-recommender) ─────────────
+      const FARM_SIZE_POWER = {
+        mini: { min: 25, max: 75, ideal: 50 },
+        small: { min: 70, max: 130, ideal: 100 },
+        medium: { min: 110, max: 180, ideal: 140 },
+        large: { min: 160, max: 280, ideal: 220 },
+        huge: { min: 250, max: 700, ideal: 350 },
+      };
+      const LOCAL_BRAND_BONUS = { zetor:10, 'john-deere':8, 'new-holland':7, 'case-ih':7, fendt:6, 'massey-ferguson':6, claas:5, 'deutz-fahr':4, kubota:4, valtra:3 };
+      const PREMIUM = new Set(['fendt', 'john-deere', 'claas', 'new-holland', 'case-ih']);
+      const VALUE = new Set(['zetor', 'kubota', 'deutz-fahr', 'valtra']);
+
+      function scoreAndRank(a, topN) {
+        const target = FARM_SIZE_POWER[a.farmSize] || FARM_SIZE_POWER.medium;
+        const cands = MODELS.filter((m) =>
+          m.power_hp != null
+          && m.power_hp >= target.min * 0.85
+          && m.power_hp <= target.max * 1.15
+        );
+        const scored = cands.map((m) => {
+          let score = 100;
+          const reasons = [];
+          const delta = Math.abs((m.power_hp || 0) - target.ideal);
+          score -= (delta / target.ideal) * 40;
+          if (delta < target.ideal * 0.1) reasons.push('Výkon ' + m.power_hp + ' k přesně pasuje na vaši velikost farmy');
+          else if (delta < target.ideal * 0.25) reasons.push('Vhodný výkon ' + m.power_hp + ' k pro vaši farmu');
+
+          const brandScore = LOCAL_BRAND_BONUS[m.brand_slug] || 0;
+          score += brandScore;
+          if (brandScore >= 7) reasons.push('Široká servisní síť ' + m.brand_name + ' v ČR');
+
+          if ((a.driverPref === 'comfort' || a.driverPref === 'tech') && PREMIUM.has(m.brand_slug)) {
+            score += 15;
+            reasons.push(a.driverPref === 'tech'
+              ? m.brand_name + ' patří mezi technologické lídry'
+              : m.brand_name + ' nabízí prémiový komfort obsluhy');
+          }
+          if ((a.driverPref === 'value' || a.driverPref === 'simple') && VALUE.has(m.brand_slug)) {
+            score += 15;
+            reasons.push(a.driverPref === 'value'
+              ? m.brand_name + ' = nejlepší poměr cena / výkon'
+              : m.brand_name + ' = robustní, snadný servis');
+          }
+
+          if (a.budget === 'tight' && VALUE.has(m.brand_slug)) score += 10;
+          if (a.budget === 'tight' && PREMIUM.has(m.brand_slug)) score -= 20;
+          if (a.budget === 'flagship' && PREMIUM.has(m.brand_slug)) score += 10;
+
+          if (a.usage === 'tow-heavy' && (m.power_hp || 0) >= target.ideal) score += 5;
+          if (a.usage === 'pto-heavy' && (m.transmission || '').toLowerCase().includes('powershift')) score += 5;
+          if (a.usage === 'transport' && (m.transmission || '').toLowerCase().includes('cvt')) score += 5;
+
+          if (a.farmType === 'orchard' && m.brand_slug === 'kubota') score += 10;
+          if (a.farmType === 'forest' && (m.brand_slug === 'john-deere' || m.brand_slug === 'zetor')) score += 5;
+
+          if (a.servicePref === 'local' && m.brand_slug === 'zetor') {
+            score += 10;
+            reasons.push('Český výrobce → nejlepší dostupnost ND a servisu v ČR');
+          }
+
+          return { model: m, score, reasons: reasons.slice(0, 3) };
+        });
+        scored.sort((x, y) => y.score - x.score);
+        const seen = new Set();
+        const out = [];
+        for (const r of scored) {
+          const key = r.model.brand_slug + ':' + r.model.series_slug;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          out.push(r);
+          if (out.length >= topN) break;
+        }
+        return out;
+      }
+
+      startBtn.addEventListener('click', () => {
+        intro.hidden = true;
+        game.hidden = false;
+        render();
+      });
+      backBtn.addEventListener('click', () => {
+        if (idx > 0) { idx--; render(); }
+      });
+      restartBtn.addEventListener('click', () => {
+        result.hidden = true;
+        game.hidden = false;
+        idx = 0;
+        for (const k of Object.keys(answers)) delete answers[k];
+        render();
+      });
+    })();
+  </script>
+
+  <style>
+    .qr-root { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+    .qr-head { margin-bottom: 28px; }
+    .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+    h1 { font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin: 12px 0 8px; color: #1a1a1a; }
+    .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+
+    .qr-card {
+      padding: 28px;
+      background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+      border: 2px solid #FFEA00;
+      border-radius: 14px;
+      margin-bottom: 20px;
+    }
+    .qr-card h2 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 0 0 14px; line-height: 1.3; }
+    .qr-card ul { padding-left: 22px; margin: 0 0 20px; }
+    .qr-card li { font-size: 14px; line-height: 1.6; color: #444; margin-bottom: 6px; }
+
+    .qr-start, .qr-restart {
+      width: 100%; padding: 14px; background: #0A0A0B; color: #FFEA00;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+    .qr-start:hover, .qr-restart:hover { background: #2a2a2f; }
+
+    .qr-progress { margin-bottom: 18px; }
+    .qr-progress-bar { background: #eaeaec; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+    .qr-progress-fill { background: linear-gradient(90deg, #FFEA00, #FCD34D); height: 100%; transition: width .3s; }
+    .qr-progress-text { font-size: 13px; color: #6B6B72; }
+
+    .qr-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .qr-opt {
+      width: 100%; text-align: left; padding: 14px 16px;
+      background: #fafafa; border: 1.5px solid #eaeaec; border-radius: 10px;
+      font-size: 14px; color: #0A0A0B; cursor: pointer; transition: border-color .15s, background .15s;
+    }
+    .qr-opt:hover { border-color: #FFEA00; background: #fffef8; }
+    .qr-opt.picked { border-color: #FFEA00; background: #fff8c4; font-weight: 600; }
+    .qr-back {
+      display: inline-block; padding: 8px 14px; background: transparent;
+      border: 1.5px solid #DFDFE3; border-radius: 8px; font-size: 12px; font-weight: 700;
+      color: #666; cursor: pointer;
+    }
+    .qr-back:hover { border-color: #0A0A0B; color: #0A0A0B; }
+
+    .qr-result-kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #FFEA00; font-weight: 700; background: #0A0A0B; padding: 3px 10px; border-radius: 4px; }
+    .qr-list { display: flex; flex-direction: column; gap: 12px; margin: 16px 0 24px; }
+    .qr-rec {
+      display: flex; gap: 16px; padding: 16px 18px;
+      background: #fff; border: 1.5px solid #eaeaec; border-radius: 12px;
+      transition: border-color .15s;
+    }
+    .qr-rec:hover { border-color: #FFEA00; }
+    .qr-rec-rank {
+      flex: 0 0 50px; font-size: 28px; font-weight: 800;
+      font-family: 'Chakra Petch', sans-serif; color: #FFEA00;
+      text-shadow: -1px -1px 0 #0A0A0B, 1px -1px 0 #0A0A0B, -1px 1px 0 #0A0A0B, 1px 1px 0 #0A0A0B;
+      line-height: 1; align-self: flex-start;
+    }
+    .qr-rec-body { flex: 1; min-width: 0; }
+    .qr-rec-title { display: block; font-size: 16px; color: #0A0A0B; text-decoration: none; margin-bottom: 4px; }
+    .qr-rec-title:hover { color: #0B7A3B; }
+    .qr-rec-meta { font-size: 12px; color: #6B6B72; margin-bottom: 8px; }
+    .qr-rec-reasons { padding-left: 18px; margin: 0 0 10px; }
+    .qr-rec-reasons li { font-size: 13px; color: #444; line-height: 1.5; margin-bottom: 3px; }
+    .qr-rec-cta { font-size: 12px; font-weight: 700; color: #0B7A3B; text-decoration: none; }
+    .qr-rec-cta:hover { text-decoration: underline; }
+    .qr-result-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+    .qr-result-cta .qr-restart { width: auto; padding: 12px 20px; }
+    .qr-ghost {
+      padding: 12px 18px; background: transparent; color: #0A0A0B;
+      border: 1.5px solid #DFDFE3; border-radius: 8px; font-size: 13px; font-weight: 700;
+      text-decoration: none;
+    }
+    .qr-ghost:hover { border-color: #0A0A0B; }
+  </style>
+</Layout>

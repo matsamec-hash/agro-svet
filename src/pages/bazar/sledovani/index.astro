@@ -153,8 +153,42 @@ const breadcrumbJsonLd = breadcrumbSchema([
     const banner = document.getElementById('sled-banner') as HTMLElement;
     const btn = document.getElementById('sled-btn') as HTMLButtonElement;
 
-    // URL params handling — confirmation / unsubscribe redirects
+    // URL params handling — confirmation / unsubscribe redirects + prefill
     const params = new URLSearchParams(location.search);
+
+    // Prefill from /bazar/?prefill=encodedQueryString (when user clicks "Sledovat
+    // tento filtr" on /bazar/ with active filters).
+    const prefill = params.get('prefill');
+    if (prefill) {
+      try {
+        const pfParams = new URLSearchParams(prefill);
+        const map: Record<string, string> = {
+          q: 'query', query: 'query',
+          category: 'category', brand: 'brand',
+          priceFrom: 'priceFrom', priceTo: 'priceTo',
+          yearFrom: 'yearFrom', yearTo: 'yearTo',
+          location: 'kraj', kraj: 'kraj',
+        };
+        for (const [k, v] of pfParams) {
+          const formKey = map[k];
+          if (!formKey) continue;
+          const el = form.elements.namedItem(formKey) as HTMLInputElement | HTMLSelectElement | null;
+          if (el) el.value = v;
+        }
+        // Auto-suggest label from filter description
+        const labelEl = form.elements.namedItem('label') as HTMLInputElement | null;
+        if (labelEl && !labelEl.value) {
+          const parts: string[] = [];
+          if (pfParams.get('brand')) parts.push(pfParams.get('brand')!);
+          if (pfParams.get('category')) parts.push(pfParams.get('category')!);
+          if (pfParams.get('q')) parts.push(`"${pfParams.get('q')!}"`);
+          if (pfParams.get('priceTo')) parts.push(`do ${pfParams.get('priceTo')} Kč`);
+          if (pfParams.get('location')) parts.push(`v ${pfParams.get('location')!}`);
+          labelEl.value = parts.length ? parts.join(' ') : 'Sledovaný filtr z bazaru';
+        }
+      } catch { /* ignore */ }
+    }
+
     if (params.get('confirmed') === '1') {
       banner.hidden = false;
       banner.className = 'sled-banner sled-banner-success';

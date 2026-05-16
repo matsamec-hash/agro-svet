@@ -22,3 +22,8 @@ run_worker_first = true
 
 [observability]
 enabled = true
+
+# Daily cron pro notify-me digest je triggered externě (UptimeRobot /
+# cron-job.org / lokální cron) přes GET /api/cron/saved-search-digest
+# s Authorization: Bearer ${CRON_SECRET}. Astro adapter @astrojs/cloudflare
+# nemá nativní scheduled handler — orphaned wrangler trigger by nic nedělal.
