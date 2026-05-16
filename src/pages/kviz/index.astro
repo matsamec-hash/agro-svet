@@ -1,0 +1,101 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/kviz/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kvízy', url: canonical },
+]);
+
+const quizzes = [
+  {
+    slug: 'historie-znacek',
+    title: 'Historie značek a technologie',
+    description: '16 otázek o historii zemědělských značek, technologiích (CVT, ISOBUS, AdBlue) a dotacích CAP. Test pro hospodáře, dealery i fanoušky agro-techniky.',
+    questions: 16,
+    duration: '~5 minut',
+    icon: '🚜',
+  },
+];
+---
+
+<Layout
+  title="Kvízy ze zemědělství — otestujte své znalosti"
+  description="Interaktivní kvízy ze zemědělství — historie značek, technologie traktorů, dotace CAP. Hodnocení podle správných odpovědí."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="kviz-hub">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Kvízy</span>
+    </nav>
+
+    <header class="hub-head">
+      <span class="kicker">Kvízy · {quizzes.length}</span>
+      <h1>Otestujte své znalosti</h1>
+      <p class="lede">
+        Interaktivní kvízy o zemědělství, technice a dotacích. Hodnocení Začátečník → Hospodář → Expert → Legenda podle počtu správných odpovědí.
+      </p>
+    </header>
+
+    <div class="quiz-grid">
+      {quizzes.map((q) => (
+        <a href={`/kviz/${q.slug}/`} class="quiz-card">
+          <div class="quiz-icon">{q.icon}</div>
+          <h2>{q.title}</h2>
+          <p>{q.description}</p>
+          <div class="quiz-meta">
+            <span><strong>{q.questions}</strong> otázek</span>
+            <span class="dot">·</span>
+            <span>{q.duration}</span>
+          </div>
+          <span class="quiz-cta">Spustit kvíz →</span>
+        </a>
+      ))}
+    </div>
+
+    <p class="kviz-foot">
+      Další kvízy připravujeme. Návrh tématu? Napište nám na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .kviz-hub { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .hub-head { margin-bottom: 36px; max-width: 720px; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin: 12px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 16px; color: #666; line-height: 1.6; margin: 0; }
+  .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .quiz-card {
+    display: block;
+    padding: 24px;
+    background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+    border: 2px solid #eaeaec;
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+  }
+  .quiz-card:hover { border-color: #FFEA00; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 234, 0, .2); }
+  .quiz-icon { font-size: 40px; margin-bottom: 12px; }
+  .quiz-card h2 { font-size: 20px; font-weight: 700; color: #0A0A0B; margin: 0 0 8px; }
+  .quiz-card p { font-size: 14px; line-height: 1.55; color: #555; margin: 0 0 12px; }
+  .quiz-meta { display: flex; gap: 6px; align-items: center; font-size: 13px; color: #6B6B72; margin-bottom: 14px; }
+  .quiz-meta strong { color: #0A0A0B; font-weight: 700; }
+  .quiz-meta .dot { color: #ccc; }
+  .quiz-cta { font-size: 14px; font-weight: 700; color: #0B7A3B; }
+  .kviz-foot { margin-top: 32px; font-size: 14px; color: #666; text-align: center; }
+  .kviz-foot a { color: #0B7A3B; }
+</style>

@@ -1,0 +1,280 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import { CATEGORIES, BRANDS } from '../../../lib/bazar-constants';
+import { KRAJE } from '../../../lib/cap-dotace';
+
+const canonical = `${SITE_URL}/bazar/sledovani/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Bazar', url: '/bazar/' },
+  { name: 'Sledování nových inzerátů', url: canonical },
+]);
+---
+
+<Layout
+  title="Sledování nových inzerátů — agro bazar"
+  description="Vytvořte si filtr (značka, kategorie, cena, kraj) a denně dostávejte e-mail s novými inzeráty, které mu odpovídají."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="sled-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/bazar/">Bazar</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Sledování</span>
+    </nav>
+
+    <header class="sled-head">
+      <span class="kicker">Notify-me · Sledování</span>
+      <h1>Buďte první, kdo uvidí nové inzeráty</h1>
+      <p class="lede">
+        Nastavte filtr (značka, kategorie, cena, kraj) a každý den dostanete e-mail s inzeráty, které mu odpovídají. Žádný spam, kdykoliv unsubscribe.
+      </p>
+    </header>
+
+    <div id="sled-banner" class="sled-banner" hidden></div>
+
+    <form class="sled-form" id="sled-form" autocomplete="off">
+      <fieldset class="fs">
+        <legend>Filtr</legend>
+
+        <label class="field">
+          <span>Klíčová slova v názvu / popisu <em>— volitelné</em></span>
+          <input type="text" name="query" placeholder="např. Forterra, Proxima, hloubkový kypřič" />
+        </label>
+
+        <div class="field-row">
+          <label class="field">
+            <span>Kategorie</span>
+            <select name="category">
+              <option value="">Všechny</option>
+              {CATEGORIES.map((c) => <option value={c.value}>{c.label}</option>)}
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Značka</span>
+            <select name="brand">
+              <option value="">Všechny</option>
+              {BRANDS.map((b) => <option value={b.value}>{b.label}</option>)}
+            </select>
+          </label>
+        </div>
+
+        <div class="field-row">
+          <label class="field">
+            <span>Cena od (Kč)</span>
+            <input type="number" name="priceFrom" min="0" step="10000" placeholder="" />
+          </label>
+          <label class="field">
+            <span>Cena do (Kč)</span>
+            <input type="number" name="priceTo" min="0" step="10000" placeholder="" />
+          </label>
+        </div>
+
+        <div class="field-row">
+          <label class="field">
+            <span>Rok výroby od</span>
+            <input type="number" name="yearFrom" min="1950" max="2030" placeholder="" />
+          </label>
+          <label class="field">
+            <span>Rok výroby do</span>
+            <input type="number" name="yearTo" min="1950" max="2030" placeholder="" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Kraj <em>— volitelné</em></span>
+          <select name="kraj">
+            <option value="">Celá ČR</option>
+            {KRAJE.map((k) => <option value={k.slug}>{k.name}</option>)}
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset class="fs">
+        <legend>E-mail pro notifikace</legend>
+
+        <label class="field">
+          <span>Váš e-mail <strong class="req">*</strong></span>
+          <input type="email" name="email" required placeholder="vase@email.cz" />
+        </label>
+
+        <label class="field">
+          <span>Pojmenování filtru <strong class="req">*</strong></span>
+          <input type="text" name="label" required maxlength="120" placeholder="např. Zetor Forterra do 500K v Jihočeském" />
+          <small style="font-size:12px; color:#666; margin-top:4px; display:block;">
+            Lidsky čitelný popis — pomůže si pamatovat, co sledujete.
+          </small>
+        </label>
+      </fieldset>
+
+      <button type="submit" class="sled-btn" id="sled-btn">Začít sledovat →</button>
+
+      <p class="sled-disclaimer">
+        Bez potvrzení e-mailu nic neposíláme. Maximum 10 sledovaných filtrů na jeden e-mail.
+      </p>
+    </form>
+
+    <section class="info">
+      <h2>Jak to funguje</h2>
+      <ol>
+        <li><strong>Nastavte filtr</strong> — značka, cena, kategorie, kraj.</li>
+        <li><strong>Potvrďte e-mail</strong> — pošleme jednorázový potvrzovací link.</li>
+        <li><strong>Dostávejte denní digest</strong> — každý den e-mail s novými inzeráty, které matchují filtr (max 1 e-mail/den).</li>
+        <li><strong>Odhlásit jedním kliknutím</strong> — v každém e-mailu unsubscribe link.</li>
+      </ol>
+
+      <h2>Časté dotazy</h2>
+      <details class="faq">
+        <summary>Kolik filtrů můžu mít?</summary>
+        <p>Max 10 sledovaných filtrů na jeden e-mail. Pokud chcete víc, použijte jiný e-mail.</p>
+      </details>
+      <details class="faq">
+        <summary>Jak často budu dostávat e-maily?</summary>
+        <p>Max 1× denně. Pokud žádné nové inzeráty nepřibyly, e-mail nepřijde.</p>
+      </details>
+      <details class="faq">
+        <summary>Můžu si nastavit i bez registrace?</summary>
+        <p>Ano. Stačí e-mail a potvrzení. Registrace je výhodná pro správu více filtrů a sdílení s bazarem.</p>
+      </details>
+    </section>
+  </div>
+
+  <script>
+    const form = document.getElementById('sled-form') as HTMLFormElement;
+    const banner = document.getElementById('sled-banner') as HTMLElement;
+    const btn = document.getElementById('sled-btn') as HTMLButtonElement;
+
+    // URL params handling — confirmation / unsubscribe redirects
+    const params = new URLSearchParams(location.search);
+    if (params.get('confirmed') === '1') {
+      banner.hidden = false;
+      banner.className = 'sled-banner sled-banner-success';
+      banner.textContent = '✓ Sledování potvrzeno. Od zítřka začnete dostávat denní digest nových inzerátů.';
+    } else if (params.get('unsubscribed') === '1') {
+      banner.hidden = false;
+      banner.className = 'sled-banner sled-banner-info';
+      banner.textContent = 'Sledování bylo zrušeno. Pokud se chcete vrátit, vytvořte nový filtr.';
+    } else if (params.get('error') === 'invalid_token') {
+      banner.hidden = false;
+      banner.className = 'sled-banner sled-banner-error';
+      banner.textContent = '✗ Odkaz není platný nebo už byl použit. Vytvořte nové sledování.';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const email = String(data.get('email') ?? '').trim();
+      const label = String(data.get('label') ?? '').trim();
+
+      const filter: Record<string, string> = {};
+      for (const k of ['query', 'category', 'brand', 'priceFrom', 'priceTo', 'yearFrom', 'yearTo', 'kraj']) {
+        const v = String(data.get(k) ?? '').trim();
+        if (v) filter[k] = v;
+      }
+
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Odesílám…';
+
+      try {
+        const r = await fetch('/api/bazar/saved-searches/create/', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ email, label, filter, frequency: 'daily' }),
+        });
+        const j = await r.json();
+        if (!r.ok) {
+          banner.hidden = false;
+          banner.className = 'sled-banner sled-banner-error';
+          banner.textContent = `✗ ${j.message ?? j.error ?? 'Něco se nepovedlo.'}`;
+          return;
+        }
+        banner.hidden = false;
+        banner.className = 'sled-banner sled-banner-success';
+        banner.textContent = j.message ?? 'Sledování vytvořeno.';
+        form.reset();
+        banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        banner.hidden = false;
+        banner.className = 'sled-banner sled-banner-error';
+        banner.textContent = '✗ Síťová chyba — zkuste prosím znovu.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
+  </script>
+
+  <style>
+    .sled-root { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+
+    .sled-head { margin-bottom: 24px; max-width: 600px; }
+    .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin: 12px 0 8px; color: #1a1a1a; }
+    .lede { font-size: 15px; color: #444; line-height: 1.6; margin: 0; }
+
+    .sled-banner {
+      padding: 14px 18px; border-radius: 10px; margin-bottom: 20px;
+      font-size: 14px; line-height: 1.5;
+    }
+    .sled-banner-success { background: #f0fdf4; border: 1.5px solid #86efac; color: #166534; }
+    .sled-banner-info { background: #f0f9ff; border: 1.5px solid #93c5fd; color: #1e40af; }
+    .sled-banner-error { background: #fef2f2; border: 1.5px solid #fca5a5; color: #991b1b; }
+
+    .sled-form { background: #fff; border: 1.5px solid #eaeaec; border-radius: 14px; padding: 24px; margin-bottom: 32px; }
+    .fs { border: none; padding: 0; margin: 0 0 24px; }
+    .fs:last-of-type { margin-bottom: 16px; }
+    .fs legend {
+      font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+      color: #0A0A0B; margin-bottom: 12px; padding: 0;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .field span { font-size: 13px; color: #333; font-weight: 600; }
+    .field span em { color: #888; font-style: normal; font-weight: 400; }
+    .field input, .field select {
+      padding: 10px 12px; border: 1.5px solid #DFDFE3; border-radius: 8px;
+      font-size: 14px; background: #fff;
+    }
+    .field input:focus, .field select:focus {
+      outline: none; border-color: #FFEA00;
+      box-shadow: 0 0 0 3px rgba(255, 234, 0, 0.2);
+    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .req { color: #C8102E; }
+
+    .sled-btn {
+      width: 100%; padding: 14px; background: #0A0A0B; color: #FFEA00;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: background .15s;
+    }
+    .sled-btn:hover:not(:disabled) { background: #2a2a2f; }
+    .sled-btn:disabled { opacity: 0.6; cursor: wait; }
+
+    .sled-disclaimer {
+      font-size: 12px; color: #666; text-align: center; margin: 14px 0 0;
+    }
+
+    .info h2 { font-size: 22px; margin: 24px 0 12px; font-weight: 700; color: #0A0A0B; }
+    .info ol { padding-left: 22px; margin: 0 0 24px; }
+    .info ol li { font-size: 15px; line-height: 1.7; color: #444; margin-bottom: 6px; }
+    .info ol li strong { color: #0A0A0B; }
+    .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; margin-bottom: 8px; }
+    .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 14px; }
+    .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+
+    @media (max-width: 540px) { .field-row { grid-template-columns: 1fr; } }
+  </style>
+</Layout>

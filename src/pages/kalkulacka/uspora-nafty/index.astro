@@ -1,0 +1,393 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import { NORMA_OPTIONS } from '../../../lib/diesel-calc';
+
+const canonical = `${SITE_URL}/kalkulacka/uspora-nafty/`;
+
+const faqItems = [
+  {
+    q: 'Jak přesná je odhadovaná spotřeba?',
+    a: 'Spotřeba vychází z DLG profi-testů a OECD traktorových testů — průměry pro průměrné využití (~60 % nominálního výkonu, mix tah/PTO/transport). Reálná spotřeba se může lišit o ±20 % podle typu práce, kvality údržby a zkušenosti řidiče. Pro přesný odhad sledujte spotřebu na vlastním stroji aspoň 100 motohodin.',
+  },
+  {
+    q: 'Proč je nový traktor Stage V úspornější než starší Stage IV?',
+    a: 'Stage V (od 2020) má optimalizovanou kombinaci DPF + SCR a vylepšené motorové mapy. Specifická spotřeba klesla z ~215 g/kWh (Stage IV) na ~210 g/kWh (Stage V). Rozdíl 2–3 % se projeví na celoroční úspoře desítkami tisíc Kč u stroje s 800+ motohodin/rok.',
+  },
+  {
+    q: 'Zahrnuje kalkulačka AdBlue?',
+    a: 'Ne — kalkulačka počítá jen naftu. AdBlue je 3–5 % objemu nafty (~15 Kč/l v IBC), takže přidejte cca 4 % k vypočteným ročním nákladům, pokud chcete kompletní obraz provozních nákladů.',
+  },
+  {
+    q: 'Kolik let návratnosti je rozumné?',
+    a: 'Návratnost <3 roky je excellent (kupte hned). 3–5 let je rozumná (vyplatí se, pokud plánujete stroj držet 10+ let). 5–10 let je hraniční (zvažte i jiné faktory — komfort, technologie, servis). Nad 10 let se úspora nafty nezaplatí — investice musí zaplatit jiné benefity (precision farming, vyšší výkon).',
+  },
+  {
+    q: 'Co když mám velmi specifické využití (např. jen tah)?',
+    a: 'V poli "spotřeba l/h" můžete přepsat výchozí odhad vlastním údajem. Pokud znáte měřenou spotřebu z vašeho aktuálního stroje při typické práci, použijte tu. Pro nový stroj odhadněte na základě DLG testů konkrétního modelu (Profi DLG Test publikuje detailní data).',
+  },
+];
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalkulačky', url: '/kalkulacka/' },
+  { name: 'Úspora nafty', url: canonical },
+]);
+const faqJsonLd = faqPageSchema(faqItems);
+---
+
+<Layout
+  title="Kalkulačka úspory nafty mezi traktory"
+  description="Spočítejte, kolik ušetříte na naftě při výměně traktoru — porovnání spotřeby dvou modelů, roční náklady a doba návratnosti investice."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="dc-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/kalkulacka/">Kalkulačky</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Úspora nafty</span>
+    </nav>
+
+    <header class="dc-head">
+      <span class="kicker">Kalkulačka · Úspora nafty</span>
+      <h1>Kolik ušetříte výměnou traktoru</h1>
+      <p class="lede">
+        Porovnání spotřeby a ročních nákladů na naftu mezi dvěma traktory. Roční úspora, 5letá úspora a doba návratnosti, pokud znáte rozdíl pořizovacích cen.
+      </p>
+    </header>
+
+    <form class="dc-form" id="dc-form" autocomplete="off">
+      <div class="dc-tractors">
+        <fieldset class="dc-tractor">
+          <legend>Traktor A (stávající)</legend>
+          <label class="field">
+            <span>Výkon (k) <strong class="req">*</strong></span>
+            <input type="number" id="a-hp" name="aHp" min="1" max="900" step="1" placeholder="např. 130" required />
+          </label>
+          <label class="field">
+            <span>Emisní norma</span>
+            <select id="a-norma" name="aNorma">
+              {NORMA_OPTIONS.map((o) => <option value={o.value}>{o.label}</option>)}
+            </select>
+          </label>
+          <label class="field">
+            <span>Vlastní spotřeba (l/h) <em>— volitelné</em></span>
+            <input type="number" id="a-cons" name="aCons" min="0" step="0.1" placeholder="přepíše odhad" />
+          </label>
+        </fieldset>
+
+        <div class="dc-vs">vs</div>
+
+        <fieldset class="dc-tractor dc-tractor-new">
+          <legend>Traktor B (nový / cílový)</legend>
+          <label class="field">
+            <span>Výkon (k) <strong class="req">*</strong></span>
+            <input type="number" id="b-hp" name="bHp" min="1" max="900" step="1" placeholder="např. 150" required />
+          </label>
+          <label class="field">
+            <span>Emisní norma</span>
+            <select id="b-norma" name="bNorma">
+              {NORMA_OPTIONS.map((o) => <option value={o.value} selected={o.value === 'stage5'}>{o.label}</option>)}
+            </select>
+          </label>
+          <label class="field">
+            <span>Vlastní spotřeba (l/h) <em>— volitelné</em></span>
+            <input type="number" id="b-cons" name="bCons" min="0" step="0.1" placeholder="přepíše odhad" />
+          </label>
+        </fieldset>
+      </div>
+
+      <fieldset class="dc-context">
+        <legend>Provoz</legend>
+        <div class="dc-context-grid">
+          <label class="field">
+            <span>Roční využití (motohodin) <strong class="req">*</strong></span>
+            <input type="number" id="hours" name="hours" min="1" max="5000" step="50" placeholder="např. 800" required value="800" />
+          </label>
+          <label class="field">
+            <span>Cena nafty (Kč/l) <strong class="req">*</strong></span>
+            <input type="number" id="price" name="price" min="1" step="0.10" placeholder="např. 32" required value="32" />
+          </label>
+          <label class="field">
+            <span>Rozdíl ceny B vs A (Kč) <em>— volitelné</em></span>
+            <input type="number" id="invest" name="invest" min="0" step="10000" placeholder="kolik B stojí navíc" />
+          </label>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="dc-btn">Spočítat úsporu →</button>
+    </form>
+
+    <div id="dc-result" class="dc-result" hidden>
+      <header class="dc-result-head">
+        <span class="dc-result-kicker">Roční úspora</span>
+        <div class="dc-result-total" id="dc-result-yearly">— Kč/rok</div>
+        <div class="dc-result-sub" id="dc-result-pct">— %</div>
+      </header>
+
+      <div class="dc-comparison">
+        <div class="dc-card dc-card-a">
+          <span class="dc-card-label">Traktor A</span>
+          <strong id="dc-a-label">—</strong>
+          <div class="dc-stat">
+            <span>Spotřeba:</span><strong id="dc-a-cons">— l/h</strong>
+          </div>
+          <div class="dc-stat">
+            <span>Roční:</span><strong id="dc-a-yearly">— l</strong>
+          </div>
+          <div class="dc-stat dc-stat-czk">
+            <span>Náklady:</span><strong id="dc-a-czk">— Kč/rok</strong>
+          </div>
+        </div>
+        <div class="dc-card dc-card-b">
+          <span class="dc-card-label">Traktor B</span>
+          <strong id="dc-b-label">—</strong>
+          <div class="dc-stat">
+            <span>Spotřeba:</span><strong id="dc-b-cons">— l/h</strong>
+          </div>
+          <div class="dc-stat">
+            <span>Roční:</span><strong id="dc-b-yearly">— l</strong>
+          </div>
+          <div class="dc-stat dc-stat-czk">
+            <span>Náklady:</span><strong id="dc-b-czk">— Kč/rok</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="dc-projection">
+        <div>
+          <span class="dc-proj-label">Úspora za 5 let</span>
+          <strong id="dc-5y">— Kč</strong>
+        </div>
+        <div id="dc-payback-wrap" hidden>
+          <span class="dc-proj-label">Návratnost investice</span>
+          <strong id="dc-payback">— let</strong>
+        </div>
+      </div>
+
+      <div class="dc-disclaimer">
+        ⚠️ Orientační odhad podle DLG profi-testových průměrů. Reálná spotřeba ±20 % podle typu práce, údržby a stylu jízdy. Nezahrnuje AdBlue (~4 % nafty navíc) ani jiné provozní náklady (oleje, filtry, servis).
+      </div>
+    </div>
+
+    <section class="info">
+      <h2>Jak kalkulačka funguje</h2>
+      <p>Spotřeba se odhaduje podle <strong>specifické spotřeby paliva</strong> (g/kWh) typické pro danou emisní normu motoru:</p>
+      <ul>
+        <li><strong>Před 2006 (Tier 1/Stage I-II):</strong> ~260 g/kWh — staré motory bez after-treatment</li>
+        <li><strong>Tier 3 (2006–2011):</strong> ~240 g/kWh — EGR, bez DPF</li>
+        <li><strong>Stage IIIB (2011–2014):</strong> ~230 g/kWh — DPF povinný</li>
+        <li><strong>Stage IV (2014–2019):</strong> ~215 g/kWh — SCR (AdBlue) snížil spotřebu</li>
+        <li><strong>Stage V (2020+):</strong> ~210 g/kWh — optimalizovaná SCR + DPF</li>
+      </ul>
+      <p>Pro průměrnou práci se počítá s ~60 % zatížením nominálního výkonu (mix tah + PTO + transport). Pokud znáte měřenou spotřebu vlastního stroje, přepište výchozí odhad v poli „Vlastní spotřeba".</p>
+
+      <h2>Časté dotazy</h2>
+      <div class="faqs">
+        {faqItems.map((item) => (
+          <details class="faq">
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>Související</h2>
+      <ul class="info-links">
+        <li><a href="/kalkulacka/dotace-cap/">Kalkulačka dotací CAP 2024</a></li>
+        <li><a href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu traktoru</a></li>
+        <li><a href="/kalkulacka/naklady-na-hektar/">Kalkulačka nákladů na hektar</a></li>
+        <li><a href="/slovnik/adblue/">Co je AdBlue (slovník)</a></li>
+        <li><a href="/slovnik/emisni-normy-stage/">Emisní normy Stage / Tier (slovník)</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    import { compareDiesel } from '../../../lib/diesel-calc';
+    import type { EmisniNorma } from '../../../lib/diesel-calc';
+
+    const form = document.getElementById('dc-form') as HTMLFormElement;
+    const result = document.getElementById('dc-result') as HTMLElement;
+
+    function $(id: string): HTMLElement { return document.getElementById(id)!; }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const aHp = parseFloat(String(data.get('aHp') ?? '')) || 0;
+      const bHp = parseFloat(String(data.get('bHp') ?? '')) || 0;
+      const aCons = parseFloat(String(data.get('aCons') ?? '')) || 0;
+      const bCons = parseFloat(String(data.get('bCons') ?? '')) || 0;
+      const hours = parseFloat(String(data.get('hours') ?? '')) || 0;
+      const price = parseFloat(String(data.get('price') ?? '')) || 0;
+      const invest = parseFloat(String(data.get('invest') ?? '')) || 0;
+
+      if (aHp <= 0 || bHp <= 0 || hours <= 0 || price <= 0) {
+        alert('Vyplňte výkon obou traktorů, roční využití a cenu nafty.');
+        return;
+      }
+
+      const r = compareDiesel({
+        tractorA: { powerHp: aHp, norma: data.get('aNorma') as EmisniNorma, consumptionLh: aCons || undefined },
+        tractorB: { powerHp: bHp, norma: data.get('bNorma') as EmisniNorma, consumptionLh: bCons || undefined },
+        hoursPerYear: hours,
+        naftaPriceCzk: price,
+        investmentDiffCzk: invest || undefined,
+      });
+
+      const fmtCzk = (n: number) => Math.abs(n).toLocaleString('cs-CZ') + ' Kč';
+      const sign = (n: number) => n > 0 ? '−' : n < 0 ? '+' : '';
+
+      const yearlyEl = $('dc-result-yearly');
+      const pctEl = $('dc-result-pct');
+      yearlyEl.textContent = (r.yearlySavingCzk >= 0 ? '−' : '+') + fmtCzk(r.yearlySavingCzk) + ' / rok';
+      yearlyEl.style.color = r.yearlySavingCzk > 0 ? '#0B7A3B' : r.yearlySavingCzk < 0 ? '#C8102E' : '#0A0A0B';
+      pctEl.textContent = `${r.savingPct >= 0 ? '−' : '+'}${Math.abs(r.savingPct).toFixed(1)} % proti A`;
+
+      $('dc-a-label').textContent = r.a.label;
+      $('dc-a-cons').textContent = `${r.a.consumptionLh.toFixed(1)} l/h`;
+      $('dc-a-yearly').textContent = `${r.a.yearlyL.toLocaleString('cs-CZ')} l`;
+      $('dc-a-czk').textContent = fmtCzk(r.a.yearlyCzk) + ' / rok';
+
+      $('dc-b-label').textContent = r.b.label;
+      $('dc-b-cons').textContent = `${r.b.consumptionLh.toFixed(1)} l/h`;
+      $('dc-b-yearly').textContent = `${r.b.yearlyL.toLocaleString('cs-CZ')} l`;
+      $('dc-b-czk').textContent = fmtCzk(r.b.yearlyCzk) + ' / rok';
+
+      $('dc-5y').textContent = (r.fiveYearSavingCzk >= 0 ? '−' : '+') + fmtCzk(r.fiveYearSavingCzk);
+
+      const paybackWrap = $('dc-payback-wrap');
+      if (r.paybackYears !== undefined && r.paybackYears > 0) {
+        $('dc-payback').textContent = r.paybackYears < 1
+          ? `${(r.paybackYears * 12).toFixed(0)} měsíců`
+          : `${r.paybackYears.toFixed(1)} let`;
+        paybackWrap.hidden = false;
+      } else {
+        paybackWrap.hidden = true;
+      }
+
+      result.hidden = false;
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+
+  <style>
+    .dc-root { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+
+    .dc-head { margin-bottom: 32px; max-width: 720px; }
+    .kicker {
+      display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700;
+      padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin: 12px 0 12px; color: #1a1a1a; }
+    .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+
+    .dc-form {
+      background: #fff; border: 1.5px solid #eaeaec; border-radius: 14px;
+      padding: 24px; margin-bottom: 24px;
+    }
+    .dc-tractors { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin-bottom: 24px; }
+    .dc-tractor {
+      border: 1.5px solid #eaeaec; border-radius: 12px; padding: 16px;
+      background: #fafafa; margin: 0;
+    }
+    .dc-tractor-new { background: #fffef8; border-color: #FFEA00; }
+    .dc-tractor legend {
+      font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+      color: #0A0A0B; padding: 0 6px;
+    }
+    .dc-vs {
+      font-size: 18px; font-weight: 800; color: #999; font-family: 'Chakra Petch', sans-serif;
+    }
+
+    .dc-context { border: none; padding: 0; margin: 0; }
+    .dc-context legend {
+      font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+      color: #0A0A0B; margin-bottom: 12px; padding: 0;
+    }
+    .dc-context-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+    .field span { font-size: 13px; color: #333; font-weight: 600; }
+    .field span em { color: #888; font-style: normal; font-weight: 400; }
+    .field input, .field select {
+      padding: 10px 12px; border: 1.5px solid #DFDFE3; border-radius: 8px;
+      font-size: 15px; background: #fff;
+    }
+    .field input:focus, .field select:focus {
+      outline: none; border-color: #FFEA00;
+      box-shadow: 0 0 0 3px rgba(255, 234, 0, 0.2);
+    }
+    .req { color: #C8102E; }
+
+    .dc-btn {
+      width: 100%; margin-top: 20px; padding: 14px; background: #0A0A0B; color: #FFEA00;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: background .15s;
+    }
+    .dc-btn:hover { background: #2a2a2f; }
+
+    .dc-result {
+      background: #fff; border: 2px solid #FFEA00; border-radius: 14px;
+      padding: 24px; margin-bottom: 32px;
+    }
+    .dc-result-head { margin-bottom: 20px; text-align: center; }
+    .dc-result-kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #6B6B72; font-weight: 700; }
+    .dc-result-total {
+      font-size: clamp(2rem, 5vw, 3rem); font-weight: 800;
+      margin: 8px 0 4px; font-family: 'Chakra Petch', sans-serif; letter-spacing: -1px;
+    }
+    .dc-result-sub { font-size: 14px; color: #666; }
+
+    .dc-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .dc-card { padding: 16px; border-radius: 10px; background: #fafafa; }
+    .dc-card-b { background: #fffef8; border: 1px solid #FFEA00; }
+    .dc-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6B6B72; font-weight: 700; }
+    .dc-card strong:first-of-type { display: block; font-size: 14px; color: #0A0A0B; margin: 4px 0 10px; }
+    .dc-stat { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #555; margin-bottom: 6px; }
+    .dc-stat strong { color: #0A0A0B; font-weight: 700; }
+    .dc-stat-czk strong { color: #0B7A3B; font-size: 14px; }
+
+    .dc-projection {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+      padding: 16px; background: #fafafa; border-radius: 10px; margin-bottom: 16px;
+    }
+    .dc-projection > div { display: flex; flex-direction: column; gap: 4px; }
+    .dc-proj-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6B6B72; font-weight: 700; }
+    .dc-projection strong { font-size: 20px; font-weight: 800; color: #0A0A0B; font-family: 'Chakra Petch', sans-serif; }
+
+    .dc-disclaimer {
+      padding: 12px 16px; background: #fffbeb; border-left: 3px solid #FCD34D;
+      border-radius: 0 6px 6px 0; font-size: 13px; color: #555; line-height: 1.5;
+    }
+
+    .info { margin-top: 40px; }
+    .info h2 { font-size: 22px; margin: 32px 0 12px; font-weight: 700; color: #0A0A0B; }
+    .info p { font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 14px; }
+    .info ul { padding-left: 22px; margin: 0 0 16px; }
+    .info ul li { font-size: 15px; line-height: 1.7; color: #444; }
+    .info-links li a { color: #0B7A3B; text-decoration: underline; }
+    .faqs { display: flex; flex-direction: column; gap: 8px; }
+    .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; }
+    .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 14px; }
+    .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+
+    @media (max-width: 640px) {
+      .dc-tractors { grid-template-columns: 1fr; }
+      .dc-vs { text-align: center; padding: 8px 0; }
+      .dc-comparison { grid-template-columns: 1fr; }
+    }
+  </style>
+</Layout>

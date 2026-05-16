@@ -1,0 +1,292 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+import { KVIZ_HISTORIE } from '../../lib/kviz';
+
+const canonical = `${SITE_URL}/kviz/historie-znacek/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kvízy', url: '/kviz/' },
+  { name: 'Historie značek', url: canonical },
+]);
+
+// Quiz schema (FAQPage hack — protect answers visible to user agent later via JS).
+// Lehčí approach: nestylujeme jako FAQPage (Q&A je quiz, ne FAQ), místo toho jen
+// Article schema.
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Kvíz: Historie značek a technologie zemědělství',
+  description: 'Interaktivní kvíz se 16 otázkami o historii zemědělských značek a technologiích.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout
+  title="Kvíz: Historie značek a technologie zemědělství (16 otázek)"
+  description="Otestujte své znalosti o historii zemědělských značek (John Deere, Fendt, Zetor…), technologiích (CVT, ISOBUS, AdBlue) a dotacích CAP. 16 otázek, ~5 minut."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+
+  <div class="kv-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/kviz/">Kvízy</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Historie značek</span>
+    </nav>
+
+    <header class="kv-head">
+      <span class="kicker">Kvíz · {KVIZ_HISTORIE.length} otázek</span>
+      <h1>Historie značek a technologie</h1>
+      <p class="lede">
+        Otestujte své znalosti — kdo vynalezl tříbodový závěs, kdy přišlo první sériové CVT a co znamená Stage V. Po dokončení dostanete hodnocení.
+      </p>
+    </header>
+
+    <div id="kv-intro" class="kv-intro">
+      <div class="kv-intro-card">
+        <h2>Jak to funguje</h2>
+        <ul>
+          <li>{KVIZ_HISTORIE.length} otázek, každá s 4 možnostmi.</li>
+          <li>Po každé odpovědi se ukáže vysvětlení + odkaz na zdroj v agro-svět.</li>
+          <li>Na konci dostanete hodnocení (Začátečník → Legenda) a možnost sdílet výsledek.</li>
+          <li>Žádný login. Žádné cookies. Žádné odhalování správné odpovědi předem.</li>
+        </ul>
+        <button class="kv-btn-start" id="kv-start">Spustit kvíz →</button>
+      </div>
+    </div>
+
+    <div id="kv-game" class="kv-game" hidden>
+      <div class="kv-progress">
+        <div class="kv-progress-bar"><div class="kv-progress-fill" id="kv-progress-fill" style="width:0%"></div></div>
+        <div class="kv-progress-text"><span id="kv-q-num">1</span> / {KVIZ_HISTORIE.length} · Skóre: <strong id="kv-score">0</strong></div>
+      </div>
+      <div class="kv-question-card" id="kv-question-card">
+        <h2 id="kv-question">—</h2>
+        <div class="kv-options" id="kv-options"></div>
+        <div class="kv-explanation" id="kv-explanation" hidden>
+          <strong id="kv-verdict">—</strong>
+          <p id="kv-explain-text">—</p>
+          <a id="kv-source" href="#" hidden>Více v slovníku →</a>
+          <button class="kv-btn-next" id="kv-next">Další otázka →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="kv-result" class="kv-result" hidden>
+      <div class="kv-result-card">
+        <div class="kv-result-emoji" id="kv-result-emoji">🌱</div>
+        <h2 id="kv-result-level">—</h2>
+        <p class="kv-result-score"><strong id="kv-result-score">0</strong> / {KVIZ_HISTORIE.length} správně</p>
+        <p class="kv-result-desc" id="kv-result-desc">—</p>
+        <div class="kv-result-cta">
+          <button class="kv-btn-restart" id="kv-restart">Hrát znovu</button>
+          <a href="/kviz/" class="kv-btn-ghost">Další kvízy</a>
+          <a href="/slovnik/" class="kv-btn-ghost">Slovník pojmů</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { KVIZ_HISTORIE, getLevel } from '../../lib/kviz';
+
+    const intro = document.getElementById('kv-intro') as HTMLElement;
+    const game = document.getElementById('kv-game') as HTMLElement;
+    const result = document.getElementById('kv-result') as HTMLElement;
+    const startBtn = document.getElementById('kv-start') as HTMLButtonElement;
+    const restartBtn = document.getElementById('kv-restart') as HTMLButtonElement;
+    const nextBtn = document.getElementById('kv-next') as HTMLButtonElement;
+    const qNumEl = document.getElementById('kv-q-num') as HTMLElement;
+    const scoreEl = document.getElementById('kv-score') as HTMLElement;
+    const fillEl = document.getElementById('kv-progress-fill') as HTMLElement;
+    const qEl = document.getElementById('kv-question') as HTMLElement;
+    const optsEl = document.getElementById('kv-options') as HTMLElement;
+    const explainBox = document.getElementById('kv-explanation') as HTMLElement;
+    const verdictEl = document.getElementById('kv-verdict') as HTMLElement;
+    const explainText = document.getElementById('kv-explain-text') as HTMLElement;
+    const sourceLink = document.getElementById('kv-source') as HTMLAnchorElement;
+
+    let qIdx = 0;
+    let score = 0;
+    let answered = false;
+
+    function render() {
+      const q = KVIZ_HISTORIE[qIdx];
+      qNumEl.textContent = String(qIdx + 1);
+      scoreEl.textContent = String(score);
+      fillEl.style.width = `${(qIdx / KVIZ_HISTORIE.length) * 100}%`;
+      qEl.textContent = q.question;
+      explainBox.hidden = true;
+      answered = false;
+
+      optsEl.innerHTML = '';
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'kv-option';
+        btn.textContent = opt.text;
+        btn.addEventListener('click', () => onAnswer(i, btn));
+        optsEl.appendChild(btn);
+      });
+    }
+
+    function onAnswer(picked: number, btn: HTMLButtonElement) {
+      if (answered) return;
+      answered = true;
+      const q = KVIZ_HISTORIE[qIdx];
+      const correct = picked === q.correct;
+      if (correct) score++;
+      scoreEl.textContent = String(score);
+
+      // Highlight all options
+      const allBtns = optsEl.querySelectorAll<HTMLButtonElement>('.kv-option');
+      allBtns.forEach((b, i) => {
+        b.disabled = true;
+        if (i === q.correct) b.classList.add('correct');
+        if (i === picked && i !== q.correct) b.classList.add('wrong');
+      });
+
+      verdictEl.textContent = correct ? '✓ Správně!' : '✗ Špatně';
+      verdictEl.className = correct ? 'verdict-ok' : 'verdict-bad';
+      explainText.textContent = q.explanation;
+      if (q.sourceUrl) {
+        sourceLink.href = q.sourceUrl;
+        sourceLink.textContent = (q.sourceLabel ?? 'Zdroj') + ' →';
+        sourceLink.hidden = false;
+      } else {
+        sourceLink.hidden = true;
+      }
+      explainBox.hidden = false;
+    }
+
+    function next() {
+      qIdx++;
+      if (qIdx >= KVIZ_HISTORIE.length) {
+        finish();
+      } else {
+        render();
+        document.getElementById('kv-question-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function finish() {
+      game.hidden = true;
+      result.hidden = false;
+      const level = getLevel(score, KVIZ_HISTORIE.length);
+      (document.getElementById('kv-result-emoji') as HTMLElement).textContent = level.emoji;
+      (document.getElementById('kv-result-level') as HTMLElement).textContent = level.name;
+      (document.getElementById('kv-result-score') as HTMLElement).textContent = String(score);
+      (document.getElementById('kv-result-desc') as HTMLElement).textContent = level.description;
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function restart() {
+      qIdx = 0;
+      score = 0;
+      result.hidden = true;
+      game.hidden = false;
+      render();
+      game.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    startBtn.addEventListener('click', () => {
+      intro.hidden = true;
+      game.hidden = false;
+      render();
+    });
+    nextBtn.addEventListener('click', next);
+    restartBtn.addEventListener('click', restart);
+  </script>
+
+  <style>
+    .kv-root { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+
+    .kv-head { margin-bottom: 28px; }
+    .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+    h1 { font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin: 12px 0 8px; color: #1a1a1a; }
+    .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+
+    .kv-intro-card {
+      padding: 28px;
+      background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+      border: 2px solid #FFEA00;
+      border-radius: 14px;
+    }
+    .kv-intro-card h2 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 0 0 14px; }
+    .kv-intro-card ul { padding-left: 22px; margin: 0 0 20px; }
+    .kv-intro-card li { font-size: 14px; line-height: 1.6; color: #444; margin-bottom: 6px; }
+    .kv-btn-start, .kv-btn-restart {
+      width: 100%; padding: 14px; background: #0A0A0B; color: #FFEA00;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: background .15s;
+    }
+    .kv-btn-start:hover, .kv-btn-restart:hover { background: #2a2a2f; }
+
+    .kv-progress { margin-bottom: 20px; }
+    .kv-progress-bar { background: #eaeaec; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+    .kv-progress-fill { background: linear-gradient(90deg, #FFEA00, #FCD34D); height: 100%; transition: width .3s; }
+    .kv-progress-text { font-size: 13px; color: #6B6B72; }
+    .kv-progress-text strong { color: #0B7A3B; }
+
+    .kv-question-card { padding: 24px; background: #fff; border: 1.5px solid #eaeaec; border-radius: 14px; }
+    .kv-question-card h2 { font-size: 18px; font-weight: 700; color: #0A0A0B; line-height: 1.4; margin: 0 0 20px; }
+    .kv-options { display: flex; flex-direction: column; gap: 8px; }
+    .kv-option {
+      display: block; width: 100%; text-align: left;
+      padding: 14px 16px; background: #fafafa; border: 1.5px solid #eaeaec;
+      border-radius: 10px; font-size: 14px; color: #0A0A0B; cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .kv-option:hover:not(:disabled) { border-color: #FFEA00; background: #fffef8; }
+    .kv-option:disabled { cursor: default; }
+    .kv-option.correct { background: #f0fdf4; border-color: #86efac; color: #166534; font-weight: 600; }
+    .kv-option.wrong { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+
+    .kv-explanation {
+      margin-top: 20px; padding: 16px 18px; background: #fafafa;
+      border-radius: 10px;
+    }
+    .verdict-ok { color: #166534; font-size: 17px; font-weight: 700; display: block; margin-bottom: 8px; }
+    .verdict-bad { color: #991b1b; font-size: 17px; font-weight: 700; display: block; margin-bottom: 8px; }
+    .kv-explanation p { font-size: 14px; line-height: 1.6; color: #333; margin: 0 0 12px; }
+    .kv-explanation a { display: inline-block; margin-bottom: 14px; font-size: 13px; font-weight: 600; color: #0B7A3B; }
+    .kv-btn-next {
+      width: 100%; padding: 12px; background: #FFEA00; color: #0A0A0B;
+      border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    .kv-btn-next:hover { background: #FFE100; }
+
+    .kv-result-card {
+      padding: 32px; background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+      border: 2px solid #FFEA00; border-radius: 14px; text-align: center;
+    }
+    .kv-result-emoji { font-size: 64px; margin-bottom: 12px; }
+    .kv-result-card h2 { font-size: 32px; font-weight: 800; color: #0A0A0B; margin: 0 0 8px; letter-spacing: -0.5px; }
+    .kv-result-score { font-size: 20px; color: #6B6B72; margin: 0 0 16px; }
+    .kv-result-score strong { color: #0B7A3B; font-size: 28px; font-family: 'Chakra Petch', sans-serif; }
+    .kv-result-desc { font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 24px; }
+    .kv-result-cta { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .kv-btn-ghost {
+      padding: 12px 18px; background: transparent; color: #0A0A0B;
+      border: 1.5px solid #DFDFE3; border-radius: 8px; font-size: 13px; font-weight: 700;
+      text-decoration: none;
+    }
+    .kv-btn-ghost:hover { border-color: #0A0A0B; }
+    .kv-result-card .kv-btn-restart { width: auto; padding: 12px 24px; }
+  </style>
+</Layout>
