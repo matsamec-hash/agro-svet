@@ -1,0 +1,42 @@
+name: Daily notify-me digest
+
+on:
+  schedule:
+    # 06:00 UTC = 07:00 ČAS v zimě, 08:00 ČAS v létě.
+    # GitHub Actions cron je v UTC, žádné DST handling.
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # Umožňuje manuální spuštění z Actions UI (tlačítko "Run workflow").
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping /api/cron/saved-search-digest
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_SECRET secret not configured in repo settings"
+            exit 1
+          fi
+
+          response=$(curl -sw "\n%{http_code}" \
+            "https://agro-svet.cz/api/cron/saved-search-digest/" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            --max-time 240)
+
+          status=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "HTTP $status"
+          echo "Body: $body"
+          echo ""
+
+          if [ "$status" != "200" ]; then
+            echo "::error::Cron endpoint returned HTTP $status (expected 200)"
+            exit 1
+          fi
+
+          echo "::notice::Daily digest pinged successfully"
