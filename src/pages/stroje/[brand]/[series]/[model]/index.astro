@@ -39,8 +39,8 @@ const model: StrojModel | undefined = series.models.find(
 );
 if (!model) return Astro.rewrite('/404');
 
-// Edge cache for 10 min — model detail only changes on YAML/bazar updates.
-Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=600');
+// Edge cache 1h s-maxage + 24h SWR — model detail only changes on YAML/bazar updates.
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',

@@ -13,9 +13,9 @@ const { brand: brandSlug } = Astro.params;
 const brand = getBrand(brandSlug!);
 if (!brand) return Astro.rewrite('/404');
 
-// Edge cache for 10 min — brand listing only changes when bazar inventory or
-// YAML data changes (rare). cf-purge runs after every deploy + new listing.
-Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=600');
+// Edge cache 1h s-maxage + 24h SWR — brand listing only changes when bazar
+// inventory or YAML data changes (rare). cf-purge runs after every deploy + new listing.
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const categoryLabels: Record<StrojKategorie, string> = {
   traktory: 'Traktory',

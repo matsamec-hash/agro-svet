@@ -22,22 +22,9 @@ const minYear = years.length ? Math.min(...years) : 1990;
 const traktoryCount = models.filter((m) => m.category === 'traktory').length;
 const kombajnyCount = models.filter((m) => m.category === 'kombajny').length;
 
-const modelsJson = JSON.stringify(
-  models.map((m) => ({
-    slug: m.slug,
-    name: m.name,
-    brand_slug: m.brand_slug,
-    brand_name: m.brand_name,
-    category: m.category,
-    series_slug: m.series_slug,
-    series_name: m.series_name,
-    year_from: m.year_from,
-    year_to: m.year_to,
-    power_hp: m.power_hp,
-    power_kw: m.power_kw,
-    cutting_width_m: m.cutting_width_m ?? null,
-  })),
-);
+// Models payload is loaded async from /stroje/data.json (prerendered, 24h CF cache).
+// This keeps the HTML shell ~50KB instead of ~587KB and lets the brand grid + hero
+// render instantly. Filter UI activates after fetch resolves.
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -257,9 +244,13 @@ const brandCards = brands.map((b) => {
 
   </div>
 
-  <script is:inline set:html={`window.__STROJE_DATA__ = ${modelsJson};`}></script>
-
   <script>
+    type CompactModel = {
+      s: string; n: string; b: string; bn: string; c: string;
+      sr: string; srn: string;
+      yf: number | null; yt: number | null;
+      hp: number | null; kw: number | null;
+    };
     type Model = {
       slug: string;
       name: string;
@@ -274,7 +265,27 @@ const brandCards = brands.map((b) => {
       power_kw: number | null;
     };
 
-    const MODELS: Model[] = (window as any).__STROJE_DATA__ ?? [];
+    let MODELS: Model[] = [];
+    let modelsLoaded = false;
+
+    async function loadModels(): Promise<Model[]> {
+      if (modelsLoaded) return MODELS;
+      try {
+        const res = await fetch('/stroje/data.json');
+        if (!res.ok) throw new Error('fetch_failed');
+        const raw: CompactModel[] = await res.json();
+        MODELS = raw.map((m) => ({
+          slug: m.s, name: m.n, brand_slug: m.b, brand_name: m.bn, category: m.c,
+          series_slug: m.sr, series_name: m.srn,
+          year_from: m.yf, year_to: m.yt, power_hp: m.hp, power_kw: m.kw,
+        }));
+        modelsLoaded = true;
+      } catch {
+        MODELS = [];
+        modelsLoaded = true;
+      }
+      return MODELS;
+    }
 
     const el = {
       category: document.getElementById('f-category') as HTMLSelectElement,
@@ -341,7 +352,8 @@ const brandCards = brands.map((b) => {
       window.history.replaceState(null, '', newUrl);
     }
 
-    function applyFilters() {
+    async function applyFilters() {
+      if (!modelsLoaded) await loadModels();
       const cat = el.category.value;
       const brand = el.brand.value;
       const hpMin = parseInt(el.hpMin.value, 10);
@@ -409,7 +421,25 @@ const brandCards = brands.map((b) => {
     if (params.get('rok_od')) el.yearMin.value = params.get('rok_od')!;
     if (params.get('rok_do')) el.yearMax.value = params.get('rok_do')!;
     if (params.get('q')) el.search.value = params.get('q')!;
-    applyFilters();
+
+    // If URL has filters, load immediately. Otherwise warm the cache on idle
+    // (or first interaction) so the dataset is ready when user touches a filter.
+    const hasParams = anyFilterActive();
+    if (hasParams) {
+      applyFilters();
+    } else {
+      const warm = () => { loadModels(); };
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(warm, { timeout: 2000 });
+      } else {
+        setTimeout(warm, 600);
+      }
+      // Empty state — brand grid is visible, results hidden.
+      el.brandGrid.style.display = 'grid';
+      el.resultsGrid.style.display = 'none';
+      el.znackyHeading.style.display = 'inline-flex';
+      el.resultsHeading.style.display = 'none';
+    }
   </script>
 
   <style>
