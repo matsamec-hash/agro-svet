@@ -3,6 +3,7 @@ import { createServerClient } from '../../../lib/supabase';
 import { getEnvVar } from '../../../lib/env';
 import { AGRO_SVET_SITE_ID } from '../../../lib/config';
 import { sendNewsletterConfirmation } from '../../../lib/newsletter-email';
+import { edgeThrottle } from '../../../lib/edge-throttle';
 
 export const prerender = false;
 
@@ -12,7 +13,25 @@ function genToken(): string {
   return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-export const POST: APIRoute = async ({ request }) => {
+const THROTTLE_MAX = 3;
+const THROTTLE_WINDOW_S = 15 * 60;
+
+export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
+  // Throttle before any DB / email work.
+  const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+  const limit = await edgeThrottle({
+    bucket: 'newsletter-subscribe',
+    key: ip,
+    max: THROTTLE_MAX,
+    windowS: THROTTLE_WINDOW_S,
+    ctx: (locals as any).cfContext,
+  });
+  if (!limit.ok) {
+    return new Response(JSON.stringify({ error: 'rate_limited' }), {
+      status: 429,
+      headers: { 'content-type': 'application/json', 'retry-after': String(limit.retryAfterS) },
+    });
+  }
   let email = '';
   try {
     const body = await request.json();
