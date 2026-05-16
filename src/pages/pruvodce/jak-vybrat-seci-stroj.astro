@@ -1,0 +1,171 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/pruvodce/jak-vybrat-seci-stroj/`;
+const datePublished = '2026-05-16';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Průvodce nákupem', url: '/pruvodce/' },
+  { name: 'Jak vybrat secí stroj', url: canonical },
+]);
+
+const faqs = [
+  { q: 'Mechanický nebo pneumatický?', a: 'Mechanický (gravitační) je levný a robustní pro obiloviny — dávkuje hmotnost přes výsevný kotouč. Pneumatický (vzduchový) je přesnější, vhodný pro úzké řádky, ale dražší a vyžaduje výkonnější traktor pro pohon ventilátoru.' },
+  { q: 'Jaký záběr pro střední farmu?', a: '3 m je standard pro 70–120 koní traktor. 4 m vyžaduje 130+ koní. 6 m je už pro speciální velké stroje 200+ koní. Pro 150 ha farmu stačí 3 m, pro 300+ ha zvažte 4 m.' },
+  { q: 'Klasický nebo bezorebný (no-till)?', a: 'Klasický secí stroj seje do připravené (zorané + smykované) půdy — nejstabilnější výnos. Bezorebný (disko-secí) seje přímo do strniště — šetří 5 operací, ale vyžaduje vyšší dávky herbicidů.' },
+  { q: 'Vyplatí se ISOBUS?', a: 'Pro standardní obiloviny ne. Pro variabilní dávkování (VRA s GPS mapou), Section Control nebo přesné dávkování osiva ano — pak ISOBUS-capable secí stroj + traktor s TC-GEO licencí.' },
+];
+
+const faqJsonLd = faqPageSchema(faqs);
+const articleJsonLd = {
+  '@context': 'https://schema.org', '@type': 'Article',
+  headline: 'Jak vybrat secí stroj — mechanický vs pneumatický',
+  description: 'Mechanická secička, pneumatická, přesná. Záběr, kompatibilita s traktorem, ISOBUS funkce.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished, dateModified: datePublished,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout title="Jak vybrat secí stroj — mechanický vs pneumatický (2026)" description="Průvodce výběrem secího stroje pro CZ farmu. Mechanický, pneumatický, přesný. Záběr, kompatibilita s traktorem, ISOBUS funkce, top modely." canonical={canonical} ogType="article" publishedTime={datePublished}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a><span aria-hidden="true">›</span>
+      <a href="/pruvodce/">Průvodce nákupem</a><span aria-hidden="true">›</span>
+      <span class="current">Jak vybrat secí stroj</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Průvodce · ~12 min</span>
+      <h1>Jak vybrat secí stroj — mechanický vs pneumatický</h1>
+      <p class="lede">
+        Secí stroj rozhoduje o stabilitě výnosů — špatně nastavená dávka, špatný hloubka, nepravidelnost vzcházení. Tento průvodce vám pomůže vybrat správný typ pro vaši farmu.
+      </p>
+      <div class="meta">Publikováno 16. května 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Tři hlavní typy secích strojů</h2>
+
+      <h3>Mechanický (gravitační)</h3>
+      <p>Klasický typ — osivo padá z bunkru gravitačně do výsevního kotouče, který dávkuje pevné množství. Standard pro obiloviny.</p>
+      <ul>
+        <li><strong>Plusy:</strong> nejlevnější (300–600 tis. Kč nový 3 m), robustní, snadný servis.</li>
+        <li><strong>Mínusy:</strong> menší přesnost u drobných osiv (řepka, mák), citlivost na sklon (na svahu chybnost +20 %).</li>
+      </ul>
+      <p>Vhodné pro <strong>obilovin + řepka na rovných polích</strong>.</p>
+
+      <h3>Pneumatický (vzduchový)</h3>
+      <p>Osivo se transportuje vzduchem (centrální dávkovač → trubky → výsevné páteře). Vyšší přesnost, kompenzuje sklon.</p>
+      <ul>
+        <li><strong>Plusy:</strong> vyšší přesnost dávky, kompatibilní s drobnými osivy (řepka, vojtěška), variabilní dávkování (VRA) přes ISOBUS.</li>
+        <li><strong>Mínusy:</strong> dražší (700 tis. – 1,5 mil. Kč nový), vyžaduje výkonnější traktor pro pohon ventilátoru (+30 koní vs mechanický).</li>
+      </ul>
+
+      <h3>Přesný / sázecí (precision)</h3>
+      <p>Pro <strong>okopaniny</strong> — kukuřice, slunečnice, cukrovka, sója. Sází jednotlivá semena v přesné vzdálenosti.</p>
+      <ul>
+        <li><strong>Plusy:</strong> nejvyšší přesnost (1 zrno = 1 rostlina), úspora osiva 15–30 %, vyšší výnosy.</li>
+        <li><strong>Mínusy:</strong> nejdražší (1–4 mil. Kč), specializovaný (jeden typ plodiny), nevhodný pro obilí.</li>
+      </ul>
+
+      <h2>2. Záběr a kompatibilita s traktorem</h2>
+      <div class="comp-table">
+        <table>
+          <thead>
+            <tr><th>Záběr</th><th>Doporučený výkon traktoru</th><th>Vhodné pro</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2,5 m</td><td>60–80 k</td><td>Hobby / malé farmy do 30 ha</td></tr>
+            <tr><td>3 m</td><td>80–120 k</td><td>Standard CZ farma 50–150 ha</td></tr>
+            <tr><td>4 m</td><td>130–180 k</td><td>Střední 150–400 ha</td></tr>
+            <tr><td>5 m</td><td>180–230 k</td><td>Velké 400+ ha</td></tr>
+            <tr><td>6 m+</td><td>240+ k</td><td>Velkofarmy 800+ ha</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>3. Top značky a modely</h2>
+      <ul>
+        <li><strong><a href="/znacky/amazone/">Amazone</a></strong> (Cirrus, AD, ED) — DE prémium, široká škála od mechanických po precision. Nejlepší pro mid-tier.</li>
+        <li><strong><a href="/znacky/horsch/">Horsch</a></strong> (Pronto, Sprinter, Maestro) — DE prémium pro no-till + precision. Vyšší cena, profi nářadí.</li>
+        <li><strong><a href="/znacky/lemken/">Lemken</a></strong> (Solitair, Compact-Solitair) — DE, dobré pro obiloviny + kombinace s předkypřičem.</li>
+        <li><strong><a href="/znacky/kuhn/">Kuhn</a></strong> (Espro, Venta) — FR, široká škála, dobré ceny.</li>
+        <li><strong><a href="/znacky/kverneland/">Kverneland</a></strong> (Optima, e-drill) — NO/IT, kvalitní precision pro kukuřici.</li>
+        <li><strong><a href="/znacky/pottinger/">Pöttinger</a></strong> (Terrasem, Vitasem) — AT, dobré pro středně velké farmy.</li>
+        <li><strong>Väderstad</strong> (Rapid, Tempo) — SE, top no-till a precision (drahé).</li>
+      </ul>
+
+      <h2>4. Klíčové features k posouzení</h2>
+      <ul>
+        <li><strong>Hloubka výsevu</strong> — regulace 1–6 cm, ideálně i automatická podle GPS mapy.</li>
+        <li><strong>ISOBUS kompatibilita</strong> — pro VRA, Section Control, řízení z kabiny traktoru.</li>
+        <li><strong>Kombinace s předkypřičem</strong> — disková brána před secím = jedna jízda místo dvou (úspora 30 % paliva).</li>
+        <li><strong>Hutnič / přítlačný válec</strong> — utlumení půdy nad osivem = lepší kontakt s vlhkostí, rovnoměrnější vzcházení.</li>
+        <li><strong>Bunker</strong> — velikost 1500–4500 l (větší = méně doplňování, ale větší hmotnost).</li>
+      </ul>
+
+      <h2>5. Cenové orientace 2026</h2>
+      <ul>
+        <li><strong>Mechanický 3 m</strong>: 400–700 tis. Kč nový, ojetý 5 let starý 150–300 tis. Kč.</li>
+        <li><strong>Pneumatický 4 m + ISOBUS</strong>: 1,2–2 mil. Kč nový, ojetý 5 let 500–900 tis. Kč.</li>
+        <li><strong>Precision kukuřice 8řádkový</strong>: 1,5–3 mil. Kč nový, ojetý 5 let 700 tis. – 1,2 mil. Kč.</li>
+        <li><strong>No-till disko-secí 4 m</strong> (Horsch Avatar, Väderstad Rapid): 2–3,5 mil. Kč.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Další zdroje</h2>
+      <ul>
+        <li><a href="/stroje/zemedelske-stroje/seti/">Katalog secích strojů</a></li>
+        <li><a href="/slovnik/no-till/">Slovník: No-till</a></li>
+        <li><a href="/slovnik/isobus/">Slovník: ISOBUS</a></li>
+        <li><a href="/slovnik/variable-rate/">Slovník: Variable Rate Application</a></li>
+        <li><a href="/bazar/?category=seti">Ojeté secí stroje v bazaru</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .g-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .g-head { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.65; margin: 0 0 14px; }
+  .meta { font-size: 13px; color: #6B6B72; }
+  .g-body h2 { font-size: 22px; font-weight: 800; color: #0A0A0B; margin: 32px 0 14px; line-height: 1.25; }
+  .g-body h3 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 22px 0 8px; }
+  .g-body p { font-size: 16px; line-height: 1.75; color: #333; margin: 0 0 14px; }
+  .g-body ul { padding-left: 22px; margin: 0 0 16px; }
+  .g-body li { font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 6px; }
+  .g-body strong { color: #0A0A0B; font-weight: 700; }
+  .g-body a { color: #0B7A3B; text-decoration: underline; }
+  .comp-table { overflow-x: auto; margin: 0 0 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  .faqs { display: flex; flex-direction: column; gap: 8px; }
+  .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; }
+  .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 15px; }
+  .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+</style>

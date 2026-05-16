@@ -115,6 +115,10 @@ export const GET: APIRoute = async () => {
     ['/prehled/nejprodavanejsi-traktory-2025/', 'yearly', '0.8'],
     ['/pruvodce/', 'monthly', '0.8'],
     ['/pruvodce/jak-vybrat-traktor-100-150-koni/', 'monthly', '0.85'],
+    ['/pruvodce/jak-vybrat-kombajn-stredni-farma/', 'monthly', '0.85'],
+    ['/pruvodce/kontrola-ojeteho-traktoru/', 'monthly', '0.85'],
+    ['/pruvodce/prvni-traktor-mlady-zemedelec/', 'monthly', '0.85'],
+    ['/pruvodce/jak-vybrat-seci-stroj/', 'monthly', '0.85'],
   ];
   for (const [path, changefreq, priority] of staticPaths) {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority });

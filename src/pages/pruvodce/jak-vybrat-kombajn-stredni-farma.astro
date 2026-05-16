@@ -1,0 +1,196 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/pruvodce/jak-vybrat-kombajn-stredni-farma/`;
+const datePublished = '2026-05-16';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Průvodce nákupem', url: '/pruvodce/' },
+  { name: 'Kombajn pro střední farmu', url: canonical },
+]);
+
+const faqs = [
+  { q: 'Kolik stojí nový kombajn pro střední farmu?', a: 'Třída V–VII (záběr 5–8 m, výkon 200–300 koní) stojí nový 6–10 mil. Kč. Ojetý 3–5 let starý je 50–65 % ceny nového při 70 % zbývající životnosti. Typický CZ kupující střední třídu hradí leasingem 5–7 let.' },
+  { q: 'Vlastní kombajn nebo nájem ze sklizňového podniku?', a: 'Pro farmu pod 200 ha často není návratný — nájem stojí 600–1200 Kč/ha (kombajn + obsluha + transport). Pro 300+ ha už vlastní kombajn dává smysl (cca 8–10 mil. Kč rozložených na 10 let = ekonomicky podobné jako nájem 800 ha sklizně/rok).' },
+  { q: 'Záběr 5 m nebo 6 m?', a: 'Záběr 5 m stačí pro většinu CZ polních tvarů (úzké lány, krátké pásy). 6 m vyžaduje pravidelné velké lány bez překážek. Rozdíl výkonu cca 20 %, ale 6 m je nákladnější transport (povinný vozík).' },
+  { q: 'Rotor (axial-flow) nebo klasický mlat?', a: 'Klasický mlat (vytřásadla) je standardem v CZ — nižší pořizovací cena, lepší stéblová sláma pro balíky, nižší spotřeba nafty. Rotor (Case Axial-Flow, JD S/T, NH CR) dává vyšší propustnost a méně poškození zrna, ale za vyšší cenu a horší slámu.' },
+  { q: 'Co se sklizňovým službou v prvních letech?', a: 'Mnoho středně velkých farem začíná tím, že kombajn pronajímá sousedovi — 200–400 ha navíc za sezónu zaplatí 30–50 % roční amortizace. Doporučujeme dohodnout předem (smlouva, ne ústní dohoda) a počítat reálnou cenu.' },
+];
+
+const faqJsonLd = faqPageSchema(faqs);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Jak vybrat kombajn pro střední farmu (150–500 ha)',
+  description: 'Průvodce výběrem kombajnu pro střední farmu. Třída, záběr, rotor vs klasický mlat, top 6 modelů, ekonomika.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished, dateModified: datePublished,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout
+  title="Jak vybrat kombajn pro střední farmu (150–500 ha)"
+  description="Průvodce výběrem kombajnu pro střední farmu. Třída V–VII, záběr žacího stolu, rotor vs klasický mlat, top 6 modelů 2026, ekonomika."
+  canonical={canonical}
+  ogType="article"
+  publishedTime={datePublished}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/pruvodce/">Průvodce nákupem</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Kombajn pro střední farmu</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Průvodce · Aktuální 2026</span>
+      <h1>Jak vybrat kombajn pro střední farmu (150–500 ha)</h1>
+      <p class="lede">
+        Kombajn je největší investice v cyklu zemědělské techniky — 6–12 mil. Kč nový, 10+ let životnost. Pro středně velkou českou farmu (150–500 ha) je správný výběr klíčový pro ekonomiku.
+      </p>
+      <div class="meta">Publikováno 16. května 2026 · ~10 min čtení</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Kolik kombajn potřebujete?</h2>
+      <p>Pro českou farmu platí orientačně:</p>
+      <ul>
+        <li><strong>Do 200 ha</strong> — vlastní kombajn obvykle není návratný. Nájem ze sklizňové služby (600–1200 Kč/ha včetně obsluhy) je levnější.</li>
+        <li><strong>200–500 ha</strong> — sweet spot pro vlastní kombajn <a href="/zebricky/kombajny-do-300-koni/">třídy V–VII</a>. Možnost si přivydělat sklizňovými službami sousedům 100–300 ha navíc.</li>
+        <li><strong>500+ ha</strong> — vlastní kombajn nutnost, zvažte třídu VIII (200 ha/den).</li>
+      </ul>
+
+      <h2>2. Klíčové parametry</h2>
+
+      <h3>Třída a propustnost</h3>
+      <p><a href="/slovnik/kombajn-trida/">Třída kombajnu</a> (III–X+) určuje propustnost (t obilí za hodinu):</p>
+      <ul>
+        <li><strong>Třída V</strong> (210–250 k, záběr 5–6 m) — 200 ha sklízí za 8–12 dní (1 stroj, 10 h/den).</li>
+        <li><strong>Třída VI</strong> (250–310 k, záběr 6–7,5 m) — 400 ha za 10–14 dní.</li>
+        <li><strong>Třída VII</strong> (310–365 k, záběr 7,5–9 m) — 500–700 ha za 12–18 dní.</li>
+      </ul>
+
+      <h3>Záběr žacího stolu</h3>
+      <p>Záběr (cutting bar) je hlavní hardware feature:</p>
+      <ul>
+        <li><strong>4–5 m</strong> — manévrovací, levné, malé lány.</li>
+        <li><strong>5–6 m</strong> — sweet spot pro střední farmu, standard v ČR.</li>
+        <li><strong>6–7,5 m</strong> — produktivita roste, ale transport vyžaduje vozík.</li>
+        <li><strong>7,5+ m</strong> — jen pro velké lány bez překážek (Vysočina, Polabská nížina).</li>
+      </ul>
+      <p>Pravidlo: záběr by neměl převyšovat <strong>40 % průměrné šířky vašich polí</strong>. Pro pole 60 m široké je optimální 6 m záběr.</p>
+
+      <h3>Zásobník zrna</h3>
+      <p>Velikost zásobníku určuje frekvenci vyprazdňování:</p>
+      <ul>
+        <li><strong>5 500 l</strong> (~4 t pšenice) — vyprazdňování každých 15–20 min při normálním výnosu.</li>
+        <li><strong>7 500 l</strong> (~6 t) — každých 25 min.</li>
+        <li><strong>10 500+ l</strong> (~8+ t) — každých 40+ min, méně přerušení.</li>
+      </ul>
+      <p>Větší zásobník = méně přerušení sklizně + možnost vyprazdňovat za jízdy. Klíčové pokud nemáte dostatek odběrných souprav.</p>
+
+      <h3>Rotor vs klasický mlat</h3>
+      <p>Viz <a href="/slovnik/rotor-kombajn/">slovník: rotor / axial-flow kombajn</a>. Krátce:</p>
+      <ul>
+        <li><strong>Klasický (válcový) mlat</strong> — standardní v ČR, lepší stéblová sláma, nižší cena.</li>
+        <li><strong>Rotor (axial-flow)</strong> — vyšší propustnost, méně poškození zrna, vyšší cena.</li>
+      </ul>
+
+      <h2>3. Top 6 kombajnů pro střední farmu 2026</h2>
+
+      <div class="comp-table">
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Třída</th><th>Záběr</th><th>Cena (orientačně)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><a href="/stroje/claas/">Claas Avero 240</a></td><td>IV</td><td>5,5 m</td><td>5,5 mil. Kč</td></tr>
+            <tr><td><a href="/stroje/claas/">Claas Tucano 320</a></td><td>V</td><td>6 m</td><td>7,5 mil. Kč</td></tr>
+            <tr><td><a href="/stroje/john-deere/">John Deere T550</a></td><td>V</td><td>5,5 m</td><td>7,2 mil. Kč</td></tr>
+            <tr><td><a href="/stroje/case-ih/">Case IH Axial-Flow 6150</a></td><td>VI</td><td>6 m</td><td>8,5 mil. Kč</td></tr>
+            <tr><td><a href="/stroje/new-holland/">NH CX5.90</a></td><td>V</td><td>6 m</td><td>7,8 mil. Kč</td></tr>
+            <tr><td><a href="/stroje/fendt/">Fendt 6275L</a></td><td>VI</td><td>6 m</td><td>9,2 mil. Kč</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4. Ekonomika kombajnu</h2>
+      <p>Hrubá kalkulace pro kombajn 8 mil. Kč na farmě 300 ha:</p>
+      <ul>
+        <li><strong>Pořizovací cena</strong>: 8 mil. Kč → leasing 8 let á 110 000 Kč/měsíc = <strong>1,32 mil. Kč/rok</strong>.</li>
+        <li><strong>Nafta</strong>: 15 l/ha × 300 ha × 35 Kč/l = <strong>157 500 Kč/rok</strong>.</li>
+        <li><strong>Servis + ND</strong>: ~3 % z ceny stroje = <strong>240 000 Kč/rok</strong>.</li>
+        <li><strong>Pojištění</strong>: 50 000 Kč/rok.</li>
+        <li><strong>Mzdy</strong>: 1 obsluhující × 100 hodin × 350 Kč = 35 000 Kč.</li>
+      </ul>
+      <p>Celkem ~<strong>1,8 mil. Kč/rok</strong> = <strong>6 000 Kč/ha</strong>. Pro srovnání: sklizňová služba 800–1 200 Kč/ha. Vlastní kombajn se vyplatí pokud:</p>
+      <ul>
+        <li>Sklízíte 2 sezónně přes 6 týdnů — flexibilita timing.</li>
+        <li>Vyděláváte sklizňové služby 100+ ha sousedům (cca +50–120 000 Kč/rok).</li>
+        <li>Plánujete kombajn držet 10+ let (rozkládá fixed cost).</li>
+      </ul>
+
+      <h2>5. Časté dotazy</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>Další zdroje</h2>
+      <ul>
+        <li><a href="/zebricky/kombajny-do-300-koni/">Žebříček kombajnů do 300 koní</a></li>
+        <li><a href="/zebricky/kombajny-nejvykonnejsi/">Žebříček nejvýkonnějších kombajnů</a></li>
+        <li><a href="/srovnani/">Comparator</a> — srovnejte si finální kandidáty</li>
+        <li><a href="/bazar/?category=kombajny">Ojeté kombajny v bazaru</a></li>
+        <li><a href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .g-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .g-head { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.65; margin: 0 0 14px; }
+  .meta { font-size: 13px; color: #6B6B72; }
+  .g-body section { margin-bottom: 36px; }
+  .g-body h2 { font-size: 24px; font-weight: 800; color: #0A0A0B; margin: 32px 0 14px; line-height: 1.25; }
+  .g-body h3 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 22px 0 8px; }
+  .g-body p { font-size: 16px; line-height: 1.75; color: #333; margin: 0 0 14px; }
+  .g-body ul, .g-body ol { padding-left: 22px; margin: 0 0 16px; }
+  .g-body li { font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 6px; }
+  .g-body strong { color: #0A0A0B; font-weight: 700; }
+  .g-body a { color: #0B7A3B; text-decoration: underline; }
+  .comp-table { overflow-x: auto; margin: 0 0 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  .faqs { display: flex; flex-direction: column; gap: 8px; }
+  .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; }
+  .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 15px; }
+  .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+</style>

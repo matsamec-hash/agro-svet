@@ -1,0 +1,152 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/pruvodce/prvni-traktor-mlady-zemedelec/`;
+const datePublished = '2026-05-16';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Průvodce nákupem', url: '/pruvodce/' },
+  { name: 'První traktor pro mladého zemědělce', url: canonical },
+]);
+
+const faqs = [
+  { q: 'Co je dotace Mladý zemědělec?', a: 'CAP 2024 bonus pro zemědělce do 40 let — 1500 Kč/ha pro prvních 150 ha, vyplácí se max 5 let od první žádosti. Detail: /slovnik/cap-2024/.' },
+  { q: 'Jaký rozpočet pro první traktor?', a: 'Pro startovací farmu 30–60 ha doporučujeme 1,5–2,5 mil. Kč (ojetý Zetor Forterra, JD 6M nebo NH T6 5–8 let starý). Plus 200–400 tis. Kč na pluh, secí, vůz, drobné nářadí.' },
+  { q: 'Nový nebo ojetý jako první?', a: 'Pro startujícího farmáře téměř vždy ojetý. Nový dělá smysl jen pokud čerpáte investiční dotaci PRV (Intervence 33.73). Ojetý 4–6 let starý s 3000–5000 mh = 50 % ceny nového při 70 % zbývající životnosti.' },
+  { q: 'Jak dlouho musím čekat na první dotaci?', a: 'Po podání Jednotné žádosti (duben–červen) vyplácí SZIF v říjnu–prosinci. První rok investiční výdaje hradíte sám, dotace přichází ex-post.' },
+];
+
+const faqJsonLd = faqPageSchema(faqs);
+const articleJsonLd = {
+  '@context': 'https://schema.org', '@type': 'Article',
+  headline: 'První traktor pro mladého zemědělce',
+  description: 'Průvodce výběrem prvního traktoru. Dotace Mladý zemědělec, rozpočet, ojetý vs nový, doporučené modely.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished, dateModified: datePublished,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout title="První traktor pro mladého zemědělce — průvodce 2026" description="Začínáte hospodařit do 40 let? Průvodce výběrem prvního traktoru s ohledem na dotaci Mladý zemědělec, omezený rozpočet a růst farmy." canonical={canonical} ogType="article" publishedTime={datePublished}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a><span aria-hidden="true">›</span>
+      <a href="/pruvodce/">Průvodce nákupem</a><span aria-hidden="true">›</span>
+      <span class="current">První traktor pro mladého zemědělce</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Průvodce · ~10 min</span>
+      <h1>První traktor pro mladého zemědělce</h1>
+      <p class="lede">
+        Začínáte hospodařit do 40 let? Tento průvodce vás provede nákupem prvního traktoru s ohledem na dotaci Mladý zemědělec, omezený startovací rozpočet a plánovaný růst farmy.
+      </p>
+      <div class="meta">Publikováno 16. května 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Specifika startovací farmy</h2>
+      <p>Mladý zemědělec (do 40 let, prvních 5 let od první žádosti SZP) má v CAP 2024 výhody:</p>
+      <ul>
+        <li><strong>Bonus 1500 Kč/ha</strong> pro prvních 150 ha — pro 50 ha farmu = 75 000 Kč/rok navíc.</li>
+        <li><strong>Investiční dotace PRV</strong> s vyšším procentem podpory (50 % místo 40 % pro startup).</li>
+        <li><strong>Levnější úvěry</strong> u některých bank (Komerční banka, ČSOB) díky státní garanci.</li>
+      </ul>
+      <p>→ <a href="/kalkulacka/dotace-cap/">CAP kalkulačka</a> ukáže přesnou výši pro vaši farmu.</p>
+
+      <h2>2. Rozpočet a strategie</h2>
+      <p>Pro typickou startovací farmu (30–60 ha) doporučujeme:</p>
+      <ul>
+        <li><strong>Traktor</strong>: 1,5–2,5 mil. Kč (ojetý 80–130 koní).</li>
+        <li><strong>Pluh + secí stroj</strong>: 300–600 tis. Kč.</li>
+        <li><strong>Vůz / kontejner</strong>: 150–300 tis. Kč.</li>
+        <li><strong>Drobné nářadí</strong>: 100–200 tis. Kč.</li>
+      </ul>
+      <p>Celkem ~<strong>2,2–3,5 mil. Kč</strong> startovací sada. Z toho můžete čerpat 30–50 % dotaci PRV (Intervence 33.73 + bonusy pro mladé).</p>
+
+      <h2>3. Doporučené modely pro první traktor</h2>
+      <div class="comp-table">
+        <table>
+          <thead>
+            <tr><th>Model (ojetý 4–6 let)</th><th>Výkon</th><th>Cena (orientačně)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Zetor Proxima 90</strong></td><td>90 k</td><td>900 tis. – 1,3 mil. Kč</td></tr>
+            <tr><td><strong>Zetor Forterra 120</strong></td><td>120 k</td><td>1,3–1,7 mil. Kč</td></tr>
+            <tr><td><strong>John Deere 6M 110</strong></td><td>110 k</td><td>1,6–2,0 mil. Kč</td></tr>
+            <tr><td><strong>NH T6.165</strong></td><td>130 k</td><td>1,7–2,1 mil. Kč</td></tr>
+            <tr><td><strong>Massey Ferguson 5713</strong></td><td>130 k</td><td>1,8–2,2 mil. Kč</td></tr>
+            <tr><td><strong>Kubota M5-111</strong></td><td>110 k</td><td>1,5–1,9 mil. Kč</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4. Růst farmy — plánování dopředu</h2>
+      <p>První traktor by měl mít <strong>rezervu pro budoucí růst</strong>. Pravidlo:</p>
+      <ul>
+        <li>Pokud plánujete růst z 30 ha na 100 ha za 5 let, nekupujte 70 koní (bude málo na 100 ha). Volte 100–130 koní s rezervou.</li>
+        <li>Pokud plánujete zůstat na 30–50 ha, 80–100 koní stačí (méně paliva, levnější údržba).</li>
+      </ul>
+
+      <h2>5. Co určitě nedělat</h2>
+      <ul>
+        <li>❌ <strong>Nekupujte první traktor na maximální leasing</strong>. Splátky musí pokrýt i špatný rok.</li>
+        <li>❌ <strong>Nekupujte stroj z první nabídky</strong> bez prohlídky 3–5 alternativ.</li>
+        <li>❌ <strong>Nepořizujte všechno nové</strong>. Sekundární nářadí (pluh, brány, postřikovač) levný ojetý funguje stejně.</li>
+        <li>❌ <strong>Nezapomínejte na rezervu</strong> 15–20 % rozpočtu na nečekané opravy/upgrade.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Další zdroje</h2>
+      <ul>
+        <li>🔍 <a href="/kviz/jaky-traktor-potrebujete/">Kvíz „Jaký traktor potřebujete?"</a></li>
+        <li>📋 <a href="/pruvodce/kontrola-ojeteho-traktoru/">Checklist kontroly ojetého traktoru</a></li>
+        <li>💶 <a href="/kalkulacka/dotace-cap/">Kalkulačka dotací CAP</a></li>
+        <li>📋 <a href="/dotace/dotace-pro-mlade-zemedelce/">Detail dotace Mladý zemědělec</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .g-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .g-head { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.65; margin: 0 0 14px; }
+  .meta { font-size: 13px; color: #6B6B72; }
+  .g-body h2 { font-size: 22px; font-weight: 800; color: #0A0A0B; margin: 32px 0 14px; line-height: 1.25; }
+  .g-body p { font-size: 16px; line-height: 1.75; color: #333; margin: 0 0 14px; }
+  .g-body ul { padding-left: 22px; margin: 0 0 16px; }
+  .g-body li { font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 6px; }
+  .g-body strong { color: #0A0A0B; font-weight: 700; }
+  .g-body a { color: #0B7A3B; text-decoration: underline; }
+  .comp-table { overflow-x: auto; margin: 0 0 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  .faqs { display: flex; flex-direction: column; gap: 8px; }
+  .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; }
+  .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 15px; }
+  .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+</style>

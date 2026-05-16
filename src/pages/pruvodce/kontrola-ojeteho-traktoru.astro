@@ -1,0 +1,178 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/pruvodce/kontrola-ojeteho-traktoru/`;
+const datePublished = '2026-05-16';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Průvodce nákupem', url: '/pruvodce/' },
+  { name: 'Kontrola ojetého traktoru', url: canonical },
+]);
+
+const faqs = [
+  { q: 'Jak dlouho prohlídka trvá?', a: 'Důkladná prohlídka 60–90 minut. Méně času = vyšší riziko skrytých vad. Pokud prodávající tlačí na rychlou prohlídku, je to red flag — obvykle něco skrývá.' },
+  { q: 'Mám vzít s sebou specialistu?', a: 'Pro stroje nad 1 mil. Kč ano. Nezávislý mechanik s vlastním diagnostickým kufrem stojí 2000–5000 Kč za prohlídku — relativně k investici minimální. Některé značky (JD, Fendt, Claas) mají autorizované "predelivery inspection" za 5000–15000 Kč včetně certifikátu.' },
+  { q: 'Co když prodávající nepředloží servisní knihu?', a: 'Vážné varování. Servisní kniha (nebo její digitální ekvivalent — JDLink, MyJohnDeere) je důkaz pravidelné údržby. Bez ní nevíte, jak byl stroj udržován a riskujete skryté závady. Smlouvejte cenu dolů o 5–10 % nebo odejděte.' },
+  { q: 'Jak prověřit reálné motohodiny?', a: 'Hodinoměr lze přetáčet u starších traktorů (do 2010). Křížový check: opotřebení sedačky, gum, kabiny vs deklarované hodiny. Stroj s 3000 mh ale sedačka jako po 8000 mh = manipulace.' },
+];
+
+const faqJsonLd = faqPageSchema(faqs);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Checklist: Kontrola ojetého traktoru před koupí',
+  description: 'Co prověřit při prohlídce ojetého traktoru. 30-bodový checklist: dokumenty, motor, převodovka, hydraulika, kabina.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished, dateModified: datePublished,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout
+  title="Checklist: Kontrola ojetého traktoru před koupí"
+  description="30-bodový checklist pro prohlídku ojetého traktoru. Dokumenty, motor, převodovka, hydraulika, kabina, test jízdy. Co prověřit, na co dát pozor."
+  canonical={canonical} ogType="article" publishedTime={datePublished}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a><span aria-hidden="true">›</span>
+      <a href="/pruvodce/">Průvodce nákupem</a><span aria-hidden="true">›</span>
+      <span class="current">Kontrola ojetého traktoru</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Checklist · ~8 min</span>
+      <h1>Kontrola ojetého traktoru před koupí — 30-bodový checklist</h1>
+      <p class="lede">
+        Důkladná prohlídka ojetého traktoru trvá 60–90 minut. Tento checklist projděte krok za krokem — ušetří vás od skrytých vad za desítky tisíc Kč.
+      </p>
+      <div class="meta">Publikováno 16. května 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Dokumenty (10 minut)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Velký technický průkaz</strong> — počet majitelů, datum první registrace, žádné poznámky o nehodách.</label>
+        <label><input type="checkbox" /> <strong>Servisní kniha / digitální záznam</strong> — pravidelné výměny oleje (každých 500 mh), filtrů, AdBlue.</label>
+        <label><input type="checkbox" /> <strong>STK</strong> — platná, bez závad. Předchozí 2 STK pro trend.</label>
+        <label><input type="checkbox" /> <strong>Faktury z autoservisu</strong> — originální díly, datum poslední generální opravy.</label>
+        <label><input type="checkbox" /> <strong>Pojištění</strong> — povinné ručení platné, žádné nedoplatky.</label>
+        <label><input type="checkbox" /> <strong>VIN / sériové číslo</strong> — souhlasí s dokumenty a štítkem na rámu.</label>
+      </div>
+
+      <h2>2. Motor (15 minut)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Studený start</strong> — bez kouře, hladké rozjetí. Černý kouř = vstřikování. Modrý kouř = olej v válcích. Bílý kouř = voda v palivu.</label>
+        <label><input type="checkbox" /> <strong>Olej v motoru</strong> — čistý, žádný náznak vody nebo prosakování.</label>
+        <label><input type="checkbox" /> <strong>Chladicí kapalina</strong> — čistá zelená/červená, bez oleje.</label>
+        <label><input type="checkbox" /> <strong>Hladina AdBlue</strong> (Stage IV+) — funguje SCR ukazatel, žádné chybové kódy.</label>
+        <label><input type="checkbox" /> <strong>DPF stav</strong> — diagnostika ukáže % zaplnění. Nad 80 % = nutná aktivní regenerace.</label>
+        <label><input type="checkbox" /> <strong>Test plné zátěže</strong> (pluh nebo brzda) — bez prokluzu, vibrací, neobvyklých zvuků.</label>
+      </div>
+
+      <h2>3. Převodovka a hnací ústrojí (10 minut)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Hladké řazení všech stupňů</strong> — pod zátěží i bez. Skřípání = synchron.</label>
+        <label><input type="checkbox" /> <strong>Reverz</strong> (vpřed/vzad) — žádný náraz.</label>
+        <label><input type="checkbox" /> <strong>Tah ze stoje</strong> — bez prokluzu spojky.</label>
+        <label><input type="checkbox" /> <strong>CVT</strong> (Vario / AutoPowr): tempomat funguje, plynulé zrychlování.</label>
+        <label><input type="checkbox" /> <strong>Diferenciální uzávěrka</strong> — zapne se, otáčky se vyrovnají.</label>
+        <label><input type="checkbox" /> <strong>Pohon 4×4</strong> — zapne se, slyšet zapadnutí.</label>
+        <label><input type="checkbox" /> <strong>Olej převodovky</strong> — čistý, vůně po oleji (ne spáleninou).</label>
+      </div>
+
+      <h2>4. Hydraulika a tříbod (10 minut)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Tříbod zvedne plný náklad</strong> — orientačně 1500+ kg na 1 metr.</label>
+        <label><input type="checkbox" /> <strong>SCV výstupy</strong> — všechny fungují, bez prosakování.</label>
+        <label><input type="checkbox" /> <strong>PTO 540 i 1000 ot/min</strong> — zapne, vypne, žádné vrtění.</label>
+        <label><input type="checkbox" /> <strong>Olejová filtr</strong> — datum poslední výměny (max 1500 mh).</label>
+        <label><input type="checkbox" /> <strong>Hadice</strong> — bez prasklin, deformací.</label>
+      </div>
+
+      <h2>5. Kabina a elektronika (10 minut)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Klimatizace</strong> — chladí + topí. Stará klimatizace = porouchané kompresory.</label>
+        <label><input type="checkbox" /> <strong>Všechna světla</strong> — denní, brzdná, blinky, ostřikovače, světla na nářadí.</label>
+        <label><input type="checkbox" /> <strong>Displej / přístroje</strong> — žádné error kódy, AdBlue/DPF status normální.</label>
+        <label><input type="checkbox" /> <strong>Sedadlo</strong> — funkční odpružení, pohyb opěradla, čalounění bez prasklin.</label>
+        <label><input type="checkbox" /> <strong>Volant</strong> — bez vůle (max 2°), reverzní spojka funguje.</label>
+        <label><input type="checkbox" /> <strong>Stěrače + sklomyvačka</strong> — fungují všechny rychlosti.</label>
+      </div>
+
+      <h2>6. Vnější komponenty (5 minut)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Pneumatiky</strong> — vzorek 50+ %, žádné praskliny, rovnoměrné opotřebení.</label>
+        <label><input type="checkbox" /> <strong>Disky kol</strong> — bez vibrací při jízdě.</label>
+        <label><input type="checkbox" /> <strong>Kapota a karoserie</strong> — bez větších oprav, jednotná barva.</label>
+        <label><input type="checkbox" /> <strong>Korozní místa</strong> — kabina, podvozek, výfukový systém.</label>
+        <label><input type="checkbox" /> <strong>Brzdy</strong> — funkční na vzduch i hydraulicky.</label>
+      </div>
+
+      <h2>Red flags — kdy odejít</h2>
+      <ul>
+        <li>🚨 <strong>Stříkající olej</strong> z motoru / převodovky.</li>
+        <li>🚨 <strong>Modrý kouř</strong> z výfuku trvale (víc než 30 s po startu).</li>
+        <li>🚨 <strong>Vrtění při jízdě</strong> nad 25 km/h.</li>
+        <li>🚨 <strong>Skřípání nebo dunění</strong> z převodovky pod zátěží.</li>
+        <li>🚨 <strong>Chybějící servisní kniha</strong> + prodávající ji "nemá s sebou".</li>
+        <li>🚨 <strong>Sériové číslo neviditelné</strong> nebo přemalované.</li>
+        <li>🚨 <strong>Hluboké koroze na rámu</strong> (ne jen povrchová).</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Další zdroje</h2>
+      <ul>
+        <li><a href="/pruvodce/jak-vybrat-traktor-100-150-koni/">Jak vybrat traktor 100–150 koní</a></li>
+        <li><a href="/bazar/">Ojeté traktory v bazaru</a></li>
+        <li><a href="/kalkulacka/uspora-nafty/">Diesel kalkulačka úspory</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .g-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .g-head { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.65; margin: 0 0 14px; }
+  .meta { font-size: 13px; color: #6B6B72; }
+  .g-body h2 { font-size: 22px; font-weight: 800; color: #0A0A0B; margin: 32px 0 14px; line-height: 1.25; }
+  .g-body h3 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 22px 0 8px; }
+  .g-body p { font-size: 16px; line-height: 1.75; color: #333; margin: 0 0 14px; }
+  .g-body ul { padding-left: 22px; margin: 0 0 16px; }
+  .g-body li { font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 6px; }
+  .g-body strong { color: #0A0A0B; font-weight: 700; }
+  .g-body a { color: #0B7A3B; text-decoration: underline; }
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 24px; padding: 16px; background: #fafafa; border-radius: 10px; }
+  .checklist label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.6; cursor: pointer; padding: 6px 8px; border-radius: 6px; }
+  .checklist label:hover { background: #fff; }
+  .checklist input[type="checkbox"] { margin-top: 4px; width: 18px; height: 18px; cursor: pointer; accent-color: #0B7A3B; }
+  .checklist strong { color: #0A0A0B; }
+  .faqs { display: flex; flex-direction: column; gap: 8px; }
+  .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; }
+  .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 15px; }
+  .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+</style>
