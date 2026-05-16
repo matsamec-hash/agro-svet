@@ -46,7 +46,10 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
   </div>
 </section>
 
-<script type="application/json" id="commodityChartData" set:html={JSON.stringify({ series: namedSeries, events, fiveYearAvg, default0 })}></script>
+<!-- Chart data se loaduje async z /statistiky/commodity-data.json (24h CF cache).
+     Šetří ~86 KB inline JSON v HTML. Element zůstává jako sentinel pro init script
+     — když je v DOM, page má chart, fetch může proběhnout. -->
+<div id="commodityChartData" hidden></div>
 
 <!-- Chart.js — eager init if Chart už loaded (např. /statistiky/), jinak lazy přes
      IntersectionObserver: na homepage se ~80KB Chart.js bundle neloaduje dokud
@@ -81,18 +84,25 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
       if (window['chartjs-plugin-annotation']) Chart.register(window['chartjs-plugin-annotation']);
     }
 
-    async function bootstrap() {
-      await ensureChart();
-      run();
+    // Cached fetch — multiple charts on the same page reuse one network request.
+    if (!window.__commodityDataPromise) {
+      window.__commodityDataPromise = fetch('/statistiky/commodity-data.json')
+        .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
     }
 
-    function run() {
+    async function bootstrap() {
+      await ensureChart();
+      const data = await window.__commodityDataPromise;
+      run(data);
+    }
+
+    function run(__data) {
 
     const SHORT_MONTHS = ['Led','Úno','Bře','Dub','Kvě','Čvn','Čvc','Srp','Zář','Říj','Lis','Pro'];
     const YELLOW = '#FFEA00';
     const INK = '#0A0A0B';
 
-    const { series, events, fiveYearAvg, default0 } = JSON.parse(dataEl.textContent);
+    const { series, events, fiveYearAvg, default0 } = __data;
     let currentName = default0;
     let currentWindow = '5y';
     let chart = null;
