@@ -210,6 +210,80 @@ export function machineProductSchema(m: MachineModelForSchema) {
   return schema;
 }
 
+export interface ExpertReviewInput {
+  /** Page URL of the review (typically the encyklopedie detail). */
+  url: string;
+  /** Reviewed model — schema.org Thing. */
+  itemName: string;
+  itemUrl: string;
+  itemImageUrl?: string;
+  itemCategory?: string;
+  itemBrand?: string;
+  /** Editorial rating, 1–5 (decimals allowed: 4.5). */
+  rating: number;
+  /** Short verdict paragraph. */
+  verdict: string;
+  /** Optional plusses / minuses summarised as a sentence each. */
+  pros?: string[];
+  cons?: string[];
+  /** ISO 8601 date when the review was published / last updated. */
+  datePublished?: string;
+  dateModified?: string;
+  authorName?: string;
+}
+
+// Editorial Review of a machine model. Mapped to schema.org Review with
+// itemReviewed pointing at a Thing/Vehicle entity. Doesn't claim user-generated
+// AggregateRating — that requires real review collection infrastructure.
+export function expertReviewSchema(r: ExpertReviewInput) {
+  const reviewUrl = r.url.startsWith('http') ? r.url : `${SITE_URL}${r.url}`;
+  const itemUrl = r.itemUrl.startsWith('http') ? r.itemUrl : `${SITE_URL}${r.itemUrl}`;
+  const itemImageUrl = r.itemImageUrl
+    ? (r.itemImageUrl.startsWith('http') ? r.itemImageUrl : `${SITE_URL}${r.itemImageUrl}`)
+    : undefined;
+  const reviewBody = [
+    r.verdict,
+    r.pros && r.pros.length > 0 ? `Plusy: ${r.pros.join('; ')}.` : null,
+    r.cons && r.cons.length > 0 ? `Mínusy: ${r.cons.join('; ')}.` : null,
+  ].filter(Boolean).join(' ');
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    url: reviewUrl,
+    name: `Hodnocení redakce — ${r.itemName}`,
+    reviewBody,
+    inLanguage: 'cs-CZ',
+    datePublished: r.datePublished ?? new Date().toISOString().slice(0, 10),
+    ...(r.dateModified ? { dateModified: r.dateModified } : {}),
+    author: {
+      '@type': 'Organization',
+      name: r.authorName ?? 'Redakce agro-svět.cz',
+      url: SITE_URL,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'agro-svět.cz',
+      url: SITE_URL,
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: r.rating,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    itemReviewed: {
+      '@type': 'Thing',
+      name: r.itemName,
+      url: itemUrl,
+      ...(itemImageUrl ? { image: itemImageUrl } : {}),
+      ...(r.itemBrand ? { brand: { '@type': 'Brand', name: r.itemBrand } } : {}),
+      ...(r.itemCategory ? { category: r.itemCategory } : {}),
+    },
+    ...(r.pros && r.pros.length > 0 ? { positiveNotes: { '@type': 'ItemList', itemListElement: r.pros.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p })) } } : {}),
+    ...(r.cons && r.cons.length > 0 ? { negativeNotes: { '@type': 'ItemList', itemListElement: r.cons.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c })) } } : {}),
+  };
+}
+
 export interface FaqItem {
   q: string;
   a: string;

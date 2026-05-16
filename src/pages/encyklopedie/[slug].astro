@@ -3,7 +3,7 @@ export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
-import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchema, expertReviewSchema } from '../../lib/structured-data';
 
 export async function getStaticPaths() {
   const items = await getCollection('encyklopedie');
@@ -70,6 +70,27 @@ const productJsonLd = machineProductSchema({
 
 const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
 
+// Editorial review (volitelné, frontmatter recenze). Vyplnit jen pokud redakce
+// model skutečně posoudila — nelegitimní hvězdičky by uškodily důvěryhodnosti.
+const reviewJsonLd = item.data.recenze
+  ? expertReviewSchema({
+      url: pageUrl,
+      itemName: `${brandPretty} ${item.data.name}`.replace(`${brandPretty} ${brandPretty}`, brandPretty),
+      itemUrl: pageUrl,
+      itemImageUrl: heroImageAbs,
+      itemBrand: brandPretty,
+      itemCategory: kategLabels[item.data.kategorie] ?? item.data.kategorie,
+      rating: item.data.recenze.hodnoceni,
+      verdict: item.data.recenze.verdikt,
+      pros: item.data.recenze.plusy,
+      cons: item.data.recenze.minusy,
+      datePublished: item.data.recenze.datum
+        ? item.data.recenze.datum.toISOString().slice(0, 10)
+        : (lastVerifiedIso ?? undefined),
+      dateModified: lastVerifiedIso ?? undefined,
+    })
+  : null;
+
 // VideoObject JSON-LD only when an encyklopedie entry references a YouTube video.
 const videoJsonLd = item.data.youtubeId
   ? videoObjectSchema({
@@ -117,6 +138,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
   {videoJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(videoJsonLd)} />}
+  {reviewJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(reviewJsonLd)} />}
 
   {item.data.heroImage && (
     <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
@@ -191,6 +213,53 @@ const articleJsonLd = {
         </ul>
       </div>
     )}
+
+    {/* Editorial verdict card — pouze pokud frontmatter má recenze. Pro user trust + Review JSON-LD parity. */}
+    {item.data.recenze && (() => {
+      const rec = item.data.recenze;
+      const fullStars = Math.floor(rec.hodnoceni);
+      const hasHalf = rec.hodnoceni - fullStars >= 0.25 && rec.hodnoceni - fullStars < 0.75;
+      const fullCount = hasHalf ? fullStars : Math.round(rec.hodnoceni);
+      const ratingFmt = rec.hodnoceni.toFixed(1).replace('.', ',');
+      return (
+        <aside aria-labelledby="verdict-heading" style="margin:0 0 40px; padding:24px 28px; border:2px solid #FFFF00; border-radius:14px; background:linear-gradient(180deg, #fffce0 0%, #fffaa8 100%); color:#0A0A0B;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:14px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:12px; text-transform:uppercase; letter-spacing:1.5px; font-weight:700; color:#0A0A0B;">Hodnocení redakce</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span aria-hidden="true" style="font-size:18px; letter-spacing:2px; color:#B58A00;">
+                {'★'.repeat(fullCount)}{hasHalf ? '½' : ''}{'☆'.repeat(5 - fullCount - (hasHalf ? 1 : 0))}
+              </span>
+              <strong style="font-size:20px; color:#0A0A0B;">{ratingFmt} / 5</strong>
+            </div>
+          </div>
+          <h2 id="verdict-heading" style="font-size:18px; font-weight:700; margin:0 0 8px; color:#0A0A0B;">Verdikt</h2>
+          <p style="font-size:15px; line-height:1.6; margin:0 0 18px; color:#1a1a1a;">{rec.verdikt}</p>
+          {((rec.plusy && rec.plusy.length > 0) || (rec.minusy && rec.minusy.length > 0)) && (
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;">
+              {rec.plusy && rec.plusy.length > 0 && (
+                <div>
+                  <div style="font-size:13px; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#0B7A3B; margin-bottom:6px;">Plusy</div>
+                  <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:4px; font-size:14px;">
+                    {rec.plusy.map((p) => <li style="display:flex; gap:8px;"><span aria-hidden="true" style="color:#0B7A3B; font-weight:700;">+</span><span>{p}</span></li>)}
+                  </ul>
+                </div>
+              )}
+              {rec.minusy && rec.minusy.length > 0 && (
+                <div>
+                  <div style="font-size:13px; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#C8102E; margin-bottom:6px;">Mínusy</div>
+                  <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:4px; font-size:14px;">
+                    {rec.minusy.map((m) => <li style="display:flex; gap:8px;"><span aria-hidden="true" style="color:#C8102E; font-weight:700;">−</span><span>{m}</span></li>)}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+          <p style="margin:14px 0 0; font-size:12px; color:#5a5a5a;">Recenze redakce na základě veřejně dostupných specifikací, testů a uživatelských zpětných vazeb.</p>
+        </aside>
+      );
+    })()}
 
     <!-- Body -->
     <div class="prose">

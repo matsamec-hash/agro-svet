@@ -46,6 +46,16 @@ const encyklopedie = defineCollection({
     // Volitelný YouTube embed — feeduje VideoObject JSON-LD + lazy facade na detailu.
     youtubeId: z.string().optional(),
     youtubeTitle: z.string().optional(),
+    // Volitelná redakční recenze — feeduje Review JSON-LD + on-page verdict card.
+    // Plnit jen u modelů, které redakce skutečně posoudila. Mimo CMS prozatím
+    // ručně z odborné rešerše, ne user-generated.
+    recenze: z.object({
+      hodnoceni: z.number().min(1).max(5),
+      verdikt: z.string(),
+      plusy: z.array(z.string()).optional(),
+      minusy: z.array(z.string()).optional(),
+      datum: z.date().optional(),
+    }).optional(),
   }),
 });
 
