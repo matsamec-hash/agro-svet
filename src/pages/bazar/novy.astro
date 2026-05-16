@@ -377,7 +377,7 @@ const { data: profile } = await supabase
         if (!key || key === lastQuery) return;
         lastQuery = key;
         try {
-          const r = await fetch(`/api/geocode?${params}`);
+          const r = await fetch(`/api/geocode/?${params}`);
           if (!r.ok) {
             latInput.value = '';
             lngInput.value = '';
