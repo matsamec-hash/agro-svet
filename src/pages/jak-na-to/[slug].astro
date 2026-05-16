@@ -15,6 +15,8 @@ const items = await getCollection('howto');
 const item = items.find((i) => i.id === slug);
 if (!item) return Astro.rewrite('/404');
 const { Content } = await render(item);
+import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `/jak-na-to/${slug}/`);
 
 const related = items.filter((i) => i.id !== item.id).slice(0, 3);
 
@@ -125,7 +127,7 @@ const articleJsonLd = {
 
     <!-- Intro body -->
     <div class="prose">
-      <Content />
+      <div set:html={contentHtml} />
     </div>
 
     <!-- Meta box: time + tools + supplies -->

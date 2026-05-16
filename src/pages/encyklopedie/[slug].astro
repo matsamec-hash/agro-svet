@@ -15,6 +15,9 @@ const items = await getCollection('encyklopedie');
 const item = items.find((i) => i.id === slug);
 if (!item) return Astro.rewrite('/404');
 const { Content } = await render(item);
+// Render content body with auto-link injection (slovník, žebříčky, modely).
+import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `/encyklopedie/${slug}/`);
 
 // Related encyklopedie items: same znacka first, then same kategorie.
 const relatedSameZnacka = items.filter((i) => i.id !== item.id && i.data.znacka === item.data.znacka);
@@ -263,7 +266,7 @@ const articleJsonLd = {
 
     <!-- Body -->
     <div class="prose">
-      <Content />
+      <div set:html={contentHtml} />
     </div>
 
     {item.data.youtubeId && (

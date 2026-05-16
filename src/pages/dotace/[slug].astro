@@ -12,7 +12,9 @@ export async function getStaticPaths() {
 
 const { titul } = Astro.props;
 const { Content } = await render(titul);
+import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
 const d = titul.data;
+const contentHtml = await renderMarkdownWithLinks(titul.body ?? '', `/dotace/${d.slug}/`);
 const canonical = `${SITE_URL}/dotace/${d.slug}/`;
 
 function fmtCZK(n: number): string {
@@ -109,7 +111,7 @@ const faqJsonLd = d.faq && d.faq.length > 0 ? faqPageSchema(d.faq) : null;
     )}
 
     <div class="prose">
-      <Content />
+      <div set:html={contentHtml} />
     </div>
 
     {d.faq && d.faq.length > 0 && (
