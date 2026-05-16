@@ -93,6 +93,7 @@ export const GET: APIRoute = async () => {
     ['/statistiky/', 'weekly'],
     ['/srovnani/', 'weekly', '0.85'],
     ['/zebricky/', 'weekly', '0.8'],
+    ['/slovnik/', 'monthly', '0.75'],
     ['/kalkulacka/', 'monthly', '0.8'],
     ['/kalkulacka/leasing-traktoru/', 'monthly', '0.75'],
     ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75'],
@@ -116,6 +117,12 @@ export const GET: APIRoute = async () => {
   const { TIER_LISTS } = await import('../lib/tier-lists');
   for (const t of TIER_LISTS) {
     urls.push({ loc: `${SITE_URL}/zebricky/${t.slug}/`, changefreq: 'weekly', priority: '0.75' });
+  }
+
+  // Slovník zemědělských pojmů.
+  const { SLOVNIK } = await import('../lib/slovnik');
+  for (const term of SLOVNIK) {
+    urls.push({ loc: `${SITE_URL}/slovnik/${term.slug}/`, changefreq: 'monthly', priority: '0.6' });
   }
 
   // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.

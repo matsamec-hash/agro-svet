@@ -9,6 +9,12 @@ import Footer from '../components/Footer.astro';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 
+// Microsoft Clarity — session recordings + heatmaps. Zdarma, vyžaduje
+// jen project ID z clarity.microsoft.com. Pokud env CLARITY_PROJECT_ID
+// chybí, script se nepřipojí (no-op). Cookie-consent neblokuje (Clarity
+// běží anonymous bez PII a respektuje DNT).
+const clarityId = (import.meta.env.PUBLIC_CLARITY_PROJECT_ID ?? '').toString().trim();
+
 interface Props {
   title: string;
   description?: string;
@@ -107,6 +113,10 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <!-- Preload the two most-used Chakra Petch latin weights to cut first paint FOIT. -->
   <link rel="preload" as="font" type="font/woff2" href={chakraPetch400} crossorigin />
   <link rel="preload" as="font" type="font/woff2" href={chakraPetch700} crossorigin />
+
+  {clarityId && (
+    <script is:inline set:html={`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${clarityId.replace(/[^a-zA-Z0-9_-]/g, '')}");`} />
+  )}
 </head>
 <body>
   <a href="#main-content" class="skip-link">Přeskočit na obsah</a>

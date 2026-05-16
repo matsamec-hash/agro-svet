@@ -1,0 +1,152 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { SLOVNIK, getSlovnikTerm, KATEGORIE_LABELS } from '../../lib/slovnik';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+export function getStaticPaths() {
+  return SLOVNIK.map((t) => ({ params: { slug: t.slug } }));
+}
+
+const { slug } = Astro.params;
+const term = getSlovnikTerm(slug!);
+if (!term) return Astro.rewrite('/404');
+
+const pageUrl = `${SITE_URL}/slovnik/${term.slug}/`;
+const relatedTerms = (term.related ?? [])
+  .map((s) => getSlovnikTerm(s))
+  .filter((t): t is NonNullable<typeof t> => !!t);
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Slovník', url: '/slovnik/' },
+  { name: term.term, url: pageUrl },
+]);
+
+// DefinedTerm schema — Google sometimes uses this for definition snippets
+// in AI Overviews / featured snippets.
+const definedTermJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'DefinedTerm',
+  name: term.term,
+  description: term.shortDef,
+  inDefinedTermSet: {
+    '@type': 'DefinedTermSet',
+    name: 'Slovník zemědělských pojmů',
+    url: `${SITE_URL}/slovnik/`,
+  },
+  url: pageUrl,
+  ...(term.alias && term.alias.length > 0 ? { alternateName: term.alias } : {}),
+};
+
+const paragraphs = term.longDef.split('\n\n');
+---
+
+<Layout
+  title={`${term.term} — co to je? Vysvětlení`}
+  description={term.shortDef}
+  canonical={pageUrl}
+  ogType="article"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(definedTermJsonLd)} />
+
+  <article class="slv-detail-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/slovnik/">Slovník</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">{term.term}</span>
+    </nav>
+
+    <header class="slv-d-head">
+      <span class="kicker">{KATEGORIE_LABELS[term.kategorie]}</span>
+      <h1>{term.term}</h1>
+      {term.alias && term.alias.length > 0 && (
+        <div class="slv-d-alias">Také: {term.alias.map((a) => <span>{a}</span>).reduce((acc, el, i) => i === 0 ? [el] : [...acc, <>, </>, el], [] as any[])}</div>
+      )}
+      <p class="slv-d-short"><strong>{term.shortDef}</strong></p>
+    </header>
+
+    <div class="slv-d-body prose">
+      {paragraphs.map((p) => (
+        <p set:html={p.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')}></p>
+      ))}
+    </div>
+
+    {term.externalUrl && (
+      <div class="slv-d-external">
+        <strong>Externí zdroj:</strong>{' '}
+        <a href={term.externalUrl} rel="external nofollow noopener" target="_blank">
+          {term.externalLabel ?? term.externalUrl}
+        </a>
+      </div>
+    )}
+
+    {relatedTerms.length > 0 && (
+      <section class="slv-d-related">
+        <h2>Související pojmy</h2>
+        <div class="slv-d-rel-grid">
+          {relatedTerms.map((rt) => (
+            <a href={`/slovnik/${rt.slug}/`} class="slv-d-rel-card">
+              <h3>{rt.term}</h3>
+              <p>{rt.shortDef.slice(0, 100)}{rt.shortDef.length > 100 ? '…' : ''}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <a class="slv-d-back" href="/slovnik/">← Zpět na slovník</a>
+  </article>
+</Layout>
+
+<style>
+  .slv-detail-root { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .slv-d-head { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid #eaeaec; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -1px; margin: 12px 0 8px; line-height: 1.15; color: #1a1a1a; }
+  .slv-d-alias { font-size: 13px; color: #6B6B72; margin-bottom: 14px; }
+  .slv-d-alias span { color: #444; font-weight: 500; }
+  .slv-d-short { font-size: 17px; line-height: 1.6; color: #0A0A0B; margin: 12px 0 0; padding: 14px 16px; background: #fffef8; border-left: 3px solid #FFEA00; border-radius: 0 6px 6px 0; }
+
+  .slv-d-body { font-size: 16px; line-height: 1.75; color: #333; }
+  .slv-d-body p { margin: 0 0 16px; }
+  .slv-d-body strong { color: #0A0A0B; }
+
+  .slv-d-external {
+    margin: 24px 0;
+    padding: 12px 16px;
+    background: #f5f5f7;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .slv-d-external a { color: #0B7A3B; text-decoration: underline; }
+
+  .slv-d-related { margin: 40px 0 24px; }
+  .slv-d-related h2 { font-size: 20px; font-weight: 700; color: #0A0A0B; margin: 0 0 16px; }
+  .slv-d-rel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .slv-d-rel-card {
+    display: block;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1.5px solid #eaeaec;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s;
+  }
+  .slv-d-rel-card:hover { border-color: #FFEA00; }
+  .slv-d-rel-card h3 { font-size: 14px; font-weight: 700; color: #0A0A0B; margin: 0 0 4px; }
+  .slv-d-rel-card p { font-size: 12px; color: #666; line-height: 1.5; margin: 0; }
+
+  .slv-d-back { display: inline-block; font-size: 13px; color: #666; text-decoration: none; font-weight: 600; }
+  .slv-d-back:hover { color: #0A0A0B; }
+</style>
