@@ -6,6 +6,8 @@
 
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from './stroje';
 import { getAllDruhy, getAllPlemena } from './plemena';
+import { SLOVNIK } from './slovnik';
+import { TIER_LISTS } from './tier-lists';
 
 interface GlossaryEntry {
   term: string;
@@ -71,6 +73,44 @@ function buildGlossary(): GlossaryEntry[] {
 
   for (const [slug, group] of Object.entries(FUNCTIONAL_GROUPS) as Array<[FunctionalGroupSlug, typeof FUNCTIONAL_GROUPS[FunctionalGroupSlug]]>) {
     entries.push(makeEntry(group.name, `/stroje/zemedelske-stroje/${slug}/`, 4));
+  }
+
+  // Slovník — definitions feed AI Overviews + Knowledge Graph. Lower MIN length
+  // here because uppercase-only terms like "ISOBUS", "AdBlue", "DPF", "PTO",
+  // "CVT" jsou jednoznačné a auto-link na slovník přesně to, co text potřebuje
+  // vysvětlit. Priorita 8 — pod brand (10) a model (12), aby v textu o
+  // "John Deere AdBlue" wrappnuli značku, ne acronym.
+  for (const term of SLOVNIK) {
+    // Hlavní jméno (case-insensitive regex match)
+    if (term.term.length >= 3) {
+      entries.push({
+        term: term.term,
+        termLower: term.term.toLowerCase(),
+        // Bez MIN_TERM_LENGTH guardu — slovník je curated, žádné false pozitive jako "T4".
+        pattern: new RegExp(`(?<![\\p{L}\\p{N}_])(${escapeRegex(term.term)})(?![\\p{L}\\p{N}_])`, 'iu'),
+        url: `/slovnik/${term.slug}/`,
+        priority: 8,
+      });
+    }
+    // Aliases — weaker (priorita 3), často krátké zkratky.
+    if (term.alias) {
+      for (const a of term.alias) {
+        if (a.length < 3) continue;
+        entries.push({
+          term: a,
+          termLower: a.toLowerCase(),
+          pattern: new RegExp(`(?<![\\p{L}\\p{N}_])(${escapeRegex(a)})(?![\\p{L}\\p{N}_])`, 'iu'),
+          url: `/slovnik/${term.slug}/`,
+          priority: 3,
+        });
+      }
+    }
+  }
+
+  // Žebříčky — když článek zmiňuje "nejlepší traktory do 100 koní" nebo
+  // "top 250 koní", link na konkrétní žebříček. Priorita 5 (under encyklopedie + slovník).
+  for (const t of TIER_LISTS) {
+    entries.push(makeEntry(t.title, `/zebricky/${t.slug}/`, 5));
   }
 
   // Sort by term length DESC (so "John Deere" matches before "Deere"), priority DESC tie-break.

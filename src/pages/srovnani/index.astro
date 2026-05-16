@@ -2,11 +2,34 @@
 export const prerender = true;
 
 import Layout from '../../layouts/Layout.astro';
-import { topComparisonPairs, modelDisplayName } from '../../lib/comparator';
+import { topComparisonPairs, modelDisplayName, pairCombo } from '../../lib/comparator';
+import { getAllModels, getAllBrands } from '../../lib/stroje';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
 const pairs = topComparisonPairs(220);
+
+// Custom picker data: all eligible models for the dropdowns. Cap fields to keep
+// payload small (one row per option). Frontend filters brand → models.
+const allBrands = getAllBrands();
+const allModelsForPicker = getAllModels()
+  .filter((m) => m.category === 'traktory' || m.category === 'kombajny')
+  .map((m) => ({
+    slug: m.slug,
+    name: m.name,
+    brand_slug: m.brand_slug,
+    brand_name: m.brand_name,
+    category: m.category,
+    power_hp: m.power_hp,
+    year_from: m.year_from,
+    year_to: m.year_to,
+  }))
+  .sort((a, b) => a.brand_name.localeCompare(b.brand_name, 'cs') || (b.power_hp ?? 0) - (a.power_hp ?? 0));
+const pickerJson = JSON.stringify(allModelsForPicker);
+const brandsForPicker = allBrands
+  .map((b) => ({ slug: b.slug, name: b.name, count: allModelsForPicker.filter((m) => m.brand_slug === b.slug).length }))
+  .filter((b) => b.count > 0)
+  .sort((a, b) => a.name.localeCompare(b.name, 'cs'));
 
 // Group by category for browse-friendly hub layout.
 const tractorPairs = pairs.filter((p) => p.a.category === 'traktory');
@@ -72,8 +95,67 @@ const canonical = `${SITE_URL}/srovnani/`;
         <a href="/zebricky/" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none;">
           ⭐ Žebříčky top modelů →
         </a>
+        <a href="#picker" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:rgba(255,255,255,.08); color:#fff; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none; border:1px solid rgba(255,255,255,.2);">
+          🛠 Postavit vlastní srovnání →
+        </a>
       </div>
     </header>
+
+    <section id="picker" class="picker-section" aria-labelledby="picker-heading">
+      <header class="picker-head">
+        <h2 id="picker-heading">Postavit vlastní srovnání</h2>
+        <p>Vyberte dva libovolné modely z katalogu — z různých kategorií i značek. Odkaz vás zavede na detailní srovnání s parametry vedle sebe.</p>
+      </header>
+
+      <form class="picker-form" id="picker-form">
+        <div class="picker-grid">
+          <fieldset class="pck-side pck-side-a">
+            <legend>Model A</legend>
+            <label class="pck-field">
+              <span>Značka</span>
+              <select id="pck-a-brand">
+                <option value="">— Vyberte —</option>
+                {brandsForPicker.map((b) => <option value={b.slug}>{b.name} ({b.count})</option>)}
+              </select>
+            </label>
+            <label class="pck-field">
+              <span>Model</span>
+              <select id="pck-a-model" disabled>
+                <option value="">— Nejdřív vyberte značku —</option>
+              </select>
+            </label>
+          </fieldset>
+
+          <div class="pck-vs" aria-hidden="true">VS</div>
+
+          <fieldset class="pck-side pck-side-b">
+            <legend>Model B</legend>
+            <label class="pck-field">
+              <span>Značka</span>
+              <select id="pck-b-brand">
+                <option value="">— Vyberte —</option>
+                {brandsForPicker.map((b) => <option value={b.slug}>{b.name} ({b.count})</option>)}
+              </select>
+            </label>
+            <label class="pck-field">
+              <span>Model</span>
+              <select id="pck-b-model" disabled>
+                <option value="">— Nejdřív vyberte značku —</option>
+              </select>
+            </label>
+          </fieldset>
+        </div>
+
+        <div class="pck-controls">
+          <label class="pck-cat-toggle">
+            <input type="checkbox" id="pck-same-cat" checked />
+            <span>Jen stejnou kategorii (traktor vs traktor, kombajn vs kombajn)</span>
+          </label>
+          <button type="submit" class="pck-btn" id="pck-btn" disabled>Porovnat →</button>
+        </div>
+        <p id="pck-error" class="pck-error" hidden></p>
+      </form>
+    </section>
 
     {tractorPairs.length > 0 && (
       <section class="grid-section">
@@ -137,6 +219,124 @@ const canonical = `${SITE_URL}/srovnani/`;
     )}
 
   </div>
+
+  <script is:inline define:vars={{ pickerJson }}>
+    (function () {
+      const models = JSON.parse(pickerJson);
+      const PAIR_DELIMITER = '-vs-';
+
+      const aBrand = document.getElementById('pck-a-brand');
+      const aModel = document.getElementById('pck-a-model');
+      const bBrand = document.getElementById('pck-b-brand');
+      const bModel = document.getElementById('pck-b-model');
+      const sameCat = document.getElementById('pck-same-cat');
+      const btn = document.getElementById('pck-btn');
+      const errEl = document.getElementById('pck-error');
+      const form = document.getElementById('picker-form');
+      if (!aBrand || !bBrand || !aModel || !bModel || !btn || !form) return;
+
+      function populateModels(brandSel, modelSel, opposite) {
+        const slug = brandSel.value;
+        const cat = sameCat.checked ? oppositeCategory() : '';
+        modelSel.innerHTML = '';
+        if (!slug) {
+          modelSel.disabled = true;
+          modelSel.innerHTML = '<option value="">— Nejdřív vyberte značku —</option>';
+          return;
+        }
+        const filtered = models.filter((m) => {
+          if (m.brand_slug !== slug) return false;
+          if (cat && m.category !== cat) return false;
+          return true;
+        });
+        if (filtered.length === 0) {
+          modelSel.disabled = true;
+          modelSel.innerHTML = '<option value="">— Žádné modely —</option>';
+          return;
+        }
+        modelSel.disabled = false;
+        modelSel.innerHTML = '<option value="">— Vyberte model —</option>';
+        // Group: in production first
+        const inProd = filtered.filter((m) => m.year_to === null);
+        const old = filtered.filter((m) => m.year_to !== null);
+        if (inProd.length > 0) {
+          const og = document.createElement('optgroup');
+          og.label = 'Aktuálně vyráběné';
+          for (const m of inProd) {
+            const o = document.createElement('option');
+            o.value = m.slug;
+            o.textContent = `${m.name}${m.power_hp ? ' · ' + m.power_hp + ' k' : ''}`;
+            og.appendChild(o);
+          }
+          modelSel.appendChild(og);
+        }
+        if (old.length > 0) {
+          const og = document.createElement('optgroup');
+          og.label = 'Starší / nevyráběné';
+          for (const m of old) {
+            const o = document.createElement('option');
+            o.value = m.slug;
+            o.textContent = `${m.name}${m.power_hp ? ' · ' + m.power_hp + ' k' : ''}${m.year_to ? ' (do ' + m.year_to + ')' : ''}`;
+            og.appendChild(o);
+          }
+          modelSel.appendChild(og);
+        }
+      }
+
+      function oppositeCategory() {
+        // If picker A model is set, return its category to restrict B; otherwise empty.
+        if (aModel.value) {
+          const m = models.find((mm) => mm.slug === aModel.value);
+          return m?.category ?? '';
+        }
+        if (bModel.value) {
+          const m = models.find((mm) => mm.slug === bModel.value);
+          return m?.category ?? '';
+        }
+        return '';
+      }
+
+      function refresh() {
+        populateModels(aBrand, aModel, bModel);
+        populateModels(bBrand, bModel, aModel);
+        validate();
+      }
+
+      function validate() {
+        const aSlug = aModel.value;
+        const bSlug = bModel.value;
+        errEl.hidden = true;
+        errEl.textContent = '';
+        if (!aSlug || !bSlug) {
+          btn.disabled = true;
+          return;
+        }
+        if (aSlug === bSlug) {
+          btn.disabled = true;
+          errEl.hidden = false;
+          errEl.textContent = 'Vyberte dva různé modely.';
+          return;
+        }
+        btn.disabled = false;
+      }
+
+      aBrand.addEventListener('change', refresh);
+      bBrand.addEventListener('change', refresh);
+      aModel.addEventListener('change', validate);
+      bModel.addEventListener('change', validate);
+      sameCat.addEventListener('change', refresh);
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const a = aModel.value;
+        const b = bModel.value;
+        if (!a || !b || a === b) return;
+        const [first, second] = a < b ? [a, b] : [b, a];
+        const combo = first + PAIR_DELIMITER + second;
+        window.location.href = '/srovnani/' + combo + '/';
+      });
+    })();
+  </script>
 </Layout>
 
 <style>
@@ -186,5 +386,121 @@ const canonical = `${SITE_URL}/srovnani/`;
     .hub { padding:20px 16px 60px; }
     .hero { padding:32px 24px; }
     .hero-stats .hs + .hs { padding-left:0; border-left:0; }
+  }
+
+  /* Custom picker */
+  .picker-section {
+    background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+    border: 2px solid #FFEA00;
+    border-radius: 16px;
+    padding: 28px;
+    margin: 32px 0 40px;
+    scroll-margin-top: 100px;
+  }
+  .picker-head h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0A0A0B;
+    margin: 0 0 8px;
+    letter-spacing: -0.3px;
+  }
+  .picker-head p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 20px;
+    max-width: 620px;
+  }
+  .picker-form { display: flex; flex-direction: column; gap: 18px; }
+  .picker-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .pck-side {
+    background: #fff;
+    border: 1.5px solid #eaeaec;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 0;
+  }
+  .pck-side-b { background: #fafafa; }
+  .pck-side legend {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #0A0A0B;
+    padding: 0 6px;
+  }
+  .pck-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+  .pck-field span { font-size: 12px; color: #6B6B72; font-weight: 600; }
+  .pck-field select {
+    padding: 9px 12px;
+    border: 1.5px solid #DFDFE3;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fff;
+    width: 100%;
+  }
+  .pck-field select:focus {
+    outline: none;
+    border-color: #FFEA00;
+    box-shadow: 0 0 0 3px rgba(255, 234, 0, 0.2);
+  }
+  .pck-field select:disabled { background: #f5f5f5; color: #999; }
+  .pck-vs {
+    font-size: 24px;
+    font-weight: 800;
+    color: #FFEA00;
+    text-shadow: -1px -1px 0 #0A0A0B, 1px -1px 0 #0A0A0B, -1px 1px 0 #0A0A0B, 1px 1px 0 #0A0A0B;
+    font-family: 'Chakra Petch', sans-serif;
+    text-align: center;
+  }
+  .pck-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .pck-cat-toggle {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 13px;
+    color: #444;
+    cursor: pointer;
+  }
+  .pck-cat-toggle input { width: 16px; height: 16px; accent-color: #0B7A3B; cursor: pointer; }
+  .pck-btn {
+    padding: 12px 24px;
+    background: #0A0A0B;
+    color: #FFEA00;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, opacity .15s;
+  }
+  .pck-btn:hover:not(:disabled) { background: #2a2a2f; }
+  .pck-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .pck-error {
+    margin: 0;
+    padding: 10px 14px;
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    .picker-grid { grid-template-columns: 1fr; }
+    .pck-vs { padding: 6px 0; }
+    .pck-controls { flex-direction: column; align-items: stretch; }
+    .pck-btn { width: 100%; }
   }
 </style>
