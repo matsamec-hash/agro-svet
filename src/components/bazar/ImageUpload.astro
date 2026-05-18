@@ -77,6 +77,55 @@
   let uploadedPaths: string[] = [];
   const MAX_FILES = 5;
   const MAX_SIZE = 5 * 1024 * 1024;
+  // Client-side resize target. 1600 covers retina laptops; phone cameras
+  // shoot 4032+ wide, which is wasted on bazar listings. JPEG q0.82 strikes
+  // a good balance — sub-300 KB output for typical photos, no visible loss.
+  const RESIZE_MAX_DIM = 1600;
+  const RESIZE_JPEG_QUALITY = 0.82;
+
+  /**
+   * Resize a phone-uploaded image down to RESIZE_MAX_DIM on the longest edge
+   * before submitting to /api/bazar/upload. Server still validates type + size
+   * and pre-resize is best-effort — if any step fails we fall back to the
+   * original file so the user never sees a broken upload.
+   *
+   * Returns the original File untouched for already-small images.
+   */
+  async function maybeResizeImage(file: File): Promise<File> {
+    // Skip very small files — not worth the canvas round-trip.
+    if (file.size < 400 * 1024) return file;
+    // Skip non-bitmap (server already rejects, but defensive).
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return file;
+
+    try {
+      const bitmap = await createImageBitmap(file);
+      if (bitmap.width <= RESIZE_MAX_DIM && bitmap.height <= RESIZE_MAX_DIM) {
+        bitmap.close?.();
+        return file;
+      }
+      const scale = RESIZE_MAX_DIM / Math.max(bitmap.width, bitmap.height);
+      const w = Math.round(bitmap.width * scale);
+      const h = Math.round(bitmap.height * scale);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return file;
+      ctx.drawImage(bitmap, 0, 0, w, h);
+      bitmap.close?.();
+
+      const blob: Blob | null = await new Promise((resolve) =>
+        canvas.toBlob(resolve, 'image/jpeg', RESIZE_JPEG_QUALITY),
+      );
+      if (!blob || blob.size >= file.size) return file; // no improvement → keep original
+      const newName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+      return new File([blob], newName, { type: 'image/jpeg' });
+    } catch (err) {
+      console.warn('[upload] client-side resize failed — uploading original', err);
+      return file;
+    }
+  }
 
   area.addEventListener('click', () => input.click());
   area.addEventListener('dragover', (e) => { e.preventDefault(); area.classList.add('dragover'); });
@@ -97,8 +146,13 @@
         continue;
       }
 
+      // Pre-resize on the client so phone photos (often 4-8 MB / 4000+ px)
+      // don't waste bandwidth + Supabase Storage quota. Server-side validation
+      // and bot filtering still apply.
+      const fileToUpload = await maybeResizeImage(file);
+
       const fd = new FormData();
-      fd.append('file', file);
+      fd.append('file', fileToUpload);
 
       try {
         const res = await fetch('/api/bazar/upload', {
