@@ -8,11 +8,6 @@ import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
-// Module-level deploy-approximate date. The worker resets on each deploy (and
-// occasionally between, but that's rare and acceptable). Gives Google a
-// "recently updated" signal on static hub pages without changing on every render.
-const STATIC_LASTMOD = new Date().toISOString().slice(0, 10);
-
 function maxIsoDate(values: Array<string | null | undefined>): string | undefined {
   let max: string | undefined;
   for (const v of values) {
@@ -63,6 +58,13 @@ function renderUrl(u: UrlEntry): string {
 }
 
 export const GET: APIRoute = async () => {
+  // Request-time current date. MUST be computed inside the handler — Cloudflare
+  // Workers pin Date.now() to 0 at module-load time (security/spectre mitigation),
+  // so a module-level `new Date()` would emit "1970-01-01" lastmod across the
+  // sitemap. Inside a request handler Date.now() returns the wallclock time as
+  // expected.
+  const STATIC_LASTMOD = new Date().toISOString().slice(0, 10);
+
   const urls: UrlEntry[] = [];
 
   // Pull dynamic content FIRST — sequential (not Promise.all) because parallel
