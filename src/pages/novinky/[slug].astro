@@ -7,6 +7,7 @@ import { AGRO_SVET_SITE_ID as SITE_ID } from '../../lib/config';
 import { injectLinks, injectLinksInText, createLinkContext } from '../../lib/auto-linker';
 import { getAllBrands } from '../../lib/stroje';
 import { getAllPlemena } from '../../lib/plemena';
+import { imgSrcset } from '../../lib/image-variants';
 
 const { slug } = Astro.params;
 const supabase = createAnonClient();
@@ -186,10 +187,16 @@ const jsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
   <!-- Hero image -->
-  {article.featured_image_url && (
+  {article.featured_image_url && (() => {
+    // Hero spans 100vw of the viewport — sizes hint covers mobile through
+    // ultrawide. The 2400 w variant only kicks in on retina laptops/desktops.
+    const heroVariants = imgSrcset(article.featured_image_url, '100vw');
+    return (
     <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
       <img
-        src={article.featured_image_url}
+        src={heroVariants.src}
+        srcset={heroVariants.srcset}
+        sizes={heroVariants.sizes}
         alt={article.title}
         width="1600"
         height="900"
@@ -199,7 +206,8 @@ const jsonLd = {
       />
       <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.35));"></div>
     </div>
-  )}
+    );
+  })()}
 
   <div style="max-width:780px; margin:0 auto; padding:48px 32px 96px;">
 

@@ -9,6 +9,7 @@ import { createAnonClient } from '../lib/supabase';
 import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 import { organizationSchema } from '../lib/structured-data';
+import { imgSrcset } from '../lib/image-variants';
 
 // Edge cache: 5min s-maxage + 30min SWR. Většina requestů HIT na CF edge,
 // nový článek se objeví do ~5min (akceptovatelný trade-off vs 0 Worker
@@ -120,7 +121,10 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       {featured && (
         <div class="hero-card hero-main hero-wrap">
           <a href={`/novinky/${featured.slug}/`} class="hero-link">
-            {featured.featured_image_url && <img src={featured.featured_image_url} alt={featured.title} width="800" height="600" fetchpriority="high" decoding="async" style={`object-position: ${featured.focal_point?.x ?? 50}% ${featured.focal_point?.y ?? 50}%;`} />}
+            {featured.featured_image_url && (() => {
+              const v = imgSrcset(featured.featured_image_url, '(max-width: 900px) 100vw, 800px');
+              return <img src={v.src} srcset={v.srcset} sizes={v.sizes} alt={featured.title} width="800" height="600" fetchpriority="high" decoding="async" style={`object-position: ${featured.focal_point?.x ?? 50}% ${featured.focal_point?.y ?? 50}%;`} />;
+            })()}
             <div class="hero-overlay"></div>
             <div class="hero-card-content">
               <h2>{featured.title}</h2>
@@ -138,7 +142,10 @@ const itemListJsonLd = homepageItems.length > 0 ? {
         <div class="hero-card hero-small hero-wrap">
           <a href={`/novinky/${article.slug}/`} class="hero-link">
             {article.featured_image_url
-              ? <img src={article.featured_image_url} alt={article.title} width="400" height="300" loading="lazy" decoding="async" />
+              ? (() => {
+                  const v = imgSrcset(article.featured_image_url, '(max-width: 900px) 50vw, 400px');
+                  return <img src={v.src} srcset={v.srcset} sizes={v.sizes} alt={article.title} width="400" height="300" loading="lazy" decoding="async" />;
+                })()
               : <div class="hero-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
             }
             <div class="hero-overlay"></div>
