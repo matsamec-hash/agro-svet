@@ -21,24 +21,9 @@ if (!listing) {
   return Astro.rewrite('/404');
 }
 
-// Increment views (debounced — skip bots and recent visitors via cookie)
-const cookieName = `bv_${id}`;
-const userAgent = Astro.request.headers.get('user-agent') ?? '';
-const isBot = /bot|crawler|spider|crawl|google|bing|yandex|duckduck|baidu|slurp|facebook/i.test(userAgent);
-const recentlyViewed = Astro.cookies.has(cookieName);
-
-if (!isBot && !recentlyViewed) {
-  await supabase
-    .from('bazar_listings')
-    .update({ views: (listing.views ?? 0) + 1 })
-    .eq('id', id);
-  Astro.cookies.set(cookieName, '1', {
-    maxAge: 60 * 30,
-    httpOnly: true,
-    sameSite: 'lax',
-    path: '/',
-  });
-}
+// View counter moved to client-side beacon → /api/bazar/views/[id] (atomic RPC).
+// Removes the SSR read-modify-write race plus a Supabase write from the cache
+// miss hot path. Bot/cookie filtering happens server-side in the API endpoint.
 
 // Resolve image URLs
 const images = (listing.bazar_images ?? []).map((img: any) => {
@@ -191,6 +176,30 @@ const breadcrumbJsonLd = breadcrumbSchema([
       </aside>
     </div>
   </div>
+
+  <!-- Fire-and-forget view counter beacon. sendBeacon survives navigation away,
+       but the API endpoint also accepts regular fetch as fallback for older browsers. -->
+  <script type="module" is:inline define:vars={{ listingId: id }}>
+    (() => {
+      const url = `/api/bazar/views/${listingId}`;
+      const send = () => {
+        try {
+          if (navigator.sendBeacon) {
+            // Empty body is fine — server uses params.id; sendBeacon needs a Blob.
+            navigator.sendBeacon(url, new Blob([''], { type: 'application/json' }));
+          } else {
+            fetch(url, { method: 'POST', keepalive: true }).catch(() => {});
+          }
+        } catch { /* swallow — view counter is non-essential */ }
+      };
+      // Defer until after first paint so we don't compete with critical resources.
+      if (document.readyState === 'complete') {
+        setTimeout(send, 200);
+      } else {
+        window.addEventListener('load', () => setTimeout(send, 200), { once: true });
+      }
+    })();
+  </script>
 </Layout>
 
 <style>

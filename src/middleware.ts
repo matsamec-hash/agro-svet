@@ -17,6 +17,24 @@ const PROTECTED_PATHS = [
 
 const ADMIN_PATHS = ['/admin/'];
 
+// Routes that may consult locals.user (page-level redirects, ownership checks,
+// or API auth). Anything outside this set is "public" and skips the Supabase
+// setSession round-trip — cheaper for the 99% of requests that don't need auth.
+function needsAuthContext(pathname: string): boolean {
+  if (pathname.startsWith('/api/')) return true;
+  if (ADMIN_PATHS.some((p) => pathname.startsWith(p))) return true;
+  if (PROTECTED_PATHS.some((p) => pathname.startsWith(p))) return true;
+  // /bazar/prihlaseni & /bazar/registrace want to redirect already-logged-in
+  // users away; odhlaseni clears the session.
+  if (
+    pathname.startsWith('/bazar/prihlaseni') ||
+    pathname.startsWith('/bazar/registrace') ||
+    pathname.startsWith('/bazar/auth/') ||
+    pathname.startsWith('/bazar/odhlaseni')
+  ) return true;
+  return false;
+}
+
 function applyGateHeaders(response: Response, opts: { redirect?: boolean } = {}): Response {
   // Always: noindex (gate is pre-launch — don't index any of it)
   response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
@@ -56,6 +74,16 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
   // ---------------------------------------------------------------------------
+
+  // Fast path: public route (and gate is off) — skip auth processing entirely.
+  // Saves the Supabase setSession round-trip for anonymous traffic on hot pages
+  // like /, /novinky/[slug], /bazar/, /bazar/[id].
+  if (!needsAuthContext(url.pathname)) {
+    locals.user = null;
+    const response = await next();
+    if (gateOn) applyGateHeaders(response);
+    return response;
+  }
 
   const accessToken = cookies.get('sb-access-token')?.value;
   const refreshToken = cookies.get('sb-refresh-token')?.value;

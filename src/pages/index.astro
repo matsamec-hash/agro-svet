@@ -8,7 +8,7 @@ import HomeWeather from '../components/HomeWeather.astro';
 import { createAnonClient } from '../lib/supabase';
 import commoditiesData from '../data/commodities.json';
 import { AGRO_EVENTS } from '../data/agro-events';
-import { AGRO_SVET_SITE_ID as SITE_ID } from '../lib/config';
+import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 import { organizationSchema } from '../lib/structured-data';
 
 // Edge cache: 5min s-maxage + 30min SWR. Většina requestů HIT na CF edge,
@@ -82,6 +82,26 @@ const websiteJsonLd = {
     'query-input': 'required name=search_term_string',
   },
 };
+
+// ItemList of the homepage article grid — helps Google Discover surface the hub
+// and understand which articles are currently "above the fold" on the site.
+const homepageItems = [
+  ...(featured ? [featured] : []),
+  ...heroRight,
+  ...latest,
+];
+const itemListJsonLd = homepageItems.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'agro-svět.cz — aktuální články',
+  numberOfItems: homepageItems.length,
+  itemListElement: homepageItems.map((a, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `${SITE_URL}/novinky/${a.slug}/`,
+    name: a.title,
+  })),
+} : null;
 ---
 
 <Layout
@@ -90,6 +110,7 @@ const websiteJsonLd = {
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(websiteJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(organizationSchema())} />
+  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
 
   <h1 class="visually-hidden">agro-svět.cz — zemědělská technika, bazar a novinky</h1>
 

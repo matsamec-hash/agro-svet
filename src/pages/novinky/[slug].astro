@@ -11,14 +11,29 @@ import { getAllPlemena } from '../../lib/plemena';
 const { slug } = Astro.params;
 const supabase = createAnonClient();
 
-const { data: article } = await supabase
-  .from('articles')
-  .select('*')
-  .eq('site_id', SITE_ID)
-  .eq('slug', slug)
-  .eq('status', 'published')
-  .single();
+// Run the article fetch and the related-pool fetch in parallel. The pool can be
+// filtered by article.id post-hoc; that saves one full RTT to Supabase Frankfurt.
+const ARTICLE_COLUMNS = 'id, title, slug, perex, content, featured_image_url, focal_point, category, tags, published_at, updated_at, seo_title, seo_description';
+const POOL_COLUMNS = 'id, title, slug, perex, featured_image_url, category, tags, published_at';
 
+const [articleRes, poolRes] = await Promise.all([
+  supabase
+    .from('articles')
+    .select(ARTICLE_COLUMNS)
+    .eq('site_id', SITE_ID)
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .single(),
+  supabase
+    .from('articles')
+    .select(POOL_COLUMNS)
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(81),
+]);
+
+const article = articleRes.data;
 if (!article) {
   return Astro.rewrite('/404');
 }
@@ -30,18 +45,8 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=3600,
 // Shared link-dedup state for perex + body so each entity is linked at most once per page.
 const linkCtx = createLinkContext(`/novinky/${article.slug}/`);
 
-// Related articles + prev/next nav: fetch a recent pool from same category
-// + same site, score by tag overlap (deterministic, SEO-friendly).
-// Single query keeps it cheap; pool is bounded for SSR latency.
-const { data: poolRaw } = await supabase
-  .from('articles')
-  .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published')
-  .neq('id', article.id)
-  .order('published_at', { ascending: false })
-  .limit(80);
-const pool = poolRaw ?? [];
+// Filter the current article out of the pool (we fetched 81 to keep 80 after removal).
+const pool = (poolRes.data ?? []).filter((p) => p.id !== article.id).slice(0, 80);
 
 const articleTags: string[] = (article.tags as string[] | null) ?? [];
 function scoreRelated(other: typeof pool[number]): number {
@@ -146,6 +151,12 @@ const jsonLd = {
       author,
       publisher,
       inLanguage: 'cs-CZ',
+      // Speakable: marks the headline + lead paragraph as suitable for voice assistants
+      // (Google Assistant, Apple/Siri citations). CSS selectors point at our DOM ids.
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['#article-headline', '#article-lead'],
+      },
       ...(articleSectionLabel && { articleSection: articleSectionLabel }),
       ...(article.tags?.length > 0 && { keywords: article.tags.join(', ') }),
     },
@@ -210,7 +221,7 @@ const jsonLd = {
     </div>
 
     <!-- Headline -->
-    <h1 style="font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.5px; line-height:1.15; color:#1a1a1a; margin-bottom:12px;">
+    <h1 id="article-headline" style="font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.5px; line-height:1.15; color:#1a1a1a; margin-bottom:12px;">
       {article.title}
     </h1>
 
@@ -227,7 +238,7 @@ const jsonLd = {
       )}
     </div>
 
-    <p style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;" set:html={injectLinksInText(article.perex, linkCtx)} />
+    <p id="article-lead" style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;" set:html={injectLinksInText(article.perex, linkCtx)} />
 
     <!-- Article body (HTML from CMS) — auto-linker injects internal links to brands/plemena/stroje hubs. Shares used-set with perex above. -->
     <div class="prose" set:html={injectLinks(article.content, linkCtx)} />

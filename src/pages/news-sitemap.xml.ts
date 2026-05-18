@@ -4,9 +4,12 @@ import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 
 const PUBLICATION_NAME = 'agro-svět.cz';
 const PUBLICATION_LANG = 'cs';
-// Google News accepts up to 2 days strictly, but in practice indexes up to 30.
-// Wider window so sitemap is never empty between publishing cadences.
-const FRESHNESS_HOURS = 24 * 30;
+// Google News spec: include only articles published in the last 2 days. Wider
+// windows can lower trust in the feed and don't help indexing (older articles
+// stay in the main sitemap and Google's regular index for ~30 days anyway).
+// If the publishing cadence drops and the feed runs empty, that's an acceptable
+// "we didn't publish news this week" signal — better than misrepresenting freshness.
+const FRESHNESS_HOURS = 48;
 
 const XML_ESCAPES: Record<string, string> = {
   '<': '&lt;',

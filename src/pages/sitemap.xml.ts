@@ -8,6 +8,21 @@ import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
+// Module-level deploy-approximate date. The worker resets on each deploy (and
+// occasionally between, but that's rare and acceptable). Gives Google a
+// "recently updated" signal on static hub pages without changing on every render.
+const STATIC_LASTMOD = new Date().toISOString().slice(0, 10);
+
+function maxIsoDate(values: Array<string | null | undefined>): string | undefined {
+  let max: string | undefined;
+  for (const v of values) {
+    if (!v) continue;
+    const d = v.slice(0, 10);
+    if (!max || d > max) max = d;
+  }
+  return max;
+}
+
 interface UrlEntry {
   loc: string;
   lastmod?: string;
@@ -73,80 +88,87 @@ export const GET: APIRoute = async () => {
   if (listingsRes.error) console.error('sitemap bazar query error', listingsRes.error);
   const listingsDyn = listingsRes.data ?? [];
 
-  const staticPaths: Array<[string, UrlEntry['changefreq'], string?]> = [
-    ['/', 'daily', '1.0'],
-    ['/novinky/', 'daily', '0.9'],
-    ['/bazar/', 'daily', '0.7'],
-    ['/bazar/mapa/', 'daily', '0.65'],
-    ['/bazar/sledovani/', 'monthly', '0.6'],
-    ['/bazar/topovani/', 'monthly', '0.65'],
-    ['/bazar/kraj/', 'weekly', '0.7'],
-    ['/stroje/', 'weekly', '0.9'],
-    ['/stroje/traktory/', 'weekly'],
-    ['/stroje/kombajny/', 'weekly'],
-    ['/stroje/zemedelske-stroje/', 'weekly', '0.85'],
-    ['/znacky/', 'weekly', '0.8'],
-    ['/encyklopedie/', 'weekly'],
-    ['/plemena/', 'weekly'],
-    ['/puda/', 'weekly'],
-    ['/fotosoutez/', 'weekly', '0.8'],
-    ['/fotosoutez/archiv/', 'monthly'],
-    ['/fotosoutez/pravidla/', 'yearly'],
-    ['/fotosoutez/gdpr/', 'yearly'],
-    ['/statistiky/', 'weekly'],
-    ['/srovnani/', 'weekly', '0.85'],
-    ['/zebricky/', 'weekly', '0.8'],
-    ['/slovnik/', 'monthly', '0.75'],
-    ['/kviz/', 'monthly', '0.7'],
-    ['/kviz/historie-znacek/', 'monthly', '0.7'],
-    ['/kviz/jaky-traktor-potrebujete/', 'monthly', '0.8'],
-    ['/kalkulacka/', 'monthly', '0.8'],
-    ['/kalkulacka/leasing-traktoru/', 'monthly', '0.75'],
-    ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75'],
-    ['/kalkulacka/dotace-cap/', 'monthly', '0.8'],
-    ['/kalkulacka/uspora-nafty/', 'monthly', '0.75'],
-    ['/prodejci/', 'monthly', '0.8'],
-    ['/dotace/', 'weekly', '0.85'],
-    ['/dotace/kalendar-kol/', 'weekly', '0.75'],
-    ['/jak-na-to/', 'weekly', '0.8'],
-    ['/media/', 'monthly'],
-    ['/redakce/', 'monthly', '0.5'],
-    ['/prehled/', 'monthly', '0.7'],
-    ['/prehled/nejprodavanejsi-traktory-2025/', 'yearly', '0.8'],
-    ['/pruvodce/', 'monthly', '0.8'],
-    ['/pruvodce/jak-vybrat-traktor-100-150-koni/', 'monthly', '0.85'],
-    ['/pruvodce/jak-vybrat-kombajn-stredni-farma/', 'monthly', '0.85'],
-    ['/pruvodce/kontrola-ojeteho-traktoru/', 'monthly', '0.85'],
-    ['/pruvodce/prvni-traktor-mlady-zemedelec/', 'monthly', '0.85'],
-    ['/pruvodce/jak-vybrat-seci-stroj/', 'monthly', '0.85'],
-    ['/pruvodce/jak-vybrat-postrikovac/', 'monthly', '0.85'],
-    ['/pruvodce/jak-vybrat-lis-na-baliky/', 'monthly', '0.85'],
-    ['/pruvodce/jak-vybrat-rozmetadlo-hnojiv/', 'monthly', '0.85'],
+  // Hub pages whose freshness is driven by dynamic content underneath them.
+  const latestArticleLastmod = maxIsoDate(articlesDyn.map((a) => (a as { published_at?: string }).published_at));
+  const latestListingLastmod = maxIsoDate(
+    listingsDyn.map((l) => (l as { updated_at?: string }).updated_at || (l as { created_at?: string }).created_at),
+  );
+  const homepageLastmod = latestArticleLastmod ?? STATIC_LASTMOD;
+
+  const staticPaths: Array<[string, UrlEntry['changefreq'], string?, string?]> = [
+    ['/', 'daily', '1.0', homepageLastmod],
+    ['/novinky/', 'daily', '0.9', latestArticleLastmod ?? STATIC_LASTMOD],
+    ['/bazar/', 'daily', '0.7', latestListingLastmod ?? STATIC_LASTMOD],
+    ['/bazar/mapa/', 'daily', '0.65', latestListingLastmod ?? STATIC_LASTMOD],
+    ['/bazar/sledovani/', 'monthly', '0.6', STATIC_LASTMOD],
+    ['/bazar/topovani/', 'monthly', '0.65', STATIC_LASTMOD],
+    ['/bazar/kraj/', 'weekly', '0.7', latestListingLastmod ?? STATIC_LASTMOD],
+    ['/stroje/', 'weekly', '0.9', STATIC_LASTMOD],
+    ['/stroje/traktory/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/stroje/kombajny/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/stroje/zemedelske-stroje/', 'weekly', '0.85', STATIC_LASTMOD],
+    ['/znacky/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/encyklopedie/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/plemena/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/puda/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/fotosoutez/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/fotosoutez/archiv/', 'monthly', undefined, STATIC_LASTMOD],
+    ['/fotosoutez/pravidla/', 'yearly', undefined, STATIC_LASTMOD],
+    ['/fotosoutez/gdpr/', 'yearly', undefined, STATIC_LASTMOD],
+    ['/statistiky/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/srovnani/', 'weekly', '0.85', STATIC_LASTMOD],
+    ['/zebricky/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/slovnik/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/kviz/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/kviz/historie-znacek/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/kviz/jaky-traktor-potrebujete/', 'monthly', '0.8', STATIC_LASTMOD],
+    ['/kalkulacka/', 'monthly', '0.8', STATIC_LASTMOD],
+    ['/kalkulacka/leasing-traktoru/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/kalkulacka/dotace-cap/', 'monthly', '0.8', STATIC_LASTMOD],
+    ['/kalkulacka/uspora-nafty/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/prodejci/', 'monthly', '0.8', STATIC_LASTMOD],
+    ['/dotace/', 'weekly', '0.85', STATIC_LASTMOD],
+    ['/dotace/kalendar-kol/', 'weekly', '0.75', STATIC_LASTMOD],
+    ['/jak-na-to/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/media/', 'monthly', undefined, STATIC_LASTMOD],
+    ['/redakce/', 'monthly', '0.5', STATIC_LASTMOD],
+    ['/prehled/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/prehled/nejprodavanejsi-traktory-2025/', 'yearly', '0.8', STATIC_LASTMOD],
+    ['/pruvodce/', 'monthly', '0.8', STATIC_LASTMOD],
+    ['/pruvodce/jak-vybrat-traktor-100-150-koni/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/pruvodce/jak-vybrat-kombajn-stredni-farma/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/pruvodce/kontrola-ojeteho-traktoru/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/pruvodce/prvni-traktor-mlady-zemedelec/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/pruvodce/jak-vybrat-seci-stroj/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/pruvodce/jak-vybrat-postrikovac/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/pruvodce/jak-vybrat-lis-na-baliky/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/pruvodce/jak-vybrat-rozmetadlo-hnojiv/', 'monthly', '0.85', STATIC_LASTMOD],
   ];
-  for (const [path, changefreq, priority] of staticPaths) {
-    urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority });
+  for (const [path, changefreq, priority, lastmod] of staticPaths) {
+    urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority, lastmod });
   }
 
   for (const cat of NOVINKY_CATEGORIES) {
-    urls.push({ loc: `${SITE_URL}/novinky/kategorie/${cat}/`, changefreq: 'weekly' });
+    urls.push({ loc: `${SITE_URL}/novinky/kategorie/${cat}/`, changefreq: 'weekly', lastmod: latestArticleLastmod ?? STATIC_LASTMOD });
   }
 
   // Žebříčky — top-N seznamy generované z stroje dat.
   const { TIER_LISTS } = await import('../lib/tier-lists');
   for (const t of TIER_LISTS) {
-    urls.push({ loc: `${SITE_URL}/zebricky/${t.slug}/`, changefreq: 'weekly', priority: '0.75' });
+    urls.push({ loc: `${SITE_URL}/zebricky/${t.slug}/`, changefreq: 'weekly', priority: '0.75', lastmod: STATIC_LASTMOD });
   }
 
   // Slovník zemědělských pojmů.
   const { SLOVNIK } = await import('../lib/slovnik');
   for (const term of SLOVNIK) {
-    urls.push({ loc: `${SITE_URL}/slovnik/${term.slug}/`, changefreq: 'monthly', priority: '0.6' });
+    urls.push({ loc: `${SITE_URL}/slovnik/${term.slug}/`, changefreq: 'monthly', priority: '0.6', lastmod: STATIC_LASTMOD });
   }
 
   // Kraj-level lokální bazar landing pages.
   const { KRAJE } = await import('../lib/cap-dotace');
   for (const k of KRAJE) {
-    urls.push({ loc: `${SITE_URL}/bazar/kraj/${k.slug}/`, changefreq: 'weekly', priority: '0.65' });
+    urls.push({ loc: `${SITE_URL}/bazar/kraj/${k.slug}/`, changefreq: 'weekly', priority: '0.65', lastmod: latestListingLastmod ?? STATIC_LASTMOD });
   }
 
   // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.
@@ -159,17 +181,17 @@ export const GET: APIRoute = async () => {
   const groupsWithModels = (Object.entries(FUNCTIONAL_GROUPS) as [string, typeof FUNCTIONAL_GROUPS[keyof typeof FUNCTIONAL_GROUPS]][])
     .filter(([_, group]) => allStrojeModels.some((m) => (group.categories as readonly string[]).includes(m.effective_category)));
   for (const [groupSlug] of groupsWithModels) {
-    urls.push({ loc: `${SITE_URL}/stroje/zemedelske-stroje/${groupSlug}/`, changefreq: 'weekly', priority: '0.75' });
+    urls.push({ loc: `${SITE_URL}/stroje/zemedelske-stroje/${groupSlug}/`, changefreq: 'weekly', priority: '0.75', lastmod: STATIC_LASTMOD });
   }
 
   // Stroje sub-kategorie (cross-brand pages /stroje/<subcategory>/) — pouze ty s modely.
   const subcategoriesWithModels = new Set(allStrojeModels.map((m) => m.effective_category));
   for (const subcat of subcategoriesWithModels) {
-    urls.push({ loc: `${SITE_URL}/stroje/${subcat}/`, changefreq: 'weekly', priority: '0.7' });
+    urls.push({ loc: `${SITE_URL}/stroje/${subcat}/`, changefreq: 'weekly', priority: '0.7', lastmod: STATIC_LASTMOD });
   }
 
   for (const brand of getAllBrands()) {
-    urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/`, changefreq: 'monthly', priority: '0.7' });
+    urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: STATIC_LASTMOD });
     for (const [catKey, cat] of Object.entries(brand.categories || {})) {
       const families = new Set<string>();
       for (const s of cat.series || []) {
@@ -178,6 +200,7 @@ export const GET: APIRoute = async () => {
         urls.push({
           loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/`,
           changefreq: 'monthly',
+          lastmod: STATIC_LASTMOD,
           images: seriesImg ? [seriesImg] : undefined,
         });
         for (const m of s.models || []) {
@@ -188,12 +211,13 @@ export const GET: APIRoute = async () => {
           urls.push({
             loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/${short}/`,
             changefreq: 'monthly',
+            lastmod: STATIC_LASTMOD,
             images: imgUrl ? [imgUrl] : undefined,
           });
         }
       }
       for (const fam of families) {
-        urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/rada/${catKey}/${fam}/`, changefreq: 'monthly', priority: '0.6' });
+        urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/rada/${catKey}/${fam}/`, changefreq: 'monthly', priority: '0.6', lastmod: STATIC_LASTMOD });
       }
     }
   }
@@ -205,19 +229,19 @@ export const GET: APIRoute = async () => {
   ]);
 
   for (const z of znacky) {
-    urls.push({ loc: `${SITE_URL}/znacky/${z.id}/`, changefreq: 'monthly' });
+    urls.push({ loc: `${SITE_URL}/znacky/${z.id}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
   }
   for (const e of encyklopedie) {
     const heroImg = e.data.heroImage;
     urls.push({
       loc: `${SITE_URL}/encyklopedie/${e.id}/`,
       changefreq: 'monthly',
-      lastmod: e.data.lastVerified ? e.data.lastVerified.toISOString().slice(0, 10) : undefined,
+      lastmod: e.data.lastVerified ? e.data.lastVerified.toISOString().slice(0, 10) : STATIC_LASTMOD,
       images: heroImg ? [heroImg] : undefined,
     });
   }
   for (const p of puda) {
-    urls.push({ loc: `${SITE_URL}/puda/${p.id}/`, changefreq: 'monthly' });
+    urls.push({ loc: `${SITE_URL}/puda/${p.id}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
   }
 
   const howto = await getCollection('howto');
@@ -233,25 +257,25 @@ export const GET: APIRoute = async () => {
 
   const dotace = await getCollection('dotace');
   for (const dt of dotace) {
-    urls.push({ loc: `${SITE_URL}/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8' });
+    urls.push({ loc: `${SITE_URL}/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
   }
 
   for (const d of getAllDruhy()) {
-    urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/`, changefreq: 'monthly' });
+    urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
     for (const p of d.plemena) {
-      urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/${p.slug}/`, changefreq: 'monthly' });
+      urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/${p.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
     }
   }
 
   // Comparison pairs — same list that generates /srovnani/[combo]/ routes.
   for (const pair of topComparisonPairs(220)) {
-    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65' });
+    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD });
   }
 
   // Tier-list pages (top-10 lists per segment).
-  urls.push({ loc: `${SITE_URL}/srovnani/top/`, changefreq: 'weekly', priority: '0.8' });
+  urls.push({ loc: `${SITE_URL}/srovnani/top/`, changefreq: 'weekly', priority: '0.8', lastmod: STATIC_LASTMOD });
   for (const t of (await import('../lib/tier-lists')).TIER_LISTS) {
-    urls.push({ loc: `${SITE_URL}/srovnani/top/${t.slug}/`, changefreq: 'weekly', priority: '0.75' });
+    urls.push({ loc: `${SITE_URL}/srovnani/top/${t.slug}/`, changefreq: 'weekly', priority: '0.75', lastmod: STATIC_LASTMOD });
   }
 
   for (const a of articlesDyn) {

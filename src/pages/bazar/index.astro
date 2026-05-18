@@ -74,6 +74,17 @@ const hasFilters = Boolean(
 );
 const isDefaultView = page === 1 && !hasFilters;
 
+// Edge-cache the default unfiltered landing — it's what 80% of visitors hit.
+// 60s s-maxage with 5min SWR keeps new listings near-realtime while collapsing
+// the per-request Supabase fan-out into a handful of cache misses per minute.
+// Filtered views get cookie/uncacheable response because every filter combo
+// is a unique cache key and we'd just waste edge storage.
+if (isDefaultView) {
+  Astro.response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+} else {
+  Astro.response.headers.set('Cache-Control', 'private, max-age=0, must-revalidate');
+}
+
 let featuredListings: any[] = [];
 if (isDefaultView) {
   const nowIso = new Date().toISOString();

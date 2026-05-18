@@ -84,15 +84,26 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
       if (window['chartjs-plugin-annotation']) Chart.register(window['chartjs-plugin-annotation']);
     }
 
-    // Cached fetch — multiple charts on the same page reuse one network request.
-    if (!window.__commodityDataPromise) {
-      window.__commodityDataPromise = fetch('/statistiky/commodity-data.json')
+    // Two-tier fetch:
+    //   - recent: last 60 months only (~85 KB) — eager, covers default "5y" view
+    //   - full:   complete history (~256 KB) — lazy, fetched only when user
+    //             clicks "Vše"
+    // Cached on window so multiple chart instances on the same page share.
+    if (!window.__commodityRecentPromise) {
+      window.__commodityRecentPromise = fetch('/statistiky/commodity-data-recent.json')
         .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+    }
+    function loadFull() {
+      if (!window.__commodityFullPromise) {
+        window.__commodityFullPromise = fetch('/statistiky/commodity-data.json')
+          .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+      }
+      return window.__commodityFullPromise;
     }
 
     async function bootstrap() {
       await ensureChart();
-      const data = await window.__commodityDataPromise;
+      const data = await window.__commodityRecentPromise;
       run(data);
     }
 
@@ -102,10 +113,11 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
     const YELLOW = '#FFEA00';
     const INK = '#0A0A0B';
 
-    const { series, events, fiveYearAvg, default0 } = __data;
+    let { series, events, fiveYearAvg, default0 } = __data;
     let currentName = default0;
     let currentWindow = '5y';
     let chart = null;
+    let fullLoaded = !__data.partial;
 
     function buildAnnotations(labels) {
       const anns = {};
@@ -192,10 +204,20 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
       });
     });
     document.querySelectorAll('.sp-time-btn').forEach(b => {
-      b.addEventListener('click', () => {
+      b.addEventListener('click', async () => {
         document.querySelectorAll('.sp-time-btn').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
         currentWindow = b.dataset.window;
+        // "Vše" needs the full series — lazy-fetch on first click.
+        if (currentWindow === 'all' && !fullLoaded) {
+          try {
+            const full = await loadFull();
+            series = full.series;
+            events = full.events;
+            fiveYearAvg = full.fiveYearAvg;
+            fullLoaded = true;
+          } catch { /* fall back to recent data — still renders, just truncated */ }
+        }
         render();
       });
     });
