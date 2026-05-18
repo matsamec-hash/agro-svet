@@ -1,0 +1,200 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/pruvodce/jak-vybrat-rozmetadlo-hnojiv/`;
+const datePublished = '2026-05-18';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Průvodce nákupem', url: '/pruvodce/' },
+  { name: 'Jak vybrat rozmetadlo hnojiv', url: canonical },
+]);
+
+const faqs = [
+  { q: 'Talířové nebo pneumatické rozmetadlo?', a: 'Talířové (disc spreader) — 95 % CZ farem. Levné, robustní, záběr 12–36 m. Pneumatické (rameno se vzduchovým rozvodem) — velmi přesné dávkování, vhodné pro VRA a úzké pásy, ale 3× dražší a komplikovanější údržba.' },
+  { q: 'Jaký objem zásobníku?', a: 'Pro farmu 200 ha postačí 1 500–2 500 l (= 1,5–2,5 t hnojiva, jedno plnění na 5–10 ha při dávce 250 kg/ha). Pro 500+ ha doporučujeme 3 500+ l. Větší zásobník = méně plnění, ale větší hmotnost (vyšší utužení).' },
+  { q: 'Vyplatí se Section Control pro rozmetadlo?', a: 'Ano, hlavně u tvarově složitých polí. Variable Rate Application + Section Control šetří 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnost ISOBUS-capable rozmetadla + RTK GPS retrofit za 2–4 sezóny u farmy 200+ ha.' },
+  { q: 'Důležité features?', a: 'WeighCell (vážený zásobník) — kalibruje skutečnou dávku během jízdy, kompenzuje variabilní hustotu hnojiva. ISOBUS TC-GEO pro VRA. Border Control pro krajní pás (zabraňuje úniku hnojiva mimo pole). Tronic regulace (DPAE) pro automatickou kompenzaci náklonu.' },
+];
+
+const faqJsonLd = faqPageSchema(faqs);
+const articleJsonLd = {
+  '@context': 'https://schema.org', '@type': 'Article',
+  headline: 'Jak vybrat rozmetadlo hnojiv (2026)',
+  description: 'Průvodce výběrem rozmetadla hnojiv. Talířové vs pneumatické, objem zásobníku, ISOBUS Section Control, top značky.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished, dateModified: datePublished,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout title="Jak vybrat rozmetadlo hnojiv (2026) — talířové vs pneumatické" description="Průvodce výběrem rozmetadla pro CZ farmu. Talířové vs pneumatické, zásobník, Section Control, vážení, top značky 2026." canonical={canonical} ogType="article" publishedTime={datePublished}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a><span aria-hidden="true">›</span>
+      <a href="/pruvodce/">Průvodce nákupem</a><span aria-hidden="true">›</span>
+      <span class="current">Jak vybrat rozmetadlo</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Průvodce · ~10 min</span>
+      <h1>Jak vybrat rozmetadlo hnojiv (2026)</h1>
+      <p class="lede">
+        Rozmetadlo je třetí nejvyužívanější stroj na farmě (po traktoru a postřikovači) — typicky 4–8 jízd za sezónu. Přesnost dávkování přímo ovlivňuje výnos i náklady na hnojiva.
+      </p>
+      <div class="meta">Publikováno 18. května 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Dva hlavní typy rozmetadel</h2>
+
+      <h3>Talířové rozmetadlo (disc spreader)</h3>
+      <p>2 rotující talíře se lopatkami "vystřelují" hnojivo do stran. <strong>95 % CZ farem</strong>.</p>
+      <ul>
+        <li><strong>Plusy:</strong> jednoduchá konstrukce, dlouhá životnost (15+ let), levné, široký záběr (12–36 m).</li>
+        <li><strong>Mínusy:</strong> nerovnoměrnost na okrajích pole (cross spreading), citlivost na vlhkost hnojiva.</li>
+        <li><strong>Cena:</strong> 60 000 – 500 000 Kč nový.</li>
+      </ul>
+
+      <h3>Pneumatické rozmetadlo (boom spreader)</h3>
+      <p>Hnojivo dopravované vzduchem skrz trubky do trysek na rameni (podobně jako postřikovač).</p>
+      <ul>
+        <li><strong>Plusy:</strong> extrémně přesné dávkování, ideální pro VRA (variable rate), úzké pásy bez cross-spreading, konstantní rovnoměrnost.</li>
+        <li><strong>Mínusy:</strong> 3–5× dražší než talířové, vyšší příkon ventilátoru (vyšší spotřeba), složitější servis.</li>
+        <li><strong>Cena:</strong> 800 000 – 3 mil. Kč nový.</li>
+      </ul>
+      <p>Pro CZ farmu pneumatické rozmetadlo dává smysl jen při <strong>500+ ha</strong> s precision farming setupem (RTK GPS + variabilní dávkování).</p>
+
+      <h2>2. Klíčové parametry talířového</h2>
+
+      <h3>Objem zásobníku</h3>
+      <table>
+        <thead><tr><th>Objem</th><th>Doporučené pro farmu</th></tr></thead>
+        <tbody>
+          <tr><td>800–1 200 l</td><td>do 50 ha (hobby, sad)</td></tr>
+          <tr><td>1 500–2 500 l</td><td>50–250 ha (střední CZ)</td></tr>
+          <tr><td>3 000–4 500 l</td><td>250–800 ha (velké)</td></tr>
+          <tr><td>5 000+ l</td><td>800+ ha (velkofarmy, sklizňové podniky)</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Pravidlo</strong>: zásobník na 1 plnění by měl pokrýt minimálně 10 ha při běžné dávce 250 kg/ha (= 2 500 l). Pro vyšší výkon volit větší.</p>
+
+      <h3>Záběr</h3>
+      <ul>
+        <li><strong>12–18 m</strong>: pro malé / střední farmy, traktor 80+ koní.</li>
+        <li><strong>18–24 m</strong>: standard pro CZ farmy 100–500 ha, traktor 130+ koní.</li>
+        <li><strong>24–36 m</strong>: velkofarmy, vyžaduje synchronizaci se zacházkami (musí pasovat se záběrem secího nebo postřikovače).</li>
+      </ul>
+
+      <h3>WeighCell (vážený zásobník)</h3>
+      <p>4 vážicí buňky pod zásobníkem měří skutečnou aktuální hmotnost. Systém pak <strong>v reálném čase kalibruje dávkování</strong> — kompenzuje variabilní hustotu hnojiva (čas, vlhkost) a opotřebení lopatek.</p>
+      <p><strong>Bez WeighCell</strong>: chyba dávky až ±10 %.<br><strong>S WeighCell</strong>: chyba ±2 %.</p>
+      <p>Cena: +120 000 – 250 000 Kč nad standard. <strong>Vyplatí se</strong> pro farmy s nákladem na hnojiva 1+ mil. Kč/sezónu.</p>
+
+      <h3>Border Control (krajní rozmetávání)</h3>
+      <p>Speciální klapka nebo asymetrické lopatky pro <strong>krajní pás</strong> pole. Bez ní by hnojivo letělo i mimo pole (ztráty + ekologické riziko = porušení GAEC 4).</p>
+      <ul>
+        <li><strong>Standard mechanický</strong>: ruční klapka, otáčí se v souvratích.</li>
+        <li><strong>Hydraulická</strong>: ovládaná z kabiny.</li>
+        <li><strong>ISOBUS automatická</strong>: aktivuje se podle GPS pozice.</li>
+      </ul>
+
+      <h3>ISOBUS + Section Control + VRA</h3>
+      <p>Stejně jako u postřikovače. ISOBUS-capable rozmetadlo (např. Amazone ZA-TS, Sulky X 50) komunikuje s traktorem přes standardizovaný kabel.</p>
+      <ul>
+        <li><strong>TC-BAS</strong> (Task Controller Basic): počítání ošetřené plochy + spotřeby.</li>
+        <li><strong>TC-SC</strong> (Section Control): vypíná půlené sekce v souvratích, šetří 5–10 %.</li>
+        <li><strong>TC-GEO</strong>: variabilní dávkování podle GPS mapy pH / NDVI / yield, šetří 10–25 %.</li>
+      </ul>
+
+      <h2>3. Top značky 2026</h2>
+      <table>
+        <thead><tr><th>Značka</th><th>Země</th><th>Specialita</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Amazone</strong></td><td>DE</td><td>ZA-V, ZA-TS, ZA-M — prémium s WeighCell, ISOBUS, široká škála</td></tr>
+          <tr><td><strong>Sulky</strong></td><td>FR</td><td>X 30/40/50 — kvalitní mid-tier, dobré pro VRA</td></tr>
+          <tr><td><strong>Kuhn</strong></td><td>FR</td><td>Axis, Axent — robustní, široká dealerská síť v CZ</td></tr>
+          <tr><td><strong>Bogballe</strong></td><td>DK</td><td>L1, M2, M3, EX — flagship vážených s extrémní přesností</td></tr>
+          <tr><td><strong>Rauch</strong></td><td>DE</td><td>Axis, AGT — německá kvalita, ISOBUS standard</td></tr>
+          <tr><td><strong>Sulky / Lely</strong></td><td>FR/NL</td><td>Centerliner, X-Tron — pro precision farming</td></tr>
+          <tr><td><strong>Bednar</strong></td><td>CZ</td><td>Fenix — tuzemská značka, atraktivní cena</td></tr>
+          <tr><td><strong>Vicon</strong></td><td>NO</td><td>RotaFlow RO-XL — pro pneumatická</td></tr>
+        </tbody>
+      </table>
+
+      <h2>4. Cenová orientace 2026</h2>
+      <ul>
+        <li><strong>Talířové 1 500 l + 12 m</strong>: 100 000 – 200 000 Kč nový.</li>
+        <li><strong>Talířové 2 500 l + 18 m + ISOBUS</strong>: 250 000 – 500 000 Kč.</li>
+        <li><strong>Talířové 3 500 l + 24 m + WeighCell + TC-GEO</strong>: 600 000 – 1 mil. Kč.</li>
+        <li><strong>Talířové 4 500+ l + premium</strong>: 1–1,8 mil. Kč.</li>
+        <li><strong>Pneumatické</strong>: 800 000 – 3 mil. Kč.</li>
+      </ul>
+
+      <h2>5. Ekonomika investice do WeighCell + VRA</h2>
+      <p>Pro farmu <strong>200 ha</strong> s nákladem na hnojiva <strong>4 000 Kč/ha = 800 000 Kč/sezónu</strong>:</p>
+      <ul>
+        <li>WeighCell úspora ±8 % chyby dávkování = <strong>64 000 Kč/rok</strong>.</li>
+        <li>VRA úspora 12 % díky variabilnímu dávkování podle pH / NDVI = <strong>96 000 Kč/rok</strong>.</li>
+        <li><strong>Celkem 160 000 Kč/rok</strong>.</li>
+        <li>Příplatek WeighCell + ISOBUS TC-GEO: 250 000 – 400 000 Kč.</li>
+        <li><strong>Návratnost: 1,5–2,5 roku</strong>. Bez VRA pouze WeighCell návratnost 4–6 let.</li>
+      </ul>
+
+      <h2>6. FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Další zdroje</h2>
+      <ul>
+        <li><a href="/stroje/rozmetadla-mineralni/">Katalog rozmetadel minerálních hnojiv</a></li>
+        <li><a href="/stroje/rozmetadla-statkova/">Katalog rozmetadel statkových hnojiv</a></li>
+        <li><a href="/slovnik/variable-rate/">Slovník: Variable Rate Application</a></li>
+        <li><a href="/slovnik/section-control/">Slovník: Section Control</a></li>
+        <li><a href="/slovnik/isobus/">Slovník: ISOBUS</a></li>
+        <li><a href="/slovnik/npk-hnojivo/">Slovník: NPK hnojivo</a></li>
+        <li><a href="/slovnik/lav-can/">Slovník: LAV / CAN</a></li>
+        <li><a href="/bazar/?category=hnojeni">Ojetá rozmetadla v bazaru</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .g-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .g-head { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.65; margin: 0 0 14px; }
+  .meta { font-size: 13px; color: #6B6B72; }
+  .g-body h2 { font-size: 22px; font-weight: 800; color: #0A0A0B; margin: 32px 0 14px; line-height: 1.25; }
+  .g-body h3 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 22px 0 8px; }
+  .g-body p { font-size: 16px; line-height: 1.75; color: #333; margin: 0 0 14px; }
+  .g-body ul { padding-left: 22px; margin: 0 0 16px; }
+  .g-body li { font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 6px; }
+  .g-body strong { color: #0A0A0B; font-weight: 700; }
+  .g-body a { color: #0B7A3B; text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 20px; }
+  th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  .faqs { display: flex; flex-direction: column; gap: 8px; }
+  .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; }
+  .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 15px; }
+  .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+</style>

@@ -119,6 +119,9 @@ export const GET: APIRoute = async () => {
     ['/pruvodce/kontrola-ojeteho-traktoru/', 'monthly', '0.85'],
     ['/pruvodce/prvni-traktor-mlady-zemedelec/', 'monthly', '0.85'],
     ['/pruvodce/jak-vybrat-seci-stroj/', 'monthly', '0.85'],
+    ['/pruvodce/jak-vybrat-postrikovac/', 'monthly', '0.85'],
+    ['/pruvodce/jak-vybrat-lis-na-baliky/', 'monthly', '0.85'],
+    ['/pruvodce/jak-vybrat-rozmetadlo-hnojiv/', 'monthly', '0.85'],
   ];
   for (const [path, changefreq, priority] of staticPaths) {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority });

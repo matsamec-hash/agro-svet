@@ -1515,6 +1515,748 @@ Rizika:
 Pro CZ farmu je standardní **70 % ozimy + 30 % jařiny**.`,
     related: ['osevni-postup', 'orba'],
   },
+
+  // ── HNOJIVA & CHEMIE ────────────────────────────────────────────────
+  {
+    slug: 'lav-can',
+    term: 'LAV / CAN (Ledek amonný s vápencem)',
+    alias: ['CAN', 'Ledek vápenatý', 'Calcium Ammonium Nitrate'],
+    kategorie: 'hnojivo',
+    shortDef: 'LAV (CAN) je dusíkaté hnojivo s obsahem 27 % N a vápencovou složkou. Druhé nejpoužívanější N-hnojivo v ČR po močovině. Rychlý efekt, bezpečnější skladování.',
+    longDef: `LAV (Ledek amonný s vápencem, ang. CAN — Calcium Ammonium Nitrate) je granulované dusíkaté hnojivo. Obsahuje **27 % N** (50 % nitrát NO₃⁻, 50 % amonium NH₄⁺) a cca **8 % CaO** + 4 % MgO z vápencové složky.
+
+Hlavní výhody proti močovině:
+- **Okamžitý účinek** — polovina N v nitrátové formě je hned využitelná rostlinou.
+- **Žádné ztráty volatilizací** (NH₃ úniky) — bez nutnosti zapracování.
+- **Bezpečnější skladování** — neexploduje (ledek čistý 33 % N je výbušnina, LAV s vápencem ne).
+- **Vápnitý efekt** — slabě zvyšuje pH půdy (vs močovina, která je neutrální až mírně kyselá).
+
+Použití:
+- **Jarní top dressing ozimů** — 200–400 kg/ha (= 54–108 kg N/ha).
+- **Pre-em pro jaří plodiny** — 150–250 kg/ha pod kukuřici, slunečnici.
+- **Lepší než močovina za suchého počasí** — močovina vyžaduje vlhko pro hydrolýzu, LAV funguje i v suchu.
+
+Cena (2024): cca 11 000–14 000 Kč/t v IBC bagů 600 kg. O ~15 % dražší per kg N než močovina, ale praktičtější.
+
+V CZ dominantní výrobce: Lovochemie (Lovosice) — značky LAV 27. Import z Polska (Yara, Anwil) a Slovenska (Duslo).`,
+    related: ['mocovina', 'npk-hnojivo', 'pH-pudy'],
+  },
+  {
+    slug: 'dam-390',
+    term: 'DAM 390 (Kapalné hnojivo)',
+    alias: ['DAM', 'UAN', 'Urea Ammonium Nitrate solution'],
+    kategorie: 'hnojivo',
+    shortDef: 'DAM 390 je kapalné dusíkaté hnojivo s 30 % N (mix močoviny + ledku amonného + vody). Aplikace přes postřikovač — rychlé, rovnoměrné, bez prachu.',
+    longDef: `DAM 390 (ang. UAN 32 — Urea Ammonium Nitrate solution) je nejpoužívanější kapalné dusíkaté hnojivo v EU. **30 % N v 1 litru = 390 g N/l** (proto "DAM 390"). Složení:
+- 50 % močovina (15 % N celkem)
+- 25 % ledek amonný (7,5 % N celkem)
+- 25 % voda (7,5 % N v amid + nitrát formách)
+
+Aplikace:
+- **Postřikovač s trubkovými tryskami** (ne klasické rozprašovače — DAM by spálil list).
+- **Hnojivová sada na postřikovači** — speciální 5–7 paprskové trysky střelí kapalinu mezi řádky.
+- **Dávkování** 100–250 l/ha (= 39–98 kg N/ha).
+- **Časy aplikace**: jarní vzcházení obilovin, druhá dávka na kvetení, případně listové hnojení (5–15 l/ha v poredění).
+
+Výhody:
+- **Rovnoměrnost** — žádné rozpadlé granule, plynulý spray.
+- **Rychlost práce** — 80–150 ha/den s postřikovačem 24 m.
+- **Možnost kombinace** s mikroprvky, ochrannými přípravky v tank-mix.
+- **Skladování** v IBC (1000 l) nebo cisternách (10+ t) — bez nutnosti uzavřeného skladu.
+
+Nevýhody:
+- **Sklon k popálení listu** při horku nad 22 °C nebo přímém slunci.
+- **Korozní k vodárenství** — separátní cisterna a čerpadlo.
+
+Cena (2024): cca 7 500–10 500 Kč/t (= 19–27 Kč/kg N — výrazně levnější než pevná hnojiva za jednotku N).`,
+    related: ['mocovina', 'lav-can', 'npk-hnojivo'],
+  },
+  {
+    slug: 'vapneni',
+    term: 'Vápnění půdy',
+    alias: ['vápnění', 'liming', 'CaCO₃ aplikace'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Vápnění je aplikace vápenatých látek do půdy pro úpravu pH a doplnění vápníku. Klíčový dlouhodobý zásah pro úrodnost — 1× za 4–8 let podle pH.',
+    longDef: `Vápnění je proces aplikace vápenatých produktů do půdy, kterým se cíleně:
+1. **Upraví pH** směrem k optimu (5,5–7,0 pro většinu plodin).
+2. **Doplní vápník** jako živina (Ca je makroživina, kterou rostliny vážou v desítkách kg/ha/rok).
+3. **Zlepší struktura** půdy (Ca flokuluje jíl, zvyšuje kapilaritu).
+
+Hlavní produkty:
+- **Mletý vápenec (CaCO₃)** — nejlevnější, pomalý účinek (3–6 měsíců), dávka 2–6 t/ha.
+- **Dolomitický vápenec (CaCO₃ + MgCO₃)** — pro půdy chudé na Mg, dávka 2–6 t/ha.
+- **Vápenec pálený (CaO)** — agresivní, rychlý účinek, dávka 0,8–2,5 t/ha. Nutná opatrnost (popálí kořeny).
+- **Hašené vápno (Ca(OH)₂)** — pro extrémně kyselé půdy, velmi rychlý účinek.
+- **Cukrovarnické saturační kaly** — odpadní z výroby cukru, levný zdroj Ca + organické hmoty.
+
+Cena (2024): 800–1 800 Kč/t včetně dovozu (vápenec). Aplikace rozmetadlem 200–400 Kč/ha. Celková investice 4 000–12 000 Kč/ha při běžné dávce.
+
+Kdy vápnit:
+- **Půdní rozbor 1× za 4 roky** ukáže aktuální pH a saturaci Ca.
+- **pH pod 5,5** → vápnit cca 4 t/ha vápence + opakovat po 2 letech.
+- **pH 5,5–6,0** → 2 t/ha jako prevence každých 4–6 let.
+- **pH nad 6,5** → nevápnit (zbytečné, riziko alkality).
+
+ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dlouhodobě. Návratnost 2–4 sezóny.`,
+    related: ['pH-pudy', 'organicka-hmota'],
+  },
+
+  // ── STROJE & NÁŘADÍ ────────────────────────────────────────────────
+  {
+    slug: 'pluh',
+    term: 'Pluh (typy a parametry)',
+    alias: ['plough', 'orbní pluh'],
+    kategorie: 'technologie',
+    shortDef: 'Pluh je nářadí pro hlubokou orbu — obrací 20–35 cm vrstvu ornice. Existuje nesený, polonesený a otočný (reverze) typ s 2–12 radlicemi.',
+    longDef: `Pluh je nejstarší orné nářadí — obrací půdu pomocí radlic. V CZ standardní zařízení pro podzimní zpracování pole.
+
+**Typy podle závěsu**:
+- **Nesený pluh** — celý nese tříbod traktoru. Lehčí (do 4–5 radlic). Pro 80–150 koní traktor.
+- **Polonesený** (semi-mounted) — zadní část pluhu opírá o vlastní kola. 5–8 radlic. Pro 130–200 koní.
+- **Tažený** (trailed) — celý pluh na vlastních kolech, tříbod jen táhne. 8–12 radlic. Pro 200+ koní.
+
+**Typy podle směru orby**:
+- **Klasický (jednosměrný)** — orá jen jedním směrem. Vyžaduje "mezerovou orbu" → nepravidelný povrch.
+- **Otočný pluh (reverze)** — radlice se otáčejí o 180°, orá oběma směry. Hladký povrch bez mezer. Dnes standardem (95 % nových pluhů).
+- **Variopluh** — proměnný záběr radlic za jízdy (40–60 cm per radlice). Užitečné u oprav cest nebo úzkých záhonů.
+
+**Klíčové parametry**:
+- **Počet radlic** — 3 (lehký), 4–5 (střední), 6–8 (těžký), 8–12 (extra těžký).
+- **Záběr per radlice** — 35, 40, 45, 50 cm. Celkový záběr = počet × per radlice.
+- **Hloubka orby** — 20–35 cm regulovaná hydraulicky nebo mechanicky.
+
+**Top značky CZ**: Lemken (DE — Diamant, EurOpal), Pöttinger (AT — Servo), Kverneland (NO/IT — LB, ED, PB), Kuhn (FR — Vari-Master), Vogel & Noot (AT — Plus).
+
+**Cenová orientace** (2026 nový):
+- 3-radlový nesený otočný: 200 000–350 000 Kč.
+- 5-radlový polonesený otočný: 600 000–1 100 000 Kč.
+- 8-radlový tažený otočný + Vario: 1,8–3 mil. Kč.`,
+    related: ['orba', 'tribod', 'no-till'],
+  },
+  {
+    slug: 'kompaktomat',
+    term: 'Kompaktomat',
+    alias: ['compact disk harrow', 'kompaktor'],
+    kategorie: 'technologie',
+    shortDef: 'Kompaktomat je kombinované nářadí pro mělké zpracování půdy — disky + kola + drobící lišty v jedné jízdě. Připravuje pole pro setí po orbě nebo místo orby.',
+    longDef: `Kompaktomat je polonesený stroj kombinující ve více řadách: **diskové brány + drobicí lišty + zatlačovací válce** (smyk, kola). Cíl: připravit ideální seťové lůžko v 1 jízdě.
+
+**Typický záběr**: 3–8 m, podle traktoru 100–250 koní.
+
+**Komponenty (zepředu dozadu)**:
+1. **Diskové secce** (40–55 cm Ø) — nařežou strniště, předkypří 5–10 cm.
+2. **Šípy / dláta** (volitelné) — rozrušení utužení.
+3. **Pružné kypřící lišty** — drobí hrudky.
+4. **Zatlačovací válec** (Crosskill, U-profil, Cambridge) — utlumí povrch, vytvoří kapilární propojení s podorničím.
+
+**Hlavní použití**:
+- **Pre-secí příprava** — místo bran + smyku + válce v 3 separátních jízdách.
+- **Stubble cultivation** — okamžitě po sklizni, podmítka strniště.
+- **Pseudoorba** — jako náhrada orby v min-till systémech.
+
+**Výhody**:
+- 1 jízda místo 3–4 = úspora paliva 40–60 % vs konvenční schéma.
+- Vyšší výkon — 4–8 ha/h vs 1–3 ha/h u jednoduchých nástrojů.
+- Lepší struktura půdy — méně utužení od opakovaných pojezdů.
+
+**Top značky**:
+- **Horsch** (Tiger, Joker, Terrano) — DE prémium, no-till friendly.
+- **Lemken** (Karat, Heliodor) — DE univerzální.
+- **Väderstad** (Carrier, TopDown, Cultus) — SE precision.
+- **Köckerling** (Quadro, Allrounder) — DE robustní.
+- **Kuhn** (Performer, Optimer) — FR cena/výkon.
+
+**Cena (2026)**: 4 m = 400 000–800 000 Kč, 6 m = 800 000–1,8 mil. Kč, 8 m = 1,5–3,5 mil. Kč.`,
+    related: ['orba', 'no-till', 'organicka-hmota'],
+  },
+  {
+    slug: 'mulcovac',
+    term: 'Mulčovač',
+    alias: ['mulcher', 'mulcher rotační'],
+    kategorie: 'technologie',
+    shortDef: 'Mulčovač je rotační drtič rostlinné hmoty — strnišť, posklizňových zbytků, trávy, slabých keřů. Připojený na PTO traktoru přes tříbod.',
+    longDef: `Mulčovač drtí rostlinou hmotu na velmi drobné kousky pomocí rotujících kladívek nebo nožů na vertikálním nebo horizontálním rotoru.
+
+**Dva hlavní typy**:
+- **Rotor horizontální (osa kolmo k jízdě)** — klasický pro plošné mulčování trávy a strniště. Nejčastější.
+- **Rotor vertikální (osa svisle)** — pro lesní pasečné práce, hustší vegetaci.
+
+**Šíře záběru**:
+- **1,2–2 m** — pro sady, vinohrady, komunální.
+- **2,5–4 m** — pro pole (strniště, krmné plodiny).
+- **4–8 m** — velkofarmy, sklizňové podniky.
+
+**Použití**:
+- **Mulčování strniště** po sklizni obilí — zbylé stéble podrcené, urychluje rozklad.
+- **Údržba TTP** — 1–2× ročně mulčování pastevních ploch.
+- **Mulčování meziplodin** před zaoráním.
+- **Sady a vinohrady** — mulčování travy v meziřadcích.
+- **Likvidace zbytku kukuřičných lodyh** — proti zavíječi.
+
+**Pohon**: PTO 540 nebo 1000 ot/min. Příkon obvykle 50–150 koní podle záběru.
+
+**Top značky**:
+- **Berti** (IT) — prémium, široká škála.
+- **Kuhn** (BPR, BC) — FR univerzál.
+- **Krone** (BiG M, EasyCut) — DE pro výkonné aplikace.
+- **Maschio Gaspardo** (IT) — cenově dostupné.
+
+**Cena (2026)**: 1,8 m hobby = 50 000–80 000 Kč, 2,5 m střední = 120 000–250 000 Kč, 4 m profi = 300 000–600 000 Kč.`,
+    related: ['pto', 'tribod', 'orba'],
+  },
+  {
+    slug: 'naves-sklapeci',
+    term: 'Návěs sklápěcí (tříhráp)',
+    alias: ['tipper', 'sklápěč'],
+    kategorie: 'technologie',
+    shortDef: 'Sklápěcí návěs (tříhráp) je transportní vůz s hydraulickým sklápěním na 3 strany. Klíčový pro sklizňové linky, transport sklizně a hnojiv.',
+    longDef: `Sklápěcí návěs je dominantní transportní jednotka v zemědělství. **Tříhráp** = může sklopit dozadu i na obě boční strany (3-way tipper).
+
+**Nosnost**:
+- **Lehký 8 t** — pro malé farmy, traktor 80+ koní.
+- **Standard 12–16 t** — pro střední farmy, traktor 130+ koní.
+- **Velký 18–24 t** — pro velkofarmy, traktor 180+ koní. Tandem nebo tridem nápravy.
+- **Extra 28+ t** — sklizňové podniky, vlastní motorový pohon.
+
+**Konstrukce**:
+- **Korba** ocelová nebo hliníková (lehčí, 200 kg úspora hmotnosti).
+- **Nápravy** — single (do 12 t), tandem (12–20 t), tridem (20+ t).
+- **Brzdy** vzduchové standard od 10 t (povinné v EU).
+- **Hydraulika** — sklápění + bočnice + zadní klapka.
+
+**Tipping (sklápěcí) systémy**:
+- **Teleskopický hydraulický válec** — standard, 2–4stupňový válec.
+- **Front-tipping** — sklápí pouze dozadu, levnější.
+- **3-way tipping** — výjimečně i na strany (užitečné při vykládce do silážních věží nebo v úzkých prostorách).
+
+**Použití**:
+- **Žně** — odvoz obilí od kombajnu.
+- **Sklizeň pícnin** — siláž z kukuřice / trav.
+- **Transport hnojiv, vápence** — od stanice na pole.
+- **Komunál** — odvoz výkopků, drcené suti.
+
+**Top značky**:
+- **Joskin** (BE) — Trans-Cap, KTP. Prémium.
+- **Strom** (CZ) — Vario, Master. Tuzemská kvalita.
+- **Bednar** (CZ) — Atlas. Cenově atraktivní.
+- **Conow** (DE) — TMH série.
+- **Krampe** (DE) — Bandit, BIG body.
+
+**Cena (2026)**: 12 t single = 350 000–600 000 Kč, 18 t tandem = 700 000–1,5 mil. Kč, 24 t tridem = 1,5–3 mil. Kč.`,
+    related: ['pto', 'tribod'],
+  },
+
+  // ── PLODINY ─────────────────────────────────────────────────────────
+  {
+    slug: 'kukurice-silazni',
+    term: 'Kukuřice silážní',
+    alias: ['silage corn', 'krmná kukuřice'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Silážní kukuřice se pěstuje na celé rostliny (klasy + lodyhy + listy), sklízí se nezralá a fermentuje na siláž — hlavní krmivo pro skot v ČR.',
+    longDef: `Silážní kukuřice je odrůdový typ kukuřice pěstovaný pro **celorostlinnou sklizeň** (na rozdíl od zrnové kukuřice, která sklízí jen klasy). Hlavní krmivo pro skot v ČR — v dojné kravě tvoří 30–60 % objemu krmné dávky.
+
+**Pěstování**:
+- **Setí**: konec dubna – polovina května (po Ledových mužích, půda 10 °C).
+- **Osivo**: 80 000–110 000 zrn/ha = 22–28 kg/ha.
+- **Hnojení**: 150–200 kg N/ha, plus P, K základní hnojení na podzim.
+- **Postřik**: pre-em na klíčící plevele (Lumax, Successor) + post-em na druhá vlna (Callisto, Laudis).
+- **Sklizeň**: konec srpna – říjen, vlhkost celé rostliny 30–35 % (optimum pro silážování).
+
+**Výnosy**:
+- **Zelená hmota**: 30–60 t/ha (průměr ČR 45 t/ha).
+- **Sušina**: 10–18 t/ha (silážní).
+- **Energie**: 5–8 GJ/ha NEL (čistá energie laktace).
+
+**Sklizeň**:
+- **Sklízecí řezačka** (Claas Jaguar, JD 9000, NH FR) — řeže, drtí zrno (cracking), foukne do návěsu.
+- **Délka řezky**: 8–22 mm podle obsahu sušiny a typu silážní jámy.
+- **Cena sklizňové služby**: 2 000–4 000 Kč/ha + návěsy 800–1 200 Kč/h.
+
+**Silážování**:
+- **Silážní jáma** se naplní + utlačuje pásovým traktorem.
+- **Zakrytí** plastovou fólií + zatížení (pneumatiky / pytle písku).
+- **Fermentace** 4–6 týdnů → ideální krmivo.
+
+**Top CZ regiony**: jižní Morava, Polabská nížina, dolní Posázaví. V severních horských oblastech je sezóna kratší a výnosy nižší.`,
+    related: ['osevni-postup', 'orba'],
+  },
+  {
+    slug: 'repka-ozima',
+    term: 'Řepka ozimá',
+    alias: ['oilseed rape', 'canola'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Řepka ozimá je strategická CZ olejovina — pěstuje se na 380–420 tisících ha (12 % orné půdy). Výnos 3,5–4,5 t/ha, hlavně pro biopalivový a potravinářský olej.',
+    longDef: `Řepka ozimá (Brassica napus) je nejvýznamnější olejovina v ČR. Pěstuje se na **380–420 tis. ha** = 12 % orné půdy (po pšenici druhá nejrozšířenější plodina).
+
+**Pěstování**:
+- **Setí**: 15. srpna – 5. září (přesně, kratší okno → menší výnos).
+- **Osivo**: 2–4 kg/ha (hybridy) nebo 5–8 kg/ha (linie). 35–50 zrn/m².
+- **Hnojení**: P + K na podzim (200 kg superfosfátu, 150 kg draselné soli). Jaro 150–200 kg N v 2 dávkách (regenerace + butonizace).
+- **Postřik**: insekticidy proti dřepčík (podzim), choroby (jarní fungicidy proti hlízence, fómové hnilobě), regulátory růstu.
+- **Sklizeň**: konec června – polovina července. Kombajn s řepkovým žacím stolem (Vario lišta).
+
+**Výnosy** (průměr ČR 2024):
+- **3,5 t/ha** běžné průměrné podmínky.
+- **4,0–4,5 t/ha** dobré roky + premium hybrid.
+- **5+ t/ha** špička (vrcholoví farmáři).
+
+**Cenovka** (2024–2026):
+- **Realizační cena** 11 000–14 000 Kč/t.
+- **Tržba**: 4 t × 12 500 = 50 000 Kč/ha.
+- **Náklady**: ~25 000 Kč/ha (osivo 4 000 + hnojiva 8 000 + postřiky 6 000 + mech. 7 000).
+- **Marže**: 20 000–30 000 Kč/ha = velmi atraktivní vs obiloviny.
+
+**VCS dotace**: NENÍ (řepka je v EU dlouhodobě konkurenčně silná).
+
+**Trh**:
+- **Vykupují**: Komodita Praha, Granaria, Glencore, Agrofert.
+- **Použití**: 70 % biopaliva (FAME), 20 % potravinářský olej, 10 % krmiva (řepkové šroty).
+- **Konkurence**: import slunečnicový olej (UA, RU), palmový olej (Indonésie).
+
+**Risk**: hubení populací včel kvůli neonikotinoidům (od 2018 EU zákaz aplikace na řepku). Současné insekticidy mají nižší účinnost → vyšší riziko poškození dřepčík.`,
+    related: ['osevni-postup', 'ozim-jarin', 'orba'],
+  },
+  {
+    slug: 'sojaova-bob',
+    term: 'Sója luštinatá',
+    alias: ['sója', 'soybean', 'soja'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Sója je nejvýznamnější luskovina světa, v ČR menšinová plodina (15–25 tisíc ha) ale rostoucí. Bohatá na bílkoviny (40 %), váže atmosférický N.',
+    longDef: `Sója luštinatá (Glycine max) je nejvýznamnější olejnatá luskovina na světě. V ČR rostoucí plodina (z 5 000 ha v 2010 na ~20 000 ha v 2024), podporovaná VCS dotací 2 800 Kč/ha.
+
+**Pěstování**:
+- **Setí**: konec dubna – začátek května, půda min. 8 °C.
+- **Osivo**: 110–130 kg/ha. Hladké semínko, vyžaduje přesné setí pneumatickým strojem.
+- **Inokulace**: nezbytná! Sójová semena obarvit Rhizobium japonicum bakteriemi pro vazbu N. Bez inokulace = sója si nedělá N a výnos klesne o 30–50 %.
+- **Hnojení**: jen P + K (sója si vyrobí N sama). Žádné dusíkaté hnojivo!
+- **Postřik**: pre-em (Pulsar), post-em (Pulsar Plus). Insekticidy jen výjimečně.
+- **Sklizeň**: konec září – polovina října. Standardní kombajn s řepkovým / sójovým flexihederem.
+
+**Výnosy** (průměr ČR 2024):
+- **2,5–3,2 t/ha** běžné.
+- **3,5+ t/ha** dobré roky + zavlažování.
+
+**Vlastnosti zrna**:
+- **40 % bílkoviny** (vs pšenice 12 %) — nejbohatší rostlinný zdroj.
+- **20 % oleje** — sójový olej pro potraviny i biopaliva.
+- **Cenovka** (2024): 12 000–16 000 Kč/t.
+
+**Ekonomika** (3 t/ha × 14 000 = 42 000 Kč tržba + 2 800 Kč VCS):
+- Tržba ~44 800 Kč/ha.
+- Náklady ~22 000 Kč/ha (osivo + inokulace + hnojiva + postřiky + mech).
+- **Marže ~22 000 Kč/ha** = porovnatelné s řepkou, ale nižší riziko.
+
+**Proč v CZ rostou plochy**:
+- **EU snaha o nezávislost na importu sóji** z Brazílie/Argentiny (kde se odlesní pro pěstování).
+- **VCS bonus 2 800 Kč/ha** = +30 % výnos.
+- **Vazba N** zlepšuje strukturu půdy pro následnou plodinu.
+- **Tržní cena** rostoucí kvůli krmnému průmyslu (sójový šrot pro prasata, drůbež).
+
+**Rizika**:
+- **Sucho v srpnu** (kvetení) = výrazný pokles výnosu.
+- **Nemoci** Sclerotinia (hlízenka) — limit pro region.
+- **Holuby** rádi sklízejí na poli (riziko 5–10 % ztráty).`,
+    related: ['osevni-postup', 'cap-2024'],
+  },
+  {
+    slug: 'vojteska',
+    term: 'Vojtěška setá',
+    alias: ['Medicago sativa', 'alfalfa', 'lucerne'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Vojtěška je víceletá pícnina (3–5 let na 1 pozemku) bohatá na bílkoviny. Sklízí se 3–4× ročně, váže N, zlepšuje strukturu půdy.',
+    longDef: `Vojtěška setá (Medicago sativa) je nejlepší pícninové luskovina v mírném klimatu. **Víceletá** plodina — sází se na 3–5 let, sklízí se 3–4× za sezónu (3 v ČR, 4 v jižní Itálii).
+
+**Pěstování**:
+- **Setí**: jaro (březen–duben) jako "podsev" pod obilí (žito, ječmen) nebo čistý porost.
+- **Osivo**: 15–25 kg/ha. Inokulace Sinorhizobium meliloti nutná.
+- **Hnojení**: jen P + K na podzim (200 kg superfosfátu, 100 kg KCl). Žádný N (vlastní fixace 200–300 kg N/ha/rok).
+- **Žádný postřik** na samotnou vojtěšku (silně konkurenční plevele potlačí).
+
+**Sklizeň** (3× za sezónu v CZ):
+- **1. seč**: polovina května (50 % květu — nejvyšší obsah bílkovin).
+- **2. seč**: konec června.
+- **3. seč**: konec srpna.
+- Případně **4. seč** v září (low yield, jen pro silný porost).
+
+**Výnos** (3-letý průměr):
+- **8–12 t sušiny/ha/rok** celkem (rozděleno do 3–4 sečí).
+- **Cca 25 % bílkovin** v sušině.
+
+**Použití**:
+- **Senáž / siláž** pro skot — luckni baliky.
+- **Seno** klasické (přírodní sušení).
+- **Zelená píce** pro pastvy nebo přímou aplikaci do žlabu.
+- **Granulát** pro průmyslové krmiva (sušárenský granulát).
+
+**Přínos do osevního postupu**:
+- **Vazba N** 200–300 kg/ha/rok — zásadní bonus pro následnou plodinu.
+- **Hluboký kořen** (až 3 m) — narušuje utužení podorničí, dostává živiny z hloubky.
+- **Zlepšuje strukturu půdy** — vojtěška za 3 roky obnoví humus.
+- **Po vojtěšce** typicky pěstuje pšenice ozimá (vysoký výnos díky N + struktuře).
+
+**Trh**:
+- **Cenovka senáž v balíkách**: 1 800–3 000 Kč/t (regionální).
+- **Cenovka granulát**: 4 000–6 000 Kč/t.
+- **CAP**: vojtěška kvalifikuje na EKO režim (zelená plocha) + AEKO travní porosty.
+
+**Důležité plemena**: Verdor (FR), Power (US), Niagara (FR), domácí Kometa (CZ).`,
+    related: ['osevni-postup', 'organicka-hmota', 'mezi-plodiny'],
+  },
+
+  // ── TECHNOLOGIE & PRECISE FARMING ──────────────────────────────────
+  {
+    slug: 'telematika',
+    term: 'Telematika',
+    alias: ['JDLink', 'AFS Connect', 'MyPLM', 'PLM Connect', 'fleet management'],
+    kategorie: 'precise-farming',
+    shortDef: 'Telematika je systém vzdáleného sledování stroje přes mobilní síť — sleduje pozici, motohodiny, spotřebu, chyby. Standard u prémiových traktorů od 2010.',
+    longDef: `Telematika v zemědělství je obdoba GPS trackeru v osobních autech, ale rozšířená o **technická data stroje** (CAN-bus). Stroj odesílá data do cloudové platformy přes mobilní síť (LTE), kde majitel / dealer vidí real-time stav.
+
+**Hlavní platformy** (per značka):
+- **John Deere Operations Center** (Ops Center) + JDLink — nejrozsáhlejší. Sleduje 100+ parametrů, agronomy mapy, prediktivní údržbu.
+- **Case IH AFS Connect** + Trimble Display — společná s NH.
+- **New Holland PLM Connect** — sklizňové mapy, GPS prefix.
+- **Fendt Connect** + FendtONE — bezdrátové aktualizace, telemetrie.
+- **Claas TELEMATICS** — sklizňové analytiky.
+- **AGCO Fuse** (Massey, Valtra, Fendt) — sjednocená platforma.
+- **Trimble Connected Farm** — multi-brand pro starší stroje.
+
+**Co sleduje**:
+- **GPS pozice** v real-time, historie tras.
+- **Motohodiny** + uptime / downtime.
+- **Spotřeba paliva** per hektar / per hodinu.
+- **Otáčky motoru, převodovka, výkon, zátěž**.
+- **Chybové kódy** — okamžitá notifikace SMS / email.
+- **Sklizňové mapy** (kombajny) — výnos per GPS bod.
+- **AdBlue, DPF stav** — varování před regenerací / doplněním.
+- **Vstup do "geofence"** — alarm při výjezdu z farmy / krádeži.
+
+**Cenová politika** (2026):
+- **JD Operations Center**: zdarma pro majitele JD stroje (3-letá subskripce při nákupu).
+- **Fendt Connect**: zdarma 5 let, pak 800–1 500 Kč/rok.
+- **AGCO Fuse**: variabilní podle balíčku.
+- **Trimble Connected Farm**: 5 000–15 000 Kč/rok per stroj.
+
+**Pro CZ farmáře**:
+- **U malých farem** často nevyužité — paperwork v Excelu funguje.
+- **U farem 200+ ha** s 3+ stroji už dává smysl — flota management, prediktivní údržba.
+- **Sklizňové podniky** standardně využívají pro per-zákazník účtování motohodin a sklizených ha.
+
+**Soukromí / data ownership**: kontroverze — kdo vlastní agronomická data? V EU GDPR řeší PII, ale produkční data má smluvně přístup výrobce (využívá pro vývoj). Někteří farmáři tlačí na "Farm Data Privacy" iniciativy.`,
+    related: ['isobus', 'gps-rtk', 'yield-monitor'],
+  },
+  {
+    slug: 'autonomni-traktor',
+    term: 'Autonomní traktor',
+    alias: ['autonomous tractor', 'driverless'],
+    kategorie: 'precise-farming',
+    shortDef: 'Autonomní traktor jezdí po poli bez řidiče — kombinuje RTK GPS + LiDAR + kamery + AI. Demonstrované 2022+ (JD 8R Autonomous), komerčně dostupné pomalu.',
+    longDef: `Autonomní traktor je další úroveň přesného zemědělství — stroj jezdí po poli **úplně bez řidiče v kabině**. Kombinace technologií:
+
+- **RTK GPS** (centimetrová přesnost trasy).
+- **LiDAR** (3D mapování okolí, detekce překážek).
+- **Multispektrální kamery** (rozpoznávání plodiny vs plevele).
+- **AI** (rozhodování v reálném čase).
+- **5G konektivita** (vzdálené ovládání + dohled).
+
+**Současné komerční ukázky**:
+- **John Deere 8R Autonomous** (CES 2022): plně autonomní traktor s 6 kamerami a NVIDIA Jetson AI. K dispozici 2023+ na vybraných trzích v USA. Cena ~$800 000 ($300K příplatek nad standardní 8R).
+- **Case IH Autonomous Concept** (2016): koncept bez kabiny vůbec. Nedošlo na komerci.
+- **AGCO Fendt MARS** (2019): roj malých autonomních robotů místo jednoho velkého. Stále výzkum.
+- **Bear Flag Robotics** (Trimble dceřinka, 2021 akvizice JD): retrofit autonomního systému na stávající traktory.
+- **Monarch Tractor** (US startup, 2020+): autonomní elektrický traktor 70 koní pro vinohrady. Cena $58 000.
+
+**Stav v ČR (2026)**:
+- **Žádný autonomní traktor reálně v provozu**.
+- **Dílčí autonomní funkce** (auto-steering, section control, automatický headland turning) jsou standardem u prémiových traktorů.
+- **Regulace** pro autonomní stroje na poli zatím není (na silnici by byl problém s řidičským průkazem).
+
+**Bariéry komerčního nasazení**:
+- **Cena** — premium $300 000 nad běžný traktor je pro 99 % farmářů nedosažitelná.
+- **Bezpečnost** — pole nejsou izolovaný kontrolovaný prostor jako továrna. Riziko sražení člověka / zvířete.
+- **Regulace** — EU dosud nedefinovala jasná pravidla pro autonomní polní stroje.
+- **ROI** — řidič stojí 30 000–50 000 Kč/měsíc, autonomní stroj se vyplatí jen u velkofarmu s 24/7 provozem.
+
+**Realistická timeline**:
+- **2025–2030**: autonomie pro úzké úlohy (postřik, sečení) pro velkofarmu.
+- **2030+**: rozšíření pro CZ střední farmy, cenová dostupnost.
+- **2035+**: standard.
+
+**Aktuálně doporučujeme** pro CZ farmáře využít **semi-autonomní funkce** (auto-steering, ISOBUS, telematika) — 80 % benefitu za 20 % ceny.`,
+    related: ['auto-steering', 'gps-rtk', 'telematika', 'isobus'],
+  },
+  {
+    slug: 'drony-zemedelstvi',
+    term: 'Drony v zemědělství',
+    alias: ['UAV', 'agriculture drone', 'precision drone'],
+    kategorie: 'precise-farming',
+    shortDef: 'Drony v zemědělství slouží pro: monitoring (multispektrální NDVI snímky), aplikaci (postřik, výsev meziplodin), kontrolu (krádeže, povodně). Standard pro precizní farmáře.',
+    longDef: `Drony (UAV — Unmanned Aerial Vehicles) v zemědělství plní 3 hlavní úkoly:
+
+### 1. Monitoring (nejčastější)
+- **Multispektrální snímkování** — RGB + NIR kamera, výpočet NDVI / EVI indexů biomasy.
+- **3D mapování** — výška rostlin, deformace polí.
+- **Letové výšky** 50–120 m, pokrytí 50–200 ha za hodinu.
+- **Drone modely**: DJI Phantom 4 Multispectral ($6 000), DJI Mavic 3 Multispectral ($5 500), Parrot Anafi USA ($7 000), eBee X ($25 000+ profesionál).
+
+### 2. Aplikace (postřik / výsev) — rostoucí
+- **Spray drones** — Yamaha RMAX (JP), DJI Agras T40/T50, EAVision EA-30X.
+- **Užitečné zatížení**: 30–40 l postřiku, záběr 8–11 m.
+- **Výkon**: 4–10 ha/h.
+- **Cena**: $15 000–50 000 dron + $5 000–15 000 baterie + softvér.
+- **V ČR**: zatím **málo nasazené** — regulace SUR (Sustainable Use Regulation EU) komplikuje letecké postřikování (potřeba speciální povolení).
+
+### 3. Kontrola a bezpečnost
+- **Patrolovací drony** — kontrola plotů, krádeží.
+- **Tepelné kamery** — detekce zvířat před sečením (chrání srnčata).
+- **Povodňové mapování** — DJI Mavic s thermal kamerou.
+
+### Regulace v ČR (EASA + ÚCL):
+- **Otevřená kategorie** (A1/A2/A3) pro drony pod 25 kg za vizuální dohled.
+- **Specifická kategorie** pro letecké aplikace postřiku — vyžaduje OSO (Operations Specific Operations) povolení od Úřadu civilního letectví.
+- **Pilot certifikát** A1/A3 zdarma online, A2 za 800 Kč.
+- **Registrace operátora** povinná (€19/rok).
+
+### Pro CZ farmáře (2026):
+- **Monitoring** — DJI Mavic 3 Multispectral je sweet spot pro 100–500 ha farmy. ROI 1–2 sezóny díky úspoře hnojiv (variabilní dávkování).
+- **Aplikace** — zatím **drahé a regulačně náročné**. Klasický postřikovač s GPS + Section Control vychází lépe.
+- **Tepelné kamery** — pro velké TTP s vysokou pravděpodobností srnčat, ekonomicky náročné.`,
+    related: ['ndvi', 'variable-rate', 'section-control'],
+  },
+
+  // ── DOTACE & REGULACE ──────────────────────────────────────────────
+  {
+    slug: 'sp-szp-2023-2027',
+    term: 'SP SZP 2023–2027 (Strategický plán)',
+    alias: ['Strategický plán SZP', 'Common Agricultural Policy Strategic Plan'],
+    kategorie: 'dotace',
+    shortDef: 'SP SZP 2023–2027 je národní implementace EU Společné zemědělské politiky pro ČR. Definuje všechny dotační tituly (přímé platby, AEKO, investice).',
+    longDef: `Strategický plán Společné zemědělské politiky (SP SZP) je závazný dokument schválený EU komisí pro každý členský stát zvlášť pro období 2023–2027. **Pro ČR** definuje rozpočet ~110 mld Kč pro 5leté období a všechny dotační tituly.
+
+**Struktura SP SZP ČR**:
+
+### Pilíř I — Přímé platby (~50 % rozpočtu):
+- **BISS** (Základní platba) ~2150 Kč/ha
+- **CISS** (Redistributivní) ~1450 Kč/ha pro prvních 150 ha
+- **EKO režim** základní 1300 + premium +1100 Kč/ha
+- **ANC** (méně příznivé) 2000–4500 Kč/ha
+- **Mladý zemědělec** +1500 Kč/ha bonus
+- **VCS** (citlivé sektory) — variabilní
+
+### Pilíř II — Rozvoj venkova (PRV):
+- **AEKO** smlouvy (5-leté agro-environmentální)
+- **Investiční tituly** (Intervence 33.73, 37.73, ad.)
+- **LFA** (Less Favoured Areas — překryto s ANC)
+- **Welfare zvířat** zvláštní platby
+- **Bio prémie** pro ekologické zemědělství
+- **Pojištění úrody** (50 % spoluúčast státu)
+
+**Klíčové intervence** (číselné označení v SP SZP):
+- **33.73** — Investice do zemědělských podniků (technika, stavby).
+- **37.73** — Technologie snižující emise (hnojení s nižším NH₃).
+- **47.73** — Pozemkové úpravy.
+- **51.73** — Mladí zemědělci — jednorázová podpora na zahájení.
+- **75.73** — AEKO travní porosty.
+
+**Dokumentace pro žadatele**:
+- **Hlavní dokument**: https://eagri.cz/web/mze/dotace/sp-szp-2023-2027
+- **SZIF Pravidla** pro každý titul zvlášť — vždy ověřit aktuální verzi (mění se ročně).
+- **Portál farmáře** — elektronické podání všech žádostí.
+
+**Pro CZ farmáře**:
+- **Jednotná žádost** (duben–červen) pokrývá většinu přímých plateb.
+- **Investiční dotace** mají vlastní kola (typicky 2× ročně).
+- **AEKO smlouvy** se zavírají na 5 let — vstup je dlouhodobé rozhodnutí.
+
+**Kontroly**: SZIF kontroluje 1–5 % žadatelů na místě + satelitní monitoring (Copernicus SISAEC) celého LPIS každý rok.`,
+    related: ['cap-2024', 'biss', 'aeko', 'jednotna-zadost'],
+  },
+  {
+    slug: 'intervence-33-73',
+    term: 'Intervence 33.73 (Investice do zemědělských podniků)',
+    alias: ['Investice do zemědělství', 'PRV investice', 'I.33.73'],
+    kategorie: 'dotace',
+    shortDef: 'Intervence 33.73 je hlavní investiční dotace v ČR — pokrývá nákup techniky, stavby, technologie. Sazba 50–60 % způsobilých výdajů, 10 % bonus pro mladé zemědělce.',
+    longDef: `Intervence 33.73 je nejdůležitější investiční dotace pro CZ zemědělce. Kryje:
+
+**Způsobilé výdaje**:
+- **Stroje a technika** — traktory, kombajny, secí stroje, postřikovače, lisy, sklízecí mlátičky, manipulátory.
+- **Stavby pro živočišnou výrobu** — stáje, dojírny, sila.
+- **Stavby pro skladování** — silá, šrotovny, mrazírny.
+- **Technologie precise farming** — GPS, ISOBUS, variable rate aplikace.
+- **Závlahy** — investice do zavlažovacích systémů.
+
+**Sazby dotace** (procento ze způsobilých výdajů, 2024):
+- **50 %** — rostlinná výroba.
+- **60 %** — živočišná výroba (welfare bonus).
+- **+10 % pro mladé zemědělce** (do 40 let, prvních 5 let od zahájení činnosti).
+- **+10 % pro zóny ANC** (méně příznivé oblasti).
+- **+5 % pro spolupráci** (mezi farmami / s výzkumem).
+
+Maximální sazba kumulovaně: **80 % způsobilých výdajů**.
+
+**Omezení**:
+- **Mobilní stroje** (traktory, kombajny) — max 49 % způsobilých výdajů z celého projektu. Zbytek musí být stavby / pevná technologie.
+- **Strop dotace per projekt**: 1–10 mil. Kč podle velikosti farmy.
+- **Strop dotace per žadatel za období**: 30 mil. Kč 2023–2027.
+
+**Postup žádosti**:
+1. **Příprava projektu** — návrh, podnikatelský plán, ekonomické vyhodnocení.
+2. **Vyhlášení kola** (typicky 2× ročně) — SZIF zveřejní podmínky.
+3. **Podání** přes Portál farmáře v rámci 3-4 týdenního okna.
+4. **Hodnocení** (3–6 měsíců) — bodové hodnocení projektu.
+5. **Rozhodnutí** — pozitivní / odložené / zamítnuté.
+6. **Realizace** (1–3 roky) — nákup techniky, stavba, dokumentace.
+7. **Závěrečná žádost o platbu** — vyplacení dotace po prokázání investice.
+
+**Praktické tipy**:
+- **Konzultant** specializovaný na PRV výrazně zvyšuje šanci schválení (3 000–15 000 Kč za projekt). Ve smlouvě obvykle 2–5 % z dotace = úspěšnostní bonus.
+- **Časování**: kupujte techniku až **po schválení dotace**, ne před. Před schválení = neuznatelný výdaj.
+- **Dokumentace**: faktury, smlouvy, fotodokumentace průběhu, ekonomická prokazatelnost.
+
+**Riziko**: nesplnění podmínek (např. provozování stroje min. 5 let, kvalita stavby) = **vrácení dotace s úroky**. Standardně auditováno SZIF v posledních letech.`,
+    related: ['sp-szp-2023-2027', 'cap-2024', 'aeko'],
+  },
+  {
+    slug: 'agrarni-komora',
+    term: 'Agrární komora ČR (AK ČR)',
+    alias: ['AKČR', 'agrární komora'],
+    kategorie: 'regulace',
+    shortDef: 'AK ČR je hlavní zájmová organizace zemědělců, lesníků a potravinářů v ČR — sdružuje cca 5 000 členů, lobbuje za zájmy oboru u vlády a EU.',
+    longDef: `Agrární komora ČR (AK ČR) je největší zájmová organizace zemědělců, potravinářů, lesníků a vinařů v ČR. Založená 1993 zákonem č. 301/1992 Sb.
+
+**Členská základna**: cca **5 000 fyzických a právnických osob** napříč obory.
+
+**Hlavní role**:
+- **Lobbying** u Ministerstva zemědělství, vlády a europoslanců — zájmy CZ zemědělství v EU CAP, výjimky pro CZ specifika.
+- **Připomínkové místo** v legislativním procesu — všechny zákony týkající se zemědělství procházejí AK ČR.
+- **Zastupování** v COPA-COGECA (evropský zemědělský lobby v Bruselu).
+- **Poradenství** členům — daňové, dotační, právní.
+- **Vzdělávání** — semináře, kongresy, výstavy (Země živitelka v ČB).
+- **Certifikace** — Klasa, Český výrobek, regionální značky.
+
+**Struktura**:
+- **Prezidium** — výkonný orgán, 5letý mandát.
+- **Snem** — nejvyšší orgán, 1× ročně.
+- **8 sekcí** podle oboru: rostlinná výroba, živočišná, lesnictví, vinařství, ovocnářství, zelinářství, mlékárenství, masný průmysl.
+- **14 regionálních komor** (per kraj).
+
+**Členský příspěvek** (2024):
+- **Fyzická osoba**: 1 200–3 600 Kč/rok podle velikosti farmy.
+- **Právnická osoba**: 5 000–50 000 Kč/rok podle obratu.
+- **Bonus**: členové dostávají časopis Zemědělec, právní helpdesk, dotační poradenství.
+
+**Kontroverze**:
+- **Politická angažovanost** — historicky úzké vazby na ČSSD, dnes neutrálnější.
+- **Konflikt zájmů velkých vs malých farem** — AK ČR často kritizována za prosazování zájmů velkých agro-holdingů (Agrofert ad.) na úkor rodinných farem.
+- **Konkurence**: Asociace soukromého zemědělství (ASZ) — alternativa pro malé farmy.
+
+**Pro CZ farmáře**: členství dává smysl pro farmy s 100+ ha (využíjí dotační poradenství a lobbying). Pro hobby farmy do 10 ha často přínos minimální.
+
+**Web**: https://www.akcr.cz`,
+    related: ['sp-szp-2023-2027', 'cap-2024'],
+  },
+
+  // ── PRAKTICKÉ / OSTATNÍ ────────────────────────────────────────────
+  {
+    slug: 'siloky-balik',
+    term: 'Silážní balík',
+    alias: ['siláž balíky', 'baled silage', 'wrapping'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Silážní balík je oválný balík zelené píce (vojtěška, jetel, traviny) zabalený v plastové fólii pro fermentaci. Alternativa k velké silážní jámě pro menší farmy.',
+    longDef: `Silážní balík je metoda silážování v kompaktních balících (vs klasická silážní jáma). Pro CZ farmy do 200 dojnic je často ekonomičtější než budování silážní jámy.
+
+**Pracovní postup**:
+1. **Sečení** — žacím strojem s kondicionérem (rolováním stébel pro rychlejší vysoušení).
+2. **Sušení** v řádcích na poli 6–24 h (na sušinu 30–45 %).
+3. **Obracení / shrnování** — obraceč, shrnovač pro homogenní řádek.
+4. **Balování** — kulatý lis (round baler) tvoří válcové balíky 1,2 × 1,2 m (cca 600 kg) nebo 1,5 × 1,2 m (800–1000 kg).
+5. **Wrapping** — okamžitě po balení (do 2 h) zabalit do plastové fólie. Wrapper navíjí 4–8 vrstev (cca 25–35 m fólie per balík).
+6. **Skladování** — balíky stahovat na 1 stranu (snazší doprava), kontrola na promáčknutí / poškození fólie.
+
+**Stroje + cena (2026)**:
+- **Lis kulatý** (round baler) — 350 000 – 1,5 mil. Kč. Top značky: Krone, John Deere, Massey Ferguson, Vicon, Welger, Kverneland.
+- **Wrapper** — 200 000 – 800 000 Kč. Hi-Spec wrapper / Pöttinger / McHale.
+- **Kombi (lis + wrapper v jednom)** — 800 000 – 2,2 mil. Kč. McHale Fusion, Krone Comprima Wrap, Kuhn iBio.
+
+**Náklady na balík** (orientačně):
+- **Fólie**: 80–120 Kč/balík (6 vrstev = 30 m × 4 Kč/m).
+- **Práce + traktor**: 100–200 Kč/balík.
+- **Amortizace strojů**: 50–150 Kč/balík.
+- **Celkem**: 230–470 Kč/balík = 230–470 Kč/600 kg = **0,40–0,80 Kč/kg sušiny**.
+
+Pro srovnání **silážní jáma**: 0,15–0,30 Kč/kg sušiny (levnější), ale jednorázová investice 1–5 mil. Kč na stavbu.
+
+**Kdy se vyplatí balíky**:
+- **Malá / střední farma** (do 100 dojnic) — nepotřebuje 2000 t silážní jámy.
+- **Malé pozemky** s rozdílnými plodinami — flexibilita.
+- **Bez stálé staveb pozemku** — nájemné pole, krátkodobé hospodaření.
+- **Krmení mimo farmu** — prodej balíků sousedním chovatelům.
+
+**Top značky pro lisy**: McHale (IE), Krone Comprima (DE), JD 870 (US), MF RB 4180 (US), Kuhn FB 3140 (FR).`,
+    related: ['osevni-postup', 'vojteska'],
+  },
+  {
+    slug: 'dojirna',
+    term: 'Dojírna (typy)',
+    alias: ['milking parlor', 'milkroom'],
+    kategorie: 'technologie',
+    shortDef: 'Dojírna je technologie pro dojení skotu — od rybí kosti přes paralel po robot. Volba ovlivňuje pracovní výkon, welfare a investiční náklady.',
+    longDef: `Dojírna je technologický komplex pro dojení dojnic. V CZ dominantní u stájí 50+ dojnic.
+
+**Hlavní typy**:
+
+### 1. Rybí kost (Fishbone)
+- **Pozice krav**: pod úhlem 30° k pracovní jámě.
+- **Velikost**: 2×4 až 2×12 stání.
+- **Výkon**: 60–80 krav/hod.
+- **Pro stádo**: 50–200 dojnic.
+- **Cena**: 500 000 – 2 mil. Kč.
+- **Plus**: jednoduchá, ověřená, levná.
+- **Mínus**: pomalá vs novější systémy.
+
+### 2. Paralel (Parallel)
+- **Pozice krav**: kolmo k pracovní jámě, dojič za zadkem.
+- **Velikost**: 2×8 až 2×24.
+- **Výkon**: 100–140 krav/hod.
+- **Pro stádo**: 100–500 dojnic.
+- **Cena**: 1,5–6 mil. Kč.
+- **Plus**: kompaktní (užší než fishbone), vyšší výkon.
+- **Mínus**: dojič nemá výhled na vemena přední řady.
+
+### 3. Karusel (Rotary)
+- **Pozice krav**: na rotující plošině.
+- **Velikost**: 24–80 stání.
+- **Výkon**: 150–300 krav/hod.
+- **Pro stádo**: 300+ dojnic.
+- **Cena**: 5–25 mil. Kč.
+- **Plus**: extrémní výkon, kontinuální tok krav.
+- **Mínus**: extrémní investice, vyžaduje 24/7 provoz pro návratnost.
+
+### 4. Robot (AMS — Automatic Milking System)
+- **Pozice**: krávy si přicházejí samy 2–3× za den.
+- **Výkon**: 60–80 dojnic per robot (jednotka).
+- **Pro stádo**: 60+ dojnic per robot, modulární.
+- **Cena**: 4–6 mil. Kč per robot + 1–2 mil. Kč instalace.
+- **Plus**: automatizace 24/7, žádný dojič, welfare (kráva si určuje rytmus), data per kráva.
+- **Mínus**: vysoká investice, závislost na elektronice, vyžaduje optimalizovanou stáj.
+
+**Top značky**:
+- **DeLaval** (SE) — VMS robot, fishbone, paralel, karusel. Tradiční lídr.
+- **Lely** (NL) — Astronaut robot. Nejprodávanější AMS na světě.
+- **GEA Westfalia** (DE) — DairyRobot, Magnum karusel.
+- **BouMatic** (US) — paralel, fishbone, robot.
+- **Fullwood** (UK) — fishbone, paralel.
+
+**Ekonomika** (orientačně pro stádo 200 dojnic):
+- **Fishbone 2×10**: investice 1,8 mil. Kč, 2 dojiči × 4 h × 2× denně.
+- **Paralel 2×16**: investice 3,5 mil. Kč, 1 dojič × 3,5 h × 2× denně.
+- **3× Lely Astronaut**: investice 18 mil. Kč, 0 dojičů.
+- **Per liter mléka**: fishbone 0,30 Kč/l, paralel 0,25, robot 0,40 (vyšší fixní, nižší variabilní).
+
+V CZ 2024: cca **70 % farem fishbone/paralel**, **20 % karusel/rapid exit**, **10 % AMS robot** (roste rychle, hlavně mladé generace farmářů).`,
+    related: ['telematika'],
+  },
 ];
 
 export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {

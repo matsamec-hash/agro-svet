@@ -1,0 +1,192 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/pruvodce/jak-vybrat-lis-na-baliky/`;
+const datePublished = '2026-05-18';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Průvodce nákupem', url: '/pruvodce/' },
+  { name: 'Jak vybrat lis na balíky', url: canonical },
+]);
+
+const faqs = [
+  { q: 'Kulatý nebo hranolový lis?', a: 'Kulatý (round) je standardem pro CZ farmy < 500 dojnic — levnější, manévrovatelnější, balík 600–1 000 kg snadno hýbatelný traktorem s vidlemi. Hranolový (square) dává hustší balík (efektivnější přeprava) ale je 2× dražší a vyžaduje silnější traktor + speciální stahovák.' },
+  { q: 'Vyplatí se kombi lis + wrapper?', a: 'Pro silážní balíky ano. Standardní postup je: lisování + okamžité wrappování do 2 hodin (aby fermentace začala v anaerobním prostředí). Kombi stroj (McHale Fusion, Krone Comprima Wrap) udělá obojí v 1 jízdě = vyšší výkon, méně přejezdů. Cena +500 tis. – 1 mil. Kč vs samostatný lis + wrapper.' },
+  { q: 'Net wrap nebo provázek (twine)?', a: 'Net wrap dnes standard 90 %+ moderních lisů — rychlejší (3-5 obtáček vs 18-22 u provázku), pevnější fixace, menší ztráty hmoty. Provázek levnější o 30 %, ale starší stroje. Pro siláž balíky doporučujeme výhradně net wrap.' },
+  { q: 'Jaká velikost balíku?', a: '120 × 120 cm (kulatý, ~600 kg) je nejběžnější pro CZ. 150 × 120 cm (~800–1000 kg) je vyšší výkon, ale potřebuje silnější manipulační techniku. Hranolový HD 80 × 90 × 240 cm (~500 kg) je standard pro export sena.' },
+];
+
+const faqJsonLd = faqPageSchema(faqs);
+const articleJsonLd = {
+  '@context': 'https://schema.org', '@type': 'Article',
+  headline: 'Jak vybrat lis na balíky (2026)',
+  description: 'Průvodce výběrem lisu na balíky. Kulatý vs hranolový, kombi s wrapperem, top značky.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished, dateModified: datePublished,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout title="Jak vybrat lis na balíky (2026) — kulatý vs hranolový" description="Průvodce výběrem lisu na balíky pro CZ farmu. Kulatý vs hranolový, net wrap vs provázek, kombi s wrapperem, top značky 2026." canonical={canonical} ogType="article" publishedTime={datePublished}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a><span aria-hidden="true">›</span>
+      <a href="/pruvodce/">Průvodce nákupem</a><span aria-hidden="true">›</span>
+      <span class="current">Jak vybrat lis na balíky</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Průvodce · ~10 min</span>
+      <h1>Jak vybrat lis na balíky (2026)</h1>
+      <p class="lede">
+        Lis je klíčový stroj pro chovatele skotu, ovcí i pro farmy s vlastní výrobou sena a slámy. Správný výběr ovlivní kvalitu silážního balíku, rychlost sklizně a celkové náklady na krmivo.
+      </p>
+      <div class="meta">Publikováno 18. května 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Dva hlavní typy lisů</h2>
+
+      <h3>Kulatý lis (round baler)</h3>
+      <p>Tvoří válcové balíky 1,2 × 1,2 m (600 kg) nebo 1,5 × 1,2 m (800–1000 kg). Standard pro <a href="/slovnik/siloky-balik/">silážní balíky</a> v CZ.</p>
+      <ul>
+        <li><strong>Plusy:</strong> manévrovatelný (lis o hmotnosti 2–4 t), univerzální (sláma, seno, siláž), snadná přeprava balíku traktorem s vidlemi nebo manipulátorem.</li>
+        <li><strong>Mínusy:</strong> méně hutný balík (200–300 kg/m³ vs 400+ u hranolového), horší pro dálkový transport.</li>
+        <li><strong>Cena (2026)</strong>: 350 000 – 1,5 mil. Kč.</li>
+      </ul>
+
+      <h3>Hranolový lis (large square baler / HD)</h3>
+      <p>Tvoří obdélníkové balíky 80×90×240 cm (~500 kg, malý) nebo 120×130×260 cm (~700+ kg, velký). Standard pro export sena, slámy.</p>
+      <ul>
+        <li><strong>Plusy:</strong> velmi hutný balík (400–500 kg/m³) → efektivní transport (více tun na kamion), uniformní rozměry pro skladování.</li>
+        <li><strong>Mínusy:</strong> velmi těžký lis (5–9 t) → potřebuje silný traktor (150+ koní), drahý, vyžaduje stahovák / vidle s velkou nosností.</li>
+        <li><strong>Cena (2026)</strong>: 1,5–6 mil. Kč.</li>
+      </ul>
+
+      <h2>2. Klíčové parametry</h2>
+
+      <h3>Komorový vs řetězový sběr</h3>
+      <ul>
+        <li><strong>Komorový</strong> (pickup chamber): pásy v kombinaci s válci tvoří balík. Standard u prémiových značek (Krone Comprima, McHale, Vicon).</li>
+        <li><strong>Řetězový</strong> (chain & slat): řetězové dopravníky. Levnější, ale méně variabilní velikost balíku.</li>
+      </ul>
+
+      <h3>Pevná vs variabilní komora</h3>
+      <ul>
+        <li><strong>Pevná komora</strong>: balíky jen jedné velikosti (např. 120 cm Ø). Levnější, ale méně variabilní.</li>
+        <li><strong>Variabilní komora</strong>: nastavitelný průměr balíku 60–180 cm. Užitečné pro různé materiály a transportní omezení.</li>
+      </ul>
+
+      <h3>Sběrač (pickup width)</h3>
+      <ul>
+        <li><strong>1,8 m</strong> — standard pro řádky z žacího stroje 2,5–3 m.</li>
+        <li><strong>2,2 m</strong> — pro širší řádky / kombi se shrnovačem.</li>
+        <li><strong>2,4 m+</strong> — pro vícestupňové shrnování (velkofarmy).</li>
+      </ul>
+
+      <h3>Vázání</h3>
+      <ul>
+        <li><strong>Net wrap</strong> (síť) — 3–6 obtáček, rychlejší (10–15 sec/balík), pevnější. <strong>Doporučujeme</strong>.</li>
+        <li><strong>Twine</strong> (provázek) — 16–22 obtáček, pomalejší (25–40 sec/balík), levnější o ~30 %.</li>
+        <li><strong>Plastic film</strong> — premium pro siláž (alternativa k wrapperu) — Krone HighSpeed, McHale Mover. Drahé.</li>
+      </ul>
+
+      <h2>3. Kombi lis + wrapper</h2>
+      <p>Pro siláž je doporučovaný <strong>kombi stroj</strong> — lisuje a okamžitě (do 2 minut) zabalí balík do plastové fólie. Eliminuje druhou jízdu wrapperu.</p>
+      <ul>
+        <li><strong>Top kombi modely</strong>: McHale Fusion 3 / 4, Krone Comprima CV 150 XC, Kuhn iBio+, Pöttinger Impress Pro, Vicon FastBale.</li>
+        <li><strong>Plus:</strong> vyšší výkon (40–60 balíků/h vs 25–40 u sólo), menší riziko poškození balíku, méně palivového paliva.</li>
+        <li><strong>Mínus:</strong> investice 1,5–3 mil. Kč (vs sólo lis 500K – 1,5M + sólo wrapper 200–800K).</li>
+      </ul>
+
+      <h2>4. Top značky 2026</h2>
+      <table>
+        <thead><tr><th>Značka</th><th>Země</th><th>Specialita</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Krone</strong></td><td>DE</td><td>Comprima (kulatý variable), BiG Pack (hranolový HD) — prémium, dlouhá životnost</td></tr>
+          <tr><td><strong>McHale</strong></td><td>IE</td><td>Fusion (kombi lis+wrapper) — světový leader v silážních kombi</td></tr>
+          <tr><td><strong>John Deere</strong></td><td>US</td><td>F441, 8 a 9 série — robustní, široká dealerská síť</td></tr>
+          <tr><td><strong>Massey Ferguson</strong></td><td>US</td><td>RB / SB série — cenově atraktivní</td></tr>
+          <tr><td><strong>Kuhn</strong></td><td>FR</td><td>VB / iBio+ — kvalitní mid-tier</td></tr>
+          <tr><td><strong>Vicon</strong></td><td>NO</td><td>FastBale (kontinuální kombi) — speciální technologie bez zastavování</td></tr>
+          <tr><td><strong>Pöttinger</strong></td><td>AT</td><td>Impress Pro (kombi lis+wrapper) — DE/AT design</td></tr>
+          <tr><td><strong>Welger / Lely</strong></td><td>DE/NL</td><td>RP, Welger Lely Tornado — historicky kvalitní</td></tr>
+          <tr><td><strong>New Holland</strong></td><td>US</td><td>BR / BC série — dobrý poměr cena/výkon</td></tr>
+          <tr><td><strong>Claas</strong></td><td>DE</td><td>Rollant, Variant, Quadrant — prémium pro velkofarmu</td></tr>
+        </tbody>
+      </table>
+
+      <h2>5. Cenová orientace 2026</h2>
+      <ul>
+        <li><strong>Kulatý lis pevná komora (provázek)</strong>: 350 000 – 600 000 Kč.</li>
+        <li><strong>Kulatý lis variable + net wrap</strong>: 600 000 – 1,1 mil. Kč.</li>
+        <li><strong>Kombi kulatý + wrapper (siláž)</strong>: 1,5–3 mil. Kč.</li>
+        <li><strong>Hranolový lis HD (80×90)</strong>: 1,5–3 mil. Kč.</li>
+        <li><strong>Hranolový BIG (120×130)</strong>: 3–6 mil. Kč.</li>
+      </ul>
+
+      <h2>6. Náklady na balík</h2>
+      <ul>
+        <li><strong>Net wrap</strong>: 80–120 Kč/balík (6 vrstev).</li>
+        <li><strong>Plastová fólie (siláž)</strong>: 100–180 Kč/balík (4–6 vrstev).</li>
+        <li><strong>Práce + traktor</strong>: 100–200 Kč/balík.</li>
+        <li><strong>Amortizace lisu</strong>: 50–200 Kč/balík (záleží na výkonu strojí + roční kapacita).</li>
+        <li><strong>Celkem</strong>: 330–700 Kč/balík = 0,55–1,15 Kč/kg.</li>
+      </ul>
+
+      <h2>7. FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Další zdroje</h2>
+      <ul>
+        <li><a href="/stroje/lisy-valcove/">Katalog kulatých lisů</a></li>
+        <li><a href="/stroje/lisy-hranolove/">Katalog hranolových lisů</a></li>
+        <li><a href="/stroje/obalovace/">Katalog obalovačů (wrapperů)</a></li>
+        <li><a href="/slovnik/siloky-balik/">Slovník: Silážní balík</a></li>
+        <li><a href="/slovnik/vojteska/">Slovník: Vojtěška setá</a></li>
+        <li><a href="/bazar/?category=sklizen-picnin">Ojeté lisy v bazaru</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .g-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .g-head { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.65; margin: 0 0 14px; }
+  .meta { font-size: 13px; color: #6B6B72; }
+  .g-body h2 { font-size: 22px; font-weight: 800; color: #0A0A0B; margin: 32px 0 14px; line-height: 1.25; }
+  .g-body h3 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 22px 0 8px; }
+  .g-body p { font-size: 16px; line-height: 1.75; color: #333; margin: 0 0 14px; }
+  .g-body ul { padding-left: 22px; margin: 0 0 16px; }
+  .g-body li { font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 6px; }
+  .g-body strong { color: #0A0A0B; font-weight: 700; }
+  .g-body a { color: #0B7A3B; text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 20px; }
+  th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  .faqs { display: flex; flex-direction: column; gap: 8px; }
+  .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; }
+  .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 15px; }
+  .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+</style>

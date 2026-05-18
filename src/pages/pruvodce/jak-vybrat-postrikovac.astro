@@ -1,0 +1,196 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/pruvodce/jak-vybrat-postrikovac/`;
+const datePublished = '2026-05-18';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Průvodce nákupem', url: '/pruvodce/' },
+  { name: 'Jak vybrat postřikovač', url: canonical },
+]);
+
+const faqs = [
+  { q: 'Nesený nebo tažený postřikovač?', a: 'Nesený (na tříbod) je levnější (200–500 tis. Kč) a manévrovatelnější, ale objem nádrže omezený na 600–1200 l. Tažený (5 000–10 000 l) dává vyšší výkon pro střední a velké farmy, ale potřebuje silnější traktor pro pohon hydrauliky.' },
+  { q: 'Jaký záběr ramen pro střední farmu?', a: '12–18 m je standard pro CZ farmy 100–500 ha. Záběr 21–24 m vyžaduje pravidelné velké lány bez překážek. Záběr 28+ m je pro velkofarmy 800+ ha. Pravidlo: záběr by neměl převyšovat 40 % průměrné šířky vašich polí.' },
+  { q: 'ISOBUS / Section Control — vyplatí se?', a: 'Pro postřikovač Section Control šetří 5–15 % chemie ročně (v souvratích a překrytí). U farmy 300 ha s nákladem 5 000 Kč/ha/sezónu na chemii = úspora 75 000–225 000 Kč/rok. Návratnost ISOBUS + RTK GPS retrofit (250–500 tis. Kč) za 2–4 sezóny.' },
+  { q: 'Trysky — jaké zvolit?', a: 'Standard pro CZ jsou injektorové (anti-drift) trysky 03 nebo 04 (3 nebo 4 l/min při 3 bar). Pro pre-em herbicidy širokopaprskové ploché 110°. Pro listové fungicidy úzkopaprskové. Sady trysek 4 000–15 000 Kč podle počtu sekcí.' },
+  { q: 'Postřik letadlem nebo dronem místo postřikovače?', a: 'V EU je letecký postřik silně regulovaný (EASA + SUR). Drony pro postřik jsou na vzestupu, ale stále vyžadují speciální povolení a jsou drahé ($30 000+ stroj). Pro CZ farmy zatím klasický postřikovač zůstává standardem.' },
+];
+
+const faqJsonLd = faqPageSchema(faqs);
+const articleJsonLd = {
+  '@context': 'https://schema.org', '@type': 'Article',
+  headline: 'Jak vybrat postřikovač (2026)',
+  description: 'Průvodce výběrem postřikovače pro CZ farmu. Nesený vs tažený, záběr ramen, ISOBUS, top značky.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished, dateModified: datePublished,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout title="Jak vybrat postřikovač (2026) — průvodce pro CZ farmu" description="Průvodce výběrem postřikovače: nesený vs tažený vs samojízdný, záběr ramen, ISOBUS Section Control, trysky, top značky 2026." canonical={canonical} ogType="article" publishedTime={datePublished}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a><span aria-hidden="true">›</span>
+      <a href="/pruvodce/">Průvodce nákupem</a><span aria-hidden="true">›</span>
+      <span class="current">Jak vybrat postřikovač</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Průvodce · ~10 min</span>
+      <h1>Jak vybrat postřikovač (2026)</h1>
+      <p class="lede">
+        Postřikovač je druhá nejvyužívanější stroj na farmě (po traktoru) — průměrně 30–60 jízd za sezónu. Správný výběr ušetří desetisíce Kč ročně na chemii a paliva.
+      </p>
+      <div class="meta">Publikováno 18. května 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Tři hlavní typy postřikovačů</h2>
+
+      <h3>Nesený (mounted)</h3>
+      <p>Připojen na tříbod traktoru. Objem nádrže 400–1 200 l, záběr 12–18 m.</p>
+      <ul>
+        <li><strong>Plusy:</strong> nejlevnější (200–500 tis. Kč nový), manévrovatelný, krátký zatáčecí poloměr.</li>
+        <li><strong>Mínusy:</strong> malý objem = časté doplňování (každých 30–60 min při běžné dávce 200 l/ha).</li>
+      </ul>
+      <p>Pro <strong>farmy do 100 ha</strong>.</p>
+
+      <h3>Tažený (trailed)</h3>
+      <p>Vlastní podvozek na 1 nebo 2 nápravách. Objem 2 500–8 000 l, záběr 18–30 m. Standard pro CZ střední a velké farmy.</p>
+      <ul>
+        <li><strong>Plusy:</strong> velký objem (1 plnění na 25–40 ha), vyšší výkon, lepší stabilita ramen.</li>
+        <li><strong>Mínusy:</strong> dražší (800 tis. – 3 mil. Kč), vyžaduje silnější traktor (130+ koní), nepraktický pro malé pole pod 5 ha.</li>
+      </ul>
+      <p>Pro <strong>farmy 100–800 ha</strong>.</p>
+
+      <h3>Samojízdný (self-propelled)</h3>
+      <p>Vlastní motor + kola + kabina. Objem 4 000–12 000 l, záběr 24–48 m. Pro velkofarmy a sklizňové podniky.</p>
+      <ul>
+        <li><strong>Plusy:</strong> ergonomie (vysoká kabina, výhled), rychlost na poli (12–25 km/h), vlastní kola = menší utužení.</li>
+        <li><strong>Mínusy:</strong> extrémní cena (4–15 mil. Kč), těžký (10–25 t), vyžaduje sezónní využití 500+ ha.</li>
+      </ul>
+      <p>Pro <strong>farmy nad 800 ha</strong> nebo sklizňové podniky.</p>
+
+      <h2>2. Klíčové parametry</h2>
+
+      <h3>Záběr ramen</h3>
+      <table>
+        <thead><tr><th>Záběr</th><th>Doporučené pro farmu</th><th>Cena ramen navíc</th></tr></thead>
+        <tbody>
+          <tr><td>12 m</td><td>do 100 ha</td><td>—</td></tr>
+          <tr><td>18 m</td><td>100–300 ha</td><td>+50 000 Kč</td></tr>
+          <tr><td>24 m</td><td>300–800 ha</td><td>+150 000 Kč</td></tr>
+          <tr><td>27–30 m</td><td>800+ ha</td><td>+250 000 Kč</td></tr>
+          <tr><td>36+ m</td><td>specialisté</td><td>+500 000 Kč</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Pravidlo</strong>: záběr ≤ 40 % průměrné šířky vašich polí. Pole 60 m → max 24 m záběr.</p>
+
+      <h3>Objem nádrže</h3>
+      <p>Optimální objem = <strong>výkon × kapacita</strong>: pro postřikovač 24 m záběr × 8 km/h = 19 ha/h × 200 l/ha dávka = 3 800 l/h. Nádrž 4 000 l znamená 1 plnění za hodinu — rozumné. Nádrž 8 000 l znamená 2 hodiny bez plnění (lepší výkon, ale dvakrát víc hmotnosti → utužení půdy).</p>
+
+      <h3>ISOBUS + Section Control</h3>
+      <p>Standard u prémiových postřikovačů. Vypíná sekce ramen v souvratích nebo již ošetřených pásech. Úspora 5–15 % chemie. Vyžaduje:</p>
+      <ul>
+        <li><strong>RTK GPS</strong> (centimetrová přesnost) — 100–300 tis. Kč hardware nebo subskripční služba.</li>
+        <li><strong>ISOBUS terminál</strong> v traktoru s licencí TC-SC (Task Controller Section Control) — 20–80 tis. Kč.</li>
+        <li><strong>Section Control sekce</strong> na postřikovači — typicky 5–24 sekcí (více = přesnější vypínání).</li>
+      </ul>
+
+      <h3>Čerpadlo</h3>
+      <ul>
+        <li><strong>Membránové</strong> (do 200 l/min) — pro nesené postřikovače, vyšší tlaková rezerva.</li>
+        <li><strong>Pístové</strong> (200–500 l/min) — pro střední tažené.</li>
+        <li><strong>Odstředivé</strong> (500+ l/min) — pro samojízdné, vysoký průtok.</li>
+      </ul>
+
+      <h3>Trysky (Nozzles)</h3>
+      <p>Velikost a typ trysky určují kvalitu postřiku:</p>
+      <ul>
+        <li><strong>Anti-drift injektorové</strong> (Lechler IDK, Agrotop AirMix) — nejlepší proti úletu, standard pro CZ.</li>
+        <li><strong>Standardní ploché</strong> (Hardi Flat Fan) — pro herbicidy, vyšší úlet.</li>
+        <li><strong>Hollow Cone</strong> — pro fungicidy a insekticidy.</li>
+        <li><strong>Velikost</strong> 02 / 03 / 04 / 05 (= 2/3/4/5 l/min při 3 bar) — vybírá podle dávky a rychlosti jízdy.</li>
+      </ul>
+
+      <h2>3. Top značky 2026</h2>
+      <table>
+        <thead><tr><th>Značka</th><th>Země</th><th>Specialita</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Amazone</strong></td><td>DE</td><td>UX (tažený), UF (nesený), Pantera (samojízdný) — prémium, dlouhá životnost</td></tr>
+          <tr><td><strong>Horsch</strong></td><td>DE</td><td>Leeb série — nejlepší nezávislé podvěšení ramen (eliminuje boční rozkmit)</td></tr>
+          <tr><td><strong>Kuhn</strong></td><td>FR</td><td>Metris, Lexis — středy poměr cena/výkon</td></tr>
+          <tr><td><strong>Hardi</strong></td><td>DK</td><td>Twin Force, Mega — důraz na anti-drift, robustní</td></tr>
+          <tr><td><strong>John Deere</strong></td><td>US</td><td>R, M série + ExactApply (each-nozzle control) — top precise farming</td></tr>
+          <tr><td><strong>Dammann</strong></td><td>DE</td><td>Trailblazer, ANP — extrémní záběr (až 51 m), pro nejvyspělejší</td></tr>
+          <tr><td><strong>Bednar</strong></td><td>CZ</td><td>FertiNium — tuzemská značka, atraktivní cena</td></tr>
+        </tbody>
+      </table>
+
+      <h2>4. Cenová orientace 2026</h2>
+      <ul>
+        <li><strong>Nesený 600 l + 12 m</strong>: 200 000–400 000 Kč nový.</li>
+        <li><strong>Nesený 1 000 l + 18 m + ISOBUS</strong>: 500 000–800 000 Kč.</li>
+        <li><strong>Tažený 3 000 l + 21 m + Section Control</strong>: 1,2–2 mil. Kč.</li>
+        <li><strong>Tažený 5 000 l + 24 m + premium</strong>: 2–3,5 mil. Kč.</li>
+        <li><strong>Samojízdný 4 000 l + 28 m</strong>: 4,5–8 mil. Kč.</li>
+        <li><strong>Samojízdný 8 000 l + 36 m flagship</strong>: 8–15 mil. Kč.</li>
+      </ul>
+
+      <h2>5. FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Další zdroje</h2>
+      <ul>
+        <li><a href="/stroje/postrikovace-nesene/">Katalog nesených postřikovačů</a></li>
+        <li><a href="/stroje/postrikovace-tazene/">Katalog tažených postřikovačů</a></li>
+        <li><a href="/stroje/postrikovace-samojizdne/">Katalog samojízdných postřikovačů</a></li>
+        <li><a href="/slovnik/section-control/">Co je Section Control</a></li>
+        <li><a href="/slovnik/isobus/">Slovník: ISOBUS</a></li>
+        <li><a href="/bazar/?category=ochrana-rostlin">Ojeté postřikovače v bazaru</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .g-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .g-head { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.65; margin: 0 0 14px; }
+  .meta { font-size: 13px; color: #6B6B72; }
+  .g-body h2 { font-size: 22px; font-weight: 800; color: #0A0A0B; margin: 32px 0 14px; line-height: 1.25; }
+  .g-body h3 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 22px 0 8px; }
+  .g-body p { font-size: 16px; line-height: 1.75; color: #333; margin: 0 0 14px; }
+  .g-body ul { padding-left: 22px; margin: 0 0 16px; }
+  .g-body li { font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 6px; }
+  .g-body strong { color: #0A0A0B; font-weight: 700; }
+  .g-body a { color: #0B7A3B; text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 20px; }
+  th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  .faqs { display: flex; flex-direction: column; gap: 8px; }
+  .faq { background: #fafafa; border: 1px solid #eaeaec; border-radius: 8px; padding: 14px 16px; }
+  .faq summary { cursor: pointer; font-weight: 600; color: #0A0A0B; font-size: 15px; }
+  .faq p { margin-top: 10px; font-size: 14px; color: #444; line-height: 1.6; }
+</style>
