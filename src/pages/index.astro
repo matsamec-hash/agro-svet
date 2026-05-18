@@ -6,8 +6,7 @@ import Newsletter from '../components/Newsletter.astro';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
 import HomeWeather from '../components/HomeWeather.astro';
 import { createAnonClient } from '../lib/supabase';
-import commoditiesData from '../data/commodities.json';
-import { AGRO_EVENTS } from '../data/agro-events';
+import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 import { organizationSchema } from '../lib/structured-data';
 
@@ -34,10 +33,10 @@ const featured = sorted[0];
 const heroRight = sorted.slice(1, 5);
 const latest = sorted.slice(5, 11);
 
-// Commodity data — precomputed at build time via scripts/fetch-commodities.mjs.
-// Refresh: `npm run commodities:refresh`. Avoids CZSO API + O(n²) compute on Worker.
-const commodityFull = commoditiesData.commodityFull;
-const fiveYearAvgs = commoditiesData.fiveYearAvgs;
+// Commodity chart loads its data client-side from /statistiky/commodity-data-recent.json
+// (eager, ~85 KB) and /statistiky/commodity-data.json (lazy on "Vše"). The homepage
+// only needs the 9 commodity names for the button row — bundling the full 256 KB
+// commodities.json into the Worker chunk would be pure waste.
 
 // Fresh bazar listings (latest 6; when topování lands, featured go first)
 const { data: freshListings } = await supabase
@@ -224,11 +223,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       </div>
       <a href="/statistiky/" class="link-cta">Zobrazit celou sekci →</a>
     </div>
-    <CommodityChart
-      series={commodityFull}
-      events={AGRO_EVENTS}
-      fiveYearAvg={fiveYearAvgs}
-    />
+    <CommodityChart commodityNames={COMMODITY_NAMES} />
   </section>
 
   <!-- Fresh bazar listings -->

@@ -10,10 +10,20 @@ import { bazarListingProductSchema, breadcrumbSchema } from '../../lib/structure
 const { id } = Astro.params;
 const supabase = createServerClient();
 
-// Fetch listing with images and user
+// Explicit columns instead of `*` — keeps the SSR payload tight on cache miss.
+// Excludes admin/internal columns (featured_until, updated_at, internal_notes
+// if added later, etc.) that the page doesn't render.
+const LISTING_COLUMNS = [
+  'id, title, description, price, location, category, subcategory, brand',
+  'model_slug, year_of_manufacture, power_hp, hours_operated',
+  'pracovni_zaber_m, nosnost_kg, objem_nadrze_l',
+  'phone, email, views, created_at, status',
+  'bazar_images(storage_path, position), bazar_users(name)',
+].join(', ');
+
 const { data: listing } = await supabase
   .from('bazar_listings')
-  .select('*, bazar_images(storage_path, position), bazar_users(name)')
+  .select(LISTING_COLUMNS)
   .eq('id', id)
   .single();
 

@@ -1,21 +1,17 @@
 ---
 // src/components/statistiky/CommodityChart.astro
-import type { CommodityTimeSeries } from '../../lib/czso';
-import type { AgroEvent } from '../../data/agro-events';
-
+//
+// Only the commodity NAMES are needed server-side (for the button row).
+// Chart data, events, and 5y averages are fetched client-side from
+// /statistiky/commodity-data-recent.json (eager, ~85 KB) and
+// /statistiky/commodity-data.json (lazy, ~256 KB, only on "Vše"). Passing
+// the full series as a prop used to bundle the 256 KB commodities.json into
+// the homepage Worker chunk for no SSR benefit.
 interface Props {
-  series: CommodityTimeSeries[];   // všech 9 komodit s plnou historií
-  events: AgroEvent[];             // historické anotace
-  fiveYearAvg: Record<string, { label: string; avg: number }[] | null>; // klíč = jméno komodity
+  commodityNames: readonly string[]; // 9 names rendered as pill buttons
 }
-const { series, events, fiveYearAvg } = Astro.props;
-
-const namedSeries = series.map(s => ({
-  name: s.name,
-  data: s.data.map(d => ({ label: d.label, value: d.value })),
-  unit: s.unit,
-}));
-const default0 = namedSeries[0]?.name ?? 'Pšenice';
+const { commodityNames } = Astro.props;
+const default0 = commodityNames[0] ?? 'Pšenice';
 ---
 
 <section class="sp-section" id="trh">
@@ -27,8 +23,8 @@ const default0 = namedSeries[0]?.name ?? 'Pšenice';
 
   <div class="sp-controls">
     <div class="sp-pills-row" role="tablist" aria-label="Komodita">
-      {namedSeries.map((s, i) => (
-        <button class:list={['sp-mini-pill', { active: i === 0 }]} data-commodity={s.name} type="button">{s.name}</button>
+      {commodityNames.map((name, i) => (
+        <button class:list={['sp-mini-pill', { active: i === 0 }]} data-commodity={name} type="button">{name}</button>
       ))}
     </div>
     <div class="sp-time-row" role="tablist" aria-label="Časové okno">

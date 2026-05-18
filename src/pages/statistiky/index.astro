@@ -7,7 +7,8 @@
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { biggestYoyChange, inputCostInflation, livestockMilestone } from '../../lib/agro-derived';
-import { AGRO_EVENTS } from '../../data/agro-events';
+// AGRO_EVENTS moved to /statistiky/commodity-data*.json endpoints — loaded
+// client-side by the chart, no longer needed at SSR time on this page.
 import statsData from '../../data/agro-stats.json';
 
 import DataSegmentNav from '../../components/DataSegmentNav.astro';
@@ -39,7 +40,6 @@ const {
   fertSeries,
   regional,
   scissorsPoints,
-  fiveYearAvgs,
   scissorsBaseYear: BASE_YEAR,
 } = statsData;
 
@@ -205,11 +205,7 @@ const PILLS = [
 
     <PillsNav items={PILLS} />
 
-    <CommodityChart
-      series={commodityFull}
-      events={AGRO_EVENTS}
-      fiveYearAvg={fiveYearAvgs}
-    />
+    <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} />
 
     <InputsBlock fuelSeries={fuelSeries} fertSeries={fertSeries} />
 
