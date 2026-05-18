@@ -14,7 +14,12 @@ const supabase = createAnonClient();
 
 // Run the article fetch and the related-pool fetch in parallel. The pool can be
 // filtered by article.id post-hoc; that saves one full RTT to Supabase Frankfurt.
-const ARTICLE_COLUMNS = 'id, title, slug, perex, content, featured_image_url, focal_point, category, tags, published_at, updated_at, seo_title, seo_description';
+// Columns we actually use in the template. NOTE: articles table has
+// `created_at` but no plain `updated_at` — what looks like an editorial
+// "last modified" lives in `last_updated_at` (added by aktualizovano in
+// migration 024) and isn't populated for agro-svet articles. Falling
+// back to `published_at` for dateModified is correct here.
+const ARTICLE_COLUMNS = 'id, title, slug, perex, content, featured_image_url, focal_point, category, tags, published_at, seo_title, seo_description';
 const POOL_COLUMNS = 'id, title, slug, perex, featured_image_url, category, tags, published_at';
 
 const [articleRes, poolRes] = await Promise.all([
