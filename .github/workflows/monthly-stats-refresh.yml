@@ -1,0 +1,73 @@
+name: Monthly agro-stats refresh
+
+# Měsíční refresh CZSO + Eurostat dat (ceny komodit, statistiky).
+# Nahrazuje dřívější Claude Code remote routine — běží zadarmo na GitHubu.
+# Když data dají změny → otevře PR. Když ne → tichý konec.
+
+on:
+  schedule:
+    # 27. v měsíci, 03:00 UTC (stejně jako původní routine).
+    - cron: '0 3 27 * *'
+  workflow_dispatch:
+    # Manuální spuštění z Actions UI.
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Refresh stats (retry once on CZSO timeout)
+        run: |
+          if ! npm run stats:refresh; then
+            echo "::warning::stats:refresh selhalo (pravděpodobně CZSO timeout), zkouším znovu za 30s"
+            sleep 30
+            npm run stats:refresh
+          fi
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet -- src/data/commodities.json src/data/agro-stats.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Žádné změny dat — PR se nevytváří."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat -- src/data/commodities.json src/data/agro-stats.json
+          fi
+
+      - name: Create Pull Request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          BRANCH="data/refresh-agro-stats-$DATE"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add src/data/commodities.json src/data/agro-stats.json
+          git commit -m "data: refresh agro-stats $DATE
+
+          Měsíční automatický refresh build-time agro dat (CZSO komodity/dobytek/nafta/hnojiva + Eurostat). Generováno GitHub Actions."
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "data: refresh agro-stats $DATE" \
+            --body "Měsíční automatický refresh build-time agro statistik (CZSO + Eurostat). Generováno GitHub Actions workflow \`monthly-stats-refresh\`." \
+            --base master \
+            --head "$BRANCH"
