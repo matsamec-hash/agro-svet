@@ -1,9 +1,12 @@
 ---
 interface Props {
   images: { url: string; position: number }[];
+  /** Inzerát titulek — používá se pro popisný alt (Google Images indexace). */
+  title?: string;
 }
 
-const { images } = Astro.props;
+const { images, title } = Astro.props;
+const altBase = title?.trim() || 'Inzerát';
 const sorted = [...images].sort((a, b) => a.position - b.position);
 const main = sorted[0];
 const thumbs = sorted.slice(1);
@@ -15,7 +18,9 @@ const thumbs = sorted.slice(1);
       <img
         id="gallery-main-img"
         src={main.url}
-        alt="Hlavní fotka"
+        alt={altBase}
+        width="800"
+        height="600"
         data-lightbox={main.url}
         data-gallery="listing-photos"
         fetchpriority="high"
@@ -27,7 +32,7 @@ const thumbs = sorted.slice(1);
       <div class="gallery-thumbs">
         {sorted.map((img, idx) => (
           <button class="gallery-thumb" data-src={img.url} data-idx={idx} data-lightbox={img.url} data-gallery="listing-photos">
-            <img src={img.url} alt={`Fotka ${idx + 1}`} loading="lazy" />
+            <img src={img.url} alt={`${altBase} — fotka ${idx + 1}`} width="80" height="60" loading="lazy" decoding="async" />
           </button>
         ))}
       </div>

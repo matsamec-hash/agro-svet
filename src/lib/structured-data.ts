@@ -7,17 +7,55 @@ export interface BreadcrumbItem {
   url: string;
 }
 
-export function organizationSchema() {
+// Stabilní @id kotvy pro sitewide entity. Všechna ostatní schémata (NewsArticle
+// publisher, WebPage isPartOf, …) na ně odkazují přes { '@id': … } místo aby
+// duplikovala celý objekt — Google pak nody slučuje do jedné entity (silnější
+// E-E-A-T / Knowledge Graph signál).
+export const ORG_ID = `${SITE_URL}/#organization`;
+export const WEBSITE_ID = `${SITE_URL}/#website`;
+
+const ORG_DESCRIPTION =
+  'Zemědělský portál — encyklopedie traktorů a kombajnů, plemena hospodářských zvířat, agro bazar zdarma a aktuální novinky.';
+
+// Sitewide @graph emitovaný v Layout.astro na KAŽDÉ stránce. Definuje kanonickou
+// Organization + WebSite entitu jednou; ostatní stránky už jen referencují @id.
+export function siteSchemaGraph() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'agro-svět.cz',
-    alternateName: 'agro-svet.cz',
-    url: SITE_URL + '/',
-    logo: `${SITE_URL}/icon-512.png`,
-    description:
-      'Zemědělský portál — encyklopedie traktorů a kombajnů, plemena hospodářských zvířat, agro bazar zdarma a aktuální novinky.',
-    inLanguage: 'cs-CZ',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': ORG_ID,
+        name: 'agro-svět.cz',
+        alternateName: 'agro-svet.cz',
+        url: SITE_URL + '/',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE_URL}/icon-512.png`,
+          width: 512,
+          height: 512,
+        },
+        description: ORG_DESCRIPTION,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': WEBSITE_ID,
+        name: 'agro-svět.cz',
+        alternateName: 'agro-svet.cz',
+        url: SITE_URL + '/',
+        inLanguage: 'cs-CZ',
+        description: ORG_DESCRIPTION,
+        publisher: { '@id': ORG_ID },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${SITE_URL}/hledat/?q={search_term_string}`,
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+    ],
   };
 }
 

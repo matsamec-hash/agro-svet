@@ -273,7 +273,16 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
       </div>
 
       <div class="hero-right">
-        <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
+        <div class="hero-photo">
+          <img
+            class="hero-photo-img"
+            src={heroPhoto}
+            alt={`${model.name} — ${categoryLabels[category]}`}
+            width="800"
+            height="600"
+            fetchpriority="high"
+            decoding="async"
+          />
           <div class="hero-photo-badge">
             <span class="n">{model.name}</span>
             {model.power_hp && <span class="pwr">{model.power_hp} k</span>}
@@ -591,10 +600,13 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   .model-page .hero-right{position:relative;z-index:1;min-height:300px;display:flex;align-items:center;justify-content:center}
   .model-page .hero-photo{
     width:100%;height:100%;min-height:300px;
-    background-size:cover;background-position:center;
     border-radius:18px;
     box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
     position:relative;overflow:hidden;
+  }
+  .model-page .hero-photo-img{
+    position:absolute;inset:0;z-index:0;
+    width:100%;height:100%;object-fit:cover;object-position:center;
   }
   .model-page .hero-photo::after{
     content:"";position:absolute;inset:0;

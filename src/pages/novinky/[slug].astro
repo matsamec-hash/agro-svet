@@ -8,6 +8,7 @@ import { injectLinks, injectLinksInText, createLinkContext } from '../../lib/aut
 import { getAllBrands } from '../../lib/stroje';
 import { getAllPlemena } from '../../lib/plemena';
 import { imgSrcset } from '../../lib/image-variants';
+import { ORG_ID, WEBSITE_ID } from '../../lib/structured-data';
 
 const { slug } = Astro.params;
 const supabase = createAnonClient();
@@ -117,17 +118,9 @@ const categoryLabels: Record<string, string> = {
 };
 
 const canonical = `https://agro-svet.cz/novinky/${article.slug}/`;
-const publisher = {
-  '@type': 'Organization',
-  name: 'agro-svět.cz',
-  url: 'https://agro-svet.cz',
-  logo: {
-    '@type': 'ImageObject',
-    url: 'https://agro-svet.cz/icon-512.png',
-    width: 512,
-    height: 512,
-  },
-};
+// Odkaz na sitewide Organization entitu (definovanou v Layout @graph) místo
+// duplikace celého objektu — Google nody sloučí podle @id.
+const publisher = { '@id': ORG_ID };
 const author = {
   '@type': 'Organization',
   name: 'Redakce agro-svět.cz',
@@ -154,6 +147,7 @@ const jsonLd = {
       dateModified,
       url: canonical,
       mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+      isPartOf: { '@id': WEBSITE_ID },
       author,
       publisher,
       inLanguage: 'cs-CZ',
