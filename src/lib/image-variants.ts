@@ -33,11 +33,13 @@ export interface ImgSrcsetResult {
 export function imgSrcset(
   url: string | null | undefined,
   sizes?: string,
+  maxWidth?: number,
 ): ImgSrcsetResult {
   if (!url) return { src: '' };
   const m = url.match(VARIANT_RE);
   if (!m) return { src: url };
   const [, base, , ext] = m;
-  const srcset = VARIANT_WIDTHS.map((w) => `${base}${VARIANT_FLAG}${w}${ext} ${w}w`).join(', ');
+  const widths = maxWidth ? VARIANT_WIDTHS.filter((w) => w <= maxWidth) : VARIANT_WIDTHS;
+  const srcset = widths.map((w) => `${base}${VARIANT_FLAG}${w}${ext} ${w}w`).join(', ');
   return { src: url, srcset, sizes };
 }

@@ -1,0 +1,38 @@
+---
+import ArticleCard from '../ArticleCard.astro';
+import { createAnonClient } from '../../lib/supabase';
+import { AGRO_SVET_SITE_ID as SITE_ID } from '../../lib/config';
+
+const supabase = createAnonClient();
+const { data: articles } = await supabase
+  .from('articles')
+  .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
+  .eq('site_id', SITE_ID)
+  .eq('status', 'published')
+  .order('featured', { ascending: false })
+  .order('published_at', { ascending: false })
+  .range(5, 10);
+
+const latest = articles ?? [];
+---
+
+<section style="max-width:1280px; margin:0 auto; padding:72px 32px 48px;">
+  <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
+    <div>
+      <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Novinky</h2>
+    </div>
+    <a href="/novinky/" class="link-cta">Všechny novinky →</a>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
+    {latest.map(article => (
+      <ArticleCard
+        title={article.title}
+        description={article.perex}
+        slug={article.slug}
+        publishDate={new Date(article.published_at)}
+        category={article.category}
+        heroImage={article.featured_image_url}
+      />
+    ))}
+  </div>
+</section>

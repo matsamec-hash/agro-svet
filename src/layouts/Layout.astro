@@ -31,6 +31,8 @@ interface Props {
   preloadHeroImage?: string;
   /** `sizes` attribute to pair with the preload — must match the rendered img. */
   preloadHeroSizes?: string;
+  /** Cap srcset width — useful when hero is small on mobile and w1600+ is wasted bytes. */
+  preloadHeroMaxWidth?: number;
 }
 
 const {
@@ -46,9 +48,10 @@ const {
   articleTags,
   preloadHeroImage,
   preloadHeroSizes,
+  preloadHeroMaxWidth,
 } = Astro.props;
 
-const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSizes) : null;
+const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSizes, preloadHeroMaxWidth) : null;
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
 const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;

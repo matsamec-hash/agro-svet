@@ -4,7 +4,8 @@
    bundled with build for max edge cache hit.
    Czech vyžaduje OBA subsety: latin (ASCII + á/í/é/ú/ý) + latin-ext (ě/š/č/ř/ž/ů/ď/ť/ň).
    Chakra Petch: 400-700 (no 800/900 in family — CSS using 800/900 falls back to 700).
-   Roboto Condensed: 300, 400, 700 (most-used weights only). */
+   Body text uses system stack — saves 6 woff2 files (~75 KB) na critical path.
+   Roboto Condensed fallback ostává jako legacy hint pro grep, ale není importnutý. */
 @import "@fontsource/chakra-petch/latin-400.css";
 @import "@fontsource/chakra-petch/latin-500.css";
 @import "@fontsource/chakra-petch/latin-600.css";
@@ -13,12 +14,6 @@
 @import "@fontsource/chakra-petch/latin-ext-500.css";
 @import "@fontsource/chakra-petch/latin-ext-600.css";
 @import "@fontsource/chakra-petch/latin-ext-700.css";
-@import "@fontsource/roboto-condensed/latin-300.css";
-@import "@fontsource/roboto-condensed/latin-400.css";
-@import "@fontsource/roboto-condensed/latin-700.css";
-@import "@fontsource/roboto-condensed/latin-ext-300.css";
-@import "@fontsource/roboto-condensed/latin-ext-400.css";
-@import "@fontsource/roboto-condensed/latin-ext-700.css";
 
 /* ===== Design Tokens ===== */
 :root {
@@ -27,7 +22,7 @@
   --gray: #888;
   --gray-light: #f5f5f5;
   --font-heading: 'Chakra Petch', sans-serif;
-  --font-body: 'Roboto Condensed', sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 /* ===== Base ===== */
