@@ -7,6 +7,7 @@ import chakraPetch700 from '@fontsource/chakra-petch/files/chakra-petch-latin-70
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { siteSchemaGraph } from '../lib/structured-data';
+import { imgSrcset } from '../lib/image-variants';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 
@@ -26,6 +27,10 @@ interface Props {
   modifiedTime?: string;
   articleSection?: string;
   articleTags?: string[];
+  /** URL of the LCP hero image to preload (CDN variant pattern OK). */
+  preloadHeroImage?: string;
+  /** `sizes` attribute to pair with the preload — must match the rendered img. */
+  preloadHeroSizes?: string;
 }
 
 const {
@@ -39,7 +44,11 @@ const {
   modifiedTime,
   articleSection,
   articleTags,
+  preloadHeroImage,
+  preloadHeroSizes,
 } = Astro.props;
+
+const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSizes) : null;
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
 const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
@@ -109,17 +118,26 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <!-- Preconnect: hero/article images + bazar listing photos. Šetří ~100ms TLS handshake na 1. requestu. -->
   <link rel="preconnect" href="https://cdn.samecdigital.com" crossorigin />
   <link rel="preconnect" href="https://obhypfuzmknvmknskdwh.supabase.co" crossorigin />
-  <!-- YouTube facade na encyklopedii — preconnect šetří TLS handshake při kliknutí na video poster. -->
-  <link rel="preconnect" href="https://www.youtube-nocookie.com" />
-  <link rel="preconnect" href="https://i.ytimg.com" />
+  {Astro.url.pathname.startsWith('/encyklopedie/') && (
+    <>
+      <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+      <link rel="preconnect" href="https://i.ytimg.com" />
+    </>
+  )}
 
   <!-- Fonts self-hosted via @fontsource (imported in src/styles/global.css). -->
   <!-- Preload the two most-used Chakra Petch latin weights to cut first paint FOIT. -->
   <link rel="preload" as="font" type="font/woff2" href={chakraPetch400} crossorigin />
   <link rel="preload" as="font" type="font/woff2" href={chakraPetch700} crossorigin />
 
+  {heroPreload && (
+    heroPreload.srcset
+      ? <link rel="preload" as="image" href={heroPreload.src} imagesrcset={heroPreload.srcset} imagesizes={heroPreload.sizes ?? ''} fetchpriority="high" />
+      : <link rel="preload" as="image" href={heroPreload.src} fetchpriority="high" />
+  )}
+
   {clarityId && (
-    <script is:inline set:html={`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${clarityId.replace(/[^a-zA-Z0-9_-]/g, '')}");`} />
+    <script is:inline set:html={`(function(c,l,i){c.clarity=c.clarity||function(){(c.clarity.q=c.clarity.q||[]).push(arguments)};function boot(){var t=l.createElement("script");t.async=1;t.src="https://www.clarity.ms/tag/"+i;var y=l.getElementsByTagName("script")[0];y.parentNode.insertBefore(t,y)}var fire=function(){("requestIdleCallback" in c?c.requestIdleCallback(boot,{timeout:4000}):setTimeout(boot,2500))};if(l.readyState==="complete")fire();else c.addEventListener("load",fire,{once:true})})(window, document, "${clarityId.replace(/[^a-zA-Z0-9_-]/g, '')}");`} />
   )}
 </head>
 <body>

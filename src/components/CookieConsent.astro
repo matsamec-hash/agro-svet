@@ -12,35 +12,39 @@ const GA_ID = "G-HC3JY466RR";
 </div>
 
 <script define:vars={{ GA_ID }}>
-  const KEY = 'agrosvet-cookie-consent';
-  const banner = document.getElementById('cc');
-  const stored = localStorage.getItem(KEY);
+  function ccInit() {
+    const KEY = 'agrosvet-cookie-consent';
+    const banner = document.getElementById('cc');
+    const stored = localStorage.getItem(KEY);
 
-  function loadGA() {
-    if (!GA_ID) return;
-    const s = document.createElement('script');
-    s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-    s.async = true;
-    document.head.appendChild(s);
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ window.dataLayer.push(arguments); }
-    window.gtag = gtag;
-    gtag('js', new Date());
-    gtag('config', GA_ID, { anonymize_ip: true });
+    function loadGA() {
+      if (!GA_ID) return;
+      const s = document.createElement('script');
+      s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+      s.async = true;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ window.dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', GA_ID, { anonymize_ip: true });
+    }
+
+    if (stored === 'all') loadGA();
+    else if (stored !== 'essentials') banner.hidden = false;
+
+    document.getElementById('cc-essentials')?.addEventListener('click', () => {
+      localStorage.setItem(KEY, 'essentials');
+      banner.hidden = true;
+    });
+    document.getElementById('cc-all')?.addEventListener('click', () => {
+      localStorage.setItem(KEY, 'all');
+      banner.hidden = true;
+      loadGA();
+    });
   }
-
-  if (stored === 'all') loadGA();
-  else if (stored !== 'essentials') banner.hidden = false;
-
-  document.getElementById('cc-essentials')?.addEventListener('click', () => {
-    localStorage.setItem(KEY, 'essentials');
-    banner.hidden = true;
-  });
-  document.getElementById('cc-all')?.addEventListener('click', () => {
-    localStorage.setItem(KEY, 'all');
-    banner.hidden = true;
-    loadGA();
-  });
+  if (document.readyState === 'complete') ccInit();
+  else window.addEventListener('load', ccInit, { once: true });
 </script>
 
 <style>

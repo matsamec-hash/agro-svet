@@ -86,6 +86,8 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 <Layout
   title="agro-svět.cz — zemědělská technika, bazar a novinky"
   description={homeDescription}
+  preloadHeroImage={featured?.featured_image_url ?? undefined}
+  preloadHeroSizes="(max-width: 900px) 100vw, 800px"
 >
   {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
 

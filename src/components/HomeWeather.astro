@@ -69,8 +69,12 @@ const { mode } = Astro.props;
   </section>
 )}
 
+{(mode === 'puda' || mode === 'commodity') && (
 <script is:inline>
   (function(){
+    if (window.__awBooted) return;
+    window.__awBooted = true;
+    const start = function(){
     const WMO = {
       0:['☀️','Jasno'],1:['🌤️','Polojasno'],2:['⛅','Polojasno'],3:['☁️','Zataženo'],
       45:['🌫️','Mlha'],48:['🌫️','Námraza'],
@@ -270,8 +274,17 @@ const { mode } = Astro.props;
         })
         .catch(() => { /* keep hidden */ });
     }
+    };
+    if (document.readyState === 'complete') {
+      ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 2000 }) : setTimeout(start, 0));
+    } else {
+      window.addEventListener('load', function(){
+        ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 2000 }) : setTimeout(start, 0));
+      }, { once: true });
+    }
   })();
 </script>
+)}
 
 <style is:global>
   /* Mirror of AgroWeather styles — kept :global so innerHTML-injected

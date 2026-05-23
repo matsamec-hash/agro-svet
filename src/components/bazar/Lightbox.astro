@@ -15,6 +15,7 @@
 
 <script is:inline>
 (function() {
+  function init() {
   const root = document.getElementById('lb-root');
   const img = document.getElementById('lb-img');
   const counter = document.getElementById('lb-counter');
@@ -73,6 +74,9 @@
     const start = group.indexOf(el);
     open(srcs, start < 0 ? 0 : start);
   });
+  }
+  if (document.readyState === 'complete') init();
+  else window.addEventListener('load', init, { once: true });
 })();
 </script>
 

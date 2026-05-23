@@ -25,9 +25,12 @@ const items = [
 
 <div class="ia-wrap">
   <div class="ia-row">
-    {items.map((item) => (
+    {items.map((item) => {
+      const base = item.img.replace(/\.webp$/, '');
+      const srcset = `${base}__v-w400.webp 400w, ${base}__v-w800.webp 800w, ${item.img} 1200w`;
+      return (
       <a class="ia-panel" href={item.href} aria-label={`${item.label} — klepněte pro náhled`}>
-        <img src={item.img} alt={item.label} class="ia-img" width="640" height="480" loading="lazy" />
+        <img src={`${base}__v-w800.webp`} srcset={srcset} sizes="(max-width: 768px) 100vw, (max-width: 1280px) 25vw, 320px" alt={item.label} class="ia-img" width="800" height="600" loading="lazy" decoding="async" />
         <div class="ia-overlay"></div>
         <div class="ia-content">
           <h3>{item.label}</h3>
@@ -35,7 +38,8 @@ const items = [
         </div>
         <span class="ia-hint" aria-hidden="true">{item.label} →</span>
       </a>
-    ))}
+      );
+    })}
   </div>
 </div>
 
