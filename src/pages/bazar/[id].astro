@@ -183,6 +183,25 @@ const breadcrumbJsonLd = breadcrumbSchema([
           <p>Datum: {date}</p>
           <p>{listing.views ?? 0}x zobrazeno</p>
         </div>
+
+        <!-- Report listing -->
+        <div class="sidebar-box report-box">
+          <a
+            class="report-link"
+            href={`mailto:info@samecdigital.com?subject=${encodeURIComponent(`Nahlášení závadného inzerátu #${id}`)}&body=${encodeURIComponent(`Inzerát: https://agro-svet.cz/bazar/${id}/\n\nDůvod nahlášení (uveďte, prosím, které pravidlo nebo předpis je porušen):\n\n\nVaše kontaktní údaje (volitelně):\n`)}`}
+            rel="nofollow"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 22V2l16 10-16 10z" transform="rotate(90 12 12)"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            Nahlásit závadný inzerát
+          </a>
+          <p class="report-hint">
+            Padělky, podvod, MLM, OR/léčiva bez oprávnění, porušení autorských práv apod. Posuzujeme do 7 dnů — viz <a href="/bazar/pravidla/">pravidla bazaru</a>.
+          </p>
+        </div>
       </aside>
     </div>
   </div>
@@ -289,6 +308,26 @@ const breadcrumbJsonLd = breadcrumbSchema([
   }
   .contact-reveal-btn:hover { background: #f0f000; }
   .contact-reveal-btn:active { transform: translateY(1px); }
+
+  .report-box { padding: 14px 18px; }
+  .report-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #777;
+    font-size: 13px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .report-link:hover { color: #c0392b; text-decoration: underline; }
+  .report-link svg { opacity: .7; }
+  .report-hint {
+    margin: 8px 0 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #999;
+  }
+  .report-hint a { color: #0B7A3B; text-decoration: underline; }
 
   .catalog-link-box {
     display: flex;

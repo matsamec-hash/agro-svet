@@ -1,0 +1,225 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="Pravidla bazaru — Agro-svět"
+  description="Pravidla agro bazaru: kdo smí inzerovat, povinnost IČO pro podnikatele, zakázané obsahy, hlášení závadných inzerátů, postup mazání a blokací."
+>
+  <main class="legal-page">
+    <h1>Pravidla bazaru</h1>
+    <p class="lead">
+      Bazar agro-svet.cz je inzertní platforma pro zemědělskou techniku, náhradní díly,
+      zvířata, pozemky, osiva, hnojiva a související zboží a služby. Vložením inzerátu
+      vyjadřujete souhlas s těmito pravidly a s
+      <a href="/podminky-pouziti/">Podmínkami použití</a>.
+    </p>
+
+    <h2>1. Kdo smí inzerovat</h2>
+    <h3>1.1 Fyzické osoby (nepodnikatelé)</h3>
+    <p>
+      Můžete inzerovat <strong>svůj vlastní majetek</strong> — vždy <strong>konkrétní
+      jednotlivou věc po kuse</strong> s jasným popisem (jeden traktor značky X model Y,
+      jeden pluh, jedno tele plemene Z atd.). Není dovoleno inzerovat „sklad",
+      „nabídku z výroby", neurčité množství nebo opakované partie.
+    </p>
+
+    <h3>1.2 Podnikatelé (OSVČ, firmy, dealerství)</h3>
+    <p>
+      Můžete inzerovat <strong>konkrétní nabízené zboží nebo službu</strong>.
+      Inzerent-podnikatel je <strong>povinen v inzerátu uvést</strong>:
+    </p>
+    <ul>
+      <li>obchodní firmu nebo jméno a příjmení,</li>
+      <li>IČO,</li>
+      <li>případně další identifikační údaje vyžadované zvláštními předpisy (např. číslo
+        autorizace ÚKZÚZ pro distributora přípravků na ochranu rostlin, registrace u SVS
+        pro chovatele, registrace u ČIŽP pro obchodníka s chráněnými druhy apod.).</li>
+    </ul>
+    <p>
+      Tyto údaje uveďte buď v poli „Jméno / firma" při registraci, nebo na konci textu
+      inzerátu. <strong>Neuvedení IČO podnikatelem je důvodem ke smazání inzerátu
+      a zablokování účtu bez náhrady.</strong>
+    </p>
+    <p>
+      <strong>Není dovoleno inzerovat podnikatelskou činnost obecně.</strong> Inzeráty
+      typu „nabízíme veškerou zemědělskou techniku", „dovoz strojů z Německa na zakázku",
+      „kompletní servis" budou smazány — pro tyto účely využijte sekci
+      <a href="/prodejci/">Prodejci a dealeři</a> nebo placené reklamní pozice.
+    </p>
+
+    <h2>2. Jak inzerát vypadat má a nemá</h2>
+    <h3>2.1 Doporučená pravidla</h3>
+    <ul>
+      <li>Jeden inzerát = jedna konkrétní věc. Více kusů různého typu vkládejte samostatně.</li>
+      <li>V názvu uveďte značku, model a hlavní parametr (rok výroby, výkon, šíře záběru).</li>
+      <li>V popisu uveďte pravdivý stav, závady, dobu provozu, kompletnost.</li>
+      <li>Vkládejte pouze <strong>vlastní</strong> fotografie nebo fotografie, ke kterým
+        máte licenci. Fotografie z webů výrobců, prodejců nebo z jiných inzerátů jsou
+        zakázány a budou smazány.</li>
+      <li>Cena se uvádí konkrétně. „Dohodou" jen tam, kde to dává smysl (např. pozemek).</li>
+    </ul>
+
+    <h3>2.2 Zakázaný obsah</h3>
+    <p>Smazány budou zejména inzeráty, které:</p>
+    <ul>
+      <li>nabízejí <strong>padělky</strong>, neoriginální díly vydávané za originální,
+        odcizené nebo neoprávněně získané věci,</li>
+      <li>nabízejí <strong>léčiva</strong> (humánní i veterinární) bez příslušného oprávnění,</li>
+      <li>nabízejí <strong>přípravky na ochranu rostlin v rozporu se zákonem č. 326/2004 Sb.</strong>
+        — zejména neregistrované přípravky, prodej mimo profesionální uživatele tam, kde
+        to zákon zakazuje, prodej osobou bez registrace ÚKZÚZ,</li>
+      <li>nabízejí <strong>hnojiva neuvedená v registru ÚKZÚZ</strong> nebo v rozporu
+        se zákonem č. 156/1998 Sb.,</li>
+      <li>nabízejí <strong>osiva a sadbu</strong> v rozporu se zákonem č. 219/2003 Sb.
+        (zejména bez uvedení odrůdy, generace, certifikace, neuznané osivo k uvádění do oběhu),</li>
+      <li>nabízejí <strong>živá zvířata</strong> bez požadovaného veterinárního osvědčení
+        nebo registrace, <strong>chráněné druhy</strong> bez výjimky / CITES, nebo
+        <strong>mrtvá zvířata</strong> (kromě potravinářských produktů jako zvěřina od
+        oprávněného dodavatele),</li>
+      <li>nabízejí <strong>zbraně, střelivo a výbušniny</strong> v rozporu se zákonem
+        č. 119/2002 Sb. (zejména automatické zbraně, zbraně kategorie A bez výjimky),</li>
+      <li>nabízejí <strong>tabák, alkohol, omamné a psychotropní látky, e-cigarety</strong>,</li>
+      <li>jsou <strong>MLM, pyramidové schémata, „práce z domova", půjčky a úvěry
+        nebankovních subjektů</strong>,</li>
+      <li>jsou <strong>erotické, seznamky, eskortní služby</strong>,</li>
+      <li>nabízejí <strong>kryptoměny, herní účty, virtuální předměty</strong>,</li>
+      <li>obsahují <strong>diskriminační, urážlivý, nenávistný, vulgární</strong>
+        nebo jinak nezákonný obsah,</li>
+      <li>porušují <strong>autorská, průmyslová nebo osobnostní práva</strong> třetích osob,</li>
+      <li>jsou <strong>duplicitní</strong> (stejná věc opakovaně), <strong>spamové</strong>
+        (řetězec klíčových slov bez vztahu k nabízenému zboží) nebo <strong>klamavé</strong>
+        (například nereálná cena pro získání pozornosti).</li>
+    </ul>
+
+    <h2>3. Odpovědnost</h2>
+    <p>
+      Provozovatel <strong>pouze zprostředkovává kontakt</strong> mezi inzerentem
+      a zájemcem. Neručí za stav, kvalitu, pravost ani existenci nabízeného zboží,
+      za pravdivost údajů v inzerátu, ani za to, že druhá strana splní své závazky.
+      Provozovatel neprovádí inkaso plateb a není stranou kupní smlouvy.
+    </p>
+    <p>
+      Před koupí <strong>doporučujeme zboží osobně zkontrolovat</strong>, ověřit
+      doklady (technický průkaz, doklad o vlastnictví, faktura, veterinární osvědčení)
+      a platbu provádět preferovaně osobně při předání nebo přes ověřenou službu
+      s ochranou kupujícího. Buďte obezřetní vůči nestandardním žádostem o platbu
+      předem na zahraniční účet, žádostem o ověřovací poplatky atd.
+    </p>
+
+    <h2>4. Hlášení závadného inzerátu</h2>
+    <p>
+      Pokud se domníváte, že konkrétní inzerát porušuje tato pravidla, právní předpisy
+      nebo vaše práva, oznamte to provozovateli e-mailem na
+      <a href="mailto:info@samecdigital.com?subject=N%C3%A1hl%C3%A1%C5%A1en%C3%AD%20z%C3%A1vadn%C3%A9ho%20inzer%C3%A1tu">info@samecdigital.com</a>
+      s předmětem <strong>„Nahlášení závadného inzerátu"</strong>. Uveďte:
+    </p>
+    <ul>
+      <li>URL inzerátu nebo jeho ID,</li>
+      <li>důvod nahlášení (které pravidlo nebo předpis je porušen),</li>
+      <li>vaše kontaktní údaje (volitelně, pro doplnění informací a zpětnou vazbu).</li>
+    </ul>
+    <p>
+      Oznámení posoudíme <strong>bez zbytečného odkladu</strong>, zpravidla
+      <strong>do 7 dnů</strong>. Ve zjevně nezákonných případech (ohrožení zdraví,
+      podvod, padělky) jednáme neprodleně. Pokud jste uvedli kontakt, sdělíme vám
+      výsledek.
+    </p>
+
+    <h2>5. Postup při porušení pravidel</h2>
+    <p>
+      Provozovatel je oprávněn <strong>bez předchozího upozornění</strong>:
+    </p>
+    <ul>
+      <li>inzerát nezveřejnit nebo zveřejněný inzerát smazat,</li>
+      <li>upravit kategorii nebo zjevně chybné údaje (např. přesunout traktor z kategorie
+        „Ostatní" do „Traktory"),</li>
+      <li>zablokovat účet uživatele,</li>
+      <li>odmítnout nové registrace ze stejné identity, IP nebo s podobnými vzory chování.</li>
+    </ul>
+    <p>
+      Uživatele o důvodu informujeme e-mailem registrovaným k účtu. Proti rozhodnutí lze
+      podat odůvodněnou stížnost na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+      ve lhůtě 14 dnů od oznámení. Stížnost vyřídíme do 14 dnů od doručení.
+    </p>
+    <p>
+      V případě <strong>závažného nebo opakovaného porušení</strong> (padělky, podvod,
+      spam ve velkém rozsahu) může být uživatel zablokován trvale a věc předána orgánům
+      činným v trestním řízení.
+    </p>
+
+    <h2>6. Doba zveřejnění a expirace</h2>
+    <p>
+      Standardní doba zveřejnění inzerátu je <strong>30 dnů</strong>. Po jejím uplynutí
+      dostává inzerát status „expirovaný" a po dalších 12 měsících je smazán. Inzerent
+      může inzerát kdykoli sám smazat nebo prodloužit (případně podpořit zaplacením
+      topování — viz stránka <a href="/bazar/topovani/">Topování</a>).
+    </p>
+
+    <h2>7. Ochrana osobních údajů a kontakt</h2>
+    <p>
+      Zpracování osobních údajů upravují
+      <a href="/zpracovani-osobnich-udaju/">Zásady zpracování osobních údajů</a>.
+    </p>
+    <p>
+      <strong>Provozovatel:</strong><br>
+      Samec Digital s.r.o., IČO 29547539<br>
+      Na Břehu 378, 387 11 Katovice<br>
+      E-mail: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+
+    <p class="effective"><strong>Účinnost:</strong> 28. května 2026</p>
+  </main>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.7;
+    color: #222;
+  }
+  .legal-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin: 0 0 12px;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+  }
+  .legal-page .lead {
+    font-size: 16px;
+    color: #444;
+    margin: 0 0 32px;
+  }
+  .legal-page h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 32px 0 12px;
+    letter-spacing: -.01em;
+  }
+  .legal-page h3 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 20px 0 8px;
+  }
+  .legal-page ul {
+    padding-left: 22px;
+    margin: 8px 0 16px;
+  }
+  .legal-page li { margin: 4px 0; }
+  .legal-page a {
+    color: #0B7A3B;
+    text-decoration: underline;
+  }
+  .legal-page a:hover { color: #066027; }
+  .legal-page .effective {
+    margin-top: 36px;
+    padding-top: 16px;
+    border-top: 1px solid #eaeaec;
+    font-size: 13px;
+    color: #666;
+  }
+</style>
