@@ -11,7 +11,7 @@
 // - related URL (na encyklopedie / dotace / žebříčky)
 
 export type SlovnikKategorie =
-  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky';
+  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky' | 'historie' | 'chov' | 'slang';
 
 export interface SlovnikTerm {
   slug: string;
@@ -2770,7 +2770,1699 @@ Pro srovnání **silážní jáma**: 0,15–0,30 Kč/kg sušiny (levnější), a
 - **Per liter mléka**: fishbone 0,30 Kč/l, paralel 0,25, robot 0,40 (vyšší fixní, nižší variabilní).
 
 V CZ 2024: cca **70 % farem fishbone/paralel**, **20 % karusel/rapid exit**, **10 % AMS robot** (roste rychle, hlavně mladé generace farmářů).`,
-    related: ['telematika'],
+    related: ['telematika', 'rijnost', 'usni-znamka'],
+  },
+
+  // ── HISTORIE A ARCHAICKÉ POJMY ──────────────────────────────────────
+  {
+    slug: 'uhor',
+    term: 'Úhor',
+    alias: ['úhorování', 'ladina', 'pasivní úhor'],
+    kategorie: 'historie',
+    shortDef: 'Úhor je dočasně neoseté pole, které se nechává odpočinout, regenerovat živiny a potlačit plevele. V historickém trojhonném systému ležela 1/3 polí ladem každý rok. Dnes přežívá jako „zelený úhor" pro greening a EFA.',
+    longDef: `Úhor (od slovesa „úhořit" = odpočívat) je pole, které se po sklizni **dočasně neosévá**, aby si půda mohla regenerovat živiny, vodu a strukturu. Historicky byl základní součástí evropského zemědělství až do 19. století.
+
+**Trojhonné hospodářství** (= třípolní systém, viz [[trojhonny-system]]):
+- 1. hon: ozim (žito, pšenice)
+- 2. hon: jarin (oves, ječmen)
+- 3. hon: **úhor** (ladem, pase se nebo orá)
+
+Třetina polí každý rok ležela ladem. Bez minerálních hnojiv to byl jediný způsob, jak udržet úrodnost. Hospodář na úhoru obvykle:
+- nechal **paseni dobytka** — ten hnojil pole čerstvým hnojem
+- **přerýval** (Bramborová orba) → ničil plevele
+- **zelený podsev** vojtěškou nebo jetelem (od 18. století) — fixoval dusík
+
+**Konec úhoru:** Mineralní hnojiva (Liebig 1840s, syntéza čpavku Haber-Bosch 1909) odstranila nutnost úhoru. Norfolský 4-honný systém (vojtěška-pšenice-řepa-ječmen) bez úhoru dramaticky zvýšil produktivitu — anglická zemědělská revoluce.
+
+**Moderní typy úhoru:**
+- **Zelený úhor** (greening, EFA — Ecological Focus Area) — povinný v rámci CAP od 2015. Mez plodina, květinový pás nebo prostě neoseté ladem s povolenou seč.
+- **Černý úhor** — orané, neoseté pole. Dnes spíše ekologicky problematický (eroze).
+- **Aktivní úhor** — pásy nektarodárných rostlin pro opylovače, biopásy, biopas (viz [[biopasy]]).
+- **Půda v zařazení** — pole vyjmuté z osevu na 1-2 roky kvůli regulaci trhu.
+
+V CZ dnes:
+- Z dotace BISS lze do **5 % výměry hospodaření** vykázat jako úhor (EFA), počítá se za "klimatický příspěvek".
+- Plocha úhoru v CZ 2024: ~50 000 ha (1,2 % orné půdy).
+
+Etymologie: praslovanské *ǫgorъ* (= pole nechané ladem). Související slova: **ladina** (úhor po více letech), **honitba** (revír na úhoru), **pole** (kontrast: pole = obdělávané, úhor = ne).
+
+Viz též [[trojhonny-system]], [[osevni-postup]], [[mezi-plodiny]], [[biopasy]], [[regenerativni-zemedelstvi]].`,
+    related: ['trojhonny-system', 'osevni-postup', 'mezi-plodiny', 'biopasy', 'regenerativni-zemedelstvi'],
+  },
+  {
+    slug: 'trojhonny-system',
+    term: 'Trojhonný systém',
+    alias: ['třípolní systém', 'trojpolní hospodářství', 'třípolové hospodářství'],
+    kategorie: 'historie',
+    shortDef: 'Trojhonný systém je středověký osevní postup, který rozděloval ornou půdu na tři hony — ozim, jarin, úhor. Každý rok se hony střídaly. Dominoval v Evropě od 9. do 19. století.',
+    longDef: `Trojhonný systém (také třípolní systém, něm. *Dreifelderwirtschaft*) je středověký a raně novověký **osevní postup**, který nahradil starší dvojhonný systém (ozim/úhor). Vznikl v karolinské době (9. století) a v Evropě dominoval téměř 1 000 let.
+
+**Princip:**
+Orná půda vesnice byla rozdělena na **tři hony** (= velké pole sestávající z mnoha úzkých záhonů jednotlivých sedláků). Každý rok se osévalo:
+- **1. hon (ozim)**: pšenice nebo žito, seté na podzim
+- **2. hon (jarin)**: oves nebo ječmen, seté na jaře
+- **3. hon (úhor)**: ladem, pasivně, paseni dobytka pro hnůj
+
+Následující rok se vše posunulo o jeden — ozim → úhor → jarin → ozim atd. Cyklus 3 roky.
+
+**Výhody (vs dvojhonný):**
+- 2/3 půdy aktivně obdělané (vs 1/2 v dvojhonném)
+- Vyšší produktivita, lepší výživa populace
+- Dvě sklizně ročně (ozim v červenci, jarin v září)
+- Lepší distribuce práce přes rok
+
+**Nevýhody (z dnešního pohledu):**
+- 1/3 půdy stále ležela ladem
+- Nízké výnosy (1,5–2 t/ha pšenice — dnes 8 t/ha)
+- Žádné okopaniny (brambory, řepa) — ty přišly až v 18. století
+- Sociální strnulost: každý sedlák měl pruhy ve všech třech honech, vesnice musela rozhodovat společně co kdy sít
+
+**Konec systému (přechod 1750–1900):**
+- **Norfolský 4-honný systém** (UK, 1730s): vojtěška-pšenice-řepa-ječmen — bez úhoru, vyšší výnosy.
+- **Marie Terezie a Josef II.** (CZ 1750–1790): patenty rušily nucené trojpolní hospodářství, povolovaly individuální rozhodování sedláků.
+- **Liebig + mineralní hnojiva** (1840+): umožnily kontinuální osev.
+- **19. století**: scelování pozemků (komasace), individuální farmy, moderní střídání plodin.
+
+V CZ trojhonný systém zanikl postupně 1780–1850, posledně v některých horských oblastech (Šumava, Krkonoše) ještě začátkem 20. století.
+
+**Pozůstatky v krajině:**
+- **Lineární cesty** mezi pole v plužině (záhonové parcelaci)
+- **Mezní kameny** (viz [[mez]]) označující hranice
+- **Pomístní názvy**: „Velký hon", „Horní hon", „Dolní hon"
+- **Trojstrukturální vinice** na jižní Moravě (vinařské varianty)
+
+Viz též [[uhor]], [[osevni-postup]] (moderní), [[mez]], [[lan]].`,
+    related: ['uhor', 'osevni-postup', 'mez', 'lan'],
+  },
+  {
+    slug: 'mez',
+    term: 'Mez',
+    alias: ['mezní pás', 'mezník', 'remízek'],
+    kategorie: 'historie',
+    shortDef: 'Mez je úzký travnatý nebo křovinatý pás oddělující sousední pole. Historicky vyznačovala hranice mezi vlastníky, dnes je ceněna pro biodiverzitu, ochranu proti erozi a v rámci CAP greening.',
+    longDef: `Mez (od staročeského *meža* = hranice) je **úzký travnatý nebo křovinatý pás** mezi dvěma poli. Historicky to byl praktický předěl mezi vlastníky půdy (hranice plužiny) i ochrana proti splachu půdy.
+
+**Funkce historicky:**
+- **Hraniční pás** — viditelně oddělovala vlastnictví. Často s **mezníky** (kameny, sloupy) na rozích.
+- **Krajinný prvek** — domov pro zvěř, ptactvo, hmyz. Nebyla intenzivně obdělávaná.
+- **Cesta pro povozy** — širší meze sloužily jako polní cesty.
+- **Pastva pro drobný dobytek** — kozy, ovce se pásly „na mezích" když pole bylo osetá.
+
+**Likvidace mezí 1948–1989** (kolektivizace):
+JZD a státní statky **sceelovaly pole do obřích bloků** (často 50–200 ha) pro nasazení velké techniky (T-150, Š-180, Fortschritt). Tisíce kilometrů mezí v ČR padlo. Důsledky:
+- Akcelerace **vodní eroze** (žádné zelené pásy zachycující splach)
+- Pokles **biodiverzity** (zánik útočiště pro hmyz, ptáky, drobnou zvěř)
+- Vznik velkých homogenních „prérií"
+- Změny mikroklimatu (sušší krajina, větru otevřená)
+
+**Návrat mezí 1990–dnes:**
+- **CAP greening / EFA**: meze, biopásy, květinové pásy se počítají jako Ecological Focus Area (3–5 % výměry).
+- **AEKO podopatření**: dotace za údržbu mezí (50–80 Kč/m délky/rok).
+- **Erozní kontrola** v erozně ohrožených oblastech (DPB) — GAEC 2 vyžaduje protierozní opatření, meze jsou jedním z nástrojů.
+- **Krajinotvorné prvky** — meze ze zákona chráněné (Zákon č. 114/1992 Sb.).
+
+**Šířka mezí dnes:**
+- **Klasická mez** šíře 1–3 m mezi poli
+- **Široká mez** 5–10 m, často s keři (trnka, šípek, hloh) — pro vodní hospodářství
+- **Lineární remízek** 10+ m — funguje jako biotop
+- **Biokoridor** 20+ m — propojuje větší biotopy
+
+**Pomístní názvy s „mez"** jsou v ČR všudypřítomné: „Na Mezích", „Velká mez", „Mezní cesta", „U mezníku", obce „Meznice", „Meziroka", „Meziboří".
+
+Viz též [[biopasy]], [[eroze-pudy]], [[trojhonny-system]], [[gaec]], [[lan]].`,
+    related: ['biopasy', 'eroze-pudy', 'trojhonny-system', 'gaec', 'lan'],
+  },
+  {
+    slug: 'robota',
+    term: 'Robota',
+    alias: ['poddanská robota', 'panská robota', 'tažná robota'],
+    kategorie: 'historie',
+    shortDef: 'Robota byla povinná neplacená práce poddaných sedláků na panské půdě, hlavní forma feudální renty v českých zemích od 11. do 19. století. Zrušena 1848 (formálně) a 1849 (definitivně).',
+    longDef: `Robota (od slovesa *robotiti* = pracovat, otročit) byla **povinná neplacená práce** poddaných sedláků na půdě vrchnosti (šlechty, klášterů, krále). V českých zemích to byla hlavní forma feudální renty od 11. do 19. století.
+
+**Typy roboty:**
+- **Tažná robota** — práce s párem koní nebo volů (orba, hnojení, žně, vožení). Pro „láníky" s celým lánem.
+- **Pěší robota** — manuální práce (kopání, plení, kosa, hrabání). Pro chalupníky a domkáře.
+- **Ženská robota** — přadlení, pletení, žně, sklizeň ovoce.
+- **Mimořádná robota** — stavby (mlýny, panská sídla), lov pro vrchnost.
+
+**Rozsah:**
+Robotní povinnosti se odvíjely od velikosti gruntu (viz [[grunt]], [[lan]]):
+- **Láník (celý lán, 17+ ha)**: 3 dny tažné roboty týdně + sezónní špičky (žně, vinobraní)
+- **Půlláník**: 2 dny tažné + 1 den pěší
+- **Chalupník**: 1–2 dny pěší týdně
+- **Domkář (bez půdy)**: jen sezónní
+
+Plus **naturální dávky** (desátek, vejce, slepice) a peněžní daně.
+
+**Klíčové milníky regulace:**
+- **1680 — Tereziánský patent o robotě**: max. 3 dny tažné / 3 dny pěší týdně.
+- **1738 — Robotní patent Karla VI.**: dále upřesněno, ale poddaný stále nemohl odejít.
+- **1775 — Robotní patent Marie Terezie**: oficiální tabulky podle velikosti gruntu, nucené smírčí komise při sporech.
+- **1781 — Patent o zrušení nevolnictví Josefa II.**: poddaný mohl odejít z panství, vzít si koho chtěl, dát děti na řemeslo. **Robota však zůstala!**
+- **1848 — Říjen 1848**: Hans Kudlich (sedlák a poslanec Říšského sněmu) iniciuje **zrušení roboty bez náhrady**. Schváleno 7. září 1848.
+- **1849 — Skutečná likvidace**: vrchnost dostala kompenzaci (od státu, ne sedláků). Sedlák se stal **svobodným vlastníkem půdy**.
+
+**Dopady zrušení:**
+- Vznik svobodného trhu s půdou
+- **Komasace** (scelování) pozemků 1850–1920
+- Mladí selci si mohli budovat hospodářství bez závazků
+- Vznik moderního zemědělství s motivem zisku
+- Sociální revoluce na venkově — emigrace „přebytečných" sedláků do USA, Vídně, do měst
+
+V kultuře: **„Babička"** B. Němcové (1855) zachycuje pozdní robotní éru. **„Robotnický dům"** byla historická budova pro ubytování nájemných pracovníků na panství po zrušení nevolnictví.
+
+Etymologie: od staročeského *robota* (těžká práce, otroctví). Karel Čapek v R.U.R. (1920) použil slovo **robot** v moderním smyslu, čímž ho učinil světovým.
+
+Viz též [[grunt]], [[lan]], [[trojhonny-system]], [[mez]], [[uhor]].`,
+    related: ['grunt', 'lan', 'trojhonny-system', 'mez'],
+  },
+  {
+    slug: 'grunt',
+    term: 'Grunt',
+    alias: ['selský grunt', 'gruntovní zápis', 'gruntovní kniha'],
+    kategorie: 'historie',
+    shortDef: 'Grunt je historické označení pro selské hospodářství — usedlost s domem, hospodářskými staveními, zahradou a poli. „Selský grunt" byl základní jednotka venkovské společnosti až do poloviny 20. století.',
+    longDef: `Grunt (z německého *Grund* = základ, půda) je historické označení pro **selské hospodářství** — usedlost se vším příslušenstvím: dům, stáje, stodola, sýpka, zahrada, sad a pole v plužině obce. „Sedlák na gruntě" byl základní sociální vrstvou venkovského obyvatelstva.
+
+**Velikost gruntů:**
+- **Celý lán (láník)**: 17–20 ha polí — nejvyšší kategorie, „selský grunt"
+- **Půllán (půlláník)**: 8–10 ha — střední sedlák
+- **Čtvrtlán (čtvrtláník, chalupník s polem)**: 4–5 ha
+- **Chalupa bez půdy**: jen dům a malá zahrada — domkáři, řemeslníci
+- **Velký grunt** (statkář, dvorský grunt): 30+ ha, často s vlastními pacholky
+
+**Architektura gruntu:**
+- **Dům** s jednou velkou „světnicí" (obytná místnost s pecí), kuchyní a komorou
+- **Chlév** (stáje) pro krávy, koně, prasata — typicky v zadní části dvora
+- **Stodola** (stoh — viz separátně) pro slámu, seno, naskladněnou úrodu před mlácením
+- **Sýpka** (panský sypkář) — uskladnění obilí pro setí + osivo pro zimu
+- **Studna** uprostřed dvora
+- **Hnojiště** (mršiště) za chlévem
+- **Sad / zahrada** za domem (jabloně, hrušně, slívy)
+
+**Gruntovní knihy:**
+Od 16. století **každá vesnice měla gruntovní knihu** vedenou vrchností (později státem) — záznam **kdo na kterém gruntě hospodaří**, prodeje, dědické převody, věna. Klíčový zdroj pro genealogii a historii vesnice.
+
+**Klíčové gruntovní právo:**
+- **Nedělitelnost gruntu** — celý grunt přebíral **jeden syn** (typicky nejstarší, ale ne vždy). Ostatní šli na řemeslo, do města nebo dostali peněžní výpomoc.
+- **Výminek** — odcházející hospodář (stárnoucí otec) si na gruntě vymínil bydlení a stravu na zbytek života. Smlouva pevně zakotvena.
+- **Vejminkářský domek** = malá budova pro výminkáře (často součást gruntu).
+
+**Konec gruntů 1948–1960:**
+- **Vyvlastnění**: kolektivizace zlikvidovala soukromé hospodaření, grunt se stal součástí JZD/Státního statku.
+- **Vykulačnění**: největší selské grunty (kulaci) zlikvidovány, rodiny perzekuovány.
+- **Demolice**: mnoho gruntů strženo pro výstavbu kravínů, sil a domu pro pracující JZD.
+
+**Restituce 1991–dnes:**
+- Vrácení pozemků a budov původním vlastníkům nebo dědicům.
+- Mnoho gruntů zrekonstruováno jako **rodinné farmy** (často 5. generace na stejném pozemku).
+- Některé velké grunty fungují jako **agroturistika** nebo „dědictví" pro městské potomky.
+
+**Pomístní stopy**: „Na gruntě", „Starý grunt", „Gruntovní cesta" jsou typické názvy v ČR. **Příjmení Grunt, Grunta, Gruntorád** odkazují na sedlácký původ.
+
+Viz též [[lan]], [[robota]], [[trojhonny-system]], [[mez]], [[jitro]], [[korec]].`,
+    related: ['lan', 'robota', 'trojhonny-system', 'mez', 'jitro'],
+  },
+  {
+    slug: 'zentour',
+    term: 'Žentour',
+    alias: ['šlapací stroj', 'žentourový stroj'],
+    kategorie: 'historie',
+    shortDef: 'Žentour je historický stroj poháněný silou dobytka (koně, voli) — kruhové zařízení, kde zvíře chodí po obvodu a otáčí hřídelí napojenou na mlátičku, šrotovník nebo lis. Předchůdce parního a elektrického pohonu.',
+    longDef: `Žentour (něm. *Göpel*, z latinského *gyrum* = kruh) je **historický stroj poháněný tažnou silou dobytka** — koně, volů, oslů. Princip: zvíře kráčí po kruhové trati (průměr 6–10 m) a otáčí svislou nebo vodorovnou hřídelí, která pohání cílový stroj.
+
+**Konstrukce:**
+- **Centrální svislá hřídel** s ramenem (rudlem), za které zvíře táhne
+- **Převodovka** (často s ozubenými koly) — překládá pomalou otáčku zvířete (3–8 ot/min) na rychlejší pro pracovní stroj
+- **Plošina nebo střecha** — chrání zvíře před deštěm
+- **Postroj a vodítka** — někdy s automatickou regulací rychlosti
+
+**Použití:**
+- **Mlátička obilí** (nejčastější) — mlat (cep) byl postupně nahrazen mechanickou mlátičkou poháněnou žentourem
+- **Šrotovník** — drcení obilí a brambor na krmivo
+- **Lis** — slámy do balíků, ovoce na mošt
+- **Vyklízeč** — sena, hnoje
+- **Čerpadlo** — voda ze studny do zásobníku
+- **Kovárna** — pohon dmýchadla v kovárně
+- **Cukrovary 19. století** — drcení cukrové řepy
+
+**Dvě hlavní varianty:**
+1. **Svislý žentour** (nejstarší) — zvíře chodí kolem svislé osy, mlátička stojí v centru. Vyžaduje velkou plochu.
+2. **Vodorovný žentour** (od 18. století) — kompaktnější, hřídel vede z žentouru do stroje v sousední místnosti. Umožnil **stavbu žentourové stodoly** s dvěma místnostmi.
+
+**Výkon:**
+- 1 kůň generuje ~0,5–1 koňské síly (740 W) v žentouru
+- Pár koní = ~1,5 HP = stačí pro malou mlátičku (100 kg obilí/h)
+- 4 voli = ~2 HP — pro větší mlátičku nebo lis
+
+**Historie:**
+- **Středověk**: jen pro vodní mlýny a kovárny (vodní kola, ne žentoury).
+- **16.–18. století**: šíření žentourů s mlátičkami v Anglii, Německu.
+- **1740–1850 v ČR**: každý větší grunt měl žentourovou stodolu.
+- **1850–1900**: parní stroj (lokomobila — viz [[parni-stroj]]) postupně nahradil žentour. Mlátička poháněna parou byla mnohonásobně výkonnější.
+- **1900–1950**: elektrický motor (po elektrifikaci venkova 1920–1950) finálně nahradil i parní stroj.
+- **Dnes**: žentoury jsou muzeální kuriozity (Vlastivědné muzeum Šumperk, Veselý Kopec, skanzeny).
+
+**Stopy v krajině:**
+- **Žentourové stodoly** — kulatý nebo polygonální půdorys s šikmou střechou, dosud zachované v některých vesnicích (zejm. severní Morava, Vysočina).
+- **Pomístní názvy**: „U žentouru", „Žentourová cesta".
+- **Slovo „žentour"** přežívá v dialektu jako synonymum pro „těžkou monotónní práci" (Čalounit jak žentour = dělat namáhavou rutinní práci).
+
+Viz též [[grunt]], [[robota]], [[mlat]], [[zne]].`,
+    related: ['grunt', 'robota', 'mlat', 'zne'],
+  },
+  {
+    slug: 'mlat',
+    term: 'Mlat',
+    alias: ['mlátírna', 'mlatovna', 'humno'],
+    kategorie: 'historie',
+    shortDef: 'Mlat je velká plocha (původně udusaná hlína) v stodole, kde se cepy nebo žentourovou mlátičkou mlátilo obilí. Centrum zimního hospodaření až do 19. století, kdy ho nahradila mobilní mlátička.',
+    longDef: `Mlat (od *mlátit*) je **vodorovná zpevněná plocha** uvnitř stodoly, kde se v zimě **mlátilo obilí** — oddělovala se zrna od slámy a klásků. Klíčové místo zimní práce sedláka.
+
+**Konstrukce mlatu:**
+- **Podlaha**: tvrdá udusaná hlína smíšená s vápnem nebo voloví krví (pro tvrdost), občas dlažba nebo dřevěné fošny
+- **Velikost**: typicky 4 × 6 m až 6 × 10 m
+- **Umístění v stodole**: uprostřed mezi dvěma „závory" — prostory, kde se skladovaly nevymlácené snopy
+- **Vstupy**: dvě protilehlá vrata (jih i sever), aby se daly „závory" zaplnit z obou stran a aby fungoval **průvan** pro zvedání plev (provívání zrna)
+
+**Mlácení cepem (do ~1850):**
+- **Cep** (viz [[cep]]) — dřevěné nástroj se švihací částí (bidlo + tlučka spojené řemínkem)
+- **Rytmus**: 4–8 mlátečů v řadě mlátilo rytmicky („čtveřice", „šesterka") — dodnes přežívá v lidové hudbě (rytmus „mlátiček")
+- **Výkon**: 1 mláteč zvládne ~50–80 kg zrna za den
+- **Skladba sezóny**: mlátilo se od listopadu do března — celé 4–5 měsíců zimní práce
+
+**Mlácení žentourovou mlátičkou (1850–1900):**
+- **Mechanická mlátička** poháněná žentourem (viz [[zentour]]) v sousední místnosti
+- **Výkon**: 200–500 kg obilí za hodinu (5–10× rychlejší než cep)
+- **Pomocník**: 2–3 muži přikládali snopy, 1–2 odbírali slámu, 1 odebíral zrno
+
+**Mlácení parní lokomobilou (1880–1950):**
+- **Stěhovavá mlátička** — parní stroj na vozíku objížděl vesnice, „mlátil" 1–2 dny u každého sedláka
+- **Výkon**: 1 000–2 000 kg/h
+- **Konec mlatu jako pracovního prostoru** — práce se přesunula ven na dvůr
+
+**Mlácení kombajnem (1950+):**
+- **Kombajn** (viz [[kombajn-trida]]) provádí mlácení **přímo na poli**
+- Mlat ztratil funkci, **stodoly se přestavěly** na garáže pro techniku, sklady pro hnojiva, nebo se zbouraly.
+
+**Dnes:**
+- Některé staré stodoly s mlatem dochovány v skanzenech (Veselý Kopec, Strážnice, Přerov nad Labem).
+- **„Mlatová slavnost"** = lidová oslava konce mlácení (před 1900), s tancem na mlatě.
+- Slovo **mlátička** přežívá jako technický termín (= obilní mlátička v kombajnu, viz [[rotor-kombajn]]).
+
+**Pomístní názvy:** „U mlatu", „Mlatovna", „Stará mlátička" v ČR běžné.
+
+**„Humno"** (slovenské, valašské) = synonymum mlatu, někdy širší (= celá stodola).
+
+Etymologie: praslovanské *mlatъ* (= úder, mlat). Související slova: **mlátit** (= mlátit cepem), **mlátička** (= stroj), **mlatec** (= muž mlátící cepem).
+
+Viz též [[zentour]], [[grunt]], [[zne]], [[cep]], [[rotor-kombajn]].`,
+    related: ['zentour', 'grunt', 'zne', 'rotor-kombajn'],
+  },
+  {
+    slug: 'zne',
+    term: 'Žně',
+    alias: ['žatva', 'sklizeň obilí', 'kosení'],
+    kategorie: 'historie',
+    shortDef: 'Žně je tradiční označení sklizně obilí — vrcholné období letního zemědělského roku (červenec–srpen). Historicky se sekalo srpem nebo kosou, dnes kombajnem. V kultuře symbol „roku ve znamení slunce a chleba".',
+    longDef: `Žně (od slovesa *žát* — sekat obilí) je **vrcholné období sklizně obilí** v letním zemědělském cyklu. V ČR typicky konec července až polovina srpna (ozimy první, jariny později). Historicky to byla **nejintenzivnější práce roku** s vlastní liturgií, písněmi a obyčeji.
+
+**Tradiční žně (do ~1900):**
+- **Nástroje**: **srp** (jednoruční, do 17. století hlavní), **kosa** (od 17. století — větší výkon)
+- **Tempo**: 1 sekáč za den zvládne ~0,3–0,5 ha obilí
+- **Organizace**: rodina + nájemní pomocníci („žencové", „ženkyně")
+- **Žněnská skupina** (= 4–8 lidí): jeden sekáč → odběračka (žne) za ním → snopiči (vazači snopů — viz [[snop-otep]]) → kladači do panáků
+- **Po sklizni**: snopy stojí v polních **panáčcích** (šokách) k oschnutí 1–2 týdny, pak se převážejí do **stodol** na **mlat** (viz [[mlat]]) k zimnímu mlácení
+
+**Mechanizační milníky:**
+- **1850 — Žací stroj (reaper)** Cyrus McCormick (USA), Cyrus Hall McCormick — táhne dvojspřeží koní, jeden řidič. Reaper položil obilí na zem, žencové ho vázali ručně.
+- **1880 — Žací vázací stroj (binder)** — vázal snopy automaticky.
+- **1930 — Kombajn** v USA (kombinace žacího stroje + mlátičky). Sklízí + mlátí + očišťuje v jedné operaci.
+- **1950 — Kombajn v ČSR** (Mountfield, Sodóma, později Slavia, Kombajny Polska Bizon).
+- **1990+ — Velké západní kombajny** (Claas Lexion, John Deere S-řada, New Holland CR).
+
+Dnes:
+- **Sklizeň pšenice**: 1 moderní kombajn (Claas Lexion 8900) zvládne **5–10 ha/h** = celá farma 500 ha za **2–3 dny**.
+- **Sekáč s kosou**: 0,3 ha/den × 500 ha = **3 roky lidské práce** ekvivalent jednoho moderního kombajnu.
+
+**Kulturní dimenze:**
+- **Žencovské písně** (zachovány lidovou tradicí, např. „Pole, pole, široké pole")
+- **„Hostina po žních"** = oslava konce sklizně, štědrá strava, tanec
+- **„Dožínky"** = slavnostní průvod posledního snopu ozdobeného květinami ke statkáři, vrchnosti nebo dnes na slavnostech městyse/obce
+- **„Sklizňový obřad"** v některých krajích (přivolávání úrody) — synkretismus pohanských a křesťanských obřadů
+- **Klasické české literatury**: Babička, Naši, Karel Klostermann — žně jsou ústřední scéna venkovského roku
+
+**Klimatické riziko žní:**
+- **Bouřky** — silný déšť „polehne" obilí (vrhne stébla k zemi), výnos klesá o 20–40 %
+- **Krupobití** — likviduje úrodu během minut
+- **Dlouhotrvající mokré počasí** — obilí klíčí v klasu, ztráta potravinářské kvality
+- **Sucho** — snižuje výnos i hektolitrovou váhu (viz [[hektolitr]])
+
+**Sklizeň 2024 v CZ** (orientačně):
+- Pšenice ozimá: 1,4 mil. ha × 6,2 t/ha = **8,7 mil. t**
+- Ječmen: 320 tis. ha × 5,8 t/ha = **1,85 mil. t**
+- Řepka: 380 tis. ha × 3,2 t/ha = **1,2 mil. t**
+- Kombajny v provozu: ~3 500 ks (převažují Claas + JD)
+
+**„Otavy"** = druhá sklizeň trávy/sena na podzim (NE obilí — to jde jen jednou).
+
+Viz též [[mlat]], [[snop-otep]], [[kombajn-trida]], [[rotor-kombajn]], [[grunt]].`,
+    related: ['mlat', 'kombajn-trida', 'rotor-kombajn', 'grunt'],
+  },
+
+  // ── MODERNÍ / REGENERATIVNÍ ZEMĚDĚLSTVÍ ─────────────────────────────
+  {
+    slug: 'regenerativni-zemedelstvi',
+    term: 'Regenerativní zemědělství',
+    alias: ['regen ag', 'regenerative agriculture'],
+    kategorie: 'precise-farming',
+    shortDef: 'Regenerativní zemědělství je systém pěstování zaměřený na obnovu zdraví půdy, zvyšování organické hmoty, biodiverzity a sekvestrace uhlíku. Klíčové praktiky: no-till, krycí plodiny, integrace dobytka, snížení agrochemie.',
+    longDef: `Regenerativní zemědělství (anglicky *regenerative agriculture*, „regen ag") je systém produkce, který **aktivně obnovuje** zdraví půdy, biodiverzitu a ekosystémové služby. Není to certifikační schéma jako bio, ale **principiální přístup** s měřitelnými výsledky.
+
+**5 principů regenerativního zemědělství** (podle Gabe Brown, US):
+1. **Minimalizace narušení půdy** — žádná orba, žádné hluboké zpracování. Půda zůstává strukturovaná, mikroorganismy nepřerušené. Viz [[no-till]], [[strip-till]].
+2. **Stálý kryt půdy** — krycí plodiny (cover crops), mulč, sláma. Půda nikdy nahá. Snižuje erozi, udržuje vlhkost, krmí mikrobiom.
+3. **Rozmanitost rostlin** — minimálně 4-5 plodin v rotaci, ideálně víceleté smíšky (mezi plodiny, viz [[mezi-plodiny]]). Žádná monokultura.
+4. **Žijící kořeny celoročně** — vždy něco roste. Krycí plodiny mezi hlavními plodinami zajistí, že kořeny stále krmí mikrobiom.
+5. **Integrace dobytka** — pastva nebo „mob grazing" (vysoká intenzita, krátká doba) na polích po sklizni. Hnůj + tlumící kopyta + slin obnoví půdu.
+
+**Hlavní rozdíly vs konvenční zemědělství:**
+
+| Aspekt | Konvenční | Regenerativní |
+|--------|-----------|---------------|
+| Půda | Komodita (substrát) | Živý organismus |
+| Zpracování | Orba, podmítka | No-till, strip-till |
+| Kryt | Holá půda 3–6 měs./rok | Stálý kryt |
+| Plodin v rotaci | 2–4 | 5+ |
+| Mineralní hnojiva | 150–200 kg N/ha | 50–100 kg N/ha (s pokrytím leguminózami) |
+| Postřiky | Pravidelně | Cílené, redukované |
+| Dobytek | Oddělený od polí | Integrovaný |
+
+**Měřitelné výsledky (po 5–10 letech):**
+- **Organická hmota v půdě**: +1–2 % (z 2 % na 3–4 %). Každé 1 % SOM = +20 t C/ha sekvestrace.
+- **Infiltrace vody**: 2–10× lepší (méně povrchového odtoku)
+- **Náklady**: -20 až -40 % (méně paliva, hnojiv, postřiků)
+- **Výnosy**: První 2–3 roky pokles 10–20 %, pak srovnatelné s konvenčním (někdy +10–20 %)
+- **Marže**: vyšší kvůli nižším nákladům + premium ceny (carbon credits, regen certifikace, Whole Foods/Patagonia kontrakty)
+
+**Slavná regen jména:**
+- **Gabe Brown** (USA, ND) — kniha „Dirt to Soil", farma 2 500 ha bez hnojiv 20+ let
+- **Allan Savory** (Zimbabwe) — „Holistic Management" pro pastvu
+- **Joel Salatin** (USA, VA) — Polyface Farm, multi-species integrované pastviny
+- **Charles Massy** (Austrálie) — „Call of the Reed Warbler", regenerace australských pastvin
+
+**V ČR:**
+- **Jihočeská farma „Kuneš"** (Kestřany) — modelová regen farma
+- **AgroProgress** — konzultace pro převod
+- **Skupina REGAGRI** — sdružení regen farmářů
+- **Carbon credits**: pilotní programy od 2023 (Indigo, Climate Farmers, Soil Capital)
+
+**Risk:**
+- **Přechodové období 3–5 let** — výnosy klesnou, dokud se neobnoví půdní mikrobiom
+- **Vyžaduje hluboké znalosti** agronomie a ekologie — víc než aplikovat recepty
+- **Pozemkové vlastnictví**: pronajatá půda znevýhodňuje (musíš dlouhodobě investovat do něčeho, co možná opustíš)
+
+Viz též [[no-till]], [[ctf]], [[mezi-plodiny]], [[organicka-hmota]], [[karbonove-zemedelstvi]], [[biouhel]], [[mykorhiza]].`,
+    related: ['no-till', 'ctf', 'mezi-plodiny', 'organicka-hmota', 'karbonove-zemedelstvi', 'biouhel', 'mykorhiza'],
+  },
+  {
+    slug: 'karbonove-zemedelstvi',
+    term: 'Karbonové zemědělství',
+    alias: ['carbon farming', 'climate-smart agriculture', 'uhlíkové zemědělství'],
+    kategorie: 'precise-farming',
+    shortDef: 'Karbonové zemědělství je soubor praktik, které sekvestrují CO₂ z atmosféry do půdy a biomasy. Zemědělec může z certifikovaného uhlíku generovat „carbon credits" prodávané korporacím pro plnění klimatických závazků.',
+    longDef: `Karbonové zemědělství (carbon farming) je systém **zemědělských praktik aktivně zvyšujících uhlíkové zásoby v půdě a vegetaci** s cílem zmírnit klimatickou změnu. Zemědělec se stává „carbon farmer" — produkuje vedle běžných plodin také **sekvestrovaný uhlík**, který lze prodat jako **carbon credit**.
+
+**Klíčové praktiky (sekvestrace C):**
+- **No-till / strip-till** — bez orby = méně oxidace organické hmoty = víc C v půdě. Viz [[no-till]], [[strip-till]].
+- **Krycí plodiny** (cover crops) — kořeny + listy přidávají C do půdy mezi hlavními plodinami.
+- **Vrátit slámu** (incorporation reziduí) — nepalovat slámu, mulčovat ji.
+- **Hnojiva organická** (hnůj, kompost, biouhel — viz [[biouhel]]) místo mineralních.
+- **Diverzifikace osevního postupu** — 5+ plodin v rotaci.
+- **Vápnění** (viz [[vapneni]]) — alkalizuje pH, snižuje emise N₂O.
+- **Agrolesnictví** — stromořady, větrolamy, agroforestry. Stromy zachycují velké množství C.
+- **TTP konverze** (orná → louka, viz [[ttp]]) — louky uloží 2–4× víc C než orná.
+
+**Co je 1 carbon credit?**
+1 carbon credit = **1 tuna CO₂ ekvivalentu** sekvestrovaná nebo redukovaná. V ČR/EU se obchoduje na voluntárních trzích za:
+- **15–25 EUR/t CO₂** (dnes 2024) na voluntárních trzích (Verra, Gold Standard)
+- **60–90 EUR/t CO₂** v EU ETS (povinný trh, ale zemědělství tam zatím není)
+
+**Příklad ekonomiky** (farma 500 ha přechází z orby na no-till + cover crops):
+- **Sekvestrace**: ~0,5 t C/ha/rok = ~1,8 t CO₂/ha/rok
+- **500 ha × 1,8 t × 20 EUR = 18 000 EUR/rok = ~450 tis. Kč**
+- Plus snížení nákladů na palivo a hnojiva: ~200 tis. Kč
+- Minus poradenství a certifikace: ~80 tis. Kč
+- **Net profit**: 570 tis. Kč/rok dodatečně
+
+**Certifikační schémata** (jak prodat credit):
+- **Verra VCS** (Verified Carbon Standard) — globální, drahá certifikace
+- **Gold Standard** — preferuje sociální dopad
+- **Indigo Ag** (USA) — agtech platforma, převažuje v US
+- **Climate Farmers** (DE) — startup pro EU farmy
+- **Soil Capital** (BE) — payments per t CO₂
+- **eAgronom** (EE) — softwarová platforma pro management
+- **AgroVoltaika certifikace** (SOIL3) — CZ-orientovaná
+
+**Problémy a kritika:**
+- **Additionality** — credit je „validní" jen pokud farma sekvestraci NEDĚLALA by bez něj. Sporné.
+- **Permanence** — pokud farma za 10 let znovu zorá, uhlík se vrátí do atmosféry. Carbon credit by měl být „revoked".
+- **Verification** — měření obsahu C v půdě je drahé, často nepřesné. Modely vs reálné měření.
+- **Leakage** — pokud farma A sekvestruje, ale farma B vedle zorá víc, čistý dopad = 0.
+- **Greenwashing** — některé firmy nakupují credits, aby vypadali „klimaticky neutrální", ale nikdy nesnižují vlastní emise.
+
+**EU + ČR politika:**
+- **EU CRCF** (Carbon Removals Certification Framework) — nařízení 2024 nastavuje pravidla pro carbon credits ze zemědělství.
+- **Strategický plán SZP 2023–2027** zahrnuje **uhlíkové platby** v rámci EKO a AEKO.
+- **MZe ČR** v 2026 plánuje pilotní „uhlíkové dotace" pro farmy v no-till.
+
+**Doporučená literatura:**
+- Lal, R. (2004) „Soil carbon sequestration impacts on global climate change and food security"
+- Kniha „Drawdown" (P. Hawken, 2017) — top 100 řešení klimatické změny, mnoho v zemědělství
+
+Viz též [[regenerativni-zemedelstvi]], [[no-till]], [[organicka-hmota]], [[biouhel]], [[ttp]], [[vapneni]].`,
+    related: ['regenerativni-zemedelstvi', 'no-till', 'organicka-hmota', 'biouhel', 'ttp', 'vapneni'],
+  },
+  {
+    slug: 'strip-till',
+    term: 'Strip-till',
+    alias: ['pásové zpracování', 'pásová orba', 'strip tillage'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Strip-till je kompromis mezi orbou a no-till — zpracovává jen 20–30 cm široký pás půdy v řádku (kde se sije), mezi řádky půda zůstává nedotčena. Vhodné pro kukuřici, slunečnici, řepku.',
+    longDef: `Strip-till (pásové zpracování, *strip tillage*) je **kompromis mezi konvenční orbou a no-till** (viz [[no-till]]). Stroj zpracovává **jen úzký pás půdy přímo v setém řádku** (typicky 20–30 cm široký), zatímco prostor mezi řádky (typicky 75 cm rozteč pro kukuřici) zůstává **nedotčený** s mulčem.
+
+**Princip činnosti:**
+Stroj má dvě hlavní části na každém řádku:
+1. **Diskový kotouč** — řeže residua a uvolňuje horní vrstvu (do 2–5 cm)
+2. **Dláto / radlička** — kypří pás do hloubky 15–25 cm
+3. **Volitelně**: aplikace hnojiv do pásu (P, K, kapalná N) v jednom průjezdu — „fertilizer applicator"
+4. **Volitelně**: zapůjčená setí (současně sije osivo) — *one-pass* operace
+
+**Pro které plodiny:**
+Strip-till je ideální pro **řádkové plodiny s velkou roztečí**:
+- **Kukuřice** (rozteč 75 cm) — primární uplatnění
+- **Slunečnice** (rozteč 70 cm)
+- **Cukrovka** (rozteč 45–50 cm)
+- **Řepka ozimá** (rozteč 30–50 cm)
+- **Sója** (rozteč 35–50 cm)
+
+Pro úzce setou pšenici (rozteč 12,5 cm) **strip-till nemá smysl** — celá plocha by se zpracovávala, ekvivalent k orbě.
+
+**Výhody:**
+- **Snížení eroze**: mezirádkový mulč zachycuje vodu (vs holá orba)
+- **Úspora paliva**: -30–50 % vs orba
+- **Lepší struktura půdy**: jen 30 % plochy zpracovaná, zbytek udržuje strukturu
+- **Cílené hnojení**: hnojivo přesně do řádku, ne plošně → -20 % spotřeba
+- **Pozdní podzim/jaro vhodný**: vyšší pružnost než klasická orba (která musí brzo na podzim)
+- **Sekvestrace uhlíku**: jako kompromis mezi orbou (-) a no-till (+)
+
+**Nevýhody:**
+- **Drahý stroj** — strip-till s aplikací hnojiv 1,5–3 mil. Kč (vs běžný pluh 500 tis. Kč)
+- **Vyžaduje GPS RTK** (viz [[gps-rtk]]) — řádky musí být přesné na 2 cm. Bez RTK nelze opakovaně trefit stejné pásy.
+- **Závisí na typu půdy**: na těžkých jílovitých půdách problém s utuženým mezipásem (potřeba občasná hluboká orba)
+- **Plevele**: v mulči mezi pásy klíčí plevele, potřeba glyfosát + selektivní herbicidy
+- **Sklon**: na svazích > 8 % riskantní (eroze v koleji secího stroje)
+
+**Stroje:**
+- **Kuhn Striger** (FR) — premium, 1,5–2,5 mil. Kč
+- **Vaderstad Cultus** (SE) — robust, populární v CZ
+- **Köckerling Vector** (DE) — kombinace s aplikací
+- **Horsch Focus TD** (DE) — strip-till + secí stroj v jednom
+- **John Deere 2510H** (US) — populární v USA, méně v EU
+
+**V ČR**: do roku 2020 marginálni (< 1 % výměry), 2024 už ~5–8 % výměry kukuřice a řepky. Růst poháněný:
+- AEKO platby za snížené zpracování půdy
+- Vysoká cena nafty 2022+
+- GAEC 5 (erozní opatření v erozně ohrožených zónách)
+
+Viz též [[no-till]], [[orba]], [[regenerativni-zemedelstvi]], [[ctf]], [[gps-rtk]], [[eroze-pudy]].`,
+    related: ['no-till', 'orba', 'regenerativni-zemedelstvi', 'ctf', 'gps-rtk', 'eroze-pudy'],
+  },
+  {
+    slug: 'biouhel',
+    term: 'Biouhel (biochar)',
+    alias: ['biochar', 'agrouhel', 'pyrouhel'],
+    kategorie: 'hnojivo',
+    shortDef: 'Biouhel je porézní uhlí získané pyrolýzou biomasy (dřeva, slámy, rostlinných zbytků) bez kyslíku. Přidává se do půdy pro zvýšení úrodnosti, vázání živin a dlouhodobou sekvestraci uhlíku (1000+ let).',
+    longDef: `Biouhel (anglicky *biochar*, řec. *bios* + *char* = život + uhlí) je **uhlíkatý materiál vyrobený pyrolýzou** (zahřátím bez kyslíku) biomasy — dřevěné štěpky, sláma, slupky, hnůj, ovocné pecky. Vyzařuje **75–90 % uhlíku** z původní biomasy, který je v půdě **stabilní stovky až tisíce let** — proto silný nástroj sekvestrace CO₂.
+
+**Vznik a inspirace — *Terra Preta*:**
+V Amazonii (Brazílie) byly objeveny **temně černé úrodné půdy** *Terra Preta de Índio* obsahující až 80 t/ha biouhle ze starých indiánských ohnišť. **Stáří 500–2000 let**, dodnes mnohonásobně úrodnější než okolní červené latosoly. Inspirace pro moderní biochar.
+
+**Pyrolýza — výrobní proces:**
+- **Teplota**: 400–800 °C
+- **Bez kyslíku**: aby biomasa neoxidovala (nepálila se na popel)
+- **Doba**: 15 min – 8 h podle technologie
+- **Produkty**:
+  - 30–40 % biochar (pevný)
+  - 30–50 % bioolej (kapalný — palivo)
+  - 20–30 % syngas (CO + H₂ + CH₄ — palivo)
+- **Energetická bilance**: pyrolýza je samonosná — syngas pohání proces
+
+**Vstupní suroviny:**
+- **Dřevěné štěpky** (lesní těžba, prořezávky) — nejvyšší kvalita biouhle
+- **Sláma obilí** (pšenice, kukuřice, řepka) — středně kvalitní, hojně dostupná
+- **Slupky a peckoviny** (ovoce, ořechy) — vysoce porézní
+- **Hnůj kuřat / krav** — bohatý na P, K
+- **Zelená biomasa** (rákos, miscanthus) — pro plantáže biouhle
+
+**Efekt na půdě:**
+1. **Porozita** — 1 g biouhle = 200–400 m² povrchu (jako aktivní uhlí). Drží vodu i živiny.
+2. **CEC** (Cation Exchange Capacity) — biouhel váže kationy (Ca²⁺, Mg²⁺, K⁺, NH₄⁺), pomalu je uvolňuje plodině. **+30–80 % CEC** v písčitých půdách.
+3. **pH** — biouhel je mírně alkalický (pH 8–10) → **stabilizuje kyselé půdy**, alternativa vápnění.
+4. **Mikrobiom** — póry biouhle jsou ideální „domovy" pro půdní bakterie a houby. **+30–60 % biomasy mikroorganismů**.
+5. **Voda** — 1 t biouhle zadržuje **2–4 t vody** v půdě → ochrana proti suchu.
+6. **Sekvestrace C** — 1 t biouhle = ~3 t CO₂ ekvivalent, stabilní 500+ let.
+
+**Aplikace:**
+- **Dávka**: 1–10 t/ha (typicky 3–5 t/ha)
+- **Hloubka**: 10–30 cm orbou nebo strip-till
+- **Aktivace**: rozdrtit + namočit + smíchat s kompostem 2–4 týdny před aplikací (aby se nasáklý sytými živinami, ne hladovým dřevěným uhlím)
+- **Frekvence**: jednorázová nebo postupná (1 t/ha/rok)
+
+**Cena 2024:**
+- **Sypaný biouhel CZ**: 4 000–8 000 Kč/t
+- **Pelet (jednodušší aplikace)**: 8 000–15 000 Kč/t
+- **Aktivovaný s mykorhizou (premium)**: 15 000–25 000 Kč/t
+- **Investice na 1 ha**: 12 000–40 000 Kč
+
+**Návratnost:**
+- **Výnosy**: typicky +5–20 % po 1–3 letech
+- **Úspora hnojiv**: -10–25 % díky CEC
+- **Carbon credits**: 15–25 EUR/t CO₂ × 3 t CO₂/t biouhle = ~1 200 Kč/t biouhle dodatečně
+- **Návratnost**: 5–10 let na biouhel samostatně, 3–5 let s carbon credity
+
+**V ČR:**
+- **Sklizeň-Lanškroun** — největší výrobce, kapacita 5 000 t/rok
+- **Biochar.cz** — distribuce, poradenství
+- **AGRIBO** — výrobce + carbon credit konsultant
+- **Pilotní projekty** na výzkumných ústavech (Bohunice, Lanžhot)
+
+**Limity:**
+- **Vstupní cena** vysoká, return až po letech
+- **Riziko aplikace neaktivovaného uhle** — „hladový" biouhel **VÝRAZNĚ snižuje výnos první 1–2 roky** (saje vlastní živiny z půdy)
+- **Měření efektu** — viditelné jen po 3+ letech, předtím těžko proseditelné
+- **Pozor na kontaminanty** — biouhel z odpadní biomasy může obsahovat těžké kovy, dioxiny. Vyžaduje certifikaci EBC (European Biochar Certificate).
+
+Viz též [[organicka-hmota]], [[regenerativni-zemedelstvi]], [[karbonove-zemedelstvi]], [[ph-pudy]], [[vapneni]], [[hnojivo]].`,
+    related: ['organicka-hmota', 'regenerativni-zemedelstvi', 'karbonove-zemedelstvi', 'pH-pudy', 'vapneni'],
+  },
+  {
+    slug: 'mykorhiza',
+    term: 'Mykorhiza',
+    alias: ['mycorrhiza', 'symbióza hub a kořenů', 'arbuskulární mykorhiza'],
+    kategorie: 'agrotechnika',
+    shortDef: 'Mykorhiza je symbióza mezi kořeny rostlin a půdními houbami. Houba zvětší pomocí svých vláken (hyf) sací plochu kořene 10–100×, rostlina za to dodává houbě cukry. Klíčový faktor zdraví půdy a výnosu.',
+    longDef: `Mykorhiza (řec. *mykes* + *rhiza* = houba + kořen) je **vzájemně prospěšná symbióza mezi kořeny rostlin a podzemními houbami**. Vědecky popsána 1885 (Albert Bernhard Frank), ale v praxi využívána zemědělci tisíce let (bez vědomí mechanismu — Indiáni v Amazonii).
+
+**Princip:**
+- **Houba** prorůstá hustou sítí vláken (*hyf*) do půdy, mnohonásobně **zvětšuje sací plochu kořene** (z ~1 m² na 100+ m²)
+- **Hyfy** se dotýkají kořene rostliny a vytváří **arbuskule** (košíčkové struktury) v kořenových buňkách — místa výměny
+- **Rostlina** dodává houbě **5–20 % své fotosyntézy** (cukry, glukózu)
+- **Houba** za to dodává rostlině **fosfor, dusík, mikroprvky** (zejm. Zn, Cu) — mnohem efektivněji než kořen sám
+
+**Typy mykorhizy:**
+1. **Arbuskulární mykorhiza (AM)** — nejběžnější, 80 % rostlin (pšenice, kukuřice, sója, ovocné stromy). Houby z divize *Glomeromycota*.
+2. **Ektomykorhiza** — lesní stromy (dub, buk, smrk, borovice). Houby z divize *Basidiomycota* (hřiby, klouzky, ryzce).
+3. **Erikoidní mykorhiza** — vřesovité (borůvky, brusinky, vřes).
+4. **Orchideoidní mykorhiza** — orchideje. Symbióza zcela nutná pro klíčení.
+
+**Bez mykorhizy NEROSTOU:**
+- Vinná réva (téměř závislá)
+- Olivovník
+- Mnoho ovocných dřevin
+- Některé orchideje
+
+**Slabě závislé (mohou bez):**
+- Brukvovité (řepka, hořčice, zelí) — produkují glukosinoláty, které mykorhizní houby zabíjejí
+- Některé jednoleté plevele
+
+**Výhody pro plodinu:**
+- **+30–80 % příjmu P** (fosfor je v půdě často vázán v nedostupné formě, hyfy ho rozpouští)
+- **+20–40 % příjmu N** (zejm. z organické hmoty)
+- **+50–100 % příjmu vody** (větší sací plocha)
+- **Tolerance k suchu**: hyfy hledají vodu metry daleko
+- **Tolerance k těžkým kovům**: mykorhiza chrání kořen
+- **Odolnost k patogenům**: hyfy „blokují" cesty kořenovým patogenům (fuzarióza, pythiová hniloba)
+- **Výnos**: +5–30 % v stresových podmínkách
+
+**Co mykorhizu poškozuje:**
+- **Orba a hluboké zpracování půdy** — fyzicky rozseká hyfovou síť. **No-till** (viz [[no-till]]) a strip-till (viz [[strip-till]]) hyfy chrání.
+- **Mineralní hnojiva s vysokým P** — rostlina nepotřebuje houbu, symbióza zaniká.
+- **Fungicidy** v půdě (zejm. metalaxyl, propiconazol) — někteří specifické na mykorhizní houby.
+- **Brukvovité v rotaci** — produkují glukosinoláty, mykorhiza klesá.
+- **Holá půda** (žádný kryt) — hyfy odumírají bez hostitele.
+- **Vápnění příliš vysoké pH** — některé AM houby preferují kyselé pH.
+
+**Mykorhizní preparáty (komerční inokulanty):**
+- **Symbivit** (CZ) — Mendelu, 1 000–2 000 Kč/kg
+- **Mykos** (CZ) — Symbiom (Lanškroun)
+- **Glomus intraradices** (zahraniční) — RhizoVital
+- **Aplikace**: namořit osivo, posypat do řádků při setí, namáčet sadbu
+
+**Cena na hektar:**
+- Inokulace osiva: 200–500 Kč/ha
+- Aplikace do řádků: 800–1 500 Kč/ha
+- ROI 1–3 roky (zejm. v půdách po dlouhém orání nebo po vysokých dávkách P)
+
+**Měření mykorhizy:**
+- **Mikroskopie kořene** (barvení) — laboratorní
+- **DNA test** (qPCR) — kvantifikace AM hub v půdě
+- **Nepřímé indikátory**: měření P příjmu, sucho-tolerance, výnos
+
+**V ČR výzkum**: Mendelu Brno, ČZU Praha, ÚEB AV ČR — desítky publikací.
+
+Viz též [[regenerativni-zemedelstvi]], [[no-till]], [[strip-till]], [[organicka-hmota]], [[biouhel]], [[npk-hnojivo]].`,
+    related: ['regenerativni-zemedelstvi', 'no-till', 'strip-till', 'organicka-hmota', 'biouhel', 'npk-hnojivo'],
+  },
+  {
+    slug: 'tmr',
+    term: 'TMR (Total Mixed Ration)',
+    alias: ['Total Mixed Ration', 'totální směsná dávka', 'směsná krmná dávka'],
+    kategorie: 'chov',
+    shortDef: 'TMR (Total Mixed Ration) je krmná technologie, kdy se všechny komponenty dávky (siláž, seno, koncentrát, minerály) smíchají v míchacím voze a krmí jako jednotná homogenní směs. Standard pro mléčné dojnice nad 25 l/den.',
+    longDef: `TMR (anglicky *Total Mixed Ration*, „totální směsná dávka") je **moderní krmná technologie pro skot**, kde se všechny složky krmné dávky **smíchají do jednotné homogenní směsi** v míchacím voze a krmí najednou. Standardní praxe pro produkční mléčné stáda od 1990s.
+
+**Tradiční vs TMR krmení:**
+| Tradiční | TMR |
+|----------|-----|
+| Komponenty zvlášť (siláž → seno → koncentrát) | Vše smíchané v 1 dávce |
+| Kráva si vybírá | Nemůže selektovat |
+| Selektivní příjem = problém s acidózou | Vyrovnaná dávka |
+| Hodně práce (3–5× denně) | 1× denně rozdat, 1–2× přihrnout |
+| Nižší užitkovost | +5–15 % mléčná produkce |
+
+**Komponenty typické TMR pro vysokoužitkovou krávu (40+ l mléka/den):**
+- **Kukuřičná siláž**: 25–35 kg (sušina 30–35 %)
+- **Travní siláž / senáž**: 5–10 kg
+- **Vojtěšková siláž / seno**: 3–6 kg (zdroj bílkovin a strukturní vlákniny)
+- **Koncentrát / krmná směs**: 8–12 kg (obilí, sójový extrahovaný šrot, řepkový šrot)
+- **Cukrovarské řízky / pivovarské mláto**: 5–15 kg (vedlejší produkty)
+- **Minerály + vitamíny**: 0,2–0,5 kg (Ca, P, Mg, Na, mikroprvky)
+- **Voda**: do kbelíku ad lib (ne v TMR)
+- **Celkem**: 50–70 kg krmiva/krávu/den (z toho 22–28 kg sušiny)
+
+**Klíčové parametry kvality TMR:**
+- **Sušina** (DM — Dry Matter): 45–55 % (víc → krávy nepijou dost; míň → fermentační problémy)
+- **NDF** (Neutral Detergent Fiber): 28–34 % — strukturní vláknina pro přežvykování
+- **NDF z píce** (forage NDF): min. 19 % — pro funkčnost bachoru
+- **NEL** (Net Energy Lactation): 6,8–7,2 MJ/kg DM
+- **CP** (Crude Protein): 16–18 %
+- **RUP** (Rumen Undegradable Protein): 35–40 % CP
+- **Délka částic** (Penn State Particle Separator):
+  - >19 mm: 5–15 % (strukturní efekt)
+  - 8–19 mm: 30–50 %
+  - 4–8 mm: 30–50 %
+  - <4 mm: <20 %
+
+**Míchací vozy (Mixer Wagons / TMR Wagons):**
+- **Horizontální šnek** (1, 2, 3 šneky) — Trioliet, Faresin, Strautmann
+- **Vertikální šnek** (1, 2 šneky) — KUHN Profile, Storti, Sgariboldi — častější dnes
+- **Tažné vs samojízdné** (samojízdné u stád > 500 kus)
+- **Kapacita**: 8–30 m³ (1× nakrmení 50–300 krav)
+- **Cena**: 800 tis. – 5 mil. Kč
+- **Hodnotí se**: doba míchání, homogenita, délka řezání (vertikální šnek umí krátit dlouhou siláž)
+
+**PMR vs TMR vs CMR:**
+- **TMR**: jedna univerzální dávka pro celé stádo (nebo skupinu)
+- **PMR** (Partial Mixed Ration): základ smíchaný + individuální dokrmení v dojírně podle výroby (= koncentrát na základě dat krávy)
+- **CMR** (Component Mixed Ration): tradiční oddělené krmení komponent (nejstarší přístup)
+
+**Skupinové krmení:**
+Moderní stádo má **2–4 skupiny dojnic** s různou TMR:
+- **Vysokoužitkové** (>35 l/den): vysoká energie, vyšší koncentrát
+- **Středně užitkové** (25–35 l/den): standardní
+- **Nízkoužitkové** (<25 l/den, pozdní laktace): nižší energie, víc píce
+- **Suché krávy / zaprahlé**: jen píce + minerály (transition diet 3 týdny před porodem)
+
+**Náklady:**
+- **Krmivo**: 70–100 Kč/kráva/den (pro 30 kg sušiny)
+- **Práce**: -50 % oproti tradičnímu (1× rozdání místo 3–5×)
+- **Investice do techniky**: amortizace 1,5–3 Kč/kráva/den
+
+**Sledování spotřeby:**
+- **Váha vozu** před a po krmení → spotřeba na skupinu/krávu
+- **Refusal (odpad)** — to, co krávy nesní, váží se a sype na jiné krávy nebo do bioplynu. 3–5 % refusal je normální (= správně se trefíte do potřeb).
+
+**Software pro plánování TMR:**
+- **TMR Tracker** (US) — sledování kvality
+- **NDS Professional** (IT) — výživové plánování
+- **Agralis CCT** (CZ) — dojírny + krmení integrované
+- **CowVision** (NL) — full digital
+
+V ČR: ~80 % stád > 100 dojnic používá TMR (2024 data).
+
+Viz též [[dojirna]], [[kukurice-silazni]], [[vojteska]], [[siloky-balik]], [[oteleni]], [[rijnost]].`,
+    related: ['dojirna', 'kukurice-silazni', 'vojteska', 'siloky-balik', 'oteleni'],
+  },
+
+  // ── CHOV A ŽIVOČIŠNÁ VÝROBA ──────────────────────────────────────────
+  {
+    slug: 'oteleni',
+    term: 'Otelení',
+    alias: ['telení', 'porod krávy', 'calving'],
+    kategorie: 'chov',
+    shortDef: 'Otelení je porod krávy. V přirozeném cyklu probíhá zhruba 280 dní po inseminaci. Klíčový moment hospodaření — začíná laktace (~305 dní), kráva je nejcitlivější na výživu a hygienu. Komplikace tu rozhodují o ekonomice celého chovu.',
+    longDef: `Otelení (lidově *telení*, odborně *partus*, anglicky *calving*) je **porod krávy** — vrcholný moment chovatelského cyklu. Standardní gravidita skotu trvá **280 ± 5 dní** (9 měsíců).
+
+**Cyklus produkční krávy:**
+- **Den 0**: otelení, začátek laktace
+- **Den 60–70**: optimální inseminace (zhruba 2. říje po porodu, viz [[rijnost]], [[inseminace]])
+- **Den 280**: zaprahnutí (zastavení dojení 60 dní před dalším porodem) — období regenerace mléčné žlázy
+- **Den 340**: další otelení → cyklus restartuje
+
+**Pomocné měřítka:**
+- **Mezidoba** (calving interval): 365–400 dní = ideální (kratší = lepší ekonomika)
+- **Servis perioda** (od otelení k inseminaci): 60–90 dní = optimální
+- **Indeks oplodnitelnosti**: 1,5–2,5 inseminací na zabřeznutí = dobrý
+
+**Příznaky blížícího se otelení (24–48 h před):**
+- **Vemeno** se naplňuje, mlékem prosakuje
+- **Vulva** zduřená, pánevní vazy uvolněné
+- **Hlen** z pochvy (žlutý / hnědý)
+- **Změna chování**: krávu odděluje se od stáda, neklid, oblézání
+- **Pokles tělesné teploty** o 0,5–1 °C
+
+**Průběh porodu (3 fáze):**
+1. **Otevírací fáze** (2–6 h): cervix se otevírá, krávu cítíme stahy, vstává a lehá
+2. **Vypudovací fáze** (30 min – 4 h): aktivní tlačení, vidíme „vodní vak" (allantois), pak telete přicházejí (zpravidla nejdřív přední nohy + hlava)
+3. **Placentová fáze** (do 12 h): vypuzení placenty (lůžka). Pokud >12 h = **retentio placentae** = veterinární problém
+
+**Komplikace (dystocie):**
+- **Špatná poloha telete** (zadní místo přední, hlava zavrácená, nohy stočené) — 5–8 % všech otelení
+- **Velký plod** (oversized calf) — Belgické modré, Charolais (býk přemete krávu)
+- **Úzká pánev** (malá kráva s velkým býkem)
+- **Slabé kontrakce** (oslabená kráva, hypokalcemie)
+- **Twins** (dvojčata) — vyšší riziko komplikací, často vyžaduje veterináře
+
+**Statistika dystocií:**
+- **Holštýn**: 8–12 % otelení s asistencí (lehčí porody)
+- **Belgické modré**: 90+ % asistovaných (často císařský řez!)
+- **Charolais, Limousin**: 15–25 % asistovaných
+- **Aberdeen Angus**: <5 % — „easy calving"
+
+**Veterinární zákroky:**
+- **Manuální asistence**: vytažení rukama
+- **Fetotomie**: porodní lana, řetězy, vytahování řemenem (do 50 kg tahu)
+- **Císařský řez**: nutný u úzkých pánví nebo špatných poloh — 8 000–25 000 Kč
+- **Embryotomie**: rozdělení mrtvého plodu v děloze (zachrání matku)
+
+**Po otelení — kritické první týdny:**
+- **Kolostrum** (mlezivo) — první mléko bohaté na protilátky. Tele MUSÍ dostat min. 4 l do 6 h po porodu (pasivní imunita).
+- **Hypokalcémie / mléčná horečka** — 3–10 % krav, krátce po otelení (Ca → mléko). Léčí se infuzí calcia.
+- **Ketóza** — energetická deficience v ranné laktaci, hubnutí, ketolátky v moči. Prevence: kvalitní TMR ([[tmr]]).
+- **Retentio placentae** (zadržená lůžka) — riziko zánětu dělohy → snížená plodnost.
+- **Metritida** — zánět dělohy, snižuje reprodukci.
+- **Mastitis** — zánět vemene, časté první 30 dní.
+
+**Welfare požadavky** (CZ normy):
+- **Oddělená telící boxa** (calving pen) — min. 12 m², čisto, sucho, klid
+- **Veterinární dohled** během porodu
+- **Telete a krávu společně** min. 24 h po porodu (pro pasivní imunitu)
+- **Žádné rutinní hormonální indukce porodů** (zakázáno EU 2008)
+
+**Indikátory ekonomiky:**
+- **% živě narozených telat**: 92–96 % = velmi dobré
+- **% telat přežívajících do 60 dní**: 90–95 %
+- **Náklady na 1 otelení**: 1 500–8 000 Kč (asistence, lék, čas)
+- **Hodnota telete** (býček 50 kg živé hmotnosti): 8 000–15 000 Kč
+- **Hodnota telete** (jaločka pro chov): 25 000–60 000 Kč
+
+**Synchronizace porodů:**
+- **CIDR + PGF₂α** protokol (kontrolovaný cyklus) → narozeni telat ve „vlnách"
+- Výhody: organizace práce, hromadná koupě/prodej, monitoring
+- Nevýhody: vyšší fixní zatížení techniky a personálu během vrcholů
+
+Viz též [[rijnost]], [[inseminace]], [[jalovice]], [[usni-znamka]], [[dojirna]], [[tmr]].`,
+    related: ['rijnost', 'inseminace', 'jalovice', 'usni-znamka', 'dojirna', 'tmr'],
+  },
+  {
+    slug: 'rijnost',
+    term: 'Říje (estrus)',
+    alias: ['ruje', 'říjnost', 'estrus', 'pohlavní cyklus'],
+    kategorie: 'chov',
+    shortDef: 'Říje je období sexuální receptivity samice — u krávy trvá 12–24 h, opakuje se každých 18–24 dní. Klíčový moment pro inseminaci. Detekce říje (přirozeně nebo automatickými sensory) určuje 80 % reprodukčního úspěchu farmy.',
+    longDef: `Říje (latinsky *estrus*, anglicky *heat*) je **období, kdy samice savce je sexuálně receptivní a schopná oplodnění**. U skotu (krav i jalovic — viz [[jalovice]]) trvá 12–24 hodin a opakuje se v **21denním cyklu** (18–24 dní v normě).
+
+**Cyklus krávy (21 dní průměrně):**
+- **Den 0**: říje (estrus) — 12–24 h
+- **Den 1**: ovulace 24–30 h po začátku říje
+- **Den 5–17**: luteální fáze (corpus luteum produkuje progesteron) — bránění další říji
+- **Den 18–19**: luteolýza (rozpad corpus luteum)
+- **Den 20–21**: nová říje, cyklus restartuje
+- **Pokud gravidita**: corpus luteum přežívá → žádná další říje 280 dní
+
+**Příznaky říje:**
+1. **Standing heat** (= klíčový příznak): kráva stojí nehybně, když ji nasedne jiná kráva. **Trvá 4–18 h** v rámci celkové říje. **Jediný 100% spolehlivý** příznak.
+2. **Mounting** (naskakování na ostatní krávy) — start říje
+3. **Hleny**: čistý, lepkavý hlen z vulvy
+4. **Vulva**: zarudlá, mírně zduřená
+5. **Neklid**: víc chůze (až 4× normální distance), bučení, snížený příjem krmiva
+6. **Pokles užitkovosti mléka**: −10 až −30 % na 1 den
+
+**Tichá říje (silent heat):**
+30–40 % krav (zejm. v ranné poporodní době nebo při tepelném stresu v létě) **nevykazuje viditelnou říji**, ale ovulace probíhá. **Riziko**: ručně se nedá detekovat, kráva „neoplodněna" 60+ dní → ekonomická ztráta 50–100 Kč/den.
+
+**Detekce říje — metody:**
+
+**1. Vizuální pozorování** (tradiční):
+- 2× denně po 20 min = záchyt **45–55 %** říjí
+- 3× denně po 30 min = záchyt **65–75 %** říjí
+- Náročné na čas, podléhá lidské chybě
+
+**2. Detekční pomůcky:**
+- **Heat mount detector** (Kamar) — barevný lepicí čip na sakrum, mění barvu pod tlakem nasedající krávy. **Levné** (50–100 Kč/kus), spolehlivost ~80 %.
+- **Křídový sprej** na sakrum — nový spray každý den, smytí = pozn. říje
+- **Estrotect patches** — kombinace tlakové a barevné detekce
+
+**3. Senzory (precision livestock farming):**
+- **Aktivometr** (pedometr) — krok-počítač na noze, říje = +50–100 % kroků
+- **Akcelerometr** na obojku — chov-detekce + pozn. fyzické aktivity
+- **CowManager SensOor** — kvantifikace ruminace, příjmu, aktivity
+- **Allflex Heatime** — kombinovaný systém
+- **DeLaval BCS Camera** — kamera + AI detekce
+- **Cena**: 2 000–5 000 Kč/kráva (jednorázová) + 30–80 Kč/měsíc software
+- **Spolehlivost**: 90–98 % detekce, méně false positives
+
+**4. Hormonální měření (lab):**
+- **Progesteron v mléce** — denně nebo 3× týdně. Drop progesteronu = říje.
+- **Rapid Milk Progesterone Test** (RMPT) — pásek 30 min, 50 Kč/test
+
+**Inseminace načasování:**
+- **AM/PM rule**: říje ráno → inseminovat odpoledne; říje večer → inseminovat ráno
+- **Ovulace** je 24–30 h po startu říje
+- **Spermie** přežívají 12–24 h v děloze
+- **Vajíčko** přežívá jen 6–10 h po ovulaci
+- **Optimální okno**: 6–18 h od startu říje (12 h před ovulací)
+
+**Synchronizace říje** (řízená reprodukce):
+Hormonální protokoly pro **vyvolání říje ve skupině najednou** — usnadní inseminace, plánování porodů, monitoring:
+
+- **PGF₂α** (Prostaglandin) — 2 injekce ve 14denním rozestupu. Levné, 80–85 % synchronizace.
+- **Ovsynch** — 7denní protokol s GnRH + PGF + GnRH + AI. Vyšší spolehlivost ~70 %.
+- **CIDR / PRID** (intravaginální progesteron) + GnRH + PGF — pro krávy s nepravidelnou cyklika
+
+**Anestrus** (chybějící cyklus):
+- Po porodu 30–60 dní normální (= **postpartum anestrus**)
+- Pokud > 90 dní → patologie:
+  - **Cyklický anestrus**: ovariální problém
+  - **Anestrický anestrus**: nedostatek živin, ketóza (viz [[oteleni]])
+  - **Persistentní žluté tělísko**: vzácně, řešení PGF₂α
+
+**Ekonomický dopad detekce říje:**
+- **Detekce 95 %** (sensory): mezidoba 380 dní, +200 l mléka/kráva/rok = +6 000 Kč
+- **Detekce 50 %** (manuálně): mezidoba 430 dní, ztráta 50 dní × 100 Kč/den = -5 000 Kč/kráva/rok
+
+Viz též [[inseminace]], [[oteleni]], [[jalovice]], [[dojirna]], [[tmr]].`,
+    related: ['inseminace', 'oteleni', 'jalovice', 'dojirna'],
+  },
+  {
+    slug: 'inseminace',
+    term: 'Umělá inseminace',
+    alias: ['AI', 'artificial insemination', 'IZR umělé oplodnění'],
+    kategorie: 'chov',
+    shortDef: 'Umělá inseminace je metoda reprodukce, kdy se semeno vybraného plemenného býka zmraženě skladuje a dávkovaně aplikuje do dělohy krávy v období říje. Standardní postup v moderním chovu (>95 % v CZ).',
+    longDef: `Umělá inseminace (AI, *artificial insemination*) je **metoda reprodukce hospodářských zvířat**, kdy se získané a zmrazené semeno plemenného samce aplikuje do dělohy samice **bez přímého páření**. Standardní praxe v moderním chovu skotu, prasat, ovcí, koz.
+
+**Historie:**
+- **1779** — italský fyziolog Lazzaro Spallanzani úspěšně inseminoval psici
+- **1899** — Ruský vědec Ilja Ivanovič Ivanov první AI u koní a krav
+- **1949** — Polge a Smith objevili **kryoprotektant glycerol** pro mražení spermatu
+- **1950s** — zavedení mraženého semena v US a EU
+- **1960s** — masové rozšíření v CZ (Velký kus, Inseminační stanice Stadlec)
+
+**Princip:**
+
+**1. Získání semene od býka:**
+- **Umělá pochva** (artificial vagina) — býk skočí na atrapu (fantom) nebo cvičnou krávu, semeno se zachytí do skleněné nádobky
+- **Elektroejakulace** — pro problematické býky nebo při onemocnění
+- **Frekvence**: 2× týdně, 1–2 ejakuláty na sezení
+- **Objem 1 ejakulátu**: 5–10 ml, ~1 miliarda spermií
+
+**2. Hodnocení a zředění:**
+- **Mikroskopická kontrola**: motility (pohyb), morfologie (tvar), koncentrace
+- **Zředění** v krmiči (egg yolk + glycerol + citrate buffer)
+- **Rozdělení do dávek**: typicky 20–30 mil. spermií / dávku (= 1 inseminace)
+- **Jeden ejakulát → 200–500 dávek**
+
+**3. Mražení:**
+- **Pejety (straws)** — slámky 0,25 ml, plastové, barevně kódované podle býka
+- **Ochlazování postupně**: 22 °C → 4 °C → -100 °C → -196 °C (kapalný dusík)
+- **Skladování v dewaru s LN₂** (kapalný dusík)
+- **Doba skladovatelnosti**: prakticky neomezená (50+ let prokazatelně)
+
+**4. Inseminace krávy (zemědělec nebo inseminační technik):**
+- **Termín**: 6–18 h od začátku říje (viz [[rijnost]])
+- **Rozmražení pejety**: 35 °C, 45 sec ve vodní lázni
+- **Aplikace**:
+  - Inseminátor zavádí inseminační pistoli **přes pochvu, cervix, do těla dělohy** (asi 20 cm hloubky)
+  - Jednu ruku má v konečníku — palpuje cervix a vede pistoli
+  - Vstříkne celý objem (0,25 ml) do dělohy
+- **Délka úkonu**: 30 sec – 2 min na zkušeného inseminátora
+
+**Vzdělání inseminátora v ČR:**
+- **Lékaři veterinární medicíny** (VŠ) — bez omezení
+- **Zoologové / agronomové** — speciální kurz „Inseminační technik"
+- **Sami zemědělci** — kurz „Vlastní inseminace" (přibližně 40 h), pak licence pouze pro vlastní stádo (NE pro inseminaci cizích krav)
+
+**Ekonomika a praxe:**
+
+**Cena 1 dávky semena (2024):**
+- **Standardní genetika**: 200–400 Kč/dávka
+- **Top genetika** (Top 100 USA TPI): 600–1 500 Kč
+- **Sexované semeno** (90 % jaloček): 1 200–2 500 Kč
+- **Embryotransfer linie**: 5 000–25 000 Kč
+- **Cena za 1 zabřeznutí** (1,8 dávky průměrně): 360–2 700 Kč
+
+**Konkurence — přírodní páření (býk ve stádě):**
+- **Plusy**: 95 % zabřeznutí, žádné náklady na inseminátora, ne třeba detekovat říji
+- **Mínusy**: 1 býk = 1 genetická linie (vs 20+ AI variant), riziko zranění krávy/býka, zoonózy, geneticky průměrní býci
+
+**V ČR 2024:**
+- ~98 % mléčných krav inseminovaných (téměř všechny)
+- ~75 % masných krav inseminovaných (zbylé přírodní páření)
+- **Inseminační stanice**: VŠM (Velký Šariš), Plemenáři Lhota, GeneTPlus, Bohemia Plus
+- **Importované semena**: 60 % US Holstein, 20 % CZ genetika, 20 % EU genetika
+
+**Sexované semeno (sex-sorted):**
+- **Princip**: spermie X (jaločky) a Y (býčci) sortrovány průtokovou cytometrií (DNA množství v hlavičce X je ~3,8 % vyšší)
+- **Spolehlivost**: 90 % požadovaného pohlaví
+- **Nižší motility** — typicky 30 mil. spermií/dávka (vs 25 mil. konv.)
+- **Cena**: 1 200–2 500 Kč/dávka
+- **Použití**: ranní jalovice (zaručené jaločky pro chov), top kráv pro chovné linie
+
+**Embryotransfer (ET):**
+- **Vyšší úroveň genetiky**: super-ovulace top krávy → embryotransfer do recipientních krav
+- **Princip**:
+  1. Top kráva-donor: hormonální stimulace (FSH 4 dny)
+  2. Inseminace top býkem
+  3. Embrya (7 dní stará) vypláchnuta z dělohy
+  4. Přesazení do 5–10 recipientních krav (synchronizovaných)
+- **Cena**: 50 000–150 000 Kč na 1 cyklus
+- **Top kráva** generuje 6–10 telat ročně místo 1 (oproti naturalu)
+
+Viz též [[rijnost]], [[oteleni]], [[jalovice]], [[usni-znamka]], [[dojirna]].`,
+    related: ['rijnost', 'oteleni', 'jalovice', 'usni-znamka'],
+  },
+  {
+    slug: 'jalovice',
+    term: 'Jalovice',
+    alias: ['heifer', 'jalůvka', 'sirka'],
+    kategorie: 'chov',
+    shortDef: 'Jalovice je samice skotu od narození do prvního otelení — typicky 0–24 měsíců. Klíčová investice chovu (12–18 měs. odchovu bez výroby), genetický potenciál nové generace. Po prvním otelení se z ní stává „prvotelka" (cow).',
+    longDef: `Jalovice (lidově *jalůvka*, dialekt *sirka*, anglicky *heifer*) je **samice skotu od narození do prvního otelení**. Po prvním otelení už není jalovice ale **kráva** (cow), konkrétně „prvotelka" (= primipara). Doba odchovu jalovice je **klíčovou investicí** chovu — 22–24 měsíců nákladů bez výroby mléka.
+
+**Fáze odchovu jalovice:**
+
+**1. Telete (calf) — 0–2 měsíce:**
+- **Hmotnost narození**: 35–45 kg (holštýn), 25–35 kg (jersey), 40–50 kg (charolais)
+- **Kolostrum (mlezivo)**: 4 l do 6 h po porodu — KRITICKÉ pro pasivní imunitu (telete nemá vrozenou imunitu)
+- **Krmení mlékem**: 6–8 l/den, 2× denně
+- **Stáj**: jednotlivé boxy (calf hutch) první 4–8 týdnů, pak ve skupině
+- **Sušená krmiva**: úvod jádra a sena od 2. týdne
+- **Odstav** (weaning): 6–10 týdnů, postupné snižování mléka
+
+**2. Telete v odstavu — 2–6 měsíců:**
+- **Hmotnost**: 70–150 kg
+- **Krmení**: jádro (1–2 kg/den), kvalitní seno ad lib, voda
+- **Růst**: cíl **0,8 kg/den** (holštýn)
+- **Sociální skupina**: 4–10 telat stejné věkové kategorie
+- **Bohlanitýření / odrohování** (8 týdnů) — anestezie + lokál
+- **První ošetření**: parazitologie, vakcinace (BVD, IBR, salmonelóza)
+
+**3. Mladá jalovice — 6–12 měsíců:**
+- **Hmotnost**: 150–300 kg
+- **Krmení**: kvalitní travní siláž + 1–2 kg jádra
+- **Růst**: cíl 0,75 kg/den
+- **Stáj**: skupinová kotec, 4–6 m²/kus
+- **Pohyb**: pastva v létě (vhodné pro odchov)
+
+**4. Inseminační jalovice — 12–18 měsíců:**
+- **Hmotnost**: 350–450 kg (cílově 380–420 kg pro holštýn před inseminací)
+- **Pohlavní zralost**: ~10–12 měsíců (puberta), ale ne dříve než 14 měsíců se inseminuje
+- **Optimální inseminace**: 15 měsíců věku, 380 kg hmotnost
+- **Cíl otelení**: 24 měsíců věku (vs ve starší praxi 28–32 měs.) — **mladší otelení = lepší ekonomika**
+
+**5. Březí jalovice (in-calf heifer) — 15–24 měs.:**
+- **Gravidita**: 280 dní (9 měs.)
+- **Krmení**: stejné jako mladá jalovice + last trimester +20 % energie
+- **Hmotnost při otelení**: 550–650 kg (holštýn)
+- **Stáj**: krávový kotec (= připravuje se na laktační skupinu)
+
+**Náklady odchovu jalovice (CZ 2024):**
+- **Krmení** (22 měs.): ~22 000 Kč
+- **Veterina, léčiva**: ~3 000 Kč
+- **Inseminace**: ~500 Kč
+- **Práce, energie, voda**: ~6 000 Kč
+- **Amortizace stájí**: ~4 000 Kč
+- **Celkem**: ~35 000 Kč na 1 jalovici do prvního otelení
+
+**Hodnota jaločky / jalovice:**
+- **Narozená jaločka** (z top genetiky): 5 000–15 000 Kč (jen jako tele)
+- **Březí jalovice** připravená k otelení: **50 000–80 000 Kč**
+- **Top genetická chovná jalovice** (NA-3+, Top 100 BBA): 80 000–250 000 Kč
+- **Embryová jalovice** (z ET): 100 000–500 000 Kč
+
+**Sexované semeno** (viz [[inseminace]]):
+- **Standardní inseminace**: 50 % jaločky / 50 % býčci
+- **Sexed semen**: 90 % jaločky
+- **Strategická aplikace**: top 25 % krav stáda dostane sexed semen (= zaručené jaločky pro chov), spodní 25 % dostane masná genetika (= cross-bred tele pro maso, prodá se za 12–20 tis. Kč)
+
+**Welfare a problémy:**
+- **První otelení**: dystocie (těžký porod) častější než u dospělých krav (15 % vs 8 %)
+- **Doporučená pánev**: změřit perineum a pánev rektálně → vyloučit extrémně úzké
+- **První laktace**: 75 % výroby dospělé krávy. Plný potenciál až 3. laktace.
+
+**Genetický pokrok:**
+- Jalovice = **nová generace** stáda
+- Pokud máte top 10 % krav = doporučeno top semen + ET → maximální zlepšení
+- Spodní 30 % stáda = masná genetika (genetická slepá ulička)
+
+**Stárnoucí stádo:**
+- Průměrný věk krávy v CZ stádech: **3,5 laktace** (= 5–6 let)
+- **Cyklus**: 30–35 % jalovic ročně vstupuje do stáda jako prvotelky, 30–35 % krav odchází (kanibalismus nebo prodej)
+
+**„Sirka"** — slovenský / valašský dialekt pro jalovici, dnes regionálně v Moravě.
+
+Viz též [[oteleni]], [[rijnost]], [[inseminace]], [[usni-znamka]], [[tmr]], [[dojirna]].`,
+    related: ['oteleni', 'rijnost', 'inseminace', 'usni-znamka', 'tmr'],
+  },
+  {
+    slug: 'usni-znamka',
+    term: 'Ušní známka',
+    alias: ['ušnice', 'ear tag', 'identifikační známka', 'IZR značení'],
+    kategorie: 'chov',
+    shortDef: 'Ušní známka je plastová identifikační visačka aplikovaná do ucha hospodářského zvířete povinná v EU. Skot, ovce, kozy, prasata. Obsahuje individuální kód napojený na IZR (Integrovaný zemědělský registr) — bez ní zvíře nesmí opustit farmu ani jít na jatka.',
+    longDef: `Ušní známka (anglicky *ear tag*, oficiálně **identifikační známka**) je **plastová visačka** s individuálním kódem, kterou EU legislativa vyžaduje pro všechna hospodářská zvířata (skot, ovce, kozy, prasata, kůně) jako součást **registračního systému zvířat**. V ČR je vázána na **IZR — Integrovaný zemědělský registr** spravovaný SZIF.
+
+**Legislativní rámec:**
+- **EU nařízení 1760/2000** — povinnost identifikace skotu (po BSE krizi)
+- **EU 21/2004** — ovce a kozy
+- **EU 1/2005** — prasata
+- **CZ zákon 154/2000 Sb.** o plemenitbě
+- **CZ vyhláška 136/2004 Sb.** — technické provedení známek
+
+**Co je na ušní známce:**
+
+**Skot — dvě známky (povinně do 7 dní po porodu):**
+- **Velká plastová známka** (žlutá, asi 8 × 6 cm) v levém uchu
+- **Malá kovová / plastová známka** v pravém uchu (záloha pro případ ztráty velké)
+- **Obsah**:
+  - **CZ** (kód státu)
+  - **9-místné individuální číslo zvířete** (např. *CZ 123 456 789*)
+  - **Logo zvířete / IZR**
+  - **Volitelně**: jméno chovatele, výstroj farmy, RFID chip (HDX 134,2 kHz)
+
+**Prasata:**
+- **1 ušní známka** s číslem hospodářství (ne individuální)
+- Nebo **tetování** (tetovací vyznačovací kleště v levém uchu)
+- Při převozu do jiného hospodářství: nová známka
+
+**Ovce, kozy:**
+- **2 známky** (jako skot), jedna z nich obsahuje RFID
+- Pro **elektronickou identifikaci** v moderních ovčárnách
+
+**RFID elektronická identifikace:**
+- **HDX (Half Duplex)** vs **FDX-B (Full Duplex)** — standardy
+- **Frekvence**: 134,2 kHz (ISO 11784/11785)
+- **Čtecí dosah**: 10–40 cm (statické čtečky), 1–3 m (anténní brány)
+- **Použití**:
+  - Automatické krmení v dojírně (= jiná dávka koncentrátu pro každou krávu)
+  - Vážení v průchodu (auto-record do databáze)
+  - Mléčné dojící roboty (Lely, DeLaval)
+  - Sběr dat o aktivitě (CowManager, Allflex Heatime)
+
+**Aplikace ušní známky:**
+- **Speciální kleště** (tagger) — jednorázový nebo opakovaně použitelný (Allflex, Datamars, Caisley)
+- **Místo aplikace**: dolní třetina ucha, mezi 2 cévami (vyhneme se krvácení)
+- **Hygiena**: dezinfekce kleští mezi zvířaty
+- **Bolestnost**: krátké píchnutí, do 30 sec uklidnění zvířete
+
+**Ztráta známky:**
+- **Skot**: ~3–8 % ročně (zaháčí se o stáj, ostatní krávy)
+- **Postup**: chovatel zjistí ztrátu, objedná **náhradní známku** od SZIF/IZR (stejné individuální číslo), nasadí ji do 7 dní
+- **Cena 1 známky** (2024): 25–50 Kč skot, 8–15 Kč ovce
+- **Roční náklady na známky** pro stádo 100 krav: ~1 500–3 000 Kč
+
+**Sankce za chybějící známky:**
+- **Skot bez známky nesmí opustit farmu** (= nemůže jít na jatka, prodej)
+- **SZIF kontrola** — 1× ročně, pokuta 10 000–500 000 Kč
+- **Dotace BISS / CISS** závislé na řádné identifikaci
+- **Riziko AVI / SBV** epidemie — neidentifikované zvíře nelze trasovat
+
+**IZR — Integrovaný zemědělský registr:**
+- **Databáze**: čísla zvířat + historie pohybů + farmáři + jatka
+- **Pohyb zvířete** = nahlásit IZR do 7 dní (původ + cíl)
+- **Otelení** = nahlásit do 7 dní (jiné číslo pro telete + matka)
+- **Úhyn / porážka** = nahlásit do 7 dní
+- **Online systém**: portal.szif.cz, mobilní aplikace „IZR mobile"
+
+**XML hromadné exporty z IZR:**
+Profi farmy používají **XML export pro hromadné hlášení** přesunů (např. po sklizni jater nebo přesun krav mezi stájemi):
+- Generuje se z managment softwaru (CowVision, AgroTronic)
+- Nahraje se na portál SZIF
+- Validace XSD schéma, chyby online
+
+**Pasporty (Cattle Passport / Identifikační karta):**
+- **Skot**: každé zvíře má vlastní **identifikační kartu** vystavenou SZIF s historií pohybů
+- **Karta je papírová**, vystavena s první registrací, doplňuje se přesuny
+- **Pas musí cestovat se zvířetem** při transportu (riskuje řidič přepravy)
+
+**Moderní vývoj — biometrika:**
+- **Boluse** (RFID v bachoru, polykané zvířetem) — Mottainai, Cowtronix
+- **Retinální skenování** — Vision Pro (US) — bezdotyková ID
+- **Obličejová identifikace** (AI) — DeLaval BCS Camera
+- Tyto technologie zatím nejsou EU legálním nahrazením visačkou, jen doplňkem.
+
+**Tetování / freeze branding:**
+- Dříve používané (před EU 1760/2000), dnes jen u koní a v některých USA chovech
+- **Bolestivé**, dnes v EU většinou nahrazeno visačkami
+
+Viz též [[oteleni]], [[inseminace]], [[jalovice]], [[lpis]], [[dojirna]].`,
+    related: ['oteleni', 'inseminace', 'jalovice', 'lpis'],
+  },
+  {
+    slug: 'krmne-davky',
+    term: 'Krmné dávky',
+    alias: ['krmiva pro skot', 'výživa skotu', 'feed ration'],
+    kategorie: 'chov',
+    shortDef: 'Krmná dávka je denní množství krmiva pro hospodářské zvíře, vyvážené podle energie, bílkovin, vlákniny a minerálů. Pro vysokoužitkovou dojnici 50–70 kg krmiva (22–28 kg sušiny). Plánování je věda — chyba = ztracená laktace nebo zdravotní problém.',
+    longDef: `Krmná dávka (anglicky *ration*, *diet*) je **denní množství a složení krmiva** pro hospodářské zvíře, vypočítané podle jeho **produkčního stadia, hmotnosti a klimatu**. Cílem je zajistit **maximální užitkovost při ekonomickém krmení**.
+
+**Komponenty dávky pro skot:**
+
+**1. Píce (forage) — strukturální vláknina:**
+- **Travní siláž / senáž**: NDF 50–60 %, NEL 5,8–6,4 MJ/kg DM
+- **Kukuřičná siláž**: NDF 38–45 %, NEL 6,4–7,0 MJ/kg DM, vysoká energie ze škrobu
+- **Vojtěšková siláž**: NDF 40–48 %, CP 19–22 %, vysoký Ca
+- **Seno**: NDF 55–65 %, doplněk pro strukturu, „scratch factor" pro bachor
+- **Sláma**: NDF 75–85 %, low energie, pro extenzivní chovy nebo zaprahlé krávy
+
+**2. Koncentráty (jádro) — energie a bílkoviny:**
+- **Pšenice, ječmen, kukuřice (zrno)**: NEL 8,3–8,7 MJ/kg DM, CP 9–13 %, vysoký škrob
+- **Sójový extrahovaný šrot (SES)**: CP 45–48 %, vyvážený aminokyselinový profil
+- **Řepkový extrahovaný šrot (ŘES)**: CP 36–38 %, levnější než SES, slightly nižší kvalita
+- **Slunečnicový šrot**: CP 32–38 %, vysoká vláknina
+- **Sušené pivovarské mláto**: CP 24–28 %, NEL 7,0 MJ
+- **DDGS** (suchý destilátorský zbytek): CP 28–30 %, NEL 7,2 MJ — vedlejší produkt z bioetanolu
+
+**3. Vedlejší produkty / By-products:**
+- **Cukrovarské řízky**: čerstvé (vlhké) 8 % CP, NEL 6,9 MJ
+- **Pivovarské mláto**: 25 % CP, NEL 6,5 MJ
+- **Soja okara**: 26 % CP, NEL 6,8 MJ
+- **Pomerančové slupky (CR)**: vysoký cukr, NEL 7,5 MJ
+- **Voda po výrobě sýra (whey)**: tekutina, nízká hodnota
+
+**4. Minerály a vitaminy:**
+- **Ca**: 0,8–1,0 % suš. (mléko obsahuje Ca, vysoká potřeba)
+- **P**: 0,4–0,5 % suš.
+- **Mg**: 0,2–0,3 % suš. (prevence tetanie pastvy)
+- **Na (sůl)**: 0,2 % suš.
+- **K**: 1,0–1,5 % suš.
+- **Mikroprvky**: Zn 60–80 ppm, Cu 15–20 ppm, Se 0,3 ppm, I 0,8 ppm
+- **Vitamin A**: 100 000 IU/den
+- **Vitamin D₃**: 40 000 IU/den
+- **Vitamin E**: 500 mg/den
+
+**Typové dávky:**
+
+**Vysokoužitková dojnice (45+ kg mléka/den, 700 kg živé hmoty):**
+- 28 kg kukuřičné siláže
+- 18 kg travní siláže
+- 4 kg vojtěškové senáže
+- 9 kg jádra (mix obilovin)
+- 3 kg SES
+- 1,5 kg cukrovarské řízky
+- 0,4 kg minerály
+- **Celkem**: 64 kg krmiva, ~26 kg sušiny
+- **Cena**: ~95 Kč/kus/den
+
+**Středně užitková (30 kg mléka/den):**
+- 25 kg kukuřičné siláže
+- 15 kg travní siláže
+- 6 kg jádra
+- 2 kg SES
+- **Cena**: ~70 Kč/kus/den
+
+**Zaprahlé krávy (suché, 60 dní před otelením):**
+- 30 kg travní siláže nebo senáže
+- 4 kg sena (vláknina pro bachor)
+- 1 kg minerální směsi „dry cow"
+- **Cena**: ~30 Kč/kus/den
+- **Cíl**: minimální energie, max struktura, prevence mléčné horečky
+
+**Žírný býk (intenzivní výkrm, 400–700 kg):**
+- 12 kg kukuřičné siláže
+- 4 kg sena
+- 5 kg jádra
+- 0,5 kg SES
+- 0,2 kg minerály
+- **Cíl**: 1,2 kg přírůstku/den
+- **Cena**: ~50 Kč/kus/den
+
+**Telete v odstavu (3 měs.):**
+- 0,8 kg telecí krmné směsi
+- 0,3 kg sena
+- Plný přístup vody
+- **Cena**: ~25 Kč/kus/den
+
+**Klíčové parametry:**
+
+**Sušina (DM)**: 22–28 kg/den pro krávu = 3,5–4,5 % živé hmotnosti
+**Energie (NEL)**:
+- Dojnice (start laktace): 7,2 MJ/kg DM (vysoká koncentrace)
+- Dojnice (pozdní laktace): 6,5 MJ/kg DM
+- Suché krávy: 5,2 MJ/kg DM
+
+**Crude Protein (CP)**:
+- Vysoké užitkovost: 17–18 %
+- Střední: 15–16 %
+- Suché: 12–13 %
+
+**RUP (Rumen Undegradable Protein)**: 35–42 % CP = bílkovina projdou nezdegradované přes bachor, vstřebá se v tenkém střevě = vyšší užitkovost
+
+**NDF (Neutral Detergent Fiber)**: 30–34 % DM = strukturální vláknina, ne moc (= acidóza), ne málo (= podstrukturní strava)
+
+**Software pro plánování:**
+- **NDS Professional** (IT) — světový standard
+- **CPM-Dairy** (USA)
+- **Spartan Dairy** (USA)
+- **AMTS Cattle Pro** (USA)
+- **DAIRY-X** (CZ) — domácí řešení
+- **Agralis CCT** (CZ) — full farm management včetně krmení
+
+**Sledování:**
+- **Spotřeba** vážení vstup vs odpad = skutečný příjem
+- **BCS** (Body Condition Score) — 1–5 stupeň výživného stavu
+- **Mléčný profil** — bílkoviny, tuk, urea, somatické buňky → laboratorní analýza krávy mléko 1× měs.
+- **Bachorové pH** — sonda u problémových stád
+
+**Krmení a ekonomika:**
+- **Krmivo** = **60–70 % nákladů na mléko**
+- **Optimalizace dávky** = 1 Kč/krávu/den úspory × 365 dní × 100 krav = **36 500 Kč/rok**
+- Konzultace nutricionisty (1–3 tis. Kč/měs.) se typicky vyplatí
+
+Viz též [[tmr]], [[kukurice-silazni]], [[vojteska]], [[oteleni]], [[rijnost]], [[siloky-balik]].`,
+    related: ['tmr', 'kukurice-silazni', 'vojteska', 'oteleni', 'siloky-balik'],
+  },
+
+  // ── HOVOROVÉ VÝRAZY A SLANG ─────────────────────────────────────────
+  {
+    slug: 'kombajner',
+    term: 'Kombajnér',
+    alias: ['kombajnista', 'řidič kombajnu', 'sklízeč'],
+    kategorie: 'slang',
+    shortDef: 'Kombajnér je hovorové označení pro řidiče sklízecí kombajnové mlátičky během žní. V profesní hierarchii farmy nejviditelnější a nejnáročnější pozice — pracuje 12–16 h/den po dobu 2–6 týdnů sklizně.',
+    longDef: `Kombajnér (kombajnista, řidič kombajnu) je **hovorové označení pro řidiče sklízecí kombajnové mlátičky**. Není to oficiální profesní titul (formálně „operátor zemědělských strojů" nebo „řidič samojízdných strojů"), ale v zemědělské komunitě plně zavedený výraz.
+
+**Pozice ve farmě:**
+- **Sezónní intenzita** — během žní (červenec–září) pracuje 12–16 h/den, často 7 dní v týdnu
+- **Mimo sezónu** — obvykle řidič traktoru, mechanik, údržbář, nebo má jinou práci na statku
+- **Plat** — v sezóně 50 000–100 000 Kč/měs. (intenzita), mimo sezónu 35 000–60 000 Kč/měs. (přepočet na hodiny ~40–60 Kč/h před zdaněním + dohodnuté úkolové bonusy)
+
+**Co se od kombajnéra očekává:**
+- **Technické dovednosti**:
+  - Nastavení kombajnu pro danou plodinu (mlátička, rošty, ventilátor, žací lišta výška)
+  - Údržba (mazání, kontrola olejů, výměna nožů, řemenů)
+  - Diagnostika poruch (displej kombajnu, hydraulika, elektronika)
+  - Spojení mechanika + řidiče v jednom
+
+- **Agronomický cit**:
+  - Posouzení správné vlhkosti obilí (vlhkoměr v kombajnu vs vlastní pocit)
+  - Optimální výška seče (ozim 12–15 cm, sója 5–8 cm, řepka 25–35 cm)
+  - Kdy zastavit (ráno za rosy = mokré obilí, večer = ztracené hodiny)
+  - Reakce na polehlé obilí (snížit rychlost, žací lištu níže)
+
+- **Logistika**:
+  - Koordinace s odvozem (návěs musí být u kombajnu v plné zásobníku)
+  - Komunikace s vedoucím farmy přes vysílačku
+  - Plánování přesunů mezi poli
+
+- **Vytrvalost**:
+  - Sezóna začne ozimou pšenicí (polovina července)
+  - Pokračuje řepkou, ječmenem
+  - Vrcholy v srpnu — kukuřice, slunečnice
+  - Konec v září — sója, slunečnice
+  - **Celkem 6–10 týdnů s minimem volna**
+
+**„Velký kombajnér" vs „obyčejný kombajnér":**
+
+V profesní hierarchii velkých farem existuje neformální rozlišení:
+- **„Velký kombajnér"** = řidič top techniky (Claas Lexion 8900, John Deere S790). Má největší zodpovědnost, nejlepší plat. Často roky zkušeností.
+- **„Obyčejný kombajnér"** = junior pozice, řídí starší kombajn (Claas Lexion 600 z 2010, Case IH Axial-Flow 7240 starší). Učí se. Pod dohledem.
+
+**Žargon:**
+- **„Stuhnout / vyhořet / přesytit mlátičku"** — přemíra obilí ucpe mlátičku, kombajn se zastaví
+- **„Plivnout"** — odhodit nadbytek nemlátitelné slámy (např. kvůli vlhkosti)
+- **„Žít na buřtu"** — během žní nemá kombajnér čas pravidelně jíst, žije z buřtů a piva
+- **„Být v zásobě"** — kombajn má plný zásobník (8–13 m³), čeká na návěs
+- **„Hrát si na koně"** — vyplnit dlouhý transport kombajnu po silnici mezi farmami
+- **„Padá zelený"** (= vlhkostní procenta) — obilí příliš vlhké pro mlácení (>15 %)
+
+**Specifika ČR (2024):**
+- **Cizí kombajnéři** — mnoho farem si najímá zahraniční řidiče (slovenské, polské, rumunské) jen na sezónu. Ubytování ve farmě.
+- **Sezónní fakta**: cca 3 500 kombajnů v provozu, 1 sezónu 2,8 mil. ha obilí, průměrně 800 ha/kombajn/sezónu.
+- **Genderové zastoupení**: 99 % muži. Posledních 5 let pomalý nárůst žen-kombajnérek (zejm. mladá generace, agronomky).
+
+**Slangové synonymum** v polském zemědělství: *kombajnista*. V německy mluvících oblastech: *Mähdrescherführer*. V anglosaském světě: *combine operator* (nebo jednoduše „farmer running the combine").
+
+Viz též [[traktorista]], [[kombajn-trida]], [[rotor-kombajn]], [[zne]], [[header]].`,
+    related: ['traktorista', 'kombajn-trida', 'rotor-kombajn', 'zne', 'header'],
+  },
+  {
+    slug: 'traktorista',
+    term: 'Traktorista',
+    alias: ['řidič traktoru', 'agro řidič'],
+    kategorie: 'slang',
+    shortDef: 'Traktorista je hovorové označení pro řidiče zemědělského traktoru. Nejstarší a nejtypičtější profese mechanizovaného zemědělství. Dnes „univerzál" — orá, seje, hnojí, postříká, převáží. Profesní cesta může vést až k vedoucímu mechanizace.',
+    longDef: `Traktorista je **hovorové označení pro řidiče zemědělského traktoru**. Profese vznikla s nástupem mechanizace zemědělství ve 20. letech 20. století a stala se **klíčovou pozicí venkovské práce** v Československu, později ČSSR a dnešní ČR.
+
+**Co traktorista dělá:**
+
+**Polní práce** (jaro–podzim):
+- **Orba** (pluh, podmítač, hluboký dlátový kypřič) — viz [[orba]], [[pluh]]
+- **Setí** (secí stroj, secí kombinace) — viz [[ozim-jarin]]
+- **Hnojení** (rozmetadlo, postřikovač) — viz [[npk-hnojivo]]
+- **Postřik** (postřikovač) — viz [[roundup]]
+- **Sklizeň** (mlátička v kombinaci s kombajnem, lis, balíkovací stroj)
+- **Slámování a balíkování** — viz [[siloky-balik]]
+- **Krmné kalkulace** — vožení siláže na siláž
+
+**Zimní práce**:
+- **Vyklízení sněhu** (radlice na traktor)
+- **Štěpkování** (drtič větví, štěpkovač) — biopaliva
+- **Doprava** (kejda, hnůj, sláma) — kontinuální celý rok
+- **Údržba strojů** — opravy, malování, údržba
+
+**Hierarchie traktoristy:**
+
+**1. „Mladý kluk u traktoru"** (junior):
+- Čerstvý zaměstnanec, věk 18–25 let
+- Začíná na **menším traktoru** (Zetor 5xxx, John Deere 6100 atd.)
+- Práce: vyklízení hnoje, jednoduché převozy, údržba
+- Plat: 25 000–35 000 Kč/měs.
+
+**2. „Zkušený traktorista"** (regular):
+- 3–10 let zkušeností
+- Řídí **střední traktor** (90–150 koní)
+- Univerzál — orá, seje, postřikuje
+- Plat: 35 000–55 000 Kč/měs.
+
+**3. „Šéf-traktorista"** (senior, hlavní traktorista):
+- 10+ let, plné zkušenosti
+- **Top stroj farmy** (Fendt 728, JD 7R 250 atd.)
+- Plánuje sezónní práce, učí mladší
+- Často také mechanik (umí poradit s diagnostikou)
+- Plat: 55 000–75 000 Kč/měs.
+
+**4. „Vedoucí mechanizace"** (manager):
+- Bývalý senior traktorista nebo agronom
+- Plánuje nákup, údržbu, pojištění techniky
+- Řídí ostatní traktoristy
+- Plat: 70 000–110 000 Kč/měs.
+
+**Specifika různých typů farem:**
+
+**Velká agrární farma** (1 000+ ha):
+- 8–15 traktoristů
+- **Specializace** — někdo jen postřikuje, někdo jen seje, někdo jen kejdu vozí
+- Hierarchická organizace, denní porady
+
+**Středně velký statek** (200–500 ha):
+- 2–4 traktoristé
+- **Univerzálové** — každý umí všechno
+- Rodinná atmosféra, neformální
+
+**Malá rodinná farma** (50–200 ha):
+- Často jen majitel + 1 traktorista (rodinný příslušník)
+- Multitasking, vše v 1 osobě
+
+**Technologie a požadavky 2024:**
+
+Moderní traktor (Fendt 728, JD 7R, Massey 8S) má více displejů než auto:
+- **GPS-RTK** auto-steering (přesnost 2 cm)
+- **Telematika** (data v reálném čase do centrály)
+- **ISOBUS** komunikace s nářadím
+- **Variable rate** aplikace hnojiv podle map
+- **Yield monitoring** — kombinace s daty z kombajnu
+
+Traktorista 2024 musí umět:
+- Klasické řemeslo (mechanika, hydraulika)
+- + digitální dovednosti (číst displeje, kalibrovat senzory, řešit chyby softwaru)
+- + agronomické rozhodování (kdy přerušit práci kvůli počasí, jak nastavit aplikační dávku)
+
+**„Generační problém":**
+- Většina traktoristů 50+ let (= „stará škola", manuální cit)
+- **Mladí se hlásí málo** — image „špinavé" práce, sezónní intenzita, venkovský život
+- Farmy řeší **přílivem ze Slovenska, Polska, Ukrajiny, Rumunska**
+- **Robotizace** (autonomní traktor Bednar, Fendt Xaver) je úsměvná, ale do 2030 by mohla nahradit 30–50 % manuálních úkonů
+
+**Žargon:**
+- **„Šlapat"** — orat (od šlapání na pedál)
+- **„Lupnout"** — náhle se zastavit, zalehnout (často kvůli poruše)
+- **„Padák"** — kombajn (od slangového „padnout do mlátičky")
+- **„Vážko vážko"** — trochu v hovorové („pomalu pomalu")
+- **„Kobylka"** — slangové pro nejmenší traktor ve flotile
+- **„Mašina"** — kterýkoli traktor obecně
+- **„Šediváč"** — Zetor stará série (slang z 1970s, dnes již nepoužívané)
+
+**Lidská kultura:**
+- **„Babičkovy povídky o traktoristech"** (1968 J. Vodňanský) — kult v lidovém humoru
+- **„Vesnice má svého traktoristu"** (1973 J. Menzel) — společenský film z JZD éry
+- **Lidové písně**: „Padá kosa, padá / když traktorista bez ovládá" (50s)
+
+Viz též [[kombajner]], [[cvt-prevodovka]], [[orba]], [[autonomni-traktor]], [[gps-rtk]].`,
+    related: ['kombajner', 'cvt-prevodovka', 'orba', 'autonomni-traktor', 'gps-rtk'],
+  },
+  {
+    slug: 'srotovnik',
+    term: 'Šrotovník',
+    alias: ['šrotovací stroj', 'drtič obilí', 'krmnářský šrotovník'],
+    kategorie: 'slang',
+    shortDef: 'Šrotovník je stroj na drcení obilí, kukuřice a luskovin na hrubý šrot pro krmení dobytka. Historicky poháněný žentourem nebo lokomobilou, dnes elektrický. Klíčové vybavení každé farmy s vlastní krmnářskou výrobou.',
+    longDef: `Šrotovník (od slov *šrot* — drcené obilí) je **stroj na drcení obilí, kukuřice a luskovin** (sója, hrách, lupina) na **hrubý šrot** určený jako krmivo pro skot, prasata, drůbež. Bez šrotování by zvířata vetšinu zrna nezužitkovala (nestrávila celé zrna v traktu).
+
+**Princip činnosti:**
+
+**1. Mlecí (šrotovací) válce:**
+- Dvě **drsné kovové válce** otáčející se proti sobě
+- Mezi nimi vstupuje zrno, **mačká se a drtí**
+- Konečná velikost: 1–5 mm úlomky (vs celé zrno 5–10 mm)
+- Reguluje se **mezerou mezi válci** + rychlostí
+
+**2. Kladivový šrotovník (hammer mill):**
+- **Rotor s kladívky** (rychlost 3 000–4 500 ot/min)
+- Drtí zrno o kovovou síta (perforaci)
+- Výsledek: jemnější šrot (0,5–3 mm), víc prachu
+- Vhodnější pro **prasata** (tradičně preferují jemnější)
+
+**3. Diskový šrotovník:**
+- Méně časté, pro speciální aplikace
+
+**Šrotovaná zrniny — proč:**
+
+**Pro skot:**
+- Celé pšenice / kukuřice **prochází** trávicím traktem ne zužitkováno → 30–40 % ztráta
+- Šrotování zvyšuje **stravitelnost** o 20–30 %
+- Příliš jemný šrot u skotu = riziko **acidózy bachoru** (rychlá fermentace škrobu na kyseliny)
+- **Optimum**: hrubý šrot 2–4 mm = vyvážená stravitelnost + struktura
+
+**Pro prasata:**
+- Strávitelnost mnohem citlivější (jednoduchý žaludek)
+- Jemnější šrot (0,8–2 mm) vhodnější
+- Riziko **žaludečních vředů** při příliš jemném (< 0,5 mm) = vrátit hrubší frakci
+
+**Pro drůbež (kuřata, brojleři, slepice):**
+- Drtina (krátké zrnka 1–3 mm) NEBO peletování
+- Jemný prach (< 0,5 mm) drůbež nesnáší (lepí se ke zobáku)
+
+**Pro koně:**
+- Šrotovaná zrniny (ovesný šrot, ječmenný šrot)
+- Hrubá konzistence = pomalá fermentace, nižší kolicová rizika
+
+**Historie:**
+
+**Žentourový šrotovník** (1800–1900) — viz [[zentour]]:
+- Pohon: 1–2 koně chodící v kruhu
+- Výkon: 50–150 kg šrotu/h
+- V každém větším gruntě
+
+**Parní lokomobila** (1880–1950):
+- Putovní šrotovník
+- Příjezd 1× měsíčně do vesnice, sedláci přiváželi obilí na šrotování
+- Cena za úsluhu: typicky 5–10 % ze šrotovaného množství („mlátečná")
+
+**Elektrický šrotovník** (od 1950):
+- **3–7,5 kW** motor + válcová / kladívková mechanika
+- **Domácí**: 800–3 000 kg šrotu/h
+- **Pro velké farmy**: 5–20 t/h
+
+**Současné typy:**
+
+**Stacionární šrotovník** (na farmě):
+- **Příkon**: 5–22 kW (~25–35 tis. Kč pro malý)
+- **Velký pro farmu**: 30–75 kW (~80–250 tis. Kč)
+- **Top značky CZ**: PS-Strojírny (Letohrad), Sano (Lichnov), DAS (Pardubice)
+- **Top značky EU**: Skiold (DK), Renkum (NL), Romill (CZ-Brno)
+
+**Mobilní šrotovník** (na traktoru):
+- **Příkon**: z PTO traktoru, 30–80 kW
+- **Výkon**: 1–5 t/h
+- **Použití**: putovní šrotovník, mlecí kombajny (kombajn šrotuje za jízdy)
+- **Cena**: 80 000–300 000 Kč
+
+**Mlecí kombajn** (modernější trend):
+- **Sklízí + šrotuje + ukládá** vlhké zrno do vaků pro siláž
+- **Vlhké šrotování CCM** (Corn-Cob-Mix) — kukuřičné zrno + klás drcený + uložený do vaku
+- Trend pro **mléčné farmy** (nahrazení nakupovaného koncentrátu)
+
+**Šrot a krmiva:**
+
+**Hodnocení kvality šrotu:**
+- **Granulometrie** (velikost částic) — Penn State Particle Separator
+- **Vlhkost** (max 14 % pro skladování, 30+ % pro vlhké šrotování CCM)
+- **Teplota** po šrotování (vyšší u rychlých kladívkových — pozor na poškození vitamínů)
+
+**Typický šrot na farmě:**
+- **Pšeničný šrot**: 50–60 % obilný součást krmné dávky
+- **Ječný šrot**: substituce pšenice, levnější
+- **Kukuřičný šrot**: vysoká energie, nižší bílkoviny
+- **Sójový šrot**: vysoké CP, dovážený nebo vlastní výroba
+- **Hrachový šrot**: domácí proteinová alternativa SES
+
+**Energetika a ekonomika:**
+
+**Spotřeba elektřiny**:
+- Válcový šrotovník: 6–12 kWh/t šrotu
+- Kladívkový: 10–18 kWh/t šrotu
+- **Cena** elektřiny: 6 Kč/kWh × 10 kWh = **60 Kč/t šrotu**
+
+**Vlastní šrotování vs nakupované krmivo**:
+- **Vlastní šrot ze sklizně**: 4 500 Kč/t pšenice + 60 Kč šrotování = **4 560 Kč/t šrotu**
+- **Nakupovaný hotový koncentrát**: 8 000–12 000 Kč/t
+- **Úspora 3 500–7 500 Kč/t** → velké farmy si šrotují téměř všechno
+
+**Slangová a hovorová užití:**
+- **„Šrotovat"** — kromě obilí znamená lidově „bít" (slangově), „mluvit zbytečně rychle"
+- **„Šrotovník"** — slangově pro „pomalý / zastaralý počítač" („tenhle laptop je šrotovník")
+- **„Šrot"** — používá se jak technicky (krmivo), tak v slangu („pojď, dáme si šrot" = dáme si pivo, slangově staré)
+
+V kultuře: **„Šrotování"** byla v ČS literatuře symbolem podzimní práce (Karel Čapek, B. Hrabal).
+
+Viz též [[zentour]], [[krmne-davky]], [[kukurice-silazni]], [[grunt]], [[tmr]].`,
+    related: ['zentour', 'krmne-davky', 'kukurice-silazni', 'grunt', 'tmr'],
+  },
+  {
+    slug: 'zemak',
+    term: 'Zemák (brambor)',
+    alias: ['zemčata', 'erteple', 'kobzole', 'brambora'],
+    kategorie: 'slang',
+    shortDef: 'Zemák je hovorové / dialektické označení pro bramboru (Solanum tuberosum). V češtině existují regionální varianty: zemák (severní Morava, Slezsko), erteple (jihlavsko, slang), kobzole (Slezsko, polské vlivy), brambor (standard CZ).',
+    longDef: `Zemák (lidově *zemčata*, *erteple*, *kobzole*) je **hovorové a dialektické označení pro bramboru** — *Solanum tuberosum* — jednoletá hlíznatá rostlina z čeledi lilkovitých. V češtině má brambor desítky regionálních synonym, což svědčí o **historickém významu plodiny** v různých českých regionech.
+
+**Regionální varianty:**
+
+- **Brambor / brambora** — standard ČR, jihočeské nářečí. „Z Bramburska" = z německého Brandenburska, odkud se brambory šířily do Čech.
+- **Zemák** — Slezsko, severní Morava. Z „země" + zdrobněliny.
+- **Erteple** — jihlavsko, jihovýchodní Morava. Z německého *Erdäpfel* („zemská jablka").
+- **Kobzole** — Slezsko, severovýchod (polské *kartofle*).
+- **Zemčata** — Vysočina, českomoravská vrchovina.
+- **Krumpáč** (zastaralé) — Slovácko, jihovýchodní Morava.
+- **Krumple** — Valašsko.
+- **Grumpera** — Chodsko.
+- **Šemerlák** — okolí Telče.
+- **Knedl** — slang ve velkých městech (z bramborového knedlíku).
+
+**Historie v českých zemích:**
+
+**1700s — příchod brambory:**
+- Brambory přicházejí do Čech přes Vídeň (Marie Terezie) a Sasko (Sedmiletá válka 1756–1763)
+- První pěstování v **klášterních zahradách** a u šlechty
+- Sedláci dlouho odolávali — báli se „čertovy plodiny" (jed lilkovitých, zelené hlízy obsahují solanin)
+
+**1770–1772 — Velký hladomor:**
+- Tradiční obilí selhalo opakovaně
+- **Marie Terezie nařídila povinné pěstování brambor** (1771)
+- Brambora zachránila desítky tisíc rolníků od smrti
+- Od té doby trvale zakotvená v české kuchyni
+
+**1800–1860 — éra rozmachu:**
+- Brambory se stávají **základní stravou venkova** (chudých)
+- „Brambora s mlékem" — typický pokrm
+- Vznik **bramborářských oblastí** (Vysočina, Krkonoše, Beskydy)
+
+**1860+ — chov prasat a lihovary:**
+- Brambory pro **krmení prasat** (vykrmená brambora)
+- **Lihovary** zpracovávají bramborový škrob na ethanol (vodka, lék, chemie)
+- Vznik **bramborářské tradice** (Vysočina, Pardubicko)
+
+**Pěstování v ČR (2024):**
+
+**Plocha**: ~24 000 ha (klesající trend, z 100 000 ha v 90s)
+**Výnosy**: 26–35 t/ha (raně rané), 35–55 t/ha (pozdní průmyslové)
+**Produkce**: ~700 000 t/rok
+
+**Hlavní kategorie**:
+1. **Konzumní brambory** (raně rané, červené, modré, žluté) — supermarkety
+2. **Sadbové brambory** (certifikované osivo pro další generaci) — vyšší cena
+3. **Průmyslové brambory** (lihovary, škrobárny, hranolkárny) — kontrakt
+4. **Krmné brambory** (pro prasata, dnes méně časté)
+
+**Klíčové oblasti pěstování**:
+- **Vysočina** (Jihlavsko, Pelhřimovsko) — vyšší nadmořská výška, vyrovnaný výnos
+- **Polabská nížina** (Polabí, Hradecko) — raně rané odrůdy
+- **Šumavské podhůří** — kvalitní sadba
+- **Chod / Plzeňsko** — historicky bramborář
+
+**Top odrůdy CZ**:
+- **Adéla** (raně rané)
+- **Filea** (raně rané, červená)
+- **Magda** (středně pozdní, žlutá)
+- **Saturna** (průmyslová, výnosy 50+ t/ha)
+- **Marabel** (pozdní, konzumní, vysoká kvalita)
+- **Soraya** (sadba)
+
+**Agrotechnika:**
+- **Setí** sadbou (10–25 cm hloubka, rozteč 75 × 30 cm), březen–květen
+- **Hnojení**: 80–120 kg N/ha + 60–80 P + 120–160 K
+- **Postřiky**: proti plísním (oomyceta), mandelinky (Colorado beetle)
+- **Sklizeň**: sklízeč brambor (vykopávač) — září–říjen
+- **Skladování**: chladné, suché 4–8 °C, vlhkost 90 %
+
+**Choroby a škůdci**:
+- **Plíseň bramborová** (Phytophthora infestans) — historicky způsobila Velký irský hladomor 1845
+- **Mandelinka bramborová** — invazní z USA (1922 první výskyt v ČR)
+- **Háďátko bramborové** — karanténní škodlivý činitel
+
+**Ekonomika 2024**:
+- **Konzumní cena (supermarket)**: 15–40 Kč/kg
+- **Cena od pěstitele**: 5–12 Kč/kg
+- **Marže obchodu**: 200–400 % (mezi pěstitelem a regálem)
+- **Průmyslová cena**: 3–6 Kč/kg (lihovary, škrob)
+
+**Klesající plocha**:
+- 1990: 100 000 ha
+- 2010: 30 000 ha
+- 2024: 24 000 ha
+- **Důvody**: import (NL, DE, FR, PL), levná dovozová cena, vysoké náklady na techniku, choroby (plíseň)
+
+**Slangová a kulturní role:**
+
+- **„Zemáky"** — slangové pro „jednoduchá strava" („mám doma jen zemáky a mlíko")
+- **„Brambora"** — pejorativní pro neohebnou osobu („je z něj brambora", „bramborové tělo")
+- **„Bramborový salát"** — symbol Vánoc v české kuchyni
+- **„Bramboračka"** (polévka) — chudá rolnická strava povýšená na národní pokrm
+- **„Hozený brambor"** — v UK slang pro nevychovanou novinářskou otázku (= „hot potato")
+
+**Lidové pranostiky:**
+- „Když brambora kvete na svatého Vavřince (10. 8.), nebude úroda" (= pozdní kvetení = malé hlízy)
+- „Mokrý červen, brambor zaplaval" (= příliš dešťů = plíseň)
+
+V kultuře: **„Bramborové pohádky"** (J. Lada), **„Bramborové dni"** (regionální festivaly Vysočiny), **„Pelhřimovské bramborářské slavnosti"** (každoročně).
+
+Viz též [[ozim-jarin]], [[osevni-postup]], [[npk-hnojivo]], [[roundup]].`,
+    related: ['ozim-jarin', 'osevni-postup', 'npk-hnojivo'],
   },
 ];
 
@@ -2791,4 +4483,7 @@ export const KATEGORIE_LABELS: Record<SlovnikKategorie, string> = {
   regulace: 'Regulace a normy',
   'precise-farming': 'Přesné zemědělství',
   jednotky: 'Jednotky a měření',
+  historie: 'Historie a archaické pojmy',
+  chov: 'Chov a živočišná výroba',
+  slang: 'Hovorové výrazy a slang',
 };
