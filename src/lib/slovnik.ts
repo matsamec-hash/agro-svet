@@ -11,7 +11,7 @@
 // - related URL (na encyklopedie / dotace / žebříčky)
 
 export type SlovnikKategorie =
-  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky' | 'historie' | 'chov' | 'slang' | 'ochrana';
+  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky' | 'historie' | 'chov' | 'slang' | 'ochrana' | 'plodiny';
 
 export interface SlovnikTerm {
   slug: string;
@@ -2266,7 +2266,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     slug: 'kukurice-silazni',
     term: 'Kukuřice silážní',
     alias: ['silage corn', 'krmná kukuřice'],
-    kategorie: 'agrotechnika',
+    kategorie: 'plodiny',
     shortDef: 'Silážní kukuřice se pěstuje na celé rostliny (klasy + lodyhy + listy), sklízí se nezralá a fermentuje na siláž — hlavní krmivo pro skot v ČR.',
     longDef: `Silážní kukuřice je odrůdový typ kukuřice pěstovaný pro **celorostlinnou sklizeň** (na rozdíl od zrnové kukuřice, která sklízí jen klasy). Hlavní krmivo pro skot v ČR — v dojné kravě tvoří 30–60 % objemu krmné dávky.
 
@@ -2299,7 +2299,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     slug: 'repka-ozima',
     term: 'Řepka ozimá',
     alias: ['oilseed rape', 'canola'],
-    kategorie: 'agrotechnika',
+    kategorie: 'plodiny',
     shortDef: 'Řepka ozimá je strategická CZ olejovina — pěstuje se na 380–420 tisících ha (12 % orné půdy). Výnos 3,5–4,5 t/ha, hlavně pro biopalivový a potravinářský olej.',
     longDef: `Řepka ozimá (Brassica napus) je nejvýznamnější olejovina v ČR. Pěstuje se na **380–420 tis. ha** = 12 % orné půdy (po pšenici druhá nejrozšířenější plodina).
 
@@ -2335,7 +2335,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     slug: 'sojaova-bob',
     term: 'Sója luštinatá',
     alias: ['sója', 'soybean', 'soja'],
-    kategorie: 'agrotechnika',
+    kategorie: 'plodiny',
     shortDef: 'Sója je nejvýznamnější luskovina světa, v ČR menšinová plodina (15–25 tisíc ha) ale rostoucí. Bohatá na bílkoviny (40 %), váže atmosférický N.',
     longDef: `Sója luštinatá (Glycine max) je nejvýznamnější olejnatá luskovina na světě. V ČR rostoucí plodina (z 5 000 ha v 2010 na ~20 000 ha v 2024), podporovaná VCS dotací 2 800 Kč/ha.
 
@@ -2377,7 +2377,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     slug: 'vojteska',
     term: 'Vojtěška setá',
     alias: ['Medicago sativa', 'alfalfa', 'lucerne'],
-    kategorie: 'agrotechnika',
+    kategorie: 'plodiny',
     shortDef: 'Vojtěška je víceletá pícnina (3–5 let na 1 pozemku) bohatá na bílkoviny. Sklízí se 3–4× ročně, váže N, zlepšuje strukturu půdy.',
     longDef: `Vojtěška setá (Medicago sativa) je nejlepší pícninové luskovina v mírném klimatu. **Víceletá** plodina — sází se na 3–5 let, sklízí se 3–4× za sezónu (3 v ČR, 4 v jižní Itálii).
 
@@ -5684,6 +5684,1291 @@ Viz též [[mandelinka-bramborova]], [[msice-repna]], [[zavijec-kukuricny]], [[f
 Viz též [[roundup]], [[herbicidy]], [[repka-ozima]], [[zemak]], [[plisen-bramborova]].`,
     related: ['roundup', 'herbicidy', 'repka-ozima', 'zemak', 'plisen-bramborova'],
   },
+
+  // ── PLODINY A KOMODITY ──────────────────────────────────────────────
+  {
+    slug: 'psenice-ozima',
+    term: 'Pšenice ozimá',
+    alias: ['winter wheat', 'Triticum aestivum', 'ozimka'],
+    kategorie: 'plodiny',
+    shortDef: 'Pšenice ozimá je nejdůležitější plodina ČR — 800 000+ ha = 30 % orné půdy. Seje se na podzim (září–říjen), sklízí v červenci–srpnu. Výnos 6–8 t/ha, cena 4 500–6 500 Kč/t. Potravinářská třída A/E nebo krmná podle hektolitrové váhy.',
+    longDef: `Pšenice ozimá (lat. *Triticum aestivum*, ang. *winter wheat*) je **nejdůležitější obilnina v ČR** a 2. nejpěstovanější plodina (po kukuřici v plochách). V CZ pokrývá **800–950 tis. ha** ročně, produkce **5–7 mil. t**.
+
+**Vlastnosti ozimu vs jarinu (viz [[ozim-jarin]]):**
+- **Setí**: 15. září – 20. října (optimálně do 5. října v CZ)
+- **Vegetace**: 280–310 dní (přezimuje)
+- **Sklizeň**: 15. července – 15. srpna
+- **Výnos vs jarní**: o 20–40 % vyšší (využije zimní vláhu, delší vegetace)
+
+**Agrotechnika:**
+
+**1. Setí (BBCH 00–09):**
+- **Hloubka**: 2–4 cm
+- **Vzdálenost řádků**: 12,5 cm (úzké), 15 cm (standard)
+- **Hustota**: 350–450 klíčivých zrn/m² (= 180–220 kg osiva/ha pro HW 45g)
+- **Doporučení**: pozdější setí (po 1. říjnu) = nižší riziko septoriózy ([[septorioza]]) ale slabší kořenový systém
+- **Předplodina ideální**: řepka, hrách, luskovina (zanechávají dusík)
+- **Předplodina riziková**: kukuřice (Fusarium [[fuzarioza]]), pšenice (autokoroze)
+
+**2. Podzimní vývoj (BBCH 10–29):**
+- **Cíl: zima** s 3-4 odnožemi, kořenový systém v hloubce 50+ cm
+- **Hnojení na podzim**: 30–40 kg P/ha, 60–80 kg K/ha (NPK 15-15-15 = 200 kg)
+- **Postřik plevele**: jeseň pre-emergence (Stomp + Boxer) nebo časné jaro
+- **Postřik fungicid**: jen při silném podzimním tlaku (septoriózy)
+
+**3. Jarní vývoj (BBCH 30–49):**
+- **Regenerační hnojení** N (BBCH 25–29): 50–70 kg N/ha (LAV, DAM-390)
+- **Hnojení BBCH 32**: 40–60 kg N/ha
+- **Hnojení BBCH 39**: 30–50 kg N/ha + síra (S 20 kg)
+- **Celkem N**: 150–220 kg N/ha (intenzivní) nebo 120–160 (extenzivní)
+- **Postřiky T1 + T2** (viz [[fungicidy]]) — SDHI + triazol
+
+**4. Kvetení a tvorba zrna (BBCH 50–89):**
+- **Postřik T3** (BBCH 63): fuzarióza prevence
+- **Plnění zrna**: cca 40 dní (mléčné → voskové → tvrdé)
+- **Klíčové**: déšť v plnění zvyšuje výnos, sucho srazí o 20–40 %
+
+**5. Sklizeň (BBCH 90–99):**
+- **Vlhkost zrna**: 13–15 % optimum (skladovatelné bez sušení)
+- **Desikace** (viz [[desikace]]): u mokrých let glyfosát 10 dní před sklizní
+- **Kombajn**: 5–10 ha/h (moderní)
+
+**Výnosy CZ 2024:**
+- **Průměr**: 6,2 t/ha
+- **Top farmy** (intenzivní, Středočesko): 9–12 t/ha
+- **Slabé farmy** (Vysočina, ANC): 4–5 t/ha
+
+**Kvalitativní třídy** (podle hektolitrové váhy a obsahu N):
+
+| Třída | hl váha | NL (sušina) | Cena (Kč/t 2024) |
+|-------|---------|-------------|------------------|
+| **E** (elite) | 82+ | 14+ % | 6 200–6 500 |
+| **A** | 78–82 | 12,5+ % | 5 800–6 200 |
+| **B** | 76–78 | 11,5+ % | 5 400–5 800 |
+| **C** (krmná) | 74–76 | 10+ % | 4 800–5 200 |
+| **Pod limit** | < 74 | < 10 | 4 200–4 600 |
+
+**Ekonomika 2024:**
+- **Náklady** na 1 ha: 28 000–38 000 Kč (osivo, hnojiva, postřiky, palivo, sklizeň)
+- **Výnosy 6,5 t/ha × 5 500 Kč = 35 750 Kč/ha**
+- **Marže**: -2 000 až +5 000 Kč/ha (úzká, citlivá na ceny)
+- **Dotace BISS + CISS + EKO**: ~5 000–7 000 Kč/ha přidává marže
+
+**Odrůdy 2024 (CZ trh):**
+- **Bohemia** — toleruje sucho, A třída
+- **Sailor** — výnos top, B-A třída
+- **Vlasta** — septoriózová odolnost
+- **Genius** — krmná, top výnos
+- **RGT Sacramento** (FR import) — A třída, hodně rozšířená
+
+**Hlavní choroby:** [[septorioza]] (#1), [[fuzarioza]], [[rzi]]
+
+**Hlavní škůdci:** mšice (BYDV vektor), kohoutek obilní, hrbáč pšeničný
+
+**EU regulace:**
+- **CAP BISS + CISS**: ~3 600 Kč/ha (2024)
+- **EKO režim** (cover crops, no-till): +1 300 Kč/ha
+- **Pšenice v greening**: počítá se jako „diverzifikace" v 5+ plodinovém osevním postupu
+
+Viz též [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[septorioza]], [[fuzarioza]], [[hektolitr]], [[psenice-jarni]].`,
+    related: ['ozim-jarin', 'osevni-postup', 'fungicidy', 'septorioza', 'fuzarioza', 'hektolitr', 'psenice-jarni'],
+  },
+  {
+    slug: 'psenice-jarni',
+    term: 'Pšenice jarní',
+    alias: ['spring wheat', 'jarka pšenice'],
+    kategorie: 'plodiny',
+    shortDef: 'Pšenice jarní je doplňková plodina v CZ — 20 000–40 000 ha (záplata po neúspěšném ozimu nebo specializované odrůdy). Seje se v březnu–dubnu, sklízí v srpnu. Výnos 4–6 t/ha (o 1–2 t/ha nižší než ozim).',
+    longDef: `Pšenice jarní (lat. *Triticum aestivum* — varieta jarní, ang. *spring wheat*) je **doplňková plodina** v ČR — v normálních letech jen 20 000–40 000 ha. Většinou jako **náhrada po nedovydařeném ozimu** (vymrznutí, vyplavení v zimě) nebo specializované odrůdy pro pekařskou kvalitu.
+
+**Klíčové rozdíly oproti ozimu (viz [[psenice-ozima]]):**
+
+| Parametr | Ozim | Jarin |
+|----------|------|-------|
+| Setí | září–říjen | březen–duben |
+| Vegetace | 280–310 dní | 110–140 dní |
+| Sklizeň | červenec–srpen | srpen |
+| Výnos | 6–8 t/ha | 4–6 t/ha |
+| Hektolitrová váha | 76–82 kg/hl | 74–78 kg/hl |
+| Kvalitativní třída | E/A/B (potrav) | A/B (potrav) nebo krmná |
+| N hnojení | 150–220 kg/ha | 100–140 kg/ha |
+| Náklady | 28–38 tis. Kč/ha | 20–28 tis. Kč/ha |
+| Riziko žní | vlhká léta = fuzarióza | vlhká léta = polehnutí |
+
+**Kdy se používá:**
+
+1. **Záplatovací plodina** — když ozim vymrzl nebo nebyl zaset včas (mokrý podzim)
+2. **Pekařské speciality** — některé odrůdy mají vyšší lepek pro pekařskou kvalitu
+3. **Severní oblasti** ČR (Krkonoše, Šumava) — kde ozim přezimuje špatně
+4. **Bio farmy** — kratší vegetace = menší tlak chorob = méně postřiků
+
+**Agrotechnika:**
+
+**Setí:**
+- **Optimální termín**: jakmile půda umožní vjetí strojem (typicky 10.–25. března)
+- **Pozdější setí** (po 10. dubnu) = výnos klesá o 100–200 kg/ha/týden
+- **Hloubka**: 3–5 cm
+- **Hustota**: 450–550 klíčivých zrn/m² (vyšší než ozim, kvůli kratší vegetaci a méně odnožování)
+
+**Hnojení:**
+- **Při setí**: 80–100 kg N/ha (rychlý start, jarka nestihne mineralizovat)
+- **BBCH 32**: 30–50 kg N/ha
+- **BBCH 39**: 20–30 kg N/ha
+- **Celkem**: 130–180 kg N/ha
+- **P + K**: jen poloviční vs ozim (vegetace kratší)
+
+**Ochrana**:
+- **Plevele**: post-emergence (Granstar, Hussar) — méně tlaku než ozim
+- **Fungicidy**: 1–2 postřiky (T1 + T2) — méně tlaku septoriózy
+- **Insekticidy**: mšice (BYDV), kohoutek obilní — pyrethroid
+
+**Odrůdy CZ 2024:**
+- **Septima** — top výnos jarní
+- **KWS Sharki** — pekařská kvalita
+- **Tybalt** — bio přístup, odolnost
+
+**Ekonomika:**
+- **Náklady**: 22 000–28 000 Kč/ha (nižší než ozim — méně N, méně postřiků)
+- **Výnos**: 4,5 t/ha × 5 200 Kč = 23 400 Kč/ha
+- **Marže**: typicky -2 000 až +3 000 Kč/ha
+- **Když záplata po ozimu**: alespoň „nějaký výnos" je lepší než nic
+
+**Výzkum a šlechtění:**
+- **CZ odrůdy**: VURV Praha-Ruzyně, Selgen
+- **Trend**: hledat odrůdy s vyšší tolerancí k suchu (klimatická změna)
+
+Viz též [[psenice-ozima]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[hektolitr]].`,
+    related: ['psenice-ozima', 'ozim-jarin', 'osevni-postup', 'fungicidy', 'hektolitr'],
+  },
+  {
+    slug: 'jecmen-sladovnicky',
+    term: 'Ječmen sladovnický',
+    alias: ['malting barley', 'pivovarský ječmen', 'Hordeum vulgare malt'],
+    kategorie: 'plodiny',
+    shortDef: 'Ječmen sladovnický je jarní plodina pěstovaná pro výrobu sladu (pivovarnictví). CZ má 100 000+ ha. Klíčové parametry: hl. váha min. 64 kg, dusík 1,5–1,9 % (NÍZKÝ!), klíčivost 95+ %. Příplatek za kvalitu 800–1 500 Kč/t.',
+    longDef: `Ječmen sladovnický (lat. *Hordeum vulgare*, ang. *malting barley*) je **jarní plodina** pěstovaná specifically pro výrobu **sladu** — základní suroviny pro **pivovarnictví**. ČR je tradiční producent (Plzeňský prazdroj, Budvar, Staropramen).
+
+**Klíčový rozdíl od krmného ječmene** (viz [[jecmen-krmny]]):
+- **Nízký obsah dusíku** (1,5–1,9 %) — pivovar potřebuje **málo bílkovin, hodně škrobu** pro fermentaci na ethanol
+- **Vysoká hl. váha** (min. 64 kg/hl, ideál 68+)
+- **Vyrovnaná velikost zrna** (homogenní klíčení sladu)
+- **Vysoká klíčivost** (95+ %) — bez klíčení nelze udělat slad
+- **Bez fuzariózy** (mykotoxiny DON v pivu nepřípustné)
+
+**Vlastnosti agronomické:**
+
+**Setí:**
+- **Termín**: 10.–25. března (čím dřív, tím lépe — chladu odolný)
+- **Pozdější setí** = vyšší dusík v zrnu (špatné pro slad!)
+- **Hloubka**: 3–4 cm
+- **Hustota**: 350–420 klíčivých zrn/m²
+
+**Hnojení — POZOR:**
+- **N hnojení**: jen 60–100 kg/ha (níže než pšenice!)
+- **Vyšší N → vyšší bílkoviny v zrnu → nesplnění limitu sladovnictví**
+- **Časování**: vše do BBCH 32 (později nestihne se odbourat z listů)
+- **P + K**: 30–50 kg P, 60–100 kg K (struktura, hektolitrová váha)
+
+**Ochrana:**
+- **Plevele**: standard pro jaré obilí (Granstar, Hussar)
+- **Fungicidy**: T1 (BBCH 31–32) + T2 (BBCH 39–49) — Ramularie (Zymoseptoria), padlí
+- **Insekticidy**: mšice (BYDV), žírači listů
+
+**Kvalitativní parametry sladovnictví** (CZ standard):
+
+| Parametr | Min. | Optimal | Penalizace |
+|----------|------|---------|-----------|
+| Hl. váha | 64 kg/hl | 68+ | -200 Kč/t pod 64 |
+| Dusík | 1,5–1,9 % | 1,5–1,7 % | -500 Kč/t nad 2,1 % |
+| Klíčivost (4 dny) | 95 % | 98+ % | nedodáno pod 90 % |
+| Vyrovnanost (síto 2,5 mm) | 90 % | 95+ % | -200 Kč/t pod 88 % |
+| Vlhkost | 14 % max | 13 % | -150 Kč/t nad 15 % |
+
+**Sklizeň:**
+- **Vlhkost zrna**: 14 % optimum
+- **Důležité**: nesklízet za mokra (DON riziko po deštích)
+- **Sušení**: max 40 °C (vyšší teplota = ztráta klíčivosti)
+
+**Výnosy:**
+- **Průměr CZ**: 5,2 t/ha
+- **Top farmy**: 7+ t/ha
+- **Odrůdové výnosy** vs krmný: o 0,5–1 t/ha nižší (cena za kvalitu)
+
+**Cena 2024:**
+- **Standard sladovnický**: 5 800–7 000 Kč/t (kontrakt předem)
+- **Přírůstek za top kvalitu** (nízký N, vysoká klíčivost): +800–1 500 Kč/t
+- **Krmný odbyt** (nesplnil limit): 4 800–5 500 Kč/t
+
+**Odrůdy CZ 2024:**
+- **Bojos** — nejrozšířenější, vysoká hl. váha
+- **Laudis** — moderní, výnos + kvalita
+- **Calcule** — Heineken kontrakt
+- **Spartacus** — nový, vysoký výnos
+- **Bonus** — chladu odolný
+
+**Trh a kontrakty:**
+
+**Smluvní pěstování** (dominantní):
+- **Plzeňský prazdroj** — kontrakt s farmáři 1 rok dopředu, garantovaná cena
+- **Budvar** — vlastní výkup
+- **Staropramen** — Belgické vlastnictví, kontrakt EU pivovarní skupina
+- **Heineken** — globální buyer
+
+**Spotový trh** (volný prodej):
+- **MATIF** (Paris) — futures cena ječmene
+- **Volatilní** — záleží na úrodě v EU, Rusku, Ukrajině
+
+**Eksport:**
+- CZ exportuje 200 000–300 000 t/rok sladovnického ječmene (Německo, Velká Británie, Belgie)
+
+**Klimatická změna:**
+- **Sucho v dubnu–červnu** = krátká vegetace = vysoký N v zrnu
+- **Pivovary tlačí** na pěstování v severnějších oblastech (Polsko, Skandinávie)
+- **Šlechtění**: hledá rezistenci k suchu
+
+**Pozn.**: ČR má **historickou tradici** — Žatecký chmel + sladovnický ječmen = základ české pivní kvality, identita státu.
+
+Viz též [[jecmen-krmny]], [[psenice-ozima]], [[fungicidy]], [[hektolitr]], [[ozim-jarin]].`,
+    related: ['jecmen-krmny', 'psenice-ozima', 'fungicidy', 'hektolitr'],
+  },
+  {
+    slug: 'jecmen-krmny',
+    term: 'Ječmen krmný',
+    alias: ['feed barley', 'krmný ječmen ozimý/jarní', 'Hordeum vulgare feed'],
+    kategorie: 'plodiny',
+    shortDef: 'Ječmen krmný je ozimá nebo jarní plodina pro krmení skotu, prasat, drůbeže. Vyšší výnos (6–8 t/ha) než sladovnický, vyšší dusík. Cena 4 600–5 400 Kč/t. CZ má 150 000+ ha (kombinace ozim + jarní).',
+    longDef: `Ječmen krmný (lat. *Hordeum vulgare*, ang. *feed barley*) je **ozimá nebo jarní plodina** pěstovaná pro **krmení hospodářských zvířat** (skot, prasata, drůbež). Na rozdíl od sladovnického (viz [[jecmen-sladovnicky]]) nemá požadavky na nízký dusík — naopak vyšší N znamená vyšší bílkoviny v krmivu = vyšší hodnota.
+
+**Vlastnosti agronomické:**
+
+**Ozimý vs jarní krmný ječmen:**
+
+| Parametr | Ozimý | Jarní |
+|----------|-------|-------|
+| Setí | září–říjen | březen–duben |
+| Sklizeň | červenec | srpen |
+| Výnos | 7–9 t/ha | 5–7 t/ha |
+| N hnojení | 140–180 kg | 90–130 kg |
+| Náklady | 25 000–32 000 Kč/ha | 20 000–25 000 Kč/ha |
+
+**Ozimý dominuje** v CZ pro krmné účely (lepší výnosy).
+
+**Setí (ozim):**
+- **Termín**: 20. září – 15. října (= dříve než ozim pšenice o 1–2 týdny)
+- **Hloubka**: 3–4 cm
+- **Hustota**: 350–420 klíčivých zrn/m²
+
+**Hnojení (ozim):**
+- **Podzim**: 20 kg N + 40 kg P + 80 kg K (= NPK 15-15-15 200 kg/ha)
+- **Jaro BBCH 25**: 60–80 kg N/ha (LAV, DAM)
+- **Jaro BBCH 32**: 40–60 kg N/ha
+- **Celkem N**: 130–180 kg/ha
+
+**Krmné použití:**
+
+**Pro skot:**
+- **Šrot** (viz [[srotovnik]]) — drcené zrno do TMR (viz [[tmr]])
+- **Dávka**: 3–6 kg krmné dávky / kráva / den
+- **Nutriční hodnoty**: 12 % CP, 7,5 MJ NEL/kg, vysoký škrob
+
+**Pro prasata:**
+- **Jemněji mletý šrot** — 30–60 % krmné směsi
+- **Pomáhá** trávení (vláknina), méně škrobu než kukuřice
+
+**Pro drůbež:**
+- **Mlátí se** — 10–20 % krmné směsi (méně než kukuřice — vyšší vláknina ne ideální pro drůbež)
+- **Speciálně pro nosnice** (vyšší vláknina = lepší peristaltika)
+
+**Cena 2024:**
+- **Krmný ječmen**: 4 600–5 400 Kč/t
+- **Rozdíl proti sladovnickému**: -800 až -1 500 Kč/t (záleží na momentální poptávce sladovnictví)
+
+**Sklizeň:**
+- **Vlhkost zrna**: 14 % optimum
+- **Méně náročný timing** než sladovnický (není nutné nesklízet za mokra — pro krmení to nevadí)
+
+**Odrůdy:**
+
+**Ozimé krmné:**
+- **KWS Tenor** — top výnos
+- **Cassia** — populární, robustní
+- **Wootan** — moderní, krmný kontrakt
+
+**Jarní krmné:**
+- **Vladimir** — výnosný
+- **Salome** — nezávislost
+
+**Choroby a ochrana:**
+- **Rynchosporium** (skvrnitost ječmene) — typická pro ječmen
+- **Ramularie** (listová) — rostoucí problém 2020s
+- **Padlí ječmenné** — častý problém
+- **Fungicidy**: T1 + T2 (jako u pšenice, viz [[fungicidy]])
+- **Insekticidy**: mšice (BYDV), kohoutek obilní
+
+Viz též [[jecmen-sladovnicky]], [[psenice-ozima]], [[tmr]], [[krmne-davky]], [[hektolitr]], [[srotovnik]].`,
+    related: ['jecmen-sladovnicky', 'psenice-ozima', 'tmr', 'krmne-davky', 'hektolitr'],
+  },
+  {
+    slug: 'zito-ozime',
+    term: 'Žito ozimé',
+    alias: ['rye', 'Secale cereale', 'ozimý žitný'],
+    kategorie: 'plodiny',
+    shortDef: 'Žito ozimé je obilnina pěstovaná na chudých půdách a v severnějších/horských oblastech ČR. Výnos 5–7 t/ha, cena 4 200–5 200 Kč/t. Hlavní použití: chleba (kvašený žitný chléb), žitné celozrnné pečivo, lihovary, krmivo.',
+    longDef: `Žito ozimé (lat. *Secale cereale*, ang. *rye*) je **ozimá obilnina**, historicky druhá nejdůležitější po pšenici v ČR. Dnes spíše nicheový — pěstuje se na **chudých písčitých půdách** a v **horských oblastech**, kde pšenice nedává dobré výnosy.
+
+**Plocha v ČR 2024**: ~25 000 ha (klesající trend, v 1950s bylo 400 000+ ha)
+
+**Vlastnosti:**
+
+**Agrotechnika:**
+
+**Setí:**
+- **Termín**: 1.–25. září (= dříve než pšenice o 2–3 týdny — žito vyžaduje delší podzimní růst)
+- **Hloubka**: 2–4 cm
+- **Hustota**: 280–350 klíčivých zrn/m² (méně než pšenice — žito hodně odnožuje)
+- **Vhodná předplodina**: brambory, řepka, luskoviny
+
+**Hnojení:**
+- **Podzim**: 20 kg N + 30 kg P + 60 kg K
+- **Jaro BBCH 25**: 50–70 kg N/ha
+- **Jaro BBCH 32**: 30–50 kg N/ha
+- **Celkem N**: 80–120 kg/ha (méně než pšenice — žito je tolerantní k chudým půdám)
+
+**Sklizeň:**
+- **Vlhkost**: 13–15 %
+- **Polehnutí riziko**: žito je vyšší (130–180 cm) než pšenice (90–110 cm) — vítr ho snadno položí
+
+**Výnosy:**
+- **Průměr CZ**: 5,5 t/ha (zlepšení vs historie díky hybridnímu žitu)
+- **Hybridní žito** (KWS Sortiment): 7–8 t/ha (lepší než tradiční populace)
+
+**Použití:**
+
+**1. Chléb a pečivo (60 % spotřeby):**
+- **Žitný kvas** — nutný pro chléb (proteiny žita netvoří lepek jako pšenice)
+- **Šumavský chléb, podpisový žitný** — tradiční CZ pekařství
+- **Žitné mouky**: ražná T75 (světlá), T80 (chlebová), T200 (celozrnná)
+
+**2. Lihovary (15 %):**
+- **Žitný líh** — tradiční CZ destilát (mladá žitná, ražná pálenka)
+- **Vodka** — Polsko, Rusko (jiná tradice)
+
+**3. Krmivo (20 %):**
+- **Pro skot**: do TMR jako alternativa pšenice
+- **Pro prasata**: jen do 20 % směsi (vyšší vláknina)
+
+**4. Bio paliva / bioethanol (5 %):**
+- **Některé EU země** (Německo) dotovaly bioethanol z žita
+
+**Cena 2024:**
+- **Potravinářské žito**: 4 600–5 200 Kč/t
+- **Krmné žito**: 4 200–4 600 Kč/t
+- **Bio žito**: 6 800–8 500 Kč/t (premium pro bio pekařství)
+
+**Hybridní žito** (klíčový technologický skok od 1990s):
+- **KWS** (Germany) dominuje trhem hybridního žita
+- **Tepelný systém** opylování — F1 hybridi jen z certifikovaného osiva (nelze sklízet ke setí)
+- **Výnos**: +30–50 % vs tradiční populace
+- **Cena osiva**: 4–6× vyšší než tradiční (kompenzováno výnosem)
+
+**Odrůdy CZ 2024:**
+- **KWS Bono** — hybrid, top výnos
+- **KWS Vinetto** — hybrid, robustní
+- **Selgo** — tradiční populace, levné osivo
+- **Souvenir** — bio přístup
+
+**Choroby a ochrana:**
+- **Ergot (paličkovice)** — *Claviceps purpurea* — historicky **šíleny v Evropě**, dnes pod kontrolou. **Mykotoxiny** (ergotaminy), riziko v deštivých letech.
+- **Rzi** (viz [[rzi]]) — méně tlaku než pšenice
+- **Septoriózy** — minimální
+- **Postřiky**: lehčí program než pšenice (1 fungicid)
+
+**EU regulace:**
+- **CAP BISS + CISS** stejné jako pšenice
+- **EKO režim** — bio žito populární u ekologických farem (méně postřiků, robustní)
+
+**Kulturní dimenze:**
+- **Žito je „chudobná" plodina** — historicky lidé chudí jedli žitný chléb, bohatí pšeničný
+- **Dnes obrácený trend** — žitný chléb je „zdravější" image (vyšší vláknina, lepší index glykémie)
+- **Tmavé pečivo** — celozrnné žitné, žitné krekry — trend wellness
+
+Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolitr]].`,
+    related: ['psenice-ozima', 'oves-jarni', 'ozim-jarin', 'rzi', 'hektolitr'],
+  },
+  {
+    slug: 'oves-jarni',
+    term: 'Oves jarní',
+    alias: ['oats', 'Avena sativa', 'jarní oves'],
+    kategorie: 'plodiny',
+    shortDef: 'Oves jarní je obilnina pěstovaná hlavně v severnějších a chladnějších oblastech ČR. Výnos 3,5–5 t/ha, cena 4 000–5 500 Kč/t. Použití: krmivo pro koně, lidská konzumace (vločky, müsli), zelené krmivo.',
+    longDef: `Oves jarní (lat. *Avena sativa*, ang. *oats*) je **jarní obilnina** s tradicí v CZ na chudších a chladnějších půdách. Plocha v CZ 2024: ~35 000 ha. Trend: rostoucí kvůli zdravotnímu pozitivnímu image (ovesné vločky, plant-based).
+
+**Vlastnosti:**
+
+**Agrotechnika:**
+
+**Setí:**
+- **Termín**: 15. března – 15. dubna (snáší chlad, raně setí)
+- **Hloubka**: 3–4 cm
+- **Hustota**: 350–450 klíčivých zrn/m²
+
+**Hnojení:**
+- **Při setí**: 60–80 kg N/ha
+- **BBCH 32**: 30–40 kg N/ha
+- **Celkem N**: 80–120 kg/ha (oves nezužitkuje vysoké N, polehne)
+
+**Sklizeň:**
+- **Vlhkost**: 13–15 %
+- **Polehnutí riziko**: vysoký (110–140 cm), tenké stéblo
+- **Klíčové**: NEpřehnojit N
+
+**Výnosy:**
+- **Průměr CZ**: 4,2 t/ha
+- **Top farmy**: 6+ t/ha
+
+**Použití:**
+
+**1. Lidská konzumace (45 %):**
+- **Ovesné vločky** (rolled oats) — pařené + válcované zrno
+- **Müsli, granola** — populární zdravá snídaně
+- **Ovesné mléko** (oat milk) — silný trend 2020s, plant-based náhrada
+- **Pekařství** — celozrnný chléb s ovesem
+- **Diet** — oves má **β-glukan** (vláknina, snižuje cholesterol)
+
+**2. Krmivo pro koně (35 %):**
+- **Tradiční koňské krmivo** — energie + vláknina + dobrá stravitelnost
+- **2–6 kg/kůň/den** podle zatížení
+- **Dostihoví koně** — vyšší podíl ovsa
+
+**3. Krmivo pro skot (15 %):**
+- **Méně časté** než ječmen
+- **Pro mladé telata** — lehce stravitelné
+
+**4. Zelená pícnina / cover crop (5 %):**
+- **Oves jako krycí plodina** — biomasa pro mulč, sekvestraci uhlíku
+- **Oves + vikve smíška** — luskovino-obilná směs pro pícnice
+
+**Cena 2024:**
+- **Potravinářský oves** (premium pro vločky): 5 200–5 800 Kč/t
+- **Krmný oves**: 4 200–4 800 Kč/t
+- **Bio oves**: 7 500–9 500 Kč/t (vysoký premium pro bio müsli)
+
+**Odrůdy CZ 2024:**
+- **Atego** — top výnos krmný
+- **Husar** — potravinářský
+- **Rozmar** — tradiční populace
+- **Spurt** — moderní, robustní
+
+**Choroby:**
+- **Rzi ovsí** (Puccinia coronata) — listová
+- **Helminthosporium** (skvrnitost) — vlhká léta
+- **Méně tlaku** než pšenice → méně postřiků
+
+**Ochrana:**
+- **Plevele**: pre-emergence (Stomp)
+- **Fungicidy**: 1 postřik T2 (BBCH 39) — preventivní
+- **Insekticidy**: minimální (mšice BYDV)
+
+**Bio přístup:**
+- **Oves** je ideální pro bio farmu (málo postřiků, robustní)
+- **Bio cena premium** kompenzuje výnos -20 % vs konvenční
+
+**Ekonomika:**
+- **Náklady**: 18 000–24 000 Kč/ha
+- **Výnos 4,5 t/ha × 4 800 Kč = 21 600 Kč/ha**
+- **Marže**: typicky úzká (-1 000 až +3 000 Kč/ha)
+- **Plus dotace BISS + CISS + EKO**: dělá z toho výhodnější plodinu
+
+**Trh a trendy:**
+- **Plant-based revolution** — ovesné mléko = 2x růst spotřeby 2020s
+- **Oat milk vs almond milk** — oat má lepší enviromentální stopu, šíření v EU
+- **Bio oves**: rostoucí poptávka pro Hipp dětskou výživu, Müsli zdroje
+
+Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[mezi-plodiny]].`,
+    related: ['psenice-ozima', 'zito-ozime', 'ozim-jarin', 'hektolitr', 'mezi-plodiny'],
+  },
+  {
+    slug: 'tritikale',
+    term: 'Tritikale',
+    alias: ['triticale', 'kříženec pšenice a žita', 'pšeničné žito'],
+    kategorie: 'plodiny',
+    shortDef: 'Tritikale je obilnina vzniklá křížením pšenice (Triticum) a žita (Secale). Kombinuje vlastnosti obou — výnos pšenice + odolnost žita. Hlavně krmné použití, výnos 6–8 t/ha, cena 4 400–5 200 Kč/t.',
+    longDef: `Tritikale (lat. *× Triticosecale*, ang. *triticale*) je **uměle vyšlechtěná obilnina** vzniklá křížením **pšenice** (*Triticum*) × **žita** (*Secale cereale*). Kombinuje vlastnosti obou rodičů: **výnos pšenice + odolnost žita** k chudým půdám a chorobám.
+
+**Historie:**
+- **1875** — první kříženec popsán skotský chovatel Stephen Wilson
+- **1937** — kanadský agronom L.H. Newman vytvořil první funkční tritikale
+- **1960s** — CIMMYT (Mexiko) zahájil systematický šlechtitelský program
+- **1980s** — masové rozšíření v Evropě (Polsko, NSR, ČSSR)
+- **2024** — globální plocha 15 mil. ha (Polsko #1, Německo #2, ČR ~50 000 ha)
+
+**Vlastnosti:**
+
+**Ozimý vs jarní tritikale:**
+- **Ozimý** dominuje v CZ (90 % ploch)
+- **Jarní** jen jako záplata po nepovedeném ozimu
+
+**Setí (ozim):**
+- **Termín**: 15. září – 5. října
+- **Hloubka**: 3–5 cm
+- **Hustota**: 320–400 klíčivých zrn/m²
+- **Vhodná předplodina**: brambory, řepka, luskoviny
+
+**Hnojení:**
+- **Podzim**: 25 kg N + 30 kg P + 60 kg K
+- **Jaro BBCH 25**: 60–80 kg N/ha
+- **Jaro BBCH 32**: 30–50 kg N/ha
+- **Celkem N**: 100–140 kg/ha (mezi pšenicí a žitem)
+
+**Sklizeň:**
+- **Vlhkost**: 13–15 %
+- **Polehnutí střední riziko** (mezi pšenicí a žitem)
+
+**Výnosy:**
+- **Průměr CZ**: 6,8 t/ha
+- **Top farmy**: 9+ t/ha
+- **Lepší než žito** o 1–2 t/ha, **mírně pod pšenicí** o 0,5–1 t/ha
+
+**Použití:**
+
+**1. Krmivo (85 %):**
+- **Pro skot**: do TMR (viz [[tmr]]) — substituce pšenice/ječmene
+- **Pro prasata**: hlavní obilná složka
+- **Pro drůbež**: 20–40 % směsi
+
+**2. Bioethanol (10 %):**
+- **Lihovary** — vysoký škrob, dobrá fermentace
+- **EU dotované** v některých zemích (Polsko, Německo)
+
+**3. Lidská konzumace (5 %):**
+- **Specifické pečivo** (zdravotně orientované)
+- **Müsli** směsi
+- **Méně rozvinutá** kategorie
+
+**Cena 2024:**
+- **Krmný tritikale**: 4 400–5 000 Kč/t
+- **Bioethanol kontrakt**: 4 200–4 600 Kč/t
+- **Bio tritikale**: 6 500–8 000 Kč/t
+
+**Odrůdy CZ 2024:**
+- **Trisem** — top výnos
+- **Triamant** — odolnost
+- **Kassiopeia** — moderní DE import
+- **Borowik** — polský import
+
+**Choroby a ochrana:**
+- **Septorióza** — méně tlaku než pšenice
+- **Rzi** — průměrné tlak (citlivější než žito, méně než pšenice)
+- **Padlí** — méně tlaku
+- **Postřiky**: 1–2 fungicidy (méně intenzivní než pšenice)
+- **EKO režim**: vhodný (méně postřiků)
+
+**Výhody tritikale:**
+1. **Robust** — toleruje chudé půdy, sucho
+2. **Méně postřiků** — nižší náklady, vhodný pro bio
+3. **Vysoký výnos** vs žito
+4. **Stravitelný** pro skot a prasata
+5. **Cover crop schopnost** — biomasa pro mulč
+
+**Nevýhody:**
+1. **Nižší cena** než potravinářská pšenice
+2. **Limitovaný trh** lidské konzumace
+3. **Méně odrůd** než pšenice/ječmen
+
+**Ekonomika:**
+- **Náklady**: 22 000–28 000 Kč/ha
+- **Výnos 7 t/ha × 4 700 Kč = 32 900 Kč/ha**
+- **Marže**: 4 000–10 000 Kč/ha (lepší než pšenice!)
+- **Dotace BISS + CISS + EKO**: standardní
+
+**Strategicky pro CZ:**
+- **Pro středně velkou farmu** v ANC (Vysočina, Beskydy) — tritikale je často **lepší volba než pšenice**
+- **Pro bio farmu** — méně tlaku chorob, nižší vstupy
+- **Pro chov skotu** — vlastní krmivo z vlastního pole
+
+Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [[krmne-davky]].`,
+    related: ['psenice-ozima', 'zito-ozime', 'jecmen-krmny', 'ozim-jarin', 'krmne-davky'],
+  },
+  {
+    slug: 'mak-ozimy',
+    term: 'Mák setý',
+    alias: ['poppy', 'Papaver somniferum', 'mák modrosemenný'],
+    kategorie: 'plodiny',
+    shortDef: 'Mák setý je jarní olejnatá plodina, kde je ČR globální velmoc — produkuje 50–70 % světového potravinářského máku (modré semeno). Výnos 0,8–1,4 t/ha semen, cena 35 000–55 000 Kč/t. Hlavní produkt: pekařské semínko, mákový olej, makovice (omezené kvůli opioidům).',
+    longDef: `Mák setý (lat. *Papaver somniferum*, ang. *opium poppy* nebo *poppy seed*) je **jarní olejnatá plodina** a globálně specifická — **ČR produkuje 50–70 % světového potravinářského máku** (modré semeno pro pekařské použití). Tradiční oblast: Haná, Polabí, Vysočina.
+
+**Plocha v ČR 2024**: 30 000–40 000 ha (kolísá podle ceny)
+**Produkce**: 25 000–35 000 t/rok
+
+**Vlastnosti:**
+
+**Agrotechnika:**
+
+**Setí:**
+- **Termín**: 25. března – 25. dubna (snáší pozdní mrazy)
+- **Hloubka**: 0,5–1 cm (semínko miniature, plytké setí!)
+- **Hustota**: 80–100 klíčivých zrn/m² (= 1,5–2 kg osiva/ha, HW 0,4g)
+- **Rozteč řádků**: 25–30 cm (úzké) nebo 45 cm (širší pro plečku)
+
+**Hnojení:**
+- **Při setí**: 60–80 kg N/ha
+- **BBCH 30**: 30–50 kg N/ha
+- **Celkem N**: 80–130 kg/ha
+
+**Ochrana:**
+- **Plevele**: pre-emergence (Bromotril, Metaza Plus) + post-emergence
+- **Insekticidy**: krytoposed (Ceutorhynchus macula-alba), žírači
+- **Fungicidy**: helmintosporióza, plíseň máku — méně tlaku
+- **Mák je „čistá" plodina** — málo postřiků, vhodný pro bio
+
+**Sklizeň:**
+- **Termín**: srpen, vlhkost makovic 12–14 %
+- **Sklízeč mákový** — speciální adaptér na kombajn (oddělí semena z makovic)
+- **Klíčové**: nevylít semínka při manipulaci
+
+**Výnosy:**
+- **Průměr CZ**: 0,9 t/ha semen
+- **Top farmy**: 1,4 t/ha
+- **Náklady na 1 ha**: 18 000–25 000 Kč
+
+**Použití:**
+
+**1. Pekařské semínko (modré semeno, 80 %):**
+- **Tradiční CZ pekařství** — buchty s mákem, makový závin, makovic
+- **Export**: Německo, Nizozemsko, USA, Polsko
+- **Cena 2024**: 35 000–55 000 Kč/t (vysoká volatilita)
+
+**2. Mákový olej (10 %):**
+- **Lisování** modrých semen
+- **Olej** — premium kulinářský olej, vysoká cena
+- **Hladký omega-6 profil**, dobrá chuť
+
+**3. Makovice (5 %):**
+- **Sušené makovice** — historicky pro lidovou medicínu (sedativní)
+- **Kvůli opioidům** (morfin, codein) v makovicích — **omezené použití**, regulované
+- **Farmaceutický průmysl** — extraktivní výroba opioidních léků (= **smluvní pěstování pro Zentiva, Pharmos**)
+
+**Legální a regulační aspekty:**
+- **CZ legislativa**: pěstování máku **legální** pro potravinářské + farmaceutické účely
+- **Nutné registrace** u SZIF, prostor pod 5 ha bez specifické licence
+- **Kontroly**: ÚKZÚZ, často monitorovaný kvůli zneužití pro výrobu drog
+- **Suché makovice po sklizni** — musí být **zničeny nebo zpracovány** v licencovaném zařízení
+
+**Trh a marketing:**
+- **Burza Bruntál** — týdenní mákový trh, CZ centrum
+- **Spotový trh** vs **kontraktové pěstování** (Pharmos)
+- **Cenová volatilita**: 30 000 ↔ 70 000 Kč/t v rozsahu 2 let
+- **Export**: 70 % české produkce jde do EU + USA
+
+**Odrůdy CZ 2024:**
+- **Major** — modré semeno, top výnos
+- **Maratón** — robustnost
+- **Opal** — bílé semeno (export do Asie)
+- **Onyx** — moderní
+
+**Ekonomika:**
+- **Náklady**: 18 000–25 000 Kč/ha
+- **Výnos 1 t × 45 000 Kč = 45 000 Kč/ha**
+- **Marže**: 20 000–27 000 Kč/ha (vysoká!)
+- **Risk**: cenová volatilita + výnosy citlivé na počasí
+
+**Kulturní význam:**
+- **Mák v CZ kuchyni** — kulturní identita (makovic, závin, koláče)
+- **Vánoce** — tradiční moučné pokrmy s mákem
+- **Velikonoce** — kraslicová zahrada s máky
+
+**Klimatická změna:**
+- **Sucho v dubnu–červnu** = nižší výnos
+- **Vlhká léta** = plíseň makovic
+- **Klíčové**: hluboké kořeny (snáší sucho lépe než pšenice)
+
+**Bio mák:**
+- **Bio mák** = 50–80 % vyšší cena
+- **Trh malý** ale roste (organic premium pro vegetářské/zdravotní pekařství)
+
+Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
+    related: ['ozim-jarin', 'slunecnice', 'repka-ozima'],
+  },
+  {
+    slug: 'slunecnice',
+    term: 'Slunečnice roční',
+    alias: ['sunflower', 'Helianthus annuus'],
+    kategorie: 'plodiny',
+    shortDef: 'Slunečnice je jarní olejnatá plodina s rostoucím významem v CZ (klimatická změna). Plocha 30 000–50 000 ha, výnos 2,5–4 t/ha, cena 13 000–17 000 Kč/t (high oleic premium +2 000). Hlavní použití: olej, krmivo (šrot), bio paliva, ptactvo (semínka).',
+    longDef: `Slunečnice roční (lat. *Helianthus annuus*, ang. *sunflower*) je **jarní olejnatá plodina** z rodu *Asteraceae*. V CZ dlouho marginální, ale **rostoucí význam** kvůli klimatické změně (vyšší teploty + sucho = vhodné pro slunečnici).
+
+**Plocha v ČR 2024**: 35 000–50 000 ha (10× nárůst od 2010)
+**Produkce**: 110 000–150 000 t/rok
+
+**Vlastnosti:**
+
+**Agrotechnika:**
+
+**Setí:**
+- **Termín**: 15.–30. dubna (po posledních jarních mrazech)
+- **Hloubka**: 4–5 cm
+- **Hustota**: 5–7 rostlin/m² (rozteč 70 × 25 cm)
+- **Rozteč řádků**: 70 cm (jako kukuřice — kompatibilní s kukuřičnou plečkou)
+
+**Hnojení:**
+- **Při setí**: 80–100 kg N/ha + 50 kg P + 100 kg K
+- **Celkem N**: 100–140 kg/ha (nižší než kukuřice)
+- **Bor** (B 1 kg/ha) — kritický prvek pro tvorbu úborů
+
+**Ochrana:**
+- **Plevele**: pre-emergence (Stomp, Dual Gold) + post-emergence
+- **Fungicidy**: bílá hniloba *Sclerotinia*, hnědá hniloba *Phomopsis* — 1–2 postřiky
+- **Insekticidy**: minimální (méně škůdců než řepka)
+
+**Sklizeň:**
+- **Termín**: září–říjen, vlhkost zrna 10–12 %
+- **Desikace** (viz [[desikace]]): glyfosát 2 týdny před sklizní pro sjednocení dozrávání
+- **Kombajn**: speciální slunečnicový žací mech (longer fingers)
+- **Klíčové**: nevybírat příliš nahoru = ztráta
+
+**Výnosy:**
+- **Průměr CZ**: 2,8 t/ha
+- **Top farmy** (jižní Morava): 4+ t/ha
+- **EU TOP** (Francie, Maďarsko): 3,5–4,5 t/ha
+
+**Použití:**
+
+**1. Slunečnicový olej (60 %):**
+- **Standardní olej** — kuchyně, salátový olej, smažení
+- **Slunečnicový olej** je **nejlevnější rostlinný olej** v EU
+- **Spotřeba CZ**: 6 kg/osoba/rok
+
+**2. High-oleic odrůdy (15 %):**
+- **Vysoký obsah kyseliny olejové** (oleic acid) — 80+ % místo standardních 30 %
+- **Stabilní při vysokých teplotách** — pro friture, McDonald's, smažení v gastronomii
+- **Premium cena**: +1 500–2 500 Kč/t vs standard
+- **Odrůdy**: NK Neoma (Syngenta), LG 50.270 HO (Limagrain)
+
+**3. Slunečnicový šrot (15 %):**
+- **Vedlejší produkt** lisování oleje
+- **Krmivo**: 30–35 % CP, vhodné pro skot, prasata
+- **Cena**: 6 500–8 500 Kč/t
+
+**4. Ptáci (potrava, 5 %):**
+- **Celé slupkové semínko** — pro ptáčníky, krmítka
+- **Cena**: vysoký premium (15 000–25 000 Kč/t)
+
+**5. Bio paliva (5 %):**
+- **Bio diesel** z slunečnicového oleje
+- **EU dotované** (RED II Renewable Energy Directive)
+
+**Cena 2024:**
+- **Standard slunečnice**: 13 000–16 000 Kč/t
+- **High-oleic**: +1 500–2 500 Kč/t
+- **Bio slunečnice**: 22 000–28 000 Kč/t
+
+**Odrůdy CZ 2024:**
+- **LG 50.270 HO** (Limagrain) — high oleic, top výnos
+- **NK Neoma** (Syngenta) — high oleic populární
+- **ES Janis** (Euralis) — standard, robustní
+- **Pioneer P63LE10** — vysoký výnos
+
+**Choroby:**
+- **Bílá hniloba** (*Sclerotinia sclerotiorum*) — vlhká léta, ztráta 10–30 %
+- **Hnědá hniloba** (*Phomopsis helianthi*) — listová + úborová
+- **Plíseň slunečnice** (*Plasmopara halstedii*) — preventivní moření osiv
+- **Postřiky**: 1–2 fungicidy v sezóně (BBCH 51 + 65)
+
+**Škůdci:**
+- **Drobní brouci** — menší tlak než řepka
+- **Ptáci** — sníží sklizeň o 5–15 %, zvláště holubi a hejna
+
+**Ekonomika:**
+- **Náklady**: 22 000–28 000 Kč/ha
+- **Výnos 3 t × 14 500 Kč = 43 500 Kč/ha**
+- **Marže**: 15 000–20 000 Kč/ha (atraktivní!)
+- **Dotace BISS + CISS + EKO**: standardní
+
+**Strategický význam pro CZ:**
+- **Růst plochy 2010s** vs řepka — alternativa s nižším postřikovým tlakem
+- **Klimatická vhodnost** — jižní Morava, Polabí, Slovácko
+- **Severnější CZ** (Vysočina, Krkonoše): méně vhodné kvůli kratší vegetaci
+
+**Klimatická změna:**
+- **Pozitivní dopad** — slunečnice je tepelná plodina, profituje z teplých let
+- **Sucho** — tolerantní (hluboké kořeny)
+- **Riziko**: pozdní mrazy v dubnu (zničí klíčící porost)
+
+Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-ozimy]].`,
+    related: ['repka-ozima', 'ozim-jarin', 'fungicidy', 'desikace'],
+  },
+  {
+    slug: 'horcice',
+    term: 'Hořčice setá',
+    alias: ['mustard', 'Sinapis alba', 'bílá hořčice', 'Sinapis arvensis'],
+    kategorie: 'plodiny',
+    shortDef: 'Hořčice setá (bílá hořčice) je jarní brukvovitá plodina pro výrobu hořčice (kořeněné omáčky) a jako meziplodina pro zelené hnojení. CZ plocha 5 000–15 000 ha. Krátká vegetace 90–110 dní. Výnos 1–2 t/ha semen, cena 13 000–18 000 Kč/t.',
+    longDef: `Hořčice setá (lat. *Sinapis alba*, „bílá hořčice", ang. *white mustard*) je **jarní brukvovitá plodina** s krátkou vegetační dobou (90–110 dní). Hlavně pro **výrobu hořčice** (jako kořeněná omáčka) a **jako meziplodina** pro zelené hnojení.
+
+**Plocha v ČR 2024**: 5 000–15 000 ha pro semeno + 100 000+ ha jako meziplodina
+
+**Vlastnosti:**
+
+**Agrotechnika:**
+
+**Setí:**
+- **Termín**: 25. března – 25. dubna (semínko pro sklizeň) NEBO 1.–15. srpna (meziplodina po sklizni obilí)
+- **Hloubka**: 1,5–2 cm
+- **Hustota**: 200–300 klíčivých zrn/m² (= 8–12 kg osiva/ha)
+
+**Hnojení:**
+- **Pro semeno**: 60–80 kg N/ha
+- **Pro meziplodinu**: bez hnojení (využije zbytek z předplodiny)
+- **P + K**: 30 P + 60 K
+
+**Ochrana:**
+- **Plevele**: pre-emergence (Stomp) + post-emergence
+- **Insekticidy**: krytonosec stonkový, blýskáček řepkový — pyrethroid
+- **Fungicidy**: minimální tlak
+
+**Sklizeň:**
+- **Termín**: konec července–srpen, vlhkost 10–12 %
+- **Sjednocení dozrávání**: glyfosát desikace 10 dní před sklizní
+- **Kombajn**: standardní obilní žací mech
+
+**Výnosy:**
+- **Průměr CZ**: 1,3 t/ha
+- **Top farmy**: 2+ t/ha
+
+**Použití:**
+
+**1. Hořčice kořenina (60 % výroby):**
+- **Mletá hořčice + ocet + sůl + voda + koření** = kořeněná omáčka
+- **Český národní pokrm** (svíčková, řízek)
+- **Pražská hořčice, plnotučná hořčice** — typy CZ
+- **Globální značky**: Hellmann's, Heinz, Maille — všechny od slunečnice setí
+
+**2. Meziplodina (30 % ploch — největší užití!):**
+- **Sklizeň pšenice/ječmene** → ihned setí hořčice → vegetační období do první mrazy → zarytí na podzim nebo na jaře
+- **Účinky**:
+  - **Zelené hnojení** — biomasa rozkládá se v půdě
+  - **Sekvestrace C** — kořeny + biomasa
+  - **Suprese plevelů** — hořčice rychle pokryje půdu
+  - **Glukosinoláty v půdě** — biofumigace (potlačuje patogeny)
+  - **EU CAP greening** — hořčice = EFA (Ecological Focus Area)
+- **Cena osiva pro meziplodinu**: 600–1 000 Kč/ha
+
+**3. Olej (5 %):**
+- **Hořčicový olej** — specifický východoevropský kulinářský olej (NL, Polsko)
+- **V CZ vzácné**
+
+**4. Krmivo (5 %):**
+- **Hořčicový šrot** (po lisování oleje) — pro skot
+- **Pozor**: glukosinoláty mohou způsobit problémy u prasat
+
+**Cena 2024:**
+- **Hořčicové semeno**: 13 000–18 000 Kč/t
+- **Bio hořčice**: 18 000–25 000 Kč/t (Hellmann's bio kontrakt)
+
+**Odrůdy CZ 2024:**
+- **Veronica** — výnosná
+- **Severka** — robustní
+- **Andromeda** — moderní
+
+**Choroby a škůdci:**
+- **Stejné jako řepka** ale méně tlaku (krátká vegetace)
+- **Blýskáček řepkový** (*Meligethes aeneus*) — žírá pukláky
+- **Plíseň brukvovitých** (*Peronospora parasitica*) — minimální tlak
+
+**Výhody hořčice:**
+1. **Krátká vegetace** — flexibilní v osevním postupu
+2. **Levné osivo**
+3. **Meziplodina hodnota** — EFA, zelené hnojení, biofumigace
+4. **Robustní** — málo postřiků
+
+**Nevýhody:**
+1. **Nízký výnos** (1–2 t/ha vs 8 t/ha pšenice)
+2. **Marginální plocha** pro semeno
+3. **Cenová volatilita** — citlivá na poptávku potravinářského průmyslu
+
+**Ekonomika:**
+
+**Pro semeno (1,3 t/ha × 15 000 Kč = 19 500 Kč/ha):**
+- **Náklady**: 12 000–15 000 Kč/ha
+- **Marže**: 4 500–7 500 Kč/ha (mírná)
+- **Plus dotace**: standardní BISS + CISS
+
+**Pro meziplodinu:**
+- **Náklady**: 1 000–1 500 Kč/ha (osivo + setí)
+- **Benefity**: EFA dotace ~3 000 Kč/ha + půdní benefity neměřitelné finančně
+- **Net pozitivní**: 1 500–2 000 Kč/ha (jen dotace), plus dlouhodobé benefity
+
+**EU a CAP:**
+- **Meziplodinová schémata** dotované — hořčice je nejpopulárnější
+- **EFA limity** — minimálně 5 % plochy v EFA pro CAP (greening)
+
+**Klimatická změna:**
+- **Sucho v letní** → meziplodina nevejde
+- **Mírné podzimy** → delší vegetace = větší biomasa
+
+Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zemedelstvi]], [[osevni-postup]].`,
+    related: ['mezi-plodiny', 'repka-ozima', 'ozim-jarin', 'regenerativni-zemedelstvi', 'osevni-postup'],
+  },
+  {
+    slug: 'cukrovka',
+    term: 'Cukrová řepa',
+    alias: ['sugar beet', 'Beta vulgaris', 'cukrovka'],
+    kategorie: 'plodiny',
+    shortDef: 'Cukrová řepa (Beta vulgaris) je jarní okopanina pěstovaná pro výrobu cukru. CZ plocha 60 000–70 000 ha. Výnos 60–80 t/ha bulvy, cukernatost 17–20 %. Cena 1 100–1 600 Kč/t (záleží na cukernatosti). Smluvní pěstování pro cukrovary.',
+    longDef: `Cukrová řepa (lat. *Beta vulgaris* var. *altissima*, ang. *sugar beet*) je **jarní okopanina** pěstovaná pro **výrobu cukru** (sacharóza). Bulva obsahuje 17–20 % cukru. CZ dlouhá tradice (od 19. století), oblast: Polabí, Středočesko, Haná.
+
+**Plocha v ČR 2024**: 60 000–70 000 ha
+**Produkce**: 4–5 mil. t bulvy → 600 000–750 000 t cukru
+
+**Vlastnosti:**
+
+**Agrotechnika:**
+
+**Setí:**
+- **Termín**: 20. března – 20. dubna
+- **Hloubka**: 2–3 cm
+- **Hustota**: 8–10 rostlin/m² (rozteč 45 × 18 cm)
+- **Klíčové**: precision setí (každé semínko počítá, drahé osivo)
+
+**Hnojení:**
+- **Při setí**: 100–130 kg N/ha (cukrovka je „N hladová")
+- **Celkem N**: 130–180 kg/ha
+- **Bor (B)** — kritický pro tvorbu cukru, 2–4 kg/ha
+- **Sodík (Na)** — atypicky pozitivní efekt na výnos
+- **Hnůj v předplodině** — cukrovka miluje organickou hmotu
+
+**Ochrana:**
+- **Plevele**: 3–4 postřiky (Goltix + Betanal + Pyramin) — drahý program
+- **Insekticidy**: mšice řepná (BYV vektor, viz [[msice-repna]])
+- **Fungicidy**: 1–2 postřiky (Cercospora, padlí)
+
+**Sklizeň:**
+- **Termín**: září–listopad (úvod kampaně)
+- **Sklízeč řepy** — Holmer Terra Dos, Ropa euro-Tiger — 6-řádkový samojízdný (50–80 t/h)
+- **Tzv. „kampaň"**: říjen–prosinec, cukrovary jedou 24/7
+
+**Výnosy:**
+- **Průměr CZ**: 70 t/ha bulvy
+- **Top farmy**: 90+ t/ha
+- **Cukernatost**: 17–20 % (vyšší = vyšší cena!)
+
+**Cena 2024 (smluvní):**
+- **Standardní cukrovka** (17 % cukru): 1 200 Kč/t
+- **High sugar** (19 % cukru): 1 500 Kč/t
+- **Bonus za biopaliva** (kontrakt na bioethanol): +50–100 Kč/t
+
+**Smluvní pěstování:**
+
+**Cukrovary CZ:**
+- **Cukrovary Hradec Králové** (skupina Tereos) — Polabí
+- **Moravskoslezské cukrovary** (Litovel, Vrbátky) — Haná
+- **Tereos TTD** — Dobrovice (Polabí)
+- **Pfeifer & Langen** (Český Meziříčí)
+
+**Kontrakt** mezi farmou a cukrovarem:
+- **Plocha + odhad výnosu** = množstevní závazek
+- **Cena**: garantovaná za %cukru + bonusy
+- **Doprava**: cukrovar často zajišťuje
+- **Předpolnost**: někdy 3-5 let dopředu
+
+**Produkty z cukrovky:**
+1. **Cukr (50 %)** — hlavní produkt
+2. **Melasa (15 %)** — kvasinky, krmivo, líh
+3. **Řízky (30 %)** — krmivo skotu (vlhké nebo sušené, peletované)
+4. **Hlína a list** (5 %) — kompost
+
+**Odrůdy CZ 2024:**
+- **KWS odrůdy** (Marleen, Cantona) — dominantní
+- **Strube** (Salamando, Rosagold) — alternativa
+- **Klein-Wanzlebener** — tradiční german
+
+**Choroby:**
+- **Cercospora beticola** — listová skvrnitost, vážná ztráta cukernatosti
+- **Padlí řepné** (Erysiphe betae) — listy
+- **Rhizoctonia** — kořenová hniloba
+- **BYV virus** přenášený mšicemi — viz [[msice-repna]]
+
+**Škůdci:**
+- **Mšice řepná** (Aphis fabae) — vektor BYV
+- **Dřepčíci** (Chaetocnema) — listy
+- **Plžík polní** (Deroceras) — listy
+
+**Ekonomika:**
+
+**Náklady na 1 ha** (cukrovka je „drahá" plodina):
+- **Osivo**: 8 000–12 000 Kč/ha (precision sety, drahé pelletované)
+- **Hnojiva**: 6 000–8 000 Kč/ha
+- **Postřiky**: 10 000–15 000 Kč/ha (3-4 herbicidní postřiky)
+- **Sklizeň**: 3 000–5 000 Kč/ha (vlastní sklízeč nebo služba)
+- **Doprava**: 2 000–4 000 Kč/ha
+- **Práce a režie**: 6 000–10 000 Kč/ha
+- **Celkem**: 35 000–55 000 Kč/ha
+
+**Výnos**: 70 t/ha × 1 300 Kč = 91 000 Kč/ha
+**Marže**: 35 000–55 000 Kč/ha (ATRAKTIVNÍ!)
+
+**Plus dotace**:
+- **BISS + CISS**: ~3 600 Kč/ha
+- **VCS pro cukrovku** (citlivý sektor): ~7 500 Kč/ha (specifická CZ dotace pro cukrovku!)
+- **EKO režim**: pokud splní podmínky
+
+**Trend a budoucnost:**
+- **EU cukrová kvóta** zrušená 2017 → liberalizace trhu → tlak na cenu
+- **CZ klesající plocha** (z 100 000 ha v 1990s na 60 000 ha dnes)
+- **Bioethanol** — alternativní použití pro cukrovku (EU RED II)
+- **Klimatická změna** — vyšší teploty + sucho = nižší výnos v Polabí
+
+**Strategická plodina:**
+- **VCS dotace** dělá z cukrovky **velmi profitabilní volbu** v cukrovkářských regionech
+- **Mimo VCS regiony** méně atraktivní (sucho na Vysočině nelegální)
+
+Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[hnojivo]].`,
+    related: ['msice-repna', 'ozim-jarin', 'osevni-postup', 'fungicidy'],
+  },
+  {
+    slug: 'hrach-set',
+    term: 'Hrách setý',
+    alias: ['pea', 'Pisum sativum', 'jarní hrách'],
+    kategorie: 'plodiny',
+    shortDef: 'Hrách setý je jarní luskovina pěstovaná pro semeno (zrnový hrách) nebo zelený lusk (konzumní hrášek). CZ plocha 10 000–20 000 ha. Výnos 3–5 t/ha semen, cena 6 500–8 500 Kč/t. Klíčová pro fixaci N (50–100 kg N/ha) a osevní postup po obilovinách.',
+    longDef: `Hrách setý (lat. *Pisum sativum*, ang. *field pea*) je **jarní luskovina** s klíčovými agronomickými benefity: **fixace dusíku** symbiózou s *Rhizobium leguminosarum* (50–100 kg N/ha) a zlepšení struktury půdy. Hlavní použití: krmivo (zrnový hrách), lidská konzumace (zelený hrášek), průmyslové aplikace.
+
+**Plocha v ČR 2024**: 10 000–20 000 ha (rostoucí trend kvůli plant-based proteinům + EU bílkovinné strategii)
+
+**Typy hrachu:**
+
+**1. Zrnový hrách** (95 % CZ plochy):
+- **Sklizeň**: srpen, zrno suché
+- **Použití**: krmivo, lidská strava (loupaný hrach)
+- **Výnos**: 3–5 t/ha
+
+**2. Konzervárenský hrášek** (5 %):
+- **Sklizeň**: zelený lusk, červen–červenec
+- **Použití**: konzervy (Boncourier), mražené (Bonduelle)
+- **Smluvní pěstování** pro konzervárny
+- **Výnos**: 5–8 t/ha zeleného lusku
+
+**Agrotechnika:**
+
+**Setí:**
+- **Termín**: 20. března – 15. dubna (raně setí — chladu odolný)
+- **Hloubka**: 4–6 cm (hluboce, kvůli sucho-toleranci kořenů)
+- **Hustota**: 80–120 klíčivých zrn/m² (= 200–280 kg osiva/ha, HW 250g)
+
+**Hnojení:**
+- **Žádný N hnojivý!** — hrach si fixuje vlastní (symbióza)
+- **P + K**: 40 P + 80 K + Mg
+- **Inokulace osiva** Rhizobium leguminosarum bivar. *viceae* = klíčové (zejm. na poli, kde hrach 5+ let nebyl)
+
+**Ochrana:**
+- **Plevele**: pre-emergence (Stomp, Bicarb) + post-emergence (Basagran, Pulsar)
+- **Insekticidy**: zrnokaz hrachový (Bruchus pisorum), mšice
+- **Fungicidy**: bílá hniloba *Sclerotinia*, plíseň hrášku (Mycosphaerella pisi)
+
+**Sklizeň zrnového hrachu:**
+- **Termín**: konec července–srpen, vlhkost 14 %
+- **Desikace** (viz [[desikace]]): glyfosát 7–10 dní před sklizní (vyrovnání dozrání)
+- **Kombajn**: standardní žací mech, ale opatrně (zrno lehce vypadá)
+
+**Výnosy:**
+- **Průměr CZ**: 3,8 t/ha zrnového hrachu
+- **Top farmy**: 5,5+ t/ha
+- **Konzervárenský**: 6 t/ha zelený
+
+**Použití:**
+
+**1. Krmivo (60 %):**
+- **Pro prasata**: hlavní bílkovinná složka (CP 23–26 %)
+- **Pro skot**: alternativa SES (sojový extrahovaný šrot)
+- **Pro drůbež**: do 20 % směsi
+- **Nutriční hodnoty**: CP 24 %, NEL 8,2 MJ/kg, vysoký škrob
+
+**2. Lidská konzumace (25 %):**
+- **Loupaný hrách** — polévky, omáčky (česká kuchyně)
+- **Hráškové vločky / mouka** — plant-based proteiny
+- **Konzervovaný / mražený hrášek** — zelenina
+- **Pea protein** — hojně používaný v plant-based produktech (Beyond Meat, Impossible)
+
+**3. Průmysl (10 %):**
+- **Pea protein izolát** — 80 %+ čistota, premium plant-based ingredient
+- **Cena pea protein**: 80 000–150 000 Kč/t (10× vs zrno)
+- **EU dotuje** plant-based proteinovou strategií
+
+**4. Bio paliva (5 %):**
+- **Hrachovou ethanol** — vedlejší možnost, marginální
+
+**Cena 2024:**
+- **Krmný zrnový hrach**: 6 500–8 000 Kč/t
+- **Potravinářský hrach** (loupaný): 9 000–12 000 Kč/t
+- **Konzervárenský** (smluvní zelený): 4 500–6 000 Kč/t bruto
+
+**Odrůdy CZ 2024:**
+- **Eso, Madonna** — bílé květy, krmné, top výnos
+- **Bohatýr** — robustní
+- **Salamanca** — krátká stéblo (méně polehnutí)
+
+**Agronomické benefity (klíčové!):**
+1. **N fixace**: 50–100 kg N/ha + reziduální N pro následující plodinu (typicky pšenice po hrachu)
+2. **Rozrušení monokultur**: brukvovité a obiloviny mají úplně jiné patogeny — hrach je „čistič" osevního postupu
+3. **Struktura půdy**: hluboké kořeny rozrušují utuženou půdu
+4. **Sekvestrace C**: vyšší organická hmota v půdě po luskovině
+
+**Ekonomika:**
+
+**Náklady na 1 ha:**
+- Osivo: 4 500–6 000 Kč
+- Hnojiva: 2 000–3 000 Kč (jen P + K)
+- Postřiky: 4 000–6 000 Kč
+- Sklizeň + doprava: 3 000–4 000 Kč
+- Celkem: 13 500–19 000 Kč/ha
+
+**Výnos**: 4 t × 7 200 Kč = **28 800 Kč/ha**
+**Marže**: 9 800–15 300 Kč/ha (atraktivní!)
+**Plus N pro následující plodinu**: ušetří 60–80 kg N (~1 200–1 600 Kč/ha)
+
+**EU Bílkovinná strategie:**
+- **EU CAP** od 2023 podporuje **bílkovinné plodiny** (hrach, sója, lupina, peluška, vikve, fazol)
+- **VCS pro bílkoviny**: ~2 800 Kč/ha
+- **EU cíl**: zvýšit domácí produkci bílkovin z 30 % na 50 % do 2030
+
+**Klimatická změna:**
+- **Mírné jaro** = pozitivní
+- **Sucho v květnu–červnu** = negativní (kvetení a tvorba lusků)
+- **Mokrá léta** = polehnutí, plíseň
+
+**Strategický význam:**
+- **Hrach v osevním postupu** = klíč pro **udržitelnou intenzifikaci**
+- **Plant-based proteiny** = rostoucí trh = vyšší cena
+- **EU bílkovinná podpora** = dotace navíc
+
+Viz též [[sojaova-bob]], [[vojteska]], [[osevni-postup]], [[mezi-plodiny]], [[ozim-jarin]], [[regenerativni-zemedelstvi]].`,
+    related: ['sojaova-bob', 'vojteska', 'osevni-postup', 'mezi-plodiny', 'ozim-jarin', 'regenerativni-zemedelstvi'],
+  },
+  {
+    slug: 'len-set',
+    term: 'Len setý',
+    alias: ['flax', 'Linum usitatissimum', 'olejný len', 'přadný len'],
+    kategorie: 'plodiny',
+    shortDef: 'Len setý je dvojí plodina — olejný len pro semínko a lněný olej, přadný len pro vlákno (lněné plátno). CZ plocha 1 500–3 000 ha (klesající). Výnos olejného 1,5–2,5 t/ha semen, cena 12 000–17 000 Kč/t. Historicky klíčový (vlaké plátno do 1900s).',
+    longDef: `Len setý (lat. *Linum usitatissimum*, ang. *flax*) je **jarní plodina dvojího použití**:
+1. **Olejný len** — semínko pro lněný olej (omega-3), pekařské semínko
+2. **Přadný len** — stéblo pro lněné vlákno (textil)
+
+V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 500–3 000 ha dnes.
+
+**Historie:**
+- **Tisíciletí** — len je jedna z nejstarších kulturních rostlin (egyptské mumie, biblické zmínky)
+- **Středověk** — lněné plátno = standardní textil v EU
+- **18.–19. století** — vrchol pěstování v CZ (Krkonoše, Jeseníky lněné centra)
+- **20. století** — bavlna a synthetika vytlačily lněné plátno
+- **1950s vrchol CZ** — 120 000 ha (státem dotované)
+- **2020s** — niche plodina
+
+**Vlastnosti:**
+
+**Olejný len (95 % CZ ploch):**
+
+**Setí:**
+- **Termín**: 25. března – 20. dubna
+- **Hloubka**: 2–3 cm
+- **Hustota**: 600–800 klíčivých zrn/m² (drobné semínko)
+
+**Hnojení:**
+- **N**: 60–80 kg/ha
+- **P + K**: standardní
+
+**Ochrana:**
+- **Plevele**: post-emergence (Lontrel, Basagran)
+- **Insekticidy**: dřepčíci, mšice — pyrethroid
+- **Fungicidy**: bílá hniloba (Sclerotinia), plíseň lnu — 1 postřik
+
+**Sklizeň:**
+- **Termín**: konec července–srpen
+- **Vlhkost zrna**: 9–12 %
+- **Kombajn**: standardní
+- **Výnos**: 1,5–2,5 t/ha semen
+
+**Použití olejného lnu:**
+
+**1. Lněné semínko (potravinářské):**
+- **Celé nebo mleté semínko** — do pečiva, müsli, jogurtů
+- **Vysoký obsah omega-3** (ALA — alfa-linolenová kyselina)
+- **Vláknina** — pozitivní pro trávení
+- **Cena potravinářské semínko**: 18 000–25 000 Kč/t
+
+**2. Lněný olej:**
+- **Lisování** semen
+- **Kulinářský**: salát, müsli (ne smažení — nestabilní)
+- **Léčebný**: omega-3 doplněk
+- **Cena**: 250–400 Kč/100ml v retailu
+
+**3. Krmivo:**
+- **Lněný šrot** (po lisování oleje) — krmivo pro skot, koně
+- **Vysoký obsah olejnatých látek** — lesklá srst koní
+
+**4. Průmysl:**
+- **Lněný olej technický** (sušící olej) — pro nátěry, lakové výrobky, linoleum
+- **Linoleum** etymology: linum oleum = lněný olej
+
+**Přadný len (5 % CZ ploch):**
+
+**Specifický pro vlákno:**
+- **Hustší setí** (1 500 zrn/m²) — tenké, dlouhé stéblo
+- **Kratší vegetace** — sklizeň v červenci
+- **Rosení** (retting) — stěbla se nechají na poli rosit 14 dní, aby pektin se rozložil
+- **Lámání + tření** — uvolnění vlákna
+- **Vlákno** — pro lněné plátno (linen, batist, kambrik)
+
+**Lněné plátno**:
+- **Premium materiál** — luxusní oblečení, ručníky, ubrusy
+- **Belgium + France** = EU lněné centrum (80 % EU produkce)
+- **CZ marginální** — odvozené průmyslové dějiny zaniky
+
+**Cena 2024:**
+- **Olejný len** krmný: 12 000–14 000 Kč/t
+- **Olejný len** potravinářský: 18 000–25 000 Kč/t
+- **Bio olejný len**: 28 000–35 000 Kč/t (premium pro bio müsli)
+
+**Odrůdy CZ 2024:**
+- **Lola** — olejný, top výnos
+- **Recital** — robustní
+- **Niagara** — přadný (Belgické import)
+
+**Choroby:**
+- **Bílá hniloba** (Sclerotinia) — vlhká léta
+- **Plíseň lnu** (Botrytis) — sezónní
+- **Lnu rzi** (Melampsora) — málo
+
+**Ekonomika olejného lnu:**
+
+**Náklady na 1 ha**:
+- Osivo: 1 500–2 500 Kč
+- Hnojiva: 2 500–3 500 Kč
+- Postřiky: 3 000–5 000 Kč
+- Sklizeň: 2 500–3 500 Kč
+- Celkem: 9 500–14 500 Kč/ha
+
+**Výnos**: 2 t × 14 000 Kč = **28 000 Kč/ha**
+**Marže**: 13 500–18 500 Kč/ha (atraktivní pro niche!)
+
+**Strategický význam:**
+- **Niche plodina** s vysokou marží
+- **Plant-based omega-3** trend = rostoucí poptávka
+- **Bio kontrakty** pro pekařský průmysl
+
+**Klimatická změna:**
+- **Sucho v květnu–červnu** = pozitivní (len nesnáší vlhko)
+- **Mírná léta** = ideální
+- **Mokrá léta** = bílá hniloba
+
+**Renaissance lnu?**
+- **Plant-based food** trend = trh roste
+- **Lokální producenti** mohou cílit na premium pekařský trh
+- **Bio kontrakty** pro Hipp, Bauer dětskou výživu
+
+Viz též [[ozim-jarin]], [[sojaova-bob]], [[mak-ozimy]], [[osevni-postup]].`,
+    related: ['ozim-jarin', 'mak-ozimy', 'osevni-postup'],
+  },
 ];
 
 export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {
@@ -5707,4 +6992,5 @@ export const KATEGORIE_LABELS: Record<SlovnikKategorie, string> = {
   chov: 'Chov a živočišná výroba',
   slang: 'Hovorové výrazy a slang',
   ochrana: 'Ochrana rostlin a postřiky',
+  plodiny: 'Plodiny a komodity',
 };
