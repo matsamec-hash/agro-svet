@@ -1,0 +1,310 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { createServerClient } from '../../lib/supabase';
+
+export const prerender = false;
+
+const url = new URL(Astro.request.url);
+const listingId = url.searchParams.get('listing')?.trim() ?? '';
+const ok = url.searchParams.get('ok') === '1';
+const err = url.searchParams.get('err') ?? '';
+
+const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(listingId);
+
+let listingPreview: { title: string; price: number | null } | null = null;
+if (isUuid) {
+  const supabase = createServerClient();
+  const { data } = await supabase
+    .from('bazar_listings')
+    .select('title, price')
+    .eq('id', listingId)
+    .maybeSingle();
+  if (data) listingPreview = { title: data.title, price: data.price };
+}
+
+const errMessages: Record<string, string> = {
+  reason: 'Vyberte důvod nahlášení.',
+  description: 'U důvodu „Jiné" prosím doplňte popis (alespoň 10 znaků).',
+  'description-long': 'Popis je příliš dlouhý (max 4000 znaků).',
+  server: 'Hlášení se nepodařilo uložit. Zkuste to prosím znovu nebo nám napište na info@samecdigital.com.',
+};
+const errMsg = err ? (errMessages[err] ?? 'Chyba při odesílání.') : '';
+
+const REASONS = [
+  { value: 'padelek', label: 'Padělek nebo neoriginální díly vydávané za originální' },
+  { value: 'podvod', label: 'Podvod nebo scam (nereálná cena, platba předem, falešné kontakty)' },
+  { value: 'mlm-pujcky', label: 'MLM, půjčky, pyramida, „práce z domova"' },
+  { value: 'leciva-or', label: 'Léčiva nebo přípravky na ochranu rostlin bez oprávnění (mimo profesionální uživatele, neregistrované)' },
+  { value: 'osiva-hnojiva', label: 'Osiva nebo hnojiva v rozporu s registrem ÚKZÚZ' },
+  { value: 'zvirata-cites', label: 'Zvířata bez veterinárního osvědčení / chráněné druhy bez CITES / mrtvá zvířata' },
+  { value: 'zbrane', label: 'Zbraně, střelivo, výbušniny v rozporu se zákonem' },
+  { value: 'erotika-tabak', label: 'Erotika, tabák, alkohol, drogy, e-cigarety' },
+  { value: 'autorska-prava', label: 'Porušení autorských / průmyslových / osobnostních práv (kradené fotky, padělané logo)' },
+  { value: 'spam-duplicita', label: 'Spam, duplicitní inzerát, klamavý obsah' },
+  { value: 'nezakonny-obsah', label: 'Jiný nezákonný obsah' },
+  { value: 'jine', label: 'Jiné (uveďte v popisu)' },
+];
+---
+<Layout
+  title="Nahlásit závadný inzerát — Agro bazar"
+  description="Formulář pro nahlášení inzerátu, který porušuje pravidla bazaru, právní předpisy nebo vaše práva. Posuzujeme do 7 dnů."
+>
+  <main class="report-page">
+    <h1>Nahlásit závadný inzerát</h1>
+    <p class="lead">
+      Domníváte-li se, že konkrétní inzerát porušuje
+      <a href="/bazar/pravidla/">pravidla bazaru</a> nebo právní předpisy, vyplňte
+      formulář níže. Oznámení posoudíme <strong>bez zbytečného odkladu</strong>,
+      zpravidla do <strong>7 dnů</strong>. Ve zjevně nezákonných případech jednáme
+      neprodleně.
+    </p>
+
+    {ok && (
+      <div class="alert alert-success">
+        Děkujeme, hlášení jsme přijali. Pokud jste uvedli e-mail, ozveme se vám po
+        posouzení.
+      </div>
+    )}
+
+    {errMsg && (
+      <div class="alert alert-error">{errMsg}</div>
+    )}
+
+    {!ok && (
+      <form method="POST" action="/api/bazar/reports" class="report-form">
+        <div class="form-group">
+          <label for="listing_id">Inzerát (URL nebo ID)</label>
+          {listingPreview ? (
+            <div class="listing-preview">
+              <p class="listing-preview-title">{listingPreview.title}</p>
+              <p class="listing-preview-meta">
+                ID: <code>{listingId}</code> ·{' '}
+                <a href={`/bazar/${listingId}/`} target="_blank" rel="noopener">otevřít inzerát</a>
+              </p>
+              <input type="hidden" name="listing_id" value={listingId} />
+            </div>
+          ) : (
+            <>
+              <input
+                type="text"
+                id="listing_id"
+                name="listing_id"
+                class="form-input"
+                placeholder="https://agro-svet.cz/bazar/… nebo UUID inzerátu"
+                value={listingId}
+                pattern="(https?://[^\s]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})"
+              />
+              <p class="field-hint">URL najdete v adresním řádku, ID je poslední část URL (uuid).</p>
+            </>
+          )}
+        </div>
+
+        <div class="form-group">
+          <label for="reason">Důvod nahlášení *</label>
+          <select id="reason" name="reason" class="form-select" required>
+            <option value="">— vyberte —</option>
+            {REASONS.map((r) => (
+              <option value={r.value}>{r.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Popis (volitelně, pro důvod „Jiné" povinný)</label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-input"
+            rows="5"
+            maxlength="4000"
+            placeholder="Uveďte, co konkrétně je v inzerátu závadné, případně odkažte na zdroj (např. registr ÚKZÚZ, originální fotku, kterou kradou…)"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="reporter_email">Váš e-mail (volitelně)</label>
+          <input
+            type="email"
+            id="reporter_email"
+            name="reporter_email"
+            class="form-input"
+            placeholder="jan@example.cz"
+          />
+          <p class="field-hint">Pokud chcete dostat vyjádření k posouzení, nechte kontakt. E-mail uchováváme do uzavření hlášení a poté ho mažeme.</p>
+        </div>
+
+        {/* Honeypot — bots fill all visible fields, skip CSS-hidden ones. */}
+        <div class="hp-field" aria-hidden="true">
+          <label for="website">Vyplňte jen, jste-li robot</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <p class="legal-hint">
+          Odesláním souhlasíte se zpracováním údajů pro účely posouzení oznámení podle
+          <a href="/zpracovani-osobnich-udaju/" target="_blank" rel="noopener">zásad zpracování osobních údajů</a>.
+          IP adresu uchováváme po dobu 90 dnů (hash) pro detekci opakovaných nahlášení.
+        </p>
+
+        <button type="submit" class="btn-primary">Odeslat hlášení</button>
+      </form>
+    )}
+
+    <hr>
+
+    <h2>Co se s hlášením stane</h2>
+    <ol>
+      <li>Hlášení dorazí provozovateli (Samec Digital s.r.o.) na info@samecdigital.com.</li>
+      <li>Posoudíme ho zpravidla <strong>do 7 dnů</strong> od přijetí. Pokud je obsah <strong>zjevně nezákonný</strong> (ohrožení zdraví, podvod, padělky), jednáme neprodleně.</li>
+      <li>Pokud porušení potvrdíme, inzerát smažeme a/nebo zablokujeme účet inzerenta. Inzerent dostane oznámení s odůvodněním (DSA čl. 17) a může podat <strong>stížnost</strong> ve lhůtě 14 dnů.</li>
+      <li>Pokud jste uvedli e-mail, sdělíme vám výsledek.</li>
+    </ol>
+
+    <h2>Co tu nemá smysl hlásit</h2>
+    <ul>
+      <li><strong>Spory o cenu nebo kvalitu</strong> — provozovatel není stranou kupní smlouvy, řešte přímo s inzerentem nebo spotřebitelským sporem.</li>
+      <li><strong>Inzerát, který se vám prostě nelíbí</strong> — bez porušení pravidel.</li>
+      <li><strong>Žádosti o smazání vlastního inzerátu</strong> — to dělejte ze svého profilu (<a href="/bazar/moje/">Moje inzeráty</a>).</li>
+      <li><strong>Reklamace topování</strong> — na info@samecdigital.com.</li>
+    </ul>
+  </main>
+</Layout>
+
+<style>
+  .report-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.7;
+    color: #222;
+  }
+  .report-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin: 0 0 12px;
+  }
+  .report-page .lead {
+    font-size: 15px;
+    color: #444;
+    margin: 0 0 24px;
+  }
+  .report-page h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    margin: 32px 0 12px;
+  }
+  .report-page a { color: #0B7A3B; text-decoration: underline; }
+  .report-page hr { border: 0; border-top: 1px solid #eaeaec; margin: 32px 0; }
+
+  .alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 0 0 20px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .alert-success {
+    background: #e8f5ec;
+    border: 1px solid #0B7A3B;
+    color: #0B7A3B;
+  }
+  .alert-error {
+    background: #fcebe8;
+    border: 1px solid #c0392b;
+    color: #c0392b;
+  }
+
+  .report-form .form-group { margin: 0 0 18px; }
+  .report-form label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0 0 6px;
+    color: #1a1a1a;
+  }
+  .report-form .form-input,
+  .report-form .form-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d6d3c4;
+    border-radius: 8px;
+    font: inherit;
+    background: #fff;
+  }
+  .report-form textarea.form-input {
+    resize: vertical;
+    min-height: 110px;
+    font-family: inherit;
+  }
+  .report-form .form-input:focus,
+  .report-form .form-select:focus {
+    outline: 2px solid #0B7A3B;
+    outline-offset: -1px;
+    border-color: #0B7A3B;
+  }
+  .field-hint {
+    font-size: 12px;
+    color: #666;
+    margin: 6px 0 0;
+    line-height: 1.5;
+  }
+
+  .listing-preview {
+    background: #fbfaf4;
+    border: 1px solid #e8e4d2;
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+  .listing-preview-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin: 0 0 4px;
+    color: #1a1a1a;
+  }
+  .listing-preview-meta {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+  }
+  .listing-preview-meta code {
+    font-size: 11px;
+    background: #fff;
+    border: 1px solid #e8e4d2;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .legal-hint {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.55;
+    background: #fafafa;
+    border-left: 3px solid #d6d3c4;
+    padding: 10px 14px;
+    margin: 4px 0 18px;
+  }
+
+  .btn-primary {
+    background: #0B7A3B;
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    padding: 12px 24px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background .15s;
+  }
+  .btn-primary:hover { background: #066027; }
+
+  /* Honeypot — hidden from real users via CSS, bots that auto-fill text inputs will fill it. */
+  .hp-field {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
