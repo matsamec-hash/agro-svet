@@ -47,7 +47,7 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; {year} agro-svět.cz · Provozuje Samec Digital s.r.o., IČO 29547539</p>
+      <p>&copy; {year} agro-svět.cz · Provozuje <a href="https://samecdigital.com" target="_blank" rel="noopener" class="footer-operator-link">Samec Digital s.r.o.</a>, IČO 29547539</p>
       <div class="footer-bottom-links">
         <a href="/hledat/">Hledat</a>
         <span aria-hidden="true">·</span>
@@ -139,6 +139,16 @@ const year = new Date().getFullYear();
   }
   .footer-bottom p {
     margin: 0;
+  }
+  .footer-operator-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.18);
+    text-underline-offset: 2px;
+  }
+  .footer-operator-link:hover {
+    color: #FFFF00;
+    text-decoration-color: #FFFF00;
   }
   .footer-bottom-links {
     display: flex;
