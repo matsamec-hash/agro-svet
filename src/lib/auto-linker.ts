@@ -8,6 +8,7 @@ import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug
 import { getAllDruhy, getAllPlemena } from './plemena';
 import { SLOVNIK } from './slovnik';
 import { TIER_LISTS } from './tier-lists';
+import remoteCatalog from '../data/remote-catalog.json';
 
 interface GlossaryEntry {
   term: string;
@@ -18,6 +19,17 @@ interface GlossaryEntry {
   url: string;
   /** Higher wins when terms overlap; longer terms also matched first by length. */
   priority: number;
+  /** External URL (cross-site link) — adds target="_blank" rel="noopener" in render. */
+  external?: boolean;
+}
+
+interface RemoteCatalogEntry {
+  term: string;
+  aliases?: string[];
+  url: string;
+  category?: string;
+  priority?: number;
+  description?: string;
 }
 
 const PROTECTED_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'code', 'pre', 'script', 'style', 'figcaption']);
@@ -29,13 +41,14 @@ const MIN_TERM_LENGTH = 5;
 
 let cachedGlossary: GlossaryEntry[] | null = null;
 
-function makeEntry(term: string, url: string, priority: number): GlossaryEntry {
+function makeEntry(term: string, url: string, priority: number, external = false): GlossaryEntry {
   return {
     term,
     termLower: term.toLowerCase(),
     pattern: new RegExp(`(?<![\\p{L}\\p{N}_])(${escapeRegex(term)})(?![\\p{L}\\p{N}_])`, 'iu'),
     url,
     priority,
+    external,
   };
 }
 
@@ -113,6 +126,21 @@ function buildGlossary(): GlossaryEntry[] {
     entries.push(makeEntry(t.title, `/zebricky/${t.slug}/`, 5));
   }
 
+  // Cross-site catalog (Samec Digital síť) — external links na sister sites
+  // (Šanon, Naše kořeny, ChargeMate atd.). Priorita 4 (pod stroje/plemena/slovník),
+  // aby internal linky vyhrály když by se overlapovaly s external term.
+  // Renderne s target="_blank" rel="noopener" díky entry.external flag.
+  const remoteEntries = (remoteCatalog?.entries ?? []) as RemoteCatalogEntry[];
+  for (const e of remoteEntries) {
+    if (!e.term || !e.url) continue;
+    const prio = typeof e.priority === 'number' ? e.priority : 4;
+    entries.push(makeEntry(e.term, e.url, prio, true));
+    for (const alias of e.aliases ?? []) {
+      if (alias.length < 3) continue;
+      entries.push(makeEntry(alias, e.url, Math.max(3, prio - 2), true));
+    }
+  }
+
   // Sort by term length DESC (so "John Deere" matches before "Deere"), priority DESC tie-break.
   entries.sort((a, b) => b.term.length - a.term.length || b.priority - a.priority);
   return entries;
@@ -188,7 +216,10 @@ function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>): 
       const before = s.slice(0, match.index);
       const matched = match[0];
       const after = s.slice(match.index + matched.length);
-      s = `${before}<a href="${entry.url}" class="auto-link">${matched}</a>${after}`;
+      const attrs = entry.external
+        ? ` class="auto-link auto-link-external" target="_blank" rel="noopener"`
+        : ` class="auto-link"`;
+      s = `${before}<a href="${entry.url}"${attrs}>${matched}</a>${after}`;
       used.add(entry.url);
     }
   }
