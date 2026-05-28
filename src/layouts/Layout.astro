@@ -142,6 +142,8 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   {clarityId && (
     <script is:inline set:html={`(function(c,l,i){c.clarity=c.clarity||function(){(c.clarity.q=c.clarity.q||[]).push(arguments)};function boot(){var t=l.createElement("script");t.async=1;t.src="https://www.clarity.ms/tag/"+i;var y=l.getElementsByTagName("script")[0];y.parentNode.insertBefore(t,y)}var fire=function(){("requestIdleCallback" in c?c.requestIdleCallback(boot,{timeout:4000}):setTimeout(boot,2500))};if(l.readyState==="complete")fire();else c.addEventListener("load",fire,{once:true})})(window, document, "${clarityId.replace(/[^a-zA-Z0-9_-]/g, '')}");`} />
   )}
+
+  <script is:inline async src="https://analytics.ahrefs.com/analytics.js" data-key="Z+e1pTc55fQZcn08PcWwtQ"></script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Přeskočit na obsah</a>
