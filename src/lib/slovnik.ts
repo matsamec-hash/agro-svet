@@ -6969,6 +6969,468 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 500–3 000 ha dnes.
 Viz též [[ozim-jarin]], [[sojaova-bob]], [[mak-ozimy]], [[osevni-postup]].`,
     related: ['ozim-jarin', 'mak-ozimy', 'osevni-postup'],
   },
+
+  // ── CHOV — POKROČILÉ KONCEPTY ─────────────────────────────────────
+  {
+    slug: 'mastitida',
+    term: 'Mastitida',
+    alias: ['mastitis', 'zánět vemene', 'mléčný zánět'],
+    kategorie: 'chov',
+    shortDef: 'Mastitida je zánět mléčné žlázy (vemene) dojnice, typicky bakteriální. Nejvýznamnější zdravotní problém mléčných farem — způsobuje 30 % ekonomických ztrát chovu. Diagnostika: somatické buňky v mléce (SCC) >200 000/ml = subklinická, >500 000/ml = klinická.',
+    longDef: `Mastitida (lat. *mastitis*, řec. *mastos* = vemeno) je **zánět mléčné žlázy** dojnice. Nejvýznamnější zdravotní problém mléčného chovu — způsobuje **30 % ekonomických ztrát** (snížená produkce, antibiotika, vyřazené krávy).
+
+**Typy:** klinická (vizuální příznaky, vyžaduje léčbu) vs subklinická (jen SCC >200 000/ml, většina případů). Klíčové patogeny: kontagiózní (*Staphylococcus aureus*, *Streptococcus agalactiae*) a environmentální (*E. coli*, *Streptococcus uberis*, *Klebsiella*).
+
+**Měření SCC:**
+- <100 000/ml = zdravé
+- 200–500 000/ml = subklinická
+- >500 000/ml = klinická
+- **EU limit pro výkup mléka**: <400 000/ml
+
+**Léčba klinické mastitidy:**
+- **Intramammární antibiotika** (Mastijet, Cefa Safe) — 3 dny do napadené čtvrtě
+- **Systémová** (Penicilin G IM, Cefquinome) pro vážné případy
+- **Anti-inflammatory** (ketoprofen, meloxicam)
+- **Withdraval period**: mléko 3–5 dní, maso 14–30 dní
+- **Cena léčby**: 500–1 500 Kč + 1 500–3 000 Kč ztracené mléko
+
+**Prevence (klíčové):**
+1. **Hygiena dojení**: pre-dip + sušení sterilním ručníkem (per krávu!) + post-dip
+2. **Dry-cow therapy**: intramammární antibiotika + teat sealant při zaprahnutí
+3. **Suchá podestýlka**: sláma, dřevěné hobliny, písek
+4. **Genetika**: výběr býků s nízkým SCC ve potomstvu
+5. **TMR** (viz [[tmr]]): vyvážená výživa, selén + vit. E
+
+**Ekonomický dopad:**
+- Náklady na 1 klinickou mastitidu: 4 000–11 500 Kč
+- Stádo 100 krav: 300 000–800 000 Kč/rok ztráty
+- Dobrý management snižuje mastitidu o 50–70 % = velký ROI
+
+Viz též [[oteleni]], [[dojirna]], [[ku-kontrola-uzitkovosti]], [[tmr]], [[bcs-body-condition]], [[transition-period]].`,
+    related: ['oteleni', 'dojirna', 'tmr', 'krmne-davky'],
+  },
+  {
+    slug: 'bcs-body-condition',
+    term: 'BCS (Body Condition Score)',
+    alias: ['Body Condition Score', 'tělesný kondiční skór'],
+    kategorie: 'chov',
+    shortDef: 'BCS je vizuální hodnocení tělesné kondice skotu na škále 1–5 (USA) nebo 1–9. Klíčový management nástroj — optimální BCS mléčné krávy při otelení 3,25–3,75. Příliš tlustá = dystocie + ketóza; příliš hubená = nízká produkce a fertilita.',
+    longDef: `BCS (Body Condition Score) je **vizuální subjektivní hodnocení tělesné kondice (tuku)** hospodářských zvířat. Klíčový management nástroj pro mléčný + masný skot, ovce, kozy, prasata.
+
+**Škála USA (Wildman, 1982):**
+- 1: extrémně vyhublá
+- 2: hubená
+- 3: ideální mléčná kráva
+- 4: tlustá
+- 5: extrémně tlustá
+- Krokem 0,25
+
+**Optimální BCS — mléčná kráva (Holstein):**
+
+| Stadium | BCS |
+|---------|-----|
+| Otelení | 3,25–3,75 |
+| 30 dní po otelení | 2,75–3,00 (přípustný pokles) |
+| Vrchol laktace (100 dní) | 2,75–3,00 |
+| 200 dní | 3,00–3,25 |
+| Zaprahnutí | 3,25–3,75 |
+
+**Hodnocení**: páteř, kostnaté výběžky, krátká žebra, sedací hrbol, ocasní rýha. Vizuálně + palpace.
+
+**Důsledky chybného BCS:**
+
+**Příliš nízký (<2,5 při otelení):**
+- Nízká produkce, ketóza, slabší imunita, pozdní říje (viz [[rijnost]])
+
+**Příliš vysoký (>4,0 při otelení):**
+- Dystocie (viz [[oteleni]]), fatty liver, retentio placentae, ketóza, snížený příjem krmiva
+
+**Důležité pravidlo**: ztráta >1,0 BCS v prvních 60 dnech = riziko (ketóza, nízká fertilita).
+
+**Software pro automatickou BCS:**
+- **CowManager**, **DeLaval BCS Camera** — kamera + AI hodnocení
+- 200 000–500 000 Kč instalace
+- Denní BCS každé krávy bez manuální práce
+
+**Ekonomický dopad**: stádo s optimálním BCS managementem má o 200–500 l mléka/kráva/rok víc → pro 100 krav = 220 000–550 000 Kč/rok.
+
+Viz též [[oteleni]], [[rijnost]], [[mastitida]], [[ku-kontrola-uzitkovosti]], [[tmr]], [[transition-period]].`,
+    related: ['oteleni', 'rijnost', 'mastitida', 'tmr'],
+  },
+  {
+    slug: 'ku-kontrola-uzitkovosti',
+    term: 'Kontrola užitkovosti (KU)',
+    alias: ['KU', 'DHIA', 'milk recording'],
+    kategorie: 'chov',
+    shortDef: 'Kontrola užitkovosti je systematický monitoring produkce a kvality mléka dojnic. V CZ zajišťuje Český svaz chovatelů — 1× měsíčně analýza mléka per kráva (množství, tuk, bílkoviny, SCC, urea). Klíčové pro selekci, zdraví a šlechtění.',
+    longDef: `Kontrola užitkovosti (KU, anglicky *DHIA — Dairy Herd Improvement Association*, *milk recording*) je **systematický monitoring produkce a kvality mléka jednotlivých dojnic** přes plemenářské služby. V CZ zajišťuje **Český svaz chovatelů**.
+
+**Princip:**
+- 1× měsíčně technik na farmu
+- Vzorky mléka z každé krávy (ranní + večerní dojení)
+- Analýza v akreditované laboratoři
+- Výsledky zpracuje svaz + plemenná kniha (viz [[plemenna-kniha]])
+
+**Měřené parametry:**
+
+| Parametr | Holstein optimum |
+|----------|------------------|
+| Množství | 25–40 kg/den |
+| Tuk | 3,8–4,2 % |
+| Bílkoviny | 3,2–3,5 % |
+| SCC | <200 000/ml |
+| Urea | 15–30 mg/100 ml |
+| Laktóza | 4,8–5,0 % |
+
+**Použití KU dat:**
+
+**1. Selekce krav:**
+- Top 25 % → sexed semen (zaručené jaločky pro chov)
+- Bottom 25 % → masná genetika nebo prodej
+
+**2. Diagnostika:**
+- Vysoké SCC → mastitida (viz [[mastitida]])
+- Nízké bílkoviny → změna TMR (viz [[tmr]])
+- Vysoké urea → snížit CP v dietě
+- Pokles produkce → vyšetření
+
+**3. Plemenná hodnota:**
+- KU data jdou do plemenné knihy
+- Top býky vybráni z výsledků jejich dcer
+
+**Účast:**
+- ~60–70 % mléčných farem v CZ
+- Vysoká užitkovost (>10 000 kg/laktace) téměř 100 % v KU
+
+**Cena:**
+- 150–250 Kč/krávu/měs.
+- Stádo 100 krav: 180 000–300 000 Kč/rok
+- ROI: 500–1 500 Kč/kráva/rok zisk z lepší selekce
+
+**Digitalizace:**
+- AMS (Lely, DeLaval) ukládá data každého dojení
+- In-line analyzery měří tuk/bílkoviny v reálném čase
+- Trend: AMS data mohou nahradit klasickou KU
+
+Viz též [[plemenna-kniha]], [[mastitida]], [[bcs-body-condition]], [[oteleni]], [[dojirna]], [[inseminace]].`,
+    related: ['plemenna-kniha', 'mastitida', 'bcs-body-condition', 'dojirna'],
+  },
+  {
+    slug: 'plemenna-kniha',
+    term: 'Plemenná kniha',
+    alias: ['herd book', 'plemenná evidence'],
+    kategorie: 'chov',
+    shortDef: 'Plemenná kniha je oficiální registr čistokrevných zvířat plemene s rodokmenem a plemennou hodnotou. Vede ji uznaná plemenářská organizace (v CZ Český svaz chovatelů). Klíčový nástroj šlechtění, EU dotací a obchodu s genetikou.',
+    longDef: `Plemenná kniha (něm. *Herdbuch*, ang. *herd book*) je **oficiální registr čistokrevných zvířat plemene** spravovaný uznanou plemenářskou organizací. Obsahuje rodokmen, plemennou hodnotu, vlastnosti a původ. Klíčový nástroj šlechtění a EU dotací.
+
+**Historie:**
+- 1791 — první (British Thoroughbred koně)
+- 1822 — první pro skot (Shorthorn UK)
+- 1872 — Holstein-Friesian Herd Book (NL/DE)
+- 1898 — Český svaz chovatelů založen
+
+**Sekce:**
+- **A (čistokrevné)**: otec + matka registrovaní, ≥7/8 čistokrevnosti
+- **B (upgrade)**: cesta k sekci A přes 2–3 generace
+- **C (foundation)**: jen matka registrovaná, 50 % čistokrevnosti
+
+**Co eviduje:**
+
+1. **Identifikace**: ušní známka (viz [[usni-znamka]]), jméno, datum, plemeno
+2. **Rodokmen**: 4 generace dozadu (8 předků)
+3. **Vlastnosti**: produkce, plemenné hodnoty (PV/EBV), tělesný typ
+4. **Reprodukce**: inseminace, otelení, mezidoba
+5. **Zdraví**: mastitidy, veterinární zákroky, vyřazení
+
+**Plemenná hodnota (PV):**
+
+Klíčové indexy:
+- **TPI** (Total Performance Index — USA Holstein)
+- **NM$** (Net Merit dollars — ekonomický)
+- **RZG** (Relativzuchtwert Gesamt — DE/AT Holstein)
+- **NORD** (Severský index)
+- **CZECH SIH** (CZ celkový index Holstein)
+
+**Genomické hodnocení (2009+):**
+- DNA testy mladých zvířat
+- Predikce plemenné hodnoty bez čekání na dcery
+- 10 000+ testů/rok v CZ
+
+**Mezinárodní výměna:**
+- **Interbull** — koordinace přes 30+ zemí
+- ČR importuje 60 % semene (USA, Kanada, NL, DK)
+
+**CZ plemenářské organizace:**
+- **ČSCH** — Holstein, černo strakatý
+- **Svaz chovatelů masného skotu** — Charolais, Limousin, Aberdeen Angus
+- **Plemenáři Lhota, Bohemia Plus** — inseminační stanice
+
+**Plemena v CZ:**
+- Mléčné: Holstein (#1, 70 %), Český strakatý (20 %), Jersey, Montbéliarde
+- Masná: Charolais, Limousin, Aberdeen Angus, Hereford, Simmental, Belgické modré
+
+**Ekonomická hodnota:**
+- Čistokrevná top jalovice: 50 000–250 000 Kč
+- Top býk pro inseminaci: 500 000+ Kč
+- Embryotransfer top genetiky: 50 000–500 000 Kč
+- World Dairy Expo Grand Champion: 1+ mil. USD
+
+Viz též [[ku-kontrola-uzitkovosti]], [[inseminace]], [[jalovice]], [[bcs-body-condition]], [[f1-hybrid]], [[usni-znamka]].`,
+    related: ['ku-kontrola-uzitkovosti', 'inseminace', 'jalovice', 'usni-znamka', 'f1-hybrid'],
+  },
+  {
+    slug: 'kolostrum-mlezivo',
+    term: 'Kolostrum (mlezivo)',
+    alias: ['colostrum', 'mlezivo', 'první mléko'],
+    kategorie: 'chov',
+    shortDef: 'Kolostrum (mlezivo) je první mléko krávy po otelení — bohaté na imunoglobuliny (IgG). Telete musí dostat 4 litry kolostra do 6 hodin po porodu pro pasivní imunitu. Bez kolostra: 30–50 % úmrtnost telat v prvních týdnech.',
+    longDef: `Kolostrum (lat. *colostrum*, čes. *mlezivo*) je **první mléko krávy** po otelení. Klíčové pro **přežití telete** — narozené tele nemá vrozenou imunitu (placenta krávy je nepropustná pro protilátky), kolostrum je jediný zdroj **pasivní imunity**.
+
+**Složení kolostrum vs mléko:**
+
+| Komponent | Kolostrum | Mléko (den 3+) |
+|-----------|-----------|----------------|
+| Sušina | 23–28 % | 12–13 % |
+| Bílkoviny | 14–18 % | 3,3 % |
+| Tuk | 6–7 % | 4 % |
+| IgG | 60–120 g/l | 0,5–1 g/l |
+| Vitamín A | 10× vyšší | běžný |
+
+**Kritické okno absorpce:**
+- 0–6 h po porodu: 100 % absorpce IgG (= nejvyšší)
+- 6–12 h: 60 % absorpce
+- 12–24 h: 30 % absorpce
+- 24+ h: <10 % absorpce (sliznice "zavřela")
+
+**Doporučení:**
+
+**1. první dávka (kritická):**
+- **4 litry kolostra do 6 hodin** po porodu
+- Bud matčiným (pokud zdravá), nebo pasterizovaným zásobním
+- Aplikace: lahev nebo drench tube (sonda)
+
+**2. Druhá dávka:**
+- 2 litry za 6–12 h
+
+**3. Den 2–3:**
+- Postupný přechod na běžné mléko nebo náhražku
+
+**Kvalita kolostra:**
+
+**Test (Brix refraktometr):**
+- >22 % Brix = vysoká kvalita (>60 g IgG/l)
+- 18–22 % Brix = střední
+- <18 % Brix = nízká (nutné doplnit)
+
+**Faktory kvality:**
+- Plemeno: Jersey > Holstein (vyšší IgG)
+- Pořadí laktace: starší krávy mají vyšší IgG
+- Doba dojení: první dojení = nejvyšší IgG
+- Hygiena: čistá vemena → nižší kontaminace
+
+**Pasterizace:**
+- 60 °C × 60 min
+- Účel: zničit *Mycoplasma bovis*, *Salmonella*, *Mycobacterium avium* (Johne's)
+- Nesnižuje IgG významně (-10 %)
+- Pasterizér: 100 000–300 000 Kč
+
+**Zmrazení:**
+- Kvalitní kolostrum top krav zmrazeno (-20 °C, plastové sáčky 2 l)
+- Skladovatelnost: 12 měsíců
+- Rozmrazení: 40 °C vodní lázeň, max 60 min
+
+**Pasivní imunita selhání (FPT):**
+- 20–30 % telat (mezinárodní průměr)
+- Symptomy: průjem, pneumonie v 1.–4. týdnu
+- Diagnostika: STP (Total Protein) v krvi telete 2.–7. den — <5,0 g/dl = FPT
+
+**Ekonomický dopad:**
+
+**Bez kvalitního kolostra:**
+- 30–50 % úmrtnost (vs 5–10 %)
+- Léčba: 1 000–3 000 Kč/telete
+- Ztracené tele: 8 000–60 000 Kč hodnoty
+
+**S managementem:**
+- Lepší růst, lepší produkce v dospělosti (epigenetický efekt)
+
+Viz též [[oteleni]], [[jalovice]], [[mastitida]], [[transition-period]], [[dojirna]].`,
+    related: ['oteleni', 'jalovice', 'mastitida', 'transition-period', 'dojirna'],
+  },
+  {
+    slug: 'transition-period',
+    term: 'Tranzitní období',
+    alias: ['transition period', 'přechodné období dojnice'],
+    kategorie: 'chov',
+    shortDef: 'Tranzitní období je 3 týdny před a 3 týdny po otelení = 6 týdnů kritického zdravotního a metabolického přechodu krávy. 70 % všech zdravotních problémů vzniká v tomto okně. Klíč: TMR design, BCS management, prevence ketózy + hypokalcémie.',
+    longDef: `Tranzitní období (anglicky *transition period*) je **3 týdny před a 3 týdny po otelení** = **6 týdnů kritického přechodu** mléčné krávy mezi suchým obdobím a aktivní laktací. **70 % všech zdravotních problémů** mléčné krávy vzniká právě v tomto okně.
+
+**Hlavní zdravotní rizika:**
+
+**1. Mléčná horečka (hypocalcémie):**
+- Ca v krvi <8 mg/dl (norma 8,5–10,5)
+- Klinická: 3–8 % krav, paralýza, ležení
+- Subklinická: 25–50 % krav (snižuje produkci, imunitu)
+- Léčba: kalciumglukonát IV
+- Prevence: anionická směs předporodu (DCAD <0)
+
+**2. Ketóza:**
+- Negativní energetický balanc (NEB) → mobilizace tuku → ketolátky
+- Subklinická: 30–50 % krav (BHB >1,2 mmol/l)
+- Klinická: 5–10 % (BHB >3 mmol/l, anorexie, dech aceton)
+- Léčba: propylenglykol, glukóza IV
+- Prevence: monensin (Kexxtone), cholin, postupné navýšení TMR
+
+**3. Retentio placentae:**
+- 5–10 % otelení (vyšší u twins, dystocie)
+- Komplikace: metritis → snížená fertilita
+
+**4. Metritida (zánět dělohy):**
+- Akutní (pyometra) i chronická (endometritida)
+- Léčba: antibiotika + PGF₂α
+
+**5. Posunutí slezu (DA):**
+- LDA (levostranné): 95 %, 2–4 týdny po porodu
+- Léčba: chirurgické vrácení (5 000–15 000 Kč)
+
+**6. Mastitida** (viz [[mastitida]]):
+- Imunitní suprese zvyšuje riziko
+
+**Management:**
+
+**3 týdny před otelením (Close-up Dry):**
+
+TMR design:
+- **Anionická směs** (DCAD <0): kyselejší tělo → lepší Ca mobilizace
+- Energie: 6,5–7,0 MJ NEL/kg DM
+- CP: 14–15 %
+- NDF: 32–35 %
+- Cíl: udržet vysoký příjem krmiva
+
+Sledování:
+- BCS (3,25–3,5, viz [[bcs-body-condition]])
+- Příjem krmiva denně
+- Aktivita
+
+**Den otelení + první 3 dny:**
+
+- Suchá, čistá telící boxa (12+ m²)
+- Veterinární dohled
+- Kolostrum telete do 6 h (viz [[kolostrum-mlezivo]])
+- Calcium bolus krávě bezprostředně po porodu
+- Drench (sondování) elektrolyty + propylenglykol pokud nepije
+
+**Týdny 1–3 (Fresh Cow):**
+
+Transition TMR:
+- Postupné zvyšování koncentrátu (den 1: 60/40 píce/koncentrát; den 21: 50/50)
+- Energie: 7,2 MJ NEL/kg DM
+- CP: 16–17 %
+- RUP: 35–38 %
+- Cholin (Reashure): 15 g/kráva/den
+
+Sledování:
+- Denní vážení mléka
+- BHB test (ketóza) — den 5, 7, 12
+- NEFA test (mobilizace tuku)
+- BCS každý týden
+- Teplota (>39,5 °C = problém)
+
+**Ekonomický dopad:**
+
+**OPTIMÁLNÍ transition:**
+- 5 % klinických problémů
+- 305d produkce 11 000+ kg
+
+**ŠPATNÝ transition:**
+- 20–30 % klinických problémů
+- Léčba: 5 000–10 000 Kč/kráva
+- Snížená produkce: -500 až -1 500 kg/laktace
+- Vyřazení: 20+ % (vs 10 %)
+
+**ROI investice do transition managementu**: 3–5× = nejvýnosnější investice mléčné farmy.
+
+Viz též [[oteleni]], [[bcs-body-condition]], [[mastitida]], [[tmr]], [[kolostrum-mlezivo]], [[krmne-davky]].`,
+    related: ['oteleni', 'bcs-body-condition', 'mastitida', 'tmr', 'kolostrum-mlezivo'],
+  },
+  {
+    slug: 'f1-hybrid',
+    term: 'F1 hybrid',
+    alias: ['F1 generace', 'first filial generation', 'kříženec'],
+    kategorie: 'chov',
+    shortDef: 'F1 hybrid je první generace kříženců dvou různých plemen/linií. Vykazuje heterózu (hybrid vigor) — vyšší výkon než průměr rodičů. V zemědělství klíčové pro semena (hybridní kukuřice, žito) i živočišnou výrobu (mléko, prasata, brojleři).',
+    longDef: `F1 hybrid (anglicky *F1 generation*, *first filial generation*) je **první generace kříženců dvou geneticky odlišných linií**. Vyznačuje se **heterózí (hybrid vigor)** — vyšším výkonem než průměr rodičů. Klíčový genetický princip v moderním zemědělství.
+
+**Princip:**
+
+- **Rodič A** × **Rodič B** = **F1 generace** (geneticky identičtí, heterozygotní)
+- F1 × F1 = **F2** (rekombinanti, variabilní, heteróze klesá)
+
+**Heteróze (hybrid vigor):**
+- F1 výkonnější o 5–30 % nad průměrem rodičů
+- Mechanizmus: kombinace různých alel, maskování recesivních defektů
+- **Sníží se v F2** → každoroční nákup nového F1 osiva
+
+**Aplikace v rostlinné výrobě:**
+
+**1. Hybridní kukuřice:**
+- Henry Wallace USA 1920s — průkopnictví
+- USA výnos: 1900: 1,8 t/ha → dnes 11+ t/ha (díky F1)
+- F1 výhody: +20–30 % výnos, uniformita, stres tolerance
+- Trh: Pioneer, DEKALB (Bayer), Syngenta, Limagrain
+
+**2. Hybridní žito** (viz [[zito-ozime]]):
+- KWS 1990s (CMS — Cytoplasmic Male Sterility)
+- Výnosy: +30–50 % vs tradiční
+
+**3. Cukrová řepa, zelenina** — téměř 100 % F1
+
+**4. Hybridní pšenice** — neúspěšný projekt (samospraš)
+
+**Aplikace v živočišné výrobě:**
+
+**1. Prasata:**
+- Pietrain × (Velký bílý × Landrasse) = "double cross"
+- F1 prasnice: vysoká plodnost (12+ selat/vrhu)
+- F1 výkrm: rychlý růst, libové maso
+
+**2. Brojleři:**
+- **Ross 308**: 4-liniový hybrid, mezinárodní standard
+- Růst: 42 dní z 40 g na 2,5 kg
+- Konverze: 1,6 kg krmiva / kg masa
+
+**3. Nosnice:**
+- **ISA Brown** (Hubbard ISA, Hendrix Genetics)
+- 320+ vajec/rok (vs 200 tradiční)
+
+**4. Crossbreeding skot:**
+
+**Mléčný kříž** (méně častý):
+- Norský červený × Holstein — robust, lepší zdraví
+- Jersey × Holstein — vyšší tuk
+
+**Masný kříž** (běžný):
+- Holstein kráva × Charolais býk — premium kříženci
+- Holstein × Aberdeen Angus — marbling
+- Komerční výkrm: 50 kg → 600 kg za 12–18 měs.
+
+**Teorie heteróze:**
+1. **Dominance**: F1 maskuje recesivní defekty obou linií
+2. **Overdominance**: heterozygot je výkonnější
+3. **Epistasis**: synergie interakcí mezi loky
+
+**Etika a debata:**
+- Závislost farem na semenářských firmách (Bayer, Corteva, Syngenta, Limagrain)
+- Ztráta tradiční variability
+- **Open Source Seed Initiative** — alternativa
+
+**EU regulace:**
+- CMS hybridi ≠ GMO (klasická šlechtitelská technologie)
+- GMO hybridi (Mon810) silně omezené v EU
+
+Viz též [[plemenna-kniha]], [[inseminace]], [[zito-ozime]], [[kukurice-silazni]], [[ku-kontrola-uzitkovosti]].`,
+    related: ['plemenna-kniha', 'inseminace', 'zito-ozime', 'kukurice-silazni'],
+  },
 ];
 
 export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {
