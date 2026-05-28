@@ -1,0 +1,274 @@
+---
+// Interaktivní převodník jednotek hmotnosti pro zemědělství.
+// Specifikum: bušl (bushel) má různou hmotnost podle komodity, takže
+// widget má dropdown komodity + převod q ↔ t ↔ kg ↔ lb ↔ bu.
+// Embedded ve /slovnik/q-cent/, /slovnik/hektolitr/, /slovnik/busl/,
+// /slovnik/tuna/, /slovnik/kilogram/ a ve /kalkulacka/prevody-hmotnost/.
+
+export interface Props {
+  defaultUnit?: string;
+  defaultValue?: number;
+  defaultCommodity?: string;
+  heading?: string;
+  caption?: string;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const {
+  defaultUnit = 't',
+  defaultValue = 1,
+  defaultCommodity = 'pšenice',
+  heading = 'Převodník jednotek hmotnosti',
+  caption,
+  headingLevel = 'h2',
+} = Astro.props;
+
+// Konverzní faktory na kg (základní jednotka pro výpočet).
+const UNITS = [
+  { id: 'kg', label: 'kg', name: 'kilogram', factor: 1, decimals: 2, commodityDependent: false },
+  { id: 'q', label: 'q', name: 'metrický cent', factor: 100, decimals: 4, commodityDependent: false },
+  { id: 't', label: 't', name: 'tuna', factor: 1000, decimals: 5, commodityDependent: false },
+  { id: 'lb', label: 'lb', name: 'libra (pound)', factor: 0.45359237, decimals: 3, commodityDependent: false },
+  { id: 'bu', label: 'bu', name: 'bušl (bushel)', factor: 0, decimals: 4, commodityDependent: true },
+];
+
+// Hmotnost 1 bušlu v kg podle komodity (USDA standard).
+const COMMODITIES = [
+  { id: 'wheat', label: 'pšenice', buKg: 27.2155 },
+  { id: 'corn', label: 'kukuřice', buKg: 25.4012 },
+  { id: 'soy', label: 'sója', buKg: 27.2155 },
+  { id: 'barley', label: 'ječmen', buKg: 21.7724 },
+  { id: 'oats', label: 'oves', buKg: 14.5150 },
+  { id: 'rye', label: 'žito', buKg: 25.4012 },
+  { id: 'canola', label: 'řepka (canola)', buKg: 22.6796 },
+];
+
+const Heading = headingLevel;
+---
+
+<section
+  class="weight-conv"
+  data-default-unit={defaultUnit}
+  data-default-value={String(defaultValue)}
+  aria-label="Převodník jednotek hmotnosti"
+>
+  <Heading class="wc-h">{heading}</Heading>
+
+  <form class="wc-form" autocomplete="off" onsubmit="return false">
+    <label class="wc-input-row">
+      <span class="wc-label">Zadej hmotnost</span>
+      <span class="wc-input-wrap">
+        <input
+          type="number"
+          inputmode="decimal"
+          step="any"
+          min="0"
+          class="wc-input"
+          id="wc-input"
+          value={defaultValue}
+        />
+        <select class="wc-unit" id="wc-unit" aria-label="Vyber jednotku">
+          {UNITS.map((u) => (
+            <option value={u.id} selected={u.id === defaultUnit}>{u.label} ({u.name})</option>
+          ))}
+        </select>
+      </span>
+    </label>
+
+    <label class="wc-commodity-row">
+      <span class="wc-label">Komodita (pro bušl)</span>
+      <select class="wc-commodity" id="wc-commodity" aria-label="Vyber komoditu pro bušl">
+        {COMMODITIES.map((c) => (
+          <option value={c.id} selected={c.label === defaultCommodity}>{c.label} — 1 bu = {c.buKg.toFixed(2).replace('.', ',')} kg</option>
+        ))}
+      </select>
+    </label>
+
+    <div class="wc-results" id="wc-results" role="region" aria-live="polite">
+      {UNITS.map((u) => (
+        <div class="wc-result" data-unit={u.id}>
+          <span class="wc-r-label">{u.label}</span>
+          <span class="wc-r-value">—</span>
+          <span class="wc-r-name">{u.name}</span>
+        </div>
+      ))}
+    </div>
+  </form>
+
+  {caption && <p class="wc-caption">{caption}</p>}
+</section>
+
+<script is:inline define:vars={{ UNITS, COMMODITIES }}>
+  (function () {
+    const root = document.currentScript.previousElementSibling;
+    if (!root) return;
+    const input = root.querySelector('#wc-input');
+    const unitSel = root.querySelector('#wc-unit');
+    const cmdSel = root.querySelector('#wc-commodity');
+    const results = root.querySelector('#wc-results');
+    if (!input || !unitSel || !cmdSel || !results) return;
+
+    const fmt = (n) => {
+      if (!isFinite(n)) return '—';
+      if (n === 0) return '0';
+      const abs = Math.abs(n);
+      let d;
+      if (abs >= 1000) d = 0;
+      else if (abs >= 10) d = 2;
+      else if (abs >= 1) d = 3;
+      else if (abs >= 0.01) d = 4;
+      else d = 6;
+      return n
+        .toLocaleString('cs-CZ', { maximumFractionDigits: d, minimumFractionDigits: 0 })
+        .replace(/ /g, ' ');
+    };
+
+    function buFactor() {
+      const c = COMMODITIES.find((x) => x.id === cmdSel.value);
+      return c ? c.buKg : 27.2155;
+    }
+
+    function recalc() {
+      const raw = parseFloat(String(input.value).replace(',', '.'));
+      const fromUnit = UNITS.find((u) => u.id === unitSel.value);
+      if (!fromUnit || !isFinite(raw)) {
+        results.querySelectorAll('.wc-r-value').forEach((el) => { el.textContent = '—'; });
+        return;
+      }
+      const factorFrom = fromUnit.id === 'bu' ? buFactor() : fromUnit.factor;
+      const kg = raw * factorFrom;
+
+      UNITS.forEach((u) => {
+        const cell = results.querySelector(`[data-unit="${u.id}"] .wc-r-value`);
+        if (!cell) return;
+        const factorTo = u.id === 'bu' ? buFactor() : u.factor;
+        const val = factorTo > 0 ? kg / factorTo : 0;
+        cell.textContent = fmt(val);
+        const row = cell.closest('.wc-result');
+        if (row) row.classList.toggle('is-source', u.id === fromUnit.id);
+      });
+    }
+
+    input.addEventListener('input', recalc);
+    unitSel.addEventListener('change', recalc);
+    cmdSel.addEventListener('change', recalc);
+    recalc();
+  })();
+</script>
+
+<style>
+  .weight-conv {
+    margin: 28px 0;
+    padding: 20px 22px;
+    background: linear-gradient(180deg, #fffef8 0%, #fff 100%);
+    border: 1.5px solid #FFEA00;
+    border-radius: 12px;
+  }
+  .wc-h {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0A0A0B;
+    margin: 0 0 14px;
+    letter-spacing: -0.3px;
+  }
+  .wc-form { display: flex; flex-direction: column; gap: 14px; }
+  .wc-input-row, .wc-commodity-row { display: flex; flex-direction: column; gap: 6px; }
+  .wc-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6B6B72;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .wc-input-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .wc-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 10px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    border: 1.5px solid #d4d4d8;
+    border-radius: 8px;
+    background: #fff;
+    color: #0A0A0B;
+    font-variant-numeric: tabular-nums;
+  }
+  .wc-input:focus { outline: none; border-color: #0A0A0B; }
+  .wc-unit, .wc-commodity {
+    flex: 0 0 auto;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1.5px solid #d4d4d8;
+    border-radius: 8px;
+    background: #fff;
+    color: #0A0A0B;
+    cursor: pointer;
+    max-width: 240px;
+  }
+  .wc-commodity { width: 100%; max-width: none; }
+  .wc-unit:focus, .wc-commodity:focus { outline: none; border-color: #0A0A0B; }
+
+  .wc-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    padding-top: 4px;
+  }
+  .wc-result {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .wc-result.is-source {
+    background: #FFFBCC;
+    border-color: #FFEA00;
+  }
+  .wc-r-label {
+    grid-row: 1 / span 2;
+    align-self: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #6B6B72;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    min-width: 38px;
+  }
+  .wc-r-value {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0A0A0B;
+    font-variant-numeric: tabular-nums;
+  }
+  .wc-r-name {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 11px;
+    color: #6B6B72;
+  }
+  .wc-caption {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: #6B6B72;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px) {
+    .wc-input-wrap { flex-direction: column; }
+    .wc-unit { max-width: none; }
+    .wc-results { grid-template-columns: 1fr 1fr; }
+  }
+</style>

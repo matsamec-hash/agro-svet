@@ -651,7 +651,7 @@ Praktický příklad:
 - Cena 5500 Kč/t = 550 Kč/q → tržba 3,3 mil. Kč
 
 Pro velké výnosy (kukuřice silážní, traviny na siláž) se počítá v t (1 t = 10 q), nikdy v q (čísla by byla nepraktická — 400 q/ha kukuřice).`,
-    related: ['hektar', 'hektolitr', 'busl'],
+    related: ['tuna', 'kilogram', 'hektolitr', 'busl', 'hektar'],
   },
   {
     slug: 'ar',
@@ -818,8 +818,8 @@ Praktické dopady na příjem farmy:
 
 Hektolitrovou váhu měří mobilní váhy přímo v kombajnu (yield monitor, viz [[yield-monitor]]) nebo přesně laboratorně po sklizni.
 
-Viz též [[busl]] (US ekvivalent), [[q-cent]], [[hektar]].`,
-    related: ['busl', 'q-cent', 'yield-monitor'],
+Viz též [[busl]] (US ekvivalent), [[q-cent]], [[tuna]], [[kilogram]], [[hektar]].`,
+    related: ['busl', 'q-cent', 'tuna', 'kilogram', 'yield-monitor'],
   },
   {
     slug: 'busl',
@@ -860,8 +860,8 @@ Příklad převodu ceny CBOT na CZ:
 
 Pozor — **UK imperial bushel** (36,37 l) je o 3 % větší než US bušl, ale v zemědělství dnes naprosto dominuje US standard.
 
-Viz též [[hektolitr]] (EU ekvivalent kvalitativní jednotky), [[q-cent]], [[akr]].`,
-    related: ['hektolitr', 'q-cent', 'akr'],
+Viz též [[hektolitr]] (EU ekvivalent kvalitativní jednotky), [[q-cent]], [[tuna]], [[libra]], [[akr]].`,
+    related: ['hektolitr', 'q-cent', 'tuna', 'libra', 'akr'],
   },
   {
     slug: 'jitro',
@@ -1018,6 +1018,119 @@ Po metrické reformě v ČSR (1919) byl strych **oficiálně zrušen** jako plat
 
 Viz též [[korec]] (synonymum), [[jitro]] (= 2 strychy), [[lan]], [[hektar]].`,
     related: ['korec', 'jitro', 'lan', 'hektar'],
+  },
+  {
+    slug: 'tuna',
+    term: 'Tuna (t)',
+    alias: ['t', 'metrická tuna', 'megagram'],
+    kategorie: 'jednotky',
+    shortDef: 'Tuna (t) je jednotka hmotnosti = 1 000 kg = 10 metrických centů (q). Standardní jednotka v zemědělství pro výnosy plodin (t/ha), výkupní ceny komodit (Kč/t) i kapacity strojů.',
+    longDef: `Metrická tuna (značka **t**, někdy *Mg* — megagram) je jednotka hmotnosti = 1 000 kg = 10⁶ gramů. V SI je tuna přijímaná jednotka mimo SI, ale fakticky dominantní pro praktické vážení v zemědělství, obchodu i průmyslu.
+
+Převody:
+- **1 t = 1 000 kg = 10 q** (metrických centů)
+- **1 t ≈ 2 204,62 lb** (anglických liber)
+- **1 t ≈ 22,046 amerických short tunů** (US short ton = 907,18 kg)
+- **1 t ≈ 0,9842 long tunů (UK)** (long ton = 1 016 kg)
+- **1 t pšenice ≈ 36,7 bušlů** (US)
+- **1 t kukuřice ≈ 39,4 bušlů**
+
+Použití v zemědělství (CZ + EU standard):
+- **Výnosy plodin** — t/ha je dominantní jednotka. Pšenice 5–8 t/ha, kukuřice 8–12 t/ha, řepka 3–4,5 t/ha, ječmen 5–7 t/ha.
+- **Výkupní ceny** — Kč/t. Příklad 2024: pšenice 4 800–5 500 Kč/t, kukuřice 3 800–4 500 Kč/t.
+- **Hnojiva** — t/ha kejdy (15–25 t/ha), kg/ha NPK, ale balení dnes typicky v t (big-bag 600 kg ≈ 0,6 t, kontejner 1 t).
+- **Kapacita strojů** — návěs 14–24 t, kombajn zásobník 8–13 m³ ≈ 6–10 t obilí.
+- **Mezinárodní obchod** — CBOT, MATIF, FOB ceny v USD/t, EUR/t.
+
+Praktické příklady:
+- Pole 50 ha pšenice × 6,5 t/ha = 325 t = **6,5 železničních vagonů** (vagon ~50 t)
+- Sklizeň kukuřice 100 ha × 10 t/ha = 1 000 t = **40 návěsů × 25 t**
+- Roční spotřeba hnojiv farma 500 ha: 250 t LAV + 100 t DAM = 350 t
+
+**Tuna vs short ton (US/UK):**
+V mezinárodním obchodu pozor — americký *short ton* (2 000 lb) má jen 907 kg, *long ton* (UK, 2 240 lb) má 1 016 kg. Pokud čtete USDA reporty nebo americké zdroje, vždy ověřit jaká „ton" je míněna. **CBOT a EU obchod používá výhradně metrickou tunu (t)**.
+
+Viz též [[q-cent]] (= 0,1 t), [[kilogram]], [[busl]] (komoditní převod).`,
+    related: ['q-cent', 'kilogram', 'busl', 'hektolitr'],
+  },
+  {
+    slug: 'kilogram',
+    term: 'Kilogram (kg)',
+    alias: ['kg', 'kilo'],
+    kategorie: 'jednotky',
+    shortDef: 'Kilogram (kg) je základní jednotka hmotnosti v SI. V zemědělství klíčový pro dávkování hnojiv (kg/ha), váhu zvířat, ceny krmiv a balení (kg/balík siláže, kg/pytel osiva).',
+    longDef: `Kilogram (kg) je **základní jednotka hmotnosti v SI soustavě**. Od roku 2019 je definován pomocí Planckovy konstanty (h = 6,62607015 × 10⁻³⁴ J·s), předtím byl definován jako hmotnost mezinárodního prototypu uloženého v Sèvres u Paříže.
+
+Převody:
+- **1 kg = 1 000 g = 1 000 000 mg**
+- **1 kg = 0,001 t = 0,01 q**
+- **1 kg ≈ 2,2046 lb** (libra)
+- **1 kg ≈ 35,274 oz** (unce, USA/UK)
+
+Použití v zemědělství:
+- **Dávkování hnojiv** — kg/ha čistých živin. Příklad: pšenice ozimá 150 kg N/ha, kukuřice 180 kg N/ha. Pozor: kg živin ≠ kg hnojiva (LAV má 27,5 % N → 150 kg N = 545 kg LAV/ha).
+- **Dávkování postřiků** — kg/ha pro granulované přípravky a moridla. Příklad: Roundup 360 SL je tekutý (l/ha), ale glyfosát ve formě soli se uvádí v g/ha (720 g a.s./ha).
+- **Váha zvířat** — telata 35–45 kg při narození, dospělé krávy mléčné dojnice 600–750 kg, býk plemeník 1 000+ kg.
+- **Ceny krmiv** — Kč/kg pro premixy a koncentráty (10–30 Kč/kg), Kč/t pro běžné krmné směsi.
+- **Osivo** — pšenice 180–220 kg/ha, kukuřice 22–28 kg/ha (mnohem menší dávka — větší zrno).
+- **Balení produktů** — pytle hnojiv 25/40/50 kg, big-bag 500–1 200 kg, balíky siláže 600–800 kg.
+
+**Hektolitrová váha** — kg/hl je kvalitativní parametr obilí (viz [[hektolitr]]). Pšenice potravinářská 78+ kg/hl, krmná < 74 kg/hl.
+
+**Měření živé hmotnosti vs jatečná hmotnost:**
+- **Živá hmotnost** (LW — Live Weight) = váha zvířete na váze
+- **Jatečná hmotnost** (CW — Carcass Weight) = váha těla po porážce
+- Poměr CW/LW: skot ~55–60 %, prase ~75 %, drůbež ~70 %
+
+Praktická přirovnání:
+- **Pytel cementu**: 25 kg
+- **Pytel pšenice (osivo)**: 25 kg (standardní balení)
+- **Big-bag hnojiva**: 600 kg
+- **Tele**: 40 kg
+- **Selecky pas dojnice**: 650 kg
+- **Velký traktor (Fendt 1050)**: ~13 000 kg
+- **Návěs Joskin Trans-CAP plný kejdy**: ~30 000 kg (= 30 t)
+
+Viz též [[tuna]] (= 1 000 kg), [[q-cent]] (= 100 kg), [[libra]] (USA/UK).`,
+    related: ['tuna', 'q-cent', 'libra', 'hektolitr'],
+  },
+  {
+    slug: 'libra',
+    term: 'Libra (pound, lb)',
+    alias: ['pound', 'lb', 'anglická libra'],
+    kategorie: 'jednotky',
+    shortDef: 'Libra (pound, lb) je anglosaská jednotka hmotnosti = 0,4536 kg. Standardní jednotka v USA, UK, Kanadě a Austrálii. V zemědělství se s ní setkáme v USDA reportech, CBOT cenách a balení amerického krmiva.',
+    longDef: `Libra (anglicky *pound*, zkr. *lb* z latinského *libra*) je tradiční anglosaská jednotka hmotnosti. **Mezinárodní libra** (definovaná od roku 1959) = **0,45359237 kg** přesně.
+
+Převody:
+- **1 lb = 0,4536 kg** (přesně 0,45359237)
+- **1 lb = 16 oz** (uncí)
+- **1 kg ≈ 2,2046 lb**
+- **1 t ≈ 2 204,62 lb**
+- **1 short ton (US)** = 2 000 lb = 907,18 kg
+- **1 long ton (UK)** = 2 240 lb = 1 016 kg
+- **1 bušl pšenice** = 60 lb = 27,2155 kg
+
+Historicky existovaly desítky regionálních liber (apothecary lb 373 g, troy lb 373 g, French livre 489 g, ...), ale dnes je v praxi jen **mezinárodní libra (0,4536 kg)** v anglosaském obchodu.
+
+**Kde libra v CZ zemědělství:**
+- **USDA reporty** — WASDE, ERS publikace uvádějí ceny v ¢/lb pro některé komodity (bavlna, máslo, sýr).
+- **CBOT futures** — sójový olej se kvotuje v ¢/lb (cca 45–60 ¢/lb v 2024). Dobytek (live cattle) se obchoduje v ¢/lb (cca 180–200 ¢/lb).
+- **Krmiva premixy a doplňky** — americké zdroje uvádějí dávky v lb/head/day.
+- **Genetika a plemenné zápisy** — váhy plemenných býků a krav v lb (US Holstein registry).
+- **Outdoor / lov / rybolov** — v ČR populární „libra" pro označení velkých ryb (kapr 20+ lb = trofejní rozměr).
+
+Převod cen CBOT:
+- Sójový olej 50 ¢/lb = 0,50 USD/lb × 2,2046 = **1,10 USD/kg** = **1 100 USD/t**
+- Live cattle 200 ¢/lb = 2,00 USD/lb × 2,2046 = **4,41 USD/kg** living weight
+
+**Pozor — libra ≠ kilogram:**
+Časté chyby v překladech recipes a krmných tabulek. Američan napíše „180 lb cow" = 82 kg telete (myšlené tele, ne kráva!). Dospělá US cow = 1 200–1 400 lb = 545–635 kg.
+
+Pro CZ farmáře praktická pomůcka: **lb × 0,5** dává rychlý odhad v kg (přesněji × 0,4536, ale lb × 0,5 je dost pro mental math). Příklad: 2 000 lb ≈ 1 000 kg (skutečně 907 kg).
+
+Viz též [[kilogram]] (SI), [[tuna]], [[busl]] (= 60 lb pro pšenici).`,
+    related: ['kilogram', 'tuna', 'busl'],
   },
   {
     slug: 'morgen',
