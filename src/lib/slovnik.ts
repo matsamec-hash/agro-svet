@@ -7431,6 +7431,1101 @@ Viz též [[oteleni]], [[bcs-body-condition]], [[mastitida]], [[tmr]], [[kolostr
 Viz též [[plemenna-kniha]], [[inseminace]], [[zito-ozime]], [[kukurice-silazni]], [[ku-kontrola-uzitkovosti]].`,
     related: ['plemenna-kniha', 'inseminace', 'zito-ozime', 'kukurice-silazni'],
   },
+
+  // ── MODERNÍ AGTECH ─────────────────────────────────────────────────
+  {
+    slug: 'precision-livestock-farming',
+    term: 'Precision Livestock Farming (PLF)',
+    alias: ['PLF', 'precizní chov', 'precision dairy', 'smart farming živočišné'],
+    kategorie: 'precise-farming',
+    shortDef: 'Precision Livestock Farming (PLF) je systém kontinuálního automatického monitoringu zvířat pomocí senzorů (akcelerometry, RFID, kamery) a AI analýzy dat. Detekuje říji, mastitidu, kulhání, stres dříve než člověk — řeší 80 % managment rozhodnutí mléčné farmy.',
+    longDef: `Precision Livestock Farming (PLF, „precizní chov", anglicky *smart farming*) je systém **kontinuálního automatického monitoringu zvířat** pomocí senzorů, IoT a AI. Cíl: detekovat **biologické signály** (říje, nemoc, stres, krmení) **dříve než člověk** a transformovat data do managementu.
+
+**Historie:**
+- **1990s**: první aktivometry (pedometry) v dojírnách
+- **2010s**: rozšíření akcelerometrů na obojcích
+- **2015+**: AI/ML modely pro behaviorální analýzu
+- **2020+**: kamery + computer vision (BCS, kulhání)
+- **2024**: integrace LLM (Large Language Models) pro doporučení
+
+**Hlavní senzorové technologie:**
+
+**1. Akcelerometry (obojkové / nákolenní):**
+- **Měří**: aktivitu (kroky, mounting, lehání)
+- **Aplikace**: detekce říje, ranná detekce nemoci, monitoring komfortu
+- **Top produkty**:
+  - **CowManager SensOor** (NL) — obojkový
+  - **Allflex Heatime** (IL) — obojkový
+  - **DeLaval DDM** — uchový tag
+  - **SCR Heatime** — Israeli alternative
+- **Cena**: 2 000–5 000 Kč/krávu (jednorázová) + 30–80 Kč/měs. software
+
+**2. RFID (radio-frequency identification):**
+- **Ušní známka** (viz [[usni-znamka]]) s integrovaným RFID chipem
+- **Statické čtečky**: brány do dojírny, krmných boxů
+- **Aplikace**: identifikace, automatické krmení (per cow), monitoring příjmu
+
+**3. Mléčný analyzér (in-line):**
+- **Integrovaný v dojírně** — měří objem + složení v reálném čase
+- **Parametry**: tuk, bílkoviny, laktóza, vodivost (mastitida — viz [[mastitida]])
+- **Aplikace**: alarm vysokého SCC, denní KU bez technika
+- **Trh**: AfiLab (DeLaval), Lely milk analyzer
+
+**4. Kamery + Computer Vision:**
+- **Aplikace**:
+  - **BCS skórování** (viz [[bcs-body-condition]]) automaticky
+  - **Lameness detection** (kulhání) — analýza chůze
+  - **Behavior monitoring** (lying time, water visits)
+  - **Heat detection** (komplement k akcelerometru)
+- **Trh**: DeLaval BCS Camera, Cargill ZAFFY (kulhání), Connecterra (full AI)
+- **Cena**: 200 000–500 000 Kč instalace
+
+**5. Bolus senzory (v bachoru):**
+- **Polykané telete** (orálně) — žije v bachoru roky
+- **Měří**: bachorové pH, teplotu, motorickou aktivitu
+- **Aplikace**: acidóza detection, ranná detekce nemoci
+- **Trh**: Mottainai, Cowtronix
+- **Cena**: 3 000–8 000 Kč/kráva (jednorázové)
+
+**6. Vodní spotřeba sensors:**
+- **Měření spotřeby vody** per cow (přes RFID v boxu)
+- **Aplikace**: pokles příjmu = ranná indikace nemoci nebo stresu
+
+**Klíčové aplikace PLF:**
+
+**1. Detekce říje (viz [[rijnost]]):**
+- **Tradiční vizuální**: 45–65 % detekce
+- **PLF akcelerometr**: 90–98 % detekce
+- **Inseminační timing**: optimální (6–18 h od startu říje)
+- **Ekonomický dopad**: -50 dní mezidoby = +500 l mléka/kráva/rok
+
+**2. Detekce mastitidy:**
+- **In-line mléčný analyzér** detekuje vodivost (≈ SCC)
+- **Alarm** na zvýšení 24 h před klinickými příznaky
+- **Rychlejší léčba** = méně ztracená produkce
+
+**3. Detekce nemocí (general):**
+- **Změna chování** (-30 % aktivity nebo -20 % ruminace) = alarm
+- **Ranný start léčby** snižuje closure rate
+- **Telete v transition period** (viz [[transition-period]]) — vysoký ROI
+
+**4. Detekce kulhání:**
+- **Kamerový systém** sleduje chůzi
+- **Trénink AI**: klasifikace 1–5 (locomotion score)
+- **Cíl**: <5 % krav s lameness score >3
+
+**5. Welfare monitoring:**
+- **Lying time** (12–14 h = optimum)
+- **Standing time u krmení**
+- **Sociální interakce**
+
+**6. Reprodukční management:**
+- **Ovsynch protokoly** podle dat
+- **Inseminační timing**
+- **Konfirmace zabřeznutí** (změna aktivity 5–7 dní po inseminaci)
+
+**Software a platformy:**
+
+- **CowManager** (NL) — dominantní v EU
+- **Connecterra IDA** (NL) — AI-first
+- **Afimilk Aclick** (IL)
+- **GEA CowScout** (DE)
+- **Lely Astronaut + Horizon** (NL)
+- **Microsoft Azure FarmBeats** — IoT platforma
+
+**Robotické dojírny (AMS) jako PLF platforma:**
+- Lely Astronaut, DeLaval VMS, GEA DairyRobot
+- Integrace: dojení + krmení + senzory + software
+- Cena: 4–6 mil. Kč per robot (1 robot = 60 krav)
+
+**ROI PLF systému:**
+
+**Investice na 100 krav:**
+- Akcelerometry + sw: 250 000–500 000 Kč
+- Plus in-line analyzér: +400 000–800 000 Kč
+- Plus BCS kamera: +300 000–500 000 Kč
+- **Celkem**: 950 000–1 800 000 Kč
+
+**Benefity ročně:**
+- Lepší detekce říje: +50 000–100 000 Kč/krávu × 100 = 50 000 Kč/100 krav... wait, recalc: +1 000–2 000 Kč/kráva = 100 000–200 000 Kč/rok pro 100 krav
+- Méně mastitid: -50 000–100 000 Kč/rok
+- Lepší welfare = lepší dlouhověkost krav: 100 000–200 000 Kč/rok
+
+**Celkem**: 250 000–500 000 Kč/rok ROI
+**Návratnost**: 2–5 let
+
+**Bariéry:**
+1. **Vysoká investice** — pro malé farmy obtížné
+2. **Komplexnost** — vyžaduje IT/digital dovednosti
+3. **Závislost na internetu** — cloud sw vyžaduje stabilní internet
+4. **Údržba** — senzory životnost 5–7 let
+
+**Budoucnost:**
+- **LLM integrace** — ChatGPT-like rozhraní pro farmu
+- **Predikční modely** — predikce mastitidy 7 dní dopředu
+- **Genomické integrace** — kombinace PLF dat s plemennou hodnotou
+- **Vir farmy** — koncept "digital twin" mléčného stáda
+
+Viz též [[rijnost]], [[mastitida]], [[bcs-body-condition]], [[ku-kontrola-uzitkovosti]], [[transition-period]], [[dojirna]], [[telematika]], [[usni-znamka]].`,
+    related: ['rijnost', 'mastitida', 'bcs-body-condition', 'ku-kontrola-uzitkovosti', 'transition-period', 'dojirna'],
+  },
+  {
+    slug: 'satelity-zemedelstvi',
+    term: 'Satelity v zemědělství',
+    alias: ['satellite agriculture', 'remote sensing', 'družicová data', 'Sentinel data'],
+    kategorie: 'precise-farming',
+    shortDef: 'Satelitní data (Sentinel, Landsat, Planet) poskytují multispektrální snímky pro monitoring polí — vegetační indexy (NDVI), vlhkost půdy, výnos predikce, detekce stresu plodin. Free Sentinel data umožňují každé farmě sledovat 100+ ha za zlomek nákladů.',
+    longDef: `Satelitní data jsou klíčový **vstup pro precision farming** — poskytují **multispektrální snímky** s prostorovým rozlišením 1–30 m a temporálním rozlišením 1–7 dní. Aplikace: monitoring porostů, detekce stresu, variable rate aplikace (viz [[variable-rate]]), výnos predikce.
+
+**Hlavní satelitní programy:**
+
+**1. Copernicus Sentinel (EU, zdarma!):**
+- **Sentinel-2** — multispektrální (13 bands), rozlišení 10 m (RGB+NIR), 20 m (red edge), 60 m (atmosférické)
+- **Frekvence**: 5 dní (kombinace 2 satelitů)
+- **Pokrytí**: celá EU pravidelně
+- **Cena**: ZDARMA pro všechny (EU iniciativa)
+- **API**: Sentinel Hub, Google Earth Engine
+
+**2. Landsat (USA, NASA, zdarma!):**
+- **Landsat 8/9** — rozlišení 30 m (multispektrální), 100 m (termální)
+- **Frekvence**: 16 dní (jeden satelit)
+- **Pokrytí**: globální od 1972 (50+ let dat!)
+- **Cena**: ZDARMA
+- **Použití**: dlouhodobé trendy, historie
+
+**3. Planet Labs (USA, komerční):**
+- **PlanetScope** — denní snímky, rozlišení 3 m
+- **SkySat** — rozlišení 0,5 m (subdetailní)
+- **Cena**: 10–50 USD/km²/měs.
+- **Použití**: precision farming na úrovni rostliny
+
+**4. Maxar / DigitalGlobe (komerční, drahá):**
+- **WorldView-3/4** — rozlišení 0,3 m
+- **Cena**: 25–100 USD/km²
+- **Použití**: military, urban planning, vzácně ag
+
+**5. NICFI (Norway, tropická lesní data zdarma):**
+- Planet Labs PlanetScope pro tropy ZDARMA
+- Pro EU farmy irelevantní
+
+**Vegetační indexy (klíčové výstupy):**
+
+**1. NDVI (Normalized Difference Vegetation Index) — viz [[ndvi]]:**
+- **Vzorec**: (NIR - RED) / (NIR + RED)
+- **Hodnoty**: -1 až +1 (porost: 0,3–0,9)
+- **Interpretace**: vyšší = více chlorofylu = zdravější porost
+- **Aplikace**: stress detection, variable rate N hnojení
+
+**2. NDRE (Normalized Difference Red Edge):**
+- **Vzorec**: (NIR - RedEdge) / (NIR + RedEdge)
+- **Citlivější** k variabilitě N v plodině
+- **Aplikace**: in-season hnojení rozhodnutí
+
+**3. EVI (Enhanced Vegetation Index):**
+- Robustnější vůči atmosférickým efektům
+- Vhodný pro lesy, husté porosty
+
+**4. SAVI, OSAVI (Soil-Adjusted):**
+- Pro nízké pokrytí (kukuřice v BBCH 12–30)
+- Odpočítá efekt holé půdy
+
+**5. Termální indexy:**
+- Landsat 8/9 termální band
+- **CWSI** (Crop Water Stress Index) — detekce sucha
+- Sentinel-3 = lepší teplotní snímky (1 km rozlišení, denně)
+
+**6. SAR (Synthetic Aperture Radar):**
+- Sentinel-1 — radar (proniká mrak, vidí v noci)
+- **Aplikace**: vlhkost půdy, biomassa, detekce sklizně
+
+**Komerční platformy pro farmáře:**
+
+- **Climate FieldView** (USA, Bayer) — top globální, $500–1 500/farma/rok
+- **OneSoil** (NL) — bezplatná, NDVI ze Sentinel
+- **Mapy.eAgronom** (CZ, EE) — domácí integrace
+- **Yara Atfarm** — N variabilita
+- **Soyl** (UK) — variable rate N + osivo
+- **Agremo** (RS) — drone + satellite kombinace
+- **SatAgro** (PL) — Sentinel-based, EU farms
+- **Sentinel Hub Playground** — DIY platforma (technical)
+
+**Aplikace v CZ farmě:**
+
+**1. Variable rate N hnojení:**
+- Sentinel-2 NDVI BBCH 32 pšenice
+- Mapa variability → soubor pro postřikovač (ISO XML)
+- Aplikační stroj reaguje sekce-by-sekce (10–24 m sekce)
+- **Úspora N**: 10–20 % (= 500–1 000 Kč/ha)
+
+**2. Detekce stresu (sucho, choroba):**
+- Pravidelný NDVI monitoring
+- Anomálie = signál k kontrole
+- Ranný zásah = prevence ztrát
+
+**3. Yield prediction:**
+- Historická NDVI data + ML model
+- Predikce výnosů 30–60 dní před sklizní
+- Plánování logistiky (sušárny, sklady)
+
+**4. Pojištění úrody:**
+- **Parametric insurance** — pojistka platí podle NDVI anomálie
+- **Bez nutnosti** prohlídky pole pojistitelem
+- **Trh**: Hannover Re, Munich Re — EU parametrické pojištění
+
+**5. EU CAP kontroly:**
+- **SZIF** používá Sentinel data pro kontrolu LPIS (viz [[lpis]])
+- Detekuje "sklizeň před vyhlášením", neoznámené operace
+- "Geo-tagged photos" verifikované satelity
+
+**6. Historická analýza pole:**
+- 10+ let NDVI dat ZDARMA
+- Identifikace variability půdy (zóny)
+- Plánování investic (drenáž, vápnění zón)
+
+**Technické omezení:**
+- **Mraky** — Sentinel-2 optický nevidí přes mrak (cca 30 % snímků zataženo)
+- **Rozlišení** — 10 m nevidí jednotlivé rostliny (jen plošně)
+- **Atmosférické korekce** — vyžaduje preprocessing (řeší platformy)
+- **Časový lag** — od snímání po dostupnost 1–7 dní
+
+**Cena PRO farmu:**
+
+**Free tier** (Sentinel + OneSoil):
+- **0 Kč**
+- Základní NDVI 1× týdně
+- Vhodné pro malé farmy
+
+**Mid tier** (Climate FieldView, eAgronom):
+- **15 000–40 000 Kč/rok**
+- Plné rozhraní, variable rate maps, integrace s technikou
+- Vhodné pro 200–1 000 ha farmy
+
+**Top tier** (Planet + custom analytics):
+- **100 000+ Kč/rok**
+- Denní 3m rozlišení, vlastní AI modely
+- Vhodné pro velké korporátní farmy nebo výzkumné projekty
+
+**Budoucnost:**
+- **Sentinel-3 NextGen** (2025+) — vyšší rozlišení
+- **AI integrace** — automatická detekce konkrétních chorob (rzi, septorioza)
+- **Real-time pojištění** — okamžitá výplata podle satelitu
+- **Carbon credits** — verifikace sekvestrace pomocí satelitního monitoringu (viz [[karbonove-zemedelstvi]])
+
+Viz též [[ndvi]], [[variable-rate]], [[gps-rtk]], [[lpis]], [[karbonove-zemedelstvi]], [[telematika]], [[drony-zemedelstvi]].`,
+    related: ['ndvi', 'variable-rate', 'gps-rtk', 'lpis', 'karbonove-zemedelstvi', 'telematika', 'drony-zemedelstvi'],
+  },
+  {
+    slug: 'agrolesnictvi',
+    term: 'Agrolesnictví',
+    alias: ['agroforestry', 'agroles', 'silvopasture', 'alley cropping'],
+    kategorie: 'precise-farming',
+    shortDef: 'Agrolesnictví je systém pěstování stromů a zemědělských plodin nebo živočichů na stejném pozemku. Klíčové formy: alley cropping (řady stromů mezi plodinami), silvopasture (pastva mezi stromy), forest farming (rozšířený les). V EU rostoucí v rámci CAP 2023+.',
+    longDef: `Agrolesnictví (anglicky *agroforestry*, „zemědělství s lesem") je **integrovaný systém pěstování stromů + zemědělských plodin nebo živočichů** na stejném pozemku. Synergie stromů a zemědělství zvyšuje produktivitu, biodiverzitu, sekvestraci uhlíku.
+
+**Hlavní formy:**
+
+**1. Alley cropping (mezisazená polní hospodářství):**
+- **Princip**: řady stromů (ovocné, lesnické) v mezerách 15–40 m mezi nimi pěstujeme plodiny
+- **Stromy**: ořešák, jabloň, hrušeň, lípa, dub červený, olše
+- **Plodiny**: pšenice, kukuřice, řepka, luskoviny
+- **Výnos plodin**: -10 až -20 % (kvůli zástinu)
+- **Plus stromy**: ovoce, dřevo, sekvestrace C → kompenzace + bonus
+
+**2. Silvopasture (pastva mezi stromy):**
+- **Princip**: pastviny s rozptýlenými stromy nebo řadami
+- **Výhody**: stín pro skot (snížený tepelný stres), pastva pod stromy, biodiverzita
+- **Stromy**: dub, kaštan, ovocné, akcie ořešák
+- **Tradice**: dehesa (Španělsko), montado (Portugalsko), pastvy v ČR Krkonoše
+
+**3. Forest farming:**
+- **Princip**: rozšířené pěstování pod lesnatým pokrytím
+- **Plodiny**: houby, lesní jahody, bylinky, ženšen
+- **Niche trh**, vysoká marže
+
+**4. Větrolamy + plodiny:**
+- **Pásové výsadby** stromů kolem polí (5–20 m široké)
+- **Ochrana** proti větrné erozi
+- **Mikroklima** — méně sucha, lepší výnosy o 5–15 %
+- **Tradice CZ**: jiřinské větrolamy (jižní Morava)
+
+**5. Riparian buffer (břehové porosty):**
+- **Stromy podél vodních toků** (5–30 m)
+- **Účel**: filtrace splavů hnojiv + pesticidů, biodiverzita
+- **EU dotace** v rámci AEKO
+
+**6. Plantážové ovocné sady:**
+- **Klasický sad** je již agroforestry forma
+- **Intenzivní**: jabloně 800–1 200/ha, jednoosé řady
+- **Plus**: travní pás mezi řady → cilační skoty pastevně
+
+**Ekosystémové benefity:**
+
+**1. Sekvestrace uhlíku:**
+- **Stromy ukládají C v dřevě + půdě** — 2–10 t CO₂/ha/rok
+- Pro CAP carbon farming = vysoký kredit (viz [[karbonove-zemedelstvi]])
+
+**2. Biodiverzita:**
+- **Stromy** = habitat pro ptáky, hmyz, drobné savce
+- **Pesticidní redukce** — predátoři škůdců (slunéčka, hmyz parazitoidi)
+
+**3. Vodní hospodářství:**
+- **Kořeny stromů** infiltrují vodu hlouběji
+- **Snižuje erozi** (viz [[eroze-pudy]])
+- **Větrolamy** snižují evaporaci o 20–30 %
+
+**4. Welfare zvířat (silvopasture):**
+- Stín v létě = nižší tepelný stres
+- Volný pohyb pro skot
+
+**5. Diverzifikace příjmů:**
+- Plodiny + dřevo + ovoce + housova + bio paliva
+- Risk-spreading proti tržním šokům
+
+**Ekonomika:**
+
+**Náklady na výsadbu**:
+- **Stromy** (sazenice): 100–500 Kč/strom
+- **Hustota**: 100–400 stromů/ha (řadové výsadby)
+- **Ochrana** (chrániče proti zvěři, plot): 50–200 Kč/strom
+- **Údržba** (zalévání první 3 roky, řez): 20–50 Kč/strom/rok
+- **Celkem startup**: 30 000–100 000 Kč/ha
+- **Provozní**: 1 000–3 000 Kč/ha/rok
+
+**Návratnost**:
+- **Ovoce** od roku 5–7 (jabloň, hrušeň)
+- **Ořechy** od roku 8–12 (ořešák)
+- **Dřevo** od roku 30–60 (lesnické dřeviny)
+- **Carbon credits** ihned (3–8 EUR/t CO₂)
+- **CAP dotace** za stromy (viz dále)
+
+**EU CAP 2023–2027 a agrolesnictví:**
+
+**1. Eko-režimy (EKO platba):**
+- **Stromy v zemědělství** = bonus +1 300 Kč/ha
+- **Podmínka**: min. 50 stromů/ha, registrace
+
+**2. AEKO podopatření:**
+- **Trvalé krajinné prvky** (alej, větrolam) — 50–80 Kč/m/rok
+- **Pastviny s stromy** — vyšší sazba ANC
+
+**3. Intervence 4.4** (Strategický plán SZP):
+- **Investiční podpora pro výsadbu** stromů na zemědělské půdě
+- **60–80 % nákladů** dotováno
+- **Cíl EU**: 3 mld nových stromů do 2030
+
+**CZ právní rámec:**
+- **Vyhláška 314/2017** o stromech v zemědělství
+- **LPIS** musí stromy registrovat
+- **GAEC 8** vyžaduje zachování krajinných prvků
+
+**Implementační bariéry:**
+1. **Dlouhodobá investice** — návratnost 5–30 let
+2. **Pronajatá půda** — nájemce nechce investovat do stromů
+3. **Stínění plodin** — pokles výnosů o 10–20 %
+4. **Údržba** — řez, ochrana, zalévání
+5. **Mechanizace** — překáží polní strojům
+
+**Příklady úspěšných farem:**
+- **Wakelyns** (UK) — alley cropping pšenice + ořešák, 30+ let
+- **Stilo** (FR) — silvopasture skot + dub
+- **CZ pilotní projekty** — Jihočeská univerzita, Mendelu Brno
+
+**Trend:**
+- **EU strategie "Farm to Fork"** podporuje agroforestry
+- **Climate change adaptation** — stromy + plodiny = resilience
+- **Carbon credits** — rostoucí trh pro agroforestry sekvestraci
+
+Viz též [[karbonove-zemedelstvi]], [[regenerativni-zemedelstvi]], [[eroze-pudy]], [[mez]], [[biopasy]], [[gaec]].`,
+    related: ['karbonove-zemedelstvi', 'regenerativni-zemedelstvi', 'eroze-pudy', 'mez', 'biopasy', 'gaec'],
+  },
+  {
+    slug: 'hydroponie',
+    term: 'Hydroponie',
+    alias: ['hydroponics', 'beztrhní pěstování', 'soilless growing'],
+    kategorie: 'precise-farming',
+    shortDef: 'Hydroponie je pěstování rostlin bez půdy — v inertním substrátu (perlit, kokos, kamenná vlna) nebo přímo ve vodě s živinami. Klíčová pro skleníky (rajčata, paprika, salát) a vertical farming. Spotřeba vody -90 %, výnos +30 % vs půdní pěstování.',
+    longDef: `Hydroponie (řec. *hydro* + *ponos* = voda + práce) je **pěstování rostlin bez půdy** — kořeny v inertním substrátu (perlit, kokos, kamenná vlna) nebo přímo ve vodě s rozpuštěnými živinami. Klíčová technologie pro **skleníky, vertical farming, urban agriculture**.
+
+**Princip:**
+- Rostlina získává **živiny z vodního roztoku** (= nutrient solution), ne z půdy
+- Kořeny v inertním substrátu (struktura) nebo přímo ve vzduchu/vodě
+- **Přesné ovládání** pH, EC (electrical conductivity), teploty, koncentrací N/P/K
+- **Velmi efektivní** využití vody a živin
+
+**Hlavní systémy:**
+
+**1. NFT (Nutrient Film Technique):**
+- **Mělký proud** výživného roztoku přes kořeny v žlabech
+- **Plodiny**: salát, bazalka, jahody
+- **Plusy**: jednoduchý, levný
+- **Mínusy**: výpadek pumpy = rychlá smrt rostlin
+
+**2. DWC (Deep Water Culture):**
+- **Kořeny ponořené** ve vzdušném roztoku
+- **Vzduchovači** dodávají kyslík kořenům
+- **Plodiny**: salát, kanabis (medicinální), bylinky
+- **Plusy**: high yield, jednoduchý
+- **Mínusy**: výpadek vzduchu = kořeny anaerobní za 4 h
+
+**3. Ebb & Flow (Flood & Drain):**
+- **Periodicky** zaplavovaný substrát
+- **Plodiny**: zelenina, ovoce, dekorativní
+- **Plusy**: flexibilní, levný
+- **Mínusy**: vyžaduje timer kontrolu
+
+**4. Drip irrigation:**
+- **Kapky výživy** na bázi substrátu (kamenná vlna, kokos)
+- **Plodiny**: rajčata, paprika, okurky (skleníkové)
+- **Plusy**: precision, EU standard
+- **Mínusy**: vyšší investice
+
+**5. Aeroponics:**
+- **Kořeny ve vzduchu** + sprej výživy
+- **Plodiny**: salát, brambory (sazenice)
+- **Plusy**: nejvyšší kyslík = nejrychlejší růst
+- **Mínusy**: vysoká investice, technicky obtížný
+
+**Substráty:**
+
+**1. Kamenná vlna (Rockwool):**
+- **EU skleníky standard** pro rajčata, paprika
+- **Cena**: 50–150 Kč/m³
+- **Recyklace**: drahá, environmentální problém
+
+**2. Kokosové vlákno:**
+- **Bio přístup** — alternativa kamenné vlny
+- **Cena**: 80–200 Kč/m³
+- **Plus**: biologicky rozložitelné
+
+**3. Perlit, vermikulit:**
+- **Lehké** substráty pro pěstební boxy
+- **Cena**: 100–300 Kč/m³
+
+**4. Hydroton (expandovaný jíl):**
+- **Pelety** pro DWC, ebb & flow
+- **Cena**: 80–200 Kč/m³, opakovaně použitelný
+
+**5. Bezsubstrátové** (NFT, DWC, aero):
+- **Žádný substrát** = nejnižší náklady
+- Vhodné jen pro salát, bylinky
+
+**Výživa — nutrient solution:**
+
+**Klíčové prvky** (NPK + mikroprvky):
+- **N**: 100–250 mg/l (záleží na plodině)
+- **P**: 30–80 mg/l
+- **K**: 150–300 mg/l
+- **Ca**: 100–200 mg/l
+- **Mg**: 30–60 mg/l
+- **Mikroprvky**: Fe, Mn, Zn, Cu, B, Mo (v ppb)
+
+**pH**: 5,5–6,5 (optimal absorbcia živin)
+**EC**: 1,5–3,0 mS/cm (záleží na plodině)
+**Teplota roztoku**: 18–22 °C
+
+**Komerční hnojiva:**
+- **Hoagland solution** — klasický recept
+- **PPM (Plant Prod)** — komerční směsi
+- **Floraseries** (GHE) — kanabis-orientované
+- **Yara Krista** — profesionální
+
+**Aplikace:**
+
+**1. Skleníky rajčat:**
+- Holandsko = 8 000 ha (50 % EU produkce v 1 zemi!)
+- **Výnos rajčat**: 60–80 kg/m²/rok (vs 4 kg/m² půdní)
+- **Cena instalace skleníku**: 2 000–5 000 Kč/m²
+
+**2. Skleníky paprik, okurek:**
+- Podobné rajčatům
+- CZ producenti: BeJa, Frudoma, Magna Czech
+
+**3. Salát a bylinky (NFT, DWC):**
+- **24 hour cycle** — sklizeň každý den
+- **Plant factory** koncept
+- CZ producenti: Salatika, Czech Microgreens
+
+**4. Jahody:**
+- **Hydroponic strawberries** — celoroční sklizeň
+- **Vysoký premium** (chuť, cena)
+
+**5. Kanabis (medicinální):**
+- **EU rostoucí trh** (DE, NL, ČR pilotní programy)
+- **Hydroponie** = standard pro indoor pěstování
+
+**6. Salátové micro-greens:**
+- **8–14 dní cycle** — rychlá sklizeň
+- **Premium retail** — chefs, fine dining
+
+**Výhody hydroponie:**
+
+1. **Voda**: -90 % spotřeba (recirkulace)
+2. **Živiny**: -50 % (přesné dávkování)
+3. **Výnos**: +30 až +1 000 % vs půdní (záleží na plodině)
+4. **Mikroorganismus tlak**: nižší (sterilní prostředí)
+5. **Pesticidy**: -80 % (kontrolované prostředí)
+6. **Plocha**: 5–10× vyšší produkce na m²
+7. **Sezonalita**: 24/7 produkce
+8. **Kvalita**: konzistentní, premium
+
+**Nevýhody:**
+
+1. **Vysoká investice** — startup 2 000–10 000 Kč/m²
+2. **Energetická náročnost** (LED osvětlení, vzduchovači)
+3. **Technicky komplexní** — vyžaduje znalosti chemie + biologie + IT
+4. **Závislost na elektřině** — výpadek = ztráta
+5. **Nutrient management** — drahé profesionální výživy
+6. **Není certifikované bio** (s výjimkou některých US států)
+
+**Ekonomika:**
+
+**Skleník rajčat 1 ha (10 000 m²):**
+- Investice: 30–50 mil. Kč
+- Provozní náklady: 5–10 mil. Kč/rok (energie, voda, výživa, práce)
+- Výnos: 700 t/ha × 35 Kč/kg = 24,5 mil. Kč/rok
+- Marže: 14,5 mil. Kč/rok
+- Návratnost: 3–4 roky
+
+**Vertical farm salátu (viz [[vertikalni-farma]]):**
+- Investice: 100 000–300 000 Kč/m² stavební plochy
+- Vyšší produkce per m² ale dražší investice
+- Návratnost: 5–10 let
+
+**CZ producenti a trh:**
+- **Frudoma** (Olomouc) — rajčata, paprika
+- **BeJa Group** — moderní skleníky
+- **Magna Czech** — sklenikářství
+- **Salatika** — salát, micro-greens
+- **HempFlow** (Praha) — kanabis medicinální
+
+**Trendy 2024:**
+- **LED technology** — efektivnější, cenově dostupné
+- **AI control systems** — automatizace pH, EC, klima
+- **CRISPR plodiny** šité na míru hydroponie
+- **Plant factories** — fully automated, 24/7
+
+Viz též [[vertikalni-farma]], [[precision-livestock-farming]], [[npk-hnojivo]], [[satelity-zemedelstvi]].`,
+    related: ['vertikalni-farma', 'npk-hnojivo'],
+  },
+  {
+    slug: 'vertikalni-farma',
+    term: 'Vertikální farma',
+    alias: ['vertical farm', 'vertical farming', 'plant factory'],
+    kategorie: 'precise-farming',
+    shortDef: 'Vertikální farma je vícepatrový systém pěstování plodin v kontrolovaném vnitřním prostředí (LED osvětlení, hydroponie). Cíl: produkce v městech, blízko spotřebitele, 365 dní/rok. Výnosy 50–100× vyšší na m² půdy, ale energetická náročnost vysoká.',
+    longDef: `Vertikální farma (anglicky *vertical farming*, *plant factory*) je **vícepatrový systém pěstování plodin v kontrolovaném vnitřním prostředí** (CEA — Controlled Environment Agriculture). Kombinace **hydroponie** (viz [[hydroponie]]) + **LED osvětlení** + **AI/IoT** kontrola + vertikální stohování.
+
+**Princip:**
+- **Vícepatrová struktura** (5–20+ pater)
+- **LED osvětlení** nahrazuje slunce (red + blue spectrum)
+- **Hydroponie** nahrazuje půdu
+- **HVAC** (klimatizace) kontroluje teplotu, vlhkost, CO₂
+- **Plně izolované** od vnějšího prostředí — žádné pesticidy, choroby
+- **365 dní/rok** produkce
+
+**Historie:**
+- **1999** — Dickson Despommier (Columbia University) popularizuje koncept
+- **2010** — první komerční vertical farms v Japonsku (Tokyo)
+- **2015+** — investiční boom v USA, EU
+- **2022–2023** — některé velké projekty (Plenty, AeroFarms, Infarm) **kolaps** kvůli vysokým nákladům
+- **2024** — konsolidace trhu, fokus na ekonomicky funkční modely
+
+**Hlavní plodiny:**
+
+**1. Salát (90 % komerčních vertical farms):**
+- **Cycle**: 21–35 dní z osiva
+- **Yield**: 1 500–3 000 hlávek/m² stavební plochy/rok
+- **Trh**: retail premium (Tesco, Whole Foods), restaurace
+
+**2. Micro-greens:**
+- **Cycle**: 7–14 dní
+- **Premium**: 800–2 000 Kč/kg
+- **Trh**: fine dining, mixed sets
+
+**3. Bylinky (bazalka, koriandr, máta):**
+- **Cycle**: 25–45 dní
+- **Vysoký premium**: 1 500–3 000 Kč/kg
+- **Trh**: retail + foodservice
+
+**4. Jahody:**
+- **Year-round** produkce
+- **Premium**: až 800 Kč/kg
+- **Trh**: prémiové retail
+
+**5. Listové zeleniny** (kale, spinach, arugula):
+- Podobné salátu
+- Rostoucí trend pro fitness/health-conscious
+
+**6. Rajčata, paprika** — vzácně (energeticky nákladné):
+- **Pouze high-tech farmy**
+- Stoupající úsilí (Plenty, Bowery)
+
+**7. Kanabis (medicinální):**
+- **EU rostoucí trh** (regulačně omezený)
+- **Premium**: extrémně vysoký
+- **Energie**: ještě vyšší než salát
+
+**Klíčové technologie:**
+
+**1. LED osvětlení:**
+- **Red light** (660 nm) — fotosyntéza
+- **Blue light** (450 nm) — vegetativní růst
+- **Spectrum tuning** podle plodiny + růstové fáze
+- **DLI** (Daily Light Integral): 10–25 mol/m²/den
+- **Cena LED**: 5 000–15 000 Kč/m² pěstební plochy
+- **Životnost**: 50 000–80 000 h (5–10 let)
+
+**2. HVAC (klimatizace):**
+- **Teplota**: 20–24 °C
+- **Vlhkost**: 65–75 %
+- **CO₂ enrichment**: 800–1 200 ppm (vs 420 ppm normální atmosféra)
+- **Spotřeba energie**: 50 % celkové farma spotřeby
+
+**3. Hydroponický systém:**
+- **NFT, DWC, aeroponics** (viz [[hydroponie]])
+- **Automatická výživa** + monitoring pH + EC
+- **Recirkulace vody** = 95 % úspora vs půdní
+
+**4. Automatizace:**
+- **Robotické setí, transplantace, sklizeň**
+- **AI vision** pro detekci nemocí, růstové fáze
+- **Predictive control** klima a osvětlení
+
+**5. Software a IoT:**
+- **Plant Hub, Source.AI** — plant monitoring
+- **Skylab Analytics** — performance optimization
+- **Cloud platforms** pro multi-farm operations
+
+**Energetická náročnost (klíčový problém):**
+
+**Spotřeba per kg produkce:**
+- **Salát**: 8–25 kWh/kg
+- **Bylinky**: 15–40 kWh/kg
+- **Rajčata**: 60–100 kWh/kg (proto nevhodné!)
+- **Kanabis**: 1 000+ kWh/kg
+
+**Cena elektřiny** = ~50–70 % nákladů farmy
+- Při 4 Kč/kWh × 20 kWh/kg salátu = **80 Kč/kg jen energie**
+- Plus práce + materiály + amortizace = celkové náklady 150–300 Kč/kg salátu
+- Vs **polní salát**: 30–60 Kč/kg náklady
+
+**Ekonomická realita:**
+
+**Vertical farm rentabilní jen pro:**
+1. **Premium retail** (Whole Foods, Tesco F&F): 250–500 Kč/kg
+2. **Restaurace** (fine dining): 400–1 200 Kč/kg
+3. **Specialty products** (micro-greens, exotic herbs): 800+ Kč/kg
+4. **B2B kontrakty** (sushi chefs, salad chains)
+
+**NE pro mass market** (běžný salát v Lidlu za 30 Kč/kg) — ekonomicky nemožné.
+
+**Klíčové farmy (2024):**
+- **AeroFarms** (USA) — Newark, NJ. 6 000 m² farma, salát
+- **Plenty** (USA) — financováno SoftBank, problémy s rentabilitou
+- **Bowery Farming** (USA) — rajčata, salát
+- **Infarm** (DE) — modulární farmy v supermarketech, **kolaps 2023**
+- **Sky Greens** (Singapore) — první komerční (2012)
+- **YesHealth iFarm** (Taiwan) — high-tech
+- **Spread** (Japan) — automatizace top
+- **Crops in Pots** (Praha, CZ) — pilotní
+
+**ČR situace:**
+- **Pilotní projekty** v Praze, Brně
+- **Žádná velká komerční farma** zatím
+- **Trh: premium retail + restaurace** — limit ~100 t produkce/rok pro celou ČR
+- **Bariéry**: vysoká investice (50–200 mil. Kč), levná dovozová produkce ze Španělska
+
+**Bariéry adopce:**
+1. **Vysoká investice**: 100–300 tis. Kč/m² stavební plochy
+2. **Energetická náročnost** — drahá elektřina
+3. **Klimatická závislost** — solar/wind potřebné pro snížení uhlíkové stopy
+4. **Lidský kapitál** — vyžaduje IT + biologii + engineering
+5. **Trh limit** — premium segment je malý
+
+**Výhody:**
+1. **Voda**: 90–95 % úspora
+2. **Pesticidy**: 0 (kontrolované prostředí)
+3. **Yield/m²**: 50–100× vs polní
+4. **Sezonalita**: 365 dní
+5. **Lokálnost**: žádná doprava (urban farming)
+6. **Konzistentní kvalita**
+
+**Trendy 2024+:**
+- **Konsolidace** trhu (velké projekty zkolabovaly)
+- **Solar + battery integration** — snížení elektrické závislosti
+- **AI optimization** — algoritmy pro snížení energie o 20–40 %
+- **GMO/CRISPR plodiny** vyšlechtěné na míru vertical farming (rychlý růst, nízké nároky na světlo)
+- **Hybrid modely** — semi-vertical greenhouse (využití slunečního světla + LED supplement)
+
+**Etická diskuse:**
+- **Vertical farms = budoucnost** nebo **drahý gimmick**?
+- **Polní zemědělství** stále nejekonomičtější pro většinu plodin
+- **Vertical farms = niche** pro městské premium
+
+Viz též [[hydroponie]], [[satelity-zemedelstvi]], [[precision-livestock-farming]], [[ai-zemedelstvi]].`,
+    related: ['hydroponie', 'satelity-zemedelstvi', 'precision-livestock-farming'],
+  },
+  {
+    slug: 'agro-iot',
+    term: 'IoT v zemědělství',
+    alias: ['Internet of Things', 'agro-IoT', 'smart farming sensors', 'agricultural IoT'],
+    kategorie: 'precise-farming',
+    shortDef: 'IoT (Internet of Things) v zemědělství je síť propojených senzorů, strojů a systémů sbírajících data v reálném čase — vlhkost půdy, teplota, vodní zdroje, stav strojů, krmení, krávy. Data jdou do cloudu pro AI analýzu a management rozhodnutí.',
+    longDef: `IoT (Internet of Things, „internet věcí") v zemědělství je **síť propojených senzorů, strojů a systémů**, které sbírají data v reálném čase, posílají je do cloudu pro AI analýzu, a poskytují **management rozhodnutí**.
+
+**Klíčové komponenty IoT systému:**
+
+**1. Senzory (data collection):**
+
+**Půdní senzory:**
+- **Vlhkost půdy** (TDR — Time Domain Reflectometry, kapacitní)
+- **Teplota půdy** (multiple hloubky: 10, 30, 60 cm)
+- **EC** (electrical conductivity — slanost, živiny)
+- **pH půdy** (přímo v poli)
+- **NPK senzory** (real-time měření)
+- **Cena**: 2 000–20 000 Kč per senzor
+
+**Klimatické stanice:**
+- **Vzduchová teplota, vlhkost, srážky, vítr, solární radiace**
+- **Doplňky**: tlak, evapotranspirace, listová vlhkost (= choroby risk)
+- **Trh**: Davis Instruments, Pessl Metos, Sencrop
+- **Cena**: 10 000–80 000 Kč
+
+**Plodinové senzory:**
+- **NDVI z dronu nebo satelitu** (viz [[ndvi]], [[satelity-zemedelstvi]])
+- **Kamerové systémy** (computer vision pro choroby)
+- **Sap flow sensors** (cévní průtok v rostlině)
+
+**Zvířecí senzory (PLF):**
+- **Obojky** (akcelerometr, GPS) — viz [[precision-livestock-farming]]
+- **Bolus senzory v bachoru**
+- **In-line mléčné analyzéry**
+- **Kamery v stáji**
+
+**Strojové senzory:**
+- **GPS-RTK** v traktorech, kombajnech (viz [[gps-rtk]])
+- **Telematika** — viz [[telematika]]
+- **CAN bus data** — motor, hydraulika, palivo
+- **Yield monitor** — viz [[yield-monitor]]
+
+**Vodní senzory:**
+- **Průtok** ve sítích zavlažování
+- **Hladina** v jímkách, studnách
+- **Pumpa** monitoring
+
+**2. Komunikační vrstva (data transmission):**
+
+**LoRaWAN** (Long Range WAN):
+- **Dosah**: 5–15 km venkov
+- **Spotřeba**: extrémně nízká (baterie 5+ let)
+- **Vhodné**: půdní senzory, vodní hospodářství
+- **Cena**: 200–500 Kč/senzor/rok
+
+**NB-IoT (Narrowband):**
+- **Cellular network** (3G/4G/5G)
+- **Vyšší spotřeba**, ale lepší pokrytí
+- **Vhodné**: mobilní zvířata, traktory
+
+**Wi-Fi:**
+- **Krátký dosah** (100 m), vyšší spotřeba
+- **Vhodné**: stáje, sklady
+
+**5G**:
+- **Vysoká propustnost** + nízká latence
+- **Vhodné**: autonomní stroje, drony, kamerová analýza
+
+**3. Cloud + Edge computing:**
+
+**Edge (lokálně):**
+- **Předzpracování dat** na traktoru, ve stáji
+- **Snížení datového provozu** do cloudu
+- **Rychlejší odezva** (real-time decisions)
+
+**Cloud:**
+- **AWS, Azure, Google Cloud** — platformy
+- **AWS Greengrass**, **Azure IoT Edge** — IoT-specifické
+- **Cena**: 5 000–50 000 Kč/měs. pro velkou farmu
+
+**4. AI/ML analýza:**
+
+**Aplikace:**
+- **Predictive maintenance** strojů (selhání motoru)
+- **Disease prediction** podle počasí + stavu pole
+- **Yield forecasting** z více datových zdrojů
+- **Anomaly detection** v chování zvířat
+- **Optimization** krmení, postřiků, hnojení
+
+**5. Visualizace + dashboards:**
+
+- **Web platformy**: Climate FieldView, OneSoil, eAgronom
+- **Mobilní aplikace** pro farmáře
+- **Alarmy** (SMS, email, push notification)
+
+**Hlavní aplikace IoT v ag:**
+
+**1. Smart irrigation:**
+- Půdní vlhkost senzory + meteo + AI = optimální plán zavlažování
+- **Úspora vody**: 30–50 %
+- **ROI**: 1–2 roky
+
+**2. Disease forecasting:**
+- Listová vlhkost + teplota + srážky → predikce septoriózy, plísně
+- **Models**: BlightCast, SmartGrain, FieldClimate
+- **Cílené postřiky** místo paušálních
+
+**3. Crop monitoring:**
+- Drone + satellite + půdní senzory = comprehensive monitoring
+- **Variable rate** aplikace hnojiv, postřiků (viz [[variable-rate]])
+
+**4. Livestock monitoring:**
+- Viz [[precision-livestock-farming]]
+- Říje, mastitida, kulhání detekce
+
+**5. Storage monitoring:**
+- Teplota + vlhkost v sile, ve skladu obilí
+- **Prevence**: hniloba, plísně, plíseňové toxiny
+
+**6. Greenhouse automation:**
+- Teplota + vlhkost + CO₂ + osvětlení kontrola
+- **Fully automated** pro skleníky rajčat, paprik
+
+**7. Fleet management:**
+- GPS + CAN data všech strojů
+- **Optimalizace** logistiky, sledování paliva, prevence krádeží
+
+**8. Smart sprayer:**
+- Section control (viz [[section-control]]) + RTK GPS + senzory
+- Plné variable rate aplikace pesticidů
+
+**Příklady IoT řešení v CZ:**
+
+**Mestská farma:**
+- **Climate FieldView** (Bayer) — top globální
+- **OneSoil** — freemium pro malé farmy
+- **eAgronom** — domácí CZ řešení
+- **AgroIT** (CZ startup) — IoT systémy pro CZ farmy
+- **Agrosoft** — ERP pro farmy
+
+**Big players:**
+- **John Deere Operations Center** — integrovaný systém
+- **Bayer Climate FieldView** — globální platforma
+- **CNH Industrial AGXTEND** — kombinace strojů + dat
+
+**Ekonomika IoT pro typickou farmu (500 ha):**
+
+**Investice:**
+- 5 půdních stanic × 8 000 Kč = 40 000 Kč
+- 1 meteostanice × 50 000 Kč = 50 000 Kč
+- RTK kit do 2 traktorů × 80 000 Kč = 160 000 Kč
+- Yield monitor v kombajnu = 100 000 Kč
+- Software ročně = 30 000 Kč
+- **Startup**: 350 000–400 000 Kč
+- **Roční**: 50 000–100 000 Kč (software + údržba)
+
+**Benefity:**
+- Variable rate N: -10–20 % spotřeba = 500–1 000 Kč/ha × 500 ha = 250 000–500 000 Kč/rok
+- Lepší timing postřiků: -30 % postřikových nákladů = 100 000–300 000 Kč/rok
+- Méně paliva (RTK = méně překrývů): -5 % = 50 000–100 000 Kč/rok
+- Lepší výnosy: +200 kg/ha pšenice = +650 000 Kč/rok pro 500 ha
+
+**ROI**: 1–3 roky pro typickou farmu
+
+**Bariéry:**
+1. **Investice** — vysoká pro malé farmy
+2. **Internet connectivity** — venkov má problém
+3. **Komplexnost** — vyžaduje IT znalosti
+4. **Data integrace** — různé platformy nesynchronizují
+5. **Privacy** — kdo vlastní data farmy?
+
+**Standards & interoperability:**
+- **ISOBUS** (viz [[isobus]]) — komunikace traktor ↔ nářadí
+- **ADAPT** (AgGateway) — data exchange standard
+- **GDPR-like** debaty o farm data ownership
+
+**Trendy 2024+:**
+- **5G adoption** — rychlejší, nižší latence
+- **Edge AI** — víc inteligence v terénu
+- **Open data platforms** — interoperability
+- **Carbon credits validation** — IoT data verifikuje sekvestraci
+- **Blockchain traceability** — food chain od farmy po konzumenta
+
+Viz též [[telematika]], [[precision-livestock-farming]], [[satelity-zemedelstvi]], [[gps-rtk]], [[variable-rate]], [[isobus]], [[yield-monitor]].`,
+    related: ['telematika', 'precision-livestock-farming', 'satelity-zemedelstvi', 'gps-rtk', 'variable-rate', 'isobus', 'yield-monitor'],
+  },
+  {
+    slug: 'carbon-credits',
+    term: 'Carbon credits (uhlíkové kredity)',
+    alias: ['uhlíkové kredity', 'carbon credit', 'C credits', 'carbon farming credits'],
+    kategorie: 'precise-farming',
+    shortDef: 'Carbon credit = certifikát potvrzující 1 tunu CO₂ ekvivalentu sekvestrovanou nebo neuvolněnou do atmosféry. Zemědělec produkuje credits pomocí no-till, krycích plodin, biouhle a prodává je korporacím pro plnění klimatických cílů. EU obnovuje regulační rámec (CRCF 2024).',
+    longDef: `Carbon credits (uhlíkové kredity) jsou **certifikáty potvrzující 1 tunu CO₂ ekvivalentu** (1 t CO₂e) sekvestrovanou (uloženou) nebo emisi neuvolněnou do atmosféry. Klíčový **finanční nástroj klimatické politiky** — kombinuje boj proti klimatické změně s ekonomickými stimuly.
+
+**Princip:**
+
+1. **Zemědělec** implementuje praktiky snižující emise nebo sekvestrující C:
+   - **No-till** (viz [[no-till]]) — žádná oxidace půdního C
+   - **Krycí plodiny** (viz [[mezi-plodiny]]) — C v půdě
+   - **Hnojiva organická** místo mineralních — méně N₂O emisí
+   - **Biouhel** (viz [[biouhel]]) — stabilní C 500+ let
+   - **TTP konverze** (viz [[ttp]]) — louky uloží 2–4× víc C než orná
+   - **Agrolesnictví** (viz [[agrolesnictvi]]) — stromy + zemědělství
+
+2. **Certifikační organizace** ověří sekvestraci:
+   - Půdní vzorky (před + po)
+   - Modely (LCA, IPCC)
+   - Satelitní data (viz [[satelity-zemedelstvi]])
+
+3. **Vystavení carbon creditů**: 1 credit = 1 t CO₂e
+
+4. **Prodej kreditů**:
+   - **Voluntary market** (dobrovolný): korporace kupují pro ESG, klimatické cíle
+   - **Compliance market** (povinný): EU ETS, kalifornské CCA (zatím bez zemědělství)
+
+5. **Korporace** používá credits pro klimatickou neutralitu
+
+**Cena uhlíkového kreditu:**
+
+**Voluntary market (2024):**
+- **High quality (additionality verified)**: 15–25 EUR/t CO₂
+- **Standard quality**: 5–15 EUR/t CO₂
+- **Junk credits** (kontroverzní): 1–5 EUR/t CO₂
+
+**Compliance market (EU ETS, 2024):**
+- **EU Allowance (EUA)**: 60–90 EUR/t CO₂
+- Zemědělství zatím **MIMO ETS** (EU plánuje zahrnutí ~2030)
+
+**Certifikační standards:**
+
+**1. Verra VCS (Verified Carbon Standard):**
+- **Globální #1**, ~75 % voluntary trhu
+- Drahá certifikace, ale uznávaná
+- Vlastní podstandardy: VM0042 (improved agricultural management), VM0017 (no-till)
+
+**2. Gold Standard:**
+- Důraz na **sociální dopad** + klimatický
+- Vyšší cena kreditů
+
+**3. American Carbon Registry (ACR):**
+- USA, krajinné projekty
+
+**4. Climate Action Reserve (CAR):**
+- USA, agriculture-specific
+
+**5. CDM** (Clean Development Mechanism):
+- UN-řízený, post-Kyoto Protocol
+- Klesající trh (Paris Agreement nahradil)
+
+**EU-specifické platformy:**
+
+**Climate Farmers (DE):**
+- EU agroles, payments per t CO₂e
+- ~20 EUR/t
+
+**Soil Capital (BE):**
+- Belgicko-francouzská, regenerative ag fokus
+- Annual payments per ha podle implementace
+
+**Indigo Ag (USA + EU):**
+- Velká agtech platforma
+- Carbon program + agronomic services
+
+**eAgronom (EE):**
+- Estonský software pro CZ + EU farmy
+- Carbon credit certification servis
+
+**EU CRCF (Carbon Removals Certification Framework):**
+
+**Nařízení 2024** — nový EU právní rámec pro carbon credits:
+- **Standardizace** výpočtů
+- **Permanence** požadavky (carbon credit musí "vydržet" 100+ let pro sekvestraci)
+- **Additionality** — credit jen pokud farma by sekvestraci NEDĚLALA without it
+- **MRV** (Monitoring, Reporting, Verification) — pravidelná verifikace
+
+**Cíl**: zvýšit kvalitu kreditů, vyhnout se greenwashingu
+
+**Příklad ekonomiky pro CZ farmu (500 ha):**
+
+**Implementace**:
+- Přechod z orby na no-till + cover crops na celé 500 ha
+- Investice do techniky (strip-till stroj): 1,5 mil. Kč
+- Roční zvýšené náklady (osivo cover crops, postřik): +100 000 Kč/rok
+
+**Sekvestrace** (typicky):
+- 0,5 t C/ha/rok = 1,83 t CO₂e/ha/rok
+- 500 ha × 1,83 = **916 t CO₂e/rok**
+
+**Příjem z kreditů**:
+- 916 t × 20 EUR/t = **18 320 EUR/rok = ~460 000 Kč/rok**
+
+**Plus benefity**:
+- Snížení nákladů na palivo (méně orby): 200 000 Kč/rok
+- Snížení nákladů na hnojiva (lepší půda): 100 000 Kč/rok
+
+**Net benefit**: ~660 000 Kč/rok (po odečtení vyšších nákladů)
+**Návratnost techniky**: 2–3 roky
+
+**Problémy a kritika:**
+
+**1. Additionality (přidanost):**
+- Credit je validní jen pokud farma sekvestraci by NEDĚLALA bez něj
+- Sporné — velké farmy se přechodu na regen ag dělaly i bez creditů
+- Risk **greenwashing**
+
+**2. Permanence (trvalost):**
+- Pokud farma za 10 let znovu zorá → uhlík se vrátí do atmosféry
+- Carbon credit by měl být revoked
+- Vyžaduje long-term contractual commitments
+
+**3. Verification (ověření):**
+- Měření C v půdě je drahé, často nepřesné
+- Modely vs reálné měření
+- Risk **over-crediting**
+
+**4. Leakage:**
+- Pokud farma A sekvestruje, ale farma B vedle ji nahradí intenzivnější praxí → net dopad = 0
+- Globální leakage problém
+
+**5. Equity issue:**
+- Velké korporátní farmy mají lepší přístup k certifikaci než malé rodinné
+- Risk **carbon colonialism** (rich farms sell credits to support more emissions elsewhere)
+
+**6. Cena volatility:**
+- Voluntary market: cena se hýbe 10× v rozsahu 5 let
+- Risk pro farmáře dlouhodobě plánovat
+
+**Renaissance carbon farming:**
+
+**Důvody růstu trhu:**
+1. **Paris Agreement** — globální klimatické cíle
+2. **EU CRCF** — regulatorní jasnost
+3. **ESG reporting** — povinnost korporací reportovat carbon footprint
+4. **Net Zero pledges** — Microsoft, Apple, Google, Amazon kupují credits
+5. **Carbon border tax** (CBAM) — EU bude penalizovat dovoz s vysokou CO₂
+
+**Predikce trhu:**
+- **2024**: 2–3 mld USD voluntary carbon market
+- **2030**: 50–100 mld USD predikcí (McKinsey, BCG)
+- **Zemědělství** = 20–30 % očekávaného trhu
+
+**Jak začít na CZ farmě:**
+
+1. **Zjistit baseline**: současný stav organické hmoty, půdní C
+2. **Plánovat změny**: no-till, cover crops, redukce N hnojiv
+3. **Najít platformu**: Climate Farmers, eAgronom, Soil Capital
+4. **Smluvit verifikaci**: půdní vzorky, satelitní monitoring
+5. **Implementovat 1+ rok**, pak žádat credits
+6. **Prodat credits** přes platformu
+
+**Náklady na zapojení**:
+- Půdní vzorky: 5 000–15 000 Kč/farma
+- Konzultace: 20 000–50 000 Kč
+- Software/platform fee: 10–20 % z creditů
+
+**Net příjem**: typicky 60–80 % z hrubého výnosu kreditů
+
+Viz též [[karbonove-zemedelstvi]], [[regenerativni-zemedelstvi]], [[no-till]], [[mezi-plodiny]], [[biouhel]], [[ttp]], [[agrolesnictvi]], [[satelity-zemedelstvi]].`,
+    related: ['karbonove-zemedelstvi', 'regenerativni-zemedelstvi', 'no-till', 'mezi-plodiny', 'biouhel', 'ttp', 'agrolesnictvi', 'satelity-zemedelstvi'],
+  },
 ];
 
 export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {
