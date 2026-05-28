@@ -11,7 +11,7 @@
 // - related URL (na encyklopedie / dotace / žebříčky)
 
 export type SlovnikKategorie =
-  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming';
+  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky';
 
 export interface SlovnikTerm {
   slug: string;
@@ -606,12 +606,12 @@ Olej: hydraulický + převodový společný (UTTO — Universal Tractor Transmis
     related: ['tribod', 'pto'],
   },
 
-  // ── HMOTA & MĚŘENÍ ──────────────────────────────────────────────────
+  // ── JEDNOTKY & MĚŘENÍ ───────────────────────────────────────────────
   {
     slug: 'hektar',
     term: 'Hektar (ha)',
     alias: ['ha', 'jednotka plochy'],
-    kategorie: 'agrotechnika',
+    kategorie: 'jednotky',
     shortDef: 'Hektar (ha) je jednotka plochy = 10 000 m² = 100 × 100 m. Standardní jednotka v zemědělství pro výměru polí, dotace, výnosy.',
     longDef: `Hektar (ha) je jednotka plošného obsahu metrické soustavy. 1 ha = 10 000 m² = 100 a (arů). Vizuálně: čtverec 100 × 100 m, nebo fotbalové hřiště 1,5×.
 
@@ -630,13 +630,13 @@ Převody:
 - 1 morgen (DE/AT) = 0,25–0,34 ha podle regionu (historická)
 
 V ČR farmy 1–50 ha = "drobní farmáři", 50–500 ha = "střední", 500–5000 ha = "velcí", 5000+ ha = "průmyslové podniky".`,
-    related: ['cap-2024', 'pH-pudy'],
+    related: ['ar', 'akr', 'metr-ctvrecni', 'kilometr-ctvrecni', 'q-cent', 'cap-2024'],
   },
   {
     slug: 'q-cent',
     term: 'Cent (q)',
     alias: ['q', 'metrický cent', 'kvintál'],
-    kategorie: 'agrotechnika',
+    kategorie: 'jednotky',
     shortDef: 'Cent (q) je jednotka hmotnosti = 100 kg. V zemědělství se používá pro výnosy a ceny komodit — pšenice 60 q/ha = 6 t/ha.',
     longDef: `Cent (latinsky centum = 100, značka **q** z italského "quintale") je jednotka hmotnosti, standardně 100 kilogramů. V CZ a EU zemědělství je dominantní jednotkou pro:
 
@@ -651,7 +651,409 @@ Praktický příklad:
 - Cena 5500 Kč/t = 550 Kč/q → tržba 3,3 mil. Kč
 
 Pro velké výnosy (kukuřice silážní, traviny na siláž) se počítá v t (1 t = 10 q), nikdy v q (čísla by byla nepraktická — 400 q/ha kukuřice).`,
-    related: ['hektar'],
+    related: ['hektar', 'hektolitr', 'busl'],
+  },
+  {
+    slug: 'ar',
+    term: 'Ar (a)',
+    alias: ['a', 'sto metrů čtverečních'],
+    kategorie: 'jednotky',
+    shortDef: 'Ar (a) je jednotka plochy = 100 m² = čtverec 10 × 10 m. 100 arů = 1 hektar. Používá se pro zahrady, parcely a malé pozemky v katastru nemovitostí.',
+    longDef: `Ar je jednotka plošného obsahu, odvozená od latinského *area*. 1 ar = 100 m² = čtverec o straně 10 m. V soustavě SI je ar (a) přijímaná jednotka mimo SI, přípustná pro pozemkovou agendu.
+
+Převody:
+- **1 a = 100 m²**
+- **1 a = 0,01 ha** (100 a = 1 ha)
+- **1 a = 0,0001 km²**
+- **1 a ≈ 0,0247 akru** (akr ≈ 40,47 a)
+
+V ČR se ar používá především v:
+- **Katastru nemovitostí** — výměry zahrad, stavebních parcel a malých zemědělských pozemků se obvykle zapisují v m² nebo v ha, ale starší zápisy a běžná řeč („zahrada 8 arů") ar drží.
+- **Drobné zemědělství** — pěstitelské pásy, ovocné sady, vinice malých vinařů.
+- **Daň z nemovitých věcí** — sazby se počítají z m², ale rolníci si plochu typicky pamatují v arech.
+
+Praktická přirovnání:
+- **Tenisový dvorec** (single, 23,77 × 8,23 m) ≈ 2 ary
+- **Olympijský bazén** (50 × 25 m) = 12,5 a
+- **Fotbalové hřiště** (105 × 68 m) ≈ 71 a (= 0,71 ha)
+- **Průměrná česká zahrada u rodinného domu** = 4–10 a
+
+Historicky byl ar zaveden ve Francii v roce 1795 jako součást metrické soustavy. V CZ/SK kontextu nahradil dřívější jednotky jako **korec** (≈ 28 a) a **strych** (≈ 28–32 a) — viz [[korec]], [[strych]].`,
+    related: ['hektar', 'metr-ctvrecni', 'korec', 'strych'],
+  },
+  {
+    slug: 'akr',
+    term: 'Akr (acre)',
+    alias: ['acre', 'akre', 'anglický akr'],
+    kategorie: 'jednotky',
+    shortDef: 'Akr (acre) je anglosaská jednotka plochy = 4 046,86 m² = 0,4047 hektaru. Standardní jednotka v USA, UK, Kanadě a Austrálii pro zemědělské pozemky.',
+    longDef: `Akr (anglicky *acre*) je tradiční anglosaská jednotka plošného obsahu, dnes přesně definovaná jako **4 046,8564224 m²** (mezinárodní akr). V USA a UK je dodnes dominantní jednotkou pro zemědělské pozemky a real estate.
+
+Přesné převody:
+- **1 akr = 4 046,86 m²**
+- **1 akr = 0,4047 ha** (≈ 40,5 a)
+- **1 akr = 40,4686 a**
+- **1 hektar = 2,4711 akru**
+- **1 mile² = 640 akrů** (1 section v US township systému)
+
+Původ jednotky: středověký akr byl plocha, kterou jeden muž s párem volů zorá za den — proto délka **1 furlong × šířka 1 chain** (220 yardů × 22 yardů = 4 840 yard²).
+
+Praktické použití:
+- **USA**: průměrná farma 2026 ≈ 446 akrů (≈ 180 ha). Velké průmyslové farmy 10 000+ akrů.
+- **UK**: typická anglická farma 88 ha = 217 akrů.
+- **Půdní fondy / investice**: americké zemědělské pozemky se obchodují v USD/akr (typicky $4–10 tis./akr v Midwestu).
+- **Komodit price**: USDA yields publikuje v bushel/akr — pšenice ~50 bu/ac, kukuřice ~175 bu/ac.
+
+Pro CZ farmáře relevantní při:
+- **Pronájmu zahraničních pozemků** (zejm. SK, AT, DE pohraničí — viz [[morgen]]).
+- **Importu USDA dat** o světových výnosech (přepočet bu/ac → t/ha: bušl × 0,02489 = t/ha).
+- **Prodeji do USA** (export komodit).
+
+Pozor: existují i regionální varianty — *scottish acre* (5 080 m²), *irish acre* (6 555 m²) — dnes obsoletní, ale stále v některých starých zápisech.`,
+    related: ['hektar', 'morgen', 'busl', 'metr-ctvrecni'],
+  },
+  {
+    slug: 'metr-ctvrecni',
+    term: 'Metr čtvereční (m²)',
+    alias: ['m²', 'm2', 'čtverečný metr'],
+    kategorie: 'jednotky',
+    shortDef: 'Metr čtvereční (m²) je základní jednotka plochy v SI = čtverec 1 × 1 m. 10 000 m² = 1 hektar. Univerzální jednotka pro stavby, parcely, byty.',
+    longDef: `Metr čtvereční (m², někdy psáno m2 nebo „čtvereční metr") je odvozená jednotka plošného obsahu v soustavě SI. 1 m² = plocha čtverce o straně 1 metr.
+
+Převody na další jednotky plochy:
+- **1 m² = 0,01 a** (100 m² = 1 ar)
+- **1 m² = 0,0001 ha** (10 000 m² = 1 hektar)
+- **1 m² = 0,000001 km²** (1 000 000 m² = 1 km²)
+- **1 m² ≈ 10,764 sq ft** (čtvereční stopa, USA/UK)
+- **1 m² ≈ 1,196 sq yd** (čtvereční yard)
+
+Použití v zemědělství a real estate:
+- **Stavební parcely** — katastr nemovitostí eviduje pozemky v m² (oficiální zápis).
+- **Sazby daně z nemovitých věcí** — počítá se v Kč/m² podle typu pozemku.
+- **Skleníky a fóliovníky** — kapacita se uvádí v m² pěstební plochy.
+- **Drůbež a chovy** — minimální plocha na zvíře (welfare normy) v m²/kus.
+- **Skladovací haly** — silážní jámy, seníky, mechanizační dvory v m².
+
+Praktická přirovnání:
+- **Parkovací místo**: 12,5 m² (2,5 × 5 m)
+- **Malý byt 1+kk**: 25–35 m²
+- **Velký byt 4+1**: 100–130 m²
+- **Tenisový dvorec**: 261 m² (single)
+- **Fotbalové hřiště**: 7 140 m² (≈ 0,71 ha)
+
+Pro převod větších ploch na hektary stačí dělit 10 000:
+- 5 000 m² = 0,5 ha
+- 25 000 m² = 2,5 ha
+- 500 000 m² = 50 ha
+
+Viz též [[ar]] (= 100 m²), [[hektar]] (= 10 000 m²), [[kilometr-ctvrecni]] (= 1 000 000 m²).`,
+    related: ['ar', 'hektar', 'kilometr-ctvrecni'],
+  },
+  {
+    slug: 'kilometr-ctvrecni',
+    term: 'Kilometr čtvereční (km²)',
+    alias: ['km²', 'km2', 'čtverečný kilometr'],
+    kategorie: 'jednotky',
+    shortDef: 'Kilometr čtvereční (km²) je jednotka plochy = čtverec 1 × 1 km = 100 hektarů = 1 000 000 m². Používá se pro lesy, katastrální území, kraje, povodí.',
+    longDef: `Kilometr čtvereční (km², psáno též km2 nebo „čtvereční kilometr") je odvozená jednotka plošného obsahu v SI. 1 km² = plocha čtverce o straně 1 km = 1 000 m × 1 000 m.
+
+Převody:
+- **1 km² = 1 000 000 m²**
+- **1 km² = 100 ha** (sto hektarů)
+- **1 km² = 10 000 a** (deset tisíc arů)
+- **1 km² ≈ 247,1 akru**
+- **1 mile² ≈ 2,59 km²** (čtvereční míle, USA)
+
+Použití:
+- **Lesnictví** — výměra lesních hospodářských celků, povodí, chráněných území (CHKO, NP) se uvádí v km².
+- **Katastrální území** — průměrné katastrální území v ČR má 4–8 km².
+- **Pastviny a TTP** — extenzivní pastvy v horských oblastech (Krkonoše, Beskydy) se měří v km².
+- **Statistika ČSÚ** — orná půda v ČR ~30 000 km² (3 mil. ha), TTP ~10 000 km².
+- **Klimatická a meteo data** — srážky a teploty interpolované na km² rastr.
+
+Praktická přirovnání:
+- **Praha 1 (správní obvod)**: 5,5 km²
+- **Manhattan (NYC)**: 59 km²
+- **Mikulov (město)**: 47 km²
+- **NP Šumava**: 685 km²
+- **CHKO Český kras**: 132 km²
+
+ČR celkem má **78 871 km²** = 7,89 mil. ha. Z toho zemědělská půda 41 868 km² = 4,19 mil. ha (53 % rozlohy státu).
+
+Viz též [[hektar]] (= 0,01 km²), [[metr-ctvrecni]], [[ar]].`,
+    related: ['hektar', 'metr-ctvrecni', 'ar'],
+  },
+  {
+    slug: 'hektolitr',
+    term: 'Hektolitr (hl)',
+    alias: ['hl', 'hektolitrová váha'],
+    kategorie: 'jednotky',
+    shortDef: 'Hektolitr (hl) je jednotka objemu = 100 litrů = 0,1 m³. V zemědělství klíčová pro hektolitrovou váhu obilí (kg/hl) — kvalitativní parametr pro výkup.',
+    longDef: `Hektolitr (hl) je jednotka objemu = **100 litrů** = 0,1 m³. V SI je hektolitr přijímaná jednotka mimo SI, široce používaná v zemědělství, pivovarnictví a obchodu s tekutinami.
+
+Převody:
+- **1 hl = 100 l**
+- **1 hl = 0,1 m³ = 100 dm³**
+- **1 hl ≈ 22 imperiálních galonů (UK) ≈ 26,4 US galonu**
+- **1 hl ≈ 2,75 amerických bušlů** (záleží na komoditě)
+
+V zemědělství je hl klíčový pro **hektolitrovou váhu** — hmotnost v kilogramech, kterou má 100 litrů obilí. Je to fundamentální **kvalitativní parametr** pro výkup obilí:
+
+| Plodina | Standard kg/hl | Krmné | Potravinářské |
+|---------|----------------|-------|---------------|
+| **Pšenice ozimá** | 76–82 | < 74 | 78–84 (E, A) |
+| **Ječmen sladovnický** | 64–68 | < 62 | min. 64 |
+| **Ječmen krmný** | 62–66 | běžné | — |
+| **Žito** | 70–76 | < 68 | 72+ |
+| **Oves** | 48–52 | < 45 | 50+ |
+| **Řepka ozimá** | 64–68 | — | min. 62 |
+| **Tritikale** | 70–76 | běžné | — |
+
+**Proč hl váha?** Vyšší hektolitrová váha = vyšší obsah škrobu/oleje, méně plev a šešulí, lepší mlynářská kvalita. Mlýny a sladovny určují cenu obilí podle hl váhy + dalších parametrů (vlhkost, dusík, Falling Number).
+
+Praktické dopady na příjem farmy:
+- Pšenice 78 kg/hl → potravinářská třída A → 5800 Kč/t
+- Pšenice 74 kg/hl → krmná → 4200 Kč/t
+- **Rozdíl 1600 Kč/t** = 80 tis. Kč na 50 ha při výnosu 6 t/ha
+
+Hektolitrovou váhu měří mobilní váhy přímo v kombajnu (yield monitor, viz [[yield-monitor]]) nebo přesně laboratorně po sklizni.
+
+Viz též [[busl]] (US ekvivalent), [[q-cent]], [[hektar]].`,
+    related: ['busl', 'q-cent', 'yield-monitor'],
+  },
+  {
+    slug: 'busl',
+    term: 'Bušl (bushel)',
+    alias: ['bushel', 'bu', 'americký bušl'],
+    kategorie: 'jednotky',
+    shortDef: 'Bušl (bushel, bu) je anglosaská jednotka objemu i hmotnosti pro obilí. 1 US bušl pšenice = 27,2155 kg, kukuřice = 25,4 kg. Standardní jednotka cen na CBOT.',
+    longDef: `Bušl (anglicky *bushel*, zkr. *bu*) je tradiční anglosaská jednotka, která se v zemědělství používá ve dvou formách:
+
+1. **Objemový bušl** = 35,2391 litru (USA, dry bushel) = 36,3687 l (UK, imperial)
+2. **Hmotnostní bušl** — pevně definovaná hmotnost pro každou komoditu (USDA standard)
+
+Hmotnostní bušl (USDA pro US obchod):
+| Komodita | kg/bušl | lb/bušl |
+|----------|---------|---------|
+| **Pšenice** | 27,2155 | 60 |
+| **Sója** | 27,2155 | 60 |
+| **Kukuřice** | 25,4012 | 56 |
+| **Ječmen** | 21,7724 | 48 |
+| **Oves** | 14,5150 | 32 |
+| **Žito** | 25,4012 | 56 |
+| **Řepka (canola)** | 22,6796 | 50 |
+
+**Proč bušl důležitý pro CZ farmáře:**
+- **CBOT (Chicago Board of Trade)** — světové ceny pšenice, kukuřice a sóji se kvotují v **centech/bušl**. Pohyby na CBOT diktují i ceny v Evropě s 1–2 denním zpožděním.
+- **USDA WASDE reporty** — měsíční globální odhady úrody a zásob publikované v milionech bušlů.
+- **Export/import** — americká soja a kukuřice se prodává po bušlech.
+
+Převod **bušl/akr → t/hektar** (kvůli porovnání US a EU výnosů):
+- **Pšenice**: bu/ac × 0,06725 = t/ha (50 bu/ac ≈ 3,36 t/ha)
+- **Kukuřice**: bu/ac × 0,06277 = t/ha (175 bu/ac ≈ 10,98 t/ha)
+- **Sója**: bu/ac × 0,06725 = t/ha (50 bu/ac ≈ 3,36 t/ha)
+
+Příklad převodu ceny CBOT na CZ:
+- Pšenice 600 ¢/bu = 6,00 USD/bu
+- 6,00 USD ÷ 27,2155 kg × 1000 = **220,4 USD/t**
+- × 23 Kč/USD = **5 070 Kč/t** (před dopravou a maržemi)
+
+Pozor — **UK imperial bushel** (36,37 l) je o 3 % větší než US bušl, ale v zemědělství dnes naprosto dominuje US standard.
+
+Viz též [[hektolitr]] (EU ekvivalent kvalitativní jednotky), [[q-cent]], [[akr]].`,
+    related: ['hektolitr', 'q-cent', 'akr'],
+  },
+  {
+    slug: 'jitro',
+    term: 'Jitro',
+    alias: ['historická jednotka plochy', 'rakouské jitro'],
+    kategorie: 'jednotky',
+    shortDef: 'Jitro je historická středoevropská jednotka plochy ≈ 0,5755 ha (rakouské/české jitro = 1600 čtv. sáhů). Plocha, kterou pár volů zorá za den. Dnes obsoletní, ale v katastrálních zápisech a rodinné paměti přežívá.',
+    longDef: `Jitro (latinsky *jugerum*, německy *Joch*) je tradiční středoevropská jednotka plošného obsahu, jejíž velikost se historicky lišila podle regionu. V českých zemích a Rakousku-Uhersku platilo standardizované **rakouské (dolnorakouské) jitro = 1600 čtverečních sáhů = 5754,642 m² ≈ 0,5755 ha**.
+
+Hlavní regionální varianty:
+- **Rakouské/české jitro**: 5 754,64 m² = **0,5755 ha** (od roku 1764 v Habsburské monarchii)
+- **Uherské jitro**: 5 754,64 m² (stejné jako rakouské)
+- **Moravské zemské jitro**: 5 754,64 m² (sjednoceno s rakouským)
+- **Pruské jitro (Morgen)**: 2 553 m² ≈ 0,255 ha (viz [[morgen]])
+- **Velké jitro**: někdy 1,5–1,75 ha (regionální, neoficiální)
+
+Etymologie: jitro = plocha, kterou pár volů zorá od jitra (rána) do oběda. Pro pár volů s dřevěným hákem to bylo cca 0,5–0,6 hektaru za půl dne — odtud rozsah.
+
+**Proč ještě dnes relevantní:**
+- **Katastr nemovitostí** — starší zápisy z 19. a začátku 20. století udávají výměru v jitrech a čtverečních sázích. Při dědických řízeních a převodech pozemků se s jitry stále setkáváme.
+- **Rodinná paměť** — sedlácké rodiny si výměry předků pamatují v jitrech („dědek měl 12 jiter", tj. ≈ 6,9 ha).
+- **Pohraničí** — staré pruské, bavorské, saské mapy používaly *Morgen* (≈ 0,25 ha), což se občas plete s jitrem.
+
+Praktické převody:
+- **1 jitro = 0,5755 ha = 57,55 a = 5 754 m²**
+- **1 jitro ≈ 1,422 akru** (anglosaského)
+- **2 jitra = 1,151 ha** (tradiční „selské hospodářství" mělo 20–40 jiter, tj. 12–23 ha)
+
+V dnešním katastru ČR jsou jitra **nahrazena m² a hektary** (vyhláška o katastru), ale stará čísla v knihovním zápise jsou stále právně platná.
+
+Viz též [[hektar]], [[ar]], [[korec]], [[strych]], [[lan]], [[morgen]].`,
+    related: ['hektar', 'korec', 'strych', 'lan', 'morgen'],
+  },
+  {
+    slug: 'lan',
+    term: 'Lán',
+    alias: ['celý lán', 'selský lán', 'kmetcí lán'],
+    kategorie: 'jednotky',
+    shortDef: 'Lán je středověká česká jednotka plochy ≈ 18 ha (přesněji 16–24 ha podle regionu). Plocha selského hospodářství, které uživí jednu rodinu. Dnes obsoletní, ale historicky zásadní jednotka.',
+    longDef: `Lán je historická česká jednotka plošného obsahu, používaná od raného středověku do 18. století. Velikost lánu se výrazně lišila podle regionu, doby a typu (selský/královský/kmetcí), ale ve standardu z urbáře platilo:
+
+**Český lán (kmetcí, selský)**: typicky 64 strychů ≈ **18 ha** (16–24 ha v praxi).
+
+Typy lánů:
+- **Lán kmetcí (selský)** — 60–64 strychů ≈ 16–20 ha, hospodářství poddaného sedláka
+- **Lán královský** — 70–84 strychů ≈ 19–24 ha, mírně větší
+- **Pražský lán** — standardizován na 64 strychů ≈ 18,2 ha
+- **Lán moravský** — variabilní, 16–21 ha
+- **Půllán** — polovina lánu, drobnější hospodářství (8–10 ha)
+- **Čtvrtlán** — čtvrtina, chalupníci (4–5 ha)
+- **Zahradník** — bez lánu, jen dům a zahrada (< 1 ha)
+
+Lán byl **základní ekonomicko-sociální jednotkou** českého venkova:
+- **Daně a robota** — robotní povinnosti se vyměřovaly podle velikosti lánu (3 dny v týdnu pro celý lán).
+- **Společenský status** — *láník* (sedlák s celým lánem) byl nejvyšší vrstva poddaného obyvatelstva.
+- **Dědictví** — lán se v Čechách typicky nedělil (právo nedílu), dědil ho jeden syn, ostatní šli na řemeslo nebo do města.
+
+Lán byl tvořen mnoha menšími pozemky (políčka, louky, pastviny, les) rozesetými po katastru obce — typický **trojhonný systém** (ozim/jarin/úhor) vyžadoval mít půdu ve více honech.
+
+Po **patentech Marie Terezie** (1755) a **josefínském katastru** (1789) se lán postupně nahrazoval přesnějšími jitry a m². V Tereziánském katastru (1748) byly lány konkrétně vyměřeny — proto dnes víme přesné velikosti pro jednotlivé vesnice.
+
+V moderním kontextu:
+- **Genealogie a rodopis** — staré matriční a urbární zápisy uvádějí předky jako „láník", „půlláník", „chalupník".
+- **Historie obcí** — kronikáři a regionální historici pracují s lány při popisu středověké struktury vesnice.
+- **Místní názvy** — „Velký lán", „Lánská cesta", „Na lánech" jsou dodnes živé pomístní názvy.
+
+Pozor — moderní slovo „lán" jako synonymum pro velké pole (např. „nekonečné lány obilí") je už metaforické, nepředstavuje konkrétní jednotku.
+
+Viz též [[jitro]], [[korec]], [[strych]], [[hektar]].`,
+    related: ['jitro', 'korec', 'strych', 'hektar'],
+  },
+  {
+    slug: 'korec',
+    term: 'Korec',
+    alias: ['český korec', 'pražský korec', 'historická míra'],
+    kategorie: 'jednotky',
+    shortDef: 'Korec je historická česká jednotka plochy ≈ 0,2877 ha (28,77 a). Plocha, na kterou se vyseje 1 korec (objemová míra) obilí. V katastrálních zápisech a rodinné paměti přežívá dodnes.',
+    longDef: `Korec je historická česká jednotka plošného obsahu, etymologicky odvozená od **korce jako objemové míry obilí** (asi 93 litrů). Korec půdy = plocha, na kterou se vyseje 1 korec osiva.
+
+**Standardizovaný český (pražský) korec**: 2 877,32 m² = **28,77 a ≈ 0,288 ha**.
+
+Regionální varianty:
+- **Pražský korec**: 2 877 m² ≈ 0,288 ha (oficiální od r. 1764)
+- **Moravský korec**: variabilní, 1 920–2 880 m² (0,19–0,29 ha)
+- **Slezský korec**: 2 877 m² (sjednocený s pražským)
+- **Velký korec** (lesní): někdy až 5 754 m² (= jedno jitro)
+
+Vztah k dalším historickým jednotkám:
+- **1 jitro = 2 korce** (po 1 800 čtv. sáhách + zaokrouhlení regionálně)
+- **1 strych = 1 korec** (synonymum v některých regionech, viz [[strych]])
+- **1 lán = 60–64 korců** ≈ 17–18 ha
+
+V hospodářské praxi:
+- **Drobné chalupnické usedlosti**: 2–4 korce (= 0,6–1,2 ha)
+- **Střední statek**: 20–40 korců (= 5,8–11,5 ha)
+- **Selský láník**: 60+ korců = 1 lán = 17+ ha
+
+**Proč korec dnes ještě potkáváme:**
+- **Katastrální zápisy do roku 1869** používají korce a jitra. Vklad starého zápisu při dědictví → potkáte korce.
+- **Rodinné kroniky a vyprávění** — „dědek měl 8 korců u potoka" = ≈ 2,3 ha.
+- **Pomístní názvy** — „Na korci", „Korecká louka" jsou v ČR rozšířené.
+- **Genealogie** — gruntovní knihy a urbáře (16.–19. století) — výměry v korcích/strychích.
+
+Praktické převody:
+- **1 korec = 0,2877 ha = 28,77 a = 2 877 m²**
+- **1 korec ≈ 0,711 akru**
+- **3,5 korce = 1 ha** (zaokrouhleně)
+
+Po metrické reformě v ČSR (zákon č. 268/1919 Sb.) byl korec **oficiálně nahrazen hektarem a arem**. Dnes nemá právní platnost jako jednotka, ale staré zápisy zůstávají právně relevantní.
+
+Viz též [[strych]] (synonymum v některých regionech), [[jitro]], [[lan]], [[hektar]], [[ar]].`,
+    related: ['strych', 'jitro', 'lan', 'hektar', 'ar'],
+  },
+  {
+    slug: 'strych',
+    term: 'Strych',
+    alias: ['historický strych', 'moravský strych'],
+    kategorie: 'jednotky',
+    shortDef: 'Strych je historická středoevropská jednotka plochy ≈ 0,288 ha (28,8 a), v podstatě synonymum českého korce. Plocha, na kterou se vyseje 1 strych (objem) osiva. V Tereziánském katastru a starých zápisech přežívá dodnes.',
+    longDef: `Strych je tradiční česká a středoevropská jednotka plošného obsahu. Slovo pochází z německého *Strich* (= pruh, řádek, vyznačený pás půdy). V mnoha regionech je strych **synonymem korce** — obě jednotky byly definovány jako plocha, na kterou se vyseje 1 strych/korec (objemová míra ≈ 93 l) obilí.
+
+**Český strych**: 2 877 m² ≈ **0,288 ha** (totožný s pražským korcem).
+
+Regionální varianty:
+- **Český/pražský strych**: 2 877 m² ≈ 0,288 ha
+- **Moravský strych**: 1 920–2 880 m² (0,19–0,29 ha) — variabilní
+- **Slezský strych**: 2 877 m² (sjednocený s českým po patentech Marie Terezie)
+- **Velký strych** (lesní): až dvojnásobek
+
+V některých regionech jihovýchodní Moravy a Slovenska byl strych pevně menší než český korec (≈ 0,2 ha) — proto vždy v archivních pramenech ověřit lokální definici.
+
+**Použití historicky:**
+- **Tereziánský katastr (1748)** — výměry polí, luk a pastvin zapsány ve strychích/jitrech.
+- **Robotní patenty** — robotní povinnosti se odvíjely od počtu strychů.
+- **Urbární knihy 17.–18. století** — daňová evidence drobné držby.
+
+**Vztah k dalším jednotkám:**
+- **1 strych = 1 korec** (v české standardizaci po 1764)
+- **2 strychy = 1 jitro** (≈ 0,575 ha)
+- **64 strychů = 1 lán** (≈ 18 ha)
+- **3,48 strychu = 1 ha**
+
+**Dnes ještě potkáme strych:**
+- **Katastr nemovitostí** — staré zápisy před metrickou reformou 1919.
+- **Genealogie / rodopis** — matriky a gruntovní knihy uvádějí výměry ve strychích.
+- **Pomístní názvy** — „Strychy", „Na strychu", „Strychová pole" v některých obcích.
+
+Praktické převody:
+- **1 strych = 0,288 ha = 28,8 a = 2 877 m²**
+- **1 strych ≈ 0,712 akru**
+- **3,48 strychu = 1 hektar**
+
+Po metrické reformě v ČSR (1919) byl strych **oficiálně zrušen** jako platná jednotka. Pro pochopení starých dokumentů ale potřeba znát.
+
+Viz též [[korec]] (synonymum), [[jitro]] (= 2 strychy), [[lan]], [[hektar]].`,
+    related: ['korec', 'jitro', 'lan', 'hektar'],
+  },
+  {
+    slug: 'morgen',
+    term: 'Morgen',
+    alias: ['pruský morgen', 'německé jitro', 'Morgen'],
+    kategorie: 'jednotky',
+    shortDef: 'Morgen je historická německá/rakouská jednotka plochy. Pruský morgen = 0,2553 ha, bavorský = 0,3407 ha, rakouský = 0,5755 ha (= rakouské jitro). V pohraničí a starých zápisech přežívá.',
+    longDef: `Morgen (německy „ráno") je historická středoevropská jednotka plošného obsahu, definovaná jako plocha, kterou pár volů zorá za jedno ráno (jitro). Stejně jako české [[jitro]] se velikost výrazně lišila podle regionu — Německo bylo do roku 1872 fragmentované na desítky zemí, každá s vlastní mírou.
+
+Hlavní varianty (před metrickou reformou):
+- **Pruský morgen** (Magdeburský): 2 553,2 m² ≈ **0,2553 ha**
+- **Bavorský morgen**: 3 407,3 m² ≈ **0,3407 ha**
+- **Saský morgen**: 2 767 m² ≈ 0,277 ha
+- **Hesenský morgen**: 2 500 m² (zaokrouhleno na 0,25 ha v 19. století)
+- **Württemberský morgen**: 3 152 m² ≈ 0,315 ha
+- **Rakouský/dolnorakouský morgen** (= jitro): 5 754,6 m² ≈ **0,5755 ha**
+
+Po **metrické reformě v Německé říši (1872)** byl morgen oficiálně zrušen, ale v běžné řeči a katastrálních zápisech v některých regionech přežívá dodnes — **zejména na severu Německa** (Mecklenburg, Sasko) udává staršie generace výměry v morgenech.
+
+**Proč relevantní pro CZ farmáře:**
+- **Pohraničí** (Šumava, Krkonoše, Krušné hory, jižní Morava) — staré německé mapy z dob R-U a před rokem 1945 udávaly výměry v morgenech. Při restituci a katastrálních sporech narazíte.
+- **Nákup pozemků v DE** — zahraniční prodejci/inzeráty v severním Německu občas uvádějí morgeny (zejm. lesnictví).
+- **Pruské katastrální mapy** — historický výzkum vlastnictví Sudet, lichtenštejnských statků atd.
+
+Praktické převody (nejčastější — pruský morgen):
+- **1 pruský morgen = 0,2553 ha = 25,53 a = 2 553 m²**
+- **1 pruský morgen ≈ 0,631 akru**
+- **4 pruské morgeny ≈ 1 ha**
+- **1 ha = 3,92 pruského morgenu**
+
+Pozor — **rakouský morgen** je úplně něco jiného (= rakouské jitro = 0,5755 ha). Při čtení starých map vždy nejdřív zjistit, ze které země mapa pochází.
+
+V současné formální agendě **morgen nemá žádnou právní platnost** ani v Německu, ani v ČR.
+
+Viz též [[jitro]] (rakouská varianta), [[akr]], [[hektar]], [[korec]].`,
+    related: ['jitro', 'akr', 'hektar', 'korec'],
   },
 
   // ── DALŠÍ TECHNOLOGIE / STROJE ──────────────────────────────────────
@@ -2275,4 +2677,5 @@ export const KATEGORIE_LABELS: Record<SlovnikKategorie, string> = {
   agrotechnika: 'Agrotechnika',
   regulace: 'Regulace a normy',
   'precise-farming': 'Přesné zemědělství',
+  jednotky: 'Jednotky a měření',
 };

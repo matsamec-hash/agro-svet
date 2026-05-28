@@ -1,0 +1,370 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import AreaConverter from '../../../components/AreaConverter.astro';
+
+const canonical = `${SITE_URL}/kalkulacka/prevody-jednotek/`;
+
+const faqItems = [
+  {
+    q: 'Kolik je 1 hektar v m² a arech?',
+    a: '1 hektar (ha) = 10 000 m² = 100 arů (a) = 0,01 km². Hektar je čtverec o straně 100 × 100 metrů. V zemědělství je hektar standardní jednotka pro výměru polí, dotace na hektar i výnosy plodin (t/ha).',
+  },
+  {
+    q: 'Kolik m² je 1 ar?',
+    a: '1 ar (a) = 100 m² = čtverec 10 × 10 m = 0,01 hektaru. 100 arů tvoří jeden hektar. Ar se v ČR používá hlavně pro výměru zahrad, malých parcel a v katastrálních zápisech.',
+  },
+  {
+    q: 'Kolik je 1 akr v hektarech?',
+    a: '1 akr (acre) = 4 046,86 m² = 0,4047 hektaru = přibližně 40,5 aru. Akr je anglosaská jednotka používaná v USA, UK, Kanadě a Austrálii. Pro převod akrů na hektary vynásob hodnotu číslem 0,4047.',
+  },
+  {
+    q: 'Jak převést bušly na tuny z hektaru?',
+    a: 'Záleží na komoditě. Pro pšenici a sóju: bu/ac × 0,0673 = t/ha. Pro kukuřici: bu/ac × 0,0628 = t/ha. Příklad: 175 bu/ac kukuřice ≈ 11 t/ha. CBOT publikuje US výnosy v bušlech na akr, EU v t/ha.',
+  },
+  {
+    q: 'Co je jitro, korec a strych? Jak velké jsou?',
+    a: 'Historické české jednotky plochy z doby před metrickou reformou (1919). Standardizované hodnoty z roku 1764: rakouské/české jitro = 0,5755 ha (5 754 m²), pražský korec = strych = 0,288 ha (2 877 m²). Stále se objevují v katastrálních zápisech a rodinné paměti.',
+  },
+  {
+    q: 'Proč existuje hektolitrová váha obilí?',
+    a: 'Hektolitrová váha (kg/hl) je kvalitativní parametr — hmotnost 100 litrů obilí. Vyšší hl váha = vyšší obsah škrobu/oleje, lepší mlynářská kvalita. Pšenice 78+ kg/hl = potravinářská třída, < 74 kg/hl = krmná. Rozdíl ceny může být 1500+ Kč/t.',
+  },
+];
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalkulačky', url: '/kalkulacka/' },
+  { name: 'Převody jednotek', url: canonical },
+]);
+const faqJsonLd = faqPageSchema(faqItems);
+---
+
+<Layout
+  title="Převody jednotek plochy — hektar, ar, m², akr, jitro, korec"
+  description="Online kalkulačka pro převody jednotek plochy: hektar ↔ ar ↔ m² ↔ km² ↔ akr ↔ jitro ↔ korec ↔ strych ↔ morgen. Okamžitý výpočet, vhodné pro zemědělce, geodety i katastr."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="pj-page">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="/kalkulacka/">Kalkulačky</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">Převody jednotek</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Kalkulačka · jednotky a měření</span>
+      <h1>Převody jednotek plochy</h1>
+      <p class="hero-lede">
+        Zadej hodnotu v libovolné jednotce a okamžitě uvidíš převod do všech ostatních —
+        hektary, ary, metry čtvereční, akry i historické české jednotky (jitro, korec, strych) a pruský morgen.
+        Kalkulačka funguje bez registrace, čísla se počítají v prohlížeči.
+      </p>
+    </header>
+
+    <AreaConverter
+      defaultUnit="ha"
+      defaultValue={1}
+      heading="Online převodník jednotek plochy"
+      caption="Tip: klikni do pole s hodnotou a piš — všechny převody se aktualizují živě. Pro starší jednotky (jitro, korec, strych) jsou použité standardizované hodnoty z roku 1764, regionální varianty se mohly mírně lišit."
+      headingLevel="h2"
+    />
+
+    <section class="pj-reference">
+      <h2>Referenční tabulka — nejčastější převody</h2>
+      <div class="pj-tables">
+        <table class="pj-table">
+          <caption>Hektar (ha) na další jednotky</caption>
+          <tbody>
+            <tr><th>1 ha</th><td>= 10 000 m²</td></tr>
+            <tr><th>1 ha</th><td>= 100 a (arů)</td></tr>
+            <tr><th>1 ha</th><td>= 0,01 km²</td></tr>
+            <tr><th>1 ha</th><td>≈ 2,471 akru</td></tr>
+            <tr><th>1 ha</th><td>≈ 1,738 jitra</td></tr>
+            <tr><th>1 ha</th><td>≈ 3,476 korce / strychu</td></tr>
+            <tr><th>1 ha</th><td>≈ 3,917 pruského morgenu</td></tr>
+          </tbody>
+        </table>
+
+        <table class="pj-table">
+          <caption>Ar (a) na další jednotky</caption>
+          <tbody>
+            <tr><th>1 a</th><td>= 100 m²</td></tr>
+            <tr><th>1 a</th><td>= 0,01 ha</td></tr>
+            <tr><th>1 a</th><td>≈ 0,0247 akru</td></tr>
+            <tr><th>100 a</th><td>= 1 ha</td></tr>
+            <tr><th>4 a</th><td>= 400 m² (malá zahrada)</td></tr>
+            <tr><th>10 a</th><td>= 1 000 m² (větší zahrada)</td></tr>
+          </tbody>
+        </table>
+
+        <table class="pj-table">
+          <caption>Akr (acre) na další jednotky</caption>
+          <tbody>
+            <tr><th>1 akr</th><td>= 4 046,86 m²</td></tr>
+            <tr><th>1 akr</th><td>≈ 0,4047 ha</td></tr>
+            <tr><th>1 akr</th><td>≈ 40,47 a</td></tr>
+            <tr><th>1 akr</th><td>= 4 840 yard²</td></tr>
+            <tr><th>2,471 akru</th><td>= 1 ha</td></tr>
+            <tr><th>640 akrů</th><td>= 1 mile² (US section)</td></tr>
+          </tbody>
+        </table>
+
+        <table class="pj-table">
+          <caption>Historické české jednotky</caption>
+          <tbody>
+            <tr><th>1 jitro</th><td>= 5 754 m² = 0,5755 ha</td></tr>
+            <tr><th>1 korec</th><td>= 2 877 m² = 0,288 ha</td></tr>
+            <tr><th>1 strych</th><td>= 2 877 m² (= korec)</td></tr>
+            <tr><th>2 korce</th><td>= 1 jitro</td></tr>
+            <tr><th>1 lán</th><td>≈ 64 korců ≈ 18 ha</td></tr>
+            <tr><th>1 morgen (pruský)</th><td>= 2 553 m² = 0,255 ha</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="pj-context">
+      <h2>K čemu jsou jednotlivé jednotky dobré?</h2>
+      <div class="pj-cards">
+        <article class="pj-card">
+          <h3>Hektar (ha) <a href="/slovnik/hektar/" class="pj-card-link">detail →</a></h3>
+          <p>
+            Standardní jednotka v zemědělství a lesnictví. Používá se pro výměru farem, dotace na hektar
+            (BISS, CISS, EKO), výnosy plodin (t/ha) i ceny postřiků (l/ha). 1 ha = fotbalové hřiště 1,5×.
+          </p>
+        </article>
+
+        <article class="pj-card">
+          <h3>Ar (a) <a href="/slovnik/ar/" class="pj-card-link">detail →</a></h3>
+          <p>
+            Jednotka pro drobné pozemky — zahrady, malé parcely, vinice malých vinařů. 1 ar = čtverec
+            10 × 10 m. V katastru nemovitostí přetrvává v běžné řeči, oficiálně se eviduje v m².
+          </p>
+        </article>
+
+        <article class="pj-card">
+          <h3>Metr čtvereční (m²) <a href="/slovnik/metr-ctvrecni/" class="pj-card-link">detail →</a></h3>
+          <p>
+            Základní SI jednotka. Oficiální zápis v katastru nemovitostí, sazba daně z nemovitých věcí,
+            výměra stavebních parcel, bytů a hal. Univerzální napříč obory.
+          </p>
+        </article>
+
+        <article class="pj-card">
+          <h3>Akr (acre) <a href="/slovnik/akr/" class="pj-card-link">detail →</a></h3>
+          <p>
+            Anglosaská jednotka pro USA, UK, Kanadu, Austrálii. Pro CZ farmáře relevantní při čtení
+            USDA dat (výnosy v bu/ac), CBOT cenotvorby a při exportu komodit.
+          </p>
+        </article>
+
+        <article class="pj-card">
+          <h3>Jitro, korec, strych <a href="/slovnik/jitro/" class="pj-card-link">detail →</a></h3>
+          <p>
+            Historické české jednotky před metrickou reformou (1919). Setkáte se s nimi
+            v katastrálních zápisech, gruntovních knihách, urbářích a rodinných kronikách.
+            Pro dědická řízení a genealogii nutné znát.
+          </p>
+        </article>
+
+        <article class="pj-card">
+          <h3>Morgen <a href="/slovnik/morgen/" class="pj-card-link">detail →</a></h3>
+          <p>
+            Historická německá jednotka. Pruský morgen ≈ 0,255 ha, rakouský ≈ 0,575 ha (rovná se českému
+            jitru). Setkáte se v pohraničí (Sudety, jižní Morava), na pruských mapách a při nákupu
+            pozemků v severním Německu.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="pj-faq">
+      <h2>Časté otázky</h2>
+      {faqItems.map((item) => (
+        <details class="pj-faq-item">
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <aside class="pj-related">
+      <h2>Další užitečné stránky</h2>
+      <ul class="pj-related-list">
+        <li><a href="/slovnik/?kategorie=jednotky">📐 Slovník — všechny jednotky a měření</a></li>
+        <li><a href="/kalkulacka/naklady-na-hektar/">🌾 Kalkulačka nákladů na hektar</a></li>
+        <li><a href="/kalkulacka/dotace-cap/">💶 Kalkulačka dotací CAP 2024</a></li>
+        <li><a href="/slovnik/hektar/">🟨 Hektar (ha) — detail jednotky</a></li>
+        <li><a href="/slovnik/q-cent/">⚖️ Cent (q) — jednotka výnosu</a></li>
+      </ul>
+    </aside>
+  </div>
+</Layout>
+
+<style>
+  .pj-page { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .breadcrumb .sep { opacity: 0.5; }
+
+  .hero { max-width: 720px; margin-bottom: 28px; }
+  .kicker {
+    display: inline-block;
+    background: #FFEA00;
+    color: #0A0A0B;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin: 12px 0 12px;
+    line-height: 1.1;
+    color: #1a1a1a;
+  }
+  .hero-lede { font-size: 16px; color: #555; line-height: 1.65; margin: 0; }
+
+  .pj-reference { margin: 36px 0; }
+  .pj-reference h2,
+  .pj-context h2,
+  .pj-faq h2,
+  .pj-related h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0A0A0B;
+    margin: 0 0 18px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #FFEA00;
+  }
+
+  .pj-tables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .pj-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+  .pj-table caption {
+    text-align: left;
+    padding: 10px 14px;
+    background: #fffef8;
+    color: #0A0A0B;
+    font-weight: 700;
+    border-bottom: 1px solid #eaeaec;
+    caption-side: top;
+  }
+  .pj-table th,
+  .pj-table td { padding: 8px 14px; text-align: left; }
+  .pj-table th {
+    font-weight: 700;
+    color: #0A0A0B;
+    font-variant-numeric: tabular-nums;
+    width: 40%;
+  }
+  .pj-table td { color: #444; font-variant-numeric: tabular-nums; }
+  .pj-table tr + tr { border-top: 1px solid #f1f1f3; }
+
+  .pj-context { margin: 36px 0; }
+  .pj-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .pj-card {
+    padding: 16px 18px;
+    background: #fff;
+    border: 1.5px solid #eaeaec;
+    border-radius: 10px;
+  }
+  .pj-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0A0A0B;
+    margin: 0 0 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .pj-card-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0B7A3B;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .pj-card-link:hover { text-decoration: underline; }
+  .pj-card p { font-size: 13px; color: #555; line-height: 1.6; margin: 0; }
+
+  .pj-faq { margin: 36px 0; }
+  .pj-faq-item {
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .pj-faq-item summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: #0A0A0B;
+    font-size: 14px;
+  }
+  .pj-faq-item[open] summary { margin-bottom: 8px; }
+  .pj-faq-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+    line-height: 1.65;
+  }
+
+  .pj-related {
+    margin: 36px 0 0;
+    padding: 20px 24px;
+    background: #f9f9fb;
+    border-radius: 12px;
+  }
+  .pj-related-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 8px;
+  }
+  .pj-related-list a {
+    display: block;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 8px;
+    color: #0A0A0B;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color .15s;
+  }
+  .pj-related-list a:hover { border-color: #FFEA00; }
+</style>

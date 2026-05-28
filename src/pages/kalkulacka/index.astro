@@ -6,6 +6,13 @@ import { SITE_URL } from '../../lib/config';
 
 const calculators = [
   {
+    slug: 'prevody-jednotek',
+    name: 'Převody jednotek plochy',
+    short: 'Převody jednotek',
+    description: 'Hektar, ar, m², km², akr a historické jednotky (jitro, korec, strych, morgen) — okamžitý přepočet pro zemědělce, katastr i genealogii.',
+    icon: '📐',
+  },
+  {
     slug: 'leasing-traktoru',
     name: 'Kalkulačka leasingu traktoru',
     short: 'Leasing traktoru',
@@ -49,8 +56,8 @@ const itemListJsonLd = itemListSchema(
 ---
 
 <Layout
-  title="Kalkulačky pro zemědělce — leasing, náklady na hektar"
-  description="Interaktivní kalkulačky pro plánování investic a provozu zemědělské techniky: leasing traktoru, provozní náklady na hektar."
+  title="Kalkulačky pro zemědělce — převody jednotek, leasing, náklady"
+  description="Interaktivní kalkulačky: převody jednotek plochy (ha, ar, m², akr, jitro), leasing traktoru, provozní náklady na hektar, dotace CAP a úspora nafty."
   canonical={canonical}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
