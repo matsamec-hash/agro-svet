@@ -11,7 +11,7 @@
 // - related URL (na encyklopedie / dotace / žebříčky)
 
 export type SlovnikKategorie =
-  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky' | 'historie' | 'chov' | 'slang';
+  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky' | 'historie' | 'chov' | 'slang' | 'ochrana';
 
 export interface SlovnikTerm {
   slug: string;
@@ -4461,8 +4461,1228 @@ Viz též [[zentour]], [[krmne-davky]], [[kukurice-silazni]], [[grunt]], [[tmr]]
 
 V kultuře: **„Bramborové pohádky"** (J. Lada), **„Bramborové dni"** (regionální festivaly Vysočiny), **„Pelhřimovské bramborářské slavnosti"** (každoročně).
 
-Viz též [[ozim-jarin]], [[osevni-postup]], [[npk-hnojivo]], [[roundup]].`,
-    related: ['ozim-jarin', 'osevni-postup', 'npk-hnojivo'],
+Viz též [[ozim-jarin]], [[osevni-postup]], [[npk-hnojivo]], [[roundup]], [[plisen-bramborova]], [[mandelinka-bramborova]].`,
+    related: ['ozim-jarin', 'osevni-postup', 'npk-hnojivo', 'plisen-bramborova', 'mandelinka-bramborova'],
+  },
+
+  // ── OCHRANA ROSTLIN A POSTŘIKY ──────────────────────────────────────
+  {
+    slug: 'plisen-bramborova',
+    term: 'Plíseň bramborová',
+    alias: ['Phytophthora infestans', 'late blight', 'plíseň pozdní'],
+    kategorie: 'ochrana',
+    shortDef: 'Plíseň bramborová (Phytophthora infestans) je houbová choroba brambor a rajčat. Způsobila irský hladomor 1845–1849. Dnes nejvážnější choroba bramboru — bez fungicidů ztráta 50–100 % výnosu během 14 dní.',
+    longDef: `Plíseň bramborová (lat. *Phytophthora infestans*, anglicky *late blight*, „pozdní plíseň") je **oomyceta** (ne pravá houba — patří mezi řasovce / Stramenopila) způsobující nejdůležitější chorobu **bramboru** a **rajčat**. Historicky způsobila **Velký irský hladomor** 1845–1849 (1 milion mrtvých, 1 milion emigrantů).
+
+**Historie:**
+- **1840s** — patogen poprvé pozorován v Belgii, Holandsku
+- **1845–1849** — Irský hladomor. Brambory tvořily 80 % stravy chudých irských rolníků. Patogen zničil úrodu 3 roky v řadě.
+- **1882** — francouz Pierre Marie Alexis Millardet objevuje **bordeauxskou jíchu** (CuSO₄ + Ca(OH)₂) v Médocu — náhodou, jako prevence proti zlodějům vinné révy. První historický fungicid.
+- **20. století** — postupný vývoj systemických fungicidů (mancozeb, metalaxyl, cymoxanil)
+- **2000s** — agresivní A2 mating type kmen z Mexika invadní do EU — patogen sexuálně reprodukuje → oospory v půdě → trvalost
+
+**Životní cyklus:**
+1. **Přezimování**: v hlízách brambor (semenách), kompostech, mrtvých rostlinách
+2. **Sporulace**: ráno za rosy (vlhko + 10–25 °C) → sporangia
+3. **Šíření**: vzduch (sporangia letí desítky km), voda (zoospory plavou v rosě)
+4. **Infekce**: penetrace stomatami nebo přes ranky, projevy 3–5 dní po infekci
+5. **Sekundární cyklus**: za 4–7 dní další sporulace → epidemie
+
+**Symptomy:**
+- **Listy**: tmavé hnědo-černé nekrózy, často s **bílým plíseňovitým okrajem** na rubu (sporulace)
+- **Stonky**: tmavé skvrny, později kruhové rozkladné léze
+- **Hlízy**: hnědé skvrny na povrchu → uvnitř hnědá/červená hniloba (často sekundárně bakteriální mokrý)
+- **Rajčata**: stejné — hnědé skvrny, sporulace, hniloba plodů
+
+**Riziko a varování:**
+- **Vlhko + teplo** (RH > 90 %, T 10–25 °C) → vysoké riziko
+- **Modelovací systémy** (Smith Period, NegFry, BlightCAST) — předpověď infekce 1-3 dny dopředu
+- **CZ varování**: Státní rostlinolékařská správa (ÚKZÚZ) + komerční (BIRTeam, Bayer FieldView)
+
+**Boj — fungicidy:**
+
+**Preventivní (kontaktní)**:
+- **Mancozeb** (Dithane, Penncozeb) — bílý prach, 7–10 dní účinek. **Plánovaný zákaz v EU** od 2024 (potenciálně karcinogenní)
+- **Cymoxanil** — velmi efektivní, krátká účinnost (2–3 dny)
+- **Měď** (CuSO₄, Cu hydroxid) — bio i konvenční. **Limit 4 kg Cu/ha/rok** v EU
+- **Folpet** — alternative k mancozebu
+
+**Systemické (lokálně systémové)**:
+- **Metalaxyl, Metalaxyl-M** (Ridomil) — fenylamid, velmi efektivní. Riziko rezistence (problém od 1990s)
+- **Mandipropamid** (Revus) — CAA fungicid, špička 2020s
+- **Cymoxanil + Mancozeb** kombinace (Curzate)
+- **Fluazinam** (Shirlan) — preventivní, dlouhá perzistence
+- **Pyrimethanil** — komplikované použití
+
+**Postřikový kalendář** (intensivní brambora, 2024 EU):
+- **Klíčící**: žádný postřik
+- **5–10 cm porost**: 1. prevence (mancozeb nebo Cu)
+- **Před uzavíráním řádků**: 2. (cymoxanil/metalaxyl)
+- **Květ**: 3.–4. postřik (mandipropamid)
+- **Tvorba hlíz**: 5.–7. postřik (preventivní každých 7–10 dní)
+- **Před sklizní**: 8. desikační (Reglone alternativa)
+- **Celkem**: 7–10 postřiků/sezónu, **náklady 4 000–7 000 Kč/ha**
+
+**Rezistentní odrůdy:**
+- **Sárka, Adéla, Marabel** — středně tolerantní
+- **Sárpo Mira** — vysoká rezistence, hodí se pro biofarmy
+- **Bionica, Toluca** — moderní rezistentní hybridy
+- **Rezistence není 100 %** — i tolerantní odrůdy potřebují 3–5 postřiků v rizikové sezóně
+
+**Bio přístup:**
+- Pouze **měď** (Cu — viz výše, 4 kg/ha/rok limit)
+- **Bordeauxská jícha** (klasická, levná, vlastnoručně míchaná)
+- **Bio-stimulanty** (silikát draselný, výtažky z kopřiv) — marginální efekt
+- **Rezistentní odrůdy** + krátký vegetační cyklus (sklizeň brzy)
+
+**Po infekci:**
+- **Není léčba** — preventivní fungicidy se aplikují PŘED infekcí
+- **Po prvních symptomech** → lokální „spalování" (zničit infikované rostliny mechanicky/chemicky)
+- **Sklizená brambora** → třídit (žádné napadené do skladu, riziko hniloby celého skladu)
+
+**V ČR 2024**: ztráty z plísně bramborové ~5–15 % výnosu i přes intenzivní postřik. Bez postřiků 50–100 % ztráta.
+
+Viz též [[roundup]], [[fungicidy]], [[zemak]], [[ozim-jarin]], [[osevni-postup]], [[mez]].`,
+    related: ['fungicidy', 'zemak', 'mandelinka-bramborova', 'desikace'],
+  },
+  {
+    slug: 'fuzarioza',
+    term: 'Fuzarióza klasů',
+    alias: ['Fusarium head blight', 'FHB', 'klasová fuzarióza', 'Fusarium graminearum'],
+    kategorie: 'ochrana',
+    shortDef: 'Fuzarióza klasů (Fusarium spp.) je houbová choroba obilí (pšenice, ječmen) napadající klasy. Produkuje mykotoxiny (DON, ZEA, T-2) škodlivé pro lidi i zvířata. Standardní limit EU pro DON v pšenici = 1,25 mg/kg.',
+    longDef: `Fuzarióza klasů (anglicky *Fusarium Head Blight*, FHB) je **houbová choroba obilí** způsobená komplexem druhů rodu *Fusarium* (*F. graminearum, F. culmorum, F. avenaceum, F. poae*). Napadá především **pšenici, ječmen, žito, oves, kukuřici**. Klíčový problém: **mykotoxiny**.
+
+**Druhy a mykotoxiny:**
+
+| Druh | Hlavní mykotoxin | Účinek |
+|------|------------------|---------|
+| **F. graminearum** | DON (deoxynivalenol) | Imunosupresivní, gastrointestinální |
+| **F. graminearum** | ZEA (zearalenon) | Estrogenní (problém u prasat) |
+| **F. culmorum** | DON, ZEA, NIV | Podobné |
+| **F. poae** | NIV (nivalenol), T-2 | Vysoce toxický (T-2 = bojový agent) |
+| **F. avenaceum** | Moniliformin, ENN | Kardiotoxický |
+| **F. verticillioides** (kukuřice) | Fumonisiny | Karcinogenní, neurologický |
+
+**EU limity mykotoxinů** (Nařízení 1881/2006 + 2023 revize):
+- **DON**: pšenice/ječmen pro konzum 1,25 mg/kg, krmivo 8 mg/kg
+- **ZEA**: pšenice 100 µg/kg, kukuřice 350 µg/kg
+- **Fumonisiny**: kukuřice 4 000 µg/kg
+- **Aflatoxiny** (jiný rod *Aspergillus*): 4 µg/kg max
+
+**Symptomy:**
+- **Klásky bělavé** (předčasně dozrávají) — kontrast se zdravými zelenými
+- **Růžovo-oranžová sporulace** na klasu při vlhku
+- **Zrno scvrklé, „růžovaté"** ("tombstone kernels", *piepsy*)
+- **Posklizňový test**: laboratoř kvantifikuje DON na ELISA nebo HPLC
+
+**Rizikové faktory:**
+- **Předplodina kukuřice** — *F. graminearum* přezimuje v kukuřičných stočistích
+- **No-till** + reziduální sláma kukuřice = vysoké riziko
+- **Vlhko + teplo** (15–25 °C, déšť 24–48 h) **během kvetení pšenice** (BBCH 61–69, polovina května až polovina června)
+- **Husté porosty** (nesnižuje aerace klasů)
+
+**Boj — chemický:**
+
+**Klíčový moment — postřik ve kvetení (BBCH 63–67)**:
+- **Triazoly**: prothiokonazol (Prosaro, Caramba), tebuconazol, metconazol
+- **SDHI** (Inatreq): fluxapyroxad, bixafen — moderní generace
+- **Strobiluriny**: azoxystrobin (NOT recommended pro FHB — některé druhy F. zvyšuje DON!)
+- **Kombinace** SDHI + triazol = stříbrný standard 2020s
+- **Aplikace**: 200–400 l vody/ha, jemné rozprášení, **timing kritický** (kvetoucí klasy)
+
+**Efektivita postřiku:**
+- **Optimal timing**: -40 % DON, -50 % FHB
+- **Pozdě**: +10 % efekt na DON
+- **Brzo (před kvetením)**: 0 efekt
+- **Nutné měřit** vegetační stádium, ne datum
+
+**Boj — agrotechnický:**
+- **Předplodina**: po kukuřici **NESÉT pšenici**. Lepší: řepka → pšenice nebo luskovina → pšenice.
+- **Zpracování půdy**: orba zaorá *Fusarium* rezidua, snižuje inokulum o 50–80 %. **No-till + kukuřice = nejhorší kombinace**.
+- **Rezistentní odrůdy**: částečná tolerance (nikdy 100%). Sumai 3 (CN) = donor genu Fhb1, používaný v EU šlechtění.
+- **Hustota porostu**: 350–450 klasů/m² (vyšší = vyšší riziko)
+- **Hnojení**: vysoký N nezvyšuje FHB výrazně, ale prodlužuje kvetení = větší okno infekce
+- **Odolnost**: BBCH model + meteodata + povětrnostní stanice = pre-warning systém
+
+**Sklizeň a posklizňová úprava:**
+- **Časné kombajnování** napadeného porostu — méně času pro další sporulaci
+- **Vyšší vlhkost při sklizni** (15–20 %) → ihned sušit pod 13 %
+- **Čištění** — *fuzariové zrno je lehčí*, lze ho oddělit air-screen čistírnou (ztráta 5–15 % hmotnosti, ale DON klesne o 50–80 %)
+- **Sklad** za sucha a chladu (< 14 % vlhkost, < 15 °C) — *Fusarium* dále neroste
+
+**Ekonomický dopad:**
+- **Cena kontaminovaného obilí**: výkup ho přijme s 30–50 % srážkou nebo odmítne (krmné = nižší cena, nesplnění mlynářských limitů)
+- **Náklady na postřik FHB**: 800–1 500 Kč/ha (1 aplikace)
+- **Ztráta výnosu**: 10–30 % při napadení
+- **CZ 2024**: cca 20–30 % sklizně pšenice ve „FHB riziku" v některých letech
+
+**Lidské zdraví:**
+- **Akutní otrava** vysokými dávkami DON: nausea, zvracení, hořkost v ústech
+- **Chronická expozice**: imunosuprese, růstová retardace u dětí
+- **ZEA**: hormonální disrupce (estrogenní), problém pro prasata
+
+**Krmiva pro zvířata:**
+- **Prasata** velmi citlivá (limit DON 0,9 mg/kg krmiva)
+- **Skot** méně citlivý (5 mg DON/kg krmiva)
+- **Drůbež** středně citlivá (2 mg DON/kg)
+- **Mykotoxinové vazače** (bentonity, glukomananové stěny kvasinek) — kompenzace v krmivu pro vázání toxinů v trávicím traktu
+
+**V ČR výzkum**: VURV Praha-Ruzyně, Mendelu Brno — selekce rezistentních odrůd, predikční modely.
+
+Viz též [[fungicidy]], [[ozim-jarin]], [[osevni-postup]], [[no-till]], [[kukurice-silazni]], [[hektolitr]].`,
+    related: ['fungicidy', 'ozim-jarin', 'osevni-postup', 'no-till', 'septorioza', 'rzi'],
+  },
+  {
+    slug: 'septorioza',
+    term: 'Septorióza',
+    alias: ['Zymoseptoria tritici', 'STB', 'Septoria tritici blotch', 'listová septorióza pšenice'],
+    kategorie: 'ochrana',
+    shortDef: 'Septorióza (Zymoseptoria tritici, dříve Septoria tritici) je nejvýznamnější houbová choroba listů pšenice v Evropě. Snižuje výnos o 30–50 % bez postřiku. Klíčový důvod fungicidních postřiků na pšenici v Evropě.',
+    longDef: `Septorióza pšenice (*Zymoseptoria tritici*, dříve *Septoria tritici* nebo *Mycosphaerella graminicola*, anglicky *Septoria tritici blotch*, STB) je **dominantní listová choroba pšenice ve západní a střední Evropě**. V CZ je hlavním důvodem ošetření pšenice fungicidy — bez postřiku 30–50 % ztráta výnosu.
+
+**Životní cyklus:**
+1. **Přezimování**: na rostlinných zbytcích pšenice (sláma) nebo na ozimu na podzim
+2. **Šíření na podzim** (ozim): déšť rozšiřuje **pyknospory** na listy. Mírné teploty + déšť = ideální.
+3. **Latentní fáze**: 14–28 dní (mírná zima → infekce neviditelná)
+4. **Symptomy na jaře**: žlutavé skvrny s malými černými tečkami (pyknidy)
+5. **Vertikální šíření**: spóry letí déštěm vzhůru, postupně napadá vyšší listy (flag leaf — vlajkový list je nejcennější, dodává 60 % asimilátů zrnu)
+6. **Sekundární cyklus**: nový déšť = nové sporulace = nová infekce
+
+**Symptomy:**
+- **Žluté → hnědé** nepravidelné skvrny na listech
+- **Charakteristické**: drobné **černé pyknidy** v ploše léze (hodně teček na 1 cm²)
+- **Postup zdola nahoru**: dolní listy ovlivněny nejdřív, postupně do vrcholu
+- **Nejvíc škodí napadení vlajkového listu** (F0) a F-1 — 60 % výnosu závisí na nich
+
+**Rizikové faktory:**
+- **Časné setí ozimu** (před 15. zářím) → větší infekce v podzimu
+- **Vlhké jaro** (déšť > 5 mm v rozmezí 10 dní) → každý déšť = nová infekce
+- **Husté porosty** → mikroklima = vlhko
+- **Vysoké N hnojení** → bujný porost
+- **Předplodina pšenice** → inokulum přezimuje ve slámě (proto **NESÉT pšenice po pšenici**)
+- **No-till + sláma na povrchu** → zachovaný inokulum
+
+**Boj — fungicidy:**
+
+**Klíčové ošetření**:
+1. **T0 (BBCH 30–32, jaro)** — pokud silné napadení z podzimu. Levný basic.
+2. **T1 (BBCH 32–37)** — ošetření krymové listy. Triazol + SDHI.
+3. **T2 (BBCH 39–49, flag leaf)** — **NEJCENNĚJŠÍ ošetření**. Vlajkový list musí zůstat zelený.
+4. **T3 (BBCH 60–69, kvetení)** — fuzarióza + dozrávání. Triazol nebo strobilurin.
+
+**Aktivní látky:**
+- **Triazoly (DMI)**: tebuconazol, prothiokonazol, metconazol — hlavní třída 30 let, **rostoucí rezistence**
+- **SDHI**: fluxapyroxad (Bixafen), benzovindiflupyr (Solatenol), pydiflumetofen — top performery 2020s. Riziko rezistence (mírné, dosud zvládnutelné).
+- **Strobiluriny (QoI)**: azoxystrobin (Amistar), pyraclostrobin — **dnes prakticky neúčinné na septoriózu** kvůli rezistenci (mutace G143A v cytochromu b). Stále se používají pro jiné choroby.
+- **Inatreq active** (fenpicoxamid) — nová třída, 2021+ na trhu. Zatím low resistance.
+- **Mefentrifluconazole** (Revysol) — nová DMI z BASF s lepší aktivitou na rezistentní izoláty
+
+**Strategie anti-rezistence:**
+- **Mix činných látek** vždy (triazol + SDHI + strobilurin)
+- **Maximální 1× na sezónu** stejnou účinnou látku
+- **Kombinace s biologie** (bacillus, Trichoderma — komerčně tlumené pro velké farmy)
+
+**Náklady postřiků:**
+- **T1**: 600–1 200 Kč/ha
+- **T2**: 800–1 500 Kč/ha (flag leaf — kvalitní mix)
+- **T3**: 700–1 200 Kč/ha
+- **Sezónní celkem**: 2 100–3 900 Kč/ha pro pšenici
+
+**Návratnost:**
+- Postřik T2 ušetří 1–2 t/ha = 5 000–10 000 Kč/ha → návratnost 4–6×
+- T1 + T3 méně klíčové, ale zachovávají rezerve T2
+
+**Agrotechnika (anti-septorióza bez chemie):**
+- **Odolné odrůdy**: Bohemia, RGT Sacramento, Arnaud (CZ trh) — částečná tolerance
+- **Pozdější setí** ozimu (po 30. září) → menší podzimní infekce
+- **Snížená hustota porostu** (350 klasů/m² místo 500) → lepší aerace
+- **Snížené N hnojení** + split aplikace (rozdělit dávku 2-3× během sezóny)
+- **Předplodina jiná než pšenice** — řepka, luskovina, kukuřice
+- **Orba** zaorá inokulum (vs no-till)
+
+**Klimatická změna:**
+- Teplejší zimy = více přezimovaného inokula
+- Vlhčí jaro = víc cyklů
+- **Posun areálu** — septorióza posuvuje na sever Evropy (SE, DK, UK posílení 2020s)
+
+**V ČR výzkum**: VURV, Mendelu — selekce rezistentních linií, sledování fungicidní citlivosti.
+
+Viz též [[fuzarioza]], [[rzi]], [[fungicidy]], [[ozim-jarin]], [[osevni-postup]], [[no-till]].`,
+    related: ['fuzarioza', 'rzi', 'fungicidy', 'ozim-jarin', 'osevni-postup'],
+  },
+  {
+    slug: 'rzi',
+    term: 'Rzi obilí',
+    alias: ['Puccinia', 'rust', 'rez pšeničná', 'rez ječmenná', 'rzi'],
+    kategorie: 'ochrana',
+    shortDef: 'Rzi jsou skupina houbových chorob obilí způsobená rody Puccinia. Tři klíčové: rez plevová (P. striiformis), rez listová (P. recondita), rez stéblová (P. graminis). Historicky devastující choroby, dnes zvládané fungicidy a rezistencí.',
+    longDef: `Rzi obilí (anglicky *rusts*) jsou skupina **biotrofních houbových chorob** způsobená rody **Puccinia**. Tři klíčové druhy pro CZ pšenici a ječmen:
+
+1. **Rez plevová (žlutá)** — *Puccinia striiformis* (PST) — agresivní, chladný/vlhký
+2. **Rez listová (hnědá)** — *Puccinia recondita / triticina* (PT) — teplo/sucho
+3. **Rez stéblová (černá)** — *Puccinia graminis* (PG) — historicky katastrofická, dnes vzácná v EU
+
+**Historický význam:**
+- **Římská říše** — *Robigalia* svátek (25. dubna) zaměřený proti rzi
+- **1880s** — masivní epidemie v US a EU
+- **1916, 1953** — celosvětové epidemie rze stéblové → impulsy pro Bordeauxskou jíchu a moderní fungicidy
+- **1999+** — UG99 (Ug99) — vysoce agresivní kmen rze stéblové z Ugandy, šíří se Afrika → Asie. Hrozba pro globální pšeničnou produkci.
+- **2010+** — PST Warrior (žlutá rez) — agresivní rasy v EU, prolomení odolnosti většiny pšeničných odrůd
+
+**Symptomy:**
+
+**Rez plevová (žlutá, *yellow rust*):**
+- **Drobné žluto-oranžové puchýřky** v dlouhých proužcích podél žilek listů
+- Optimální: 8–18 °C, vlhko, rosa
+- **Časná v sezóně** (březen–červen v CZ)
+- **Riziko**: napadá ozim už během zimy (přezimuje na listech)
+
+**Rez listová (hnědá, *brown/leaf rust*):**
+- **Hnědo-oranžové puchýřky** jednotlivě nebo v shlucích, kruhové
+- Optimální: 15–25 °C
+- **Pozdně v sezóně** (květen–srpen)
+- **Riziko**: poškozuje vlajkový list během plnění zrna
+
+**Rez stéblová (černá, *stem rust*):**
+- **Tmavě hnědé až černé** puchýřky NA STÉBLECH (ne listech)
+- Velké léze, často 1×3 cm
+- **Pozdně** (konec června–červenec)
+- **Riziko**: poškozuje stéblo → polehnutí porostu, výrazné snížení výnosu (-30–80 %)
+
+**Životní cyklus (komplexní — alternující hostitel):**
+- **Hlavní hostitel**: pšenice / ječmen / žito (uredinia → telia stage)
+- **Vedlejší hostitel** (sexuální reprodukce): různý podle druhu
+  - PST žlutá: dříve se myslelo žádný, dnes víme *Berberis spp.* (dříšťál)
+  - PT listová: *Thalictrum spp.* (řešetlák — vzácně)
+  - PG stéblová: *Berberis vulgaris* (dříšťál obecný) — **historicky kácen** v USA pro eradikaci rze!
+- **EU/CZ**: *Berberis vulgaris* dnes není rozšířen → eradikace 1900s pomohla.
+
+**Boj — fungicidy:**
+
+**Stejná schémata jako septorióza** (často kombinované postřiky):
+- **Triazoly** — tebuconazol, propiconazol, prothiokonazol — efektivní
+- **Strobiluriny** — pyraclostrobin, azoxystrobin — vysoce účinné, **rezistence v některých rasách**
+- **SDHI** — moderní, kombinace s triazolem
+- **Inatreq active** — nová třída 2021+
+- **Aplikace timing**: stejné jako STB (T1 + T2 nejcennější)
+
+**Náklady**: zahrnuty v sezónním postřiku 2 000–4 000 Kč/ha (kombinované s STB postřikem)
+
+**Boj — rezistentní odrůdy:**
+- **Major rezistenční geny** (Lr, Sr, Yr genes) — specifické, ale snadno prolomené
+- **Slow-rusting**, kvantitativní rezistence — trvanlivější
+- **CIMMYT, ICARDA** — globální šlechtění
+- **CZ moderní odrůdy** mají kombinaci 3-5 rezistenčních genů (Bohemia, Sailor, Vlasta)
+
+**Rezistence patogenů:**
+- **PST Warrior** prolomilo Yr17 v 2011 → většina EU odrůd citlivá
+- **Ug99 black rust** prolomilo Sr31, Sr24, Sr36 — agresivní v Africe
+- **Konstantní souboj** šlechtění vs evoluce patogena
+
+**Mezinárodní spolupráce:**
+- **WIN** (Wheat Initiative Network) — globální sledování rasných typů
+- **Borlaug Global Rust Initiative (BGRI)** — koordinace boje proti Ug99
+- **EAS-Eppo** — EU monitoring
+
+**Klimatická změna:**
+- Teplejší zimy → vyšší přezimování patogena
+- Pozdější chlad na jaře → rzi začínají později ale silněji
+- **Pšenice v severních krajích** (UK, IE, S-Skandinávie) nyní pravidelně napadané (dříve řidčeji)
+
+**V ČR výzkum**: VURV Praha (rasi PST, PT), Mendelu Brno (rezistence šlechtění).
+
+Viz též [[fuzarioza]], [[septorioza]], [[fungicidy]], [[ozim-jarin]].`,
+    related: ['fuzarioza', 'septorioza', 'fungicidy', 'ozim-jarin'],
+  },
+  {
+    slug: 'mandelinka-bramborova',
+    term: 'Mandelinka bramborová',
+    alias: ['Colorado potato beetle', 'Leptinotarsa decemlineata', 'mandelinka'],
+    kategorie: 'ochrana',
+    shortDef: 'Mandelinka bramborová (Leptinotarsa decemlineata) je invazní brouk z USA, hlavní škůdce brambor v Evropě. Dospělec i larva žerou listy, bez ochrany 100 % defoliace = 80 % ztráta výnosu. V ČR od 1922.',
+    longDef: `Mandelinka bramborová (lat. *Leptinotarsa decemlineata*, ang. *Colorado potato beetle*, CPB) je **invazní brouk** z čeledi *Chrysomelidae*. Původem z **Colorada (USA)**, dnes hlavní škůdce brambor v Evropě, Asii i v původní Severní Americe.
+
+**Historie invaze:**
+- **1859** — první masová epidemie v Colorado (USA). Předtím žila na divokých *Solanum* spp.
+- **1875** — invaze do New Yorku, dále do EU
+- **1922** — první výskyt v CZ (Bordeaux pak Praha)
+- **1947** — masová invaze do CZ, kampaň proti „americkému brouku"
+- **1950s** — DDT poprvé použit, krátký triumf, pak rezistence
+- **Dnes** — etablovaná po celé Evropě, Severní Asii (Sibiř), Japonsku, Číně
+
+**Morfologie:**
+- **Dospělec**: 10 mm, **žlutý** s **10 černými proužky** na krovkách. Charakteristický vzhled.
+- **Vajíčko**: 1,5 mm, **oranžovo-žluté**, kladené v shlucích 20–60 ks **na spodní stranu** listů
+- **Larva**: 8–15 mm, **červeno-oranžová** s černou hlavou a černými tečkami po stranách. 4 instar stadia.
+- **Kukla**: v půdě 3–5 cm hlubina
+
+**Životní cyklus:**
+1. **Přezimování**: dospělci v půdě 10–20 cm hluboko (nezamrznou)
+2. **Vylezení**: jaro při teplotách >15 °C (v CZ konec dubna–polovina května)
+3. **Páření a kladení**: dospělci najdou bramborové porosty, kladou 200–400 vajíček/samice
+4. **Larvy** (3–4 týdny): konzumují listy. **Stádium L4 = největší žravost** (60 % celkového poškození).
+5. **Kuklení**: v půdě, 1–2 týdny
+6. **Druhá generace** dospělců: konec července–srpen
+7. **V CZ klimatu**: 1–2 generace ročně (2. generace jen v teplých letech)
+
+**Symptomy poškození:**
+- **Listy ohryzané**, často jen řapíky a žilky zůstanou
+- **Defoliace** může být 100 % během 7–14 dní bez ochrany
+- **Plné defoliace ve vegetaci**: -50 až -100 % výnosu
+- **Hlízy zůstávají nepoškozené** (mandelinka je listový škůdce)
+
+**Boj — chemický:**
+
+**Insekticidy:**
+- **Neonikotinoidy**: thiamethoxam, imidacloprid, clothianidin — **ZAKÁZÁNY v EU od 2018** kvůli toxicitě pro včely
+- **Spinosad** (Laser) — biopreparát z *Saccharopolyspora spinosa*, EU povolený, drahý
+- **Spinetoram** (Delegate) — vyšší účinnost než spinosad
+- **Chlorantraniliprole** (Coragen) — moderní, na L1-L3 larvy účinný
+- **Cyantraniliprole** (Verimark) — kořenová aplikace při výsadbě
+- **Pyrethroidy**: lambda-cyhalothrin (Karate) — levné ale rezistence
+- **Indoxakarb** (Steward) — alternative, stárnoucí
+
+**Aplikace timing:**
+- **Klíčový moment**: L1–L3 larvy (mladé, lehce kontrolovatelné)
+- **Pozdě (L4)**: účinnost klesá, larva už 50 % defoliace způsobila
+- **Sledovat porost** každých 3–5 dní v rizikovém období
+- **Threshold**: 30 larev/100 rostlin = postřik
+
+**Boj — biologický:**
+
+**Predátoři a parazitoidi:**
+- **Slunéčka** (*Coccinellidae*) — žerou vajíčka i mladé larvy
+- **Zlatoočka** (*Chrysoperla*) — žerou vajíčka
+- **Ploštice** (*Podisus, Perillus*) — americké, méně účinné v EU
+- **Cizopasné mušky** (*Doryphorophaga*) — vzácné v EU
+- **Není dostatečně efektivní** pro velké pole, jen v zahradě/biofarmě
+
+**Bacillus thuringiensis tenebrionis (BTT):**
+- Bakterie produkující toxiny **specifické pro brouky**
+- Komerčně: Novodor, Trichodor
+- **Účinný jen na L1-L2 larvy**, vyšší instary tolerantní
+- **Bio-přístup**, vhodný pro zahrady a biofarmu
+
+**Boj — kulturní:**
+- **Pravidelné střídání plodin** — alespoň 2 roky mezi bramborami na stejném poli
+- **Odběry rukou** v zahradě (pracné ale 100% efektivní pro malé plochy)
+- **Síťové barriéry** — mladý porost se zakryje sítí (drahé, jen pro vzácné odrůdy)
+- **Pluhování v podzim** — vyžene některé dospělce z přezimování
+
+**Rezistentní odrůdy:**
+- **Solanum chacoense** — divoký brambor, geneticky zdroj rezistence
+- **Sárka, Sárpo Mira** — částečná tolerance
+- **Genetické modifikované brambory** (BT-potatoes) — vyřazeno z EU regulační scény 1990s, NABLAH a další
+
+**Rezistence patogena na pesticidy:**
+- Mandelinka je **šampión rezistence mezi škůdci**
+- DDT (1950s), pyrethroidy (1980s), neonikotinoidy (2010s) — postupně prolomené
+- **Resistance management**: rotovat 2–3 různé třídy insekticidů per sezónu
+
+**Ekonomika:**
+- **Postřik**: 800–1 500 Kč/ha (1 aplikace)
+- **Sezónně**: 2–4 postřiky × 1 200 = **2 400–4 800 Kč/ha**
+- **Návratnost**: 5–10× (bez postřiku 80 % ztráta = 80 000+ Kč/ha)
+
+**Klimatická změna:**
+- Teplejší zimy = lepší přezimování
+- Delší vegetační doba = 2 generace pravidelně (dřív vzácně)
+- **Posun severního areálu** do Skandinávie
+
+V kultuře: **„Americký brouk"** byl propagandistický symbol v 1950s (Studená válka — Sovět tvrdili že USA shazují mandelinky z letadel na CSR a NDR pro sabotáž zemědělství).
+
+Viz též [[zemak]], [[plisen-bramborova]], [[insekticidy]].`,
+    related: ['zemak', 'plisen-bramborova', 'insekticidy'],
+  },
+  {
+    slug: 'msice-repna',
+    term: 'Mšice řepná',
+    alias: ['Aphis fabae', 'black bean aphid', 'mšice černá'],
+    kategorie: 'ochrana',
+    shortDef: 'Mšice řepná (Aphis fabae) je drobný hmyz sající šťávy řepy, fazolu, máku, hlívy. Sama o sobě nepříliš škodlivá, ale přenáší virus žluté mozaiky řepy (BYV) — virus snižuje cukernatost cukrovky o 20–40 %.',
+    longDef: `Mšice řepná (lat. *Aphis fabae*, ang. *black bean aphid*) je **černá / tmavě hnědá mšice** sající šťávy hostitelských rostlin. Sama o sobě středně škodlivá, ale **klíčový vektor virů** v cukrovce, fazolu, máku.
+
+**Vzhled:**
+- **Dospělec** 2 mm, **černý / tmavě hnědý**, často s voskovým povlakem
+- **Bezkřídlá forma** (vivipara) — letní rozmnožování
+- **Okřídlená forma** (alata) — disperzní generace, šíření na nové porosty
+- **Líhně** (nymfy) — světle zelené, později tmavé
+
+**Hostitelé:**
+
+**Primární** (zima):
+- **Brslen evropský** (Euonymus europaeus) — hlavní zimní hostitel v EU
+- **Kalina** (Viburnum)
+- **Lopuch** (méně častý)
+
+**Sekundární** (léto):
+- **Cukrovka, krmná řepa**
+- **Fazol obecný** (Phaseolus vulgaris)
+- **Mák** (Papaver)
+- **Lebeda** (Atriplex)
+- **Pampeliška, jiné Compositae**
+
+**Životní cyklus:**
+1. **Zima**: vajíčka kladená na brslen, kalinu
+2. **Jaro**: bezkřídlé samice se rojí na brslenu
+3. **Okřídlené dispersers**: letí na řepu, fazol (květen–červen)
+4. **Vrchol populace**: konec června–červenec, na řepě a fazolu
+5. **Návrat na brslen**: konec léta–podzim, kladení vajíček
+6. **V CZ**: 10–15 generací letní cyklus
+
+**Symptomy přímého poškození:**
+- **Listy stočené, zkroucené**
+- **Kolonie mšic** na rubu listů (často 100+ jedinců na list)
+- **Medovice** (sweet excret) — lepkavé povlaky → růst saze
+- **Snížený růst** rostliny
+
+**Klíčový problém — viry:**
+
+**BYV (Beet Yellows Virus, virus žloutenky řepy):**
+- Mšice naskočí na nemocnou rostlinu → cucá viry → letí na zdravou → infikuje
+- **Symptomy**: žluté listy řepy, redukce fotosyntézy
+- **Ztráta cukernatosti**: -20 až -40 % (cukrovka)
+- **Šíření**: 1 jediná infikovaná mšice může nakazit desítky rostlin
+
+**BMYV (Beet Mild Yellowing Virus):**
+- Méně agresivní než BYV ale rozšířená
+
+**BWYV (Beet Western Yellows Virus):**
+- I řepka, brukvovité
+
+**Boj — chemický:**
+
+**Insekticidy:**
+- **Neonikotinoidy** (thiamethoxam, imidacloprid) — **ZAKÁZÁNY v EU pro venkovní použití od 2018** kvůli včelám. Dříve standardní mořidlo cukrovky.
+- **Acetamiprid** (Mospilan) — neonikotinoid stále povolený v EU (jiná chemická struktura)
+- **Flonicamid** (Teppeki) — anti-feedant, **moderní standard 2020s** pro cukrovku
+- **Spirotetramat** (Movento) — systemický, působí i v rubu listů
+- **Pirimicarb** (Aphox) — selektivní mšicid, šetrný k benefitům (ladybugs)
+- **Pyrethroidy** (cypermethrin, deltamethrin) — krátká účinnost, rezistence rychlá
+
+**Aplikace timing:**
+- **První postřik**: při zjištění 10 mšic/rostlinu nebo 5 % rostlin s mšicemi
+- **Opakování**: za 7–14 dní (záleží na látce)
+- **Sezónní celkem**: 2–4 postřiky v cukrovce
+
+**Náklady**: 600–1 200 Kč/ha za postřik × 3 = 1 800–3 600 Kč/ha sezónně
+
+**Boj — biologický:**
+- **Slunéčka** (Coccinellidae) — efektivní, 1 slunéčko sežere 50 mšic/den
+- **Zlatoočky** (Chrysoperla)
+- **Mšicovníci** (Aphidius spp., Praon spp.) — parazitické vosičky, kladou vejce do mšice
+- **Květinové pásy** kolem polí zvyšují populaci predátorů
+- **Houby** (Beauveria, Metarhizium) — entomopatogenní, méně účinné v poli
+
+**Boj — kulturní:**
+- **Odstranění brslenu** (zimní hostitel) v okolí cukrovkových polí — preventivně
+- **Časné setí** cukrovky → porost má víc vegetace před vrcholem mšic
+- **Rezistentní odrůdy** cukrovky — částečná tolerance k BYV (donor *Beta maritima*)
+
+**Bio přístup:**
+- **Mýdlový roztok** (drasly mýdla) — fyzikální poškození mšic
+- **Neem olej** (azadirachtin) — naturalní pesticid, omezený efekt
+- **Pyrethrum** (z chrysantém) — krátká účinnost, EU povolené
+
+**Klimatická změna:**
+- **Teplé zimy** → mšice přezimují i jako dospělci (ne jen jako vajíčka), víc generací
+- **Sušší jara** → menší populace (mšice preferuje vlhko)
+- **Posun areálu** na sever
+
+**V ČR výzkum**: Cukrovarnický výzkumný ústav Praha, ÚKZÚZ — monitoring viru BYV, pruhování polí pro modelaci rizika.
+
+Viz též [[insekticidy]], [[mandelinka-bramborova]], [[osevni-postup]].`,
+    related: ['insekticidy', 'mandelinka-bramborova'],
+  },
+  {
+    slug: 'zavijec-kukuricny',
+    term: 'Zavíječ kukuřičný',
+    alias: ['Ostrinia nubilalis', 'European Corn Borer', 'ECB', 'kukuřičná zavíječka'],
+    kategorie: 'ochrana',
+    shortDef: 'Zavíječ kukuřičný (Ostrinia nubilalis) je motýl, jehož housenky se vrtají do stébel a klásků kukuřice. Bez ochrany ztráta 5–25 % výnosu + vstup hub Fusarium = mykotoxiny. V CZ rozšířený zejm. na jižní Moravě a Polabí.',
+    longDef: `Zavíječ kukuřičný (lat. *Ostrinia nubilalis*, ang. *European Corn Borer*, ECB) je **motýl** z čeledi *Crambidae*. Jeho **housenky se vrtají do stébel, klásků a palic kukuřice**, způsobujíce přímé ztráty + sekundární infekci houbami *Fusarium* (mykotoxiny — viz [[fuzarioza]]).
+
+**Vzhled:**
+- **Dospělec**: motýl, rozpětí 25–30 mm, **bledě žlutá křídla** s vlnitými hnědými proužky. Samec tmavší než samice.
+- **Vajíčko**: 1 mm, **ploché šupinky** v shlucích 15–30 ks na spodní straně listů
+- **Housenka**: 25 mm, **šedo-růžová s tmavou hlavou**, 5 instar stadií
+- **Kukla**: v stéble kukuřice, hnědá
+
+**Životní cyklus v CZ:**
+
+**Severní areál (Krkonoše, Vysočina)** — **1 generace ročně**:
+- Květen–červen: motýli létají
+- Červen–červenec: housenky v rostlinách
+- Srpen: kuklení
+- Září–říjen: motýli druhé krátké generace (často neútočí)
+- Listopad–březen: housenky přezimují ve zbytcích rostlin (slámě, kukuřičné stočisti)
+
+**Jižní areál (Slovácko, Polabí)** — **2 generace ročně**:
+- 1. generace: květen–červenec
+- 2. generace: srpen–říjen
+- Druhá generace způsobuje **vážnější ztráty** (větší rostlina, větší housenky)
+
+**Symptomy poškození:**
+
+**Stéblo:**
+- **Otvory** (díry, hloubka 5–20 mm) — vstupní bod housenky
+- **Sklouznutí stébla** během silného větru/deště (broken stalks)
+- **Otěry žluté pilinky** kolem vstupního otvoru (excrementy housenky)
+
+**List:**
+- **Otvory v listech** (housenka mladá někdy ohryzává listy než vleze do stébla)
+- **Brokátový vzhled** (pinhole damage)
+
+**Palice (sklizeň):**
+- **Housenky ve palici** — žerou zrna
+- **Otvory na klasu** — vstup pro *Fusarium*, *Aspergillus* — **mykotoxiny**
+- **Snížený výnos**: 5–25 % primární, +10–30 % sekundární kvůli houbám
+
+**Boj — chemický:**
+
+**Insekticidy** (aplikace v larvální stadium, ne dospělce):
+- **Spinosad** (Laser) — bio, fungovaly na L1-L2
+- **Spinetoram** (Delegate) — silnější verze
+- **Chlorantraniliprole** (Coragen) — moderní standard, vysoká účinnost
+- **Cyantraniliprole** (Verimark) — alternativní
+- **Indoxakarb** (Steward) — stárnoucí
+- **Pyrethroidy** (lambda-cyhalothrin) — krátká účinnost
+
+**Aplikace timing — KRITICKÉ:**
+- **Před vstupem do stébla**: housenka L1-L3 ještě na listech → cíl postřiku
+- **Po vstupu do stébla**: insekticid nemá přístup, **postřik selhává**
+- **Timing**: 7–10 dní po vrcholu letu motýlů (feromonové lapače)
+- **Monitorování**: feromonové lapače v polích, sledování pravidelně
+
+**Ošetření je drahé a nejisté** pro siláž — náklady 1 000–2 000 Kč/ha + obtížné timing. Mnoho farem **vynechává**.
+
+**Boj — biologický:**
+
+**Trichogramma spp.** (parazitická vosička):
+- **Klade vajíčka do vajíček ECB** → 50–80 % parazitace
+- **Aplikace**: lepící karty s vosičkami zavěšené v poli (5 000 vosiček/ha)
+- **Cena**: ~800–1 500 Kč/ha
+- **Účinnost**: srovnatelná s insekticidem, **bio přístup**
+- **Trh**: AgriCom, BBM, BioActiv
+
+**Bacillus thuringiensis kurstaki (BTK):**
+- Bakterie s toxinem **specifický pro motýly** (lepidopterans)
+- Komerčně: Lepinox, Dipel, Foray
+- **Spojené s biopaliva sezónou** (až do 10 dní účinnost)
+
+**GMO kukuřice MON810 (BT-corn):**
+- **Vlastní rezistence** — kukuřice produkuje *Bt* toxin
+- **EU zákaz pěstování** (jen výjimky: Španělsko, Portugalsko)
+- **V CZ není zaregistrovaná** k pěstování
+
+**Boj — kulturní:**
+
+**Klíčové preventivní opatření:**
+- **Pluhování po sklizni** — zaorá kukuřičnou slámu se housenkami → snížení populace 50–80 %
+- **Drcení / mulčování stočiště** — destruuje úkryt
+- **Předplodina** (krátká sezóna) — méně tlaku
+- **No-till + kukuřičná sláma na povrchu** = NEJHORŠÍ podmínky pro ECB
+
+**Rezistence patogena:**
+- ECB byl rezistentní na **MON810 Bt** v Brazílii a USA (2010s) — populace pole-evolved
+- V EU bez plošného použití Bt zatím rezistence pomalá
+
+**Klimatická změna:**
+- 2. generace na sever — Slovácko v 2020s pravidelně, dříve jen výjimečně
+- Teplejší podzimy → větší přežití housenek
+- Posun areálu na sever Evropy
+
+**Ekonomický dopad:**
+- **Bez ochrany**: ztráta 5–25 % výnosu + 5–15 % cena za kontaminaci mykotoxiny
+- **Sezónní ztráta na 100 ha kukuřice**: 50 000 – 250 000 Kč
+- **Cost ochrany**: 1 000–2 500 Kč/ha
+- **Návratnost**: 5–20× při silném tlaku
+
+**V ČR**: hlavní problém pro **silážní kukuřici** (jižní Morava, Slovácko, Olomoucko). Zrnová kukuřice méně problém (sklizeň před vrcholem 2. generace).
+
+Viz též [[fuzarioza]], [[insekticidy]], [[kukurice-silazni]], [[no-till]].`,
+    related: ['fuzarioza', 'insekticidy', 'kukurice-silazni', 'no-till'],
+  },
+  {
+    slug: 'fungicidy',
+    term: 'Fungicidy',
+    alias: ['fungicides', 'protihoubové přípravky', 'mykocidní postřiky'],
+    kategorie: 'ochrana',
+    shortDef: 'Fungicidy jsou chemické přípravky proti houbovým chorobám rostlin. Klíčové třídy: triazoly (DMI), strobiluriny (QoI), SDHI, kontaktní (mancozeb, měď). Cena v ČR 2024: 500–2 500 Kč/ha za jednu aplikaci.',
+    longDef: `Fungicidy (z latinského *fungus* + *caedere* = houba + zabíjet) jsou **chemické přípravky určené pro ochranu rostlin před houbovými chorobami**. V EU regulovány nařízením EC 1107/2009. V CZ schvaluje **ÚKZÚZ** (Ústřední kontrolní a zkušební ústav zemědělský).
+
+**Hlavní třídy fungicidů:**
+
+**1. Triazoly (DMI — DeMethylation Inhibitors):**
+- **Mechanismus**: blokují biosyntézu ergosterolu (membrána houbové buňky)
+- **Hlavní zástupci**: tebuconazol, propiconazol, prothiokonazol (Proline), metconazol, epoxiconazol (vyřazený 2020s)
+- **Spektrum**: široké — septorióza, rzi, fuzarióza, padlí
+- **Účinnost**: středně-vysoká, **systemicky** (proniká listem)
+- **Rezistence**: po 30 letech používání **slábnou na septoriózu**, ale stále základ
+- **Cena**: 400–800 Kč/ha
+- **Pozn.**: tebuconazol u řepky chrání před fómou (*Leptosphaeria maculans*)
+
+**2. Strobiluriny (QoI — Quinone outside Inhibitors):**
+- **Mechanismus**: inhibují mitochondriální dýchání (cyt b)
+- **Hlavní zástupci**: azoxystrobin (Amistar), pyraclostrobin (Comet), trifloxystrobin (Flint), kresoxim-methyl
+- **Spektrum**: padlí, rzi, **NIKOLIV septorióza** (rezistence prolomena 2003)
+- **Účinnost**: vysoká pro padlí a rzi
+- **Speciální efekty**: **„green effect"** — prodlouží zelenou fázi listu o 7–10 dní → +5 % výnos
+- **Rezistence**: silná pro septoriózu, šíří se v dalších patogenech
+- **Cena**: 500–1 200 Kč/ha
+
+**3. SDHI (Succinate Dehydrogenase Inhibitors):**
+- **Mechanismus**: blokují komplex II mitochondriální dýchání
+- **Hlavní zástupci**: fluxapyroxad (Imtrex), bixafen (Aviator), benzovindiflupyr (Solatenol), pydiflumetofen (Adepidyn)
+- **Spektrum**: septorióza, fuzarióza, padlí, rzi
+- **Účinnost**: TOP 2020s — silnější než triazoly
+- **Rezistence**: zatím mírná
+- **Cena**: 800–1 500 Kč/ha
+- **Typická aplikace**: SDHI + triazol mix = stříbrný standard pro pšenici
+
+**4. Inatreq active (fenpicoxamid) — nová třída:**
+- **Mechanismus**: NOVÝ MOA (Quinone Inside Inhibitor, QiI)
+- **Účinnost**: vysoká na septoriózu, žádná dosavadní rezistence
+- **Cena**: 1 200–1 800 Kč/ha
+- **Trh**: Univoq (Corteva), 2021+
+
+**5. Mefentrifluconazole (Revysol) — nová DMI:**
+- **Mechanismus**: pokročilý DMI, aktivní i proti rezistentním kmenům
+- **Cena**: 1 000–1 500 Kč/ha
+- **Trh**: Revysol, Revystar (BASF), 2020+
+
+**6. Kontaktní fungicidy (multisite):**
+
+- **Mancozeb** (Dithane M-45, Penncozeb)
+  - **Mechanismus**: multi-site (nelze vytvořit rezistence)
+  - **EU**: zákaz **2024** (potenciálně karcinogenní podle ECHA classification)
+  - **Cena**: 200–500 Kč/ha (levný)
+
+- **Měď** (CuSO₄, Cu hydroxid, oxychlorid)
+  - **Bio i konvenční**: povolená v EU bio
+  - **Limit**: 4 kg Cu/ha/rok od 2019
+  - **Použití**: plíseň bramborová, plíseň vinné révy, peronospora
+  - **Cena**: 300–600 Kč/ha
+
+- **Síra (S)**
+  - **Bio přístup**: padlí, roztoči
+  - **Cena**: 200–400 Kč/ha
+
+- **Folpet**
+  - **Multisite alternative k mancozebu**
+  - **Cena**: 400–800 Kč/ha
+
+**7. Anilinopyrimidiny (AP):**
+- **Mechanismus**: methionin biosyntéza
+- **Zástupci**: pyrimethanil, cyprodinil
+- **Spektrum**: padlí, monilióza
+
+**8. Cymoxanil:**
+- **Krátká účinnost** (3–4 dny)
+- **Vždy v kombinaci** s mancozebem nebo metalaxylem
+- **Použití**: plíseň bramborová (kurativní efekt)
+
+**9. Metalaxyl-M (oomyceta-specific):**
+- **Mechanismus**: RNA polymeráza I (specifické pro oomycety)
+- **Použití**: plíseň bramborová, plíseň révy
+- **Rezistence**: vysoká (od 1980s)
+
+**Aplikační technika:**
+
+**Postřikovač** (sprayer):
+- **Nesený** (na traktoru, 600–1 200 l zásobník) — malé farmy
+- **Tažený** (1 500–4 500 l) — střední
+- **Samojízdný** (Berthoud, Amazone Pantera) — velké farmy
+- **Pracovní záběr**: 18–36 m
+
+**Tryska a tlak:**
+- **Plochový pohyb**: 200–400 l vody/ha, tlak 2–4 bary
+- **Jemné rozprášení**: lepší pokrytí ale větší drift (snos do okolí)
+- **Hrubé rozprášení**: méně driftu, ale horší pokrytí
+
+**Kombinace s adjuvantem (povrchové činidlo):**
+- **Olej** (Mero, Adigor) — zvyšuje retention na listu
+- **Smáčedlo** (Trend, Silwet) — snižuje povrchové napětí, lepší pokrytí
+- **Penetrant**: rychlejší vstup do listu
+
+**Rezistence — anti-resistance strategie:**
+1. **MIX různých MOA** (mechanism of action) v každém postřiku
+2. **Maximum 1× sezónu** stejnou MOA
+3. **Rotace** — různé MOA mezi postřiky
+4. **Spojení s rezistentními odrůdami**
+5. **Spojení s agrotechnikou** (zaorávání, hustota porostu)
+
+**Sezónní kalendář — pšenice (typický 2024):**
+- **T0** (BBCH 30): protiseptoriózový — triazol, 500 Kč/ha
+- **T1** (BBCH 32): septoria + rzi — SDHI + triazol, 1 200 Kč/ha
+- **T2** (BBCH 39): flag leaf — SDHI + triazol, 1 500 Kč/ha (NEJCENNĚJŠÍ)
+- **T3** (BBCH 63): fuzarióza — triazol, 1 000 Kč/ha
+- **Sezónně**: 3 500–4 500 Kč/ha
+
+**Návratnost:**
+- **Bez fungicidů**: -30 až -50 % výnos
+- **Postřik T2 alone**: -10 až -20 % vs full program
+- **Plný program**: max výnos
+- **Návratnost full program**: 4–6× v rizikovém roce
+
+**EU regulace:**
+- **REACH** — autorizace účinných látek
+- **MRL** (Maximum Residue Limits) — limity zbytků v jídle
+- **Buffer zones** — povinné nepostřikovat 5–20 m od vodních toků
+- **PPE** — povinné OOP (rukavice, respirátor) při aplikaci
+- **Zákazy**:
+  - **Neonikotinoidy** (venkovní) 2018
+  - **Chlorothalonil** 2019
+  - **Glyfosát** (Roundup) — periodicky obnovované, riziko zákazu
+  - **Mancozeb** 2024
+
+Viz též [[plisen-bramborova]], [[fuzarioza]], [[septorioza]], [[rzi]], [[insekticidy]], [[herbicidy]].`,
+    related: ['plisen-bramborova', 'fuzarioza', 'septorioza', 'rzi', 'insekticidy', 'herbicidy'],
+  },
+  {
+    slug: 'herbicidy',
+    term: 'Herbicidy',
+    alias: ['herbicides', 'protirostlinné přípravky', 'protiplevelné postřiky'],
+    kategorie: 'ochrana',
+    shortDef: 'Herbicidy jsou přípravky proti plevelům. Glyfosát (Roundup) je nejpoužívanější. Selektivní herbicidy hubí jen určité druhy plevelů, totální zabijí vše. Globální trh 30+ mld USD/rok, klíčový pro moderní zemědělství.',
+    longDef: `Herbicidy (z lat. *herba* = bylina + *caedere* = zabíjet) jsou **přípravky proti plevelům**. Klíčový pesticidní segment — bez herbicidů by současné výnosy klesly o 30–50 % a manuální plení by bylo ekonomicky nemožné na velkých plochách.
+
+**Dělení podle selektivity:**
+
+**Totální (neselektivní)** — zabijí všechny rostliny:
+- **Glyfosát** (Roundup) — viz [[roundup]]
+- **Glufosinát** (Basta) — alternative
+- **Diquat** (Reglone) — desikant
+- **Paraquat** — **zakázáno v EU od 2007**
+
+**Selektivní** — hubí jen určité druhy:
+
+**Dvouděložné (širokolisté plevele) v obilí:**
+- **MCPA, 2,4-D** (Glean, Banvel) — stará třída, levná
+- **Sulfonylmocoviny** (Granstar, Hussar) — moderní, dávky 10–30 g/ha
+- **Triazinony** (metribuzin) — brambory
+
+**Jednoděložné (trávy) v širokolistých plodinách:**
+- **Quizalofop-p-ethyl** (Targa, Leopard) — řepka, sója
+- **Fluazifop-p-butyl** (Fusilade) — alternativa
+- **Clethodim** (Centurion) — sója
+
+**Pro-emergence (před vzejitím):**
+- **Pendimethalin** (Stomp, Activus) — kořenový herbicid
+- **S-metolachlor** (Dual Gold) — kukuřice
+- **Metribuzin** — brambory
+- **Aplikace**: před vzejitím plevelů, 2-7 dnů po setí
+
+**Post-emergence (po vzejitím):**
+- **Mesotrione** (Callisto) — kukuřice, šetrná
+- **Foramsulfuron** (Maister) — kukuřice
+- **Mesosulfuron + iodosulfuron** (Atlantis) — graminicid v pšenici
+
+**Mechanismus účinku (MOA — HRAC groups):**
+
+**1. EPSPS inhibitory** (Group 9): glyfosát
+**2. AHAS inhibitory** (Group 2): sulfonylmocoviny, imidazolinony — nejvíc rezistencí
+**3. ACCase inhibitory** (Group 1): graminicidy (Fusilade, Targa) — vysoká rezistence
+**4. PSII inhibitory** (Group 5): triaziny (atrazin — zakázán 2007)
+**5. PPO inhibitory** (Group 14): carfentrazone, sulfentrazone
+**6. HPPD inhibitory** (Group 27): mesotrione, isoxaflutole — kukuřice
+**7. Mitóza inhibitory** (Group 3): pendimethalin
+**8. Cellulose syntéza** (Group 29): isoxaben
+
+**Glyfosát (Roundup) — detail:**
+Viz [[roundup]] pro plný profil.
+
+- **Mechanismus**: blokuje EPSPS enzym (syntéza aromatických aminokyselin)
+- **Spectrum**: totální (mimo Roundup Ready GMO plodin)
+- **Aplikace**: před setím, **stoolování** (mezi řádky), desikace (zhruba 10 dní před sklizní)
+- **Cena**: 250–500 Kč/ha (jeden z nejlevnějších herbicidů)
+- **Globální trh**: 800 000 t/rok, 30 % všech herbicidů
+- **EU regulace**: schválení obnoveno do 2033
+
+**Klíčové plevele v CZ a jejich herbicidy:**
+
+**V pšenici:**
+- **Svízel přítula** (Galium aparine): Granstar, Hussar OD, Salsa
+- **Heřmánek pravý** (Matricaria chamomilla): MCPA, sulfonylmocoviny
+- **Chundelka metlice** (Apera spica-venti): Atlantis OD, Pacifica Plus
+- **Lipnice** (Poa annua): Atlantis OD
+- **Pýr plazivý** (Elymus repens): glyfosát před setím nebo na strniště
+
+**V kukuřici:**
+- **Merlík bílý** (Chenopodium album): Callisto, Maister Power
+- **Lebeda** (Atriplex): Callisto, Stomp
+- **Béry** (Setaria): Maister
+- **Ohnice** (Sinapis arvensis): Casper
+
+**V řepce:**
+- **Heřmánek**: Galera (clopyralid + picloram)
+- **Smetanka**: Galera
+- **Pýr**: Fusilade Forte (jen v řepce)
+
+**V cukrovce:**
+- **Merlík, lebeda**: Goltix (metamitron) + Betanal (phenmedipham) + Pyramin
+- **Bér, vlčí mák**: Betanal kombinace
+
+**Rezistence k herbicidům:**
+
+**Globální problém 2010s+**:
+- **Amaranth palmerii** v USA — rezistence na glyfosát, sulfonylmocoviny, HPPD
+- **Lolium spp.** v Austrálii — multi-resistance, „herbicide superweeds"
+- **Chundelka metlice** v EU — rezistence k ACCase i AHAS inhibitorům
+
+**Strategie anti-resistance:**
+1. **Rotace MOA** — různé herbicidy v různých letech
+2. **Mix MOA** — kombinace v jednom postřiku
+3. **Mechanická kontrola** — orba, plečka v mezirádcích
+4. **Cover crops** — krycí plodiny snižují plevele
+5. **Manuální** — kontrola hnízd rezistence
+
+**Bioherbicidy:**
+- **Acetate** (Beloukha) — kyselina pelargonová, z přírodních zdrojů
+- **Octová kyselina** (vinegar) — pro malé plochy
+- **Termální** — propanové hořáky pro pásové herbicidy
+- **Cena**: 5–20× dráž než glyfosát
+
+**Aplikace technika:**
+- **Postřikovač** (jako fungicidy) — 200–400 l vody/ha
+- **Tryska**: většinou jemnější (jednoduchá injekce) než pro fungicidy
+- **Mix s adjuvantem**: smáčedlo zlepší účinnost
+- **Pozor na drift** — herbicid může poškodit sousední plodiny
+
+**Náklady — pro typickou pšenici:**
+- **Pre-emergence**: 600–1 200 Kč/ha
+- **Post-emergence** (jaro): 800–1 500 Kč/ha
+- **Desikace** (před sklizní): 300–500 Kč/ha (Roundup, Reglone)
+- **Sezónně**: 1 700–3 200 Kč/ha
+
+**Pro kukuřici:**
+- **Pre-emergence**: 1 200–2 000 Kč/ha (Lumax — typický mix)
+- **Post-emergence**: 1 000–1 800 Kč/ha (Callisto + atrazin alternativa)
+
+**EU regulace:**
+- **Neonikotinoidy a glyfosát**: kontroverzní, ale zatím povolené (s omezeními)
+- **Chlorthal-dimethyl, atrazin, paraquat**: zákazy 2007+
+- **MRL** — maximum residue limits v potravinách
+- **Bufferzóny** — 5–10 m od vodních toků
+
+Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jarin]].`,
+    related: ['roundup', 'fungicidy', 'insekticidy', 'desikace', 'ozim-jarin'],
+  },
+  {
+    slug: 'insekticidy',
+    term: 'Insekticidy',
+    alias: ['insecticides', 'protiherzí přípravky', 'protihmyzné postřiky'],
+    kategorie: 'ochrana',
+    shortDef: 'Insekticidy jsou přípravky proti škodlivému hmyzu. Klíčové třídy: pyrethroidy (lambda-cyhalothrin), neonikotinoidy (ZAKÁZANÉ v EU 2018 pro venkovní použití), modernější diamidy a spinosyny. Cena postřiku v ČR 600–2 000 Kč/ha.',
+    longDef: `Insekticidy (z lat. *insectum* + *caedere* = hmyz + zabíjet) jsou **přípravky proti škodlivému hmyzu**. Klíčový segment ochrany rostlin — bez insekticidů by ztráty z mšic, mandelinky, zavíječů byly katastrofální.
+
+**Hlavní třídy insekticidů (IRAC groups):**
+
+**1. Pyrethroidy** (Group 3 — sodium channel modulators):
+- **Mechanismus**: blokují sodíkové kanály v nervovém systému hmyzu
+- **Hlavní zástupci**:
+  - **Lambda-cyhalothrin** (Karate Zeon) — široké spektrum
+  - **Deltamethrin** (Decis) — populární
+  - **Cypermethrin** (Cyperkill) — levný
+  - **Bifenthrin** — Lambda alternative
+  - **Tau-fluvalinate** — selektivnější (vždy med-bee safer)
+- **Spektrum**: široké — mšice, brouci, larvy motýlů, ploštice
+- **Účinnost**: rychlá (knockdown), ale krátká (7-10 dní)
+- **Rezistence**: rozsáhlá (od 1980s) — mšice, mandelinka, klopuška řepná
+- **Toxicita**: vysoká pro včely (NEpostřikovat v rozkvětu!)
+- **Cena**: 200–500 Kč/ha (levné)
+
+**2. Neonikotinoidy** (Group 4 — nicotinic acetylcholine receptor):
+- **Mechanismus**: agonisté acetylcholin receptorů (jako nikotin u člověka)
+- **Hlavní zástupci**:
+  - **Imidacloprid** (Confidor, Gaucho) — historicky #1
+  - **Thiamethoxam** (Actara, Cruiser)
+  - **Clothianidin** (Poncho) — zejm. v moři osiv kukuřice
+  - **Acetamiprid** (Mospilan) — STÁLE povolený v EU
+- **EU zákaz** — venkovní použití od 2018 pro thiamethoxam, clothianidin, imidacloprid. **Acetamiprid stále povolený**.
+- **Důvod zákazu**: vysoká toxicita pro **včely a opylovače**
+- **Cena**: 300–600 Kč/ha (acetamiprid)
+- **Systémové působení**: pohybuje se v rostlině, dlouhodobá ochrana (2-4 týdny)
+
+**3. Diamidy** (Group 28 — ryanodine receptor modulators):
+- **Mechanismus**: stálé otvírání kalciových kanálů v svalech hmyzu → paralýza
+- **Hlavní zástupci**:
+  - **Chlorantraniliprole** (Coragen) — kukuřice, brambora
+  - **Cyantraniliprole** (Verimark) — moření osiv, systemicky
+  - **Flubendiamide** (Belt) — některé EU země omezené
+- **Spektrum**: motýli (housenky), brouci (mandelinka), některé mušky
+- **Bezpečnost**: ŠETRNÁ k včelám a benefitům
+- **Cena**: 1 000–2 000 Kč/ha (drahá)
+- **Rezistence**: zatím mírná
+- **Trh**: rychle rostoucí 2010s+
+
+**4. Spinosyny** (Group 5 — nicotinic acetylcholine receptor, jiný site):
+- **Mechanismus**: agonisté acetylcholin receptorů (jiný binding site než neonikotinoidy)
+- **Hlavní zástupci**:
+  - **Spinosad** (Laser) — bio i konvenční, z bakterie *Saccharopolyspora spinosa*
+  - **Spinetoram** (Delegate) — silnější verze
+- **Spektrum**: motýli, mandelinka, vrtule
+- **Bezpečnost**: nízká toxicita pro savce, **střední pro včely** (postřikovat večer)
+- **Cena**: 800–1 500 Kč/ha
+
+**5. Anti-feedants / Růstové regulátory:**
+
+- **Flonicamid** (Teppeki) — anti-feedant pro mšice. Zastaví krmení během 1-2 h.
+  - **Bezpečné** pro včely
+  - **Cena**: 800–1 200 Kč/ha
+  - **Použití**: cukrovka, brambora, ovoce
+
+- **Pymetrozin** (Plenum) — mšice. EU zákaz 2019.
+
+- **Buprofezin** (Applaud) — chitin syntéza inhibitor. Růstový regulátor pro nymfální stadia.
+
+- **Indoxakarb** (Steward, Avaunt) — Group 22, sodium channel blocker. Motýli, mandelinka.
+  - **Cena**: 800–1 500 Kč/ha
+
+**6. Acaricidy (proti roztočům):**
+
+- **Hexythiazox** (Nissorun) — roztočové vajíčka a nymfy
+- **Pyridaben** (Sanmite) — adultní roztoči
+- **Abamectin** (Vertimec) — širší spektrum
+- **Spirodiclofen** (Envidor) — moderní
+- **Bifenazate** (Floramite) — selektivní
+
+**7. Bio insekticidy:**
+
+- **Bacillus thuringiensis** (BT):
+  - **BT kurstaki (BTK)** — Lepinox, Dipel — motýli (housenky)
+  - **BT tenebrionis (BTT)** — Novodor — brouci (mandelinka L1-L2)
+  - **BT israelensis (BTI)** — komáři, mušky v zahradách
+  - **Bezpečné** pro savce, ptáky, ryby — jen pro hmyz cílový
+  - **Krátká účinnost** (3-7 dní)
+- **Spinosad** (viz výše) — bio i konvenční certifikace
+- **Neem olej** (azadirachtin) — z indického neemu, **antifeedant + IGR**
+- **Pyrethrum** — z květů chrysantém — krátká účinnost (1-3 dny)
+- **Beauveria bassiana** — entomopatogenní houba
+
+**Aplikační technika:**
+
+**Postřikovač** (stejně jako fungicidy/herbicidy):
+- 200–400 l vody/ha
+- Jemnější tryska pro lepší pokrytí
+
+**Moření osiv** (seed treatment):
+- **Neonikotinoidy** (clothianidin, imidacloprid) — **EU zákaz od 2018** pro venkovní použití
+- **Acetamiprid moření** — povolené, ale méně účinné
+- **Cyantraniliprole moření** (Verimark) — moderní alternativa
+
+**Granulát na řádky:**
+- **Fipronil** — fluxax (proti drátovcům, larvám kořenožravců)
+- **Tefluthrin** — Force — kukuřice
+
+**Aplikace timing:**
+
+**Mandelinka bramborová**:
+- L1-L3 larvy (mladé) — postřik
+- 30 larev/100 rostlin = threshold
+
+**Zavíječ kukuřičný**:
+- Po vrcholu letu motýlů (feromonové lapače)
+- 7-10 dní po vrcholu → housenky L1-L3
+
+**Mšice**:
+- 10 mšic/rostlinu = threshold v cukrovce
+- 50+ % rostlin s mšicemi = postřik v obilí
+
+**Sací škůdci** (mšice, klopušky):
+- Aplikuje SYSTEMICKÝ insekticid (acetamiprid, flonicamid)
+
+**Žroucí škůdci** (brouci, housenky, larvy):
+- Aplikuje kontaktní nebo žaludeční (pyrethroid, BTK)
+
+**Bezpečnost pro včely a opylovače:**
+
+**EU regulace** (od 2018):
+- Většina neonikotinoidů ZAKÁZANÝCH venkovně
+- Pyrethroidy: NEpostřikovat v rozkvětu plodin
+- Diamidy, spinosyny: ŠETRNÉ
+- Flonicamid: bezpečné
+
+**Best practice:**
+1. **Postřik večer** (po západu slunce) — včely doma v úlu
+2. **NEpostřikovat kvetoucí porost** (pšenice ve kvetení, slunečnice, řepka)
+3. **Informovat sousední včelaře** před postřikem (zákonná povinnost v některých zemích)
+4. **Buffer zóny** od kvetoucích remízků
+5. **Mix s herbicidem** pro snížení počtu postřiků
+
+**Rezistence:**
+
+**Šampióni rezistence:**
+- **Mandelinka bramborová** — rezistentní k DDT, pyrethroidům, neonikotinoidům (in succession)
+- **Slatinská diamantová housenka** (*Plutella xylostella*) — superresistant
+- **Drosophila suzukii** (Spotted wing drosophila) — rychlá rezistence
+
+**Strategie:**
+1. **Rotace MOA** — nejméně 3 různé tříd insekticidů
+2. **Mix MOA** v jednom postřiku
+3. **Vyhnout se** jednomu produktu opakovaně
+4. **Spojení s IPM** (Integrated Pest Management)
+
+**IPM (Integrované řízení škůdců):**
+- **Monitoring**: feromonové lapače, vizuální kontrola, model risku
+- **Threshold**: postřik až po překročení ekonomického prahu
+- **Biologie**: predátoři, parazitoidi, BT
+- **Kulturní**: střídání, odolné odrůdy, zaorávání
+- **Chemie**: jako poslední řešení, cíleně
+
+**Náklady:**
+- **Pyrethroid**: 200–500 Kč/ha
+- **Acetamiprid**: 400–700 Kč/ha
+- **Diamid**: 1 000–2 000 Kč/ha
+- **BT bio**: 600–1 200 Kč/ha
+- **Sezónně** (3–5 postřiků): 1 500–5 000 Kč/ha
+
+Viz též [[mandelinka-bramborova]], [[msice-repna]], [[zavijec-kukuricny]], [[fungicidy]], [[herbicidy]].`,
+    related: ['mandelinka-bramborova', 'msice-repna', 'zavijec-kukuricny', 'fungicidy', 'herbicidy'],
+  },
+  {
+    slug: 'desikace',
+    term: 'Desikace',
+    alias: ['desiccation', 'předsklizňové sušení', 'preharvest desiccation'],
+    kategorie: 'ochrana',
+    shortDef: 'Desikace je předsklizňové vysušení porostu (řepka, slunečnice, brambory, hrách) chemickou cestou. Sjednocuje dozrávání, snižuje vlhkost zrna a usnadňuje kombajnování. V CZ klíčové pro řepku a brambory.',
+    longDef: `Desikace (z lat. *desiccare* = vysušit) je **chemické předsklizňové vysušení porostu**. Cílem je **sjednotit dozrávání, snížit vlhkost zrna a usnadnit kombajnování**. Klíčová operace pro **řepku, slunečnici, brambory, hrách, mák, len**.
+
+**Účel desikace:**
+
+1. **Sjednocení dozrávání**: porost zrne nerovnoměrně (různé fáze květu, terminál vs větvení). Desikace zastaví vegetaci, všechno zrno se „dorovná".
+2. **Snížení vlhkosti zrna**: vlhké zrno (>15 %) nelze prodat na výkup bez sušení (drahé). Desikace srazí vlhkost o 5-15 %.
+3. **Usnadnění kombajnování**: suchý porost prochází mlátičkou rychleji, méně ztrát.
+4. **Sušení slámy / nati**: u brambor podpoří odumírání nati před sklizní (předchází přenosu plísně do hlíz).
+5. **Likvidace plevelů**: vyrostlé plevele v porostu jsou desikovány společně s plodinou.
+
+**Hlavní desikační přípravky:**
+
+**1. Glyfosát (Roundup):**
+- **Spectrum**: totální — všechny zelené rostliny
+- **Použití**: řepka, slunečnice, hrách, obilí
+- **Aplikace**: 10–14 dní před sklizní
+- **Dávka**: 1,5–3 l/ha (záleží na koncentraci přípravku 360 g/l)
+- **Cena**: 250–500 Kč/ha
+- **Výhody**: levný, systémový (vstupuje do plevelů → likviduje i kořeny)
+- **Pozn.**: EU obnoveno povolení do 2033, ale kontroverzní
+
+**2. Diquat (Reglone):**
+- **Mechanismus**: foto-radicalation in chloroplasts (rychlá oxidace)
+- **Spectrum**: kontaktní totální desikant
+- **Použití**: brambory (nať), řepka, hrách, slunečnice
+- **Aplikace**: 7–10 dní před sklizní
+- **Dávka**: 2–3 l/ha
+- **Cena**: 500–900 Kč/ha
+- **Výhody**: velmi rychlý (3-5 dní efekt), univerzální
+- **EU stav**: **Diquat ZAKÁZANÝ v EU od 2019** (toxicita pro savce, ptáky, vodní organismy)
+- **Alternativy**: glyfosát nebo glufosinát
+
+**3. Glufosinát (Basta, Liberty):**
+- **Mechanismus**: glutamine syntheteáza inhibitor
+- **Spectrum**: totální, kontaktní
+- **Použití**: řepka, slunečnice, obilí
+- **Aplikace**: 5–8 dní před sklizní
+- **Dávka**: 4–5 l/ha
+- **Cena**: 700–1 200 Kč/ha (dražší než glyfosát)
+- **EU stav**: **Glufosinát ZAKÁZANÝ v EU od 2018** kvůli reprodukční toxicitě
+- Trh hledá alternativy (kyselina pelargonová, octová)
+
+**4. Pyraflufen-ethyl (Spotlight):**
+- **Mechanismus**: PPO inhibitor (kontaktní)
+- **Použití**: brambory (nať), polní zelenina
+- **Dávka**: 0,2–0,4 l/ha
+- **Cena**: 1 000–1 500 Kč/ha
+- **EU stav**: POVOLENÝ
+
+**5. Karfentrazon-ethyl (Aurora):**
+- **Mechanismus**: PPO inhibitor
+- **Použití**: brambory, slunečnice
+- **Dávka**: 0,1–0,2 l/ha
+- **EU stav**: POVOLENÝ
+
+**6. Mechanická desikace (alternativa po EU zákazech):**
+
+- **Drcení nati brambor** — Spedo, Rumptstad — fyzické zničení listů
+- **Tepelná desikace** — propanové hořáky (drahé, pomalu)
+- **Vyhnívání přirozeně** — nechat porost dozrávat (delší sklizňové okno, vyšší riziko počasí)
+
+**Desikace specifických plodin:**
+
+**Řepka ozimá:**
+- **Načasování**: BBCH 87–89 (85+ % šešulí dospělých, 80 % zrna hnědé)
+- **Důvod**: bez desikace **8–15 % ztráta** vinou pukání šešulí
+- **Přípravek**: glyfosát 2 l/ha, alternativa karfentrazon
+- **Načas**: 10–14 dní před sklizní
+- **Cena 2024**: 350–500 Kč/ha
+
+**Slunečnice:**
+- **Načasování**: BBCH 87–89 (zrno hnědé, obálka úzce dělá kulovitou)
+- **Důvod**: spolu s ozimovou řepkou nejlepší ROI
+- **Přípravek**: glyfosát 2,5 l/ha
+- **Cena**: 400–600 Kč/ha
+
+**Brambory:**
+- **Načasování**: 14–21 dní před sklizní hlíz
+- **Důvod**: silně nať = energický kombajn, nemůže projít. Také prevence plíseňového přenosu (P. infestans) do hlíz.
+- **Přípravek (post-Reglone éra)**: pyraflufen-ethyl, mechanické drcení, karfentrazon
+- **Cena**: 1 200–1 800 Kč/ha (vyšší než pre-Reglone éra)
+
+**Hrách jarní:**
+- **Načasování**: BBCH 89 (lusky hnědé)
+- **Důvod**: hrách nedozrává najednou, **nutné sjednotit**
+- **Přípravek**: glyfosát 2 l/ha
+- **Cena**: 400–600 Kč/ha
+
+**Pšenice:**
+- **Načasování**: BBCH 87–89 (zrno tvrdé, mléčný stav minul)
+- **Důvod**: jen u **velmi vlhkých let** (nutnost rychlé sklizně před deštěm)
+- **Přípravek**: glyfosát 2 l/ha
+- **Cena**: 350–500 Kč/ha
+- **Pozn.**: u potravinářské pšenice **omezené použití** kvůli reziduím glyfosátu (MRL)
+
+**Kontroverze glyfosátu při desikaci obilí:**
+- USA EPA a EFSA: **MRL pro glyfosát v pšenici** 10 mg/kg
+- Bayer / Roundup studie ukazují bezpečné dávky, ale **public concern** vyšší
+- **Mnoho EU mlýnů odmítá** zrno z desikovaného porostu
+- Trend: desikace obilí klesá, řepka a brambory zůstávají
+
+**Aplikace technika:**
+
+**Postřikovač**:
+- 200–300 l vody/ha
+- Pozor na **drift** — desikant zničí sousední porosty
+- **Hrubší tryska** (méně driftu)
+
+**Letecky** (postřik z letadla / drone):
+- Pro **těžko dostupné porosty** (rákos, vodní hospodářství)
+- Drahší (1 500–3 000 Kč/ha)
+- Méně regulačně přijatelné
+
+**EU regulace desikantů:**
+
+**Zakázané v EU (2018-2024)**:
+- Diquat (2019)
+- Glufosinát (2018)
+- Mancozeb (2024)
+
+**Riziko zákazu**:
+- **Glyfosát** — pravidelně přezkoumávaný, zatím povoleno do 2033
+
+**Alternativy bez chemie:**
+- **Mechanická desikace** (drcení nati u brambor)
+- **Tepelná desikace** (propanové hořáky — drahé)
+- **Vyhnívání přirozeně** (delší okno sklizně, riziko počasí)
+- **Šlechtění** odrůd s **synchronnějším dozráváním** (řepka)
+
+**Ekonomický dopad:**
+- **Bez desikace u řepky**: 8–15 % ztráta výnosu = 4 000–8 000 Kč/ha
+- **Desikace**: 350–500 Kč/ha náklady
+- **Návratnost**: 8–15× ROI v řepce
+
+Viz též [[roundup]], [[herbicidy]], [[repka-ozima]], [[zemak]], [[plisen-bramborova]].`,
+    related: ['roundup', 'herbicidy', 'repka-ozima', 'zemak', 'plisen-bramborova'],
   },
 ];
 
@@ -4486,4 +5706,5 @@ export const KATEGORIE_LABELS: Record<SlovnikKategorie, string> = {
   historie: 'Historie a archaické pojmy',
   chov: 'Chov a živočišná výroba',
   slang: 'Hovorové výrazy a slang',
+  ochrana: 'Ochrana rostlin a postřiky',
 };
