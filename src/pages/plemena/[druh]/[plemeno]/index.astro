@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from '../../../../layouts/Layout.astro';
 import { getAllDruhy, getPlemeno, UZITKOVOST_LABELS } from '../../../../lib/plemena';
+import { faqPageSchema } from '../../../../lib/structured-data';
 
 export async function getStaticPaths() {
   const paths: { params: { druh: string; plemeno: string } }[] = [];
@@ -120,11 +121,16 @@ const sameAs: string[] = [];
 if (plemeno.wikipedia) sameAs.push(plemeno.wikipedia);
 if (plemeno.wikidata) sameAs.push(plemeno.wikidata);
 if (sameAs.length > 0) thingJsonLd.sameAs = sameAs;
+
+// FAQ — jen pokud má entita ≥2 položky (krátký FAQ blok = thin content signál).
+const faqItems = plemeno.faq && plemeno.faq.length >= 2 ? plemeno.faq : null;
+const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 ---
 
 <Layout title={`${pageTitle} — plemeno ${druh.name.toLowerCase()}`} description={pageDesc} canonical={canonical}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(thingJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
   <div class="plemeno-page">
 
     <nav class="breadcrumb" aria-label="Cesta">
@@ -232,6 +238,28 @@ if (sameAs.length > 0) thingJsonLd.sameAs = sameAs;
             </div>
           )}
         </section>
+
+        {plemeno.body && (
+          <section class="body-card">
+            <div class="prose" set:html={plemeno.body} />
+          </section>
+        )}
+
+        {faqItems && (
+          <section class="faq-card" aria-labelledby="faq-heading">
+            <div class="card-head">
+              <h2 id="faq-heading">Časté otázky</h2>
+            </div>
+            <dl class="faq-list">
+              {faqItems.map((qa) => (
+                <div class="faq-item">
+                  <dt>{qa.q}</dt>
+                  <dd set:html={qa.a} />
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
 
         {related.length > 0 && (
           <section class="related-card">
@@ -409,10 +437,39 @@ if (sameAs.length > 0) thingJsonLd.sameAs = sameAs;
   .plemeno-page .content-grid{display:grid;grid-template-columns:1fr 320px;gap:22px}
   .plemeno-page .content-main{display:flex;flex-direction:column;gap:22px}
 
-  .plemeno-page .spec-card, .plemeno-page .related-card{
+  .plemeno-page .spec-card, .plemeno-page .related-card,
+  .plemeno-page .body-card, .plemeno-page .faq-card{
     background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);
     padding:24px 24px 22px;box-shadow:var(--sh-1);
   }
+
+  .plemeno-page .prose{color:var(--body);font-size:16px;line-height:1.72}
+  .plemeno-page .prose :global(h2){
+    font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;
+    color:var(--ink);line-height:1.1;margin:0 0 14px;
+  }
+  .plemeno-page .prose :global(h3){
+    font-family:'Chakra Petch',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.01em;
+    color:var(--ink);margin:26px 0 8px;
+  }
+  .plemeno-page .prose :global(p){margin:0 0 14px}
+  .plemeno-page .prose :global(p:last-child){margin-bottom:0}
+  .plemeno-page .prose :global(ul){margin:0 0 14px;padding-left:20px}
+  .plemeno-page .prose :global(li){margin:0 0 6px}
+  .plemeno-page .prose :global(strong){color:var(--ink);font-weight:600}
+  .plemeno-page .prose :global(a){
+    color:#0A5E2E;text-decoration:underline;text-decoration-color:rgba(11,122,59,.35);
+    text-underline-offset:2px;font-weight:500;
+  }
+  .plemeno-page .prose :global(a:hover){text-decoration-color:#0B7A3B;background:var(--yellow-soft)}
+
+  .plemeno-page .faq-list{margin:0;padding:0;display:flex;flex-direction:column}
+  .plemeno-page .faq-item{padding:16px 0;border-bottom:1px dashed var(--line)}
+  .plemeno-page .faq-item:first-child{padding-top:0}
+  .plemeno-page .faq-item:last-child{border-bottom:0;padding-bottom:0}
+  .plemeno-page .faq-item dt{font:600 16px/1.4 'Chakra Petch',sans-serif;color:var(--ink);margin:0 0 8px;letter-spacing:-.005em}
+  .plemeno-page .faq-item dd{margin:0;font-size:15px;line-height:1.65;color:var(--body)}
+  .plemeno-page .faq-item dd :global(a){color:#0A5E2E;text-decoration:underline;text-underline-offset:2px}
   .plemeno-page .card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
   .plemeno-page .card-head h2{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.1;color:var(--ink)}
   .plemeno-page .card-head-meta{font:600 12px 'Chakra Petch',sans-serif;color:var(--muted);background:#FBFAF4;padding:5px 10px;border-radius:8px}
