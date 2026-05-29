@@ -38,6 +38,7 @@ export type RoundPhase =
   | 'upload_open'
   | 'between'
   | 'voting_open'
+  | 'live'        // upload + voting windows overlap — both open at once
   | 'closed'
   | 'announced';
 
@@ -57,11 +58,31 @@ function toDate(v: string | Date): Date {
 export function computeRoundPhase(round: RoundTimings, now: Date = new Date()): RoundPhase {
   if (round.status === 'announced') return 'announced';
   const t = now.getTime();
-  if (t < toDate(round.upload_starts_at).getTime()) return 'upcoming';
-  if (t < toDate(round.upload_ends_at).getTime())   return 'upload_open';
-  if (t < toDate(round.voting_starts_at).getTime()) return 'between';
-  if (t < toDate(round.voting_ends_at).getTime())   return 'voting_open';
+  const uploadStart = toDate(round.upload_starts_at).getTime();
+  const uploadEnd   = toDate(round.upload_ends_at).getTime();
+  const votingStart = toDate(round.voting_starts_at).getTime();
+  const votingEnd   = toDate(round.voting_ends_at).getTime();
+
+  if (t < uploadStart && t < votingStart) return 'upcoming';
+
+  const uploadOpen = t >= uploadStart && t < uploadEnd;
+  const votingOpen = t >= votingStart && t < votingEnd;
+
+  if (uploadOpen && votingOpen) return 'live';
+  if (uploadOpen) return 'upload_open';
+  if (votingOpen) return 'voting_open';
+  if (t < votingStart) return 'between'; // upload finished, voting not started yet
   return 'closed';
+}
+
+/** Whether new uploads are accepted in this phase. */
+export function isUploadPhase(phase: RoundPhase): boolean {
+  return phase === 'upload_open' || phase === 'live';
+}
+
+/** Whether public voting is accepted in this phase. */
+export function isVotingPhase(phase: RoundPhase): boolean {
+  return phase === 'voting_open' || phase === 'live';
 }
 
 export function msUntil(target: string | Date, now: Date = new Date()): number {

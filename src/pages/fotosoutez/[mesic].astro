@@ -35,12 +35,12 @@ const leaderboard = await Promise.all(
         <h2>Galerie ({entries.length})</h2>
         <div class="entries">
           {entries.map((e, i) => (
-            <ContestEntryCard entry={e} rank={phase === 'voting_open' ? i + 1 : undefined} />
+            <ContestEntryCard entry={e} rank={(phase === 'voting_open' || phase === 'live') ? i + 1 : undefined} />
           ))}
         </div>
         {entries.length === 0 && <p class="empty">Zatím žádné schválené fotky.</p>}
       </section>
-      {phase === 'voting_open' && leaderboard.length > 0 && (
+      {(phase === 'voting_open' || phase === 'live') && leaderboard.length > 0 && (
         <ContestLiveLeaderboard roundSlug={round.slug} initialEntries={leaderboard} />
       )}
     </div>
