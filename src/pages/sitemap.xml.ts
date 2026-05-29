@@ -186,9 +186,12 @@ export const GET: APIRoute = async () => {
     urls.push({ loc: `${SITE_URL}/stroje/zemedelske-stroje/${groupSlug}/`, changefreq: 'weekly', priority: '0.75', lastmod: STATIC_LASTMOD });
   }
 
-  // Stroje sub-kategorie (cross-brand pages /stroje/<subcategory>/) — pouze ty s modely.
+  // Stroje sub-kategorie (cross-brand pages /stroje/<subcategory>/) — pouze ty s modely
+  // a které jsou v FUNCTIONAL_GROUPS.categories (jen ty mají route v [subcategory]/index.astro).
+  const routableSubcats = new Set(Object.values(FUNCTIONAL_GROUPS).flatMap((g) => g.categories as readonly string[]));
   const subcategoriesWithModels = new Set(allStrojeModels.map((m) => m.effective_category));
   for (const subcat of subcategoriesWithModels) {
+    if (!routableSubcats.has(subcat)) continue;
     urls.push({ loc: `${SITE_URL}/stroje/${subcat}/`, changefreq: 'weekly', priority: '0.7', lastmod: STATIC_LASTMOD });
   }
 
