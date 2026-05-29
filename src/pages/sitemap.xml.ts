@@ -234,7 +234,13 @@ export const GET: APIRoute = async () => {
   ]);
 
   for (const z of znacky) {
-    urls.push({ loc: `${SITE_URL}/znacky/${z.id}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+    const zUpdated = (z.data as any).aktualizovano as Date | undefined;
+    urls.push({
+      loc: `${SITE_URL}/znacky/${z.id}/`,
+      changefreq: 'monthly',
+      priority: '0.8',
+      lastmod: zUpdated ? zUpdated.toISOString().slice(0, 10) : STATIC_LASTMOD,
+    });
   }
   for (const e of encyklopedie) {
     const heroImg = e.data.heroImage;

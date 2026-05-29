@@ -15,6 +15,9 @@ const items = await getCollection('encyklopedie');
 const item = items.find((i) => i.id === slug);
 if (!item) return Astro.rewrite('/404');
 const { Content } = await render(item);
+// Existuje-li redakční profil značky (historie), nabídneme odkaz.
+const znackyHubs = await getCollection('znacky');
+const hasBrandHub = znackyHubs.some((z) => z.id === item.data.znacka);
 // Render content body with auto-link injection (slovník, žebříčky, modely).
 import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
 const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `/encyklopedie/${slug}/`);
@@ -23,7 +26,9 @@ const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `/encyklopedi
 const relatedSameZnacka = items.filter((i) => i.id !== item.id && i.data.znacka === item.data.znacka);
 const relatedSameCat = items.filter((i) => i.id !== item.id && i.data.znacka !== item.data.znacka && i.data.kategorie === item.data.kategorie);
 const relatedItems = [...relatedSameZnacka, ...relatedSameCat].slice(0, 4);
-const brandPrettyForLinks = item.data.znacka.charAt(0).toUpperCase() + item.data.znacka.slice(1);
+// Preferuj skutečný název značky (např. "John Deere") před kapitalizací slugu ("John-deere").
+const brandPrettyForLinks = znackyHubs.find((z) => z.id === item.data.znacka)?.data.name
+  ?? (item.data.znacka.charAt(0).toUpperCase() + item.data.znacka.slice(1));
 
 const kategLabels: Record<string, string> = {
   traktor: 'Traktor', kombajn: 'Kombajn', stroj: 'Stroj', 'puda-technika': 'Půdní technika',
@@ -326,6 +331,11 @@ const articleJsonLd = {
           <a href={`/stroje/${item.data.znacka}/`} class="related-link">
             Celý katalog modelů {brandPrettyForLinks} →
           </a>
+          {hasBrandHub && (
+            <a href={`/znacky/${item.data.znacka}/`} class="related-link">
+              Historie značky {brandPrettyForLinks} →
+            </a>
+          )}
         </div>
       </section>
     )}
