@@ -1,0 +1,473 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/kviz/jaka-vcela-pro-vas/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kvízy', url: '/kviz/' },
+  { name: 'Jaká včela pro vás', url: canonical },
+]);
+
+const questions = [
+  {
+    key: 'experience',
+    title: 'Jaké jsou vaše zkušenosti s včelařením?',
+    options: [
+      ['beginner', 'Úplný začátečník — ještě jsem u úlů nebyl/a'],
+      ['some', 'Mám základy — absolvoval/a jsem kurz nebo pomáhal/a jinému včelaři'],
+      ['experienced', 'Zkušený včelař — mám vlastní úly několik let'],
+      ['expert', 'Zkušený chovatel — zajímám se i o selekci a šlechtění'],
+    ],
+  },
+  {
+    key: 'priority',
+    title: 'Co je pro vás při chovu včel nejdůležitější?',
+    options: [
+      ['mild', 'Mírnost a klidné chování — bezpečí pro mě i sousedy'],
+      ['honey', 'Maximální medný výnos — chci co nejvíc medu'],
+      ['propolis', 'Zdravotní síla a propolisování — odolnost vůči nemocem'],
+      ['conservation', 'Zachování přírodního místního genofondu'],
+    ],
+  },
+  {
+    key: 'swarm',
+    title: 'Kolik času a péče můžete včelám věnovat?',
+    options: [
+      ['low', 'Minimum — maximálně 1–2 kontroly měsíčně'],
+      ['medium', 'Průměr — pravidelné kontroly, ale bez zbytečných zásahů'],
+      ['high', 'Hodně — nevadí mi časté prohlídky a rojení zvládnu'],
+      ['intensive', 'Intenzivně — plánuji profesionální nebo větší provoz'],
+    ],
+  },
+  {
+    key: 'climate',
+    title: 'Kde plánujete včelařit?',
+    options: [
+      ['lowland', 'Nížiny, teplé oblasti (jižní Morava, střední Čechy)'],
+      ['highland', 'Vyšší polohy nebo chladnější oblasti (Vysočina, podhorské oblasti)'],
+      ['mountain', 'Horské nebo podhorské oblasti, krátká sezóna'],
+      ['anywhere', 'Zatím nevím / kdekoliv to bude fungovat'],
+    ],
+  },
+];
+
+const questionsJson = JSON.stringify(questions);
+
+const BEES = [
+  {
+    slug: 'kranska',
+    name: 'Kraňská včela',
+    subtitle: 'Carnica · ideální pro začátečníky',
+    description: 'Nejoblíbenější včela v ČR. Vynikající mírností, minimální rojivostí a rychlým jarním vývojem. Ideální volba pro začátečníky i pro chov v blízkosti sídel.',
+    strengths: ['Výjimečně mírná a klidná', 'Nízká rojivost při správném vedení', 'Vynikající přezimování', 'Vhodná pro začátečníky i rekreační včelaře'],
+    url: '/vcelarstvi/druhy/kranska/',
+  },
+  {
+    slug: 'italka',
+    name: 'Italská včela',
+    subtitle: 'Ligustica · výnos a plodnost',
+    description: 'Italka je mistryně produkce medu díky velkým rodinám a intenzivní sběratelské aktivitě. Vyžaduje zkušeného chovatele a teplé podmínky.',
+    strengths: ['Vysoký medný výnos', 'Velké, silné rodiny', 'Aktivní i za chladnějšího počasí', 'Klidná při prohlídkách'],
+    url: '/vcelarstvi/druhy/italka/',
+  },
+  {
+    slug: 'buckfast',
+    name: 'Buckfast',
+    subtitle: 'Šlechtěný hybrid · výnos i mírnost',
+    description: 'Šlechtěná linie kombinující produktivitu italky a klidnost kraňky. Vynikající všestranná volba pro moderní včelaře hledající rovnováhu mezi výnosem a snadnou obsluhou.',
+    strengths: ['Vysoká produktivita', 'Mírná a klidná obsluha', 'Nízká rojivost', 'Odolnost vůči varroáze'],
+    url: '/vcelarstvi/druhy/buckfast/',
+  },
+  {
+    slug: 'kavkazska',
+    name: 'Kavkazská včela',
+    subtitle: 'Caucasica · propolisování a klid',
+    description: 'Kavkazská včela je nejklidnější ze všech plemen — někdy až flegmatická. Vyniká produkcí propolisu a přizpůsobivostí různým podmínkám. Vhodná pro zkušenější chovatele.',
+    strengths: ['Nejklidnější plemeno', 'Výjimečná produkce propolisu', 'Přizpůsobivost klimatu', 'Odolnost vůči nemocem'],
+    url: '/vcelarstvi/druhy/kavkazska/',
+  },
+  {
+    slug: 'tmava-vcela',
+    name: 'Tmavá včela',
+    subtitle: 'Mellifera · místní genofond',
+    description: 'Původní středoevropské plemeno přizpůsobené místnímu klimatu. Silná přezimovatelnost a odolnost. Vhodná pro chovatele zaměřené na zachování genofondu a horské oblasti.',
+    strengths: ['Perfektní přizpůsobení místnímu klimatu', 'Vynikající přezimování', 'Zachování místního genofondu', 'Odolnost v chladných oblastech'],
+    url: '/vcelarstvi/druhy/tmava-vcela/',
+  },
+];
+
+const beesJson = JSON.stringify(BEES);
+---
+
+<Layout
+  title="Jaká včela je pro vás vhodná? — kvíz s doporučením plemene"
+  description="4 otázky o vašich zkušenostech, prioritách a podmínkách → doporučení konkrétního včelího plemene (kraňka, italka, buckfast, kavkazská, tmavá včela) s vysvětlením proč."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="jvp-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/kviz/">Kvízy</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Jaká včela pro vás</span>
+    </nav>
+
+    <header class="jvp-head">
+      <span class="kicker">Kvíz · Doporučovač</span>
+      <h1>Jaká včela je pro vás vhodná?</h1>
+      <p class="lede">
+        4 otázky o vašich zkušenostech, prioritách a podmínkách → doporučení konkrétního včelího plemene s vysvětlením, proč právě to.
+      </p>
+    </header>
+
+    <div id="jvp-intro" class="jvp-card">
+      <h2>Než začneme</h2>
+      <ul>
+        <li>4 otázky zaměřené na zkušenost, priority, čas a lokalitu.</li>
+        <li>Po dokončení uvidíte doporučené plemeno + důvody proč vám sedí.</li>
+        <li>Žádný login, žádné cookies. Výsledek spočítá čistý JavaScript.</li>
+      </ul>
+      <button class="jvp-start" id="jvp-start">Spustit kvíz →</button>
+    </div>
+
+    <div id="jvp-game" class="jvp-card" hidden>
+      <div class="jvp-progress">
+        <div class="jvp-progress-bar"><div class="jvp-progress-fill" id="jvp-progress-fill" style="width:0%"></div></div>
+        <span class="jvp-progress-text"><span id="jvp-q-num">1</span> / {questions.length}</span>
+      </div>
+      <h2 id="jvp-question">—</h2>
+      <div class="jvp-options" id="jvp-options"></div>
+      <button class="jvp-back" id="jvp-back" hidden>← Zpět na předchozí</button>
+    </div>
+
+    <div id="jvp-result" class="jvp-card" hidden>
+      <span class="jvp-result-kicker">Vaše doporučení</span>
+      <h2>Pro vás doporučujeme:</h2>
+      <div id="jvp-bee" class="jvp-bee-card"></div>
+      <div class="jvp-result-cta">
+        <button class="jvp-restart" id="jvp-restart">Spustit kvíz znovu</button>
+        <a href="/vcelarstvi/druhy/" class="jvp-ghost">Všechna plemena</a>
+        <a href="/vcelarstvi/" class="jvp-ghost">Encyklopedie včelařství</a>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ beesJson, questionsRaw: questionsJson }}>
+    (function () {
+      const QUESTIONS = JSON.parse(questionsRaw);
+      const BEES = JSON.parse(beesJson);
+
+      const intro = document.getElementById('jvp-intro');
+      const game = document.getElementById('jvp-game');
+      const result = document.getElementById('jvp-result');
+      const startBtn = document.getElementById('jvp-start');
+      const restartBtn = document.getElementById('jvp-restart');
+      const backBtn = document.getElementById('jvp-back');
+      const qNumEl = document.getElementById('jvp-q-num');
+      const fillEl = document.getElementById('jvp-progress-fill');
+      const titleEl = document.getElementById('jvp-question');
+      const optsEl = document.getElementById('jvp-options');
+      const beeEl = document.getElementById('jvp-bee');
+
+      const answers = {};
+      let idx = 0;
+
+      function render() {
+        const q = QUESTIONS[idx];
+        qNumEl.textContent = idx + 1;
+        fillEl.style.width = (idx / QUESTIONS.length) * 100 + '%';
+        titleEl.textContent = q.title;
+        optsEl.innerHTML = '';
+        for (const [val, label] of q.options) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'jvp-opt' + (answers[q.key] === val ? ' picked' : '');
+          btn.textContent = label;
+          btn.addEventListener('click', () => answer(q.key, val));
+          optsEl.appendChild(btn);
+        }
+        backBtn.hidden = idx === 0;
+      }
+
+      function answer(key, val) {
+        answers[key] = val;
+        if (idx < QUESTIONS.length - 1) {
+          idx++;
+          render();
+        } else {
+          fillEl.style.width = '100%';
+          finish();
+        }
+      }
+
+      function finish() {
+        game.hidden = true;
+        result.hidden = false;
+
+        const bee = recommend(answers);
+        beeEl.innerHTML = '';
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'jvp-bee-name';
+        nameEl.innerHTML = '<strong>' + esc(bee.name) + '</strong>';
+        beeEl.appendChild(nameEl);
+
+        const subtitleEl = document.createElement('div');
+        subtitleEl.className = 'jvp-bee-subtitle';
+        subtitleEl.textContent = bee.subtitle;
+        beeEl.appendChild(subtitleEl);
+
+        const descEl = document.createElement('p');
+        descEl.className = 'jvp-bee-desc';
+        descEl.textContent = bee.description;
+        beeEl.appendChild(descEl);
+
+        const strengthsTitle = document.createElement('div');
+        strengthsTitle.className = 'jvp-strengths-title';
+        strengthsTitle.textContent = 'Hlavní výhody:';
+        beeEl.appendChild(strengthsTitle);
+
+        const ul = document.createElement('ul');
+        ul.className = 'jvp-bee-strengths';
+        bee.strengths.forEach(function (s) {
+          const li = document.createElement('li');
+          li.textContent = s;
+          ul.appendChild(li);
+        });
+        beeEl.appendChild(ul);
+
+        const link = document.createElement('a');
+        link.href = bee.url;
+        link.className = 'jvp-bee-cta';
+        link.textContent = 'Podrobný profil plemene →';
+        beeEl.appendChild(link);
+
+        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function esc(s) {
+        return String(s ?? '').replace(/[<>&"]/g, function (c) {
+          return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c];
+        });
+      }
+
+      // ── scoring logic ─────────────────────────────────────────────────
+      function recommend(a) {
+        // scores[slug] = accumulated points
+        var scores = {};
+        BEES.forEach(function (b) { scores[b.slug] = 0; });
+
+        // Experience
+        if (a.experience === 'beginner') {
+          scores['kranska'] += 30;
+          scores['buckfast'] += 20;
+          scores['italka'] -= 10;
+          scores['kavkazska'] -= 5;
+          scores['tmava-vcela'] -= 15;
+        } else if (a.experience === 'some') {
+          scores['kranska'] += 20;
+          scores['buckfast'] += 25;
+          scores['italka'] += 5;
+          scores['kavkazska'] += 5;
+        } else if (a.experience === 'experienced') {
+          scores['italka'] += 20;
+          scores['buckfast'] += 15;
+          scores['kavkazska'] += 20;
+          scores['tmava-vcela'] += 10;
+        } else if (a.experience === 'expert') {
+          scores['tmava-vcela'] += 30;
+          scores['kavkazska'] += 20;
+          scores['italka'] += 15;
+        }
+
+        // Priority
+        if (a.priority === 'mild') {
+          scores['kranska'] += 30;
+          scores['kavkazska'] += 25;
+          scores['buckfast'] += 20;
+          scores['italka'] += 5;
+          scores['tmava-vcela'] += 5;
+        } else if (a.priority === 'honey') {
+          scores['italka'] += 35;
+          scores['buckfast'] += 25;
+          scores['kranska'] += 5;
+          scores['kavkazska'] -= 5;
+          scores['tmava-vcela'] -= 10;
+        } else if (a.priority === 'propolis') {
+          scores['kavkazska'] += 35;
+          scores['tmava-vcela'] += 20;
+          scores['kranska'] += 5;
+          scores['italka'] += 5;
+          scores['buckfast'] += 10;
+        } else if (a.priority === 'conservation') {
+          scores['tmava-vcela'] += 40;
+          scores['kranska'] += 5;
+          scores['italka'] -= 10;
+          scores['kavkazska'] -= 5;
+          scores['buckfast'] -= 15;
+        }
+
+        // Time / swarm tolerance
+        if (a.swarm === 'low') {
+          scores['kranska'] += 25;
+          scores['buckfast'] += 20;
+          scores['italka'] -= 10;
+          scores['kavkazska'] += 10;
+          scores['tmava-vcela'] -= 5;
+        } else if (a.swarm === 'medium') {
+          scores['buckfast'] += 15;
+          scores['kranska'] += 10;
+          scores['italka'] += 10;
+          scores['kavkazska'] += 10;
+          scores['tmava-vcela'] += 5;
+        } else if (a.swarm === 'high') {
+          scores['italka'] += 15;
+          scores['tmava-vcela'] += 15;
+          scores['kavkazska'] += 10;
+          scores['buckfast'] += 5;
+          scores['kranska'] += 5;
+        } else if (a.swarm === 'intensive') {
+          scores['italka'] += 25;
+          scores['buckfast'] += 20;
+          scores['kavkazska'] += 10;
+          scores['tmava-vcela'] += 5;
+          scores['kranska'] += 0;
+        }
+
+        // Climate
+        if (a.climate === 'lowland') {
+          scores['italka'] += 15;
+          scores['buckfast'] += 10;
+          scores['kranska'] += 5;
+          scores['kavkazska'] += 5;
+          scores['tmava-vcela'] -= 5;
+        } else if (a.climate === 'highland') {
+          scores['kranska'] += 20;
+          scores['tmava-vcela'] += 15;
+          scores['buckfast'] += 10;
+          scores['kavkazska'] += 5;
+          scores['italka'] -= 5;
+        } else if (a.climate === 'mountain') {
+          scores['tmava-vcela'] += 30;
+          scores['kranska'] += 20;
+          scores['kavkazska'] += 10;
+          scores['buckfast'] += 5;
+          scores['italka'] -= 15;
+        } else {
+          // anywhere — slight boost to versatile options
+          scores['buckfast'] += 10;
+          scores['kranska'] += 5;
+        }
+
+        // Pick the winner
+        var best = BEES[0];
+        var bestScore = scores[BEES[0].slug];
+        BEES.forEach(function (b) {
+          if (scores[b.slug] > bestScore) {
+            bestScore = scores[b.slug];
+            best = b;
+          }
+        });
+        return best;
+      }
+
+      startBtn.addEventListener('click', function () {
+        intro.hidden = true;
+        game.hidden = false;
+        render();
+      });
+      backBtn.addEventListener('click', function () {
+        if (idx > 0) { idx--; render(); }
+      });
+      restartBtn.addEventListener('click', function () {
+        result.hidden = true;
+        game.hidden = false;
+        idx = 0;
+        Object.keys(answers).forEach(function (k) { delete answers[k]; });
+        render();
+      });
+    })();
+  </script>
+
+  <style is:global>
+    .jvp-root { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+    .jvp-root .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+    .jvp-root .breadcrumb a { color: #666; text-decoration: none; }
+    .jvp-root .breadcrumb a:hover { color: #000; }
+    .jvp-root .breadcrumb .current { color: #000; font-weight: 600; }
+    .jvp-head { margin-bottom: 28px; }
+    .jvp-head .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+    .jvp-head h1 { font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin: 12px 0 8px; color: #1a1a1a; }
+    .jvp-head .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+
+    .jvp-card {
+      padding: 28px;
+      background: linear-gradient(135deg, #fff 0%, #f8fff9 100%);
+      border: 2px solid #FFEA00;
+      border-radius: 14px;
+      margin-bottom: 20px;
+    }
+    .jvp-card h2 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 0 0 14px; line-height: 1.3; }
+    .jvp-card ul { padding-left: 22px; margin: 0 0 20px; }
+    .jvp-card li { font-size: 14px; line-height: 1.6; color: #444; margin-bottom: 6px; }
+
+    .jvp-start, .jvp-restart {
+      width: 100%; padding: 14px; background: #0A0A0B; color: #FFEA00;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+    .jvp-start:hover, .jvp-restart:hover { background: #2a2a2f; }
+
+    .jvp-progress { margin-bottom: 18px; }
+    .jvp-progress-bar { background: #eaeaec; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+    .jvp-progress-fill { background: linear-gradient(90deg, #FFEA00, #84cc16); height: 100%; transition: width .3s; }
+    .jvp-progress-text { font-size: 13px; color: #6B6B72; }
+
+    .jvp-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .jvp-opt {
+      width: 100%; text-align: left; padding: 14px 16px;
+      background: #fafafa; border: 1.5px solid #eaeaec; border-radius: 10px;
+      font-size: 14px; color: #0A0A0B; cursor: pointer; transition: border-color .15s, background .15s;
+    }
+    .jvp-opt:hover { border-color: #FFEA00; background: #f8fff9; }
+    .jvp-opt.picked { border-color: #FFEA00; background: #f0fce4; font-weight: 600; }
+    .jvp-back {
+      display: inline-block; padding: 8px 14px; background: transparent;
+      border: 1.5px solid #DFDFE3; border-radius: 8px; font-size: 12px; font-weight: 700;
+      color: #666; cursor: pointer;
+    }
+    .jvp-back:hover { border-color: #0A0A0B; color: #0A0A0B; }
+
+    .jvp-result-kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #FFEA00; font-weight: 700; background: #0A0A0B; padding: 3px 10px; border-radius: 4px; }
+    .jvp-bee-card {
+      margin: 16px 0 24px;
+      padding: 20px 22px;
+      background: #fff;
+      border: 1.5px solid #eaeaec;
+      border-radius: 12px;
+    }
+    .jvp-bee-name { font-size: 22px; font-weight: 800; color: #0A0A0B; margin-bottom: 4px; }
+    .jvp-bee-subtitle { font-size: 13px; color: #6B6B72; margin-bottom: 14px; }
+    .jvp-bee-desc { font-size: 14px; line-height: 1.6; color: #333; margin: 0 0 14px; }
+    .jvp-strengths-title { font-size: 13px; font-weight: 700; color: #0A0A0B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .jvp-bee-strengths { padding-left: 18px; margin: 0 0 16px; }
+    .jvp-bee-strengths li { font-size: 13px; color: #444; line-height: 1.5; margin-bottom: 4px; }
+    .jvp-bee-cta { display: inline-block; font-size: 13px; font-weight: 700; color: #0B7A3B; text-decoration: none; }
+    .jvp-bee-cta:hover { text-decoration: underline; }
+
+    .jvp-result-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+    .jvp-result-cta .jvp-restart { width: auto; padding: 12px 20px; }
+    .jvp-ghost {
+      padding: 12px 18px; background: transparent; color: #0A0A0B;
+      border: 1.5px solid #DFDFE3; border-radius: 8px; font-size: 13px; font-weight: 700;
+      text-decoration: none;
+    }
+    .jvp-ghost:hover { border-color: #0A0A0B; }
+  </style>
+</Layout>
