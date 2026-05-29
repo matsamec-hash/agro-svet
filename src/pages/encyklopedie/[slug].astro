@@ -282,7 +282,7 @@ const articleJsonLd = {
         >
           <img
             src={`https://i.ytimg.com/vi/${item.data.youtubeId}/hqdefault.jpg`}
-            alt=""
+            alt={`Náhled videa: ${item.data.youtubeTitle ?? item.data.name}`}
             width="1280"
             height="720"
             loading="lazy"
