@@ -53,15 +53,17 @@ export interface Med {
   image_url?: string | null;
 }
 
-const vcelyModules = import.meta.glob('/src/data/vcelarstvi/vcely.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
-const vybaveniModules = import.meta.glob('/src/data/vcelarstvi/vybaveni.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
-const medModules = import.meta.glob('/src/data/vcelarstvi/med.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vcelyModules = import.meta.glob('/src/data/vcelarstvi/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vybaveniModules = import.meta.glob('/src/data/vcelarstvi/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const medModules = import.meta.glob('/src/data/vcelarstvi/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 
-function firstArray<T>(modules: Record<string, unknown>): T[] {
-  for (const raw of Object.values(modules)) {
-    if (Array.isArray(raw)) return raw as T[];
+function collectArrays<T>(modules: Record<string, unknown>): T[] {
+  const out: T[] = [];
+  for (const [path, raw] of Object.entries(modules)) {
+    if (Array.isArray(raw)) out.push(...(raw as T[]));
+    else console.warn(`[vcelarstvi] Expected array in ${path}, got ${typeof raw}`);
   }
-  return [];
+  return out;
 }
 
 let cVcely: Vcela[] | null = null;
@@ -70,7 +72,7 @@ let cMed: Med[] | null = null;
 
 export function getAllVcely(): Vcela[] {
   if (cVcely) return cVcely;
-  cVcely = firstArray<Vcela>(vcelyModules).map((v) => ({ ...v, slug: String(v.slug) }));
+  cVcely = collectArrays<Vcela>(vcelyModules).map((v) => ({ ...v, slug: String(v.slug) }));
   cVcely.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
   return cVcely;
 }
@@ -80,7 +82,7 @@ export function getVcela(slug: string): Vcela | undefined {
 
 export function getAllVybaveni(): Vybaveni[] {
   if (cVybaveni) return cVybaveni;
-  cVybaveni = firstArray<Vybaveni>(vybaveniModules).map((v) => ({ ...v, slug: String(v.slug) }));
+  cVybaveni = collectArrays<Vybaveni>(vybaveniModules).map((v) => ({ ...v, slug: String(v.slug) }));
   cVybaveni.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
   return cVybaveni;
 }
@@ -90,7 +92,7 @@ export function getVybaveni(slug: string): Vybaveni | undefined {
 
 export function getAllMed(): Med[] {
   if (cMed) return cMed;
-  cMed = firstArray<Med>(medModules).map((v) => ({ ...v, slug: String(v.slug) }));
+  cMed = collectArrays<Med>(medModules).map((v) => ({ ...v, slug: String(v.slug) }));
   cMed.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
   return cMed;
 }

@@ -25,14 +25,18 @@ describe('vcelarstvi loaders', () => {
     }
   });
 
-  it('vybavení a med se načtou a mají unikátní slugy', () => {
+  it('vybavení se načte a má unikátní slugy + lookup', () => {
     const vyb = getAllVybaveni().map((x) => x.slug);
-    expect(new Set(vyb).size).toBe(vyb.length);
     expect(getAllVybaveni().length).toBeGreaterThan(0);
+    expect(new Set(vyb).size).toBe(vyb.length);
+    expect(getVybaveni(vyb[0])).toBeDefined();
+  });
+
+  it('med se načte a má unikátní slugy + lookup', () => {
     const med = getAllMed().map((x) => x.slug);
+    expect(getAllMed().length).toBeGreaterThan(0);
     expect(new Set(med).size).toBe(med.length);
-    expect(getMed(getAllMed()[0].slug)).toBeDefined();
-    expect(getVybaveni(getAllVybaveni()[0].slug)).toBeDefined();
+    expect(getMed(med[0])).toBeDefined();
   });
 
   it('related slugy ve vybavení odkazují na existující položky', () => {
