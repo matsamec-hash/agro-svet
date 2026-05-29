@@ -18,6 +18,9 @@ export interface Vcela {
   barva?: string;
   description: string;
   image_url?: string | null;
+  image_credit?: string;
+  image_source_url?: string;
+  image_license?: string;
   wikipedia?: string;
   wikidata?: string;
   faq?: { q: string; a: string }[];
@@ -34,6 +37,9 @@ export interface Vybaveni {
   pro_zacatecniky?: boolean;
   orientacni_cena?: string;
   image_url?: string | null;
+  image_credit?: string;
+  image_source_url?: string;
+  image_license?: string;
   related?: string[];
 }
 
@@ -51,6 +57,9 @@ export interface Med {
   popis_kratky: string;
   description: string;
   image_url?: string | null;
+  image_credit?: string;
+  image_source_url?: string;
+  image_license?: string;
 }
 
 const vcelyModules = import.meta.glob('/src/data/vcelarstvi/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;

@@ -95,6 +95,18 @@ const thingJsonLd: Record<string, unknown> = {
         {item.image_url ? (
           <figure class="hero-photo">
             <img src={item.image_url} alt={item.name} width="800" height="600" loading="eager" decoding="async" />
+            {(item.image_credit || item.image_license) && (
+              <figcaption class="hero-photo-credit">
+                {item.image_source_url ? (
+                  <a href={item.image_source_url} target="_blank" rel="noopener noreferrer">
+                    {item.image_credit || 'Zdroj'}
+                  </a>
+                ) : (
+                  <span>{item.image_credit}</span>
+                )}
+                {item.image_license && <span class="hero-photo-license"> · {item.image_license}</span>}
+              </figcaption>
+            )}
           </figure>
         ) : (
           <div class="hero-emoji-card">
@@ -273,6 +285,16 @@ const thingJsonLd: Record<string, unknown> = {
     aspect-ratio: 4/3; background: #0A0A0B;
   }
   .vybaveni-page .hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .vybaveni-page .hero-photo-credit {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 18px 16px 10px;
+    background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
+    font: 500 11px 'Chakra Petch', sans-serif;
+    color: rgba(255,255,255,.78); letter-spacing: .04em;
+  }
+  .vybaveni-page .hero-photo-credit a { color: rgba(255,255,255,.9); text-decoration: underline; text-decoration-color: rgba(255,255,255,.3); text-underline-offset: 2px; }
+  .vybaveni-page .hero-photo-credit a:hover { color: #fff; text-decoration-color: rgba(255,255,255,.7); }
+  .vybaveni-page .hero-photo-license { color: rgba(255,255,255,.55); }
 
   .vybaveni-page .content-grid { display: grid; grid-template-columns: 1fr 320px; gap: 22px; }
   .vybaveni-page .content-main { display: flex; flex-direction: column; gap: 22px; }
