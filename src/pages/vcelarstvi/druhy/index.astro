@@ -1,0 +1,243 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { getAllVcely } from '../../../lib/vcelarstvi';
+import { SITE_URL } from '../../../lib/config';
+
+const vcely = getAllVcely();
+const title = 'Druhy včel — přehled chovaných včel medonosných';
+const description = 'Kraňka, italka, buckfast a další druhy chované v Česku. Temperament, medný výnos, rojivost a vhodnost pro začátečníky.';
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'Včelařství', item: `${SITE_URL}/vcelarstvi/` },
+    { '@type': 'ListItem', position: 3, name: 'Druhy včel', item: `${SITE_URL}/vcelarstvi/druhy/` },
+  ],
+};
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: title,
+  description,
+  url: `${SITE_URL}/vcelarstvi/druhy/`,
+  inLanguage: 'cs-CZ',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: vcely.length,
+    itemListElement: vcely.map((v, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE_URL}/vcelarstvi/druhy/${v.slug}/`,
+      name: v.name,
+    })),
+  },
+};
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+
+  <div class="vcely-listing-root">
+
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/vcelarstvi/">Včelařství</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">Druhy včel</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Katalog · Včelařství</span>
+        <h1>Druhy <em>včel</em></h1>
+        <p class="hero-lede">{description}</p>
+        <div class="hero-stats">
+          <div class="s"><span class="n">{vcely.length}</span><span class="l">druhů včel</span></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-emoji-tile" aria-hidden="true">🐝</div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Přehled druhů <span class="section-title-c">{vcely.length}</span></h2>
+
+    <div class="vcely-grid">
+      {vcely.map((v) => (
+        <a href={`/vcelarstvi/druhy/${v.slug}/`} class="vcela-card">
+          {v.image_url ? (
+            <div class="vc-photo" style={`background-image:url('${v.image_url}')`} role="img" aria-label={v.name}></div>
+          ) : (
+            <div class="vc-photo vc-photo-fallback" aria-hidden="true">🐝</div>
+          )}
+          <div class="vc-body">
+            <div class="vc-tags">
+              <span class="vc-tag">{v.temperament}</span>
+              <span class="vc-tag vc-tag-vynos">{v.medny_vynos} výnos</span>
+            </div>
+            <div class="vc-name">{v.name}</div>
+            <div class="vc-latin">{v.latinsky}</div>
+            <p class="vc-desc">{v.vhodnost_cr}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <section class="big-cta">
+      <div>
+        <span class="cta-kicker">Více o včelařství</span>
+        <h2>Průvodce včelařstvím<br />pro začátečníky i pokročilé.</h2>
+        <p>Vše o úlech, vybavení, medu a sezónní péči na jednom místě.</p>
+        <div class="cta-actions">
+          <a class="cta-btn primary" href="/vcelarstvi/">
+            Zpět na včelařství
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</Layout>
+
+<style>
+  .vcely-listing-root {
+    --yellow: #FFEA00;
+    --yellow-soft: #FFF6A8;
+    --yellow-glow: rgba(255, 234, 0, .35);
+    --ink: #0A0A0B;
+    --body: #1E1E22;
+    --muted: #6B6B72;
+    --muted-2: #9A9AA3;
+    --line: #EAEAEC;
+    --bg-cream: #FBFAF4;
+    --card: #FFFFFF;
+    --r-xl: 24px;
+    --r-lg: 18px;
+    --r-md: 12px;
+    --sh-1: 0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3: 0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 26px 24px 96px;
+    color: var(--body);
+  }
+
+  .vcely-listing-root .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 22px; flex-wrap: wrap; }
+  .vcely-listing-root .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .vcely-listing-root .breadcrumb a:hover { color: #000; }
+  .vcely-listing-root .breadcrumb svg { width: 14px; height: 14px; color: var(--muted-2); flex-shrink: 0; }
+  .vcely-listing-root .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .vcely-listing-root .hero {
+    position: relative; overflow: hidden; color: #fff; border-radius: var(--r-xl);
+    background: radial-gradient(600px 300px at 15% 20%, rgba(255, 234, 0, .18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(255, 160, 0, .28), transparent 60%),
+      linear-gradient(135deg, #14110E 0%, #1F1A14 60%, #2A2218 100%);
+    padding: 48px 48px 40px; margin-bottom: 22px;
+    box-shadow: var(--sh-3);
+    display: grid; grid-template-columns: 1.35fr 1fr; gap: 32px; align-items: center;
+  }
+  .vcely-listing-root .hero::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
+    background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .vcely-listing-root .hero-left { position: relative; z-index: 2; }
+  .vcely-listing-root .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font: 600 11px/1 'Chakra Petch', sans-serif; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--yellow); margin-bottom: 18px;
+    padding: 8px 14px; border: 1px solid rgba(255,234,0,.4); border-radius: 999px;
+    background: rgba(255,234,0,.06);
+  }
+  .vcely-listing-root .kicker .dot { width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; box-shadow: 0 0 0 3px rgba(255,234,0,.2); }
+  .vcely-listing-root .hero h1 {
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+    font-size: clamp(2.4rem, 5.5vw, 4.4rem); color: #fff; line-height: .96; letter-spacing: -.03em; margin: 0;
+  }
+  .vcely-listing-root .hero h1 em { font-style: normal; color: var(--yellow); text-shadow: 0 0 40px rgba(255,234,0,.5); }
+  .vcely-listing-root .hero-lede { max-width: 580px; font-size: 16px; color: #c8c8d0; margin: 18px 0 22px; line-height: 1.6; }
+  .vcely-listing-root .hero-stats { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; font-family: 'Chakra Petch', sans-serif; }
+  .vcely-listing-root .hero-stats .s { display: flex; flex-direction: column; gap: 3px; }
+  .vcely-listing-root .hero-stats .n { font-size: 24px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -.02em; }
+  .vcely-listing-root .hero-stats .l { font-size: 11px; color: #8a8a92; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
+  .vcely-listing-root .hero-right { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
+  .vcely-listing-root .hero-emoji-tile { font-size: 120px; line-height: 1; filter: drop-shadow(0 12px 40px rgba(255,160,0,.4)); }
+
+  .vcely-listing-root .section-title {
+    font-family: 'Chakra Petch', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -.02em;
+    margin: 14px 0 14px; color: var(--ink);
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .vcely-listing-root .section-title-c {
+    font-size: 14px; background: var(--yellow); color: #0A0A0B; padding: 3px 10px; border-radius: 8px; letter-spacing: .04em;
+  }
+
+  .vcely-listing-root .vcely-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;
+  }
+  .vcely-listing-root .vcela-card {
+    display: flex; flex-direction: column;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg);
+    overflow: hidden; text-decoration: none; color: inherit;
+    transition: .22s cubic-bezier(.2,.7,.2,1);
+    box-shadow: var(--sh-1);
+  }
+  .vcely-listing-root .vcela-card:hover { transform: translateY(-3px); box-shadow: var(--sh-3); border-color: var(--yellow); }
+  .vcely-listing-root .vc-photo {
+    height: 200px; background-size: cover; background-position: center;
+    background-color: #f0ede5;
+  }
+  .vcely-listing-root .vc-photo-fallback {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 72px;
+  }
+  .vcely-listing-root .vc-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+  .vcely-listing-root .vc-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; }
+  .vcely-listing-root .vc-tag {
+    font: 600 10px 'Chakra Petch', sans-serif; letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 7px; border-radius: 5px;
+    background: #FBFAF4; color: var(--muted); border: 1px solid var(--line);
+  }
+  .vcely-listing-root .vc-tag-vynos { background: var(--yellow); color: #0A0A0B; border-color: transparent; }
+  .vcely-listing-root .vc-name { font: 700 19px 'Chakra Petch', sans-serif; color: var(--ink); letter-spacing: -.01em; }
+  .vcely-listing-root .vc-latin { font: 400 13px 'Roboto Condensed', sans-serif; color: var(--muted); font-style: italic; }
+  .vcely-listing-root .vc-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 4px 0 0; }
+
+  .vcely-listing-root .big-cta {
+    margin-top: 32px; padding: 36px; border-radius: var(--r-xl);
+    background: linear-gradient(135deg, var(--yellow) 0%, #FFD400 100%);
+    position: relative; overflow: hidden; box-shadow: 0 10px 30px -8px var(--yellow-glow);
+  }
+  .vcely-listing-root .big-cta h2 { font-family: 'Chakra Petch', sans-serif; font-size: 30px; line-height: 1.05; letter-spacing: -.02em; position: relative; z-index: 2; color: #0A0A0B; margin: 0; }
+  .vcely-listing-root .big-cta p { color: #2a2a2a; margin-top: 10px; font-size: 15px; position: relative; z-index: 2; max-width: 600px; }
+  .vcely-listing-root .cta-kicker {
+    display: inline-block; font: 600 11px 'Chakra Petch', sans-serif; letter-spacing: .2em; text-transform: uppercase;
+    color: #0A0A0B; background: rgba(0,0,0,.08); padding: 6px 12px; border-radius: 999px; margin-bottom: 14px; position: relative; z-index: 2;
+  }
+  .vcely-listing-root .cta-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; position: relative; z-index: 2; }
+  .vcely-listing-root .cta-btn {
+    padding: 15px 24px; border-radius: 14px; text-decoration: none;
+    font: 700 14px 'Chakra Petch', sans-serif; letter-spacing: .04em;
+    display: inline-flex; align-items: center; gap: 10px; transition: .15s;
+  }
+  .vcely-listing-root .cta-btn.primary { background: #0A0A0B; color: #fff; }
+  .vcely-listing-root .cta-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(0,0,0,.4); }
+
+  @media (max-width: 960px) {
+    .vcely-listing-root .hero { grid-template-columns: 1fr; padding: 32px 24px 28px; gap: 18px; }
+    .vcely-listing-root .hero-right { display: none; }
+  }
+  @media (max-width: 600px) {
+    .vcely-listing-root { padding: 20px 16px 60px; }
+  }
+</style>
