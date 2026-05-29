@@ -188,6 +188,11 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
   .slv-d-body { font-size: 16px; line-height: 1.75; color: #333; }
   .slv-d-body p { margin: 0 0 16px; }
   .slv-d-body strong { color: #0A0A0B; }
+  .slv-d-body a { color: #0A0A0B; text-decoration: underline; text-decoration-color: #FFEA00; text-decoration-thickness: 2px; text-underline-offset: 3px; transition: background .15s; }
+  .slv-d-body a:hover { background: #FFEA00; }
+  .slv-d-body a.auto-link { text-decoration-color: #EAEAEC; text-decoration-style: dotted; }
+  .slv-d-body a.auto-link:hover { background: #FFEA00; text-decoration-color: #0A0A0B; }
+  .slv-d-body a.auto-link-external::after { content: " ↗"; font-size: 0.85em; opacity: 0.55; }
 
   .slv-d-external {
     margin: 24px 0;
