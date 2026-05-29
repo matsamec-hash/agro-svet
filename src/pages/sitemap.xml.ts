@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { getAllBrands, getAllModels, seriesFamily, FUNCTIONAL_GROUPS } from '../lib/stroje';
 import { getAllDruhy } from '../lib/plemena';
-import { topComparisonPairs } from '../lib/comparator';
+import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 
@@ -272,8 +272,11 @@ export const GET: APIRoute = async () => {
     }
   }
 
-  // Comparison pairs — same list that generates /srovnani/[combo]/ routes.
-  for (const pair of topComparisonPairs(220)) {
+  // Comparison pairs — match the limit used by /srovnani/[combo]/getStaticPaths
+  // so every prerendered pair (including mid-class 90–195 hp tractors) is in
+  // sitemap. Previously capped at 220 → Google saw only top-power flagships,
+  // mid-class pairs were prerendered but not discoverable.
+  for (const pair of expandedComparisonPairs(5000)) {
     urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD });
   }
 
