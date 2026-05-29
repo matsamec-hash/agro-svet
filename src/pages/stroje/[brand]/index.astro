@@ -172,24 +172,30 @@ const allHp = categories.flatMap((c) => [c.minHp, c.maxHp]).filter((x): x is num
 const minHp = allHp.length ? Math.min(...allHp) : null;
 const maxHp = allHp.length ? Math.max(...allHp) : null;
 
-// Pick the most prominent current series cover for hero (highest max hp tile that has cover)
+// Pick the most prominent series cover for hero. Prefer current tiles, then
+// legacy. Many brand YAMLs omit year_from/year_to → all tiles end up "non-current"
+// and a search restricted to current tiles falls through to the generic Fendt-
+// branded fallback photo, which is wrong on every other brand's page.
 let heroPhoto: string | null = null;
 let heroCreditUrl: string | null = null;
 let heroCreditAuthor: string | null = null;
 let heroCreditLicense: string | null = null;
-for (const c of categories) {
-  for (const t of [...c.currentTiles].sort((a, b) => (b.maxHp ?? 0) - (a.maxHp ?? 0))) {
+function pickHero(tiles: Tile[]): boolean {
+  for (const t of tiles) {
     if (t.coverImage) {
       heroPhoto = t.coverImage;
       heroCreditUrl = t.coverCreditUrl;
       heroCreditAuthor = t.coverCreditAuthor;
       heroCreditLicense = t.coverCreditLicense;
-      break;
+      return true;
     }
   }
-  if (heroPhoto) break;
+  return false;
 }
-if (!heroPhoto) heroPhoto = categories[0]?.heroFallback ?? '/images/traktor.webp';
+const tileByHp = (a: Tile, b: Tile) => (b.maxHp ?? 0) - (a.maxHp ?? 0);
+for (const c of categories) if (pickHero([...c.currentTiles].sort(tileByHp))) break;
+if (!heroPhoto) for (const c of categories) if (pickHero([...c.legacyTiles].sort(tileByHp))) break;
+if (!heroPhoto) for (const c of categories) if (pickHero([...c.currentTiles, ...c.legacyTiles])) break;
 
 function hpBar(min: number | null, max: number | null, hpMax: number): { from: number; span: number } {
   if (min === null || max === null) return { from: 0, span: 0 };
@@ -306,12 +312,12 @@ const seriesListJsonLd = allSeries.length > 0
       </div>
 
       <div class="hero-right">
-        <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
+        <div class="hero-photo" data-has-photo={heroPhoto ? 'true' : 'false'} style={heroPhoto ? `background-image:url('${heroPhoto}')` : ''}>
           <div class="hero-photo-logo">
             <img src={`/images/stroje/brands/${brand.slug}.png`} alt={`${brand.name} logo`} loading="eager" />
           </div>
           <div class="hero-photo-badge"><span class="n">{totalModels}+</span> modelů v katalogu</div>
-          {heroCreditAuthor && heroCreditUrl && (
+          {heroPhoto && heroCreditAuthor && heroCreditUrl && (
             <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
                title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons · upraveno (crop, konverze do WebP)`}>
               © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''} · upraveno
@@ -548,7 +554,7 @@ const seriesListJsonLd = allSeries.length > 0
         </div>
       </div>
       <div class="cta-right">
-        <div class="cta-photo" style={`background-image:url('${heroPhoto}')`}></div>
+        <div class="cta-photo" data-has-photo={heroPhoto ? 'true' : 'false'} style={heroPhoto ? `background-image:url('${heroPhoto}')` : ''}></div>
       </div>
     </section>
 
@@ -657,6 +663,12 @@ const seriesListJsonLd = allSeries.length > 0
     box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
     position:relative;overflow:hidden;
   }
+  .brand-page .hero-photo[data-has-photo="false"]{
+    background:
+      radial-gradient(120% 80% at 50% 100%, color-mix(in srgb, var(--brand-c1) 32%, transparent), transparent 70%),
+      linear-gradient(135deg, color-mix(in srgb, var(--brand-c1) 22%, #1a1a1f) 0%, color-mix(in srgb, var(--brand-c2) 18%, #14141a) 100%);
+  }
+  .brand-page .cta-photo[data-has-photo="false"]{background:linear-gradient(135deg, color-mix(in srgb, var(--brand-c1) 18%, #1a1a1f) 0%, color-mix(in srgb, var(--brand-c2) 14%, #14141a) 100%)}
   .brand-page .hero-photo::after{
     content:"";position:absolute;inset:0;
     background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, color-mix(in srgb, var(--brand-c1) 24%, transparent) 100%);
