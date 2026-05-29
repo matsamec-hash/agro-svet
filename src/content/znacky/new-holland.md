@@ -3,20 +3,79 @@ name: New Holland
 slug: new-holland
 zeme: Itálie / USA
 zalozena: 1895
-popis: New Holland Agriculture je jedním z největších světových výrobců zemědělské techniky. Značka je součástí koncernu CNH Industrial a nabízí kompletní portfolio od traktorů přes kombajny až po sklízecí řezačky. V posledních letech se New Holland soustředí na alternativní pohony — vodíkové traktory a LNG kombajny.
+popis: New Holland Agriculture je jedním z největších světových výrobců zemědělské techniky. Značka je součástí koncernu CNH Industrial a nabízí kompletní portfolio od traktorů přes kombajny až po sklízecí řezačky. V posledních letech se New Holland soustředí na alternativní pohony — vodíkové traktory a stroje na biometan.
 website: https://www.newholland.com
 wikipedia: https://en.wikipedia.org/wiki/New_Holland_Agriculture
 wikidata: https://www.wikidata.org/wiki/Q1423217
 kategorie: ["Traktory", "Kombajny", "Sklízecí řezačky", "Teleskopické manipulátory"]
+aktualizovano: 2026-05-29
+founder:
+  name: "Abram Zimmerman"
+  note: "Zakladatel firmy v městečku New Holland v Pensylvánii (1895), tvůrce motoru odolného proti zamrznutí."
+snapshot:
+  - label: "Založeno"
+    value: "1895"
+  - label: "Místo vzniku"
+    value: "New Holland, Pensylvánie (USA)"
+  - label: "Mateřská skupina"
+    value: "CNH Industrial"
+  - label: "Centrála agro divize"
+    value: "Turín (Itálie)"
+  - label: "Pozice v ČR"
+    value: "4. nejprodávanější značka (2024)"
+timeline:
+  - year: 1895
+    label: "Založení dílny v New Holland"
+    detail: "Abram Zimmerman založil v pensylvánském městečku New Holland kovářskou a strojní dílnu."
+  - year: 1903
+    label: "Vznik New Holland Machine Company"
+    detail: "Zimmerman přeměnil firmu na akciovou společnost."
+  - year: 1940
+    label: "První samovazný sběrací lis"
+  - year: 1947
+    label: "Převzetí skupinou Sperry Corporation"
+    detail: "Vznik značky Sperry New Holland."
+  - year: 1964
+    label: "Akvizice belgické Claeys"
+    detail: "Vstup na evropský trh; výrobce kombajnů ze Zedelgemu."
+  - year: 1986
+    label: "Akvizice Fordem → Ford New Holland"
+  - year: 1991
+    label: "Většinový podíl získává Fiat"
+    detail: "Sjednocení produktů Ford a Fiat pod globální značku New Holland."
+  - year: 1999
+    label: "Fúze s Case → CNH Global"
+  - year: 2009
+    label: "Prototyp vodíkového traktoru NH2"
+    detail: "Představen na veletrhu SIMA v Paříži."
+  - year: 2013
+    label: "Vznik CNH Industrial"
+  - year: 2022
+    label: "Prototyp T7 Methane Power (LNG)"
+sources:
+  - title: "Wikipedia — New Holland Agriculture (EN)"
+    url: "https://en.wikipedia.org/wiki/New_Holland_Agriculture"
+  - title: "Wikipedia — New Holland Machine Company (EN)"
+    url: "https://en.wikipedia.org/wiki/New_Holland_Machine_Company"
+  - title: "Wikipedia — CNH Industrial (EN)"
+    url: "https://en.wikipedia.org/wiki/CNH_Industrial"
+  - title: "CNH — oficiální historie New Holland Agriculture"
+    url: "https://media.cnh.com/north-america/new-holland-agriculture/new-holland-agriculture-history/s/8932d30e-801c-450e-9009-5d6e4a553e54"
+  - title: "Mechanizaceweb.cz — statistiky prodeje traktorů v ČR 2024 (data SDA)"
+    url: "https://mechanizaceweb.cz/statistiky-prodeje-traktoru-v-cr-v-roce-2024/"
 ---
+
+New Holland Agriculture je jedna z největších značek zemědělské techniky na světě, dnes součást koncernu CNH Industrial. Charakteristické modro-bílé stroje pokrývají kompletní portfolio od traktorů přes kombajny až po sklízecí řezačky.
+
+<h2 id="zakladatel">Zakladatel: Abram Zimmerman</h2>
+
+Firmu založil v roce **1895** **Abram („Abe") Zimmerman** v městečku **New Holland** v americké Pensylvánii, podle nějž značka nese jméno. V kovářské a strojní dílně opravoval a vyráběl zemědělské stroje pro místní farmáře a proslul stacionárním motorem **odolným proti zamrznutí** — jeho vodní plášť umožňoval ledu při mrazu roztáhnout se, aniž praskl blok motoru. V roce **1903** Zimmerman firmu přeměnil na akciovou společnost **New Holland Machine Company**.
 
 ## Historie
 
 ### Začátky v Pensylvánii (1895–1947)
 
-V roce **1895** otevřel Abe Zimmermann malou opravárenskou dílnu na okraji městečka **New Holland** ve státě Pensylvánie, podle něhož později značka dostala jméno. V roce **1903** Zimmermann založil **New Holland Machine Company** a začal vyrábět mobilní šrotovníky obilí pro výrobu krmiva pro hospodářská zvířata.
-
-Po světové hospodářské krizi ve **30. letech** uvedl New Holland na trh **automatický lis na seno a slámu** — historicky první stroj na světě s automatickým plněním a vázacím systémem. Od **40. let** se firma specializovala na techniku pro sklizeň pícnin a v roce **1947** představila **Haybine** — žací stroj s úpravou píce, který znamenal přelom ve sklizni sena.
+Po založení se New Holland Machine Company zaměřila na výrobu mobilních šrotovníků obilí pro přípravu krmiva pro hospodářská zvířata. Ve **30. letech** uvedla na trh **automatický lis na seno a slámu** s automatickým vázacím systémem a od **40. let** se specializovala na techniku pro sklizeň pícnin; v roce **1947** představila **Haybine** — žací stroj s úpravou píce, který znamenal přelom ve sklizni sena.
 
 ### Sperry New Holland (1947–1986)
 
@@ -63,4 +122,4 @@ New Holland je průkopníkem v alternativních pohonech v zemědělství:
 
 ## Zastoupení v ČR
 
-New Holland zastupuje v České republice importér **CNH Industrial Czech Republic s.r.o.** Servisní síť zahrnuje přes 60 autorizovaných dealerů a servisních středisek po celé republice.
+New Holland patří v České republice ke stálicím trhu s traktory. Podle statistik za rok 2024 bylo v ČR registrováno **159 nových traktorů New Holland**, což značku v kategorii nad 50 koní řadilo na **4. místo** (podíl 10 %). Servisní síť zahrnuje autorizované dealery a servisní střediska po celé republice.
