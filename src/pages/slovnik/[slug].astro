@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import { SLOVNIK, getSlovnikTerm, KATEGORIE_LABELS } from '../../lib/slovnik';
 import { breadcrumbSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import AreaConverter from '../../components/AreaConverter.astro';
 
 export function getStaticPaths() {
   return SLOVNIK.map((t) => ({ params: { slug: t.slug } }));
@@ -17,6 +18,21 @@ const pageUrl = `${SITE_URL}/slovnik/${term.slug}/`;
 const relatedTerms = (term.related ?? [])
   .map((s) => getSlovnikTerm(s))
   .filter((t): t is NonNullable<typeof t> => !!t);
+
+// Mapování slovnik slug → výchozí jednotka pro inline AreaConverter.
+// Jen slugy v této mapě dostanou widget (jen jednotky plochy).
+const AREA_UNIT_BY_SLUG: Record<string, string> = {
+  hektar: 'ha',
+  ar: 'a',
+  'metr-ctvrecni': 'm2',
+  'kilometr-ctvrecni': 'km2',
+  akr: 'acre',
+  jitro: 'jitro',
+  korec: 'korec',
+  strych: 'strych',
+  morgen: 'morgen',
+};
+const areaUnit = AREA_UNIT_BY_SLUG[term.slug];
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
@@ -69,6 +85,15 @@ const paragraphs = term.longDef.split('\n\n');
       )}
       <p class="slv-d-short"><strong>{term.shortDef}</strong></p>
     </header>
+
+    {areaUnit && (
+      <AreaConverter
+        defaultUnit={areaUnit}
+        defaultValue={1}
+        heading={`Převodník — ${term.term} na další jednotky plochy`}
+        caption="Zadej hodnotu a vyber jednotku. Převody se přepočítají okamžitě. Pro starší jednotky (jitro, korec, strych) jsou použité standardizované hodnoty z roku 1764."
+      />
+    )}
 
     <div class="slv-d-body prose">
       {paragraphs.map((p) => (

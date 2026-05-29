@@ -1,0 +1,248 @@
+---
+// Interaktivní převodník jednotek plochy. Embedded ve /slovnik/* pro jednotky
+// plochy a ve standalone kalkulačce /kalkulacka/prevody-jednotek/.
+// Vanilla JS, žádné závislosti.
+
+export interface Props {
+  /** Výchozí jednotka pro input. Pokud nezadána, default = 'ha'. */
+  defaultUnit?: string;
+  /** Výchozí hodnota pro input. Default = 1. */
+  defaultValue?: number;
+  /** Nadpis nad widgetem. */
+  heading?: string;
+  /** Krátký podpis pod widgetem. */
+  caption?: string;
+  /** Heading level (h2 v slovniku, h1 v standalone). */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const {
+  defaultUnit = 'ha',
+  defaultValue = 1,
+  heading = 'Převodník jednotek plochy',
+  caption,
+  headingLevel = 'h2',
+} = Astro.props;
+
+// All factors in m² (square meters).
+const UNITS = [
+  { id: 'm2', label: 'm²', name: 'metr čtvereční', factor: 1, decimals: 2 },
+  { id: 'a', label: 'a', name: 'ar', factor: 100, decimals: 4 },
+  { id: 'ha', label: 'ha', name: 'hektar', factor: 10_000, decimals: 6 },
+  { id: 'km2', label: 'km²', name: 'kilometr čtvereční', factor: 1_000_000, decimals: 8 },
+  { id: 'acre', label: 'akr', name: 'akr (acre)', factor: 4046.8564224, decimals: 5 },
+  { id: 'jitro', label: 'jitro', name: 'rakouské/české jitro', factor: 5754.642, decimals: 5 },
+  { id: 'korec', label: 'korec', name: 'český korec', factor: 2877.32, decimals: 5 },
+  { id: 'strych', label: 'strych', name: 'český strych', factor: 2877.32, decimals: 5 },
+  { id: 'morgen', label: 'morgen', name: 'pruský morgen', factor: 2553.2, decimals: 5 },
+];
+
+const Heading = headingLevel;
+---
+
+<section
+  class="area-conv"
+  data-default-unit={defaultUnit}
+  data-default-value={String(defaultValue)}
+  aria-label="Převodník jednotek plochy"
+>
+  <Heading class="ac-h">{heading}</Heading>
+
+  <form class="ac-form" autocomplete="off" onsubmit="return false">
+    <label class="ac-input-row">
+      <span class="ac-label">Zadej hodnotu</span>
+      <span class="ac-input-wrap">
+        <input
+          type="number"
+          inputmode="decimal"
+          step="any"
+          min="0"
+          class="ac-input"
+          id="ac-input"
+          value={defaultValue}
+        />
+        <select class="ac-unit" id="ac-unit" aria-label="Vyber jednotku">
+          {UNITS.map((u) => (
+            <option value={u.id} selected={u.id === defaultUnit}>{u.label} ({u.name})</option>
+          ))}
+        </select>
+      </span>
+    </label>
+
+    <div class="ac-results" id="ac-results" role="region" aria-live="polite">
+      {UNITS.map((u) => (
+        <div class="ac-result" data-unit={u.id}>
+          <span class="ac-r-label">{u.label}</span>
+          <span class="ac-r-value">—</span>
+          <span class="ac-r-name">{u.name}</span>
+        </div>
+      ))}
+    </div>
+  </form>
+
+  {caption && <p class="ac-caption">{caption}</p>}
+</section>
+
+<script is:inline define:vars={{ UNITS }}>
+  (function () {
+    const root = document.currentScript.previousElementSibling;
+    if (!root) return;
+    const input = root.querySelector('#ac-input');
+    const unitSel = root.querySelector('#ac-unit');
+    const results = root.querySelector('#ac-results');
+    if (!input || !unitSel || !results) return;
+
+    const fmt = (n, decimals) => {
+      if (!isFinite(n)) return '—';
+      if (n === 0) return '0';
+      // Czech formatting: space thousands, comma decimal
+      const abs = Math.abs(n);
+      let d;
+      if (abs >= 1000) d = 0;
+      else if (abs >= 1) d = 2;
+      else if (abs >= 0.01) d = 4;
+      else d = decimals;
+      return n
+        .toLocaleString('cs-CZ', { maximumFractionDigits: d, minimumFractionDigits: 0 })
+        .replace(/ /g, ' ');
+    };
+
+    function recalc() {
+      const raw = parseFloat(String(input.value).replace(',', '.'));
+      const fromUnit = UNITS.find((u) => u.id === unitSel.value);
+      if (!fromUnit || !isFinite(raw)) {
+        results.querySelectorAll('.ac-r-value').forEach((el) => { el.textContent = '—'; });
+        return;
+      }
+      const m2 = raw * fromUnit.factor;
+      UNITS.forEach((u) => {
+        const cell = results.querySelector(`[data-unit="${u.id}"] .ac-r-value`);
+        if (!cell) return;
+        const val = m2 / u.factor;
+        cell.textContent = fmt(val, u.decimals);
+        const row = cell.closest('.ac-result');
+        if (row) row.classList.toggle('is-source', u.id === fromUnit.id);
+      });
+    }
+
+    input.addEventListener('input', recalc);
+    unitSel.addEventListener('change', recalc);
+    recalc();
+  })();
+</script>
+
+<style>
+  .area-conv {
+    margin: 28px 0;
+    padding: 20px 22px;
+    background: linear-gradient(180deg, #fffef8 0%, #fff 100%);
+    border: 1.5px solid #FFEA00;
+    border-radius: 12px;
+  }
+  .ac-h {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0A0A0B;
+    margin: 0 0 14px;
+    letter-spacing: -0.3px;
+  }
+  .ac-form { display: flex; flex-direction: column; gap: 14px; }
+  .ac-input-row { display: flex; flex-direction: column; gap: 6px; }
+  .ac-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6B6B72;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .ac-input-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .ac-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 10px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    border: 1.5px solid #d4d4d8;
+    border-radius: 8px;
+    background: #fff;
+    color: #0A0A0B;
+    font-variant-numeric: tabular-nums;
+  }
+  .ac-input:focus { outline: none; border-color: #0A0A0B; }
+  .ac-unit {
+    flex: 0 0 auto;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1.5px solid #d4d4d8;
+    border-radius: 8px;
+    background: #fff;
+    color: #0A0A0B;
+    cursor: pointer;
+    max-width: 240px;
+  }
+  .ac-unit:focus { outline: none; border-color: #0A0A0B; }
+
+  .ac-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    padding-top: 4px;
+  }
+  .ac-result {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .ac-result.is-source {
+    background: #FFFBCC;
+    border-color: #FFEA00;
+  }
+  .ac-r-label {
+    grid-row: 1 / span 2;
+    align-self: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #6B6B72;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    min-width: 38px;
+  }
+  .ac-r-value {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0A0A0B;
+    font-variant-numeric: tabular-nums;
+  }
+  .ac-r-name {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 11px;
+    color: #6B6B72;
+  }
+  .ac-caption {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: #6B6B72;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px) {
+    .ac-input-wrap { flex-direction: column; }
+    .ac-unit { max-width: none; }
+    .ac-results { grid-template-columns: 1fr 1fr; }
+  }
+</style>
