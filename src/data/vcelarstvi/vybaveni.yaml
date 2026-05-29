@@ -5,7 +5,186 @@
   description: >
     Nástavkový úl se skládá z oddělitelných nástavků stavěných na sebe.
     Umožňuje pracovat s celými nástavky, snadné rozšiřování i odebírání medníku.
+    V Česku se nejčastěji setkáme s rámkovou mírou Optimal (39×24 cm) nebo Langstroth.
+    Pro začátečníka je vhodný jako první úl díky dostupnosti příslušenství a literatury.
   pro_zacatecniky: true
   orientacni_cena: 2 500–6 000 Kč za nástavek
   image_url: /images/vcelarstvi/vybaveni/nastavkovy-ul.webp
-  related: []
+  related:
+    - langstroth
+    - optimal
+
+- slug: langstroth
+  name: Úl Langstroth
+  kategorie: ul
+  popis_kratky: Nejrozšířenější rámková míra na světě s modulárním příslušenstvím kompatibilním napříč výrobci.
+  description: >
+    Úl Langstroth navrhl v roce 1851 americký pastor Lorenzo Langstroth; dnes dominuje
+    ve světovém včelařství zejména díky standardizovaným rozměrům rámku (448×232 mm).
+    Modulárnost umožňuje vzájemnou záměnu nástavků a plástů od různých výrobců, což
+    usnadňuje pořizování náhradních dílů i sdílení vybavení mezi chovateli.
+    V Česku je méně rozšířený než Optimal, ale s nástupem ekologického a profesionálního
+    chovu jeho podíl roste.
+  pro_zacatecniky: true
+  orientacni_cena: 2 500–5 500 Kč za nástavek
+  image_url: /images/vcelarstvi/vybaveni/langstroth.webp
+  related:
+    - nastavkovy-ul
+    - optimal
+
+- slug: optimal
+  name: Úl Optimal (39×24)
+  kategorie: ul
+  popis_kratky: Tradiční česká rámková míra 39×24 cm, v tuzemských chovech stále nejrozšířenější.
+  description: >
+    Rámková míra Optimal (šířka 390 mm, výška 240 mm) se v Česku prosadila jako standard
+    po druhé světové válce a dodnes ji používá většina tuzemských včelařů.
+    Vysoká míra vybavenosti a dostupnost rámků, mezistěn i nástavků v tuzemské
+    prodejní síti činí z Optimalu logickou volbu pro začínající chovatele.
+    Příslušenství pro tento systém vyrábí řada domácích i slovenských dílen, ceny
+    jsou zpravidla nižší než u importovaného Langstrothu.
+  pro_zacatecniky: true
+  orientacni_cena: 2 000–5 000 Kč za nástavek
+  image_url: /images/vcelarstvi/vybaveni/optimal.webp
+  related:
+    - nastavkovy-ul
+    - langstroth
+    - ramek
+
+- slug: mezistena
+  name: Mezistěna
+  kategorie: zpracovani
+  popis_kratky: Voskový základ s předlisovanými buňkami, který včely vkládají do rámku a rychle dostavují do hotového plástu.
+  description: >
+    Mezistěna je tenká vosková deska s předlisovanými šestiúhelníkovými základy buněk,
+    která urychluje stavbu plástů a nasměruje včely ke stavbě buněk standardní velikosti.
+    Vkládá se do připraveného rámku s napjatými dráty, které ji mechanicky zpevňují,
+    a následně se fixuje zatavením pomocí elektrického zdroje nebo vyhřívaného kolečka.
+    Kvalitní mezistěny jsou vyrobeny z čistého včelího vosku bez příměsí parafinu;
+    jejich biologická čistota přímo ovlivňuje zdraví plodu v buňkách.
+  pro_zacatecniky: true
+  orientacni_cena: od 20 Kč za kus (Optimal), 100–350 Kč za kg vosku
+  image_url: /images/vcelarstvi/vybaveni/mezistena.webp
+  related:
+    - ramek
+    - optimal
+    - langstroth
+
+- slug: ramek
+  name: Rámek
+  kategorie: naradi
+  popis_kratky: Dřevěný nebo plastový rámeček nesoucí plást, který se vkládá do nástavku a umožňuje vyjímání díla bez jeho poškození.
+  description: >
+    Rámek tvoří základní nosnou jednotku plástu — včely jej osídlí voskem, do mezistěny
+    zastaví buňky a matka v nich klade vajíčka nebo dělnice skladují med a pyl.
+    Standardní provedení je dřevěné s horní lištou, postranními loučkami a spodní lištou;
+    mezi loučkami se napínají ocelové nebo mosazné dráty, na které se fixuje mezistěna.
+    Rozměry rámku určují rámkovou míru celého úlu — záměna rámků Optimal a Langstroth
+    není možná bez úpravy nástavku.
+  pro_zacatecniky: true
+  orientacni_cena: 10–30 Kč za kus
+  image_url: /images/vcelarstvi/vybaveni/ramek.webp
+  related:
+    - mezistena
+    - optimal
+    - langstroth
+    - nastavkovy-ul
+
+- slug: medomet
+  name: Medomet
+  kategorie: zpracovani
+  popis_kratky: Odstředivka na vytáčení medu z plástů pomocí odstředivé síly bez jejich poškození.
+  description: >
+    Medomet pracuje na principu odstředivky — plásty (nebo celé rámky) se vkládají
+    do rotujícího bubnu a odstředivá síla vytlačí med z buněk do válcové nádoby,
+    odkud stéká výpustným kohoutem do nádoby.
+    Ruční medometry s kapacitou 2–4 rámků jsou cenově dostupné a postačují pro menší
+    chov do 10 úlů; elektrické přístroje s kapacitou 9 rámků a více šetří čas
+    při rozsáhlejší sklizni.
+    Klíčový parametr je kompatibilita s rámkovou mírou (Optimal nebo Langstroth),
+    protože kazety v bubnu nelze vždy přizpůsobit oběma mírám.
+  pro_zacatecniky: false
+  orientacni_cena: 2 000–6 000 Kč (ruční), od 8 000 Kč (elektrický)
+  image_url: /images/vcelarstvi/vybaveni/medomet.webp
+  related:
+    - rozperka
+    - ramek
+
+- slug: kurak
+  name: Dýmák (kuřák)
+  kategorie: ochrana
+  popis_kratky: Nástroj produkující studený kouř, který zklidňuje včely při manipulaci s úlem a snižuje riziko žihadel.
+  description: >
+    Dýmák se skládá z nerezového nebo pocínovaného spalovacího košíčku s měchovým
+    dmychadlem; jako palivo slouží suchá tráva, dřevěné piliny, kůra nebo speciální
+    pelety z přírodních materiálů.
+    Kouř způsobuje, že včely reflexivně přijímají med a připravují se na únik před
+    požárem — v tomto stavu jsou méně agresivní a snadněji snášejí zásah chovatele.
+    Správné používání dýmáku patří k základním dovednostem každého včelaře a výrazně
+    snižuje počet žihadel jak chovatele, tak sousedů při práci na stanovišti.
+  pro_zacatecniky: true
+  orientacni_cena: 300–800 Kč
+  image_url: /images/vcelarstvi/vybaveni/kurak.webp
+  related:
+    - vcelarsky-oblek
+    - rozperka
+
+- slug: vcelarsky-oblek
+  name: Včelařský oblek a kukla
+  kategorie: ochrana
+  popis_kratky: Ochranný oděv a síťovaná kukla bránící žihadlům při práci s úlem, pro začátečníky doporučen celý oblek.
+  description: >
+    Včelařský oblek tvoří kombinéza z hustě tkaného světlého materiálu (bavlna nebo
+    polyester s bavlnou) s elastickými manžetami na zápěstích a kotnících, která
+    zamezuje průniku včel pod oděv.
+    Kukla s kovovou nebo plastovou sítí chrání obličej a krk; existují samostatné
+    kukly pro použití s vlastním oděvem i integrované kukly přímo sešité s kombinézou.
+    Pro začátečníky odborné organizace jako Český svaz včelařů doporučují celý oblek
+    s integrovanou kuklou — zkušenější chovatelé s mírným plemenem často pracují
+    pouze v kuklách s rukavicemi.
+  pro_zacatecniky: true
+  orientacni_cena: 600–1 800 Kč (kukla), 1 500–4 000 Kč (celý oblek)
+  image_url: /images/vcelarstvi/vybaveni/vcelarsky-oblek.webp
+  related:
+    - kurak
+    - rozperka
+
+- slug: rozperka
+  name: Rozpěrka (páčidlo)
+  kategorie: naradi
+  popis_kratky: Nerezové páčidlo na oddělování propolis-slepených nástavků a rámků, základní každodenní nářadí včelaře.
+  description: >
+    Rozpěrka je tvarovaná nerezová tyč délky přibližně 20–25 cm s mírně zahnutým
+    klínovým koncem a rovným škrabákem na druhé straně.
+    Slouží k oddělování nástavků slepených propolisem, k uvolňování rámků z úzkých
+    mezer a ke škrábání usazeného propolis nebo vosku ze stěn nástavku.
+    Bez tohoto nástroje nelze bezpečně otevřít úl bez poškození díla nebo
+    drcení včel — jde proto o první kus nářadí, který každý začínající včelař pořizuje.
+  pro_zacatecniky: true
+  orientacni_cena: 80–250 Kč
+  image_url: /images/vcelarstvi/vybaveni/rozperka.webp
+  related:
+    - kurak
+    - vcelarsky-oblek
+    - medomet
+
+- slug: krmitko
+  name: Krmítko
+  kategorie: krmeni
+  popis_kratky: Nádoba umísťovaná přímo do nebo nad úl pro podávání cukerného roztoku při zazimování nebo nouzovém krmení.
+  description: >
+    Krmítko slouží k doplnění energetických zásob včelstva v období, kdy přirozená
+    snůška nestačí — typicky při zazimování v září a říjnu nebo v chudém meziobdobí
+    během léta.
+    Stropní krmítko (ploché, pokrývající celý strop nástavku) pojme 1–3 litry roztoku
+    a včely k němu přistupují přes otvor zespod; rámkové krmítko má tvar úzkého rámku
+    a vkládá se přímo mezi plásty.
+    Cukerný roztok se připravuje v poměru 1:1 (jar) nebo 2:1 (zásoby na zimu) a jeho
+    dávkování se řídí hmotností zimní zásoby doporučenou Českým svazem včelařů,
+    zpravidla 15–20 kg na zimující rodinu.
+  pro_zacatecniky: true
+  orientacni_cena: 100–400 Kč
+  image_url: /images/vcelarstvi/vybaveni/krmitko.webp
+  related:
+    - nastavkovy-ul
+    - ramek
