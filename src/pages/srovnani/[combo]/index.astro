@@ -19,9 +19,10 @@ import {
   relatedComparisonsFor,
   type ComparisonPair,
 } from '../../../lib/comparator';
-import { breadcrumbSchema, itemListSchema } from '../../../lib/structured-data';
+import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../../lib/structured-data';
 import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
+import { comparisonInsights } from '../../../lib/comparison-insights';
 
 export async function getStaticPaths() {
   // Expand z 220 na ~1500 párů — širší tolerance výkonu + víc konkurentů
@@ -73,12 +74,21 @@ const bPhoto = b.image_url ?? bSeries?.series.image_url ?? categoryFallback;
 const aUseCase = useCaseDescription(a.category, a.power_hp);
 const bUseCase = useCaseDescription(b.category, b.power_hp);
 
+// Dynamic per-pair insights: TL;DR verdict, decision boxes, FAQs, fresh
+// description with concrete diff numbers. Generated from StrojFlatModel data
+// so each of ~1500 pages reads uniquely (no boilerplate Google demotes).
+const insights = comparisonInsights(a, b);
+
 const canonical = `https://agro-svet.cz/srovnani/${pair.combo}/`;
 const categoryLabel = a.category === 'traktory' ? 'traktorů' : 'kombajnů';
 const title = `${aDisplay} vs ${bDisplay} — srovnání ${categoryLabel}`;
-const description = `Porovnání ${aDisplay} a ${bDisplay}: výkon, motor, převodovka, hmotnost a další parametry vedle sebe.`;
+const description = insights.shortDescription;
 
 const related = relatedComparisonsFor(a, 6).filter((p) => p.combo !== pair.combo).slice(0, 5);
+
+const lastUpdatedHuman = new Date(insights.lastUpdatedIso).toLocaleDateString('cs-CZ', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
@@ -92,6 +102,7 @@ const itemListJsonLd = itemListSchema(
   ],
   `Srovnání: ${aDisplay} vs ${bDisplay}`,
 );
+const faqJsonLd = insights.faqs.length > 0 ? faqPageSchema(insights.faqs) : null;
 
 function formatCell(value: number | string | null | undefined, unit?: string): string {
   if (value === null || value === undefined || value === '') return '—';
@@ -108,6 +119,7 @@ function modelLink(m: typeof a): string {
 <Layout title={title} description={description} canonical={canonical} ogImage={aPhoto}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
 
   <div class="cmp-page">
 
@@ -122,10 +134,14 @@ function modelLink(m: typeof a): string {
     <header class="hero">
       <span class="kicker">Srovnání · {a.category === 'traktory' ? 'Traktory' : 'Kombajny'}</span>
       <h1>{aDisplay} <em>vs</em> {bDisplay}</h1>
-      <p class="hero-lede">
-        Boční srovnání klíčových parametrů. Údaje vychází z technických specifikací výrobců;
-        skutečná výbava se může lišit dle konfigurace.
-      </p>
+      <p class="hero-lede">{insights.tldr}</p>
+      <div class="hero-meta">
+        <span class="hm-brand"><a href={`/znacky/${a.brand_slug}/`}>{a.brand_name}</a></span>
+        <span class="hm-sep" aria-hidden="true">·</span>
+        <span class="hm-brand"><a href={`/znacky/${b.brand_slug}/`}>{b.brand_name}</a></span>
+        <span class="hm-sep" aria-hidden="true">·</span>
+        <time class="hm-date" datetime={insights.lastUpdatedIso}>Aktualizováno {lastUpdatedHuman}</time>
+      </div>
     </header>
 
     <section class="duo">
@@ -201,6 +217,38 @@ function modelLink(m: typeof a): string {
         Údaje typu motor a převodovka jsou kvalitativní — neutrální v zobrazení.
       </p>
     </section>
+
+    <section class="decision" aria-labelledby="decision-h">
+      <h2 id="decision-h">Kdy si vybrat {aDisplay}, kdy {bDisplay}</h2>
+      <div class="decision-grid">
+        <article class="dc-card dc-a">
+          <span class="dc-brand">{a.brand_name}</span>
+          <h3 class="dc-name">{aDisplay}</h3>
+          <p class="dc-text">{insights.decisionA}</p>
+          <a class="dc-link" href={modelLink(a)}>Detail modelu →</a>
+        </article>
+        <article class="dc-card dc-b">
+          <span class="dc-brand">{b.brand_name}</span>
+          <h3 class="dc-name">{bDisplay}</h3>
+          <p class="dc-text">{insights.decisionB}</p>
+          <a class="dc-link" href={modelLink(b)}>Detail modelu →</a>
+        </article>
+      </div>
+    </section>
+
+    {insights.faqs.length > 0 && (
+      <section class="cmp-faq" aria-labelledby="faq-h">
+        <h2 id="faq-h">Časté otázky</h2>
+        <div class="faq-list">
+          {insights.faqs.map((f) => (
+            <details class="faq-item">
+              <summary>{f.q}</summary>
+              <div class="faq-answer">{f.a}</div>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
 
     {related.length > 0 && (
       <section class="related-cmp" aria-labelledby="related-h">
@@ -306,6 +354,35 @@ function modelLink(m: typeof a): string {
   .bc-btn.ghost { background:rgba(255,255,255,.5); color:#0A0A0B; border:1px solid rgba(0,0,0,.15); }
   .bc-btn.ghost:hover { background:rgba(255,255,255,.8); }
 
+  .hero-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:18px; position:relative; z-index:2; font:600 12px 'Chakra Petch',sans-serif; letter-spacing:.02em; }
+  .hero-meta .hm-brand a { color:var(--yellow); text-decoration:none; padding:5px 11px; background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); border-radius:999px; transition:.15s; }
+  .hero-meta .hm-brand a:hover { background:rgba(255,234,0,.18); }
+  .hero-meta .hm-sep { color:#5c5c63; }
+  .hero-meta .hm-date { color:#9a9aa3; font-weight:500; }
+
+  .decision { margin:32px 0; }
+  .decision h2 { font:700 22px 'Chakra Petch',sans-serif; letter-spacing:-.015em; color:var(--ink); margin:0 0 16px; }
+  .decision-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .dc-card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px 24px; box-shadow:var(--sh-1); display:flex; flex-direction:column; gap:8px; }
+  .dc-card.dc-a { border-left:4px solid var(--yellow); }
+  .dc-card.dc-b { border-left:4px solid var(--ink); }
+  .dc-brand { font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  .dc-name { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.015em; color:var(--ink); margin:0; }
+  .dc-text { font-size:14.5px; line-height:1.55; color:var(--body); margin:4px 0 6px; }
+  .dc-link { font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.03em; color:var(--ink); text-decoration:none; align-self:flex-start; padding:8px 14px; background:var(--yellow-soft); border-radius:8px; transition:.15s; }
+  .dc-link:hover { background:var(--yellow); transform:translateY(-1px); }
+
+  .cmp-faq { margin:32px 0; }
+  .cmp-faq h2 { font:700 22px 'Chakra Petch',sans-serif; letter-spacing:-.015em; color:var(--ink); margin:0 0 16px; }
+  .faq-list { display:flex; flex-direction:column; gap:8px; }
+  .faq-item { background:#fff; border:1px solid var(--line); border-radius:12px; padding:0; box-shadow:var(--sh-1); overflow:hidden; }
+  .faq-item summary { cursor:pointer; padding:16px 20px; font:600 15px 'Chakra Petch',sans-serif; letter-spacing:-.005em; color:var(--ink); list-style:none; position:relative; padding-right:44px; transition:.15s; }
+  .faq-item summary::-webkit-details-marker { display:none; }
+  .faq-item summary::after { content:"+"; position:absolute; right:18px; top:50%; transform:translateY(-50%); font:700 22px sans-serif; color:var(--muted); transition:.15s; }
+  .faq-item[open] summary::after { content:"−"; color:var(--ink); }
+  .faq-item summary:hover { background:var(--bg-cream); }
+  .faq-answer { padding:0 20px 18px; font-size:14.5px; line-height:1.6; color:var(--body); }
+
   @media (max-width:760px) {
     .duo { grid-template-columns:1fr; }
     .duo-vs { order:2; width:60px; height:60px; font-size:22px; }
@@ -315,5 +392,7 @@ function modelLink(m: typeof a): string {
     .hero { padding:28px 22px; }
     .hero h1 { font-size:1.8rem; }
     .hero h1 em { margin:0 8px; }
+    .decision-grid { grid-template-columns:1fr; }
+    .dc-card { padding:18px 20px; }
   }
 </style>
