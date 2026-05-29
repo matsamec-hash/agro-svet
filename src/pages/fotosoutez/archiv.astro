@@ -1,5 +1,7 @@
 ---
-export const prerender = true;
+// SSR: stránka tahá kola/výherce ze Supabase. Při prerenderu (build) na CF
+// dotaz selže a vznikne prázdná stránka (0 B, bez title) — proto render za běhu.
+export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { createServerClient } from '../../lib/supabase';
