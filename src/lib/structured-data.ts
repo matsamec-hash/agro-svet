@@ -36,6 +36,30 @@ export function siteSchemaGraph() {
           height: 512,
         },
         description: ORG_DESCRIPTION,
+        parentOrganization: {
+          '@type': 'Organization',
+          name: 'Samec Digital s.r.o.',
+          legalName: 'Samec Digital s.r.o.',
+          url: 'https://samecdigital.com/',
+          identifier: {
+            '@type': 'PropertyValue',
+            propertyID: 'IČO',
+            value: '29547539',
+          },
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Na Břehu 378',
+            postalCode: '387 11',
+            addressLocality: 'Katovice',
+            addressCountry: 'CZ',
+          },
+        },
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          email: 'info@samecdigital.com',
+          availableLanguage: ['Czech', 'Slovak'],
+        },
       },
       {
         '@type': 'WebSite',
