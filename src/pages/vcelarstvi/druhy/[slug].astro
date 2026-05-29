@@ -142,7 +142,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         </section>
 
         <section class="body-card">
-          <div class="prose" set:html={vcela.description.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>').replace(/^(.+)$/, '<p>$1</p>')} />
+          <div class="prose" set:html={vcela.description.trim().split(/\n\n+/).map((p) => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('')} />
         </section>
 
         {vcela.wikipedia && (
