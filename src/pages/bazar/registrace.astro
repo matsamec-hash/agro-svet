@@ -14,11 +14,14 @@ if (Astro.request.method === 'POST') {
   const name = form.get('name')?.toString().trim() ?? '';
   const phone = form.get('phone')?.toString().trim() ?? '';
   const location = form.get('location')?.toString().trim() ?? '';
+  const termsAccepted = form.get('terms_accepted')?.toString() === 'on';
 
   if (!email || !password || !name || !phone) {
     error = 'Vyplňte všechna povinná pole.';
   } else if (password.length < 6) {
     error = 'Heslo musí mít alespoň 6 znaků.';
+  } else if (!termsAccepted) {
+    error = 'Pro registraci je nutné souhlasit s pravidly bazaru a podmínkami použití.';
   } else {
     const supabase = createAnonClient();
     const { data, error: authError } = await supabase.auth.signUp({
@@ -64,6 +67,7 @@ if (Astro.request.method === 'POST') {
         <div class="form-group">
           <label for="name">Jméno / firma *</label>
           <input type="text" id="name" name="name" class="form-input" required />
+          <p class="field-hint">Podnikatelé (OSVČ, firma) zde uveďte obchodní firmu a v inzerátu doplňte IČO. <a href="/bazar/pravidla/" target="_blank" rel="noopener">Pravidla bazaru</a></p>
         </div>
         <div class="form-group">
           <label for="email">Email *</label>
@@ -80,6 +84,16 @@ if (Astro.request.method === 'POST') {
         <div class="form-group">
           <label for="location">Město / okres</label>
           <LocationInput id="location" name="location" />
+        </div>
+        <div class="form-group consent-group">
+          <label class="consent-label">
+            <input type="checkbox" id="terms_accepted" name="terms_accepted" required />
+            <span>
+              Souhlasím s <a href="/bazar/pravidla/" target="_blank" rel="noopener">pravidly bazaru</a>
+              a <a href="/podminky-pouziti/" target="_blank" rel="noopener">podmínkami použití</a>.
+              Beru na vědomí <a href="/zpracovani-osobnich-udaju/" target="_blank" rel="noopener">zpracování osobních údajů</a>.
+            </span>
+          </label>
         </div>
         <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
           Zaregistrovat se
@@ -116,6 +130,12 @@ if (Astro.request.method === 'POST') {
     .btn-google:hover { background: #f9f9f9; border-color: #666; }
     .divider { display: flex; align-items: center; gap: 12px; color: #767676; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; margin: 0 0 20px; white-space: nowrap; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e4e4e4; }
+    .field-hint { font-size: 12px; color: #666; margin: 6px 0 0; line-height: 1.5; }
+    .field-hint a { color: #0B7A3B; text-decoration: underline; }
+    .consent-group { margin-top: 8px; }
+    .consent-label { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; color: #333; cursor: pointer; }
+    .consent-label input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; width: 16px; height: 16px; cursor: pointer; }
+    .consent-label a { color: #0B7A3B; text-decoration: underline; }
   </style>
 
   <script type="module" define:vars={{ supabaseUrl, supabaseKey }}>
