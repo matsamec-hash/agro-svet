@@ -21,6 +21,14 @@ export interface Plemeno {
   wikipedia?: string;
   /** Wikidata Q-entity URL. Cross-language entity anchor for AI Overviews. */
   wikidata?: string;
+  /**
+   * Volitelný redakční long-form blok (HTML). Renderuje se na detailu plemene
+   * pod charakteristikou. Smí obsahovat interní odkazy + keyword varianty —
+   * prohlubuje rankující URL místo zakládání samostatného článku (kanibalizace).
+   */
+  body?: string;
+  /** Volitelné Q&A → FAQPage JSON-LD + viditelná sekce (mirror detailu strojů). */
+  faq?: { q: string; a: string }[];
 }
 
 export interface Druh {

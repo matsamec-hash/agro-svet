@@ -132,7 +132,7 @@ const itemListJsonLd = page === 1 && displayedListings.length > 0 ? {
 } : null;
 ---
 
-<Layout title="Agro bazar — inzeráty" description="Bazar zemědělské techniky, pozemků, zvířat a služeb. Vložte inzerát zdarma.">
+<Layout title={isDefaultView ? "Bazar zemědělské techniky — traktory, stroje, pozemky a zvířata" : "Agro bazar — inzeráty"} description="Bazar zemědělské techniky, pozemků, zvířat a služeb. Inzeráty traktorů, kombajnů a strojů přímo od majitelů. Vložte inzerát zdarma.">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:32px 32px 80px;">
@@ -140,7 +140,10 @@ const itemListJsonLd = page === 1 && displayedListings.length > 0 ? {
     <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
       <div>
         <span class="section-label">Agro bazar</span>
-        <h1 style="font-size:clamp(1.8rem,4vw,2.5rem);">Inzeráty</h1>
+        <h1 style="font-size:clamp(1.8rem,4vw,2.5rem);">{isDefaultView ? 'Bazar zemědělské techniky' : 'Inzeráty'}</h1>
+        {isDefaultView && (
+          <p style="color:#666; font-size:14px; margin-top:4px; max-width:640px;">Inzeráty traktorů, kombajnů, zemědělských strojů, pozemků a zvířat přímo od majitelů — bez provize.</p>
+        )}
         {count !== null && count !== undefined && (
           <p style="color:#666; font-size:14px; margin-top:4px;">Nalezeno {count.toLocaleString('cs-CZ')} inzerátů</p>
         )}
