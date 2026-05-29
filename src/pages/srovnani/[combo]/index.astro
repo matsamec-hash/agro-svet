@@ -24,9 +24,13 @@ import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
 
 export async function getStaticPaths() {
-  // Expand z 220 na ~1500 párů — širší tolerance výkonu + víc konkurentů
-  // per source = každý model dostane víc smysluplných srovnání. Long-tail SEO.
-  const pairs = expandedComparisonPairs(1500);
+  // Expand limit na 5000 (z 1500) — pokrývá všechny ~2000 unikátní párů včetně
+  // mid-class 90–195 hp segmentu, který sort by power_sum desc dříve odřízl pod
+  // 1500. 452 active traktorů × 10 perSourceLimit → ~2200 unique pairs po dedup,
+  // takže limit 5000 zachytí všechny + headroom pro budoucí models. Bonus:
+  // všechny mid-class páry jsou teď v sitemap → discovery pro decision-stage
+  // dotazy (jak vybrat X vs Y v třídě 100-150 koní).
+  const pairs = expandedComparisonPairs(5000);
   return pairs.map((p) => ({
     params: { combo: p.combo },
     props: { pair: p },
