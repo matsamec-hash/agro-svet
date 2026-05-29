@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
 const canonical = `${SITE_URL}/pruvodce/kontrola-ojeteho-traktoru/`;
@@ -21,6 +21,22 @@ const faqs = [
 ];
 
 const faqJsonLd = faqPageSchema(faqs);
+
+const howToJsonLd = howToSchema({
+  name: 'Kontrola ojetého traktoru před koupí',
+  description: '30-bodový postupný checklist pro prohlídku ojetého traktoru: dokumenty, motor, převodovka, hydraulika, kabina, vnější komponenty. Cíl: odhalit skryté závady před podpisem smlouvy.',
+  url: canonical,
+  totalTime: 'PT1H',
+  tools: ['Diagnostický kufr (volitelně)', 'Hadr na kontrolu oleje', 'Mobilní telefon (fotky vad)', 'Tlakoměr pneumatik'],
+  steps: [
+    { name: 'Dokumenty (10 minut)', text: 'Servisní kniha (nebo digitální ekvivalent — JDLink, MyJohnDeere) je důkaz pravidelné údržby. Bez ní smlouvej cenu dolů 5–10 % nebo odejdi. Kontroluj VIN s velkým TP, technický průkaz, doklady o servisních prohlídkách.' },
+    { name: 'Motor (15 minut)', text: 'Studený start (motor stál nejméně 4 hodiny). Pozoruj kouř (bílý = chladicí kapalina, modrý = olej, černý = palivo). Kontrola oleje (barva, hladina, voda), chladicí kapaliny (barva, žádný olej), AdBlue systém. Důkladně poslouchat — žádné klepání nebo ne-rovnoměrné běhy.' },
+    { name: 'Převodovka a hnací ústrojí (10 minut)', text: 'Zkušební jízda: řazení pod zátěží všech rychlostí, vpřed i vzad. PTO test (zapnout/vypnout 3× při zatížení). Diferenciálový blok zapnout. Kardany — žádná vůle, žádné klepání. Olej v převodovce — barva (čistá), žádné kovové třísky.' },
+    { name: 'Hydraulika a tříbod (10 minut)', text: 'Tlak SCV výstupů (s kalibrovaným manometrem) — měl by držet 180–200 bar. Tříbod test: zvednutí + spuštění 5× se zátěží (alespoň 1 t). Kontrola olejových úniků na zadním víku, hadicích, válcích. Vůle čepů — žádná hra.' },
+    { name: 'Kabina a elektronika (10 minut)', text: 'Klimatizace funguje (test 5 min). Topení — všechny rychlosti. Displej a měřáky — chybové hlášky? Hodinoměr — křížový check s opotřebením sedačky a pneumatik (3000 mh + sedačka jako po 8000 = manipulace). Světla, blinkry, zvukový signál.' },
+    { name: 'Vnější komponenty (5 minut)', text: 'Pneumatiky: dezén min 30 % (jinak nový komplet 30–80 tis. Kč). Rám: žádné praskliny, žádné svary opravy. Kabelové prochody — promáčklé, prořezané? Otevři dvířka motoru — žádný zápach (jen pohonné hmoty).' },
+  ],
+});
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
@@ -43,6 +59,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
