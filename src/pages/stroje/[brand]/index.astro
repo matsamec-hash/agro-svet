@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllBrands, getBrand, seriesFamily, familyLabel, type StrojKategorie } from '../../../lib/stroje';
+import { getAllBrands, getBrand, seriesFamily, familyLabel, FUNCTIONAL_GROUPS, type StrojKategorie } from '../../../lib/stroje';
 import { createServerClient } from '../../../lib/supabase';
 import { itemListSchema } from '../../../lib/structured-data';
 
@@ -117,7 +117,7 @@ function tileSort(a: Tile, b: Tile): number {
   const bMax = b.maxHp ?? 0;
   if (aMax !== bMax) return bMax - aMax;
   if (a.modelCount !== b.modelCount) return b.modelCount - a.modelCount;
-  return a.family.localeCompare(b.family, 'cs');
+  return String(a.family).localeCompare(String(b.family), 'cs');
 }
 
 function familySublabel(family: string): string {
@@ -380,7 +380,7 @@ const seriesListJsonLd = allSeries.length > 0
               {cat.minHp !== null && cat.maxHp !== null && (<><span class="sep"></span><strong>{cat.minHp}–{cat.maxHp} k</strong></>)}
             </div>
           </div>
-          <a class="cat-cta" href={`/stroje/${cat.slug}/`}>
+          <a class="cat-cta" href={cat.slug in FUNCTIONAL_GROUPS ? `/stroje/zemedelske-stroje/${cat.slug}/` : `/stroje/${cat.slug}/`}>
             Všechny značky
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
