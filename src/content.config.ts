@@ -74,6 +74,38 @@ const znacky = defineCollection({
     wikipedia: z.string().optional(),
     /** Wikidata entity URL (Qxxxxx). Knowledge graph anchor. */
     wikidata: z.string().optional(),
+    /** Datum poslední redakční revize obsahu (E-E-A-T signál). */
+    aktualizovano: z.date().optional(),
+    /** Zakladatel — feeduje schema.org Organization.founder (Person). */
+    founder: z.object({
+      name: z.string(),
+      birth: z.string().optional(),
+      death: z.string().optional(),
+      note: z.string().optional(),
+    }).optional(),
+    /** Vizuální časová osa značky (rok + událost). Render jako vertical timeline. */
+    timeline: z.array(z.object({
+      year: z.number(),
+      label: z.string(),
+      detail: z.string().optional(),
+    })).optional(),
+    /** Snapshot stat-karty (aktuální klíčové ukazatele). */
+    snapshot: z.array(z.object({
+      label: z.string(),
+      value: z.string(),
+    })).optional(),
+    /** Finanční ukazatele po fiskálních letech — render jako tabulka. */
+    financials: z.array(z.object({
+      year: z.number(),
+      revenue: z.string().optional(),
+      netIncome: z.string().optional(),
+      note: z.string().optional(),
+    })).optional(),
+    /** Citované zdroje (jako reference na Wikipedii). */
+    sources: z.array(z.object({
+      title: z.string(),
+      url: z.string(),
+    })).optional(),
   }),
 });
 
