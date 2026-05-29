@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
 const canonical = `${SITE_URL}/pruvodce/jak-vybrat-rozmetadlo-hnojiv/`;
@@ -21,6 +21,21 @@ const faqs = [
 ];
 
 const faqJsonLd = faqPageSchema(faqs);
+
+const howToJsonLd = howToSchema({
+  name: 'Jak vybrat rozmetadlo hnojiv',
+  description: 'Postup výběru rozmetadla pro CZ farmu — od rozhodnutí talířové vs pneumatické přes klíčové parametry, top značky až po ekonomiku investice do WeighCell + VRA.',
+  url: canonical,
+  totalTime: 'PT45M',
+  steps: [
+    { name: 'Rozhodni mezi talířovým a pneumatickým rozmetadlem', text: 'Talířové (disc spreader) pro 95 % CZ farem — levné, robustní, záběr 12–36 m. Pneumatické (rameno se vzduchovým rozvodem) extrémně přesné dávkování pro VRA a úzké pásy, ale 3× dražší a komplikovanější údržba.' },
+    { name: 'Definuj objem zásobníku podle výměry', text: '200 ha = 1 500–2 500 l (jedno plnění na 5–10 ha při dávce 250 kg/ha). 500+ ha = 3 500+ l. Větší zásobník = méně plnění, ale vyšší hmotnost a riziko utužování — kompromis kolem 2 500 l je sweet spot pro většinu CZ.' },
+    { name: 'Projdi top značky 2026', text: 'Amazone ZA-V / ZG-TS (CZ standard), Kuhn Axis, Sulky X-line, Bogballe (premium dánská), Rauch Axera, Bredal F-line (samojízdný). Servisní dostupnost dealera ve tvém kraji = klíčové.' },
+    { name: 'Investuj do WeighCell + ISOBUS Section Control', text: 'WeighCell (vážený zásobník) kalibruje skutečnou dávku během jízdy, kompenzuje variabilní hustotu hnojiva. VRA + Section Control šetří 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnost ISOBUS-capable retrofit za 2–4 sezóny u 200+ ha.' },
+    { name: 'Nezapomeň na Border Control a Tronic regulaci', text: 'Border Control pro krajní pás zabraňuje úniku hnojiva mimo pole (povinné u nitrát-direktivních zón ČR). Tronic (DPAE) automaticky kompenzuje náklon a tvar pole — kritické u pahorkatin.' },
+  ],
+});
+
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
   headline: 'Jak vybrat rozmetadlo hnojiv (2026)',
@@ -37,6 +52,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">

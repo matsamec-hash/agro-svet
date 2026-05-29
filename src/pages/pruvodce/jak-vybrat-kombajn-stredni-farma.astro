@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
 const canonical = `${SITE_URL}/pruvodce/jak-vybrat-kombajn-stredni-farma/`;
@@ -22,6 +22,19 @@ const faqs = [
 ];
 
 const faqJsonLd = faqPageSchema(faqs);
+
+const howToJsonLd = howToSchema({
+  name: 'Jak vybrat kombajn pro střední farmu',
+  description: 'Postup výběru sklízecí mlátičky pro farmu 150–500 ha — od kalkulace potřebné třídy přes klíčové parametry, top 6 modelů 2026 po ekonomiku investice.',
+  url: canonical,
+  totalTime: 'PT1H30M',
+  steps: [
+    { name: 'Spočítej, kolik kombajn reálně potřebuješ', text: 'Pro farmu pod 200 ha často není návratný — výhodnější je nájem sklizňového podniku (600–1200 Kč/ha). Pro 300+ ha už vlastní kombajn ekonomicky dává smysl (8–10 mil. Kč rozložených na 10 let).' },
+    { name: 'Definuj klíčové parametry', text: 'Třída V–VII odpovídá záběru 5–8 m a výkonu 200–300 koní. Rozhodni mezi rotorem (vyšší propustnost, horší sláma) a klasickým mlatem s vytřásadly (standard v ČR, lepší sláma pro balíky, nižší cena).' },
+    { name: 'Projdi top 6 kombajnů 2026 v ČR', text: 'New Holland CX/CR střední, John Deere W/T řada, Case IH Axial-Flow 6/7, Claas Trion/Tucano, Massey Ferguson Activa/Beta, Fendt L/E. Porovnej dostupnost dealera ve tvém kraji + náhradní díly.' },
+    { name: 'Spočítej ekonomiku — nájem, vlastní, plus pronájem souseda', text: 'Začni leasingem 5–7 let. Pronájem souseda pro 200–400 ha navíc/sezónu zaplatí 30–50 % roční amortizace. Smluvně, ne ústně. Reálná cena nájmu = leasing splátka + nafta + obsluha + servis.' },
+  ],
+});
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
@@ -46,6 +59,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">

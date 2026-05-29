@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
 const canonical = `${SITE_URL}/pruvodce/prvni-traktor-mlady-zemedelec/`;
@@ -21,6 +21,21 @@ const faqs = [
 ];
 
 const faqJsonLd = faqPageSchema(faqs);
+
+const howToJsonLd = howToSchema({
+  name: 'První traktor pro mladého zemědělce',
+  description: 'Postup výběru prvního traktoru pro začínající farmu 30–60 hektarů s ohledem na dotaci Mladý zemědělec (CAP 2024) a omezený rozpočet — od specifik startovací farmy přes rozpočet po růstovou strategii.',
+  url: canonical,
+  totalTime: 'PT2H',
+  steps: [
+    { name: 'Pochop specifika startovací farmy', text: 'Začínáš na 30–60 ha s omezeným kapitálem. Tvůj traktor musí zvládnout 80 % polních prací (orba, smyk, secí, postřik) + transport. Pravidlo: spíš menší robustní (Zetor Forterra, JD 6M) než větší premium (Fendt 514). Nepřeplácej za neaktuální features.' },
+    { name: 'Definuj rozpočet a strategii', text: '1,5–2,5 mil. Kč na ojetý traktor (Zetor Forterra HSX 100–140, JD 6M 130, NH T6 5–8 let starý) + 200–400 tis. Kč na pluh, secí, vůz, drobné nářadí. Leasing 5–7 let pokud cashflow napjatý. Nepřemýšlej nákup nového bez dotace PRV 33.73.' },
+    { name: 'Vyber doporučené modely', text: 'Pro 30–60 ha: Zetor Forterra HSX 100–140 (1,2–1,8 mil. Kč nový, 700–1300 tis. ojetý), JD 6M 110–130, NH T6 150–180, MF 5S 145, Case IH Maxxum 115. Powershift (ne CVT) — robustnější, levnější servis. Servisní síť v tvém kraji je rozhodující.' },
+    { name: 'Plánuj růst farmy dopředu', text: 'Při růstu na 100–200 ha za 5–7 let budeš potřebovat 130–160 koní místo 100–120. Strategie: kup teď ojetý 130 koní (budeš ho používat 7+ let), místo nového 100 koní (za 3 roky malý). Nebo: kup malý nový s dotací Mladý zemědělec + plánuj druhý traktor za 4 roky.' },
+    { name: 'Vyhni se top 5 začátečnickým chybám', text: '(1) Nepřepláceni za CVT, ISOBUS, premium značku — pro start zbytečné. (2) Nekup příliš starý (>10 let) — servis tě sežere. (3) Nepodepisuj nájem stroje "first option to buy" — vždy raději leasing. (4) Nezapomeň zahrnout DPH a registraci (cca 23 % navíc). (5) Nečerpej dotaci na traktor co bys nekoupil i bez ní.' },
+  ],
+});
+
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
   headline: 'První traktor pro mladého zemědělce',
@@ -37,6 +52,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">

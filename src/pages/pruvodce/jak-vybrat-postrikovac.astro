@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
 const canonical = `${SITE_URL}/pruvodce/jak-vybrat-postrikovac/`;
@@ -22,6 +22,21 @@ const faqs = [
 ];
 
 const faqJsonLd = faqPageSchema(faqs);
+
+const howToJsonLd = howToSchema({
+  name: 'Jak vybrat postřikovač',
+  description: 'Postup výběru postřikovače pro CZ farmu — od rozhodnutí nesený/tažený/samojízdný přes klíčové parametry, ISOBUS Section Control až po top značky a cenovou orientaci.',
+  url: canonical,
+  totalTime: 'PT1H',
+  steps: [
+    { name: 'Rozhodni mezi neseným, taženým a samojízdným', text: 'Nesený (na tříbod, 600–1200 l, 200–500 tis. Kč) pro farmy do 100 ha. Tažený (5 000–10 000 l, 800 tis. – 2 mil. Kč) pro 100–500 ha. Samojízdný (3+ mil. Kč) pro 500+ ha nebo službovou činnost.' },
+    { name: 'Definuj záběr ramen podle tvaru polí', text: '12–18 m standard pro CZ farmy 100–500 ha. 21–24 m pro velké lány bez překážek. 28+ m pro 800+ ha. Pravidlo: záběr by neměl převyšovat 40 % průměrné šířky tvých polí.' },
+    { name: 'Projdi top značky 2026', text: 'Amazone (UX/UF nesený, UG tažený — standard CZ), Horsch Leeb (premium tažený), John Deere R4 (samojízdný), Berthoud (francouzská kvalita), Lemken Sirius, Hardi, Kuhn Deltis. Servis dealera ve tvém kraji = kritické pro sezónu.' },
+    { name: 'Investuj do ISOBUS Section Control + RTK GPS', text: 'Section Control šetří 5–15 % chemie ročně (souvratě, překryt). Pro farmu 300 ha s nákladem 5 000 Kč/ha/sezónu na chemii = úspora 75–225 tis. Kč/rok. Návratnost retrofit (250–500 tis. Kč) za 2–4 sezóny.' },
+    { name: 'Vyber správné trysky podle aplikace', text: 'Injektorové anti-drift 03/04 standard. Pre-em herbicidy: širokopaprskové ploché 110°. Listové fungicidy: úzkopaprskové. Sady trysek 4–15 tis. Kč podle počtu sekcí. Drift Reduction Technology (DRT) povinná pro nové programy CAP.' },
+  ],
+});
+
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
   headline: 'Jak vybrat postřikovač (2026)',
@@ -38,6 +53,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">

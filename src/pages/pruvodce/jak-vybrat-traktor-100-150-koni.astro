@@ -1,8 +1,10 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { pairsInPowerRange } from '../../lib/pruvodce-pairs';
+import { modelDisplayName } from '../../lib/comparator';
 
 const canonical = `${SITE_URL}/pruvodce/jak-vybrat-traktor-100-150-koni/`;
 const datePublished = '2026-05-16';
@@ -46,6 +48,23 @@ const faqs = [
 
 const faqJsonLd = faqPageSchema(faqs);
 
+const howToJsonLd = howToSchema({
+  name: 'Jak vybrat traktor 100–150 koní',
+  description: 'Postup výběru traktoru pro střední farmu 50–200 hektarů — od potřeb a rozpočtu přes klíčové parametry, top modely, rozhodnutí nový vs ojetý, prohlídku až po vyjednávání ceny.',
+  url: canonical,
+  totalTime: 'PT2H',
+  steps: [
+    { name: 'Ověř si, že potřebuješ právě třídu 100–150 koní', text: 'Pro farmu 50–200 ha s typickým nasazením 600–1200 motohodin/rok je tato třída sweet spot. Pod 50 ha zvaž 80–100 k, nad 200 ha 160–200 k.' },
+    { name: 'Definuj klíčové parametry', text: 'Hmotnost 5–7 t pro orbu, typ převodovky (powershift levnější, CVT komfortnější), tříbod Cat II min 5000 kg, hydraulika min 4 SCV výstupy, ISOBUS pokud plánuješ moderní nářadí.' },
+    { name: 'Projdi top 8 modelů 2026 v ČR', text: 'Zetor Forterra HSX 140, John Deere 6M 130 / 6R 150, NH T6.180, MF 6S 165, Case IH Puma 165, Fendt 514 Vario, Deutz-Fahr 6135C. Porovnej cenu, servisní síť, dostupnost náhradních dílů.' },
+    { name: 'Rozhodni nový vs ojetý', text: 'Ojetý 3–5 let starý se 2500–4000 mth = best value (50–60 % ceny nového, 60–75 % zbývající životnosti). Nový se vyplatí při čerpání PRV dotace nebo 10+ letém držení.' },
+    { name: 'Prověř ojetý traktor osobně', text: 'Checklist: motor (kompresní test, AdBlue systém), převodovka (řazení pod zátěží), hydraulika (tlak SCV), tříbod (vůle), kabina (klima), pneumatiky (dezén min 30 %). Délka prohlídky 60 minut.' },
+    { name: 'Vyjednej cenu a dohodni převzetí', text: 'Reference: ojetý mid-tier 4–5 let / 3500 mth = 1,4–1,8 mil. Kč. Vyjednávej o cenu PHM v nádrži (–10 000 Kč), o nářadí (přední závaží, dvojkolí), o servisním balíčku (první servis zdarma).' },
+  ],
+});
+
+const recommendedPairs = pairsInPowerRange({ category: 'traktory', hpMin: 95, hpMax: 165, limit: 5 });
+
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -70,6 +89,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
@@ -318,6 +338,23 @@ const articleJsonLd = {
         </div>
       </section>
 
+      {recommendedPairs.length > 0 && (
+        <section class="reco-pairs" aria-labelledby="reco-pairs-h">
+          <h2 id="reco-pairs-h">Doporučená srovnání pro tuto třídu</h2>
+          <p class="reco-pairs-lede">Side-by-side srovnání modelů 100–160 koní s technickými parametry, motorem, převodovkou a hmotností.</p>
+          <ul class="reco-pairs-list">
+            {recommendedPairs.map((p) => (
+              <li>
+                <a href={`/srovnani/${p.combo}/`}>
+                  <span class="rp-pair">{modelDisplayName(p.a)} <em>vs</em> {modelDisplayName(p.b)}</span>
+                  <span class="rp-cta">Otevřít srovnání →</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section class="cta-section">
         <h2>Další kroky</h2>
         <ul class="cta-list">
@@ -380,4 +417,13 @@ const articleJsonLd = {
   .cta-list { list-style: none; padding: 0; }
   .cta-list li { font-size: 15px; line-height: 1.8; padding: 4px 0; }
   .cta-list a { color: #0B7A3B; font-weight: 600; text-decoration: underline; }
+  .reco-pairs { margin-top: 36px; padding: 24px; background: #FBFAF4; border: 1px solid #EAEAEC; border-radius: 14px; }
+  .reco-pairs h2 { margin-top: 0; font-size: 22px; }
+  .reco-pairs-lede { color: #555; font-size: 14.5px; margin: 6px 0 14px; }
+  .reco-pairs-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .reco-pairs-list a { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; background: #fff; border: 1px solid #EAEAEC; border-radius: 10px; text-decoration: none; color: #0A0A0B; transition: .15s; }
+  .reco-pairs-list a:hover { background: #FFF6A8; border-color: #FFEA00; transform: translateY(-1px); }
+  .rp-pair { font-weight: 600; font-size: 14.5px; }
+  .rp-pair em { font-style: normal; color: #888; margin: 0 6px; }
+  .rp-cta { color: #0B7A3B; font-weight: 600; font-size: 13px; flex-shrink: 0; }
 </style>

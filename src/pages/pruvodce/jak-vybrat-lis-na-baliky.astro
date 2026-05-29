@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
 const canonical = `${SITE_URL}/pruvodce/jak-vybrat-lis-na-baliky/`;
@@ -21,6 +21,21 @@ const faqs = [
 ];
 
 const faqJsonLd = faqPageSchema(faqs);
+
+const howToJsonLd = howToSchema({
+  name: 'Jak vybrat lis na balíky',
+  description: 'Postup výběru lisu na balíky pro CZ farmu — od rozhodnutí kulatý vs hranolový přes klíčové parametry, kombi s wrapperem, top značky až po cenovou orientaci 2026.',
+  url: canonical,
+  totalTime: 'PT1H',
+  steps: [
+    { name: 'Rozhodni mezi kulatým a hranolovým lisem', text: 'Kulatý (round) je standard pro CZ farmy do 500 dojnic — balík 600–1000 kg manévrovatelný traktorem s vidlemi. Hranolový (square) hustší balík pro export, ale 2× dražší a vyžaduje silnější traktor + speciální stahovák.' },
+    { name: 'Definuj klíčové parametry — záběr, fixaci, velikost balíku', text: 'Net wrap (3–5 obtáček) preferuj před provázkem (18–22 obtáček) — rychlejší, pevnější, pro siláž jediná možnost. Velikost 120×120 cm (kulatý ~600 kg) je standard pro CZ.' },
+    { name: 'Zvaž kombi lis + wrapper pro silážní balíky', text: 'Standardní postup: lisování + okamžité wrappování do 2 hodin (aby fermentace začala anaerobně). Kombi (McHale Fusion, Krone Comprima Wrap) udělá obojí v 1 jízdě, cena +500 tis. – 1 mil. Kč vs samostatný lis + wrapper.' },
+    { name: 'Projdi top značky 2026', text: 'Kuhn (silážní mistr v CZ), Pöttinger (rakouská kvalita), McHale (kombi specialista), Claas Rollant (svaroch standard), Krone Comprima, John Deere V/F řada, New Holland Roll-Bar. Porovnej dostupnost dealera ve tvém kraji.' },
+    { name: 'Spočítej náklady na balík', text: 'Síť 30–50 Kč/balík, mzda obsluhy + nafta cca 80–120 Kč/balík, amortizace stroje 50–100 Kč/balík (závisí na obratu). Total ~200–280 Kč/balík vlastní výroby, srovnej s nájmem sklizňového podniku.' },
+  ],
+});
+
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
   headline: 'Jak vybrat lis na balíky (2026)',
@@ -37,6 +52,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">

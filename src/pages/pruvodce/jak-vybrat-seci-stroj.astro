@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
+import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
 const canonical = `${SITE_URL}/pruvodce/jak-vybrat-seci-stroj/`;
@@ -21,6 +21,21 @@ const faqs = [
 ];
 
 const faqJsonLd = faqPageSchema(faqs);
+
+const howToJsonLd = howToSchema({
+  name: 'Jak vybrat secí stroj',
+  description: 'Postup výběru secího stroje pro CZ farmu — mechanický vs pneumatický, záběr a kompatibilita s traktorem, klasický vs bezorebný, ISOBUS funkce, top značky.',
+  url: canonical,
+  totalTime: 'PT45M',
+  steps: [
+    { name: 'Rozhodni mezi mechanickým a pneumatickým', text: 'Mechanický (gravitační, výsevný kotouč) je levný a robustní pro obiloviny — standard CZ. Pneumatický (vzduchový rozvod) je přesnější pro úzké řádky, ale dražší a vyžaduje výkonnější traktor pro pohon ventilátoru.' },
+    { name: 'Sladění záběru s traktorem', text: '3 m záběr standard pro 70–120 koní traktor (vejde se Zetor Forterra, JD 6M 130). 4 m vyžaduje 130+ koní. 6 m je už pro speciální velké stroje 200+ koní. Pro 150 ha farmu stačí 3 m, pro 300+ ha zvažte 4 m.' },
+    { name: 'Klasický (do připravené půdy) nebo bezorebný (no-till)', text: 'Klasický seje do orané + smykované půdy — nejstabilnější výnos. Bezorebný (disko-secí Horsch Pronto / Lemken Solitair / Väderstad Tempo) seje přímo do strniště — šetří 5 operací, ale vyšší dávky herbicidů.' },
+    { name: 'Projdi top značky a modely', text: 'Amazone D9 / Cirrus (CZ standard), Horsch Pronto (velkofarmy), Lemken Solitair, Väderstad Spirit / Tempo, Pöttinger Vitasem, Sulky DPX, Kuhn Espro. Dostupnost dealera a náhradních dílů ve tvém kraji je rozhodující.' },
+    { name: 'Posuď klíčové features — ISOBUS, VRA, jednotlivé řízení řádků', text: 'Pro obiloviny ISOBUS neřeš. Pro VRA (variabilní dávkování dle GPS mapy) nebo Section Control ano — pak ISOBUS-capable secí + traktor s TC-GEO licencí. Single Shoot vs Twin Shoot (separátní osivo + hnojivo) zvyš výnos o 5–10 %.' },
+  ],
+});
+
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
   headline: 'Jak vybrat secí stroj — mechanický vs pneumatický',
@@ -37,6 +52,7 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
