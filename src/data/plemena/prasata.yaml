@@ -3,89 +3,105 @@ name: Prase domácí
 name_plural: Plemena prasat
 description: >
   Přehled plemen prasat chovaných v České republice a Evropě. Mateřská plemena
-  (Bílé ušlechtilé, Česká landrasa) tvoří základ chovů, otcovské linie (Pietrain,
-  Duroc, Hampshire) zajišťují svalnatost a kvalitu masa. Dataset zahrnuje
-  původ, hmotnost, plodnost a hlavní chovné znaky včetně českého původního
-  Přeštického černostrakatého.
+  (Bílé ušlechtilé, Česká landrasa) tvoří základ chovů, otcovské linie
+  (Pietrain, Duroc, Hampshire) zajišťují svalnatost a kvalitu masa. Dataset
+  zahrnuje původ, hmotnost, plodnost a hlavní chovné znaky včetně českého
+  původního Přeštického černostrakatého.
 
 plemena:
   # ========== MATEŘSKÁ PLEMENA (uznaná v ČR) ==========
   - slug: bile-uslechtile
     name: Bílé ušlechtilé prase
-    alternative_names: [Large White, Yorkshire, BU]
+    alternative_names: [ Large White, Yorkshire, BU ]
     origin_country: Velká Británie
     year_registered: 1868
-    uzitkovost: [maso, kombinovane]
+    uzitkovost: [ maso, kombinovane ]
     color: "bílá, růžová kůže, polostojaté uši"
     weight_male_kg: 350
     weight_female_kg: 270
     description: >
-      Nejrozšířenější mateřské plemeno v ČR i ve světě — základ téměř všech komerčních
-      hybridních linií. Šlechtěno od poloviny 19. století v Yorkshire. Vysoká plodnost
-      (12–14 selat ve vrhu), výborné mateřské vlastnosti, dobrá růstovost a zmasilost.
-      V hybridních programech tvoří prarodičovskou linii (často kříženo s landrasou).
+      Nejrozšířenější mateřské plemeno v ČR i ve světě — základ téměř všech
+      komerčních hybridních linií. Šlechtěno od poloviny 19. století v
+      Yorkshire. Vysoká plodnost (12–14 selat ve vrhu), výborné mateřské
+      vlastnosti, dobrá růstovost a zmasilost. V hybridních programech tvoří
+      prarodičovskou linii (často kříženo s landrasou).
     wikipedia: https://en.wikipedia.org/wiki/Large_White_pig
     wikidata: https://www.wikidata.org/wiki/Q1363458
+    image_url: /images/plemena/prasata/bile-uslechtile.webp
+    image_credit: AI-generated (gpt-image-1)
+    image_license: Synthetic — illustrative only
 
   - slug: ceska-landrasa
     name: Česká landrasa
-    alternative_names: [ČL]
+    alternative_names: [ ČL ]
     origin_country: Česká republika
     year_registered: 1972
-    uzitkovost: [maso, kombinovane]
+    uzitkovost: [ maso, kombinovane ]
     color: "bílá, dlouhé převislé uši"
     weight_male_kg: 320
     weight_female_kg: 250
     description: >
       Národní české mateřské plemeno vyšlechtěné z dovezené dánské landrasy a
       domácích bílých plemen. Druhá nejvýznamnější mateřská linie v ČR. Vyšší
-      plodnost (12–13 selat) a delší tělesný rámec než BU. Často se kříží
-      s bílým ušlechtilým prasetem pro F1 mateřskou prasnici.
+      plodnost (12–13 selat) a delší tělesný rámec než BU. Často se kříží s
+      bílým ušlechtilým prasetem pro F1 mateřskou prasnici.
     wikipedia: https://cs.wikipedia.org/wiki/%C4%8Cesk%C3%A1_landrase
     wikidata: https://www.wikidata.org/wiki/Q30320655
+    image_url: /images/plemena/prasata/ceska-landrasa.webp
+    image_credit: AI-generated (gpt-image-1)
+    image_license: Synthetic — illustrative only
 
   - slug: landrasa
     name: Landrasa
-    alternative_names: [Danish Landrace, Belgická landrasa]
+    alternative_names: [ Danish Landrace, Belgická landrasa ]
     origin_country: Dánsko
     year_registered: 1895
-    uzitkovost: [maso, kombinovane]
+    uzitkovost: [ maso, kombinovane ]
     color: "bílá, dlouhé převislé uši, prodloužené tělo"
     weight_male_kg: 320
     weight_female_kg: 230
     description: >
-      Severské mateřské plemeno se silně prodlouženým tělem (více obratlů — výborný
-      poměr svalovina/kost). Základ dánských a holandských šlechtitelských programů.
-      Vysoká plodnost a mléčnost. V Belgii vznikla varianta Belgická landrasa
-      s vyšší zmasilostí (obsahuje gen RYR-1 — citlivost na stres).
+      Severské mateřské plemeno se silně prodlouženým tělem (více obratlů —
+      výborný poměr svalovina/kost). Základ dánských a holandských
+      šlechtitelských programů. Vysoká plodnost a mléčnost. V Belgii vznikla
+      varianta Belgická landrasa s vyšší zmasilostí (obsahuje gen RYR-1 —
+      citlivost na stres).
 
-  # ========== OTCOVSKÁ / TERMINÁLNÍ PLEMENA ==========
+    # ========== OTCOVSKÁ / TERMINÁLNÍ PLEMENA ==========
     wikipedia: https://cs.wikipedia.org/wiki/Landrase
     wikidata: https://www.wikidata.org/wiki/Q1270172
+    image_url: /images/plemena/prasata/landrasa.webp
+    image_credit: Unknown authorUnknown author
+    image_license: Public domain
+    image_source_url: https://commons.wikimedia.org/wiki/File:Danish_Landrace_sow,_1909.jpg
   - slug: pietrain
     name: Pietrain
-    alternative_names: [PN]
+    alternative_names: [ PN ]
     origin_country: Belgie
     year_registered: 1950
-    uzitkovost: [maso]
+    uzitkovost: [ maso ]
     color: "strakatá černobílá až šedá, krátké stojaté uši"
     weight_male_kg: 280
     weight_female_kg: 220
     description: >
       Belgické otcovské plemeno z obce Pietrain. Extrémní svalnatost — nejvyšší
-      podíl svaloviny v jatečně upraveném těle (60–65 %), výrazně vyklenuté kýty.
-      Klasická linie nese halotanový gen (citlivost na stres a PSE maso),
+      podíl svaloviny v jatečně upraveném těle (60–65 %), výrazně vyklenuté
+      kýty. Klasická linie nese halotanový gen (citlivost na stres a PSE maso),
       moderní stres-rezistentní varianta (NN) je preferovaná. V ČR dominantní
       otcovské plemeno pro finální hybridy.
     wikipedia: https://cs.wikipedia.org/wiki/Pietrainsk%C3%A9_prase
     wikidata: https://www.wikidata.org/wiki/Q956817
+    image_url: /images/plemena/prasata/pietrain.webp
+    image_credit: L. Mahin
+    image_license: CC BY-SA 3.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:Pourceas_Piitrin.jpg
 
   - slug: duroc
     name: Duroc
-    alternative_names: [D]
+    alternative_names: [ D ]
     origin_country: USA
     year_registered: 1880
-    uzitkovost: [maso]
+    uzitkovost: [ maso ]
     color: "červená až tmavě hnědá, polopřevislé uši"
     weight_male_kg: 400
     weight_female_kg: 300
@@ -97,67 +113,82 @@ plemena:
       značek vepřového.
     wikipedia: https://en.wikipedia.org/wiki/Duroc_pig
     wikidata: https://www.wikidata.org/wiki/Q1205207
+    image_url: /images/plemena/prasata/duroc.webp
+    image_credit: Fabricio Cardenas
+    image_license: CC BY-SA 4.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:20231102_-_Rouxbio_-_05.jpg
 
   - slug: hampshire
     name: Hampshire
-    alternative_names: [H]
+    alternative_names: [ H ]
     origin_country: USA
     year_registered: 1893
-    uzitkovost: [maso]
+    uzitkovost: [ maso ]
     color: "černá s bílým pásem přes plece a přední nohy, stojaté uši"
     weight_male_kg: 320
     weight_female_kg: 250
     description: >
-      Americké otcovské plemeno pojmenované podle anglického Hampshire (původ
-      v importu z UK). Charakteristický bílý pás přes plece. Velmi nízký obsah
+      Americké otcovské plemeno pojmenované podle anglického Hampshire (původ v
+      importu z UK). Charakteristický bílý pás přes plece. Velmi nízký obsah
       hřbetního sádla, vysoká zmasilost a kvalitní libové maso. V ČR využíváno
       jako otcovské v hybridních liniích.
     wikipedia: https://en.wikipedia.org/wiki/Hampshire_pig
     wikidata: https://www.wikidata.org/wiki/Q262867
+    image_url: /images/plemena/prasata/hampshire.webp
+    image_credit: Joy Schoenberger. Original uploader was MamaGeek at en.wikipedia
+    image_license: CC BY 3.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:Sow_and_Piglets.jpg
 
   - slug: bile-otcovske
     name: Bílé otcovské plemeno
-    alternative_names: [BO, Sire White]
+    alternative_names: [ BO, Sire White ]
     origin_country: Česká republika / Velká Británie
-    uzitkovost: [maso]
+    uzitkovost: [ maso ]
     color: "bílá, polostojaté uši"
     weight_male_kg: 340
     weight_female_kg: 260
     description: >
       Česká otcovská linie vyšlechtěná z Bílého ušlechtilého prasete s důrazem
       na zmasilost a denní přírůstek. Alternativa k Pietrainu pro ty chovatele,
-      kteří preferují bílé sele a vyhýbají se halotanové genetice. Zařazené
-      v plemenné knize SCHP CZ.
+      kteří preferují bílé sele a vyhýbají se halotanové genetice. Zařazené v
+      plemenné knize SCHP CZ.
     wikipedia: https://cs.wikipedia.org/wiki/B%C3%ADl%C3%A9_otcovsk%C3%A9_prase
     wikidata: https://www.wikidata.org/wiki/Q30316560
+    image_url: /images/plemena/prasata/bile-otcovske.webp
+    image_credit: AI-generated (gpt-image-1)
+    image_license: Synthetic — illustrative only
 
   # ========== ČESKÉ PŮVODNÍ / GENETICKÝ ZDROJ ==========
   - slug: prestice-cernostrakate
     name: Přeštické černostrakaté prase
-    alternative_names: [PC, Přeštičky]
+    alternative_names: [ PC, Přeštičky ]
     origin_country: Česká republika (Plzeňsko)
     year_registered: 1962
-    uzitkovost: [maso, kombinovane, ostatni]
+    uzitkovost: [ maso, kombinovane, ostatni ]
     color: "bílá s nepravidelnými černými skvrnami, polopřevislé uši"
     weight_male_kg: 300
     weight_female_kg: 220
     description: >
-      Jediné původní české plemeno prasete a národní genetický zdroj ČR.
-      Vznik křížením domácích sviní s berkshirem a cornwallem v okolí
-      Přeštic na konci 19. století. Dnes chováno v rámci konzervačního
-      programu (přibližně 200–300 prasnic). Pomalejší růst, ale vyšší
-      kvalita masa s mramorováním a tukovou pokrývkou — vyhledávané
-      řeznické a delikatesní plemeno (Přeštická šunka).
+      Jediné původní české plemeno prasete a národní genetický zdroj ČR. Vznik
+      křížením domácích sviní s berkshirem a cornwallem v okolí Přeštic na konci
+      19. století. Dnes chováno v rámci konzervačního programu (přibližně
+      200–300 prasnic). Pomalejší růst, ale vyšší kvalita masa s mramorováním a
+      tukovou pokrývkou — vyhledávané řeznické a delikatesní plemeno (Přeštická
+      šunka).
     wikipedia: https://cs.wikipedia.org/wiki/P%C5%99e%C5%A1tick%C3%A9_%C4%8Dernostrakat%C3%A9_prase
     wikidata: https://www.wikidata.org/wiki/Q12048096
+    image_url: /images/plemena/prasata/prestice-cernostrakate.webp
+    image_credit: Roy147
+    image_license: CC BY-SA 3.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:P%C5%99e%C5%A1tick%C3%A9_%C4%8Dernostrakat%C3%A9_prase,_ZOO_Plze%C5%88.JPG
 
   # ========== HERITAGE / SPECIALNÍ PLEMENA ==========
   - slug: mangalica
     name: Mangalica
-    alternative_names: [Mangalitsa, Vlnaté prase]
+    alternative_names: [ Mangalitsa, Vlnaté prase ]
     origin_country: Maďarsko
     year_registered: 1833
-    uzitkovost: [maso, ostatni]
+    uzitkovost: [ maso, ostatni ]
     color: "plavá, červená nebo lastovičí (černá s plavým břichem), kudrnatá srst"
     weight_male_kg: 300
     weight_female_kg: 220
@@ -165,31 +196,39 @@ plemena:
       Charakteristické maďarské plemeno s hustou kudrnatou srstí — jediné prase
       s ovčí vlnou. Pomalu rostoucí sádelný typ, vysoký obsah intramuskulárního
       tuku. Maso a sádlo se používají pro prémiové sušené výrobky (Mangalica
-      salám, šunky). Zachráněno před vymřením v 90. letech, dnes rostoucí
-      zájem v gastronomii a v ČR ojediněle v alternativních chovech.
+      salám, šunky). Zachráněno před vymřením v 90. letech, dnes rostoucí zájem
+      v gastronomii a v ČR ojediněle v alternativních chovech.
     wikipedia: https://cs.wikipedia.org/wiki/Mangalica
     wikidata: https://www.wikidata.org/wiki/Q904165
+    image_url: /images/plemena/prasata/mangalica.webp
+    image_credit: Nienetwiler
+    image_license: CC BY-SA 3.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:20101119_Mangalica_003.jpg
 
   - slug: berkshire
     name: Berkshire
     origin_country: Velká Británie
     year_registered: 1875
-    uzitkovost: [maso]
+    uzitkovost: [ maso ]
     color: "černá s bílými znaky na nohách, čenichu a ocasu, stojaté uši"
     weight_male_kg: 280
     weight_female_kg: 220
     description: >
-      Jedno z nejstarších uznaných plemen prasat. Maso s vysokým mramorováním
-      a jemnou texturou — v Japonsku známé jako "Kurobuta" (prémiové vepřové).
-      V ČR raritní, využíváno v gastronomicky orientovaných farmách.
+      Jedno z nejstarších uznaných plemen prasat. Maso s vysokým mramorováním a
+      jemnou texturou — v Japonsku známé jako "Kurobuta" (prémiové vepřové). V
+      ČR raritní, využíváno v gastronomicky orientovaných farmách.
     wikipedia: https://en.wikipedia.org/wiki/Berkshire_pig
     wikidata: https://www.wikidata.org/wiki/Q820953
+    image_url: /images/plemena/prasata/berkshire.webp
+    image_credit: Unknown
+    image_license: CC BY-SA 3.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:Adelaide_champion_Berkshire_boar_2005.jpg
 
   - slug: tamworth
     name: Tamworth
     origin_country: Velká Británie
     year_registered: 1865
-    uzitkovost: [maso]
+    uzitkovost: [ maso ]
     color: "zlatočervená až tmavě červená, dlouhý čenich, stojaté uši"
     weight_male_kg: 320
     weight_female_kg: 240
@@ -200,62 +239,78 @@ plemena:
       vzácné, chráněné jako genetická rezerva.
     wikipedia: https://en.wikipedia.org/wiki/Tamworth_pig
     wikidata: https://www.wikidata.org/wiki/Q3113876
+    image_url: /images/plemena/prasata/tamworth.webp
+    image_credit: Caroline Ford
+    image_license: CC BY-SA 3.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:Mudchute_farm_pig_side.jpg
 
   - slug: iberico
     name: Iberské prase
-    alternative_names: [Cerdo Ibérico, Pata Negra]
+    alternative_names: [ Cerdo Ibérico, Pata Negra ]
     origin_country: Španělsko / Portugalsko
-    uzitkovost: [maso, ostatni]
+    uzitkovost: [ maso, ostatni ]
     color: "černá nebo tmavě šedá s tmavými kopyty"
     weight_male_kg: 180
     weight_female_kg: 150
     description: >
       Středomořské plemeno z dubových lesů (dehesa) Iberského poloostrova.
       Krmení žaludy (bellota) v posledních měsících před porážkou dává unikátní
-      ořechovou chuť masa a tuku. Základ pro Jamón Ibérico de Bellota — jednu
-      z nejprestižnějších šunek na světě. V ČR pouze v importovaných produktech.
+      ořechovou chuť masa a tuku. Základ pro Jamón Ibérico de Bellota — jednu z
+      nejprestižnějších šunek na světě. V ČR pouze v importovaných produktech.
     wikipedia: https://en.wikipedia.org/wiki/Black_Iberian_pig
     wikidata: https://www.wikidata.org/wiki/Q1655849
+    image_url: /images/plemena/prasata/iberico.webp
+    image_credit: Guanbirra
+    image_license: CC BY-SA 3.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:Dehesa_en_Guijuelo_de_Jam%C3%B3n_Or.jpg
 
   - slug: cinta-senese
     name: Cinta Senese
-    alternative_names: [Sienské pásové prase]
+    alternative_names: [ Sienské pásové prase ]
     origin_country: Itálie (Toskánsko)
-    uzitkovost: [maso, ostatni]
+    uzitkovost: [ maso, ostatni ]
     color: "černá s bílým pásem přes plece (jako Hampshire, ale širším)"
     weight_male_kg: 250
     weight_female_kg: 180
     description: >
-      Toskánské heritage plemeno s DOP označením. Pastevní chov v dubových
-      a kaštanových lesích. Maso s výrazným mramorováním, využití pro
-      tradiční toskánské uzeniny (finocchiona, salame). V ČR pouze v dovozových
+      Toskánské heritage plemeno s DOP označením. Pastevní chov v dubových a
+      kaštanových lesích. Maso s výrazným mramorováním, využití pro tradiční
+      toskánské uzeniny (finocchiona, salame). V ČR pouze v dovozových
       delikatesách.
     wikipedia: https://en.wikipedia.org/wiki/Cinta_Senese
     wikidata: https://www.wikidata.org/wiki/Q500434
+    image_url: /images/plemena/prasata/cinta-senese.webp
+    image_credit: Michela Simoncini
+    image_license: CC BY 2.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:Cinta_Senese.jpg
 
   - slug: gloucester-old-spot
     name: Gloucester Old Spot
-    alternative_names: [GOS, Orchard Pig]
+    alternative_names: [ GOS, Orchard Pig ]
     origin_country: Velká Británie
     year_registered: 1885
-    uzitkovost: [maso, ostatni]
+    uzitkovost: [ maso, ostatni ]
     color: "bílá s velkými černými skvrnami, převislé uši"
     weight_male_kg: 270
     weight_female_kg: 220
     description: >
-      Anglické regionální plemeno z hrabství Gloucester, tradičně chované
-      v jablečných sadech a mlékárnách (využívaly odpadky a syrovátku).
-      Klidný temperament, výborné mateřské vlastnosti. Dnes vzácné,
-      chráněné jako rare breed.
+      Anglické regionální plemeno z hrabství Gloucester, tradičně chované v
+      jablečných sadech a mlékárnách (využívaly odpadky a syrovátku). Klidný
+      temperament, výborné mateřské vlastnosti. Dnes vzácné, chráněné jako rare
+      breed.
     wikipedia: https://en.wikipedia.org/wiki/Gloucestershire_Old_Spots
     wikidata: https://www.wikidata.org/wiki/Q5572116
+    image_url: /images/plemena/prasata/gloucester-old-spot.webp
+    image_credit: Amanda Slater from Coventry, England
+    image_license: CC BY-SA 2.0
+    image_source_url: https://commons.wikimedia.org/wiki/File:Gloucester_Old_Spot_Boar,_England.jpg
 
   # ========== MALÁ / OKRASNÁ ==========
   - slug: vietnamske-brisate
     name: Vietnamské bříšaté prase
-    alternative_names: [Pot-bellied pig, Mini prase]
+    alternative_names: [ Pot-bellied pig, Mini prase ]
     origin_country: Vietnam
-    uzitkovost: [ostatni]
+    uzitkovost: [ ostatni ]
     color: "černá, vrásčitá kůže, krátké nohy, prohnutý hřbet, převislé břicho"
     weight_male_kg: 80
     weight_female_kg: 60
@@ -265,31 +320,39 @@ plemena:
       přejídání — sklon k extrémní obezitě v zajetí.
     wikipedia: https://cs.wikipedia.org/wiki/Vietnamsk%C3%A9_prase
     wikidata: https://www.wikidata.org/wiki/Q945552
+    image_url: /images/plemena/prasata/vietnamske-brisate.webp
+    image_credit: User:HAH
+    image_license: CC BY 2.5
+    image_source_url: https://commons.wikimedia.org/wiki/File:Ulm_Tiergarten_H%C3%A4ngebauchschwein.jpg
 
   # ========== DIVOKÉ A PŘECHODNÉ ==========
   - slug: divoke-prase
     name: Prase divoké
-    alternative_names: [Divočák, Sus scrofa]
+    alternative_names: [ Divočák, Sus scrofa ]
     origin_country: Eurasie (původní druh)
-    uzitkovost: [maso, ostatni]
+    uzitkovost: [ maso, ostatni ]
     color: "tmavě hnědá až černá, štětinatá srst, hřebenovitý hřbet"
     weight_male_kg: 200
     weight_female_kg: 130
     description: >
       Divoký předek všech domácích prasat. V ČR volně žijící jako lovná zvěř,
-      ale také chovaný v oborách a na farmách pro produkci zvěřiny. Maso
-      tmavé, libové, s výraznou chutí — ceněná surovina pro restaurace a
-      myslivecké uzeniny. Křížení s domácím prasetem (tzv. "kanec divočák")
-      někdy využíváno pro specializované produkty.
+      ale také chovaný v oborách a na farmách pro produkci zvěřiny. Maso tmavé,
+      libové, s výraznou chutí — ceněná surovina pro restaurace a myslivecké
+      uzeniny. Křížení s domácím prasetem (tzv. "kanec divočák") někdy využíváno
+      pro specializované produkty.
 
-  # ========== KATCH-ALL ==========
+    # ========== KATCH-ALL ==========
     wikipedia: https://cs.wikipedia.org/wiki/Prase_divok%C3%A9
     wikidata: https://www.wikidata.org/wiki/Q58697
+    image_url: /images/plemena/prasata/divoke-prase.webp
+    image_credit: Valentin Panzirsch
+    image_license: CC BY-SA 3.0 at
+    image_source_url: https://commons.wikimedia.org/wiki/File:Wildschwein,_N%C3%A4he_Pulverstampftor.jpg
   - slug: ostatni
     name: Ostatní plemena
     origin_country: různé
-    uzitkovost: [ostatni]
+    uzitkovost: [ ostatni ]
     description: >
-      Menšinová, regionální nebo křížená plemena prasat neuvedená výše,
-      včetně F1 a F2 hybridů z komerčních linií (PIC, Topigs Norsvin,
-      DanBred). V bazaru a inzercích lze upřesnit volným textem.
+      Menšinová, regionální nebo křížená plemena prasat neuvedená výše, včetně
+      F1 a F2 hybridů z komerčních linií (PIC, Topigs Norsvin, DanBred). V
+      bazaru a inzercích lze upřesnit volným textem.

@@ -165,11 +165,29 @@ if (sameAs.length > 0) thingJsonLd.sameAs = sameAs;
       </div>
 
       <div class="hero-right">
-        <div class="hero-emoji-card">
-          <div class="hec-emoji" aria-hidden="true">{druhEmoji[druh.slug] ?? '🐾'}</div>
-          <div class="hec-name">{plemeno.name}</div>
-          {plemeno.year_registered && <div class="hec-year">Uznáno {plemeno.year_registered}</div>}
-        </div>
+        {plemeno.image_url ? (
+          <figure class="hero-photo">
+            <img src={plemeno.image_url} alt={`Plemeno ${plemeno.name}${plemeno.origin_country ? ` — ${plemeno.origin_country}` : ''}`} width="800" height="600" loading="eager" decoding="async" />
+            {(plemeno.image_credit || plemeno.image_license) && (
+              <figcaption class="hero-photo-credit">
+                {plemeno.image_source_url ? (
+                  <a href={plemeno.image_source_url} target="_blank" rel="noopener noreferrer">
+                    {plemeno.image_credit || 'Zdroj'}
+                  </a>
+                ) : (
+                  <span>{plemeno.image_credit}</span>
+                )}
+                {plemeno.image_license && <span class="hero-photo-license"> · {plemeno.image_license}</span>}
+              </figcaption>
+            )}
+          </figure>
+        ) : (
+          <div class="hero-emoji-card">
+            <div class="hec-emoji" aria-hidden="true">{druhEmoji[druh.slug] ?? '🐾'}</div>
+            <div class="hec-name">{plemeno.name}</div>
+            {plemeno.year_registered && <div class="hec-year">Uznáno {plemeno.year_registered}</div>}
+          </div>
+        )}
       </div>
     </section>
 
@@ -368,6 +386,25 @@ if (sameAs.length > 0) thingJsonLd.sameAs = sameAs;
   .plemeno-page .hec-emoji{font-size:120px;line-height:1;filter:drop-shadow(0 12px 30px rgba(0,0,0,.4))}
   .plemeno-page .hec-name{font:700 22px 'Chakra Petch',sans-serif;color:#fff;letter-spacing:-.01em;text-align:center}
   .plemeno-page .hec-year{font:500 12px 'Chakra Petch',sans-serif;color:var(--yellow);letter-spacing:.06em}
+
+  .plemeno-page .hero-photo{
+    width:100%;margin:0;position:relative;
+    border-radius:18px;overflow:hidden;
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
+    aspect-ratio:4/3;background:#0A0A0B;
+  }
+  .plemeno-page .hero-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .plemeno-page .hero-photo-credit{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:18px 16px 10px;
+    background:linear-gradient(to top, rgba(0,0,0,.7), transparent);
+    font:500 11px 'Chakra Petch',sans-serif;
+    color:rgba(255,255,255,.78);letter-spacing:.04em;
+  }
+  .plemeno-page .hero-photo-credit a{color:rgba(255,255,255,.9);text-decoration:underline;text-decoration-color:rgba(255,255,255,.3);text-underline-offset:2px}
+  .plemeno-page .hero-photo-credit a:hover{color:#fff;text-decoration-color:rgba(255,255,255,.7)}
+  .plemeno-page .hero-photo-license{color:rgba(255,255,255,.55)}
 
   .plemeno-page .content-grid{display:grid;grid-template-columns:1fr 320px;gap:22px}
   .plemeno-page .content-main{display:flex;flex-direction:column;gap:22px}

@@ -107,6 +107,12 @@ const plemenaListJsonLd = sorted.length > 0
         const uzit = p.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u);
         return (
           <a href={`/plemena/${druh.slug}/${p.slug}/`} class="plemeno-card">
+            {p.image_url && (
+              <div class="pc-photo">
+                <img src={p.image_url} alt={`Plemeno ${p.name}`} loading="lazy" decoding="async" width="800" height="600" />
+              </div>
+            )}
+            <div class="pc-body">
             <div class="pc-tags">
               {uzit.map((u) => <span class="pc-tag">{u}</span>)}
             </div>
@@ -131,6 +137,7 @@ const plemenaListJsonLd = sorted.length > 0
             <div class="pc-foot">
               <span>Detail plemene</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
             </div>
           </a>
         );
@@ -273,10 +280,14 @@ const plemenaListJsonLd = sorted.length > 0
   .druh-page .plemeno-card{
     display:flex;flex-direction:column;
     background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
-    padding:18px;text-decoration:none;color:inherit;
+    text-decoration:none;color:inherit;overflow:hidden;
     transition:.22s cubic-bezier(.2,.7,.2,1);
   }
   .druh-page .plemeno-card:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
+  .druh-page .pc-photo{aspect-ratio:4/3;overflow:hidden;background:#FBFAF4;border-bottom:1px solid var(--line)}
+  .druh-page .pc-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+  .druh-page .plemeno-card:hover .pc-photo img{transform:scale(1.04)}
+  .druh-page .pc-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
   .druh-page .pc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
   .druh-page .pc-tag{
     font:600 10.5px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:.1em;text-transform:uppercase;
