@@ -5,6 +5,7 @@ import { SLOVNIK, getSlovnikTerm, KATEGORIE_LABELS } from '../../lib/slovnik';
 import { breadcrumbSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 import AreaConverter from '../../components/AreaConverter.astro';
+import WeightConverter from '../../components/WeightConverter.astro';
 
 export function getStaticPaths() {
   return SLOVNIK.map((t) => ({ params: { slug: t.slug } }));
@@ -33,6 +34,17 @@ const AREA_UNIT_BY_SLUG: Record<string, string> = {
   morgen: 'morgen',
 };
 const areaUnit = AREA_UNIT_BY_SLUG[term.slug];
+
+// Mapování pro WeightConverter — slovnik slug → výchozí jednotka hmotnosti.
+const WEIGHT_UNIT_BY_SLUG: Record<string, string> = {
+  'q-cent': 'q',
+  tuna: 't',
+  kilogram: 'kg',
+  libra: 'lb',
+  busl: 'bu',
+  hektolitr: 'kg',
+};
+const weightUnit = WEIGHT_UNIT_BY_SLUG[term.slug];
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
@@ -92,6 +104,15 @@ const paragraphs = term.longDef.split('\n\n');
         defaultValue={1}
         heading={`Převodník — ${term.term} na další jednotky plochy`}
         caption="Zadej hodnotu a vyber jednotku. Převody se přepočítají okamžitě. Pro starší jednotky (jitro, korec, strych) jsou použité standardizované hodnoty z roku 1764."
+      />
+    )}
+
+    {weightUnit && (
+      <WeightConverter
+        defaultUnit={weightUnit}
+        defaultValue={1}
+        heading={`Převodník — ${term.term} na další jednotky hmotnosti`}
+        caption="Bušl má různou hmotnost podle komodity — vyber konkrétní plodinu z dropdownu. Hodnoty bušlu odpovídají USDA standardu."
       />
     )}
 

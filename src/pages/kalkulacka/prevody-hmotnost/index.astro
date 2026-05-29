@@ -1,0 +1,316 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import WeightConverter from '../../../components/WeightConverter.astro';
+
+const canonical = `${SITE_URL}/kalkulacka/prevody-hmotnost/`;
+
+const faqItems = [
+  {
+    q: 'Kolik je 1 tuna v kilogramech a centech?',
+    a: '1 tuna (t) = 1 000 kg = 10 metrických centů (q). Tuna je dominantní jednotka v zemědělství pro výnosy (t/ha), výkupní ceny (Kč/t) a kapacity strojů. Pozor — americký short ton (907 kg) a britský long ton (1 016 kg) jsou jiné jednotky.',
+  },
+  {
+    q: 'Kolik je 1 bušl pšenice v kg?',
+    a: '1 bušl (bushel) pšenice = 27,2155 kg = 60 amerických liber. Sója má stejnou hmotnost (27,2 kg), kukuřice 25,4 kg, ječmen 21,8 kg, oves 14,5 kg. Bušl je objemová jednotka s pevnou hmotností pro každou komoditu podle USDA standardu.',
+  },
+  {
+    q: 'Jak převést cenu z CBOT (¢/bušl) na CZ (Kč/t)?',
+    a: 'Příklad pšenice 600 ¢/bu: 6,00 USD ÷ 27,2155 kg × 1 000 = 220,4 USD/t. Při kurzu 23 Kč/USD = 5 070 Kč/t (před dopravou a maržemi). Pro kukuřici děl 25,4 místo 27,2.',
+  },
+  {
+    q: 'Jaký je rozdíl mezi q a t?',
+    a: 'Metrický cent (q) = 100 kg, tuna (t) = 1 000 kg. 1 t = 10 q. V CZ se výnosy mohou udávat v obou: 6 t/ha = 60 q/ha. Ceny komodit dnes typicky v Kč/t, ale starší zemědělci ještě počítají v Kč/q (550 Kč/q = 5 500 Kč/t).',
+  },
+  {
+    q: 'Kolik kg je 1 libra (pound, lb)?',
+    a: '1 libra (lb) = 0,45359237 kg, prakticky 0,4536 kg. Rychlý odhad: lb × 0,5 ≈ kg. Libra se používá v USDA reportech, na CBOT futures (sójový olej v ¢/lb, live cattle v ¢/lb) a v amerických krmných tabulkách.',
+  },
+  {
+    q: 'Co je hektolitrová váha obilí?',
+    a: 'Hmotnost 100 litrů obilí v kg — kvalitativní parametr pro výkup. Pšenice potravinářská 78+ kg/hl, krmná pod 74 kg/hl. Vyšší hl váha = lepší škrob/olej, vyšší cena. Rozdíl ceny krmné a potravinářské třídy může být 1 500+ Kč/t.',
+  },
+];
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalkulačky', url: '/kalkulacka/' },
+  { name: 'Převody hmotnosti', url: canonical },
+]);
+const faqJsonLd = faqPageSchema(faqItems);
+---
+
+<Layout
+  title="Převody jednotek hmotnosti — tuna, q, kg, bušl, libra"
+  description="Online kalkulačka pro převody hmotnosti v zemědělství: tuna ↔ metrický cent (q) ↔ kilogram ↔ bušl (pšenice, kukuřice, sója) ↔ libra. Hodnoty bušlu podle komodity (USDA standard)."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="ph-page">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="/kalkulacka/">Kalkulačky</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">Převody hmotnosti</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Kalkulačka · jednotky hmotnosti</span>
+      <h1>Převody jednotek hmotnosti</h1>
+      <p class="hero-lede">
+        Tuna, metrický cent, kilogram, libra a bušl (s výběrem komodity) — okamžitý převod
+        pro zemědělce, makléře komodit i čtenáře USDA reportů. Bušl má různou hmotnost
+        podle plodiny, kalkulačka to počítá přesně podle USDA standardu.
+      </p>
+    </header>
+
+    <WeightConverter
+      defaultUnit="t"
+      defaultValue={1}
+      defaultCommodity="pšenice"
+      heading="Online převodník hmotnosti"
+      caption="Tip: vyber dropdown komodity dole, abys upravil hmotnost bušlu (pšenice 27,2 kg, kukuřice 25,4 kg, oves 14,5 kg…)."
+      headingLevel="h2"
+    />
+
+    <section class="ph-reference">
+      <h2>Referenční tabulka — nejčastější převody</h2>
+      <div class="ph-tables">
+        <table class="ph-table">
+          <caption>Tuna (t) na další jednotky</caption>
+          <tbody>
+            <tr><th>1 t</th><td>= 1 000 kg</td></tr>
+            <tr><th>1 t</th><td>= 10 q (metrických centů)</td></tr>
+            <tr><th>1 t</th><td>≈ 2 204,6 lb (anglických liber)</td></tr>
+            <tr><th>1 t pšenice / sója</th><td>≈ 36,7 bušlu</td></tr>
+            <tr><th>1 t kukuřice / žito</th><td>≈ 39,4 bušlu</td></tr>
+            <tr><th>1 t ječmen</th><td>≈ 45,9 bušlu</td></tr>
+            <tr><th>1 t oves</th><td>≈ 68,9 bušlu</td></tr>
+          </tbody>
+        </table>
+
+        <table class="ph-table">
+          <caption>Bušl (USDA standard) — kg / lb</caption>
+          <tbody>
+            <tr><th>Pšenice / sója</th><td>27,2155 kg / 60 lb</td></tr>
+            <tr><th>Kukuřice / žito</th><td>25,4012 kg / 56 lb</td></tr>
+            <tr><th>Řepka (canola)</th><td>22,6796 kg / 50 lb</td></tr>
+            <tr><th>Ječmen</th><td>21,7724 kg / 48 lb</td></tr>
+            <tr><th>Oves</th><td>14,5150 kg / 32 lb</td></tr>
+          </tbody>
+        </table>
+
+        <table class="ph-table">
+          <caption>Cent (q) a libra (lb)</caption>
+          <tbody>
+            <tr><th>1 q</th><td>= 100 kg = 0,1 t</td></tr>
+            <tr><th>10 q</th><td>= 1 t</td></tr>
+            <tr><th>1 lb</th><td>= 0,4536 kg</td></tr>
+            <tr><th>1 kg</th><td>= 2,2046 lb</td></tr>
+            <tr><th>1 US short ton</th><td>= 907,18 kg = 2 000 lb</td></tr>
+            <tr><th>1 UK long ton</th><td>= 1 016 kg = 2 240 lb</td></tr>
+          </tbody>
+        </table>
+
+        <table class="ph-table">
+          <caption>Hektolitrová váha pro výkup</caption>
+          <tbody>
+            <tr><th>Pšenice potrav.</th><td>78–84 kg/hl (třída A/E)</td></tr>
+            <tr><th>Pšenice krmná</th><td>pod 74 kg/hl</td></tr>
+            <tr><th>Ječmen sladovnický</th><td>min. 64 kg/hl</td></tr>
+            <tr><th>Ječmen krmný</th><td>62–66 kg/hl</td></tr>
+            <tr><th>Žito potrav.</th><td>72+ kg/hl</td></tr>
+            <tr><th>Oves potrav.</th><td>50+ kg/hl</td></tr>
+            <tr><th>Řepka ozimá</th><td>min. 62 kg/hl</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="ph-yield">
+      <h2>Převod výnosů: bušl/akr ↔ t/hektar</h2>
+      <p class="ph-yield-lede">
+        Pro porovnání US a EU výnosů. CBOT publikuje výnosy v bushel/acre,
+        EU statistiky v t/ha. Násobicí faktor záleží na komoditě (kvůli různé hmotnosti bušlu a převodu akr→ha).
+      </p>
+      <table class="ph-table">
+        <thead>
+          <tr><th>Komodita</th><th>bu/ac → t/ha</th><th>Příklad US výnos</th><th>Ekvivalent CZ</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pšenice / sója</td><td>× 0,06725</td><td>50 bu/ac</td><td>≈ 3,36 t/ha</td></tr>
+          <tr><td>Kukuřice / žito</td><td>× 0,06277</td><td>175 bu/ac</td><td>≈ 10,98 t/ha</td></tr>
+          <tr><td>Řepka (canola)</td><td>× 0,05604</td><td>40 bu/ac</td><td>≈ 2,24 t/ha</td></tr>
+          <tr><td>Ječmen</td><td>× 0,05381</td><td>80 bu/ac</td><td>≈ 4,30 t/ha</td></tr>
+          <tr><td>Oves</td><td>× 0,03587</td><td>70 bu/ac</td><td>≈ 2,51 t/ha</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ph-faq">
+      <h2>Časté otázky</h2>
+      {faqItems.map((item) => (
+        <details class="ph-faq-item">
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <aside class="ph-related">
+      <h2>Další užitečné stránky</h2>
+      <ul class="ph-related-list">
+        <li><a href="/kalkulacka/prevody-jednotek/">📐 Převody jednotek plochy</a></li>
+        <li><a href="/slovnik/tuna/">⚖️ Tuna (t) — detail jednotky</a></li>
+        <li><a href="/slovnik/q-cent/">⚖️ Cent (q) — detail jednotky</a></li>
+        <li><a href="/slovnik/busl/">🌾 Bušl — detail s USDA tabulkou</a></li>
+        <li><a href="/slovnik/hektolitr/">🌾 Hektolitr — váha obilí</a></li>
+        <li><a href="/kalkulacka/naklady-na-hektar/">💰 Náklady na hektar</a></li>
+      </ul>
+    </aside>
+  </div>
+</Layout>
+
+<style>
+  .ph-page { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .breadcrumb .sep { opacity: 0.5; }
+
+  .hero { max-width: 720px; margin-bottom: 28px; }
+  .kicker {
+    display: inline-block;
+    background: #FFEA00;
+    color: #0A0A0B;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin: 12px 0 12px;
+    line-height: 1.1;
+    color: #1a1a1a;
+  }
+  .hero-lede { font-size: 16px; color: #555; line-height: 1.65; margin: 0; }
+
+  .ph-reference, .ph-yield { margin: 36px 0; }
+  .ph-reference h2,
+  .ph-yield h2,
+  .ph-faq h2,
+  .ph-related h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0A0A0B;
+    margin: 0 0 18px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #FFEA00;
+  }
+  .ph-yield-lede {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 14px;
+  }
+
+  .ph-tables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .ph-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+  .ph-table caption {
+    text-align: left;
+    padding: 10px 14px;
+    background: #fffef8;
+    color: #0A0A0B;
+    font-weight: 700;
+    border-bottom: 1px solid #eaeaec;
+    caption-side: top;
+  }
+  .ph-table th,
+  .ph-table td { padding: 8px 14px; text-align: left; }
+  .ph-table th {
+    font-weight: 700;
+    color: #0A0A0B;
+    font-variant-numeric: tabular-nums;
+    width: 40%;
+  }
+  .ph-table thead th {
+    background: #f5f5f7;
+    border-bottom: 1px solid #eaeaec;
+    width: auto;
+  }
+  .ph-table td { color: #444; font-variant-numeric: tabular-nums; }
+  .ph-table tr + tr { border-top: 1px solid #f1f1f3; }
+
+  .ph-faq { margin: 36px 0; }
+  .ph-faq-item {
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .ph-faq-item summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: #0A0A0B;
+    font-size: 14px;
+  }
+  .ph-faq-item[open] summary { margin-bottom: 8px; }
+  .ph-faq-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+    line-height: 1.65;
+  }
+
+  .ph-related {
+    margin: 36px 0 0;
+    padding: 20px 24px;
+    background: #f9f9fb;
+    border-radius: 12px;
+  }
+  .ph-related-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 8px;
+  }
+  .ph-related-list a {
+    display: block;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid #eaeaec;
+    border-radius: 8px;
+    color: #0A0A0B;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color .15s;
+  }
+  .ph-related-list a:hover { border-color: #FFEA00; }
+</style>
