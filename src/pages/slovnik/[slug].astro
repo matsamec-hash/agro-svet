@@ -6,6 +6,7 @@ import { breadcrumbSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 import AreaConverter from '../../components/AreaConverter.astro';
 import WeightConverter from '../../components/WeightConverter.astro';
+import { injectLinks, createLinkContext } from '../../lib/auto-linker';
 
 export function getStaticPaths() {
   return SLOVNIK.map((t) => ({ params: { slug: t.slug } }));
@@ -68,7 +69,28 @@ const definedTermJsonLd = {
   ...(term.alias && term.alias.length > 0 ? { alternateName: term.alias } : {}),
 };
 
-const paragraphs = term.longDef.split('\n\n');
+// Build slug → display name lookup for wikilink resolution.
+const SLOVNIK_BY_SLUG = new Map(SLOVNIK.map((t) => [t.slug, t.term]));
+
+// Render pipeline pro každý paragraph:
+// 1. `[[slug]]` wikilinks → <a href="/slovnik/slug/">{term.term}</a>
+//    (pokud slug existuje v SLOVNIK; jinak zachová literal)
+// 2. `**bold**` → <strong>
+// 3. auto-linker — značky/modely/plemena/další slovník hesla
+//    (sdílený ctx = unikátní link na URL napříč celým article)
+const linkCtx = createLinkContext(pageUrl);
+
+const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
+  // Wikilinks first — pre-resolved <a> tags se ochrání před auto-linkerem
+  // (PROTECTED_TAGS zahrnuje 'a').
+  const withWikilinks = para.replace(/\[\[([a-z0-9-]+)\]\]/gi, (m, slug) => {
+    const name = SLOVNIK_BY_SLUG.get(slug);
+    if (!name) return m; // unknown slug — leave literal
+    return `<a href="/slovnik/${slug}/">${name}</a>`;
+  });
+  const withBold = withWikilinks.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  return injectLinks(withBold, linkCtx);
+});
 ---
 
 <Layout
@@ -117,8 +139,8 @@ const paragraphs = term.longDef.split('\n\n');
     )}
 
     <div class="slv-d-body prose">
-      {paragraphs.map((p) => (
-        <p set:html={p.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')}></p>
+      {renderedParagraphs.map((html) => (
+        <p set:html={html}></p>
       ))}
     </div>
 
