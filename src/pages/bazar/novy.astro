@@ -47,8 +47,12 @@ if (Astro.request.method === 'POST') {
   const nosnostStr = form.get('nosnost_kg')?.toString().trim() ?? '';
   const objemStr = form.get('objem_nadrze_l')?.toString().trim() ?? '';
 
+  const rulesAccepted = form.get('rules_accepted')?.toString() === 'on';
+
   if (!title || !category || !phone) {
     error = 'Vyplňte název, kategorii a telefon.';
+  } else if (!rulesAccepted) {
+    error = 'Pro vložení inzerátu je nutné potvrdit, že obsah neporušuje pravidla bazaru.';
   } else {
     const supabase = createServerClient();
     const price = priceStr ? parseInt(priceStr) : null;
@@ -277,6 +281,29 @@ const { data: profile } = await supabase
         <input type="email" id="email" name="email" class="form-input" value={profile?.email ?? ''} />
       </div>
 
+      <div class="form-group rules-notice">
+        <p class="rules-notice-title">Před vložením inzerátu</p>
+        <ul class="rules-notice-list">
+          <li>Inzerujte <strong>konkrétní jednotlivou věc po kuse</strong>, ne sklady ani podnikatelskou činnost obecně.</li>
+          <li>Jste-li <strong>podnikatel</strong> (OSVČ, firma, dealerství), uveďte v popisu inzerátu <strong>IČO</strong> a obchodní firmu.</li>
+          <li>Vkládejte pouze <strong>vlastní fotografie</strong> nebo fotografie, ke kterým máte licenci.</li>
+          <li>Některé kategorie (přípravky na ochranu rostlin, léčiva, zvířata, osiva, hnojiva, zbraně) mají <strong>zákonná omezení</strong> — viz <a href="/bazar/pravidla/" target="_blank" rel="noopener">pravidla bazaru</a>.</li>
+        </ul>
+      </div>
+
+      <div class="form-group consent-group">
+        <label class="consent-label">
+          <input type="checkbox" id="rules_accepted" name="rules_accepted" required />
+          <span>
+            Prohlašuji, že obsah inzerátu je pravdivý, nabízená věc je v mém vlastnictví nebo
+            mám oprávnění s ní disponovat, a že inzerát neporušuje
+            <a href="/bazar/pravidla/" target="_blank" rel="noopener">pravidla bazaru</a>,
+            <a href="/podminky-pouziti/" target="_blank" rel="noopener">podmínky použití</a>
+            ani právní předpisy.
+          </span>
+        </label>
+      </div>
+
       <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
         Vložit inzerát
       </button>
@@ -411,4 +438,50 @@ const { data: profile } = await supabase
       if (locationInput.value.trim()) schedule();
     })();
   </script>
+
+  <style>
+    .rules-notice {
+      background: #fbfaf4;
+      border: 1px solid #e8e4d2;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-top: 8px;
+    }
+    .rules-notice-title {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #555;
+      margin: 0 0 8px;
+    }
+    .rules-notice-list {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #444;
+    }
+    .rules-notice-list li { margin: 4px 0; }
+    .rules-notice-list a { color: #0B7A3B; text-decoration: underline; }
+    .consent-group { margin-top: 4px; }
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #333;
+      cursor: pointer;
+    }
+    .consent-label input[type="checkbox"] {
+      margin-top: 3px;
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .consent-label a { color: #0B7A3B; text-decoration: underline; }
+  </style>
 </Layout>
