@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { getAllBrands, getAllModels, seriesFamily, FUNCTIONAL_GROUPS } from '../lib/stroje';
 import { getAllDruhy } from '../lib/plemena';
+import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
 import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
@@ -112,6 +113,11 @@ export const GET: APIRoute = async () => {
     ['/znacky/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/encyklopedie/', 'weekly', undefined, STATIC_LASTMOD],
     ['/plemena/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/vcelarstvi/', 'weekly', '0.85', STATIC_LASTMOD],
+    ['/vcelarstvi/druhy/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/vcelarstvi/vybaveni/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/vcelarstvi/med/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/kviz/jaka-vcela-pro-vas/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/puda/', 'weekly', undefined, STATIC_LASTMOD],
     ['/fotosoutez/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/fotosoutez/archiv/', 'monthly', undefined, STATIC_LASTMOD],
@@ -276,6 +282,16 @@ export const GET: APIRoute = async () => {
     for (const p of d.plemena) {
       urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/${p.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
     }
+  }
+
+  for (const v of getAllVcely()) {
+    urls.push({ loc: `${SITE_URL}/vcelarstvi/druhy/${v.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: STATIC_LASTMOD, images: v.image_url ? [v.image_url] : undefined });
+  }
+  for (const x of getAllVybaveni()) {
+    urls.push({ loc: `${SITE_URL}/vcelarstvi/vybaveni/${x.slug}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD, images: x.image_url ? [x.image_url] : undefined });
+  }
+  for (const m of getAllMed()) {
+    urls.push({ loc: `${SITE_URL}/vcelarstvi/med/${m.slug}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD, images: m.image_url ? [m.image_url] : undefined });
   }
 
   // Comparison pairs — match the limit used by /srovnani/[combo]/getStaticPaths

@@ -1,0 +1,218 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getAllVcely, getAllVybaveni, getAllMed } from '../../lib/vcelarstvi';
+import { SITE_URL } from '../../lib/config';
+
+const vcely = getAllVcely();
+const vybaveni = getAllVybaveni();
+const med = getAllMed();
+const counts = { vcely: vcely.length, vybaveni: vybaveni.length, med: med.length };
+
+const title = 'Včelařství — druhy včel, vybavení, med a návody';
+const description = 'Vše pro začínající i pokročilé včelaře: druhy včel, včelařské vybavení, druhy medu, slovník pojmů a praktické návody krok za krokem.';
+
+const sekce = [
+  { href: '/vcelarstvi/druhy/', title: 'Druhy včel', desc: `Kraňka, italka, buckfast a další (${counts.vcely})`, emoji: '🐝' },
+  { href: '/vcelarstvi/vybaveni/', title: 'Vybavení', desc: `Úly, ochrana, nářadí, zpracování (${counts.vybaveni})`, emoji: '🪣' },
+  { href: '/vcelarstvi/med/', title: 'Druhy medu', desc: `Květový, medovicový, akátový… (${counts.med})`, emoji: '🍯' },
+  { href: '/jak-na-to/jak-zacit-vcelarit/', title: 'Jak začít včelařit', desc: 'Průvodce pro úplné začátečníky', emoji: '📖' },
+  { href: '/jak-na-to/vcelarsky-rok/', title: 'Včelařský rok', desc: 'Kalendář prací po měsících', emoji: '📅' },
+  { href: '/slovnik/', title: 'Včelařský slovník', desc: 'Pojmy od matky po varroázu', emoji: '📚' },
+  { href: '/kviz/jaka-vcela-pro-vas/', title: 'Kvíz: jaká včela pro vás', desc: 'Najděte vhodnou včelu', emoji: '🎯' },
+];
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'Včelařství', item: `${SITE_URL}/vcelarstvi/` },
+  ],
+};
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: title,
+  description,
+  url: `${SITE_URL}/vcelarstvi/`,
+  inLanguage: 'cs-CZ',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: sekce.length,
+    itemListElement: sekce.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE_URL}${s.href}`,
+      name: s.title,
+    })),
+  },
+};
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+
+  <div class="vcel-hub-root">
+
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">Včelařství</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Průvodce · Včelařství</span>
+        <h1>Vše o <em>včelařství</em></h1>
+        <p class="hero-lede">Průvodce světem včel pro začátečníky i zkušené včelaře. Zjistěte, jaký druh včely se hodí do vašich podmínek, vyberte správné vybavení a naučte se rozlišovat druhy medu.</p>
+        <div class="hero-stats">
+          <div class="s"><span class="n">{counts.vcely}</span><span class="l">druhů včel</span></div>
+          <div class="s"><span class="n">{counts.vybaveni}</span><span class="l">položek vybavení</span></div>
+          <div class="s"><span class="n">{counts.med}</span><span class="l">druhů medu</span></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-emoji-tile" aria-hidden="true">🐝</div>
+      </div>
+    </section>
+
+    <p class="intro-text">
+      Včelařství je jedno z nejstarších řemesel — a dnes zároveň důležitý příspěvek k biodiverzitě a opylování plodin.
+      Ať teprve přemýšlíte o prvním úlu, nebo hledáte informace o konkrétním druhu medu, najdete zde vše pohromadě.
+      Začněte výběrem včelího druhu nebo si projděte průvodce pro úplné začátečníky.
+    </p>
+
+    <h2 class="section-title">Sekce <span class="section-title-c">{sekce.length}</span></h2>
+
+    <div class="hub-grid">
+      {sekce.map((s) => (
+        <a href={s.href} class="hub-card">
+          <div class="hc-emoji" aria-hidden="true">{s.emoji}</div>
+          <div class="hc-body">
+            <div class="hc-title">{s.title}</div>
+            <p class="hc-desc">{s.desc}</p>
+          </div>
+          <svg class="hc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</Layout>
+
+<style>
+  .vcel-hub-root {
+    --yellow: #FFEA00;
+    --yellow-soft: #FFF6A8;
+    --yellow-glow: rgba(255, 234, 0, .35);
+    --ink: #0A0A0B;
+    --body: #1E1E22;
+    --muted: #6B6B72;
+    --muted-2: #9A9AA3;
+    --line: #EAEAEC;
+    --bg-cream: #FBFAF4;
+    --card: #FFFFFF;
+    --r-xl: 24px;
+    --r-lg: 18px;
+    --r-md: 12px;
+    --sh-1: 0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3: 0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 26px 24px 96px;
+    color: var(--body);
+  }
+
+  .vcel-hub-root .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 22px; flex-wrap: wrap; }
+  .vcel-hub-root .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .vcel-hub-root .breadcrumb a:hover { color: #000; }
+  .vcel-hub-root .breadcrumb svg { width: 14px; height: 14px; color: var(--muted-2); flex-shrink: 0; }
+  .vcel-hub-root .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .vcel-hub-root .hero {
+    position: relative; overflow: hidden; color: #fff; border-radius: var(--r-xl);
+    background: radial-gradient(600px 300px at 15% 20%, rgba(255, 234, 0, .18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(255, 160, 0, .28), transparent 60%),
+      linear-gradient(135deg, #14110E 0%, #1F1A14 60%, #2A2218 100%);
+    padding: 48px 48px 40px; margin-bottom: 22px;
+    box-shadow: var(--sh-3);
+    display: grid; grid-template-columns: 1.35fr 1fr; gap: 32px; align-items: center;
+  }
+  .vcel-hub-root .hero::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
+    background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .vcel-hub-root .hero-left { position: relative; z-index: 2; }
+  .vcel-hub-root .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font: 600 11px/1 'Chakra Petch', sans-serif; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--yellow); margin-bottom: 18px;
+    padding: 8px 14px; border: 1px solid rgba(255,234,0,.4); border-radius: 999px;
+    background: rgba(255,234,0,.06);
+  }
+  .vcel-hub-root .kicker .dot { width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; box-shadow: 0 0 0 3px rgba(255,234,0,.2); }
+  .vcel-hub-root .hero h1 {
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+    font-size: clamp(2.4rem, 5.5vw, 4.4rem); color: #fff; line-height: .96; letter-spacing: -.03em; margin: 0;
+  }
+  .vcel-hub-root .hero h1 em { font-style: normal; color: var(--yellow); text-shadow: 0 0 40px rgba(255,234,0,.5); }
+  .vcel-hub-root .hero-lede { max-width: 580px; font-size: 16px; color: #c8c8d0; margin: 18px 0 22px; line-height: 1.6; }
+  .vcel-hub-root .hero-stats { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; font-family: 'Chakra Petch', sans-serif; }
+  .vcel-hub-root .hero-stats .s { display: flex; flex-direction: column; gap: 3px; }
+  .vcel-hub-root .hero-stats .n { font-size: 24px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -.02em; }
+  .vcel-hub-root .hero-stats .l { font-size: 11px; color: #8a8a92; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
+  .vcel-hub-root .hero-right { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
+  .vcel-hub-root .hero-emoji-tile { font-size: 120px; line-height: 1; filter: drop-shadow(0 12px 40px rgba(255,160,0,.4)); }
+
+  .vcel-hub-root .intro-text {
+    font-size: 16px; color: var(--muted); line-height: 1.7;
+    max-width: 780px; margin: 0 0 32px;
+  }
+
+  .vcel-hub-root .section-title {
+    font-family: 'Chakra Petch', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -.02em;
+    margin: 0 0 14px; color: var(--ink);
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .vcel-hub-root .section-title-c {
+    font-size: 14px; background: var(--yellow); color: #0A0A0B; padding: 3px 10px; border-radius: 8px; letter-spacing: .04em;
+  }
+
+  .vcel-hub-root .hub-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px;
+  }
+  .vcel-hub-root .hub-card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg);
+    padding: 20px 20px 20px 20px;
+    text-decoration: none; color: inherit;
+    transition: .22s cubic-bezier(.2,.7,.2,1);
+    box-shadow: var(--sh-1);
+  }
+  .vcel-hub-root .hub-card:hover { transform: translateY(-3px); box-shadow: var(--sh-3); border-color: var(--yellow); }
+  .vcel-hub-root .hc-emoji {
+    font-size: 40px; line-height: 1; flex-shrink: 0;
+    width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-cream); border-radius: var(--r-md);
+  }
+  .vcel-hub-root .hc-body { flex: 1; min-width: 0; }
+  .vcel-hub-root .hc-title { font: 700 17px 'Chakra Petch', sans-serif; color: var(--ink); letter-spacing: -.01em; margin-bottom: 4px; }
+  .vcel-hub-root .hc-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0; }
+  .vcel-hub-root .hc-arrow { flex-shrink: 0; color: var(--muted-2); transition: transform .2s, color .2s; }
+  .vcel-hub-root .hub-card:hover .hc-arrow { color: var(--ink); transform: translateX(3px); }
+
+  @media (max-width: 960px) {
+    .vcel-hub-root .hero { grid-template-columns: 1fr; padding: 32px 24px 28px; gap: 18px; }
+    .vcel-hub-root .hero-right { display: none; }
+  }
+  @media (max-width: 600px) {
+    .vcel-hub-root { padding: 20px 16px 60px; }
+    .vcel-hub-root .hub-grid { grid-template-columns: 1fr; }
+  }
+</style>
