@@ -11,7 +11,7 @@
 // - related URL (na encyklopedie / dotace / žebříčky)
 
 export type SlovnikKategorie =
-  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky' | 'historie' | 'chov' | 'slang' | 'ochrana' | 'plodiny';
+  | 'technologie' | 'pohon' | 'hnojivo' | 'dotace' | 'agrotechnika' | 'regulace' | 'precise-farming' | 'jednotky' | 'historie' | 'chov' | 'slang' | 'ochrana' | 'plodiny' | 'vcelarstvi';
 
 export interface SlovnikTerm {
   slug: string;
@@ -8526,6 +8526,796 @@ Viz též [[telematika]], [[precision-livestock-farming]], [[satelity-zemedelstv
 Viz též [[karbonove-zemedelstvi]], [[regenerativni-zemedelstvi]], [[no-till]], [[mezi-plodiny]], [[biouhel]], [[ttp]], [[agrolesnictvi]], [[satelity-zemedelstvi]].`,
     related: ['karbonove-zemedelstvi', 'regenerativni-zemedelstvi', 'no-till', 'mezi-plodiny', 'biouhel', 'ttp', 'agrolesnictvi', 'satelity-zemedelstvi'],
   },
+
+  // ── VČELAŘSTVÍ ──────────────────────────────────────────────────────────
+  {
+    slug: 'matka',
+    term: 'Matka (včelí)',
+    alias: ['královna', 'včelí matka'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Matka je jediná pohlavně vyvinutá samice ve včelstvu, jejíž hlavní funkcí je kladení vajíček a udržování soudržnosti roje prostřednictvím feromonů.',
+    longDef: `Matka se vyvíjí z oplodněného vajíčka v matečníku a prochází celým vývojem za přibližně 16 dnů (vajíčko 3 dny, larva 5,5 dne, kukla 7,5 dne). Od dělnic se liší výrazně protáhlým zadečkem, rudimentálními zásobníky pylu a větší tělesnou hmotností — pohybuje se v rozmezí 180–300 mg.
+
+Po snubním proletu, při němž se páří zpravidla s 10–20 trubci na snubní dráze, ukládá semeno do semenné váčku (spermatheca). Tato semenná zásoba jí vystačí na 3–5 let intenzivního kladení. Plodná matka klade v sezoně 1 500–2 500 vajíček denně, výjimečně až 3 000.
+
+Ve zdravém včelstvu je vždy jen jedna matka. Feromonový komplex produkovaný matkou (tzv. mateří látka, kyselina 9-oxo-decenová) potlačuje u dělnic vývoj vaječníků a inhibuje stavbu matečníků. Oslabení tohoto signálu vede ke stavu tiché výměny nebo rojení.
+
+Včelař sleduje stáří a snůškovou zdatnost matky. Staré nebo vadné matky způsobují chřadnutí včelstva a jsou zpravidla vyměňovány každé 2–3 roky. Matku lze zakoupit od šlechtitelů v tzv. zásilkové kleci.`,
+    related: ['delnice', 'trubec', 'materi-mrizka', 'materi-kasicka', 'rojeni', 'snubni-prolet', 'matka-neoplozena', 'kladeni-matky'],
+  },
+  {
+    slug: 'delnice',
+    term: 'Dělnice',
+    alias: ['včela dělnice'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Dělnice jsou pohlavně nevyvinuté samice tvořící drtivou většinu včelstva, které zajišťují veškerou práci v úlu i na pastvě.',
+    longDef: `Dělnice se vyvíjí z oplodněného vajíčka za přibližně 21 dnů (vajíčko 3 dny, larva 6 dnů, kukla 12 dnů). Hmotnost dospělé dělnice se pohybuje kolem 90–120 mg. V sezoně tvoří včelstvo 40 000–80 000 dělnic, v zimě jejich počet klesá na 10 000–20 000.
+
+Životní délka letní dělnice je 4–6 týdnů, zimní dělnice žije 4–6 měsíců. Práce se mění s věkem — mladé dělnice (1–10 dní) ošetřují plod a krmí matku, střední věk (10–20 dní) se věnuje přijímání nektaru, stavbě plástu, strážní službě, starší dělnice (od 21 dne) létají a sbírají nektar, pyl, pryskyřici a vodu.
+
+Dělnice mají specializované orgány: košíčky na zadních nohách pro transport pylu, voskové žlázky na zadečku pro produkci vosku a jedový váček s bodcem (zubatý bodec, který po vbodnutí zůstává v kůži savce). Na rozdíl od matky mají plně vyvinutý cueillopharyngeální žlázový systém pro tvorbu mateří kašičky.
+
+Dělnice bez matky mohou po 3–4 týdnech začít klást neoplodněná vajíčka — vznikají tzv. trubčice nebo včelstvo s policejní šlechtou (ztracené včelstvo).`,
+    related: ['matka', 'trubec', 'vcelstvo', 'pyl-rousky', 'snuska', 'vcelivosk'],
+  },
+  {
+    slug: 'trubec',
+    term: 'Trubec',
+    alias: ['trubci'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Trubec je samec včely medonosné, jehož jedinou biologickou funkcí je oplodnění matky při snubním proletu.',
+    longDef: `Trubec se vyvíjí z neoplodněného vajíčka partenogenezí za přibližně 24 dnů. Hmotnost dospělého trubce dosahuje 200–250 mg. Trubci nemají bodec ani košíčky na pyl — nemohou se živit sami a jsou zcela závislí na zásobách včelstva.
+
+V sezoně (duben–srpen) tvoří trubci 200–1 500 kusů v jednom včelstvu. Opouštějí úl v teplých slunečních dnech a létají na shromaždiště trubců (tzv. trubcovní místa), kde čekají na matku. Trubec, který se spáří s matkou, bezprostředně po kopulaci uhyne.
+
+Na konci sezony, zpravidla v srpnu a září, dělnice trubce vyhánějí z úlu (tzv. trubcoví záhon) — tím snižují spotřebu zásob na zimu. Výskyt trubců mimo normální dobu (mimo sezonu nebo v nadměrném počtu) může signalizovat ztrátu matky nebo přítomnost bezmatečného stavu.
+
+Ve šlechtitelské praxi se sledují kvality trubců z výběrových linií — trubci přenášejí genetický materiál, a to na snubní dráze zcela nekontrolovaně (otevřená párkovací lokalita). Kontrolované oplodnění na izolovaném stanovišti (oplodnáček) je proto klíčovým nástrojem selekce.`,
+    related: ['matka', 'vcelstvo', 'snubni-prolet', 'oplodnacek', 'trubcina'],
+  },
+  {
+    slug: 'vcelstvo',
+    term: 'Včelstvo',
+    alias: ['roj', 'rojina'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Včelstvo je biologická jednotka tvořená matkou, dělnicemi a trubci, která funguje jako superorganismus se společným dýcháním, termoregulací a kolektivní obranou.',
+    longDef: `Včelstvo se skládá z jediné matky, sezónně 40 000–80 000 dělnic a několika set až tisíce trubců. Jako celek udržuje vnitřní teplotu plodového hnízda na 34–35 °C bez ohledu na vnější podmínky — dělnice generují teplo svalovou kontrakcí, v létě naopak chladí odpařováním vody. Tato termoregulace je zásadní pro správný vývoj plodu.
+
+Komunikace uvnitř včelstva probíhá feromon-chemickými signály (mateří látka, nožní feromon, výstražný feromon kyselina isopentylacetátová při obraně) i pohybovými signály — tanzí. Ztráta matky vede k feromonovému deficitu, který dělnice detekují během hodin a začínají stavět záchranné matečníky.
+
+Zdravotní stav včelstva je základním ukazatelem pro včelaře. Sleduje se množství a charakter plodu (zavíčkovaný vs. otevřený, rozmístění), chování na česnu, množství zimních zásob a přítomnost parazitů (zejména roztoč Varroa destructor). Prohlídka úlu se provádí zpravidla jednou za 7–10 dnů v sezoně.
+
+Silné včelstvo o 60 000–80 000 dělnicích je předpokladem ekonomicky zajímavého medonosného výnosu. Podle dat Českého svazu chovatelů hospodářských zvířat (ČSCHZ) čítal průměrný výnos medu v ČR v roce 2023 přibližně 19 kg na jedno včelstvo.`,
+    related: ['matka', 'delnice', 'trubec', 'rojeni', 'zazimovani', 'ul-pojem'],
+  },
+  {
+    slug: 'plast',
+    term: 'Plást',
+    alias: ['plástek', 'včelí plást'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Plást je soustava šestibokých voskových buněk, které včely stavějí jako zásobník pro med, pyl i jako líheň pro plod.',
+    longDef: `Plást tvoří dělnice vylučováním voskových šupinek ze čtyř párů voskových žlázek na zadečku. Jedna dělnice vyprodukuje za svůj život 1–2 g vosku; stavba 1 kg plástu vyžaduje spotřebu asi 6–8 kg medu. Stavba plástu probíhá intenzivně při dostatku nektaru a teplém počasí.
+
+Šestihranné buňky mají geometricky optimální tvar — maximalizují objem při minimální spotřebě materiálu. Průměr buněk pro dělnický plod činí přibližně 5,2–5,4 mm, pro trubčí plod 6,2–6,9 mm. Orientace plástů v moderním rámkovém úlu je na kolmé rámky (Langstrothova orientace) nebo vodorovné pásmo (Dadant).
+
+V plodišti jsou buňky využívány pro kladení vajíček a výchovu larvy. V medníku jsou buňky naplněny zralým medem a zaplombovány voskovým víčkem. Pyl (tzv. chléb včelí) se ukládá do buněk přiléhajících k plodistu a lisuje se vrstvami různobarevného pylu.
+
+Starý plást (tmavý, zanesený zbytky svleček larev) zhoršuje zdravotní podmínky a zvyšuje riziko onemocnění. Včelaři proto provádějí každoroční nebo dvouletou obměnu části plástů, zejména v plodišti. Vyřazené plásty se taví a vosk se prodává nebo vrací k výrobě mezistěn.`,
+    related: ['vcelivosk', 'vceli-plod', 'mezistena-pojem', 'vcelarsky-ramek'],
+  },
+  {
+    slug: 'vceli-dilo',
+    term: 'Včelí dílo',
+    alias: ['obilí', 'plásty'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Včelí dílo je souhrn všech plástů v úlu, které tvoří životní prostor včelstva — zahrnuje plodové i medné zóny.',
+    longDef: `Pojmem včelí dílo se rozumí úhrn všech plástů (jak plodových, tak medných) umístěných na rámcích v nástavkovém nebo plodišťovém prostoru úlu. Kvalita díla je jedním z hlavních ukazatelů stavu včelstva při jarní prohlídce.
+
+Zdravé dílo je kompaktní, plodové pásmo je soustředěné (tzv. zavřené plodové hnízdo), med a pyl jsou rovnoměrně rozloženy po okraji a v horní části plástu. Přerušovaný nebo rozptýlený plod signalizuje nemoc (mor plodu, hniloba), problémy s matkou nebo zákeřné vnější podmínky.
+
+Staré černé plásty se v plodišti nahrazují každé 1–2 roky; v medníku se plásty udržují déle, protože neobsahují svlečky larev. Pravidelná obnova díla snižuje chemickou zátěž (rezidua akaricidů se akumulují ve vosku) a zlepšuje hygienu hnízda.
+
+Včelař eviduje počet obsazených plástů jako ukazatel síly včelstva — silné zimující včelstvo obsadí 8–10 rámků v Langstrothově úlu. Pojem "plást chléb" označuje plástu plné pylu (zásoby bílkovin pro jarní rozvoj).`,
+    related: ['plast', 'vcelivosk', 'vceli-plod', 'ul-pojem', 'vcelarsky-ramek'],
+  },
+  {
+    slug: 'vcelarsky-ramek',
+    term: 'Včelařský rámek',
+    alias: ['rámek', 'rámek úlový'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Včelařský rámek je dřevěný nebo plastový nosný prvek, na němž včely staví plást — jeho rozměry určují typ úlu a umožňují výměnu plástů bez poškození díla.',
+    longDef: `Rámek se skládá z horní a dolní lišty a dvou postranních lišt. Standardizované rozměry zajišťují vzájemnou zaměnitelnost mezi úly stejného systému. Nejrozšířenější rozměry v Česku a Slovensku jsou rámek Langstroth (448 × 232 mm) a rámek Česko-Slovenský (39 × 24 cm), dále Dadant, Zander nebo rámky pro medníkové nástavky (medníkový rámek je přibližně poloviční výšky plodištního).
+
+Nový rámek je opatřen drátkem (3–4 řady ocelového nebo nerezového drátu), na nějž se připevňuje mezistěna — voskový základ pro výstavbu plástu. Alternativně se používají rámky s plastovou základnou.
+
+Mezi sousedními rámky je zachováván tzv. včelí prostor (bee space) 6–9 mm — tento rozměr popsal jako klíčový americký včelař Lorenzo Langstroth v roce 1851. Menší mezera by se zaplnila propolisem, větší stavbou divokých plástů.
+
+Správná manipulace s rámky (zvedání za bočnice, nikoli za horní lištu samotnou) zabraňuje přetrhání plástů. Na prodejní trh jsou dodávány rámky hotové nebo v sadách k sestavení.`,
+    related: ['plast', 'mezistena-pojem', 'rozperka-pojem', 'ul-pojem', 'vceli-dilo'],
+  },
+  {
+    slug: 'nastavek',
+    term: 'Nástavek',
+    alias: ['nástavkový úl', 'medníkový nástavek'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Nástavek je samostatná část nástavkového úlu (zpravidla medník), která se přidává na plodišťový nástavek, aby včelám poskytla prostor pro ukládání medu.',
+    longDef: `Nástavkový systém (nejčastěji Langstroth, Dadant nebo Zander) umožňuje snadno rozšiřovat objem úlu přidáváním normalizovaných boxů — nástavků. Plodiště (nejspodnější nástavek) slouží k výchově plodu a zimování, medník (horní nástavek) je určen pro ukládání medné zásoby. Obě části jsou odděleny mateří mřížkou, která zabrání matce klást do medníku.
+
+Každý nástavek pojme 8 nebo 10 standardních rámků. V sezoně s dobrou snůškou lze včelstvo rozšiřovat přidáváním dalšího medníkového nástavku — tzv. šuplíkový systém. Příliš brzké přidání medníku zbrzdí rozvoj plodu; příliš pozdní způsobí překotné rojení kvůli nedostatku prostoru.
+
+Pro zimování se medníky odebírají; zimující včelstvo se soustřeďuje na 1–2 plodištních nástavcích s dostatkem zimních zásob (12–15 kg cukrového roztoku nebo medu).
+
+Nástavky se vyrábějí ze dřeva (smrk, topolovice) nebo z polystyrenu. Polystyrenové úly mají lepší tepelnou izolaci, jsou lehčí, ale mechanicky méně odolné.`,
+    related: ['ul-pojem', 'materi-mrizka', 'plodiste', 'mednik', 'zazimovani'],
+  },
+  {
+    slug: 'plodiste',
+    term: 'Plodišt',
+    alias: ['plodiště', 'plodový prostor'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Plodiště je spodní část úlu, kde matka klade vajíčka, vyvíjí se plod a kde včelstvo zimuje.',
+    longDef: `Plodiště tvoří jádro biologického života včelstva. Matka zde klade vajíčka do voskových buněk, dělnice ošetřují larvy a kukly a udržují teplotu plodového hnízda na 34–35 °C. Správný tvar plodového hnízda je kulovitý nebo elipsoidní — plod je soustředěn ve středu, zásoby medu a pylu obklopují hnízdo ze stran a shora.
+
+V moderních nástavkových úlech tvoří plodiště zpravidla jeden nebo dva nástavkové boxy. V tradičním jednodílném úlu (Česko-Slovenský, Simplex) jsou plodiště a medník v jednom prostoru, oddělení se provádí jen mateří mřížkou.
+
+Velikost plodiště ovlivňuje silu včelstva a přezimování. Příliš velké plodiště vede k plýtvání energií na vyhřívání; příliš malé omezuje rozvoj a může vyvolat rojení. Pro silné včelstvo se doporučuje plodiště s kapacitou 10 plodištních rámků Langstroth.
+
+Na jaře se plodiště kontroluje jako první — po zimě by mělo být osazeno 5–7 plásty s živým plodem a dostatkem pylu. Plodiste bez plodu (mimo zimní nebo rojový stav) signalizuje bezmatečnost.`,
+    related: ['ul-pojem', 'nastavek', 'mednik', 'materi-mrizka', 'vceli-plod', 'matka'],
+  },
+  {
+    slug: 'mednik',
+    term: 'Medník',
+    alias: ['medníkový nástavek'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Medník je horní část úlu oddělená mateří mřížkou, kam dělnice ukládají přebytečný med určený pro sklizeň.',
+    longDef: `Medník se umísťuje nad plodišťový nástavek a od plodiště ho odděluje mateří mřížka. Dělnice jím procházejí volně, matka (kvůli větší šířce zadečku) nikoliv — tím je zaručeno, že medník obsahuje čistý med bez plodu.
+
+V průběhu hlavní snůšky (zejm. lípová a řepková) se medník plní rychle — silné včelstvo může zaplnit medníkový nástavek o 10 rámcích za méně než 2 týdny. Při velmi silné snůšce se přidává druhý nebo třetí medník (tzv. zaplnění medníků).
+
+Vytáčení medu z medníku se provádí nejčastěji dvakrát v sezoně — po řepkové (červen) a po lípovo-letní snůšce (srpen). Před vytáčením se plásty zbavují víček pomocí odkrývacích nástrojů (odkrývací vidlička, nůž nebo pára).
+
+Medník se na zimu sundává a skladuje na suchém místě — vlhkost by způsobila plísně a zkažení zbylých stopen medu. Na podzim se medníkové plásty mohou dočasně vrátit k dočišťování zbytků medu.`,
+    related: ['nastavek', 'materi-mrizka', 'plodiste', 'medomet-pojem', 'vytaceni-medu', 'zaviceny-med'],
+  },
+  {
+    slug: 'materi-mrizka',
+    term: 'Mateří mřížka',
+    alias: ['matečná mřížka', 'excluder'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Mateří mřížka je perforovaná destička s otvory (4,1–4,4 mm), jimiž projdou dělnice, ale nikoli matka, a zabraňuje tak matce klást v medníku.',
+    longDef: `Mateří mřížka se vkládá mezi plodiště a medník. Průchody jsou dimenzovány na průměr dělnice (cca 4,5 mm), ale matka (cca 5,5–6 mm šířky zadečku) jimi neprojde. Trubci zpravidla také neprojdou, nebo jen s obtížemi.
+
+Vyrábí se v kovové (nerez, pozinkovaný plech) nebo plastové variantě. Kovové mřížky mají delší životnost, plastové jsou levnější. Klíčovým parametrem je přesnost rozměrů — příliš velké otvory matku nezadrží, příliš malé brání průchodu dělnic a snižují mednou výnosnost.
+
+Někteří včelaři mateří mřížku nepoužívají (tzv. bezrámkové nebo přirozené metody), protože snižuje pohyb dělnic a může mírně omezovat přínos nektaru. V konvenčním hospodaření je ale mřížka standardním vybavením pro dosažení čistého, plodu prostého medu.
+
+Mateří mřížku je třeba pravidelně čistit od propolisu, který dělnice ucpávají otvory.`,
+    related: ['nastavek', 'mednik', 'plodiste', 'matka'],
+  },
+  {
+    slug: 'materi-kasicka',
+    term: 'Mateří kašička',
+    alias: ['royal jelly', 'mateří kašička'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Mateří kašička je bílkovinný sekret vylučovaný čelistními a hltonovými žlázami dělnic, jímž je krmena matka po celý život a dělnické larvy pouze v prvních třech dnech.',
+    longDef: `Mateří kašička je výživná látka bílé až slabě nažloutlé barvy s charakteristicky kyselou chutí. Obsahuje přibližně 60–70 % vody, 12–15 % bílkovin (zejm. majalaeny — specifické proteiny royalactin), 5–6 % cukrů, 3–6 % lipidů a různé vitaminy skupiny B.
+
+Rozhodující roli hraje mateří kašička v determinaci kasty — stejná genetická informace v oplodněném vajíčku vede při krmení výhradně mateří kašičkou ke vzniku matky, při krmení pylem a medem ke vzniku dělnice. Látka 10-HDA (kyselina trans-2-decenová) je považována za klíčový faktor diferenciace.
+
+Produkce mateří kašičky je základ pro chov matek — speciální larvální misky (tzv. misky, čínské nebo Nicotovy misky) přijímají 1–2denní larvy, které jsou zasazeny do matečníků, kde dělnice kašičku ukládají. Moderní produkce mateří kašičky dosahuje 300–500 g z jednoho silného včelstva za sezonu (intenzivní metody).
+
+Na trhu se mateří kašička prodává jako potravní doplněk, v kosmetice a v lékárnické praxi. Cena čerstvé mateří kašičky se na českém trhu pohybuje v rozmezí 3 000–7 000 Kč za kilogram.`,
+    related: ['matka', 'delnice', 'matecnik', 'vcelstvo'],
+  },
+  {
+    slug: 'propolis-vcely',
+    term: 'Propolis',
+    alias: ['pryskyřičný tmel', 'včelí tmel'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Propolis je pryskyřičná hmota, kterou včely sbírají z pupenů a kůry stromů, míchají s voskem a enzymy a používají k utěsnění a dezinfekci úlu.',
+    longDef: `Propolis (z řec. pro-polis, „před městem") sbírají dělnice zejména z pryskyřičných pupenů topolů, bříz, kaštanů a jehličnanů. Sběrný košíček na zadní nohze ho dopraví do úlu, kde ho přebírají stavitelky a zpracovávají přidáváním slin a enzymů.
+
+Složení propolisu závisí na botanickém okolí stanoviště — typicky obsahuje 50–55 % pryskyřic a balzámů, 25–35 % vosků, 10 % silic, 5 % pylu a různá fenolická a flavonoidní sloučeniny. Chemická variabilita je proto značná.
+
+Včely propolisem zalepují škvíry v úlu, zmenšují česno v zimě, mumifikují mrtvé larvy nebo vniknuté vetřelce (myš), které nemohou vynést. Propolis tak funguje jako přirozená dezinfekce — má prokázané antibakteriální, antifungální a antivirové účinky.
+
+Ve včelařství se propolis sbírá speciálními mřížkami umístěnými pod víkem úlu. Roční výnos z jednoho úlu je 50–150 g. Na trhu nachází uplatnění v potravinových doplňcích, tinkturách a kosmetice; cena surového propolisu se pohybuje kolem 300–600 Kč za 100 g.`,
+    related: ['vcelstvo', 'ul-pojem', 'vceli-dilo'],
+  },
+  {
+    slug: 'vcelivosk',
+    term: 'Včelí vosk',
+    alias: ['vosk', 'beeswax'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Včelí vosk je tuhý lipidický sekret produkovaný voskovými žlázkami dělnic, z nějž včely staví plásty a který se v průmyslu využívá v kosmetice, farmacii a ke výrobě mezistěn.',
+    longDef: `Včelí vosk vylučují dělnice ve věku 12–18 dnů ze čtyř párů voskových žlázek na ventrálním povrchu zadečku. Šupinky vosku (0,8 mg každá) zpracovávají dělnice čelistmi a formují do základního stavebního materiálu plástu.
+
+Chemicky jde o komplexní směs esterů mastných kyselin a alkoholů s dlouhými řetězci, uhlovodíků, kyselin a alkoholů. Teplota tání kolísá mezi 62–65 °C, bod tuhnutí je o 1–2 °C nižší. Vosk je nerozpustný ve vodě, rozpustný v organických rozpouštědlech (toluen, benzin).
+
+Výtěžnost vosku ze starých plástů při přetavování v solárním nebo parním tavičem dosahuje 60–80 % původní hmoty plástu. Z jednoho úlu lze ročně získat 0,2–1 kg vosku (závisí na obměně plástů). Vosk se prodává ke zpracování na mezistěny, svíčky, kosmetiku a farmaceutické přípravky.
+
+Rezidua pesticidů a akaricidů (zejm. fluvalinát, kumafos) se ve vosku akumulují — to je jeden z hlavních argumentů pro pravidelnou obměnu plástů. Nová mezistěna ze staré praxe může obsahovat znečistěný vosk a být vstupním zdrojem chemické zátěže.`,
+    related: ['plast', 'mezistena-pojem', 'delnice', 'vceli-dilo'],
+  },
+  {
+    slug: 'pyl-rousky',
+    term: 'Pyl (rouška)',
+    alias: ['pyl', 'pyl chléb', 'chléb včelí'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Pyl sbírají dělnice na okvětních prašnících, smíchávají ho se slinami a nektarem, formují do rousek a transportují v pylovém košíčku jako hlavní bílkovinný zdroj včelstva.',
+    longDef: `Sběr pylu probíhá při letu na kvetoucí rostliny — dělnice ho aktivně sbírá kartáčky na nohách, zvlhčuje nektarem nebo medem a formuje kompaktní rousky v košíčcích (corbicula) na zadních nohách. Barva rousek závisí na botanickém původu — žlutá (řepka), oranžová (mák, lípa), cihlová (kaštany), bílá (akát).
+
+Denní příjem pylu do silného včelstva dosahuje 20–50 g; celoroční potřeba jednoho včelstva je odhadována na 15–20 kg. Pyl je nenahraditelný bílkovinný zdroj pro výchovu plodu a produkci mateří kašičky — nedostatek pylu na jaře nebo na podzim oslabuje vývoj zimní generace dělnic.
+
+Včelař může pyl odebírat pylovými lapači umístěnými na česnu. Rousky projdou mřížkou, která je oddělí od trupu včely. Pyl se ihned suší při teplotě do 40 °C a skladuje v uzavřených nádobách nebo mrazí. Prodává se jako potravní doplněk (cena 200–600 Kč/100 g).
+
+Pylová analýza (melisopalinologie) umožňuje určit geografický původ a botanické složení medu i propolisu.`,
+    related: ['snuska', 'delnice', 'plast', 'vceli-plod'],
+  },
+  {
+    slug: 'snuska',
+    term: 'Snůška',
+    alias: ['medná snůška', 'hlavní snůška', 'vedlejší snůška'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Snůška je období, kdy je v přírodě dostatek nektaru nebo medovice a včely ho aktivně sbírají a zpracovávají na med.',
+    longDef: `Termín snůška označuje jak samotný zdroj (kvetoucí rostlinu nebo výměšek mšic), tak období intenzivního sběru. V podmínkách střední Evropy se rozlišuje snůška jarní (slivoň, jabloň, řepka — duben–červen), letní (lípa, jetel, maliník — červen–červenec) a podzimní doplňková (pohanka, slunečnice, vřes — srpen–září).
+
+Intenzitu snůšky měří váhový úlový kontrolní úl — průmyslová přesnost vah (100 g nebo méně) umožňuje zaznamenávat denní přírůstek hmoty. Hodnoty nad 2 kg/den signalizují silnou snůšku, nad 5 kg/den výjimečnou. Řepková snůška může v optimálních podmínkách (velký řepkový lán, teplé sluneční dny) přinést 30–60 kg medu na jedno silné včelstvo.
+
+Medovicová snůška (z výměšků mšic nebo červců na listnatých nebo jehličnatých stromech) je charakteristická pro horské oblasti, Šumavu, Jeseníky a podhorskou část Moravy. Medovicový med má tmavší barvu, silnější chuť a nižší obsah sacharózy než květový med.
+
+Správné načasování kočování ke zdrojům snůšky je základem rentabilního včelařství. Při snůšce řepky je třeba přisunout úly 2–3 dny před plným rozkvětem.`,
+    related: ['nektar-pojem', 'medovice-pojem', 'medny-vynos-pojem', 'kocovani', 'medomet-pojem'],
+  },
+  {
+    slug: 'medovice-pojem',
+    term: 'Medovice',
+    alias: ['lesní med', 'medovicová snůška'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Medovice je sladký výměšek mšic, červců nebo jiných fytofágního hmyzu sajícího ze floemu stromů, který dělnice sbírají jako alternativní zdroj cukrů k nektaru.',
+    longDef: `Medovice vzniká tak, že kořen sajícího hmyzu (mšice, červci, mery, háďátko) zpracovává floémový mízu bohatou na sacharózy — přebytek cukrů vylučuje v podobě kapičky výměšku. Dělnice ho sbírají z povrchu listů nebo přímo z hmyzu, transportují do úlu a zpracovávají podobně jako nektar.
+
+Botanické zdroje medovice v Česku tvoří zejm. jedlová medovice (Abies alba, Picea abies — dělají ji mery Cinara a Sacchiphantes), dubová medovice a lipová medovice. Medovicový med je tmavý (barva od hnědožlutavé po téměř černou), s charakteristicky pryskyřičnou nebo karamelovou chutí, s nižším obsahem sacharózy a vyšším obsahem oligosacharidů a minerálních látek.
+
+Riziko pro zimování: medovicový med má vyšší obsah dextrinů (nestravitelných polysacharidů), které způsobují průjem u včel (tzv. nosematóza provázená průjmem) při konzumaci v zimě. Včelaři proto doporučují odebírat medovicový med z medníků v srpnu a nahradit zásoby cukerným sirupem.
+
+Medovicový med se prodává draze — na českém trhu 200–500 Kč/kg — a je považován za gastronomicky hodnotnější produkt pro specifickou chuť.`,
+    related: ['snuska', 'nektar-pojem', 'zazimovani', 'nosematoza'],
+  },
+  {
+    slug: 'nektar-pojem',
+    term: 'Nektar',
+    alias: ['nektarová snůška'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Nektar je cukerný roztok vylučovaný nektárníky kvetoucích rostlin, který je primárním surovým materiálem pro výrobu květového medu.',
+    longDef: `Nektar produkují nektáriá — specializovaná pletiva (žlázky) umístěná u základny okvětních plátků nebo na extraflórálních místech (listové řapíky, palisty). Jeho složení je proměnlivé: 5–80 % cukrů (sacharóza, fruktóza, glukóza), voda, aminokyseliny, enzymy a aromatické látky.
+
+Dělnice sbírají nektar medovým váčkem (volata mel) — po návratu do úlu ho předávají přijímacím dělnicím, které ho opakovaně přelévají a přidávají enzymy (invertáza, glukóza oxidáza). Voda se odpařuje při ventilaci — ze čerstvého nektaru (obsahuje 20–80 % vody) vzniká zralý med (do 17–18 % vody), pak teprve dělnice buňky zavíčkují.
+
+Vydatnost nektarové produkce závisí na druhu rostliny, počasí a půdní vlhkosti. Řepka olejka je jednou z nejdůležitějších nektarových plodin v Česku — při příznivých podmínkách produkuje až 100–150 kg nektaru na hektar. Významné nektarové plodiny jsou dále lípa (Tilia sp.), akát (Robinia pseudoacacia), jetel (Trifolium sp.) a facelie (Phacelia tanacetifolia).
+
+Nektarová snůška se od medovicové liší tím, že nektar pochází přímo z rostlin, nikoliv z hmyzích výměšků — výsledný med má odlišné fyzikální i senzorické vlastnosti.`,
+    related: ['snuska', 'medovice-pojem', 'pyl-rousky', 'zaviceny-med'],
+  },
+  {
+    slug: 'rojeni',
+    term: 'Rojení',
+    alias: ['roj', 'přirozené rojení'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Rojení je přirozený způsob rozmnožení včelstva, při němž stará matka s částí dělnic opouští původní úl a zakládá nové hnízdo.',
+    longDef: `Rojení je evolučně zakódovaná strategie šíření včelstva. Spouštěcím mechanismem je kombinace přeplněného úlu, slabé mateří látky (klesající produkce staré matky), hromadění trubců a vhodného počasí (konec května – červen). Dělnice začínají stavět matečníky — první signál pro včelaře.
+
+Primární roj (příroj) opouští úl v poledních hodinách za teplého a slunného dne, zpravidla v den, kdy se první matečník blíží k zavíčkování. Se starousedlou matkou odletí 30–50 % dělnic. Roj se shlukne na větvi nebo jiné podpoře v okruhu do 300 m od původního úlu, kde čeká 1–3 dny, než průzkumné dělnice najdou nové hnízdiště.
+
+Včelař může roj chytit (vejde se do prázdného úlu nebo rohové schránky) a takto získat nové včelstvo. Pokud roj odletí, původní úl pokračuje se zásobou matečníků — první nakladená matka likviduje ostatní matečníky (souboj o trůn). Po snubním proletu a oplodnění obnoví kladení.
+
+Kontrola rojení je jedním z hlavních pracovních úkolů v sezoně. Profilaktická opatření zahrnují výměnu matek, přidávání medníků, uřezání matečníků nebo umělé rojení (oddělkování).`,
+    related: ['roj', 'oddelek', 'matecnik', 'matka', 'vcelstvo'],
+  },
+  {
+    slug: 'roj',
+    term: 'Roj',
+    alias: ['přírodní roj', 'příroj'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Roj je skupina včel (matka + dělnice) oddělená od mateřského včelstva při přirozeném rojení, která hledá nové hnízdiště.',
+    longDef: `Roj opouštějící úl tvoří matka a přibližně 30–50 % dělnic mateřského včelstva — v počtu 10 000–30 000 kusů. Před odletem dělnice přijímají med do volete na zásoby. Roj obvykle setrvá dočasně (tzv. rojové shromaždiště) na blízkém místě 30 minut až několik hodin, poté odletí za novým hnízdištěm nalezeným průzkumnicemi.
+
+Chycení roje provádí včelař sfouknuní (protřepáním) do prázdného úlu nebo do speciálního rojového koše. Je nutné zachytit matku — bez ní roj opustí nové umístění. Pro chytání rojů ve výšce nebo na stromech se používají speciální záchytné klapky nebo rohové schránky.
+
+Příroj má výhodu — mladý roj je obvykle zdravý a plný energie (dělnice ve věku intenzivní produkce vosku a stavby plástu), rychle buduje nové dílo. Nevýhodou je nižší výnos v prvním roce a nutnost přikrmování.
+
+V přírodě (dutý strom, střešní mezera) zakládají roje volná hnízda — tzv. divoké nálezy jsou v ČR součástí ochrany biodiverzity, ale prakticky je hospodaření s nimi problematické.`,
+    related: ['rojeni', 'oddelek', 'matecnik', 'matka', 'vcelstvo'],
+  },
+  {
+    slug: 'oddelek',
+    term: 'Oddělk',
+    alias: ['oddělkové včelstvo', 'nucleus'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Oddělk je malé umělé včelstvo vytvořené včelařem z části dělnic, plástů a mladé nebo zaváčkované matky, sloužící k reprodukci nebo překotvení bez přirozeného rojení.',
+    longDef: `Oddělk (nucleus) je jednou z metod kontrolovaného množení včelstev bez přirozeného rojení. Tvoří ho zpravidla 3–6 rámků (plod, zásoby, dělnice) odebraných z jednoho nebo více silných včelstev, k nimž se přidá buď zaváčkovaný matečník (ze záměrného chovu nebo záchranný), kupovaná matka nebo volná neoplodněná matka.
+
+Oddělk se umístí na nové standiště nebo na vzdálené místo, aby létavky se nemohly vrátit zpět. Oddělk bez matky (tzv. sirotčí) přijme přidanou matku nebo si vystaví záchranné matečníky ze zálohy plodu.
+
+Oddělky jsou základem moderní selekce matek — chovatelé matek standardně pracují s tzv. nukleárními (nucleus) úly, do nichž se sází oplozené matky z výběrového chovu. V ČR probíhá hodnocení matek v rámci šlechtitelského programu Českého svazu chovatelů včely medonosné (ČSCHM).
+
+Oddělk zpravidla v prvním roce nepřinese ekonomický výnos — slouží jako nová zásoba pro příští sezonu. V případě ztráty silného včelstva může oddělk sloužit k urgentnímu posílení nebo spojení.`,
+    related: ['rojeni', 'roj', 'matecnik', 'matka', 'oplodnacek'],
+  },
+  {
+    slug: 'matecnik',
+    term: 'Matečník',
+    alias: ['matečná buňka'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Matečník je zvětšená vosková buňka, ve které se vyvíjí larva budoucí matky, krmená výhradně mateří kašičkou.',
+    longDef: `Matečník má žaludovitý tvar a svislou orientaci, na rozdíl od vodorovně orientovaných buněk dělnic a trubců. Délka matečníku dosahuje 20–25 mm. Staví se z vosku, přičemž dno je tvarováno do misky ještě před zasazením vajíčka.
+
+Rozlišují se tři typy: rojové matečníky (na okrajích plástů, signalizují přípravy na rojení), záchranné matečníky (budované nouzově z dělnických larv mladých do 3 dnů po ztrátě matky) a tiché výměnné matečníky (stavěné diskrétně vedle mateřského hnízda při postupné výměně stárnoucí matky).
+
+Záchranné matečníky jsou méně spolehlivé než plánované rojové nebo chovatelsky připravené — larva přechází na výhradní krmení mateří kašičkou opožděně (přes 24 h), výsledná matka bývá méně kvalitní. Proto zkušený chovatel matek používá speciální chovatelské misky nebo larvovníky.
+
+Z matečníku vychází matka přibližně 16. den od nakladení vajíčka. První dny po vylíhnutí zůstává v úlu a prochází mládecky zrání. Snubní prolet podnikne za 7–10 dnů za příznivých podmínek.`,
+    related: ['matka', 'rojeni', 'oddelek', 'materi-kasicka', 'snubni-prolet'],
+  },
+  {
+    slug: 'zavickovani',
+    term: 'Zavíčkování',
+    alias: ['plombování', 'víčkování'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Zavíčkování je pokrytí obsahu buněk voskovým víčkem — u plodu uzavírá kuklu, u medu signalizuje jeho zralost (obsah vody pod 18 %).',
+    longDef: `Zavíčkování plodu nastane přibližně 6. den po nakladení vajíčka (po 3 dnech ve vajíčku a 3 dnech larvy). Dělnice uzavřou buňku plochým nebo mírně vyvýšeným voskovým víčkem; pod ním larva spřede zámotek a přemění se v kuklu. Barva zavíčkovaného plodu je světle hnědá (zdravá) nebo tmavohnědá (pokleslá — možný příznak nemoci).
+
+Zavíčkování medu je pro včelaře signálem zralosti — včely zavíčkují buňku teprve tehdy, když se obsah vody sníží pod 17–18 %. Med s vyšším obsahem vody (z nezavíčkovaných buněk nebo nevyzrálý) kvasí. Proto platí pravidlo: vytáčet jen med z rámků zavíčkovaných alespoň ze dvou třetin plochy.
+
+Víčka medu mohou být plochá (suchá víčka) nebo konvexní (mokrá víčka). Suchá víčka jsou oblíbena pro prodej medových plástů jako delikatesu. Odkrývání (deoperkulace) se provádí odkrývací vidličkou, nožem nebo parním odkrývačem.
+
+Bledý nebo šedý zákal zavíčkovaného plodového díla může indikovat mrazový plod (Melissococcus plutonius) nebo vápenný plod (Ascosphaera apis) — hygienická kontrola je zde klíčová.`,
+    related: ['vceli-plod', 'zaviceny-med', 'medomet-pojem', 'vytaceni-medu'],
+  },
+  {
+    slug: 'vceli-plod',
+    term: 'Včelí plod',
+    alias: ['plod', 'pláství s plodem'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Včelí plod je souhrnné označení pro vajíčka, larvy a kukly ve vývojovém stádiu uvnitř plástových buněk.',
+    longDef: `Vývoj včelího plodu začíná nakladením vajíčka matkou na dno buňky. Vajíčko je válcovité (1,5 mm), bílé barvy, ve svislé poloze. Po 3 dnech se z vajíčka vylíhne larva — malý, zakřivený, beznohý červ. Dělnice ji krmí mateří kašičkou (prvních 2–3 dní pro dělnici), pak směsí pylu a medu.
+
+Ve zdravém plodistu je plod kompaktní — buňky jsou obsazené pravidelně, vajíčka stojí svisle ve středu buňky, larvy jsou perleťově bílé a lesklé. Tzv. „pepřový" plod (buňky s plodem a prázdné buňky střídavě) je příznakem viru deformovaných křídel, vápenného nebo mrazového plodu, nebo problémů s matkou.
+
+Larvální výchova probíhá 6 dní (dělnice), poté dělnice buňku zavíčkují. Kuklení a metamorfóza trvá 12 dní. Celkem 21 dní od vajíčka k dospělé dělnici. Trubec se vyvíjí 24 dnů, matka 16 dnů.
+
+Plodový plást je tepelnou konstantní zónou — teplota 34–35 °C se udržuje termoregulací dělnic. Odchylky způsobují vývojové defekty (křivé nebo chybějící části těla).`,
+    related: ['zavickovani', 'matka', 'delnice', 'plast', 'mor-vceliho-plodu', 'hniloba-plodu'],
+  },
+  {
+    slug: 'kladeni-matky',
+    term: 'Kladení matky',
+    alias: ['snůška vajec', 'oviposice'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Kladení matky (oviposice) je proces, při němž matka vkládá oplodněná nebo neoplodněná vajíčka do buněk plástu — klíčový ukazatel zdravého stavu včelstva.',
+    longDef: `Plodná oplodněná matka klade v plné sezoně (duben–srpen) 1 500–2 500 vajíček denně. Oplodněná vajíčka směřují do buněk dělnického rozměru (5,2–5,4 mm) a dávají vznik dělnicím; do buněk trubčí velikosti (6,2–6,9 mm) klade matka záměrně neoplodněná vajíčka, z nichž se vyvíjejí trubci.
+
+Vzor kladení sleduje včelař při prohlídce: zdravá matka klade kompaktní terč plodu bez mezer. Přerušený plod (chybějící vajíčka v buňkách, „hnáto síto") signalizuje onemocnění nebo matku s vadným semenem. Matka s nízkým příjmem pylu nebo starší matka přechází na nepravidelné kladení dříve.
+
+Dělnice přijímají vajíčko krátkodobou inspekcí buňky — vaječné buňky dělnic obsahují nultý pyl nebo mateří kašičku připravenou pro larvu. Matka vajíčko připevní k dnu buňky vylučovaným lepivým sekretem.
+
+Kontrola kladení je základní metodou diagnostiky bezmatečnosti — pouhý pohled na plást (přítomnost vajíček viditelných lupou nebo na slunci) potvrdí přítomnost aktivní matky. Vajíčko je čerstvé, starší larrvy a zavíčkovaný plod mohou pocházet z předchozí matky.`,
+    related: ['matka', 'vceli-plod', 'zavickovani', 'delnice', 'trubcina'],
+  },
+  {
+    slug: 'varroaza',
+    term: 'Varroáza',
+    alias: ['varroóza', 'varroa', 'Varroa destructor'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Varroáza je nejrozšířenější a ekonomicky nejvýznamnější onemocnění včel způsobené roztočem Varroa destructor, který oslabuje plod a přenáší virové nemoci.',
+    longDef: `Varroa destructor (dříve Varroa jacobsoni) je ektoparazitický roztoč původem z Asie, který se šíří celosvětově a prakticky v každé populaci včely medonosné v Evropě. Samička (1,1 × 1,6 mm, červenohnědá, oválná) se přichycuje na kuklu nebo dospělou včelu a saje hemolymfu.
+
+Rozmnožování probíhá v zavíčkovaném plodu — samička vstoupí do buňky před zavíčkováním, naklade 1 samce a 4–5 samic; po dokončení vývoje dospělé roztoče opouštějí buňku s novou generací včely. Trubčí plod je preferovaným hostitelem (trubci se vyvíjejí déle, takže samička stihne více potomků).
+
+Neléčená Varroa způsobí zánik včelstva zpravidla do 2–4 let. Kromě přímého sání oslabuje imunitu a je vektorem virů (zejm. virus deformovaných křídel — DWV). Léčba je v ČR povinná — přípustné látky jsou kyselina šťavelová (Oxuvar, Api-Bioxal), amitraza (Apivar, Apitraz) a fluvalinát (Apistan); použití se řídí Metodickým pokynem SVS a zákonem o léčivech.
+
+Monitoring se provádí přirozeným spadem na podložce, zimní prací s 100 včelami nebo alkoholovým omýváním (wash). Práh léčení je zpravidla 3 % roztoče na dělnicích nebo 0,5 roztoče/100 dělnic (WHO doporučení).`,
+    related: ['klestik-vcely', 'zazimovani', 'vcelstvo', 'vceli-plod'],
+    externalUrl: 'https://cs.wikipedia.org/wiki/Varroa_destructor',
+    externalLabel: 'Wikipedia: Varroa destructor',
+  },
+  {
+    slug: 'klestik-vcely',
+    term: 'Kleštík včelí',
+    alias: ['Varroa destructor', 'kleštík', 'roztoč varroa'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Kleštík včelí (Varroa destructor) je ektoparazitický roztoč sajíci hemolymfu ze včelích larev a dospělců, jehož nekontrolovaný nárůst vede k zániku včelstva.',
+    longDef: `Kleštík včelí je systematicky zařazen do řádu Acarina (pavoukovci), čeledi Varroidae. Samička je oploštělá, hnědočervená, přibližně 1,1 mm dlouhá a 1,6 mm široká. Je viditelná pouhým okem na těle včely nebo ve spadu na úlové podložce.
+
+Životní cyklus zahrnuje phoretickou fázi (roztoče žijí na dospělých včelách) a reproduktivní fázi (v zavíčkovaném plodu). Samička vstupuje do buňky 24–48 hodin před zavíčkováním, naklade jedno neoplodněné vajíčko (samec) a 4–5 oplodněných (samice). Samec oplodní dcery v buňce ještě před vylíhnutím dělnice.
+
+Virulence kleštíka je způsobena kombinací přímého poškození (sání hemolymfy snižuje váhu narozené včely, poškozuje tukové těleso) a vektorového přenosu — kleštík je hlavním vektorem viru deformovaných křídel (DWV), akutního paralytického viru (ABPV) a dalších virů.
+
+Chemická rezistence Varroa destructor vůči pyrethroidům (fluvalinát, flumethrin) je popsána v Evropě od 90. let. Proto se doporučuje rotace účinných látek a preferenční využití organických kyselin (kyselina šťavelová) jako první volba zejm. v bezplodém období.`,
+    related: ['varroaza', 'zazimovani', 'vceli-plod', 'vcelstvo'],
+  },
+  {
+    slug: 'mor-vceliho-plodu',
+    term: 'Mor včelího plodu',
+    alias: ['americký mor', 'AFB', 'Paenibacillus larvae'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Mor včelího plodu je nejnebezpečnější bakteriální onemocnění včelího plodu způsobené sporulující bakterií Paenibacillus larvae, které je v ČR úředně sledovanou nákazou.',
+    longDef: `Mor včelího plodu (anglicky American Foulbrood, AFB) způsobuje bakterie Paenibacillus larvae. Spóry jsou extrémně odolné — přežívají v suchu desítky let, v medu i po vaření. Přenos probíhá prostřednictvím kontaminovaných zásob, nástrojů, starých plástů nebo loupežnými včelami.
+
+Příznaky: zavíčkovaný plod mění barvu z světle hnědé na tmavohnědou, víčka jsou propadlá a perforovaná. Roztavená larva (tzv. „provázek" — sticky rope test) se táhne z buňky při zápichu párátkem jako lepivý provázek — tento test je základní diagnostickou metodou. Zápach je intenzivní, nasládlý až odporný.
+
+V ČR je mor včelího plodu chorobou podléhající povinnosti hlášení (zákon č. 166/1999 Sb., vyhláška SVS). Při potvrzení nákazy veterinárním lékařem (laboratorní průkaz z ÚSKVBL nebo SVS) se celé včelstvo i úlové vybavení spálí, stanoviště se dezinfikuje. Neexistuje povolená léčba antibiotiky v ČR (na rozdíl od USA).
+
+Preventivní opatření: dezinfekce nástrojů (louhem sodným 4 %, plamenem), nákup zdravých matek a rodinných oddělků s veterinárním osvědčením, vyhýbání se krmení cizím medem.`,
+    related: ['hniloba-plodu', 'vceli-plod', 'vcelstvo'],
+    externalUrl: 'https://www.svscr.cz/zdravi-zviratunemoci-vcely/',
+    externalLabel: 'SVS ČR: nemoci včel',
+  },
+  {
+    slug: 'hniloba-plodu',
+    term: 'Hniloba plodu',
+    alias: ['evropský mor', 'EFB', 'Melissococcus plutonius'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Hniloba plodu (evropský mor) je bakteriální onemocnění nezavíčkovaného plodu způsobené bakterií Melissococcus plutonius, méně destruktivní než mor, ale při stresu vysoce šírivé.',
+    longDef: `Hniloba plodu (European Foulbrood, EFB) způsobuje Melissococcus plutonius. Bakterie se šíří v trávicím traktu larvy a konkuruje jí o živiny, larva hyne zpravidla před zavíčkováním. Symptomy: larvy mění barvu z perleťově bílé na žlutou až hnědou, přijímají nepřirozené polohy v buňce (zkroucení, přilnutí ke stěně buňky), zápach je méně intenzivní než u moru.
+
+EFB je v ČR také chorobou podléhající hlášení (vyhláška č. 299/2003 Sb.). Při potvrzení nákazy SVS se rozhoduje o léčbě nebo likvidaci — závisí na intenzitě nákazy a zdravotní situaci. Na rozdíl od AFB existuje v některých zemích EU povolená léčba oxytetracyklinem, v ČR je použití antibiotik u včel zakázáno.
+
+Předisponující faktory pro propuknutí EFB jsou stres (slabá snůška, chlad), nedostatek pylu (slabá jarní snůška), oslabená imunita včelstva nebo přítomnost Varroa. Včelstvo může spontánně ozdravět při příznivých podmínkách a silné snůšce (dělnice rychle odstraní nemocný plod — hygiena).
+
+Preventivní hygiena: pravidelná obměna plástů, dezinfekce nástrojů, vyhýbání se přemísťování plástů mezi podezřelými včelstvy.`,
+    related: ['mor-vceliho-plodu', 'vceli-plod', 'varroaza'],
+  },
+  {
+    slug: 'nosematoza',
+    term: 'Nosematóza',
+    alias: ['nosema', 'Nosema apis', 'Nosema ceranae'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Nosematóza je mikrosporiální onemocnění střeva dělnic způsobené parazitem Nosema apis nebo Nosema ceranae, projevující se průjmem, oslabením a zkrácením životnosti dělnic.',
+    longDef: `Nosema apis je původní mikrosporie střeva dospělé včely v Evropě, Nosema ceranae je invazivní druh původem z Asie, který v současnosti dominuje v ČR i EU. N. ceranae nevyvolává typické průjmové příznaky jako N. apis (viditelné namnažení výkalů na přístupu a česnu), ale způsobuje chronické oslabení a zkrácení života dělnic.
+
+Spóry Nosemy jsou přijímány perorálně (kontaminovanou potravou nebo vodou). Ve střevě klíčí a napadají epitelové buňky, čímž snižují absorpci živin. Nakažené dělnice jsou méně schopné krmit plod, slabší, s kratší životností — záporná spirála oslabuje celé včelstvo.
+
+Diagnostika se provádí mikroskopicky z homogenátu zadečků 30–60 dělnic (posouzení počtu spór na dělnici). Léčba fumagilinem (Fumidil B) je v ČR od roku 2014 prakticky nedostupná (zrušení registrace přípravku v EU). Jiná léčba schválena není — prevence se zaměřuje na hygienu, obměnu plástů, silné zimování a přikrmování kyselinou fumarovou (omezeně).
+
+Medovicový med ponechaný jako zimní zásoba zvyšuje riziko nosematózy v zimě (nevstřebatelné dextriny způsobují průjem), proto se doporučuje doplňování cukerným sirupem.`,
+    related: ['vcelstvo', 'zazimovani', 'medovice-pojem'],
+  },
+  {
+    slug: 'medomet-pojem',
+    term: 'Medomet',
+    alias: ['medomet radiální', 'medomet tangenciální'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Medomet je centrifugální zařízení, v němž se odvíčkované rámky otáčejí a med je odstředivou silou vymršťován ze stěn buněk.',
+    longDef: `Medomet funguje na principu centrifugace — rámky jsou umístěny buď radiálně (čelní strana rámku kolmo k ose rotace) nebo tangenciálně (rámek rovnoběžně s obvodem koše). Radiální medomety (obvyklejší pro větší chovy) vytáčejí obě strany plástu najednou; tangenciální je třeba překlopit.
+
+Kapacita medometu se liší — ruční (2–6 rámků), elektrický malý (6–12 rámků), poloautomatický nebo průmyslový (24–48 rámků). Pro profesionální chovy nad 100 včelstev se používají průtočné systémy s automatickým odkrýváním, medomety s invertorem (nastavitelné otáčky) a filtrací medu pod odpouštěcím kohoutem.
+
+Med zachycený na stěnách koše stéká dolů a odtéká přes kohoutek do síta a sedimentační nádoby. Filtrace odstraňuje zbytky vosku a mechanické nečistoty; sedimentace (12–24 hodin) umožňuje vzduchové bubliny stoupnout na povrch.
+
+Nerezový medomet splňující hygienická kritéria (EN 13440) je podmínkou pro certifikaci medu v rámci systémů kvality (BIO, regionální značky).`,
+    related: ['vytaceni-medu', 'zaviceny-med', 'mednik', 'pastovani-medu'],
+  },
+  {
+    slug: 'mezistena-pojem',
+    term: 'Mezistěna',
+    alias: ['voskový základ', 'foundation'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Mezistěna je tenká vosková deska s reliéfem šestibokých buněk, která se vkládá do rámku jako základ pro stavbu plástu a usměrňuje velikost buněk.',
+    longDef: `Mezistěna se vyrábí strojovým lisováním nebo válcováním včelího vosku do desek o tloušťce 0,8–1,2 mm s reliéfem buněčných základen. Reliéf udává průměr buněk — standardní mezistěna pro dělnický plod má hexagonální vzor průměru přibližně 5,2–5,4 mm.
+
+Mezistěna se vkládá do rámku s drátkem (3–4 vodorovné vodiče), k nimž se připevní zahřátím nebo horkým elektrifikátorem (tzv. pájením drátu). Připevnění musí být pevné — padající nebo přeložená mezistěna v létě ztrácí tvar a způsobuje divokost díla.
+
+Používání mezistěn řídí stavbu plástu: dělnice nestaví zbytečné trubčí buňky (klíčové pro kontrolu Varroa), dílo je pravidelné a snáze se manipuluje při točení. Mezistěny z certifikovaného vosku (bez reziduí pesticidů) jsou hygienickým standardem — kontaminovaná mezistěna může zatížit celé dílo.
+
+Na trhu jsou i plastové mezistěny s voskovou povrchovou vrstvou — jsou trvanlivější, ale méně přirozeně přijímané dělnicemi než čistě voskové.`,
+    related: ['plast', 'vcelivosk', 'vcelarsky-ramek'],
+  },
+  {
+    slug: 'rozperka-pojem',
+    term: 'Rozperka',
+    alias: ['rozpěrka', 'distanční vložka'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Rozperka je distanční vložka nebo úprava horní lišty rámku zajišťující správnou vzdálenost (včelí prostor 6–9 mm) mezi sousedními rámky.',
+    longDef: `Pojmem rozperka se označují různé konstrukční prvky zajišťující dodržení tzv. bee space (včelí mezera) — prostoru 6–9 mm, při němž včely rámky ani nepropolis, ani nestavějí divoká díla.
+
+Nejrozšířenější typ jsou Hofmannovy rozperky (konce bočních lišt rámků jsou prohnuty tak, aby se sousední rámky opíraly o sebe). Alternativou jsou kovové průvlaky (separátory), plastové distanční spony nebo magnetické distanční tyčky.
+
+Nesprávná vzdálenost rámků vede k problémům: příliš malá (< 6 mm) způsobí zapropolisování a neprostupnost díla; příliš velká (> 9,5 mm) vede ke stavbě divokého díla mezi rámky, které musí včelař odstraňovat a čistit.
+
+V nástavkových úlech se běžně používá 10 rámků na nástavek, přičemž okrajový prostor je mírně větší (8–10 mm od stěny úlu).`,
+    related: ['vcelarsky-ramek', 'ul-pojem', 'vceli-dilo'],
+  },
+  {
+    slug: 'dymak',
+    term: 'Dymák',
+    alias: ['kouřák', 'včelařský dymák'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Dymák je nástoj na výrobu chladného hustého kouře, který se při práci s včelstvem aplikuje do česna a pod víko úlu, aby se snížila agresivita včel.',
+    longDef: `Dymák se skládá z nádržky (nerezový nebo pozinkovaný koš), měchu (kožený nebo syntetický) a trysky. Tlením organického materiálu (papír, sisal, dřevěné lupínky, seno, sušené houby) vzniká hustý chladný kouř. Teplota kouře by neměla překročit 50–60 °C — příliš horký kouř dělnice popálí a způsobí opak klidu.
+
+Fyziologický účinek kouře: dělnice detekují dym jako signál požáru a začínají přijímat zásoby medu z plástů (instinktivní příprava na opuštění hnízda). Plný vůle se méně snadněji bodají, jsou méně agresivní a méně reagují na dráždivé podněty. Navíc dym maskuje výstražné feromony (kyselina isopentylacetátová).
+
+Technicky správná aplikace: 2–3 záchvěvy kouře do česna před otevřením úlu, pak mírné zakouření pod víko. Přehnané zakouření dělnice stresuje a může poškodit jejich pachy (orientaci). Studený hustý bílý kouř je ideální, teplý tenký šedý je neúčinný.
+
+Dymák se čistí po každém použití — zbytky dehtu ucpávají trysku. Po skončení práce se uzavře přiškrcením trysky, aby doutnání samovolně uhaslo.`,
+    related: ['smetacek', 'ul-pojem'],
+  },
+  {
+    slug: 'smetacek',
+    term: 'Smetáček',
+    alias: ['včelí smetáček', 'péřový smetáček'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Smetáček je měkký kartáček nebo péřový věchýtek, jímž včelař setřásá a shromažďuje dělnice z rámků při prohlídce nebo před vytáčením.',
+    longDef: `Smetáček (anglicky bee brush) je nepostradatelnou součástí výstroje včelaře. Tradičně se vyráběl z koňských nebo husích per, dnes převažuje verze s měkkými syntetickými vlákny. Při každém použití musí být čistý — zbytky medu nebo propolisu způsobují reakci dělnic při kontaktu s cizím zápachem.
+
+Používá se ke strhávání dělnic z rámků (před kontrolou matky, před vytáčením medu, při přesunu rámků). Správná technika: krátké plynulé tahy od středu rámku směrem dolů. Rychlé nebo trhavé pohyby dělnice vyplaší a zvýší agresivitu.
+
+Alternativou k smetáčku jsou ofukovací kleště (mechanická) nebo vzduchový ofukovač (pro větší provoz). Při snůšce přítomnost cizích vůní (parfém, alkohol, pot) na smetáčku dráždí včely.
+
+Dezinfekce smetáčku mezi navštěvanými včelstvy je preventivním opatřením při podezření na mor plodu nebo jinou infekci — přenos přes kontaminovaný smetáček je možný.`,
+    related: ['dymak', 'ul-pojem'],
+  },
+  {
+    slug: 'ul-pojem',
+    term: 'Úl',
+    alias: ['koš', 'úlový box', 'box'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Úl je uměle vyrobené obydlí pro včelstvo, v němž včely staví dílo, vychovávají plod a ukládají zásoby; moderní rámkové úly umožňují snadnou prohlídku a sklizeň medu.',
+    longDef: `Dějiny úlaření sahají tisíce let zpět — první úly byly hliněné, korkové nebo košíkové. Moderní rámkový úl vychází z principu bee space definovaného Lorenzo Langstrothem (USA, 1851): pohyblivé rámky s mezirámkovou mezerou 6–9 mm dovolují rámky vyjímat bez poškozeni díla.
+
+Základní typy úlů v Česku a Slovensku: Česko-Slovenský úl (rozebíratelný, jednodílný, rámek 39 × 24 cm), Langstrothův úl (nástavkový, mezinárodně nejrozšířenější, rámek 448 × 232 mm), Dadantův úl (velké plodiště, oblíbený v jižní Evropě), Zanderův úl (kompromis rozměrů, oblíbený ve střední Evropě).
+
+Materiály: smrkové dřevo (tradice, dobré tepelné vlastnosti, nutnost nátěru), topolovice, polystyren (tepelná izolace, lehkost, horší trvanlivost), plast (moderní hygiena, lehkost). Polystyrenové úly jsou v ČR stále oblíbenější pro kočovné včelaření kvůli nižší hmotnosti.
+
+Správně umístěný úl stojí na podstavci ve výšce 30–50 cm, česnem na jih nebo jihovýchod, chráněný před přímým sluncem v poledne (lehký stín), bez překážek před česnem. Stanoviště se volí s ohledem na dostupnost vody a snůškový rádius (letí 3–5 km).`,
+    related: ['nastavek', 'plodiste', 'mednik', 'vcelarsky-ramek', 'vceli-dilo', 'cesno-pojem'],
+  },
+  {
+    slug: 'zazimovani',
+    term: 'Zazimování',
+    alias: ['zimní příprava', 'zimování'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Zazimování je souhrn úkonů provedených na konci sezony (srpen–říjen), jimiž včelař připraví včelstvo na zimní klid s dostatkem zásob a léčenou populací roztočů.',
+    longDef: `Zazimování zahrnuje několik klíčových kroků: vyhodnocení síly včelstva (obsazenost rámků, stav matky), léčbu varroázy (kyselina šťavelovou kapáním nebo sublimací při bezplodém stavu v říjnu–listopadu), doplnění zimních zásob (12–15 kg cukerného sirupu nebo medu), zúžení česna, odstranění medníkového nástavku a kontrolu větrání.
+
+Cukerný sirup na zazimování: koncentrace 2,5 : 1 (cukr : voda hmotnostně) nebo hustý sirup 2 : 1, podává se od poloviny srpna do konce září, aby ho včely stačily zpracovat. Příliš pozdní přikrmování způsobí, že med z cukerného sirupu zůstane nevyzrálý.
+
+Zimní shluček (cluster) se formuje v dolní části plodového hnízda, když teplota klesne pod 14 °C. Dělnice generují teplo svalovou kontrakcí, pohybují se od studené periferie do středu. Teplota středu shlučku se udržuje nad 20–25 °C.
+
+Klíčový ukazatel úspěšného zazimování: přítomnost dostatku zimních dělnic (dělnice, které nevychovávaly plod, mají velké tukové těleso — přezimují i 6 měsíců). Slabá nebo nemocná zimní generace vede k záhubě včelstva ještě před jarním vývojem.`,
+    related: ['vyzimovani', 'varroaza', 'medovice-pojem', 'nosematoza', 'vcelstvo'],
+  },
+  {
+    slug: 'vyzimovani',
+    term: 'Výzimování',
+    alias: ['jarní prohlídka', 'jarní revize'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Výzimování je první prohlídka včelstev po zimě (zpravidla konec března – začátek dubna), při níž se ověří stav matky, zásoby, plod a provede se jarní léčba varroázy.',
+    longDef: `Výzimování se provádí za teplého, bezvětrného dne při teplotě nad 12–14 °C. Při nižší teplotě se plodové hnízdo otevřením prochladí a plod uhyne. Cíl prohlídky: potvrdit přítomnost živé matky (vajíčka nebo mladý plod), odhadnout sílu a zásoby.
+
+Postup: sejme se víko, odstraní se záchranná krmítka, prohlédne se vrchní rámek. Pokud je plodové hnízdo vinuté a aktivní, prohlédne se centrálně. Hledá se přítomnost vajíček (průhled na světle), normálnost plodového pásma, stav zásob pylu a medu.
+
+Odebraný jarní spad ze zimní podložky dává přibližnou informaci o roztočích — přirozeně zemřelí roztoči z zimního shlučku jsou indikátorem stavu infestace. Při počtu nad 50 mrtvých roztočů na podložce (za zimu) je zahájení léčby v dubnu doporučeno.
+
+Po výzimování se odstraní zimní ucpávky česna, vymění se zimní podložka, vyčistí se dno. Slabá nebo bezmatečná včelstva se spojí metodou novinové fólie nebo přidáním matky z rezervy.`,
+    related: ['zazimovani', 'varroaza', 'vcelstvo', 'matka'],
+  },
+  {
+    slug: 'snubni-prolet',
+    term: 'Snubní prolet',
+    alias: ['párovací let', 'oplodnění matky'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Snubní prolet je let mladé matky za trubci na snubní dráhu, kde se páří s 10–20 trubci a ukládá sperma do semenného váčku na celý život.',
+    longDef: `Mladá matka podniká snubní prolet zpravidla 7–14 dnů po vylíhnutí z matečníku. Předpokladem je teplý slunečný den při teplotě nad 20 °C a slabém větru. Matka létá na trubcovní shromaždiště (vzdálená 1–5 km) ve výšce 10–40 m, kde se pohybují trubci z mnoha různých včelstev.
+
+Copulace probíhá za letu — trubec spočine na matce, evertuje kopulační orgán a přenese sperma; po kopulaci uhyne. Matka se páří s 10–20 trubci během 1–3 snubních proletů. Sperma se ukládá v semenném váčku (spermathece) — tato zásoba ji vystačí na 3–5 let. Nevyužité sperma se aktivně filtruje.
+
+Špatné počasí (déšť, chlad) může zabránit snubnímu proletu — matka pak zůstává neoplodněná i přes 3 týdny. Neoplodněná matka (nazývaná trubčice nebo pseudomatka) nakonec začne klást neoplodněná vajíčka, z nichž se vyvíjejí jen trubci.
+
+Kontrolované oplodnění matky na izolované inseminační stanici (ostrov, odlehlé horské stanoviště) je základem selekčního šlechtění. V ČR funguje síť inseminačních stanic Svazu chovatelů včely medonosné.`,
+    related: ['matka', 'trubec', 'oplodnacek', 'matka-neoplozena'],
+  },
+  {
+    slug: 'vceli-tanec',
+    term: 'Včelí tanec',
+    alias: ['tanec osmiček', 'kruhovitý tanec', 'waggle dance'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Včelí tanec je komunikační pohybový signál, jímž průzkumná dělnice informuje ostatní o vzdálenosti, směru a kvalitě zdroje potravy nebo nového hnízdiště.',
+    longDef: `Včelí tance popsal a dešifroval Karl von Frisch, za což obdržel Nobelovu cenu za fyziologii a medicínu v roce 1973. Rozlišují se dva základní typy: kruhový tanec (zdroj do cca 50–100 m od úlu) a tanec osmiček (wabble dance, pro vzdálenosti nad 100 m).
+
+Při tanci osmiček dělnice běží rovnou vzdáleností (tzv. přímý průběh) a přitom vrtí zadečkem — délka přímého průběhu signalizuje vzdálenost (delší průběh = vzdálenější zdroj), úhel přímého průběhu vůči svislé ose plástu odpovídá úhlu letu ke slunci. Počet deviačních kroků za 15 sekund koreluje s vzdáleností zdroje.
+
+Intenzita tance (energičnost, počet opakování) signalizuje kvalitu zdroje — bohatý a voňavý nektar vyvolá intenzivnější tanec a rychlejší nábor sběraček. Přijímající dělnice sledují tance čelistmi a antenami, přijímají vzorek pachu ze sběračky.
+
+Výzkum včelích tanců pokračuje — bylo prokázáno, že souhrnná rozhodovací síla skupiny průzkumnic volí hnízdiště demokraticky: posilují se tance pro lepší lokality. Toto kolektivní rozhodování je modelem pro teorii skupinového rozhodování.`,
+    related: ['snuska', 'nektar-pojem', 'vcelstvo'],
+    externalUrl: 'https://cs.wikipedia.org/wiki/Vč elí_tanec',
+    externalLabel: 'Wikipedia: Včelí tanec',
+  },
+  {
+    slug: 'medny-vynos-pojem',
+    term: 'Medný výnos',
+    alias: ['výtěžnost medu', 'výnos medu'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Medný výnos je množství medu sklizeného z jednoho včelstva za sezonu, vyjádřené v kilogramech, jako hlavní ekonomický ukazatel rentability chovu.',
+    longDef: `Medný výnos závisí na kombinaci genetického potenciálu matky, síle včelstva, druhu a dostupnosti snůšky a povětrnostních podmínkách. Průměrný výnos v ČR dosahuje podle dat ČSCHM přibližně 18–22 kg/včelstvo/rok; v příznivých řepkovo-lípových oblastech Polabí nebo jižní Moravy může silné včelstvo přinést 60–80 kg a více.
+
+Medonosný potenciál je dán hustotou kvetoucích rostlin v letovém okruhu (3–5 km) a dobou kvetení. V monokulturní krajině (pšenice, kukuřice) je mimo sezonní pastvinu nedostatek pestřejší potravy — moderní zemědělské dotace proto zahrnují agro-environmetální opatření podporující biopásy a kvetoucí pásy.
+
+Kočovné včelaření (přesun úlů za snůškami) zvyšuje potenciální výnos, ale je organizačně i fyzicky náročnější. V ČR je kočování rozšírenou praxí — k řepce v dubnu-červnu, k lípe v červenci, k pohance nebo slunečnici v srpnu.
+
+Medný výnos je základem kalkulace ekonomiky chovu: při cenách medu 200–350 Kč/kg a nákladech na provoz úlu 500–1 000 Kč/rok se rentabilita malého provozu dosáhne od přibližně 30 včelstev.`,
+    related: ['snuska', 'kocovani', 'medomet-pojem', 'vytaceni-medu'],
+  },
+  {
+    slug: 'pastovani-medu',
+    term: 'Pastování medu',
+    alias: ['krémování medu', 'pasírování', 'roušení medu'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Pastování medu je kontrolovaná krystalizace, při níž se tekutý med homogenizuje se zárodečnými krystaly (seed crystal), aby vznikl krémový jemně krystalický produkt s hladkou konzistencí.',
+    longDef: `Krystalizace medu je přirozený fyzikálně-chemický proces — glukóza precipituje z přesyceného vodného roztoku. Rychlost krystalizace závisí na poměru fruktózy a glukózy (vysoký obsah fruktózy = pomalá krystalizace — akátový med; řepkový med s vysokým glukózou krystalizuje do tuhé formy za 2–6 týdnů).
+
+Při pastování se tekutý med (zahřátý na 35–40 °C pro roztavení existujících krystalů) smíchá se zárodečnými krystaly (jemně rozmíchaným starším medem, zpravidla 10–20 % hmotnosti). Zárodečné krystaly fungují jako nukleační jádra — řízenou krystalizací vznikají velmi drobné homogenní krystaly, výsledná konzistence je krémová a snadno roztíratelná.
+
+Chlazení na 14–16 °C po dobu 1–2 týdnů je optimální pro tvorbu pastovaného medu. Při teplotě pod 10 °C je proces příliš pomalý, nad 25 °C se krystaly znovu rozpouštějí. Výsledný produkt si zachovává drobné krystalky a neroztéká se.
+
+Pastovaný med je v Česku oblíbenou formou prodeje — má delší trvanlivost ve stáčeném stavu, nesteká, lépe se roztírá na pečivo. Je prodáván za ceny srovnatelné nebo mírně vyšší než tekutý med (200–400 Kč/kg v přímém prodeji).`,
+    related: ['zaviceny-med', 'medomet-pojem', 'nektar-pojem'],
+  },
+  {
+    slug: 'vytaceni-medu',
+    term: 'Vytáčení medu',
+    alias: ['točení medu', 'stáčení medu'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Vytáčení medu je proces odstředění zralého medu z odkrytých plástů v medometu, při němž se med vymrší ze stěn buněk a odtéká do nádoby.',
+    longDef: `Před vlastním vytáčením jsou nutné přípravné kroky: přesun medníkových rámků do čisté místnosti (zbavení létek, aby se dělnice nemohly vrátit do odkrytých rámků), odkrytí (deoperkulace) voskových víček odkrývacím nástrojem nebo párou a vložení rámků do medometu.
+
+Vytáčení probíhá pomalou rozjezdovou rychlostí (70–100 ot./min.), aby se plásty nepřetrhaly, pak se zvýší na pracovní otáčky (200–500 ot./min. podle průměru medometu). V radiálním medometu stačí jeden cyklus, v tangenciálním se rámky otočí a vytočí obě strany.
+
+Čerstvě vytočený med se přefiltruje přes nerezové síto (≤ 0,5 mm oka) a nechá sedimentovat v uzavřené nádobě 24–48 hodin. Vzduchové bubliny a drobné voskové vločky stoupají na povrch. Pak se stáčí do sklenic nebo sudů.
+
+Před stočením do finálního obalu je třeba změřit obsah vody refraktometrem (Brix nebo index lomu) — med s obsahem vody nad 18 % kvasí. Kvasný med nelze prodávat jako potravinový med dle nařízení Nařízení č. 1308/2013 a vyhlášky 76/2003 Sb.`,
+    related: ['medomet-pojem', 'zaviceny-med', 'mednik', 'pastovani-medu'],
+  },
+  {
+    slug: 'vcelin',
+    term: 'Včelín',
+    alias: ['úlové stanoviště', 'přístřešek pro úly'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Včelín je zastřešený přístřešek nebo budova chránící úly před povětrnostními vlivy, predátory a vandaly, zároveň sloužící jako sklad nástrojů a medárna.',
+    longDef: `Tradiční včelín (pavlačový typ) je dřevěná stavba s lodžií, na které stojí úly česny ven. Pavlačový typ je pro chodící (bez kočování) provoz v místech s drsnějším klimatem nebo zimami — chrání úly před deštěm, sněhem a mrazem.
+
+Moderní provoz zpravidla používá volně stojící úly na podstavcích s lehkým přístřeškem nebo plachtou. V podmínkách ČR se považuje za dostačující umístění v jihovýchodní expozici s přirozeným větrem a stínem.
+
+Zákonné podmínky: v ČR stanovuje vzdálenost úlů od hranic sousedních nemovitostí vyhláška č. 136/2004 Sb. a místní stavební předpisy (min. 3 m od hranice pozemku nebo min. 25 m od zastavěné části, v opačném případě je nutná živá nebo pevná zástěna). Chovatelský svaz (ČSCHM) vydává podrobnější doporučení.
+
+Pro komerční nebo hobby provoz je výhodné mít na stanovišti drobný přístřešek s pracovním stolem, kbelíky na med, medometem a dezinfekčními prostředky — splňuje základní hygienické požadavky pro domácí zpracování medu dle hygienické vyhlášky.`,
+    related: ['ul-pojem', 'kocovani', 'medomet-pojem'],
+  },
+  {
+    slug: 'kocovani',
+    term: 'Kočování',
+    alias: ['přesun úlů', 'kočovné včelaření'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Kočování je přesun včelstev za snůškou do jiných lokalit, které umožňuje využívat sezónně různé zdroje nektaru a medovice a zvyšovat medný výnos.',
+    longDef: `Kočování patří k nejefektivnějším metodám zvyšování medné produkce. V ČR typicky zahrnuje přesun ke kvetoucí řepce (duben–květen, Polabí, jižní Morava), k lípe (červenec, lesy a stromořadí), k pohance nebo slunečnici (srpen) a případně k vřesu (srpen–září, Česká vysočina, šumavská podhůří).
+
+Přesun se provádí v noci, kdy jsou dělnice uvnitř úlu — česno se uzavře síťovou vložkou (dostatečná ventilace) nebo zátkou, úly se zajistí popruhy a loží se na vozidlo. Přeprava by neměla trvat déle než jednu noc — při delší přepravě nebo horku hrozí zadušení nebo přehřátí.
+
+Na novém stanovišti se doporučuje ponechat česno 1–2 hodiny uzavřené (dělnice se uklidní), pak otevřít brzy ráno. Přesun na méně než 3 km od předchozího stanoviště nezajistí přesměrování létenek — včely se vrátí na původní místo. Vzdálenost přesunu musí být buď méně než 50 m (denní přeprava po etapách) nebo více než 3 km.
+
+Kočovné včelstvo musí být zdravé a ošetřené — SVS vydává kočovací průkazy, které veterinárně stvrzují zdravotní stav včelstva. Bez platného průkazu nelze legálně přesouvat úly v ČR.`,
+    related: ['snuska', 'medny-vynos-pojem', 'ul-pojem', 'vcelin'],
+  },
+  {
+    slug: 'cmsch',
+    term: 'ČMSCH',
+    alias: ['Český svaz chovatelů', 'ČSCHM', 'svaz chovatelů včely medonosné'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'ČMSCH (Český svaz chovatelů hospodářských zvířat) je zastřešující chovatelský svaz, jehož součástí jsou včelařské organizace koordinující šlechtění, evidenci a odbornou podporu v ČR.',
+    longDef: `Český svaz chovatelů hospodářských zvířat (ČMSCH) je zemědělská organizace sdružující chovatele různých hospodářských zvířat. V oblasti včelařství spolupracuje s Českým svazem chovatelů včely medonosné (ČSCHM) na vedení plemenné knihy, šlechtitelském programu a certifikaci matek.
+
+ČSCHM koordinuje hodnocení užitkových vlastností matek v rámci ověřovacích stanic a vydává osvědčení o původu pro prodej matek. Šlechtitelský program zahrnuje hodnocení výnosnosti, klidnosti, rojivosti a hygieny (obrněnost proti varroáze prostřednictvím VSH — Varroa Sensitive Hygiene).
+
+V systému evidence včelstev v ČR funguje Ústřední evidence hospodářských zvířat (UEHO, provozovaná Ministerstvem zemědělství přes ISVS). Každý chovatel je povinen nahlásit počty včelstev a pohyby do UEHO. Data slouží pro veterinární dohled a pro výpočet dotačních nároků.
+
+Dotace pro včelaře v ČR jsou spravovány Státním zemědělským intervenčním fondem (SZIF) v rámci Programu rozvoje venkova (PRV) — zejm. národní dotace na přezimování včelstev (cca 600–800 Kč/včelstvo ročně) a opatření na boj s varroázou.`,
+    related: ['vcelstvo', 'varroaza', 'zazimovani'],
+    externalUrl: 'https://www.cschm.cz/',
+    externalLabel: 'Web ČSCHM',
+  },
+  {
+    slug: 'cesno-pojem',
+    term: 'Česno',
+    alias: ['česno úlu', 'letový otvor', 'vletový otvor'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Česno je vstupní otvor do úlu sloužící jako vletový a výletový bod pro dělnice a jako první linie obrany včelstva před nežádoucími vlivy a narušiteli.',
+    longDef: `Česno (ze starosl. "česati" — cesta) je hlavní otvor v čelní stěně úlu. Standardní šířka česna závisí na typu úlu — u Langstrothu je to zpravidla 20 mm výška a celá šířka nástavku (37–40 cm) nebo kratší zástrčka. Výška česna přizpůsobuje velikost populace a roční dobu.
+
+Na léto se česno rozšiřuje pro volný průchod intenzivně létajících dělnic a ventilaci; na podzim se zužuje zástrčkou nebo česnovým vstupem na šíři jednoho prstu, aby se snížil přístup slabá predátorů (sršni, myši, loupeživé včely). Na zimu se česno zcela uzavře česnovým zástrčníkem s větraným sítem.
+
+Česno jako obranná linie: strážné dělnice kontrolují každou přicházející včelu čichovými a hmatovými orgány. Narušitelé (loupeživé včely z cizích úlů, vosy, sršni) jsou odháněni nebo usmrceni. Intenzita loupení je indikátorem síly včelstva — slabé nebo bezmatečné včelstvo se nedovede ubránit.
+
+Posouzení aktivity česna je rychlou diagnostikou zdraví včelstva: aktivní pohyb dělnic s rouskami pylu v ranních hodinách signalizuje silné, aktivní plodiště; mrtvé nebo nehybné české signalizuje problém.`,
+    related: ['ul-pojem', 'nastavek', 'zazimovani'],
+  },
+  {
+    slug: 'medocukrove-testo',
+    term: 'Medocukrové těsto',
+    alias: ['kandy', 'candy', 'medocukerné těsto', 'zimní krmivo'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Medocukrové těsto (kandy) je tuhé záhněcné krmivo ze cukru, medu a vody, které se pokládá na rámky k doplnění zásoby v zimě nebo brzy na jaře.',
+    longDef: `Medocukrové těsto (angl. candy nebo fondant) se vyrábí z krystalového cukru (80–90 %), medu (5–15 %) a malého množství vody (8–10 %). Vaří se za míchání do 118–120 °C (zkouška do studené vody — tvrdá kulička), pak se míchá při chladnutí do tuhé, plastické konzistence. Výsledek je měkký, roztíratelný tuhý cukrový produkt.
+
+Podávání kandy probíhá přes zimní nebo jarní česno v plastovém sáčku nebo plastové misky položené na horní lišty rámků. Dělnice kandy pomalu konzumují — slouží jako záchranná zásoby při vyčerpání zimního medu. Dávkování bývá 1–2 kg na zimující včelstvo.
+
+Domácí výroba je možná, ale časově náročná. Komerčně prodávané kandypastě (např. Apifondant, Apicandy) jsou standardizovány, hygienicky nezávadné, někdy obohaceny o minerály nebo vitaminy. Cena hotového kandy se pohybuje kolem 30–50 Kč/kg.
+
+Kandy je alternativou k cukerného sirupu (podávaném v teplé sezoně) — nevhodné pro zimní podávání kapalného sirupu, protože dělnice musí vodu odparit a vnitřní vlhkost by narůstala. Tuha forma kandy odparem nevnáší vlhkost do zimovaniho shlučku.`,
+    related: ['zazimovani', 'vyzimovani', 'vcelstvo'],
+  },
+  {
+    slug: 'oplodnacek',
+    term: 'Oplodnáček',
+    alias: ['nucleus úl', 'miniúl', 'inseminační stanice'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Oplodnáček je malý miniaturnní úl na 3–5 miniaturních rámků, používaný chovateli matek k izolovanému oplodnění mladých matek na vzdálených snubních stanicích.',
+    longDef: `Oplodnáček (miniúl nebo nucleusový minúl) je speciální malý úl, jehož rozměry odpovídají přibližně třetině nebo čtvrtině standardního rámku (např. Zander nebo Apidea formát). Osadí se hrstí dělnic (přibližně 100–200 g) z jednoho nebo více nevyhubitelných zdrojů, krátkoplodným plástem a zásobami, pak se vloží nedávno vylíhnutá panenská matka.
+
+Dělnice v oplodnáčku ošetřují matku během jejího zrání. Za 7–14 dní po vylíhnutí podnikne matka snubní prolet. Na izolované inseminační stanici (ostrov, vzdálený horský hřbet) jsou v dosahu pouze trubci z vybraných šlechtitelských linií, čímž se dosáhne kontrolovaného oplodnění.
+
+Po oplodnění se matka kontroluje (kladení vajíček, kompaktní plod do 10 dnů po návratu ze snubního proletu) a odchytí se pro expedici nebo zasazení do výrobního včelstva. Oplodnáček pak slouží k přijetí nové panenské matky.
+
+Systémy oplodnáčků jsou standardizovány (Apidea, Kirchhain, Nicot) — vzájemná zaměnitelnost a snadná manipulace jsou výhodami, nevýhodou je náročnost přepravy a slabší zásoby při špatném počasí.`,
+    related: ['matka', 'snubni-prolet', 'oddelek', 'matka-neoplozena'],
+  },
+  {
+    slug: 'trubcina',
+    term: 'Trubčina',
+    alias: ['trubčí plod', 'trubčí plocha'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Trubčina je plocha plástu s trubčími buňkami (průměr 6,2–6,9 mm), v nichž se vyvíjejí trubci a jež slouží jako biotop preferovaný roztočem Varroa pro reprodukci.',
+    longDef: `Trubčina se pozná od dělnického plodu jak vizuálně (buňky mají větší průměr, jsou mírně kupolovitě vypouklé, nápadnější vzduch vzduch vzduch vzduch), tak rozměrově. Matka klade do trubčích buněk neoplodněná vajíčka záměrně — rozpozná velikost buňky zadečkovými senzory.
+
+Z pohledu parazitologie je trubčina kritickým místem pro varroázu — Varroa destructor preferuje trubčí plod (trubci mají delší zavíčkovanou fázi, takže roztoč stihne více potomků). Záměrné vkládání trubčích rámků do plodiště a jejich cyklické vyřazování (tzv. biotechnická metoda boje s varroázou) snižuje populaci roztočů bez chemie.
+
+Příliš velká plocha trubčiny (přes 20 % plochy plodiště) oslabuje včelstvo zbytečným množstvím živých trubců. V bezmatečném včelstvu (nebo při dělnicích s vaječníky) je veškerý plod trubčí — tento jev nazývaný „trubčice" nebo „bezmatečné trubčivo" svědčí o vážné poruše.
+
+Stará mezistěna má tendenci ke zvětšování buněk — včely dostavují buňky na větší průměr, což zvyšuje podíl trubčiny. Výměna mezistěn každé 2 roky kontroluje buněčný rozměr.`,
+    related: ['trubec', 'varroaza', 'vceli-plod', 'klestik-vcely'],
+  },
+  {
+    slug: 'matka-neoplozena',
+    term: 'Matka neoplozená',
+    alias: ['panenská matka', 'virgin queen'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Matka neoplozená (panenská) je čerstvě vylíhnutá nebo zrající matka, která dosud nepodnikla snubní prolet, takže neskladuje sperma a není schopna klást oplodněná vajíčka.',
+    longDef: `Panenská matka je fyziologickým mezistádiem mezi larvou v matečníku a plodnou matkou. Po vylíhnutí z matečníku je pohyblivá a aktivní, ale ještě nevyvinutá pro reprodukci — vaječníky dozrávají, semenný váček je prázdný.
+
+V prvních 5–7 dnech po vylíhnutí probíhá pohlavní zrání. Matka exploruje úl, ničí ostatní matečníky (bodne je skrz víčko) a vytlačuje případné sokyně z jiných matečníků. Tento stav „soubojů o trůn" je normální při přirozeném roji.
+
+Přítomnost panenské matky lze ověřit špatně — neklade, proto plodový test nepomůže. Přímé pozorování (matka je pohyblivá, vytáhlá, ale bez vajíček) nebo feromónový test (není výrazná mateří látka) jsou metody. Nezkušený včelař snadno záměnou zlikviduje panenskou matku.
+
+Přeprava panenských matek v zásilkových klecích je rizikovější než přeprava kladoucích matek — dělnice je hůře přijímají. Proto šlechtitelé expedují zpravidla matky po oplodnění (nejpozději 2–3 dny po prvním kladení).`,
+    related: ['matka', 'snubni-prolet', 'oplodnacek', 'matecnik'],
+  },
+  {
+    slug: 'zaviceny-med',
+    term: 'Zavíčkovaný med',
+    alias: ['zralý med', 'dozrálý med', 'operkovaný med'],
+    kategorie: 'vcelarstvi',
+    shortDef: 'Zavíčkovaný med je med uzavřený voskovým víčkem v buňkách plástu, což signalizuje jeho zralost — obsah vody se snížil pod 18 % a med nekvasí.',
+    longDef: `Zavíčkování medu je přirozeným kvalitativním standardem, který včely uplatňují instinktivně. Teprve po dosažení obsahu vody pod 17–18 % dělnice uzavřou buňku voskovým víčkem. Med s vyšším obsahem vody by v buňce fermentoval (droždí Saccharomyces cerevisiae nebo Zygosaccharomyces rouxii jsou přirozeně přítomna v medu).
+
+Pro vytáčení platí zásada: vytáčet pouze rámky, jejichž alespoň dvě třetiny buněk jsou zavíčkovány. Nevyzrálý med (z buněk bez víček nebo slabě víčkovaný) lze vytočit, ale je nestabilní — zkvasí v nádobě. Úřední kontrola (SZPI) při prodeji medu ověřuje obsah vody refraktometricky (do 20 % dle vyhl. 76/2003, optimum do 18 %).
+
+Plástový med (honeycomb) — celé zavíčkované plásty nebo jejich výřezy — je nejhodnotnějším způsobem prodeje medu: zákazník dostane produkt zcela nezpracovaný lidskou rukou. Cena plástového medu dosahuje 400–800 Kč/kg.
+
+Fermentovaný med (zkvasený med) nelze prodávat jako potravinářský med. Zpracovává se na medovinu nebo hydromel. Obsah alkoholu fermentovaného medu závisí na podmínkách kvašení — zpravidla 1–3 % v přirozeně vykvasené hmotě.`,
+    related: ['zavickovani', 'medomet-pojem', 'vytaceni-medu', 'nektar-pojem'],
+  },
 ];
 
 export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {
@@ -8550,4 +9340,5 @@ export const KATEGORIE_LABELS: Record<SlovnikKategorie, string> = {
   slang: 'Hovorové výrazy a slang',
   ochrana: 'Ochrana rostlin a postřiky',
   plodiny: 'Plodiny a komodity',
+  vcelarstvi: 'Včelařství',
 };
