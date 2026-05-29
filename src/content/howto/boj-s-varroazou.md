@@ -8,7 +8,7 @@ obtiznost: "Základní praxe"
 tools:
   - "Podložka nebo zasíťovaná spodní deska"
   - "Odpařovač nebo kapaná souprava pro kyselinu šťavelovou"
-  - "Odpařovací souprapa pro kyselinu mravenčí (léto)"
+  - "Odpařovací souprava pro kyselinu mravenčí (léto)"
   - "Ochranné pomůcky (rukavice, respirátor, brýle)"
 supplies:
   - "Registrovaný přípravek s kyselinou mravenčí (letní ošetření)"
