@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeRoundPhase, msUntil, formatCountdown } from '../../src/lib/contest-config';
+import { computeRoundPhase, msUntil, formatCountdown, isUploadPhase, isVotingPhase } from '../../src/lib/contest-config';
 
 const ROUND = {
   upload_starts_at: '2026-05-01T00:00:00Z',
@@ -29,6 +29,40 @@ describe('computeRoundPhase', () => {
   it('announced when status=announced regardless of time', () => {
     expect(computeRoundPhase({ ...ROUND, status: 'announced' }, new Date('2026-05-05T12:00:00Z')))
       .toBe('announced');
+  });
+
+  // Summer 2026: upload + voting windows fully overlap → 'live' (both open at once).
+  const LIVE_ROUND = {
+    upload_starts_at: '2026-07-01T00:00:00Z',
+    upload_ends_at:   '2026-08-28T22:00:00Z',
+    voting_starts_at: '2026-07-01T00:00:00Z',
+    voting_ends_at:   '2026-08-28T22:00:00Z',
+    announcement_at:  '2026-08-31T12:00:00Z',
+    status: 'voting_open',
+  };
+  it('live when upload and voting windows overlap', () => {
+    expect(computeRoundPhase(LIVE_ROUND, new Date('2026-07-20T12:00:00Z'))).toBe('live');
+  });
+  it('upcoming before overlapping windows start', () => {
+    expect(computeRoundPhase(LIVE_ROUND, new Date('2026-06-30T12:00:00Z'))).toBe('upcoming');
+  });
+  it('closed after overlapping windows end', () => {
+    expect(computeRoundPhase(LIVE_ROUND, new Date('2026-08-29T00:00:00Z'))).toBe('closed');
+  });
+});
+
+describe('phase helpers', () => {
+  it('isUploadPhase true for upload_open and live', () => {
+    expect(isUploadPhase('upload_open')).toBe(true);
+    expect(isUploadPhase('live')).toBe(true);
+    expect(isUploadPhase('voting_open')).toBe(false);
+    expect(isUploadPhase('closed')).toBe(false);
+  });
+  it('isVotingPhase true for voting_open and live', () => {
+    expect(isVotingPhase('voting_open')).toBe(true);
+    expect(isVotingPhase('live')).toBe(true);
+    expect(isVotingPhase('upload_open')).toBe(false);
+    expect(isVotingPhase('closed')).toBe(false);
   });
 });
 

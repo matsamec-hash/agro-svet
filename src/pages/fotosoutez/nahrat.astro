@@ -5,13 +5,13 @@ import Layout from '../../layouts/Layout.astro';
 import { getActiveRound } from '../../lib/contest-supabase';
 import { getAllBrands } from '../../lib/stroje';
 import { getKraje } from '../../lib/lokality';
-import { computeRoundPhase } from '../../lib/contest-config';
+import { computeRoundPhase, isUploadPhase } from '../../lib/contest-config';
 import { getEnvVar } from '../../lib/env';
 
 const user = Astro.locals.user;
 const round = await getActiveRound();
 const phase = round ? computeRoundPhase(round) : null;
-const canUpload = phase === 'upload_open';
+const canUpload = phase ? isUploadPhase(phase) : false;
 
 const brands = getAllBrands();
 const kraje = getKraje();
@@ -121,10 +121,6 @@ const turnstileSiteKey = getEnvVar('PUBLIC_TURNSTILE_SITE_KEY') ?? '';
             <label>
               <input type="checkbox" name="confirm_rules" required />
               <span>Souhlasím s <a href="/fotosoutez/pravidla/">pravidly soutěže</a> a <a href="/fotosoutez/gdpr/">zpracováním osobních údajů</a>. *</span>
-            </label>
-            <label>
-              <input type="checkbox" name="license_merch_print" />
-              <span>Dobrovolně souhlasím s případným použitím fotky v kalendáři Agro-svět 2027 a merchandise.</span>
             </label>
           </div>
 

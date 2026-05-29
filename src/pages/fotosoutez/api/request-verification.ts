@@ -9,6 +9,7 @@ import { verifyTurnstile } from '../../../lib/contest-turnstile';
 import { generateVerificationToken } from '../../../lib/contest-voting';
 import { sendContestEmail } from '../../../lib/contest-email';
 import { getEnvVar } from '../../../lib/env';
+import { computeRoundPhase, isVotingPhase } from '../../../lib/contest-config';
 
 export const prerender = false;
 
@@ -27,7 +28,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   const round = await getActiveRound();
-  if (!round || round.status !== 'voting_open') {
+  if (!round || !isVotingPhase(computeRoundPhase(round))) {
     return json({ error: 'voting_closed' }, 400);
   }
 

@@ -6,7 +6,7 @@ import type { APIRoute } from 'astro';
 import { createServerClient } from '../../../lib/supabase';
 import { getEntry, getActiveRound } from '../../../lib/contest-supabase';
 import { canVote } from '../../../lib/contest-voting';
-import { CONTEST_CONFIG } from '../../../lib/contest-config';
+import { CONTEST_CONFIG, computeRoundPhase, isVotingPhase } from '../../../lib/contest-config';
 
 export const prerender = false;
 
@@ -35,7 +35,7 @@ export const POST: APIRoute = async ({ request, cookies, clientAddress, locals }
   }
 
   const round = await getActiveRound();
-  if (!round || round.status !== 'voting_open' || round.id !== voter.round_id) {
+  if (!round || !isVotingPhase(computeRoundPhase(round)) || round.id !== voter.round_id) {
     return json({ error: 'voting_closed' }, 400);
   }
 

@@ -7,7 +7,7 @@ import ContestShareButtons from '../../../components/contest/ContestShareButtons
 import { getEntry, getPublicPhotoUrl } from '../../../lib/contest-supabase';
 import { createServerClient } from '../../../lib/supabase';
 import { formatLokalita } from '../../../lib/lokality';
-import { computeRoundPhase } from '../../../lib/contest-config';
+import { computeRoundPhase, isVotingPhase } from '../../../lib/contest-config';
 import { getModelBySlug, getBrand } from '../../../lib/stroje';
 import { getEnvVar } from '../../../lib/env';
 
@@ -25,7 +25,7 @@ const { data: round } = await sb
   .single();
 
 const phase = round ? computeRoundPhase(round) : 'closed';
-const canVoteNow = phase === 'voting_open';
+const canVoteNow = isVotingPhase(phase);
 const photoUrl = await getPublicPhotoUrl(entry.photo_path);
 const lokalita = formatLokalita(entry.location_kraj_slug, entry.location_okres_slug);
 const brand = entry.brand_slug ? getBrand(entry.brand_slug) : null;

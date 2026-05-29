@@ -3,7 +3,7 @@
 // Sequence:
 //   1. authn (locals.user from middleware)
 //   2. Turnstile gate (anti-bot)
-//   3. round must be in upload_open phase
+//   3. round must be in an upload-accepting phase (upload_open or live)
 //   4. user has not exceeded MAX_ENTRIES_PER_ROUND
 //   5. validate uploaded image (size/mime/dims/EXIF)
 //   6. validate text fields + required consents
@@ -15,7 +15,7 @@ import { getActiveRound, countUserEntriesInRound } from '../../../lib/contest-su
 import { validateUpload, buildStoragePath } from '../../../lib/contest-images';
 import { verifyTurnstile } from '../../../lib/contest-turnstile';
 import { sendContestEmail } from '../../../lib/contest-email';
-import { CONTEST_CONFIG } from '../../../lib/contest-config';
+import { CONTEST_CONFIG, computeRoundPhase, isUploadPhase } from '../../../lib/contest-config';
 import { getEnvVar } from '../../../lib/env';
 
 export const prerender = false;
@@ -37,7 +37,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   if (!okTurnstile) return json({ error: 'captcha_failed' }, 400);
 
   const round = await getActiveRound();
-  if (!round || round.status !== 'upload_open') {
+  if (!round || !isUploadPhase(computeRoundPhase(round))) {
     return json({ error: 'upload_closed' }, 400);
   }
 

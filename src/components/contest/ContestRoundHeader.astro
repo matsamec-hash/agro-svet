@@ -12,13 +12,17 @@ const labels: Record<string, string> = {
   upload_open: 'Nahrávání otevřené',
   between: 'Upload uzavřen — brzy hlasování',
   voting_open: 'Hlasování otevřené',
+  live: 'Soutěž běží — nahrávejte i hlasujte',
   closed: 'Hlasování uzavřeno',
   announced: 'Výsledky vyhlášeny',
 };
 
 let countdownTarget: string | null = null;
 let countdownLabel = '';
-if (phase === 'upload_open') {
+if (phase === 'live') {
+  countdownTarget = String(round.voting_ends_at);
+  countdownLabel = 'Soutěž končí za';
+} else if (phase === 'upload_open') {
   countdownTarget = String(round.upload_ends_at);
   countdownLabel = 'Upload končí za';
 } else if (phase === 'voting_open') {
@@ -41,7 +45,7 @@ const remaining = countdownTarget ? formatCountdown(msUntil(countdownTarget, now
   {countdownTarget && (
     <p class="round-countdown">{countdownLabel}: <strong>{remaining}</strong></p>
   )}
-  {phase === 'upload_open' && (
+  {(phase === 'upload_open' || phase === 'live') && (
     <a href="/fotosoutez/nahrat/" class="round-cta">Nahrát fotku</a>
   )}
 </section>
