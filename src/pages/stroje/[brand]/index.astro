@@ -98,17 +98,27 @@ function buildTilesForCategory(catKey: StrojKategorie): Tile[] {
     }
     for (const m of s.models ?? []) {
       t.modelCount += 1;
-      if (m.power_hp !== null) {
-        t.minHp = t.minHp === null ? m.power_hp : Math.min(t.minHp, m.power_hp);
-        t.maxHp = t.maxHp === null ? m.power_hp : Math.max(t.maxHp, m.power_hp);
+      // YAML omits absent keys → fields arrive as `undefined`, not `null`.
+      // Use nullish checks so brands without per-model years (e.g. BEDNAR)
+      // don't poison min/max with undefined or get mis-bucketed as legacy.
+      const yearFrom = m.year_from ?? null;
+      const yearTo = m.year_to ?? null;
+      const powerHp = m.power_hp ?? null;
+      if (powerHp !== null) {
+        t.minHp = t.minHp === null ? powerHp : Math.min(t.minHp, powerHp);
+        t.maxHp = t.maxHp === null ? powerHp : Math.max(t.maxHp, powerHp);
       }
-      if (m.year_from !== null) {
-        t.minYear = t.minYear === null ? m.year_from : Math.min(t.minYear, m.year_from);
+      if (yearFrom !== null) {
+        t.minYear = t.minYear === null ? yearFrom : Math.min(t.minYear, yearFrom);
       }
-      if (m.year_to === null && m.year_from !== null) {
+      if (yearTo === null) {
+        // No discontinuation date → still in the catalog (current). Covers both
+        // "year_from set, year_to open" and brands that omit per-model years
+        // entirely (e.g. BEDNAR) — those must not fall through to the legacy
+        // bucket, which is hidden by default and mislabelled "Starší řady · historie".
         t.hasCurrent = true;
-      } else if (m.year_to !== null) {
-        t.maxYear = t.maxYear === null ? m.year_to : Math.max(t.maxYear, m.year_to);
+      } else {
+        t.maxYear = t.maxYear === null ? yearTo : Math.max(t.maxYear, yearTo);
       }
     }
   }
