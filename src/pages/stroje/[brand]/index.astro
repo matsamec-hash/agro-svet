@@ -196,8 +196,16 @@ function pickHero(tiles: Tile[]): boolean {
   }
   return false;
 }
+// Brand-level hero photo wins outright — decoupled from series tiles so the
+// showcase can use a striking shot that doesn't double as a (mislabelled) tile cover.
+if (brand.hero_image) {
+  heroPhoto = brand.hero_image;
+  heroCreditUrl = brand.hero_credit_url ?? null;
+  heroCreditAuthor = brand.hero_credit ?? null;
+  heroCreditLicense = brand.hero_license ?? null;
+}
 const tileByHp = (a: Tile, b: Tile) => (b.maxHp ?? 0) - (a.maxHp ?? 0);
-for (const c of categories) if (pickHero([...c.currentTiles].sort(tileByHp))) break;
+if (!heroPhoto) for (const c of categories) if (pickHero([...c.currentTiles].sort(tileByHp))) break;
 if (!heroPhoto) for (const c of categories) if (pickHero([...c.legacyTiles].sort(tileByHp))) break;
 if (!heroPhoto) for (const c of categories) if (pickHero([...c.currentTiles, ...c.legacyTiles])) break;
 
