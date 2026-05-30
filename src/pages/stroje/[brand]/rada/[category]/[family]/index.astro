@@ -33,7 +33,9 @@ const categoryHero: Record<StrojKategorie, string> = {
   kombajny: '/images/kombajn.webp',
 };
 const catLabel = categoryLabels[categorySlug as StrojKategorie] ?? categorySlug;
-const catHeroFallback = categoryHero[categorySlug as StrojKategorie] ?? '/images/traktor.webp';
+// Jen traktory/kombajny mají vhodný kategorijní fallback; u nářadí (secí stroje…)
+// raději brand gradient + silueta než zavádějící fotka traktoru.
+const catHeroFallback = categoryHero[categorySlug as StrojKategorie] ?? null;
 
 const cat = brand.categories?.[categorySlug as StrojKategorie];
 if (!cat) return Astro.rewrite('/404');
@@ -107,8 +109,8 @@ seriesData.sort((a, b) => {
 
 const label = familyLabel(family!);
 const totalModels = seriesData.reduce((acc, s) => acc + s.models.length, 0);
-const allHp = seriesData.flatMap((s) => s.models.map((r) => r.power_hp)).filter((x): x is number => x !== null);
-const allYearsFrom = seriesData.flatMap((s) => s.models.map((r) => r.year_from)).filter((x): x is number => x !== null);
+const allHp = seriesData.flatMap((s) => s.models.map((r) => r.power_hp)).filter((x): x is number => typeof x === 'number');
+const allYearsFrom = seriesData.flatMap((s) => s.models.map((r) => r.year_from)).filter((x): x is number => typeof x === 'number');
 const allYearsTo = seriesData.flatMap((s) => s.models.map((r) => r.year_to));
 // Missing year_to (YAML omits the key → undefined) = no discontinuation date = current.
 const hasCurrent = allYearsTo.some((y) => (y ?? null) === null);
@@ -116,7 +118,7 @@ const minHp = allHp.length ? Math.min(...allHp) : null;
 const maxHp = allHp.length ? Math.max(...allHp) : null;
 const minYear = allYearsFrom.length ? Math.min(...allYearsFrom) : null;
 const maxYear = !hasCurrent && allYearsTo.length
-  ? Math.max(...(allYearsTo.filter((y): y is number => y !== null)))
+  ? Math.max(...(allYearsTo.filter((y): y is number => typeof y === 'number')))
   : null;
 const yearLine = minYear !== null
   ? (hasCurrent ? `${minYear}–dosud` : (maxYear ? `${minYear}–${maxYear}` : `${minYear}`))
@@ -204,7 +206,14 @@ const jsonLd = {
       </div>
 
       <div class="hero-right">
-        <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
+        <div class="hero-photo" data-has-photo={heroPhoto ? 'true' : 'false'} style={heroPhoto ? `background-image:url('${heroPhoto}')` : `background:linear-gradient(135deg, ${brandC1} 0%, ${brandC2} 100%)`}>
+          {!heroPhoto && (
+            <svg class="hero-photo-silhouette" width="170" height="100" viewBox="0 0 140 80" fill="rgba(255,255,255,.16)" aria-hidden="true">
+              <rect x="20" y="42" width="100" height="22" rx="3"/>
+              <path d="M20 42 Q25 24 50 22 L110 22 Q120 24 120 42 Z"/>
+              <circle cx="40" cy="68" r="8"/><circle cx="100" cy="68" r="8"/>
+            </svg>
+          )}
           <div class="hero-photo-badge"><span class="n">{seriesData.length}</span> {seriesData.length === 1 ? 'generace' : seriesData.length < 5 ? 'generace' : 'generací'}</div>
           {heroCreditAuthor && heroCreditUrl && (
             <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
@@ -237,7 +246,7 @@ const jsonLd = {
       const yr = s.year_from
         ? (s.year_to ? `${s.year_from}–${s.year_to}` : `${s.year_from}–dosud`)
         : '';
-      const seriesHpAll = s.models.map((m) => m.power_hp).filter((x): x is number => x !== null);
+      const seriesHpAll = s.models.map((m) => m.power_hp).filter((x): x is number => typeof x === 'number');
       const sMinHp = seriesHpAll.length ? Math.min(...seriesHpAll) : null;
       const sMaxHp = seriesHpAll.length ? Math.max(...seriesHpAll) : null;
       const sHp = sMinHp !== null && sMaxHp !== null
@@ -288,7 +297,7 @@ const jsonLd = {
                   </span>
                   <span class="st-year">{myr}</span>
                   <span class="st-power">
-                    {m.power_hp !== null ? (
+                    {typeof m.power_hp === 'number' ? (
                       <>
                         <strong>{m.power_hp} k</strong>
                         {m.power_kw && <span class="kw"> · {m.power_kw} kW</span>}
@@ -318,7 +327,7 @@ const jsonLd = {
         </div>
       </div>
       <div class="cta-right">
-        <div class="cta-photo" style={`background-image:url('${heroPhoto}')`}></div>
+        <div class="cta-photo" style={heroPhoto ? `background-image:url('${heroPhoto}')` : `background:linear-gradient(135deg, ${brandC1} 0%, ${brandC2} 100%)`}></div>
       </div>
     </section>
 
@@ -432,6 +441,8 @@ const jsonLd = {
     content:"";position:absolute;inset:0;
     background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, color-mix(in srgb, var(--brand-c1) 24%, transparent) 100%);
   }
+  .rada-page .hero-photo[data-has-photo="false"]{display:flex;align-items:center;justify-content:center}
+  .rada-page .hero-photo-silhouette{position:relative;z-index:1}
   .rada-page .hero-photo-badge{
     position:absolute;left:16px;bottom:16px;z-index:2;
     background:rgba(10,10,11,.72);backdrop-filter:blur(10px);
