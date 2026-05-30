@@ -115,13 +115,13 @@ const collectionJsonLd = {
       <div class="hero-right">
         <div class="hero-photo-stack">
           {druhy.map((d) => (
-            <div class="hsp-tile" data-druh={d.slug}>
+            <a class="hsp-tile" data-druh={d.slug} href={`/plemena/${d.slug}/`}>
               <div class="hsp-emoji" aria-hidden="true">{druhEmoji[d.slug] ?? '🐾'}</div>
               <div class="hsp-info">
                 <span class="hsp-name">{d.name_plural}</span>
                 <span class="hsp-c">{d.plemena.length} plemen</span>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
@@ -457,6 +457,11 @@ const collectionJsonLd = {
       background:linear-gradient(135deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.01) 100%);
       border:1px solid rgba(255,255,255,.08);
       padding:16px 18px;display:flex;align-items:center;gap:14px;
+      text-decoration:none;transition:transform .18s, border-color .18s, background .18s;
+    }
+    .plemena-root a.hsp-tile:hover{
+      transform:translateY(-2px);border-color:rgba(255,255,255,.22);
+      background:linear-gradient(135deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.02) 100%);
     }
     .plemena-root .hsp-emoji{font-size:42px;line-height:1;flex-shrink:0}
     .plemena-root .hsp-info{display:flex;flex-direction:column;gap:2px}
