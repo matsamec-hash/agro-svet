@@ -144,6 +144,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   )}
 
   <script is:inline async src="https://analytics.ahrefs.com/analytics.js" data-key="Z+e1pTc55fQZcn08PcWwtQ"></script>
+  <slot name="head" />
 </head>
 <body>
   <a href="#main-content" class="skip-link">Přeskočit na obsah</a>
