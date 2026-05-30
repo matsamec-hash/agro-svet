@@ -120,12 +120,12 @@ const brandCards = brands.map((b) => {
 
       <div class="hero-right">
         <div class="hero-photo-stack">
-          <div class="hsp-tile hsp-traktor" style="background-image:url('/images/traktor.webp')">
+          <a class="hsp-tile hsp-traktor" href="/stroje/traktory/" style="background-image:url('/images/traktor.webp')">
             <div class="hsp-label"><span>Traktory</span><span class="c">{traktoryCount}</span></div>
-          </div>
-          <div class="hsp-tile hsp-kombajn" style="background-image:url('/images/kombajn.webp')">
+          </a>
+          <a class="hsp-tile hsp-kombajn" href="/stroje/kombajny/" style="background-image:url('/images/kombajn.webp')">
             <div class="hsp-label"><span>Kombajny</span><span class="c">{kombajnyCount}</span></div>
-          </div>
+          </a>
         </div>
       </div>
     </section>
@@ -537,9 +537,14 @@ const brandCards = brands.map((b) => {
       display:grid;grid-template-rows:1fr 1fr;gap:10px;height:100%;min-height:300px;
     }
     .catalog-root .hsp-tile{
-      position:relative;border-radius:14px;overflow:hidden;
-      background-size:cover;background-position:center;
+      position:relative;border-radius:14px;overflow:hidden;display:block;
+      background-size:cover;background-position:center;text-decoration:none;
       box-shadow:0 14px 40px -16px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.08);
+      transition:transform .18s, box-shadow .18s;
+    }
+    .catalog-root a.hsp-tile:hover{
+      transform:translateY(-2px);
+      box-shadow:0 18px 48px -14px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.18);
     }
     .catalog-root .hsp-tile::after{
       content:"";position:absolute;inset:0;
