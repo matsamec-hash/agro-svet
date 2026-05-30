@@ -320,7 +320,7 @@ const brandCards = brands.map((b) => {
       const hp = m.power_hp ? `${m.power_hp} k` : '—';
       const kw = m.power_kw ? ` · ${m.power_kw} kW` : '';
       const yr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '';
-      const isCurrent = m.year_to === null && m.year_from !== null;
+      const isCurrent = (m.year_to ?? null) === null;
       return `
         <a href="${modelUrl(m)}" class="rc-card">
           <div class="rc-tags">

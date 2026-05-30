@@ -81,7 +81,7 @@ const seriesData = matchingSeries.map((s: any) => {
       power_hp: m.power_hp,
       power_kw: m.power_kw,
       urlSlug,
-      isCurrent: m.year_to === null && m.year_from !== null,
+      isCurrent: (m.year_to ?? null) === null,
     };
   });
   rows.sort((a, b) => (b.power_hp ?? 0) - (a.power_hp ?? 0));
@@ -110,7 +110,8 @@ const totalModels = seriesData.reduce((acc, s) => acc + s.models.length, 0);
 const allHp = seriesData.flatMap((s) => s.models.map((r) => r.power_hp)).filter((x): x is number => x !== null);
 const allYearsFrom = seriesData.flatMap((s) => s.models.map((r) => r.year_from)).filter((x): x is number => x !== null);
 const allYearsTo = seriesData.flatMap((s) => s.models.map((r) => r.year_to));
-const hasCurrent = allYearsTo.some((y) => y === null);
+// Missing year_to (YAML omits the key → undefined) = no discontinuation date = current.
+const hasCurrent = allYearsTo.some((y) => (y ?? null) === null);
 const minHp = allHp.length ? Math.min(...allHp) : null;
 const maxHp = allHp.length ? Math.max(...allHp) : null;
 const minYear = allYearsFrom.length ? Math.min(...allYearsFrom) : null;
@@ -135,7 +136,7 @@ function setHeroFrom(s: any) {
   heroCreditAuthor = s.image_credit || null;
   heroCreditLicense = s.image_license || null;
 }
-for (const s of matchingSeries) if (s.image_url && (s.year_to === null || (s.models ?? []).some((m: any) => m.year_to === null))) { setHeroFrom(s); break; }
+for (const s of matchingSeries) if (s.image_url && ((s.year_to ?? null) === null || (s.models ?? []).some((m: any) => (m.year_to ?? null) === null))) { setHeroFrom(s); break; }
 if (!heroPhoto) for (const s of matchingSeries) if (s.image_url) { setHeroFrom(s); break; }
 if (!heroPhoto) heroPhoto = catHeroFallback;
 
