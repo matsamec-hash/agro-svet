@@ -91,6 +91,11 @@ export interface StrojBrand {
   wikipedia?: string;
   /** Wikidata entity URL (https://www.wikidata.org/wiki/Qxxxxx). Knowledge graph anchor. */
   wikidata?: string;
+  /** Brand-level hero photo, decoupled from series tiles. Overrides the per-series cover pick. */
+  hero_image?: string | null;
+  hero_credit?: string | null;
+  hero_credit_url?: string | null;
+  hero_license?: string | null;
   categories: Partial<Record<StrojKategorie, { name: string; series: StrojSeries[] }>>;
 }
 
