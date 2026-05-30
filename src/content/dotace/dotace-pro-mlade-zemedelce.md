@@ -28,9 +28,11 @@ Podpora **mladých zemědělců** je jedním z prioritních cílů Strategickéh
 
 > **Informativní charakter.** Tento přehled vychází z veřejně dostupných dokumentů SZIF a MZe a neslouží jako dotační poradenství. Závazné jsou výhradně Pravidla zveřejněná na [szif.gov.cz](https://szif.gov.cz/cs/szp23-proj). Před podáním žádosti doporučujeme konzultaci s dotačním specialistou. Aktualizováno: 14. května 2026.
 
-## Jednorázová podpora na zahájení
+## Jednorázová podpora na zahájení (49.75)
 
 Mladý zemědělec, který poprvé zahajuje vlastní zemědělskou činnost, může získat **jednorázovou paušální podporu** v rozmezí přibližně **1,5–2,03 milionu Kč** (dle podmínek aktuálního kola). Vyplácí se ve splátkách po splnění podnikatelského plánu a slouží na počáteční investice — včetně techniky.
+
+Samostatný titul: [Zahájení činnosti mladého zemědělce (49.75)](/dotace/zahajeni-cinnosti-mladeho-zemedelce-49-75/) — detail kvalifikace, splátek a aktuálních kol.
 
 ## Bonifikace +10 % v titulu 33.73
 
