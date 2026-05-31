@@ -454,3 +454,58 @@ export function itemListSchema(entries: ItemListEntry[], listName?: string) {
   if (listName) schema.name = listName;
   return schema;
 }
+
+export interface FarmForSchema {
+  slug: string;
+  name: string;
+  description: string;
+  region: string;
+  address?: string | null;
+  lat: number;
+  lng: number;
+  products: string[]; // human labely
+  eco: boolean;
+  tel?: string | null;
+  web?: string | null;
+  email?: string | null;
+  imageUrls?: string[];
+}
+
+// LocalBusiness/GroceryStore pro farmu prodávající ze dvora. Bez Offer cen
+// (nemáme transakční data) — makesOffer drží sortiment jako Product nody,
+// což je entity-rich a validní bez Product Snippet požadavků.
+export function farmLocalBusinessSchema(f: FarmForSchema) {
+  const url = `${SITE_URL}/farmy/${f.slug}/`;
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'GroceryStore',
+    name: f.name,
+    url,
+    description: f.description,
+    geo: { '@type': 'GeoCoordinates', latitude: f.lat, longitude: f.lng },
+    areaServed: { '@type': 'AdministrativeArea', name: f.region },
+  };
+  if (f.address) {
+    schema.address = {
+      '@type': 'PostalAddress',
+      streetAddress: f.address,
+      addressRegion: f.region,
+      addressCountry: 'CZ',
+    };
+  }
+  if (f.tel) schema.telephone = f.tel;
+  if (f.email) schema.email = f.email;
+  const sameAs = [f.web].filter(Boolean) as string[];
+  if (sameAs.length > 0) schema.sameAs = sameAs;
+  if (f.imageUrls && f.imageUrls.length > 0) schema.image = f.imageUrls.map((u) => (u.startsWith('http') ? u : `${SITE_URL}${u}`));
+  if (f.products.length > 0) {
+    schema.makesOffer = f.products.map((p) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Product', name: p },
+    }));
+  }
+  if (f.eco) {
+    schema.additionalProperty = [{ '@type': 'PropertyValue', name: 'Ekologické zemědělství', value: 'Ano' }];
+  }
+  return schema;
+}
