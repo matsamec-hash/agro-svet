@@ -12,6 +12,7 @@ const productOptions = (Object.keys(FARM_PRODUCTS) as (keyof typeof FARM_PRODUCT
   .filter((p) => counts[p])
   .map((p) => ({ value: p, label: FARM_PRODUCTS[p], count: counts[p] }));
 const regionOptions = KRAJE.filter((k) => farms.some((f) => f.region === k.slug));
+const regionLabels = Object.fromEntries(KRAJE.map((k) => [k.slug, k.name]));
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
@@ -30,6 +31,7 @@ const listJsonLd = itemListSchema(
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(listJsonLd)} />
+  <script type="application/json" id="farmy-labels" is:inline set:html={JSON.stringify({ products: FARM_PRODUCTS, regions: regionLabels })} />
 
   <!-- Leaflet styles (loaded via unpkg CDN; ~14KB gz). -->
   <link
@@ -157,37 +159,14 @@ const listJsonLd = itemListSchema(
       addr: string | null;
     };
 
-    // Číselníky pro klientskou stranu (popupy + labely). Drženo v synchronu s lib/farmy.ts.
-    const PRODUCT_LABELS: Record<string, string> = {
-      'brambory': 'Brambory',
-      'zelenina': 'Zelenina',
-      'ovoce': 'Ovoce',
-      'mleko': 'Mléko',
-      'mlecne-vyrobky': 'Mléčné výrobky',
-      'maso': 'Maso',
-      'vejce': 'Vejce',
-      'med': 'Med',
-      'obiloviny': 'Obiloviny a mouka',
-      'bylinky': 'Bylinky',
-      'kvety': 'Květiny',
-      'vino': 'Víno',
+    // Číselníky pro klientskou stranu (popupy + labely) — injektované ze serveru
+    // (#farmy-labels island), single source of truth = lib/farmy.ts + lib/cap-dotace.ts.
+    const labelData = JSON.parse(document.getElementById('farmy-labels')?.textContent || '{}') as {
+      products?: Record<string, string>;
+      regions?: Record<string, string>;
     };
-    const REGION_LABELS: Record<string, string> = {
-      'praha': 'Hlavní město Praha',
-      'stredocesky': 'Středočeský kraj',
-      'jihocesky': 'Jihočeský kraj',
-      'plzensky': 'Plzeňský kraj',
-      'karlovarsky': 'Karlovarský kraj',
-      'ustecky': 'Ústecký kraj',
-      'liberecky': 'Liberecký kraj',
-      'kralovehradecky': 'Královéhradecký kraj',
-      'pardubicky': 'Pardubický kraj',
-      'vysocina': 'Vysočina',
-      'jihomoravsky': 'Jihomoravský kraj',
-      'olomoucky': 'Olomoucký kraj',
-      'zlinsky': 'Zlínský kraj',
-      'moravskoslezsky': 'Moravskoslezský kraj',
-    };
+    const PRODUCT_LABELS: Record<string, string> = labelData.products ?? {};
+    const REGION_LABELS: Record<string, string> = labelData.regions ?? {};
 
     const regionSel = document.getElementById('ff-region') as HTMLSelectElement;
     const productSel = document.getElementById('ff-product') as HTMLSelectElement;
