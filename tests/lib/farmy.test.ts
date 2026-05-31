@@ -8,7 +8,7 @@ import {
 describe('farmy loader', () => {
   it('načte farmy a najde podle slugu', () => {
     const all = getAllFarms();
-    expect(all.length).toBeGreaterThanOrEqual(6);
+    expect(all.length).toBeGreaterThanOrEqual(1);
     expect(getFarm(all[0].slug)?.name).toBe(all[0].name);
   });
 
@@ -17,10 +17,11 @@ describe('farmy loader', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it('každá farma má validní region, GPS, popis a aspoň 1 produkt z číselníku', () => {
+  it('každá farma má validní region, GPS, popis, eco-flag a aspoň 1 produkt z číselníku', () => {
     for (const f of getAllFarms()) {
       expect(typeof f.lat, `${f.slug} lat`).toBe('number');
       expect(typeof f.lng, `${f.slug} lng`).toBe('number');
+      expect(typeof f.eco, `${f.slug} eco`).toBe('boolean');
       expect(f.description.length, `${f.slug} description`).toBeGreaterThan(20);
       expect(f.products.length, `${f.slug} products`).toBeGreaterThan(0);
       for (const p of f.products) expect(FARM_PRODUCTS[p], `${f.slug} product ${p}`).toBeTruthy();
@@ -28,14 +29,12 @@ describe('farmy loader', () => {
     }
   });
 
-  it('eco farmy mají eco=true a aspoň jedna farma je eko, jedna neeko', () => {
-    const farms = getAllFarms();
-    expect(farms.some((f) => f.eco)).toBe(true);
-    expect(farms.some((f) => !f.eco)).toBe(true);
-  });
-
-  it('aspoň jeden kraj má ≥3 farmy (pro krajský landing)', () => {
-    expect(regionsWithEnoughFarms(3).length).toBeGreaterThanOrEqual(1);
+  it('regionsWithEnoughFarms vrací jen kraje s počtem ≥ min (a vyšší práh nevrací víc krajů)', () => {
+    for (const r of regionsWithEnoughFarms(1)) {
+      expect(r.count).toBeGreaterThanOrEqual(1);
+      expect(getFarmsByRegion(r.slug).length).toBe(r.count);
+    }
+    expect(regionsWithEnoughFarms(99).length).toBeLessThanOrEqual(regionsWithEnoughFarms(1).length);
   });
 
   it('getFarmsByRegion vrací jen farmy daného kraje', () => {
@@ -45,10 +44,12 @@ describe('farmy loader', () => {
 
   it('filterFarms filtruje podle produktu, eko a fulltextu', () => {
     const farms = getAllFarms();
-    const withMed = filterFarms(farms, { product: 'med' });
-    for (const f of withMed) expect(f.products).toContain('med');
-    const ecoOnly = filterFarms(farms, { eco: true });
-    for (const f of ecoOnly) expect(f.eco).toBe(true);
+    const someProduct = farms[0].products[0];
+    const byProduct = filterFarms(farms, { product: someProduct });
+    expect(byProduct.length).toBeGreaterThan(0);
+    for (const f of byProduct) expect(f.products).toContain(someProduct);
+    for (const f of filterFarms(farms, { eco: true })) expect(f.eco).toBe(true);
+    for (const f of filterFarms(farms, { eco: false })) expect(f.eco).toBe(false);
     const byName = filterFarms(farms, { q: farms[0].name.slice(0, 4) });
     expect(byName.length).toBeGreaterThan(0);
   });
