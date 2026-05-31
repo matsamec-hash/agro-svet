@@ -1,0 +1,156 @@
+---
+export const prerender = true;
+import Layout from '../../../../layouts/Layout.astro';
+import { getFarmsByRegion, regionsWithEnoughFarms, regionName, FARM_TYPES, FARM_PRODUCTS } from '../../../../lib/farmy';
+import type { CzKraj } from '../../../../lib/cap-dotace';
+import { breadcrumbSchema, itemListSchema } from '../../../../lib/structured-data';
+
+export function getStaticPaths() {
+  // Jen kraje s ≥3 farmami — thin-content guard. Ostatní route nemají (404).
+  return regionsWithEnoughFarms(3).map((r) => ({ params: { kraj: r.slug } }));
+}
+
+const { kraj } = Astro.params;
+const region = kraj as CzKraj;
+const farms = getFarmsByRegion(region);
+const name = regionName(region);
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Farmy', url: '/farmy/' },
+  { name, url: `/farmy/kraj/${region}/` },
+]);
+const listJsonLd = itemListSchema(
+  farms.map((f) => ({ url: `/farmy/${f.slug}/`, name: f.name })),
+  `Farmy — ${name}`,
+);
+---
+
+<Layout
+  title={`Farmy v kraji ${name} — prodej ze dvora | agro-svět.cz`}
+  description={`Vybrané farmy prodávající ze dvora v kraji ${name}. ${farms.length} farem — brambory, zelenina, mléko, maso, med a další.`}
+  canonical={`https://agro-svet.cz/farmy/kraj/${region}/`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(listJsonLd)} />
+
+  <div class="kraj-root">
+    <header class="kraj-head">
+      <nav class="breadcrumb" aria-label="Cesta">
+        <a href="/">Domů</a>
+        <span aria-hidden="true">›</span>
+        <a href="/farmy/">Farmy</a>
+        <span aria-hidden="true">›</span>
+        <span class="current">{name}</span>
+      </nav>
+      <h1>Farmy v kraji {name}</h1>
+      <p class="lede">Ručně vybrané farmy v kraji {name}, které prodávají své produkty přímo ze dvora. Vyberte si pěstitele ve svém okolí a nakupujte čerstvé brambory, zeleninu, mléko, maso, med a další.</p>
+    </header>
+
+    <div class="farm-grid">
+      {farms.map((f) => (
+        <article class="farm-card">
+          <div class="farm-card-head">
+            <h2 class="farm-card-title">
+              <a href={`/farmy/${f.slug}/`}>{f.name}</a>
+            </h2>
+            {f.eco && <span class="eco-badge">EKO</span>}
+          </div>
+          <span class="farm-type-tag">{FARM_TYPES[f.farm_type]}</span>
+          <p class="farm-region">{name}{f.district ? ` · ${f.district}` : ''}</p>
+          {f.products.length > 0 && (
+            <p class="farm-products">
+              {f.products.slice(0, 4).map((p) => FARM_PRODUCTS[p]).join(' · ')}
+            </p>
+          )}
+        </article>
+      ))}
+    </div>
+
+    <a class="back-link" href="/farmy/">← Všechny farmy</a>
+  </div>
+
+  <style>
+    .kraj-root {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    .kraj-head { margin-bottom: 24px; }
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 4px 0 6px; }
+    .lede { color: #666; font-size: 14px; line-height: 1.5; margin: 0; max-width: 620px; }
+
+    /* Karty identické s hubem (/farmy/) — jeden vizuální jazyk. */
+    .farm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .farm-card {
+      background: #fff;
+      border: 1px solid #eaeaec;
+      border-radius: 10px;
+      padding: 16px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .farm-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(10, 10, 12, 0.08);
+    }
+    .farm-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .farm-card-title { font-size: 16px; margin: 0; line-height: 1.3; }
+    .farm-card-title a { color: #0A0A0B; font-weight: 700; text-decoration: none; }
+    .farm-card-title a:hover { text-decoration: underline; }
+    .eco-badge {
+      flex: none;
+      background: rgba(11, 122, 59, 0.12);
+      color: #0B7A3B;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    .farm-type-tag {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+      color: #999;
+    }
+    .farm-region { font-size: 13px; color: #555; margin: 8px 0 0; }
+    .farm-products { font-size: 13px; color: #777; margin: 6px 0 0; }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 32px;
+      padding: 9px 16px;
+      border: 1.5px solid #DFDFE3;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0A0A0B;
+      text-decoration: none;
+    }
+    .back-link:hover { border-color: #0A0A0B; }
+  </style>
+</Layout>

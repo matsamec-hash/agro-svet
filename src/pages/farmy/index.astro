@@ -1,0 +1,497 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getAllFarms, regionsWithEnoughFarms, FARM_PRODUCTS, FARM_TYPES, productCounts, regionName } from '../../lib/farmy';
+import { KRAJE } from '../../lib/cap-dotace';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+
+const farms = getAllFarms();
+const counts = productCounts();
+const regionLandings = regionsWithEnoughFarms(3);
+const productOptions = (Object.keys(FARM_PRODUCTS) as (keyof typeof FARM_PRODUCTS)[])
+  .filter((p) => counts[p])
+  .map((p) => ({ value: p, label: FARM_PRODUCTS[p], count: counts[p] }));
+const regionOptions = KRAJE.filter((k) => farms.some((f) => f.region === k.slug));
+const regionLabels = Object.fromEntries(KRAJE.map((k) => [k.slug, k.name]));
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Farmy', url: '/farmy/' },
+]);
+const listJsonLd = itemListSchema(
+  farms.map((f) => ({ url: `/farmy/${f.slug}/`, name: f.name })),
+  'Vybrané farmy prodávající ze dvora',
+);
+---
+
+<Layout
+  title="Farmy — prodej ze dvora | agro-svět.cz"
+  description="Adresář vybraných farem prodávajících ze dvora — brambory, zelenina, mléko, maso, med a další. Filtrujte podle kraje, produktu a ekologického hospodaření."
+  canonical="https://agro-svet.cz/farmy/"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(listJsonLd)} />
+  <script type="application/json" id="farmy-labels" is:inline set:html={JSON.stringify({ products: FARM_PRODUCTS, regions: regionLabels })} />
+
+  <!-- Leaflet styles (loaded via unpkg CDN; ~14KB gz). -->
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+    crossorigin=""
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+    crossorigin=""
+  />
+
+  <div class="farmy-root">
+    <header class="farmy-head">
+      <nav class="breadcrumb" aria-label="Cesta">
+        <a href="/">Domů</a>
+        <span aria-hidden="true">›</span>
+        <span class="current">Farmy</span>
+      </nav>
+      <h1>Farmy — prodej ze dvora</h1>
+      <p class="lede">Ručně vybrané farmy, které prodávají své produkty přímo ze dvora — brambory, zeleninu, mléko, maso, med a další. Filtrujte podle kraje, produktu nebo ekologického hospodaření a najděte pěstitele ve svém okolí.</p>
+    </header>
+
+    <div class="farmy-filters" role="toolbar" aria-label="Filtry farem">
+      <label class="filter-field">
+        <span class="filter-label">Kraj</span>
+        <select id="ff-region">
+          <option value="">Všechny kraje</option>
+          {regionOptions.map((k) => <option value={k.slug}>{k.name}</option>)}
+        </select>
+      </label>
+      <label class="filter-field">
+        <span class="filter-label">Produkt</span>
+        <select id="ff-product">
+          <option value="">Všechny produkty</option>
+          {productOptions.map((o) => <option value={o.value}>{o.label} ({o.count})</option>)}
+        </select>
+      </label>
+      <label class="filter-field">
+        <span class="filter-label">Hospodaření</span>
+        <select id="ff-eco">
+          <option value="">Vše</option>
+          <option value="1">Jen ekologické</option>
+          <option value="0">Konvenční</option>
+        </select>
+      </label>
+      <label class="filter-field">
+        <span class="filter-label">Hledat</span>
+        <input type="search" id="ff-q" placeholder="Hledat farmu…" />
+      </label>
+      <div class="filter-status" id="ff-status" aria-live="polite">{farms.length} farem</div>
+    </div>
+
+    <div id="farmy-map" class="farmy-map" role="application" aria-label="Mapa farem"></div>
+
+    <p class="map-attribution">
+      Mapové dlaždice © <a href="https://www.openstreetmap.org/copyright" rel="external nofollow">OpenStreetMap</a> přispěvatelé.
+      Polohy farem jsou orientační.
+    </p>
+
+    <div class="farm-grid" id="farm-grid">
+      {farms.map((f) => (
+        <article
+          class="farm-card"
+          data-slug={f.slug}
+          data-region={f.region}
+          data-products={f.products.join(',')}
+          data-eco={f.eco ? '1' : '0'}
+          data-name={f.name.toLowerCase()}
+          data-desc={(f.description + ' ' + (f.address ?? '') + ' ' + (f.district ?? '')).toLowerCase()}
+        >
+          <div class="farm-card-head">
+            <h2 class="farm-card-title">
+              <a href={`/farmy/${f.slug}/`}>{f.name}</a>
+            </h2>
+            {f.eco && <span class="eco-badge">EKO</span>}
+          </div>
+          <span class="farm-type-tag">{FARM_TYPES[f.farm_type]}</span>
+          <p class="farm-region">{regionName(f.region)}{f.district ? ` · ${f.district}` : ''}</p>
+          {f.products.length > 0 && (
+            <p class="farm-products">
+              {f.products.slice(0, 4).map((p) => FARM_PRODUCTS[p]).join(' · ')}
+            </p>
+          )}
+        </article>
+      ))}
+      <p class="no-results" id="ff-noresults" hidden>Žádná farma neodpovídá filtru.</p>
+    </div>
+
+    {regionLandings.length > 0 && (
+      <section class="region-landings">
+        <h2>Farmy podle kraje</h2>
+        <ul class="region-list">
+          {regionLandings.map((r) => (
+            <li><a href={`/farmy/kraj/${r.slug}/`}>{r.name} <span class="region-count">({r.count})</span></a></li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+
+  <script>
+    type Farm = {
+      s: string;
+      n: string;
+      t: string;
+      r: string;
+      d: string | null;
+      lat: number;
+      lng: number;
+      e: boolean;
+      p: string[];
+      ph: string | null;
+      desc: string;
+      addr: string | null;
+    };
+
+    // Číselníky pro klientskou stranu (popupy + labely) — injektované ze serveru
+    // (#farmy-labels island), single source of truth = lib/farmy.ts + lib/cap-dotace.ts.
+    const labelData = JSON.parse(document.getElementById('farmy-labels')?.textContent || '{}') as {
+      products?: Record<string, string>;
+      regions?: Record<string, string>;
+    };
+    const PRODUCT_LABELS: Record<string, string> = labelData.products ?? {};
+    const REGION_LABELS: Record<string, string> = labelData.regions ?? {};
+
+    const regionSel = document.getElementById('ff-region') as HTMLSelectElement;
+    const productSel = document.getElementById('ff-product') as HTMLSelectElement;
+    const ecoSel = document.getElementById('ff-eco') as HTMLSelectElement;
+    const qInput = document.getElementById('ff-q') as HTMLInputElement;
+    const statusEl = document.getElementById('ff-status') as HTMLElement;
+    const noResults = document.getElementById('ff-noresults') as HTMLElement;
+
+    // Initial control state from URL params (deep-linkable view).
+    {
+      const params = new URLSearchParams(location.search);
+      if (params.get('kraj')) regionSel.value = params.get('kraj') as string;
+      if (params.get('produkt')) productSel.value = params.get('produkt') as string;
+      if (params.get('eko') !== null) ecoSel.value = params.get('eko') as string;
+      if (params.get('q')) qInput.value = params.get('q') as string;
+    }
+
+    function syncUrl() {
+      const url = new URL(location.href);
+      const set = (key: string, val: string) => {
+        if (val) url.searchParams.set(key, val);
+        else url.searchParams.delete(key);
+      };
+      set('kraj', regionSel.value);
+      set('produkt', productSel.value);
+      set('eko', ecoSel.value);
+      set('q', qInput.value.trim());
+      history.replaceState(null, '', url);
+    }
+
+    function currentFilter() {
+      return {
+        region: regionSel.value,
+        product: productSel.value,
+        eco: ecoSel.value === '1' ? true : ecoSel.value === '0' ? false : null,
+        q: qInput.value.trim().toLowerCase(),
+      };
+    }
+
+    function escapeHtml(s: string): string {
+      return s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c] as string));
+    }
+
+    function applyCardFilter() {
+      const f = currentFilter();
+      const cards = document.querySelectorAll<HTMLElement>('.farm-card');
+      let shown = 0;
+      cards.forEach((card) => {
+        const region = card.dataset.region ?? '';
+        const products = (card.dataset.products ?? '').split(',');
+        const eco = card.dataset.eco ?? '0';
+        const hay = `${card.dataset.name ?? ''} ${card.dataset.desc ?? ''}`;
+        let ok = true;
+        if (f.region && region !== f.region) ok = false;
+        if (f.product && !products.includes(f.product)) ok = false;
+        if (f.eco === true && eco !== '1') ok = false;
+        if (f.eco === false && eco !== '0') ok = false;
+        if (f.q && !hay.includes(f.q)) ok = false;
+        card.hidden = !ok;
+        if (ok) shown++;
+      });
+      statusEl.textContent = `${shown} z ${cards.length} farem`;
+      noResults.hidden = shown > 0;
+    }
+
+    // ---- Mapa (lazy) ----
+    function loadScript(src: string): Promise<void> {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.crossOrigin = '';
+        s.async = true;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('script_failed: ' + src));
+        document.head.appendChild(s);
+      });
+    }
+
+    let allFarms: Farm[] = [];
+    let renderMarkers: () => void = () => {};
+
+    function farmPasses(f: Farm) {
+      const flt = currentFilter();
+      if (flt.region && f.r !== flt.region) return false;
+      if (flt.product && !f.p.includes(flt.product)) return false;
+      if (flt.eco === true && !f.e) return false;
+      if (flt.eco === false && f.e) return false;
+      if (flt.q) {
+        const hay = `${f.n} ${f.desc} ${f.addr ?? ''} ${f.d ?? ''}`.toLowerCase();
+        if (!hay.includes(flt.q)) return false;
+      }
+      return true;
+    }
+
+    async function init() {
+      await loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js');
+      await loadScript('https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js');
+      const L = (window as any).L;
+      if (!L) throw new Error('Leaflet failed to load');
+
+      const map = L.map('farmy-map', { preferCanvas: true }).setView([49.8, 15.5], 7);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18,
+      }).addTo(map);
+
+      const cluster = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        spiderfyOnMaxZoom: true,
+        maxClusterRadius: 60,
+      });
+      map.addLayer(cluster);
+
+      const popupHtml = (f: Farm) => {
+        const region = REGION_LABELS[f.r] ?? f.r;
+        const products = f.p.map((p) => PRODUCT_LABELS[p] ?? p).join(' · ');
+        return `
+          <div style="font-family: system-ui, -apple-system, sans-serif; min-width: 200px; max-width: 260px;">
+            <div style="font-weight: 700; font-size: 14px; line-height: 1.3; margin-bottom: 4px;">
+              <a href="/farmy/${f.s}/" style="color: #0A0A0B; text-decoration: none;">${escapeHtml(f.n)}</a>
+            </div>
+            <div style="font-size: 12px; color: #666; margin-bottom: 6px;">${escapeHtml(region)}${f.d ? ` · ${escapeHtml(f.d)}` : ''}</div>
+            ${f.e ? `<span style="display:inline-block; background:rgba(11,122,59,0.12); color:#0B7A3B; font-weight:700; font-size:11px; padding:2px 7px; border-radius:99px; margin-bottom:6px;">EKO</span>` : ''}
+            ${products ? `<div style="font-size: 12px; color: #444; margin-bottom: 8px;">${escapeHtml(products)}</div>` : ''}
+            <a href="/farmy/${f.s}/" style="display:inline-block; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:12px; padding:6px 12px; border-radius:4px; text-decoration:none;">Detail farmy →</a>
+          </div>
+        `;
+      };
+
+      renderMarkers = () => {
+        cluster.clearLayers();
+        for (const f of allFarms) {
+          if (!farmPasses(f)) continue;
+          const m = L.marker([f.lat, f.lng]);
+          m.bindPopup(popupHtml(f));
+          cluster.addLayer(m);
+        }
+      };
+
+      try {
+        const r = await fetch('/farmy/data.json');
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        allFarms = await r.json();
+        renderMarkers();
+      } catch (e) {
+        console.error('[farmy] load failed', e);
+      }
+    }
+
+    // ---- Wiring ----
+    function onFilterChange() {
+      syncUrl();
+      applyCardFilter();
+      renderMarkers();
+    }
+    regionSel.addEventListener('change', onFilterChange);
+    productSel.addEventListener('change', onFilterChange);
+    ecoSel.addEventListener('change', onFilterChange);
+    qInput.addEventListener('input', () => {
+      clearTimeout((qInput as any)._t);
+      (qInput as any)._t = setTimeout(onFilterChange, 200);
+    });
+
+    // Reflect initial URL-param state in cards immediately (before map lazy-loads).
+    applyCardFilter();
+
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => init().catch((e) => console.error(e)), { timeout: 1000 });
+    } else {
+      setTimeout(() => init().catch((e) => console.error(e)), 50);
+    }
+  </script>
+
+  <style>
+    .farmy-root {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    .farmy-head { margin-bottom: 24px; }
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 4px 0 6px; }
+    .lede { color: #666; font-size: 14px; line-height: 1.5; margin: 0; max-width: 620px; }
+
+    .farmy-filters {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      padding: 16px;
+      background: #fafafa;
+      border: 1px solid #eaeaec;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    .filter-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px; }
+    .filter-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: #666;
+    }
+    .filter-field select,
+    .filter-field input {
+      padding: 8px 10px;
+      border: 1.5px solid #DFDFE3;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
+    }
+    .filter-status {
+      font-size: 13px;
+      color: #444;
+      margin-left: auto;
+      align-self: center;
+      font-weight: 600;
+    }
+
+    .farmy-map {
+      width: 100%;
+      height: clamp(420px, 70vh, 720px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(10, 10, 12, 0.04), 0 0 0 1px rgba(10, 10, 12, 0.06);
+      background: #f0f0f0;
+    }
+
+    .map-attribution {
+      font-size: 11px;
+      color: #999;
+      text-align: center;
+      margin-top: 12px;
+    }
+    .map-attribution a { color: #999; }
+
+    .farm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .farm-card {
+      background: #fff;
+      border: 1px solid #eaeaec;
+      border-radius: 10px;
+      padding: 16px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .farm-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(10, 10, 12, 0.08);
+    }
+    .farm-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .farm-card-title { font-size: 16px; margin: 0; line-height: 1.3; }
+    .farm-card-title a { color: #0A0A0B; font-weight: 700; text-decoration: none; }
+    .farm-card-title a:hover { text-decoration: underline; }
+    .eco-badge {
+      flex: none;
+      background: rgba(11, 122, 59, 0.12);
+      color: #0B7A3B;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    .farm-type-tag {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+      color: #999;
+    }
+    .farm-region { font-size: 13px; color: #555; margin: 8px 0 0; }
+    .farm-products { font-size: 13px; color: #777; margin: 6px 0 0; }
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      padding: 24px 0;
+    }
+
+    .region-landings { margin-top: 48px; }
+    .region-landings h2 { font-size: 1.2rem; margin: 0 0 12px; }
+    .region-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+    }
+    .region-list a {
+      display: inline-block;
+      padding: 8px 14px;
+      border: 1.5px solid #DFDFE3;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #0A0A0B;
+      text-decoration: none;
+    }
+    .region-list a:hover { border-color: #0A0A0B; }
+    .region-count { color: #999; }
+
+    @media (max-width: 640px) {
+      .farmy-filters { flex-direction: column; align-items: stretch; }
+      .filter-status { margin-left: 0; width: 100%; }
+    }
+  </style>
+</Layout>

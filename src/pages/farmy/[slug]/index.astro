@@ -1,0 +1,397 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { getAllFarms, getFarm, FARM_PRODUCTS, FARM_TYPES, regionName, regionsWithEnoughFarms } from '../../../lib/farmy';
+import { breadcrumbSchema, farmLocalBusinessSchema } from '../../../lib/structured-data';
+
+export function getStaticPaths() {
+  return getAllFarms().map((f) => ({ params: { slug: f.slug } }));
+}
+
+const { slug } = Astro.params;
+const farm = getFarm(slug!);
+if (!farm) return Astro.redirect('/farmy/', 302);
+
+const regName = regionName(farm.region);
+// Krajský landing existuje jen pro kraje s ≥3 farmami — jinak odkazuj prostý text.
+const hasRegionLanding = regionsWithEnoughFarms(3).some((r) => r.slug === farm.region);
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Farmy', url: '/farmy/' },
+  ...(hasRegionLanding ? [{ name: regName, url: `/farmy/kraj/${farm.region}/` }] : []),
+  { name: farm.name, url: `/farmy/${farm.slug}/` },
+]);
+const farmJsonLd = farmLocalBusinessSchema({
+  slug: farm.slug, name: farm.name, description: farm.description,
+  region: regName, address: farm.address, lat: farm.lat, lng: farm.lng,
+  products: farm.products.map((p) => FARM_PRODUCTS[p]),
+  eco: farm.eco, tel: farm.contact?.tel, web: farm.contact?.web, email: farm.contact?.email,
+  imageUrls: farm.photos,
+});
+
+const photos = farm.photos ?? [];
+const heroPhoto = photos[0];
+const galleryPhotos = photos.slice(1);
+const productLabels = farm.products.map((p) => FARM_PRODUCTS[p]);
+const web = farm.contact?.web;
+const tel = farm.contact?.tel;
+const email = farm.contact?.email;
+const hasContact = !!(web || tel || email || farm.opening);
+const initial = farm.name.trim().charAt(0).toUpperCase();
+---
+
+<Layout
+  title={`${farm.name} — prodej ze dvora (${regName}) | agro-svět.cz`}
+  description={farm.description.slice(0, 155)}
+  canonical={`https://agro-svet.cz/farmy/${farm.slug}/`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(farmJsonLd)} />
+
+  <!-- Leaflet styles (loaded via unpkg CDN; ~14KB gz). -->
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <div class="farm-detail-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/farmy/">Farmy</a>
+      {hasRegionLanding && (
+        <>
+          <span aria-hidden="true">›</span>
+          <a href={`/farmy/kraj/${farm.region}/`}>{regName}</a>
+        </>
+      )}
+      <span aria-hidden="true">›</span>
+      <span class="current">{farm.name}</span>
+    </nav>
+
+    <header class="farm-header">
+      <h1>{farm.name}</h1>
+      <div class="farm-tags">
+        <span class="farm-type-tag">{FARM_TYPES[farm.farm_type]}</span>
+        {farm.eco && (
+          <span class="eco-badge">EKO{farm.eco_cert ? ` · ${farm.eco_cert}` : ''}</span>
+        )}
+      </div>
+    </header>
+
+    {heroPhoto ? (
+      <figure class="farm-hero">
+        <img src={heroPhoto} alt={farm.name} loading="lazy" />
+      </figure>
+    ) : (
+      <div class="farm-hero-placeholder" aria-hidden="true">
+        <span class="placeholder-mark">{initial || '🌿'}</span>
+      </div>
+    )}
+
+    {galleryPhotos.length > 0 && (
+      <div class="farm-gallery">
+        {galleryPhotos.map((src) => (
+          <img src={src} alt={farm.name} loading="lazy" />
+        ))}
+      </div>
+    )}
+
+    <div class="farm-body">
+      <section class="farm-section">
+        <h2>O farmě</h2>
+        <p class="farm-desc">{farm.description}</p>
+      </section>
+
+      {productLabels.length > 0 && (
+        <section class="farm-section">
+          <h2>Co nabízí</h2>
+          <ul class="product-chips">
+            {productLabels.map((label) => (
+              <li class="product-chip">{label}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {hasContact && (
+        <section class="farm-section">
+          <h2>Kontakt</h2>
+          <ul class="contact-list">
+            {web && (
+              <li>
+                <span class="contact-label">Web</span>
+                <a href={web} target="_blank" rel="external nofollow noopener">{web}</a>
+              </li>
+            )}
+            {tel && (
+              <li>
+                <span class="contact-label">Telefon</span>
+                <a href={`tel:${tel.replace(/\s+/g, '')}`}>{tel}</a>
+              </li>
+            )}
+            {email && (
+              <li>
+                <span class="contact-label">E-mail</span>
+                <a href={`mailto:${email}`}>{email}</a>
+              </li>
+            )}
+            {farm.opening && (
+              <li>
+                <span class="contact-label">Otevřeno</span>
+                <span>{farm.opening}</span>
+              </li>
+            )}
+          </ul>
+        </section>
+      )}
+
+      <section class="farm-section">
+        <h2>Poloha</h2>
+        <p class="farm-location">
+          {farm.address && <>{farm.address}<br /></>}
+          {hasRegionLanding ? (
+            <a href={`/farmy/kraj/${farm.region}/`}>{regName}</a>
+          ) : (
+            <span>{regName}</span>
+          )}
+          {farm.district ? ` · ${farm.district}` : ''}
+        </p>
+        <div
+          id="farm-map"
+          class="farm-map"
+          data-lat={farm.lat}
+          data-lng={farm.lng}
+          role="application"
+          aria-label={`Poloha farmy ${farm.name}`}
+        ></div>
+        <p class="map-attribution">
+          Mapové dlaždice © <a href="https://www.openstreetmap.org/copyright" rel="external nofollow">OpenStreetMap</a> přispěvatelé.
+          Poloha je orientační.
+        </p>
+      </section>
+
+      <a class="back-link" href="/farmy/">← Zpět na seznam farem</a>
+    </div>
+  </div>
+
+  <script>
+    // Lazy Leaflet loader — jediný marker (žádný MarkerCluster). Souřadnice se
+    // čtou z data-* atributů #farm-map (module script nevidí frontmatter proměnné).
+    function loadScript(src: string): Promise<void> {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.crossOrigin = '';
+        s.async = true;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('script_failed: ' + src));
+        document.head.appendChild(s);
+      });
+    }
+
+    async function init() {
+      const el = document.getElementById('farm-map');
+      if (!el) return;
+      const lat = parseFloat(el.dataset.lat ?? '');
+      const lng = parseFloat(el.dataset.lng ?? '');
+      if (Number.isNaN(lat) || Number.isNaN(lng)) return;
+
+      await loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js');
+      const L = (window as any).L;
+      if (!L) throw new Error('Leaflet failed to load');
+
+      const map = L.map('farm-map').setView([lat, lng], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18,
+      }).addTo(map);
+      L.marker([lat, lng]).addTo(map);
+    }
+
+    // Defer init to first idle so the page paints quickly.
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => init().catch((e) => console.error(e)), { timeout: 1000 });
+    } else {
+      setTimeout(() => init().catch((e) => console.error(e)), 50);
+    }
+  </script>
+
+  <style>
+    .farm-detail-root {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+
+    .farm-header { margin-bottom: 20px; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 10px; line-height: 1.2; }
+    .farm-tags { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .farm-type-tag {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+      color: #999;
+    }
+    .eco-badge {
+      background: rgba(11, 122, 59, 0.12);
+      color: #0B7A3B;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 99px;
+    }
+
+    .farm-hero {
+      margin: 0 0 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+    .farm-hero img {
+      display: block;
+      width: 100%;
+      max-height: 460px;
+      object-fit: cover;
+    }
+    .farm-hero-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: clamp(200px, 36vw, 360px);
+      margin: 0 0 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f3f6f1, #e7efe2);
+      border: 1px solid #e0e8db;
+    }
+    .placeholder-mark {
+      font-size: clamp(3rem, 12vw, 5rem);
+      font-weight: 700;
+      color: #0B7A3B;
+      opacity: 0.55;
+    }
+
+    .farm-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .farm-gallery img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #f0f0f0;
+    }
+
+    .farm-body { margin-top: 8px; }
+    .farm-section { margin-bottom: 32px; }
+    .farm-section h2 {
+      font-size: 1.15rem;
+      margin: 0 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #FFEA00;
+      display: inline-block;
+    }
+    .farm-desc { color: #333; font-size: 15px; line-height: 1.65; margin: 0; white-space: pre-line; }
+
+    .product-chips {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .product-chip {
+      background: #fafafa;
+      border: 1px solid #eaeaec;
+      border-radius: 99px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .contact-list { list-style: none; padding: 0; margin: 0; }
+    .contact-list li {
+      display: flex;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+      align-items: baseline;
+    }
+    .contact-list li:last-child { border-bottom: none; }
+    .contact-label {
+      flex: none;
+      width: 86px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+      color: #999;
+    }
+    .contact-list a { color: #0B7A3B; text-decoration: none; word-break: break-word; }
+    .contact-list a:hover { text-decoration: underline; }
+
+    .farm-location { font-size: 14px; color: #444; line-height: 1.6; margin: 0 0 12px; }
+    .farm-location a { color: #0B7A3B; text-decoration: none; }
+    .farm-location a:hover { text-decoration: underline; }
+
+    .farm-map {
+      width: 100%;
+      height: clamp(280px, 40vh, 420px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(10, 10, 12, 0.04), 0 0 0 1px rgba(10, 10, 12, 0.06);
+      background: #f0f0f0;
+    }
+    .map-attribution {
+      font-size: 11px;
+      color: #999;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .map-attribution a { color: #999; }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 9px 16px;
+      border: 1.5px solid #DFDFE3;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0A0A0B;
+      text-decoration: none;
+    }
+    .back-link:hover { border-color: #0A0A0B; }
+
+    @media (max-width: 640px) {
+      .contact-list li { flex-direction: column; gap: 2px; }
+      .contact-label { width: auto; }
+    }
+  </style>
+</Layout>
