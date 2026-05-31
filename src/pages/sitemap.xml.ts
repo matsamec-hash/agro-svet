@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { getAllBrands, getAllModels, seriesFamily, FUNCTIONAL_GROUPS } from '../lib/stroje';
 import { getAllDruhy } from '../lib/plemena';
+import { getAllFarms, regionsWithEnoughFarms } from '../lib/farmy';
 import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
 import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
@@ -107,6 +108,7 @@ export const GET: APIRoute = async () => {
     ['/bazar/topovani/', 'monthly', '0.65', STATIC_LASTMOD],
     ['/bazar/kraj/', 'weekly', '0.7', latestListingLastmod ?? STATIC_LASTMOD],
     ['/stroje/', 'weekly', '0.9', STATIC_LASTMOD],
+    ['/farmy/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/stroje/traktory/', 'weekly', undefined, STATIC_LASTMOD],
     ['/stroje/kombajny/', 'weekly', undefined, STATIC_LASTMOD],
     ['/stroje/zemedelske-stroje/', 'weekly', '0.85', STATIC_LASTMOD],
@@ -322,6 +324,20 @@ export const GET: APIRoute = async () => {
       lastmod: (l as { updated_at?: string }).updated_at || (l as { created_at?: string }).created_at || undefined,
       changefreq: 'weekly',
     });
+  }
+
+  // Farmy — hub má vlastní záznam výše; zde detaily + krajské landingy.
+  for (const f of getAllFarms()) {
+    urls.push({
+      loc: `${SITE_URL}/farmy/${f.slug}/`,
+      changefreq: 'monthly',
+      priority: '0.7',
+      lastmod: STATIC_LASTMOD,
+      images: f.photos && f.photos.length > 0 ? [f.photos[0]] : undefined,
+    });
+  }
+  for (const r of regionsWithEnoughFarms(3)) {
+    urls.push({ loc: `${SITE_URL}/farmy/kraj/${r.slug}/`, changefreq: 'weekly', priority: '0.7', lastmod: STATIC_LASTMOD });
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
