@@ -305,15 +305,21 @@ def do_novinky(arg):
             if a.get(f):
                 kv[f] = a[f].strip()
         sk_kv = translate_kv(f"polia článku '{a.get('title')}'", kv)
-        sk_content = translate_body(a["content"]) if a.get("content") else None
+        sk_content = translate_body(a["content"]) if a.get("content") else ""
+        # Existing shared table (CMS migration 040): cols article_id, locale,
+        # title NOT NULL, perex/content/seo_* NOT NULL default '', model;
+        # unique(article_id, locale). No status/slug columns.
         payload = {
-            "article_id": a["id"], "locale": "sk", "slug": a["slug"],
-            "status": "published",
-            "title": sk_kv.get("title"), "perex": sk_kv.get("perex"),
-            "seo_title": sk_kv.get("seo_title"), "seo_description": sk_kv.get("seo_description"),
-            "content": sk_content,
+            "article_id": a["id"], "locale": "sk",
+            "title": sk_kv.get("title") or a["title"],
+            "perex": sk_kv.get("perex") or "",
+            "seo_title": sk_kv.get("seo_title") or "",
+            "seo_description": sk_kv.get("seo_description") or "",
+            "content": sk_content or "",
+            "model": f"vercel-ai-gateway:{EDIT_MODEL}",
         }
-        _supa_request(base, key, "POST", "/rest/v1/article_translations",
+        _supa_request(base, key, "POST",
+                      "/rest/v1/article_translations?on_conflict=article_id,locale",
                       body=payload,
                       extra_headers={"Prefer": "resolution=merge-duplicates,return=minimal"})
         print(f"  upserted sk translation for {a['slug']}")

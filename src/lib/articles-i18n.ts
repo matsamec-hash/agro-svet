@@ -42,8 +42,11 @@ export function buildTranslationMap(
   return m;
 }
 
-/** Fetch published translations for the given article ids + locale.
- *  `supabase` is a createAnonClient() instance. Returns [] on cs or empty ids. */
+/** Fetch translations for the given article ids + locale from the shared
+ *  content-network `article_translations` table (CMS migration 040). The table
+ *  has no own `status` column — anon-read RLS already restricts rows to those
+ *  whose parent article is published, so no status filter here. Returns [] on
+ *  cs or empty ids. */
 export async function fetchArticleTranslations(
   supabase: { from: (t: string) => any },
   ids: string[],
@@ -54,7 +57,6 @@ export async function fetchArticleTranslations(
     .from('article_translations')
     .select('article_id, title, perex, content, seo_title, seo_description')
     .eq('locale', locale)
-    .eq('status', 'published')
     .in('article_id', ids);
   return data ?? [];
 }
