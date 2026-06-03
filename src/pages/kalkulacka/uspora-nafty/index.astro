@@ -1,195 +1,179 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. cs výstup sémanticky identický.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
-import { NORMA_OPTIONS } from '../../../lib/diesel-calc';
+import { content } from '../../../i18n/kalkulacka/uspora-nafty';
+import { crumbs } from '../../../i18n/kalkulacka/common';
+import type { EmisniNorma } from '../../../lib/diesel-calc';
 
+const locale = Astro.locals.locale ?? 'cs';
+const c = content[locale] ?? content.cs;
+const cr = crumbs[locale] ?? crumbs.cs;
+const NORMA_ORDER: EmisniNorma[] = ['pre-tier2', 'tier3', 'stage3b', 'stage4', 'stage5'];
+const normaOptions = NORMA_ORDER.map((value) => ({ value, label: c.normaLabels[value] }));
 const canonical = `${SITE_URL}/kalkulacka/uspora-nafty/`;
-
-const faqItems = [
-  {
-    q: 'Jak přesná je odhadovaná spotřeba?',
-    a: 'Spotřeba vychází z DLG profi-testů a OECD traktorových testů — průměry pro průměrné využití (~60 % nominálního výkonu, mix tah/PTO/transport). Reálná spotřeba se může lišit o ±20 % podle typu práce, kvality údržby a zkušenosti řidiče. Pro přesný odhad sledujte spotřebu na vlastním stroji aspoň 100 motohodin.',
-  },
-  {
-    q: 'Proč je nový traktor Stage V úspornější než starší Stage IV?',
-    a: 'Stage V (od 2020) má optimalizovanou kombinaci DPF + SCR a vylepšené motorové mapy. Specifická spotřeba klesla z ~215 g/kWh (Stage IV) na ~210 g/kWh (Stage V). Rozdíl 2–3 % se projeví na celoroční úspoře desítkami tisíc Kč u stroje s 800+ motohodin/rok.',
-  },
-  {
-    q: 'Zahrnuje kalkulačka AdBlue?',
-    a: 'Ne — kalkulačka počítá jen naftu. AdBlue je 3–5 % objemu nafty (~15 Kč/l v IBC), takže přidejte cca 4 % k vypočteným ročním nákladům, pokud chcete kompletní obraz provozních nákladů.',
-  },
-  {
-    q: 'Kolik let návratnosti je rozumné?',
-    a: 'Návratnost <3 roky je excellent (kupte hned). 3–5 let je rozumná (vyplatí se, pokud plánujete stroj držet 10+ let). 5–10 let je hraniční (zvažte i jiné faktory — komfort, technologie, servis). Nad 10 let se úspora nafty nezaplatí — investice musí zaplatit jiné benefity (precision farming, vyšší výkon).',
-  },
-  {
-    q: 'Co když mám velmi specifické využití (např. jen tah)?',
-    a: 'V poli "spotřeba l/h" můžete přepsat výchozí odhad vlastním údajem. Pokud znáte měřenou spotřebu z vašeho aktuálního stroje při typické práci, použijte tu. Pro nový stroj odhadněte na základě DLG testů konkrétního modelu (Profi DLG Test publikuje detailní data).',
-  },
-];
+const faqItems = c.faq;
+const calcCfg = { currency: c.currency, numberLocale: c.numberLocale, js: c.js, normaLabels: c.normaLabels, hpUnit: c.hpUnit, fillAlert: c.js.alertFill };
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kalkulačky', url: '/kalkulacka/' },
-  { name: 'Úspora nafty', url: canonical },
+  { name: cr.home, url: locale === 'cs' ? '/' : `/${locale}/` },
+  { name: cr.hub, url: locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/` },
+  { name: c.crumb, url: canonical },
 ]);
 const faqJsonLd = faqPageSchema(faqItems);
 ---
 
 <Layout
-  title="Kalkulačka úspory nafty mezi traktory"
-  description="Spočítejte, kolik ušetříte na naftě při výměně traktoru — porovnání spotřeby dvou modelů, roční náklady a doba návratnosti investice."
-  canonical={canonical}
+  title={c.title}
+  description={c.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
 
   <div class="dc-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span aria-hidden="true">›</span>
-      <a href="/kalkulacka/">Kalkulačky</a>
+      <a href={locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/`}>{cr.hub}</a>
       <span aria-hidden="true">›</span>
-      <span class="current">Úspora nafty</span>
+      <span class="current">{c.crumb}</span>
     </nav>
 
     <header class="dc-head">
-      <span class="kicker">Kalkulačka · Úspora nafty</span>
-      <h1>Kolik ušetříte výměnou traktoru</h1>
+      <span class="kicker">{c.kicker}</span>
+      <h1>{c.h1}</h1>
       <p class="lede">
-        Porovnání spotřeby a ročních nákladů na naftu mezi dvěma traktory. Roční úspora, 5letá úspora a doba návratnosti, pokud znáte rozdíl pořizovacích cen.
+        {c.lede}
       </p>
     </header>
 
     <form class="dc-form" id="dc-form" autocomplete="off">
       <div class="dc-tractors">
         <fieldset class="dc-tractor">
-          <legend>Traktor A (stávající)</legend>
+          <legend>{c.form.tractorA}</legend>
           <label class="field">
-            <span>Výkon (k) <strong class="req">*</strong></span>
-            <input type="number" id="a-hp" name="aHp" min="1" max="900" step="1" placeholder="např. 130" required />
+            <span>{c.form.power} <strong class="req">*</strong></span>
+            <input type="number" id="a-hp" name="aHp" min="1" max="900" step="1" placeholder={c.form.phPowerA} required />
           </label>
           <label class="field">
-            <span>Emisní norma</span>
+            <span>{c.form.norma}</span>
             <select id="a-norma" name="aNorma">
-              {NORMA_OPTIONS.map((o) => <option value={o.value}>{o.label}</option>)}
+              {normaOptions.map((o) => <option value={o.value}>{o.label}</option>)}
             </select>
           </label>
           <label class="field">
-            <span>Vlastní spotřeba (l/h) <em>— volitelné</em></span>
-            <input type="number" id="a-cons" name="aCons" min="0" step="0.1" placeholder="přepíše odhad" />
+            <span>{c.form.ownConsumption} <em>{c.form.ownConsumptionHint}</em></span>
+            <input type="number" id="a-cons" name="aCons" min="0" step="0.1" placeholder={c.form.phOwnConsumption} />
           </label>
         </fieldset>
 
         <div class="dc-vs">vs</div>
 
         <fieldset class="dc-tractor dc-tractor-new">
-          <legend>Traktor B (nový / cílový)</legend>
+          <legend>{c.form.tractorB}</legend>
           <label class="field">
-            <span>Výkon (k) <strong class="req">*</strong></span>
-            <input type="number" id="b-hp" name="bHp" min="1" max="900" step="1" placeholder="např. 150" required />
+            <span>{c.form.power} <strong class="req">*</strong></span>
+            <input type="number" id="b-hp" name="bHp" min="1" max="900" step="1" placeholder={c.form.phPowerB} required />
           </label>
           <label class="field">
-            <span>Emisní norma</span>
+            <span>{c.form.norma}</span>
             <select id="b-norma" name="bNorma">
-              {NORMA_OPTIONS.map((o) => <option value={o.value} selected={o.value === 'stage5'}>{o.label}</option>)}
+              {normaOptions.map((o) => <option value={o.value} selected={o.value === 'stage5'}>{o.label}</option>)}
             </select>
           </label>
           <label class="field">
-            <span>Vlastní spotřeba (l/h) <em>— volitelné</em></span>
-            <input type="number" id="b-cons" name="bCons" min="0" step="0.1" placeholder="přepíše odhad" />
+            <span>{c.form.ownConsumption} <em>{c.form.ownConsumptionHint}</em></span>
+            <input type="number" id="b-cons" name="bCons" min="0" step="0.1" placeholder={c.form.phOwnConsumption} />
           </label>
         </fieldset>
       </div>
 
       <fieldset class="dc-context">
-        <legend>Provoz</legend>
+        <legend>{c.form.contextLegend}</legend>
         <div class="dc-context-grid">
           <label class="field">
-            <span>Roční využití (motohodin) <strong class="req">*</strong></span>
-            <input type="number" id="hours" name="hours" min="1" max="5000" step="50" placeholder="např. 800" required value="800" />
+            <span>{c.form.hours} <strong class="req">*</strong></span>
+            <input type="number" id="hours" name="hours" min="1" max="5000" step="50" placeholder={c.form.phHours} required value={c.defaults.hours} />
           </label>
           <label class="field">
-            <span>Cena nafty (Kč/l) <strong class="req">*</strong></span>
-            <input type="number" id="price" name="price" min="1" step="0.10" placeholder="např. 32" required value="32" />
+            <span>{c.form.price} <strong class="req">*</strong></span>
+            <input type="number" id="price" name="price" min="1" step="0.10" placeholder={c.form.phPrice} required value={c.defaults.price} />
           </label>
           <label class="field">
-            <span>Rozdíl ceny B vs A (Kč) <em>— volitelné</em></span>
-            <input type="number" id="invest" name="invest" min="0" step="10000" placeholder="kolik B stojí navíc" />
+            <span>{c.form.investDiff} <em>{c.form.ownConsumptionHint}</em></span>
+            <input type="number" id="invest" name="invest" min="0" step="10000" placeholder={c.form.phInvest} />
           </label>
         </div>
       </fieldset>
 
-      <button type="submit" class="dc-btn">Spočítat úsporu →</button>
+      <button type="submit" class="dc-btn">{c.form.submit}</button>
     </form>
 
     <div id="dc-result" class="dc-result" hidden>
       <header class="dc-result-head">
-        <span class="dc-result-kicker">Roční úspora</span>
-        <div class="dc-result-total" id="dc-result-yearly">— Kč/rok</div>
-        <div class="dc-result-sub" id="dc-result-pct">— %</div>
+        <span class="dc-result-kicker">{c.result.yearlyKicker}</span>
+        <div class="dc-result-total" id="dc-result-yearly">—</div>
+        <div class="dc-result-sub" id="dc-result-pct">—</div>
       </header>
 
       <div class="dc-comparison">
         <div class="dc-card dc-card-a">
-          <span class="dc-card-label">Traktor A</span>
+          <span class="dc-card-label">{c.result.tractorACard}</span>
           <strong id="dc-a-label">—</strong>
           <div class="dc-stat">
-            <span>Spotřeba:</span><strong id="dc-a-cons">— l/h</strong>
+            <span>{c.result.consumption}</span><strong id="dc-a-cons">—</strong>
           </div>
           <div class="dc-stat">
-            <span>Roční:</span><strong id="dc-a-yearly">— l</strong>
+            <span>{c.result.yearly}</span><strong id="dc-a-yearly">—</strong>
           </div>
           <div class="dc-stat dc-stat-czk">
-            <span>Náklady:</span><strong id="dc-a-czk">— Kč/rok</strong>
+            <span>{c.result.costs}</span><strong id="dc-a-czk">—</strong>
           </div>
         </div>
         <div class="dc-card dc-card-b">
-          <span class="dc-card-label">Traktor B</span>
+          <span class="dc-card-label">{c.result.tractorBCard}</span>
           <strong id="dc-b-label">—</strong>
           <div class="dc-stat">
-            <span>Spotřeba:</span><strong id="dc-b-cons">— l/h</strong>
+            <span>{c.result.consumption}</span><strong id="dc-b-cons">—</strong>
           </div>
           <div class="dc-stat">
-            <span>Roční:</span><strong id="dc-b-yearly">— l</strong>
+            <span>{c.result.yearly}</span><strong id="dc-b-yearly">—</strong>
           </div>
           <div class="dc-stat dc-stat-czk">
-            <span>Náklady:</span><strong id="dc-b-czk">— Kč/rok</strong>
+            <span>{c.result.costs}</span><strong id="dc-b-czk">—</strong>
           </div>
         </div>
       </div>
 
       <div class="dc-projection">
         <div>
-          <span class="dc-proj-label">Úspora za 5 let</span>
-          <strong id="dc-5y">— Kč</strong>
+          <span class="dc-proj-label">{c.result.fiveYear}</span>
+          <strong id="dc-5y">—</strong>
         </div>
         <div id="dc-payback-wrap" hidden>
-          <span class="dc-proj-label">Návratnost investice</span>
-          <strong id="dc-payback">— let</strong>
+          <span class="dc-proj-label">{c.result.payback}</span>
+          <strong id="dc-payback">—</strong>
         </div>
       </div>
 
       <div class="dc-disclaimer">
-        ⚠️ Orientační odhad podle DLG profi-testových průměrů. Reálná spotřeba ±20 % podle typu práce, údržby a stylu jízdy. Nezahrnuje AdBlue (~4 % nafty navíc) ani jiné provozní náklady (oleje, filtry, servis).
+        {c.disclaimer}
       </div>
     </div>
 
     <section class="info">
-      <h2>Jak kalkulačka funguje</h2>
-      <p>Spotřeba se odhaduje podle <strong>specifické spotřeby paliva</strong> (g/kWh) typické pro danou emisní normu motoru:</p>
+      <h2>{c.howItWorks.heading}</h2>
+      <p set:html={c.howItWorks.intro} />
       <ul>
-        <li><strong>Před 2006 (Tier 1/Stage I-II):</strong> ~260 g/kWh — staré motory bez after-treatment</li>
-        <li><strong>Tier 3 (2006–2011):</strong> ~240 g/kWh — EGR, bez DPF</li>
-        <li><strong>Stage IIIB (2011–2014):</strong> ~230 g/kWh — DPF povinný</li>
-        <li><strong>Stage IV (2014–2019):</strong> ~215 g/kWh — SCR (AdBlue) snížil spotřebu</li>
-        <li><strong>Stage V (2020+):</strong> ~210 g/kWh — optimalizovaná SCR + DPF</li>
+        {c.howItWorks.bullets.map((b) => <li><strong>{b.strong}</strong>{b.rest}</li>)}
       </ul>
-      <p>Pro průměrnou práci se počítá s ~60 % zatížením nominálního výkonu (mix tah + PTO + transport). Pokud znáte měřenou spotřebu vlastního stroje, přepište výchozí odhad v poli „Vlastní spotřeba".</p>
+      <p>{c.howItWorks.outro}</p>
 
-      <h2>Časté dotazy</h2>
+      <h2>{locale === 'cs' ? 'Časté dotazy' : 'Časté otázky'}</h2>
       <div class="faqs">
         {faqItems.map((item) => (
           <details class="faq">
@@ -199,20 +183,28 @@ const faqJsonLd = faqPageSchema(faqItems);
         ))}
       </div>
 
-      <h2>Související</h2>
+      <h2>{c.related.heading}</h2>
       <ul class="info-links">
-        <li><a href="/kalkulacka/dotace-cap/">Kalkulačka dotací CAP 2024</a></li>
-        <li><a href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu traktoru</a></li>
-        <li><a href="/kalkulacka/naklady-na-hektar/">Kalkulačka nákladů na hektar</a></li>
-        <li><a href="/slovnik/adblue/">Co je AdBlue (slovník)</a></li>
-        <li><a href="/slovnik/emisni-normy-stage/">Emisní normy Stage / Tier (slovník)</a></li>
+        {c.related.links.map((l) => (
+          <li><a href={locale === 'cs' ? l.href : `/${locale}${l.href}`}>{l.label}</a></li>
+        ))}
       </ul>
     </section>
+
+    <script type="application/json" id="calc-cfg" set:html={JSON.stringify(calcCfg)}></script>
   </div>
 
   <script>
     import { compareDiesel } from '../../../lib/diesel-calc';
     import type { EmisniNorma } from '../../../lib/diesel-calc';
+
+    const cfg = JSON.parse(document.getElementById('calc-cfg')?.textContent || '{}');
+    const numberLocale: string = cfg.numberLocale ?? 'cs-CZ';
+    const currency: string = cfg.currency ?? 'CZK';
+    const js = cfg.js ?? {};
+    const fmtMoney = (n: number) =>
+      new Intl.NumberFormat(numberLocale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(Math.abs(Math.round(n)));
+    const fmtNum = (n: number) => n.toLocaleString(numberLocale);
 
     const form = document.getElementById('dc-form') as HTMLFormElement;
     const result = document.getElementById('dc-result') as HTMLElement;
@@ -231,7 +223,7 @@ const faqJsonLd = faqPageSchema(faqItems);
       const invest = parseFloat(String(data.get('invest') ?? '')) || 0;
 
       if (aHp <= 0 || bHp <= 0 || hours <= 0 || price <= 0) {
-        alert('Vyplňte výkon obou traktorů, roční využití a cenu nafty.');
+        alert(cfg.fillAlert ?? 'Vyplňte výkon obou traktorů, roční využití a cenu nafty.');
         return;
       }
 
@@ -241,34 +233,33 @@ const faqJsonLd = faqPageSchema(faqItems);
         hoursPerYear: hours,
         naftaPriceCzk: price,
         investmentDiffCzk: invest || undefined,
+        normaLabels: cfg.normaLabels,
+        hpUnit: cfg.hpUnit,
       });
-
-      const fmtCzk = (n: number) => Math.abs(n).toLocaleString('cs-CZ') + ' Kč';
-      const sign = (n: number) => n > 0 ? '−' : n < 0 ? '+' : '';
 
       const yearlyEl = $('dc-result-yearly');
       const pctEl = $('dc-result-pct');
-      yearlyEl.textContent = (r.yearlySavingCzk >= 0 ? '−' : '+') + fmtCzk(r.yearlySavingCzk) + ' / rok';
+      yearlyEl.textContent = (r.yearlySavingCzk >= 0 ? '−' : '+') + fmtMoney(r.yearlySavingCzk) + (js.perYear ?? ' / rok');
       yearlyEl.style.color = r.yearlySavingCzk > 0 ? '#0B7A3B' : r.yearlySavingCzk < 0 ? '#C8102E' : '#0A0A0B';
-      pctEl.textContent = `${r.savingPct >= 0 ? '−' : '+'}${Math.abs(r.savingPct).toFixed(1)} % proti A`;
+      pctEl.textContent = `${r.savingPct >= 0 ? '−' : '+'}${Math.abs(r.savingPct).toFixed(1)} %${js.vsA ?? ' proti A'}`;
 
       $('dc-a-label').textContent = r.a.label;
-      $('dc-a-cons').textContent = `${r.a.consumptionLh.toFixed(1)} l/h`;
-      $('dc-a-yearly').textContent = `${r.a.yearlyL.toLocaleString('cs-CZ')} l`;
-      $('dc-a-czk').textContent = fmtCzk(r.a.yearlyCzk) + ' / rok';
+      $('dc-a-cons').textContent = `${r.a.consumptionLh.toFixed(1)} ${js.unitLh ?? 'l/h'}`;
+      $('dc-a-yearly').textContent = `${fmtNum(r.a.yearlyL)} ${js.unitL ?? 'l'}`;
+      $('dc-a-czk').textContent = fmtMoney(r.a.yearlyCzk) + (js.perYear ?? ' / rok');
 
       $('dc-b-label').textContent = r.b.label;
-      $('dc-b-cons').textContent = `${r.b.consumptionLh.toFixed(1)} l/h`;
-      $('dc-b-yearly').textContent = `${r.b.yearlyL.toLocaleString('cs-CZ')} l`;
-      $('dc-b-czk').textContent = fmtCzk(r.b.yearlyCzk) + ' / rok';
+      $('dc-b-cons').textContent = `${r.b.consumptionLh.toFixed(1)} ${js.unitLh ?? 'l/h'}`;
+      $('dc-b-yearly').textContent = `${fmtNum(r.b.yearlyL)} ${js.unitL ?? 'l'}`;
+      $('dc-b-czk').textContent = fmtMoney(r.b.yearlyCzk) + (js.perYear ?? ' / rok');
 
-      $('dc-5y').textContent = (r.fiveYearSavingCzk >= 0 ? '−' : '+') + fmtCzk(r.fiveYearSavingCzk);
+      $('dc-5y').textContent = (r.fiveYearSavingCzk >= 0 ? '−' : '+') + fmtMoney(r.fiveYearSavingCzk);
 
       const paybackWrap = $('dc-payback-wrap');
       if (r.paybackYears !== undefined && r.paybackYears > 0) {
         $('dc-payback').textContent = r.paybackYears < 1
-          ? `${(r.paybackYears * 12).toFixed(0)} měsíců`
-          : `${r.paybackYears.toFixed(1)} let`;
+          ? `${(r.paybackYears * 12).toFixed(0)} ${js.months ?? 'měsíců'}`
+          : `${r.paybackYears.toFixed(1)} ${js.years ?? 'let'}`;
         paybackWrap.hidden = false;
       } else {
         paybackWrap.hidden = true;
