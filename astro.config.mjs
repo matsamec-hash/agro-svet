@@ -9,6 +9,11 @@ export default defineConfig({
   adapter: cloudflare(),
   site: 'https://agro-svet.cz',
   trailingSlash: 'always',
+  i18n: {
+    defaultLocale: 'cs',
+    locales: ['cs', 'sk', 'uk'],
+    routing: { prefixDefaultLocale: false },
+  },
   // Inline všechny (malé) stylesheety do HTML — odstraní render-blocking CSS
   // requesty (~467ms na 4G dle Lighthouse). Celkový CSS je ~15 KB, takže
   // navýšení HTML je zanedbatelné oproti ušetřeným round-tripům k LCP.
