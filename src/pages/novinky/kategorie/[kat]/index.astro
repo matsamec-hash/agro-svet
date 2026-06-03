@@ -10,11 +10,14 @@ import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
 import { breadcrumbSchema } from '../../../../lib/structured-data';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../../../lib/articles-i18n';
 import { localizePath, t, localizedCategory } from '../../../../i18n/utils';
+import { isNewsCategoryHidden } from '../../../../i18n/nav';
 
 const VALID_CATS = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 const { kat } = Astro.params;
 if (!kat || !VALID_CATS.includes(kat)) return Astro.rewrite('/404');
 const locale = Astro.locals.locale ?? 'cs';
+// Jurisdikčně uzamčená kategorie (CZ dotace/legislativa/trh) pod /sk neexistuje.
+if (isNewsCategoryHidden(locale, kat)) return Astro.rewrite('/404');
 
 const categoryDescriptions: Record<string, string> = {
   technika: 'Novinky ze zemědělské techniky — traktory, kombajny, postřikovače, secí stroje a další stroje.',

@@ -7,11 +7,15 @@ import { categoryStyle, tagStyle } from '../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../lib/articles-i18n';
 import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
+import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
 
 const PER_PAGE = 24;
 
 const supabase = createAnonClient();
 const locale = Astro.locals.locale ?? 'cs';
+// Jurisdikčně uzamčené kategorie (CZ dotace/legislativa/trh) se pod /sk nezobrazují.
+const hiddenCats = HIDDEN_NEWS_CATEGORIES[locale];
+const hiddenCatsFilter = hiddenCats.length ? `(${hiddenCats.join(',')})` : '';
 
 const category = Astro.url.searchParams.get('kategorie') ?? '';
 const query = Astro.url.searchParams.get('q') ?? '';
@@ -28,6 +32,7 @@ let q = supabase
   .order('published_at', { ascending: false })
   .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
 
+if (hiddenCatsFilter) q = q.not('category', 'in', hiddenCatsFilter);
 if (category) q = q.eq('category', category);
 if (query) q = q.or(`title.ilike.%${query}%,perex.ilike.%${query}%`);
 if (dateFrom) q = q.gte('published_at', dateFrom);
@@ -47,11 +52,13 @@ if (locale !== 'cs' && sorted.length) {
 const totalPages = Math.ceil((count ?? 0) / PER_PAGE);
 
 // Category counts (across all articles) + available tags
-const { data: allForMeta } = await supabase
+let metaQuery = supabase
   .from('articles')
   .select('category, tags')
   .eq('site_id', SITE_ID)
   .eq('status', 'published');
+if (hiddenCatsFilter) metaQuery = metaQuery.not('category', 'in', hiddenCatsFilter);
+const { data: allForMeta } = await metaQuery;
 
 const catCounts = new Map<string, number>();
 const tagCounts = new Map<string, number>();
