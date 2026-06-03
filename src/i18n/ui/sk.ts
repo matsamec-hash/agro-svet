@@ -110,6 +110,9 @@ const sk: Record<string, string> = {
   'nf.errorHint': 'Ak si myslíte, že ide o chybu, dajte nám vedieť na',
   'nf.operatedBy': 'Web prevádzkuje',
 
+  // — katalóg (cat.*) —
+  'cat.foundedIn': 'založené · {country}',
+
   // — cookie consent —
   'cc.text': 'Používame cookies pre základnú funkčnosť webu a&nbsp;(ak súhlasíte) pre anonymnú analytiku cez Google Analytics.',
   'cc.more': 'Viac informácií',
