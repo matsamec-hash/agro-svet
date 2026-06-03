@@ -8,9 +8,12 @@ import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, categoryStyle, getTagColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
 import { breadcrumbSchema } from '../../../../lib/structured-data';
+import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../../../lib/articles-i18n';
+import { localizePath, t, localizedCategory } from '../../../../i18n/utils';
 
 const { tag } = Astro.params;
 if (!tag) return Astro.rewrite('/404');
+const locale = Astro.locals.locale ?? 'cs';
 
 const supabase = createAnonClient();
 
@@ -22,7 +25,11 @@ const { data: articles } = await supabase
   .contains('tags', [tag])
   .order('published_at', { ascending: false });
 
-const items = articles ?? [];
+let items = articles ?? [];
+if (locale !== 'cs' && items.length) {
+  const trMap = buildTranslationMap(await fetchArticleTranslations(supabase, items.map((a) => a.id), locale));
+  items = items.map((a) => overlayArticle(a, trMap.get(a.id)));
+}
 
 // Categories present under this tag (for faceted nav)
 const catCounts = new Map<string, number>();
@@ -30,16 +37,8 @@ for (const a of items) {
   const c = (a.category as string) || 'novinky';
   catCounts.set(c, (catCounts.get(c) ?? 0) + 1);
 }
-const categoryLabels: Record<string, string> = {
-  technika: 'Technika',
-  dotace: 'Dotace',
-  trh: 'Trh',
-  legislativa: 'Legislativa',
-  znacky: 'Značky',
-  novinky: 'Novinky',
-};
 const catFacets = [...catCounts.entries()]
-  .map(([slug, count]) => ({ slug, label: categoryLabels[slug] ?? slug, count }))
+  .map(([slug, count]) => ({ slug, label: localizedCategory(locale, slug), count }))
   .sort((a, b) => b.count - a.count);
 
 // Related tags (co-occurring in these articles, top 12, excluding current)
@@ -52,21 +51,23 @@ for (const a of items) {
 }
 const relatedTags = [...coTagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12);
 
-const pageTitle = `Téma: ${tag}`;
-const pageDesc = `Články k tématu „${tag}" na agro-svět.cz — ${items.length} článků${items.length === 0 ? '' : ' z kategorií ' + catFacets.map((c) => c.label).join(', ')}.`;
+const pageTitle = `${t(locale, 'nov.theme')}: ${tag}`;
+const pageDesc = locale === 'sk'
+  ? `Články k téme „${tag}" na agro-svět.cz — ${items.length} článkov${items.length === 0 ? '' : ' z kategórií ' + catFacets.map((c) => c.label).join(', ')}.`
+  : `Články k tématu „${tag}" na agro-svět.cz — ${items.length} článků${items.length === 0 ? '' : ' z kategorií ' + catFacets.map((c) => c.label).join(', ')}.`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Novinky', url: '/novinky/' },
-  { name: `#${tag}`, url: `/novinky/tema/${encodeURIComponent(tag!)}/` },
+  { name: t(locale, 'nav.home'), url: localizePath(locale, '/') },
+  { name: t(locale, 'nov.breadcrumb'), url: localizePath(locale, '/novinky/') },
+  { name: `#${tag}`, url: localizePath(locale, `/novinky/tema/${encodeURIComponent(tag!)}/`) },
 ]);
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: pageTitle,
   description: pageDesc,
-  url: `${SITE_URL}/novinky/tema/${encodeURIComponent(tag!)}/`,
-  inLanguage: 'cs-CZ',
+  url: `${SITE_URL}${localizePath(locale, `/novinky/tema/${encodeURIComponent(tag!)}/`)}`,
+  inLanguage: locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ',
   numberOfItems: items.length,
 };
 ---
@@ -76,30 +77,32 @@ const collectionJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px; font-size:13px; color:#666;">
-      <a href="/novinky/" style="color:#666; text-decoration:none;">Novinky</a>
+      <a href={localizePath(locale, '/novinky/')} style="color:#666; text-decoration:none;">{t(locale, 'nov.breadcrumb')}</a>
       <span style="margin:0 6px;">/</span>
-      <span style="color:#666;">Téma</span>
+      <span style="color:#666;">{t(locale, 'nov.theme')}</span>
       <span style="margin:0 6px;">/</span>
       <span style="color:#1a1a1a;">{tag}</span>
     </div>
 
     <div style="margin-bottom:24px;">
-      <span class="section-label" style={tagStyle(tag!)}>Téma</span>
+      <span class="section-label" style={tagStyle(tag!)}>{t(locale, 'nov.theme')}</span>
       <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-top:10px; margin-bottom:10px;">
         <span style={`color:${getTagColor(tag!).fg};`}>#{tag}</span>
       </h1>
       <p style="font-size:15px; color:#666; line-height:1.6;">
         {items.length === 0
-          ? `Pro téma „${tag}" zatím žádné články.`
-          : `${items.length} ${items.length === 1 ? 'článek' : (items.length < 5 ? 'články' : 'článků')} k tématu ${tag}.`}
+          ? (locale === 'sk' ? `Pre tému „${tag}" zatiaľ žiadne články.` : `Pro téma „${tag}" zatím žádné články.`)
+          : (locale === 'sk'
+              ? `${items.length} ${items.length === 1 ? 'článok' : (items.length < 5 ? 'články' : 'článkov')} k téme ${tag}.`
+              : `${items.length} ${items.length === 1 ? 'článek' : (items.length < 5 ? 'články' : 'článků')} k tématu ${tag}.`)}
       </p>
     </div>
 
     {catFacets.length > 1 && (
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;">
-        <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; padding:8px 0;">V kategoriích:</span>
+        <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; padding:8px 0;">{t(locale, 'nov.inCategories')}</span>
         {catFacets.map((c) => (
-          <a href={`/novinky/kategorie/${c.slug}/`} class="pill" style={categoryStyle(c.slug)}>
+          <a href={localizePath(locale, `/novinky/kategorie/${c.slug}/`)} class="pill" style={categoryStyle(c.slug)}>
             {c.label} <span class="pill-count">{c.count}</span>
           </a>
         ))}
@@ -116,24 +119,25 @@ const collectionJsonLd = {
             publishDate={new Date(a.published_at)}
             category={a.category}
             heroImage={a.featured_image_url}
+            locale={locale}
           />
         ))}
       </div>
     ) : (
       <p style="padding:48px 0; text-align:center; color:#666;">
-        <a href="/novinky/" style="color:#1a1a1a;">← Zpět na novinky</a>
+        <a href={localizePath(locale, '/novinky/')} style="color:#1a1a1a;">{t(locale, 'nov.back')}</a>
       </p>
     )}
 
     {relatedTags.length > 0 && (
       <aside style="margin-top:48px; padding-top:24px; border-top:1px solid #eee;">
         <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; margin-bottom:12px;">
-          Související témata
+          {t(locale, 'nov.relatedTopics')}
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap;">
-          {relatedTags.map(([t, count]) => (
-            <a href={`/novinky/tema/${encodeURIComponent(t)}/`} class="nov-tag" style={tagStyle(t)}>
-              #{t} <span class="nov-tag-count">{count}</span>
+          {relatedTags.map(([tagName, count]) => (
+            <a href={localizePath(locale, `/novinky/tema/${encodeURIComponent(tagName)}/`)} class="nov-tag" style={tagStyle(tagName)}>
+              #{tagName} <span class="nov-tag-count">{count}</span>
             </a>
           ))}
         </div>

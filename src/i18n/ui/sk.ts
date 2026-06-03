@@ -387,6 +387,8 @@ const sk: Record<string, string> = {
   'nov.kicker.cat': 'Kategória',
   'nov.breadcrumbAria': 'Navigácia (omrvinky)',
   'nov.noArticles': 'Zatiaľ bez článkov',
+  'nov.inCategories': 'V kategóriách:',
+  'nov.relatedTopics': 'Súvisiace témy',
   'nov.all': 'Všetko',
   'nov.empty': 'Žiadne články nezodpovedajú filtrom.',
   'nov.emptyReset': 'Vymazať filtre',
