@@ -7,7 +7,7 @@ describe('kalkulačka i18n — parity klíčů sk ↔ cs', () => {
 
   it('registry obsahuje očekávané kalkulačky', () => {
     // Aktualizuje se s každým přidaným modulem; finální stav = 5 calc modulů.
-    expect(slugs.length).toBeGreaterThanOrEqual(0);
+    expect(slugs.length).toBeGreaterThan(0);
   });
 
   for (const slug of slugs) {

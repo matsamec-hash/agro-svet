@@ -1,80 +1,61 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. cs výstup sémanticky identický.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
 import AreaConverter from '../../../components/AreaConverter.astro';
+import { content } from '../../../i18n/kalkulacka/prevody-jednotek';
+import { crumbs } from '../../../i18n/kalkulacka/common';
+
+const locale = Astro.locals.locale ?? 'cs';
+const c = content[locale] ?? content.cs;
+const cr = crumbs[locale] ?? crumbs.cs;
 
 const canonical = `${SITE_URL}/kalkulacka/prevody-jednotek/`;
-
-const faqItems = [
-  {
-    q: 'Kolik je 1 hektar v m² a arech?',
-    a: '1 hektar (ha) = 10 000 m² = 100 arů (a) = 0,01 km². Hektar je čtverec o straně 100 × 100 metrů. V zemědělství je hektar standardní jednotka pro výměru polí, dotace na hektar i výnosy plodin (t/ha).',
-  },
-  {
-    q: 'Kolik m² je 1 ar?',
-    a: '1 ar (a) = 100 m² = čtverec 10 × 10 m = 0,01 hektaru. 100 arů tvoří jeden hektar. Ar se v ČR používá hlavně pro výměru zahrad, malých parcel a v katastrálních zápisech.',
-  },
-  {
-    q: 'Kolik je 1 akr v hektarech?',
-    a: '1 akr (acre) = 4 046,86 m² = 0,4047 hektaru = přibližně 40,5 aru. Akr je anglosaská jednotka používaná v USA, UK, Kanadě a Austrálii. Pro převod akrů na hektary vynásob hodnotu číslem 0,4047.',
-  },
-  {
-    q: 'Jak převést bušly na tuny z hektaru?',
-    a: 'Záleží na komoditě. Pro pšenici a sóju: bu/ac × 0,0673 = t/ha. Pro kukuřici: bu/ac × 0,0628 = t/ha. Příklad: 175 bu/ac kukuřice ≈ 11 t/ha. CBOT publikuje US výnosy v bušlech na akr, EU v t/ha.',
-  },
-  {
-    q: 'Co je jitro, korec a strych? Jak velké jsou?',
-    a: 'Historické české jednotky plochy z doby před metrickou reformou (1919). Standardizované hodnoty z roku 1764: rakouské/české jitro = 0,5755 ha (5 754 m²), pražský korec = strych = 0,288 ha (2 877 m²). Stále se objevují v katastrálních zápisech a rodinné paměti.',
-  },
-  {
-    q: 'Proč existuje hektolitrová váha obilí?',
-    a: 'Hektolitrová váha (kg/hl) je kvalitativní parametr — hmotnost 100 litrů obilí. Vyšší hl váha = vyšší obsah škrobu/oleje, lepší mlynářská kvalita. Pšenice 78+ kg/hl = potravinářská třída, < 74 kg/hl = krmná. Rozdíl ceny může být 1500+ Kč/t.',
-  },
-];
+const faqItems = c.faq;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kalkulačky', url: '/kalkulacka/' },
-  { name: 'Převody jednotek', url: canonical },
+  { name: cr.home, url: '/' },
+  { name: cr.hub, url: '/kalkulacka/' },
+  { name: c.crumb, url: canonical },
 ]);
 const faqJsonLd = faqPageSchema(faqItems);
 ---
 
 <Layout
-  title="Převody jednotek plochy — hektar, ar, m², akr, jitro, korec"
-  description="Online kalkulačka pro převody jednotek plochy: hektar ↔ ar ↔ m² ↔ km² ↔ akr ↔ jitro ↔ korec ↔ strych ↔ morgen. Okamžitý výpočet, vhodné pro zemědělce, geodety i katastr."
-  canonical={canonical}
+  title={c.title}
+  description={c.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
 
   <div class="pj-page">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/kalkulacka/">Kalkulačky</a>
+      <a href={locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/`}>{cr.hub}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <span class="current">Převody jednotek</span>
+      <span class="current">{c.crumb}</span>
     </nav>
 
     <header class="hero">
-      <span class="kicker">Kalkulačka · jednotky a měření</span>
-      <h1>Převody jednotek plochy</h1>
-      <p class="hero-lede">
-        Zadej hodnotu v libovolné jednotce a okamžitě uvidíš převod do všech ostatních —
-        hektary, ary, metry čtvereční, akry i historické české jednotky (jitro, korec, strych) a pruský morgen.
-        Kalkulačka funguje bez registrace, čísla se počítají v prohlížeči.
-      </p>
+      <span class="kicker">{c.kicker}</span>
+      <h1>{c.h1}</h1>
+      <p class="hero-lede">{c.lede}</p>
     </header>
 
     <AreaConverter
       defaultUnit="ha"
       defaultValue={1}
-      heading="Online převodník jednotek plochy"
-      caption="Tip: klikni do pole s hodnotou a piš — všechny převody se aktualizují živě. Pro starší jednotky (jitro, korec, strych) jsou použité standardizované hodnoty z roku 1764, regionální varianty se mohly mírně lišit."
+      heading={c.converterHeading}
+      caption={c.converterCaption}
       headingLevel="h2"
+      numberLocale={c.numberLocale}
+      ui={c.ui}
+      unitNames={c.unitNames}
     />
 
     <section class="pj-reference">
