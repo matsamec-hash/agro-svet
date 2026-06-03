@@ -1,87 +1,65 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. cs výstup sémanticky identický.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
+import { content } from '../../../i18n/kalkulacka/leasing-traktoru';
+import { crumbs } from '../../../i18n/kalkulacka/common';
+
+const locale = Astro.locals.locale ?? 'cs';
+const c = content[locale] ?? content.cs;
+const cr = crumbs[locale] ?? crumbs.cs;
 
 const canonical = `${SITE_URL}/kalkulacka/leasing-traktoru/`;
-
-// Orientation rates — public ballpark APR for CZ ag-equipment leasing 2026.
-// Real offers depend on credit profile, down-payment, residual value, brand
-// promo campaigns. These are intentionally conservative midpoints.
-const providers = [
-  { id: 'csob', name: 'ČSOB Leasing', apr: 6.9, note: 'Univerzální poskytovatel, financuje všechny značky.' },
-  { id: 'jd', name: 'John Deere Financial', apr: 5.9, note: 'Captive financování — akční sazby na nové John Deere stroje.' },
-  { id: 'agri-cs', name: 'AGRI CS Finance', apr: 7.5, note: 'Dealer financování pro Case IH, Steyr.' },
-  { id: 'agrotec', name: 'AGROTEC FS', apr: 7.2, note: 'Financování New Holland přes dealerskou síť.' },
-];
-
-const faqItems = [
-  {
-    q: 'Jak se počítá měsíční splátka leasingu?',
-    a: 'Splátka se počítá anuitní metodou — z financované částky (cena stroje minus akontace) se rozpočítá jistina a úrok rovnoměrně na celou dobu splácení. Vyšší akontace i kratší doba snižují celkové přeplacení, ale zvyšují měsíční zatížení.',
-  },
-  {
-    q: 'Jaká je obvyklá akontace u leasingu zemědělské techniky?',
-    a: 'Obvyklá akontace se pohybuje mezi 10 a 30 % z pořizovací ceny. Vyšší akontace snižuje úrokové náklady i riziko pro poskytovatele, takže často znamená i nižší sazbu.',
-  },
-  {
-    q: 'Co je RPSN a proč je důležité?',
-    a: 'RPSN (roční procentní sazba nákladů) zahrnuje kromě úroku i poplatky za uzavření a vedení smlouvy. Je to nejlepší ukazatel pro srovnání nabídek různých poskytovatelů — nižší RPSN znamená levnější financování.',
-  },
-  {
-    q: 'Vyplatí se captive financování od výrobce?',
-    a: 'Captive financování (John Deere Financial, AGROTEC FS) často nabízí akční sazby na nové stroje dané značky, které bankovní leasing nedokáže nabídnout. U ojetých strojů nebo cross-brand nákupu bývá univerzální poskytovatel flexibilnější.',
-  },
-];
+const faqItems = c.faq;
+const providers = c.providers;
+const calcCfg = { currency: c.currency, numberLocale: c.numberLocale, js: c.js, providers: c.providers };
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kalkulačky', url: '/kalkulacka/' },
-  { name: 'Leasing traktoru', url: canonical },
+  { name: cr.home, url: locale === 'cs' ? '/' : `/${locale}/` },
+  { name: cr.hub, url: locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/` },
+  { name: c.crumb, url: canonical },
 ]);
 const faqJsonLd = faqPageSchema(faqItems);
 ---
 
 <Layout
-  title="Kalkulačka leasingu traktoru — měsíční splátka a srovnání 2026"
-  description="Spočítejte měsíční splátku, celkové přeplacení a RPSN leasingu traktoru. Srovnání ČSOB Leasing, John Deere Financial, AGRI CS a AGROTEC."
-  canonical={canonical}
+  title={c.title}
+  description={c.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
 
   <div class="calc-page" data-providers={JSON.stringify(providers)}>
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/kalkulacka/">Kalkulačky</a>
+      <a href={locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/`}>{cr.hub}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <span class="current">Leasing traktoru</span>
+      <span class="current">{c.crumb}</span>
     </nav>
 
     <header class="hero">
-      <span class="kicker">Kalkulačka · financování</span>
-      <h1>Kalkulačka leasingu traktoru</h1>
-      <p class="hero-lede">
-        Zadejte cenu stroje, akontaci a dobu splácení. Spočítáme měsíční splátku, celkové přeplacení
-        a porovnáme orientační nabídky čtyř poskytovatelů. Výsledky jsou orientační — finální nabídku
-        vždy ověřte přímo u leasingové společnosti.
-      </p>
+      <span class="kicker">{c.kicker}</span>
+      <h1>{c.h1}</h1>
+      <p class="hero-lede">{c.lede}</p>
     </header>
 
     <div class="calc-layout">
       <form class="calc-form" id="calc-form" autocomplete="off">
         <div class="cf-group">
-          <label for="price">Pořizovací cena stroje</label>
+          <label for="price">{c.form.price}</label>
           <div class="cf-input-unit">
-            <input type="number" id="price" min="100000" max="20000000" step="10000" value="2500000" inputmode="numeric" />
-            <span class="cf-unit">Kč</span>
+            <input type="number" id="price" min="100000" max="20000000" step="10000" value={c.currency === 'EUR' ? 100000 : 2500000} inputmode="numeric" />
+            <span class="cf-unit">{c.currency === 'EUR' ? '€' : 'Kč'}</span>
           </div>
         </div>
 
         <div class="cf-group">
-          <label for="downpayment">Akontace</label>
+          <label for="downpayment">{c.form.downpayment}</label>
           <div class="cf-input-unit">
             <input type="number" id="downpayment" min="0" max="90" step="1" value="20" inputmode="numeric" />
             <span class="cf-unit">%</span>
@@ -90,15 +68,15 @@ const faqJsonLd = faqPageSchema(faqItems);
         </div>
 
         <div class="cf-group">
-          <label for="months">Doba splácení</label>
+          <label for="months">{c.form.months}</label>
           <div class="cf-input-unit">
             <input type="number" id="months" min="12" max="84" step="6" value="60" inputmode="numeric" />
-            <span class="cf-unit">měsíců</span>
+            <span class="cf-unit">{c.form.monthsUnit}</span>
           </div>
         </div>
 
         <div class="cf-group">
-          <label for="residual">Zůstatková hodnota (balónová splátka)</label>
+          <label for="residual">{c.form.residual}</label>
           <div class="cf-input-unit">
             <input type="number" id="residual" min="0" max="50" step="1" value="0" inputmode="numeric" />
             <span class="cf-unit">%</span>
@@ -109,60 +87,56 @@ const faqJsonLd = faqPageSchema(faqItems);
 
       <div class="calc-result" id="calc-result">
         <div class="cr-headline">
-          <span class="cr-label">Měsíční splátka (orientačně)</span>
+          <span class="cr-label">{c.result.headline}</span>
           <span class="cr-value" id="result-monthly">—</span>
         </div>
         <div class="cr-grid">
           <div class="cr-stat">
-            <span class="crs-label">Financovaná částka</span>
+            <span class="crs-label">{c.result.financed}</span>
             <span class="crs-value" id="result-financed">—</span>
           </div>
           <div class="cr-stat">
-            <span class="crs-label">Celkem zaplaceno</span>
+            <span class="crs-label">{c.result.total}</span>
             <span class="crs-value" id="result-total">—</span>
           </div>
           <div class="cr-stat">
-            <span class="crs-label">Přeplaceno na úrocích</span>
+            <span class="crs-label">{c.result.interest}</span>
             <span class="crs-value" id="result-interest">—</span>
           </div>
           <div class="cr-stat">
-            <span class="crs-label">Použitá sazba</span>
+            <span class="crs-label">{c.result.usedRate}</span>
             <span class="crs-value" id="result-apr">—</span>
           </div>
         </div>
       </div>
     </div>
 
-    <section class="provider-section" aria-labelledby="providers-h">
-      <h2 id="providers-h">Srovnání poskytovatelů</h2>
-      <p class="provider-lede">
-        Stejné parametry, různé orientační sazby. Captive financování výrobců (John Deere, AGROTEC)
-        bývá levnější na nových strojích dané značky, univerzální poskytovatelé jsou flexibilnější u ojetých.
-      </p>
-      <div class="provider-table" id="provider-table">
-        <div class="pt-header">
-          <div class="pt-th">Poskytovatel</div>
-          <div class="pt-th">Sazba p.a.</div>
-          <div class="pt-th">Měsíční splátka</div>
-          <div class="pt-th">Celkem zaplaceno</div>
-        </div>
-        {providers.map((p) => (
-          <div class="pt-row" data-provider-id={p.id} data-apr={p.apr}>
-            <div class="pt-cell pt-name">
-              <strong>{p.name}</strong>
-              <span class="pt-note">{p.note}</span>
-            </div>
-            <div class="pt-cell pt-apr">{p.apr.toLocaleString('cs-CZ')} %</div>
-            <div class="pt-cell pt-monthly">—</div>
-            <div class="pt-cell pt-total">—</div>
+    {c.providerSection && (
+      <section class="provider-section" aria-labelledby="providers-h">
+        <h2 id="providers-h">{c.providerSection.heading}</h2>
+        <p class="provider-lede">{c.providerSection.lede}</p>
+        <div class="provider-table" id="provider-table">
+          <div class="pt-header">
+            <div class="pt-th">{c.providerSection.thProvider}</div>
+            <div class="pt-th">{c.providerSection.thRate}</div>
+            <div class="pt-th">{c.providerSection.thMonthly}</div>
+            <div class="pt-th">{c.providerSection.thTotal}</div>
           </div>
-        ))}
-      </div>
-      <p class="provider-disclaimer">
-        Sazby jsou orientační odhady pro rok 2026 a slouží pouze ke srovnání. Skutečná nabídka závisí na bonitě,
-        výši akontace, zůstatkové hodnotě a aktuálních akčních kampaních. Agro-svět.cz není zprostředkovatel financování.
-      </p>
-    </section>
+          {providers.map((p) => (
+            <div class="pt-row" data-provider-id={p.id} data-apr={p.apr}>
+              <div class="pt-cell pt-name">
+                <strong>{p.name}</strong>
+                <span class="pt-note">{p.note}</span>
+              </div>
+              <div class="pt-cell pt-apr">{p.apr.toLocaleString(c.numberLocale)} %</div>
+              <div class="pt-cell pt-monthly">—</div>
+              <div class="pt-cell pt-total">—</div>
+            </div>
+          ))}
+        </div>
+        <p class="provider-disclaimer">{c.providerSection.disclaimer}</p>
+      </section>
+    )}
 
     <section class="faq" aria-labelledby="faq-h">
       <h2 id="faq-h">Časté otázky</h2>
@@ -178,15 +152,17 @@ const faqJsonLd = faqPageSchema(faqItems);
 
     <section class="cross-cta">
       <div>
-        <span class="cc-kicker">Ještě nevíte, který stroj?</span>
-        <h2>Projděte katalog traktorů nebo si dva modely porovnejte</h2>
+        <span class="cc-kicker">{c.cta.kicker}</span>
+        <h2>{c.cta.heading}</h2>
         <div class="cc-actions">
-          <a class="cc-btn primary" href="/stroje/traktory/">Katalog traktorů</a>
-          <a class="cc-btn ghost" href="/srovnani/">Srovnání modelů</a>
-          <a class="cc-btn ghost" href="/kalkulacka/naklady-na-hektar/">Náklady na hektar</a>
+          <a class="cc-btn primary" href={locale === 'cs' ? '/stroje/traktory/' : `/${locale}/stroje/traktory/`}>{c.cta.catalog}</a>
+          <a class="cc-btn ghost" href={locale === 'cs' ? '/srovnani/' : `/${locale}/srovnani/`}>{c.cta.compare}</a>
+          <a class="cc-btn ghost" href={locale === 'cs' ? '/kalkulacka/naklady-na-hektar/' : `/${locale}/kalkulacka/naklady-na-hektar/`}>{c.cta.costs}</a>
         </div>
       </div>
     </section>
+
+    <script type="application/json" id="calc-cfg" set:html={JSON.stringify(calcCfg)}></script>
   </div>
 </Layout>
 
@@ -287,9 +263,13 @@ const faqJsonLd = faqPageSchema(faqItems);
 
 <script>
   // ── Leasing calculator — annuity formula ──────────────────────────────────
-  const page = document.querySelector<HTMLElement>('.calc-page');
-  const providers: { id: string; name: string; apr: number; note: string }[] =
-    JSON.parse(page?.dataset.providers ?? '[]');
+  const cfg = JSON.parse(document.getElementById('calc-cfg')?.textContent || '{}');
+  const providers: { id: string; name: string; apr: number; note: string }[] = cfg.providers ?? [];
+  const numberLocale: string = cfg.numberLocale ?? 'cs-CZ';
+  const currency: string = cfg.currency ?? 'CZK';
+  const js = cfg.js ?? {};
+  const fmtMoney = (n: number) =>
+    new Intl.NumberFormat(numberLocale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(Math.round(n));
 
   const priceEl = document.getElementById('price') as HTMLInputElement;
   const downEl = document.getElementById('downpayment') as HTMLInputElement;
@@ -297,9 +277,6 @@ const faqJsonLd = faqPageSchema(faqItems);
   const residualEl = document.getElementById('residual') as HTMLInputElement;
   const downHint = document.getElementById('downpayment-hint');
   const residualHint = document.getElementById('residual-hint');
-
-  const fmtCZK = (n: number) =>
-    new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(Math.round(n));
 
   /**
    * Annuity payment with optional balloon (residual) payment.
@@ -326,8 +303,8 @@ const faqJsonLd = faqPageSchema(faqItems);
     const financed = price - downAmount;
     const residualAmount = price * (residualPct / 100);
 
-    if (downHint) downHint.textContent = downAmount > 0 ? `= ${fmtCZK(downAmount)}` : '';
-    if (residualHint) residualHint.textContent = residualAmount > 0 ? `= ${fmtCZK(residualAmount)} na konci` : 'Bez balónové splátky';
+    if (downHint) downHint.textContent = downAmount > 0 ? `${js.downHintPrefix ?? '= '}${fmtMoney(downAmount)}` : '';
+    if (residualHint) residualHint.textContent = residualAmount > 0 ? `${js.downHintPrefix ?? '= '}${fmtMoney(residualAmount)}${js.residualSuffix ?? ''}` : (js.noResidual ?? '');
 
     // Primary result uses the first provider's rate as the headline default.
     const headlineApr = providers[0]?.apr ?? 6.9;
@@ -335,11 +312,11 @@ const faqJsonLd = faqPageSchema(faqItems);
     const totalPaid = downAmount + monthly * months + residualAmount;
     const interest = totalPaid - price;
 
-    document.getElementById('result-monthly')!.textContent = fmtCZK(monthly);
-    document.getElementById('result-financed')!.textContent = fmtCZK(financed);
-    document.getElementById('result-total')!.textContent = fmtCZK(totalPaid);
-    document.getElementById('result-interest')!.textContent = fmtCZK(interest);
-    document.getElementById('result-apr')!.textContent = `${headlineApr.toLocaleString('cs-CZ')} % p.a.`;
+    document.getElementById('result-monthly')!.textContent = fmtMoney(monthly);
+    document.getElementById('result-financed')!.textContent = fmtMoney(financed);
+    document.getElementById('result-total')!.textContent = fmtMoney(totalPaid);
+    document.getElementById('result-interest')!.textContent = fmtMoney(interest);
+    document.getElementById('result-apr')!.textContent = `${headlineApr.toLocaleString(numberLocale)}${js.perAnnum ?? ' % p.a.'}`;
 
     // Provider comparison table
     let bestMonthly = Infinity;
@@ -353,8 +330,8 @@ const faqJsonLd = faqPageSchema(faqItems);
     for (const row of rows) {
       const rowEl = document.querySelector<HTMLElement>(`.pt-row[data-provider-id="${row.id}"]`);
       if (!rowEl) continue;
-      rowEl.querySelector('.pt-monthly')!.textContent = fmtCZK(row.monthly);
-      rowEl.querySelector('.pt-total')!.textContent = fmtCZK(row.total);
+      rowEl.querySelector('.pt-monthly')!.textContent = fmtMoney(row.monthly);
+      rowEl.querySelector('.pt-total')!.textContent = fmtMoney(row.total);
       rowEl.classList.toggle('is-best', Math.abs(row.monthly - bestMonthly) < 0.5);
     }
   }
