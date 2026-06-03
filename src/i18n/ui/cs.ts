@@ -111,7 +111,7 @@ const cs: Record<string, string> = {
   'nf.operatedBy': 'Web provozuje',
 
   // — cookie consent —
-  'cc.text': 'Používáme cookies pro základní funkčnost webu a (pokud souhlasíte) pro anonymní analytiku přes Google Analytics.',
+  'cc.text': 'Používáme cookies pro základní funkčnost webu a&nbsp;(pokud souhlasíte) pro anonymní analytiku přes Google Analytics.',
   'cc.more': 'Více informací',
   'cc.essentials': 'Pouze nezbytné',
   'cc.acceptAll': 'Přijmout vše',

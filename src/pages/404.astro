@@ -1,13 +1,16 @@
 ---
 export const prerender = false;
 import Layout from '../layouts/Layout.astro';
+import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
 
+const locale = getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 Astro.response.status = 404;
 ---
 
 <Layout
-  title="Stránka nenalezena"
-  description="Hledaná stránka neexistuje. Zkuste přejít na novinky, katalog strojů nebo bazar."
+  title={tr('nf.title')}
+  description={tr('nf.description')}
   noindex={true}
 >
   <main style="max-width:760px; margin:0 auto; padding:64px 32px 96px; text-align:center;">
@@ -15,28 +18,28 @@ Astro.response.status = 404;
       404
     </div>
     <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(1.6rem,4vw,2.4rem); font-weight:700; color:#0A0A0B; margin:8px 0 16px;">
-      Tato stránka neexistuje
+      {tr('nf.heading')}
     </h1>
     <p style="font-size:16px; color:#6B6B72; line-height:1.6; max-width:480px; margin:0 auto 36px;">
-      Mohla být přesunuta, smazána nebo jste se překlepli v adrese. Zkuste některou z hlavních sekcí.
+      {tr('nf.body')}
     </p>
 
     <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:48px;">
-      <a href="/" class="kat-btn kat-btn-primary">← Domů</a>
-      <a href="/novinky/" class="kat-btn">Novinky</a>
-      <a href="/stroje/" class="kat-btn">Katalog techniky</a>
-      <a href="/bazar/" class="kat-btn">Bazar</a>
-      <a href="/plemena/" class="kat-btn">Plemena zvířat</a>
-      <a href="/hledat/" class="kat-btn">Hledat</a>
+      <a href="/" class="kat-btn kat-btn-primary">{tr('nf.home')}</a>
+      <a href="/novinky/" class="kat-btn">{tr('nf.news')}</a>
+      <a href="/stroje/" class="kat-btn">{tr('nf.techCatalog')}</a>
+      <a href="/bazar/" class="kat-btn">{tr('nf.bazar')}</a>
+      <a href="/plemena/" class="kat-btn">{tr('nf.breeds')}</a>
+      <a href="/hledat/" class="kat-btn">{tr('nf.search')}</a>
     </div>
 
     <div style="border-top:1px solid #EAEAEC; padding-top:24px; margin-top:24px;">
       <p style="font-size:13px; color:#6B6B72;">
-        Pokud si myslíte, že jde o chybu, dejte nám vědět na
+        {tr('nf.errorHint')}
         <a href="mailto:info@samecdigital.com" style="color:#0A0A0B;">info@samecdigital.com</a>.
       </p>
       <p style="font-size:12px; color:#9B9BA0; margin-top:10px;">
-        Web provozuje <a href="https://samecdigital.com" target="_blank" rel="noopener" style="color:#6B6B72;">Samec Digital s.r.o.</a>
+        {tr('nf.operatedBy')} <a href="https://samecdigital.com" target="_blank" rel="noopener" style="color:#6B6B72;">Samec Digital s.r.o.</a>
       </p>
     </div>
   </main>

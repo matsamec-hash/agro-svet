@@ -8,7 +8,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { siteSchemaGraph } from '../lib/structured-data';
 import { imgSrcset } from '../lib/image-variants';
-import { getLocaleFromUrl } from '../i18n/utils';
+import { getLocaleFromUrl, t } from '../i18n/utils';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 
@@ -56,6 +56,7 @@ const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSi
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
 const locale = getLocaleFromUrl(Astro.url);
+const ogLocale = { cs: 'cs_CZ', sk: 'sk_SK', uk: 'uk_UA' }[locale];
 const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
 const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString();
 
@@ -96,7 +97,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta property="og:description" content={description} />
   <meta property="og:type" content={ogType} />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:locale" content="cs_CZ" />
+  <meta property="og:locale" content={ogLocale} />
   <meta property="og:site_name" content="agro-svět.cz" />
   <meta property="og:image" content={resolvedOgImage} />
   <meta property="og:image:width" content="1200" />
@@ -149,7 +150,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <slot name="head" />
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Přeskočit na obsah</a>
+  <a href="#main-content" class="skip-link">{t(locale, 'a11y.skipToContent')}</a>
   <Header />
   <main id="main-content" tabindex="-1">
     <slot />
