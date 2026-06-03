@@ -4,30 +4,54 @@
 // short SERP-grade meta description, and 5 FAQPage entries — everything
 // derived from StrojFlatModel data so we avoid generic boilerplate that
 // LLMs and Google deprioritize.
+//
+// Locale-aware: the function emits cs (default) byte-identically to the
+// original and a native Slovak variant for locale 'sk'. Phrases are NOT a
+// translation of this file — they are locale-keyed templates built inline so
+// the cs branch stays diff-proof against the pre-i18n output.
 
 import type { StrojFlatModel, StrojKategorie } from './stroje';
+import type { Locale } from './../i18n/config';
 import { modelDisplayName } from './comparator';
 import { useCaseDescription } from './competitor-finder';
 
 /**
  * Short dependent-clause describing the farm size implied by a power level.
- * Designed to fit grammatically after "když" — returns a fragment without
+ * Designed to fit grammatically after "když"/"ak" — returns a fragment without
  * the leading capital letter or trailing period.
  */
-function farmSizeClause(category: StrojKategorie, powerHp: number | null): string | null {
+function farmSizeClause(category: StrojKategorie, powerHp: number | null, sk: boolean): string | null {
   if (powerHp === null) return null;
   if (category === 'traktory') {
-    if (powerHp < 50) return 'máš malé hospodářství do cca 30 hektarů (sady, vinice, komunální využití)';
-    if (powerHp < 90) return 'hospodaříš na 30–100 hektarech a hledáš univerzál pro polní práci a sklizeň trávy';
-    if (powerHp < 160) return 'máš střední farmu 100–300 hektarů pro orbu, secí kombinace a postřik';
-    if (powerHp < 250) return 'máš velkou farmu 300–600 hektarů a chceš tahat široké secí kombinace nebo samochodné postřikovače';
-    return 'jsi velkovýroba nad 500 hektarů a chceš maximum z denní produktivity';
+    if (powerHp < 50) return sk
+      ? 'máš malé hospodárstvo do cca 30 hektárov (sady, vinice, komunálne využitie)'
+      : 'máš malé hospodářství do cca 30 hektarů (sady, vinice, komunální využití)';
+    if (powerHp < 90) return sk
+      ? 'hospodáriš na 30–100 hektároch a hľadáš univerzál na poľnú prácu a zber trávy'
+      : 'hospodaříš na 30–100 hektarech a hledáš univerzál pro polní práci a sklizeň trávy';
+    if (powerHp < 160) return sk
+      ? 'máš strednú farmu 100–300 hektárov na orbu, sejacie kombinácie a postrek'
+      : 'máš střední farmu 100–300 hektarů pro orbu, secí kombinace a postřik';
+    if (powerHp < 250) return sk
+      ? 'máš veľkú farmu 300–600 hektárov a chceš ťahať široké sejacie kombinácie alebo samohybné postrekovače'
+      : 'máš velkou farmu 300–600 hektarů a chceš tahat široké secí kombinace nebo samochodné postřikovače';
+    return sk
+      ? 'si veľkovýroba nad 500 hektárov a chceš maximum z dennej produktivity'
+      : 'jsi velkovýroba nad 500 hektarů a chceš maximum z denní produktivity';
   }
   if (category === 'kombajny') {
-    if (powerHp < 250) return 'máš obilninou plochu do 200 ha a vystačíš si se záběrem 5–6 m';
-    if (powerHp < 400) return 'sklízíš 200–500 ha obilnin a hodí se ti záběr 6–9 m';
-    if (powerHp < 600) return 'sklízíš přes 500 ha obilnin a chceš záběr 9–12 m';
-    return 'jsi velkovýroba a chceš nejširší záběr (12 m+) a největší zásobník (14 000+ l)';
+    if (powerHp < 250) return sk
+      ? 'máš obilninovú plochu do 200 ha a vystačíš si so záberom 5–6 m'
+      : 'máš obilninou plochu do 200 ha a vystačíš si se záběrem 5–6 m';
+    if (powerHp < 400) return sk
+      ? 'zbieraš 200–500 ha obilnín a hodí sa ti záber 6–9 m'
+      : 'sklízíš 200–500 ha obilnin a hodí se ti záběr 6–9 m';
+    if (powerHp < 600) return sk
+      ? 'zbieraš cez 500 ha obilnín a chceš záber 9–12 m'
+      : 'sklízíš přes 500 ha obilnin a chceš záběr 9–12 m';
+    return sk
+      ? 'si veľkovýroba a chceš najširší záber (12 m+) a najväčší zásobník (14 000+ l)'
+      : 'jsi velkovýroba a chceš nejširší záběr (12 m+) a největší zásobník (14 000+ l)';
   }
   return null;
 }
@@ -57,16 +81,12 @@ function pct(a: number, b: number): number {
   return Math.round(((a - b) / b) * 100);
 }
 
-function cs(n: number): string {
-  return n.toLocaleString('cs-CZ');
-}
-
 /**
- * Brand description in Czech akuzativ — fits grammatically after "preferuješ".
+ * Brand description in accusative — fits grammatically after "preferuješ".
  * Example: "preferuješ německou prémiovou značku" (not "německá prémiová značka").
  */
-function brandDescriptorAkuzativ(brand: string, brandName: string): string {
-  const map: Record<string, string> = {
+function brandDescriptorAkuzativ(brand: string, brandName: string, sk: boolean): string {
+  const mapCs: Record<string, string> = {
     fendt: 'německou prémiovou značku Fendt',
     'john-deere': 'amerického giganta John Deere',
     'case-ih': 'americkou značku Case IH (koncern CNH)',
@@ -78,10 +98,29 @@ function brandDescriptorAkuzativ(brand: string, brandName: string): string {
     kubota: 'japonskou značku Kubota',
     zetor: 'českou značku Zetor z Brna',
   };
+  const mapSk: Record<string, string> = {
+    fendt: 'nemeckú prémiovú značku Fendt',
+    'john-deere': 'amerického giganta John Deere',
+    'case-ih': 'americkú značku Case IH (koncern CNH)',
+    'new-holland': 'európsku značku New Holland (koncern CNH)',
+    claas: 'nemeckého lídra v kombajnoch Claas',
+    'massey-ferguson': 'tradičnú značku Massey Ferguson (koncern AGCO)',
+    valtra: 'fínsku značku Valtra (koncern AGCO)',
+    'deutz-fahr': 'nemeckú značku Deutz-Fahr (koncern SDF)',
+    kubota: 'japonskú značku Kubota',
+    zetor: 'českú značku Zetor z Brna',
+  };
+  const map = sk ? mapSk : mapCs;
   return map[brand] ?? `značku ${brandName}`;
 }
 
-export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): ComparisonInsights {
+export function comparisonInsights(
+  a: StrojFlatModel,
+  b: StrojFlatModel,
+  locale: Locale = 'cs',
+): ComparisonInsights {
+  const sk = locale === 'sk';
+  const num = (n: number): string => n.toLocaleString(sk ? 'sk-SK' : 'cs-CZ');
   const aName = modelDisplayName(a);
   const bName = modelDisplayName(b);
   const isTractor = a.category === 'traktory';
@@ -114,25 +153,33 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
     const weakerHp = stronger === a ? bHp : aHp;
     const strongerHp = stronger === a ? aHp : bHp;
     tldrParts.push(
-      `${strongerName} má vyšší výkon o ${absHp} k (${cs(strongerHp!)} vs ${cs(weakerHp!)} k, +${absPct} %).`,
+      `${strongerName} má vyšší výkon o ${absHp} k (${num(strongerHp!)} vs ${num(weakerHp!)} k, +${absPct} %).`,
     );
   } else if (aHp !== null && bHp !== null && hpDiff === 0) {
-    tldrParts.push(`Oba ${categoryWord}y mají stejný výkon ${cs(aHp)} k.`);
+    tldrParts.push(sk
+      ? `Oba ${categoryWord}y majú rovnaký výkon ${num(aHp)} k.`
+      : `Oba ${categoryWord}y mají stejný výkon ${num(aHp)} k.`);
   }
 
   if (lighter && kgDiff !== null) {
     const lighterName = modelDisplayName(lighter);
-    tldrParts.push(`${lighterName} je lehčí o ${cs(Math.abs(kgDiff))} kg.`);
+    tldrParts.push(sk
+      ? `${lighterName} je ľahší o ${num(Math.abs(kgDiff))} kg.`
+      : `${lighterName} je lehčí o ${num(Math.abs(kgDiff))} kg.`);
   }
 
   if (newer && yearDiff !== null && Math.abs(yearDiff) >= 2) {
     const newerName = modelDisplayName(newer);
     const newerYear = newer === a ? aYear : bYear;
-    tldrParts.push(`${newerName} je novější (uveden ${newerYear}).`);
+    tldrParts.push(sk
+      ? `${newerName} je novší (uvedený ${newerYear}).`
+      : `${newerName} je novější (uveden ${newerYear}).`);
   }
 
   if (tldrParts.length === 0) {
-    tldrParts.push(`${aName} a ${bName} jsou ${categoryWord}y srovnatelné třídy.`);
+    tldrParts.push(sk
+      ? `${aName} a ${bName} sú ${categoryWord}y porovnateľnej triedy.`
+      : `${aName} a ${bName} jsou ${categoryWord}y srovnatelné třídy.`);
   }
 
   const tldr = tldrParts.join(' ');
@@ -141,18 +188,22 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
   let shortDescription: string;
   if (stronger && hpDiff !== null) {
     const strongerName = modelDisplayName(stronger);
-    shortDescription =
-      `Srovnání: ${aName} vs ${bName}. ${strongerName} má +${Math.abs(hpDiff)} k. Motor, převodovka, hmotnost, ` +
-      `roky výroby a FAQ vedle sebe.`;
+    shortDescription = sk
+      ? `Porovnanie: ${aName} vs ${bName}. ${strongerName} má +${Math.abs(hpDiff)} k. Motor, prevodovka, hmotnosť, ` +
+        `roky výroby a FAQ vedľa seba.`
+      : `Srovnání: ${aName} vs ${bName}. ${strongerName} má +${Math.abs(hpDiff)} k. Motor, převodovka, hmotnost, ` +
+        `roky výroby a FAQ vedle sebe.`;
   } else {
-    shortDescription = `Srovnání ${aName} a ${bName}: výkon, motor, převodovka, hmotnost, FAQ a vhodné použití.`;
+    shortDescription = sk
+      ? `Porovnanie ${aName} a ${bName}: výkon, motor, prevodovka, hmotnosť, FAQ a vhodné použitie.`
+      : `Srovnání ${aName} a ${bName}: výkon, motor, převodovka, hmotnost, FAQ a vhodné použití.`;
   }
   // Hard cap to 158 chars to avoid SERP truncation.
   if (shortDescription.length > 158) shortDescription = shortDescription.slice(0, 155) + '…';
 
   // ---- Decision boxes ----
-  const aUseCase = useCaseDescription(a.category, a.power_hp);
-  const bUseCase = useCaseDescription(b.category, b.power_hp);
+  const aUseCase = useCaseDescription(a.category, a.power_hp, locale);
+  const bUseCase = useCaseDescription(b.category, b.power_hp, locale);
 
   function buildDecision(self: StrojFlatModel, other: StrojFlatModel): string {
     const parts: string[] = [];
@@ -161,21 +212,30 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
     const isLighter = lighter === self;
     const isNewer = newer === self;
     if (isStronger && hpDiff !== null) {
-      parts.push(`potřebuješ vyšší výkon (${cs(self.power_hp!)} k) než nabízí ${other.brand_name}`);
+      parts.push(sk
+        ? `potrebuješ vyšší výkon (${num(self.power_hp!)} k), než ponúka ${other.brand_name}`
+        : `potřebuješ vyšší výkon (${num(self.power_hp!)} k) než nabízí ${other.brand_name}`);
     }
     if (isLighter && kgDiff !== null && Math.abs(kgDiff) >= 200) {
-      parts.push(`hraje pro tebe roli nižší hmotnost (méně utužování půdy, lepší manévrovatelnost)`);
+      parts.push(sk
+        ? `hrá pre teba rolu nižšia hmotnosť (menšie utláčanie pôdy, lepšia manévrovateľnosť)`
+        : `hraje pro tebe roli nižší hmotnost (méně utužování půdy, lepší manévrovatelnost)`);
     }
     if (isNewer && yearDiff !== null && Math.abs(yearDiff) >= 2) {
-      parts.push(`chceš novější konstrukci (uvedení ${self.year_from}) — typicky modernější elektronika, ISOBUS, emisní stupeň Stage V`);
+      parts.push(sk
+        ? `chceš novšiu konštrukciu (uvedenie ${self.year_from}) — typicky modernejšia elektronika, ISOBUS, emisný stupeň Stage V`
+        : `chceš novější konstrukci (uvedení ${self.year_from}) — typicky modernější elektronika, ISOBUS, emisní stupeň Stage V`);
     }
     // If self has no winning attribute, frame positively via farm-size fit + brand preference.
     if (parts.length === 0) {
-      const sizeClause = farmSizeClause(self.category, self.power_hp);
+      const sizeClause = farmSizeClause(self.category, self.power_hp, sk);
       if (sizeClause) parts.push(sizeClause);
-      parts.push(`preferuješ ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name)}`);
+      // "preferuješ" is identical in cs and sk.
+      parts.push(`preferuješ ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, sk)}`);
     }
-    return `Vyber ${selfName} pokud ${parts.join(', a zároveň ')}.`;
+    return sk
+      ? `Vyber ${selfName}, ak ${parts.join(', a zároveň ')}.`
+      : `Vyber ${selfName} pokud ${parts.join(', a zároveň ')}.`;
   }
 
   const decisionA = buildDecision(a, b);
@@ -187,9 +247,12 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
   // Q1: Power
   if (aHp !== null && bHp !== null) {
     if (hpDiff === 0) {
+      const kw = a.power_kw ?? Math.round(aHp * 0.7457);
       faqs.push({
-        q: `Jaký výkon mají ${aName} a ${bName}?`,
-        a: `Oba ${categoryWord}y mají shodný výkon ${cs(aHp)} k (${a.power_kw ?? Math.round(aHp * 0.7457)} kW). Rozhodující rozdíl je tedy v dalších parametrech — motoru, převodovce a hmotnosti.`,
+        q: sk ? `Aký výkon majú ${aName} a ${bName}?` : `Jaký výkon mají ${aName} a ${bName}?`,
+        a: sk
+          ? `Oba ${categoryWord}y majú zhodný výkon ${num(aHp)} k (${kw} kW). Rozhodujúci rozdiel je teda v ďalších parametroch — motore, prevodovke a hmotnosti.`
+          : `Oba ${categoryWord}y mají shodný výkon ${num(aHp)} k (${kw} kW). Rozhodující rozdíl je tedy v dalších parametrech — motoru, převodovce a hmotnosti.`,
       });
     } else {
       const strongerName = modelDisplayName(stronger!);
@@ -197,8 +260,12 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
       const strongerHp = stronger === a ? aHp : bHp;
       const weakerHp = stronger === a ? bHp : aHp;
       faqs.push({
-        q: `Co je výkonnější — ${aName} nebo ${bName}?`,
-        a: `Výkonnější je ${strongerName} s ${cs(strongerHp!)} k oproti ${cs(weakerHp!)} k u ${weakerName}, rozdíl tedy činí ${Math.abs(hpDiff!)} k (přibližně ${Math.abs(hpPct!)} %).`,
+        q: sk
+          ? `Čo je výkonnejšie — ${aName} alebo ${bName}?`
+          : `Co je výkonnější — ${aName} nebo ${bName}?`,
+        a: sk
+          ? `Výkonnejší je ${strongerName} s ${num(strongerHp!)} k oproti ${num(weakerHp!)} k u ${weakerName}, rozdiel teda predstavuje ${Math.abs(hpDiff!)} k (približne ${Math.abs(hpPct!)} %).`
+          : `Výkonnější je ${strongerName} s ${num(strongerHp!)} k oproti ${num(weakerHp!)} k u ${weakerName}, rozdíl tedy činí ${Math.abs(hpDiff!)} k (přibližně ${Math.abs(hpPct!)} %).`,
       });
     }
   }
@@ -210,13 +277,15 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
   const bTr = b.transmission ?? null;
   if (aEng || bEng || aTr || bTr) {
     const parts: string[] = [];
-    if (aEng) parts.push(`${aName} pohání motor ${aEng}`);
+    if (aEng) parts.push(sk ? `${aName} poháňa motor ${aEng}` : `${aName} pohání motor ${aEng}`);
     if (bEng) parts.push(`${bName} motor ${bEng}`);
-    if (aTr && bTr && aTr !== bTr) parts.push(`Převodovka: ${aName} — ${aTr}, ${bName} — ${bTr}`);
-    else if (aTr) parts.push(`Převodovka: ${aTr}`);
-    else if (bTr) parts.push(`Převodovka: ${bTr}`);
+    if (aTr && bTr && aTr !== bTr) parts.push(sk
+      ? `Prevodovka: ${aName} — ${aTr}, ${bName} — ${bTr}`
+      : `Převodovka: ${aName} — ${aTr}, ${bName} — ${bTr}`);
+    else if (aTr) parts.push(sk ? `Prevodovka: ${aTr}` : `Převodovka: ${aTr}`);
+    else if (bTr) parts.push(sk ? `Prevodovka: ${bTr}` : `Převodovka: ${bTr}`);
     faqs.push({
-      q: `Jaký mají motor a převodovku?`,
+      q: sk ? `Aký majú motor a prevodovku?` : `Jaký mají motor a převodovku?`,
       a: parts.join('. ') + '.',
     });
   }
@@ -227,8 +296,10 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
     const lighterKg = lighter === a ? aKg : bKg;
     const heavierKg = lighter === a ? bKg : aKg;
     faqs.push({
-      q: `Který ${categoryWord} je lehčí?`,
-      a: `Lehčí je ${lighterName} s hmotností ${cs(lighterKg)} kg oproti ${cs(heavierKg)} kg, rozdíl ${cs(Math.abs(kgDiff))} kg. Nižší hmotnost znamená menší utužování půdy a lepší manévrovatelnost, ale typicky i nižší tažnou sílu.`,
+      q: sk ? `Ktorý ${categoryWord} je ľahší?` : `Který ${categoryWord} je lehčí?`,
+      a: sk
+        ? `Ľahší je ${lighterName} s hmotnosťou ${num(lighterKg)} kg oproti ${num(heavierKg)} kg, rozdiel ${num(Math.abs(kgDiff))} kg. Nižšia hmotnosť znamená menšie utláčanie pôdy a lepšiu manévrovateľnosť, ale typicky aj nižšiu ťažnú silu.`
+        : `Lehčí je ${lighterName} s hmotností ${num(lighterKg)} kg oproti ${num(heavierKg)} kg, rozdíl ${num(Math.abs(kgDiff))} kg. Nižší hmotnost znamená menší utužování půdy a lepší manévrovatelnost, ale typicky i nižší tažnou sílu.`,
     });
   }
 
@@ -238,7 +309,9 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
     if (aUseCase) parts.push(`${aName}: ${aUseCase}`);
     if (bUseCase) parts.push(`${bName}: ${bUseCase}`);
     faqs.push({
-      q: `Pro jakou velikost farmy se ${aName} a ${bName} hodí?`,
+      q: sk
+        ? `Pre akú veľkosť farmy sa ${aName} a ${bName} hodia?`
+        : `Pro jakou velikost farmy se ${aName} a ${bName} hodí?`,
       a: parts.join(' '),
     });
   }
@@ -247,16 +320,26 @@ export function comparisonInsights(a: StrojFlatModel, b: StrojFlatModel): Compar
   if (aYear !== null && bYear !== null) {
     if (yearDiff === 0) {
       faqs.push({
-        q: `Kdy byly ${aName} a ${bName} uvedeny na trh?`,
-        a: `Oba modely byly uvedeny v roce ${aYear}, jde tedy o současníky stejné generace techniky.`,
+        q: sk
+          ? `Kedy boli ${aName} a ${bName} uvedené na trh?`
+          : `Kdy byly ${aName} a ${bName} uvedeny na trh?`,
+        a: sk
+          ? `Oba modely boli uvedené v roku ${aYear}, ide teda o súčasníkov rovnakej generácie techniky.`
+          : `Oba modely byly uvedeny v roce ${aYear}, jde tedy o současníky stejné generace techniky.`,
       });
     } else {
       const newerName = modelDisplayName(newer!);
       const newerYear = newer === a ? aYear : bYear;
       const olderYear = newer === a ? bYear : aYear;
+      const ay = Math.abs(yearDiff!);
+      const yearWord = sk
+        ? (ay === 1 ? 'rok' : ay < 5 ? 'roky' : 'rokov')
+        : (ay === 1 ? 'rok' : ay < 5 ? 'roky' : 'let');
       faqs.push({
-        q: `Který model je novější?`,
-        a: `Novější je ${newerName} uvedený v roce ${newerYear} (oproti ${olderYear}). Rozdíl ${Math.abs(yearDiff!)} ${Math.abs(yearDiff!) === 1 ? 'rok' : Math.abs(yearDiff!) < 5 ? 'roky' : 'let'} typicky znamená modernější emisní stupeň, lepší elektroniku a aktuálnější ISOBUS implementaci.`,
+        q: sk ? `Ktorý model je novší?` : `Který model je novější?`,
+        a: sk
+          ? `Novší je ${newerName} uvedený v roku ${newerYear} (oproti ${olderYear}). Rozdiel ${ay} ${yearWord} typicky znamená modernejší emisný stupeň, lepšiu elektroniku a aktuálnejšiu ISOBUS implementáciu.`
+          : `Novější je ${newerName} uvedený v roce ${newerYear} (oproti ${olderYear}). Rozdíl ${ay} ${yearWord} typicky znamená modernější emisní stupeň, lepší elektroniku a aktuálnější ISOBUS implementaci.`,
       });
     }
   }

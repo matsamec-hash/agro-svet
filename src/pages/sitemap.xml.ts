@@ -7,6 +7,7 @@ import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
 import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
+import { isSkLaunchedPath } from '../i18n/utils';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
@@ -339,6 +340,14 @@ export const GET: APIRoute = async () => {
   for (const r of regionsWithEnoughFarms(3)) {
     urls.push({ loc: `${SITE_URL}/farmy/kraj/${r.slug}/`, changefreq: 'weekly', priority: '0.7', lastmod: STATIC_LASTMOD });
   }
+
+  // SK launch (Fáze 1c-obsah): pre přeložené katalogové sekcie (/stroje, /znacky,
+  // /srovnani) pridáme /sk zrkadlové URL. cs časť vyššie zostáva byte-identická —
+  // /sk záznamy len appendujeme na koniec.
+  const skMirror: UrlEntry[] = urls
+    .filter((u) => u.loc.startsWith(SITE_URL) && isSkLaunchedPath(u.loc.slice(SITE_URL.length)))
+    .map((u) => ({ ...u, loc: `${SITE_URL}/sk${u.loc.slice(SITE_URL.length)}` }));
+  urls.push(...skMirror);
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

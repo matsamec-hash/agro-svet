@@ -26,6 +26,15 @@ export function localizePath(locale: Locale, path: string): string {
   return `/${locale}${clean}`;
 }
 
+/** Sekce, jejichž /sk verze jsou v Fázi 1c-obsah přeložené a tedy indexovatelné.
+ *  Zbytek /sk zůstává noindex (servíruje cs tělo) dokud nebude lokalizován. */
+export const SK_LAUNCHED_PREFIXES = ['/stroje', '/znacky', '/srovnani'];
+
+/** True, pokud cs-root cesta patří do launchnuté (přeložené) SK sekce. */
+export function isSkLaunchedPath(csRootPath: string): boolean {
+  return SK_LAUNCHED_PREFIXES.some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
+}
+
 /** Hreflang alternates pro daný pathname (přijímá i lokalizovaný). */
 export function getAlternates(pathname: string): { hreflang: string; href: string }[] {
   const { path } = stripLocale(pathname);

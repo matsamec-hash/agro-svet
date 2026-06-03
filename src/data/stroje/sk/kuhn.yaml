@@ -1,0 +1,182 @@
+# SK overlay (popisy/polia) na cs štruktúru. AI draft+editor, review nutný.
+
+country: "Francúzsko"
+description: >-
+  Francúzsky výrobca s najširším portfóliom poľnohospodárskej techniky — pluhy Master a Vari-Master, sejačky Espro a Venta, postrekovače Altis/Metris/Oceanis, rozmetadlá Axis a Aero, lisy VB/LSB, žacie stroje GMD, kŕmne vozy Euromix a Profile.
+
+categories:
+  hnojeni: "Hnojenie"
+  komunal-les: "Komunál a les"
+  ochrana-rostlin: "Ochrana rastlín"
+  seti: "Sejba a sadenie"
+  sklizen-picnin: "Zber krmovín a slamy"
+  staj-chov: "Stajňa a chov"
+  zpracovani-pudy: "Spracovanie pôdy"
+
+series:
+  aero: >-
+    Pneumatické rozmetadlá minerálnych hnojív s rozdeľovacím ramenom so záberom až 27 m.
+    Aero využíva vzduchový rozvod namiesto odstredivých kotúčov, čo zaručuje extrémnu
+    presnosť dávkovania aj pri priemyselných hnojivách. Vhodné na tram-line aplikácie
+    a sektorové vypínanie. Ťahané vyhotovenia s objemom nad 3 m³.
+  axis: >-
+    Vlajkový rad nesených odstredivých rozmetadiel s elektronickým systémom EMC,
+    ktorý priebežne meria moment každého kotúča a koriguje dávku v reálnom čase.
+    Zábery 12–50 m, kapacity zásobníka 1 000–4 500 l. Verzia H s kontinuálnym vážením
+    pre najvyššiu presnosť pri premenlivom teréne a sklone.
+  msp: >-
+    Univerzálne rozmetadlá statkových hnojív s vertikálnymi bubnami alebo taniermi.
+    Konštrukcia s nízko umiestneným ťažiskom a hydraulickým zadným šupátkom
+    umožňuje rovnomernú aplikáciu maštaľného hnoja, kompostu aj digestátu.
+    Modely s objemom korby 8–24 m³, kompatibilné s ISOBUS.
+  pul: >-
+    Nesené aj ťahané cisterny na kejdu s objemom 7–28 m³. Štandardné je vákuové
+    plnenie a možnosť kombinácie s aplikátormi (vlečné hadice, diskové, slot-injektor).
+    Kompatibilné s ISOBUS a sekčným vypínaním pre presnú aplikáciu na pozemkoch
+    v ochranných pásmach.
+  bp: >-
+    Univerzálne mulčovače na údržbu trávnych plôch, krajníc a strniska.
+    Zábery 1,8–3,2 m s plávajúcim kĺbom na kopírovanie nerovností.
+    Reverzibilné varianty BPR umožňujú prednú aj zadnú montáž a sú vhodné
+    na nasadenie s komunálnou technikou.
+  tbe: >-
+    Výložníkové mulčovače na údržbu priekop, krajníc a živých plotov.
+    Hydraulické rameno s dosahom 5–8 m a kyvným mulčovacím adaptérom.
+    Štandardne proporcionálne joystickové ovládanie a bezpečnostný float
+    systém proti nárazom.
+  altis: >-
+    Nesené poľné postrekovače s nádržou 1 000–1 800 l a záberom ramien 18–28 m.
+    Hydraulicky ovládané oceľové ramená s odpružením a sekčným vypínaním.
+    Vhodné pre stredne veľké podniky a kombináciu s predným zásobníkom
+    na zvýšenie kapacity.
+  deltis: >-
+    Kompaktné nesené postrekovače pre menšie a stredné podniky. Nádrž 600–1 300 l,
+    ramená 12–24 m s ručným alebo hydraulickým rozkladaním. Štandardne počítač
+    DPAE pre presné dávkovanie závislé od rýchlosti.
+  lexis: >-
+    Kompaktný ťahaný postrekovač vstupnej triedy s nádržou 2 400–3 000 l a ramenami
+    18–24 m. Jednonápravové šasi, mechanicky riadená oj a jednoduchá údržba.
+    Vhodný pre stredne veľké prevádzky hľadajúce prvý ťahaný stroj.
+  metris: >-
+    Ťahaný postrekovač strednej triedy s objemom nádrže 3 200–4 100 l a ramenami
+    18–30 m. Vybavený systémom stabilizácie ramien Equilibra a aktívnym sekčným
+    riadením. ISOBUS s mapovými aplikáciami a možnosťou Auto-Section.
+  oceanis: >-
+    Vlajkový rad ťahaných postrekovačov s nádržou 4 600–7 700 l a hliníkovými
+    ramenami do 44 m. Pneumatické odpruženie, riadená náprava a stabilizácia ramien
+    Equilibra+. Plne ISOBUS, kompatibilné s GPS sekcionálom a PWM tryskami.
+  espro: >-
+    Ťahané diskové sejacie kombinácie pre minimalizačnú aj konvenčnú technológiu.
+    Dvojradové disky s nastaviteľným uhlom, valce TF s utláčacím účinkom
+    a paralelogram výsevných pätiek. Zábery 3–8 m, jedno- alebo dvojkomorové
+    zásobníky na sejbu zmesí a medziplodín.
+  maxima: >-
+    Presné sejačky pre riadkové plodiny — kukuricu, slnečnicu, repku
+    a cukrovú repu. Elektrický pohon výsevného ústrojenstva s individuálnym vypínaním
+    riadkov a singulárnym výberom zŕn. Záber 4–18 riadkov, riadenie cez ISOBUS
+    terminál CCI.
+  sitera: >-
+    Mechanické sejačky na kombináciu s rotačnou bránou HR. Botičkový výsevný
+    systém Suprapack alebo diskový CD pre rôzne pôdne podmienky. Hydraulický
+    presun do prepravnej polohy a možnosť prihnojenia. Záber 3–4 m.
+  venta: >-
+    Pneumatické sejačky na kombináciu s aktívnym náradím. Centrálne
+    dávkovanie s elektrickým pohonom, pneumatický rozvod do botiek a veľký
+    zásobník až 1 500 l. Vhodné pre intenzívne prevádzky s kombináciou
+    rotačnej brány a sejačky v jednom prejazde.
+  fc: >-
+    Žacie stroje s kondicionérom (oceľovými prstami alebo valcami) na urýchlenie
+    schnutia krmovín. Zábery 2,4–13,4 m v nesenom, čelnom aj triple vyhotovení.
+    Nesymetrický pohon Optidisc a hydropneumatické odľahčenie Lift-Control
+    pre šetrné nasadenie na nerovnom teréne.
+  ga: >-
+    Zhŕňače píce s jedným, dvoma alebo štyrmi rotormi. Zábery 3,2–15 m,
+    riaditeľný podvozok MASTER DRIVE GIII pre extrémnu životnosť a 3D kyvanie
+    rotorov kopírujúce terén. Modely 9531/15131 sú vlajkovým radom pre veľké
+    prevádzky a profesionálnu senáž.
+  gf: >-
+    Obracače píce so zábermi 4,5–17 m a 4–14 rotormi. Hydraulická úprava uhla
+    rozhozu pre rôzne typy plodín a šetrné obracanie aj mladej píce.
+    Kyvná hlavica digihead pre stabilitu na svahoch a nočnú prepravu
+    v sklopenej polohe.
+  gmd: >-
+    Diskové žacie stroje bez kondicionéra pre nesené aj ťahané aplikácie.
+    Žacia lišta Optidisc Elite s veľkým rozostupom kotúčov pre plynulý odhoz
+    materiálu. Zábery 1,7–9,5 m, nesené aj triple varianty s automatickým
+    obchádzaním prekážok (NSH).
+  lsb: >-
+    Hranolové lisy strednej triedy s komorou 80×70 alebo 80×90 cm. Pickup šírky
+    2,3 m a integrované rezacie zariadenie do 23 nožov. Vhodné na slamu, seno
+    aj senáž s vysokou hustotou balíka a nízkymi prevádzkovými nákladmi.
+  merge-maxx: >-
+    Pásový zhŕňač (merger) s pickupom a dopravným pásom namiesto rotorov.
+    Šetrná manipulácia s pícou bez kontaminácie zeminou — ideálne pre luxusné
+    senáže a osivárske porasty. Záber 9,5 m s možnosťou zhŕňania doprava,
+    doľava aj na obe strany.
+  profile-fs: >-
+    Samozberací voz s veľkokapacitným ložným priestorom 36–58 m³ DIN.
+    Pickup šírky 2 m a nožový rotor s 35–46 nožmi na krátke rezanie krmovín.
+    Tandemová náprava s odpružením a hydraulická vyhadzovacia podlaha.
+  rw: >-
+    Ťahané obaľovače balíkov pre okrúhle aj hranolové balíky. Dvojité predpínacie
+    jednotky 500/750 mm a hydraulické sklopenie balíka do polohy pre plynulú
+    prácu s nakladačom. Modely RW 1410/1610 patria medzi najpredávanejšie
+    v Európe.
+  vb: >-
+    Valcové lisy s variabilnou komorou pre balíky s priemerom 0,8–1,85 m.
+    Nový rotor Integral pre vysoký výkon aj vo vlhkom materiáli, rezacie zariadenie
+    OptiCut so 14, 23 alebo 25 nožmi. Varianty VBP kombinujú lis s obaľovačom
+    v jednom prejazde.
+  euromix: >-
+    Horizontálne kŕmne miešacie vozy s 2–4 závitovkami/lopatkami a objemom 8–24 m³.
+    Jemná miešacia akcia vhodná na miešanie TMR s podielom dlhostébelných krmovín
+    a sena. Štandardne programovateľné váženie s pamäťou receptúr.
+  primor: >-
+    Stroje na rozdružovanie a fúkanie slamy do stajní — bale shredder. Bočný
+    výhoz až 18 m, otočný komín na fúkanie slamy do hlbokých stajní.
+    Modely od 1,3 do 5,7 m³ s pickupom na veľké balíky 120×120 cm.
+  profile-mixer: >-
+    Vertikálne kŕmne miešacie vozy s jednou alebo dvoma závitovkami a objemom
+    12–46 m³. Závitovka s ostrými nožmi pre rýchle spracovanie veľkých balíkov
+    a senáže. Verzia Plus pridáva programovateľné váženie, rozhranie ISOBUS
+    a režim eco-drive.
+  spv: >-
+    Samohybné miešacie vozy s integrovaným nakladacím frézovacím ramenom
+    a objemom 12–27 m³. Hydrostatický pohon, kabína s 360° výhľadom
+    a možnosť konfigurácie pohonu 4×4 alebo 4×4×4 s riadenou zadnou nápravou.
+    Vhodné pre veľkochovy s denným kŕmením 200+ kusov.
+  tks: >-
+    Automatický kŕmny systém na báze robotického voza na koľajnici stropu
+    stajne. Naváži sa zásobníkom TMR a programovane obchádza kŕmny stôl
+    v nastavených časoch. Znižuje náklady na prácu a stabilizuje dennú
+    dávku — vhodné pre mliečne farmy s automatickou dojacou stajňou.
+  cultimer: >-
+    Radličkové podmietače s 2–4 radmi slupíc a hydraulickou ochranou
+    Non-Stop. Zábery 3–6 m v nesenom a 6–10 m v ťahanom vyhotovení.
+    Vymeniteľné radlice umožňujú adaptáciu od plytkej podmietky 5 cm
+    po hlboké kyprenie 35 cm.
+  discover-xm2: >-
+    Krátky diskový podmietač pre plytkú podmietku a urovnanie povrchu.
+    Kotúče 510 mm s nezávislým uložením a hydraulickou ochranou.
+    Vhodný pre vysokovýkonné prevádzky s traktormi 150+ HP a pracovnou
+    rýchlosťou 12–15 km/h. Zábery 3–6 m.
+  hr: >-
+    Rotačné brány s aktívnymi rotačnými členmi pre kvalitnú prípravu osiatkového
+    lôžka. Zábery 3–8 m, nesené aj skladacie varianty s pevnou rýchlostnou
+    prevodovkou alebo voľbou Speedline. Štandardne valec Maxipack
+    a možnosť kombinácie s mechanickou či pneumatickou sejačkou.
+  master: >-
+    Otočné nesené aj polonesené pluhy s 3–8 radlicami. Modely Master 103/153
+    ponúkajú mechanické alebo hydraulické nastavenie záberu, Vari-Master plynulé
+    nastavenie šírky brázdy 30–55 cm. Slupice z bórovej ocele s rezervou
+    pre hlboké orby do 35 cm.
+  optimer: >-
+    Krátke diskové podmietače určené na plytkú podmietku po zbere.
+    Kotúče 510 mm s individuálnym uložením na gumových silentblokoch.
+    Zábery 3–7,5 m v nesenom aj ťahanom vyhotovení. Hydraulické nastavenie
+    hĺbky z kabíny pre adaptáciu na rôzne typy pôd.
+  prolander: >-
+    Radličkový kyprič na plytkú podmietku a prípravu osiatkového lôžka.
+    Šesť radov slupíc s rozstupom 6 cm zaručuje rovnomerný profil
+    práce a kvalitné zapravenie pozberových zvyškov. Zábery 3–7,5 m,
+    nesené aj ťahané.

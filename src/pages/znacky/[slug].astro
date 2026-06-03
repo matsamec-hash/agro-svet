@@ -1,11 +1,11 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import { itemListSchema } from '../../lib/structured-data';
 import { getAllModels } from '../../lib/stroje';
 import { TIER_LISTS, rankForTierList } from '../../lib/tier-lists';
-import { useTranslations, tf, getLocaleFromUrl } from '../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -17,8 +17,9 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const znacky = await getCollection('znacky');
-const znacka = znacky.find((z) => z.id === slug);
+// SK serves the localized profile from znackySk (fallback to cs if missing).
+const znacka = (locale !== 'cs' ? await getEntry('znackySk', slug!) : undefined)
+  ?? await getEntry('znacky', slug!);
 if (!znacka) return Astro.rewrite('/404');
 const { Content, headings } = await render(znacka);
 
@@ -44,7 +45,7 @@ const toc: { text: string; slug: string }[] = [
 const hasRichProfile = toc.length >= 3;
 const pageTitle = hasRichProfile ? tf(locale, 'cat.zn.d.titleSuffix', { brand: znacka.data.name }) : znacka.data.name;
 
-const canonical = `https://agro-svet.cz/znacky/${znacka.id}/`;
+const canonical = `https://agro-svet.cz${localizePath(locale, `/znacky/${znacka.id}/`)}`;
 const sameAsList: string[] = [];
 if ((znacka.data as any).wikipedia) sameAsList.push((znacka.data as any).wikipedia);
 if ((znacka.data as any).wikidata) sameAsList.push((znacka.data as any).wikidata);

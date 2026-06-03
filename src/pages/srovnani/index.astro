@@ -1,12 +1,14 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) tak, aby middleware mohlo servírovať lokalizovanú /sk
+// verziu cez locals.locale. cs výstup zostáva identický (rovnaký kód komponenty).
+export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { topComparisonPairs, modelDisplayName, pairCombo } from '../../lib/comparator';
 import { getAllModels, getAllBrands } from '../../lib/stroje';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
-import { useTranslations, plural, tf, getLocaleFromUrl } from '../../i18n/utils';
+import { useTranslations, plural, tf, getLocaleFromUrl, localizePath } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -64,7 +66,7 @@ const itemListJsonLd = itemListSchema(
   'Srovnání zemědělských strojů',
 );
 
-const canonical = `${SITE_URL}/srovnani/`;
+const canonical = `${SITE_URL}${localizePath(locale, '/srovnani/')}`;
 
 const js = {
   selectBrandFirst: tr('cat.sr.selectBrandFirst'),

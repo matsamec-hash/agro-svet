@@ -1,0 +1,115 @@
+# SK overlay (popisy/polia) na cs štruktúru. AI draft+editor, review nutný.
+
+country: "USA"
+description: >-
+  Najväčší výrobca poľnohospodárskej techniky na svete. Americká spoločnosť so zelenými traktormi a žltou hviezdou dominuje trhu v Severnej Amerike, Európe aj Ázii.
+
+categories:
+  traktory: "Traktory"
+  kombajny: "Kombajny"
+  rezacky: "Samohybné rezačky"
+  postrikovace: "Samohybné postrekovače"
+
+series:
+  new-generation-10-series: >-
+    Prelomová generácia, ktorá ukončila éru dvojvalcových motorov John Deere („Johnny Popper"). Premiéra 30. augusta 1960 v Dallase („Deere Day in Dallas") predstavila kompletne nové viacvalcové vznetové motory — radové štvorvalce a šesťvalce, novú prevodovku Synchro-Range a modernú hydrauliku. Obrovskú modernizáciu sprevádzal presun výroby do Waterloo (Iowa) a Dubuque. New Generation položila základ všetkým nasledujúcim radom a definovala John Deere ako technologického lídra v poľnohospodárstve.
+  20-series-1963: >-
+    Vylepšená generácia 10 Series. Kľúčový model 4020 (1963–1972) sa stal jedným z najpredávanejších traktorov v histórii John Deere — vyrobených bolo vyše 184 000 kusov. Disponoval voliteľnou prevodovkou Power Shift (8 rýchlostí pod záťažou), šesťvalcovým motorom 6,6 L a neskôr ikonickou kabínou „hex-shaped" (1972). V roku 1965 začala továreň Mannheim (Nemecko) s výrobou radu 20 pre európsky trh — prvá európska produkcia John Deere.
+  30-series-sound-gard: >-
+    Generácia, ktorá definovala pohodlie v poľnohospodárstve. V septembri 1972 predstavil John Deere revolučnú kabínu **Sound-Gard** — prvú integrovanú zvukovo izolovanú kabínu v poľnohospodárskej technike s klimatizáciou, kúrením a tlmením vibrácií (max. 80 dB(A) vo vnútri). Prezývaná „Generation II". Modely 4030/4230/4430/4630 nahradili úspešné rady 4020/4320/4520/4620 a stanovili nové štandardy ergonómie pre celé odvetvie.
+  40-series-iron-horse: >-
+    Modernizácia kabíny Sound-Gard (Sound-Gard II). Modely 4040/4240/4440/4640/4840 priniesli úspornejšie motory, vylepšenú hydrauliku a robustnejšie prevodovky. Ikonický **4440** s výkonom 130 k sa stal najpredávanejším modelom dekády — vyrobených bolo vyše 95 000 kusov. Pribudol najvýkonnejší 4840 (180 k) ako vlajková loď.
+  50-series-1982: >-
+    Pokračovanie úspešnej generácie s dôrazom na úspornosť paliva a vylepšenú prevodovku **Quad-Range** (16 rýchlostí). Motory s elektronickou reguláciou otáčok, nový displej v kabíne a hydraulika s vyšším prietokom. Modely 4050/4250/4450/4650/4850 pokrývali 105–193 koní.
+  55-series-1988: >-
+    Posledná „čistá" row-crop generácia pred rozdelením na rady 7000 (row-crop) a 8000 (vlajkové). Modely 4055/4255/4455/4555/4755/4955 priniesli elektronicky riadené hydraulické zdviháky, vylepšený monitor PerformanceMonitor a moderný vzhľad kabíny. Špičkový **4955** (200 k) bol najvýkonnejší row-crop John Deere svojej doby.
+  5000: >-
+    Prvé úžitkové traktory pre európsky trh vyrábané v Mannheime. Výkony 40–75 k, jednoduchá koncepcia určená pre menšie hospodárstva a komunálne nasadenie.
+  5010-5020-5030: >-
+    Postupne vylepšované generácie úžitkových traktorov. Motory PowerTech, plne synchronizovaná prevodovka SyncShuttle 9x3.
+  5m: >-
+    Moderný úžitkový rad s motorom PowerTech a elektronicky riadenou hydraulikou. Varianty pre farmárov, sadárov aj mestské služby.
+  5r: >-
+    Prémiový úžitkový rad s technológiami vyšších tried — CommandArm, prevodovka IVT, plná kabínová konektivita.
+  6000: >-
+    Prelomový rad stredných traktorov vyrábaný v Mannheime. Kabína **OOS** (Open Operator Station) s panoramatickým výhľadom, motor PowerTech 4045 (4-valec, 4,5 L) pre 6100–6400 a 6076 (6-valec, 7,6 L) pre 6500–6900, prevodovka **PowrQuad 16/16**, voliteľná **Triple-Link Suspension** prednej nápravy.
+  6010: >-
+    Nástupca radu 6000, motory PowerTech, prevodovka PowrQuad Plus 16x16. Rozšírený výber od 80 do 150 koní.
+  6020: >-
+    Úplne nová platforma. Kabína ComfortGard, motor PowerTech Plus s common-rail, voliteľná prevodovka AutoQuad Plus a hydraulika s detekciou záťaže (load sensing).
+  6030-premium: >-
+    Prémiový rad s technológiou AutoPowr (CVT), plné odpruženie prednej nápravy TLS, kabína Premium a integrácia s GreenStar 2.
+  6m: >-
+    Univerzálny rad pre zmiešané hospodárstva. Motor PowerTech 4,5 / 6,8 L, prevodovka AutoQuad alebo CommandQuad, emisná norma Stage V (2019+).
+  6r: >-
+    Prémiový všestranný rad. Motor PowerTech PSS/PVS, prevodovka AutoPowr IVT alebo CommandPro, plné odpruženie TLS Plus, kabína CommandView III, displeje Gen 4.
+  6r-gen3: >-
+    Tretia generácia prémiového radu 6R, vyrábaná v Mannheime. Motor PowerTech 4,5 L (4-valec) a 6,8 L (6-valec) Stage V so SCR a DPF, prevodovka AutoPowr (CVT) alebo CommandQuad Plus, kabína CommandView 4 s 12,8" displejom G5, plná konektivita JDLink a podpora autonómnych funkcií AutoTrac a AutoPath. Modelové označenie 6R 110 / 120 / 130 / 140 / 150 / 165 / 185 / 195 / 215 / 230 / 250.
+  7000: >-
+    Prvá generácia row-crop traktorov nad 150 koní vyrábaná vo Waterloo. Základ pre všetky nasledujúce rady 7R.
+  7010: >-
+    Row-crop traktory druhej generácie, motor PowerTech 6,8 L, prevodovka PowrQuad Plus alebo AutoQuad.
+  7020: >-
+    Motor PowerTech Plus s elektronickým vstrekovaním. Voliteľná prevodovka AutoPowr IVT (plynulá variátorová) — prvá v tejto triede u John Deere.
+  7030: >-
+    Emisná norma Tier 3, motor PowerTech Plus 6,8 L s 24-ventilovou hlavou. Kabína Premium s vetraním, klimatizáciou a elektronicky ovládaným sedadlom.
+  7r: >-
+    Vlajkový row-crop rad strednej veľkosti. Motor PowerTech PSS 6,8/9,0 L, prevodovka e23 PowerShift alebo AutoPowr IVT, kabína CommandView III, AutoTrac, AutoPath.
+  7r-gen3: >-
+    Aktuálna generácia 7R s motorom PowerTech PSS 9,0 L (6-valec, Stage V), prevodovkou e23 PowerShift (23 rýchlostí) alebo AutoPowr IVT, kabínou CommandView 4 s 10" displejom CommandCenter a 12,8" Gen 4 Extended. Plná podpora AutoPath, AutoTrac SF7000 a JDLink. Modelový rad 7R 230 až 7R 350 v 60-koňových krokoch.
+  8000: >-
+    Legendárna „veľká zelená". Prvý row-crop nad 200 koní s modernou kabínou, elektronicky riadenou hydraulikou a PowerShift 16/4.
+  8010: >-
+    Motor PowerTech 8,1 L, prevodovka PowerShift 16/4, kabína ComfortGard Plus.
+  8020: >-
+    Nová generácia s motorom PowerTech Plus, voliteľná prevodovka IVT AutoPowr, aktívne odpruženie prednej nápravy ILS.
+  8030: >-
+    Emisná norma Tier 3 (PowerTech Plus 9,0 L), automatické riadenie **AutoTrac**, displej GreenStar 2 1800/2630, kabína CommandView, odpruženie prednej nápravy TLS Plus, pásová verzia 8030T (8130T/8230T/8330T/8430T/8530T).
+  8r-gen1: >-
+    Prvá generácia 8R s voliteľným pásovým podvozkom 8RT. Motor PowerTech PSS 9,0 L, prevodovka e23 PowerShift alebo AutoPowr IVT, kabína CommandView II/III.
+  8r-gen2: >-
+    Úplne nová platforma, motor PowerTech PSS 9,0 L, prevodovka e23 / IVT / DirectDrive, kabína CommandView 4, pásové verzie 8RT a kolesové 8R. AutoPath a autonómne riadenie (CES 2022).
+  8rx-4track: >-
+    Prelomová pásová varianta radu 8R — prvý **štvropásový (four-track)** poľnohospodársky traktor v segmente strednej veľkosti. Každé koleso nahrádza samostatná gumová húsenica, čo zabezpečuje minimálny tlak na pôdu, vysoký ťah a komfort porovnateľný s kolesovým traktorom. Zdieľa motor PowerTech PSS 9,0 L a kabínu CommandView 4 s radom 8R, prevodovka e23 alebo IVT.
+  9000: >-
+    Kĺbové traktory 4WD pre rozsiahle hospodárstva. Motor PowerTech 12,5 L a PowerShift 12/3.
+  9020: >-
+    Motor PowerTech 12,5 L, voliteľný pásový podvozok 9000T, Greenstar 2.
+  9030: >-
+    Motor PowerTech Plus 13,5 L, AutoTrac Universal, GreenStar 3.
+  9r-gen1: >-
+    Prvá generácia označenia 9R. Motor Cummins QSX 15,0 L, pásové verzie 9RT (dve gumové húsenice) a 9RX (štyri gumové húsenice).
+  9r-gen2: >-
+    Generácia s motorom JD 13,6 L a 18,0 L, kabína novej generácie, e18 PowerShift, autonómne riadenie, pásové verzie 9RX s piatimi variantmi výkonu.
+  9rx: >-
+    Prvá generácia priemyselne prvého **kĺbového štvropásového** traktora — uvedená v roku 2015 ako samostatná pásová verzia radu 9R. Štyri nezávislé gumové húsenice zabezpečujú plynulé rozloženie hmotnosti, minimálne zhutnenie pôdy a ťah porovnateľný s najťažšími kolesovými 9R. Motor Cummins QSX 15,0 L, 18-stupňový PowerShift e18. Od roku 2022 sa 9RX integroval do nového radu Gen2.
+  cts: >-
+    Hybridná technológia CTS (Cylinder Tine Separator) — kombinácia konvenčného bubna a dvoch rotorov. Nástupca radu 9000/9500/9600.
+  9000-kombajn: >-
+    Konvenčný bubon-slamník, typický americký ťažký rad.
+  wts: >-
+    Európska generácia kombajnov, konvenčný systém separácie s vylepšenými slamníkmi a rotačným doseparátorom.
+  9000-sts: >-
+    Revolučná single-rotorová technológia STS (Single Tine Separator). Od 9660 STS po 9880i STS.
+  s-series: >-
+    Prémiový rad single-rotorových kombajnov. Motor JD PowerTech / Cummins 13,5 L, hydrostatický pohon, ActiveYield, automatika HarvestSmart, displej Gen 4.
+  t-series: >-
+    Európsky konvenčný kombajn so slamníkmi (Walker). Motor JD PowerTech 6,8/9,0/13,5 L, prevodovka ProDrive, päťslamník.
+  w-series: >-
+    Ekonomický európsky rad s konvenčnou separáciou, 4 až 5 slamníkmi, motor JD PowerTech 6,8 L.
+  x-series: >-
+    Revolučný dvojrotorový systém Dual Separator. Najväčšia priepustnosť a najnižšie straty v triede. Motor JD PowerTech 13,6 L, AutoMaintain, HarvestVision.
+  6000-rezacky: >-
+    Prvé moderné samohybné rezačky John Deere vyrábané v Zweibrückene (Nemecko). Po akvizícii nemeckej firmy Hesston/Heesemann a know-how o krmovinách. Motory PowerTech 8,1–12,5 L, mechanický pohon valcov, klasický kovový vyhadzovač.
+  7000-rezacky: >-
+    Modernizácia s elektronickým riadením žacieho ústrojenstva, automatické nastavenie dĺžky rezanky AutoLOC a vylepšený systém KernelStar na drvenie zŕn kukurice. Motor PowerTech Tier 3, kabína ComfortGard.
+  7050-rezacky: >-
+    Generácia 7050 priniesla AutoLOC II, senzor HarvestLab NIR na analýzu sušiny a živín v reálnom čase a integráciu s GreenStar 2. Motory Tier 3, výkony 360 až 625 koní.
+  8000-rezacky: >-
+    Generácia 8000 priniesla úplne nový priechod stroja — žacie ústrojenstvo o 25 % väčšie, nový systém KernelStar 2 (drvič zrna), HarvestLab 3000 a integrácia s JDLink. Motor JD PowerTech 9,0 / 13,5 / 19,0 L Tier 4.
+  9000-rezacky: >-
+    Vlajkový rad samohybných rezačiek. **9900** s motorom 24,2 L Liebherr a výkonom nad 1 000 koní je najvýkonnejšia samohybná rezačka na svete. AutoLOC III, KernelStar 3, HarvestLab 3000, plne integrovaný AutoTrac, kamerové systémy a JDLink Connect.
+  4730-postrikovace: >-
+    Prvá moderná generácia samohybných postrekovačov John Deere pre európsky trh. Vyrábané vo Waterloo (USA) a v Horste (Holandsko). Motor PowerTech, štyri kolesá s nezávislým pohonom (HydroHandle), nádrž 1 500–4 540 l. Modely 4730/4830/4930 poskytli výkonový rozsah od 200 do 360 koní.
+  r-series-postrikovace: >-
+    Aktuálna generácia samohybných postrekovačov. Modely R4030/R4040i/R4045i a americký rad R4044/R4060/R4150. Motor JD PowerTech, BoomTrac Pro (automatická regulácia výšky ramien), individuálne spínanie trysiek (ExactApply, See & Spray), AutoTrac, integrácia s Operations Center.
