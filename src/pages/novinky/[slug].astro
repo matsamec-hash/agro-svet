@@ -9,6 +9,8 @@ import { getAllBrands } from '../../lib/stroje';
 import { getAllPlemena } from '../../lib/plemena';
 import { imgSrcset } from '../../lib/image-variants';
 import { ORG_ID, WEBSITE_ID } from '../../lib/structured-data';
+import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../lib/articles-i18n';
+import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
 
 const { slug } = Astro.params;
 const supabase = createAnonClient();
@@ -40,8 +42,8 @@ const [articleRes, poolRes] = await Promise.all([
     .limit(81),
 ]);
 
-const article = articleRes.data;
-if (!article) {
+const articleRaw = articleRes.data;
+if (!articleRaw) {
   return Astro.rewrite('/404');
 }
 
@@ -49,11 +51,24 @@ if (!article) {
 // Editorial updates trigger a CF cache purge via the same hook used after deploys.
 Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
 
+const locale = Astro.locals.locale ?? 'cs';
+
 // Shared link-dedup state for perex + body so each entity is linked at most once per page.
-const linkCtx = createLinkContext(`/novinky/${article.slug}/`);
+const linkCtx = createLinkContext(`/novinky/${articleRaw.slug}/`);
 
 // Filter the current article out of the pool (we fetched 81 to keep 80 after removal).
-const pool = (poolRes.data ?? []).filter((p) => p.id !== article.id).slice(0, 80);
+const poolRaw = (poolRes.data ?? []).filter((p) => p.id !== articleRaw.id).slice(0, 80);
+
+// SK/UK: overlay translations (article + pool) when not cs. cs → empty map →
+// overlayArticle returns the same refs → downstream + output byte-identical.
+let trMap = buildTranslationMap(null);
+if (locale !== 'cs') {
+  trMap = buildTranslationMap(
+    await fetchArticleTranslations(supabase, [articleRaw.id, ...poolRaw.map((p) => p.id)], locale),
+  );
+}
+const article = overlayArticle(articleRaw, trMap.get(articleRaw.id));
+const pool = poolRaw.map((p) => overlayArticle(p, trMap.get(p.id)));
 
 const articleTags: string[] = (article.tags as string[] | null) ?? [];
 function scoreRelated(other: typeof pool[number]): number {
@@ -111,13 +126,10 @@ const articleDate = new Date(article.published_at).getTime();
 const prevArticle = pool.find((p) => new Date(p.published_at).getTime() < articleDate) ?? null; // older
 const nextArticle = [...pool].reverse().find((p) => new Date(p.published_at).getTime() > articleDate) ?? null; // newer
 
-const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.published_at));
-const categoryLabels: Record<string, string> = {
-  technika: 'Technika', dotace: 'Dotace', trh: 'Trh', legislativa: 'Legislativa', znacky: 'Značky',
-  psychologie: 'Psychologie', zdravi: 'Zdraví', finance: 'Finance', krasa: 'Krása',
-};
+const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ';
+const date = new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.published_at));
 
-const canonical = `https://agro-svet.cz/novinky/${article.slug}/`;
+const canonical = `https://agro-svet.cz${localizePath(locale, `/novinky/${article.slug}/`)}`;
 // Odkaz na sitewide Organization entitu (definovanou v Layout @graph) místo
 // duplikace celého objektu — Google nody sloučí podle @id.
 const publisher = { '@id': ORG_ID };
@@ -126,7 +138,7 @@ const author = {
   name: 'Redakce agro-svět.cz',
   url: 'https://agro-svet.cz/redakce/',
 };
-const articleSectionLabel = article.category ? (categoryLabels[article.category] || article.category) : undefined;
+const articleSectionLabel = article.category ? localizedCategory(locale, article.category) : undefined;
 const dateModified = article.updated_at || article.published_at;
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -150,7 +162,7 @@ const jsonLd = {
       isPartOf: { '@id': WEBSITE_ID },
       author,
       publisher,
-      inLanguage: 'cs-CZ',
+      inLanguage: dateLocale,
       // Speakable: marks the headline + lead paragraph as suitable for voice assistants
       // (Google Assistant, Apple/Siri citations). CSS selectors point at our DOM ids.
       speakable: {
@@ -163,8 +175,8 @@ const jsonLd = {
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-        { '@type': 'ListItem', position: 2, name: 'Novinky', item: 'https://agro-svet.cz/novinky/' },
+        { '@type': 'ListItem', position: 1, name: t(locale, 'nav.home'), item: `https://agro-svet.cz${localizePath(locale, '/')}` },
+        { '@type': 'ListItem', position: 2, name: t(locale, 'nov.breadcrumb'), item: `https://agro-svet.cz${localizePath(locale, '/novinky/')}` },
         { '@type': 'ListItem', position: 3, name: article.title, item: canonical },
       ],
     },
@@ -212,7 +224,7 @@ const jsonLd = {
 
     <!-- Breadcrumb -->
     <div style="font-size:13px; color:#666; margin-bottom:28px;">
-      <a href="/novinky/" style="color:#666; text-decoration:none;">Novinky</a>
+      <a href={localizePath(locale, '/novinky/')} style="color:#666; text-decoration:none;">{t(locale, 'nov.breadcrumb')}</a>
       <span style="margin:0 8px;">›</span>
       <span>{article.title}</span>
     </div>
@@ -221,7 +233,7 @@ const jsonLd = {
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
       {article.category && (
         <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:.5px;">
-          {categoryLabels[article.category] ?? article.category}
+          {localizedCategory(locale, article.category)}
         </span>
       )}
       <time datetime={article.published_at} style="font-size:13px; color:#666;">{date}</time>
@@ -235,12 +247,12 @@ const jsonLd = {
     <!-- Author byline (E-E-A-T signal above the fold) -->
     <div class="byline" style="display:flex; gap:10px; align-items:center; font-size:13.5px; color:#5a5a62; margin-bottom:28px;">
       <span>
-        Napsala <a href="/redakce/" style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">redakce agro-svět.cz</a>
+        {t(locale, 'nov.byline')} <a href={localizePath(locale, '/redakce/')} style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">{t(locale, 'nov.editorial')}</a>
       </span>
       {article.updated_at && article.updated_at !== article.published_at && (
         <>
           <span style="color:#c0c0c8;" aria-hidden="true">·</span>
-          <span>Aktualizováno <time datetime={article.updated_at}>{new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.updated_at))}</time></span>
+          <span>{t(locale, 'nov.updated')} <time datetime={article.updated_at}>{new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.updated_at))}</time></span>
         </>
       )}
     </div>
@@ -253,12 +265,12 @@ const jsonLd = {
     {topEntity && entityRelated.length > 0 && (
       <aside class="entity-related" aria-labelledby="entity-related-h">
         <h2 id="entity-related-h">
-          Další články o&nbsp;<a href={topEntity.url}>{topEntity.name}</a>
+          {t(locale, 'nov.entityMore')}&nbsp;<a href={localizePath(locale, topEntity.url)}>{topEntity.name}</a>
         </h2>
         <ul>
           {entityRelated.map((r) => (
             <li>
-              <a href={`/novinky/${r.slug}/`}>
+              <a href={localizePath(locale, `/novinky/${r.slug}/`)}>
                 <span class="er-title">{r.title}</span>
                 {r.perex && <span class="er-perex">{r.perex.length > 100 ? r.perex.slice(0, 100) + '…' : r.perex}</span>}
               </a>
@@ -267,8 +279,8 @@ const jsonLd = {
         </ul>
         <p class="entity-related-cta">
           {topEntity.kind === 'brand'
-            ? <a href={topEntity.url}>Vše o značce {topEntity.name} →</a>
-            : <a href={topEntity.url}>Detail plemene {topEntity.name} →</a>}
+            ? <a href={localizePath(locale, topEntity.url)}>{tf(locale, 'nov.entityBrandCta', { name: topEntity.name })}</a>
+            : <a href={localizePath(locale, topEntity.url)}>{tf(locale, 'nov.entityPlemenoCta', { name: topEntity.name })}</a>}
         </p>
       </aside>
     )}
@@ -276,13 +288,13 @@ const jsonLd = {
     <!-- Tags (clickable — navigate to filtered novinky) -->
     {article.tags?.length > 0 && (
       <div style="margin-top:48px; padding-top:24px; border-top:1px solid #ebebeb;">
-        <span style="font-size:12px; color:#767676; margin-right:8px;">Tagy:</span>
+        <span style="font-size:12px; color:#767676; margin-right:8px;">{t(locale, 'nov.tags')}</span>
         {article.tags.map((tag: string) => (
           <a
-            href={`/novinky/tema/${encodeURIComponent(tag)}/`}
+            href={localizePath(locale, `/novinky/tema/${encodeURIComponent(tag)}/`)}
             class="article-tag"
             style={tagStyle(tag)}
-            title={`Další články s tagem „${tag}"`}
+            title={tf(locale, 'nov.tagTitle', { tag })}
           >
             #{tag}
           </a>
@@ -292,16 +304,16 @@ const jsonLd = {
 
     <!-- Prev / next chronological nav -->
     {(prevArticle || nextArticle) && (
-      <nav class="prev-next" aria-label="Navigace mezi články">
+      <nav class="prev-next" aria-label={t(locale, 'nov.navAria')}>
         {prevArticle ? (
-          <a href={`/novinky/${prevArticle.slug}/`} class="pn-link pn-prev" rel="prev">
-            <span class="pn-label">← Předchozí</span>
+          <a href={localizePath(locale, `/novinky/${prevArticle.slug}/`)} class="pn-link pn-prev" rel="prev">
+            <span class="pn-label">{t(locale, 'nov.prev')}</span>
             <span class="pn-title">{prevArticle.title}</span>
           </a>
         ) : <span></span>}
         {nextArticle ? (
-          <a href={`/novinky/${nextArticle.slug}/`} class="pn-link pn-next" rel="next">
-            <span class="pn-label">Další →</span>
+          <a href={localizePath(locale, `/novinky/${nextArticle.slug}/`)} class="pn-link pn-next" rel="next">
+            <span class="pn-label">{t(locale, 'nov.next')}</span>
             <span class="pn-title">{nextArticle.title}</span>
           </a>
         ) : <span></span>}
@@ -310,8 +322,8 @@ const jsonLd = {
 
     <!-- Back link -->
     <div style="margin-top:48px;">
-      <a href="/novinky/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px; transition:background .15s;">
-        ← Zpět na novinky
+      <a href={localizePath(locale, '/novinky/')} style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px; transition:background .15s;">
+        {t(locale, 'nov.back')}
       </a>
     </div>
 
@@ -321,17 +333,17 @@ const jsonLd = {
   {related.length > 0 && (
     <aside class="related-section" aria-labelledby="related-heading">
       <div class="related-inner">
-        <h2 id="related-heading">Další články k tématu</h2>
+        <h2 id="related-heading">{t(locale, 'nov.related')}</h2>
         <div class="related-grid">
           {related.map((r) => (
-            <a href={`/novinky/${r.slug}/`} class="related-card">
+            <a href={localizePath(locale, `/novinky/${r.slug}/`)} class="related-card">
               {r.featured_image_url && (
                 <div class="rc-img">
                   <img src={r.featured_image_url} alt={r.title} loading="lazy" decoding="async" width="400" height="225" />
                 </div>
               )}
               <div class="rc-body">
-                {r.category && <span class="rc-cat">{categoryLabels[r.category] ?? r.category}</span>}
+                {r.category && <span class="rc-cat">{localizedCategory(locale, r.category)}</span>}
                 <h3>{r.title}</h3>
                 {r.perex && <p>{r.perex.length > 120 ? r.perex.slice(0, 120) + '…' : r.perex}</p>}
               </div>
