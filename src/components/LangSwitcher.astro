@@ -1,0 +1,25 @@
+---
+// src/components/LangSwitcher.astro
+// CZ/SK header switcher. Builds the localized equivalent of the current
+// cs-root path via stripLocale + localizePath. uk added in Fáze 3.
+import { stripLocale, localizePath, t } from '../i18n/utils';
+
+const localizedPathname = Astro.locals.localizedPathname ?? Astro.url.pathname;
+const { locale, path } = stripLocale(localizedPathname);
+const csHref = localizePath('cs', path);
+const skHref = localizePath('sk', path);
+---
+<div class="lang-switch" role="group" aria-label={t(locale, 'lang.switch')}>
+  <a href={csHref} class:list={["lang-opt", { active: locale === 'cs' }]} hreflang="cs"
+     aria-current={locale === 'cs' ? 'true' : undefined}>{t(locale, 'lang.cs')}</a>
+  <span class="lang-sep" aria-hidden="true">/</span>
+  <a href={skHref} class:list={["lang-opt", { active: locale === 'sk' }]} hreflang="sk"
+     aria-current={locale === 'sk' ? 'true' : undefined}>{t(locale, 'lang.sk')}</a>
+</div>
+<style>
+  .lang-switch { display: inline-flex; align-items: center; gap: 4px; font-family: 'Chakra Petch', sans-serif; font-size: 12px; }
+  .lang-opt { color: #6B6B72; text-decoration: none; padding: 2px 5px; border-radius: 5px; transition: color .15s, background .15s; }
+  .lang-opt:hover { color: #0A0A0B; background: #FFFF00; }
+  .lang-opt.active { color: #0A0A0B; font-weight: 700; }
+  .lang-sep { color: #c0c0c5; }
+</style>
