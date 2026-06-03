@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
 import { createAnonClient } from './lib/supabase';
 import { stripLocale } from './i18n/utils';
+import { isLockedSectionPath } from './i18n/nav';
 import {
   gateActive,
   isGateBypassed,
@@ -62,6 +63,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
   locals.locale = locale;
   locals.localizedPathname = url.pathname;
   const advance = () => (locale !== 'cs' ? next(strippedPath + url.search) : next());
+
+  // CZ-jurisdikční sekce (dotace/statistiky/kalkulačky/ceny půdy) se pod non-cs
+  // locale NEservírují jako SK obsah — přesměruj na cs URL (poctivě = český web).
+  // Reálné SK ekvivalenty sem doplní Fáze 2b. Dočasný redirect (307).
+  if (locale !== 'cs' && isLockedSectionPath(strippedPath)) {
+    return redirect(strippedPath + url.search, 307);
+  }
 
   // ---- Site gate: runs FIRST, above everything else -------------------------
   // To disable: unset SITE_GATE_PASSCODE env var and redeploy.

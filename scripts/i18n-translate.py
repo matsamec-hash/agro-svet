@@ -28,6 +28,34 @@ def load_key():
 
 KEY = load_key()
 
+AGRO_SVET_SITE_ID = "cadc73fd-6bd9-4dc5-a0da-ea33725762e1"
+
+def load_supabase():
+    """(url, service_key) from env or ~/agro-svet/.env."""
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    if url and key:
+        return url, key
+    envp = os.path.expanduser("~/agro-svet/.env")
+    if os.path.exists(envp):
+        for line in open(envp):
+            if line.startswith("SUPABASE_URL=") and not url:
+                url = line.split("=", 1)[1].strip()
+            elif line.startswith("SUPABASE_SERVICE_KEY=") and not key:
+                key = line.split("=", 1)[1].strip()
+    if not (url and key):
+        sys.exit("SUPABASE_URL / SUPABASE_SERVICE_KEY not found")
+    return url, key
+
+def _supa_request(base, key, method, rel, body=None, extra_headers=None):
+    data = json.dumps(body).encode() if body is not None else None
+    req = urllib.request.Request(base.rstrip("/") + rel, data=data, method=method,
+        headers={"apikey": key, "Authorization": f"Bearer {key}",
+                 "Content-Type": "application/json", **(extra_headers or {})})
+    with urllib.request.urlopen(req, timeout=120) as r:
+        raw = r.read()
+        return json.loads(raw) if raw else None
+
 GLOSSARY = (
     "ZÁVÄZNÝ GLOSÁR (cz -> sk, dodrž konzistentne):\n"
     "samojízdný/sklízecí řezačka -> samohybná rezačka; sklízecí mlátička -> kombajn; "
@@ -258,11 +286,52 @@ def do_znacky(slug):
     print("\n=== PREVIEW (first 2200 chars) ===")
     print(dst.read_text()[:2200])
 
+# ---------- novinky ----------
+def do_novinky(arg):
+    """arg: a slug, or 'all'. Translates articles -> upserts article_translations (locale=sk)."""
+    base, key = load_supabase()
+    sel = ("/rest/v1/articles?select=id,slug,title,perex,content,seo_title,seo_description"
+           f"&site_id=eq.{AGRO_SVET_SITE_ID}&status=eq.published")
+    if arg != "all":
+        sel += f"&slug=eq.{arg}"
+    sel += "&order=published_at.desc"
+    rows = _supa_request(base, key, "GET", sel) or []
+    if not rows:
+        sys.exit(f"no published article(s) for {arg!r}")
+    for i, a in enumerate(rows, 1):
+        print(f"[{i}/{len(rows)}] {a['slug']}")
+        kv = {}
+        for f in ("title", "perex", "seo_title", "seo_description"):
+            if a.get(f):
+                kv[f] = a[f].strip()
+        sk_kv = translate_kv(f"polia článku '{a.get('title')}'", kv)
+        sk_content = translate_body(a["content"]) if a.get("content") else ""
+        # Existing shared table (CMS migration 040): cols article_id, locale,
+        # title NOT NULL, perex/content/seo_* NOT NULL default '', model;
+        # unique(article_id, locale). No status/slug columns.
+        payload = {
+            "article_id": a["id"], "locale": "sk",
+            "title": sk_kv.get("title") or a["title"],
+            "perex": sk_kv.get("perex") or "",
+            "seo_title": sk_kv.get("seo_title") or "",
+            "seo_description": sk_kv.get("seo_description") or "",
+            "content": sk_content or "",
+            "model": f"vercel-ai-gateway:{EDIT_MODEL}",
+        }
+        _supa_request(base, key, "POST",
+                      "/rest/v1/article_translations?on_conflict=article_id,locale",
+                      body=payload,
+                      extra_headers={"Prefer": "resolution=merge-duplicates,return=minimal"})
+        print(f"  upserted sk translation for {a['slug']}")
+    print(f"DONE — {len(rows)} article(s)")
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
     if cmd == "stroje":
         do_stroje(sys.argv[2])
     elif cmd == "znacky":
         do_znacky(sys.argv[2])
+    elif cmd == "novinky":
+        do_novinky(sys.argv[2])
     else:
-        sys.exit("usage: i18n-translate.py {stroje|znacky} <slug>")
+        sys.exit("usage: i18n-translate.py {stroje|znacky|novinky} <slug|all>")

@@ -1,6 +1,8 @@
 ---
 import { categoryStyle } from '../lib/tag-color';
 import { imgSrcset } from '../lib/image-variants';
+import { localizePath, tf, localizedCategory } from '../i18n/utils';
+import type { Locale } from '../i18n/config';
 
 interface Props {
   title: string;
@@ -10,28 +12,25 @@ interface Props {
   category: string;
   heroImage?: string;
   focalPoint?: { x: number; y: number } | null;
+  locale?: Locale;
 }
 
-const { title, description, slug, publishDate, category, heroImage, focalPoint } = Astro.props;
+const { title, description, slug, publishDate, category, heroImage, focalPoint, locale = 'cs' } = Astro.props;
 const focalCss = `${focalPoint?.x ?? 50}% ${focalPoint?.y ?? 50}%`;
 // Card image is ~360–520 px wide in the responsive grid. Tell the browser
 // to grab the 400 w variant on mobile, 800 w on larger viewports.
 const heroVariants = imgSrcset(heroImage, '(max-width: 600px) 100vw, 400px');
 
-const categoryLabels: Record<string, string> = {
-  technika: 'Technika',
-  dotace: 'Dotace',
-  trh: 'Trh',
-  legislativa: 'Legislativa',
-  znacky: 'Značky',
-  novinky: 'Novinky',
-};
-
-const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(publishDate);
+const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ';
+const date = new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(publishDate);
+const catLabel = localizedCategory(locale, category);
+const catTitle = tf(locale, 'nov.cat.allInTitle', { label: catLabel });
+const articleHref = localizePath(locale, `/novinky/${slug}/`);
+const categoryHref = localizePath(locale, `/novinky/kategorie/${category}/`);
 ---
 
 <div class="card-wrap">
-  <a href={`/novinky/${slug}/`} class="card">
+  <a href={articleHref} class="card">
     <div class="card-img">
       {heroImage
         ? <img
@@ -61,12 +60,12 @@ const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', y
     </div>
   </a>
   <a
-    href={`/novinky/kategorie/${category}/`}
+    href={categoryHref}
     class="tag"
     style={categoryStyle(category)}
-    title={`Všechny články v kategorii ${categoryLabels[category] ?? category}`}
+    title={catTitle}
   >
-    {categoryLabels[category] ?? category}
+    {catLabel}
   </a>
 </div>
 

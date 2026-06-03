@@ -1,31 +1,24 @@
 ---
-export const prerender = true;
+// SSR (ne prerender) — locale rewrite (/sk/...) běží přes middleware jen pro
+// ne-prerendered routy. Validace proti fixnímu enumu kategorií za běhu.
+export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, getCategoryColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
 import { breadcrumbSchema } from '../../../../lib/structured-data';
+import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../../../lib/articles-i18n';
+import { localizePath, t, localizedCategory } from '../../../../i18n/utils';
+import { isNewsCategoryHidden } from '../../../../i18n/nav';
 
-// Prerender pro fixní enum kategorií. Articles content načteno build-time
-// per kategorie. Note: nově publikovaný článek se objeví až po dalším buildu.
-export function getStaticPaths() {
-  return ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'].map(
-    (kat) => ({ params: { kat } }),
-  );
-}
-
+const VALID_CATS = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 const { kat } = Astro.params;
-if (!kat) return Astro.rewrite('/404');
+if (!kat || !VALID_CATS.includes(kat)) return Astro.rewrite('/404');
+const locale = Astro.locals.locale ?? 'cs';
+// Jurisdikčně uzamčená kategorie (CZ dotace/legislativa/trh) pod /sk neexistuje.
+if (isNewsCategoryHidden(locale, kat)) return Astro.rewrite('/404');
 
-const categoryLabels: Record<string, string> = {
-  technika: 'Technika',
-  dotace: 'Dotace',
-  trh: 'Trh',
-  legislativa: 'Legislativa',
-  znacky: 'Značky',
-  novinky: 'Novinky',
-};
 const categoryDescriptions: Record<string, string> = {
   technika: 'Novinky ze zemědělské techniky — traktory, kombajny, postřikovače, secí stroje a další stroje.',
   dotace: 'Dotační programy, podpora zemědělství, Společná zemědělská politika EU, národní dotace.',
@@ -34,13 +27,22 @@ const categoryDescriptions: Record<string, string> = {
   znacky: 'Zprávy od výrobců zemědělské techniky, tiskové zprávy, nové modely.',
   novinky: 'Obecné zemědělské novinky.',
 };
-const label = categoryLabels[kat] ?? kat;
-const description = categoryDescriptions[kat] ?? `Články v kategorii ${label}.`;
+const categoryDescriptionsSk: Record<string, string> = {
+  technika: 'Novinky z poľnohospodárskej techniky — traktory, kombajny, postrekovače, sejačky a ďalšie stroje.',
+  dotace: 'Dotačné programy, podpora poľnohospodárstva, Spoločná poľnohospodárska politika EÚ, národné dotácie.',
+  trh: 'Vývoj cien poľnohospodárskych komodít, trh s mliekom, mäsom, obilím, trendy a analýzy.',
+  legislativa: 'Novely zákonov, nariadenia a vyhlášky pre poľnohospodárov, nájmy, udržateľnosť.',
+  znacky: 'Správy od výrobcov poľnohospodárskej techniky, tlačové správy, nové modely.',
+  novinky: 'Všeobecné poľnohospodárske novinky.',
+};
+const label = localizedCategory(locale, kat);
+const description = (locale === 'sk' ? categoryDescriptionsSk : categoryDescriptions)[kat]
+  ?? (locale === 'sk' ? `Články v kategórii ${label}.` : `Články v kategorii ${label}.`);
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Novinky', url: '/novinky/' },
-  { name: label, url: `/novinky/kategorie/${kat}/` },
+  { name: t(locale, 'nav.home'), url: localizePath(locale, '/') },
+  { name: t(locale, 'nov.breadcrumb'), url: localizePath(locale, '/novinky/') },
+  { name: label, url: localizePath(locale, `/novinky/kategorie/${kat}/`) },
 ]);
 
 const supabase = createAnonClient();
@@ -53,15 +55,19 @@ const { data: articles } = await supabase
   .eq('category', kat)
   .order('published_at', { ascending: false });
 
-const items = articles ?? [];
+let items = articles ?? [];
+if (locale !== 'cs' && items.length) {
+  const trMap = buildTranslationMap(await fetchArticleTranslations(supabase, items.map((a) => a.id), locale));
+  items = items.map((a) => overlayArticle(a, trMap.get(a.id)));
+}
 
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: `${label} — agro-svět.cz`,
   description,
-  url: `${SITE_URL}/novinky/kategorie/${kat}/`,
-  inLanguage: 'cs-CZ',
+  url: `${SITE_URL}${localizePath(locale, `/novinky/kategorie/${kat}/`)}`,
+  inLanguage: locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ',
   numberOfItems: items.length,
 };
 
@@ -79,8 +85,8 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
-    <nav class="kat-breadcrumb" aria-label="Drobečková navigace">
-      <a href="/novinky/">Novinky</a>
+    <nav class="kat-breadcrumb" aria-label={t(locale, 'nov.breadcrumbAria')}>
+      <a href={localizePath(locale, '/novinky/')}>{t(locale, 'nov.breadcrumb')}</a>
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
       <span>{label}</span>
     </nav>
@@ -88,14 +94,16 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
     <header class="kat-hero">
       <span class="kat-kicker">
         <span class="kat-kicker-dot" style={`background:${getCategoryColor(kat).fg};`}></span>
-        Kategorie
+        {t(locale, 'nov.kicker.cat')}
       </span>
       <h1 class="kat-title">{label}</h1>
       <div class="kat-meta">
         <span class="kat-count">
           {items.length === 0
-            ? 'Zatím bez článků'
-            : `${items.length} ${items.length === 1 ? 'článek' : items.length < 5 ? 'články' : 'článků'}`}
+            ? t(locale, 'nov.noArticles')
+            : (locale === 'sk'
+                ? `${items.length} ${items.length === 1 ? 'článok' : items.length < 5 ? 'články' : 'článkov'}`
+                : `${items.length} ${items.length === 1 ? 'článek' : items.length < 5 ? 'články' : 'článků'}`)}
         </span>
         <span class="kat-divider"></span>
         <p class="kat-desc">{description}</p>
@@ -105,13 +113,13 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
     {topTags.length > 0 && (
       <details style="margin-bottom:24px;" open={false}>
         <summary class="kat-topics-summary">
-          <span style="display:inline-flex; align-items:center; gap:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Témata v této kategorii</span>
+          <span style="display:inline-flex; align-items:center; gap:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>{t(locale, 'nov.topicsInCat')}</span>
           <span class="kat-topics-count">{topTags.length}</span>
         </summary>
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;">
-          {topTags.map(([t, count]) => (
-            <a href={`/novinky/tema/${encodeURIComponent(t)}/`} class="nov-tag" style={tagStyle(t)}>
-              #{t} <span class="nov-tag-count">{count}</span>
+          {topTags.map(([tagName, count]) => (
+            <a href={localizePath(locale, `/novinky/tema/${encodeURIComponent(tagName)}/`)} class="nov-tag" style={tagStyle(tagName)}>
+              #{tagName} <span class="nov-tag-count">{count}</span>
             </a>
           ))}
         </div>
@@ -128,12 +136,13 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
             publishDate={new Date(a.published_at)}
             category={a.category}
             heroImage={a.featured_image_url}
+            locale={locale}
           />
         ))}
       </div>
     ) : (
       <p style="padding:48px 0; text-align:center; color:#666;">
-        <a href="/novinky/" style="color:#1a1a1a;">← Zpět na novinky</a>
+        <a href={localizePath(locale, '/novinky/')} style="color:#1a1a1a;">{t(locale, 'nov.back')}</a>
       </p>
     )}
   </div>

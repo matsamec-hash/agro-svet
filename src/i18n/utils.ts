@@ -28,7 +28,7 @@ export function localizePath(locale: Locale, path: string): string {
 
 /** Sekce, jejichž /sk verze jsou v Fázi 1c-obsah přeložené a tedy indexovatelné.
  *  Zbytek /sk zůstává noindex (servíruje cs tělo) dokud nebude lokalizován. */
-export const SK_LAUNCHED_PREFIXES = ['/stroje', '/znacky', '/srovnani'];
+export const SK_LAUNCHED_PREFIXES = ['/stroje', '/znacky', '/srovnani', '/novinky'];
 
 /** True, pokud cs-root cesta patří do launchnuté (přeložené) SK sekce. */
 export function isSkLaunchedPath(csRootPath: string): boolean {
@@ -53,6 +53,15 @@ export function t(locale: Locale, key: string): string {
 
 export function useTranslations(locale: Locale) {
   return (key: string) => t(locale, key);
+}
+
+/** Lokalizovaný název kategorie novinek s fallbackem na surovou hodnotu.
+ *  Reprodukuje původní `categoryLabels[category] ?? category`: pro známé
+ *  kategorie vrátí překlad, pro neznámé surovou kategorii (ne klíč). */
+export function localizedCategory(locale: Locale, category: string): string {
+  const key = `nov.cat.${category}`;
+  const val = t(locale, key);
+  return val === key ? category : val;
 }
 
 /** Překlad s interpolací {token} → params[token]. Fallback locale→cs→klíč. */

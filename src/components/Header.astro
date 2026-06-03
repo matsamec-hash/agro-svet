@@ -2,6 +2,7 @@
 import { getLocaleFromUrl, stripLocale } from '../i18n/utils';
 import { useTranslations } from '../i18n/utils';
 import { getNav } from '../i18n/nav';
+import LangSwitcher from './LangSwitcher.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -46,6 +47,9 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
         );
       })}
     </nav>
+
+    <!-- Language switcher (CZ / SK) -->
+    <LangSwitcher />
 
     <!-- Search (toggles input) -->
     <div class="search-container" id="search-container">
