@@ -3,7 +3,7 @@ import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
 import { getFooterColumns } from '../i18n/nav';
 
 const year = new Date().getFullYear();
-const locale = getLocaleFromUrl(Astro.url);
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 const columns = getFooterColumns(locale);
 // POZOR: whitespace v markupu níže je load-bearing — tagline jde přes

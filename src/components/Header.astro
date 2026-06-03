@@ -1,12 +1,14 @@
 ---
-import { getLocaleFromUrl } from '../i18n/utils';
+import { getLocaleFromUrl, stripLocale } from '../i18n/utils';
 import { useTranslations } from '../i18n/utils';
 import { getNav } from '../i18n/nav';
 
-const locale = getLocaleFromUrl(Astro.url);
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 const nav = getNav(locale);
-const current = Astro.url.pathname;
+// Active-nav porovnává proti neprefixovaným hrefs, tak strip locale prefix
+// (pro cs no-op → cs bit-identické; pro sk/uk se highlight zase chytí).
+const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname).path;
 ---
 
 <header style="background:#fff; border-bottom:1px solid #e8e8e8; position:sticky; top:0; z-index:100;">
