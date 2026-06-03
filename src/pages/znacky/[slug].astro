@@ -5,6 +5,11 @@ import { getCollection, render } from 'astro:content';
 import { itemListSchema } from '../../lib/structured-data';
 import { getAllModels } from '../../lib/stroje';
 import { TIER_LISTS, rankForTierList } from '../../lib/tier-lists';
+import { useTranslations, tf, getLocaleFromUrl } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const NL = '\n';
 
 export async function getStaticPaths() {
   const znacky = await getCollection('znacky');
@@ -25,19 +30,19 @@ const sources: { title: string; url: string }[] = d.sources ?? [];
 const founder = d.founder as { name: string; birth?: string; death?: string; note?: string } | undefined;
 const aktualizovano: Date | undefined = d.aktualizovano;
 const aktualizovanoStr = aktualizovano
-  ? new Intl.DateTimeFormat('cs-CZ', { month: 'long', year: 'numeric' }).format(aktualizovano)
+  ? new Intl.DateTimeFormat(locale === 'sk' ? 'sk-SK' : 'cs-CZ', { month: 'long', year: 'numeric' }).format(aktualizovano)
   : null;
 
 // Osnova (table of contents): nadpisy z prózy (depth 2) + sekce ze šablony.
 // Zlepšuje navigaci, jump-to odkazy ve vyhledávačích i orientaci pro LLM.
 const toc: { text: string; slug: string }[] = [
   ...headings.filter((h) => h.depth === 2).map((h) => ({ text: h.text, slug: h.slug })),
-  ...(timeline.length > 0 ? [{ text: 'Časová osa', slug: 'timeline-heading' }] : []),
-  ...(financials.length > 0 ? [{ text: 'Společnost v číslech', slug: 'financials-heading' }] : []),
-  ...(sources.length > 0 ? [{ text: 'Zdroje', slug: 'zdroje-heading' }] : []),
+  ...(timeline.length > 0 ? [{ text: tr('cat.zn.d.tocTimeline'), slug: 'timeline-heading' }] : []),
+  ...(financials.length > 0 ? [{ text: tr('cat.zn.d.tocFinancials'), slug: 'financials-heading' }] : []),
+  ...(sources.length > 0 ? [{ text: tr('cat.zn.d.tocSources'), slug: 'zdroje-heading' }] : []),
 ];
 const hasRichProfile = toc.length >= 3;
-const pageTitle = hasRichProfile ? `${znacka.data.name} — historie značky` : znacka.data.name;
+const pageTitle = hasRichProfile ? tf(locale, 'cat.zn.d.titleSuffix', { brand: znacka.data.name }) : znacka.data.name;
 
 const canonical = `https://agro-svet.cz/znacky/${znacka.id}/`;
 const sameAsList: string[] = [];
@@ -61,6 +66,13 @@ const catalogTop = catalogModels.slice(0, 12);
 const catalogTraktoryCount = catalogModels.filter((m) => m.category === 'traktory').length;
 const catalogKombajnyCount = catalogModels.filter((m) => m.category === 'kombajny').length;
 const catalogStrojeCount = catalogModels.length - catalogTraktoryCount - catalogKombajnyCount;
+// Reprodukuje původní JSX whitespace (text-node newline + collapse prázdných výrazů)
+// bit-identicky; viz formule ověřená proti dist snapshotům více značek.
+const catalogCountStr =
+  ` ${catalogModels.length} ${tr('cat.zn.d.catalogModels')}${NL}`
+  + (catalogTraktoryCount > 0 ? ` · ${catalogTraktoryCount} ${tr('cat.zn.d.catalogTraktory')}` : '') + ' '
+  + (catalogKombajnyCount > 0 ? ` · ${catalogKombajnyCount} ${tr('cat.zn.d.catalogKombajny')}` : '') + ' '
+  + (catalogStrojeCount > 0 ? ` · ${catalogStrojeCount} ${tr('cat.zn.d.catalogStroje')}` : '') + ' ';
 
 // Tier-list occurrences: žebříčky kde značka figuruje v Top-12.
 const tierAppearances = TIER_LISTS.flatMap((t) => {
@@ -128,7 +140,7 @@ const modelListJsonLd = brandModels.length > 0
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:28px;">
-      <a href="/znacky/" style="color:#666; text-decoration:none;">Značky</a>
+      <a href="/znacky/" style="color:#666; text-decoration:none;">{tr('cat.zn.d.bcBrands')}</a>
       <span style="margin:0 8px;">›</span>
       <span>{znacka.data.name}</span>
     </div>
@@ -138,11 +150,9 @@ const modelListJsonLd = brandModels.length > 0
         <h1 style="font-size:clamp(2.4rem,6vw,3.6rem); font-weight:900; letter-spacing:-1.5px; line-height:1; color:#1a1a1a; margin-bottom:12px;">{znacka.data.name}</h1>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:11px; font-weight:400; padding:3px 10px; border-radius:4px;">{znacka.data.zeme}</span>
-          <span style="background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:4px;">Zal. {znacka.data.zalozena}</span>
+          <span style="background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:4px;">{tf(locale, 'cat.zn.d.foundedTag', { founded: znacka.data.zalozena })}</span>
           {znacka.data.website && (
-            <a href={znacka.data.website} target="_blank" rel="noopener" style="background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:4px; text-decoration:none;">
-              ↗ Web výrobce
-            </a>
+            <a href={znacka.data.website} target="_blank" rel="noopener" style="background:#f5f5f5; color:#555; font-size:12px; padding:3px 10px; border-radius:4px; text-decoration:none;">{NL}{tr('cat.zn.d.webMaker')}{NL}</a>
           )}
         </div>
       </div>
@@ -162,8 +172,8 @@ const modelListJsonLd = brandModels.length > 0
     )}
 
     {hasRichProfile && (
-      <nav class="toc" aria-label="Obsah stránky">
-        <span class="toc-title">Obsah</span>
+      <nav class="toc" aria-label={tr('cat.zn.d.tocAria')}>
+        <span class="toc-title">{tr('cat.zn.d.toc')}</span>
         <ol class="toc-list">
           {toc.map((t) => (
             <li><a href={`#${t.slug}`}>{t.text}</a></li>
@@ -177,8 +187,8 @@ const modelListJsonLd = brandModels.length > 0
     {timeline.length > 0 && (
       <section class="hub-section" aria-labelledby="timeline-heading">
         <header class="hub-section-head">
-          <h2 id="timeline-heading">Časová osa</h2>
-          <span class="hub-section-sub">Klíčové milníky v historii značky</span>
+          <h2 id="timeline-heading">{tr('cat.zn.d.timeline')}</h2>
+          <span class="hub-section-sub">{tr('cat.zn.d.timelineSub')}</span>
         </header>
         <ol class="timeline">
           {timeline.map((t) => (
@@ -197,13 +207,13 @@ const modelListJsonLd = brandModels.length > 0
     {financials.length > 0 && (
       <section class="hub-section" aria-labelledby="financials-heading">
         <header class="hub-section-head">
-          <h2 id="financials-heading">Společnost v číslech</h2>
-          <span class="hub-section-sub">Celkové tržby a výnosy a čistý zisk podle fiskálních let</span>
+          <h2 id="financials-heading">{tr('cat.zn.d.financials')}</h2>
+          <span class="hub-section-sub">{tr('cat.zn.d.financialsSub')}</span>
         </header>
         <div class="fin-table-wrap">
           <table class="fin-table">
             <thead>
-              <tr><th>Fiskální rok</th><th>Tržby a výnosy</th><th>Čistý zisk</th></tr>
+              <tr><th>{tr('cat.zn.d.thYear')}</th><th>{tr('cat.zn.d.thRevenue')}</th><th>{tr('cat.zn.d.thNetIncome')}</th></tr>
             </thead>
             <tbody>
               {financials.map((f) => (
@@ -222,19 +232,14 @@ const modelListJsonLd = brandModels.length > 0
     {catalogTop.length > 0 && (
       <section class="hub-section" aria-labelledby="modely-heading">
         <header class="hub-section-head">
-          <h2 id="modely-heading">Modely v katalogu</h2>
-          <span class="hub-section-sub">
-            {catalogModels.length} modelů
-            {catalogTraktoryCount > 0 && ` · ${catalogTraktoryCount} traktorů`}
-            {catalogKombajnyCount > 0 && ` · ${catalogKombajnyCount} kombajnů`}
-            {catalogStrojeCount > 0 && ` · ${catalogStrojeCount} strojů`}
-          </span>
+          <h2 id="modely-heading">{tr('cat.zn.d.catalog')}</h2>
+          <span class="hub-section-sub">{catalogCountStr}</span>
         </header>
         <div class="model-grid">
           {catalogTop.map((m) => (
             <a href={modelUrl(m)} class="model-card">
               <div class="model-card-top">
-                <span class="model-cat">{m.category === 'traktory' ? 'Traktor' : m.category === 'kombajny' ? 'Kombajn' : 'Stroj'}</span>
+                <span class="model-cat">{m.category === 'traktory' ? tr('cat.zn.d.catTagTraktor') : m.category === 'kombajny' ? tr('cat.zn.d.catTagKombajn') : tr('cat.zn.d.catTagStroj')}</span>
                 {m.power_hp && <span class="model-power">{m.power_hp} k</span>}
               </div>
               <h3 class="model-name">{m.name}</h3>
@@ -246,7 +251,7 @@ const modelListJsonLd = brandModels.length > 0
           ))}
         </div>
         {catalogModels.length > catalogTop.length && (
-          <a class="hub-section-more" href={`/stroje/${znacka.id}/`}>Všech {catalogModels.length} modelů {znacka.data.name} →</a>
+          <a class="hub-section-more" href={`/stroje/${znacka.id}/`}>{tf(locale, 'cat.zn.d.catalogMore', { count: catalogModels.length, brand: znacka.data.name })}</a>
         )}
       </section>
     )}
@@ -254,8 +259,8 @@ const modelListJsonLd = brandModels.length > 0
     {brandEncyclopedia.length > 0 && (
       <section class="hub-section" aria-labelledby="encyklopedie-heading">
         <header class="hub-section-head">
-          <h2 id="encyklopedie-heading">Hloubkové profily v encyklopedii</h2>
-          <span class="hub-section-sub">Detail s technickými parametry, FAQ a popisy</span>
+          <h2 id="encyklopedie-heading">{tr('cat.zn.d.encyclopedia')}</h2>
+          <span class="hub-section-sub">{tr('cat.zn.d.encyclopediaSub')}</span>
         </header>
         <div class="enc-grid">
           {brandEncyclopedia.map((e) => (
@@ -272,8 +277,8 @@ const modelListJsonLd = brandModels.length > 0
     {tierAppearances.length > 0 && (
       <section class="hub-section" aria-labelledby="zebricky-heading">
         <header class="hub-section-head">
-          <h2 id="zebricky-heading">{znacka.data.name} v žebříčcích</h2>
-          <span class="hub-section-sub">Top umístění v našich kategorizovaných srovnáních</span>
+          <h2 id="zebricky-heading">{tf(locale, 'cat.zn.d.tiers', { brand: znacka.data.name })}</h2>
+          <span class="hub-section-sub">{tr('cat.zn.d.tiersSub')}</span>
         </header>
         <div class="tier-grid">
           {tierAppearances.map((t) => (
@@ -292,7 +297,7 @@ const modelListJsonLd = brandModels.length > 0
     {sources.length > 0 && (
       <section class="hub-section" aria-labelledby="zdroje-heading">
         <header class="hub-section-head">
-          <h2 id="zdroje-heading">Zdroje</h2>
+          <h2 id="zdroje-heading">{tr('cat.zn.d.sources')}</h2>
         </header>
         <ol class="sources-list">
           {sources.map((s) => (
@@ -303,19 +308,13 @@ const modelListJsonLd = brandModels.length > 0
     )}
 
     {aktualizovanoStr && (
-      <p class="updated-line">Obsah naposledy ověřen: {aktualizovanoStr}</p>
+      <p class="updated-line">{tf(locale, 'cat.zn.d.updated', { date: aktualizovanoStr! })}</p>
     )}
 
     <div style="margin-top:48px; display:flex; gap:10px; flex-wrap:wrap;">
-      <a href="/znacky/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
-        ← Zpět na značky
-      </a>
-      <a href={`/stroje/${znacka.id}/`} style="display:inline-flex; align-items:center; gap:8px; background:#0A0A0B; color:#FFEA00; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">
-        Všechny modely {znacka.data.name} →
-      </a>
-      <a href={`/bazar/?znacka=${znacka.id}`} style="display:inline-flex; align-items:center; gap:8px; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">
-        Inzeráty v bazaru →
-      </a>
+      <a href="/znacky/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">{NL}{tr('cat.zn.d.backToBrands')}{NL}</a>
+      <a href={`/stroje/${znacka.id}/`} style="display:inline-flex; align-items:center; gap:8px; background:#0A0A0B; color:#FFEA00; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">{NL}{tf(locale, 'cat.zn.d.allModels', { brand: znacka.data.name })}{NL}</a>
+      <a href={`/bazar/?znacka=${znacka.id}`} style="display:inline-flex; align-items:center; gap:8px; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">{NL}{tr('cat.zn.d.bazarAds')}{NL}</a>
     </div>
   </div>
 </Layout>
