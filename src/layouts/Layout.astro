@@ -55,10 +55,16 @@ const {
 const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSizes, preloadHeroMaxWidth) : null;
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
-const locale = getLocaleFromUrl(Astro.url);
+// Po případném middleware rewritu je Astro.url kanonická cs cesta → locale
+// i původní (locale-prefixovaná) cesta se čtou z locals (fallback pro jistotu).
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const localizedPathname = Astro.locals.localizedPathname ?? Astro.url.pathname;
 const ogLocale = { cs: 'cs_CZ', sk: 'sk_SK', uk: 'uk_UA' }[locale];
-const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonicalPath = localizedPathname.endsWith('/') ? localizedPathname : `${localizedPathname}/`;
 const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString();
+// /sk a /uk jsou do Fáze 1c (lokalizace obsahu) noindex — ať Google neindexuje
+// stránky s českým tělem. Pro cs beze změny.
+const effectiveNoindex = noindex || locale !== 'cs';
 
 // Route-based OG fallback: páry top-level cest k landing PNGs vygenerovaným
 // v scripts/build-og-images.mjs. Pokud konkrétní stránka nepředala ogImage,
@@ -87,7 +93,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta name="seznam-wmt" content="H957FuP9Pc7eQLHuPaTpuyrG03OUV0FD" />
   <title>{title} | agro-svět.cz</title>
   <meta name="description" content={description} />
-  <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+  <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
   <link rel="canonical" href={canonicalUrl} />
   <link rel="alternate" hreflang="cs" href={canonicalUrl} />
