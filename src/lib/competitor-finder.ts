@@ -4,6 +4,7 @@
 
 import type { StrojFlatModel, StrojKategorie } from './stroje';
 import { getAllModels } from './stroje';
+import type { Locale } from '../i18n/config';
 
 interface CompetitorOptions {
   /** Tolerance in percent of source power_hp (e.g. 15 → ±15%). */
@@ -66,34 +67,58 @@ export function findCompetitors(
   return [...byBrand.values()];
 }
 
-/** Generate a use-case description from power range + category. Static, factual. */
-export function useCaseDescription(category: StrojKategorie, powerHp: number | null): string | null {
+/** Generate a use-case description from power range + category. Static, factual.
+ *  cs branch is byte-identical to the original; sk adds the localized variant. */
+export function useCaseDescription(
+  category: StrojKategorie,
+  powerHp: number | null,
+  locale: Locale = 'cs',
+): string | null {
+  const sk = locale === 'sk';
   if (category === 'traktory' && powerHp !== null) {
     if (powerHp < 50) {
-      return 'Kompaktní traktor pro malé hospodářství, sady, vinice a komunální využití. Vhodný pro výměru do přibližně 30 hektarů.';
+      return sk
+        ? 'Kompaktný traktor pre malé hospodárstvo, sady, vinice a komunálne využitie. Vhodný pre výmeru do približne 30 hektárov.'
+        : 'Kompaktní traktor pro malé hospodářství, sady, vinice a komunální využití. Vhodný pro výměru do přibližně 30 hektarů.';
     }
     if (powerHp < 90) {
-      return 'Univerzální traktor pro menší a střední farmy s výměrou 30–100 hektarů. Zvládne polní práci s lehčími agregáty, sklizeň trávy a manipulaci s nakladačem.';
+      return sk
+        ? 'Univerzálny traktor pre menšie a stredné farmy s výmerou 30–100 hektárov. Zvládne poľnú prácu s ľahšími agregátmi, zber trávy a manipuláciu s nakladačom.'
+        : 'Univerzální traktor pro menší a střední farmy s výměrou 30–100 hektarů. Zvládne polní práci s lehčími agregáty, sklizeň trávy a manipulaci s nakladačem.';
     }
     if (powerHp < 160) {
-      return 'Středně výkonný traktor pro farmy s výměrou 100–300 hektarů. Optimální pro orbu, secí kombinace, polní postřik a lisování.';
+      return sk
+        ? 'Stredne výkonný traktor pre farmy s výmerou 100–300 hektárov. Optimálny na orbu, sejacie kombinácie, poľný postrek a lisovanie.'
+        : 'Středně výkonný traktor pro farmy s výměrou 100–300 hektarů. Optimální pro orbu, secí kombinace, polní postřik a lisování.';
     }
     if (powerHp < 250) {
-      return 'Výkonný traktor pro velké farmy s výměrou 300–600 hektarů. Plný potenciál uplatní u širokých secích kombinací, kypřičů a samochodných postřikovačů.';
+      return sk
+        ? 'Výkonný traktor pre veľké farmy s výmerou 300–600 hektárov. Plný potenciál uplatní pri širokých sejacích kombináciách, kypričoch a samohybných postrekovačoch.'
+        : 'Výkonný traktor pro velké farmy s výměrou 300–600 hektarů. Plný potenciál uplatní u širokých secích kombinací, kypřičů a samochodných postřikovačů.';
     }
-    return 'Vlajkový traktor pro velkovýrobu s výměrou nad 500 hektarů. Určen pro nejširší agregace, autonomní řízení a maximální denní produktivitu na poli.';
+    return sk
+      ? 'Vlajkový traktor pre veľkovýrobu s výmerou nad 500 hektárov. Určený pre najširšie agregácie, autonómne riadenie a maximálnu dennú produktivitu na poli.'
+      : 'Vlajkový traktor pro velkovýrobu s výměrou nad 500 hektarů. Určen pro nejširší agregace, autonomní řízení a maximální denní produktivitu na poli.';
   }
   if (category === 'kombajny' && powerHp !== null) {
     if (powerHp < 250) {
-      return 'Kompaktní sklízecí mlátička pro střední farmy s plochou obilnin do 200 hektarů. Záběr žacího stolu typicky 5–6 m.';
+      return sk
+        ? 'Kompaktný kombajn pre stredné farmy s plochou obilnín do 200 hektárov. Záber žacieho stola typicky 5–6 m.'
+        : 'Kompaktní sklízecí mlátička pro střední farmy s plochou obilnin do 200 hektarů. Záběr žacího stolu typicky 5–6 m.';
     }
     if (powerHp < 400) {
-      return 'Středně výkonná sklízecí mlátička pro farmy s plochou obilnin 200–500 hektarů. Záběr 6–9 m, kapacita zásobníku obvykle 8 000–10 000 l.';
+      return sk
+        ? 'Stredne výkonný kombajn pre farmy s plochou obilnín 200–500 hektárov. Záber 6–9 m, kapacita zásobníka obvykle 8 000–10 000 l.'
+        : 'Středně výkonná sklízecí mlátička pro farmy s plochou obilnin 200–500 hektarů. Záběr 6–9 m, kapacita zásobníku obvykle 8 000–10 000 l.';
     }
     if (powerHp < 600) {
-      return 'Výkonná sklízecí mlátička pro velké farmy s plochou obilnin nad 500 hektarů. Záběr 9–12 m, kapacita zásobníku 10 000–14 000 l.';
+      return sk
+        ? 'Výkonný kombajn pre veľké farmy s plochou obilnín nad 500 hektárov. Záber 9–12 m, kapacita zásobníka 10 000–14 000 l.'
+        : 'Výkonná sklízecí mlátička pro velké farmy s plochou obilnin nad 500 hektarů. Záběr 9–12 m, kapacita zásobníku 10 000–14 000 l.';
     }
-    return 'Vlajková sklízecí mlátička pro velkovýrobu — největší záběry (12 m+), zásobník 14 000+ l, určeno pro nejvyšší denní produktivitu na rozsáhlých polích.';
+    return sk
+      ? 'Vlajkový kombajn pre veľkovýrobu — najväčšie zábery (12 m+), zásobník 14 000+ l, určené pre najvyššiu dennú produktivitu na rozsiahlych poliach.'
+      : 'Vlajková sklízecí mlátička pro velkovýrobu — největší záběry (12 m+), zásobník 14 000+ l, určeno pro nejvyšší denní produktivitu na rozsáhlých polích.';
   }
   return null;
 }

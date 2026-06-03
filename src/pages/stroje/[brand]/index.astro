@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { brand: brandSlug } = Astro.params;
-const brand = getBrand(brandSlug!);
+const brand = getBrand(brandSlug!, locale);
 if (!brand) return Astro.rewrite('/404');
 
 // Existuje-li redakční profil značky (historie), nabídneme na něj odkaz.

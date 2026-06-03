@@ -23,7 +23,7 @@ import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../../lib/st
 import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
 import { comparisonInsights } from '../../../lib/comparison-insights';
-import { useTranslations, tf, getLocaleFromUrl } from '../../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -79,15 +79,15 @@ const categoryFallback = a.category === 'traktory' ? '/images/traktor.webp' : '/
 const aPhoto = a.image_url ?? aSeries?.series.image_url ?? categoryFallback;
 const bPhoto = b.image_url ?? bSeries?.series.image_url ?? categoryFallback;
 
-const aUseCase = useCaseDescription(a.category, a.power_hp);
-const bUseCase = useCaseDescription(b.category, b.power_hp);
+const aUseCase = useCaseDescription(a.category, a.power_hp, locale);
+const bUseCase = useCaseDescription(b.category, b.power_hp, locale);
 
 // Dynamic per-pair insights: TL;DR verdict, decision boxes, FAQs, fresh
 // description with concrete diff numbers. Generated from StrojFlatModel data
 // so each of ~1500 pages reads uniquely (no boilerplate Google demotes).
-const insights = comparisonInsights(a, b);
+const insights = comparisonInsights(a, b, locale);
 
-const canonical = `https://agro-svet.cz/srovnani/${pair.combo}/`;
+const canonical = `https://agro-svet.cz${localizePath(locale, `/srovnani/${pair.combo}/`)}`;
 const title = tf(
   locale,
   a.category === 'traktory' ? 'cat.sr.c.titleTraktory' : 'cat.sr.c.titleKombajny',
@@ -97,7 +97,7 @@ const description = insights.shortDescription;
 
 const related = relatedComparisonsFor(a, 6).filter((p) => p.combo !== pair.combo).slice(0, 5);
 
-const lastUpdatedHuman = new Date(insights.lastUpdatedIso).toLocaleDateString('cs-CZ', {
+const lastUpdatedHuman = new Date(insights.lastUpdatedIso).toLocaleDateString(locale === 'sk' ? 'sk-SK' : 'cs-CZ', {
   year: 'numeric', month: 'long', day: 'numeric',
 });
 

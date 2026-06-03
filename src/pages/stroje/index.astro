@@ -1,5 +1,7 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. cs výstup identický (rovnaký kód). Canonical odvodí Layout.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, type StrojKategorie } from '../../lib/stroje';
 import { useTranslations, plural, tf, getLocaleFromUrl } from '../../i18n/utils';

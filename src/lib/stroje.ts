@@ -182,6 +182,41 @@ const brandModules = import.meta.glob('/src/data/stroje/*.yaml', {
   import: 'default',
 }) as Record<string, unknown>;
 
+// Per-locale prose overlays: /src/data/stroje/<locale>/<slug>.yaml
+// (country/description/category-names/series-descriptions). cs has no overlay.
+const overlayModules = import.meta.glob('/src/data/stroje/*/*.yaml', {
+  eager: true,
+  import: 'default',
+}) as Record<string, unknown>;
+
+interface StrojOverlay {
+  country?: string;
+  description?: string;
+  categories?: Record<string, string>;
+  series?: Record<string, string>;
+}
+
+function getOverlay(slug: string, locale: string): StrojOverlay | null {
+  return (overlayModules[`/src/data/stroje/${locale}/${slug}.yaml`] as StrojOverlay) ?? null;
+}
+
+// Deep-clone the cached cs brand and overlay localized prose onto it.
+// cs structure stays the single source of truth — only prose strings change.
+function localizeBrand(base: StrojBrand, locale: string): StrojBrand {
+  const ov = getOverlay(base.slug, locale);
+  if (!ov) return base;
+  const b = structuredClone(base) as any;
+  if (ov.country) b.country = ov.country;
+  if (ov.description) b.description = ov.description;
+  for (const [ck, cat] of Object.entries(b.categories || {}) as [string, any][]) {
+    if (ov.categories?.[ck]) cat.name = ov.categories[ck];
+    for (const s of cat.series || []) {
+      if (ov.series?.[s.slug]) s.description = ov.series[s.slug];
+    }
+  }
+  return b as StrojBrand;
+}
+
 let cachedBrands: StrojBrand[] | null = null;
 let cachedFlat: StrojFlatModel[] | null = null;
 
@@ -218,8 +253,10 @@ export function getAllBrands(): StrojBrand[] {
   return brands;
 }
 
-export function getBrand(slug: string): StrojBrand | undefined {
-  return getAllBrands().find((b) => b.slug === slug);
+export function getBrand(slug: string, locale: string = 'cs'): StrojBrand | undefined {
+  const base = getAllBrands().find((b) => b.slug === slug);
+  if (!base || locale === 'cs') return base;
+  return localizeBrand(base, locale);
 }
 
 export function getAllModels(): StrojFlatModel[] {

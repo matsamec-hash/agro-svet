@@ -59,9 +59,8 @@ const encyklopedie = defineCollection({
   }),
 });
 
-const znacky = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/znacky' }),
-  schema: z.object({
+const znackySchema = () =>
+  z.object({
     name: z.string(),
     slug: z.string(),
     logo: z.string().optional(),
@@ -106,7 +105,18 @@ const znacky = defineCollection({
       title: z.string(),
       url: z.string(),
     })).optional(),
-  }),
+  });
+
+const znacky = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky' }),
+  schema: znackySchema(),
+});
+
+// SK-localized brand profiles (overlay collection — kept separate so cs-facing
+// getCollection('znacky') listings/sitemap/llms stay untouched).
+const znackySk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky-sk' }),
+  schema: znackySchema(),
 });
 
 const puda = defineCollection({
@@ -174,4 +184,4 @@ const howto = defineCollection({
   }),
 });
 
-export const collections = { novinky, encyklopedie, znacky, puda, dotace, howto };
+export const collections = { novinky, encyklopedie, znacky, znackySk, puda, dotace, howto };
