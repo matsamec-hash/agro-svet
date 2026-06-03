@@ -1,66 +1,49 @@
 ---
+import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
+import { getFooterColumns } from '../i18n/nav';
+
 const year = new Date().getFullYear();
+const locale = getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const columns = getFooterColumns(locale);
 ---
 
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-grid">
       <div class="footer-col footer-brand">
-        <a href="/" class="footer-logo" aria-label="agro-svět.cz domů">
-          <span>agro-svět.cz</span>
+        <a href="/" class="footer-logo" aria-label={tr('footer.logoHome')}>
+          <span>{tr('brand.name')}</span>
         </a>
-        <p class="footer-tagline">
-          Zemědělská technika, novinky a encyklopedie. Bazar, statistiky, fotosoutěž — vše pro českého zemědělce.
-        </p>
+        <p class="footer-tagline" set:html={'\n' + tr('footer.tagline') + '\n'}></p>
       </div>
 
-      <div class="footer-col">
-        <h3>Obsah</h3>
-        <ul>
-          <li><a href="/novinky/">Novinky</a></li>
-          <li><a href="/stroje/">Katalog techniky</a></li>
-          <li><a href="/plemena/">Plemena zvířat</a></li>
-          <li><a href="/puda/">Zemědělská půda</a></li>
-          <li><a href="/statistiky/">Data a statistiky</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h3>Bazar</h3>
-        <ul>
-          <li><a href="/bazar/">Všechny inzeráty</a></li>
-          <li><a href="/bazar/novy/">Vložit inzerát</a></li>
-          <li><a href="/bazar/prihlaseni/">Přihlásit</a></li>
-          <li><a href="/bazar/registrace/">Registrace</a></li>
-          <li><a href="/bazar/pravidla/">Pravidla bazaru</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h3>Fotosoutěž</h3>
-        <ul>
-          <li><a href="/fotosoutez/">Aktuální kolo</a></li>
-          <li><a href="/fotosoutez/archiv/">Archiv</a></li>
-          <li><a href="/fotosoutez/pravidla/">Pravidla</a></li>
-          <li><a href="/fotosoutez/gdpr/">Ochrana osobních údajů</a></li>
-        </ul>
-      </div>
+      {columns.map((col, ci) => (
+        <Fragment>{ci > 0 ? ' ' : ''}<div class="footer-col">
+          <h3>{col.heading}</h3>
+          <ul>
+            {col.links.map((l, li) => (
+              <Fragment>{li > 0 ? ' ' : ''}<li><a href={l.href}>{l.label}</a></li></Fragment>
+            ))}
+          </ul>
+        </div></Fragment>
+      ))}
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; {year} agro-svět.cz · Provozuje <a href="https://samecdigital.com" target="_blank" rel="noopener" class="footer-operator-link">Samec Digital s.r.o.</a>, IČO 29547539</p>
+      <p>&copy; {year} agro-svět.cz · {tr('footer.operatedBy')} <a href="https://samecdigital.com" target="_blank" rel="noopener" class="footer-operator-link">Samec Digital s.r.o.</a>, IČO 29547539</p>
       <div class="footer-bottom-links">
-        <a href="/hledat/">Hledat</a>
+        <a href="/hledat/">{tr('footer.search')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/redakce/">Redakce</a>
+        <a href="/redakce/">{tr('footer.editorial')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/podminky-pouziti/">Podmínky použití</a>
+        <a href="/podminky-pouziti/">{tr('footer.terms')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/fotosoutez/gdpr/">GDPR</a>
+        <a href="/fotosoutez/gdpr/">{tr('footer.gdpr')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/dsa-kontakt/">DSA</a>
+        <a href="/dsa-kontakt/">{tr('footer.dsa')}</a>
         <span aria-hidden="true">·</span>
-        <a href="mailto:info@samecdigital.com">Kontakt</a>
+        <a href="mailto:info@samecdigital.com">{tr('footer.contact')}</a>
       </div>
     </div>
   </div>
