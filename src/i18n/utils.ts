@@ -55,6 +55,15 @@ export function useTranslations(locale: Locale) {
   return (key: string) => t(locale, key);
 }
 
+/** Lokalizovaný název kategorie novinek s fallbackem na surovou hodnotu.
+ *  Reprodukuje původní `categoryLabels[category] ?? category`: pro známé
+ *  kategorie vrátí překlad, pro neznámé surovou kategorii (ne klíč). */
+export function localizedCategory(locale: Locale, category: string): string {
+  const key = `nov.cat.${category}`;
+  const val = t(locale, key);
+  return val === key ? category : val;
+}
+
 /** Překlad s interpolací {token} → params[token]. Fallback locale→cs→klíč. */
 export function tf(locale: Locale, key: string, params: Record<string, string | number>): string {
   const tmpl = ui[locale]?.[key] ?? ui[defaultLocale][key] ?? key;

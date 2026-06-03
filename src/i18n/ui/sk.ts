@@ -385,6 +385,7 @@ const sk: Record<string, string> = {
   'nov.cat.legislativa': 'Legislatíva',
   'nov.cat.znacky': 'Značky',
   'nov.cat.novinky': 'Novinky',
+  'nov.cat.allInTitle': 'Všetky články v kategórii {label}',
   // language switcher
   'lang.switch': 'Jazyk',
   'lang.cs': 'CZ',
