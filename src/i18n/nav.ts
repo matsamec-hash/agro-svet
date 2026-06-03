@@ -20,6 +20,9 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
     children: [
       { labelKey: 'nav.tema.all', href: '/novinky/' },
       { labelKey: 'nav.tema.tech', href: '/novinky/kategorie/technika/' },
+      // Záměrně NEgated pro sk/uk: tohle je novinková KATEGORIE (tag), ne
+      // jurisdikčně vázaný nástroj. Skrytá je top-level sekce `data` níže,
+      // která obsahuje reálnou /dotace/ stránku (CZ dotační kalkulačky).
       { labelKey: 'nav.tema.dotace', href: '/novinky/kategorie/dotace/' },
       { labelKey: 'nav.tema.trh', href: '/novinky/kategorie/trh/' },
       { labelKey: 'nav.tema.legislativa', href: '/novinky/kategorie/legislativa/' },

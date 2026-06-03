@@ -6,6 +6,10 @@ const year = new Date().getFullYear();
 const locale = getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 const columns = getFooterColumns(locale);
+// POZOR: whitespace v markupu níže je load-bearing — tagline jde přes
+// set:html={'\n'+...+'\n'} a sloupce/odkazy mají {ci>0?' ':''} / {li>0?' ':''}
+// separátory, aby cs výstup zůstal BYTE-IDENTICKÝ s původním statickým markupem
+// (ověřeno build-diffem). Nereformátuj bez re-ověření diffu proti masteru.
 ---
 
 <footer class="site-footer">
