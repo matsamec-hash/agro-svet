@@ -10,10 +10,14 @@ describe('kalkulačka i18n — parity klíčů sk ↔ cs', () => {
     expect(slugs.length).toBeGreaterThan(0);
   });
 
+  const CS_ONLY_PREFIXES = ['providers', 'providerSection'];
+  const stripCsOnly = (paths: string[]) =>
+    paths.filter((p) => !CS_ONLY_PREFIXES.some((pre) => p === pre || p.startsWith(`${pre}[`) || p.startsWith(`${pre}.`)));
+
   for (const slug of slugs) {
-    it(`${slug}: sk má přesně stejné klíče jako cs`, () => {
-      const csKeys = keyPaths(calcRegistry[slug].cs);
-      const skKeys = keyPaths(calcRegistry[slug].sk);
+    it(`${slug}: sk má přesně stejné klíče jako cs (mimo cs-only strukturální pole)`, () => {
+      const csKeys = stripCsOnly(keyPaths(calcRegistry[slug].cs));
+      const skKeys = stripCsOnly(keyPaths(calcRegistry[slug].sk));
       expect(skKeys).toEqual(csKeys);
     });
   }
