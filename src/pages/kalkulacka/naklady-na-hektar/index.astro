@@ -1,82 +1,56 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. cs výstup sémanticky identický.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
+import { content } from '../../../i18n/kalkulacka/naklady-na-hektar';
+import { crumbs } from '../../../i18n/kalkulacka/common';
 
+const locale = Astro.locals.locale ?? 'cs';
+const c = content[locale] ?? content.cs;
+const cr = crumbs[locale] ?? crumbs.cs;
+const operations = c.operations;
 const canonical = `${SITE_URL}/kalkulacka/naklady-na-hektar/`;
-
-// Operation presets — typical field capacity (ha/h) and fuel use (l/h) for a
-// mid-power tractor + implement, or self-propelled machine. Conservative CZ
-// averages for 2026; real numbers vary with soil, terrain, working width.
-const operations = [
-  { id: 'orba', name: 'Orba (pluh)', haPerHour: 1.2, fuelPerHour: 22, note: 'Náročná operace — vysoká spotřeba, malý výkon plochy.' },
-  { id: 'podmitka', name: 'Podmítka / kypření', haPerHour: 3.5, fuelPerHour: 18, note: 'Mělké zpracování, vyšší pojezdová rychlost.' },
-  { id: 'seti', name: 'Setí (secí kombinace)', haPerHour: 4.0, fuelPerHour: 16, note: 'Široký záběr, střední spotřeba.' },
-  { id: 'postrik', name: 'Postřik', haPerHour: 12.0, fuelPerHour: 9, note: 'Velký záběr, nízká spotřeba — nejlevnější na hektar.' },
-  { id: 'hnojeni', name: 'Rozmetání hnojiv', haPerHour: 9.0, fuelPerHour: 10, note: 'Vysoký výkon plochy díky širokému rozhozu.' },
-  { id: 'sklizen-obili', name: 'Sklizeň obilí (kombajn)', haPerHour: 2.5, fuelPerHour: 38, note: 'Samojízdný stroj, vysoká spotřeba motoru.' },
-  { id: 'sklizen-pice', name: 'Sklizeň píce (řezačka/lis)', haPerHour: 3.0, fuelPerHour: 30, note: 'Energeticky náročná sklizňová operace.' },
-];
-
-const faqItems = [
-  {
-    q: 'Co všechno se počítá do nákladů na hektar?',
-    a: 'Tato kalkulačka pokrývá variabilní provozní náklady — palivo, práci obsluhy a paušál na opravy a údržbu. Nezahrnuje fixní náklady jako odpisy stroje, leasing, pojištění nebo garážování. Pro celkové náklady na hektar je třeba fixní náklady připočítat zvlášť.',
-  },
-  {
-    q: 'Proč je orba dražší než postřik?',
-    a: 'Orba je energeticky nejnáročnější operace — pluh klade velký tažný odpor, takže traktor spotřebuje hodně paliva a zvládne jen malou plochu za hodinu. Postřik má naopak široký záběr a malý odpor, takže stejná hodina práce pokryje mnohonásobně větší plochu.',
-  },
-  {
-    q: 'Jak přesné jsou výchozí hodnoty výkonu plochy?',
-    a: 'Přednastavené hodnoty (ha/h, l/h) jsou konzervativní české průměry pro stroj střední výkonové třídy. Skutečnost závisí na typu půdy, svažitosti, pracovní šířce nářadí a stylu jízdy. Hodnoty si proto upravte podle vlastní zkušenosti — kalkulačka je počítá dál automaticky.',
-  },
-  {
-    q: 'Jakou cenu nafty mám zadat?',
-    a: 'Zadejte cenu, za kterou reálně tankujete — zemědělci často využívají vratku spotřební daně z minerálních olejů (tzv. zelená nafta), takže efektivní cena bývá nižší než pumpová. Pro plánování použijte cenu po vratce.',
-  },
-];
+const faqItems = c.faq;
+const calcCfg = { currency: c.currency, numberLocale: c.numberLocale, js: c.js, operations: c.operations };
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kalkulačky', url: '/kalkulacka/' },
-  { name: 'Náklady na hektar', url: canonical },
+  { name: cr.home, url: locale === 'cs' ? '/' : `/${locale}/` },
+  { name: cr.hub, url: locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/` },
+  { name: c.crumb, url: canonical },
 ]);
 const faqJsonLd = faqPageSchema(faqItems);
 ---
 
 <Layout
-  title="Kalkulačka provozních nákladů na hektar — palivo, práce, údržba"
-  description="Spočítejte provozní náklady na hektar pro orbu, setí, postřik nebo sklizeň. Spotřeba nafty, výkon plochy, práce obsluhy — Kč/ha pro plánování farmy."
-  canonical={canonical}
+  title={c.title}
+  description={c.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
 
   <div class="calc-page" data-operations={JSON.stringify(operations)}>
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/kalkulacka/">Kalkulačky</a>
+      <a href={locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/`}>{cr.hub}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <span class="current">Náklady na hektar</span>
+      <span class="current">{c.crumb}</span>
     </nav>
 
     <header class="hero">
-      <span class="kicker">Kalkulačka · ekonomika provozu</span>
-      <h1>Provozní náklady na hektar</h1>
-      <p class="hero-lede">
-        Vyberte operaci, upravte spotřebu a výkon plochy podle svých podmínek a doplňte ceny.
-        Kalkulačka spočítá variabilní náklady na hektar — palivo, práci obsluhy a paušál na údržbu.
-        Fixní náklady (odpisy, leasing, pojištění) je třeba připočítat zvlášť.
-      </p>
+      <span class="kicker">{c.kicker}</span>
+      <h1>{c.h1}</h1>
+      <p class="hero-lede">{c.lede}</p>
     </header>
 
     <div class="calc-layout">
       <form class="calc-form" id="calc-form" autocomplete="off">
         <div class="cf-group">
-          <label for="operation">Polní operace</label>
+          <label for="operation">{c.form.operation}</label>
           <select id="operation" class="cf-select">
             {operations.map((op) => <option value={op.id}>{op.name}</option>)}
           </select>
@@ -85,14 +59,14 @@ const faqJsonLd = faqPageSchema(faqItems);
 
         <div class="cf-row">
           <div class="cf-group">
-            <label for="ha-per-hour">Výkon plochy</label>
+            <label for="ha-per-hour">{c.form.haPerHour}</label>
             <div class="cf-input-unit">
               <input type="number" id="ha-per-hour" min="0.1" max="40" step="0.1" inputmode="decimal" />
               <span class="cf-unit">ha/h</span>
             </div>
           </div>
           <div class="cf-group">
-            <label for="fuel-per-hour">Spotřeba nafty</label>
+            <label for="fuel-per-hour">{c.form.fuelPerHour}</label>
             <div class="cf-input-unit">
               <input type="number" id="fuel-per-hour" min="1" max="80" step="0.5" inputmode="decimal" />
               <span class="cf-unit">l/h</span>
@@ -102,70 +76,70 @@ const faqJsonLd = faqPageSchema(faqItems);
 
         <div class="cf-row">
           <div class="cf-group">
-            <label for="fuel-price">Cena nafty (po vratce)</label>
+            <label for="fuel-price">{c.form.fuelPrice}</label>
             <div class="cf-input-unit">
-              <input type="number" id="fuel-price" min="1" max="60" step="0.5" value="32" inputmode="decimal" />
-              <span class="cf-unit">Kč/l</span>
+              <input type="number" id="fuel-price" min="1" max="60" step="0.5" value={c.defaults.fuelPrice} inputmode="decimal" />
+              <span class="cf-unit">{c.currency === 'EUR' ? '€/l' : 'Kč/l'}</span>
             </div>
           </div>
           <div class="cf-group">
-            <label for="labor-cost">Práce obsluhy</label>
+            <label for="labor-cost">{c.form.laborCost}</label>
             <div class="cf-input-unit">
-              <input type="number" id="labor-cost" min="0" max="2000" step="10" value="280" inputmode="numeric" />
-              <span class="cf-unit">Kč/h</span>
+              <input type="number" id="labor-cost" min="0" max="2000" step="10" value={c.defaults.laborCost} inputmode="numeric" />
+              <span class="cf-unit">{c.currency === 'EUR' ? '€/h' : 'Kč/h'}</span>
             </div>
           </div>
         </div>
 
         <div class="cf-row">
           <div class="cf-group">
-            <label for="maintenance">Údržba a opravy</label>
+            <label for="maintenance">{c.form.maintenance}</label>
             <div class="cf-input-unit">
-              <input type="number" id="maintenance" min="0" max="2000" step="10" value="150" inputmode="numeric" />
-              <span class="cf-unit">Kč/h</span>
+              <input type="number" id="maintenance" min="0" max="2000" step="10" value={c.defaults.maintenance} inputmode="numeric" />
+              <span class="cf-unit">{c.currency === 'EUR' ? '€/h' : 'Kč/h'}</span>
             </div>
-            <output class="cf-hint">Paušál na opravy, oleje, opotřebení dílů.</output>
+            <output class="cf-hint">{c.form.maintenanceHint}</output>
           </div>
           <div class="cf-group">
-            <label for="area">Plocha (volitelné)</label>
+            <label for="area">{c.form.area}</label>
             <div class="cf-input-unit">
-              <input type="number" id="area" min="0" max="100000" step="1" value="100" inputmode="numeric" />
+              <input type="number" id="area" min="0" max="100000" step="1" value={c.defaults.area} inputmode="numeric" />
               <span class="cf-unit">ha</span>
             </div>
-            <output class="cf-hint">Pro výpočet celkových nákladů a času.</output>
+            <output class="cf-hint">{c.form.areaHint}</output>
           </div>
         </div>
       </form>
 
       <div class="calc-result">
         <div class="cr-headline">
-          <span class="cr-label">Provozní náklady na hektar</span>
+          <span class="cr-label">{c.result.perHaKicker}</span>
           <span class="cr-value" id="result-per-ha">—</span>
         </div>
         <div class="cr-breakdown">
           <div class="crb-row">
-            <span class="crb-label">Palivo</span>
+            <span class="crb-label">{c.result.fuel}</span>
             <span class="crb-bar"><span class="crb-fill" id="bar-fuel"></span></span>
             <span class="crb-value" id="result-fuel">—</span>
           </div>
           <div class="crb-row">
-            <span class="crb-label">Práce obsluhy</span>
+            <span class="crb-label">{c.result.labor}</span>
             <span class="crb-bar"><span class="crb-fill" id="bar-labor"></span></span>
             <span class="crb-value" id="result-labor">—</span>
           </div>
           <div class="crb-row">
-            <span class="crb-label">Údržba</span>
+            <span class="crb-label">{c.result.maint}</span>
             <span class="crb-bar"><span class="crb-fill" id="bar-maint"></span></span>
             <span class="crb-value" id="result-maint">—</span>
           </div>
         </div>
         <div class="cr-grid">
           <div class="cr-stat">
-            <span class="crs-label">Náklady celkem</span>
+            <span class="crs-label">{c.result.totalCost}</span>
             <span class="crs-value" id="result-total">—</span>
           </div>
           <div class="cr-stat">
-            <span class="crs-label">Čas práce</span>
+            <span class="crs-label">{c.result.workTime}</span>
             <span class="crs-value" id="result-hours">—</span>
           </div>
         </div>
@@ -186,15 +160,17 @@ const faqJsonLd = faqPageSchema(faqItems);
 
     <section class="cross-cta">
       <div>
-        <span class="cc-kicker">Plánujete pořízení stroje?</span>
-        <h2>Spočítejte si leasing nebo projděte katalog techniky</h2>
+        <span class="cc-kicker">{c.cta.kicker}</span>
+        <h2>{c.cta.heading}</h2>
         <div class="cc-actions">
-          <a class="cc-btn primary" href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu</a>
-          <a class="cc-btn ghost" href="/stroje/traktory/">Katalog traktorů</a>
-          <a class="cc-btn ghost" href="/stroje/kombajny/">Katalog kombajnů</a>
+          <a class="cc-btn primary" href={locale === 'cs' ? '/kalkulacka/leasing-traktoru/' : `/${locale}/kalkulacka/leasing-traktoru/`}>{c.cta.leasing}</a>
+          <a class="cc-btn ghost" href={locale === 'cs' ? '/stroje/traktory/' : `/${locale}/stroje/traktory/`}>{c.cta.tractors}</a>
+          <a class="cc-btn ghost" href={locale === 'cs' ? '/stroje/kombajny/' : `/${locale}/stroje/kombajny/`}>{c.cta.combines}</a>
         </div>
       </div>
     </section>
+
+    <script type="application/json" id="calc-cfg" set:html={JSON.stringify(calcCfg)}></script>
   </div>
 </Layout>
 
@@ -280,8 +256,16 @@ const faqJsonLd = faqPageSchema(faqItems);
 <script>
   // ── Cost-per-hectare calculator ───────────────────────────────────────────
   const page = document.querySelector<HTMLElement>('.calc-page');
+  const cfg = JSON.parse(document.getElementById('calc-cfg')?.textContent || '{}');
   const operations: { id: string; name: string; haPerHour: number; fuelPerHour: number; note: string }[] =
-    JSON.parse(page?.dataset.operations ?? '[]');
+    cfg.operations ?? JSON.parse(page?.dataset.operations ?? '[]');
+  const numberLocale: string = cfg.numberLocale ?? 'cs-CZ';
+  const currency: string = cfg.currency ?? 'CZK';
+  const js = cfg.js ?? {};
+  const fmtMoney = (n: number) =>
+    new Intl.NumberFormat(numberLocale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(Math.round(n));
+  const fmtMoney1 = (n: number) =>
+    new Intl.NumberFormat(numberLocale, { style: 'currency', currency, maximumFractionDigits: 1 }).format(n);
 
   const opEl = document.getElementById('operation') as HTMLSelectElement;
   const haEl = document.getElementById('ha-per-hour') as HTMLInputElement;
@@ -291,11 +275,6 @@ const faqJsonLd = faqPageSchema(faqItems);
   const maintEl = document.getElementById('maintenance') as HTMLInputElement;
   const areaEl = document.getElementById('area') as HTMLInputElement;
   const opNote = document.getElementById('operation-note');
-
-  const fmtCZK = (n: number) =>
-    new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(Math.round(n));
-  const fmtCZK1 = (n: number) =>
-    new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 1 }).format(n);
 
   /** When the operation changes, repopulate ha/h + l/h with the preset baseline. */
   function applyPreset() {
@@ -320,10 +299,10 @@ const faqJsonLd = faqPageSchema(faqItems);
     const maintPerHa = maintCost / haPerHour;
     const totalPerHa = fuelPerHa + laborPerHa + maintPerHa;
 
-    document.getElementById('result-per-ha')!.textContent = `${fmtCZK1(totalPerHa)}/ha`;
-    document.getElementById('result-fuel')!.textContent = `${fmtCZK1(fuelPerHa)}/ha`;
-    document.getElementById('result-labor')!.textContent = `${fmtCZK1(laborPerHa)}/ha`;
-    document.getElementById('result-maint')!.textContent = `${fmtCZK1(maintPerHa)}/ha`;
+    document.getElementById('result-per-ha')!.textContent = `${fmtMoney1(totalPerHa)}${js.perHa ?? '/ha'}`;
+    document.getElementById('result-fuel')!.textContent = `${fmtMoney1(fuelPerHa)}${js.perHa ?? '/ha'}`;
+    document.getElementById('result-labor')!.textContent = `${fmtMoney1(laborPerHa)}${js.perHa ?? '/ha'}`;
+    document.getElementById('result-maint')!.textContent = `${fmtMoney1(maintPerHa)}${js.perHa ?? '/ha'}`;
 
     // Breakdown bars — share of total
     const pct = (v: number) => (totalPerHa > 0 ? `${Math.round((v / totalPerHa) * 100)}%` : '0%');
@@ -335,10 +314,10 @@ const faqJsonLd = faqPageSchema(faqItems);
     if (area > 0) {
       const totalCost = totalPerHa * area;
       const hours = area / haPerHour;
-      document.getElementById('result-total')!.textContent = fmtCZK(totalCost);
+      document.getElementById('result-total')!.textContent = fmtMoney(totalCost);
       const h = Math.floor(hours);
       const m = Math.round((hours - h) * 60);
-      document.getElementById('result-hours')!.textContent = `${h} h ${m} min`;
+      document.getElementById('result-hours')!.textContent = `${h} ${js.hoursH ?? 'h'} ${m} ${js.hoursMin ?? 'min'}`;
     } else {
       document.getElementById('result-total')!.textContent = '—';
       document.getElementById('result-hours')!.textContent = '—';
