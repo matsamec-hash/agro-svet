@@ -355,6 +355,9 @@ const sk: Record<string, string> = {
   // — novinky —
   'nov.section': 'Novinky',
   'nov.title.default': 'Poľnohospodárstvo v pohybe',
+  'nov.title.cat': 'Kategória: {label}',
+  'nov.title.query': 'Hľadáte: „{q}"',
+  'nov.ld.latest': 'Aktuálne novinky',
   'nov.lead': 'Sledujeme nové stroje, dotačné programy, trhy aj legislatívne zmeny. Všetko, čo potrebujete vedieť ako poľnohospodár.',
   'nov.desc.default': 'Aktuálne správy zo sveta poľnohospodárskej techniky — nové stroje, dotácie, trh a legislatíva.',
   'nov.back': '← Späť na novinky',

@@ -355,6 +355,9 @@ const cs: Record<string, string> = {
   // — novinky —
   'nov.section': 'Novinky',
   'nov.title.default': 'Zemědělství v pohybu',
+  'nov.title.cat': 'Kategorie: {label}',
+  'nov.title.query': 'Hledáte: „{q}"',
+  'nov.ld.latest': 'Aktuální novinky',
   'nov.lead': 'Sledujeme nové stroje, dotační programy, trhy i legislativní změny. Vše, co potřebujete vědět jako zemědělec.',
   'nov.desc.default': 'Aktuální zprávy ze světa zemědělské techniky — nové stroje, dotace, trh a legislativa.',
   'nov.back': '← Zpět na novinky',
