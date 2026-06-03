@@ -6,6 +6,10 @@ import { topComparisonPairs, modelDisplayName, pairCombo } from '../../lib/compa
 import { getAllModels, getAllBrands } from '../../lib/stroje';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { useTranslations, plural, tf, getLocaleFromUrl } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 const pairs = topComparisonPairs(220);
 
@@ -61,11 +65,21 @@ const itemListJsonLd = itemListSchema(
 );
 
 const canonical = `${SITE_URL}/srovnani/`;
+
+const js = {
+  selectBrandFirst: tr('cat.sr.selectBrandFirst'),
+  noModels: tr('cat.sr.jsNoModels'),
+  selectModel: tr('cat.sr.jsSelectModel'),
+  inProd: tr('cat.sr.jsInProd'),
+  legacy: tr('cat.sr.jsLegacy'),
+  errSame: tr('cat.sr.jsErrSame'),
+  errCat: tr('cat.sr.jsErrCat'),
+};
 ---
 
 <Layout
-  title="Srovnání traktorů a kombajnů — boční porovnání parametrů"
-  description={`Boční srovnání ${pairs.length} kombinací traktorů a kombajnů. Výkon, motor, převodovka, hmotnost a další parametry vedle sebe — pro výběr stroje na míru.`}
+  title={tr('cat.sr.title')}
+  description={tf(locale, 'cat.sr.desc', { pairs: pairs.length })}
   canonical={canonical}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -73,74 +87,67 @@ const canonical = `${SITE_URL}/srovnani/`;
 
   <div class="hub">
 
-    <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+    <nav class="breadcrumb" aria-label={tr('cat.sr.bcAria')}>
+      <a href="/">{tr('cat.sr.bcHome')}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <span class="current">Srovnání</span>
+      <span class="current">{tr('cat.sr.bcCurrent')}</span>
     </nav>
 
     <header class="hero">
-      <span class="kicker">Boční srovnání · cross-brand</span>
-      <h1>Srovnání zemědělských strojů</h1>
-      <p class="hero-lede">
-        Vyber dvě modely vedle sebe — výkon, motor, převodovka, hmotnost. Cílí podobné výkonnostní třídy
-        napříč značkami, takže porovnáváš srovnatelné stroje. {pairs.length} kombinací předem připravených.
-      </p>
+      <span class="kicker">{tr('cat.sr.kicker')}</span>
+      <h1>{tr('cat.sr.h1')}</h1>
+      <p class="hero-lede" set:html={tf(locale, 'cat.sr.lede', { pairs: pairs.length })}></p>
       <div class="hero-stats">
-        <div class="hs"><span class="n">{tractorPairs.length}</span><span class="l">srovnání traktorů</span></div>
-        <div class="hs"><span class="n">{combinePairs.length}</span><span class="l">srovnání kombajnů</span></div>
-        <div class="hs"><span class="n">{brandComboList.length}+</span><span class="l">kombinací značek</span></div>
+        <div class="hs"><span class="n">{tractorPairs.length}</span><span class="l">{tr('cat.sr.statTractors')}</span></div>
+        <div class="hs"><span class="n">{combinePairs.length}</span><span class="l">{tr('cat.sr.statCombines')}</span></div>
+        <div class="hs"><span class="n">{brandComboList.length}+</span><span class="l">{tr('cat.sr.statBrandCombos')}</span></div>
       </div>
       <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; position:relative; z-index:2;">
-        <a href="/zebricky/" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none;">
-          ⭐ Žebříčky top modelů →
-        </a>
-        <a href="#picker" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:rgba(255,255,255,.08); color:#fff; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none; border:1px solid rgba(255,255,255,.2);">
-          🛠 Postavit vlastní srovnání →
-        </a>
+        <a href="/zebricky/" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none;" set:html={tr('cat.sr.ctaTiers')}></a>
+        <a href="#picker" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:rgba(255,255,255,.08); color:#fff; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none; border:1px solid rgba(255,255,255,.2);" set:html={tr('cat.sr.ctaBuild')}></a>
       </div>
     </header>
 
     <section id="picker" class="picker-section" aria-labelledby="picker-heading">
       <header class="picker-head">
-        <h2 id="picker-heading">Postavit vlastní srovnání</h2>
-        <p>Vyberte dva libovolné modely z katalogu — z různých kategorií i značek. Odkaz vás zavede na detailní srovnání s parametry vedle sebe.</p>
+        <h2 id="picker-heading">{tr('cat.sr.pickerH2')}</h2>
+        <p>{tr('cat.sr.pickerP')}</p>
       </header>
 
       <form class="picker-form" id="picker-form">
         <div class="picker-grid">
           <fieldset class="pck-side pck-side-a">
-            <legend>Model A</legend>
+            <legend>{tr('cat.sr.modelA')}</legend>
             <label class="pck-field">
-              <span>Značka</span>
+              <span>{tr('cat.sr.brand')}</span>
               <select id="pck-a-brand">
-                <option value="">— Vyberte —</option>
+                <option value="">{tr('cat.sr.selectPlaceholder')}</option>
                 {brandsForPicker.map((b) => <option value={b.slug}>{b.name} ({b.count})</option>)}
               </select>
             </label>
             <label class="pck-field">
-              <span>Model</span>
+              <span>{tr('cat.sr.model')}</span>
               <select id="pck-a-model" disabled>
-                <option value="">— Nejdřív vyberte značku —</option>
+                <option value="">{tr('cat.sr.selectBrandFirst')}</option>
               </select>
             </label>
           </fieldset>
 
-          <div class="pck-vs" aria-hidden="true">VS</div>
+          <div class="pck-vs" aria-hidden="true">{tr('cat.sr.vs')}</div>
 
           <fieldset class="pck-side pck-side-b">
-            <legend>Model B</legend>
+            <legend>{tr('cat.sr.modelB')}</legend>
             <label class="pck-field">
-              <span>Značka</span>
+              <span>{tr('cat.sr.brand')}</span>
               <select id="pck-b-brand">
-                <option value="">— Vyberte —</option>
+                <option value="">{tr('cat.sr.selectPlaceholder')}</option>
                 {brandsForPicker.map((b) => <option value={b.slug}>{b.name} ({b.count})</option>)}
               </select>
             </label>
             <label class="pck-field">
-              <span>Model</span>
+              <span>{tr('cat.sr.model')}</span>
               <select id="pck-b-model" disabled>
-                <option value="">— Nejdřív vyberte značku —</option>
+                <option value="">{tr('cat.sr.selectBrandFirst')}</option>
               </select>
             </label>
           </fieldset>
@@ -149,9 +156,9 @@ const canonical = `${SITE_URL}/srovnani/`;
         <div class="pck-controls">
           <label class="pck-cat-toggle">
             <input type="checkbox" id="pck-same-cat" checked />
-            <span>Jen stejnou kategorii (traktor vs traktor, kombajn vs kombajn)</span>
+            <span>{tr('cat.sr.sameCat')}</span>
           </label>
-          <button type="submit" class="pck-btn" id="pck-btn" disabled>Porovnat →</button>
+          <button type="submit" class="pck-btn" id="pck-btn" disabled>{tr('cat.sr.compareBtn')}</button>
         </div>
         <p id="pck-error" class="pck-error" hidden></p>
       </form>
@@ -160,8 +167,8 @@ const canonical = `${SITE_URL}/srovnani/`;
     {tractorPairs.length > 0 && (
       <section class="grid-section">
         <div class="gs-head">
-          <h2>Traktory</h2>
-          <span class="gs-count">{tractorPairs.length} srovnání</span>
+          <h2>{tr('cat.sr.sectionTractors')}</h2>
+          <span class="gs-count">{tractorPairs.length} {tr('cat.sr.sectionCount')}</span>
         </div>
         <div class="card-grid">
           {tractorPairs.slice(0, 30).map((p) => (
@@ -179,12 +186,12 @@ const canonical = `${SITE_URL}/srovnani/`;
                   {p.b.power_hp !== null && <div class="cc-hp">{p.b.power_hp} k</div>}
                 </div>
               </div>
-              <div class="cc-cta">Porovnat →</div>
+              <div class="cc-cta">{tr('cat.sr.cardCta')}</div>
             </a>
           ))}
         </div>
         {tractorPairs.length > 30 && (
-          <p class="gs-more">Zobrazeno 30 z {tractorPairs.length}. Další srovnání naleznete na stránkách jednotlivých modelů.</p>
+          <p class="gs-more">{tf(locale, 'cat.sr.more', { total: tractorPairs.length })}</p>
         )}
       </section>
     )}
@@ -192,8 +199,8 @@ const canonical = `${SITE_URL}/srovnani/`;
     {combinePairs.length > 0 && (
       <section class="grid-section">
         <div class="gs-head">
-          <h2>Kombajny</h2>
-          <span class="gs-count">{combinePairs.length} srovnání</span>
+          <h2>{tr('cat.sr.sectionCombines')}</h2>
+          <span class="gs-count">{combinePairs.length} {tr('cat.sr.sectionCount')}</span>
         </div>
         <div class="card-grid">
           {combinePairs.slice(0, 24).map((p) => (
@@ -211,7 +218,7 @@ const canonical = `${SITE_URL}/srovnani/`;
                   {p.b.power_hp !== null && <div class="cc-hp">{p.b.power_hp} k</div>}
                 </div>
               </div>
-              <div class="cc-cta">Porovnat →</div>
+              <div class="cc-cta">{tr('cat.sr.cardCta')}</div>
             </a>
           ))}
         </div>
@@ -220,7 +227,7 @@ const canonical = `${SITE_URL}/srovnani/`;
 
   </div>
 
-  <script is:inline define:vars={{ pickerJson }}>
+  <script is:inline define:vars={{ pickerJson, js }}>
     (function () {
       const models = JSON.parse(pickerJson);
       const PAIR_DELIMITER = '-vs-';
@@ -241,7 +248,7 @@ const canonical = `${SITE_URL}/srovnani/`;
         modelSel.innerHTML = '';
         if (!slug) {
           modelSel.disabled = true;
-          modelSel.innerHTML = '<option value="">— Nejdřív vyberte značku —</option>';
+          modelSel.innerHTML = '<option value="">' + js.selectBrandFirst + '</option>';
           return;
         }
         const filtered = models.filter((m) => {
@@ -251,17 +258,17 @@ const canonical = `${SITE_URL}/srovnani/`;
         });
         if (filtered.length === 0) {
           modelSel.disabled = true;
-          modelSel.innerHTML = '<option value="">— Žádné modely —</option>';
+          modelSel.innerHTML = '<option value="">' + js.noModels + '</option>';
           return;
         }
         modelSel.disabled = false;
-        modelSel.innerHTML = '<option value="">— Vyberte model —</option>';
+        modelSel.innerHTML = '<option value="">' + js.selectModel + '</option>';
         // Group: in production first
         const inProd = filtered.filter((m) => m.year_to === null);
         const old = filtered.filter((m) => m.year_to !== null);
         if (inProd.length > 0) {
           const og = document.createElement('optgroup');
-          og.label = 'Aktuálně vyráběné';
+          og.label = js.inProd;
           for (const m of inProd) {
             const o = document.createElement('option');
             o.value = m.slug;
@@ -272,7 +279,7 @@ const canonical = `${SITE_URL}/srovnani/`;
         }
         if (old.length > 0) {
           const og = document.createElement('optgroup');
-          og.label = 'Starší / nevyráběné';
+          og.label = js.legacy;
           for (const m of old) {
             const o = document.createElement('option');
             o.value = m.slug;
@@ -314,7 +321,7 @@ const canonical = `${SITE_URL}/srovnani/`;
         if (aSlug === bSlug) {
           btn.disabled = true;
           errEl.hidden = false;
-          errEl.textContent = 'Vyberte dva různé modely.';
+          errEl.textContent = js.errSame;
           return;
         }
         const aModelObj = models.find((m) => m.slug === aSlug);
@@ -322,7 +329,7 @@ const canonical = `${SITE_URL}/srovnani/`;
         if (sameCat.checked && aModelObj && bModelObj && aModelObj.category !== bModelObj.category) {
           btn.disabled = true;
           errEl.hidden = false;
-          errEl.textContent = 'Vybrané modely nemají stejnou kategorii (traktor vs kombajn). Buď odškrtněte "Jen stejnou kategorii", nebo zvolte modely ze stejné kategorie.';
+          errEl.textContent = js.errCat;
           return;
         }
         btn.disabled = false;

@@ -45,3 +45,21 @@ export function t(locale: Locale, key: string): string {
 export function useTranslations(locale: Locale) {
   return (key: string) => t(locale, key);
 }
+
+/** Překlad s interpolací {token} → params[token]. Fallback locale→cs→klíč. */
+export function tf(locale: Locale, key: string, params: Record<string, string | number>): string {
+  const tmpl = ui[locale]?.[key] ?? ui[defaultLocale][key] ?? key;
+  return tmpl.replace(/\{(\w+)\}/g, (_, k) => (k in params ? String(params[k]) : `{${k}}`));
+}
+
+/** Pluralizace pro cs/sk (1 / 2–4 / 5+). uk dostane vlastní pravidla ve Fázi 3. */
+export function plural(
+  _locale: Locale,
+  n: number,
+  forms: { one: string; few: string; many: string },
+): string {
+  const abs = Math.abs(n);
+  if (abs === 1) return forms.one;
+  if (abs >= 2 && abs <= 4) return forms.few;
+  return forms.many;
+}

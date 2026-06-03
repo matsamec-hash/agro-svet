@@ -1,24 +1,18 @@
 ---
 import { getAllBrands, seriesFamily, familyLabel, type StrojKategorie } from '../../lib/stroje';
+import { useTranslations, plural, tf, getLocaleFromUrl } from '../../i18n/utils';
 
 interface Props {
   category: StrojKategorie;
 }
 const { category } = Astro.props;
 
-const categoryLabels: Record<StrojKategorie, string> = {
-  traktory: 'Traktory',
-  kombajny: 'Kombajny',
-};
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+
 const categoryHero: Record<StrojKategorie, string> = {
   traktory: '/images/traktor.webp',
   kombajny: '/images/kombajn.webp',
-};
-const categoryLede: Record<StrojKategorie, string> = {
-  traktory:
-    'Kompletní encyklopedie modelových řad — od zahradních „jednadvacítek“ po 620k obry na polích. Aktuální produkce i historické modely pro bazarový průzkum.',
-  kombajny:
-    'Přehled sklízecích mlátiček — od kompaktních 4-bubnových po hybridy s rotorem. Kapacita zásobníku, šířka záběru, motorizace per modelová řada.',
 };
 
 const brandCreditUrl: Record<string, string> = {
@@ -224,54 +218,63 @@ const allHp = sections.flatMap((s) => [s.minHp, s.maxHp]).filter((x): x is numbe
 const minHp = allHp.length ? Math.min(...allHp) : null;
 const maxHp = allHp.length ? Math.max(...allHp) : null;
 
-const catLabel = categoryLabels[category];
+const catLabel = tr(`cat.label.${category}`);
 const catHeroImage = categoryHero[category];
-const catLede = categoryLede[category];
+const catLede = tr(`cat.lede.${category}`);
+
+const js = {
+  result: tr('cat.jsResult'),
+  brandAll: tr('cat.jsBrandAll'),
+};
+
+// Load-bearing newline: the original markup placed several text labels on their
+// own (indented) source lines, which Astro emits as `\n<text>\n`. Replacing the
+// text with an expression collapses that whitespace to a single space, so we
+// re-inject the literal newline to keep the cs HTML byte-identical.
+const NL = '\n';
 ---
 
 <div class="catalog-page">
 
-  <nav class="breadcrumb" aria-label="Cesta">
-    <a href="/">Domů</a>
+  <nav class="breadcrumb" aria-label={tr('cat.bcAria')}>
+    <a href="/">{tr('cat.bc.home')}</a>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-    <a href="/stroje/">Technika</a>
+    <a href="/stroje/">{tr('cat.bc.tech')}</a>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
     <span class="current">{catLabel}</span>
   </nav>
 
   <section class="hero">
     <div class="hero-left">
-      <span class="kicker"><span class="dot"></span>Katalog · Technika</span>
-      <h1>{catLabel} <em>všech značek</em></h1>
+      <span class="kicker"><span class="dot"></span>{tr('cat.heroKicker')}</span>
+      <h1>{catLabel} <em>{tr('cat.heroH1Suffix')}</em></h1>
       <p class="hero-lede">{catLede}</p>
 
       <div class="hero-stats">
-        <div class="s"><span class="n">{totalModels}+</span><span class="l">modelů</span></div>
-        <div class="s"><span class="n">{totalBrands}</span><span class="l">značek</span></div>
+        <div class="s"><span class="n">{totalModels}+</span><span class="l">{tr('cat.statModels')}</span></div>
+        <div class="s"><span class="n">{totalBrands}</span><span class="l">{tr('cat.statBrands')}</span></div>
         {minHp !== null && maxHp !== null && (
-          <div class="s"><span class="n">{minHp}–{maxHp} k</span><span class="l">výkon</span></div>
+          <div class="s"><span class="n">{minHp}–{maxHp} k</span><span class="l">{tr('cat.statPower')}</span></div>
         )}
       </div>
 
       <form class="search" role="search" action="/hledat/" method="GET">
-        <input type="search" name="q" placeholder={`Hledejte model, řadu nebo značku — např. "Zetor Proxima 120"`} aria-label="Vyhledat" />
-        <button type="submit">
-          Hledat
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <input type="search" name="q" placeholder={tr('cat.searchPlaceholder')} aria-label={tr('cat.searchAria')} />
+        <button type="submit">{NL + tr('cat.searchButton') + NL}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
       </form>
     </div>
 
     <div class="hero-right">
       <div class="hero-photo" style={`background-image:url('${catHeroImage}')`}>
-        <div class="hero-photo-badge"><span class="n">{totalModels}+</span> modelů v katalogu</div>
+        <div class="hero-photo-badge"><span class="n">{totalModels}+</span> {tr('cat.badge')}</div>
       </div>
     </div>
   </section>
 
   <div class="split-bar">
     <div class="split-inner">
-      <nav class="brand-pills" aria-label="Značky">
+      <nav class="brand-pills" aria-label={tr('cat.brandsAria')}>
         {sections.map((s, i) => (
           <a class:list={['pill', { active: i === 0 }]} href={`#${s.slug}`}>{s.name} <span class="c">{s.modelCount}</span></a>
         ))}
@@ -282,38 +285,38 @@ const catLede = categoryLede[category];
   <!-- Filter bar — client-side filters tiles by power / year / current production / brand -->
   <div class="filter-bar" id="filter-bar" data-min-hp={minHp ?? 0} data-max-hp={maxHp ?? (category === 'traktory' ? 620 : 700)}>
     <div class="filter-head">
-      <span class="filter-title">Filtry</span>
-      <span class="filter-result" id="filter-result">{totalModels} modelů ve {totalBrands} značkách</span>
-      <button type="button" class="filter-reset" id="filter-reset" hidden>Zrušit filtry</button>
+      <span class="filter-title">{tr('cat.filterTitle')}</span>
+      <span class="filter-result" id="filter-result">{tf(locale, 'cat.filterResult', { models: totalModels, brands: totalBrands })}</span>
+      <button type="button" class="filter-reset" id="filter-reset" hidden>{tr('cat.filterReset')}</button>
     </div>
     <div class="filter-controls">
       <div class="filter-group filter-range">
-        <label class="filter-label" for="filter-hp-min">Výkon (k)</label>
+        <label class="filter-label" for="filter-hp-min">{tr('cat.filterPower')}</label>
         <div class="range-inputs">
-          <input type="number" id="filter-hp-min" class="filter-num" min={minHp ?? 0} max={maxHp ?? 700} placeholder={`${minHp ?? 0}`} inputmode="numeric" aria-label="Minimální výkon" />
+          <input type="number" id="filter-hp-min" class="filter-num" min={minHp ?? 0} max={maxHp ?? 700} placeholder={`${minHp ?? 0}`} inputmode="numeric" aria-label={tr('cat.filterPowerMinAria')} />
           <span class="range-sep">–</span>
-          <input type="number" id="filter-hp-max" class="filter-num" min={minHp ?? 0} max={maxHp ?? 700} placeholder={`${maxHp ?? 700}`} inputmode="numeric" aria-label="Maximální výkon" />
+          <input type="number" id="filter-hp-max" class="filter-num" min={minHp ?? 0} max={maxHp ?? 700} placeholder={`${maxHp ?? 700}`} inputmode="numeric" aria-label={tr('cat.filterPowerMaxAria')} />
         </div>
       </div>
 
       <div class="filter-group filter-range">
-        <label class="filter-label" for="filter-year-min">Rok uvedení</label>
+        <label class="filter-label" for="filter-year-min">{tr('cat.filterYear')}</label>
         <div class="range-inputs">
-          <input type="number" id="filter-year-min" class="filter-num" min="1950" max="2030" placeholder="1990" inputmode="numeric" aria-label="Minimální rok" />
+          <input type="number" id="filter-year-min" class="filter-num" min="1950" max="2030" placeholder="1990" inputmode="numeric" aria-label={tr('cat.filterYearMinAria')} />
           <span class="range-sep">–</span>
-          <input type="number" id="filter-year-max" class="filter-num" min="1950" max="2030" placeholder="2026" inputmode="numeric" aria-label="Maximální rok" />
+          <input type="number" id="filter-year-max" class="filter-num" min="1950" max="2030" placeholder="2026" inputmode="numeric" aria-label={tr('cat.filterYearMaxAria')} />
         </div>
       </div>
 
       <div class="filter-group">
         <label class="filter-checkbox">
           <input type="checkbox" id="filter-current" checked />
-          <span>Pouze v prodeji</span>
+          <span>{tr('cat.filterCurrentOnly')}</span>
         </label>
       </div>
 
       <details class="filter-group filter-brands">
-        <summary class="filter-brands-summary">Značky <span class="fb-count" id="filter-brand-count"></span></summary>
+        <summary class="filter-brands-summary">{tr('cat.filterBrands')} <span class="fb-count" id="filter-brand-count"></span></summary>
         <div class="filter-brands-list">
           {sections.map((s) => (
             <label class="filter-checkbox">
@@ -339,38 +342,36 @@ const catLede = categoryLede[category];
         <div class="brand-head">
           <div class="brand-title">
             <div class="brand-logo" data-letter={s.name.charAt(0).toUpperCase()}>
-              <img src={`/images/stroje/brands/${s.slug}.png`} alt={`${s.name} logo`} loading="lazy" onerror="this.remove()" />
+              <img src={`/images/stroje/brands/${s.slug}.png`} alt={tf(locale, 'cat.brandLogoAlt', { brand: s.name })} loading="lazy" onerror="this.remove()" />
             </div>
             <div class="brand-name">
               <h2><a href={`/stroje/${s.slug}/`}>{s.name}</a></h2>
               <div class="brand-meta">
-                <span>{s.country} · od <strong>{s.founded}</strong></span><span class="sep"></span>
-                <strong>{s.modelCount} modelů</strong> <span>v {s.seriesCount} řadách</span>
+                <span>{s.country} · {tr('cat.brandFoundedPrefix')} <strong>{s.founded}</strong></span><span class="sep"></span>
+                <strong>{s.modelCount} {tr('cat.brandModelsLabel')}</strong> <span>{tf(locale, 'cat.brandSeriesLabel', { count: s.seriesCount })}</span>
                 {s.minHp !== null && s.maxHp !== null && (<><span class="sep"></span><strong>{s.minHp}–{s.maxHp} k</strong></>)}
                 {brandCreditUrl[s.slug] && (
                   <>
                     <span class="sep"></span>
-                    <span class="brand-credit">Foto: <a href={brandCreditUrl[s.slug]} target="_blank" rel="noopener">{brandCreditLabel(s.slug)}</a></span>
+                    <span class="brand-credit">{tr('cat.photo')} <a href={brandCreditUrl[s.slug]} target="_blank" rel="noopener">{brandCreditLabel(s.slug)}</a></span>
                   </>
                 )}
               </div>
             </div>
           </div>
-          <a class="brand-cta" href={`/stroje/${s.slug}/`}>
-            Všechny modely
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a class="brand-cta" href={`/stroje/${s.slug}/`}>{NL + tr('cat.brandCta') + NL}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
 
         <div class="block-label">
-          <span class="status current"><span class="dot"></span>Aktuální v prodeji</span>
+          <span class="status current"><span class="dot"></span>{tr('cat.blockCurrent')}</span>
         </div>
 
         <div class="family-grid">
           {s.topTiles.map((t) => {
             const bar = hpBar(t.minHp, t.maxHp);
             const yearStr = t.minYear !== null
-              ? (t.hasCurrent ? `${t.minYear}–dosud` : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
+              ? (t.hasCurrent ? tf(locale, 'cat.tileYearToNow', { from: t.minYear }) : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
               : '';
             const sub = familySublabel(t.family);
             const hpStr = t.minHp !== null && t.maxHp !== null
@@ -400,10 +401,10 @@ const catLede = categoryLede[category];
                     // For Wikipedia/CC photos, show author + license
                     if (t.coverCreditAuthor && t.coverCreditLicense) {
                       const short = t.coverCreditAuthor.length > 30 ? t.coverCreditAuthor.slice(0, 28) + '…' : t.coverCreditAuthor;
-                      const titleAttr = `Foto: ${t.coverCreditAuthor} (${t.coverCreditLicense}) via ${host} · upraveno (crop, WebP)\n${url}`;
+                      const titleAttr = `${tr('cat.photo')} ${t.coverCreditAuthor} (${t.coverCreditLicense}) via ${host} · upraveno (crop, WebP)\n${url}`;
                       return <span class="ft-credit" title={titleAttr}>© {short} / {t.coverCreditLicense}</span>;
                     }
-                    return <span class="ft-credit" title={`Foto: ${host} (${url})`}>Foto: {host}</span>;
+                    return <span class="ft-credit" title={`${tr('cat.photo')} ${host} (${url})`}>{tr('cat.photo')} {host}</span>;
                   })()}
                   {!t.coverImage && (
                     <svg class="ft-silhouette" width="120" height="68" viewBox="0 0 140 80" fill="rgba(0,0,0,.18)" aria-hidden="true">
@@ -428,11 +429,11 @@ const catLede = categoryLede[category];
                       <div class="ft-title">{t.label}</div>
                       {sub && <div class="ft-sub">{sub}</div>}
                     </div>
-                    <span class="ft-count">{t.modelCount} {t.modelCount === 1 ? 'model' : t.modelCount < 5 ? 'modely' : 'modelů'}</span>
+                    <span class="ft-count">{t.modelCount} {plural(locale, t.modelCount, { one: tr('cat.tileModelOne'), few: tr('cat.tileModelFew'), many: tr('cat.tileModelMany') })}</span>
                   </div>
                   {hpStr && (
                     <div class="ft-bar-wrap">
-                      <div class="ft-bar-row"><span>Výkon</span><span class="v">{hpStr}</span></div>
+                      <div class="ft-bar-row"><span>{tr('cat.tilePower')}</span><span class="v">{hpStr}</span></div>
                       <div class="ft-bar" style={`--from:${bar.from}%;--span:${bar.span}%`}></div>
                     </div>
                   )}
@@ -441,7 +442,7 @@ const catLede = categoryLede[category];
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
                       {yearStr}
                     </span>
-                    <span class="go">Řada →</span>
+                    <span class="go">{tr('cat.tileGo')}</span>
                   </div>
                 </div>
               </a>
@@ -450,15 +451,12 @@ const catLede = categoryLede[category];
         </div>
 
         <a href={`/stroje/${s.slug}/`} class="show-all-cta">
-          <span class="sac-t">
-            Zobrazit všech <strong>{s.modelCount} modelů</strong> {s.name}
+          <span class="sac-t">{NL}{tr('cat.showAllPrefix')} <strong>{s.modelCount} {tr('cat.showAllModels')}</strong> {s.name}
             {s.legacyCount > 0 && (
-              <span class="sac-d">· včetně starších řad{s.legacyExamples.length > 0 ? ` (${s.legacyExamples.join(', ')})` : ''}</span>
+              <span class="sac-d">{tr('cat.showAllLegacy')}{s.legacyExamples.length > 0 ? ` (${s.legacyExamples.join(', ')})` : ''}</span>
             )}
           </span>
-          <span class="sac-arrow">
-            Všechny modely
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span class="sac-arrow">{NL + tr('cat.showAllArrow') + NL}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </span>
         </a>
       </section>
@@ -466,24 +464,22 @@ const catLede = categoryLede[category];
   })}
 
   <div class="filter-empty" id="filter-empty">
-    <strong>Žádné modely neodpovídají filtrům.</strong>
-    Zkuste rozšířit rozsah výkonu nebo roku, nebo zrušte filtry.
-  </div>
+    <strong>{tr('cat.emptyTitle')}</strong>{NL + tr('cat.emptyBody') + NL}</div>
 
   <section class="big-cta">
     <div>
-      <span class="cta-kicker">Nenašli jste svůj model?</span>
-      <h2>Prodáváte {category === 'traktory' ? 'traktor' : 'kombajn'}?<br />Inzerát v Agro bazaru zdarma.</h2>
-      <p>30 dní inzerát · až 5 fotek · kontakt přímo na prodejce · bez provize.</p>
-      <a class="cta-btn" href="/bazar/novy/">
-        Přidat inzerát zdarma
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <span class="cta-kicker">{tr('cat.ctaKicker')}</span>
+      <h2>{tr('cat.ctaH1Lead')} {category === 'traktory' ? tr('cat.ctaH1Traktor') : tr('cat.ctaH1Kombajn')}{tr('cat.ctaH1Tail')}<br />{tr('cat.ctaH1Line2')}</h2>
+      <p>{tr('cat.ctaP')}</p>
+      <a class="cta-btn" href="/bazar/novy/">{NL + tr('cat.ctaButton') + NL}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
     <div class="cta-right">
       <div class="cta-photo" style={`background-image:url('${catHeroImage}')`}></div>
     </div>
   </section>
+
+  <script type="application/json" id="cb-i18n" set:html={JSON.stringify(js)} />
 
 </div>
 
@@ -879,6 +875,11 @@ const catLede = categoryLede[category];
   // Filters family tiles in-place; hides whole brand sections that lose all
   // visible tiles. URL is updated via replaceState so the filter survives
   // reload + back/forward.
+  // i18n strings are passed from the frontmatter via a JSON <script> data island
+  // (#cb-i18n) so the filter result + brand-count labels are localized while the
+  // server-rendered HTML stays byte-identical per locale.
+  const i18nEl = document.getElementById('cb-i18n');
+  const I18N = i18nEl ? JSON.parse(i18nEl.textContent || '{}') : { result: '{rows} řad ve {brands} značkách', brandAll: '(vše)' };
   const filterBar = document.getElementById('filter-bar');
   const hpMinInput = document.getElementById('filter-hp-min') as HTMLInputElement | null;
   const hpMaxInput = document.getElementById('filter-hp-max') as HTMLInputElement | null;
@@ -963,13 +964,15 @@ const catLede = categoryLede[category];
     }
     if (resultEl) {
       const filtered = isFiltered(st);
-      resultEl.textContent = `${visibleTiles} řad ve ${visibleBrandSlugs.size} značkách`;
+      resultEl.textContent = I18N.result
+        .replace('{rows}', String(visibleTiles))
+        .replace('{brands}', String(visibleBrandSlugs.size));
       resultEl.classList.toggle('is-filtered', filtered);
     }
     if (resetBtn) resetBtn.hidden = !isFiltered(st);
     if (emptyEl) emptyEl.classList.toggle('is-visible', visibleTiles === 0);
     if (brandCountEl) {
-      brandCountEl.textContent = st.brands.size === allBrandSlugs.size ? '(vše)' : `(${st.brands.size})`;
+      brandCountEl.textContent = st.brands.size === allBrandSlugs.size ? I18N.brandAll : `(${st.brands.size})`;
     }
     syncUrl(st);
   }
