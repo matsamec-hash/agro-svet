@@ -1,5 +1,6 @@
 import { defineMiddleware } from 'astro:middleware';
 import { createAnonClient } from './lib/supabase';
+import { stripLocale } from './i18n/utils';
 import {
   gateActive,
   isGateBypassed,
@@ -55,6 +56,13 @@ function applyGateHeaders(response: Response, opts: { redirect?: boolean } = {})
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
 
+  // Locale prefix: odvoď locale + původní cestu, propiš do locals. Pro ne-cs
+  // se na konci rewritne na kanonickou cs routu (next(strippedPath)).
+  const { locale, path: strippedPath } = stripLocale(url.pathname);
+  locals.locale = locale;
+  locals.localizedPathname = url.pathname;
+  const advance = () => (locale !== 'cs' ? next(strippedPath + url.search) : next());
+
   // ---- Site gate: runs FIRST, above everything else -------------------------
   // To disable: unset SITE_GATE_PASSCODE env var and redeploy.
   const gateOn = gateActive();
@@ -80,7 +88,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // like /, /novinky/[slug], /bazar/, /bazar/[id].
   if (!needsAuthContext(url.pathname)) {
     locals.user = null;
-    const response = await next();
+    const response = await advance();
     if (gateOn) applyGateHeaders(response);
     return response;
   }
@@ -145,7 +153,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
-  const response = await next();
+  const response = await advance();
 
   if (gateOn) {
     applyGateHeaders(response);
