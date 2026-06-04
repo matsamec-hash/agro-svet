@@ -58,8 +58,9 @@ describe('getFooterColumns', () => {
 
 describe('isLockedSectionPath — granularita kalkulaček (Fáze 2b)', () => {
   it('dotace-cap zůstává locked', () => {
-    expect(isLockedSectionPath('/kalkulacka/dotace-cap')).toBe(true);
-    expect(isLockedSectionPath('/kalkulacka/dotace-cap/')).toBe(true);
+    // UPDATED Fáze 2b A: dotace-cap je nyní odemčena (SK kalkulačka nasazena)
+    expect(isLockedSectionPath('/kalkulacka/dotace-cap')).toBe(false);
+    expect(isLockedSectionPath('/kalkulacka/dotace-cap/')).toBe(false);
   });
   it('ostatní kalkulačky jsou odemčené', () => {
     expect(isLockedSectionPath('/kalkulacka')).toBe(false);
@@ -68,8 +69,20 @@ describe('isLockedSectionPath — granularita kalkulaček (Fáze 2b)', () => {
     expect(isLockedSectionPath('/kalkulacka/leasing-traktoru')).toBe(false);
   });
   it('ostatní jurisdikční sekce zůstávají locked', () => {
-    expect(isLockedSectionPath('/dotace')).toBe(true);
+    // UPDATED Fáze 2b A: /dotace je nyní odemčena; /statistiky a /puda zůstávají
+    expect(isLockedSectionPath('/dotace')).toBe(false);
     expect(isLockedSectionPath('/statistiky')).toBe(true);
     expect(isLockedSectionPath('/puda/ceny')).toBe(true);
+  });
+
+  it('Fáze 2b A: /dotace a /kalkulacka/dotace-cap NEJSOU locked', () => {
+    expect(isLockedSectionPath('/dotace')).toBe(false);
+    expect(isLockedSectionPath('/dotace/investice')).toBe(false);
+    expect(isLockedSectionPath('/kalkulacka/dotace-cap')).toBe(false);
+  });
+
+  it('/statistiky a /puda zůstávají locked (balíky B/C)', () => {
+    expect(isLockedSectionPath('/statistiky')).toBe(true);
+    expect(isLockedSectionPath('/puda')).toBe(true);
   });
 });

@@ -24,10 +24,11 @@ export const HIDDEN_NEWS_CATEGORIES: Record<Locale, string[]> = {
 };
 
 /** cs-root prefixy CZ-jurisdikčních nástrojů/dat. Pod non-cs locale se NEservírují
- *  jako SK obsah — middleware je přesměruje na cs URL. Kalkulačky jsou převážně
- *  jurisdikčně neutrální (Fáze 2b je odemkla); locked zůstává jen /kalkulacka/dotace-cap
- *  (ryze CZ — SZIF/CAP přímé platby). */
-export const LOCKED_SECTION_PREFIXES = ['/dotace', '/statistiky', '/kalkulacka/dotace-cap', '/puda'];
+ *  jako SK obsah — middleware je přesměruje na cs URL.
+ *  Fáze 2b balík A: /dotace a /kalkulacka/dotace-cap odemčeny (SK obsah nasazen).
+ *  Locked zůstává jen /statistiky (CZ tržní statistiky) a /puda (CZ půdní data) —
+ *  ty jsou předmětem samostatných balíků B/C. */
+export const LOCKED_SECTION_PREFIXES = ['/statistiky', '/puda'];
 
 /** True, pokud cs-root cesta patří do CZ-jurisdikčně uzamčené sekce. */
 export function isLockedSectionPath(csRootPath: string): boolean {
