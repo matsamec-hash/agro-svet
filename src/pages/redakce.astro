@@ -1,62 +1,97 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import { SITE_URL } from '../lib/config';
 import { breadcrumbSchema } from '../lib/structured-data';
 
+const locale = Astro.locals.locale ?? 'cs';
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Redakce', url: '/redakce/' },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Redakcia' : 'Redakce', url: `${base}/redakce/` },
 ]);
 
 const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'NewsMediaOrganization',
-  name: 'Redakce agro-svět.cz',
-  url: `${SITE_URL}/redakce/`,
-  logo: {
-    '@type': 'ImageObject',
-    url: `${SITE_URL}/icon-512.png`,
-    width: 512,
-    height: 512,
-  },
+  name: isSk ? 'Redakcia agro-svet.cz' : 'Redakce agro-svět.cz',
+  url: `${SITE_URL}${base}/redakce/`,
+  logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png`, width: 512, height: 512 },
   parentOrganization: {
     '@type': 'Organization',
     name: 'Samec Digital s.r.o.',
     legalName: 'Samec Digital s.r.o.',
-    identifier: {
-      '@type': 'PropertyValue',
-      propertyID: 'IČO',
-      value: '29547539',
-    },
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Na Břehu 378',
-      postalCode: '387 11',
-      addressLocality: 'Katovice',
-      addressCountry: 'CZ',
-    },
+    identifier: { '@type': 'PropertyValue', propertyID: 'IČO', value: '29547539' },
+    address: { '@type': 'PostalAddress', streetAddress: 'Na Břehu 378', postalCode: '387 11', addressLocality: 'Katovice', addressCountry: 'CZ' },
   },
-  diversityPolicy: `${SITE_URL}/redakce/`,
-  ethicsPolicy: `${SITE_URL}/redakce/`,
-  contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'editorial',
-    email: 'info@samecdigital.com',
-    availableLanguage: 'Czech',
-  },
+  diversityPolicy: `${SITE_URL}${base}/redakce/`,
+  ethicsPolicy: `${SITE_URL}${base}/redakce/`,
+  contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'info@samecdigital.com', availableLanguage: isSk ? 'Slovak' : 'Czech' },
 };
 ---
 
 <Layout
-  title="Redakce agro-svět.cz"
-  description="Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt."
-  canonical={`${SITE_URL}/redakce/`}
+  title={isSk ? 'Redakcia agro-svet.cz' : 'Redakce agro-svět.cz'}
+  description={isSk ? 'Redakcia poľnohospodárskeho portálu agro-svet.cz — kto stojí za obsahom, redakčné zásady a kontakt.' : 'Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt.'}
+  canonical={isSk ? undefined : `${SITE_URL}/redakce/`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
 
   <main class="redakce">
+  {isSk ? (
+    <Fragment>
+    <nav class="breadcrumb" aria-label="Drobečková navigace">
+      <a href={`${base}/`}>Domov</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Redakcia</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">O nás</span>
+      <h1>Redakcia agro-svet.cz</h1>
+      <p class="lead">
+        Píšeme o poľnohospodárstve, technike, dotáciách a živote na vidieku. Cieľom je dávať
+        poľnohospodárom užitočné, overené a aktuálne informácie z domova aj zo sveta.
+      </p>
+    </header>
+
+    <section class="block">
+      <h2>Čo robíme</h2>
+      <p>
+        Sledujeme novinky zo sveta poľnohospodárskej techniky, európskej dotačnej politiky, vývoj
+        cien komodít a legislatívne zmeny. Prevádzkujeme tiež encyklopédiu traktorov a kombajnov,
+        databázu plemien hospodárskych zvierat a bazár poľnohospodárskej techniky.
+      </p>
+    </section>
+
+    <section class="block">
+      <h2>Redakčné zásady</h2>
+      <ul>
+        <li><strong>Overené zdroje.</strong> Vychádzame z oficiálnych dát (ČSÚ, MZe, Eurostat) a tlačových správ výrobcov.</li>
+        <li><strong>Korekcie.</strong> Ak sa v texte objaví chyba, opravíme ju a označíme dátum úpravy.</li>
+        <li><strong>Oddelenie obsahu a inzercie.</strong> Komerčný obsah je vždy zreteľne označený.</li>
+        <li><strong>Spätná väzba.</strong> Podnety čitateľov vítame a reagujeme na ne.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Kontakt</h2>
+      <p>
+        Pre tipy, tlačové správy a všeobecné otázky napíšte na
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+        Pre inzertnú spoluprácu využite rovnaký kontakt s predmetom „Inzercia".
+      </p>
+      <p class="provoz">
+        Web prevádzkuje <a href="https://samecdigital.com" target="_blank" rel="noopener">Samec Digital s.r.o.</a>,
+        IČO 29547539, so sídlom Na Břehu 378, 387 11 Katovice.
+      </p>
+    </section>
+    </Fragment>
+  ) : (
+    <Fragment>
     <nav class="breadcrumb" aria-label="Drobečková navigace">
       <a href="/">Domů</a>
       <span aria-hidden="true">›</span>
@@ -103,6 +138,8 @@ const orgJsonLd = {
         IČO 29547539, se sídlem Na Břehu 378, 387 11 Katovice.
       </p>
     </section>
+    </Fragment>
+  )}
   </main>
 
   <style>
