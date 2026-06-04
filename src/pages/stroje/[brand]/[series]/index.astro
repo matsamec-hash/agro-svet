@@ -10,7 +10,7 @@ const tr = useTranslations(locale);
 
 const { brand: brandSlug, series: seriesSlug } = Astro.params;
 const found = getSeries(brandSlug!, seriesSlug!, locale);
-if (!found) return new Response(null, { status: 404 });
+if (!found) return Astro.rewrite('/404');
 const { brand, category, series } = found;
 
 // Edge cache 1h s-maxage + 24h SWR — series list only changes on YAML updates.
