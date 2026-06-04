@@ -40,8 +40,9 @@ od českého — není to čistá výměna konstant:
   ~92 €/ha v CHVÚ vs ~59 €/ha mimo. (CZ má „basic vs premium podle počtu praktik".)
 - **VCS (viazaná podpora príjmu)**: cukrová repa ~477,80 €/ha, bielkovinové plodiny
   ~69,90 €/ha, dále chmeľ, zelenina, ovocie. (Jiné sektory/sazby než CZ.)
-- **ANC** je v SR formálně intervence rozvoja vidieka (ne přímá platba), ale je plošná
-  a farmář ji dostává → v kalkulačce **zahrneme** s výslovnou poznámkou o jiné kategorii.
+- **ANC** je v SR formálně intervence rozvoja vidieka (ne přímá platba); její per-ha sazba
+  navíc není veřejně dohledatelná → **z V1 kalkulačky vypuštěna**, nahrazena jen poznámkou
+  (viz §7 rozhodnutí).
 
 > ⚠️ Sazby výše jsou **orientační z rešerše a musí být znovu ověřeny** v dedikované
 > rešeršní fázi (viz §6) před zápisem do kódu. Přesnost dat je na nás.
@@ -82,8 +83,9 @@ pro živou CZ kalkulačku a snadná testovatelnost.
 - `KRAJE_SK` — 8 krajov SR (pre-fill ANC UX), analog `KrajInfo`.
 - `CITLIVE_SEKTORY_SK` — VCS sektory SR (slug, name SK, sazba €/ha, description SK).
 - `AncCategorySk`, `CapInputSk`, `CapBreakdownItemSk`, `CapResultSk` — typy.
-- `calculateCapSk(input): CapResultSk` — logika: BISS, dvoustupňová CRISS (80/40 €/ha
-  s hranicemi), ekoschéma (CHVÚ on/off), ANC (kategorie SR), mladý poľnohospodár, VCS.
+- `calculateCapSk(input): CapResultSk` — logika: BISS, dvoustupňová CRISS (79/40 €/ha
+  s hranicemi 100,99/150 ha), ekoschéma (CHVÚ on/off, plocha v CHVÚ ≤ totalHa),
+  mladý poľnohospodár (strop 28 ha), VCS. (ANC mimo výpočet — viz §7.)
 - `formatEur(n): string` — `n.toLocaleString('sk-SK', …) + ' €'`.
 
 **Stránka:** `src/pages/sk/kalkulacka/dotace-cap/index.astro` — lokalizovaná kopie
@@ -132,9 +134,10 @@ Lock/launch rozhodnutí (Layout, sitemap, llms): `isSkLaunchedPath(path) && !isL
 
 ## 5. Edge-cases a ošetření chyb
 - `totalHa <= 0` → prázdný výsledek (analog CZ `calculateCap`).
-- CRISS hranice: ha ≤ ~101 → plná sazba; ~101–150 → snížená; nad 150 → 0 (přesné hranice z rešerše).
-- ANC plocha > totalHa → ořezat na totalHa.
-- VCS plocha sektoru > totalHa → ořezat.
+- CRISS hranice: ha ≤ 100,99 → 79 €/ha; část 101–150 → 40 €/ha; nad 150 → 0.
+- Ekoschéma: plocha v CHVÚ ≤ totalHa; zbytek výměry sazbou mimo CHVÚ (nebo dvě nezávislá pole — viz plán).
+- VCS plocha sektoru > totalHa → ořezat na totalHa.
+- Mladý poľnohospodár: počítá se max na 28 ha.
 - Chybějící SK overlay soubor pro daný slug → 404 jako u cs (žádný tichý cs fallback obsahu
   na sk URL, aby se neindexoval mix jazyků).
 - Disclaimer: „Orientačné, záväzné sú sadzby PPA" + odkaz `apa.sk` na každé stránce A1 i A2.
@@ -158,30 +161,54 @@ jako první task plánu s gate „čísla ověřena" před kódem.
 
 ---
 
-## 7. Tabulka sazeb (DOPLNIT v rešeršní fázi)
+## 7. Tabulka sazeb (naplněno rešeršní fází 2026-06-04)
 
-> Placeholder — naplní rešeršní fáze §6. Žádné číslo nejde do kódu bez řádku zde
-> s ≥2 zdroji.
+> **Stav ověření.** „Pevné" = dual-sourced 2024 aktuály (Vestník MPRV SR via Poľnoinfo
+> + druhý nezávislý web). „Overiť" = jen 2023 plánované (single-source) — final hodnota
+> 2024 jen v oficiálním PPA Excelu „Sadzby priamych platieb pre rok 2024" (apa.sk/sadzby,
+> .xlsx — přes web nečitelný). **Plán Task 1 = stáhnout ten Excel a opravit/potvrdit
+> všechny řádky před UI prací.** Žádné číslo bez řádku zde.
 
-| Platba | Sazba | Hranice/podmínka | Zdroj 1 (URL, rok) | Zdroj 2 (URL, rok) |
-|---|---|---|---|---|
-| BISS | _TBD_ | — | | |
-| CRISS stupeň 1 | _TBD_ | do _TBD_ ha | | |
-| CRISS stupeň 2 | _TBD_ | _TBD_–150 ha | | |
-| Ekoschéma (mimo CHVÚ) | _TBD_ | | | |
-| Ekoschéma (CHVÚ) | _TBD_ | | | |
-| ANC (kategorie) | _TBD_ | | | |
-| Mladý poľnohospodár | _TBD_ | strop ha _TBD_ | | |
-| VCS — cukrová repa | _TBD_ | | | |
-| VCS — bielkoviny | _TBD_ | | | |
-| VCS — chmeľ/zelenina/ovocie | _TBD_ | | | |
+| Platba | Sazba | Hranice/podmínka | Rok | Stav | Zdroje |
+|---|---|---|---|---|---|
+| BISS | 103,80 €/ha | celá způsobilá výměra | 2024 | pevné | polnoinfo.sk¹, search Vestník MPRV² |
+| CRISS stupeň 1 | 79 €/ha | do 100,99 ha | 2024 | pevné | polnoinfo.sk¹ (2023: agrobiznis³ 80) |
+| CRISS stupeň 2 | 40 €/ha | 101–150 ha; nad 150 = 0 | 2024 | pevné | polnoinfo.sk¹ + agrobiznis³ |
+| Ekoschéma (mimo CHVÚ) | 60,36 €/ha | celá výměra | 2024 | pevné | polnoinfo.sk¹ |
+| Ekoschéma (v CHVÚ) | 110,45 €/ha | plocha v CHVÚ | 2024 | pevné | polnoinfo.sk¹ + search² |
+| VCS — cukrová repa | 477,80 €/ha | min. plocha dle pravidel | 2024 | pevné | polnoinfo.sk¹ + search² |
+| VCS — bielkoviny | 69,90 €/ha | | 2024 | pevné | polnoinfo.sk¹ + search² |
+| VCS — chmeľ | 800 €/ha | min. 0,3 ha chmeľnice | 2023 plán | **overiť** | agrobiznis³ |
+| VCS — ovocie (vybrané) | 558 €/ha | min. 0,3 ha sadov | 2023 plán | **overiť** | agrobiznis³ |
+| VCS — zelenina (prácna) | 500 €/ha | min. 0,3 ha | 2023 plán | **overiť** | agrobiznis³ |
+| VCS — zelenina (vysoko prácna) | 745 €/ha | min. 0,3 ha | 2023 plán | **overiť** | agrobiznis³ |
+| Mladý poľnohospodár | 100 €/ha | max **28 ha** (2024), do 40 let, první podnik | sazba 2023 plán / strop 2024 | **overiť** | agrobiznis³ (sazba) + search² (28 ha) |
+| **ANC** | — | **vypuštěno z V1** | — | — | per-ha sazba nedohledatelná; formálně rozvoj vidieka |
+
+**Per-head platby mimo plošnou kalkulačku** (uvést jen textem, nepočítat — kalkulačka je
+na ha): dojnice 270,95 €/ks (2024), ovce/kozy 24,15 €/ks (2024). Zdroj: polnoinfo.sk¹.
+
+**Zdroje:**
+1. https://polnoinfo.sk/polnohospodari-stratia-tisicky-eur-na-priamych-platbach/ (2024 aktuály z Vestníku MPRV SR, list. 2024)
+2. WebSearch „sadzby priamych platieb 2024 Slovensko" → Vestník MPRV SR (2024)
+3. https://www.agrobiznis.sk/agrarne-spravodajstvo/agrarna-politika-dotacie-eurofondy/7744-podpory-2023-premiera-novej-spp (2023 plánované)
+4. Oficiální primár (Task 1 verifikace): https://www.apa.sk/sadzby → „Sadzby priamych platieb pre rok 2024" (.xlsx)
+
+### Rozhodnutí: ANC vypuštěno z V1 kalkulačky
+Per-ha sazba ANC pro SR není veřejně dohledatelná (jen oficiální PPA dokumenty) a ANC je
+v SR formálně intervence rozvoja vidieka, ne přímá platba. Místo neověřeného čísla
+zobrazí SK kalkulačka krátkou poznámku: *„ANC (oblasti s prírodnými obmedzeniami) sa
+v SR poskytuje samostatne v rámci rozvoja vidieka — pozri apa.sk."* (Mění §1/§3 původního
+návrhu „ANC zahrnout s poznámkou" → „ANC jen poznámka, bez výpočtu".)
 
 ---
 
 ## 8. Testy
 - **Unit `tests/lib/sk-cap-dotace.test.ts`:** `calculateCapSk` — BISS na celou výměru;
-  dvoustupňová CRISS na hranicích (100 / 101 / 150 / 200 ha); ekoschéma CHVÚ on vs off;
-  ANC ořez na totalHa; VCS sektor; mladý poľnohospodár; perHa; `totalHa <= 0` → prázdno.
+  dvoustupňová CRISS na hranicích (100 / 100,99 / 101 / 150 / 200 ha); ekoschéma CHVÚ
+  on vs off (sazba se mění + plocha v CHVÚ ≤ totalHa); VCS sektor (ořez na totalHa);
+  mladý poľnohospodár (strop 28 ha); perHa; `totalHa <= 0` → prázdno.
+  (ANC se nepočítá — viz §7 rozhodnutí.)
 - **i18n `tests/i18n/*`:** `dotace-sk` overlay resolduje při sk; cs `getCollection('dotace')`
   netknuté; lock/launch matice — `/dotace` a `/kalkulacka/dotace-cap` nově **launched**
   pro sk (indexovatelné), `/statistiky` a `/puda` stále **locked**.
