@@ -1,7 +1,9 @@
 ---
 import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
 const GA_ID = "G-HC3JY466RR";
-const locale = getLocaleFromUrl(Astro.url);
+// Po middleware rewritu je Astro.url kanonická cs cesta → locale MUSÍ z locals
+// (jinak banner vždy cs i na /sk). Fallback na URL pro jistotu.
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 ---
 <div id="cc" class="cc" hidden>
