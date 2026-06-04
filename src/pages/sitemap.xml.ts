@@ -10,7 +10,7 @@ import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath } from '../i18n/nav';
 
-const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
+const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky', 'chov-hlemyzdu'];
 
 function maxIsoDate(values: Array<string | null | undefined>): string | undefined {
   let max: string | undefined;
