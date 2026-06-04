@@ -3,8 +3,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import { listPending } from '../../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../../lib/akce-recurrence';
-import { akceTypLabel } from '../../../lib/akce-constants';
-import type { AkceTyp } from '../../../lib/akce';
+import { akceTypLabel, type AkceTyp } from '../../../lib/akce-constants';
 
 export const prerender = false;
 const pending = await listPending();
