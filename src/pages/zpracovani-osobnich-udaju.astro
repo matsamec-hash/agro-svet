@@ -1,11 +1,127 @@
 ---
+export const prerender = false;
 import Layout from '../layouts/Layout.astro';
+const locale = Astro.locals.locale ?? 'cs';
+const isSk = locale === 'sk';
 ---
 <Layout
-  title="Zpracování osobních údajů — Agro-svět"
-  description="Zásady zpracování osobních údajů na Agro-svět.cz — kdo jsme, jaké údaje zpracováváme, jak dlouho, vaše práva."
+  title={isSk ? 'Spracúvanie osobných údajov — Agro-svet' : 'Zpracování osobních údajů — Agro-svět'}
+  description={isSk ? 'Zásady spracúvania osobných údajov na agro-svet.cz — kto sme, aké údaje spracúvame, ako dlho, vaše práva.' : 'Zásady zpracování osobních údajů na Agro-svět.cz — kdo jsme, jaké údaje zpracováváme, jak dlouho, vaše práva.'}
 >
   <main class="legal-page">
+  {isSk ? (
+    <Fragment>
+    <h1>Zásady spracúvania osobných údajov</h1>
+    <p class="lead">Ako spracúvame osobné údaje používateľov webu <strong>agro-svet.cz</strong> v súlade s nariadením GDPR (2016/679) a zákonom č. 110/2019 Sb.</p>
+
+    <h2>1. Prevádzkovateľ osobných údajov</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong>, IČO 29547539, so sídlom Na Břehu 378, 387 11 Katovice.<br>
+      Kontakt: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+
+    <h2>2. Aké údaje spracúvame</h2>
+
+    <h3>2.1 Newsletter (odber noviniek)</h3>
+    <ul>
+      <li>E-mailová adresa</li>
+      <li>Dátum prihlásenia a potvrdenia odberu</li>
+      <li>Časové pečiatky kliknutia na potvrdzovací odkaz (anti-fraud)</li>
+    </ul>
+
+    <h3>2.2 Bazár — registrovaní používatelia</h3>
+    <ul>
+      <li>Meno (zobrazované pri inzeráte)</li>
+      <li>E-mail (prihlasovanie, kontakt)</li>
+      <li>Telefón (kontakt na inzerenta)</li>
+      <li>Lokalita (mesto/kraj)</li>
+      <li>Heslo (hašované, nikdy v plain texte)</li>
+    </ul>
+
+    <h3>2.3 Bazár — inzeráty</h3>
+    <ul>
+      <li>Obsah inzerátu (názov, popis, cena, kategória, fotky)</li>
+      <li>Kontaktné údaje uvedené v inzeráte</li>
+    </ul>
+
+    <h3>2.4 Fotosúťaž</h3>
+    <p>Pre fotosúťaž platia samostatné <a href="/fotosoutez/gdpr/">zásady spracúvania</a>.</p>
+
+    <h3>2.5 Technické údaje (všetci návštevníci)</h3>
+    <ul>
+      <li>IP adresa (anonymizovaná v logu, anti-fraud, max 30 dní)</li>
+      <li>User-agent prehliadača (štatistika, debugging)</li>
+      <li>Referer (z akého webu ste prišli)</li>
+    </ul>
+
+    <h2>3. Účel a právny základ spracúvania</h2>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Účel</th><th>Právny základ (GDPR čl. 6)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Zasielanie newslettera</td><td>Súhlas — ods. 1 písm. a)</td></tr>
+        <tr><td>Prevádzka používateľského účtu (bazár)</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
+        <tr><td>Zverejňovanie inzerátov</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
+        <tr><td>Anti-fraud, bezpečnosť prevádzky</td><td>Oprávnený záujem — ods. 1 písm. f)</td></tr>
+        <tr><td>Plnenie zákonných povinností (účtovníctvo pri platených službách)</td><td>Právna povinnosť — ods. 1 písm. c)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Doba uchovávania</h2>
+    <ul>
+      <li><strong>Newsletter:</strong> do odvolania súhlasu (odhlásenia) — potom 30 dní v unsubscribe liste na preukázanie odhlásenia</li>
+      <li><strong>Účet bazáru:</strong> do zmazania účtu používateľom; neaktívne účty po 3 rokoch bez prihlásenia mažeme</li>
+      <li><strong>Aktívne inzeráty:</strong> 30 dní (potom status „expired"), trvalo 1 rok od zmazania na audit</li>
+      <li><strong>Logy a IP adresy:</strong> 30 dní</li>
+    </ul>
+
+    <h2>5. Komu údaje odovzdávame (sprostredkovatelia)</h2>
+    <ul>
+      <li><strong>Cloudflare, Inc.</strong> (USA) — hosting, CDN, anti-DDoS. Štandardné zmluvné doložky (SCC) podľa čl. 46 GDPR.</li>
+      <li><strong>Supabase, Inc.</strong> (USA, EU regióny) — databáza a autentizácia. SCC.</li>
+      <li><strong>Resend, Inc.</strong> (USA) — odosielanie transakčných a newsletter e-mailov. SCC.</li>
+    </ul>
+    <p>Vaše osobné údaje nepredávame ani neodovzdávame tretím stranám na marketingové účely.</p>
+
+    <h2>6. Vaše práva</h2>
+    <p>Podľa GDPR máte právo na:</p>
+    <ul>
+      <li><strong>Prístup</strong> k svojim údajom (čl. 15)</li>
+      <li><strong>Opravu</strong> nepresných údajov (čl. 16)</li>
+      <li><strong>Výmaz</strong> („právo byť zabudnutý", čl. 17)</li>
+      <li><strong>Obmedzenie spracúvania</strong> (čl. 18)</li>
+      <li><strong>Prenosnosť</strong> údajov (čl. 20)</li>
+      <li><strong>Námietku</strong> proti spracúvaniu na základe oprávneného záujmu (čl. 21)</li>
+      <li><strong>Odvolanie súhlasu</strong> kedykoľvek (čl. 7 ods. 3) — týka sa newslettera</li>
+    </ul>
+    <p>Žiadosť zašlite na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Vybavíme ju do 30 dní.</p>
+
+    <h2>7. Odhlásenie z newslettera</h2>
+    <p>Odber newslettera môžete kedykoľvek odhlásiť:</p>
+    <ul>
+      <li>Odpoveďou na akýkoľvek newsletter e-mail s textom „odhlásiť"</li>
+      <li>E-mailom na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></li>
+    </ul>
+
+    <h2>8. Sťažnosť u dozorného úradu</h2>
+    <p>
+      Ak sa domnievate, že spracúvaním vašich osobných údajov porušujeme GDPR, môžete podať sťažnosť.
+      Keďže prevádzkovateľ je usadený v Českej republike, vedúcim dozorným úradom je
+      <strong>Úřad pro ochranu osobních údajů (ČR)</strong>, Pplk. Sochora 27, 170 00 Praha 7,
+      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+      Ako používateľ zo Slovenska sa môžete obrátiť aj na
+      <strong>Úrad na ochranu osobných údajov Slovenskej republiky</strong>, Hraničná 4826/12,
+      820 07 Bratislava 27, <a href="https://dataprotection.gov.sk" rel="noopener">dataprotection.gov.sk</a>.
+    </p>
+
+    <h2>9. Cookies</h2>
+    <p>Web používa technicky nevyhnutné cookies na prevádzku (prihlasovanie, anti-fraud). Nepoužívame marketingové ani trackovacie cookies tretích strán bez vášho výslovného súhlasu.</p>
+
+    <p class="effective"><strong>Účinnosť:</strong> 13. mája 2026</p>
+    </Fragment>
+  ) : (
+    <Fragment>
     <h1>Zásady zpracování osobních údajů</h1>
     <p class="lead">Jak zpracováváme osobní údaje uživatelů webu <strong>agro-svet.cz</strong> v souladu s nařízením GDPR (2016/679) a zákonem č. 110/2019 Sb.</p>
 
@@ -110,6 +226,8 @@ import Layout from '../layouts/Layout.astro';
     <p>Web používá technicky nezbytné cookies pro provoz (přihlašování, anti-fraud). Nepoužíváme marketingové ani trackovací cookies třetích stran bez vašeho výslovného souhlasu.</p>
 
     <p class="effective"><strong>Účinnost:</strong> 13. května 2026</p>
+    </Fragment>
+  )}
   </main>
 </Layout>
 

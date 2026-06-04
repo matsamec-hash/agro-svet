@@ -39,13 +39,13 @@ const columns = getFooterColumns(locale);
       <div class="footer-bottom-links">
         <a href="/hledat/">{tr('footer.search')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/redakce/">{tr('footer.editorial')}</a>
+        <a href={navHref(locale, '/redakce/')}>{tr('footer.editorial')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/podminky-pouziti/">{tr('footer.terms')}</a>
+        <a href={navHref(locale, '/podminky-pouziti/')}>{tr('footer.terms')}</a>
         <span aria-hidden="true">·</span>
         <a href="/fotosoutez/gdpr/">{tr('footer.gdpr')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/dsa-kontakt/">{tr('footer.dsa')}</a>
+        <a href={navHref(locale, '/dsa-kontakt/')}>{tr('footer.dsa')}</a>
         <span aria-hidden="true">·</span>
         <a href="mailto:info@samecdigital.com">{tr('footer.contact')}</a>
       </div>

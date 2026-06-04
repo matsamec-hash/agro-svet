@@ -1,11 +1,116 @@
 ---
+export const prerender = false;
 import Layout from '../layouts/Layout.astro';
+const locale = Astro.locals.locale ?? 'cs';
+const isSk = locale === 'sk';
 ---
 <Layout
-  title="DSA kontaktní bod — Agro-svět"
-  description="Jednotný kontaktní bod podle nařízení (EU) 2022/2065 (Digital Services Act, čl. 11 a 12) — pro orgány a uživatele."
+  title={isSk ? 'DSA kontaktné miesto — Agro-svet' : 'DSA kontaktní bod — Agro-svět'}
+  description={isSk ? 'Jednotné kontaktné miesto podľa nariadenia (EÚ) 2022/2065 (Digital Services Act, čl. 11 a 12) — pre orgány a používateľov.' : 'Jednotný kontaktní bod podle nařízení (EU) 2022/2065 (Digital Services Act, čl. 11 a 12) — pro orgány a uživatele.'}
 >
   <main class="legal-page">
+  {isSk ? (
+    <Fragment>
+    <h1>DSA kontaktné miesto</h1>
+    <p class="lead">
+      Táto stránka zverejňuje jednotné kontaktné miesto na komunikáciu s orgánmi členských štátov,
+      Európskou komisiou, Výborom pre digitálne služby a používateľmi podľa
+      <strong>nariadenia (EÚ) 2022/2065 z 19. októbra 2022 o jednotnom trhu s digitálnymi
+      službami (Digital Services Act)</strong>, čl. 11 a 12.
+    </p>
+
+    <h2>1. Prevádzkovateľ hostingovej služby</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong><br>
+      IČO: 29547539<br>
+      Sídlo: Na Břehu 378, 387 11 Katovice, Česká republika<br>
+      Web: <a href="https://agro-svet.cz">https://agro-svet.cz</a>
+    </p>
+
+    <h2>2. Kontaktné miesto pre orgány (DSA čl. 11)</h2>
+    <p>
+      <strong>E-mail:</strong> <a href="mailto:info@samecdigital.com">info@samecdigital.com</a><br>
+      <strong>Predmet:</strong> „DSA — orgán" (kvôli prioritnému spracovaniu)<br>
+      <strong>Kontaktná osoba:</strong> konateľ spoločnosti<br>
+      <strong>Jazyk komunikácie:</strong> čeština, slovenčina, angličtina
+    </p>
+    <p>
+      Komunikácia prebieha elektronicky. Toto kontaktné miesto slúži orgánom uvedeným
+      v čl. 11 ods. 1 DSA — koordinátorom digitálnych služieb členských štátov, Európskej
+      komisii a Výboru pre digitálne služby.
+    </p>
+
+    <h2>3. Kontaktné miesto pre používateľov (DSA čl. 12)</h2>
+    <p>
+      Používatelia môžu s prevádzkovateľom komunikovať priamo a rýchlo elektronicky:
+    </p>
+    <ul>
+      <li><strong>Všeobecný kontakt:</strong> <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></li>
+      <li><strong>Nahlásenie závadného inzerátu (DSA čl. 16):</strong> formulár <a href="/bazar/nahlasit/">/bazar/nahlasit/</a></li>
+      <li><strong>Sťažnosť proti odstráneniu inzerátu / blokácii účtu:</strong> e-mail
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>, lehota 14 dní
+        od oznámenia, vybavenie do 14 dní</li>
+      <li><strong>Žiadosti podľa GDPR (prístup, oprava, výmaz, námietka):</strong>
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — pozri
+        <a href="/zpracovani-osobnich-udaju/">Zásady spracúvania osobných údajov</a></li>
+    </ul>
+    <p>
+      <strong>Jazyk:</strong> čeština alebo slovenčina. Odpovedáme spravidla do 5 pracovných
+      dní, pri DSA hláseniach podľa čl. 16 do 7 dní, v zjavne nezákonných prípadoch bezodkladne.
+    </p>
+
+    <h2>4. Kategória hostovanej služby</h2>
+    <p>
+      Agro-svet.cz je <strong>hostingová služba</strong> v zmysle čl. 3 písm. g) iii) DSA —
+      prevádzkovateľ ukladá informácie poskytnuté používateľom (inzeráty v bazári, fotografie,
+      komentáre pri fotosúťaži) na ich žiadosť.
+    </p>
+    <p>
+      Prevádzkovateľ <strong>nie je online trhoviskom</strong> v zmysle čl. 3 písm. h) DSA —
+      nevykonáva inkaso platieb, nie je stranou kúpnych zmlúv medzi používateľmi a sprostredkúva
+      len kontakt. Povinnosti čl. 30–32 DSA (trader traceability, compliance by design,
+      povinné informácie o tovare) sa preto neuplatňujú, pokiaľ na bazári neinzerujú
+      podnikatelia predávajúci spotrebiteľom. Bazár je podľa <a href="/bazar/pravidla/">pravidiel</a>
+      koncipovaný pre fyzické osoby s vlastným majetkom a podnikateľov s povinnosťou uviesť IČO.
+    </p>
+
+    <h2>5. Kategória podľa veľkosti</h2>
+    <p>
+      Prevádzkovateľ je <strong>mikropodnikom v zmysle odporúčania Komisie 2003/361/ES</strong>
+      (zamestnanci &lt; 10, ročný obrat / bilancia &lt; 2 mil. EUR). Vzťahujú sa naň
+      povinnosti hostingových služieb podľa kapitoly III oddielu 2 DSA (čl. 11, 12, 14,
+      16, 17, 18), <strong>nevzťahujú sa</strong> naň povinnosti kapitoly III oddielu 3
+      (čl. 19–22, trusted flaggers, interný systém sťažností pre veľké platformy) podľa
+      čl. 19 ods. 2 DSA.
+    </p>
+
+    <h2>6. Ročné správy o transparentnosti</h2>
+    <p>
+      Mikropodniky sú podľa čl. 15 ods. 2 DSA <strong>oslobodené od povinnosti</strong>
+      publikovať ročné správy o transparentnosti. Prevádzkovateľ ich nepublikuje a túto výnimku
+      uplatňuje. Ak v budúcnosti prekročí kategóriu mikropodniku, zverejní prvú správu
+      do 12 mesiacov.
+    </p>
+
+    <h2>7. Mechanizmy podľa DSA implementované prevádzkovateľom</h2>
+    <ul>
+      <li><strong>Čl. 14</strong> (zmluvné podmienky) —
+        <a href="/podminky-pouziti/">Podmienky používania</a>,
+        <a href="/bazar/pravidla/">Pravidlá bazáru</a>.</li>
+      <li><strong>Čl. 16</strong> (notice and action) — formulár
+        <a href="/bazar/nahlasit/">/bazar/nahlasit/</a>, lehota 7 dní.</li>
+      <li><strong>Čl. 17</strong> (odôvodnenie rozhodnutia) — používateľ je o zmazaní inzerátu
+        alebo blokácii účtu informovaný e-mailom s odôvodnením.</li>
+      <li><strong>Čl. 18</strong> (oznámenie podozrenia z trestného činu) — prevádzkovateľ
+        oznámi podozrenie orgánom činným v trestnom konaní bezodkladne.</li>
+      <li><strong>Sťažnosť proti rozhodnutiu</strong> — e-mailom na info@samecdigital.com,
+        lehota 14 dní, vybavenie do 14 dní.</li>
+    </ul>
+
+    <p class="effective"><strong>Účinnosť:</strong> 28. mája 2026</p>
+    </Fragment>
+  ) : (
+    <Fragment>
     <h1>DSA kontaktní bod</h1>
     <p class="lead">
       Tato stránka zveřejňuje jednotný kontaktní bod pro komunikaci s orgány členských států,
@@ -103,6 +208,8 @@ import Layout from '../layouts/Layout.astro';
     </ul>
 
     <p class="effective"><strong>Účinnost:</strong> 28. května 2026</p>
+    </Fragment>
+  )}
   </main>
 </Layout>
 
