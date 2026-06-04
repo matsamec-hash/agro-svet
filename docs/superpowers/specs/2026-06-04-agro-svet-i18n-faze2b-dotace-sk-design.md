@@ -88,9 +88,24 @@ pro živou CZ kalkulačku a snadná testovatelnost.
   mladý poľnohospodár (strop 28 ha), VCS. (ANC mimo výpočet — viz §7.)
 - `formatEur(n): string` — `n.toLocaleString('sk-SK', …) + ' €'`.
 
-**Stránka:** `src/pages/sk/kalkulacka/dotace-cap/index.astro` — lokalizovaná kopie
-struktury CZ stránky (`prerender = true`), slovenské texty, EUR, FAQ v SK, disclaimer
-směrující na PPA. CZ stránka `src/pages/kalkulacka/dotace-cap/index.astro` zůstává netknutá.
+**Routing (oprava):** projekt NEMÁ fyzické `/sk/` stránky. Middleware
+([`src/middleware.ts`](../../../src/middleware.ts)) stripuje prefix a rewritne
+`/sk/foo` → interní `/foo` s `Astro.locals.locale='sk'`; lock = 307 redirect.
+Launchnuté SK kalkulačky (Fáze 2b vzor, [`naklady-na-hektar/index.astro`](../../../src/pages/kalkulacka/naklady-na-hektar/index.astro))
+používají **`prerender = false` (SSR)** + i18n content modul + `Astro.locals.locale`.
+
+**Stránka (skutečný vzor):** modifikovat **existující** `src/pages/kalkulacka/dotace-cap/index.astro`:
+- `prerender = false`; číst `const locale = Astro.locals.locale ?? 'cs'`.
+- Formuláře CZ a SK se strukturně liší (SK: CHVÚ plocha, bez ANC fieldsetu; CZ: ANC + eko-premium)
+  → každou jurisdikci extrahovat do komponenty:
+  - `src/components/calc/DotaceCapCz.astro` — CZ formulář + klientský `<script>` (verbatim přesun
+    ze současné stránky, importuje `calculateCap` z `cap-dotace.ts`) → **CZ logika netknutá**.
+  - `src/components/calc/DotaceCapSk.astro` — SK formulář + `<script>` importující `calculateCapSk`
+    z `sk-cap-dotace.ts`.
+- Stránka: `{locale === 'sk' ? <DotaceCapSk/> : <DotaceCapCz/>}`, Layout title/description/canonical
+  a FAQ JSON-LD z content modulu podle locale.
+- `src/i18n/kalkulacka/dotace-cap.ts` — `content[locale]` (title, metaDescription, kicker, h1, lede,
+  FAQ, breadcrumb, disclaimer). cs reprodukuje současné texty byte-ekvivalentně.
 
 ### A2 — Obsah: overlay kolekce `dotace-sk`
 
@@ -98,16 +113,18 @@ směrující na PPA. CZ stránka `src/pages/kalkulacka/dotace-cap/index.astro` z
 ([`src/content.config.ts`](../../../src/content.config.ts)).
 
 - Nová kolekce `dotaceSk` v `content.config.ts`: `glob({ base: './src/content/dotace-sk' })`,
-  **stejné schéma** jako `dotace`.
-- `src/content/dotace-sk/*.md` — 3–4 slovenské investiční tituly PPA SR (nový obsah
-  z rešerše, ne překlad — SK nemá intervence „33.73", má vlastní kódy/tituly).
+  **stejné schéma** jako `dotace` (sdílet schema factory, viz `znackySchema()`).
+- `src/content/dotace-sk/*.md` — 3 slovenské investiční tituly PPA SR (nový obsah z rešerše,
+  ne překlad — SK nemá intervence „33.73", má vlastní intervence Strategického plánu SR).
+  Slugy SK ≠ CZ → **žádný cs fallback obsahu** (na rozdíl od `znacky-sk`, kde slugy = překlady).
 - `src/data/dotace-kola-sk.json` — kola PPA SR (slovenské intervence, odkazy `apa.sk`/`mpsr.sk`).
-- Stránky `/dotace/index`, `/dotace/[slug]`, `/dotace/kalendar-kol` budou **locale-aware**:
-  při `locale === 'sk'` čtou `dotace-sk` overlay + `dotace-kola-sk.json`; jinak cs zdroje.
-  cs-facing `getCollection('dotace')` (listings/sitemap/llms) zůstává **netknuté**.
-
-> Přesný mechanismus výběru overlay (helper vs inline větvení v page frontmatteru)
-> dořeší implementační plán podle toho, jak to dělá `znacky-sk` — sledovat existující vzor.
+- Stránky (existující, prerender=true → **prerender=false** SSR, locale-aware):
+  - `/dotace/index.astro`: `locale==='sk'` → `getCollection('dotaceSk')` + SK copy; jinak cs.
+  - `/dotace/[slug].astro`: `getStaticPaths` zrušit; `locale==='sk'` → `getEntry('dotaceSk', slug)`
+    (404 když chybí, **bez** cs fallbacku); cs → `getEntry('dotace', slug)` jako dřív.
+  - `/dotace/kalendar-kol/index.astro`: `locale==='sk'` → `dotace-kola-sk.json` + SK copy; jinak cs.
+  - cs-facing `getCollection('dotace')` v sitemap/llms zůstává **netknuté**.
+- `src/i18n/dotace.ts` — `content[locale]` pro copy sekce (hero, disclaimer, statusLabel, breadcrumb).
 
 ### Odemčení a indexace
 - Z `LOCKED_SECTION_PREFIXES` ([`nav.ts:30`](../../../src/i18n/nav.ts)) **odebrat**
@@ -124,8 +141,9 @@ směrující na PPA. CZ stránka `src/pages/kalkulacka/dotace-cap/index.astro` z
 
 ```
 A1:  uživatel (SK form) → calculateCapSk(CapInputSk) → CapResultSk → render breakdown (EUR)
-A2:  locale === 'sk' ? getCollection('dotace-sk') : getCollection('dotace')  → /dotace render
-     locale === 'sk' ? dotace-kola-sk.json        : dotace-kola.json          → /dotace/kalendar-kol
+A2:  locale === 'sk' ? getCollection('dotaceSk') : getCollection('dotace')  → /dotace render
+     locale === 'sk' ? getEntry('dotaceSk', slug) : getEntry('dotace', slug) → /dotace/[slug] (sk: 404 if missing)
+     locale === 'sk' ? dotace-kola-sk.json       : dotace-kola.json          → /dotace/kalendar-kol
 ```
 
 Lock/launch rozhodnutí (Layout, sitemap, llms): `isSkLaunchedPath(path) && !isLockedSectionPath(path)`.
