@@ -1,99 +1,60 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. cs výstup sémanticky identický. SK hub vynechá dotace-cap kartu.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { content } from '../../i18n/kalkulacka/hub';
+import { crumbs } from '../../i18n/kalkulacka/common';
 
-const calculators = [
-  {
-    slug: 'prevody-jednotek',
-    name: 'Převody jednotek plochy',
-    short: 'Převody jednotek',
-    description: 'Hektar, ar, m², km², akr a historické jednotky (jitro, korec, strych, morgen) — okamžitý přepočet pro zemědělce, katastr i genealogii.',
-    icon: '📐',
-  },
-  {
-    slug: 'prevody-hmotnost',
-    name: 'Převody jednotek hmotnosti',
-    short: 'Převody hmotnosti',
-    description: 'Tuna, metrický cent, kilogram, libra a bušl (pšenice, kukuřice, sója) — pro výkup, CBOT futures a porovnání US/EU výnosů.',
-    icon: '⚖️',
-  },
-  {
-    slug: 'leasing-traktoru',
-    name: 'Kalkulačka leasingu traktoru',
-    short: 'Leasing traktoru',
-    description: 'Spočítejte měsíční splátku, celkové náklady a RPSN. Porovnání ČSOB Leasing, John Deere Financial, AGRI CS a AGROTEC.',
-    icon: '💳',
-  },
-  {
-    slug: 'naklady-na-hektar',
-    name: 'Kalkulačka provozních nákladů na hektar',
-    short: 'Náklady na hektar',
-    description: 'Spotřeba nafty, výkon plochy a obsluha — celkové Kč/ha pro orbu, secí, postřik nebo sklizeň.',
-    icon: '🌾',
-  },
-  {
-    slug: 'dotace-cap',
-    name: 'Kalkulačka dotací CAP 2024',
-    short: 'Dotace CAP',
-    description: 'Spočítejte přímé platby SZP 2023–2027: BISS, CISS, EKO, ANC i VCS pro citlivé sektory (chmel, ovoce, cukrová řepa…).',
-    icon: '💶',
-  },
-  {
-    slug: 'uspora-nafty',
-    name: 'Kalkulačka úspory nafty',
-    short: 'Úspora nafty',
-    description: 'Porovnejte spotřebu dvou traktorů, roční náklady na naftu a dobu návratnosti investice. Podle emisní normy nebo vlastní měřené spotřeby.',
-    icon: '⛽',
-  },
-];
+const locale = Astro.locals.locale ?? 'cs';
+const c = content[locale] ?? content.cs;
+const cr = crumbs[locale] ?? crumbs.cs;
 
+const calculators = c.cards;
 const canonical = `${SITE_URL}/kalkulacka/`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kalkulačky', url: '/kalkulacka/' },
+  { name: cr.home, url: '/' },
+  { name: cr.hub, url: '/kalkulacka/' },
 ]);
 
 const itemListJsonLd = itemListSchema(
-  calculators.map((c) => ({ url: `/kalkulacka/${c.slug}/`, name: c.name })),
-  'Zemědělské kalkulačky',
+  calculators.map((card) => ({ url: `/kalkulacka/${card.slug}/`, name: card.name })),
+  c.itemListName,
 );
 ---
 
 <Layout
-  title="Kalkulačky pro zemědělce — převody jednotek, leasing, náklady"
-  description="Interaktivní kalkulačky: převody jednotek plochy (ha, ar, m², akr, jitro), leasing traktoru, provozní náklady na hektar, dotace CAP a úspora nafty."
-  canonical={canonical}
+  title={c.title}
+  description={c.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
 
   <div class="hub">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <span class="current">Kalkulačky</span>
+      <span class="current">{cr.hub}</span>
     </nav>
 
     <header class="hero">
-      <span class="kicker">Nástroje · ekonomika farmy</span>
-      <h1>Kalkulačky pro zemědělce</h1>
-      <p class="hero-lede">
-        Otevřené, transparentní nástroje pro plánování investic a denního provozu. Spočítejte si splátky a náklady
-        před tím, než zavoláte dealerovi — výsledky jsou jen pro orientaci, finální nabídku vždy ověřte u poskytovatele.
-      </p>
+      <span class="kicker">{c.kicker}</span>
+      <h1>{c.h1}</h1>
+      <p class="hero-lede">{c.lede}</p>
     </header>
 
     <div class="card-grid">
-      {calculators.map((c) => (
-        <a href={`/kalkulacka/${c.slug}/`} class="calc-card">
-          <div class="cc-icon" aria-hidden="true">{c.icon}</div>
+      {calculators.map((card) => (
+        <a href={locale === 'cs' ? `/kalkulacka/${card.slug}/` : `/${locale}/kalkulacka/${card.slug}/`} class="calc-card">
+          <div class="cc-icon" aria-hidden="true">{card.icon}</div>
           <div class="cc-body">
-            <h2>{c.short}</h2>
-            <p>{c.description}</p>
-            <span class="cc-cta">Otevřít kalkulačku →</span>
+            <h2>{card.short}</h2>
+            <p>{card.description}</p>
+            <span class="cc-cta">{c.ctaOpen}</span>
           </div>
         </a>
       ))}
