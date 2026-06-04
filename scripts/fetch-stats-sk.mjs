@@ -1,8 +1,16 @@
 #!/usr/bin/env node
 // Build-time fetcher pre SK /statistiky/. Zdroj = Eurostat geo=SK (primárny),
-// ŠÚSR DATAcube best-effort (PHM/hnojivá). Výstup src/data/agro-stats-sk.json
+// ŠÚSR DATAcube (PHM týždenné ceny). Výstup src/data/agro-stats-sk.json
 // (rovnaký tvar ako agro-stats.json; prázdne polia = blok sa na /sk vynechá).
 // Refresh: `npm run stats:refresh:sk`.
+//
+// ŠÚSR DATAcube (data.statistics.sk/api/v2):
+//   PHM: sp0207ts (týždenné, EUR/l) — NÁJDENÉ, fetchujeme. Dimenzie: sp0207ts_tyz (YYYYWW), sp0207ts_ukaz.
+//        UKAZ01=Benzín 95, UKAZ03=LPG, UKAZ04=Nafta.
+//   Priemyselné hnojivá (EUR/t): katalóg 668 datasetov prehľadaný — žiadna tabuľka cien
+//        priemyselných hnojív nenájdená. pl2022rs = spotreba pesticídov (nie ceny).
+//        sp2034ms = priemerné ceny agro produktov (plodiny/živočíchy, nie vstupy).
+//        fertilizers/fertSeries zostávajú prázdne → InputsBlock bez hnojív na /sk.
 
 import { writeFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
@@ -146,6 +154,95 @@ function buildCommodityStats(full) {
   });
 }
 
+// — ŠÚSR DATAcube: týždenné ceny PHM (sp0207ts) —
+// Vracia { latestFuels, fuelSeries }. fuelSeries = nafta posledných 52 týždňov.
+// latestFuels = benzín 95 + nafta + LPG z posledného dostupného týždňa.
+const SUSR_BASE = 'https://data.statistics.sk/api/v2';
+const SUSR_FUEL_LABELS = { UKAZ01: 'Benzín 95', UKAZ03: 'LPG', UKAZ04: 'Nafta' };
+
+async function susrFetch(path) {
+  const url = `${SUSR_BASE}${path}`;
+  console.log(`→ ŠÚSR ${path}`);
+  const res = await fetch(url, { headers: { Accept: 'application/json' } });
+  if (!res.ok) { console.warn(`  ŠÚSR ${res.status} — skip`); return null; }
+  return res.json();
+}
+
+/** Vráti zoradený zoznam kódov týždňov (YYYYWW) z dimenzie sp0207ts_tyz, zostupne. */
+async function susrWeekCodes() {
+  const d = await susrFetch('/dimension/sp0207ts/sp0207ts_tyz?lang=en');
+  if (!d) return [];
+  const idx = d.category?.index ?? {};
+  return Object.keys(idx).sort((a, b) => parseInt(b) - parseInt(a));
+}
+
+/**
+ * Parsuje JSON-stat2 z ŠÚSR sp0207ts pre jeden týždeň a niekoľko indikátorov.
+ * Vracia { weekCode, weekLabel, values: { UKAZ01: price, UKAZ04: price, ... } }
+ */
+function parseSusrWeek(json) {
+  if (!json) return null;
+  const weekDim = json.dimension?.sp0207ts_tyz?.category ?? {};
+  const ukazDim = json.dimension?.sp0207ts_ukaz?.category ?? {};
+  const weekCodes = Object.keys(weekDim.index ?? {});
+  const ukazCodes = Object.keys(ukazDim.index ?? {});
+  if (!weekCodes.length || !ukazCodes.length) return null;
+  const weekCode = weekCodes[0];
+  const weekLabel = (weekDim.label ?? {})[weekCode] ?? weekCode;
+  const values = {};
+  for (let ui = 0; ui < ukazCodes.length; ui++) {
+    // JSON-stat2: flat index = weekIdx * nUkaz + ukazIdx (sp0207ts_data dim last, size 1)
+    const flat = ui; // single week → weekIdx always 0
+    const raw = json.value?.[String(flat)] ?? json.value?.[flat];
+    if (raw !== null && raw !== undefined) values[ukazCodes[ui]] = raw;
+  }
+  return { weekCode, weekLabel, values };
+}
+
+async function fetchSkUsrFuels(weekCount = 52) {
+  const weeks = await susrWeekCodes();
+  if (!weeks.length) return { latestFuels: [], fuelSeries: [] };
+
+  // Fetch posledných weekCount týždňov (plus 4 navyše pre prípad null hodnôt)
+  const toFetch = weeks.slice(0, weekCount + 4);
+
+  const results = [];
+  for (const wk of toFetch) {
+    const json = await susrFetch(`/dataset/sp0207ts/${wk}/UKAZ01,UKAZ03,UKAZ04?lang=en`);
+    const parsed = parseSusrWeek(json);
+    if (parsed) results.push(parsed);
+  }
+
+  // latestFuels: z prvého týždňa kde máme hodnoty pre naftu
+  const latestFuels = [];
+  const latestResult = results.find(r => r.values.UKAZ04 !== undefined);
+  if (latestResult) {
+    for (const [code, label] of Object.entries(SUSR_FUEL_LABELS)) {
+      const price = latestResult.values[code];
+      if (price !== undefined) {
+        // Štandardizuj week label: "21. week (18. 5. 2026 - 24. 5. 2026)" → "21. týždeň 2026"
+        const m = latestResult.weekLabel.match(/^(\d+)\.\s*week.*?(\d{4})/);
+        const weekLabel = m ? `${m[1]}. týždeň ${m[2]}` : latestResult.weekLabel;
+        latestFuels.push({ fuel: label, price: Math.round(price * 1000) / 1000, week: weekLabel });
+      }
+    }
+  }
+
+  // fuelSeries: nafta (UKAZ04) za posledných 52 týždňov, vzostupne
+  const fuelSeries = results
+    .filter(r => r.values.UKAZ04 !== undefined)
+    .slice(0, weekCount)
+    .reverse() // najstaršie prvé
+    .map(r => {
+      const m = r.weekLabel.match(/^(\d+)\.\s*week.*?(\d{4})/);
+      const label = m ? `${m[1]}/${m[2]}` : r.weekCode;
+      const sortKey = parseInt(r.weekCode);
+      return { label, value: Math.round(r.values.UKAZ04 * 1000) / 1000, sortKey };
+    });
+
+  return { latestFuels, fuelSeries };
+}
+
 async function main() {
   const livestockHistorical = await fetchLivestock();
   const commodityFull = await fetchCommodities();
@@ -153,6 +250,7 @@ async function main() {
   const { crops, areas } = await fetchProduction();
 
   const scissorsPoints = await fetchScissors();
+  const { latestFuels, fuelSeries } = await fetchSkUsrFuels(52);
 
   const payload = {
     generated: new Date().toISOString(),
@@ -160,8 +258,8 @@ async function main() {
     commodityStats,
     commodityFull,
     fiveYearAvgs: {},
-    latestFuels: [],
-    fuelSeries: [],
+    latestFuels,
+    fuelSeries,
     livestock: livestockHistorical.slice(-4),
     livestockHistorical,
     crops,
@@ -177,6 +275,7 @@ async function main() {
   console.log(`✓ wrote ${OUT}`);
   console.log(`  livestockHistorical: ${livestockHistorical.length}`);
   console.log(`  crops: ${crops.length}, areas: ${areas.length}`);
+  console.log(`  latestFuels: ${latestFuels.length}, fuelSeries: ${fuelSeries.length}w`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
