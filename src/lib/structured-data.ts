@@ -199,6 +199,9 @@ export interface MachineModelForSchema {
   yearTo?: number | null;
   engine?: string;
   transmission?: string;
+  /** BCP-47 language of the page (e.g. 'cs-CZ', 'sk-SK'). Default cs → no inLanguage
+   *  emitted (byte-identický s původním výstupem). */
+  lang?: string;
 }
 
 // Categories that map to Schema.org Vehicle (self-propelled = vehicle).
@@ -243,6 +246,8 @@ export function machineProductSchema(m: MachineModelForSchema) {
     category: categoryLabel,
   };
 
+  // Only emit inLanguage for non-default locales — keeps cs output byte-identical.
+  if (m.lang && m.lang !== 'cs-CZ') schema.inLanguage = m.lang;
   if (m.description) schema.description = m.description;
   if (m.imageUrl) schema.image = m.imageUrl.startsWith('http') ? m.imageUrl : `${SITE_URL}${m.imageUrl}`;
 
