@@ -189,3 +189,203 @@ export function livestockMilestone(
     threshold,
   };
 }
+
+// ── Locale-aware prose helpers ───────────────────────────────────────────────
+
+export type Locale = 'cs' | 'sk';
+
+export interface ScissorsPoint {
+  year: number;
+  x: number; // index vstupů / inputs index
+  y: number; // index výstupů / outputs index
+}
+
+export interface Takeaway {
+  category: 'trh' | 'vstupy' | 'zvirata';
+  title: string;
+  insight: string;
+  anchor: string;
+}
+
+interface LocaleStrings {
+  noData: string;
+  positive: (year: number, y: number, x: number, margin: number) => string;
+  negative: (year: number, x: number, y: number, margin: number) => string;
+  neutral: (year: number, x: number, y: number) => string;
+  livestockFallback: string;
+  livestockTrend: (first: number, last: number, drop: number, numLocale: string) => string;
+  wheatName: string;
+  wheatFallback: (price: number, unit: string, month: string, numLocale: string) => string;
+  fertName: string;
+  fertInsight: (inflPct: number) => string;
+  fertFallback: string;
+  fertFallbackTitle: string;
+  cattleDisplayName: string;
+  cattleMilestone: (threshold: number, latestCount: number) => string;
+  cattleFallback: (count: number, date: string, numLocale: string) => string;
+  cattleNoData: string;
+}
+
+const CS_STRINGS: LocaleStrings = {
+  noData: 'Nedostatek dat pro výpočet cenových nůžek.',
+  positive: (year, y, x, margin) =>
+    `V ${year} výstupy ${y.toFixed(0)} vs. vstupy ${x.toFixed(0)} → marže pozitivní (+${margin.toFixed(0)} bodů).`,
+  negative: (year, x, y, margin) =>
+    `V ${year} vstupy ${x.toFixed(0)} > výstupy ${y.toFixed(0)} → marže negativní (${margin.toFixed(0)} bodů).`,
+  neutral: (year, x, y) =>
+    `V ${year} vstupy ${x.toFixed(0)}, výstupy ${y.toFixed(0)} → marže neutrální.`,
+  livestockFallback: 'Pololetní data ČSÚ — viz graf níže.',
+  livestockTrend: (first, last, drop, numLocale) =>
+    `Stav skotu: ${first.toLocaleString(numLocale)} → ${last.toLocaleString(numLocale)} ks (${drop.toFixed(0)} %).`,
+  wheatName: 'Pšenice',
+  wheatFallback: (price, unit, month, numLocale) =>
+    `Aktuální cena ${price.toLocaleString(numLocale)} Kč/t (${month}).`,
+  fertName: 'NPK 15-15-15',
+  fertInsight: (inflPct) =>
+    `Stále ${inflPct >= 0 ? '+' : ''}${inflPct.toFixed(0)} % proti roku 2019. Cenové nůžky se ${inflPct > 30 ? 'zužují' : 'stabilizují'}.`,
+  fertFallback: 'Aktuální data v sekci Vstupy.',
+  fertFallbackTitle: 'Hnojiva',
+  cattleDisplayName: 'Skot',
+  cattleMilestone: (threshold, latestCount) =>
+    `Stav pod ${(threshold / 1e6).toFixed(1)} M kusů (aktuálně ${(latestCount / 1e6).toFixed(2)} M).`,
+  cattleFallback: (count, date, numLocale) =>
+    `Aktuálně ${count.toLocaleString(numLocale)} ks (${date}).`,
+  cattleNoData: 'Pololetní data ČSÚ.',
+};
+
+const SK_STRINGS: LocaleStrings = {
+  noData: 'Nedostatok dát pre výpočet cenových nožníc.',
+  positive: (year, y, x, margin) =>
+    `V ${year} výstupy ${y.toFixed(0)} vs. vstupy ${x.toFixed(0)} → marža pozitívna (+${margin.toFixed(0)} bodov).`,
+  negative: (year, x, y, margin) =>
+    `V ${year} vstupy ${x.toFixed(0)} > výstupy ${y.toFixed(0)} → marža negatívna (${margin.toFixed(0)} bodov).`,
+  neutral: (year, x, y) =>
+    `V ${year} vstupy ${x.toFixed(0)}, výstupy ${y.toFixed(0)} → marža neutrálna.`,
+  livestockFallback: 'Ročné údaje Eurostat — pozri graf nižšie.',
+  livestockTrend: (first, last, drop, numLocale) =>
+    `Stav HD: ${first.toLocaleString(numLocale)} → ${last.toLocaleString(numLocale)} ks (${drop.toFixed(0)} %).`,
+  wheatName: 'Pšenica',
+  wheatFallback: (price, _unit, month, numLocale) =>
+    `Aktuálna cena ${price.toLocaleString(numLocale)} EUR/t (${month}).`,
+  fertName: 'NPK 15-15-15',
+  fertInsight: (inflPct) =>
+    `Stále ${inflPct >= 0 ? '+' : ''}${inflPct.toFixed(0)} % oproti roku 2019. Cenové nožnice sa ${inflPct > 30 ? 'zužujú' : 'stabilizujú'}.`,
+  fertFallback: 'Aktuálne dáta v sekcii Vstupy.',
+  fertFallbackTitle: 'Hnojivá',
+  cattleDisplayName: 'Hovädzí dobytok',
+  cattleMilestone: (threshold, latestCount) =>
+    `Stav pod ${(threshold / 1e6).toFixed(1)} M kusov (aktuálne ${(latestCount / 1e6).toFixed(2)} M).`,
+  cattleFallback: (count, date, numLocale) =>
+    `Aktuálne ${count.toLocaleString(numLocale)} ks (${date}).`,
+  cattleNoData: 'Ročné údaje Eurostat.',
+};
+
+function getStrings(locale: Locale): LocaleStrings {
+  return locale === 'sk' ? SK_STRINGS : CS_STRINGS;
+}
+
+/** Human-readable price scissors insight for the given series. */
+export function scissorsInsightText(scissorsPoints: ScissorsPoint[], locale: Locale): string {
+  const s = getStrings(locale);
+  if (scissorsPoints.length === 0) return s.noData;
+  const last = scissorsPoints[scissorsPoints.length - 1];
+  const margin = last.y - last.x;
+  if (margin > 5) return s.positive(last.year, last.y, last.x, margin);
+  if (margin < -5) return s.negative(last.year, last.x, last.y, margin);
+  return s.neutral(last.year, last.x, last.y);
+}
+
+/** Human-readable livestock (cattle) trend insight across full historical series. */
+export function livestockInsightText(livestockHistorical: LivestockStat[], locale: Locale): string {
+  const s = getStrings(locale);
+  const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+  const skot = livestockHistorical
+    .filter(l => l.animal === 'Skot')
+    .sort((a, b) => a.date.localeCompare(b.date));
+  if (skot.length < 2) return s.livestockFallback;
+  const first = skot[0];
+  const last = skot[skot.length - 1];
+  const drop = ((last.count / first.count) - 1) * 100;
+  return s.livestockTrend(first.count, last.count, drop, numLocale);
+}
+
+interface StatTakeawaysInput {
+  commodityStats: CommodityStat[];
+  fertilizers: FertilizerPrice[];
+  livestock: LivestockStat[];
+}
+
+/** Produces the 3 auto-takeaway cards (trh / vstupy / zvirata) for the statistics page. */
+export function statTakeaways(
+  { commodityStats, fertilizers, livestock }: StatTakeawaysInput,
+  locale: Locale,
+): Takeaway[] {
+  const s = getStrings(locale);
+  const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+  const FERT_BASE_YEAR = 2019;
+  const SKOT_THRESHOLD = 1300000;
+
+  const big = biggestYoyChange(commodityStats);
+  const inflPct = inputCostInflation(fertilizers, 'NPK 15-15-15', FERT_BASE_YEAR);
+  const skotMile = livestockMilestone(livestock, 'Skot', SKOT_THRESHOLD);
+  const wheat = commodityStats.find(c => c.name === s.wheatName);
+
+  const result: Takeaway[] = [];
+
+  // ── trh ──
+  if (big && big.change !== null && Math.abs(big.change) >= 1) {
+    const dir = big.change >= 0 ? '+' : '';
+    result.push({
+      category: 'trh',
+      title: big.name,
+      insight: `${dir}${big.change.toFixed(1)} % r/r. Aktuální cena ${big.price.toLocaleString(numLocale)} ${big.unit}.`,
+      anchor: '#trh',
+    });
+  } else if (wheat) {
+    result.push({
+      category: 'trh',
+      title: s.wheatName,
+      insight: s.wheatFallback(wheat.price, wheat.unit, wheat.month, numLocale),
+      anchor: '#trh',
+    });
+  }
+
+  // ── vstupy ──
+  if (inflPct !== null) {
+    result.push({
+      category: 'vstupy',
+      title: 'NPK 15-15-15',
+      insight: s.fertInsight(inflPct),
+      anchor: '#vstupy',
+    });
+  } else {
+    result.push({
+      category: 'vstupy',
+      title: s.fertFallbackTitle,
+      insight: s.fertFallback,
+      anchor: '#vstupy',
+    });
+  }
+
+  // ── zvirata ──
+  if (skotMile) {
+    result.push({
+      category: 'zvirata',
+      title: s.cattleDisplayName,
+      insight: s.cattleMilestone(skotMile.threshold, skotMile.latestCount),
+      anchor: '#zvirata',
+    });
+  } else {
+    const skot = livestock.filter(l => l.animal === 'Skot').pop();
+    result.push({
+      category: 'zvirata',
+      title: s.cattleDisplayName,
+      insight: skot
+        ? s.cattleFallback(skot.count, skot.date, numLocale)
+        : s.cattleNoData,
+      anchor: '#zvirata',
+    });
+  }
+
+  return result;
+}
