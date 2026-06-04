@@ -1,58 +1,32 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
-import { SAZBY } from '../../../lib/cap-dotace';
+import { content } from '../../../i18n/kalkulacka/dotace-cap';
 import DotaceCapCz from '../../../components/calc/DotaceCapCz.astro';
+import DotaceCapSk from '../../../components/calc/DotaceCapSk.astro';
 
+const locale = Astro.locals.locale ?? 'cs';
+const c = content[locale] ?? content.cs;
 const canonical = `${SITE_URL}/kalkulacka/dotace-cap/`;
-
-const faqItems = [
-  {
-    q: 'Jaké dotace mi reálně přijdou na účet?',
-    a: 'Kalkulačka sčítá hlavní přímé platby SZP 2023–2027 (BISS + CISS + EKO + ANC + VCS pro citlivé sektory + bonus Mladý zemědělec). Investiční dotace (Intervence 33.73, 37.73 a další z PRV) jsou samostatné výzvy a nepočítáme je. Pojistné kompenzace, AEKO smlouvy a Welfare zvířat také ne.',
-  },
-  {
-    q: 'Jsou sazby aktuální?',
-    a: `Sazby vychází z veřejně dostupných materiálů SZIF / MZe pro rok 2024 (BISS ${SAZBY.biss} Kč/ha, CISS ${SAZBY.ciss} Kč/ha pro prvních ${SAZBY.cissMaxHa} ha, EKO základní ${SAZBY.ekoBasic} Kč/ha). Oficiální sazby pro daný rok SZIF zveřejňuje až po uzávěrce kampaně, takže celková částka se může lišit o ±5–10 %.`,
-  },
-  {
-    q: 'Co je CISS a proč jen na prvních 150 ha?',
-    a: `CISS (Complementary Redistributive Income Support) je redistributivní platba — sníží disproporci mezi malými a velkými farmami. Platí se ${SAZBY.ciss} Kč/ha pouze na prvních ${SAZBY.cissMaxHa} ha. Velká farma s 500 ha dostane CISS jen za prvních ${SAZBY.cissMaxHa} ha, malá s 50 ha dostane CISS na celou výměru.`,
-  },
-  {
-    q: 'Kdy se vyplatí EKO premium?',
-    a: `EKO premium režim platí vyšší sazbu (${SAZBY.ekoPremium} Kč/ha) za víc eko-praktik — meziplodiny, krycí plodiny, biopásy, neproduktivní plochy ad. Vyplatí se vždy, kdy je farma schopná praktiky uskutečnit bez výrazného dopadu na hektarový výnos. Rozdíl proti základnímu EKO (${SAZBY.ekoBasic} Kč/ha) je ${SAZBY.ekoPremium - SAZBY.ekoBasic} Kč/ha.`,
-  },
-  {
-    q: 'Co je ANC a komu se vyplatí?',
-    a: 'ANC = Areas with Natural Constraints, méně příznivé oblasti. Tři kategorie: horská (H1–H5, nejvyšší sazba ~4500 Kč/ha průměr), ostatní oblast (OA, ~2000 Kč/ha) a oblasti se specifickým omezením (SV, ~2000 Kč/ha). Zařazení LPIS bloku do ANC kategorie je dáno průměrnou nadmořskou výškou, sklonem, půdním typem a podloží — najdete v evidenci LPIS u svého LPIS bloku.',
-  },
-  {
-    q: 'Vyplatí se VCS u méně známých sektorů?',
-    a: 'Ano, zejména u chmele (~13000 Kč/ha) a polní zeleniny (~9000 Kč/ha) je sazba významná — i 5 ha přidá 45–65 tis. Kč/rok. U krmných plodin (~1100 Kč/ha) je sazba spíš orientační — citelná až od desítek hektarů.',
-  },
-  {
-    q: 'Kalkulačka je závazná?',
-    a: 'NE. Slouží jako orientace pro plánování. Závazné částky stanovuje SZIF (https://www.szif.cz) po uzávěrce roční kampaně a po kontrole LPIS a sankčního systému. Při překročení limitů nebo nesplnění podmínek (např. greening) může být skutečná platba i o desítky procent nižší.',
-  },
-];
+const homeHref = locale === 'cs' ? '/' : `/${locale}/`;
+const hubHref = locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kalkulačky', url: '/kalkulacka/' },
-  { name: 'Dotace CAP', url: canonical },
+  { name: c.crumbHome, url: homeHref },
+  { name: c.crumbHub, url: hubHref },
+  { name: c.crumbSelf, url: canonical },
 ]);
-const faqJsonLd = faqPageSchema(faqItems);
+const faqJsonLd = faqPageSchema(c.faq);
 ---
 
 <Layout
-  title="Kalkulačka dotací CAP 2024 — BISS, CISS, EKO, ANC, VCS"
-  description="Spočítejte, jaké přímé platby vám připadnou ze Společné zemědělské politiky 2023–2027. Zahrnuje BISS, CISS, EKO, ANC i VCS pro citlivé sektory."
-  canonical={canonical}
+  title={c.title}
+  description={c.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
-  <DotaceCapCz faqItems={faqItems} />
+  {locale === 'sk' ? <DotaceCapSk faqItems={c.faq} /> : <DotaceCapCz faqItems={c.faq} />}
 </Layout>
