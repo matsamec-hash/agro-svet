@@ -181,36 +181,45 @@ jako první task plánu s gate „čísla ověřena" před kódem.
 
 ## 7. Tabulka sazeb (naplněno rešeršní fází 2026-06-04)
 
-> **Stav ověření.** „Pevné" = dual-sourced 2024 aktuály (Vestník MPRV SR via Poľnoinfo
-> + druhý nezávislý web). „Overiť" = jen 2023 plánované (single-source) — final hodnota
-> 2024 jen v oficiálním PPA Excelu „Sadzby priamych platieb pre rok 2024" (apa.sk/sadzby,
-> .xlsx — přes web nečitelný). **Plán Task 1 = stáhnout ten Excel a opravit/potvrdit
-> všechny řádky před UI prací.** Žádné číslo bez řádku zde.
+> **Stav ověření (Task 0 hotov 2026-06-04).** VŠECHNY řádky níže jsou nyní **CONFIRMED-2024
+> z oficiálního PPA Excelu** „Sadzby priamych platieb pre rok 2024" (apa.sk/sadzby, .xlsx,
+> publikováno 16.6.2025) — soubor byl stažen a strojově přečten (rozbalen XML), viz §7.1.
+> Ne každé číslo z dřívější rešerše bylo správné: **mladý poľnohospodár, chmeľ, ovocie a obě
+> zeleniny se opravily** (původní hodnoty byly 2023-plánované a neplatí pro 2024).
+> Pro orientaci je v §7.2 i oficiální 2025 sazebník (rovněž stažen z apa.sk).
 
-| Platba | Sazba | Hranice/podmínka | Rok | Stav | Zdroje |
+| Platba | Sazba 2024 (oficiální) | Hranice/podmínka | Rok | Stav | Zdroje |
 |---|---|---|---|---|---|
-| BISS | 103,80 €/ha | celá způsobilá výměra | 2024 | pevné | polnoinfo.sk¹, search Vestník MPRV² |
-| CRISS stupeň 1 | 79 €/ha | do 100,99 ha | 2024 | pevné | polnoinfo.sk¹ (2023: agrobiznis³ 80) |
-| CRISS stupeň 2 | 40 €/ha | 101–150 ha; nad 150 = 0 | 2024 | pevné | polnoinfo.sk¹ + agrobiznis³ |
-| Ekoschéma (mimo CHVÚ) | 60,36 €/ha | celá výměra | 2024 | pevné | polnoinfo.sk¹ |
-| Ekoschéma (v CHVÚ) | 110,45 €/ha | plocha v CHVÚ | 2024 | pevné | polnoinfo.sk¹ + search² |
-| VCS — cukrová repa | 477,80 €/ha | min. plocha dle pravidel | 2024 | pevné | polnoinfo.sk¹ + search² |
-| VCS — bielkoviny | 69,90 €/ha | | 2024 | pevné | polnoinfo.sk¹ + search² |
-| VCS — chmeľ | 800 €/ha | min. 0,3 ha chmeľnice | 2023 plán | **overiť** | agrobiznis³ |
-| VCS — ovocie (vybrané) | 558 €/ha | min. 0,3 ha sadov | 2023 plán | **overiť** | agrobiznis³ |
-| VCS — zelenina (prácna) | 500 €/ha | min. 0,3 ha | 2023 plán | **overiť** | agrobiznis³ |
-| VCS — zelenina (vysoko prácna) | 745 €/ha | min. 0,3 ha | 2023 plán | **overiť** | agrobiznis³ |
-| Mladý poľnohospodár | 100 €/ha | max **28 ha** (2024), do 40 let, první podnik | sazba 2023 plán / strop 2024 | **overiť** | agrobiznis³ (sazba) + search² (28 ha) |
+| BISS | 103,80 €/ha | celá způsobilá výměra | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| CRISS stupeň 1 | 79,00 €/ha | do 100,99 ha | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| CRISS stupeň 2 | 40,00 €/ha | 101–150 ha; nad 150 = 0 | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| Ekoschéma (mimo CHVÚ) | 60,36 €/ha | celá výměra | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| Ekoschéma (v CHVÚ) | 110,45 €/ha | plocha v CHVÚ | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| VCS — cukrová repa | 477,80 €/ha | min. plocha dle pravidel | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| VCS — bielkoviny | 69,90 €/ha | | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| VCS — chmeľ | **880,00 €/ha** (oprava z 800) | min. 0,3 ha chmeľnice | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| VCS — ovocie (vybrané) | **554,35 €/ha** (oprava z 558) | min. 0,3 ha sadov | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| VCS — zelenina (prácna) | **455,00 €/ha** (oprava z 500) | min. 0,3 ha | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| VCS — zelenina (vysoko prácna) | **685,00 €/ha** (oprava z 745) | min. 0,3 ha | 2024 | **CONFIRMED-2024** | PPA Excel⁰ |
+| Mladý poľnohospodár (CRISS-YF) | **88,15 €/ha** (oprava z 100) | max **28 ha** (2024), do 40 let, první podnik | 2024 | **CONFIRMED-2024** (sazba), strop 28 ha overiť | PPA Excel⁰ (sazba) + search² (28 ha) |
 | **ANC** | — | **vypuštěno z V1** | — | — | per-ha sazba nedohledatelná; formálně rozvoj vidieka |
 
-**Per-head platby mimo plošnou kalkulačku** (uvést jen textem, nepočítat — kalkulačka je
-na ha): dojnice 270,95 €/ks (2024), ovce/kozy 24,15 €/ks (2024). Zdroj: polnoinfo.sk¹.
+> **Pozn. „mladý poľnohospodár":** v PPA Excelu jde o „Komplementárna podpora príjmu pre
+> mladého poľnohospodára" = **88,15 €/ha** (2024). Strop 28 ha nebyl v Excelu (Excel obsahuje
+> jen sazby), zůstává single-source 2024 — overiť proti pravidlám PPA před UI.
+
+**Per-head/per-DJ platby mimo plošnou kalkulačku** (uvést jen textem, nepočítat — kalkulačka
+je na ha), oficiální 2024 z PPA Excelu⁰:
+- VCS dojnice (kravy v systému s trhovou produkcí mléka): **270,95 €/ks**
+- VCS ovce a kozy: **24,15 €/ks**
+- Welfare zvířat (pastevní chov) — dojnice: 295,90 €/DJ; jalovice: 65,00 €/DJ; ovce/kozy samičí ≥12 měs.: 119,24 €/DJ
 
 **Zdroje:**
-1. https://polnoinfo.sk/polnohospodari-stratia-tisicky-eur-na-priamych-platbach/ (2024 aktuály z Vestníku MPRV SR, list. 2024)
-2. WebSearch „sadzby priamych platieb 2024 Slovensko" → Vestník MPRV SR (2024)
-3. https://www.agrobiznis.sk/agrarne-spravodajstvo/agrarna-politika-dotacie-eurofondy/7744-podpory-2023-premiera-novej-spp (2023 plánované)
-4. Oficiální primár (Task 1 verifikace): https://www.apa.sk/sadzby → „Sadzby priamych platieb pre rok 2024" (.xlsx)
+- 0. **PRIMÁRNÍ (Task 0):** PPA, „Sadzby priamych platieb pre rok 2024" (.xlsx, publ. 16.6.2025),
+  listing na https://www.apa.sk/sadzby — soubor stažen + strojově přečten 2026-06-04.
+  (Analogický oficiální 2025 sazebník viz §7.2, listing https://apa.sk/priame-podpory/sadzby.)
+2. WebSearch „strop mladý poľnohospodár 28 ha" → Vestník/pravidlá MPRV SR (strop ha, NE sazba).
+3. ~~agrobiznis³ (2023 plánované)~~ — překonáno oficiálním 2024 Excelem; 2023 plán hodnoty byly chybné.
 
 ### Rozhodnutí: ANC vypuštěno z V1 kalkulačky
 Per-ha sazba ANC pro SR není veřejně dohledatelná (jen oficiální PPA dokumenty) a ANC je
@@ -218,6 +227,111 @@ v SR formálně intervence rozvoja vidieka, ne přímá platba. Místo neověře
 zobrazí SK kalkulačka krátkou poznámku: *„ANC (oblasti s prírodnými obmedzeniami) sa
 v SR poskytuje samostatne v rámci rozvoja vidieka — pozri apa.sk."* (Mění §1/§3 původního
 návrhu „ANC zahrnout s poznámkou" → „ANC jen poznámka, bez výpočtu".)
+
+### 7.1 Oficiální PPA sazebník 2024 — kompletní strojový výpis (zdroj⁰)
+Stažen z apa.sk/sadzby a rozbalen (xlsx = zip XML), 2026-06-04. Verbatim řádky:
+
+```
+Rok 2024
+Základná podpora príjmu v záujme udržateľnosti ............................ 103,80 EUR/ha
+Komplementárna redistributívna podpora príjmu ... do 100,99 ha ............ 79,00 EUR/ha
+Komplementárna redistributívna podpora príjmu ... od 101 ha do 150 ha ..... 40,00 EUR/ha
+Komplementárna podpora príjmu pre mladého poľnohospodára .................. 88,15 EUR/ha
+Podpora formou celofarmovej eko-schémy v chránenom území .................. 110,45 EUR/ha
+Podpora formou celofarmovej eko-schémy mimo chráneného územia ............. 60,36 EUR/ha
+Welfare zvierat – pastevný chov (ovce a kozy samičie ≥12 mes.) ........... 119,24 EUR/DJ
+Welfare zvierat – pastevný chov (dojnice) ................................ 295,90 EUR/DJ
+Welfare zvierat – pastevný chov (jalovice) ................................ 65,00 EUR/DJ
+Viazaná podpora – vybrané druhy bielkovinových plodín ..................... 69,90 EUR/ha
+Viazaná podpora – kravy chované v systéme s trhovou produkciou mlieka .... 270,95 EUR/ks
+Viazaná podpora – ovce a kozy ............................................. 24,15 EUR/ks
+Viazaná podpora – chmeľ .................................................. 880,00 EUR/ha
+Viazaná podpora – cukrová repa .......................................... 477,80 EUR/ha
+Viazaná podpora – vybrané druhy ovocia .................................. 554,35 EUR/ha
+Viazaná podpora – vybrané druhy vysoko prácnej zeleniny .................. 685,00 EUR/ha
+Viazaná podpora – vybrané druhy prácnej zeleniny ........................ 455,00 EUR/ha
+```
+
+### 7.2 Oficiální PPA sazebník 2025 (pro orientaci / případný upgrade UI na 2025)
+Stažen z apa.sk (listing apa.sk/priame-podpory/sadzby), 2026-06-04. NEpoužívat ve V1 (UI cílí 2024),
+jen reference — sazby 2025 se MĚNÍ a struktura je stejná:
+
+```
+Rok 2025
+BISS .................................................. 105,05 EUR/ha
+CRISS do 100,99 ha ................................... 79,70 EUR/ha
+CRISS 101–150 ha ..................................... 38,00 EUR/ha
+Mladý poľnohospodár ................................. 108,89 EUR/ha
+Eko-schéma v chránenom území ........................ 93,15 EUR/ha
+Eko-schéma mimo chráneného územia ................... 58,06 EUR/ha
+VCS bielkovinové plodiny ............................ 75,77 EUR/ha
+VCS chmeľ ........................................... 880,00 EUR/ha
+VCS cukrová repa .................................... 565,00 EUR/ha
+VCS ovocie .......................................... 531,92 EUR/ha
+VCS vysoko prácna zelenina .......................... 688,00 EUR/ha
+VCS prácna zelenina ................................. 490,00 EUR/ha
+VCS kravy (trhová produkcia mlieka) ................. 276,02 EUR/ks
+VCS ovce a kozy ..................................... 24,96 EUR/ks
+```
+
+> Pozor: 2025 hodnoty se od 2024 liší (BISS ↑, CRISS-2 ↓ na 38, eko ↓, cukrová repa ↑ na 565,
+> ovocie ↓). **V1 kalkulačka = sazby 2024**; UI musí explicitně psát „sadzby pre rok 2024".
+
+### A2 tituly (verifikované)
+
+3 reálné investiční tituly relevantní pro stroje/agropodniky. Tituly 1–2 jsou **publikované
+výzvy SP SPP 2023–2027** (kampaň 2026, kódy `X/SP/2026`); titul 3 je **investiční výzva
+na poľnohospodárske podniky** (4.1, přechodové financování PRV→SP SPP, otevřená na apa.sk).
+Všechny dohledány proti apa.sk; čísla, která nebyla v primárním zdroji čitelná, jsou označena.
+
+**Titul 1 — Získavanie a udržanie mladých poľnohospodárov**
+- **Intervence/kód:** 75.1 (typ INSTAL(75)); výzva **5/SP/2026 – 75.1**
+- **Forma a výše podpory:** paušál (lump sum) **100 000 €** na žadatele, ve 2 splátkách
+  — **75 000 €** po podpisu zmluvy + **25 000 €** po splnění podnikatelského plánu.
+- **Strop/cap:** 100 000 € / žadatel (paušál, ne % výdajů).
+- **Oprávněný žadatel:** fyzická/právnická osoba v poľnohospodárské prvovýrobě splňující
+  definici mladého poľnohospodára; do **40 let** (FO nesmí v roce podání dovršit 41 let);
+  podnikatelský plán + odborná způsobilost. Účel: traktory, stroje, RV/ŽV investice.
+- **Alokace:** **57 000 000 €** (kapacita ~570 žadatelů). **Termín:** 29.05.2026,
+  aktualizací č. 1 prodloužen na **12.06.2026** (včetně).
+- **Primární zdroj:** https://www.apa.sk/vyzvy/vyzva-vyzva-5sp2026-751-mladi-polnohospodari
+  (sekundární korroborace: agrall.sk⁵)
+
+**Titul 2 — Investície do rozšírenia kapacít v spracovateľských podnikoch**
+- **Intervence/kód:** 73.7 (typ INVEST(73-74)); výzva **6/SP/2026 – 73.7** (uzavretá)
+- **Intenzita pomoci / max. výše:** dle schém **DM-19/2025** (de minimis) a **SA.121709**
+  (štátna pomoc) — konkrétní % a min/max částky jsou v přílohách 11 a 12 výzvy
+  (**nepřečteno z webu**, nutno otevřít přílohy PDF).
+- **Oprávněný žadatel:** podniky všech velikostních kategorií, které **už vykonávají
+  spracovateľskú činnost** (mäso, mlieko, pekárenství aj.).
+- **Alokace:** **35 000 000 €** (uváděno sekundárně⁶). **Termín příjmu:** 24.03.2026 –
+  **30.04.2026** (aktualizace č. 2).
+- **Primární zdroj:** https://www.apa.sk/vyzvy/vyzva-vyzva-6sp2026-737-spracovatelia
+
+**Titul 3 — Podpora na investície do poľnohospodárskych podnikov (stroje a technologie)**
+- **Opatření/kód:** podopatrenie **4.1**; výzva **74/PRV/2024** (přechodové financování do
+  programového období SP SPP 2023–2027; otevřená na apa.sk).
+- **Intenzita pomoci:** **50 %** z celkových oprávněných výdajů (+ možné bonusy/navýšení dle
+  pravidel — bonusy nepotvrzeny z primáru).
+- **Strop/cap:** oprávněné výdaje **min. 10 000 € / max. 1 800 000 €** na projekt.
+- **Oprávněný žadatel:** fyzické a právnické osoby podnikající v **poľnohospodárské
+  prvovýrobě** (RV/ŽV).
+- **Účel (stroje):** investice výhradně z Katalogu cen poľnohospodárskej techniky (príloha 7)
+  — mj. **traktory do 400 kW**, sklízecí technika na pícniny, oplocení pro ŽV, technika pro
+  vinohrad/zahradnictví.
+- **Primární zdroj:** https://www.apa.sk/74-prv-2024 (na apa.sk archivováno → vrací 404;
+  parametry dohledány u zprostředkujícího org. RRA Ister⁷, který cituje text výzvy PPA).
+
+**Zdroje A2:**
+5. https://www.agrall.sk/sk/dotacia-pre-mladych-farmarov-5-sp-2026-75-1 (korroborace 100 000 €, do 40 let, alokace 57 mil. €)
+6. https://www.eurofondy.sk/nove-vyzvy-ppa/ + teraz.sk/ekonomika (alokace 35 mil. € pro 73.7)
+7. https://www.rraister.sk/vyzva-c-74prv2024-41-podpora-na-investicie-do-polnohospodarskych-podnikov (parametry výzvy 74/PRV/2024 – 4.1)
+
+> **Caveat A2:** Pro titul 2 (73.7) nebyly z webu čitelné přesné % intenzity ani min/max
+> částky (jsou v přílohách PDF výzvy). Pro titul 3 (74/PRV/2024) je primární apa.sk stránka
+> archivovaná (404) → intenzita 50 % a stropy 10 k–1,8 M € dohledány u akreditovaného
+> zprostředkovatele, ne přímo z apa.sk. Před publikací obsahových článků doporučeno otevřít
+> PDF přílohy výzev a doplnit chybějící % / částky.
 
 ---
 
