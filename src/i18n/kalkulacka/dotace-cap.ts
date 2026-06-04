@@ -15,8 +15,7 @@ export interface DotaceCapContent {
   faq: DotaceCapFaq[];
 }
 
-export const content: Record<Locale, DotaceCapContent> = {
-  cs: {
+const cs: DotaceCapContent = {
     title: 'Kalkulačka dotací CAP 2024 — BISS, CISS, EKO, ANC, VCS',
     metaDescription: 'Spočítejte, jaké přímé platby vám připadnou ze Společné zemědělské politiky 2023–2027. Zahrnuje BISS, CISS, EKO, ANC i VCS pro citlivé sektory.',
     kicker: 'Kalkulačka · CAP 2024',
@@ -55,8 +54,9 @@ export const content: Record<Locale, DotaceCapContent> = {
         a: 'NE. Slouží jako orientace pro plánování. Závazné částky stanovuje SZIF (https://www.szif.cz) po uzávěrce roční kampaně a po kontrole LPIS a sankčního systému. Při překročení limitů nebo nesplnění podmínek (např. greening) může být skutečná platba i o desítky procent nižší.',
       },
     ],
-  },
-  sk: {
+};
+
+const sk: DotaceCapContent = {
     title: 'Kalkulačka priamych platieb SPP 2024 — BISS, CRISS, ekoschéma, VCS',
     metaDescription: 'Vypočítajte si, aké priame platby vám pripadnú zo Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku. BISS, redistributívna platba, ekoschéma a viazané platby v EUR.',
     kicker: 'Kalkulačka · SPP 2024',
@@ -73,6 +73,6 @@ export const content: Record<Locale, DotaceCapContent> = {
       { q: 'Počíta kalkulačka ANC?', a: 'Nie. Podpora pre oblasti s prírodnými obmedzeniami (ANC) sa v SR poskytuje samostatne v rámci rozvoja vidieka, nie ako priama platba — pozrite apa.sk.' },
       { q: 'Je výpočet záväzný?', a: 'Nie. Slúži na orientáciu pri plánovaní. Záväzné sumy stanovuje Pôdohospodárska platobná agentúra (PPA) po uzávierke kampane a po kontrole.' },
     ],
-  },
-  uk: {} as DotaceCapContent,
 };
+
+export const content: Record<Locale, DotaceCapContent> = { cs, sk, uk: cs };

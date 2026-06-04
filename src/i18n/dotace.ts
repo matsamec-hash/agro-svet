@@ -99,8 +99,7 @@ export interface DotaceDetailCopy {
   inLanguage: string;
 }
 
-export const content: Record<Locale, DotaceCopy> = {
-  cs: {
+const cs: DotaceCopy = {
     metaTitle: 'Dotace na zemědělskou techniku 2026 — SZIF přehled',
     metaDescription:
       'Přehled dotací SZIF na nákup zemědělské techniky (SP SZP 2023–2027, navazuje na 2023–2024): investice do podniků, technologie snižující emise, podpora mladých zemědělců. Sazby, stropy, termíny kol.',
@@ -173,8 +172,9 @@ export const content: Record<Locale, DotaceCopy> = {
       ctaLeasing: 'Kalkulačka leasingu',
       inLanguage: 'cs-CZ',
     },
-  },
-  sk: {
+};
+
+const sk: DotaceCopy = {
     metaTitle: 'Investičné dotácie pre poľnohospodárov 2026 — prehľad PPA',
     metaDescription:
       'Prehľad investičných dotácií PPA SR zo Strategického plánu SPP 2023–2027 — investície do podnikov, spracovania a podpora mladých poľnohospodárov. Sadzby, stropy, podmienky.',
@@ -247,6 +247,6 @@ export const content: Record<Locale, DotaceCopy> = {
       ctaLeasing: 'Kalkulačka lízingu',
       inLanguage: 'sk-SK',
     },
-  },
-  uk: {} as DotaceCopy,
 };
+
+export const content: Record<Locale, DotaceCopy> = { cs, sk, uk: cs };
