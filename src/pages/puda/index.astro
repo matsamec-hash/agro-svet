@@ -1,44 +1,69 @@
 ---
-export const prerender = true;
+// prerender=false (SSR): launchnuté SK sekce servíruje middleware rewrite, který
+// prerendered routy nepokrývá → SSR. Locale JEN z Astro.locals.locale (po rewrite
+// je Astro.url cs cesta). cs render = dnešní inline literály VERBATIM (byte-identita);
+// sk render = data z agro-puda-sk.json + vynechané CZ-only bloky.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import DataSegmentNav from '../../components/DataSegmentNav.astro';
 import PillsNav from '../../components/statistiky/PillsNav.astro';
 import HomeWeather from '../../components/HomeWeather.astro';
 import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/utils';
+import { pudaBigNumbers, pudaCenaInsight } from '../../lib/puda-derived';
+import pudaSkData from '../../data/agro-puda-sk.json';
 
-const PUDA_PILLS = [
-  { label: 'Témata', href: '#temata' },
-  { label: 'Cena', href: '#cena' },
-  { label: 'Struktura', href: '#struktura' },
-  { label: 'Ohrožení', href: '#ohrozeni' },
-  { label: 'Vlastnictví', href: '#vlastnictvi' },
-  { label: 'Plodiny', href: '#plodiny' },
-];
+const locale = Astro.locals.locale ?? 'cs';
+const isSk = locale === 'sk';
+const t = useTranslations(locale);
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-const pudaItems = await getCollection('puda');
+const PUDA_PILLS = isSk
+  ? [
+      { label: t('puda.pill.temata'), href: '#temata' },
+      { label: t('puda.pill.cena'), href: '#cena' },
+      { label: t('puda.pill.najem'), href: '#najem' },
+      { label: t('puda.pill.plodiny'), href: '#plodiny' },
+    ]
+  : [
+      { label: 'Témata', href: '#temata' },
+      { label: 'Cena', href: '#cena' },
+      { label: 'Struktura', href: '#struktura' },
+      { label: 'Ohrožení', href: '#ohrozeni' },
+      { label: 'Vlastnictví', href: '#vlastnictvi' },
+      { label: 'Plodiny', href: '#plodiny' },
+    ];
 
-// Time series cena půdy 2000-2025 (FARMY.CZ Index, Tomáš Valka)
-const cenaPudy = [
-  { rok: 2000, cena: 60 },
-  { rok: 2010, cena: 90 },
-  { rok: 2014, cena: 150 },
-  { rok: 2019, cena: 250 },
-  { rok: 2020, cena: 265 },
-  { rok: 2021, cena: 290 },
-  { rok: 2022, cena: 340 },
-  { rok: 2023, cena: 350 },
-  { rok: 2024, cena: 360 },
-  { rok: 2025, cena: 372.55 },
-];
+const pudaItems = isSk ? await getCollection('pudaSk') : await getCollection('puda');
+const skBn = isSk ? pudaBigNumbers(pudaSkData, 'sk') : null;
+
+// cs = FARMY.CZ index (tis. Kč, 2000–2025) VERBATIM; sk = Eurostat ARAXIB (€/ha, 2017–2024)
+const cenaPudy = isSk
+  ? pudaSkData.cena.series.map((p) => ({ rok: p.year, cena: p.value }))
+  : [
+      { rok: 2000, cena: 60 },
+      { rok: 2010, cena: 90 },
+      { rok: 2014, cena: 150 },
+      { rok: 2019, cena: 250 },
+      { rok: 2020, cena: 265 },
+      { rok: 2021, cena: 290 },
+      { rok: 2022, cena: 340 },
+      { rok: 2023, cena: 350 },
+      { rok: 2024, cena: 360 },
+      { rok: 2025, cena: 372.55 },
+    ];
 const cenaMin = 0;
-const cenaMax = 400;
+const cenaMax = isSk ? 6000 : 400;
+const cenaTicks = isSk ? [0, 1500, 3000, 4500, 6000] : [0, 100, 200, 300, 400];
+const cenaYearMin = cenaPudy[0].rok;
+const cenaYearSpan = cenaPudy.at(-1).rok - cenaYearMin || 1;
 const cenaW = 1200;
 const cenaH = 360;
 const cenaPad = { l: 50, r: 20, t: 20, b: 30 };
 const cenaPlotW = cenaW - cenaPad.l - cenaPad.r;
 const cenaPlotH = cenaH - cenaPad.t - cenaPad.b;
 const cenaPoints = cenaPudy.map((d) => {
-  const x = cenaPad.l + ((d.rok - 2000) / 25) * cenaPlotW;
+  const x = cenaPad.l + ((d.rok - cenaYearMin) / cenaYearSpan) * cenaPlotW;
   const y = cenaPad.t + cenaPlotH - ((d.cena - cenaMin) / (cenaMax - cenaMin)) * cenaPlotH;
   return { ...d, x, y };
 });
@@ -71,7 +96,7 @@ const donutSegs = struktura.map((s) => {
 });
 ---
 
-<Layout title="Zemědělská půda v ČR — fakta, ceny, eroze" description="Aktuální data o zemědělské půdě v ČR: cena 372 550 Kč/ha, úbytek 10,8 ha denně, 60 % polí ohroženo vodní erozí. Ornice, eroze, výživa a ochrana půdního fondu.">
+<Layout title={isSk ? 'Cena poľnohospodárskej pôdy na Slovensku — Eurostat dáta' : 'Zemědělská půda v ČR — fakta, ceny, eroze'} description={isSk ? 'Aktuálne ceny a nájmy poľnohospodárskej pôdy na Slovensku (Eurostat) a štruktúra plodín.' : 'Aktuální data o zemědělské půdě v ČR: cena 372 550 Kč/ha, úbytek 10,8 ha denně, 60 % polí ohroženo vodní erozí. Ornice, eroze, výživa a ochrana půdního fondu.'}>
   <div class="puda-root">
 
     <DataSegmentNav active="puda" />
@@ -79,23 +104,24 @@ const donutSegs = struktura.map((s) => {
     <!-- Hero (sjednoceno se statistiky) -->
     <section class="sp-hero">
       <div class="sp-hero-left">
-        <span class="sp-kicker"><span class="dot"></span>PŮDA · DATOVÁ POVER-MAPA</span>
-        <h1>Zemědělská <em>půda</em></h1>
-        <p class="sp-hero-lede">
-          Půda je nejcennější zemědělský zdroj — a v Česku jí ubývá rekordním tempem. Sledujte aktuální ceny,
-          vývoj výměry, ohrožení erozí a strukturální fakta o českém zemědělském půdním fondu.
-        </p>
+        <span class="sp-kicker"><span class="dot"></span>{isSk ? t('puda.kicker') : 'PŮDA · DATOVÁ POVER-MAPA'}</span>
+        <h1>{isSk ? t('puda.h1a') : 'Zemědělská'} <em>{isSk ? t('puda.h1em') : 'půda'}</em></h1>
+        <p class="sp-hero-lede">{isSk ? t('puda.heroLede') : 'Půda je nejcennější zemědělský zdroj — a v Česku jí ubývá rekordním tempem. Sledujte aktuální ceny, vývoj výměry, ohrožení erozí a strukturální fakta o českém zemědělském půdním fondu.'}</p>
       </div>
       <div class="sp-hero-right">
         <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')">
-          <div class="sp-hero-photo-badge">372 550 Kč/ha · 2025</div>
+          <div class="sp-hero-photo-badge">{isSk ? `${new Intl.NumberFormat('sk-SK').format(skBn.cena)} €/ha · ${skBn.cenaYear}` : '372 550 Kč/ha · 2025'}</div>
         </div>
       </div>
     </section>
 
     <!-- Big numbers (samostatná sekce pod heroem) -->
     <section class="big-numbers">
-        {[
+        {(isSk ? [
+          { val: new Intl.NumberFormat('sk-SK').format(skBn.cena), unit: ' €/ha', lbl: t('puda.bn.cena.lbl'), trend: `${skBn.cenaYear}`, source: 'Eurostat — apri_lprc', url: 'https://ec.europa.eu/eurostat/databrowser/view/apri_lprc/default/table' },
+          { val: `+${skBn.rustPct} %`, unit: '', lbl: t('puda.bn.rust.lbl'), trend: `${skBn.rustFrom} → ${skBn.cenaYear}`, source: 'Eurostat — apri_lprc', url: 'https://ec.europa.eu/eurostat/databrowser/view/apri_lprc/default/table' },
+          { val: new Intl.NumberFormat('sk-SK').format(skBn.najem), unit: ' €/ha/rok', lbl: t('puda.bn.najem.lbl'), trend: `${skBn.najemYear}`, source: 'Eurostat — apri_lrnt', url: 'https://ec.europa.eu/eurostat/databrowser/view/apri_lrnt/default/table' },
+        ] : [
           {
             val: '372 550', unit: ' Kč/ha',
             lbl: 'Průměrná tržní cena orné půdy',
@@ -124,7 +150,7 @@ const donutSegs = struktura.map((s) => {
             source: 'VÚMOP — Monitoring eroze',
             url: 'https://www.vumop.cz/projekty/monitoring-eroze',
           },
-        ].map((b) => (
+        ]).map((b) => (
           <div class="bn">
             <span class="bn-val">{b.val.replace(/ /g, ' ')}{b.unit && <span class="bn-unit">{b.unit}</span>}</span>
             <span class="bn-lbl">{b.lbl}</span>
@@ -137,20 +163,20 @@ const donutSegs = struktura.map((s) => {
         ))}
     </section>
 
-    <HomeWeather mode="puda" />
+    {!isSk && <HomeWeather mode="puda" />}
 
     <PillsNav items={PUDA_PILLS} />
 
     <!-- Témata (na začátek) -->
     <section class="topics-section" id="temata">
-      <h2>Hloubkově k tématům</h2>
+      <h2>{isSk ? t('puda.temata.h') : 'Hloubkově k tématům'}</h2>
       <div class="topics-grid">
         {pudaItems.map(item => (
-          <a href={`/puda/${item.id}/`} class="puda-card">
+          <a href={`${isSk ? '/sk' : ''}/puda/${item.id}/`} class="puda-card">
             <div class="card-icon">🌱</div>
             <h3>{item.data.title}</h3>
             <p>{item.data.popis}</p>
-            <span class="card-cta">Číst dál →</span>
+            <span class="card-cta">{isSk ? t('puda.card.cta') : 'Číst dál →'}</span>
           </a>
         ))}
       </div>
@@ -159,13 +185,13 @@ const donutSegs = struktura.map((s) => {
     <!-- Cena půdy graf -->
     <section class="chart-section reveal" data-reveal="line" id="cena">
       <header>
-        <h2>Cena zemědělské půdy 2000–2025</h2>
-        <span class="sub">Průměrná tržní cena hektaru orné půdy v tis. Kč.</span>
-        <a class="src-link" href="https://www.farmy.cz/cena-pudy/" target="_blank" rel="noopener noreferrer">Zdroj: FARMY.CZ Index + studie Tomáš Valka (ČZU) <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+        <h2>{isSk ? t('puda.cena.h') : 'Cena zemědělské půdy 2000–2025'}</h2>
+        <span class="sub">{isSk ? t('puda.cena.sub') : 'Průměrná tržní cena hektaru orné půdy v tis. Kč.'}</span>
+        <a class="src-link" href={isSk ? 'https://ec.europa.eu/eurostat/databrowser/view/apri_lprc/default/table' : 'https://www.farmy.cz/cena-pudy/'} target="_blank" rel="noopener noreferrer">{isSk ? t('puda.cena.src') : 'Zdroj: FARMY.CZ Index + studie Tomáš Valka (ČZU)'} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
       </header>
       <div class="chart-wrap">
         <svg viewBox={`0 0 ${cenaW} ${cenaH}`} class="chart-svg" role="img" aria-label="Vývoj ceny zemědělské půdy 2000-2025">
-          {[0, 100, 200, 300, 400].map((v) => {
+          {cenaTicks.map((v) => {
             const y = cenaPad.t + cenaPlotH - ((v - cenaMin) / (cenaMax - cenaMin)) * cenaPlotH;
             return (
               <>
@@ -200,13 +226,40 @@ const donutSegs = struktura.map((s) => {
           })}
         </svg>
         <div class="chart-insight">
-          Z 60 tis. Kč/ha v roce 2000 na <strong>372 550 Kč/ha v 2025</strong> — sedminásobný růst za jednu generaci.
-          Po raketovém růstu 2014–2022 (+10–15 % p.a.) přichází mírná stagnace, růst zpomalil na 3,4 % v 2025.
+          {isSk ? pudaCenaInsight(pudaSkData, 'sk') : (
+            <>Z 60 tis. Kč/ha v roce 2000 na <strong>372 550 Kč/ha v 2025</strong> — sedminásobný růst za jednu generaci.
+          Po raketovém růstu 2014–2022 (+10–15 % p.a.) přichází mírná stagnace, růst zpomalil na 3,4 % v 2025.</>
+          )}
         </div>
       </div>
     </section>
 
+    {isSk && (
+      <section class="chart-section reveal" data-reveal="bars" id="najem">
+        <header>
+          <h2>{t('puda.najem.h')}</h2>
+          <span class="sub">{t('puda.najem.sub')}</span>
+          <a class="src-link" href="https://ec.europa.eu/eurostat/databrowser/view/apri_lrnt/default/table" target="_blank" rel="noopener noreferrer">{t('puda.najem.src')}</a>
+        </header>
+        <div class="crops-bars">
+          {pudaSkData.najem.series.slice(-10).map((p) => {
+            const max = Math.max(...pudaSkData.najem.series.map((s) => s.value));
+            return (
+              <div class="crop-row">
+                <span class="crop-name">{p.year}</span>
+                <div class="crop-bar-wrap">
+                  <div class="crop-bar" style={`--w:${(p.value / max) * 100}%; background:#7CB342`}></div>
+                  <span class="crop-val">{new Intl.NumberFormat('sk-SK').format(p.value)} €/ha</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
     <!-- Struktura ZPF + Eroze -->
+    {!isSk && (
     <section class="two-col" id="struktura">
       <div class="card-chart reveal" data-reveal="donut">
         <h3>Struktura zemědělského půdního fondu</h3>
@@ -259,8 +312,10 @@ const donutSegs = struktura.map((s) => {
         <p class="card-note">Hlavní rizika: jižní Morava (větrná), Vysočina a Hanácká nížina (vodní). Dehumifikace souvisí s poklesem chovu zvířat → méně statkových hnojiv.</p>
       </div>
     </section>
+    )}
 
     <!-- Vlastnictví + Pacht fakta -->
+    {!isSk && (
     <section class="facts-grid" id="vlastnictvi">
       {[
         {
@@ -339,40 +394,57 @@ const donutSegs = struktura.map((s) => {
         </div>
       ))}
     </section>
+    )}
 
     <!-- Hlavní plodiny -->
     <section class="crops-section reveal" data-reveal="bars" id="plodiny">
       <header>
-        <h2>Hlavní plodiny na orné půdě (2024)</h2>
-        <span class="sub">Sklizeň 7 525 tis. tun obilovin, soběstačnost 164,6 %.</span>
+        <h2>{isSk ? t('puda.plodiny.h') : 'Hlavní plodiny na orné půdě (2024)'}</h2>
+        <span class="sub">{isSk ? t('puda.plodiny.sub') : 'Sklizeň 7 525 tis. tun obilovin, soběstačnost 164,6 %.'}</span>
+        {isSk && <a class="src-link" href="https://ec.europa.eu/eurostat/databrowser/view/apro_cpshr/default/table" target="_blank" rel="noopener noreferrer">{t('puda.plodiny.src')} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>}
       </header>
       <div class="crops-bars">
-        {[
+        {(isSk
+          ? pudaSkData.plodiny.map((c, i) => ({ name: c.crop, ha: Math.round(c.hectares / 1000), color: ['#FFD700','#FFB300','#7CB342','#FB8C00','#9E9E9E'][i % 5] }))
+          : [
           { name: 'Pšenice ozimá', ha: 780, color: '#FFD700' },
           { name: 'Řepka ozimá', ha: 344, color: '#FFB300' },
           { name: 'Ječmen', ha: 321, color: '#7CB342' },
           { name: 'Kukuřice na zrno', ha: 280, color: '#FB8C00' },
           { name: 'Ostatní obiloviny + okopaniny', ha: 800, color: '#9E9E9E' },
-        ].map((c) => (
+        ]).map((c) => {
+          const maxHa = isSk ? Math.max(...pudaSkData.plodiny.map(p => Math.round(p.hectares / 1000))) : 800;
+          return (
           <div class="crop-row">
             <span class="crop-name">{c.name}</span>
             <div class="crop-bar-wrap">
-              <div class="crop-bar" style={`--w:${(c.ha / 800) * 100}%; background:${c.color}`}></div>
+              <div class="crop-bar" style={`--w:${(c.ha / maxHa) * 100}%; background:${c.color}`}></div>
               <span class="crop-val">{c.ha} tis. ha</span>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
+      {!isSk && (
       <p class="section-note">
         ČR má extrémní podíl řepky: <strong>16 % všech polí</strong> oseto řepkou (vs. EU průměr 6,3 %). Kukuřice rapidně roste,
         v Jihomoravském kraji +32 % ploch v 2024.
       </p>
+      )}
     </section>
 
     <!-- Zdroje -->
     <section class="sources-section">
-      <h3>Zdroje dat</h3>
+      <h3>{isSk ? t('puda.sources.h') : 'Zdroje dat'}</h3>
       <ul>
+        {isSk ? (
+          <>
+            <li><a href="https://ec.europa.eu/eurostat/databrowser/view/apri_lprc/default/table" target="_blank" rel="noopener">Eurostat — ceny poľnohospodárskej pôdy (apri_lprc)</a></li>
+            <li><a href="https://ec.europa.eu/eurostat/databrowser/view/apri_lrnt/default/table" target="_blank" rel="noopener">Eurostat — nájmy poľnohospodárskej pôdy (apri_lrnt)</a></li>
+            <li><a href="https://ec.europa.eu/eurostat/databrowser/view/apro_cpshr/default/table" target="_blank" rel="noopener">Eurostat — plochy plodín (apro_cpshr)</a></li>
+          </>
+        ) : (
+          <>
         <li><a href="https://www.farmy.cz/informace_kolik_stoji_puda" target="_blank" rel="noopener">FARMY.CZ — Index farmářské půdy</a></li>
         <li><a href="https://csu.gov.cz/zemedelske-pudy-je-zase-mene" target="_blank" rel="noopener">ČSÚ — Statistika a my (úbytek ZPF)</a></li>
         <li><a href="https://www.vumop.cz/eroze-pudy/" target="_blank" rel="noopener">VÚMOP — Eroze půdy</a></li>
@@ -380,8 +452,10 @@ const donutSegs = struktura.map((s) => {
         <li><a href="https://www.zememeric.cz/cuzk-souhrnna-zprava-o-pudnim-fondu-za-rok-2024/" target="_blank" rel="noopener">ČÚZK — Souhrnná zpráva o půdním fondu 2024</a></li>
         <li><a href="https://www.tomasvalka.cz/vyvoj-cen-zemedelske-pudy-za-poslednich-25-let/" target="_blank" rel="noopener">Tomáš Valka — Vývoj cen půdy</a></li>
         <li><a href="https://www.asz.cz/" target="_blank" rel="noopener">ASZ ČR — Asociace soukromého zemědělství</a></li>
+          </>
+        )}
       </ul>
-      <p class="updated">Datová pover-mapa naposledy aktualizována: duben 2026.</p>
+      {!isSk && <p class="updated">Datová pover-mapa naposledy aktualizována: duben 2026.</p>}
     </section>
 
   </div>
@@ -630,8 +704,11 @@ const donutSegs = struktura.map((s) => {
   .puda-tooltip strong { color: #FFFF00; }
 </style>
 
+<script type="application/json" id="puda-cfg" set:html={JSON.stringify({ numLocale: isSk ? 'sk-SK' : 'cs-CZ', currency: isSk ? '€/ha' : 'Kč/ha', isSk })} />
 <script is:inline>
   (function () {
+    const CFG = JSON.parse(document.getElementById('puda-cfg')?.textContent || '{}');
+    const NUM = CFG.numLocale || 'cs-CZ';
     // ── IntersectionObserver: trigger .in-view on reveal sekce ──
     const reveals = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
@@ -670,7 +747,7 @@ const donutSegs = struktura.map((s) => {
       pt.addEventListener('mouseenter', () => {
         const rok = pt.dataset.rok;
         const cena = parseFloat(pt.dataset.cena);
-        const cenaKc = (cena * 1000).toLocaleString('cs-CZ');
+        const cenaKc = (cena * 1000).toLocaleString(NUM);
         // Tooltip: pozice nad datapointem v SVG (ne kde je kurzor — Voronoi sloupec je široký)
         const svg = pt.closest('svg');
         const ptRect = svg.getBoundingClientRect();
@@ -680,7 +757,10 @@ const donutSegs = struktura.map((s) => {
         const vbH = svg.viewBox.baseVal.height;
         const screenX = ptRect.left + (dx / vbW) * ptRect.width;
         const screenY = ptRect.top + (dy / vbH) * ptRect.height;
-        showTip(`<strong>${rok}</strong><br>${cena.toLocaleString('cs-CZ')} tis. Kč/ha<br><span style="opacity:.7;font-size:11px">${cenaKc} Kč/ha</span>`, screenX, screenY);
+        const tipHtml = CFG.isSk
+          ? `<strong>${rok}</strong><br>${cena.toLocaleString(NUM)} €/ha`
+          : `<strong>${rok}</strong><br>${cena.toLocaleString(NUM)} tis. Kč/ha<br><span style="opacity:.7;font-size:11px">${cenaKc} Kč/ha</span>`;
+        showTip(tipHtml, screenX, screenY);
         // Pulse visible point + guide line
         svg.querySelectorAll('.line-point').forEach(p => p.classList.toggle('is-hover', p.dataset.rok === rok));
         svg.querySelectorAll('.line-guide').forEach(g => g.classList.toggle('is-hover', g.dataset.rokLine === rok));

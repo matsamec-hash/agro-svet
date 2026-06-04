@@ -32,8 +32,9 @@ describe('getNav', () => {
     expect(nav.some((i) => i.href === '/fotosoutez/')).toBe(false);
   });
 
-  it('sk nav: data sekce je viditelná a obsahuje dotace + capCalc + statistiky, ne puda', () => {
-    // UPDATED Fáze 2b B: /statistiky odemčena → je v sk data children + header
+  it('sk nav: data sekce je viditelná a obsahuje dotace + capCalc + statistiky + puda', () => {
+    // UPDATED Fáze 2b C: /puda odemčena → LOCKED_SECTION_PREFIXES prázdné,
+    // getNav už nefiltruje žádné `data` dítě (i sk vidí celou sekci).
     const nav = getNav('sk');
     const data = nav.find((s) => s.section === 'data');
     expect(data).toBeTruthy();
@@ -41,7 +42,7 @@ describe('getNav', () => {
     expect(hrefs).toContain('/dotace/');
     expect(hrefs).toContain('/kalkulacka/dotace-cap/');
     expect(hrefs).toContain('/statistiky/');
-    expect(hrefs).not.toContain('/puda/');
+    expect(hrefs).toContain('/puda/');
     // section header ukazuje na /statistiky/ (odemčeno, je to první/hlavní dítě)
     expect(data!.href).toBe('/statistiky/');
   });
@@ -87,11 +88,11 @@ describe('getFooterColumns', () => {
     expect(cols[0].links.find((l) => l.href === '/stroje/')!.label).toBe('Katalóg techniky');
   });
 
-  it('sk footer skrývá locked /puda, ale zobrazuje odemčené /statistiky (Fáze 2b B)', () => {
-    // UPDATED Fáze 2b B: /statistiky odemčena → přítomná v sk footeru
+  it('sk footer zobrazuje odemčené /statistiky i /puda (Fáze 2b B+C)', () => {
+    // UPDATED Fáze 2b C: /puda odemčena → přítomná i v sk footeru
     const cols = getFooterColumns('sk');
     const allHrefs = cols.flatMap((c) => c.links.map((l) => l.href));
-    expect(allHrefs).not.toContain('/puda/');
+    expect(allHrefs).toContain('/puda/');
     expect(allHrefs).toContain('/statistiky/');
   });
 });
@@ -108,11 +109,11 @@ describe('isLockedSectionPath — granularita kalkulaček (Fáze 2b)', () => {
     expect(isLockedSectionPath('/kalkulacka/prevody-jednotek')).toBe(false);
     expect(isLockedSectionPath('/kalkulacka/leasing-traktoru')).toBe(false);
   });
-  it('ostatní jurisdikční sekce zůstávají locked', () => {
-    // UPDATED Fáze 2b B: /dotace a /statistiky odemčeny; jen /puda zůstává locked
+  it('všechny `data` jurisdikční sekce jsou odemčené (Fáze 2b C)', () => {
+    // UPDATED Fáze 2b C: /puda odemčena → žádná `data` sekce už není locked
     expect(isLockedSectionPath('/dotace')).toBe(false);
     expect(isLockedSectionPath('/statistiky')).toBe(false);
-    expect(isLockedSectionPath('/puda/ceny')).toBe(true);
+    expect(isLockedSectionPath('/puda/ceny')).toBe(false);
   });
 
   it('Fáze 2b A: /dotace a /kalkulacka/dotace-cap NEJSOU locked', () => {
@@ -121,9 +122,9 @@ describe('isLockedSectionPath — granularita kalkulaček (Fáze 2b)', () => {
     expect(isLockedSectionPath('/kalkulacka/dotace-cap')).toBe(false);
   });
 
-  it('/statistiky odemčena (balík B), /puda zůstává locked (balík C)', () => {
-    // UPDATED Fáze 2b B: /statistiky je odemčena
+  it('/statistiky (balík B) i /puda (balík C) jsou odemčené', () => {
+    // UPDATED Fáze 2b C: /puda je nyní odemčena
     expect(isLockedSectionPath('/statistiky')).toBe(false);
-    expect(isLockedSectionPath('/puda')).toBe(true);
+    expect(isLockedSectionPath('/puda')).toBe(false);
   });
 });

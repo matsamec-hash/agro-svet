@@ -119,12 +119,22 @@ const znackySk = defineCollection({
   schema: znackySchema(),
 });
 
-const puda = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/puda' }),
-  schema: z.object({
+const pudaSchema = () =>
+  z.object({
     title: z.string(),
     popis: z.string(),
-  }),
+  });
+
+const puda = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/puda' }),
+  schema: pudaSchema(),
+});
+
+// SK-localized článková kolekce o pôde (overlay). Držené zvlášť, aby cs-facing
+// getCollection('puda') zůstalo nedotčené. Slug = REUSE cs slug.
+const pudaSk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/puda-sk' }),
+  schema: pudaSchema(),
 });
 
 // SZIF dotační tituly — evergreen průvodci. Žádná automatizace: SZIF nemá API,
@@ -194,4 +204,4 @@ const howto = defineCollection({
   }),
 });
 
-export const collections = { novinky, encyklopedie, znacky, znackySk, puda, dotace, dotaceSk, howto };
+export const collections = { novinky, encyklopedie, znacky, znackySk, puda, pudaSk, dotace, dotaceSk, howto };

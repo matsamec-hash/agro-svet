@@ -16,6 +16,7 @@
     "commodities:refresh": "node scripts/fetch-commodities.mjs",
     "stats:refresh": "node scripts/fetch-commodities.mjs && node scripts/fetch-stats.mjs",
     "stats:refresh:sk": "node scripts/fetch-stats-sk.mjs",
+    "puda:refresh:sk": "node scripts/fetch-puda-sk.mjs",
     "catalog:refresh": "node scripts/fetch-remote-catalog.mjs",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
