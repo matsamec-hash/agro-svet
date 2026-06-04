@@ -24,6 +24,7 @@ const cs: Record<string, string> = {
   'nav.tema.dotace': 'Dotace',
   'nav.tema.trh': 'Trh',
   'nav.tema.legislativa': 'Legislativa',
+  'nav.tema.chov': 'Chov hlemýžďů',
   'nav.tema.howto': 'Jak na to — návody',
   'nav.tema.guide': 'Průvodce nákupem',
   'nav.tema.market': 'Přehledy trhu',
@@ -398,6 +399,7 @@ const cs: Record<string, string> = {
   'nov.cat.trh': 'Trh',
   'nov.cat.legislativa': 'Legislativa',
   'nov.cat.znacky': 'Značky',
+  'nov.cat.chov-hlemyzdu': 'Chov hlemýžďů',
   'nov.cat.novinky': 'Novinky',
   'nov.cat.allInTitle': 'Všechny články v kategorii {label}',
   // language switcher
