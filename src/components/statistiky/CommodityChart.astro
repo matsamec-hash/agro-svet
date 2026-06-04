@@ -9,8 +9,9 @@
 // the homepage Worker chunk for no SSR benefit.
 interface Props {
   commodityNames: readonly string[]; // 9 names rendered as pill buttons
+  dataBase?: string; // suffix for JSON endpoint paths, e.g. '-sk' → /statistiky/commodity-data-recent-sk.json
 }
-const { commodityNames } = Astro.props;
+const { commodityNames, dataBase = '' } = Astro.props;
 const default0 = commodityNames[0] ?? 'Pšenice';
 ---
 
@@ -45,7 +46,7 @@ const default0 = commodityNames[0] ?? 'Pšenice';
 <!-- Chart data se loaduje async z /statistiky/commodity-data.json (24h CF cache).
      Šetří ~86 KB inline JSON v HTML. Element zůstává jako sentinel pro init script
      — když je v DOM, page má chart, fetch může proběhnout. -->
-<div id="commodityChartData" hidden></div>
+<div id="commodityChartData" data-base={dataBase} hidden></div>
 
 <!-- Chart.js — eager init if Chart už loaded (např. /statistiky/), jinak lazy přes
      IntersectionObserver: na homepage se ~80KB Chart.js bundle neloaduje dokud
@@ -85,21 +86,25 @@ const default0 = commodityNames[0] ?? 'Pšenice';
     //   - full:   complete history (~256 KB) — lazy, fetched only when user
     //             clicks "Vše"
     // Cached on window so multiple chart instances on the same page share.
-    if (!window.__commodityRecentPromise) {
-      window.__commodityRecentPromise = fetch('/statistiky/commodity-data-recent.json')
+    // dataBase suffix (e.g. '-sk') points to locale-specific JSON endpoints.
+    var dataBase = dataEl.dataset.base || '';
+    var recentKey = '__commodityRecentPromise' + dataBase;
+    var fullKey = '__commodityFullPromise' + dataBase;
+    if (!window[recentKey]) {
+      window[recentKey] = fetch('/statistiky/commodity-data-recent' + dataBase + '.json')
         .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
     }
     function loadFull() {
-      if (!window.__commodityFullPromise) {
-        window.__commodityFullPromise = fetch('/statistiky/commodity-data.json')
+      if (!window[fullKey]) {
+        window[fullKey] = fetch('/statistiky/commodity-data' + dataBase + '.json')
           .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
       }
-      return window.__commodityFullPromise;
+      return window[fullKey];
     }
 
     async function bootstrap() {
       await ensureChart();
-      const data = await window.__commodityRecentPromise;
+      const data = await window[recentKey];
       run(data);
     }
 
