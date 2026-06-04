@@ -189,9 +189,8 @@ const dotaceSk = defineCollection({
 
 // HowTo průvodci — krok-za-krokem návody pro AI Overviews a voice search.
 // Strukturované kroky ve frontmatteru feedují HowTo JSON-LD i on-page seznam.
-const howto = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/howto' }),
-  schema: z.object({
+const howtoSchema = () =>
+  z.object({
     title: z.string(),
     slug: z.string(),
     description: z.string(),
@@ -211,7 +210,19 @@ const howto = defineCollection({
     /** Volitelný odkaz na související hub (např. /kalkulacka/, /dotace/). */
     relatedUrl: z.string().optional(),
     relatedLabel: z.string().optional(),
-  }),
+  });
+
+const howto = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/howto' }),
+  schema: howtoSchema(),
 });
 
-export const collections = { novinky, encyklopedie, encyklopedieSk, znacky, znackySk, puda, pudaSk, dotace, dotaceSk, howto };
+// SK-localizovaná overlay kolekce howto (slug = REUSE cs slug). Držené zvlášť,
+// aby cs-facing getCollection('howto') zůstalo nedotčené. Chybějící sk slug
+// pod /sk = 404 (žádný cs leak).
+const howtoSk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/howto-sk' }),
+  schema: howtoSchema(),
+});
+
+export const collections = { novinky, encyklopedie, encyklopedieSk, znacky, znackySk, puda, pudaSk, dotace, dotaceSk, howto, howtoSk };

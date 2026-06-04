@@ -752,5 +752,25 @@ const cs: Record<string, string> = {
   'enc.back': '← Zpět na encyklopedii',
   'enc.alt.hero': 'hlavní pohled',
   'enc.alt.koni': 'koní',
+
+  // --- Jak na to (HowTo návody) ---
+  'howto.crumb': 'Jak na to',
+  'howto.list.title': 'Jak na to — praktické návody pro zemědělce',
+  'howto.list.description': 'Návody krok za krokem: jak vybrat traktor pro malou farmu, seřídit pluh, zkontrolovat ojetý traktor, nastavit secí stroj, číst štítek traktoru a naplánovat dotaci na techniku.',
+  'howto.list.label': 'Jak na to',
+  'howto.list.h1': 'Praktické návody pro zemědělce',
+  'howto.list.intro': 'Návody krok za krokem — od výběru traktoru přes seřízení nářadí až po plánování dotace. Každý návod má strukturovaný postup, nářadí a odpovědi na časté otázky.',
+  'howto.list.itemListName': 'Praktické návody pro zemědělce',
+  'howto.list.collName': 'Jak na to — praktické návody pro zemědělce',
+  'howto.list.collDesc': 'Návody krok za krokem: výběr traktoru, seřízení pluhu, kontrola ojeté techniky, nastavení secího stroje a plánování dotace.',
+  'howto.kroku': 'kroků',
+  'howto.badge': 'Návod krok za krokem',
+  'howto.obtiznost': 'Náročnost:',
+  'howto.meta.time': 'Časová náročnost',
+  'howto.meta.tools': 'Co budete potřebovat',
+  'howto.meta.supplies': 'Materiál a podklady',
+  'howto.steps.h': 'Postup krok za krokem',
+  'howto.related.h': 'Další návody',
+  'howto.back': '← Zpět na návody',
 };
 export default cs;

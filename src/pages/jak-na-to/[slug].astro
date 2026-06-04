@@ -1,34 +1,39 @@
 ---
-export const prerender = true;
+// SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
+// sk čte z 'howtoSk' (přeložená overlay kolekce) BEZ cs fallbacku —
+// chybějící sk slug = 404 (žádný cs leak). cs render = dnešní literály VERBATIM.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, howToSchema, faqPageSchema } from '../../lib/structured-data';
+import { useTranslations, getLocaleFromUrl, localizePath } from '../../i18n/utils';
 
-export async function getStaticPaths() {
-  const items = await getCollection('howto');
-  return items.map((i) => ({ params: { slug: i.id } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const t = useTranslations(locale);
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const items = await getCollection('howto');
+const items = await getCollection(isSk ? 'howtoSk' : 'howto');
 const item = items.find((i) => i.id === slug);
 if (!item) return Astro.rewrite('/404');
 const { Content } = await render(item);
 import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
-const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `/jak-na-to/${slug}/`);
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/jak-na-to/${slug}/`);
 
 const related = items.filter((i) => i.id !== item.id).slice(0, 3);
 
-const pageUrl = `${SITE_URL}/jak-na-to/${slug}/`;
+const pageUrl = `${SITE_URL}${base}/jak-na-to/${slug}/`;
 const heroImageAbs = item.data.heroImage
   ? (item.data.heroImage.startsWith('http') ? item.data.heroImage : `${SITE_URL}${item.data.heroImage}`)
   : undefined;
 const ogImageAbs = `${SITE_URL}/og/howto-${slug}.png`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Jak na to', url: '/jak-na-to/' },
+  { name: t('cat.bc.home'), url: `${base}/` },
+  { name: t('howto.crumb'), url: `${base}/jak-na-to/` },
   { name: item.data.title, url: pageUrl },
 ]);
 
@@ -48,7 +53,7 @@ const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item
 const datePublishedIso = item.data.datePublished.toISOString().slice(0, 10);
 const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : null;
 const lastVerifiedFmt = item.data.lastVerified
-  ? new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
+  ? new Intl.DateTimeFormat(isSk ? 'sk-SK' : 'cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
   : null;
 
 // Article schema with explicit author + dateModified — E-E-A-T signal,
@@ -73,11 +78,11 @@ const articleJsonLd = {
   datePublished: datePublishedIso,
   dateModified: lastVerifiedIso ?? datePublishedIso,
   mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
 };
 ---
 
-<Layout title={item.data.title} description={item.data.description} canonical={pageUrl} ogType="article" ogImage={ogImageAbs}>
+<Layout title={item.data.title} description={item.data.description} canonical={isSk ? undefined : pageUrl} ogType="article" ogImage={ogImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
@@ -101,26 +106,26 @@ const articleJsonLd = {
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:24px;">
-      <a href="/jak-na-to/" style="color:#666; text-decoration:none;">Jak na to</a>
+      <a href={localizePath(locale, '/jak-na-to/')} style="color:#666; text-decoration:none;">{t('howto.crumb')}</a>
       <span style="margin:0 8px;">›</span>
       <span>{item.data.title}</span>
     </div>
 
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-      <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase;">Návod krok za krokem</span>
-      {item.data.obtiznost && <span style="font-size:13px; color:#767676;">Náročnost: {item.data.obtiznost}</span>}
+      <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase;">{t('howto.badge')}</span>
+      {item.data.obtiznost && <span style="font-size:13px; color:#767676;">{t('howto.obtiznost')} {item.data.obtiznost}</span>}
     </div>
 
     <h1 style="font-size:clamp(1.9rem,4.5vw,2.8rem); font-weight:900; letter-spacing:-.6px; line-height:1.15; color:#1a1a1a; margin-bottom:12px;">{item.data.title}</h1>
 
     <div class="byline" style="display:flex; gap:12px; align-items:center; font-size:13.5px; color:#5a5a62; margin-bottom:28px; padding-bottom:16px; border-bottom:1px solid #ebebeb; flex-wrap:wrap;">
       <span>
-        Zpracováno <a href="/redakce/" style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">redakcí agro-svět.cz</a>
+        {t('enc.byline.pre')} <a href={localizePath(locale, '/redakce/')} style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">{t('enc.byline.redakce')}</a>
       </span>
       {lastVerifiedFmt && (
         <>
           <span style="color:#c0c0c8;" aria-hidden="true">·</span>
-          <span>Naposledy ověřeno <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time></span>
+          <span>{t('enc.byline.verified')} <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time></span>
         </>
       )}
     </div>
@@ -135,19 +140,19 @@ const articleJsonLd = {
       <div class="howto-meta">
         {item.data.totalTime && (
           <div class="hm-block">
-            <div class="hm-label">Časová náročnost</div>
+            <div class="hm-label">{t('howto.meta.time')}</div>
             <div class="hm-value">{item.data.totalTime.replace('PT', '').replace('H', ' h ').replace('M', ' min').trim()}</div>
           </div>
         )}
         {item.data.tools && item.data.tools.length > 0 && (
           <div class="hm-block">
-            <div class="hm-label">Co budete potřebovat</div>
-            <ul class="hm-list">{item.data.tools.map((t) => <li>{t}</li>)}</ul>
+            <div class="hm-label">{t('howto.meta.tools')}</div>
+            <ul class="hm-list">{item.data.tools.map((tool) => <li>{tool}</li>)}</ul>
           </div>
         )}
         {item.data.supplies && item.data.supplies.length > 0 && (
           <div class="hm-block">
-            <div class="hm-label">Materiál a podklady</div>
+            <div class="hm-label">{t('howto.meta.supplies')}</div>
             <ul class="hm-list">{item.data.supplies.map((s) => <li>{s}</li>)}</ul>
           </div>
         )}
@@ -156,7 +161,7 @@ const articleJsonLd = {
 
     <!-- Steps -->
     <section class="steps" aria-labelledby="steps-heading">
-      <h2 id="steps-heading">Postup krok za krokem</h2>
+      <h2 id="steps-heading">{t('howto.steps.h')}</h2>
       <ol class="step-list">
         {item.data.steps.map((step, i) => (
           <li class="step-item" id={`krok-${i + 1}`}>
@@ -178,7 +183,7 @@ const articleJsonLd = {
 
     {item.data.faq && item.data.faq.length > 0 && (
       <section class="faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">Časté otázky</h2>
+        <h2 id="faq-heading">{t('enc.faq.h')}</h2>
         <dl class="faq-list">
           {item.data.faq.map((qa) => (
             <div class="faq-item">
@@ -192,32 +197,32 @@ const articleJsonLd = {
 
     {related.length > 0 && (
       <section class="related" aria-labelledby="related-heading">
-        <h2 id="related-heading">Další návody</h2>
+        <h2 id="related-heading">{t('howto.related.h')}</h2>
         <div class="related-grid">
           {related.map((r) => (
-            <a href={`/jak-na-to/${r.id}/`} class="related-card">
+            <a href={localizePath(locale, `/jak-na-to/${r.id}/`)} class="related-card">
               <div class="related-name">{r.data.title}</div>
-              <div class="related-meta">{r.data.steps.length} kroků</div>
+              <div class="related-meta">{r.data.steps.length} {t('howto.kroku')}</div>
             </a>
           ))}
         </div>
       </section>
     )}
 
-    <aside class="trust-bar" aria-label="Ověření obsahu">
+    <aside class="trust-bar" aria-label={t('enc.trust.label')}>
       <span class="trust-item">
-        Zpracováno <a href="/redakce/" class="trust-link">redakcí agro-svět.cz</a>
+        {t('enc.byline.pre')} <a href={localizePath(locale, '/redakce/')} class="trust-link">{t('enc.byline.redakce')}</a>
       </span>
       {lastVerifiedFmt && (
         <span class="trust-item">
-          Naposledy ověřeno: <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time>
+          {t('enc.trust.verified')} <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time>
         </span>
       )}
     </aside>
 
     <div style="margin-top:48px;">
-      <a href="/jak-na-to/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
-        ← Zpět na návody
+      <a href={localizePath(locale, '/jak-na-to/')} style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
+        {t('howto.back')}
       </a>
     </div>
   </div>

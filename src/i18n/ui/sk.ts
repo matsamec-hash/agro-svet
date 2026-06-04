@@ -752,5 +752,25 @@ const sk: Record<string, string> = {
   'enc.back': '← Späť na encyklopédiu',
   'enc.alt.hero': 'hlavný pohľad',
   'enc.alt.koni': 'koní',
+
+  // --- Ako na to (HowTo návody) ---
+  'howto.crumb': 'Ako na to',
+  'howto.list.title': 'Ako na to — praktické návody pre poľnohospodárov',
+  'howto.list.description': 'Návody krok za krokom: ako vybrať traktor pre malú farmu, nastaviť pluh, skontrolovať ojazdený traktor, nastaviť sejací stroj, čítať štítok traktora a naplánovať dotáciu na techniku.',
+  'howto.list.label': 'Ako na to',
+  'howto.list.h1': 'Praktické návody pre poľnohospodárov',
+  'howto.list.intro': 'Návody krok za krokom — od výberu traktora cez nastavenie náradia až po plánovanie dotácie. Každý návod má štruktúrovaný postup, náradie a odpovede na časté otázky.',
+  'howto.list.itemListName': 'Praktické návody pre poľnohospodárov',
+  'howto.list.collName': 'Ako na to — praktické návody pre poľnohospodárov',
+  'howto.list.collDesc': 'Návody krok za krokom: výber traktora, nastavenie pluhu, kontrola ojazdenej techniky, nastavenie sejacieho stroja a plánovanie dotácie.',
+  'howto.kroku': 'krokov',
+  'howto.badge': 'Návod krok za krokom',
+  'howto.obtiznost': 'Náročnosť:',
+  'howto.meta.time': 'Časová náročnosť',
+  'howto.meta.tools': 'Čo budete potrebovať',
+  'howto.meta.supplies': 'Materiál a podklady',
+  'howto.steps.h': 'Postup krok za krokom',
+  'howto.related.h': 'Ďalšie návody',
+  'howto.back': '← Späť na návody',
 };
 export default sk;
