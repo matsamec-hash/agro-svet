@@ -404,5 +404,96 @@ const cs: Record<string, string> = {
   'lang.switch': 'Jazyk',
   'lang.cs': 'CZ',
   'lang.sk': 'SK',
+
+  // — statistiky chrome (stat.*) —
+  // Hero
+  'stat.hero.kicker': 'LIVE DATA · ČESKÁ ZEMĚDĚLSKÁ DATA',
+  'stat.hero.h1Prefix': 'Co stojí české ',
+  'stat.hero.h1Em': 'zemědělství',
+  'stat.hero.lede': 'Aktuální ceny zemědělských komodit, sklizeň, vstupní náklady a regionální produkce z Českého statistického úřadu — každý měsíc aktualizovaná data.',
+  'stat.hero.statDatasets': 'datasetů',
+  'stat.hero.statYears': 'let',
+  'stat.hero.statRegions': 'krajů',
+  // AutoTakeaways
+  'stat.takeaways.heading': 'Co dnes říkají data',
+  'stat.takeaways.detail': 'Detail →',
+  'stat.takeaways.labelTrh': 'TRH',
+  'stat.takeaways.labelVstupy': 'VSTUPY',
+  'stat.takeaways.labelZvirata': 'STAVY ZVÍŘAT',
+  // PillsNav
+  'stat.pills.aria': 'Sekce stránky',
+  // SparklineTicker
+  'stat.spark.aria': 'Aktuální ceny — rychlý přehled',
+  // BottomCTA
+  'stat.cta.kicker': 'A co dál?',
+  'stat.cta.h2a': 'Hledáte zemědělskou techniku?',
+  'stat.cta.h2b': 'Katalog traktorů a kombajnů.',
+  'stat.cta.p': '10+ značek · 500+ modelů · technické parametry, výkon, ceny — kompletní encyklopedie.',
+  'stat.cta.button': 'Otevřít katalog',
+  // DataSegmentNav
+  'stat.dataNav.label': 'Datová sekce',
+  'stat.dataNav.pudaLabel': 'Zemědělská půda',
+  'stat.dataNav.pudaSub': 'Cena, struktura, eroze, vlastnictví',
+  'stat.dataNav.komodityLabel': 'Trhy a komodity',
+  'stat.dataNav.komoditySub': 'Ceny, vstupy, sklizeň, regiony',
+  'stat.dataNav.aria': 'Sekce Data — přepínač podsekcí',
+  // MethodologyFooter
+  'stat.method.heading': 'Metodologie & zdroje',
+
+  // — LivestockSlope —
+  'stat.livestock.h2': 'Zvířata — historický vývoj stavů',
+  'stat.livestock.subtitleFrom': 'Od roku {fromYear} do dneška',
+  'stat.livestock.subtitleFallback': 'Dostupná pololetní data ČSÚ',
+  'stat.livestock.source': 'Zdroj: Eurostat + ČSÚ — Pololetní soupisy hospodářských zvířat',
+
+  // — ProductionBlock —
+  'stat.production.h2': 'Produkce — sklizeň a osevní plochy {latestYear}',
+  'stat.production.subtitle': 'Tuny / hektary v Česku',
+  'stat.production.source': 'Zdroj: ČSÚ — Definitivní údaje o sklizni zemědělských plodin',
+  'stat.production.sourceHref': 'https://csu.gov.cz/produkty/definitivni-udaje-o-sklizni-zemedelskych-plodin',
+  'stat.production.cardHarvest': 'Sklizeň podle plodin (tun)',
+  'stat.production.cardAreas': 'Osevní plochy ({totalArea} ha celkem)',
+  'stat.production.cardAreasFallback': 'Osevní plochy (– ha celkem)',
+
+  // — InputsBlock —
+  'stat.inputs.h2': 'Vstupy — Pohonné hmoty a hnojiva',
+  'stat.inputs.subtitle': 'Týdenní cena nafty a roční ceny hnojiv',
+  'stat.inputs.source': 'Zdroj: ČSÚ — Indexy spotřebitelských cen, MPO Energostat',
+  'stat.inputs.sourceHref': 'https://csu.gov.cz/zemedelstvi',
+  'stat.inputs.cardFuel': 'Nafta — týdenní průměr (52 týdnů)',
+  'stat.inputs.cardFert': 'Hnojiva — roční průměr (Kč/t)',
+
+  // — PriceScissors —
+  'stat.scissors.h2': '⚡ Cenové nůžky — co dražší: vstupy nebo výstupy?',
+  'stat.scissors.explainer': 'Vývoj cen vstupů (nafta + NPK hnojivo) a výstupů (4 hlavní komodity: pšenice, ječmen, řepka, kukuřice).',
+  'stat.scissors.source': 'Zdroj: ČSÚ — výpočet z indexů cen vstupů a výstupů',
+  'stat.scissors.sourceHref': 'https://csu.gov.cz/zemedelstvi',
+  'stat.scissors.legendInputs': 'Vstupy (nafta + NPK)',
+  'stat.scissors.legendOutputs': 'Výstupy (4 komodity)',
+  'stat.scissors.legendNegative': 'Marže záporná (vstupy > výstupy)',
+  'stat.scissors.howToRead': 'Jak číst:',
+  'stat.scissors.helpText': 'obě čáry začínají v roce {baseYear} na hodnotě 100. Když se čáry rozevřou (nafta-NPK červená nahoru, komodity zelená dole), farmář <strong>doplácí</strong> — vstupy zdražily víc než to, co prodá. V roce 2022 vstupy vyletěly o 96 %, ale komodity jen o 75 % → klasické cenové nůžky.',
+
+  'stat.pills.trh': 'Trh',
+  'stat.pills.vstupy': 'Vstupy',
+  'stat.pills.scissors': 'Cenové nůžky',
+  'stat.pills.produkce': 'Produkce',
+  'stat.pills.regiony': 'Regiony',
+  'stat.pills.zvirata': 'Zvířata',
+  'stat.pills.pribehy': 'Příběhy',
+
+  'stat.meta.title': 'Ceny zemědělských komodit a statistiky ČR — sklizeň, vstupní náklady',
+  'stat.meta.description': 'Aktuální ceny zemědělských komodit (pšenice, řepka, kukuřice) a data z Českého statistického úřadu — vývoj cen vstupů, sklizeň, regionální produkce, stavy zvířat. Měsíčně aktualizováno.',
+
+  'stat.animal.cattle': 'Skot',
+  'stat.animal.pigs': 'Prasata',
+
+  // — CommodityChart —
+  'stat.commodity.title': 'Ceny zemědělských komodit',
+  'stat.commodity.sub': 'Měsíční průměry výrobců, anotované historickými událostmi',
+  'stat.commodity.source': 'Zdroj: ČSÚ — Indexy cen výrobců v zemědělství',
+  'stat.commodity.sourceHref': 'https://csu.gov.cz/zemedelstvi',
+  'stat.commodity.ariaCommodity': 'Komodita',
+  'stat.commodity.ariaWindow': 'Časové okno',
 };
 export default cs;

@@ -1,12 +1,16 @@
 ---
 // src/components/statistiky/PillsNav.astro
+import { useTranslations } from '../../i18n/utils';
+
 interface Props {
   items: { label: string; href: string }[];
 }
 const { items } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
 ---
 
-<nav class="sp-pills" aria-label="Sekce stránky">
+<nav class="sp-pills" aria-label={t('stat.pills.aria')}>
   {items.map((it, i) => (
     <a class:list={['sp-pill', { active: i === 0 }]} href={it.href} data-href={it.href}>{it.label}</a>
   ))}

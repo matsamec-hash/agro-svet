@@ -1,29 +1,61 @@
 ---
 // src/components/statistiky/MethodologyFooter.astro
+import { useTranslations } from '../../i18n/utils';
+
 interface Props { lastUpdated: string; }
 const { lastUpdated } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
+
+const CS_ROWS = [
+  { label: 'Ceny komodit:', value: 'CEN0203BT02 — měsíční průměry výrobců (Kč/t)' },
+  { label: 'Pohonné hmoty:', value: 'CENPHMTT01 — týdenní průměry (Kč/l)' },
+  { label: 'Hnojiva:', value: 'CEN0203ET03 — roční průměry (Kč/t)' },
+  { label: 'Sklizeň:', value: 'WZEM03AT01 — roční (t)' },
+  { label: 'Osevní plochy:', value: 'ZEM03CT01 — roční (ha)' },
+  { label: 'Stavy zvířat:', value: 'WZEM02AT01 — pololetní (ks)' },
+];
+
+const SK_ROWS = [
+  { label: 'Ceny komodít:', value: 'Eurostat apri_ap_crpouta / apri_ap_anouta — ročné výrobné ceny (EUR/t)' },
+  { label: 'Cenové nožnice:', value: 'Eurostat apri_pi20_outa / apri_pi20_ina — indexy cien (báza 2020)' },
+  { label: 'Pohonné hmoty:', value: 'ŠÚSR DATAcube sp0207ts — týždenné priemery (EUR/l)' },
+  { label: 'Úroda:', value: 'Eurostat apro_cpshr — ročné (t)' },
+  { label: 'Osevné plochy:', value: 'Eurostat apro_cpshr — ročné (ha)' },
+  { label: 'Stavy zvierat:', value: 'Eurostat apro_mt_lscatl / apro_mt_lspig — ročné (ks)' },
+];
+
+const rows = locale === 'sk' ? SK_ROWS : CS_ROWS;
 ---
 
 <section class="sp-method" id="metodologie">
-  <h2>Metodologie & zdroje</h2>
-  <p>
-    Veškerá data pochází z otevřeného API
-    <a href="https://data.csu.gov.cz" target="_blank" rel="noopener">Českého statistického úřadu</a>
-    (DataStat). Stránka byla naposledy aktualizována <strong>{lastUpdated}</strong>.
-  </p>
+  <h2>{t('stat.method.heading')}</h2>
+  {locale === 'sk' ? (
+    <p>
+      Dáta pochádzajú z otvorených zdrojov
+      <a href="https://ec.europa.eu/eurostat" target="_blank" rel="noopener">Eurostatu</a>
+      a <a href="https://datacube.statistics.sk" target="_blank" rel="noopener">Štatistického úradu SR</a>
+      (DATAcube). Stránka bola naposledy aktualizovaná <strong>{lastUpdated}</strong>.
+    </p>
+  ) : (
+    <p>
+      Veškerá data pochází z otevřeného API
+      <a href="https://data.csu.gov.cz" target="_blank" rel="noopener">Českého statistického úřadu</a>
+      (DataStat). Stránka byla naposledy aktualizována <strong>{lastUpdated}</strong>.
+    </p>
+  )}
   <ul class="sp-method-list">
-    <li><strong>Ceny komodit:</strong> CEN0203BT02 — měsíční průměry výrobců (Kč/t)</li>
-    <li><strong>Pohonné hmoty:</strong> CENPHMTT01 — týdenní průměry (Kč/l)</li>
-    <li><strong>Hnojiva:</strong> CEN0203ET03 — roční průměry (Kč/t)</li>
-    <li><strong>Sklizeň:</strong> WZEM03AT01 — roční (t)</li>
-    <li><strong>Osevní plochy:</strong> ZEM03CT01 — roční (ha)</li>
-    <li><strong>Stavy zvířat:</strong> WZEM02AT01 — pololetní (ks)</li>
+    {rows.map(row => (
+      <li><strong>{row.label}</strong> {row.value}</li>
+    ))}
   </ul>
-  <p class="note">
-    Cenové nůžky a 5letý průměr jsou derivované metriky vypočtené v
-    <code>src/lib/agro-derived.ts</code>. Historické anotace v grafech jsou
-    vybrané manuálně dle relevance pro české zemědělství.
-  </p>
+  {locale !== 'sk' && (
+    <p class="note">
+      Cenové nůžky a 5letý průměr jsou derivované metriky vypočtené v
+      <code>src/lib/agro-derived.ts</code>. Historické anotace v grafech jsou
+      vybrané manuálně dle relevance pro české zemědělství.
+    </p>
+  )}
 </section>
 
 <style>

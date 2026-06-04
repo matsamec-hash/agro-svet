@@ -1,6 +1,7 @@
 ---
 // src/components/statistiky/ProductionBlock.astro
 import type { CropProduction, CropArea } from '../../lib/czso';
+import { useTranslations } from '../../i18n/utils';
 
 interface Props {
   crops: CropProduction[];      // plný historický řez
@@ -8,26 +9,33 @@ interface Props {
   latestYear: string;
 }
 const { crops, areas, latestYear } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
 
 const latestCrops = crops.filter(c => c.year === latestYear);
 const latestAreas = areas.filter(a => a.year === latestYear && a.crop !== 'Celkem');
 const totalArea = areas.find(a => a.year === latestYear && a.crop === 'Celkem');
+
+const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+const areasLabel = totalArea
+  ? t('stat.production.cardAreas').replace('{totalArea}', totalArea.hectares.toLocaleString(numLocale))
+  : t('stat.production.cardAreasFallback');
 ---
 
 <section class="sp-section" id="produkce">
   <header class="sp-section-head">
-    <h2>Produkce — sklizeň a osevní plochy {latestYear}</h2>
-    <span class="sp-section-sub">Tuny / hektary v Česku</span>
-    <a class="sp-src" href="https://csu.gov.cz/produkty/definitivni-udaje-o-sklizni-zemedelskych-plodin" target="_blank" rel="noopener noreferrer">Zdroj: ČSÚ — Definitivní údaje o sklizni zemědělských plodin <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    <h2>{t('stat.production.h2').replace('{latestYear}', latestYear)}</h2>
+    <span class="sp-section-sub">{t('stat.production.subtitle')}</span>
+    <a class="sp-src" href={t('stat.production.sourceHref')} target="_blank" rel="noopener noreferrer">{t('stat.production.source')} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
   </header>
 
   <div class="sp-prod-grid">
     <div class="sp-chart-card">
-      <h3>Sklizeň podle plodin (tun)</h3>
+      <h3>{t('stat.production.cardHarvest')}</h3>
       <canvas id="cropProductionChart" height="280"></canvas>
     </div>
     <div class="sp-chart-card">
-      <h3>Osevní plochy ({totalArea ? totalArea.hectares.toLocaleString('cs-CZ') : '–'} ha celkem)</h3>
+      <h3>{areasLabel}</h3>
       <canvas id="cropAreasChart" height="280"></canvas>
     </div>
   </div>

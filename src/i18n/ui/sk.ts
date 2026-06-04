@@ -404,5 +404,96 @@ const sk: Record<string, string> = {
   'lang.switch': 'Jazyk',
   'lang.cs': 'CZ',
   'lang.sk': 'SK',
+
+  // — štatistiky chrome (stat.*) —
+  // Hero
+  'stat.hero.kicker': 'ŽIVÉ DÁTA · SLOVENSKÉ POĽNOHOSPODÁRSKE DÁTA',
+  'stat.hero.h1Prefix': 'Čo stojí slovenské ',
+  'stat.hero.h1Em': 'poľnohospodárstvo',
+  'stat.hero.lede': 'Aktuálne ceny poľnohospodárskych komodít, úroda a vstupné náklady z Eurostatu a Štatistického úradu SR — pravidelne aktualizované dáta.',
+  'stat.hero.statDatasets': 'datasetov',
+  'stat.hero.statYears': 'rokov',
+  'stat.hero.statRegions': 'krajov',
+  // AutoTakeaways
+  'stat.takeaways.heading': 'Čo dnes hovoria dáta',
+  'stat.takeaways.detail': 'Detail →',
+  'stat.takeaways.labelTrh': 'TRH',
+  'stat.takeaways.labelVstupy': 'VSTUPY',
+  'stat.takeaways.labelZvirata': 'STAVY ZVIERAT',
+  // PillsNav
+  'stat.pills.aria': 'Sekcie stránky',
+  // SparklineTicker
+  'stat.spark.aria': 'Aktuálne ceny — rýchly prehľad',
+  // BottomCTA
+  'stat.cta.kicker': 'A čo ďalej?',
+  'stat.cta.h2a': 'Hľadáte poľnohospodársku techniku?',
+  'stat.cta.h2b': 'Katalóg traktorov a kombajnov.',
+  'stat.cta.p': '10+ značiek · 500+ modelov · technické parametre, výkon, ceny — kompletná encyklopédia.',
+  'stat.cta.button': 'Otvoriť katalóg',
+  // DataSegmentNav
+  'stat.dataNav.label': 'Dátová sekcia',
+  'stat.dataNav.pudaLabel': 'Poľnohospodárska pôda',
+  'stat.dataNav.pudaSub': 'Cena, štruktúra, erózia, vlastníctvo',
+  'stat.dataNav.komodityLabel': 'Trhy a komodity',
+  'stat.dataNav.komoditySub': 'Ceny, vstupy, úroda, regióny',
+  'stat.dataNav.aria': 'Sekcia Dáta — prepínač podsekcií',
+  // MethodologyFooter
+  'stat.method.heading': 'Metodológia & zdroje',
+
+  // — LivestockSlope —
+  'stat.livestock.h2': 'Zvieratá — historický vývoj stavov',
+  'stat.livestock.subtitleFrom': 'Od roku {fromYear} dodnes',
+  'stat.livestock.subtitleFallback': 'Dostupné ročné údaje Eurostatu',
+  'stat.livestock.source': 'Zdroj: Eurostat — ročné stavy hospodárskych zvierat',
+
+  // — ProductionBlock —
+  'stat.production.h2': 'Produkcia — úroda a osevné plochy {latestYear}',
+  'stat.production.subtitle': 'Tony / hektáre na Slovensku',
+  'stat.production.source': 'Zdroj: Eurostat — produkcia poľnohospodárskych plodín',
+  'stat.production.sourceHref': 'https://ec.europa.eu/eurostat/web/agriculture/database',
+  'stat.production.cardHarvest': 'Úroda podľa plodín (ton)',
+  'stat.production.cardAreas': 'Osevné plochy ({totalArea} ha spolu)',
+  'stat.production.cardAreasFallback': 'Osevné plochy (– ha spolu)',
+
+  // — InputsBlock —
+  'stat.inputs.h2': 'Vstupy — Pohonné hmoty',
+  'stat.inputs.subtitle': 'Týždenná cena nafty',
+  'stat.inputs.source': 'Zdroj: ŠÚSR DATAcube — priemerné ceny pohonných látok (sp0207ts)',
+  'stat.inputs.sourceHref': 'https://datacube.statistics.sk/#!/lang/sk/',
+  'stat.inputs.cardFuel': 'Nafta — týždenný priemer (52 týždňov)',
+  'stat.inputs.cardFert': 'Hnojivá — ročný priemer (EUR/t)',
+
+  // — PriceScissors —
+  'stat.scissors.h2': '⚡ Cenové nožnice — čo je drahšie: vstupy alebo výstupy?',
+  'stat.scissors.explainer': 'Vývoj indexu vstupných a výstupných cien v poľnohospodárstve (Eurostat, báza 2020 = 100).',
+  'stat.scissors.source': 'Zdroj: Eurostat — indexy vstupných a výstupných cien (apri_pi20, báza 2020)',
+  'stat.scissors.sourceHref': 'https://ec.europa.eu/eurostat/web/agriculture/database',
+  'stat.scissors.legendInputs': 'Index vstupných cien',
+  'stat.scissors.legendOutputs': 'Index výstupných cien',
+  'stat.scissors.legendNegative': 'Marža záporná (vstupy > výstupy)',
+  'stat.scissors.howToRead': 'Ako čítať:',
+  'stat.scissors.helpText': 'Keď sa čiary roztvoria (vstupy hore, výstupy dole), farmár <strong>dopláca</strong> — pri rovnakej produkcii zarobí menej. Index 100 = úroveň roku 2020.',
+
+  'stat.pills.trh': 'Trh',
+  'stat.pills.vstupy': 'Vstupy',
+  'stat.pills.scissors': 'Cenové nožnice',
+  'stat.pills.produkce': 'Produkcia',
+  'stat.pills.regiony': 'Regióny',
+  'stat.pills.zvirata': 'Zvieratá',
+  'stat.pills.pribehy': 'Príbehy',
+
+  'stat.meta.title': 'Ceny poľnohospodárskych komodít a štatistiky SR — úroda, vstupné náklady',
+  'stat.meta.description': 'Aktuálne ceny poľnohospodárskych komodít (pšenica, repka, kukurica) a dáta z Eurostatu a Štatistického úradu SR — vývoj cien vstupov, úroda, produkcia a stavy hospodárskych zvierat. Pravidelne aktualizované.',
+
+  'stat.animal.cattle': 'Hovädzí dobytok',
+  'stat.animal.pigs': 'Ošípané',
+
+  // — CommodityChart —
+  'stat.commodity.title': 'Ceny poľnohospodárskych komodít',
+  'stat.commodity.sub': 'Ročné výrobné ceny (Eurostat)',
+  'stat.commodity.source': 'Zdroj: Eurostat — výrobné ceny poľnohospodárskych komodít',
+  'stat.commodity.sourceHref': 'https://ec.europa.eu/eurostat/web/agriculture/database',
+  'stat.commodity.ariaCommodity': 'Komodita',
+  'stat.commodity.ariaWindow': 'Časové okno',
 };
 export default sk;

@@ -1,30 +1,35 @@
 ---
 // src/components/statistiky/InputsBlock.astro
 import type { TimeSeriesPoint, FertilizerTimeSeries } from '../../lib/czso';
+import { useTranslations } from '../../i18n/utils';
 
 interface Props {
   fuelSeries: TimeSeriesPoint[];        // nafta, posledních 52 týdnů
   fertSeries: FertilizerTimeSeries[];   // 6 hnojiv, full history
 }
 const { fuelSeries, fertSeries } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
 ---
 
 <section class="sp-section" id="vstupy">
   <header class="sp-section-head">
-    <h2>Vstupy — Pohonné hmoty a hnojiva</h2>
-    <span class="sp-section-sub">Týdenní cena nafty a roční ceny hnojiv</span>
-    <a class="sp-src" href="https://csu.gov.cz/zemedelstvi" target="_blank" rel="noopener noreferrer">Zdroj: ČSÚ — Indexy spotřebitelských cen, MPO Energostat <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    <h2>{t('stat.inputs.h2')}</h2>
+    <span class="sp-section-sub">{t('stat.inputs.subtitle')}</span>
+    <a class="sp-src" href={t('stat.inputs.sourceHref')} target="_blank" rel="noopener noreferrer">{t('stat.inputs.source')} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
   </header>
 
   <div class="sp-inputs-grid">
     <div class="sp-chart-card">
-      <h3>Nafta — týdenní průměr (52 týdnů)</h3>
+      <h3>{t('stat.inputs.cardFuel')}</h3>
       <canvas id="fuelLongChart" height="220"></canvas>
     </div>
-    <div class="sp-chart-card">
-      <h3>Hnojiva — roční průměr (Kč/t)</h3>
-      <canvas id="fertLongChart" height="220"></canvas>
-    </div>
+    {fertSeries.length > 0 && (
+      <div class="sp-chart-card">
+        <h3>{t('stat.inputs.cardFert')}</h3>
+        <canvas id="fertLongChart" height="220"></canvas>
+      </div>
+    )}
   </div>
 </section>
 
