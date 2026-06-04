@@ -1,81 +1,63 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. cs výstup sémanticky identický.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
 import WeightConverter from '../../../components/WeightConverter.astro';
+import { content } from '../../../i18n/kalkulacka/prevody-hmotnost';
+import { crumbs } from '../../../i18n/kalkulacka/common';
+
+const locale = Astro.locals.locale ?? 'cs';
+const c = content[locale] ?? content.cs;
+const cr = crumbs[locale] ?? crumbs.cs;
 
 const canonical = `${SITE_URL}/kalkulacka/prevody-hmotnost/`;
-
-const faqItems = [
-  {
-    q: 'Kolik je 1 tuna v kilogramech a centech?',
-    a: '1 tuna (t) = 1 000 kg = 10 metrických centů (q). Tuna je dominantní jednotka v zemědělství pro výnosy (t/ha), výkupní ceny (Kč/t) a kapacity strojů. Pozor — americký short ton (907 kg) a britský long ton (1 016 kg) jsou jiné jednotky.',
-  },
-  {
-    q: 'Kolik je 1 bušl pšenice v kg?',
-    a: '1 bušl (bushel) pšenice = 27,2155 kg = 60 amerických liber. Sója má stejnou hmotnost (27,2 kg), kukuřice 25,4 kg, ječmen 21,8 kg, oves 14,5 kg. Bušl je objemová jednotka s pevnou hmotností pro každou komoditu podle USDA standardu.',
-  },
-  {
-    q: 'Jak převést cenu z CBOT (¢/bušl) na CZ (Kč/t)?',
-    a: 'Příklad pšenice 600 ¢/bu: 6,00 USD ÷ 27,2155 kg × 1 000 = 220,4 USD/t. Při kurzu 23 Kč/USD = 5 070 Kč/t (před dopravou a maržemi). Pro kukuřici děl 25,4 místo 27,2.',
-  },
-  {
-    q: 'Jaký je rozdíl mezi q a t?',
-    a: 'Metrický cent (q) = 100 kg, tuna (t) = 1 000 kg. 1 t = 10 q. V CZ se výnosy mohou udávat v obou: 6 t/ha = 60 q/ha. Ceny komodit dnes typicky v Kč/t, ale starší zemědělci ještě počítají v Kč/q (550 Kč/q = 5 500 Kč/t).',
-  },
-  {
-    q: 'Kolik kg je 1 libra (pound, lb)?',
-    a: '1 libra (lb) = 0,45359237 kg, prakticky 0,4536 kg. Rychlý odhad: lb × 0,5 ≈ kg. Libra se používá v USDA reportech, na CBOT futures (sójový olej v ¢/lb, live cattle v ¢/lb) a v amerických krmných tabulkách.',
-  },
-  {
-    q: 'Co je hektolitrová váha obilí?',
-    a: 'Hmotnost 100 litrů obilí v kg — kvalitativní parametr pro výkup. Pšenice potravinářská 78+ kg/hl, krmná pod 74 kg/hl. Vyšší hl váha = lepší škrob/olej, vyšší cena. Rozdíl ceny krmné a potravinářské třídy může být 1 500+ Kč/t.',
-  },
-];
+const faqItems = c.faq;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kalkulačky', url: '/kalkulacka/' },
-  { name: 'Převody hmotnosti', url: canonical },
+  { name: cr.home, url: '/' },
+  { name: cr.hub, url: '/kalkulacka/' },
+  { name: c.crumb, url: canonical },
 ]);
 const faqJsonLd = faqPageSchema(faqItems);
 ---
 
 <Layout
-  title="Převody jednotek hmotnosti — tuna, q, kg, bušl, libra"
-  description="Online kalkulačka pro převody hmotnosti v zemědělství: tuna ↔ metrický cent (q) ↔ kilogram ↔ bušl (pšenice, kukuřice, sója) ↔ libra. Hodnoty bušlu podle komodity (USDA standard)."
-  canonical={canonical}
+  title={c.title}
+  description={c.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
 
   <div class="ph-page">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/kalkulacka/">Kalkulačky</a>
+      <a href={locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/`}>{cr.hub}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <span class="current">Převody hmotnosti</span>
+      <span class="current">{c.crumb}</span>
     </nav>
 
     <header class="hero">
-      <span class="kicker">Kalkulačka · jednotky hmotnosti</span>
-      <h1>Převody jednotek hmotnosti</h1>
-      <p class="hero-lede">
-        Tuna, metrický cent, kilogram, libra a bušl (s výběrem komodity) — okamžitý převod
-        pro zemědělce, makléře komodit i čtenáře USDA reportů. Bušl má různou hmotnost
-        podle plodiny, kalkulačka to počítá přesně podle USDA standardu.
-      </p>
+      <span class="kicker">{c.kicker}</span>
+      <h1>{c.h1}</h1>
+      <p class="hero-lede">{c.lede}</p>
     </header>
 
     <WeightConverter
       defaultUnit="t"
       defaultValue={1}
-      defaultCommodity="pšenice"
-      heading="Online převodník hmotnosti"
-      caption="Tip: vyber dropdown komodity dole, abys upravil hmotnost bušlu (pšenice 27,2 kg, kukuřice 25,4 kg, oves 14,5 kg…)."
+      defaultCommodity={c.defaultCommodity}
+      heading={c.converterHeading}
+      caption={c.converterCaption}
       headingLevel="h2"
+      numberLocale={c.numberLocale}
+      ui={c.ui}
+      unitNames={c.unitNames}
+      commodityNames={c.commodityNames}
     />
 
     <section class="ph-reference">

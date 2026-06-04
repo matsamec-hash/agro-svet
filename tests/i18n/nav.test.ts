@@ -1,6 +1,6 @@
 // tests/i18n/nav.test.ts
 import { describe, it, expect } from 'vitest';
-import { getNav, getFooterColumns, HIDDEN_SECTIONS } from '../../src/i18n/nav';
+import { getNav, getFooterColumns, HIDDEN_SECTIONS, isLockedSectionPath } from '../../src/i18n/nav';
 
 describe('getNav', () => {
   it('cs vrací plný strom se 7 top-level položkami a původními labely', () => {
@@ -53,5 +53,23 @@ describe('getFooterColumns', () => {
     const cols = getFooterColumns('sk');
     expect(cols.map((c) => c.heading)).toEqual(['Obsah']);
     expect(cols[0].links.find((l) => l.href === '/stroje/')!.label).toBe('Katalóg techniky');
+  });
+});
+
+describe('isLockedSectionPath — granularita kalkulaček (Fáze 2b)', () => {
+  it('dotace-cap zůstává locked', () => {
+    expect(isLockedSectionPath('/kalkulacka/dotace-cap')).toBe(true);
+    expect(isLockedSectionPath('/kalkulacka/dotace-cap/')).toBe(true);
+  });
+  it('ostatní kalkulačky jsou odemčené', () => {
+    expect(isLockedSectionPath('/kalkulacka')).toBe(false);
+    expect(isLockedSectionPath('/kalkulacka/')).toBe(false);
+    expect(isLockedSectionPath('/kalkulacka/prevody-jednotek')).toBe(false);
+    expect(isLockedSectionPath('/kalkulacka/leasing-traktoru')).toBe(false);
+  });
+  it('ostatní jurisdikční sekce zůstávají locked', () => {
+    expect(isLockedSectionPath('/dotace')).toBe(true);
+    expect(isLockedSectionPath('/statistiky')).toBe(true);
+    expect(isLockedSectionPath('/puda/ceny')).toBe(true);
   });
 });

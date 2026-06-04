@@ -12,6 +12,10 @@ export interface Props {
   heading?: string;
   caption?: string;
   headingLevel?: 'h2' | 'h3';
+  numberLocale?: string;
+  ui?: { inputLabel?: string; commodityLabel?: string; unitSelectLabel?: string; commoditySelectLabel?: string };
+  unitNames?: Record<string, string>;
+  commodityNames?: Record<string, string>;
 }
 
 const {
@@ -21,26 +25,35 @@ const {
   heading = 'Převodník jednotek hmotnosti',
   caption,
   headingLevel = 'h2',
+  numberLocale = 'cs-CZ',
+  ui = {},
+  unitNames = {},
+  commodityNames = {},
 } = Astro.props;
 
-// Konverzní faktory na kg (základní jednotka pro výpočet).
+const uiText = {
+  inputLabel: ui.inputLabel ?? 'Zadej hmotnost',
+  commodityLabel: ui.commodityLabel ?? 'Komodita (pro bušl)',
+  unitSelectLabel: ui.unitSelectLabel ?? 'Vyber jednotku',
+  commoditySelectLabel: ui.commoditySelectLabel ?? 'Vyber komoditu pro bušl',
+};
+
 const UNITS = [
-  { id: 'kg', label: 'kg', name: 'kilogram', factor: 1, decimals: 2, commodityDependent: false },
-  { id: 'q', label: 'q', name: 'metrický cent', factor: 100, decimals: 4, commodityDependent: false },
-  { id: 't', label: 't', name: 'tuna', factor: 1000, decimals: 5, commodityDependent: false },
-  { id: 'lb', label: 'lb', name: 'libra (pound)', factor: 0.45359237, decimals: 3, commodityDependent: false },
-  { id: 'bu', label: 'bu', name: 'bušl (bushel)', factor: 0, decimals: 4, commodityDependent: true },
+  { id: 'kg', label: 'kg', name: unitNames.kg ?? 'kilogram', factor: 1, decimals: 2, commodityDependent: false },
+  { id: 'q', label: 'q', name: unitNames.q ?? 'metrický cent', factor: 100, decimals: 4, commodityDependent: false },
+  { id: 't', label: 't', name: unitNames.t ?? 'tuna', factor: 1000, decimals: 5, commodityDependent: false },
+  { id: 'lb', label: 'lb', name: unitNames.lb ?? 'libra (pound)', factor: 0.45359237, decimals: 3, commodityDependent: false },
+  { id: 'bu', label: 'bu', name: unitNames.bu ?? 'bušl (bushel)', factor: 0, decimals: 4, commodityDependent: true },
 ];
 
-// Hmotnost 1 bušlu v kg podle komodity (USDA standard).
 const COMMODITIES = [
-  { id: 'wheat', label: 'pšenice', buKg: 27.2155 },
-  { id: 'corn', label: 'kukuřice', buKg: 25.4012 },
-  { id: 'soy', label: 'sója', buKg: 27.2155 },
-  { id: 'barley', label: 'ječmen', buKg: 21.7724 },
-  { id: 'oats', label: 'oves', buKg: 14.5150 },
-  { id: 'rye', label: 'žito', buKg: 25.4012 },
-  { id: 'canola', label: 'řepka (canola)', buKg: 22.6796 },
+  { id: 'wheat', label: commodityNames.wheat ?? 'pšenice', buKg: 27.2155 },
+  { id: 'corn', label: commodityNames.corn ?? 'kukuřice', buKg: 25.4012 },
+  { id: 'soy', label: commodityNames.soy ?? 'sója', buKg: 27.2155 },
+  { id: 'barley', label: commodityNames.barley ?? 'ječmen', buKg: 21.7724 },
+  { id: 'oats', label: commodityNames.oats ?? 'oves', buKg: 14.5150 },
+  { id: 'rye', label: commodityNames.rye ?? 'žito', buKg: 25.4012 },
+  { id: 'canola', label: commodityNames.canola ?? 'řepka (canola)', buKg: 22.6796 },
 ];
 
 const Heading = headingLevel;
@@ -56,7 +69,7 @@ const Heading = headingLevel;
 
   <form class="wc-form" autocomplete="off" onsubmit="return false">
     <label class="wc-input-row">
-      <span class="wc-label">Zadej hmotnost</span>
+      <span class="wc-label">{uiText.inputLabel}</span>
       <span class="wc-input-wrap">
         <input
           type="number"
@@ -67,7 +80,7 @@ const Heading = headingLevel;
           id="wc-input"
           value={defaultValue}
         />
-        <select class="wc-unit" id="wc-unit" aria-label="Vyber jednotku">
+        <select class="wc-unit" id="wc-unit" aria-label={uiText.unitSelectLabel}>
           {UNITS.map((u) => (
             <option value={u.id} selected={u.id === defaultUnit}>{u.label} ({u.name})</option>
           ))}
@@ -76,8 +89,8 @@ const Heading = headingLevel;
     </label>
 
     <label class="wc-commodity-row">
-      <span class="wc-label">Komodita (pro bušl)</span>
-      <select class="wc-commodity" id="wc-commodity" aria-label="Vyber komoditu pro bušl">
+      <span class="wc-label">{uiText.commodityLabel}</span>
+      <select class="wc-commodity" id="wc-commodity" aria-label={uiText.commoditySelectLabel}>
         {COMMODITIES.map((c) => (
           <option value={c.id} selected={c.label === defaultCommodity}>{c.label} — 1 bu = {c.buKg.toFixed(2).replace('.', ',')} kg</option>
         ))}
@@ -98,7 +111,7 @@ const Heading = headingLevel;
   {caption && <p class="wc-caption">{caption}</p>}
 </section>
 
-<script is:inline define:vars={{ UNITS, COMMODITIES }}>
+<script is:inline define:vars={{ UNITS, COMMODITIES, numberLocale }}>
   (function () {
     const root = document.currentScript.previousElementSibling;
     if (!root) return;
@@ -119,7 +132,7 @@ const Heading = headingLevel;
       else if (abs >= 0.01) d = 4;
       else d = 6;
       return n
-        .toLocaleString('cs-CZ', { maximumFractionDigits: d, minimumFractionDigits: 0 })
+        .toLocaleString(numberLocale, { maximumFractionDigits: d, minimumFractionDigits: 0 })
         .replace(/ /g, ' ');
     };
 

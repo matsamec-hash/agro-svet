@@ -49,6 +49,10 @@ export interface DieselComparisonInput {
   naftaPriceCzk: number;
   /** Volitelné: porovnání investice — kolik stojí nový traktor B navíc. */
   investmentDiffCzk?: number;
+  /** Volitelné lokalizované labely emisních norem (default = cs NORMA_LABELS). */
+  normaLabels?: Record<EmisniNorma, string>;
+  /** Volitelná jednotka výkonu v labelu (default 'k'). */
+  hpUnit?: string;
 }
 
 export interface ConsumptionLine {
@@ -84,6 +88,9 @@ export function compareDiesel(input: DieselComparisonInput): DieselComparisonRes
   const fiveYearSaving = yearlySaving * 5;
   const savingPct = yearlyCzkA > 0 ? (yearlySaving / yearlyCzkA) * 100 : 0;
 
+  const labels = input.normaLabels ?? NORMA_LABELS;
+  const hp = input.hpUnit ?? 'k';
+
   let paybackYears: number | undefined;
   if (input.investmentDiffCzk && input.investmentDiffCzk > 0 && yearlySaving > 0) {
     paybackYears = input.investmentDiffCzk / yearlySaving;
@@ -91,14 +98,14 @@ export function compareDiesel(input: DieselComparisonInput): DieselComparisonRes
 
   return {
     a: {
-      label: `${input.tractorA.powerHp} k · ${NORMA_LABELS[input.tractorA.norma]}`,
+      label: `${input.tractorA.powerHp} ${hp} · ${labels[input.tractorA.norma]}`,
       consumptionLh: consA,
       yearlyL: Math.round(yearlyLA),
       yearlyCzk: yearlyCzkA,
       perHourCzk: Math.round(consA * input.naftaPriceCzk),
     },
     b: {
-      label: `${input.tractorB.powerHp} k · ${NORMA_LABELS[input.tractorB.norma]}`,
+      label: `${input.tractorB.powerHp} ${hp} · ${labels[input.tractorB.norma]}`,
       consumptionLh: consB,
       yearlyL: Math.round(yearlyLB),
       yearlyCzk: yearlyCzkB,
