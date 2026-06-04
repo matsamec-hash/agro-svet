@@ -49,14 +49,69 @@ async function fetchLivestock() {
   return out;
 }
 
+// — Ceny komodit (roční, EUR/100kg → přepočet na EUR/t pre konzistenciu jednotky) —
+const CROP_PRICES = [
+  { name: 'Pšenica', code: '01110000' },
+  { name: 'Jačmeň', code: '01300000' },
+  { name: 'Kukurica', code: '01500000' },
+  { name: 'Repka', code: '02110000' },
+];
+const ANIMAL_PRICES = [
+  { name: 'Hovädzie', code: '11114000' },
+  { name: 'Bravčové', code: '11220000' },
+  { name: 'Mlieko', code: '12111000' },
+];
+
+function buildCommodity(name, series) {
+  // series: [{ time:'2020', value: EUR/100kg }]; prepočet ×10 = EUR/t
+  const data = series.map((p) => ({ label: p.time, value: Math.round(p.value * 10), sortKey: parseInt(p.time) * 12 }));
+  return { name, unit: 'EUR/t', data };
+}
+
+async function fetchCommodities() {
+  const full = [];
+  const cropJson = await esFetch('apri_ap_crpouta', { currency: 'EUR' });
+  if (cropJson) {
+    for (const c of CROP_PRICES) {
+      const s = pickSeries(cropJson, { freq: 'A', currency: 'EUR', prod_veg: c.code, geo: 'SK' });
+      if (s.length) full.push(buildCommodity(c.name, s));
+    }
+  }
+  const aniJson = await esFetch('apri_ap_anouta', { currency: 'EUR' });
+  if (aniJson) {
+    for (const a of ANIMAL_PRICES) {
+      const s = pickSeries(aniJson, { freq: 'A', currency: 'EUR', prod_ani: a.code, geo: 'SK' });
+      if (s.length) full.push(buildCommodity(a.name, s));
+    }
+  }
+  return full;
+}
+
+function buildCommodityStats(full) {
+  // Posledný rok + medziročná zmena z ročnej rady.
+  return full.map((s) => {
+    const data = s.data;
+    const last = data[data.length - 1];
+    const prev = data[data.length - 2];
+    return {
+      name: s.name, unit: s.unit, price: last?.value ?? 0,
+      month: last?.label ?? '',           // u SK = rok ("2024")
+      prevYearPrice: prev?.value ?? null,
+      change: prev && prev.value ? Math.round((last.value / prev.value - 1) * 1000) / 10 : null,
+    };
+  });
+}
+
 async function main() {
   const livestockHistorical = await fetchLivestock();
+  const commodityFull = await fetchCommodities();
+  const commodityStats = buildCommodityStats(commodityFull);
 
   const payload = {
     generated: new Date().toISOString(),
     scissorsBaseYear: SCISSORS_BASE_YEAR,
-    commodityStats: [],
-    commodityFull: [],
+    commodityStats,
+    commodityFull,
     fiveYearAvgs: {},
     latestFuels: [],
     fuelSeries: [],
