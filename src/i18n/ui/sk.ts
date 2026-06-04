@@ -404,5 +404,35 @@ const sk: Record<string, string> = {
   'lang.switch': 'Jazyk',
   'lang.cs': 'CZ',
   'lang.sk': 'SK',
+
+  // — štatistiky chrome (stat.*) —
+  // Hero
+  'stat.hero.kicker': 'ŽIVÉ DÁTA · SLOVENSKÉ POĽNOHOSPODÁRSKE DÁTA',
+  'stat.hero.h1Prefix': 'Čo stojí slovenské ',
+  'stat.hero.h1Em': 'poľnohospodárstvo',
+  'stat.hero.statDatasets': 'datasetov',
+  'stat.hero.statYears': 'rokov',
+  'stat.hero.statRegions': 'krajov',
+  // AutoTakeaways
+  'stat.takeaways.heading': 'Čo dnes hovoria dáta',
+  'stat.takeaways.detail': 'Detail →',
+  // PillsNav
+  'stat.pills.aria': 'Sekcie stránky',
+  // SparklineTicker
+  'stat.spark.aria': 'Aktuálne ceny — rýchly prehľad',
+  // BottomCTA
+  'stat.cta.kicker': 'A čo ďalej?',
+  'stat.cta.h2a': 'Hľadáte poľnohospodársku techniku?',
+  'stat.cta.h2b': 'Katalóg traktorov a kombajnov.',
+  'stat.cta.p': '10+ značiek · 500+ modelov · technické parametre, výkon, ceny — kompletná encyklopédia.',
+  // DataSegmentNav
+  'stat.dataNav.label': 'Dátová sekcia',
+  'stat.dataNav.pudaLabel': 'Poľnohospodárska pôda',
+  'stat.dataNav.pudaSub': 'Cena, štruktúra, erózia, vlastníctvo',
+  'stat.dataNav.komodityLabel': 'Trhy a komodity',
+  'stat.dataNav.komoditySub': 'Ceny, vstupy, úroda, regióny',
+  'stat.dataNav.aria': 'Sekcia Dáta — prepínač podsekcií',
+  // MethodologyFooter
+  'stat.method.heading': 'Metodológia & zdroje',
 };
 export default sk;

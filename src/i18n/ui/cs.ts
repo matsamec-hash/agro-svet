@@ -404,5 +404,35 @@ const cs: Record<string, string> = {
   'lang.switch': 'Jazyk',
   'lang.cs': 'CZ',
   'lang.sk': 'SK',
+
+  // — statistiky chrome (stat.*) —
+  // Hero
+  'stat.hero.kicker': 'LIVE DATA · ČESKÁ ZEMĚDĚLSKÁ DATA',
+  'stat.hero.h1Prefix': 'Co stojí české ',
+  'stat.hero.h1Em': 'zemědělství',
+  'stat.hero.statDatasets': 'datasetů',
+  'stat.hero.statYears': 'let',
+  'stat.hero.statRegions': 'krajů',
+  // AutoTakeaways
+  'stat.takeaways.heading': 'Co dnes říkají data',
+  'stat.takeaways.detail': 'Detail →',
+  // PillsNav
+  'stat.pills.aria': 'Sekce stránky',
+  // SparklineTicker
+  'stat.spark.aria': 'Aktuální ceny — rychlý přehled',
+  // BottomCTA
+  'stat.cta.kicker': 'A co dál?',
+  'stat.cta.h2a': 'Hledáte zemědělskou techniku?',
+  'stat.cta.h2b': 'Katalog traktorů a kombajnů.',
+  'stat.cta.p': '10+ značek · 500+ modelů · technické parametry, výkon, ceny — kompletní encyklopedie.',
+  // DataSegmentNav
+  'stat.dataNav.label': 'Datová sekce',
+  'stat.dataNav.pudaLabel': 'Zemědělská půda',
+  'stat.dataNav.pudaSub': 'Cena, struktura, eroze, vlastnictví',
+  'stat.dataNav.komodityLabel': 'Trhy a komodity',
+  'stat.dataNav.komoditySub': 'Ceny, vstupy, sklizeň, regiony',
+  'stat.dataNav.aria': 'Sekce Data — přepínač podsekcí',
+  // MethodologyFooter
+  'stat.method.heading': 'Metodologie & zdroje',
 };
 export default cs;

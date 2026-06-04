@@ -1,6 +1,7 @@
 ---
 // src/components/statistiky/SparklineTicker.astro
 import type { TimeSeriesPoint } from '../../lib/czso';
+import { useTranslations } from '../../i18n/utils';
 
 export interface SparklineMetric {
   name: string;
@@ -15,6 +16,8 @@ interface Props {
   metrics: SparklineMetric[];
 }
 const { metrics } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
 
 function fmt(n: number): string {
   if (n >= 1000) return n.toLocaleString('cs-CZ', { maximumFractionDigits: 0 });
@@ -38,7 +41,7 @@ function buildSparklinePath(series: TimeSeriesPoint[], width: number, height: nu
 }
 ---
 
-<nav class="sp-ticker" aria-label="Aktuální ceny — rychlý přehled">
+<nav class="sp-ticker" aria-label={t('stat.spark.aria')}>
   {metrics.map(m => {
     const path = buildSparklinePath(m.series, 100, 24);
     const lastVal = m.series.length > 0 ? m.series[m.series.length - 1].value : m.value;

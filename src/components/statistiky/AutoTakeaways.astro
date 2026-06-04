@@ -1,5 +1,7 @@
 ---
 // src/components/statistiky/AutoTakeaways.astro
+import { useTranslations } from '../../i18n/utils';
+
 export interface Takeaway {
   category: 'trh' | 'vstupy' | 'zvirata';
   title: string;       // např. "Pšenice"
@@ -11,6 +13,8 @@ interface Props {
   takeaways: Takeaway[];
 }
 const { takeaways } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
 
 const ICONS = {
   trh: '📈',
@@ -25,14 +29,14 @@ const LABELS = {
 ---
 
 <section class="sp-takeaways" aria-labelledby="takeaways-h">
-  <h2 id="takeaways-h" class="sp-section-h">Co dnes říkají data</h2>
+  <h2 id="takeaways-h" class="sp-section-h">{t('stat.takeaways.heading')}</h2>
   <div class="sp-takeaways-grid">
-    {takeaways.map(t => (
-      <a class={`sp-take-card cat-${t.category}`} href={t.anchor}>
-        <span class="cat-label">{ICONS[t.category]} {LABELS[t.category]}</span>
-        <h3>{t.title}</h3>
-        <p>{t.insight}</p>
-        <span class="cta">Detail →</span>
+    {takeaways.map(tk => (
+      <a class={`sp-take-card cat-${tk.category}`} href={tk.anchor}>
+        <span class="cat-label">{ICONS[tk.category]} {LABELS[tk.category]}</span>
+        <h3>{tk.title}</h3>
+        <p>{tk.insight}</p>
+        <span class="cta">{t('stat.takeaways.detail')}</span>
       </a>
     ))}
   </div>

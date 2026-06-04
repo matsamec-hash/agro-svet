@@ -1,18 +1,35 @@
 ---
+import { useTranslations } from '../i18n/utils';
+
 interface Props {
   active: 'komodity' | 'puda';
 }
 const { active } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
 
-const items = [
-  { key: 'puda', label: 'Zemědělská půda', href: '/puda/', sub: 'Cena, struktura, eroze, vlastnictví' },
-  { key: 'komodity', label: 'Trhy a komodity', href: '/statistiky/', sub: 'Ceny, vstupy, sklizeň, regiony' },
+const allItems = [
+  {
+    key: 'puda',
+    label: t('stat.dataNav.pudaLabel'),
+    href: '/puda/',
+    sub: t('stat.dataNav.pudaSub'),
+  },
+  {
+    key: 'komodity',
+    label: t('stat.dataNav.komodityLabel'),
+    href: '/statistiky/',
+    sub: t('stat.dataNav.komoditySub'),
+  },
 ];
+
+// On sk, /puda is not yet launched — hide it
+const items = locale === 'sk' ? allItems.filter(it => it.key !== 'puda') : allItems;
 ---
 
-<nav class="data-seg" aria-label="Sekce Data — přepínač podsekcí">
-  <span class="data-seg-label">Datová sekce</span>
-  <div class="data-seg-tabs" role="tablist">
+<nav class="data-seg" aria-label={t('stat.dataNav.aria')}>
+  <span class="data-seg-label">{t('stat.dataNav.label')}</span>
+  <div class="data-seg-tabs" role="tablist" style={items.length === 1 ? 'grid-template-columns:1fr' : undefined}>
     {items.map((it) => (
       <a
         href={it.href}
