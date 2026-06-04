@@ -8,6 +8,7 @@ import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath } from '../i18n/utils';
+import { isLockedSectionPath } from '../i18n/nav';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
@@ -134,6 +135,8 @@ export const GET: APIRoute = async () => {
     ['/kviz/historie-znacek/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/kviz/jaky-traktor-potrebujete/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/kalkulacka/', 'monthly', '0.8', STATIC_LASTMOD],
+    ['/kalkulacka/prevody-jednotek/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/kalkulacka/prevody-hmotnost/', 'monthly', '0.75', STATIC_LASTMOD],
     ['/kalkulacka/leasing-traktoru/', 'monthly', '0.75', STATIC_LASTMOD],
     ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75', STATIC_LASTMOD],
     ['/kalkulacka/dotace-cap/', 'monthly', '0.8', STATIC_LASTMOD],
@@ -345,7 +348,13 @@ export const GET: APIRoute = async () => {
   // /srovnani) pridáme /sk zrkadlové URL. cs časť vyššie zostáva byte-identická —
   // /sk záznamy len appendujeme na koniec.
   const skMirror: UrlEntry[] = urls
-    .filter((u) => u.loc.startsWith(SITE_URL) && isSkLaunchedPath(u.loc.slice(SITE_URL.length)))
+    .filter((u) => {
+      if (!u.loc.startsWith(SITE_URL)) return false;
+      const p = u.loc.slice(SITE_URL.length);
+      // Lock přebíjí launch: zamčené pod-cesty (/kalkulacka/dotace-cap) nezrcadlit
+      // do /sk sitemapy — na produkci 307-ují na cs.
+      return isSkLaunchedPath(p) && !isLockedSectionPath(p);
+    })
     .map((u) => ({ ...u, loc: `${SITE_URL}/sk${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...skMirror);
 
