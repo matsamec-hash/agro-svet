@@ -9,7 +9,11 @@ export type FooterColumn = { section: string; heading: string; links: NavLink[] 
 /** Sekce skryté v daném locale (jurisdikčně vázané / CZ-provozní). cs = nic. */
 export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   cs: [],
-  sk: ['data', 'bazar', 'photo'],
+  // Fáze 2b A: `data` už sk neskrývá — /dotace a /kalkulacka/dotace-cap byly
+  // odemčeny (SK obsah nasazen). Sekce se servíruje, ale getNav z ní vyfiltruje
+  // stále uzamčené nástroje (/statistiky, /puda) a přesměruje header na první
+  // viditelné dítě. uk zůstává plně skrytá (žádný SK/UK obsah zatím).
+  sk: ['bazar', 'photo'],
   uk: ['data', 'bazar', 'photo'],
 };
 
@@ -104,17 +108,28 @@ export function getNav(locale: Locale): NavItem[] {
   const hidden = HIDDEN_SECTIONS[locale];
   const hiddenCats = HIDDEN_NEWS_CATEGORIES[locale];
   const hiddenCatHrefs = hiddenCats.map((c) => `/novinky/kategorie/${c}/`);
+  // Non-cs locale: z viditelných sekcí vyfiltruj stále uzamčené CZ-nástroje
+  // (/statistiky, /puda) a přesměruj header dead-linkující na locked cestu.
+  // cs musí zůstat byte-identické → filtr neaplikujeme (i když isLockedSectionPath
+  // je locale-agnostické, cs si všech 5 dětí + header /statistiky/ ponechává).
+  const filterLocked = locale !== 'cs';
+  const norm = (href: string) => href.replace(/\/+$/, '') || '/';
   return NAV
     .filter((item) => !hidden.includes(item.section))
     .map((item) => {
       const out: NavItem = { section: item.section, label: t(locale, item.labelKey), href: item.href };
       if (item.children) {
         // Skryj jurisdikčně uzamčené novinkové kategorie (locale-specific; pro cs
-        // prázdné → beze změny). CZ-data nástroje (/dotace…) jsou už pod celou
-        // skrytou sekcí `data`, takže je tu netřeba zvlášť filtrovat.
+        // prázdné → beze změny).
         out.children = item.children
           .filter((c) => !hiddenCatHrefs.includes(c.href))
+          .filter((c) => !filterLocked || !isLockedSectionPath(norm(c.href)))
           .map((c) => ({ label: t(locale, c.labelKey), href: c.href }));
+        // Pokud vlastní top-level href sekce ukazuje na locked cestu (a filtrujeme),
+        // přesměruj na první viditelné dítě, ať header nedead-linkuje na 307 redirect.
+        if (filterLocked && isLockedSectionPath(norm(item.href)) && out.children.length) {
+          out.href = out.children[0].href;
+        }
       }
       return out;
     });
@@ -155,9 +170,10 @@ const FOOTER: { section: string; headingKey: string; links: { labelKey: string; 
 /** Přeložené + locale-filtrované footer sloupce. */
 export function getFooterColumns(locale: Locale): FooterColumn[] {
   const hidden = HIDDEN_SECTIONS[locale];
-  // Locale, který skrývá sekci `data`, skryje i odkazy na CZ-jurisdikční nástroje
-  // (puda/statistiky/dotace/kalkulacka) v ostatních footer sloupcích. cs = false → beze změny.
-  const hideLocked = hidden.includes('data');
+  // Non-cs locale skryje odkazy na stále uzamčené CZ-jurisdikční nástroje
+  // (/puda, /statistiky) i v ostatních footer sloupcích. Odděleno od `data`
+  // hidden flagu (Fáze 2b A `data` už sk neskrývá). cs = false → beze změny.
+  const hideLocked = locale !== 'cs';
   return FOOTER
     .filter((col) => !hidden.includes(col.section))
     .map((col) => ({

@@ -19,14 +19,42 @@ describe('getNav', () => {
     expect(nav[4].children).toBeUndefined(); // Farmy
   });
 
-  it('sk skryje jurisdikční/CZ-provozní sekce (data, bazar, photo)', () => {
+  it('sk skryje bazar+photo, ale data sekce je nyní viditelná (Fáze 2b A)', () => {
+    // UPDATED Fáze 2b A: sekce `data` už není v HIDDEN_SECTIONS['sk'] —
+    // /dotace + /kalkulacka byly odemčeny, takže `data` se servíruje (filtrovaná).
     const nav = getNav('sk');
     expect(nav.map((i) => i.label)).toEqual([
-      'Téma', 'Zvieratá', 'Technika', 'Farmy',
+      'Téma', 'Zvieratá', 'Technika', 'Dáta', 'Farmy',
     ]);
+    // top-level header sekce `data` nesmí dead-linkovat na locked /statistiky/
     expect(nav.some((i) => i.href === '/statistiky/')).toBe(false);
     expect(nav.some((i) => i.href === '/bazar/')).toBe(false);
     expect(nav.some((i) => i.href === '/fotosoutez/')).toBe(false);
+  });
+
+  it('sk nav: data sekce je viditelná a obsahuje dotace + capCalc, ne statistiky/puda', () => {
+    const nav = getNav('sk');
+    const data = nav.find((s) => s.section === 'data');
+    expect(data).toBeTruthy();
+    const hrefs = (data!.children ?? []).map((c) => c.href);
+    expect(hrefs).toContain('/dotace/');
+    expect(hrefs).toContain('/kalkulacka/dotace-cap/');
+    expect(hrefs).not.toContain('/statistiky/');
+    expect(hrefs).not.toContain('/puda/');
+    // section header nesmí dead-linkovat na locked /statistiky/
+    expect(data!.href).not.toBe('/statistiky/');
+  });
+
+  it('cs nav: data sekce beze změny (všech 5 dětí, header /statistiky/)', () => {
+    const nav = getNav('cs');
+    const data = nav.find((s) => s.section === 'data')!;
+    expect(data.href).toBe('/statistiky/');
+    const hrefs = (data.children ?? []).map((c) => c.href);
+    expect(hrefs).toEqual(['/statistiky/', '/puda/', '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/']);
+  });
+
+  it('uk nav: data sekce stále skrytá', () => {
+    expect(getNav('uk').find((s) => s.section === 'data')).toBeUndefined();
   });
 
   it('sk překládá zachované labely', () => {
@@ -38,7 +66,10 @@ describe('getNav', () => {
 
   it('HIDDEN_SECTIONS: cs nic neskrývá', () => {
     expect(HIDDEN_SECTIONS.cs).toEqual([]);
-    expect(HIDDEN_SECTIONS.sk).toEqual(expect.arrayContaining(['data', 'bazar', 'photo']));
+    // UPDATED Fáze 2b A: `data` už sk neskrývá (jen bazar+photo); uk skrývá vše.
+    expect(HIDDEN_SECTIONS.sk).toEqual(expect.arrayContaining(['bazar', 'photo']));
+    expect(HIDDEN_SECTIONS.sk).not.toContain('data');
+    expect(HIDDEN_SECTIONS.uk).toEqual(expect.arrayContaining(['data', 'bazar', 'photo']));
   });
 });
 
@@ -53,6 +84,13 @@ describe('getFooterColumns', () => {
     const cols = getFooterColumns('sk');
     expect(cols.map((c) => c.heading)).toEqual(['Obsah']);
     expect(cols[0].links.find((l) => l.href === '/stroje/')!.label).toBe('Katalóg techniky');
+  });
+
+  it('sk footer stále skrývá locked odkazy (/puda, /statistiky)', () => {
+    const cols = getFooterColumns('sk');
+    const allHrefs = cols.flatMap((c) => c.links.map((l) => l.href));
+    expect(allHrefs).not.toContain('/puda/');
+    expect(allHrefs).not.toContain('/statistiky/');
   });
 });
 
