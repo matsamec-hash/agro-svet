@@ -1,5 +1,5 @@
 ---
-import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
+import { getLocaleFromUrl, useTranslations, navHref } from '../i18n/utils';
 import { getFooterColumns } from '../i18n/nav';
 
 const year = new Date().getFullYear();
@@ -16,7 +16,7 @@ const columns = getFooterColumns(locale);
   <div class="footer-inner">
     <div class="footer-grid">
       <div class="footer-col footer-brand">
-        <a href="/" class="footer-logo" aria-label={tr('footer.logoHome')}>
+        <a href={navHref(locale, '/')} class="footer-logo" aria-label={tr('footer.logoHome')}>
           <span>{tr('brand.name')}</span>
         </a>
         <p class="footer-tagline" set:html={'\n' + tr('footer.tagline') + '\n'}></p>
@@ -27,7 +27,7 @@ const columns = getFooterColumns(locale);
           <h3>{col.heading}</h3>
           <ul>
             {col.links.map((l, li) => (
-              <Fragment>{li > 0 ? ' ' : ''}<li><a href={l.href}>{l.label}</a></li></Fragment>
+              <Fragment>{li > 0 ? ' ' : ''}<li><a href={navHref(locale, l.href)}>{l.label}</a></li></Fragment>
             ))}
           </ul>
         </div></Fragment>
