@@ -122,9 +122,24 @@ const kraje = getKraje();
 
   <style>
     .pridat { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
-    .pridat label { display: block; margin: 12px 0; }
-    .pridat input, .pridat select, .pridat textarea { width: 100%; padding: 8px; }
-    .pridat .dny label { display: inline-block; width: auto; margin-right: 10px; }
+    .pridat label { display: block; margin: 12px 0; font-weight: 600; }
+    .pridat input:not([type="radio"]):not([type="checkbox"]),
+    .pridat select,
+    .pridat textarea {
+      display: block; width: 100%; padding: 8px; margin-top: 4px;
+      font-weight: 400; box-sizing: border-box;
+    }
+    .pridat fieldset { margin: 18px 0; border: 1px solid #e2e2e2; border-radius: 10px; padding: 10px 16px 16px; }
+    .pridat legend { font-weight: 600; padding: 0 6px; }
+    /* radio/checkbox volby — inline vedle popisku, ne roztažené na 100 % */
+    .pridat label:has(> input[type="radio"]),
+    .pridat label:has(> input[type="checkbox"]) {
+      display: inline-flex; align-items: center; gap: 8px;
+      width: auto; margin: 6px 20px 6px 0; font-weight: 400;
+    }
+    .pridat label:has(> input[type="radio"]) > input,
+    .pridat label:has(> input[type="checkbox"]) > input { width: auto; margin: 0; }
+    .pridat .dny { border: 0; padding: 0; margin: 8px 0; }
     .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
     .pridat button { margin-top: 20px; padding: 12px 24px; font-weight: 600; cursor: pointer; }
   </style>
