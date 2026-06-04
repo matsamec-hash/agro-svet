@@ -38,7 +38,7 @@ export function isSkLaunchedPath(csRootPath: string): boolean {
 /** Cesty uvnitř launchnutých sekcí, které ALE pod /sk 404-ují (jsou prerendered,
  *  nemají SSR routu pokrytou middleware-rewritem). V navigaci je drž na cs, ať
  *  /sk odkaz nevede na 404. Ověřeno živě. (Hub /stroje/ SSR funguje, kategorie ne.) */
-const SK_PRERENDERED_NAV_PATHS = ['/stroje/traktory', '/stroje/kombajny', '/stroje/zemedelske-stroje'];
+const SK_PRERENDERED_NAV_PATHS: string[] = [];
 
 /** Lokalizuje navigační/footer href pro daný locale. Pro cs vrací href beze změny.
  *  Pro non-cs přidá `/sk` (resp. `/uk`) prefix POUZE u cest, které pod daným locale
