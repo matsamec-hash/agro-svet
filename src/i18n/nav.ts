@@ -10,9 +10,9 @@ export type FooterColumn = { section: string; heading: string; links: NavLink[] 
 export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   cs: [],
   // Fáze 2b A: `data` už sk neskrývá — /dotace a /kalkulacka/dotace-cap byly
-  // odemčeny (SK obsah nasazen). Sekce se servíruje, ale getNav z ní vyfiltruje
-  // stále uzamčené nástroje (/statistiky, /puda) a přesměruje header na první
-  // viditelné dítě. uk zůstává plně skrytá (žádný SK/UK obsah zatím).
+  // odemčeny (SK obsah nasazen). Fáze 2b B: /statistiky taky odemčeno (SK obsah).
+  // getNav z ní vyfiltruje stále uzamčené nástroje (/puda) a přesměruje header
+  // na první viditelné dítě (jen kdyby header locked). uk zůstává plně skrytá.
   sk: ['bazar', 'photo'],
   uk: ['data', 'bazar', 'photo'],
 };
@@ -30,9 +30,9 @@ export const HIDDEN_NEWS_CATEGORIES: Record<Locale, string[]> = {
 /** cs-root prefixy CZ-jurisdikčních nástrojů/dat. Pod non-cs locale se NEservírují
  *  jako SK obsah — middleware je přesměruje na cs URL.
  *  Fáze 2b balík A: /dotace a /kalkulacka/dotace-cap odemčeny (SK obsah nasazen).
- *  Locked zůstává jen /statistiky (CZ tržní statistiky) a /puda (CZ půdní data) —
- *  ty jsou předmětem samostatných balíků B/C. */
-export const LOCKED_SECTION_PREFIXES = ['/statistiky', '/puda'];
+ *  Fáze 2b balík B: /statistiky odemčeno (SK tržní statistiky nasazeny).
+ *  Locked zůstává jen /puda (CZ půdní data) — předmět balíku C. */
+export const LOCKED_SECTION_PREFIXES = ['/puda'];
 
 /** True, pokud cs-root cesta patří do CZ-jurisdikčně uzamčené sekce. */
 export function isLockedSectionPath(csRootPath: string): boolean {
@@ -109,7 +109,7 @@ export function getNav(locale: Locale): NavItem[] {
   const hiddenCats = HIDDEN_NEWS_CATEGORIES[locale];
   const hiddenCatHrefs = hiddenCats.map((c) => `/novinky/kategorie/${c}/`);
   // Non-cs locale: z viditelných sekcí vyfiltruj stále uzamčené CZ-nástroje
-  // (/statistiky, /puda) a přesměruj header dead-linkující na locked cestu.
+  // (/puda) a přesměruj header dead-linkující na locked cestu.
   // cs musí zůstat byte-identické → filtr neaplikujeme (i když isLockedSectionPath
   // je locale-agnostické, cs si všech 5 dětí + header /statistiky/ ponechává).
   const filterLocked = locale !== 'cs';
@@ -171,8 +171,8 @@ const FOOTER: { section: string; headingKey: string; links: { labelKey: string; 
 export function getFooterColumns(locale: Locale): FooterColumn[] {
   const hidden = HIDDEN_SECTIONS[locale];
   // Non-cs locale skryje odkazy na stále uzamčené CZ-jurisdikční nástroje
-  // (/puda, /statistiky) i v ostatních footer sloupcích. Odděleno od `data`
-  // hidden flagu (Fáze 2b A `data` už sk neskrývá). cs = false → beze změny.
+  // (/puda) i v ostatních footer sloupcích. Odděleno od `data` hidden flagu
+  // (Fáze 2b A/B `data` sk neskrývá, /statistiky odemčeno). cs = false → beze změny.
   const hideLocked = locale !== 'cs';
   return FOOTER
     .filter((col) => !hidden.includes(col.section))
