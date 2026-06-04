@@ -34,8 +34,35 @@ export interface DotaceCopy {
   ctaCalc: string;
   /** Název itemListu pro JSON-LD. */
   itemListName: string;
+  /** Kalendář kol — dedikovaná stránka /dotace/kalendar-kol/. */
+  kalendarKol: DotaceKalendarKolCopy;
   /** Frame-copy pro detailovú stránku /dotace/[slug]. */
   detail: DotaceDetailCopy;
+}
+
+export interface DotaceKalendarKolCopy {
+  metaTitle: string;
+  metaDescription: string;
+  crumbKalendar: string;
+  kicker: string;
+  h1: string;
+  lede: string;
+  /** Disclaimer blok HTML (obsahuje odkaz na primárny zdroj). "{date}" sa nahradí dátumom aktualizácie. */
+  disclaimerHtml: string;
+  /** Hlavička stĺpca dátumov v karte kola. */
+  datesLabel: string;
+  /** Text odkazu na pravidlá/výzvu. */
+  rulesLink: string;
+  /** Nadpis info-boxu pod zoznamom. */
+  infoTitle: string;
+  /** Obsah info-boxu — HTML. */
+  infoBodyHtml: string;
+  /** Tlačidlo: prehľad titulov. */
+  btnPrehled: string;
+  /** Tlačidlo: kalkulačka leasingu. */
+  btnLeasing: string;
+  /** Status labels specific to this page (differ from index page labels). */
+  statusLabel: Record<'ocekavane' | 'otevrene' | 'uzavrene', string>;
 }
 
 export interface DotaceDetailCopy {
@@ -104,6 +131,25 @@ export const content: Record<Locale, DotaceCopy> = {
     ctaCompare: 'Srovnání modelů',
     ctaCalc: 'Kalkulačky',
     itemListName: 'Dotace na zemědělskou techniku',
+    kalendarKol: {
+      metaTitle: 'Kalendář kol dotací SZIF 2026 — termíny příjmu žádostí',
+      metaDescription:
+        'Přehled termínů příjmu žádostí o dotace SZIF v rámci SP SZP 2023–2027. Investice do podniků, technologie snižující emise, zpracování produktů.',
+      crumbKalendar: 'Kalendář kol',
+      kicker: 'SZIF · harmonogram příjmu žádostí',
+      h1: 'Kalendář kol dotací',
+      lede: 'Termíny příjmu žádostí o projektové dotace SP SZP 2023–2027. Příjem probíhá typicky dvakrát ročně — na jaře a na podzim. Pravidla daného kola SZIF zveřejňuje přibližně dva měsíce před zahájením příjmu.',
+      disclaimerHtml:
+        '<strong>Orientační termíny.</strong> Kalendář vychází z předpokládaného harmonogramu MZe. Závazné termíny a podmínky zveřejňuje SZIF v Pravidlech daného kola na <a href="https://szif.gov.cz/cs/szp23" target="_blank" rel="noopener">szif.gov.cz</a>. Aktualizováno: {date}.',
+      datesLabel: 'Příjem žádostí',
+      rulesLink: 'Pravidla SZIF ↗',
+      infoTitle: 'Jak funguje cyklus výzev',
+      infoBodyHtml:
+        'Projektové dotace SP SZP 2023–2027 se podávají v <strong>kolech</strong> — vymezených obdobích příjmu žádostí. Pro nákup zemědělské techniky jsou klíčové intervence <a href="/dotace/investice-do-zemedelskych-podniku-33-73/">33.73 Investice do zemědělských podniků</a> a <a href="/dotace/technologie-snizujici-emise-37-73/">37.73 Technologie snižující emise</a>. Pravidla každého kola se zveřejňují přibližně dva měsíce předem — je to čas na přípravu projektu a podnikatelského plánu. Tento kalendář revidujeme s každým novým harmonogramem MZe.',
+      btnPrehled: 'Přehled dotačních titulů',
+      btnLeasing: 'Kalkulačka leasingu',
+      statusLabel: { ocekavane: 'Očekávané', otevrene: 'Probíhá příjem', uzavrene: 'Uzavřené' },
+    },
     detail: {
       titleSuffix: ' — dotace na techniku 2026',
       updatedLabel: 'Aktualizováno',
@@ -159,6 +205,25 @@ export const content: Record<Locale, DotaceCopy> = {
     ctaCompare: 'Porovnanie modelov',
     ctaCalc: 'Kalkulačky',
     itemListName: 'Investičné dotácie pre poľnohospodárov',
+    kalendarKol: {
+      metaTitle: 'Kalendár kôl dotácií PPA 2026 — termíny príjmu žiadostí',
+      metaDescription:
+        'Prehľad termínov príjmu žiadostí o investičné dotácie PPA SR v rámci SP SPP 2023–2027. Investície do podnikov, spracovateľov a podpora mladých poľnohospodárov.',
+      crumbKalendar: 'Kalendár kôl',
+      kicker: 'PPA · harmonogram príjmu žiadostí',
+      h1: 'Kalendár kôl dotácií',
+      lede: 'Termíny príjmu žiadostí o investičné dotácie SP SPP 2023–2027. Príjem prebieha spravidla v niekoľkých kolách ročne. Podmienky danej výzvy PPA zverejňuje spravidla niekoľko týždňov pred zahájením príjmu.',
+      disclaimerHtml:
+        '<strong>Orientačné termíny.</strong> Kalendár vychádza z harmonogramu výziev PPA SR. Záväzné termíny a podmienky zverejňuje PPA vo výzvach na <a href="https://www.apa.sk" target="_blank" rel="noopener">apa.sk</a>. Aktualizované: {date}.',
+      datesLabel: 'Príjem žiadostí',
+      rulesLink: 'Podmienky výzvy ↗',
+      infoTitle: 'Ako funguje cyklus výziev',
+      infoBodyHtml:
+        'Investičné dotácie SP SPP 2023–2027 sa podávajú v <strong>kolách/výzvach</strong> — vymedzených obdobiach príjmu žiadostí. Pre kúpu poľnohospodárskej techniky sú kľúčové výzvy v rámci intervencií <strong>4.1 Investície do poľnohospodárskych podnikov</strong> a <strong>75.1 Podpora mladých poľnohospodárov</strong>. Podmienky každej výzvy PPA zverejňuje vopred na <a href="https://www.apa.sk" target="_blank" rel="noopener">apa.sk</a>. Tento kalendár aktualizujeme s každou novou výzvou.',
+      btnPrehled: 'Prehľad dotačných titulov',
+      btnLeasing: 'Kalkulačka lízingu',
+      statusLabel: { ocekavane: 'Očakávané', otevrene: 'Otvorené', uzavrene: 'Uzavreté' },
+    },
     detail: {
       titleSuffix: ' — investičná dotácia 2026',
       updatedLabel: 'Aktualizované',

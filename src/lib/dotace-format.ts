@@ -14,7 +14,9 @@ export function fmtMoney(n: number, locale: Locale): string {
 }
 
 /** Locale-aware date; empty/invalid ISO → '—'. */
-export function fmtDate(iso: string, locale: Locale): string {
+export function fmtDate(iso: string, locale: Locale, opts?: { month?: 'numeric' | 'long' }): string {
   if (!iso) return '—';
-  return new Intl.DateTimeFormat(locale === 'sk' ? 'sk-SK' : 'cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' }).format(new Date(iso));
+  return new Intl.DateTimeFormat(locale === 'sk' ? 'sk-SK' : 'cs-CZ', {
+    day: 'numeric', month: opts?.month ?? 'numeric', year: 'numeric',
+  }).format(new Date(iso));
 }
