@@ -434,5 +434,39 @@ const cs: Record<string, string> = {
   'stat.dataNav.aria': 'Sekce Data — přepínač podsekcí',
   // MethodologyFooter
   'stat.method.heading': 'Metodologie & zdroje',
+
+  // — LivestockSlope —
+  'stat.livestock.h2': 'Zvířata — historický vývoj stavů',
+  'stat.livestock.subtitleFrom': 'Od roku {fromYear} do dneška',
+  'stat.livestock.subtitleFallback': 'Dostupná pololetní data ČSÚ',
+  'stat.livestock.source': 'Zdroj: Eurostat + ČSÚ — Pololetní soupisy hospodářských zvířat',
+
+  // — ProductionBlock —
+  'stat.production.h2': 'Produkce — sklizeň a osevní plochy {latestYear}',
+  'stat.production.subtitle': 'Tuny / hektary v Česku',
+  'stat.production.source': 'Zdroj: ČSÚ — Definitivní údaje o sklizni zemědělských plodin',
+  'stat.production.sourceHref': 'https://csu.gov.cz/produkty/definitivni-udaje-o-sklizni-zemedelskych-plodin',
+  'stat.production.cardHarvest': 'Sklizeň podle plodin (tun)',
+  'stat.production.cardAreas': 'Osevní plochy ({totalArea} ha celkem)',
+  'stat.production.cardAreasFallback': 'Osevní plochy (– ha celkem)',
+
+  // — InputsBlock —
+  'stat.inputs.h2': 'Vstupy — Pohonné hmoty a hnojiva',
+  'stat.inputs.subtitle': 'Týdenní cena nafty a roční ceny hnojiv',
+  'stat.inputs.source': 'Zdroj: ČSÚ — Indexy spotřebitelských cen, MPO Energostat',
+  'stat.inputs.sourceHref': 'https://csu.gov.cz/zemedelstvi',
+  'stat.inputs.cardFuel': 'Nafta — týdenní průměr (52 týdnů)',
+  'stat.inputs.cardFert': 'Hnojiva — roční průměr (Kč/t)',
+
+  // — PriceScissors —
+  'stat.scissors.h2': '⚡ Cenové nůžky — co dražší: vstupy nebo výstupy?',
+  'stat.scissors.explainer': 'Vývoj cen vstupů (nafta + NPK hnojivo) a výstupů (4 hlavní komodity: pšenice, ječmen, řepka, kukuřice).',
+  'stat.scissors.source': 'Zdroj: ČSÚ — výpočet z indexů cen vstupů a výstupů',
+  'stat.scissors.sourceHref': 'https://csu.gov.cz/zemedelstvi',
+  'stat.scissors.legendInputs': 'Vstupy (nafta + NPK)',
+  'stat.scissors.legendOutputs': 'Výstupy (4 komodity)',
+  'stat.scissors.legendNegative': 'Marže záporná (vstupy > výstupy)',
+  'stat.scissors.howToRead': 'Jak číst:',
+  'stat.scissors.helpText': 'obě čáry začínají v roce {baseYear} na hodnotě 100. Když se čáry rozevřou (nafta-NPK červená nahoru, komodity zelená dole), farmář <strong>doplácí</strong> — vstupy zdražily víc než to, co prodá. V roce 2022 vstupy vyletěly o 96 %, ale komodity jen o 75 % → klasické cenové nůžky.',
 };
 export default cs;

@@ -434,5 +434,39 @@ const sk: Record<string, string> = {
   'stat.dataNav.aria': 'Sekcia Dáta — prepínač podsekcií',
   // MethodologyFooter
   'stat.method.heading': 'Metodológia & zdroje',
+
+  // — LivestockSlope —
+  'stat.livestock.h2': 'Zvieratá — historický vývoj stavov',
+  'stat.livestock.subtitleFrom': 'Od roku {fromYear} dodnes',
+  'stat.livestock.subtitleFallback': 'Dostupné ročné údaje Eurostatu',
+  'stat.livestock.source': 'Zdroj: Eurostat — ročné stavy hospodárskych zvierat',
+
+  // — ProductionBlock —
+  'stat.production.h2': 'Produkcia — úroda a osevné plochy {latestYear}',
+  'stat.production.subtitle': 'Tony / hektáre na Slovensku',
+  'stat.production.source': 'Zdroj: Eurostat — produkcia poľnohospodárskych plodín',
+  'stat.production.sourceHref': 'https://ec.europa.eu/eurostat/web/agriculture/database',
+  'stat.production.cardHarvest': 'Úroda podľa plodín (ton)',
+  'stat.production.cardAreas': 'Osevné plochy ({totalArea} ha spolu)',
+  'stat.production.cardAreasFallback': 'Osevné plochy (– ha spolu)',
+
+  // — InputsBlock —
+  'stat.inputs.h2': 'Vstupy — Pohonné hmoty',
+  'stat.inputs.subtitle': 'Týždenná cena nafty',
+  'stat.inputs.source': 'Zdroj: ŠÚSR DATAcube — priemerné ceny pohonných látok (sp0207ts)',
+  'stat.inputs.sourceHref': 'https://datacube.statistics.sk/#!/lang/sk/',
+  'stat.inputs.cardFuel': 'Nafta — týždenný priemer (52 týždňov)',
+  'stat.inputs.cardFert': 'Hnojivá — ročný priemer (Kč/t)',
+
+  // — PriceScissors —
+  'stat.scissors.h2': '⚡ Cenové nožnice — čo je drahšie: vstupy alebo výstupy?',
+  'stat.scissors.explainer': 'Vývoj indexu vstupných a výstupných cien v poľnohospodárstve (Eurostat, báza 2020 = 100).',
+  'stat.scissors.source': 'Zdroj: Eurostat — indexy vstupných a výstupných cien (apri_pi20, báza 2020)',
+  'stat.scissors.sourceHref': 'https://ec.europa.eu/eurostat/web/agriculture/database',
+  'stat.scissors.legendInputs': 'Index vstupných cien',
+  'stat.scissors.legendOutputs': 'Index výstupných cien',
+  'stat.scissors.legendNegative': 'Marža záporná (vstupy > výstupy)',
+  'stat.scissors.howToRead': 'Ako čítať:',
+  'stat.scissors.helpText': 'Keď sa čiary roztvoria (vstupy hore, výstupy dole), farmár <strong>dopláca</strong> — pri rovnakej produkcii zarobí menej. Index 100 = úroveň roku 2020.',
 };
 export default sk;
