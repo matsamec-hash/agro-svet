@@ -347,16 +347,31 @@ export const GET: APIRoute = async () => {
   // SK launch (Fáze 1c-obsah): pre přeložené katalogové sekcie (/stroje, /znacky,
   // /srovnani) pridáme /sk zrkadlové URL. cs časť vyššie zostáva byte-identická —
   // /sk záznamy len appendujeme na koniec.
+  //
+  // Pozn.: /dotace DETAIL stránky majú pre sk INÉ slugy (PPA SR výzvy z kolekcie
+  // 'dotaceSk'), takže ich nemožno len zrkadliť z cs slugov — tie /sk URL by 404-ovali.
+  // Cestu cs /dotace/<slug>/ preto z mirroru vylúčime a sk detaily pridáme explicitne
+  // nižšie z getCollection('dotaceSk'). Hub /dotace/ a /dotace/kalendar-kol/ zdieľajú
+  // rovnaké cesty pre cs aj sk, tie sa mirrorujú normálne.
+  const isDotaceDetailPath = (p: string) =>
+    p.startsWith('/dotace/') && p !== '/dotace/' && p !== '/dotace/kalendar-kol/';
   const skMirror: UrlEntry[] = urls
     .filter((u) => {
       if (!u.loc.startsWith(SITE_URL)) return false;
       const p = u.loc.slice(SITE_URL.length);
+      if (isDotaceDetailPath(p)) return false;
       // Lock přebíjí launch: zamčené pod-cesty (/kalkulacka/dotace-cap) nezrcadlit
       // do /sk sitemapy — na produkci 307-ují na cs.
       return isSkLaunchedPath(p) && !isLockedSectionPath(p);
     })
     .map((u) => ({ ...u, loc: `${SITE_URL}/sk${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...skMirror);
+
+  // SK /dotace detail URL — vlastné slugy z kolekcie 'dotaceSk' (PPA SR výzvy).
+  const dotaceSkEntries = await getCollection('dotaceSk');
+  for (const dt of dotaceSkEntries) {
+    urls.push({ loc: `${SITE_URL}/sk/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+  }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

@@ -61,4 +61,9 @@ describe('isSkLaunchedPath — kalkulačky (Fáze 2b launch)', () => {
   it('nelaunchnuté sekce zůstávají false', () => {
     expect(isSkLaunchedPath('/slovnik')).toBe(false);
   });
+
+  it('/dotace je SK-launched', () => {
+    expect(isSkLaunchedPath('/dotace')).toBe(true);
+    expect(isSkLaunchedPath('/dotace/investice')).toBe(true);
+  });
 });
