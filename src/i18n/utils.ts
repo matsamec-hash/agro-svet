@@ -28,7 +28,7 @@ export function localizePath(locale: Locale, path: string): string {
 
 /** Sekce, jejichž /sk verze jsou v Fázi 1c-obsah přeložené a tedy indexovatelné.
  *  Zbytek /sk zůstává noindex (servíruje cs tělo) dokud nebude lokalizován. */
-export const SK_LAUNCHED_PREFIXES = ['/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda'];
+export const SK_LAUNCHED_PREFIXES = ['/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'];
 
 /** True, pokud cs-root cesta patří do launchnuté (přeložené) SK sekce. */
 export function isSkLaunchedPath(csRootPath: string): boolean {
