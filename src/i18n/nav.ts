@@ -11,8 +11,8 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   cs: [],
   // Fáze 2b A: `data` už sk neskrývá — /dotace a /kalkulacka/dotace-cap byly
   // odemčeny (SK obsah nasazen). Fáze 2b B: /statistiky taky odemčeno (SK obsah).
-  // getNav z ní vyfiltruje stále uzamčené nástroje (/puda) a přesměruje header
-  // na první viditelné dítě (jen kdyby header locked). uk zůstává plně skrytá.
+  // Fáze 2b C: /puda odemčeno → LOCKED_SECTION_PREFIXES je teď prázdné, takže
+  // getNav už nic z `data` nefiltruje. uk zůstává plně skrytá.
   sk: ['bazar', 'photo'],
   uk: ['data', 'bazar', 'photo'],
 };
@@ -27,12 +27,10 @@ export const HIDDEN_NEWS_CATEGORIES: Record<Locale, string[]> = {
   uk: ['dotace', 'legislativa', 'trh'],
 };
 
-/** cs-root prefixy CZ-jurisdikčních nástrojů/dat. Pod non-cs locale se NEservírují
- *  jako SK obsah — middleware je přesměruje na cs URL.
- *  Fáze 2b balík A: /dotace a /kalkulacka/dotace-cap odemčeny (SK obsah nasazen).
- *  Fáze 2b balík B: /statistiky odemčeno (SK tržní statistiky nasazeny).
- *  Locked zůstává jen /puda (CZ půdní data) — předmět balíku C. */
-export const LOCKED_SECTION_PREFIXES = ['/puda'];
+/** cs-root prefixy CZ-jurisdikčních nástrojů/dat. Po Fázi 2b balíku C jsou
+ *  VŠECHNY `data` nástroje odemčeny (A=dotace, B=statistiky, C=puda) → prázdné.
+ *  Ponecháno pro budoucí použití + lock-guard v Layoutu. */
+export const LOCKED_SECTION_PREFIXES: string[] = [];
 
 /** True, pokud cs-root cesta patří do CZ-jurisdikčně uzamčené sekce. */
 export function isLockedSectionPath(csRootPath: string): boolean {

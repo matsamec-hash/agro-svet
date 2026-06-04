@@ -11,7 +11,8 @@ describe('/statistiky SK launch (balík B)', () => {
     expect(LOCKED_SECTION_PREFIXES).not.toContain('/statistiky');
     expect(isLockedSectionPath('/statistiky')).toBe(false);
   });
-  it('/puda zůstává locked', () => {
-    expect(isLockedSectionPath('/puda')).toBe(true);
+  it('/puda je nyní odemčena (balík C)', () => {
+    expect(isLockedSectionPath('/puda')).toBe(false);
+    expect(LOCKED_SECTION_PREFIXES).toEqual([]);
   });
 });

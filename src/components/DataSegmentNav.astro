@@ -1,5 +1,5 @@
 ---
-import { useTranslations } from '../i18n/utils';
+import { useTranslations, navHref } from '../i18n/utils';
 
 interface Props {
   active: 'komodity' | 'puda';
@@ -23,8 +23,8 @@ const allItems = [
   },
 ];
 
-// On sk, /puda is not yet launched — hide it
-const items = locale === 'sk' ? allItems.filter(it => it.key !== 'puda') : allItems;
+// PO launchi balíku C je /puda pro sk odemčená → oba taby pro všechny locale.
+const items = allItems;
 ---
 
 <nav class="data-seg" aria-label={t('stat.dataNav.aria')}>
@@ -32,7 +32,7 @@ const items = locale === 'sk' ? allItems.filter(it => it.key !== 'puda') : allIt
   <div class="data-seg-tabs" role="tablist" style={items.length === 1 ? 'grid-template-columns:1fr' : undefined}>
     {items.map((it) => (
       <a
-        href={it.href}
+        href={navHref(locale, it.href)}
         role="tab"
         class:list={['data-seg-tab', { active: it.key === active }]}
         aria-current={it.key === active ? 'page' : undefined}
