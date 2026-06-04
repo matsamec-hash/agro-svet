@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  getLocaleFromUrl, stripLocale, localizePath, getAlternates,
+  getLocaleFromUrl, stripLocale, localizePath, getAlternates, isSkLaunchedPath,
 } from '../../src/i18n/utils';
 
 describe('getLocaleFromUrl', () => {
@@ -44,5 +44,21 @@ describe('getAlternates (hreflang)', () => {
       { hreflang: 'uk', href: 'https://agro-svet.cz/uk/stroje/' },
       { hreflang: 'x-default', href: 'https://agro-svet.cz/stroje/' },
     ]);
+  });
+});
+
+describe('isSkLaunchedPath — kalkulačky (Fáze 2b launch)', () => {
+  it('launchnuté kalkulačky jsou indexovatelné', () => {
+    expect(isSkLaunchedPath('/kalkulacka')).toBe(true);
+    expect(isSkLaunchedPath('/kalkulacka/')).toBe(true);
+    expect(isSkLaunchedPath('/kalkulacka/prevody-jednotek')).toBe(true);
+    expect(isSkLaunchedPath('/kalkulacka/leasing-traktoru')).toBe(true);
+  });
+  it('dříve launchnuté sekce zůstávají', () => {
+    expect(isSkLaunchedPath('/stroje')).toBe(true);
+    expect(isSkLaunchedPath('/novinky')).toBe(true);
+  });
+  it('nelaunchnuté sekce zůstávají false', () => {
+    expect(isSkLaunchedPath('/slovnik')).toBe(false);
   });
 });
