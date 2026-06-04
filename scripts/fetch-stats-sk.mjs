@@ -110,6 +110,27 @@ async function fetchCommodities() {
   return full;
 }
 
+// — Cenové nůžky: index výstupov (apri_pi20_outa) vs vstupov (apri_pi20_ina), báza 2020 —
+// Dimenzia 'product': výstup = '040000' (Total output), vstup = '200000' (Total inputs).
+// unit='I20' (index báza 2020=100), p_adj='NI' (nominálny).
+async function fetchScissors() {
+  const out = await esFetch('apri_pi20_outa', { unit: 'I20', p_adj: 'NI', product: '040000' });
+  const inp = await esFetch('apri_pi20_ina', { unit: 'I20', p_adj: 'NI', product: '200000' });
+  if (!out || !inp) return [];
+
+  const outSeries = pickSeries(out, { freq: 'A', unit: 'I20', p_adj: 'NI', product: '040000', geo: 'SK' });
+  const inSeries = pickSeries(inp, { freq: 'A', unit: 'I20', p_adj: 'NI', product: '200000', geo: 'SK' });
+
+  const inByYear = new Map(inSeries.map((p) => [p.time, p.value]));
+  const points = [];
+  for (const o of outSeries) {
+    const x = inByYear.get(o.time);
+    if (x === undefined) continue;
+    points.push({ year: parseInt(o.time), x: Math.round(x * 10) / 10, y: Math.round(o.value * 10) / 10 });
+  }
+  return points.sort((a, b) => a.year - b.year);
+}
+
 function buildCommodityStats(full) {
   // Posledný rok + medziročná zmena z ročnej rady.
   return full.map((s) => {
@@ -131,6 +152,8 @@ async function main() {
   const commodityStats = buildCommodityStats(commodityFull);
   const { crops, areas } = await fetchProduction();
 
+  const scissorsPoints = await fetchScissors();
+
   const payload = {
     generated: new Date().toISOString(),
     scissorsBaseYear: SCISSORS_BASE_YEAR,
@@ -146,7 +169,7 @@ async function main() {
     fertilizers: [],
     fertSeries: [],
     regional: [],
-    scissorsPoints: [],
+    scissorsPoints,
   };
 
   await mkdir(dirname(OUT), { recursive: true });
