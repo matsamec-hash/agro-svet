@@ -163,7 +163,7 @@ const PILLS = [
     <PillsNav items={PILLS} />
 
     {commodityFull.length > 0 && (
-      <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} dataBase={locale === 'sk' ? '-sk' : ''} />
+      <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} dataBase={locale === 'sk' ? '-sk' : ''} numLocale={locale === 'sk' ? 'sk-SK' : 'cs-CZ'} />
     )}
 
     {fuelSeries.length > 0 && <InputsBlock fuelSeries={fuelSeries} fertSeries={fertSeries} />}
@@ -186,6 +186,16 @@ const PILLS = [
   <script type="application/json" id="statI18n" set:html={JSON.stringify({
     numLocale,
     animals: { Skot: t('stat.animal.cattle'), Prasata: t('stat.animal.pigs') },
+    fuelLabel:     locale === 'sk' ? 'Nafta (EUR/l)'          : 'Nafta (Kč/l)',
+    fuelTooltip:   locale === 'sk' ? 'EUR/l'                  : 'Kč/l',
+    fuelAxis:      locale === 'sk' ? '€'                      : 'Kč',
+    commodityUnit: locale === 'sk' ? 'EUR/t'                  : 'Kč/t',
+    scissorsInput: locale === 'sk' ? 'Index vstupných cien'  : 'Vstupy (nafta + NPK)',
+    scissorsOutput:locale === 'sk' ? 'Index výstupných cien' : 'Výstupy (4 komodity)',
+    scissorsAxis:  `Index ${locale === 'sk' ? 'cien' : 'cen'} (${BASE_YEAR} = 100)`,
+    yearLabel: 'Rok',
+    total:     locale === 'sk' ? 'spolu'    : 'celkem',
+    thousTons: locale === 'sk' ? 'tis. ton' : 'tis. tun',
   })}></script>
 </Layout>
 
@@ -222,6 +232,8 @@ const PILLS = [
 
   // ──────────── INPUTS BLOCK ────────────
   (function initInputs() {
+    const I18N = JSON.parse(document.getElementById('statI18n')?.textContent || '{}');
+    const NUM = I18N.numLocale || 'cs-CZ';
     const dataEl = document.getElementById('inputsData');
     if (!dataEl) return;
     const { fuelSeries, fertSeries } = JSON.parse(dataEl.textContent);
@@ -233,7 +245,7 @@ const PILLS = [
         data: {
           labels: fuelSeries.map(d => d.label),
           datasets: [{
-            label: 'Nafta (Kč/l)',
+            label: I18N.fuelLabel,
             data: fuelSeries.map(d => d.value),
             borderColor: RED,
             backgroundColor: 'rgba(194,68,20,.08)',
@@ -248,11 +260,11 @@ const PILLS = [
           plugins: {
             legend: { display: false },
             tooltip: { backgroundColor: INK, padding: 12, cornerRadius: 10,
-              callbacks: { label: ctx => `${ctx.parsed.y.toFixed(2)} Kč/l` } },
+              callbacks: { label: ctx => `${ctx.parsed.y.toFixed(2)} ${I18N.fuelTooltip}` } },
           },
           scales: {
             x: { grid: { display: false }, ticks: { maxTicksLimit: 12, font: { size: 10 } } },
-            y: { grid: { color: 'rgba(10,10,12,.06)' }, ticks: { callback: v => v + ' Kč' } },
+            y: { grid: { color: 'rgba(10,10,12,.06)' }, ticks: { callback: v => v + ' ' + I18N.fuelAxis } },
           },
         },
       });
@@ -281,7 +293,7 @@ const PILLS = [
           plugins: {
             legend: { position: 'top', labels: { usePointStyle: true, padding: 10, font: { size: 11 }, boxWidth: 10 } },
             tooltip: { backgroundColor: INK, padding: 12, cornerRadius: 10,
-              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('cs-CZ')} Kč/t` } },
+              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString(NUM)} ${I18N.commodityUnit}` } },
           },
           scales: {
             x: { grid: { display: false } },
@@ -294,6 +306,7 @@ const PILLS = [
 
   // ──────────── PRICE SCISSORS ────────────
   (function initScissors() {
+    const I18N = JSON.parse(document.getElementById('statI18n')?.textContent || '{}');
     const dataEl = document.getElementById('scissorsData');
     const el = document.getElementById('scissorsChart');
     if (!dataEl || !el) return;
@@ -316,7 +329,7 @@ const PILLS = [
         labels,
         datasets: [
           {
-            label: 'Vstupy (nafta + NPK)',
+            label: I18N.scissorsInput,
             data: inputs,
             borderColor: RED,
             backgroundColor: 'rgba(194,68,20,.20)',
@@ -327,7 +340,7 @@ const PILLS = [
             fill: '+1', // fill mezi inputs a další dataset (outputs)
           },
           {
-            label: 'Výstupy (4 komodity)',
+            label: I18N.scissorsOutput,
             data: outputs,
             borderColor: GREEN,
             backgroundColor: 'rgba(11,122,59,.10)',
@@ -347,12 +360,12 @@ const PILLS = [
           tooltip: {
             backgroundColor: INK, padding: 12, cornerRadius: 10,
             callbacks: {
-              title: ctx => `Rok ${ctx[0].label}`,
+              title: ctx => `${I18N.yearLabel} ${ctx[0].label}`,
               label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}`,
               afterBody: ctx => {
                 if (ctx.length < 2) return '';
-                const ins = ctx.find(c => c.dataset.label.startsWith('Vstupy'))?.parsed.y;
-                const outs = ctx.find(c => c.dataset.label.startsWith('Výstupy'))?.parsed.y;
+                const ins = ctx.find(c => c.dataset.label.startsWith('Vstupy') || c.dataset.label.startsWith('Index vstup'))?.parsed.y;
+                const outs = ctx.find(c => c.dataset.label.startsWith('Výstupy') || c.dataset.label.startsWith('Index výstup'))?.parsed.y;
                 if (ins == null || outs == null) return '';
                 const diff = outs - ins;
                 const sign = diff >= 0 ? '+' : '';
@@ -366,7 +379,7 @@ const PILLS = [
           x: { grid: { display: false }, ticks: { font: { size: 12 } } },
           y: {
             beginAtZero: false,
-            title: { display: true, text: 'Index cen (2017 = 100)', font: { size: 12 } },
+            title: { display: true, text: I18N.scissorsAxis, font: { size: 12 } },
             grid: { color: 'rgba(10,10,12,.06)' },
             ticks: { callback: v => v },
           },
@@ -377,6 +390,8 @@ const PILLS = [
 
   // ──────────── PRODUCTION BLOCK ────────────
   (function initProduction() {
+    const I18N = JSON.parse(document.getElementById('statI18n')?.textContent || '{}');
+    const NUM = I18N.numLocale || 'cs-CZ';
     const dataEl = document.getElementById('productionData');
     if (!dataEl) return;
     const { latestCrops, latestAreas } = JSON.parse(dataEl.textContent);
@@ -399,7 +414,7 @@ const PILLS = [
           plugins: {
             legend: { display: false },
             tooltip: { backgroundColor: INK, padding: 12, cornerRadius: 10,
-              callbacks: { label: ctx => `${ctx.parsed.x.toLocaleString('cs-CZ')} t` } },
+              callbacks: { label: ctx => `${ctx.parsed.x.toLocaleString(NUM)} t` } },
           },
           scales: {
             x: { grid: { color: 'rgba(10,10,12,.06)' }, ticks: { callback: v => (v / 1e6).toFixed(1) + 'M t' } },
@@ -426,7 +441,7 @@ const PILLS = [
           plugins: {
             legend: { position: 'bottom', labels: { usePointStyle: true, padding: 12, font: { size: 12 } } },
             tooltip: { backgroundColor: INK, padding: 12, cornerRadius: 10,
-              callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed.toLocaleString('cs-CZ')} ha` } },
+              callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed.toLocaleString(NUM)} ha` } },
           },
         },
       });
@@ -435,6 +450,7 @@ const PILLS = [
 
   // ──────────── HEX MAP ────────────
   (function initHexMap() {
+    const I18N = JSON.parse(document.getElementById('statI18n')?.textContent || '{}');
     const dataEl = document.getElementById('hexMapData');
     const svg = document.querySelector('.sp-hex-svg');
     if (!dataEl || !svg) return;
@@ -492,7 +508,7 @@ const PILLS = [
         </li>`).join('');
       panel.innerHTML = `
         <h3>${region}</h3>
-        <p class="d-meta">${currentYear} · celkem ${(total/1000).toFixed(0)} tis. tun</p>
+        <p class="d-meta">${currentYear} · ${I18N.total} ${(total/1000).toFixed(0)} ${I18N.thousTons}</p>
         <ul class="d-list">${rows}</ul>
       `;
     }
@@ -536,6 +552,8 @@ const PILLS = [
 
   // ──────────── LIVESTOCK SLOPE ────────────
   (function initLivestock() {
+    const I18N = JSON.parse(document.getElementById('statI18n')?.textContent || '{}');
+    const NUM = I18N.numLocale || 'cs-CZ';
     const dataEl = document.getElementById('livestockData');
     const el = document.getElementById('livestockSlopeChart');
     if (!dataEl || !el) return;
@@ -557,7 +575,7 @@ const PILLS = [
     const labels = [...new Set(livestock.map(l => l.date))].sort();
 
     const datasets = Object.entries(byAnimal).map(([animal, arr], i) => ({
-      label: animal,
+      label: I18N.animals?.[animal] || animal,
       data: labels.map(d => {
         const found = arr.find(l => l.date === d);
         return found ? found.count : null;
@@ -581,7 +599,7 @@ const PILLS = [
         plugins: {
           legend: { position: 'top', labels: { usePointStyle: true, padding: 14, font: { size: 12 } } },
           tooltip: { backgroundColor: INK, padding: 12, cornerRadius: 10,
-            callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('cs-CZ')} ks` } },
+            callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString(NUM)} ks` } },
         },
         scales: {
           x: { grid: { display: false }, ticks: { maxTicksLimit: 10, font: { size: 11 } } },
