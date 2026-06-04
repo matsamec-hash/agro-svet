@@ -16,9 +16,8 @@ const novinky = defineCollection({
   }),
 });
 
-const encyklopedie = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie' }),
-  schema: z.object({
+const encyklopedieSchema = () =>
+  z.object({
     name: z.string(),
     slug: z.string(),
     znacka: z.string(),
@@ -56,7 +55,18 @@ const encyklopedie = defineCollection({
       minusy: z.array(z.string()).optional(),
       datum: z.date().optional(),
     }).optional(),
-  }),
+  });
+
+const encyklopedie = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie' }),
+  schema: encyklopedieSchema(),
+});
+
+// SK-localizovaná overlay kolekce encyklopedie (slug = REUSE cs slug). Držené
+// zvlášť, aby cs-facing getCollection('encyklopedie') zůstalo nedotčené.
+const encyklopedieSk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie-sk' }),
+  schema: encyklopedieSchema(),
 });
 
 const znackySchema = () =>
@@ -204,4 +214,4 @@ const howto = defineCollection({
   }),
 });
 
-export const collections = { novinky, encyklopedie, znacky, znackySk, puda, pudaSk, dotace, dotaceSk, howto };
+export const collections = { novinky, encyklopedie, encyklopedieSk, znacky, znackySk, puda, pudaSk, dotace, dotaceSk, howto };

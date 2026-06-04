@@ -1,28 +1,39 @@
 ---
-export const prerender = true;
+// SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
+// sk čte z 'encyklopedieSk' (přeložená overlay kolekce); cs render = dnešní
+// literály VERBATIM (byte-identita). Locale jen z Astro.locals.locale (po rewritu
+// je Astro.url cs cesta) s fallbackem na getLocaleFromUrl.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
+import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../i18n/utils';
 
-const items = await getCollection('encyklopedie');
-const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, 'cs'));
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const t = useTranslations(locale);
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const items = await getCollection(isSk ? 'encyklopedieSk' : 'encyklopedie');
+const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, isSk ? 'sk' : 'cs'));
 
 const kategLabels: Record<string, string> = {
-  traktor: 'Traktor', kombajn: 'Kombajn', stroj: 'Stroj', 'puda-technika': 'Půdní technika',
+  traktor: t('enc.kat.traktor'), kombajn: t('enc.kat.kombajn'), stroj: t('enc.kat.stroj'), 'puda-technika': t('enc.kat.puda-technika'),
 };
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Encyklopedie', url: '/encyklopedie/' },
+  { name: t('cat.bc.home'), url: `${base}/` },
+  { name: t('enc.crumb'), url: `${base}/encyklopedie/` },
 ]);
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Encyklopedie zemědělských strojů',
-  description: 'Databáze zemědělských strojů — traktory, kombajny, sklízecí mlátičky.',
-  url: `${SITE_URL}/encyklopedie/`,
-  inLanguage: 'cs-CZ',
+  name: t('enc.list.collName'),
+  description: t('enc.list.collDesc'),
+  url: `${SITE_URL}${base}/encyklopedie/`,
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
   numberOfItems: sorted.length,
   mainEntity: {
     '@type': 'ItemList',
@@ -30,35 +41,43 @@ const collectionJsonLd = {
     itemListElement: sorted.slice(0, 100).map((item, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${SITE_URL}/encyklopedie/${item.id}/`,
+      url: `${SITE_URL}${base}/encyklopedie/${item.id}/`,
       name: item.data.name,
     })),
   },
 };
 ---
 
-<Layout title="Encyklopedie strojů" description="Databáze zemědělských strojů — traktory, kombajny, sklízecí mlátičky a stroje. Technické parametry, popis a srovnání.">
+<Layout title={t('enc.list.title')} description={t('enc.list.description')}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
 
     <div style="margin-bottom:48px;">
-      <span style="" class="section-label" style="">Encyklopedie</span>
+      <span style="" class="section-label" style="">{t('enc.list.label')}</span>
       <h1 style="font-size:clamp(2rem,5vw,3.2rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
-        Databáze strojů
+        {t('enc.list.h1')}
       </h1>
-      <p style="font-size:16px; color:#666; max-width:680px; line-height:1.6;">
-        Encyklopedie agro-svět shromažďuje {sorted.length} traktorů, kombajnů a další zemědělské techniky
-        s technickými parametry, popisem a výkonem. Hledáte vysvětlení pojmů? Zamiřte do
-        <a href="/slovnik/" style="color:#2d7a3e; font-weight:600; text-decoration:none;">zemědělského slovníku</a>;
-        pro řazení a srovnání strojů do <a href="/stroje/" style="color:#2d7a3e; font-weight:600; text-decoration:none;">katalogu strojů</a>.
-        Databáze průběžně roste.
-      </p>
+      {isSk ? (
+        <p style="font-size:16px; color:#666; max-width:680px; line-height:1.6;">
+          {tf(locale, 'enc.list.introA', { count: sorted.length })}
+          <a href={localizePath(locale, '/slovnik/')} style="color:#2d7a3e; font-weight:600; text-decoration:none;">{t('enc.list.introSlovnik')}</a>;
+          {t('enc.list.introMid')} <a href={localizePath(locale, '/stroje/')} style="color:#2d7a3e; font-weight:600; text-decoration:none;">{t('enc.list.introKatalog')}</a>{t('enc.list.introEnd')}
+        </p>
+      ) : (
+        <p style="font-size:16px; color:#666; max-width:680px; line-height:1.6;">
+          Encyklopedie agro-svět shromažďuje {sorted.length} traktorů, kombajnů a další zemědělské techniky
+          s technickými parametry, popisem a výkonem. Hledáte vysvětlení pojmů? Zamiřte do
+          <a href="/slovnik/" style="color:#2d7a3e; font-weight:600; text-decoration:none;">zemědělského slovníku</a>;
+          pro řazení a srovnání strojů do <a href="/stroje/" style="color:#2d7a3e; font-weight:600; text-decoration:none;">katalogu strojů</a>.
+          Databáze průběžně roste.
+        </p>
+      )}
     </div>
 
     <div class="enc-grid">
       {sorted.map(item => (
-        <a href={`/encyklopedie/${item.id}/`} class="enc-card" data-kat={item.data.kategorie}>
+        <a href={localizePath(locale, `/encyklopedie/${item.id}/`)} class="enc-card" data-kat={item.data.kategorie}>
           {item.data.heroImage && (
             <div class="enc-img">
               <img
