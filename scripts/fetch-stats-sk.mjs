@@ -49,6 +49,29 @@ async function fetchLivestock() {
   return out;
 }
 
+// — Produkcia plodin (tis. t) + plochy (tis. ha) z apro_cpshr —
+const PROD_CROPS = [
+  { crop: 'Pšenica', code: 'C1100' },
+  { crop: 'Jačmeň', code: 'C1300' },
+  { crop: 'Kukurica', code: 'C1500' },
+  { crop: 'Repka', code: 'I1110' },
+  { crop: 'Obilniny', code: 'C1000' },
+  { crop: 'Zemiaky', code: 'R1000' },
+];
+
+async function fetchProduction() {
+  const json = await esFetch('apro_cpshr', {});
+  if (!json) return { crops: [], areas: [] };
+  const crops = [], areas = [];
+  for (const c of PROD_CROPS) {
+    const prod = pickSeries(json, { freq: 'A', crops: c.code, strucpro: 'HPRD_HUMD_EU_THS_T', geo: 'SK' });
+    for (const p of prod) crops.push({ crop: c.crop, year: p.time, tonnes: Math.round(p.value * 1000) });
+    const area = pickSeries(json, { freq: 'A', crops: c.code, strucpro: 'AR_THS_HA', geo: 'SK' });
+    for (const p of area) areas.push({ crop: c.crop, year: p.time, hectares: Math.round(p.value * 1000) });
+  }
+  return { crops, areas };
+}
+
 // — Ceny komodit (roční, EUR/100kg → přepočet na EUR/t pre konzistenciu jednotky) —
 const CROP_PRICES = [
   { name: 'Pšenica', code: '01110000' },
@@ -106,6 +129,7 @@ async function main() {
   const livestockHistorical = await fetchLivestock();
   const commodityFull = await fetchCommodities();
   const commodityStats = buildCommodityStats(commodityFull);
+  const { crops, areas } = await fetchProduction();
 
   const payload = {
     generated: new Date().toISOString(),
@@ -117,8 +141,8 @@ async function main() {
     fuelSeries: [],
     livestock: livestockHistorical.slice(-4),
     livestockHistorical,
-    crops: [],
-    areas: [],
+    crops,
+    areas,
     fertilizers: [],
     fertSeries: [],
     regional: [],
@@ -129,6 +153,7 @@ async function main() {
   await writeFile(OUT, JSON.stringify(payload, null, 2) + '\n');
   console.log(`✓ wrote ${OUT}`);
   console.log(`  livestockHistorical: ${livestockHistorical.length}`);
+  console.log(`  crops: ${crops.length}, areas: ${areas.length}`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
