@@ -102,16 +102,16 @@ const lastUpdatedHuman = new Date(insights.lastUpdatedIso).toLocaleDateString(lo
 });
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Srovnání', url: '/srovnani/' },
+  { name: tr('cat.sr.bcHome'), url: localizePath(locale, '/') },
+  { name: tr('cat.sr.bcCurrent'), url: localizePath(locale, '/srovnani/') },
   { name: `${aDisplay} vs ${bDisplay}`, url: canonical },
 ]);
 const itemListJsonLd = itemListSchema(
   [
-    { url: `/stroje/${a.brand_slug}/${a.series_slug}/${a.slug.startsWith(a.brand_slug + '-') ? a.slug.slice(a.brand_slug.length + 1) : a.slug}/`, name: aDisplay },
-    { url: `/stroje/${b.brand_slug}/${b.series_slug}/${b.slug.startsWith(b.brand_slug + '-') ? b.slug.slice(b.brand_slug.length + 1) : b.slug}/`, name: bDisplay },
+    { url: localizePath(locale, `/stroje/${a.brand_slug}/${a.series_slug}/${a.slug.startsWith(a.brand_slug + '-') ? a.slug.slice(a.brand_slug.length + 1) : a.slug}/`), name: aDisplay },
+    { url: localizePath(locale, `/stroje/${b.brand_slug}/${b.series_slug}/${b.slug.startsWith(b.brand_slug + '-') ? b.slug.slice(b.brand_slug.length + 1) : b.slug}/`), name: bDisplay },
   ],
-  `Srovnání: ${aDisplay} vs ${bDisplay}`,
+  `${tr('cat.sr.bcCurrent')}: ${aDisplay} vs ${bDisplay}`,
 );
 const faqJsonLd = insights.faqs.length > 0 ? faqPageSchema(insights.faqs) : null;
 

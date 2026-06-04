@@ -54,16 +54,16 @@ const brandComboList = [...byBrandPair.entries()]
   .slice(0, 12);
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Srovnání', url: '/srovnani/' },
+  { name: tr('cat.sr.bcHome'), url: localizePath(locale, '/') },
+  { name: tr('cat.sr.bcCurrent'), url: localizePath(locale, '/srovnani/') },
 ]);
 
 const itemListJsonLd = itemListSchema(
   pairs.slice(0, 50).map((p) => ({
-    url: `/srovnani/${p.combo}/`,
+    url: localizePath(locale, `/srovnani/${p.combo}/`),
     name: `${modelDisplayName(p.a)} vs ${modelDisplayName(p.b)}`,
   })),
-  'Srovnání zemědělských strojů',
+  tr('cat.sr.h1'),
 );
 
 const canonical = `${SITE_URL}${localizePath(locale, '/srovnani/')}`;
