@@ -7,6 +7,8 @@
 // /statistiky/commodity-data.json (lazy, ~256 KB, only on "Vše"). Passing
 // the full series as a prop used to bundle the 256 KB commodities.json into
 // the homepage Worker chunk for no SSR benefit.
+import { useTranslations } from '../../i18n/utils';
+
 interface Props {
   commodityNames: readonly string[]; // 9 names rendered as pill buttons
   dataBase?: string; // suffix for JSON endpoint paths, e.g. '-sk' → /statistiky/commodity-data-recent-sk.json
@@ -14,6 +16,7 @@ interface Props {
   locale?: string; // 'cs' | 'sk'; used to derive localized insight fragments
 }
 const { commodityNames, dataBase = '', numLocale = 'cs-CZ', locale = 'cs' } = Astro.props;
+const tt = useTranslations(locale);
 const isSk = locale === 'sk';
 const L = {
   avgLabel:  isSk ? '5-ročný priemer'   : '5letý průměr',
@@ -26,22 +29,24 @@ const default0 = commodityNames[0] ?? 'Pšenice';
 
 <section class="sp-section" id="trh">
   <header class="sp-section-head">
-    <h2>Ceny zemědělských komodit</h2>
-    <span class="sp-section-sub">Měsíční průměry výrobců, anotované historickými událostmi</span>
-    <a class="sp-src" href="https://csu.gov.cz/zemedelstvi" target="_blank" rel="noopener noreferrer">Zdroj: ČSÚ — Indexy cen výrobců v zemědělství <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    <h2>{tt('stat.commodity.title')}</h2>
+    <span class="sp-section-sub">{tt('stat.commodity.sub')}</span>
+    <a class="sp-src" href={tt('stat.commodity.sourceHref')} target="_blank" rel="noopener noreferrer">{tt('stat.commodity.source')} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
   </header>
 
   <div class="sp-controls">
-    <div class="sp-pills-row" role="tablist" aria-label="Komodita">
+    <div class="sp-pills-row" role="tablist" aria-label={tt('stat.commodity.ariaCommodity')}>
       {commodityNames.map((name, i) => (
         <button class:list={['sp-mini-pill', { active: i === 0 }]} data-commodity={name} type="button">{name}</button>
       ))}
     </div>
-    <div class="sp-time-row" role="tablist" aria-label="Časové okno">
-      <button class="sp-time-btn" data-window="1y" type="button">1 rok</button>
-      <button class="sp-time-btn active" data-window="5y" type="button">5 let</button>
-      <button class="sp-time-btn" data-window="all" type="button">Vše</button>
-    </div>
+    {locale !== 'sk' && (
+      <div class="sp-time-row" role="tablist" aria-label={tt('stat.commodity.ariaWindow')}>
+        <button class="sp-time-btn" data-window="1y" type="button">1 rok</button>
+        <button class="sp-time-btn active" data-window="5y" type="button">5 let</button>
+        <button class="sp-time-btn" data-window="all" type="button">Vše</button>
+      </div>
+    )}
   </div>
 
   <div class="sp-chart-card">
@@ -132,7 +137,8 @@ const default0 = commodityNames[0] ?? 'Pšenice';
 
     let { series, events, fiveYearAvg, default0 } = __data;
     let currentName = default0;
-    let currentWindow = '5y';
+    const activeBtn = document.querySelector('.sp-time-btn.active');
+    let currentWindow = activeBtn ? activeBtn.dataset.window : 'all';
     let chart = null;
     let fullLoaded = !__data.partial;
 

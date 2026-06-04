@@ -426,6 +426,7 @@ const cs: Record<string, string> = {
   'stat.cta.h2a': 'Hledáte zemědělskou techniku?',
   'stat.cta.h2b': 'Katalog traktorů a kombajnů.',
   'stat.cta.p': '10+ značek · 500+ modelů · technické parametry, výkon, ceny — kompletní encyklopedie.',
+  'stat.cta.button': 'Otevřít katalog',
   // DataSegmentNav
   'stat.dataNav.label': 'Datová sekce',
   'stat.dataNav.pudaLabel': 'Zemědělská půda',
@@ -483,5 +484,13 @@ const cs: Record<string, string> = {
 
   'stat.animal.cattle': 'Skot',
   'stat.animal.pigs': 'Prasata',
+
+  // — CommodityChart —
+  'stat.commodity.title': 'Ceny zemědělských komodit',
+  'stat.commodity.sub': 'Měsíční průměry výrobců, anotované historickými událostmi',
+  'stat.commodity.source': 'Zdroj: ČSÚ — Indexy cen výrobců v zemědělství',
+  'stat.commodity.sourceHref': 'https://csu.gov.cz/zemedelstvi',
+  'stat.commodity.ariaCommodity': 'Komodita',
+  'stat.commodity.ariaWindow': 'Časové okno',
 };
 export default cs;

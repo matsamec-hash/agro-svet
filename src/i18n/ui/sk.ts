@@ -426,6 +426,7 @@ const sk: Record<string, string> = {
   'stat.cta.h2a': 'Hľadáte poľnohospodársku techniku?',
   'stat.cta.h2b': 'Katalóg traktorov a kombajnov.',
   'stat.cta.p': '10+ značiek · 500+ modelov · technické parametre, výkon, ceny — kompletná encyklopédia.',
+  'stat.cta.button': 'Otvoriť katalóg',
   // DataSegmentNav
   'stat.dataNav.label': 'Dátová sekcia',
   'stat.dataNav.pudaLabel': 'Poľnohospodárska pôda',
@@ -483,5 +484,13 @@ const sk: Record<string, string> = {
 
   'stat.animal.cattle': 'Hovädzí dobytok',
   'stat.animal.pigs': 'Ošípané',
+
+  // — CommodityChart —
+  'stat.commodity.title': 'Ceny poľnohospodárskych komodít',
+  'stat.commodity.sub': 'Ročné výrobné ceny (Eurostat)',
+  'stat.commodity.source': 'Zdroj: Eurostat — výrobné ceny poľnohospodárskych komodít',
+  'stat.commodity.sourceHref': 'https://ec.europa.eu/eurostat/web/agriculture/database',
+  'stat.commodity.ariaCommodity': 'Komodita',
+  'stat.commodity.ariaWindow': 'Časové okno',
 };
 export default sk;
