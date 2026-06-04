@@ -468,5 +468,19 @@ const sk: Record<string, string> = {
   'stat.scissors.legendNegative': 'Marža záporná (vstupy > výstupy)',
   'stat.scissors.howToRead': 'Ako čítať:',
   'stat.scissors.helpText': 'Keď sa čiary roztvoria (vstupy hore, výstupy dole), farmár <strong>dopláca</strong> — pri rovnakej produkcii zarobí menej. Index 100 = úroveň roku 2020.',
+
+  'stat.pills.trh': 'Trh',
+  'stat.pills.vstupy': 'Vstupy',
+  'stat.pills.scissors': 'Cenové nožnice',
+  'stat.pills.produkce': 'Produkcia',
+  'stat.pills.regiony': 'Regióny',
+  'stat.pills.zvirata': 'Zvieratá',
+  'stat.pills.pribehy': 'Príbehy',
+
+  'stat.meta.title': 'Ceny poľnohospodárskych komodít a štatistiky SR — úroda, vstupné náklady',
+  'stat.meta.description': 'Aktuálne ceny poľnohospodárskych komodít (pšenica, repka, kukurica) a dáta z Eurostatu a Štatistického úradu SR — vývoj cien vstupov, úroda, produkcia a stavy hospodárskych zvierat. Pravidelne aktualizované.',
+
+  'stat.animal.cattle': 'Hovädzí dobytok',
+  'stat.animal.pigs': 'Ošípané',
 };
 export default sk;

@@ -468,5 +468,19 @@ const cs: Record<string, string> = {
   'stat.scissors.legendNegative': 'Marže záporná (vstupy > výstupy)',
   'stat.scissors.howToRead': 'Jak číst:',
   'stat.scissors.helpText': 'obě čáry začínají v roce {baseYear} na hodnotě 100. Když se čáry rozevřou (nafta-NPK červená nahoru, komodity zelená dole), farmář <strong>doplácí</strong> — vstupy zdražily víc než to, co prodá. V roce 2022 vstupy vyletěly o 96 %, ale komodity jen o 75 % → klasické cenové nůžky.',
+
+  'stat.pills.trh': 'Trh',
+  'stat.pills.vstupy': 'Vstupy',
+  'stat.pills.scissors': 'Cenové nůžky',
+  'stat.pills.produkce': 'Produkce',
+  'stat.pills.regiony': 'Regiony',
+  'stat.pills.zvirata': 'Zvířata',
+  'stat.pills.pribehy': 'Příběhy',
+
+  'stat.meta.title': 'Ceny zemědělských komodit a statistiky ČR — sklizeň, vstupní náklady',
+  'stat.meta.description': 'Aktuální ceny zemědělských komodit (pšenice, řepka, kukuřice) a data z Českého statistického úřadu — vývoj cen vstupů, sklizeň, regionální produkce, stavy zvířat. Měsíčně aktualizováno.',
+
+  'stat.animal.cattle': 'Skot',
+  'stat.animal.pigs': 'Prasata',
 };
 export default cs;

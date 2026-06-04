@@ -24,7 +24,9 @@ const t = useTranslations(locale);
     <div class="sp-hero-stats">
       <div class="s"><span class="n">{datasetCount}</span><span class="l">{t('stat.hero.statDatasets')}</span></div>
       <div class="s"><span class="n">{yearsCovered}</span><span class="l">{t('stat.hero.statYears')}</span></div>
-      <div class="s"><span class="n">{regionCount}</span><span class="l">{t('stat.hero.statRegions')}</span></div>
+      {regionCount > 0 && (
+        <div class="s"><span class="n">{regionCount}</span><span class="l">{t('stat.hero.statRegions')}</span></div>
+      )}
     </div>
   </div>
   <div class="sp-hero-right">

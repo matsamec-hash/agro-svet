@@ -1,15 +1,17 @@
 ---
 // src/pages/statistiky/index.astro
-// prerender=true: data jsou precomputed v src/data/agro-stats.json (build-time fetch
-// CZSO + Eurostat přes `npm run stats:refresh`). Žádný API call v requestu, page je
-// 100% staticky cached na CF edge — žádný 1102 risk, 0 Worker CPU.
-// Refresh měsíčně (commodity data se aktualizují měsíčně/ročně).
-export const prerender = true;
+// prerender=false (SSR): launchnuté SK sekce servíruje middleware rewrite, který
+// prerendered routy nepokrývá → tato stránka musí být SSR. Locale ber JEN z
+// Astro.locals.locale (po rewrite je Astro.url cs cesta). Data jsou precomputed
+// v src/data/agro-stats{,-sk}.json — žádný runtime fetch, čistý render JSONu.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { biggestYoyChange, inputCostInflation, livestockMilestone } from '../../lib/agro-derived';
+import { useTranslations } from '../../i18n/utils';
+import { statTakeaways, scissorsInsightText, livestockInsightText } from '../../lib/agro-derived';
 // AGRO_EVENTS moved to /statistiky/commodity-data*.json endpoints — loaded
 // client-side by the chart, no longer needed at SSR time on this page.
-import statsData from '../../data/agro-stats.json';
+import statsCs from '../../data/agro-stats.json';
+import statsSk from '../../data/agro-stats-sk.json';
 
 import DataSegmentNav from '../../components/DataSegmentNav.astro';
 import HomeWeather from '../../components/HomeWeather.astro';
@@ -27,6 +29,15 @@ import StoryCards from '../../components/statistiky/StoryCards.astro';
 import MethodologyFooter from '../../components/statistiky/MethodologyFooter.astro';
 import BottomCTA from '../../components/statistiky/BottomCTA.astro';
 
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
+const statsData = locale === 'sk' ? statsSk : statsCs;
+
+// Žádný runtime fetch — čistý render importovaného JSONu → bezpečně cachovatelné na edge.
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+
 const {
   commodityStats,
   latestFuels,
@@ -43,106 +54,59 @@ const {
   scissorsBaseYear: BASE_YEAR,
 } = statsData;
 
-// Hero stats
-const datasetCount = 6 + 1; // 6 hlavních + regional
+// Hero stats — datasetCount: počet neprázdných datových bloků (cs = 7: 6 hlavních + regional).
+const datasetCount = [
+  commodityFull.length > 0,
+  fuelSeries.length > 0,
+  fertSeries.length > 0,
+  scissorsPoints.length > 0,
+  crops.length > 0,
+  livestockHistorical.length > 0,
+  regional.length > 0,
+].filter(Boolean).length;
 const yearsCovered = (() => {
   const allYears = commodityFull.flatMap(s => s.data.map(d => d.label.split(' ')[1])).map(Number).filter(n => !isNaN(n));
   return allYears.length ? new Date().getFullYear() - Math.min(...allYears) + 1 : 14;
 })();
-const lastUpdated = new Date().toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' });
+const lastUpdated = new Date().toLocaleDateString(numLocale, { day: 'numeric', month: 'long', year: 'numeric' });
 
-// Sparkline ticker — 5 metrik
+// Sparkline ticker — locale-aware metriky
+const SPARK = locale === 'sk'
+  ? { wheat: 'Pšenica', rapeseed: 'Repka', third: 'Kukurica', diesel: 'Nafta', fertilizer: null as string | null }
+  : { wheat: 'Pšenice', rapeseed: 'Řepka', third: 'Mléko', diesel: 'Nafta', fertilizer: 'NPK 15-15-15' as string | null };
+const fuelUnit = locale === 'sk' ? 'EUR/l' : 'Kč/l';
+
 function sparklineFor(name: string, months = 12): { label: string; value: number; sortKey: number }[] {
   const series = commodityFull.find(s => s.name === name)?.data ?? [];
   return series.slice(-months);
 }
-const psenice = commodityStats.find(s => s.name === 'Pšenice');
-const repka = commodityStats.find(s => s.name === 'Řepka');
-const mleko = commodityStats.find(s => s.name === 'Mléko');
-const nafta = latestFuels.find(f => f.fuel === 'Nafta');
+const psenice = commodityStats.find(s => s.name === SPARK.wheat);
+const repka = commodityStats.find(s => s.name === SPARK.rapeseed);
+const third = commodityStats.find(s => s.name === SPARK.third);
+const nafta = latestFuels.find(f => f.fuel === SPARK.diesel);
 const npk = (() => {
-  const last = fertSeries.find(f => f.name === 'NPK 15-15-15');
+  if (!SPARK.fertilizer) return null;
+  const last = fertSeries.find(f => f.name === SPARK.fertilizer);
   if (!last || last.data.length < 2) return null;
   const ll = last.data[last.data.length - 1];
   const prev = last.data[last.data.length - 2];
   const ch = prev.price > 0 ? ((ll.price / prev.price) - 1) * 100 : null;
-  return { name: 'NPK 15-15-15', price: ll.price, year: ll.year, change: ch };
+  return { name: SPARK.fertilizer, price: ll.price, year: ll.year, change: ch };
 })();
 
 const sparkMetrics = [
-  psenice && { name: 'Pšenice', value: psenice.price, unit: psenice.unit, changePct: psenice.change, series: sparklineFor('Pšenice'), anchor: '#trh' },
-  repka && { name: 'Řepka', value: repka.price, unit: repka.unit, changePct: repka.change, series: sparklineFor('Řepka'), anchor: '#trh' },
-  mleko && { name: 'Mléko', value: mleko.price, unit: mleko.unit, changePct: mleko.change, series: sparklineFor('Mléko'), anchor: '#trh' },
-  nafta && { name: 'Nafta', value: nafta.price, unit: 'Kč/l', changePct: null, series: fuelSeries.slice(-12).map(p => ({ label: p.label, value: p.value, sortKey: p.sortKey })), anchor: '#vstupy' },
-  npk && { name: 'NPK 15-15-15', value: npk.price, unit: 'Kč/t', changePct: npk.change, series: (fertSeries.find(f => f.name === 'NPK 15-15-15')?.data ?? []).slice(-12).map((d, i) => ({ label: d.year, value: d.price, sortKey: i })), anchor: '#vstupy' },
+  psenice && { name: SPARK.wheat, value: psenice.price, unit: psenice.unit, changePct: psenice.change, series: sparklineFor(SPARK.wheat), anchor: '#trh' },
+  repka && { name: SPARK.rapeseed, value: repka.price, unit: repka.unit, changePct: repka.change, series: sparklineFor(SPARK.rapeseed), anchor: '#trh' },
+  third && { name: SPARK.third, value: third.price, unit: third.unit, changePct: third.change, series: sparklineFor(SPARK.third), anchor: '#trh' },
+  nafta && { name: SPARK.diesel, value: nafta.price, unit: fuelUnit, changePct: null, series: fuelSeries.slice(-12).map(p => ({ label: p.label, value: p.value, sortKey: p.sortKey })), anchor: '#vstupy' },
+  npk && { name: npk.name, value: npk.price, unit: 'Kč/t', changePct: npk.change, series: (fertSeries.find(f => f.name === npk.name)?.data ?? []).slice(-12).map((d, i) => ({ label: d.year, value: d.price, sortKey: i })), anchor: '#vstupy' },
 ].filter(Boolean) as any[];
 
-// Auto-takeaways
-const big = biggestYoyChange(commodityStats);
-const inflPct = inputCostInflation(fertilizers, 'NPK 15-15-15', 2019);
-const skotMile = livestockMilestone(livestock, 'Skot', 1300000);
+// Auto-takeaways — locale-aware próza (helper reprodukuje cs verbatim)
+const takeaways = statTakeaways({ commodityStats, fertilizers, livestock }, locale);
 
-const takeaways: { category: 'trh' | 'vstupy' | 'zvirata'; title: string; insight: string; anchor: string }[] = [];
-if (big && big.change !== null && Math.abs(big.change) >= 1) {
-  const dir = big.change >= 0 ? '+' : '';
-  takeaways.push({
-    category: 'trh',
-    title: big.name,
-    insight: `${dir}${big.change.toFixed(1)} % r/r. Aktuální cena ${big.price.toLocaleString('cs-CZ')} ${big.unit}.`,
-    anchor: '#trh',
-  });
-} else if (psenice) {
-  takeaways.push({
-    category: 'trh',
-    title: 'Pšenice',
-    insight: `Aktuální cena ${psenice.price.toLocaleString('cs-CZ')} Kč/t (${psenice.month}).`,
-    anchor: '#trh',
-  });
-}
-if (inflPct !== null) {
-  takeaways.push({
-    category: 'vstupy',
-    title: 'NPK 15-15-15',
-    insight: `Stále ${inflPct >= 0 ? '+' : ''}${inflPct.toFixed(0)} % proti roku 2019. Cenové nůžky se ${inflPct > 30 ? 'zužují' : 'stabilizují'}.`,
-    anchor: '#vstupy',
-  });
-} else {
-  takeaways.push({
-    category: 'vstupy',
-    title: 'Hnojiva',
-    insight: `Aktuální data v sekci Vstupy.`,
-    anchor: '#vstupy',
-  });
-}
-if (skotMile) {
-  takeaways.push({
-    category: 'zvirata',
-    title: 'Skot',
-    insight: `Stav pod ${(skotMile.threshold / 1e6).toFixed(1)} M kusů (aktuálně ${(skotMile.latestCount / 1e6).toFixed(2)} M).`,
-    anchor: '#zvirata',
-  });
-} else {
-  const skot = livestock.filter(l => l.animal === 'Skot').pop();
-  takeaways.push({
-    category: 'zvirata',
-    title: 'Skot',
-    insight: skot ? `Aktuálně ${skot.count.toLocaleString('cs-CZ')} ks (${skot.date}).` : 'Pololetní data ČSÚ.',
-    anchor: '#zvirata',
-  });
-}
-
-// Cenové nůžky — scissorsPoints precomputed v agro-stats.json (BASE_YEAR = 2017,
-// první rok kde mají všechny 3 vstupy full coverage)
-const scissorsInsight = (() => {
-  if (scissorsPoints.length < 2) return 'Nedostatek dat pro výpočet cenových nůžek.';
-  const last = scissorsPoints[scissorsPoints.length - 1];
-  const margin = last.y - last.x;
-  if (margin > 5) return `V ${last.year} výstupy ${last.y.toFixed(0)} vs. vstupy ${last.x.toFixed(0)} → marže pozitivní (+${margin.toFixed(0)} bodů).`;
-  if (margin < -5) return `V ${last.year} vstupy ${last.x.toFixed(0)} > výstupy ${last.y.toFixed(0)} → marže negativní (${margin.toFixed(0)} bodů).`;
-  return `V ${last.year} vstupy ${last.x.toFixed(0)}, výstupy ${last.y.toFixed(0)} → marže neutrální.`;
-})();
-
-// 5letý průměr per komodita — precomputed v agro-stats.json
+// Cenové nůžky — scissorsPoints precomputed v agro-stats.json
+const scissorsInsight = scissorsInsightText(scissorsPoints, locale);
 
 // Latest year for production
 const latestCropYear = (() => {
@@ -151,33 +115,26 @@ const latestCropYear = (() => {
 })();
 
 // Livestock insight (z plné historické řady)
-const livestockInsight = (() => {
-  const skot = livestockHistorical.filter(l => l.animal === 'Skot').sort((a, b) => a.date.localeCompare(b.date));
-  if (skot.length < 2) return 'Pololetní data ČSÚ — viz graf níže.';
-  const first = skot[0];
-  const last = skot[skot.length - 1];
-  const drop = ((last.count / first.count) - 1) * 100;
-  return `Stav skotu: ${first.count.toLocaleString('cs-CZ')} → ${last.count.toLocaleString('cs-CZ')} ks (${drop.toFixed(0)} %).`;
-})();
+const livestockInsight = livestockInsightText(livestockHistorical, locale);
 const livestockFromYear = (() => {
   const dates = livestockHistorical.map(l => parseInt(l.date.match(/\d{4}/)?.[0] ?? '0')).filter(n => n > 1900);
   return dates.length ? Math.min(...dates) : null;
 })();
 
 const PILLS = [
-  { label: 'Trh', href: '#trh' },
-  { label: 'Vstupy', href: '#vstupy' },
-  { label: 'Cenové nůžky', href: '#cenove-nuzky' },
-  { label: 'Produkce', href: '#produkce' },
-  { label: 'Regiony', href: '#regiony' },
-  { label: 'Zvířata', href: '#zvirata' },
-  { label: 'Příběhy', href: '#pribehy' },
+  { label: t('stat.pills.trh'), href: '#trh' },
+  { label: t('stat.pills.vstupy'), href: '#vstupy' },
+  { label: t('stat.pills.scissors'), href: '#cenove-nuzky' },
+  { label: t('stat.pills.produkce'), href: '#produkce' },
+  ...(regional.length > 0 ? [{ label: t('stat.pills.regiony'), href: '#regiony' }] : []),
+  { label: t('stat.pills.zvirata'), href: '#zvirata' },
+  ...(locale === 'cs' ? [{ label: t('stat.pills.pribehy'), href: '#pribehy' }] : []),
 ];
 ---
 
 <Layout
-  title="Ceny zemědělských komodit a statistiky ČR — sklizeň, vstupní náklady"
-  description="Aktuální ceny zemědělských komodit (pšenice, řepka, kukuřice) a data z Českého statistického úřadu — vývoj cen vstupů, sklizeň, regionální produkce, stavy zvířat. Měsíčně aktualizováno."
+  title={t('stat.meta.title')}
+  description={t('stat.meta.description')}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify({
     '@context': 'https://schema.org',
@@ -193,7 +150,7 @@ const PILLS = [
     <Hero
       datasetCount={datasetCount}
       yearsCovered={yearsCovered}
-      regionCount={13}
+      regionCount={regional.length}
       lastUpdated={lastUpdated}
     />
 
@@ -201,28 +158,35 @@ const PILLS = [
 
     <AutoTakeaways takeaways={takeaways} />
 
-    <HomeWeather mode="commodity" />
+    {locale === 'cs' && <HomeWeather mode="commodity" />}
 
     <PillsNav items={PILLS} />
 
-    <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} />
+    {commodityFull.length > 0 && (
+      <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} dataBase={locale === 'sk' ? '-sk' : ''} />
+    )}
 
-    <InputsBlock fuelSeries={fuelSeries} fertSeries={fertSeries} />
+    {fuelSeries.length > 0 && <InputsBlock fuelSeries={fuelSeries} fertSeries={fertSeries} />}
 
-    <PriceScissors points={scissorsPoints} insight={scissorsInsight} baseYear={BASE_YEAR} />
+    {scissorsPoints.length > 0 && <PriceScissors points={scissorsPoints} insight={scissorsInsight} baseYear={BASE_YEAR} />}
 
-    <ProductionBlock crops={crops} areas={areas} latestYear={latestCropYear} />
+    {crops.length > 0 && <ProductionBlock crops={crops} areas={areas} latestYear={latestCropYear} />}
 
-    <HexMap data={regional} />
+    {regional.length > 0 && <HexMap data={regional} />}
 
-    <LivestockSlope livestock={livestockHistorical} insight={livestockInsight} fromYear={livestockFromYear} />
+    {livestockHistorical.length > 0 && <LivestockSlope livestock={livestockHistorical} insight={livestockInsight} fromYear={livestockFromYear} />}
 
-    <StoryCards />
+    {locale === 'cs' && <StoryCards />}
 
     <MethodologyFooter lastUpdated={lastUpdated} />
 
     <BottomCTA />
   </main>
+
+  <script type="application/json" id="statI18n" set:html={JSON.stringify({
+    numLocale,
+    animals: { Skot: t('stat.animal.cattle'), Prasata: t('stat.animal.pigs') },
+  })}></script>
 </Layout>
 
 <!-- Chart.js + annotation plugin from CDN -->
