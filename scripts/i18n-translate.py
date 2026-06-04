@@ -286,6 +286,34 @@ def do_znacky(slug):
     print("\n=== PREVIEW (first 2200 chars) ===")
     print(dst.read_text()[:2200])
 
+# ---------- puda ----------
+def do_puda(slug):
+    import yaml
+    root = pathlib.Path(__file__).resolve().parent.parent
+    src = root / f"src/content/puda/{slug}.md"
+    raw = src.read_text()
+    m = re.match(r"^---\n(.*?)\n---\n(.*)$", raw, re.S)
+    fm, body = yaml.safe_load(m.group(1)), m.group(2)
+
+    payload = {}
+    if isinstance(fm.get("title"), str): payload["title"] = fm["title"].strip()
+    if isinstance(fm.get("popis"), str): payload["popis"] = fm["popis"].strip()
+
+    sk = translate_kv(f"frontmatter článku o pôde '{fm.get('title')}'", payload)
+    sk_body = translate_body(body)
+
+    if "title" in payload: fm["title"] = sk.get("title") or payload["title"]
+    if "popis" in payload: fm["popis"] = sk.get("popis") or payload["popis"]
+
+    new_fm = yaml.safe_dump(fm, allow_unicode=True, sort_keys=False,
+                            default_flow_style=False, width=4096).rstrip()
+    dst = root / f"src/content/puda-sk/{slug}.md"
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    dst.write_text(f"---\n{new_fm}\n---\n\n{sk_body}\n")
+    print(f"WROTE {dst}")
+    print("\n=== PREVIEW (first 2200 chars) ===")
+    print(dst.read_text()[:2200])
+
 # ---------- novinky ----------
 def do_novinky(arg):
     """arg: a slug, or 'all'. Translates articles -> upserts article_translations (locale=sk)."""
@@ -331,6 +359,8 @@ if __name__ == "__main__":
         do_stroje(sys.argv[2])
     elif cmd == "znacky":
         do_znacky(sys.argv[2])
+    elif cmd == "puda":
+        do_puda(sys.argv[2])
     elif cmd == "novinky":
         do_novinky(sys.argv[2])
     else:
