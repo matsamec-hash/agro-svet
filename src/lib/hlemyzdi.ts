@@ -13,6 +13,7 @@ export interface HlemyzdiArticle {
   featured_image_url: string;
   featured_image_alt: string;
   tags: string[];
+  faq: { q: string; a: string }[];
   group: 'pillar' | 'zaklady' | 'rozhodovani' | 'produkty' | 'aktualne';
   order: number;
 }
