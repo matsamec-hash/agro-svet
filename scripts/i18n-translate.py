@@ -200,6 +200,10 @@ def do_stroje(brand):
             if s.get("description"):
                 # YAML may parse purely-numeric slugs (7, 8, 9) as ints — key must be str.
                 payload[str(s["slug"])] = s["description"].strip()
+            for m in (s.get("models") or []):
+                if m.get("description"):
+                    # __model__ prefix: model slug se může krýt se slugem série.
+                    payload[f"__model__{m['slug']}"] = m["description"].strip()
     sk = translate_kv(f"popisy/polia značky strojov {data.get('name')}", payload)
     # --- build overlay yaml ---
     def block(key, val):
@@ -215,9 +219,15 @@ def do_stroje(brand):
         for ck, cv in cats.items():
             lines.append(f'  {ck}: "{cv.strip()}"')
         lines.append("")
+    models = {k[9:]: sk.pop(k) for k in list(sk) if k.startswith("__model__")}
     lines.append("series:")
     for k, v in sk.items():
         lines.append("  " + block(k, v).replace("\n", "\n  "))
+    if models:
+        lines.append("")
+        lines.append("models:")
+        for k, v in models.items():
+            lines.append("  " + block(k, v).replace("\n", "\n  "))
     dst = root / f"src/data/stroje/sk/{brand}.yaml"
     dst.write_text("\n".join(lines) + "\n")
     print(f"WROTE {dst}")

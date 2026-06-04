@@ -7,6 +7,10 @@ import { breadcrumbSchema, machineProductSchema, faqPageSchema } from '../../../
 import { generateModelFaq } from '../../../../../lib/faq-generator';
 import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 import { pairCombo } from '../../../../../lib/comparator';
+import { useTranslations, getLocaleFromUrl, tf, plural, localizePath } from '../../../../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 export async function getStaticPaths() {
   const paths: { params: { brand: string; series: string; model: string }; props: { modelSlug: string } }[] = [];
@@ -28,7 +32,7 @@ export async function getStaticPaths() {
 
 const { brand: brandSlug, series: seriesSlug, model: modelParam } = Astro.params;
 const { modelSlug: modelSlugFromProps } = (Astro.props ?? {}) as { modelSlug?: string };
-const found = getSeries(brandSlug!, seriesSlug!);
+const found = getSeries(brandSlug!, seriesSlug!, locale);
 if (!found) return Astro.rewrite('/404');
 const { brand, category, series } = found;
 // SSR: props is empty (getStaticPaths not invoked), resolve from URL param.
@@ -43,12 +47,12 @@ if (!model) return Astro.rewrite('/404');
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const categoryLabels: Record<StrojKategorie, string> = {
-  traktory: 'Traktory',
-  kombajny: 'Kombajny',
+  traktory: tr('cat.label.traktory'),
+  kombajny: tr('cat.label.kombajny'),
 };
 const categorySingular: Record<StrojKategorie, string> = {
-  traktory: 'traktor',
-  kombajny: 'kombajn',
+  traktory: tr('cat.s.d.singular.traktory'),
+  kombajny: tr('cat.s.d.singular.kombajny'),
 };
 const categoryHero: Record<StrojKategorie, string> = {
   traktory: '/images/traktor.webp',
@@ -106,13 +110,14 @@ const drivetrainSpecs: SpecRow[] = [];
 const dimensionSpecs: SpecRow[] = [];
 const otherSpecs: SpecRow[] = [];
 
-if (model.power_hp) performanceSpecs.push({ label: 'Výkon', value: `${model.power_hp} k${model.power_kw ? ` (${model.power_kw} kW)` : ''}` });
-if (model.engine) drivetrainSpecs.push({ label: 'Motor', value: model.engine });
-if (model.transmission) drivetrainSpecs.push({ label: 'Převodovka', value: model.transmission });
-if (model.weight_kg) dimensionSpecs.push({ label: 'Hmotnost', value: `${model.weight_kg.toLocaleString('cs-CZ')} kg` });
-if (model.cutting_width_m) dimensionSpecs.push({ label: 'Záběr žacího stolu', value: `${model.cutting_width_m} m` });
-if (model.grain_tank_l) dimensionSpecs.push({ label: 'Objem bunkru', value: `${model.grain_tank_l.toLocaleString('cs-CZ')} l` });
-if (yr) performanceSpecs.push({ label: 'Roky výroby', value: yr });
+const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+if (model.power_hp) performanceSpecs.push({ label: tr('cat.s.d.specPower'), value: `${model.power_hp} k${model.power_kw ? ` (${model.power_kw} kW)` : ''}` });
+if (model.engine) drivetrainSpecs.push({ label: tr('cat.s.d.specEngine'), value: model.engine });
+if (model.transmission) drivetrainSpecs.push({ label: tr('cat.s.d.specTransmission'), value: model.transmission });
+if (model.weight_kg) dimensionSpecs.push({ label: tr('cat.s.d.specWeight'), value: `${model.weight_kg.toLocaleString(numLocale)} kg` });
+if (model.cutting_width_m) dimensionSpecs.push({ label: tr('cat.s.d.specCuttingWidth'), value: `${model.cutting_width_m} m` });
+if (model.grain_tank_l) dimensionSpecs.push({ label: tr('cat.s.d.specGrainTank'), value: `${model.grain_tank_l.toLocaleString(numLocale)} l` });
+if (yr) performanceSpecs.push({ label: tr('cat.s.d.specYears'), value: yr });
 
 if (model.specs) {
   const specGroups: Record<string, 'perf' | 'drive' | 'dim' | 'other'> = {
@@ -123,11 +128,11 @@ if (model.specs) {
     kabina: 'other',
   };
   const specLabels: Record<string, string> = {
-    hydraulika_l_min: 'Hydraulika',
-    zadni_zaves_kg: 'Zadní závěs',
-    predni_zaves_kg: 'Přední závěs',
-    emise: 'Emisní norma',
-    kabina: 'Kabina',
+    hydraulika_l_min: tr('cat.s.d.specHydraulika'),
+    zadni_zaves_kg: tr('cat.s.d.specZadniZaves'),
+    predni_zaves_kg: tr('cat.s.d.specPredniZaves'),
+    emise: tr('cat.s.d.specEmise'),
+    kabina: tr('cat.s.d.specKabina'),
   };
   const specUnits: Record<string, string> = {
     hydraulika_l_min: ' l/min',
@@ -138,7 +143,7 @@ if (model.specs) {
     if (v === null || v === undefined || v === '') continue;
     const label = specLabels[k] ?? k.replace(/_/g, ' ');
     const unit = specUnits[k] ?? '';
-    const formatted = typeof v === 'number' ? v.toLocaleString('cs-CZ') + unit : String(v);
+    const formatted = typeof v === 'number' ? v.toLocaleString(numLocale) + unit : String(v);
     const row = { label, value: formatted };
     const grp = specGroups[k] ?? 'other';
     if (grp === 'perf') performanceSpecs.push(row);
@@ -154,18 +159,24 @@ const heroPhoto = series.image_url || categoryHero[category] || '/images/traktor
 const heroCreditUrl: string | null = series.image_url ? (series.image_credit_url || null) : null;
 const heroCreditAuthor: string | null = series.image_url ? (series.image_credit || null) : null;
 const heroCreditLicense: string | null = series.image_url ? (series.image_license || null) : null;
+const heroCreditTitle = tf(locale, 'cat.s.d.photoTitle', { author: heroCreditAuthor ?? '', license: heroCreditLicense ? ` (${heroCreditLicense})` : '' });
+const heroCreditTextRaw = tf(locale, 'cat.s.d.photoCredit', { author: heroCreditAuthor ?? '', license: heroCreditLicense ? ` · ${heroCreditLicense}` : '' });
+const heroCreditText = '\n' + heroCreditTextRaw + '\n';
+const wholeSeriesText = '\n' + tf(locale, 'cat.s.d.wholeSeries', { series: seriesNameClean }) + ' ';
+const compareLinkText = '\n' + tr('cat.s.d.compareLink') + '\n';
+const ebProcessedText = '\n' + tr('cat.s.d.ebProcessed') + ' ';
 
 const pageTitle = `${brand.name} ${model.name}`;
 const pageDesc = model.description
   ? model.description.slice(0, 160)
-  : `${pageTitle} — ${categorySingular[category]} s výkonem ${model.power_hp ?? '?'} k, roky výroby ${yr}. Technické parametry a nabídka v bazaru.`;
+  : tf(locale, 'cat.s.d.descFallback', { title: pageTitle, singular: categorySingular[category], power: model.power_hp ?? '?', years: yr });
 
-const canonical = `https://agro-svet.cz/stroje/${brand.slug}/${series.slug}/${modelUrlPart(model.slug)}/`;
+const canonical = `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(model.slug)}/`)}`;
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Technika', url: '/stroje/' },
-  { name: brand.name, url: `/stroje/${brand.slug}/` },
-  { name: seriesNameClean, url: `/stroje/${brand.slug}/${series.slug}/` },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('cat.bc.tech'), url: localizePath(locale, '/stroje/') },
+  { name: brand.name, url: localizePath(locale, `/stroje/${brand.slug}/`) },
+  { name: seriesNameClean, url: localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`) },
   { name: model.name, url: canonical },
 ]);
 const productJsonLd = machineProductSchema({
@@ -185,6 +196,7 @@ const productJsonLd = machineProductSchema({
   yearTo: model.year_to,
   engine: model.engine,
   transmission: model.transmission,
+  lang: locale === 'sk' ? 'sk-SK' : 'cs-CZ',
 });
 
 const faqItems = generateModelFaq({
@@ -193,6 +205,7 @@ const faqItems = generateModelFaq({
   category,
   categorySingular: categorySingular[category],
   bazarCount: modelBazarCount,
+  locale,
 });
 const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 
@@ -215,20 +228,20 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 }
 ---
 
-<Layout title={`${pageTitle} — parametry a cena`} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
+<Layout title={tf(locale, 'cat.s.d.titleSuffix', { name: pageTitle })} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
   <div class="model-page">
 
-    <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+    <nav class="breadcrumb" aria-label={tr('cat.s.d.bcAria')}>
+      <a href={localizePath(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/stroje/">Technika</a>
+      <a href={localizePath(locale, '/stroje/')}>{tr('cat.bc.tech')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={`/stroje/${brand.slug}/`}>{brand.name}</a>
+      <a href={localizePath(locale, `/stroje/${brand.slug}/`)}>{brand.name}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={`/stroje/${brand.slug}/${series.slug}/`}>{seriesNameClean}</a>
+      <a href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`)}>{seriesNameClean}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{model.name}</span>
     </nav>
@@ -240,9 +253,9 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           <span class="tag tag-cat">{categoryLabels[category]}</span>
           <span class="tag tag-series">{seriesNameClean}</span>
           {isCurrent ? (
-            <span class="tag tag-current"><span class="dot"></span>Aktuální v prodeji</span>
+            <span class="tag tag-current"><span class="dot"></span>{tr('cat.s.d.tagCurrent')}</span>
           ) : (
-            <span class="tag tag-legacy">Historie</span>
+            <span class="tag tag-legacy">{tr('cat.s.d.tagLegacy')}</span>
           )}
         </div>
         <h1>{model.name}</h1>
@@ -261,14 +274,12 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         <div class="hero-actions">
           <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`}>
             {modelBazarCount > 0
-              ? `${modelBazarCount} ${modelBazarCount === 1 ? 'inzerát' : modelBazarCount < 5 ? 'inzeráty' : 'inzerátů'} v bazaru`
-              : `Hledat ${model.name} v bazaru`}
+              ? tf(locale, 'cat.s.d.bazarCount', { count: modelBazarCount, unit: plural(locale, modelBazarCount, { one: tr('cat.s.d.adOne'), few: tr('cat.s.d.adFew'), many: tr('cat.s.d.adMany') }) })
+              : tf(locale, 'cat.s.d.bazarSearch', { model: model.name })}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-secondary" href={`/stroje/${brand.slug}/${series.slug}/`}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Celá řada {seriesNameClean}
-          </a>
+          <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`)}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>{wholeSeriesText}</a>
         </div>
       </div>
 
@@ -277,7 +288,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           <img
             class="hero-photo-img"
             src={heroPhoto}
-            alt={`${model.name} — ${categoryLabels[category]}`}
+            alt={tf(locale, 'cat.s.d.altPhoto', { model: model.name, category: categoryLabels[category] })}
             width="800"
             height="600"
             fetchpriority="high"
@@ -289,9 +300,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </div>
           {heroCreditAuthor && heroCreditUrl && (
             <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
-               title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons · upraveno (crop, konverze do WebP)`}>
-              © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''} · upraveno
-            </a>
+               title={heroCreditTitle}>{heroCreditText}</a>
           )}
         </div>
       </div>
@@ -302,13 +311,13 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         {totalSpecCount > 0 ? (
           <section class="spec-card">
             <div class="card-head">
-              <h2>Technické parametry</h2>
-              <span class="card-head-meta">{totalSpecCount} {totalSpecCount === 1 ? 'parametr' : totalSpecCount < 5 ? 'parametry' : 'parametrů'}</span>
+              <h2>{tr('cat.s.d.specTitle')}</h2>
+              <span class="card-head-meta">{totalSpecCount} {plural(locale, totalSpecCount, { one: tr('cat.s.d.specCountOne'), few: tr('cat.s.d.specCountFew'), many: tr('cat.s.d.specCountMany') })}</span>
             </div>
 
             {performanceSpecs.length > 0 && (
               <div class="spec-group">
-                <div class="spec-group-label">Výkon &amp; provoz</div>
+                <div class="spec-group-label">{tr('cat.s.d.groupPerf')}</div>
                 <dl class="spec-list">
                   {performanceSpecs.map((row) => (
                     <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -319,7 +328,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 
             {drivetrainSpecs.length > 0 && (
               <div class="spec-group">
-                <div class="spec-group-label">Pohon &amp; motor</div>
+                <div class="spec-group-label">{tr('cat.s.d.groupDrive')}</div>
                 <dl class="spec-list">
                   {drivetrainSpecs.map((row) => (
                     <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -330,7 +339,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 
             {dimensionSpecs.length > 0 && (
               <div class="spec-group">
-                <div class="spec-group-label">Rozměry &amp; kapacita</div>
+                <div class="spec-group-label">{tr('cat.s.d.groupDim')}</div>
                 <dl class="spec-list">
                   {dimensionSpecs.map((row) => (
                     <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -341,7 +350,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 
             {otherSpecs.length > 0 && (
               <div class="spec-group">
-                <div class="spec-group-label">Vybavení</div>
+                <div class="spec-group-label">{tr('cat.s.d.groupOther')}</div>
                 <dl class="spec-list">
                   {otherSpecs.map((row) => (
                     <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -352,15 +361,15 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </section>
         ) : (
           <section class="spec-card spec-empty">
-            <h2>Technické parametry</h2>
-            <p>Detailní parametry budou doplněny.</p>
+            <h2>{tr('cat.s.d.specTitle')}</h2>
+            <p>{tr('cat.s.d.specEmpty')}</p>
           </section>
         )}
 
         {useCase && (
           <section class="usecase-card">
             <div class="card-head">
-              <h2>Pro jakou farmu se {brand.name} {model.name} hodí</h2>
+              <h2>{tf(locale, 'cat.s.d.useCaseTitle', { brand: brand.name, model: model.name })}</h2>
             </div>
             <p class="usecase-text">{useCase}</p>
           </section>
@@ -369,13 +378,13 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         {competitors.length > 0 && (
           <section class="competitor-card">
             <div class="card-head">
-              <h2>Konkurence ve výkonové třídě</h2>
-              <span class="card-head-meta">{competitors.length} {competitors.length === 1 ? 'model' : competitors.length < 5 ? 'modely' : 'modelů'}</span>
+              <h2>{tr('cat.s.d.compTitle')}</h2>
+              <span class="card-head-meta">{competitors.length} {plural(locale, competitors.length, { one: tr('cat.s.d.compCountOne'), few: tr('cat.s.d.compCountFew'), many: tr('cat.s.d.compCountMany') })}</span>
             </div>
-            <p class="competitor-lede">Modely jiných značek s podobným výkonem (±15&nbsp;%) — pro porovnání před nákupem v bazaru.</p>
+            <p class="competitor-lede" set:html={tr('cat.s.d.compLede')}></p>
             <div class="comp-grid">
               {competitors.map((c) => {
-                const cUrl = `/stroje/${c.brand_slug}/${c.series_slug}/${competitorUrlPart(c)}/`;
+                const cUrl = localizePath(locale, `/stroje/${c.brand_slug}/${c.series_slug}/${competitorUrlPart(c)}/`);
                 const cYr = c.year_from ? (c.year_to ? `${c.year_from}–${c.year_to}` : `${c.year_from}–dosud`) : '';
                 const cIsCurrent = c.year_to === null && c.year_from !== null;
                 // Compare with the source model — only meaningful when source has power data.
@@ -386,7 +395,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
                       <div class="comp-brand">{c.brand_name}</div>
                       <div class="comp-name">
                         {c.name}
-                        {cIsCurrent && <span class="dot-current" title="Aktuální"></span>}
+                        {cIsCurrent && <span class="dot-current" title={tr('cat.s.d.dotCurrent')}></span>}
                       </div>
                       <div class="comp-meta">
                         <span class="comp-power"><strong>{c.power_hp} k</strong>{c.power_kw ? ` · ${c.power_kw} kW` : ''}</span>
@@ -394,9 +403,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
                       </div>
                     </a>
                     {compareCombo && (
-                      <a href={`/srovnani/${compareCombo}/`} class="comp-compare-link" title={`Srovnat ${model.name} vs ${c.name}`}>
-                        Porovnat parametry →
-                      </a>
+                      <a href={localizePath(locale, `/srovnani/${compareCombo}/`)} class="comp-compare-link" title={tf(locale, 'cat.s.d.compareTitle', { model: model.name, competitor: c.name })}>{compareLinkText}</a>
                     )}
                   </div>
                 );
@@ -408,7 +415,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         {faqItems && (
           <section class="faq-card" aria-labelledby="faq-heading">
             <div class="card-head">
-              <h2 id="faq-heading">Časté otázky</h2>
+              <h2 id="faq-heading">{tr('cat.s.d.faqTitle')}</h2>
             </div>
             <dl class="faq-list">
               {faqItems.map((qa) => (
@@ -424,18 +431,18 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         {related.length > 0 && (
           <section class="related-card">
             <div class="card-head">
-              <h2>Další modely v řadě {seriesNameClean}</h2>
-              <a class="card-head-link" href={`/stroje/${brand.slug}/${series.slug}/`}>Všechny modely →</a>
+              <h2>{tf(locale, 'cat.s.d.relatedTitle', { series: seriesNameClean })}</h2>
+              <a class="card-head-link" href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`)}>{tr('cat.s.d.allModels')}</a>
             </div>
             <div class="rel-grid">
               {related.map((m) => {
                 const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '';
                 const mIsCurrent = m.year_to === null && m.year_from !== null;
                 return (
-                  <a href={`/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`} class="rel-card">
+                  <a href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`)} class="rel-card">
                     <div class="rel-title">
                       {m.name}
-                      {mIsCurrent && <span class="dot-current" title="Aktuální"></span>}
+                      {mIsCurrent && <span class="dot-current" title={tr('cat.s.d.dotCurrent')}></span>}
                     </div>
                     <div class="rel-meta">
                       <span class="rel-power">
@@ -451,40 +458,39 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         )}
 
         <aside class="editorial-bar" aria-label="Ověření obsahu">
-          <span class="eb-item">
-            Zpracováno <a href="/redakce/" class="eb-link">redakcí agro-svět.cz</a>
+          <span class="eb-item">{ebProcessedText}<a href={localizePath(locale, '/redakce/')} class="eb-link">{tr('cat.s.d.ebEditorial')}</a>
           </span>
           <span class="eb-sep" aria-hidden="true">·</span>
-          <span class="eb-item">Specifikace na základě veřejných materiálů výrobce</span>
+          <span class="eb-item">{tr('cat.s.d.ebSpec')}</span>
         </aside>
       </div>
 
       <aside class="content-aside">
         <div class="aside-card primary-cta-card">
-          <span class="acc-kicker">{modelBazarCount > 0 ? `${modelBazarCount} ${modelBazarCount === 1 ? 'aktuální inzerát' : modelBazarCount < 5 ? 'aktuální inzeráty' : 'aktuálních inzerátů'}` : 'Aktuální nabídky'}</span>
-          <h3>{brand.name} {model.name}<br/>v Agro bazaru</h3>
-          <p>{modelBazarCount > 0 ? 'Konkrétně tento model. Kontakt přímo na prodejce, bez provize.' : 'Filtrujte podle modelu, výkonu a roku. Kontakt přímo na prodejce, bez provize.'}</p>
+          <span class="acc-kicker">{modelBazarCount > 0 ? tf(locale, 'cat.s.d.asideKickerCount', { count: modelBazarCount, unit: plural(locale, modelBazarCount, { one: tr('cat.s.d.asideKickerOne'), few: tr('cat.s.d.asideKickerFew'), many: tr('cat.s.d.asideKickerMany') }) }) : tr('cat.s.d.asideKickerNone')}</span>
+          <h3>{brand.name} {model.name}<br/>{tr('cat.s.d.asideInBazar')}</h3>
+          <p>{modelBazarCount > 0 ? tr('cat.s.d.asideTextHas') : tr('cat.s.d.asideTextNone')}</p>
           <a href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`} class="aside-btn primary">
-            {modelBazarCount > 0 ? `Zobrazit ${modelBazarCount === 1 ? 'inzerát' : 'inzeráty'}` : 'Otevřít bazar'}
+            {modelBazarCount > 0 ? (modelBazarCount === 1 ? tr('cat.s.d.asideBtnShowOne') : tr('cat.s.d.asideBtnShowFew')) : tr('cat.s.d.asideBtnOpen')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a href="/bazar/novy/" class="aside-btn ghost-light">Přidat vlastní inzerát</a>
+          <a href={localizePath(locale, '/bazar/novy/')} class="aside-btn ghost-light">{tr('cat.s.d.asideAddOwn')}</a>
         </div>
 
         <div class="aside-card nav-card">
-          <span class="acc-label">Kontext</span>
-          <a href={`/stroje/${brand.slug}/`} class="aside-link">
-            <span class="al-label">Značka</span>
+          <span class="acc-label">{tr('cat.s.d.contextLabel')}</span>
+          <a href={localizePath(locale, `/stroje/${brand.slug}/`)} class="aside-link">
+            <span class="al-label">{tr('cat.s.d.contextBrand')}</span>
             <span class="al-value">{brand.name}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
-          <a href={`/stroje/${brand.slug}/rada/${category}/${family}/`} class="aside-link">
-            <span class="al-label">Řada</span>
+          <a href={localizePath(locale, `/stroje/${brand.slug}/rada/${category}/${family}/`)} class="aside-link">
+            <span class="al-label">{tr('cat.s.d.contextSeries')}</span>
             <span class="al-value">{familyLab}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
-          <a href={`/stroje/${brand.slug}/${series.slug}/`} class="aside-link">
-            <span class="al-label">Generace</span>
+          <a href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`)} class="aside-link">
+            <span class="al-label">{tr('cat.s.d.contextGeneration')}</span>
             <span class="al-value">{seriesNameClean}{seriesYr ? ` · ${seriesYr}` : ''}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
