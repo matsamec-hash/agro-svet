@@ -204,19 +204,19 @@ export const SAZBY_SK = {
   crissTier1MaxHa: 100.99, // zdroj: polnoinfo.sk, 2024
   crissTier2: 40,          // zdroj: polnoinfo.sk, 2024
   crissTier2MaxHa: 150,    // nad 150 ha = 0
-  ekoMimoChvu: 60.36,      // ekoschéma mimo CHVÚ, zdroj: polnoinfo.sk, 2024
-  ekoChvu: 110.45,         // ekoschéma v CHVÚ, zdroj: polnoinfo.sk, 2024
-  mlady: 100,              // €/ha — NEOVERENÉ 2024 (2023 plán, agrobiznis); Task 0 potvrdí
-  mladyMaxHa: 28,          // strop 2024, zdroj: search Vestník MPRV SR
+  ekoMimoChvu: 60.36,      // ekoschéma mimo CHVÚ, zdroj: oficiálny PPA Excel "Sadzby 2024", 2024
+  ekoChvu: 110.45,         // ekoschéma v CHVÚ, zdroj: oficiálny PPA Excel "Sadzby 2024", 2024
+  mlady: 88.15,            // €/ha — zdroj: oficiálny PPA Excel "Sadzby 2024", 2024
+  mladyMaxHa: 28,          // strop — single-source (Vestník MPRV SR); Excel drží len sadzby
 } as const;
 
 export const VCS_SEKTORY_SK: VcsSektorSk[] = [
-  { slug: 'cukrova-repa', name: 'Cukrová repa', sazba: 477.80, description: 'Viazaná podpora na pestovanie cukrovej repy.' }, // 2024 pevné
-  { slug: 'bielkoviny', name: 'Bielkovinové plodiny', sazba: 69.90, description: 'Sója, hrach, bôb, šošovica a ďalšie bielkovinové plodiny.' }, // 2024 pevné
-  { slug: 'chmel', name: 'Chmeľ', sazba: 800, description: 'Plocha chmeľnice min. 0,3 ha.' }, // NEOVERENÉ 2024 (2023 plán)
-  { slug: 'ovocie', name: 'Ovocie (vybrané druhy)', sazba: 558, description: 'Ovocné sady vybraných druhov s vysokou prácnosťou, min. 0,3 ha.' }, // NEOVERENÉ 2024
-  { slug: 'zelenina-pracna', name: 'Zelenina (prácna)', sazba: 500, description: 'Vybrané druhy zeleniny s prácnosťou, min. 0,3 ha.' }, // NEOVERENÉ 2024
-  { slug: 'zelenina-vysoko-pracna', name: 'Zelenina (vysoko prácna)', sazba: 745, description: 'Vybrané druhy zeleniny s vysokou prácnosťou, min. 0,3 ha.' }, // NEOVERENÉ 2024
+  { slug: 'cukrova-repa', name: 'Cukrová repa', sazba: 477.80, description: 'Viazaná podpora na pestovanie cukrovej repy.' }, // 2024 PPA Excel
+  { slug: 'bielkoviny', name: 'Bielkovinové plodiny', sazba: 69.90, description: 'Sója, hrach, bôb, šošovica a ďalšie bielkovinové plodiny.' }, // 2024 PPA Excel
+  { slug: 'chmel', name: 'Chmeľ', sazba: 880, description: 'Plocha chmeľnice min. 0,3 ha.' }, // 2024 PPA Excel
+  { slug: 'ovocie', name: 'Ovocie (vybrané druhy)', sazba: 554.35, description: 'Ovocné sady vybraných druhov s vysokou prácnosťou, min. 0,3 ha.' }, // 2024 PPA Excel
+  { slug: 'zelenina-pracna', name: 'Zelenina (prácna)', sazba: 455, description: 'Vybrané druhy zeleniny s prácnosťou, min. 0,3 ha.' }, // 2024 PPA Excel
+  { slug: 'zelenina-vysoko-pracna', name: 'Zelenina (vysoko prácna)', sazba: 685, description: 'Vybrané druhy zeleniny s vysokou prácnosťou, min. 0,3 ha.' }, // 2024 PPA Excel
 ];
 
 export function getVcsSektorSk(slug: string): VcsSektorSk | undefined {
