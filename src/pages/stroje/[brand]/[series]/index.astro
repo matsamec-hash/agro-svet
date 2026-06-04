@@ -1,29 +1,26 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
-import { getAllBrands, getSeries, seriesFamily, familyLabel, type StrojKategorie } from '../../../../lib/stroje';
+import { getSeries, seriesFamily, familyLabel, type StrojKategorie } from '../../../../lib/stroje';
 import { itemListSchema } from '../../../../lib/structured-data';
+import { useTranslations, getLocaleFromUrl, tf, plural, localizePath } from '../../../../i18n/utils';
 
-export async function getStaticPaths() {
-  const paths: { params: { brand: string; series: string } }[] = [];
-  for (const brand of getAllBrands()) {
-    for (const cat of Object.values(brand.categories || {})) {
-      for (const s of cat.series || []) {
-        paths.push({ params: { brand: brand.slug, series: s.slug } });
-      }
-    }
-  }
-  return paths;
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 const { brand: brandSlug, series: seriesSlug } = Astro.params;
-const found = getSeries(brandSlug!, seriesSlug!);
-if (!found) return Astro.rewrite('/404');
+const found = getSeries(brandSlug!, seriesSlug!, locale);
+if (!found) return new Response(null, { status: 404 });
 const { brand, category, series } = found;
 
+// Edge cache 1h s-maxage + 24h SWR — series list only changes on YAML updates.
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const modelPlural = (n: number) => plural(locale, n, { one: tr('cat.s.d.s.modelOne'), few: tr('cat.s.d.s.modelFew'), many: tr('cat.s.d.s.modelMany') });
+
 const categoryLabels: Record<StrojKategorie, string> = {
-  traktory: 'Traktory',
-  kombajny: 'Kombajny',
+  traktory: tr('cat.label.traktory'),
+  kombajny: tr('cat.label.kombajny'),
 };
 const categoryHero: Record<StrojKategorie, string> = {
   traktory: '/images/traktor.webp',
@@ -61,8 +58,8 @@ const hpRange = minHp !== null && maxHp !== null
 // Pull engine/transmission from any model (typically shared within a series)
 const engines = Array.from(new Set(series.models.map((m) => m.engine).filter((x): x is string => !!x)));
 const transmissions = Array.from(new Set(series.models.map((m) => m.transmission).filter((x): x is string => !!x)));
-const sharedEngine = engines.length === 1 ? engines[0] : engines.length > 1 ? `${engines.length} variant motoru` : '';
-const sharedTransmission = transmissions.length === 1 ? transmissions[0] : transmissions.length > 1 ? `${transmissions.length} variant převodovky` : '';
+const sharedEngine = engines.length === 1 ? engines[0] : engines.length > 1 ? tf(locale, 'cat.s.d.s.engineVariants', { count: engines.length }) : '';
+const sharedTransmission = transmissions.length === 1 ? transmissions[0] : transmissions.length > 1 ? tf(locale, 'cat.s.d.s.transmissionVariants', { count: transmissions.length }) : '';
 
 const sortedModels = [...series.models].sort((a, b) => (b.power_hp ?? 0) - (a.power_hp ?? 0));
 const categoryHasGrainTank = category === 'kombajny';
@@ -100,40 +97,50 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
-    { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz/stroje/${brand.slug}/` },
-    { '@type': 'ListItem', position: 4, name: familyLab, item: `https://agro-svet.cz/stroje/${brand.slug}/rada/${category}/${family}/` },
-    { '@type': 'ListItem', position: 5, name: seriesNameClean, item: `https://agro-svet.cz/stroje/${brand.slug}/${series.slug}/` },
+    { '@type': 'ListItem', position: 1, name: tr('cat.bc.home'), item: `https://agro-svet.cz${localizePath(locale, '/')}` },
+    { '@type': 'ListItem', position: 2, name: tr('cat.bc.tech'), item: `https://agro-svet.cz${localizePath(locale, '/stroje/')}` },
+    { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/`)}` },
+    { '@type': 'ListItem', position: 4, name: familyLab, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/rada/${category}/${family}/`)}` },
+    { '@type': 'ListItem', position: 5, name: seriesNameClean, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`)}` },
   ],
 };
 const modelListJsonLd = sortedModels.length > 0
   ? itemListSchema(
       sortedModels.map((m) => ({
-        url: `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`,
+        url: localizePath(locale, `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`),
         name: `${brand.name} ${m.name}`,
       })),
-      `Modely v řadě ${brand.name} ${seriesNameClean}`,
+      tf(locale, 'cat.s.d.s.jsonListName', { brand: brand.name, series: seriesNameClean }),
     )
   : null;
+
+// Whitespace-bearing CTA strings precomputed to keep cs HTML byte-identical
+// (avoids newline-collapse around `Czech {expr}` adjacency in JSX text nodes).
+// Astro trims/normalizes whitespace around JSX text nodes; precomputed strings are
+// emitted verbatim, so reproduce the exact surrounding whitespace of the original cs HTML.
+const heroSearchText = '\n' + tf(locale, 'cat.s.d.s.heroSearch', { series: seriesNameClean }) + '\n';
+const heroAllGenText = '\n' + tf(locale, 'cat.s.d.s.heroAllGen', { fam: familyLab }) + ' ';
+const sibTitleText = tf(locale, 'cat.s.d.s.sibTitle', { fam: familyLab });
+const heroCreditText = '\n' + tf(locale, 'cat.s.d.photoCredit', { author: heroCreditAuthor ?? '', license: heroCreditLicense ? ` · ${heroCreditLicense}` : '' }) + '\n';
+const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
 ---
 
 <Layout
-  title={`${brand.name} ${series.name} — všechny modely`}
-  description={`Přehled všech modelů řady ${brand.name} ${series.name}. Výkony ${hpRange || '—'}, roky výroby ${yr || '—'}.`}
+  title={tf(locale, 'cat.s.d.s.title', { brand: brand.name, series: series.name })}
+  description={tf(locale, 'cat.s.d.s.desc', { brand: brand.name, series: series.name, hp: hpRange || '—', yr: yr || '—' })}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   {modelListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(modelListJsonLd)} />}
   <div class="series-page">
 
-    <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+    <nav class="breadcrumb" aria-label={tr('cat.s.d.bcAria')}>
+      <a href={localizePath(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/stroje/">Technika</a>
+      <a href={localizePath(locale, '/stroje/')}>{tr('cat.bc.tech')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={`/stroje/${brand.slug}/`}>{brand.name}</a>
+      <a href={localizePath(locale, `/stroje/${brand.slug}/`)}>{brand.name}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={`/stroje/${brand.slug}/rada/${category}/${family}/`}>{familyLab}</a>
+      <a href={localizePath(locale, `/stroje/${brand.slug}/rada/${category}/${family}/`)}>{familyLab}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{seriesNameClean}</span>
     </nav>
@@ -145,9 +152,9 @@ const modelListJsonLd = sortedModels.length > 0
           <span class="tag tag-cat">{categoryLabels[category]}</span>
           <span class="tag tag-fam">{familyLab}</span>
           {isCurrent ? (
-            <span class="tag tag-current"><span class="dot"></span>Aktuální v prodeji</span>
+            <span class="tag tag-current"><span class="dot"></span>{tr('cat.s.d.tagCurrent')}</span>
           ) : (
-            <span class="tag tag-legacy">Historie</span>
+            <span class="tag tag-legacy">{tr('cat.s.d.tagLegacy')}</span>
           )}
         </div>
         <h1>{seriesNameClean}</h1>
@@ -155,34 +162,28 @@ const modelListJsonLd = sortedModels.length > 0
         {series.description && <p class="hero-lede">{series.description}</p>}
 
         <div class="hero-stats">
-          <div class="s"><span class="n">{series.models.length}</span><span class="l">{series.models.length === 1 ? 'model' : series.models.length < 5 ? 'modely' : 'modelů'}</span></div>
-          {hpRange && <div class="s"><span class="n">{hpRange}</span><span class="l">výkon</span></div>}
-          {sharedEngine && <div class="s"><span class="n n-text">{engines.length === 1 ? engines[0].split(' ').slice(0, 2).join(' ') : `${engines.length}×`}</span><span class="l">motor</span></div>}
-          {sharedTransmission && <div class="s"><span class="n n-text">{transmissions.length === 1 ? transmissions[0].split(' ').slice(0, 2).join(' ') : `${transmissions.length}×`}</span><span class="l">převodovka</span></div>}
+          <div class="s"><span class="n">{series.models.length}</span><span class="l">{modelPlural(series.models.length)}</span></div>
+          {hpRange && <div class="s"><span class="n">{hpRange}</span><span class="l">{tr('cat.s.d.s.statPower')}</span></div>}
+          {sharedEngine && <div class="s"><span class="n n-text">{engines.length === 1 ? engines[0].split(' ').slice(0, 2).join(' ') : `${engines.length}×`}</span><span class="l">{tr('cat.s.d.s.statEngine')}</span></div>}
+          {sharedTransmission && <div class="s"><span class="n n-text">{transmissions.length === 1 ? transmissions[0].split(' ').slice(0, 2).join(' ') : `${transmissions.length}×`}</span><span class="l">{tr('cat.s.d.s.statTransmission')}</span></div>}
         </div>
 
         <div class="hero-actions">
-          <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>
-            Hledat {seriesNameClean} v bazaru
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>{heroSearchText}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-secondary" href={`/stroje/${brand.slug}/rada/${category}/${family}/`}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Všechny generace {familyLab}
-          </a>
+          <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/rada/${category}/${family}/`)}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>{heroAllGenText}</a>
         </div>
       </div>
 
       <div class="hero-right">
         <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
           {series.models.length > 0 && (
-            <div class="hero-photo-badge"><span class="n">{series.models.length}</span> {series.models.length === 1 ? 'model' : series.models.length < 5 ? 'modely' : 'modelů'}</div>
+            <div class="hero-photo-badge"><span class="n">{series.models.length}</span> {modelPlural(series.models.length)}</div>
           )}
           {heroCreditAuthor && heroCreditUrl && (
             <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
-               title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons · upraveno (crop, konverze do WebP)`}>
-              © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''} · upraveno
-            </a>
+               title={tf(locale, 'cat.s.d.photoTitle', { author: heroCreditAuthor, license: heroCreditLicense ? ` (${heroCreditLicense})` : '' })}>{heroCreditText}</a>
           )}
         </div>
       </div>
@@ -191,29 +192,29 @@ const modelListJsonLd = sortedModels.length > 0
     <section class="models-section">
       <div class="ms-head">
         <div>
-          <h2>Modely v řadě</h2>
-          <p class="ms-sub">Seřazeno podle výkonu — od nejsilnějšího po nejslabší.</p>
+          <h2>{tr('cat.s.d.s.modelsTitle')}</h2>
+          <p class="ms-sub">{tr('cat.s.d.s.modelsSub')}</p>
         </div>
-        {hpRange && <div class="ms-summary"><strong>{series.models.length}</strong> {series.models.length === 1 ? 'model' : series.models.length < 5 ? 'modely' : 'modelů'} · {hpRange}</div>}
+        {hpRange && <div class="ms-summary"><strong>{series.models.length}</strong> {modelPlural(series.models.length)} · {hpRange}</div>}
       </div>
 
       <div class="models-table">
         <div class="mt-head">
-          <span>Model</span>
-          <span class="mt-col-power">Výkon</span>
-          <span class="mt-col-year">Roky výroby</span>
-          {categoryHasGrainTank && <span class="mt-col-tank">Bunkr</span>}
-          <span class="mt-col-engine">Motor</span>
+          <span>{tr('cat.s.d.s.colModel')}</span>
+          <span class="mt-col-power">{tr('cat.s.d.s.colPower')}</span>
+          <span class="mt-col-year">{tr('cat.s.d.s.colYear')}</span>
+          {categoryHasGrainTank && <span class="mt-col-tank">{tr('cat.s.d.s.colTank')}</span>}
+          <span class="mt-col-engine">{tr('cat.s.d.s.colEngine')}</span>
           <span class="mt-col-action"></span>
         </div>
         {sortedModels.map((m) => {
           const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '—';
           const mIsCurrent = m.year_to === null && m.year_from !== null;
           return (
-            <a href={`/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`} class="mt-row">
+            <a href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`)} class="mt-row">
               <span class="mt-name">
                 {m.name}
-                {mIsCurrent && <span class="dot-current" title="Aktuální"></span>}
+                {mIsCurrent && <span class="dot-current" title={tr('cat.s.d.dotCurrent')}></span>}
               </span>
               <span class="mt-power">
                 {m.power_hp !== null ? (
@@ -225,10 +226,10 @@ const modelListJsonLd = sortedModels.length > 0
               </span>
               <span class="mt-year">{mYr}</span>
               {categoryHasGrainTank && (
-                <span class="mt-tank">{m.grain_tank_l ? `${m.grain_tank_l.toLocaleString('cs-CZ')} l` : '—'}</span>
+                <span class="mt-tank">{m.grain_tank_l ? `${m.grain_tank_l.toLocaleString(locale === 'sk' ? 'sk-SK' : 'cs-CZ')} l` : '—'}</span>
               )}
               <span class="mt-engine">{m.engine ?? '—'}</span>
-              <span class="mt-go">Detail →</span>
+              <span class="mt-go">{tr('cat.s.d.s.detailLink')}</span>
             </a>
           );
         })}
@@ -238,8 +239,8 @@ const modelListJsonLd = sortedModels.length > 0
     {siblings.length > 0 && (
       <section class="siblings">
         <div class="sib-head">
-          <h2>Další generace {familyLab}</h2>
-          <a class="sib-all" href={`/stroje/${brand.slug}/rada/${category}/${family}/`}>Všechny generace →</a>
+          <h2>{sibTitleText}</h2>
+          <a class="sib-all" href={localizePath(locale, `/stroje/${brand.slug}/rada/${category}/${family}/`)}>{tr('cat.s.d.s.sibAll')}</a>
         </div>
         <div class="sib-grid">
           {siblings.map((s) => {
@@ -247,17 +248,17 @@ const modelListJsonLd = sortedModels.length > 0
               ? (s.minHp === s.maxHp ? `${s.minHp} k` : `${s.minHp}–${s.maxHp} k`)
               : '';
             return (
-              <a class="sib-card" href={`/stroje/${brand.slug}/${s.slug}/`}>
+              <a class="sib-card" href={localizePath(locale, `/stroje/${brand.slug}/${s.slug}/`)}>
                 <div class="sib-title-row">
                   <span class="sib-title">{s.name}</span>
                   {s.isCurrent ? (
-                    <span class="sib-badge current"><span class="dot"></span>Aktuální</span>
+                    <span class="sib-badge current"><span class="dot"></span>{tr('cat.s.d.s.sibCurrent')}</span>
                   ) : (
-                    <span class="sib-badge legacy">Historie</span>
+                    <span class="sib-badge legacy">{tr('cat.s.d.s.sibLegacy')}</span>
                   )}
                 </div>
                 <div class="sib-meta">
-                  <span><strong>{s.modelCount}</strong> {s.modelCount === 1 ? 'model' : s.modelCount < 5 ? 'modely' : 'modelů'}</span>
+                  <span><strong>{s.modelCount}</strong> {modelPlural(s.modelCount)}</span>
                   {sHp && <><span class="sep"></span><span>{sHp}</span></>}
                   {s.yr && <><span class="sep"></span><span>{s.yr}</span></>}
                 </div>
@@ -270,15 +271,13 @@ const modelListJsonLd = sortedModels.length > 0
 
     <section class="big-cta">
       <div>
-        <span class="cta-kicker">Hledáte konkrétní model?</span>
-        <h2>{brand.name} {seriesNameClean} v Agro bazaru<br />— inzeráty od soukromých prodejců i dealerů.</h2>
-        <p>Filtrujte podle modelu, výkonu a roku. Kontakt přímo na prodejce, bez provize.</p>
+        <span class="cta-kicker">{tr('cat.s.d.s.ctaKicker')}</span>
+        <h2>{brand.name} {seriesNameClean} {tr('cat.s.d.s.ctaHeadingPre')}<br />{tr('cat.s.d.s.ctaHeadingPost')}</h2>
+        <p>{tr('cat.s.d.s.ctaText')}</p>
         <div class="cta-actions">
-          <a class="cta-btn primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>
-            Otevřít bazar
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a class="cta-btn primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>{ctaOpenText}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-btn ghost" href="/bazar/novy/">Přidat vlastní inzerát</a>
+          <a class="cta-btn ghost" href={localizePath(locale, '/bazar/novy/')}>{tr('cat.s.d.s.ctaAdd')}</a>
         </div>
       </div>
       <div class="cta-right">
