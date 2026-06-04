@@ -1,31 +1,47 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. sk číta z 'dotaceSk' (PPA SR výzvy), BEZ cs fallbacku —
+// chýbajúci sk slug = 404 (nezobrazí cs obsah na /sk URL).
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, render } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
-
-export async function getStaticPaths() {
-  const tituly = await getCollection('dotace');
-  return tituly.map((t) => ({ params: { slug: t.data.slug }, props: { titul: t } }));
-}
-
-const { titul } = Astro.props;
-const { Content } = await render(titul);
+import { content } from '../../i18n/dotace';
+import { linkBase, fmtMoney } from '../../lib/dotace-format';
 import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
-const d = titul.data;
-const contentHtml = await renderMarkdownWithLinks(titul.body ?? '', `/dotace/${d.slug}/`);
-const canonical = `${SITE_URL}/dotace/${d.slug}/`;
 
-function fmtCZK(n: number): string {
-  return new Intl.NumberFormat('cs-CZ').format(n) + ' Kč';
-}
-const aktualizovanoFmt = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(d.aktualizovano);
+const locale = Astro.locals.locale ?? 'cs';
+const loc = content[locale] ?? content.cs;
+const c = loc.detail;
+const { slug } = Astro.params;
+const titul = slug
+  ? locale === 'sk'
+    ? await getEntry('dotaceSk', slug)
+    : await getEntry('dotace', slug)
+  : undefined;
+if (!titul) return new Response(null, { status: 404 });
+
+// processes remark/rehype plugins; body rendered via contentHtml
+await render(titul);
+const d = titul.data;
+const base = linkBase(locale);
+const contentHtml = await renderMarkdownWithLinks(titul.body ?? '', `${base}/dotace/${d.slug}/`);
+// Pre cs posielame explicitný absolútny canonical (byte-identické s pôvodným).
+// Pre sk Layout doplní self-canonical z lokalizovanej cesty (/dotace je pre sk
+// odomknuté a indexovateľné). base='' pre cs, '/sk' pre sk.
+const canonical = `${SITE_URL}${base}/dotace/${d.slug}/`;
+
+const aktualizovanoFmt = new Intl.DateTimeFormat(locale === 'sk' ? 'sk-SK' : 'cs-CZ', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(d.aktualizovano);
 const aktualizovanoIso = d.aktualizovano.toISOString().slice(0, 10);
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Dotace', url: '/dotace/' },
+  { name: loc.crumbHome, url: `${base}/` },
+  { name: loc.crumbSelf, url: `${base}/dotace/` },
   { name: d.name, url: canonical },
 ]);
 
@@ -45,69 +61,67 @@ const articleJsonLd = {
   dateModified: aktualizovanoIso,
   datePublished: aktualizovanoIso,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: c.inLanguage,
 };
 const faqJsonLd = d.faq && d.faq.length > 0 ? faqPageSchema(d.faq) : null;
 ---
 
-<Layout title={`${d.name} — dotace na techniku 2026`} description={d.popis} canonical={canonical}>
+<Layout
+  title={`${d.name}${c.titleSuffix}`}
+  description={d.popis}
+  canonical={locale === 'cs' ? canonical : undefined}
+>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
 
   <div class="titul-page">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={`${base}/`}>{loc.crumbHome}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/dotace/">Dotace</a>
+      <a href={`${base}/dotace/`}>{loc.crumbSelf}</a>
       <span class="sep" aria-hidden="true">›</span>
       <span class="current">{d.name}</span>
     </nav>
 
     <div class="tp-meta">
       <span class="tp-code">{d.intervence}</span>
-      <span class="tp-updated">Aktualizováno <time datetime={aktualizovanoIso}>{aktualizovanoFmt}</time></span>
+      <span class="tp-updated">{c.updatedLabel} <time datetime={aktualizovanoIso}>{aktualizovanoFmt}</time></span>
     </div>
     <h1>{d.name}</h1>
 
-    <div class="byline">
-      Zpracováno <a href="/redakce/">redakcí agro-svět.cz</a> z veřejných dokumentů SZIF a MZe
-    </div>
+    <div class="byline" set:html={c.bylineHtml}></div>
 
     <!-- Spec grid -->
     <div class="spec-grid">
       {d.procentoRostlinna && (
         <div class="spec-box">
-          <span class="sb-label">Rostlinná výroba</span>
-          <span class="sb-value">{d.procentoRostlinna} %</span>
+          <span class="sb-label">{c.specRostlinna}</span>
+          <span class="sb-value">{d.procentoRostlinna}{c.pctSuffix}</span>
         </div>
       )}
       {d.procentoZivocisna && (
         <div class="spec-box">
-          <span class="sb-label">Živočišná výroba</span>
-          <span class="sb-value">{d.procentoZivocisna} %</span>
+          <span class="sb-label">{c.specZivocisna}</span>
+          <span class="sb-value">{d.procentoZivocisna}{c.pctSuffix}</span>
         </div>
       )}
       {d.stropDotace && (
         <div class="spec-box">
-          <span class="sb-label">Strop dotace</span>
-          <span class="sb-value">{fmtCZK(d.stropDotace)}</span>
+          <span class="sb-label">{c.specStrop}</span>
+          <span class="sb-value">{fmtMoney(d.stropDotace, locale)}</span>
         </div>
       )}
       {d.minVydaje && (
         <div class="spec-box">
-          <span class="sb-label">Min. způsobilé výdaje</span>
-          <span class="sb-value">{fmtCZK(d.minVydaje)}</span>
+          <span class="sb-label">{c.specMinVydaje}</span>
+          <span class="sb-value">{fmtMoney(d.minVydaje, locale)}</span>
         </div>
       )}
     </div>
 
     {d.strojeMax49 && (
-      <div class="warn-box">
-        <strong>Pozor — pravidlo 49 %.</strong> Výdaje na mobilní stroje (traktory, sklízeče, samojízdné
-        postřikovače) smí tvořit maximálně 49 % způsobilých výdajů projektu. Stroj samotný nelze plně dotovat —
-        projekt musí obsahovat i jiné investice. Výjimka pro hospodářství do 150 ha.
-      </div>
+      <div class="warn-box" set:html={c.warnBoxHtml}></div>
     )}
 
     <div class="prose">
@@ -116,7 +130,7 @@ const faqJsonLd = d.faq && d.faq.length > 0 ? faqPageSchema(d.faq) : null;
 
     {d.faq && d.faq.length > 0 && (
       <section class="faq" aria-labelledby="faq-h">
-        <h2 id="faq-h">Časté otázky</h2>
+        <h2 id="faq-h">{c.faqHeading}</h2>
         <dl class="faq-list">
           {d.faq.map((qa) => (
             <div class="faq-item">
@@ -129,18 +143,18 @@ const faqJsonLd = d.faq && d.faq.length > 0 ? faqPageSchema(d.faq) : null;
     )}
 
     <aside class="source-bar">
-      <span>Primární zdroj: <a href={d.primarniZdroj} target="_blank" rel="noopener nofollow">Pravidla a podmínky SZIF / MZe</a></span>
-      <a href="/dotace/kalendar-kol/" class="sb-link">Kalendář kol →</a>
+      <span>{c.sourceLabel}<a href={d.primarniZdroj} target="_blank" rel="noopener nofollow">{c.sourceLinkText}</a></span>
+      <a href={`${base}/dotace/kalendar-kol/`} class="sb-link">{c.sourceCalendarLink}</a>
     </aside>
 
     <section class="cross-cta">
       <div>
-        <span class="cc-kicker">Vyberte stroj</span>
-        <h2>Spojte dotaci s konkrétní technikou</h2>
+        <span class="cc-kicker">{c.ctaKicker}</span>
+        <h2>{c.ctaHeading}</h2>
         <div class="cc-actions">
-          <a class="cc-btn primary" href="/stroje/traktory/">Katalog traktorů</a>
-          <a class="cc-btn ghost" href="/srovnani/">Srovnání modelů</a>
-          <a class="cc-btn ghost" href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu</a>
+          <a class="cc-btn primary" href={`${base}/stroje/traktory/`}>{c.ctaTractors}</a>
+          <a class="cc-btn ghost" href={`${base}/srovnani/`}>{c.ctaCompare}</a>
+          <a class="cc-btn ghost" href={`${base}/kalkulacka/leasing-traktoru/`}>{c.ctaLeasing}</a>
         </div>
       </div>
     </section>

@@ -34,6 +34,42 @@ export interface DotaceCopy {
   ctaCalc: string;
   /** Název itemListu pro JSON-LD. */
   itemListName: string;
+  /** Frame-copy pro detailovú stránku /dotace/[slug]. */
+  detail: DotaceDetailCopy;
+}
+
+export interface DotaceDetailCopy {
+  /** Suffix názvu stránky: "{name}{titleSuffix}". */
+  titleSuffix: string;
+  /** "Aktualizováno" / "Aktualizované" (pred dátumom). */
+  updatedLabel: string;
+  /** Byline HTML (obsahuje odkaz na /redakce/). */
+  bylineHtml: string;
+  /** Štítky spec-boxov. */
+  specRostlinna: string;
+  specZivocisna: string;
+  specStrop: string;
+  specMinVydaje: string;
+  /** Sufix percent v spec-boxe, vč. medzery: " %". */
+  pctSuffix: string;
+  /** Warn-box pre stroje (pravidlo 49 %) — HTML, obsahuje <strong>. */
+  warnBoxHtml: string;
+  /** Nadpis FAQ sekcie. */
+  faqHeading: string;
+  /** Prefix "Primární zdroj: " v source-bare. */
+  sourceLabel: string;
+  /** Text odkazu na primárny zdroj. */
+  sourceLinkText: string;
+  /** Odkaz "Kalendář kol →". */
+  sourceCalendarLink: string;
+  /** Cross-CTA. */
+  ctaKicker: string;
+  ctaHeading: string;
+  ctaTractors: string;
+  ctaCompare: string;
+  ctaLeasing: string;
+  /** Jazyk pre Article JSON-LD (BCP-47). */
+  inLanguage: string;
 }
 
 export const content: Record<Locale, DotaceCopy> = {
@@ -68,6 +104,29 @@ export const content: Record<Locale, DotaceCopy> = {
     ctaCompare: 'Srovnání modelů',
     ctaCalc: 'Kalkulačky',
     itemListName: 'Dotace na zemědělskou techniku',
+    detail: {
+      titleSuffix: ' — dotace na techniku 2026',
+      updatedLabel: 'Aktualizováno',
+      bylineHtml:
+        'Zpracováno <a href="/redakce/">redakcí agro-svět.cz</a> z veřejných dokumentů SZIF a MZe',
+      specRostlinna: 'Rostlinná výroba',
+      specZivocisna: 'Živočišná výroba',
+      specStrop: 'Strop dotace',
+      specMinVydaje: 'Min. způsobilé výdaje',
+      pctSuffix: ' %',
+      warnBoxHtml:
+        '<strong>Pozor — pravidlo 49 %.</strong> Výdaje na mobilní stroje (traktory, sklízeče, samojízdné postřikovače) smí tvořit maximálně 49 % způsobilých výdajů projektu. Stroj samotný nelze plně dotovat — projekt musí obsahovat i jiné investice. Výjimka pro hospodářství do 150 ha.',
+      faqHeading: 'Časté otázky',
+      sourceLabel: 'Primární zdroj: ',
+      sourceLinkText: 'Pravidla a podmínky SZIF / MZe',
+      sourceCalendarLink: 'Kalendář kol →',
+      ctaKicker: 'Vyberte stroj',
+      ctaHeading: 'Spojte dotaci s konkrétní technikou',
+      ctaTractors: 'Katalog traktorů',
+      ctaCompare: 'Srovnání modelů',
+      ctaLeasing: 'Kalkulačka leasingu',
+      inLanguage: 'cs-CZ',
+    },
   },
   sk: {
     metaTitle: 'Investičné dotácie pre poľnohospodárov 2026 — prehľad PPA',
@@ -100,6 +159,29 @@ export const content: Record<Locale, DotaceCopy> = {
     ctaCompare: 'Porovnanie modelov',
     ctaCalc: 'Kalkulačky',
     itemListName: 'Investičné dotácie pre poľnohospodárov',
+    detail: {
+      titleSuffix: ' — investičná dotácia 2026',
+      updatedLabel: 'Aktualizované',
+      bylineHtml:
+        'Spracované <a href="/sk/redakce/">redakciou agro-svet.cz</a> z verejných dokumentov PPA a MPRV SR',
+      specRostlinna: 'Rastlinná výroba',
+      specZivocisna: 'Živočíšna výroba',
+      specStrop: 'Strop dotácie',
+      specMinVydaje: 'Min. oprávnené výdavky',
+      pctSuffix: ' %',
+      warnBoxHtml:
+        '<strong>Pozor — pravidlo 49 %.</strong> Výdavky na mobilné stroje (traktory, kombajny, samochodné postrekovače) môžu tvoriť najviac 49 % oprávnených výdavkov projektu. Samotný stroj nemožno plne dotovať — projekt musí obsahovať aj iné investície.',
+      faqHeading: 'Časté otázky',
+      sourceLabel: 'Primárny zdroj: ',
+      sourceLinkText: 'Podmienky výzvy PPA',
+      sourceCalendarLink: 'Kalendár kôl →',
+      ctaKicker: 'Vyberte stroj',
+      ctaHeading: 'Spojte dotáciu s konkrétnou technikou',
+      ctaTractors: 'Katalóg traktorov',
+      ctaCompare: 'Porovnanie modelov',
+      ctaLeasing: 'Kalkulačka lízingu',
+      inLanguage: 'sk-SK',
+    },
   },
   uk: {} as DotaceCopy,
 };
