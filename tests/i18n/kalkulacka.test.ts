@@ -22,3 +22,27 @@ describe('kalkulačka i18n — parity klíčů sk ↔ cs', () => {
     });
   }
 });
+
+import { content as hub } from '../../src/i18n/kalkulacka/hub';
+
+describe('kalkulačka hub i18n', () => {
+  it('sk hub vynechává dotace-cap kartu', () => {
+    const skSlugs = hub.sk.cards.map((c) => c.slug);
+    expect(skSlugs).not.toContain('dotace-cap');
+  });
+  it('cs hub obsahuje všech 6 karet včetně dotace-cap', () => {
+    const csSlugs = hub.cs.cards.map((c) => c.slug);
+    expect(csSlugs).toContain('dotace-cap');
+    expect(csSlugs).toHaveLength(6);
+  });
+  it('sk hub má 5 karet', () => {
+    expect(hub.sk.cards).toHaveLength(5);
+  });
+  it('každá sk karta má neprázdné name/short/description', () => {
+    for (const card of hub.sk.cards) {
+      expect(card.name).not.toBe('');
+      expect(card.short).not.toBe('');
+      expect(card.description).not.toBe('');
+    }
+  });
+});
