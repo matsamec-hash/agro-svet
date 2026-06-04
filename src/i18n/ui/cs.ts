@@ -482,6 +482,8 @@ const cs: Record<string, string> = {
   'stat.pills.zvirata': 'Zvířata',
   'stat.pills.pribehy': 'Příběhy',
 
+  'stat.bc.home': 'Domů',
+  'stat.bc.current': 'Statistiky',
   'stat.meta.title': 'Ceny zemědělských komodit a statistiky ČR — sklizeň, vstupní náklady',
   'stat.meta.description': 'Aktuální ceny zemědělských komodit (pšenice, řepka, kukuřice) a data z Českého statistického úřadu — vývoj cen vstupů, sklizeň, regionální produkce, stavy zvířat. Měsíčně aktualizováno.',
 

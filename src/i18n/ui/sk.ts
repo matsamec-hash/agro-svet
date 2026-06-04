@@ -246,7 +246,7 @@ const sk: Record<string, string> = {
   'cat.zn.desc': 'Prehľad svetových výrobcov poľnohospodárskej techniky — od Claas a John Deere po Fendt, New Holland a Zetor.',
   'cat.zn.label': 'Značky',
   'cat.zn.h1': 'Výrobcovia poľnohospodárskej techniky',
-  'cat.zn.intro': 'Profily svetových aj domácich výrobcov — história, portfólio a zastúpenie v Českej republike.',
+  'cat.zn.intro': 'Profily svetových aj domácich výrobcov — história, portfólio a zastúpenie na Slovensku.',
   'cat.zn.foundedFrom': 'od {year}',
 
   // — znacky/[slug] (cat.zn.d.*) —
@@ -482,6 +482,8 @@ const sk: Record<string, string> = {
   'stat.pills.zvirata': 'Zvieratá',
   'stat.pills.pribehy': 'Príbehy',
 
+  'stat.bc.home': 'Domov',
+  'stat.bc.current': 'Štatistiky',
   'stat.meta.title': 'Ceny poľnohospodárskych komodít a štatistiky SR — úroda, vstupné náklady',
   'stat.meta.description': 'Aktuálne ceny poľnohospodárskych komodít (pšenica, repka, kukurica) a dáta z Eurostatu a Štatistického úradu SR — vývoj cien vstupov, úroda, produkcia a stavy hospodárskych zvierat. Pravidelne aktualizované.',
 

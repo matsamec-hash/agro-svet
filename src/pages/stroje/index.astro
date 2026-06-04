@@ -4,7 +4,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, type StrojKategorie } from '../../lib/stroje';
-import { useTranslations, plural, tf, getLocaleFromUrl } from '../../i18n/utils';
+import { useTranslations, plural, tf, getLocaleFromUrl, localizePath } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -36,18 +36,18 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 1, name: tr('cat.bc.home'), item: `https://agro-svet.cz${localizePath(locale, '/')}` },
+    { '@type': 'ListItem', position: 2, name: tr('cat.bc.tech'), item: `https://agro-svet.cz${localizePath(locale, '/stroje/')}` },
   ],
 };
 
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Katalog zemědělských strojů',
-  description: 'Kompletní databáze traktorů a kombajnů od světových výrobců.',
-  url: 'https://agro-svet.cz/stroje/',
-  inLanguage: 'cs-CZ',
+  name: tr('cat.s.title'),
+  description: locale === 'sk' ? tr('cat.s.desc') : 'Kompletní databáze traktorů a kombajnů od světových výrobců.',
+  url: `https://agro-svet.cz${localizePath(locale, '/stroje/')}`,
+  inLanguage: locale === 'sk' ? 'sk-SK' : 'cs-CZ',
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: brands.length,

@@ -67,7 +67,10 @@ export function siteSchemaGraph() {
         name: 'agro-svět.cz',
         alternateName: 'agro-svet.cz',
         url: SITE_URL + '/',
-        inLanguage: 'cs-CZ',
+        // Dvojjazyčný portál — WebSite entita je sdílená (stejné @id) napříč cs i sk
+        // URL, proto deklarujeme oba jazyky polem místo jediné hodnoty. Per-page jazyk
+        // řeší <html lang> + page-level inLanguage (Article/CollectionPage).
+        inLanguage: ['cs-CZ', 'sk-SK'],
         description: ORG_DESCRIPTION,
         publisher: { '@id': ORG_ID },
         potentialAction: {
