@@ -417,6 +417,9 @@ const sk: Record<string, string> = {
   // AutoTakeaways
   'stat.takeaways.heading': 'Čo dnes hovoria dáta',
   'stat.takeaways.detail': 'Detail →',
+  'stat.takeaways.labelTrh': 'TRH',
+  'stat.takeaways.labelVstupy': 'VSTUPY',
+  'stat.takeaways.labelZvirata': 'STAVY ZVIERAT',
   // PillsNav
   'stat.pills.aria': 'Sekcie stránky',
   // SparklineTicker
@@ -458,7 +461,7 @@ const sk: Record<string, string> = {
   'stat.inputs.source': 'Zdroj: ŠÚSR DATAcube — priemerné ceny pohonných látok (sp0207ts)',
   'stat.inputs.sourceHref': 'https://datacube.statistics.sk/#!/lang/sk/',
   'stat.inputs.cardFuel': 'Nafta — týždenný priemer (52 týždňov)',
-  'stat.inputs.cardFert': 'Hnojivá — ročný priemer (Kč/t)',
+  'stat.inputs.cardFert': 'Hnojivá — ročný priemer (EUR/t)',
 
   // — PriceScissors —
   'stat.scissors.h2': '⚡ Cenové nožnice — čo je drahšie: vstupy alebo výstupy?',

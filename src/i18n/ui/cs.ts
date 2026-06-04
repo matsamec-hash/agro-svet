@@ -417,6 +417,9 @@ const cs: Record<string, string> = {
   // AutoTakeaways
   'stat.takeaways.heading': 'Co dnes říkají data',
   'stat.takeaways.detail': 'Detail →',
+  'stat.takeaways.labelTrh': 'TRH',
+  'stat.takeaways.labelVstupy': 'VSTUPY',
+  'stat.takeaways.labelZvirata': 'STAVY ZVÍŘAT',
   // PillsNav
   'stat.pills.aria': 'Sekce stránky',
   // SparklineTicker

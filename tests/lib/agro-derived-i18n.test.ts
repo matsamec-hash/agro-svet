@@ -202,6 +202,18 @@ describe('statTakeaways', () => {
     expect(result.map(t => t.category)).toEqual(['trh', 'vstupy', 'zvirata']);
   });
 
+  it('sk — trh big-change insight uses Aktuálna NOT Aktuální', () => {
+    const commodityStats = [
+      { name: 'Pšenica', price: 270, change: 12.0, unit: 'EUR/t', month: 'apríl 2026', prevYearPrice: 240 },
+    ];
+    const livestock = [{ animal: 'Skot', count: 1350000, date: '2024-06-30' }];
+    const result = statTakeaways({ commodityStats, fertilizers, livestock }, 'sk');
+    const trh = result.find(t => t.category === 'trh')!;
+    expect(trh.insight).not.toContain('Aktuální');
+    expect(trh.insight).toContain('Aktuálna');
+    expect(trh.insight).toBe('+12.0 % r/r. Aktuálna cena 270 EUR/t.');
+  });
+
   // sk sanity checks
   it('sk — žádné CZ ř/ě/ů v celém výsledku', () => {
     const commodityStats = [

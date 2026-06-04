@@ -216,6 +216,7 @@ interface LocaleStrings {
   livestockTrend: (first: number, last: number, drop: number, numLocale: string) => string;
   wheatName: string;
   wheatFallback: (price: number, unit: string, month: string, numLocale: string) => string;
+  trhInsight: (dir: string, change: number, price: number, unit: string, numLocale: string) => string;
   fertName: string;
   fertInsight: (inflPct: number) => string;
   fertFallback: string;
@@ -240,6 +241,8 @@ const CS_STRINGS: LocaleStrings = {
   wheatName: 'Pšenice',
   wheatFallback: (price, unit, month, numLocale) =>
     `Aktuální cena ${price.toLocaleString(numLocale)} Kč/t (${month}).`,
+  trhInsight: (dir, change, price, unit, numLocale) =>
+    `${dir}${change.toFixed(1)} % r/r. Aktuální cena ${price.toLocaleString(numLocale)} ${unit}.`,
   fertName: 'NPK 15-15-15',
   fertInsight: (inflPct) =>
     `Stále ${inflPct >= 0 ? '+' : ''}${inflPct.toFixed(0)} % proti roku 2019. Cenové nůžky se ${inflPct > 30 ? 'zužují' : 'stabilizují'}.`,
@@ -267,6 +270,8 @@ const SK_STRINGS: LocaleStrings = {
   wheatName: 'Pšenica',
   wheatFallback: (price, _unit, month, numLocale) =>
     `Aktuálna cena ${price.toLocaleString(numLocale)} EUR/t (${month}).`,
+  trhInsight: (dir, change, price, unit, numLocale) =>
+    `${dir}${change.toFixed(1)} % r/r. Aktuálna cena ${price.toLocaleString(numLocale)} ${unit}.`,
   fertName: 'NPK 15-15-15',
   fertInsight: (inflPct) =>
     `Stále ${inflPct >= 0 ? '+' : ''}${inflPct.toFixed(0)} % oproti roku 2019. Cenové nožnice sa ${inflPct > 30 ? 'zužujú' : 'stabilizujú'}.`,
@@ -338,7 +343,7 @@ export function statTakeaways(
     result.push({
       category: 'trh',
       title: big.name,
-      insight: `${dir}${big.change.toFixed(1)} % r/r. Aktuální cena ${big.price.toLocaleString(numLocale)} ${big.unit}.`,
+      insight: s.trhInsight(dir, big.change, big.price, big.unit, numLocale),
       anchor: '#trh',
     });
   } else if (wheat) {
