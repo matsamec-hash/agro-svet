@@ -4,13 +4,14 @@ import { getAllBrands, getAllModels, seriesFamily, FUNCTIONAL_GROUPS } from '../
 import { getAllDruhy } from '../lib/plemena';
 import { getAllFarms, regionsWithEnoughFarms } from '../lib/farmy';
 import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
+import { getAllHlemyzdi } from '../lib/hlemyzdi';
 import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath } from '../i18n/nav';
 
-const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky', 'chov-hlemyzdu'];
+const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
 function maxIsoDate(values: Array<string | null | undefined>): string | undefined {
   let max: string | undefined;
@@ -121,6 +122,7 @@ export const GET: APIRoute = async () => {
     ['/vcelarstvi/druhy/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/vcelarstvi/vybaveni/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/vcelarstvi/med/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/chov-hlemyzdu/', 'weekly', '0.85', STATIC_LASTMOD],
     ['/kviz/jaka-vcela-pro-vas/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/puda/', 'weekly', undefined, STATIC_LASTMOD],
     ['/fotosoutez/', 'weekly', '0.8', STATIC_LASTMOD],
@@ -168,6 +170,17 @@ export const GET: APIRoute = async () => {
 
   for (const cat of NOVINKY_CATEGORIES) {
     urls.push({ loc: `${SITE_URL}/novinky/kategorie/${cat}/`, changefreq: 'weekly', lastmod: latestArticleLastmod ?? STATIC_LASTMOD });
+  }
+
+  // Sekce „Chov hlemýžďů" — 16 podstránek (statická data v src/lib/hlemyzdi.ts).
+  for (const a of getAllHlemyzdi()) {
+    urls.push({
+      loc: `${SITE_URL}/chov-hlemyzdu/${a.slug}/`,
+      changefreq: 'monthly',
+      priority: '0.7',
+      lastmod: STATIC_LASTMOD,
+      images: a.featured_image_url ? [a.featured_image_url] : undefined,
+    });
   }
 
   // Žebříčky — top-N seznamy generované z stroje dat.

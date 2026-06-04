@@ -31,7 +31,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   legislativa: 'Legislativa',
   znacky: 'Značky',
   novinky: 'Novinky',
-  'chov-hlemyzdu': 'Chov hlemýžďů',
 };
 
 export const GET: APIRoute = async () => {

@@ -35,6 +35,7 @@ const sk: Record<string, string> = {
   'nav.animals.sheep': 'Plemená oviec',
   'nav.animals.pigs': 'Plemená ošípaných',
   'nav.animals.bees': 'Včelárstvo',
+  'nav.animals.snails': 'Chov slimákov',
 
   // — navigácia: Technika —
   'nav.tech.all': 'Všetka technika',
@@ -398,7 +399,6 @@ const sk: Record<string, string> = {
   'nov.cat.trh': 'Trh',
   'nov.cat.legislativa': 'Legislatíva',
   'nov.cat.znacky': 'Značky',
-  'nov.cat.chov-hlemyzdu': 'Chov slimákov',
   'nov.cat.novinky': 'Novinky',
   'nov.cat.allInTitle': 'Všetky články v kategórii {label}',
   // language switcher

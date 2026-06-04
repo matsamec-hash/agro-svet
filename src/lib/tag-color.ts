@@ -13,7 +13,6 @@ const CATEGORY_COLORS: Record<string, ColorPair> = {
   legislativa: { bg: '#F3E5F5', fg: '#4A148C', border: '#BA68C8' },
   znacky: { bg: '#FFE8D1', fg: '#9A3E00', border: '#FFB074' },
   novinky: { bg: '#ECEFF1', fg: '#37474F', border: '#B0BEC5' },
-  'chov-hlemyzdu': { bg: '#E0F2F1', fg: '#00695C', border: '#80CBC4' },
 };
 
 const TAG_PALETTE: ColorPair[] = [

@@ -23,10 +23,8 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
  *  Fáze 2b nenahradí reálnými SK daty. cs = nic. */
 export const HIDDEN_NEWS_CATEGORIES: Record<Locale, string[]> = {
   cs: [],
-  // `chov-hlemyzdu` je zatím jen v CZ (cluster „Chov hlemýžďů"); v non-cs skrytý,
-  // dokud nevznikne lokalizovaný obsah (lokalizační plán CZ→SK→EN).
-  sk: ['dotace', 'legislativa', 'trh', 'chov-hlemyzdu'],
-  uk: ['dotace', 'legislativa', 'trh', 'chov-hlemyzdu'],
+  sk: ['dotace', 'legislativa', 'trh'],
+  uk: ['dotace', 'legislativa', 'trh'],
 };
 
 /** cs-root prefixy CZ-jurisdikčních nástrojů/dat. Po Fázi 2b balíku C jsou
@@ -57,7 +55,6 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
       { labelKey: 'nav.tema.dotace', href: '/novinky/kategorie/dotace/' },
       { labelKey: 'nav.tema.trh', href: '/novinky/kategorie/trh/' },
       { labelKey: 'nav.tema.legislativa', href: '/novinky/kategorie/legislativa/' },
-      { labelKey: 'nav.tema.chov', href: '/novinky/kategorie/chov-hlemyzdu/' },
       { labelKey: 'nav.tema.howto', href: '/jak-na-to/' },
       { labelKey: 'nav.tema.guide', href: '/pruvodce/' },
       { labelKey: 'nav.tema.market', href: '/prehled/' },
@@ -72,6 +69,7 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
       { labelKey: 'nav.animals.sheep', href: '/plemena/ovce/' },
       { labelKey: 'nav.animals.pigs', href: '/plemena/prasata/' },
       { labelKey: 'nav.animals.bees', href: '/vcelarstvi/' },
+      { labelKey: 'nav.animals.snails', href: '/chov-hlemyzdu/' },
     ],
   },
   {

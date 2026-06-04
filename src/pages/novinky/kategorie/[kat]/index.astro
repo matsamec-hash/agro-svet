@@ -12,7 +12,7 @@ import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '.
 import { localizePath, t, localizedCategory } from '../../../../i18n/utils';
 import { isNewsCategoryHidden } from '../../../../i18n/nav';
 
-const VALID_CATS = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky', 'chov-hlemyzdu'];
+const VALID_CATS = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 const { kat } = Astro.params;
 if (!kat || !VALID_CATS.includes(kat)) return Astro.rewrite('/404');
 const locale = Astro.locals.locale ?? 'cs';
@@ -26,7 +26,6 @@ const categoryDescriptions: Record<string, string> = {
   legislativa: 'Novely zákonů, nařízení a vyhlášky pro zemědělce, pachty, udržitelnost.',
   znacky: 'Zprávy od výrobců zemědělské techniky, tiskové zprávy, nové modely.',
   novinky: 'Obecné zemědělské novinky.',
-  'chov-hlemyzdu': 'Chov hlemýžďů od A do Z — druhy, vybavení, krmení, legislativa, ekonomika i produkty (sliz, maso, šnečí kaviár, ulity).',
 };
 const categoryDescriptionsSk: Record<string, string> = {
   technika: 'Novinky z poľnohospodárskej techniky — traktory, kombajny, postrekovače, sejačky a ďalšie stroje.',
@@ -35,7 +34,6 @@ const categoryDescriptionsSk: Record<string, string> = {
   legislativa: 'Novely zákonov, nariadenia a vyhlášky pre poľnohospodárov, nájmy, udržateľnosť.',
   znacky: 'Správy od výrobcov poľnohospodárskej techniky, tlačové správy, nové modely.',
   novinky: 'Všeobecné poľnohospodárske novinky.',
-  'chov-hlemyzdu': 'Chov slimákov od A po Z — druhy, vybavenie, kŕmenie, legislatíva, ekonomika aj produkty (sliz, mäso, slimačí kaviár, ulity).',
 };
 const label = localizedCategory(locale, kat);
 const description = (locale === 'sk' ? categoryDescriptionsSk : categoryDescriptions)[kat]
