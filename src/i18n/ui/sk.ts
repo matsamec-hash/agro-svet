@@ -410,6 +410,7 @@ const sk: Record<string, string> = {
   'stat.hero.kicker': 'ŽIVÉ DÁTA · SLOVENSKÉ POĽNOHOSPODÁRSKE DÁTA',
   'stat.hero.h1Prefix': 'Čo stojí slovenské ',
   'stat.hero.h1Em': 'poľnohospodárstvo',
+  'stat.hero.lede': 'Aktuálne ceny poľnohospodárskych komodít, úroda a vstupné náklady z Eurostatu a Štatistického úradu SR — pravidelne aktualizované dáta.',
   'stat.hero.statDatasets': 'datasetov',
   'stat.hero.statYears': 'rokov',
   'stat.hero.statRegions': 'krajov',

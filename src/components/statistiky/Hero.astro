@@ -17,10 +17,7 @@ const t = useTranslations(locale);
   <div class="sp-hero-left">
     <span class="sp-kicker"><span class="dot"></span>{t('stat.hero.kicker')}</span>
     <h1>{t('stat.hero.h1Prefix')}<em>{t('stat.hero.h1Em')}</em></h1>
-    <p class="sp-hero-lede">
-      Aktuální ceny zemědělských komodit, sklizeň, vstupní náklady a regionální produkce
-      z Českého statistického úřadu — každý měsíc aktualizovaná data.
-    </p>
+    <p class="sp-hero-lede">{t('stat.hero.lede')}</p>
     <div class="sp-hero-stats">
       <div class="s"><span class="n">{datasetCount}</span><span class="l">{t('stat.hero.statDatasets')}</span></div>
       <div class="s"><span class="n">{yearsCovered}</span><span class="l">{t('stat.hero.statYears')}</span></div>

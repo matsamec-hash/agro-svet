@@ -163,7 +163,7 @@ const PILLS = [
     <PillsNav items={PILLS} />
 
     {commodityFull.length > 0 && (
-      <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} dataBase={locale === 'sk' ? '-sk' : ''} numLocale={locale === 'sk' ? 'sk-SK' : 'cs-CZ'} />
+      <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} dataBase={locale === 'sk' ? '-sk' : ''} numLocale={locale === 'sk' ? 'sk-SK' : 'cs-CZ'} locale={locale} />
     )}
 
     {fuelSeries.length > 0 && <InputsBlock fuelSeries={fuelSeries} fertSeries={fertSeries} />}

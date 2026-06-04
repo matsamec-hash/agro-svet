@@ -410,6 +410,7 @@ const cs: Record<string, string> = {
   'stat.hero.kicker': 'LIVE DATA · ČESKÁ ZEMĚDĚLSKÁ DATA',
   'stat.hero.h1Prefix': 'Co stojí české ',
   'stat.hero.h1Em': 'zemědělství',
+  'stat.hero.lede': 'Aktuální ceny zemědělských komodit, sklizeň, vstupní náklady a regionální produkce z Českého statistického úřadu — každý měsíc aktualizovaná data.',
   'stat.hero.statDatasets': 'datasetů',
   'stat.hero.statYears': 'let',
   'stat.hero.statRegions': 'krajů',

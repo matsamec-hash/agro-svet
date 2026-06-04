@@ -11,8 +11,16 @@ interface Props {
   commodityNames: readonly string[]; // 9 names rendered as pill buttons
   dataBase?: string; // suffix for JSON endpoint paths, e.g. '-sk' → /statistiky/commodity-data-recent-sk.json
   numLocale?: string; // e.g. 'sk-SK'; defaults to 'cs-CZ'
+  locale?: string; // 'cs' | 'sk'; used to derive localized insight fragments
 }
-const { commodityNames, dataBase = '', numLocale = 'cs-CZ' } = Astro.props;
+const { commodityNames, dataBase = '', numLocale = 'cs-CZ', locale = 'cs' } = Astro.props;
+const isSk = locale === 'sk';
+const L = {
+  avgLabel:  isSk ? '5-ročný priemer'   : '5letý průměr',
+  avgPrefix: isSk ? 'Aktuálna hodnota ' : 'Aktuální hodnota ',
+  avgSuffix: isSk ? ' vs. 5-ročný priemer.' : ' vs. 5letý průměr.',
+  nowPrefix: isSk ? 'Aktuálne '         : 'Aktuálně ',
+};
 const default0 = commodityNames[0] ?? 'Pšenice';
 ---
 
@@ -47,7 +55,7 @@ const default0 = commodityNames[0] ?? 'Pšenice';
 <!-- Chart data se loaduje async z /statistiky/commodity-data.json (24h CF cache).
      Šetří ~86 KB inline JSON v HTML. Element zůstává jako sentinel pro init script
      — když je v DOM, page má chart, fetch může proběhnout. -->
-<div id="commodityChartData" data-base={dataBase} data-numlocale={numLocale} hidden></div>
+<div id="commodityChartData" data-base={dataBase} data-numlocale={numLocale} data-avg-label={L.avgLabel} data-avg-prefix={L.avgPrefix} data-avg-suffix={L.avgSuffix} data-now-prefix={L.nowPrefix} hidden></div>
 
 <!-- Chart.js — eager init if Chart už loaded (např. /statistiky/), jinak lazy přes
      IntersectionObserver: na homepage se ~80KB Chart.js bundle neloaduje dokud
@@ -90,6 +98,12 @@ const default0 = commodityNames[0] ?? 'Pšenice';
     // dataBase suffix (e.g. '-sk') points to locale-specific JSON endpoints.
     var dataBase = dataEl.dataset.base || '';
     var numLocale = dataEl.dataset.numlocale || 'cs-CZ';
+    var L = {
+      avgLabel:  dataEl.dataset.avgLabel  || '',
+      avgPrefix: dataEl.dataset.avgPrefix || '',
+      avgSuffix: dataEl.dataset.avgSuffix || '',
+      nowPrefix: dataEl.dataset.nowPrefix || '',
+    };
     var recentKey = '__commodityRecentPromise' + dataBase;
     var fullKey = '__commodityFullPromise' + dataBase;
     if (!window[recentKey]) {
@@ -160,7 +174,7 @@ const default0 = commodityNames[0] ?? 'Pšenice';
       }];
       if (avgLine.some(v => v !== null)) {
         datasets.push({
-          label: '5letý průměr', data: avgLine, borderColor: 'rgba(107,107,114,.6)',
+          label: L.avgLabel, data: avgLine, borderColor: 'rgba(107,107,114,.6)',
           borderWidth: 1.5, borderDash: [3, 3], pointRadius: 0, tension: 0.3, fill: false,
         });
       }
@@ -191,9 +205,9 @@ const default0 = commodityNames[0] ?? 'Pšenice';
         const avg = avgMap.get(last?.label);
         if (last && avg) {
           const diff = ((last.value / avg) - 1) * 100;
-          insightEl.textContent = `Aktuální hodnota ${last.value.toLocaleString(numLocale)} ${s.unit} ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} % vs. 5letý průměr.`;
+          insightEl.textContent = `${L.avgPrefix}${last.value.toLocaleString(numLocale)} ${s.unit} ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} %${L.avgSuffix}`;
         } else {
-          insightEl.textContent = `Aktuálně ${last?.value.toLocaleString(numLocale) ?? '–'} ${s.unit}.`;
+          insightEl.textContent = `${L.nowPrefix}${last?.value.toLocaleString(numLocale) ?? '–'} ${s.unit}.`;
         }
       }
     }
