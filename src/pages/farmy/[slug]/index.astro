@@ -35,6 +35,10 @@ const heroPhoto = photos[0];
 const galleryPhotos = photos.slice(1);
 const productLabels = farm.products.map((p) => FARM_PRODUCTS[p]);
 const web = farm.contact?.web;
+// Naše síťové farmy dostávají "followed" odkaz (přenos autority); cizí farmy zůstávají nofollow.
+const NETWORK_FARM_HOSTS = ['farmakrty.cz', 'farmateplysovice.cz'];
+const isNetworkFarm = !!web && NETWORK_FARM_HOSTS.some((h) => web.includes(h));
+const webRel = isNetworkFarm ? 'external noopener' : 'external nofollow noopener';
 const tel = farm.contact?.tel;
 const email = farm.contact?.email;
 const hasContact = !!(web || tel || email || farm.opening);
@@ -125,7 +129,7 @@ const initial = farm.name.trim().charAt(0).toUpperCase();
             {web && (
               <li>
                 <span class="contact-label">Web</span>
-                <a href={web} target="_blank" rel="external nofollow noopener">{web}</a>
+                <a href={web} target="_blank" rel={webRel}>{web}</a>
               </li>
             )}
             {tel && (
