@@ -1,5 +1,5 @@
 ---
-import { getLocaleFromUrl, stripLocale } from '../i18n/utils';
+import { getLocaleFromUrl, stripLocale, navHref } from '../i18n/utils';
 import { useTranslations } from '../i18n/utils';
 import { getNav } from '../i18n/nav';
 import LangSwitcher from './LangSwitcher.astro';
@@ -15,7 +15,7 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
 <header style="background:#fff; border-bottom:1px solid #e8e8e8; position:sticky; top:0; z-index:100;">
   <div class="header-inner">
 
-    <a href="/" class="header-logo">
+    <a href={navHref(locale, '/')} class="header-logo">
       <span>{tr('brand.name')}</span>
     </a>
 
@@ -25,7 +25,7 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
         return item.children ? (
           <div class="nav-item-wrap">
             <a
-              href={item.href}
+              href={navHref(locale, item.href)}
               class:list={['nav-link', { active: itemActive }]}
             >
               {item.label}
@@ -33,13 +33,13 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
             </a>
             <div class="nav-submenu">
               {item.children.map((c) => (
-                <a href={c.href} class="nav-subitem">{c.label}</a>
+                <a href={navHref(locale, c.href)} class="nav-subitem">{c.label}</a>
               ))}
             </div>
           </div>
         ) : (
           <a
-            href={item.href}
+            href={navHref(locale, item.href)}
             class:list={['nav-link', { active: itemActive }]}
           >
             {item.label}
@@ -114,7 +114,7 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
           return (
             <li class="mn-group">
               <div class="mn-row">
-                <a href={item.href} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
+                <a href={navHref(locale, item.href)} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
                 <button
                   type="button"
                   class="mn-toggle"
@@ -128,7 +128,7 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
               <ul class="mn-sub" hidden>
                 {item.children.map((c) => (
                   <li>
-                    <a href={c.href} class:list={['mn-sublink', { active: current.startsWith(c.href) }]}>{c.label}</a>
+                    <a href={navHref(locale, c.href)} class:list={['mn-sublink', { active: current.startsWith(c.href) }]}>{c.label}</a>
                   </li>
                 ))}
               </ul>
@@ -138,7 +138,7 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
         return (
           <li>
             <div class="mn-row">
-              <a href={item.href} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
+              <a href={navHref(locale, item.href)} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
             </div>
           </li>
         );

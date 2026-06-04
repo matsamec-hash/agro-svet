@@ -35,6 +35,23 @@ export function isSkLaunchedPath(csRootPath: string): boolean {
   return SK_LAUNCHED_PREFIXES.some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
 }
 
+/** Cesty uvnitř launchnutých sekcí, které ALE pod /sk 404-ují (jsou prerendered,
+ *  nemají SSR routu pokrytou middleware-rewritem). V navigaci je drž na cs, ať
+ *  /sk odkaz nevede na 404. Ověřeno živě. (Hub /stroje/ SSR funguje, kategorie ne.) */
+const SK_PRERENDERED_NAV_PATHS = ['/stroje/traktory', '/stroje/kombajny', '/stroje/zemedelske-stroje'];
+
+/** Lokalizuje navigační/footer href pro daný locale. Pro cs vrací href beze změny.
+ *  Pro non-cs přidá `/sk` (resp. `/uk`) prefix POUZE u cest, které pod daným locale
+ *  reálně fungují — tj. launchnuté sekce + home; nelaunchnuté a prerendered-pod-/sk
+ *  cesty nechá na cs, aby menu nevedlo na 404 ani neservírovalo míchaný obsah. */
+export function navHref(locale: Locale, href: string): string {
+  if (locale === defaultLocale) return href;
+  const root = href.replace(/\/+$/, '') || '/';
+  if (root === '/') return localizePath(locale, href);
+  if (isSkLaunchedPath(root) && !SK_PRERENDERED_NAV_PATHS.includes(root)) return localizePath(locale, href);
+  return href;
+}
+
 /** Hreflang alternates pro daný pathname (přijímá i lokalizovaný). */
 export function getAlternates(pathname: string): { hreflang: string; href: string }[] {
   const { path } = stripLocale(pathname);
