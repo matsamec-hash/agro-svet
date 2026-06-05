@@ -142,7 +142,7 @@ INSERT INTO akce (slug, nazev, popis, typ, druh, zacatek, konec, pristi_vyskyt,
   obec, okres_slug, kraj_slug, lat, lng, poradatel, web, email, zdroj, stav, zverejneno_at)
 VALUES (
   'trznice-zahrady-cech-litomerice-2026', 'Tržnice Zahrady Čech 2026',
-  'Jarní zahradnická prodejní výstava na výstavišti Zahrada Čech v Litoměřicích (8.–12. 5. 2026). Bohatý výběr sazenic, cibulovin, okrasných i ovocných rostlin, bylinek, zeleniny, zahradního nářadí a nábytku. Vhodné pro zahrádkáře i chalupáře.',
+  'Jarní zahradnická prodejní výstava na výstavišti Zahrada Čech v Litoměřicích (8.–12. 4. 2026). Bohatý výběr sazenic, cibulovin, okrasných i ovocných rostlin, bylinek, zeleniny, zahradního nářadí a nábytku. Vhodné pro zahrádkáře i chalupáře.',
   'vystavy-veletrhy', 'jednorazova', '2026-04-08T09:00:00+02:00', '2026-04-12T17:00:00+02:00',
   '2026-04-08T09:00:00+02:00', 'Litoměřice', 'litomerice', 'ustecky',
   50.53680, 14.13180, 'Městská kulturní zařízení Litoměřice', 'https://www.mkz-ltm.cz/zahradacech/',
