@@ -121,7 +121,7 @@ const akceData = akce.map((a) => ({
     document.getElementById('f-reset')!.addEventListener('click', reset);
     document.getElementById('empty-reset')?.addEventListener('click', reset);
 
-    const months = upcomingMonths(akce, now);
+    let months = upcomingMonths(akce, now);
     let monthIdx = 0;
     const MESICE = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
 
@@ -133,7 +133,7 @@ const akceData = akce.map((a) => ({
     function renderCal() {
       const grid = document.getElementById('mc-grid')!;
       const label = document.getElementById('mc-label')!;
-      if (months.length === 0) { cal.hidden = true; return; }
+      if (months.length === 0) { cal.hidden = true; return; } else cal.hidden = false;
       const key = months[monthIdx];
       const [y, m] = key.split('-').map(Number);
       label.textContent = `${MESICE[m - 1]} ${y}`;
@@ -178,6 +178,8 @@ const akceData = akce.map((a) => ({
       });
       fCount.textContent = visible === akce.length ? `${visible} akcí` : `${visible} z ${akce.length} akcí`;
       (document.getElementById('empty-filtr') as HTMLElement).hidden = visible !== 0 || akce.length === 0;
+      months = upcomingMonths(visibleAkce(), now);
+      if (monthIdx > months.length - 1) monthIdx = Math.max(0, months.length - 1);
       renderCal();
     }
 
