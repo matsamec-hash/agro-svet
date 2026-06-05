@@ -124,6 +124,20 @@ export async function moderate(args: {
   return getById(args.id);
 }
 
+/** Veřejný výpis: nadcházející zveřejněné akce, řazené dle příštího výskytu. */
+export async function listUpcoming(limit = 60): Promise<Akce[]> {
+  const sb = createServerClient();
+  const { data, error } = await sb
+    .from('akce')
+    .select('*')
+    .eq('stav', 'zverejneno')
+    .not('pristi_vyskyt', 'is', null)
+    .order('pristi_vyskyt', { ascending: true })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as Akce[];
+}
+
 /** Pro údržbový skript: všechny zveřejněné akce. */
 export async function listPublishedForMaintenance(): Promise<Akce[]> {
   const sb = createServerClient();
