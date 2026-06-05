@@ -19,6 +19,7 @@ const sk: Record<string, string> = {
   'nav.photo': 'Fotosúťaž',
 
   // — navigácia: Téma —
+  'nav.tema.akce': 'Kalendár akcií',
   'nav.tema.all': 'Všetky novinky',
   'nav.tema.tech': 'Technika',
   'nav.tema.dotace': 'Dotácie',

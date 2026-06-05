@@ -2,5 +2,6 @@
 const uk: Record<string, string> = {
   'nav.home': 'Головна',
   'nav.machines': 'Техніка',
+  'nav.tema.akce': 'Календар подій',
 };
 export default uk;

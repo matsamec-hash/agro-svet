@@ -19,6 +19,7 @@ const cs: Record<string, string> = {
   'nav.photo': 'Fotosoutěž',
 
   // — navigace: Téma —
+  'nav.tema.akce': 'Kalendář akcí',
   'nav.tema.all': 'Všechny novinky',
   'nav.tema.tech': 'Technika',
   'nav.tema.dotace': 'Dotace',
