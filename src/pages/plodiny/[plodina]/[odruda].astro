@@ -1,8 +1,8 @@
 ---
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
-import { listIndexableOdrudy, getPlodina, getOdruda, udrzovatelSlug, SKUPINA_LABELS } from '../../../lib/plodiny';
-import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
+import { listIndexableOdrudy, getPlodina, getOdruda, isOdrudaIndexable, udrzovatelSlug, SKUPINA_LABELS } from '../../../lib/plodiny';
+import { breadcrumbSchema, faqPageSchema, odrudaDatasetSchema, truncateAtBoundary } from '../../../lib/structured-data';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
 
 export async function getStaticPaths() {
@@ -25,13 +25,40 @@ const breadcrumb = breadcrumbSchema([
   { name: odruda.name, url: base },
 ]);
 const faq = e.faq && e.faq.length > 0 ? faqPageSchema(e.faq) : null;
+
+const dataset = odrudaDatasetSchema({
+  odrudaName: odruda.name,
+  plodinaName: plodina.name,
+  plodinaSlug: plodina.slug,
+  url: base,
+  description: e.popis ?? `Odrůda ${odruda.name} plodiny ${plodina.name.toLowerCase()}.`,
+  udrzovatel: odruda.udrzovatel,
+  rokRegistrace: odruda.rok_registrace,
+  typ: odruda.typ,
+  ranost: odruda.ranost,
+  vlastnosti: e.vlastnosti as Record<string, string | number> | undefined,
+  odolnosti: e.odolnosti as Record<string, string | number> | undefined,
+  zdrojUrl: odruda.zdroj_url,
+});
+
+// Související odrůdy — dalších až 6 indexovaných odrůd téže plodiny (hlubší
+// prolink, nižší bounce). Bez současné odrůdy; deterministicky dle abecedy.
+const relatedOdrudy = plodina.odrudy
+  .filter((o) => o.slug !== odruda.slug && isOdrudaIndexable(o))
+  .slice(0, 6);
+
+const metaDescription = truncateAtBoundary(
+  e.popis ?? `Odrůda ${odruda.name} plodiny ${plodina.name.toLowerCase()}.`,
+  155,
+);
 ---
 
 <Layout
   title={`${odruda.name} — odrůda (${plodina.name})`}
-  description={(e.popis ?? `Odrůda ${odruda.name} plodiny ${plodina.name.toLowerCase()}.`).slice(0, 155)}
+  description={metaDescription}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(dataset)} />
   {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
 
   <div class="pl-detail">
@@ -158,6 +185,31 @@ const faq = e.faq && e.faq.length > 0 ? faqPageSchema(e.faq) : null;
       </section>
     )}
 
+    {relatedOdrudy.length > 0 && (
+      <section class="card-section related-section">
+        <h2 class="section-title">Související odrůdy ({plodina.name.toLowerCase()})</h2>
+        <ul class="related-grid">
+          {relatedOdrudy.map((o) => (
+            <li>
+              <a class="related-card" href={`/plodiny/${plodina.slug}/${o.slug}/`}>
+                <span class="related-name">{o.name}</span>
+                {(o.typ || o.rok_registrace) && (
+                  <span class="related-meta">
+                    {[o.typ, o.rok_registrace].filter(Boolean).join(' · ')}
+                  </span>
+                )}
+                <svg class="related-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a class="related-all" href={`/plodiny/${plodina.slug}/`}>
+          Všechny odrůdy plodiny {plodina.name.toLowerCase()}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </section>
+    )}
+
     <div class="card-section osiva-wrap">
       <OsivaLinks plodina={plodina.name} skupina={plodina.skupina} odruda={odruda.name} />
     </div>
@@ -269,6 +321,28 @@ const faq = e.faq && e.faq.length > 0 ? faqPageSchema(e.faq) : null;
   .pl-detail .faq-item { border-left: 3px solid var(--green-soft); padding-left: 16px; }
   .pl-detail .faq-q { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0 0 6px; }
   .pl-detail .faq-a { font-size: 14.5px; line-height: 1.65; color: var(--body); margin: 0; }
+
+  /* ── Související odrůdy ── */
+  .pl-detail .related-grid {
+    list-style: none; margin: 0 0 18px; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;
+  }
+  .pl-detail .related-card {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-md);
+    background: #fff; text-decoration: none; transition: .15s; min-height: 100%;
+  }
+  .pl-detail .related-card:hover { border-color: var(--green); background: var(--green-soft); }
+  .pl-detail .related-name { font-weight: 700; color: var(--ink); font-size: 15px; }
+  .pl-detail .related-meta { font-size: 12.5px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+  .pl-detail .related-arrow { color: var(--green); flex-shrink: 0; }
+  .pl-detail .related-meta + .related-arrow { margin-left: 6px; }
+  .pl-detail .related-name + .related-arrow { margin-left: auto; }
+  .pl-detail .related-all {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--green-dark); font-weight: 700; font-size: 14px; text-decoration: none;
+  }
+  .pl-detail .related-all:hover { text-decoration: underline; }
 
   /* ── Osiva wrapper ── */
   .pl-detail .osiva-wrap { border-top: 2px solid var(--green-soft); }
