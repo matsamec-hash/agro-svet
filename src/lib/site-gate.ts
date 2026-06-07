@@ -1,13 +1,13 @@
 // Site-wide passcode gate. Active iff SITE_GATE_PASSCODE env var is non-empty.
 // Used by middleware (entry guard) + /api/unlock (cookie issuer).
 
-import { env } from 'cloudflare:workers';
+import { getEnvVar } from './env';
 
 export const GATE_COOKIE_NAME = 'as-unlock';
 export const GATE_COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
 export function getGatePasscode(): string {
-  return (env as { SITE_GATE_PASSCODE?: string }).SITE_GATE_PASSCODE || '';
+  return getEnvVar('SITE_GATE_PASSCODE') ?? '';
 }
 
 export function gateActive(): boolean {
