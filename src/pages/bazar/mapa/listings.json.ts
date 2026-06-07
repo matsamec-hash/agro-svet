@@ -67,6 +67,9 @@ export const GET: APIRoute = async ({ request, locals }) => {
       'content-type': 'application/json; charset=utf-8',
       // 5min edge cache + 30min SWR. Fresh listings show up quickly when
       // someone publishes; map doesn't need real-time accuracy.
+      // Note: on the Node origin (runtimeCache) only s-maxage=300 takes effect as a
+      // hard TTL — stale-while-revalidate is a no-op here; after 300s the next request
+      // re-queries Supabase. Cloudflare edge in front still honors SWR for proxied hits.
       'cache-control': 'public, max-age=120, s-maxage=300, stale-while-revalidate=1800',
     },
   });

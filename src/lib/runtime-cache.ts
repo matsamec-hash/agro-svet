@@ -20,6 +20,9 @@ const MAX_ENTRIES = 5000;
 
 const store = new Map<string, Entry>();
 
+// NOTE: stale-while-revalidate / stale-if-error are NOT honored — only s-maxage
+// (preferred) or max-age set a hard TTL. SWR was an edge-cache feature; on the
+// Node origin an entry simply expires at its TTL and the next request is a miss.
 function parseTtlSeconds(cacheControl: string | null): number {
   if (!cacheControl) return 0;
   const s = /s-maxage=(\d+)/.exec(cacheControl);
