@@ -1,0 +1,196 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { listIndexableUdrzovatele, getUdrzovatel, isOdrudaIndexable } from '../../../lib/plodiny';
+import { breadcrumbSchema, itemListSchema } from '../../../lib/structured-data';
+
+export async function getStaticPaths() {
+  return listIndexableUdrzovatele().map((u) => ({ params: { slug: u.slug } }));
+}
+
+const { slug } = Astro.params;
+const u = getUdrzovatel(slug!);
+if (!u) return Astro.rewrite('/404');
+
+const base = `/odrudy/udrzovatel/${u.slug}/`;
+const breadcrumb = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Plodiny', url: '/plodiny/' },
+  { name: u.name, url: base },
+]);
+const list = itemListSchema(
+  u.odrudy.map((e) => ({
+    url: isOdrudaIndexable(e.odruda) ? `/plodiny/${e.plodina_slug}/${e.odruda.slug}/` : `/plodiny/${e.plodina_slug}/`,
+    name: `${e.odruda.name} (${e.plodina_name})`,
+  })),
+  `Odrůdy — ${u.name}`,
+);
+---
+
+<Layout title={`${u.name} — registrované odrůdy`} description={`Přehled registrovaných odrůd udržovatele ${u.name}.`}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
+
+  <div class="pl-udrzovatel">
+
+    <nav class="breadcrumb" aria-label="Drobečková navigace">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/plodiny/">Plodiny</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">{u.name}</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Udržovatel odrůd · ÚKZÚZ</span>
+        <h1>{u.name}</h1>
+        <p class="hero-lede">Přehled registrovaných odrůd vedených pod udržovatelem {u.name} v databázi ÚKZÚZ.</p>
+        <div class="hero-stats">
+          <div class="s"><span class="n">{u.odrudy.length}</span><span class="l">registrovaných odrůd</span></div>
+          <div class="s">
+            <span class="n">{new Set(u.odrudy.map((e) => e.plodina_slug)).size}</span>
+            <span class="l">plodin</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a class="cta-back" href="/plodiny/">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            Všechny plodiny
+          </a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-emoji-tile" aria-hidden="true">🌱</div>
+      </div>
+    </section>
+
+    <section class="card-section odrudy-section">
+      <h2 class="section-title">
+        Odrůdy
+        <span class="section-title-c">{u.odrudy.length}</span>
+      </h2>
+      <div class="table-wrap">
+        <table class="odrudy-table">
+          <thead>
+            <tr>
+              <th>Odrůda</th>
+              <th>Plodina</th>
+              <th>Registrace</th>
+            </tr>
+          </thead>
+          <tbody>
+            {u.odrudy.map((e) => (
+              <tr>
+                <td class="td-name">
+                  {isOdrudaIndexable(e.odruda)
+                    ? <a href={`/plodiny/${e.plodina_slug}/${e.odruda.slug}/`}>{e.odruda.name}</a>
+                    : e.odruda.name}
+                </td>
+                <td><a href={`/plodiny/${e.plodina_slug}/`}>{e.plodina_name}</a></td>
+                <td>{e.odruda.rok_registrace ?? '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</Layout>
+
+<style>
+  .pl-udrzovatel {
+    --yellow: #FFEA00; --ink: #0A0A0B; --body: #1E1E22; --muted: #6B6B72;
+    --muted-2: #9A9AA3; --line: #EAEAEC; --card: #FFFFFF; --green: #3c7a1a;
+    --green-soft: #eaf4e0; --green-dark: #2a5a10;
+    --r-xl: 24px; --r-lg: 18px; --r-md: 12px;
+    --sh-1: 0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3: 0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width: 1280px; margin: 0 auto; padding: 26px 24px 96px; color: var(--body);
+  }
+
+  /* ── Breadcrumb ── */
+  .pl-udrzovatel .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 22px; flex-wrap: wrap; }
+  .pl-udrzovatel .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .pl-udrzovatel .breadcrumb a:hover { color: #000; }
+  .pl-udrzovatel .breadcrumb svg { color: var(--muted-2); flex-shrink: 0; }
+  .pl-udrzovatel .breadcrumb .current { color: #000; font-weight: 600; }
+
+  /* ── Hero ── */
+  .pl-udrzovatel .hero {
+    position: relative; overflow: hidden; color: #fff; border-radius: var(--r-xl);
+    background:
+      radial-gradient(600px 300px at 15% 20%, rgba(255, 234, 0, .14), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(60, 140, 40, .30), transparent 60%),
+      linear-gradient(135deg, #0F1409 0%, #161F0E 60%, #1C2B10 100%);
+    padding: 48px 48px 40px; margin-bottom: 26px; display: flex; gap: 32px; align-items: center;
+    box-shadow: var(--sh-3);
+  }
+  .pl-udrzovatel .hero-left { flex: 1; min-width: 0; }
+  .pl-udrzovatel .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #D8EBC0; margin-bottom: 16px; }
+  .pl-udrzovatel .kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
+  .pl-udrzovatel .hero h1 { font-size: clamp(22px, 3.5vw, 38px); line-height: 1.1; margin: 0 0 14px; font-weight: 800; }
+  .pl-udrzovatel .hero-lede { font-size: 16.5px; line-height: 1.6; color: #E0ECDA; max-width: 60ch; margin: 0 0 22px; }
+  .pl-udrzovatel .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 22px; }
+  .pl-udrzovatel .hero-stats .s { display: flex; flex-direction: column; }
+  .pl-udrzovatel .hero-stats .n { font-size: 26px; font-weight: 800; color: #fff; }
+  .pl-udrzovatel .hero-stats .l { font-size: 12.5px; color: #B2C9A8; }
+  .pl-udrzovatel .hero-right { flex-shrink: 0; }
+  .pl-udrzovatel .hero-emoji-tile { font-size: 92px; line-height: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,.4)); }
+  .pl-udrzovatel .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pl-udrzovatel .cta-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #c8c8d0; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    padding: 11px 16px; border-radius: var(--r-md); text-decoration: none;
+    font-size: 13.5px; font-weight: 500; transition: .15s;
+  }
+  .pl-udrzovatel .cta-back:hover { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.22); }
+
+  /* ── Card section ── */
+  .pl-udrzovatel .card-section {
+    background: var(--card); border-radius: var(--r-lg); padding: 28px 32px;
+    box-shadow: var(--sh-1); margin-bottom: 20px;
+  }
+  .pl-udrzovatel .section-title {
+    font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pl-udrzovatel .section-title-c {
+    font-size: 13px; background: var(--green-soft); color: var(--green);
+    font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  }
+
+  /* ── Odrůdy table ── */
+  .pl-udrzovatel .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--r-md); border: 1px solid var(--line); }
+  .pl-udrzovatel .odrudy-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .pl-udrzovatel .odrudy-table thead tr { background: #F7F7FA; }
+  .pl-udrzovatel .odrudy-table th {
+    padding: 11px 14px; font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--muted); text-align: left;
+    border-bottom: 1px solid var(--line); white-space: nowrap;
+  }
+  .pl-udrzovatel .odrudy-table td {
+    padding: 10px 14px; border-bottom: 1px solid var(--line);
+    color: var(--body); vertical-align: top; font-size: 13.5px;
+  }
+  .pl-udrzovatel .odrudy-table tbody tr:last-child td { border-bottom: none; }
+  .pl-udrzovatel .odrudy-table tbody tr:hover { background: #F7F7FA; }
+  .pl-udrzovatel .td-name { font-weight: 600; color: var(--ink); }
+  .pl-udrzovatel .td-name a { color: var(--green); text-decoration: none; font-weight: 700; }
+  .pl-udrzovatel .td-name a:hover { text-decoration: underline; color: var(--green-dark); }
+  .pl-udrzovatel .odrudy-table td a { color: var(--green); text-decoration: none; }
+  .pl-udrzovatel .odrudy-table td a:hover { text-decoration: underline; color: var(--green-dark); }
+
+  /* ── Responsive ── */
+  @media (max-width: 720px) {
+    .pl-udrzovatel .hero { flex-direction: column; padding: 34px 26px; text-align: center; }
+    .pl-udrzovatel .hero-stats { justify-content: center; }
+    .pl-udrzovatel .hero-right { display: none; }
+    .pl-udrzovatel .hero-actions { justify-content: center; }
+    .pl-udrzovatel .card-section { padding: 22px 18px; }
+  }
+  @media (max-width: 480px) {
+    .pl-udrzovatel { padding: 20px 16px 60px; }
+  }
+</style>
