@@ -30,7 +30,7 @@ const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
 
 <Layout
   title={`${label} — plodiny a odrůdy`}
-  description={`Přehled ${plodiny.length} plodin skupiny ${label.toLowerCase()}: agronomie, výsevek, hnojení a ${totalOdrudy} registrovaných odrůd.`}
+  description={`Přehled ${plodiny.length} ${plodiny.length === 1 ? 'plodiny' : 'plodin'} skupiny ${label.toLowerCase()}: agronomie, výsevek, hnojení a ${totalOdrudy} registrovaných odrůd.`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
