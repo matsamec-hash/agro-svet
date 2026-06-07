@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { listPlodiny, getPlodina, SKUPINA_LABELS } from '../../src/lib/plodiny';
 import { isOdrudaIndexable, listIndexableOdrudy, getOdruda } from '../../src/lib/plodiny';
+import { listSkupiny, listPlodinyBySkupina, listUdrzovatele, getUdrzovatel, udrzovatelSlug } from '../../src/lib/plodiny';
 
 describe('plodiny lib — jádro', () => {
   it('listPlodiny vrací plodiny seřazené dle name', () => {
@@ -51,5 +52,35 @@ describe('plodiny lib — guardrail odrůd', () => {
     expect(idx.every((e) => isOdrudaIndexable(e.odruda))).toBe(true);
     expect(idx.some((e) => e.odruda.slug === 'zlatak' && e.plodina_slug === 'oves')).toBe(true);
     expect(idx.some((e) => e.odruda.slug === 'korok')).toBe(false);
+  });
+});
+
+describe('plodiny lib — facety', () => {
+  it('listSkupiny vrací použité skupiny s počty', () => {
+    const sk = listSkupiny();
+    expect(sk.find((s) => s.skupina === 'obiloviny')?.count).toBeGreaterThanOrEqual(1);
+  });
+
+  it('listPlodinyBySkupina filtruje dle skupiny', () => {
+    const obi = listPlodinyBySkupina('obiloviny');
+    expect(obi.every((p) => p.skupina === 'obiloviny')).toBe(true);
+    expect(obi.some((p) => p.slug === 'oves')).toBe(true);
+  });
+
+  it('udrzovatelSlug je deterministický ASCII slug', () => {
+    expect(udrzovatelSlug('Selgen, a.s.')).toBe('selgen-a-s');
+  });
+
+  it('listUdrzovatele agreguje odrůdy dle udržovatele', () => {
+    const u = listUdrzovatele();
+    const selgen = u.find((x) => x.slug === 'selgen-a-s');
+    expect(selgen).toBeTruthy();
+    expect(selgen!.odrudy.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('getUdrzovatel vrací odrůdy daného udržovatele', () => {
+    const selgen = getUdrzovatel('selgen-a-s');
+    expect(selgen?.name).toBe('Selgen, a.s.');
+    expect(selgen!.odrudy.some((e) => e.odruda.slug === 'zlatak')).toBe(true);
   });
 });

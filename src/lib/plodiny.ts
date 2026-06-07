@@ -158,3 +158,60 @@ export function listIndexableOdrudy(): IndexableOdrudaEntry[] {
   }
   return out;
 }
+
+export interface SkupinaEntry { skupina: Skupina; label: string; count: number }
+
+export function listSkupiny(): SkupinaEntry[] {
+  const counts = new Map<Skupina, number>();
+  for (const p of build()) counts.set(p.skupina, (counts.get(p.skupina) ?? 0) + 1);
+  return Array.from(counts.entries())
+    .map(([skupina, count]) => ({ skupina, label: SKUPINA_LABELS[skupina], count }))
+    .sort((a, b) => a.label.localeCompare(b.label, 'cs'));
+}
+
+export function listPlodinyBySkupina(skupina: Skupina): Plodina[] {
+  return build().filter((p) => p.skupina === skupina);
+}
+
+/** Deterministický ASCII slug (bez diakritiky, jen [a-z0-9-]). */
+export function udrzovatelSlug(name: string): string {
+  return name
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export interface UdrzovatelEntry {
+  slug: string;
+  name: string;
+  odrudy: { plodina_slug: string; plodina_name: string; odruda: Odruda }[];
+}
+
+export function listUdrzovatele(): UdrzovatelEntry[] {
+  const bySlug = new Map<string, UdrzovatelEntry>();
+  for (const p of build()) {
+    for (const o of p.odrudy) {
+      const name = (o.udrzovatel ?? '').trim();
+      if (!name) continue;
+      const slug = udrzovatelSlug(name);
+      if (!slug) continue;
+      const entry = bySlug.get(slug) ?? { slug, name, odrudy: [] };
+      entry.odrudy.push({ plodina_slug: p.slug, plodina_name: p.name, odruda: o });
+      bySlug.set(slug, entry);
+    }
+  }
+  return Array.from(bySlug.values()).sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+}
+
+export function getUdrzovatel(slug: string): UdrzovatelEntry | undefined {
+  return listUdrzovatele().find((u) => u.slug === slug);
+}
+
+/** Práh pro indexaci facetu udržovatele (anti-thin). */
+export const UDRZOVATEL_INDEX_MIN = 2;
+
+export function listIndexableUdrzovatele(): UdrzovatelEntry[] {
+  return listUdrzovatele().filter((u) => u.odrudy.length >= UDRZOVATEL_INDEX_MIN);
+}
