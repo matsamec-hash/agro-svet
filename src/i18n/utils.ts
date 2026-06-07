@@ -103,13 +103,24 @@ export function tf(locale: Locale, key: string, params: Record<string, string | 
   return tmpl.replace(/\{(\w+)\}/g, (_, k) => (k in params ? String(params[k]) : `{${k}}`));
 }
 
-/** Pluralizace pro cs/sk (1 / 2–4 / 5+). uk dostane vlastní pravidla ve Fázi 3. */
+/** Pluralizace.
+ *  cs/sk: 1 / 2–4 / 5+.
+ *  uk (východoslovanská): one = n%10==1 & n%100!=11; few = n%10∈2..4 & n%100∉12..14;
+ *  many = zbytek (0, 5–20, x5–x9, 11–14). Tři tvary se mapují na stejné `forms`
+ *  (one = nominativ sg, few = tvar 2–4, many = genitiv pl). */
 export function plural(
-  _locale: Locale,
+  locale: Locale,
   n: number,
   forms: { one: string; few: string; many: string },
 ): string {
   const abs = Math.abs(n);
+  if (locale === 'uk') {
+    const mod10 = abs % 10;
+    const mod100 = abs % 100;
+    if (mod10 === 1 && mod100 !== 11) return forms.one;
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return forms.few;
+    return forms.many;
+  }
   if (abs === 1) return forms.one;
   if (abs >= 2 && abs <= 4) return forms.few;
   return forms.many;

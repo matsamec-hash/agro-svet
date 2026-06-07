@@ -25,3 +25,28 @@ describe('plural (cs/sk 1 / 2-4 / 5+)', () => {
     expect(plural('sk', 8, { one: 'model', few: 'modely', many: 'modelov' })).toBe('modelov');
   });
 });
+
+describe('plural — uk (východoslovanská pravidla: one / few / many s mod-100 výjimkami)', () => {
+  const f = { one: 'модель', few: 'моделі', many: 'моделей' };
+  it('one: n%10==1 & n%100!=11', () => {
+    expect(plural('uk', 1, f)).toBe('модель');
+    expect(plural('uk', 21, f)).toBe('модель');
+    expect(plural('uk', 101, f)).toBe('модель');
+  });
+  it('few: n%10 in 2..4 & n%100 not in 12..14', () => {
+    expect(plural('uk', 2, f)).toBe('моделі');
+    expect(plural('uk', 3, f)).toBe('моделі');
+    expect(plural('uk', 4, f)).toBe('моделі');
+    expect(plural('uk', 22, f)).toBe('моделі');
+    expect(plural('uk', 34, f)).toBe('моделі');
+  });
+  it('many: zbytek vč. 0, 5–20, 11–14, x5–x9', () => {
+    expect(plural('uk', 0, f)).toBe('моделей');
+    expect(plural('uk', 5, f)).toBe('моделей');
+    expect(plural('uk', 11, f)).toBe('моделей'); // n%100==11 → many i když n%10==1
+    expect(plural('uk', 12, f)).toBe('моделей');
+    expect(plural('uk', 14, f)).toBe('моделей');
+    expect(plural('uk', 25, f)).toBe('моделей');
+    expect(plural('uk', 111, f)).toBe('моделей');
+  });
+});

@@ -2,6 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import cs from '../../src/i18n/ui/cs';
 import sk from '../../src/i18n/ui/sk';
+import uk from '../../src/i18n/ui/uk';
 
 // Klíče, které MUSÍ existovat ve všech plně lokalizovaných slovnících (cs, sk).
 const REQUIRED_KEYS = [
@@ -75,5 +76,37 @@ describe('UI dictionaries — plné pokrytí', () => {
     expect(sk['header.logout']).toBe('Odhlásiť sa');
     expect(sk['cc.essentials']).toBe('Iba nevyhnutné');
     expect(sk['a11y.skipToContent']).toBe('Preskočiť na obsah');
+  });
+
+  it('uk má všechny požadované klíče a nejsou prázdné', () => {
+    for (const k of REQUIRED_KEYS) {
+      expect(uk[k], `uk chybí klíč ${k}`).toBeTruthy();
+    }
+  });
+
+  it('uk má plnou paritu klíčů s cs (žádný klíč nechybí → žádný cs fallback v UI)', () => {
+    const csKeys = Object.keys(cs);
+    const ukKeys = new Set(Object.keys(uk));
+    const missing = csKeys.filter((k) => !ukKeys.has(k));
+    expect(missing, `uk chybí ${missing.length} klíčů: ${missing.slice(0, 20).join(', ')}`).toEqual([]);
+  });
+
+  it('uk zachovává interpolační {tokeny} z cs (stejná množina na klíč)', () => {
+    const tok = (s: string) => (s.match(/\{\w+\}/g) ?? []).slice().sort();
+    const mismatches: string[] = [];
+    for (const k of Object.keys(cs)) {
+      if (!(k in uk)) continue;
+      const a = tok(cs[k]).join(',');
+      const b = tok(uk[k]).join(',');
+      if (a !== b) mismatches.push(`${k} (cs:[${a}] uk:[${b}])`);
+    }
+    expect(mismatches, mismatches.join(' | ')).toEqual([]);
+  });
+
+  it('uk se v lokalizovaných klíčích liší od cs (Cyrilice, není to kopie)', () => {
+    expect(uk['nav.animals']).toBe('Тварини');
+    expect(uk['header.logout']).toBe('Вийти');
+    expect(uk['cc.essentials']).toBe('Лише необхідні');
+    expect(uk['a11y.skipToContent']).toBe('Перейти до вмісту');
   });
 });

@@ -14,8 +14,23 @@ describe('UI dictionaries', () => {
     expect(t('uk', 'nav.machines')).toBe('Техніка');
   });
 
+  it('uk má vlastní překlad footer.rights (plná parita, žádný cs fallback)', () => {
+    expect(ui.uk['footer.rights']).toBe('Усі права захищені');
+    expect(t('uk', 'footer.rights')).not.toBe(ui.cs['footer.rights']);
+  });
+
   it('t() spadne na cs když klíč v locale chybí', () => {
-    expect(t('uk', 'footer.rights')).toBe(ui.cs['footer.rights']);
+    // Mechanismus locale→cs: simulujeme klíč přítomný jen v cs.
+    const csOnly = '__test.cs.only__';
+    const orig = ui.cs[csOnly];
+    ui.cs[csOnly] = 'jen cs';
+    try {
+      expect(t('uk', csOnly)).toBe('jen cs');
+      expect(t('sk', csOnly)).toBe('jen cs');
+    } finally {
+      if (orig === undefined) delete ui.cs[csOnly];
+      else ui.cs[csOnly] = orig;
+    }
   });
 
   it('t() vrátí klíč když chybí všude', () => {
