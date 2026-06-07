@@ -217,6 +217,46 @@ async function main() {
     count++;
   }
 
+  // Plodiny (crop pillar pages)
+  const SKUPINA_LABELS_OG = {
+    obiloviny: 'Obiloviny',
+    olejniny: 'Olejniny',
+    okopaniny: 'Okopaniny',
+    luskoviny: 'Luskoviny',
+    picniny: 'Pícniny',
+  };
+  const plodinaFiles = [];
+  for await (const f of glob('src/data/plodiny/*.yaml', { cwd: ROOT })) {
+    plodinaFiles.push(f);
+  }
+  for (const file of plodinaFiles) {
+    const raw = readFileSync(resolve(ROOT, file), 'utf8');
+    const data = parseYaml(raw);
+    const slug = data.slug;
+    const skupinaLabel = SKUPINA_LABELS_OG[data.skupina] ?? data.skupina ?? 'Plodina';
+    // Count registered varieties from the companion JSON file
+    const odrudyPath = resolve(ROOT, 'src/data/plodiny/odrudy', `${slug}.json`);
+    let odrudyCount = 0;
+    if (existsSync(odrudyPath)) {
+      try {
+        const arr = JSON.parse(readFileSync(odrudyPath, 'utf8'));
+        odrudyCount = Array.isArray(arr) ? arr.length : 0;
+      } catch { /* treat as 0 */ }
+    }
+    const footerRight = odrudyCount > 0 ? `${odrudyCount} registrovaných odrůd` : 'Pěstování · Agronomie';
+    const jsx = template({
+      kicker: skupinaLabel,
+      title: data.name,
+      subtitle: 'Plodina · Odrůdy · Pěstování',
+      accentColor: '#3D8E1B', // agro green — matches site's --green accent
+      footerLeft: 'agro-svět.cz',
+      footerRight,
+    });
+    const png = await render(jsx, fonts);
+    writeFileSync(resolve(OUT_DIR, `plodiny-${slug}.png`), png);
+    count++;
+  }
+
   // Default site OG + landing pages without a specific image
   const LANDINGS = [
     { slug: 'default', kicker: 'agro-svět', title: 'Zemědělství, technika a stroje', subtitle: 'Katalog · Magazín · Bazar', footerRight: 'agro-svet.cz' },

@@ -46,6 +46,7 @@ const list = plodina.odrudy.length > 0
 <Layout
   title={`${plodina.name} — pěstování, odrůdy, agronomie`}
   description={`${plodina.name}: výsevek, hnojení, choroby, výnos a přehled ${plodina.odrudy.length} registrovaných odrůd.`}
+  ogImage={`https://agro-svet.cz/og/plodiny-${plodina.slug}.png`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
   {howTo && <script type="application/ld+json" is:inline set:html={JSON.stringify(howTo)} />}
