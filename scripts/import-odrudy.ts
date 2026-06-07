@@ -74,8 +74,9 @@ function extractUdrzovatel(raw: Record<string, unknown>): string | null {
  * udrzovatel / typ / ranost) používané v testech a PDF fallbacku.
  */
 export function normalizeOdruda(raw: Record<string, unknown>, plodinaSlug: string): OdrudaFaktaOut {
+  // `||` (ne `??`): currentName může být prázdný řetězec → musí propadnout na proposedName.
   const name = String(
-    raw.currentName ?? raw.nazev ?? raw.name ?? raw.proposedName ?? '',
+    raw.currentName || raw.nazev || raw.name || raw.proposedName || '',
   ).trim();
 
   // rok registrace: alias rokRegistrace/rok_registrace, jinak rok z regDecisionDate

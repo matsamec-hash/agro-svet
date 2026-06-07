@@ -28,4 +28,28 @@ describe('import-odrudy — normalizace', () => {
       zdroj_url: 'https://ido.ukzuz.cz/ido/',
     });
   });
+
+  it('normalizeOdruda mapuje skutečná pole ÚKZÚZ API (currentName/regDecisionDate/subjects)', () => {
+    const raw = {
+      currentName: 'Selgen Zlaťák',
+      proposedName: 'mělo-by-se-ignorovat',
+      speciesName: 'Oves setý',
+      regDecisionDate: '2018-03-15',
+      subjects: [
+        { relationType: 1, relationName: 'Příjemce', name: 'Distributor s.r.o.' },
+        { relationType: 0, relationName: 'Udržovatel', name: 'Selgen, a.s.' },
+      ],
+    };
+    const out = normalizeOdruda(raw, 'oves');
+    expect(out.name).toBe('Selgen Zlaťák');
+    expect(out.rok_registrace).toBe(2018);
+    expect(out.udrzovatel).toBe('Selgen, a.s.');
+    expect(out.slug).toBe('selgen-zlatak');
+  });
+
+  it('normalizeOdruda použije proposedName, je-li currentName prázdný řetězec', () => {
+    const raw = { currentName: '', proposedName: 'KWS Aréna', regDecisionDate: '2020-01-01', subjects: [] };
+    const out = normalizeOdruda(raw, 'psenice');
+    expect(out.name).toBe('KWS Aréna');
+  });
 });
