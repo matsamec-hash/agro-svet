@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { fetchCityStrip } from '../../../lib/open-meteo';
+import { runtimeCache } from '../../../lib/runtime-cache';
 
 export const prerender = false;
 
@@ -7,18 +8,14 @@ const CACHE_TTL = 1800; // 30 minutes
 
 async function tryCacheGet(request: Request): Promise<Response | null> {
   try {
-    const cache = (globalThis as any).caches?.default;
-    if (!cache) return null;
-    const hit = await cache.match(request);
+    const hit = await runtimeCache.match(request);
     return hit ?? null;
   } catch { return null; }
 }
 
 async function tryCachePut(request: Request, response: Response, ctx: any) {
   try {
-    const cache = (globalThis as any).caches?.default;
-    if (!cache) return;
-    const put = cache.put(request, response.clone());
+    const put = runtimeCache.put(request, response.clone());
     if (ctx?.waitUntil) ctx.waitUntil(put);
     else await put;
   } catch { /* swallow */ }
