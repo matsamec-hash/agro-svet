@@ -305,6 +305,16 @@ describe('comparisonInsights — cs output is stable (byte-identity guard)', () 
   });
 });
 
+describe('comparisonInsights — uk variant je ukrajinština', () => {
+  it('uk tldr obsahuje cyrilici a zachovává názvy modelů', () => {
+    const a = { brand_slug: 'fendt', brand_name: 'Fendt', name: '942', power_hp: 415, category: 'traktory' } as any;
+    const b = { brand_slug: 'john-deere', brand_name: 'John Deere', name: '8R 410', power_hp: 410, category: 'traktory' } as any;
+    const out = csNew(a, b, 'uk');
+    expect(out.tldr).toMatch(/[Ѐ-ӿ]/);
+    expect(out.tldr).toContain('Fendt');
+  });
+});
+
 describe('comparisonInsights — sk variant is Slovak and fact-preserving', () => {
   it.each(PAIRS.map((p, i) => [i, p[0], p[1]] as const))(
     'pair %i produces SK output with preserved facts',
