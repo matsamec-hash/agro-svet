@@ -25,8 +25,17 @@ describe('import-odrudy — normalizace', () => {
       udrzovatel: 'Selgen, a.s.',
       typ: 'jarní',
       ranost: 'poloraná',
+      popis: null,
       zdroj_url: 'https://ido.ukzuz.cz/ido/',
     });
+  });
+
+  it('normalizeOdruda vezme popis z ÚKZÚZ pole description', () => {
+    const out = normalizeOdruda(
+      { currentName: 'Absolut', speciesName: 'Pšenice setá ozimá', regDecisionDate: '2023-01-01', description: '  Pekařská středně raná odrůda.  ' },
+      'psenice-ozima',
+    );
+    expect(out.popis).toBe('Pekařská středně raná odrůda.');
   });
 
   it('normalizeOdruda mapuje skutečná pole ÚKZÚZ API (currentName/regDecisionDate/subjects)', () => {

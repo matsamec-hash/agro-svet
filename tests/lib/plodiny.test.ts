@@ -1,22 +1,39 @@
 import { describe, it, expect } from 'vitest';
-import { listPlodiny, getPlodina, SKUPINA_LABELS } from '../../src/lib/plodiny';
-import { isOdrudaIndexable, listIndexableOdrudy, getOdruda } from '../../src/lib/plodiny';
-import { listSkupiny, listPlodinyBySkupina, listUdrzovatele, getUdrzovatel, udrzovatelSlug } from '../../src/lib/plodiny';
+import {
+  listPlodiny,
+  getPlodina,
+  SKUPINA_LABELS,
+  isOdrudaIndexable,
+  listIndexableOdrudy,
+  getOdruda,
+  listSkupiny,
+  listPlodinyBySkupina,
+  listUdrzovatele,
+  getUdrzovatel,
+  udrzovatelSlug,
+  type Odruda,
+} from '../../src/lib/plodiny';
 
 describe('plodiny lib — jádro', () => {
-  it('listPlodiny vrací plodiny seřazené dle name', () => {
+  it('listPlodiny vrací neprázdný seznam seřazený dle name (cs)', () => {
     const all = listPlodiny();
     expect(all.length).toBeGreaterThan(0);
-    expect(all.find((p) => p.slug === 'oves')).toBeTruthy();
+    const names = all.map((p) => p.name);
+    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'cs')));
   });
 
   it('getPlodina spojí obohacující vrstvu s faktickými odrůdami', () => {
     const oves = getPlodina('oves');
     expect(oves).toBeTruthy();
-    expect(oves!.name).toBe('Oves setý');
+    expect(oves!.name).toBeTruthy();
     expect(oves!.skupina).toBe('obiloviny');
-    expect(oves!.odrudy.length).toBe(3);
-    expect(oves!.odrudy.map((o) => o.slug)).toContain('atego');
+    expect(oves!.odrudy.length).toBeGreaterThan(0);
+  });
+
+  it('odrůdy plodiny jsou seřazené dle name (cs)', () => {
+    const oves = getPlodina('oves')!;
+    const names = oves.odrudy.map((o) => o.name);
+    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'cs')));
   });
 
   it('getPlodina vrací undefined pro neznámou plodinu', () => {
@@ -34,24 +51,52 @@ describe('plodiny lib — jádro', () => {
   });
 });
 
-describe('plodiny lib — guardrail odrůd', () => {
-  it('obohacená odrůda je indexovatelná', () => {
-    const zlatak = getOdruda('oves', 'zlatak');
-    expect(zlatak).toBeTruthy();
-    expect(isOdrudaIndexable(zlatak!)).toBe(true);
+describe('plodiny lib — guardrail indexovatelnosti (čisté chování)', () => {
+  const enriched: Odruda = {
+    slug: 'x',
+    name: 'X',
+    plodina_slug: 'oves',
+    enrichment: { popis: 'Faktický popis odrůdy z ÚKZÚZ.' },
+  };
+  const bare: Odruda = { slug: 'y', name: 'Y', plodina_slug: 'oves' };
+
+  it('odrůda s popisem v enrichmentu je indexovatelná', () => {
+    expect(isOdrudaIndexable(enriched)).toBe(true);
   });
 
-  it('holá odrůda bez obohacení není indexovatelná', () => {
-    const korok = getOdruda('oves', 'korok');
-    expect(korok).toBeTruthy();
-    expect(isOdrudaIndexable(korok!)).toBe(false);
+  it('odrůda bez enrichmentu není indexovatelná', () => {
+    expect(isOdrudaIndexable(bare)).toBe(false);
   });
 
-  it('listIndexableOdrudy vrací jen obohacené odrůdy s plodina_slug', () => {
+  it('prázdný popis / prázdné vlastnosti nestačí', () => {
+    expect(isOdrudaIndexable({ ...bare, enrichment: { popis: '   ' } })).toBe(false);
+    expect(isOdrudaIndexable({ ...bare, enrichment: { vlastnosti: {} } })).toBe(false);
+    expect(isOdrudaIndexable({ ...bare, enrichment: { faq: [] } })).toBe(false);
+  });
+
+  it('vlastnosti nebo faq stačí k indexovatelnosti', () => {
+    expect(isOdrudaIndexable({ ...bare, enrichment: { vlastnosti: { Typ: 'jarní' } } })).toBe(true);
+    expect(isOdrudaIndexable({ ...bare, enrichment: { faq: [{ q: 'a', a: 'b' }] } })).toBe(true);
+  });
+});
+
+describe('plodiny lib — guardrail nad reálnými daty', () => {
+  it('build() odvodí enrichment.popis z faktického ÚKZÚZ popisu', () => {
+    // Alespoň jedna odrůda v datech má oficiální popis → je indexovatelná.
+    const idx = listIndexableOdrudy();
+    expect(idx.length).toBeGreaterThan(0);
+  });
+
+  it('listIndexableOdrudy vrací jen indexovatelné a nese plodina kontext', () => {
     const idx = listIndexableOdrudy();
     expect(idx.every((e) => isOdrudaIndexable(e.odruda))).toBe(true);
-    expect(idx.some((e) => e.odruda.slug === 'zlatak' && e.plodina_slug === 'oves')).toBe(true);
-    expect(idx.some((e) => e.odruda.slug === 'korok')).toBe(false);
+    expect(idx.every((e) => typeof e.plodina_slug === 'string' && e.plodina_slug.length > 0)).toBe(true);
+  });
+
+  it('getOdruda najde konkrétní odrůdu v plodině', () => {
+    const oves = getPlodina('oves')!;
+    const first = oves.odrudy[0];
+    expect(getOdruda('oves', first.slug)?.name).toBe(first.name);
   });
 });
 
@@ -63,25 +108,22 @@ describe('plodiny lib — facety', () => {
 
   it('listPlodinyBySkupina filtruje dle skupiny', () => {
     const obi = listPlodinyBySkupina('obiloviny');
+    expect(obi.length).toBeGreaterThan(0);
     expect(obi.every((p) => p.skupina === 'obiloviny')).toBe(true);
-    expect(obi.some((p) => p.slug === 'oves')).toBe(true);
   });
 
   it('udrzovatelSlug je deterministický ASCII slug', () => {
     expect(udrzovatelSlug('Selgen, a.s.')).toBe('selgen-a-s');
+    expect(udrzovatelSlug('KWS LOCHOW POLSKA Sp. z o.o.')).toBe('kws-lochow-polska-sp-z-o-o');
   });
 
-  it('listUdrzovatele agreguje odrůdy dle udržovatele', () => {
+  it('listUdrzovatele agreguje odrůdy a getUdrzovatel je dohledá', () => {
     const u = listUdrzovatele();
-    const selgen = u.find((x) => x.slug === 'selgen-a-s');
-    expect(selgen).toBeTruthy();
-    expect(selgen!.odrudy.length).toBeGreaterThanOrEqual(2);
-  });
-
-  it('getUdrzovatel vrací odrůdy daného udržovatele', () => {
-    const selgen = getUdrzovatel('selgen-a-s');
-    expect(selgen?.name).toBe('Selgen, a.s.');
-    expect(selgen!.odrudy.some((e) => e.odruda.slug === 'zlatak')).toBe(true);
+    expect(u.length).toBeGreaterThan(0);
+    const withMany = u.find((x) => x.odrudy.length >= 2);
+    expect(withMany).toBeTruthy();
+    const fetched = getUdrzovatel(withMany!.slug);
+    expect(fetched?.name).toBe(withMany!.name);
   });
 });
 

@@ -24,6 +24,12 @@ export interface OdrudaFakta {
   udrzovatel?: string | null;
   typ?: string | null;
   ranost?: string | null;
+  /**
+   * Oficiální popis odrůdy z ÚKZÚZ (faktická agronomická próza). build() z něj
+   * odvodí enrichment.popis (pokud YAML enrichment popis nemá) → odrůda s
+   * oficiálním popisem dostane vlastní indexovanou URL bez halucinací.
+   */
+  popis?: string | null;
   zdroj_url?: string | null;
 }
 
@@ -92,6 +98,20 @@ function buildOdrudyIndex(): Record<string, OdrudaFakta[]> {
   return byPlodina;
 }
 
+/**
+ * Spojí kurátorovanou YAML enrichment vrstvu s oficiálním popisem z ÚKZÚZ.
+ * YAML má přednost; chybí-li v YAML popis, použije se faktický popis z ÚKZÚZ.
+ * Tím každá odrůda s oficiálním popisem získá enrichment (→ indexovatelnost).
+ */
+function mergeEnrichment(
+  yamlEnrichment: OdrudaEnrichment | undefined,
+  factualPopis: string | null | undefined,
+): OdrudaEnrichment | undefined {
+  const popis = factualPopis?.trim();
+  if (!popis) return yamlEnrichment;
+  return { ...(yamlEnrichment ?? {}), popis: yamlEnrichment?.popis ?? popis };
+}
+
 function build(): Plodina[] {
   if (cached) return cached;
   const odrudyIndex = buildOdrudyIndex();
@@ -103,7 +123,7 @@ function build(): Plodina[] {
     const fakta = odrudyIndex[yaml.slug] ?? [];
     const odrudy: Odruda[] = fakta.map((f) => ({
       ...f,
-      enrichment: yaml.enrichment?.[f.slug],
+      enrichment: mergeEnrichment(yaml.enrichment?.[f.slug], f.popis),
     }));
     odrudy.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
     plodiny.push({ ...yaml, odrudy });

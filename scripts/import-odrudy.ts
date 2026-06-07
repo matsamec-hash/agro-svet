@@ -27,7 +27,7 @@
  *   např.:  npx tsx scripts/import-odrudy.ts oves "Oves setý"
  * Generovaný JSON se COMMITUJE (data v repu = build bez síťové závislosti).
  */
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
 export interface OdrudaFaktaOut {
@@ -38,6 +38,12 @@ export interface OdrudaFaktaOut {
   udrzovatel: string | null;
   typ: string | null;
   ranost: string | null;
+  /**
+   * Oficiální popis odrůdy z ÚKZÚZ (pole `description`) — faktická agronomická
+   * próza (typ/ranost/odolnosti/výnos). Slouží jako enrichment bez halucinací:
+   * lib z něj v build() odvodí enrichment.popis → odrůda dostane indexovanou URL.
+   */
+  popis: string | null;
   zdroj_url: string;
 }
 
@@ -90,6 +96,9 @@ export function normalizeOdruda(raw: Record<string, unknown>, plodinaSlug: strin
     ? String(raw.udrzovatel).trim()
     : extractUdrzovatel(raw);
 
+  const popisSrc = raw.description ?? raw.popis;
+  const popis = popisSrc && String(popisSrc).trim() ? String(popisSrc).trim() : null;
+
   return {
     slug: slugifyOdruda(name),
     name,
@@ -98,6 +107,7 @@ export function normalizeOdruda(raw: Record<string, unknown>, plodinaSlug: strin
     udrzovatel,
     typ: raw.typ ? String(raw.typ).trim() : null,
     ranost: raw.ranost ? String(raw.ranost).trim() : null,
+    popis,
     zdroj_url: 'https://ido.ukzuz.cz/ido/',
   };
 }
@@ -108,8 +118,19 @@ export function normalizeOdruda(raw: Record<string, unknown>, plodinaSlug: strin
  * Bere jen REGISTROVANÉ odrůdy (regDecisionDate != null).
  */
 async function fetchRaw(ukzuzDruh: string): Promise<Record<string, unknown>[]> {
-  const base = 'https://ido.ukzuz.cz/ido/api/varieties';
   const needle = ukzuzDruh.toLowerCase();
+
+  // Lokální cache: IDO_CACHE=cesta k JSON poli všech raw záznamů (jedno stažení
+  // → generace všech plodin bez opakovaného volání ÚKZÚZ). Filtruje stejně.
+  const cachePath = process.env.IDO_CACHE;
+  if (cachePath) {
+    const arr = JSON.parse(readFileSync(cachePath, 'utf8')) as Record<string, unknown>[];
+    return arr.filter(
+      (v) => String(v.speciesName ?? '').toLowerCase().includes(needle) && v.regDecisionDate,
+    );
+  }
+
+  const base = 'https://ido.ukzuz.cz/ido/api/varieties';
   const out: Record<string, unknown>[] = [];
   let page = 1;
   let total = Infinity;
