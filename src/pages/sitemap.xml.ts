@@ -5,6 +5,7 @@ import { getAllDruhy } from '../lib/plemena';
 import { getAllFarms, regionsWithEnoughFarms } from '../lib/farmy';
 import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
 import { getAllHlemyzdi } from '../lib/hlemyzdi';
+import { listPlodiny, listIndexableOdrudy, listSkupiny, listIndexableUdrzovatele } from '../lib/plodiny';
 import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
@@ -304,6 +305,21 @@ export const GET: APIRoute = async () => {
     for (const p of d.plemena) {
       urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/${p.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
     }
+  }
+
+  // Plodiny + indexovatelné odrůdy + facety (anti-thin: jen indexovatelné)
+  urls.push({ loc: `${SITE_URL}/plodiny/`, changefreq: 'weekly', lastmod: STATIC_LASTMOD });
+  for (const p of listPlodiny()) {
+    urls.push({ loc: `${SITE_URL}/plodiny/${p.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+  for (const e of listIndexableOdrudy()) {
+    urls.push({ loc: `${SITE_URL}/plodiny/${e.plodina_slug}/${e.odruda.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+  for (const s of listSkupiny()) {
+    urls.push({ loc: `${SITE_URL}/plodiny/skupina/${s.skupina}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+  for (const u of listIndexableUdrzovatele()) {
+    urls.push({ loc: `${SITE_URL}/odrudy/udrzovatel/${u.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
   }
 
   for (const v of getAllVcely()) {
