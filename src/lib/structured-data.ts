@@ -463,6 +463,104 @@ export function itemListSchema(entries: ItemListEntry[], listName?: string) {
   return schema;
 }
 
+export interface OdrudaDatasetInput {
+  /** Název odrůdy (např. "Annie"). */
+  odrudaName: string;
+  /** Název plodiny (např. "Pšenice ozimá"). */
+  plodinaName: string;
+  /** Slug plodiny pro odkaz na pillar (isPartOf). */
+  plodinaSlug: string;
+  /** URL detailu odrůdy (absolutní nebo site-relativní). */
+  url: string;
+  /** Popis odrůdy (oficiální próza z ÚKZÚZ / enrichment). */
+  description: string;
+  udrzovatel?: string | null;
+  rokRegistrace?: number | null;
+  typ?: string | null;
+  ranost?: string | null;
+  vlastnosti?: Record<string, string | number>;
+  odolnosti?: Record<string, string | number>;
+  /** Odkaz na zdrojový záznam ÚKZÚZ. */
+  zdrojUrl?: string | null;
+}
+
+// Odrůda = záznam v databázi odrůd ÚKZÚZ → Dataset je nejpřesnější schema.org
+// typ (schema.org nemá PlantVariety). Strukturovaná agronomická pole jdou do
+// variableMeasured (PropertyValue), creator = ÚKZÚZ (autorita dat), isPartOf
+// odkazuje na kolekci odrůd plodiny. Entity-rich, validní bez Product požadavků.
+export function odrudaDatasetSchema(d: OdrudaDatasetInput) {
+  const url = d.url.startsWith('http') ? d.url : `${SITE_URL}${d.url}`;
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: `${d.odrudaName} — odrůda (${d.plodinaName})`,
+    description: d.description,
+    url,
+    inLanguage: 'cs-CZ',
+    isAccessibleForFree: true,
+    creator: {
+      '@type': 'GovernmentOrganization',
+      name: 'Ústřední kontrolní a zkušební ústav zemědělský',
+      alternateName: 'ÚKZÚZ',
+      url: 'https://www.ukzuz.cz/',
+    },
+    isPartOf: {
+      '@type': 'Dataset',
+      name: `Odrůdy plodiny ${d.plodinaName}`,
+      url: `${SITE_URL}/plodiny/${d.plodinaSlug}/`,
+    },
+  };
+
+  schema.keywords = [
+    d.odrudaName,
+    d.plodinaName,
+    'odrůda',
+    d.udrzovatel,
+    d.typ,
+    d.ranost,
+  ].filter(Boolean);
+
+  const vars: Array<Record<string, unknown>> = [];
+  if (d.rokRegistrace) vars.push({ '@type': 'PropertyValue', name: 'Rok registrace', value: d.rokRegistrace });
+  if (d.typ) vars.push({ '@type': 'PropertyValue', name: 'Typ', value: d.typ });
+  if (d.ranost) vars.push({ '@type': 'PropertyValue', name: 'Ranost', value: d.ranost });
+  if (d.udrzovatel) vars.push({ '@type': 'PropertyValue', name: 'Udržovatel', value: d.udrzovatel });
+  for (const [name, value] of Object.entries(d.vlastnosti ?? {})) {
+    vars.push({ '@type': 'PropertyValue', name, value });
+  }
+  for (const [name, value] of Object.entries(d.odolnosti ?? {})) {
+    vars.push({ '@type': 'PropertyValue', name, value });
+  }
+  if (vars.length > 0) schema.variableMeasured = vars;
+
+  if (d.zdrojUrl) schema.isBasedOn = d.zdrojUrl;
+
+  return schema;
+}
+
+/**
+ * Ořízne text na čistou hranici pro meta description — nikdy uprostřed slova.
+ * Pokud věta končí v poslední třetině limitu, ukončí na ní (bez výpustky);
+ * jinak ořízne na poslední celé slovo, odstraní koncovou interpunkci/mezeru
+ * a přidá výpustku „…". Text kratší než limit vrací beze změny.
+ */
+export function truncateAtBoundary(text: string, max = 155): string {
+  // Sjednotí vnitřní bílé znaky (ÚKZÚZ popisy mají zalomení řádků) na jednu mezeru.
+  const t = text.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const slice = t.slice(0, max);
+
+  // Preferuj ukončení na hranici věty, pokud je rozumně blízko limitu.
+  const sentenceEnd = Math.max(slice.lastIndexOf('. '), slice.lastIndexOf('! '), slice.lastIndexOf('? '));
+  if (sentenceEnd >= max * 0.6) {
+    return slice.slice(0, sentenceEnd + 1).trim();
+  }
+  // Jinak ořízni na poslední celé slovo + výpustka.
+  const lastSpace = slice.lastIndexOf(' ');
+  const base = lastSpace > 0 ? slice.slice(0, lastSpace) : slice;
+  return base.replace(/[\s.,;:–—-]+$/, '') + '…';
+}
+
 export interface FarmForSchema {
   slug: string;
   name: string;
