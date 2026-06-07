@@ -33,6 +33,12 @@ export function overlayArticle<T extends Record<string, any>>(
   return out as T;
 }
 
+/** True když překlad existuje a má neprázdný titulek — tj. článek je reálně
+ *  přeložen do daného locale, ne jen prázdný/částečný řádek. */
+export function hasTranslatedTitle(tr: ArticleTranslation | null | undefined): boolean {
+  return !!tr && typeof tr.title === 'string' && tr.title.trim() !== '';
+}
+
 /** Index translation rows by article_id for O(1) listing overlays. */
 export function buildTranslationMap(
   rows: Array<ArticleTranslation & { article_id: string }> | null | undefined,
@@ -59,4 +65,24 @@ export async function fetchArticleTranslations(
     .eq('locale', locale)
     .in('article_id', ids);
   return data ?? [];
+}
+
+/** Množina article_id, které mají neprázdný titulek překladu pro daný locale.
+ *  Slouží k omezení non-cs výpisů (hub, kategorie, téma, související) jen na
+ *  reálně přeložené články — žádný český fallback neprosakuje do /sk ani /uk.
+ *  cs → prázdná množina (volající ji ignoruje a cs cestu nechá beze změny). */
+export async function fetchTranslatedArticleIds(
+  supabase: { from: (t: string) => any },
+  locale: string,
+): Promise<Set<string>> {
+  if (locale === 'cs') return new Set();
+  const { data } = await supabase
+    .from('article_translations')
+    .select('article_id, title')
+    .eq('locale', locale);
+  const ids = new Set<string>();
+  for (const r of (data ?? []) as Array<ArticleTranslation & { article_id: string }>) {
+    if (r?.article_id && hasTranslatedTitle(r)) ids.add(r.article_id);
+  }
+  return ids;
 }

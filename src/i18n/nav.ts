@@ -18,13 +18,13 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české
- *  dotace/SZIF, česká legislativa, českým trhem rámované ceny). Vyřazují se
- *  z /sk novinek (nav, listing, kategorie, tag, related, sitemap), dokud je
- *  Fáze 2b nenahradí reálnými SK daty. cs = nic. */
+ *  dotace/SZIF, česká legislativa). Vyřazují se z /sk i /uk novinek (nav,
+ *  listing, kategorie, tag, related, sitemap). `trh` (ceny komodit) je
+ *  přeshraničně relevantní → od 2026-06 odemčen pro sk i uk. cs = nic. */
 export const HIDDEN_NEWS_CATEGORIES: Record<Locale, string[]> = {
   cs: [],
-  sk: ['dotace', 'legislativa', 'trh'],
-  uk: ['dotace', 'legislativa', 'trh'],
+  sk: ['dotace', 'legislativa'],
+  uk: ['dotace', 'legislativa'],
 };
 
 /** cs-root prefixy CZ-jurisdikčních nástrojů/dat. Po Fázi 2b balíku C jsou

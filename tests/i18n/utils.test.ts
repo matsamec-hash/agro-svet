@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  getLocaleFromUrl, stripLocale, localizePath, getAlternates, isSkLaunchedPath,
+  getLocaleFromUrl, stripLocale, localizePath, getAlternates, isSkLaunchedPath, langSwitchHref,
 } from '../../src/i18n/utils';
 
 describe('getLocaleFromUrl', () => {
@@ -65,5 +65,34 @@ describe('isSkLaunchedPath — kalkulačky (Fáze 2b launch)', () => {
   it('/dotace je SK-launched', () => {
     expect(isSkLaunchedPath('/dotace')).toBe(true);
     expect(isSkLaunchedPath('/dotace/investice')).toBe(true);
+  });
+});
+
+describe('langSwitchHref', () => {
+  const hidden = ['dotace', 'legislativa'];
+
+  it('cs cíl vrací cestu beze změny', () => {
+    expect(langSwitchHref('cs', '/novinky/kategorie/dotace/', hidden)).toBe('/novinky/kategorie/dotace/');
+  });
+
+  it('skrytá SK kategorie → SK novinky hub místo 404', () => {
+    expect(langSwitchHref('sk', '/novinky/kategorie/dotace/', hidden)).toBe('/sk/novinky/');
+    expect(langSwitchHref('sk', '/novinky/kategorie/legislativa/', hidden)).toBe('/sk/novinky/');
+  });
+
+  it('odemčená kategorie (trh) → normální /sk cesta', () => {
+    expect(langSwitchHref('sk', '/novinky/kategorie/trh/', hidden)).toBe('/sk/novinky/kategorie/trh/');
+  });
+
+  it('launchnutá ne-novinková sekce → /sk cesta', () => {
+    expect(langSwitchHref('sk', '/stroje/traktory/', hidden)).toBe('/sk/stroje/traktory/');
+  });
+
+  it('nelaunchnutá sekce (bazar) → SK home místo 404', () => {
+    expect(langSwitchHref('sk', '/bazar/', hidden)).toBe('/sk/');
+  });
+
+  it('home → SK home', () => {
+    expect(langSwitchHref('sk', '/', hidden)).toBe('/sk/');
   });
 });

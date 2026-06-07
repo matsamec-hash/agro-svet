@@ -8,7 +8,7 @@ import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, categoryStyle, getTagColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
 import { breadcrumbSchema } from '../../../../lib/structured-data';
-import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../../../lib/articles-i18n';
+import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../../../lib/articles-i18n';
 import { localizePath, t, localizedCategory } from '../../../../i18n/utils';
 import { HIDDEN_NEWS_CATEGORIES } from '../../../../i18n/nav';
 
@@ -19,16 +19,24 @@ const hiddenCats = HIDDEN_NEWS_CATEGORIES[locale];
 
 const supabase = createAnonClient();
 
-let articlesQuery = supabase
-  .from('articles')
-  .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published')
-  .contains('tags', [tag])
-  .order('published_at', { ascending: false });
-// Jurisdikčně uzamčené kategorie (CZ dotace/legislativa/trh) se pod /sk nezobrazují.
-if (hiddenCats.length) articlesQuery = articlesQuery.not('category', 'in', `(${hiddenCats.join(',')})`);
-const { data: articles } = await articlesQuery;
+// Non-cs: jen reálně přeložené články (žádný český fallback ve výpisu tématu).
+const translatedIds = locale !== 'cs' ? await fetchTranslatedArticleIds(supabase, locale) : null;
+const noTranslated = translatedIds !== null && translatedIds.size === 0;
+
+let articles: any[] | null = null;
+if (!noTranslated) {
+  let articlesQuery = supabase
+    .from('articles')
+    .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .contains('tags', [tag])
+    .order('published_at', { ascending: false });
+  // Jurisdikčně uzamčené kategorie (CZ dotace/legislativa) se pod /sk nezobrazují.
+  if (hiddenCats.length) articlesQuery = articlesQuery.not('category', 'in', `(${hiddenCats.join(',')})`);
+  if (translatedIds) articlesQuery = articlesQuery.in('id', [...translatedIds]);
+  articles = (await articlesQuery).data;
+}
 
 let items = articles ?? [];
 if (locale !== 'cs' && items.length) {

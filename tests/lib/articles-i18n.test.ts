@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { overlayArticle, buildTranslationMap } from '../../src/lib/articles-i18n';
+import { overlayArticle, buildTranslationMap, hasTranslatedTitle, fetchTranslatedArticleIds } from '../../src/lib/articles-i18n';
 
 describe('overlayArticle', () => {
   const cs = {
@@ -44,5 +44,50 @@ describe('buildTranslationMap', () => {
   it('returns an empty map for null/empty input', () => {
     expect(buildTranslationMap(null).size).toBe(0);
     expect(buildTranslationMap([]).size).toBe(0);
+  });
+});
+
+describe('hasTranslatedTitle', () => {
+  it('true jen pro neprázdný titulek', () => {
+    expect(hasTranslatedTitle({ title: 'SK titul' })).toBe(true);
+    expect(hasTranslatedTitle({ title: '   ' })).toBe(false);
+    expect(hasTranslatedTitle({ title: '' })).toBe(false);
+    expect(hasTranslatedTitle({ title: null })).toBe(false);
+    expect(hasTranslatedTitle({ perex: 'jen perex' })).toBe(false);
+    expect(hasTranslatedTitle(null)).toBe(false);
+    expect(hasTranslatedTitle(undefined)).toBe(false);
+  });
+});
+
+describe('fetchTranslatedArticleIds', () => {
+  const stub = (rows: any[]) => ({
+    from: () => ({
+      select: () => ({
+        eq: () => Promise.resolve({ data: rows }),
+      }),
+    }),
+  });
+
+  it('cs → prázdná množina bez dotazu', async () => {
+    const ids = await fetchTranslatedArticleIds(stub([{ article_id: 'a1', title: 'X' }]) as any, 'cs');
+    expect(ids.size).toBe(0);
+  });
+
+  it('vrátí jen id s neprázdným titulkem', async () => {
+    const ids = await fetchTranslatedArticleIds(
+      stub([
+        { article_id: 'a1', title: 'SK titul' },
+        { article_id: 'a2', title: '   ' },
+        { article_id: 'a3', title: null },
+        { article_id: 'a4', title: 'SK 4' },
+      ]) as any,
+      'sk',
+    );
+    expect([...ids].sort()).toEqual(['a1', 'a4']);
+  });
+
+  it('prázdná data → prázdná množina', async () => {
+    const ids = await fetchTranslatedArticleIds(stub([]) as any, 'sk');
+    expect(ids.size).toBe(0);
   });
 });

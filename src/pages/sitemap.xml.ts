@@ -11,7 +11,7 @@ import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath } from '../i18n/utils';
-import { isLockedSectionPath } from '../i18n/nav';
+import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
@@ -394,11 +394,19 @@ export const GET: APIRoute = async () => {
   // rovnaké cesty pre cs aj sk, tie sa mirrorujú normálne.
   const isDotaceDetailPath = (p: string) =>
     p.startsWith('/dotace/') && p !== '/dotace/' && p !== '/dotace/kalendar-kol/';
+  // /sk-skryté novinkové kategorie (jurisdikčně uzamčené: dotace, legislativa)
+  // pod /sk 404-ují → nezrcadlit do /sk sitemapy.
+  const skHiddenCatMatch = /^\/novinky\/kategorie\/([^/]+)\//;
+  const isSkHiddenCategoryPath = (p: string) => {
+    const m = p.match(skHiddenCatMatch);
+    return !!m && HIDDEN_NEWS_CATEGORIES.sk.includes(m[1]);
+  };
   const skMirror: UrlEntry[] = urls
     .filter((u) => {
       if (!u.loc.startsWith(SITE_URL)) return false;
       const p = u.loc.slice(SITE_URL.length);
       if (isDotaceDetailPath(p)) return false;
+      if (isSkHiddenCategoryPath(p)) return false;
       // Lock přebíjí launch: zamčené pod-cesty (/kalkulacka/dotace-cap) nezrcadlit
       // do /sk sitemapy — na produkci 307-ují na cs.
       return isSkLaunchedPath(p) && !isLockedSectionPath(p);

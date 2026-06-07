@@ -9,7 +9,7 @@ import { getAllBrands } from '../../lib/stroje';
 import { getAllPlemena } from '../../lib/plemena';
 import { imgSrcset } from '../../lib/image-variants';
 import { ORG_ID, WEBSITE_ID } from '../../lib/structured-data';
-import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../lib/articles-i18n';
+import { fetchArticleTranslations, overlayArticle, buildTranslationMap, hasTranslatedTitle } from '../../lib/articles-i18n';
 import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
 import { HIDDEN_NEWS_CATEGORIES, isNewsCategoryHidden } from '../../i18n/nav';
 
@@ -78,7 +78,11 @@ if (locale !== 'cs') {
   );
 }
 const article = overlayArticle(articleRaw, trMap.get(articleRaw.id));
-const pool = poolRaw.map((p) => overlayArticle(p, trMap.get(p.id)));
+// Non-cs: do related/prev/next poolu jen reálně přeložené články (žádný český
+// fallback v sekcích pod /sk ani /uk). cs → ponech vše (pool beze změny).
+const pool = poolRaw
+  .filter((p) => locale === 'cs' || hasTranslatedTitle(trMap.get(p.id)))
+  .map((p) => overlayArticle(p, trMap.get(p.id)));
 
 const articleTags: string[] = (article.tags as string[] | null) ?? [];
 function scoreRelated(other: typeof pool[number]): number {

@@ -5,7 +5,7 @@ import BazarPagination from '../../components/bazar/BazarPagination.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { categoryStyle, tagStyle } from '../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
-import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../lib/articles-i18n';
+import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../lib/articles-i18n';
 import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
 import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
 
@@ -24,41 +24,58 @@ const dateTo = Astro.url.searchParams.get('do') ?? '';
 const tag = Astro.url.searchParams.get('tag') ?? '';
 const page = Math.max(1, parseInt(Astro.url.searchParams.get('page') ?? '1'));
 
-let q = supabase
-  .from('articles')
-  .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at', { count: 'exact' })
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published')
-  .order('published_at', { ascending: false })
-  .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
+// Non-cs: výpis omezíme jen na reálně přeložené články (žádný český fallback
+// neprosakuje do /sk ani /uk). Prázdná množina → prázdný výpis (bez DB dotazu).
+const translatedIds = locale !== 'cs' ? await fetchTranslatedArticleIds(supabase, locale) : null;
+const translatedIdList = translatedIds ? [...translatedIds] : null;
+const noTranslated = translatedIds !== null && translatedIds.size === 0;
 
-if (hiddenCatsFilter) q = q.not('category', 'in', hiddenCatsFilter);
-if (category) q = q.eq('category', category);
-if (query) q = q.or(`title.ilike.%${query}%,perex.ilike.%${query}%`);
-if (dateFrom) q = q.gte('published_at', dateFrom);
-if (dateTo) {
-  const end = new Date(dateTo);
-  end.setHours(23, 59, 59, 999);
-  q = q.lte('published_at', end.toISOString());
+let articles: any[] | null = null;
+let count = 0;
+let allForMeta: Array<{ category: string | null; tags: string[] | null }> | null = null;
+
+if (!noTranslated) {
+  let q = supabase
+    .from('articles')
+    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at', { count: 'exact' })
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
+
+  if (hiddenCatsFilter) q = q.not('category', 'in', hiddenCatsFilter);
+  if (translatedIdList) q = q.in('id', translatedIdList);
+  if (category) q = q.eq('category', category);
+  if (query) q = q.or(`title.ilike.%${query}%,perex.ilike.%${query}%`);
+  if (dateFrom) q = q.gte('published_at', dateFrom);
+  if (dateTo) {
+    const end = new Date(dateTo);
+    end.setHours(23, 59, 59, 999);
+    q = q.lte('published_at', end.toISOString());
+  }
+  if (tag) q = q.contains('tags', [tag]);
+
+  const res = await q;
+  articles = res.data;
+  count = res.count ?? 0;
+
+  // Category counts (across all visible articles) + available tags
+  let metaQuery = supabase
+    .from('articles')
+    .select('category, tags')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published');
+  if (hiddenCatsFilter) metaQuery = metaQuery.not('category', 'in', hiddenCatsFilter);
+  if (translatedIdList) metaQuery = metaQuery.in('id', translatedIdList);
+  allForMeta = (await metaQuery).data;
 }
-if (tag) q = q.contains('tags', [tag]);
 
-const { data: articles, count } = await q;
 let sorted = articles ?? [];
 if (locale !== 'cs' && sorted.length) {
   const trMap = buildTranslationMap(await fetchArticleTranslations(supabase, sorted.map((a) => a.id), locale));
   sorted = sorted.map((a) => overlayArticle(a, trMap.get(a.id)));
 }
 const totalPages = Math.ceil((count ?? 0) / PER_PAGE);
-
-// Category counts (across all articles) + available tags
-let metaQuery = supabase
-  .from('articles')
-  .select('category, tags')
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published');
-if (hiddenCatsFilter) metaQuery = metaQuery.not('category', 'in', hiddenCatsFilter);
-const { data: allForMeta } = await metaQuery;
 
 const catCounts = new Map<string, number>();
 const tagCounts = new Map<string, number>();

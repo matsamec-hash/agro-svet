@@ -52,6 +52,22 @@ export function navHref(locale: Locale, href: string): string {
   return href;
 }
 
+/** Cílová cesta přepínače jazyka. Když cílový locale danou cs-cestu nemá
+ *  (skrytá novinková kategorie, nelaunchnutá sekce nebo prerendered-pod-/sk
+ *  cesta), spadne na lokalizovaný hub místo 404 — uživatel reálně přepne jazyk
+ *  místo přistání na chybě. cs je kanonické → vrací cestu beze změny.
+ *  `hiddenNewsCats` = skryté novinkové kategorie cílového locale. */
+export function langSwitchHref(target: Locale, path: string, hiddenNewsCats: string[]): string {
+  if (target === defaultLocale) return localizePath(target, path);
+  const catMatch = path.match(/^\/novinky\/kategorie\/([^/]+)\/?$/);
+  if (catMatch && hiddenNewsCats.includes(catMatch[1])) return localizePath(target, '/novinky/');
+  const root = path.replace(/\/+$/, '') || '/';
+  if (root !== '/' && (!isSkLaunchedPath(root) || SK_PRERENDERED_NAV_PATHS.includes(root))) {
+    return localizePath(target, '/');
+  }
+  return localizePath(target, path);
+}
+
 /** Hreflang alternates pro daný pathname (přijímá i lokalizovaný). */
 export function getAlternates(pathname: string): { hreflang: string; href: string }[] {
   const { path } = stripLocale(pathname);

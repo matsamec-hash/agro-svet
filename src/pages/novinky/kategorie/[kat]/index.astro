@@ -8,7 +8,7 @@ import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, getCategoryColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
 import { breadcrumbSchema } from '../../../../lib/structured-data';
-import { fetchArticleTranslations, overlayArticle, buildTranslationMap } from '../../../../lib/articles-i18n';
+import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../../../lib/articles-i18n';
 import { localizePath, t, localizedCategory } from '../../../../i18n/utils';
 import { isNewsCategoryHidden } from '../../../../i18n/nav';
 
@@ -47,13 +47,22 @@ const breadcrumbJsonLd = breadcrumbSchema([
 
 const supabase = createAnonClient();
 
-const { data: articles } = await supabase
-  .from('articles')
-  .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published')
-  .eq('category', kat)
-  .order('published_at', { ascending: false });
+// Non-cs: jen reálně přeložené články (žádný český fallback ve výpisu kategorie).
+const translatedIds = locale !== 'cs' ? await fetchTranslatedArticleIds(supabase, locale) : null;
+const noTranslated = translatedIds !== null && translatedIds.size === 0;
+
+let articles: any[] | null = null;
+if (!noTranslated) {
+  let q = supabase
+    .from('articles')
+    .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .eq('category', kat)
+    .order('published_at', { ascending: false });
+  if (translatedIds) q = q.in('id', [...translatedIds]);
+  articles = (await q).data;
+}
 
 let items = articles ?? [];
 if (locale !== 'cs' && items.length) {
