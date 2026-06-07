@@ -85,7 +85,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     { id: thirdPlaceEntryId, place: 3, prize: round.prize_third ?? null },
   ];
 
-  const apiKey = getEnvVar('RESEND_API_KEY');
+  const apiKey = getEnvVar('RESEND_API_KEY') ?? '';
   for (const p of placements) {
     if (!p.id) continue;
     const entry = entriesById.get(p.id);
