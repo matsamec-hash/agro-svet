@@ -8,7 +8,7 @@
 // Auth: middleware gates /admin/* globally. The handler re-checks
 // is_admin as a defence-in-depth measure.
 import type { APIRoute } from 'astro';
-import { env } from 'cloudflare:workers';
+import { getEnvVar } from '../../../../lib/env';
 import { createServerClient } from '../../../../lib/supabase';
 import { sendContestEmail } from '../../../../lib/contest-email';
 
@@ -85,7 +85,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     { id: thirdPlaceEntryId, place: 3, prize: round.prize_third ?? null },
   ];
 
-  const apiKey = (env as any).RESEND_API_KEY;
+  const apiKey = getEnvVar('RESEND_API_KEY');
   for (const p of placements) {
     if (!p.id) continue;
     const entry = entriesById.get(p.id);
