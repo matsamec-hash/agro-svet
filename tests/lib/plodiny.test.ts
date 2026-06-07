@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { listPlodiny, getPlodina, SKUPINA_LABELS } from '../../src/lib/plodiny';
+import { isOdrudaIndexable, listIndexableOdrudy, getOdruda } from '../../src/lib/plodiny';
 
 describe('plodiny lib — jádro', () => {
   it('listPlodiny vrací plodiny seřazené dle name', () => {
@@ -29,5 +30,26 @@ describe('plodiny lib — jádro', () => {
     for (const p of listPlodiny()) {
       expect(SKUPINA_LABELS[p.skupina]).toBeTruthy();
     }
+  });
+});
+
+describe('plodiny lib — guardrail odrůd', () => {
+  it('obohacená odrůda je indexovatelná', () => {
+    const zlatak = getOdruda('oves', 'zlatak');
+    expect(zlatak).toBeTruthy();
+    expect(isOdrudaIndexable(zlatak!)).toBe(true);
+  });
+
+  it('holá odrůda bez obohacení není indexovatelná', () => {
+    const korok = getOdruda('oves', 'korok');
+    expect(korok).toBeTruthy();
+    expect(isOdrudaIndexable(korok!)).toBe(false);
+  });
+
+  it('listIndexableOdrudy vrací jen obohacené odrůdy s plodina_slug', () => {
+    const idx = listIndexableOdrudy();
+    expect(idx.every((e) => isOdrudaIndexable(e.odruda))).toBe(true);
+    expect(idx.some((e) => e.odruda.slug === 'zlatak' && e.plodina_slug === 'oves')).toBe(true);
+    expect(idx.some((e) => e.odruda.slug === 'korok')).toBe(false);
   });
 });

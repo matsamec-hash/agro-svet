@@ -120,3 +120,41 @@ export function listPlodiny(): Plodina[] {
 export function getPlodina(slug: string): Plodina | undefined {
   return build().find((p) => p.slug === slug);
 }
+
+/**
+ * Odrůda dostane vlastní indexovanou URL jen když má obohacení (popis / FAQ /
+ * vlastnosti). Holé odrůdy z ÚKZÚZ žijí pouze jako řádek v tabulce na stránce
+ * plodiny — žádné tenké duplikátní URL. Anti-thin guardrail.
+ */
+export function isOdrudaIndexable(o: Odruda): boolean {
+  const e = o.enrichment;
+  if (!e) return false;
+  return Boolean(
+    (e.popis && e.popis.trim().length > 0) ||
+      (e.faq && e.faq.length > 0) ||
+      (e.vlastnosti && Object.keys(e.vlastnosti).length > 0) ||
+      (e.body && e.body.trim().length > 0),
+  );
+}
+
+export function getOdruda(plodinaSlug: string, odrudaSlug: string): Odruda | undefined {
+  return getPlodina(plodinaSlug)?.odrudy.find((o) => o.slug === odrudaSlug);
+}
+
+export interface IndexableOdrudaEntry {
+  plodina_slug: string;
+  plodina_name: string;
+  odruda: Odruda;
+}
+
+export function listIndexableOdrudy(): IndexableOdrudaEntry[] {
+  const out: IndexableOdrudaEntry[] = [];
+  for (const p of build()) {
+    for (const o of p.odrudy) {
+      if (isOdrudaIndexable(o)) {
+        out.push({ plodina_slug: p.slug, plodina_name: p.name, odruda: o });
+      }
+    }
+  }
+  return out;
+}
