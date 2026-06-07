@@ -3,7 +3,7 @@ export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { listPlodiny, getPlodina, isOdrudaIndexable, SKUPINA_LABELS } from '../../../lib/plodiny';
 import { chorobaChipsForPlodina } from '../../../lib/choroby';
-import { breadcrumbSchema, howToSchema, faqPageSchema, itemListSchema } from '../../../lib/structured-data';
+import { breadcrumbSchema, howToSchema, faqPageSchema, itemListSchema, imageObjectSchema } from '../../../lib/structured-data';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
 
 export async function getStaticPaths() {
@@ -32,6 +32,15 @@ const howTo = plodina.osevni_postup && plodina.osevni_postup.length > 0
   : null;
 const faq = plodina.faq && plodina.faq.length > 0 ? faqPageSchema(plodina.faq) : null;
 const chorobaChips = chorobaChipsForPlodina(plodina.slug);
+const heroImageSchema = plodina.hero_image
+  ? imageObjectSchema({
+      contentUrl: plodina.hero_image,
+      author: plodina.hero_author || undefined,
+      license: plodina.hero_license,
+      acquireLicensePage: plodina.hero_source,
+      representativeOfPage: true,
+    })
+  : null;
 const list = plodina.odrudy.length > 0
   ? itemListSchema(
       plodina.odrudy.map((o) => ({
@@ -52,6 +61,7 @@ const list = plodina.odrudy.length > 0
   {howTo && <script type="application/ld+json" is:inline set:html={JSON.stringify(howTo)} />}
   {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
   {list && <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />}
+  {heroImageSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(heroImageSchema)} />}
 
   <div class="pl-detail">
 
@@ -93,9 +103,30 @@ const list = plodina.odrudy.length > 0
         </div>
       </div>
       <div class="hero-right">
-        <div class="hero-emoji-tile" aria-hidden="true">🌾</div>
+        {plodina.hero_image ? (
+          <img
+            src={plodina.hero_image}
+            alt={`Plodina ${plodina.name}`}
+            width="280"
+            height="210"
+            loading="eager"
+            decoding="async"
+            class="hero-photo"
+          />
+        ) : (
+          <div class="hero-emoji-tile" aria-hidden="true">🌾</div>
+        )}
       </div>
     </section>
+
+    {plodina.hero_image && (
+      <p class="hero-attribution">
+        {plodina.hero_author
+          ? <>Foto: {plodina.hero_author}, {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
+          : <>Ilustrace: volné dílo (public domain), <a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a></>
+        }
+      </p>
+    )}
 
     {(plodina.vysevek || plodina.hnojeni || plodina.vynos_t_ha || plodina.sklizen || plodina.vyuziti) && (
       <section class="card-section agro-facts">
@@ -266,6 +297,17 @@ const list = plodina.odrudy.length > 0
   .pl-detail .hero-stats .l { font-size: 12.5px; color: #B2C9A8; }
   .pl-detail .hero-right { flex-shrink: 0; }
   .pl-detail .hero-emoji-tile { font-size: 92px; line-height: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,.4)); }
+  .pl-detail .hero-photo {
+    width: 280px; height: 210px; object-fit: cover;
+    border-radius: var(--r-lg); display: block;
+    box-shadow: 0 8px 32px rgba(0,0,0,.45);
+  }
+  .pl-detail .hero-attribution {
+    font-size: 11.5px; color: var(--muted-2); margin: -18px 0 20px;
+    padding: 0 4px; line-height: 1.5;
+  }
+  .pl-detail .hero-attribution a { color: var(--muted); text-decoration: underline; }
+  .pl-detail .hero-attribution a:hover { color: #000; }
   .pl-detail .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
   .pl-detail .cta-back {
     display: inline-flex; align-items: center; gap: 8px;

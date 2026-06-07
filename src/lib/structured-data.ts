@@ -538,6 +538,45 @@ export function odrudaDatasetSchema(d: OdrudaDatasetInput) {
   return schema;
 }
 
+export interface ImageObjectInput {
+  /** Absolutní nebo site-relativní cesta k obrázku (např. /images/plodiny/oves.jpg). */
+  contentUrl: string;
+  /** Jméno autora / fotografa. Může být prázdné u Public domain. */
+  author?: string;
+  /** Textový popis licence, např. "Public domain" nebo "CC BY-SA 3.0". */
+  license?: string;
+  /** URL na zdrojovou stránku (Wikimedia Commons soubor). */
+  acquireLicensePage?: string;
+  /** Pokud true, přidá representativeOfPage: true. */
+  representativeOfPage?: boolean;
+}
+
+/**
+ * schema.org ImageObject pro hero obrázky s open-source licencí.
+ * Emituje creditText/author/license/acquireLicensePage pro správnou atribuci.
+ */
+export function imageObjectSchema(img: ImageObjectInput) {
+  const contentUrl = img.contentUrl.startsWith('http')
+    ? img.contentUrl
+    : `${SITE_URL}${img.contentUrl}`;
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'ImageObject',
+    contentUrl,
+  };
+  if (img.author) {
+    schema.creditText = img.author;
+    schema.author = { '@type': 'Person', name: img.author };
+  }
+  if (img.license) {
+    schema.copyrightNotice = img.license;
+    // acquireLicensePage = zdrojový soubor (Wikimedia Commons)
+    if (img.acquireLicensePage) schema.acquireLicensePage = img.acquireLicensePage;
+  }
+  if (img.representativeOfPage) schema.representativeOfPage = true;
+  return schema;
+}
+
 /**
  * Ořízne text na čistou hranici pro meta description — nikdy uprostřed slova.
  * Pokud věta končí v poslední třetině limitu, ukončí na ní (bez výpustky);
