@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   getLocaleFromUrl, stripLocale, localizePath, getAlternates, isSkLaunchedPath, langSwitchHref,
+  isLaunchedPath, LAUNCHED_PREFIXES,
 } from '../../src/i18n/utils';
 
 describe('getLocaleFromUrl', () => {
@@ -65,6 +66,21 @@ describe('isSkLaunchedPath — kalkulačky (Fáze 2b launch)', () => {
   it('/dotace je SK-launched', () => {
     expect(isSkLaunchedPath('/dotace')).toBe(true);
     expect(isSkLaunchedPath('/dotace/investice')).toBe(true);
+  });
+});
+
+describe('isLaunchedPath (per-locale)', () => {
+  it('cs nemá nic launchnuto (default bez prefixu)', () => {
+    expect(LAUNCHED_PREFIXES.cs).toEqual([]);
+    expect(isLaunchedPath('cs', '/stroje/')).toBe(false);
+  });
+  it('sk = zachované chování isSkLaunchedPath', () => {
+    expect(isLaunchedPath('sk', '/stroje/')).toBe(isSkLaunchedPath('/stroje/'));
+    expect(isLaunchedPath('sk', '/stroje/john-deere/')).toBe(true);
+    expect(isLaunchedPath('sk', '/bazar/')).toBe(false);
+  });
+  it('isSkLaunchedPath je tenký alias na isLaunchedPath("sk", …)', () => {
+    expect(isSkLaunchedPath('/znacky/')).toBe(isLaunchedPath('sk', '/znacky/'));
   });
 });
 
