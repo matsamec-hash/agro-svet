@@ -121,9 +121,11 @@ const list = plodina.odrudy.length > 0
 
     {plodina.hero_image && (
       <p class="hero-attribution">
-        {plodina.hero_author
-          ? <>Foto: {plodina.hero_author}, {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
-          : <>Ilustrace: volné dílo (public domain), <a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a></>
+        {plodina.hero_license === 'Public domain' && !plodina.hero_author
+          ? <>Ilustrace: volné dílo (public domain), <a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a></>
+          : plodina.hero_author
+            ? <>Foto: {plodina.hero_author}, {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
+            : <>Foto: {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
         }
       </p>
     )}
