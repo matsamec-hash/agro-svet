@@ -113,15 +113,21 @@ describe('langSwitchHref', () => {
   });
 });
 
-describe('navHref/langSwitchHref per-locale (uk před launchem)', () => {
-  it('uk: nelaunchnutá sekce zůstává na cs href (žádný /uk prefix)', () => {
-    // LAUNCHED_PREFIXES.uk je zatím [] → /stroje není pro uk launchnuté
-    expect(navHref('uk', '/stroje/')).toBe('/stroje/');
+describe('navHref/langSwitchHref per-locale (uk po launchi fáze 2)', () => {
+  it('uk: nelaunchnutá sekce (jurisdikční data) zůstává na cs href (žádný /uk prefix)', () => {
+    // /dotace není pro uk launchnuté (jurisdikční data) → drží se na cs
+    expect(navHref('uk', '/dotace/')).toBe('/dotace/');
+  });
+  it('uk: launchnutá sekce dostane /uk prefix', () => {
+    expect(navHref('uk', '/stroje/')).toBe('/uk/stroje/');
   });
   it('sk: launchnutá sekce dostane /sk prefix (beze změny)', () => {
     expect(navHref('sk', '/stroje/')).toBe('/sk/stroje/');
   });
   it('langSwitchHref uk: nelaunchnutá sekce → uk hub', () => {
-    expect(langSwitchHref('uk', '/stroje/', [])).toBe('/uk/');
+    expect(langSwitchHref('uk', '/dotace/', [])).toBe('/uk/');
+  });
+  it('langSwitchHref uk: launchnutá sekce → /uk/<sekce>', () => {
+    expect(langSwitchHref('uk', '/stroje/', [])).toBe('/uk/stroje/');
   });
 });
