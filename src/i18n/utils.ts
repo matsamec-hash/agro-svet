@@ -59,7 +59,7 @@ export function navHref(locale: Locale, href: string): string {
   if (locale === defaultLocale) return href;
   const root = href.replace(/\/+$/, '') || '/';
   if (root === '/') return localizePath(locale, href);
-  if (isSkLaunchedPath(root) && !SK_PRERENDERED_NAV_PATHS.includes(root)) return localizePath(locale, href);
+  if (isLaunchedPath(locale, root) && !SK_PRERENDERED_NAV_PATHS.includes(root)) return localizePath(locale, href);
   return href;
 }
 
@@ -73,7 +73,7 @@ export function langSwitchHref(target: Locale, path: string, hiddenNewsCats: str
   const catMatch = path.match(/^\/novinky\/kategorie\/([^/]+)\/?$/);
   if (catMatch && hiddenNewsCats.includes(catMatch[1])) return localizePath(target, '/novinky/');
   const root = path.replace(/\/+$/, '') || '/';
-  if (root !== '/' && (!isSkLaunchedPath(root) || SK_PRERENDERED_NAV_PATHS.includes(root))) {
+  if (root !== '/' && (!isLaunchedPath(target, root) || SK_PRERENDERED_NAV_PATHS.includes(root))) {
     return localizePath(target, '/');
   }
   return localizePath(target, path);

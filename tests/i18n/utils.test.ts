@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   getLocaleFromUrl, stripLocale, localizePath, getAlternates, isSkLaunchedPath, langSwitchHref,
-  isLaunchedPath, LAUNCHED_PREFIXES,
+  isLaunchedPath, LAUNCHED_PREFIXES, navHref,
 } from '../../src/i18n/utils';
 
 describe('getLocaleFromUrl', () => {
@@ -110,5 +110,18 @@ describe('langSwitchHref', () => {
 
   it('home → SK home', () => {
     expect(langSwitchHref('sk', '/', hidden)).toBe('/sk/');
+  });
+});
+
+describe('navHref/langSwitchHref per-locale (uk před launchem)', () => {
+  it('uk: nelaunchnutá sekce zůstává na cs href (žádný /uk prefix)', () => {
+    // LAUNCHED_PREFIXES.uk je zatím [] → /stroje není pro uk launchnuté
+    expect(navHref('uk', '/stroje/')).toBe('/stroje/');
+  });
+  it('sk: launchnutá sekce dostane /sk prefix (beze změny)', () => {
+    expect(navHref('sk', '/stroje/')).toBe('/sk/stroje/');
+  });
+  it('langSwitchHref uk: nelaunchnutá sekce → uk hub', () => {
+    expect(langSwitchHref('uk', '/stroje/', [])).toBe('/uk/');
   });
 });
