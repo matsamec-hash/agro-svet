@@ -69,6 +69,10 @@ export interface PlodinaYaml {
   body?: string;
   faq?: { q: string; a: string }[];
   enrichment?: Record<string, OdrudaEnrichment>;
+  hero_image?: string;    // /images/plodiny/<slug>.jpg
+  hero_author?: string;   // může být prázdné u PD
+  hero_license?: string;  // "Public domain" | "CC BY-SA 3.0" | ...
+  hero_source?: string;   // URL na Wikimedia Commons soubor
 }
 
 /** Plodina spojená s odrůdami — to, co konzumují stránky. */
