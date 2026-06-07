@@ -4,5 +4,6 @@ const uk: Record<string, string> = {
   'nav.machines': 'Техніка',
   'nav.tema.akce': 'Календар подій',
   'nav.tema.plodiny': 'Рослини та сорти',
+  'nav.tema.choroby': 'Хвороби та шкідники',
 };
 export default uk;

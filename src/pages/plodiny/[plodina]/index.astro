@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { listPlodiny, getPlodina, isOdrudaIndexable, SKUPINA_LABELS } from '../../../lib/plodiny';
+import { chorobaChipsForPlodina } from '../../../lib/choroby';
 import { breadcrumbSchema, howToSchema, faqPageSchema, itemListSchema } from '../../../lib/structured-data';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
 
@@ -30,6 +31,7 @@ const howTo = plodina.osevni_postup && plodina.osevni_postup.length > 0
     })
   : null;
 const faq = plodina.faq && plodina.faq.length > 0 ? faqPageSchema(plodina.faq) : null;
+const chorobaChips = chorobaChipsForPlodina(plodina.slug);
 const list = plodina.odrudy.length > 0
   ? itemListSchema(
       plodina.odrudy.map((o) => ({
@@ -149,12 +151,14 @@ const list = plodina.odrudy.length > 0
       </section>
     )}
 
-    {plodina.choroby && plodina.choroby.length > 0 && (
+    {chorobaChips.length > 0 && (
       <section class="card-section">
         <h2 class="section-title">Choroby a škůdci</h2>
         <ul class="tag-list">
-          {plodina.choroby.map((c) => (
-            <li class="tag-item">{c}</li>
+          {chorobaChips.map((c) => (
+            c.slug
+              ? <li class="tag-item"><a href={`/choroby/${c.slug}/`}>{c.chip}</a></li>
+              : <li class="tag-item">{c.chip}</li>
           ))}
         </ul>
       </section>
@@ -334,6 +338,10 @@ const list = plodina.odrudy.length > 0
     color: #7a2a10; background: #fdf0ec; border: 1px solid #f5c6b8;
     padding: 5px 12px; border-radius: 999px;
   }
+  .pl-detail .tag-item a { color: inherit; text-decoration: none; }
+  .pl-detail .tag-item:has(a) { transition: .15s; }
+  .pl-detail .tag-item:has(a):hover { background: #fbe2da; border-color: #ec9f88; }
+  .pl-detail .tag-item a:hover { text-decoration: underline; }
 
   /* ── Prose body ── */
   .pl-detail .prose { font-size: 15px; line-height: 1.7; color: var(--body); }

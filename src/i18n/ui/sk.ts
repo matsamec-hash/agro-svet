@@ -21,6 +21,7 @@ const sk: Record<string, string> = {
   // — navigácia: Téma —
   'nav.tema.akce': 'Kalendár akcií',
   'nav.tema.plodiny': 'Plodiny a odrody',
+  'nav.tema.choroby': 'Choroby a škodcovia',
   'nav.tema.all': 'Všetky novinky',
   'nav.tema.tech': 'Technika',
   'nav.tema.dotace': 'Dotácie',

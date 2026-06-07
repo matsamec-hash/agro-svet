@@ -6,6 +6,7 @@ import { getAllFarms, regionsWithEnoughFarms } from '../lib/farmy';
 import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
 import { getAllHlemyzdi } from '../lib/hlemyzdi';
 import { listPlodiny, listIndexableOdrudy, listSkupiny, listIndexableUdrzovatele } from '../lib/plodiny';
+import { listIndexableChoroby } from '../lib/choroby';
 import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
@@ -320,6 +321,12 @@ export const GET: APIRoute = async () => {
   }
   for (const u of listIndexableUdrzovatele()) {
     urls.push({ loc: `${SITE_URL}/odrudy/udrzovatel/${u.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+
+  // Choroby a škůdci — hub + detaily (anti-thin: jen choroby s popisem a ≥1 plodinou)
+  urls.push({ loc: `${SITE_URL}/choroby/`, changefreq: 'weekly', lastmod: STATIC_LASTMOD });
+  for (const c of listIndexableChoroby()) {
+    urls.push({ loc: `${SITE_URL}/choroby/${c.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
   }
 
   for (const v of getAllVcely()) {

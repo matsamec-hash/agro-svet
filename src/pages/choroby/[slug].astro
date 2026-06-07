@@ -1,0 +1,212 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { listIndexableChoroby, getChoroba } from '../../lib/choroby';
+import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../lib/structured-data';
+
+export async function getStaticPaths() {
+  return listIndexableChoroby().map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const choroba = getChoroba(slug!);
+if (!choroba) return Astro.rewrite('/404');
+
+const base = `/choroby/${choroba.slug}/`;
+const breadcrumb = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Choroby a škůdci', url: '/choroby/' },
+  { name: choroba.name, url: base },
+]);
+const list = choroba.plodiny.length > 0
+  ? itemListSchema(
+      choroba.plodiny.map((p) => ({ url: `/plodiny/${p.plodina_slug}/`, name: p.plodina_name })),
+      `Plodiny ohrožené chorobou ${choroba.name}`,
+    )
+  : null;
+const faq = choroba.faq && choroba.faq.length > 0 ? faqPageSchema(choroba.faq) : null;
+
+const metaDesc = `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` : ''}: příznaky, původce a ochrana. Ohrožuje ${choroba.plodiny.length} ${choroba.plodiny.length === 1 ? 'plodinu' : choroba.plodiny.length < 5 ? 'plodiny' : 'plodin'}.`;
+---
+
+<Layout title={`${choroba.name} — příznaky, původce a ochrana`} description={metaDesc}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
+  {list && <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />}
+  {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
+
+  <div class="ch-detail">
+    <nav class="breadcrumb" aria-label="Drobečková navigace">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/choroby/">Choroby a škůdci</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">{choroba.name}</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Choroby a škůdci · Ochrana rostlin</span>
+        <h1>{choroba.name}</h1>
+        {choroba.latinsky && <p class="hero-latin">{choroba.latinsky}</p>}
+        <p class="hero-lede">{choroba.popis}</p>
+        <div class="hero-stats">
+          <div class="s"><span class="n">{choroba.plodiny.length}</span><span class="l">ohrožených plodin</span></div>
+        </div>
+        <div class="hero-actions">
+          <a class="cta-back" href="/choroby/">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            Všechny choroby
+          </a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-emoji-tile" aria-hidden="true">🦠</div>
+      </div>
+    </section>
+
+    {choroba.puvodce && (
+      <section class="card-section">
+        <h2 class="section-title">Původce</h2>
+        <p class="lead-text">{choroba.puvodce}</p>
+      </section>
+    )}
+
+    <section class="card-section">
+      <h2 class="section-title">Příznaky a popis</h2>
+      <p class="lead-text">{choroba.popis}</p>
+    </section>
+
+    {choroba.ochrana && (
+      <section class="card-section ochrana">
+        <h2 class="section-title">Ochrana a prevence</h2>
+        <p class="lead-text">{choroba.ochrana}</p>
+      </section>
+    )}
+
+    {choroba.plodiny.length > 0 && (
+      <section class="card-section">
+        <h2 class="section-title">
+          Ohrožené plodiny
+          <span class="section-title-c">{choroba.plodiny.length}</span>
+        </h2>
+        <ul class="plodiny-list">
+          {choroba.plodiny.map((p) => (
+            <li>
+              <a href={`/plodiny/${p.plodina_slug}/`} class="plodina-link">
+                <span class="pl-name">{p.plodina_name}</span>
+                <span class="pl-chip">{p.chip}</span>
+                <svg class="pl-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {choroba.faq && choroba.faq.length > 0 && (
+      <section class="card-section faq-section">
+        <h2 class="section-title">Časté dotazy</h2>
+        <div class="faq-list">
+          {choroba.faq.map((f) => (
+            <div class="faq-item">
+              <h3 class="faq-q">{f.q}</h3>
+              <p class="faq-a">{f.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .ch-detail {
+    --yellow: #FFEA00; --ink: #0A0A0B; --body: #1E1E22; --muted: #6B6B72;
+    --muted-2: #9A9AA3; --line: #EAEAEC; --card: #FFFFFF; --green: #3c7a1a;
+    --green-soft: #eaf4e0; --green-dark: #2a5a10;
+    --r-xl: 24px; --r-lg: 18px; --r-md: 12px;
+    --sh-1: 0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3: 0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width: 1040px; margin: 0 auto; padding: 26px 24px 96px; color: var(--body);
+  }
+
+  .ch-detail .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 22px; flex-wrap: wrap; }
+  .ch-detail .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .ch-detail .breadcrumb a:hover { color: #000; }
+  .ch-detail .breadcrumb svg { color: var(--muted-2); flex-shrink: 0; }
+  .ch-detail .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .ch-detail .hero {
+    position: relative; overflow: hidden; color: #fff; border-radius: var(--r-xl);
+    background:
+      radial-gradient(600px 300px at 15% 20%, rgba(255, 234, 0, .14), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(60, 140, 40, .30), transparent 60%),
+      linear-gradient(135deg, #0F1409 0%, #161F0E 60%, #1C2B10 100%);
+    padding: 48px 48px 40px; margin-bottom: 26px; display: flex; gap: 32px; align-items: center;
+    box-shadow: var(--sh-3);
+  }
+  .ch-detail .hero-left { flex: 1; min-width: 0; }
+  .ch-detail .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #D8EBC0; margin-bottom: 16px; }
+  .ch-detail .kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
+  .ch-detail .hero h1 { font-size: clamp(26px, 3.6vw, 40px); line-height: 1.1; margin: 0 0 6px; font-weight: 800; }
+  .ch-detail .hero-latin { font-size: 16px; font-style: italic; color: #B2C9A8; margin: 0 0 14px; }
+  .ch-detail .hero-lede { font-size: 16px; line-height: 1.6; color: #E0ECDA; max-width: 62ch; margin: 0 0 22px; }
+  .ch-detail .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 22px; }
+  .ch-detail .hero-stats .s { display: flex; flex-direction: column; }
+  .ch-detail .hero-stats .n { font-size: 26px; font-weight: 800; color: #fff; }
+  .ch-detail .hero-stats .l { font-size: 12.5px; color: #B2C9A8; }
+  .ch-detail .hero-right { flex-shrink: 0; }
+  .ch-detail .hero-emoji-tile { font-size: 92px; line-height: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,.4)); }
+  .ch-detail .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .ch-detail .cta-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #c8c8d0; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    padding: 11px 16px; border-radius: var(--r-md); text-decoration: none;
+    font-size: 13.5px; font-weight: 500; transition: .15s;
+  }
+  .ch-detail .cta-back:hover { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.22); }
+
+  .ch-detail .card-section {
+    background: var(--card); border-radius: var(--r-lg); padding: 28px 32px;
+    box-shadow: var(--sh-1); margin-bottom: 20px;
+  }
+  .ch-detail .section-title {
+    font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .ch-detail .section-title-c {
+    font-size: 13px; background: var(--green-soft); color: var(--green);
+    font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  }
+  .ch-detail .lead-text { font-size: 15.5px; line-height: 1.7; color: var(--body); margin: 0; }
+  .ch-detail .ochrana { border-left: 4px solid var(--green); }
+
+  .ch-detail .plodiny-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+  .ch-detail .plodina-link {
+    display: flex; align-items: center; gap: 12px;
+    background: #F7F7FA; border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 14px 16px; text-decoration: none; color: inherit; transition: .15s;
+  }
+  .ch-detail .plodina-link:hover { background: var(--green-soft); border-color: #cfe0bd; }
+  .ch-detail .pl-name { font-weight: 700; color: var(--ink); flex-shrink: 0; }
+  .ch-detail .pl-chip { font-size: 12.5px; color: var(--muted); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ch-detail .pl-arrow { color: var(--muted-2); flex-shrink: 0; }
+  .ch-detail .plodina-link:hover .pl-arrow { color: var(--green); }
+
+  .ch-detail .faq-list { display: flex; flex-direction: column; gap: 16px; }
+  .ch-detail .faq-item { border-left: 3px solid var(--green-soft); padding-left: 16px; }
+  .ch-detail .faq-q { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0 0 6px; }
+  .ch-detail .faq-a { font-size: 14.5px; line-height: 1.65; color: var(--body); margin: 0; }
+
+  @media (max-width: 720px) {
+    .ch-detail .hero { flex-direction: column; padding: 34px 26px; text-align: center; }
+    .ch-detail .hero-stats { justify-content: center; }
+    .ch-detail .hero-right { display: none; }
+    .ch-detail .hero-actions { justify-content: center; }
+    .ch-detail .card-section { padding: 22px 18px; }
+    .ch-detail .pl-chip { display: none; }
+  }
+  @media (max-width: 480px) {
+    .ch-detail { padding: 20px 16px 60px; }
+  }
+</style>

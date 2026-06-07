@@ -1,0 +1,148 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { listIndexableChoroby } from '../../lib/choroby';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+
+const choroby = listIndexableChoroby();
+const totalVazby = choroby.reduce((n, c) => n + c.plodiny.length, 0);
+
+const breadcrumb = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Choroby a škůdci', url: '/choroby/' },
+]);
+const list = itemListSchema(
+  choroby.map((c) => ({ url: `/choroby/${c.slug}/`, name: c.name })),
+  'Choroby a škůdci plodin',
+);
+---
+
+<Layout
+  title="Choroby a škůdci polních plodin — atlas a ochrana"
+  description={`Atlas ${choroby.length} chorob a škůdců polních plodin: příznaky, původce a doporučená ochrana. U každé choroby přehled plodin, které ohrožuje.`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
+
+  <div class="ch-hub">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">Choroby a škůdci</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Atlas · Ochrana rostlin</span>
+        <h1>Choroby a <em>škůdci</em> plodin</h1>
+        <p class="hero-lede">Přehled nejvýznamnějších chorob polních plodin — příznaky, původce a doporučená ochrana. U každé choroby najdete plodiny, které ohrožuje, s odkazy na jejich pěstování.</p>
+        <div class="hero-stats">
+          <div class="s"><span class="n">{choroby.length}</span><span class="l">chorob a škůdců</span></div>
+          <div class="s"><span class="n">{totalVazby}</span><span class="l">vazeb na plodiny</span></div>
+        </div>
+        <div class="hero-actions">
+          <a class="cta-group" href="/plodiny/">
+            Databáze plodin
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-emoji-tile" aria-hidden="true">🦠</div>
+      </div>
+    </section>
+
+    <div class="hub-grid">
+      {choroby.map((c) => (
+        <a href={`/choroby/${c.slug}/`} class="hub-card">
+          <div class="hc-body">
+            <div class="hc-title">{c.name}</div>
+            {c.latinsky && <div class="hc-latin">{c.latinsky}</div>}
+            <p class="hc-desc">{c.popis}</p>
+            <span class="hc-badge">{c.plodiny.length} {c.plodiny.length === 1 ? 'plodina' : c.plodiny.length < 5 ? 'plodiny' : 'plodin'}</span>
+          </div>
+          <svg class="hc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .ch-hub {
+    --yellow: #FFEA00; --ink: #0A0A0B; --body: #1E1E22; --muted: #6B6B72;
+    --muted-2: #9A9AA3; --line: #EAEAEC; --card: #FFFFFF; --green: #3c7a1a;
+    --green-soft: #eaf4e0; --green-dark: #2a5a10;
+    --r-xl: 24px; --r-lg: 18px; --r-md: 12px;
+    --sh-1: 0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3: 0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width: 1280px; margin: 0 auto; padding: 26px 24px 96px; color: var(--body);
+  }
+
+  .ch-hub .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 22px; flex-wrap: wrap; }
+  .ch-hub .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .ch-hub .breadcrumb a:hover { color: #000; }
+  .ch-hub .breadcrumb svg { color: var(--muted-2); flex-shrink: 0; }
+  .ch-hub .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .ch-hub .hero {
+    position: relative; overflow: hidden; color: #fff; border-radius: var(--r-xl);
+    background: radial-gradient(600px 300px at 15% 20%, rgba(255, 234, 0, .14), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(60, 140, 40, .30), transparent 60%),
+      linear-gradient(135deg, #0F1409 0%, #161F0E 60%, #1C2B10 100%);
+    padding: 48px 48px 40px; margin-bottom: 30px; display: flex; gap: 32px; align-items: center;
+    box-shadow: var(--sh-3);
+  }
+  .ch-hub .hero-left { flex: 1; min-width: 0; }
+  .ch-hub .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #D8EBC0; margin-bottom: 16px; }
+  .ch-hub .kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
+  .ch-hub .hero h1 { font-size: clamp(28px, 4vw, 44px); line-height: 1.08; margin: 0 0 14px; font-weight: 800; }
+  .ch-hub .hero h1 em { font-style: normal; color: var(--yellow); }
+  .ch-hub .hero-lede { font-size: 16.5px; line-height: 1.6; color: #E0ECDA; max-width: 62ch; margin: 0 0 22px; }
+  .ch-hub .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 22px; }
+  .ch-hub .hero-stats .s { display: flex; flex-direction: column; }
+  .ch-hub .hero-stats .n { font-size: 26px; font-weight: 800; color: #fff; }
+  .ch-hub .hero-stats .l { font-size: 12.5px; color: #B2C9A8; }
+  .ch-hub .hero-right { flex-shrink: 0; }
+  .ch-hub .hero-emoji-tile { font-size: 92px; line-height: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,.4)); }
+  .ch-hub .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .ch-hub .cta-group {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--yellow); color: #0A0A0B;
+    padding: 11px 16px; border-radius: var(--r-md); text-decoration: none;
+    font-size: 13.5px; font-weight: 700; transition: .15s;
+  }
+  .ch-hub .cta-group:hover { opacity: .9; }
+
+  .ch-hub .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .ch-hub .hub-card {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg);
+    padding: 22px 24px; text-decoration: none; color: inherit; box-shadow: var(--sh-1);
+    transition: .15s;
+  }
+  .ch-hub .hub-card:hover { border-color: #cfe0bd; box-shadow: var(--sh-3); transform: translateY(-2px); }
+  .ch-hub .hc-body { min-width: 0; }
+  .ch-hub .hc-title { font-size: 17px; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
+  .ch-hub .hc-latin { font-size: 13px; font-style: italic; color: var(--muted); margin-bottom: 10px; }
+  .ch-hub .hc-desc {
+    font-size: 13.5px; line-height: 1.55; color: var(--body); margin: 0 0 12px;
+    display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .ch-hub .hc-badge {
+    display: inline-block; font-size: 12px; font-weight: 700;
+    background: var(--green-soft); color: var(--green); padding: 3px 10px; border-radius: 999px;
+  }
+  .ch-hub .hc-arrow { color: var(--muted-2); flex-shrink: 0; margin-top: 4px; }
+  .ch-hub .hub-card:hover .hc-arrow { color: var(--green); }
+
+  @media (max-width: 720px) {
+    .ch-hub .hero { flex-direction: column; padding: 34px 26px; text-align: center; }
+    .ch-hub .hero-stats { justify-content: center; }
+    .ch-hub .hero-right { display: none; }
+    .ch-hub .hero-actions { justify-content: center; }
+  }
+  @media (max-width: 480px) {
+    .ch-hub { padding: 20px 16px 60px; }
+  }
+</style>

@@ -49,6 +49,7 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
     children: [
       { labelKey: 'nav.tema.akce', href: '/akce/' },
       { labelKey: 'nav.tema.plodiny', href: '/plodiny/' },
+      { labelKey: 'nav.tema.choroby', href: '/choroby/' },
       { labelKey: 'nav.tema.all', href: '/novinky/' },
       { labelKey: 'nav.tema.tech', href: '/novinky/kategorie/technika/' },
       // Záměrně NEgated pro sk/uk: tohle je novinková KATEGORIE (tag), ne
