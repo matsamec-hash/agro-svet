@@ -1,5 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
-import { runtimeCache } from '../../src/lib/runtime-cache';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { runtimeCache, __clearCacheForTesting } from '../../src/lib/runtime-cache';
+
+beforeEach(() => __clearCacheForTesting());
 
 describe('runtimeCache', () => {
   it('returns a cached response within its TTL', async () => {
@@ -53,5 +55,54 @@ describe('runtimeCache', () => {
     const b = await runtimeCache.match(req);
     expect(await a!.text()).toBe('once');
     expect(await b!.text()).toBe('once');
+  });
+
+  it('caps the store at MAX_ENTRIES', async () => {
+    // Insert 5100 entries — 100 past the MAX_ENTRIES cap of 5000.
+    // The eviction logic must have fired at least once, removing the oldest
+    // entries by insertion order.
+    for (let i = 0; i < 5100; i++) {
+      await runtimeCache.put(
+        new Request(`https://x/cap-${i}`),
+        new Response(`body-${i}`, { headers: { 'cache-control': 'max-age=600' } }),
+      );
+    }
+    // cap-0 was inserted first and must have been evicted to make room.
+    expect(await runtimeCache.match(new Request('https://x/cap-0'))).toBeUndefined();
+    // cap-5099 was inserted last and must still be present.
+    expect(await runtimeCache.match(new Request('https://x/cap-5099'))).toBeDefined();
+  });
+
+  it('sweeps expired entries when full instead of evicting live ones', async () => {
+    // Fill the store to the cap with short-lived entries (max-age=1).
+    vi.useFakeTimers();
+    for (let i = 0; i < 5000; i++) {
+      await runtimeCache.put(
+        new Request(`https://x/short-${i}`),
+        new Response(`body-${i}`, { headers: { 'cache-control': 'max-age=1' } }),
+      );
+    }
+    // Advance time so all 5000 entries are expired.
+    vi.advanceTimersByTime(2_000);
+
+    // Now put 10 fresh entries. The sweep in `put` should reclaim the 5000
+    // expired slots, so all 10 fresh entries survive without being evicted.
+    const freshUrls: string[] = [];
+    for (let i = 0; i < 10; i++) {
+      const url = `https://x/fresh-${i}`;
+      freshUrls.push(url);
+      await runtimeCache.put(
+        new Request(url),
+        new Response(`fresh-${i}`, { headers: { 'cache-control': 'max-age=600' } }),
+      );
+    }
+
+    vi.useRealTimers();
+
+    // All 10 fresh entries must still be retrievable — the sweep reclaimed the
+    // expired slots rather than evicting the newly inserted live entries.
+    for (const url of freshUrls) {
+      expect(await runtimeCache.match(new Request(url))).toBeDefined();
+    }
   });
 });
