@@ -10,7 +10,7 @@ import { listIndexableChoroby } from '../lib/choroby';
 import { expandedComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
-import { isSkLaunchedPath } from '../i18n/utils';
+import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
@@ -413,6 +413,21 @@ export const GET: APIRoute = async () => {
     })
     .map((u) => ({ ...u, loc: `${SITE_URL}/sk${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...skMirror);
+
+  // UK launch (Fáze 2-obsah): pro přeložené sekce přidáme /uk zrcadlové URL.
+  // Stejné filtry jako sk (skryté dotace-detaily/kategorie + lock). Před launchem
+  // je LAUNCHED_PREFIXES.uk prázdné → ukMirror == [] (žádná změna sitemapy).
+  const ukMirror: UrlEntry[] = urls
+    .filter((u) => {
+      if (!u.loc.startsWith(SITE_URL)) return false;
+      const p = u.loc.slice(SITE_URL.length);
+      if (p.startsWith('/sk/')) return false; // nezrcadlit už zrcadlené sk URL
+      if (isDotaceDetailPath(p)) return false;
+      if (isSkHiddenCategoryPath(p)) return false;
+      return isLaunchedPath('uk', p) && !isLockedSectionPath(p);
+    })
+    .map((u) => ({ ...u, loc: `${SITE_URL}/uk${u.loc.slice(SITE_URL.length)}` }));
+  urls.push(...ukMirror);
 
   // SK /dotace detail URL — vlastné slugy z kolekcie 'dotaceSk' (PPA SR výzvy).
   const dotaceSkEntries = await getCollection('dotaceSk');
