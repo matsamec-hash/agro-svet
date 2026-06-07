@@ -1,5 +1,5 @@
 import { defineMiddleware } from 'astro:middleware';
-import { createAnonClient } from './lib/supabase';
+import { createAnonClient, createServerClient } from './lib/supabase';
 import { stripLocale } from './i18n/utils';
 import { isLockedSectionPath } from './i18n/nav';
 import {
@@ -149,7 +149,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     if (!locals.user) {
       return redirect('/bazar/prihlaseni/?redirect=' + encodeURIComponent(url.pathname));
     }
-    const sb = createAnonClient();
+    // Service-role read: bazar_users SELECT RLS is owner-scoped (auth.uid()=id),
+    // and this anon-context middleware has no user JWT, so an anon client would
+    // see no row and lock admins out. Service-role bypasses RLS; we still scope
+    // the lookup to the authenticated user's id.
+    const sb = createServerClient();
     const { data } = await sb
       .from('bazar_users')
       .select('is_admin')
