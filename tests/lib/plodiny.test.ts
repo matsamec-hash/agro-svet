@@ -84,3 +84,15 @@ describe('plodiny lib — facety', () => {
     expect(selgen!.odrudy.some((e) => e.odruda.slug === 'zlatak')).toBe(true);
   });
 });
+
+import { osivaLinksFor } from '../../src/lib/osiva-links';
+
+describe('osiva-links — síťová synergie', () => {
+  it('vrací odkaz na adresář prodejců a na farmakrty (followed)', () => {
+    const links = osivaLinksFor('obiloviny');
+    expect(links.some((l) => l.href.includes('/prodejci'))).toBe(true);
+    const fk = links.find((l) => l.href.includes('farmakrty.cz'));
+    expect(fk).toBeTruthy();
+    expect(fk!.rel).toBeUndefined(); // vlastní síť = followed, žádné nofollow
+  });
+});
