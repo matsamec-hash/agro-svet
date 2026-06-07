@@ -27,7 +27,7 @@ const list = itemListSchema(
 );
 ---
 
-<Layout title={`${u.name} — registrované odrůdy`} description={`Přehled registrovaných odrůd udržovatele ${u.name}.`}>
+<Layout title={`${u.name} — registrované odrůdy`} description={`Přehled registrovaných odrůd udržovatele ${u.name.replace(/\.$/, '')}.`}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
 
@@ -74,9 +74,9 @@ const list = itemListSchema(
         <table class="odrudy-table">
           <thead>
             <tr>
-              <th>Odrůda</th>
-              <th>Plodina</th>
-              <th>Registrace</th>
+              <th scope="col">Odrůda</th>
+              <th scope="col">Plodina</th>
+              <th scope="col">Registrace</th>
             </tr>
           </thead>
           <tbody>
