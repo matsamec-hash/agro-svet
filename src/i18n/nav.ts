@@ -8,7 +8,11 @@ export type FooterColumn = { section: string; heading: string; links: NavLink[] 
 
 /** Sekce skryté v daném locale (jurisdikčně vázané / CZ-provozní). cs = nic. */
 export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
-  cs: [],
+  // 'bazar' dočasně skryt i pro cs (2026-06-09): registrace přes e-mail je
+  // rozbitá kvůli vyčerpanému rate limitu vestavěného Supabase SMTP. Skrývá
+  // jen nav + footer odkaz; /bazar stránky zůstávají funkční (přihlášení přes
+  // Google). Vrátit na [] po nasazení custom SMTP (Resend).
+  cs: ['bazar'],
   // Fáze 2b A: `data` už sk neskrývá — /dotace a /kalkulacka/dotace-cap byly
   // odemčeny (SK obsah nasazen). Fáze 2b B: /statistiky taky odemčeno (SK obsah).
   // Fáze 2b C: /puda odemčeno → LOCKED_SECTION_PREFIXES je teď prázdné, takže
