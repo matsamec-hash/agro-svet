@@ -9,6 +9,14 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   site: 'https://agro-svet.cz',
   trailingSlash: 'always',
+  // Astro vestavěný checkOrigin porovnává Origin (https://) proti request.url,
+  // jehož schéma je za TLS-terminujícím reverzním proxy (Cloudflare→Traefik→Node)
+  // jen `http://` — Node adapter nečte X-Forwarded-Proto. Tím by KAŽDÝ same-origin
+  // form/multipart POST padal na 403 "Cross-site POST forbidden" (rozbitý email
+  // login, registrace, foto upload, akce). Vypínáme vestavěnou kontrolu a děláme
+  // vlastní CSRF check v middleware.ts (host-based, schéma-necitlivý). NEvypínat
+  // bez té middleware kontroly.
+  security: { checkOrigin: false },
   i18n: {
     defaultLocale: 'cs',
     locales: ['cs', 'sk', 'uk'],

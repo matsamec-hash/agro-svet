@@ -54,8 +54,31 @@ function applyGateHeaders(response: Response, opts: { redirect?: boolean } = {})
   return response;
 }
 
+// Náhrada za Astro vestavěný checkOrigin (viz astro.config.mjs: security.checkOrigin=false).
+// Schéma-NECITLIVÁ CSRF kontrola: u nebezpečných metod musí host v Origin headeru
+// odpovídat hostu requestu. Za reverzní proxy je request.url schéma `http://`
+// (Node nečte X-Forwarded-Proto), takže porovnáváme jen HOST, ne celý origin.
+// Bez Origin headeru (cron, server-to-server) propouštíme — prohlížeč Origin u
+// cross-origin POST posílá vždy, takže jeho absence není browser CSRF útok.
+const UNSAFE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+function isCrossSite(request: Request, host: string): boolean {
+  if (!UNSAFE_METHODS.has(request.method)) return false;
+  const origin = request.headers.get('origin');
+  if (!origin) return false; // no Origin → not a browser cross-origin POST
+  try {
+    return new URL(origin).host !== host;
+  } catch {
+    return true; // malformed Origin on unsafe method → reject
+  }
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
+
+  // CSRF: blokuj cross-site nebezpečné POSTy (host-based, viz výše).
+  if (isCrossSite(context.request, url.host)) {
+    return new Response('Cross-site request forbidden', { status: 403 });
+  }
 
   // Locale prefix: odvoď locale + původní cestu, propiš do locals. Pro ne-cs
   // se na konci rewritne na kanonickou cs routu (next(strippedPath)).
