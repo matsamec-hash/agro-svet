@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { createAnonClient, createServerClient, getPublicSupabaseConfig } from '../../lib/supabase';
 import LocationInput from '../../components/bazar/LocationInput.astro';
+import { SITE_URL } from '../../lib/config';
 
 let error = '';
 let success = '';
@@ -27,7 +28,13 @@ if (Astro.request.method === 'POST') {
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name, phone, location } },
+      options: {
+        data: { name, phone, location },
+        // Bez tohoto Supabase použije Site URL SDÍLENÉHO projektu (= CMS
+        // admin.samecdigital.com) → potvrzovací odkaz v e-mailu mířil do CMS.
+        // emailRedirectTo vrací uživatele zpět na agro-svet bazar callback.
+        emailRedirectTo: `${SITE_URL}/bazar/auth/callback/`,
+      },
     });
 
     if (authError) {
