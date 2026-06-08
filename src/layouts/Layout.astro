@@ -8,7 +8,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { siteSchemaGraph } from '../lib/structured-data';
 import { imgSrcset } from '../lib/image-variants';
-import { getLocaleFromUrl, t, stripLocale, isSkLaunchedPath } from '../i18n/utils';
+import { getLocaleFromUrl, t, stripLocale, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath } from '../i18n/nav';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
@@ -63,20 +63,23 @@ const localizedPathname = Astro.locals.localizedPathname ?? Astro.url.pathname;
 const ogLocale = { cs: 'cs_CZ', sk: 'sk_SK', uk: 'uk_UA' }[locale];
 const canonicalPath = localizedPathname.endsWith('/') ? localizedPathname : `${localizedPathname}/`;
 const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString();
-// SK launch (Fáze 1c-obsah) je path-scoped: indexují se jen přeložené sekce
-// (/stroje, /znacky, /srovnani). Zbytek /sk i celé /uk zůstává noindex, protože
-// servíruje české tělo. cs se nemění (effectiveNoindex == noindex jako dřív).
+// Launch je path-scoped a per-locale: indexují se jen přeložené sekce daného
+// locale. cs se nemění (effectiveNoindex == noindex). SK chování beze změny.
 const csRootPath = stripLocale(localizedPathname).path;
 // Lock přebíjí launch: zamčené pod-cesty (např. /kalkulacka/dotace-cap) zůstávají
 // noindex i bez reciproč. hreflang, i když jejich prefix (/kalkulacka) je launchnutý.
-const skLaunched = isSkLaunchedPath(csRootPath) && !isLockedSectionPath(csRootPath);
-const effectiveNoindex = noindex || (locale === 'sk' ? !skLaunched : locale !== 'cs');
-// Reciproční hreflang emitujeme jen na launchnutých katalogových stránkách
-// (cs i sk verze existují a jsou indexovatelné). Mimo katalog zůstává hlavička
-// cs-only, bit-identická s předlaunch stavem.
+const locked = isLockedSectionPath(csRootPath);
+const launchedForLocale = isLaunchedPath(locale, csRootPath) && !locked;
+const effectiveNoindex = noindex || (locale === 'cs' ? false : !launchedForLocale);
+// Reciproční hreflang: nezávisle per-locale (sk/uk emitujeme jen kde je sekce
+// pro daný locale launchnutá). cs je vždy. x-default = cs.
+const skLaunchedPath = isLaunchedPath('sk', csRootPath) && !locked;
+const ukLaunchedPath = isLaunchedPath('uk', csRootPath) && !locked;
+const anyAlt = skLaunchedPath || ukLaunchedPath;
 const csRootCanonical = csRootPath.endsWith('/') ? csRootPath : `${csRootPath}/`;
 const hreflangCsUrl = new URL(csRootCanonical, SITE_ORIGIN).toString();
 const hreflangSkUrl = new URL(`/sk${csRootCanonical}`, SITE_ORIGIN).toString();
+const hreflangUkUrl = new URL(`/uk${csRootCanonical}`, SITE_ORIGIN).toString();
 
 // Route-based OG fallback: páry top-level cest k landing PNGs vygenerovaným
 // v scripts/build-og-images.mjs. Pokud konkrétní stránka nepředala ogImage,
@@ -108,10 +111,11 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
   <link rel="canonical" href={canonicalUrl} />
-  {skLaunched ? (
+  {anyAlt ? (
     <>
       <link rel="alternate" hreflang="cs" href={hreflangCsUrl} />
-      <link rel="alternate" hreflang="sk" href={hreflangSkUrl} />
+      {skLaunchedPath && <link rel="alternate" hreflang="sk" href={hreflangSkUrl} />}
+      {ukLaunchedPath && <link rel="alternate" hreflang="uk" href={hreflangUkUrl} />}
       <link rel="alternate" hreflang="x-default" href={hreflangCsUrl} />
     </>
   ) : (

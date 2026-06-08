@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   getLocaleFromUrl, stripLocale, localizePath, getAlternates, isSkLaunchedPath, langSwitchHref,
+  isLaunchedPath, LAUNCHED_PREFIXES, navHref,
 } from '../../src/i18n/utils';
 
 describe('getLocaleFromUrl', () => {
@@ -68,6 +69,21 @@ describe('isSkLaunchedPath — kalkulačky (Fáze 2b launch)', () => {
   });
 });
 
+describe('isLaunchedPath (per-locale)', () => {
+  it('cs nemá nic launchnuto (default bez prefixu)', () => {
+    expect(LAUNCHED_PREFIXES.cs).toEqual([]);
+    expect(isLaunchedPath('cs', '/stroje/')).toBe(false);
+  });
+  it('sk = zachované chování isSkLaunchedPath', () => {
+    expect(isLaunchedPath('sk', '/stroje/')).toBe(isSkLaunchedPath('/stroje/'));
+    expect(isLaunchedPath('sk', '/stroje/john-deere/')).toBe(true);
+    expect(isLaunchedPath('sk', '/bazar/')).toBe(false);
+  });
+  it('isSkLaunchedPath je tenký alias na isLaunchedPath("sk", …)', () => {
+    expect(isSkLaunchedPath('/znacky/')).toBe(isLaunchedPath('sk', '/znacky/'));
+  });
+});
+
 describe('langSwitchHref', () => {
   const hidden = ['dotace', 'legislativa'];
 
@@ -94,5 +110,24 @@ describe('langSwitchHref', () => {
 
   it('home → SK home', () => {
     expect(langSwitchHref('sk', '/', hidden)).toBe('/sk/');
+  });
+});
+
+describe('navHref/langSwitchHref per-locale (uk po launchi fáze 2)', () => {
+  it('uk: nelaunchnutá sekce (jurisdikční data) zůstává na cs href (žádný /uk prefix)', () => {
+    // /dotace není pro uk launchnuté (jurisdikční data) → drží se na cs
+    expect(navHref('uk', '/dotace/')).toBe('/dotace/');
+  });
+  it('uk: launchnutá sekce dostane /uk prefix', () => {
+    expect(navHref('uk', '/stroje/')).toBe('/uk/stroje/');
+  });
+  it('sk: launchnutá sekce dostane /sk prefix (beze změny)', () => {
+    expect(navHref('sk', '/stroje/')).toBe('/sk/stroje/');
+  });
+  it('langSwitchHref uk: nelaunchnutá sekce → uk hub', () => {
+    expect(langSwitchHref('uk', '/dotace/', [])).toBe('/uk/');
+  });
+  it('langSwitchHref uk: launchnutá sekce → /uk/<sekce>', () => {
+    expect(langSwitchHref('uk', '/stroje/', [])).toBe('/uk/stroje/');
   });
 });

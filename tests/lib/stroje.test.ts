@@ -36,6 +36,16 @@ describe('stroje lib — SK overlay modelů (Fáze stroje-detail)', () => {
   it('bez overlaye vrací base beze změny (cs identita)', () => {
     expect(applyStrojOverlay(base, null)).toBe(base);
   });
+
+  it('aplikuje uk description/series/models, nemutuje base (locale-agnostický overlay)', () => {
+    const ov = { description: 'укр опис', series: { 'z-25': 'укр серія' }, models: { 'zetor-25': 'укр модель' } };
+    const out: any = applyStrojOverlay(base, ov);
+    const s = out.categories.traktory.series[0];
+    expect(out.description).toBe('укр опис');
+    expect(s.description).toBe('укр серія');
+    expect(s.models[0].description).toBe('укр модель');
+    expect(base.description).toBe(undefined); // base nezmutován (žádné description na base)
+  });
 });
 
 describe('stroje lib — schema rozšíření', () => {

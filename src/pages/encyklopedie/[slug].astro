@@ -1,7 +1,8 @@
 ---
-// SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
-// sk čte z 'encyklopedieSk' (přeložená overlay kolekce) BEZ cs fallbacku —
-// chybějící sk slug = 404 (žádný cs leak). cs render = dnešní literály VERBATIM.
+// SSR (prerender:false): middleware servíruje /sk a /uk verzi přes locals.locale.
+// sk čte z 'encyklopedieSk', uk z 'encyklopedieUk' (přeložené overlay kolekce)
+// BEZ cs fallbacku — chybějící sk/uk slug = 404 (žádný cs leak).
+// cs render = dnešní literály VERBATIM.
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry, render } from 'astro:content';
@@ -10,16 +11,18 @@ import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchem
 import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
-const isSk = locale === 'sk';
 const t = useTranslations(locale);
-const base = isSk ? '/sk' : '';
+const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklopedieUk' } as const;
+const coll = ENC_COLLECTION[locale];
+const base = locale === 'cs' ? '' : `/${locale}`;
+const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA' } as const)[locale];
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const item = slug ? (isSk ? await getEntry('encyklopedieSk', slug) : await getEntry('encyklopedie', slug)) : undefined;
-if (!item) return Astro.rewrite('/404');
-// Hledání souvisejících/related čte z lokalizované kolekce (sk overlay má stejné slug+znacka+kategorie).
-const items = await getCollection(isSk ? 'encyklopedieSk' : 'encyklopedie');
+const item = slug ? await getEntry(coll, slug) : undefined;
+if (!item) return Astro.rewrite('/404'); // žádný cs fallback — chybějící uk/sk slug = 404
+// Hledání souvisejících/related čte z lokalizované kolekce (overlay má stejné slug+znacka+kategorie).
+const items = await getCollection(coll);
 const { Content } = await render(item);
 // Existuje-li redakční profil značky (historie), nabídneme odkaz.
 const znackyHubs = await getCollection('znacky');
@@ -80,7 +83,7 @@ const productJsonLd = machineProductSchema({
   yearTo: item.data.yearTo ?? null,
   engine: item.data.engine,
   transmission: item.data.transmission,
-  lang: isSk ? 'sk-SK' : 'cs-CZ',
+  lang: bcp47,
 });
 
 const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
@@ -118,7 +121,7 @@ const videoJsonLd = item.data.youtubeId
   : null;
 
 const lastVerifiedFmt = item.data.lastVerified
-  ? new Intl.DateTimeFormat(isSk ? 'sk-SK' : 'cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
+  ? new Intl.DateTimeFormat(bcp47, { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
   : null;
 const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : null;
 
@@ -143,11 +146,11 @@ const articleJsonLd = {
   },
   ...(lastVerifiedIso && { dateModified: lastVerifiedIso, datePublished: lastVerifiedIso }),
   mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
-  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
+  inLanguage: bcp47,
 };
 ---
 
-<Layout title={item.data.name} description={item.data.popis} canonical={isSk ? undefined : pageUrl} ogType="product" ogImage={ogImageAbs}>
+<Layout title={item.data.name} description={item.data.popis} canonical={locale === 'cs' ? pageUrl : undefined} ogType="product" ogImage={ogImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />

@@ -26,13 +26,24 @@ export function localizePath(locale: Locale, path: string): string {
   return `/${locale}${clean}`;
 }
 
-/** Sekce, jejichž /sk verze jsou v Fázi 1c-obsah přeložené a tedy indexovatelné.
- *  Zbytek /sk zůstává noindex (servíruje cs tělo) dokud nebude lokalizován. */
-export const SK_LAUNCHED_PREFIXES = ['/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/jak-na-to', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'];
+/** Per-locale launchnuté (přeložené → indexovatelné) prefixy. cs je default bez
+ *  prefixu, gating se na něj neaplikuje. Zbytek dané /<locale> sekce zůstává
+ *  noindex (servíruje cs tělo) dokud není lokalizován. */
+export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
+  cs: [],
+  sk: ['/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/jak-na-to', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
+  uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie'],
+};
 
-/** True, pokud cs-root cesta patří do launchnuté (přeložené) SK sekce. */
+/** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
+export function isLaunchedPath(locale: Locale, csRootPath: string): boolean {
+  return (LAUNCHED_PREFIXES[locale] ?? []).some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
+}
+
+/** Zpětně kompatibilní SK alias (volá ho Layout/sitemap; ponecháno kvůli minimal-diff). */
+export const SK_LAUNCHED_PREFIXES = LAUNCHED_PREFIXES.sk;
 export function isSkLaunchedPath(csRootPath: string): boolean {
-  return SK_LAUNCHED_PREFIXES.some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
+  return isLaunchedPath('sk', csRootPath);
 }
 
 /** Cesty uvnitř launchnutých sekcí, které ALE pod /sk 404-ují (jsou prerendered,
@@ -48,7 +59,7 @@ export function navHref(locale: Locale, href: string): string {
   if (locale === defaultLocale) return href;
   const root = href.replace(/\/+$/, '') || '/';
   if (root === '/') return localizePath(locale, href);
-  if (isSkLaunchedPath(root) && !SK_PRERENDERED_NAV_PATHS.includes(root)) return localizePath(locale, href);
+  if (isLaunchedPath(locale, root) && !SK_PRERENDERED_NAV_PATHS.includes(root)) return localizePath(locale, href);
   return href;
 }
 
@@ -62,7 +73,7 @@ export function langSwitchHref(target: Locale, path: string, hiddenNewsCats: str
   const catMatch = path.match(/^\/novinky\/kategorie\/([^/]+)\/?$/);
   if (catMatch && hiddenNewsCats.includes(catMatch[1])) return localizePath(target, '/novinky/');
   const root = path.replace(/\/+$/, '') || '/';
-  if (root !== '/' && (!isSkLaunchedPath(root) || SK_PRERENDERED_NAV_PATHS.includes(root))) {
+  if (root !== '/' && (!isLaunchedPath(target, root) || SK_PRERENDERED_NAV_PATHS.includes(root))) {
     return localizePath(target, '/');
   }
   return localizePath(target, path);

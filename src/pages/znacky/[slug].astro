@@ -17,9 +17,11 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-// SK serves the localized profile from znackySk (fallback to cs if missing).
-const znacka = (locale !== 'cs' ? await getEntry('znackySk', slug!) : undefined)
-  ?? await getEntry('znacky', slug!);
+// Overlay kolekce dle locale; cs fallback zachován jako u SK (před launchem je
+// uk noindex, a launch nastane až po plné pokrytí všech ~24 značek).
+const ZN_COLLECTION = { sk: 'znackySk', uk: 'znackyUk' } as const;
+const localized = locale !== 'cs' ? await getEntry(ZN_COLLECTION[locale as 'sk' | 'uk'], slug!) : undefined;
+const znacka = localized ?? await getEntry('znacky', slug!);
 if (!znacka) return Astro.rewrite('/404');
 const { Content, headings } = await render(znacka);
 
@@ -31,7 +33,7 @@ const sources: { title: string; url: string }[] = d.sources ?? [];
 const founder = d.founder as { name: string; birth?: string; death?: string; note?: string } | undefined;
 const aktualizovano: Date | undefined = d.aktualizovano;
 const aktualizovanoStr = aktualizovano
-  ? new Intl.DateTimeFormat(locale === 'sk' ? 'sk-SK' : 'cs-CZ', { month: 'long', year: 'numeric' }).format(aktualizovano)
+  ? new Intl.DateTimeFormat(locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ', { month: 'long', year: 'numeric' }).format(aktualizovano)
   : null;
 
 // Osnova (table of contents): nadpisy z prózy (depth 2) + sekce ze šablony.

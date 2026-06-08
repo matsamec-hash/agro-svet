@@ -6,9 +6,10 @@
 // LLMs and Google deprioritize.
 //
 // Locale-aware: the function emits cs (default) byte-identically to the
-// original and a native Slovak variant for locale 'sk'. Phrases are NOT a
-// translation of this file — they are locale-keyed templates built inline so
-// the cs branch stays diff-proof against the pre-i18n output.
+// original, a native Slovak variant for locale 'sk', and a native Ukrainian
+// variant for locale 'uk'. Phrases are NOT a translation of this file — they
+// are locale-keyed templates built inline so the cs branch stays diff-proof
+// against the pre-i18n output.
 
 import type { StrojFlatModel, StrojKategorie } from './stroje';
 import type { Locale } from './../i18n/config';
@@ -20,38 +21,49 @@ import { useCaseDescription } from './competitor-finder';
  * Designed to fit grammatically after "když"/"ak" — returns a fragment without
  * the leading capital letter or trailing period.
  */
-function farmSizeClause(category: StrojKategorie, powerHp: number | null, sk: boolean): string | null {
+function farmSizeClause(category: StrojKategorie, powerHp: number | null, locale: Locale): string | null {
   if (powerHp === null) return null;
+  const pick = (cs: string, sk: string, uk: string): string =>
+    locale === 'sk' ? sk : locale === 'uk' ? uk : cs;
   if (category === 'traktory') {
-    if (powerHp < 50) return sk
-      ? 'máš malé hospodárstvo do cca 30 hektárov (sady, vinice, komunálne využitie)'
-      : 'máš malé hospodářství do cca 30 hektarů (sady, vinice, komunální využití)';
-    if (powerHp < 90) return sk
-      ? 'hospodáriš na 30–100 hektároch a hľadáš univerzál na poľnú prácu a zber trávy'
-      : 'hospodaříš na 30–100 hektarech a hledáš univerzál pro polní práci a sklizeň trávy';
-    if (powerHp < 160) return sk
-      ? 'máš strednú farmu 100–300 hektárov na orbu, sejacie kombinácie a postrek'
-      : 'máš střední farmu 100–300 hektarů pro orbu, secí kombinace a postřik';
-    if (powerHp < 250) return sk
-      ? 'máš veľkú farmu 300–600 hektárov a chceš ťahať široké sejacie kombinácie alebo samohybné postrekovače'
-      : 'máš velkou farmu 300–600 hektarů a chceš tahat široké secí kombinace nebo samochodné postřikovače';
-    return sk
-      ? 'si veľkovýroba nad 500 hektárov a chceš maximum z dennej produktivity'
-      : 'jsi velkovýroba nad 500 hektarů a chceš maximum z denní produktivity';
+    if (powerHp < 50) return pick(
+      'máš malé hospodářství do cca 30 hektarů (sady, vinice, komunální využití)',
+      'máš malé hospodárstvo do cca 30 hektárov (sady, vinice, komunálne využitie)',
+      'у тебе невелике господарство до приблизно 30 гектарів (сади, виноградники, комунальне використання)');
+    if (powerHp < 90) return pick(
+      'hospodaříš na 30–100 hektarech a hledáš univerzál pro polní práci a sklizeň trávy',
+      'hospodáriš na 30–100 hektároch a hľadáš univerzál na poľnú prácu a zber trávy',
+      'ти господарюєш на 30–100 гектарах і шукаєш універсал для польових робіт та збирання трави');
+    if (powerHp < 160) return pick(
+      'máš střední farmu 100–300 hektarů pro orbu, secí kombinace a postřik',
+      'máš strednú farmu 100–300 hektárov na orbu, sejacie kombinácie a postrek',
+      'у тебе середня ферма 100–300 гектарів для оранки, посівних комбінацій та обприскування');
+    if (powerHp < 250) return pick(
+      'máš velkou farmu 300–600 hektarů a chceš tahat široké secí kombinace nebo samochodné postřikovače',
+      'máš veľkú farmu 300–600 hektárov a chceš ťahať široké sejacie kombinácie alebo samohybné postrekovače',
+      'у тебе велика ферма 300–600 гектарів і ти хочеш тягати широкі посівні комбінації або самохідні обприскувачі');
+    return pick(
+      'jsi velkovýroba nad 500 hektarů a chceš maximum z denní produktivity',
+      'si veľkovýroba nad 500 hektárov a chceš maximum z dennej produktivity',
+      'ти великотоварне виробництво понад 500 гектарів і хочеш максимум денної продуктивності');
   }
   if (category === 'kombajny') {
-    if (powerHp < 250) return sk
-      ? 'máš obilninovú plochu do 200 ha a vystačíš si so záberom 5–6 m'
-      : 'máš obilninou plochu do 200 ha a vystačíš si se záběrem 5–6 m';
-    if (powerHp < 400) return sk
-      ? 'zbieraš 200–500 ha obilnín a hodí sa ti záber 6–9 m'
-      : 'sklízíš 200–500 ha obilnin a hodí se ti záběr 6–9 m';
-    if (powerHp < 600) return sk
-      ? 'zbieraš cez 500 ha obilnín a chceš záber 9–12 m'
-      : 'sklízíš přes 500 ha obilnin a chceš záběr 9–12 m';
-    return sk
-      ? 'si veľkovýroba a chceš najširší záber (12 m+) a najväčší zásobník (14 000+ l)'
-      : 'jsi velkovýroba a chceš nejširší záběr (12 m+) a největší zásobník (14 000+ l)';
+    if (powerHp < 250) return pick(
+      'máš obilninou plochu do 200 ha a vystačíš si se záběrem 5–6 m',
+      'máš obilninovú plochu do 200 ha a vystačíš si so záberom 5–6 m',
+      'у тебе площа зернових до 200 га і тобі вистачить захвату 5–6 м');
+    if (powerHp < 400) return pick(
+      'sklízíš 200–500 ha obilnin a hodí se ti záběr 6–9 m',
+      'zbieraš 200–500 ha obilnín a hodí sa ti záber 6–9 m',
+      'ти збираєш 200–500 га зернових і тобі підходить захват 6–9 м');
+    if (powerHp < 600) return pick(
+      'sklízíš přes 500 ha obilnin a chceš záběr 9–12 m',
+      'zbieraš cez 500 ha obilnín a chceš záber 9–12 m',
+      'ти збираєш понад 500 га зернових і хочеш захват 9–12 м');
+    return pick(
+      'jsi velkovýroba a chceš nejširší záběr (12 m+) a největší zásobník (14 000+ l)',
+      'si veľkovýroba a chceš najširší záber (12 m+) a najväčší zásobník (14 000+ l)',
+      'ти великотоварне виробництво і хочеш найширший захват (12 м+) та найбільший бункер (14 000+ л)');
   }
   return null;
 }
@@ -85,7 +97,7 @@ function pct(a: number, b: number): number {
  * Brand description in accusative — fits grammatically after "preferuješ".
  * Example: "preferuješ německou prémiovou značku" (not "německá prémiová značka").
  */
-function brandDescriptorAkuzativ(brand: string, brandName: string, sk: boolean): string {
+function brandDescriptorAkuzativ(brand: string, brandName: string, locale: Locale): string {
   const mapCs: Record<string, string> = {
     fendt: 'německou prémiovou značku Fendt',
     'john-deere': 'amerického giganta John Deere',
@@ -110,8 +122,20 @@ function brandDescriptorAkuzativ(brand: string, brandName: string, sk: boolean):
     kubota: 'japonskú značku Kubota',
     zetor: 'českú značku Zetor z Brna',
   };
-  const map = sk ? mapSk : mapCs;
-  return map[brand] ?? `značku ${brandName}`;
+  const mapUk: Record<string, string> = {
+    fendt: 'німецький преміальний бренд Fendt',
+    'john-deere': 'американського гіганта John Deere',
+    'case-ih': 'американський бренд Case IH (концерн CNH)',
+    'new-holland': 'європейський бренд New Holland (концерн CNH)',
+    claas: 'німецького лідера у комбайнах Claas',
+    'massey-ferguson': 'традиційний бренд Massey Ferguson (концерн AGCO)',
+    valtra: 'фінський бренд Valtra (концерн AGCO)',
+    'deutz-fahr': 'німецький бренд Deutz-Fahr (концерн SDF)',
+    kubota: 'японський бренд Kubota',
+    zetor: 'чеський бренд Zetor із Брно',
+  };
+  const map = locale === 'sk' ? mapSk : locale === 'uk' ? mapUk : mapCs;
+  return map[brand] ?? (locale === 'uk' ? `бренд ${brandName}` : `značku ${brandName}`);
 }
 
 export function comparisonInsights(
@@ -119,12 +143,15 @@ export function comparisonInsights(
   b: StrojFlatModel,
   locale: Locale = 'cs',
 ): ComparisonInsights {
-  const sk = locale === 'sk';
-  const num = (n: number): string => n.toLocaleString(sk ? 'sk-SK' : 'cs-CZ');
+  const pick = (cs: string, sk: string, uk: string): string =>
+    locale === 'sk' ? sk : locale === 'uk' ? uk : cs;
+  const num = (n: number): string =>
+    n.toLocaleString(locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ');
   const aName = modelDisplayName(a);
   const bName = modelDisplayName(b);
   const isTractor = a.category === 'traktory';
   const categoryWord = isTractor ? 'traktor' : 'kombajn';
+  const categoryWordUk = isTractor ? 'трактор' : 'комбайн';
 
   // ---- Numeric diffs ----
   const aHp = a.power_hp;
@@ -152,34 +179,40 @@ export function comparisonInsights(
     const strongerName = modelDisplayName(stronger);
     const weakerHp = stronger === a ? bHp : aHp;
     const strongerHp = stronger === a ? aHp : bHp;
-    tldrParts.push(
+    tldrParts.push(pick(
       `${strongerName} má vyšší výkon o ${absHp} k (${num(strongerHp!)} vs ${num(weakerHp!)} k, +${absPct} %).`,
-    );
+      `${strongerName} má vyšší výkon o ${absHp} k (${num(strongerHp!)} vs ${num(weakerHp!)} k, +${absPct} %).`,
+      `${strongerName} має вищу потужність на ${absHp} к.с. (${num(strongerHp!)} проти ${num(weakerHp!)} к.с., +${absPct} %).`,
+    ));
   } else if (aHp !== null && bHp !== null && hpDiff === 0) {
-    tldrParts.push(sk
-      ? `Oba ${categoryWord}y majú rovnaký výkon ${num(aHp)} k.`
-      : `Oba ${categoryWord}y mají stejný výkon ${num(aHp)} k.`);
+    tldrParts.push(pick(
+      `Oba ${categoryWord}y mají stejný výkon ${num(aHp)} k.`,
+      `Oba ${categoryWord}y majú rovnaký výkon ${num(aHp)} k.`,
+      `Обидва ${categoryWordUk}и мають однакову потужність ${num(aHp)} к.с.`));
   }
 
   if (lighter && kgDiff !== null) {
     const lighterName = modelDisplayName(lighter);
-    tldrParts.push(sk
-      ? `${lighterName} je ľahší o ${num(Math.abs(kgDiff))} kg.`
-      : `${lighterName} je lehčí o ${num(Math.abs(kgDiff))} kg.`);
+    tldrParts.push(pick(
+      `${lighterName} je lehčí o ${num(Math.abs(kgDiff))} kg.`,
+      `${lighterName} je ľahší o ${num(Math.abs(kgDiff))} kg.`,
+      `${lighterName} легший на ${num(Math.abs(kgDiff))} кг.`));
   }
 
   if (newer && yearDiff !== null && Math.abs(yearDiff) >= 2) {
     const newerName = modelDisplayName(newer);
     const newerYear = newer === a ? aYear : bYear;
-    tldrParts.push(sk
-      ? `${newerName} je novší (uvedený ${newerYear}).`
-      : `${newerName} je novější (uveden ${newerYear}).`);
+    tldrParts.push(pick(
+      `${newerName} je novější (uveden ${newerYear}).`,
+      `${newerName} je novší (uvedený ${newerYear}).`,
+      `${newerName} новіший (представлений у ${newerYear}).`));
   }
 
   if (tldrParts.length === 0) {
-    tldrParts.push(sk
-      ? `${aName} a ${bName} sú ${categoryWord}y porovnateľnej triedy.`
-      : `${aName} a ${bName} jsou ${categoryWord}y srovnatelné třídy.`);
+    tldrParts.push(pick(
+      `${aName} a ${bName} jsou ${categoryWord}y srovnatelné třídy.`,
+      `${aName} a ${bName} sú ${categoryWord}y porovnateľnej triedy.`,
+      `${aName} та ${bName} — ${categoryWordUk}и порівнянного класу.`));
   }
 
   const tldr = tldrParts.join(' ');
@@ -188,15 +221,18 @@ export function comparisonInsights(
   let shortDescription: string;
   if (stronger && hpDiff !== null) {
     const strongerName = modelDisplayName(stronger);
-    shortDescription = sk
-      ? `Porovnanie: ${aName} vs ${bName}. ${strongerName} má +${Math.abs(hpDiff)} k. Motor, prevodovka, hmotnosť, ` +
-        `roky výroby a FAQ vedľa seba.`
-      : `Srovnání: ${aName} vs ${bName}. ${strongerName} má +${Math.abs(hpDiff)} k. Motor, převodovka, hmotnost, ` +
-        `roky výroby a FAQ vedle sebe.`;
+    shortDescription = pick(
+      `Srovnání: ${aName} vs ${bName}. ${strongerName} má +${Math.abs(hpDiff)} k. Motor, převodovka, hmotnost, ` +
+        `roky výroby a FAQ vedle sebe.`,
+      `Porovnanie: ${aName} vs ${bName}. ${strongerName} má +${Math.abs(hpDiff)} k. Motor, prevodovka, hmotnosť, ` +
+        `roky výroby a FAQ vedľa seba.`,
+      `Порівняння: ${aName} vs ${bName}. ${strongerName} має +${Math.abs(hpDiff)} к.с. Двигун, трансмісія, маса, ` +
+        `роки випуску та FAQ поряд.`);
   } else {
-    shortDescription = sk
-      ? `Porovnanie ${aName} a ${bName}: výkon, motor, prevodovka, hmotnosť, FAQ a vhodné použitie.`
-      : `Srovnání ${aName} a ${bName}: výkon, motor, převodovka, hmotnost, FAQ a vhodné použití.`;
+    shortDescription = pick(
+      `Srovnání ${aName} a ${bName}: výkon, motor, převodovka, hmotnost, FAQ a vhodné použití.`,
+      `Porovnanie ${aName} a ${bName}: výkon, motor, prevodovka, hmotnosť, FAQ a vhodné použitie.`,
+      `Порівняння ${aName} та ${bName}: потужність, двигун, трансмісія, маса, FAQ і відповідне застосування.`);
   }
   // Hard cap to 158 chars to avoid SERP truncation.
   if (shortDescription.length > 158) shortDescription = shortDescription.slice(0, 155) + '…';
@@ -212,30 +248,36 @@ export function comparisonInsights(
     const isLighter = lighter === self;
     const isNewer = newer === self;
     if (isStronger && hpDiff !== null) {
-      parts.push(sk
-        ? `potrebuješ vyšší výkon (${num(self.power_hp!)} k), než ponúka ${other.brand_name}`
-        : `potřebuješ vyšší výkon (${num(self.power_hp!)} k) než nabízí ${other.brand_name}`);
+      parts.push(pick(
+        `potřebuješ vyšší výkon (${num(self.power_hp!)} k) než nabízí ${other.brand_name}`,
+        `potrebuješ vyšší výkon (${num(self.power_hp!)} k), než ponúka ${other.brand_name}`,
+        `тобі потрібна вища потужність (${num(self.power_hp!)} к.с.), ніж пропонує ${other.brand_name}`));
     }
     if (isLighter && kgDiff !== null && Math.abs(kgDiff) >= 200) {
-      parts.push(sk
-        ? `hrá pre teba rolu nižšia hmotnosť (menšie utláčanie pôdy, lepšia manévrovateľnosť)`
-        : `hraje pro tebe roli nižší hmotnost (méně utužování půdy, lepší manévrovatelnost)`);
+      parts.push(pick(
+        `hraje pro tebe roli nižší hmotnost (méně utužování půdy, lepší manévrovatelnost)`,
+        `hrá pre teba rolu nižšia hmotnosť (menšie utláčanie pôdy, lepšia manévrovateľnosť)`,
+        `для тебе важлива менша маса (менше ущільнення ґрунту, краща маневреність)`));
     }
     if (isNewer && yearDiff !== null && Math.abs(yearDiff) >= 2) {
-      parts.push(sk
-        ? `chceš novšiu konštrukciu (uvedenie ${self.year_from}) — typicky modernejšia elektronika, ISOBUS, emisný stupeň Stage V`
-        : `chceš novější konstrukci (uvedení ${self.year_from}) — typicky modernější elektronika, ISOBUS, emisní stupeň Stage V`);
+      parts.push(pick(
+        `chceš novější konstrukci (uvedení ${self.year_from}) — typicky modernější elektronika, ISOBUS, emisní stupeň Stage V`,
+        `chceš novšiu konštrukciu (uvedenie ${self.year_from}) — typicky modernejšia elektronika, ISOBUS, emisný stupeň Stage V`,
+        `хочеш новішу конструкцію (представлення ${self.year_from}) — зазвичай сучасніша електроніка, ISOBUS, екологічний клас Stage V`));
     }
     // If self has no winning attribute, frame positively via farm-size fit + brand preference.
     if (parts.length === 0) {
-      const sizeClause = farmSizeClause(self.category, self.power_hp, sk);
+      const sizeClause = farmSizeClause(self.category, self.power_hp, locale);
       if (sizeClause) parts.push(sizeClause);
-      // "preferuješ" is identical in cs and sk.
-      parts.push(`preferuješ ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, sk)}`);
+      parts.push(pick(
+        `preferuješ ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, locale)}`,
+        `preferuješ ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, locale)}`,
+        `орієнтуєшся на ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, locale)}`));
     }
-    return sk
-      ? `Vyber ${selfName}, ak ${parts.join(', a zároveň ')}.`
-      : `Vyber ${selfName} pokud ${parts.join(', a zároveň ')}.`;
+    return pick(
+      `Vyber ${selfName} pokud ${parts.join(', a zároveň ')}.`,
+      `Vyber ${selfName}, ak ${parts.join(', a zároveň ')}.`,
+      `Обери ${selfName}, якщо ${parts.join(', а водночас ')}.`);
   }
 
   const decisionA = buildDecision(a, b);
@@ -249,10 +291,11 @@ export function comparisonInsights(
     if (hpDiff === 0) {
       const kw = a.power_kw ?? Math.round(aHp * 0.7457);
       faqs.push({
-        q: sk ? `Aký výkon majú ${aName} a ${bName}?` : `Jaký výkon mají ${aName} a ${bName}?`,
-        a: sk
-          ? `Oba ${categoryWord}y majú zhodný výkon ${num(aHp)} k (${kw} kW). Rozhodujúci rozdiel je teda v ďalších parametroch — motore, prevodovke a hmotnosti.`
-          : `Oba ${categoryWord}y mají shodný výkon ${num(aHp)} k (${kw} kW). Rozhodující rozdíl je tedy v dalších parametrech — motoru, převodovce a hmotnosti.`,
+        q: pick(`Jaký výkon mají ${aName} a ${bName}?`, `Aký výkon majú ${aName} a ${bName}?`, `Яку потужність мають ${aName} та ${bName}?`),
+        a: pick(
+          `Oba ${categoryWord}y mají shodný výkon ${num(aHp)} k (${kw} kW). Rozhodující rozdíl je tedy v dalších parametrech — motoru, převodovce a hmotnosti.`,
+          `Oba ${categoryWord}y majú zhodný výkon ${num(aHp)} k (${kw} kW). Rozhodujúci rozdiel je teda v ďalších parametroch — motore, prevodovke a hmotnosti.`,
+          `Обидва ${categoryWordUk}и мають однакову потужність ${num(aHp)} к.с. (${kw} кВт). Вирішальна різниця, отже, полягає в інших параметрах — двигуні, трансмісії та масі.`),
       });
     } else {
       const strongerName = modelDisplayName(stronger!);
@@ -260,12 +303,14 @@ export function comparisonInsights(
       const strongerHp = stronger === a ? aHp : bHp;
       const weakerHp = stronger === a ? bHp : aHp;
       faqs.push({
-        q: sk
-          ? `Čo je výkonnejšie — ${aName} alebo ${bName}?`
-          : `Co je výkonnější — ${aName} nebo ${bName}?`,
-        a: sk
-          ? `Výkonnejší je ${strongerName} s ${num(strongerHp!)} k oproti ${num(weakerHp!)} k u ${weakerName}, rozdiel teda predstavuje ${Math.abs(hpDiff!)} k (približne ${Math.abs(hpPct!)} %).`
-          : `Výkonnější je ${strongerName} s ${num(strongerHp!)} k oproti ${num(weakerHp!)} k u ${weakerName}, rozdíl tedy činí ${Math.abs(hpDiff!)} k (přibližně ${Math.abs(hpPct!)} %).`,
+        q: pick(
+          `Co je výkonnější — ${aName} nebo ${bName}?`,
+          `Čo je výkonnejšie — ${aName} alebo ${bName}?`,
+          `Що потужніше — ${aName} чи ${bName}?`),
+        a: pick(
+          `Výkonnější je ${strongerName} s ${num(strongerHp!)} k oproti ${num(weakerHp!)} k u ${weakerName}, rozdíl tedy činí ${Math.abs(hpDiff!)} k (přibližně ${Math.abs(hpPct!)} %).`,
+          `Výkonnejší je ${strongerName} s ${num(strongerHp!)} k oproti ${num(weakerHp!)} k u ${weakerName}, rozdiel teda predstavuje ${Math.abs(hpDiff!)} k (približne ${Math.abs(hpPct!)} %).`,
+          `Потужніший — ${strongerName} з ${num(strongerHp!)} к.с. проти ${num(weakerHp!)} к.с. у ${weakerName}, тобто різниця становить ${Math.abs(hpDiff!)} к.с. (приблизно ${Math.abs(hpPct!)} %).`),
       });
     }
   }
@@ -277,15 +322,16 @@ export function comparisonInsights(
   const bTr = b.transmission ?? null;
   if (aEng || bEng || aTr || bTr) {
     const parts: string[] = [];
-    if (aEng) parts.push(sk ? `${aName} poháňa motor ${aEng}` : `${aName} pohání motor ${aEng}`);
-    if (bEng) parts.push(`${bName} motor ${bEng}`);
-    if (aTr && bTr && aTr !== bTr) parts.push(sk
-      ? `Prevodovka: ${aName} — ${aTr}, ${bName} — ${bTr}`
-      : `Převodovka: ${aName} — ${aTr}, ${bName} — ${bTr}`);
-    else if (aTr) parts.push(sk ? `Prevodovka: ${aTr}` : `Převodovka: ${aTr}`);
-    else if (bTr) parts.push(sk ? `Prevodovka: ${bTr}` : `Převodovka: ${bTr}`);
+    if (aEng) parts.push(pick(`${aName} pohání motor ${aEng}`, `${aName} poháňa motor ${aEng}`, `${aName} оснащено двигуном ${aEng}`));
+    if (bEng) parts.push(pick(`${bName} motor ${bEng}`, `${bName} motor ${bEng}`, `${bName} — двигун ${bEng}`));
+    if (aTr && bTr && aTr !== bTr) parts.push(pick(
+      `Převodovka: ${aName} — ${aTr}, ${bName} — ${bTr}`,
+      `Prevodovka: ${aName} — ${aTr}, ${bName} — ${bTr}`,
+      `Трансмісія: ${aName} — ${aTr}, ${bName} — ${bTr}`));
+    else if (aTr) parts.push(pick(`Převodovka: ${aTr}`, `Prevodovka: ${aTr}`, `Трансмісія: ${aTr}`));
+    else if (bTr) parts.push(pick(`Převodovka: ${bTr}`, `Prevodovka: ${bTr}`, `Трансмісія: ${bTr}`));
     faqs.push({
-      q: sk ? `Aký majú motor a prevodovku?` : `Jaký mají motor a převodovku?`,
+      q: pick(`Jaký mají motor a převodovku?`, `Aký majú motor a prevodovku?`, `Який у них двигун і трансмісія?`),
       a: parts.join('. ') + '.',
     });
   }
@@ -296,10 +342,11 @@ export function comparisonInsights(
     const lighterKg = lighter === a ? aKg : bKg;
     const heavierKg = lighter === a ? bKg : aKg;
     faqs.push({
-      q: sk ? `Ktorý ${categoryWord} je ľahší?` : `Který ${categoryWord} je lehčí?`,
-      a: sk
-        ? `Ľahší je ${lighterName} s hmotnosťou ${num(lighterKg)} kg oproti ${num(heavierKg)} kg, rozdiel ${num(Math.abs(kgDiff))} kg. Nižšia hmotnosť znamená menšie utláčanie pôdy a lepšiu manévrovateľnosť, ale typicky aj nižšiu ťažnú silu.`
-        : `Lehčí je ${lighterName} s hmotností ${num(lighterKg)} kg oproti ${num(heavierKg)} kg, rozdíl ${num(Math.abs(kgDiff))} kg. Nižší hmotnost znamená menší utužování půdy a lepší manévrovatelnost, ale typicky i nižší tažnou sílu.`,
+      q: pick(`Který ${categoryWord} je lehčí?`, `Ktorý ${categoryWord} je ľahší?`, `Який ${categoryWordUk} легший?`),
+      a: pick(
+        `Lehčí je ${lighterName} s hmotností ${num(lighterKg)} kg oproti ${num(heavierKg)} kg, rozdíl ${num(Math.abs(kgDiff))} kg. Nižší hmotnost znamená menší utužování půdy a lepší manévrovatelnost, ale typicky i nižší tažnou sílu.`,
+        `Ľahší je ${lighterName} s hmotnosťou ${num(lighterKg)} kg oproti ${num(heavierKg)} kg, rozdiel ${num(Math.abs(kgDiff))} kg. Nižšia hmotnosť znamená menšie utláčanie pôdy a lepšiu manévrovateľnosť, ale typicky aj nižšiu ťažnú silu.`,
+        `Легший — ${lighterName} з масою ${num(lighterKg)} кг проти ${num(heavierKg)} кг, різниця ${num(Math.abs(kgDiff))} кг. Менша маса означає менше ущільнення ґрунту та кращу маневреність, але зазвичай і меншу тягову силу.`),
     });
   }
 
@@ -309,9 +356,10 @@ export function comparisonInsights(
     if (aUseCase) parts.push(`${aName}: ${aUseCase}`);
     if (bUseCase) parts.push(`${bName}: ${bUseCase}`);
     faqs.push({
-      q: sk
-        ? `Pre akú veľkosť farmy sa ${aName} a ${bName} hodia?`
-        : `Pro jakou velikost farmy se ${aName} a ${bName} hodí?`,
+      q: pick(
+        `Pro jakou velikost farmy se ${aName} a ${bName} hodí?`,
+        `Pre akú veľkosť farmy sa ${aName} a ${bName} hodia?`,
+        `Для якого розміру ферми підходять ${aName} та ${bName}?`),
       a: parts.join(' '),
     });
   }
@@ -320,26 +368,35 @@ export function comparisonInsights(
   if (aYear !== null && bYear !== null) {
     if (yearDiff === 0) {
       faqs.push({
-        q: sk
-          ? `Kedy boli ${aName} a ${bName} uvedené na trh?`
-          : `Kdy byly ${aName} a ${bName} uvedeny na trh?`,
-        a: sk
-          ? `Oba modely boli uvedené v roku ${aYear}, ide teda o súčasníkov rovnakej generácie techniky.`
-          : `Oba modely byly uvedeny v roce ${aYear}, jde tedy o současníky stejné generace techniky.`,
+        q: pick(
+          `Kdy byly ${aName} a ${bName} uvedeny na trh?`,
+          `Kedy boli ${aName} a ${bName} uvedené na trh?`,
+          `Коли ${aName} та ${bName} вийшли на ринок?`),
+        a: pick(
+          `Oba modely byly uvedeny v roce ${aYear}, jde tedy o současníky stejné generace techniky.`,
+          `Oba modely boli uvedené v roku ${aYear}, ide teda o súčasníkov rovnakej generácie techniky.`,
+          `Обидві моделі вийшли у ${aYear} році, тобто це сучасники одного покоління техніки.`),
       });
     } else {
       const newerName = modelDisplayName(newer!);
       const newerYear = newer === a ? aYear : bYear;
       const olderYear = newer === a ? bYear : aYear;
       const ay = Math.abs(yearDiff!);
-      const yearWord = sk
-        ? (ay === 1 ? 'rok' : ay < 5 ? 'roky' : 'rokov')
-        : (ay === 1 ? 'rok' : ay < 5 ? 'roky' : 'let');
+      // Ukrainian plural for "рік": 1 → рік; 2–4 (not 12–14) → роки; else роки → років.
+      const ayMod10 = ay % 10;
+      const ayMod100 = ay % 100;
+      const yearWord = pick(
+        ay === 1 ? 'rok' : ay < 5 ? 'roky' : 'let',
+        ay === 1 ? 'rok' : ay < 5 ? 'roky' : 'rokov',
+        ayMod10 === 1 && ayMod100 !== 11 ? 'рік'
+          : ayMod10 >= 2 && ayMod10 <= 4 && !(ayMod100 >= 12 && ayMod100 <= 14) ? 'роки'
+          : 'років');
       faqs.push({
-        q: sk ? `Ktorý model je novší?` : `Který model je novější?`,
-        a: sk
-          ? `Novší je ${newerName} uvedený v roku ${newerYear} (oproti ${olderYear}). Rozdiel ${ay} ${yearWord} typicky znamená modernejší emisný stupeň, lepšiu elektroniku a aktuálnejšiu ISOBUS implementáciu.`
-          : `Novější je ${newerName} uvedený v roce ${newerYear} (oproti ${olderYear}). Rozdíl ${ay} ${yearWord} typicky znamená modernější emisní stupeň, lepší elektroniku a aktuálnější ISOBUS implementaci.`,
+        q: pick(`Který model je novější?`, `Ktorý model je novší?`, `Яка модель новіша?`),
+        a: pick(
+          `Novější je ${newerName} uvedený v roce ${newerYear} (oproti ${olderYear}). Rozdíl ${ay} ${yearWord} typicky znamená modernější emisní stupeň, lepší elektroniku a aktuálnější ISOBUS implementaci.`,
+          `Novší je ${newerName} uvedený v roku ${newerYear} (oproti ${olderYear}). Rozdiel ${ay} ${yearWord} typicky znamená modernejší emisný stupeň, lepšiu elektroniku a aktuálnejšiu ISOBUS implementáciu.`,
+          `Новіша — ${newerName}, представлена у ${newerYear} році (проти ${olderYear}). Різниця ${ay} ${yearWord} зазвичай означає сучасніший екологічний клас, кращу електроніку та актуальнішу реалізацію ISOBUS.`),
       });
     }
   }

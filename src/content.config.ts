@@ -69,6 +69,12 @@ const encyklopedieSk = defineCollection({
   schema: encyklopedieSchema(),
 });
 
+// UK-localizovaná overlay kolekce encyklopedie (slug = REUSE cs slug).
+const encyklopedieUk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie-uk' }),
+  schema: encyklopedieSchema(),
+});
+
 const znackySchema = () =>
   z.object({
     name: z.string(),
@@ -126,6 +132,12 @@ const znacky = defineCollection({
 // getCollection('znacky') listings/sitemap/llms stay untouched).
 const znackySk = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/znacky-sk' }),
+  schema: znackySchema(),
+});
+
+// UK-localized brand profiles (overlay collection).
+const znackyUk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky-uk' }),
   schema: znackySchema(),
 });
 
@@ -225,4 +237,4 @@ const howtoSk = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { novinky, encyklopedie, encyklopedieSk, znacky, znackySk, puda, pudaSk, dotace, dotaceSk, howto, howtoSk };
+export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, znacky, znackySk, znackyUk, puda, pudaSk, dotace, dotaceSk, howto, howtoSk };
