@@ -11,12 +11,13 @@ import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { useTranslations, getLocaleFromUrl, localizePath } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
-const isSk = locale === 'sk';
 const t = useTranslations(locale);
-const base = isSk ? '/sk' : '';
+const base = locale === 'cs' ? '' : `/${locale}`;
+const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA' } as const)[locale];
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
-const items = await getCollection(isSk ? 'howtoSk' : 'howto');
+const HOWTO_COLLECTION = { cs: 'howto', sk: 'howtoSk', uk: 'howtoUk' } as const;
+const items = await getCollection(HOWTO_COLLECTION[locale]);
 const sorted = items.sort((a, b) => b.data.datePublished.getTime() - a.data.datePublished.getTime());
 
 const breadcrumbJsonLd = breadcrumbSchema([
@@ -33,14 +34,14 @@ const collectionJsonLd = {
   name: t('howto.list.collName'),
   description: t('howto.list.collDesc'),
   url: `${SITE_URL}${base}/jak-na-to/`,
-  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
+  inLanguage: bcp47,
 };
 ---
 
 <Layout
   title={t('howto.list.title')}
   description={t('howto.list.description')}
-  canonical={isSk ? undefined : `${SITE_URL}/jak-na-to/`}
+  canonical={locale === 'cs' ? `${SITE_URL}/jak-na-to/` : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(listJsonLd)} />

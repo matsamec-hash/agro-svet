@@ -237,4 +237,12 @@ const howtoSk = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, znacky, znackySk, znackyUk, puda, pudaSk, dotace, dotaceSk, howto, howtoSk };
+// UK-localizovaná overlay kolekce howto (slug = REUSE cs slug). Chybějící uk
+// slug pod /uk = 404 (žádný cs leak). 2 jurisdikční návody (registrace-vcelaru,
+// jak-naplanovat-dotaci-na-techniku) záměrně NEpřeloženy → UK jurisdikční fáze.
+const howtoUk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/howto-uk' }),
+  schema: howtoSchema(),
+});
+
+export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, znacky, znackySk, znackyUk, puda, pudaSk, dotace, dotaceSk, howto, howtoSk, howtoUk };

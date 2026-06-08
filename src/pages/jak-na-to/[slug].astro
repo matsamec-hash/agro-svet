@@ -10,13 +10,14 @@ import { breadcrumbSchema, howToSchema, faqPageSchema } from '../../lib/structur
 import { useTranslations, getLocaleFromUrl, localizePath } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
-const isSk = locale === 'sk';
 const t = useTranslations(locale);
-const base = isSk ? '/sk' : '';
+const base = locale === 'cs' ? '' : `/${locale}`;
+const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA' } as const)[locale];
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const items = await getCollection(isSk ? 'howtoSk' : 'howto');
+const HOWTO_COLLECTION = { cs: 'howto', sk: 'howtoSk', uk: 'howtoUk' } as const;
+const items = await getCollection(HOWTO_COLLECTION[locale]);
 const item = items.find((i) => i.id === slug);
 if (!item) return Astro.rewrite('/404');
 const { Content } = await render(item);
@@ -53,7 +54,7 @@ const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item
 const datePublishedIso = item.data.datePublished.toISOString().slice(0, 10);
 const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : null;
 const lastVerifiedFmt = item.data.lastVerified
-  ? new Intl.DateTimeFormat(isSk ? 'sk-SK' : 'cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
+  ? new Intl.DateTimeFormat(bcp47, { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
   : null;
 
 // Article schema with explicit author + dateModified — E-E-A-T signal,
@@ -78,11 +79,11 @@ const articleJsonLd = {
   datePublished: datePublishedIso,
   dateModified: lastVerifiedIso ?? datePublishedIso,
   mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
-  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
+  inLanguage: bcp47,
 };
 ---
 
-<Layout title={item.data.title} description={item.data.description} canonical={isSk ? undefined : pageUrl} ogType="article" ogImage={ogImageAbs}>
+<Layout title={item.data.title} description={item.data.description} canonical={locale === 'cs' ? pageUrl : undefined} ogType="article" ogImage={ogImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />

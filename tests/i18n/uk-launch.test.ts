@@ -20,3 +20,15 @@ describe('UK fáze 2 launch (stroje/srovnani/znacky/encyklopedie)', () => {
     for (const p of launched) expect(isLockedSectionPath(p)).toBe(false);
   });
 });
+
+describe('UK fáze 3 launch (jak-na-to)', () => {
+  it('/jak-na-to je launchnuté pro uk', () => {
+    expect(LAUNCHED_PREFIXES.uk).toContain('/jak-na-to');
+    expect(isLaunchedPath('uk', '/jak-na-to/')).toBe(true);
+    expect(isLaunchedPath('uk', '/jak-na-to/boj-s-varroazou/')).toBe(true);
+  });
+  it('cs nikdy nedostane gating-noindex (LAUNCHED_PREFIXES.cs prázdné)', () => {
+    expect(LAUNCHED_PREFIXES.cs).toEqual([]);
+    expect(isLaunchedPath('cs', '/jak-na-to/boj-s-varroazou/')).toBe(false);
+  });
+});
