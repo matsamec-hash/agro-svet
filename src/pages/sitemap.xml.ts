@@ -417,6 +417,13 @@ export const GET: APIRoute = async () => {
   // UK launch (Fáze 2-obsah): pro přeložené sekce přidáme /uk zrcadlové URL.
   // Stejné filtry jako sk (skryté dotace-detaily/kategorie + lock). Před launchem
   // je LAUNCHED_PREFIXES.uk prázdné → ukMirror == [] (žádná změna sitemapy).
+  // Fáze 3: howto-uk je PODMNOŽINA cs howto (2 jurisdikční návody nepřeloženy →
+  // /uk/jak-na-to/<slug>/ = 404). Nezrcadlit cs howto slugy chybějící v howtoUk.
+  const ukHowtoSlugs = new Set((await getCollection('howtoUk')).map((h) => h.id));
+  const isUkMissingHowto = (p: string): boolean => {
+    const m = p.match(/^\/jak-na-to\/([^/]+)\/$/);
+    return !!m && !ukHowtoSlugs.has(m[1]);
+  };
   const ukMirror: UrlEntry[] = urls
     .filter((u) => {
       if (!u.loc.startsWith(SITE_URL)) return false;
@@ -424,6 +431,7 @@ export const GET: APIRoute = async () => {
       if (p.startsWith('/sk/')) return false; // nezrcadlit už zrcadlené sk URL
       if (isDotaceDetailPath(p)) return false;
       if (isSkHiddenCategoryPath(p)) return false;
+      if (isUkMissingHowto(p)) return false; // chybějící uk návod → 404, nezrcadlit
       return isLaunchedPath('uk', p) && !isLockedSectionPath(p);
     })
     .map((u) => ({ ...u, loc: `${SITE_URL}/uk${u.loc.slice(SITE_URL.length)}` }));
