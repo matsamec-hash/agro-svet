@@ -46,7 +46,7 @@ const withUrls = await Promise.all(
           fd.append('entry_id', id);
           fd.append('action', action);
           if (reason) fd.append('reason', reason);
-          const res = await fetch('/admin/fotosoutez/api/moderate', { method: 'POST', body: fd });
+          const res = await fetch('/admin/fotosoutez/api/moderate/', { method: 'POST', body: fd });
           if (res.ok) card.remove();
           else alert('Chyba moderace');
         }

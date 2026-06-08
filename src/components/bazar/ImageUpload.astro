@@ -155,7 +155,7 @@
       fd.append('file', fileToUpload);
 
       try {
-        const res = await fetch('/api/bazar/upload', {
+        const res = await fetch('/api/bazar/upload/', {
           method: 'POST',
           body: fd,
           credentials: 'same-origin',

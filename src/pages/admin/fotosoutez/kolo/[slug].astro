@@ -147,7 +147,7 @@ const alreadyAnnounced = round.status === 'announced';
           ev.preventDefault();
           if (!confirm('Opravdu vyhlásit výherce? Tato akce odešle e-maily a kolo přepne na "announced".')) return;
           const fd = new FormData(form);
-          const res = await fetch('/admin/fotosoutez/api/announce', { method: 'POST', body: fd });
+          const res = await fetch('/admin/fotosoutez/api/announce/', { method: 'POST', body: fd });
           if (res.ok) {
             alert('Výherci vyhlášeni.');
             window.location.reload();

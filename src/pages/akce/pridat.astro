@@ -109,7 +109,7 @@ const kraje = getKraje();
       e.preventDefault();
       const msg = document.getElementById('form-msg');
       msg.textContent = 'Odesílám…';
-      const res = await fetch('/api/akce/submit', { method: 'POST', body: new FormData(form) });
+      const res = await fetch('/api/akce/submit/', { method: 'POST', body: new FormData(form) });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
         form.reset();

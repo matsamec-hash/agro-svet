@@ -47,7 +47,7 @@ function termin(a: (typeof pending)[number]): string {
     async function act(id: string, action: string, reason = '') {
       const fd = new FormData();
       fd.set('akce_id', id); fd.set('action', action); fd.set('reason', reason);
-      const res = await fetch('/admin/akce/api/moderate', { method: 'POST', body: fd });
+      const res = await fetch('/admin/akce/api/moderate/', { method: 'POST', body: fd });
       if (res.ok) location.reload();
       else alert('Chyba moderace: ' + res.status);
     }
