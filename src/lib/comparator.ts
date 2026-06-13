@@ -190,6 +190,64 @@ export interface ComparisonRow {
 }
 
 export function buildComparisonRows(category: StrojKategorie): ComparisonRow[] {
+  // Nářaďová větev: záběrové kategorie nemají power_hp/motor/převodovku → vlastní sada
+  // relevantních řádků (záběr, příkon traktoru, typ závěsu) + univerzální roky/hmotnost.
+  if (category !== 'traktory' && category !== 'kombajny') {
+    const zavesLabel = (v: string | null | undefined): string | null => {
+      switch (v) {
+        case 'neseny': return 'nesený';
+        case 'tazeny': return 'tažený';
+        case 'poloneseny': return 'polonesený';
+        case 'samojizdny': return 'samojízdný';
+        case 'navesny': return 'návěsný';
+        default: return null;
+      }
+    };
+    return [
+      {
+        label: 'Pracovní záběr',
+        better: 'higher',
+        unit: 'm',
+        get: (m) => m.pracovni_zaber_m ?? null,
+      },
+      {
+        label: 'Potřebný příkon traktoru',
+        better: 'none',
+        get: (m) => {
+          const lo = m.prikon_traktor_hp_min ?? null;
+          const hi = m.prikon_traktor_hp_max ?? null;
+          if (lo === null && hi === null) return null;
+          if (lo !== null && hi !== null) return lo === hi ? `${lo} k` : `${lo}–${hi} k`;
+          return `${lo ?? hi} k`;
+        },
+      },
+      {
+        label: 'Typ závěsu',
+        better: 'none',
+        get: (m) => zavesLabel(m.typ_zavesu),
+      },
+      {
+        label: 'Roky výroby',
+        better: 'none',
+        get: (m) => {
+          if (m.year_from === null) return null;
+          return m.year_to === null ? `${m.year_from}–dosud` : `${m.year_from}–${m.year_to}`;
+        },
+      },
+      {
+        label: 'V prodeji',
+        better: 'none',
+        get: (m) => (m.year_to === null ? 'Ano' : 'Ne'),
+      },
+      {
+        label: 'Hmotnost',
+        better: 'lower',
+        unit: 'kg',
+        get: (m) => m.weight_kg ?? null,
+      },
+    ];
+  }
+
   const rows: ComparisonRow[] = [
     {
       label: 'Výkon',
