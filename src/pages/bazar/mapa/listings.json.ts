@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { createServerClient } from '../../../lib/supabase';
+import { runtimeCache } from '../../../lib/runtime-cache';
 
 export const prerender = false;
 
@@ -22,11 +23,8 @@ interface CompactListing {
 }
 
 export const GET: APIRoute = async ({ request, locals }) => {
-  const cache = (globalThis as any).caches?.default;
-  if (cache) {
-    const hit = await cache.match(request);
-    if (hit) return hit;
-  }
+  const hit = await runtimeCache.match(request);
+  if (hit) return hit;
 
   const sb = createServerClient();
   const { data, error } = await sb
@@ -69,12 +67,14 @@ export const GET: APIRoute = async ({ request, locals }) => {
       'content-type': 'application/json; charset=utf-8',
       // 5min edge cache + 30min SWR. Fresh listings show up quickly when
       // someone publishes; map doesn't need real-time accuracy.
+      // Note: on the Node origin (runtimeCache) only s-maxage=300 takes effect as a
+      // hard TTL — stale-while-revalidate is a no-op here; after 300s the next request
+      // re-queries Supabase. Cloudflare edge in front still honors SWR for proxied hits.
       'cache-control': 'public, max-age=120, s-maxage=300, stale-while-revalidate=1800',
     },
   });
-  if (cache) {
-    const put = cache.put(request, response.clone());
-    if ((locals as any).cfContext?.waitUntil) (locals as any).cfContext.waitUntil(put);
-  }
+  const put = runtimeCache.put(request, response.clone());
+  if ((locals as any).cfContext?.waitUntil) (locals as any).cfContext.waitUntil(put);
+  else await put;
   return response;
 };

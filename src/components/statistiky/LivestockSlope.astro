@@ -1,6 +1,7 @@
 ---
 // src/components/statistiky/LivestockSlope.astro
 import type { LivestockStat } from '../../lib/czso';
+import { useTranslations } from '../../i18n/utils';
 
 interface Props {
   livestock: LivestockStat[];   // celá historie (pokud k dispozici)
@@ -8,13 +9,18 @@ interface Props {
   fromYear: number | null;      // rok začátku řady (může být null pokud data jen pár let)
 }
 const { livestock, insight, fromYear } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
+const subtitle = fromYear
+  ? t('stat.livestock.subtitleFrom').replace('{fromYear}', String(fromYear))
+  : t('stat.livestock.subtitleFallback');
 ---
 
 <section class="sp-section" id="zvirata">
   <header class="sp-section-head">
-    <h2>Zvířata — historický vývoj stavů</h2>
-    <span class="sp-section-sub">{fromYear ? `Od roku ${fromYear} do dneška` : 'Dostupná pololetní data ČSÚ'}</span>
-    <a class="sp-src" href="https://ec.europa.eu/eurostat/web/agriculture/database" target="_blank" rel="noopener noreferrer">Zdroj: Eurostat + ČSÚ — Pololetní soupisy hospodářských zvířat <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    <h2>{t('stat.livestock.h2')}</h2>
+    <span class="sp-section-sub">{subtitle}</span>
+    <a class="sp-src" href="https://ec.europa.eu/eurostat/web/agriculture/database" target="_blank" rel="noopener noreferrer">{t('stat.livestock.source')} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
   </header>
 
   <div class="sp-chart-card">

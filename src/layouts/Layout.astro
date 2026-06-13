@@ -8,6 +8,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { siteSchemaGraph } from '../lib/structured-data';
 import { imgSrcset } from '../lib/image-variants';
+import { getLocaleFromUrl, t, stripLocale, isLaunchedPath } from '../i18n/utils';
+import { isLockedSectionPath } from '../i18n/nav';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 
@@ -54,8 +56,30 @@ const {
 const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSizes, preloadHeroMaxWidth) : null;
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
-const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+// Po případném middleware rewritu je Astro.url kanonická cs cesta → locale
+// i původní (locale-prefixovaná) cesta se čtou z locals (fallback pro jistotu).
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const localizedPathname = Astro.locals.localizedPathname ?? Astro.url.pathname;
+const ogLocale = { cs: 'cs_CZ', sk: 'sk_SK', uk: 'uk_UA' }[locale];
+const canonicalPath = localizedPathname.endsWith('/') ? localizedPathname : `${localizedPathname}/`;
 const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_ORIGIN).toString();
+// Launch je path-scoped a per-locale: indexují se jen přeložené sekce daného
+// locale. cs se nemění (effectiveNoindex == noindex). SK chování beze změny.
+const csRootPath = stripLocale(localizedPathname).path;
+// Lock přebíjí launch: zamčené pod-cesty (např. /kalkulacka/dotace-cap) zůstávají
+// noindex i bez reciproč. hreflang, i když jejich prefix (/kalkulacka) je launchnutý.
+const locked = isLockedSectionPath(csRootPath);
+const launchedForLocale = isLaunchedPath(locale, csRootPath) && !locked;
+const effectiveNoindex = noindex || (locale === 'cs' ? false : !launchedForLocale);
+// Reciproční hreflang: nezávisle per-locale (sk/uk emitujeme jen kde je sekce
+// pro daný locale launchnutá). cs je vždy. x-default = cs.
+const skLaunchedPath = isLaunchedPath('sk', csRootPath) && !locked;
+const ukLaunchedPath = isLaunchedPath('uk', csRootPath) && !locked;
+const anyAlt = skLaunchedPath || ukLaunchedPath;
+const csRootCanonical = csRootPath.endsWith('/') ? csRootPath : `${csRootPath}/`;
+const hreflangCsUrl = new URL(csRootCanonical, SITE_ORIGIN).toString();
+const hreflangSkUrl = new URL(`/sk${csRootCanonical}`, SITE_ORIGIN).toString();
+const hreflangUkUrl = new URL(`/uk${csRootCanonical}`, SITE_ORIGIN).toString();
 
 // Route-based OG fallback: páry top-level cest k landing PNGs vygenerovaným
 // v scripts/build-og-images.mjs. Pokud konkrétní stránka nepředala ogImage,
@@ -73,7 +97,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
 ---
 
 <!DOCTYPE html>
-<html lang="cs">
+<html lang={locale}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -84,17 +108,28 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta name="seznam-wmt" content="H957FuP9Pc7eQLHuPaTpuyrG03OUV0FD" />
   <title>{title} | agro-svět.cz</title>
   <meta name="description" content={description} />
-  <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+  <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
   <link rel="canonical" href={canonicalUrl} />
-  <link rel="alternate" hreflang="cs" href={canonicalUrl} />
-  <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+  {anyAlt ? (
+    <>
+      <link rel="alternate" hreflang="cs" href={hreflangCsUrl} />
+      {skLaunchedPath && <link rel="alternate" hreflang="sk" href={hreflangSkUrl} />}
+      {ukLaunchedPath && <link rel="alternate" hreflang="uk" href={hreflangUkUrl} />}
+      <link rel="alternate" hreflang="x-default" href={hreflangCsUrl} />
+    </>
+  ) : (
+    <>
+      <link rel="alternate" hreflang="cs" href={canonicalUrl} />
+      <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+    </>
+  )}
 
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content={ogType} />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:locale" content="cs_CZ" />
+  <meta property="og:locale" content={ogLocale} />
   <meta property="og:site_name" content="agro-svět.cz" />
   <meta property="og:image" content={resolvedOgImage} />
   <meta property="og:image:width" content="1200" />
@@ -147,7 +182,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <slot name="head" />
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Přeskočit na obsah</a>
+  <a href="#main-content" class="skip-link">{t(locale, 'a11y.skipToContent')}</a>
   <Header />
   <main id="main-content" tabindex="-1">
     <slot />

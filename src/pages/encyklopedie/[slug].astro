@@ -1,26 +1,35 @@
 ---
-export const prerender = true;
+// SSR (prerender:false): middleware servíruje /sk a /uk verzi přes locals.locale.
+// sk čte z 'encyklopedieSk', uk z 'encyklopedieUk' (přeložené overlay kolekce)
+// BEZ cs fallbacku — chybějící sk/uk slug = 404 (žádný cs leak).
+// cs render = dnešní literály VERBATIM.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchema, expertReviewSchema } from '../../lib/structured-data';
+import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../i18n/utils';
 
-export async function getStaticPaths() {
-  const items = await getCollection('encyklopedie');
-  return items.map((i) => ({ params: { slug: i.id } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklopedieUk' } as const;
+const coll = ENC_COLLECTION[locale];
+const base = locale === 'cs' ? '' : `/${locale}`;
+const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA' } as const)[locale];
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const items = await getCollection('encyklopedie');
-const item = items.find((i) => i.id === slug);
-if (!item) return Astro.rewrite('/404');
+const item = slug ? await getEntry(coll, slug) : undefined;
+if (!item) return Astro.rewrite('/404'); // žádný cs fallback — chybějící uk/sk slug = 404
+// Hledání souvisejících/related čte z lokalizované kolekce (overlay má stejné slug+znacka+kategorie).
+const items = await getCollection(coll);
 const { Content } = await render(item);
 // Existuje-li redakční profil značky (historie), nabídneme odkaz.
 const znackyHubs = await getCollection('znacky');
 const hasBrandHub = znackyHubs.some((z) => z.id === item.data.znacka);
 // Render content body with auto-link injection (slovník, žebříčky, modely).
 import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
-const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `/encyklopedie/${slug}/`);
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/encyklopedie/${slug}/`);
 
 // Related encyklopedie items: same znacka first, then same kategorie.
 const relatedSameZnacka = items.filter((i) => i.id !== item.id && i.data.znacka === item.data.znacka);
@@ -31,7 +40,7 @@ const brandPrettyForLinks = znackyHubs.find((z) => z.id === item.data.znacka)?.d
   ?? (item.data.znacka.charAt(0).toUpperCase() + item.data.znacka.slice(1));
 
 const kategLabels: Record<string, string> = {
-  traktor: 'Traktor', kombajn: 'Kombajn', stroj: 'Stroj', 'puda-technika': 'Půdní technika',
+  traktor: t('enc.kat.traktor'), kombajn: t('enc.kat.kombajn'), stroj: t('enc.kat.stroj'), 'puda-technika': t('enc.kat.puda-technika'),
 };
 // Map narrative singular categories to schema-helper plural slugs (Vehicle vs Product).
 const schemaCategory: Record<string, string> = {
@@ -41,7 +50,7 @@ const schemaCategory: Record<string, string> = {
   'puda-technika': 'zemedelske-stroje',
 };
 
-const pageUrl = `${SITE_URL}/encyklopedie/${slug}/`;
+const pageUrl = `${SITE_URL}${base}/encyklopedie/${slug}/`;
 const heroImageAbs = item.data.heroImage
   ? (item.data.heroImage.startsWith('http') ? item.data.heroImage : `${SITE_URL}${item.data.heroImage}`)
   : undefined;
@@ -50,8 +59,8 @@ const heroImageAbs = item.data.heroImage
 const ogImageAbs = `${SITE_URL}/og/encyklopedie-${slug}.png`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Encyklopedie', url: '/encyklopedie/' },
+  { name: t('cat.bc.home'), url: `${base}/` },
+  { name: t('enc.crumb'), url: `${base}/encyklopedie/` },
   { name: item.data.name, url: pageUrl },
 ]);
 
@@ -74,6 +83,7 @@ const productJsonLd = machineProductSchema({
   yearTo: item.data.yearTo ?? null,
   engine: item.data.engine,
   transmission: item.data.transmission,
+  lang: bcp47,
 });
 
 const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
@@ -111,7 +121,7 @@ const videoJsonLd = item.data.youtubeId
   : null;
 
 const lastVerifiedFmt = item.data.lastVerified
-  ? new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
+  ? new Intl.DateTimeFormat(bcp47, { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
   : null;
 const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : null;
 
@@ -136,11 +146,11 @@ const articleJsonLd = {
   },
   ...(lastVerifiedIso && { dateModified: lastVerifiedIso, datePublished: lastVerifiedIso }),
   mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
-  inLanguage: 'cs-CZ',
+  inLanguage: bcp47,
 };
 ---
 
-<Layout title={item.data.name} description={item.data.popis} canonical={pageUrl} ogType="product" ogImage={ogImageAbs}>
+<Layout title={item.data.name} description={item.data.popis} canonical={locale === 'cs' ? pageUrl : undefined} ogType="product" ogImage={ogImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
@@ -152,7 +162,7 @@ const articleJsonLd = {
     <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
       <img
         src={item.data.heroImage}
-        alt={`${item.data.name} — ${kategLabels[item.data.kategorie] ?? item.data.kategorie}${item.data.powerHp ? `, ${item.data.powerHp} koní` : ''}, hlavní pohled`}
+        alt={`${item.data.name} — ${kategLabels[item.data.kategorie] ?? item.data.kategorie}${item.data.powerHp ? `, ${item.data.powerHp} ${t('enc.alt.koni')}` : ''}, ${t('enc.alt.hero')}`}
         width="1200"
         height="600"
         fetchpriority="high"
@@ -166,14 +176,14 @@ const articleJsonLd = {
   <div style="max-width:980px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:28px;">
-      <a href="/encyklopedie/" style="color:#666; text-decoration:none;">Encyklopedie</a>
+      <a href={localizePath(locale, '/encyklopedie/')} style="color:#666; text-decoration:none;">{t('enc.crumb')}</a>
       <span style="margin:0 8px;">›</span>
       <span>{item.data.name}</span>
     </div>
 
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
       <span style="background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-weight:400; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase;">{kategLabels[item.data.kategorie] ?? item.data.kategorie}</span>
-      <span style="font-size:13px; color:#767676;">{item.data.znacka.toUpperCase()} · od {item.data.rok_uvedeni}</span>
+      <span style="font-size:13px; color:#767676;">{item.data.znacka.toUpperCase()} · {t('enc.kategorieOd')} {item.data.rok_uvedeni}</span>
     </div>
 
     <h1 style="font-size:clamp(2rem,5vw,3rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:12px;">{item.data.name}</h1>
@@ -181,12 +191,12 @@ const articleJsonLd = {
     <!-- Author byline (E-E-A-T signal above the fold) -->
     <div class="byline" style="display:flex; gap:12px; align-items:center; font-size:13.5px; color:#5a5a62; margin-bottom:32px; padding-bottom:16px; border-bottom:1px solid #ebebeb; flex-wrap:wrap;">
       <span>
-        Zpracováno <a href="/redakce/" style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">redakcí agro-svět.cz</a>
+        {t('enc.byline.pre')} <a href={localizePath(locale, '/redakce/')} style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">{t('enc.byline.redakce')}</a>
       </span>
       {lastVerifiedFmt && (
         <>
           <span style="color:#c0c0c8;" aria-hidden="true">·</span>
-          <span>Naposledy ověřeno <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time></span>
+          <span>{t('enc.byline.verified')} <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time></span>
         </>
       )}
     </div>
@@ -194,15 +204,15 @@ const articleJsonLd = {
     <!-- Spec grid -->
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:40px;">
       <div style="background:#f8f8f8; border-radius:10px; padding:18px;">
-        <div style="font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:#666; margin-bottom:6px;">Výkon</div>
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:#666; margin-bottom:6px;">{t('enc.spec.vykon')}</div>
         <div style="font-size:20px; font-weight:400; color:#1a1a1a;">{item.data.vykon}</div>
       </div>
       <div style="background:#f8f8f8; border-radius:10px; padding:18px;">
-        <div style="font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:#666; margin-bottom:6px;">Hmotnost</div>
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:#666; margin-bottom:6px;">{t('enc.spec.hmotnost')}</div>
         <div style="font-size:20px; font-weight:400; color:#1a1a1a;">{item.data.hmotnost}</div>
       </div>
       <div style="background:#f8f8f8; border-radius:10px; padding:18px;">
-        <div style="font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:#666; margin-bottom:6px;">Rok uvedení</div>
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:#666; margin-bottom:6px;">{t('enc.spec.rok')}</div>
         <div style="font-size:20px; font-weight:400; color:#1a1a1a;">{item.data.rok_uvedeni}</div>
       </div>
     </div>
@@ -210,7 +220,7 @@ const articleJsonLd = {
     <!-- Highlights -->
     {item.data.highlights?.length > 0 && (
       <div style="background:#1a1a1a; border-radius:14px; padding:24px 28px; margin-bottom:40px;">
-        <div style="font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#666; margin-bottom:16px;">Klíčové vlastnosti</div>
+        <div style="font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#666; margin-bottom:16px;">{t('enc.highlights')}</div>
         <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;">
           {item.data.highlights.map(h => (
             <li style="display:flex; align-items:flex-start; gap:12px; font-size:15px; color:#f0f0f0; line-height:1.5;">
@@ -233,7 +243,7 @@ const articleJsonLd = {
         <aside aria-labelledby="verdict-heading" style="margin:0 0 40px; padding:24px 28px; border:2px solid #FFFF00; border-radius:14px; background:linear-gradient(180deg, #fffce0 0%, #fffaa8 100%); color:#0A0A0B;">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:14px;">
             <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:12px; text-transform:uppercase; letter-spacing:1.5px; font-weight:700; color:#0A0A0B;">Hodnocení redakce</span>
+              <span style="font-size:12px; text-transform:uppercase; letter-spacing:1.5px; font-weight:700; color:#0A0A0B;">{t('enc.verdict.label')}</span>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
               <span aria-hidden="true" style="font-size:18px; letter-spacing:2px; color:#B58A00;">
@@ -242,13 +252,13 @@ const articleJsonLd = {
               <strong style="font-size:20px; color:#0A0A0B;">{ratingFmt} / 5</strong>
             </div>
           </div>
-          <h2 id="verdict-heading" style="font-size:18px; font-weight:700; margin:0 0 8px; color:#0A0A0B;">Verdikt</h2>
+          <h2 id="verdict-heading" style="font-size:18px; font-weight:700; margin:0 0 8px; color:#0A0A0B;">{t('enc.verdict.h')}</h2>
           <p style="font-size:15px; line-height:1.6; margin:0 0 18px; color:#1a1a1a;">{rec.verdikt}</p>
           {((rec.plusy && rec.plusy.length > 0) || (rec.minusy && rec.minusy.length > 0)) && (
             <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;">
               {rec.plusy && rec.plusy.length > 0 && (
                 <div>
-                  <div style="font-size:13px; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#0B7A3B; margin-bottom:6px;">Plusy</div>
+                  <div style="font-size:13px; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#0B7A3B; margin-bottom:6px;">{t('enc.verdict.plusy')}</div>
                   <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:4px; font-size:14px;">
                     {rec.plusy.map((p) => <li style="display:flex; gap:8px;"><span aria-hidden="true" style="color:#0B7A3B; font-weight:700;">+</span><span>{p}</span></li>)}
                   </ul>
@@ -256,7 +266,7 @@ const articleJsonLd = {
               )}
               {rec.minusy && rec.minusy.length > 0 && (
                 <div>
-                  <div style="font-size:13px; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#C8102E; margin-bottom:6px;">Mínusy</div>
+                  <div style="font-size:13px; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#C8102E; margin-bottom:6px;">{t('enc.verdict.minusy')}</div>
                   <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:4px; font-size:14px;">
                     {rec.minusy.map((m) => <li style="display:flex; gap:8px;"><span aria-hidden="true" style="color:#C8102E; font-weight:700;">−</span><span>{m}</span></li>)}
                   </ul>
@@ -264,7 +274,7 @@ const articleJsonLd = {
               )}
             </div>
           )}
-          <p style="margin:14px 0 0; font-size:12px; color:#5a5a5a;">Recenze redakce na základě veřejně dostupných specifikací, testů a uživatelských zpětných vazeb.</p>
+          <p style="margin:14px 0 0; font-size:12px; color:#5a5a5a;">{t('enc.verdict.note')}</p>
         </aside>
       );
     })()}
@@ -276,18 +286,18 @@ const articleJsonLd = {
 
     {item.data.youtubeId && (
       <section class="video" aria-labelledby="video-heading">
-        <h2 id="video-heading">Video — {item.data.youtubeTitle ?? `${item.data.name}`}</h2>
+        <h2 id="video-heading">{t('enc.video.h')} — {item.data.youtubeTitle ?? `${item.data.name}`}</h2>
         <div
           class="yt-facade"
           data-yt-id={item.data.youtubeId}
           data-yt-title={item.data.youtubeTitle ?? item.data.name}
           role="button"
           tabindex="0"
-          aria-label={`Přehrát video: ${item.data.youtubeTitle ?? item.data.name}`}
+          aria-label={`${t('enc.video.play')}: ${item.data.youtubeTitle ?? item.data.name}`}
         >
           <img
             src={`https://i.ytimg.com/vi/${item.data.youtubeId}/hqdefault.jpg`}
-            alt={`Náhled videa: ${item.data.youtubeTitle ?? item.data.name}`}
+            alt={`${t('enc.video.preview')}: ${item.data.youtubeTitle ?? item.data.name}`}
             width="1280"
             height="720"
             loading="lazy"
@@ -297,13 +307,13 @@ const articleJsonLd = {
             <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74A8.02 8.02 0 0 0 60.96 2.18C56.06.83 34 .83 34 .83s-22.06 0-26.96 1.35A8.02 8.02 0 0 0 1.48 7.74C.13 12.64.13 24 .13 24s0 11.36 1.35 16.26a8.02 8.02 0 0 0 5.56 5.56C11.94 47.17 34 47.17 34 47.17s22.06 0 26.96-1.35a8.02 8.02 0 0 0 5.56-5.56C67.87 35.36 67.87 24 67.87 24s0-11.36-1.35-16.26z" fill="#ff0000"/><path d="M27.2 33.6L45.6 24 27.2 14.4z" fill="#fff"/></svg>
           </div>
         </div>
-        <p class="video-note">Načtením videa souhlasíte s podmínkami služby YouTube.</p>
+        <p class="video-note">{t('enc.video.note')}</p>
       </section>
     )}
 
     {item.data.faq && item.data.faq.length > 0 && (
       <section class="faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">Časté otázky</h2>
+        <h2 id="faq-heading">{t('enc.faq.h')}</h2>
         <dl class="faq-list">
           {item.data.faq.map((qa) => (
             <div class="faq-item">
@@ -317,10 +327,10 @@ const articleJsonLd = {
 
     {relatedItems.length > 0 && (
       <section class="related" aria-labelledby="related-heading">
-        <h2 id="related-heading">Související modely</h2>
+        <h2 id="related-heading">{t('enc.related.h')}</h2>
         <div class="related-grid">
           {relatedItems.map((r) => (
-            <a href={`/encyklopedie/${r.id}/`} class="related-card">
+            <a href={localizePath(locale, `/encyklopedie/${r.id}/`)} class="related-card">
               <div class="related-brand">{r.data.znacka.toUpperCase()}</div>
               <div class="related-name">{r.data.name}</div>
               <div class="related-meta">{r.data.vykon}{r.data.rok_uvedeni ? ` · ${r.data.rok_uvedeni}` : ''}</div>
@@ -328,37 +338,37 @@ const articleJsonLd = {
           ))}
         </div>
         <div class="related-cta">
-          <a href={`/stroje/${item.data.znacka}/`} class="related-link">
-            Celý katalog modelů {brandPrettyForLinks} →
+          <a href={localizePath(locale, `/stroje/${item.data.znacka}/`)} class="related-link">
+            {tf(locale, 'enc.related.catalog', { brand: brandPrettyForLinks })}
           </a>
           {hasBrandHub && (
-            <a href={`/znacky/${item.data.znacka}/`} class="related-link">
-              Historie značky {brandPrettyForLinks} →
+            <a href={localizePath(locale, `/znacky/${item.data.znacka}/`)} class="related-link">
+              {tf(locale, 'enc.related.history', { brand: brandPrettyForLinks })}
             </a>
           )}
         </div>
       </section>
     )}
 
-    <aside class="trust-bar" aria-label="Ověření obsahu">
+    <aside class="trust-bar" aria-label={t('enc.trust.label')}>
       <span class="trust-item">
-        Zpracováno <a href="/redakce/" class="trust-link">redakcí agro-svět.cz</a>
+        {t('enc.byline.pre')} <a href={localizePath(locale, '/redakce/')} class="trust-link">{t('enc.byline.redakce')}</a>
       </span>
       {lastVerifiedFmt && (
         <span class="trust-item">
-          Naposledy ověřeno: <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time>
+          {t('enc.trust.verified')} <time datetime={lastVerifiedIso}>{lastVerifiedFmt}</time>
         </span>
       )}
       {item.data.sourceUrl && (
         <a class="trust-item trust-link" href={item.data.sourceUrl} target="_blank" rel="noopener nofollow">
-          Zdroj: oficiální specifikace výrobce
+          {t('enc.trust.source')}
         </a>
       )}
     </aside>
 
     <div style="margin-top:48px;">
-      <a href="/encyklopedie/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
-        ← Zpět na encyklopedii
+      <a href={localizePath(locale, '/encyklopedie/')} style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
+        {t('enc.back')}
       </a>
     </div>
   </div>

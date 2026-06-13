@@ -1,71 +1,22 @@
 ---
-type NavItem = { label: string; href: string; children?: { label: string; href: string }[] };
-const nav: NavItem[] = [
-  {
-    label: 'Téma',
-    href: '/novinky/',
-    children: [
-      { label: 'Všechny novinky', href: '/novinky/' },
-      { label: 'Technika', href: '/novinky/kategorie/technika/' },
-      { label: 'Dotace', href: '/novinky/kategorie/dotace/' },
-      { label: 'Trh', href: '/novinky/kategorie/trh/' },
-      { label: 'Legislativa', href: '/novinky/kategorie/legislativa/' },
-      { label: 'Jak na to — návody', href: '/jak-na-to/' },
-      { label: 'Průvodce nákupem', href: '/pruvodce/' },
-      { label: 'Přehledy trhu', href: '/prehled/' },
-    ],
-  },
-  {
-    label: 'Zvířata',
-    href: '/plemena/',
-    children: [
-      { label: 'Všechna plemena', href: '/plemena/' },
-      { label: 'Hovězí plemena', href: '/plemena/hovezi/' },
-      { label: 'Plemena koní', href: '/plemena/kone/' },
-      { label: 'Plemena ovcí', href: '/plemena/ovce/' },
-      { label: 'Plemena prasat', href: '/plemena/prasata/' },
-      { label: 'Včelařství', href: '/vcelarstvi/' },
-    ],
-  },
-  {
-    label: 'Technika',
-    href: '/stroje/',
-    children: [
-      { label: 'Všechna technika', href: '/stroje/' },
-      { label: 'Traktory', href: '/stroje/traktory/' },
-      { label: 'Kombajny', href: '/stroje/kombajny/' },
-      { label: 'Stroje', href: '/stroje/zemedelske-stroje/' },
-      { label: 'Značky', href: '/znacky/' },
-      { label: 'Srovnání modelů', href: '/srovnani/' },
-      { label: 'Žebříčky top-N', href: '/zebricky/' },
-      { label: 'Slovník pojmů', href: '/slovnik/' },
-      { label: 'Kvízy', href: '/kviz/' },
-      { label: 'Kde koupit', href: '/prodejci/' },
-    ],
-  },
-  {
-    label: 'Data',
-    href: '/statistiky/',
-    children: [
-      { label: 'Trhy a komodity', href: '/statistiky/' },
-      { label: 'Zemědělská půda', href: '/puda/' },
-      { label: 'Kalkulačky', href: '/kalkulacka/' },
-      { label: 'Kalkulačka dotací CAP', href: '/kalkulacka/dotace-cap/' },
-      { label: 'Dotace', href: '/dotace/' },
-    ],
-  },
-  { label: 'Farmy', href: '/farmy/' },
-  { label: 'Agro bazar', href: '/bazar/' },
-  { label: 'Fotosoutěž', href: '/fotosoutez/' },
-];
-const current = Astro.url.pathname;
+import { getLocaleFromUrl, stripLocale, navHref } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+import { getNav } from '../i18n/nav';
+import LangSwitcher from './LangSwitcher.astro';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const nav = getNav(locale);
+// Active-nav porovnává proti neprefixovaným hrefs, tak strip locale prefix
+// (pro cs no-op → cs bit-identické; pro sk/uk se highlight zase chytí).
+const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname).path;
 ---
 
 <header style="background:#fff; border-bottom:1px solid #e8e8e8; position:sticky; top:0; z-index:100;">
   <div class="header-inner">
 
-    <a href="/" class="header-logo">
-      <span>agro-svět.cz</span>
+    <a href={navHref(locale, '/')} class="header-logo">
+      <span>{tr('brand.name')}</span>
     </a>
 
     <nav class="nav-desktop" id="main-nav">
@@ -74,7 +25,7 @@ const current = Astro.url.pathname;
         return item.children ? (
           <div class="nav-item-wrap">
             <a
-              href={item.href}
+              href={navHref(locale, item.href)}
               class:list={['nav-link', { active: itemActive }]}
             >
               {item.label}
@@ -82,13 +33,13 @@ const current = Astro.url.pathname;
             </a>
             <div class="nav-submenu">
               {item.children.map((c) => (
-                <a href={c.href} class="nav-subitem">{c.label}</a>
+                <a href={navHref(locale, c.href)} class="nav-subitem">{c.label}</a>
               ))}
             </div>
           </div>
         ) : (
           <a
-            href={item.href}
+            href={navHref(locale, item.href)}
             class:list={['nav-link', { active: itemActive }]}
           >
             {item.label}
@@ -97,15 +48,18 @@ const current = Astro.url.pathname;
       })}
     </nav>
 
+    <!-- Language switcher (CZ / SK) -->
+    <LangSwitcher />
+
     <!-- Search (toggles input) -->
     <div class="search-container" id="search-container">
-      <button type="button" class="search-icon-btn" id="search-toggle" aria-label="Hledat">
+      <button type="button" class="search-icon-btn" id="search-toggle" aria-label={tr('header.search')}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
         </svg>
       </button>
       <form class="search-form" id="search-form" action="/hledat/" method="GET" hidden>
-        <input type="search" name="q" placeholder="Hledat…" class="search-field" id="search-field" />
+        <input type="search" name="q" placeholder={tr('header.searchPlaceholder')} class="search-field" id="search-field" />
       </form>
     </div>
 
@@ -116,26 +70,26 @@ const current = Astro.url.pathname;
           <circle cx="12" cy="8" r="4"/>
           <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
         </svg>
-        <span id="user-name">Účet</span>
+        <span id="user-name">{tr('header.account')}</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       <div id="user-dropdown" class="user-dropdown" hidden>
-        <a href="/bazar/moje/" class="user-dropdown-item">Moje inzeráty</a>
-        <a href="/bazar/novy/" class="user-dropdown-item">+ Nový inzerát</a>
-        <a href="/bazar/profil/" class="user-dropdown-item">Profil</a>
+        <a href="/bazar/moje/" class="user-dropdown-item">{tr('header.myAds')}</a>
+        <a href="/bazar/novy/" class="user-dropdown-item">{tr('header.newAd')}</a>
+        <a href="/bazar/profil/" class="user-dropdown-item">{tr('header.profile')}</a>
         <div class="user-dropdown-sep"></div>
-        <a href="/bazar/odhlaseni/" class="user-dropdown-item">Odhlásit se</a>
+        <a href="/bazar/odhlaseni/" class="user-dropdown-item">{tr('header.logout')}</a>
       </div>
     </div>
 
     <!-- Guest link (shown when not logged in) -->
-    <a href="/bazar/prihlaseni/" id="guest-link" class="guest-link" hidden>Přihlásit</a>
+    <a href="/bazar/prihlaseni/" id="guest-link" class="guest-link" hidden>{tr('header.login')}</a>
 
     <!-- Mobile hamburger -->
     <button
       id="hamburger"
       class="hamburger-btn"
-      aria-label="Menu"
+      aria-label={tr('header.menu')}
       aria-expanded="false"
       aria-controls="mobile-nav"
     >
@@ -152,7 +106,7 @@ const current = Astro.url.pathname;
   <div id="mobile-nav-backdrop" class="mobile-nav-backdrop" hidden></div>
 
   <!-- Mobile nav drawer -->
-  <nav id="mobile-nav" class="mobile-nav" aria-label="Hlavní menu" hidden>
+  <nav id="mobile-nav" class="mobile-nav" aria-label={tr('header.mainMenu')} hidden>
     <ul class="mn-list">
       {nav.map(item => {
         const itemActive = current.startsWith(item.href) || (item.children?.some((c) => current.startsWith(c.href)) ?? false);
@@ -160,12 +114,12 @@ const current = Astro.url.pathname;
           return (
             <li class="mn-group">
               <div class="mn-row">
-                <a href={item.href} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
+                <a href={navHref(locale, item.href)} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
                 <button
                   type="button"
                   class="mn-toggle"
                   aria-expanded="false"
-                  aria-label={`Rozbalit ${item.label}`}
+                  aria-label={`${tr('header.expand')} ${item.label}`}
                   data-mn-toggle
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -174,7 +128,7 @@ const current = Astro.url.pathname;
               <ul class="mn-sub" hidden>
                 {item.children.map((c) => (
                   <li>
-                    <a href={c.href} class:list={['mn-sublink', { active: current.startsWith(c.href) }]}>{c.label}</a>
+                    <a href={navHref(locale, c.href)} class:list={['mn-sublink', { active: current.startsWith(c.href) }]}>{c.label}</a>
                   </li>
                 ))}
               </ul>
@@ -184,7 +138,7 @@ const current = Astro.url.pathname;
         return (
           <li>
             <div class="mn-row">
-              <a href={item.href} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
+              <a href={navHref(locale, item.href)} class:list={['mn-link', { active: itemActive }]}>{item.label}</a>
             </div>
           </li>
         );

@@ -1,0 +1,34 @@
+name: Daily akce maintenance
+
+on:
+  schedule:
+    # 04:00 UTC denně. Expirace proběhlých akcí + přepočet výskytů.
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping /api/cron/akce-maintenance
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_SECRET secret not configured in repo settings"
+            exit 1
+          fi
+          response=$(curl -sw "\n%{http_code}" \
+            "https://agro-svet.cz/api/cron/akce-maintenance/" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            --max-time 120)
+          status=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          echo "HTTP $status"
+          echo "Body: $body"
+          if [ "$status" != "200" ]; then
+            echo "::error::Cron endpoint returned HTTP $status (expected 200)"
+            exit 1
+          fi
+          echo "::notice::akce maintenance pinged successfully"

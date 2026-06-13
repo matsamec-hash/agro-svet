@@ -1,0 +1,163 @@
+---
+// src/pages/akce/pridat.astro
+import Layout from '../../layouts/Layout.astro';
+import { AKCE_TYPES } from '../../lib/akce-constants';
+import { getKraje } from '../../lib/lokality';
+
+export const prerender = false;
+const kraje = getKraje();
+---
+<Layout title="Přidat akci — Kalendář akcí | agro-svet.cz" description="Přidejte svou zemědělskou akci — farmářské trhy, polní den, prodej ze dvora. Po schválení se zobrazí v kalendáři.">
+  <main class="pridat">
+    <h1>Přidat akci do kalendáře</h1>
+    <p>Akci po odeslání zkontrolujeme a poté zveřejníme. Vyplnění zabere minutu.</p>
+
+    <form id="akce-form" method="POST" action="/api/akce/submit">
+      <input type="text" name="web_url" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+
+      <label>Název akce*
+        <input type="text" name="nazev" required maxlength="120" />
+      </label>
+
+      <label>Typ akce*
+        <select name="typ" required>
+          {Object.entries(AKCE_TYPES).map(([slug, label]) => <option value={slug}>{label}</option>)}
+        </select>
+      </label>
+
+      <fieldset>
+        <legend>Termín*</legend>
+        <label><input type="radio" name="druh" value="jednorazova" checked /> Jednorázová</label>
+        <label><input type="radio" name="druh" value="opakovana" /> Opakovaná</label>
+
+        <div data-druh="jednorazova">
+          <label>Začátek <input type="datetime-local" name="zacatek" /></label>
+          <label>Konec (volitelné) <input type="datetime-local" name="konec" /></label>
+        </div>
+
+        <div data-druh="opakovana" hidden>
+          <fieldset class="dny">
+            <legend>Dny v týdnu</legend>
+            {['Po','Út','St','Čt','Pá','So','Ne'].map((d, i) => (
+              <label><input type="checkbox" name="dny_v_tydnu" value={i + 1} /> {d}</label>
+            ))}
+          </fieldset>
+          <label>Čas od <input type="time" name="cas_od" /></label>
+          <label>Čas do <input type="time" name="cas_do" /></label>
+          <label>Platí od <input type="date" name="plati_od" /></label>
+          <label>Platí do (volitelné) <input type="date" name="plati_do" /></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Místo</legend>
+        <label>Kraj*
+          <select name="kraj_slug" id="kraj" required>
+            <option value="">— vyberte —</option>
+            {kraje.map((k) => <option value={k.slug}>{k.name}</option>)}
+          </select>
+        </label>
+        <label>Okres*
+          <select name="okres_slug" id="okres" required><option value="">— nejdřív vyberte kraj —</option></select>
+        </label>
+        <label>Obec*
+          <input type="text" name="obec" required maxlength="80" placeholder="Např. Teplýšovice" />
+        </label>
+        <label>Místo / adresa (volitelné)
+          <input type="text" name="misto_nazev" maxlength="120" placeholder="Náměstí, areál farmy…" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Pořadatel a kontakt</legend>
+        <label>Pořadatel (volitelné) <input type="text" name="poradatel" maxlength="120" /></label>
+        <label>Web (volitelné) <input type="url" name="web" /></label>
+        <label>Telefon (volitelné) <input type="tel" name="telefon" /></label>
+        <label>Váš e-mail* <input type="email" name="email" required /></label>
+      </fieldset>
+
+      <label>Popis akce*
+        <textarea name="popis" required minlength="10" maxlength="2000" rows="5"></textarea>
+      </label>
+
+      <button type="submit">Odeslat ke schválení</button>
+      <p id="form-msg" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <script id="kraje-data" type="application/json" set:html={JSON.stringify(kraje)}></script>
+  <script type="module">
+    const kraje = JSON.parse(document.getElementById('kraje-data').textContent);
+    const krajSel = document.getElementById('kraj');
+    const okresSel = document.getElementById('okres');
+    krajSel.addEventListener('change', () => {
+      const k = kraje.find((x) => x.slug === krajSel.value);
+      okresSel.innerHTML = '<option value="">— vyberte —</option>' +
+        (k ? k.okresy.map((o) => `<option value="${o.slug}">${o.name}</option>`).join('') : '');
+    });
+
+    const form = document.getElementById('akce-form');
+    for (const el of form.querySelectorAll('input[name="druh"]')) {
+      el.addEventListener('change', () => {
+        const v = form.querySelector('input[name="druh"]:checked').value;
+        form.querySelector('[data-druh="jednorazova"]').hidden = v !== 'jednorazova';
+        form.querySelector('[data-druh="opakovana"]').hidden = v !== 'opakovana';
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('form-msg');
+      msg.textContent = 'Odesílám…';
+      const res = await fetch('/api/akce/submit/', { method: 'POST', body: new FormData(form) });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        form.reset();
+        msg.textContent = '✅ Děkujeme! Akce čeká na schválení.';
+      } else {
+        msg.textContent = '⚠️ ' + ((data.errors || ['Něco se pokazilo.']).join(' '));
+      }
+    });
+  </script>
+
+  <style>
+    .pridat { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+    .pridat label { display: block; margin: 12px 0; font-weight: 600; }
+    .pridat input:not([type="radio"]):not([type="checkbox"]),
+    .pridat select,
+    .pridat textarea {
+      display: block; width: 100%; padding: 10px 12px; margin-top: 4px;
+      font-weight: 400; box-sizing: border-box;
+      font: inherit; font-size: 1rem; color: #1a1a1a;
+      background: #fff; border: 1px solid #c4c4c4; border-radius: 8px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .pridat input:not([type="radio"]):not([type="checkbox"]):focus,
+    .pridat select:focus,
+    .pridat textarea:focus {
+      outline: none; border-color: #3a7d34;
+      box-shadow: 0 0 0 3px rgba(58, 125, 52, .18);
+    }
+    .pridat input::placeholder,
+    .pridat textarea::placeholder { color: #8a8a8a; }
+    .pridat textarea { resize: vertical; min-height: 110px; }
+    .pridat fieldset { margin: 18px 0; border: 1px solid #e2e2e2; border-radius: 10px; padding: 10px 16px 16px; }
+    .pridat legend { font-weight: 600; padding: 0 6px; }
+    /* radio/checkbox volby — inline vedle popisku, ne roztažené na 100 % */
+    .pridat label:has(> input[type="radio"]),
+    .pridat label:has(> input[type="checkbox"]) {
+      display: inline-flex; align-items: center; gap: 8px;
+      width: auto; margin: 6px 20px 6px 0; font-weight: 400;
+    }
+    .pridat label:has(> input[type="radio"]) > input,
+    .pridat label:has(> input[type="checkbox"]) > input { width: auto; margin: 0; }
+    .pridat .dny { border: 0; padding: 0; margin: 8px 0; }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+    .pridat button {
+      margin-top: 20px; padding: 12px 28px; font: inherit; font-weight: 700;
+      cursor: pointer; color: #fff; background: #3a7d34;
+      border: 0; border-radius: 8px;
+    }
+    .pridat button:hover { background: #2f6a2a; }
+  </style>
+</Layout>

@@ -1,0 +1,19 @@
+---
+import { osivaLinksFor } from '../lib/osiva-links';
+import type { Skupina } from '../lib/plodiny';
+
+interface Props { plodina: string; skupina: Skupina; odruda?: string }
+const { plodina, skupina } = Astro.props;
+const links = osivaLinksFor(skupina);
+---
+<section class="osiva-synergie">
+  <h2>Kde řešit osivo a poradenství</h2>
+  <p>Pro pořízení osiva plodiny {plodina.toLowerCase()} a odborné poradenství:</p>
+  <ul>
+    {links.map((l) => (
+      <li>
+        <a href={l.href} rel={l.rel} {...(l.external ? { target: '_blank' } : {})}>{l.label}</a>
+      </li>
+    ))}
+  </ul>
+</section>

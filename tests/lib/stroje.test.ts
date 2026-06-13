@@ -1,5 +1,52 @@
 import { describe, it, expect } from 'vitest';
-import { getEffectiveZaber, getFunctionalGroupForCategory, FUNCTIONAL_GROUPS, type StrojKategorie } from '../../src/lib/stroje';
+import { getEffectiveZaber, getFunctionalGroupForCategory, FUNCTIONAL_GROUPS, applyStrojOverlay, type StrojKategorie } from '../../src/lib/stroje';
+
+describe('stroje lib — SK overlay modelů (Fáze stroje-detail)', () => {
+  const base = {
+    slug: 'zetor', name: 'Zetor', country: 'Česká republika', founded: 1946,
+    categories: {
+      traktory: {
+        name: 'Traktory',
+        series: [
+          { slug: 'z-25', name: 'Z 25', year_from: 1946, year_to: 1968, description: 'CS série popis',
+            models: [
+              { slug: 'zetor-25', name: 'Z 25', description: 'CS model popis', power_hp: 25 },
+              { slug: 'zetor-25k', name: 'Z 25K', description: 'CS model bez SK', power_hp: 25 },
+            ] },
+        ],
+      },
+    },
+  } as any;
+
+  it('overlayuje model.description z ov.models, sérii z ov.series; chybějící model padá na cs', () => {
+    const ov = { description: 'SK značka', series: { 'z-25': 'SK série' }, models: { 'zetor-25': 'SK model' } };
+    const out: any = applyStrojOverlay(base, ov);
+    const s = out.categories.traktory.series[0];
+    expect(out.description).toBe('SK značka');
+    expect(s.description).toBe('SK série');
+    expect(s.models[0].description).toBe('SK model');
+    expect(s.models[1].description).toBe('CS model bez SK');
+  });
+
+  it('nemutuje base (structuredClone)', () => {
+    applyStrojOverlay(base, { models: { 'zetor-25': 'SK model' } });
+    expect(base.categories.traktory.series[0].models[0].description).toBe('CS model popis');
+  });
+
+  it('bez overlaye vrací base beze změny (cs identita)', () => {
+    expect(applyStrojOverlay(base, null)).toBe(base);
+  });
+
+  it('aplikuje uk description/series/models, nemutuje base (locale-agnostický overlay)', () => {
+    const ov = { description: 'укр опис', series: { 'z-25': 'укр серія' }, models: { 'zetor-25': 'укр модель' } };
+    const out: any = applyStrojOverlay(base, ov);
+    const s = out.categories.traktory.series[0];
+    expect(out.description).toBe('укр опис');
+    expect(s.description).toBe('укр серія');
+    expect(s.models[0].description).toBe('укр модель');
+    expect(base.description).toBe(undefined); // base nezmutován (žádné description na base)
+  });
+});
 
 describe('stroje lib — schema rozšíření', () => {
   it('FUNCTIONAL_GROUPS má 10 skupin', () => {

@@ -5,10 +5,17 @@ import BazarPagination from '../../components/bazar/BazarPagination.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { categoryStyle, tagStyle } from '../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
+import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../lib/articles-i18n';
+import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
+import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
 
 const PER_PAGE = 24;
 
 const supabase = createAnonClient();
+const locale = Astro.locals.locale ?? 'cs';
+// Jurisdikčně uzamčené kategorie (CZ dotace/legislativa/trh) se pod /sk nezobrazují.
+const hiddenCats = HIDDEN_NEWS_CATEGORIES[locale];
+const hiddenCatsFilter = hiddenCats.length ? `(${hiddenCats.join(',')})` : '';
 
 const category = Astro.url.searchParams.get('kategorie') ?? '';
 const query = Astro.url.searchParams.get('q') ?? '';
@@ -17,34 +24,58 @@ const dateTo = Astro.url.searchParams.get('do') ?? '';
 const tag = Astro.url.searchParams.get('tag') ?? '';
 const page = Math.max(1, parseInt(Astro.url.searchParams.get('page') ?? '1'));
 
-let q = supabase
-  .from('articles')
-  .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at', { count: 'exact' })
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published')
-  .order('published_at', { ascending: false })
-  .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
+// Non-cs: výpis omezíme jen na reálně přeložené články (žádný český fallback
+// neprosakuje do /sk ani /uk). Prázdná množina → prázdný výpis (bez DB dotazu).
+const translatedIds = locale !== 'cs' ? await fetchTranslatedArticleIds(supabase, locale) : null;
+const translatedIdList = translatedIds ? [...translatedIds] : null;
+const noTranslated = translatedIds !== null && translatedIds.size === 0;
 
-if (category) q = q.eq('category', category);
-if (query) q = q.or(`title.ilike.%${query}%,perex.ilike.%${query}%`);
-if (dateFrom) q = q.gte('published_at', dateFrom);
-if (dateTo) {
-  const end = new Date(dateTo);
-  end.setHours(23, 59, 59, 999);
-  q = q.lte('published_at', end.toISOString());
+let articles: any[] | null = null;
+let count = 0;
+let allForMeta: Array<{ category: string | null; tags: string[] | null }> | null = null;
+
+if (!noTranslated) {
+  let q = supabase
+    .from('articles')
+    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at', { count: 'exact' })
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
+
+  if (hiddenCatsFilter) q = q.not('category', 'in', hiddenCatsFilter);
+  if (translatedIdList) q = q.in('id', translatedIdList);
+  if (category) q = q.eq('category', category);
+  if (query) q = q.or(`title.ilike.%${query}%,perex.ilike.%${query}%`);
+  if (dateFrom) q = q.gte('published_at', dateFrom);
+  if (dateTo) {
+    const end = new Date(dateTo);
+    end.setHours(23, 59, 59, 999);
+    q = q.lte('published_at', end.toISOString());
+  }
+  if (tag) q = q.contains('tags', [tag]);
+
+  const res = await q;
+  articles = res.data;
+  count = res.count ?? 0;
+
+  // Category counts (across all visible articles) + available tags
+  let metaQuery = supabase
+    .from('articles')
+    .select('category, tags')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published');
+  if (hiddenCatsFilter) metaQuery = metaQuery.not('category', 'in', hiddenCatsFilter);
+  if (translatedIdList) metaQuery = metaQuery.in('id', translatedIdList);
+  allForMeta = (await metaQuery).data;
 }
-if (tag) q = q.contains('tags', [tag]);
 
-const { data: articles, count } = await q;
-const sorted = articles ?? [];
+let sorted = articles ?? [];
+if (locale !== 'cs' && sorted.length) {
+  const trMap = buildTranslationMap(await fetchArticleTranslations(supabase, sorted.map((a) => a.id), locale));
+  sorted = sorted.map((a) => overlayArticle(a, trMap.get(a.id)));
+}
 const totalPages = Math.ceil((count ?? 0) / PER_PAGE);
-
-// Category counts (across all articles) + available tags
-const { data: allForMeta } = await supabase
-  .from('articles')
-  .select('category, tags')
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published');
 
 const catCounts = new Map<string, number>();
 const tagCounts = new Map<string, number>();
@@ -55,22 +86,14 @@ for (const a of allForMeta ?? []) {
     tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
   }
 }
-const categoryLabels: Record<string, string> = {
-  technika: 'Technika',
-  dotace: 'Dotace',
-  trh: 'Trh',
-  legislativa: 'Legislativa',
-  znacky: 'Značky',
-  novinky: 'Novinky',
-};
 const catPills = [...catCounts.entries()]
-  .map(([slug, count]) => ({ slug, label: categoryLabels[slug] ?? slug, count }))
+  .map(([slug, count]) => ({ slug, label: localizedCategory(locale, slug), count }))
   .sort((a, b) => b.count - a.count);
 const topTags = [...tagCounts.entries()]
   .sort((a, b) => b[1] - a[1])
   .slice(0, 20);
 
-const activeLabel = category ? (categoryLabels[category] ?? category) : null;
+const activeLabel = category ? localizedCategory(locale, category) : null;
 const hasFilters = Boolean(category || query || dateFrom || dateTo || tag);
 const totalAll = allForMeta?.length ?? 0;
 
@@ -78,8 +101,8 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Novinky', item: 'https://agro-svet.cz/novinky/' },
+    { '@type': 'ListItem', position: 1, name: t(locale, 'nav.home'), item: `https://agro-svet.cz${localizePath(locale, '/')}` },
+    { '@type': 'ListItem', position: 2, name: t(locale, 'nov.breadcrumb'), item: `https://agro-svet.cz${localizePath(locale, '/novinky/')}` },
   ],
 };
 
@@ -88,33 +111,33 @@ const breadcrumbJsonLd = {
 const itemListJsonLd = sorted.length > 0 ? {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: activeLabel ? `Novinky: ${activeLabel}` : 'Aktuální novinky',
+  name: activeLabel ? `${t(locale, 'nov.section')}: ${activeLabel}` : t(locale, 'nov.ld.latest'),
   numberOfItems: sorted.length,
   itemListElement: sorted.map((a, i) => ({
     '@type': 'ListItem',
     position: i + 1,
-    url: `${SITE_URL}/novinky/${a.slug}/`,
+    url: `${SITE_URL}${localizePath(locale, `/novinky/${a.slug}/`)}`,
     name: a.title,
   })),
 } : null;
 ---
 
 <Layout
-  title={activeLabel ? `Novinky: ${activeLabel}` : (query ? `Novinky: „${query}"` : 'Novinky')}
-  description={activeLabel ? `Články v kategorii ${activeLabel}.` : 'Aktuální zprávy ze světa zemědělské techniky — nové stroje, dotace, trh a legislativa.'}
+  title={activeLabel ? `${t(locale, 'nov.section')}: ${activeLabel}` : (query ? `${t(locale, 'nov.section')}: „${query}"` : t(locale, 'nov.section'))}
+  description={activeLabel ? (locale === 'cs' ? `Články v kategorii ${activeLabel}.` : `Články v kategórii ${activeLabel}.`) : t(locale, 'nov.desc.default')}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
 
     <div style="margin-bottom:24px;">
-      <span class="section-label">Novinky</span>
+      <span class="section-label">{t(locale, 'nov.section')}</span>
       <h1 style="font-size:clamp(2rem,5vw,3.2rem); margin-bottom:16px;">
-        {activeLabel ? `Kategorie: ${activeLabel}` : (query ? `Hledáte: „${query}"` : 'Zemědělství v pohybu')}
+        {activeLabel ? tf(locale, 'nov.title.cat', { label: activeLabel }) : (query ? tf(locale, 'nov.title.query', { q: query }) : t(locale, 'nov.title.default'))}
       </h1>
       {!hasFilters && (
         <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">
-          Sledujeme nové stroje, dotační programy, trhy i legislativní změny. Vše, co potřebujete vědět jako zemědělec.
+          {t(locale, 'nov.lead')}
         </p>
       )}
     </div>
@@ -125,48 +148,48 @@ const itemListJsonLd = sorted.length > 0 ? {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <path d="M3 6h18M7 12h10M11 18h2"/>
         </svg>
-        <span>Rozšířené filtry</span>
-        {(query || dateFrom || dateTo || tag) && <span class="nov-filter-badge">aktivní</span>}
+        <span>{t(locale, 'nov.filters')}</span>
+        {(query || dateFrom || dateTo || tag) && <span class="nov-filter-badge">{t(locale, 'nov.filters.active')}</span>}
         <svg class="nov-filter-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
       </summary>
-      <form method="GET" action="/novinky/" class="nov-filter">
+      <form method="GET" action={localizePath(locale, '/novinky/')} class="nov-filter">
         <div class="nov-search-row">
           <div class="nov-search-wrap">
             <svg class="nov-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
             </svg>
-            <input type="search" name="q" value={query} placeholder="Hledat v názvech a perexech…" class="nov-search-input" />
+            <input type="search" name="q" value={query} placeholder={t(locale, 'nov.search.placeholder')} class="nov-search-input" />
           </div>
-          <button type="submit" class="btn-primary">Hledat</button>
+          <button type="submit" class="btn-primary">{t(locale, 'nov.search.submit')}</button>
         </div>
         <div class="nov-date-row">
           <label class="nov-date-field">
-            <span class="nov-date-label">Od</span>
+            <span class="nov-date-label">{t(locale, 'nov.from')}</span>
             <input type="date" name="od" value={dateFrom} class="nov-date-input" />
           </label>
           <label class="nov-date-field">
-            <span class="nov-date-label">Do</span>
+            <span class="nov-date-label">{t(locale, 'nov.to')}</span>
             <input type="date" name="do" value={dateTo} class="nov-date-input" />
           </label>
           {category && <input type="hidden" name="kategorie" value={category} />}
           {tag && <input type="hidden" name="tag" value={tag} />}
-          {hasFilters && <a href="/novinky/" class="nov-reset">Vymazat vše</a>}
+          {hasFilters && <a href={localizePath(locale, '/novinky/')} class="nov-reset">{t(locale, 'nov.reset')}</a>}
         </div>
 
         {topTags.length > 0 && (
           <div style="margin-top:16px; padding-top:14px; border-top:1px solid #eee;">
             <div style="display:inline-flex; align-items:center; gap:6px; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#666; margin-bottom:8px;">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              Témata
+              {t(locale, 'nov.topics')}
             </div>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              {topTags.map(([t, count]) => (
+              {topTags.map(([tagName, count]) => (
                 <a
-                  href={`/novinky/tema/${encodeURIComponent(t)}/`}
-                  class:list={["nov-tag", { active: t === tag }]}
-                  style={t !== tag ? tagStyle(t) : ''}
+                  href={localizePath(locale, `/novinky/tema/${encodeURIComponent(tagName)}/`)}
+                  class:list={["nov-tag", { active: tagName === tag }]}
+                  style={tagName !== tag ? tagStyle(tagName) : ''}
                 >
-                  #{t} <span class="nov-tag-count">{count}</span>
+                  #{tagName} <span class="nov-tag-count">{count}</span>
                 </a>
               ))}
             </div>
@@ -177,12 +200,12 @@ const itemListJsonLd = sorted.length > 0 ? {
 
     <!-- Category pills -->
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
-      <a href="/novinky/" class:list={["pill", { active: !category }]}>
-        Vše <span class="pill-count">{totalAll}</span>
+      <a href={localizePath(locale, '/novinky/')} class:list={["pill", { active: !category }]}>
+        {t(locale, 'nov.all')} <span class="pill-count">{totalAll}</span>
       </a>
       {catPills.map((c) => (
         <a
-          href={`/novinky/kategorie/${c.slug}/`}
+          href={localizePath(locale, `/novinky/kategorie/${c.slug}/`)}
           class:list={["pill", { active: c.slug === category }]}
           style={c.slug !== category ? categoryStyle(c.slug) : ''}
         >
@@ -196,7 +219,9 @@ const itemListJsonLd = sorted.length > 0 ? {
     {sorted.length > 0 ? (
       <>
         <div style="margin-bottom:14px; font-size:13px; color:#666;">
-          Nalezeno {(count ?? 0).toLocaleString('cs-CZ')} článků{hasFilters ? ' odpovídajících filtrům' : ''}{totalPages > 1 ? ` · stránka ${page} z ${totalPages}` : ''}.
+          {locale === 'cs'
+            ? <>Nalezeno {(count ?? 0).toLocaleString('cs-CZ')} článků{hasFilters ? ' odpovídajících filtrům' : ''}{totalPages > 1 ? ` · stránka ${page} z ${totalPages}` : ''}.</>
+            : <>Nájdených {(count ?? 0).toLocaleString('sk-SK')} článkov{hasFilters ? ' zodpovedajúcich filtrom' : ''}{totalPages > 1 ? ` · strana ${page} z ${totalPages}` : ''}.</>}
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
           {sorted.map(article => (
@@ -208,6 +233,7 @@ const itemListJsonLd = sorted.length > 0 ? {
               category={article.category}
               heroImage={article.featured_image_url}
               focalPoint={article.focal_point}
+              locale={locale}
             />
           ))}
         </div>
@@ -215,8 +241,8 @@ const itemListJsonLd = sorted.length > 0 ? {
       </>
     ) : (
       <p style="color:#666; font-size:16px; padding:48px 0; text-align:center;">
-        Žádné články neodpovídají filtrům.
-        {hasFilters && <> <a href="/novinky/" style="color:#1a1a1a;">Vymazat filtry</a>.</>}
+        {t(locale, 'nov.empty')}
+        {hasFilters && <> <a href={localizePath(locale, '/novinky/')} style="color:#1a1a1a;">{t(locale, 'nov.emptyReset')}</a>.</>}
       </p>
     )}
   </div>

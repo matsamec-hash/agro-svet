@@ -67,7 +67,10 @@ export function siteSchemaGraph() {
         name: 'agro-svět.cz',
         alternateName: 'agro-svet.cz',
         url: SITE_URL + '/',
-        inLanguage: 'cs-CZ',
+        // Dvojjazyčný portál — WebSite entita je sdílená (stejné @id) napříč cs i sk
+        // URL, proto deklarujeme oba jazyky polem místo jediné hodnoty. Per-page jazyk
+        // řeší <html lang> + page-level inLanguage (Article/CollectionPage).
+        inLanguage: ['cs-CZ', 'sk-SK'],
         description: ORG_DESCRIPTION,
         publisher: { '@id': ORG_ID },
         potentialAction: {
@@ -199,6 +202,9 @@ export interface MachineModelForSchema {
   yearTo?: number | null;
   engine?: string;
   transmission?: string;
+  /** BCP-47 language of the page (e.g. 'cs-CZ', 'sk-SK'). Default cs → no inLanguage
+   *  emitted (byte-identický s původním výstupem). */
+  lang?: string;
 }
 
 // Categories that map to Schema.org Vehicle (self-propelled = vehicle).
@@ -243,6 +249,8 @@ export function machineProductSchema(m: MachineModelForSchema) {
     category: categoryLabel,
   };
 
+  // Only emit inLanguage for non-default locales — keeps cs output byte-identical.
+  if (m.lang && m.lang !== 'cs-CZ') schema.inLanguage = m.lang;
   if (m.description) schema.description = m.description;
   if (m.imageUrl) schema.image = m.imageUrl.startsWith('http') ? m.imageUrl : `${SITE_URL}${m.imageUrl}`;
 
@@ -453,6 +461,143 @@ export function itemListSchema(entries: ItemListEntry[], listName?: string) {
   };
   if (listName) schema.name = listName;
   return schema;
+}
+
+export interface OdrudaDatasetInput {
+  /** Název odrůdy (např. "Annie"). */
+  odrudaName: string;
+  /** Název plodiny (např. "Pšenice ozimá"). */
+  plodinaName: string;
+  /** Slug plodiny pro odkaz na pillar (isPartOf). */
+  plodinaSlug: string;
+  /** URL detailu odrůdy (absolutní nebo site-relativní). */
+  url: string;
+  /** Popis odrůdy (oficiální próza z ÚKZÚZ / enrichment). */
+  description: string;
+  udrzovatel?: string | null;
+  rokRegistrace?: number | null;
+  typ?: string | null;
+  ranost?: string | null;
+  vlastnosti?: Record<string, string | number>;
+  odolnosti?: Record<string, string | number>;
+  /** Odkaz na zdrojový záznam ÚKZÚZ. */
+  zdrojUrl?: string | null;
+}
+
+// Odrůda = záznam v databázi odrůd ÚKZÚZ → Dataset je nejpřesnější schema.org
+// typ (schema.org nemá PlantVariety). Strukturovaná agronomická pole jdou do
+// variableMeasured (PropertyValue), creator = ÚKZÚZ (autorita dat), isPartOf
+// odkazuje na kolekci odrůd plodiny. Entity-rich, validní bez Product požadavků.
+export function odrudaDatasetSchema(d: OdrudaDatasetInput) {
+  const url = d.url.startsWith('http') ? d.url : `${SITE_URL}${d.url}`;
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: `${d.odrudaName} — odrůda (${d.plodinaName})`,
+    description: d.description,
+    url,
+    inLanguage: 'cs-CZ',
+    isAccessibleForFree: true,
+    creator: {
+      '@type': 'GovernmentOrganization',
+      name: 'Ústřední kontrolní a zkušební ústav zemědělský',
+      alternateName: 'ÚKZÚZ',
+      url: 'https://www.ukzuz.cz/',
+    },
+    isPartOf: {
+      '@type': 'Dataset',
+      name: `Odrůdy plodiny ${d.plodinaName}`,
+      url: `${SITE_URL}/plodiny/${d.plodinaSlug}/`,
+    },
+  };
+
+  schema.keywords = [
+    d.odrudaName,
+    d.plodinaName,
+    'odrůda',
+    d.udrzovatel,
+    d.typ,
+    d.ranost,
+  ].filter(Boolean);
+
+  const vars: Array<Record<string, unknown>> = [];
+  if (d.rokRegistrace) vars.push({ '@type': 'PropertyValue', name: 'Rok registrace', value: d.rokRegistrace });
+  if (d.typ) vars.push({ '@type': 'PropertyValue', name: 'Typ', value: d.typ });
+  if (d.ranost) vars.push({ '@type': 'PropertyValue', name: 'Ranost', value: d.ranost });
+  if (d.udrzovatel) vars.push({ '@type': 'PropertyValue', name: 'Udržovatel', value: d.udrzovatel });
+  for (const [name, value] of Object.entries(d.vlastnosti ?? {})) {
+    vars.push({ '@type': 'PropertyValue', name, value });
+  }
+  for (const [name, value] of Object.entries(d.odolnosti ?? {})) {
+    vars.push({ '@type': 'PropertyValue', name, value });
+  }
+  if (vars.length > 0) schema.variableMeasured = vars;
+
+  if (d.zdrojUrl) schema.isBasedOn = d.zdrojUrl;
+
+  return schema;
+}
+
+export interface ImageObjectInput {
+  /** Absolutní nebo site-relativní cesta k obrázku (např. /images/plodiny/oves.jpg). */
+  contentUrl: string;
+  /** Jméno autora / fotografa. Může být prázdné u Public domain. */
+  author?: string;
+  /** Textový popis licence, např. "Public domain" nebo "CC BY-SA 3.0". */
+  license?: string;
+  /** URL na zdrojovou stránku (Wikimedia Commons soubor). */
+  acquireLicensePage?: string;
+  /** Pokud true, přidá representativeOfPage: true. */
+  representativeOfPage?: boolean;
+}
+
+/**
+ * schema.org ImageObject pro hero obrázky s open-source licencí.
+ * Emituje creditText/author/license/acquireLicensePage pro správnou atribuci.
+ */
+export function imageObjectSchema(img: ImageObjectInput) {
+  const contentUrl = img.contentUrl.startsWith('http')
+    ? img.contentUrl
+    : `${SITE_URL}${img.contentUrl}`;
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'ImageObject',
+    contentUrl,
+  };
+  if (img.author) {
+    schema.creditText = img.author;
+    schema.author = { '@type': 'Person', name: img.author };
+  }
+  if (img.license) {
+    schema.copyrightNotice = img.license;
+    // acquireLicensePage = zdrojový soubor (Wikimedia Commons)
+    if (img.acquireLicensePage) schema.acquireLicensePage = img.acquireLicensePage;
+  }
+  if (img.representativeOfPage) schema.representativeOfPage = true;
+  return schema;
+}
+
+/**
+ * Ořízne text na čistou hranici pro meta description — nikdy uprostřed slova.
+ * Pokud věta končí v poslední třetině limitu, ukončí na ní (bez výpustky);
+ * jinak ořízne na poslední celé slovo, odstraní koncovou interpunkci/mezeru
+ * a přidá výpustku „…". Text kratší než limit vrací beze změny.
+ */
+export function truncateAtBoundary(text: string, max = 155): string {
+  // Sjednotí vnitřní bílé znaky (ÚKZÚZ popisy mají zalomení řádků) na jednu mezeru.
+  const t = text.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const slice = t.slice(0, max);
+
+  // Preferuj ukončení na hranici věty, pokud je rozumně blízko limitu.
+  const sentenceEnd = Math.max(slice.lastIndexOf('. '), slice.lastIndexOf('! '), slice.lastIndexOf('? '));
+  if (sentenceEnd >= max * 0.6) {
+    return slice.slice(0, sentenceEnd + 1).trim();
+  }
+  // Jinak ořízni na poslední celé slovo + výpustka.
+  const lastSpace = slice.lastIndexOf(' ');
+  const base = lastSpace > 0 ? slice.slice(0, lastSpace) : slice;
+  return base.replace(/[\s.,;:–—-]+$/, '') + '…';
 }
 
 export interface FarmForSchema {

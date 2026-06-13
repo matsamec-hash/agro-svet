@@ -1,12 +1,17 @@
 ---
+import { getLocaleFromUrl, useTranslations, navHref } from '../i18n/utils';
 const GA_ID = "G-HC3JY466RR";
+// Po middleware rewritu je Astro.url kanonická cs cesta → locale MUSÍ z locals
+// (jinak banner vždy cs i na /sk). Fallback na URL pro jistotu.
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 ---
 <div id="cc" class="cc" hidden>
   <div class="cc-inner">
-    <p>Používáme cookies pro základní funkčnost webu a&nbsp;(pokud souhlasíte) pro anonymní analytiku přes Google Analytics. <a href="/zpracovani-osobnich-udaju/">Více informací</a></p>
+    <p><Fragment set:html={tr('cc.text')} /> <a href={navHref(locale, '/zpracovani-osobnich-udaju/')}>{tr('cc.more')}</a></p>
     <div class="cc-actions">
-      <button id="cc-essentials" class="btn-ghost">Pouze nezbytné</button>
-      <button id="cc-all" class="btn-primary">Přijmout vše</button>
+      <button id="cc-essentials" class="btn-ghost">{tr('cc.essentials')}</button>
+      <button id="cc-all" class="btn-primary">{tr('cc.acceptAll')}</button>
     </div>
   </div>
 </div>

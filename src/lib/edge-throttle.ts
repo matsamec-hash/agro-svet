@@ -10,6 +10,8 @@
 // - Reads are eventually consistent; tight bursts at the same PoP may
 //   over-count by 1–2.
 
+import { runtimeCache } from './runtime-cache';
+
 export interface ThrottleOptions {
   /** Logical bucket name, used as part of the cache key. */
   bucket: string;
@@ -37,8 +39,7 @@ export async function edgeThrottle(opts: ThrottleOptions): Promise<ThrottleResul
   if (!key || key === 'unknown') {
     return { ok: true, remaining: max, retryAfterS: 0 };
   }
-  const cache = (globalThis as any).caches?.default;
-  if (!cache) return { ok: true, remaining: max, retryAfterS: 0 };
+  const cache = runtimeCache;
 
   const cacheKey = new Request(`https://throttle.internal/${encodeURIComponent(bucket)}/${encodeURIComponent(key)}`);
   let count = 0;

@@ -44,7 +44,7 @@ const { url: supabaseUrl, anonKey: supabaseKey } = getPublicSupabaseConfig();
       if (error || !data.session) {
         fail('Přihlášení se nezdařilo.');
       } else {
-        const res = await fetch('/api/bazar/session', {
+        const res = await fetch('/api/bazar/session/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

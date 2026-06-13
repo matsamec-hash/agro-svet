@@ -1,0 +1,241 @@
+// Compile-time data: YAML přes @modyfi/vite-plugin-yaml, JSON nativně. Žádná runtime DB.
+
+export type Skupina =
+  | 'obiloviny'
+  | 'olejniny'
+  | 'okopaniny'
+  | 'luskoviny'
+  | 'picniny';
+
+export const SKUPINA_LABELS: Record<Skupina, string> = {
+  obiloviny: 'Obiloviny',
+  olejniny: 'Olejniny',
+  okopaniny: 'Okopaniny',
+  luskoviny: 'Luskoviny',
+  picniny: 'Pícniny',
+};
+
+/** Faktická vrstva odrůdy — generovaná z ÚKZÚZ, commitovaná jako JSON. */
+export interface OdrudaFakta {
+  slug: string;
+  name: string;
+  plodina_slug: string;
+  rok_registrace?: number | null;
+  udrzovatel?: string | null;
+  typ?: string | null;
+  ranost?: string | null;
+  /**
+   * Oficiální popis odrůdy z ÚKZÚZ (faktická agronomická próza). build() z něj
+   * odvodí enrichment.popis (pokud YAML enrichment popis nemá) → odrůda s
+   * oficiálním popisem dostane vlastní indexovanou URL bez halucinací.
+   */
+  popis?: string | null;
+  zdroj_url?: string | null;
+}
+
+/** Obohacení odrůdy — kurátorovaná/AI vrstva, volitelné. */
+export interface OdrudaEnrichment {
+  popis?: string;
+  vlastnosti?: Record<string, string | number>;
+  odolnosti?: Record<string, string | number>;
+  doporuceni?: string;
+  body?: string;
+  faq?: { q: string; a: string }[];
+}
+
+/** Spojená odrůda (fakta + případné obohacení). */
+export interface Odruda extends OdrudaFakta {
+  enrichment?: OdrudaEnrichment;
+}
+
+export interface HowToStepData { name: string; text: string }
+
+/** Obohacující vrstva plodiny (YAML). */
+export interface PlodinaYaml {
+  slug: string;
+  name: string;
+  name_plural: string;
+  skupina: Skupina;
+  description: string;
+  vysevek?: string;
+  hnojeni?: string;
+  vynos_t_ha?: string;
+  sklizen?: string;
+  vyuziti?: string;
+  choroby?: string[];
+  osevni_postup?: HowToStepData[];
+  wikipedia?: string;
+  wikidata?: string;
+  body?: string;
+  faq?: { q: string; a: string }[];
+  enrichment?: Record<string, OdrudaEnrichment>;
+  hero_image?: string;    // /images/plodiny/<slug>.jpg
+  hero_author?: string;   // může být prázdné u PD
+  hero_license?: string;  // "Public domain" | "CC BY-SA 3.0" | ...
+  hero_source?: string;   // URL na Wikimedia Commons soubor
+}
+
+/** Plodina spojená s odrůdami — to, co konzumují stránky. */
+export interface Plodina extends PlodinaYaml {
+  odrudy: Odruda[];
+}
+
+const yamlModules = import.meta.glob('/src/data/plodiny/*.yaml', {
+  eager: true,
+  import: 'default',
+}) as Record<string, PlodinaYaml>;
+
+const odrudyModules = import.meta.glob('/src/data/plodiny/odrudy/*.json', {
+  eager: true,
+  import: 'default',
+}) as Record<string, OdrudaFakta[]>;
+
+let cached: Plodina[] | null = null;
+
+function buildOdrudyIndex(): Record<string, OdrudaFakta[]> {
+  const byPlodina: Record<string, OdrudaFakta[]> = {};
+  for (const arr of Object.values(odrudyModules)) {
+    for (const o of arr) {
+      (byPlodina[o.plodina_slug] ??= []).push(o);
+    }
+  }
+  return byPlodina;
+}
+
+/**
+ * Spojí kurátorovanou YAML enrichment vrstvu s oficiálním popisem z ÚKZÚZ.
+ * YAML má přednost; chybí-li v YAML popis, použije se faktický popis z ÚKZÚZ.
+ * Tím každá odrůda s oficiálním popisem získá enrichment (→ indexovatelnost).
+ */
+function mergeEnrichment(
+  yamlEnrichment: OdrudaEnrichment | undefined,
+  factualPopis: string | null | undefined,
+): OdrudaEnrichment | undefined {
+  const popis = factualPopis?.trim();
+  if (!popis) return yamlEnrichment;
+  return { ...(yamlEnrichment ?? {}), popis: yamlEnrichment?.popis ?? popis };
+}
+
+function build(): Plodina[] {
+  if (cached) return cached;
+  const odrudyIndex = buildOdrudyIndex();
+  const plodiny: Plodina[] = [];
+  for (const yaml of Object.values(yamlModules)) {
+    if (yaml.slug === 'skupina') {
+      throw new Error('Plodina nesmí mít rezervovaný slug "skupina"');
+    }
+    const fakta = odrudyIndex[yaml.slug] ?? [];
+    const odrudy: Odruda[] = fakta.map((f) => ({
+      ...f,
+      enrichment: mergeEnrichment(yaml.enrichment?.[f.slug], f.popis),
+    }));
+    odrudy.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+    plodiny.push({ ...yaml, odrudy });
+  }
+  plodiny.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+  cached = plodiny;
+  return plodiny;
+}
+
+export function listPlodiny(): Plodina[] {
+  return build();
+}
+
+export function getPlodina(slug: string): Plodina | undefined {
+  return build().find((p) => p.slug === slug);
+}
+
+/**
+ * Odrůda dostane vlastní indexovanou URL jen když má obohacení (popis / FAQ /
+ * vlastnosti). Holé odrůdy z ÚKZÚZ žijí pouze jako řádek v tabulce na stránce
+ * plodiny — žádné tenké duplikátní URL. Anti-thin guardrail.
+ */
+export function isOdrudaIndexable(o: Odruda): boolean {
+  const e = o.enrichment;
+  if (!e) return false;
+  return Boolean(
+    (e.popis && e.popis.trim().length > 0) ||
+      (e.faq && e.faq.length > 0) ||
+      (e.vlastnosti && Object.keys(e.vlastnosti).length > 0) ||
+      (e.body && e.body.trim().length > 0),
+  );
+}
+
+export function getOdruda(plodinaSlug: string, odrudaSlug: string): Odruda | undefined {
+  return getPlodina(plodinaSlug)?.odrudy.find((o) => o.slug === odrudaSlug);
+}
+
+export interface IndexableOdrudaEntry {
+  plodina_slug: string;
+  plodina_name: string;
+  odruda: Odruda;
+}
+
+export function listIndexableOdrudy(): IndexableOdrudaEntry[] {
+  const out: IndexableOdrudaEntry[] = [];
+  for (const p of build()) {
+    for (const o of p.odrudy) {
+      if (isOdrudaIndexable(o)) {
+        out.push({ plodina_slug: p.slug, plodina_name: p.name, odruda: o });
+      }
+    }
+  }
+  return out;
+}
+
+export interface SkupinaEntry { skupina: Skupina; label: string; count: number }
+
+export function listSkupiny(): SkupinaEntry[] {
+  const counts = new Map<Skupina, number>();
+  for (const p of build()) counts.set(p.skupina, (counts.get(p.skupina) ?? 0) + 1);
+  return Array.from(counts.entries())
+    .map(([skupina, count]) => ({ skupina, label: SKUPINA_LABELS[skupina], count }))
+    .sort((a, b) => a.label.localeCompare(b.label, 'cs'));
+}
+
+export function listPlodinyBySkupina(skupina: Skupina): Plodina[] {
+  return build().filter((p) => p.skupina === skupina);
+}
+
+/** Deterministický ASCII slug (bez diakritiky, jen [a-z0-9-]). */
+export function udrzovatelSlug(name: string): string {
+  return name
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export interface UdrzovatelEntry {
+  slug: string;
+  name: string;
+  odrudy: { plodina_slug: string; plodina_name: string; odruda: Odruda }[];
+}
+
+export function listUdrzovatele(): UdrzovatelEntry[] {
+  const bySlug = new Map<string, UdrzovatelEntry>();
+  for (const p of build()) {
+    for (const o of p.odrudy) {
+      const name = (o.udrzovatel ?? '').trim();
+      if (!name) continue;
+      const slug = udrzovatelSlug(name);
+      if (!slug) continue;
+      const entry = bySlug.get(slug) ?? { slug, name, odrudy: [] };
+      entry.odrudy.push({ plodina_slug: p.slug, plodina_name: p.name, odruda: o });
+      bySlug.set(slug, entry);
+    }
+  }
+  return Array.from(bySlug.values()).sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+}
+
+export function getUdrzovatel(slug: string): UdrzovatelEntry | undefined {
+  return listUdrzovatele().find((u) => u.slug === slug);
+}
+
+/** Práh pro indexaci facetu udržovatele (anti-thin). */
+export const UDRZOVATEL_INDEX_MIN = 2;
+
+export function listIndexableUdrzovatele(): UdrzovatelEntry[] {
+  return listUdrzovatele().filter((u) => u.odrudy.length >= UDRZOVATEL_INDEX_MIN);
+}

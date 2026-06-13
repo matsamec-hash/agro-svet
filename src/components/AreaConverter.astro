@@ -4,16 +4,17 @@
 // Vanilla JS, žádné závislosti.
 
 export interface Props {
-  /** Výchozí jednotka pro input. Pokud nezadána, default = 'ha'. */
   defaultUnit?: string;
-  /** Výchozí hodnota pro input. Default = 1. */
   defaultValue?: number;
-  /** Nadpis nad widgetem. */
   heading?: string;
-  /** Krátký podpis pod widgetem. */
   caption?: string;
-  /** Heading level (h2 v slovniku, h1 v standalone). */
   headingLevel?: 'h2' | 'h3';
+  /** BCP-47 locale pro formátování čísel ve výsledcích. Default 'cs-CZ'. */
+  numberLocale?: string;
+  /** Lokalizované UI stringy (default = cs). */
+  ui?: { inputLabel?: string; unitSelectLabel?: string };
+  /** Lokalizované názvy jednotek (id → name). Chybějící klíč → cs default. */
+  unitNames?: Record<string, string>;
 }
 
 const {
@@ -22,19 +23,27 @@ const {
   heading = 'Převodník jednotek plochy',
   caption,
   headingLevel = 'h2',
+  numberLocale = 'cs-CZ',
+  ui = {},
+  unitNames = {},
 } = Astro.props;
 
-// All factors in m² (square meters).
+const uiText = {
+  inputLabel: ui.inputLabel ?? 'Zadej hodnotu',
+  unitSelectLabel: ui.unitSelectLabel ?? 'Vyber jednotku',
+};
+
+// All factors in m² (square meters). `name` se lokalizuje přes unitNames override.
 const UNITS = [
-  { id: 'm2', label: 'm²', name: 'metr čtvereční', factor: 1, decimals: 2 },
-  { id: 'a', label: 'a', name: 'ar', factor: 100, decimals: 4 },
-  { id: 'ha', label: 'ha', name: 'hektar', factor: 10_000, decimals: 6 },
-  { id: 'km2', label: 'km²', name: 'kilometr čtvereční', factor: 1_000_000, decimals: 8 },
-  { id: 'acre', label: 'akr', name: 'akr (acre)', factor: 4046.8564224, decimals: 5 },
-  { id: 'jitro', label: 'jitro', name: 'rakouské/české jitro', factor: 5754.642, decimals: 5 },
-  { id: 'korec', label: 'korec', name: 'český korec', factor: 2877.32, decimals: 5 },
-  { id: 'strych', label: 'strych', name: 'český strych', factor: 2877.32, decimals: 5 },
-  { id: 'morgen', label: 'morgen', name: 'pruský morgen', factor: 2553.2, decimals: 5 },
+  { id: 'm2', label: 'm²', name: unitNames.m2 ?? 'metr čtvereční', factor: 1, decimals: 2 },
+  { id: 'a', label: 'a', name: unitNames.a ?? 'ar', factor: 100, decimals: 4 },
+  { id: 'ha', label: 'ha', name: unitNames.ha ?? 'hektar', factor: 10_000, decimals: 6 },
+  { id: 'km2', label: 'km²', name: unitNames.km2 ?? 'kilometr čtvereční', factor: 1_000_000, decimals: 8 },
+  { id: 'acre', label: 'akr', name: unitNames.acre ?? 'akr (acre)', factor: 4046.8564224, decimals: 5 },
+  { id: 'jitro', label: 'jitro', name: unitNames.jitro ?? 'rakouské/české jitro', factor: 5754.642, decimals: 5 },
+  { id: 'korec', label: 'korec', name: unitNames.korec ?? 'český korec', factor: 2877.32, decimals: 5 },
+  { id: 'strych', label: 'strych', name: unitNames.strych ?? 'český strych', factor: 2877.32, decimals: 5 },
+  { id: 'morgen', label: 'morgen', name: unitNames.morgen ?? 'pruský morgen', factor: 2553.2, decimals: 5 },
 ];
 
 const Heading = headingLevel;
@@ -50,7 +59,7 @@ const Heading = headingLevel;
 
   <form class="ac-form" autocomplete="off" onsubmit="return false">
     <label class="ac-input-row">
-      <span class="ac-label">Zadej hodnotu</span>
+      <span class="ac-label">{uiText.inputLabel}</span>
       <span class="ac-input-wrap">
         <input
           type="number"
@@ -61,7 +70,7 @@ const Heading = headingLevel;
           id="ac-input"
           value={defaultValue}
         />
-        <select class="ac-unit" id="ac-unit" aria-label="Vyber jednotku">
+        <select class="ac-unit" id="ac-unit" aria-label={uiText.unitSelectLabel}>
           {UNITS.map((u) => (
             <option value={u.id} selected={u.id === defaultUnit}>{u.label} ({u.name})</option>
           ))}
@@ -83,7 +92,7 @@ const Heading = headingLevel;
   {caption && <p class="ac-caption">{caption}</p>}
 </section>
 
-<script is:inline define:vars={{ UNITS }}>
+<script is:inline define:vars={{ UNITS, numberLocale }}>
   (function () {
     const root = document.currentScript.previousElementSibling;
     if (!root) return;
@@ -103,7 +112,7 @@ const Heading = headingLevel;
       else if (abs >= 0.01) d = 4;
       else d = decimals;
       return n
-        .toLocaleString('cs-CZ', { maximumFractionDigits: d, minimumFractionDigits: 0 })
+        .toLocaleString(numberLocale, { maximumFractionDigits: d, minimumFractionDigits: 0 })
         .replace(/ /g, ' ');
     };
 

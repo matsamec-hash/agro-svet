@@ -1,29 +1,29 @@
 ---
-export const prerender = true;
+// SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
+// sk čte z 'pudaSk' (přeložené články) BEZ cs fallbacku — chybějící sk slug = 404.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
+import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
+import { useTranslations } from '../../i18n/utils';
 
-export async function getStaticPaths() {
-  const items = await getCollection('puda');
-  return items.map((i) => ({ params: { slug: i.id } }));
-}
-
+const locale = Astro.locals.locale ?? 'cs';
+const isSk = locale === 'sk';
+const t = useTranslations(locale);
+const base = isSk ? '/sk' : '';
 const { slug } = Astro.params;
-const items = await getCollection('puda');
-const item = items.find(i => i.id === slug);
 
-if (!item) {
-  return Astro.rewrite('/404');
-}
+const item = slug ? (isSk ? await getEntry('pudaSk', slug) : await getEntry('puda', slug)) : undefined;
+if (!item) return new Response(null, { status: 404 });
 
-const { Content } = await render(item);
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/puda/${slug}/`);
 
-const pageUrl = `${SITE_URL}/puda/${slug}/`;
+const pageUrl = `${SITE_URL}${base}/puda/${slug}/`;
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Zemědělská půda', url: '/puda/' },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Poľnohospodárska pôda' : 'Zemědělská půda', url: `${base}/puda/` },
   { name: item.data.title, url: pageUrl },
 ]);
 const articleJsonLd = {
@@ -32,7 +32,7 @@ const articleJsonLd = {
   headline: item.data.title,
   description: item.data.popis,
   url: pageUrl,
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
   publisher: {
     '@type': 'Organization',
     name: 'agro-svět.cz',
@@ -41,13 +41,13 @@ const articleJsonLd = {
 };
 ---
 
-<Layout title={item.data.title} description={item.data.popis} canonical={pageUrl}>
+<Layout title={item.data.title} description={item.data.popis} canonical={isSk ? undefined : pageUrl}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <div style="max-width:780px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:28px;">
-      <a href="/puda/" style="color:#666; text-decoration:none;">Půda</a>
+      <a href={`${base}/puda/`} style="color:#666; text-decoration:none;">{isSk ? 'Pôda' : 'Půda'}</a>
       <span style="margin:0 8px;">›</span>
       <span>{item.data.title}</span>
     </div>
@@ -55,11 +55,11 @@ const articleJsonLd = {
     <h1 style="font-size:clamp(2rem,5vw,3rem); font-weight:900; letter-spacing:-1px; line-height:1.15; color:#1a1a1a; margin-bottom:16px;">{item.data.title}</h1>
     <p style="font-size:18px; color:#555; line-height:1.65; margin-bottom:40px; padding-bottom:32px; border-bottom:1px solid #ebebeb;">{item.data.popis}</p>
 
-    <div class="prose"><Content /></div>
+    <div class="prose"><div set:html={contentHtml} /></div>
 
     <div style="margin-top:48px;">
-      <a href="/puda/" style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
-        ← Zpět na půdu
+      <a href={`${base}/puda/`} style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">
+        {isSk ? t('puda.back') : '← Zpět na půdu'}
       </a>
     </div>
   </div>

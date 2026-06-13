@@ -1,57 +1,51 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
-import kolaData from '../../../data/dotace-kola.json';
+import kolaCs from '../../../data/dotace-kola.json';
+import kolaSk from '../../../data/dotace-kola-sk.json';
+import { content } from '../../../i18n/dotace';
+import { linkBase, fmtDate } from '../../../lib/dotace-format';
 
+const locale = Astro.locals.locale ?? 'cs';
+const c = content[locale] ?? content.cs;
+const ck = c.kalendarKol;
+
+const kolaData = locale === 'sk' ? kolaSk : kolaCs;
 const kola = kolaData.kola;
 const canonical = `${SITE_URL}/dotace/kalendar-kol/`;
 
-function fmtDate(iso: string): string {
-  return new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
-}
-const statusLabel: Record<string, string> = { ocekavane: 'Očekávané', otevrene: 'Probíhá příjem', uzavrene: 'Uzavřené' };
-
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Dotace', url: '/dotace/' },
-  { name: 'Kalendář kol', url: '/dotace/kalendar-kol/' },
+  { name: c.crumbHome, url: `${linkBase(locale)}/` },
+  { name: c.crumbSelf, url: `${linkBase(locale)}/dotace/` },
+  { name: ck.crumbKalendar, url: `${linkBase(locale)}/dotace/kalendar-kol/` },
 ]);
 ---
 
 <Layout
-  title="Kalendář kol dotací SZIF 2026 — termíny příjmu žádostí"
-  description="Přehled termínů příjmu žádostí o dotace SZIF v rámci SP SZP 2023–2027. Investice do podniků, technologie snižující emise, zpracování produktů."
-  canonical={canonical}
+  title={ck.metaTitle}
+  description={ck.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
 
   <div class="kal-page">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={`${linkBase(locale)}/`}>{c.crumbHome}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/dotace/">Dotace</a>
+      <a href={`${linkBase(locale)}/dotace/`}>{c.crumbSelf}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <span class="current">Kalendář kol</span>
+      <span class="current">{ck.crumbKalendar}</span>
     </nav>
 
     <header class="hero">
-      <span class="kicker">SZIF · harmonogram příjmu žádostí</span>
-      <h1>Kalendář kol dotací</h1>
-      <p class="hero-lede">
-        Termíny příjmu žádostí o projektové dotace SP SZP 2023–2027. Příjem probíhá typicky
-        dvakrát ročně — na jaře a na podzim. Pravidla daného kola SZIF zveřejňuje přibližně
-        dva měsíce před zahájením příjmu.
-      </p>
+      <span class="kicker">{ck.kicker}</span>
+      <h1>{ck.h1}</h1>
+      <p class="hero-lede">{ck.lede}</p>
     </header>
 
-    <div class="disclaimer">
-      <strong>Orientační termíny.</strong> Kalendář vychází z předpokládaného harmonogramu MZe.
-      Závazné termíny a podmínky zveřejňuje SZIF v Pravidlech daného kola na
-      <a href="https://szif.gov.cz/cs/szp23" target="_blank" rel="noopener">szif.gov.cz</a>.
-      Aktualizováno: {kolaData.aktualizovano}.
-    </div>
+    <div class="disclaimer" set:html={ck.disclaimerHtml.replace('{date}', kolaData.aktualizovano)} />
 
     <div class="kola-list">
       {kola.map((k) => (
@@ -63,29 +57,25 @@ const breadcrumbJsonLd = breadcrumbSchema([
           </div>
           <div class="kc-right">
             <div class="kc-dates">
-              <span class="kc-dates-label">Příjem žádostí</span>
-              <span class="kc-dates-value">{fmtDate(k.prijemOd)} – {fmtDate(k.prijemDo)}</span>
+              <span class="kc-dates-label">{ck.datesLabel}</span>
+              <span class="kc-dates-value">{fmtDate(k.prijemOd, locale, { month: 'long' })} – {fmtDate(k.prijemDo, locale, { month: 'long' })}</span>
             </div>
-            <span class={`kc-status status-${k.status}`}>{statusLabel[k.status] ?? k.status}</span>
-            <a href={k.pravidlaUrl} target="_blank" rel="noopener nofollow" class="kc-link">Pravidla SZIF ↗</a>
+            <span class={`kc-status status-${k.status}`}>{ck.statusLabel[k.status as keyof typeof ck.statusLabel] ?? k.status}</span>
+            <a href={k.pravidlaUrl} target="_blank" rel="noopener nofollow" class="kc-link">{ck.rulesLink}</a>
           </div>
         </article>
       ))}
     </div>
 
     <section class="info-box">
-      <h2>Jak funguje cyklus výzev</h2>
-      <p>
-        Projektové dotace SP SZP 2023–2027 se podávají v <strong>kolech</strong> — vymezených obdobích
-        příjmu žádostí. Pro nákup zemědělské techniky jsou klíčové intervence
-        <a href="/dotace/investice-do-zemedelskych-podniku-33-73/">33.73 Investice do zemědělských podniků</a>
-        a <a href="/dotace/technologie-snizujici-emise-37-73/">37.73 Technologie snižující emise</a>.
-        Pravidla každého kola se zveřejňují přibližně dva měsíce předem — je to čas na přípravu projektu
-        a podnikatelského plánu. Tento kalendář revidujeme s každým novým harmonogramem MZe.
-      </p>
+      <h2>{ck.infoTitle}</h2>
+      <p set:html={ck.infoBodyHtml} />
       <div class="ib-actions">
-        <a class="ib-btn primary" href="/dotace/">Přehled dotačních titulů</a>
-        <a class="ib-btn ghost" href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu</a>
+        {locale === 'cs' && (
+          <a class="ib-btn primary" href="/dotace/jak-vybrat/">{c.jakVybrat.h1}</a>
+        )}
+        <a class="ib-btn primary" href={`${linkBase(locale)}/dotace/`}>{ck.btnPrehled}</a>
+        <a class="ib-btn ghost" href={`${linkBase(locale)}/kalkulacka/leasing-traktoru/`}>{ck.btnLeasing}</a>
       </div>
     </section>
   </div>

@@ -1,7 +1,13 @@
 ---
-export const prerender = true;
+// SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
+// locals.locale. cs výstup identický (rovnaký kód). Canonical odvodí Layout.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, type StrojKategorie } from '../../lib/stroje';
+import { useTranslations, plural, tf, getLocaleFromUrl, localizePath } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 const brands = getAllBrands();
 const models = getAllModels();
@@ -30,18 +36,18 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 1, name: tr('cat.bc.home'), item: `https://agro-svet.cz${localizePath(locale, '/')}` },
+    { '@type': 'ListItem', position: 2, name: tr('cat.bc.tech'), item: `https://agro-svet.cz${localizePath(locale, '/stroje/')}` },
   ],
 };
 
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Katalog zemědělských strojů',
-  description: 'Kompletní databáze traktorů a kombajnů od světových výrobců.',
-  url: 'https://agro-svet.cz/stroje/',
-  inLanguage: 'cs-CZ',
+  name: tr('cat.s.title'),
+  description: locale === 'sk' ? tr('cat.s.desc') : 'Kompletní databáze traktorů a kombajnů od světových výrobců.',
+  url: `https://agro-svet.cz${localizePath(locale, '/stroje/')}`,
+  inLanguage: locale === 'sk' ? 'sk-SK' : 'cs-CZ',
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: brands.length,
@@ -70,61 +76,76 @@ const brandCards = brands.map((b) => {
     maxHp: bHp.length ? Math.max(...bHp) : null,
   };
 }).sort((a, b) => b.modelCount - a.modelCount);
+
+// Strings consumed by the client-side filter script (renderCard, empty state,
+// result count). Passed via a JSON island so the TS-typed <script> can read
+// localized values without breaking under `define:vars`.
+const js = {
+  tagTraktor: tr('cat.s.tagTraktor'),
+  tagKombajn: tr('cat.s.tagKombajn'),
+  tagCurrent: tr('cat.s.tagCurrent'),
+  yearToNow: tr('cat.s.yearToNow'),
+  empty: tr('cat.s.empty'),
+  foundPrefix: tr('cat.s.foundPrefix'),
+  modelOne: tr('cat.tileModelOne'),
+  modelFew: tr('cat.tileModelFew'),
+  modelMany: tr('cat.tileModelMany'),
+};
+
+// Load-bearing newline: several CTA labels sat on their own indented source line,
+// which Astro emitted as `\n<text>`. Replacing the text with an expression
+// collapses that to a single space, so we re-inject the literal newline to keep
+// the cs HTML byte-identical. (A literal `\n` inside an `.astro` `{...}` crashes
+// esbuild, hence the frontmatter constant.)
+const NL = '\n';
 ---
 
 <Layout
-  title="Katalog zemědělských strojů"
-  description="Kompletní databáze traktorů a kombajnů — John Deere, Zetor, Fendt, New Holland, Case IH, Valtra, CLAAS a další. Filtrujte podle značky, výkonu a roku výroby."
+  title={tr('cat.s.title')}
+  description={tr('cat.s.desc')}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div class="catalog-root">
 
-    <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+    <nav class="breadcrumb" aria-label={tr('cat.bcAria')}>
+      <a href="/">{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <span class="current">Technika</span>
+      <span class="current">{tr('cat.bc.tech')}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Katalog · Technika</span>
-        <h1>Zemědělská <em>technika</em></h1>
-        <p class="hero-lede">
-          Kompletní databáze {totalModels}+ modelů traktorů a kombajnů z {brands.length} značek
-          od roku {minYear} až po současnost. Aktuální produkce i historické modely pro bazarový průzkum.
-        </p>
+        <span class="kicker"><span class="dot"></span>{tr('cat.heroKicker')}</span>
+        <h1>{tr('cat.s.h1Lead')} <em>{tr('cat.s.h1Em')}</em></h1>
+        <p class="hero-lede" set:html={tf(locale, 'cat.s.lede', { count: totalModels, brands: brands.length, minYear: Number.isFinite(minYear) ? minYear : '' })}></p>
 
         <div class="hero-stats">
-          <div class="s"><span class="n">{totalModels}+</span><span class="l">modelů</span></div>
-          <div class="s"><span class="n">{brands.length}</span><span class="l">značek</span></div>
-          <div class="s"><span class="n">{totalSeries}</span><span class="l">řad</span></div>
-          <div class="s"><span class="n">{minHp}–{maxHp} k</span><span class="l">výkon</span></div>
+          <div class="s"><span class="n">{totalModels}+</span><span class="l">{tr('cat.statModels')}</span></div>
+          <div class="s"><span class="n">{brands.length}</span><span class="l">{tr('cat.statBrands')}</span></div>
+          <div class="s"><span class="n">{totalSeries}</span><span class="l">{tr('cat.s.statSeries')}</span></div>
+          <div class="s"><span class="n">{minHp}–{maxHp} k</span><span class="l">{tr('cat.statPower')}</span></div>
         </div>
 
         <div class="hero-actions">
-          <a class="cta-primary" href="/stroje/traktory/">
-            Traktory <span class="cta-c">{traktoryCount}</span>
+          <a class="cta-primary" href="/stroje/traktory/">{NL}{tr('cat.label.traktory')} <span class="cta-c">{traktoryCount}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-primary" href="/stroje/kombajny/">
-            Kombajny <span class="cta-c">{kombajnyCount}</span>
+          <a class="cta-primary" href="/stroje/kombajny/">{NL}{tr('cat.label.kombajny')} <span class="cta-c">{kombajnyCount}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
           <a class="cta-secondary" href="#znacky">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-            Značky
-          </a>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>{NL}{tr('cat.brandsAria')}{NL}</a>
         </div>
       </div>
 
       <div class="hero-right">
         <div class="hero-photo-stack">
           <a class="hsp-tile hsp-traktor" href="/stroje/traktory/" style="background-image:url('/images/traktor.webp')">
-            <div class="hsp-label"><span>Traktory</span><span class="c">{traktoryCount}</span></div>
+            <div class="hsp-label"><span>{tr('cat.label.traktory')}</span><span class="c">{traktoryCount}</span></div>
           </a>
           <a class="hsp-tile hsp-kombajn" href="/stroje/kombajny/" style="background-image:url('/images/kombajn.webp')">
-            <div class="hsp-label"><span>Kombajny</span><span class="c">{kombajnyCount}</span></div>
+            <div class="hsp-label"><span>{tr('cat.label.kombajny')}</span><span class="c">{kombajnyCount}</span></div>
           </a>
         </div>
       </div>
@@ -132,90 +153,90 @@ const brandCards = brands.map((b) => {
 
     <section class="filter-card" aria-labelledby="filter-title">
       <div class="fc-head">
-        <h2 id="filter-title">Filtr katalogu</h2>
-        <span class="fc-sub">Filtrujte podle kategorie, značky, výkonu a roku</span>
+        <h2 id="filter-title">{tr('cat.s.filterTitle')}</h2>
+        <span class="fc-sub">{tr('cat.s.filterSub')}</span>
       </div>
       <div class="fc-grid">
         <label class="fc-field">
-          <span class="fc-label">Kategorie</span>
+          <span class="fc-label">{tr('cat.s.fCategory')}</span>
           <select id="f-category">
-            <option value="">Všechny kategorie</option>
-            <option value="traktory">Traktory</option>
-            <option value="kombajny">Kombajny</option>
+            <option value="">{tr('cat.s.allCategories')}</option>
+            <option value="traktory">{tr('cat.label.traktory')}</option>
+            <option value="kombajny">{tr('cat.label.kombajny')}</option>
           </select>
         </label>
 
         <label class="fc-field">
-          <span class="fc-label">Značka</span>
+          <span class="fc-label">{tr('cat.s.fBrand')}</span>
           <select id="f-brand">
-            <option value="">Všechny značky</option>
+            <option value="">{tr('cat.s.allBrands')}</option>
             {brands.map((b) => <option value={b.slug}>{b.name}</option>)}
           </select>
         </label>
 
         <label class="fc-field">
-          <span class="fc-label">Výkon od (k)</span>
+          <span class="fc-label">{tr('cat.s.fHpFrom')}</span>
           <input id="f-hp-min" type="number" min="0" placeholder={`${minHp}`} />
         </label>
 
         <label class="fc-field">
-          <span class="fc-label">Výkon do (k)</span>
+          <span class="fc-label">{tr('cat.s.fHpTo')}</span>
           <input id="f-hp-max" type="number" min="0" placeholder={`${maxHp}`} />
         </label>
 
         <label class="fc-field">
-          <span class="fc-label">Rok od</span>
+          <span class="fc-label">{tr('cat.s.fYearFrom')}</span>
           <input id="f-year-min" type="number" min="1950" max="2030" placeholder={`${minYear}`} />
         </label>
 
         <label class="fc-field">
-          <span class="fc-label">Rok do</span>
+          <span class="fc-label">{tr('cat.s.fYearTo')}</span>
           <input id="f-year-max" type="number" min="1950" max="2030" placeholder="2026" />
         </label>
 
         <label class="fc-field fc-field-search">
-          <span class="fc-label">Hledat model</span>
-          <input id="f-search" type="search" placeholder={`např. "Zetor Proxima 120"`} />
+          <span class="fc-label">{tr('cat.s.fSearch')}</span>
+          <input id="f-search" type="search" placeholder={tr('cat.s.fSearchPlaceholder')} />
         </label>
       </div>
       <div class="fc-foot">
         <span id="result-count" class="fc-count"></span>
-        <button id="f-reset" type="button">Resetovat filtry</button>
+        <button id="f-reset" type="button">{tr('cat.s.fReset')}</button>
       </div>
     </section>
 
-    <h2 id="znacky-heading" class="section-title">Značky <span class="section-title-c">{brands.length}</span></h2>
-    <h2 id="results-heading" class="section-title results-heading">Výsledky <span id="results-heading-c" class="section-title-c"></span></h2>
+    <h2 id="znacky-heading" class="section-title">{tr('cat.brandsAria')} <span class="section-title-c">{brands.length}</span></h2>
+    <h2 id="results-heading" class="section-title results-heading">{tr('cat.s.results')} <span id="results-heading-c" class="section-title-c"></span></h2>
     <div id="brand-grid" class="brand-grid">
       {brandCards.map((b) => (
         <a href={`/stroje/${b.slug}/`} class="brand-card">
           <div class="bc-head">
             <div class="bc-logo" data-letter={b.name.charAt(0).toUpperCase()}>
-              <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="64" height="64" onerror="this.remove()" />
+              <img src={`/images/stroje/brands/${b.slug}.png`} alt={tf(locale, 'cat.brandLogoAlt', { brand: b.name })} loading="lazy" width="64" height="64" onerror="this.remove()" />
             </div>
             <div class="bc-title">
               <h3>{b.name}</h3>
-              <span class="bc-meta-1">{b.country} · od <strong>{b.founded}</strong></span>
+              <span class="bc-meta-1">{b.country} · {tr('cat.brandFoundedPrefix')} <strong>{b.founded}</strong></span>
             </div>
           </div>
           <div class="bc-stats">
             <div class="bc-stat">
               <span class="bc-stat-n">{b.modelCount}</span>
-              <span class="bc-stat-l">modelů</span>
+              <span class="bc-stat-l">{tr('cat.statModels')}</span>
             </div>
             {b.minHp !== null && b.maxHp !== null && (
               <div class="bc-stat">
                 <span class="bc-stat-n">{b.minHp}–{b.maxHp} <em>k</em></span>
-                <span class="bc-stat-l">výkon</span>
+                <span class="bc-stat-l">{tr('cat.statPower')}</span>
               </div>
             )}
           </div>
           <div class="bc-cats">
-            {b.traktoryCount > 0 && <span class="bc-cat">Traktory <strong>{b.traktoryCount}</strong></span>}
-            {b.kombajnyCount > 0 && <span class="bc-cat">Kombajny <strong>{b.kombajnyCount}</strong></span>}
+            {b.traktoryCount > 0 && <span class="bc-cat">{tr('cat.label.traktory')} <strong>{b.traktoryCount}</strong></span>}
+            {b.kombajnyCount > 0 && <span class="bc-cat">{tr('cat.label.kombajny')} <strong>{b.kombajnyCount}</strong></span>}
           </div>
           <div class="bc-foot">
-            <span>Detail značky</span>
+            <span>{tr('cat.s.brandDetail')}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </div>
         </a>
@@ -226,15 +247,13 @@ const brandCards = brands.map((b) => {
 
     <section class="big-cta">
       <div>
-        <span class="cta-kicker">Prodáváte techniku?</span>
-        <h2>Inzerát v Agro bazaru<br />zdarma a bez provize.</h2>
-        <p>30 dní inzerát · až 5 fotek · kontakt přímo na prodejce · žádný poplatek za zveřejnění.</p>
+        <span class="cta-kicker">{tr('cat.s.ctaKicker')}</span>
+        <h2>{tr('cat.s.ctaH2a')}<br />{tr('cat.s.ctaH2b')}</h2>
+        <p>{tr('cat.s.ctaP')}</p>
         <div class="cta-actions">
-          <a class="cta-btn primary" href="/bazar/novy/">
-            Přidat inzerát zdarma
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a class="cta-btn primary" href="/bazar/novy/">{NL}{tr('cat.s.ctaAdd')}{NL}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-btn ghost" href="/bazar/">Procházet bazar</a>
+          <a class="cta-btn ghost" href="/bazar/">{tr('cat.s.ctaBrowse')}</a>
         </div>
       </div>
       <div class="cta-right">
@@ -243,6 +262,8 @@ const brandCards = brands.map((b) => {
     </section>
 
   </div>
+
+  <script type="application/json" id="s-i18n" set:html={JSON.stringify(js)} />
 
   <script>
     type CompactModel = {
@@ -264,6 +285,23 @@ const brandCards = brands.map((b) => {
       power_hp: number | null;
       power_kw: number | null;
     };
+
+    const i18nEl = document.getElementById('s-i18n');
+    const I18N = i18nEl
+      ? JSON.parse(i18nEl.textContent || '{}')
+      : {
+          tagTraktor: 'Traktor', tagKombajn: 'Kombajn', tagCurrent: 'Aktuální',
+          yearToNow: '{from}–dosud',
+          empty: 'Žádné modely neodpovídají filtrům. Zkuste je rozvolnit nebo resetovat.',
+          foundPrefix: 'Nalezeno', modelOne: 'model', modelFew: 'modely', modelMany: 'modelů',
+        };
+
+    function pluralModel(n: number): string {
+      const abs = Math.abs(n);
+      if (abs === 1) return I18N.modelOne;
+      if (abs >= 2 && abs <= 4) return I18N.modelFew;
+      return I18N.modelMany;
+    }
 
     let MODELS: Model[] = [];
     let modelsLoaded = false;
@@ -319,14 +357,14 @@ const brandCards = brands.map((b) => {
     function renderCard(m: Model): string {
       const hp = m.power_hp ? `${m.power_hp} k` : '—';
       const kw = m.power_kw ? ` · ${m.power_kw} kW` : '';
-      const yr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '';
+      const yr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : I18N.yearToNow.replace('{from}', String(m.year_from))) : '';
       const isCurrent = (m.year_to ?? null) === null;
       return `
         <a href="${modelUrl(m)}" class="rc-card">
           <div class="rc-tags">
             <span class="rc-tag rc-tag-brand">${m.brand_name}</span>
-            <span class="rc-tag rc-tag-cat">${m.category === 'traktory' ? 'Traktor' : 'Kombajn'}</span>
-            ${isCurrent ? '<span class="rc-tag rc-tag-current"><span class="rc-dot"></span>Aktuální</span>' : ''}
+            <span class="rc-tag rc-tag-cat">${m.category === 'traktory' ? I18N.tagTraktor : I18N.tagKombajn}</span>
+            ${isCurrent ? `<span class="rc-tag rc-tag-current"><span class="rc-dot"></span>${I18N.tagCurrent}</span>` : ''}
           </div>
           <div class="rc-name">${m.name}</div>
           <div class="rc-series">${m.series_name}</div>
@@ -386,8 +424,8 @@ const brandCards = brands.map((b) => {
         const sorted = filtered.sort((a, b) => (b.power_hp ?? 0) - (a.power_hp ?? 0));
         el.resultsGrid.innerHTML = sorted.length > 0
           ? sorted.map(renderCard).join('')
-          : '<div class="rg-empty">Žádné modely neodpovídají filtrům. Zkuste je rozvolnit nebo resetovat.</div>';
-        el.count.textContent = `Nalezeno ${filtered.length} modelů`;
+          : `<div class="rg-empty">${I18N.empty}</div>`;
+        el.count.textContent = `${I18N.foundPrefix} ${filtered.length} ${pluralModel(filtered.length)}`;
         el.resultsHeadingCount.textContent = String(filtered.length);
       } else {
         el.brandGrid.style.display = 'grid';

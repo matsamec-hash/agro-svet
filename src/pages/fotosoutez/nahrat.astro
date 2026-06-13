@@ -252,7 +252,7 @@ const turnstileSiteKey = getEnvVar('PUBLIC_TURNSTILE_SITE_KEY') ?? '';
             msg.hidden = true;
 
             try {
-              const res = await fetch('/fotosoutez/api/upload', { method: 'POST', body: fd });
+              const res = await fetch('/fotosoutez/api/upload/', { method: 'POST', body: fd });
               const json = await res.json().catch(() => ({}));
               if (res.ok) {
                 form.hidden = true;

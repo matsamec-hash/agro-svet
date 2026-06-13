@@ -1,33 +1,37 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import CategoryBrowse from '../../../components/stroje/CategoryBrowse.astro';
 import { getAllBrands } from '../../../lib/stroje';
 import { itemListSchema } from '../../../lib/structured-data';
+import { useTranslations } from '../../../i18n/utils';
+
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
 
 const brandsWithKombajny = getAllBrands().filter((b) => (b.categories?.kombajny?.series?.length ?? 0) > 0);
 const brandListJsonLd = brandsWithKombajny.length > 0
   ? itemListSchema(
       brandsWithKombajny.map((b) => ({
         url: `/stroje/${b.slug}/`,
-        name: `${b.name} kombajny`,
+        name: `${b.name} ${t('stroje.cat.kombajny.itemSuffix')}`,
       })),
-      'Značky kombajnů',
+      t('stroje.cat.kombajny.itemListName'),
     )
   : null;
 ---
 
 <Layout
-  title="Kombajny — katalog"
-  description="Přehled kombajnů všech značek — John Deere, CLAAS, New Holland, Case IH, Fendt, Massey Ferguson, Deutz-Fahr a další. Konvenční, hybridní i rotorové mlátičky."
+  title={t('stroje.cat.kombajny.title')}
+  description={t('stroje.cat.kombajny.desc')}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-      { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
-      { '@type': 'ListItem', position: 3, name: 'Kombajny', item: 'https://agro-svet.cz/stroje/kombajny/' },
+      { '@type': 'ListItem', position: 1, name: t('stroje.crumb.home'), item: 'https://agro-svet.cz/' },
+      { '@type': 'ListItem', position: 2, name: t('stroje.crumb.tech'), item: 'https://agro-svet.cz/stroje/' },
+      { '@type': 'ListItem', position: 3, name: t('stroje.cat.kombajny.crumbName'), item: 'https://agro-svet.cz/stroje/kombajny/' },
     ],
   })} />
   {brandListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(brandListJsonLd)} />}

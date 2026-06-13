@@ -1,5 +1,7 @@
 ---
+import { navHref, getLocaleFromUrl } from '../i18n/utils';
 const variant = Astro.props.variant ?? 'full';
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 ---
 
 <section class={`newsletter newsletter--${variant}`}>
@@ -26,7 +28,7 @@ const variant = Astro.props.variant ?? 'full';
     </form>
     <p id="newsletter-msg" class="newsletter-msg">Žádný spam. Odhlášení kdykoliv.</p>
     <p class="newsletter-gdpr">
-      Odebíráním souhlasíte se <a href="/zpracovani-osobnich-udaju/">zpracováním osobních údajů</a>. Odhlásit se můžete kdykoliv.
+      Odebíráním souhlasíte se <a href={navHref(locale, '/zpracovani-osobnich-udaju/')}>zpracováním osobních údajů</a>. Odhlásit se můžete kdykoliv.
     </p>
   </div>
 </section>
@@ -171,7 +173,7 @@ const variant = Astro.props.variant ?? 'full';
     btn.textContent = '...';
 
     try {
-      const res = await fetch('/api/newsletter/subscribe', {
+      const res = await fetch('/api/newsletter/subscribe/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

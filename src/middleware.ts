@@ -1,5 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
-import { createAnonClient } from './lib/supabase';
+import { createAnonClient, createServerClient } from './lib/supabase';
+import { stripLocale } from './i18n/utils';
+import { isLockedSectionPath } from './i18n/nav';
 import {
   gateActive,
   isGateBypassed,
@@ -52,8 +54,45 @@ function applyGateHeaders(response: Response, opts: { redirect?: boolean } = {})
   return response;
 }
 
+// Náhrada za Astro vestavěný checkOrigin (viz astro.config.mjs: security.checkOrigin=false).
+// Schéma-NECITLIVÁ CSRF kontrola: u nebezpečných metod musí host v Origin headeru
+// odpovídat hostu requestu. Za reverzní proxy je request.url schéma `http://`
+// (Node nečte X-Forwarded-Proto), takže porovnáváme jen HOST, ne celý origin.
+// Bez Origin headeru (cron, server-to-server) propouštíme — prohlížeč Origin u
+// cross-origin POST posílá vždy, takže jeho absence není browser CSRF útok.
+const UNSAFE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+function isCrossSite(request: Request, host: string): boolean {
+  if (!UNSAFE_METHODS.has(request.method)) return false;
+  const origin = request.headers.get('origin');
+  if (!origin) return false; // no Origin → not a browser cross-origin POST
+  try {
+    return new URL(origin).host !== host;
+  } catch {
+    return true; // malformed Origin on unsafe method → reject
+  }
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
+
+  // CSRF: blokuj cross-site nebezpečné POSTy (host-based, viz výše).
+  if (isCrossSite(context.request, url.host)) {
+    return new Response('Cross-site request forbidden', { status: 403 });
+  }
+
+  // Locale prefix: odvoď locale + původní cestu, propiš do locals. Pro ne-cs
+  // se na konci rewritne na kanonickou cs routu (next(strippedPath)).
+  const { locale, path: strippedPath } = stripLocale(url.pathname);
+  locals.locale = locale;
+  locals.localizedPathname = url.pathname;
+  const advance = () => (locale !== 'cs' ? next(strippedPath + url.search) : next());
+
+  // CZ-jurisdikční sekce (dotace/statistiky/kalkulačky/ceny půdy) se pod non-cs
+  // locale NEservírují jako SK obsah — přesměruj na cs URL (poctivě = český web).
+  // Reálné SK ekvivalenty sem doplní Fáze 2b. Dočasný redirect (307).
+  if (locale !== 'cs' && isLockedSectionPath(strippedPath)) {
+    return redirect(strippedPath + url.search, 307);
+  }
 
   // ---- Site gate: runs FIRST, above everything else -------------------------
   // To disable: unset SITE_GATE_PASSCODE env var and redeploy.
@@ -80,7 +119,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // like /, /novinky/[slug], /bazar/, /bazar/[id].
   if (!needsAuthContext(url.pathname)) {
     locals.user = null;
-    const response = await next();
+    const response = await advance();
     if (gateOn) applyGateHeaders(response);
     return response;
   }
@@ -133,7 +172,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     if (!locals.user) {
       return redirect('/bazar/prihlaseni/?redirect=' + encodeURIComponent(url.pathname));
     }
-    const sb = createAnonClient();
+    // Service-role read: bazar_users SELECT RLS is owner-scoped (auth.uid()=id),
+    // and this anon-context middleware has no user JWT, so an anon client would
+    // see no row and lock admins out. Service-role bypasses RLS; we still scope
+    // the lookup to the authenticated user's id.
+    const sb = createServerClient();
     const { data } = await sb
       .from('bazar_users')
       .select('is_admin')
@@ -145,7 +188,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
-  const response = await next();
+  const response = await advance();
 
   if (gateOn) {
     applyGateHeaders(response);

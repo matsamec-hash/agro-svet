@@ -1,0 +1,364 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { listIndexableOdrudy, getPlodina, getOdruda, isOdrudaIndexable, udrzovatelSlug, SKUPINA_LABELS } from '../../../lib/plodiny';
+import { breadcrumbSchema, faqPageSchema, odrudaDatasetSchema, truncateAtBoundary } from '../../../lib/structured-data';
+import OsivaLinks from '../../../components/OsivaLinks.astro';
+
+export async function getStaticPaths() {
+  return listIndexableOdrudy().map((e) => ({
+    params: { plodina: e.plodina_slug, odruda: e.odruda.slug },
+  }));
+}
+
+const { plodina: plodinaSlug, odruda: odrudaSlug } = Astro.params;
+const plodina = getPlodina(plodinaSlug!);
+const odruda = getOdruda(plodinaSlug!, odrudaSlug!);
+if (!plodina || !odruda) return Astro.rewrite('/404');
+
+const e = odruda.enrichment!;
+const base = `/plodiny/${plodina.slug}/${odruda.slug}/`;
+const breadcrumb = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Plodiny', url: '/plodiny/' },
+  { name: plodina.name, url: `/plodiny/${plodina.slug}/` },
+  { name: odruda.name, url: base },
+]);
+const faq = e.faq && e.faq.length > 0 ? faqPageSchema(e.faq) : null;
+
+const dataset = odrudaDatasetSchema({
+  odrudaName: odruda.name,
+  plodinaName: plodina.name,
+  plodinaSlug: plodina.slug,
+  url: base,
+  description: e.popis ?? `Odrůda ${odruda.name} plodiny ${plodina.name.toLowerCase()}.`,
+  udrzovatel: odruda.udrzovatel,
+  rokRegistrace: odruda.rok_registrace,
+  typ: odruda.typ,
+  ranost: odruda.ranost,
+  vlastnosti: e.vlastnosti as Record<string, string | number> | undefined,
+  odolnosti: e.odolnosti as Record<string, string | number> | undefined,
+  zdrojUrl: odruda.zdroj_url,
+});
+
+// Související odrůdy — dalších až 6 indexovaných odrůd téže plodiny (hlubší
+// prolink, nižší bounce). Bez současné odrůdy; deterministicky dle abecedy.
+const relatedOdrudy = plodina.odrudy
+  .filter((o) => o.slug !== odruda.slug && isOdrudaIndexable(o))
+  .slice(0, 6);
+
+const metaDescription = truncateAtBoundary(
+  e.popis ?? `Odrůda ${odruda.name} plodiny ${plodina.name.toLowerCase()}.`,
+  155,
+);
+---
+
+<Layout
+  title={`${odruda.name} — odrůda (${plodina.name})`}
+  description={metaDescription}
+  ogImage={`https://agro-svet.cz/og/plodiny-${plodina.slug}.png`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(dataset)} />
+  {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
+
+  <div class="pl-detail">
+
+    <nav class="breadcrumb" aria-label="Drobečková navigace">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href="/plodiny/">Plodiny</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <a href={`/plodiny/${plodina.slug}/`}>{plodina.name}</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">{odruda.name}</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>{SKUPINA_LABELS[plodina.skupina]} · Odrůda</span>
+        <h1>{odruda.name}</h1>
+        <p class="hero-lede">
+          {e.popis
+            ? e.popis
+            : `Odrůda plodiny ${plodina.name.toLowerCase()}.`}
+        </p>
+        <div class="hero-actions">
+          <a class="cta-back" href={`/plodiny/${plodina.slug}/`}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            {plodina.name}
+          </a>
+          <a class="cta-group" href={`/plodiny/skupina/${plodina.skupina}/`}>
+            {SKUPINA_LABELS[plodina.skupina]}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-emoji-tile" aria-hidden="true">🌾</div>
+      </div>
+    </section>
+
+    {(odruda.typ || odruda.ranost || odruda.rok_registrace || odruda.udrzovatel) && (
+      <section class="card-section agro-facts">
+        <h2 class="section-title">Základní údaje</h2>
+        <dl class="facts-dl">
+          {odruda.typ && (
+            <>
+              <dt>Typ</dt>
+              <dd>{odruda.typ}</dd>
+            </>
+          )}
+          {odruda.ranost && (
+            <>
+              <dt>Ranost</dt>
+              <dd>{odruda.ranost}</dd>
+            </>
+          )}
+          {odruda.rok_registrace && (
+            <>
+              <dt>Rok registrace</dt>
+              <dd>{odruda.rok_registrace}</dd>
+            </>
+          )}
+          {odruda.udrzovatel && (
+            <>
+              <dt>Udržovatel</dt>
+              <dd>
+                <a href={`/odrudy/udrzovatel/${udrzovatelSlug(odruda.udrzovatel)}/`}>{odruda.udrzovatel}</a>
+              </dd>
+            </>
+          )}
+        </dl>
+      </section>
+    )}
+
+    {e.vlastnosti && Object.keys(e.vlastnosti).length > 0 && (
+      <section class="card-section agro-facts">
+        <h2 class="section-title">Vlastnosti</h2>
+        <dl class="facts-dl">
+          {Object.entries(e.vlastnosti).map(([k, v]) => (
+            <>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    {e.odolnosti && Object.keys(e.odolnosti).length > 0 && (
+      <section class="card-section agro-facts">
+        <h2 class="section-title">Odolnosti</h2>
+        <dl class="facts-dl">
+          {Object.entries(e.odolnosti).map(([k, v]) => (
+            <>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    {e.doporuceni && (
+      <section class="card-section">
+        <h2 class="section-title">Doporučení k pěstování</h2>
+        <p class="doporuceni-text">{e.doporuceni}</p>
+      </section>
+    )}
+
+    {e.body && (
+      <section class="card-section prose" set:html={e.body} />
+    )}
+
+    {e.faq && e.faq.length > 0 && (
+      <section class="card-section faq-section">
+        <h2 class="section-title">Časté dotazy</h2>
+        <div class="faq-list">
+          {e.faq.map((f) => (
+            <div class="faq-item">
+              <h3 class="faq-q">{f.q}</h3>
+              <p class="faq-a">{f.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {relatedOdrudy.length > 0 && (
+      <section class="card-section related-section">
+        <h2 class="section-title">Související odrůdy ({plodina.name.toLowerCase()})</h2>
+        <ul class="related-grid">
+          {relatedOdrudy.map((o) => (
+            <li>
+              <a class="related-card" href={`/plodiny/${plodina.slug}/${o.slug}/`}>
+                <span class="related-name">{o.name}</span>
+                {(o.typ || o.rok_registrace) && (
+                  <span class="related-meta">
+                    {[o.typ, o.rok_registrace].filter(Boolean).join(' · ')}
+                  </span>
+                )}
+                <svg class="related-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a class="related-all" href={`/plodiny/${plodina.slug}/`}>
+          Všechny odrůdy plodiny {plodina.name.toLowerCase()}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </section>
+    )}
+
+    <div class="card-section osiva-wrap">
+      <OsivaLinks plodina={plodina.name} skupina={plodina.skupina} odruda={odruda.name} />
+    </div>
+
+  </div>
+</Layout>
+
+<style>
+  .pl-detail {
+    --yellow: #FFEA00; --ink: #0A0A0B; --body: #1E1E22; --muted: #6B6B72;
+    --muted-2: #9A9AA3; --line: #EAEAEC; --card: #FFFFFF; --green: #3c7a1a;
+    --green-soft: #eaf4e0; --green-dark: #2a5a10;
+    --r-xl: 24px; --r-lg: 18px; --r-md: 12px;
+    --sh-1: 0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3: 0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width: 1280px; margin: 0 auto; padding: 26px 24px 96px; color: var(--body);
+  }
+
+  /* ── Breadcrumb ── */
+  .pl-detail .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 22px; flex-wrap: wrap; }
+  .pl-detail .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .pl-detail .breadcrumb a:hover { color: #000; }
+  .pl-detail .breadcrumb svg { color: var(--muted-2); flex-shrink: 0; }
+  .pl-detail .breadcrumb .current { color: #000; font-weight: 600; }
+
+  /* ── Hero ── */
+  .pl-detail .hero {
+    position: relative; overflow: hidden; color: #fff; border-radius: var(--r-xl);
+    background:
+      radial-gradient(600px 300px at 15% 20%, rgba(255, 234, 0, .14), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(60, 140, 40, .30), transparent 60%),
+      linear-gradient(135deg, #0F1409 0%, #161F0E 60%, #1C2B10 100%);
+    padding: 48px 48px 40px; margin-bottom: 26px; display: flex; gap: 32px; align-items: center;
+    box-shadow: var(--sh-3);
+  }
+  .pl-detail .hero-left { flex: 1; min-width: 0; }
+  .pl-detail .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #D8EBC0; margin-bottom: 16px; }
+  .pl-detail .kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
+  .pl-detail .hero h1 { font-size: clamp(28px, 4vw, 44px); line-height: 1.08; margin: 0 0 14px; font-weight: 800; }
+  .pl-detail .hero-lede { font-size: 16.5px; line-height: 1.6; color: #E0ECDA; max-width: 60ch; margin: 0 0 22px; }
+  .pl-detail .hero-right { flex-shrink: 0; }
+  .pl-detail .hero-emoji-tile { font-size: 92px; line-height: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,.4)); }
+  .pl-detail .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pl-detail .cta-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #c8c8d0; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    padding: 11px 16px; border-radius: var(--r-md); text-decoration: none;
+    font-size: 13.5px; font-weight: 500; transition: .15s;
+  }
+  .pl-detail .cta-back:hover { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.22); }
+  .pl-detail .cta-group {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--yellow); color: #0A0A0B;
+    padding: 11px 16px; border-radius: var(--r-md); text-decoration: none;
+    font-size: 13.5px; font-weight: 700; transition: .15s;
+  }
+  .pl-detail .cta-group:hover { opacity: .9; }
+
+  /* ── Section cards ── */
+  .pl-detail .card-section {
+    background: var(--card); border-radius: var(--r-lg); padding: 28px 32px;
+    box-shadow: var(--sh-1); margin-bottom: 20px;
+  }
+  .pl-detail .section-title {
+    font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  /* ── Facts DL (shared by Základní údaje / Vlastnosti / Odolnosti) ── */
+  .pl-detail .facts-dl {
+    display: grid; grid-template-columns: max-content 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden;
+  }
+  .pl-detail .facts-dl dt,
+  .pl-detail .facts-dl dd {
+    padding: 11px 16px; margin: 0; font-size: 14.5px; line-height: 1.5;
+  }
+  .pl-detail .facts-dl dt {
+    font-weight: 700; color: var(--ink); background: #F7F7FA;
+    border-bottom: 1px solid var(--line);
+  }
+  .pl-detail .facts-dl dd {
+    color: var(--body); background: #fff; border-bottom: 1px solid var(--line);
+  }
+  .pl-detail .facts-dl dt:last-of-type,
+  .pl-detail .facts-dl dd:last-child { border-bottom: none; }
+  .pl-detail .facts-dl a { color: var(--green); text-decoration: none; }
+  .pl-detail .facts-dl a:hover { color: var(--green-dark); text-decoration: underline; }
+
+  /* ── Doporučení ── */
+  .pl-detail .doporuceni-text { font-size: 15px; line-height: 1.7; color: var(--body); margin: 0; }
+
+  /* ── Prose body ── */
+  .pl-detail .prose { font-size: 15px; line-height: 1.7; color: var(--body); }
+  .pl-detail .prose h2 { font-size: 20px; font-weight: 800; color: var(--ink); margin: 1.4em 0 .6em; }
+  .pl-detail .prose h3 { font-size: 17px; font-weight: 700; color: var(--ink); margin: 1.2em 0 .5em; }
+  .pl-detail .prose p { margin: 0 0 1em; }
+  .pl-detail .prose ul, .pl-detail .prose ol { padding-left: 1.4em; margin: 0 0 1em; }
+  .pl-detail .prose li { margin-bottom: .4em; }
+  .pl-detail .prose strong { font-weight: 700; color: var(--ink); }
+  .pl-detail .prose a { color: var(--green); text-decoration: underline; }
+  .pl-detail .prose a:hover { color: var(--green-dark); }
+  .pl-detail .prose table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 1em 0; }
+  .pl-detail .prose th { background: #F7F7FA; font-weight: 700; padding: 10px 14px; border: 1px solid var(--line); text-align: left; }
+  .pl-detail .prose td { padding: 10px 14px; border: 1px solid var(--line); }
+
+  /* ── FAQ ── */
+  .pl-detail .faq-list { display: flex; flex-direction: column; gap: 16px; }
+  .pl-detail .faq-item { border-left: 3px solid var(--green-soft); padding-left: 16px; }
+  .pl-detail .faq-q { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0 0 6px; }
+  .pl-detail .faq-a { font-size: 14.5px; line-height: 1.65; color: var(--body); margin: 0; }
+
+  /* ── Související odrůdy ── */
+  .pl-detail .related-grid {
+    list-style: none; margin: 0 0 18px; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;
+  }
+  .pl-detail .related-card {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-md);
+    background: #fff; text-decoration: none; transition: .15s; min-height: 100%;
+  }
+  .pl-detail .related-card:hover { border-color: var(--green); background: var(--green-soft); }
+  .pl-detail .related-name { font-weight: 700; color: var(--ink); font-size: 15px; }
+  .pl-detail .related-meta { font-size: 12.5px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+  .pl-detail .related-arrow { color: var(--green); flex-shrink: 0; }
+  .pl-detail .related-meta + .related-arrow { margin-left: 6px; }
+  .pl-detail .related-name + .related-arrow { margin-left: auto; }
+  .pl-detail .related-all {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--green-dark); font-weight: 700; font-size: 14px; text-decoration: none;
+  }
+  .pl-detail .related-all:hover { text-decoration: underline; }
+
+  /* ── Osiva wrapper ── */
+  .pl-detail .osiva-wrap { border-top: 2px solid var(--green-soft); }
+
+  /* ── Responsive ── */
+  @media (max-width: 720px) {
+    .pl-detail .hero { flex-direction: column; padding: 34px 26px; text-align: center; }
+    .pl-detail .hero-right { display: none; }
+    .pl-detail .hero-actions { justify-content: center; }
+    .pl-detail .card-section { padding: 22px 18px; }
+    .pl-detail .facts-dl { grid-template-columns: 1fr; }
+    .pl-detail .facts-dl dt { border-bottom: none; padding-bottom: 2px; }
+    .pl-detail .facts-dl dd { border-bottom: 1px solid var(--line); padding-top: 2px; }
+  }
+  @media (max-width: 480px) {
+    .pl-detail { padding: 20px 16px 60px; }
+  }
+</style>

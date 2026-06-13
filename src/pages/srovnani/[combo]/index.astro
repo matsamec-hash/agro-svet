@@ -11,6 +11,7 @@ import Layout from '../../../layouts/Layout.astro';
 import {
   topComparisonPairs,
   expandedComparisonPairs,
+  implementComparisonPairs,
   parsePairCombo,
   findModelBySlug,
   pairCombo,
@@ -23,6 +24,11 @@ import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../../lib/st
 import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
 import { comparisonInsights } from '../../../lib/comparison-insights';
+import { implementComparisonInsights } from '../../../lib/implement-comparison-insights';
+import { useTranslations, tf, getLocaleFromUrl, localizePath } from '../../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 export async function getStaticPaths() {
   // Expand limit na 5000 (z 1500) — pokrývá všechny ~2000 unikátní párů včetně
@@ -31,8 +37,13 @@ export async function getStaticPaths() {
   // takže limit 5000 zachytí všechny + headroom pro budoucí models. Bonus:
   // všechny mid-class páry jsou teď v sitemap → discovery pro decision-stage
   // dotazy (jak vybrat X vs Y v třídě 100-150 koní).
-  const pairs = expandedComparisonPairs(5000);
-  return pairs.map((p) => ({
+  const tractorPairs = expandedComparisonPairs(5000);
+  const implementPairs = implementComparisonPairs(4000);
+  const byCombo = new Map<string, ComparisonPair>();
+  for (const p of [...tractorPairs, ...implementPairs]) {
+    if (!byCombo.has(p.combo)) byCombo.set(p.combo, p);
+  }
+  return [...byCombo.values()].map((p) => ({
     params: { combo: p.combo },
     props: { pair: p },
   }));
@@ -50,7 +61,7 @@ if (!pair) {
   if (parsed) {
     const a = findModelBySlug(parsed[0]);
     const b = findModelBySlug(parsed[1]);
-    if (a && b && a.category === b.category && a.brand_slug !== b.brand_slug) {
+    if (a && b && a.effective_category === b.effective_category && a.brand_slug !== b.brand_slug) {
       const canonical = pairCombo(a, b);
       if (canonical !== combo) return Astro.rewrite('/404');
       pair = { a, b, combo: canonical };
@@ -66,45 +77,55 @@ const { a, b } = pair;
 const aDisplay = modelDisplayName(a);
 const bDisplay = modelDisplayName(b);
 
-const rows = buildComparisonRows(a.category);
+const isImplement = a.effective_category !== 'traktory' && a.effective_category !== 'kombajny';
+const rows = buildComparisonRows(a.effective_category);
 
 // Look up series image fallbacks for hero photos.
 const aSeries = getSeries(a.brand_slug, a.series_slug);
 const bSeries = getSeries(b.brand_slug, b.series_slug);
-const categoryFallback = a.category === 'traktory' ? '/images/traktor.webp' : '/images/kombajn.webp';
+const categoryFallback = isImplement
+  ? '/images/stroje.webp'
+  : a.effective_category === 'traktory'
+    ? '/images/traktor.webp'
+    : '/images/kombajn.webp';
 const aPhoto = a.image_url ?? aSeries?.series.image_url ?? categoryFallback;
 const bPhoto = b.image_url ?? bSeries?.series.image_url ?? categoryFallback;
 
-const aUseCase = useCaseDescription(a.category, a.power_hp);
-const bUseCase = useCaseDescription(b.category, b.power_hp);
+const aUseCase = useCaseDescription(a.category, a.power_hp, locale);
+const bUseCase = useCaseDescription(b.category, b.power_hp, locale);
 
 // Dynamic per-pair insights: TL;DR verdict, decision boxes, FAQs, fresh
 // description with concrete diff numbers. Generated from StrojFlatModel data
 // so each of ~1500 pages reads uniquely (no boilerplate Google demotes).
-const insights = comparisonInsights(a, b);
+const insights = isImplement
+  ? implementComparisonInsights(a, b, locale)
+  : comparisonInsights(a, b, locale);
 
-const canonical = `https://agro-svet.cz/srovnani/${pair.combo}/`;
-const categoryLabel = a.category === 'traktory' ? 'traktorů' : 'kombajnů';
-const title = `${aDisplay} vs ${bDisplay} — srovnání ${categoryLabel}`;
+const canonical = `https://agro-svet.cz${localizePath(locale, `/srovnani/${pair.combo}/`)}`;
+const title = tf(
+  locale,
+  isImplement ? 'cat.sr.c.titleImplement' : a.effective_category === 'traktory' ? 'cat.sr.c.titleTraktory' : 'cat.sr.c.titleKombajny',
+  { a: aDisplay, b: bDisplay },
+);
 const description = insights.shortDescription;
 
 const related = relatedComparisonsFor(a, 6).filter((p) => p.combo !== pair.combo).slice(0, 5);
 
-const lastUpdatedHuman = new Date(insights.lastUpdatedIso).toLocaleDateString('cs-CZ', {
+const lastUpdatedHuman = new Date(insights.lastUpdatedIso).toLocaleDateString(locale === 'sk' ? 'sk-SK' : 'cs-CZ', {
   year: 'numeric', month: 'long', day: 'numeric',
 });
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Srovnání', url: '/srovnani/' },
+  { name: tr('cat.sr.bcHome'), url: localizePath(locale, '/') },
+  { name: tr('cat.sr.bcCurrent'), url: localizePath(locale, '/srovnani/') },
   { name: `${aDisplay} vs ${bDisplay}`, url: canonical },
 ]);
 const itemListJsonLd = itemListSchema(
   [
-    { url: `/stroje/${a.brand_slug}/${a.series_slug}/${a.slug.startsWith(a.brand_slug + '-') ? a.slug.slice(a.brand_slug.length + 1) : a.slug}/`, name: aDisplay },
-    { url: `/stroje/${b.brand_slug}/${b.series_slug}/${b.slug.startsWith(b.brand_slug + '-') ? b.slug.slice(b.brand_slug.length + 1) : b.slug}/`, name: bDisplay },
+    { url: localizePath(locale, `/stroje/${a.brand_slug}/${a.series_slug}/${a.slug.startsWith(a.brand_slug + '-') ? a.slug.slice(a.brand_slug.length + 1) : a.slug}/`), name: aDisplay },
+    { url: localizePath(locale, `/stroje/${b.brand_slug}/${b.series_slug}/${b.slug.startsWith(b.brand_slug + '-') ? b.slug.slice(b.brand_slug.length + 1) : b.slug}/`), name: bDisplay },
   ],
-  `Srovnání: ${aDisplay} vs ${bDisplay}`,
+  `${tr('cat.sr.bcCurrent')}: ${aDisplay} vs ${bDisplay}`,
 );
 const faqJsonLd = insights.faqs.length > 0 ? faqPageSchema(insights.faqs) : null;
 
@@ -127,16 +148,16 @@ function modelLink(m: typeof a): string {
 
   <div class="cmp-page">
 
-    <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+    <nav class="breadcrumb" aria-label={tr('cat.sr.c.bcAria')}>
+      <a href="/">{tr('cat.sr.c.bcHome')}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/srovnani/">Srovnání</a>
+      <a href="/srovnani/">{tr('cat.sr.c.bcSrovnani')}</a>
       <span class="sep" aria-hidden="true">›</span>
       <span class="current">{aDisplay} vs {bDisplay}</span>
     </nav>
 
     <header class="hero">
-      <span class="kicker">Srovnání · {a.category === 'traktory' ? 'Traktory' : 'Kombajny'}</span>
+      <span class="kicker">{tr('cat.sr.c.kicker')}{isImplement ? tr('cat.sr.c.kicImplement') : a.effective_category === 'traktory' ? tr('cat.sr.c.kicTraktory') : tr('cat.sr.c.kicKombajny')}</span>
       <h1>{aDisplay} <em>vs</em> {bDisplay}</h1>
       <p class="hero-lede">{insights.tldr}</p>
       <div class="hero-meta">
@@ -144,7 +165,7 @@ function modelLink(m: typeof a): string {
         <span class="hm-sep" aria-hidden="true">·</span>
         <span class="hm-brand"><a href={`/znacky/${b.brand_slug}/`}>{b.brand_name}</a></span>
         <span class="hm-sep" aria-hidden="true">·</span>
-        <time class="hm-date" datetime={insights.lastUpdatedIso}>Aktualizováno {lastUpdatedHuman}</time>
+        <time class="hm-date" datetime={insights.lastUpdatedIso}>{tf(locale, 'cat.sr.c.updated', { date: lastUpdatedHuman })}</time>
       </div>
     </header>
 
@@ -183,10 +204,10 @@ function modelLink(m: typeof a): string {
     </section>
 
     <section class="spec-table-wrap" aria-labelledby="spec-table-h">
-      <h2 id="spec-table-h">Parametry vedle sebe</h2>
+      <h2 id="spec-table-h">{tr('cat.sr.c.specH2')}</h2>
       <div class="spec-table">
         <div class="st-header">
-          <div class="st-th">Parametr</div>
+          <div class="st-th">{tr('cat.sr.c.thParam')}</div>
           <div class="st-th st-th-a">{aDisplay}</div>
           <div class="st-th st-th-b">{bDisplay}</div>
         </div>
@@ -216,33 +237,30 @@ function modelLink(m: typeof a): string {
           );
         })}
       </div>
-      <p class="st-note">
-        Zelená značí lepší hodnotu v parametrech, kde je jednoznačné kritérium (vyšší výkon, nižší hmotnost).
-        Údaje typu motor a převodovka jsou kvalitativní — neutrální v zobrazení.
-      </p>
+      <p class="st-note" set:html={tr('cat.sr.c.stNote')}></p>
     </section>
 
     <section class="decision" aria-labelledby="decision-h">
-      <h2 id="decision-h">Kdy si vybrat {aDisplay}, kdy {bDisplay}</h2>
+      <h2 id="decision-h">{tf(locale, 'cat.sr.c.decisionH2', { a: aDisplay, b: bDisplay })}</h2>
       <div class="decision-grid">
         <article class="dc-card dc-a">
           <span class="dc-brand">{a.brand_name}</span>
           <h3 class="dc-name">{aDisplay}</h3>
           <p class="dc-text">{insights.decisionA}</p>
-          <a class="dc-link" href={modelLink(a)}>Detail modelu →</a>
+          <a class="dc-link" href={modelLink(a)}>{tr('cat.sr.c.detailLink')}</a>
         </article>
         <article class="dc-card dc-b">
           <span class="dc-brand">{b.brand_name}</span>
           <h3 class="dc-name">{bDisplay}</h3>
           <p class="dc-text">{insights.decisionB}</p>
-          <a class="dc-link" href={modelLink(b)}>Detail modelu →</a>
+          <a class="dc-link" href={modelLink(b)}>{tr('cat.sr.c.detailLink')}</a>
         </article>
       </div>
     </section>
 
     {insights.faqs.length > 0 && (
       <section class="cmp-faq" aria-labelledby="faq-h">
-        <h2 id="faq-h">Časté otázky</h2>
+        <h2 id="faq-h">{tr('cat.sr.c.faqH2')}</h2>
         <div class="faq-list">
           {insights.faqs.map((f) => (
             <details class="faq-item">
@@ -256,13 +274,13 @@ function modelLink(m: typeof a): string {
 
     {related.length > 0 && (
       <section class="related-cmp" aria-labelledby="related-h">
-        <h2 id="related-h">Další srovnání pro {a.name}</h2>
+        <h2 id="related-h">{tf(locale, 'cat.sr.c.relatedH2', { a: a.name })}</h2>
         <ul class="related-list">
           {related.map((r) => (
             <li>
               <a href={`/srovnani/${r.combo}/`}>
                 <span class="rl-pair">{modelDisplayName(r.a)} <em>vs</em> {modelDisplayName(r.b)}</span>
-                <span class="rl-cta">Otevřít →</span>
+                <span class="rl-cta">{tr('cat.sr.c.openLink')}</span>
               </a>
             </li>
           ))}
@@ -272,12 +290,12 @@ function modelLink(m: typeof a): string {
 
     <section class="big-cta">
       <div>
-        <span class="bc-kicker">Hledáte konkrétní model?</span>
-        <h2>Najdi {a.name} nebo {b.name} v bazaru</h2>
-        <p>Inzeráty od dealerů i soukromých prodejců — kontakt napřímo, bez provize.</p>
+        <span class="bc-kicker">{tr('cat.sr.c.ctaKicker')}</span>
+        <h2>{tf(locale, 'cat.sr.c.ctaH2', { a: a.name, b: b.name })}</h2>
+        <p>{tr('cat.sr.c.ctaP')}</p>
         <div class="bc-actions">
-          <a class="bc-btn primary" href={`/bazar/?brand=${encodeURIComponent(a.brand_slug)}`}>Bazar {a.brand_name}</a>
-          <a class="bc-btn ghost" href={`/bazar/?brand=${encodeURIComponent(b.brand_slug)}`}>Bazar {b.brand_name}</a>
+          <a class="bc-btn primary" href={`/bazar/?brand=${encodeURIComponent(a.brand_slug)}`}>{tf(locale, 'cat.sr.c.ctaBazar', { brand: a.brand_name })}</a>
+          <a class="bc-btn ghost" href={`/bazar/?brand=${encodeURIComponent(b.brand_slug)}`}>{tf(locale, 'cat.sr.c.ctaBazar', { brand: b.brand_name })}</a>
         </div>
       </div>
     </section>

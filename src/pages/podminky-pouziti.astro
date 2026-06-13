@@ -1,11 +1,198 @@
 ---
+export const prerender = false;
 import Layout from '../layouts/Layout.astro';
+const locale = Astro.locals.locale ?? 'cs';
+const isSk = locale === 'sk';
 ---
 <Layout
-  title="Podmínky použití — Agro-svět"
-  description="Podmínky použití webu agro-svet.cz — orientační charakter informací, vyloučení odpovědnosti, autorská práva, kontakt."
+  title={isSk ? 'Podmienky používania — Agro-svet' : 'Podmínky použití — Agro-svět'}
+  description={isSk ? 'Podmienky používania webu agro-svet.cz — orientačný charakter informácií, vylúčenie zodpovednosti, autorské práva, kontakt.' : 'Podmínky použití webu agro-svet.cz — orientační charakter informací, vyloučení odpovědnosti, autorská práva, kontakt.'}
 >
   <main class="legal-page">
+  {isSk ? (
+    <Fragment>
+    <h1>Podmienky používania</h1>
+    <p class="lead">
+      Tieto podmienky upravujú používanie webu <strong>agro-svet.cz</strong> prevádzkovaného spoločnosťou
+      <strong>Samec Digital s.r.o.</strong>, IČO 29547539, se sídlem Na Břehu 378, 387 11 Katovice
+      (ďalej len „prevádzkovateľ"). Používaním webu s nimi vyjadrujete súhlas.
+    </p>
+
+    <h2>1. Charakter obsahu — informácie sú len orientačné</h2>
+    <p>
+      Všetky údaje, čísla, ceny, parametre techniky, štatistiky, kalkulačky, prevody jednotiek,
+      heslá v slovníku a encyklopédii, údaje o dotáciách, plemenách, pôde, strojoch, predajcoch,
+      značkách a všetky ostatné informácie zverejnené na webe majú <strong>výhradne informatívny
+      a orientačný charakter</strong>.
+    </p>
+    <p>
+      Prevádzkovateľ <strong>negarantuje</strong> ich presnosť, úplnosť, aktuálnosť ani vhodnosť
+      pre konkrétny účel. Údaje sa môžu v čase meniť, zastarať alebo obsahovať chyby (technické,
+      typografické, prevzaté zo zdrojov tretích strán, generované automaticky).
+    </p>
+
+    <h2>2. Vylúčenie zodpovednosti</h2>
+    <p>
+      Prevádzkovateľ <strong>nenesie žiadnu zodpovednosť</strong> za:
+    </p>
+    <ul>
+      <li>správnosť, presnosť ani aktuálnosť zverejnených údajov a informácií,</li>
+      <li>akékoľvek rozhodnutia urobené používateľom na základe informácií z webu,</li>
+      <li>priame i nepriame škody (finančné, materiálne, ušlý zisk) vzniknuté použitím obsahu webu,</li>
+      <li>výsledky výpočtov kalkulačiek, prevodov jednotiek a porovnaní — slúžia len na hrubý odhad,</li>
+      <li>obsah inzerátov v bazári — zodpovedá zaň výhradne ich autor (inzerent),</li>
+      <li>obsah a dostupnosť odkazovaných webov tretích strán,</li>
+      <li>výpadky, obmedzenie dostupnosti alebo prerušenie prevádzky webu.</li>
+    </ul>
+    <p>
+      <strong>Pred akýmkoľvek rozhodnutím</strong> s finančnými, právnymi, technologickými alebo
+      prevádzkovými dôsledkami (nákup techniky, žiadosť o dotáciu, agronomické postupy, výživa rastlín
+      a zvierat, použitie prípravkov na ochranu rastlín a pod.) si vždy overte informácie u
+      <strong>oficiálnych zdrojov</strong>, výrobcu, predajcu, autorizovaného poradcu, SZIF,
+      ÚKZÚZ, Ministerstva zemědělství alebo inej kompetentnej autority.
+    </p>
+
+    <h2>3. Bazár a používateľský obsah</h2>
+    <p>
+      Bazár agro-svet.cz je <strong>inzertná platforma</strong> — prevádzkovateľ iba
+      sprostredkúva kontakt medzi inzerentom a záujemcom. Prevádzkovateľ <strong>nie je stranou
+      kúpnej zmluvy</strong>, nevykonáva inkaso platieb, neručí za stav, kvalitu ani existenciu
+      ponúkaného tovaru, ani za to, že druhá strana splní svoje záväzky.
+    </p>
+    <p>
+      Za obsah inzerátu, pravdivosť údajov, cenu, stav ponúkaného tovaru, autorské práva
+      k fotografiám aj za splnenie všetkých zákonných povinností (živnostenský zákon, záručná
+      zodpovednosť, daň z príjmov, DPH, ohlasovacia povinnosť) zodpovedá <strong>výhradne
+      inzerent</strong>.
+    </p>
+
+    <h3>3.1 Kto smie inzerovať</h3>
+    <ul>
+      <li><strong>Fyzické osoby (nepodnikatelia)</strong> môžu inzerovať <strong>svoj
+        vlastný majetok</strong> — konkrétne jednotlivé veci po kuse, s jasným popisom
+        (jeden traktor, jeden pluh, jedno teľa a pod.). Nemožno inzerovať „sklad", „ponuku
+        z výroby" ani neurčité množstvo.</li>
+      <li><strong>Podnikatelia (SZČO, firmy, dealerstvá)</strong> môžu inzerovať
+        <strong>konkrétny ponúkaný tovar alebo službu</strong>. Inzerent-podnikateľ je
+        povinný v inzeráte uviesť <strong>obchodné meno alebo meno a IČO</strong>
+        (na konci inzerátu alebo v poli „Meno / firma"). Neuvedenie IČO podnikateľom je
+        dôvodom na zmazanie inzerátu a zablokovanie účtu.</li>
+      <li>Nie je dovolené inzerovať <strong>podnikateľskú činnosť všeobecne</strong>
+        („ponúkame všetku poľnohospodársku techniku", „dovoz strojov z Nemecka") — iba
+        konkrétny tovar.</li>
+    </ul>
+
+    <h3>3.2 Zakázaný obsah</h3>
+    <p>Na bazári nemožno inzerovať najmä:</p>
+    <ul>
+      <li>falzifikáty a neoriginálne náhradné diely vydávané za originálne,</li>
+      <li>MLM, provízne a pyramídové systémy, „prácu z domu",</li>
+      <li>pôžičky, úvery a finančné služby nebankových subjektov,</li>
+      <li>erotické inzeráty, zoznamky, eskortné služby,</li>
+      <li>kradnuté alebo nelegálne získané veci,</li>
+      <li>lieky (humánne i veterinárne) bez príslušného oprávnenia,</li>
+      <li>prípravky na ochranu rastlín v rozpore so zákonem č. 326/2004 Sb. (najmä
+        bez registrácie ÚKZÚZ, mimo profesionálnych používateľov tam, kde to zákon vyžaduje),</li>
+      <li>zbrane, strelivo a výbušniny v rozpore so zákonem č. 119/2002 Sb.,</li>
+      <li>živé zvieratá bez veterinárneho osvedčenia, chránené druhy bez CITES, mŕtve zvieratá,</li>
+      <li>tabakové výrobky, alkohol, omamné a psychotropné látky, e-cigarety,</li>
+      <li>kryptomeny, herné účty, virtuálne predmety,</li>
+      <li>čokoľvek porušujúce autorské, priemyselné či osobnostné práva tretích osôb,</li>
+      <li>diskriminačný, urážlivý, nenávistný alebo inak nezákonný obsah.</li>
+    </ul>
+    <p>
+      Podrobné pravidlá bazára vrátane ďalších zakázaných obsahov a postupu pri porušení
+      nájdete na stránke <a href="/bazar/pravidla/">Pravidlá bazára</a>.
+    </p>
+
+    <h3>3.3 Mazanie inzerátov a blokácia účtov</h3>
+    <p>
+      Prevádzkovateľ je oprávnený <strong>bez predchádzajúceho upozornenia</strong> nezverejniť
+      inzerát, zmazať zverejnený inzerát, prípadne zablokovať účet používateľa, ak:
+    </p>
+    <ul>
+      <li>inzerát alebo správanie používateľa porušuje tieto podmienky, pravidlá bazára
+        alebo právne predpisy,</li>
+      <li>inzerát obsahuje nepravdivé, klamlivé alebo zavádzajúce informácie,</li>
+      <li>používateľ opakovane vkladá duplicitné alebo spamové inzeráty,</li>
+      <li>prevádzkovateľ dostane <strong>kvalifikované oznámenie</strong> o nezákonnosti
+        obsahu od tretej osoby alebo úradu.</li>
+    </ul>
+    <p>
+      Používateľ bude o dôvode zmazania / blokácie informovaný e-mailom registrovaným k účtu.
+      Proti rozhodnutiu možno podať odôvodnenú sťažnosť na
+      <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> v lehote 14 dní;
+      prevádzkovateľ ju vybaví do 14 dní od doručenia.
+    </p>
+
+    <h3>3.4 Hlásenie závadného obsahu (notice-and-action)</h3>
+    <p>
+      Ak sa domnievate, že konkrétny inzerát porušuje právne predpisy alebo tieto pravidlá,
+      použite formulár <a href="/bazar/nahlasit/">Nahlásiť závadný inzerát</a>
+      alebo pošlite oznámenie e-mailom na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+      V oznámení uveďte:
+    </p>
+    <ul>
+      <li>URL inzerátu alebo jeho ID,</li>
+      <li>dôvod, prečo považujete obsah za závadný (porušený predpis alebo pravidlo),</li>
+      <li>vaše kontaktné údaje (voliteľne, pre prípad doplnenia informácií).</li>
+    </ul>
+    <p>
+      Prevádzkovateľ oznámenie posúdi <strong>bez zbytočného odkladu</strong>, spravidla do
+      <strong>7 dní</strong>, a o výsledku vás informuje, ak ste uviedli kontakt.
+      V odôvodnených prípadoch (zjavne nezákonný obsah, ohrozenie zdravia) koná bezodkladne.
+    </p>
+
+    <h2>4. Pravidlá používania</h2>
+    <p>Používateľ sa zaväzuje, že nebude:</p>
+    <ul>
+      <li>narúšať prevádzku webu, jeho bezpečnosť ani používať automatizované nástroje (scrapery, boty) bez súhlasu,</li>
+      <li>vkladať klamlivý, urážlivý, nezákonný alebo spamový obsah,</li>
+      <li>vydávať sa za inú osobu alebo subjekt,</li>
+      <li>obchádzať technické opatrenia chrániace obsah alebo prístup k nemu.</li>
+    </ul>
+    <p>
+      Prevádzkovateľ si vyhradzuje právo bez predchádzajúceho upozornenia odstrániť obsah porušujúci
+      tieto podmienky a zablokovať účet používateľa.
+    </p>
+
+    <h2>5. Autorské práva</h2>
+    <p>
+      Obsah webu (texty, grafika, dizajn, databázy, fotografie redakcie, slovníkové heslá,
+      encyklopedické články, štatistiky a ich vizualizácie) je chránený autorským právom
+      a databázovým právom. Bez písomného súhlasu prevádzkovateľa nie je dovolené obsah
+      kopírovať, šíriť, upravovať ani inak komerčne využívať.
+    </p>
+    <p>
+      Fotografie a obsah inzerátov v bazári zostávajú vlastníctvom inzerenta; vložením inzerátu
+      inzerent udeľuje prevádzkovateľovi nevýhradnú bezodplatnú licenciu na ich zobrazenie v rámci
+      prevádzky webu.
+    </p>
+
+    <h2>6. Ochrana osobných údajov</h2>
+    <p>
+      Spracúvanie osobných údajov upravujú samostatné
+      <a href="/zpracovani-osobnich-udaju/">Zásady spracúvania osobných údajov</a>.
+    </p>
+
+    <h2>7. Zmeny podmienok</h2>
+    <p>
+      Prevádzkovateľ je oprávnený tieto podmienky kedykoľvek zmeniť. Aktuálne znenie je vždy zverejnené
+      na tejto stránke s uvedením dátumu účinnosti. Pokračovaním v používaní webu po zmene podmienok
+      vyjadrujete súhlas s novým znením.
+    </p>
+
+    <h2>8. Kontakt</h2>
+    <p>
+      Samec Digital s.r.o., IČO 29547539<br>
+      Na Břehu 378, 387 11 Katovice<br>
+      E-mail: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+
+    <p class="effective"><strong>Účinnosť:</strong> 28. mája 2026</p>
+    </Fragment>
+  ) : (
+    <Fragment>
     <h1>Podmínky použití</h1>
     <p class="lead">
       Tyto podmínky upravují užívání webu <strong>agro-svet.cz</strong> provozovaného společností
@@ -185,6 +372,8 @@ import Layout from '../layouts/Layout.astro';
     </p>
 
     <p class="effective"><strong>Účinnost:</strong> 28. května 2026</p>
+    </Fragment>
+  )}
   </main>
 </Layout>
 

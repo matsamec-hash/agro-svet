@@ -1,0 +1,381 @@
+---
+import { VCS_SEKTORY_SK, SAZBY_SK } from '../../lib/sk-cap-dotace';
+
+interface Props {
+  faqItems: { q: string; a: string }[];
+}
+
+const { faqItems } = Astro.props;
+---
+
+<div class="calc-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a>
+      <span aria-hidden="true">›</span>
+      <a href="/sk/kalkulacka/">Kalkulačky</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Priame platby SPP</span>
+    </nav>
+
+    <header class="calc-head">
+      <span class="kicker">Kalkulačka · SPP 2024</span>
+      <h1>Koľko dostanete na priamych platbách</h1>
+      <p class="lede">
+        Orientačný kalkulátor priamych platieb Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku — spočíta BISS, redistributívnu platbu (CRISS), ekoschému a viazané platby (VCS). Sadzby vychádzajú z oficiálneho Excelu PPA pre rok 2024.
+      </p>
+    </header>
+
+    <form class="calc-form" id="cap-form-sk" autocomplete="off">
+      <fieldset class="fs">
+        <legend>Podnik</legend>
+
+        <label class="field">
+          <span>Celková výmera (ha) <strong class="req">*</strong></span>
+          <input type="number" id="total-ha-sk" name="totalHa" min="0" step="0.1" placeholder="napr. 75" required />
+        </label>
+
+        <label class="field">
+          <span>Plocha v CHVÚ (ha)</span>
+          <input type="number" id="chvu-ha-sk" name="chvuHa" min="0" step="0.1" placeholder="0" />
+          <span class="field-hint">koľko ha vašej výmery leží v chránenom vtáčom území (vyššia sadzba ekoschémy)</span>
+        </label>
+
+        <label class="field-check">
+          <input type="checkbox" id="mlady-sk" name="mlady" />
+          <span><strong>Mladý poľnohospodár</strong> <em>do 40 rokov, prvý podnik — max {SAZBY_SK.mladyMaxHa} ha.</em></span>
+        </label>
+      </fieldset>
+
+      <fieldset class="fs">
+        <legend>Viazané platby (VCS)</legend>
+        <p class="fs-hint">Vyplňte plochy v jednotlivých sektoroch, na ktoré čerpáte VCS. Nechajte 0, pokiaľ sektor nepestujete.</p>
+
+        <div class="vcs-grid">
+          {VCS_SEKTORY_SK.map((s) => (
+            <label class="vcs-field">
+              <span class="vcs-name">{s.name}</span>
+              <span class="vcs-rate">{s.sazba.toLocaleString('sk-SK')} €/ha</span>
+              <input type="number" name={`vcs-${s.slug}`} data-vcs={s.slug} min="0" step="0.1" placeholder="0" />
+            </label>
+          ))}
+        </div>
+
+        <p class="fs-hint">ANC (oblasti s prírodnými obmedzeniami) sa v SR poskytuje samostatne v rámci rozvoja vidieka — pozrite <a href="https://www.apa.sk" rel="external nofollow">apa.sk</a>.</p>
+      </fieldset>
+
+      <button type="submit" class="calc-btn">Vypočítať platby →</button>
+    </form>
+
+    <div id="result-sk" class="result-card" hidden>
+      <header class="result-head">
+        <span class="result-kicker">Orientačný výpočet</span>
+        <div class="result-total" id="result-total-sk">— € / rok</div>
+        <div class="result-perha" id="result-perha-sk">— € / ha priemerne</div>
+      </header>
+
+      <h2>Rozpočet</h2>
+      <table class="result-table">
+        <thead>
+          <tr><th>Položka</th><th>Plocha</th><th>Sadzba</th><th>Suma</th></tr>
+        </thead>
+        <tbody id="result-tbody-sk"></tbody>
+      </table>
+
+      <div class="result-disclaimer">
+        ⚠️ Orientačný výpočet podľa oficiálnych sadzieb PPA 2024. Záväzné sumy stanovuje <a href="https://www.apa.sk" rel="external nofollow">PPA</a> po uzávierke kampane.
+      </div>
+
+      <div class="result-cta">
+        <a href="/sk/dotace/" class="cta-link">Prehľad dotácií →</a>
+        <a href="/sk/dotace/kalendar-kol/" class="cta-link">Kalendár kôl →</a>
+      </div>
+    </div>
+
+    <section class="info">
+      <h2>Ako kalkulačka funguje</h2>
+      <p>Táto kalkulačka sčíta hlavné priame platby Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku:</p>
+      <ul>
+        <li><strong>BISS</strong> — Základná podpora príjmu ({SAZBY_SK.biss} €/ha) na všetku spôsobilú plochu</li>
+        <li><strong>CRISS</strong> — Redistributívna platba ({SAZBY_SK.crissTier1} €/ha do {SAZBY_SK.crissTier1MaxHa} ha, {SAZBY_SK.crissTier2} €/ha do {SAZBY_SK.crissTier2MaxHa} ha)</li>
+        <li><strong>Ekoschéma</strong> — Celofarmská: {SAZBY_SK.ekoChvu} €/ha v CHVÚ, {SAZBY_SK.ekoMimoChvu} €/ha mimo CHVÚ</li>
+        <li><strong>Mladý poľnohospodár</strong> — Platba {SAZBY_SK.mlady} €/ha pre prvých {SAZBY_SK.mladyMaxHa} ha</li>
+        <li><strong>VCS</strong> — Viazané platby na vybrané plodiny: cukrová repa, bielkovinové plodiny, chmeľ, ovocie a prácna zelenina</li>
+      </ul>
+      <p>Čo kalkulačka <strong>nezapočítava</strong>: ANC (poskytuje sa samostatne v rámci rozvoja vidieka), AEKO, welfare zvierat, platby na zviera ani investičné intervencie.</p>
+
+      <h2>Časté otázky</h2>
+      <div class="faqs">
+        {faqItems.map((item) => (
+          <details class="faq">
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <script>
+    import { calculateCapSk, formatEur, VCS_SEKTORY_SK } from '../../lib/sk-cap-dotace';
+
+    const form = document.getElementById('cap-form-sk') as HTMLFormElement | null;
+    if (form) {
+      const resultCard = document.getElementById('result-sk')!;
+      const resultTotal = document.getElementById('result-total-sk')!;
+      const resultPerHa = document.getElementById('result-perha-sk')!;
+      const resultTbody = document.getElementById('result-tbody-sk')!;
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const num = (k: string) => parseFloat(String(fd.get(k) ?? '')) || 0;
+        const vcsHa: Record<string, number> = {};
+        for (const s of VCS_SEKTORY_SK) vcsHa[s.slug] = num(`vcs-${s.slug}`);
+
+        const res = calculateCapSk({
+          totalHa: num('totalHa'),
+          chvuHa: num('chvuHa'),
+          mladyPolnohospodar: fd.get('mlady') === 'on',
+          vcsHa,
+        });
+
+        if (!res.items.length) {
+          alert('Zadajte celkovú výmeru.');
+          return;
+        }
+
+        resultTotal.textContent = `${formatEur(res.total)} / rok`;
+        resultPerHa.textContent = `${formatEur(Math.round(res.perHa))} / ha priemerne`;
+        resultTbody.innerHTML = res.items.map((it) => `
+          <tr>
+            <td class="strong">${escapeHtml(it.label)}${it.note ? `<div class="row-note">${escapeHtml(it.note)}</div>` : ''}</td>
+            <td class="num">${it.ha.toLocaleString('sk-SK', { maximumFractionDigits: 2 })} ha</td>
+            <td class="num">${formatEur(Math.round(it.sazba))}/ha</td>
+            <td class="num strong">${formatEur(it.amount)}</td>
+          </tr>`).join('');
+        resultCard.hidden = false;
+        resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+
+    function escapeHtml(s: string): string {
+      return s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c] as string));
+    }
+  </script>
+
+<style>
+    .calc-root { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+    .breadcrumb a { color: #666; text-decoration: none; }
+    .breadcrumb a:hover { color: #000; }
+    .breadcrumb .current { color: #000; font-weight: 600; }
+
+    .calc-head { margin-bottom: 32px; max-width: 720px; }
+    .kicker {
+      display: inline-block;
+      background: #FFEA00;
+      color: #0A0A0B;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin: 12px 0 12px; color: #1a1a1a; }
+    .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+
+    .calc-form {
+      background: #fff;
+      border: 1.5px solid #eaeaec;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .fs {
+      border: none;
+      padding: 0;
+      margin: 0 0 24px;
+    }
+    .fs:last-of-type { margin-bottom: 16px; }
+    .fs legend {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      color: #0A0A0B;
+      margin-bottom: 12px;
+      padding: 0;
+    }
+    .fs-hint {
+      font-size: 13px;
+      color: #666;
+      margin: 0 0 14px;
+      line-height: 1.5;
+    }
+    .fs-hint a { color: #0B7A3B; text-decoration: underline; }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .field span { font-size: 13px; color: #333; font-weight: 600; }
+    .field span em { color: #888; font-style: normal; font-weight: 400; }
+    .field-hint { font-size: 12px; color: #888; font-weight: 400 !important; line-height: 1.4; }
+    .field input {
+      padding: 10px 12px;
+      border: 1.5px solid #DFDFE3;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #fff;
+    }
+    .field input:focus {
+      outline: none;
+      border-color: #FFEA00;
+      box-shadow: 0 0 0 3px rgba(255, 234, 0, 0.2);
+    }
+    .req { color: #C8102E; }
+
+    .field-check {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px;
+      background: #fafafa;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .field-check input[type='checkbox'] {
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #0B7A3B;
+    }
+    .field-check strong { display: inline; font-size: 14px; color: #0A0A0B; }
+    .field-check em { color: #666; font-style: normal; font-size: 13px; }
+
+    .vcs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .vcs-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 12px;
+      border: 1.5px solid #eaeaec;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    .vcs-name { font-size: 14px; font-weight: 600; color: #0A0A0B; }
+    .vcs-rate { font-size: 11px; color: #0B7A3B; font-weight: 700; }
+    .vcs-field input {
+      margin-top: 4px;
+      padding: 6px 8px;
+      border: 1px solid #DFDFE3;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .calc-btn {
+      width: 100%;
+      padding: 14px;
+      background: #0A0A0B;
+      color: #FFEA00;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .calc-btn:hover { background: #2a2a2f; }
+
+    .result-card {
+      background: #fff;
+      border: 2px solid #FFEA00;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .result-head { margin-bottom: 20px; text-align: center; }
+    .result-kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #6B6B72; font-weight: 700; }
+    .result-total {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: #0A0A0B;
+      margin: 8px 0 4px;
+      font-family: 'Chakra Petch', sans-serif;
+    }
+    .result-perha { font-size: 14px; color: #666; }
+
+    .result-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .result-table th {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 2px solid #0A0A0B;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #666;
+    }
+    .result-table td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #eaeaec;
+      vertical-align: top;
+    }
+    .result-table td.num { text-align: right; white-space: nowrap; }
+    .result-table td.strong { font-weight: 700; color: #0A0A0B; }
+    .row-note { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.4; }
+
+    .result-disclaimer {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: #fffbeb;
+      border-left: 3px solid #FCD34D;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      color: #555;
+      line-height: 1.5;
+    }
+    .result-disclaimer a { color: #0B7A3B; text-decoration: underline; }
+
+    .result-cta {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .cta-link { font-size: 13px; font-weight: 700; color: #0B7A3B; text-decoration: none; }
+    .cta-link:hover { text-decoration: underline; }
+
+    .info { margin-top: 40px; }
+    .info h2 { font-size: 22px; margin: 32px 0 12px; font-weight: 700; color: #0A0A0B; }
+    .info p { font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 14px; }
+    .info ul { padding-left: 22px; margin: 0 0 16px; }
+    .info ul li { font-size: 15px; line-height: 1.7; color: #444; }
+
+    .faqs { display: flex; flex-direction: column; gap: 8px; }
+    .faq {
+      background: #fafafa;
+      border: 1px solid #eaeaec;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .faq summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #0A0A0B;
+      font-size: 14px;
+    }
+    .faq p {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #444;
+      line-height: 1.6;
+    }
+  </style>

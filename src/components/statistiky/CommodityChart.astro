@@ -7,31 +7,46 @@
 // /statistiky/commodity-data.json (lazy, ~256 KB, only on "Vše"). Passing
 // the full series as a prop used to bundle the 256 KB commodities.json into
 // the homepage Worker chunk for no SSR benefit.
+import { useTranslations } from '../../i18n/utils';
+
 interface Props {
   commodityNames: readonly string[]; // 9 names rendered as pill buttons
+  dataBase?: string; // suffix for JSON endpoint paths, e.g. '-sk' → /statistiky/commodity-data-recent-sk.json
+  numLocale?: string; // e.g. 'sk-SK'; defaults to 'cs-CZ'
+  locale?: string; // 'cs' | 'sk'; used to derive localized insight fragments
 }
-const { commodityNames } = Astro.props;
+const { commodityNames, dataBase = '', numLocale = 'cs-CZ', locale = 'cs' } = Astro.props;
+const tt = useTranslations(locale);
+const isSk = locale === 'sk';
+const L = {
+  avgLabel:  isSk ? '5-ročný priemer'   : '5letý průměr',
+  avgPrefix: isSk ? 'Aktuálna hodnota ' : 'Aktuální hodnota ',
+  avgSuffix: isSk ? ' vs. 5-ročný priemer.' : ' vs. 5letý průměr.',
+  nowPrefix: isSk ? 'Aktuálne '         : 'Aktuálně ',
+};
 const default0 = commodityNames[0] ?? 'Pšenice';
 ---
 
 <section class="sp-section" id="trh">
   <header class="sp-section-head">
-    <h2>Ceny zemědělských komodit</h2>
-    <span class="sp-section-sub">Měsíční průměry výrobců, anotované historickými událostmi</span>
-    <a class="sp-src" href="https://csu.gov.cz/zemedelstvi" target="_blank" rel="noopener noreferrer">Zdroj: ČSÚ — Indexy cen výrobců v zemědělství <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    <h2>{tt('stat.commodity.title')}</h2>
+    <span class="sp-section-sub">{tt('stat.commodity.sub')}</span>
+    <a class="sp-src" href={tt('stat.commodity.sourceHref')} target="_blank" rel="noopener noreferrer">{tt('stat.commodity.source')} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
   </header>
 
   <div class="sp-controls">
-    <div class="sp-pills-row" role="tablist" aria-label="Komodita">
+    <div class="sp-pills-row" role="tablist" aria-label={tt('stat.commodity.ariaCommodity')}>
       {commodityNames.map((name, i) => (
         <button class:list={['sp-mini-pill', { active: i === 0 }]} data-commodity={name} type="button">{name}</button>
       ))}
     </div>
-    <div class="sp-time-row" role="tablist" aria-label="Časové okno">
-      <button class="sp-time-btn" data-window="1y" type="button">1 rok</button>
-      <button class="sp-time-btn active" data-window="5y" type="button">5 let</button>
-      <button class="sp-time-btn" data-window="all" type="button">Vše</button>
-    </div>
+    {locale !== 'sk' && (
+      <div class="sp-time-row" role="tablist" aria-label={tt('stat.commodity.ariaWindow')}>
+        <button class="sp-time-btn" data-window="1y" type="button">1 rok</button>
+        <button class="sp-time-btn active" data-window="5y" type="button">5 let</button>
+        <button class="sp-time-btn" data-window="all" type="button">Vše</button>
+      </div>
+    )}
   </div>
 
   <div class="sp-chart-card">
@@ -45,7 +60,7 @@ const default0 = commodityNames[0] ?? 'Pšenice';
 <!-- Chart data se loaduje async z /statistiky/commodity-data.json (24h CF cache).
      Šetří ~86 KB inline JSON v HTML. Element zůstává jako sentinel pro init script
      — když je v DOM, page má chart, fetch může proběhnout. -->
-<div id="commodityChartData" hidden></div>
+<div id="commodityChartData" data-base={dataBase} data-numlocale={numLocale} data-avg-label={L.avgLabel} data-avg-prefix={L.avgPrefix} data-avg-suffix={L.avgSuffix} data-now-prefix={L.nowPrefix} hidden></div>
 
 <!-- Chart.js — eager init if Chart už loaded (např. /statistiky/), jinak lazy přes
      IntersectionObserver: na homepage se ~80KB Chart.js bundle neloaduje dokud
@@ -85,21 +100,32 @@ const default0 = commodityNames[0] ?? 'Pšenice';
     //   - full:   complete history (~256 KB) — lazy, fetched only when user
     //             clicks "Vše"
     // Cached on window so multiple chart instances on the same page share.
-    if (!window.__commodityRecentPromise) {
-      window.__commodityRecentPromise = fetch('/statistiky/commodity-data-recent.json')
+    // dataBase suffix (e.g. '-sk') points to locale-specific JSON endpoints.
+    var dataBase = dataEl.dataset.base || '';
+    var numLocale = dataEl.dataset.numlocale || 'cs-CZ';
+    var L = {
+      avgLabel:  dataEl.dataset.avgLabel  || '',
+      avgPrefix: dataEl.dataset.avgPrefix || '',
+      avgSuffix: dataEl.dataset.avgSuffix || '',
+      nowPrefix: dataEl.dataset.nowPrefix || '',
+    };
+    var recentKey = '__commodityRecentPromise' + dataBase;
+    var fullKey = '__commodityFullPromise' + dataBase;
+    if (!window[recentKey]) {
+      window[recentKey] = fetch('/statistiky/commodity-data-recent' + dataBase + '.json')
         .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
     }
     function loadFull() {
-      if (!window.__commodityFullPromise) {
-        window.__commodityFullPromise = fetch('/statistiky/commodity-data.json')
+      if (!window[fullKey]) {
+        window[fullKey] = fetch('/statistiky/commodity-data' + dataBase + '.json')
           .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
       }
-      return window.__commodityFullPromise;
+      return window[fullKey];
     }
 
     async function bootstrap() {
       await ensureChart();
-      const data = await window.__commodityRecentPromise;
+      const data = await window[recentKey];
       run(data);
     }
 
@@ -111,7 +137,8 @@ const default0 = commodityNames[0] ?? 'Pšenice';
 
     let { series, events, fiveYearAvg, default0 } = __data;
     let currentName = default0;
-    let currentWindow = '5y';
+    const activeBtn = document.querySelector('.sp-time-btn.active');
+    let currentWindow = activeBtn ? activeBtn.dataset.window : 'all';
     let chart = null;
     let fullLoaded = !__data.partial;
 
@@ -153,7 +180,7 @@ const default0 = commodityNames[0] ?? 'Pšenice';
       }];
       if (avgLine.some(v => v !== null)) {
         datasets.push({
-          label: '5letý průměr', data: avgLine, borderColor: 'rgba(107,107,114,.6)',
+          label: L.avgLabel, data: avgLine, borderColor: 'rgba(107,107,114,.6)',
           borderWidth: 1.5, borderDash: [3, 3], pointRadius: 0, tension: 0.3, fill: false,
         });
       }
@@ -166,12 +193,12 @@ const default0 = commodityNames[0] ?? 'Pšenice';
           plugins: {
             legend: { position: 'top', labels: { usePointStyle: true, padding: 14, font: { size: 12 } } },
             tooltip: { backgroundColor: INK, padding: 12, cornerRadius: 10,
-              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('cs-CZ')} ${s.unit}` } },
+              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString(numLocale)} ${s.unit}` } },
             annotation: { annotations: buildAnnotations(labels) },
           },
           scales: {
             x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12, font: { size: 11 } } },
-            y: { grid: { color: 'rgba(10,10,12,.06)' }, ticks: { callback: v => v.toLocaleString('cs-CZ') } },
+            y: { grid: { color: 'rgba(10,10,12,.06)' }, ticks: { callback: v => v.toLocaleString(numLocale) } },
           },
         },
       };
@@ -184,9 +211,9 @@ const default0 = commodityNames[0] ?? 'Pšenice';
         const avg = avgMap.get(last?.label);
         if (last && avg) {
           const diff = ((last.value / avg) - 1) * 100;
-          insightEl.textContent = `Aktuální hodnota ${last.value.toLocaleString('cs-CZ')} ${s.unit} ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} % vs. 5letý průměr.`;
+          insightEl.textContent = `${L.avgPrefix}${last.value.toLocaleString(numLocale)} ${s.unit} ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} %${L.avgSuffix}`;
         } else {
-          insightEl.textContent = `Aktuálně ${last?.value.toLocaleString('cs-CZ') ?? '–'} ${s.unit}.`;
+          insightEl.textContent = `${L.nowPrefix}${last?.value.toLocaleString(numLocale) ?? '–'} ${s.unit}.`;
         }
       }
     }

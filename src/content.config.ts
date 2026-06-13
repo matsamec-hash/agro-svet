@@ -16,9 +16,8 @@ const novinky = defineCollection({
   }),
 });
 
-const encyklopedie = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie' }),
-  schema: z.object({
+const encyklopedieSchema = () =>
+  z.object({
     name: z.string(),
     slug: z.string(),
     znacka: z.string(),
@@ -56,12 +55,28 @@ const encyklopedie = defineCollection({
       minusy: z.array(z.string()).optional(),
       datum: z.date().optional(),
     }).optional(),
-  }),
+  });
+
+const encyklopedie = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie' }),
+  schema: encyklopedieSchema(),
 });
 
-const znacky = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/znacky' }),
-  schema: z.object({
+// SK-localizovaná overlay kolekce encyklopedie (slug = REUSE cs slug). Držené
+// zvlášť, aby cs-facing getCollection('encyklopedie') zůstalo nedotčené.
+const encyklopedieSk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie-sk' }),
+  schema: encyklopedieSchema(),
+});
+
+// UK-localizovaná overlay kolekce encyklopedie (slug = REUSE cs slug).
+const encyklopedieUk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie-uk' }),
+  schema: encyklopedieSchema(),
+});
+
+const znackySchema = () =>
+  z.object({
     name: z.string(),
     slug: z.string(),
     logo: z.string().optional(),
@@ -106,22 +121,48 @@ const znacky = defineCollection({
       title: z.string(),
       url: z.string(),
     })).optional(),
-  }),
+  });
+
+const znacky = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky' }),
+  schema: znackySchema(),
 });
+
+// SK-localized brand profiles (overlay collection — kept separate so cs-facing
+// getCollection('znacky') listings/sitemap/llms stay untouched).
+const znackySk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky-sk' }),
+  schema: znackySchema(),
+});
+
+// UK-localized brand profiles (overlay collection).
+const znackyUk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky-uk' }),
+  schema: znackySchema(),
+});
+
+const pudaSchema = () =>
+  z.object({
+    title: z.string(),
+    popis: z.string(),
+  });
 
 const puda = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/puda' }),
-  schema: z.object({
-    title: z.string(),
-    popis: z.string(),
-  }),
+  schema: pudaSchema(),
+});
+
+// SK-localized článková kolekce o pôde (overlay). Držené zvlášť, aby cs-facing
+// getCollection('puda') zůstalo nedotčené. Slug = REUSE cs slug.
+const pudaSk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/puda-sk' }),
+  schema: pudaSchema(),
 });
 
 // SZIF dotační tituly — evergreen průvodci. Žádná automatizace: SZIF nemá API,
 // cyklus výzev je pomalý (2× ročně), takže ruční revize 2-4× ročně stačí.
-const dotace = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/dotace' }),
-  schema: z.object({
+const dotaceSchema = () =>
+  z.object({
     name: z.string(),
     slug: z.string(),
     /** Intervence kód SP SZP 2023-2027, např. "33.73". */
@@ -131,27 +172,41 @@ const dotace = defineCollection({
     procentoRostlinna: z.number().optional(),
     /** % dotace pro živočišnou výrobu. */
     procentoZivocisna: z.number().optional(),
-    /** Maximální výše dotace na projekt (Kč). */
+    /** Maximální výše dotace na projekt (Kč / €). */
     stropDotace: z.number().optional(),
-    /** Minimální způsobilé výdaje (Kč). */
+    /** Minimální způsobilé výdaje (Kč / €). */
     minVydaje: z.number().optional(),
     /** Kdo může žádat. */
     zadatel: z.string(),
     /** True = výdaje na mobilní stroje max 49 % způsobilých výdajů. */
     strojeMax49: z.boolean().default(false),
-    /** Odkaz na primární zdroj (Pravidla SZIF / MZe). */
+    /** Odkaz na primární zdroj (Pravidla SZIF / MZe / PPA). */
     primarniZdroj: z.string(),
     aktualizovano: z.date(),
     highlights: z.array(z.string()),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
-  }),
+    /** Per-titul cílené cross-linky (stroje/howto/srovnání). První = primární. */
+    relatedLinks: z
+      .array(z.object({ href: z.string(), label: z.string() }))
+      .optional(),
+  });
+
+const dotace = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/dotace' }),
+  schema: dotaceSchema(),
+});
+
+// SK-localized dotační tituly (overlay collection — PPA SR výzvy).
+// Držené zvlášť, aby cs-facing getCollection('dotace') zůstalo nedotčené.
+const dotaceSk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/dotace-sk' }),
+  schema: dotaceSchema(),
 });
 
 // HowTo průvodci — krok-za-krokem návody pro AI Overviews a voice search.
 // Strukturované kroky ve frontmatteru feedují HowTo JSON-LD i on-page seznam.
-const howto = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/howto' }),
-  schema: z.object({
+const howtoSchema = () =>
+  z.object({
     title: z.string(),
     slug: z.string(),
     description: z.string(),
@@ -171,7 +226,27 @@ const howto = defineCollection({
     /** Volitelný odkaz na související hub (např. /kalkulacka/, /dotace/). */
     relatedUrl: z.string().optional(),
     relatedLabel: z.string().optional(),
-  }),
+  });
+
+const howto = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/howto' }),
+  schema: howtoSchema(),
 });
 
-export const collections = { novinky, encyklopedie, znacky, puda, dotace, howto };
+// SK-localizovaná overlay kolekce howto (slug = REUSE cs slug). Držené zvlášť,
+// aby cs-facing getCollection('howto') zůstalo nedotčené. Chybějící sk slug
+// pod /sk = 404 (žádný cs leak).
+const howtoSk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/howto-sk' }),
+  schema: howtoSchema(),
+});
+
+// UK-localizovaná overlay kolekce howto (slug = REUSE cs slug). Chybějící uk
+// slug pod /uk = 404 (žádný cs leak). 2 jurisdikční návody (registrace-vcelaru,
+// jak-naplanovat-dotaci-na-techniku) záměrně NEpřeloženy → UK jurisdikční fáze.
+const howtoUk = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/howto-uk' }),
+  schema: howtoSchema(),
+});
+
+export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, znacky, znackySk, znackyUk, puda, pudaSk, dotace, dotaceSk, howto, howtoSk, howtoUk };

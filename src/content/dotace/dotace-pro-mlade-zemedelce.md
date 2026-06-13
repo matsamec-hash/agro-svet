@@ -22,6 +22,13 @@ faq:
     a: "Mladým zemědělcem se obvykle rozumí osoba do 40 let, která poprvé zahajuje zemědělskou činnost jako vedoucí podniku. Přesná definice (věk, doba od zahájení, kvalifikace) se řídí Pravidly konkrétního kola — vždy ověřte aktuální podmínky na szif.gov.cz."
   - q: "Lze podporu pro mladé zemědělce kombinovat s dotací na techniku?"
     a: "Ano. Jednorázová paušální podpora na zahájení činnosti je samostatný titul a nevylučuje žádost o investiční dotaci 33.73 na techniku. Mladý zemědělec navíc v titulu 33.73 čerpá zvýhodněnou sazbu díky bonifikaci +10 %."
+relatedLinks:
+  - href: "/jak-na-to/jak-vybrat-traktor-pro-malou-farmu/"
+    label: "Traktor pro malou farmu"
+  - href: "/stroje/traktory/"
+    label: "Katalog traktorů"
+  - href: "/kalkulacka/leasing-traktoru/"
+    label: "Kalkulačka leasingu"
 ---
 
 Podpora **mladých zemědělců** je jedním z prioritních cílů Strategického plánu SZP 2023–2027. Pro začínající zemědělce jsou k dispozici dvě hlavní formy pomoci — jednorázová paušální platba a zvýhodněné sazby v investičních titulech.

@@ -28,6 +28,13 @@ faq:
     a: "Příjem žádostí probíhá typicky dvakrát ročně — na jaře (obvykle duben) a na podzim (obvykle říjen). Konkrétní termíny daného kola SZIF zveřejňuje přibližně dva měsíce předem. Aktuální termíny sledujte v kalendáři kol a na szif.gov.cz."
   - q: "Lze z 33.73 financovat precizní zemědělství?"
     a: "Senzory, GPS navádění a technologie precizního zemědělství lze zahrnout do projektu 33.73 jako součást investice. Samostatný titul výhradně na precizní techniku neexistuje — plošná podpora precizního zemědělství jde přes Jednotnou žádost jako platba na hektar, ne jako investiční dotace na techniku."
+relatedLinks:
+  - href: "/stroje/traktory/"
+    label: "Katalog traktorů"
+  - href: "/srovnani/"
+    label: "Srovnání modelů"
+  - href: "/jak-na-to/jak-naplanovat-dotaci-na-techniku/"
+    label: "Jak naplánovat dotaci"
 ---
 
 **Investice do zemědělských podniků** (intervence 33.73) je hlavním investičním dotačním titulem Strategického plánu Společné zemědělské politiky 2023–2027. Je to nejčastější cesta, jak v Česku spolufinancovat nákup zemědělské techniky z evropských a národních zdrojů.

@@ -36,3 +36,23 @@ supabase/.branches/
 
 # OG image build cache (fonts downloaded by scripts/build-og-images.mjs)
 .og-cache/
+.env.save
+*.save
+.claude/
+.planning/
+
+# --- security-audit-2026-06-07 hardening ---
+.env
+.env.*
+!.env.example
+!.env.local.example
+*.save
+*.key
+*.pem
+*.p12
+*.pfx
+service-account*.json
+# DB dumps / backups (may contain PII)
+*.dump
+*.sql.gz
+db-backup*/

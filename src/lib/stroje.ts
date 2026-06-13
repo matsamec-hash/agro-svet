@@ -182,6 +182,49 @@ const brandModules = import.meta.glob('/src/data/stroje/*.yaml', {
   import: 'default',
 }) as Record<string, unknown>;
 
+// Per-locale prose overlays: /src/data/stroje/<locale>/<slug>.yaml
+// (country/description/category-names/series-descriptions). cs has no overlay.
+const overlayModules = import.meta.glob('/src/data/stroje/*/*.yaml', {
+  eager: true,
+  import: 'default',
+}) as Record<string, unknown>;
+
+interface StrojOverlay {
+  country?: string;
+  description?: string;
+  categories?: Record<string, string>;
+  series?: Record<string, string>;
+  models?: Record<string, string>; // model.slug -> SK popis (Fáze stroje-detail)
+}
+
+function getOverlay(slug: string, locale: string): StrojOverlay | null {
+  return (overlayModules[`/src/data/stroje/${locale}/${slug}.yaml`] as StrojOverlay) ?? null;
+}
+
+// Pure overlay merge: cs base + prose overlay → lokalizovaný brand. ov=null → base
+// beze změny (cs identita). Nemutuje base (structuredClone). Exportováno kvůli testům.
+// cs struktura zůstává single source of truth — mění se jen prose stringy.
+export function applyStrojOverlay(base: StrojBrand, ov: StrojOverlay | null): StrojBrand {
+  if (!ov) return base;
+  const b = structuredClone(base) as any;
+  if (ov.country) b.country = ov.country;
+  if (ov.description) b.description = ov.description;
+  for (const [ck, cat] of Object.entries(b.categories || {}) as [string, any][]) {
+    if (ov.categories?.[ck]) cat.name = ov.categories[ck];
+    for (const s of cat.series || []) {
+      if (ov.series?.[s.slug]) s.description = ov.series[s.slug];
+      for (const m of s.models || []) {
+        if (ov.models?.[m.slug]) m.description = ov.models[m.slug];
+      }
+    }
+  }
+  return b as StrojBrand;
+}
+
+function localizeBrand(base: StrojBrand, locale: string): StrojBrand {
+  return applyStrojOverlay(base, getOverlay(base.slug, locale));
+}
+
 let cachedBrands: StrojBrand[] | null = null;
 let cachedFlat: StrojFlatModel[] | null = null;
 
@@ -218,8 +261,10 @@ export function getAllBrands(): StrojBrand[] {
   return brands;
 }
 
-export function getBrand(slug: string): StrojBrand | undefined {
-  return getAllBrands().find((b) => b.slug === slug);
+export function getBrand(slug: string, locale: string = 'cs'): StrojBrand | undefined {
+  const base = getAllBrands().find((b) => b.slug === slug);
+  if (!base || locale === 'cs') return base;
+  return localizeBrand(base, locale);
 }
 
 export function getAllModels(): StrojFlatModel[] {
@@ -233,6 +278,8 @@ export function getAllModels(): StrojFlatModel[] {
         for (const model of series.models || []) {
           flat.push({
             ...model,
+            year_from: model.year_from ?? null,
+            year_to: model.year_to ?? null,
             brand_slug: brand.slug,
             brand_name: brand.name,
             category,
@@ -252,8 +299,8 @@ export function getModelBySlug(slug: string): StrojFlatModel | undefined {
   return getAllModels().find((m) => m.slug === slug);
 }
 
-export function getSeries(brandSlug: string, seriesSlug: string): { brand: StrojBrand; category: StrojKategorie; series: StrojSeries } | undefined {
-  const brand = getBrand(brandSlug);
+export function getSeries(brandSlug: string, seriesSlug: string, locale: string = 'cs'): { brand: StrojBrand; category: StrojKategorie; series: StrojSeries } | undefined {
+  const brand = getBrand(brandSlug, locale);
   if (!brand) return undefined;
   for (const [catKey, cat] of Object.entries(brand.categories || {})) {
     const s = cat.series.find((x) => x.slug === seriesSlug);

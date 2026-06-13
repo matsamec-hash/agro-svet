@@ -4,9 +4,14 @@ import { getAllBrands, getAllModels, seriesFamily, FUNCTIONAL_GROUPS } from '../
 import { getAllDruhy } from '../lib/plemena';
 import { getAllFarms, regionsWithEnoughFarms } from '../lib/farmy';
 import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
-import { expandedComparisonPairs } from '../lib/comparator';
+import { getAllHlemyzdi } from '../lib/hlemyzdi';
+import { listPlodiny, listIndexableOdrudy, listSkupiny, listIndexableUdrzovatele } from '../lib/plodiny';
+import { listIndexableChoroby } from '../lib/choroby';
+import { expandedComparisonPairs, implementComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
+import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
+import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
@@ -119,6 +124,7 @@ export const GET: APIRoute = async () => {
     ['/vcelarstvi/druhy/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/vcelarstvi/vybaveni/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/vcelarstvi/med/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/chov-hlemyzdu/', 'weekly', '0.85', STATIC_LASTMOD],
     ['/kviz/jaka-vcela-pro-vas/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/puda/', 'weekly', undefined, STATIC_LASTMOD],
     ['/fotosoutez/', 'weekly', '0.8', STATIC_LASTMOD],
@@ -133,6 +139,8 @@ export const GET: APIRoute = async () => {
     ['/kviz/historie-znacek/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/kviz/jaky-traktor-potrebujete/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/kalkulacka/', 'monthly', '0.8', STATIC_LASTMOD],
+    ['/kalkulacka/prevody-jednotek/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/kalkulacka/prevody-hmotnost/', 'monthly', '0.75', STATIC_LASTMOD],
     ['/kalkulacka/leasing-traktoru/', 'monthly', '0.75', STATIC_LASTMOD],
     ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75', STATIC_LASTMOD],
     ['/kalkulacka/dotace-cap/', 'monthly', '0.8', STATIC_LASTMOD],
@@ -140,9 +148,13 @@ export const GET: APIRoute = async () => {
     ['/prodejci/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/dotace/', 'weekly', '0.85', STATIC_LASTMOD],
     ['/dotace/kalendar-kol/', 'weekly', '0.75', STATIC_LASTMOD],
+    ['/dotace/jak-vybrat/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/jak-na-to/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/media/', 'monthly', undefined, STATIC_LASTMOD],
     ['/redakce/', 'monthly', '0.5', STATIC_LASTMOD],
+    ['/podminky-pouziti/', 'yearly', '0.3', STATIC_LASTMOD],
+    ['/zpracovani-osobnich-udaju/', 'yearly', '0.3', STATIC_LASTMOD],
+    ['/dsa-kontakt/', 'yearly', '0.3', STATIC_LASTMOD],
     ['/prehled/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/prehled/nejprodavanejsi-traktory-2025/', 'yearly', '0.8', STATIC_LASTMOD],
     ['/pruvodce/', 'monthly', '0.8', STATIC_LASTMOD],
@@ -161,6 +173,17 @@ export const GET: APIRoute = async () => {
 
   for (const cat of NOVINKY_CATEGORIES) {
     urls.push({ loc: `${SITE_URL}/novinky/kategorie/${cat}/`, changefreq: 'weekly', lastmod: latestArticleLastmod ?? STATIC_LASTMOD });
+  }
+
+  // Sekce „Chov hlemýžďů" — 16 podstránek (statická data v src/lib/hlemyzdi.ts).
+  for (const a of getAllHlemyzdi()) {
+    urls.push({
+      loc: `${SITE_URL}/chov-hlemyzdu/${a.slug}/`,
+      changefreq: 'monthly',
+      priority: '0.7',
+      lastmod: STATIC_LASTMOD,
+      images: a.featured_image_url ? [a.featured_image_url] : undefined,
+    });
   }
 
   // Žebříčky — top-N seznamy generované z stroje dat.
@@ -286,6 +309,27 @@ export const GET: APIRoute = async () => {
     }
   }
 
+  // Plodiny + indexovatelné odrůdy + facety (anti-thin: jen indexovatelné)
+  urls.push({ loc: `${SITE_URL}/plodiny/`, changefreq: 'weekly', lastmod: STATIC_LASTMOD });
+  for (const p of listPlodiny()) {
+    urls.push({ loc: `${SITE_URL}/plodiny/${p.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+  for (const e of listIndexableOdrudy()) {
+    urls.push({ loc: `${SITE_URL}/plodiny/${e.plodina_slug}/${e.odruda.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+  for (const s of listSkupiny()) {
+    urls.push({ loc: `${SITE_URL}/plodiny/skupina/${s.skupina}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+  for (const u of listIndexableUdrzovatele()) {
+    urls.push({ loc: `${SITE_URL}/odrudy/udrzovatel/${u.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+
+  // Choroby a škůdci — hub + detaily (anti-thin: jen choroby s popisem a ≥1 plodinou)
+  urls.push({ loc: `${SITE_URL}/choroby/`, changefreq: 'weekly', lastmod: STATIC_LASTMOD });
+  for (const c of listIndexableChoroby()) {
+    urls.push({ loc: `${SITE_URL}/choroby/${c.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+  }
+
   for (const v of getAllVcely()) {
     urls.push({ loc: `${SITE_URL}/vcelarstvi/druhy/${v.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: STATIC_LASTMOD, images: v.image_url ? [v.image_url] : undefined });
   }
@@ -304,10 +348,9 @@ export const GET: APIRoute = async () => {
     urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD });
   }
 
-  // Tier-list pages (top-10 lists per segment).
-  urls.push({ loc: `${SITE_URL}/srovnani/top/`, changefreq: 'weekly', priority: '0.8', lastmod: STATIC_LASTMOD });
-  for (const t of (await import('../lib/tier-lists')).TIER_LISTS) {
-    urls.push({ loc: `${SITE_URL}/srovnani/top/${t.slug}/`, changefreq: 'weekly', priority: '0.75', lastmod: STATIC_LASTMOD });
+  // Implement (nářadí) páry — párované dle záběru, match limit z [combo]/getStaticPaths.
+  for (const pair of implementComparisonPairs(4000)) {
+    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.6', lastmod: STATIC_LASTMOD });
   }
 
   for (const a of articlesDyn) {
@@ -338,6 +381,66 @@ export const GET: APIRoute = async () => {
   }
   for (const r of regionsWithEnoughFarms(3)) {
     urls.push({ loc: `${SITE_URL}/farmy/kraj/${r.slug}/`, changefreq: 'weekly', priority: '0.7', lastmod: STATIC_LASTMOD });
+  }
+
+  // SK launch (Fáze 1c-obsah): pre přeložené katalogové sekcie (/stroje, /znacky,
+  // /srovnani) pridáme /sk zrkadlové URL. cs časť vyššie zostáva byte-identická —
+  // /sk záznamy len appendujeme na koniec.
+  //
+  // Pozn.: /dotace DETAIL stránky majú pre sk INÉ slugy (PPA SR výzvy z kolekcie
+  // 'dotaceSk'), takže ich nemožno len zrkadliť z cs slugov — tie /sk URL by 404-ovali.
+  // Cestu cs /dotace/<slug>/ preto z mirroru vylúčime a sk detaily pridáme explicitne
+  // nižšie z getCollection('dotaceSk'). Hub /dotace/ a /dotace/kalendar-kol/ zdieľajú
+  // rovnaké cesty pre cs aj sk, tie sa mirrorujú normálne.
+  const isDotaceDetailPath = (p: string) =>
+    p.startsWith('/dotace/') && p !== '/dotace/' && p !== '/dotace/kalendar-kol/';
+  // /sk-skryté novinkové kategorie (jurisdikčně uzamčené: dotace, legislativa)
+  // pod /sk 404-ují → nezrcadlit do /sk sitemapy.
+  const skHiddenCatMatch = /^\/novinky\/kategorie\/([^/]+)\//;
+  const isSkHiddenCategoryPath = (p: string) => {
+    const m = p.match(skHiddenCatMatch);
+    return !!m && HIDDEN_NEWS_CATEGORIES.sk.includes(m[1]);
+  };
+  const skMirror: UrlEntry[] = urls
+    .filter((u) => {
+      if (!u.loc.startsWith(SITE_URL)) return false;
+      const p = u.loc.slice(SITE_URL.length);
+      if (isDotaceDetailPath(p)) return false;
+      if (isSkHiddenCategoryPath(p)) return false;
+      // Lock přebíjí launch: zamčené pod-cesty (/kalkulacka/dotace-cap) nezrcadlit
+      // do /sk sitemapy — na produkci 307-ují na cs.
+      return isSkLaunchedPath(p) && !isLockedSectionPath(p);
+    })
+    .map((u) => ({ ...u, loc: `${SITE_URL}/sk${u.loc.slice(SITE_URL.length)}` }));
+  urls.push(...skMirror);
+
+  // UK launch (Fáze 2-obsah): pro přeložené sekce přidáme /uk zrcadlové URL.
+  // Stejné filtry jako sk (skryté dotace-detaily/kategorie + lock). Před launchem
+  // je LAUNCHED_PREFIXES.uk prázdné → ukMirror == [] (žádná změna sitemapy).
+  // Fáze 3: howto-uk je PODMNOŽINA cs howto (2 jurisdikční návody nepřeloženy →
+  // /uk/jak-na-to/<slug>/ = 404). Nezrcadlit cs howto slugy chybějící v howtoUk.
+  const ukHowtoSlugs = new Set((await getCollection('howtoUk')).map((h) => h.id));
+  const isUkMissingHowto = (p: string): boolean => {
+    const m = p.match(/^\/jak-na-to\/([^/]+)\/$/);
+    return !!m && !ukHowtoSlugs.has(m[1]);
+  };
+  const ukMirror: UrlEntry[] = urls
+    .filter((u) => {
+      if (!u.loc.startsWith(SITE_URL)) return false;
+      const p = u.loc.slice(SITE_URL.length);
+      if (p.startsWith('/sk/')) return false; // nezrcadlit už zrcadlené sk URL
+      if (isDotaceDetailPath(p)) return false;
+      if (isSkHiddenCategoryPath(p)) return false;
+      if (isUkMissingHowto(p)) return false; // chybějící uk návod → 404, nezrcadlit
+      return isLaunchedPath('uk', p) && !isLockedSectionPath(p);
+    })
+    .map((u) => ({ ...u, loc: `${SITE_URL}/uk${u.loc.slice(SITE_URL.length)}` }));
+  urls.push(...ukMirror);
+
+  // SK /dotace detail URL — vlastné slugy z kolekcie 'dotaceSk' (PPA SR výzvy).
+  const dotaceSkEntries = await getCollection('dotaceSk');
+  for (const dt of dotaceSkEntries) {
+    urls.push({ loc: `${SITE_URL}/sk/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

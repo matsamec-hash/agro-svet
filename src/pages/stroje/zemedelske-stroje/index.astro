@@ -1,8 +1,12 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from '../../../lib/stroje';
 import { createServerClient } from '../../../lib/supabase';
+import { useTranslations } from '../../../i18n/utils';
+
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
 
 const brands = getAllBrands();
 const allModels = getAllModels();
@@ -34,11 +38,9 @@ const totalBrands = strojeBrands.length;
 // Per-group stats
 type GroupStats = {
   slug: FunctionalGroupSlug;
-  name: string;
-  description: string;
-  categoryCount: number;
   modelCount: number;
   brandCount: number;
+  categoryCount: number;
 };
 
 const groupStats: GroupStats[] = (Object.entries(FUNCTIONAL_GROUPS) as [FunctionalGroupSlug, typeof FUNCTIONAL_GROUPS[FunctionalGroupSlug]][]).map(([slug, group]) => {
@@ -47,8 +49,6 @@ const groupStats: GroupStats[] = (Object.entries(FUNCTIONAL_GROUPS) as [Function
   const gBrands = new Set(gModels.map((m) => m.brand_slug)).size;
   return {
     slug,
-    name: group.name,
-    description: group.description,
     categoryCount: cats.length,
     modelCount: gModels.length,
     brandCount: gBrands,
@@ -63,61 +63,70 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Katalog strojů', item: 'https://agro-svet.cz/stroje/' },
-    { '@type': 'ListItem', position: 3, name: 'Zemědělské stroje', item: 'https://agro-svet.cz/stroje/zemedelske-stroje/' },
+    { '@type': 'ListItem', position: 1, name: t('stroje.crumb.home'), item: 'https://agro-svet.cz/' },
+    { '@type': 'ListItem', position: 2, name: t('stroje.zem.crumbCatalog'), item: 'https://agro-svet.cz/stroje/' },
+    { '@type': 'ListItem', position: 3, name: t('stroje.zem.crumbName'), item: 'https://agro-svet.cz/stroje/zemedelske-stroje/' },
   ],
 };
 
 const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 'Horsch', 'Väderstad', 'Bednar', 'Manitou', 'JCB', 'Joskin', 'Kverneland'];
+
+// Pluralization helpers
+function pluralCs(n: number, one: string, few: string, many: string): string {
+  if (n === 1) return one;
+  if (n >= 2 && n <= 4) return few;
+  return many;
+}
 ---
 
 <Layout
-  title="Zemědělské stroje — pluhy, lisy, postřikovače, manipulátory"
-  description="Kompletní přehled zemědělských strojů: zpracování půdy, setí, hnojení, ochrana rostlin, sklizeň pícnin a okopanin, manipulace, doprava a chov. Filtrujte podle účelu nebo značky."
+  title={t('stroje.zem.title')}
+  description={t('stroje.zem.desc')}
   canonical="https://agro-svet.cz/stroje/zemedelske-stroje/"
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
 
   <div class="sz-root">
 
-    <nav class="sz-breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+    <nav class="sz-breadcrumb" aria-label={t('stroje.zem.bcAria')}>
+      <a href="/">{t('stroje.zem.bcHome')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/stroje/">Katalog strojů</a>
+      <a href="/stroje/">{t('stroje.zem.bcCatalog')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <span class="current">Zemědělské stroje</span>
+      <span class="current">{t('stroje.zem.crumbName')}</span>
     </nav>
 
     <!-- Hero -->
     <section class="sz-hero">
       <div class="sz-hero-inner">
-        <span class="sz-kicker"><span class="sz-dot"></span>Katalog · Zemědělské stroje</span>
-        <h1>Zemědělské <em>stroje</em></h1>
+        <span class="sz-kicker"><span class="sz-dot"></span>{t('stroje.zem.kicker')}</span>
+        <h1>{t('stroje.zem.h1Lead')} <em>{t('stroje.zem.h1Em')}</em></h1>
         <p class="sz-lede">
-          Katalog zemědělské techniky podle značek a funkčních skupin.
-          {totalModels > 0 ? `Aktuálně ${totalModels} modelů z ${totalBrands} značek, databázi průběžně rozšiřujeme.` : 'Databáze průběžně doplňována.'}
+          {t('stroje.zem.ledeBase')}
+          {totalModels > 0
+            ? t('stroje.zem.ledeWithData').replace('{totalModels}', String(totalModels)).replace('{totalBrands}', String(totalBrands))
+            : t('stroje.zem.ledeNoData')}
         </p>
         <div class="sz-stats">
           {readyGroups.length > 0 && (
             <div class="sz-stat">
               <span class="sz-stat-n">{readyGroups.length}</span>
-              <span class="sz-stat-l">{readyGroups.length === 1 ? 'skupina' : readyGroups.length < 5 ? 'skupiny' : 'skupin'}</span>
+              <span class="sz-stat-l">{pluralCs(readyGroups.length, t('stroje.zem.statSkupina1'), t('stroje.zem.statSkupinyFew'), t('stroje.zem.statSkupinMany'))}</span>
             </div>
           )}
           {readyCategoryCount > 0 && (
             <div class="sz-stat">
               <span class="sz-stat-n">{readyCategoryCount}</span>
-              <span class="sz-stat-l">{readyCategoryCount === 1 ? 'kategorie' : readyCategoryCount < 5 ? 'kategorie' : 'kategorií'}</span>
+              <span class="sz-stat-l">{pluralCs(readyCategoryCount, t('stroje.zem.statKategorie1'), t('stroje.zem.statKategorieFew'), t('stroje.zem.statKategoriiMany'))}</span>
             </div>
           )}
           <div class="sz-stat">
             <span class="sz-stat-n">{totalModels > 0 ? `${totalModels}+` : '—'}</span>
-            <span class="sz-stat-l">modelů</span>
+            <span class="sz-stat-l">{t('stroje.zem.statModelu')}</span>
           </div>
           <div class="sz-stat">
             <span class="sz-stat-n">{totalBrands > 0 ? totalBrands : PLACEHOLDER_BRANDS.length + '+'}</span>
-            <span class="sz-stat-l">značek</span>
+            <span class="sz-stat-l">{t('stroje.zem.statZnacek')}</span>
           </div>
         </div>
       </div>
@@ -127,16 +136,16 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
     {readyGroups.length > 0 && (
       <section class="sz-section" aria-labelledby="groups-title">
         <h2 id="groups-title" class="sz-section-title">
-          <span class="sz-section-label">Hledáte podle účelu?</span>
+          <span class="sz-section-label">{t('stroje.zem.groupsTitle')}</span>
         </h2>
-        <p class="sz-section-sub">Vyberte funkční skupinu a procházejte stroje podle toho, k čemu je potřebujete.</p>
+        <p class="sz-section-sub">{t('stroje.zem.groupsSub')}</p>
         <div class="sz-group-grid">
           {readyGroups.map((g) => (
             <a href={`/stroje/zemedelske-stroje/${g.slug}/`} class="sz-group-card">
-              <h3>{g.name}</h3>
-              <p>{g.description}</p>
+              <h3>{t(`stroje.fg.${g.slug}.name`)}</h3>
+              <p>{t(`stroje.fg.${g.slug}.desc`)}</p>
               <div class="sz-group-meta">
-                <span>{g.categoryCount} {g.categoryCount === 1 ? 'kategorie' : g.categoryCount < 5 ? 'kategorie' : 'kategorií'} · {g.modelCount} {g.modelCount === 1 ? 'model' : g.modelCount < 5 ? 'modely' : 'modelů'} · {g.brandCount} {g.brandCount === 1 ? 'značka' : g.brandCount < 5 ? 'značky' : 'značek'}</span>
+                <span>{g.categoryCount} {pluralCs(g.categoryCount, t('stroje.zem.groupMeta1'), t('stroje.zem.groupMetaFew'), t('stroje.zem.groupMetaMany'))} · {g.modelCount} {pluralCs(g.modelCount, t('stroje.zem.groupModel1'), t('stroje.zem.groupModelFew'), t('stroje.zem.groupModelMany'))} · {g.brandCount} {pluralCs(g.brandCount, t('stroje.zem.groupBrand1'), t('stroje.zem.groupBrandFew'), t('stroje.zem.groupBrandMany'))}</span>
               </div>
               <div class="sz-group-arrow">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -150,9 +159,9 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
     <!-- Brands -->
     <section class="sz-section" aria-labelledby="brands-title">
       <h2 id="brands-title" class="sz-section-title">
-        <span class="sz-section-label">Nebo podle značky?</span>
+        <span class="sz-section-label">{t('stroje.zem.brandsTitle')}</span>
       </h2>
-      <p class="sz-section-sub">Přejděte přímo na katalog konkrétního výrobce zemědělské techniky.</p>
+      <p class="sz-section-sub">{t('stroje.zem.brandsSub')}</p>
 
       {strojeBrands.length > 0 ? (
         <div class="sz-brand-grid">
@@ -167,14 +176,14 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
                   </div>
                   <div class="sz-brand-info">
                     <strong>{b.name}</strong>
-                    <span>{b.country} · {bCount} {bCount === 1 ? 'model' : bCount < 5 ? 'modely' : 'modelů'}</span>
+                    <span>{b.country} · {bCount} {pluralCs(bCount, t('stroje.zem.brandModel1'), t('stroje.zem.brandModelFew'), t('stroje.zem.brandModelMany'))}</span>
                   </div>
                   <svg class="sz-brand-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </a>
                 {bazarCount > 0 && (
                   <a href={`/bazar/?brand=${b.slug}`} class="sz-brand-bazar">
                     <span class="sz-brand-bazar-count">{bazarCount}</span>
-                    <span class="sz-brand-bazar-lbl">{bazarCount === 1 ? 'inzerát' : bazarCount < 5 ? 'inzeráty' : 'inzerátů'} v bazaru</span>
+                    <span class="sz-brand-bazar-lbl">{pluralCs(bazarCount, t('stroje.zem.bazarInzerát'), t('stroje.zem.bazarInzerátyFew'), t('stroje.zem.bazarInzerátůMany'))} {t('stroje.zem.bazarLabel')}</span>
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                   </a>
                 )}
@@ -184,7 +193,7 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
         </div>
       ) : (
         <div class="sz-brands-placeholder">
-          <p class="sz-placeholder-title">Brzy přibudou značky:</p>
+          <p class="sz-placeholder-title">{t('stroje.zem.placeholder')}</p>
           <div class="sz-placeholder-tags">
             {PLACEHOLDER_BRANDS.map((name) => (
               <span class="sz-placeholder-tag">{name}</span>
@@ -198,7 +207,7 @@ const PLACEHOLDER_BRANDS = ['Lemken', 'Pöttinger', 'Kuhn', 'Amazone', 'Krone', 
     <div class="sz-back">
       <a href="/stroje/">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-        Zpět na katalog techniky
+        {t('stroje.zem.back')}
       </a>
     </div>
 

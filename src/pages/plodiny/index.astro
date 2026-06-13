@@ -1,0 +1,139 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { listPlodiny, listSkupiny } from '../../lib/plodiny';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+
+const plodiny = listPlodiny();
+const skupiny = listSkupiny();
+const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
+
+const breadcrumb = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Plodiny', url: '/plodiny/' },
+]);
+const list = itemListSchema(
+  plodiny.map((p) => ({ url: `/plodiny/${p.slug}/`, name: p.name })),
+  'Plodiny',
+);
+---
+
+<Layout
+  title="Plodiny a odrůdy — databáze polních plodin"
+  description={`Databáze ${plodiny.length} polních plodin a ${totalOdrudy} registrovaných odrůd: agronomie, výsevek, hnojení, choroby, výnos a doporučení.`}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
+
+  <div class="pl-hub">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="current">Plodiny</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-left">
+        <span class="kicker"><span class="dot"></span>Databáze · Polní plodiny</span>
+        <h1>Plodiny a <em>odrůdy</em></h1>
+        <p class="hero-lede">Encyklopedie polních plodin a databáze registrovaných odrůd — agronomie, výsevek, hnojení, choroby, výnos a pěstitelská doporučení.</p>
+        <div class="hero-stats">
+          <div class="s"><span class="n">{plodiny.length}</span><span class="l">plodin</span></div>
+          <div class="s"><span class="n">{totalOdrudy}</span><span class="l">registrovaných odrůd</span></div>
+          <div class="s"><span class="n">{skupiny.length}</span><span class="l">skupin plodin</span></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-emoji-tile" aria-hidden="true">🌾</div>
+      </div>
+    </section>
+
+    {skupiny.map((s) => (
+      <section class="group">
+        <div class="group-head">
+          <h2 class="section-title">
+            <a href={`/plodiny/skupina/${s.skupina}/`}>{s.label}</a>
+            <span class="section-title-c">{s.count}</span>
+          </h2>
+        </div>
+        <div class="hub-grid">
+          {plodiny.filter((p) => p.skupina === s.skupina).map((p) => (
+            <a href={`/plodiny/${p.slug}/`} class="hub-card">
+              <div class="hc-body">
+                <div class="hc-title">{p.name}</div>
+                {p.description && <p class="hc-desc">{p.description}</p>}
+                {p.odrudy.length > 0 && (
+                  <span class="hc-badge">{p.odrudy.length} odrůd</span>
+                )}
+              </div>
+              <svg class="hc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</Layout>
+
+<style>
+  .pl-hub {
+    --yellow: #FFEA00; --ink: #0A0A0B; --body: #1E1E22; --muted: #6B6B72;
+    --muted-2: #9A9AA3; --line: #EAEAEC; --card: #FFFFFF;
+    --r-xl: 24px; --r-lg: 18px; --r-md: 12px;
+    --sh-1: 0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3: 0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width: 1280px; margin: 0 auto; padding: 26px 24px 96px; color: var(--body);
+  }
+
+  .pl-hub .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 22px; flex-wrap: wrap; }
+  .pl-hub .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .pl-hub .breadcrumb a:hover { color: #000; }
+  .pl-hub .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .pl-hub .hero {
+    position: relative; overflow: hidden; color: #fff; border-radius: var(--r-xl);
+    background: radial-gradient(600px 300px at 15% 20%, rgba(255, 234, 0, .14), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(60, 140, 40, .30), transparent 60%),
+      linear-gradient(135deg, #0F1409 0%, #161F0E 60%, #1C2B10 100%);
+    padding: 48px 48px 40px; margin-bottom: 26px; display: flex; gap: 32px; align-items: center;
+  }
+  .pl-hub .hero-left { flex: 1; min-width: 0; }
+  .pl-hub .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #D8EBC0; margin-bottom: 16px; }
+  .pl-hub .kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
+  .pl-hub .hero h1 { font-size: clamp(28px, 4vw, 44px); line-height: 1.08; margin: 0 0 14px; font-weight: 800; }
+  .pl-hub .hero h1 em { font-style: normal; color: var(--yellow); }
+  .pl-hub .hero-lede { font-size: 16.5px; line-height: 1.6; color: #E0ECDA; max-width: 60ch; margin: 0 0 22px; }
+  .pl-hub .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+  .pl-hub .hero-stats .s { display: flex; flex-direction: column; }
+  .pl-hub .hero-stats .n { font-size: 26px; font-weight: 800; color: #fff; }
+  .pl-hub .hero-stats .l { font-size: 12.5px; color: #B2C9A8; }
+  .pl-hub .hero-right { flex-shrink: 0; }
+  .pl-hub .hero-emoji-tile { font-size: 92px; line-height: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,.4)); }
+
+  .pl-hub .group { margin-bottom: 38px; }
+  .pl-hub .group-head { margin-bottom: 16px; }
+  .pl-hub .section-title { font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 4px; display: flex; align-items: center; gap: 10px; }
+  .pl-hub .section-title a { color: var(--ink); text-decoration: none; }
+  .pl-hub .section-title a:hover { color: #3c7a1a; }
+  .pl-hub .section-title-c { color: var(--muted-2); font-weight: 600; font-size: 16px; }
+
+  .pl-hub .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .pl-hub .hub-card {
+    display: flex; align-items: flex-start; gap: 12px; text-decoration: none; color: var(--body);
+    background: var(--card); border-radius: var(--r-md); padding: 18px 20px; box-shadow: var(--sh-1);
+    transition: box-shadow .15s, transform .15s;
+  }
+  .pl-hub .hub-card:hover { box-shadow: var(--sh-3); transform: translateY(-2px); }
+  .pl-hub .hc-body { flex: 1; min-width: 0; }
+  .pl-hub .hc-title { font-size: 15.5px; font-weight: 700; color: var(--ink); margin-bottom: 5px; line-height: 1.3; }
+  .pl-hub .hc-desc { font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .pl-hub .hc-badge { display: inline-block; font-size: 11.5px; font-weight: 700; color: #3c7a1a; background: #eaf4e0; padding: 2px 8px; border-radius: 999px; }
+  .pl-hub .hc-arrow { color: var(--muted-2); flex-shrink: 0; margin-top: 3px; }
+  .pl-hub .hub-card:hover .hc-arrow { color: var(--ink); }
+
+  @media (max-width: 720px) {
+    .pl-hub .hero { flex-direction: column; padding: 34px 26px; text-align: center; }
+    .pl-hub .hero-stats { justify-content: center; }
+    .pl-hub .hero-right { display: none; }
+  }
+</style>
