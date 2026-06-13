@@ -185,6 +185,10 @@ const dotaceSchema = () =>
     aktualizovano: z.date(),
     highlights: z.array(z.string()),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+    /** Per-titul cílené cross-linky (stroje/howto/srovnání). První = primární. */
+    relatedLinks: z
+      .array(z.object({ href: z.string(), label: z.string() }))
+      .optional(),
   });
 
 const dotace = defineCollection({
