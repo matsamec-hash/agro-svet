@@ -130,6 +130,96 @@ export const TIER_LISTS: TierListDef[] = [
     score: (m) => m.power_hp ?? 0,
     limit: 12,
   },
+
+  // ── NÁŘADÍ (záběr / výkon) ──────────────────────────────────────────
+  {
+    slug: 'nejsirsi-diskove-podmitace',
+    title: 'Nejširší diskové podmítače',
+    description: 'Žebříček diskových podmítačů podle pracovního záběru. Širší záběr = vyšší plošný výkon, ale vyšší nárok na výkon traktoru. Vhodné pro mělké zpracování strniště.',
+    methodology: 'Modely seřazené podle pracovního záběru sestupně. Z každé série jen nejširší varianta. Napříč značkami Amazone, Bednar, Horsch, Väderstad, Pöttinger.',
+    callToAction: 'Hledáte hlubší zpracování? Viz žebříček radličkových podmítačů a kypřičů.',
+    category: 'podmitace-diskove',
+    filter: (m) => typeof m.pracovni_zaber_m === 'number' && m.pracovni_zaber_m > 0,
+    score: (m) => m.pracovni_zaber_m ?? 0,
+    limit: 12,
+  },
+  {
+    slug: 'nejsirsi-radlickove-podmitace',
+    title: 'Nejširší radličkové podmítače',
+    description: 'Žebříček radličkových (dlátových) podmítačů podle pracovního záběru. Radličky pracují hlouběji než disky — vhodné pro prokypření a narušení utužených vrstev.',
+    methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Napříč značkami Amazone, Bednar, Horsch, Väderstad, Pöttinger.',
+    callToAction: 'Pro mělké zpracování strniště viz žebříček diskových podmítačů.',
+    category: 'podmitace-radlickove',
+    filter: (m) => typeof m.pracovni_zaber_m === 'number' && m.pracovni_zaber_m > 0,
+    score: (m) => m.pracovni_zaber_m ?? 0,
+    limit: 12,
+  },
+  {
+    slug: 'nejlepsi-seci-kombinace',
+    title: 'Nejširší secí kombinace',
+    description: 'Žebříček secích kombinací (příprava půdy + setí v jednom přejezdu) podle pracovního záběru. Úspora přejezdů a času při zakládání porostů.',
+    methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Napříč značkami Amazone, Horsch, Väderstad, Pöttinger, Bednar.',
+    callToAction: 'Pro samostatné secí stroje viz žebříček pneumatických a přesných secích strojů.',
+    category: 'seci-kombinace',
+    filter: (m) => typeof m.pracovni_zaber_m === 'number' && m.pracovni_zaber_m > 0,
+    score: (m) => m.pracovni_zaber_m ?? 0,
+    limit: 12,
+  },
+  {
+    slug: 'nejsirsi-pneumaticke-seci-stroje',
+    title: 'Nejširší pneumatické secí stroje',
+    description: 'Žebříček pneumatických (výsevních) secích strojů podle pracovního záběru. Pneumatická distribuce osiva umožňuje větší záběr a přesnější dávkování.',
+    methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Napříč pěti hlavními značkami na českém trhu.',
+    callToAction: 'Pro přesný výsev (kukuřice, řepa, slunečnice) viz žebříček přesných secích strojů.',
+    category: 'seci-stroje-pneumaticke',
+    filter: (m) => typeof m.pracovni_zaber_m === 'number' && m.pracovni_zaber_m > 0,
+    score: (m) => m.pracovni_zaber_m ?? 0,
+    limit: 12,
+  },
+  {
+    slug: 'nejlepsi-presne-seci-stroje',
+    title: 'Nejširší přesné secí stroje',
+    description: 'Žebříček přesných (jednozrnných) secích strojů podle pracovního záběru. Pro kukuřici, řepu a slunečnici — přesné rozmístění jednotlivých zrn.',
+    methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Záběr u přesných secích strojů obvykle odpovídá počtu řádků × meziřádková vzdálenost.',
+    callToAction: 'Pro hustě seté plodiny (obilniny) viz žebříček pneumatických secích strojů.',
+    category: 'seci-stroje-presne',
+    filter: (m) => typeof m.pracovni_zaber_m === 'number' && m.pracovni_zaber_m > 0,
+    score: (m) => m.pracovni_zaber_m ?? 0,
+    limit: 12,
+  },
+  {
+    slug: 'nejlepsi-kyprice',
+    title: 'Nejširší kypřiče',
+    description: 'Žebříček kypřičů podle pracovního záběru. Kypřiče zpracovávají půdu do střední a větší hloubky bez obracení — základ minimalizačních technologií.',
+    methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Napříč značkami Amazone, Bednar, Horsch, Väderstad, Pöttinger.',
+    callToAction: 'Pro mělké strniště viz diskové podmítače, pro setí viz secí kombinace.',
+    category: 'kyprice',
+    filter: (m) => typeof m.pracovni_zaber_m === 'number' && m.pracovni_zaber_m > 0,
+    score: (m) => m.pracovni_zaber_m ?? 0,
+    limit: 12,
+  },
+  {
+    slug: 'nejsirsi-zaci-stroje',
+    title: 'Nejširší žací stroje',
+    description: 'Žebříček žacích strojů (na pícniny) podle pracovního záběru. Větší záběr zkracuje dobu seče a využívá počasí — klíčové při sklizni objemných krmiv.',
+    methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Hlavně žací kombinace Krone a Pöttinger.',
+    callToAction: 'Pro shrnování a obracení píce viz příslušné kategorie strojů na sklizeň pícnin.',
+    category: 'zaci-stroje',
+    filter: (m) => typeof m.pracovni_zaber_m === 'number' && m.pracovni_zaber_m > 0,
+    score: (m) => m.pracovni_zaber_m ?? 0,
+    limit: 12,
+  },
+  {
+    slug: 'nejvykonnejsi-samojizdne-rezacky',
+    title: 'Nejvýkonnější samojízdné řezačky',
+    description: 'Žebříček samojízdných sklízecích řezaček podle výkonu motoru. Pro sklizeň kukuřice na siláž a travních porostů — nejvýkonnější stroje na poli.',
+    methodology: 'Modely seřazené podle výkonu motoru sestupně, de-dup per série. Flagshipy Claas Jaguar a Krone BiG X.',
+    callToAction: 'Pro lisování a sběr píce viz ostatní stroje na sklizeň pícnin.',
+    category: 'rezacky-samojizdne',
+    filter: (m) => typeof m.power_hp === 'number' && m.power_hp > 0,
+    score: (m) => m.power_hp ?? 0,
+    limit: 12,
+  },
 ];
 
 export function getTierList(slug: string): TierListDef | undefined {
@@ -144,7 +234,7 @@ export interface RankedModel {
 /** Apply the tier list to current models and return ranked entries. */
 export function rankForTierList(def: TierListDef): RankedModel[] {
   const all = getAllModels();
-  const filtered = all.filter((m) => m.category === def.category && def.filter(m));
+  const filtered = all.filter((m) => m.effective_category === def.category && def.filter(m));
   filtered.sort((a, b) => def.score(b) - def.score(a));
   // De-duplicate: only one model per series — top-N would otherwise be dominated
   // by adjacent variants of the same Fendt 1000 / JD 9R, which adds no info.
