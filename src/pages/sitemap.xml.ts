@@ -166,6 +166,12 @@ export const GET: APIRoute = async () => {
     ['/pruvodce/jak-vybrat-postrikovac/', 'monthly', '0.85', STATIC_LASTMOD],
     ['/pruvodce/jak-vybrat-lis-na-baliky/', 'monthly', '0.85', STATIC_LASTMOD],
     ['/pruvodce/jak-vybrat-rozmetadlo-hnojiv/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/sezona/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/sezona/jaro/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/sezona/leto/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/sezona/podzim/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/sezona/zima/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/sezona/kalendar/', 'monthly', '0.75', STATIC_LASTMOD],
   ];
   for (const [path, changefreq, priority, lastmod] of staticPaths) {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority, lastmod });
