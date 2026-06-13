@@ -1,0 +1,110 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { SEASONS, getSeason, seasonLead, seasonWorkLinks, seasonFaq, cropsSownInSeason, cropsHarvestedInSeason } from '../../lib/sezona';
+import { SITE_URL } from '../../lib/config';
+import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../lib/structured-data';
+
+export function getStaticPaths() {
+  return SEASONS.map((s) => ({ params: { season: s.slug } }));
+}
+
+const { season } = Astro.params;
+const def = getSeason(season!);
+if (!def) return Astro.rewrite('/404');
+
+const sown = cropsSownInSeason(def.slug);
+const harvested = cropsHarvestedInSeason(def.slug);
+const workLinks = seasonWorkLinks(def.slug);
+const faq = seasonFaq(def.slug);
+const lead = seasonLead(def.slug);
+
+const pageUrl = `${SITE_URL}/sezona/${def.slug}/`;
+const title = `${def.name} na poli — práce, setí a sklizeň | Sezónní kalendář`;
+const description = lead.slice(0, 155);
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Sezóna', url: '/sezona/' },
+  { name: def.name, url: pageUrl },
+]);
+const itemListJsonLd = itemListSchema(
+  [...sown, ...harvested].map((p) => ({ url: `${SITE_URL}/plodiny/${p.slug}/`, name: p.name })),
+  `${def.name} — plodiny`,
+);
+const faqJsonLd = faqPageSchema(faq);
+---
+
+<Layout title={title} description={description} canonical={pageUrl}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="sezona-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a> <span aria-hidden="true">›</span>
+      <a href="/sezona/">Sezóna</a> <span aria-hidden="true">›</span>
+      <span class="current">{def.name}</span>
+    </nav>
+
+    <h1>{def.name} na poli</h1>
+    <p class="lead">{lead}</p>
+
+    {workLinks.length > 0 && (
+      <section class="block">
+        <h2>Polní práce v sezóně</h2>
+        <ul class="links">
+          {workLinks.map((l) => (<li><a href={l.href}>{l.label}</a></li>))}
+        </ul>
+      </section>
+    )}
+
+    {sown.length > 0 && (
+      <section class="block">
+        <h2>Co se {def.slug === 'zima' ? 'plánuje sít' : 'teď seje'}</h2>
+        <ul class="crops">
+          {sown.map((p) => (
+            <li><a href={`/plodiny/${p.slug}/`}>{p.name}</a>{p.vysevek ? <span class="meta"> — výsevek: {p.vysevek}</span> : null}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {harvested.length > 0 && (
+      <section class="block">
+        <h2>Co se teď sklízí</h2>
+        <ul class="crops">
+          {harvested.map((p) => (
+            <li><a href={`/plodiny/${p.slug}/`}>{p.name}</a>{p.sklizen ? <span class="meta"> — sklizeň: {p.sklizen}</span> : null}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="faq">
+      <h2>Časté otázky</h2>
+      {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
+    </section>
+
+    <p class="cross"><a href="/sezona/">← Všechny sezóny</a> · <a href="/sezona/kalendar/">Kalendář setí a sklizně</a></p>
+  </div>
+
+  <style>
+    .sezona-root { max-width: 820px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .breadcrumb { font-size: .85rem; color: #6b7280; margin-bottom: 1rem; display: flex; gap: .4rem; flex-wrap: wrap; }
+    .breadcrumb a { color: #15803d; text-decoration: none; }
+    h1 { font-size: 2rem; margin: .2rem 0 .6rem; }
+    .lead { color: #374151; font-size: 1.05rem; margin-bottom: 1.8rem; }
+    .block { margin-bottom: 1.8rem; }
+    .block h2 { font-size: 1.3rem; margin-bottom: .7rem; }
+    .links, .crops { list-style: none; padding: 0; margin: 0; display: grid; gap: .4rem; }
+    .crops .meta { color: #6b7280; font-size: .85rem; }
+    .links a, .crops a { color: #15803d; text-decoration: none; font-weight: 600; }
+    .faq h2 { font-size: 1.3rem; margin: 2rem 0 .8rem; }
+    .faq details { border-bottom: 1px solid #e5e7eb; padding: .6rem 0; }
+    .faq summary { cursor: pointer; font-weight: 600; }
+    .faq p { color: #374151; margin: .5rem 0 0; }
+    .cross { margin-top: 2rem; font-size: .9rem; }
+    .cross a { color: #15803d; }
+  </style>
+</Layout>

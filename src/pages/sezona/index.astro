@@ -1,0 +1,89 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { SEASONS } from '../../lib/sezona';
+import { SITE_URL } from '../../lib/config';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+
+const pageUrl = `${SITE_URL}/sezona/`;
+const title = 'Zemědělský rok — sezónní práce, setí a sklizeň na poli';
+const description = 'Co se na poli dělá v jednotlivých ročních obdobích: jarní setí, letní sklizeň, podzimní ozimy a zimní příprava. Kalendář setí a sklizně plodin.';
+
+const emoji = { jaro: '🌱', leto: '🌾', podzim: '🍂', zima: '❄️' } as const;
+const teaser = {
+  jaro: 'Setí jařin, příprava půdy, jarní hnojení',
+  leto: 'Sklizeň obilovin, seč pícnin, balíkování',
+  podzim: 'Zakládání ozimů, sklizeň okopanin, podmítka',
+  zima: 'Servis techniky, plánování, dotace',
+} as const;
+
+const cards = SEASONS.map((s) => ({ href: `/sezona/${s.slug}/`, name: s.name, slug: s.slug, emoji: emoji[s.slug], desc: teaser[s.slug] }));
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Sezóna', url: pageUrl },
+]);
+const itemListJsonLd = itemListSchema(
+  [...cards.map((c) => ({ url: `${SITE_URL}${c.href}`, name: c.name })),
+   { url: `${SITE_URL}/sezona/kalendar/`, name: 'Kalendář setí a sklizně' }],
+  'Zemědělský rok',
+);
+---
+
+<Layout title={title} description={description} canonical={pageUrl}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+
+  <div class="sezona-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a> <span aria-hidden="true">›</span>
+      <span class="current">Zemědělský rok</span>
+    </nav>
+
+    <h1>Zemědělský rok</h1>
+    <p class="lead">{description}</p>
+
+    <div class="grid">
+      {cards.map((c) => (
+        <a class="card" href={c.href} data-season={c.slug}>
+          <span class="emoji">{c.emoji}</span>
+          <span class="name">{c.name}</span>
+          <span class="desc">{c.desc}</span>
+          <span class="now-badge">právě teď</span>
+        </a>
+      ))}
+      <a class="card cal-card" href="/sezona/kalendar/">
+        <span class="emoji">📅</span>
+        <span class="name">Kalendář setí a sklizně</span>
+        <span class="desc">Kdy sít a sklízet 18 polních plodin, měsíc po měsíci</span>
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var m = new Date().getMonth() + 1;
+      var season = (m >= 3 && m <= 5) ? 'jaro' : (m >= 6 && m <= 8) ? 'leto' : (m >= 9 && m <= 11) ? 'podzim' : 'zima';
+      var el = document.querySelector('.card[data-season="' + season + '"]');
+      if (el) el.classList.add('is-now');
+    })();
+  </script>
+
+  <style>
+    .sezona-root { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .breadcrumb { font-size: .85rem; color: #6b7280; margin-bottom: 1rem; display: flex; gap: .4rem; flex-wrap: wrap; }
+    .breadcrumb a { color: #15803d; text-decoration: none; }
+    h1 { font-size: 2rem; margin: .2rem 0 .6rem; }
+    .lead { color: #374151; max-width: 70ch; margin-bottom: 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .card { position: relative; display: flex; flex-direction: column; gap: .35rem; padding: 1.3rem; border: 1px solid #e5e7eb; border-radius: 12px; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s; }
+    .card:hover { border-color: #15803d; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+    .card .emoji { font-size: 1.8rem; }
+    .card .name { font-weight: 700; font-size: 1.15rem; }
+    .card .desc { color: #6b7280; font-size: .9rem; }
+    .card .now-badge { display: none; position: absolute; top: .8rem; right: .8rem; background: #15803d; color: #fff; font-size: .7rem; font-weight: 700; padding: .15rem .5rem; border-radius: 999px; }
+    .card.is-now { border-color: #15803d; box-shadow: 0 0 0 2px #15803d33; }
+    .card.is-now .now-badge { display: inline-block; }
+    .cal-card { background: #f9fafb; }
+  </style>
+</Layout>

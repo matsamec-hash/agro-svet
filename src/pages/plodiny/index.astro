@@ -37,6 +37,7 @@ const list = itemListSchema(
         <span class="kicker"><span class="dot"></span>Databáze · Polní plodiny</span>
         <h1>Plodiny a <em>odrůdy</em></h1>
         <p class="hero-lede">Encyklopedie polních plodin a databáze registrovaných odrůd — agronomie, výsevek, hnojení, choroby, výnos a pěstitelská doporučení.</p>
+        <p class="cal-link"><a href="/sezona/kalendar/">📅 Kalendář setí a sklizně →</a></p>
         <div class="hero-stats">
           <div class="s"><span class="n">{plodiny.length}</span><span class="l">plodin</span></div>
           <div class="s"><span class="n">{totalOdrudy}</span><span class="l">registrovaných odrůd</span></div>
@@ -102,7 +103,10 @@ const list = itemListSchema(
   .pl-hub .kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
   .pl-hub .hero h1 { font-size: clamp(28px, 4vw, 44px); line-height: 1.08; margin: 0 0 14px; font-weight: 800; }
   .pl-hub .hero h1 em { font-style: normal; color: var(--yellow); }
-  .pl-hub .hero-lede { font-size: 16.5px; line-height: 1.6; color: #E0ECDA; max-width: 60ch; margin: 0 0 22px; }
+  .pl-hub .hero-lede { font-size: 16.5px; line-height: 1.6; color: #E0ECDA; max-width: 60ch; margin: 0 0 10px; }
+  .pl-hub .cal-link { margin: 0 0 18px; font-size: 14px; }
+  .pl-hub .cal-link a { color: var(--yellow); text-decoration: none; font-weight: 600; }
+  .pl-hub .cal-link a:hover { text-decoration: underline; }
   .pl-hub .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; }
   .pl-hub .hero-stats .s { display: flex; flex-direction: column; }
   .pl-hub .hero-stats .n { font-size: 26px; font-weight: 800; color: #fff; }

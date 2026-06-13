@@ -61,6 +61,10 @@ export interface PlodinaYaml {
   hnojeni?: string;
   vynos_t_ha?: string;
   sklizen?: string;
+  /** Měsíce setí (1–12), odvozené z osevni_postup "Setí". Pro crop-calendar. */
+  seti_mesice?: number[];
+  /** Měsíce sklizně (1–12), odvozené z pole `sklizen`. Pro crop-calendar. */
+  sklizen_mesice?: number[];
   vyuziti?: string;
   choroby?: string[];
   osevni_postup?: HowToStepData[];
