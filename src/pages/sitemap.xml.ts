@@ -12,8 +12,29 @@ import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
+import { dsDate, FALLBACK_LASTMOD } from '../lib/content-dates';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
+
+// Per-dataset content dates, baked at build time from git history
+// (scripts/gen-content-dates.mjs). A URL's <lastmod> reflects when its CONTENT
+// last changed, not when the site was deployed — so Google can trust it as a
+// recrawl signal instead of seeing every URL "changed today" on every deploy.
+const D_STROJE = dsDate('stroje'); // /stroje, /srovnani, /zebricky, /znacky hub
+const D_PLEMENA = dsDate('plemena');
+const D_PLODINY = dsDate('plodiny');
+const D_CHOROBY = dsDate('choroby');
+const D_VCELARSTVI = dsDate('vcelarstvi');
+const D_HLEMYZDI = dsDate('hlemyzdi');
+const D_FARMY = dsDate('farmy');
+const D_SLOVNIK = dsDate('slovnik');
+const D_KRAJE = dsDate('kraje');
+const D_ENCYKLOPEDIE = dsDate('encyklopedie');
+const D_ZNACKY = dsDate('znacky');
+const D_DOTACE = dsDate('dotace');
+const D_DOTACE_SK = dsDate('dotaceSk');
+const D_PUDA = dsDate('puda');
+const D_HOWTO = dsDate('howto');
 
 function maxIsoDate(values: Array<string | null | undefined>): string | undefined {
   let max: string | undefined;
@@ -65,12 +86,12 @@ function renderUrl(u: UrlEntry): string {
 }
 
 export const GET: APIRoute = async () => {
-  // Request-time current date. MUST be computed inside the handler — Cloudflare
-  // Workers pin Date.now() to 0 at module-load time (security/spectre mitigation),
-  // so a module-level `new Date()` would emit "1970-01-01" lastmod across the
-  // sitemap. Inside a request handler Date.now() returns the wallclock time as
-  // expected.
-  const STATIC_LASTMOD = new Date().toISOString().slice(0, 10);
+  // Stable fallback for genuinely static pages (legal, calculators, quizzes) that
+  // have no underlying dataset. Baked from the HEAD commit date at build time — NOT
+  // `new Date()`. The old per-request date re-stamped all ~23k URLs with "today" on
+  // every request, which trains Google to ignore lastmod entirely. Dataset-backed
+  // URLs use their own D_* date below.
+  const STATIC_LASTMOD = FALLBACK_LASTMOD;
 
   const urls: UrlEntry[] = [];
 
@@ -112,29 +133,29 @@ export const GET: APIRoute = async () => {
     ['/bazar/sledovani/', 'monthly', '0.6', STATIC_LASTMOD],
     ['/bazar/topovani/', 'monthly', '0.65', STATIC_LASTMOD],
     ['/bazar/kraj/', 'weekly', '0.7', latestListingLastmod ?? STATIC_LASTMOD],
-    ['/stroje/', 'weekly', '0.9', STATIC_LASTMOD],
-    ['/farmy/', 'weekly', '0.8', STATIC_LASTMOD],
-    ['/stroje/traktory/', 'weekly', undefined, STATIC_LASTMOD],
-    ['/stroje/kombajny/', 'weekly', undefined, STATIC_LASTMOD],
-    ['/stroje/zemedelske-stroje/', 'weekly', '0.85', STATIC_LASTMOD],
-    ['/znacky/', 'weekly', '0.8', STATIC_LASTMOD],
-    ['/encyklopedie/', 'weekly', undefined, STATIC_LASTMOD],
-    ['/plemena/', 'weekly', undefined, STATIC_LASTMOD],
-    ['/vcelarstvi/', 'weekly', '0.85', STATIC_LASTMOD],
-    ['/vcelarstvi/druhy/', 'weekly', '0.8', STATIC_LASTMOD],
-    ['/vcelarstvi/vybaveni/', 'weekly', '0.8', STATIC_LASTMOD],
-    ['/vcelarstvi/med/', 'weekly', '0.8', STATIC_LASTMOD],
-    ['/chov-hlemyzdu/', 'weekly', '0.85', STATIC_LASTMOD],
+    ['/stroje/', 'weekly', '0.9', D_STROJE],
+    ['/farmy/', 'weekly', '0.8', D_FARMY],
+    ['/stroje/traktory/', 'weekly', undefined, D_STROJE],
+    ['/stroje/kombajny/', 'weekly', undefined, D_STROJE],
+    ['/stroje/zemedelske-stroje/', 'weekly', '0.85', D_STROJE],
+    ['/znacky/', 'weekly', '0.8', D_ZNACKY],
+    ['/encyklopedie/', 'weekly', undefined, D_ENCYKLOPEDIE],
+    ['/plemena/', 'weekly', undefined, D_PLEMENA],
+    ['/vcelarstvi/', 'weekly', '0.85', D_VCELARSTVI],
+    ['/vcelarstvi/druhy/', 'weekly', '0.8', D_VCELARSTVI],
+    ['/vcelarstvi/vybaveni/', 'weekly', '0.8', D_VCELARSTVI],
+    ['/vcelarstvi/med/', 'weekly', '0.8', D_VCELARSTVI],
+    ['/chov-hlemyzdu/', 'weekly', '0.85', D_HLEMYZDI],
     ['/kviz/jaka-vcela-pro-vas/', 'monthly', '0.7', STATIC_LASTMOD],
-    ['/puda/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/puda/', 'weekly', undefined, D_PUDA],
     ['/fotosoutez/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/fotosoutez/archiv/', 'monthly', undefined, STATIC_LASTMOD],
     ['/fotosoutez/pravidla/', 'yearly', undefined, STATIC_LASTMOD],
     ['/fotosoutez/gdpr/', 'yearly', undefined, STATIC_LASTMOD],
     ['/statistiky/', 'weekly', undefined, STATIC_LASTMOD],
-    ['/srovnani/', 'weekly', '0.85', STATIC_LASTMOD],
-    ['/zebricky/', 'weekly', '0.8', STATIC_LASTMOD],
-    ['/slovnik/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/srovnani/', 'weekly', '0.85', D_STROJE],
+    ['/zebricky/', 'weekly', '0.8', D_STROJE],
+    ['/slovnik/', 'monthly', '0.75', D_SLOVNIK],
     ['/kviz/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/kviz/historie-znacek/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/kviz/jaky-traktor-potrebujete/', 'monthly', '0.8', STATIC_LASTMOD],
@@ -146,10 +167,10 @@ export const GET: APIRoute = async () => {
     ['/kalkulacka/dotace-cap/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/kalkulacka/uspora-nafty/', 'monthly', '0.75', STATIC_LASTMOD],
     ['/prodejci/', 'monthly', '0.8', STATIC_LASTMOD],
-    ['/dotace/', 'weekly', '0.85', STATIC_LASTMOD],
-    ['/dotace/kalendar-kol/', 'weekly', '0.75', STATIC_LASTMOD],
-    ['/dotace/jak-vybrat/', 'monthly', '0.8', STATIC_LASTMOD],
-    ['/jak-na-to/', 'weekly', '0.8', STATIC_LASTMOD],
+    ['/dotace/', 'weekly', '0.85', D_DOTACE],
+    ['/dotace/kalendar-kol/', 'weekly', '0.75', D_DOTACE],
+    ['/dotace/jak-vybrat/', 'monthly', '0.8', D_DOTACE],
+    ['/jak-na-to/', 'weekly', '0.8', D_HOWTO],
     ['/media/', 'monthly', undefined, STATIC_LASTMOD],
     ['/redakce/', 'monthly', '0.5', STATIC_LASTMOD],
     ['/podminky-pouziti/', 'yearly', '0.3', STATIC_LASTMOD],
@@ -166,6 +187,12 @@ export const GET: APIRoute = async () => {
     ['/pruvodce/jak-vybrat-postrikovac/', 'monthly', '0.85', STATIC_LASTMOD],
     ['/pruvodce/jak-vybrat-lis-na-baliky/', 'monthly', '0.85', STATIC_LASTMOD],
     ['/pruvodce/jak-vybrat-rozmetadlo-hnojiv/', 'monthly', '0.85', STATIC_LASTMOD],
+    ['/sezona/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/sezona/jaro/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/sezona/leto/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/sezona/podzim/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/sezona/zima/', 'monthly', '0.7', STATIC_LASTMOD],
+    ['/sezona/kalendar/', 'monthly', '0.75', STATIC_LASTMOD],
   ];
   for (const [path, changefreq, priority, lastmod] of staticPaths) {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority, lastmod });
@@ -181,7 +208,7 @@ export const GET: APIRoute = async () => {
       loc: `${SITE_URL}/chov-hlemyzdu/${a.slug}/`,
       changefreq: 'monthly',
       priority: '0.7',
-      lastmod: STATIC_LASTMOD,
+      lastmod: D_HLEMYZDI,
       images: a.featured_image_url ? [a.featured_image_url] : undefined,
     });
   }
@@ -189,19 +216,19 @@ export const GET: APIRoute = async () => {
   // Žebříčky — top-N seznamy generované z stroje dat.
   const { TIER_LISTS } = await import('../lib/tier-lists');
   for (const t of TIER_LISTS) {
-    urls.push({ loc: `${SITE_URL}/zebricky/${t.slug}/`, changefreq: 'weekly', priority: '0.75', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/zebricky/${t.slug}/`, changefreq: 'weekly', priority: '0.75', lastmod: D_STROJE });
   }
 
   // Slovník zemědělských pojmů.
   const { SLOVNIK } = await import('../lib/slovnik');
   for (const term of SLOVNIK) {
-    urls.push({ loc: `${SITE_URL}/slovnik/${term.slug}/`, changefreq: 'monthly', priority: '0.6', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/slovnik/${term.slug}/`, changefreq: 'monthly', priority: '0.6', lastmod: D_SLOVNIK });
   }
 
   // Kraj-level lokální bazar landing pages.
   const { KRAJE } = await import('../lib/cap-dotace');
   for (const k of KRAJE) {
-    urls.push({ loc: `${SITE_URL}/bazar/kraj/${k.slug}/`, changefreq: 'weekly', priority: '0.65', lastmod: latestListingLastmod ?? STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/bazar/kraj/${k.slug}/`, changefreq: 'weekly', priority: '0.65', lastmod: latestListingLastmod ?? D_KRAJE });
   }
 
   // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.
@@ -214,7 +241,7 @@ export const GET: APIRoute = async () => {
   const groupsWithModels = (Object.entries(FUNCTIONAL_GROUPS) as [string, typeof FUNCTIONAL_GROUPS[keyof typeof FUNCTIONAL_GROUPS]][])
     .filter(([_, group]) => allStrojeModels.some((m) => (group.categories as readonly string[]).includes(m.effective_category)));
   for (const [groupSlug] of groupsWithModels) {
-    urls.push({ loc: `${SITE_URL}/stroje/zemedelske-stroje/${groupSlug}/`, changefreq: 'weekly', priority: '0.75', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/stroje/zemedelske-stroje/${groupSlug}/`, changefreq: 'weekly', priority: '0.75', lastmod: D_STROJE });
   }
 
   // Stroje sub-kategorie (cross-brand pages /stroje/<subcategory>/) — pouze ty s modely
@@ -223,11 +250,11 @@ export const GET: APIRoute = async () => {
   const subcategoriesWithModels = new Set(allStrojeModels.map((m) => m.effective_category));
   for (const subcat of subcategoriesWithModels) {
     if (!routableSubcats.has(subcat)) continue;
-    urls.push({ loc: `${SITE_URL}/stroje/${subcat}/`, changefreq: 'weekly', priority: '0.7', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/stroje/${subcat}/`, changefreq: 'weekly', priority: '0.7', lastmod: D_STROJE });
   }
 
   for (const brand of getAllBrands()) {
-    urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: D_STROJE });
     for (const [catKey, cat] of Object.entries(brand.categories || {})) {
       const families = new Set<string>();
       for (const s of cat.series || []) {
@@ -236,7 +263,7 @@ export const GET: APIRoute = async () => {
         urls.push({
           loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/`,
           changefreq: 'monthly',
-          lastmod: STATIC_LASTMOD,
+          lastmod: D_STROJE,
           images: seriesImg ? [seriesImg] : undefined,
         });
         for (const m of s.models || []) {
@@ -247,13 +274,13 @@ export const GET: APIRoute = async () => {
           urls.push({
             loc: `${SITE_URL}/stroje/${brand.slug}/${s.slug}/${short}/`,
             changefreq: 'monthly',
-            lastmod: STATIC_LASTMOD,
+            lastmod: D_STROJE,
             images: imgUrl ? [imgUrl] : undefined,
           });
         }
       }
       for (const fam of families) {
-        urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/rada/${catKey}/${fam}/`, changefreq: 'monthly', priority: '0.6', lastmod: STATIC_LASTMOD });
+        urls.push({ loc: `${SITE_URL}/stroje/${brand.slug}/rada/${catKey}/${fam}/`, changefreq: 'monthly', priority: '0.6', lastmod: D_STROJE });
       }
     }
   }
@@ -270,7 +297,7 @@ export const GET: APIRoute = async () => {
       loc: `${SITE_URL}/znacky/${z.id}/`,
       changefreq: 'monthly',
       priority: '0.8',
-      lastmod: zUpdated ? zUpdated.toISOString().slice(0, 10) : STATIC_LASTMOD,
+      lastmod: zUpdated ? zUpdated.toISOString().slice(0, 10) : D_ZNACKY,
     });
   }
   for (const e of encyklopedie) {
@@ -278,12 +305,12 @@ export const GET: APIRoute = async () => {
     urls.push({
       loc: `${SITE_URL}/encyklopedie/${e.id}/`,
       changefreq: 'monthly',
-      lastmod: e.data.lastVerified ? e.data.lastVerified.toISOString().slice(0, 10) : STATIC_LASTMOD,
+      lastmod: e.data.lastVerified ? e.data.lastVerified.toISOString().slice(0, 10) : D_ENCYKLOPEDIE,
       images: heroImg ? [heroImg] : undefined,
     });
   }
   for (const p of puda) {
-    urls.push({ loc: `${SITE_URL}/puda/${p.id}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/puda/${p.id}/`, changefreq: 'monthly', lastmod: D_PUDA });
   }
 
   const howto = await getCollection('howto');
@@ -299,45 +326,45 @@ export const GET: APIRoute = async () => {
 
   const dotace = await getCollection('dotace');
   for (const dt of dotace) {
-    urls.push({ loc: `${SITE_URL}/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8', lastmod: D_DOTACE });
   }
 
   for (const d of getAllDruhy()) {
-    urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/`, changefreq: 'monthly', lastmod: D_PLEMENA });
     for (const p of d.plemena) {
-      urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/${p.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+      urls.push({ loc: `${SITE_URL}/plemena/${d.slug}/${p.slug}/`, changefreq: 'monthly', lastmod: D_PLEMENA });
     }
   }
 
   // Plodiny + indexovatelné odrůdy + facety (anti-thin: jen indexovatelné)
-  urls.push({ loc: `${SITE_URL}/plodiny/`, changefreq: 'weekly', lastmod: STATIC_LASTMOD });
+  urls.push({ loc: `${SITE_URL}/plodiny/`, changefreq: 'weekly', lastmod: D_PLODINY });
   for (const p of listPlodiny()) {
-    urls.push({ loc: `${SITE_URL}/plodiny/${p.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/plodiny/${p.slug}/`, changefreq: 'monthly', lastmod: D_PLODINY });
   }
   for (const e of listIndexableOdrudy()) {
-    urls.push({ loc: `${SITE_URL}/plodiny/${e.plodina_slug}/${e.odruda.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/plodiny/${e.plodina_slug}/${e.odruda.slug}/`, changefreq: 'monthly', lastmod: D_PLODINY });
   }
   for (const s of listSkupiny()) {
-    urls.push({ loc: `${SITE_URL}/plodiny/skupina/${s.skupina}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/plodiny/skupina/${s.skupina}/`, changefreq: 'monthly', lastmod: D_PLODINY });
   }
   for (const u of listIndexableUdrzovatele()) {
-    urls.push({ loc: `${SITE_URL}/odrudy/udrzovatel/${u.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/odrudy/udrzovatel/${u.slug}/`, changefreq: 'monthly', lastmod: D_PLODINY });
   }
 
   // Choroby a škůdci — hub + detaily (anti-thin: jen choroby s popisem a ≥1 plodinou)
-  urls.push({ loc: `${SITE_URL}/choroby/`, changefreq: 'weekly', lastmod: STATIC_LASTMOD });
+  urls.push({ loc: `${SITE_URL}/choroby/`, changefreq: 'weekly', lastmod: D_CHOROBY });
   for (const c of listIndexableChoroby()) {
-    urls.push({ loc: `${SITE_URL}/choroby/${c.slug}/`, changefreq: 'monthly', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/choroby/${c.slug}/`, changefreq: 'monthly', lastmod: D_CHOROBY });
   }
 
   for (const v of getAllVcely()) {
-    urls.push({ loc: `${SITE_URL}/vcelarstvi/druhy/${v.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: STATIC_LASTMOD, images: v.image_url ? [v.image_url] : undefined });
+    urls.push({ loc: `${SITE_URL}/vcelarstvi/druhy/${v.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: D_VCELARSTVI, images: v.image_url ? [v.image_url] : undefined });
   }
   for (const x of getAllVybaveni()) {
-    urls.push({ loc: `${SITE_URL}/vcelarstvi/vybaveni/${x.slug}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD, images: x.image_url ? [x.image_url] : undefined });
+    urls.push({ loc: `${SITE_URL}/vcelarstvi/vybaveni/${x.slug}/`, changefreq: 'monthly', priority: '0.65', lastmod: D_VCELARSTVI, images: x.image_url ? [x.image_url] : undefined });
   }
   for (const m of getAllMed()) {
-    urls.push({ loc: `${SITE_URL}/vcelarstvi/med/${m.slug}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD, images: m.image_url ? [m.image_url] : undefined });
+    urls.push({ loc: `${SITE_URL}/vcelarstvi/med/${m.slug}/`, changefreq: 'monthly', priority: '0.65', lastmod: D_VCELARSTVI, images: m.image_url ? [m.image_url] : undefined });
   }
 
   // Comparison pairs — match the limit used by /srovnani/[combo]/getStaticPaths
@@ -345,12 +372,12 @@ export const GET: APIRoute = async () => {
   // sitemap. Previously capped at 220 → Google saw only top-power flagships,
   // mid-class pairs were prerendered but not discoverable.
   for (const pair of expandedComparisonPairs(5000)) {
-    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65', lastmod: D_STROJE });
   }
 
   // Implement (nářadí) páry — párované dle záběru, match limit z [combo]/getStaticPaths.
   for (const pair of implementComparisonPairs(4000)) {
-    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.6', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.6', lastmod: D_STROJE });
   }
 
   for (const a of articlesDyn) {
@@ -375,12 +402,12 @@ export const GET: APIRoute = async () => {
       loc: `${SITE_URL}/farmy/${f.slug}/`,
       changefreq: 'monthly',
       priority: '0.7',
-      lastmod: STATIC_LASTMOD,
+      lastmod: D_FARMY,
       images: f.photos && f.photos.length > 0 ? [f.photos[0]] : undefined,
     });
   }
   for (const r of regionsWithEnoughFarms(3)) {
-    urls.push({ loc: `${SITE_URL}/farmy/kraj/${r.slug}/`, changefreq: 'weekly', priority: '0.7', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/farmy/kraj/${r.slug}/`, changefreq: 'weekly', priority: '0.7', lastmod: D_FARMY });
   }
 
   // SK launch (Fáze 1c-obsah): pre přeložené katalogové sekcie (/stroje, /znacky,
@@ -440,7 +467,7 @@ export const GET: APIRoute = async () => {
   // SK /dotace detail URL — vlastné slugy z kolekcie 'dotaceSk' (PPA SR výzvy).
   const dotaceSkEntries = await getCollection('dotaceSk');
   for (const dt of dotaceSkEntries) {
-    urls.push({ loc: `${SITE_URL}/sk/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+    urls.push({ loc: `${SITE_URL}/sk/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8', lastmod: D_DOTACE_SK });
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
