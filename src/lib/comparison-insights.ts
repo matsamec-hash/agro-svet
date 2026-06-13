@@ -15,6 +15,8 @@ import type { StrojFlatModel, StrojKategorie } from './stroje';
 import type { Locale } from './../i18n/config';
 import { modelDisplayName } from './comparator';
 import { useCaseDescription } from './competitor-finder';
+import { pct, brandDescriptorAkuzativ } from './comparison-insights-shared';
+export type { ComparisonFaq, ComparisonInsights } from './comparison-insights-shared';
 
 /**
  * Short dependent-clause describing the farm size implied by a power level.
@@ -66,76 +68,6 @@ function farmSizeClause(category: StrojKategorie, powerHp: number | null, locale
       'ти великотоварне виробництво і хочеш найширший захват (12 м+) та найбільший бункер (14 000+ л)');
   }
   return null;
-}
-
-export interface ComparisonFaq {
-  q: string;
-  a: string;
-}
-
-export interface ComparisonInsights {
-  /** 2–3 sentence verdict-style TL;DR for above-the-fold + LLM citation. */
-  tldr: string;
-  /** ~155 char SERP meta description with concrete diff numbers. */
-  shortDescription: string;
-  /** "Vyber A když…" — 2–3 sentences. */
-  decisionA: string;
-  /** "Vyber B když…" — 2–3 sentences. */
-  decisionB: string;
-  /** 5 FAQ entries for FAQPage schema + rendered list. */
-  faqs: ComparisonFaq[];
-  /** ISO date for visible "aktualizováno" badge + JSON-LD dateModified. */
-  lastUpdatedIso: string;
-}
-
-function pct(a: number, b: number): number {
-  if (b === 0) return 0;
-  return Math.round(((a - b) / b) * 100);
-}
-
-/**
- * Brand description in accusative — fits grammatically after "preferuješ".
- * Example: "preferuješ německou prémiovou značku" (not "německá prémiová značka").
- */
-function brandDescriptorAkuzativ(brand: string, brandName: string, locale: Locale): string {
-  const mapCs: Record<string, string> = {
-    fendt: 'německou prémiovou značku Fendt',
-    'john-deere': 'amerického giganta John Deere',
-    'case-ih': 'americkou značku Case IH (koncern CNH)',
-    'new-holland': 'evropskou značku New Holland (koncern CNH)',
-    claas: 'německého lídra v kombajnech Claas',
-    'massey-ferguson': 'tradiční značku Massey Ferguson (koncern AGCO)',
-    valtra: 'finskou značku Valtra (koncern AGCO)',
-    'deutz-fahr': 'německou značku Deutz-Fahr (koncern SDF)',
-    kubota: 'japonskou značku Kubota',
-    zetor: 'českou značku Zetor z Brna',
-  };
-  const mapSk: Record<string, string> = {
-    fendt: 'nemeckú prémiovú značku Fendt',
-    'john-deere': 'amerického giganta John Deere',
-    'case-ih': 'americkú značku Case IH (koncern CNH)',
-    'new-holland': 'európsku značku New Holland (koncern CNH)',
-    claas: 'nemeckého lídra v kombajnoch Claas',
-    'massey-ferguson': 'tradičnú značku Massey Ferguson (koncern AGCO)',
-    valtra: 'fínsku značku Valtra (koncern AGCO)',
-    'deutz-fahr': 'nemeckú značku Deutz-Fahr (koncern SDF)',
-    kubota: 'japonskú značku Kubota',
-    zetor: 'českú značku Zetor z Brna',
-  };
-  const mapUk: Record<string, string> = {
-    fendt: 'німецький преміальний бренд Fendt',
-    'john-deere': 'американського гіганта John Deere',
-    'case-ih': 'американський бренд Case IH (концерн CNH)',
-    'new-holland': 'європейський бренд New Holland (концерн CNH)',
-    claas: 'німецького лідера у комбайнах Claas',
-    'massey-ferguson': 'традиційний бренд Massey Ferguson (концерн AGCO)',
-    valtra: 'фінський бренд Valtra (концерн AGCO)',
-    'deutz-fahr': 'німецький бренд Deutz-Fahr (концерн SDF)',
-    kubota: 'японський бренд Kubota',
-    zetor: 'чеський бренд Zetor із Брно',
-  };
-  const map = locale === 'sk' ? mapSk : locale === 'uk' ? mapUk : mapCs;
-  return map[brand] ?? (locale === 'uk' ? `бренд ${brandName}` : `značku ${brandName}`);
 }
 
 export function comparisonInsights(

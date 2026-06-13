@@ -278,6 +278,8 @@ export function getAllModels(): StrojFlatModel[] {
         for (const model of series.models || []) {
           flat.push({
             ...model,
+            year_from: model.year_from ?? null,
+            year_to: model.year_to ?? null,
             brand_slug: brand.slug,
             brand_name: brand.name,
             category,

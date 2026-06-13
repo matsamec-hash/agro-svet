@@ -6,7 +6,7 @@
 // the route uses a 301 from non-canonical permutations.
 
 import { getAllModels, type StrojFlatModel, type StrojKategorie } from './stroje';
-import { findCompetitors } from './competitor-finder';
+import { findCompetitors, findImplementCompetitors } from './competitor-finder';
 
 const PAIR_DELIMITER = '-vs-';
 
@@ -103,6 +103,71 @@ export function expandedComparisonPairs(limit = 1500): ComparisonPair[] {
   return topComparisonPairs(limit, { tolerancePct: 30, perSourceLimit: 10 });
 }
 
+/** Práh: kolik modelů se záběrem musí kategorie mít, aby se generovaly nářaďové páry. */
+export const MIN_MODELS_WITH_ZABER = 8;
+
+let _implementCats: StrojKategorie[] | null = null;
+/**
+ * Data-driven množina nářaďových kategorií vhodných pro srovnání — effective_category,
+ * kde ≥ MIN_MODELS_WITH_ZABER modelů má pracovni_zaber_m. Memoizováno (data statická).
+ */
+export function implementCompareCategories(): StrojKategorie[] {
+  if (_implementCats) return _implementCats;
+  const counts = new Map<StrojKategorie, number>();
+  for (const m of getAllModels()) {
+    if (m.pracovni_zaber_m != null) {
+      counts.set(m.effective_category, (counts.get(m.effective_category) ?? 0) + 1);
+    }
+  }
+  _implementCats = [...counts.entries()]
+    .filter(([, n]) => n >= MIN_MODELS_WITH_ZABER)
+    .map(([c]) => c)
+    .sort();
+  return _implementCats;
+}
+
+/**
+ * Páry nářadí párované dle pracovního záběru. Anchor = current-production modely
+ * v kvalifikovaných kategoriích; konkurenti přes findImplementCompetitors (může vrátit
+ * i historické). Kanonické pořadí, dedup dle combo, řazeno dle součtu záběru desc.
+ * Disjunktní vůči topComparisonPairs (ty jsou jen traktory/kombajny).
+ */
+export function implementComparisonPairs(limit = 4000): ComparisonPair[] {
+  const cats = new Set(implementCompareCategories());
+  const sources = getAllModels().filter(
+    (m) => cats.has(m.effective_category) && m.pracovni_zaber_m != null && m.year_to === null,
+  );
+
+  const seen = new Map<string, ComparisonPair>();
+  for (const source of sources) {
+    const competitors = findImplementCompetitors(
+      {
+        slug: source.slug,
+        brand_slug: source.brand_slug,
+        effective_category: source.effective_category,
+        pracovni_zaber_m: source.pracovni_zaber_m,
+        year_to: source.year_to,
+      },
+      { tolerancePct: 30, limit: 8 },
+    );
+    for (const competitor of competitors) {
+      const combo = pairCombo(source, competitor);
+      if (seen.has(combo)) continue;
+      const [a, b] = canonicalOrder(source, competitor);
+      seen.set(combo, { a, b, combo });
+    }
+  }
+
+  const pairs = [...seen.values()];
+  pairs.sort((x, y) => {
+    const scoreX = (x.a.pracovni_zaber_m ?? 0) + (x.b.pracovni_zaber_m ?? 0);
+    const scoreY = (y.a.pracovni_zaber_m ?? 0) + (y.b.pracovni_zaber_m ?? 0);
+    if (scoreX !== scoreY) return scoreY - scoreX;
+    return x.combo.localeCompare(y.combo);
+  });
+  return pairs.slice(0, limit);
+}
+
 /** Find competitor pairs that include the given model — used for "Related comparisons" cross-link. */
 export function relatedComparisonsFor(model: StrojFlatModel, limit = 6): ComparisonPair[] {
   const pairs = topComparisonPairs(500);
@@ -125,6 +190,64 @@ export interface ComparisonRow {
 }
 
 export function buildComparisonRows(category: StrojKategorie): ComparisonRow[] {
+  // Nářaďová větev: záběrové kategorie nemají power_hp/motor/převodovku → vlastní sada
+  // relevantních řádků (záběr, příkon traktoru, typ závěsu) + univerzální roky/hmotnost.
+  if (category !== 'traktory' && category !== 'kombajny') {
+    const zavesLabel = (v: string | null | undefined): string | null => {
+      switch (v) {
+        case 'neseny': return 'nesený';
+        case 'tazeny': return 'tažený';
+        case 'poloneseny': return 'polonesený';
+        case 'samojizdny': return 'samojízdný';
+        case 'navesny': return 'návěsný';
+        default: return null;
+      }
+    };
+    return [
+      {
+        label: 'Pracovní záběr',
+        better: 'higher',
+        unit: 'm',
+        get: (m) => m.pracovni_zaber_m ?? null,
+      },
+      {
+        label: 'Potřebný příkon traktoru',
+        better: 'none',
+        get: (m) => {
+          const lo = m.prikon_traktor_hp_min ?? null;
+          const hi = m.prikon_traktor_hp_max ?? null;
+          if (lo === null && hi === null) return null;
+          if (lo !== null && hi !== null) return lo === hi ? `${lo} k` : `${lo}–${hi} k`;
+          return `${lo ?? hi} k`;
+        },
+      },
+      {
+        label: 'Typ závěsu',
+        better: 'none',
+        get: (m) => zavesLabel(m.typ_zavesu),
+      },
+      {
+        label: 'Roky výroby',
+        better: 'none',
+        get: (m) => {
+          if (m.year_from === null) return null;
+          return m.year_to === null ? `${m.year_from}–dosud` : `${m.year_from}–${m.year_to}`;
+        },
+      },
+      {
+        label: 'V prodeji',
+        better: 'none',
+        get: (m) => (m.year_to === null ? 'Ano' : 'Ne'),
+      },
+      {
+        label: 'Hmotnost',
+        better: 'lower',
+        unit: 'kg',
+        get: (m) => m.weight_kg ?? null,
+      },
+    ];
+  }
+
   const rows: ComparisonRow[] = [
     {
       label: 'Výkon',

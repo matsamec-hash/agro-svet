@@ -67,6 +67,64 @@ export function findCompetitors(
   return [...byBrand.values()];
 }
 
+interface ImplementSourceModel {
+  slug: string;
+  brand_slug: string;
+  /** Reálná kategorie (subcategory) — NE top-level funkční skupina. */
+  effective_category: StrojKategorie;
+  pracovni_zaber_m: number | null;
+  year_to: number | null;
+}
+
+/**
+ * Cross-brand konkurenti pro nářadí — párováno dle pracovního záběru (m).
+ * Mirror findCompetitors, ale osa = pracovni_zaber_m a match na effective_category
+ * (nářadí je v datech pod funkční skupinou category, reálná kategorie je effective_category).
+ * Preference: current production když zdroj current, pak blízkost záběru, tiebreak značka.
+ * Dedup: 1 model na konkurenční značku.
+ */
+export function findImplementCompetitors(
+  source: ImplementSourceModel,
+  options: CompetitorOptions = {},
+): StrojFlatModel[] {
+  if (source.pracovni_zaber_m === null) return [];
+  const { tolerancePct = 25, limit = 6 } = options;
+
+  const minZ = source.pracovni_zaber_m * (1 - tolerancePct / 100);
+  const maxZ = source.pracovni_zaber_m * (1 + tolerancePct / 100);
+  // year_to may be undefined (field absent from YAML) or null — both mean "current production".
+  const sourceIsCurrent = source.year_to == null;
+
+  const candidates = getAllModels().filter(
+    (m) =>
+      m.effective_category === source.effective_category &&
+      m.brand_slug !== source.brand_slug &&
+      m.pracovni_zaber_m !== null &&
+      (m.pracovni_zaber_m as number) >= minZ &&
+      (m.pracovni_zaber_m as number) <= maxZ,
+  );
+
+  candidates.sort((a, b) => {
+    const aCurrent = a.year_to == null;
+    const bCurrent = b.year_to == null;
+    if (aCurrent !== bCurrent) {
+      if (sourceIsCurrent) return aCurrent ? -1 : 1;
+      return aCurrent ? 1 : -1;
+    }
+    const aDiff = Math.abs((a.pracovni_zaber_m ?? 0) - (source.pracovni_zaber_m ?? 0));
+    const bDiff = Math.abs((b.pracovni_zaber_m ?? 0) - (source.pracovni_zaber_m ?? 0));
+    if (aDiff !== bDiff) return aDiff - bDiff;
+    return a.brand_slug.localeCompare(b.brand_slug);
+  });
+
+  const byBrand = new Map<string, StrojFlatModel>();
+  for (const c of candidates) {
+    if (!byBrand.has(c.brand_slug)) byBrand.set(c.brand_slug, c);
+    if (byBrand.size >= limit) break;
+  }
+  return [...byBrand.values()];
+}
+
 /** Generate a use-case description from power range + category. Static, factual.
  *  cs branch is byte-identical to the original; sk and uk add localized variants. */
 export function useCaseDescription(
