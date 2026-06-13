@@ -60,8 +60,7 @@ describe('sezona — crop filtry (reálná plodiny data)', () => {
   });
 });
 
-import { SEASON_CONTENT, seasonWorkLinks, seasonLead, seasonFaq } from '../../src/lib/sezona';
-import { akceInSeason } from '../../src/lib/sezona';
+import { SEASON_CONTENT, seasonWorkLinks, seasonLead, seasonFaq, akceInSeason } from '../../src/lib/sezona';
 import type { Akce } from '../../src/lib/akce';
 
 describe('sezona — editorial obsah', () => {
@@ -126,5 +125,10 @@ describe('sezona — akceInSeason', () => {
     const winterNow = new Date('2026-01-10T10:00:00Z');
     const akce = [mkAkce('unor', '2026-02-05'), mkAkce('brezen', '2026-03-05')];
     expect(akceInSeason(akce, 'zima', winterNow).map((a) => a.slug)).toEqual(['unor']);
+  });
+
+  it('zahrne akci s pristi_vyskyt přesně dnes (hranice >=)', () => {
+    const akce = [mkAkce('dnes', '2026-04-15')];
+    expect(akceInSeason(akce, 'jaro', now).map((a) => a.slug)).toEqual(['dnes']);
   });
 });
