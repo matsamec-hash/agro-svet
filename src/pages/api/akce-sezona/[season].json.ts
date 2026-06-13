@@ -24,7 +24,16 @@ export const GET: APIRoute = async ({ params }) => {
     });
   }
 
-  const all = await listUpcoming(200);
+  let all: Akce[];
+  try {
+    all = await listUpcoming(200);
+  } catch (err) {
+    console.error('[api/akce-sezona] listUpcoming failed', err);
+    return new Response(JSON.stringify({ error: 'unavailable' }), {
+      status: 503,
+      headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
+    });
+  }
   const filtered = akceInSeason(all, season as 'jaro' | 'leto' | 'podzim' | 'zima', new Date()).slice(0, MAX_ITEMS);
   const payload = filtered.map((a) => ({
     slug: a.slug,
