@@ -64,7 +64,7 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
                 const sow = p.seti_mesice?.includes(m);
                 const harvest = p.sklizen_mesice?.includes(m);
                 return (
-                  <td data-month={m} class={`${sow ? 'sow' : ''} ${harvest ? 'harvest' : ''}`.trim()}>
+                  <td data-month={m} class={`${sow ? 'sow' : ''} ${harvest ? 'harvest' : ''}`.trim() || undefined}>
                     {sow ? 'S' : ''}{harvest ? '☑' : ''}
                   </td>
                 );
