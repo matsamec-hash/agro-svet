@@ -40,7 +40,6 @@ export const GET: APIRoute = async ({ params }) => {
     nazev: a.nazev,
     terminText: terminText(a),
     obec: a.obec,
-    typ: a.typ,
   }));
 
   return new Response(JSON.stringify(payload), {

@@ -83,7 +83,7 @@ const faqJsonLd = faqPageSchema(faq);
 
     <section class="block akce-block">
       <h2>Akce v této sezóně</h2>
-      <div id="akce-sezona" data-season={def.slug} aria-live="polite">
+      <div id="akce-sezona" aria-live="polite">
         <p class="akce-fallback"><a href="/akce/">Zobrazit kalendář akcí →</a></p>
       </div>
     </section>
@@ -114,6 +114,7 @@ const faqJsonLd = faqPageSchema(faq);
     .cross { margin-top: 2rem; font-size: .9rem; }
     .cross a { color: #15803d; }
     .akce-block .akce-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+    .akce-block .akce-nazev { color: #166534; font-weight: 600; }
     .akce-block .akce-list a { color: #15803d; text-decoration: none; font-weight: 600; }
     .akce-block .akce-meta { color: #6b7280; font-size: .85rem; font-weight: 400; }
     .akce-block .akce-empty, .akce-block .akce-fallback { color: #374151; }
@@ -139,7 +140,7 @@ const faqJsonLd = faqPageSchema(faq);
             var nazev = esc(a.nazev);
             var termin = esc(a.terminText);
             var obec = esc(a.obec);
-            html += '<li><a href="/akce/' + encodeURIComponent(a.slug) + '/">' + nazev + '</a>'
+            html += '<li><strong class="akce-nazev">' + nazev + '</strong>'
               + '<span class="akce-meta"> — ' + termin + (obec ? ', ' + obec : '') + '</span></li>';
           }
           html += '</ul><p class="akce-all"><a href="/akce/">Všechny akce →</a></p>';
