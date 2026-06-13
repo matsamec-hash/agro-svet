@@ -81,6 +81,13 @@ const faqJsonLd = faqPageSchema(faq);
       </section>
     )}
 
+    <section class="block akce-block">
+      <h2>Akce v této sezóně</h2>
+      <div id="akce-sezona" data-season={def.slug} aria-live="polite">
+        <p class="akce-fallback"><a href="/akce/">Zobrazit kalendář akcí →</a></p>
+      </div>
+    </section>
+
     <section class="faq">
       <h2>Časté otázky</h2>
       {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
@@ -106,5 +113,40 @@ const faqJsonLd = faqPageSchema(faq);
     .faq p { color: #374151; margin: .5rem 0 0; }
     .cross { margin-top: 2rem; font-size: .9rem; }
     .cross a { color: #15803d; }
+    .akce-block .akce-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+    .akce-block .akce-list a { color: #15803d; text-decoration: none; font-weight: 600; }
+    .akce-block .akce-meta { color: #6b7280; font-size: .85rem; font-weight: 400; }
+    .akce-block .akce-empty, .akce-block .akce-fallback { color: #374151; }
+    .akce-block .akce-all { margin-top: .8rem; font-size: .9rem; }
+    .akce-block .akce-all a, .akce-block .akce-empty a, .akce-block .akce-fallback a { color: #15803d; }
   </style>
+
+  <script is:inline define:vars={{ season: def.slug }}>
+    (function () {
+      var box = document.getElementById('akce-sezona');
+      if (!box) return;
+      fetch('/api/akce-sezona/' + season + '.json/')
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (items) {
+          if (!Array.isArray(items) || items.length === 0) {
+            box.innerHTML = '<p class="akce-empty">Pro tuto sezónu zatím nejsou naplánované žádné akce. <a href="/akce/">Procházet celý kalendář akcí →</a></p>';
+            return;
+          }
+          var html = '<ul class="akce-list">';
+          for (var i = 0; i < items.length; i++) {
+            var a = items[i];
+            var nazev = (a.nazev || '').replace(/</g, '&lt;');
+            var termin = (a.terminText || '').replace(/</g, '&lt;');
+            var obec = (a.obec || '').replace(/</g, '&lt;');
+            html += '<li><a href="/akce/' + encodeURIComponent(a.slug) + '/">' + nazev + '</a>'
+              + '<span class="akce-meta"> — ' + termin + (obec ? ', ' + obec : '') + '</span></li>';
+          }
+          html += '</ul><p class="akce-all"><a href="/akce/">Všechny akce →</a></p>';
+          box.innerHTML = html;
+        })
+        .catch(function () {
+          box.innerHTML = '<p class="akce-empty"><a href="/akce/">Zobrazit kalendář akcí →</a></p>';
+        });
+    })();
+  </script>
 </Layout>
