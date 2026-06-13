@@ -778,5 +778,27 @@ const sk: Record<string, string> = {
   'howto.steps.h': 'Postup krok za krokom',
   'howto.related.h': 'Ďalšie návody',
   'howto.back': '← Späť na návody',
+
+  // — slovník (glossary chrome) —
+  'slovnik.crumb.home': 'Domov',
+  'slovnik.crumb.glossary': 'Slovník',
+  'slovnik.index.title': 'Slovník poľnohospodárskych pojmov',
+  'slovnik.index.desc': 'Definície {n}+ pojmov z oblasti poľnohospodárstva, techniky, dotácií a precision farming. Čo je AdBlue, CVT, ISOBUS, RTK GPS a ďalšie.',
+  'slovnik.index.kicker': 'Slovník · {n} pojmov',
+  'slovnik.index.h1': 'Slovník poľnohospodárskych pojmov',
+  'slovnik.index.lede': 'Definície technických termínov — od AdBlue cez ISOBUS po precision farming. Cielené na poľnohospodárov, dealerov, agronómov aj začiatočníkov.',
+  'slovnik.index.collName': 'Slovník poľnohospodárskych pojmov',
+  'slovnik.detail.titleSuffix': ' — čo to je? Vysvetlenie',
+  'slovnik.detail.also': 'Tiež:',
+  'slovnik.detail.areaHeading': 'Prevodník — {term} na ďalšie jednotky plochy',
+  'slovnik.detail.areaCaption': 'Zadaj hodnotu a vyber jednotku. Prevody sa prepočítajú okamžite.',
+  'slovnik.detail.weightHeading': 'Prevodník — {term} na ďalšie jednotky hmotnosti',
+  'slovnik.detail.weightCaption': 'Bušel má rôznu hmotnosť podľa komodity — vyber plodinu zo zoznamu. Hodnoty zodpovedajú štandardu USDA.',
+  'slovnik.detail.zajimavosti': 'Zaujímavosti',
+  'slovnik.detail.faq': 'Časté otázky',
+  'slovnik.detail.external': 'Externý zdroj:',
+  'slovnik.detail.related': 'Súvisiace pojmy',
+  'slovnik.detail.back': '← Späť na slovník',
+  'slovnik.detail.definedTermSet': 'Slovník poľnohospodárskych pojmov',
 };
 export default sk;

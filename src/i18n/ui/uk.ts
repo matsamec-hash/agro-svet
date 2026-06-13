@@ -783,5 +783,27 @@ const uk: Record<string, string> = {
   'howto.steps.h': 'Порядок дій крок за кроком',
   'howto.related.h': 'Інші інструкції',
   'howto.back': '← Назад до інструкцій',
+
+  // — slovník (glossary chrome) —
+  'slovnik.crumb.home': 'Головна',
+  'slovnik.crumb.glossary': 'Словник',
+  'slovnik.index.title': 'Словник сільськогосподарських термінів',
+  'slovnik.index.desc': 'Визначення {n}+ термінів із галузі сільського господарства, техніки, субсидій та точного землеробства. Що таке AdBlue, CVT, ISOBUS, RTK GPS та інші.',
+  'slovnik.index.kicker': 'Словник · {n} термінів',
+  'slovnik.index.h1': 'Словник сільськогосподарських термінів',
+  'slovnik.index.lede': 'Визначення технічних термінів — від AdBlue через ISOBUS до точного землеробства. Для аграріїв, дилерів, агрономів і початківців.',
+  'slovnik.index.collName': 'Словник сільськогосподарських термінів',
+  'slovnik.detail.titleSuffix': ' — що це таке? Пояснення',
+  'slovnik.detail.also': 'Також:',
+  'slovnik.detail.areaHeading': 'Конвертер — {term} в інші одиниці площі',
+  'slovnik.detail.areaCaption': 'Введіть значення та виберіть одиницю. Перерахунок відбувається миттєво. Для історичних одиниць використано стандартизовані значення.',
+  'slovnik.detail.weightHeading': 'Конвертер — {term} в інші одиниці маси',
+  'slovnik.detail.weightCaption': 'Бушель має різну масу залежно від культури — виберіть культуру зі списку. Значення бушеля відповідають стандарту USDA.',
+  'slovnik.detail.zajimavosti': 'Цікаві факти',
+  'slovnik.detail.faq': 'Часті запитання',
+  'slovnik.detail.external': 'Зовнішнє джерело:',
+  'slovnik.detail.related': "Пов'язані терміни",
+  'slovnik.detail.back': '← Назад до словника',
+  'slovnik.detail.definedTermSet': 'Словник сільськогосподарських термінів',
 };
 export default uk;
