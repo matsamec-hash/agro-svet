@@ -59,3 +59,31 @@ describe('sezona — crop filtry (reálná plodiny data)', () => {
     expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'cs')));
   });
 });
+
+import { SEASON_CONTENT, seasonWorkLinks, seasonLead, seasonFaq } from '../../src/lib/sezona';
+
+describe('sezona — editorial obsah', () => {
+  it('každá sezóna má lead, ≥1 work link a ≥2 FAQ', () => {
+    for (const s of SEASONS) {
+      expect(seasonLead(s.slug).length).toBeGreaterThan(20);
+      expect(seasonWorkLinks(s.slug).length).toBeGreaterThanOrEqual(1);
+      expect(seasonFaq(s.slug).length).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it('work linky míří na existující sekce (/jak-na-to/ nebo /pruvodce/)', () => {
+    for (const s of SEASONS) {
+      for (const l of seasonWorkLinks(s.slug)) {
+        expect(l.href).toMatch(/^\/(jak-na-to|pruvodce)\//);
+        expect(l.label.length).toBeGreaterThan(3);
+      }
+    }
+  });
+
+  it('FAQ položky mají q i a', () => {
+    for (const f of seasonFaq('jaro')) {
+      expect(f.q.length).toBeGreaterThan(5);
+      expect(f.a.length).toBeGreaterThan(10);
+    }
+  });
+});
