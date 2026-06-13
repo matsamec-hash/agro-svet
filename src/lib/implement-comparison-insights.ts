@@ -45,7 +45,7 @@ function zavesNoun(typ: string | null | undefined, locale: Locale): string | nul
     tazeny: ['tažený', 'ťahaný', 'причіпний'],
     poloneseny: ['polonesený', 'polonesený', 'напівначіпний'],
     samojizdny: ['samojízdný', 'samohybný', 'самохідний'],
-    navesny: ['návěsný', 'návesný', 'причіпний (на přívěsu)'],
+    navesny: ['návěsný', 'návesný', 'причіпний (на причепі)'],
   };
   const row = t[typ];
   if (!row) return null;
@@ -82,7 +82,7 @@ export function implementComparisonInsights(
   const yDiff = aY !== null && bY !== null ? aY - bY : null;
   const newer = yDiff !== null && yDiff !== 0 ? (yDiff > 0 ? a : b) : null;
 
-  const fmtZ = (z: number): string => `${num(z)} m`;
+  const fmtZ = (z: number): string => `${num(z)} ${pick('m', 'm', 'м')}`;
 
   // ---- TL;DR ----
   const tldrParts: string[] = [];
@@ -174,7 +174,7 @@ export function implementComparisonInsights(
         parts.push(pick(
           `preferuješ ${selfZav} stroj (větší záběr bez zatížení zadní nápravy traktoru)`,
           `preferuješ ${selfZav} stroj (väčší záber bez zaťaženia zadnej nápravy traktora)`,
-          `ти віддаєш перевагу ${selfZav} агрегату (більший захват без навантаження задньої осі трактора)`));
+          `ти хочеш ${selfZav} агрегат (більший захват без навантаження задньої осі трактора)`));
       }
     }
     if (isNewer && yDiff !== null && Math.abs(yDiff) >= 2) {
@@ -233,8 +233,9 @@ export function implementComparisonInsights(
       const lo = m.prikon_traktor_hp_min ?? null;
       const hi = m.prikon_traktor_hp_max ?? null;
       if (lo === null && hi === null) return pick('neuvedeno', 'neuvedené', 'не вказано');
-      if (lo !== null && hi !== null) return lo === hi ? `${num(lo)} k` : `${num(lo)}–${num(hi)} k`;
-      return `${num((lo ?? hi)!)} k`;
+      const ku = pick('k', 'k', 'к.с.');
+      if (lo !== null && hi !== null) return lo === hi ? `${num(lo)} ${ku}` : `${num(lo)}–${num(hi)} ${ku}`;
+      return `${num((lo ?? hi)!)} ${ku}`;
     };
     faqs.push({
       q: pick(`Jaký traktor je potřeba pro ${aName} a ${bName}?`, `Aký traktor je potrebný pre ${aName} a ${bName}?`, `Який трактор потрібен для ${aName} та ${bName}?`),
