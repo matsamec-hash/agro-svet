@@ -52,6 +52,11 @@ const statusLabel = c.statusLabel;
       <span class="kicker">{c.kicker}</span>
       <h1>{c.h1}</h1>
       <p class="hero-lede" set:html={c.ledeHtml}></p>
+      {locale === 'cs' && (
+        <p class="hero-hublink">
+          <a href="/dotace/jak-vybrat/">{c.jakVybrat.h1} →</a>
+        </p>
+      )}
     </header>
 
     <div class="disclaimer" set:html={c.disclaimerHtml}></div>
@@ -139,6 +144,9 @@ const statusLabel = c.statusLabel;
   .hero-lede { color:#c8c8d0; max-width:720px; font-size:16px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
   .hero-lede a { color:var(--yellow); text-decoration:none; }
   .hero-lede a:hover { text-decoration:underline; }
+  .hero-hublink { margin:18px 0 0; position:relative; z-index:2; }
+  .hero-hublink a { display:inline-flex; align-items:center; gap:6px; font:700 14px 'Chakra Petch',sans-serif; letter-spacing:.04em; color:var(--ink); background:var(--yellow); padding:10px 18px; border-radius:10px; text-decoration:none; transition:.15s; }
+  .hero-hublink a:hover { background:#FFD400; transform:translateY(-1px); }
 
   .disclaimer { background:var(--amber-soft); border:1px solid #E0D38A; border-radius:12px; padding:14px 18px; font-size:13px; color:#5a4f12; line-height:1.6; margin-bottom:32px; }
   .disclaimer strong { color:var(--amber); }

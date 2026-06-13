@@ -71,6 +71,9 @@ const breadcrumbJsonLd = breadcrumbSchema([
       <h2>{ck.infoTitle}</h2>
       <p set:html={ck.infoBodyHtml} />
       <div class="ib-actions">
+        {locale === 'cs' && (
+          <a class="ib-btn primary" href="/dotace/jak-vybrat/">{c.jakVybrat.h1}</a>
+        )}
         <a class="ib-btn primary" href={`${linkBase(locale)}/dotace/`}>{ck.btnPrehled}</a>
         <a class="ib-btn ghost" href={`${linkBase(locale)}/kalkulacka/leasing-traktoru/`}>{ck.btnLeasing}</a>
       </div>
