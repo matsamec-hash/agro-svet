@@ -26,6 +26,13 @@ faq:
     a: "Ano. Paušální podpora na zahájení činnosti (49.75) je samostatný titul a nevylučuje žádost o investiční dotaci 33.73 na techniku. Mladý zemědělec navíc v titulu 33.73 čerpá bonifikaci +10 % k základní sazbě."
   - q: "Kde najdu závazná Pravidla?"
     a: "Obecné a Specifické podmínky Pravidel, formulář pro výpočet standardní produkce a postupy posuzování zemědělské kvalifikace publikuje SZIF na stránce szp23-zahajeni-mz. Aktuálně (jaro 2026) probíhá výběr pro 6. kolo, schvalování 4. kola."
+relatedLinks:
+  - href: "/stroje/traktory/"
+    label: "Katalog traktorů"
+  - href: "/srovnani/"
+    label: "Srovnání modelů"
+  - href: "/jak-na-to/jak-naplanovat-dotaci-na-techniku/"
+    label: "Jak naplánovat dotaci"
 ---
 
 **Zahájení činnosti mladého zemědělce** (intervence 49.75) je jeden z nástrojů Strategického plánu SZP 2023–2027 pro generační obnovu v zemědělství. Cílí na mladé žadatele do 40 let, kteří poprvé zakládají vlastní zemědělský podnik.

@@ -26,6 +26,13 @@ faq:
     a: "Na rozdíl od titulu 33.73 se u 37.73 omezení 49 % na mobilní stroje neuplatňuje stejným způsobem — titul je přímo zaměřený na aplikační techniku jako prostředek snížení emisí. Přesné podmínky daného kola vždy ověřte v aktuálních Pravidlech SZIF."
   - q: "Kdo může žádat o dotaci 37.73?"
     a: "Žadateli jsou zemědělští podnikatelé evidovaní podle zákona č. 252/1997 Sb. Titul je atraktivní zejména pro provozy s živočišnou výrobou, které potřebují modernizovat techniku pro aplikaci statkových hnojiv."
+relatedLinks:
+  - href: "/stroje/aplikatory-kejda/"
+    label: "Aplikátory kejdy"
+  - href: "/stroje/cisterny-kejda/"
+    label: "Cisterny na kejdu"
+  - href: "/jak-na-to/jak-naplanovat-dotaci-na-techniku/"
+    label: "Jak naplánovat dotaci"
 ---
 
 **Technologie snižující emise GHG a NH3** (intervence 37.73) je dotační titul Strategického plánu SZP 2023–2027 zaměřený na snižování emisí skleníkových plynů a amoniaku v zemědělství. Pro nákup techniky je relevantní především v oblasti **aplikace statkových hnojiv**.
