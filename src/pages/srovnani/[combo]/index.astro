@@ -11,6 +11,7 @@ import Layout from '../../../layouts/Layout.astro';
 import {
   topComparisonPairs,
   expandedComparisonPairs,
+  implementComparisonPairs,
   parsePairCombo,
   findModelBySlug,
   pairCombo,
@@ -23,6 +24,7 @@ import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../../lib/st
 import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
 import { comparisonInsights } from '../../../lib/comparison-insights';
+import { implementComparisonInsights } from '../../../lib/implement-comparison-insights';
 import { useTranslations, tf, getLocaleFromUrl, localizePath } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -35,8 +37,13 @@ export async function getStaticPaths() {
   // takže limit 5000 zachytí všechny + headroom pro budoucí models. Bonus:
   // všechny mid-class páry jsou teď v sitemap → discovery pro decision-stage
   // dotazy (jak vybrat X vs Y v třídě 100-150 koní).
-  const pairs = expandedComparisonPairs(5000);
-  return pairs.map((p) => ({
+  const tractorPairs = expandedComparisonPairs(5000);
+  const implementPairs = implementComparisonPairs(4000);
+  const byCombo = new Map<string, ComparisonPair>();
+  for (const p of [...tractorPairs, ...implementPairs]) {
+    if (!byCombo.has(p.combo)) byCombo.set(p.combo, p);
+  }
+  return [...byCombo.values()].map((p) => ({
     params: { combo: p.combo },
     props: { pair: p },
   }));
@@ -54,7 +61,7 @@ if (!pair) {
   if (parsed) {
     const a = findModelBySlug(parsed[0]);
     const b = findModelBySlug(parsed[1]);
-    if (a && b && a.category === b.category && a.brand_slug !== b.brand_slug) {
+    if (a && b && a.effective_category === b.effective_category && a.brand_slug !== b.brand_slug) {
       const canonical = pairCombo(a, b);
       if (canonical !== combo) return Astro.rewrite('/404');
       pair = { a, b, combo: canonical };
@@ -70,12 +77,17 @@ const { a, b } = pair;
 const aDisplay = modelDisplayName(a);
 const bDisplay = modelDisplayName(b);
 
-const rows = buildComparisonRows(a.category);
+const isImplement = a.effective_category !== 'traktory' && a.effective_category !== 'kombajny';
+const rows = buildComparisonRows(a.effective_category);
 
 // Look up series image fallbacks for hero photos.
 const aSeries = getSeries(a.brand_slug, a.series_slug);
 const bSeries = getSeries(b.brand_slug, b.series_slug);
-const categoryFallback = a.category === 'traktory' ? '/images/traktor.webp' : '/images/kombajn.webp';
+const categoryFallback = isImplement
+  ? '/images/stroje.webp'
+  : a.effective_category === 'traktory'
+    ? '/images/traktor.webp'
+    : '/images/kombajn.webp';
 const aPhoto = a.image_url ?? aSeries?.series.image_url ?? categoryFallback;
 const bPhoto = b.image_url ?? bSeries?.series.image_url ?? categoryFallback;
 
@@ -85,12 +97,14 @@ const bUseCase = useCaseDescription(b.category, b.power_hp, locale);
 // Dynamic per-pair insights: TL;DR verdict, decision boxes, FAQs, fresh
 // description with concrete diff numbers. Generated from StrojFlatModel data
 // so each of ~1500 pages reads uniquely (no boilerplate Google demotes).
-const insights = comparisonInsights(a, b, locale);
+const insights = isImplement
+  ? implementComparisonInsights(a, b, locale)
+  : comparisonInsights(a, b, locale);
 
 const canonical = `https://agro-svet.cz${localizePath(locale, `/srovnani/${pair.combo}/`)}`;
 const title = tf(
   locale,
-  a.category === 'traktory' ? 'cat.sr.c.titleTraktory' : 'cat.sr.c.titleKombajny',
+  isImplement ? 'cat.sr.c.titleImplement' : a.effective_category === 'traktory' ? 'cat.sr.c.titleTraktory' : 'cat.sr.c.titleKombajny',
   { a: aDisplay, b: bDisplay },
 );
 const description = insights.shortDescription;
@@ -143,7 +157,7 @@ function modelLink(m: typeof a): string {
     </nav>
 
     <header class="hero">
-      <span class="kicker">{tr('cat.sr.c.kicker')}{a.category === 'traktory' ? tr('cat.sr.c.kicTraktory') : tr('cat.sr.c.kicKombajny')}</span>
+      <span class="kicker">{tr('cat.sr.c.kicker')}{isImplement ? tr('cat.sr.c.kicImplement') : a.effective_category === 'traktory' ? tr('cat.sr.c.kicTraktory') : tr('cat.sr.c.kicKombajny')}</span>
       <h1>{aDisplay} <em>vs</em> {bDisplay}</h1>
       <p class="hero-lede">{insights.tldr}</p>
       <div class="hero-meta">
