@@ -1,6 +1,8 @@
 // Sezónní agregační vrstva. Čistá, bez astro:content/async — testovatelná.
 // Data: plodiny (listPlodiny) + statická kurátorská mapa howto→sezóna.
 
+import { listPlodiny, type Plodina } from './plodiny';
+
 export type SeasonSlug = 'jaro' | 'leto' | 'podzim' | 'zima';
 
 export interface Season {
@@ -28,4 +30,26 @@ export function getSeason(slug: string): Season | undefined {
 
 export function seasonOfMonth(month: number): SeasonSlug {
   return SEASONS.find((s) => s.months.includes(month))!.slug;
+}
+
+function sortCs(arr: Plodina[]): Plodina[] {
+  return [...arr].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+}
+
+export function cropsSownInMonth(month: number): Plodina[] {
+  return sortCs(listPlodiny().filter((p) => p.seti_mesice?.includes(month)));
+}
+
+export function cropsHarvestedInMonth(month: number): Plodina[] {
+  return sortCs(listPlodiny().filter((p) => p.sklizen_mesice?.includes(month)));
+}
+
+export function cropsSownInSeason(slug: SeasonSlug): Plodina[] {
+  const months = getSeason(slug)!.months;
+  return sortCs(listPlodiny().filter((p) => p.seti_mesice?.some((m) => months.includes(m))));
+}
+
+export function cropsHarvestedInSeason(slug: SeasonSlug): Plodina[] {
+  const months = getSeason(slug)!.months;
+  return sortCs(listPlodiny().filter((p) => p.sklizen_mesice?.some((m) => months.includes(m))));
 }
