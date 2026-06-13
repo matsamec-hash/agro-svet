@@ -155,7 +155,7 @@ export const TIER_LISTS: TierListDef[] = [
     limit: 12,
   },
   {
-    slug: 'nejlepsi-seci-kombinace',
+    slug: 'nejsirsi-seci-kombinace',
     title: 'Nejširší secí kombinace',
     description: 'Žebříček secích kombinací (příprava půdy + setí v jednom přejezdu) podle pracovního záběru. Úspora přejezdů a času při zakládání porostů.',
     methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Napříč značkami Amazone, Horsch, Väderstad, Pöttinger, Bednar.',
@@ -177,7 +177,7 @@ export const TIER_LISTS: TierListDef[] = [
     limit: 12,
   },
   {
-    slug: 'nejlepsi-presne-seci-stroje',
+    slug: 'nejsirsi-presne-seci-stroje',
     title: 'Nejširší přesné secí stroje',
     description: 'Žebříček přesných (jednozrnných) secích strojů podle pracovního záběru. Pro kukuřici, řepu a slunečnici — přesné rozmístění jednotlivých zrn.',
     methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Záběr u přesných secích strojů obvykle odpovídá počtu řádků × meziřádková vzdálenost.',
@@ -188,7 +188,7 @@ export const TIER_LISTS: TierListDef[] = [
     limit: 12,
   },
   {
-    slug: 'nejlepsi-kyprice',
+    slug: 'nejsirsi-kyprice',
     title: 'Nejširší kypřiče',
     description: 'Žebříček kypřičů podle pracovního záběru. Kypřiče zpracovávají půdu do střední a větší hloubky bez obracení — základ minimalizačních technologií.',
     methodology: 'Modely seřazené podle pracovního záběru sestupně, de-dup per série. Napříč značkami Amazone, Bednar, Horsch, Väderstad, Pöttinger.',

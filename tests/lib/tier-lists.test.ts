@@ -4,10 +4,10 @@ import { TIER_LISTS, getTierList, rankForTierList } from '../../src/lib/tier-lis
 const NEW_SLUGS = [
   'nejsirsi-diskove-podmitace',
   'nejsirsi-radlickove-podmitace',
-  'nejlepsi-seci-kombinace',
+  'nejsirsi-seci-kombinace',
   'nejsirsi-pneumaticke-seci-stroje',
-  'nejlepsi-presne-seci-stroje',
-  'nejlepsi-kyprice',
+  'nejsirsi-presne-seci-stroje',
+  'nejsirsi-kyprice',
   'nejsirsi-zaci-stroje',
   'nejvykonnejsi-samojizdne-rezacky',
 ];
