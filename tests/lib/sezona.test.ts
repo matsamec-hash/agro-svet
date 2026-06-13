@@ -60,7 +60,8 @@ describe('sezona — crop filtry (reálná plodiny data)', () => {
   });
 });
 
-import { SEASON_CONTENT, seasonWorkLinks, seasonLead, seasonFaq } from '../../src/lib/sezona';
+import { SEASON_CONTENT, seasonWorkLinks, seasonLead, seasonFaq, akceInSeason } from '../../src/lib/sezona';
+import type { Akce } from '../../src/lib/akce';
 
 describe('sezona — editorial obsah', () => {
   it('každá sezóna má lead, ≥1 work link a ≥2 FAQ', () => {
@@ -85,5 +86,49 @@ describe('sezona — editorial obsah', () => {
       expect(f.q.length).toBeGreaterThan(5);
       expect(f.a.length).toBeGreaterThan(10);
     }
+  });
+});
+
+// Minimální Akce fixture — akceInSeason čte jen pristi_vyskyt (+ vrací celý objekt).
+function mkAkce(slug: string, pristi_vyskyt: string | null): Akce {
+  return { slug, nazev: slug, pristi_vyskyt } as unknown as Akce;
+}
+
+describe('sezona — akceInSeason', () => {
+  const now = new Date('2026-04-15T10:00:00Z'); // duben = jaro
+
+  it('zahrne akci, jejíž pristi_vyskyt padá do měsíců sezóny a je v budoucnu', () => {
+    const akce = [mkAkce('jarni-trh', '2026-05-10')]; // květen ∈ jaro
+    expect(akceInSeason(akce, 'jaro', now).map((a) => a.slug)).toEqual(['jarni-trh']);
+  });
+
+  it('vynechá akci mimo měsíce sezóny', () => {
+    const akce = [mkAkce('letni-akce', '2026-07-10')]; // červenec ∉ jaro
+    expect(akceInSeason(akce, 'jaro', now)).toEqual([]);
+  });
+
+  it('vynechá akci v minulosti (pristi_vyskyt < now)', () => {
+    const akce = [mkAkce('probehla', '2026-03-01')]; // březen ∈ jaro, ale < 15.4.
+    expect(akceInSeason(akce, 'jaro', now)).toEqual([]);
+  });
+
+  it('vynechá akci s pristi_vyskyt null', () => {
+    expect(akceInSeason([mkAkce('bez-data', null)], 'jaro', now)).toEqual([]);
+  });
+
+  it('seřadí výsledek vzestupně dle pristi_vyskyt', () => {
+    const akce = [mkAkce('pozdejsi', '2026-05-20'), mkAkce('drivejsi', '2026-04-20')];
+    expect(akceInSeason(akce, 'jaro', now).map((a) => a.slug)).toEqual(['drivejsi', 'pozdejsi']);
+  });
+
+  it('respektuje hranice sezóny (zima = 12,1,2)', () => {
+    const winterNow = new Date('2026-01-10T10:00:00Z');
+    const akce = [mkAkce('unor', '2026-02-05'), mkAkce('brezen', '2026-03-05')];
+    expect(akceInSeason(akce, 'zima', winterNow).map((a) => a.slug)).toEqual(['unor']);
+  });
+
+  it('zahrne akci s pristi_vyskyt přesně dnes (hranice >=)', () => {
+    const akce = [mkAkce('dnes', '2026-04-15')];
+    expect(akceInSeason(akce, 'jaro', now).map((a) => a.slug)).toEqual(['dnes']);
   });
 });

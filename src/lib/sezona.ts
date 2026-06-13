@@ -2,6 +2,7 @@
 // Data: plodiny (listPlodiny) + statická kurátorská mapa howto→sezóna.
 
 import { listPlodiny, type Plodina } from './plodiny';
+import type { Akce } from './akce';
 
 export type SeasonSlug = 'jaro' | 'leto' | 'podzim' | 'zima';
 
@@ -128,4 +129,21 @@ export function seasonWorkLinks(slug: SeasonSlug): SeasonalLink[] {
 }
 export function seasonFaq(slug: SeasonSlug): { q: string; a: string }[] {
   return SEASON_CONTENT[slug].faq;
+}
+
+/** Nadcházející akce (pristi_vyskyt >= dnešek), jejichž měsíc spadá do sezóny;
+ *  seřazené vzestupně dle data. Čistá — bere `now` parametrem (testovatelnost). */
+export function akceInSeason(akce: Akce[], seasonSlug: SeasonSlug, now: Date): Akce[] {
+  const months = getSeason(seasonSlug)!.months;
+  const todayMs = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  return akce
+    .filter((a) => {
+      if (!a.pristi_vyskyt) return false;
+      const d = new Date(a.pristi_vyskyt);
+      if (Number.isNaN(d.getTime())) return false;
+      const dMs = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+      if (dMs < todayMs) return false;
+      return months.includes(d.getMonth() + 1);
+    })
+    .sort((a, b) => (a.pristi_vyskyt! < b.pristi_vyskyt! ? -1 : a.pristi_vyskyt! > b.pristi_vyskyt! ? 1 : 0));
 }
