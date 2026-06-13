@@ -7,7 +7,7 @@ import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
 import { getAllHlemyzdi } from '../lib/hlemyzdi';
 import { listPlodiny, listIndexableOdrudy, listSkupiny, listIndexableUdrzovatele } from '../lib/plodiny';
 import { listIndexableChoroby } from '../lib/choroby';
-import { expandedComparisonPairs } from '../lib/comparator';
+import { expandedComparisonPairs, implementComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
@@ -347,10 +347,9 @@ export const GET: APIRoute = async () => {
     urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.65', lastmod: STATIC_LASTMOD });
   }
 
-  // Tier-list pages (top-10 lists per segment).
-  urls.push({ loc: `${SITE_URL}/srovnani/top/`, changefreq: 'weekly', priority: '0.8', lastmod: STATIC_LASTMOD });
-  for (const t of (await import('../lib/tier-lists')).TIER_LISTS) {
-    urls.push({ loc: `${SITE_URL}/srovnani/top/${t.slug}/`, changefreq: 'weekly', priority: '0.75', lastmod: STATIC_LASTMOD });
+  // Implement (nářadí) páry — párované dle záběru, match limit z [combo]/getStaticPaths.
+  for (const pair of implementComparisonPairs(4000)) {
+    urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.6', lastmod: STATIC_LASTMOD });
   }
 
   for (const a of articlesDyn) {
