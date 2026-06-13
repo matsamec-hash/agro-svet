@@ -28,9 +28,15 @@ export interface SlovnikTerm {
   /** Externí URL pro hlubší vysvětlení (Wikipedia, vendor docs). */
   externalUrl?: string;
   externalLabel?: string;
+  /** Časté dotazy — renderují se jako sekce + FAQPage JSON-LD (snippet / AI Overview). */
+  faq?: { q: string; a: string }[];
+  /** Zajímavosti — méně známé fakty, renderují se jako odrážky. */
+  zajimavosti?: string[];
 }
 
-export const SLOVNIK: SlovnikTerm[] = [
+import { SLOVNIK_EXTRA } from './slovnik-extra';
+
+const SLOVNIK_CORE: SlovnikTerm[] = [
   // ── POHON / MOTOR / EMISE ───────────────────────────────────────────
   {
     slug: 'adblue',
@@ -9317,6 +9323,9 @@ Fermentovaný med (zkvasený med) nelze prodávat jako potravinářský med. Zpr
     related: ['zavickovani', 'medomet-pojem', 'vytaceni-medu', 'nektar-pojem'],
   },
 ];
+
+// Stávající hesla (beze změny) + 102 nových hesel.
+export const SLOVNIK: SlovnikTerm[] = [...SLOVNIK_CORE, ...SLOVNIK_EXTRA];
 
 export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {
   return SLOVNIK.find((t) => t.slug === slug);
