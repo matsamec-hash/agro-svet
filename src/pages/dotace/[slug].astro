@@ -9,6 +9,7 @@ import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 import { content } from '../../i18n/dotace';
 import { linkBase, fmtMoney } from '../../lib/dotace-format';
+import { resolveCrossLinks } from '../../lib/dotace-crosslinks';
 import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
 
 const locale = Astro.locals.locale ?? 'cs';
@@ -64,6 +65,11 @@ const articleJsonLd = {
   inLanguage: c.inLanguage,
 };
 const faqJsonLd = d.faq && d.faq.length > 0 ? faqPageSchema(d.faq) : null;
+const crossLinks = resolveCrossLinks(d.relatedLinks, base, [
+  { href: `${base}/stroje/traktory/`, label: c.ctaTractors, primary: true },
+  { href: `${base}/srovnani/`, label: c.ctaCompare, primary: false },
+  { href: `${base}/kalkulacka/leasing-traktoru/`, label: c.ctaLeasing, primary: false },
+]);
 ---
 
 <Layout
@@ -152,9 +158,9 @@ const faqJsonLd = d.faq && d.faq.length > 0 ? faqPageSchema(d.faq) : null;
         <span class="cc-kicker">{c.ctaKicker}</span>
         <h2>{c.ctaHeading}</h2>
         <div class="cc-actions">
-          <a class="cc-btn primary" href={`${base}/stroje/traktory/`}>{c.ctaTractors}</a>
-          <a class="cc-btn ghost" href={`${base}/srovnani/`}>{c.ctaCompare}</a>
-          <a class="cc-btn ghost" href={`${base}/kalkulacka/leasing-traktoru/`}>{c.ctaLeasing}</a>
+          {crossLinks.map((l) => (
+            <a class={`cc-btn ${l.primary ? 'primary' : 'ghost'}`} href={l.href}>{l.label}</a>
+          ))}
         </div>
       </div>
     </section>

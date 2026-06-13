@@ -148,6 +148,7 @@ export const GET: APIRoute = async () => {
     ['/prodejci/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/dotace/', 'weekly', '0.85', STATIC_LASTMOD],
     ['/dotace/kalendar-kol/', 'weekly', '0.75', STATIC_LASTMOD],
+    ['/dotace/jak-vybrat/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/jak-na-to/', 'weekly', '0.8', STATIC_LASTMOD],
     ['/media/', 'monthly', undefined, STATIC_LASTMOD],
     ['/redakce/', 'monthly', '0.5', STATIC_LASTMOD],

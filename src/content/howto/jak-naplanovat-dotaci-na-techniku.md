@@ -48,6 +48,6 @@ relatedLabel: "Přehled dotačních titulů a kalendář výzev"
 
 Dotace na techniku dokáže pokrýt podstatnou část investice do nového stroje — ale jen tehdy, když je žádost dobře připravená a podaná do správné výzvy. Nejčastější chybou není odmítnutí kvůli kvalitě záměru, ale **formální pochybení**: chybějící příloha, nesplněná podmínka způsobilosti nebo zmeškaný termín.
 
-Plánování dotace proto začíná dávno před vyplňováním formuláře. Nejprve musíte mít jasný investiční záměr, k němu najít vhodný dotační titul, prostudovat závazná Pravidla výzvy a ověřit, že je vůbec splňujete. Teprve pak má smysl shromažďovat přílohy a podávat žádost.
+Plánování dotace proto začíná dávno před vyplňováním formuláře. Nejprve musíte mít jasný investiční záměr, k němu najít vhodný dotační titul, prostudovat závazná Pravidla výzvy a ověřit, že je vůbec splňujete. Teprve pak má smysl shromažďovat přílohy a podávat žádost. Pokud teprve vybíráte vhodný titul, projděte si rozcestník [jak vybrat dotaci podle typu techniky](/dotace/jak-vybrat/) a [přehled dotačních titulů](/dotace/).
 
 Tento návod vás provede celým procesem krok za krokem — od definice záměru přes kontrolu podmínek a rozpočtu až po podání žádosti a archivaci dokladů. Konkrétní podmínky se mezi výzvami liší, proto vždy vycházejte z Pravidel aktuální výzvy.

@@ -1,0 +1,164 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema, itemListSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import { content } from '../../../i18n/dotace';
+import { linkBase } from '../../../lib/dotace-format';
+import { DECISION_ROWS, ELIGIBILITY } from '../../../lib/dotace-hub';
+
+const locale = Astro.locals.locale ?? 'cs';
+const base = linkBase(locale);
+// Hub je CS-jurisdikční (intervence SP SZP ČR, české právo). Pro ostatní locale
+// přesměruj na lokalizovaný přehled dotací — žádná jurisdikční kontaminace.
+if (locale !== 'cs') return Astro.redirect(`${base}/dotace/`, 302);
+
+const c = content.cs;
+const jv = c.jakVybrat;
+const canonical = `${SITE_URL}/dotace/jak-vybrat/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: c.crumbHome, url: `/` },
+  { name: c.crumbSelf, url: `/dotace/` },
+  { name: jv.crumb, url: canonical },
+]);
+const itemListJsonLd = itemListSchema(
+  DECISION_ROWS.map((r) => ({ url: `${SITE_URL}/dotace/${r.titulSlug}/`, name: `${r.intervence} — ${r.strojTyp}` })),
+  jv.itemListName,
+);
+---
+
+<Layout title={jv.metaTitle} description={jv.metaDescription} canonical={canonical}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+
+  <div class="jakvybrat-page">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">{c.crumbHome}</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="/dotace/">{c.crumbSelf}</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">{jv.crumb}</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">{jv.kicker}</span>
+      <h1>{jv.h1}</h1>
+      <p class="hero-lede">{jv.lede}</p>
+    </header>
+
+    <section class="block">
+      <h2 class="block-title">{jv.tableTitle}</h2>
+      <div class="table-scroll">
+        <table class="decision-table">
+          <thead>
+            <tr>
+              <th scope="col">{jv.thStroj}</th>
+              <th scope="col">{jv.thIntervence}</th>
+              <th scope="col">{jv.thOmezeni}</th>
+              <th scope="col"><span class="sr-only">Akce</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {DECISION_ROWS.map((row) => (
+              <tr>
+                <td class="td-stroj">{row.strojTyp}</td>
+                <td class="td-code"><span class="tp-code">{row.intervence}</span></td>
+                <td class="td-omezeni">{row.omezeni}</td>
+                <td class="td-actions">
+                  <a class="row-link" href={`/dotace/${row.titulSlug}/`}>{jv.rowDetailLink}</a>
+                  <a class="row-link ghost" href={row.strojeHref}>{jv.rowStrojeLink}</a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2 class="block-title">{jv.eligibilityTitle}</h2>
+      <div class="elig-grid">
+        {ELIGIBILITY.map((e) => (
+          <article class="elig-card">
+            <h3>{e.label}</h3>
+            <p>{e.popis}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="info-box">
+      <h2>{jv.stepsTitle}</h2>
+      <div class="steps-body" set:html={jv.stepsBodyHtml} />
+      <div class="ib-actions">
+        <a class="ib-btn primary" href="/dotace/">{c.crumbSelf}</a>
+        <a class="ib-btn ghost" href="/dotace/kalendar-kol/">{c.kalendarKol.crumbKalendar}</a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .jakvybrat-page {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --green:#0B7A3B; --green-soft:#E3F3EA; --amber:#7A6B0B; --amber-soft:#F5EFC8;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:920px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; flex-wrap:wrap; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:40px 44px; margin-bottom:32px; box-shadow:var(--sh-3); position:relative; overflow:hidden; }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(2rem,5vw,3.2rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:16px 0 0; line-height:1.05; position:relative; z-index:2; }
+  .hero-lede { color:#c8c8d0; max-width:680px; font-size:15.5px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
+
+  .block { margin-bottom:36px; }
+  .block-title { font:700 22px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0 0 16px; }
+
+  .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+  .table-scroll { overflow-x:auto; border:1px solid var(--line); border-radius:16px; box-shadow:var(--sh-1); background:var(--card); }
+  .decision-table { width:100%; border-collapse:collapse; min-width:680px; }
+  .decision-table thead th { text-align:left; font:600 10px 'Chakra Petch',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:14px 18px; border-bottom:1px solid var(--line); background:var(--bg-cream); }
+  .decision-table tbody tr { border-bottom:1px solid var(--line); }
+  .decision-table tbody tr:last-child { border-bottom:0; }
+  .decision-table td { padding:16px 18px; vertical-align:top; font-size:14px; line-height:1.5; color:#3a3a40; }
+  .td-stroj { font:700 14.5px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:-.01em; min-width:200px; }
+  .tp-code { display:inline-block; font:700 12px 'Chakra Petch',sans-serif; letter-spacing:.06em; background:var(--yellow-soft); color:var(--ink); padding:4px 10px; border-radius:6px; white-space:nowrap; }
+  .td-omezeni { color:var(--muted); max-width:280px; }
+  .td-actions { white-space:nowrap; }
+  .row-link { display:block; font:700 12px 'Chakra Petch',sans-serif; color:var(--ink); text-decoration:none; white-space:nowrap; }
+  .row-link:hover { text-decoration:underline; }
+  .row-link.ghost { color:var(--green); margin-top:6px; }
+
+  .elig-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; }
+  .elig-card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow:var(--sh-1); }
+  .elig-card h3 { font:700 16px 'Chakra Petch',sans-serif; color:var(--ink); margin:0 0 8px; letter-spacing:-.01em; }
+  .elig-card p { font-size:13.5px; color:#3a3a40; line-height:1.6; margin:0; }
+
+  .info-box { background:var(--bg-cream); border:1px solid var(--line); border-radius:18px; padding:28px 32px; }
+  .info-box h2 { font:700 22px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0 0 12px; }
+  .steps-body { font-size:14.5px; color:#3a3a40; line-height:1.7; margin:0 0 18px; }
+  .steps-body :global(a) { color:var(--green); }
+  .ib-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .ib-btn { padding:11px 18px; border-radius:10px; text-decoration:none; font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.04em; transition:.15s; }
+  .ib-btn.primary { background:#0A0A0B; color:#fff; }
+  .ib-btn.primary:hover { transform:translateY(-1px); }
+  .ib-btn.ghost { background:#fff; color:#0A0A0B; border:1px solid var(--line); }
+  .ib-btn.ghost:hover { background:var(--yellow-soft); border-color:var(--yellow); }
+
+  @media (max-width:640px) {
+    .jakvybrat-page { padding:20px 16px 60px; }
+    .hero { padding:30px 22px; }
+    .info-box { padding:22px 20px; }
+  }
+</style>

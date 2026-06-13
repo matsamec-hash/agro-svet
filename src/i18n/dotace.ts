@@ -38,6 +38,8 @@ export interface DotaceCopy {
   kalendarKol: DotaceKalendarKolCopy;
   /** Frame-copy pro detailovú stránku /dotace/[slug]. */
   detail: DotaceDetailCopy;
+  /** Rozhodovací hub /dotace/jak-vybrat/. */
+  jakVybrat: DotaceJakVybratCopy;
 }
 
 export interface DotaceKalendarKolCopy {
@@ -97,6 +99,32 @@ export interface DotaceDetailCopy {
   ctaLeasing: string;
   /** Jazyk pre Article JSON-LD (BCP-47). */
   inLanguage: string;
+}
+
+export interface DotaceJakVybratCopy {
+  metaTitle: string;
+  metaDescription: string;
+  crumb: string;
+  kicker: string;
+  h1: string;
+  lede: string;
+  /** Nadpis rozhodovací tabulky. */
+  tableTitle: string;
+  thStroj: string;
+  thIntervence: string;
+  thOmezeni: string;
+  /** Text odkazu „Detail" v řádku tabulky. */
+  rowDetailLink: string;
+  /** Text odkazu na kategorii strojů v řádku. */
+  rowStrojeLink: string;
+  /** Nadpis sekce eligibility. */
+  eligibilityTitle: string;
+  /** Nadpis „jak postupovat" rozcestníku. */
+  stepsTitle: string;
+  /** HTML odstavec s odkazem na master howto + kalendář. */
+  stepsBodyHtml: string;
+  /** Název ItemListu pro JSON-LD. */
+  itemListName: string;
 }
 
 const cs: DotaceCopy = {
@@ -172,6 +200,26 @@ const cs: DotaceCopy = {
       ctaLeasing: 'Kalkulačka leasingu',
       inLanguage: 'cs-CZ',
     },
+    jakVybrat: {
+      metaTitle: 'Jak vybrat dotaci na zemědělskou techniku — rozcestník SZIF',
+      metaDescription:
+        'Rozhodovací přehled: který dotační titul SP SZP 2023–2027 se hodí na váš typ techniky. Traktory, zpracování, lesní technika — podmínky, omezení, kdo může žádat.',
+      crumb: 'Jak vybrat dotaci',
+      kicker: 'SZIF · rozhodovací rozcestník',
+      h1: 'Jak vybrat dotaci na techniku',
+      lede: 'Podle typu investice se liší vhodný dotační titul i jeho podmínky. Tabulka níže propojuje typ techniky s odpovídající intervencí Strategického plánu SZP 2023–2027 a jejím klíčovým omezením.',
+      tableTitle: 'Typ investice → vhodná intervence',
+      thStroj: 'Co pořizujete',
+      thIntervence: 'Intervence',
+      thOmezeni: 'Klíčové omezení',
+      rowDetailLink: 'Detail dotace →',
+      rowStrojeLink: 'Katalog strojů →',
+      eligibilityTitle: 'Kdo může žádat',
+      stepsTitle: 'Jak postupovat',
+      stepsBodyHtml:
+        'Po výběru titulu si projděte <a href="/jak-na-to/jak-naplanovat-dotaci-na-techniku/">návod jak naplánovat dotaci na techniku</a> a sledujte termíny v <a href="/dotace/kalendar-kol/">kalendáři kol</a>. Závazné jsou výhradně Pravidla SZIF daného kola.',
+      itemListName: 'Dotační tituly podle typu techniky',
+    },
 };
 
 const sk: DotaceCopy = {
@@ -246,6 +294,26 @@ const sk: DotaceCopy = {
       ctaCompare: 'Porovnanie modelov',
       ctaLeasing: 'Kalkulačka lízingu',
       inLanguage: 'sk-SK',
+    },
+    jakVybrat: {
+      metaTitle: 'Ako vybrať dotáciu na poľnohospodársku techniku — rozcestník PPA',
+      metaDescription:
+        'Rozhodovací prehľad investičných dotácií PPA SR podľa typu investície. Vhodný titul, podmienky a kto môže žiadať.',
+      crumb: 'Ako vybrať dotáciu',
+      kicker: 'PPA · rozhodovací rozcestník',
+      h1: 'Ako vybrať dotáciu na techniku',
+      lede: 'Podľa typu investície sa líši vhodný dotačný titul aj jeho podmienky. Prehľad nižšie pomáha zorientovať sa v investičných tituloch PPA SR a ich podmienkach.',
+      tableTitle: 'Typ investície → vhodný titul',
+      thStroj: 'Čo obstarávate',
+      thIntervence: 'Titul',
+      thOmezeni: 'Kľúčové obmedzenie',
+      rowDetailLink: 'Detail dotácie →',
+      rowStrojeLink: 'Katalóg strojov →',
+      eligibilityTitle: 'Kto môže žiadať',
+      stepsTitle: 'Ako postupovať',
+      stepsBodyHtml:
+        'Po výbere titulu sledujte termíny v <a href="/sk/dotace/kalendar-kol/">kalendári kôl</a>. Záväzné sú výhradne podmienky výzvy PPA daného kola.',
+      itemListName: 'Dotačné tituly podľa typu techniky',
     },
 };
 
