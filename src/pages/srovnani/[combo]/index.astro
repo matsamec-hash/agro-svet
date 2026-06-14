@@ -25,7 +25,7 @@ import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
 import { comparisonInsights } from '../../../lib/comparison-insights';
 import { implementComparisonInsights } from '../../../lib/implement-comparison-insights';
-import { useTranslations, tf, getLocaleFromUrl, localizePath } from '../../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -151,7 +151,7 @@ function modelLink(m: typeof a): string {
     <nav class="breadcrumb" aria-label={tr('cat.sr.c.bcAria')}>
       <a href="/">{tr('cat.sr.c.bcHome')}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/srovnani/">{tr('cat.sr.c.bcSrovnani')}</a>
+      <a href={localizeInternalHref(locale, '/srovnani/')}>{tr('cat.sr.c.bcSrovnani')}</a>
       <span class="sep" aria-hidden="true">›</span>
       <span class="current">{aDisplay} vs {bDisplay}</span>
     </nav>
