@@ -8,7 +8,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
-import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, localizePath, tf, localizeInternalHref } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const isSk = locale === 'sk';
@@ -69,7 +69,7 @@ const collectionJsonLd = {
           Encyklopedie agro-svět shromažďuje {sorted.length} traktorů, kombajnů a další zemědělské techniky
           s technickými parametry, popisem a výkonem. Hledáte vysvětlení pojmů? Zamiřte do
           <a href="/slovnik/" style="color:#2d7a3e; font-weight:600; text-decoration:none;">zemědělského slovníku</a>;
-          pro řazení a srovnání strojů do <a href="/stroje/" style="color:#2d7a3e; font-weight:600; text-decoration:none;">katalogu strojů</a>.
+          pro řazení a srovnání strojů do <a href={localizeInternalHref(locale, '/stroje/')} style="color:#2d7a3e; font-weight:600; text-decoration:none;">katalogu strojů</a>.
           Databáze průběžně roste.
         </p>
       )}

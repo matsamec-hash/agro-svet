@@ -18,7 +18,7 @@ const { slug } = Astro.params;
 const item = slug ? (isSk ? await getEntry('pudaSk', slug) : await getEntry('puda', slug)) : undefined;
 if (!item) return new Response(null, { status: 404 });
 
-const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/puda/${slug}/`);
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/puda/${slug}/`, locale);
 
 const pageUrl = `${SITE_URL}${base}/puda/${slug}/`;
 const breadcrumbJsonLd = breadcrumbSchema([

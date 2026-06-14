@@ -22,7 +22,7 @@ const item = items.find((i) => i.id === slug);
 if (!item) return Astro.rewrite('/404');
 const { Content } = await render(item);
 import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
-const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/jak-na-to/${slug}/`);
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/jak-na-to/${slug}/`, locale);
 
 const related = items.filter((i) => i.id !== item.id).slice(0, 3);
 

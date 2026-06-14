@@ -6,6 +6,7 @@ import { SITE_URL } from '../../../lib/config';
 import kolaCs from '../../../data/dotace-kola.json';
 import kolaSk from '../../../data/dotace-kola-sk.json';
 import { content } from '../../../i18n/dotace';
+import { localizeInternalHref } from '../../../i18n/utils';
 import { linkBase, fmtDate } from '../../../lib/dotace-format';
 
 const locale = Astro.locals.locale ?? 'cs';
@@ -72,7 +73,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
       <p set:html={ck.infoBodyHtml} />
       <div class="ib-actions">
         {locale === 'cs' && (
-          <a class="ib-btn primary" href="/dotace/jak-vybrat/">{c.jakVybrat.h1}</a>
+          <a class="ib-btn primary" href={localizeInternalHref(locale, '/dotace/jak-vybrat/')}>{c.jakVybrat.h1}</a>
         )}
         <a class="ib-btn primary" href={`${linkBase(locale)}/dotace/`}>{ck.btnPrehled}</a>
         <a class="ib-btn ghost" href={`${linkBase(locale)}/kalkulacka/leasing-traktoru/`}>{ck.btnLeasing}</a>

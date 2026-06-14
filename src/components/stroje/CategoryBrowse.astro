@@ -1,6 +1,6 @@
 ---
 import { getAllBrands, seriesFamily, familyLabel, type StrojKategorie } from '../../lib/stroje';
-import { useTranslations, plural, tf, getLocaleFromUrl } from '../../i18n/utils';
+import { useTranslations, plural, tf, getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
 
 interface Props {
   category: StrojKategorie;
@@ -239,7 +239,7 @@ const NL = '\n';
   <nav class="breadcrumb" aria-label={tr('cat.bcAria')}>
     <a href="/">{tr('cat.bc.home')}</a>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-    <a href="/stroje/">{tr('cat.bc.tech')}</a>
+    <a href={localizeInternalHref(locale, '/stroje/')}>{tr('cat.bc.tech')}</a>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
     <span class="current">{catLabel}</span>
   </nav>
@@ -345,7 +345,7 @@ const NL = '\n';
               <img src={`/images/stroje/brands/${s.slug}.png`} alt={tf(locale, 'cat.brandLogoAlt', { brand: s.name })} loading="lazy" onerror="this.remove()" />
             </div>
             <div class="brand-name">
-              <h2><a href={`/stroje/${s.slug}/`}>{s.name}</a></h2>
+              <h2><a href={localizeInternalHref(locale, `/stroje/${s.slug}/`)}>{s.name}</a></h2>
               <div class="brand-meta">
                 <span>{s.country} · {tr('cat.brandFoundedPrefix')} <strong>{s.founded}</strong></span><span class="sep"></span>
                 <strong>{s.modelCount} {tr('cat.brandModelsLabel')}</strong> <span>{tf(locale, 'cat.brandSeriesLabel', { count: s.seriesCount })}</span>
@@ -359,7 +359,7 @@ const NL = '\n';
               </div>
             </div>
           </div>
-          <a class="brand-cta" href={`/stroje/${s.slug}/`}>{NL + tr('cat.brandCta') + NL}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a class="brand-cta" href={localizeInternalHref(locale, `/stroje/${s.slug}/`)}>{NL + tr('cat.brandCta') + NL}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
 
@@ -450,7 +450,7 @@ const NL = '\n';
           })}
         </div>
 
-        <a href={`/stroje/${s.slug}/`} class="show-all-cta">
+        <a href={localizeInternalHref(locale, `/stroje/${s.slug}/`)} class="show-all-cta">
           <span class="sac-t">{NL}{tr('cat.showAllPrefix')} <strong>{s.modelCount} {tr('cat.showAllModels')}</strong> {s.name}
             {s.legacyCount > 0 && (
               <span class="sac-d">{tr('cat.showAllLegacy')}{s.legacyExamples.length > 0 ? ` (${s.legacyExamples.join(', ')})` : ''}</span>

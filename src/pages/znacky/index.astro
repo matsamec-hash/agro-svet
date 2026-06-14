@@ -6,7 +6,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
-import { useTranslations, tf, getLocaleFromUrl, localizePath } from '../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -52,7 +52,7 @@ const itemListJsonLd = {
 
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px;">
       {sorted.map(znacka => (
-        <a href={`/znacky/${znacka.id}/`} style="display:block; text-decoration:none; color:inherit; border:none; border-radius:14px; padding:24px; background:#fff; box-shadow:0 0 10px rgba(0,0,0,.12); transition:box-shadow .2s, transform .2s;" class="brand-card">
+        <a href={localizeInternalHref(locale, `/znacky/${znacka.id}/`)} style="display:block; text-decoration:none; color:inherit; border:none; border-radius:14px; padding:24px; background:#fff; box-shadow:0 0 10px rgba(0,0,0,.12); transition:box-shadow .2s, transform .2s;" class="brand-card">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
             <h3 style="font-size:20px; font-weight:400; color:#1a1a1a;">{znacka.data.name}</h3>
             <span style="font-size:12px; color:#767676; white-space:nowrap;">{znacka.data.zeme}</span>

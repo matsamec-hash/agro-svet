@@ -9,6 +9,9 @@ import { createAnonClient } from '../lib/supabase';
 import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 import { imgSrcset } from '../lib/image-variants';
+import { getLocaleFromUrl, localizeInternalHref } from '../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
 // Edge cache: 5min s-maxage + 30min SWR. Většina requestů HIT na CF edge,
 // nový článek se objeví do ~5min (akceptovatelný trade-off vs 0 Worker
@@ -82,7 +85,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       <!-- Left: large featured card spanning 2 rows -->
       {featured && (
         <div class="hero-card hero-main hero-wrap">
-          <a href={`/novinky/${featured.slug}/`} class="hero-link">
+          <a href={localizeInternalHref(locale, `/novinky/${featured.slug}/`)} class="hero-link">
             {featured.featured_image_url && (() => {
               const v = imgSrcset(featured.featured_image_url, '(max-width: 900px) 100vw, 800px', 800);
               return <img src={v.src} srcset={v.srcset} sizes={v.sizes} alt={featured.title} width="800" height="600" fetchpriority="high" decoding="async" style={`object-position: ${featured.focal_point?.x ?? 50}% ${featured.focal_point?.y ?? 50}%;`} />;
@@ -93,8 +96,8 @@ const itemListJsonLd = homepageItems.length > 0 ? {
             </div>
           </a>
           <div class="hero-tags">
-            <a href="/novinky/" class="hero-tag">Novinky</a>
-            {featured.category && <a href={`/novinky/kategorie/${featured.category}/`} class="hero-tag">{featured.category}</a>}
+            <a href={localizeInternalHref(locale, '/novinky/')} class="hero-tag">Novinky</a>
+            {featured.category && <a href={localizeInternalHref(locale, `/novinky/kategorie/${featured.category}/`)} class="hero-tag">{featured.category}</a>}
           </div>
         </div>
       )}
@@ -102,7 +105,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       <!-- Right: 4 small cards in 2x2 grid -->
       {heroRight.map(article => (
         <div class="hero-card hero-small hero-wrap">
-          <a href={`/novinky/${article.slug}/`} class="hero-link">
+          <a href={localizeInternalHref(locale, `/novinky/${article.slug}/`)} class="hero-link">
             {article.featured_image_url
               ? (() => {
                   const v = imgSrcset(article.featured_image_url, '(max-width: 900px) 50vw, 400px');
@@ -163,7 +166,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       <div>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Zemědělská půda</h2>
       </div>
-      <a href="/puda/" class="link-cta">Zobrazit celou sekci →</a>
+      <a href={localizeInternalHref(locale, '/puda/')} class="link-cta">Zobrazit celou sekci →</a>
     </div>
     <HomeWeather mode="puda" />
   </section>
@@ -174,7 +177,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       <div>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Trhy a komodity</h2>
       </div>
-      <a href="/statistiky/" class="link-cta">Zobrazit celou sekci →</a>
+      <a href={localizeInternalHref(locale, '/statistiky/')} class="link-cta">Zobrazit celou sekci →</a>
     </div>
     <CommodityChart commodityNames={COMMODITY_NAMES} />
   </section>

@@ -9,6 +9,7 @@ import { SITE_URL } from '../../lib/config';
 import kolaCs from '../../data/dotace-kola.json';
 import kolaSk from '../../data/dotace-kola-sk.json';
 import { content } from '../../i18n/dotace';
+import { localizeInternalHref } from '../../i18n/utils';
 import { linkBase, fmtMoney, fmtDate } from '../../lib/dotace-format';
 
 const locale = Astro.locals.locale ?? 'cs';
@@ -54,7 +55,7 @@ const statusLabel = c.statusLabel;
       <p class="hero-lede" set:html={c.ledeHtml}></p>
       {locale === 'cs' && (
         <p class="hero-hublink">
-          <a href="/dotace/jak-vybrat/">{c.jakVybrat.h1} →</a>
+          <a href={localizeInternalHref(locale, '/dotace/jak-vybrat/')}>{c.jakVybrat.h1} →</a>
         </p>
       )}
     </header>

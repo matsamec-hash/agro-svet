@@ -27,7 +27,7 @@ if (!titul) return new Response(null, { status: 404 });
 await render(titul);
 const d = titul.data;
 const base = linkBase(locale);
-const contentHtml = await renderMarkdownWithLinks(titul.body ?? '', `${base}/dotace/${d.slug}/`);
+const contentHtml = await renderMarkdownWithLinks(titul.body ?? '', `${base}/dotace/${d.slug}/`, locale);
 // Pre cs posielame explicitný absolútny canonical (byte-identické s pôvodným).
 // Pre sk Layout doplní self-canonical z lokalizovanej cesty (/dotace je pre sk
 // odomknuté a indexovateľné). base='' pre cs, '/sk' pre sk.

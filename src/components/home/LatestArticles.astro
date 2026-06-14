@@ -2,6 +2,9 @@
 import ArticleCard from '../ArticleCard.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../../lib/config';
+import { getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
 const supabase = createAnonClient();
 const { data: articles } = await supabase
@@ -21,7 +24,7 @@ const latest = articles ?? [];
     <div>
       <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Novinky</h2>
     </div>
-    <a href="/novinky/" class="link-cta">Všechny novinky →</a>
+    <a href={localizeInternalHref(locale, '/novinky/')} class="link-cta">Všechny novinky →</a>
   </div>
   <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
     {latest.map(article => (

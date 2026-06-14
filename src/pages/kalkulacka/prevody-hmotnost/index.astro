@@ -8,6 +8,7 @@ import { SITE_URL } from '../../../lib/config';
 import WeightConverter from '../../../components/WeightConverter.astro';
 import { content } from '../../../i18n/kalkulacka/prevody-hmotnost';
 import { crumbs } from '../../../i18n/kalkulacka/common';
+import { localizeInternalHref } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? 'cs';
 const c = content[locale] ?? content.cs;
@@ -147,12 +148,12 @@ const faqJsonLd = faqPageSchema(faqItems);
     <aside class="ph-related">
       <h2>Další užitečné stránky</h2>
       <ul class="ph-related-list">
-        <li><a href="/kalkulacka/prevody-jednotek/">📐 Převody jednotek plochy</a></li>
+        <li><a href={localizeInternalHref(locale, '/kalkulacka/prevody-jednotek/')}>📐 Převody jednotek plochy</a></li>
         <li><a href="/slovnik/tuna/">⚖️ Tuna (t) — detail jednotky</a></li>
         <li><a href="/slovnik/q-cent/">⚖️ Cent (q) — detail jednotky</a></li>
         <li><a href="/slovnik/busl/">🌾 Bušl — detail s USDA tabulkou</a></li>
         <li><a href="/slovnik/hektolitr/">🌾 Hektolitr — váha obilí</a></li>
-        <li><a href="/kalkulacka/naklady-na-hektar/">💰 Náklady na hektar</a></li>
+        <li><a href={localizeInternalHref(locale, '/kalkulacka/naklady-na-hektar/')}>💰 Náklady na hektar</a></li>
       </ul>
     </aside>
   </div>
