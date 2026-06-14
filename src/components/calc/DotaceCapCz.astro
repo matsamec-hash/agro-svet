@@ -1,5 +1,8 @@
 ---
 import { KRAJE, CITLIVE_SEKTORY, SAZBY } from '../../lib/cap-dotace';
+import { getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
 interface Props {
   faqItems: { q: string; a: string }[];
@@ -12,7 +15,7 @@ const { faqItems } = Astro.props;
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a>
       <span aria-hidden="true">›</span>
-      <a href="/kalkulacka/">Kalkulačky</a>
+      <a href={localizeInternalHref(locale, '/kalkulacka/')}>Kalkulačky</a>
       <span aria-hidden="true">›</span>
       <span class="current">Dotace CAP</span>
     </nav>
@@ -112,8 +115,8 @@ const { faqItems } = Astro.props;
       </div>
 
       <div class="result-cta">
-        <a href="/dotace/" class="cta-link">Přehled dotací z PRV →</a>
-        <a href="/dotace/kalendar-kol/" class="cta-link">Kalendář kol →</a>
+        <a href={localizeInternalHref(locale, '/dotace/')} class="cta-link">Přehled dotací z PRV →</a>
+        <a href={localizeInternalHref(locale, '/dotace/kalendar-kol/')} class="cta-link">Kalendář kol →</a>
       </div>
     </div>
 

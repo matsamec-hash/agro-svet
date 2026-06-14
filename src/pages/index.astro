@@ -9,6 +9,9 @@ import { createAnonClient } from '../lib/supabase';
 import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 import { imgSrcset } from '../lib/image-variants';
+import { getLocaleFromUrl, localizeInternalHref } from '../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
 // Edge cache: 5min s-maxage + 30min SWR. Většina requestů HIT na CF edge,
 // nový článek se objeví do ~5min (akceptovatelný trade-off vs 0 Worker
@@ -93,7 +96,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
             </div>
           </a>
           <div class="hero-tags">
-            <a href="/novinky/" class="hero-tag">Novinky</a>
+            <a href={localizeInternalHref(locale, '/novinky/')} class="hero-tag">Novinky</a>
             {featured.category && <a href={`/novinky/kategorie/${featured.category}/`} class="hero-tag">{featured.category}</a>}
           </div>
         </div>
@@ -163,7 +166,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       <div>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Zemědělská půda</h2>
       </div>
-      <a href="/puda/" class="link-cta">Zobrazit celou sekci →</a>
+      <a href={localizeInternalHref(locale, '/puda/')} class="link-cta">Zobrazit celou sekci →</a>
     </div>
     <HomeWeather mode="puda" />
   </section>
@@ -174,7 +177,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       <div>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Trhy a komodity</h2>
       </div>
-      <a href="/statistiky/" class="link-cta">Zobrazit celou sekci →</a>
+      <a href={localizeInternalHref(locale, '/statistiky/')} class="link-cta">Zobrazit celou sekci →</a>
     </div>
     <CommodityChart commodityNames={COMMODITY_NAMES} />
   </section>
