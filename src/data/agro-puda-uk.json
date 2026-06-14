@@ -19,10 +19,10 @@
       "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA"
     },
     {
-      "val": "+60",
-      "unit": "%",
-      "lbl": "зростання ціни гектара з відкриття ринку",
-      "trend": "з липня 2021 по червень 2025",
+      "val": "≈60,7",
+      "unit": "тис. грн/га",
+      "lbl": "середня ціна гектара (червень 2025)",
+      "trend": "зросла з ≈33,7 тис. грн наприкінці 2021 (за оцінкою Опендатабот — приблизно +60 % від відкриття ринку)",
       "source": "Опендатабот",
       "url": "https://opendatabot.ua/en/analytics/land-2025"
     },
@@ -92,33 +92,33 @@
   "plodiny": [
     {
       "crop": "Соняшник",
-      "hectares": 6100000,
-      "source": "USDA FAS (МР 2024/25)",
-      "url": "https://www.fas.usda.gov/data/ukraine-oilseeds-and-products-annual-2"
+      "hectares": 5300000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
     },
     {
       "crop": "Пшениця",
-      "hectares": 4530000,
-      "source": "USDA FAS (МР 2024/25)",
-      "url": "https://www.fas.usda.gov/data/production/up"
+      "hectares": 4500000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
     },
     {
       "crop": "Кукурудза",
-      "hectares": 4300000,
-      "source": "USDA FAS (МР 2024/25)",
-      "url": "https://www.fas.usda.gov/data/production/up"
+      "hectares": 3900000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
     },
     {
       "crop": "Соя",
-      "hectares": 3000000,
-      "source": "USDA FAS (МР 2024/25)",
-      "url": "https://www.fas.usda.gov/data/ukraine-oilseeds-and-products-annual-2"
+      "hectares": 2200000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
     },
     {
       "crop": "Ячмінь",
-      "hectares": 900000,
-      "source": "USDA FAS (МР 2024/25)",
-      "url": "https://www.fas.usda.gov/data/production/up"
+      "hectares": 1400000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
     }
   ],
   "facts": [
@@ -180,7 +180,7 @@
     {
       "lbl": "Окупація сільгоспземель",
       "pct": 20,
-      "detail": "За оцінками, близько 20 % сільгоспугідь України було під російською окупацією; орієнтовно 3,5 млн га орних земель втрачено через окупацію (Project Expedite Justice; Geographical, 2024)."
+      "detail": "За оцінкою Європейського парламенту (EPRS, 2024), під російською окупацією перебуває близько 20 % найродючіших сільгоспугідь України; ще ≈2 млн га орних земель непридатні для обробітку через замінування."
     }
   ],
   "sources": [
@@ -190,6 +190,7 @@
     { "label": "Опендатабот — моніторинг ринку землі", "url": "https://opendatabot.ua/en/analytics/land-2025" },
     { "label": "Світовий банк — World Development Indicators", "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA" },
     { "label": "USDA FAS — Foreign Agricultural Service (Ukraine)", "url": "https://www.fas.usda.gov/data/production/up" },
-    { "label": "VoxUkraine — Ukraine's agriculture and farmland market", "url": "https://voxukraine.org/en/ukraines-agriculture-and-farmland-market-the-impact-of-war" }
+    { "label": "VoxUkraine — Ukraine's agriculture and farmland market", "url": "https://voxukraine.org/en/ukraines-agriculture-and-farmland-market-the-impact-of-war" },
+    { "label": "Європейський парламент (EPRS) — Ukrainian agriculture (2024)", "url": "https://www.europarl.europa.eu/RegData/etudes/BRIE/2024/760432/EPRS_BRI(2024)760432_EN.pdf" }
   ]
 }
