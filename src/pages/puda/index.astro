@@ -12,6 +12,7 @@ import { getCollection } from 'astro:content';
 import { useTranslations } from '../../i18n/utils';
 import { pudaBigNumbers, pudaCenaInsight } from '../../lib/puda-derived';
 import pudaSkData from '../../data/agro-puda-sk.json';
+import PudaUk from '../../components/puda/PudaUk.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
@@ -96,6 +97,7 @@ const donutSegs = struktura.map((s) => {
 });
 ---
 
+{locale === 'uk' ? <PudaUk /> : (
 <Layout title={isSk ? 'Cena poľnohospodárskej pôdy na Slovensku — Eurostat dáta' : 'Zemědělská půda v ČR — fakta, ceny, eroze'} description={isSk ? 'Aktuálne ceny a nájmy poľnohospodárskej pôdy na Slovensku (Eurostat) a štruktúra plodín.' : 'Aktuální data o zemědělské půdě v ČR: cena 372 550 Kč/ha, úbytek 10,8 ha denně, 60 % polí ohroženo vodní erozí. Ornice, eroze, výživa a ochrana půdního fondu.'}>
   <div class="puda-root">
 
@@ -460,6 +462,7 @@ const donutSegs = struktura.map((s) => {
 
   </div>
 </Layout>
+)}
 
 <style>
   .puda-root {
