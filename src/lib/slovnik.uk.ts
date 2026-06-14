@@ -1,6 +1,6 @@
 // Ukrajinská (uk) varianta slovníku — překlad CS hesel (slug = cs slug).
-// Naplní se v Tasku 5 (subagent-driven překlad). Zatím prázdné → uk routy 404
-// (sekce není launchnutá, noindex).
+// 306 hesel, slug/kategorie/related/čísla identické s CS (SLOVNIK).
+// Generováno subagent-driven překladem + UK review bránou; udržuj přes oba kroky.
 import type { SlovnikTerm, SlovnikKategorie } from './slovnik';
 
 export const SLOVNIK_UK: SlovnikTerm[] = [
