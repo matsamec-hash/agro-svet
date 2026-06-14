@@ -32,3 +32,17 @@ describe('UK fáze 3 launch (jak-na-to)', () => {
     expect(isLaunchedPath('cs', '/jak-na-to/boj-s-varroazou/')).toBe(false);
   });
 });
+
+describe('UK fáze 4a launch (slovnik)', () => {
+  it('/slovnik je launchnuté pro uk', () => {
+    expect(LAUNCHED_PREFIXES.uk).toContain('/slovnik');
+    expect(isLaunchedPath('uk', '/slovnik/')).toBe(true);
+    expect(isLaunchedPath('uk', '/slovnik/adblue/')).toBe(true);
+  });
+  it('/slovnik není locked sekce', () => {
+    expect(isLockedSectionPath('/slovnik')).toBe(false);
+  });
+  it('cs /slovnik nedostane gating-noindex', () => {
+    expect(isLaunchedPath('cs', '/slovnik/adblue/')).toBe(false);
+  });
+});
