@@ -617,6 +617,14 @@ const uk: Record<string, string> = {
   'puda.bn.rust.lbl': 'Зростання ціни землі',
   'puda.bn.najem.lbl': 'Середня орендна плата',
   'puda.back': '← Назад до землі',
+  'puda.uk.crumbHome': 'Головна',
+  'puda.uk.crumbSelf': 'Сільськогосподарська земля',
+  'puda.uk.h.reforma': 'Реформа ринку землі',
+  'puda.uk.h.cena': 'Ціна сільськогосподарської землі',
+  'puda.uk.h.najem': 'Оренда землі',
+  'puda.uk.h.plodiny': 'Основні культури',
+  'puda.uk.h.ohrozeni': 'Загрози для ґрунтів',
+  'puda.uk.sources.h': 'Джерела даних',
 
   // — detail stroje (model) —
   'cat.s.d.singular.traktory': 'трактор',
