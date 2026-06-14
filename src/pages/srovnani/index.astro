@@ -116,7 +116,7 @@ const js = {
         <p>{tr('cat.sr.pickerP')}</p>
       </header>
 
-      <form class="picker-form" id="picker-form">
+      <form class="picker-form" id="picker-form" data-srovnani-base={localizePath(locale, '/srovnani/')}>
         <div class="picker-grid">
           <fieldset class="pck-side pck-side-a">
             <legend>{tr('cat.sr.modelA')}</legend>
@@ -174,7 +174,7 @@ const js = {
         </div>
         <div class="card-grid">
           {tractorPairs.slice(0, 30).map((p) => (
-            <a href={`/srovnani/${p.combo}/`} class="cmp-card">
+            <a href={localizePath(locale, `/srovnani/${p.combo}/`)} class="cmp-card">
               <div class="cc-models">
                 <div class="cc-model">
                   <div class="cc-brand">{p.a.brand_name}</div>
@@ -206,7 +206,7 @@ const js = {
         </div>
         <div class="card-grid">
           {combinePairs.slice(0, 24).map((p) => (
-            <a href={`/srovnani/${p.combo}/`} class="cmp-card">
+            <a href={localizePath(locale, `/srovnani/${p.combo}/`)} class="cmp-card">
               <div class="cc-models">
                 <div class="cc-model">
                   <div class="cc-brand">{p.a.brand_name}</div>
@@ -350,7 +350,7 @@ const js = {
         if (!a || !b || a === b) return;
         const [first, second] = a < b ? [a, b] : [b, a];
         const combo = first + PAIR_DELIMITER + second;
-        window.location.href = '/srovnani/' + combo + '/';
+        window.location.href = form.dataset.srovnaniBase + combo + '/';
       });
     })();
   </script>

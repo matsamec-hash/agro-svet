@@ -67,7 +67,7 @@ const itemListJsonLd = itemListSchema(
                 <td class="td-code"><span class="tp-code">{row.intervence}</span></td>
                 <td class="td-omezeni">{row.omezeni}</td>
                 <td class="td-actions">
-                  <a class="row-link" href={`/dotace/${row.titulSlug}/`}>{jv.rowDetailLink}</a>
+                  <a class="row-link" href={localizeInternalHref(locale, `/dotace/${row.titulSlug}/`)}>{jv.rowDetailLink}</a>
                   <a class="row-link ghost" href={row.strojeHref}>{jv.rowStrojeLink}</a>
                 </td>
               </tr>
