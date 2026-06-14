@@ -1,36 +1,46 @@
 ---
-export const prerender = true;
+// SSR (prerender:false): middleware servíruje /uk a /sk verzi přes locals.locale.
+// Data + chrome lokalizované; cs render = dnešní literály VERBATIM (byte-identita).
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { SLOVNIK, KATEGORIE_LABELS, type SlovnikKategorie } from '../../lib/slovnik';
+import { getSlovnik, getKategorieLabels, type SlovnikKategorie } from '../../lib/slovnik';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { useTranslations, getLocaleFromUrl, tf } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/slovnik/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const base = locale === 'uk' ? '/uk' : locale === 'sk' ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
-const byCategory = SLOVNIK.reduce((acc, t) => {
-  if (!acc[t.kategorie]) acc[t.kategorie] = [];
-  acc[t.kategorie].push(t);
+const SLOVNIK = getSlovnik(locale);
+const KATEGORIE_LABELS = getKategorieLabels(locale);
+const canonical = `${SITE_URL}${base}/slovnik/`;
+
+const byCategory = SLOVNIK.reduce((acc, t2) => {
+  if (!acc[t2.kategorie]) acc[t2.kategorie] = [];
+  acc[t2.kategorie].push(t2);
   return acc;
 }, {} as Record<SlovnikKategorie, typeof SLOVNIK>);
 
 for (const cat in byCategory) {
-  byCategory[cat as SlovnikKategorie].sort((a, b) => a.term.localeCompare(b.term, 'cs'));
+  byCategory[cat as SlovnikKategorie].sort((a, b) => a.term.localeCompare(b.term, locale));
 }
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Slovník', url: canonical },
+  { name: t('slovnik.crumb.home'), url: `${base}/` },
+  { name: t('slovnik.crumb.glossary'), url: canonical },
 ]);
 
 const itemListJsonLd = itemListSchema(
-  SLOVNIK.map((t) => ({ url: `${SITE_URL}/slovnik/${t.slug}/`, name: t.term })),
-  'Slovník zemědělských pojmů',
+  SLOVNIK.map((term) => ({ url: `${SITE_URL}${base}/slovnik/${term.slug}/`, name: term.term })),
+  t('slovnik.index.collName'),
 );
 ---
 
 <Layout
-  title="Slovník zemědělských pojmů"
-  description={`Definice ${SLOVNIK.length}+ pojmů z oblasti zemědělství, techniky, dotací a precision farming. Co je AdBlue, CVT, ISOBUS, RTK GPS, EKO-platba, BISS a další.`}
+  title={t('slovnik.index.title')}
+  description={tf(locale, 'slovnik.index.desc', { n: SLOVNIK.length })}
   canonical={canonical}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -38,16 +48,16 @@ const itemListJsonLd = itemListSchema(
 
   <div class="slv-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={`${base}/`}>{t('slovnik.crumb.home')}</a>
       <span aria-hidden="true">›</span>
-      <span class="current">Slovník</span>
+      <span class="current">{t('slovnik.crumb.glossary')}</span>
     </nav>
 
     <header class="slv-head">
-      <span class="kicker">Slovník · {SLOVNIK.length} pojmů</span>
-      <h1>Slovník zemědělských pojmů</h1>
+      <span class="kicker">{tf(locale, 'slovnik.index.kicker', { n: SLOVNIK.length })}</span>
+      <h1>{t('slovnik.index.h1')}</h1>
       <p class="lede">
-        Definice technických termínů — od AdBlue přes ISOBUS po BISS a EKO-platbu. Cíleno na zemědělce, dealery, agronomy i začátečníky.
+        {t('slovnik.index.lede')}
       </p>
     </header>
 
@@ -55,11 +65,11 @@ const itemListJsonLd = itemListSchema(
       <section class="slv-cat">
         <h2>{KATEGORIE_LABELS[cat as SlovnikKategorie]}</h2>
         <div class="slv-grid">
-          {terms.map((t) => (
-            <a href={`/slovnik/${t.slug}/`} class="slv-card">
-              <h3>{t.term}</h3>
-              {t.alias && t.alias.length > 0 && <span class="slv-alias">{t.alias.slice(0, 2).join(' · ')}</span>}
-              <p>{t.shortDef.slice(0, 140)}{t.shortDef.length > 140 ? '…' : ''}</p>
+          {terms.map((term) => (
+            <a href={`${base}/slovnik/${term.slug}/`} class="slv-card">
+              <h3>{term.term}</h3>
+              {term.alias && term.alias.length > 0 && <span class="slv-alias">{term.alias.slice(0, 2).join(' · ')}</span>}
+              <p>{term.shortDef.slice(0, 140)}{term.shortDef.length > 140 ? '…' : ''}</p>
             </a>
           ))}
         </div>

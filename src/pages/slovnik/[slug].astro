@@ -1,25 +1,29 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { SLOVNIK, getSlovnikTerm, KATEGORIE_LABELS } from '../../lib/slovnik';
+import { getSlovnik, getSlovnikTerm, getKategorieLabels } from '../../lib/slovnik';
 import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 import AreaConverter from '../../components/AreaConverter.astro';
 import WeightConverter from '../../components/WeightConverter.astro';
 import { injectLinks, createLinkContext } from '../../lib/auto-linker';
+import { useTranslations, getLocaleFromUrl, tf } from '../../i18n/utils';
 
-export function getStaticPaths() {
-  return SLOVNIK.map((t) => ({ params: { slug: t.slug } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const base = locale === 'cs' ? '' : `/${locale}`;
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const term = getSlovnikTerm(slug!);
+const term = getSlovnikTerm(slug!, locale);
 if (!term) return Astro.rewrite('/404');
 
-const pageUrl = `${SITE_URL}/slovnik/${term.slug}/`;
+const SLOVNIK = getSlovnik(locale);
+const KATEGORIE_LABELS = getKategorieLabels(locale);
+const pageUrl = `${SITE_URL}${base}/slovnik/${term.slug}/`;
 const relatedTerms = (term.related ?? [])
-  .map((s) => getSlovnikTerm(s))
-  .filter((t): t is NonNullable<typeof t> => !!t);
+  .map((s) => getSlovnikTerm(s, locale))
+  .filter((rt): rt is NonNullable<typeof rt> => !!rt);
 
 // Mapování slovnik slug → výchozí jednotka pro inline AreaConverter.
 // Jen slugy v této mapě dostanou widget (jen jednotky plochy).
@@ -48,8 +52,8 @@ const WEIGHT_UNIT_BY_SLUG: Record<string, string> = {
 const weightUnit = WEIGHT_UNIT_BY_SLUG[term.slug];
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Slovník', url: '/slovnik/' },
+  { name: t('slovnik.crumb.home'), url: `${base}/` },
+  { name: t('slovnik.crumb.glossary'), url: `${base}/slovnik/` },
   { name: term.term, url: pageUrl },
 ]);
 
@@ -62,8 +66,8 @@ const definedTermJsonLd = {
   description: term.shortDef,
   inDefinedTermSet: {
     '@type': 'DefinedTermSet',
-    name: 'Slovník zemědělských pojmů',
-    url: `${SITE_URL}/slovnik/`,
+    name: t('slovnik.detail.definedTermSet'),
+    url: `${SITE_URL}${base}/slovnik/`,
   },
   url: pageUrl,
   ...(term.alias && term.alias.length > 0 ? { alternateName: term.alias } : {}),
@@ -73,7 +77,7 @@ const definedTermJsonLd = {
 const faqJsonLd = term.faq && term.faq.length > 0 ? faqPageSchema(term.faq) : null;
 
 // Build slug → display name lookup for wikilink resolution.
-const SLOVNIK_BY_SLUG = new Map(SLOVNIK.map((t) => [t.slug, t.term]));
+const SLOVNIK_BY_SLUG = new Map(SLOVNIK.map((tt) => [tt.slug, tt.term]));
 
 // Render pipeline pro každý paragraph:
 // 1. `[[slug]]` wikilinks → <a href="/slovnik/slug/">{term.term}</a>
@@ -86,18 +90,20 @@ const linkCtx = createLinkContext(pageUrl);
 const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
   // Wikilinks first — pre-resolved <a> tags se ochrání před auto-linkerem
   // (PROTECTED_TAGS zahrnuje 'a').
-  const withWikilinks = para.replace(/\[\[([a-z0-9-]+)\]\]/gi, (m, slug) => {
-    const name = SLOVNIK_BY_SLUG.get(slug);
+  const withWikilinks = para.replace(/\[\[([a-z0-9-]+)\]\]/gi, (m, s) => {
+    const name = SLOVNIK_BY_SLUG.get(s);
     if (!name) return m; // unknown slug — leave literal
-    return `<a href="/slovnik/${slug}/">${name}</a>`;
+    return `<a href="${base}/slovnik/${s}/">${name}</a>`;
   });
   const withBold = withWikilinks.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  return injectLinks(withBold, linkCtx);
+  // CS-only auto-linker: injektovat CS značky/modely/slovník odkazy jen do CS textu.
+  // Pro uk/sk by to vložilo CS entity do přeloženého textu — vynecháno.
+  return locale === 'cs' ? injectLinks(withBold, linkCtx) : withBold;
 });
 ---
 
 <Layout
-  title={`${term.term} — co to je? Vysvětlení`}
+  title={`${term.term}${t('slovnik.detail.titleSuffix')}`}
   description={term.shortDef}
   canonical={pageUrl}
   ogType="article"
@@ -108,9 +114,9 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
 
   <article class="slv-detail-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={`${base}/`}>{t('slovnik.crumb.home')}</a>
       <span aria-hidden="true">›</span>
-      <a href="/slovnik/">Slovník</a>
+      <a href={`${base}/slovnik/`}>{t('slovnik.crumb.glossary')}</a>
       <span aria-hidden="true">›</span>
       <span class="current">{term.term}</span>
     </nav>
@@ -119,7 +125,7 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
       <span class="kicker">{KATEGORIE_LABELS[term.kategorie]}</span>
       <h1>{term.term}</h1>
       {term.alias && term.alias.length > 0 && (
-        <div class="slv-d-alias">Také: {term.alias.map((a) => <span>{a}</span>).reduce((acc, el, i) => i === 0 ? [el] : [...acc, <>, </>, el], [] as any[])}</div>
+        <div class="slv-d-alias">{t('slovnik.detail.also')} {term.alias.map((a) => <span>{a}</span>).reduce((acc, el, i) => i === 0 ? [el] : [...acc, <>, </>, el], [] as any[])}</div>
       )}
       <p class="slv-d-short"><strong>{term.shortDef}</strong></p>
     </header>
@@ -128,8 +134,8 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
       <AreaConverter
         defaultUnit={areaUnit}
         defaultValue={1}
-        heading={`Převodník — ${term.term} na další jednotky plochy`}
-        caption="Zadej hodnotu a vyber jednotku. Převody se přepočítají okamžitě. Pro starší jednotky (jitro, korec, strych) jsou použité standardizované hodnoty z roku 1764."
+        heading={tf(locale, 'slovnik.detail.areaHeading', { term: term.term })}
+        caption={t('slovnik.detail.areaCaption')}
       />
     )}
 
@@ -137,8 +143,8 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
       <WeightConverter
         defaultUnit={weightUnit}
         defaultValue={1}
-        heading={`Převodník — ${term.term} na další jednotky hmotnosti`}
-        caption="Bušl má různou hmotnost podle komodity — vyber konkrétní plodinu z dropdownu. Hodnoty bušlu odpovídají USDA standardu."
+        heading={tf(locale, 'slovnik.detail.weightHeading', { term: term.term })}
+        caption={t('slovnik.detail.weightCaption')}
       />
     )}
 
@@ -150,7 +156,7 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
 
     {term.zajimavosti && term.zajimavosti.length > 0 && (
       <section class="slv-d-zaj">
-        <h2>Zajímavosti</h2>
+        <h2>{t('slovnik.detail.zajimavosti')}</h2>
         <ul>
           {term.zajimavosti.map((z) => <li>{z}</li>)}
         </ul>
@@ -159,7 +165,7 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
 
     {term.faq && term.faq.length > 0 && (
       <section class="slv-d-faq">
-        <h2>Časté dotazy</h2>
+        <h2>{t('slovnik.detail.faq')}</h2>
         {term.faq.map((f) => (
           <details class="slv-d-faq-item">
             <summary>{f.q}</summary>
@@ -171,7 +177,7 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
 
     {term.externalUrl && (
       <div class="slv-d-external">
-        <strong>Externí zdroj:</strong>{' '}
+        <strong>{t('slovnik.detail.external')}</strong>{' '}
         <a href={term.externalUrl} rel="external nofollow noopener" target="_blank">
           {term.externalLabel ?? term.externalUrl}
         </a>
@@ -180,10 +186,10 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
 
     {relatedTerms.length > 0 && (
       <section class="slv-d-related">
-        <h2>Související pojmy</h2>
+        <h2>{t('slovnik.detail.related')}</h2>
         <div class="slv-d-rel-grid">
           {relatedTerms.map((rt) => (
-            <a href={`/slovnik/${rt.slug}/`} class="slv-d-rel-card">
+            <a href={`${base}/slovnik/${rt.slug}/`} class="slv-d-rel-card">
               <h3>{rt.term}</h3>
               <p>{rt.shortDef.slice(0, 100)}{rt.shortDef.length > 100 ? '…' : ''}</p>
             </a>
@@ -192,7 +198,7 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
       </section>
     )}
 
-    <a class="slv-d-back" href="/slovnik/">← Zpět na slovník</a>
+    <a class="slv-d-back" href={`${base}/slovnik/`}>{t('slovnik.detail.back')}</a>
   </article>
 </Layout>
 

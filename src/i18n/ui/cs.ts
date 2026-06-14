@@ -779,5 +779,27 @@ const cs: Record<string, string> = {
   'howto.steps.h': 'Postup krok za krokem',
   'howto.related.h': 'Další návody',
   'howto.back': '← Zpět na návody',
+
+  // — slovník (glossary chrome) —
+  'slovnik.crumb.home': 'Domů',
+  'slovnik.crumb.glossary': 'Slovník',
+  'slovnik.index.title': 'Slovník zemědělských pojmů',
+  'slovnik.index.desc': 'Definice {n}+ pojmů z oblasti zemědělství, techniky, dotací a precision farming. Co je AdBlue, CVT, ISOBUS, RTK GPS, EKO-platba, BISS a další.',
+  'slovnik.index.kicker': 'Slovník · {n} pojmů',
+  'slovnik.index.h1': 'Slovník zemědělských pojmů',
+  'slovnik.index.lede': 'Definice technických termínů — od AdBlue přes ISOBUS po BISS a EKO-platbu. Cíleno na zemědělce, dealery, agronomy i začátečníky.',
+  'slovnik.index.collName': 'Slovník zemědělských pojmů',
+  'slovnik.detail.titleSuffix': ' — co to je? Vysvětlení',
+  'slovnik.detail.also': 'Také:',
+  'slovnik.detail.areaHeading': 'Převodník — {term} na další jednotky plochy',
+  'slovnik.detail.areaCaption': 'Zadej hodnotu a vyber jednotku. Převody se přepočítají okamžitě. Pro starší jednotky (jitro, korec, strych) jsou použité standardizované hodnoty z roku 1764.',
+  'slovnik.detail.weightHeading': 'Převodník — {term} na další jednotky hmotnosti',
+  'slovnik.detail.weightCaption': 'Bušl má různou hmotnost podle komodity — vyber konkrétní plodinu z dropdownu. Hodnoty bušlu odpovídají USDA standardu.',
+  'slovnik.detail.zajimavosti': 'Zajímavosti',
+  'slovnik.detail.faq': 'Časté dotazy',
+  'slovnik.detail.external': 'Externí zdroj:',
+  'slovnik.detail.related': 'Související pojmy',
+  'slovnik.detail.back': '← Zpět na slovník',
+  'slovnik.detail.definedTermSet': 'Slovník zemědělských pojmů',
 };
 export default cs;

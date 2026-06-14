@@ -35,6 +35,7 @@ export interface SlovnikTerm {
 }
 
 import { SLOVNIK_EXTRA } from './slovnik-extra';
+import { SLOVNIK_UK, KATEGORIE_LABELS_UK } from './slovnik.uk';
 
 const SLOVNIK_CORE: SlovnikTerm[] = [
   // ── POHON / MOTOR / EMISE ───────────────────────────────────────────
@@ -9327,8 +9328,8 @@ Fermentovaný med (zkvasený med) nelze prodávat jako potravinářský med. Zpr
 // Stávající hesla (beze změny) + 102 nových hesel.
 export const SLOVNIK: SlovnikTerm[] = [...SLOVNIK_CORE, ...SLOVNIK_EXTRA];
 
-export function getSlovnikTerm(slug: string): SlovnikTerm | undefined {
-  return SLOVNIK.find((t) => t.slug === slug);
+export function getSlovnikTerm(slug: string, locale: string = 'cs'): SlovnikTerm | undefined {
+  return getSlovnik(locale).find((t) => t.slug === slug);
 }
 
 export function getSlovnikByCategory(cat: SlovnikKategorie): SlovnikTerm[] {
@@ -9351,3 +9352,19 @@ export const KATEGORIE_LABELS: Record<SlovnikKategorie, string> = {
   plodiny: 'Plodiny a komodity',
   vcelarstvi: 'Včelařství',
 };
+
+const SLOVNIK_BY_LOCALE: Record<string, SlovnikTerm[]> = { cs: SLOVNIK, uk: SLOVNIK_UK };
+const KATEGORIE_LABELS_BY_LOCALE: Record<string, Record<SlovnikKategorie, string>> = {
+  cs: KATEGORIE_LABELS,
+  uk: KATEGORIE_LABELS_UK,
+};
+
+/** Vrátí slovník pro daný locale; neznámý locale → cs. CS chování beze změny. */
+export function getSlovnik(locale: string = 'cs'): SlovnikTerm[] {
+  return SLOVNIK_BY_LOCALE[locale] ?? SLOVNIK;
+}
+
+/** Lokalizovaná category-label mapa; neznámý locale → cs. */
+export function getKategorieLabels(locale: string = 'cs'): Record<SlovnikKategorie, string> {
+  return KATEGORIE_LABELS_BY_LOCALE[locale] ?? KATEGORIE_LABELS;
+}
