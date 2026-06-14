@@ -1,0 +1,123 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { listPlodiny } from '../../../lib/plodiny';
+import { MONTH_NAMES_CS } from '../../../lib/sezona';
+import { SITE_URL } from '../../../lib/config';
+import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../../lib/structured-data';
+
+const plodiny = listPlodiny()
+  .filter((p) => (p.seti_mesice?.length ?? 0) > 0 || (p.sklizen_mesice?.length ?? 0) > 0)
+  .sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+
+const pageUrl = `${SITE_URL}/sezona/kalendar/`;
+const title = 'Kalendář setí a sklizně — kdy sít a sklízet polní plodiny';
+const description = 'Přehledný kalendář setí a sklizně hlavních polních plodin v ČR: obiloviny, řepka, okopaniny, luskoviny a pícniny měsíc po měsíci.';
+
+const faq = [
+  { q: 'Kdy se sejí jařiny?', a: 'Jarní ječmen a pšenice únor–březen, mák, cukrovka a slunečnice březen–duben, kukuřice a sója duben–květen. Raný výsev jařin zvyšuje výnos.' },
+  { q: 'Kdy se sejí ozimy?', a: 'Ozimá řepka srpen–září, ozimá pšenice, ječmen, žito a tritikale září–říjen. Termín setí ozimů je klíčový pro dobré přezimování.' },
+  { q: 'Kdy vrcholí sklizeň obilovin?', a: 'V červenci a srpnu: nejdříve ozimý ječmen (červen–červenec), pak ozimá pšenice, žito a tritikale, nakonec jarní obiloviny.' },
+];
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Sezóna', url: '/sezona/' },
+  { name: 'Kalendář setí a sklizně', url: pageUrl },
+]);
+const itemListJsonLd = itemListSchema(
+  plodiny.map((p) => ({ url: `${SITE_URL}/plodiny/${p.slug}/`, name: p.name })),
+  'Kalendář setí a sklizně',
+);
+const faqJsonLd = faqPageSchema(faq);
+const months = Array.from({ length: 12 }, (_, i) => i + 1);
+---
+
+<Layout title={title} description={description} canonical={pageUrl}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="sezona-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a> <span aria-hidden="true">›</span>
+      <a href="/sezona/">Sezóna</a> <span aria-hidden="true">›</span>
+      <span class="current">Kalendář setí a sklizně</span>
+    </nav>
+
+    <h1>Kalendář setí a sklizně</h1>
+    <p class="lead">{description}</p>
+
+    <div class="table-wrap">
+      <table class="cal" data-current-month="">
+        <thead>
+          <tr>
+            <th scope="col">Plodina</th>
+            {months.map((m) => <th scope="col" data-month={m} title={MONTH_NAMES_CS[m - 1]}>{MONTH_NAMES_CS[m - 1].slice(0, 3)}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {plodiny.map((p) => (
+            <tr>
+              <th scope="row"><a href={`/plodiny/${p.slug}/`}>{p.name}</a></th>
+              {months.map((m) => {
+                const sow = p.seti_mesice?.includes(m);
+                const harvest = p.sklizen_mesice?.includes(m);
+                return (
+                  <td data-month={m} class={`${sow ? 'sow' : ''} ${harvest ? 'harvest' : ''}`.trim() || undefined}>
+                    {sow ? 'S' : ''}{harvest ? '☑' : ''}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="legenda"><span class="k sow">S</span> setí &nbsp; <span class="k harvest">☑</span> sklizeň</p>
+
+    <section class="faq">
+      <h2>Časté otázky</h2>
+      {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
+    </section>
+
+    <p class="cross"><a href="/sezona/">← Zpět na sezónní rozcestník</a> · <a href="/plodiny/">Všechny plodiny a odrůdy</a></p>
+  </div>
+
+  <script is:inline>
+    // Zvýrazni aktuální měsíc (prerender → klientsky). 1–12.
+    (function () {
+      var m = new Date().getMonth() + 1;
+      document.querySelectorAll('[data-month="' + m + '"]').forEach(function (el) {
+        el.classList.add('is-current-month');
+      });
+    })();
+  </script>
+
+  <style>
+    .sezona-root { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .breadcrumb { font-size: .85rem; color: #6b7280; margin-bottom: 1rem; display: flex; gap: .4rem; flex-wrap: wrap; }
+    .breadcrumb a { color: #15803d; text-decoration: none; }
+    h1 { font-size: 1.9rem; margin: .2rem 0 .5rem; }
+    .lead { color: #374151; max-width: 70ch; margin-bottom: 1.5rem; }
+    .table-wrap { overflow-x: auto; border: 1px solid #e5e7eb; border-radius: 10px; }
+    table.cal { border-collapse: collapse; width: 100%; min-width: 760px; font-size: .85rem; }
+    .cal th, .cal td { border: 1px solid #eef2f5; padding: .35rem .4rem; text-align: center; }
+    .cal thead th { background: #f9fafb; position: sticky; top: 0; }
+    .cal tbody th[scope="row"] { text-align: left; white-space: nowrap; font-weight: 600; }
+    .cal tbody th a { color: #15803d; text-decoration: none; }
+    .cal td.sow { background: #dcfce7; }
+    .cal td.harvest { background: #fef3c7; }
+    .cal td.sow.harvest { background: linear-gradient(135deg, #dcfce7 50%, #fef3c7 50%); }
+    .cal .is-current-month { outline: 2px solid #15803d; outline-offset: -2px; }
+    .legenda { font-size: .8rem; color: #6b7280; margin: .6rem 0 2rem; }
+    .legenda .k { display: inline-block; width: 1.4rem; text-align: center; border-radius: 4px; }
+    .legenda .k.sow { background: #dcfce7; } .legenda .k.harvest { background: #fef3c7; }
+    .faq h2 { font-size: 1.3rem; margin: 2rem 0 .8rem; }
+    .faq details { border-bottom: 1px solid #e5e7eb; padding: .6rem 0; }
+    .faq summary { cursor: pointer; font-weight: 600; }
+    .faq p { color: #374151; margin: .5rem 0 0; }
+    .cross { margin-top: 2rem; font-size: .9rem; }
+    .cross a { color: #15803d; }
+  </style>
+</Layout>

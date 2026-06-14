@@ -26,6 +26,7 @@ const uk: Record<string, string> = {
   // — navigace: Téma —
   'nav.tema.akce': 'Календар подій',
   'nav.tema.plodiny': 'Культури та сорти',
+  'nav.tema.sezona': 'Сільськогосподарський рік',
   'nav.tema.choroby': 'Хвороби та шкідники',
   'nav.tema.all': 'Усі новини',
   'nav.tema.tech': 'Техніка',
