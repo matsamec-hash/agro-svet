@@ -1,6 +1,6 @@
 ---
 import { getAllBrands, seriesFamily, familyLabel, type StrojKategorie } from '../../lib/stroje';
-import { useTranslations, plural, tf, getLocaleFromUrl } from '../../i18n/utils';
+import { useTranslations, plural, tf, getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
 
 interface Props {
   category: StrojKategorie;
@@ -239,7 +239,7 @@ const NL = '\n';
   <nav class="breadcrumb" aria-label={tr('cat.bcAria')}>
     <a href="/">{tr('cat.bc.home')}</a>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-    <a href="/stroje/">{tr('cat.bc.tech')}</a>
+    <a href={localizeInternalHref(locale, '/stroje/')}>{tr('cat.bc.tech')}</a>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
     <span class="current">{catLabel}</span>
   </nav>
