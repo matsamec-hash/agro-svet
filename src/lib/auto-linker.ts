@@ -232,11 +232,6 @@ function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>, l
   return s;
 }
 
-/**
- * Inject internal links into article HTML.
- * @param html — article HTML (CMS-rendered, may contain <p>, <h2>, <a>, <img>, etc.)
- * @param excludeUrl — current page URL path (e.g. `/stroje/fendt/`); the linker won't link to this.
- */
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')
@@ -270,12 +265,19 @@ export function createLinkContext(excludeUrl?: string): Set<string> {
  * so output is safe to use with `set:html`.
  *
  * Pass `used` from createLinkContext() to share dedup state with a subsequent injectLinks() call.
+ * @param locale — cílový locale; cs (default) = no-op, sk/uk lokalizuje brand/model odkazy.
  */
 export function injectLinksInText(text: string, excludeUrlOrUsed?: string | Set<string>, locale: Locale = defaultLocale): string {
   if (!text) return text;
   return injectLinks(escapeHtml(text), excludeUrlOrUsed, locale);
 }
 
+/**
+ * Inject internal links into article HTML.
+ * @param html — article HTML (CMS-rendered, may contain <p>, <h2>, <a>, <img>, etc.)
+ * @param excludeUrlOrUsed — current page URL path (e.g. `/stroje/fendt/`) or a shared Set from createLinkContext(); the linker won't link to this URL.
+ * @param locale — cílový locale; cs (default) = no-op, sk/uk lokalizuje brand/model odkazy.
+ */
 export function injectLinks(html: string, excludeUrlOrUsed?: string | Set<string>, locale: Locale = defaultLocale): string {
   if (!html) return html;
   try {

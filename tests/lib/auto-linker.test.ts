@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { injectLinks, createLinkContext } from '../../src/lib/auto-linker';
 import { getAllBrands } from '../../src/lib/stroje';
 
-const brand = getAllBrands().find((b) => b.slug === 'fendt') ?? getAllBrands()[0];
+const brand = getAllBrands().find((b) => b.slug === 'fendt')
+  ?? getAllBrands().find((b) => b.name.length >= 5)!;
 const html = `<p>Traktor ${brand.name} je oblíbený.</p>`;
 
 describe('auto-linker locale', () => {
