@@ -64,10 +64,14 @@ const processor = unified()
  * Render markdown body to HTML with internal links auto-injected.
  * @param markdown — raw markdown string (entry.body).
  * @param excludeUrl — current page URL path (no auto-link to self).
+ * @param applyLinks — set to false to skip auto-link injection (default true).
+ *   cs/sk callers omit this param → default true = byte-identical behaviour.
+ *   uk callers pass false: cs-rooted auto-links would point into the cs site.
  */
-export async function renderMarkdownWithLinks(markdown: string, excludeUrl?: string): Promise<string> {
+export async function renderMarkdownWithLinks(markdown: string, excludeUrl?: string, applyLinks: boolean = true): Promise<string> {
   const file = await processor.process(markdown);
   const html = String(file);
+  if (!applyLinks) return html;
   const linkCtx = createLinkContext(excludeUrl);
   return injectLinks(html, linkCtx);
 }
