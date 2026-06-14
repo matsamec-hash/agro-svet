@@ -209,7 +209,7 @@ const NL = '\n';
     <h2 id="results-heading" class="section-title results-heading">{tr('cat.s.results')} <span id="results-heading-c" class="section-title-c"></span></h2>
     <div id="brand-grid" class="brand-grid">
       {brandCards.map((b) => (
-        <a href={`/stroje/${b.slug}/`} class="brand-card">
+        <a href={localizeInternalHref(locale, `/stroje/${b.slug}/`)} class="brand-card">
           <div class="bc-head">
             <div class="bc-logo" data-letter={b.name.charAt(0).toUpperCase()}>
               <img src={`/images/stroje/brands/${b.slug}.png`} alt={tf(locale, 'cat.brandLogoAlt', { brand: b.name })} loading="lazy" width="64" height="64" onerror="this.remove()" />

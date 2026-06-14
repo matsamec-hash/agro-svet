@@ -170,7 +170,7 @@ function pluralCs(n: number, one: string, few: string, many: string): string {
             const bazarCount = bazarCountByBrand[b.slug] ?? 0;
             return (
               <div class="sz-brand-card-wrap">
-                <a href={`/stroje/${b.slug}/`} class="sz-brand-card">
+                <a href={localizeInternalHref(locale, `/stroje/${b.slug}/`)} class="sz-brand-card">
                   <div class="sz-brand-logo" data-letter={b.name.charAt(0).toUpperCase()}>
                     <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="56" height="56" onerror="this.remove()" />
                   </div>

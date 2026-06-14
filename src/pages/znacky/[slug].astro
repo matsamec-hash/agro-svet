@@ -254,7 +254,7 @@ const modelListJsonLd = brandModels.length > 0
           ))}
         </div>
         {catalogModels.length > catalogTop.length && (
-          <a class="hub-section-more" href={`/stroje/${znacka.id}/`}>{tf(locale, 'cat.zn.d.catalogMore', { count: catalogModels.length, brand: znacka.data.name })}</a>
+          <a class="hub-section-more" href={localizeInternalHref(locale, `/stroje/${znacka.id}/`)}>{tf(locale, 'cat.zn.d.catalogMore', { count: catalogModels.length, brand: znacka.data.name })}</a>
         )}
       </section>
     )}
@@ -267,7 +267,7 @@ const modelListJsonLd = brandModels.length > 0
         </header>
         <div class="enc-grid">
           {brandEncyclopedia.map((e) => (
-            <a href={`/encyklopedie/${e.id}/`} class="enc-card">
+            <a href={localizeInternalHref(locale, `/encyklopedie/${e.id}/`)} class="enc-card">
               <h3>{e.data.name}</h3>
               <p>{e.data.popis.slice(0, 140)}{e.data.popis.length > 140 ? '…' : ''}</p>
               {e.data.vykon && <span class="enc-power">{e.data.vykon}</span>}
@@ -316,7 +316,7 @@ const modelListJsonLd = brandModels.length > 0
 
     <div style="margin-top:48px; display:flex; gap:10px; flex-wrap:wrap;">
       <a href={localizeInternalHref(locale, '/znacky/')} style="display:inline-flex; align-items:center; gap:8px; color:#1a1a1a; font-weight:400; font-size:14px; text-decoration:none; border:2px solid #1a1a1a; padding:10px 18px; border-radius:8px;">{NL}{tr('cat.zn.d.backToBrands')}{NL}</a>
-      <a href={`/stroje/${znacka.id}/`} style="display:inline-flex; align-items:center; gap:8px; background:#0A0A0B; color:#FFEA00; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">{NL}{tf(locale, 'cat.zn.d.allModels', { brand: znacka.data.name })}{NL}</a>
+      <a href={localizeInternalHref(locale, `/stroje/${znacka.id}/`)} style="display:inline-flex; align-items:center; gap:8px; background:#0A0A0B; color:#FFEA00; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">{NL}{tf(locale, 'cat.zn.d.allModels', { brand: znacka.data.name })}{NL}</a>
       <a href={`/bazar/?znacka=${znacka.id}`} style="display:inline-flex; align-items:center; gap:8px; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">{NL}{tr('cat.zn.d.bazarAds')}{NL}</a>
     </div>
   </div>
