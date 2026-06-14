@@ -1,7 +1,40 @@
 {
   "generated": "2026-06-15",
   "warCaveat": "Дані відображають доступну офіційну статистику. Частина сільгоспугідь тимчасово окупована або замінована — агреговані показники можуть бути неповними.",
-  "bigNumbers": [],
+  "bigNumbers": [
+    {
+      "val": "≈25",
+      "unit": "%",
+      "lbl": "світових запасів чорнозему",
+      "trend": "приблизно чверть світових родючих чорноземів",
+      "source": "VoxUkraine / Oakland Institute",
+      "url": "https://www.oaklandinstitute.org/our-take/who-owns-agricultural-land-ukraine"
+    },
+    {
+      "val": "≈32,9",
+      "unit": "млн га",
+      "lbl": "орних земель",
+      "trend": "за даними Світового банку (2023)",
+      "source": "Світовий банк",
+      "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA"
+    },
+    {
+      "val": "+60",
+      "unit": "%",
+      "lbl": "зростання ціни гектара з відкриття ринку",
+      "trend": "з липня 2021 по червень 2025",
+      "source": "Опендатабот",
+      "url": "https://opendatabot.ua/en/analytics/land-2025"
+    },
+    {
+      "val": "≈339,6",
+      "unit": "тис. угод",
+      "lbl": "купівлі-продажу землі з 2021 року",
+      "trend": "понад 636 тис. га на суму 30,4 млрд грн (станом на липень 2025)",
+      "source": "Опендатабот / Держгеокадастр",
+      "url": "https://opendatabot.ua/en/analytics/land-2025"
+    }
+  ],
   "reformTimeline": [
     {
       "year": "до 2001",
@@ -33,13 +66,19 @@
     }
   ],
   "cena": {
-    "unit": "USD/га",
-    "asOf": "",
-    "source": "",
-    "url": "https://land.gov.ua/",
-    "max": 0,
-    "ticks": [],
-    "series": []
+    "unit": "грн/га",
+    "asOf": "червень 2025",
+    "source": "Опендатабот",
+    "url": "https://opendatabot.ua/en/analytics/land-2025",
+    "max": 70000,
+    "ticks": [0, 17500, 35000, 52500, 70000],
+    "series": [
+      { "year": 2021, "value": 33700 },
+      { "year": 2022, "value": 37867 },
+      { "year": 2023, "value": 42000 },
+      { "year": 2024, "value": 47300 },
+      { "year": 2025, "value": 60700 }
+    ]
   },
   "najem": {
     "unit": "грн/га/рік",
@@ -50,12 +89,107 @@
     "ticks": [],
     "series": []
   },
-  "plodiny": [],
-  "facts": [],
-  "threats": [],
+  "plodiny": [
+    {
+      "crop": "Соняшник",
+      "hectares": 6100000,
+      "source": "USDA FAS (МР 2024/25)",
+      "url": "https://www.fas.usda.gov/data/ukraine-oilseeds-and-products-annual-2"
+    },
+    {
+      "crop": "Пшениця",
+      "hectares": 4530000,
+      "source": "USDA FAS (МР 2024/25)",
+      "url": "https://www.fas.usda.gov/data/production/up"
+    },
+    {
+      "crop": "Кукурудза",
+      "hectares": 4300000,
+      "source": "USDA FAS (МР 2024/25)",
+      "url": "https://www.fas.usda.gov/data/production/up"
+    },
+    {
+      "crop": "Соя",
+      "hectares": 3000000,
+      "source": "USDA FAS (МР 2024/25)",
+      "url": "https://www.fas.usda.gov/data/ukraine-oilseeds-and-products-annual-2"
+    },
+    {
+      "crop": "Ячмінь",
+      "hectares": 900000,
+      "source": "USDA FAS (МР 2024/25)",
+      "url": "https://www.fas.usda.gov/data/production/up"
+    }
+  ],
+  "facts": [
+    {
+      "val": "≈32,9",
+      "unit": "млн га",
+      "lbl": "Орні землі",
+      "note": "Площа орних земель за класифікацією FAO (дані Світового банку, 2023).",
+      "source": "Світовий банк",
+      "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA"
+    },
+    {
+      "val": "≈25",
+      "unit": "%",
+      "lbl": "Частка світового чорнозему",
+      "note": "Україна володіє приблизно чвертю світових запасів чорнозему.",
+      "source": "Oakland Institute",
+      "url": "https://www.oaklandinstitute.org/our-take/who-owns-agricultural-land-ukraine"
+    },
+    {
+      "val": "≈6,9",
+      "unit": "млн",
+      "lbl": "Власників паїв",
+      "note": "Приватними власниками земельних паїв є близько 6,9 млн громадян.",
+      "source": "VoxUkraine",
+      "url": "https://voxukraine.org/en/ukraines-agriculture-and-farmland-market-the-impact-of-war"
+    },
+    {
+      "val": "≈75",
+      "unit": "%",
+      "lbl": "У приватній власності",
+      "note": "Близько 31 млн га (≈75 %) сільгоспземель перебуває у приватній власності; більшість обробляється на умовах оренди.",
+      "source": "VoxUkraine",
+      "url": "https://voxukraine.org/en/ukraines-agriculture-and-farmland-market-the-impact-of-war"
+    },
+    {
+      "val": "339,6",
+      "unit": "тис. угод",
+      "lbl": "Угод купівлі-продажу",
+      "note": "З відкриття ринку (липень 2021) укладено ≈339,6 тис. угод на понад 636 тис. га за 30,4 млрд грн (станом на липень 2025).",
+      "source": "Опендатабот / Держгеокадастр",
+      "url": "https://opendatabot.ua/en/analytics/land-2025"
+    },
+    {
+      "val": "≈47,3",
+      "unit": "тис. грн/га",
+      "lbl": "Середня ціна (2024)",
+      "note": "Середня вартість гектара сільгоспземлі у 2024 році; протягом року коливалася в межах 43–52 тис. грн.",
+      "source": "Опендатабот",
+      "url": "https://opendatabot.ua/en/analytics/land-2025"
+    }
+  ],
+  "threats": [
+    {
+      "lbl": "Замінування територій",
+      "pct": 23,
+      "detail": "Станом на лютий 2024 потенційно забруднено вибухонебезпечними предметами ≈156 тис. км² (зменшено зі 174 тис. км²) — близько чверті території країни. Україна — найбільш замінована країна світу (Мінекономіки України; ACAPS)."
+    },
+    {
+      "lbl": "Окупація сільгоспземель",
+      "pct": 20,
+      "detail": "За оцінками, близько 20 % сільгоспугідь України було під російською окупацією; орієнтовно 3,5 млн га орних земель втрачено через окупацію (Project Expedite Justice; Geographical, 2024)."
+    }
+  ],
   "sources": [
     { "label": "Держгеокадастр — Державна служба з питань геодезії, картографії та кадастру", "url": "https://land.gov.ua/" },
     { "label": "Держстат — Державна служба статистики України", "url": "https://www.ukrstat.gov.ua/" },
-    { "label": "Мінагрополітики України", "url": "https://minagro.gov.ua/" }
+    { "label": "Мінагрополітики України", "url": "https://minagro.gov.ua/" },
+    { "label": "Опендатабот — моніторинг ринку землі", "url": "https://opendatabot.ua/en/analytics/land-2025" },
+    { "label": "Світовий банк — World Development Indicators", "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA" },
+    { "label": "USDA FAS — Foreign Agricultural Service (Ukraine)", "url": "https://www.fas.usda.gov/data/production/up" },
+    { "label": "VoxUkraine — Ukraine's agriculture and farmland market", "url": "https://voxukraine.org/en/ukraines-agriculture-and-farmland-market-the-impact-of-war" }
   ]
 }
