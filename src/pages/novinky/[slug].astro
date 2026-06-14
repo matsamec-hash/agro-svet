@@ -271,10 +271,10 @@ const jsonLd = {
       )}
     </div>
 
-    <p id="article-lead" style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;" set:html={injectLinksInText(article.perex, linkCtx)} />
+    <p id="article-lead" style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;" set:html={injectLinksInText(article.perex, linkCtx, locale)} />
 
     <!-- Article body (HTML from CMS) — auto-linker injects internal links to brands/plemena/stroje hubs. Shares used-set with perex above. -->
-    <div class="prose" set:html={injectLinks(article.content, linkCtx)} />
+    <div class="prose" set:html={injectLinks(article.content, linkCtx, locale)} />
 
     {topEntity && entityRelated.length > 0 && (
       <aside class="entity-related" aria-labelledby="entity-related-h">

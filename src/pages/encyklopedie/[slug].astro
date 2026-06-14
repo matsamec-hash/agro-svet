@@ -29,7 +29,7 @@ const znackyHubs = await getCollection('znacky');
 const hasBrandHub = znackyHubs.some((z) => z.id === item.data.znacka);
 // Render content body with auto-link injection (slovník, žebříčky, modely).
 import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
-const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/encyklopedie/${slug}/`);
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/encyklopedie/${slug}/`, locale);
 
 // Related encyklopedie items: same znacka first, then same kategorie.
 const relatedSameZnacka = items.filter((i) => i.id !== item.id && i.data.znacka === item.data.znacka);
