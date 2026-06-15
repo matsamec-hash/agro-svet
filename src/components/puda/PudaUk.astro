@@ -5,6 +5,7 @@ import PillsNav from '../../components/statistiky/PillsNav.astro';
 import { useTranslations } from '../../i18n/utils';
 import { buildLineChart, pudaUkPriceGrowthPct, type PudaUkData } from '../../lib/puda-uk';
 import raw from '../../data/agro-puda-uk.json';
+import { getCollection } from 'astro:content';
 
 const d = raw as unknown as PudaUkData;
 const t = useTranslations('uk');
@@ -17,8 +18,10 @@ const cena = d.cena.series.length >= 2
 const najemMax = d.najem.series.length ? Math.max(...d.najem.series.map((s) => s.value)) : 0;
 const plodinyMax = d.plodiny.length ? Math.max(...d.plodiny.map((p) => p.hectares)) : 0;
 const growthPct = pudaUkPriceGrowthPct(d);
+const articles = await getCollection('pudaUk');
 
 const PILLS = [
+  { label: 'Теми', href: '#temata' },
   { label: t('puda.uk.h.reforma'), href: '#reforma' },
   ...(cena ? [{ label: t('puda.uk.h.cena'), href: '#cena' }] : []),
   ...(d.najem.series.length ? [{ label: t('puda.uk.h.najem'), href: '#najem' }] : []),
@@ -62,6 +65,22 @@ const PILLS = [
 
     <PillsNav items={PILLS} />
 
+    {articles.length > 0 && (
+      <section class="topics-section" id="temata">
+        <h2>Поглиблено за темами</h2>
+        <div class="topics-grid">
+          {articles.map((a) => (
+            <a href={`/uk/puda/${a.id}/`} class="puda-card">
+              <div class="card-icon">🌱</div>
+              <h3>{a.data.title}</h3>
+              <p>{a.data.popis}</p>
+              <span class="card-cta">Читати далі →</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
     <section class="reforma-section" id="reforma">
       <h2>{t('puda.uk.h.reforma')}</h2>
       <ol class="timeline">
@@ -103,7 +122,7 @@ const PILLS = [
             </>))}
           </svg>
           {growthPct !== null && (
-            <div class="chart-insight">Зростання ціни на <strong>{growthPct} %</strong> за період {d.cena.series[0].year}–{d.cena.series.at(-1).year}.</div>
+            <div class="chart-insight">Зростання ціни на <strong>{growthPct} %</strong> за період {d.cena.series[0].year}–{d.cena.series.at(-1)!.year}.</div>
           )}
         </div>
       </section>
@@ -177,7 +196,7 @@ const PILLS = [
     <section class="sources-section">
       <h3>{t('puda.uk.sources.h')}</h3>
       <ul>
-        {d.sources.map((s) => (<li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>))}
+        {d.sources.map((s) => (<li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></li>))}
       </ul>
     </section>
   </div>
@@ -240,13 +259,6 @@ const PILLS = [
     content:"";position:absolute;inset:0;
     background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, rgba(255,234,0,.12) 100%);
   }
-  .sp-hero-photo-badge{
-    position:absolute;left:16px;bottom:16px;z-index:2;
-    background:rgba(10,10,11,.72);backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.1);
-    color:#fff;padding:9px 13px;border-radius:10px;
-    font:500 12px 'Chakra Petch',sans-serif;
-  }
   @media (max-width:960px){
     .sp-hero{grid-template-columns:1fr;padding:32px 24px 28px;gap:18px}
     .sp-hero-right{min-height:200px;order:2}
@@ -283,12 +295,8 @@ const PILLS = [
   .chart-svg { width:100%; height:auto; display:block; }
   .chart-insight { font-size:14px; color:#1E1E22; line-height:1.6; padding:12px 16px; background:#FFF6A8; border:1px solid #FFEA00; border-radius:10px; font-weight:500; }
 
-  /* Two-column */
-  .two-col { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:14px; margin: 32px 0 36px; scroll-margin-top:200px; }
   .card-chart { padding:24px 26px; background:#fff; border-radius:18px; border:1px solid #EAEAEC; box-shadow:0 1px 2px rgba(10,10,12,.04); scroll-margin-top:200px; }
   .card-chart h3 { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.01em; margin:0; color:#0A0A0B; }
-  .card-chart .sub { display:block; font-size:13px; color:#6B6B72; margin-top:2px; margin-bottom:18px; }
-  .card-note { font-size:13px; color:#6B6B72; line-height:1.55; margin:18px 0 0; }
 
   /* Source link konzistentní s .sp-src ve statistiky komponentách */
   .src-link {
@@ -301,18 +309,10 @@ const PILLS = [
   .src-link svg{color:#a0a0a8;transition:transform .15s}
   .src-link:hover svg{color:#0A0A0B;transform:translate(1px,-1px)}
 
-  .donut-wrap { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
-  .donut-svg { width:200px; height:200px; flex-shrink:0; }
-  .donut-legend { list-style:none; padding:0; margin:0; flex:1; min-width:180px; display:flex; flex-direction:column; gap:8px; }
-  .donut-legend li { display:flex; align-items:center; gap:10px; font-size:13px; }
-  .donut-legend .dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
-  .donut-legend .lbl { color:#1E1E22; flex:1; }
-  .donut-legend .val { color:#6B6B72; font-size:12px; }
-
   /* Threats bars */
   .threats { display:flex; flex-direction:column; gap:14px; }
   .threat { display:flex; flex-direction:column; gap:4px; }
-  .threat-bar { height:24px; background:var(--c); width:var(--w); border-radius:6px; position:relative; min-width:36px; transition: width .8s ease; }
+  .threat-bar { height:24px; background:var(--c); border-radius:6px; position:relative; min-width:36px; }
   .threat-bar span { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:12px; color:#fff; font-weight:700; }
   .threat-lbl { font-size:13px; color:#1E1E22; }
 
@@ -333,10 +333,8 @@ const PILLS = [
   .crop-row { display:grid; grid-template-columns:200px 1fr; gap:16px; align-items:center; }
   .crop-name { font-size:14px; color:#444; }
   .crop-bar-wrap { display:flex; align-items:center; gap:12px; }
-  .crop-bar { height:22px; border-radius:4px; min-width:24px; transition: width .8s ease; }
+  .crop-bar { height:22px; border-radius:4px; min-width:24px; }
   .crop-val { font-size:13px; color:#666; white-space:nowrap; }
-  .section-note { font-size:14px; color:#1E1E22; line-height:1.6; padding:12px 16px; background:#FFF6A8; border:1px solid #FFEA00; border-radius:10px; margin-top:24px; font-weight:500; }
-
   /* Topics */
   .topics-section { margin: 32px 0 36px; scroll-margin-top:200px; }
   .topics-section h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; margin:0 0 18px; color:#0A0A0B; }
@@ -355,75 +353,11 @@ const PILLS = [
   .sources-section li { font-size:13px; }
   .sources-section a { color:#6B6B72; text-decoration:underline; text-decoration-color:#c0c0c5; text-underline-offset:2px; }
   .sources-section a:hover { color:#0A0A0B; text-decoration-color:#FFEA00; }
-  .updated { font-size:12px; color:#888; margin-top:18px; }
-
   @media (max-width: 768px) {
     .puda-root { padding: 32px 16px 64px; }
     .crop-row { grid-template-columns:1fr; gap:6px; }
     .chart-section, .crops-section, .card-chart { padding:20px; }
   }
-
-  /* ===== Interaktivita ===== */
-
-  /* Line chart — stroke draw on scroll */
-  .chart-svg .line-path { stroke-dasharray: 1500; stroke-dashoffset: 1500; }
-  .chart-svg .line-area { opacity: 0; }
-  .reveal.in-view .line-path { animation: drawLine 1.6s cubic-bezier(.6,.05,.3,1) forwards; }
-  .reveal.in-view .line-area { animation: fadeIn .8s .8s ease forwards; }
-  @keyframes drawLine { to { stroke-dashoffset: 0; } }
-  @keyframes fadeIn { to { opacity: 1; } }
-
-  /* Line points — pulse on hover */
-  .line-point { transition: r .15s, fill .15s; pointer-events: none; }
-  .line-point-hit { cursor: crosshair; }
-  .line-point.is-hover { r: 8; fill: #1a1a1a; stroke: #FFFF00; stroke-width: 2.5; }
-  .line-guide { transition: opacity .15s; pointer-events: none; }
-  .line-guide.is-hover { opacity: .5; }
-
-  /* Donut — radial reveal + hover scale */
-  .donut-svg { overflow: visible; }
-  .donut-svg path { transform-origin: 100px 100px; transition: transform .25s cubic-bezier(.5,0,.3,1), opacity .2s; cursor: pointer; }
-  .donut-svg path { stroke-dasharray: 600; stroke-dashoffset: 600; }
-  .reveal.in-view .donut-svg path { animation: dash 1.0s cubic-bezier(.6,.05,.3,1) forwards; }
-  .reveal.in-view .donut-svg path:nth-child(2) { animation-delay: .15s; }
-  .reveal.in-view .donut-svg path:nth-child(3) { animation-delay: .3s; }
-  @keyframes dash { to { stroke-dashoffset: 0; } }
-  .donut-svg path:hover, .donut-svg path.is-active { transform: scale(1.06); }
-  .donut-svg.has-active path:not(.is-active) { opacity: .35; }
-  .donut-center { opacity: 0; transition: opacity .35s ease .9s; }
-  .reveal.in-view .donut-center { opacity: 1; }
-
-  /* Donut legend sync */
-  .donut-legend li { padding:8px 10px; border-radius:8px; cursor:pointer; transition: background .15s; }
-  .donut-legend li:hover, .donut-legend li.is-active { background: #f5f3ea; }
-
-  /* Threats + crops bars — width fly-in + hover lift */
-  .threat-bar, .crop-bar {
-    width: 0 !important;
-    transition: width 1.0s cubic-bezier(.6,.05,.3,1), filter .15s, transform .15s;
-    cursor: pointer;
-  }
-  .reveal.in-view .threat-bar { width: var(--w) !important; }
-  .reveal.in-view .crop-bar { width: var(--final-w, var(--w, 0)) !important; }
-  .threat-bar:hover, .crop-bar:hover {
-    filter: brightness(1.10) saturate(1.15);
-    transform: translateX(2px);
-  }
-  .threat { transition: opacity .15s; }
-  .threats:has(.threat-bar:hover) .threat:not(:has(.threat-bar:hover)) { opacity: .55; }
-
-  /* Tooltip — shared. Default above element, .below variant pod ním (auto-flip pokud point u top) */
-  .puda-tooltip {
-    position: fixed; z-index: 999; pointer-events: none;
-    background: #1a1a1a; color: #fff; padding: 9px 13px; border-radius: 8px;
-    font-size: 13px; line-height: 1.45; white-space: nowrap;
-    box-shadow: 0 4px 14px rgba(0,0,0,.25);
-    opacity: 0; transform: translate(-50%, -120%) translateY(6px);
-    transition: opacity .15s, transform .15s;
-  }
-  .puda-tooltip.is-visible { opacity: 1; transform: translate(-50%, -120%); }
-  .puda-tooltip.is-visible.below { transform: translate(-50%, 20%); }
-  .puda-tooltip strong { color: #FFFF00; }
 
   .war-caveat { font-size:13px; color:#8a6d00; background:#FFF6A8; border:1px solid #FFEA00; border-radius:10px; padding:12px 16px; margin:0 0 24px; line-height:1.5; }
   .reforma-section { margin:32px 0 36px; scroll-margin-top:200px; }
