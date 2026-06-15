@@ -9,6 +9,8 @@ import { getAllDruhy, getAllPlemena } from './plemena';
 import { SLOVNIK } from './slovnik';
 import { TIER_LISTS } from './tier-lists';
 import remoteCatalog from '../data/remote-catalog.json';
+import { localizeInternalHref, stripLocale } from '../i18n/utils';
+import { defaultLocale, type Locale } from '../i18n/config';
 
 interface GlossaryEntry {
   term: string;
@@ -21,6 +23,8 @@ interface GlossaryEntry {
   priority: number;
   /** External URL (cross-site link) — adds target="_blank" rel="noopener" in render. */
   external?: boolean;
+  /** Interní odkaz lokalizovatelný do /sk|/uk (jen brand+model — SSR launchnuté). */
+  localizable?: boolean;
 }
 
 interface RemoteCatalogEntry {
@@ -41,7 +45,7 @@ const MIN_TERM_LENGTH = 5;
 
 let cachedGlossary: GlossaryEntry[] | null = null;
 
-function makeEntry(term: string, url: string, priority: number, external = false): GlossaryEntry {
+function makeEntry(term: string, url: string, priority: number, external = false, localizable = false): GlossaryEntry {
   return {
     term,
     termLower: term.toLowerCase(),
@@ -49,6 +53,7 @@ function makeEntry(term: string, url: string, priority: number, external = false
     url,
     priority,
     external,
+    localizable,
   };
 }
 
@@ -56,7 +61,7 @@ function buildGlossary(): GlossaryEntry[] {
   const entries: GlossaryEntry[] = [];
 
   for (const b of getAllBrands()) {
-    entries.push(makeEntry(b.name, `/stroje/${b.slug}/`, 10));
+    entries.push(makeEntry(b.name, `/stroje/${b.slug}/`, 10, false, true));
   }
 
   // Models: only currently-in-production (year_to === null), name >= MIN_TERM_LENGTH
@@ -64,7 +69,7 @@ function buildGlossary(): GlossaryEntry[] {
   for (const m of getAllModels()) {
     if (!m.name || m.name.length < MIN_TERM_LENGTH) continue;
     if (m.year_to !== null) continue;
-    entries.push(makeEntry(m.name, `/stroje/${m.brand_slug}/${m.series_slug}/${m.slug}/`, 12));
+    entries.push(makeEntry(m.name, `/stroje/${m.brand_slug}/${m.series_slug}/${m.slug}/`, 12, false, true));
   }
 
   for (const d of getAllDruhy()) {
@@ -199,7 +204,7 @@ function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>): string {
+function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>, locale: Locale): string {
   if (used.size >= MAX_LINKS_PER_ARTICLE) return text;
   // Lowercase the haystack ONCE per text node, then String.includes() prefilter
   // skips ~90% of glossary entries for free. Without this, 640 entries × N text nodes
@@ -216,21 +221,17 @@ function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>): 
       const before = s.slice(0, match.index);
       const matched = match[0];
       const after = s.slice(match.index + matched.length);
+      const href = entry.localizable ? localizeInternalHref(locale, entry.url) : entry.url;
       const attrs = entry.external
         ? ` class="auto-link auto-link-external" target="_blank" rel="noopener"`
         : ` class="auto-link"`;
-      s = `${before}<a href="${entry.url}"${attrs}>${matched}</a>${after}`;
+      s = `${before}<a href="${href}"${attrs}>${matched}</a>${after}`;
       used.add(entry.url);
     }
   }
   return s;
 }
 
-/**
- * Inject internal links into article HTML.
- * @param html — article HTML (CMS-rendered, may contain <p>, <h2>, <a>, <img>, etc.)
- * @param excludeUrl — current page URL path (e.g. `/stroje/fendt/`); the linker won't link to this.
- */
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')
@@ -240,10 +241,22 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;');
 }
 
+/** Normalizuje URL (plný i lokalizovaný) na cs-root path, aby self-exclusion
+ *  klíč odpovídal cs-root glossary URL bez ohledu na to, co caller předá. */
+function normalizeToCsRoot(url: string): string {
+  let path = url;
+  const scheme = path.indexOf('://');
+  if (scheme !== -1) {
+    const slash = path.indexOf('/', scheme + 3);
+    path = slash === -1 ? '/' : path.slice(slash);
+  }
+  return stripLocale(path).path;
+}
+
 /** Shared state used to dedupe links across multiple injectLinks() calls (e.g. perex + body). */
 export function createLinkContext(excludeUrl?: string): Set<string> {
   const used = new Set<string>();
-  if (excludeUrl) used.add(excludeUrl);
+  if (excludeUrl) used.add(normalizeToCsRoot(excludeUrl));
   return used;
 }
 
@@ -252,13 +265,20 @@ export function createLinkContext(excludeUrl?: string): Set<string> {
  * so output is safe to use with `set:html`.
  *
  * Pass `used` from createLinkContext() to share dedup state with a subsequent injectLinks() call.
+ * @param locale — cílový locale; cs (default) = no-op, sk/uk lokalizuje brand/model odkazy.
  */
-export function injectLinksInText(text: string, excludeUrlOrUsed?: string | Set<string>): string {
+export function injectLinksInText(text: string, excludeUrlOrUsed?: string | Set<string>, locale: Locale = defaultLocale): string {
   if (!text) return text;
-  return injectLinks(escapeHtml(text), excludeUrlOrUsed);
+  return injectLinks(escapeHtml(text), excludeUrlOrUsed, locale);
 }
 
-export function injectLinks(html: string, excludeUrlOrUsed?: string | Set<string>): string {
+/**
+ * Inject internal links into article HTML.
+ * @param html — article HTML (CMS-rendered, may contain <p>, <h2>, <a>, <img>, etc.)
+ * @param excludeUrlOrUsed — current page URL path (e.g. `/stroje/fendt/`) or a shared Set from createLinkContext(); the linker won't link to this URL.
+ * @param locale — cílový locale; cs (default) = no-op, sk/uk lokalizuje brand/model odkazy.
+ */
+export function injectLinks(html: string, excludeUrlOrUsed?: string | Set<string>, locale: Locale = defaultLocale): string {
   if (!html) return html;
   try {
     const glossary = getGlossary();
@@ -279,7 +299,7 @@ export function injectLinks(html: string, excludeUrlOrUsed?: string | Set<string
         }
         out.push(tok.value);
       } else if (tok.type === 'text' && protectedDepth === 0) {
-        out.push(tryInject(tok.value, glossary, used));
+        out.push(tryInject(tok.value, glossary, used, locale));
       } else {
         out.push(tok.value);
       }

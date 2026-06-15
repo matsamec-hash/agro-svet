@@ -4,7 +4,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, type StrojKategorie } from '../../lib/stroje';
-import { useTranslations, plural, tf, getLocaleFromUrl, localizePath } from '../../i18n/utils';
+import { useTranslations, plural, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -128,10 +128,10 @@ const NL = '\n';
         </div>
 
         <div class="hero-actions">
-          <a class="cta-primary" href="/stroje/traktory/">{NL}{tr('cat.label.traktory')} <span class="cta-c">{traktoryCount}</span>
+          <a class="cta-primary" href={localizeInternalHref(locale, '/stroje/traktory/')}>{NL}{tr('cat.label.traktory')} <span class="cta-c">{traktoryCount}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-primary" href="/stroje/kombajny/">{NL}{tr('cat.label.kombajny')} <span class="cta-c">{kombajnyCount}</span>
+          <a class="cta-primary" href={localizeInternalHref(locale, '/stroje/kombajny/')}>{NL}{tr('cat.label.kombajny')} <span class="cta-c">{kombajnyCount}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
           <a class="cta-secondary" href="#znacky">
@@ -141,10 +141,10 @@ const NL = '\n';
 
       <div class="hero-right">
         <div class="hero-photo-stack">
-          <a class="hsp-tile hsp-traktor" href="/stroje/traktory/" style="background-image:url('/images/traktor.webp')">
+          <a class="hsp-tile hsp-traktor" href={localizeInternalHref(locale, '/stroje/traktory/')} style="background-image:url('/images/traktor.webp')">
             <div class="hsp-label"><span>{tr('cat.label.traktory')}</span><span class="c">{traktoryCount}</span></div>
           </a>
-          <a class="hsp-tile hsp-kombajn" href="/stroje/kombajny/" style="background-image:url('/images/kombajn.webp')">
+          <a class="hsp-tile hsp-kombajn" href={localizeInternalHref(locale, '/stroje/kombajny/')} style="background-image:url('/images/kombajn.webp')">
             <div class="hsp-label"><span>{tr('cat.label.kombajny')}</span><span class="c">{kombajnyCount}</span></div>
           </a>
         </div>
@@ -209,7 +209,7 @@ const NL = '\n';
     <h2 id="results-heading" class="section-title results-heading">{tr('cat.s.results')} <span id="results-heading-c" class="section-title-c"></span></h2>
     <div id="brand-grid" class="brand-grid">
       {brandCards.map((b) => (
-        <a href={`/stroje/${b.slug}/`} class="brand-card">
+        <a href={localizeInternalHref(locale, `/stroje/${b.slug}/`)} class="brand-card">
           <div class="bc-head">
             <div class="bc-logo" data-letter={b.name.charAt(0).toUpperCase()}>
               <img src={`/images/stroje/brands/${b.slug}.png`} alt={tf(locale, 'cat.brandLogoAlt', { brand: b.name })} loading="lazy" width="64" height="64" onerror="this.remove()" />

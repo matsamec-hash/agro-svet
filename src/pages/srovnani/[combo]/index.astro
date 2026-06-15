@@ -25,7 +25,7 @@ import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
 import { comparisonInsights } from '../../../lib/comparison-insights';
 import { implementComparisonInsights } from '../../../lib/implement-comparison-insights';
-import { useTranslations, tf, getLocaleFromUrl, localizePath } from '../../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -151,7 +151,7 @@ function modelLink(m: typeof a): string {
     <nav class="breadcrumb" aria-label={tr('cat.sr.c.bcAria')}>
       <a href="/">{tr('cat.sr.c.bcHome')}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/srovnani/">{tr('cat.sr.c.bcSrovnani')}</a>
+      <a href={localizeInternalHref(locale, '/srovnani/')}>{tr('cat.sr.c.bcSrovnani')}</a>
       <span class="sep" aria-hidden="true">›</span>
       <span class="current">{aDisplay} vs {bDisplay}</span>
     </nav>
@@ -161,9 +161,9 @@ function modelLink(m: typeof a): string {
       <h1>{aDisplay} <em>vs</em> {bDisplay}</h1>
       <p class="hero-lede">{insights.tldr}</p>
       <div class="hero-meta">
-        <span class="hm-brand"><a href={`/znacky/${a.brand_slug}/`}>{a.brand_name}</a></span>
+        <span class="hm-brand"><a href={localizeInternalHref(locale, `/znacky/${a.brand_slug}/`)}>{a.brand_name}</a></span>
         <span class="hm-sep" aria-hidden="true">·</span>
-        <span class="hm-brand"><a href={`/znacky/${b.brand_slug}/`}>{b.brand_name}</a></span>
+        <span class="hm-brand"><a href={localizeInternalHref(locale, `/znacky/${b.brand_slug}/`)}>{b.brand_name}</a></span>
         <span class="hm-sep" aria-hidden="true">·</span>
         <time class="hm-date" datetime={insights.lastUpdatedIso}>{tf(locale, 'cat.sr.c.updated', { date: lastUpdatedHuman })}</time>
       </div>
@@ -278,7 +278,7 @@ function modelLink(m: typeof a): string {
         <ul class="related-list">
           {related.map((r) => (
             <li>
-              <a href={`/srovnani/${r.combo}/`}>
+              <a href={localizeInternalHref(locale, `/srovnani/${r.combo}/`)}>
                 <span class="rl-pair">{modelDisplayName(r.a)} <em>vs</em> {modelDisplayName(r.b)}</span>
                 <span class="rl-cta">{tr('cat.sr.c.openLink')}</span>
               </a>

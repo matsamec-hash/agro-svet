@@ -4,6 +4,24 @@ Datum: 2026-06-14
 Větev (plán): `feat/i18n-internal-siloing`
 Návaznost: sitemap `lastmod` fix (PR #81) — tohle je silnější páka pro „Objeveno – neindexováno“.
 
+## ⚠️ ADDENDUM (2026-06-15) — dynamické hrefy (rozšíření scope)
+
+Původní audit grepoval jen statické `href="/..."` a **minul dynamické `href={`/...`}`**
+(brand karty, model/série odkazy, srovnávací karty, odkazy na články) — což jsou ZÁSADNÍ
+interní navigační odkazy způsobující osiření. Odhaleno finálním code review. Rozšíření
+(commity „dynamické SSR-target odkazy“) je dokrylo. **Pravidlo pro dynamické hrefy:**
+- **Lokalizovat** (cíl je SSR routa renderovaná pod /sk|/uk): `/stroje/{brand}/`,
+  `/stroje/{brand}/{series}/`, `/stroje/{brand}/{series}/{model}/`, `/znacky/{slug}/`,
+  `/srovnani/{combo}/`, `/novinky/{slug}/`, `/novinky/kategorie/{cat}/`, `/dotace/{slug}/`,
+  `/encyklopedie/{slug}/`.
+- **Ponechat cs** (cíl je PRERENDERED → pod /sk 302): cokoliv s `/rada/`,
+  a `/stroje/zemedelske-stroje/{group}/`. (Stejný no-302 princip jako u auto-linker
+  FUNCTIONAL_GROUPS.)
+- **Mimo** (cs-only prerendered stránky, locale vždy cs → no-op): `pruvodce/*`, `prodejci/*`,
+  `admin/*`, `zebricky/[slug]`, prerendered stroje routy (`[subcategory]`, `[group]`, `[family]`).
+- **JS redirect** v `srovnani/index.astro` lokalizován přes `data-srovnani-base={localizePath(...)}`
+  na `<form>` + `form.dataset.srovnaniBase` (cs = `/srovnani/`, byte-identické).
+
 ## Problém
 
 SK detailní stránky (~6 607 URL v sitemapě) jsou **osiřelé**: vedou na ně jen sitemapa,

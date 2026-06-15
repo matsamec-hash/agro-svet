@@ -4,6 +4,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, itemListSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
 import { content } from '../../../i18n/dotace';
+import { localizeInternalHref } from '../../../i18n/utils';
 import { linkBase } from '../../../lib/dotace-format';
 import { DECISION_ROWS, ELIGIBILITY } from '../../../lib/dotace-hub';
 
@@ -36,7 +37,7 @@ const itemListJsonLd = itemListSchema(
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">{c.crumbHome}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href="/dotace/">{c.crumbSelf}</a>
+      <a href={localizeInternalHref(locale, '/dotace/')}>{c.crumbSelf}</a>
       <span class="sep" aria-hidden="true">›</span>
       <span class="current">{jv.crumb}</span>
     </nav>
@@ -66,7 +67,7 @@ const itemListJsonLd = itemListSchema(
                 <td class="td-code"><span class="tp-code">{row.intervence}</span></td>
                 <td class="td-omezeni">{row.omezeni}</td>
                 <td class="td-actions">
-                  <a class="row-link" href={`/dotace/${row.titulSlug}/`}>{jv.rowDetailLink}</a>
+                  <a class="row-link" href={localizeInternalHref(locale, `/dotace/${row.titulSlug}/`)}>{jv.rowDetailLink}</a>
                   <a class="row-link ghost" href={row.strojeHref}>{jv.rowStrojeLink}</a>
                 </td>
               </tr>
@@ -92,8 +93,8 @@ const itemListJsonLd = itemListSchema(
       <h2>{jv.stepsTitle}</h2>
       <div class="steps-body" set:html={jv.stepsBodyHtml} />
       <div class="ib-actions">
-        <a class="ib-btn primary" href="/dotace/">{c.crumbSelf}</a>
-        <a class="ib-btn ghost" href="/dotace/kalendar-kol/">{c.kalendarKol.crumbKalendar}</a>
+        <a class="ib-btn primary" href={localizeInternalHref(locale, '/dotace/')}>{c.crumbSelf}</a>
+        <a class="ib-btn ghost" href={localizeInternalHref(locale, '/dotace/kalendar-kol/')}>{c.kalendarKol.crumbKalendar}</a>
       </div>
     </section>
   </div>

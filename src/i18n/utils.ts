@@ -32,7 +32,7 @@ export function localizePath(locale: Locale, path: string): string {
 export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   cs: [],
   sk: ['/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/jak-na-to', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
-  uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/puda'],
+  uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
@@ -51,17 +51,19 @@ export function isSkLaunchedPath(csRootPath: string): boolean {
  *  /sk odkaz nevede na 404. Ověřeno živě. (Hub /stroje/ SSR funguje, kategorie ne.) */
 const SK_PRERENDERED_NAV_PATHS: string[] = [];
 
-/** Lokalizuje navigační/footer href pro daný locale. Pro cs vrací href beze změny.
- *  Pro non-cs přidá `/sk` (resp. `/uk`) prefix POUZE u cest, které pod daným locale
- *  reálně fungují — tj. launchnuté sekce + home; nelaunchnuté a prerendered-pod-/sk
- *  cesty nechá na cs, aby menu nevedlo na 404 ani neservírovalo míchaný obsah. */
-export function navHref(locale: Locale, href: string): string {
+/** Lokalizuje interní href pro daný locale POUZE u launchnutých (reálně
+ *  renderovaných) sekcí; jinak vrací cs href beze změny. Pro cs no-op.
+ *  Sdílené: nav/footer + huby/listingy + auto-linker. */
+export function localizeInternalHref(locale: Locale, href: string): string {
   if (locale === defaultLocale) return href;
   const root = href.replace(/\/+$/, '') || '/';
   if (root === '/') return localizePath(locale, href);
   if (isLaunchedPath(locale, root) && !SK_PRERENDERED_NAV_PATHS.includes(root)) return localizePath(locale, href);
   return href;
 }
+
+/** Zpětně kompatibilní alias (volá ho Layout/nav/footer). */
+export const navHref = localizeInternalHref;
 
 /** Cílová cesta přepínače jazyka. Když cílový locale danou cs-cestu nemá
  *  (skrytá novinková kategorie, nelaunchnutá sekce nebo prerendered-pod-/sk

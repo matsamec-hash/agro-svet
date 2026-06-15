@@ -19,8 +19,9 @@ const PUDA_COLLECTION = { cs: 'puda', sk: 'pudaSk', uk: 'pudaUk' } as const;
 const item = slug ? await getEntry(PUDA_COLLECTION[locale as 'cs' | 'sk' | 'uk'] ?? 'puda', slug) : undefined;
 if (!item) return new Response(null, { status: 404 });
 
-// Auto-linker JEN pro cs/sk (uk: cs-rooted odkazy by vedly do cs sekcí → vypnuto).
-const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/puda/${slug}/`, locale !== 'uk');
+// Auto-linker je locale-aware (siloing): pro uk lokalizuje interní odkazy na /uk
+// launchnuté sekce, jinak cs fallback — žádný cs leak v UK textu.
+const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/puda/${slug}/`, locale);
 
 const pageUrl = `${SITE_URL}${base}/puda/${slug}/`;
 const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA' } as const)[locale as 'cs' | 'sk' | 'uk'] ?? 'cs-CZ';

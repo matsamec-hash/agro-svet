@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   getLocaleFromUrl, stripLocale, localizePath, getAlternates, isSkLaunchedPath, langSwitchHref,
-  isLaunchedPath, LAUNCHED_PREFIXES, navHref,
+  isLaunchedPath, LAUNCHED_PREFIXES, navHref, localizeInternalHref,
 } from '../../src/i18n/utils';
 
 describe('getLocaleFromUrl', () => {
@@ -129,5 +129,33 @@ describe('navHref/langSwitchHref per-locale (uk po launchi fáze 2)', () => {
   });
   it('langSwitchHref uk: launchnutá sekce → /uk/<sekce>', () => {
     expect(langSwitchHref('uk', '/stroje/', [])).toBe('/uk/stroje/');
+  });
+});
+
+describe('localizeInternalHref', () => {
+  it('cs = no-op (byte-identické)', () => {
+    expect(localizeInternalHref('cs', '/stroje/fendt/')).toBe('/stroje/fendt/');
+    expect(localizeInternalHref('cs', '/')).toBe('/');
+  });
+  it('sk: launchnutá sekce → /sk prefix', () => {
+    expect(localizeInternalHref('sk', '/stroje/traktory/')).toBe('/sk/stroje/traktory/');
+    expect(localizeInternalHref('sk', '/dotace/')).toBe('/sk/dotace/');
+    expect(localizeInternalHref('sk', '/')).toBe('/sk/');
+  });
+  it('sk: NElaunchnutá sekce → cs beze změny (žádné 302)', () => {
+    expect(localizeInternalHref('sk', '/plemena/skot/')).toBe('/plemena/skot/');
+    expect(localizeInternalHref('sk', '/zebricky/nej-traktory/')).toBe('/zebricky/nej-traktory/');
+  });
+  it('uk: launchnutá → /uk; nelaunchnutá (novinky není uk) → cs', () => {
+    expect(localizeInternalHref('uk', '/stroje/')).toBe('/uk/stroje/');
+    expect(localizeInternalHref('uk', '/novinky/')).toBe('/novinky/');
+  });
+  it('non-path vstup se nerozbije', () => {
+    expect(localizeInternalHref('sk', '#sekce')).toBe('#sekce');
+    expect(localizeInternalHref('sk', 'https://x.cz/stroje/')).toBe('https://x.cz/stroje/');
+  });
+  it('navHref je identický alias', () => {
+    expect(navHref('sk', '/stroje/')).toBe(localizeInternalHref('sk', '/stroje/'));
+    expect(navHref('uk', '/novinky/')).toBe(localizeInternalHref('uk', '/novinky/'));
   });
 });

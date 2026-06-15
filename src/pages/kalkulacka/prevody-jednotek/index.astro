@@ -8,6 +8,7 @@ import { SITE_URL } from '../../../lib/config';
 import AreaConverter from '../../../components/AreaConverter.astro';
 import { content } from '../../../i18n/kalkulacka/prevody-jednotek';
 import { crumbs } from '../../../i18n/kalkulacka/common';
+import { localizeInternalHref } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? 'cs';
 const c = content[locale] ?? content.cs;
@@ -181,8 +182,8 @@ const faqJsonLd = faqPageSchema(faqItems);
       <h2>Další užitečné stránky</h2>
       <ul class="pj-related-list">
         <li><a href="/slovnik/?kategorie=jednotky">📐 Slovník — všechny jednotky a měření</a></li>
-        <li><a href="/kalkulacka/naklady-na-hektar/">🌾 Kalkulačka nákladů na hektar</a></li>
-        <li><a href="/kalkulacka/dotace-cap/">💶 Kalkulačka dotací CAP 2024</a></li>
+        <li><a href={localizeInternalHref(locale, '/kalkulacka/naklady-na-hektar/')}>🌾 Kalkulačka nákladů na hektar</a></li>
+        <li><a href={localizeInternalHref(locale, '/kalkulacka/dotace-cap/')}>💶 Kalkulačka dotací CAP 2024</a></li>
         <li><a href="/slovnik/hektar/">🟨 Hektar (ha) — detail jednotky</a></li>
         <li><a href="/slovnik/q-cent/">⚖️ Cent (q) — jednotka výnosu</a></li>
       </ul>
