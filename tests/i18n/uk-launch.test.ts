@@ -11,8 +11,8 @@ describe('UK fáze 2 launch (stroje/srovnani/znacky/encyklopedie)', () => {
       expect(isLaunchedPath('uk', `${p}/cokoli/`)).toBe(true);
     }
   });
-  it('jurisdikční data NEjsou launchnuté pro uk', () => {
-    for (const p of ['/dotace', '/statistiky', '/puda']) {
+  it('jurisdikční data NEjsou launchnuté pro uk (kromě /puda — fáze 4b)', () => {
+    for (const p of ['/dotace', '/statistiky']) {
       expect(isLaunchedPath('uk', p)).toBe(false);
     }
   });
@@ -44,5 +44,13 @@ describe('UK fáze 4a launch (slovnik)', () => {
   });
   it('cs /slovnik nedostane gating-noindex', () => {
     expect(isLaunchedPath('cs', '/slovnik/adblue/')).toBe(false);
+  });
+});
+
+describe('UK fáze 4b launch (puda)', () => {
+  it('/puda je launchnuté pro uk', () => {
+    expect(LAUNCHED_PREFIXES.uk).toContain('/puda');
+    expect(isLaunchedPath('uk', '/puda')).toBe(true);
+    expect(isLaunchedPath('uk', '/puda/eroze/')).toBe(true);
   });
 });

@@ -32,7 +32,7 @@ export function localizePath(locale: Locale, path: string): string {
 export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   cs: [],
   sk: ['/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/jak-na-to', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
-  uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik'],
+  uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

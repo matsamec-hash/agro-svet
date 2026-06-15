@@ -1,0 +1,196 @@
+{
+  "generated": "2026-06-15",
+  "warCaveat": "Дані відображають доступну офіційну статистику. Частина сільгоспугідь тимчасово окупована або замінована — агреговані показники можуть бути неповними.",
+  "bigNumbers": [
+    {
+      "val": "≈25",
+      "unit": "%",
+      "lbl": "світових запасів чорнозему",
+      "trend": "приблизно чверть світових родючих чорноземів",
+      "source": "VoxUkraine / Oakland Institute",
+      "url": "https://www.oaklandinstitute.org/our-take/who-owns-agricultural-land-ukraine"
+    },
+    {
+      "val": "≈32,9",
+      "unit": "млн га",
+      "lbl": "орних земель",
+      "trend": "за даними Світового банку (2023)",
+      "source": "Світовий банк",
+      "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA"
+    },
+    {
+      "val": "≈60,7",
+      "unit": "тис. грн/га",
+      "lbl": "середня ціна гектара (червень 2025)",
+      "trend": "зросла з ≈33,7 тис. грн наприкінці 2021 до ≈60,7 тис. грн (червень 2025) — +80 % за серією цін Опендатабот",
+      "source": "Опендатабот",
+      "url": "https://opendatabot.ua/en/analytics/land-2025"
+    },
+    {
+      "val": "≈339,6",
+      "unit": "тис. угод",
+      "lbl": "купівлі-продажу землі з 2021 року",
+      "trend": "понад 636 тис. га на суму 30,4 млрд грн (станом на липень 2025)",
+      "source": "Опендатабот / Держгеокадастр",
+      "url": "https://opendatabot.ua/en/analytics/land-2025"
+    }
+  ],
+  "reformTimeline": [
+    {
+      "year": "до 2001",
+      "title": "Паювання землі",
+      "text": "Роздержавлення колгоспної землі — близько 7 млн громадян отримали земельні паї.",
+      "source": "Держгеокадастр",
+      "url": "https://land.gov.ua/"
+    },
+    {
+      "year": "2001–2021",
+      "title": "Мораторій на продаж",
+      "text": "Заборона на продаж земель сільськогосподарського призначення; обіг лише через оренду.",
+      "source": "Верховна Рада України",
+      "url": "https://zakon.rada.gov.ua/"
+    },
+    {
+      "year": "01.07.2021",
+      "title": "Відкриття ринку (етап 1)",
+      "text": "Купувати можуть лише фізичні особи — громадяни України, до 100 га в одні руки.",
+      "source": "Закон №552-IX",
+      "url": "https://zakon.rada.gov.ua/laws/show/552-20"
+    },
+    {
+      "year": "01.01.2024",
+      "title": "Етап 2",
+      "text": "Доступ юридичних осіб (з українськими бенефіціарами), ліміт до 10 000 га. Іноземці — лише після референдуму.",
+      "source": "Закон №552-IX",
+      "url": "https://zakon.rada.gov.ua/laws/show/552-20"
+    }
+  ],
+  "cena": {
+    "unit": "грн/га",
+    "asOf": "червень 2025",
+    "source": "Опендатабот",
+    "url": "https://opendatabot.ua/en/analytics/land-2025",
+    "max": 70000,
+    "ticks": [0, 17500, 35000, 52500, 70000],
+    "series": [
+      { "year": 2021, "value": 33700 },
+      { "year": 2022, "value": 37867 },
+      { "year": 2023, "value": 42000 },
+      { "year": 2024, "value": 47300 },
+      { "year": 2025, "value": 60700 }
+    ]
+  },
+  "najem": {
+    "unit": "грн/га/рік",
+    "asOf": "",
+    "source": "",
+    "url": "https://land.gov.ua/",
+    "max": 0,
+    "ticks": [],
+    "series": []
+  },
+  "plodiny": [
+    {
+      "crop": "Соняшник",
+      "hectares": 5300000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
+    },
+    {
+      "crop": "Пшениця",
+      "hectares": 4500000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
+    },
+    {
+      "crop": "Кукурудза",
+      "hectares": 3900000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
+    },
+    {
+      "crop": "Соя",
+      "hectares": 2200000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
+    },
+    {
+      "crop": "Ячмінь",
+      "hectares": 1400000,
+      "source": "Мінагрополітики (посівні площі 2024)",
+      "url": "https://minagro.gov.ua/"
+    }
+  ],
+  "facts": [
+    {
+      "val": "≈32,9",
+      "unit": "млн га",
+      "lbl": "Орні землі",
+      "note": "Площа орних земель за класифікацією FAO (дані Світового банку, 2023).",
+      "source": "Світовий банк",
+      "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA"
+    },
+    {
+      "val": "≈25",
+      "unit": "%",
+      "lbl": "Частка світового чорнозему",
+      "note": "Україна володіє приблизно чвертю світових запасів чорнозему.",
+      "source": "Oakland Institute",
+      "url": "https://www.oaklandinstitute.org/our-take/who-owns-agricultural-land-ukraine"
+    },
+    {
+      "val": "≈6,9",
+      "unit": "млн",
+      "lbl": "Власників паїв",
+      "note": "Приватними власниками земельних паїв є близько 6,9 млн громадян.",
+      "source": "VoxUkraine",
+      "url": "https://voxukraine.org/en/ukraines-agriculture-and-farmland-market-the-impact-of-war"
+    },
+    {
+      "val": "≈75",
+      "unit": "%",
+      "lbl": "У приватній власності",
+      "note": "Близько 31 млн га (≈75 %) сільгоспземель перебуває у приватній власності; більшість обробляється на умовах оренди.",
+      "source": "VoxUkraine",
+      "url": "https://voxukraine.org/en/ukraines-agriculture-and-farmland-market-the-impact-of-war"
+    },
+    {
+      "val": "339,6",
+      "unit": "тис. угод",
+      "lbl": "Угод купівлі-продажу",
+      "note": "З відкриття ринку (липень 2021) укладено ≈339,6 тис. угод на понад 636 тис. га за 30,4 млрд грн (станом на липень 2025).",
+      "source": "Опендатабот / Держгеокадастр",
+      "url": "https://opendatabot.ua/en/analytics/land-2025"
+    },
+    {
+      "val": "≈47,3",
+      "unit": "тис. грн/га",
+      "lbl": "Середня ціна (2024)",
+      "note": "Середня вартість гектара сільгоспземлі у 2024 році; протягом року коливалася в межах 43–52 тис. грн.",
+      "source": "Опендатабот",
+      "url": "https://opendatabot.ua/en/analytics/land-2025"
+    }
+  ],
+  "threats": [
+    {
+      "lbl": "Замінування територій",
+      "pct": 23,
+      "detail": "Станом на лютий 2024 потенційно забруднено вибухонебезпечними предметами ≈156 тис. км² (зменшено зі 174 тис. км²) — близько чверті території країни. Україна — найбільш замінована країна світу (Мінекономіки України; ACAPS)."
+    },
+    {
+      "lbl": "Окупація сільгоспземель",
+      "pct": 20,
+      "detail": "За оцінкою Європейського парламенту (EPRS, 2024), під російською окупацією перебуває близько 20 % найродючіших сільгоспугідь України; ще ≈2 млн га орних земель непридатні для обробітку через замінування."
+    }
+  ],
+  "sources": [
+    { "label": "Держгеокадастр — Державна служба з питань геодезії, картографії та кадастру", "url": "https://land.gov.ua/" },
+    { "label": "Держстат — Державна служба статистики України", "url": "https://www.ukrstat.gov.ua/" },
+    { "label": "Мінагрополітики України", "url": "https://minagro.gov.ua/" },
+    { "label": "Опендатабот — моніторинг ринку землі", "url": "https://opendatabot.ua/en/analytics/land-2025" },
+    { "label": "Світовий банк — World Development Indicators", "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA" },
+    { "label": "USDA FAS — Foreign Agricultural Service (Ukraine)", "url": "https://www.fas.usda.gov/data/production/up" },
+    { "label": "VoxUkraine — Ukraine's agriculture and farmland market", "url": "https://voxukraine.org/en/ukraines-agriculture-and-farmland-market-the-impact-of-war" },
+    { "label": "Європейський парламент (EPRS) — Ukrainian agriculture (2024)", "url": "https://www.europarl.europa.eu/RegData/etudes/BRIE/2024/760432/EPRS_BRI(2024)760432_EN.pdf" }
+  ]
+}
