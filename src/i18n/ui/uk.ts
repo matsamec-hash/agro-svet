@@ -475,6 +475,16 @@ const uk: Record<string, string> = {
   'stat.inputs.cardFuel': 'Дизпаливо — тижневий середній (52 тижні)',
   'stat.inputs.cardFert': 'Добрива — річний середній (Kč/т)',
 
+  // — statistiky UK kurátovaný hub (stat.uk.*) —
+  'stat.uk.h.bigNumbers': 'Україна у світовому вимірі',
+  'stat.uk.h.produkce': 'Виробництво та експорт культур',
+  'stat.uk.h.valka': 'Вплив війни на виробництво',
+  'stat.uk.h.ceny': 'Ціни',
+  'stat.uk.sources.h': 'Джерела даних',
+  'stat.uk.pills.temata': 'Огляд',
+  'stat.uk.prod.production': 'Виробництво',
+  'stat.uk.prod.export': 'Експорт',
+
   // — PriceScissors —
   'stat.scissors.h2': '⚡ Цінові ножиці — що дорожчає: ресурси чи продукція?',
   'stat.scissors.explainer': 'Динаміка цін на ресурси (дизпаливо + добриво NPK) та продукцію (4 основні товари: пшениця, ячмінь, ріпак, кукурудза).',
