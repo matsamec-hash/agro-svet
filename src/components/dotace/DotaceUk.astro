@@ -20,7 +20,7 @@ const PILLS = [
   title="Державна підтримка сільського господарства України — гранти, кредити, програми"
   description="Як отримати державну підтримку для аграріїв в Україні: Державний аграрний реєстр і Дія, воєнні гранти, доступні кредити 5-7-9 та підтримка ЄС і донорів."
 >
-  <main class="puda-root">
+  <div class="puda-root">
     <section class="sp-hero">
       <div class="sp-hero-left">
         <span class="sp-kicker"><span class="dot"></span>ПІДТРИМКА АГРАРІЇВ · УКРАЇНА</span>
@@ -54,8 +54,10 @@ const PILLS = [
     )}
 
     {d.programs.length > 0 && (
-      <section class="facts-grid" id="programs">
-        {d.programs.map((p) => (
+      <section class="crops-section" id="programs">
+        <header><h2>{t('dotace.uk.h.programs')}</h2></header>
+        <div class="facts-grid">
+          {d.programs.map((p) => (
           <div class="fact prog-card">
             <span class="prog-type">{p.type}</span>
             <span class="fact-lbl">{p.name}</span>
@@ -65,7 +67,8 @@ const PILLS = [
             <span class="fact-note">{p.summary}</span>
             <a class="fact-source" href={p.url} target="_blank" rel="noopener noreferrer"><span class="fact-source-prefix">Джерело:</span> {p.source} · {p.asOf}</a>
           </div>
-        ))}
+          ))}
+        </div>
       </section>
     )}
 
@@ -90,7 +93,7 @@ const PILLS = [
         {d.sources.map((s) => (<li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></li>))}
       </ul>
     </section>
-  </main>
+  </div>
 </Layout>
 
 <style>
