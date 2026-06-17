@@ -29,9 +29,29 @@ describe('agro-stats-uk.json', () => {
         assertAttrib(blk);
         const years = blk.series.map((p) => p.year);
         expect(years).toEqual([...years].sort((a, b) => a - b));
-        for (const p of blk.series) expect(typeof p.value).toBe('number');
+        // Guard 1 — žádné duplicitní roky
+        expect(new Set(years).size).toBe(years.length); // žádné duplicitní roky
+        for (const p of blk.series) {
+          // Guard 2 — každá hodnota je finite a kladná
+          expect(Number.isFinite(p.value)).toBe(true);
+          expect(p.value).toBeGreaterThan(0);
+        }
       }
       expect(c.name.length).toBeGreaterThan(0);
+    }
+  });
+
+  // Guard 3 — max/ticks jsou validní a nepřekrývají (anti-clipping)
+  it('max/ticks jsou validní a chart-safe pro každou plodinu a sérii', () => {
+    for (const c of d.crops) {
+      for (const blk of [c.production, c.area]) {
+        const seriesMax = Math.max(...blk.series.map((p) => p.value));
+        expect(blk.max).toBeGreaterThanOrEqual(seriesMax);
+        expect(blk.ticks.length).toBeGreaterThan(0);
+        expect(blk.ticks[0]).toBe(0);
+        expect(blk.ticks).toEqual([...blk.ticks].sort((a, b) => a - b));
+        expect(blk.ticks.at(-1)).toBeLessThanOrEqual(blk.max);
+      }
     }
   });
 
