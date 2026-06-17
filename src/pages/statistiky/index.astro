@@ -134,6 +134,7 @@ const PILLS = [
 ---
 
 {locale === 'uk' ? <StatistikyUk /> : (
+<Fragment>
 <Layout
   title={t('stat.meta.title')}
   description={t('stat.meta.description')}
@@ -200,7 +201,6 @@ const PILLS = [
     thousTons: locale === 'sk' ? 'tis. ton' : 'tis. tun',
   })}></script>
 </Layout>
-)}
 
 <!-- Chart.js + annotation plugin from CDN -->
 <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
@@ -612,6 +612,8 @@ const PILLS = [
     });
   })();
 </script>
+</Fragment>
+)}
 
 <style>
   .sp-page {
