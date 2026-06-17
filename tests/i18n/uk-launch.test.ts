@@ -11,8 +11,8 @@ describe('UK fáze 2 launch (stroje/srovnani/znacky/encyklopedie)', () => {
       expect(isLaunchedPath('uk', `${p}/cokoli/`)).toBe(true);
     }
   });
-  it('jurisdikční data NEjsou launchnuté pro uk (kromě /puda — fáze 4b)', () => {
-    for (const p of ['/dotace', '/statistiky']) {
+  it('jurisdikční data NEjsou launchnuté pro uk (kromě /puda — 4b, /statistiky — 4c)', () => {
+    for (const p of ['/dotace']) {
       expect(isLaunchedPath('uk', p)).toBe(false);
     }
   });
@@ -52,5 +52,19 @@ describe('UK fáze 4b launch (puda)', () => {
     expect(LAUNCHED_PREFIXES.uk).toContain('/puda');
     expect(isLaunchedPath('uk', '/puda')).toBe(true);
     expect(isLaunchedPath('uk', '/puda/eroze/')).toBe(true);
+  });
+});
+
+describe('UK fáze 4c launch (statistiky)', () => {
+  it('/statistiky je launchnuté pro uk', () => {
+    expect(LAUNCHED_PREFIXES.uk).toContain('/statistiky');
+    expect(isLaunchedPath('uk', '/statistiky')).toBe(true);
+    expect(isLaunchedPath('uk', '/statistiky/')).toBe(true);
+  });
+  it('/statistiky není locked sekce', () => {
+    expect(isLockedSectionPath('/statistiky')).toBe(false);
+  });
+  it('cs /statistiky nedostane gating-noindex', () => {
+    expect(isLaunchedPath('cs', '/statistiky/')).toBe(false);
   });
 });

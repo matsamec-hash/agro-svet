@@ -28,6 +28,7 @@ import LivestockSlope from '../../components/statistiky/LivestockSlope.astro';
 import StoryCards from '../../components/statistiky/StoryCards.astro';
 import MethodologyFooter from '../../components/statistiky/MethodologyFooter.astro';
 import BottomCTA from '../../components/statistiky/BottomCTA.astro';
+import StatistikyUk from '../../components/statistiky/StatistikyUk.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const t = useTranslations(locale);
@@ -132,6 +133,7 @@ const PILLS = [
 ];
 ---
 
+{locale === 'uk' ? <StatistikyUk /> : (
 <Layout
   title={t('stat.meta.title')}
   description={t('stat.meta.description')}
@@ -198,6 +200,7 @@ const PILLS = [
     thousTons: locale === 'sk' ? 'tis. ton' : 'tis. tun',
   })}></script>
 </Layout>
+)}
 
 <!-- Chart.js + annotation plugin from CDN -->
 <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
