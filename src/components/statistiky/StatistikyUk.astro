@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DataSegmentNav from '../../components/DataSegmentNav.astro';
+import { useTranslations, localizePath } from '../../i18n/utils';
+import { buildLineChart, cropGrowthPct, type StatistikyUkData } from '../../lib/statistiky-uk';
+import raw from '../../data/agro-stats-uk.json';
+
+const d = raw as unknown as StatistikyUkData;
+const t = useTranslations('uk');
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+const charts = d.crops.map((c) => ({
+  crop: c,
+  production: buildLineChart(c.production.series, { max: c.production.max, ticks: c.production.ticks }),
+  area: buildLineChart(c.area.series, { max: c.area.max, ticks: c.area.ticks }),
+  growth: cropGrowthPct(c.production),
+}));
+const exportMax = d.exportShare.items.length ? Math.max(...d.exportShare.items.map((i) => i.pct)) : 100;
+---
+
+<Layout title={t('stat.uk.title')} description={t('stat.uk.desc')}>
+  <div class="stat-uk-root">
+    <DataSegmentNav active="komodity" />
+
+    <section class="su-hero">
+      <span class="su-kicker">{t('stat.uk.hero.kicker')}</span>
+      <h1 set:html={t('stat.uk.hero.h')}></h1>
+      <p class="su-lede">{t('stat.uk.hero.lede')}</p>
+    </section>
+
+    {d.bigNumbers.length > 0 && (
+      <section class="big-numbers">
+        {d.bigNumbers.map((b) => (
+          <div class="bn">
+            <span class="bn-val">{b.val}{b.unit && <span class="bn-unit">{b.unit}</span>}</span>
+            <span class="bn-lbl">{b.lbl}</span>
+            <span class="bn-sub">{b.sub}</span>
+            <a class="bn-source" href={b.url} target="_blank" rel="noopener noreferrer">{t('stat.uk.sourcePrefix')} {b.source} ({b.asOf})</a>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {d.warCaveat && <p class="war-caveat">⚠️ {d.warCaveat}</p>}
+
+    <section id="plodiny" class="su-block">
+      <h2>{t('stat.uk.h.plodiny')}</h2>
+      {charts.map(({ crop, production, area, growth }) => (
+        <div class="crop-card">
+          <h3>{crop.name}{growth !== null && <span class="crop-growth"> ({growth > 0 ? '+' : ''}{growth} %)</span>}</h3>
+          <p class="crop-note">{crop.note}</p>
+          <div class="crop-charts">
+            <figure>
+              <figcaption>{t('stat.uk.production')} ({crop.production.unit})</figcaption>
+              <svg viewBox={`0 0 ${production.w} ${production.h}`} class="line-chart" role="img" aria-label={`${crop.name} — ${t('stat.uk.production')}`}>
+                <path d={production.area} class="lc-area" />
+                <path d={production.path} class="lc-line" fill="none" />
+              </svg>
+              <a class="src" href={crop.production.url} target="_blank" rel="noopener noreferrer">{t('stat.uk.sourcePrefix')} {crop.production.source} ({crop.production.asOf})</a>
+            </figure>
+            <figure>
+              <figcaption>{t('stat.uk.area')} ({crop.area.unit})</figcaption>
+              <svg viewBox={`0 0 ${area.w} ${area.h}`} class="line-chart" role="img" aria-label={`${crop.name} — ${t('stat.uk.area')}`}>
+                <path d={area.area} class="lc-area" />
+                <path d={area.path} class="lc-line" fill="none" />
+              </svg>
+              <a class="src" href={crop.area.url} target="_blank" rel="noopener noreferrer">{t('stat.uk.sourcePrefix')} {crop.area.source} ({crop.area.asOf})</a>
+            </figure>
+          </div>
+        </div>
+      ))}
+    </section>
+
+    {d.exportShare.items.length > 0 && (
+      <section id="export" class="su-block">
+        <h2>{t('stat.uk.h.export')}</h2>
+        <ul class="export-bars">
+          {d.exportShare.items.map((i) => (
+            <li>
+              <span class="eb-label">{i.label}</span>
+              <span class="eb-track"><span class="eb-fill" style={`width:${(i.pct / exportMax) * 100}%`}></span></span>
+              <span class="eb-pct">{i.pct} {d.exportShare.unit}</span>
+            </li>
+          ))}
+        </ul>
+        <a class="src" href={d.exportShare.url} target="_blank" rel="noopener noreferrer">{t('stat.uk.sourcePrefix')} {d.exportShare.source} ({d.exportShare.asOf})</a>
+      </section>
+    )}
+
+    {d.facts.length > 0 && (
+      <section id="fakta" class="su-block">
+        <h2>{t('stat.uk.h.fakta')}</h2>
+        <ul class="facts">
+          {d.facts.map((f) => (
+            <li>{f.text} <a class="src" href={f.url} target="_blank" rel="noopener noreferrer">({f.source}, {f.asOf})</a></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="su-block sources">
+      <h2>{t('stat.uk.sources.h')}</h2>
+      <ul>
+        {d.sources.map((s) => (<li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></li>))}
+      </ul>
+    </section>
+
+    <p class="su-cta">
+      <a href={localizePath('uk', '/puda/')}>{t('stat.uk.cta.puda')}</a> ·
+      <a href={localizePath('uk', '/slovnik/')}>{t('stat.uk.cta.slovnik')}</a>
+    </p>
+  </div>
+
+  <style>
+    .stat-uk-root { max-width: 980px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .su-hero { margin: 1rem 0 1.6rem; }
+    .su-kicker { display: inline-block; font-size: .8rem; letter-spacing: .08em; color: #15803d; font-weight: 700; }
+    .su-hero h1 { font-size: 2rem; margin: .3rem 0 .6rem; }
+    .su-hero h1 em { color: #15803d; font-style: normal; }
+    .su-lede { color: #374151; font-size: 1.05rem; }
+    .big-numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.4rem 0; }
+    .bn { display: flex; flex-direction: column; gap: .15rem; padding: 1rem; border: 1px solid #e5e7eb; border-radius: 10px; }
+    .bn-val { font-size: 1.8rem; font-weight: 800; color: #166534; }
+    .bn-unit { font-size: 1rem; font-weight: 600; margin-left: .15rem; }
+    .bn-lbl { font-weight: 600; }
+    .bn-sub { color: #6b7280; font-size: .85rem; }
+    .bn-source, .src { color: #15803d; font-size: .75rem; text-decoration: none; }
+    .war-caveat { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: .7rem .9rem; color: #78350f; font-size: .9rem; }
+    .su-block { margin: 2rem 0; }
+    .su-block h2 { font-size: 1.35rem; margin-bottom: 1rem; }
+    .crop-card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem; margin-bottom: 1.2rem; }
+    .crop-card h3 { font-size: 1.15rem; margin: 0 0 .3rem; }
+    .crop-growth { color: #6b7280; font-size: .9rem; font-weight: 400; }
+    .crop-note { color: #374151; font-size: .9rem; margin: 0 0 .8rem; }
+    .crop-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 640px) { .crop-charts { grid-template-columns: 1fr; } }
+    .line-chart { width: 100%; height: auto; background: #f9fafb; border-radius: 6px; }
+    .lc-area { fill: #bbf7d0; opacity: .5; }
+    .lc-line { stroke: #15803d; stroke-width: 3; }
+    figcaption { font-size: .85rem; font-weight: 600; color: #374151; margin-bottom: .3rem; }
+    figure { margin: 0; }
+    .export-bars { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
+    .export-bars li { display: grid; grid-template-columns: 160px 1fr auto; align-items: center; gap: .6rem; }
+    .eb-track { background: #e5e7eb; border-radius: 999px; height: 14px; overflow: hidden; }
+    .eb-fill { display: block; height: 100%; background: #15803d; border-radius: 999px; }
+    .eb-pct { font-variant-numeric: tabular-nums; font-weight: 600; font-size: .85rem; }
+    .facts { color: #374151; display: grid; gap: .5rem; padding-left: 1.1rem; }
+    .sources ul { padding-left: 1.1rem; }
+    .sources a { color: #15803d; }
+    .su-cta { margin-top: 2rem; font-size: .95rem; }
+    .su-cta a { color: #15803d; text-decoration: none; font-weight: 600; }
+  </style>
+</Layout>
