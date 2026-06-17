@@ -12,6 +12,7 @@ const t = useTranslations('uk');
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
 const NF = new Intl.NumberFormat('uk-UA');
+// d.prices! in SVG tick loop is safe: prices is non-null only when d.prices exists (guarded here)
 const prices = d.prices && d.prices.series.length >= 2
   ? buildLineChart(d.prices.series, { max: d.prices.max, ticks: d.prices.ticks })
   : null;
@@ -28,7 +29,7 @@ const PILLS = [
   title="Статистика сільського господарства України — виробництво, експорт, ринки"
   description="Дані про українське сільське господарство: світова роль, виробництво та експорт пшениці, кукурудзи й соняшнику, вплив війни на врожаї."
 >
-  <main class="sp-page puda-root">
+  <main class="puda-root">
     <DataSegmentNav active="komodity" />
 
     <section class="sp-hero">
