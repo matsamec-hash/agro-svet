@@ -1,0 +1,175 @@
+---
+// Ukrajinská homepage = kurátovaný rozcestník na 4 launchnuté UA sekce
+// (statistiky / puda / dotace / slovnik), NE český zpravodajský feed.
+// Renderuje se z index.astro když locale === 'uk'. Vzor: PudaUk.astro
+// (self-contained, vlastní <Layout>, ukrajinské stringy hardcoded).
+// Cesty hardcoded /uk/... — všechny 4 sekce jsou launchnuté a UA-only.
+import Layout from '../../layouts/Layout.astro';
+
+const SECTIONS = [
+  {
+    href: '/uk/statistiky/',
+    icon: '📊',
+    title: 'Статистика',
+    desc: 'Експорт, виробництво та ціни головних культур України — пшениця, кукурудза, соняшник.',
+  },
+  {
+    href: '/uk/puda/',
+    icon: '🌱',
+    title: 'Ринок землі',
+    desc: 'Відкриття ринку, ціни та оренда, структура культур і стан ґрунтів.',
+  },
+  {
+    href: '/uk/dotace/',
+    icon: '💰',
+    title: 'Субсидії',
+    desc: 'Гранти й воєнна підтримка, програма «Власна справа», кредити 5-7-9 та донори.',
+  },
+  {
+    href: '/uk/slovnik/',
+    icon: '📖',
+    title: 'Словник',
+    desc: 'Понад 300 аграрних термінів з поясненнями — від гектара до субсидій ЄС.',
+  },
+];
+---
+
+<Layout
+  title="Аграрний світ — дані про сільське господарство України"
+  description="Аграрні дані України: статистика експорту та виробництва, ринок землі, субсидії й воєнна підтримка, словник аграрних термінів."
+>
+  <div class="huk-root">
+    <section class="huk-hero">
+      <span class="huk-kicker"><span class="dot"></span>АГРАРНІ ДАНІ · ДОВІДНИК</span>
+      <h1>Аграрний світ <em>України</em></h1>
+      <p class="huk-lede">
+        Перевірені дані та довідник про українське сільське господарство:
+        статистика експорту, ринок землі, державна підтримка й словник термінів.
+      </p>
+    </section>
+
+    <section class="huk-grid" aria-label="Розділи">
+      {SECTIONS.map((s) => (
+        <a href={s.href} class="huk-card">
+          <span class="huk-card-icon" aria-hidden="true">{s.icon}</span>
+          <h2>{s.title}</h2>
+          <p>{s.desc}</p>
+          <span class="huk-card-cta">Перейти до розділу →</span>
+        </a>
+      ))}
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .huk-root {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 32px 64px;
+  }
+
+  .huk-hero {
+    max-width: 760px;
+    margin: 0 auto 48px;
+    text-align: center;
+  }
+
+  .huk-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: 700 12px 'Chakra Petch', sans-serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #0A0A0B;
+    background: #FFFF00;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1.5px solid #0A0A0B;
+  }
+  .huk-kicker .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #0A0A0B;
+  }
+
+  .huk-hero h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 18px 0 14px;
+    color: #0A0A0B;
+  }
+  .huk-hero h1 em {
+    font-style: normal;
+    background: #FFFF00;
+    padding: 0 .12em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .huk-lede {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.55;
+    color: #444;
+    margin: 0;
+  }
+
+  .huk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .huk-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 28px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1.5px solid #0A0A0B;
+    box-shadow: 4px 4px 0 #0A0A0B;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .huk-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0 #0A0A0B;
+  }
+
+  .huk-card-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .huk-card h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0;
+    color: #0A0A0B;
+  }
+
+  .huk-card p {
+    font-size: .98rem;
+    line-height: 1.5;
+    color: #555;
+    margin: 0;
+    flex: 1;
+  }
+
+  .huk-card-cta {
+    font: 700 14px 'Chakra Petch', sans-serif;
+    color: #0A0A0B;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 680px) {
+    .huk-root { padding: 32px 16px 48px; }
+    .huk-grid { grid-template-columns: 1fr; }
+  }
+</style>
