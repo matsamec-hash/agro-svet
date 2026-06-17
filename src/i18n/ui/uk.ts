@@ -627,8 +627,6 @@ const uk: Record<string, string> = {
   'puda.uk.sources.h': 'Джерела даних',
 
   // — statistiky /uk/statistiky (stat.uk.*) —
-  'stat.uk.crumbHome': 'Головна',
-  'stat.uk.crumbSelf': 'Аграрна статистика',
   'stat.uk.title': 'Аграрна статистика України — зерно та олійні',
   'stat.uk.desc': 'Виробництво, посівні площі та частка світового експорту ключових культур України: пшениця, кукурудза, соняшник, ячмінь.',
   'stat.uk.hero.kicker': 'СТАТИСТИКА · ДАТА-ОГЛЯД',
@@ -640,7 +638,6 @@ const uk: Record<string, string> = {
   'stat.uk.production': 'Виробництво',
   'stat.uk.area': 'Посівна площа',
   'stat.uk.sourcePrefix': 'Джерело:',
-  'stat.uk.asOfPrefix': 'Станом на:',
   'stat.uk.sources.h': 'Джерела даних',
   'stat.uk.cta.puda': 'Ринок землі в Україні →',
   'stat.uk.cta.slovnik': 'Аграрний словник →',
