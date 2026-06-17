@@ -416,6 +416,7 @@ const uk: Record<string, string> = {
   'lang.switch': 'Мова',
   'lang.cs': 'CZ',
   'lang.sk': 'SK',
+  'lang.uk': 'UA',
 
   // — statistiky chrome (stat.*) — [jurisdikčně vázané; pro /uk skryté, čeká na UA data]
   // Hero

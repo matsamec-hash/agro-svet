@@ -11,6 +11,8 @@ const csHref = localizePath('cs', path);
 // SK cíl: u skrytých novinkových kategorií / nelaunchnutých sekcí spadne na SK
 // hub místo 404, ať přepnutí jazyka nevede na chybovou stránku.
 const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk);
+// UK cíl: nelaunchnuté sekce padají na /uk/ (UK homepage) — nikdy 404.
+const ukHref = langSwitchHref('uk', path, []);
 ---
 <div class="lang-switch" role="group" aria-label={t(locale, 'lang.switch')}>
   <a href={csHref} class:list={["lang-opt", { active: locale === 'cs' }]} hreflang="cs"
@@ -18,6 +20,9 @@ const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk);
   <span class="lang-sep" aria-hidden="true">/</span>
   <a href={skHref} class:list={["lang-opt", { active: locale === 'sk' }]} hreflang="sk"
      aria-current={locale === 'sk' ? 'true' : undefined}>{t(locale, 'lang.sk')}</a>
+  <span class="lang-sep" aria-hidden="true">/</span>
+  <a href={ukHref} class:list={["lang-opt", { active: locale === 'uk' }]} hreflang="uk"
+     aria-current={locale === 'uk' ? 'true' : undefined}>{t(locale, 'lang.uk')}</a>
 </div>
 <style>
   .lang-switch { display: inline-flex; align-items: center; gap: 4px; font-family: 'Chakra Petch', sans-serif; font-size: 12px; }
