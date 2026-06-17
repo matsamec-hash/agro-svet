@@ -29,7 +29,7 @@ const PILLS = [
   title="Статистика сільського господарства України — виробництво, експорт, ринки"
   description="Дані про українське сільське господарство: світова роль, виробництво та експорт пшениці, кукурудзи й соняшнику, вплив війни на врожаї."
 >
-  <main class="puda-root">
+  <div class="puda-root">
     <DataSegmentNav active="komodity" />
 
     <section class="sp-hero">
@@ -147,7 +147,7 @@ const PILLS = [
         {d.sources.map((s) => (<li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></li>))}
       </ul>
     </section>
-  </main>
+  </div>
 </Layout>
 
 <style>
