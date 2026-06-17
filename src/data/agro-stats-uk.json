@@ -1,0 +1,288 @@
+{
+  "generated": "2026-06-17",
+  "warCaveat": "З лютого 2022 року повномасштабне вторгнення Росії суттєво вплинуло на виробництво та експорт зернових в Україні: частина сільськогосподарських угідь на сході та півдні країни перебуває в окупації або зоні активних бойових дій. Офіційна статистика за 2022–2024 рр. відображає лише підконтрольні Україні території.",
+  "bigNumbers": [
+    {
+      "val": "~47",
+      "unit": "%",
+      "lbl": "Частка світового експорту соняшникової олії",
+      "sub": "Україна — незаперечний лідер глобального ринку соняшникової олії (середнє за 2019–2021 рр.)",
+      "source": "USDA Foreign Agricultural Service / American Farm Bureau Federation",
+      "asOf": "2020/21",
+      "url": "https://www.fb.org/market-intel/ukraine-russia-volatile-ag-markets"
+    },
+    {
+      "val": "~17",
+      "unit": "%",
+      "lbl": "Частка світового експорту кукурудзи",
+      "sub": "Україна — один із чотирьох найбільших світових експортерів кукурудзи (2021/22 р.)",
+      "source": "USDA Foreign Agricultural Service",
+      "asOf": "2021/22",
+      "url": "https://farmpolicynews.illinois.edu/2022/02/a-closer-look-at-ukrainian-corn-and-wheat-exports-recent-usda-reports/"
+    },
+    {
+      "val": "~10",
+      "unit": "%",
+      "lbl": "Частка світового експорту пшениці",
+      "sub": "Україна входить до п'ятірки найбільших світових експортерів пшениці (2020/21 р.)",
+      "source": "USDA FAS / American Farm Bureau Federation",
+      "asOf": "2020/21",
+      "url": "https://www.fb.org/market-intel/ukraine-russia-volatile-ag-markets"
+    },
+    {
+      "val": "~17",
+      "unit": "%",
+      "lbl": "Частка світового експорту ячменю",
+      "sub": "Україна — четвертий за величиною постачальник ячменю на світовому ринку (до 2022 р.)",
+      "source": "USDA Economic Research Service",
+      "asOf": "2021/22",
+      "url": "https://www.ers.usda.gov/amber-waves/2024/may/ukraine-s-rise-in-grain-and-sunflower-seed-market-share-limited-by-ongoing-war"
+    }
+  ],
+  "crops": [
+    {
+      "slug": "psenice",
+      "name": "Пшениця",
+      "production": {
+        "unit": "млн т",
+        "asOf": "2024/25",
+        "source": "USDA FAS PSD (дані IndexMundi / USDA FAS)",
+        "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=wheat&graph=production",
+        "max": 40,
+        "ticks": [0, 10, 20, 30, 40],
+        "series": [
+          { "year": 2015, "value": 27.3 },
+          { "year": 2016, "value": 26.8 },
+          { "year": 2017, "value": 27.0 },
+          { "year": 2018, "value": 25.1 },
+          { "year": 2019, "value": 29.2 },
+          { "year": 2020, "value": 25.4 },
+          { "year": 2021, "value": 33.0 },
+          { "year": 2022, "value": 21.5 },
+          { "year": 2023, "value": 23.0 },
+          { "year": 2024, "value": 22.9 }
+        ]
+      },
+      "area": {
+        "unit": "млн га",
+        "asOf": "2024/25",
+        "source": "USDA FAS PSD / Argus Media",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2559168-ukraine-s-2024-25-wheat-output-forecast-to-fall",
+        "max": 8,
+        "ticks": [0, 2, 4, 6, 8],
+        "series": [
+          { "year": 2015, "value": 6.5 },
+          { "year": 2016, "value": 6.6 },
+          { "year": 2017, "value": 6.3 },
+          { "year": 2018, "value": 6.4 },
+          { "year": 2019, "value": 7.0 },
+          { "year": 2020, "value": 6.8 },
+          { "year": 2021, "value": 7.2 },
+          { "year": 2022, "value": 5.85 },
+          { "year": 2023, "value": 4.3 },
+          { "year": 2024, "value": 4.37 }
+        ]
+      },
+      "note": "До 2022 р. Україна щорічно виробляла 25–33 млн т пшениці й входила до п'ятірки найбільших світових експортерів. З початком повномасштабного вторгнення посівні площі скоротилися майже на третину, а виробництво у 2022 р. впало до 21,5 млн т — найнижчого рівня за понад десятиліття (USDA FAS PSD)."
+    },
+    {
+      "slug": "kukurice",
+      "name": "Кукурудза",
+      "production": {
+        "unit": "млн т",
+        "asOf": "2024/25",
+        "source": "USDA FAS PSD (дані IndexMundi / USDA FAS)",
+        "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=corn&graph=production",
+        "max": 50,
+        "ticks": [0, 10, 20, 30, 40, 50],
+        "series": [
+          { "year": 2015, "value": 23.3 },
+          { "year": 2016, "value": 28.0 },
+          { "year": 2017, "value": 24.1 },
+          { "year": 2018, "value": 35.8 },
+          { "year": 2019, "value": 35.9 },
+          { "year": 2020, "value": 30.3 },
+          { "year": 2021, "value": 42.1 },
+          { "year": 2022, "value": 27.0 },
+          { "year": 2023, "value": 32.5 },
+          { "year": 2024, "value": 26.5 }
+        ]
+      },
+      "area": {
+        "unit": "млн га",
+        "asOf": "2024/25",
+        "source": "USDA FAS PSD / farmdoc daily",
+        "url": "https://farmdocdaily.illinois.edu/2023/02/the-russia-ukraine-war-and-changes-in-ukraine-corn-and-wheat-supply-impacts-on-global-agricultural-markets.html",
+        "max": 7,
+        "ticks": [0, 2, 4, 6, 7],
+        "series": [
+          { "year": 2015, "value": 4.0 },
+          { "year": 2016, "value": 4.3 },
+          { "year": 2017, "value": 4.1 },
+          { "year": 2018, "value": 4.5 },
+          { "year": 2019, "value": 4.6 },
+          { "year": 2020, "value": 4.5 },
+          { "year": 2021, "value": 5.4 },
+          { "year": 2022, "value": 3.9 },
+          { "year": 2023, "value": 4.2 },
+          { "year": 2024, "value": 4.1 }
+        ]
+      },
+      "note": "Виробництво кукурудзи в Україні зросло вдвічі між 2012 і 2021 рр., досягнувши рекордних 42,1 млн т у 2021/22 МР. Незважаючи на втрати через війну, Україна залишається одним із чотирьох найбільших світових експортерів кукурудзи, забезпечуючи близько 17 % світового ринку (USDA FAS)."
+    },
+    {
+      "slug": "slunecnice",
+      "name": "Соняшник",
+      "production": {
+        "unit": "млн т",
+        "asOf": "2023/24",
+        "source": "USDA FAS PSD / Ukroliaprom (Interfax Ukraine) / USDA ERS",
+        "url": "https://interfax.com/newsroom/top-stories/108708/",
+        "max": 20,
+        "ticks": [0, 5, 10, 15, 20],
+        "series": [
+          { "year": 2015, "value": 11.2 },
+          { "year": 2016, "value": 13.6 },
+          { "year": 2017, "value": 12.2 },
+          { "year": 2018, "value": 14.2 },
+          { "year": 2019, "value": 15.3 },
+          { "year": 2020, "value": 13.1 },
+          { "year": 2021, "value": 16.7 },
+          { "year": 2022, "value": 9.4 },
+          { "year": 2023, "value": 12.0 },
+          { "year": 2024, "value": 11.5 }
+        ]
+      },
+      "area": {
+        "unit": "млн га",
+        "asOf": "2023/24",
+        "source": "Sentinel-1 SAR / USDA FAS / Держстат України",
+        "url": "https://www.sciencedirect.com/science/article/pii/S2666017224000233",
+        "max": 8,
+        "ticks": [0, 2, 4, 6, 8],
+        "series": [
+          { "year": 2015, "value": 5.4 },
+          { "year": 2016, "value": 5.5 },
+          { "year": 2017, "value": 6.0 },
+          { "year": 2018, "value": 6.1 },
+          { "year": 2019, "value": 6.2 },
+          { "year": 2020, "value": 6.5 },
+          { "year": 2021, "value": 6.5 },
+          { "year": 2022, "value": 6.75 },
+          { "year": 2023, "value": 5.5 },
+          { "year": 2024, "value": 5.0 }
+        ]
+      },
+      "note": "Україна є беззаперечним світовим лідером з виробництва та експорту соняшникової олії — до 2022 р. на неї припадало близько 47 % світового експорту олії. Після вторгнення у 2022 р. виробництво насіння впало до 9,4 млн т (-44 % порівняно з рекордом 2021 р.), проте експортний потік поступово відновлюється через порти Одеси (USDA FAS, Interfax-Ukraine)."
+    },
+    {
+      "slug": "jecmen",
+      "name": "Ячмінь",
+      "production": {
+        "unit": "млн т",
+        "asOf": "2024/25",
+        "source": "USDA FAS PSD (дані IndexMundi / USDA FAS)",
+        "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=barley&graph=production",
+        "max": 12,
+        "ticks": [0, 3, 6, 9, 12],
+        "series": [
+          { "year": 2015, "value": 8.8 },
+          { "year": 2016, "value": 9.9 },
+          { "year": 2017, "value": 8.7 },
+          { "year": 2018, "value": 7.6 },
+          { "year": 2019, "value": 9.5 },
+          { "year": 2020, "value": 7.9 },
+          { "year": 2021, "value": 9.9 },
+          { "year": 2022, "value": 6.1 },
+          { "year": 2023, "value": 6.4 },
+          { "year": 2024, "value": 5.9 }
+        ]
+      },
+      "area": {
+        "unit": "млн га",
+        "asOf": "2024/25",
+        "source": "USDA FAS / Держстат України (дані USDA GAIN)",
+        "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=barley&graph=production",
+        "max": 4,
+        "ticks": [0, 1, 2, 3, 4],
+        "series": [
+          { "year": 2015, "value": 2.9 },
+          { "year": 2016, "value": 3.0 },
+          { "year": 2017, "value": 2.6 },
+          { "year": 2018, "value": 2.2 },
+          { "year": 2019, "value": 2.5 },
+          { "year": 2020, "value": 2.3 },
+          { "year": 2021, "value": 2.4 },
+          { "year": 2022, "value": 1.6 },
+          { "year": 2023, "value": 1.7 },
+          { "year": 2024, "value": 1.6 }
+        ]
+      },
+      "note": "До 2022 р. Україна посідала 3–4 місце серед світових експортерів ячменю з часткою ~17 % глобального ринку. Через окупацію та бойові дії площі під ячменем скоротилися на 37 % порівняно з 2021/22 МР, що призвело до падіння виробництва нижче 6 млн т — найнижчого рівня за останні 15 років (USDA ERS, 2024)."
+    }
+  ],
+  "exportShare": {
+    "unit": "% світового експорту",
+    "asOf": "2020/21",
+    "source": "USDA FAS / American Farm Bureau Federation",
+    "url": "https://www.fb.org/market-intel/ukraine-russia-volatile-ag-markets",
+    "items": [
+      { "crop": "slunecnice", "label": "Соняшникова олія", "pct": 47 },
+      { "crop": "kukurice", "label": "Кукурудза", "pct": 13 },
+      { "crop": "psenice", "label": "Пшениця", "pct": 8.5 },
+      { "crop": "jecmen", "label": "Ячмінь", "pct": 17 }
+    ]
+  },
+  "facts": [
+    {
+      "text": "У рекордному 2021 р. Україна зібрала 33 млн т пшениці, 42 млн т кукурудзи, 9,9 млн т ячменю та 16,7 млн т насіння соняшника — загалом понад 100 млн т зернових та олійних культур.",
+      "source": "USDA FAS PSD / IndexMundi (дані USDA)",
+      "asOf": "2021",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=corn&graph=production"
+    },
+    {
+      "text": "Україна займає ~25 % світових запасів чорнозему: 71 % її земель — сільськогосподарські угіддя, що робить країну однією з найбільших «житниць» планети.",
+      "source": "Al Jazeera / USDA FAS",
+      "asOf": "2022",
+      "url": "https://www.aljazeera.com/news/2022/2/17/infographic-russia-ukraine-and-the-global-wheat-supply-interactive"
+    },
+    {
+      "text": "Через повномасштабне вторгнення 2022 р. посівні площі під пшеницею скоротилися на 32 %, кукурудзою — на 27 %, ячменем — на 37 % порівняно з 2021/22 МР (дані за 2023/24 МР).",
+      "source": "IFPRI Blog / USDA FAS",
+      "asOf": "2023/24",
+      "url": "https://www.ifpri.org/blog/ukraine-and-global-agricultural-markets-two-years-later/"
+    },
+    {
+      "text": "У середньому за 2018–2021 МР Україна забезпечувала 15 % світової торгівлі кукурудзою та 10 % — пшеницею (USDA FAS PSD).",
+      "source": "farmdoc daily / USDA FAS PSD",
+      "asOf": "2018/19–2020/21",
+      "url": "https://farmdocdaily.illinois.edu/2023/02/the-russia-ukraine-war-and-changes-in-ukraine-corn-and-wheat-supply-impacts-on-global-agricultural-markets.html"
+    }
+  ],
+  "sources": [
+    {
+      "label": "USDA FAS PSD Online",
+      "url": "https://apps.fas.usda.gov/psdonline/app/index.html#/app/home"
+    },
+    {
+      "label": "USDA ERS — Ukraine's Rise in Grain and Sunflower Seed Market Share (2024)",
+      "url": "https://www.ers.usda.gov/amber-waves/2024/may/ukraine-s-rise-in-grain-and-sunflower-seed-market-share-limited-by-ongoing-war"
+    },
+    {
+      "label": "IndexMundi — Ukraine agricultural production (USDA FAS data)",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&graph=production"
+    },
+    {
+      "label": "FAOSTAT",
+      "url": "https://www.fao.org/faostat/"
+    },
+    {
+      "label": "American Farm Bureau Federation — Ukraine, Russia, Volatile Ag Markets",
+      "url": "https://www.fb.org/market-intel/ukraine-russia-volatile-ag-markets"
+    },
+    {
+      "label": "Interfax Ukraine / Ukroliaprom — Oilseeds production 2024",
+      "url": "https://interfax.com/newsroom/top-stories/108708/"
+    }
+  ]
+}
