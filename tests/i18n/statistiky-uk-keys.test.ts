@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { ui } from '../../src/i18n/ui';
 
 const REQUIRED = [
-  'stat.uk.h.bigNumbers', 'stat.uk.h.produkce', 'stat.uk.h.valka',
+  'stat.uk.h.produkce', 'stat.uk.h.valka',
   'stat.uk.h.ceny', 'stat.uk.sources.h', 'stat.uk.pills.temata',
   'stat.uk.prod.production', 'stat.uk.prod.export',
 ];
