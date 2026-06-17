@@ -2,22 +2,188 @@
   "generated": "2026-06-17",
   "warCaveat": "Дані відображають доступну офіційну статистику. Частина сільгоспугідь тимчасово окупована або замінована — агреговані показники можуть бути неповними.",
   "bigNumbers": [
-    { "val": "__TODO__", "unit": "", "lbl": "__TODO__", "trend": "__TODO__", "source": "USDA FAS", "url": "https://fas.usda.gov/" },
-    { "val": "__TODO__", "unit": "", "lbl": "__TODO__", "trend": "__TODO__", "source": "FAO", "url": "https://www.fao.org/faostat/en/" },
-    { "val": "__TODO__", "unit": "", "lbl": "__TODO__", "trend": "__TODO__", "source": "Світовий банк", "url": "https://data.worldbank.org/country/ukraine" }
+    {
+      "val": "≈50",
+      "unit": "%",
+      "lbl": "Частка України у світовому експорті соняшникової олії",
+      "trend": "Україна залишається найбільшим у світі експортером соняшникової олії — на неї припадає близько половини світової торгівлі соняшниковою олією та шротом.",
+      "source": "USDA ERS / FAS",
+      "url": "https://www.ers.usda.gov/amber-waves/2024/may/ukraine-s-rise-in-grain-and-sunflower-seed-market-share-limited-by-ongoing-war"
+    },
+    {
+      "val": "≈33",
+      "unit": "млн га",
+      "lbl": "Площа орних земель України",
+      "trend": "За даними Світового банку, у 2023 році орні землі України становили близько 32,9 млн га — одна з найбільших площ ріллі в Європі.",
+      "source": "Світовий банк (World Bank Open Data)",
+      "url": "https://data.worldbank.org/indicator/AG.LND.ARBL.HA?locations=UA"
+    },
+    {
+      "val": "≈23",
+      "unit": "млн т",
+      "lbl": "Експорт кукурудзи (МР 2024/25)",
+      "trend": "Україна залишається одним із найбільших світових експортерів кукурудзи; у МР 2024/25 експорт оцінено приблизно у 23 млн т (USDA PSD).",
+      "source": "USDA FAS PSD",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=corn&graph=exports"
+    },
+    {
+      "val": "16",
+      "unit": "млн т",
+      "lbl": "Експорт пшениці (МР 2024/25)",
+      "trend": "Україна входить до провідних світових експортерів пшениці; у МР 2024/25 експорт пшениці оцінено USDA у 16 млн т.",
+      "source": "USDA FAS PSD",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=wheat&graph=exports"
+    }
   ],
   "cropProduction": [
-    { "crop": "Пшениця", "unit": "млн т", "production": [{ "year": 2021, "value": 0 }], "export": [], "source": "USDA FAS PSD", "url": "https://apps.fas.usda.gov/psdonline/app/index.html", "asOf": "__TODO__" },
-    { "crop": "Кукурудза", "unit": "млн т", "production": [{ "year": 2021, "value": 0 }], "export": [], "source": "USDA FAS PSD", "url": "https://apps.fas.usda.gov/psdonline/app/index.html", "asOf": "__TODO__" },
-    { "crop": "Соняшник", "unit": "млн т", "production": [{ "year": 2021, "value": 0 }], "export": [], "source": "USDA FAS PSD", "url": "https://apps.fas.usda.gov/psdonline/app/index.html", "asOf": "__TODO__" }
+    {
+      "crop": "Пшениця",
+      "unit": "млн т",
+      "production": [
+        { "year": 2019, "value": 29.17 },
+        { "year": 2020, "value": 25.42 },
+        { "year": 2021, "value": 33.01 },
+        { "year": 2022, "value": 21.5 },
+        { "year": 2023, "value": 23.0 },
+        { "year": 2024, "value": 22.9 }
+      ],
+      "export": [
+        { "year": 2020, "value": 16.85 },
+        { "year": 2021, "value": 18.84 },
+        { "year": 2022, "value": 17.12 },
+        { "year": 2023, "value": 18.58 },
+        { "year": 2024, "value": 16.0 }
+      ],
+      "source": "USDA FAS PSD",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=wheat&graph=production",
+      "asOf": "МР 2024/25"
+    },
+    {
+      "crop": "Кукурудза",
+      "unit": "млн т",
+      "production": [
+        { "year": 2019, "value": 35.89 },
+        { "year": 2020, "value": 30.3 },
+        { "year": 2021, "value": 42.13 },
+        { "year": 2022, "value": 27.0 },
+        { "year": 2023, "value": 32.5 },
+        { "year": 2024, "value": 26.5 }
+      ],
+      "export": [
+        { "year": 2020, "value": 23.86 },
+        { "year": 2021, "value": 26.98 },
+        { "year": 2022, "value": 27.12 },
+        { "year": 2023, "value": 29.49 },
+        { "year": 2024, "value": 23.0 }
+      ],
+      "source": "USDA FAS PSD",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=corn&graph=production",
+      "asOf": "МР 2024/25"
+    },
+    {
+      "crop": "Соняшник",
+      "unit": "млн т",
+      "production": [
+        { "year": 2019, "value": 16.5 },
+        { "year": 2020, "value": 14.1 },
+        { "year": 2021, "value": 17.5 },
+        { "year": 2022, "value": 12.2 },
+        { "year": 2023, "value": 15.5 },
+        { "year": 2024, "value": 12.9 }
+      ],
+      "export": [],
+      "source": "USDA FAS PSD",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=sunflowerseed-oilseed&graph=production",
+      "asOf": "МР 2024/25"
+    },
+    {
+      "crop": "Ячмінь",
+      "unit": "млн т",
+      "production": [
+        { "year": 2019, "value": 9.53 },
+        { "year": 2020, "value": 7.95 },
+        { "year": 2021, "value": 9.92 },
+        { "year": 2022, "value": 6.1 },
+        { "year": 2023, "value": 6.35 },
+        { "year": 2024, "value": 5.9 }
+      ],
+      "export": [
+        { "year": 2020, "value": 4.19 },
+        { "year": 2021, "value": 5.71 },
+        { "year": 2022, "value": 2.71 },
+        { "year": 2023, "value": 2.48 },
+        { "year": 2024, "value": 2.5 }
+      ],
+      "source": "USDA FAS PSD",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=barley&graph=production",
+      "asOf": "МР 2024/25"
+    },
+    {
+      "crop": "Соя",
+      "unit": "млн т",
+      "production": [
+        { "year": 2019, "value": 4.5 },
+        { "year": 2020, "value": 3.0 },
+        { "year": 2021, "value": 3.8 },
+        { "year": 2022, "value": 4.1 },
+        { "year": 2023, "value": 5.2 },
+        { "year": 2024, "value": 6.6 }
+      ],
+      "export": [
+        { "year": 2020, "value": 1.47 },
+        { "year": 2021, "value": 1.39 },
+        { "year": 2022, "value": 3.1 },
+        { "year": 2023, "value": 3.26 },
+        { "year": 2024, "value": 4.2 }
+      ],
+      "source": "USDA FAS PSD",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=soybean-oilseed&graph=production",
+      "asOf": "МР 2024/25"
+    }
   ],
   "warTimeline": [
-    { "year": "2022", "title": "__TODO__", "text": "__TODO__", "source": "__TODO__", "url": "https://www.worldbank.org/" },
-    { "year": "2023", "title": "__TODO__", "text": "__TODO__", "source": "__TODO__", "url": "https://www.worldbank.org/" },
-    { "year": "2024", "title": "__TODO__", "text": "__TODO__", "source": "__TODO__", "url": "https://www.worldbank.org/" }
+    {
+      "year": "2022",
+      "title": "Обвал виробництва та блокада чорноморських портів",
+      "text": "Після повномасштабного вторгнення Росії у лютому 2022 року виробництво впало: урожай пшениці скоротився з ≈33 млн т (2021) до ≈21,5 млн т, кукурудзи — з ≈42 до ≈27 млн т (USDA PSD). Морський експорт через чорноморські порти був фактично заблокований.",
+      "source": "USDA FAS PSD",
+      "url": "https://www.indexmundi.com/agriculture/?country=ua&commodity=corn&graph=production"
+    },
+    {
+      "year": "2022",
+      "title": "Чорноморська зернова ініціатива (липень 2022)",
+      "text": "22 липня 2022 року в Стамбулі за посередництва ООН і Туреччини підписано ініціативу безпечного транспортування зерна з українських портів. До липня 2023 року нею вивезено майже 33 млн т зерна та продовольства (1004 рейси), понад половину — кукурудза.",
+      "source": "ООН (United Nations)",
+      "url": "https://www.un.org/en/black-sea-grain-initiative/achievements"
+    },
+    {
+      "year": "2022",
+      "title": "Шляхи солідарності ЄС (Solidarity Lanes)",
+      "text": "З травня 2022 року ЄС запустив «шляхи солідарності» — наземні та річкові маршрути для українського експорту. Станом на 2026 рік ними вивезено майже 220 млн т товарів, зокрема близько 93 млн т зерна, олійних та супутньої продукції.",
+      "source": "Європейська комісія",
+      "url": "https://commission.europa.eu/topics/eu-solidarity-ukraine/eu-assistance-ukraine/eu-ukraine-solidarity-lanes_en"
+    },
+    {
+      "year": "2023",
+      "title": "Припинення зернової ініціативи (липень 2023)",
+      "text": "17 липня 2023 року Росія вийшла з Чорноморської зернової ініціативи, припинивши її дію. Україна почала розвивати власний морський коридор та нарощувати експорт суходільними «шляхами солідарності» ЄС.",
+      "source": "ООН (United Nations)",
+      "url": "https://www.un.org/en/black-sea-grain-initiative/update-15-july-2023"
+    },
+    {
+      "year": "2024",
+      "title": "Замінування сільгоспугідь",
+      "text": "Через війну Україна стала однією з найбільш замінованих країн світу: за оцінками FAO/WFP, потенційно небезпечними залишаються близько 25 000 км² сільськогосподарських земель, забруднених мінами та боєприпасами, що не вибухнули.",
+      "source": "FAO / WFP",
+      "url": "https://www.fao.org/newsroom/detail/ukraine--fao-and-wfp-join-forces-to-clear-agricultural-land-from-remnants-of-the-war-and-help-farmers-resume-production/en"
+    }
   ],
   "sources": [
     { "label": "USDA FAS PSD Online", "url": "https://apps.fas.usda.gov/psdonline/app/index.html" },
+    { "label": "USDA ERS — Amber Waves (Ukraine market share)", "url": "https://www.ers.usda.gov/amber-waves/2024/may/ukraine-s-rise-in-grain-and-sunflower-seed-market-share-limited-by-ongoing-war" },
+    { "label": "Світовий банк — Open Data (Ukraine)", "url": "https://data.worldbank.org/country/ukraine" },
+    { "label": "ООН — Black Sea Grain Initiative", "url": "https://www.un.org/en/black-sea-grain-initiative/achievements" },
+    { "label": "Європейська комісія — Solidarity Lanes", "url": "https://commission.europa.eu/topics/eu-solidarity-ukraine/eu-assistance-ukraine/eu-ukraine-solidarity-lanes_en" },
     { "label": "FAOSTAT", "url": "https://www.fao.org/faostat/en/" }
   ]
 }
