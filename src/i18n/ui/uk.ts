@@ -626,6 +626,25 @@ const uk: Record<string, string> = {
   'puda.uk.h.ohrozeni': 'Загрози для ґрунтів',
   'puda.uk.sources.h': 'Джерела даних',
 
+  // — statistiky /uk/statistiky (stat.uk.*) —
+  'stat.uk.crumbHome': 'Головна',
+  'stat.uk.crumbSelf': 'Аграрна статистика',
+  'stat.uk.title': 'Аграрна статистика України — зерно та олійні',
+  'stat.uk.desc': 'Виробництво, посівні площі та частка світового експорту ключових культур України: пшениця, кукурудза, соняшник, ячмінь.',
+  'stat.uk.hero.kicker': 'СТАТИСТИКА · ДАТА-ОГЛЯД',
+  'stat.uk.hero.h': 'Україна — світова <em>житниця</em>',
+  'stat.uk.hero.lede': 'Виробництво, посівні площі та експортна вага головних культур України на основі даних USDA та FAO.',
+  'stat.uk.h.plodiny': 'Культури: виробництво та площі',
+  'stat.uk.h.export': 'Частка світового експорту',
+  'stat.uk.h.fakta': 'Ключові факти',
+  'stat.uk.production': 'Виробництво',
+  'stat.uk.area': 'Посівна площа',
+  'stat.uk.sourcePrefix': 'Джерело:',
+  'stat.uk.asOfPrefix': 'Станом на:',
+  'stat.uk.sources.h': 'Джерела даних',
+  'stat.uk.cta.puda': 'Ринок землі в Україні →',
+  'stat.uk.cta.slovnik': 'Аграрний словник →',
+
   // — detail stroje (model) —
   'cat.s.d.singular.traktory': 'трактор',
   'cat.s.d.singular.kombajny': 'комбайн',
