@@ -21,7 +21,11 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // UK 4d follow-up: `data` už uk neskrývá — /statistiky, /puda i /dotace jsou
   // launchnuté pro uk. getNav filtruje NElaunchnuté `data` děti (kalkulačky) přes
   // isLaunchedPath, takže header ukáže jen launchnuté (žádný cs-fallback dead-link).
-  uk: ['bazar', 'photo'],
+  // UK homepage-hub follow-up: `tema` (/novinky/), `animals` (/plemena/) a `farms`
+  // (/farmy/) skryté — nemají UA obsah, vedly by celé do češtiny. UA hlavička tak
+  // ukazuje jen sekce s reálným UA obsahem: `tech` (katalog + slovník) a `data`
+  // (statistiky/půda/dotace) — stejný princip jako homepage rozcestník.
+  uk: ['bazar', 'photo', 'tema', 'animals', 'farms'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české
@@ -135,9 +139,12 @@ export function getNav(locale: Locale): NavItem[] {
           .filter((c) => !hiddenCatHrefs.includes(c.href))
           .filter((c) => !filterLocked || !isLockedSectionPath(norm(c.href)))
           // Data sekce (jurisdikční huby) u non-cs: ukaž jen launchnuté děti, ať
-          // header nedead-linkuje na cs-fallback (ostatní sekce záměrně cs-fallback
-          // ponechávají, proto je filtr scope-nutý jen na `data`). cs = beze změny.
+          // header nedead-linkuje na cs-fallback. cs = beze změny.
           .filter((c) => !(filterLocked && item.section === 'data') || isLaunchedPath(locale, norm(c.href)))
+          // uk: stejný launched-filtr na VŠECHNY viditelné sekce (tj. `tech`), ať
+          // dropdown nedead-linkuje na cs (žebříčky/kvíz/prodejci nejsou launchnuté).
+          // Scope-nuté na uk → sk nav beze změny (sk si cs-fallback děti ponechává).
+          .filter((c) => locale !== 'uk' || isLaunchedPath(locale, norm(c.href)))
           .map((c) => ({ label: t(locale, c.labelKey), href: c.href }));
         // Pokud vlastní top-level href sekce ukazuje na locked cestu (a filtrujeme),
         // přesměruj na první viditelné dítě, ať header nedead-linkuje na 307 redirect.
@@ -188,13 +195,18 @@ export function getFooterColumns(locale: Locale): FooterColumn[] {
   // (/puda) i v ostatních footer sloupcích. Odděleno od `data` hidden flagu
   // (Fáze 2b A/B `data` sk neskrývá, /statistiky odemčeno). cs = false → beze změny.
   const hideLocked = locale !== 'cs';
+  // uk: footer odkazy jen na launchnuté sekce (zahodí /novinky/, /plemena/ ve
+  // sloupci Obsah — vedly by do češtiny). Scope-nuté na uk → sk footer beze změny.
+  const filterUkLaunched = locale === 'uk';
+  const norm = (href: string) => href.replace(/\/+$/, '') || '/';
   return FOOTER
     .filter((col) => !hidden.includes(col.section))
     .map((col) => ({
       section: col.section,
       heading: t(locale, col.headingKey),
       links: col.links
-        .filter((l) => !(hideLocked && isLockedSectionPath(l.href.replace(/\/+$/, '') || '/')))
+        .filter((l) => !(hideLocked && isLockedSectionPath(norm(l.href))))
+        .filter((l) => !filterUkLaunched || isLaunchedPath(locale, norm(l.href)))
         .map((l) => ({ label: t(locale, l.labelKey), href: l.href })),
     }));
 }

@@ -66,6 +66,28 @@ describe('getNav', () => {
     expect(data!.href).toBe('/statistiky/');
   });
 
+  it('uk nav: jen sekce s UA obsahem — tech + data (tema/animals/farms skryté)', () => {
+    const nav = getNav('uk');
+    expect(nav.map((i) => i.section)).toEqual(['tech', 'data']);
+    // top-level hrefs = launchnuté cs-root cesty (navHref je lokalizuje na /uk/)
+    expect(nav.find((s) => s.section === 'tech')!.href).toBe('/stroje/');
+    expect(nav.find((s) => s.section === 'data')!.href).toBe('/statistiky/');
+  });
+
+  it('uk nav: tech sekce jen launchnuté děti (žádné žebříčky/kvíz/prodejci do cs)', () => {
+    const tech = getNav('uk').find((s) => s.section === 'tech')!;
+    const hrefs = (tech.children ?? []).map((c) => c.href);
+    // launchnuté pro uk
+    expect(hrefs).toContain('/stroje/');
+    expect(hrefs).toContain('/znacky/');
+    expect(hrefs).toContain('/srovnani/');
+    expect(hrefs).toContain('/slovnik/');
+    // NElaunchnuté → vyfiltrované (vedly by do češtiny)
+    expect(hrefs).not.toContain('/zebricky/');
+    expect(hrefs).not.toContain('/kviz/');
+    expect(hrefs).not.toContain('/prodejci/');
+  });
+
   it('sk překládá zachované labely', () => {
     const nav = getNav('sk');
     expect(nav[1].label).toBe('Zvieratá');
@@ -95,6 +117,17 @@ describe('getFooterColumns', () => {
     const cols = getFooterColumns('sk');
     expect(cols.map((c) => c.heading)).toEqual(['Obsah']);
     expect(cols[0].links.find((l) => l.href === '/stroje/')!.label).toBe('Katalóg techniky');
+  });
+
+  it('uk footer: sloupec Obsah jen launchnuté odkazy (bez /novinky/, /plemena/)', () => {
+    const cols = getFooterColumns('uk');
+    expect(cols.map((c) => c.section)).toEqual(['content']);
+    const hrefs = cols[0].links.map((l) => l.href);
+    expect(hrefs).toContain('/stroje/');
+    expect(hrefs).toContain('/puda/');
+    expect(hrefs).toContain('/statistiky/');
+    expect(hrefs).not.toContain('/novinky/');
+    expect(hrefs).not.toContain('/plemena/');
   });
 
   it('sk footer zobrazuje odemčené /statistiky i /puda (Fáze 2b B+C)', () => {
