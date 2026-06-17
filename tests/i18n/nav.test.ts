@@ -55,8 +55,15 @@ describe('getNav', () => {
     expect(hrefs).toEqual(['/statistiky/', '/puda/', '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/']);
   });
 
-  it('uk nav: data sekce stále skrytá', () => {
-    expect(getNav('uk').find((s) => s.section === 'data')).toBeUndefined();
+  it('uk nav: data sekce viditelná, jen launchnuté děti (statistiky/puda/dotace; kalkulačky vynechané)', () => {
+    const data = getNav('uk').find((s) => s.section === 'data');
+    expect(data).toBeTruthy();
+    const hrefs = (data!.children ?? []).map((c) => c.href);
+    expect(hrefs).toEqual(['/statistiky/', '/puda/', '/dotace/']);
+    expect(hrefs).not.toContain('/kalkulacka/');
+    expect(hrefs).not.toContain('/kalkulacka/dotace-cap/');
+    // header sekce ukazuje na první launchnuté dítě (/statistiky/ je launchnuté pro uk)
+    expect(data!.href).toBe('/statistiky/');
   });
 
   it('sk překládá zachované labely', () => {
@@ -71,7 +78,9 @@ describe('getNav', () => {
     // UPDATED Fáze 2b A: `data` už sk neskrývá (jen bazar+photo); uk skrývá vše.
     expect(HIDDEN_SECTIONS.sk).toEqual(expect.arrayContaining(['bazar', 'photo']));
     expect(HIDDEN_SECTIONS.sk).not.toContain('data');
-    expect(HIDDEN_SECTIONS.uk).toEqual(expect.arrayContaining(['data', 'bazar', 'photo']));
+    // UPDATED: uk už `data` neskrývá (statistiky/puda/dotace launchnuté → header je zobrazí).
+    expect(HIDDEN_SECTIONS.uk).toEqual(expect.arrayContaining(['bazar', 'photo']));
+    expect(HIDDEN_SECTIONS.uk).not.toContain('data');
   });
 });
 

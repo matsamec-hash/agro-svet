@@ -1,6 +1,6 @@
 // src/i18n/nav.ts
 import type { Locale } from './config';
-import { t } from './utils';
+import { t, isLaunchedPath } from './utils';
 
 export type NavLink = { label: string; href: string };
 export type NavItem = NavLink & { section: string; children?: NavLink[] };
@@ -16,9 +16,12 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // Fáze 2b A: `data` už sk neskrývá — /dotace a /kalkulacka/dotace-cap byly
   // odemčeny (SK obsah nasazen). Fáze 2b B: /statistiky taky odemčeno (SK obsah).
   // Fáze 2b C: /puda odemčeno → LOCKED_SECTION_PREFIXES je teď prázdné, takže
-  // getNav už nic z `data` nefiltruje. uk zůstává plně skrytá.
+  // getNav už nic z `data` nefiltruje.
   sk: ['bazar', 'photo'],
-  uk: ['data', 'bazar', 'photo'],
+  // UK 4d follow-up: `data` už uk neskrývá — /statistiky, /puda i /dotace jsou
+  // launchnuté pro uk. getNav filtruje NElaunchnuté `data` děti (kalkulačky) přes
+  // isLaunchedPath, takže header ukáže jen launchnuté (žádný cs-fallback dead-link).
+  uk: ['bazar', 'photo'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české
@@ -131,6 +134,10 @@ export function getNav(locale: Locale): NavItem[] {
         out.children = item.children
           .filter((c) => !hiddenCatHrefs.includes(c.href))
           .filter((c) => !filterLocked || !isLockedSectionPath(norm(c.href)))
+          // Data sekce (jurisdikční huby) u non-cs: ukaž jen launchnuté děti, ať
+          // header nedead-linkuje na cs-fallback (ostatní sekce záměrně cs-fallback
+          // ponechávají, proto je filtr scope-nutý jen na `data`). cs = beze změny.
+          .filter((c) => !(filterLocked && item.section === 'data') || isLaunchedPath(locale, norm(c.href)))
           .map((c) => ({ label: t(locale, c.labelKey), href: c.href }));
         // Pokud vlastní top-level href sekce ukazuje na locked cestu (a filtrujeme),
         // přesměruj na první viditelné dítě, ať header nedead-linkuje na 307 redirect.
