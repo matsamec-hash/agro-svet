@@ -10,6 +10,8 @@ export interface StatistikyUkCrop {
   crop: string; unit: string;
   production: StatistikyUkSeriesPoint[];
   export: StatistikyUkSeriesPoint[];
+  area?: StatistikyUkSeriesPoint[];
+  areaUnit?: string;
   source: string; url: string; asOf: string;
 }
 

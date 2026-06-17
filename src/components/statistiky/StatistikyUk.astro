@@ -65,6 +65,7 @@ const PILLS = [
         <header><h2>{t('stat.uk.h.produkce')}</h2></header>
         {d.cropProduction.map((c) => {
           const prodMax = Math.max(...c.production.map((p) => p.value), ...c.export.map((p) => p.value), 1);
+          const areaMax = c.area && c.area.length > 0 ? Math.max(...c.area.map((p) => p.value), 1) : 1;
           return (
             <div class="crop-block">
               <h3 class="crop-title">{c.crop} <span class="sub">{c.unit} · {c.asOf}</span></h3>
@@ -84,6 +85,15 @@ const PILLS = [
                     <div class="crop-bar-wrap">
                       <div class="crop-bar" style={`width:${(p.value / prodMax) * 100}%; background:#FFB300`}></div>
                       <span class="crop-val">{NF.format(p.value)} {c.unit}</span>
+                    </div>
+                  </div>
+                ))}
+                {c.area && c.area.length > 0 && c.area.map((p) => (
+                  <div class="crop-row">
+                    <span class="crop-name">{p.year} · {t('stat.uk.prod.area')}</span>
+                    <div class="crop-bar-wrap">
+                      <div class="crop-bar" style={`width:${(p.value / areaMax) * 100}%; background:#42A5F5`}></div>
+                      <span class="crop-val">{NF.format(p.value)} {c.areaUnit}</span>
                     </div>
                   </div>
                 ))}

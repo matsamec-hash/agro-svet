@@ -29,6 +29,22 @@ describe('agro-stats-uk.json', () => {
     }
   });
 
+  it('cropProduction: každá plodina má neprázdnou řadu area (≥4 bodů, vzestupná léta, kladné hodnoty) a areaUnit', () => {
+    for (const c of d.cropProduction) {
+      expect(c.area).toBeDefined();
+      expect(c.area!.length).toBeGreaterThanOrEqual(4);
+      expect(c.areaUnit).toBeTruthy();
+      for (const pt of c.area!) {
+        expect(Number.isFinite(pt.value)).toBe(true);
+        expect(pt.value).toBeGreaterThan(0);
+      }
+      // léta musí být vzestupná
+      for (let i = 1; i < c.area!.length; i++) {
+        expect(c.area![i].year).toBeGreaterThan(c.area![i - 1].year);
+      }
+    }
+  });
+
   it('warTimeline: ≥3 kroky se zdrojem', () => {
     expect(d.warTimeline.length).toBeGreaterThanOrEqual(3);
     for (const s of d.warTimeline) {

@@ -484,6 +484,7 @@ const uk: Record<string, string> = {
   'stat.uk.pills.temata': 'Огляд',
   'stat.uk.prod.production': 'Виробництво',
   'stat.uk.prod.export': 'Експорт',
+  'stat.uk.prod.area': 'Площа',
 
   // — dotace UK kurátovaný hub (dotace.uk.*) —
   'dotace.uk.h.howItWorks': 'Як працює державна підтримка',
