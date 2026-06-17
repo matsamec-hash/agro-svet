@@ -5,6 +5,7 @@ import Newsletter from '../components/Newsletter.astro';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
 import HomeWeather from '../components/HomeWeather.astro';
 import LatestArticles from '../components/home/LatestArticles.astro';
+import HomeUk from '../components/home/HomeUk.astro';
 import { createAnonClient } from '../lib/supabase';
 import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
@@ -13,28 +14,36 @@ import { getLocaleFromUrl, localizeInternalHref } from '../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
+// UA homepage = kurátovaný rozcestník na launchnuté UA sekce (HomeUk),
+// NE český zpravodajský feed (články nemají UA překlad → vypadalo to rozbitě:
+// ukrajinská kostra + české články). cs/sk beze změny.
+const isUk = locale === 'uk';
+
 // Edge cache: 5min s-maxage + 30min SWR. Většina requestů HIT na CF edge,
 // nový článek se objeví do ~5min (akceptovatelný trade-off vs 0 Worker
 // invocations). Po publikaci článku ručně `npm run purge` pokud potřeba okamžitě.
 Astro.response.headers.set('cache-control', 'public, s-maxage=300, stale-while-revalidate=1800');
 
-const supabase = createAnonClient();
-
-const { data: articles } = await supabase
-  .from('articles')
-  .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
-  .eq('site_id', SITE_ID)
-  .eq('status', 'published')
-  .order('featured', { ascending: false })
-  .order('published_at', { ascending: false })
-  .limit(11);
-
-const sorted = articles ?? [];
-
 // Hero: first article as featured + next 4 (above-fold only). Articles 6-11
 // rendrují deferred v <LatestArticles> islandu — vlastní supabase query.
-const featured = sorted[0];
-const heroRight = sorted.slice(1, 5);
+// UA hub feed nepotřebuje → dotaz přeskočíme.
+let featured: any;
+let heroRight: any[] = [];
+if (!isUk) {
+  const supabase = createAnonClient();
+  const { data: articles } = await supabase
+    .from('articles')
+    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .order('featured', { ascending: false })
+    .order('published_at', { ascending: false })
+    .limit(11);
+
+  const sorted = articles ?? [];
+  featured = sorted[0];
+  heroRight = sorted.slice(1, 5);
+}
 
 // Commodity chart loads its data client-side from /statistiky/commodity-data-recent.json
 // (eager, ~85 KB) and /statistiky/commodity-data.json (lazy on "Vše"). The homepage
@@ -68,6 +77,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 } : null;
 ---
 
+{isUk ? <HomeUk /> : (
 <Layout
   title="agro-svět.cz — zemědělská technika, bazar a novinky"
   description={homeDescription}
@@ -194,6 +204,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   <Newsletter />
 
 </Layout>
+)}
 
 <style>
   /* ===== Hero grid — matches WP layout ===== */

@@ -477,7 +477,6 @@ const uk: Record<string, string> = {
   'stat.inputs.cardFert': 'Добрива — річний середній (Kč/т)',
 
   // — statistiky UK kurátovaný hub (stat.uk.*) —
-  'stat.uk.h.bigNumbers': 'Україна у світовому вимірі',
   'stat.uk.h.produkce': 'Виробництво та експорт культур',
   'stat.uk.h.valka': 'Вплив війни на виробництво',
   'stat.uk.h.ceny': 'Ціни',
@@ -494,7 +493,6 @@ const uk: Record<string, string> = {
   'dotace.uk.sources.h': 'Джерела даних',
   'dotace.uk.pills.start': 'Огляд',
   'dotace.uk.card.eligibility': 'Хто може отримати',
-  'dotace.uk.card.amount': 'Сума',
 
   // — PriceScissors —
   'stat.scissors.h2': '⚡ Цінові ножиці — що дорожчає: ресурси чи продукція?',
