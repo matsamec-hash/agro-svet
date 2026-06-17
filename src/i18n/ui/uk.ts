@@ -486,6 +486,15 @@ const uk: Record<string, string> = {
   'stat.uk.prod.production': 'Виробництво',
   'stat.uk.prod.export': 'Експорт',
 
+  // — dotace UK kurátovaný hub (dotace.uk.*) —
+  'dotace.uk.h.howItWorks': 'Як працює державна підтримка',
+  'dotace.uk.h.programs': 'Програми підтримки',
+  'dotace.uk.h.donors': 'Підтримка ЄС та міжнародних донорів',
+  'dotace.uk.sources.h': 'Джерела даних',
+  'dotace.uk.pills.start': 'Огляд',
+  'dotace.uk.card.eligibility': 'Хто може отримати',
+  'dotace.uk.card.amount': 'Сума',
+
   // — PriceScissors —
   'stat.scissors.h2': '⚡ Цінові ножиці — що дорожчає: ресурси чи продукція?',
   'stat.scissors.explainer': 'Динаміка цін на ресурси (дизпаливо + добриво NPK) та продукцію (4 основні товари: пшениця, ячмінь, ріпак, кукурудза).',

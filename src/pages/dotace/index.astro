@@ -11,6 +11,7 @@ import kolaSk from '../../data/dotace-kola-sk.json';
 import { content } from '../../i18n/dotace';
 import { localizeInternalHref } from '../../i18n/utils';
 import { linkBase, fmtMoney, fmtDate } from '../../lib/dotace-format';
+import DotaceUk from '../../components/dotace/DotaceUk.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const c = content[locale] ?? content.cs;
@@ -34,6 +35,7 @@ const itemListJsonLd = itemListSchema(
 const statusLabel = c.statusLabel;
 ---
 
+{locale === 'uk' ? <DotaceUk /> : (
 <Layout
   title={c.metaTitle}
   description={c.metaDescription}
@@ -121,6 +123,7 @@ const statusLabel = c.statusLabel;
     </section>
   </div>
 </Layout>
+)}
 
 <style>
   .dotace-page {

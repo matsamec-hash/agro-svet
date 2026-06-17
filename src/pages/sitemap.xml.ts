@@ -457,6 +457,7 @@ export const GET: APIRoute = async () => {
       const p = u.loc.slice(SITE_URL.length);
       if (p.startsWith('/sk/')) return false; // nezrcadlit už zrcadlené sk URL
       if (isDotaceDetailPath(p)) return false;
+      if (p === '/dotace/kalendar-kol/') return false; // uk: kalendar-kol 302→/uk/dotace/, nezrcadlit
       if (isSkHiddenCategoryPath(p)) return false;
       if (isUkMissingHowto(p)) return false; // chybějící uk návod → 404, nezrcadlit
       return isLaunchedPath('uk', p) && !isLockedSectionPath(p);

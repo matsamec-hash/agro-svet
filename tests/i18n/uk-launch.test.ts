@@ -11,10 +11,8 @@ describe('UK fáze 2 launch (stroje/srovnani/znacky/encyklopedie)', () => {
       expect(isLaunchedPath('uk', `${p}/cokoli/`)).toBe(true);
     }
   });
-  it('jurisdikční data NEjsou launchnuté pro uk (kromě /puda — 4b, /statistiky — 4c)', () => {
-    for (const p of ['/dotace']) {
-      expect(isLaunchedPath('uk', p)).toBe(false);
-    }
+  it('cs nikdy nedostane gating-noindex (LAUNCHED_PREFIXES.cs prázdné)', () => {
+    expect(LAUNCHED_PREFIXES.cs).toEqual([]);
   });
   it('launchnuté nejsou locked', () => {
     for (const p of launched) expect(isLockedSectionPath(p)).toBe(false);
@@ -66,5 +64,19 @@ describe('UK fáze 4c launch (statistiky)', () => {
   });
   it('cs /statistiky nedostane gating-noindex', () => {
     expect(isLaunchedPath('cs', '/statistiky/')).toBe(false);
+  });
+});
+
+describe('UK fáze 4d launch (dotace)', () => {
+  it('/dotace je launchnuté pro uk', () => {
+    expect(LAUNCHED_PREFIXES.uk).toContain('/dotace');
+    expect(isLaunchedPath('uk', '/dotace')).toBe(true);
+    expect(isLaunchedPath('uk', '/dotace/')).toBe(true);
+  });
+  it('/dotace není locked sekce', () => {
+    expect(isLockedSectionPath('/dotace')).toBe(false);
+  });
+  it('cs /dotace nedostane gating-noindex', () => {
+    expect(isLaunchedPath('cs', '/dotace/')).toBe(false);
   });
 });

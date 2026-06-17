@@ -10,6 +10,8 @@ import { localizeInternalHref } from '../../../i18n/utils';
 import { linkBase, fmtDate } from '../../../lib/dotace-format';
 
 const locale = Astro.locals.locale ?? 'cs';
+// UA: český SZIF / slovenský PPA kalendář je jurisdikčně irelevantní → 302 na uk hub.
+if (locale === 'uk') return Astro.redirect(`${linkBase('uk')}/dotace/`, 302);
 const c = content[locale] ?? content.cs;
 const ck = c.kalendarKol;
 

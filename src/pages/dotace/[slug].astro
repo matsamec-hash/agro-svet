@@ -16,7 +16,7 @@ const locale = Astro.locals.locale ?? 'cs';
 const loc = content[locale] ?? content.cs;
 const c = loc.detail;
 const { slug } = Astro.params;
-const titul = slug
+const titul = slug && locale !== 'uk'
   ? locale === 'sk'
     ? await getEntry('dotaceSk', slug)
     : await getEntry('dotace', slug)
