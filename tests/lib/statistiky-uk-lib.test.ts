@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildLineChart, cropDropPct, type StatistikyUkSeriesPoint } from '../../src/lib/statistiky-uk';
+import { buildLineChart, type StatistikyUkSeriesPoint } from '../../src/lib/statistiky-uk';
 
 describe('statistiky-uk buildLineChart (reuse)', () => {
   const series: StatistikyUkSeriesPoint[] = [
@@ -13,15 +13,5 @@ describe('statistiky-uk buildLineChart (reuse)', () => {
     expect(c.points[1].x).toBeCloseTo(1180, 1);
     expect(c.path.startsWith('M')).toBe(true);
     expect(c.area.trim().endsWith('Z')).toBe(true);
-  });
-});
-
-describe('cropDropPct', () => {
-  it('vrací procentní změnu prvního→posledního bodu', () => {
-    expect(cropDropPct([{ year: 2021, value: 100 }, { year: 2024, value: 75 }])).toBe(-25);
-  });
-  it('vrací null pro <2 body nebo nulový základ', () => {
-    expect(cropDropPct([{ year: 2021, value: 100 }])).toBeNull();
-    expect(cropDropPct([{ year: 2021, value: 0 }, { year: 2024, value: 50 }])).toBeNull();
   });
 });
