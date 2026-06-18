@@ -1,7 +1,7 @@
 ---
 // src/components/LangSwitcher.astro
-// CZ/SK header switcher. Builds the localized equivalent of the current
-// cs-root path via stripLocale + localizePath. uk added in Fáze 3.
+// CZ/SK/UA/PL header switcher. Builds the localized equivalent of the current
+// cs-root path via stripLocale + localizePath. uk added in Fáze 3, pl ve fázi 1 PL.
 import { stripLocale, localizePath, langSwitchHref, t } from '../i18n/utils';
 import { HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 
@@ -13,6 +13,8 @@ const csHref = localizePath('cs', path);
 const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk);
 // UK cíl: nelaunchnuté sekce padají na /uk/ (UK homepage) — nikdy 404.
 const ukHref = langSwitchHref('uk', path, []);
+// PL cíl: nelaunchnuté sekce padají na /pl/ (PL homepage, noindex) — nikdy 404.
+const plHref = langSwitchHref('pl', path, HIDDEN_NEWS_CATEGORIES.pl);
 ---
 <div class="lang-switch" role="group" aria-label={t(locale, 'lang.switch')}>
   <a href={csHref} class:list={["lang-opt", { active: locale === 'cs' }]} hreflang="cs"
@@ -23,6 +25,9 @@ const ukHref = langSwitchHref('uk', path, []);
   <span class="lang-sep" aria-hidden="true">/</span>
   <a href={ukHref} class:list={["lang-opt", { active: locale === 'uk' }]} hreflang="uk"
      aria-current={locale === 'uk' ? 'true' : undefined}>{t(locale, 'lang.uk')}</a>
+  <span class="lang-sep" aria-hidden="true">/</span>
+  <a href={plHref} class:list={["lang-opt", { active: locale === 'pl' }]} hreflang="pl"
+     aria-current={locale === 'pl' ? 'true' : undefined}>{t(locale, 'lang.pl')}</a>
 </div>
 <style>
   .lang-switch { display: inline-flex; align-items: center; gap: 4px; font-family: 'Chakra Petch', sans-serif; font-size: 12px; }
