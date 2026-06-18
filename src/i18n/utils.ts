@@ -127,7 +127,7 @@ export function plural(
   forms: { one: string; few: string; many: string },
 ): string {
   const abs = Math.abs(n);
-  if (locale === 'uk') {
+  if (locale === 'uk' || locale === 'pl') {
     const mod10 = abs % 10;
     const mod100 = abs % 100;
     if (mod10 === 1 && mod100 !== 11) return forms.one;

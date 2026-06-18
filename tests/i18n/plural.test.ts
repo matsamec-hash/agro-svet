@@ -50,3 +50,23 @@ describe('plural — uk (východoslovanská pravidla: one / few / many s mod-100
     expect(plural('uk', 111, f)).toBe('моделей');
   });
 });
+
+describe('plural — pl (polská pravidla = stejná jako uk: one / few / many)', () => {
+  const f = { one: 'model', few: 'modele', many: 'modeli' };
+  it('one: n%10==1 & n%100!=11', () => {
+    expect(plural('pl', 1, f)).toBe('model');
+    expect(plural('pl', 21, f)).toBe('model');
+  });
+  it('few: n%10 in 2..4 & n%100 not in 12..14', () => {
+    expect(plural('pl', 2, f)).toBe('modele');
+    expect(plural('pl', 22, f)).toBe('modele');
+    expect(plural('pl', 23, f)).toBe('modele');
+  });
+  it('many: zbytek vč. 0, 5, 11–14', () => {
+    expect(plural('pl', 0, f)).toBe('modeli');
+    expect(plural('pl', 5, f)).toBe('modeli');
+    expect(plural('pl', 11, f)).toBe('modeli');
+    expect(plural('pl', 12, f)).toBe('modeli');
+    expect(plural('pl', 25, f)).toBe('modeli');
+  });
+});
