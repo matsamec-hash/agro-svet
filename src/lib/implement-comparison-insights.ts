@@ -17,39 +17,43 @@ export type { ComparisonFaq, ComparisonInsights };
 /** Klauzule velikosti hospodářství dle záběru — fragment za "když"/"ak" bez velkého písmene/tečky. */
 function zaberFarmClause(zaber: number | null, locale: Locale): string | null {
   if (zaber === null) return null;
-  const pick = (cs: string, sk: string, uk: string): string =>
-    locale === 'sk' ? sk : locale === 'uk' ? uk : cs;
+  const pick = (cs: string, sk: string, uk: string, pl: string): string =>
+    locale === 'sk' ? sk : locale === 'uk' ? uk : locale === 'pl' ? pl : cs;
   if (zaber < 3.5) return pick(
     'máš menší pozemky a chceš lehkou, snadno manévrovatelnou soupravu',
     'máš menšie pozemky a chceš ľahkú, ľahko manévrovateľnú súpravu',
-    'у тебе невеликі ділянки і ти хочеш легкий, маневрений агрегат');
+    'у тебе невеликі ділянки і ти хочеш легкий, маневрений агрегат',
+    'masz mniejsze działki i chcesz lekki, łatwy w manewrowaniu agregat');
   if (zaber < 6) return pick(
     'hospodaříš na střední výměře a hledáš rovnováhu mezi záběrem a potřebným výkonem traktoru',
     'hospodáriš na strednej výmere a hľadáš rovnováhu medzi záberom a potrebným výkonom traktora',
-    'ти господарюєш на середній площі і шукаєш баланс між шириною захвату та потрібною потужністю трактора');
+    'ти господарюєш на середній площі і шукаєш баланс між шириною захвату та потрібною потужністю трактора',
+    'gospodarzysz na średniej powierzchni i szukasz balansu między szerokością roboczą a wymaganą mocą ciągnika');
   if (zaber < 9) return pick(
     'obděláváš větší výměru a chceš vyšší denní plošný výkon',
     'obrábaš väčšiu výmeru a chceš vyšší denný plošný výkon',
-    'ти обробляєш більшу площу і хочеш вищу денну продуктивність');
+    'ти обробляєш більшу площу і хочеш вищу денну продуктивність',
+    'uprawiasz większą powierzchnię i chcesz wyższą dzienną wydajność polową');
   return pick(
     'jsi velkovýroba a chceš maximum hektarů za den s nejširším záběrem',
     'si veľkovýroba a chceš maximum hektárov za deň s najširším záberom',
-    'ти великотоварне виробництво і хочеш максимум гектарів за день із найширшим захватом');
+    'ти великотоварне виробництво і хочеш максимум гектарів за день із найширшим захватом',
+    'prowadzisz wielkoobszarową produkcję i chcesz maksymalną liczbę hektarów dziennie przy największej szerokości roboczej');
 }
 
 /** Lokalizovaný název typu závěsu (nominativ). */
 function zavesNoun(typ: string | null | undefined, locale: Locale): string | null {
   if (!typ) return null;
-  const t: Record<string, [string, string, string]> = {
-    neseny: ['nesený', 'nesený', 'начіпний'],
-    tazeny: ['tažený', 'ťahaný', 'причіпний'],
-    poloneseny: ['polonesený', 'polonesený', 'напівначіпний'],
-    samojizdny: ['samojízdný', 'samohybný', 'самохідний'],
-    navesny: ['návěsný', 'návesný', 'причіпний (на причепі)'],
+  const t: Record<string, [string, string, string, string]> = {
+    neseny: ['nesený', 'nesený', 'начіпний', 'zawieszany'],
+    tazeny: ['tažený', 'ťahaný', 'причіпний', 'przyczepiany'],
+    poloneseny: ['polonesený', 'polonesený', 'напівначіпний', 'półzawieszany'],
+    samojizdny: ['samojízdný', 'samohybný', 'самохідний', 'samojezdny'],
+    navesny: ['návěsný', 'návesný', 'причіпний (на причепі)', 'półprzyczepiany'],
   };
   const row = t[typ];
   if (!row) return null;
-  return locale === 'sk' ? row[1] : locale === 'uk' ? row[2] : row[0];
+  return locale === 'sk' ? row[1] : locale === 'uk' ? row[2] : locale === 'pl' ? row[3] : row[0];
 }
 
 export function implementComparisonInsights(
@@ -57,9 +61,9 @@ export function implementComparisonInsights(
   b: StrojFlatModel,
   locale: Locale = 'cs',
 ): ComparisonInsights {
-  const pick = (cs: string, sk: string, uk: string): string =>
-    locale === 'sk' ? sk : locale === 'uk' ? uk : cs;
-  const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ';
+  const pick = (cs: string, sk: string, uk: string, pl: string): string =>
+    locale === 'sk' ? sk : locale === 'uk' ? uk : locale === 'pl' ? pl : cs;
+  const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
   const num = (n: number): string => n.toLocaleString(numLocale);
   const aName = modelDisplayName(a);
   const bName = modelDisplayName(b);
@@ -82,7 +86,7 @@ export function implementComparisonInsights(
   const yDiff = aY !== null && bY !== null ? aY - bY : null;
   const newer = yDiff !== null && yDiff !== 0 ? (yDiff > 0 ? a : b) : null;
 
-  const fmtZ = (z: number): string => `${num(z)} ${pick('m', 'm', 'м')}`;
+  const fmtZ = (z: number): string => `${num(z)} ${pick('m', 'm', 'м', 'm')}`;
 
   // ---- TL;DR ----
   const tldrParts: string[] = [];
@@ -93,12 +97,14 @@ export function implementComparisonInsights(
     tldrParts.push(pick(
       `${widerName} má širší záběr o ${num(Math.abs(zDiff))} m (${fmtZ(widerZ)} vs ${fmtZ(narrowerZ)}) — vyšší plošný výkon, ale potřebuje silnější traktor.`,
       `${widerName} má širší záber o ${num(Math.abs(zDiff))} m (${fmtZ(widerZ)} vs ${fmtZ(narrowerZ)}) — vyšší plošný výkon, ale potrebuje silnejší traktor.`,
-      `${widerName} має ширший захват на ${num(Math.abs(zDiff))} м (${fmtZ(widerZ)} проти ${fmtZ(narrowerZ)}) — вища продуктивність, але потрібен потужніший трактор.`));
+      `${widerName} має ширший захват на ${num(Math.abs(zDiff))} м (${fmtZ(widerZ)} проти ${fmtZ(narrowerZ)}) — вища продуктивність, але потрібен потужніший трактор.`,
+      `${widerName} ma szerszą szerokość roboczą o ${num(Math.abs(zDiff))} m (${fmtZ(widerZ)} vs ${fmtZ(narrowerZ)}) — wyższa wydajność polowa, ale wymaga mocniejszego ciągnika.`));
   } else if (aZ !== null && bZ !== null && zDiff === 0) {
     tldrParts.push(pick(
       `${aName} i ${bName} mají stejný pracovní záběr ${fmtZ(aZ)}.`,
       `${aName} aj ${bName} majú rovnaký pracovný záber ${fmtZ(aZ)}.`,
-      `${aName} і ${bName} мають однакову ширину захвату ${fmtZ(aZ)}.`));
+      `${aName} і ${bName} мають однакову ширину захвату ${fmtZ(aZ)}.`,
+      `${aName} i ${bName} mają taką samą szerokość roboczą ${fmtZ(aZ)}.`));
   }
 
   if (lessPower && pDiff !== null) {
@@ -107,7 +113,8 @@ export function implementComparisonInsights(
     tldrParts.push(pick(
       `${lpName} vystačí s lehčím traktorem (od ${num(lpP)} k).`,
       `${lpName} vystačí s ľahším traktorom (od ${num(lpP)} k).`,
-      `${lpName} обходиться легшим трактором (від ${num(lpP)} к.с.).`));
+      `${lpName} обходиться легшим трактором (від ${num(lpP)} к.с.).`,
+      `${lpName} wystarczy słabszy ciągnik (od ${num(lpP)} KM).`));
   }
 
   const aZav = zavesNoun(a.typ_zavesu, locale);
@@ -116,14 +123,16 @@ export function implementComparisonInsights(
     tldrParts.push(pick(
       `${aName} je ${aZav}, ${bName} je ${bZav}.`,
       `${aName} je ${aZav}, ${bName} je ${bZav}.`,
-      `${aName} — ${aZav}, ${bName} — ${bZav}.`));
+      `${aName} — ${aZav}, ${bName} — ${bZav}.`,
+      `${aName} jest ${aZav}, ${bName} jest ${bZav}.`));
   }
 
   if (tldrParts.length === 0) {
     tldrParts.push(pick(
       `${aName} a ${bName} jsou stroje srovnatelné třídy.`,
       `${aName} a ${bName} sú stroje porovnateľnej triedy.`,
-      `${aName} та ${bName} — машини порівнянного класу.`));
+      `${aName} та ${bName} — машини порівнянного класу.`,
+      `${aName} i ${bName} to maszyny porównywalnej klasy.`));
   }
   const tldr = tldrParts.join(' ');
 
@@ -134,12 +143,14 @@ export function implementComparisonInsights(
     shortDescription = pick(
       `Srovnání: ${aName} vs ${bName}. ${widerName} má širší záběr (+${num(Math.abs(zDiff))} m). Příkon traktoru, typ závěsu, hmotnost a FAQ vedle sebe.`,
       `Porovnanie: ${aName} vs ${bName}. ${widerName} má širší záber (+${num(Math.abs(zDiff))} m). Príkon traktora, typ závesu, hmotnosť a FAQ vedľa seba.`,
-      `Порівняння: ${aName} vs ${bName}. ${widerName} має ширший захват (+${num(Math.abs(zDiff))} м). Потужність трактора, тип зчіпки, маса та FAQ поряд.`);
+      `Порівняння: ${aName} vs ${bName}. ${widerName} має ширший захват (+${num(Math.abs(zDiff))} м). Потужність трактора, тип зчіпки, маса та FAQ поряд.`,
+      `Porównanie: ${aName} vs ${bName}. ${widerName} ma szerszą szerokość roboczą (+${num(Math.abs(zDiff))} m). Moc ciągnika, typ zawieszenia, masa i FAQ obok siebie.`);
   } else {
     shortDescription = pick(
       `Srovnání ${aName} a ${bName}: pracovní záběr, potřebný příkon traktoru, typ závěsu, hmotnost a FAQ.`,
       `Porovnanie ${aName} a ${bName}: pracovný záber, potrebný príkon traktora, typ závesu, hmotnosť a FAQ.`,
-      `Порівняння ${aName} та ${bName}: ширина захвату, потрібна потужність трактора, тип зчіпки, маса та FAQ.`);
+      `Порівняння ${aName} та ${bName}: ширина захвату, потрібна потужність трактора, тип зчіпки, маса та FAQ.`,
+      `Porównanie ${aName} i ${bName}: szerokość robocza, wymagana moc ciągnika, typ zawieszenia, masa i FAQ.`);
   }
   if (shortDescription.length > 158) shortDescription = shortDescription.slice(0, 155) + '…';
 
@@ -155,13 +166,15 @@ export function implementComparisonInsights(
       parts.push(pick(
         `potřebuješ vyšší plošný výkon — širší záběr ${fmtZ(selfZ)} zvládne víc hektarů za den`,
         `potrebuješ vyšší plošný výkon — širší záber ${fmtZ(selfZ)} zvládne viac hektárov za deň`,
-        `тобі потрібна вища продуктивність — ширший захват ${fmtZ(selfZ)} обробить більше гектарів за день`));
+        `тобі потрібна вища продуктивність — ширший захват ${fmtZ(selfZ)} обробить більше гектарів за день`,
+        `potrzebujesz wyższej wydajności polowej — szersza szerokość robocza ${fmtZ(selfZ)} obrobi więcej hektarów dziennie`));
     }
     if (isLessPower && self.prikon_traktor_hp_min !== null) {
       parts.push(pick(
         `máš k dispozici slabší traktor (stačí od ${num(self.prikon_traktor_hp_min)} k)`,
         `máš k dispozícii slabší traktor (stačí od ${num(self.prikon_traktor_hp_min)} k)`,
-        `у тебе слабший трактор (достатньо від ${num(self.prikon_traktor_hp_min)} к.с.)`));
+        `у тебе слабший трактор (достатньо від ${num(self.prikon_traktor_hp_min)} к.с.)`,
+        `masz słabszy ciągnik (wystarczy od ${num(self.prikon_traktor_hp_min)} KM)`));
     }
     const selfZav = zavesNoun(self.typ_zavesu, locale);
     if (selfZav && other.typ_zavesu !== self.typ_zavesu) {
@@ -169,19 +182,22 @@ export function implementComparisonInsights(
         parts.push(pick(
           `chceš ${selfZav} stroj (kratší souprava, lepší manévrovatelnost)`,
           `chceš ${selfZav} stroj (kratšia súprava, lepšia manévrovateľnosť)`,
-          `ти хочеш ${selfZav} агрегат (коротший склад, краща маневреність)`));
+          `ти хочеш ${selfZav} агрегат (коротший склад, краща маневреність)`,
+          `chcesz ${selfZav} maszynę (krótszy zestaw, lepsza zwrotność)`));
       } else {
         parts.push(pick(
           `preferuješ ${selfZav} stroj (větší záběr bez zatížení zadní nápravy traktoru)`,
           `preferuješ ${selfZav} stroj (väčší záber bez zaťaženia zadnej nápravy traktora)`,
-          `ти хочеш ${selfZav} агрегат (більший захват без навантаження задньої осі трактора)`));
+          `ти хочеш ${selfZav} агрегат (більший захват без навантаження задньої осі трактора)`,
+          `preferujesz ${selfZav} maszynę (większa szerokość robocza bez obciążenia tylnej osi ciągnika)`));
       }
     }
     if (isNewer && yDiff !== null && Math.abs(yDiff) >= 2) {
       parts.push(pick(
         `chceš novější konstrukci (uvedení ${self.year_from})`,
         `chceš novšiu konštrukciu (uvedenie ${self.year_from})`,
-        `хочеш новішу конструкцію (представлення ${self.year_from})`));
+        `хочеш новішу конструкцію (представлення ${self.year_from})`,
+        `chcesz nowszej konstrukcji (wprowadzenie ${self.year_from})`));
     }
     if (parts.length === 0) {
       const sizeClause = zaberFarmClause(self.pracovni_zaber_m ?? null, locale);
@@ -189,12 +205,14 @@ export function implementComparisonInsights(
       parts.push(pick(
         `preferuješ ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, locale)}`,
         `preferuješ ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, locale)}`,
-        `орієнтуєшся на ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, locale)}`));
+        `орієнтуєшся на ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, locale)}`,
+        `preferujesz ${brandDescriptorAkuzativ(self.brand_slug, self.brand_name, locale)}`));
     }
     return pick(
       `Vyber ${selfName} pokud ${parts.join(', a zároveň ')}.`,
       `Vyber ${selfName}, ak ${parts.join(', a zároveň ')}.`,
-      `Обери ${selfName}, якщо ${parts.join(', а водночас ')}.`);
+      `Обери ${selfName}, якщо ${parts.join(', а водночас ')}.`,
+      `Wybierz ${selfName}, jeśli ${parts.join(', a jednocześnie ')}.`);
   }
   const decisionA = buildDecision(a, b);
   const decisionB = buildDecision(b, a);
@@ -206,11 +224,12 @@ export function implementComparisonInsights(
   if (aZ !== null && bZ !== null) {
     if (zDiff === 0) {
       faqs.push({
-        q: pick(`Jaký pracovní záběr mají ${aName} a ${bName}?`, `Aký pracovný záber majú ${aName} a ${bName}?`, `Яка ширина захвату в ${aName} та ${bName}?`),
+        q: pick(`Jaký pracovní záběr mají ${aName} a ${bName}?`, `Aký pracovný záber majú ${aName} a ${bName}?`, `Яка ширина захвату в ${aName} та ${bName}?`, `Jaką szerokość roboczą mają ${aName} i ${bName}?`),
         a: pick(
           `Oba stroje mají shodný pracovní záběr ${fmtZ(aZ)}. Rozhodující rozdíl je tedy v potřebném příkonu traktoru, typu závěsu a hmotnosti.`,
           `Oba stroje majú zhodný pracovný záber ${fmtZ(aZ)}. Rozhodujúci rozdiel je teda v potrebnom príkone traktora, type závesu a hmotnosti.`,
-          `Обидві машини мають однакову ширину захвату ${fmtZ(aZ)}. Вирішальна різниця — у потрібній потужності трактора, типі зчіпки та масі.`),
+          `Обидві машини мають однакову ширину захвату ${fmtZ(aZ)}. Вирішальна різниця — у потрібній потужності трактора, типі зчіпки та масі.`,
+          `Obie maszyny mają taką samą szerokość roboczą ${fmtZ(aZ)}. Decydująca różnica leży w wymaganej mocy ciągnika, typie zawieszenia i masie.`),
       });
     } else {
       const widerName = modelDisplayName(wider!);
@@ -218,11 +237,12 @@ export function implementComparisonInsights(
       const narrowerZ = wider === a ? bZ : aZ;
       const narrowerName = wider === a ? bName : aName;
       faqs.push({
-        q: pick(`Co má širší záběr — ${aName}, nebo ${bName}?`, `Čo má širší záber — ${aName}, alebo ${bName}?`, `Що має ширший захват — ${aName} чи ${bName}?`),
+        q: pick(`Co má širší záběr — ${aName}, nebo ${bName}?`, `Čo má širší záber — ${aName}, alebo ${bName}?`, `Що має ширший захват — ${aName} чи ${bName}?`, `Co ma szerszą szerokość roboczą — ${aName} czy ${bName}?`),
         a: pick(
           `Širší záběr má ${widerName} (${fmtZ(widerZ)}) oproti ${fmtZ(narrowerZ)} u ${narrowerName}, rozdíl ${num(Math.abs(zDiff))} m. Širší záběr znamená vyšší plošný výkon, ale i vyšší nároky na výkon traktoru.`,
           `Širší záber má ${widerName} (${fmtZ(widerZ)}) oproti ${fmtZ(narrowerZ)} u ${narrowerName}, rozdiel ${num(Math.abs(zDiff))} m. Širší záber znamená vyšší plošný výkon, ale aj vyššie nároky na výkon traktora.`,
-          `Ширший захват у ${widerName} (${fmtZ(widerZ)}) проти ${fmtZ(narrowerZ)} у ${narrowerName}, різниця ${num(Math.abs(zDiff))} м. Ширший захват означає вищу продуктивність, але й вищі вимоги до потужності трактора.`),
+          `Ширший захват у ${widerName} (${fmtZ(widerZ)}) проти ${fmtZ(narrowerZ)} у ${narrowerName}, різниця ${num(Math.abs(zDiff))} м. Ширший захват означає вищу продуктивність, але й вищі вимоги до потужності трактора.`,
+          `Szerszą szerokość roboczą ma ${widerName} (${fmtZ(widerZ)}) wobec ${fmtZ(narrowerZ)} w ${narrowerName}, różnica ${num(Math.abs(zDiff))} m. Większa szerokość robocza oznacza wyższą wydajność polową, ale też wyższe wymagania co do mocy ciągnika.`),
       });
     }
   }
@@ -232,28 +252,30 @@ export function implementComparisonInsights(
     const fmtPrikon = (m: StrojFlatModel): string => {
       const lo = m.prikon_traktor_hp_min ?? null;
       const hi = m.prikon_traktor_hp_max ?? null;
-      if (lo === null && hi === null) return pick('neuvedeno', 'neuvedené', 'не вказано');
-      const ku = pick('k', 'k', 'к.с.');
+      if (lo === null && hi === null) return pick('neuvedeno', 'neuvedené', 'не вказано', 'nie podano');
+      const ku = pick('k', 'k', 'к.с.', 'KM');
       if (lo !== null && hi !== null) return lo === hi ? `${num(lo)} ${ku}` : `${num(lo)}–${num(hi)} ${ku}`;
       return `${num((lo ?? hi)!)} ${ku}`;
     };
     faqs.push({
-      q: pick(`Jaký traktor je potřeba pro ${aName} a ${bName}?`, `Aký traktor je potrebný pre ${aName} a ${bName}?`, `Який трактор потрібен для ${aName} та ${bName}?`),
+      q: pick(`Jaký traktor je potřeba pro ${aName} a ${bName}?`, `Aký traktor je potrebný pre ${aName} a ${bName}?`, `Який трактор потрібен для ${aName} та ${bName}?`, `Jaki ciągnik jest potrzebny do ${aName} i ${bName}?`),
       a: pick(
         `${aName} vyžaduje traktor ${fmtPrikon(a)}, ${bName} ${fmtPrikon(b)}. Zvol stroj podle výkonu traktoru, který máš v parku.`,
         `${aName} vyžaduje traktor ${fmtPrikon(a)}, ${bName} ${fmtPrikon(b)}. Zvoľ stroj podľa výkonu traktora, ktorý máš v parku.`,
-        `${aName} потребує трактор ${fmtPrikon(a)}, ${bName} — ${fmtPrikon(b)}. Обирай машину за потужністю трактора, який є у твоєму парку.`),
+        `${aName} потребує трактор ${fmtPrikon(a)}, ${bName} — ${fmtPrikon(b)}. Обирай машину за потужністю трактора, який є у твоєму парку.`,
+        `${aName} wymaga ciągnika ${fmtPrikon(a)}, ${bName} — ${fmtPrikon(b)}. Wybierz maszynę zgodnie z mocą ciągnika, który posiadasz.`),
     });
   }
 
   // Q3: typ závěsu
   if (aZav || bZav) {
     faqs.push({
-      q: pick(`Jsou ${aName} a ${bName} nesené, nebo tažené?`, `Sú ${aName} a ${bName} nesené, alebo ťahané?`, `${aName} та ${bName} начіпні чи причіпні?`),
+      q: pick(`Jsou ${aName} a ${bName} nesené, nebo tažené?`, `Sú ${aName} a ${bName} nesené, alebo ťahané?`, `${aName} та ${bName} начіпні чи причіпні?`, `Czy ${aName} i ${bName} są zawieszane czy przyczepianie?`),
       a: pick(
         `${aName}: ${aZav ?? 'neuvedeno'}. ${bName}: ${bZav ?? 'neuvedeno'}. Nesené stroje jsou obratnější a kratší, tažené umožní větší záběr bez zatížení zadní nápravy traktoru.`,
         `${aName}: ${aZav ?? 'neuvedené'}. ${bName}: ${bZav ?? 'neuvedené'}. Nesené stroje sú obratnejšie a kratšie, ťahané umožnia väčší záber bez zaťaženia zadnej nápravy traktora.`,
-        `${aName}: ${aZav ?? 'не вказано'}. ${bName}: ${bZav ?? 'не вказано'}. Начіпні машини маневреніші й коротші, причіпні дають більший захват без навантаження задньої осі трактора.`),
+        `${aName}: ${aZav ?? 'не вказано'}. ${bName}: ${bZav ?? 'не вказано'}. Начіпні машини маневреніші й коротші, причіпні дають більший захват без навантаження задньої осі трактора.`,
+        `${aName}: ${aZav ?? 'nie podano'}. ${bName}: ${bZav ?? 'nie podano'}. Maszyny zawieszane (TUZ) są zwrotniejsze i krótsze, przyczepianie umożliwiają większą szerokość roboczą bez obciążenia tylnej osi ciągnika.`),
     });
   }
 
@@ -266,7 +288,7 @@ export function implementComparisonInsights(
     if (aFarm) parts.push(`${aName} — ${cap(aFarm)}.`);
     if (bFarm) parts.push(`${bName} — ${cap(bFarm)}.`);
     faqs.push({
-      q: pick(`Pro jak velkou farmu se ${aName} a ${bName} hodí?`, `Pre akú veľkú farmu sa ${aName} a ${bName} hodia?`, `Для якої ферми підходять ${aName} та ${bName}?`),
+      q: pick(`Pro jak velkou farmu se ${aName} a ${bName} hodí?`, `Pre akú veľkú farmu sa ${aName} a ${bName} hodia?`, `Для якої ферми підходять ${aName} та ${bName}?`, `Do jakiego gospodarstwa pasują ${aName} i ${bName}?`),
       a: parts.join(' '),
     });
   }
@@ -275,22 +297,24 @@ export function implementComparisonInsights(
   if (aY !== null && bY !== null) {
     if (yDiff === 0) {
       faqs.push({
-        q: pick(`Kdy byly ${aName} a ${bName} uvedeny?`, `Kedy boli ${aName} a ${bName} uvedené?`, `Коли вийшли ${aName} та ${bName}?`),
+        q: pick(`Kdy byly ${aName} a ${bName} uvedeny?`, `Kedy boli ${aName} a ${bName} uvedené?`, `Коли вийшли ${aName} та ${bName}?`, `Kiedy wprowadzono ${aName} i ${bName}?`),
         a: pick(
           `Oba stroje byly uvedeny v roce ${aY}, jde o současníky stejné generace.`,
           `Oba stroje boli uvedené v roku ${aY}, ide o súčasníkov rovnakej generácie.`,
-          `Обидві машини вийшли у ${aY} році — це сучасники одного покоління.`),
+          `Обидві машини вийшли у ${aY} році — це сучасники одного покоління.`,
+          `Obie maszyny zostały wprowadzone w ${aY} roku — są współczesnymi tej samej generacji.`),
       });
     } else {
       const newerName = modelDisplayName(newer!);
       const newerYear = newer === a ? aY : bY;
       const olderYear = newer === a ? bY : aY;
       faqs.push({
-        q: pick(`Který stroj je novější?`, `Ktorý stroj je novší?`, `Яка машина новіша?`),
+        q: pick(`Který stroj je novější?`, `Ktorý stroj je novší?`, `Яка машина новіша?`, `Która maszyna jest nowsza?`),
         a: pick(
           `Novější je ${newerName}, uvedený v roce ${newerYear} (oproti ${olderYear}). Novější konstrukce typicky znamená lepší kompatibilitu s ISOBUS a aktuálnější řešení uložení/seřízení.`,
           `Novší je ${newerName}, uvedený v roku ${newerYear} (oproti ${olderYear}). Novšia konštrukcia typicky znamená lepšiu kompatibilitu s ISOBUS a aktuálnejšie riešenie uloženia/nastavenia.`,
-          `Новіша — ${newerName}, представлена у ${newerYear} році (проти ${olderYear}). Новіша конструкція зазвичай означає кращу сумісність з ISOBUS та сучасніші рішення.`),
+          `Новіша — ${newerName}, представлена у ${newerYear} році (проти ${olderYear}). Новіша конструкція зазвичай означає кращу сумісність з ISOBUS та сучасніші рішення.`,
+          `Nowsza jest ${newerName}, wprowadzona w ${newerYear} roku (wobec ${olderYear}). Nowsza konstrukcja zazwyczaj oznacza lepszą kompatybilność z ISOBUS i nowocześniejsze rozwiązania regulacji/przechowywania.`),
       });
     }
   }
