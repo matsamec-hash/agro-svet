@@ -150,7 +150,7 @@ export function generateModelFaq({
         `Pracovní záběr ${fullName} je ${model.pracovni_zaber_m} m. Záběr ovlivňuje rychlost zpracování plochy a požadavky na výkon agregovaného traktoru.`,
         `Pracovný záber ${fullName} je ${model.pracovni_zaber_m} m. Záber ovplyvňuje rýchlosť spracovania plochy a požiadavky na výkon agregovaného traktora.`,
         `Робоча ширина захвату ${fullName} становить ${model.pracovni_zaber_m} м. Ширина захвату впливає на швидкість обробітку площі та вимоги до потужності агрегованого трактора.`,
-        `Szerokość robocza ${fullName} wynosi ${model.pracovni_zaber_m} m. Szerokość robocza wpływa na szybkość uprawy powierzchni i wymagania co do mocy agragowanego ciągnika.`,
+        `Szerokość robocza ${fullName} wynosi ${model.pracovni_zaber_m} m. Szerokość robocza wpływa na szybkość uprawy powierzchni i wymagania co do mocy agregowanego ciągnika.`,
       ),
     });
   }
