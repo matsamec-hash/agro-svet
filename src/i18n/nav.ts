@@ -26,6 +26,10 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // ukazuje jen sekce s reálným UA obsahem: `tech` (katalog + slovník) a `data`
   // (statistiky/půda/dotace) — stejný princip jako homepage rozcestník.
   uk: ['bazar', 'photo', 'tema', 'animals', 'farms'],
+  // PL fáze 1: stejně jako uk — jen sekce s reálným PL obsahem (tech: katalog +
+  // slovník). data sekce zatím bez launchnutých dětí (statistiky/puda/dotace =
+  // pozdější fáze), novinky/plemena/farmy jsou české články.
+  pl: ['bazar', 'photo', 'tema', 'animals', 'farms'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české
@@ -36,6 +40,7 @@ export const HIDDEN_NEWS_CATEGORIES: Record<Locale, string[]> = {
   cs: [],
   sk: ['dotace', 'legislativa'],
   uk: ['dotace', 'legislativa'],
+  pl: ['dotace', 'legislativa'],
 };
 
 /** cs-root prefixy CZ-jurisdikčních nástrojů/dat. Po Fázi 2b balíku C jsou
@@ -141,10 +146,10 @@ export function getNav(locale: Locale): NavItem[] {
           // Data sekce (jurisdikční huby) u non-cs: ukaž jen launchnuté děti, ať
           // header nedead-linkuje na cs-fallback. cs = beze změny.
           .filter((c) => !(filterLocked && item.section === 'data') || isLaunchedPath(locale, norm(c.href)))
-          // uk: stejný launched-filtr na VŠECHNY viditelné sekce (tj. `tech`), ať
+          // uk+pl: stejný launched-filtr na VŠECHNY viditelné sekce (tj. `tech`), ať
           // dropdown nedead-linkuje na cs (žebříčky/kvíz/prodejci nejsou launchnuté).
-          // Scope-nuté na uk → sk nav beze změny (sk si cs-fallback děti ponechává).
-          .filter((c) => locale !== 'uk' || isLaunchedPath(locale, norm(c.href)))
+          // Scope-nuté na uk+pl → sk nav beze změny (sk si cs-fallback děti ponechává).
+          .filter((c) => (locale !== 'uk' && locale !== 'pl') || isLaunchedPath(locale, norm(c.href)))
           .map((c) => ({ label: t(locale, c.labelKey), href: c.href }));
         // Pokud vlastní top-level href sekce ukazuje na locked cestu (a filtrujeme),
         // přesměruj na první viditelné dítě, ať header nedead-linkuje na 307 redirect.
