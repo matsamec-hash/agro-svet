@@ -7,6 +7,8 @@
 
 import { getAllModels, type StrojFlatModel, type StrojKategorie } from './stroje';
 import { findCompetitors, findImplementCompetitors } from './competitor-finder';
+import { t } from '../i18n/utils';
+import type { Locale } from '../i18n/config';
 
 const PAIR_DELIMITER = '-vs-';
 
@@ -189,58 +191,58 @@ export interface ComparisonRow {
   get: (m: StrojFlatModel) => number | string | null | undefined;
 }
 
-export function buildComparisonRows(category: StrojKategorie): ComparisonRow[] {
+export function buildComparisonRows(category: StrojKategorie, locale: Locale = 'cs'): ComparisonRow[] {
   // Nářaďová větev: záběrové kategorie nemají power_hp/motor/převodovku → vlastní sada
   // relevantních řádků (záběr, příkon traktoru, typ závěsu) + univerzální roky/hmotnost.
   if (category !== 'traktory' && category !== 'kombajny') {
     const zavesLabel = (v: string | null | undefined): string | null => {
       switch (v) {
-        case 'neseny': return 'nesený';
-        case 'tazeny': return 'tažený';
-        case 'poloneseny': return 'polonesený';
-        case 'samojizdny': return 'samojízdný';
-        case 'navesny': return 'návěsný';
+        case 'neseny': return t(locale, 'cmp.hitch.neseny');
+        case 'tazeny': return t(locale, 'cmp.hitch.tazeny');
+        case 'poloneseny': return t(locale, 'cmp.hitch.poloneseny');
+        case 'samojizdny': return t(locale, 'cmp.hitch.samojizdny');
+        case 'navesny': return t(locale, 'cmp.hitch.navesny');
         default: return null;
       }
     };
     return [
       {
-        label: 'Pracovní záběr',
+        label: t(locale, 'cmp.workWidth'),
         better: 'higher',
         unit: 'm',
         get: (m) => m.pracovni_zaber_m ?? null,
       },
       {
-        label: 'Potřebný příkon traktoru',
+        label: t(locale, 'cmp.tractorPower'),
         better: 'none',
         get: (m) => {
           const lo = m.prikon_traktor_hp_min ?? null;
           const hi = m.prikon_traktor_hp_max ?? null;
           if (lo === null && hi === null) return null;
-          if (lo !== null && hi !== null) return lo === hi ? `${lo} k` : `${lo}–${hi} k`;
-          return `${lo ?? hi} k`;
+          if (lo !== null && hi !== null) return lo === hi ? `${lo} ${t(locale, 'cmp.unitHp')}` : `${lo}–${hi} ${t(locale, 'cmp.unitHp')}`;
+          return `${lo ?? hi} ${t(locale, 'cmp.unitHp')}`;
         },
       },
       {
-        label: 'Typ závěsu',
+        label: t(locale, 'cmp.hitchType'),
         better: 'none',
         get: (m) => zavesLabel(m.typ_zavesu),
       },
       {
-        label: 'Roky výroby',
+        label: t(locale, 'cmp.years'),
         better: 'none',
         get: (m) => {
           if (m.year_from === null) return null;
-          return m.year_to === null ? `${m.year_from}–dosud` : `${m.year_from}–${m.year_to}`;
+          return m.year_to === null ? `${m.year_from}–${t(locale, 'cmp.present')}` : `${m.year_from}–${m.year_to}`;
         },
       },
       {
-        label: 'V prodeji',
+        label: t(locale, 'cmp.onSale'),
         better: 'none',
-        get: (m) => (m.year_to === null ? 'Ano' : 'Ne'),
+        get: (m) => (m.year_to === null ? t(locale, 'cmp.yes') : t(locale, 'cmp.no')),
       },
       {
-        label: 'Hmotnost',
+        label: t(locale, 'cmp.weight'),
         better: 'lower',
         unit: 'kg',
         get: (m) => m.weight_kg ?? null,
@@ -250,42 +252,42 @@ export function buildComparisonRows(category: StrojKategorie): ComparisonRow[] {
 
   const rows: ComparisonRow[] = [
     {
-      label: 'Výkon',
+      label: t(locale, 'cmp.power'),
       better: 'higher',
-      unit: 'k',
+      unit: t(locale, 'cmp.unitHp'),
       get: (m) => m.power_hp,
     },
     {
-      label: 'Výkon (kW)',
+      label: t(locale, 'cmp.powerKw'),
       better: 'higher',
       unit: 'kW',
       get: (m) => m.power_kw ?? (m.power_hp ? Math.round(m.power_hp * 0.7457) : null),
     },
     {
-      label: 'Roky výroby',
+      label: t(locale, 'cmp.years'),
       better: 'none',
       get: (m) => {
         if (m.year_from === null) return null;
-        return m.year_to === null ? `${m.year_from}–dosud` : `${m.year_from}–${m.year_to}`;
+        return m.year_to === null ? `${m.year_from}–${t(locale, 'cmp.present')}` : `${m.year_from}–${m.year_to}`;
       },
     },
     {
-      label: 'V prodeji',
+      label: t(locale, 'cmp.onSale'),
       better: 'none',
-      get: (m) => (m.year_to === null ? 'Ano' : 'Ne'),
+      get: (m) => (m.year_to === null ? t(locale, 'cmp.yes') : t(locale, 'cmp.no')),
     },
     {
-      label: 'Motor',
+      label: t(locale, 'cmp.engine'),
       better: 'none',
       get: (m) => m.engine ?? null,
     },
     {
-      label: 'Převodovka',
+      label: t(locale, 'cmp.transmission'),
       better: 'none',
       get: (m) => m.transmission ?? null,
     },
     {
-      label: 'Hmotnost',
+      label: t(locale, 'cmp.weight'),
       better: 'lower',
       unit: 'kg',
       get: (m) => m.weight_kg ?? null,
@@ -294,13 +296,13 @@ export function buildComparisonRows(category: StrojKategorie): ComparisonRow[] {
 
   if (category === 'kombajny') {
     rows.push({
-      label: 'Záběr žacího stolu',
+      label: t(locale, 'cmp.cuttingWidth'),
       better: 'higher',
       unit: 'm',
       get: (m) => m.cutting_width_m ?? null,
     });
     rows.push({
-      label: 'Zásobník zrna',
+      label: t(locale, 'cmp.grainTank'),
       better: 'higher',
       unit: 'l',
       get: (m) => m.grain_tank_l ?? null,

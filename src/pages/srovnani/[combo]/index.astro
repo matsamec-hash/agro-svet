@@ -78,7 +78,7 @@ const aDisplay = modelDisplayName(a);
 const bDisplay = modelDisplayName(b);
 
 const isImplement = a.effective_category !== 'traktory' && a.effective_category !== 'kombajny';
-const rows = buildComparisonRows(a.effective_category);
+const rows = buildComparisonRows(a.effective_category, locale);
 
 // Look up series image fallbacks for hero photos.
 const aSeries = getSeries(a.brand_slug, a.series_slug);
