@@ -18,6 +18,10 @@ const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 // NE český zpravodajský feed (články nemají UA překlad → vypadalo to rozbitě:
 // ukrajinská kostra + české články). cs/sk beze změny.
 const isUk = locale === 'uk';
+// PL homepage zatím nemá kurátovaný rozcestník (pozdější fáze) → přeskoč cs
+// supabase feed (české články nemají PL překlad) a nech Layout gating dát /pl/
+// noindex (root není v LAUNCHED_PREFIXES.pl). Vzor isUk; cs/sk beze změny.
+const isPl = locale === 'pl';
 
 // Edge cache: 5min s-maxage + 30min SWR. Většina requestů HIT na CF edge,
 // nový článek se objeví do ~5min (akceptovatelný trade-off vs 0 Worker
@@ -29,7 +33,7 @@ Astro.response.headers.set('cache-control', 'public, s-maxage=300, stale-while-r
 // UA hub feed nepotřebuje → dotaz přeskočíme.
 let featured: any;
 let heroRight: any[] = [];
-if (!isUk) {
+if (!isUk && !isPl) {
   const supabase = createAnonClient();
   const { data: articles } = await supabase
     .from('articles')
