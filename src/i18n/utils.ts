@@ -33,6 +33,9 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   cs: [],
   sk: ['/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/jak-na-to', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
   uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace'],
+  // PL fáze 1: katalog (data-driven) + slovník. Jurisdikční data (statistiky/
+  // puda/dotace) a články zůstávají cs → pozdější fáze (jako uk před 4b-4d).
+  pl: ['/stroje', '/znacky', '/srovnani', '/slovnik'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
