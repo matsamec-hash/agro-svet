@@ -412,6 +412,7 @@ const cs: Record<string, string> = {
   'lang.cs': 'CZ',
   'lang.sk': 'SK',
   'lang.uk': 'UA',
+  'lang.pl': 'PL',
 
   // — statistiky chrome (stat.*) —
   // Hero
