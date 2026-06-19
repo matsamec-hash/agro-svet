@@ -1,0 +1,185 @@
+{
+  "slug": "velka-britanie",
+  "geo": "UK",
+  "nameCs": "Velká Británie",
+  "flag": "🇬🇧",
+  "generated": "2026-06-19",
+  "indicators": {
+    "wheat_yield": {
+      "key": "wheat_yield",
+      "label": "Výnos pšenice",
+      "pkg": "produkce",
+      "unit": "t/ha",
+      "latest": {
+        "value": 7.08,
+        "unit": "t/ha",
+        "referencePeriod": "2020",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=C1100&strucpro=YLD_HUMD_EU_T_HA&geo=UK",
+        "fetchedAt": "2026-06-19"
+      },
+      "series": [
+        {
+          "period": "2016",
+          "value": 7.81
+        },
+        {
+          "period": "2020",
+          "value": 7.08
+        }
+      ]
+    },
+    "ag_land": {
+      "key": "ag_land",
+      "label": "Zemědělská plocha",
+      "pkg": "puda",
+      "unit": "mil. ha",
+      "latest": {
+        "value": 17.009,
+        "unit": "mil. ha",
+        "referencePeriod": "2023",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/GB/indicator/AG.LND.AGRI.K2?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-06-19"
+      },
+      "series": [
+        {
+          "period": "1990",
+          "value": 18.203
+        },
+        {
+          "period": "1991",
+          "value": 18.143
+        },
+        {
+          "period": "1992",
+          "value": 18.07
+        },
+        {
+          "period": "1993",
+          "value": 17.534
+        },
+        {
+          "period": "1994",
+          "value": 17.409
+        },
+        {
+          "period": "1995",
+          "value": 17.379
+        },
+        {
+          "period": "1996",
+          "value": 17.494
+        },
+        {
+          "period": "1997",
+          "value": 17.585
+        },
+        {
+          "period": "1998",
+          "value": 17.518
+        },
+        {
+          "period": "1999",
+          "value": 17.219
+        },
+        {
+          "period": "2000",
+          "value": 16.964
+        },
+        {
+          "period": "2001",
+          "value": 16.953
+        },
+        {
+          "period": "2002",
+          "value": 16.976
+        },
+        {
+          "period": "2003",
+          "value": 16.956
+        },
+        {
+          "period": "2004",
+          "value": 17.051
+        },
+        {
+          "period": "2005",
+          "value": 16.956
+        },
+        {
+          "period": "2006",
+          "value": 17.838
+        },
+        {
+          "period": "2007",
+          "value": 17.647
+        },
+        {
+          "period": "2008",
+          "value": 17.684
+        },
+        {
+          "period": "2009",
+          "value": 17.325
+        },
+        {
+          "period": "2010",
+          "value": 17.224
+        },
+        {
+          "period": "2011",
+          "value": 17.164
+        },
+        {
+          "period": "2012",
+          "value": 17.182
+        },
+        {
+          "period": "2013",
+          "value": 17.25
+        },
+        {
+          "period": "2014",
+          "value": 17.232
+        },
+        {
+          "period": "2015",
+          "value": 17.138
+        },
+        {
+          "period": "2016",
+          "value": 17.35
+        },
+        {
+          "period": "2017",
+          "value": 17.466
+        },
+        {
+          "period": "2018",
+          "value": 17.351
+        },
+        {
+          "period": "2019",
+          "value": 17.521
+        },
+        {
+          "period": "2020",
+          "value": 17.259
+        },
+        {
+          "period": "2021",
+          "value": 17.215
+        },
+        {
+          "period": "2022",
+          "value": 17.415
+        },
+        {
+          "period": "2023",
+          "value": 17.009
+        }
+      ]
+    }
+  }
+}

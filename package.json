@@ -19,6 +19,7 @@
     "puda:refresh:sk": "node scripts/fetch-puda-sk.mjs",
     "catalog:refresh": "node scripts/fetch-remote-catalog.mjs",
     "akce:maintenance": "tsx --env-file=.env scripts/akce-maintenance.mjs",
+    "data:world": "node scripts/build-svet.mjs",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
