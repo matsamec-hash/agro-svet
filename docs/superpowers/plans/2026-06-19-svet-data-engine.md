@@ -487,11 +487,12 @@ export const INDICATORS = [
     key: 'wheat_yield', label: 'Výnos pšenice', pkg: 'produkce', unit: 't/ha',
     spec: {
       source: 'eurostat', dataset: 'apro_cpsh1',
-      filters: { crops: 'C1100', strucpro: 'YI_HU_EU' },
+      // POZOR (ověřeno z reálné fixtury Task 3): správný kód výnosu je YLD_HUMD_EU_T_HA
+      // (NE YI_HU_EU), jednotka je t/ha → scale: 1. Dataset má povinnou dimenzi freq → freq:'A'.
+      filters: { freq: 'A', crops: 'C1100', strucpro: 'YLD_HUMD_EU_T_HA' },
       sourceLabel: 'Eurostat',
       pageUrl: 'https://ec.europa.eu/eurostat/databrowser/view/apro_cpsh1/default/table',
-      // přepočet 100 kg/ha → t/ha; pokud fixtura ukázala už t/ha, nastav scale: 1
-      scale: 0.1,
+      scale: 1,
     },
   },
   {
@@ -832,6 +833,7 @@ git commit -m "feat(svet): orchestrátor build-svet + data DE/FR/UK (spine indik
 | agri_imports | obchod | FAOSTAT TCL (importy) | |
 | fert_use | obchod | FAOSTAT RFN | hnojiva |
 
+> **POZOR (ověřeno):** `apro_*` datasety mají povinnou dimenzi `freq` → každý eurostat `filters` musí obsahovat `freq: 'A'` (jinak `pickSeries` vrátí 0 bodů). Výnosové kódy jsou `YLD_HUMD_EU_T_HA` (t/ha, scale 1). Crops kódy ověř ve fixtuře (C1100=pšenice, C1500=kukuřice, C1300=ječmen, R1000=řepka).
 > Pokud kód/dimenze v reálné fixtuře nesedí, oprav podle výstupu — fixtura je zdroj pravdy. Po doplnění všech zopakuj Task 8 Step 3–4 (full run + validace) a commitni aktualizovaná data.
 
 ---
