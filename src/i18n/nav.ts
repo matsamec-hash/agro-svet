@@ -17,7 +17,8 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // odemčeny (SK obsah nasazen). Fáze 2b B: /statistiky taky odemčeno (SK obsah).
   // Fáze 2b C: /puda odemčeno → LOCKED_SECTION_PREFIXES je teď prázdné, takže
   // getNav už nic z `data` nefiltruje.
-  sk: ['bazar', 'photo'],
+  // `svet` (profily zemí + srovnání) je cs-only sekce → skrytá v sk/uk/pl.
+  sk: ['bazar', 'photo', 'svet'],
   // UK 4d follow-up: `data` už uk neskrývá — /statistiky, /puda i /dotace jsou
   // launchnuté pro uk. getNav filtruje NElaunchnuté `data` děti (kalkulačky) přes
   // isLaunchedPath, takže header ukáže jen launchnuté (žádný cs-fallback dead-link).
@@ -25,11 +26,11 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // (/farmy/) skryté — nemají UA obsah, vedly by celé do češtiny. UA hlavička tak
   // ukazuje jen sekce s reálným UA obsahem: `tech` (katalog + slovník) a `data`
   // (statistiky/půda/dotace) — stejný princip jako homepage rozcestník.
-  uk: ['bazar', 'photo', 'tema', 'animals', 'farms'],
+  uk: ['bazar', 'photo', 'tema', 'animals', 'farms', 'svet'],
   // PL fáze 1: stejně jako uk — jen sekce s reálným PL obsahem (tech: katalog +
   // slovník). data sekce zatím bez launchnutých dětí (statistiky/puda/dotace =
   // pozdější fáze), novinky/plemena/farmy jsou české články.
-  pl: ['bazar', 'photo', 'tema', 'animals', 'farms'],
+  pl: ['bazar', 'photo', 'tema', 'animals', 'farms', 'svet'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české
@@ -115,6 +116,13 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
       { labelKey: 'nav.data.calculators', href: '/kalkulacka/' },
       { labelKey: 'nav.data.capCalc', href: '/kalkulacka/dotace-cap/' },
       { labelKey: 'nav.data.subsidies', href: '/dotace/' },
+    ],
+  },
+  {
+    section: 'svet', labelKey: 'nav.svet', href: '/svet/',
+    children: [
+      { labelKey: 'nav.svet.profiles', href: '/svet/' },
+      { labelKey: 'nav.svet.compare', href: '/svet/srovnani/' },
     ],
   },
   { section: 'farms', labelKey: 'nav.farms', href: '/farmy/' },

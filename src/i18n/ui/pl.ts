@@ -16,6 +16,7 @@ const pl: Record<string, string> = {
   'nav.animals': 'Zwierzęta',
   'nav.tech': 'Technika',
   'nav.data': 'Dane',
+  'nav.svet': 'Świat',
   'nav.farms': 'Farmy',
   'nav.bazar': 'Agro giełda',
   'nav.photo': 'Konkurs fotograficzny',
@@ -61,6 +62,10 @@ const pl: Record<string, string> = {
   'nav.data.calculators': 'Kalkulatory',
   'nav.data.capCalc': 'Kalkulator dopłat WPR',
   'nav.data.subsidies': 'Dopłaty',
+
+  // — nawigacja: Świat (sekcja tylko-cs: profile krajów + porównanie) —
+  'nav.svet.profiles': 'Profile krajów',
+  'nav.svet.compare': 'Porównanie krajów',
 
   // — header chrome —
   'header.search': 'Szukaj',

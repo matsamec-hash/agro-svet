@@ -6,7 +6,7 @@ describe('getNav', () => {
   it('cs vrací plný strom se 7 top-level položkami a původními labely', () => {
     const nav = getNav('cs');
     expect(nav.map((i) => i.label)).toEqual([
-      'Téma', 'Zvířata', 'Technika', 'Data', 'Farmy', 'Agro bazar', 'Fotosoutěž',
+      'Téma', 'Zvířata', 'Technika', 'Data', 'Svět', 'Farmy', 'Agro bazar', 'Fotosoutěž',
     ]);
     // hrefs zachované
     expect(nav[0].href).toBe('/novinky/');

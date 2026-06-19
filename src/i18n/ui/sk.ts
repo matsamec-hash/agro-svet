@@ -14,6 +14,7 @@ const sk: Record<string, string> = {
   'nav.animals': 'Zvieratá',
   'nav.tech': 'Technika',
   'nav.data': 'Dáta',
+  'nav.svet': 'Svet',
   'nav.farms': 'Farmy',
   'nav.bazar': 'Agro bazár',
   'nav.photo': 'Fotosúťaž',
@@ -59,6 +60,10 @@ const sk: Record<string, string> = {
   'nav.data.calculators': 'Kalkulačky',
   'nav.data.capCalc': 'Kalkulačka dotácií SPP',
   'nav.data.subsidies': 'Dotácie',
+
+  // — navigácia: Svet (cs-only sekcia: profily krajín + porovnanie) —
+  'nav.svet.profiles': 'Profily krajín',
+  'nav.svet.compare': 'Porovnanie krajín',
 
   // — header chrome —
   'header.search': 'Hľadať',
