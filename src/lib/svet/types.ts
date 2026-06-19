@@ -1,5 +1,7 @@
 export type PackageKey = 'produkce' | 'puda' | 'ekonomika' | 'obchod';
 
+const VALID_PACKAGES: readonly PackageKey[] = ['produkce', 'puda', 'ekonomika', 'obchod'];
+
 export interface DataPoint {
   value: number;
   unit: string;
@@ -43,12 +45,29 @@ export function assertCountryProfile(p: any): asserts p is CountryProfile {
     for (const f of ['key', 'label', 'pkg', 'unit'] as const) {
       if (!ind?.[f]) throw new Error(`Indicator ${key}: chybí pole "${f}"`);
     }
+    // 3. Validate pkg is a valid PackageKey
+    if (!VALID_PACKAGES.includes(ind.pkg)) {
+      throw new Error(`Indicator ${key}: neplatný pkg "${ind.pkg}"`);
+    }
     if (!Array.isArray(ind.series) || ind.series.length === 0) {
       throw new Error(`Indicator ${key}: prázdné nebo chybějící series`);
     }
     for (const f of POINT_FIELDS) {
       if (ind.latest?.[f] === undefined || ind.latest?.[f] === null || ind.latest?.[f] === '') {
         throw new Error(`Indicator ${key}: latest chybí "${f}"`);
+      }
+    }
+    // 1. Reject non-finite latest.value
+    if (!Number.isFinite(ind.latest?.value)) {
+      throw new Error(`Indicator ${key}: latest.value musí být konečné číslo`);
+    }
+    // 2. Validate each series point
+    for (const point of ind.series) {
+      if (typeof point.period !== 'string') {
+        throw new Error(`Indicator ${key}: series bod má neplatný period`);
+      }
+      if (!Number.isFinite(point.value)) {
+        throw new Error(`Indicator ${key}: series bod má nekonečnou nebo NaN hodnotu`);
       }
     }
   }

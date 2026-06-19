@@ -27,4 +27,29 @@ describe('assertCountryProfile', () => {
     bad.indicators.wheat_yield.series = [];
     expect(() => assertCountryProfile(bad)).toThrow(/series/);
   });
+  it('selže když latest.value je NaN', () => {
+    const bad = structuredClone(valid);
+    bad.indicators.wheat_yield.latest.value = NaN;
+    expect(() => assertCountryProfile(bad)).toThrow(/konečné|finite/);
+  });
+  it('selže když latest.value je Infinity', () => {
+    const bad = structuredClone(valid);
+    bad.indicators.wheat_yield.latest.value = Infinity;
+    expect(() => assertCountryProfile(bad)).toThrow(/konečné|finite/);
+  });
+  it('selže když bod řady má NaN value', () => {
+    const bad = structuredClone(valid);
+    bad.indicators.wheat_yield.series[0].value = NaN;
+    expect(() => assertCountryProfile(bad)).toThrow(/series/);
+  });
+  it('selže když bod řady má non-string period', () => {
+    const bad = structuredClone(valid);
+    bad.indicators.wheat_yield.series[0].period = 123;
+    expect(() => assertCountryProfile(bad)).toThrow(/series/);
+  });
+  it('selže když pkg je neplatný', () => {
+    const bad = structuredClone(valid);
+    bad.indicators.wheat_yield.pkg = 'invalid';
+    expect(() => assertCountryProfile(bad)).toThrow(/pkg/);
+  });
 });
