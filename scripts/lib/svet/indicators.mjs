@@ -62,4 +62,40 @@ export const INDICATORS = [
       scale: 0.0001, // km² → mil. ha
     },
   },
+  {
+    key: 'arable_land', label: 'Orná půda', pkg: 'puda', unit: 'mil. ha',
+    spec: {
+      source: 'worldbank', indicator: 'AG.LND.ARBL.HA',
+      sourceLabel: 'World Bank',
+      pageUrl: 'https://data.worldbank.org/indicator/AG.LND.ARBL.HA',
+      scale: 0.000001, // ha → mil. ha
+    },
+  },
+  {
+    key: 'ag_value_added_gdp', label: 'Podíl zemědělství na HDP', pkg: 'ekonomika', unit: '%',
+    spec: {
+      source: 'worldbank', indicator: 'NV.AGR.TOTL.ZS',
+      sourceLabel: 'World Bank',
+      pageUrl: 'https://data.worldbank.org/indicator/NV.AGR.TOTL.ZS',
+      scale: 1,
+    },
+  },
+  {
+    key: 'ag_employment', label: 'Zaměstnanost v zemědělství', pkg: 'ekonomika', unit: '%',
+    spec: {
+      source: 'worldbank', indicator: 'SL.AGR.EMPL.ZS',
+      sourceLabel: 'World Bank',
+      pageUrl: 'https://data.worldbank.org/indicator/SL.AGR.EMPL.ZS',
+      scale: 1,
+    },
+  },
+  {
+    key: 'fert_use', label: 'Spotřeba hnojiv', pkg: 'obchod', unit: 'kg/ha',
+    spec: {
+      source: 'worldbank', indicator: 'AG.CON.FERT.ZS',
+      sourceLabel: 'World Bank',
+      pageUrl: 'https://data.worldbank.org/indicator/AG.CON.FERT.ZS',
+      scale: 1,
+    },
+  },
 ];

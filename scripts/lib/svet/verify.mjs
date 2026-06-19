@@ -5,6 +5,7 @@ const RANGES = {
   'mld €': [0, 2000],
   '1000 ks': [0, 5_000_000],
   '%': [0, 100],
+  'kg/ha': [0, 1000],
 };
 
 /** Vrátí pole textových problémů (prázdné = OK). */

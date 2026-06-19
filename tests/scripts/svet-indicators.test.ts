@@ -33,4 +33,8 @@ describe('INDICATORS', () => {
     }
     expect(INDICATORS.find((i) => i.key === 'cereal_yield').spec.source).toBe('worldbank');
   });
+  it('balíček World Bank ukazatelů', () => {
+    const keys = INDICATORS.map((i) => i.key);
+    for (const k of ['arable_land', 'ag_value_added_gdp', 'ag_employment', 'fert_use']) expect(keys).toContain(k);
+  });
 });
