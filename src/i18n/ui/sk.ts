@@ -413,6 +413,14 @@ const sk: Record<string, string> = {
   'lang.sk': 'SK',
   'lang.uk': 'UA',
   'lang.pl': 'PL',
+  'puda.pl.crumbHome': 'Domov',
+  'puda.pl.crumbSelf': 'Poľnohospodárska pôda',
+  'puda.pl.h.reforma': 'Regulácia trhu s pôdou',
+  'puda.pl.h.cena': 'Cena poľnohospodárskej pôdy',
+  'puda.pl.h.najem': 'Prenájom pôdy',
+  'puda.pl.h.plodiny': 'Hlavné plodiny',
+  'puda.pl.h.ohrozeni': 'Ohrozenia pôd',
+  'puda.pl.sources.h': 'Zdroje dát',
 
   // — štatistiky chrome (stat.*) —
   // Hero

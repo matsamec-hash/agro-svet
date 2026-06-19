@@ -418,6 +418,14 @@ const uk: Record<string, string> = {
   'lang.sk': 'SK',
   'lang.uk': 'UA',
   'lang.pl': 'PL',
+  'puda.pl.crumbHome': 'Головна',
+  'puda.pl.crumbSelf': 'Сільськогосподарська земля',
+  'puda.pl.h.reforma': 'Регулювання ринку землі',
+  'puda.pl.h.cena': 'Ціна сільськогосподарської землі',
+  'puda.pl.h.najem': 'Оренда землі',
+  'puda.pl.h.plodiny': 'Основні культури',
+  'puda.pl.h.ohrozeni': 'Загрози для ґрунтів',
+  'puda.pl.sources.h': 'Джерела даних',
 
   // — statistiky chrome (stat.*) — [jurisdikčně vázané; pro /uk skryté, čeká na UA data]
   // Hero

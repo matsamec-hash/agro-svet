@@ -413,6 +413,14 @@ const cs: Record<string, string> = {
   'lang.sk': 'SK',
   'lang.uk': 'UA',
   'lang.pl': 'PL',
+  'puda.pl.crumbHome': 'Domů',
+  'puda.pl.crumbSelf': 'Zemědělská půda',
+  'puda.pl.h.reforma': 'Regulace trhu s půdou',
+  'puda.pl.h.cena': 'Cena zemědělské půdy',
+  'puda.pl.h.najem': 'Pronájem půdy',
+  'puda.pl.h.plodiny': 'Hlavní plodiny',
+  'puda.pl.h.ohrozeni': 'Ohrožení půd',
+  'puda.pl.sources.h': 'Zdroje dat',
 
   // — statistiky chrome (stat.*) —
   // Hero
