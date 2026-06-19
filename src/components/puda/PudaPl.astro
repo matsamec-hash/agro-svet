@@ -1,0 +1,371 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DataSegmentNav from '../../components/DataSegmentNav.astro';
+import PillsNav from '../../components/statistiky/PillsNav.astro';
+import { useTranslations } from '../../i18n/utils';
+import { buildLineChart, pudaPlPriceGrowthPct, type PudaPlData } from '../../lib/puda-pl';
+import raw from '../../data/agro-puda-pl.json';
+import { getCollection } from 'astro:content';
+
+const d = raw as unknown as PudaPlData;
+const t = useTranslations('pl');
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+const NF = new Intl.NumberFormat('pl-PL');
+const cena = d.cena.series.length >= 2
+  ? buildLineChart(d.cena.series, { max: d.cena.max, ticks: d.cena.ticks })
+  : null;
+const najemMax = d.najem.series.length ? Math.max(...d.najem.series.map((s) => s.value)) : 0;
+const plodinyMax = d.plodiny.length ? Math.max(...d.plodiny.map((p) => p.hectares)) : 0;
+const growthPct = pudaPlPriceGrowthPct(d);
+const articles = await getCollection('pudaPl');
+
+const PILLS = [
+  { label: 'Tematy', href: '#temata' },
+  { label: t('puda.pl.h.reforma'), href: '#reforma' },
+  ...(cena ? [{ label: t('puda.pl.h.cena'), href: '#cena' }] : []),
+  ...(d.najem.series.length ? [{ label: t('puda.pl.h.najem'), href: '#najem' }] : []),
+  ...(d.plodiny.length ? [{ label: t('puda.pl.h.plodiny'), href: '#plodiny' }] : []),
+  ...(d.threats.length ? [{ label: t('puda.pl.h.ohrozeni'), href: '#ohrozeni' }] : []),
+];
+---
+
+<Layout
+  title="Rynek ziemi rolnej w Polsce — ceny, dzierżawa, regulacja"
+  description="Dane o ziemi rolnej w Polsce: ceny gruntów ornych, dzierżawa, regulacja rynku i prawo pierwokupu KOWR, struktura upraw oraz zagrożenia dla gleb."
+>
+  <div class="puda-root">
+    <DataSegmentNav active="puda" />
+
+    <section class="sp-hero">
+      <div class="sp-hero-left">
+        <span class="sp-kicker"><span class="dot"></span>ZIEMIA · PRZEGLĄD DANYCH</span>
+        <h1>Ziemia <em>rolna</em></h1>
+        <p class="sp-hero-lede">Ziemia to najcenniejszy zasób rolnictwa. Tutaj — ceny gruntów ornych, dzierżawa, regulacja rynku i prawo pierwokupu KOWR, struktura upraw i stan gleb.</p>
+      </div>
+      <div class="sp-hero-right">
+        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')"></div>
+      </div>
+    </section>
+
+    {d.warCaveat && <p class="war-caveat">⚠️ {d.warCaveat}</p>}
+
+    {d.bigNumbers.length > 0 && (
+      <section class="big-numbers">
+        {d.bigNumbers.map((b) => (
+          <div class="bn">
+            <span class="bn-val">{b.val}{b.unit && <span class="bn-unit">{b.unit}</span>}</span>
+            <span class="bn-lbl">{b.lbl}</span>
+            <span class="bn-trend">{b.trend}</span>
+            <a class="bn-source" href={b.url} target="_blank" rel="noopener noreferrer"><span class="bn-source-prefix">Źródło:</span> {b.source}</a>
+          </div>
+        ))}
+      </section>
+    )}
+
+    <PillsNav items={PILLS} />
+
+    {articles.length > 0 && (
+      <section class="topics-section" id="temata">
+        <h2>Pogłębione tematy</h2>
+        <div class="topics-grid">
+          {articles.map((a) => (
+            <a href={`/pl/puda/${a.id}/`} class="puda-card">
+              <div class="card-icon">🌱</div>
+              <h3>{a.data.title}</h3>
+              <p>{a.data.popis}</p>
+              <span class="card-cta">Czytaj dalej →</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="reforma-section" id="reforma">
+      <h2>{t('puda.pl.h.reforma')}</h2>
+      <ol class="timeline">
+        {d.reformTimeline.map((s) => (
+          <li class="tl-item">
+            <span class="tl-year">{s.year}</span>
+            <div class="tl-body">
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <a class="src-link" href={s.url} target="_blank" rel="noopener noreferrer">{s.source}</a>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    {cena && (
+      <section class="chart-section" id="cena">
+        <header>
+          <h2>{t('puda.pl.h.cena')}</h2>
+          <span class="sub">{d.cena.unit} · {d.cena.asOf}</span>
+          <a class="src-link" href={d.cena.url} target="_blank" rel="noopener noreferrer">{d.cena.source}</a>
+        </header>
+        <div class="chart-wrap">
+          <svg viewBox={`0 0 ${cena.w} ${cena.h}`} class="chart-svg" role="img" aria-label="Cena ziemi">
+            {d.cena.ticks.map((v) => {
+              const y = cena.pad.t + cena.plotH - (v / d.cena.max) * cena.plotH;
+              return (<>
+                <line x1={cena.pad.l} y1={y} x2={cena.w - cena.pad.r} y2={y} stroke="#eee" stroke-width="1"/>
+                <text x={cena.pad.l - 8} y={y + 5} text-anchor="end" font-size="13" fill="#888">{NF.format(v)}</text>
+              </>);
+            })}
+            <path d={cena.area} fill="rgba(255, 215, 0, .25)"/>
+            <path d={cena.path} stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            {cena.points.map((p) => (<>
+              <circle cx={p.x} cy={p.y} r="5" fill="#FFFF00" stroke="#1a1a1a" stroke-width="2"/>
+              <text x={p.x} y={p.y - 14} text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a">{NF.format(p.value)}</text>
+              <text x={p.x} y={cena.pad.t + cena.plotH + 22} text-anchor="middle" font-size="13" fill="#666">{p.year}</text>
+            </>))}
+          </svg>
+          {growthPct !== null && (
+            <div class="chart-insight">Wzrost ceny o <strong>{growthPct} %</strong> w okresie {d.cena.series[0].year}–{d.cena.series.at(-1)!.year}.</div>
+          )}
+        </div>
+      </section>
+    )}
+
+    {d.najem.series.length > 0 && (
+      <section class="chart-section" id="najem">
+        <header>
+          <h2>{t('puda.pl.h.najem')}</h2>
+          <span class="sub">{d.najem.unit} · {d.najem.asOf}</span>
+          <a class="src-link" href={d.najem.url} target="_blank" rel="noopener noreferrer">{d.najem.source}</a>
+        </header>
+        <div class="crops-bars">
+          {d.najem.series.slice(-10).map((p) => (
+            <div class="crop-row">
+              <span class="crop-name">{p.year}</span>
+              <div class="crop-bar-wrap">
+                <div class="crop-bar" style={`width:${(p.value / najemMax) * 100}%; background:#7CB342`}></div>
+                <span class="crop-val">{NF.format(p.value)} {d.najem.unit}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {d.plodiny.length > 0 && (
+      <section class="crops-section" id="plodiny">
+        <header><h2>{t('puda.pl.h.plodiny')}</h2></header>
+        <div class="crops-bars">
+          {d.plodiny.map((c, i) => (
+            <div class="crop-row">
+              <span class="crop-name">{c.crop}</span>
+              <div class="crop-bar-wrap">
+                <div class="crop-bar" style={`width:${(c.hectares / plodinyMax) * 100}%; background:${['#FFD700','#FFB300','#7CB342','#FB8C00','#9E9E9E'][i % 5]}`}></div>
+                <span class="crop-val">{NF.format(Math.round(c.hectares / 1000))} tys. ha</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {d.facts.length > 0 && (
+      <section class="facts-grid">
+        {d.facts.map((f) => (
+          <div class="fact">
+            <span class="fact-val">{f.val}{f.unit && <span class="fact-unit">{f.unit}</span>}</span>
+            <span class="fact-lbl">{f.lbl}</span>
+            <span class="fact-note">{f.note}</span>
+            <a class="fact-source" href={f.url} target="_blank" rel="noopener noreferrer"><span class="fact-source-prefix">Źródło:</span> {f.source}</a>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {d.threats.length > 0 && (
+      <section class="card-chart" id="ohrozeni">
+        <h3>{t('puda.pl.h.ohrozeni')}</h3>
+        <div class="threats">
+          {d.threats.map((th, i) => (
+            <div class="threat">
+              <div class="threat-bar" style={`width:${th.pct}%; --c:${['#E53935','#FB8C00','#FFB300','#FFC107'][i % 4]}`}><span>{th.pct} %</span></div>
+              <span class="threat-lbl">{th.lbl}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="sources-section">
+      <h3>{t('puda.pl.sources.h')}</h3>
+      <ul>
+        {d.sources.map((s) => (<li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></li>))}
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .puda-root {
+    --bg-cream: #FBFAF4;
+    max-width: 1280px; margin: 0 auto; padding: 26px 24px 96px;
+    background: var(--bg-cream); color: #1E1E22;
+  }
+
+  /* Hero — sjednoceno s /statistiky/ (sp-hero pattern) */
+  .sp-hero {
+    --yellow:#FFEA00; --ink:#0A0A0B; --r-xl:24px;
+    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
+    background:radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
+      radial-gradient(700px 400px at 90% 90%, rgba(80,80,90,.4), transparent 60%),
+      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+    padding:48px 48px 40px;margin-bottom:22px;
+    box-shadow:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
+  }
+  .sp-hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
+  }
+  .sp-hero-left{position:relative;z-index:2}
+  .sp-kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--yellow);margin-bottom:18px;
+    padding:8px 14px;border:1px solid rgba(255,234,0,.4);border-radius:999px;
+    background:rgba(255,234,0,.06);
+  }
+  .sp-kicker .dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;
+    box-shadow:0 0 0 3px rgba(255,234,0,.2);
+    animation:sp-pulse 2s infinite;
+  }
+  @keyframes sp-pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .sp-hero h1{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    font-size:clamp(2.2rem,5vw,4rem);color:#fff;line-height:.98;letter-spacing:-.03em;margin:0;
+  }
+  .sp-hero h1 em{font-style:normal;color:var(--yellow);text-shadow:0 0 40px rgba(255,234,0,.5)}
+  .sp-hero-lede{max-width:560px;font-size:16.5px;color:#c8c8d0;margin:18px 0 0;line-height:1.55}
+
+  .sp-hero-right{position:relative;z-index:1;min-height:300px;display:flex;align-items:center;justify-content:center}
+  .sp-hero-photo{
+    width:100%;height:100%;min-height:300px;
+    background-size:cover;background-position:center;
+    border-radius:18px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
+    position:relative;overflow:hidden;
+  }
+  .sp-hero-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, rgba(255,234,0,.12) 100%);
+  }
+  @media (max-width:960px){
+    .sp-hero{grid-template-columns:1fr;padding:32px 24px 28px;gap:18px}
+    .sp-hero-right{min-height:200px;order:2}
+    .sp-hero-photo{min-height:200px}
+  }
+
+  .big-numbers { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-bottom:36px; }
+  .bn { padding:22px 24px; border-radius:18px; background:#fff; border:1px solid #EAEAEC; box-shadow:0 1px 2px rgba(10,10,12,.04); display:flex; flex-direction:column; gap:6px; position:relative; }
+  .bn-val { font-family:'Chakra Petch',sans-serif; font-size:32px; font-weight:700; color:#0A0A0B; line-height:1; letter-spacing:-.02em; }
+  .bn-unit { font-size:14px; color:#6B6B72; font-weight:400; }
+  .bn-lbl { font-size:14px; color:#0A0A0B; font-weight:600; margin-top:6px; }
+  .bn-trend { font-size:12px; color:#6B6B72; }
+  .bn-source, .fact-source {
+    display:inline-flex;align-items:center;gap:4px;
+    margin-top:auto;padding-top:10px;
+    font-size:11px;color:#888;text-decoration:none;
+    border-top:1px dashed #ebebeb;
+    opacity:0;transition:opacity .15s, color .15s;
+    align-self:flex-start;
+  }
+  .bn-source svg, .fact-source svg { color:#aaa;transition:transform .15s }
+  .bn:hover .bn-source, .bn:focus-within .bn-source,
+  .fact:hover .fact-source, .fact:focus-within .fact-source { opacity:1 }
+  .bn-source:hover, .fact-source:hover { color:#1a1a1a }
+  .bn-source:hover svg, .fact-source:hover svg { color:#1a1a1a;transform:translate(1px,-1px) }
+  .bn-source-prefix, .fact-source-prefix { color:#aaa;margin-right:2px }
+
+  /* Chart sections — sjednoceno se sp-section pattern */
+  .chart-section { margin: 32px 0 36px; padding: 28px 30px; background:#fff; border-radius:18px; border:1px solid #EAEAEC; box-shadow:0 1px 2px rgba(10,10,12,.04); scroll-margin-top:200px; }
+  .chart-section header { margin-bottom: 18px; }
+  .chart-section h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; margin:0; color:#0A0A0B; }
+  .chart-section .sub { display:block; font-size:13px; color:#6B6B72; margin-top:2px; }
+  .chart-wrap { display:flex; flex-direction:column; gap:16px; }
+  .chart-svg { width:100%; height:auto; display:block; }
+  .chart-insight { font-size:14px; color:#1E1E22; line-height:1.6; padding:12px 16px; background:#FFF6A8; border:1px solid #FFEA00; border-radius:10px; font-weight:500; }
+
+  .card-chart { padding:24px 26px; background:#fff; border-radius:18px; border:1px solid #EAEAEC; box-shadow:0 1px 2px rgba(10,10,12,.04); scroll-margin-top:200px; }
+  .card-chart h3 { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.01em; margin:0; color:#0A0A0B; }
+
+  /* Source link konzistentní s .sp-src ve statistiky komponentách */
+  .src-link {
+    display:inline-flex;align-items:center;gap:4px;margin-top:6px;
+    font-size:11.5px;color:#888;text-decoration:none;
+    border-bottom:1px dotted #c0c0c5;padding-bottom:1px;
+    transition:color .15s, border-color .15s;
+  }
+  .src-link:hover{color:#0A0A0B;border-bottom-color:#0A0A0B}
+  .src-link svg{color:#a0a0a8;transition:transform .15s}
+  .src-link:hover svg{color:#0A0A0B;transform:translate(1px,-1px)}
+
+  /* Threats bars */
+  .threats { display:flex; flex-direction:column; gap:14px; }
+  .threat { display:flex; flex-direction:column; gap:4px; }
+  .threat-bar { height:24px; background:var(--c); border-radius:6px; position:relative; min-width:36px; }
+  .threat-bar span { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:12px; color:#fff; font-weight:700; }
+  .threat-lbl { font-size:13px; color:#1E1E22; }
+
+  /* Facts grid */
+  .facts-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin: 32px 0 36px; scroll-margin-top:200px; }
+  .fact { padding:22px 24px; background:#fff; border-radius:18px; border:1px solid #EAEAEC; box-shadow:0 1px 2px rgba(10,10,12,.04); display:flex; flex-direction:column; }
+  .fact-val { font-family:'Chakra Petch',sans-serif; font-size:28px; font-weight:700; color:#0A0A0B; line-height:1; display:block; letter-spacing:-.02em; }
+  .fact-unit { font-size:14px; color:#6B6B72; font-weight:400; }
+  .fact-lbl { font-size:14px; color:#0A0A0B; font-weight:600; margin-top:8px; display:block; }
+  .fact-note { font-size:12.5px; color:#6B6B72; margin-top:6px; display:block; line-height:1.5; }
+
+  /* Crops */
+  .crops-section { margin: 32px 0 36px; padding: 28px 30px; background:#fff; border-radius:18px; border:1px solid #EAEAEC; box-shadow:0 1px 2px rgba(10,10,12,.04); scroll-margin-top:200px; }
+  .crops-section header { margin-bottom: 18px; }
+  .crops-section h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; margin:0; color:#0A0A0B; }
+  .crops-section .sub { display:block; font-size:13px; color:#6B6B72; margin-top:2px; }
+  .crops-bars { display:flex; flex-direction:column; gap:12px; }
+  .crop-row { display:grid; grid-template-columns:200px 1fr; gap:16px; align-items:center; }
+  .crop-name { font-size:14px; color:#444; }
+  .crop-bar-wrap { display:flex; align-items:center; gap:12px; }
+  .crop-bar { height:22px; border-radius:4px; min-width:24px; }
+  .crop-val { font-size:13px; color:#666; white-space:nowrap; }
+  /* Topics */
+  .topics-section { margin: 32px 0 36px; scroll-margin-top:200px; }
+  .topics-section h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; margin:0 0 18px; color:#0A0A0B; }
+  .topics-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:14px; }
+  .puda-card { display:block; text-decoration:none; color:inherit; border-radius:18px; padding:24px 26px; background:#fff; border:1px solid #EAEAEC; box-shadow:0 1px 2px rgba(10,10,12,.04); transition: box-shadow .2s, transform .2s, border-color .2s; }
+  .puda-card:hover { box-shadow:0 14px 36px -16px rgba(10,10,12,.18); transform:translateY(-2px); border-color:#FFEA00; }
+  .card-icon { width:48px; height:48px; background:#FFFF00; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:16px; }
+  .puda-card h3 { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.01em; color:#0A0A0B; margin:0 0 8px; }
+  .puda-card p { font-size:14px; color:#6B6B72; line-height:1.55; margin:0 0 14px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .card-cta { font-size:13px; color:#1a1a1a; font-weight:600; }
+
+  /* Sources */
+  .sources-section { margin-top:48px; padding-top:32px; border-top:1px solid #EAEAEC; }
+  .sources-section h3 { font:700 16px 'Chakra Petch',sans-serif; letter-spacing:-.01em; margin:0 0 16px; color:#0A0A0B; }
+  .sources-section ul { padding:0; margin:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .sources-section li { font-size:13px; }
+  .sources-section a { color:#6B6B72; text-decoration:underline; text-decoration-color:#c0c0c5; text-underline-offset:2px; }
+  .sources-section a:hover { color:#0A0A0B; text-decoration-color:#FFEA00; }
+  @media (max-width: 768px) {
+    .puda-root { padding: 32px 16px 64px; }
+    .crop-row { grid-template-columns:1fr; gap:6px; }
+    .chart-section, .crops-section, .card-chart { padding:20px; }
+  }
+
+  .war-caveat { font-size:13px; color:#8a6d00; background:#FFF6A8; border:1px solid #FFEA00; border-radius:10px; padding:12px 16px; margin:0 0 24px; line-height:1.5; }
+  .reforma-section { margin:32px 0 36px; scroll-margin-top:200px; }
+  .reforma-section h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; margin:0 0 18px; color:#0A0A0B; }
+  .timeline { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px; }
+  .tl-item { display:grid; grid-template-columns:130px 1fr; gap:18px; background:#fff; border:1px solid #EAEAEC; border-radius:18px; padding:20px 24px; box-shadow:0 1px 2px rgba(10,10,12,.04); }
+  .tl-year { font:700 16px 'Chakra Petch',sans-serif; color:#0A0A0B; }
+  .tl-body h3 { font:700 17px 'Chakra Petch',sans-serif; margin:0 0 6px; color:#0A0A0B; }
+  .tl-body p { font-size:14px; color:#1E1E22; line-height:1.55; margin:0 0 8px; }
+  @media (max-width:768px){ .tl-item{ grid-template-columns:1fr; gap:6px; } }
+</style>
