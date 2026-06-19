@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import index from '../../data/svet/index.json';
+
+const countries = index.countries.filter((c) => !c.reference);
+const title = 'Zemědělství ve světě — data zemí';
+const description = 'Zemědělská data evropských zemí i světa: produkce, půda, ekonomika. Profily zemí a srovnění s Českem. Zdroje Eurostat a World Bank.';
+---
+
+<Layout title={title} description={description}>
+  <main class="sp-page svet-hub">
+    <header class="sp-hero">
+      <div>
+        <h1>{title}</h1>
+        <p>{description}</p>
+      </div>
+    </header>
+    <section class="sp-section">
+      <div class="svet-grid">
+        {countries.map((c) => (
+          <a class="svet-card" href={`/svet/${c.slug}/`}>
+            <span class="svet-card-flag">{c.flag}</span>
+            <span class="svet-card-name">{c.nameCs}</span>
+            <span class="svet-card-cta">Zobrazit data →</span>
+          </a>
+        ))}
+      </div>
+      <p style="margin-top:1rem"><a href="/svet/srovnani/">Porovnat země vedle sebe →</a></p>
+    </section>
+    <style>
+      .svet-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.8rem;
+      }
+      .svet-card {
+        display: grid;
+        gap: 0.3rem;
+        padding: 1rem;
+        border: 1px solid #dde7d6;
+        border-radius: 12px;
+        background: #fff;
+        text-decoration: none;
+        color: inherit;
+        transition: box-shadow 0.15s;
+      }
+      .svet-card:hover {
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      }
+      .svet-card-flag {
+        font-size: 2rem;
+      }
+      .svet-card-name {
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+      .svet-card-cta {
+        font-size: 0.8rem;
+        color: #2f6b2f;
+      }
+    </style>
+  </main>
+</Layout>
