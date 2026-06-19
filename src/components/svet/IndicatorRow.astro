@@ -1,0 +1,22 @@
+---
+import Sparkline from './Sparkline.astro';
+import { fmtNum, vsReference } from '../../lib/svet/render';
+import type { Indicator } from '../../lib/svet/types';
+interface Props { indicator: Indicator; refValue?: number; refName?: string; }
+const { indicator: ind, refValue, refName = 'ČR' } = Astro.props;
+const cmp = refValue != null ? vsReference(ind.latest.value, refValue) : null;
+const periodNum = Number(ind.latest.referencePeriod);
+const stale = periodNum > 0 && periodNum <= 2020;
+const dirSign = cmp && cmp.dir === 'up' ? '+' : '';
+---
+<div class="svet-row">
+  <div class="svet-row-main">
+    <span class="svet-row-label">{ind.label}</span>
+    <span class="svet-row-value">{fmtNum(ind.latest.value)} <span class="svet-row-unit">{ind.unit}</span></span>
+  </div>
+  <Sparkline series={ind.series} />
+  <div class="svet-row-meta">
+    {cmp && <span class={`svet-vs svet-vs-${cmp.dir}`}>{dirSign}{fmtNum(cmp.pct)} % vs {refName}</span>}
+    <a class="sp-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{ind.latest.source} · {ind.latest.referencePeriod}{stale ? ' (nejnovější dostupné)' : ''}</a>
+  </div>
+</div>
