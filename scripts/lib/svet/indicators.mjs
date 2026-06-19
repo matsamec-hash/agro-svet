@@ -119,4 +119,39 @@ export const INDICATORS = [
       scale: 1,
     },
   },
+  {
+    key: 'ag_output_value', label: 'Hodnota zemědělské produkce', pkg: 'ekonomika', unit: 'mld €',
+    spec: {
+      source: 'eurostat', dataset: 'aact_eaa01',
+      // am_item=AM160000 Agricultural output, indic_agr=PRD_BP základní cena, unit=MIO_EUR
+      filters: { freq: 'A', am_item: 'AM160000', indic_agr: 'PRD_BP', unit: 'MIO_EUR' },
+      sourceLabel: 'Eurostat',
+      pageUrl: 'https://ec.europa.eu/eurostat/databrowser/view/aact_eaa01/default/table',
+      scale: 0.001, // mil. EUR → mld EUR
+    },
+  },
+  {
+    key: 'farm_count', label: 'Počet zemědělských podniků', pkg: 'puda', unit: '1000 farem',
+    spec: {
+      source: 'eurostat', dataset: 'ef_m_farmleg',
+      // strukturální šetření: jen vybrané roky (2010/2013/2016/2020/2023). unit=HLD = počet hospodářství.
+      filters: {
+        freq: 'A', statinfo: 'TOTAL', leg_form: 'TOTAL', farmtype: 'TOTAL',
+        so_eur: 'TOTAL', uaarea: 'TOTAL', unit: 'HLD',
+      },
+      sourceLabel: 'Eurostat',
+      pageUrl: 'https://ec.europa.eu/eurostat/databrowser/view/ef_m_farmleg/default/table',
+      scale: 0.001, // hospodářství → tisíce hospodářství
+    },
+  },
+  {
+    key: 'organic_share', label: 'Podíl eko plochy na ZP', pkg: 'puda', unit: '%',
+    spec: {
+      source: 'eurostat', dataset: 'sdg_02_40',
+      filters: { freq: 'A', unit: 'PC_UAA', crops: 'UAAXK0000', agprdmet: 'TOTAL' },
+      sourceLabel: 'Eurostat',
+      pageUrl: 'https://ec.europa.eu/eurostat/databrowser/view/sdg_02_40/default/table',
+      scale: 1,
+    },
+  },
 ];

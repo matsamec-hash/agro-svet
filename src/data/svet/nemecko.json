@@ -1552,6 +1552,314 @@
           "value": 128.576
         }
       ]
+    },
+    "ag_output_value": {
+      "key": "ag_output_value",
+      "label": "Hodnota zemědělské produkce",
+      "pkg": "ekonomika",
+      "unit": "mld €",
+      "latest": {
+        "value": 76.449,
+        "unit": "mld €",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/aact_eaa01?format=JSON&freq=A&am_item=AM160000&indic_agr=PRD_BP&unit=MIO_EUR&geo=DE",
+        "fetchedAt": "2026-06-19"
+      },
+      "series": [
+        {
+          "period": "1991",
+          "value": 38.494
+        },
+        {
+          "period": "1992",
+          "value": 38.438
+        },
+        {
+          "period": "1993",
+          "value": 41.42
+        },
+        {
+          "period": "1994",
+          "value": 42.236
+        },
+        {
+          "period": "1995",
+          "value": 45.361
+        },
+        {
+          "period": "1996",
+          "value": 44.858
+        },
+        {
+          "period": "1997",
+          "value": 43.055
+        },
+        {
+          "period": "1998",
+          "value": 40.896
+        },
+        {
+          "period": "1999",
+          "value": 40.51
+        },
+        {
+          "period": "2000",
+          "value": 42.834
+        },
+        {
+          "period": "2001",
+          "value": 44.837
+        },
+        {
+          "period": "2002",
+          "value": 41.766
+        },
+        {
+          "period": "2003",
+          "value": 40.588
+        },
+        {
+          "period": "2004",
+          "value": 44.082
+        },
+        {
+          "period": "2005",
+          "value": 38.648
+        },
+        {
+          "period": "2006",
+          "value": 40.15
+        },
+        {
+          "period": "2007",
+          "value": 46.147
+        },
+        {
+          "period": "2008",
+          "value": 49.915
+        },
+        {
+          "period": "2009",
+          "value": 43.584
+        },
+        {
+          "period": "2010",
+          "value": 48.556
+        },
+        {
+          "period": "2011",
+          "value": 55.771
+        },
+        {
+          "period": "2012",
+          "value": 58.39
+        },
+        {
+          "period": "2013",
+          "value": 59.944
+        },
+        {
+          "period": "2014",
+          "value": 59.051
+        },
+        {
+          "period": "2015",
+          "value": 52.598
+        },
+        {
+          "period": "2016",
+          "value": 52.185
+        },
+        {
+          "period": "2017",
+          "value": 57.04
+        },
+        {
+          "period": "2018",
+          "value": 53.021
+        },
+        {
+          "period": "2019",
+          "value": 58.653
+        },
+        {
+          "period": "2020",
+          "value": 56.96
+        },
+        {
+          "period": "2021",
+          "value": 59.594
+        },
+        {
+          "period": "2022",
+          "value": 75.721
+        },
+        {
+          "period": "2023",
+          "value": 74.237
+        },
+        {
+          "period": "2024",
+          "value": 73.364
+        },
+        {
+          "period": "2025",
+          "value": 76.449
+        }
+      ]
+    },
+    "farm_count": {
+      "key": "farm_count",
+      "label": "Počet zemědělských podniků",
+      "pkg": "puda",
+      "unit": "1000 farem",
+      "latest": {
+        "value": 255.01,
+        "unit": "1000 farem",
+        "referencePeriod": "2023",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ef_m_farmleg?format=JSON&freq=A&statinfo=TOTAL&leg_form=TOTAL&farmtype=TOTAL&so_eur=TOTAL&uaarea=TOTAL&unit=HLD&geo=DE",
+        "fetchedAt": "2026-06-19"
+      },
+      "series": [
+        {
+          "period": "2010",
+          "value": 299.13
+        },
+        {
+          "period": "2013",
+          "value": 285.03
+        },
+        {
+          "period": "2016",
+          "value": 276.12
+        },
+        {
+          "period": "2020",
+          "value": 262.78
+        },
+        {
+          "period": "2023",
+          "value": 255.01
+        }
+      ]
+    },
+    "organic_share": {
+      "key": "organic_share",
+      "label": "Podíl eko plochy na ZP",
+      "pkg": "puda",
+      "unit": "%",
+      "latest": {
+        "value": 11.11,
+        "unit": "%",
+        "referencePeriod": "2024",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_02_40?format=JSON&freq=A&unit=PC_UAA&crops=UAAXK0000&agprdmet=TOTAL&geo=DE",
+        "fetchedAt": "2026-06-19"
+      },
+      "series": [
+        {
+          "period": "2000",
+          "value": 3.2
+        },
+        {
+          "period": "2001",
+          "value": 3.7
+        },
+        {
+          "period": "2002",
+          "value": 4.1
+        },
+        {
+          "period": "2003",
+          "value": 4.3
+        },
+        {
+          "period": "2004",
+          "value": 4.5
+        },
+        {
+          "period": "2005",
+          "value": 4.7
+        },
+        {
+          "period": "2006",
+          "value": 4.9
+        },
+        {
+          "period": "2007",
+          "value": 5.1
+        },
+        {
+          "period": "2008",
+          "value": 5.4
+        },
+        {
+          "period": "2009",
+          "value": 5.6
+        },
+        {
+          "period": "2010",
+          "value": 5.9
+        },
+        {
+          "period": "2011",
+          "value": 6.1
+        },
+        {
+          "period": "2012",
+          "value": 5.76
+        },
+        {
+          "period": "2013",
+          "value": 6.04
+        },
+        {
+          "period": "2014",
+          "value": 6.18
+        },
+        {
+          "period": "2015",
+          "value": 6.34
+        },
+        {
+          "period": "2016",
+          "value": 6.82
+        },
+        {
+          "period": "2017",
+          "value": 6.82
+        },
+        {
+          "period": "2018",
+          "value": 7.34
+        },
+        {
+          "period": "2019",
+          "value": 7.75
+        },
+        {
+          "period": "2020",
+          "value": 9.59
+        },
+        {
+          "period": "2021",
+          "value": 9.65
+        },
+        {
+          "period": "2022",
+          "value": 9.83
+        },
+        {
+          "period": "2023",
+          "value": 11.16
+        },
+        {
+          "period": "2024",
+          "value": 11.11
+        }
+      ]
     }
   }
 }
