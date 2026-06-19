@@ -25,4 +25,12 @@ describe('INDICATORS', () => {
     expect(al.spec.source).toBe('worldbank');
     expect(al.spec.indicator).toBe('AG.LND.AGRI.K2');
   });
+  it('balíček produkce obsahuje nové plodiny', () => {
+    const keys = INDICATORS.map((i) => i.key);
+    for (const k of ['maize_yield', 'barley_yield', 'rapeseed_yield', 'cereal_yield']) {
+      expect(keys).toContain(k);
+      expect(INDICATORS.find((i) => i.key === k).pkg).toBe('produkce');
+    }
+    expect(INDICATORS.find((i) => i.key === 'cereal_yield').spec.source).toBe('worldbank');
+  });
 });
