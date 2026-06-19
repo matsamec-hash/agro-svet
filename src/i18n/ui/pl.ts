@@ -415,6 +415,14 @@ const pl: Record<string, string> = {
   'lang.sk': 'SK',
   'lang.uk': 'UA',
   'lang.pl': 'PL',
+  'puda.pl.crumbHome': 'Strona główna',
+  'puda.pl.crumbSelf': 'Ziemia rolna',
+  'puda.pl.h.reforma': 'Regulacja rynku ziemi',
+  'puda.pl.h.cena': 'Cena ziemi rolnej',
+  'puda.pl.h.najem': 'Dzierżawa ziemi',
+  'puda.pl.h.plodiny': 'Główne uprawy',
+  'puda.pl.h.ohrozeni': 'Zagrożenia dla gleb',
+  'puda.pl.sources.h': 'Źródła danych',
 
   // — statystyki chrome (stat.*) —
   // Hero

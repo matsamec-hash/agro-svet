@@ -1,0 +1,163 @@
+{
+  "generated": "2026-06-19",
+  "warCaveat": "",
+  "bigNumbers": [
+    {
+      "val": "≈14,6",
+      "unit": "mln ha",
+      "lbl": "użytków rolnych w Polsce",
+      "trend": "ok. 9,3 % powierzchni rolnej UE (Eurostat, 2023)",
+      "source": "Eurostat",
+      "url": "https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Farms_and_farmland_in_the_European_Union_-_statistics"
+    },
+    {
+      "val": "71 151",
+      "unit": "zł/ha",
+      "lbl": "średnia cena gruntów ornych (IV kw. 2024)",
+      "trend": "obrót prywatny; +68 % wobec 2017 r. (42 455 zł/ha)",
+      "source": "GUS / ARiMR",
+      "url": "https://www.gov.pl/web/arimr/srednie-ceny-gruntow-wg-gus"
+    },
+    {
+      "val": "≈1,08",
+      "unit": "mln ha",
+      "lbl": "gruntów Zasobu WRSP w dzierżawie",
+      "trend": "ok. 81 % powierzchni Zasobu zarządzanego przez KOWR (2023)",
+      "source": "KOWR",
+      "url": "https://www.topagrar.pl/articles/aktualnosci/jak-wyglada-zasob-wlasnosci-rolnej-skarbu-panstwa-w-2023-roku-2455177"
+    },
+    {
+      "val": "≈50",
+      "unit": "%",
+      "lbl": "gleb rolnych kwaśnych i bardzo kwaśnych",
+      "trend": "wg odczynu pH (≤ 5,5); jeden z najwyższych poziomów zakwaszenia w UE (IUNG-PIB)",
+      "source": "IUNG-PIB",
+      "url": "https://www.izbarolnicza.lodz.pl/sites/default/files/IUNG%20ekspertyza%20_wapnowanie_17.10.2017r.pdf"
+    }
+  ],
+  "reformTimeline": [
+    {
+      "year": "do 2016",
+      "title": "Swobodny obrót i prywatyzacja",
+      "text": "Grunty rolne w obrocie prywatnym oraz sprzedaż nieruchomości z Zasobu Własności Rolnej Skarbu Państwa (dawniej przez ANR) w dużej mierze bez ograniczeń co do nabywcy.",
+      "source": "KOWR",
+      "url": "https://www.gov.pl/web/kowr"
+    },
+    {
+      "year": "14.04.2016",
+      "title": "Ustawa o wstrzymaniu sprzedaży ziemi ZWRSP",
+      "text": "Wstrzymanie sprzedaży gruntów z Zasobu WRSP na 5 lat. Nabywcą nieruchomości rolnej co do zasady mógł być wyłącznie rolnik indywidualny, a łączna powierzchnia gospodarstwa nie mogła przekroczyć 300 ha użytków rolnych. ANR (potem KOWR) zyskała prawo pierwokupu.",
+      "source": "ISAP / Sejm RP",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20160000585"
+    },
+    {
+      "year": "01.09.2017",
+      "title": "Powstanie KOWR",
+      "text": "Krajowy Ośrodek Wsparcia Rolnictwa zastąpił Agencję Nieruchomości Rolnych (ANR) i przejął gospodarowanie Zasobem Własności Rolnej Skarbu Państwa, w tym dzierżawę i sprzedaż gruntów.",
+      "source": "KOWR",
+      "url": "https://www.gov.pl/web/kowr/o-kowr"
+    },
+    {
+      "year": "26.06.2019",
+      "title": "Nowelizacja — liberalizacja obrotu",
+      "text": "Złagodzenie przepisów: nieruchomości do 1 ha można nabywać bez zezwolenia KOWR (bez statusu rolnika), choć KOWR zachowuje prawo pierwokupu. Okres obowiązkowego osobistego prowadzenia gospodarstwa skrócono z 10 do 5 lat.",
+      "source": "ISAP / Sejm RP",
+      "url": "https://www.rp.pl/Nieruchomosci/306259907-Nowe-zasady-obrotu-ziemia-rolna-od-26-czerwca-2019.html"
+    }
+  ],
+  "cena": {
+    "unit": "zł/ha",
+    "asOf": "IV kw. 2024",
+    "source": "GUS / ARiMR",
+    "url": "https://www.gov.pl/web/arimr/srednie-ceny-gruntow-wg-gus",
+    "max": 80000,
+    "ticks": [0, 20000, 40000, 60000, 80000],
+    "series": [
+      { "year": 2017, "value": 42455 },
+      { "year": 2018, "value": 45743 },
+      { "year": 2019, "value": 47706 },
+      { "year": 2020, "value": 48805 },
+      { "year": 2021, "value": 53254 },
+      { "year": 2022, "value": 61362 },
+      { "year": 2023, "value": 65301 },
+      { "year": 2024, "value": 71151 }
+    ]
+  },
+  "najem": {
+    "unit": "zł/ha",
+    "asOf": "",
+    "source": "",
+    "url": "",
+    "max": 0,
+    "ticks": [0],
+    "series": []
+  },
+  "plodiny": [
+    {
+      "crop": "Pszenica",
+      "hectares": 2400000,
+      "source": "GUS",
+      "url": "https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/uprawy-rolne-i-ogrodnicze/wiosenna-ocena-stanu-upraw-rolnych-i-ogrodniczych-w-2023-roku,10,20.html"
+    },
+    {
+      "crop": "Kukurydza na ziarno",
+      "hectares": 1300000,
+      "source": "GUS",
+      "url": "https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/uprawy-rolne-i-ogrodnicze/wiosenna-ocena-stanu-upraw-rolnych-i-ogrodniczych-w-2023-roku,10,20.html"
+    },
+    {
+      "crop": "Pszenżyto",
+      "hectares": 1200000,
+      "source": "GUS",
+      "url": "https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/uprawy-rolne-i-ogrodnicze/wiosenna-ocena-stanu-upraw-rolnych-i-ogrodniczych-w-2023-roku,10,20.html"
+    },
+    {
+      "crop": "Rzepak i rzepik",
+      "hectares": 1100000,
+      "source": "GUS",
+      "url": "https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/uprawy-rolne-i-ogrodnicze/wiosenna-ocena-stanu-upraw-rolnych-i-ogrodniczych-w-2023-roku,10,20.html"
+    },
+    {
+      "crop": "Żyto",
+      "hectares": 700000,
+      "source": "GUS",
+      "url": "https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/uprawy-rolne-i-ogrodnicze/wiosenna-ocena-stanu-upraw-rolnych-i-ogrodniczych-w-2023-roku,10,20.html"
+    },
+    {
+      "crop": "Jęczmień",
+      "hectares": 600000,
+      "source": "GUS",
+      "url": "https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/uprawy-rolne-i-ogrodnicze/wiosenna-ocena-stanu-upraw-rolnych-i-ogrodniczych-w-2023-roku,10,20.html"
+    }
+  ],
+  "facts": [],
+  "threats": [
+    {
+      "lbl": "Zakwaszenie gleb (kwaśne i bardzo kwaśne)",
+      "pct": 50,
+      "detail": "Ok. połowa użytków rolnych w Polsce ma odczyn kwaśny lub bardzo kwaśny (pH ≤ 5,5), co obniża dostępność składników pokarmowych i plony. Najgorzej w woj. małopolskim, podkarpackim i łódzkim (IUNG-PIB)."
+    }
+  ],
+  "sources": [
+    {
+      "label": "GUS — Główny Urząd Statystyczny (uprawy, ceny gruntów)",
+      "url": "https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/"
+    },
+    {
+      "label": "ARiMR — Średnie ceny gruntów wg GUS",
+      "url": "https://www.gov.pl/web/arimr/srednie-ceny-gruntow-wg-gus"
+    },
+    {
+      "label": "KOWR — Krajowy Ośrodek Wsparcia Rolnictwa",
+      "url": "https://www.gov.pl/web/kowr"
+    },
+    {
+      "label": "Eurostat — Farms and farmland in the EU",
+      "url": "https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Farms_and_farmland_in_the_European_Union_-_statistics"
+    },
+    {
+      "label": "IUNG-PIB — zakwaszenie i wapnowanie gleb",
+      "url": "https://www.iung.pl/"
+    }
+  ]
+}

@@ -11,8 +11,8 @@ describe('PL fáze 1 launch (stroje/znacky/srovnani/slovnik)', () => {
       expect(isLaunchedPath('pl', `${p}/cokoli/`)).toBe(true);
     }
   });
-  it('jurisdikční sekce NEjsou launchnuté pro pl', () => {
-    for (const p of ['/statistiky', '/puda', '/dotace', '/novinky']) {
+  it('zbylé jurisdikční sekce NEjsou launchnuté pro pl', () => {
+    for (const p of ['/statistiky', '/dotace', '/novinky']) {
       expect(isLaunchedPath('pl', p)).toBe(false);
     }
   });
@@ -21,5 +21,19 @@ describe('PL fáze 1 launch (stroje/znacky/srovnani/slovnik)', () => {
   });
   it('launchnuté nejsou locked', () => {
     for (const p of launched) expect(isLockedSectionPath(p)).toBe(false);
+  });
+});
+
+describe('PL fáze 3 launch (puda)', () => {
+  it('/puda je launchnuté pro pl', () => {
+    expect(LAUNCHED_PREFIXES.pl).toContain('/puda');
+    expect(isLaunchedPath('pl', '/puda')).toBe(true);
+    expect(isLaunchedPath('pl', '/puda/eroze/')).toBe(true);
+  });
+  it('/puda není locked sekce', () => {
+    expect(isLockedSectionPath('/puda')).toBe(false);
+  });
+  it('cs /puda nedostane gating-noindex', () => {
+    expect(isLaunchedPath('cs', '/puda/eroze/')).toBe(false);
   });
 });

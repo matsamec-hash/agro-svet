@@ -15,8 +15,8 @@ const t = useTranslations(locale);
 const base = locale === 'cs' ? '' : `/${locale}`;
 const { slug } = Astro.params;
 
-const PUDA_COLLECTION = { cs: 'puda', sk: 'pudaSk', uk: 'pudaUk' } as const;
-const item = slug ? await getEntry(PUDA_COLLECTION[locale as 'cs' | 'sk' | 'uk'] ?? 'puda', slug) : undefined;
+const PUDA_COLLECTION = { cs: 'puda', sk: 'pudaSk', uk: 'pudaUk', pl: 'pudaPl' } as const;
+const item = slug ? await getEntry(PUDA_COLLECTION[locale as 'cs' | 'sk' | 'uk' | 'pl'] ?? 'puda', slug) : undefined;
 if (!item) return new Response(null, { status: 404 });
 
 // Auto-linker je locale-aware (siloing): pro uk lokalizuje interní odkazy na /uk

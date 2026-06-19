@@ -166,6 +166,13 @@ const pudaUk = defineCollection({
   schema: pudaSchema(),
 });
 
+// PL-localized článková kolekce o pôde (overlay). Slug = REUSE cs slug.
+// Chybějící pl slug pod /pl = 404 (žádný cs leak).
+const pudaPl = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/puda-pl' }),
+  schema: pudaSchema(),
+});
+
 // SZIF dotační tituly — evergreen průvodci. Žádná automatizace: SZIF nemá API,
 // cyklus výzev je pomalý (2× ročně), takže ruční revize 2-4× ročně stačí.
 const dotaceSchema = () =>
@@ -256,4 +263,4 @@ const howtoUk = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, znacky, znackySk, znackyUk, puda, pudaSk, pudaUk, dotace, dotaceSk, howto, howtoSk, howtoUk };
+export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, znacky, znackySk, znackyUk, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk };
