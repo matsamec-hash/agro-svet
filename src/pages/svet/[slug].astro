@@ -1,4 +1,8 @@
 ---
+// Statická data zemí (build-svet.mjs) → prerender s getStaticPaths.
+// Bez prerender:true by se v output:'server' route servírovala jako SSR,
+// kde se props z getStaticPaths nepředávají → profile=undefined → 500.
+export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import IndicatorRow from '../../components/svet/IndicatorRow.astro';
 import { groupByPackage, fmtNum, COUNTRY_LOCATIVE } from '../../lib/svet/render';
