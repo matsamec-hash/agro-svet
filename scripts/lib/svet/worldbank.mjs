@@ -1,5 +1,7 @@
 // Tenký wrapper nad World Bank Open Data API (otevřené, bez klíče; globální/paritní
 // harmonizovaná data vč. USA). FAOSTAT services API nahrazen — vyžaduje auth.
+import { fetchJsonRetry } from './http.mjs';
+
 const BASE = 'https://api.worldbank.org/v2';
 
 /** Sestaví World Bank data URL. code = ISO2 (DE/FR/GB/US/CZ), indicator = např. AG.LND.AGRI.K2 */
@@ -23,8 +25,6 @@ export function parseWorldBank(json) {
 
 export async function fetchWorldBankSeries(code, indicator) {
   const url = buildWorldBankUrl(code, indicator);
-  const res = await fetch(url, { headers: { Accept: 'application/json' } });
-  if (!res.ok) throw new Error(`World Bank ${indicator} ${res.status} (${url})`);
-  const json = await res.json();
+  const json = await fetchJsonRetry(url);
   return { series: parseWorldBank(json), url };
 }

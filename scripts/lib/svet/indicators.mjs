@@ -45,6 +45,27 @@ export const INDICATORS = [
     },
   },
   {
+    key: 'cattle_count', label: 'Stavy skotu', pkg: 'produkce', unit: '1000 ks',
+    spec: {
+      source: 'eurostat', dataset: 'apro_mt_lscatl',
+      // všechny non-time dimenze napevno: freq + month (listopad–prosinec, roční sčítání) + animals + unit
+      filters: { freq: 'A', month: 'M11_M12', animals: 'A2000', unit: 'THS_HD' },
+      sourceLabel: 'Eurostat',
+      pageUrl: 'https://ec.europa.eu/eurostat/databrowser/view/apro_mt_lscatl/default/table',
+      scale: 1,
+    },
+  },
+  {
+    key: 'pigs_count', label: 'Stavy prasat', pkg: 'produkce', unit: '1000 ks',
+    spec: {
+      source: 'eurostat', dataset: 'apro_mt_lspig',
+      filters: { freq: 'A', month: 'M11_M12', animals: 'A3100', unit: 'THS_HD' },
+      sourceLabel: 'Eurostat',
+      pageUrl: 'https://ec.europa.eu/eurostat/databrowser/view/apro_mt_lspig/default/table',
+      scale: 1,
+    },
+  },
+  {
     key: 'cereal_yield', label: 'Výnos obilovin', pkg: 'produkce', unit: 't/ha',
     spec: {
       source: 'worldbank', indicator: 'AG.YLD.CREL.KG',

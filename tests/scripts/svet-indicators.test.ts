@@ -37,4 +37,17 @@ describe('INDICATORS', () => {
     const keys = INDICATORS.map((i) => i.key);
     for (const k of ['arable_land', 'ag_value_added_gdp', 'ag_employment', 'fert_use']) expect(keys).toContain(k);
   });
+  it('živočišná výroba: skot a prasata v balíčku produkce', () => {
+    for (const k of ['cattle_count', 'pigs_count']) {
+      const ind = INDICATORS.find((i) => i.key === k);
+      expect(ind).toBeTruthy();
+      expect(ind.pkg).toBe('produkce');
+      expect(ind.spec.source).toBe('eurostat');
+      // všechny non-time dimenze musí být napevno (jinak pickSeries vrátí prázdno)
+      for (const dim of ['freq', 'animals', 'month', 'unit']) expect(ind.spec.filters[dim]).toBeTruthy();
+      expect(ind.spec.filters.geo).toBeUndefined();
+    }
+    expect(INDICATORS.find((i) => i.key === 'cattle_count').spec.dataset).toBe('apro_mt_lscatl');
+    expect(INDICATORS.find((i) => i.key === 'pigs_count').spec.dataset).toBe('apro_mt_lspig');
+  });
 });

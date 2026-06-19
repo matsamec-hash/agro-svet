@@ -2,7 +2,7 @@
 // aplikuje scale, vytvoří latest + series, ověří sanity, zapíše src/data/svet/<slug>.json.
 import { writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { COUNTRIES } from './lib/svet/countries.mjs';
+import { COUNTRIES, REFERENCE } from './lib/svet/countries.mjs';
 import { INDICATORS } from './lib/svet/indicators.mjs';
 import { fetchEurostatSeries } from './lib/svet/eurostat.mjs';
 import { fetchWorldBankSeries } from './lib/svet/worldbank.mjs';
@@ -51,11 +51,13 @@ async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   const allProblems = [];
   const index = [];
-  for (const c of COUNTRIES) {
+  for (const c of [REFERENCE, ...COUNTRIES]) {
     const { profile, problems } = await buildCountry(c);
     allProblems.push(...problems);
     await writeFile(`${OUT_DIR}${c.slug}.json`, JSON.stringify(profile, null, 2) + '\n');
-    index.push({ slug: c.slug, nameCs: c.nameCs, flag: c.flag, indicatorKeys: Object.keys(profile.indicators) });
+    const entry = { slug: c.slug, nameCs: c.nameCs, flag: c.flag, indicatorKeys: Object.keys(profile.indicators) };
+    if (c.slug === REFERENCE.slug) entry.reference = true;
+    index.push(entry);
     console.log(`✓ ${c.slug}: ${Object.keys(profile.indicators).length} indikátorů`);
   }
   await writeFile(`${OUT_DIR}index.json`, JSON.stringify({ generated: today, countries: index }, null, 2) + '\n');
