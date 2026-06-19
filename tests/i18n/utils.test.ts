@@ -35,7 +35,7 @@ describe('localizePath', () => {
 });
 
 describe('getAlternates (hreflang)', () => {
-  it('vrátí cs/sk/uk + x-default, symetricky z libovolného locale', () => {
+  it('vrátí cs/sk/uk/pl + x-default, symetricky z libovolného locale', () => {
     const fromCs = getAlternates('/stroje/');
     const fromSk = getAlternates('/sk/stroje/');
     expect(fromCs).toEqual(fromSk);
@@ -43,6 +43,7 @@ describe('getAlternates (hreflang)', () => {
       { hreflang: 'cs', href: 'https://agro-svet.cz/stroje/' },
       { hreflang: 'sk', href: 'https://agro-svet.cz/sk/stroje/' },
       { hreflang: 'uk', href: 'https://agro-svet.cz/uk/stroje/' },
+      { hreflang: 'pl', href: 'https://agro-svet.cz/pl/stroje/' },
       { hreflang: 'x-default', href: 'https://agro-svet.cz/stroje/' },
     ]);
   });

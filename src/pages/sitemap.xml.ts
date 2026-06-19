@@ -465,6 +465,19 @@ export const GET: APIRoute = async () => {
     .map((u) => ({ ...u, loc: `${SITE_URL}/uk${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...ukMirror);
 
+  // PL launch (Fáze 1): zrcadli launchnuté sekce (stroje/znacky/srovnani/slovnik).
+  // Žádné per-locale slug-divergence (na rozdíl od sk/uk dotace/howto) → prostý
+  // filtr na launchnuté & nelocked, vyloučit už zrcadlené /sk/ a /uk/ URL.
+  const plMirror: UrlEntry[] = urls
+    .filter((u) => {
+      if (!u.loc.startsWith(SITE_URL)) return false;
+      const p = u.loc.slice(SITE_URL.length);
+      if (p.startsWith('/sk/') || p.startsWith('/uk/')) return false; // nezrcadlit už zrcadlené
+      return isLaunchedPath('pl', p) && !isLockedSectionPath(p);
+    })
+    .map((u) => ({ ...u, loc: `${SITE_URL}/pl${u.loc.slice(SITE_URL.length)}` }));
+  urls.push(...plMirror);
+
   // SK /dotace detail URL — vlastné slugy z kolekcie 'dotaceSk' (PPA SR výzvy).
   const dotaceSkEntries = await getCollection('dotaceSk');
   for (const dt of dotaceSkEntries) {

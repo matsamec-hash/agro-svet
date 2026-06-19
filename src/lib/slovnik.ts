@@ -36,6 +36,7 @@ export interface SlovnikTerm {
 
 import { SLOVNIK_EXTRA } from './slovnik-extra';
 import { SLOVNIK_UK, KATEGORIE_LABELS_UK } from './slovnik.uk';
+import { SLOVNIK_PL, KATEGORIE_LABELS_PL } from './slovnik.pl';
 
 const SLOVNIK_CORE: SlovnikTerm[] = [
   // ── POHON / MOTOR / EMISE ───────────────────────────────────────────
@@ -9353,10 +9354,11 @@ export const KATEGORIE_LABELS: Record<SlovnikKategorie, string> = {
   vcelarstvi: 'Včelařství',
 };
 
-const SLOVNIK_BY_LOCALE: Record<string, SlovnikTerm[]> = { cs: SLOVNIK, uk: SLOVNIK_UK };
+const SLOVNIK_BY_LOCALE: Record<string, SlovnikTerm[]> = { cs: SLOVNIK, uk: SLOVNIK_UK, pl: SLOVNIK_PL };
 const KATEGORIE_LABELS_BY_LOCALE: Record<string, Record<SlovnikKategorie, string>> = {
   cs: KATEGORIE_LABELS,
   uk: KATEGORIE_LABELS_UK,
+  pl: KATEGORIE_LABELS_PL,
 };
 
 /** Vrátí slovník pro daný locale; neznámý locale → cs. CS chování beze změny. */

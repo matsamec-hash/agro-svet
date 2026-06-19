@@ -98,6 +98,26 @@ export function brandDescriptorAkuzativ(brand: string, brandName: string, locale
     lemken: 'німецький бренд Lemken',
     kuhn: 'французький бренд Kuhn',
   };
-  const map = locale === 'sk' ? mapSk : locale === 'uk' ? mapUk : mapCs;
-  return map[brand] ?? (locale === 'uk' ? `бренд ${brandName}` : `značku ${brandName}`);
+  const mapPl: Record<string, string> = {
+    fendt: 'niemiecką markę premium Fendt',
+    'john-deere': 'amerykańskiego giganta John Deere',
+    'case-ih': 'amerykańską markę Case IH (koncern CNH)',
+    'new-holland': 'europejską markę New Holland (koncern CNH)',
+    claas: 'niemieckiego lidera kombajnów Claas',
+    'massey-ferguson': 'tradycyjną markę Massey Ferguson (koncern AGCO)',
+    valtra: 'fińską markę Valtra (koncern AGCO)',
+    'deutz-fahr': 'niemiecką markę Deutz-Fahr (koncern SDF)',
+    kubota: 'japońską markę Kubota',
+    zetor: 'czeską markę Zetor z Brna',
+    bednar: 'czeską markę Bednar',
+    amazone: 'niemiecką markę Amazone',
+    krone: 'niemiecką markę Krone',
+    vaderstad: 'szwedzką markę Väderstad',
+    pottinger: 'austriacką markę Pöttinger',
+    kverneland: 'norweską markę Kverneland',
+    lemken: 'niemiecką markę Lemken',
+    kuhn: 'francuską markę Kuhn',
+  };
+  const map = locale === 'sk' ? mapSk : locale === 'uk' ? mapUk : locale === 'pl' ? mapPl : mapCs;
+  return map[brand] ?? (locale === 'uk' ? `бренд ${brandName}` : locale === 'pl' ? `markę ${brandName}` : `značku ${brandName}`);
 }
