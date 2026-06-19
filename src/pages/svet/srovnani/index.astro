@@ -1,0 +1,83 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { compareMatrix, fmtNum, vsReference } from '../../../lib/svet/render';
+
+const mods = import.meta.glob('../../../data/svet/*.json', { eager: true });
+const profiles = Object.values(mods)
+  .map((m: any) => m.default)
+  .filter((p: any) => p && p.slug && p.indicators);
+profiles.sort((a: any, b: any) => (a.slug === 'cesko' ? -1 : b.slug === 'cesko' ? 1 : a.nameCs.localeCompare(b.nameCs, 'cs')));
+
+const indicatorMeta: Record<string, { label: string; unit: string }> = {};
+for (const p of profiles) for (const k of Object.keys(p.indicators)) indicatorMeta[k] ??= { label: p.indicators[k].label, unit: p.indicators[k].unit };
+
+const defaultKey = 'wheat_yield';
+const refValue = (profiles.find((p: any) => p.slug === 'cesko') as any)?.indicators[defaultKey]?.latest.value;
+const rows = compareMatrix(profiles as any, defaultKey).filter((c) => c.value != null).sort((a, b) => (b.value! - a.value!));
+
+const payload = profiles.map((p: any) => ({
+  slug: p.slug, nameCs: p.nameCs, flag: p.flag,
+  indicators: Object.fromEntries(Object.entries(p.indicators).map(([k, v]: any) => [k, { value: v.latest.value, period: v.latest.referencePeriod }])),
+}));
+
+const title = 'Srovnání zemědělství zemí';
+const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — výnosy, plochy, produkce, ekonomika — vždy se srovnáním s ČR. Zdroje Eurostat a World Bank.';
+---
+<Layout title={title} description={description}>
+  <main class="sp-page svet-cmp">
+    <header class="sp-hero"><div><h1>{title}</h1><p>{description}</p></div></header>
+    <section class="sp-section">
+      <label class="svet-cmp-pick">Ukazatel:
+        <select id="svet-indicator">
+          {Object.entries(indicatorMeta).map(([k, m]) => (
+            <option value={k} selected={k === defaultKey}>{m.label} ({m.unit})</option>
+          ))}
+        </select>
+      </label>
+      <table class="svet-cmp-table">
+        <thead><tr><th>#</th><th>Země</th><th>Hodnota</th><th>vs ČR</th></tr></thead>
+        <tbody id="svet-cmp-body">
+          {rows.map((c, i) => {
+            const cmp = refValue != null ? vsReference(c.value!, refValue) : null;
+            return (<tr><td>{i + 1}</td><td>{c.flag} {c.nameCs}</td><td>{fmtNum(c.value!)}</td><td>{cmp ? `${cmp.dir === 'up' ? '+' : ''}${fmtNum(cmp.pct)} %` : '—'}</td></tr>);
+          })}
+        </tbody>
+      </table>
+      <p class="sp-src">Zdroj: Eurostat / World Bank · poslední dostupná data u každého ukazatele</p>
+    </section>
+    <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
+    <script>
+      (() => {
+        interface CmpProfile { slug: string; nameCs: string; flag: string; indicators: Record<string, { value: number; period: string } | undefined>; }
+        const dataEl = document.getElementById('svet-data');
+        const sel = document.getElementById('svet-indicator') as HTMLSelectElement | null;
+        const body = document.getElementById('svet-cmp-body');
+        if (!dataEl || !sel || !body) return;
+        const tbody = body;
+        const profiles: CmpProfile[] = JSON.parse(dataEl.textContent || '[]');
+        const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+        const fmt = (n: number) => nf.format(n).replace(/[  \s]/g, ' ');
+        function render(key: string) {
+          const ref = profiles.find((p) => p.slug === 'cesko');
+          const refVal = ref && ref.indicators[key] ? ref.indicators[key]!.value : null;
+          const rows = profiles
+            .map((p) => ({ flag: p.flag, nameCs: p.nameCs, slug: p.slug, v: p.indicators[key] ? p.indicators[key]!.value : null }))
+            .filter((r): r is { flag: string; nameCs: string; slug: string; v: number } => r.v != null)
+            .sort((a, b) => b.v - a.v);
+          tbody.innerHTML = rows.map((r, i) => {
+            let vs = '—';
+            if (refVal) { const pct = Math.round((r.v / refVal - 1) * 100); vs = (pct > 0 ? '+' : '') + fmt(pct) + ' %'; }
+            return `<tr><td>${i + 1}</td><td>${r.flag} ${r.nameCs}</td><td>${fmt(r.v)}</td><td>${vs}</td></tr>`;
+          }).join('');
+        }
+        sel.addEventListener('change', (e) => render((e.target as HTMLSelectElement).value));
+      })();
+    </script>
+  </main>
+  <style>
+    .svet-cmp-table{width:100%;border-collapse:collapse;margin-top:.8rem}
+    .svet-cmp-table th,.svet-cmp-table td{padding:.45rem .6rem;border-bottom:1px solid #eef1ec;text-align:left}
+    .svet-cmp-pick select{padding:.35rem .6rem;border:1px solid #cdd;border-radius:8px;margin-left:.4rem}
+    .svet-cmp .sp-src{display:block;margin-top:.6rem;color:#9aa;font-size:.8rem}
+  </style>
+</Layout>
