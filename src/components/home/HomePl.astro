@@ -1,0 +1,175 @@
+---
+// Polská homepage = kurátovaný rozcestník na 4 launchnuté PL sekce
+// (katalog strojů / značky / srovnání / slovník), NE český zpravodajský feed.
+// Renderuje se z index.astro když locale === 'pl'. Vzor: HomeUk.astro
+// (self-contained, vlastní <Layout>, polské stringy hardcoded).
+// Cesty hardcoded /pl/... — všechny 4 sekce jsou pro pl launchnuté (fáze 1).
+import Layout from '../../layouts/Layout.astro';
+
+const SECTIONS = [
+  {
+    href: '/pl/stroje/',
+    icon: '🚜',
+    title: 'Katalog maszyn',
+    desc: 'Ciągniki, kombajny i maszyny rolnicze z parametrami technicznymi, mocą i opisem.',
+  },
+  {
+    href: '/pl/znacky/',
+    icon: '🏷️',
+    title: 'Marki',
+    desc: 'Przegląd producentów techniki rolniczej — od Fendta i John Deere po Zetora.',
+  },
+  {
+    href: '/pl/srovnani/',
+    icon: '⚖️',
+    title: 'Porównania',
+    desc: 'Bezpośrednie porównania modeli — moc, masa, parametry i werdykt, co wybrać.',
+  },
+  {
+    href: '/pl/slovnik/',
+    icon: '📖',
+    title: 'Słownik',
+    desc: 'Ponad 300 pojęć rolniczych i technicznych z wyjaśnieniami — od hektara po dopłaty UE.',
+  },
+];
+---
+
+<Layout
+  title="Świat rolnictwa — maszyny rolnicze, marki i porównania"
+  description="Katalog maszyn rolniczych: ciągniki, kombajny i maszyny z parametrami, porównania modeli, marki producentów oraz słownik pojęć rolniczych."
+>
+  <div class="hpl-root">
+    <section class="hpl-hero">
+      <span class="hpl-kicker"><span class="dot"></span>MASZYNY ROLNICZE · PORADNIK</span>
+      <h1>Świat <em>rolnictwa</em></h1>
+      <p class="hpl-lede">
+        Katalog techniki rolniczej i poradnik: ciągniki, kombajny i maszyny
+        z parametrami, porównania modeli, marki producentów oraz słownik pojęć.
+      </p>
+    </section>
+
+    <section class="hpl-grid" aria-label="Działy">
+      {SECTIONS.map((s) => (
+        <a href={s.href} class="hpl-card">
+          <span class="hpl-card-icon" aria-hidden="true">{s.icon}</span>
+          <h2>{s.title}</h2>
+          <p>{s.desc}</p>
+          <span class="hpl-card-cta">Przejdź do działu →</span>
+        </a>
+      ))}
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .hpl-root {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 32px 64px;
+  }
+
+  .hpl-hero {
+    max-width: 760px;
+    margin: 0 auto 48px;
+    text-align: center;
+  }
+
+  .hpl-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: 700 12px 'Chakra Petch', sans-serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #0A0A0B;
+    background: #FFFF00;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1.5px solid #0A0A0B;
+  }
+  .hpl-kicker .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #0A0A0B;
+  }
+
+  .hpl-hero h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 18px 0 14px;
+    color: #0A0A0B;
+  }
+  .hpl-hero h1 em {
+    font-style: normal;
+    background: #FFFF00;
+    padding: 0 .12em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .hpl-lede {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.55;
+    color: #444;
+    margin: 0;
+  }
+
+  .hpl-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .hpl-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 28px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1.5px solid #0A0A0B;
+    box-shadow: 4px 4px 0 #0A0A0B;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .hpl-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0 #0A0A0B;
+  }
+
+  .hpl-card-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .hpl-card h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0;
+    color: #0A0A0B;
+  }
+
+  .hpl-card p {
+    font-size: .98rem;
+    line-height: 1.5;
+    color: #555;
+    margin: 0;
+    flex: 1;
+  }
+
+  .hpl-card-cta {
+    font: 700 14px 'Chakra Petch', sans-serif;
+    color: #0A0A0B;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 680px) {
+    .hpl-root { padding: 32px 16px 48px; }
+    .hpl-grid { grid-template-columns: 1fr; }
+  }
+</style>

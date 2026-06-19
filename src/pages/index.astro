@@ -6,6 +6,7 @@ import CommodityChart from '../components/statistiky/CommodityChart.astro';
 import HomeWeather from '../components/HomeWeather.astro';
 import LatestArticles from '../components/home/LatestArticles.astro';
 import HomeUk from '../components/home/HomeUk.astro';
+import HomePl from '../components/home/HomePl.astro';
 import { createAnonClient } from '../lib/supabase';
 import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
@@ -81,7 +82,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 } : null;
 ---
 
-{isUk ? <HomeUk /> : (
+{isPl ? <HomePl /> : isUk ? <HomeUk /> : (
 <Layout
   title="agro-svět.cz — zemědělská technika, bazar a novinky"
   description={homeDescription}

@@ -200,9 +200,9 @@ export function getFooterColumns(locale: Locale): FooterColumn[] {
   // (/puda) i v ostatních footer sloupcích. Odděleno od `data` hidden flagu
   // (Fáze 2b A/B `data` sk neskrývá, /statistiky odemčeno). cs = false → beze změny.
   const hideLocked = locale !== 'cs';
-  // uk: footer odkazy jen na launchnuté sekce (zahodí /novinky/, /plemena/ ve
-  // sloupci Obsah — vedly by do češtiny). Scope-nuté na uk → sk footer beze změny.
-  const filterUkLaunched = locale === 'uk';
+  // uk+pl: footer odkazy jen na launchnuté sekce (zahodí /novinky/, /plemena/ ve
+  // sloupci Obsah — vedly by do češtiny). Scope-nuté na uk+pl → sk footer beze změny.
+  const filterLaunchedFooter = locale === 'uk' || locale === 'pl';
   const norm = (href: string) => href.replace(/\/+$/, '') || '/';
   return FOOTER
     .filter((col) => !hidden.includes(col.section))
@@ -211,7 +211,7 @@ export function getFooterColumns(locale: Locale): FooterColumn[] {
       heading: t(locale, col.headingKey),
       links: col.links
         .filter((l) => !(hideLocked && isLockedSectionPath(norm(l.href))))
-        .filter((l) => !filterUkLaunched || isLaunchedPath(locale, norm(l.href)))
+        .filter((l) => !filterLaunchedFooter || isLaunchedPath(locale, norm(l.href)))
         .map((l) => ({ label: t(locale, l.labelKey), href: l.href })),
     }));
 }
