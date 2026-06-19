@@ -22,10 +22,8 @@
 - Test: `tests/scripts/svet-indicators.test.ts`
 - Create: `scripts/lib/svet/eurostat.mjs` — `buildEurostatUrl`, `fetchEurostatSeries` (přes `pickSeries`).
 - Test: `tests/scripts/svet-eurostat.test.ts`
-- Create: `scripts/lib/svet/faostat.mjs` — `buildFaostatUrl`, `parseFaostat`.
-- Test: `tests/scripts/svet-faostat.test.ts`
-- Create: `scripts/lib/svet/usda.mjs` — `buildUsdaPsdUrl`, `parseUsdaPsd`.
-- Test: `tests/scripts/svet-usda.test.ts`
+- Create: `scripts/lib/svet/worldbank.mjs` — `buildWorldBankUrl`, `parseWorldBank`, `fetchWorldBankSeries` (globál/parita vč. USA; FAOSTAT services API teď vyžaduje auth).
+- Test: `tests/scripts/svet-worldbank.test.ts`
 - Create: `scripts/lib/svet/verify.mjs` — `sanityCheck(profile)` (čistá funkce, řády/jednotky).
 - Test: `tests/scripts/svet-verify.test.ts`
 - Create: `scripts/build-svet.mjs` — orchestrace; zapisuje `src/data/svet/<slug>.json` + `index.json`.
@@ -331,12 +329,14 @@ git commit -m "feat(svet): generický Eurostat fetcher (znovupoužívá pickSeri
 
 ---
 
-## Task 4: FAOSTAT fetcher (parita GB/USA + globál)
+## Task 4: World Bank fetcher (parita GB/USA + globál)
+
+> **ZMĚNA ZDROJE (ověřeno za běhu):** FAOSTAT services API (`faostatservices.fao.org/api/v1`) nově vrací 401 „Missing Authorization Header" — vyžaduje autorizaci. Globální/paritní zdroj proto = **World Bank Open Data API** (bez klíče, JSON, pokrývá DE/FR/GB/US i celý svět). Odpověď je `[meta, [rows]]`, řádky mají `date`, `value`, `country.value`, `indicator.value`. UK = World Bank kód `GB` (viz `countries.mjs` pole `wb`).
 
 **Files:**
-- Create: `scripts/lib/svet/faostat.mjs`
-- Test: `tests/scripts/svet-faostat.test.ts`
-- Create (fixtura): `tests/fixtures/svet/faostat-land.json`
+- Create: `scripts/lib/svet/worldbank.mjs`
+- Test: `tests/scripts/svet-worldbank.test.ts`
+- Create (fixtura): `tests/fixtures/svet/worldbank-agland-de.json`
 
 - [ ] **Step 1: Ulož reálnou fixturu (discovery)**
 
@@ -456,7 +456,7 @@ describe('INDICATORS', () => {
       expect(i.label).toBeTruthy();
       expect(['produkce', 'puda', 'ekonomika', 'obchod']).toContain(i.pkg);
       expect(i.unit).toBeTruthy();
-      expect(['eurostat', 'faostat', 'usda']).toContain(i.spec.source);
+      expect(['eurostat', 'worldbank']).toContain(i.spec.source);
       expect(seen.has(i.key)).toBe(false);
       seen.add(i.key);
     }
@@ -498,11 +498,10 @@ export const INDICATORS = [
   {
     key: 'ag_land', label: 'Zemědělská plocha', pkg: 'puda', unit: 'mil. ha',
     spec: {
-      source: 'faostat', domain: 'RL',
-      params: { element: 5110, item: 6620 }, // area = doplní orchestrátor (faostat code)
-      sourceLabel: 'FAOSTAT',
-      pageUrl: 'https://www.fao.org/faostat/en/#data/RL',
-      scale: 0.001, // 1000 ha → mil. ha
+      source: 'worldbank', indicator: 'AG.LND.AGRI.K2', // country = doplní orchestrátor (wb kód)
+      sourceLabel: 'World Bank',
+      pageUrl: 'https://data.worldbank.org/indicator/AG.LND.AGRI.K2',
+      scale: 0.0001, // km² → mil. ha (1 km² = 100 ha; ÷ 1e6 ha/mil)
     },
   },
 ];
@@ -522,14 +521,13 @@ git commit -m "feat(svet): registr indikátorů (spine: výnos pšenice, zem. pl
 
 ---
 
-## Task 6: USDA fetcher (USA — pro pozdější fázi, spine teď)
+## Task 6: USA — pokryto World Bank fetcherem (žádný separátní modul)
 
-**Files:**
-- Create: `scripts/lib/svet/usda.mjs`
-- Test: `tests/scripts/svet-usda.test.ts`
-- Create (fixtura): `tests/fixtures/svet/usda-psd-corn.json`
+> **ZRUŠENO jako separátní task.** Po pivotu na World Bank (Task 4) je USA pokryta stejným `fetchWorldBankSeries` — stačí v `countries.mjs` přidat `{ slug:'usa', geo:'US', wb:'US', nameCs:'USA', flag:'🇺🇸' }` (až ve Fázi 3). World Bank má USA pro všechny `AG.*` indikátory. Detailní per-crop USA data (USDA NASS QuickStats, vyžaduje free API klíč) je volitelné rozšíření Fáze 3, mimo tento plán.
+>
+> Žádný kód v tomto tasku. Pokračuj Taskem 7.
 
-> USA je až Fáze 3, ale parser stavíme teď, ať je engine kompletní a otestovaný. Pro Fázi 1 (DE/FR/UK) se nevolá.
+~~Files: scripts/lib/svet/usda.mjs~~ — neimplementuje se.
 
 - [ ] **Step 1: Ulož reálnou fixturu (discovery)**
 
@@ -697,8 +695,7 @@ import { fileURLToPath } from 'node:url';
 import { COUNTRIES } from './lib/svet/countries.mjs';
 import { INDICATORS } from './lib/svet/indicators.mjs';
 import { fetchEurostatSeries } from './lib/svet/eurostat.mjs';
-import { fetchFaostatSeries } from './lib/svet/faostat.mjs';
-import { fetchUsaSeries } from './lib/svet/usda.mjs';
+import { fetchWorldBankSeries } from './lib/svet/worldbank.mjs';
 import { sanityCheck } from './lib/svet/verify.mjs';
 
 const OUT_DIR = fileURLToPath(new URL('../src/data/svet/', import.meta.url));
@@ -711,12 +708,8 @@ async function fetchIndicator(def, country) {
     const { series, url } = await fetchEurostatSeries(spec.dataset, { ...spec.filters, geo: country.geo });
     return { series: scaled(series, spec.scale), url, label: spec.sourceLabel };
   }
-  if (spec.source === 'faostat') {
-    const { series, url } = await fetchFaostatSeries(spec.domain, { ...spec.params, area: country.faostat });
-    return { series: scaled(series, spec.scale), url, label: spec.sourceLabel };
-  }
-  if (spec.source === 'usda') {
-    const { series, url } = await fetchUsaSeries(spec.domain, { ...spec.params, area: country.faostat });
+  if (spec.source === 'worldbank') {
+    const { series, url } = await fetchWorldBankSeries(country.wb, spec.indicator);
     return { series: scaled(series, spec.scale), url, label: spec.sourceLabel };
   }
   throw new Error(`Neznámý zdroj: ${spec.source}`);
@@ -822,17 +815,18 @@ git commit -m "feat(svet): orchestrátor build-svet + data DE/FR/UK (spine indik
 | cattle_count | produkce | Eurostat apro_mt_lscatl (animals=A2000) | 1000 ks |
 | pigs_count | produkce | Eurostat apro_mt_lspig (animals=A3100) | 1000 ks |
 | milk_prod | produkce | Eurostat apro_mk_farm (dairyprod=D1110D) | |
-| ag_land ✅ | puda | FAOSTAT RL (5110/6620) | hotovo v Task 5 |
-| arable_land | puda | FAOSTAT RL (5110/6621) | |
+| ag_land ✅ | puda | World Bank AG.LND.AGRI.K2 | hotovo v Task 5; km²→mil. ha |
+| arable_land | puda | World Bank AG.LND.ARBL.HA | ha |
+| cereal_yield | produkce | World Bank AG.YLD.CREL.KG | kg/ha (paritní, i USA) |
 | farm_count | puda | Eurostat ef_m_farmleg | struktura farem |
 | organic_share | puda | Eurostat sdg_02_40 / org_cropar | % UAA |
 | ag_output_value | ekonomika | Eurostat aact_eaa01 | mld € |
 | ag_gva | ekonomika | Eurostat aact_eaa01 | přidaná hodnota |
-| ag_employment | ekonomika | Eurostat aact_ali01 / lfsa | |
-| agri_exports | obchod | FAOSTAT TCL (exporty) | |
-| agri_imports | obchod | FAOSTAT TCL (importy) | |
-| fert_use | obchod | FAOSTAT RFN | hnojiva |
+| ag_value_added_gdp | ekonomika | World Bank NV.AGR.TOTL.ZS | % HDP (i USA) |
+| ag_employment | ekonomika | World Bank SL.AGR.EMPL.ZS | % zaměstnanosti |
+| fert_use | obchod | World Bank AG.CON.FERT.ZS | kg/ha orné |
 
+> **Pravidlo zdrojů:** detailní per-crop/livestock/ceny/struktura = **Eurostat** (jen evropské země); cross-country agregáty + USA = **World Bank**. Pro UK použij World Bank tam, kde Eurostat po brexitu nemá data.
 > **POZOR (ověřeno):** `apro_*` datasety mají povinnou dimenzi `freq` → každý eurostat `filters` musí obsahovat `freq: 'A'` (jinak `pickSeries` vrátí 0 bodů). Výnosové kódy jsou `YLD_HUMD_EU_T_HA` (t/ha, scale 1). Crops kódy ověř ve fixtuře (C1100=pšenice, C1500=kukuřice, C1300=ječmen, R1000=řepka).
 > Pokud kód/dimenze v reálné fixtuře nesedí, oprav podle výstupu — fixtura je zdroj pravdy. Po doplnění všech zopakuj Task 8 Step 3–4 (full run + validace) a commitni aktualizovaná data.
 
