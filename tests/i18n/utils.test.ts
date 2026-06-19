@@ -115,9 +115,11 @@ describe('langSwitchHref', () => {
 });
 
 describe('navHref/langSwitchHref per-locale (uk po launchi fáze 2)', () => {
-  it('uk: nelaunchnutá sekce (jurisdikční data) zůstává na cs href (žádný /uk prefix)', () => {
-    // /dotace není pro uk launchnuté (jurisdikční data) → drží se na cs
-    expect(navHref('uk', '/dotace/')).toBe('/dotace/');
+  it('uk: nelaunchnutá sekce zůstává na cs href (žádný /uk prefix)', () => {
+    // /kalkulacka není pro uk launchnuté → drží se na cs.
+    // (Pozn.: jurisdikční data /statistiky i /dotace už pro uk launchnuté JSOU,
+    //  takže jako příklad nelaunchnuté uk sekce slouží /kalkulacka.)
+    expect(navHref('uk', '/kalkulacka/')).toBe('/kalkulacka/');
   });
   it('uk: launchnutá sekce dostane /uk prefix', () => {
     expect(navHref('uk', '/stroje/')).toBe('/uk/stroje/');
@@ -126,7 +128,7 @@ describe('navHref/langSwitchHref per-locale (uk po launchi fáze 2)', () => {
     expect(navHref('sk', '/stroje/')).toBe('/sk/stroje/');
   });
   it('langSwitchHref uk: nelaunchnutá sekce → uk hub', () => {
-    expect(langSwitchHref('uk', '/dotace/', [])).toBe('/uk/');
+    expect(langSwitchHref('uk', '/kalkulacka/', [])).toBe('/uk/');
   });
   it('langSwitchHref uk: launchnutá sekce → /uk/<sekce>', () => {
     expect(langSwitchHref('uk', '/stroje/', [])).toBe('/uk/stroje/');
