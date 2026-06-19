@@ -13,6 +13,7 @@ import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 import { dsDate, FALLBACK_LASTMOD } from '../lib/content-dates';
+import svetIndex from '../data/svet/index.json';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
@@ -35,6 +36,7 @@ const D_DOTACE = dsDate('dotace');
 const D_DOTACE_SK = dsDate('dotaceSk');
 const D_PUDA = dsDate('puda');
 const D_HOWTO = dsDate('howto');
+const D_SVET = dsDate('svet'); // /svet, /svet/srovnani, country profiles (cs-only)
 
 function maxIsoDate(values: Array<string | null | undefined>): string | undefined {
   let max: string | undefined;
@@ -153,6 +155,8 @@ export const GET: APIRoute = async () => {
     ['/fotosoutez/pravidla/', 'yearly', undefined, STATIC_LASTMOD],
     ['/fotosoutez/gdpr/', 'yearly', undefined, STATIC_LASTMOD],
     ['/statistiky/', 'weekly', undefined, STATIC_LASTMOD],
+    ['/svet/', 'weekly', '0.85', D_SVET],
+    ['/svet/srovnani/', 'monthly', '0.6', D_SVET],
     ['/srovnani/', 'weekly', '0.85', D_STROJE],
     ['/zebricky/', 'weekly', '0.8', D_STROJE],
     ['/slovnik/', 'monthly', '0.75', D_SLOVNIK],
@@ -196,6 +200,12 @@ export const GET: APIRoute = async () => {
   ];
   for (const [path, changefreq, priority, lastmod] of staticPaths) {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority, lastmod });
+  }
+
+  // /svet country profiles (cs-only; reference country = the comparison baseline,
+  // it has no standalone profile page so skip it).
+  for (const c of svetIndex.countries.filter((c) => !c.reference)) {
+    urls.push({ loc: `${SITE_URL}/svet/${c.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: D_SVET });
   }
 
   for (const cat of NOVINKY_CATEGORIES) {

@@ -33,6 +33,7 @@ const SOURCES = {
   dotaceSk: ['src/content/dotace-sk'],
   puda: ['src/content/puda'],
   howto: ['src/content/howto'],
+  svet: ['src/data/svet'],
 };
 
 function gitDate(paths) {
