@@ -1,8 +1,8 @@
 {
-  "slug": "velka-britanie",
-  "geo": "UK",
-  "nameCs": "Velká Británie",
-  "flag": "🇬🇧",
+  "slug": "kypr",
+  "geo": "CY",
+  "nameCs": "Kypr",
+  "flag": "🇨🇾",
   "generated": "2026-06-20",
   "indicators": {
     "wheat_yield": {
@@ -11,77 +11,101 @@
       "pkg": "produkce",
       "unit": "t/ha",
       "latest": {
-        "value": 7.08,
+        "value": 1.45,
         "unit": "t/ha",
-        "referencePeriod": "2020",
+        "referencePeriod": "2025",
         "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=C1100&strucpro=YLD_HUMD_EU_T_HA&geo=UK",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=C1100&strucpro=YLD_HUMD_EU_T_HA&geo=CY",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
-          "period": "2016",
-          "value": 7.81
+          "period": "2004",
+          "value": 1.39
         },
         {
-          "period": "2020",
-          "value": 7.08
-        }
-      ]
-    },
-    "maize_yield": {
-      "key": "maize_yield",
-      "label": "Výnos kukuřice",
-      "pkg": "produkce",
-      "unit": "t/ha",
-      "latest": {
-        "value": 3.95,
-        "unit": "t/ha",
-        "referencePeriod": "2020",
-        "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=C1500&strucpro=YLD_HUMD_EU_T_HA&geo=UK",
-        "fetchedAt": "2026-06-20"
-      },
-      "series": [
+          "period": "2005",
+          "value": 1.84
+        },
+        {
+          "period": "2006",
+          "value": 1.46
+        },
+        {
+          "period": "2007",
+          "value": 2.12
+        },
+        {
+          "period": "2008",
+          "value": 0.52
+        },
+        {
+          "period": "2009",
+          "value": 2.66
+        },
+        {
+          "period": "2010",
+          "value": 2.48
+        },
         {
           "period": "2011",
-          "value": 3.9
+          "value": 2.31
         },
         {
           "period": "2012",
-          "value": 7.46
+          "value": 2.75
         },
         {
           "period": "2013",
-          "value": 7.46
+          "value": 2.26
         },
         {
           "period": "2014",
-          "value": 4.66
+          "value": 0.74
         },
         {
           "period": "2015",
-          "value": 4.97
+          "value": 3.01
         },
         {
           "period": "2016",
-          "value": 3.95
+          "value": 0.85
         },
         {
           "period": "2017",
-          "value": 4.65
+          "value": 1.97
         },
         {
           "period": "2018",
-          "value": 4.45
+          "value": 1.5
         },
         {
           "period": "2019",
-          "value": 5.05
+          "value": 2.78
         },
         {
           "period": "2020",
-          "value": 3.95
+          "value": 2.67
+        },
+        {
+          "period": "2021",
+          "value": 2.1
+        },
+        {
+          "period": "2022",
+          "value": 2.34
+        },
+        {
+          "period": "2023",
+          "value": 2
+        },
+        {
+          "period": "2024",
+          "value": 1.69
+        },
+        {
+          "period": "2025",
+          "value": 1.45
         }
       ]
     },
@@ -91,117 +115,101 @@
       "pkg": "produkce",
       "unit": "t/ha",
       "latest": {
-        "value": 5.84,
+        "value": 0.96,
         "unit": "t/ha",
-        "referencePeriod": "2020",
+        "referencePeriod": "2025",
         "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=C1300&strucpro=YLD_HUMD_EU_T_HA&geo=UK",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=C1300&strucpro=YLD_HUMD_EU_T_HA&geo=CY",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
+          "period": "2004",
+          "value": 1.77
+        },
+        {
+          "period": "2005",
+          "value": 1.17
+        },
+        {
+          "period": "2006",
+          "value": 1.22
+        },
+        {
+          "period": "2007",
+          "value": 1.56
+        },
+        {
+          "period": "2008",
+          "value": 0.12
+        },
+        {
+          "period": "2009",
+          "value": 1.84
+        },
+        {
           "period": "2010",
-          "value": 5.67
+          "value": 1.96
         },
         {
           "period": "2011",
-          "value": 5.77
+          "value": 1.88
         },
         {
           "period": "2012",
-          "value": 5.48
+          "value": 2.38
         },
         {
           "period": "2013",
-          "value": 5.82
+          "value": 1.59
         },
         {
           "period": "2014",
-          "value": 6.47
+          "value": 0.15
         },
         {
           "period": "2015",
-          "value": 6.66
+          "value": 2.62
         },
         {
           "period": "2016",
-          "value": 5.83
+          "value": 0.21
         },
         {
           "period": "2017",
-          "value": 6.03
+          "value": 1.76
         },
         {
           "period": "2018",
-          "value": 5.63
+          "value": 0.62
         },
         {
           "period": "2019",
-          "value": 6.84
+          "value": 2.63
         },
         {
           "period": "2020",
-          "value": 5.84
-        }
-      ]
-    },
-    "rapeseed_yield": {
-      "key": "rapeseed_yield",
-      "label": "Výnos řepky",
-      "pkg": "produkce",
-      "unit": "t/ha",
-      "latest": {
-        "value": 2.78,
-        "unit": "t/ha",
-        "referencePeriod": "2020",
-        "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=I1110&strucpro=YLD_HUMD_EU_T_HA&geo=UK",
-        "fetchedAt": "2026-06-20"
-      },
-      "series": [
-        {
-          "period": "2010",
-          "value": 3.5
+          "value": 2.13
         },
         {
-          "period": "2011",
-          "value": 3.9
+          "period": "2021",
+          "value": 2.03
         },
         {
-          "period": "2012",
-          "value": 3.4
+          "period": "2022",
+          "value": 2.29
         },
         {
-          "period": "2013",
-          "value": 2.98
+          "period": "2023",
+          "value": 2.08
         },
         {
-          "period": "2014",
-          "value": 3.65
+          "period": "2024",
+          "value": 0.97
         },
         {
-          "period": "2015",
-          "value": 3.9
-        },
-        {
-          "period": "2016",
-          "value": 3.1
-        },
-        {
-          "period": "2017",
-          "value": 3.9
-        },
-        {
-          "period": "2018",
-          "value": 3.5
-        },
-        {
-          "period": "2019",
-          "value": 3.31
-        },
-        {
-          "period": "2020",
-          "value": 2.78
+          "period": "2025",
+          "value": 0.96
         }
       ]
     },
@@ -211,201 +219,169 @@
       "pkg": "produkce",
       "unit": "1000 ks",
       "latest": {
-        "value": 9459,
+        "value": 84.48,
         "unit": "1000 ks",
-        "referencePeriod": "2019",
+        "referencePeriod": "2025",
         "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_mt_lscatl?format=JSON&freq=A&month=M11_M12&animals=A2000&unit=THS_HD&geo=UK",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_mt_lscatl?format=JSON&freq=A&month=M11_M12&animals=A2000&unit=THS_HD&geo=CY",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
-          "period": "1973",
-          "value": 14925
-        },
-        {
-          "period": "1974",
-          "value": 14914
-        },
-        {
-          "period": "1975",
-          "value": 13991
-        },
-        {
-          "period": "1976",
-          "value": 13667
-        },
-        {
-          "period": "1977",
-          "value": 13568.41
-        },
-        {
-          "period": "1978",
-          "value": 13538.24
-        },
-        {
-          "period": "1979",
-          "value": 13363.41
-        },
-        {
-          "period": "1980",
-          "value": 13061
-        },
-        {
-          "period": "1981",
-          "value": 13054.21
-        },
-        {
-          "period": "1982",
-          "value": 13272.54
-        },
-        {
-          "period": "1983",
-          "value": 13258.2
-        },
-        {
-          "period": "1984",
-          "value": 13090.23
-        },
-        {
-          "period": "1985",
-          "value": 12798.83
-        },
-        {
-          "period": "1986",
-          "value": 12577.89
-        },
-        {
           "period": "1987",
-          "value": 11973.66
+          "value": 44.5
         },
         {
           "period": "1988",
-          "value": 12024.22
+          "value": 46
         },
         {
           "period": "1989",
-          "value": 12038.51
+          "value": 49.3
         },
         {
           "period": "1990",
-          "value": 11967
+          "value": 54.7
         },
         {
           "period": "1991",
-          "value": 11749.02
+          "value": 55
         },
         {
           "period": "1992",
-          "value": 11730.26
+          "value": 55.8
         },
         {
           "period": "1993",
-          "value": 11820.1
+          "value": 61.1
         },
         {
           "period": "1994",
-          "value": 11980.67
+          "value": 64.4
         },
         {
           "period": "1995",
-          "value": 11735.35
+          "value": 68.1
         },
         {
           "period": "1996",
-          "value": 11430.09
+          "value": 70
         },
         {
           "period": "1997",
-          "value": 11346.81
+          "value": 62.4
         },
         {
           "period": "1998",
-          "value": 11237.06
+          "value": 55.74
         },
         {
           "period": "1999",
-          "value": 11281.32
+          "value": 53.96
         },
         {
           "period": "2000",
-          "value": 10877.51
+          "value": 53.98
         },
         {
           "period": "2001",
-          "value": 10160.87
+          "value": 53.43
         },
         {
           "period": "2002",
-          "value": 10381.21
+          "value": 58.16
         },
         {
           "period": "2003",
-          "value": 10518.93
+          "value": 58.65
         },
         {
           "period": "2004",
-          "value": 10745
+          "value": 60.31
         },
         {
           "period": "2005",
-          "value": 10546
+          "value": 57.58
         },
         {
           "period": "2006",
-          "value": 10335
+          "value": 56.11
         },
         {
           "period": "2007",
-          "value": 10075
+          "value": 55.92
         },
         {
           "period": "2008",
-          "value": 9911
+          "value": 55.59
         },
         {
           "period": "2009",
-          "value": 9901
+          "value": 54.1
         },
         {
           "period": "2010",
-          "value": 9896
+          "value": 54.72
         },
         {
           "period": "2011",
-          "value": 9675
+          "value": 56.92
         },
         {
           "period": "2012",
-          "value": 9749
+          "value": 56.92
         },
         {
           "period": "2013",
-          "value": 9682
+          "value": 57.08
         },
         {
           "period": "2014",
-          "value": 9693
+          "value": 59.54
         },
         {
           "period": "2015",
-          "value": 9816
+          "value": 58.86
         },
         {
           "period": "2016",
-          "value": 9806
+          "value": 63.14
         },
         {
           "period": "2017",
-          "value": 9787
+          "value": 67.03
         },
         {
           "period": "2018",
-          "value": 9610
+          "value": 70.82
         },
         {
           "period": "2019",
-          "value": 9459
+          "value": 73.97
+        },
+        {
+          "period": "2020",
+          "value": 83.03
+        },
+        {
+          "period": "2021",
+          "value": 84.61
+        },
+        {
+          "period": "2022",
+          "value": 81.44
+        },
+        {
+          "period": "2023",
+          "value": 82.27
+        },
+        {
+          "period": "2024",
+          "value": 82.68
+        },
+        {
+          "period": "2025",
+          "value": 84.48
         }
       ]
     },
@@ -415,201 +391,169 @@
       "pkg": "produkce",
       "unit": "1000 ks",
       "latest": {
-        "value": 4741,
+        "value": 335.71,
         "unit": "1000 ks",
-        "referencePeriod": "2019",
+        "referencePeriod": "2025",
         "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_mt_lspig?format=JSON&freq=A&month=M11_M12&animals=A3100&unit=THS_HD&geo=UK",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_mt_lspig?format=JSON&freq=A&month=M11_M12&animals=A3100&unit=THS_HD&geo=CY",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
-          "period": "1973",
-          "value": 9345
-        },
-        {
-          "period": "1974",
-          "value": 7885
-        },
-        {
-          "period": "1975",
-          "value": 7714
-        },
-        {
-          "period": "1976",
-          "value": 8151
-        },
-        {
-          "period": "1977",
-          "value": 7733
-        },
-        {
-          "period": "1978",
-          "value": 7963.63
-        },
-        {
-          "period": "1979",
-          "value": 7793.56
-        },
-        {
-          "period": "1980",
-          "value": 7770
-        },
-        {
-          "period": "1981",
-          "value": 8014.48
-        },
-        {
-          "period": "1982",
-          "value": 8316.72
-        },
-        {
-          "period": "1983",
-          "value": 7883.99
-        },
-        {
-          "period": "1984",
-          "value": 7896.9
-        },
-        {
-          "period": "1985",
-          "value": 8033.15
-        },
-        {
-          "period": "1986",
-          "value": 8053.43
-        },
-        {
           "period": "1987",
-          "value": 8016.15
+          "value": 266
         },
         {
           "period": "1988",
-          "value": 7725.79
+          "value": 284
         },
         {
           "period": "1989",
-          "value": 7482.55
+          "value": 281
         },
         {
           "period": "1990",
-          "value": 7479.1
+          "value": 277.94
         },
         {
           "period": "1991",
-          "value": 7619.87
+          "value": 296.23
         },
         {
           "period": "1992",
-          "value": 7804.16
+          "value": 341.95
         },
         {
           "period": "1993",
-          "value": 7967.63
+          "value": 369.41
         },
         {
           "period": "1994",
-          "value": 7974.84
+          "value": 356.21
         },
         {
           "period": "1995",
-          "value": 7441.56
+          "value": 374.07
         },
         {
           "period": "1996",
-          "value": 7694.76
+          "value": 399.53
         },
         {
           "period": "1997",
-          "value": 8035.5
+          "value": 414.79
         },
         {
           "period": "1998",
-          "value": 7553.98
+          "value": 436.4
         },
         {
           "period": "1999",
-          "value": 7036.95
+          "value": 425.19
         },
         {
           "period": "2000",
-          "value": 5948.2
+          "value": 413.81
         },
         {
           "period": "2001",
-          "value": 5686.96
+          "value": 450.98
         },
         {
           "period": "2002",
-          "value": 5330.12
+          "value": 490.82
         },
         {
           "period": "2003",
-          "value": 4842.46
+          "value": 488.1
         },
         {
           "period": "2004",
-          "value": 4787.38
+          "value": 470.5
         },
         {
           "period": "2005",
-          "value": 4726.21
+          "value": 429.72
         },
         {
           "period": "2006",
-          "value": 4731
+          "value": 452.64
         },
         {
           "period": "2007",
-          "value": 4671
+          "value": 467.06
         },
         {
           "period": "2008",
-          "value": 4550
+          "value": 464.93
         },
         {
           "period": "2009",
-          "value": 4423
+          "value": 464.08
         },
         {
           "period": "2010",
-          "value": 4385
+          "value": 463.73
         },
         {
           "period": "2011",
-          "value": 4326
+          "value": 439.24
         },
         {
           "period": "2012",
-          "value": 4216
+          "value": 395.21
         },
         {
           "period": "2013",
-          "value": 4383
+          "value": 357.9
         },
         {
           "period": "2014",
-          "value": 4510
+          "value": 342.07
         },
         {
           "period": "2015",
-          "value": 4422
+          "value": 358.06
         },
         {
           "period": "2016",
-          "value": 4538
+          "value": 352.61
         },
         {
           "period": "2017",
-          "value": 4713
+          "value": 350.16
         },
         {
           "period": "2018",
-          "value": 4648
+          "value": 362.05
         },
         {
           "period": "2019",
-          "value": 4741
+          "value": 351.76
+        },
+        {
+          "period": "2020",
+          "value": 359.06
+        },
+        {
+          "period": "2021",
+          "value": 360.59
+        },
+        {
+          "period": "2022",
+          "value": 330.87
+        },
+        {
+          "period": "2023",
+          "value": 309.76
+        },
+        {
+          "period": "2024",
+          "value": 309.79
+        },
+        {
+          "period": "2025",
+          "value": 335.71
         }
       ]
     },
@@ -619,149 +563,153 @@
       "pkg": "produkce",
       "unit": "t/ha",
       "latest": {
-        "value": 7.138,
+        "value": 1.44,
         "unit": "t/ha",
-        "referencePeriod": "2023",
+        "referencePeriod": "2024",
         "source": "World Bank",
-        "sourceUrl": "https://api.worldbank.org/v2/country/GB/indicator/AG.YLD.CREL.KG?format=json&date=1990:2024&per_page=20000",
+        "sourceUrl": "https://api.worldbank.org/v2/country/CY/indicator/AG.YLD.CREL.KG?format=json&date=1990:2024&per_page=20000",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
           "period": "1990",
-          "value": 6.171
+          "value": 1.886
         },
         {
           "period": "1991",
-          "value": 6.466
+          "value": 1.336
         },
         {
           "period": "1992",
-          "value": 6.327
+          "value": 2.79
         },
         {
           "period": "1993",
-          "value": 6.429
+          "value": 2.964
         },
         {
           "period": "1994",
-          "value": 6.557
+          "value": 2.554
         },
         {
           "period": "1995",
-          "value": 6.873
+          "value": 2.385
         },
         {
           "period": "1996",
-          "value": 7.3
+          "value": 2.396
         },
         {
           "period": "1997",
-          "value": 6.696
+          "value": 1.111
         },
         {
           "period": "1998",
-          "value": 6.661
+          "value": 1.114
         },
         {
           "period": "1999",
-          "value": 7.043
+          "value": 2.156
         },
         {
           "period": "2000",
-          "value": 7.165
+          "value": 0.931
         },
         {
           "period": "2001",
-          "value": 6.291
+          "value": 2.276
         },
         {
           "period": "2002",
-          "value": 7.077
+          "value": 2.394
         },
         {
           "period": "2003",
-          "value": 7.033
+          "value": 2.264
         },
         {
           "period": "2004",
-          "value": 7.032
+          "value": 1.678
         },
         {
           "period": "2005",
-          "value": 7.197
+          "value": 1.206
         },
         {
           "period": "2006",
-          "value": 7.279
+          "value": 1.22
         },
         {
           "period": "2007",
-          "value": 6.632
+          "value": 1.596
         },
         {
           "period": "2008",
-          "value": 7.42
+          "value": 0.176
         },
         {
           "period": "2009",
-          "value": 7.03
+          "value": 1.824
         },
         {
           "period": "2010",
-          "value": 6.953
+          "value": 1.998
         },
         {
           "period": "2011",
-          "value": 6.985
+          "value": 1.954
         },
         {
           "period": "2012",
-          "value": 6.215
+          "value": 2.399
         },
         {
           "period": "2013",
-          "value": 6.632
+          "value": 1.688
         },
         {
           "period": "2014",
-          "value": 7.697
+          "value": 0.291
         },
         {
           "period": "2015",
-          "value": 7.981
+          "value": 2.683
         },
         {
           "period": "2016",
-          "value": 7.023
+          "value": 0.436
         },
         {
           "period": "2017",
-          "value": 7.229
+          "value": 1.803
         },
         {
           "period": "2018",
-          "value": 6.789
+          "value": 1.053
         },
         {
           "period": "2019",
-          "value": 7.946
+          "value": 2.656
         },
         {
           "period": "2020",
-          "value": 6.241
+          "value": 2.381
         },
         {
           "period": "2021",
-          "value": 6.967
+          "value": 2.064
         },
         {
           "period": "2022",
-          "value": 7.72
+          "value": 2.306
         },
         {
           "period": "2023",
-          "value": 7.138
+          "value": 2.03
+        },
+        {
+          "period": "2024",
+          "value": 1.44
         }
       ]
     },
@@ -771,149 +719,149 @@
       "pkg": "puda",
       "unit": "mil. ha",
       "latest": {
-        "value": 17.009,
+        "value": 0.129,
         "unit": "mil. ha",
         "referencePeriod": "2023",
         "source": "World Bank",
-        "sourceUrl": "https://api.worldbank.org/v2/country/GB/indicator/AG.LND.AGRI.K2?format=json&date=1990:2024&per_page=20000",
+        "sourceUrl": "https://api.worldbank.org/v2/country/CY/indicator/AG.LND.AGRI.K2?format=json&date=1990:2024&per_page=20000",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
           "period": "1990",
-          "value": 18.203
+          "value": 0.161
         },
         {
           "period": "1991",
-          "value": 18.143
+          "value": 0.159
         },
         {
           "period": "1992",
-          "value": 18.07
+          "value": 0.16
         },
         {
           "period": "1993",
-          "value": 17.534
+          "value": 0.159
         },
         {
           "period": "1994",
-          "value": 17.409
+          "value": 0.143
         },
         {
           "period": "1995",
-          "value": 17.379
+          "value": 0.143
         },
         {
           "period": "1996",
-          "value": 17.494
+          "value": 0.143
         },
         {
           "period": "1997",
-          "value": 17.585
+          "value": 0.142
         },
         {
           "period": "1998",
-          "value": 17.518
+          "value": 0.144
         },
         {
           "period": "1999",
-          "value": 17.219
+          "value": 0.144
         },
         {
           "period": "2000",
-          "value": 16.964
+          "value": 0.142
         },
         {
           "period": "2001",
-          "value": 16.953
+          "value": 0.14
         },
         {
           "period": "2002",
-          "value": 16.976
+          "value": 0.14
         },
         {
           "period": "2003",
-          "value": 16.956
+          "value": 0.154
         },
         {
           "period": "2004",
-          "value": 17.051
+          "value": 0.156
         },
         {
           "period": "2005",
-          "value": 16.956
+          "value": 0.167
         },
         {
           "period": "2006",
-          "value": 17.838
+          "value": 0.157
         },
         {
           "period": "2007",
-          "value": 17.647
+          "value": 0.147
         },
         {
           "period": "2008",
-          "value": 17.684
+          "value": 0.116
         },
         {
           "period": "2009",
-          "value": 17.325
+          "value": 0.128
         },
         {
           "period": "2010",
-          "value": 17.224
+          "value": 0.115
         },
         {
           "period": "2011",
-          "value": 17.164
+          "value": 0.116
         },
         {
           "period": "2012",
-          "value": 17.182
+          "value": 0.117
         },
         {
           "period": "2013",
-          "value": 17.25
+          "value": 0.109
         },
         {
           "period": "2014",
-          "value": 17.232
+          "value": 0.109
         },
         {
           "period": "2015",
-          "value": 17.138
+          "value": 0.127
         },
         {
           "period": "2016",
-          "value": 17.35
+          "value": 0.109
         },
         {
           "period": "2017",
-          "value": 17.466
+          "value": 0.121
         },
         {
           "period": "2018",
-          "value": 17.351
+          "value": 0.132
         },
         {
           "period": "2019",
-          "value": 17.521
+          "value": 0.125
         },
         {
           "period": "2020",
-          "value": 17.259
+          "value": 0.128
         },
         {
           "period": "2021",
-          "value": 17.215
+          "value": 0.122
         },
         {
           "period": "2022",
-          "value": 17.415
+          "value": 0.123
         },
         {
           "period": "2023",
-          "value": 17.009
+          "value": 0.129
         }
       ]
     },
@@ -923,149 +871,149 @@
       "pkg": "puda",
       "unit": "mil. ha",
       "latest": {
-        "value": 6.044,
+        "value": 0.098,
         "unit": "mil. ha",
         "referencePeriod": "2023",
         "source": "World Bank",
-        "sourceUrl": "https://api.worldbank.org/v2/country/GB/indicator/AG.LND.ARBL.HA?format=json&date=1990:2024&per_page=20000",
+        "sourceUrl": "https://api.worldbank.org/v2/country/CY/indicator/AG.LND.ARBL.HA?format=json&date=1990:2024&per_page=20000",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
           "period": "1990",
-          "value": 6.62
+          "value": 0.106
         },
         {
           "period": "1991",
-          "value": 6.567
+          "value": 0.106
         },
         {
           "period": "1992",
-          "value": 6.554
+          "value": 0.108
         },
         {
           "period": "1993",
-          "value": 6.091
+          "value": 0.109
         },
         {
           "period": "1994",
-          "value": 5.911
+          "value": 0.099
         },
         {
           "period": "1995",
-          "value": 5.936
+          "value": 0.099
         },
         {
           "period": "1996",
-          "value": 6.098
+          "value": 0.099
         },
         {
           "period": "1997",
-          "value": 6.368
+          "value": 0.098
         },
         {
           "period": "1998",
-          "value": 6.253
+          "value": 0.1
         },
         {
           "period": "1999",
-          "value": 5.917
+          "value": 0.101
         },
         {
           "period": "2000",
-          "value": 5.876
+          "value": 0.098
         },
         {
           "period": "2001",
-          "value": 5.651
+          "value": 0.098
         },
         {
           "period": "2002",
-          "value": 5.786
+          "value": 0.1
         },
         {
           "period": "2003",
-          "value": 5.659
+          "value": 0.112
         },
         {
           "period": "2004",
-          "value": 5.819
+          "value": 0.113
         },
         {
           "period": "2005",
-          "value": 5.729
+          "value": 0.123
         },
         {
           "period": "2006",
-          "value": 6.094
+          "value": 0.115
         },
         {
           "period": "2007",
-          "value": 6.085
+          "value": 0.11
         },
         {
           "period": "2008",
-          "value": 6.005
+          "value": 0.082
         },
         {
           "period": "2009",
-          "value": 6.049
+          "value": 0.087
         },
         {
           "period": "2010",
-          "value": 5.97
+          "value": 0.083
         },
         {
           "period": "2011",
-          "value": 6.062
+          "value": 0.084
         },
         {
           "period": "2012",
-          "value": 6.212
+          "value": 0.086
         },
         {
           "period": "2013",
-          "value": 6.265
+          "value": 0.08
         },
         {
           "period": "2014",
-          "value": 6.233
+          "value": 0.08
         },
         {
           "period": "2015",
-          "value": 6.011
+          "value": 0.098
         },
         {
           "period": "2016",
-          "value": 6.026
+          "value": 0.082
         },
         {
           "period": "2017",
-          "value": 6.083
+          "value": 0.094
         },
         {
           "period": "2018",
-          "value": 6.038
+          "value": 0.105
         },
         {
           "period": "2019",
-          "value": 6.086
+          "value": 0.096
         },
         {
           "period": "2020",
-          "value": 5.979
+          "value": 0.099
         },
         {
           "period": "2021",
-          "value": 6.01
+          "value": 0.094
         },
         {
           "period": "2022",
-          "value": 6.041
+          "value": 0.095
         },
         {
           "period": "2023",
-          "value": 6.044
+          "value": 0.098
         }
       ]
     },
@@ -1075,153 +1023,153 @@
       "pkg": "ekonomika",
       "unit": "%",
       "latest": {
-        "value": 0.638,
+        "value": 1.155,
         "unit": "%",
         "referencePeriod": "2024",
         "source": "World Bank",
-        "sourceUrl": "https://api.worldbank.org/v2/country/GB/indicator/NV.AGR.TOTL.ZS?format=json&date=1990:2024&per_page=20000",
+        "sourceUrl": "https://api.worldbank.org/v2/country/CY/indicator/NV.AGR.TOTL.ZS?format=json&date=1990:2024&per_page=20000",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
           "period": "1990",
-          "value": 1.274
+          "value": 6.859
         },
         {
           "period": "1991",
-          "value": 1.25
+          "value": 6.191
         },
         {
           "period": "1992",
-          "value": 1.24
+          "value": 5.724
         },
         {
           "period": "1993",
-          "value": 1.251
+          "value": 5.613
         },
         {
           "period": "1994",
-          "value": 1.293
+          "value": 5.068
         },
         {
           "period": "1995",
-          "value": 1.23
+          "value": 4.776
         },
         {
           "period": "1996",
-          "value": 1.071
+          "value": 4.578
         },
         {
           "period": "1997",
-          "value": 0.946
+          "value": 3.92
         },
         {
           "period": "1998",
-          "value": 0.935
+          "value": 4.335
         },
         {
           "period": "1999",
-          "value": 0.857
+          "value": 3.899
         },
         {
           "period": "2000",
-          "value": 0.805
+          "value": 3.647
         },
         {
           "period": "2001",
-          "value": 0.758
+          "value": 3.861
         },
         {
           "period": "2002",
-          "value": 0.9
+          "value": 3.788
         },
         {
           "period": "2003",
-          "value": 0.831
+          "value": 3.353
         },
         {
           "period": "2004",
-          "value": 0.741
+          "value": 3.083
         },
         {
           "period": "2005",
-          "value": 0.547
+          "value": 2.739
         },
         {
           "period": "2006",
-          "value": 0.575
+          "value": 2.276
         },
         {
           "period": "2007",
-          "value": 0.553
+          "value": 2.024
         },
         {
           "period": "2008",
-          "value": 0.67
+          "value": 2.093
         },
         {
           "period": "2009",
-          "value": 0.681
+          "value": 1.989
         },
         {
           "period": "2010",
-          "value": 0.566
+          "value": 2.058
         },
         {
           "period": "2011",
-          "value": 0.704
+          "value": 2.145
         },
         {
           "period": "2012",
-          "value": 0.625
+          "value": 2.001
         },
         {
           "period": "2013",
-          "value": 0.641
+          "value": 2.036
         },
         {
           "period": "2014",
-          "value": 0.738
+          "value": 1.845
         },
         {
           "period": "2015",
-          "value": 0.634
+          "value": 1.868
         },
         {
           "period": "2016",
-          "value": 0.59
+          "value": 2.144
         },
         {
           "period": "2017",
-          "value": 0.606
+          "value": 1.853
         },
         {
           "period": "2018",
-          "value": 0.563
+          "value": 1.718
         },
         {
           "period": "2019",
-          "value": 0.577
+          "value": 1.748
         },
         {
           "period": "2020",
-          "value": 0.684
+          "value": 1.825
         },
         {
           "period": "2021",
-          "value": 0.698
+          "value": 1.503
         },
         {
           "period": "2022",
-          "value": 0.681
+          "value": 1.186
         },
         {
           "period": "2023",
-          "value": 0.648
+          "value": 1.155
         },
         {
           "period": "2024",
-          "value": 0.638
+          "value": 1.155
         }
       ]
     },
@@ -1231,149 +1179,149 @@
       "pkg": "ekonomika",
       "unit": "%",
       "latest": {
-        "value": 0.873,
+        "value": 2.197,
         "unit": "%",
         "referencePeriod": "2024",
         "source": "World Bank",
-        "sourceUrl": "https://api.worldbank.org/v2/country/GB/indicator/SL.AGR.EMPL.ZS?format=json&date=1990:2024&per_page=20000",
+        "sourceUrl": "https://api.worldbank.org/v2/country/CY/indicator/SL.AGR.EMPL.ZS?format=json&date=1990:2024&per_page=20000",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
           "period": "1991",
-          "value": 2.418
+          "value": 6.407
         },
         {
           "period": "1992",
-          "value": 2.349
+          "value": 6.15
         },
         {
           "period": "1993",
-          "value": 2.277
+          "value": 5.982
         },
         {
           "period": "1994",
-          "value": 2.313
+          "value": 5.548
         },
         {
           "period": "1995",
-          "value": 2.285
+          "value": 5.387
         },
         {
           "period": "1996",
-          "value": 2.169
+          "value": 5.219
         },
         {
           "period": "1997",
-          "value": 2.064
+          "value": 5.046
         },
         {
           "period": "1998",
-          "value": 1.913
+          "value": 4.839
         },
         {
           "period": "1999",
-          "value": 1.731
+          "value": 4.665
         },
         {
           "period": "2000",
-          "value": 1.71
+          "value": 5.404
         },
         {
           "period": "2001",
-          "value": 1.552
+          "value": 4.838
         },
         {
           "period": "2002",
-          "value": 1.544
+          "value": 5.254
         },
         {
           "period": "2003",
-          "value": 1.392
+          "value": 5.187
         },
         {
           "period": "2004",
-          "value": 1.423
+          "value": 4.826
         },
         {
           "period": "2005",
-          "value": 1.38
+          "value": 4.738
         },
         {
           "period": "2006",
-          "value": 1.352
+          "value": 4.26
         },
         {
           "period": "2007",
-          "value": 1.366
+          "value": 4.385
         },
         {
           "period": "2008",
-          "value": 1.441
+          "value": 4.231
         },
         {
           "period": "2009",
-          "value": 1.109
+          "value": 3.929
         },
         {
           "period": "2010",
-          "value": 1.217
+          "value": 3.795
         },
         {
           "period": "2011",
-          "value": 1.222
+          "value": 3.828
         },
         {
           "period": "2012",
-          "value": 1.189
+          "value": 2.912
         },
         {
           "period": "2013",
-          "value": 1.061
+          "value": 3.105
         },
         {
           "period": "2014",
-          "value": 1.244
+          "value": 4.43
         },
         {
           "period": "2015",
-          "value": 1.145
+          "value": 3.995
         },
         {
           "period": "2016",
-          "value": 1.138
+          "value": 3.643
         },
         {
           "period": "2017",
-          "value": 1.159
+          "value": 2.527
         },
         {
           "period": "2018",
-          "value": 1.068
+          "value": 2.166
         },
         {
           "period": "2019",
-          "value": 1.085
+          "value": 2.411
         },
         {
           "period": "2020",
-          "value": 0.981
+          "value": 2.732
         },
         {
           "period": "2021",
-          "value": 0.896
+          "value": 2.853
         },
         {
           "period": "2022",
-          "value": 0.756
+          "value": 2.373
         },
         {
           "period": "2023",
-          "value": 0.877
+          "value": 2.461
         },
         {
           "period": "2024",
-          "value": 0.873
+          "value": 2.197
         }
       ]
     },
@@ -1383,149 +1331,149 @@
       "pkg": "obchod",
       "unit": "kg/ha",
       "latest": {
-        "value": 191.439,
+        "value": 172.12,
         "unit": "kg/ha",
         "referencePeriod": "2023",
         "source": "World Bank",
-        "sourceUrl": "https://api.worldbank.org/v2/country/GB/indicator/AG.CON.FERT.ZS?format=json&date=1990:2024&per_page=20000",
+        "sourceUrl": "https://api.worldbank.org/v2/country/CY/indicator/AG.CON.FERT.ZS?format=json&date=1990:2024&per_page=20000",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
           "period": "1990",
-          "value": 360.725
+          "value": 215.265
         },
         {
           "period": "1991",
-          "value": 330.592
+          "value": 208.512
         },
         {
           "period": "1992",
-          "value": 305.615
+          "value": 263.559
         },
         {
           "period": "1993",
-          "value": 340.667
+          "value": 241.15
         },
         {
           "period": "1994",
-          "value": 375.402
+          "value": 264.728
         },
         {
           "period": "1995",
-          "value": 369.104
+          "value": 258.073
         },
         {
           "period": "1996",
-          "value": 389.636
+          "value": 257.061
         },
         {
           "period": "1997",
-          "value": 356.47
+          "value": 207.329
         },
         {
           "period": "1998",
-          "value": 332.8
+          "value": 202.737
         },
         {
           "period": "1999",
-          "value": 337.333
+          "value": 199.634
         },
         {
           "period": "2000",
-          "value": 300.204
+          "value": 146.494
         },
         {
           "period": "2001",
-          "value": 330.915
+          "value": 150.071
         },
         {
           "period": "2002",
-          "value": 323.367
+          "value": 159.65
         },
         {
           "period": "2003",
-          "value": 315.957
+          "value": 158.232
         },
         {
           "period": "2004",
-          "value": 305.551
+          "value": 131.407
         },
         {
           "period": "2005",
-          "value": 291.848
+          "value": 108.976
         },
         {
           "period": "2006",
-          "value": 256.482
+          "value": 109.026
         },
         {
           "period": "2007",
-          "value": 254.56
+          "value": 109.836
         },
         {
           "period": "2008",
-          "value": 256.619
+          "value": 112.015
         },
         {
           "period": "2009",
-          "value": 212.432
+          "value": 181.45
         },
         {
           "period": "2010",
-          "value": 243.049
+          "value": 202.772
         },
         {
           "period": "2011",
-          "value": 246.948
+          "value": 151.202
         },
         {
           "period": "2012",
-          "value": 232.936
+          "value": 196.527
         },
         {
           "period": "2013",
-          "value": 233.026
+          "value": 183.871
         },
         {
           "period": "2014",
-          "value": 247.854
+          "value": 158.207
         },
         {
           "period": "2015",
-          "value": 252.371
+          "value": 158
         },
         {
           "period": "2016",
-          "value": 247.759
+          "value": 204.044
         },
         {
           "period": "2017",
-          "value": 248.566
+          "value": 174.791
         },
         {
           "period": "2018",
-          "value": 245.62
+          "value": 156.84
         },
         {
           "period": "2019",
-          "value": 245.005
+          "value": 187.748
         },
         {
           "period": "2020",
-          "value": 233.169
+          "value": 167.557
         },
         {
           "period": "2021",
-          "value": 241.439
+          "value": 156.23
         },
         {
           "period": "2022",
-          "value": 193.507
+          "value": 127.742
         },
         {
           "period": "2023",
-          "value": 191.439
+          "value": 172.12
         }
       ]
     },
@@ -1535,205 +1483,105 @@
       "pkg": "ekonomika",
       "unit": "mld €",
       "latest": {
-        "value": 27.855,
+        "value": 0.885,
         "unit": "mld €",
-        "referencePeriod": "2020",
+        "referencePeriod": "2025",
         "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/aact_eaa01?format=JSON&freq=A&am_item=AM160000&indic_agr=PRD_BP&unit=MIO_EUR&geo=UK",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/aact_eaa01?format=JSON&freq=A&am_item=AM160000&indic_agr=PRD_BP&unit=MIO_EUR&geo=CY",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
-          "period": "1973",
-          "value": 7.834
-        },
-        {
-          "period": "1974",
-          "value": 8.954
-        },
-        {
-          "period": "1975",
-          "value": 9.565
-        },
-        {
-          "period": "1976",
-          "value": 10.525
-        },
-        {
-          "period": "1977",
-          "value": 11.249
-        },
-        {
-          "period": "1978",
-          "value": 11.547
-        },
-        {
-          "period": "1979",
-          "value": 13.409
-        },
-        {
-          "period": "1980",
-          "value": 16.063
-        },
-        {
-          "period": "1981",
-          "value": 18.989
-        },
-        {
-          "period": "1982",
-          "value": 21.19
-        },
-        {
-          "period": "1983",
-          "value": 21.183
-        },
-        {
-          "period": "1984",
-          "value": 22.527
-        },
-        {
-          "period": "1985",
-          "value": 21.553
-        },
-        {
-          "period": "1986",
-          "value": 19.31
-        },
-        {
-          "period": "1987",
-          "value": 18.624
-        },
-        {
-          "period": "1988",
-          "value": 20.165
-        },
-        {
-          "period": "1989",
-          "value": 21.567
-        },
-        {
-          "period": "1990",
-          "value": 20.753
-        },
-        {
-          "period": "1991",
-          "value": 21.647
-        },
-        {
-          "period": "1992",
-          "value": 21.298
-        },
-        {
-          "period": "1993",
-          "value": 21.823
-        },
-        {
-          "period": "1994",
-          "value": 22.719
-        },
-        {
-          "period": "1995",
-          "value": 23.174
-        },
-        {
-          "period": "1996",
-          "value": 23.881
-        },
-        {
-          "period": "1997",
-          "value": 24.987
-        },
-        {
-          "period": "1998",
-          "value": 23.384
-        },
-        {
-          "period": "1999",
-          "value": 23.254
-        },
-        {
-          "period": "2000",
-          "value": 23.415
-        },
-        {
-          "period": "2001",
-          "value": 23.216
-        },
-        {
-          "period": "2002",
-          "value": 23.439
-        },
-        {
           "period": "2003",
-          "value": 22.163
+          "value": 0.632
         },
         {
           "period": "2004",
-          "value": 23.496
+          "value": 0.671
         },
         {
           "period": "2005",
-          "value": 20.326
+          "value": 0.686
         },
         {
           "period": "2006",
-          "value": 20.219
+          "value": 0.665
         },
         {
           "period": "2007",
-          "value": 21.794
+          "value": 0.651
         },
         {
           "period": "2008",
-          "value": 23.736
+          "value": 0.646
         },
         {
           "period": "2009",
-          "value": 20.656
+          "value": 0.674
         },
         {
           "period": "2010",
-          "value": 22.573
+          "value": 0.697
         },
         {
           "period": "2011",
-          "value": 25.801
+          "value": 0.71
         },
         {
           "period": "2012",
-          "value": 28.204
+          "value": 0.724
         },
         {
           "period": "2013",
-          "value": 28.775
+          "value": 0.666
         },
         {
           "period": "2014",
-          "value": 30.273
+          "value": 0.63
         },
         {
           "period": "2015",
-          "value": 30.875
+          "value": 0.644
         },
         {
           "period": "2016",
-          "value": 26.522
+          "value": 0.647
         },
         {
           "period": "2017",
-          "value": 28.165
+          "value": 0.696
         },
         {
           "period": "2018",
-          "value": 28.38
+          "value": 0.693
         },
         {
           "period": "2019",
-          "value": 29.256
+          "value": 0.721
         },
         {
           "period": "2020",
-          "value": 27.855
+          "value": 0.736
+        },
+        {
+          "period": "2021",
+          "value": 0.772
+        },
+        {
+          "period": "2022",
+          "value": 0.802
+        },
+        {
+          "period": "2023",
+          "value": 0.896
+        },
+        {
+          "period": "2024",
+          "value": 0.912
+        },
+        {
+          "period": "2025",
+          "value": 0.885
         }
       ]
     },
@@ -1743,25 +1591,33 @@
       "pkg": "puda",
       "unit": "1000 farem",
       "latest": {
-        "value": 183.81,
+        "value": 32.02,
         "unit": "1000 farem",
-        "referencePeriod": "2016",
+        "referencePeriod": "2023",
         "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ef_m_farmleg?format=JSON&freq=A&statinfo=TOTAL&leg_form=TOTAL&farmtype=TOTAL&so_eur=TOTAL&uaarea=TOTAL&unit=HLD&geo=UK",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ef_m_farmleg?format=JSON&freq=A&statinfo=TOTAL&leg_form=TOTAL&farmtype=TOTAL&so_eur=TOTAL&uaarea=TOTAL&unit=HLD&geo=CY",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
           "period": "2010",
-          "value": 186.42
+          "value": 38.86
         },
         {
           "period": "2013",
-          "value": 183.04
+          "value": 35.38
         },
         {
           "period": "2016",
-          "value": 183.81
+          "value": 34.95
+        },
+        {
+          "period": "2020",
+          "value": 34.05
+        },
+        {
+          "period": "2023",
+          "value": 32.02
         }
       ]
     },
@@ -1771,93 +1627,97 @@
       "pkg": "puda",
       "unit": "%",
       "latest": {
-        "value": 2.62,
+        "value": 8.76,
         "unit": "%",
-        "referencePeriod": "2019",
+        "referencePeriod": "2024",
         "source": "Eurostat",
-        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_02_40?format=JSON&freq=A&unit=PC_UAA&crops=UAAXK0000&agprdmet=TOTAL&geo=UK",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_02_40?format=JSON&freq=A&unit=PC_UAA&crops=UAAXK0000&agprdmet=TOTAL&geo=CY",
         "fetchedAt": "2026-06-20"
       },
       "series": [
         {
-          "period": "2000",
-          "value": 3.3
-        },
-        {
-          "period": "2001",
-          "value": 3.8
-        },
-        {
-          "period": "2002",
-          "value": 4.2
-        },
-        {
-          "period": "2003",
-          "value": 3.9
-        },
-        {
           "period": "2004",
-          "value": 3.9
+          "value": 0.6
         },
         {
           "period": "2005",
-          "value": 3.5
+          "value": 1
         },
         {
           "period": "2006",
-          "value": 3.4
+          "value": 1.2
         },
         {
           "period": "2007",
-          "value": 3.7
+          "value": 1.5
         },
         {
           "period": "2008",
-          "value": 4.1
+          "value": 1.6
         },
         {
           "period": "2009",
-          "value": 4.2
+          "value": 2.6
         },
         {
           "period": "2010",
-          "value": 4.1
+          "value": 2.8
         },
         {
           "period": "2011",
-          "value": 3.7
+          "value": 2.9
         },
         {
           "period": "2012",
-          "value": 3.41
+          "value": 3.38
         },
         {
           "period": "2013",
-          "value": 3.24
+          "value": 4.03
         },
         {
           "period": "2014",
-          "value": 3.02
+          "value": 3.63
         },
         {
           "period": "2015",
-          "value": 2.89
+          "value": 3.72
         },
         {
           "period": "2016",
-          "value": 2.82
+          "value": 4.94
         },
         {
           "period": "2017",
-          "value": 2.85
+          "value": 4.61
         },
         {
           "period": "2018",
-          "value": 2.64
+          "value": 4.55
         },
         {
           "period": "2019",
-          "value": 2.62
+          "value": 4.98
+        },
+        {
+          "period": "2020",
+          "value": 4.63
+        },
+        {
+          "period": "2021",
+          "value": 6.43
+        },
+        {
+          "period": "2022",
+          "value": 6.31
+        },
+        {
+          "period": "2023",
+          "value": 8.61
+        },
+        {
+          "period": "2024",
+          "value": 8.76
         }
       ]
     }

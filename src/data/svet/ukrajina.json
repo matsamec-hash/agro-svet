@@ -1,0 +1,933 @@
+{
+  "slug": "ukrajina",
+  "geo": "UA",
+  "nameCs": "Ukrajina",
+  "flag": "🇺🇦",
+  "generated": "2026-06-20",
+  "indicators": {
+    "cattle_count": {
+      "key": "cattle_count",
+      "label": "Stavy skotu",
+      "pkg": "produkce",
+      "unit": "1000 ks",
+      "latest": {
+        "value": 1804.1,
+        "unit": "1000 ks",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_mt_lscatl?format=JSON&freq=A&month=M11_M12&animals=A2000&unit=THS_HD&geo=UA",
+        "fetchedAt": "2026-06-20"
+      },
+      "series": [
+        {
+          "period": "2025",
+          "value": 1804.1
+        }
+      ]
+    },
+    "pigs_count": {
+      "key": "pigs_count",
+      "label": "Stavy prasat",
+      "pkg": "produkce",
+      "unit": "1000 ks",
+      "latest": {
+        "value": 4642.4,
+        "unit": "1000 ks",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_mt_lspig?format=JSON&freq=A&month=M11_M12&animals=A3100&unit=THS_HD&geo=UA",
+        "fetchedAt": "2026-06-20"
+      },
+      "series": [
+        {
+          "period": "2025",
+          "value": 4642.4
+        }
+      ]
+    },
+    "cereal_yield": {
+      "key": "cereal_yield",
+      "label": "Výnos obilovin",
+      "pkg": "produkce",
+      "unit": "t/ha",
+      "latest": {
+        "value": 5.148,
+        "unit": "t/ha",
+        "referencePeriod": "2024",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/UA/indicator/AG.YLD.CREL.KG?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-06-20"
+      },
+      "series": [
+        {
+          "period": "1992",
+          "value": 2.834
+        },
+        {
+          "period": "1993",
+          "value": 3.289
+        },
+        {
+          "period": "1994",
+          "value": 2.725
+        },
+        {
+          "period": "1995",
+          "value": 2.512
+        },
+        {
+          "period": "1996",
+          "value": 2.01
+        },
+        {
+          "period": "1997",
+          "value": 2.49
+        },
+        {
+          "period": "1998",
+          "value": 2.109
+        },
+        {
+          "period": "1999",
+          "value": 2.003
+        },
+        {
+          "period": "2000",
+          "value": 1.951
+        },
+        {
+          "period": "2001",
+          "value": 2.73
+        },
+        {
+          "period": "2002",
+          "value": 2.752
+        },
+        {
+          "period": "2003",
+          "value": 2.278
+        },
+        {
+          "period": "2004",
+          "value": 2.845
+        },
+        {
+          "period": "2005",
+          "value": 2.623
+        },
+        {
+          "period": "2006",
+          "value": 2.428
+        },
+        {
+          "period": "2007",
+          "value": 2.207
+        },
+        {
+          "period": "2008",
+          "value": 3.487
+        },
+        {
+          "period": "2009",
+          "value": 3.004
+        },
+        {
+          "period": "2010",
+          "value": 2.727
+        },
+        {
+          "period": "2011",
+          "value": 3.754
+        },
+        {
+          "period": "2012",
+          "value": 3.157
+        },
+        {
+          "period": "2013",
+          "value": 4.031
+        },
+        {
+          "period": "2014",
+          "value": 4.4
+        },
+        {
+          "period": "2015",
+          "value": 4.141
+        },
+        {
+          "period": "2016",
+          "value": 4.652
+        },
+        {
+          "period": "2017",
+          "value": 4.315
+        },
+        {
+          "period": "2018",
+          "value": 4.85
+        },
+        {
+          "period": "2019",
+          "value": 4.978
+        },
+        {
+          "period": "2020",
+          "value": 4.296
+        },
+        {
+          "period": "2021",
+          "value": 5.455
+        },
+        {
+          "period": "2022",
+          "value": 4.614
+        },
+        {
+          "period": "2023",
+          "value": 5.578
+        },
+        {
+          "period": "2024",
+          "value": 5.148
+        }
+      ]
+    },
+    "ag_land": {
+      "key": "ag_land",
+      "label": "Zemědělská plocha",
+      "pkg": "puda",
+      "unit": "mil. ha",
+      "latest": {
+        "value": 41.311,
+        "unit": "mil. ha",
+        "referencePeriod": "2023",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/UA/indicator/AG.LND.AGRI.K2?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-06-20"
+      },
+      "series": [
+        {
+          "period": "1990",
+          "value": 41.929
+        },
+        {
+          "period": "1991",
+          "value": 41.929
+        },
+        {
+          "period": "1992",
+          "value": 41.929
+        },
+        {
+          "period": "1993",
+          "value": 41.89
+        },
+        {
+          "period": "1994",
+          "value": 41.861
+        },
+        {
+          "period": "1995",
+          "value": 41.853
+        },
+        {
+          "period": "1996",
+          "value": 41.84
+        },
+        {
+          "period": "1997",
+          "value": 41.854
+        },
+        {
+          "period": "1998",
+          "value": 41.611
+        },
+        {
+          "period": "1999",
+          "value": 41.453
+        },
+        {
+          "period": "2000",
+          "value": 41.406
+        },
+        {
+          "period": "2001",
+          "value": 41.385
+        },
+        {
+          "period": "2002",
+          "value": 41.396
+        },
+        {
+          "period": "2003",
+          "value": 41.355
+        },
+        {
+          "period": "2004",
+          "value": 41.354
+        },
+        {
+          "period": "2005",
+          "value": 41.304
+        },
+        {
+          "period": "2006",
+          "value": 41.284
+        },
+        {
+          "period": "2007",
+          "value": 41.266
+        },
+        {
+          "period": "2008",
+          "value": 41.292
+        },
+        {
+          "period": "2009",
+          "value": 41.276
+        },
+        {
+          "period": "2010",
+          "value": 41.267
+        },
+        {
+          "period": "2011",
+          "value": 41.281
+        },
+        {
+          "period": "2012",
+          "value": 41.297
+        },
+        {
+          "period": "2013",
+          "value": 41.526
+        },
+        {
+          "period": "2014",
+          "value": 41.511
+        },
+        {
+          "period": "2015",
+          "value": 41.508
+        },
+        {
+          "period": "2016",
+          "value": 41.515
+        },
+        {
+          "period": "2017",
+          "value": 41.489
+        },
+        {
+          "period": "2018",
+          "value": 41.329
+        },
+        {
+          "period": "2019",
+          "value": 41.311
+        },
+        {
+          "period": "2020",
+          "value": 41.311
+        },
+        {
+          "period": "2021",
+          "value": 41.311
+        },
+        {
+          "period": "2022",
+          "value": 41.311
+        },
+        {
+          "period": "2023",
+          "value": 41.311
+        }
+      ]
+    },
+    "arable_land": {
+      "key": "arable_land",
+      "label": "Orná půda",
+      "pkg": "puda",
+      "unit": "mil. ha",
+      "latest": {
+        "value": 32.924,
+        "unit": "mil. ha",
+        "referencePeriod": "2023",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/UA/indicator/AG.LND.ARBL.HA?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-06-20"
+      },
+      "series": [
+        {
+          "period": "1992",
+          "value": 33.362
+        },
+        {
+          "period": "1993",
+          "value": 33.334
+        },
+        {
+          "period": "1994",
+          "value": 33.291
+        },
+        {
+          "period": "1995",
+          "value": 33.286
+        },
+        {
+          "period": "1996",
+          "value": 33.189
+        },
+        {
+          "period": "1997",
+          "value": 33.081
+        },
+        {
+          "period": "1998",
+          "value": 32.858
+        },
+        {
+          "period": "1999",
+          "value": 32.67
+        },
+        {
+          "period": "2000",
+          "value": 32.564
+        },
+        {
+          "period": "2001",
+          "value": 32.537
+        },
+        {
+          "period": "2002",
+          "value": 32.544
+        },
+        {
+          "period": "2003",
+          "value": 32.48
+        },
+        {
+          "period": "2004",
+          "value": 32.482
+        },
+        {
+          "period": "2005",
+          "value": 32.452
+        },
+        {
+          "period": "2006",
+          "value": 32.446
+        },
+        {
+          "period": "2007",
+          "value": 32.434
+        },
+        {
+          "period": "2008",
+          "value": 32.474
+        },
+        {
+          "period": "2009",
+          "value": 32.478
+        },
+        {
+          "period": "2010",
+          "value": 32.477
+        },
+        {
+          "period": "2011",
+          "value": 32.499
+        },
+        {
+          "period": "2012",
+          "value": 32.518
+        },
+        {
+          "period": "2013",
+          "value": 32.777
+        },
+        {
+          "period": "2014",
+          "value": 32.77
+        },
+        {
+          "period": "2015",
+          "value": 32.775
+        },
+        {
+          "period": "2016",
+          "value": 32.776
+        },
+        {
+          "period": "2017",
+          "value": 32.773
+        },
+        {
+          "period": "2018",
+          "value": 32.889
+        },
+        {
+          "period": "2019",
+          "value": 32.924
+        },
+        {
+          "period": "2020",
+          "value": 32.924
+        },
+        {
+          "period": "2021",
+          "value": 32.924
+        },
+        {
+          "period": "2022",
+          "value": 32.924
+        },
+        {
+          "period": "2023",
+          "value": 32.924
+        }
+      ]
+    },
+    "ag_value_added_gdp": {
+      "key": "ag_value_added_gdp",
+      "label": "Podíl zemědělství na HDP",
+      "pkg": "ekonomika",
+      "unit": "%",
+      "latest": {
+        "value": 7.111,
+        "unit": "%",
+        "referencePeriod": "2024",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/UA/indicator/NV.AGR.TOTL.ZS?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-06-20"
+      },
+      "series": [
+        {
+          "period": "1990",
+          "value": 24.467
+        },
+        {
+          "period": "1991",
+          "value": 24.649
+        },
+        {
+          "period": "1992",
+          "value": 20.852
+        },
+        {
+          "period": "1993",
+          "value": 21.541
+        },
+        {
+          "period": "1994",
+          "value": 14.572
+        },
+        {
+          "period": "1995",
+          "value": 13.77
+        },
+        {
+          "period": "1996",
+          "value": 12.229
+        },
+        {
+          "period": "1997",
+          "value": 12.515
+        },
+        {
+          "period": "1998",
+          "value": 12.068
+        },
+        {
+          "period": "1999",
+          "value": 11.875
+        },
+        {
+          "period": "2000",
+          "value": 13.952
+        },
+        {
+          "period": "2001",
+          "value": 13.976
+        },
+        {
+          "period": "2002",
+          "value": 12.603
+        },
+        {
+          "period": "2003",
+          "value": 10.5
+        },
+        {
+          "period": "2004",
+          "value": 10.437
+        },
+        {
+          "period": "2005",
+          "value": 8.875
+        },
+        {
+          "period": "2006",
+          "value": 7.239
+        },
+        {
+          "period": "2007",
+          "value": 6.283
+        },
+        {
+          "period": "2008",
+          "value": 6.535
+        },
+        {
+          "period": "2009",
+          "value": 6.905
+        },
+        {
+          "period": "2010",
+          "value": 7.402
+        },
+        {
+          "period": "2011",
+          "value": 8.15
+        },
+        {
+          "period": "2012",
+          "value": 7.761
+        },
+        {
+          "period": "2013",
+          "value": 8.692
+        },
+        {
+          "period": "2014",
+          "value": 10.155
+        },
+        {
+          "period": "2015",
+          "value": 12.059
+        },
+        {
+          "period": "2016",
+          "value": 11.726
+        },
+        {
+          "period": "2017",
+          "value": 10.178
+        },
+        {
+          "period": "2018",
+          "value": 10.14
+        },
+        {
+          "period": "2019",
+          "value": 8.965
+        },
+        {
+          "period": "2020",
+          "value": 9.31
+        },
+        {
+          "period": "2021",
+          "value": 10.886
+        },
+        {
+          "period": "2022",
+          "value": 8.573
+        },
+        {
+          "period": "2023",
+          "value": 7.552
+        },
+        {
+          "period": "2024",
+          "value": 7.111
+        }
+      ]
+    },
+    "ag_employment": {
+      "key": "ag_employment",
+      "label": "Zaměstnanost v zemědělství",
+      "pkg": "ekonomika",
+      "unit": "%",
+      "latest": {
+        "value": 14.116,
+        "unit": "%",
+        "referencePeriod": "2021",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/UA/indicator/SL.AGR.EMPL.ZS?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-06-20"
+      },
+      "series": [
+        {
+          "period": "1991",
+          "value": 15.433
+        },
+        {
+          "period": "1992",
+          "value": 16.604
+        },
+        {
+          "period": "1993",
+          "value": 15.792
+        },
+        {
+          "period": "1994",
+          "value": 15.758
+        },
+        {
+          "period": "1995",
+          "value": 17.425
+        },
+        {
+          "period": "1996",
+          "value": 17.172
+        },
+        {
+          "period": "1997",
+          "value": 17.576
+        },
+        {
+          "period": "1998",
+          "value": 18.23
+        },
+        {
+          "period": "1999",
+          "value": 18.345
+        },
+        {
+          "period": "2000",
+          "value": 18.322
+        },
+        {
+          "period": "2001",
+          "value": 17.866
+        },
+        {
+          "period": "2002",
+          "value": 17.449
+        },
+        {
+          "period": "2003",
+          "value": 16.8
+        },
+        {
+          "period": "2004",
+          "value": 16.228
+        },
+        {
+          "period": "2005",
+          "value": 15.791
+        },
+        {
+          "period": "2006",
+          "value": 15.281
+        },
+        {
+          "period": "2007",
+          "value": 14.841
+        },
+        {
+          "period": "2008",
+          "value": 14.652
+        },
+        {
+          "period": "2009",
+          "value": 14.299
+        },
+        {
+          "period": "2010",
+          "value": 14.443
+        },
+        {
+          "period": "2011",
+          "value": 14.456
+        },
+        {
+          "period": "2012",
+          "value": 14.097
+        },
+        {
+          "period": "2013",
+          "value": 14.199
+        },
+        {
+          "period": "2014",
+          "value": 14.385
+        },
+        {
+          "period": "2015",
+          "value": 14.854
+        },
+        {
+          "period": "2016",
+          "value": 15.191
+        },
+        {
+          "period": "2017",
+          "value": 15.003
+        },
+        {
+          "period": "2018",
+          "value": 14.905
+        },
+        {
+          "period": "2019",
+          "value": 13.908
+        },
+        {
+          "period": "2020",
+          "value": 14.122
+        },
+        {
+          "period": "2021",
+          "value": 14.116
+        }
+      ]
+    },
+    "fert_use": {
+      "key": "fert_use",
+      "label": "Spotřeba hnojiv",
+      "pkg": "obchod",
+      "unit": "kg/ha",
+      "latest": {
+        "value": 42.522,
+        "unit": "kg/ha",
+        "referencePeriod": "2023",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/UA/indicator/AG.CON.FERT.ZS?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-06-20"
+      },
+      "series": [
+        {
+          "period": "1992",
+          "value": 80.691
+        },
+        {
+          "period": "1993",
+          "value": 40.349
+        },
+        {
+          "period": "1994",
+          "value": 34.063
+        },
+        {
+          "period": "1995",
+          "value": 26.738
+        },
+        {
+          "period": "1996",
+          "value": 15.818
+        },
+        {
+          "period": "1997",
+          "value": 16.989
+        },
+        {
+          "period": "1998",
+          "value": 15.643
+        },
+        {
+          "period": "1999",
+          "value": 12.764
+        },
+        {
+          "period": "2000",
+          "value": 13.512
+        },
+        {
+          "period": "2001",
+          "value": 14.568
+        },
+        {
+          "period": "2002",
+          "value": 15.949
+        },
+        {
+          "period": "2003",
+          "value": 15.778
+        },
+        {
+          "period": "2004",
+          "value": 16.418
+        },
+        {
+          "period": "2005",
+          "value": 17.192
+        },
+        {
+          "period": "2006",
+          "value": 21.554
+        },
+        {
+          "period": "2007",
+          "value": 27.639
+        },
+        {
+          "period": "2008",
+          "value": 32.787
+        },
+        {
+          "period": "2009",
+          "value": 27.303
+        },
+        {
+          "period": "2010",
+          "value": 32.658
+        },
+        {
+          "period": "2011",
+          "value": 38.872
+        },
+        {
+          "period": "2012",
+          "value": 41.409
+        },
+        {
+          "period": "2013",
+          "value": 45.572
+        },
+        {
+          "period": "2014",
+          "value": 44.908
+        },
+        {
+          "period": "2015",
+          "value": 43.173
+        },
+        {
+          "period": "2016",
+          "value": 52.747
+        },
+        {
+          "period": "2017",
+          "value": 61.883
+        },
+        {
+          "period": "2018",
+          "value": 65.391
+        },
+        {
+          "period": "2019",
+          "value": 65.073
+        },
+        {
+          "period": "2020",
+          "value": 75.589
+        },
+        {
+          "period": "2021",
+          "value": 78.487
+        },
+        {
+          "period": "2022",
+          "value": 55.639
+        },
+        {
+          "period": "2023",
+          "value": 42.522
+        }
+      ]
+    }
+  }
+}
