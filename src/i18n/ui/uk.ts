@@ -19,6 +19,7 @@ const uk: Record<string, string> = {
   'nav.animals': 'Тварини',
   'nav.tech': 'Техніка',
   'nav.data': 'Дані',
+  'nav.svet': 'Світ',
   'nav.farms': 'Ферми',
   'nav.bazar': 'Агро базар',
   'nav.photo': 'Фотоконкурс',
@@ -64,6 +65,10 @@ const uk: Record<string, string> = {
   'nav.data.calculators': 'Калькулятори',
   'nav.data.capCalc': 'Калькулятор субсидій CAP',
   'nav.data.subsidies': 'Субсидії',
+
+  // — navigace: Svět (cs-only sekce: профілі країн + порівняння) —
+  'nav.svet.profiles': 'Профілі країн',
+  'nav.svet.compare': 'Порівняння країн',
 
   // — header chrome —
   'header.search': 'Пошук',

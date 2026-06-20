@@ -1,0 +1,24 @@
+---
+import { sparklinePath } from '../../lib/svet/render';
+import type { SeriesPoint } from '../../lib/svet/types';
+interface Props { series: SeriesPoint[]; w?: number; h?: number; }
+const { series, w = 120, h = 34 } = Astro.props;
+const pad = 2;
+const d = sparklinePath(series, w, h, pad);
+// poslední bod pro tečku (stejná matematika jako sparklinePath)
+let lastX = 0, lastY = h / 2;
+if (series.length >= 1) {
+  const vals = series.map((p) => p.value);
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const span = max - min || 1;
+  const last = series[series.length - 1];
+  lastX = series.length === 1 ? pad : w - pad;
+  lastY = pad + (h - pad * 2) * (1 - (last.value - min) / span);
+}
+---
+{d && (
+  <svg class="svet-spark" width={w} height={h} viewBox={`0 0 ${w} ${h}`} role="img" aria-hidden="true">
+    <path d={d} fill="none" stroke="#2f6b2f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx={lastX} cy={Math.round(lastY * 100) / 100} r="2.5" fill="#2f6b2f" />
+  </svg>
+)}
