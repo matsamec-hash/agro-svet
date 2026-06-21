@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { compareMatrix, fmtNum, vsReference } from '../../../lib/svet/render';
+import '../../../styles/svet.css';
 
 const mods = import.meta.glob('../../../data/svet/*.json', { eager: true });
 const profiles = Object.values(mods)
@@ -24,9 +25,15 @@ const title = 'Srovnání zemědělství zemí';
 const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — výnosy, plochy, produkce, ekonomika — vždy se srovnáním s ČR. Zdroje Eurostat a World Bank.';
 ---
 <Layout title={title} description={description}>
-  <main class="sp-page svet-cmp">
-    <header class="sp-hero"><div><h1>{title}</h1><p>{description}</p></div></header>
-    <section class="sp-section">
+  <main class="svet-page svet-cmp">
+    <header class="svet-hero">
+      <div class="svet-hero-inner">
+        <span class="svet-flag">📊</span>
+        <h1>{title}</h1>
+        <p class="svet-lede">{description}</p>
+      </div>
+    </header>
+    <section class="svet-section">
       <label class="svet-cmp-pick">Ukazatel:
         <select id="svet-indicator">
           {Object.entries(indicatorMeta).map(([k, m]) => (
@@ -34,16 +41,18 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
           ))}
         </select>
       </label>
-      <table class="svet-cmp-table">
-        <thead><tr><th>#</th><th>Země</th><th>Hodnota</th><th>vs ČR</th></tr></thead>
-        <tbody id="svet-cmp-body">
-          {rows.map((c, i) => {
-            const cmp = refValue != null ? vsReference(c.value!, refValue) : null;
-            return (<tr><td>{i + 1}</td><td>{c.flag} {c.nameCs}</td><td>{fmtNum(c.value!)}</td><td>{cmp ? `${cmp.dir === 'up' ? '+' : ''}${fmtNum(cmp.pct)} %` : '—'}</td></tr>);
-          })}
-        </tbody>
-      </table>
-      <p class="sp-src">Zdroj: Eurostat / World Bank · poslední dostupná data u každého ukazatele</p>
+      <div class="svet-cmp-tablewrap">
+        <table class="svet-cmp-table">
+          <thead><tr><th>#</th><th>Země</th><th>Hodnota</th><th>vs ČR</th></tr></thead>
+          <tbody id="svet-cmp-body">
+            {rows.map((c, i) => {
+              const cmp = refValue != null ? vsReference(c.value!, refValue) : null;
+              return (<tr><td>{i + 1}</td><td>{c.flag} {c.nameCs}</td><td>{fmtNum(c.value!)}</td><td>{cmp ? `${cmp.dir === 'up' ? '+' : ''}${fmtNum(cmp.pct)} %` : '—'}</td></tr>);
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p class="svet-cmp-note">Zdroj: Eurostat / World Bank · poslední dostupná data u každého ukazatele</p>
     </section>
     <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
     <script>
@@ -74,10 +83,4 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
       })();
     </script>
   </main>
-  <style>
-    .svet-cmp-table{width:100%;border-collapse:collapse;margin-top:.8rem}
-    .svet-cmp-table th,.svet-cmp-table td{padding:.45rem .6rem;border-bottom:1px solid #eef1ec;text-align:left}
-    .svet-cmp-pick select{padding:.35rem .6rem;border:1px solid #cdd;border-radius:8px;margin-left:.4rem}
-    .svet-cmp .sp-src{display:block;margin-top:.6rem;color:#9aa;font-size:.8rem}
-  </style>
 </Layout>

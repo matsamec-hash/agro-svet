@@ -3,11 +3,14 @@ import { describe, it, expect } from 'vitest';
 import { getNav, getFooterColumns, HIDDEN_SECTIONS, isLockedSectionPath } from '../../src/i18n/nav';
 
 describe('getNav', () => {
-  it('cs vrací plný strom se 7 top-level položkami a původními labely', () => {
+  it('cs top-level strom — Svět je nově podsekce Data (ne top-level), bazar skrytý', () => {
     const nav = getNav('cs');
+    // 'Svět' už NENÍ top-level (přesunut pod Data 2026-06-21); 'bazar' je dočasně
+    // skrytý i pro cs (vyčerpaný SMTP rate limit) → ve viditelném stromu chybí.
     expect(nav.map((i) => i.label)).toEqual([
-      'Téma', 'Zvířata', 'Technika', 'Data', 'Svět', 'Farmy', 'Agro bazar', 'Fotosoutěž',
+      'Téma', 'Zvířata', 'Technika', 'Data', 'Farmy', 'Fotosoutěž',
     ]);
+    expect(nav.some((i) => i.label === 'Svět')).toBe(false);
     // hrefs zachované
     expect(nav[0].href).toBe('/novinky/');
     expect(nav[2].href).toBe('/stroje/');
@@ -47,12 +50,24 @@ describe('getNav', () => {
     expect(data!.href).toBe('/statistiky/');
   });
 
-  it('cs nav: data sekce beze změny (všech 5 dětí, header /statistiky/)', () => {
+  it('cs nav: data sekce má 5 původních dětí + Svět (profily/srovnání) na konci', () => {
     const nav = getNav('cs');
     const data = nav.find((s) => s.section === 'data')!;
     expect(data.href).toBe('/statistiky/');
     const hrefs = (data.children ?? []).map((c) => c.href);
-    expect(hrefs).toEqual(['/statistiky/', '/puda/', '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/']);
+    expect(hrefs).toEqual([
+      '/statistiky/', '/puda/', '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/',
+      '/svet/', '/svet/srovnani/',
+    ]);
+  });
+
+  it('non-cs nav: /svet děti (cs-only) se v data sekci NEzobrazí', () => {
+    for (const loc of ['sk', 'uk', 'pl'] as const) {
+      const data = getNav(loc).find((s) => s.section === 'data');
+      const hrefs = (data?.children ?? []).map((c) => c.href);
+      expect(hrefs).not.toContain('/svet/');
+      expect(hrefs).not.toContain('/svet/srovnani/');
+    }
   });
 
   it('uk nav: data sekce viditelná, jen launchnuté děti (statistiky/puda/dotace; kalkulačky vynechané)', () => {
