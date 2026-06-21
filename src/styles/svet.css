@@ -1,0 +1,277 @@
+/* src/styles/svet.css — sdílený vzhled sekce /svet/ (profily zemí, srovnání, rozcestník).
+   Globální (ne scoped), aby styloval i markup z komponent IndicatorRow/Sparkline,
+   které jsou jinak mimo scope stránky. Brandové tokeny = stejné jako /statistiky/. */
+
+.svet-page {
+  --sv-yellow: #FFEA00;
+  --sv-ink: #0A0A0B;
+  --sv-cream: #FBFAF4;
+  --sv-green: #2f6b2f;
+  --sv-line: #e7e9e1;
+  --sv-muted: #6B6B72;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 26px 24px 96px;
+  background: var(--sv-cream);
+  color: #1E1E22;
+}
+
+/* ---------- HERO ---------- */
+.svet-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  color: #fff;
+  padding: 44px 44px 38px;
+  margin-bottom: 22px;
+  background:
+    radial-gradient(600px 300px at 12% 18%, rgba(255, 234, 0, .16), transparent 60%),
+    radial-gradient(700px 400px at 92% 92%, rgba(80, 80, 90, .4), transparent 60%),
+    linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
+  box-shadow: 0 18px 40px -12px rgba(10, 10, 12, .18), 0 0 0 1px rgba(10, 10, 12, .04);
+}
+.svet-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .35;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(600px 400px at 75% 100%, black, transparent 70%);
+}
+.svet-hero-inner { position: relative; z-index: 2; }
+.svet-flag {
+  display: inline-block;
+  font-size: 2.6rem;
+  line-height: 1;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .4));
+}
+.svet-hero h1 {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: #fff;
+  margin: 0;
+}
+.svet-lede {
+  max-width: 62ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #c8c8d0;
+  margin: 16px 0 0;
+}
+
+/* hero KPI dlaždice */
+.svet-kpis {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 26px;
+}
+.svet-kpi {
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 14px;
+  padding: 14px 16px;
+  backdrop-filter: blur(6px);
+}
+.svet-kpi-val {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: #fff;
+}
+.svet-kpi-val span { font-size: .8rem; font-weight: 500; color: #b9b9c2; }
+.svet-kpi-lbl {
+  margin-top: 7px;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #8a8a92;
+}
+
+/* ---------- SEKCE ---------- */
+.svet-section { margin-top: 30px; }
+.svet-section-head h2 {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -.01em;
+  color: var(--sv-ink);
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.svet-section-head h2::before {
+  content: "";
+  width: 8px;
+  height: 22px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--sv-yellow), #FFD400);
+}
+
+/* ---------- UKAZATELE (karty) ---------- */
+.svet-rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.svet-ind {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  background: #fff;
+  border: 1px solid var(--sv-line);
+  border-radius: 16px;
+  padding: 16px 18px;
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+.svet-ind:hover {
+  box-shadow: 0 10px 26px -14px rgba(10, 10, 12, .25);
+  transform: translateY(-1px);
+}
+.svet-ind-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.svet-ind-label {
+  font-weight: 600;
+  font-size: .92rem;
+  line-height: 1.25;
+  color: #2a2a30;
+}
+.svet-ind-value {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--sv-ink);
+}
+.svet-ind-value .svet-ind-unit {
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--sv-muted);
+  letter-spacing: 0;
+}
+.svet-spark { display: block; width: 100%; height: auto; }
+.svet-ind-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+/* vs ČR odznak */
+.svet-vs {
+  font-size: .76rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+.svet-vs-up { background: #e8f1e2; color: #2f6b2f; }
+.svet-vs-down { background: #fbe9e7; color: #b4452f; }
+.svet-vs-same { background: #eef1ec; color: #567; }
+
+.svet-src {
+  font-size: .72rem;
+  color: #9aa0a6;
+  text-decoration: none;
+}
+.svet-src:hover { color: var(--sv-green); text-decoration: underline; }
+
+/* ---------- METODIKA ---------- */
+.svet-method { max-width: 72ch; line-height: 1.65; color: #3a3a40; margin: 0 0 10px; }
+.svet-method a { color: var(--sv-green); font-weight: 600; }
+
+/* ---------- ROZCESTNÍK (index) ---------- */
+.svet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+}
+.svet-card {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 18px;
+  border: 1px solid var(--sv-line);
+  border-radius: 16px;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+}
+.svet-card:hover {
+  box-shadow: 0 12px 28px -16px rgba(10, 10, 12, .3);
+  transform: translateY(-2px);
+  border-color: #d9ddd1;
+}
+.svet-card-flag { font-size: 2.1rem; line-height: 1; }
+.svet-card-name { font-weight: 700; font-size: 1.1rem; color: var(--sv-ink); }
+.svet-card-cta { font-size: .82rem; font-weight: 600; color: var(--sv-green); }
+
+/* ---------- SROVNÁNÍ (tabulka) ---------- */
+.svet-cmp-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.svet-cmp-pick select {
+  padding: 9px 12px;
+  border: 1px solid var(--sv-line);
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  color: var(--sv-ink);
+}
+.svet-cmp-tablewrap {
+  margin-top: 16px;
+  background: #fff;
+  border: 1px solid var(--sv-line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.svet-cmp-table { width: 100%; border-collapse: collapse; }
+.svet-cmp-table th,
+.svet-cmp-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--sv-line);
+}
+.svet-cmp-table thead th {
+  font: 600 .72rem/1 'Chakra Petch', sans-serif;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--sv-muted);
+  background: #faf9f2;
+}
+.svet-cmp-table tbody tr:last-child td { border-bottom: 0; }
+.svet-cmp-table tbody tr:nth-child(odd) td { background: #fdfdf9; }
+.svet-cmp-table td:first-child { font-family: 'Chakra Petch', sans-serif; color: var(--sv-muted); width: 3rem; }
+.svet-cmp-table td:nth-child(3) { font-family: 'Chakra Petch', sans-serif; font-weight: 700; }
+.svet-cmp-note { margin-top: 12px; color: #9aa0a6; font-size: .8rem; }
+
+@media (max-width: 600px) {
+  .svet-page { padding: 18px 14px 60px; }
+  .svet-hero { padding: 28px 22px 26px; border-radius: 20px; }
+}

@@ -17,8 +17,10 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // odemčeny (SK obsah nasazen). Fáze 2b B: /statistiky taky odemčeno (SK obsah).
   // Fáze 2b C: /puda odemčeno → LOCKED_SECTION_PREFIXES je teď prázdné, takže
   // getNav už nic z `data` nefiltruje.
-  // `svet` (profily zemí + srovnání) je cs-only sekce → skrytá v sk/uk/pl.
-  sk: ['bazar', 'photo', 'svet'],
+  // `svet` (profily zemí + srovnání) je teď podsekce `data` (cs-only). V sk/uk/pl
+  // se /svet děti odfiltrují přes isLaunchedPath (není v LAUNCHED_PREFIXES), ne
+  // přes HIDDEN_SECTIONS, protože `data` musí zůstat viditelná.
+  sk: ['bazar', 'photo'],
   // UK 4d follow-up: `data` už uk neskrývá — /statistiky, /puda i /dotace jsou
   // launchnuté pro uk. getNav filtruje NElaunchnuté `data` děti (kalkulačky) přes
   // isLaunchedPath, takže header ukáže jen launchnuté (žádný cs-fallback dead-link).
@@ -26,11 +28,11 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // (/farmy/) skryté — nemají UA obsah, vedly by celé do češtiny. UA hlavička tak
   // ukazuje jen sekce s reálným UA obsahem: `tech` (katalog + slovník) a `data`
   // (statistiky/půda/dotace) — stejný princip jako homepage rozcestník.
-  uk: ['bazar', 'photo', 'tema', 'animals', 'farms', 'svet'],
+  uk: ['bazar', 'photo', 'tema', 'animals', 'farms'],
   // PL fáze 1: stejně jako uk — jen sekce s reálným PL obsahem (tech: katalog +
   // slovník). data sekce zatím bez launchnutých dětí (statistiky/puda/dotace =
   // pozdější fáze), novinky/plemena/farmy jsou české články.
-  pl: ['bazar', 'photo', 'tema', 'animals', 'farms', 'svet'],
+  pl: ['bazar', 'photo', 'tema', 'animals', 'farms'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české
@@ -116,11 +118,10 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
       { labelKey: 'nav.data.calculators', href: '/kalkulacka/' },
       { labelKey: 'nav.data.capCalc', href: '/kalkulacka/dotace-cap/' },
       { labelKey: 'nav.data.subsidies', href: '/dotace/' },
-    ],
-  },
-  {
-    section: 'svet', labelKey: 'nav.svet', href: '/svet/',
-    children: [
+      // `svet` (profily zemí + srovnání) přesunut pod Data jako podsekce
+      // (2026-06-21). Sekce zůstává cs-only → v sk/uk/pl tyto děti vyfiltruje
+      // launched-filtr / HIDDEN_SECTIONS níže nehraje roli, protože `data` je
+      // viditelná; proto explicitní gating /svet u non-cs řeší isLaunchedPath.
       { labelKey: 'nav.svet.profiles', href: '/svet/' },
       { labelKey: 'nav.svet.compare', href: '/svet/srovnani/' },
     ],

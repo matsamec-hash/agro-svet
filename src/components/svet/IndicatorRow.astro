@@ -9,14 +9,14 @@ const periodNum = Number(ind.latest.referencePeriod);
 const stale = periodNum > 0 && periodNum <= 2020;
 const dirSign = cmp && cmp.dir === 'up' ? '+' : '';
 ---
-<div class="svet-row">
-  <div class="svet-row-main">
-    <span class="svet-row-label">{ind.label}</span>
-    <span class="svet-row-value">{fmtNum(ind.latest.value)} <span class="svet-row-unit">{ind.unit}</span></span>
-  </div>
-  <Sparkline series={ind.series} />
-  <div class="svet-row-meta">
+<article class="svet-ind">
+  <div class="svet-ind-top">
+    <span class="svet-ind-label">{ind.label}</span>
     {cmp && <span class={`svet-vs svet-vs-${cmp.dir}`}>{dirSign}{fmtNum(cmp.pct)} % vs {refName}</span>}
-    <a class="sp-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{ind.latest.source} · {ind.latest.referencePeriod}{stale ? ' (nejnovější dostupné)' : ''}</a>
   </div>
-</div>
+  <div class="svet-ind-value">{fmtNum(ind.latest.value)} <span class="svet-ind-unit">{ind.unit}</span></div>
+  <Sparkline series={ind.series} w={260} h={46} />
+  <div class="svet-ind-foot">
+    <a class="svet-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{ind.latest.source} · {ind.latest.referencePeriod}{stale ? ' (nejnovější dostupné)' : ''}</a>
+  </div>
+</article>

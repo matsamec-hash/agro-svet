@@ -8,6 +8,7 @@ import IndicatorRow from '../../components/svet/IndicatorRow.astro';
 import { groupByPackage, fmtNum, COUNTRY_LOCATIVE } from '../../lib/svet/render';
 import { assertCountryProfile } from '../../lib/svet/types';
 import index from '../../data/svet/index.json';
+import '../../styles/svet.css';
 
 export async function getStaticPaths() {
   const mods = import.meta.glob('../../data/svet/*.json', { eager: true });
@@ -35,26 +36,28 @@ const title = `Zemědělství v ${loc}`;
 const description = `Aktuální zemědělská data: ${profile.nameCs} — produkce, půda, ekonomika a srovnání s ČR. Zdroje Eurostat a World Bank.`;
 ---
 <Layout title={title} description={description}>
-  <main class="sp-page svet-profile">
-    <header class="sp-hero svet-hero">
+  <main class="svet-page svet-profile">
+    <header class="svet-hero">
       <div class="svet-hero-inner">
         <span class="svet-flag">{profile.flag}</span>
         <h1>{title}</h1>
         <p class="svet-lede">{description}</p>
       </div>
-      <div class="svet-kpis">
-        {heroKpis.map((k: any) => (
-          <div class="svet-kpi">
-            <div class="svet-kpi-val">{fmtNum(k.latest.value)} <span>{k.unit}</span></div>
-            <div class="svet-kpi-lbl">{k.label}</div>
-          </div>
-        ))}
-      </div>
+      {heroKpis.length > 0 && (
+        <div class="svet-kpis">
+          {heroKpis.map((k: any) => (
+            <div class="svet-kpi">
+              <div class="svet-kpi-val">{fmtNum(k.latest.value)} <span>{k.unit}</span></div>
+              <div class="svet-kpi-lbl">{k.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </header>
 
     {groups.map((g) => (
-      <section class="sp-section svet-section">
-        <header class="sp-section-head"><h2>{g.label}</h2></header>
+      <section class="svet-section">
+        <header class="svet-section-head"><h2>{g.label}</h2></header>
         <div class="svet-rows">
           {g.indicators.map((ind: any) => (
             <IndicatorRow indicator={ind} refValue={refVal(ind.key)} refName="ČR" />
@@ -63,34 +66,10 @@ const description = `Aktuální zemědělská data: ${profile.nameCs} — produk
       </section>
     ))}
 
-    <section class="sp-section svet-section">
-      <header class="sp-section-head"><h2>Zdroje a metodika</h2></header>
+    <section class="svet-section">
+      <header class="svet-section-head"><h2>Zdroje a metodika</h2></header>
       <p class="svet-method">Data se stahují automaticky z oficiálních otevřených zdrojů (Eurostat, World Bank); u každého ukazatele je uvedeno období a odkaz na zdroj. Hodnoty jsou srovnatelné mezi zeměmi a „vs ČR" porovnává poslední dostupnou hodnotu s Českem. Aktualizováno {profile.generated}.</p>
       <p class="svet-method"><a href="/svet/srovnani/">Porovnat země vedle sebe →</a></p>
     </section>
   </main>
-
-  <style>
-    .svet-hero{display:grid;gap:1rem}
-    .svet-flag{font-size:2.4rem}
-    .svet-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem}
-    .svet-kpi{background:rgba(255,255,255,.08);border-radius:10px;padding:.7rem .9rem}
-    .svet-kpi-val{font-size:1.5rem;font-weight:700}
-    .svet-kpi-val span{font-size:.8rem;font-weight:500;opacity:.8}
-    .svet-kpi-lbl{font-size:.78rem;opacity:.85;text-transform:uppercase;letter-spacing:.03em}
-    .svet-rows{display:grid;gap:.4rem}
-    .svet-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:1rem;padding:.6rem .2rem;border-bottom:1px solid #eef1ec}
-    .svet-row-main{display:grid}
-    .svet-row-label{font-weight:600}
-    .svet-row-value{font-size:1.1rem}
-    .svet-row-unit{font-size:.8rem;color:#789}
-    .svet-row-meta{display:grid;justify-items:end;gap:.15rem;min-width:150px}
-    .svet-vs{font-size:.8rem;font-weight:600;border-radius:10px;padding:.05rem .5rem}
-    .svet-vs-up{background:#e8f1e2;color:#2f6b2f}
-    .svet-vs-down{background:#fbe9e7;color:#b4452f}
-    .svet-vs-same{background:#eef1ec;color:#567}
-    .svet-row-meta .sp-src{font-size:.72rem;color:#9aa}
-    .svet-method{max-width:70ch;line-height:1.6}
-    @media(max-width:680px){.svet-row{grid-template-columns:1fr auto}.svet-row .svet-spark{display:none}}
-  </style>
 </Layout>

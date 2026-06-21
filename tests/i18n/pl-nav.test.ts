@@ -3,8 +3,10 @@ import { getNav, getFooterColumns, HIDDEN_SECTIONS, HIDDEN_NEWS_CATEGORIES } fro
 import { isLaunchedPath } from '../../src/i18n/utils';
 
 describe('pl nav konfigurace', () => {
-  it('HIDDEN_SECTIONS.pl skrývá bazar/photo/tema/animals/farms/svet', () => {
-    expect(HIDDEN_SECTIONS.pl).toEqual(['bazar', 'photo', 'tema', 'animals', 'farms', 'svet']);
+  it('HIDDEN_SECTIONS.pl skrývá bazar/photo/tema/animals/farms', () => {
+    // `svet` už není top-level sekce (přesunuto pod Data); pro pl se /svet děti
+    // filtrují přes isLaunchedPath (není launchnuté), ne přes HIDDEN_SECTIONS.
+    expect(HIDDEN_SECTIONS.pl).toEqual(['bazar', 'photo', 'tema', 'animals', 'farms']);
   });
   it('HIDDEN_NEWS_CATEGORIES.pl = dotace/legislativa', () => {
     expect(HIDDEN_NEWS_CATEGORIES.pl).toEqual(['dotace', 'legislativa']);
