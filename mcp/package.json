@@ -1,0 +1,25 @@
+{
+  "name": "agro-svet-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only MCP server exposing agro-svet.cz public structured datasets (commodity prices, country agriculture indicators, crop varieties, machinery) over stdio.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run --config ./vitest.config.ts",
+    "start": "tsx src/server.ts",
+    "inspect": "echo 'Run: npx @modelcontextprotocol/inspector npx tsx src/server.ts'"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "yaml": "^2.6.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0"
+  }
+}

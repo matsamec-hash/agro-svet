@@ -76,7 +76,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
 
   // CSRF: blokuj cross-site nebezpečné POSTy (host-based, viz výše).
-  if (isCrossSite(context.request, url.host)) {
+  // Výjimka: /api/mcp je veřejné read-only MCP rozhraní (jen public reference
+  // data, žádný cookie-based state) určené pro programové cross-origin klienty
+  // (MCP klienti přes Streamable HTTP), takže host-based CSRF kontrola tu nedává
+  // smysl a blokovala by legitimní cross-origin volání. Transport sám validuje
+  // JSON-RPC; není co CSRF-em zneužít (žádná mutace, žádná autentizace cookie).
+  if (!url.pathname.startsWith('/api/mcp') && isCrossSite(context.request, url.host)) {
     return new Response('Cross-site request forbidden', { status: 403 });
   }
 
