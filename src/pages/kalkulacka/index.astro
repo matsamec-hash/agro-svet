@@ -59,6 +59,16 @@ const itemListJsonLd = itemListSchema(
         </a>
       ))}
     </div>
+
+    {locale === 'cs' && (
+      <aside class="ks-xref">
+        <div class="ks-xref-body">
+          <h2>Kolik co stojí?</h2>
+          <p>Orientační ceny techniky a provozu — traktor, kombajn, leasing i nafta na hektar — přehledně a s napojením na kalkulačky.</p>
+        </div>
+        <a class="ks-xref-cta" href="/kolik-stoji/">Přehled cen →</a>
+      </aside>
+    )}
   </div>
 </Layout>
 
@@ -90,6 +100,12 @@ const itemListJsonLd = itemListSchema(
   .cc-body h2 { font:700 19px 'Chakra Petch',sans-serif; letter-spacing:-.01em; color:var(--ink); margin:0 0 6px; }
   .cc-body p { font-size:14px; color:var(--muted); line-height:1.55; margin:0 0 10px; }
   .cc-cta { font:700 12.5px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:.04em; }
+
+  .ks-xref { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-top:28px; padding:24px 28px; background:#faf9f2; border:1px solid var(--line); border-radius:18px; }
+  .ks-xref-body h2 { font:700 19px 'Chakra Petch',sans-serif; color:var(--ink); margin:0 0 6px; }
+  .ks-xref-body p { font-size:14px; color:var(--muted); line-height:1.55; margin:0; max-width:60ch; }
+  .ks-xref-cta { flex-shrink:0; display:inline-block; padding:11px 18px; background:var(--yellow); color:var(--ink); border-radius:999px; font:700 13px 'Chakra Petch',sans-serif; text-decoration:none; transition:.15s; }
+  .ks-xref-cta:hover { filter:brightness(.95); }
 
   @media (max-width:600px) {
     .hub { padding:20px 16px 60px; }

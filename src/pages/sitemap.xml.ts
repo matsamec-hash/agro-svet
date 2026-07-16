@@ -14,6 +14,7 @@ import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 import { dsDate, FALLBACK_LASTMOD } from '../lib/content-dates';
 import svetIndex from '../data/svet/index.json';
+import { KOLIK_STOJI_TOPICS } from '../data/kolik-stoji';
 
 const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 
@@ -170,6 +171,7 @@ export const GET: APIRoute = async () => {
     ['/kalkulacka/naklady-na-hektar/', 'monthly', '0.75', STATIC_LASTMOD],
     ['/kalkulacka/dotace-cap/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/kalkulacka/uspora-nafty/', 'monthly', '0.75', STATIC_LASTMOD],
+    ['/kolik-stoji/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/prodejci/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/dotace/', 'weekly', '0.85', D_DOTACE],
     ['/dotace/kalendar-kol/', 'weekly', '0.75', D_DOTACE],
@@ -200,6 +202,11 @@ export const GET: APIRoute = async () => {
   ];
   for (const [path, changefreq, priority, lastmod] of staticPaths) {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority, lastmod });
+  }
+
+  // /kolik-stoji topic pages (cs-only landing s napojením na kalkulačky)
+  for (const t of KOLIK_STOJI_TOPICS) {
+    urls.push({ loc: `${SITE_URL}/kolik-stoji/${t.slug}/`, changefreq: 'monthly', priority: t.priority, lastmod: STATIC_LASTMOD });
   }
 
   // /svet country profiles (cs-only; reference country = the comparison baseline,
