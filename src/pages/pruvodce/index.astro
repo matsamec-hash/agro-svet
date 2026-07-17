@@ -1,10 +1,16 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { getLocaleFromUrl } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/pruvodce/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const canonical = `${SITE_URL}${base}/pruvodce/`;
 
 const guides = [
   {
@@ -14,6 +20,10 @@ const guides = [
     duration: '~12 min čtení',
     status: 'live',
     badge: 'Aktuální',
+    titleSk: 'Ako vybrať traktor 100–150 koní (2026)',
+    descriptionSk: 'Kompletný sprievodca výberom traktora vo výkonovej triede 100–150 koní pre strednú farmu. Porovnanie top 8 modelov, na čo sa pýtať pri obhliadke, ako vyjednať cenu.',
+    durationSk: '~12 min čítania',
+    badgeSk: 'Aktuálny',
   },
   {
     slug: 'jak-vybrat-kombajn-stredni-farma',
@@ -22,6 +32,10 @@ const guides = [
     duration: '~10 min',
     status: 'live',
     badge: 'Aktuální',
+    titleSk: 'Ako vybrať kombajn pre strednú farmu (150–500 ha)',
+    descriptionSk: 'Trieda V–VII kombajnov, záber žacieho stola, výkon, zásobník zrna. Kľúčové parametre, ekonomika vs nájom zo zberovej služby.',
+    durationSk: '~10 min',
+    badgeSk: 'Aktuálny',
   },
   {
     slug: 'kontrola-ojeteho-traktoru',
@@ -30,6 +44,10 @@ const guides = [
     duration: '~8 min',
     status: 'live',
     badge: 'Checklist',
+    titleSk: 'Checklist: Kontrola ojazdeného traktora pred kúpou',
+    descriptionSk: 'Čo preveriť pri obhliadke — motor, prevodovka, hydraulika, kabína, dokumenty. 30-bodový interaktívny checklist.',
+    durationSk: '~8 min',
+    badgeSk: 'Checklist',
   },
   {
     slug: 'prvni-traktor-mlady-zemedelec',
@@ -38,6 +56,10 @@ const guides = [
     duration: '~10 min',
     status: 'live',
     badge: 'Pro startupy',
+    titleSk: 'Prvý traktor pre mladého farmára',
+    descriptionSk: 'Začínate hospodáriť do 40 rokov? Sprievodca výberom prvého traktora s ohľadom na dotáciu Mladý farmár a budúci rast farmy.',
+    durationSk: '~10 min',
+    badgeSk: 'Pre startupy',
   },
   {
     slug: 'jak-vybrat-seci-stroj',
@@ -46,6 +68,10 @@ const guides = [
     duration: '~12 min',
     status: 'live',
     badge: 'Aktuální',
+    titleSk: 'Ako vybrať sejací stroj — mechanický vs pneumatický',
+    descriptionSk: 'Mechanická sejačka, pneumatická, presná. Záber, kompatibilita s traktorom, ISOBUS funkcie, top značky. Praktické porovnanie.',
+    durationSk: '~12 min',
+    badgeSk: 'Aktuálny',
   },
   {
     slug: 'jak-vybrat-postrikovac',
@@ -54,6 +80,10 @@ const guides = [
     duration: '~10 min',
     status: 'live',
     badge: 'Aktuální',
+    titleSk: 'Ako vybrať postrekovač (2026)',
+    descriptionSk: 'Nesený vs ťahaný vs samojazdný, záber ramien, ISOBUS Section Control, trysky, top značky.',
+    durationSk: '~10 min',
+    badgeSk: 'Aktuálny',
   },
   {
     slug: 'jak-vybrat-lis-na-baliky',
@@ -62,6 +92,10 @@ const guides = [
     duration: '~10 min',
     status: 'live',
     badge: 'Aktuální',
+    titleSk: 'Ako vybrať lis na balíky — okrúhly vs hranolový',
+    descriptionSk: 'Okrúhly vs hranolový, net wrap vs povrázok, kombi lis+wrapper pre siláž, top značky.',
+    durationSk: '~10 min',
+    badgeSk: 'Aktuálny',
   },
   {
     slug: 'jak-vybrat-rozmetadlo-hnojiv',
@@ -70,31 +104,83 @@ const guides = [
     duration: '~10 min',
     status: 'live',
     badge: 'Aktuální',
+    titleSk: 'Ako vybrať rozmetadlo hnojív (2026)',
+    descriptionSk: 'Tanierové vs pneumatické, objem, ISOBUS Section Control, WeighCell, VRA návratnosť.',
+    durationSk: '~10 min',
+    badgeSk: 'Aktuálny',
   },
 ];
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Průvodce nákupem', url: canonical },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Sprievodca nákupom' : 'Průvodce nákupem', url: canonical },
 ]);
 
 const itemListJsonLd = itemListSchema(
   guides.filter((g) => g.status === 'live').map((g) => ({
-    url: `${SITE_URL}/pruvodce/${g.slug}/`,
-    name: g.title,
+    url: `${SITE_URL}${base}/pruvodce/${g.slug}/`,
+    name: isSk ? g.titleSk : g.title,
   })),
-  'Průvodce nákupem zemědělské techniky',
+  isSk ? 'Sprievodca nákupom poľnohospodárskej techniky' : 'Průvodce nákupem zemědělské techniky',
 );
 ---
 
 <Layout
-  title="Průvodce nákupem zemědělské techniky"
-  description="Praktické průvodce výběrem traktorů, kombajnů a strojů. Co prověřit, jak srovnat, na co se ptát, jak vyjednat cenu."
+  title={isSk ? 'Sprievodca nákupom poľnohospodárskej techniky' : 'Průvodce nákupem zemědělské techniky'}
+  description={isSk ? 'Praktickí sprievodcovia výberom traktorov, kombajnov a strojov. Čo preveriť, ako porovnať, na čo sa pýtať, ako vyjednať cenu.' : 'Praktické průvodce výběrem traktorů, kombajnů a strojů. Co prověřit, jak srovnat, na co se ptát, jak vyjednat cenu.'}
   canonical={canonical}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
 
+  {isSk ? (
+  <div class="pr-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Sprievodca nákupom</span>
+    </nav>
+
+    <header class="hub-head">
+      <span class="kicker">Sprievodca nákupom</span>
+      <h1>Sprievodca nákupom poľnohospodárskej techniky</h1>
+      <p class="lede">
+        Dlhí praktickí sprievodcovia pre nákupné rozhodovanie. Čo preveriť, ako porovnať, na čo sa pýtať, ako vyjednať cenu. Bez marketingu.
+      </p>
+    </header>
+
+    <div class="grid">
+      {guides.map((g) => (
+        g.status === 'live' ? (
+          <a href={`/sk/pruvodce/${g.slug}/`} class="card card-live">
+            <span class="badge badge-live">{g.badgeSk}</span>
+            <h2>{g.titleSk}</h2>
+            <p>{g.descriptionSk}</p>
+            <span class="meta">{g.durationSk} · Čítať →</span>
+          </a>
+        ) : (
+          <div class="card card-soon">
+            <span class="badge badge-soon">{g.badgeSk}</span>
+            <h2>{g.titleSk}</h2>
+            <p>{g.descriptionSk}</p>
+            <span class="meta">Pripravujeme</span>
+          </div>
+        )
+      ))}
+    </div>
+
+    <section class="related">
+      <h2>Súvisiace nástroje</h2>
+      <ul>
+        <li>🔍 <a href="/sk/kviz/jaky-traktor-potrebujete/">Kvíz „Aký traktor potrebujete?"</a> — Top 5 odporúčaní podľa vašej farmy</li>
+        <li>⚖️ <a href="/sk/srovnani/">Comparator</a> — bočné porovnanie ľubovoľných dvoch modelov</li>
+        <li>⭐ <a href="/sk/zebricky/">Rebríčky top-N</a> — kurátorované rebríčky v každom segmente</li>
+        <li>⛽ <a href="/sk/kalkulacka/uspora-nafty/">Diesel kalkulačka</a> — koľko ušetríte výmenou stroja</li>
+        <li>💶 <a href="/sk/kalkulacka/dotace-cap/">Kalkulačka dotácií CAP</a> — orientačný výpočet platieb</li>
+      </ul>
+    </section>
+  </div>
+  ) : (
   <div class="pr-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a>
@@ -141,6 +227,7 @@ const itemListJsonLd = itemListSchema(
       </ul>
     </section>
   </div>
+  )}
 </Layout>
 
 <style>

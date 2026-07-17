@@ -1,28 +1,41 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { getLocaleFromUrl } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/pruvodce/jak-vybrat-rozmetadlo-hnojiv/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const canonical = `${SITE_URL}${base}/pruvodce/jak-vybrat-rozmetadlo-hnojiv/`;
 const datePublished = '2026-05-18';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Průvodce nákupem', url: '/pruvodce/' },
-  { name: 'Jak vybrat rozmetadlo hnojiv', url: canonical },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Sprievodca nákupom' : 'Průvodce nákupem', url: `${base}/pruvodce/` },
+  { name: isSk ? "Ako vybrať rozmetadlo hnojív" : "Jak vybrat rozmetadlo hnojiv", url: canonical },
 ]);
 
-const faqs = [
+const faqsCs = [
   { q: 'Talířové nebo pneumatické rozmetadlo?', a: 'Talířové (disc spreader) — 95 % CZ farem. Levné, robustní, záběr 12–36 m. Pneumatické (rameno se vzduchovým rozvodem) — velmi přesné dávkování, vhodné pro VRA a úzké pásy, ale 3× dražší a komplikovanější údržba.' },
   { q: 'Jaký objem zásobníku?', a: 'Pro farmu 200 ha postačí 1 500–2 500 l (= 1,5–2,5 t hnojiva, jedno plnění na 5–10 ha při dávce 250 kg/ha). Pro 500+ ha doporučujeme 3 500+ l. Větší zásobník = méně plnění, ale větší hmotnost (vyšší utužení).' },
   { q: 'Vyplatí se Section Control pro rozmetadlo?', a: 'Ano, hlavně u tvarově složitých polí. Variable Rate Application + Section Control šetří 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnost ISOBUS-capable rozmetadla + RTK GPS retrofit za 2–4 sezóny u farmy 200+ ha.' },
   { q: 'Důležité features?', a: 'WeighCell (vážený zásobník) — kalibruje skutečnou dávku během jízdy, kompenzuje variabilní hustotu hnojiva. ISOBUS TC-GEO pro VRA. Border Control pro krajní pás (zabraňuje úniku hnojiva mimo pole). Tronic regulace (DPAE) pro automatickou kompenzaci náklonu.' },
 ];
 
+const faqsSk = [
+  { q: "Tanierové alebo pneumatické rozmetadlo?", a: "Tanierové (disc spreader) — 95 % CZ fariem. Lacné, robustné, záber 12–36 m. Pneumatické (rameno so vzduchovým rozvodom) — veľmi presné dávkovanie, vhodné pre VRA a úzke pásy, ale 3× drahšie a komplikovanejšia údržba." },
+  { q: "Aký objem zásobníka?", a: "Pre farmu 200 ha postačí 1 500–2 500 l (= 1,5–2,5 t hnojiva, jedno plnenie na 5–10 ha pri dávke 250 kg/ha). Pre 500+ ha odporúčame 3 500+ l. Väčší zásobník = menej plnení, ale väčšia hmotnosť (vyššie utuženie)." },
+  { q: "Vyplatí sa Section Control pre rozmetadlo?", a: "Áno, hlavne u tvarovo zložitých polí. Variable Rate Application + Section Control šetrí 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnosť ISOBUS-capable rozmetadla + RTK GPS retrofit za 2–4 sezóny u farmy 200+ ha." },
+  { q: "Dôležité features?", a: "WeighCell (vážený zásobník) — kalibruje skutočnú dávku počas jazdy, kompenzuje variabilnú hustotu hnojiva. ISOBUS TC-GEO pre VRA. Border Control pre krajné pásy (zabraňuje úniku hnojiva mimo pole). Tronic regulácia (DPAE) pre automatickú kompenzáciu náklonu." },
+];
+const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
 
-const howToJsonLd = howToSchema({
+const howToCs = {
   name: 'Jak vybrat rozmetadlo hnojiv',
   description: 'Postup výběru rozmetadla pro CZ farmu — od rozhodnutí talířové vs pneumatické přes klíčové parametry, top značky až po ekonomiku investice do WeighCell + VRA.',
   url: canonical,
@@ -34,26 +47,175 @@ const howToJsonLd = howToSchema({
     { name: 'Investuj do WeighCell + ISOBUS Section Control', text: 'WeighCell (vážený zásobník) kalibruje skutečnou dávku během jízdy, kompenzuje variabilní hustotu hnojiva. VRA + Section Control šetří 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnost ISOBUS-capable retrofit za 2–4 sezóny u 200+ ha.' },
     { name: 'Nezapomeň na Border Control a Tronic regulaci', text: 'Border Control pro krajní pás zabraňuje úniku hnojiva mimo pole (povinné u nitrát-direktivních zón ČR). Tronic (DPAE) automaticky kompenzuje náklon a tvar pole — kritické u pahorkatin.' },
   ],
-});
+};
+
+const howToSk = {
+  name: "Ako vybrať rozmetadlo hnojív",
+  description: "Postup výberu rozmetadla pre CZ farmu — od rozhodnutia tanierové vs pneumatické cez kľúčové parametre, top značky až po ekonomiku investície do WeighCell + VRA.",
+  url: canonical,
+  totalTime: 'PT45M',
+  steps: [
+    { name: "Rozhodni medzi tanierovým a pneumatickým rozmetadlom", text: "Tanierové (disc spreader) pre 95 % CZ fariem — lacné, robustné, záber 12–36 m. Pneumatické (rameno so vzduchovým rozvodom) extrémne presné dávkovanie pre VRA a úzke pásy, ale 3× drahšie a komplikovanejšia údržba." },
+    { name: "Definuj objem zásobníka podľa výmery", text: "200 ha = 1 500–2 500 l (jedno plnenie na 5–10 ha pri dávke 250 kg/ha). 500+ ha = 3 500+ l. Väčší zásobník = menej plnení, ale vyššia hmotnosť a riziko utužovania — kompromis okolo 2 500 l je sweet spot pre väčšinu CZ." },
+    { name: "Prejdi top značky 2026", text: "Amazone ZA-V / ZG-TS (CZ štandard), Kuhn Axis, Sulky X-line, Bogballe (premium dánska), Rauch Axera, Bredal F-line (samojazdný). Servisná dostupnosť dealera vo tvojom kraji = kľúčové." },
+    { name: "Investuj do WeighCell + ISOBUS Section Control", text: "WeighCell (vážený zásobník) kalibruje skutočnú dávku počas jazdy, kompenzuje variabilnú hustotu hnojiva. VRA + Section Control šetrí 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnosť ISOBUS-capable retrofit za 2–4 sezóny u 200+ ha." },
+    { name: "Nezabudni na Border Control a Tronic reguláciu", text: "Border Control pre krajné pásy zabraňuje úniku hnojiva mimo pole (povinné u nitrát-direktívnych zón ČR). Tronic (DPAE) automaticky kompenzuje náklon a tvar poľa — kritické u pahorkatín." },
+  ],
+};
+const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
 
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
-  headline: 'Jak vybrat rozmetadlo hnojiv (2026)',
-  description: 'Průvodce výběrem rozmetadla hnojiv. Talířové vs pneumatické, objem zásobníku, ISOBUS Section Control, top značky.',
+  headline: isSk ? "Ako vybrať rozmetadlo hnojív (2026)" : "Jak vybrat rozmetadlo hnojiv (2026)",
+  description: isSk ? "Sprievodca výberom rozmetadla hnojív. Tanierové vs pneumatické, objem zásobníka, ISOBUS Section Control, top značky." : "Průvodce výběrem rozmetadla hnojiv. Talířové vs pneumatické, objem zásobníku, ISOBUS Section Control, top značky.",
   author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   datePublished, dateModified: datePublished,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
 };
 ---
 
-<Layout title="Jak vybrat rozmetadlo hnojiv (2026) — talířové vs pneumatické" description="Průvodce výběrem rozmetadla pro CZ farmu. Talířové vs pneumatické, zásobník, Section Control, vážení, top značky 2026." canonical={canonical} ogType="article" publishedTime={datePublished}>
+<Layout title={isSk ? "Ako vybrať rozmetadlo hnojív (2026) — tanierové vs pneumatické" : "Jak vybrat rozmetadlo hnojiv (2026) — talířové vs pneumatické"} description={isSk ? "Sprievodca výberom rozmetadla pre CZ farmu. Tanierové vs pneumatické, zásobník, Section Control, váženie, top značky 2026." : "Průvodce výběrem rozmetadla pro CZ farmu. Talířové vs pneumatické, zásobník, Section Control, vážení, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
+  {isSk ? (
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a><span aria-hidden="true">›</span>
+      <a href="/sk/pruvodce/">Sprievodca nákupom</a><span aria-hidden="true">›</span>
+      <span class="current">Ako vybrať rozmetadlo</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Sprievodca · ~10 min</span>
+      <h1>Ako vybrať rozmetadlo hnojív (2026)</h1>
+      <p class="lede">
+        Rozmetadlo je tretí najvyužívanejší stroj na farme (po traktore a postrekovači) — typicky 4–8 jázd za sezónu. Presnosť dávkovania priamo ovplyvňuje výnos aj náklady na hnojivá.
+      </p>
+      <div class="meta">Publikované 18. mája 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Dva hlavné typy rozmetadiel</h2>
+
+      <h3>Tanierové rozmetadlo (disc spreader)</h3>
+      <p>2 rotujúce taniere s lopatkami "vystreľujú" hnojivo do strán. <strong>95 % CZ fariem</strong>.</p>
+      <ul>
+        <li><strong>Plusy:</strong> jednoduchá konštrukcia, dlhá životnosť (15+ rokov), lacné, široký záber (12–36 m).</li>
+        <li><strong>Mínusy:</strong> nerovnomernosť na okrajoch poľa (cross spreading), citlivosť na vlhkosť hnojiva.</li>
+        <li><strong>Cena:</strong> 60 000 – 500 000 Kč nový.</li>
+      </ul>
+
+      <h3>Pneumatické rozmetadlo (boom spreader)</h3>
+      <p>Hnojivo dopravované vzduchom cez trubky do trysiek na ramene (podobne ako postrekovač).</p>
+      <ul>
+        <li><strong>Plusy:</strong> extrémne presné dávkovanie, ideálne pre VRA (variable rate), úzke pásy bez cross-spreading, konštantná rovnomernosť.</li>
+        <li><strong>Mínusy:</strong> 3–5× drahšie ako tanierové, vyšší príkon ventilátora (vyššia spotreba), zložitejší servis.</li>
+        <li><strong>Cena:</strong> 800 000 – 3 mil. Kč nový.</li>
+      </ul>
+      <p>Pre CZ farmu pneumatické rozmetadlo dáva zmysel len pri <strong>500+ ha</strong> s precision farming setupom (RTK GPS + variabilné dávkovanie).</p>
+
+      <h2>2. Kľúčové parametre tanierového</h2>
+
+      <h3>Objem zásobníka</h3>
+      <table>
+        <thead><tr><th>Objem</th><th>Odporúčané pre farmu</th></tr></thead>
+        <tbody>
+          <tr><td>800–1 200 l</td><td>do 50 ha (hobby, sad)</td></tr>
+          <tr><td>1 500–2 500 l</td><td>50–250 ha (stredné CZ)</td></tr>
+          <tr><td>3 000–4 500 l</td><td>250–800 ha (veľké)</td></tr>
+          <tr><td>5 000+ l</td><td>800+ ha (veľkofarmy, zberové podniky)</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Pravidlo</strong>: zásobník na 1 plnenie by mal pokryť minimálne 10 ha pri bežnej dávke 250 kg/ha (= 2 500 l). Pre vyšší výkon voliť väčší.</p>
+
+      <h3>Záber</h3>
+      <ul>
+        <li><strong>12–18 m</strong>: pre malé / stredné farmy, traktor 80+ koní.</li>
+        <li><strong>18–24 m</strong>: štandard pre CZ farmy 100–500 ha, traktor 130+ koní.</li>
+        <li><strong>24–36 m</strong>: veľkofarmy, vyžaduje synchronizáciu so zábermi (musí pasovať so záberom sejačky alebo postrekovača).</li>
+      </ul>
+
+      <h3>WeighCell (vážený zásobník)</h3>
+      <p>4 vážiace bunky pod zásobníkom merajú skutočnú aktuálnu hmotnosť. Systém potom <strong>v reálnom čase kalibruje dávkovanie</strong> — kompenzuje variabilnú hustotu hnojiva (čas, vlhkosť) a opotrebenie lopatiek.</p>
+      <p><strong>Bez WeighCell</strong>: chyba dávky až ±10 %.<br><strong>S WeighCell</strong>: chyba ±2 %.</p>
+      <p>Cena: +120 000 – 250 000 Kč nad štandard. <strong>Vyplatí sa</strong> pre farmy s nákladom na hnojivá 1+ mil. Kč/sezónu.</p>
+
+      <h3>Border Control (krajné rozmetávanie)</h3>
+      <p>Špeciálna klapka alebo asymetrické lopatky pre <strong>krajné pásy</strong> poľa. Bez nej by hnojivo letelo aj mimo pole (straty + ekologické riziko = porušenie GAEC 4).</p>
+      <ul>
+        <li><strong>Štandard mechanický</strong>: ručná klapka, otáča sa v súvratiach.</li>
+        <li><strong>Hydraulická</strong>: ovládaná z kabíny.</li>
+        <li><strong>ISOBUS automatická</strong>: aktivuje sa podľa GPS pozície.</li>
+      </ul>
+
+      <h3>ISOBUS + Section Control + VRA</h3>
+      <p>Rovnako ako u postrekovača. ISOBUS-capable rozmetadlo (napr. Amazone ZA-TS, Sulky X 50) komunikuje s traktorom cez štandardizovaný kábel.</p>
+      <ul>
+        <li><strong>TC-BAS</strong> (Task Controller Basic): počítanie ošetrenej plochy + spotreby.</li>
+        <li><strong>TC-SC</strong> (Section Control): vypína polené sekcie v súvratiach, šetrí 5–10 %.</li>
+        <li><strong>TC-GEO</strong>: variabilné dávkovanie podľa GPS mapy pH / NDVI / yield, šetrí 10–25 %.</li>
+      </ul>
+
+      <h2>3. Top značky 2026</h2>
+      <table>
+        <thead><tr><th>Značka</th><th>Krajina</th><th>Špecialita</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Amazone</strong></td><td>DE</td><td>ZA-V, ZA-TS, ZA-M — prémium s WeighCell, ISOBUS, široká škála</td></tr>
+          <tr><td><strong>Sulky</strong></td><td>FR</td><td>X 30/40/50 — kvalitný mid-tier, dobré pre VRA</td></tr>
+          <tr><td><strong>Kuhn</strong></td><td>FR</td><td>Axis, Axent — robustný, široká dealerská sieť v CZ</td></tr>
+          <tr><td><strong>Bogballe</strong></td><td>DK</td><td>L1, M2, M3, EX — flagship vážených s extrémnou presnosťou</td></tr>
+          <tr><td><strong>Rauch</strong></td><td>DE</td><td>Axis, AGT — nemecká kvalita, ISOBUS štandard</td></tr>
+          <tr><td><strong>Sulky / Lely</strong></td><td>FR/NL</td><td>Centerliner, X-Tron — pre precision farming</td></tr>
+          <tr><td><strong>Bednar</strong></td><td>CZ</td><td>Fenix — domáca značka, atraktívna cena</td></tr>
+          <tr><td><strong>Vicon</strong></td><td>NO</td><td>RotaFlow RO-XL — pre pneumatické</td></tr>
+        </tbody>
+      </table>
+
+      <h2>4. Cenová orientácia 2026</h2>
+      <ul>
+        <li><strong>Tanierové 1 500 l + 12 m</strong>: 100 000 – 200 000 Kč nový.</li>
+        <li><strong>Tanierové 2 500 l + 18 m + ISOBUS</strong>: 250 000 – 500 000 Kč.</li>
+        <li><strong>Tanierové 3 500 l + 24 m + WeighCell + TC-GEO</strong>: 600 000 – 1 mil. Kč.</li>
+        <li><strong>Tanierové 4 500+ l + premium</strong>: 1–1,8 mil. Kč.</li>
+        <li><strong>Pneumatické</strong>: 800 000 – 3 mil. Kč.</li>
+      </ul>
+
+      <h2>5. Ekonomika investície do WeighCell + VRA</h2>
+      <p>Pre farmu <strong>200 ha</strong> s nákladom na hnojivá <strong>4 000 Kč/ha = 800 000 Kč/sezónu</strong>:</p>
+      <ul>
+        <li>WeighCell úspora ±8 % chyby dávkovania = <strong>64 000 Kč/rok</strong>.</li>
+        <li>VRA úspora 12 % vďaka variabilnému dávkovaniu podľa pH / NDVI = <strong>96 000 Kč/rok</strong>.</li>
+        <li><strong>Celkom 160 000 Kč/rok</strong>.</li>
+        <li>Príplatok WeighCell + ISOBUS TC-GEO: 250 000 – 400 000 Kč.</li>
+        <li><strong>Návratnosť: 1,5–2,5 roka</strong>. Bez VRA iba WeighCell návratnosť 4–6 rokov.</li>
+      </ul>
+
+      <h2>6. FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Ďalšie zdroje</h2>
+      <ul>
+        <li><a href="/sk/stroje/rozmetadla-mineralni/">Katalóg rozmetadiel minerálnych hnojív</a></li>
+        <li><a href="/sk/stroje/rozmetadla-statkova/">Katalóg rozmetadiel statkových hnojív</a></li>
+        <li><a href="/sk/slovnik/variable-rate/">Slovník: Variable Rate Application</a></li>
+        <li><a href="/sk/slovnik/section-control/">Slovník: Section Control</a></li>
+        <li><a href="/sk/slovnik/isobus/">Slovník: ISOBUS</a></li>
+        <li><a href="/sk/slovnik/npk-hnojivo/">Slovník: NPK hnojivo</a></li>
+        <li><a href="/sk/slovnik/lav-can/">Slovník: LAV / CAN</a></li>
+        <li><a href="/sk/bazar/?category=hnojeni">Ojazdené rozmetadlá v bazári</a></li>
+      </ul>
+    </div>
+  </article>
+  ) : (
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a><span aria-hidden="true">›</span>
@@ -186,6 +348,7 @@ const articleJsonLd = {
       </ul>
     </div>
   </article>
+  )}
 </Layout>
 
 <style>

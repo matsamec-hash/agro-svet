@@ -1,21 +1,27 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { getLocaleFromUrl } from '../../i18n/utils';
 import { pairsInPowerRange } from '../../lib/pruvodce-pairs';
 import { modelDisplayName } from '../../lib/comparator';
 
-const canonical = `${SITE_URL}/pruvodce/jak-vybrat-traktor-100-150-koni/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const canonical = `${SITE_URL}${base}/pruvodce/jak-vybrat-traktor-100-150-koni/`;
 const datePublished = '2026-05-16';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Průvodce nákupem', url: '/pruvodce/' },
-  { name: 'Traktor 100–150 koní', url: canonical },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Sprievodca nákupom' : 'Průvodce nákupem', url: `${base}/pruvodce/` },
+  { name: isSk ? 'Traktor 100–150 koní' : 'Traktor 100–150 koní', url: canonical },
 ]);
 
-const faqs = [
+const faqsCs = [
   {
     q: 'Kolik stojí nový traktor 100–150 koní?',
     a: 'Cenové rozpětí 2026: od cca 1,9 mil. Kč (Zetor Forterra HSX 140) přes 2,5–3,2 mil. Kč (mid-tier: John Deere 6M 130, NH T6.180, MF 6S 165) až po 3,5–4,5 mil. Kč (premium s CVT: Fendt 514 Vario, JD 6R 150). Ojetý 3–5 let starý traktor je obvykle o 30–50 % levnější než nový.',
@@ -46,9 +52,41 @@ const faqs = [
   },
 ];
 
+const faqsSk = [
+  {
+    q: 'Koľko stojí nový traktor 100–150 koní?',
+    a: 'Cenové rozpätie 2026: od cca 1,9 mil. Kč (Zetor Forterra HSX 140) cez 2,5–3,2 mil. Kč (mid-tier: John Deere 6M 130, NH T6.180, MF 6S 165) až po 3,5–4,5 mil. Kč (prémium s CVT: Fendt 514 Vario, JD 6R 150). Ojazdený 3–5 rokov starý traktor je zvyčajne o 30–50 % lacnejší než nový.',
+  },
+  {
+    q: 'Oplatí sa CVT prevodovka v tejto triede?',
+    a: 'CVT (bezstupňová, Fendt Vario / JD AutoPowr / NH Auto Command) pridáva 200–400 tis. Kč k cene. Oplatí sa, ak budete traktor zriedkavejšie radiť a prevažne jazdiť transport + PTO úlohy. Pre väčšinu poľných prác 100–150 koní stačí powershift — robustný, lacnejší, lacnejší servis.',
+  },
+  {
+    q: 'Ako je to s emisnou normou Stage V?',
+    a: 'Všetky nové traktory od roku 2020 musia spĺňať Stage V (DPF + SCR + AdBlue). Spotreba je nižšia než predchádzajúca Stage IV, ale výfukový systém je komplexnejší — drahý servis SCR katalyzátora po 8–15 tis. motohodín. Pre ojazdené Stage IV (2014–2019) je zvyčajne lepší pomer cena/výkon.',
+  },
+  {
+    q: 'Koľko motohodín za rok je rozumné využitie?',
+    a: 'Pre farmu 100–200 ha je typických 600–1200 motohodín/rok. Pod 400 h/rok = traktor je predimenzovaný (zvážte menší), nad 1500 h = blížite sa životnosti skôr než plánujete (po 8000 h potreba generálnej opravy motora).',
+  },
+  {
+    q: 'Mám kúpiť nový alebo ojazdený?',
+    a: 'Ojazdený 3–5 rokov starý s 2500–4000 motohodín = best value (50–60 % ceny nového, 60–75 % zostávajúcej životnosti). Nový sa oplatí, ak čerpáte investičnú dotáciu PRV alebo plánujete 10+ ročné držanie. Pod 100K motohodín (3 roky) je ojazdený takmer ako nový.',
+  },
+  {
+    q: 'Čo je najdôležitejší parameter?',
+    a: 'V tejto triede: 1) Hmotnosť traktora (5–7 t pre orbu), 2) typ prevodovky (powershift vs CVT), 3) trojbod kategórie II (Cat II) s kapacitou min 5000 kg, 4) hydraulika min 4 SCV výstupov, 5) ISOBUS ak plánujete moderné náradie.',
+  },
+  {
+    q: 'Ktoré značky majú najlepšiu servisnú sieť v ČR?',
+    a: 'Zetor (40+ dílerov), John Deere (12 hlavných dílerov + sieť špecialistov), Case IH + New Holland (CNH Industrial, ~15 dílerov), Massey Ferguson (8 dílerov cez AGCO), Fendt (prémium, 4 hlavné centrá). Mimo top 5 značiek je servis obmedzený.',
+  },
+];
+
+const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
 
-const howToJsonLd = howToSchema({
+const howToCs = {
   name: 'Jak vybrat traktor 100–150 koní',
   description: 'Postup výběru traktoru pro střední farmu 50–200 hektarů — od potřeb a rozpočtu přes klíčové parametry, top modely, rozhodnutí nový vs ojetý, prohlídku až po vyjednávání ceny.',
   url: canonical,
@@ -61,27 +99,44 @@ const howToJsonLd = howToSchema({
     { name: 'Prověř ojetý traktor osobně', text: 'Checklist: motor (kompresní test, AdBlue systém), převodovka (řazení pod zátěží), hydraulika (tlak SCV), tříbod (vůle), kabina (klima), pneumatiky (dezén min 30 %). Délka prohlídky 60 minut.' },
     { name: 'Vyjednej cenu a dohodni převzetí', text: 'Reference: ojetý mid-tier 4–5 let / 3500 mth = 1,4–1,8 mil. Kč. Vyjednávej o cenu PHM v nádrži (–10 000 Kč), o nářadí (přední závaží, dvojkolí), o servisním balíčku (první servis zdarma).' },
   ],
-});
+};
+
+const howToSk = {
+  name: 'Ako vybrať traktor 100–150 koní',
+  description: 'Postup výberu traktora pre strednú farmu 50–200 hektárov — od potrieb a rozpočtu cez kľúčové parametre, top modely, rozhodnutie nový vs ojazdený, obhliadku až po vyjednávanie ceny.',
+  url: canonical,
+  totalTime: 'PT2H',
+  steps: [
+    { name: 'Over si, že potrebuješ práve triedu 100–150 koní', text: 'Pre farmu 50–200 ha s typickým nasadením 600–1200 motohodín/rok je táto trieda sweet spot. Pod 50 ha zváž 80–100 k, nad 200 ha 160–200 k.' },
+    { name: 'Definuj kľúčové parametre', text: 'Hmotnosť 5–7 t pre orbu, typ prevodovky (powershift lacnejší, CVT komfortnejší), trojbod Cat II min 5000 kg, hydraulika min 4 SCV výstupy, ISOBUS ak plánuješ moderné náradie.' },
+    { name: 'Prejdi top 8 modelov 2026 v ČR', text: 'Zetor Forterra HSX 140, John Deere 6M 130 / 6R 150, NH T6.180, MF 6S 165, Case IH Puma 165, Fendt 514 Vario, Deutz-Fahr 6135C. Porovnaj cenu, servisnú sieť, dostupnosť náhradných dielov.' },
+    { name: 'Rozhodni nový vs ojazdený', text: 'Ojazdený 3–5 rokov starý s 2500–4000 mth = best value (50–60 % ceny nového, 60–75 % zostávajúcej životnosti). Nový sa oplatí pri čerpaní PRV dotácie alebo 10+ ročnom držaní.' },
+    { name: 'Prever ojazdený traktor osobne', text: 'Checklist: motor (kompresný test, AdBlue systém), prevodovka (radenie pod záťažou), hydraulika (tlak SCV), trojbod (vôľa), kabína (klíma), pneumatiky (dezén min 30 %). Dĺžka obhliadky 60 minút.' },
+    { name: 'Vyjednaj cenu a dohodni prevzatie', text: 'Referencia: ojazdený mid-tier 4–5 rokov / 3500 mth = 1,4–1,8 mil. Kč. Vyjednávaj o cenu PHM v nádrži (–10 000 Kč), o náradie (predné závažie, dvojkolie), o servisný balíček (prvý servis zdarma).' },
+  ],
+};
+
+const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
 
 const recommendedPairs = pairsInPowerRange({ category: 'traktory', hpMin: 95, hpMax: 165, limit: 5 });
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'Jak vybrat traktor 100–150 koní (2026)',
-  description: 'Kompletní průvodce výběrem traktoru 100–150 koní pro střední farmu. Porovnání top 8 modelů, na co se ptát, jak vyjednat.',
+  headline: isSk ? 'Ako vybrať traktor 100–150 koní (2026)' : 'Jak vybrat traktor 100–150 koní (2026)',
+  description: isSk ? 'Kompletný sprievodca výberom traktora 100–150 koní pre strednú farmu. Porovnanie top 8 modelov, na čo sa pýtať, ako vyjednať.' : 'Kompletní průvodce výběrem traktoru 100–150 koní pro střední farmu. Porovnání top 8 modelů, na co se ptát, jak vyjednat.',
   author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   datePublished,
   dateModified: datePublished,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
 };
 ---
 
 <Layout
-  title="Jak vybrat traktor 100–150 koní (2026) — kompletní průvodce"
-  description="Průvodce výběrem traktoru 100–150 koní pro střední farmu (50–200 ha). Top 8 modelů, klíčové parametry, jak vyjednat cenu, na co dát pozor při prohlídce."
+  title={isSk ? 'Ako vybrať traktor 100–150 koní (2026) — kompletný sprievodca' : 'Jak vybrat traktor 100–150 koní (2026) — kompletní průvodce'}
+  description={isSk ? 'Sprievodca výberom traktora 100–150 koní pre strednú farmu (50–200 ha). Top 8 modelov, kľúčové parametre, ako vyjednať cenu, na čo dať pozor pri obhliadke.' : 'Průvodce výběrem traktoru 100–150 koní pro střední farmu (50–200 ha). Top 8 modelů, klíčové parametry, jak vyjednat cenu, na co dát pozor při prohlídce.'}
   canonical={canonical}
   ogType="article"
   publishedTime={datePublished}
@@ -91,6 +146,285 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
+  {isSk ? (
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a>
+      <span aria-hidden="true">›</span>
+      <a href="/sk/pruvodce/">Sprievodca nákupom</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Traktor 100–150 koní</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Sprievodca · Aktuálny 2026</span>
+      <h1>Ako vybrať traktor 100–150 koní (2026)</h1>
+      <p class="lede">
+        Trieda 100–150 koní je štandard pre strednú farmu 50–200 ha. Pokrýva väčšinu poľných prác: orbu, sejacie kombinácie, stredne veľké poľnohospodárske stroje. Tento sprievodca vás prevedie výberom — od pochopenia vlastných potrieb po praktické tipy pri obhliadke.
+      </p>
+      <div class="meta">
+        <span>Publikované 16. mája 2026</span>
+        <span class="sep">·</span>
+        <span>~12 min čítania</span>
+      </div>
+    </header>
+
+    <div class="toc">
+      <strong>Obsah:</strong>
+      <ol>
+        <li><a href="#kdo">Pre koho je trieda 100–150 koní</a></li>
+        <li><a href="#parametry">Kľúčové parametre</a></li>
+        <li><a href="#top8">Top 8 modelov v ČR 2026</a></li>
+        <li><a href="#novy-vs-ojety">Nový vs ojazdený</a></li>
+        <li><a href="#prohlidka">Čo preveriť pri obhliadke</a></li>
+        <li><a href="#vyjednavani">Ako vyjednať cenu</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </div>
+
+    <div class="g-body">
+      <section id="kdo">
+        <h2>1. Pre koho je trieda 100–150 koní</h2>
+        <p>Trieda 100–150 koní je <strong>najširší segment</strong> českého trhu — pokrýva:</p>
+        <ul>
+          <li><strong>Stredne veľké rodinné farmy</strong> (50–200 ha) — hlavný traktor pre orbu aj zberové linky.</li>
+          <li><strong>Veľké farmy</strong> (200+ ha) — sekundárny traktor pre ľahšie úlohy, transport, PTO práce.</li>
+          <li><strong>Špecializované prevádzky</strong> — chov hospodárskych zvierat (kŕmne vozy, manipulácia), ovocinárstvo, vinohrady (úzke rozchody).</li>
+          <li><strong>Komunálne služby</strong> — obecné úrady, lesné práce, sezónny úklid.</li>
+        </ul>
+        <p>Ak máte <strong>menšiu farmu do 50 ha</strong>, zvážte triedu <a href="/sk/zebricky/traktory-do-100-koni/">do 100 koní</a>. Pre <strong>veľké farmy nad 300 ha</strong> je zvyčajne vhodnejšia trieda <a href="/sk/zebricky/traktory-150-250-koni/">150–250 koní</a>.</p>
+        <p><a href="/sk/kviz/jaky-traktor-potrebujete/" class="cta-inline">→ Vyplňte 6-otázkový kvíz a dostanete personalizované odporúčanie</a></p>
+      </section>
+
+      <section id="parametry">
+        <h2>2. Kľúčové parametre</h2>
+
+        <h3>Hmotnosť traktora (5–7 t)</h3>
+        <p>Hmotnosť ovplyvňuje ťažnú silu — pravidlo „1 koník = 30–40 kg hmotnosti" platí pre orbu. 130-koňový traktor by mal mať aspoň 5 200 kg pohotovostnej hmotnosti. Pod túto hranicu prešmykujú kolesá, prehrávajú v ťahu.</p>
+
+        <h3>Prevodovka — powershift alebo CVT?</h3>
+        <p><strong><a href="/sk/slovnik/powershift/">Powershift</a></strong> (radí pod záťažou medzi 4–24 stupňami) je štandardom v tejto triede. Robustný, lacnejší, jednoduchý servis.</p>
+        <p><strong><a href="/sk/slovnik/cvt-prevodovka/">CVT</a></strong> (Vario / AutoPowr / Auto Command) je bezstupňová — komfortnejšia, ale drahšia o 200–400 tis. Kč. Pre 100–150 koní sa oplatí len ak prevažuje transport alebo PTO (sečka, lis).</p>
+
+        <h3>Trojbodový záves (Cat II)</h3>
+        <p>V tejto triede <strong><a href="/sk/slovnik/tribod/">trojbod Cat II</a></strong> s kapacitou <strong>min. 5 000 kg</strong>. Pre pluh 4-radličný + pôdne stroje to stačí. Pre veľký lis alebo dvojrámový pluh zvážte Cat III (od 130 koní vyššie).</p>
+
+        <h3>Hydraulika — počet SCV výstupov</h3>
+        <p>Min. <strong>4 zadné SCV</strong> (Selective Control Valves) pre náročné náradie. 2 sú málo (sotva pluh + kolesá), 6 je pre maximálnu flexibilitu. Prietok <strong>min. 100 l/min</strong>.</p>
+
+        <h3>ISOBUS</h3>
+        <p>Ak plánujete moderný sejací stroj, postrekovač alebo lis — <strong><a href="/sk/slovnik/isobus/">ISOBUS</a></strong> je dnes štandard. Bez neho nemôžete využiť ISOBUS-only náradie. Ale pozor: ISOBUS funkcie sú licencované (UT, TC-BAS, TC-GEO) — priplácia sa per funkcia.</p>
+
+        <h3>Emisná norma</h3>
+        <p>Všetko od 2020+ je <strong><a href="/sk/slovnik/emisni-normy-stage/">Stage V</a></strong> — nutný DPF + SCR (AdBlue). Spotreba je nižšia, ale servisné náklady vyššie. Stage IV (2014–2019) je sweet spot pre ojazdené nákupy.</p>
+      </section>
+
+      <section id="top8">
+        <h2>3. Top 8 modelov v ČR 2026</h2>
+        <p>Vybrali sme 8 modelov, ktoré pokrývajú celé spektrum cenové aj technologické. Zoradené podľa obstarávacej ceny vzostupne.</p>
+
+        <div class="comp-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Výkon</th>
+                <th>Cena (nový, orientačne)</th>
+                <th>Prevodovka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong><a href="/sk/encyklopedie/zetor-forterra-hsx-140/">Zetor Forterra HSX 140</a></strong></td>
+                <td>140 k</td>
+                <td>1,9 mil. Kč</td>
+                <td>Synchro 24×24</td>
+              </tr>
+              <tr>
+                <td><strong><a href="/sk/stroje/zetor/proxima/">Zetor Proxima CL 120</a></strong></td>
+                <td>118 k</td>
+                <td>1,7 mil. Kč</td>
+                <td>Synchro 16×16</td>
+              </tr>
+              <tr>
+                <td><strong><a href="/sk/stroje/john-deere/">John Deere 6M 130</a></strong></td>
+                <td>130 k</td>
+                <td>2,5 mil. Kč</td>
+                <td>PowrQuad 24×24</td>
+              </tr>
+              <tr>
+                <td><strong><a href="/sk/stroje/new-holland/">New Holland T6.180</a></strong></td>
+                <td>145 k</td>
+                <td>2,8 mil. Kč</td>
+                <td>Range Command</td>
+              </tr>
+              <tr>
+                <td><strong><a href="/sk/stroje/case-ih/">Case IH Maxxum 145</a></strong></td>
+                <td>145 k</td>
+                <td>2,9 mil. Kč</td>
+                <td>ActiveDrive 8</td>
+              </tr>
+              <tr>
+                <td><strong><a href="/sk/stroje/massey-ferguson/">MF 6S 165</a></strong></td>
+                <td>145 k</td>
+                <td>3,1 mil. Kč</td>
+                <td>Dyna-6 powershift</td>
+              </tr>
+              <tr>
+                <td><strong><a href="/sk/stroje/fendt/">Fendt 514 Vario</a></strong></td>
+                <td>150 k</td>
+                <td>3,8 mil. Kč</td>
+                <td>Vario CVT</td>
+              </tr>
+              <tr>
+                <td><strong><a href="/sk/stroje/john-deere/">John Deere 6R 150</a></strong></td>
+                <td>150 k</td>
+                <td>4,3 mil. Kč</td>
+                <td>AutoPowr CVT</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note"><strong>Pozn.:</strong> Ceny orientačné, listové 2026. Reálna cena po zľave dílera typicky 10–18 % nižšia. Konkurencia pre medzi-dílera + financing balíček.</p>
+
+        <h3>Ako sa rozhodnúť?</h3>
+        <ul>
+          <li><strong>Rozpočet do 2,5 mil. Kč</strong> → Zetor Forterra/Proxima alebo ojazdený JD 6M/NH T6 stage IV.</li>
+          <li><strong>Rozpočet 2,5–3,2 mil.</strong> → JD 6M 130 / NH T6.180 / Case Maxxum 145 / MF 6S 165 — všetky si konkurujú, vyberte podľa servisnej siete vo vašom okolí.</li>
+          <li><strong>Rozpočet 3,2+ mil. + chcem CVT</strong> → Fendt 514 Vario (najlepšie CVT na trhu) alebo JD 6R 150 (lepší servis v ČR).</li>
+        </ul>
+
+        <p><a href="/sk/srovnani/" class="cta-inline">→ Comparator: porovnajte si dva ľubovoľné modely vedľa seba</a></p>
+      </section>
+
+      <section id="novy-vs-ojety">
+        <h2>4. Nový vs ojazdený</h2>
+        <p>Pre väčšinu stredných fariem je <strong>ojazdený 3–5 rokov starý traktor (2 500–4 000 motohodín)</strong> najlepšia voľba:</p>
+        <ul>
+          <li><strong>50–60 % ceny nového</strong> pri 70–75 % zostávajúcej životnosti.</li>
+          <li><strong>Hlavné emisné/elektronické detské choroby vyriešené</strong> — kupujete preverený stroj.</li>
+          <li><strong>Investičná dotácia (PRV)</strong> kryje len nové stroje — ak čerpáte dotáciu, musíte nový.</li>
+        </ul>
+
+        <p><strong>Nový</strong> sa oplatí, ak:</p>
+        <ul>
+          <li>Čerpáte investičnú dotáciu PRV (Intervencia 33.73 a ďalšie).</li>
+          <li>Plánujete <strong>10+ ročné držanie</strong> stroja — potom rozpúšťate cenu na dlhšie obdobie.</li>
+          <li>Potrebujete <strong>špecifickú konfiguráciu</strong> (napr. CVT + ISOBUS + max SCV), ktorú v bazári nenájdete.</li>
+          <li>Cena nafty + servisu starého stroja by za 5 rokov prekročila rozdiel.</li>
+        </ul>
+
+        <p><a href="/sk/bazar/" class="cta-inline">→ Aktuálne ojazdené traktory v bazári</a> · <a href="/sk/kalkulacka/uspora-nafty/" class="cta-inline">→ Diesel kalkulačka úspory</a></p>
+      </section>
+
+      <section id="prohlidka">
+        <h2>5. Čo preveriť pri obhliadke ojazdeného</h2>
+        <h3>Dokumenty (10 minút)</h3>
+        <ul>
+          <li><strong>Veľký technický preukaz</strong> — história majiteľov, dátum prvej registrácie.</li>
+          <li><strong>Servisná knižka</strong> — pravidelné výmeny oleja (každých 500 mh), filtrov, AdBlue.</li>
+          <li><strong>STK</strong> — platná, bez závad.</li>
+          <li><strong>Faktúry</strong> — autoservis, originál ND, dátum poslednej generálnej opravy.</li>
+        </ul>
+
+        <h3>Motor (15 minút)</h3>
+        <ul>
+          <li>Studený štart — bez dymu, hladké rozbehnutie.</li>
+          <li>Olej — čistý, žiadny náznak presakovania pod kapotou.</li>
+          <li>Hladina AdBlue (Stage IV+) — funguje SCR ukazovateľ.</li>
+          <li>Test plnej záťaže (akcelerácia s náradím alebo s brzdou) — bez prešmyku, vibrácií, neobvyklých zvukov.</li>
+        </ul>
+
+        <h3>Prevodovka (10 minút)</h3>
+        <ul>
+          <li>Hladké radenie všetkých stupňov — pod záťažou aj bez.</li>
+          <li>Reverz (vpred/vzad) — žiadny náraz.</li>
+          <li>Ťah s rozjazdom zo stoja — bez prešmyku spojky.</li>
+          <li>U CVT: tempomat funguje, plynulé zrýchľovanie bez trhania.</li>
+        </ul>
+
+        <h3>Hydraulika a trojbod (10 minút)</h3>
+        <ul>
+          <li>Trojbod zdvihne plný náklad bez váhania — orientačne 1500+ kg na 1 meter.</li>
+          <li>SCV výstupy — všetky fungujú, bez presakovania.</li>
+          <li>PTO 540 aj 1000 — zapne, vypne, žiadne vrtenie.</li>
+        </ul>
+
+        <h3>Kabína + elektronika (10 minút)</h3>
+        <ul>
+          <li>Klimatizácia — chladí + kúri.</li>
+          <li>Všetky svetlá — denné svietenie, ostrekovače, svetlá na náradie.</li>
+          <li>Displej — žiadne error kódy, AdBlue/DPF status normálny.</li>
+          <li>Sedadlo — funkčné odpruženie, opierky.</li>
+        </ul>
+
+        <p><strong>Pre detailný checklist</strong> odporúčame <a href="/sk/jak-na-to/kontrola-ojeteho-traktoru-pred-koupi-checklist/">návod „Kontrola ojazdeného traktora — checklist"</a> (HowTo s 30+ bodmi).</p>
+      </section>
+
+      <section id="vyjednavani">
+        <h2>6. Ako vyjednať cenu</h2>
+        <p>Trh ojazdených traktorov má <strong>10–20 % vyjednávací priestor</strong>. Tipy:</p>
+        <ol>
+          <li><strong>Preverte konkurenciu.</strong> Rovnaký model + ročník + motohodiny na <a href="/sk/bazar/">bazári</a>, Mascus, TractorHouse. Keď je váš o 15+ % drahší, máte argument.</li>
+          <li><strong>Nájdite 3 viditeľné nedostatky</strong> — zjazdené pneumatiky, opotrebovaný pedál, drobné korózie. Argumentujte: „za tú cenu očakávam nové gumy".</li>
+          <li><strong>Vyjednajte ND/extras zdarma</strong> — náhradné diely za 30 tis. Kč sú pre dílera marginálne, pre vás reálna úspora.</li>
+          <li><strong>Hotovosť vs leasing</strong> — niektorí díleri dajú 3–5 % zľavu pri platbe hotovosťou.</li>
+          <li><strong>Koniec mesiaca / kvartálu</strong> — díleri majú kvóty, vyjednajú vám lepšiu cenu posledný týždeň.</li>
+        </ol>
+
+        <h3>Praktické otázky pre dílera</h3>
+        <ul>
+          <li>Koľko bol traktor v servise za posledný rok? (Faktúry ako dôkaz.)</li>
+          <li>Boli nejaké recall opravy? (Najmä SCR, DPF u Stage IV+.)</li>
+          <li>Aký je extension warranty? (Možnosť dokúpiť 1–2 roky záruky.)</li>
+          <li>Aké sú doplatkové možnosti za starší stroj?</li>
+          <li>Koľko stojí pravidelný servis u tohto modelu? (Olej + filtre + AdBlue per rok.)</li>
+        </ul>
+      </section>
+
+      <section id="faq">
+        <h2>7. Časté otázky</h2>
+        <div class="faqs">
+          {faqs.map((f) => (
+            <details class="faq">
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {recommendedPairs.length > 0 && (
+        <section class="reco-pairs" aria-labelledby="reco-pairs-h">
+          <h2 id="reco-pairs-h">Odporúčané porovnania pre túto triedu</h2>
+          <p class="reco-pairs-lede">Side-by-side porovnanie modelov 100–160 koní s technickými parametrami, motorom, prevodovkou a hmotnosťou.</p>
+          <ul class="reco-pairs-list">
+            {recommendedPairs.map((p) => (
+              <li>
+                <a href={`/sk/srovnani/${p.combo}/`}>
+                  <span class="rp-pair">{modelDisplayName(p.a)} <em>vs</em> {modelDisplayName(p.b)}</span>
+                  <span class="rp-cta">Otvoriť porovnanie →</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section class="cta-section">
+        <h2>Ďalšie kroky</h2>
+        <ul class="cta-list">
+          <li>🔍 <a href="/sk/kviz/jaky-traktor-potrebujete/">Vyplňte 6-otázkový kvíz</a> a dostanete personalizované Top 5 odporúčaní.</li>
+          <li>⚖️ <a href="/sk/srovnani/">Použite comparator</a> — porovnajte si dvoch finálnych kandidátov bok po boku.</li>
+          <li>🚜 <a href="/sk/bazar/">Prejdite bazár</a> — 300+ ojazdených traktorov od súkromných predajcov aj dílerov.</li>
+          <li>🔔 <a href="/sk/bazar/sledovani/">Nastavte sledovanie</a> — denne dostanete e-mail s novými inzerátmi.</li>
+          <li>⛽ <a href="/sk/kalkulacka/uspora-nafty/">Spočítajte úsporu nafty</a> medzi súčasným a novým strojom.</li>
+          <li>💶 <a href="/sk/kalkulacka/dotace-cap/">Zistite výšku dotácie CAP</a> — koľko sa vám vráti ročne.</li>
+        </ul>
+      </section>
+    </div>
+  </article>
+  ) : (
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a>
@@ -368,6 +702,7 @@ const articleJsonLd = {
       </section>
     </div>
   </article>
+  )}
 </Layout>
 
 <style>

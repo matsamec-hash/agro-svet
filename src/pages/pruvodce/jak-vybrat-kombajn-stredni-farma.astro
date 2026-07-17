@@ -1,19 +1,25 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { getLocaleFromUrl } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/pruvodce/jak-vybrat-kombajn-stredni-farma/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const canonical = `${SITE_URL}${base}/pruvodce/jak-vybrat-kombajn-stredni-farma/`;
 const datePublished = '2026-05-16';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Průvodce nákupem', url: '/pruvodce/' },
-  { name: 'Kombajn pro střední farmu', url: canonical },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Sprievodca nákupom' : 'Průvodce nákupem', url: `${base}/pruvodce/` },
+  { name: isSk ? "Kombajn pre strednú farmu" : "Kombajn pro střední farmu", url: canonical },
 ]);
 
-const faqs = [
+const faqsCs = [
   { q: 'Kolik stojí nový kombajn pro střední farmu?', a: 'Třída V–VII (záběr 5–8 m, výkon 200–300 koní) stojí nový 6–10 mil. Kč. Ojetý 3–5 let starý je 50–65 % ceny nového při 70 % zbývající životnosti. Typický CZ kupující střední třídu hradí leasingem 5–7 let.' },
   { q: 'Vlastní kombajn nebo nájem ze sklizňového podniku?', a: 'Pro farmu pod 200 ha často není návratný — nájem stojí 600–1200 Kč/ha (kombajn + obsluha + transport). Pro 300+ ha už vlastní kombajn dává smysl (cca 8–10 mil. Kč rozložených na 10 let = ekonomicky podobné jako nájem 800 ha sklizně/rok).' },
   { q: 'Záběr 5 m nebo 6 m?', a: 'Záběr 5 m stačí pro většinu CZ polních tvarů (úzké lány, krátké pásy). 6 m vyžaduje pravidelné velké lány bez překážek. Rozdíl výkonu cca 20 %, ale 6 m je nákladnější transport (povinný vozík).' },
@@ -21,9 +27,17 @@ const faqs = [
   { q: 'Co se sklizňovým službou v prvních letech?', a: 'Mnoho středně velkých farem začíná tím, že kombajn pronajímá sousedovi — 200–400 ha navíc za sezónu zaplatí 30–50 % roční amortizace. Doporučujeme dohodnout předem (smlouva, ne ústní dohoda) a počítat reálnou cenu.' },
 ];
 
+const faqsSk = [
+  { q: "Koľko stojí nový kombajn pre strednú farmu?", a: "Trieda V–VII (záber 5–8 m, výkon 200–300 koní) stojí nový 6–10 mil. Kč. Ojazdený 3–5 rokov starý je 50–65 % ceny nového pri 70 % zostávajúcej životnosti. Typický CZ kupujúci strednú triedu hradí leasingom 5–7 rokov." },
+  { q: "Vlastný kombajn alebo nájom zo žatevného podniku?", a: "Pre farmu pod 200 ha často nie je návratný — nájom stojí 600–1200 Kč/ha (kombajn + obsluha + transport). Pre 300+ ha už vlastný kombajn dáva zmysel (cca 8–10 mil. Kč rozložených na 10 rokov = ekonomicky podobné ako nájom 800 ha žatvy/rok)." },
+  { q: "Záber 5 m alebo 6 m?", a: "Záber 5 m stačí pre väčšinu CZ poľných tvarov (úzke lány, krátke pásy). 6 m vyžaduje pravidelné veľké lány bez prekážok. Rozdiel výkonu cca 20 %, ale 6 m je nákladnejší transport (povinný vozík)." },
+  { q: "Rotor (axial-flow) alebo klasický mlátič?", a: "Klasický mlátič (vytriasadlá) je štandardom v CZ — nižšia obstarávacia cena, lepšia stéblová slama pre balíky, nižšia spotreba nafty. Rotor (Case Axial-Flow, JD S/T, NH CR) dáva vyššiu priepustnosť a menej poškodenia zrna, ale za vyššiu cenu a horšiu slamu." },
+  { q: "Čo so žatevnou službou v prvých rokoch?", a: "Mnoho stredne veľkých fariem začína tým, že kombajn prenajíma susedovi — 200–400 ha navyše za sezónu zaplatí 30–50 % ročnej amortizácie. Odporúčame dohodnúť vopred (zmluva, nie ústna dohoda) a počítať reálnu cenu." },
+];
+const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
 
-const howToJsonLd = howToSchema({
+const howToCs = {
   name: 'Jak vybrat kombajn pro střední farmu',
   description: 'Postup výběru sklízecí mlátičky pro farmu 150–500 ha — od kalkulace potřebné třídy přes klíčové parametry, top 6 modelů 2026 po ekonomiku investice.',
   url: canonical,
@@ -34,24 +48,38 @@ const howToJsonLd = howToSchema({
     { name: 'Projdi top 6 kombajnů 2026 v ČR', text: 'New Holland CX/CR střední, John Deere W/T řada, Case IH Axial-Flow 6/7, Claas Trion/Tucano, Massey Ferguson Activa/Beta, Fendt L/E. Porovnej dostupnost dealera ve tvém kraji + náhradní díly.' },
     { name: 'Spočítej ekonomiku — nájem, vlastní, plus pronájem souseda', text: 'Začni leasingem 5–7 let. Pronájem souseda pro 200–400 ha navíc/sezónu zaplatí 30–50 % roční amortizace. Smluvně, ne ústně. Reálná cena nájmu = leasing splátka + nafta + obsluha + servis.' },
   ],
-});
+};
+
+const howToSk = {
+  name: "Ako vybrať kombajn pre strednú farmu",
+  description: "Postup výberu žatevnej mláťačky pre farmu 150–500 ha — od kalkulácie potrebnej triedy cez kľúčové parametre, top 6 modelov 2026 po ekonomiku investície.",
+  url: canonical,
+  totalTime: 'PT1H30M',
+  steps: [
+    { name: "Spočítaj, koľko kombajn reálne potrebuješ", text: "Pre farmu pod 200 ha často nie je návratný — výhodnejší je nájom žatevného podniku (600–1200 Kč/ha). Pre 300+ ha už vlastný kombajn ekonomicky dáva zmysel (8–10 mil. Kč rozložených na 10 rokov)." },
+    { name: "Definuj kľúčové parametre", text: "Trieda V–VII zodpovedá záberu 5–8 m a výkonu 200–300 koní. Rozhodni medzi rotorom (vyššia priepustnosť, horšia slama) a klasickým mlátičom s vytriasadlami (štandard v ČR, lepšia slama pre balíky, nižšia cena)." },
+    { name: "Prejdi top 6 kombajnov 2026 v ČR", text: "New Holland CX/CR stredný, John Deere W/T rada, Case IH Axial-Flow 6/7, Claas Trion/Tucano, Massey Ferguson Activa/Beta, Fendt L/E. Porovnaj dostupnosť dealera vo tvojom kraji + náhradné diely." },
+    { name: "Spočítaj ekonomiku — nájom, vlastný, plus prenájom suseda", text: "Začni leasingom 5–7 rokov. Prenájom suseda pre 200–400 ha navyše/sezónu zaplatí 30–50 % ročnej amortizácie. Zmluvne, nie ústne. Reálna cena nájmu = leasing splátka + nafta + obsluha + servis." },
+  ],
+};
+const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'Jak vybrat kombajn pro střední farmu (150–500 ha)',
-  description: 'Průvodce výběrem kombajnu pro střední farmu. Třída, záběr, rotor vs klasický mlat, top 6 modelů, ekonomika.',
+  headline: isSk ? "Ako vybrať kombajn pre strednú farmu (150–500 ha)" : "Jak vybrat kombajn pro střední farmu (150–500 ha)",
+  description: isSk ? "Sprievodca výberom kombajnu pre strednú farmu. Trieda, záber, rotor vs klasický mlátič, top 6 modelov, ekonomika." : "Průvodce výběrem kombajnu pro střední farmu. Třída, záběr, rotor vs klasický mlat, top 6 modelů, ekonomika.",
   author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   datePublished, dateModified: datePublished,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
 };
 ---
 
 <Layout
-  title="Jak vybrat kombajn pro střední farmu (150–500 ha)"
-  description="Průvodce výběrem kombajnu pro střední farmu. Třída V–VII, záběr žacího stolu, rotor vs klasický mlat, top 6 modelů 2026, ekonomika."
+  title={isSk ? "Ako vybrať kombajn pre strednú farmu (150–500 ha)" : "Jak vybrat kombajn pro střední farmu (150–500 ha)"}
+  description={isSk ? "Sprievodca výberom kombajnu pre strednú farmu. Trieda V–VII, záber žacieho stola, rotor vs klasický mláťač, top 6 modelov 2026, ekonomika." : "Průvodce výběrem kombajnu pro střední farmu. Třída V–VII, záběr žacího stolu, rotor vs klasický mlat, top 6 modelů 2026, ekonomika."}
   canonical={canonical}
   ogType="article"
   publishedTime={datePublished}
@@ -61,6 +89,125 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
+  {isSk ? (
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a>
+      <span aria-hidden="true">›</span>
+      <a href="/sk/pruvodce/">Sprievodca nákupom</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Kombajn pre strednú farmu</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Sprievodca · Aktuálne 2026</span>
+      <h1>Ako vybrať kombajn pre strednú farmu (150–500 ha)</h1>
+      <p class="lede">
+        Kombajn je najväčšia investícia v cykle poľnohospodárskej techniky — 6–12 mil. Kč nový, 10+ rokov životnosť. Pre stredne veľkú českú farmu (150–500 ha) je správny výber kľúčový pre ekonomiku.
+      </p>
+      <div class="meta">Publikované 16. mája 2026 · ~10 min čítanie</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Koľko kombajn potrebujete?</h2>
+      <p>Pre českú farmu platí orientačne:</p>
+      <ul>
+        <li><strong>Do 200 ha</strong> — vlastný kombajn obvykle nie je návratný. Nájom zo žatevnej služby (600–1200 Kč/ha vrátane obsluhy) je lacnejší.</li>
+        <li><strong>200–500 ha</strong> — sweet spot pre vlastný kombajn <a href="/sk/zebricky/kombajny-do-300-koni/">triedy V–VII</a>. Možnosť si privyrobiť žatevnými službami susedom 100–300 ha navyše.</li>
+        <li><strong>500+ ha</strong> — vlastný kombajn nutnosť, zvážte triedu VIII (200 ha/deň).</li>
+      </ul>
+
+      <h2>2. Kľúčové parametre</h2>
+
+      <h3>Trieda a priepustnosť</h3>
+      <p><a href="/sk/slovnik/kombajn-trida/">Trieda kombajnu</a> (III–X+) určuje priepustnosť (t obilia za hodinu):</p>
+      <ul>
+        <li><strong>Trieda V</strong> (210–250 k, záber 5–6 m) — 200 ha zberá za 8–12 dní (1 stroj, 10 h/deň).</li>
+        <li><strong>Trieda VI</strong> (250–310 k, záber 6–7,5 m) — 400 ha za 10–14 dní.</li>
+        <li><strong>Trieda VII</strong> (310–365 k, záber 7,5–9 m) — 500–700 ha za 12–18 dní.</li>
+      </ul>
+
+      <h3>Záber žacieho stola</h3>
+      <p>Záber (cutting bar) je hlavná hardware feature:</p>
+      <ul>
+        <li><strong>4–5 m</strong> — manévrovací, lacné, malé lány.</li>
+        <li><strong>5–6 m</strong> — sweet spot pre strednú farmu, štandard v ČR.</li>
+        <li><strong>6–7,5 m</strong> — produktivita rastie, ale transport vyžaduje vozík.</li>
+        <li><strong>7,5+ m</strong> — len pre veľké lány bez prekážok (Vysočina, Polabská nížina).</li>
+      </ul>
+      <p>Pravidlo: záber by nemal prevyšovať <strong>40 % priemernej šírky vašich polí</strong>. Pre pole 60 m široké je optimálny 6 m záber.</p>
+
+      <h3>Zásobník zrna</h3>
+      <p>Veľkosť zásobníka určuje frekvenciu vyprázdňovania:</p>
+      <ul>
+        <li><strong>5 500 l</strong> (~4 t pšenice) — vyprázdňovanie každých 15–20 min pri normálnom výnose.</li>
+        <li><strong>7 500 l</strong> (~6 t) — každých 25 min.</li>
+        <li><strong>10 500+ l</strong> (~8+ t) — každých 40+ min, menej prerušení.</li>
+      </ul>
+      <p>Väčší zásobník = menej prerušení zberu + možnosť vyprázdňovať za jazdy. Kľúčové ak nemáte dostatok odberných súprav.</p>
+
+      <h3>Rotor vs klasický mláťač</h3>
+      <p>Pozri <a href="/sk/slovnik/rotor-kombajn/">slovník: rotor / axial-flow kombajn</a>. Krátko:</p>
+      <ul>
+        <li><strong>Klasický (valcový) mláťač</strong> — štandardný v ČR, lepšia stéblová slama, nižšia cena.</li>
+        <li><strong>Rotor (axial-flow)</strong> — vyššia priepustnosť, menej poškodenia zrna, vyššia cena.</li>
+      </ul>
+
+      <h2>3. Top 6 kombajnov pre strednú farmu 2026</h2>
+
+      <div class="comp-table">
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Trieda</th><th>Záber</th><th>Cena (orientačne)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><a href="/sk/stroje/claas/">Claas Avero 240</a></td><td>IV</td><td>5,5 m</td><td>5,5 mil. Kč</td></tr>
+            <tr><td><a href="/sk/stroje/claas/">Claas Tucano 320</a></td><td>V</td><td>6 m</td><td>7,5 mil. Kč</td></tr>
+            <tr><td><a href="/sk/stroje/john-deere/">John Deere T550</a></td><td>V</td><td>5,5 m</td><td>7,2 mil. Kč</td></tr>
+            <tr><td><a href="/sk/stroje/case-ih/">Case IH Axial-Flow 6150</a></td><td>VI</td><td>6 m</td><td>8,5 mil. Kč</td></tr>
+            <tr><td><a href="/sk/stroje/new-holland/">NH CX5.90</a></td><td>V</td><td>6 m</td><td>7,8 mil. Kč</td></tr>
+            <tr><td><a href="/sk/stroje/fendt/">Fendt 6275L</a></td><td>VI</td><td>6 m</td><td>9,2 mil. Kč</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4. Ekonomika kombajnu</h2>
+      <p>Hrubá kalkulácia pre kombajn 8 mil. Kč na farme 300 ha:</p>
+      <ul>
+        <li><strong>Počiatočná cena</strong>: 8 mil. Kč → leasing 8 rokov á 110 000 Kč/mesiac = <strong>1,32 mil. Kč/rok</strong>.</li>
+        <li><strong>Nafta</strong>: 15 l/ha × 300 ha × 35 Kč/l = <strong>157 500 Kč/rok</strong>.</li>
+        <li><strong>Servis + ND</strong>: ~3 % z ceny stroja = <strong>240 000 Kč/rok</strong>.</li>
+        <li><strong>Poistenie</strong>: 50 000 Kč/rok.</li>
+        <li><strong>Mzdy</strong>: 1 obsluhujúci × 100 hodín × 350 Kč = 35 000 Kč.</li>
+      </ul>
+      <p>Celkom ~<strong>1,8 mil. Kč/rok</strong> = <strong>6 000 Kč/ha</strong>. Pre porovnanie: žatevná služba 800–1 200 Kč/ha. Vlastný kombajn sa oplatí ak:</p>
+      <ul>
+        <li>Zberáte 2 sezóny cez 6 týždňov — flexibilita timing.</li>
+        <li>Zarábate žatevné služby 100+ ha susedom (cca +50–120 000 Kč/rok).</li>
+        <li>Plánujete kombajn držať 10+ rokov (rozkladá fixed cost).</li>
+      </ul>
+
+      <h2>5. Časté otázky</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>Ďalšie zdroje</h2>
+      <ul>
+        <li><a href="/sk/zebricky/kombajny-do-300-koni/">Rebríček kombajnov do 300 koní</a></li>
+        <li><a href="/sk/zebricky/kombajny-nejvykonnejsi/">Rebríček najvýkonnejších kombajnov</a></li>
+        <li><a href="/sk/srovnani/">Comparator</a> — porovnajte si finálnych kandidátov</li>
+        <li><a href="/sk/bazar/?category=kombajny">Použité kombajny v bazári</a></li>
+        <li><a href="/sk/kalkulacka/leasing-traktoru/">Kalkulačka leasingu</a></li>
+      </ul>
+    </div>
+  </article>
+  ) : (
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a>
@@ -178,6 +325,7 @@ const articleJsonLd = {
       </ul>
     </div>
   </article>
+  )}
 </Layout>
 
 <style>

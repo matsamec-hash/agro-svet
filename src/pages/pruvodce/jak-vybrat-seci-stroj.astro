@@ -1,28 +1,41 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { getLocaleFromUrl } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/pruvodce/jak-vybrat-seci-stroj/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const canonical = `${SITE_URL}${base}/pruvodce/jak-vybrat-seci-stroj/`;
 const datePublished = '2026-05-16';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Průvodce nákupem', url: '/pruvodce/' },
-  { name: 'Jak vybrat secí stroj', url: canonical },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Sprievodca nákupom' : 'Průvodce nákupem', url: `${base}/pruvodce/` },
+  { name: isSk ? "Ako vybrať sejačku" : "Jak vybrat secí stroj", url: canonical },
 ]);
 
-const faqs = [
+const faqsCs = [
   { q: 'Mechanický nebo pneumatický?', a: 'Mechanický (gravitační) je levný a robustní pro obiloviny — dávkuje hmotnost přes výsevný kotouč. Pneumatický (vzduchový) je přesnější, vhodný pro úzké řádky, ale dražší a vyžaduje výkonnější traktor pro pohon ventilátoru.' },
   { q: 'Jaký záběr pro střední farmu?', a: '3 m je standard pro 70–120 koní traktor. 4 m vyžaduje 130+ koní. 6 m je už pro speciální velké stroje 200+ koní. Pro 150 ha farmu stačí 3 m, pro 300+ ha zvažte 4 m.' },
   { q: 'Klasický nebo bezorebný (no-till)?', a: 'Klasický secí stroj seje do připravené (zorané + smykované) půdy — nejstabilnější výnos. Bezorebný (disko-secí) seje přímo do strniště — šetří 5 operací, ale vyžaduje vyšší dávky herbicidů.' },
   { q: 'Vyplatí se ISOBUS?', a: 'Pro standardní obiloviny ne. Pro variabilní dávkování (VRA s GPS mapou), Section Control nebo přesné dávkování osiva ano — pak ISOBUS-capable secí stroj + traktor s TC-GEO licencí.' },
 ];
 
+const faqsSk = [
+  { q: "Mechanická alebo pneumatická?", a: "Mechanická (gravitačná) je lacná a robustná pre obilniny — dávkuje hmotnosť cez výsevný kotúč. Pneumatická (vzduchová) je presnejšia, vhodná pre úzke riadky, ale drahšia a vyžaduje výkonnejší traktor pre pohon ventilátora." },
+  { q: "Aký záber pre strednú farmu?", a: "3 m je štandard pre 70–120 koní traktor. 4 m vyžaduje 130+ koní. 6 m je už pre špeciálne veľké stroje 200+ koní. Pre 150 ha farmu stačí 3 m, pre 300+ ha zvážte 4 m." },
+  { q: "Klasická alebo bezorebná (no-till)?", a: "Klasická sejačka seje do pripravenej (oranej + smykovanej) pôdy — najstabilnejší výnos. Bezorebná (disková sejačka) seje priamo do strniska — šetrí 5 operácií, ale vyžaduje vyššie dávky herbicídov." },
+  { q: "Vyplatí sa ISOBUS?", a: "Pre štandardné obilniny nie. Pre variabilné dávkovanie (VRA s GPS mapou), Section Control alebo presné dávkovanie osiva áno — potom ISOBUS-capable sejačka + traktor s TC-GEO licenciou." },
+];
+const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
 
-const howToJsonLd = howToSchema({
+const howToCs = {
   name: 'Jak vybrat secí stroj',
   description: 'Postup výběru secího stroje pro CZ farmu — mechanický vs pneumatický, záběr a kompatibilita s traktorem, klasický vs bezorebný, ISOBUS funkce, top značky.',
   url: canonical,
@@ -34,26 +47,145 @@ const howToJsonLd = howToSchema({
     { name: 'Projdi top značky a modely', text: 'Amazone D9 / Cirrus (CZ standard), Horsch Pronto (velkofarmy), Lemken Solitair, Väderstad Spirit / Tempo, Pöttinger Vitasem, Sulky DPX, Kuhn Espro. Dostupnost dealera a náhradních dílů ve tvém kraji je rozhodující.' },
     { name: 'Posuď klíčové features — ISOBUS, VRA, jednotlivé řízení řádků', text: 'Pro obiloviny ISOBUS neřeš. Pro VRA (variabilní dávkování dle GPS mapy) nebo Section Control ano — pak ISOBUS-capable secí + traktor s TC-GEO licencí. Single Shoot vs Twin Shoot (separátní osivo + hnojivo) zvyš výnos o 5–10 %.' },
   ],
-});
+};
+
+const howToSk = {
+  name: "Ako vybrať sejačku",
+  description: "Postup výberu sejačky pre CZ farmu — mechanická vs pneumatická, záber a kompatibilita s traktorom, klasická vs bezorebná, ISOBUS funkcie, top značky.",
+  url: canonical,
+  totalTime: 'PT45M',
+  steps: [
+    { name: "Rozhodni medzi mechanickou a pneumatickou", text: "Mechanická (gravitačná, výsevný kotúč) je lacná a robustná pre obilniny — štandard CZ. Pneumatická (vzduchový rozvod) je presnejšia pre úzke riadky, ale drahšia a vyžaduje výkonnejší traktor pre pohon ventilátora." },
+    { name: "Zladenie záberu s traktorom", text: "3 m záber štandard pre 70–120 koní traktor (vojde sa Zetor Forterra, JD 6M 130). 4 m vyžaduje 130+ koní. 6 m je už pre špeciálne veľké stroje 200+ koní. Pre 150 ha farmu stačí 3 m, pre 300+ ha zvážte 4 m." },
+    { name: "Klasická (do pripravenej pôdy) alebo bezorebná (no-till)", text: "Klasická seje do oranej + smykovanej pôdy — najstabilnejší výnos. Bezorebná (disková sejačka Horsch Pronto / Lemken Solitair / Väderstad Tempo) seje priamo do strniska — šetrí 5 operácií, ale vyššie dávky herbicídov." },
+    { name: "Prejdi top značky a modely", text: "Amazone D9 / Cirrus (CZ štandard), Horsch Pronto (veľkofarmy), Lemken Solitair, Väderstad Spirit / Tempo, Pöttinger Vitasem, Sulky DPX, Kuhn Espro. Dostupnosť dealera a náhradných dielov vo tvojom kraji je rozhodujúca." },
+    { name: "Posúď kľúčové features — ISOBUS, VRA, jednotlivé riadenie riadkov", text: "Pre obilniny ISOBUS nerieš. Pre VRA (variabilné dávkovanie podľa GPS mapy) alebo Section Control áno — potom ISOBUS-capable sejačka + traktor s TC-GEO licenciou. Single Shoot vs Twin Shoot (separátne osivo + hnojivo) zvýš výnos o 5–10 %." },
+  ],
+};
+const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
 
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
-  headline: 'Jak vybrat secí stroj — mechanický vs pneumatický',
-  description: 'Mechanická secička, pneumatická, přesná. Záběr, kompatibilita s traktorem, ISOBUS funkce.',
+  headline: isSk ? "Ako vybrať sejačku — mechanická vs pneumatická" : "Jak vybrat secí stroj — mechanický vs pneumatický",
+  description: isSk ? "Mechanická sejačka, pneumatická, presná. Záber, kompatibilita s traktorom, ISOBUS funkcie." : "Mechanická secička, pneumatická, přesná. Záběr, kompatibilita s traktorem, ISOBUS funkce.",
   author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   datePublished, dateModified: datePublished,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
 };
 ---
 
-<Layout title="Jak vybrat secí stroj — mechanický vs pneumatický (2026)" description="Průvodce výběrem secího stroje pro CZ farmu. Mechanický, pneumatický, přesný. Záběr, kompatibilita s traktorem, ISOBUS funkce, top modely." canonical={canonical} ogType="article" publishedTime={datePublished}>
+<Layout title={isSk ? "Ako vybrať sejací stroj — mechanický vs pneumatický (2026)" : "Jak vybrat secí stroj — mechanický vs pneumatický (2026)"} description={isSk ? "Sprievodca výberom sejacieho stroja pre CZ farmu. Mechanický, pneumatický, presný. Záber, kompatibilita s traktorom, ISOBUS funkcie, top modely." : "Průvodce výběrem secího stroje pro CZ farmu. Mechanický, pneumatický, přesný. Záběr, kompatibilita s traktorem, ISOBUS funkce, top modely."} canonical={canonical} ogType="article" publishedTime={datePublished}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
+  {isSk ? (
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a><span aria-hidden="true">›</span>
+      <a href="/sk/pruvodce/">Sprievodca nákupom</a><span aria-hidden="true">›</span>
+      <span class="current">Ako vybrať siaci stroj</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Sprievodca · ~12 min</span>
+      <h1>Ako vybrať siaci stroj — mechanický vs pneumatický</h1>
+      <p class="lede">
+        Siaci stroj rozhoduje o stabilite výnosov — zle nastavená dávka, zlá hĺbka, nepravidelnosť vzchádzania. Tento sprievodca vám pomôže vybrať správny typ pre vašu farmu.
+      </p>
+      <div class="meta">Publikované 16. mája 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Tri hlavné typy siacich strojov</h2>
+
+      <h3>Mechanický (gravitačný)</h3>
+      <p>Klasický typ — osivo padá z bunkra gravitačne do výsevného kotúča, ktorý dávkuje pevné množstvo. Štandard pre obilniny.</p>
+      <ul>
+        <li><strong>Plusy:</strong> najlacnejší (300–600 tis. Kč nový 3 m), robustný, jednoduchý servis.</li>
+        <li><strong>Mínusy:</strong> menšia presnosť u drobných osív (repka, mak), citlivosť na sklon (na svahu chybovosť +20 %).</li>
+      </ul>
+      <p>Vhodné pre <strong>obilniny + repka na rovných poliach</strong>.</p>
+
+      <h3>Pneumatický (vzduchový)</h3>
+      <p>Osivo sa transportuje vzduchom (centrálny dávkovač → trubky → výsevné pätky). Vyššia presnosť, kompenzuje sklon.</p>
+      <ul>
+        <li><strong>Plusy:</strong> vyššia presnosť dávky, kompatibilný s drobnými osivami (repka, lucerna), variabilné dávkovanie (VRA) cez ISOBUS.</li>
+        <li><strong>Mínusy:</strong> drahší (700 tis. – 1,5 mil. Kč nový), vyžaduje výkonnejší traktor pre pohon ventilátora (+30 koní vs mechanický).</li>
+      </ul>
+
+      <h3>Presný / sádzací (precision)</h3>
+      <p>Pre <strong>okopaniny</strong> — kukurica, slnečnica, cukrovka, sója. Sádza jednotlivé semená v presnej vzdialenosti.</p>
+      <ul>
+        <li><strong>Plusy:</strong> najvyššia presnosť (1 zrno = 1 rastlina), úspora osiva 15–30 %, vyššie výnosy.</li>
+        <li><strong>Mínusy:</strong> najdrahší (1–4 mil. Kč), špecializovaný (jeden typ plodiny), nevhodný pre obilie.</li>
+      </ul>
+
+      <h2>2. Záber a kompatibilita s traktorom</h2>
+      <div class="comp-table">
+        <table>
+          <thead>
+            <tr><th>Záber</th><th>Odporúčaný výkon traktora</th><th>Vhodné pre</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2,5 m</td><td>60–80 k</td><td>Hobby / malé farmy do 30 ha</td></tr>
+            <tr><td>3 m</td><td>80–120 k</td><td>Štandard SK farma 50–150 ha</td></tr>
+            <tr><td>4 m</td><td>130–180 k</td><td>Stredné 150–400 ha</td></tr>
+            <tr><td>5 m</td><td>180–230 k</td><td>Veľké 400+ ha</td></tr>
+            <tr><td>6 m+</td><td>240+ k</td><td>Veľkofarmy 800+ ha</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>3. Top značky a modely</h2>
+      <ul>
+        <li><strong><a href="/sk/znacky/amazone/">Amazone</a></strong> (Cirrus, AD, ED) — DE prémium, široká škála od mechanických po precision. Najlepšie pre mid-tier.</li>
+        <li><strong><a href="/sk/znacky/horsch/">Horsch</a></strong> (Pronto, Sprinter, Maestro) — DE prémium pre no-till + precision. Vyššia cena, profi náradie.</li>
+        <li><strong><a href="/sk/znacky/lemken/">Lemken</a></strong> (Solitair, Compact-Solitair) — DE, dobré pre obilniny + kombinácia s predkypričom.</li>
+        <li><strong><a href="/sk/znacky/kuhn/">Kuhn</a></strong> (Espro, Venta) — FR, široká škála, dobré ceny.</li>
+        <li><strong><a href="/sk/znacky/kverneland/">Kverneland</a></strong> (Optima, e-drill) — NO/IT, kvalitný precision pre kukuricu.</li>
+        <li><strong><a href="/sk/znacky/pottinger/">Pöttinger</a></strong> (Terrasem, Vitasem) — AT, dobré pre stredne veľké farmy.</li>
+        <li><strong>Väderstad</strong> (Rapid, Tempo) — SE, top no-till a precision (drahé).</li>
+      </ul>
+
+      <h2>4. Kľúčové vlastnosti na posúdenie</h2>
+      <ul>
+        <li><strong>Hĺbka výsevu</strong> — regulácia 1–6 cm, ideálne aj automatická podľa GPS mapy.</li>
+        <li><strong>ISOBUS kompatibilita</strong> — pre VRA, Section Control, riadenie z kabíny traktora.</li>
+        <li><strong>Kombinácia s predkypričom</strong> — disková brána pred siacim = jedna jazda namiesto dvoch (úspora 30 % paliva).</li>
+        <li><strong>Hutnič / prítlačný valec</strong> — utlačenie pôdy nad osivom = lepší kontakt s vlhkosťou, rovnomernejšie vzchádzanie.</li>
+        <li><strong>Bunker</strong> — veľkosť 1500–4500 l (väčší = menej doplňovania, ale väčšia hmotnosť).</li>
+      </ul>
+
+      <h2>5. Cenové orientácie 2026</h2>
+      <ul>
+        <li><strong>Mechanický 3 m</strong>: 400–700 tis. Kč nový, ojazdený 5 rokov starý 150–300 tis. Kč.</li>
+        <li><strong>Pneumatický 4 m + ISOBUS</strong>: 1,2–2 mil. Kč nový, ojazdený 5 rokov 500–900 tis. Kč.</li>
+        <li><strong>Precision kukurica 8riadkový</strong>: 1,5–3 mil. Kč nový, ojazdený 5 rokov 700 tis. – 1,2 mil. Kč.</li>
+        <li><strong>No-till disko-siací 4 m</strong> (Horsch Avatar, Väderstad Rapid): 2–3,5 mil. Kč.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Ďalšie zdroje</h2>
+      <ul>
+        <li><a href="/sk/stroje/zemedelske-stroje/seti/">Katalóg siacich strojov</a></li>
+        <li><a href="/sk/slovnik/no-till/">Slovník: No-till</a></li>
+        <li><a href="/sk/slovnik/isobus/">Slovník: ISOBUS</a></li>
+        <li><a href="/sk/slovnik/variable-rate/">Slovník: Variable Rate Application</a></li>
+        <li><a href="/sk/bazar/?category=seti">Ojazdené siacie stroje v bazári</a></li>
+      </ul>
+    </div>
+  </article>
+  ) : (
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a><span aria-hidden="true">›</span>
@@ -156,6 +288,7 @@ const articleJsonLd = {
       </ul>
     </div>
   </article>
+  )}
 </Layout>
 
 <style>
