@@ -110,8 +110,8 @@ describe('getNav', () => {
     expect(tech.find((c) => c.href === '/srovnani/')!.label).toBe('Porovnanie modelov');
   });
 
-  it('HIDDEN_SECTIONS: cs nic neskrývá', () => {
-    expect(HIDDEN_SECTIONS.cs).toEqual([]);
+  it('HIDDEN_SECTIONS: cs skrývá jen bazar (dočasně, rozbitá SMTP registrace)', () => {
+    expect(HIDDEN_SECTIONS.cs).toEqual(['bazar']);
     // UPDATED Fáze 2b A: `data` už sk neskrývá (jen bazar+photo); uk skrývá vše.
     expect(HIDDEN_SECTIONS.sk).toEqual(expect.arrayContaining(['bazar', 'photo']));
     expect(HIDDEN_SECTIONS.sk).not.toContain('data');
@@ -122,9 +122,9 @@ describe('getNav', () => {
 });
 
 describe('getFooterColumns', () => {
-  it('cs vrací 3 sloupce (content, bazar, photo) s původními labely', () => {
+  it('cs vrací 2 sloupce (content, photo) — bazar sloupec dočasně skrytý', () => {
     const cols = getFooterColumns('cs');
-    expect(cols.map((c) => c.heading)).toEqual(['Obsah', 'Bazar', 'Fotosoutěž']);
+    expect(cols.map((c) => c.heading)).toEqual(['Obsah', 'Fotosoutěž']);
     expect(cols[0].links[0]).toEqual({ label: 'Novinky', href: '/novinky/' });
   });
 

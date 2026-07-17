@@ -1,28 +1,41 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { getLocaleFromUrl } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/pruvodce/kontrola-ojeteho-traktoru/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const canonical = `${SITE_URL}${base}/pruvodce/kontrola-ojeteho-traktoru/`;
 const datePublished = '2026-05-16';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Průvodce nákupem', url: '/pruvodce/' },
-  { name: 'Kontrola ojetého traktoru', url: canonical },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Sprievodca nákupom' : 'Průvodce nákupem', url: `${base}/pruvodce/` },
+  { name: isSk ? "Kontrola ojazdeného traktora" : "Kontrola ojetého traktoru", url: canonical },
 ]);
 
-const faqs = [
+const faqsCs = [
   { q: 'Jak dlouho prohlídka trvá?', a: 'Důkladná prohlídka 60–90 minut. Méně času = vyšší riziko skrytých vad. Pokud prodávající tlačí na rychlou prohlídku, je to red flag — obvykle něco skrývá.' },
   { q: 'Mám vzít s sebou specialistu?', a: 'Pro stroje nad 1 mil. Kč ano. Nezávislý mechanik s vlastním diagnostickým kufrem stojí 2000–5000 Kč za prohlídku — relativně k investici minimální. Některé značky (JD, Fendt, Claas) mají autorizované "predelivery inspection" za 5000–15000 Kč včetně certifikátu.' },
   { q: 'Co když prodávající nepředloží servisní knihu?', a: 'Vážné varování. Servisní kniha (nebo její digitální ekvivalent — JDLink, MyJohnDeere) je důkaz pravidelné údržby. Bez ní nevíte, jak byl stroj udržován a riskujete skryté závady. Smlouvejte cenu dolů o 5–10 % nebo odejděte.' },
   { q: 'Jak prověřit reálné motohodiny?', a: 'Hodinoměr lze přetáčet u starších traktorů (do 2010). Křížový check: opotřebení sedačky, gum, kabiny vs deklarované hodiny. Stroj s 3000 mh ale sedačka jako po 8000 mh = manipulace.' },
 ];
 
+const faqsSk = [
+  { q: "Ako dlho prehliadka trvá?", a: "Dôkladná prehliadka 60–90 minút. Menej času = vyššie riziko skrytých vád. Ak predávajúci tlačí na rýchlu prehliadku, je to red flag — obvykle niečo skrýva." },
+  { q: "Mám vziať so sebou špecialistu?", a: "Pre stroje nad 1 mil. Kč áno. Nezávislý mechanik s vlastným diagnostickým kufrom stojí 2000–5000 Kč za prehliadku — relatívne k investícii minimálne. Niektoré značky (JD, Fendt, Claas) majú autorizované \"predelivery inspection\" za 5000–15000 Kč vrátane certifikátu." },
+  { q: "Čo ak predávajúci nepredloží servisnú knihu?", a: "Vážne varovanie. Servisná kniha (alebo jej digitálny ekvivalent — JDLink, MyJohnDeere) je dôkaz pravidelnej údržby. Bez nej neviete, ako bol stroj udržiavaný a riskujete skryté závady. Smlouvejte cenu dole o 5–10 % alebo odíďte." },
+  { q: "Ako preveriť reálne motohodiny?", a: "Hodinomer možno pretáčať u starších traktorov (do 2010). Krížový check: opotrebenie sedačky, gúm, kabíny vs deklarované hodiny. Stroj s 3000 mh ale sedačka ako po 8000 mh = manipulácia." },
+];
+const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
 
-const howToJsonLd = howToSchema({
+const howToCs = {
   name: 'Kontrola ojetého traktoru před koupí',
   description: '30-bodový postupný checklist pro prohlídku ojetého traktoru: dokumenty, motor, převodovka, hydraulika, kabina, vnější komponenty. Cíl: odhalit skryté závady před podpisem smlouvy.',
   url: canonical,
@@ -36,24 +49,41 @@ const howToJsonLd = howToSchema({
     { name: 'Kabina a elektronika (10 minut)', text: 'Klimatizace funguje (test 5 min). Topení — všechny rychlosti. Displej a měřáky — chybové hlášky? Hodinoměr — křížový check s opotřebením sedačky a pneumatik (3000 mh + sedačka jako po 8000 = manipulace). Světla, blinkry, zvukový signál.' },
     { name: 'Vnější komponenty (5 minut)', text: 'Pneumatiky: dezén min 30 % (jinak nový komplet 30–80 tis. Kč). Rám: žádné praskliny, žádné svary opravy. Kabelové prochody — promáčklé, prořezané? Otevři dvířka motoru — žádný zápach (jen pohonné hmoty).' },
   ],
-});
+};
+
+const howToSk = {
+  name: "Kontrola ojazdeného traktora pred kúpou",
+  description: "30-bodový postupný checklist pre prehliadku ojazdeného traktora: dokumenty, motor, prevodovka, hydraulika, kabína, vonkajšie komponenty. Cieľ: odhaliť skryté závady pred podpisom zmluvy.",
+  url: canonical,
+  totalTime: 'PT1H',
+  tools: ["Diagnostický kufor (voliteľne)", "Handra na kontrolu oleja", "Mobilný telefón (fotky vád)", "Tlakomer pneumatík"],
+  steps: [
+    { name: "Dokumenty (10 minút)", text: "Servisná kniha (alebo digitálny ekvivalent — JDLink, MyJohnDeere) je dôkaz pravidelnej údržby. Bez nej smlouvej cenu dole 5–10 % alebo odíď. Kontroluj VIN s veľkým TP, technický preukaz, doklady o servisných prehliadkach." },
+    { name: "Motor (15 minút)", text: "Studený štart (motor stál najmenej 4 hodiny). Pozoruj dym (biely = chladiaca kvapalina, modrý = olej, čierny = palivo). Kontrola oleja (farba, hladina, voda), chladiacej kvapaliny (farba, žiadny olej), AdBlue systém. Dôkladne počúvať — žiadne klepanie alebo ne-rovnomerné behy." },
+    { name: "Prevodovka a hnacie ústrojenstvo (10 minút)", text: "Skúšobná jazda: radenie pod záťažou všetkých rýchlostí, vpred aj vzad. PTO test (zapnúť/vypnúť 3× pri zaťažení). Diferenciálový blok zapnúť. Kardany — žiadna vôľa, žiadne klepanie. Olej v prevodovke — farba (čistá), žiadne kovové triesky." },
+    { name: "Hydraulika a trojbod (10 minút)", text: "Tlak SCV výstupov (s kalibrovaným manometrom) — mal by držať 180–200 bar. Trojbod test: zdvihnutie + spustenie 5× so záťažou (aspoň 1 t). Kontrola olejových únikov na zadnom veku, hadiciach, valcoch. Vôľa čapov — žiadna hra." },
+    { name: "Kabína a elektronika (10 minút)", text: "Klimatizácia funguje (test 5 min). Kúrenie — všetky rýchlosti. Displej a merače — chybové hlásenia? Hodinomer — krížový check s opotrebením sedačky a pneumatík (3000 mh + sedačka ako po 8000 = manipulácia). Svetlá, smerovky, zvukový signál." },
+    { name: "Vonkajšie komponenty (5 minút)", text: "Pneumatiky: dezén min 30 % (inak nový komplet 30–80 tis. Kč). Rám: žiadne praskliny, žiadne zvary opravy. Káblové prechody — preliačené, prerezané? Otvor dvierka motora — žiadny zápach (len pohonné hmoty)." },
+  ],
+};
+const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'Checklist: Kontrola ojetého traktoru před koupí',
-  description: 'Co prověřit při prohlídce ojetého traktoru. 30-bodový checklist: dokumenty, motor, převodovka, hydraulika, kabina.',
+  headline: isSk ? "Checklist: Kontrola ojazdeného traktora pred kúpou" : "Checklist: Kontrola ojetého traktoru před koupí",
+  description: isSk ? "Čo preveriť pri prehliadke ojazdeného traktora. 30-bodový checklist: dokumenty, motor, prevodovka, hydraulika, kabína." : "Co prověřit při prohlídce ojetého traktoru. 30-bodový checklist: dokumenty, motor, převodovka, hydraulika, kabina.",
   author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   datePublished, dateModified: datePublished,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
 };
 ---
 
 <Layout
-  title="Checklist: Kontrola ojetého traktoru před koupí"
-  description="30-bodový checklist pro prohlídku ojetého traktoru. Dokumenty, motor, převodovka, hydraulika, kabina, test jízdy. Co prověřit, na co dát pozor."
+  title={isSk ? "Checklist: Kontrola ojazdeného traktora pred kúpou" : "Checklist: Kontrola ojetého traktoru před koupí"}
+  description={isSk ? "30-bodový checklist pre prehliadku ojazdeného traktora. Dokumenty, motor, prevodovka, hydraulika, kabína, test jazdy. Čo preveriť, na čo dať pozor." : "30-bodový checklist pro prohlídku ojetého traktoru. Dokumenty, motor, převodovka, hydraulika, kabina, test jízdy. Co prověřit, na co dát pozor."}
   canonical={canonical} ogType="article" publishedTime={datePublished}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -61,6 +91,110 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
+  {isSk ? (
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a><span aria-hidden="true">›</span>
+      <a href="/sk/pruvodce/">Sprievodca nákupom</a><span aria-hidden="true">›</span>
+      <span class="current">Kontrola ojazdeného traktora</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Checklist · ~8 min</span>
+      <h1>Kontrola ojazdeného traktora pred kúpou — 30-bodový checklist</h1>
+      <p class="lede">
+        Dôkladná obhliadka ojazdeného traktora trvá 60–90 minút. Tento checklist prejdite krok za krokom — ušetrí vás od skrytých chýb za desiatky tisíc Kč.
+      </p>
+      <div class="meta">Publikované 16. mája 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Dokumenty (10 minút)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Veľký technický preukaz</strong> — počet majiteľov, dátum prvej registrácie, žiadne poznámky o nehodách.</label>
+        <label><input type="checkbox" /> <strong>Servisná kniha / digitálny záznam</strong> — pravidelné výmeny oleja (každých 500 mh), filtrov, AdBlue.</label>
+        <label><input type="checkbox" /> <strong>STK</strong> — platná, bez závad. Predchádzajúce 2 STK pre trend.</label>
+        <label><input type="checkbox" /> <strong>Faktúry z autoservisu</strong> — originálne diely, dátum poslednej generálnej opravy.</label>
+        <label><input type="checkbox" /> <strong>Poisťovňa</strong> — povinné zmluvné poistenie platné, žiadne nedoplatky.</label>
+        <label><input type="checkbox" /> <strong>VIN / sériové číslo</strong> — súhlasí s dokumentmi a štítkom na ráme.</label>
+      </div>
+
+      <h2>2. Motor (15 minút)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Studený štart</strong> — bez dymu, hladké rozjazdenie. Čierny dym = vstrekovanie. Modrý dym = olej v valcoch. Biely dym = voda v palive.</label>
+        <label><input type="checkbox" /> <strong>Olej v motore</strong> — čistý, žiadny náznak vody alebo presakovania.</label>
+        <label><input type="checkbox" /> <strong>Chladiaca kvapalina</strong> — čistá zelená/červená, bez oleja.</label>
+        <label><input type="checkbox" /> <strong>Hladina AdBlue</strong> (Stage IV+) — funguje SCR ukazovateľ, žiadne chybové kódy.</label>
+        <label><input type="checkbox" /> <strong>DPF stav</strong> — diagnostika ukáže % zaplnenia. Nad 80 % = nutná aktívna regenerácia.</label>
+        <label><input type="checkbox" /> <strong>Test plnej záťaže</strong> (pluh alebo brzda) — bez preklzu, vibrácií, neobvyklých zvukov.</label>
+      </div>
+
+      <h2>3. Prevodovka a hnacie ústrojenstvo (10 minút)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Hladké radenie všetkých stupňov</strong> — pod záťažou aj bez. Škrípanie = synchron.</label>
+        <label><input type="checkbox" /> <strong>Reverz</strong> (vpred/vzad) — žiadny náraz.</label>
+        <label><input type="checkbox" /> <strong>Ťah zo stoja</strong> — bez preklzu spojky.</label>
+        <label><input type="checkbox" /> <strong>CVT</strong> (Vario / AutoPowr): tempomat funguje, plynulé zrýchľovanie.</label>
+        <label><input type="checkbox" /> <strong>Diferenciálna uzávierka</strong> — zapne sa, otáčky sa vyrovnajú.</label>
+        <label><input type="checkbox" /> <strong>Pohon 4×4</strong> — zapne sa, počuť zapadnutie.</label>
+        <label><input type="checkbox" /> <strong>Olej prevodovky</strong> — čistý, vôňa po oleji (nie spáleninou).</label>
+      </div>
+
+      <h2>4. Hydraulika a trojbod (10 minút)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Trojbod zdvihne plný náklad</strong> — orientačne 1500+ kg na 1 meter.</label>
+        <label><input type="checkbox" /> <strong>SCV výstupy</strong> — všetky fungujú, bez presakovania.</label>
+        <label><input type="checkbox" /> <strong>PTO 540 i 1000 ot/min</strong> — zapne, vypne, žiadne vrtulenie.</label>
+        <label><input type="checkbox" /> <strong>Olejový filter</strong> — dátum poslednej výmeny (max 1500 mh).</label>
+        <label><input type="checkbox" /> <strong>Hadice</strong> — bez prasklín, deformácií.</label>
+      </div>
+
+      <h2>5. Kabína a elektronika (10 minút)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Klimatizácia</strong> — chladí + kúri. Stará klimatizácia = poruchané kompresory.</label>
+        <label><input type="checkbox" /> <strong>Všetky svetlá</strong> — denné, brzdové, blinky, ostrekovače, svetlá na náradie.</label>
+        <label><input type="checkbox" /> <strong>Displej / prístroje</strong> — žiadne error kódy, AdBlue/DPF status normálny.</label>
+        <label><input type="checkbox" /> <strong>Sedadlo</strong> — funkčné odpruženie, pohyb operadla, čalúnenie bez prasklín.</label>
+        <label><input type="checkbox" /> <strong>Volant</strong> — bez vôle (max 2°), reverzná spojka funguje.</label>
+        <label><input type="checkbox" /> <strong>Stierače + sklomyvačka</strong> — fungujú všetky rýchlosti.</label>
+      </div>
+
+      <h2>6. Vonkajšie komponenty (5 minút)</h2>
+      <div class="checklist">
+        <label><input type="checkbox" /> <strong>Pneumatiky</strong> — vzorka 50+ %, žiadne praskliny, rovnomerné opotrebenie.</label>
+        <label><input type="checkbox" /> <strong>Disky kolies</strong> — bez vibrácií pri jazde.</label>
+        <label><input type="checkbox" /> <strong>Kapota a karoséria</strong> — bez väčších opráv, jednotná farba.</label>
+        <label><input type="checkbox" /> <strong>Korózne miesta</strong> — kabína, podvozok, výfukový systém.</label>
+        <label><input type="checkbox" /> <strong>Brzdy</strong> — funkčné na vzduch aj hydraulicky.</label>
+      </div>
+
+      <h2>Red flags — kedy odísť</h2>
+      <ul>
+        <li>🚨 <strong>Striekajúci olej</strong> z motora / prevodovky.</li>
+        <li>🚨 <strong>Modrý dym</strong> z výfuku trvale (viac než 30 s po štarte).</li>
+        <li>🚨 <strong>Vrtulenie pri jazde</strong> nad 25 km/h.</li>
+        <li>🚨 <strong>Škrípanie alebo dunenie</strong> z prevodovky pod záťažou.</li>
+        <li>🚨 <strong>Chýbajúca servisná kniha</strong> + predávajúci ju "nemá so sebou".</li>
+        <li>🚨 <strong>Sériové číslo neviditeľné</strong> alebo premaľované.</li>
+        <li>🚨 <strong>Hlboké korózie na ráme</strong> (nie len povrchové).</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Ďalšie zdroje</h2>
+      <ul>
+        <li><a href="/sk/pruvodce/jak-vybrat-traktor-100-150-koni/">Ako vybrať traktor 100–150 koní</a></li>
+        <li><a href="/sk/bazar/">Ojazdené traktory v bazári</a></li>
+        <li><a href="/sk/kalkulacka/uspora-nafty/">Diesel kalkulačka úspory</a></li>
+      </ul>
+    </div>
+  </article>
+  ) : (
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a><span aria-hidden="true">›</span>
@@ -163,6 +297,7 @@ const articleJsonLd = {
       </ul>
     </div>
   </article>
+  )}
 </Layout>
 
 <style>
