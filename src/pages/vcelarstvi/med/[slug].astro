@@ -1,51 +1,56 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllMed, getMed, MED_TYP_LABELS } from '../../../lib/vcelarstvi';
+import { getAllMed, getMed, medTypLabel, medKrystalizaceLabel } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
+import { useTranslations, getLocaleFromUrl, localizePath, plural } from '../../../i18n/utils';
 
-export function getStaticPaths() {
-  return getAllMed().map((m) => ({ params: { slug: m.slug } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+const bcp47 = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const med = getMed(slug!);
+const med = getMed(slug!, locale);
 if (!med) return Astro.rewrite('/404');
 
-const canonical = `${SITE_URL}/vcelarstvi/med/${med.slug}/`;
+const canonical = `${SITE_URL}${base}/vcelarstvi/med/${med.slug}/`;
 const pageTitle = med.name;
 const pageDesc = med.popis_kratky.length > 160 ? med.popis_kratky.slice(0, 157) + '…' : med.popis_kratky;
 
-const typLabel = MED_TYP_LABELS[med.typ];
+const typLabel = medTypLabel(med.typ, locale);
+const krystLabel = medKrystalizaceLabel(med.krystalizace, locale);
 
 type SpecRow = { label: string; value: string };
 const specs: SpecRow[] = [
-  { label: 'Typ', value: typLabel },
-  { label: 'Zdroj snůšky', value: med.zdroj_snusky },
-  { label: 'Barva', value: med.barva },
-  { label: 'Chuť', value: med.chut },
-  { label: 'Krystalizace', value: med.krystalizace },
+  { label: t('vcel.spec.typ'), value: typLabel },
+  { label: t('vcel.spec.zdrojSnusky'), value: med.zdroj_snusky },
+  { label: t('vcel.spec.barva'), value: med.barva },
+  { label: t('vcel.spec.chut'), value: med.chut },
+  { label: t('vcel.spec.krystalizace'), value: krystLabel },
 ];
 
-const related = getAllMed().filter((m) => m.slug !== med.slug).slice(0, 4);
+const related = getAllMed(locale).filter((m) => m.slug !== med.slug).slice(0, 4);
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_URL}/` },
-    { '@type': 'ListItem', position: 2, name: 'Včelařství', item: `${SITE_URL}/vcelarstvi/` },
-    { '@type': 'ListItem', position: 3, name: 'Druhy medu', item: `${SITE_URL}/vcelarstvi/med/` },
+    { '@type': 'ListItem', position: 1, name: t('vcel.bc.home'), item: `${SITE_URL}${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('vcel.crumb'), item: `${SITE_URL}${base}/vcelarstvi/` },
+    { '@type': 'ListItem', position: 3, name: t('vcel.med.crumb'), item: `${SITE_URL}${base}/vcelarstvi/med/` },
     { '@type': 'ListItem', position: 4, name: med.name, item: canonical },
   ],
 };
 
 const propertyValues: Array<{ '@type': 'PropertyValue'; name: string; value: string }> = [
-  { '@type': 'PropertyValue', name: 'Typ', value: typLabel },
-  { '@type': 'PropertyValue', name: 'Zdroj snůšky', value: med.zdroj_snusky },
-  { '@type': 'PropertyValue', name: 'Barva', value: med.barva },
-  { '@type': 'PropertyValue', name: 'Chuť', value: med.chut },
-  { '@type': 'PropertyValue', name: 'Krystalizace', value: med.krystalizace },
+  { '@type': 'PropertyValue', name: t('vcel.spec.typ'), value: typLabel },
+  { '@type': 'PropertyValue', name: t('vcel.spec.zdrojSnusky'), value: med.zdroj_snusky },
+  { '@type': 'PropertyValue', name: t('vcel.spec.barva'), value: med.barva },
+  { '@type': 'PropertyValue', name: t('vcel.spec.chut'), value: med.chut },
+  { '@type': 'PropertyValue', name: t('vcel.spec.krystalizace'), value: krystLabel },
 ];
 
 const thingJsonLd: Record<string, unknown> = {
@@ -54,7 +59,7 @@ const thingJsonLd: Record<string, unknown> = {
   name: med.name,
   description: med.description,
   url: canonical,
-  inLanguage: 'cs-CZ',
+  inLanguage: bcp47,
   ...(med.image_url && { image: med.image_url.startsWith('http') ? med.image_url : `${SITE_URL}${med.image_url}` }),
   additionalProperty: propertyValues,
 };
@@ -67,11 +72,11 @@ const thingJsonLd: Record<string, unknown> = {
   <div class="med-page">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizePath(locale, '/')}>{t('vcel.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/vcelarstvi/">Včelařství</a>
+      <a href={localizePath(locale, '/vcelarstvi/')}>{t('vcel.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/vcelarstvi/med/">Druhy medu</a>
+      <a href={localizePath(locale, '/vcelarstvi/med/')}>{t('vcel.med.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{med.name}</span>
     </nav>
@@ -80,14 +85,14 @@ const thingJsonLd: Record<string, unknown> = {
       <div class="hero-left">
         <div class="hero-tags">
           <span class={`tag tag-typ tag-typ-${med.typ}`}>{typLabel}</span>
-          <span class="tag tag-kryst">{med.krystalizace} krystalizace</span>
+          <span class="tag tag-kryst">{krystLabel} {t('vcel.krystalizace.word')}</span>
         </div>
         <h1>{med.name}</h1>
         <p class="hero-lede">{med.popis_kratky}</p>
         <div class="hero-actions">
-          <a class="cta-secondary" href="/vcelarstvi/med/">
+          <a class="cta-secondary" href={localizePath(locale, '/vcelarstvi/med/')}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Všechny druhy medu
+            {t('vcel.med.vsechnyDruhyBtn')}
           </a>
         </div>
       </div>
@@ -123,11 +128,11 @@ const thingJsonLd: Record<string, unknown> = {
 
         <section class="spec-card">
           <div class="card-head">
-            <h2>Charakteristika medu</h2>
-            <span class="card-head-meta">{specs.length} parametrů</span>
+            <h2>{t('vcel.med.charakteristika')}</h2>
+            <span class="card-head-meta">{specs.length} {plural(locale, specs.length, { one: t('vcel.param.one'), few: t('vcel.param.few'), many: t('vcel.param.many') })}</span>
           </div>
           <div class="spec-group">
-            <div class="spec-group-label">Základní parametry</div>
+            <div class="spec-group-label">{t('vcel.spec.groupZakladni')}</div>
             <dl class="spec-list">
               {specs.map((row) => (
                 <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -143,15 +148,15 @@ const thingJsonLd: Record<string, unknown> = {
         {related.length > 0 && (
           <section class="related-card">
             <div class="card-head">
-              <h2>Další druhy medu</h2>
-              <a class="card-head-link" href="/vcelarstvi/med/">Všechny druhy →</a>
+              <h2>{t('vcel.med.dalsiDruhy')}</h2>
+              <a class="card-head-link" href={localizePath(locale, '/vcelarstvi/med/')}>{t('vcel.vsechnyDruhy')}</a>
             </div>
             <div class="rel-grid">
               {related.map((r) => (
-                <a href={`/vcelarstvi/med/${r.slug}/`} class="rel-card">
+                <a href={localizePath(locale, `/vcelarstvi/med/${r.slug}/`)} class="rel-card">
                   <div class="rel-name">{r.name}</div>
-                  <div class="rel-typ">{MED_TYP_LABELS[r.typ]}</div>
-                  <div class="rel-meta">{r.krystalizace} krystalizace</div>
+                  <div class="rel-typ">{medTypLabel(r.typ, locale)}</div>
+                  <div class="rel-meta">{medKrystalizaceLabel(r.krystalizace, locale)} {t('vcel.krystalizace.word')}</div>
                 </a>
               ))}
             </div>
@@ -162,15 +167,15 @@ const thingJsonLd: Record<string, unknown> = {
 
       <aside class="content-aside">
         <div class="aside-card nav-card">
-          <span class="acc-label">Navigace</span>
-          <a href="/vcelarstvi/" class="aside-link">
-            <span class="al-label">Sekce</span>
-            <span class="al-value">Včelařství</span>
+          <span class="acc-label">{t('vcel.aside.navigace')}</span>
+          <a href={localizePath(locale, '/vcelarstvi/')} class="aside-link">
+            <span class="al-label">{t('vcel.aside.sekce')}</span>
+            <span class="al-value">{t('vcel.aside.sekceVal')}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
-          <a href="/vcelarstvi/med/" class="aside-link">
-            <span class="al-label">Katalog</span>
-            <span class="al-value">Druhy medu</span>
+          <a href={localizePath(locale, '/vcelarstvi/med/')} class="aside-link">
+            <span class="al-label">{t('vcel.aside.katalog')}</span>
+            <span class="al-value">{t('vcel.med.katalogVal')}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
         </div>
