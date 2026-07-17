@@ -1,24 +1,25 @@
 ---
-export const prerender = true;
+// SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
+// sk čte z plemena-sk overlay (getPlemeno(...,'sk')); cs render = literály VERBATIM.
+export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
-import { getAllDruhy, getPlemeno, UZITKOVOST_LABELS } from '../../../../lib/plemena';
+import { getPlemeno, getUzitkovostLabels } from '../../../../lib/plemena';
 import { faqPageSchema } from '../../../../lib/structured-data';
+import { useTranslations, getLocaleFromUrl, tf, plural } from '../../../../i18n/utils';
 
-export async function getStaticPaths() {
-  const paths: { params: { druh: string; plemeno: string } }[] = [];
-  for (const d of getAllDruhy()) {
-    for (const p of d.plemena || []) {
-      paths.push({ params: { druh: d.slug, plemeno: p.slug } });
-    }
-  }
-  return paths;
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const t = useTranslations(locale);
+const base = isSk ? '/sk' : '';
+const numLocale = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { druh: druhSlug, plemeno: plemenoSlug } = Astro.params;
-const found = getPlemeno(druhSlug!, plemenoSlug!);
+const found = getPlemeno(druhSlug!, plemenoSlug!, locale);
 if (!found) return Astro.rewrite('/404');
 const { druh, plemeno } = found;
 
+const UZITKOVOST_LABELS = getUzitkovostLabels(locale);
 const druhEmoji: Record<string, string> = { hovezi: '🐄', ovce: '🐑', kone: '🐎', prasata: '🐖' };
 const druhTone: Record<string, [string, string]> = {
   hovezi: ['#7A5230', '#3F2A18'],
@@ -42,7 +43,7 @@ function relatedScore(other: typeof plemeno): number {
 const related = druh.plemena
   .filter((p) => p.slug !== plemeno.slug)
   .map((p) => ({ p, score: relatedScore(p) }))
-  .sort((a, b) => b.score - a.score || a.p.name.localeCompare(b.p.name, 'cs'))
+  .sort((a, b) => b.score - a.score || a.p.name.localeCompare(b.p.name, locale))
   .slice(0, 6)
   .map(({ p }) => p);
 
@@ -52,19 +53,19 @@ const originSpecs: SpecRow[] = [];
 const physicalSpecs: SpecRow[] = [];
 const productionSpecs: SpecRow[] = [];
 
-originSpecs.push({ label: 'Druh', value: druh.name });
-originSpecs.push({ label: 'Původ', value: plemeno.origin_country });
-if (plemeno.alternative_names && plemeno.alternative_names.length > 0) originSpecs.push({ label: 'Jiné názvy', value: plemeno.alternative_names.join(', ') });
-if (plemeno.year_registered) originSpecs.push({ label: 'Uznání plemene', value: `${plemeno.year_registered}` });
+originSpecs.push({ label: t('plem.detail.spec.druh'), value: druh.name });
+originSpecs.push({ label: t('plem.detail.spec.origin'), value: plemeno.origin_country });
+if (plemeno.alternative_names && plemeno.alternative_names.length > 0) originSpecs.push({ label: t('plem.detail.spec.altNames'), value: plemeno.alternative_names.join(', ') });
+if (plemeno.year_registered) originSpecs.push({ label: t('plem.detail.spec.recognition'), value: `${plemeno.year_registered}` });
 
 const uzitVal = plemeno.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ');
-if (uzitVal) productionSpecs.push({ label: 'Užitkovost', value: uzitVal });
-if (plemeno.milk_yield_kg_year) productionSpecs.push({ label: 'Mléčná užitkovost', value: `${plemeno.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok` });
+if (uzitVal) productionSpecs.push({ label: t('plem.detail.spec.uzit'), value: uzitVal });
+if (plemeno.milk_yield_kg_year) productionSpecs.push({ label: t('plem.detail.spec.milk'), value: `${plemeno.milk_yield_kg_year.toLocaleString(numLocale)} kg/rok` });
 
-if (plemeno.color) physicalSpecs.push({ label: 'Zbarvení', value: plemeno.color });
-if (plemeno.weight_male_kg) physicalSpecs.push({ label: 'Hmotnost samec', value: `${plemeno.weight_male_kg.toLocaleString('cs-CZ')} kg` });
-if (plemeno.weight_female_kg) physicalSpecs.push({ label: 'Hmotnost samice', value: `${plemeno.weight_female_kg.toLocaleString('cs-CZ')} kg` });
-if (plemeno.height_cm) physicalSpecs.push({ label: 'Výška v kohoutku', value: `${plemeno.height_cm} cm` });
+if (plemeno.color) physicalSpecs.push({ label: t('plem.detail.spec.color'), value: plemeno.color });
+if (plemeno.weight_male_kg) physicalSpecs.push({ label: t('plem.detail.spec.weightM'), value: `${plemeno.weight_male_kg.toLocaleString(numLocale)} kg` });
+if (plemeno.weight_female_kg) physicalSpecs.push({ label: t('plem.detail.spec.weightF'), value: `${plemeno.weight_female_kg.toLocaleString(numLocale)} kg` });
+if (plemeno.height_cm) physicalSpecs.push({ label: t('plem.detail.spec.height'), value: `${plemeno.height_cm} cm` });
 
 const totalSpecCount = originSpecs.length + physicalSpecs.length + productionSpecs.length;
 

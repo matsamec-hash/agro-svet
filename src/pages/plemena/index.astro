@@ -1,10 +1,22 @@
 ---
-export const prerender = true;
+// SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
+// sk čte z plemena-sk overlay (getAllDruhy('sk')); cs render = dnešní literály
+// VERBATIM (byte-identita). Locale z Astro.locals.locale (po rewritu je Astro.url cs).
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { getAllDruhy, getAllPlemena, UZITKOVOST_LABELS, type PlemenoUzitkovost } from '../../lib/plemena';
+import { getAllDruhy, getAllPlemena, getUzitkovostLabels, type PlemenoUzitkovost } from '../../lib/plemena';
+import { useTranslations, getLocaleFromUrl, tf } from '../../i18n/utils';
 
-const druhy = getAllDruhy();
-const plemena = getAllPlemena();
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const t = useTranslations(locale);
+const base = isSk ? '/sk' : '';
+const numLocale = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const druhy = getAllDruhy(locale);
+const plemena = getAllPlemena(locale);
+const UZITKOVOST_LABELS = getUzitkovostLabels(locale);
 
 const totalPlemena = plemena.length;
 const countries = new Set(plemena.map((p) => p.origin_country)).size;
@@ -48,63 +60,75 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Zvířata', item: 'https://agro-svet.cz/plemena/' },
+    { '@type': 'ListItem', position: 1, name: t('plem.crumb.home'), item: `https://agro-svet.cz${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('plem.crumb.animals'), item: `https://agro-svet.cz${base}/plemena/` },
   ],
 };
 
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Katalog plemen hospodářských zvířat',
-  description: 'Databáze plemen hovězího dobytka, ovcí, koní a prasat.',
-  url: 'https://agro-svet.cz/plemena/',
-  inLanguage: 'cs-CZ',
+  name: t('plem.idx.collName'),
+  description: t('plem.idx.collDesc'),
+  url: `https://agro-svet.cz${base}/plemena/`,
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: totalPlemena,
     itemListElement: plemena.slice(0, 100).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `https://agro-svet.cz/plemena/${p.druh_slug}/${p.slug}/`,
+      url: `https://agro-svet.cz${base}/plemena/${p.druh_slug}/${p.slug}/`,
       name: p.name,
     })),
   },
 };
+
+// Lokalizované stringy pro client-side filtr (jen sk; cs čte defaulty ve skriptu → byte-identita).
+const plemenaI18n = JSON.stringify({
+  empty: t('plem.js.empty'),
+  found: t('plem.js.found'),
+  numLocale,
+  base,
+});
 ---
 
 <Layout
-  title="Katalog plemen hospodářských zvířat"
-  description="Databáze plemen hovězího dobytka, ovcí a koní — původ, užitkovost, hmotnost, mléčná dojivost. Filtrujte podle druhu a užitkovosti."
+  title={t('plem.idx.title')}
+  description={t('plem.idx.description')}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
   <div class="plemena-root">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={`${base}/`}>{t('plem.crumb.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <span class="current">Zvířata</span>
+      <span class="current">{t('plem.crumb.animals')}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Katalog · Zvířata</span>
-        <h1>Plemena <em>zvířat</em></h1>
-        <p class="hero-lede">
-          Databáze {totalPlemena}+ plemen hospodářských zvířat — hovězí dobytek, ovce a koně.
-          Původ, užitkovost, hmotnost, mléčná dojivost a popisy plemen pro chovatele i bazarový průzkum.
-        </p>
+        <span class="kicker"><span class="dot"></span>{t('plem.idx.kicker')}</span>
+        <h1>{t('plem.idx.h1pre')}<em>{t('plem.idx.h1em')}</em></h1>
+        {isSk ? (
+          <p class="hero-lede">{tf(locale, 'plem.idx.lede', { count: totalPlemena })}</p>
+        ) : (
+          <p class="hero-lede">
+            Databáze {totalPlemena}+ plemen hospodářských zvířat — hovězí dobytek, ovce a koně.
+            Původ, užitkovost, hmotnost, mléčná dojivost a popisy plemen pro chovatele i bazarový průzkum.
+          </p>
+        )}
 
         <div class="hero-stats">
-          <div class="s"><span class="n">{totalPlemena}+</span><span class="l">plemen</span></div>
-          <div class="s"><span class="n">{druhy.length}</span><span class="l">druhů zvířat</span></div>
-          <div class="s"><span class="n">{countries}</span><span class="l">zemí původu</span></div>
+          <div class="s"><span class="n">{totalPlemena}+</span><span class="l">{t('plem.word.breeds')}</span></div>
+          <div class="s"><span class="n">{druhy.length}</span><span class="l">{t('plem.idx.stat.druhy')}</span></div>
+          <div class="s"><span class="n">{countries}</span><span class="l">{t('plem.idx.stat.countries')}</span></div>
         </div>
 
         <div class="hero-actions">
           {druhy.map((d) => (
-            <a class="cta-primary" href={`/plemena/${d.slug}/`}>
+            <a class="cta-primary" href={`${base}/plemena/${d.slug}/`}>
               <span class="emoji" aria-hidden="true">{druhEmoji[d.slug] ?? ''}</span>
               {d.name_plural} <span class="cta-c">{d.plemena.length}</span>
             </a>
@@ -115,11 +139,11 @@ const collectionJsonLd = {
       <div class="hero-right">
         <div class="hero-photo-stack">
           {druhy.map((d) => (
-            <a class="hsp-tile" data-druh={d.slug} href={`/plemena/${d.slug}/`}>
+            <a class="hsp-tile" data-druh={d.slug} href={`${base}/plemena/${d.slug}/`}>
               <div class="hsp-emoji" aria-hidden="true">{druhEmoji[d.slug] ?? '🐾'}</div>
               <div class="hsp-info">
                 <span class="hsp-name">{d.name_plural}</span>
-                <span class="hsp-c">{d.plemena.length} plemen</span>
+                <span class="hsp-c">{d.plemena.length} {t('plem.word.breeds')}</span>
               </div>
             </a>
           ))}
@@ -129,55 +153,55 @@ const collectionJsonLd = {
 
     <section class="filter-card" aria-labelledby="filter-title">
       <div class="fc-head">
-        <h2 id="filter-title">Filtr plemen</h2>
-        <span class="fc-sub">Filtrujte podle druhu, užitkovosti a země původu</span>
+        <h2 id="filter-title">{t('plem.idx.filter.title')}</h2>
+        <span class="fc-sub">{t('plem.idx.filter.sub')}</span>
       </div>
       <div class="fc-grid">
         <label class="fc-field">
-          <span class="fc-label">Druh</span>
+          <span class="fc-label">{t('plem.idx.filter.druh')}</span>
           <select id="f-druh">
-            <option value="">Všechny druhy</option>
+            <option value="">{t('plem.idx.filter.allDruhy')}</option>
             {druhy.map((d) => <option value={d.slug}>{d.name}</option>)}
           </select>
         </label>
         <label class="fc-field">
-          <span class="fc-label">Užitkovost</span>
+          <span class="fc-label">{t('plem.idx.filter.uzit')}</span>
           <select id="f-uzit">
-            <option value="">Všechny</option>
+            <option value="">{t('plem.idx.filter.all')}</option>
             {uzitkovostOptions.map((u) => <option value={u}>{UZITKOVOST_LABELS[u]}</option>)}
           </select>
         </label>
         <label class="fc-field">
-          <span class="fc-label">Země původu</span>
+          <span class="fc-label">{t('plem.idx.filter.country')}</span>
           <select id="f-country">
-            <option value="">Všechny</option>
+            <option value="">{t('plem.idx.filter.all')}</option>
             {countryList.map((c) => <option value={c}>{c}</option>)}
           </select>
         </label>
         <label class="fc-field fc-field-search">
-          <span class="fc-label">Hledat plemeno</span>
-          <input id="f-search" type="search" placeholder="např. charolais, merino, lipicán" />
+          <span class="fc-label">{t('plem.idx.filter.search')}</span>
+          <input id="f-search" type="search" placeholder={t('plem.idx.filter.searchPlaceholder')} />
         </label>
       </div>
       <div class="fc-foot">
         <span id="result-count" class="fc-count"></span>
-        <button id="f-reset" type="button">Resetovat filtry</button>
+        <button id="f-reset" type="button">{t('plem.idx.filter.reset')}</button>
       </div>
     </section>
 
-    <h2 id="druhy-heading" class="section-title">Druhy zvířat <span class="section-title-c">{druhy.length}</span></h2>
-    <h2 id="results-heading" class="section-title results-heading">Výsledky <span id="results-heading-c" class="section-title-c"></span></h2>
+    <h2 id="druhy-heading" class="section-title">{t('plem.idx.section.druhy')} <span class="section-title-c">{druhy.length}</span></h2>
+    <h2 id="results-heading" class="section-title results-heading">{t('plem.idx.section.results')} <span id="results-heading-c" class="section-title-c"></span></h2>
     <div id="druh-grid" class="druh-grid">
       {druhy.map((d) => (
-        <a href={`/plemena/${d.slug}/`} class="druh-card" style={druhPhoto[d.slug] ? `--bg-img:url('${druhPhoto[d.slug]}')` : ''}>
+        <a href={`${base}/plemena/${d.slug}/`} class="druh-card" style={druhPhoto[d.slug] ? `--bg-img:url('${druhPhoto[d.slug]}')` : ''}>
           {!druhPhoto[d.slug] && <span class="dc-emoji-fallback" aria-hidden="true">{druhEmoji[d.slug] ?? '🐾'}</span>}
           <div class="dc-overlay"></div>
           <div class="dc-content">
             <h3>{d.name_plural}</h3>
-            <span class="dc-count"><strong>{d.plemena.length}</strong> plemen</span>
+            <span class="dc-count"><strong>{d.plemena.length}</strong> {t('plem.word.breeds')}</span>
             <p class="dc-desc">{d.description}</p>
             <span class="dc-cta">
-              Otevřít katalog
+              {t('plem.idx.card.openCatalog')}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </span>
           </div>
@@ -189,15 +213,15 @@ const collectionJsonLd = {
 
     <section class="big-cta">
       <div>
-        <span class="cta-kicker">Prodáváte hospodářská zvířata?</span>
-        <h2>Inzerát v Agro bazaru<br />zdarma a bez provize.</h2>
-        <p>30 dní inzerát · až 5 fotek · kontakt přímo na chovatele · žádný poplatek za zveřejnění.</p>
+        <span class="cta-kicker">{t('plem.idx.cta.kicker')}</span>
+        <h2>{t('plem.idx.cta.line1')}<br />{t('plem.idx.cta.line2')}</h2>
+        <p>{t('plem.idx.cta.p')}</p>
         <div class="cta-actions">
           <a class="cta-btn primary" href="/bazar/novy/">
-            Přidat inzerát zdarma
+            {t('plem.cta.addFree')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-btn ghost" href="/bazar/?category=zvirata">Procházet bazar</a>
+          <a class="cta-btn ghost" href="/bazar/?category=zvirata">{t('plem.cta.browse')}</a>
         </div>
       </div>
     </section>
@@ -206,6 +230,7 @@ const collectionJsonLd = {
 
   <script is:inline set:html={`window.__PLEMENA_DATA__ = ${plemenaJson};`}></script>
   <script is:inline set:html={`window.__UZITKOVOST_LABELS__ = ${JSON.stringify(UZITKOVOST_LABELS)};`}></script>
+  {isSk && <script is:inline set:html={`window.__PLEMENA_I18N__ = ${plemenaI18n};`}></script>}
 
   <script>
     type P = {
@@ -224,6 +249,14 @@ const collectionJsonLd = {
 
     const PLEMENA: P[] = (window as any).__PLEMENA_DATA__ ?? [];
     const U_LABELS: Record<string, string> = (window as any).__UZITKOVOST_LABELS__ ?? {};
+    // Lokalizované stringy filtru. cs = defaulty (global se injektuje jen pro /sk) → runtime shodný.
+    const I18N: { empty: string; found: string; numLocale: string; base: string } =
+      (window as any).__PLEMENA_I18N__ ?? {
+        empty: 'Žádná plemena neodpovídají filtrům.',
+        found: 'Nalezeno {count} plemen',
+        numLocale: 'cs-CZ',
+        base: '',
+      };
 
     const el = {
       druh: document.getElementById('f-druh') as HTMLSelectElement,
@@ -281,9 +314,9 @@ const collectionJsonLd = {
       const uzit = p.uzitkovost.map((u) => U_LABELS[u] ?? u).join(' · ');
       const wm = p.weight_male_kg ? `♂ ${p.weight_male_kg} kg` : '';
       const wf = p.weight_female_kg ? `♀ ${p.weight_female_kg} kg` : '';
-      const milk = p.milk_yield_kg_year ? `${p.milk_yield_kg_year.toLocaleString('cs-CZ')} kg/rok` : '';
+      const milk = p.milk_yield_kg_year ? `${p.milk_yield_kg_year.toLocaleString(I18N.numLocale)} kg/rok` : '';
       return `
-        <a href="/plemena/${p.druh_slug}/${p.slug}/" class="rc-card">
+        <a href="${I18N.base}/plemena/${p.druh_slug}/${p.slug}/" class="rc-card">
           <div class="rc-tags">
             <span class="rc-tag rc-tag-druh">${p.druh_name}</span>
             ${uzit ? `<span class="rc-tag rc-tag-uzit">${uzit}</span>` : ''}
@@ -336,8 +369,8 @@ const collectionJsonLd = {
         el.resultsHeading.style.display = 'inline-flex';
         el.resultsGrid.innerHTML = filtered.length > 0
           ? filtered.map(card).join('')
-          : '<div class="rg-empty">Žádná plemena neodpovídají filtrům.</div>';
-        el.count.textContent = `Nalezeno ${filtered.length} plemen`;
+          : `<div class="rg-empty">${I18N.empty}</div>`;
+        el.count.textContent = I18N.found.replace('{count}', String(filtered.length));
         el.resultsHeadingCount.textContent = String(filtered.length);
       } else {
         el.druhGrid.style.display = 'grid';
