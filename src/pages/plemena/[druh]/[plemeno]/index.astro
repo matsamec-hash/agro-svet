@@ -71,15 +71,15 @@ const totalSpecCount = originSpecs.length + physicalSpecs.length + productionSpe
 
 const pageTitle = plemeno.name;
 const pageDesc = plemeno.description.slice(0, 160);
-const canonical = `https://agro-svet.cz/plemena/${druh.slug}/${plemeno.slug}/`;
+const canonical = `https://agro-svet.cz${base}/plemena/${druh.slug}/${plemeno.slug}/`;
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Zvířata', item: 'https://agro-svet.cz/plemena/' },
-    { '@type': 'ListItem', position: 3, name: druh.name_plural, item: `https://agro-svet.cz/plemena/${druh.slug}/` },
+    { '@type': 'ListItem', position: 1, name: t('plem.crumb.home'), item: `https://agro-svet.cz${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('plem.crumb.animals'), item: `https://agro-svet.cz${base}/plemena/` },
+    { '@type': 'ListItem', position: 3, name: druh.name_plural, item: `https://agro-svet.cz${base}/plemena/${druh.slug}/` },
     { '@type': 'ListItem', position: 4, name: plemeno.name, item: canonical },
   ],
 };
@@ -87,13 +87,13 @@ const breadcrumbJsonLd = {
 // Schema.org has no Breed type; Thing with additionalType points at Wikidata for animal breed
 // (Q38547 = breed). Editors crawling for breed data treat this as a structured anchor.
 const propertyValues: Array<{ '@type': 'PropertyValue'; name: string; value: string | number; unitText?: string }> = [];
-if (plemeno.weight_male_kg) propertyValues.push({ '@type': 'PropertyValue', name: 'Hmotnost samec', value: plemeno.weight_male_kg, unitText: 'kg' });
-if (plemeno.weight_female_kg) propertyValues.push({ '@type': 'PropertyValue', name: 'Hmotnost samice', value: plemeno.weight_female_kg, unitText: 'kg' });
-if (plemeno.height_cm) propertyValues.push({ '@type': 'PropertyValue', name: 'Výška v kohoutku', value: plemeno.height_cm, unitText: 'cm' });
-if (plemeno.milk_yield_kg_year) propertyValues.push({ '@type': 'PropertyValue', name: 'Mléčná užitkovost', value: plemeno.milk_yield_kg_year, unitText: 'kg/rok' });
-if (plemeno.year_registered) propertyValues.push({ '@type': 'PropertyValue', name: 'Uznáno', value: plemeno.year_registered });
-if (plemeno.color) propertyValues.push({ '@type': 'PropertyValue', name: 'Zbarvení', value: plemeno.color });
-if (plemeno.uzitkovost?.length > 0) propertyValues.push({ '@type': 'PropertyValue', name: 'Užitkovost', value: plemeno.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ') });
+if (plemeno.weight_male_kg) propertyValues.push({ '@type': 'PropertyValue', name: t('plem.detail.spec.weightM'), value: plemeno.weight_male_kg, unitText: 'kg' });
+if (plemeno.weight_female_kg) propertyValues.push({ '@type': 'PropertyValue', name: t('plem.detail.spec.weightF'), value: plemeno.weight_female_kg, unitText: 'kg' });
+if (plemeno.height_cm) propertyValues.push({ '@type': 'PropertyValue', name: t('plem.detail.spec.height'), value: plemeno.height_cm, unitText: 'cm' });
+if (plemeno.milk_yield_kg_year) propertyValues.push({ '@type': 'PropertyValue', name: t('plem.detail.spec.milk'), value: plemeno.milk_yield_kg_year, unitText: 'kg/rok' });
+if (plemeno.year_registered) propertyValues.push({ '@type': 'PropertyValue', name: t('plem.detail.spec.recognized'), value: plemeno.year_registered });
+if (plemeno.color) propertyValues.push({ '@type': 'PropertyValue', name: t('plem.detail.spec.color'), value: plemeno.color });
+if (plemeno.uzitkovost?.length > 0) propertyValues.push({ '@type': 'PropertyValue', name: t('plem.detail.spec.uzit'), value: plemeno.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u).join(', ') });
 
 const thingJsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
@@ -102,7 +102,7 @@ const thingJsonLd: Record<string, unknown> = {
   name: plemeno.name,
   description: plemeno.description,
   url: canonical,
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
   ...(plemeno.alternative_names && plemeno.alternative_names.length > 0 && {
     alternateName: plemeno.alternative_names,
   }),
@@ -128,18 +128,18 @@ const faqItems = plemeno.faq && plemeno.faq.length >= 2 ? plemeno.faq : null;
 const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 ---
 
-<Layout title={`${pageTitle} — plemeno ${druh.name.toLowerCase()}`} description={pageDesc} canonical={canonical}>
+<Layout title={tf(locale, 'plem.detail.title', { name: pageTitle, druh: druh.name.toLowerCase() })} description={pageDesc} canonical={canonical}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(thingJsonLd)} />
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
   <div class="plemeno-page">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={`${base}/`}>{t('plem.crumb.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/plemena/">Zvířata</a>
+      <a href={`${base}/plemena/`}>{t('plem.crumb.animals')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={`/plemena/${druh.slug}/`}>{druh.name_plural}</a>
+      <a href={`${base}/plemena/${druh.slug}/`}>{druh.name_plural}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{plemeno.name}</span>
     </nav>
@@ -161,12 +161,12 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 
         <div class="hero-actions">
           <a class="cta-primary" href={`/bazar/?category=zvirata&q=${encodeURIComponent(plemeno.name)}`}>
-            Hledat {plemeno.name} v bazaru
+            {tf(locale, 'plem.detail.searchBazarName', { name: plemeno.name })}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-secondary" href={`/plemena/${druh.slug}/`}>
+          <a class="cta-secondary" href={`${base}/plemena/${druh.slug}/`}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Všechna {druh.name_plural.toLowerCase()}
+            {tf(locale, 'plem.detail.allOf', { name: druh.name_plural.toLowerCase() })}
           </a>
         </div>
       </div>
@@ -174,7 +174,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
       <div class="hero-right">
         {plemeno.image_url ? (
           <figure class="hero-photo">
-            <img src={plemeno.image_url} alt={`Plemeno ${plemeno.name}${plemeno.origin_country ? ` — ${plemeno.origin_country}` : ''}`} width="800" height="600" loading="eager" decoding="async" />
+            <img src={plemeno.image_url} alt={`${tf(locale, 'plem.altPhoto', { name: plemeno.name })}${plemeno.origin_country ? ` — ${plemeno.origin_country}` : ''}`} width="800" height="600" loading="eager" decoding="async" />
             {(plemeno.image_credit || plemeno.image_license) && (
               <figcaption class="hero-photo-credit">
                 {plemeno.image_source_url ? (
@@ -192,7 +192,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
           <div class="hero-emoji-card">
             <div class="hec-emoji" aria-hidden="true">{druhEmoji[druh.slug] ?? '🐾'}</div>
             <div class="hec-name">{plemeno.name}</div>
-            {plemeno.year_registered && <div class="hec-year">Uznáno {plemeno.year_registered}</div>}
+            {plemeno.year_registered && <div class="hec-year">{tf(locale, 'plem.detail.recognized', { year: plemeno.year_registered })}</div>}
           </div>
         )}
       </div>
@@ -202,13 +202,13 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
       <div class="content-main">
         <section class="spec-card">
           <div class="card-head">
-            <h2>Charakteristika plemene</h2>
-            <span class="card-head-meta">{totalSpecCount} {totalSpecCount === 1 ? 'parametr' : totalSpecCount < 5 ? 'parametry' : 'parametrů'}</span>
+            <h2>{t('plem.detail.spec.h2')}</h2>
+            <span class="card-head-meta">{totalSpecCount} {plural(locale, totalSpecCount, { one: t('plem.param.one'), few: t('plem.param.few'), many: t('plem.param.many') })}</span>
           </div>
 
           {originSpecs.length > 0 && (
             <div class="spec-group">
-              <div class="spec-group-label">Původ &amp; identita</div>
+              <div class="spec-group-label">{t('plem.detail.spec.groupOrigin')}</div>
               <dl class="spec-list">
                 {originSpecs.map((row) => (
                   <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -219,7 +219,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 
           {productionSpecs.length > 0 && (
             <div class="spec-group">
-              <div class="spec-group-label">Užitkovost &amp; produkce</div>
+              <div class="spec-group-label">{t('plem.detail.spec.groupProd')}</div>
               <dl class="spec-list">
                 {productionSpecs.map((row) => (
                   <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -230,7 +230,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 
           {physicalSpecs.length > 0 && (
             <div class="spec-group">
-              <div class="spec-group-label">Fyzické vlastnosti</div>
+              <div class="spec-group-label">{t('plem.detail.spec.groupPhys')}</div>
               <dl class="spec-list">
                 {physicalSpecs.map((row) => (
                   <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -249,7 +249,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         {faqItems && (
           <section class="faq-card" aria-labelledby="faq-heading">
             <div class="card-head">
-              <h2 id="faq-heading">Časté otázky</h2>
+              <h2 id="faq-heading">{t('plem.detail.faq.h2')}</h2>
             </div>
             <dl class="faq-list">
               {faqItems.map((qa) => (
@@ -265,12 +265,12 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         {related.length > 0 && (
           <section class="related-card">
             <div class="card-head">
-              <h2>Další {druh.name_plural.toLowerCase()}</h2>
-              <a class="card-head-link" href={`/plemena/${druh.slug}/`}>Všechna plemena →</a>
+              <h2>{tf(locale, 'plem.detail.related.h2', { name: druh.name_plural.toLowerCase() })}</h2>
+              <a class="card-head-link" href={`${base}/plemena/${druh.slug}/`}>{t('plem.detail.related.all')}</a>
             </div>
             <div class="rel-grid">
               {related.map((p) => (
-                <a href={`/plemena/${druh.slug}/${p.slug}/`} class="rel-card">
+                <a href={`${base}/plemena/${druh.slug}/${p.slug}/`} class="rel-card">
                   <div class="rel-name">{p.name}</div>
                   <div class="rel-country">📍 {p.origin_country}</div>
                   {p.uzitkovost.length > 0 && (
@@ -285,25 +285,25 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 
       <aside class="content-aside">
         <div class="aside-card primary-cta-card">
-          <span class="acc-kicker">Aktuální nabídky</span>
-          <h3>{plemeno.name} v Agro bazaru</h3>
-          <p>Nabídky chovných zvířat přímo od chovatelů. Bez provize, kontakt napřímo.</p>
+          <span class="acc-kicker">{t('plem.detail.aside.kicker')}</span>
+          <h3>{tf(locale, 'plem.detail.aside.h3', { name: plemeno.name })}</h3>
+          <p>{t('plem.detail.aside.p')}</p>
           <a href={`/bazar/?category=zvirata&q=${encodeURIComponent(plemeno.name)}`} class="aside-btn primary">
-            Otevřít bazar
+            {t('plem.detail.aside.open')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a href="/bazar/novy/" class="aside-btn ghost-light">Přidat vlastní inzerát</a>
+          <a href="/bazar/novy/" class="aside-btn ghost-light">{t('plem.detail.aside.addOwn')}</a>
         </div>
 
         <div class="aside-card nav-card">
-          <span class="acc-label">Kontext</span>
-          <a href="/plemena/" class="aside-link">
-            <span class="al-label">Katalog</span>
-            <span class="al-value">Všechna zvířata</span>
+          <span class="acc-label">{t('plem.detail.aside.context')}</span>
+          <a href={`${base}/plemena/`} class="aside-link">
+            <span class="al-label">{t('plem.detail.aside.catalog')}</span>
+            <span class="al-value">{t('plem.detail.aside.allAnimals')}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
-          <a href={`/plemena/${druh.slug}/`} class="aside-link">
-            <span class="al-label">Druh</span>
+          <a href={`${base}/plemena/${druh.slug}/`} class="aside-link">
+            <span class="al-label">{t('plem.detail.aside.druh')}</span>
             <span class="al-value">{druh.name_plural}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>

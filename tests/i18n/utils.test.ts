@@ -143,10 +143,11 @@ describe('localizeInternalHref', () => {
   it('sk: launchnutá sekce → /sk prefix', () => {
     expect(localizeInternalHref('sk', '/stroje/traktory/')).toBe('/sk/stroje/traktory/');
     expect(localizeInternalHref('sk', '/dotace/')).toBe('/sk/dotace/');
+    expect(localizeInternalHref('sk', '/plemena/skot/')).toBe('/sk/plemena/skot/');
     expect(localizeInternalHref('sk', '/')).toBe('/sk/');
   });
   it('sk: NElaunchnutá sekce → cs beze změny (žádné 302)', () => {
-    expect(localizeInternalHref('sk', '/plemena/skot/')).toBe('/plemena/skot/');
+    expect(localizeInternalHref('sk', '/farmy/nazev/')).toBe('/farmy/nazev/');
     expect(localizeInternalHref('sk', '/zebricky/nej-traktory/')).toBe('/zebricky/nej-traktory/');
   });
   it('uk: launchnutá → /uk; nelaunchnutá (novinky není uk) → cs', () => {
