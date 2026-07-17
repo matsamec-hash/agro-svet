@@ -1,17 +1,24 @@
 ---
-export const prerender = true;
+// SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
+// sk čte z plemena-sk overlay (getDruh(slug,'sk')); cs render = literály VERBATIM.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllDruhy, getDruh, UZITKOVOST_LABELS } from '../../../lib/plemena';
+import { getDruh, getUzitkovostLabels } from '../../../lib/plemena';
 import { itemListSchema } from '../../../lib/structured-data';
+import { useTranslations, getLocaleFromUrl, tf } from '../../../i18n/utils';
 
-export async function getStaticPaths() {
-  return getAllDruhy().map((d) => ({ params: { druh: d.slug } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const t = useTranslations(locale);
+const base = isSk ? '/sk' : '';
+const numLocale = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { druh: druhSlug } = Astro.params;
-const druh = getDruh(druhSlug!);
+const druh = getDruh(druhSlug!, locale);
 if (!druh) return Astro.rewrite('/404');
 
+const UZITKOVOST_LABELS = getUzitkovostLabels(locale);
 const druhEmoji: Record<string, string> = { hovezi: '🐄', ovce: '🐑', kone: '🐎', prasata: '🐖' };
 const druhTone: Record<string, [string, string]> = {
   hovezi: ['#7A5230', '#3F2A18'],
@@ -21,7 +28,7 @@ const druhTone: Record<string, [string, string]> = {
 };
 const [druhC1, druhC2] = druhTone[druh.slug] ?? ['#5a4a30', '#2a2218'];
 
-const sorted = [...druh.plemena].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+const sorted = [...druh.plemena].sort((a, b) => a.name.localeCompare(b.name, locale));
 
 // Aggregate stats
 const countries = Array.from(new Set(sorted.map((p) => p.origin_country))).sort();
@@ -33,58 +40,58 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Zvířata', item: 'https://agro-svet.cz/plemena/' },
-    { '@type': 'ListItem', position: 3, name: druh.name_plural, item: `https://agro-svet.cz/plemena/${druh.slug}/` },
+    { '@type': 'ListItem', position: 1, name: t('plem.crumb.home'), item: `https://agro-svet.cz${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('plem.crumb.animals'), item: `https://agro-svet.cz${base}/plemena/` },
+    { '@type': 'ListItem', position: 3, name: druh.name_plural, item: `https://agro-svet.cz${base}/plemena/${druh.slug}/` },
   ],
 };
 const plemenaListJsonLd = sorted.length > 0
   ? itemListSchema(
       sorted.map((p) => ({
-        url: `/plemena/${druh.slug}/${p.slug}/`,
+        url: `${base}/plemena/${druh.slug}/${p.slug}/`,
         name: p.name,
       })),
-      `Plemena druhu ${druh.name.toLowerCase()}`,
+      tf(locale, 'plem.druh.listName', { name: druh.name.toLowerCase() }),
     )
   : null;
 ---
 
 <Layout
-  title={`${druh.name_plural} — katalog plemen`}
-  description={`Přehled plemen druhu ${druh.name.toLowerCase()}. ${druh.description.slice(0, 140)}`}
+  title={tf(locale, 'plem.druh.title', { name: druh.name_plural })}
+  description={tf(locale, 'plem.druh.desc', { name: druh.name.toLowerCase(), desc: druh.description.slice(0, 140) })}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   {plemenaListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(plemenaListJsonLd)} />}
   <div class="druh-page">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={`${base}/`}>{t('plem.crumb.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/plemena/">Zvířata</a>
+      <a href={`${base}/plemena/`}>{t('plem.crumb.animals')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{druh.name_plural}</span>
     </nav>
 
     <section class="hero" style={`--druh-c1:${druhC1};--druh-c2:${druhC2};`}>
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Druh · {druh.name}</span>
+        <span class="kicker"><span class="dot"></span>{tf(locale, 'plem.druh.kicker', { name: druh.name })}</span>
         <h1>{druh.name_plural}</h1>
         <p class="hero-lede">{druh.description}</p>
 
         <div class="hero-stats">
-          <div class="s"><span class="n">{sorted.length}</span><span class="l">plemen</span></div>
-          <div class="s"><span class="n">{countries.length}</span><span class="l">zemí původu</span></div>
-          {uzitList.length > 0 && <div class="s"><span class="n">{uzitList.length}</span><span class="l">typů užitkovosti</span></div>}
+          <div class="s"><span class="n">{sorted.length}</span><span class="l">{t('plem.word.breeds')}</span></div>
+          <div class="s"><span class="n">{countries.length}</span><span class="l">{t('plem.druh.stat.countries')}</span></div>
+          {uzitList.length > 0 && <div class="s"><span class="n">{uzitList.length}</span><span class="l">{t('plem.druh.stat.uzit')}</span></div>}
         </div>
 
         <div class="hero-actions">
           <a class="cta-primary" href={`/bazar/?category=zvirata&druh=${druh.slug}`}>
-            Hledat v bazaru
+            {t('plem.druh.searchBazar')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-secondary" href="/plemena/">
+          <a class="cta-secondary" href={`${base}/plemena/`}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Všechny druhy
+            {t('plem.druh.allDruhy')}
           </a>
         </div>
       </div>
@@ -94,22 +101,22 @@ const plemenaListJsonLd = sorted.length > 0
           <div class="hec-emoji" aria-hidden="true">{druhEmoji[druh.slug] ?? '🐾'}</div>
           <div class="hec-info">
             <div class="hec-title">{druh.name_plural}</div>
-            <div class="hec-c">{sorted.length} plemen v databázi</div>
+            <div class="hec-c">{tf(locale, 'plem.druh.inDb', { count: sorted.length })}</div>
           </div>
         </div>
       </div>
     </section>
 
-    <h2 class="section-title">Plemena <span class="section-title-c">{sorted.length}</span></h2>
+    <h2 class="section-title">{t('plem.druh.section.plemena')} <span class="section-title-c">{sorted.length}</span></h2>
 
     <div class="plemena-grid">
       {sorted.map((p) => {
         const uzit = p.uzitkovost.map((u) => UZITKOVOST_LABELS[u] ?? u);
         return (
-          <a href={`/plemena/${druh.slug}/${p.slug}/`} class="plemeno-card">
+          <a href={`${base}/plemena/${druh.slug}/${p.slug}/`} class="plemeno-card">
             {p.image_url ? (
               <div class="pc-photo">
-                <img src={p.image_url} alt={`Plemeno ${p.name}`} loading="lazy" decoding="async" width="800" height="600" />
+                <img src={p.image_url} alt={tf(locale, 'plem.altPhoto', { name: p.name })} loading="lazy" decoding="async" width="800" height="600" />
               </div>
             ) : (
               <div class="pc-photo pc-photo-placeholder" style={`--druh-c1:${druhC1};--druh-c2:${druhC2};`} aria-hidden="true">
@@ -131,7 +138,7 @@ const plemenaListJsonLd = sorted.length > 0
                 {p.weight_female_kg && <span class="pc-stat">♀ <strong>{p.weight_female_kg}</strong> kg</span>}
                 {p.milk_yield_kg_year && (
                   <span class="pc-stat pc-stat-milk">
-                    <strong>{p.milk_yield_kg_year.toLocaleString('cs-CZ')}</strong> kg/rok
+                    <strong>{p.milk_yield_kg_year.toLocaleString(numLocale)}</strong> kg/rok
                   </span>
                 )}
                 {p.height_cm && <span class="pc-stat">↕ <strong>{p.height_cm}</strong> cm</span>}
@@ -139,7 +146,7 @@ const plemenaListJsonLd = sorted.length > 0
             )}
             <p class="pc-desc">{p.description}</p>
             <div class="pc-foot">
-              <span>Detail plemene</span>
+              <span>{t('plem.druh.card.detail')}</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </div>
             </div>
@@ -150,15 +157,15 @@ const plemenaListJsonLd = sorted.length > 0
 
     <section class="big-cta">
       <div>
-        <span class="cta-kicker">Prodáváte zvířata?</span>
-        <h2>{druh.name_plural} v Agro bazaru<br />— zdarma a bez provize.</h2>
-        <p>Inzerát na 30 dní, kontakt přímo na chovatele, žádný poplatek za zveřejnění.</p>
+        <span class="cta-kicker">{t('plem.druh.cta.kicker')}</span>
+        <h2>{tf(locale, 'plem.druh.cta.h1', { name: druh.name_plural })}<br />{t('plem.druh.cta.line2')}</h2>
+        <p>{t('plem.druh.cta.p')}</p>
         <div class="cta-actions">
           <a class="cta-btn primary" href="/bazar/novy/">
-            Přidat inzerát zdarma
+            {t('plem.cta.addFree')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-btn ghost" href={`/bazar/?category=zvirata&druh=${druh.slug}`}>Procházet bazar</a>
+          <a class="cta-btn ghost" href={`/bazar/?category=zvirata&druh=${druh.slug}`}>{t('plem.cta.browse')}</a>
         </div>
       </div>
     </section>

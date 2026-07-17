@@ -1,19 +1,25 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { getLocaleFromUrl } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/pruvodce/jak-vybrat-postrikovac/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const canonical = `${SITE_URL}${base}/pruvodce/jak-vybrat-postrikovac/`;
 const datePublished = '2026-05-18';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Průvodce nákupem', url: '/pruvodce/' },
-  { name: 'Jak vybrat postřikovač', url: canonical },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Sprievodca nákupom' : 'Průvodce nákupem', url: `${base}/pruvodce/` },
+  { name: isSk ? "Ako vybrať postrekovač" : "Jak vybrat postřikovač", url: canonical },
 ]);
 
-const faqs = [
+const faqsCs = [
   { q: 'Nesený nebo tažený postřikovač?', a: 'Nesený (na tříbod) je levnější (200–500 tis. Kč) a manévrovatelnější, ale objem nádrže omezený na 600–1200 l. Tažený (5 000–10 000 l) dává vyšší výkon pro střední a velké farmy, ale potřebuje silnější traktor pro pohon hydrauliky.' },
   { q: 'Jaký záběr ramen pro střední farmu?', a: '12–18 m je standard pro CZ farmy 100–500 ha. Záběr 21–24 m vyžaduje pravidelné velké lány bez překážek. Záběr 28+ m je pro velkofarmy 800+ ha. Pravidlo: záběr by neměl převyšovat 40 % průměrné šířky vašich polí.' },
   { q: 'ISOBUS / Section Control — vyplatí se?', a: 'Pro postřikovač Section Control šetří 5–15 % chemie ročně (v souvratích a překrytí). U farmy 300 ha s nákladem 5 000 Kč/ha/sezónu na chemii = úspora 75 000–225 000 Kč/rok. Návratnost ISOBUS + RTK GPS retrofit (250–500 tis. Kč) za 2–4 sezóny.' },
@@ -21,9 +27,17 @@ const faqs = [
   { q: 'Postřik letadlem nebo dronem místo postřikovače?', a: 'V EU je letecký postřik silně regulovaný (EASA + SUR). Drony pro postřik jsou na vzestupu, ale stále vyžadují speciální povolení a jsou drahé ($30 000+ stroj). Pro CZ farmy zatím klasický postřikovač zůstává standardem.' },
 ];
 
+const faqsSk = [
+  { q: "Nesený alebo ťahaný postrekovač?", a: "Nesený (na trojbod) je lacnejší (200–500 tis. Kč) a manévrovateľnejší, ale objem nádrže obmedzený na 600–1200 l. Ťahaný (5 000–10 000 l) dáva vyšší výkon pre stredné a veľké farmy, ale potrebuje silnejší traktor pre pohon hydrauliky." },
+  { q: "Aký záber ramien pre strednú farmu?", a: "12–18 m je štandard pre CZ farmy 100–500 ha. Záber 21–24 m vyžaduje pravidelné veľké lány bez prekážok. Záber 28+ m je pre veľkofarmy 800+ ha. Pravidlo: záber by nemal prevyšovať 40 % priemernej šírky vašich polí." },
+  { q: "ISOBUS / Section Control — vyplatí sa?", a: "Pre postrekovač Section Control šetrí 5–15 % chémie ročne (v súvratiach a prekrytí). U farmy 300 ha s nákladom 5 000 Kč/ha/sezónu na chémiu = úspora 75 000–225 000 Kč/rok. Návratnosť ISOBUS + RTK GPS retrofit (250–500 tis. Kč) za 2–4 sezóny." },
+  { q: "Trysky — aké zvoliť?", a: "Štandard pre CZ sú injektorové (anti-drift) trysky 03 alebo 04 (3 alebo 4 l/min pri 3 bar). Pre pre-em herbicídy širokopaprskové ploché 110°. Pre listové fungicídy úzkopaprskové. Sady trysiek 4 000–15 000 Kč podľa počtu sekcií." },
+  { q: "Postrek lietadlom alebo dronom namiesto postrekovača?", a: "V EÚ je letecký postrek silne regulovaný (EASA + SUR). Drony pre postrek sú na vzostupe, ale stále vyžadujú špeciálne povolenie a sú drahé ($30 000+ stroj). Pre CZ farmy zatiaľ klasický postrekovač zostáva štandardom." },
+];
+const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
 
-const howToJsonLd = howToSchema({
+const howToCs = {
   name: 'Jak vybrat postřikovač',
   description: 'Postup výběru postřikovače pro CZ farmu — od rozhodnutí nesený/tažený/samojízdný přes klíčové parametry, ISOBUS Section Control až po top značky a cenovou orientaci.',
   url: canonical,
@@ -35,26 +49,170 @@ const howToJsonLd = howToSchema({
     { name: 'Investuj do ISOBUS Section Control + RTK GPS', text: 'Section Control šetří 5–15 % chemie ročně (souvratě, překryt). Pro farmu 300 ha s nákladem 5 000 Kč/ha/sezónu na chemii = úspora 75–225 tis. Kč/rok. Návratnost retrofit (250–500 tis. Kč) za 2–4 sezóny.' },
     { name: 'Vyber správné trysky podle aplikace', text: 'Injektorové anti-drift 03/04 standard. Pre-em herbicidy: širokopaprskové ploché 110°. Listové fungicidy: úzkopaprskové. Sady trysek 4–15 tis. Kč podle počtu sekcí. Drift Reduction Technology (DRT) povinná pro nové programy CAP.' },
   ],
-});
+};
+
+const howToSk = {
+  name: "Ako vybrať postrekovač",
+  description: "Postup výberu postrekovača pre CZ farmu — od rozhodnutia nesený/ťahaný/samojazdný cez kľúčové parametre, ISOBUS Section Control až po top značky a cenovú orientáciu.",
+  url: canonical,
+  totalTime: 'PT1H',
+  steps: [
+    { name: "Rozhodni medzi neseným, ťahaným a samojazdným", text: "Nesený (na trojbod, 600–1200 l, 200–500 tis. Kč) pre farmy do 100 ha. Ťahaný (5 000–10 000 l, 800 tis. – 2 mil. Kč) pre 100–500 ha. Samojazdný (3+ mil. Kč) pre 500+ ha alebo službovú činnosť." },
+    { name: "Definuj záber ramien podľa tvaru polí", text: "12–18 m štandard pre CZ farmy 100–500 ha. 21–24 m pre veľké lány bez prekážok. 28+ m pre 800+ ha. Pravidlo: záber by nemal prevyšovať 40 % priemernej šírky tvojich polí." },
+    { name: "Prejdi top značky 2026", text: "Amazone (UX/UF nesený, UG ťahaný — štandard CZ), Horsch Leeb (premium ťahaný), John Deere R4 (samojazdný), Berthoud (francúzska kvalita), Lemken Sirius, Hardi, Kuhn Deltis. Servis dealera vo tvojom kraji = kritické pre sezónu." },
+    { name: "Investuj do ISOBUS Section Control + RTK GPS", text: "Section Control šetrí 5–15 % chémie ročne (súvratia, prekryt). Pre farmu 300 ha s nákladom 5 000 Kč/ha/sezónu na chémiu = úspora 75–225 tis. Kč/rok. Návratnosť retrofit (250–500 tis. Kč) za 2–4 sezóny." },
+    { name: "Vyber správne trysky podľa aplikácie", text: "Injektorové anti-drift 03/04 štandard. Pre-em herbicídy: širokopaprskové ploché 110°. Listové fungicídy: úzkopaprskové. Sady trysiek 4–15 tis. Kč podľa počtu sekcií. Drift Reduction Technology (DRT) povinná pre nové programy CAP." },
+  ],
+};
+const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
 
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
-  headline: 'Jak vybrat postřikovač (2026)',
-  description: 'Průvodce výběrem postřikovače pro CZ farmu. Nesený vs tažený, záběr ramen, ISOBUS, top značky.',
+  headline: isSk ? "Ako vybrať postrekovač (2026)" : "Jak vybrat postřikovač (2026)",
+  description: isSk ? "Sprievodca výberom postrekovača pre CZ farmu. Nesený vs ťahaný, záber ramien, ISOBUS, top značky." : "Průvodce výběrem postřikovače pro CZ farmu. Nesený vs tažený, záběr ramen, ISOBUS, top značky.",
   author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   datePublished, dateModified: datePublished,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
 };
 ---
 
-<Layout title="Jak vybrat postřikovač (2026) — průvodce pro CZ farmu" description="Průvodce výběrem postřikovače: nesený vs tažený vs samojízdný, záběr ramen, ISOBUS Section Control, trysky, top značky 2026." canonical={canonical} ogType="article" publishedTime={datePublished}>
+<Layout title={isSk ? "Ako vybrať postrekovač (2026) — sprievodca pre CZ farmu" : "Jak vybrat postřikovač (2026) — průvodce pro CZ farmu"} description={isSk ? "Sprievodca výberom postrekovača: nesený vs ťahaný vs samohybný, záber ramien, ISOBUS Section Control, trysky, top značky 2026." : "Průvodce výběrem postřikovače: nesený vs tažený vs samojízdný, záběr ramen, ISOBUS Section Control, trysky, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
+  {isSk ? (
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a><span aria-hidden="true">›</span>
+      <a href="/sk/pruvodce/">Sprievodca nákupom</a><span aria-hidden="true">›</span>
+      <span class="current">Ako vybrať postrekovač</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Sprievodca · ~10 min</span>
+      <h1>Ako vybrať postrekovač (2026)</h1>
+      <p class="lede">
+        Postrekovač je druhý najvyužívanejší stroj na farme (po traktore) — priemerne 30–60 jázd za sezónu. Správny výber ušetrí desaťtisíce Kč ročne na chémii a palive.
+      </p>
+      <div class="meta">Publikované 18. mája 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Tri hlavné typy postrekovačov</h2>
+
+      <h3>Nesený (mounted)</h3>
+      <p>Pripojený na trojbod traktora. Objem nádrže 400–1 200 l, záber 12–18 m.</p>
+      <ul>
+        <li><strong>Plusy:</strong> najlacnejší (200–500 tis. Kč nový), manévrovateľný, krátky zatáčací polomer.</li>
+        <li><strong>Mínusy:</strong> malý objem = časté dopĺňanie (každých 30–60 min pri bežnej dávke 200 l/ha).</li>
+      </ul>
+      <p>Pre <strong>farmy do 100 ha</strong>.</p>
+
+      <h3>Ťahaný (trailed)</h3>
+      <p>Vlastný podvozok na 1 alebo 2 nápravách. Objem 2 500–8 000 l, záber 18–30 m. Štandard pre SK stredné a veľké farmy.</p>
+      <ul>
+        <li><strong>Plusy:</strong> veľký objem (1 plnenie na 25–40 ha), vyšší výkon, lepšia stabilita ramien.</li>
+        <li><strong>Mínusy:</strong> drahší (800 tis. – 3 mil. Kč), vyžaduje silnejší traktor (130+ koní), nepraktický pre malé polia pod 5 ha.</li>
+      </ul>
+      <p>Pre <strong>farmy 100–800 ha</strong>.</p>
+
+      <h3>Samojazdný (self-propelled)</h3>
+      <p>Vlastný motor + kolesá + kabína. Objem 4 000–12 000 l, záber 24–48 m. Pre veľkofarmy a zberové podniky.</p>
+      <ul>
+        <li><strong>Plusy:</strong> ergonómia (vysoká kabína, výhľad), rýchlosť na poli (12–25 km/h), vlastné kolesá = menšie utuženie.</li>
+        <li><strong>Mínusy:</strong> extrémna cena (4–15 mil. Kč), ťažký (10–25 t), vyžaduje sezónne využitie 500+ ha.</li>
+      </ul>
+      <p>Pre <strong>farmy nad 800 ha</strong> alebo zberové podniky.</p>
+
+      <h2>2. Kľúčové parametre</h2>
+
+      <h3>Záber ramien</h3>
+      <table>
+        <thead><tr><th>Záber</th><th>Odporúčané pre farmu</th><th>Cena ramien navyše</th></tr></thead>
+        <tbody>
+          <tr><td>12 m</td><td>do 100 ha</td><td>—</td></tr>
+          <tr><td>18 m</td><td>100–300 ha</td><td>+50 000 Kč</td></tr>
+          <tr><td>24 m</td><td>300–800 ha</td><td>+150 000 Kč</td></tr>
+          <tr><td>27–30 m</td><td>800+ ha</td><td>+250 000 Kč</td></tr>
+          <tr><td>36+ m</td><td>špecialisti</td><td>+500 000 Kč</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Pravidlo</strong>: záber ≤ 40 % priemernej šírky vašich polí. Pole 60 m → max 24 m záber.</p>
+
+      <h3>Objem nádrže</h3>
+      <p>Optimálny objem = <strong>výkon × kapacita</strong>: pre postrekovač 24 m záber × 8 km/h = 19 ha/h × 200 l/ha dávka = 3 800 l/h. Nádrž 4 000 l znamená 1 plnenie za hodinu — rozumné. Nádrž 8 000 l znamená 2 hodiny bez plnenia (lepší výkon, ale dvakrát viac hmotnosti → utuženie pôdy).</p>
+
+      <h3>ISOBUS + Section Control</h3>
+      <p>Štandard u prémiových postrekovačov. Vypína sekcie ramien v súvratiach alebo už ošetrených pásoch. Úspora 5–15 % chémie. Vyžaduje:</p>
+      <ul>
+        <li><strong>RTK GPS</strong> (centimetrová presnosť) — 100–300 tis. Kč hardvér alebo subskripčná služba.</li>
+        <li><strong>ISOBUS terminál</strong> v traktore s licenciou TC-SC (Task Controller Section Control) — 20–80 tis. Kč.</li>
+        <li><strong>Section Control sekcie</strong> na postrekovači — typicky 5–24 sekcií (viac = presnejšie vypínanie).</li>
+      </ul>
+
+      <h3>Čerpadlo</h3>
+      <ul>
+        <li><strong>Membránové</strong> (do 200 l/min) — pre nesené postrekovače, vyššia tlaková rezerva.</li>
+        <li><strong>Piestové</strong> (200–500 l/min) — pre stredné ťahané.</li>
+        <li><strong>Odstredivé</strong> (500+ l/min) — pre samojazdné, vysoký prietok.</li>
+      </ul>
+
+      <h3>Trysky (Nozzles)</h3>
+      <p>Veľkosť a typ trysky určujú kvalitu postreku:</p>
+      <ul>
+        <li><strong>Anti-drift injektorové</strong> (Lechler IDK, Agrotop AirMix) — najlepšie proti úletu, štandard pre SK.</li>
+        <li><strong>Štandardné ploché</strong> (Hardi Flat Fan) — pre herbicídy, vyšší úlet.</li>
+        <li><strong>Hollow Cone</strong> — pre fungicídy a insekticídy.</li>
+        <li><strong>Veľkosť</strong> 02 / 03 / 04 / 05 (= 2/3/4/5 l/min pri 3 bar) — vyberá podľa dávky a rýchlosti jazdy.</li>
+      </ul>
+
+      <h2>3. Top značky 2026</h2>
+      <table>
+        <thead><tr><th>Značka</th><th>Krajina</th><th>Špecialita</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Amazone</strong></td><td>DE</td><td>UX (ťahaný), UF (nesený), Pantera (samojazdný) — prémium, dlhá životnosť</td></tr>
+          <tr><td><strong>Horsch</strong></td><td>DE</td><td>Leeb séria — najlepšie nezávislé podvesenie ramien (eliminuje bočný rozkmit)</td></tr>
+          <tr><td><strong>Kuhn</strong></td><td>FR</td><td>Metris, Lexis — stredy pomer cena/výkon</td></tr>
+          <tr><td><strong>Hardi</strong></td><td>DK</td><td>Twin Force, Mega — dôraz na anti-drift, robustný</td></tr>
+          <tr><td><strong>John Deere</strong></td><td>US</td><td>R, M séria + ExactApply (each-nozzle control) — top precise farming</td></tr>
+          <tr><td><strong>Dammann</strong></td><td>DE</td><td>Trailblazer, ANP — extrémny záber (až 51 m), pre najvyspelejších</td></tr>
+          <tr><td><strong>Bednar</strong></td><td>CZ</td><td>FertiNium — domáca značka, atraktívna cena</td></tr>
+        </tbody>
+      </table>
+
+      <h2>4. Cenová orientácia 2026</h2>
+      <ul>
+        <li><strong>Nesený 600 l + 12 m</strong>: 200 000–400 000 Kč nový.</li>
+        <li><strong>Nesený 1 000 l + 18 m + ISOBUS</strong>: 500 000–800 000 Kč.</li>
+        <li><strong>Ťahaný 3 000 l + 21 m + Section Control</strong>: 1,2–2 mil. Kč.</li>
+        <li><strong>Ťahaný 5 000 l + 24 m + premium</strong>: 2–3,5 mil. Kč.</li>
+        <li><strong>Samojazdný 4 000 l + 28 m</strong>: 4,5–8 mil. Kč.</li>
+        <li><strong>Samojazdný 8 000 l + 36 m flagship</strong>: 8–15 mil. Kč.</li>
+      </ul>
+
+      <h2>5. FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Ďalšie zdroje</h2>
+      <ul>
+        <li><a href="/sk/stroje/postrikovace-nesene/">Katalóg nesených postrekovačov</a></li>
+        <li><a href="/sk/stroje/postrikovace-tazene/">Katalóg ťahaných postrekovačov</a></li>
+        <li><a href="/sk/stroje/postrikovace-samojizdne/">Katalóg samojazdných postrekovačov</a></li>
+        <li><a href="/sk/slovnik/section-control/">Čo je Section Control</a></li>
+        <li><a href="/sk/slovnik/isobus/">Slovník: ISOBUS</a></li>
+        <li><a href="/sk/bazar/?category=ochrana-rostlin">Použité postrekovače v bazári</a></li>
+      </ul>
+    </div>
+  </article>
+  ) : (
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a><span aria-hidden="true">›</span>
@@ -182,6 +340,7 @@ const articleJsonLd = {
       </ul>
     </div>
   </article>
+  )}
 </Layout>
 
 <style>
