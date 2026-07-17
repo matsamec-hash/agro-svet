@@ -1,33 +1,41 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getAllVcely, getAllVybaveni, getAllMed } from '../../lib/vcelarstvi';
 import { SITE_URL } from '../../lib/config';
+import { useTranslations, getLocaleFromUrl, localizePath, localizeInternalHref, tf } from '../../i18n/utils';
 
-const vcely = getAllVcely();
-const vybaveni = getAllVybaveni();
-const med = getAllMed();
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+const bcp47 = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const vcely = getAllVcely(locale);
+const vybaveni = getAllVybaveni(locale);
+const med = getAllMed(locale);
 const counts = { vcely: vcely.length, vybaveni: vybaveni.length, med: med.length };
 
-const title = 'Včelařství — druhy včel, vybavení, med a návody';
-const description = 'Vše pro začínající i pokročilé včelaře: druhy včel, včelařské vybavení, druhy medu, slovník pojmů a praktické návody krok za krokem.';
+const title = t('vcel.hub.title');
+const description = t('vcel.hub.description');
 
 const sekce = [
-  { href: '/vcelarstvi/druhy/', title: 'Druhy včel', desc: `Kraňka, italka, buckfast a další (${counts.vcely})`, emoji: '🐝' },
-  { href: '/vcelarstvi/vybaveni/', title: 'Vybavení', desc: `Úly, ochrana, nářadí, zpracování (${counts.vybaveni})`, emoji: '🪣' },
-  { href: '/vcelarstvi/med/', title: 'Druhy medu', desc: `Květový, medovicový, akátový… (${counts.med})`, emoji: '🍯' },
-  { href: '/jak-na-to/jak-zacit-vcelarit/', title: 'Jak začít včelařit', desc: 'Průvodce pro úplné začátečníky', emoji: '📖' },
-  { href: '/jak-na-to/vcelarsky-rok/', title: 'Včelařský rok', desc: 'Kalendář prací po měsících', emoji: '📅' },
-  { href: '/slovnik/', title: 'Včelařský slovník', desc: 'Pojmy od matky po varroázu', emoji: '📚' },
-  { href: '/kviz/jaka-vcela-pro-vas/', title: 'Kvíz: jaká včela pro vás', desc: 'Najděte vhodnou včelu', emoji: '🎯' },
+  { href: '/vcelarstvi/druhy/', title: t('vcel.hub.s.druhy.title'), desc: tf(locale, 'vcel.hub.s.druhy.desc', { count: counts.vcely }), emoji: '🐝' },
+  { href: '/vcelarstvi/vybaveni/', title: t('vcel.hub.s.vybaveni.title'), desc: tf(locale, 'vcel.hub.s.vybaveni.desc', { count: counts.vybaveni }), emoji: '🪣' },
+  { href: '/vcelarstvi/med/', title: t('vcel.hub.s.med.title'), desc: tf(locale, 'vcel.hub.s.med.desc', { count: counts.med }), emoji: '🍯' },
+  { href: '/jak-na-to/jak-zacit-vcelarit/', title: t('vcel.hub.s.zacit.title'), desc: t('vcel.hub.s.zacit.desc'), emoji: '📖' },
+  { href: '/jak-na-to/vcelarsky-rok/', title: t('vcel.hub.s.rok.title'), desc: t('vcel.hub.s.rok.desc'), emoji: '📅' },
+  { href: '/slovnik/', title: t('vcel.hub.s.slovnik.title'), desc: t('vcel.hub.s.slovnik.desc'), emoji: '📚' },
+  { href: '/kviz/jaka-vcela-pro-vas/', title: t('vcel.hub.s.kviz.title'), desc: t('vcel.hub.s.kviz.desc'), emoji: '🎯' },
 ];
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_URL}/` },
-    { '@type': 'ListItem', position: 2, name: 'Včelařství', item: `${SITE_URL}/vcelarstvi/` },
+    { '@type': 'ListItem', position: 1, name: t('vcel.bc.home'), item: `${SITE_URL}${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('vcel.crumb'), item: `${SITE_URL}${base}/vcelarstvi/` },
   ],
 };
 
@@ -36,15 +44,15 @@ const collectionJsonLd = {
   '@type': 'CollectionPage',
   name: title,
   description,
-  url: `${SITE_URL}/vcelarstvi/`,
-  inLanguage: 'cs-CZ',
+  url: `${SITE_URL}${base}/vcelarstvi/`,
+  inLanguage: bcp47,
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: sekce.length,
     itemListElement: sekce.map((s, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${SITE_URL}${s.href}`,
+      url: `${SITE_URL}${localizeInternalHref(locale, s.href)}`,
       name: s.title,
     })),
   },
@@ -58,20 +66,20 @@ const collectionJsonLd = {
   <div class="vcel-hub-root">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizePath(locale, '/')}>{t('vcel.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <span class="current">Včelařství</span>
+      <span class="current">{t('vcel.crumb')}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Průvodce · Včelařství</span>
-        <h1>Vše o <em>včelařství</em></h1>
-        <p class="hero-lede">Průvodce světem včel pro začátečníky i zkušené včelaře. Zjistěte, jaký druh včely se hodí do vašich podmínek, vyberte správné vybavení a naučte se rozlišovat druhy medu.</p>
+        <span class="kicker"><span class="dot"></span>{t('vcel.hub.kicker')}</span>
+        <h1>{t('vcel.hub.h1a')} <em>{t('vcel.hub.h1em')}</em></h1>
+        <p class="hero-lede">{t('vcel.hub.lede')}</p>
         <div class="hero-stats">
-          <div class="s"><span class="n">{counts.vcely}</span><span class="l">druhů včel</span></div>
-          <div class="s"><span class="n">{counts.vybaveni}</span><span class="l">položek vybavení</span></div>
-          <div class="s"><span class="n">{counts.med}</span><span class="l">druhů medu</span></div>
+          <div class="s"><span class="n">{counts.vcely}</span><span class="l">{t('vcel.stat.druhuVcel')}</span></div>
+          <div class="s"><span class="n">{counts.vybaveni}</span><span class="l">{t('vcel.stat.polozekVybaveni')}</span></div>
+          <div class="s"><span class="n">{counts.med}</span><span class="l">{t('vcel.stat.druhuMedu')}</span></div>
         </div>
       </div>
       <div class="hero-right">
@@ -80,16 +88,14 @@ const collectionJsonLd = {
     </section>
 
     <p class="intro-text">
-      Včelařství je jedno z nejstarších řemesel — a dnes zároveň důležitý příspěvek k biodiverzitě a opylování plodin.
-      Ať teprve přemýšlíte o prvním úlu, nebo hledáte informace o konkrétním druhu medu, najdete zde vše pohromadě.
-      Začněte výběrem včelího druhu nebo si projděte průvodce pro úplné začátečníky.
+      {t('vcel.hub.intro')}
     </p>
 
-    <h2 class="section-title">Sekce <span class="section-title-c">{sekce.length}</span></h2>
+    <h2 class="section-title">{t('vcel.hub.sekce')} <span class="section-title-c">{sekce.length}</span></h2>
 
     <div class="hub-grid">
       {sekce.map((s) => (
-        <a href={s.href} class="hub-card">
+        <a href={localizeInternalHref(locale, s.href)} class="hub-card">
           <div class="hc-emoji" aria-hidden="true">{s.emoji}</div>
           <div class="hc-body">
             <div class="hc-title">{s.title}</div>

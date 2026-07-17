@@ -1,20 +1,28 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllVcely } from '../../../lib/vcelarstvi';
+import { getAllVcely, vcelaTemperamentLabel, vcelaVynosLabel } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
+import { useTranslations, getLocaleFromUrl, localizePath } from '../../../i18n/utils';
 
-const vcely = getAllVcely();
-const title = 'Druhy včel — přehled chovaných včel medonosných';
-const description = 'Kraňka, italka, buckfast a další druhy chované v Česku. Temperament, medný výnos, rojivost a vhodnost pro začátečníky.';
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+const bcp47 = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const vcely = getAllVcely(locale);
+const title = t('vcel.druhy.title');
+const description = t('vcel.druhy.description');
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_URL}/` },
-    { '@type': 'ListItem', position: 2, name: 'Včelařství', item: `${SITE_URL}/vcelarstvi/` },
-    { '@type': 'ListItem', position: 3, name: 'Druhy včel', item: `${SITE_URL}/vcelarstvi/druhy/` },
+    { '@type': 'ListItem', position: 1, name: t('vcel.bc.home'), item: `${SITE_URL}${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('vcel.crumb'), item: `${SITE_URL}${base}/vcelarstvi/` },
+    { '@type': 'ListItem', position: 3, name: t('vcel.druhy.crumb'), item: `${SITE_URL}${base}/vcelarstvi/druhy/` },
   ],
 };
 
@@ -23,15 +31,15 @@ const collectionJsonLd = {
   '@type': 'CollectionPage',
   name: title,
   description,
-  url: `${SITE_URL}/vcelarstvi/druhy/`,
-  inLanguage: 'cs-CZ',
+  url: `${SITE_URL}${base}/vcelarstvi/druhy/`,
+  inLanguage: bcp47,
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: vcely.length,
     itemListElement: vcely.map((v, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${SITE_URL}/vcelarstvi/druhy/${v.slug}/`,
+      url: `${SITE_URL}${base}/vcelarstvi/druhy/${v.slug}/`,
       name: v.name,
     })),
   },
@@ -45,20 +53,20 @@ const collectionJsonLd = {
   <div class="vcely-listing-root">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizePath(locale, '/')}>{t('vcel.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/vcelarstvi/">Včelařství</a>
+      <a href={localizePath(locale, '/vcelarstvi/')}>{t('vcel.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <span class="current">Druhy včel</span>
+      <span class="current">{t('vcel.druhy.crumb')}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Katalog · Včelařství</span>
-        <h1>Druhy <em>včel</em></h1>
+        <span class="kicker"><span class="dot"></span>{t('vcel.druhy.kicker')}</span>
+        <h1>{t('vcel.druhy.h1a')} <em>{t('vcel.druhy.h1em')}</em></h1>
         <p class="hero-lede">{description}</p>
         <div class="hero-stats">
-          <div class="s"><span class="n">{vcely.length}</span><span class="l">druhů včel</span></div>
+          <div class="s"><span class="n">{vcely.length}</span><span class="l">{t('vcel.stat.druhuVcel')}</span></div>
         </div>
       </div>
       <div class="hero-right">
@@ -66,11 +74,11 @@ const collectionJsonLd = {
       </div>
     </section>
 
-    <h2 class="section-title">Přehled druhů <span class="section-title-c">{vcely.length}</span></h2>
+    <h2 class="section-title">{t('vcel.druhy.prehled')} <span class="section-title-c">{vcely.length}</span></h2>
 
     <div class="vcely-grid">
       {vcely.map((v) => (
-        <a href={`/vcelarstvi/druhy/${v.slug}/`} class="vcela-card">
+        <a href={localizePath(locale, `/vcelarstvi/druhy/${v.slug}/`)} class="vcela-card">
           {v.image_url ? (
             <div class="vc-photo" style={`background-image:url('${v.image_url}')`} role="img" aria-label={v.name}></div>
           ) : (
@@ -78,8 +86,8 @@ const collectionJsonLd = {
           )}
           <div class="vc-body">
             <div class="vc-tags">
-              <span class="vc-tag">{v.temperament}</span>
-              <span class="vc-tag vc-tag-vynos">{v.medny_vynos} výnos</span>
+              <span class="vc-tag">{vcelaTemperamentLabel(v.temperament, locale)}</span>
+              <span class="vc-tag vc-tag-vynos">{vcelaVynosLabel(v.medny_vynos, locale)} {t('vcel.vynos.word')}</span>
             </div>
             <div class="vc-name">{v.name}</div>
             <div class="vc-latin">{v.latinsky}</div>
@@ -91,12 +99,12 @@ const collectionJsonLd = {
 
     <section class="big-cta">
       <div>
-        <span class="cta-kicker">Více o včelařství</span>
-        <h2>Průvodce včelařstvím<br />pro začátečníky i pokročilé.</h2>
-        <p>Vše o úlech, vybavení, medu a sezónní péči na jednom místě.</p>
+        <span class="cta-kicker">{t('vcel.cta.kicker')}</span>
+        <h2>{t('vcel.cta.h2a')}<br />{t('vcel.cta.h2b')}</h2>
+        <p>{t('vcel.cta.p')}</p>
         <div class="cta-actions">
-          <a class="cta-btn primary" href="/vcelarstvi/">
-            Zpět na včelařství
+          <a class="cta-btn primary" href={localizePath(locale, '/vcelarstvi/')}>
+            {t('vcel.cta.back')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>

@@ -1,4 +1,8 @@
 // YAML parsováno compile-time přes @modyfi/vite-plugin-yaml (jako plemena.ts).
+// Locale-aware: cs čte z /src/data/vcelarstvi/*.yaml, sk z /src/data/vcelarstvi/sk/*.yaml
+// (přeložená próza, enum/slug/image/číselné hodnoty zachované → CSS třídy + JSON-LD
+// klíče stabilní). cs cesta beze změny (byte-identita).
+import type { Locale } from '../i18n/config';
 
 export type VcelaTemperament = 'mírná' | 'střední' | 'obranná';
 export type VcelaVynos = 'nízký' | 'střední' | 'vysoký' | 'velmi vysoký';
@@ -65,6 +69,9 @@ export interface Med {
 const vcelyModules = import.meta.glob('/src/data/vcelarstvi/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 const vybaveniModules = import.meta.glob('/src/data/vcelarstvi/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 const medModules = import.meta.glob('/src/data/vcelarstvi/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vcelySkModules = import.meta.glob('/src/data/vcelarstvi/sk/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vybaveniSkModules = import.meta.glob('/src/data/vcelarstvi/sk/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const medSkModules = import.meta.glob('/src/data/vcelarstvi/sk/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 
 function collectArrays<T>(modules: Record<string, unknown>): T[] {
   const out: T[] = [];
@@ -75,38 +82,41 @@ function collectArrays<T>(modules: Record<string, unknown>): T[] {
   return out;
 }
 
+function build<T extends { slug: unknown; name: string }>(modules: Record<string, unknown>, locale: Locale): T[] {
+  const out = collectArrays<T>(modules).map((v) => ({ ...v, slug: String(v.slug) }));
+  out.sort((a, b) => a.name.localeCompare(b.name, locale));
+  return out;
+}
+
 let cVcely: Vcela[] | null = null;
+let cVcelySk: Vcela[] | null = null;
 let cVybaveni: Vybaveni[] | null = null;
+let cVybaveniSk: Vybaveni[] | null = null;
 let cMed: Med[] | null = null;
+let cMedSk: Med[] | null = null;
 
-export function getAllVcely(): Vcela[] {
-  if (cVcely) return cVcely;
-  cVcely = collectArrays<Vcela>(vcelyModules).map((v) => ({ ...v, slug: String(v.slug) }));
-  cVcely.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
-  return cVcely;
+export function getAllVcely(locale: Locale = 'cs'): Vcela[] {
+  if (locale === 'sk') return (cVcelySk ??= build<Vcela>(vcelySkModules, 'sk'));
+  return (cVcely ??= build<Vcela>(vcelyModules, 'cs'));
 }
-export function getVcela(slug: string): Vcela | undefined {
-  return getAllVcely().find((v) => v.slug === slug);
-}
-
-export function getAllVybaveni(): Vybaveni[] {
-  if (cVybaveni) return cVybaveni;
-  cVybaveni = collectArrays<Vybaveni>(vybaveniModules).map((v) => ({ ...v, slug: String(v.slug) }));
-  cVybaveni.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
-  return cVybaveni;
-}
-export function getVybaveni(slug: string): Vybaveni | undefined {
-  return getAllVybaveni().find((v) => v.slug === slug);
+export function getVcela(slug: string, locale: Locale = 'cs'): Vcela | undefined {
+  return getAllVcely(locale).find((v) => v.slug === slug);
 }
 
-export function getAllMed(): Med[] {
-  if (cMed) return cMed;
-  cMed = collectArrays<Med>(medModules).map((v) => ({ ...v, slug: String(v.slug) }));
-  cMed.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
-  return cMed;
+export function getAllVybaveni(locale: Locale = 'cs'): Vybaveni[] {
+  if (locale === 'sk') return (cVybaveniSk ??= build<Vybaveni>(vybaveniSkModules, 'sk'));
+  return (cVybaveni ??= build<Vybaveni>(vybaveniModules, 'cs'));
 }
-export function getMed(slug: string): Med | undefined {
-  return getAllMed().find((v) => v.slug === slug);
+export function getVybaveni(slug: string, locale: Locale = 'cs'): Vybaveni | undefined {
+  return getAllVybaveni(locale).find((v) => v.slug === slug);
+}
+
+export function getAllMed(locale: Locale = 'cs'): Med[] {
+  if (locale === 'sk') return (cMedSk ??= build<Med>(medSkModules, 'sk'));
+  return (cMed ??= build<Med>(medModules, 'cs'));
+}
+export function getMed(slug: string, locale: Locale = 'cs'): Med | undefined {
+  return getAllMed(locale).find((v) => v.slug === slug);
 }
 
 export const VYBAVENI_KATEGORIE_LABELS: Record<VybaveniKategorie, string> = {
@@ -116,9 +126,48 @@ export const VYBAVENI_KATEGORIE_LABELS: Record<VybaveniKategorie, string> = {
   zpracovani: 'Zpracování medu',
   krmeni: 'Krmení a zazimování',
 };
+const VYBAVENI_KATEGORIE_LABELS_SK: Record<VybaveniKategorie, string> = {
+  ul: 'Úle',
+  ochrana: 'Ochranné pomôcky',
+  naradi: 'Náradie',
+  zpracovani: 'Spracovanie medu',
+  krmeni: 'Kŕmenie a zazimovanie',
+};
+export function vybaveniKategorieLabel(k: VybaveniKategorie, locale: Locale = 'cs'): string {
+  return (locale === 'sk' ? VYBAVENI_KATEGORIE_LABELS_SK : VYBAVENI_KATEGORIE_LABELS)[k];
+}
 
 export const MED_TYP_LABELS: Record<MedTyp, string> = {
   kvetovy: 'Květový',
   medovicovy: 'Medovicový',
   smiseny: 'Smíšený',
 };
+const MED_TYP_LABELS_SK: Record<MedTyp, string> = {
+  kvetovy: 'Kvetový',
+  medovicovy: 'Medovicový',
+  smiseny: 'Zmiešaný',
+};
+export function medTypLabel(typ: MedTyp, locale: Locale = 'cs'): string {
+  return (locale === 'sk' ? MED_TYP_LABELS_SK : MED_TYP_LABELS)[typ];
+}
+
+// Enum hodnoty zobrazované „naživo" (temperament/výnos/rojivost/krystalizace) jsou
+// v datech kanonicky česky (klíč pro CSS třídy + JSON-LD). cs label = identita
+// (byte-identita), sk overlay překládá jen zobrazovaný text.
+const VCELA_TEMPERAMENT_SK: Record<string, string> = { 'mírná': 'mierna', 'střední': 'stredná', 'obranná': 'obranná' };
+const VCELA_VYNOS_SK: Record<string, string> = { 'nízký': 'nízky', 'střední': 'stredný', 'vysoký': 'vysoký', 'velmi vysoký': 'veľmi vysoký' };
+const VCELA_ROJIVOST_SK: Record<string, string> = { 'nízká': 'nízka', 'střední': 'stredná', 'vyšší': 'vyššia' };
+const MED_KRYSTALIZACE_SK: Record<string, string> = { 'velmi pomalá': 'veľmi pomalá', 'pomalá': 'pomalá', 'střední': 'stredná', 'rychlá': 'rýchla' };
+
+export function vcelaTemperamentLabel(v: string, locale: Locale = 'cs'): string {
+  return locale === 'sk' ? (VCELA_TEMPERAMENT_SK[v] ?? v) : v;
+}
+export function vcelaVynosLabel(v: string, locale: Locale = 'cs'): string {
+  return locale === 'sk' ? (VCELA_VYNOS_SK[v] ?? v) : v;
+}
+export function vcelaRojivostLabel(v: string, locale: Locale = 'cs'): string {
+  return locale === 'sk' ? (VCELA_ROJIVOST_SK[v] ?? v) : v;
+}
+export function medKrystalizaceLabel(v: string, locale: Locale = 'cs'): string {
+  return locale === 'sk' ? (MED_KRYSTALIZACE_SK[v] ?? v) : v;
+}

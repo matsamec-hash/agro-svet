@@ -1,23 +1,31 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllVybaveni, VYBAVENI_KATEGORIE_LABELS, type VybaveniKategorie } from '../../../lib/vcelarstvi';
+import { getAllVybaveni, vybaveniKategorieLabel, type VybaveniKategorie } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
+import { useTranslations, getLocaleFromUrl, localizePath } from '../../../i18n/utils';
 
-const all = getAllVybaveni();
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+const bcp47 = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const all = getAllVybaveni(locale);
 const order: VybaveniKategorie[] = ['ul', 'ochrana', 'naradi', 'zpracovani', 'krmeni'];
 const grouped = order.map((k) => ({ k, items: all.filter((x) => x.kategorie === k) })).filter((g) => g.items.length);
 
-const title = 'Včelařské vybavení — co potřebujete k včelaření';
-const description = 'Přehled včelařského vybavení: úly, ochranné pomůcky, nářadí, medomety a krmítka. Co si pořídit jako začátečník i pokročilý včelař.';
+const title = t('vcel.vyb.title');
+const description = t('vcel.vyb.description');
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_URL}/` },
-    { '@type': 'ListItem', position: 2, name: 'Včelařství', item: `${SITE_URL}/vcelarstvi/` },
-    { '@type': 'ListItem', position: 3, name: 'Včelařské vybavení', item: `${SITE_URL}/vcelarstvi/vybaveni/` },
+    { '@type': 'ListItem', position: 1, name: t('vcel.bc.home'), item: `${SITE_URL}${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('vcel.crumb'), item: `${SITE_URL}${base}/vcelarstvi/` },
+    { '@type': 'ListItem', position: 3, name: t('vcel.vyb.crumb'), item: `${SITE_URL}${base}/vcelarstvi/vybaveni/` },
   ],
 };
 
@@ -26,15 +34,15 @@ const collectionJsonLd = {
   '@type': 'CollectionPage',
   name: title,
   description,
-  url: `${SITE_URL}/vcelarstvi/vybaveni/`,
-  inLanguage: 'cs-CZ',
+  url: `${SITE_URL}${base}/vcelarstvi/vybaveni/`,
+  inLanguage: bcp47,
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: all.length,
     itemListElement: all.map((v, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${SITE_URL}/vcelarstvi/vybaveni/${v.slug}/`,
+      url: `${SITE_URL}${base}/vcelarstvi/vybaveni/${v.slug}/`,
       name: v.name,
     })),
   },
@@ -48,21 +56,21 @@ const collectionJsonLd = {
   <div class="vybaveni-listing-root">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizePath(locale, '/')}>{t('vcel.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/vcelarstvi/">Včelařství</a>
+      <a href={localizePath(locale, '/vcelarstvi/')}>{t('vcel.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <span class="current">Včelařské vybavení</span>
+      <span class="current">{t('vcel.vyb.crumb')}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Katalog · Včelařství</span>
-        <h1>Včelařské <em>vybavení</em></h1>
+        <span class="kicker"><span class="dot"></span>{t('vcel.vyb.kicker')}</span>
+        <h1>{t('vcel.vyb.h1a')} <em>{t('vcel.vyb.h1em')}</em></h1>
         <p class="hero-lede">{description}</p>
         <div class="hero-stats">
-          <div class="s"><span class="n">{all.length}</span><span class="l">položek vybavení</span></div>
-          <div class="s"><span class="n">{grouped.length}</span><span class="l">kategorií</span></div>
+          <div class="s"><span class="n">{all.length}</span><span class="l">{t('vcel.stat.polozekVybaveni')}</span></div>
+          <div class="s"><span class="n">{grouped.length}</span><span class="l">{t('vcel.stat.kategorii')}</span></div>
         </div>
       </div>
       <div class="hero-right">
@@ -73,12 +81,12 @@ const collectionJsonLd = {
     {grouped.map((g) => (
       <section class="category-section">
         <h2 class="section-title">
-          {VYBAVENI_KATEGORIE_LABELS[g.k]}
+          {vybaveniKategorieLabel(g.k, locale)}
           <span class="section-title-c">{g.items.length}</span>
         </h2>
         <div class="vybaveni-grid">
           {g.items.map((item) => (
-            <a href={`/vcelarstvi/vybaveni/${item.slug}/`} class="vybaveni-card">
+            <a href={localizePath(locale, `/vcelarstvi/vybaveni/${item.slug}/`)} class="vybaveni-card">
               {item.image_url ? (
                 <div class="vc-photo" style={`background-image:url('${item.image_url}')`} role="img" aria-label={item.name}></div>
               ) : (
@@ -86,8 +94,8 @@ const collectionJsonLd = {
               )}
               <div class="vc-body">
                 <div class="vc-tags">
-                  <span class="vc-tag">{VYBAVENI_KATEGORIE_LABELS[item.kategorie]}</span>
-                  {item.pro_zacatecniky && <span class="vc-tag vc-tag-pro-zac">pro začátečníky</span>}
+                  <span class="vc-tag">{vybaveniKategorieLabel(item.kategorie, locale)}</span>
+                  {item.pro_zacatecniky && <span class="vc-tag vc-tag-pro-zac">{t('vcel.vyb.proZac')}</span>}
                 </div>
                 <div class="vc-name">{item.name}</div>
                 <p class="vc-desc">{item.popis_kratky}</p>
@@ -103,12 +111,12 @@ const collectionJsonLd = {
 
     <section class="big-cta">
       <div>
-        <span class="cta-kicker">Více o včelařství</span>
-        <h2>Průvodce včelařstvím<br />pro začátečníky i pokročilé.</h2>
-        <p>Vše o úlech, vybavení, medu a sezónní péči na jednom místě.</p>
+        <span class="cta-kicker">{t('vcel.cta.kicker')}</span>
+        <h2>{t('vcel.cta.h2a')}<br />{t('vcel.cta.h2b')}</h2>
+        <p>{t('vcel.cta.p')}</p>
         <div class="cta-actions">
-          <a class="cta-btn primary" href="/vcelarstvi/">
-            Zpět na včelařství
+          <a class="cta-btn primary" href={localizePath(locale, '/vcelarstvi/')}>
+            {t('vcel.cta.back')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>

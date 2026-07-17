@@ -1,57 +1,61 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllVcely, getVcela } from '../../../lib/vcelarstvi';
+import { getAllVcely, getVcela, vcelaTemperamentLabel, vcelaVynosLabel, vcelaRojivostLabel } from '../../../lib/vcelarstvi';
 import { faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
+import { useTranslations, getLocaleFromUrl, localizePath, plural } from '../../../i18n/utils';
 
-export function getStaticPaths() {
-  return getAllVcely().map((v) => ({ params: { slug: v.slug } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+const bcp47 = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const vcela = getVcela(slug!);
+const vcela = getVcela(slug!, locale);
 if (!vcela) return Astro.rewrite('/404');
 
-const canonical = `${SITE_URL}/vcelarstvi/druhy/${vcela.slug}/`;
+const canonical = `${SITE_URL}${base}/vcelarstvi/druhy/${vcela.slug}/`;
 const pageTitle = `${vcela.name} (${vcela.latinsky})`;
 const pageDesc = vcela.vhodnost_cr.length > 160 ? vcela.vhodnost_cr.slice(0, 157) + '…' : vcela.vhodnost_cr;
 
 type SpecRow = { label: string; value: string };
 const specs: SpecRow[] = [
-  { label: 'Latinský název', value: vcela.latinsky },
-  { label: 'Původ', value: vcela.puvod },
-  { label: 'Temperament', value: vcela.temperament },
-  { label: 'Medný výnos', value: vcela.medny_vynos },
-  { label: 'Rojivost', value: vcela.rojivost },
-  { label: 'Zimuvzdornost', value: vcela.zimuvzdornost },
+  { label: t('vcel.spec.latinsky'), value: vcela.latinsky },
+  { label: t('vcel.spec.puvod'), value: vcela.puvod },
+  { label: t('vcel.spec.temperament'), value: vcelaTemperamentLabel(vcela.temperament, locale) },
+  { label: t('vcel.spec.vynos'), value: vcelaVynosLabel(vcela.medny_vynos, locale) },
+  { label: t('vcel.spec.rojivost'), value: vcelaRojivostLabel(vcela.rojivost, locale) },
+  { label: t('vcel.spec.zimuvzdornost'), value: vcela.zimuvzdornost },
 ];
-if (vcela.barva) specs.push({ label: 'Zbarvení', value: vcela.barva });
+if (vcela.barva) specs.push({ label: t('vcel.spec.zbarveni'), value: vcela.barva });
 if (vcela.alternative_names && vcela.alternative_names.length > 0) {
-  specs.push({ label: 'Jiné názvy', value: vcela.alternative_names.join(', ') });
+  specs.push({ label: t('vcel.spec.jineNazvy'), value: vcela.alternative_names.join(', ') });
 }
 
-const related = getAllVcely().filter((v) => v.slug !== vcela.slug).slice(0, 4);
+const related = getAllVcely(locale).filter((v) => v.slug !== vcela.slug).slice(0, 4);
 
 // JSON-LD — same pattern as plemeno detail page
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_URL}/` },
-    { '@type': 'ListItem', position: 2, name: 'Včelařství', item: `${SITE_URL}/vcelarstvi/` },
-    { '@type': 'ListItem', position: 3, name: 'Druhy včel', item: `${SITE_URL}/vcelarstvi/druhy/` },
+    { '@type': 'ListItem', position: 1, name: t('vcel.bc.home'), item: `${SITE_URL}${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('vcel.crumb'), item: `${SITE_URL}${base}/vcelarstvi/` },
+    { '@type': 'ListItem', position: 3, name: t('vcel.druhy.crumb'), item: `${SITE_URL}${base}/vcelarstvi/druhy/` },
     { '@type': 'ListItem', position: 4, name: vcela.name, item: canonical },
   ],
 };
 
 const propertyValues: Array<{ '@type': 'PropertyValue'; name: string; value: string }> = [
-  { '@type': 'PropertyValue', name: 'Temperament', value: vcela.temperament },
-  { '@type': 'PropertyValue', name: 'Medný výnos', value: vcela.medny_vynos },
-  { '@type': 'PropertyValue', name: 'Rojivost', value: vcela.rojivost },
-  { '@type': 'PropertyValue', name: 'Zimuvzdornost', value: vcela.zimuvzdornost },
+  { '@type': 'PropertyValue', name: t('vcel.spec.temperament'), value: vcelaTemperamentLabel(vcela.temperament, locale) },
+  { '@type': 'PropertyValue', name: t('vcel.spec.vynos'), value: vcelaVynosLabel(vcela.medny_vynos, locale) },
+  { '@type': 'PropertyValue', name: t('vcel.spec.rojivost'), value: vcelaRojivostLabel(vcela.rojivost, locale) },
+  { '@type': 'PropertyValue', name: t('vcel.spec.zimuvzdornost'), value: vcela.zimuvzdornost },
 ];
-if (vcela.barva) propertyValues.push({ '@type': 'PropertyValue', name: 'Zbarvení', value: vcela.barva });
+if (vcela.barva) propertyValues.push({ '@type': 'PropertyValue', name: t('vcel.spec.zbarveni'), value: vcela.barva });
 
 const thingJsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
@@ -59,7 +63,7 @@ const thingJsonLd: Record<string, unknown> = {
   name: vcela.name,
   description: vcela.description,
   url: canonical,
-  inLanguage: 'cs-CZ',
+  inLanguage: bcp47,
   ...(vcela.alternative_names && vcela.alternative_names.length > 0 && { alternateName: vcela.alternative_names }),
   ...(vcela.image_url && { image: vcela.image_url.startsWith('http') ? vcela.image_url : `${SITE_URL}${vcela.image_url}` }),
   additionalProperty: propertyValues,
@@ -82,11 +86,11 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
   <div class="vcela-page">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizePath(locale, '/')}>{t('vcel.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/vcelarstvi/">Včelařství</a>
+      <a href={localizePath(locale, '/vcelarstvi/')}>{t('vcel.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/vcelarstvi/druhy/">Druhy včel</a>
+      <a href={localizePath(locale, '/vcelarstvi/druhy/')}>{t('vcel.druhy.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{vcela.name}</span>
     </nav>
@@ -94,17 +98,17 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
     <section class="hero">
       <div class="hero-left">
         <div class="hero-tags">
-          <span class="tag tag-vcela">včela medonosná</span>
-          <span class="tag tag-temperament">{vcela.temperament}</span>
-          <span class="tag tag-vynos">{vcela.medny_vynos} výnos</span>
+          <span class="tag tag-vcela">{t('vcel.druhy.tagVcela')}</span>
+          <span class="tag tag-temperament">{vcelaTemperamentLabel(vcela.temperament, locale)}</span>
+          <span class="tag tag-vynos">{vcelaVynosLabel(vcela.medny_vynos, locale)} {t('vcel.vynos.word')}</span>
         </div>
         <h1>{vcela.name}</h1>
         <div class="hero-altnames">{vcela.latinsky}</div>
         <p class="hero-lede">{vcela.vhodnost_cr}</p>
         <div class="hero-actions">
-          <a class="cta-secondary" href="/vcelarstvi/druhy/">
+          <a class="cta-secondary" href={localizePath(locale, '/vcelarstvi/druhy/')}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Všechny druhy včel
+            {t('vcel.druhy.vsechnyDruhyBtn')}
           </a>
         </div>
       </div>
@@ -140,11 +144,11 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 
         <section class="spec-card">
           <div class="card-head">
-            <h2>Charakteristika druhu</h2>
-            <span class="card-head-meta">{specs.length} {specs.length === 1 ? 'parametr' : specs.length < 5 ? 'parametry' : 'parametrů'}</span>
+            <h2>{t('vcel.druhy.charakteristika')}</h2>
+            <span class="card-head-meta">{specs.length} {plural(locale, specs.length, { one: t('vcel.param.one'), few: t('vcel.param.few'), many: t('vcel.param.many') })}</span>
           </div>
           <div class="spec-group">
-            <div class="spec-group-label">Základní parametry</div>
+            <div class="spec-group-label">{t('vcel.spec.groupZakladni')}</div>
             <dl class="spec-list">
               {specs.map((row) => (
                 <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -160,10 +164,10 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         {vcela.wikipedia && (
           <section class="spec-card">
             <div class="card-head">
-              <h2>Zdroje</h2>
+              <h2>{t('vcel.druhy.zdroje')}</h2>
             </div>
             <p class="wiki-link">
-              <a href={vcela.wikipedia} rel="nofollow noopener" target="_blank">Wikipedie: {vcela.name}</a>
+              <a href={vcela.wikipedia} rel="nofollow noopener" target="_blank">{t('vcel.druhy.wiki')}: {vcela.name}</a>
             </p>
           </section>
         )}
@@ -171,7 +175,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         {faqItems && (
           <section class="faq-card" aria-labelledby="faq-heading">
             <div class="card-head">
-              <h2 id="faq-heading">Časté otázky</h2>
+              <h2 id="faq-heading">{t('vcel.faq.heading')}</h2>
             </div>
             <dl class="faq-list">
               {faqItems.map((qa) => (
@@ -187,15 +191,15 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         {related.length > 0 && (
           <section class="related-card">
             <div class="card-head">
-              <h2>Další druhy včel</h2>
-              <a class="card-head-link" href="/vcelarstvi/druhy/">Všechny druhy →</a>
+              <h2>{t('vcel.druhy.dalsiDruhy')}</h2>
+              <a class="card-head-link" href={localizePath(locale, '/vcelarstvi/druhy/')}>{t('vcel.vsechnyDruhy')}</a>
             </div>
             <div class="rel-grid">
               {related.map((r) => (
-                <a href={`/vcelarstvi/druhy/${r.slug}/`} class="rel-card">
+                <a href={localizePath(locale, `/vcelarstvi/druhy/${r.slug}/`)} class="rel-card">
                   <div class="rel-name">{r.name}</div>
                   <div class="rel-latin">{r.latinsky}</div>
-                  <div class="rel-meta">{r.temperament} · {r.medny_vynos} výnos</div>
+                  <div class="rel-meta">{vcelaTemperamentLabel(r.temperament, locale)} · {vcelaVynosLabel(r.medny_vynos, locale)} {t('vcel.vynos.word')}</div>
                 </a>
               ))}
             </div>
@@ -206,15 +210,15 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 
       <aside class="content-aside">
         <div class="aside-card nav-card">
-          <span class="acc-label">Navigace</span>
-          <a href="/vcelarstvi/" class="aside-link">
-            <span class="al-label">Sekce</span>
-            <span class="al-value">Včelařství</span>
+          <span class="acc-label">{t('vcel.aside.navigace')}</span>
+          <a href={localizePath(locale, '/vcelarstvi/')} class="aside-link">
+            <span class="al-label">{t('vcel.aside.sekce')}</span>
+            <span class="al-value">{t('vcel.aside.sekceVal')}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
-          <a href="/vcelarstvi/druhy/" class="aside-link">
-            <span class="al-label">Katalog</span>
-            <span class="al-value">Druhy včel</span>
+          <a href={localizePath(locale, '/vcelarstvi/druhy/')} class="aside-link">
+            <span class="al-label">{t('vcel.aside.katalog')}</span>
+            <span class="al-value">{t('vcel.druhy.katalogVal')}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
         </div>
