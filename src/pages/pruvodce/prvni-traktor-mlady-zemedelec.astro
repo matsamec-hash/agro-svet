@@ -1,28 +1,41 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { getLocaleFromUrl } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/pruvodce/prvni-traktor-mlady-zemedelec/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+
+const canonical = `${SITE_URL}${base}/pruvodce/prvni-traktor-mlady-zemedelec/`;
 const datePublished = '2026-05-16';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Průvodce nákupem', url: '/pruvodce/' },
-  { name: 'První traktor pro mladého zemědělce', url: canonical },
+  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Sprievodca nákupom' : 'Průvodce nákupem', url: `${base}/pruvodce/` },
+  { name: isSk ? "Prvý traktor pre mladého farmára" : "První traktor pro mladého zemědělce", url: canonical },
 ]);
 
-const faqs = [
+const faqsCs = [
   { q: 'Co je dotace Mladý zemědělec?', a: 'CAP 2024 bonus pro zemědělce do 40 let — 1500 Kč/ha pro prvních 150 ha, vyplácí se max 5 let od první žádosti. Detail: /slovnik/cap-2024/.' },
   { q: 'Jaký rozpočet pro první traktor?', a: 'Pro startovací farmu 30–60 ha doporučujeme 1,5–2,5 mil. Kč (ojetý Zetor Forterra, JD 6M nebo NH T6 5–8 let starý). Plus 200–400 tis. Kč na pluh, secí, vůz, drobné nářadí.' },
   { q: 'Nový nebo ojetý jako první?', a: 'Pro startujícího farmáře téměř vždy ojetý. Nový dělá smysl jen pokud čerpáte investiční dotaci PRV (Intervence 33.73). Ojetý 4–6 let starý s 3000–5000 mh = 50 % ceny nového při 70 % zbývající životnosti.' },
   { q: 'Jak dlouho musím čekat na první dotaci?', a: 'Po podání Jednotné žádosti (duben–červen) vyplácí SZIF v říjnu–prosinci. První rok investiční výdaje hradíte sám, dotace přichází ex-post.' },
 ];
 
+const faqsSk = [
+  { q: "Čo je dotácia Mladý poľnohospodár?", a: "CAP 2024 bonus pre poľnohospodárov do 40 rokov — 1500 Kč/ha pre prvých 150 ha, vypláca sa max 5 rokov od prvej žiadosti. Detail: /slovnik/cap-2024/." },
+  { q: "Aký rozpočet pre prvý traktor?", a: "Pre štartovaciu farmu 30–60 ha odporúčame 1,5–2,5 mil. Kč (ojazdený Zetor Forterra, JD 6M alebo NH T6 5–8 rokov starý). Plus 200–400 tis. Kč na pluh, sejačku, voz, drobné náradie." },
+  { q: "Nový alebo ojazdený ako prvý?", a: "Pre začínajúceho farmára takmer vždy ojazdený. Nový má zmysel len ak čerpáte investičnú dotáciu PRV (Intervencia 33.73). Ojazdený 4–6 rokov starý s 3000–5000 mh = 50 % ceny nového pri 70 % zostávajúcej životnosti." },
+  { q: "Ako dlho musím čakať na prvú dotáciu?", a: "Po podaní Jednotnej žiadosti (apríl–jún) vypláca SZIF v októbri–decembri. Prvý rok investičné výdavky hradíte sám, dotácia prichádza ex-post." },
+];
+const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
 
-const howToJsonLd = howToSchema({
+const howToCs = {
   name: 'První traktor pro mladého zemědělce',
   description: 'Postup výběru prvního traktoru pro začínající farmu 30–60 hektarů s ohledem na dotaci Mladý zemědělec (CAP 2024) a omezený rozpočet — od specifik startovací farmy přes rozpočet po růstovou strategii.',
   url: canonical,
@@ -34,26 +47,127 @@ const howToJsonLd = howToSchema({
     { name: 'Plánuj růst farmy dopředu', text: 'Při růstu na 100–200 ha za 5–7 let budeš potřebovat 130–160 koní místo 100–120. Strategie: kup teď ojetý 130 koní (budeš ho používat 7+ let), místo nového 100 koní (za 3 roky malý). Nebo: kup malý nový s dotací Mladý zemědělec + plánuj druhý traktor za 4 roky.' },
     { name: 'Vyhni se top 5 začátečnickým chybám', text: '(1) Nepřepláceni za CVT, ISOBUS, premium značku — pro start zbytečné. (2) Nekup příliš starý (>10 let) — servis tě sežere. (3) Nepodepisuj nájem stroje "first option to buy" — vždy raději leasing. (4) Nezapomeň zahrnout DPH a registraci (cca 23 % navíc). (5) Nečerpej dotaci na traktor co bys nekoupil i bez ní.' },
   ],
-});
+};
+
+const howToSk = {
+  name: "Prvý traktor pre mladého poľnohospodára",
+  description: "Postup výberu prvého traktora pre začínajúcu farmu 30–60 hektárov s ohľadom na dotáciu Mladý poľnohospodár (CAP 2024) a obmedzený rozpočet — od špecifikácie štartovacej farmy cez rozpočet po rastovú stratégiu.",
+  url: canonical,
+  totalTime: 'PT2H',
+  steps: [
+    { name: "Pochop špecifiká štartovacej farmy", text: "Začínaš na 30–60 ha s obmedzeným kapitálom. Tvoj traktor musí zvládnuť 80 % poľných prác (orba, smyk, sejačka, postrek) + transport. Pravidlo: skôr menší robustný (Zetor Forterra, JD 6M) než väčší prémiový (Fendt 514). Nepreplácaj za neaktuálne funkcie." },
+    { name: "Definuj rozpočet a stratégiu", text: "1,5–2,5 mil. Kč na ojazdený traktor (Zetor Forterra HSX 100–140, JD 6M 130, NH T6 5–8 rokov starý) + 200–400 tis. Kč na pluh, sejačku, voz, drobné náradie. Leasing 5–7 rokov ak je cashflow napätý. Nepremýšľaj nákup nového bez dotácie PRV 33.73." },
+    { name: "Vyber odporúčané modely", text: "Pre 30–60 ha: Zetor Forterra HSX 100–140 (1,2–1,8 mil. Kč nový, 700–1300 tis. ojazdený), JD 6M 110–130, NH T6 150–180, MF 5S 145, Case IH Maxxum 115. Powershift (nie CVT) — robustnejší, lacnejší servis. Servisná sieť v tvojom kraji je rozhodujúca." },
+    { name: "Plánuj rast farmy dopredu", text: "Pri raste na 100–200 ha za 5–7 rokov budeš potrebovať 130–160 koní namiesto 100–120. Stratégia: kúp teraz ojazdený 130 koní (budeš ho používať 7+ rokov), namiesto nového 100 koní (za 3 roky malý). Alebo: kúp malý nový s dotáciou Mladý poľnohospodár + plánuj druhý traktor za 4 roky." },
+    { name: "Vyhni sa top 5 začiatočníckym chybám", text: "(1) Nepreplácaj za CVT, ISOBUS, prémiovú značku — pre štart zbytočné. (2) Nekupuj príliš starý (>10 rokov) — servis ťa zožerie. (3) Nepodpisuj nájom stroja \"first option to buy\" — vždy radšej leasing. (4) Nezabudni zahrnúť DPH a registráciu (cca 23 % navyše). (5) Nečerpej dotáciu na traktor, ktorý by si nekúpil aj bez nej." },
+  ],
+};
+const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
 
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
-  headline: 'První traktor pro mladého zemědělce',
-  description: 'Průvodce výběrem prvního traktoru. Dotace Mladý zemědělec, rozpočet, ojetý vs nový, doporučené modely.',
+  headline: isSk ? "Prvý traktor pre mladého farmára" : "První traktor pro mladého zemědělce",
+  description: isSk ? "Sprievodca výberom prvého traktora. Dotácia Mladý poľnohospodár, rozpočet, ojazdený vs nový, odporúčané modely." : "Průvodce výběrem prvního traktoru. Dotace Mladý zemědělec, rozpočet, ojetý vs nový, doporučené modely.",
   author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   datePublished, dateModified: datePublished,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
 };
 ---
 
-<Layout title="První traktor pro mladého zemědělce — průvodce 2026" description="Začínáte hospodařit do 40 let? Průvodce výběrem prvního traktoru s ohledem na dotaci Mladý zemědělec, omezený rozpočet a růst farmy." canonical={canonical} ogType="article" publishedTime={datePublished}>
+<Layout title={isSk ? "Prvý traktor pre mladého farmára — sprievodca 2026" : "První traktor pro mladého zemědělce — průvodce 2026"} description={isSk ? "Začínate hospodáriť do 40 rokov? Sprievodca výberom prvého traktora s ohľadom na dotáciu Mladý farmár, obmedzený rozpočet a rast farmy." : "Začínáte hospodařit do 40 let? Průvodce výběrem prvního traktoru s ohledem na dotaci Mladý zemědělec, omezený rozpočet a růst farmy."} canonical={canonical} ogType="article" publishedTime={datePublished}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
 
+  {isSk ? (
+  <article class="g-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/sk/">Domov</a><span aria-hidden="true">›</span>
+      <a href="/sk/pruvodce/">Sprievodca nákupom</a><span aria-hidden="true">›</span>
+      <span class="current">Prvý traktor pre mladého farmára</span>
+    </nav>
+
+    <header class="g-head">
+      <span class="kicker">Sprievodca · ~10 min</span>
+      <h1>Prvý traktor pre mladého farmára</h1>
+      <p class="lede">
+        Začínate hospodáriť do 40 rokov? Tento sprievodca vás prevedie nákupom prvého traktora s ohľadom na dotáciu Mladý farmár, obmedzený štartovací rozpočet a plánovaný rast farmy.
+      </p>
+      <div class="meta">Publikované 16. mája 2026</div>
+    </header>
+
+    <div class="g-body">
+      <h2>1. Špecifiká štartovacej farmy</h2>
+      <p>Mladý farmár (do 40 rokov, prvých 5 rokov od prvej žiadosti SZP) má v CAP 2024 výhody:</p>
+      <ul>
+        <li><strong>Bonus 1500 Kč/ha</strong> pre prvých 150 ha — pre 50 ha farmu = 75 000 Kč/rok navyše.</li>
+        <li><strong>Investičné dotácie PRV</strong> s vyšším percentom podpory (50 % namiesto 40 % pre startup).</li>
+        <li><strong>Lacnejšie úvery</strong> u niektorých bánk (Komerční banka, ČSOB) vďaka štátnej garancii.</li>
+      </ul>
+      <p>→ <a href="/sk/kalkulacka/dotace-cap/">CAP kalkulačka</a> ukáže presnú výšku pre vašu farmu.</p>
+
+      <h2>2. Rozpočet a stratégia</h2>
+      <p>Pre typickú štartovaciu farmu (30–60 ha) odporúčame:</p>
+      <ul>
+        <li><strong>Traktor</strong>: 1,5–2,5 mil. Kč (ojazdený 80–130 koní).</li>
+        <li><strong>Pluh + sejačka</strong>: 300–600 tis. Kč.</li>
+        <li><strong>Voz / kontajner</strong>: 150–300 tis. Kč.</li>
+        <li><strong>Drobné náradie</strong>: 100–200 tis. Kč.</li>
+      </ul>
+      <p>Celkovo ~<strong>2,2–3,5 mil. Kč</strong> štartovacia sada. Z toho môžete čerpať 30–50 % dotáciu PRV (Intervencie 33.73 + bonusy pre mladých).</p>
+
+      <h2>3. Odporúčané modely pre prvý traktor</h2>
+      <div class="comp-table">
+        <table>
+          <thead>
+            <tr><th>Model (ojazdený 4–6 rokov)</th><th>Výkon</th><th>Cena (orientačne)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Zetor Proxima 90</strong></td><td>90 k</td><td>900 tis. – 1,3 mil. Kč</td></tr>
+            <tr><td><strong>Zetor Forterra 120</strong></td><td>120 k</td><td>1,3–1,7 mil. Kč</td></tr>
+            <tr><td><strong>John Deere 6M 110</strong></td><td>110 k</td><td>1,6–2,0 mil. Kč</td></tr>
+            <tr><td><strong>NH T6.165</strong></td><td>130 k</td><td>1,7–2,1 mil. Kč</td></tr>
+            <tr><td><strong>Massey Ferguson 5713</strong></td><td>130 k</td><td>1,8–2,2 mil. Kč</td></tr>
+            <tr><td><strong>Kubota M5-111</strong></td><td>110 k</td><td>1,5–1,9 mil. Kč</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4. Rast farmy — plánovanie dopredu</h2>
+      <p>Prvý traktor by mal mať <strong>rezervu pre budúci rast</strong>. Pravidlo:</p>
+      <ul>
+        <li>Ak plánujete rast z 30 ha na 100 ha za 5 rokov, nekupujte 70 koní (bude málo na 100 ha). Voľte 100–130 koní s rezervou.</li>
+        <li>Ak plánujete zostať na 30–50 ha, 80–100 koní stačí (menej paliva, lacnejšia údržba).</li>
+      </ul>
+
+      <h2>5. Čo určite nerobiť</h2>
+      <ul>
+        <li>❌ <strong>Nekupujte prvý traktor na maximálny leasing</strong>. Splátky musia pokryť aj zlý rok.</li>
+        <li>❌ <strong>Nekupujte stroj z prvej ponuky</strong> bez obhliadky 3–5 alternatív.</li>
+        <li>❌ <strong>Nekupujte všetko nové</strong>. Sekundárne náradie (pluh, brány, postrekovač) lacný ojazdený funguje rovnako.</li>
+        <li>❌ <strong>Nezabúdajte na rezervu</strong> 15–20 % rozpočtu na nečakané opravy/upgrade.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <div class="faqs">
+        {faqs.map((f) => (
+          <details class="faq"><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+
+      <h2>Ďalšie zdroje</h2>
+      <ul>
+        <li>🔍 <a href="/sk/kviz/jaky-traktor-potrebujete/">Kvíz „Aký traktor potrebujete?"</a></li>
+        <li>📋 <a href="/sk/pruvodce/kontrola-ojeteho-traktoru/">Checklist kontroly ojazdeného traktora</a></li>
+        <li>💶 <a href="/sk/kalkulacka/dotace-cap/">Kalkulačka dotácií CAP</a></li>
+        <li>📋 <a href="/sk/dotace/dotace-pro-mlade-zemedelce/">Detail dotácie Mladý farmár</a></li>
+      </ul>
+    </div>
+  </article>
+  ) : (
   <article class="g-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href="/">Domů</a><span aria-hidden="true">›</span>
@@ -138,6 +252,7 @@ const articleJsonLd = {
       </ul>
     </div>
   </article>
+  )}
 </Layout>
 
 <style>
