@@ -1,48 +1,52 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllVybaveni, getVybaveni, VYBAVENI_KATEGORIE_LABELS } from '../../../lib/vcelarstvi';
+import { getAllVybaveni, getVybaveni, vybaveniKategorieLabel } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
+import { useTranslations, getLocaleFromUrl, localizePath, plural } from '../../../i18n/utils';
 
-export function getStaticPaths() {
-  return getAllVybaveni().map((v) => ({ params: { slug: v.slug } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const isSk = locale === 'sk';
+const base = isSk ? '/sk' : '';
+const bcp47 = isSk ? 'sk-SK' : 'cs-CZ';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const item = getVybaveni(slug!);
+const item = getVybaveni(slug!, locale);
 if (!item) return Astro.rewrite('/404');
 
-const canonical = `${SITE_URL}/vcelarstvi/vybaveni/${item.slug}/`;
+const canonical = `${SITE_URL}${base}/vcelarstvi/vybaveni/${item.slug}/`;
 const pageTitle = item.name;
 const pageDesc = item.popis_kratky.length > 160 ? item.popis_kratky.slice(0, 157) + '…' : item.popis_kratky;
 
-const kategorieLabel = VYBAVENI_KATEGORIE_LABELS[item.kategorie];
+const kategorieLabel = vybaveniKategorieLabel(item.kategorie, locale);
 
 type SpecRow = { label: string; value: string };
 const specs: SpecRow[] = [
-  { label: 'Kategorie', value: kategorieLabel },
+  { label: t('vcel.spec.kategorie'), value: kategorieLabel },
 ];
-if (item.orientacni_cena) specs.push({ label: 'Orientační cena', value: item.orientacni_cena });
-if (item.pro_zacatecniky) specs.push({ label: 'Vhodné pro', value: 'Začátečníky' });
+if (item.orientacni_cena) specs.push({ label: t('vcel.spec.orientacniCena'), value: item.orientacni_cena });
+if (item.pro_zacatecniky) specs.push({ label: t('vcel.spec.vhodnePro'), value: t('vcel.spec.zacatecniky') });
 
-const related = (item.related ?? []).map((s) => getVybaveni(s)).filter(Boolean) as NonNullable<ReturnType<typeof getVybaveni>>[];
+const related = (item.related ?? []).map((s) => getVybaveni(s, locale)).filter(Boolean) as NonNullable<ReturnType<typeof getVybaveni>>[];
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_URL}/` },
-    { '@type': 'ListItem', position: 2, name: 'Včelařství', item: `${SITE_URL}/vcelarstvi/` },
-    { '@type': 'ListItem', position: 3, name: 'Včelařské vybavení', item: `${SITE_URL}/vcelarstvi/vybaveni/` },
+    { '@type': 'ListItem', position: 1, name: t('vcel.bc.home'), item: `${SITE_URL}${base}/` },
+    { '@type': 'ListItem', position: 2, name: t('vcel.crumb'), item: `${SITE_URL}${base}/vcelarstvi/` },
+    { '@type': 'ListItem', position: 3, name: t('vcel.vyb.crumb'), item: `${SITE_URL}${base}/vcelarstvi/vybaveni/` },
     { '@type': 'ListItem', position: 4, name: item.name, item: canonical },
   ],
 };
 
 const propertyValues: Array<{ '@type': 'PropertyValue'; name: string; value: string }> = [
-  { '@type': 'PropertyValue', name: 'Kategorie', value: kategorieLabel },
+  { '@type': 'PropertyValue', name: t('vcel.spec.kategorie'), value: kategorieLabel },
 ];
-if (item.orientacni_cena) propertyValues.push({ '@type': 'PropertyValue', name: 'Orientační cena', value: item.orientacni_cena });
-if (item.pro_zacatecniky) propertyValues.push({ '@type': 'PropertyValue', name: 'Vhodné pro začátečníky', value: 'Ano' });
+if (item.orientacni_cena) propertyValues.push({ '@type': 'PropertyValue', name: t('vcel.spec.orientacniCena'), value: item.orientacni_cena });
+if (item.pro_zacatecniky) propertyValues.push({ '@type': 'PropertyValue', name: t('vcel.vyb.starterLabel'), value: t('vcel.common.ano') });
 
 const thingJsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
@@ -50,7 +54,7 @@ const thingJsonLd: Record<string, unknown> = {
   name: item.name,
   description: item.description,
   url: canonical,
-  inLanguage: 'cs-CZ',
+  inLanguage: bcp47,
   ...(item.image_url && { image: item.image_url.startsWith('http') ? item.image_url : `${SITE_URL}${item.image_url}` }),
   additionalProperty: propertyValues,
 };
@@ -63,11 +67,11 @@ const thingJsonLd: Record<string, unknown> = {
   <div class="vybaveni-page">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizePath(locale, '/')}>{t('vcel.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/vcelarstvi/">Včelařství</a>
+      <a href={localizePath(locale, '/vcelarstvi/')}>{t('vcel.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/vcelarstvi/vybaveni/">Včelařské vybavení</a>
+      <a href={localizePath(locale, '/vcelarstvi/vybaveni/')}>{t('vcel.vyb.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{item.name}</span>
     </nav>
@@ -76,17 +80,17 @@ const thingJsonLd: Record<string, unknown> = {
       <div class="hero-left">
         <div class="hero-tags">
           <span class="tag tag-kategorie">{kategorieLabel}</span>
-          {item.pro_zacatecniky && <span class="tag tag-zac">pro začátečníky</span>}
+          {item.pro_zacatecniky && <span class="tag tag-zac">{t('vcel.vyb.proZac')}</span>}
         </div>
         <h1>{item.name}</h1>
         <p class="hero-lede">{item.popis_kratky}</p>
         {item.orientacni_cena && (
-          <div class="hero-cena">Orientační cena: <strong>{item.orientacni_cena}</strong></div>
+          <div class="hero-cena">{t('vcel.vyb.heroCena')} <strong>{item.orientacni_cena}</strong></div>
         )}
         <div class="hero-actions">
-          <a class="cta-secondary" href="/vcelarstvi/vybaveni/">
+          <a class="cta-secondary" href={localizePath(locale, '/vcelarstvi/vybaveni/')}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Všechno vybavení
+            {t('vcel.vyb.vsechnoBtn')}
           </a>
         </div>
       </div>
@@ -122,11 +126,11 @@ const thingJsonLd: Record<string, unknown> = {
 
         <section class="spec-card">
           <div class="card-head">
-            <h2>Parametry</h2>
-            <span class="card-head-meta">{specs.length} {specs.length === 1 ? 'parametr' : specs.length < 5 ? 'parametry' : 'parametrů'}</span>
+            <h2>{t('vcel.vyb.parametry')}</h2>
+            <span class="card-head-meta">{specs.length} {plural(locale, specs.length, { one: t('vcel.param.one'), few: t('vcel.param.few'), many: t('vcel.param.many') })}</span>
           </div>
           <div class="spec-group">
-            <div class="spec-group-label">Základní informace</div>
+            <div class="spec-group-label">{t('vcel.spec.groupZakladniInfo')}</div>
             <dl class="spec-list">
               {specs.map((row) => (
                 <div class="spec-item"><dt>{row.label}</dt><dd>{row.value}</dd></div>
@@ -142,14 +146,14 @@ const thingJsonLd: Record<string, unknown> = {
         {related.length > 0 && (
           <section class="related-card">
             <div class="card-head">
-              <h2>Související vybavení</h2>
-              <a class="card-head-link" href="/vcelarstvi/vybaveni/">Všechno vybavení →</a>
+              <h2>{t('vcel.vyb.souvisejici')}</h2>
+              <a class="card-head-link" href={localizePath(locale, '/vcelarstvi/vybaveni/')}>{t('vcel.vyb.vsechnoLink')}</a>
             </div>
             <div class="rel-grid">
               {related.map((r) => (
-                <a href={`/vcelarstvi/vybaveni/${r.slug}/`} class="rel-card">
+                <a href={localizePath(locale, `/vcelarstvi/vybaveni/${r.slug}/`)} class="rel-card">
                   <div class="rel-name">{r.name}</div>
-                  <div class="rel-kategorie">{VYBAVENI_KATEGORIE_LABELS[r.kategorie]}</div>
+                  <div class="rel-kategorie">{vybaveniKategorieLabel(r.kategorie, locale)}</div>
                   {r.orientacni_cena && <div class="rel-meta">{r.orientacni_cena}</div>}
                 </a>
               ))}
@@ -161,23 +165,23 @@ const thingJsonLd: Record<string, unknown> = {
 
       <aside class="content-aside">
         <div class="aside-card nav-card">
-          <span class="acc-label">Navigace</span>
-          <a href="/vcelarstvi/" class="aside-link">
-            <span class="al-label">Sekce</span>
-            <span class="al-value">Včelařství</span>
+          <span class="acc-label">{t('vcel.aside.navigace')}</span>
+          <a href={localizePath(locale, '/vcelarstvi/')} class="aside-link">
+            <span class="al-label">{t('vcel.aside.sekce')}</span>
+            <span class="al-value">{t('vcel.aside.sekceVal')}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
-          <a href="/vcelarstvi/vybaveni/" class="aside-link">
-            <span class="al-label">Katalog</span>
-            <span class="al-value">Vybavení</span>
+          <a href={localizePath(locale, '/vcelarstvi/vybaveni/')} class="aside-link">
+            <span class="al-label">{t('vcel.aside.katalog')}</span>
+            <span class="al-value">{t('vcel.vyb.katalogVal')}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </a>
         </div>
         {item.pro_zacatecniky && (
           <div class="aside-card starter-card">
             <div class="starter-icon" aria-hidden="true">✅</div>
-            <div class="starter-label">Vhodné pro začátečníky</div>
-            <p class="starter-desc">Toto vybavení doporučujeme i těm, kteří s včelařením teprve začínají.</p>
+            <div class="starter-label">{t('vcel.vyb.starterLabel')}</div>
+            <p class="starter-desc">{t('vcel.vyb.starterDesc')}</p>
           </div>
         )}
       </aside>
