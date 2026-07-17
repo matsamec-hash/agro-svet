@@ -44,14 +44,23 @@ export interface PlemenoFlat extends Plemeno {
   druh_name: string;
 }
 
+/** Podporovaná locale pro katalog plemen. cs = zdrojová YAML, sk = přeložená overlay. */
+export type PlemenaLocale = 'cs' | 'sk';
+
 // Vite plugin parses YAML at compile-time → default export is already an object.
-const druhModules = import.meta.glob('/src/data/plemena/*.yaml', {
+// cs = zdrojová data; sk = přeložená overlay se stejnými slugy (plemena-sk/*.yaml).
+const druhModulesCs = import.meta.glob('/src/data/plemena/*.yaml', {
+  eager: true,
+  import: 'default',
+}) as Record<string, unknown>;
+const druhModulesSk = import.meta.glob('/src/data/plemena-sk/*.yaml', {
   eager: true,
   import: 'default',
 }) as Record<string, unknown>;
 
-let cachedDruhy: Druh[] | null = null;
-let cachedFlat: PlemenoFlat[] | null = null;
+// Per-locale cache (SSR: modul žije napříč requesty, cache je bezpečná – data jsou immutable).
+const cachedDruhy: Record<PlemenaLocale, Druh[] | null> = { cs: null, sk: null };
+const cachedFlat: Record<PlemenaLocale, PlemenoFlat[] | null> = { cs: null, sk: null };
 
 function coerceSlug(v: unknown): string {
   return typeof v === 'string' ? v : String(v);
@@ -65,10 +74,17 @@ function normalize(raw: any): Druh {
   return raw as Druh;
 }
 
-export function getAllDruhy(): Druh[] {
-  if (cachedDruhy) return cachedDruhy;
+function localeOf(locale?: string): PlemenaLocale {
+  return locale === 'sk' ? 'sk' : 'cs';
+}
+
+export function getAllDruhy(locale?: string): Druh[] {
+  const loc = localeOf(locale);
+  const cached = cachedDruhy[loc];
+  if (cached) return cached;
+  const modules = loc === 'sk' ? druhModulesSk : druhModulesCs;
   const out: Druh[] = [];
-  for (const [path, raw] of Object.entries(druhModules)) {
+  for (const [path, raw] of Object.entries(modules)) {
     const parsed = raw as Druh;
     if (!parsed?.slug) {
       console.warn(`[plemena] Missing druh slug in ${path}`);
@@ -76,29 +92,31 @@ export function getAllDruhy(): Druh[] {
     }
     out.push(normalize(parsed));
   }
-  out.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
-  cachedDruhy = out;
+  out.sort((a, b) => a.name.localeCompare(b.name, loc));
+  cachedDruhy[loc] = out;
   return out;
 }
 
-export function getDruh(slug: string): Druh | undefined {
-  return getAllDruhy().find((d) => d.slug === slug);
+export function getDruh(slug: string, locale?: string): Druh | undefined {
+  return getAllDruhy(locale).find((d) => d.slug === slug);
 }
 
-export function getAllPlemena(): PlemenoFlat[] {
-  if (cachedFlat) return cachedFlat;
+export function getAllPlemena(locale?: string): PlemenoFlat[] {
+  const loc = localeOf(locale);
+  const cached = cachedFlat[loc];
+  if (cached) return cached;
   const flat: PlemenoFlat[] = [];
-  for (const druh of getAllDruhy()) {
+  for (const druh of getAllDruhy(loc)) {
     for (const p of druh.plemena || []) {
       flat.push({ ...p, druh_slug: druh.slug, druh_name: druh.name });
     }
   }
-  cachedFlat = flat;
+  cachedFlat[loc] = flat;
   return flat;
 }
 
-export function getPlemeno(druhSlug: string, plemenoSlug: string): { druh: Druh; plemeno: Plemeno } | undefined {
-  const druh = getDruh(druhSlug);
+export function getPlemeno(druhSlug: string, plemenoSlug: string, locale?: string): { druh: Druh; plemeno: Plemeno } | undefined {
+  const druh = getDruh(druhSlug, locale);
   if (!druh) return undefined;
   const plemeno = druh.plemena.find((p) => p.slug === plemenoSlug);
   if (!plemeno) return undefined;
@@ -115,3 +133,19 @@ export const UZITKOVOST_LABELS: Record<PlemenoUzitkovost, string> = {
   jezdecke: 'Jezdecké',
   ostatni: 'Ostatní',
 };
+
+const UZITKOVOST_LABELS_SK: Record<PlemenoUzitkovost, string> = {
+  maso: 'Mäsové',
+  mleko: 'Mliekové',
+  kombinovane: 'Kombinované',
+  tazne: 'Ťažné',
+  sportovni: 'Športové',
+  vlna: 'Vlna',
+  jezdecke: 'Jazdecké',
+  ostatni: 'Ostatné',
+};
+
+/** Lokalizované popisky užitkovosti. cs = výchozí, sk = přeložené. */
+export function getUzitkovostLabels(locale?: string): Record<PlemenoUzitkovost, string> {
+  return locale === 'sk' ? UZITKOVOST_LABELS_SK : UZITKOVOST_LABELS;
+}
