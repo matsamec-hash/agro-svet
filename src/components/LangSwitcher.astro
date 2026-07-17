@@ -1,7 +1,9 @@
 ---
 // src/components/LangSwitcher.astro
-// CZ/SK/UA/PL header switcher. Builds the localized equivalent of the current
-// cs-root path via stripLocale + localizePath. uk added in Fáze 3, pl ve fázi 1 PL.
+// CZ/SK/UA/PL header switcher jako dropdown. Builds the localized equivalent of
+// the current cs-root path via stripLocale + localizePath. uk added in Fáze 3,
+// pl ve fázi 1 PL. Native <details> = funguje i bez JS; drobný skript přidá
+// zavření kliknutím mimo / Esc (progressive enhancement).
 import { stripLocale, localizePath, langSwitchHref, t } from '../i18n/utils';
 import { HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 
@@ -15,24 +17,103 @@ const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk);
 const ukHref = langSwitchHref('uk', path, []);
 // PL cíl: nelaunchnuté sekce padají na /pl/ (PL homepage, noindex) — nikdy 404.
 const plHref = langSwitchHref('pl', path, HIDDEN_NEWS_CATEGORIES.pl);
+
+const options = [
+  { code: 'cs', href: csHref, hreflang: 'cs' },
+  { code: 'sk', href: skHref, hreflang: 'sk' },
+  { code: 'uk', href: ukHref, hreflang: 'uk' },
+  { code: 'pl', href: plHref, hreflang: 'pl' },
+];
+const currentLabel = t(locale, `lang.${locale}`);
 ---
-<div class="lang-switch" role="group" aria-label={t(locale, 'lang.switch')}>
-  <a href={csHref} class:list={["lang-opt", { active: locale === 'cs' }]} hreflang="cs"
-     aria-current={locale === 'cs' ? 'true' : undefined}>{t(locale, 'lang.cs')}</a>
-  <span class="lang-sep" aria-hidden="true">/</span>
-  <a href={skHref} class:list={["lang-opt", { active: locale === 'sk' }]} hreflang="sk"
-     aria-current={locale === 'sk' ? 'true' : undefined}>{t(locale, 'lang.sk')}</a>
-  <span class="lang-sep" aria-hidden="true">/</span>
-  <a href={ukHref} class:list={["lang-opt", { active: locale === 'uk' }]} hreflang="uk"
-     aria-current={locale === 'uk' ? 'true' : undefined}>{t(locale, 'lang.uk')}</a>
-  <span class="lang-sep" aria-hidden="true">/</span>
-  <a href={plHref} class:list={["lang-opt", { active: locale === 'pl' }]} hreflang="pl"
-     aria-current={locale === 'pl' ? 'true' : undefined}>{t(locale, 'lang.pl')}</a>
-</div>
+<details class="lang-dd" aria-label={t(locale, 'lang.switch')}>
+  <summary class="lang-current">
+    <span>{currentLabel}</span>
+    <svg class="lang-chevron" width="10" height="10" viewBox="0 0 12 12" aria-hidden="true" fill="none">
+      <path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </summary>
+  <div class="lang-menu" role="menu">
+    {options.map((o) => (
+      <a
+        href={o.href}
+        role="menuitem"
+        class:list={["lang-opt", { active: locale === o.code }]}
+        hreflang={o.hreflang}
+        aria-current={locale === o.code ? 'true' : undefined}
+      >{t(locale, `lang.${o.code}`)}</a>
+    ))}
+  </div>
+</details>
 <style>
-  .lang-switch { display: inline-flex; align-items: center; gap: 4px; font-family: 'Chakra Petch', sans-serif; font-size: 12px; }
-  .lang-opt { color: #6B6B72; text-decoration: none; padding: 2px 5px; border-radius: 5px; transition: color .15s, background .15s; }
+  .lang-dd { position: relative; display: inline-block; font-family: 'Chakra Petch', sans-serif; }
+  .lang-current {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0A0A0B;
+    padding: 4px 9px;
+    border: 1.5px solid #0A0A0B;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: background .15s;
+  }
+  .lang-current::-webkit-details-marker { display: none; }
+  .lang-current:hover { background: #FFFF00; }
+  .lang-chevron { transition: transform .18s ease; color: #6B6B72; }
+  .lang-dd[open] .lang-chevron { transform: rotate(180deg); }
+  .lang-dd[open] .lang-current { background: #FFFF00; }
+
+  .lang-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 5px;
+    background: #fff;
+    border: 1.5px solid #0A0A0B;
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 #0A0A0B;
+    z-index: 60;
+  }
+  /* Otevírání zprava, když je switcher u pravého okraje (footer/RTL header) */
+  .lang-menu { right: auto; }
+
+  .lang-opt {
+    display: block;
+    font-size: 12px;
+    color: #6B6B72;
+    text-decoration: none;
+    padding: 5px 12px 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    transition: color .15s, background .15s;
+  }
   .lang-opt:hover { color: #0A0A0B; background: #FFFF00; }
-  .lang-opt.active { color: #0A0A0B; font-weight: 700; }
-  .lang-sep { color: #c0c0c5; }
+  .lang-opt.active { color: #0A0A0B; font-weight: 700; box-shadow: inset 3px 0 0 #FFEA00; }
 </style>
+<script is:inline>
+  (function () {
+    // Zavři otevřený dropdown kliknutím mimo / klávesou Esc. Progressive
+    // enhancement — <details> funguje i bez tohoto skriptu.
+    document.addEventListener('click', function (e) {
+      document.querySelectorAll('details.lang-dd[open]').forEach(function (d) {
+        if (!d.contains(e.target)) d.removeAttribute('open');
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      document.querySelectorAll('details.lang-dd[open]').forEach(function (d) {
+        d.removeAttribute('open');
+      });
+    });
+  })();
+</script>
