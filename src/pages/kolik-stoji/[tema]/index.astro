@@ -1,0 +1,330 @@
+---
+// „Kolik stojí…" detail — cs-only landing s vysokým nákupním intentem.
+// Statické (prerender) — sekce zatím není v SK_LAUNCHED_PREFIXES, /sk mirror
+// nevzniká (žádný český fallback do /sk).
+export const prerender = true;
+
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import { KOLIK_STOJI_TOPICS, getKolikStojiTopic } from '../../../data/kolik-stoji';
+
+export function getStaticPaths() {
+  return KOLIK_STOJI_TOPICS.map((t) => ({ params: { tema: t.slug } }));
+}
+
+const { tema } = Astro.params;
+const topic = getKolikStojiTopic(tema!);
+if (!topic) return Astro.redirect('/kolik-stoji/');
+
+const canonical = `${SITE_URL}/kolik-stoji/${topic.slug}/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kolik stojí', url: '/kolik-stoji/' },
+  { name: topic.question, url: canonical },
+]);
+const faqJsonLd = faqPageSchema(topic.faq.map((f) => ({ q: f.q, a: f.a })));
+
+const related = KOLIK_STOJI_TOPICS.filter((t) => t.slug !== topic.slug);
+---
+
+<Layout title={topic.metaTitle} description={topic.metaDescription} canonical={canonical}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="ks-page">
+    <nav class="ks-crumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/kolik-stoji/">Kolik stojí</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">{topic.question}</span>
+    </nav>
+
+    <header class="ks-hero">
+      <div class="ks-hero-inner">
+        <span class="ks-kicker">{topic.kicker}</span>
+        <h1>{topic.question}</h1>
+        <p class="ks-answer">{topic.quickAnswer}</p>
+      </div>
+    </header>
+
+    <section class="ks-section ks-intro">
+      {topic.intro.map((p) => <p>{p}</p>)}
+    </section>
+
+    <section class="ks-section">
+      <h2>{topic.table.caption}</h2>
+      <div class="ks-tablewrap">
+        <table class="ks-table">
+          <thead>
+            <tr>
+              <th></th>
+              {topic.table.columns.map((col) => <th>{col}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {topic.table.rows.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                {row.values.map((v) => <td>{v}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {topic.table.note && <p class="ks-note">{topic.table.note}</p>}
+    </section>
+
+    <section class="ks-section">
+      <h2>Co cenu ovlivňuje</h2>
+      <ul class="ks-factors">
+        {topic.factors.map((f) => <li>{f}</li>)}
+      </ul>
+    </section>
+
+    <section class="ks-section ks-cta-wrap">
+      <h2>Spočítejte si to přesně</h2>
+      <div class="ks-cta-grid">
+        {topic.ctas.map((cta) => (
+          <a class="ks-cta" href={cta.href}>
+            <span class="ks-cta-title">{cta.title}</span>
+            <span class="ks-cta-desc">{cta.desc}</span>
+            <span class="ks-cta-arrow" aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="ks-section">
+      <h2>Časté dotazy</h2>
+      <div class="ks-faq">
+        {topic.faq.map((f) => (
+          <details class="ks-faq-item">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="ks-section">
+      <h2>Další „kolik stojí"</h2>
+      <div class="ks-related">
+        {related.map((t) => (
+          <a class="ks-related-link" href={`/kolik-stoji/${t.slug}/`}>{t.question}</a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .ks-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+    font-family: 'Roboto Condensed', system-ui, sans-serif;
+    color: #1e1e22;
+  }
+  .ks-crumb {
+    font-size: 0.85rem;
+    color: #6b6b72;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .ks-crumb a { color: #2f6b2f; text-decoration: none; }
+  .ks-crumb a:hover { text-decoration: underline; }
+  .ks-crumb .current { color: #6b6b72; }
+
+  .ks-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    color: #fff;
+    padding: 40px 40px 34px;
+    margin-bottom: 26px;
+    background:
+      radial-gradient(600px 300px at 12% 18%, rgba(255, 234, 0, .16), transparent 60%),
+      linear-gradient(135deg, #0e0e10 0%, #1c1c20 60%, #2a2a2f 100%);
+  }
+  .ks-hero-inner { position: relative; z-index: 2; }
+  .ks-kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #FFEA00;
+    margin-bottom: 12px;
+  }
+  .ks-hero h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: #fff;
+  }
+  .ks-answer {
+    max-width: 64ch;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #e6e6ea;
+    margin: 16px 0 0;
+    padding-left: 14px;
+    border-left: 3px solid #FFEA00;
+  }
+
+  .ks-section { margin-top: 34px; }
+  .ks-section h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #0a0a0b;
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ks-section h2::before {
+    content: "";
+    width: 8px;
+    height: 20px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #FFEA00, #FFD400);
+  }
+  .ks-intro p { font-size: 1.02rem; line-height: 1.7; color: #33333a; margin: 0 0 14px; }
+
+  .ks-tablewrap {
+    overflow-x: auto;
+    border: 1px solid #e7e9e1;
+    border-radius: 16px;
+    background: #fff;
+  }
+  .ks-table { width: 100%; border-collapse: collapse; min-width: 420px; }
+  .ks-table th, .ks-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eef1ec;
+  }
+  .ks-table thead th {
+    font: 600 0.72rem/1 'Chakra Petch', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b6b72;
+    background: #faf9f2;
+  }
+  .ks-table tbody th {
+    font-weight: 600;
+    color: #2a2a30;
+  }
+  .ks-table tbody td {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    color: #0a0a0b;
+  }
+  .ks-table tbody tr:last-child th,
+  .ks-table tbody tr:last-child td { border-bottom: 0; }
+  .ks-note { font-size: 0.85rem; color: #6b6b72; line-height: 1.55; margin: 10px 2px 0; }
+
+  .ks-factors { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .ks-factors li {
+    position: relative;
+    padding-left: 26px;
+    line-height: 1.55;
+    color: #33333a;
+  }
+  .ks-factors li::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: #2f6b2f;
+  }
+
+  .ks-cta-wrap .ks-cta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .ks-cta {
+    position: relative;
+    display: grid;
+    gap: 4px;
+    padding: 18px 44px 18px 18px;
+    border: 1px solid #e7e9e1;
+    border-radius: 16px;
+    background: #fff;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+  }
+  .ks-cta:hover {
+    box-shadow: 0 12px 28px -16px rgba(10, 10, 12, .3);
+    transform: translateY(-2px);
+    border-color: #FFD400;
+  }
+  .ks-cta-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.05rem; color: #0a0a0b; }
+  .ks-cta-desc { font-size: 0.9rem; line-height: 1.45; color: #6b6b72; }
+  .ks-cta-arrow {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    color: #2f6b2f;
+  }
+
+  .ks-faq { display: grid; gap: 10px; }
+  .ks-faq-item {
+    border: 1px solid #e7e9e1;
+    border-radius: 14px;
+    background: #fff;
+    padding: 4px 18px;
+  }
+  .ks-faq-item summary {
+    cursor: pointer;
+    padding: 12px 0;
+    font-weight: 600;
+    color: #1e1e22;
+    list-style: none;
+  }
+  .ks-faq-item summary::-webkit-details-marker { display: none; }
+  .ks-faq-item summary::before {
+    content: "+";
+    display: inline-block;
+    width: 20px;
+    color: #2f6b2f;
+    font-weight: 700;
+  }
+  .ks-faq-item[open] summary::before { content: "–"; }
+  .ks-faq-item p { margin: 0 0 14px 20px; line-height: 1.6; color: #33333a; }
+
+  .ks-related { display: flex; flex-wrap: wrap; gap: 10px; }
+  .ks-related-link {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid #e7e9e1;
+    border-radius: 999px;
+    background: #fff;
+    text-decoration: none;
+    color: #2f6b2f;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .ks-related-link:hover { border-color: #FFD400; background: #fffdf0; }
+
+  @media (max-width: 600px) {
+    .ks-page { padding: 16px 14px 60px; }
+    .ks-hero { padding: 28px 22px 24px; border-radius: 20px; }
+  }
+</style>

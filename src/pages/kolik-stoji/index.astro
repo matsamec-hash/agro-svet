@@ -1,0 +1,190 @@
+---
+// „Kolik stojí…" rozcestník — cs-only hub s odkazy na jednotlivá témata
+// a napojením na kalkulačky.
+export const prerender = true;
+
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+import { KOLIK_STOJI_TOPICS } from '../../data/kolik-stoji';
+
+const canonical = `${SITE_URL}/kolik-stoji/`;
+const title = 'Kolik co stojí v zemědělství — ceny techniky a provozu';
+const description =
+  'Orientační ceny a náklady v zemědělství: kolik stojí traktor, kombajn, leasing, nafta na hektar i provoz techniky. Přehledné tabulky napojené na kalkulačky.';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kolik stojí', url: canonical },
+]);
+const itemListJsonLd = itemListSchema(
+  KOLIK_STOJI_TOPICS.map((t) => ({ url: `/kolik-stoji/${t.slug}/`, name: t.question })),
+  title,
+);
+---
+
+<Layout title={title} description={description} canonical={canonical}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+
+  <div class="ksh-page">
+    <nav class="ksh-crumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Kolik stojí</span>
+    </nav>
+
+    <header class="ksh-hero">
+      <div class="ksh-hero-inner">
+        <span class="ksh-kicker">Ceny a náklady</span>
+        <h1>Kolik co stojí v zemědělství</h1>
+        <p class="ksh-lede">{description}</p>
+      </div>
+    </header>
+
+    <section class="ksh-section">
+      <div class="ksh-grid">
+        {KOLIK_STOJI_TOPICS.map((t) => (
+          <a class="ksh-card" href={`/kolik-stoji/${t.slug}/`}>
+            <span class="ksh-card-kicker">{t.kicker}</span>
+            <span class="ksh-card-title">{t.question}</span>
+            <span class="ksh-card-answer">{t.quickAnswer}</span>
+            <span class="ksh-card-cta" aria-hidden="true">Zjistit více →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="ksh-section ksh-tools">
+      <h2>Spočítejte si vlastní čísla</h2>
+      <p>Orientační rozpětí výše vám dají představu o řádu. Přesný výpočet pro váš stroj a hospodářství udělají kalkulačky:</p>
+      <div class="ksh-tool-links">
+        <a href="/kalkulacka/leasing-traktoru/">Kalkulačka leasingu traktoru</a>
+        <a href="/kalkulacka/naklady-na-hektar/">Náklady na hektar</a>
+        <a href="/kalkulacka/uspora-nafty/">Úspora nafty</a>
+        <a href="/kalkulacka/">Všechny kalkulačky</a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .ksh-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+    font-family: 'Roboto Condensed', system-ui, sans-serif;
+    color: #1e1e22;
+  }
+  .ksh-crumb { font-size: 0.85rem; color: #6b6b72; display: flex; gap: 6px; margin-bottom: 18px; }
+  .ksh-crumb a { color: #2f6b2f; text-decoration: none; }
+  .ksh-crumb a:hover { text-decoration: underline; }
+
+  .ksh-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    color: #fff;
+    padding: 44px 44px 38px;
+    margin-bottom: 26px;
+    background:
+      radial-gradient(600px 300px at 12% 18%, rgba(255, 234, 0, .16), transparent 60%),
+      linear-gradient(135deg, #0e0e10 0%, #1c1c20 60%, #2a2a2f 100%);
+  }
+  .ksh-hero-inner { position: relative; z-index: 2; }
+  .ksh-kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #FFEA00;
+    margin-bottom: 12px;
+  }
+  .ksh-hero h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 4.4vw, 3.2rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin: 0;
+    color: #fff;
+  }
+  .ksh-lede { max-width: 66ch; font-size: 1.02rem; line-height: 1.6; color: #c8c8d0; margin: 16px 0 0; }
+
+  .ksh-section { margin-top: 30px; }
+  .ksh-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .ksh-card {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    padding: 22px;
+    border: 1px solid #e7e9e1;
+    border-radius: 18px;
+    background: #fff;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+  }
+  .ksh-card:hover {
+    box-shadow: 0 14px 30px -18px rgba(10, 10, 12, .3);
+    transform: translateY(-2px);
+    border-color: #FFD400;
+  }
+  .ksh-card-kicker {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #2f6b2f;
+  }
+  .ksh-card-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.25rem; color: #0a0a0b; }
+  .ksh-card-answer {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: #55555c;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .ksh-card-cta { font-size: 0.88rem; font-weight: 700; color: #2f6b2f; margin-top: 2px; }
+
+  .ksh-tools {
+    padding: 24px;
+    border: 1px solid #e7e9e1;
+    border-radius: 18px;
+    background: #faf9f2;
+  }
+  .ksh-tools h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin: 0 0 8px;
+    color: #0a0a0b;
+  }
+  .ksh-tools p { margin: 0 0 14px; line-height: 1.6; color: #33333a; }
+  .ksh-tool-links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .ksh-tool-links a {
+    display: inline-block;
+    padding: 9px 15px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid #e7e9e1;
+    text-decoration: none;
+    color: #2f6b2f;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: border-color .15s ease;
+  }
+  .ksh-tool-links a:hover { border-color: #FFD400; }
+
+  @media (max-width: 600px) {
+    .ksh-page { padding: 16px 14px 60px; }
+    .ksh-hero { padding: 28px 22px 24px; border-radius: 20px; }
+  }
+</style>
