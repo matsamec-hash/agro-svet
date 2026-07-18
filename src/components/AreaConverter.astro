@@ -15,6 +15,10 @@ export interface Props {
   ui?: { inputLabel?: string; unitSelectLabel?: string };
   /** Lokalizované názvy jednotek (id → name). Chybějící klíč → cs default. */
   unitNames?: Record<string, string>;
+  /** Vizuální srovnání plochy s referencemi (hřiště, náměstí…). Když prázdné, panel se nezobrazí. */
+  comparisons?: { emoji: string; name: string; m2: number }[];
+  comparisonsHeading?: string;
+  comparisonsCaption?: string;
 }
 
 const {
@@ -26,6 +30,9 @@ const {
   numberLocale = 'cs-CZ',
   ui = {},
   unitNames = {},
+  comparisons = [],
+  comparisonsHeading = 'Kolik to je?',
+  comparisonsCaption,
 } = Astro.props;
 
 const uiText = {
@@ -89,10 +96,20 @@ const Heading = headingLevel;
     </div>
   </form>
 
+  {comparisons.length > 0 && (
+    <div class="ac-compare">
+      <h3 class="ac-cmp-h">{comparisonsHeading}</h3>
+      <p class="ac-cmp-primary" id="ac-cmp-primary" aria-live="polite"></p>
+      <div class="ac-cmp-field" id="ac-cmp-visual" aria-hidden="true"></div>
+      <div class="ac-cmp-refs" id="ac-cmp-refs" role="group" aria-label="Porovnat s"></div>
+      {comparisonsCaption && <p class="ac-cmp-caption">{comparisonsCaption}</p>}
+    </div>
+  )}
+
   {caption && <p class="ac-caption">{caption}</p>}
 </section>
 
-<script is:inline define:vars={{ UNITS, numberLocale }}>
+<script is:inline define:vars={{ UNITS, numberLocale, COMPARISONS: comparisons }}>
   (function () {
     const root = document.currentScript.previousElementSibling;
     if (!root) return;
@@ -100,6 +117,69 @@ const Heading = headingLevel;
     const unitSel = root.querySelector('#ac-unit');
     const results = root.querySelector('#ac-results');
     if (!input || !unitSel || !results) return;
+    const cmpPrimary = root.querySelector('#ac-cmp-primary');
+    const cmpVisual = root.querySelector('#ac-cmp-visual');
+    const cmpRefs = root.querySelector('#ac-cmp-refs');
+    const TILE_CAP = 48;
+    const hasCompare = cmpRefs && COMPARISONS && COMPARISONS.length;
+    let activeRef = null; // index reference; null = automatický výběr
+    let lastM2 = NaN;
+    const fmtCount = (n) =>
+      (n >= 100 ? Math.round(n) : n >= 10 ? Math.round(n * 10) / 10 : Math.round(n * 100) / 100)
+        .toLocaleString(numberLocale, { maximumFractionDigits: 2 });
+
+    // automatický výběr: největší reference, u které vyjde počet ≥ 1 (jinak nejmenší)
+    function autoIdx(m2) {
+      const order = COMPARISONS.map((r, i) => i).sort((a, b) => COMPARISONS[a].m2 - COMPARISONS[b].m2);
+      let idx = order[0];
+      for (const i of order) if (m2 / COMPARISONS[i].m2 >= 1) idx = i;
+      return idx;
+    }
+
+    function updateCompare(m2) {
+      if (!hasCompare) return;
+      lastM2 = m2;
+      const valid = isFinite(m2) && m2 > 0;
+      // výběrová tlačítka (s počtem u každé reference)
+      cmpRefs.innerHTML = COMPARISONS.map((r, i) =>
+        `<button type="button" class="ac-cmp-ref" data-ref="${i}">` +
+        `<span class="ac-cmp-emoji">${r.emoji}</span>` +
+        `<span class="ac-cmp-ref-name">${r.name}</span>` +
+        `<b>${valid ? fmtCount(m2 / r.m2) + '×' : '—'}</b></button>`
+      ).join('');
+      if (!valid) {
+        if (cmpPrimary) cmpPrimary.textContent = '';
+        if (cmpVisual) cmpVisual.innerHTML = '';
+        return;
+      }
+      const idx = activeRef != null ? activeRef : autoIdx(m2);
+      const r = COMPARISONS[idx];
+      const count = m2 / r.m2;
+      const btns = cmpRefs.querySelectorAll('.ac-cmp-ref');
+      if (btns[idx]) btns[idx].classList.add('active');
+      if (cmpPrimary) cmpPrimary.innerHTML =
+        `≈ <strong>${fmtCount(count)}×</strong> <span class="ac-cmp-emoji">${r.emoji}</span> ${r.name}`;
+      if (cmpVisual) {
+        const whole = Math.min(Math.ceil(count), TILE_CAP);
+        const frac = count - Math.floor(count);
+        let tiles = '';
+        for (let i = 0; i < whole; i++) {
+          const partial = i === whole - 1 && frac > 0 && count <= TILE_CAP;
+          tiles += `<span class="ac-cmp-tile${partial ? ' partial' : ''}"` +
+            `${partial ? ` style="--frac:${Math.max(0.12, frac).toFixed(3)}"` : ''}>` +
+            `<span class="ac-cmp-tile-emoji">${r.emoji}</span></span>`;
+        }
+        if (count > TILE_CAP) tiles += `<span class="ac-cmp-more">+${fmtCount(count - TILE_CAP)}</span>`;
+        cmpVisual.innerHTML = tiles;
+      }
+    }
+
+    if (hasCompare) cmpRefs.addEventListener('click', (e) => {
+      const btn = e.target.closest('.ac-cmp-ref');
+      if (!btn) return;
+      activeRef = Number(btn.dataset.ref);
+      updateCompare(lastM2);
+    });
 
     const fmt = (n, decimals) => {
       if (!isFinite(n)) return '—';
@@ -121,9 +201,11 @@ const Heading = headingLevel;
       const fromUnit = UNITS.find((u) => u.id === unitSel.value);
       if (!fromUnit || !isFinite(raw)) {
         results.querySelectorAll('.ac-r-value').forEach((el) => { el.textContent = '—'; });
+        updateCompare(NaN);
         return;
       }
       const m2 = raw * fromUnit.factor;
+      updateCompare(m2);
       UNITS.forEach((u) => {
         const cell = results.querySelector(`[data-unit="${u.id}"] .ac-r-value`);
         if (!cell) return;
@@ -248,6 +330,91 @@ const Heading = headingLevel;
     color: #6B6B72;
     line-height: 1.5;
   }
+
+  /* Vizuální srovnání plochy */
+  .ac-compare {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed #e3e3d6;
+  }
+  .ac-cmp-h {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6B6B72;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .ac-cmp-primary {
+    margin: 0 0 12px;
+    font-size: 17px;
+    line-height: 1.3;
+    color: #0A0A0B;
+    min-height: 22px;
+  }
+  /* :global — obsah polí níže se vkládá přes innerHTML (scoped selektory by nesedly) */
+  .ac-cmp-primary :global(strong) { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+  .ac-compare :global(.ac-cmp-emoji) { font-size: 1.05em; }
+
+  /* pole s proporčními dlaždicemi */
+  .ac-cmp-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 5px;
+    padding: 12px;
+    min-height: 62px;
+    background: repeating-linear-gradient(0deg, #f5faf1, #f5faf1 11px, #eef6e8 11px, #eef6e8 12px);
+    border: 1px solid #d8e6cf;
+    border-radius: 10px;
+    margin-bottom: 14px;
+  }
+  .ac-cmp-field :global(.ac-cmp-tile) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: #fff;
+    border: 1.5px solid #6ba84f;
+    border-radius: 7px;
+    box-shadow: 0 1px 2px rgba(10,10,12,.06);
+  }
+  .ac-cmp-field :global(.ac-cmp-tile-emoji) { font-size: 17px; line-height: 1; }
+  .ac-cmp-field :global(.ac-cmp-tile.partial) { opacity: var(--frac, .5); border-style: dashed; }
+  .ac-cmp-field :global(.ac-cmp-more) {
+    display: flex; align-items: center;
+    padding: 0 10px; height: 34px;
+    font-size: 13px; font-weight: 800; color: #4d7a37;
+  }
+
+  /* klikací výběr reference */
+  .ac-cmp-refs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ac-cmp-refs :global(.ac-cmp-ref) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 11px;
+    background: #fff;
+    border: 1px solid #e0e0d4;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0A0A0B;
+    cursor: pointer;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .ac-cmp-refs :global(.ac-cmp-ref:hover) { border-color: #6ba84f; }
+  .ac-cmp-refs :global(.ac-cmp-ref-name) { color: #3a3a40; }
+  .ac-cmp-refs :global(.ac-cmp-ref b) {
+    font-weight: 800;
+    color: #2f6b2f;
+    font-variant-numeric: tabular-nums;
+    padding-left: 7px;
+    border-left: 1px solid #e8e8dc;
+  }
+  .ac-cmp-refs :global(.ac-cmp-ref.active) { background: #eaf5e2; border-color: #6ba84f; }
+  .ac-cmp-caption { margin: 12px 0 0; font-size: 11px; color: #6B6B72; line-height: 1.5; }
 
   @media (max-width: 480px) {
     .ac-input-wrap { flex-direction: column; }
