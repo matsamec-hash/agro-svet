@@ -101,6 +101,7 @@ const Heading = headingLevel;
       <h3 class="ac-cmp-h">{comparisonsHeading}</h3>
       <p class="ac-cmp-primary" id="ac-cmp-primary" aria-live="polite"></p>
       <div class="ac-cmp-field" id="ac-cmp-visual" aria-hidden="true"></div>
+      <p class="ac-cmp-legend" id="ac-cmp-legend" aria-live="polite"></p>
       <div class="ac-cmp-refs" id="ac-cmp-refs" role="group" aria-label="Porovnat s"></div>
       {comparisonsCaption && <p class="ac-cmp-caption">{comparisonsCaption}</p>}
     </div>
@@ -119,14 +120,17 @@ const Heading = headingLevel;
     if (!input || !unitSel || !results) return;
     const cmpPrimary = root.querySelector('#ac-cmp-primary');
     const cmpVisual = root.querySelector('#ac-cmp-visual');
+    const cmpLegend = root.querySelector('#ac-cmp-legend');
     const cmpRefs = root.querySelector('#ac-cmp-refs');
-    const TILE_CAP = 48;
+    const VB_W = 320, VB_H = 200, CELL_CAP = 300, EMOJI_MIN = 30;
     const hasCompare = cmpRefs && COMPARISONS && COMPARISONS.length;
     let activeRef = null; // index reference; null = automatický výběr
     let lastM2 = NaN;
     const fmtCount = (n) =>
       (n >= 100 ? Math.round(n) : n >= 10 ? Math.round(n * 10) / 10 : Math.round(n * 100) / 100)
         .toLocaleString(numberLocale, { maximumFractionDigits: 2 });
+    const fmtM2 = (n) =>
+      n.toLocaleString(numberLocale, { maximumFractionDigits: n < 100 ? 1 : 0 });
 
     // automatický výběr: největší reference, u které vyjde počet ≥ 1 (jinak nejmenší)
     function autoIdx(m2) {
@@ -134,6 +138,56 @@ const Heading = headingLevel;
       let idx = order[0];
       for (const i of order) if (m2 / COMPARISONS[i].m2 >= 1) idx = i;
       return idx;
+    }
+
+    // Proporční vizuál: plocha vykreslená jako mřížka `count` referenčních dlaždic,
+    // škálovaných do pevného rámečku (dlaždice se zmenšují s rostoucím počtem → vidět poměr).
+    // Když count < 1, zobrazí se obráceně: rámeček = 1 reference, zelená plocha = zadaná plocha.
+    function buildSvg(count, r) {
+      const open = `<svg viewBox="0 0 ${VB_W} ${VB_H}" class="ac-cmp-svg" preserveAspectRatio="xMidYMid meet" role="img">`;
+      // plocha menší než jedna reference → poměrová výseč z jednoho rámečku
+      if (count < 1) {
+        const p = 6;
+        const ow = VB_W - 2 * p, oh = VB_H - 2 * p;
+        const s = Math.sqrt(Math.max(count, 0.002));
+        const iw = ow * s, ih = oh * s;
+        const iy = VB_H - p - ih;
+        return open +
+          `<rect x="${p}" y="${p}" width="${ow}" height="${oh}" rx="8" class="ac-svg-ref"/>` +
+          `<rect x="${p}" y="${iy.toFixed(1)}" width="${iw.toFixed(1)}" height="${ih.toFixed(1)}" rx="3" class="ac-svg-area"/>` +
+          `<text x="${VB_W - p - 8}" y="${p + 22}" text-anchor="end" class="ac-svg-emoji" style="font-size:24px">${r.emoji}</text>` +
+          `</svg>`;
+      }
+      const capped = count > CELL_CAP;
+      const nCells = capped ? CELL_CAP : Math.ceil(count - 1e-9);
+      const AR = VB_W / VB_H;
+      let cols = Math.max(1, Math.round(Math.sqrt(nCells * AR)));
+      let rows = Math.ceil(nCells / cols);
+      while (cols > 1 && (cols - 1) * rows >= nCells) cols--;
+      rows = Math.ceil(nCells / cols);
+      const cell = Math.min(VB_W / cols, VB_H / rows);
+      const gap = cell > 22 ? 2 : cell > 10 ? 1 : 0.4;
+      const ox = (VB_W - cols * cell) / 2, oy = (VB_H - rows * cell) / 2;
+      const full = capped ? nCells : Math.floor(count + 1e-9);
+      const frac = capped ? 0 : count - full;
+      const showEmoji = cell >= EMOJI_MIN;
+      const rx = (cell * 0.1).toFixed(1);
+      let cells = '';
+      for (let i = 0; i < nCells; i++) {
+        const cx = ox + (i % cols) * cell;
+        const cy = oy + Math.floor(i / cols) * cell;
+        const x = (cx + gap / 2).toFixed(1), y = (cy + gap / 2).toFixed(1);
+        const sz = (cell - gap).toFixed(1);
+        if (i < full) {
+          cells += `<rect x="${x}" y="${y}" width="${sz}" height="${sz}" rx="${rx}" class="ac-svg-cell full"/>`;
+          if (showEmoji) cells += `<text x="${(cx + cell / 2).toFixed(1)}" y="${(cy + cell / 2).toFixed(1)}" text-anchor="middle" dominant-baseline="central" class="ac-svg-emoji" style="font-size:${(cell * 0.46).toFixed(1)}px">${r.emoji}</text>`;
+        } else {
+          const fh = (cell - gap) * frac;
+          cells += `<rect x="${x}" y="${y}" width="${sz}" height="${sz}" rx="${rx}" class="ac-svg-cell empty"/>`;
+          cells += `<rect x="${x}" y="${(cy + gap / 2 + (cell - gap) - fh).toFixed(1)}" width="${sz}" height="${fh.toFixed(1)}" class="ac-svg-cell frac"/>`;
+        }
+      }
+      return open + cells + `</svg>`;
     }
 
     function updateCompare(m2) {
@@ -150,6 +204,7 @@ const Heading = headingLevel;
       if (!valid) {
         if (cmpPrimary) cmpPrimary.textContent = '';
         if (cmpVisual) cmpVisual.innerHTML = '';
+        if (cmpLegend) cmpLegend.textContent = '';
         return;
       }
       const idx = activeRef != null ? activeRef : autoIdx(m2);
@@ -159,18 +214,12 @@ const Heading = headingLevel;
       if (btns[idx]) btns[idx].classList.add('active');
       if (cmpPrimary) cmpPrimary.innerHTML =
         `≈ <strong>${fmtCount(count)}×</strong> <span class="ac-cmp-emoji">${r.emoji}</span> ${r.name}`;
-      if (cmpVisual) {
-        const whole = Math.min(Math.ceil(count), TILE_CAP);
-        const frac = count - Math.floor(count);
-        let tiles = '';
-        for (let i = 0; i < whole; i++) {
-          const partial = i === whole - 1 && frac > 0 && count <= TILE_CAP;
-          tiles += `<span class="ac-cmp-tile${partial ? ' partial' : ''}"` +
-            `${partial ? ` style="--frac:${Math.max(0.12, frac).toFixed(3)}"` : ''}>` +
-            `<span class="ac-cmp-tile-emoji">${r.emoji}</span></span>`;
-        }
-        if (count > TILE_CAP) tiles += `<span class="ac-cmp-more">+${fmtCount(count - TILE_CAP)}</span>`;
-        cmpVisual.innerHTML = tiles;
+      if (cmpVisual) cmpVisual.innerHTML = buildSvg(count, r);
+      if (cmpLegend) {
+        cmpLegend.textContent = count < 1
+          ? `Rámeček = ${r.emoji} ${r.name} (${fmtM2(r.m2)} m²) · zelená plocha = vaše zadání`
+          : `1 dlaždice = ${r.emoji} ${r.name} · ${fmtM2(r.m2)} m²`
+            + (count > CELL_CAP ? ` · zobrazeno prvních ${CELL_CAP} z ${fmtCount(count)}` : '');
       }
     }
 
@@ -356,36 +405,35 @@ const Heading = headingLevel;
   .ac-cmp-primary :global(strong) { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
   .ac-compare :global(.ac-cmp-emoji) { font-size: 1.05em; }
 
-  /* pole s proporčními dlaždicemi */
+  /* proporční plocha (inline SVG přes innerHTML → :global) */
   .ac-cmp-field {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 5px;
-    padding: 12px;
-    min-height: 62px;
-    background: repeating-linear-gradient(0deg, #f5faf1, #f5faf1 11px, #eef6e8 11px, #eef6e8 12px);
+    padding: 10px;
+    background: #f5faf1;
     border: 1px solid #d8e6cf;
     border-radius: 10px;
-    margin-bottom: 14px;
+    margin-bottom: 8px;
   }
-  .ac-cmp-field :global(.ac-cmp-tile) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    background: #fff;
-    border: 1.5px solid #6ba84f;
-    border-radius: 7px;
-    box-shadow: 0 1px 2px rgba(10,10,12,.06);
+  .ac-cmp-field :global(.ac-cmp-svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 260px;
   }
-  .ac-cmp-field :global(.ac-cmp-tile-emoji) { font-size: 17px; line-height: 1; }
-  .ac-cmp-field :global(.ac-cmp-tile.partial) { opacity: var(--frac, .5); border-style: dashed; }
-  .ac-cmp-field :global(.ac-cmp-more) {
-    display: flex; align-items: center;
-    padding: 0 10px; height: 34px;
-    font-size: 13px; font-weight: 800; color: #4d7a37;
+  .ac-cmp-field :global(.ac-svg-cell.full) { fill: #7fbf5f; stroke: #4d7a37; stroke-width: 1; }
+  .ac-cmp-field :global(.ac-svg-cell.empty) { fill: #fff; stroke: #b9d3a6; stroke-width: 1; }
+  .ac-cmp-field :global(.ac-svg-cell.frac) { fill: #a6d488; }
+  .ac-cmp-field :global(.ac-svg-ref) {
+    fill: #fff; stroke: #6ba84f; stroke-width: 2; stroke-dasharray: 5 4;
+  }
+  .ac-cmp-field :global(.ac-svg-area) { fill: #7fbf5f; stroke: #4d7a37; stroke-width: 1; }
+  .ac-cmp-field :global(.ac-svg-emoji) { pointer-events: none; }
+  .ac-cmp-legend {
+    margin: 0 0 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4d7a37;
+    line-height: 1.4;
+    min-height: 16px;
   }
 
   /* klikací výběr reference */
