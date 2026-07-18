@@ -5,6 +5,7 @@
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import IndicatorRow from '../../components/svet/IndicatorRow.astro';
+import RegionMap from '../../components/svet/RegionMap.astro';
 import { groupByPackage, fmtNum, COUNTRY_LOCATIVE } from '../../lib/svet/render';
 import { assertCountryProfile } from '../../lib/svet/types';
 import index from '../../data/svet/index.json';
@@ -12,16 +13,20 @@ import '../../styles/svet.css';
 
 export async function getStaticPaths() {
   const mods = import.meta.glob('../../data/svet/*.json', { eager: true });
+  const regionMods = import.meta.glob('../../data/svet/regions/*.json', { eager: true });
   return index.countries
     .filter((c) => !c.reference)
     .map((c) => {
       const profile = (mods[`../../data/svet/${c.slug}.json`] as any).default;
-      return { params: { slug: c.slug }, props: { profile } };
+      const regionGeo = (regionMods[`../../data/svet/regions/${c.slug}-geo.json`] as any)?.default ?? null;
+      const regionData = (regionMods[`../../data/svet/regions/${c.slug}.json`] as any)?.default ?? null;
+      return { params: { slug: c.slug }, props: { profile, regionGeo, regionData } };
     });
 }
 
-const { profile } = Astro.props as { profile: any };
+const { profile, regionGeo, regionData } = Astro.props as { profile: any; regionGeo: any; regionData: any };
 assertCountryProfile(profile);
+const hasMap = regionGeo && regionData;
 
 const refMods = import.meta.glob('../../data/svet/cesko.json', { eager: true });
 const ref = (Object.values(refMods)[0] as any).default;
@@ -54,6 +59,8 @@ const description = `Aktuální zemědělská data: ${profile.nameCs} — produk
         </div>
       )}
     </header>
+
+    {hasMap && <RegionMap geo={regionGeo} data={regionData} countryName={profile.nameCs} />}
 
     {groups.map((g) => (
       <section class="svet-section">
