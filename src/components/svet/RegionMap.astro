@@ -26,42 +26,45 @@ const levelNote = isN1
 <section class="svet-section svet-map">
   <header class="svet-section-head"><h2>Regionální mapa — {countryName}</h2></header>
 
-  <div class="svet-map-modes" id="svet-map-modes" role="group" aria-label="Metrika mapy">
-    {data.metrics.map((m, i) => (
-      <button type="button" data-metric={m.key} class={i === 0 ? 'active' : ''}>{m.label}</button>
-    ))}
-  </div>
-  <p class="svet-map-desc" id="svet-map-desc">{m0.desc}</p>
+  <div class="svet-map-layout">
+    <div class="svet-map-wrap">
+      <svg viewBox={geo.viewBox} class="svet-map-svg" id="svet-map-svg" role="img" data-country={countryName} aria-label={`Mapa ${countryName} — ${m0.label}`}>
+        {geo.regions.map((r) => {
+          const v = data.regions[r.code]?.[m0.key];
+          return (
+            <path
+              d={r.path}
+              data-code={r.code}
+              data-name={r.name}
+              fill={colorFor(v, e0.min, e0.max)}
+              stroke="#fff"
+              stroke-width="1"
+            ><title>{r.name}</title></path>
+          );
+        })}
+      </svg>
+      <div class="svet-map-tip" id="svet-map-tip" hidden></div>
+    </div>
 
-  <div class="svet-map-wrap">
-    <svg viewBox={geo.viewBox} class="svet-map-svg" id="svet-map-svg" role="img" data-country={countryName} aria-label={`Mapa ${countryName} — ${m0.label}`}>
-      {geo.regions.map((r) => {
-        const v = data.regions[r.code]?.[m0.key];
-        return (
-          <path
-            d={r.path}
-            data-code={r.code}
-            data-name={r.name}
-            fill={colorFor(v, e0.min, e0.max)}
-            stroke="#fff"
-            stroke-width="1"
-          ><title>{r.name}</title></path>
-        );
-      })}
-    </svg>
-    <div class="svet-map-tip" id="svet-map-tip" hidden></div>
+    <aside class="svet-map-side">
+      <span class="svet-map-side-lbl">Ukazatel</span>
+      <div class="svet-map-modes" id="svet-map-modes" role="group" aria-label="Metrika mapy">
+        {data.metrics.map((m, i) => (
+          <button type="button" data-metric={m.key} class={i === 0 ? 'active' : ''}>{m.label}</button>
+        ))}
+      </div>
+      <p class="svet-map-desc" id="svet-map-desc">{m0.desc}</p>
+      <div class="svet-map-legend">
+        <span id="svet-map-lmin">{fmt(e0.min)}</span>
+        <span class="svet-map-legend-bar" aria-hidden="true"></span>
+        <span id="svet-map-lmax">{fmt(e0.max)}</span>
+        <span class="svet-map-legend-unit" id="svet-map-lunit">{m0.unit}</span>
+      </div>
+      <p class="svet-cmp-note svet-map-src">
+        Zdroj: <a href={data.sourceUrl} rel="nofollow">{data.source}</a> · {levelNote}
+      </p>
+    </aside>
   </div>
-
-  <div class="svet-map-legend">
-    <span id="svet-map-lmin">{fmt(e0.min)}</span>
-    <span class="svet-map-legend-bar" aria-hidden="true"></span>
-    <span id="svet-map-lmax">{fmt(e0.max)}</span>
-    <span class="svet-map-legend-unit" id="svet-map-lunit">{m0.unit}</span>
-  </div>
-
-  <p class="svet-cmp-note">
-    Zdroj: <a href={data.sourceUrl} rel="nofollow">{data.source}</a> · {levelNote}
-  </p>
 
   <script type="application/json" id="svet-map-data" set:html={JSON.stringify({ regions: data.regions, metrics: data.metrics })}></script>
   <script>
