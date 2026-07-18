@@ -18,6 +18,10 @@ const valsOf = (key: string) => geo.regions.map((r) => data.regions[r.code]?.[ke
 const e0 = extent(valsOf(m0.key));
 const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
 const fmt = (n: number) => nf.format(n);
+const isN1 = (data as any).level !== 'NUTS2';
+const levelNote = isN1
+  ? 'úroveň régionů (NUTS-1), agregováno z NUTS-2. Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.'
+  : 'úroveň régionů (NUTS-2 = vojvodství). Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.';
 ---
 <section class="svet-section svet-map">
   <header class="svet-section-head"><h2>Regionální mapa — {countryName}</h2></header>
@@ -30,7 +34,7 @@ const fmt = (n: number) => nf.format(n);
   <p class="svet-map-desc" id="svet-map-desc">{m0.desc}</p>
 
   <div class="svet-map-wrap">
-    <svg viewBox={geo.viewBox} class="svet-map-svg" id="svet-map-svg" role="img" aria-label={`Mapa Francie — ${m0.label}`}>
+    <svg viewBox={geo.viewBox} class="svet-map-svg" id="svet-map-svg" role="img" data-country={countryName} aria-label={`Mapa ${countryName} — ${m0.label}`}>
       {geo.regions.map((r) => {
         const v = data.regions[r.code]?.[m0.key];
         return (
@@ -56,8 +60,7 @@ const fmt = (n: number) => nf.format(n);
   </div>
 
   <p class="svet-cmp-note">
-    Zdroj: <a href={data.sourceUrl} rel="nofollow">{data.source}</a> · úroveň régionů (NUTS-1), agregováno z NUTS-2.
-    Départementy (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.
+    Zdroj: <a href={data.sourceUrl} rel="nofollow">{data.source}</a> · {levelNote}
   </p>
 
   <script type="application/json" id="svet-map-data" set:html={JSON.stringify({ regions: data.regions, metrics: data.metrics })}></script>
@@ -93,7 +96,7 @@ const fmt = (n: number) => nf.format(n);
         if (lmax) lmax.textContent = nf.format(max);
         if (lunit) lunit.textContent = m.unit;
         if (desc) desc.textContent = m.desc || '';
-        svg!.setAttribute('aria-label', `Mapa Francie — ${m.label}`);
+        svg!.setAttribute('aria-label', `Mapa ${svg!.dataset.country || ''} — ${m.label}`);
         modes!.querySelectorAll('button').forEach((b) =>
           b.classList.toggle('active', b.dataset.metric === key));
       }

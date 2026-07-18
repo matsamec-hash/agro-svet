@@ -1,7 +1,9 @@
 // Build regionálních zemědělských dat pro choropleth mapy /svet/[slug]/.
 // Zdroj: Eurostat Farm Structure Survey (NUTS-2, 2020) — ef_lsk_main (stavy zvířat),
-// ef_lus_main (využití půdy). Data se agregují na NUTS-1 (régiony) prefixem kódu.
-// Pozn.: výnosy plodin (t/ha) Eurostat na úrovni régionů FR nemá (jen národní),
+// ef_lus_main (využití půdy). Data jsou vždy na NUTS-2; „régiony" mají per zemi jinou úroveň:
+//   FR/DE régiony = NUTS-1 (regionCodeLen 3) → agregace NUTS-2 prefixem code.slice(0,3)
+//   PL   régiony = NUTS-2 (regionCodeLen 4) → bez agregace, code.slice(0,4) = celý kód
+// Pozn.: výnosy plodin (t/ha) Eurostat na úrovni régionů nemá (jen národní),
 // proto metriky vychází z FSS (plochy, stavy) — regionálně bohatě populované.
 //
 // Spuštění: node scripts/build-svet-regions.mjs
@@ -27,12 +29,16 @@ async function euGeoMap(dataset, params) {
   return out;
 }
 
-/** Sečti NUTS-2 hodnoty do NUTS-1 (prefix 3 znaky), jen zadané régiony. */
-function rollup(map, cntr, regionCodes) {
+/**
+ * Sečti FSS hodnoty (vždy NUTS-2) na úroveň régionů, jen zadané régiony.
+ * regionCodeLen 3 → agregace na NUTS-1 (prefix). regionCodeLen 4 → NUTS-2 = celý kód (bez agregace).
+ * Deprecated NUTS-2013 kódy (DE41/DED1/PL11…) mají v FSS null → do map se vůbec nedostanou.
+ */
+function rollup(map, cntr, regionCodes, regionCodeLen) {
   const o = {};
   for (const [code, v] of Object.entries(map)) {
     if (!code.startsWith(cntr) || code.length !== 4) continue;
-    const r = code.slice(0, 3);
+    const r = code.slice(0, regionCodeLen);
     if (!regionCodes.has(r)) continue;
     o[r] = (o[r] || 0) + v;
   }
@@ -40,7 +46,9 @@ function rollup(map, cntr, regionCodes) {
 }
 
 const COUNTRIES = [
-  { slug: 'francie', cntr: 'FR', year: '2020' },
+  { slug: 'francie', cntr: 'FR', year: '2020', regionLevel: 1, regionCodeLen: 3 },
+  { slug: 'nemecko', cntr: 'DE', year: '2020', regionLevel: 1, regionCodeLen: 3 },
+  { slug: 'polsko', cntr: 'PL', year: '2020', regionLevel: 2, regionCodeLen: 4 },
 ];
 
 const FSS_TOTAL = { statinfo: 'TOTAL', farmtype: 'TOTAL', so_eur: 'TOTAL', uaarea: 'TOTAL' };
@@ -66,10 +74,10 @@ for (const c of COUNTRIES) {
     euGeoMap('ef_lus_main', { ...FSS_TOTAL, crops: 'J0000T', unit: 'HA', time: c.year }),
   ]);
 
-  const C = rollup(cattle, c.cntr, regionCodes);
-  const U = rollup(uaa, c.cntr, regionCodes);
-  const A = rollup(ara, c.cntr, regionCodes);
-  const G = rollup(grass, c.cntr, regionCodes);
+  const C = rollup(cattle, c.cntr, regionCodes, c.regionCodeLen);
+  const U = rollup(uaa, c.cntr, regionCodes, c.regionCodeLen);
+  const A = rollup(ara, c.cntr, regionCodes, c.regionCodeLen);
+  const G = rollup(grass, c.cntr, regionCodes, c.regionCodeLen);
 
   const r1 = (n) => Math.round(n * 10) / 10;
   const r2 = (n) => Math.round(n * 100) / 100;
@@ -87,10 +95,12 @@ for (const c of COUNTRIES) {
     };
   }
 
+  const nutsLbl = c.regionLevel === 1 ? 'NUTS1' : 'NUTS2';
+  const aggNote = c.regionLevel === 1 ? 'Agregace NUTS-2→NUTS-1.' : 'Přímo na NUTS-2 (bez agregace).';
   const out = {
-    _comment: `Regionální zemědělská data ${c.slug} (NUTS-1 régiony). Zdroj: Eurostat FSS ${c.year}. Agregace NUTS-2→NUTS-1.`,
+    _comment: `Regionální zemědělská data ${c.slug} (${nutsLbl} régiony). Zdroj: Eurostat FSS ${c.year}. ${aggNote}`,
     slug: c.slug,
-    level: 'NUTS1',
+    level: nutsLbl,
     year: Number(c.year),
     source: `Eurostat — Farm Structure Survey ${c.year} (ef_lsk_main, ef_lus_main)`,
     sourceUrl: 'https://ec.europa.eu/eurostat/databrowser/product/page/ef_lsk_main',
