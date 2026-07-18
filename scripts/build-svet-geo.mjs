@@ -21,6 +21,7 @@ const COUNTRIES = [
   { slug: 'francie', cntr: 'FR', res: '10M', regionLevel: 1, drillLevel: 3, regionCodeLen: 3, drop: ['FRY'] /* zámoří */ },
   { slug: 'nemecko', cntr: 'DE', res: '10M', regionLevel: 1, drillLevel: 2, regionCodeLen: 3, drop: [] /* 16 spolkových zemí = NUTS-1 */ },
   { slug: 'polsko', cntr: 'PL', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 17 NUTS-2 = 16 vojvodství + rozdělené Mazovsko (PL91/PL92) */ },
+  { slug: 'slovensko', cntr: 'SK', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 4 NUTS-2 oblasti (Bratislavský/Západné/Stredné/Východné); FSS data jen NUTS-2 */ },
 ];
 
 const VIEW_W = 1000; // šířka viewBoxu; výška dopočtena dle poměru stran

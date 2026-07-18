@@ -10,7 +10,7 @@ const INDICATOR_ORDER: string[] = [
   'ag_output_value', 'ag_value_added_gdp', 'ag_employment', 'fert_use',
 ];
 export const COUNTRY_LOCATIVE: Record<string, string> = {
-  nemecko: 'Německu', francie: 'Francii', 'velka-britanie': 'Velké Británii', usa: 'USA', polsko: 'Polsku',
+  nemecko: 'Německu', francie: 'Francii', 'velka-britanie': 'Velké Británii', usa: 'USA', polsko: 'Polsku', slovensko: 'Slovensku',
 };
 
 export interface PackageGroup { pkg: PackageKey; label: string; indicators: Indicator[]; }
