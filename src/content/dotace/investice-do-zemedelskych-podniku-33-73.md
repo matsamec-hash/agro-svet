@@ -10,7 +10,7 @@ minVydaje: 250000
 zadatel: "Zemědělští podnikatelé podle zákona č. 252/1997 Sb."
 strojeMax49: true
 primarniZdroj: "https://szif.gov.cz/cs/szp23-investice-zp"
-aktualizovano: 2026-05-14
+aktualizovano: 2026-07-18
 highlights:
   - "Až 50 % způsobilých výdajů pro rostlinnou výrobu, 60 % pro živočišnou"
   - "Strop dotace 30 mil. Kč na projekt, minimum 250 tis. Kč způsobilých výdajů"
@@ -25,7 +25,7 @@ faq:
   - q: "Kdo může o dotaci 33.73 žádat?"
     a: "Žádat mohou zemědělští podnikatelé evidovaní podle zákona č. 252/1997 Sb. — fyzické i právnické osoby provozující zemědělskou výrobu. Mladí začínající zemědělci mají v rámci titulu bonifikaci +10 % k základní sazbě."
   - q: "Kdy se podávají žádosti?"
-    a: "Příjem žádostí probíhá typicky dvakrát ročně — na jaře (obvykle duben) a na podzim (obvykle říjen). Konkrétní termíny daného kola SZIF zveřejňuje přibližně dva měsíce předem. Aktuální termíny sledujte v kalendáři kol a na szif.gov.cz."
+    a: "Příjem žádostí probíhá typicky dvakrát ročně — na jaře (obvykle duben) a na podzim (obvykle říjen). Podle Harmonogramu výzev MZe ze 17. března 2026 se ale nejbližší kolo titulu 33.73 přesouvá až na jaro 2027. Konkrétní termíny daného kola SZIF zveřejňuje přibližně dva měsíce předem. Aktuální termíny sledujte v kalendáři kol a na szif.gov.cz."
   - q: "Lze z 33.73 financovat precizní zemědělství?"
     a: "Senzory, GPS navádění a technologie precizního zemědělství lze zahrnout do projektu 33.73 jako součást investice. Samostatný titul výhradně na precizní techniku neexistuje — plošná podpora precizního zemědělství jde přes Jednotnou žádost jako platba na hektar, ne jako investiční dotace na techniku."
 relatedLinks:
@@ -39,7 +39,7 @@ relatedLinks:
 
 **Investice do zemědělských podniků** (intervence 33.73) je hlavním investičním dotačním titulem Strategického plánu Společné zemědělské politiky 2023–2027. Je to nejčastější cesta, jak v Česku spolufinancovat nákup zemědělské techniky z evropských a národních zdrojů.
 
-> **Informativní charakter.** Tento přehled vychází z veřejně dostupných dokumentů SZIF a MZe a neslouží jako dotační poradenství. Závazné jsou výhradně Pravidla zveřejněná na [szif.gov.cz](https://szif.gov.cz/cs/szp23-investice-zp). Před podáním žádosti doporučujeme konzultaci s dotačním specialistou. Aktualizováno: 14. května 2026.
+> **Informativní charakter.** Tento přehled vychází z veřejně dostupných dokumentů SZIF a MZe a neslouží jako dotační poradenství. Závazné jsou výhradně Pravidla zveřejněná na [szif.gov.cz](https://szif.gov.cz/cs/szp23-investice-zp). Před podáním žádosti doporučujeme konzultaci s dotačním specialistou. Aktualizováno: 18. července 2026.
 
 ## Kolik dotace získáte
 
@@ -63,4 +63,4 @@ V praxi to znamená, že traktor samotný nelze plně dotovat. Projekt musí obs
 
 ## Termíny
 
-Příjem žádostí probíhá typicky **dvakrát ročně** — na jaře a na podzim. Pravidla daného kola se zveřejňují přibližně dva měsíce před zahájením příjmu. Aktuální termíny najdete v [kalendáři kol](/dotace/kalendar-kol/).
+Příjem žádostí probíhá typicky **dvakrát ročně** — na jaře a na podzim. Podle Harmonogramu výzev MZe ze dne 17. března 2026 se ale nejbližší kolo titulu 33.73 **přesouvá až na jaro 2027**; v podzimním kole 2026 se místo něj otevírají jiné projektové intervence (34.73, 38.73, 39.73, 44.73 a 49.75). Pravidla daného kola se zveřejňují přibližně dva měsíce před zahájením příjmu. Aktuální termíny najdete v [kalendáři kol](/dotace/kalendar-kol/).
