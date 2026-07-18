@@ -97,6 +97,7 @@ const out = {
   year: 2022,
   source: 'USDA NASS — Census of Agriculture 2022',
   sourceUrl: 'https://www.nass.usda.gov/Publications/AgCensus/2022/',
+  regionNote: 'úroveň států (50 států). District of Columbia nemá zemědělský census, zobrazuje se bez dat.',
   metrics: [
     { key: 'cattle_density', label: 'Hustota skotu', unit: 'ks/ha', desc: 'Kusy skotu na hektar zemědělské plochy' },
     { key: 'arable_share', label: 'Podíl orné půdy', unit: '%', desc: 'Orná půda (cropland) jako podíl zemědělské plochy (land in farms)' },

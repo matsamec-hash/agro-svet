@@ -18,10 +18,11 @@ const valsOf = (key: string) => geo.regions.map((r) => data.regions[r.code]?.[ke
 const e0 = extent(valsOf(m0.key));
 const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
 const fmt = (n: number) => nf.format(n);
-const isN1 = (data as any).level !== 'NUTS2';
-const levelNote = isN1
-  ? 'úroveň régionů (NUTS-1), agregováno z NUTS-2. Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.'
-  : 'úroveň régionů (NUTS-2 = vojvodství). Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.';
+// Poznámka o granularitě: primárně z dat (data.regionNote), jinak EU/NUTS default.
+const levelNote = (data as any).regionNote
+  ?? ((data as any).level === 'NUTS2'
+    ? 'úroveň régionů (NUTS-2 = vojvodství). Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.'
+    : 'úroveň régionů (NUTS-1), agregováno z NUTS-2. Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.');
 ---
 <section class="svet-section svet-map">
   <header class="svet-section-head"><h2>Regionální mapa — {countryName}</h2></header>
