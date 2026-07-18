@@ -60,3 +60,60 @@ export function compareMatrix(profiles: CountryProfile[], indicatorKey: string):
     return { slug: p.slug, nameCs: p.nameCs, flag: p.flag, value: ind?.latest.value ?? null, period: ind?.latest.referencePeriod ?? null };
   });
 }
+
+/* ---------- Normalizace srovnání (absolutní / na 1000 obyv. / na ha ZP) ----------
+   Přepočet dává smysl jen u absolutních ukazatelů (počty, plochy, hodnota produkce).
+   Poměrové ukazatele (výnosy t/ha, podíly %, kg/ha) přepočet nemají — chybí ve specu.
+   baseScale = kolikrát vynásobit surovou hodnotu, aby vznikla základní jednotka
+   (ks, ha, €, farem). perCapita používá populaci, perHa dělí zemědělskou plochou. */
+export type NormMode = 'absolute' | 'perCapita' | 'perHa';
+
+export interface NormSpec { baseScale: number; baseUnit: string; perCapita: boolean; perHa: boolean; }
+
+export const NORM_SPECS: Record<string, NormSpec> = {
+  cattle_count:    { baseScale: 1e3, baseUnit: 'ks',    perCapita: true, perHa: true },
+  pigs_count:      { baseScale: 1e3, baseUnit: 'ks',    perCapita: true, perHa: true },
+  ag_output_value: { baseScale: 1e9, baseUnit: '€',     perCapita: true, perHa: true },
+  farm_count:      { baseScale: 1e3, baseUnit: 'farem', perCapita: true, perHa: false },
+  ag_land:         { baseScale: 1e6, baseUnit: 'ha',    perCapita: true, perHa: false },
+  arable_land:     { baseScale: 1e6, baseUnit: 'ha',    perCapita: true, perHa: false },
+};
+
+/** Je daný režim pro daný ukazatel použitelný? (absolute vždy; ostatní dle specu) */
+export function normApplies(indicatorKey: string, mode: NormMode): boolean {
+  if (mode === 'absolute') return true;
+  const s = NORM_SPECS[indicatorKey];
+  if (!s) return false;
+  return mode === 'perCapita' ? s.perCapita : s.perHa;
+}
+
+export interface NormResult { value: number; unit: string; }
+
+/**
+ * Přepočte surovou hodnotu ukazatele dle režimu.
+ * @param rawValue surová hodnota z profilu (v jednotce ukazatele)
+ * @param population počet obyvatel země (pro perCapita)
+ * @param agLandRaw hodnota ag_land země v mil. ha (pro perHa)
+ * @returns {value, unit} nebo null, když režim = absolute / nelze přepočíst / chybí vstup
+ */
+export function normalizeValue(
+  indicatorKey: string,
+  rawValue: number | null | undefined,
+  mode: NormMode,
+  population?: number | null,
+  agLandRaw?: number | null,
+): NormResult | null {
+  if (rawValue == null || mode === 'absolute') return null;
+  const s = NORM_SPECS[indicatorKey];
+  if (!s) return null;
+  const base = rawValue * s.baseScale;
+  if (mode === 'perCapita') {
+    if (!s.perCapita || !population) return null;
+    return { value: (base / population) * 1000, unit: `${s.baseUnit} / 1000 obyv.` };
+  }
+  if (mode === 'perHa') {
+    if (!s.perHa || !agLandRaw) return null;
+    return { value: base / (agLandRaw * 1e6), unit: `${s.baseUnit} / ha` };
+  }
+  return null;
+}

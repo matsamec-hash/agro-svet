@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { groupByPackage, vsReference, fmtNum, sparklinePath, compareMatrix, COUNTRY_LOCATIVE, PACKAGE_ORDER, PACKAGE_LABELS } from '../../src/lib/svet/render';
+import { groupByPackage, vsReference, fmtNum, sparklinePath, compareMatrix, COUNTRY_LOCATIVE, PACKAGE_ORDER, PACKAGE_LABELS, normalizeValue, normApplies } from '../../src/lib/svet/render';
 
 const ind = (key: string, pkg: any, value: number) => ({
   key, label: key, pkg, unit: 't/ha',
@@ -38,6 +38,40 @@ describe('fmtNum', () => {
     expect(fmtNum(1234.5)).toBe('1 234,5');
     expect(fmtNum(7.83)).toBe('7,83');
     expect(fmtNum(255010)).toBe('255 010');
+  });
+});
+
+describe('normalizeValue', () => {
+  it('perCapita: přepočte na 1000 obyvatel se správnou jednotkou', () => {
+    // 1000 (1000 ks) → 1 000 000 ks / 1 000 000 obyv × 1000 = 1000 ks/1000 obyv.
+    expect(normalizeValue('cattle_count', 1000, 'perCapita', 1_000_000)).toEqual({ value: 1000, unit: 'ks / 1000 obyv.' });
+  });
+  it('perHa: dělí zemědělskou plochou (hustota)', () => {
+    // 1000 (1000 ks) → 1 000 000 ks / (2 mil. ha) = 0,5 ks/ha
+    expect(normalizeValue('cattle_count', 1000, 'perHa', 1_000_000, 2)).toEqual({ value: 0.5, unit: 'ks / ha' });
+  });
+  it('hodnota produkce perCapita používá měřítko mld €', () => {
+    // 5 (mld €) → 5e9 € / 10e6 obyv × 1000 = 500 000 € / 1000 obyv.
+    expect(normalizeValue('ag_output_value', 5, 'perCapita', 10_000_000)).toEqual({ value: 500000, unit: '€ / 1000 obyv.' });
+  });
+  it('null pro absolute, poměrové ukazatele a nepoužitelné kombinace', () => {
+    expect(normalizeValue('cattle_count', 1000, 'absolute', 1_000_000)).toBeNull();
+    expect(normalizeValue('wheat_yield', 7.8, 'perCapita', 1_000_000)).toBeNull();
+    expect(normalizeValue('ag_land', 3.5, 'perHa', 1_000_000, 3.5)).toBeNull();
+    expect(normalizeValue('cattle_count', 1000, 'perCapita', 0)).toBeNull();
+    expect(normalizeValue('cattle_count', null, 'perCapita', 1_000_000)).toBeNull();
+  });
+});
+
+describe('normApplies', () => {
+  it('absolute vždy; perCapita u 6 absolutních; perHa jen u hustotních', () => {
+    expect(normApplies('wheat_yield', 'absolute')).toBe(true);
+    expect(normApplies('cattle_count', 'perCapita')).toBe(true);
+    expect(normApplies('cattle_count', 'perHa')).toBe(true);
+    expect(normApplies('ag_land', 'perHa')).toBe(false);
+    expect(normApplies('farm_count', 'perHa')).toBe(false);
+    expect(normApplies('farm_count', 'perCapita')).toBe(true);
+    expect(normApplies('wheat_yield', 'perCapita')).toBe(false);
   });
 });
 

@@ -1,7 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { compareMatrix, fmtNum, vsReference } from '../../../lib/svet/render';
+import populationData from '../../../data/svet/population.json';
 import '../../../styles/svet.css';
+
+const pops: Record<string, number> = (populationData as any).population ?? {};
 
 const mods = import.meta.glob('../../../data/svet/*.json', { eager: true });
 const profiles = Object.values(mods)
@@ -18,7 +21,7 @@ const refValue = (profiles.find((p: any) => p.slug === 'cesko') as any)?.indicat
 const rows = compareMatrix(profiles as any, defaultKey).filter((c) => c.value != null).sort((a, b) => (b.value! - a.value!));
 
 const payload = profiles.map((p: any) => ({
-  slug: p.slug, nameCs: p.nameCs, flag: p.flag,
+  slug: p.slug, nameCs: p.nameCs, flag: p.flag, population: pops[p.slug] ?? null,
   indicators: Object.fromEntries(Object.entries(p.indicators).map(([k, v]: any) => [k, { value: v.latest.value, period: v.latest.referencePeriod }])),
 }));
 const units = Object.fromEntries(Object.entries(indicatorMeta).map(([k, m]) => [k, m.unit]));
@@ -43,7 +46,14 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
           ))}
         </select>
       </label>
+      <div class="svet-cmp-modes" id="svet-cmp-modes" role="group" aria-label="Přepočet hodnot">
+        <span class="svet-cmp-modes-lbl">Přepočet:</span>
+        <button type="button" data-mode="absolute" class="active">Absolutní</button>
+        <button type="button" data-mode="perCapita">Na 1000 obyv.</button>
+        <button type="button" data-mode="perHa">Na ha půdy</button>
+      </div>
       <p class="svet-cmp-current">Srovnáváte ukazatel: <strong id="svet-cmp-current">{indicatorMeta[defaultKey]?.label} <span>({defaultUnit})</span></strong></p>
+      <p class="svet-cmp-modenote" id="svet-cmp-modenote"></p>
       <div class="svet-cmp-tablewrap">
         <table class="svet-cmp-table">
           <thead><tr><th>#</th><th>Země</th><th>Hodnota <span id="svet-unit-h" class="svet-cmp-unit">{defaultUnit && `(${defaultUnit})`}</span></th><th title="O kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku. ČR = 0 %.">vs ČR</th></tr></thead>
@@ -60,38 +70,76 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
     <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
     <script type="application/json" id="svet-units" set:html={JSON.stringify(units)}></script>
     <script>
-      (() => {
-        interface CmpProfile { slug: string; nameCs: string; flag: string; indicators: Record<string, { value: number; period: string } | undefined>; }
-        const dataEl = document.getElementById('svet-data');
-        const unitsEl = document.getElementById('svet-units');
-        const sel = document.getElementById('svet-indicator') as HTMLSelectElement | null;
-        const body = document.getElementById('svet-cmp-body');
-        const unitH = document.getElementById('svet-unit-h');
-        const currentH = document.getElementById('svet-cmp-current');
-        if (!dataEl || !sel || !body) return;
-        const tbody = body;
+      import { normalizeValue, normApplies, type NormMode } from '../../../lib/svet/render';
+      interface Ind { value: number | null; period: string; }
+      interface CmpProfile { slug: string; nameCs: string; flag: string; population: number | null; indicators: Record<string, Ind | undefined>; }
+      const dataEl = document.getElementById('svet-data');
+      const unitsEl = document.getElementById('svet-units');
+      const sel = document.getElementById('svet-indicator') as HTMLSelectElement | null;
+      const tbody = document.getElementById('svet-cmp-body');
+      const unitH = document.getElementById('svet-unit-h');
+      const currentH = document.getElementById('svet-cmp-current');
+      const modesEl = document.getElementById('svet-cmp-modes');
+      const noteEl = document.getElementById('svet-cmp-modenote');
+      if (dataEl && sel && tbody) {
         const profiles: CmpProfile[] = JSON.parse(dataEl.textContent || '[]');
         const units: Record<string, string> = JSON.parse(unitsEl?.textContent || '{}');
         const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
         const fmt = (n: number) => nf.format(n).replace(/[  \s]/g, ' ');
-        function render(key: string) {
-          const u = units[key];
-          if (unitH) unitH.textContent = u ? `(${u})` : '';
-          if (currentH) { const lbl = sel && sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : ''; currentH.textContent = lbl; }
+        const agLandOf = (p: CmpProfile) => { const a = p.indicators['ag_land']; return a && a.value != null ? a.value : null; };
+        const rawOf = (p: CmpProfile, key: string) => { const i = p.indicators[key]; return i && i.value != null ? i.value : null; };
+        const normable = (key: string) => normApplies(key, 'perCapita') || normApplies(key, 'perHa');
+        let mode: NormMode = 'absolute';
+
+        function render() {
+          const key = sel!.value;
+          if (!normApplies(key, mode)) mode = 'absolute';
+          // stav tlačítek dle použitelnosti pro daný ukazatel
+          if (modesEl) modesEl.querySelectorAll('button').forEach((btn) => {
+            const bm = (btn.dataset.mode || 'absolute') as NormMode;
+            btn.disabled = !normApplies(key, bm);
+            btn.classList.toggle('active', bm === mode);
+          });
+          if (noteEl) noteEl.textContent = normable(key) ? '' : 'Tento ukazatel je už poměrový — přepočet na obyvatele/hektar se nepoužije.';
+
           const ref = profiles.find((p) => p.slug === 'cesko');
-          const refVal = ref && ref.indicators[key] ? ref.indicators[key]!.value : null;
+          const refNorm = ref ? normalizeValue(key, rawOf(ref, key), mode, ref.population, agLandOf(ref)) : null;
+          const refVal = refNorm ? refNorm.value : (ref ? rawOf(ref, key) : null);
+
+          let unit = '';
           const rows = profiles
-            .map((p) => ({ flag: p.flag, nameCs: p.nameCs, slug: p.slug, v: p.indicators[key] ? p.indicators[key]!.value : null }))
+            .map((p) => {
+              const raw = rawOf(p, key);
+              const norm = normalizeValue(key, raw, mode, p.population, agLandOf(p));
+              if (norm) unit = norm.unit;
+              return { flag: p.flag, nameCs: p.nameCs, slug: p.slug, v: norm ? norm.value : raw };
+            })
             .filter((r): r is { flag: string; nameCs: string; slug: string; v: number } => r.v != null)
             .sort((a, b) => b.v - a.v);
-          tbody.innerHTML = rows.map((r, i) => {
+          if (!unit) unit = units[key] || '';
+
+          if (unitH) unitH.textContent = unit ? `(${unit})` : '';
+          if (currentH) {
+            const lbl = sel!.options[sel!.selectedIndex]?.text || '';
+            const base = lbl.replace(/\s*\([^)]*\)\s*$/, '');
+            currentH.textContent = mode === 'absolute' ? lbl : `${base} (${unit})`;
+          }
+          tbody!.innerHTML = rows.map((r, i) => {
             let vs = '—';
             if (refVal) { const pct = Math.round((r.v / refVal - 1) * 100); vs = (pct > 0 ? '+' : '') + fmt(pct) + ' %'; }
             return `<tr><td>${i + 1}</td><td>${r.flag} <a href="/svet/${r.slug}/">${r.nameCs}</a></td><td>${fmt(r.v)}</td><td>${vs}</td></tr>`;
           }).join('');
         }
-        sel.addEventListener('change', (e) => render((e.target as HTMLSelectElement).value));
-      })();
+
+        sel.addEventListener('change', render);
+        if (modesEl) modesEl.addEventListener('click', (e) => {
+          const btn = (e.target as HTMLElement).closest('button');
+          if (!btn || btn.disabled) return;
+          mode = (btn.dataset.mode || 'absolute') as NormMode;
+          render();
+        });
+        render();
+      }
     </script>
   </main>
 </Layout>
