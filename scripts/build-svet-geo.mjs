@@ -4,16 +4,23 @@
 // SDÍLENOU transformací (region + department overlay sedí na sebe).
 //
 // Spuštění: node scripts/build-svet-geo.mjs
-// Zatím Francie (pilot). Přidání země = doplnit do COUNTRIES níže.
+// Přidání země = doplnit do COUNTRIES níže.
+//
+// Per-country config (úroveň „régionů" se mezi zeměmi liší):
+//   regionLevel   … GISCO NUTS úroveň régionů (FR=1, DE=1 → spolkové země; PL=2 → vojvodství)
+//   drillLevel    … NUTS úroveň drill overlay (o úroveň níž: FR NUTS-3, DE NUTS-2, PL NUTS-3)
+//   regionCodeLen … délka kódu régionu (NUTS-1=3, NUTS-2=4) — parent drillu = code.slice(0, regionCodeLen)
+//   drop          … kódy régionů k vynechání (FR zámoří 'FRY'; DE/PL nic)
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 
 const GISCO = (res, lvl) =>
   `https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_${res}_2021_3035_LEVL_${lvl}.geojson`;
 
-// slug → { cntr, res, výběr régionů (NUTS-1) a départementů (NUTS-3) }
 const COUNTRIES = [
-  { slug: 'francie', cntr: 'FR', res: '10M', l1: 1, l3: 3, dropL1: ['FRY'] /* zámoří */ },
+  { slug: 'francie', cntr: 'FR', res: '10M', regionLevel: 1, drillLevel: 3, regionCodeLen: 3, drop: ['FRY'] /* zámoří */ },
+  { slug: 'nemecko', cntr: 'DE', res: '10M', regionLevel: 1, drillLevel: 2, regionCodeLen: 3, drop: [] /* 16 spolkových zemí = NUTS-1 */ },
+  { slug: 'polsko', cntr: 'PL', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 17 NUTS-2 = 16 vojvodství + rozdělené Mazovsko (PL91/PL92) */ },
 ];
 
 const VIEW_W = 1000; // šířka viewBoxu; výška dopočtena dle poměru stran
@@ -57,6 +64,23 @@ function polygonsOf(geom) {
   return [];
 }
 
+// plocha prstence (shoelace) v m² — souřadnice EPSG:3035 (rovnoploché LAEA)
+function ringArea(ring) {
+  let s = 0;
+  for (let i = 0; i < ring.length - 1; i++) {
+    const [x1, y1] = ring[i], [x2, y2] = ring[i + 1];
+    s += x1 * y2 - x2 * y1;
+  }
+  return Math.abs(s) / 2;
+}
+// rozloha feature v km² (vnější prstenec − díry). EPSG:3035 je rovnoploché → přesné.
+function areaKm2(feature) {
+  let a = 0;
+  for (const poly of polygonsOf(feature.geometry))
+    poly.forEach((ring, i) => { a += i === 0 ? ringArea(ring) : -ringArea(ring); });
+  return Math.round(a / 1e6);
+}
+
 function bboxOfFeatures(features) {
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (const f of features)
@@ -92,27 +116,30 @@ function makePathBuilder(bbox) {
 }
 
 for (const c of COUNTRIES) {
-  const [l1json, l3json] = await Promise.all([getJson(GISCO(c.res, c.l1)), getJson(GISCO(c.res, c.l3))]);
-  const regions = l1json.features.filter(
-    (f) => f.properties.CNTR_CODE === c.cntr && !c.dropL1.includes(f.properties.NUTS_ID),
+  const [regJson, drillJson] = await Promise.all([
+    getJson(GISCO(c.res, c.regionLevel)),
+    getJson(GISCO(c.res, c.drillLevel)),
+  ]);
+  const regions = regJson.features.filter(
+    (f) => f.properties.CNTR_CODE === c.cntr && !c.drop.includes(f.properties.NUTS_ID),
   );
   const regionIds = new Set(regions.map((f) => f.properties.NUTS_ID));
-  const departments = l3json.features.filter(
-    (f) => f.properties.CNTR_CODE === c.cntr && regionIds.has(f.properties.NUTS_ID.slice(0, 3)),
+  const departments = drillJson.features.filter(
+    (f) => f.properties.CNTR_CODE === c.cntr && regionIds.has(f.properties.NUTS_ID.slice(0, c.regionCodeLen)),
   );
 
   const bbox = bboxOfFeatures(regions); // sdílená transformace dle régionů
   const pb = makePathBuilder(bbox);
 
   const out = {
-    _comment: `Hranice ${c.slug} pro choropleth /svet/. Zdroj: Eurostat GISCO NUTS 2021 (EPSG:3035). SVG paths, sdílená transformace region+department.`,
+    _comment: `Hranice ${c.slug} pro choropleth /svet/. Zdroj: Eurostat GISCO NUTS 2021 (EPSG:3035). SVG paths, sdílená transformace region+drill.`,
     slug: c.slug,
     viewBox: `0 0 ${VIEW_W} ${pb.height}`,
     regions: regions
-      .map((f) => ({ code: f.properties.NUTS_ID, name: f.properties.NAME_LATN || f.properties.NUTS_NAME, path: pb.build(f) }))
+      .map((f) => ({ code: f.properties.NUTS_ID, name: f.properties.NAME_LATN || f.properties.NUTS_NAME, areaKm2: areaKm2(f), path: pb.build(f) }))
       .sort((a, b) => a.name.localeCompare(b.name)),
     departments: departments
-      .map((f) => ({ code: f.properties.NUTS_ID, region: f.properties.NUTS_ID.slice(0, 3), name: f.properties.NAME_LATN || f.properties.NUTS_NAME, path: pb.build(f) }))
+      .map((f) => ({ code: f.properties.NUTS_ID, region: f.properties.NUTS_ID.slice(0, c.regionCodeLen), name: f.properties.NAME_LATN || f.properties.NUTS_NAME, path: pb.build(f) }))
       .sort((a, b) => a.name.localeCompare(b.name)),
   };
 
@@ -120,5 +147,5 @@ for (const c of COUNTRIES) {
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, JSON.stringify(out) + '\n');
   const bytes = JSON.stringify(out).length;
-  console.log(`${c.slug}: ${out.regions.length} régionů, ${out.departments.length} départementů → ${outPath} (${(bytes / 1024).toFixed(0)} kB), viewBox ${out.viewBox}`);
+  console.log(`${c.slug}: ${out.regions.length} régionů, ${out.departments.length} drill-jednotek → ${outPath} (${(bytes / 1024).toFixed(0)} kB), viewBox ${out.viewBox}`);
 }
