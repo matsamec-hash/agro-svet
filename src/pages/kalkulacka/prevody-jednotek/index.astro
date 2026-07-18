@@ -57,6 +57,16 @@ const faqJsonLd = faqPageSchema(faqItems);
       numberLocale={c.numberLocale}
       ui={c.ui}
       unitNames={c.unitNames}
+      comparisonsHeading="Kolik to je? Názorné srovnání"
+      comparisonsCaption="Orientační rozměry: fotbalové hřiště ≈ 7 140 m² (0,71 ha), tenisový kurt ≈ 261 m², hokejové kluziště ≈ 1 800 m², Václavské náměstí ≈ 45 000 m², Pražský hrad ≈ 70 000 m², parkovací místo ≈ 12,5 m²."
+      comparisons={[
+        { emoji: '🅿️', name: 'parkovací místo', m2: 12.5 },
+        { emoji: '🎾', name: 'tenisový kurt', m2: 261 },
+        { emoji: '🏒', name: 'hokejové kluziště', m2: 1800 },
+        { emoji: '⚽', name: 'fotbalové hřiště', m2: 7140 },
+        { emoji: '🏛️', name: 'Václavské náměstí', m2: 45000 },
+        { emoji: '🏰', name: 'Pražský hrad', m2: 70000 },
+      ]}
     />
 
     <section class="pj-reference">
