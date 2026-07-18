@@ -269,6 +269,20 @@
 .svet-cmp-table tbody tr:nth-child(odd) td { background: #fdfdf9; }
 .svet-cmp-table td:first-child { font-family: 'Chakra Petch', sans-serif; color: var(--sv-muted); width: 3rem; }
 .svet-cmp-table td:nth-child(3) { font-family: 'Chakra Petch', sans-serif; font-weight: 700; }
+.svet-cmp-current {
+  margin: 14px 0 4px;
+  font-size: 1.05rem;
+  color: var(--sv-muted);
+}
+.svet-cmp-current strong {
+  font: 700 1.35rem/1.2 'Chakra Petch', sans-serif;
+  color: var(--sv-ink, #14140f);
+  display: inline-block;
+}
+.svet-cmp-current strong span { font-size: .9rem; font-weight: 600; color: var(--sv-muted); }
+.svet-cmp-unit { text-transform: none; letter-spacing: 0; color: var(--sv-muted); font-weight: 400; }
+.svet-cmp-table tbody a { color: inherit; text-decoration: underline; text-decoration-color: var(--sv-line); text-underline-offset: 2px; }
+.svet-cmp-table tbody a:hover { text-decoration-color: currentColor; }
 .svet-cmp-note { margin-top: 12px; color: #9aa0a6; font-size: .8rem; }
 
 @media (max-width: 600px) {
