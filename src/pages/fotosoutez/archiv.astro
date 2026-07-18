@@ -5,6 +5,7 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { createServerClient } from '../../lib/supabase';
+import { contestPhotoBase } from '../../lib/contest-supabase';
 
 const sb = createServerClient();
 const { data: rounds } = await sb
@@ -26,7 +27,7 @@ if (winnerIds.length > 0) {
   }
 }
 
-const PHOTO_BASE = 'https://obhypfuzmknvmknskdwh.supabase.co/storage/v1/object/public/contest-photos/';
+const PHOTO_BASE = contestPhotoBase();
 ---
 <Layout title="Archiv — Fotosoutěž Agro-svět" description="Všechna historická kola a výherci">
   <main class="archive-page">

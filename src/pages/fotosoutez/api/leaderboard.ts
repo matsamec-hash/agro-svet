@@ -7,13 +7,12 @@
 // leaderboard feeling live without hammering Supabase from the JS poll.
 import type { APIRoute } from 'astro';
 import { createServerClient } from '../../../lib/supabase';
-
-const PHOTO_BASE_URL =
-  'https://obhypfuzmknvmknskdwh.supabase.co/storage/v1/object/public/contest-photos/';
+import { contestPhotoBase } from '../../../lib/contest-supabase';
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ url }) => {
+  const PHOTO_BASE_URL = contestPhotoBase();
   const roundSlug = url.searchParams.get('round');
   const limit = Math.min(50, Math.max(1, Number(url.searchParams.get('limit') ?? 10)));
   if (!roundSlug) return json({ error: 'missing_round' }, 400);

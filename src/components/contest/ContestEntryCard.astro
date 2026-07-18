@@ -1,10 +1,11 @@
 ---
 import type { ContestEntry } from '../../lib/contest-supabase';
+import { contestPhotoBase } from '../../lib/contest-supabase';
 import { formatLokalita } from '../../lib/lokality';
 
 interface Props { entry: ContestEntry; rank?: number }
 const { entry, rank } = Astro.props;
-const photoUrl = `https://obhypfuzmknvmknskdwh.supabase.co/storage/v1/object/public/contest-photos/${entry.photo_path}`;
+const photoUrl = `${contestPhotoBase()}${entry.photo_path}`;
 const lokalita = formatLokalita(entry.location_kraj_slug, entry.location_okres_slug);
 ---
 <a href={`/fotosoutez/foto/${entry.id}/`} class="entry-card">

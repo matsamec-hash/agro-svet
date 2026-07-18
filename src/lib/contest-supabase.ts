@@ -1,5 +1,16 @@
 import { createServerClient } from './supabase';
+import { getEnvVar } from './env';
 import type { SupabaseClient } from '@supabase/supabase-js';
+
+/**
+ * Browser-facing base URL for public contest photos, derived from env so it
+ * follows whichever Supabase the site points at (no hardcoded project host).
+ * Synchronous + allocation-free — safe to call once per rendered entry card.
+ */
+export function contestPhotoBase(): string {
+  const base = getEnvVar('PUBLIC_SUPABASE_URL') ?? getEnvVar('SUPABASE_URL') ?? '';
+  return `${base}/storage/v1/object/public/contest-photos/`;
+}
 
 // Explicit column lists — avoid select('*') to skip large unused fields
 // (metadata JSON on entries, required_fields/optional_fields JSON on rounds)
