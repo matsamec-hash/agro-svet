@@ -13,6 +13,7 @@ const indicatorMeta: Record<string, { label: string; unit: string }> = {};
 for (const p of profiles) for (const k of Object.keys(p.indicators)) indicatorMeta[k] ??= { label: p.indicators[k].label, unit: p.indicators[k].unit };
 
 const defaultKey = 'wheat_yield';
+const defaultUnit = indicatorMeta[defaultKey]?.unit ?? '';
 const refValue = (profiles.find((p: any) => p.slug === 'cesko') as any)?.indicators[defaultKey]?.latest.value;
 const rows = compareMatrix(profiles as any, defaultKey).filter((c) => c.value != null).sort((a, b) => (b.value! - a.value!));
 
@@ -20,6 +21,7 @@ const payload = profiles.map((p: any) => ({
   slug: p.slug, nameCs: p.nameCs, flag: p.flag,
   indicators: Object.fromEntries(Object.entries(p.indicators).map(([k, v]: any) => [k, { value: v.latest.value, period: v.latest.referencePeriod }])),
 }));
+const units = Object.fromEntries(Object.entries(indicatorMeta).map(([k, m]) => [k, m.unit]));
 
 const title = 'Srovnání zemědělství zemí';
 const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — výnosy, plochy, produkce, ekonomika — vždy se srovnáním s ČR. Zdroje Eurostat a World Bank.';
@@ -41,32 +43,41 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
           ))}
         </select>
       </label>
+      <p class="svet-cmp-current">Srovnáváte ukazatel: <strong id="svet-cmp-current">{indicatorMeta[defaultKey]?.label} <span>({defaultUnit})</span></strong></p>
       <div class="svet-cmp-tablewrap">
         <table class="svet-cmp-table">
-          <thead><tr><th>#</th><th>Země</th><th>Hodnota</th><th>vs ČR</th></tr></thead>
+          <thead><tr><th>#</th><th>Země</th><th>Hodnota <span id="svet-unit-h" class="svet-cmp-unit">{defaultUnit && `(${defaultUnit})`}</span></th><th title="O kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku. ČR = 0 %.">vs ČR</th></tr></thead>
           <tbody id="svet-cmp-body">
             {rows.map((c, i) => {
               const cmp = refValue != null ? vsReference(c.value!, refValue) : null;
-              return (<tr><td>{i + 1}</td><td>{c.flag} {c.nameCs}</td><td>{fmtNum(c.value!)}</td><td>{cmp ? `${cmp.dir === 'up' ? '+' : ''}${fmtNum(cmp.pct)} %` : '—'}</td></tr>);
+              return (<tr><td>{i + 1}</td><td>{c.flag} <a href={`/svet/${c.slug}/`}>{c.nameCs}</a></td><td>{fmtNum(c.value!)}</td><td>{cmp ? `${cmp.dir === 'up' ? '+' : ''}${fmtNum(cmp.pct)} %` : '—'}</td></tr>);
             })}
           </tbody>
         </table>
       </div>
-      <p class="svet-cmp-note">Zdroj: Eurostat / World Bank · poslední dostupná data u každého ukazatele</p>
+      <p class="svet-cmp-note"><strong>vs ČR</strong> = o kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku (ČR = 0 %). Zdroj: Eurostat / World Bank · poslední dostupná data u každého ukazatele.</p>
     </section>
     <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
+    <script type="application/json" id="svet-units" set:html={JSON.stringify(units)}></script>
     <script>
       (() => {
         interface CmpProfile { slug: string; nameCs: string; flag: string; indicators: Record<string, { value: number; period: string } | undefined>; }
         const dataEl = document.getElementById('svet-data');
+        const unitsEl = document.getElementById('svet-units');
         const sel = document.getElementById('svet-indicator') as HTMLSelectElement | null;
         const body = document.getElementById('svet-cmp-body');
+        const unitH = document.getElementById('svet-unit-h');
+        const currentH = document.getElementById('svet-cmp-current');
         if (!dataEl || !sel || !body) return;
         const tbody = body;
         const profiles: CmpProfile[] = JSON.parse(dataEl.textContent || '[]');
+        const units: Record<string, string> = JSON.parse(unitsEl?.textContent || '{}');
         const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
         const fmt = (n: number) => nf.format(n).replace(/[  \s]/g, ' ');
         function render(key: string) {
+          const u = units[key];
+          if (unitH) unitH.textContent = u ? `(${u})` : '';
+          if (currentH) { const lbl = sel && sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : ''; currentH.textContent = lbl; }
           const ref = profiles.find((p) => p.slug === 'cesko');
           const refVal = ref && ref.indicators[key] ? ref.indicators[key]!.value : null;
           const rows = profiles
@@ -76,7 +87,7 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
           tbody.innerHTML = rows.map((r, i) => {
             let vs = '—';
             if (refVal) { const pct = Math.round((r.v / refVal - 1) * 100); vs = (pct > 0 ? '+' : '') + fmt(pct) + ' %'; }
-            return `<tr><td>${i + 1}</td><td>${r.flag} ${r.nameCs}</td><td>${fmt(r.v)}</td><td>${vs}</td></tr>`;
+            return `<tr><td>${i + 1}</td><td>${r.flag} <a href="/svet/${r.slug}/">${r.nameCs}</a></td><td>${fmt(r.v)}</td><td>${vs}</td></tr>`;
           }).join('');
         }
         sel.addEventListener('change', (e) => render((e.target as HTMLSelectElement).value));
