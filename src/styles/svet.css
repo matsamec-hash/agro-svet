@@ -311,6 +311,45 @@
 .svet-cmp-table tbody a:hover { text-decoration-color: currentColor; }
 .svet-cmp-note { margin-top: 12px; color: #9aa0a6; font-size: .8rem; }
 
+/* ---------- REGIONÁLNÍ MAPA (choropleth) ---------- */
+.svet-map-modes { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; }
+.svet-map-modes button {
+  font: 600 .82rem/1 inherit;
+  padding: 7px 13px;
+  border: 1px solid var(--sv-line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--sv-ink, #14140f);
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, color .12s ease;
+}
+.svet-map-modes button:hover { border-color: #cfd4c6; }
+.svet-map-modes button.active { background: var(--sv-green); border-color: var(--sv-green); color: #fff; }
+.svet-map-desc { margin: 0 0 12px; color: var(--sv-muted); font-size: .9rem; }
+.svet-map-wrap { position: relative; max-width: 640px; }
+.svet-map-svg { display: block; width: 100%; height: auto; }
+.svet-map-svg path { transition: fill .25s ease, opacity .12s ease; cursor: pointer; }
+.svet-map-svg path.hover { opacity: .82; stroke: var(--sv-ink, #14140f); stroke-width: 1.6; }
+.svet-map-tip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(10, 10, 12, .92);
+  color: #fff;
+  padding: 7px 11px;
+  border-radius: 8px;
+  font-size: .82rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  z-index: 5;
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, .4);
+}
+.svet-map-legend { display: flex; align-items: center; gap: 10px; margin: 12px 0 6px; font-size: .82rem; color: var(--sv-muted); }
+.svet-map-legend-bar {
+  width: 160px; height: 10px; border-radius: 999px;
+  background: linear-gradient(90deg, #f0f7ea, #a2c982, #5a964a, #1f5c1f);
+}
+.svet-map-legend-unit { font-weight: 600; color: var(--sv-ink, #14140f); }
+
 @media (max-width: 600px) {
   .svet-page { padding: 18px 14px 60px; }
   .svet-hero { padding: 28px 22px 26px; border-radius: 20px; }

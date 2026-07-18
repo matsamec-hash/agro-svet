@@ -1,0 +1,126 @@
+---
+// Choropleth mapa regionů země pro /svet/[slug]/. Server-rendered inline SVG
+// (near-zero JS): SSR vybarví výchozí metriku, klient jen přepíná metriku + tooltip.
+// Data: {slug}-geo.json (SVG paths) + {slug}.json (hodnoty metrik per région).
+import { colorFor, extent } from '../../lib/svet/mapcolor';
+
+interface GeoRegion { code: string; name: string; path: string; }
+interface Geo { viewBox: string; regions: GeoRegion[]; }
+interface Metric { key: string; label: string; unit: string; desc?: string; }
+interface RegionData {
+  year: number; source: string; sourceUrl: string;
+  metrics: Metric[]; regions: Record<string, Record<string, number>>;
+}
+const { geo, data, countryName } = Astro.props as { geo: Geo; data: RegionData; countryName: string };
+
+const m0 = data.metrics[0];
+const valsOf = (key: string) => geo.regions.map((r) => data.regions[r.code]?.[key]);
+const e0 = extent(valsOf(m0.key));
+const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+const fmt = (n: number) => nf.format(n);
+---
+<section class="svet-section svet-map">
+  <header class="svet-section-head"><h2>Regionální mapa — {countryName}</h2></header>
+
+  <div class="svet-map-modes" id="svet-map-modes" role="group" aria-label="Metrika mapy">
+    {data.metrics.map((m, i) => (
+      <button type="button" data-metric={m.key} class={i === 0 ? 'active' : ''}>{m.label}</button>
+    ))}
+  </div>
+  <p class="svet-map-desc" id="svet-map-desc">{m0.desc}</p>
+
+  <div class="svet-map-wrap">
+    <svg viewBox={geo.viewBox} class="svet-map-svg" id="svet-map-svg" role="img" aria-label={`Mapa Francie — ${m0.label}`}>
+      {geo.regions.map((r) => {
+        const v = data.regions[r.code]?.[m0.key];
+        return (
+          <path
+            d={r.path}
+            data-code={r.code}
+            data-name={r.name}
+            fill={colorFor(v, e0.min, e0.max)}
+            stroke="#fff"
+            stroke-width="1"
+          ><title>{r.name}</title></path>
+        );
+      })}
+    </svg>
+    <div class="svet-map-tip" id="svet-map-tip" hidden></div>
+  </div>
+
+  <div class="svet-map-legend">
+    <span id="svet-map-lmin">{fmt(e0.min)}</span>
+    <span class="svet-map-legend-bar" aria-hidden="true"></span>
+    <span id="svet-map-lmax">{fmt(e0.max)}</span>
+    <span class="svet-map-legend-unit" id="svet-map-lunit">{m0.unit}</span>
+  </div>
+
+  <p class="svet-cmp-note">
+    Zdroj: <a href={data.sourceUrl} rel="nofollow">{data.source}</a> · úroveň régionů (NUTS-1), agregováno z NUTS-2.
+    Départementy (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.
+  </p>
+
+  <script type="application/json" id="svet-map-data" set:html={JSON.stringify({ regions: data.regions, metrics: data.metrics })}></script>
+  <script>
+    import { colorFor, extent } from '../../lib/svet/mapcolor';
+    interface Metric { key: string; label: string; unit: string; desc?: string; }
+    const dataEl = document.getElementById('svet-map-data');
+    const svg = document.getElementById('svet-map-svg');
+    const modes = document.getElementById('svet-map-modes');
+    const tip = document.getElementById('svet-map-tip');
+    if (dataEl && svg && modes) {
+      const parsed = JSON.parse(dataEl.textContent || '{}') as {
+        regions: Record<string, Record<string, number>>; metrics: Metric[];
+      };
+      const byKey: Record<string, Metric> = Object.fromEntries(parsed.metrics.map((m) => [m.key, m]));
+      const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+      const paths = Array.from(svg.querySelectorAll('path')) as SVGPathElement[];
+      const desc = document.getElementById('svet-map-desc');
+      const lmin = document.getElementById('svet-map-lmin');
+      const lmax = document.getElementById('svet-map-lmax');
+      const lunit = document.getElementById('svet-map-lunit');
+      let metricKey = parsed.metrics[0].key;
+
+      function paint(key: string) {
+        const m = byKey[key];
+        const vals = paths.map((p) => parsed.regions[p.dataset.code || '']?.[key]);
+        const { min, max } = extent(vals);
+        paths.forEach((p) => {
+          const v = parsed.regions[p.dataset.code || '']?.[key];
+          p.setAttribute('fill', colorFor(v, min, max));
+        });
+        if (lmin) lmin.textContent = nf.format(min);
+        if (lmax) lmax.textContent = nf.format(max);
+        if (lunit) lunit.textContent = m.unit;
+        if (desc) desc.textContent = m.desc || '';
+        svg!.setAttribute('aria-label', `Mapa Francie — ${m.label}`);
+        modes!.querySelectorAll('button').forEach((b) =>
+          b.classList.toggle('active', b.dataset.metric === key));
+      }
+
+      modes.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('button');
+        if (!btn || !btn.dataset.metric) return;
+        metricKey = btn.dataset.metric;
+        paint(metricKey);
+      });
+
+      // tooltip
+      const showTip = (p: SVGPathElement, ev: MouseEvent) => {
+        if (!tip) return;
+        const m = byKey[metricKey];
+        const v = parsed.regions[p.dataset.code || '']?.[metricKey];
+        tip.innerHTML = `<strong>${p.dataset.name}</strong><br>${v != null ? nf.format(v) + ' ' + m.unit : 'bez dat'}`;
+        tip.hidden = false;
+        const wrap = tip.parentElement!.getBoundingClientRect();
+        tip.style.left = ev.clientX - wrap.left + 12 + 'px';
+        tip.style.top = ev.clientY - wrap.top + 12 + 'px';
+      };
+      paths.forEach((p) => {
+        p.addEventListener('mousemove', (ev) => showTip(p, ev as MouseEvent));
+        p.addEventListener('mouseenter', () => p.classList.add('hover'));
+        p.addEventListener('mouseleave', () => { p.classList.remove('hover'); if (tip) tip.hidden = true; });
+      });
+    }
+  </script>
+</section>
