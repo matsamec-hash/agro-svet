@@ -49,6 +49,7 @@ const COUNTRIES = [
   { slug: 'francie', cntr: 'FR', year: '2020', regionLevel: 1, regionCodeLen: 3 },
   { slug: 'nemecko', cntr: 'DE', year: '2020', regionLevel: 1, regionCodeLen: 3 },
   { slug: 'polsko', cntr: 'PL', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'slovensko', cntr: 'SK', year: '2020', regionLevel: 2, regionCodeLen: 4 },
 ];
 
 const FSS_TOTAL = { statinfo: 'TOTAL', farmtype: 'TOTAL', so_eur: 'TOTAL', uaarea: 'TOTAL' };
