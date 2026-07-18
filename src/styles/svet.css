@@ -269,6 +269,32 @@
 .svet-cmp-table tbody tr:nth-child(odd) td { background: #fdfdf9; }
 .svet-cmp-table td:first-child { font-family: 'Chakra Petch', sans-serif; color: var(--sv-muted); width: 3rem; }
 .svet-cmp-table td:nth-child(3) { font-family: 'Chakra Petch', sans-serif; font-weight: 700; }
+.svet-cmp-modes {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 12px 0 2px;
+}
+.svet-cmp-modes-lbl { font-weight: 600; margin-right: 4px; color: var(--sv-muted); }
+.svet-cmp-modes button {
+  font: 600 .82rem/1 inherit;
+  padding: 7px 13px;
+  border: 1px solid var(--sv-line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--sv-ink, #14140f);
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, color .12s ease;
+}
+.svet-cmp-modes button:hover:not(:disabled) { border-color: #cfd4c6; }
+.svet-cmp-modes button.active {
+  background: var(--sv-ink, #14140f);
+  border-color: var(--sv-ink, #14140f);
+  color: #fff;
+}
+.svet-cmp-modes button:disabled { opacity: .38; cursor: not-allowed; }
+.svet-cmp-modenote { margin: 2px 0 0; font-size: .82rem; color: var(--sv-muted); min-height: 1em; }
 .svet-cmp-current {
   margin: 14px 0 4px;
   font-size: 1.05rem;
