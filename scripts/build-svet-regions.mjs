@@ -77,6 +77,8 @@ const COUNTRIES = [
   { slug: 'slovinsko', cntr: 'SI', year: '2020', regionLevel: 2, regionCodeLen: 4 },
   { slug: 'chorvatsko', cntr: 'HR', year: '2020', regionLevel: 2, regionCodeLen: 4 },
   { slug: 'litva', cntr: 'LT', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  // --- Mimo EU: UK má poslední FSS 2016 (po Brexitu už nesubmituje) ---
+  { slug: 'velka-britanie', cntr: 'UK', year: '2016', regionLevel: 1, regionCodeLen: 3 },
 ];
 
 const FSS_TOTAL = { statinfo: 'TOTAL', farmtype: 'TOTAL', so_eur: 'TOTAL', uaarea: 'TOTAL' };

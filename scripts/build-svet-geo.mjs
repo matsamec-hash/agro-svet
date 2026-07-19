@@ -40,6 +40,9 @@ const COUNTRIES = [
   { slug: 'slovinsko', cntr: 'SI', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 2 kohezní regiony */ },
   { slug: 'chorvatsko', cntr: 'HR', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 4 regiony (2021) */ },
   { slug: 'litva', cntr: 'LT', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 2 regiony */ },
+  // --- Mimo EU, ale v Eurostat FSS + GISCO NUTS 2021 (stejný pipeline) ---
+  // Pozn.: Švýcarsko je v GISCO geometrii, ale Eurostat FSS pro CH nemá hodnoty (nesubmituje) → custom data zvlášť.
+  { slug: 'velka-britanie', cntr: 'UK', res: '10M', regionLevel: 1, drillLevel: 2, regionCodeLen: 3, drop: [] /* 12 régionů NUTS-1; geometrie GISCO 2021 (UK zachováno), data FSS 2016 */ },
 ];
 
 const VIEW_W = 1000; // šířka viewBoxu; výška dopočtena dle poměru stran
