@@ -168,7 +168,59 @@
   color: var(--sv-muted);
   letter-spacing: 0;
 }
-.svet-spark { display: block; width: 100%; height: auto; }
+.svet-ind-value .svet-ind-ref {
+  font-family: system-ui, sans-serif;
+  font-size: .8rem;
+  font-weight: 500;
+  color: var(--sv-muted);
+  letter-spacing: 0;
+}
+
+/* ---------- GRAF UKAZATELE ---------- */
+.svet-chart { position: relative; margin: 0; display: grid; gap: 6px; }
+.svet-chart-svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
+.svet-chart-grid { stroke: #eceadd; stroke-width: 1; }
+.svet-chart-ylab,
+.svet-chart-xlab { font-size: 9px; fill: #a9a99b; font-family: system-ui, sans-serif; }
+.svet-chart-ref {
+  fill: none; stroke: #b9a94e; stroke-width: 2; stroke-dasharray: 4 3;
+  stroke-linejoin: round; stroke-linecap: round;
+}
+.svet-chart-area { fill: var(--sv-green); opacity: .07; }
+.svet-chart-line {
+  fill: none; stroke: var(--sv-green); stroke-width: 2.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.svet-chart-dot { fill: var(--sv-green); }
+.svet-chart-guide { stroke: #1c1c17; stroke-width: 1; opacity: .35; }
+.svet-chart-hdot-c { fill: var(--sv-green); stroke: #fff; stroke-width: 1.5; }
+.svet-chart-hdot-ref { fill: #b9a94e; stroke: #fff; stroke-width: 1.5; }
+
+.svet-chart-readout {
+  position: absolute; z-index: 4; pointer-events: none;
+  transform: translate(-50%, -122%);
+  background: #1c1c17; color: #fff; border-radius: 8px;
+  padding: 6px 9px; font-size: .68rem; line-height: 1.5; white-space: nowrap;
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, .5); display: grid; gap: 0;
+}
+.svet-chart-readout .ro-yr { color: #d9d7c4; font-weight: 700; }
+.svet-chart-readout .ro-c { color: #8fd08f; }
+.svet-chart-readout .ro-r { color: #e3d488; }
+.svet-chart-readout.below { transform: translate(-50%, 22%); }
+.svet-chart-readout .ro-d { font-weight: 700; margin-top: 1px; }
+
+.svet-chart-foot { margin: 0; display: grid; gap: 4px; }
+.svet-chart-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .7rem; color: #6a6c5e; }
+.svet-chart-legend i {
+  display: inline-block; width: 14px; height: 0; vertical-align: middle;
+  margin-right: 5px; border-top-width: 3px; border-top-style: solid;
+}
+.svet-chart-legend .lg-c { border-color: var(--sv-green); }
+.svet-chart-legend .lg-r { border-color: #b9a94e; border-top-style: dashed; }
+.svet-chart-cap { font-size: .74rem; line-height: 1.5; color: #5f6154; margin: 0; }
+
+.svet-vs-info { margin-left: 3px; opacity: .55; font-size: .82em; cursor: help; }
+
 .svet-ind-foot {
   display: flex;
   align-items: center;

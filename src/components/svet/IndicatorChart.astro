@@ -1,0 +1,136 @@
+---
+// Obohacený graf ukazatele: server-rendered SVG čára (funguje i bez JS) s osami,
+// roky, kontextem min–max a překryvem čáry ČR. Klient přidá jen hover (pointer
+// events → i dotyk): svislá vodicí čára, tečky na obou čarách, bublina s rokem,
+// oběma hodnotami a % rozdílem. Vzor interakce = RegionMap (JSON blob + 1 skript
+// obsluhující všechny instance .svet-chart na stránce).
+import { buildChartModel, chartCaption, DEFAULT_OPTS } from '../../lib/svet/chart';
+import { fmtNum } from '../../lib/svet/render';
+import type { SeriesPoint } from '../../lib/svet/types';
+
+interface Props {
+  series: SeriesPoint[];
+  refSeries?: SeriesPoint[] | null;
+  unit: string;
+  label: string;
+  countryName: string;
+  refName?: string;
+}
+const { series, refSeries = null, unit, label, countryName, refName = 'ČR' } = Astro.props;
+const O = DEFAULT_OPTS;
+const m = buildChartModel(series, refSeries, O);
+const caption = chartCaption(series, refSeries, unit, refName);
+
+// Data pro hover (souřadnice teček obou čar per rok).
+const refByYear = new Map(m.refPoints.map((p) => [p.year, p]));
+const rows = m.points.map((p) => {
+  const r = refByYear.get(p.year);
+  const hv = m.hover.find((h) => h.year === p.year);
+  return { year: p.year, x: p.x, cy: p.y, val: p.value, ry: r ? r.y : null, refVal: r ? r.value : null, diff: hv?.diffPct ?? null };
+});
+const hoverJson = JSON.stringify({ w: O.w, h: O.h, unit, countryName, refName, hasRef: m.hasRef, rows });
+
+const baselineY = O.mt + (O.h - O.mt - O.mb); // dolní hrana kreslicí plochy
+const ariaSummary =
+  `${label}: ${m.points.length ? fmtNum(m.points[m.points.length - 1].value) : '–'} ${unit}. ${caption}`;
+---
+<figure class="svet-chart" role="group" aria-label={ariaSummary}>
+  <svg class="svet-chart-svg" viewBox={`0 0 ${O.w} ${O.h}`} aria-hidden="true">
+    <!-- vodorovné mřížky + popisky osy Y -->
+    {m.yTicks.map((t) => (
+      <>
+        <line class="svet-chart-grid" x1={O.ml} x2={O.w - O.mr} y1={t.y} y2={t.y} />
+        <text class="svet-chart-ylab" x={O.ml - 5} y={t.y + 3} text-anchor="end">{fmtNum(t.value)}</text>
+      </>
+    ))}
+    <!-- popisky osy X (krajní roky) -->
+    {m.xLabels.map((l, i) => (
+      <text class="svet-chart-xlab" x={l.x} y={O.h - 6} text-anchor={i === 0 ? 'start' : 'end'}>{l.year}</text>
+    ))}
+    <!-- čára ČR (reference) -->
+    {m.hasRef && <path class="svet-chart-ref" d={m.refLine} />}
+    <!-- země: výplň + čára + tečka posledního bodu -->
+    {m.area && <path class="svet-chart-area" d={m.area} />}
+    {m.line && <path class="svet-chart-line" d={m.line} />}
+    {m.lastDot && <circle class="svet-chart-dot" cx={m.lastDot.x} cy={m.lastDot.y} r="3.2" />}
+    <!-- hover vrstva (skrytá do prvního pohybu) -->
+    <line class="svet-chart-guide" x1="0" x2="0" y1={O.mt} y2={baselineY} hidden />
+    <circle class="svet-chart-hdot svet-chart-hdot-ref" r="3.5" hidden />
+    <circle class="svet-chart-hdot svet-chart-hdot-c" r="3.5" hidden />
+  </svg>
+
+  <div class="svet-chart-readout" hidden></div>
+
+  <figcaption class="svet-chart-foot">
+    <div class="svet-chart-legend">
+      <span><i class="lg-c"></i>{countryName}</span>
+      {m.hasRef && <span><i class="lg-r"></i>{refName}</span>}
+    </div>
+    {caption && <p class="svet-chart-cap">{caption}</p>}
+  </figcaption>
+
+  <script type="application/json" class="svet-chart-data" set:html={hoverJson}></script>
+</figure>
+
+<script>
+  interface Row { year: number; x: number; cy: number; val: number; ry: number | null; refVal: number | null; diff: number | null; }
+  interface ChartData { w: number; h: number; unit: string; countryName: string; refName: string; hasRef: boolean; rows: Row[]; }
+  const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+
+  document.querySelectorAll<HTMLElement>('.svet-chart').forEach((fig) => {
+    const dataEl = fig.querySelector('.svet-chart-data');
+    const svg = fig.querySelector<SVGSVGElement>('.svet-chart-svg');
+    const readout = fig.querySelector<HTMLElement>('.svet-chart-readout');
+    if (!dataEl || !svg || !readout) return;
+    const data = JSON.parse(dataEl.textContent || '{}') as ChartData;
+    if (!data.rows || !data.rows.length) return;
+
+    const guide = svg.querySelector<SVGLineElement>('.svet-chart-guide')!;
+    const dotC = svg.querySelector<SVGCircleElement>('.svet-chart-hdot-c')!;
+    const dotR = svg.querySelector<SVGCircleElement>('.svet-chart-hdot-ref')!;
+
+    const show = (el: Element) => el.removeAttribute('hidden');
+    const hide = (el: Element) => el.setAttribute('hidden', '');
+
+    function nearest(vbx: number): Row {
+      let best = data.rows[0], bd = Infinity;
+      for (const r of data.rows) { const d = Math.abs(r.x - vbx); if (d < bd) { bd = d; best = r; } }
+      return best;
+    }
+
+    function move(ev: PointerEvent) {
+      const rect = svg!.getBoundingClientRect();
+      const vbx = ((ev.clientX - rect.left) / rect.width) * data.w;
+      const row = nearest(vbx);
+      // vodicí čára + tečka země
+      guide.setAttribute('x1', String(row.x)); guide.setAttribute('x2', String(row.x)); show(guide);
+      dotC.setAttribute('cx', String(row.x)); dotC.setAttribute('cy', String(row.cy)); show(dotC);
+      // tečka ČR (jen když v daném roce jsou data)
+      if (row.ry != null) { dotR.setAttribute('cx', String(row.x)); dotR.setAttribute('cy', String(row.ry)); show(dotR); }
+      else hide(dotR);
+      // bublina
+      let html = `<span class="ro-yr">${row.year}</span><span class="ro-c">${nf.format(row.val)} ${data.unit}</span>`;
+      if (row.refVal != null) {
+        html += `<span class="ro-r">${data.refName} ${nf.format(row.refVal)}</span>`;
+        if (row.diff != null) html += `<b class="ro-d">${row.diff > 0 ? '+' : ''}${row.diff} % vs ${data.refName}</b>`;
+      }
+      readout!.innerHTML = html;
+      show(readout!);
+      // svisle: nad bodem; když je bod vysoko, překlop pod (ať nepřekrývá hlavičku)
+      const topY = row.ry != null ? Math.min(row.cy, row.ry) : row.cy;
+      const botY = row.ry != null ? Math.max(row.cy, row.ry) : row.cy;
+      const below = topY < data.h * 0.42;
+      readout!.classList.toggle('below', below);
+      readout!.style.top = `${((below ? botY : topY) / data.h) * rect.height}px`;
+      // vodorovně: vycentruj na bod, ale nepřetékej kartu
+      const halfW = readout!.offsetWidth / 2;
+      const px = (row.x / data.w) * rect.width;
+      readout!.style.left = `${Math.max(halfW + 2, Math.min(rect.width - halfW - 2, px))}px`;
+    }
+    function leave() { hide(guide); hide(dotC); hide(dotR); hide(readout!); }
+
+    svg.addEventListener('pointermove', move);
+    svg.addEventListener('pointerdown', move);
+    svg.addEventListener('pointerleave', leave);
+  });
+</script>

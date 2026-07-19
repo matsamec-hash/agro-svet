@@ -31,6 +31,7 @@ const hasMap = regionGeo && regionData;
 const refMods = import.meta.glob('../../data/svet/cesko.json', { eager: true });
 const ref = (Object.values(refMods)[0] as any).default;
 const refVal = (key: string) => ref.indicators[key]?.latest?.value;
+const refSeries = (key: string) => ref.indicators[key]?.series ?? null;
 
 const groups = groupByPackage(profile);
 const heroKeys = ['ag_land', 'ag_output_value', 'farm_count', 'cattle_count'];
@@ -67,7 +68,7 @@ const description = `Aktuální zemědělská data: ${profile.nameCs} — produk
         <header class="svet-section-head"><h2>{g.label}</h2></header>
         <div class="svet-rows">
           {g.indicators.map((ind: any) => (
-            <IndicatorRow indicator={ind} refValue={refVal(ind.key)} refName="ČR" />
+            <IndicatorRow indicator={ind} refValue={refVal(ind.key)} refSeries={refSeries(ind.key)} refName="ČR" countryName={profile.nameCs} />
           ))}
         </div>
       </section>
