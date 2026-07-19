@@ -1,0 +1,92 @@
+---
+export const prerender = false;
+import Layout from '../../../../layouts/Layout.astro';
+import { createServerClient } from '../../../../lib/supabase';
+import { claimUrl } from '../../../../lib/bazar-seed-email';
+
+// Middleware už gate-uje /admin/* přes is_admin (viz ostatní admin .astro
+// stránky — žádná z nich dělá vlastní kontrolu, locals.user navíc is_admin
+// vůbec nemá jako pole, ten žije v bazar_users).
+const supabase = createServerClient();
+const { data: prospects } = await supabase
+  .from('bazar_seed_prospects')
+  .select('id, name, email, phone, source_url, claim_token, status, created_at')
+  .order('created_at', { ascending: false })
+  .limit(100);
+---
+<Layout title="Bazar — Seeding">
+  <main class="mx-auto max-w-4xl p-6">
+    <h1 class="text-2xl font-bold mb-4">Předchystané inzeráty (seeding)</h1>
+
+    <section class="mb-8 rounded border p-4">
+      <h2 class="font-semibold mb-2">Import z URL (Bazoš)</h2>
+      <form id="importForm" class="grid gap-2 sm:grid-cols-2">
+        <input name="url" required placeholder="Odkaz na inzerát na bazos.cz" class="border p-2 sm:col-span-2" />
+        <input name="name" placeholder="Jméno prodejce" class="border p-2" />
+        <input name="phone" placeholder="Telefon" class="border p-2" />
+        <input name="email" type="email" placeholder="E-mail prodejce" class="border p-2 sm:col-span-2" />
+        <button class="bg-green-700 text-white p-2 rounded sm:col-span-2">Importovat a vytvořit draft</button>
+      </form>
+      <p id="importMsg" class="text-sm mt-2"></p>
+    </section>
+
+    <table class="w-full text-sm border-collapse">
+      <thead><tr class="text-left border-b">
+        <th class="p-2">Prodejce</th><th class="p-2">Stav</th><th class="p-2">Odkaz</th>
+      </tr></thead>
+      <tbody>
+        {prospects?.map((p) => (
+          <tr class="border-b">
+            <td class="p-2">{p.name || '—'}<br /><span class="text-gray-500">{p.email || p.phone}</span></td>
+            <td class="p-2">{p.status}</td>
+            <td class="p-2">
+              <button type="button" class="copyBtn underline" data-url={claimUrl(p.claim_token)}>Kopírovat odkaz</button>
+              {p.email && (
+                <button type="button" class="sendBtn underline ml-3" data-id={p.id}>Poslat e-mailem</button>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    const form = document.getElementById('importForm') as HTMLFormElement;
+    const msg = document.getElementById('importMsg')!;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = 'Importuji…';
+      const fd = new FormData(form);
+      const res = await fetch('/admin/bazar/seed/api/import', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          url: fd.get('url'),
+          contact: { name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email') },
+        }),
+      });
+      const data = await res.json();
+      msg.textContent = res.ok ? 'Hotovo — draft vytvořen.' : `Chyba: ${data.error}`;
+      if (res.ok) setTimeout(() => location.reload(), 800);
+    });
+
+    document.querySelectorAll('.copyBtn').forEach((b) =>
+      b.addEventListener('click', () => {
+        navigator.clipboard.writeText((b as HTMLElement).dataset.url!);
+        (b as HTMLElement).textContent = 'Zkopírováno ✓';
+      }),
+    );
+    document.querySelectorAll('.sendBtn').forEach((b) =>
+      b.addEventListener('click', async () => {
+        (b as HTMLElement).textContent = 'Odesílám…';
+        const res = await fetch('/admin/bazar/seed/api/send', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ prospectId: (b as HTMLElement).dataset.id }),
+        });
+        (b as HTMLElement).textContent = res.ok ? 'Odesláno ✓' : 'Chyba';
+      }),
+    );
+  </script>
+</Layout>
