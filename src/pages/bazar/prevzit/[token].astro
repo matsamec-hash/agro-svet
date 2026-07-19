@@ -1,0 +1,89 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { createServerClient } from '../../../lib/supabase';
+import { getProspectByToken, markProspectOpened } from '../../../lib/bazar-seed';
+import { isTokenExpired } from '../../../lib/bazar-seed-token';
+
+export const TERMS_VERSION = '2026-07-19';
+
+const { token } = Astro.params;
+const supabase = createServerClient();
+const prospect = token ? await getProspectByToken(supabase, token) : null;
+
+let state: 'ok' | 'invalid' | 'expired' | 'done' = 'ok';
+if (!prospect) state = 'invalid';
+else if (prospect.status === 'confirmed') state = 'done';
+else if (isTokenExpired(prospect.token_expires_at)) state = 'expired';
+
+interface ClaimListing {
+  id: string;
+  title: string;
+  price: number | null;
+  description: string;
+  images: string[];
+}
+
+let listings: ClaimListing[] = [];
+if (state === 'ok' && prospect) {
+  await markProspectOpened(supabase, prospect.id, new Date().toISOString());
+  const { data } = await supabase
+    .from('bazar_listings')
+    .select('id, title, price, description, bazar_images(storage_path)')
+    .eq('seed_prospect_id', prospect.id);
+  listings = (data ?? []).map((l: any) => ({
+    id: l.id,
+    title: l.title,
+    price: l.price,
+    description: l.description,
+    // Public URL built via the storage client (same pattern as bazar/[id].astro) —
+    // ties the URL to the SUPABASE_URL the server client was actually created with,
+    // instead of duplicating that config from a separately-read PUBLIC_ var.
+    images: (l.bazar_images ?? []).map(
+      (img: { storage_path: string }) =>
+        supabase.storage.from('bazar-images').getPublicUrl(img.storage_path).data.publicUrl,
+    ),
+  }));
+}
+---
+<Layout title="Zveřejnění inzerátu">
+  <main class="mx-auto max-w-2xl p-6">
+    {state === 'invalid' && <p class="text-red-700">Neplatný odkaz.</p>}
+    {state === 'expired' && <p class="text-red-700">Platnost odkazu vypršela.</p>}
+    {state === 'done' && <p class="text-green-700">Tento inzerát už byl zveřejněn. <a class="underline" href="/bazar/moje/">Přejít do mých inzerátů</a></p>}
+
+    {state === 'ok' && (
+      <>
+        <p class="mb-4 rounded bg-amber-50 p-3 text-sm">
+          Připravili jsme vám tento inzerát podle vaší nabídky na Bazoši. Zkontrolujte jej a jedním
+          kliknutím zdarma zveřejněte na Agro-svět bazaru.
+        </p>
+        {listings.map((l) => (
+          <article class="mb-4 rounded border p-4">
+            <h2 class="font-semibold">{l.title}</h2>
+            {l.price && <p class="text-green-700 font-bold">{l.price.toLocaleString('cs-CZ')} Kč</p>}
+            <p class="text-sm text-gray-700 whitespace-pre-line">{l.description}</p>
+            <div class="mt-2 flex gap-2 flex-wrap">
+              {l.images.map((url) => (
+                <img src={url} alt="" class="h-24 w-24 object-cover rounded" />
+              ))}
+            </div>
+          </article>
+        ))}
+
+        <form method="POST" action="/bazar/prevzit/api/confirm" class="mt-6 rounded border p-4">
+          <input type="hidden" name="token" value={token} />
+          <input type="hidden" name="terms_version" value={TERMS_VERSION} />
+          <label class="flex items-start gap-2 text-sm">
+            <input type="checkbox" name="agree" required class="mt-1" />
+            <span>Potvrzuji, že jsem vlastníkem inzerátu a fotek a mám právo je zveřejnit, a souhlasím
+            s <a href="/bazar/pravidla/" class="underline" target="_blank">podmínkami bazaru</a>.</span>
+          </label>
+          <button class="mt-4 w-full rounded bg-green-700 p-3 text-white font-semibold">
+            Zveřejnit můj inzerát
+          </button>
+        </form>
+      </>
+    )}
+  </main>
+</Layout>

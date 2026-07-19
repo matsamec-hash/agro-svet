@@ -34,6 +34,7 @@ function needsAuthContext(pathname: string): boolean {
     pathname.startsWith('/bazar/auth/') ||
     pathname.startsWith('/bazar/odhlaseni')
   ) return true;
+  if (pathname.startsWith('/bazar/prevzit')) return true;
   return false;
 }
 
