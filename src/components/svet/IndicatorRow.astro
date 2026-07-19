@@ -1,21 +1,35 @@
 ---
-import Sparkline from './Sparkline.astro';
+import IndicatorChart from './IndicatorChart.astro';
 import { fmtNum, vsReference } from '../../lib/svet/render';
-import type { Indicator } from '../../lib/svet/types';
-interface Props { indicator: Indicator; refValue?: number; refName?: string; }
-const { indicator: ind, refValue, refName = 'ČR' } = Astro.props;
+import type { Indicator, SeriesPoint } from '../../lib/svet/types';
+interface Props {
+  indicator: Indicator;
+  refValue?: number;
+  refSeries?: SeriesPoint[] | null;
+  refName?: string;
+  countryName: string;
+}
+const { indicator: ind, refValue, refSeries = null, refName = 'ČR', countryName } = Astro.props;
 const cmp = refValue != null ? vsReference(ind.latest.value, refValue) : null;
 const periodNum = Number(ind.latest.referencePeriod);
 const stale = periodNum > 0 && periodNum <= 2020;
 const dirSign = cmp && cmp.dir === 'up' ? '+' : '';
+const vsTitle = `Poslední dostupná hodnota (${ind.latest.referencePeriod}) porovnaná se stejným ukazatelem v ${refName}. Vývoj po letech a rozdíl v jednotlivých letech ukazuje graf.`;
 ---
 <article class="svet-ind">
   <div class="svet-ind-top">
     <span class="svet-ind-label">{ind.label}</span>
-    {cmp && <span class={`svet-vs svet-vs-${cmp.dir}`}>{dirSign}{fmtNum(cmp.pct)} % vs {refName}</span>}
+    {cmp && (
+      <span class={`svet-vs svet-vs-${cmp.dir}`} title={vsTitle}>
+        {dirSign}{fmtNum(cmp.pct)} % vs {refName}<span class="svet-vs-info" aria-hidden="true">ⓘ</span>
+      </span>
+    )}
   </div>
-  <div class="svet-ind-value">{fmtNum(ind.latest.value)} <span class="svet-ind-unit">{ind.unit}</span></div>
-  <Sparkline series={ind.series} w={260} h={46} />
+  <div class="svet-ind-value">
+    {fmtNum(ind.latest.value)} <span class="svet-ind-unit">{ind.unit}</span>
+    {refValue != null && <span class="svet-ind-ref">· {refName} {fmtNum(refValue)}</span>}
+  </div>
+  <IndicatorChart series={ind.series} refSeries={refSeries} unit={ind.unit} label={ind.label} countryName={countryName} refName={refName} />
   <div class="svet-ind-foot">
     <a class="svet-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{ind.latest.source} · {ind.latest.referencePeriod}{stale ? ' (nejnovější dostupné)' : ''}</a>
   </div>
