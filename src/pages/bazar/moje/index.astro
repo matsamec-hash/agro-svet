@@ -6,6 +6,7 @@ import { isFeaturedActive, formatFeaturedUntil } from '../../../lib/bazar-featur
 
 const user = Astro.locals.user!;
 const supabase = createServerClient();
+const welcome = Astro.url.searchParams.get('welcome') === '1';
 
 // Handle actions (POST)
 if (Astro.request.method === 'POST') {
@@ -45,6 +46,19 @@ const { data: listings } = await supabase
         <a href="/bazar/novy/" class="btn-primary">+ Nový inzerát</a>
       </div>
     </div>
+
+    {welcome && (
+      <section class="mb-6 rounded border border-green-300 bg-green-50 p-4">
+        <p class="font-semibold">Váš inzerát je zveřejněný! 🎉</p>
+        <p class="text-sm mb-2">Chcete si nastavit heslo pro pozdější úpravy? (Nepovinné — příště vám
+        pošleme přihlašovací odkaz e-mailem.)</p>
+        <form id="pwForm" class="flex gap-2">
+          <input type="password" name="password" minlength="8" placeholder="Nové heslo" class="border p-2 flex-1" />
+          <button class="bg-green-700 text-white px-4 rounded">Uložit heslo</button>
+        </form>
+        <p id="pwMsg" class="text-sm mt-1"></p>
+      </section>
+    )}
 
     {listings && listings.length > 0 ? (
       <div class="my-listings">
@@ -109,6 +123,18 @@ const { data: listings } = await supabase
     </div>
   </div>
 </Layout>
+
+<script>
+  import { getSupabaseBrowser } from '../../../lib/supabase-browser';
+  const form = document.getElementById('pwForm') as HTMLFormElement | null;
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pw = (new FormData(form).get('password') as string) || '';
+    const { error } = await getSupabaseBrowser().auth.updateUser({ password: pw });
+    const msg = document.getElementById('pwMsg');
+    if (msg) msg.textContent = error ? `Chyba: ${error.message}` : 'Heslo uloženo ✓';
+  });
+</script>
 
 <style>
   .my-listings {
