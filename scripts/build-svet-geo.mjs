@@ -22,14 +22,38 @@ const COUNTRIES = [
   { slug: 'nemecko', cntr: 'DE', res: '10M', regionLevel: 1, drillLevel: 2, regionCodeLen: 3, drop: [] /* 16 spolkových zemí = NUTS-1 */ },
   { slug: 'polsko', cntr: 'PL', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 17 NUTS-2 = 16 vojvodství + rozdělené Mazovsko (PL91/PL92) */ },
   { slug: 'slovensko', cntr: 'SK', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 4 NUTS-2 oblasti (Bratislavský/Západné/Stredné/Východné); FSS data jen NUTS-2 */ },
+  // --- EU dávka (NUTS-2 régiony, drill NUTS-3) ---
+  { slug: 'spanelsko', cntr: 'ES', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: ['ES70', 'ES63', 'ES64'] /* Kanárské ostrovy + Ceuta/Melilla (mimo pevninu) */ },
+  { slug: 'italie', cntr: 'IT', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 21 regionů */ },
+  { slug: 'nizozemsko', cntr: 'NL', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 12 provincií */ },
+  { slug: 'rakousko', cntr: 'AT', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 9 spolkových zemí */ },
+  { slug: 'belgie', cntr: 'BE', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 11 provincií */ },
+  { slug: 'dansko', cntr: 'DK', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 5 regionů */ },
+  { slug: 'irsko', cntr: 'IE', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 3 regiony */ },
+  { slug: 'svedsko', cntr: 'SE', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 8 regionů */ },
+  { slug: 'finsko', cntr: 'FI', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 5 regionů vč. Åland */ },
+  { slug: 'portugalsko', cntr: 'PT', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: ['PT20', 'PT30'] /* Azory + Madeira (mimo pevninu) */ },
+  { slug: 'recko', cntr: 'EL', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 13 regionů; pozor: CNTR_CODE 'EL' */ },
+  { slug: 'madarsko', cntr: 'HU', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 8 regionů */ },
+  { slug: 'rumunsko', cntr: 'RO', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 8 regionů */ },
+  { slug: 'bulharsko', cntr: 'BG', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 6 regionů */ },
+  { slug: 'slovinsko', cntr: 'SI', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 2 kohezní regiony */ },
+  { slug: 'chorvatsko', cntr: 'HR', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 4 regiony (2021) */ },
+  { slug: 'litva', cntr: 'LT', res: '10M', regionLevel: 2, drillLevel: 3, regionCodeLen: 4, drop: [] /* 2 regiony */ },
 ];
 
 const VIEW_W = 1000; // šířka viewBoxu; výška dopočtena dle poměru stran
 
+const _jsonCache = new Map(); // memo dle URL — GISCO geojson jsou celoevropské, sdílené napříč zeměmi
 async function getJson(url) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`${r.status} ${url}`);
-  return r.json();
+  if (_jsonCache.has(url)) return _jsonCache.get(url);
+  const p = (async () => {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(`${r.status} ${url}`);
+    return r.json();
+  })();
+  _jsonCache.set(url, p);
+  return p;
 }
 
 // perpendikulární vzdálenost bodu p od úsečky a–b

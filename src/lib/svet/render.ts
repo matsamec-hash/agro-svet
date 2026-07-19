@@ -9,8 +9,16 @@ const INDICATOR_ORDER: string[] = [
   'ag_land', 'arable_land', 'farm_count', 'organic_share',
   'ag_output_value', 'ag_value_added_gdp', 'ag_employment', 'fert_use',
 ];
+// Lokál včetně předložky (v / ve / na) — čeština volí „ve" před shluky souhlásek (Španělsko, Švédsko…),
+// „na" u Slovenska, Kypru, Malty, Ukrajiny. Používá se v titulku „Zemědělství {loc}".
 export const COUNTRY_LOCATIVE: Record<string, string> = {
-  nemecko: 'Německu', francie: 'Francii', 'velka-britanie': 'Velké Británii', usa: 'USA', polsko: 'Polsku', slovensko: 'Slovensku',
+  cesko: 'v Česku', nemecko: 'v Německu', francie: 've Francii', 'velka-britanie': 've Velké Británii', usa: 'v USA',
+  polsko: 'v Polsku', slovensko: 'na Slovensku', spanelsko: 've Španělsku', italie: 'v Itálii', nizozemsko: 'v Nizozemsku',
+  rakousko: 'v Rakousku', belgie: 'v Belgii', dansko: 'v Dánsku', irsko: 'v Irsku', svedsko: 've Švédsku',
+  finsko: 've Finsku', portugalsko: 'v Portugalsku', recko: 'v Řecku', madarsko: 'v Maďarsku', rumunsko: 'v Rumunsku',
+  bulharsko: 'v Bulharsku', slovinsko: 've Slovinsku', chorvatsko: 'v Chorvatsku', litva: 'v Litvě',
+  lotyssko: 'v Lotyšsku', estonsko: 'v Estonsku', lucembursko: 'v Lucembursku', kypr: 'na Kypru', malta: 'na Maltě',
+  svycarsko: 've Švýcarsku', norsko: 'v Norsku', ukrajina: 'na Ukrajině',
 };
 
 export interface PackageGroup { pkg: PackageKey; label: string; indicators: Indicator[]; }
