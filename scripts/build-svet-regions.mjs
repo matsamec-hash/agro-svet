@@ -11,9 +11,18 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 const EU = 'https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data';
 
+const _euCache = new Map(); // memo dle URL — datasety FSS vrací všechny geo najednou, sdílené napříč zeměmi
 async function euGeoMap(dataset, params) {
   const q = Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
-  const r = await fetch(`${EU}/${dataset}?format=JSON&lang=EN&${q}`);
+  const url = `${EU}/${dataset}?format=JSON&lang=EN&${q}`;
+  if (_euCache.has(url)) return _euCache.get(url);
+  const p = _euFetch(url, dataset);
+  _euCache.set(url, p);
+  return p;
+}
+
+async function _euFetch(url, dataset) {
+  const r = await fetch(url);
   if (!r.ok) throw new Error(`${r.status} ${dataset}`);
   const j = await r.json();
   const gi = j.dimension.geo.category.index;
@@ -50,6 +59,26 @@ const COUNTRIES = [
   { slug: 'nemecko', cntr: 'DE', year: '2020', regionLevel: 1, regionCodeLen: 3 },
   { slug: 'polsko', cntr: 'PL', year: '2020', regionLevel: 2, regionCodeLen: 4 },
   { slug: 'slovensko', cntr: 'SK', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  // --- EU dávka (NUTS-2 régiony, bez agregace) ---
+  { slug: 'spanelsko', cntr: 'ES', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'italie', cntr: 'IT', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'nizozemsko', cntr: 'NL', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'rakousko', cntr: 'AT', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'belgie', cntr: 'BE', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'dansko', cntr: 'DK', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'irsko', cntr: 'IE', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'svedsko', cntr: 'SE', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'finsko', cntr: 'FI', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'portugalsko', cntr: 'PT', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'recko', cntr: 'EL', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'madarsko', cntr: 'HU', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'rumunsko', cntr: 'RO', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'bulharsko', cntr: 'BG', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'slovinsko', cntr: 'SI', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'chorvatsko', cntr: 'HR', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  { slug: 'litva', cntr: 'LT', year: '2020', regionLevel: 2, regionCodeLen: 4 },
+  // --- Mimo EU: UK má poslední FSS 2016 (po Brexitu už nesubmituje) ---
+  { slug: 'velka-britanie', cntr: 'UK', year: '2016', regionLevel: 1, regionCodeLen: 3 },
 ];
 
 const FSS_TOTAL = { statinfo: 'TOTAL', farmtype: 'TOTAL', so_eur: 'TOTAL', uaarea: 'TOTAL' };
