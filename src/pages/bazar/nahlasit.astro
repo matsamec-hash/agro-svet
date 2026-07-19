@@ -18,6 +18,7 @@ if (isUuid) {
     .from('bazar_listings')
     .select('title, price')
     .eq('id', listingId)
+    .neq('status', 'pending_claim')
     .maybeSingle();
   if (data) listingPreview = { title: data.title, price: data.price };
 }

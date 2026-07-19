@@ -46,3 +46,14 @@ ALTER TABLE bazar_seed_prospects ENABLE ROW LEVEL SECURITY;
 DROP POLICY "bazar_listings_select" ON bazar_listings;
 CREATE POLICY "bazar_listings_select" ON bazar_listings
   FOR SELECT USING (status <> 'pending_claim');
+
+-- 5) RLS images: skryj fotky pending_claim draftů z anon/authenticated dotazů
+--    (defense-in-depth — cesty souborů se tak nedají zjistit přímým dotazem na bazar_images)
+DROP POLICY "bazar_images_select" ON bazar_images;
+CREATE POLICY "bazar_images_select" ON bazar_images
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM bazar_listings l
+      WHERE l.id = listing_id AND l.status <> 'pending_claim'
+    )
+  );

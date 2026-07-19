@@ -24,7 +24,10 @@ const LISTING_COLUMNS = [
 const { data: listing } = await supabase
   .from('bazar_listings')
   .select(LISTING_COLUMNS)
+  // Neveřejné seed drafty (pending_claim) nesmí být přístupné ani přímo přes URL
+  // detailu — server-side klient obchází RLS, takže status filtrujeme explicitně.
   .eq('id', id)
+  .neq('status', 'pending_claim')
   .single();
 
 if (!listing) {
