@@ -99,6 +99,52 @@ export function breadcrumbSchema(items: BreadcrumbItem[]) {
   };
 }
 
+export interface DatasetVariable { name: string; unitText?: string }
+export interface DatasetSource { name: string; url?: string }
+export interface DatasetInput {
+  name: string;
+  description: string;
+  url: string;
+  countryName: string;
+  keywords?: string[];
+  temporalCoverage?: string;   // '2010/2025'
+  dateModified?: string;       // 'YYYY-MM-DD'
+  variables?: DatasetVariable[];
+  sources?: DatasetSource[];
+}
+
+// schema.org/Dataset — profily zemí /svet JSOU datové sady (zemědělská
+// statistika). Silný signál pro Google Dataset Search i běžné rich results.
+export function datasetSchema(input: DatasetInput) {
+  const node: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: input.name,
+    description: input.description,
+    url: input.url.startsWith('http') ? input.url : `${SITE_URL}${input.url}`,
+    inLanguage: 'cs-CZ',
+    isAccessibleForFree: true,
+    publisher: { '@id': ORG_ID },
+    spatialCoverage: { '@type': 'Place', name: input.countryName },
+  };
+  if (input.keywords?.length) node.keywords = input.keywords;
+  if (input.temporalCoverage) node.temporalCoverage = input.temporalCoverage;
+  if (input.dateModified) node.dateModified = input.dateModified;
+  if (input.variables?.length)
+    node.variableMeasured = input.variables.map((v) => ({
+      '@type': 'PropertyValue',
+      name: v.name,
+      ...(v.unitText ? { unitText: v.unitText } : {}),
+    }));
+  if (input.sources?.length)
+    node.creator = input.sources.map((s) => ({
+      '@type': 'Organization',
+      name: s.name,
+      ...(s.url ? { url: s.url } : {}),
+    }));
+  return node;
+}
+
 export interface BazarListingForSchema {
   id: string;
   title: string;

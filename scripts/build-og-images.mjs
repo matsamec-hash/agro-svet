@@ -286,6 +286,22 @@ async function main() {
     count++;
   }
 
+  // /svet — profily zemí (zelený akcent, jednotné pro všechny země)
+  const svetIndex = JSON.parse(readFileSync(resolve(ROOT, 'src/data/svet/index.json'), 'utf8'));
+  for (const c of svetIndex.countries.filter((c) => !c.reference)) {
+    const jsx = template({
+      kicker: 'Zemědělská data',
+      title: c.nameCs,
+      subtitle: 'Produkce · Půda · Ekonomika',
+      accentColor: '#2f6b2f',
+      footerLeft: 'agro-svět.cz',
+      footerRight: 'Zdroj: Eurostat · World Bank',
+    });
+    const png = await render(jsx, fonts);
+    writeFileSync(resolve(OUT_DIR, `svet-${c.slug}.png`), png);
+    count++;
+  }
+
   console.log(`\n✓ Generated ${count} OG images → public/og/`);
 }
 

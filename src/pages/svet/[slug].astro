@@ -8,6 +8,8 @@ import IndicatorRow from '../../components/svet/IndicatorRow.astro';
 import RegionMap from '../../components/svet/RegionMap.astro';
 import { groupByPackage, fmtNum, COUNTRY_LOCATIVE } from '../../lib/svet/render';
 import { assertCountryProfile } from '../../lib/svet/types';
+import { breadcrumbSchema, datasetSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
 import index from '../../data/svet/index.json';
 import '../../styles/svet.css';
 
@@ -40,9 +42,48 @@ const heroKpis = heroKeys.map((k) => profile.indicators[k]).filter(Boolean);
 const loc = COUNTRY_LOCATIVE[profile.slug] ?? `v ${profile.nameCs}`;
 const title = `Zemědělství ${loc}`;
 const description = `Aktuální zemědělská data: ${profile.nameCs} — produkce, půda, ekonomika a srovnání s ČR. Zdroje Eurostat a World Bank.`;
+const pageUrl = `${SITE_URL}/svet/${profile.slug}/`;
+const ogImage = `${SITE_URL}/og/svet-${profile.slug}.png`;
+
+// ---- Strukturovaná data (JSON-LD) ----
+const inds = Object.values(profile.indicators) as any[];
+const years = inds.flatMap((i) => (i.series ?? []).map((p: any) => Number(p.period))).filter((y) => Number.isFinite(y));
+const temporalCoverage = years.length ? `${Math.min(...years)}/${Math.max(...years)}` : undefined;
+const SOURCE_URLS: Record<string, string> = {
+  Eurostat: 'https://ec.europa.eu/eurostat',
+  'World Bank': 'https://data.worldbank.org',
+};
+const sources = [...new Set(inds.map((i) => i.latest?.source).filter(Boolean))].map((name: string) => ({
+  name, url: SOURCE_URLS[name],
+}));
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Zemědělství ve světě', url: '/svet/' },
+  { name: profile.nameCs, url: pageUrl },
+]);
+const datasetJsonLd = datasetSchema({
+  name: `Zemědělská data — ${profile.nameCs}`,
+  description,
+  url: pageUrl,
+  countryName: profile.nameCs,
+  keywords: ['zemědělství', profile.nameCs, 'zemědělská statistika', 'produkce', 'srovnání s ČR', ...sources.map((s) => s.name)],
+  temporalCoverage,
+  dateModified: profile.generated,
+  variables: inds.map((i) => ({ name: i.label, unitText: i.unit })),
+  sources,
+});
 ---
-<Layout title={title} description={description}>
+<Layout title={title} description={description} canonical={pageUrl} ogImage={ogImage} ogType="article">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />
   <main class="svet-page svet-profile">
+    <nav class="svet-crumbs" aria-label="Drobečková navigace">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/svet/">Zemědělství ve světě</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">{profile.nameCs}</span>
+    </nav>
     <header class="svet-hero">
       <div class="svet-hero-inner">
         <span class="svet-flag">{profile.flag}</span>
