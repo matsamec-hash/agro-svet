@@ -22,10 +22,15 @@ directory = "./dist/client/"
 # AND set SITE_GATE_PASSCODE, redeploy.
 #
 # SK launch (Fáze 1c-obsah): /sk a /uk jsou plně SSR (middleware locale-rewrite).
-# Žádné /sk statické assety neexistují, takže by Worker chytil i bez tohoto — ale
-# explicitně vynutíme Worker-first pro tyto prefixy (guard proti budoucímu shadowingu
-# případně prerendered /sk stránkou).
-run_worker_first = ["/sk/*", "/uk/*"]
+# Žádné /sk statické assety neexistují, takže Worker chytí /sk i /uk i bez explicitního
+# run_worker_first (viz historie — před SK launchem tu tento klíč vůbec nebyl).
+#
+# run_worker_first ODSTRANĚNO 2026-07-19: wrangler 4.112.0 (auto-instalovaný v CI přes
+# `npx wrangler deploy`) nově vyžaduje Worker `main` script, když je run_worker_first
+# nastavené. Tento projekt používá @astrojs/node adapter (Cloudflare→Traefik→Node),
+# žádný CF Worker `main` neexistuje → deploy padal na
+# "Cannot set run_worker_first without a Worker script". Odstranění je bezpečné
+# (žádné /sk /uk statické assety k shadowingu).
 
 [observability]
 enabled = true
