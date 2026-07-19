@@ -53,9 +53,16 @@ const { url: supabaseUrl, anonKey: supabaseKey } = getPublicSupabaseConfig();
           }),
         });
         if (res.ok) {
-          // Pick up the destination stashed by prihlaseni.astro before the
-          // Google round-trip. Validate it as a same-origin path.
+          // Resolve redirect target. Same-origin paths only.
           let target = '/bazar/moje/';
+          // 1) ?next= query param — used by the seed/claim passwordless redirect.
+          try {
+            const nextParam = new URLSearchParams(window.location.search).get('next');
+            if (nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//')) {
+              target = nextParam;
+            }
+          } catch {}
+          // 2) sessionStorage stash from OAuth login (wins if present).
           try {
             const stashed = sessionStorage.getItem('postLoginRedirect');
             if (stashed && stashed.startsWith('/') && !stashed.startsWith('//')) {
