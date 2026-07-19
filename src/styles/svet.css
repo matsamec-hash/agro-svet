@@ -16,6 +16,21 @@
   color: #1E1E22;
 }
 
+/* ---------- DROBEČKOVÁ NAVIGACE ---------- */
+.svet-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  font-size: .8rem;
+  color: var(--sv-muted);
+  margin-bottom: 14px;
+}
+.svet-crumbs a { color: var(--sv-muted); text-decoration: none; }
+.svet-crumbs a:hover { color: var(--sv-green); text-decoration: underline; }
+.svet-crumbs [aria-current="page"] { color: #1E1E22; font-weight: 600; }
+.svet-crumbs span[aria-hidden] { color: #b9bab0; }
+
 /* ---------- HERO ---------- */
 .svet-hero {
   position: relative;
