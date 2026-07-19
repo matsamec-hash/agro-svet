@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { compareMatrix, fmtNum, vsReference } from '../../../lib/svet/render';
+import { buildColorMap, buildMultiSeriesModel, MULTI_OPTS } from '../../../lib/svet/multichart';
 import populationData from '../../../data/svet/population.json';
 import '../../../styles/svet.css';
 
@@ -20,17 +21,47 @@ const defaultUnit = indicatorMeta[defaultKey]?.unit ?? '';
 const refValue = (profiles.find((p: any) => p.slug === 'cesko') as any)?.indicators[defaultKey]?.latest.value;
 const rows = compareMatrix(profiles as any, defaultKey).filter((c) => c.value != null).sort((a, b) => (b.value! - a.value!));
 
+// Barvy zemí stabilní přes celý web srovnání
+const colorMap = buildColorMap(profiles.map((p: any) => p.slug));
+
+// Payload pro klienta: latest (tabulka) + série (graf) + populace/ag_land (přepočty)
 const payload = profiles.map((p: any) => ({
   slug: p.slug, nameCs: p.nameCs, flag: p.flag, population: pops[p.slug] ?? null,
-  indicators: Object.fromEntries(Object.entries(p.indicators).map(([k, v]: any) => [k, { value: v.latest.value, period: v.latest.referencePeriod }])),
+  agLand: p.indicators['ag_land']?.latest?.value ?? null,
+  indicators: Object.fromEntries(Object.entries(p.indicators).map(([k, v]: any) => [k, {
+    value: v.latest.value, period: v.latest.referencePeriod,
+    series: (v.series ?? []).map((pt: any) => [Number(pt.period), pt.value]),
+  }])),
 }));
 const units = Object.fromEntries(Object.entries(indicatorMeta).map(([k, m]) => [k, m.unit]));
 
+// Výchozí výběr zemí: ČR + 6 nejvyšších dle výchozího ukazatele
+const topDefault = profiles
+  .filter((p: any) => p.slug !== 'cesko' && p.indicators[defaultKey]?.latest?.value != null)
+  .sort((a: any, b: any) => b.indicators[defaultKey].latest.value - a.indicators[defaultKey].latest.value)
+  .slice(0, 6).map((p: any) => p.slug);
+const defaultSel = ['cesko', ...topDefault];
+
+// SSR výchozího grafu (absolutní režim, výchozí ukazatel) — progresivní enhancement
+const initInputs = profiles.filter((p: any) => defaultSel.includes(p.slug)).map((p: any) => ({
+  slug: p.slug, name: p.nameCs, color: colorMap[p.slug], isRef: p.slug === 'cesko',
+  points: (p.indicators[defaultKey]?.series ?? []).map((pt: any) => ({ year: Number(pt.period), value: pt.value })),
+})).filter((s: any) => s.points.length);
+const chart = buildMultiSeriesModel(initInputs, MULTI_OPTS);
+const O = MULTI_OPTS;
+
 const title = 'Srovnání zemědělství zemí';
-const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — výnosy, plochy, produkce, ekonomika — vždy se srovnáním s ČR. Zdroje Eurostat a World Bank.';
+const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — výnosy, plochy, produkce, ekonomika — vývoj v čase i srovnání s ČR. Zdroje Eurostat a World Bank.';
 ---
 <Layout title={title} description={description}>
   <main class="svet-page svet-cmp">
+    <nav class="svet-crumbs" aria-label="Drobečková navigace">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/svet/">Zemědělství ve světě</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Srovnání</span>
+    </nav>
     <header class="svet-hero">
       <div class="svet-hero-inner">
         <span class="svet-flag">📊</span>
@@ -54,6 +85,46 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
       </div>
       <p class="svet-cmp-current">Srovnáváte ukazatel: <strong id="svet-cmp-current">{indicatorMeta[defaultKey]?.label} <span>({defaultUnit})</span></strong></p>
       <p class="svet-cmp-modenote" id="svet-cmp-modenote"></p>
+
+      <!-- ---- Graf vývoje v čase ---- -->
+      <div class="svet-cmp-chartblock">
+        <div class="svet-cmp-charthead">Vývoj v čase <span class="svet-cmp-charthint">— klikni na zemi níže pro přidání/odebrání</span></div>
+        <div class="svet-cmp-chart-wrap" id="svet-cmp-chart-wrap">
+          <svg class="svet-cmp-svg" id="svet-cmp-svg" viewBox={`0 0 ${O.w} ${O.h}`} role="img" aria-label="Graf vývoje vybraného ukazatele v čase">
+            {chart.yTicks.map((t) => (
+              <>
+                <line class="svet-chart-grid" x1={O.ml} x2={O.w - O.mr} y1={t.y} y2={t.y} />
+                <text class="svet-chart-ylab" x={O.ml - 5} y={t.y + 3} text-anchor="end">{fmtNum(t.value)}</text>
+              </>
+            ))}
+            {chart.xLabels.map((l) => (
+              <text class="svet-chart-xlab" x={l.x} y={O.h - 8} text-anchor="middle">{l.year}</text>
+            ))}
+            {chart.lines.map((ln) => (
+              <>
+                <path class={`svet-cmp-line${ln.isRef ? ' is-ref' : ''}`} d={ln.path} stroke={ln.color} />
+                <circle class="svet-cmp-linedot" cx={ln.lastX} cy={ln.lastY} r={ln.isRef ? 3.6 : 2.6} fill={ln.color} />
+              </>
+            ))}
+            <line class="svet-cmp-guide" id="svet-cmp-guide" x1="0" x2="0" y1={O.mt} y2={O.h - O.mb} hidden />
+          </svg>
+          <div class="svet-cmp-readout" id="svet-cmp-readout" hidden></div>
+        </div>
+        <div class="svet-cmp-chips" id="svet-cmp-chips">
+          {profiles.map((p: any) => {
+            const on = defaultSel.includes(p.slug);
+            const cz = p.slug === 'cesko';
+            const col = colorMap[p.slug];
+            return (
+              <button type="button" class={`svet-chip${on ? ' on' : ''}${cz ? ' cz' : ''}`} data-slug={p.slug} aria-pressed={on ? 'true' : 'false'} disabled={cz}
+                style={on ? `border-color:${col}; background:${cz ? '#e7f0e2' : col + '1f'}` : ''}>
+                <i style={on ? `background:${col}` : ''}></i>{p.flag} {p.nameCs}{cz ? ' 🔒' : ''}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div class="svet-cmp-tablewrap">
         <table class="svet-cmp-table">
           <thead><tr><th>#</th><th>Země</th><th>Hodnota <span id="svet-unit-h" class="svet-cmp-unit">{defaultUnit && `(${defaultUnit})`}</span></th><th title="O kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku. ČR = 0 %.">vs ČR</th></tr></thead>
@@ -69,32 +140,102 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
     </section>
     <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
     <script type="application/json" id="svet-units" set:html={JSON.stringify(units)}></script>
+    <script type="application/json" id="svet-colors" set:html={JSON.stringify(colorMap)}></script>
     <script>
       import { normalizeValue, normApplies, type NormMode } from '../../../lib/svet/render';
-      interface Ind { value: number | null; period: string; }
-      interface CmpProfile { slug: string; nameCs: string; flag: string; population: number | null; indicators: Record<string, Ind | undefined>; }
+      import { buildMultiSeriesModel, MULTI_OPTS, type SeriesInput } from '../../../lib/svet/multichart';
+      interface Ind { value: number | null; period: string; series: [number, number][]; }
+      interface CmpProfile { slug: string; nameCs: string; flag: string; population: number | null; agLand: number | null; indicators: Record<string, Ind | undefined>; }
       const dataEl = document.getElementById('svet-data');
       const unitsEl = document.getElementById('svet-units');
+      const colorsEl = document.getElementById('svet-colors');
       const sel = document.getElementById('svet-indicator') as HTMLSelectElement | null;
       const tbody = document.getElementById('svet-cmp-body');
       const unitH = document.getElementById('svet-unit-h');
       const currentH = document.getElementById('svet-cmp-current');
       const modesEl = document.getElementById('svet-cmp-modes');
       const noteEl = document.getElementById('svet-cmp-modenote');
+      const chipsEl = document.getElementById('svet-cmp-chips');
+      const svg = document.getElementById('svet-cmp-svg');
+      const readout = document.getElementById('svet-cmp-readout');
       if (dataEl && sel && tbody) {
         const profiles: CmpProfile[] = JSON.parse(dataEl.textContent || '[]');
         const units: Record<string, string> = JSON.parse(unitsEl?.textContent || '{}');
+        const colors: Record<string, string> = JSON.parse(colorsEl?.textContent || '{}');
         const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
         const fmt = (n: number) => nf.format(n).replace(/[  \s]/g, ' ');
-        const agLandOf = (p: CmpProfile) => { const a = p.indicators['ag_land']; return a && a.value != null ? a.value : null; };
+        const byId = Object.fromEntries(profiles.map((p) => [p.slug, p]));
         const rawOf = (p: CmpProfile, key: string) => { const i = p.indicators[key]; return i && i.value != null ? i.value : null; };
         const normable = (key: string) => normApplies(key, 'perCapita') || normApplies(key, 'perHa');
         let mode: NormMode = 'absolute';
+        // výchozí výběr = země s .on chipem (ze serveru)
+        const selected = new Set<string>(
+          Array.from(chipsEl?.querySelectorAll('.svet-chip.on') || []).map((b) => (b as HTMLElement).dataset.slug || ''),
+        );
+
+        // přepočti hodnotu dle režimu (pro sérii i latest); vrací číslo nebo null
+        function conv(key: string, raw: number | null, p: CmpProfile, m: NormMode): number | null {
+          if (raw == null) return null;
+          if (m === 'absolute') return raw;
+          const norm = normalizeValue(key, raw, m, p.population, p.agLand);
+          return norm ? norm.value : null;
+        }
+
+        const NS = 'http://www.w3.org/2000/svg';
+        const mk = (t: string, a: Record<string, string | number>) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, String(a[k])); return e; };
+
+        function renderChart(key: string, m: NormMode) {
+          if (!svg) return;
+          const O = MULTI_OPTS;
+          const inputs: SeriesInput[] = [];
+          for (const p of profiles) {
+            if (!selected.has(p.slug)) continue;
+            const ind = p.indicators[key];
+            if (!ind || !ind.series) continue;
+            const points = ind.series
+              .map(([year, raw]) => ({ year, value: conv(key, raw, p, m) }))
+              .filter((pt): pt is { year: number; value: number } => pt.value != null);
+            if (points.length) inputs.push({ slug: p.slug, name: p.nameCs, color: colors[p.slug], isRef: p.slug === 'cesko', points });
+          }
+          const model = buildMultiSeriesModel(inputs, O);
+          // vyčisti dynamický obsah (ponech nic — překreslíme vše)
+          while (svg.firstChild) svg.removeChild(svg.firstChild);
+          for (const t of model.yTicks) {
+            svg.appendChild(mk('line', { class: 'svet-chart-grid', x1: O.ml, x2: O.w - O.mr, y1: t.y, y2: t.y }));
+            const tx = mk('text', { class: 'svet-chart-ylab', x: O.ml - 5, y: t.y + 3, 'text-anchor': 'end' }); tx.textContent = fmt(t.value); svg.appendChild(tx);
+          }
+          for (const l of model.xLabels) { const tx = mk('text', { class: 'svet-chart-xlab', x: l.x, y: O.h - 8, 'text-anchor': 'middle' }); tx.textContent = String(l.year); svg.appendChild(tx); }
+          for (const ln of model.lines) {
+            svg.appendChild(mk('path', { class: 'svet-cmp-line' + (ln.isRef ? ' is-ref' : ''), d: ln.path, stroke: ln.color }));
+            svg.appendChild(mk('circle', { class: 'svet-cmp-linedot', cx: ln.lastX, cy: ln.lastY, r: ln.isRef ? 3.6 : 2.6, fill: ln.color }));
+          }
+          const guide = mk('line', { class: 'svet-cmp-guide', x1: 0, x2: 0, y1: O.mt, y2: O.h - O.mb, opacity: 0 }); svg.appendChild(guide);
+
+          const xOf = (year: number) => model.xMax === model.xMin ? O.ml + (O.w - O.ml - O.mr) / 2 : O.ml + ((year - model.xMin) / (model.xMax - model.xMin)) * (O.w - O.ml - O.mr);
+          svg.onpointermove = (ev: PointerEvent) => {
+            if (model.empty || !readout) return;
+            const r = svg.getBoundingClientRect();
+            let year = Math.round(model.xMin + ((ev.clientX - r.left) / r.width * O.w - O.ml) / (O.w - O.ml - O.mr) * (model.xMax - model.xMin));
+            year = Math.max(model.xMin, Math.min(model.xMax, year));
+            guide.setAttribute('x1', String(xOf(year))); guide.setAttribute('x2', String(xOf(year))); guide.setAttribute('opacity', '0.4');
+            const at = inputs
+              .map((s) => { const pt = s.points.find((q) => q.year === year); return pt ? { name: s.name, slug: s.slug, v: pt.value, isRef: s.slug === 'cesko' } : null; })
+              .filter(Boolean).sort((a: any, b: any) => b.v - a.v) as { name: string; slug: string; v: number; isRef: boolean }[];
+            if (!at.length) { readout.hidden = true; return; }
+            readout.innerHTML = `<div class="ro-h">${year}</div>` + at.map((r2) =>
+              `<div class="ro-r${r2.isRef ? ' is-ref' : ''}"><span class="ro-sw" style="background:${colors[r2.slug]}"></span>${r2.name}<b>${fmt(r2.v)}</b></div>`).join('');
+            readout.hidden = false;
+            const rx = xOf(year) / O.w * r.width;
+            const halfW = readout.offsetWidth / 2;
+            readout.style.left = `${Math.max(halfW + 2, Math.min(r.width - halfW - 2, rx))}px`;
+            readout.style.top = `${O.mt / O.h * r.height}px`;
+          };
+          svg.onpointerleave = () => { if (readout) readout.hidden = true; guide.setAttribute('opacity', '0'); };
+        }
 
         function render() {
           const key = sel!.value;
           if (!normApplies(key, mode)) mode = 'absolute';
-          // stav tlačítek dle použitelnosti pro daný ukazatel
           if (modesEl) modesEl.querySelectorAll('button').forEach((btn) => {
             const bm = (btn.dataset.mode || 'absolute') as NormMode;
             btn.disabled = !normApplies(key, bm);
@@ -102,20 +243,15 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
           });
           if (noteEl) noteEl.textContent = normable(key) ? '' : 'Tento ukazatel je už poměrový — přepočet na obyvatele/hektar se nepoužije.';
 
-          const ref = profiles.find((p) => p.slug === 'cesko');
-          const refNorm = ref ? normalizeValue(key, rawOf(ref, key), mode, ref.population, agLandOf(ref)) : null;
-          const refVal = refNorm ? refNorm.value : (ref ? rawOf(ref, key) : null);
+          const ref = byId['cesko'];
+          const refVal = ref ? conv(key, rawOf(ref, key), ref, mode) : null;
 
           let unit = '';
-          const rows = profiles
-            .map((p) => {
-              const raw = rawOf(p, key);
-              const norm = normalizeValue(key, raw, mode, p.population, agLandOf(p));
-              if (norm) unit = norm.unit;
-              return { flag: p.flag, nameCs: p.nameCs, slug: p.slug, v: norm ? norm.value : raw };
-            })
+          const trows = profiles
+            .map((p) => { const v = conv(key, rawOf(p, key), p, mode); return { flag: p.flag, nameCs: p.nameCs, slug: p.slug, v }; })
             .filter((r): r is { flag: string; nameCs: string; slug: string; v: number } => r.v != null)
             .sort((a, b) => b.v - a.v);
+          if (mode !== 'absolute') { const anyNorm = ref ? normalizeValue(key, 1, mode, ref.population, ref.agLand) : null; if (anyNorm) unit = anyNorm.unit; }
           if (!unit) unit = units[key] || '';
 
           if (unitH) unitH.textContent = unit ? `(${unit})` : '';
@@ -124,11 +260,13 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
             const base = lbl.replace(/\s*\([^)]*\)\s*$/, '');
             currentH.textContent = mode === 'absolute' ? lbl : `${base} (${unit})`;
           }
-          tbody!.innerHTML = rows.map((r, i) => {
+          tbody!.innerHTML = trows.map((r, i) => {
             let vs = '—';
             if (refVal) { const pct = Math.round((r.v / refVal - 1) * 100); vs = (pct > 0 ? '+' : '') + fmt(pct) + ' %'; }
             return `<tr><td>${i + 1}</td><td>${r.flag} <a href="/svet/${r.slug}/">${r.nameCs}</a></td><td>${fmt(r.v)}</td><td>${vs}</td></tr>`;
           }).join('');
+
+          renderChart(key, mode);
         }
 
         sel.addEventListener('change', render);
@@ -137,6 +275,19 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
           if (!btn || btn.disabled) return;
           mode = (btn.dataset.mode || 'absolute') as NormMode;
           render();
+        });
+        if (chipsEl) chipsEl.addEventListener('click', (e) => {
+          const btn = (e.target as HTMLElement).closest('.svet-chip') as HTMLElement | null;
+          if (!btn || btn.hasAttribute('disabled')) return;
+          const slug = btn.dataset.slug || '';
+          const on = !selected.has(slug);
+          if (on) selected.add(slug); else selected.delete(slug);
+          btn.classList.toggle('on', on);
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          const col = colors[slug];
+          btn.style.cssText = on ? `border-color:${col}; background:${col}1f` : '';
+          const dot = btn.querySelector('i'); if (dot) (dot as HTMLElement).style.background = on ? col : '';
+          renderChart(sel!.value, mode);
         });
         render();
       }
