@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createProspectWithDraft, markProspectSent } from './bazar-seed';
+import { createProspectWithDraft, markProspectSent, confirmProspect } from './bazar-seed';
 
 function fakeSupabase(returns: Record<string, any>) {
   const calls: any[] = [];
@@ -51,5 +51,50 @@ describe('markProspectSent', () => {
     expect(upd._payload.status).toBe('sent');
     expect(upd._payload.channel).toBe('email');
     expect(upd._filters).toContainEqual(['id', 'P1']);
+  });
+});
+
+describe('confirmProspect', () => {
+  const baseProspect = {
+    id: 'P1', email: 'a@b.cz', name: 'Jan', phone: '777',
+    claim_token: 'TOK', token_expires_at: '2099-01-01T00:00:00Z',
+    status: 'opened', user_id: null,
+  };
+
+  it('expirovaný token → chyba', async () => {
+    const sb = fakeSupabase({
+      'bazar_seed_prospects.single': { data: { ...baseProspect, token_expires_at: '2000-01-01T00:00:00Z' }, error: null },
+    });
+    await expect(confirmProspect(sb, {
+      token: 'TOK', ip: '1.2.3.4', termsVersion: 'v1',
+      ensureUser: async () => 'U1', now: new Date('2026-01-01T00:00:00Z'),
+    })).rejects.toThrow(/expir/i);
+  });
+
+  it('už potvrzený token → chyba', async () => {
+    const sb = fakeSupabase({
+      'bazar_seed_prospects.single': { data: { ...baseProspect, status: 'confirmed' }, error: null },
+    });
+    await expect(confirmProspect(sb, {
+      token: 'TOK', ip: '1.2.3.4', termsVersion: 'v1', ensureUser: async () => 'U1',
+    })).rejects.toThrow(/potvrz/i);
+  });
+
+  it('platný token → vytvoří usera, zveřejní, zapíše audit', async () => {
+    const sb = fakeSupabase({ 'bazar_seed_prospects.single': { data: baseProspect, error: null } });
+    const ensureUser = vi.fn(async () => 'U1');
+    const r = await confirmProspect(sb, {
+      token: 'TOK', ip: '1.2.3.4', termsVersion: 'v1', ensureUser,
+      now: new Date('2026-01-01T00:00:00Z'),
+    });
+    expect(ensureUser).toHaveBeenCalledWith({ email: 'a@b.cz', name: 'Jan', phone: '777' });
+    expect(r.userId).toBe('U1');
+    const listingUpd = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'update');
+    expect(listingUpd._payload.status).toBe('active');
+    expect(listingUpd._payload.user_id).toBe('U1');
+    const prospectUpd = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects' && c._op === 'update');
+    expect(prospectUpd._payload.status).toBe('confirmed');
+    expect(prospectUpd._payload.confirmed_ip).toBe('1.2.3.4');
+    expect(prospectUpd._payload.terms_version).toBe('v1');
   });
 });

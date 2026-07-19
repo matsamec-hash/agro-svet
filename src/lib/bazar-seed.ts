@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { generateClaimToken } from './bazar-seed-token';
+import { generateClaimToken, isTokenExpired } from './bazar-seed-token';
 
 export interface ProspectInput {
   name: string;
@@ -94,4 +94,68 @@ export async function markProspectSent(
     .update({ status: 'sent', channel })
     .eq('id', prospectId);
   if (error) throw new Error(`markProspectSent: ${error.message}`);
+}
+
+export interface ProspectRow {
+  id: string; email: string; name: string; phone: string;
+  claim_token: string; token_expires_at: string; status: string; user_id: string | null;
+}
+
+/** Načte prospekta podle tokenu (service role obchází RLS). null když neexistuje. */
+export async function getProspectByToken(
+  supabase: SupabaseClient,
+  token: string,
+): Promise<ProspectRow | null> {
+  const { data } = await supabase
+    .from('bazar_seed_prospects')
+    .select('id, email, name, phone, claim_token, token_expires_at, status, user_id')
+    .eq('claim_token', token)
+    .single();
+  return (data as ProspectRow) ?? null;
+}
+
+/** Zaznamenej otevření claim odkazu (idempotentně jen z 'sent'/'draft'). */
+export async function markProspectOpened(supabase: SupabaseClient, prospectId: string, nowIso: string): Promise<void> {
+  await supabase
+    .from('bazar_seed_prospects')
+    .update({ status: 'opened', opened_at: nowIso })
+    .eq('id', prospectId)
+    .in('status', ['draft', 'sent']);
+}
+
+/** Callback: zajistí auth uživatele (vytvoř nebo dohledej) a vrať jeho id. */
+export type EnsureUser = (args: { email: string; name: string; phone: string }) => Promise<string>;
+
+/** Potvrdí prospekta: ověří token, zajistí usera, zveřejní inzeráty, zapíše audit. */
+export async function confirmProspect(
+  supabase: SupabaseClient,
+  args: { token: string; ip: string; termsVersion: string; ensureUser: EnsureUser; now?: Date },
+): Promise<{ userId: string; prospectId: string }> {
+  const now = args.now ?? new Date();
+  const prospect = await getProspectByToken(supabase, args.token);
+  if (!prospect) throw new Error('Neplatný odkaz.');
+  if (prospect.status === 'confirmed') throw new Error('Tento inzerát už byl potvrzen.');
+  if (isTokenExpired(prospect.token_expires_at, now)) throw new Error('Platnost odkazu vypršela (expiroval).');
+
+  const userId = await args.ensureUser({ email: prospect.email, name: prospect.name, phone: prospect.phone });
+
+  const { error: lErr } = await supabase
+    .from('bazar_listings')
+    .update({ status: 'active', user_id: userId })
+    .eq('seed_prospect_id', prospect.id);
+  if (lErr) throw new Error(`publish listings: ${lErr.message}`);
+
+  const { error: pErr } = await supabase
+    .from('bazar_seed_prospects')
+    .update({
+      status: 'confirmed',
+      confirmed_at: now.toISOString(),
+      confirmed_ip: args.ip,
+      terms_version: args.termsVersion,
+      user_id: userId,
+    })
+    .eq('id', prospect.id);
+  if (pErr) throw new Error(`confirm prospect: ${pErr.message}`);
+
+  return { userId, prospectId: prospect.id };
 }
