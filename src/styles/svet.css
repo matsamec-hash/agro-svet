@@ -295,6 +295,37 @@
 .svet-card-name { font-weight: 700; font-size: 1.1rem; color: var(--sv-ink); }
 .svet-card-cta { font-size: .82rem; font-weight: 600; color: var(--sv-green); }
 
+/* ---------- SROVNÁNÍ — GRAF VÝVOJE ---------- */
+.svet-cmp-chartblock { margin: 18px 0 22px; }
+.svet-cmp-charthead { font-weight: 600; font-size: 1rem; color: #2a2a30; margin-bottom: 10px; }
+.svet-cmp-charthint { font-weight: 400; font-size: .82rem; color: var(--sv-muted); }
+.svet-cmp-chart-wrap { position: relative; background: #fbfaf3; border: 1px solid var(--sv-line); border-radius: 14px; padding: 14px 16px; }
+.svet-cmp-svg { display: block; width: 100%; height: auto; touch-action: pan-y; }
+.svet-cmp-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; opacity: .85; }
+.svet-cmp-line.is-ref { stroke-width: 3.4; opacity: 1; }
+.svet-cmp-guide { stroke: #1c1c17; stroke-width: 1; }
+.svet-cmp-readout {
+  position: absolute; z-index: 4; pointer-events: none; transform: translate(-50%, -108%);
+  background: #1c1c17; color: #fff; border-radius: 9px; padding: 8px 10px;
+  font-size: .7rem; line-height: 1.5; white-space: nowrap; box-shadow: 0 8px 22px -8px rgba(0, 0, 0, .6);
+}
+.svet-cmp-readout .ro-h { color: #d9d7c4; font-weight: 700; margin-bottom: 3px; }
+.svet-cmp-readout .ro-r { display: flex; align-items: center; gap: 8px; }
+.svet-cmp-readout .ro-r b { margin-left: auto; padding-left: 12px; font-variant-numeric: tabular-nums; }
+.svet-cmp-readout .ro-r.is-ref { color: #8fd08f; font-weight: 700; }
+.svet-cmp-readout .ro-sw { width: 9px; height: 9px; border-radius: 2px; display: inline-block; flex: none; }
+
+.svet-cmp-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.svet-chip {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+  font: inherit; font-size: .8rem; padding: 5px 11px; border-radius: 999px;
+  border: 1.5px solid #d9d8cc; background: #fff; color: var(--sv-muted);
+}
+.svet-chip:hover { border-color: #b9bab0; }
+.svet-chip i { width: 11px; height: 11px; border-radius: 3px; background: #cfcfc4; flex: none; }
+.svet-chip.on { color: #1c1c17; font-weight: 600; }
+.svet-chip.cz { cursor: default; }
+
 /* ---------- SROVNÁNÍ (tabulka) ---------- */
 .svet-cmp-pick {
   display: inline-flex;
