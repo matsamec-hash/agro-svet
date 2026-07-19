@@ -3,7 +3,7 @@
 const RULES: Array<[string[], string]> = [
   [['traktor'], 'traktory'],
   [['kombajn', 'sklizec', 'mlaticka'], 'kombajny'],
-  [['plu', 'brany', 'podmitac', 'kypric', 'radlic'], 'zpracovani-pudy'],
+  [['pluh', 'brany', 'podmitac', 'kypric', 'radlic'], 'zpracovani-pudy'],
   [['seci', 'secka', 'sazec', 'secí', 'sadzac'], 'seti'],
   [['rozmetadlo', 'hnojiv', 'cisternu na kejdu', 'kejda'], 'hnojeni'],
   [['postrikovac', 'postrik', 'ochrana rostlin'], 'ochrana-rostlin'],
@@ -12,7 +12,7 @@ const RULES: Array<[string[], string]> = [
   [['nakladac', 'manipulator', 'celni nakladac', 'paletovaci'], 'manipulace'],
   [['privesu', 'privesy', 'valnik', 'navesu', 'preprava'], 'doprava'],
   [['dojici', 'staj', 'napajecka', 'chov', 'krmny'], 'staj-chov'],
-  [['stepkovac', 'mulcovac', 'komunal', 'les'], 'komunal-les'],
+  [['stepkovac', 'mulcovac', 'komunal', 'lesni', 'stipac', 'motorova pila'], 'komunal-les'],
   [['nahradni dil', 'nd na', 'pneumatik'], 'nahradni-dily'],
   [['osivo', 'hnojivo', 'sadba'], 'osiva-hnojiva'],
   [['pozemek', 'pole', 'orna puda', 'louka'], 'pozemky'],
