@@ -8,6 +8,7 @@ import { getPlanInfo } from '../../../../lib/bazar-featured-pricing';
 import type { FeaturedPlan } from '../../../../lib/bazar-featured';
 import { edgeThrottle } from '../../../../lib/edge-throttle';
 import { getEnvVar } from '../../../../lib/env';
+import { BAZAR_TOPOVANI_ENABLED } from '../../../../lib/config';
 import { Resend } from 'resend';
 
 const ADMIN_EMAIL = 'info@samecdigital.com';
@@ -25,6 +26,9 @@ function json(body: unknown, status = 200) {
 }
 
 export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
+  // Topování dočasně vypnuté (čeká na online platbu) — nepřijímej žádosti.
+  if (!BAZAR_TOPOVANI_ENABLED) return json({ error: 'topovani_disabled' }, 403);
+
   const user = (locals as any).user;
   if (!user) return json({ error: 'unauthenticated' }, 401);
 

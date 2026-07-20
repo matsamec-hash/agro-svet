@@ -3,15 +3,20 @@ import Layout from '../../../../layouts/Layout.astro';
 import { createServerClient } from '../../../../lib/supabase';
 import { FEATURED_PLANS } from '../../../../lib/bazar-featured-pricing';
 import { isFeaturedActive, formatFeaturedUntil } from '../../../../lib/bazar-featured';
+import { BAZAR_TOPOVANI_ENABLED } from '../../../../lib/config';
 
 export const prerender = false;
+
+const { id } = Astro.params;
+
+// Topování dočasně vypnuté — nepouštěj na stránku, vrať na detail inzerátu.
+if (!BAZAR_TOPOVANI_ENABLED) return Astro.redirect(`/bazar/moje/${id}/`);
 
 const user = (Astro.locals as any).user;
 if (!user) {
   return Astro.redirect('/bazar/prihlaseni/?next=' + encodeURIComponent(Astro.url.pathname));
 }
 
-const { id } = Astro.params;
 const supabase = createServerClient();
 const { data: listing } = await supabase
   .from('bazar_listings')

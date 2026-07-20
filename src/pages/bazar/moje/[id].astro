@@ -9,6 +9,7 @@ import { getModelOptions, getPlemenoOptions } from '../../../lib/bazar-catalog';
 import { getModelBySlug } from '../../../lib/stroje';
 import { getAllPlemena } from '../../../lib/plemena';
 import { isFeaturedActive, formatFeaturedUntil } from '../../../lib/bazar-featured';
+import { BAZAR_TOPOVANI_ENABLED } from '../../../lib/config';
 
 const user = Astro.locals.user!;
 const { id } = Astro.params;
@@ -143,13 +144,13 @@ if (isBreed && listing.model_slug) {
               : `Expirovalo: ${formatFeaturedUntil(listing.featured_until)}`}
           </div>
         </div>
-        {!isFeaturedActive(listing) && (
+        {BAZAR_TOPOVANI_ENABLED && !isFeaturedActive(listing) && (
           <a class="edit-top-cta" href={`/bazar/moje/${listing.id}/topovat/`}>Obnovit topování →</a>
         )}
       </div>
     )}
 
-    {!listing.featured && (
+    {BAZAR_TOPOVANI_ENABLED && !listing.featured && (
       <a class="edit-promo-cta" href={`/bazar/moje/${listing.id}/topovat/`}>
         <span class="edit-promo-icon" aria-hidden="true">⭐</span>
         <div class="edit-promo-text">
