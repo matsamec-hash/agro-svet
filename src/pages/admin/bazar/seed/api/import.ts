@@ -2,8 +2,8 @@ import type { APIRoute } from 'astro';
 import { createServerClient } from '../../../../../lib/supabase';
 import { getEnvVar } from '../../../../../lib/env';
 import { parseBazosListing } from '../../../../../lib/bazar-import-parse';
-import { suggestCategory } from '../../../../../lib/bazar-import-category';
-import { rewriteListing } from '../../../../../lib/bazar-import-rewrite';
+import { suggestCategory, matchBrand } from '../../../../../lib/bazar-import-category';
+import { structureListing } from '../../../../../lib/bazar-import-structure';
 import { createProspectWithDraft } from '../../../../../lib/bazar-seed';
 
 export const prerender = false;
@@ -67,12 +67,23 @@ export const POST: APIRoute = async ({ request, locals }) => {
   // Zbytek (AI přepis, stažení fotek, zápis draftu) — jakoukoli chybu vrátíme
   // jako čitelnou hlášku, ne jako neprůhledný 500.
   try {
-    const rewritten = await rewriteListing({
+    // AI (OpenAI) vytáhne strukturovaná pole + přepíše text; bez OPENAI_API_KEY se
+    // použije deterministický fallback (značka/kategorie/motohodiny).
+    const structured = await structureListing({
       title: parsed.title,
       description: parsed.description ?? '',
-      apiKey: getEnvVar('ANTHROPIC_API_KEY') ?? '',
+      apiKey: getEnvVar('OPENAI_API_KEY') ?? '',
+      fallback: {
+        brand: matchBrand(parsed.title, parsed.description ?? ''),
+        category: suggestCategory(parsed.title, parsed.description ?? ''),
+        hours: parsed.hours,
+      },
     });
-    const category = suggestCategory(rewritten.title, rewritten.description);
+
+    // Vybavení (pokud AI nějaké vrátila) doplníme na konec popisu, ať se neztratí.
+    const description = structured.features.length
+      ? `${structured.description}\n\nVýbava: ${structured.features.join(' • ')}`
+      : structured.description;
 
     const imagePaths = await downloadImages(supabase, parsed.imageUrls);
 
@@ -85,13 +96,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
         sourceUrl: url,
       },
       listing: {
-        title: rewritten.title,
-        description: rewritten.description,
+        title: structured.title,
+        description,
         price: parsed.price,
-        category,
+        category: structured.category,
+        brand: structured.brand,
         location: parsed.location ?? '',
         phone: contact.phone ?? parsed.phone ?? '',
         email: contact.email ?? '',
+        yearOfManufacture: structured.year,
+        powerHp: structured.powerHp,
+        hoursOperated: structured.hours,
       },
       imagePaths,
     });

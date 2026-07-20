@@ -4,6 +4,7 @@ export interface ParsedListing {
   description: string | null;
   location: string | null;
   phone: string | null;
+  hours: number | null;
   imageUrls: string[];
 }
 
@@ -39,6 +40,10 @@ export function parseBazosListing(html: string): ParsedListing {
 
   const phone = description ? (description.match(/\b(\d{3}\s?\d{3}\s?\d{3})\b/)?.[1] ?? null) : null;
 
+  // Motohodiny: "8251 mth", "8 251 motohodin", "8251 mh"
+  const hoursRaw = `${title ?? ''} ${description ?? ''}`.match(/([\d][\d\s]{1,})\s*(?:mth|motohodin|mh\b)/i);
+  const hours = hoursRaw ? parseInt(hoursRaw[1].replace(/\D/g, ''), 10) : null;
+
   const imageUrls = Array.from(
     new Set(
       Array.from(
@@ -54,6 +59,7 @@ export function parseBazosListing(html: string): ParsedListing {
     description,
     location: locationRaw ? locationRaw.trim() : null,
     phone: phone ? phone.replace(/\s/g, '') : null,
+    hours,
     imageUrls,
   };
 }
