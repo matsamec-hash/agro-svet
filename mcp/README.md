@@ -4,8 +4,14 @@ A standalone, **read-only** [Model Context Protocol](https://modelcontextprotoco
 server that exposes agro-svet.cz's **public** structured datasets as MCP tools
 over the **stdio** transport.
 
-Only public reference data is served. **No** user / Supabase data (bazar,
-contest, accounts) is ever touched.
+Over stdio, only public **static reference** data is served — no database.
+
+The remote HTTP transport (`src/pages/api/mcp.ts`, served at
+`POST https://agro-svet.cz/api/mcp`) additionally exposes **`search_bazar`**,
+which queries the live marketplace. Even there, only **public, active** listings
+and their **public marketing fields** are returned — seller PII (`phone`,
+`email`, `user_id`) is never selected. No contest or account data is ever
+touched by any transport.
 
 ## Datasets
 
@@ -35,6 +41,10 @@ resolved relative to the module, not the working directory).
 - **`search_machinery`** `{ brand?, category?, power_min?, power_max?, year?, limit? }` —
   flattened brand → category → series → model search by brand, category,
   horsepower range, or production year. Default limit 50, max 200.
+- **`search_bazar`** `{ query?, category?, subcategory?, brand?, price_min?, price_max?, power_min?, power_max?, year_from?, region?, limit? }`
+  — **HTTP transport only.** Live search over public, active marketplace
+  listings; each hit includes a canonical `agro-svet.cz/bazar/{id}` URL and a
+  short excerpt, but no seller contact details. Default limit 30, max 100.
 
 ## Run
 

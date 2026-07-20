@@ -23,6 +23,7 @@ import { getCommodityPrices, listCommodityNames } from "./tools/commodities.js";
 import { compareCountries, listIndicators } from "./tools/countries.js";
 import { searchCropVarieties, listCropSlugs } from "./tools/varieties.js";
 import { searchMachinery, listMachineryFacets } from "./tools/machinery.js";
+import { searchBazar, type BazarFetcher } from "./tools/bazar.js";
 
 /** The parsed, in-memory datasets the tools query against. */
 export interface Datasets {
@@ -48,9 +49,18 @@ export const SERVER_INFO = {
 } as const;
 
 /**
- * Register the five read-only tools on an McpServer, querying the injected data.
+ * Register the read-only tools on an McpServer, querying the injected data.
+ *
+ * `bazarFetcher` is optional: pass it (from a transport that has live Supabase
+ * access, e.g. the HTTP Worker) to additionally expose the `search_bazar` tool
+ * over live marketplace data. Transports with no database (stdio serving only
+ * static files) omit it, and `search_bazar` is simply not registered there.
  */
-export function registerTools(server: McpServer, data: Datasets): void {
+export function registerTools(
+  server: McpServer,
+  data: Datasets,
+  bazarFetcher?: BazarFetcher,
+): void {
   // ---- get_commodity_prices ----
   server.registerTool(
     "get_commodity_prices",
@@ -216,6 +226,75 @@ export function registerTools(server: McpServer, data: Datasets): void {
     },
   );
 
+  // ---- search_bazar (only when a live fetcher is wired) ----
+  if (bazarFetcher) {
+    server.registerTool(
+      "search_bazar",
+      {
+        title: "Search the agro-svet bazar (marketplace)",
+        description:
+          "Search LIVE listings on the agro-svet.cz bazar — a Czech marketplace " +
+          "for used agricultural machinery & equipment (tractors, ploughs, " +
+          "harvesters, trailers, etc.). Only public, currently-active listings " +
+          "are returned; each result includes a canonical listing URL. No " +
+          "seller contact details are exposed. Filters: free-text query " +
+          "(title/description/brand), category, subcategory, brand, price range " +
+          "(CZK), engine power range (hp), minimum year of manufacture, and " +
+          "region (location substring). Default limit 30, max 100.",
+        inputSchema: {
+          query: z
+            .string()
+            .optional()
+            .describe("Free-text substring over title, description and brand."),
+          category: z
+            .string()
+            .optional()
+            .describe("Category substring, e.g. 'traktory'."),
+          subcategory: z
+            .string()
+            .optional()
+            .describe("Subcategory substring, e.g. 'pluhy'."),
+          brand: z
+            .string()
+            .optional()
+            .describe("Brand substring, e.g. 'zetor'."),
+          price_min: z.number().optional().describe("Minimum price in CZK."),
+          price_max: z.number().optional().describe("Maximum price in CZK."),
+          power_min: z
+            .number()
+            .optional()
+            .describe("Minimum engine power in horsepower (hp)."),
+          power_max: z
+            .number()
+            .optional()
+            .describe("Maximum engine power in horsepower (hp)."),
+          year_from: z
+            .number()
+            .int()
+            .optional()
+            .describe("Minimum year of manufacture."),
+          region: z
+            .string()
+            .optional()
+            .describe("Location/region substring, e.g. 'Jihomoravský'."),
+          limit: z
+            .number()
+            .int()
+            .optional()
+            .describe("Max results (default 30, capped at 100)."),
+        },
+      },
+      async (args) => {
+        try {
+          const rows = await bazarFetcher(args);
+          return json(searchBazar(rows, args));
+        } catch (e) {
+          return fail(e);
+        }
+      },
+    );
+  }
+
   // ---- list_datasets ----
   server.registerTool(
     "list_datasets",
@@ -231,9 +310,22 @@ export function registerTools(server: McpServer, data: Datasets): void {
       try {
         const { commodities, countries, varieties, brands } = data;
         const facets = listMachineryFacets(brands);
+        const bazarEntry = bazarFetcher
+          ? [
+              {
+                name: "bazar",
+                description:
+                  "Live marketplace of used agricultural machinery & " +
+                  "equipment (public, active listings only).",
+                tool: "search_bazar",
+                recordCount: "live",
+              },
+            ]
+          : [];
         return json({
           generated: commodities.generated,
           datasets: [
+            ...bazarEntry,
             {
               name: "commodities",
               description:
