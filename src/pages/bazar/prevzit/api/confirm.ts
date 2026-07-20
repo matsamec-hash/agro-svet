@@ -71,8 +71,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     try {
       const a = new URL(actionLink);
       const pub = new URL(publicSupabase);
-      a.protocol = pub.protocol;
-      a.host = pub.host;
+      // Vynutíme veřejný https origin BEZ portu — server má PUBLIC_SUPABASE_URL
+      // omylem s interním portem :8000 (Kong HTTP), přes který veřejné HTTPS padá.
+      a.protocol = 'https:';
+      a.hostname = pub.hostname;
+      a.port = '';
       actionLink = a.toString();
     } catch {
       /* nepovede-li se přepsat, necháme původní */

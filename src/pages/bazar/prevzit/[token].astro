@@ -10,7 +10,17 @@ export const TERMS_VERSION = '2026-07-19';
 
 const { token } = Astro.params;
 const supabase = createServerClient();
-const publicStorageBase = `${(getEnvVar('PUBLIC_SUPABASE_URL') ?? '').replace(/\/$/, '')}/storage/v1/object/public/bazar-images`;
+// Veřejný origin pro <img> — vynutíme https bez portu (server má PUBLIC_SUPABASE_URL
+// omylem s interním portem :8000, přes který veřejné HTTPS na obrázky padá).
+function publicSupabaseOrigin(): string {
+  try {
+    const u = new URL(getEnvVar('PUBLIC_SUPABASE_URL') ?? '');
+    return `https://${u.hostname}`;
+  } catch {
+    return '';
+  }
+}
+const publicStorageBase = `${publicSupabaseOrigin()}/storage/v1/object/public/bazar-images`;
 const prospect = token ? await getProspectByToken(supabase, token) : null;
 
 let state: 'ok' | 'invalid' | 'expired' | 'done' = 'ok';
