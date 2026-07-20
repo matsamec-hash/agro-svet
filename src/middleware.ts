@@ -24,6 +24,9 @@ const ADMIN_PATHS = ['/admin/'];
 // setSession round-trip — cheaper for the 99% of requests that don't need auth.
 function needsAuthContext(pathname: string): boolean {
   if (pathname.startsWith('/api/')) return true;
+  // Fotosoutěž API žije pod /fotosoutez/api/ (ne /api/) — upload+vote čtou
+  // locals.user, takže bez tohohle by dostaly null → 401 i pro přihlášené.
+  if (pathname.startsWith('/fotosoutez/api/')) return true;
   if (ADMIN_PATHS.some((p) => pathname.startsWith(p))) return true;
   if (PROTECTED_PATHS.some((p) => pathname.startsWith(p))) return true;
   // /bazar/prihlaseni & /bazar/registrace want to redirect already-logged-in
