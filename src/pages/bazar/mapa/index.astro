@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
-import { CATEGORIES } from '../../../lib/bazar-constants';
+import { CATEGORIES, BRANDS } from '../../../lib/bazar-constants';
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -14,6 +14,7 @@ const breadcrumbJsonLd = {
 };
 
 const categoryFilters = CATEGORIES.map((c) => ({ value: c.value, label: c.label }));
+const brandFilters = BRANDS.map((b) => ({ value: b.value, label: b.label }));
 ---
 
 <Layout
@@ -78,6 +79,36 @@ const categoryFilters = CATEGORIES.map((c) => ({ value: c.value, label: c.label 
       <div class="filter-status" id="map-filter-status" aria-live="polite">Načítám inzeráty…</div>
     </div>
 
+    <details class="map-adv">
+      <summary>Rozšířené filtry</summary>
+      <div class="map-adv-grid">
+        <label class="filter-field">
+          <span class="filter-label">Značka</span>
+          <select id="map-filter-brand">
+            <option value="">Všechny</option>
+            {brandFilters.map((b) => <option value={b.value}>{b.label}</option>)}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="filter-label">Cena od (Kč)</span>
+          <input type="number" id="map-filter-price-min" min="0" step="10000" placeholder="0" />
+        </label>
+        <label class="filter-field">
+          <span class="filter-label">Rok od</span>
+          <input type="number" id="map-filter-year-min" min="1950" max="2030" placeholder="—" />
+        </label>
+        <label class="filter-field">
+          <span class="filter-label">Rok do</span>
+          <input type="number" id="map-filter-year-max" min="1950" max="2030" placeholder="—" />
+        </label>
+        <label class="filter-field">
+          <span class="filter-label">Výkon od (k)</span>
+          <input type="number" id="map-filter-power-min" min="0" step="10" placeholder="—" />
+        </label>
+        <button type="button" id="map-filter-reset" class="filter-reset">Zrušit filtry</button>
+      </div>
+    </details>
+
     <div id="bazar-map" class="map-canvas" role="application" aria-label="Interaktivní mapa inzerátů bazaru"></div>
 
     <p class="map-attribution">
@@ -98,6 +129,8 @@ const categoryFilters = CATEGORIES.map((c) => ({ value: c.value, label: c.label 
       lng: number;
       img?: string;
       created_at: string;
+      year: number | null;
+      power: number | null;
     };
 
     // Loaded lazily so the page shell paints first.
@@ -136,6 +169,12 @@ const categoryFilters = CATEGORIES.map((c) => ({ value: c.value, label: c.label 
       const status = document.getElementById('map-filter-status') as HTMLElement;
       const catFilter = document.getElementById('map-filter-category') as HTMLSelectElement;
       const priceFilter = document.getElementById('map-filter-price-max') as HTMLInputElement;
+      const brandFilter = document.getElementById('map-filter-brand') as HTMLSelectElement;
+      const priceMinFilter = document.getElementById('map-filter-price-min') as HTMLInputElement;
+      const yearMinFilter = document.getElementById('map-filter-year-min') as HTMLInputElement;
+      const yearMaxFilter = document.getElementById('map-filter-year-max') as HTMLInputElement;
+      const powerMinFilter = document.getElementById('map-filter-power-min') as HTMLInputElement;
+      const resetBtn = document.getElementById('map-filter-reset') as HTMLButtonElement;
 
       const fmtPrice = (n: number | null) =>
         n === null ? 'Cena dohodou' : `${n.toLocaleString('cs-CZ')} Kč`;
@@ -158,14 +197,26 @@ const categoryFilters = CATEGORIES.map((c) => ({ value: c.value, label: c.label 
 
       let allListings: Listing[] = [];
 
+      const num = (el: HTMLInputElement) => (el.value ? parseInt(el.value, 10) : null);
+
       function render() {
         cluster.clearLayers();
         const cat = catFilter.value;
-        const maxPrice = priceFilter.value ? parseInt(priceFilter.value, 10) : null;
+        const brand = brandFilter.value;
+        const maxPrice = num(priceFilter);
+        const minPrice = num(priceMinFilter);
+        const minYear = num(yearMinFilter);
+        const maxYear = num(yearMaxFilter);
+        const minPower = num(powerMinFilter);
         let shown = 0;
         for (const l of allListings) {
           if (cat && l.category !== cat) continue;
+          if (brand && l.brand !== brand) continue;
           if (maxPrice !== null && l.price !== null && l.price > maxPrice) continue;
+          if (minPrice !== null && l.price !== null && l.price < minPrice) continue;
+          if (minYear !== null && (l.year === null || l.year < minYear)) continue;
+          if (maxYear !== null && (l.year === null || l.year > maxYear)) continue;
+          if (minPower !== null && (l.power === null || l.power < minPower)) continue;
           const m = L.marker([l.lat, l.lng]);
           m.bindPopup(popupHtml(l));
           cluster.addLayer(m);
@@ -191,9 +242,19 @@ const categoryFilters = CATEGORIES.map((c) => ({ value: c.value, label: c.label 
       }
 
       catFilter.addEventListener('change', render);
-      priceFilter.addEventListener('input', () => {
-        clearTimeout((priceFilter as any)._t);
-        (priceFilter as any)._t = setTimeout(render, 200);
+      brandFilter.addEventListener('change', render);
+      const debounced = [priceFilter, priceMinFilter, yearMinFilter, yearMaxFilter, powerMinFilter];
+      for (const el of debounced) {
+        el.addEventListener('input', () => {
+          clearTimeout((el as any)._t);
+          (el as any)._t = setTimeout(render, 200);
+        });
+      }
+      resetBtn.addEventListener('click', () => {
+        for (const el of [priceFilter, ...debounced]) el.value = '';
+        catFilter.value = '';
+        brandFilter.value = '';
+        render();
       });
     }
 
@@ -285,6 +346,45 @@ const categoryFilters = CATEGORIES.map((c) => ({ value: c.value, label: c.label 
       align-self: center;
       font-weight: 600;
     }
+
+    .map-adv {
+      margin-bottom: 16px;
+      border: 1px solid #eaeaec;
+      border-radius: 10px;
+      background: #fafafa;
+      padding: 0 16px;
+    }
+    .map-adv > summary {
+      cursor: pointer;
+      padding: 12px 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #444;
+      list-style: none;
+    }
+    .map-adv > summary::-webkit-details-marker { display: none; }
+    .map-adv > summary::before { content: '▸ '; color: #999; }
+    .map-adv[open] > summary::before { content: '▾ '; }
+    .map-adv-grid {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      padding: 0 0 16px;
+    }
+    .map-adv-grid .filter-field { min-width: 130px; }
+    .filter-reset {
+      padding: 8px 14px;
+      border: 1.5px solid #DFDFE3;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #444;
+      height: 38px;
+    }
+    .filter-reset:hover { border-color: #0A0A0B; }
 
     .map-canvas {
       width: 100%;
