@@ -22,10 +22,12 @@ function publicSupabaseOrigin(): string {
   }
 }
 const publicStorageBase = `${publicSupabaseOrigin()}/storage/v1/object/public/bazar-images`;
+const justDeleted = Astro.url.searchParams.get('deleted') === '1';
 const prospect = token ? await getProspectByToken(supabase, token) : null;
 
-let state: 'ok' | 'invalid' | 'expired' | 'done' = 'ok';
-if (!prospect) state = 'invalid';
+let state: 'ok' | 'invalid' | 'expired' | 'done' | 'deleted' = 'ok';
+if (justDeleted) state = 'deleted';
+else if (!prospect) state = 'invalid';
 else if (prospect.status === 'confirmed') state = 'done';
 else if (isTokenExpired(prospect.token_expires_at)) state = 'expired';
 
@@ -78,6 +80,12 @@ if (state === 'ok' && prospect) {
 ---
 <Layout title="Zveřejnění inzerátu">
   <main class="mx-auto max-w-2xl p-6">
+    {state === 'deleted' && (
+      <div class="rounded border border-green-300 bg-green-50 p-4">
+        <p class="font-semibold">Inzerát byl smazán.</p>
+        <p class="text-sm text-gray-600 mt-1">Nic se nezveřejnilo a všechna data i fotky jsme odstranili. Děkujeme.</p>
+      </div>
+    )}
     {state === 'invalid' && <p class="text-red-700">Neplatný odkaz.</p>}
     {state === 'expired' && <p class="text-red-700">Platnost odkazu vypršela.</p>}
     {state === 'done' && <p class="text-green-700">Tento inzerát už byl zveřejněn. <a class="underline" href="/bazar/moje/">Přejít do mých inzerátů</a></p>}
@@ -108,6 +116,10 @@ if (state === 'ok' && prospect) {
                 <img src={url} alt="" class="h-24 w-24 object-cover rounded" />
               ))}
             </div>
+            <a href={`/bazar/${l.id}/?preview=${token}`} target="_blank" rel="noopener"
+              class="mt-3 inline-block text-sm text-green-700 underline">
+              👁️ Náhled inzerátu
+            </a>
           </article>
         ))}
 
@@ -121,6 +133,14 @@ if (state === 'ok' && prospect) {
           </label>
           <button class="mt-4 w-full rounded bg-green-700 p-3 text-white font-semibold">
             Zveřejnit můj inzerát
+          </button>
+        </form>
+
+        <form method="POST" action="/bazar/prevzit/api/delete/" class="mt-3 text-center"
+          onsubmit="return confirm('Opravdu smazat tento předchystaný inzerát? Akce je nevratná.');">
+          <input type="hidden" name="token" value={token} />
+          <button class="text-sm text-gray-500 underline hover:text-red-700">
+            Nemám zájem — smazat inzerát
           </button>
         </form>
       </>

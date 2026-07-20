@@ -33,18 +33,39 @@ async function downloadImages(
         debug.push(`#${i}: fetch HTTP ${res.status}`);
         continue;
       }
-      const buf = new Uint8Array(await res.arrayBuffer());
-      const ext = (url.split('.').pop() || 'jpg').split('?')[0].slice(0, 4);
-      const path = `seed/${crypto.randomUUID()}-${i}.${ext}`;
-      const { error } = await supabase.storage.from('bazar-images').upload(path, buf, {
-        contentType: res.headers.get('content-type') || 'image/jpeg',
+      const raw = Buffer.from(await res.arrayBuffer());
+      // Ořízni spodní pruh s vodoznakem Bazoše (ve výšce loga). Přes sharp: uřízneme
+      // spodní ~7 % výšky. Když sharp selže, nahrajeme originál (fotka je důležitější
+      // než ořez). Výstup normalizujeme na JPEG.
+      let out: Buffer = raw;
+      let cropped = false;
+      try {
+        const sharp = (await import('sharp')).default;
+        const img = sharp(raw);
+        const meta = await img.metadata();
+        if (meta.height && meta.width) {
+          const cropPx = Math.round(meta.height * 0.07);
+          if (cropPx > 4 && meta.height - cropPx > 80) {
+            out = await img
+              .extract({ left: 0, top: 0, width: meta.width, height: meta.height - cropPx })
+              .jpeg({ quality: 85 })
+              .toBuffer();
+            cropped = true;
+          }
+        }
+      } catch (e) {
+        debug.push(`#${i}: ořez přeskočen (${(e as Error).message})`);
+      }
+      const path = `seed/${crypto.randomUUID()}-${i}.jpg`;
+      const { error } = await supabase.storage.from('bazar-images').upload(path, out, {
+        contentType: 'image/jpeg',
       });
       if (error) {
         debug.push(`#${i}: upload "${error.message}"`);
         continue;
       }
       paths.push(path);
-      debug.push(`#${i}: OK ${Math.round(buf.length / 1024)}KB`);
+      debug.push(`#${i}: OK ${Math.round(out.length / 1024)}KB${cropped ? ' (oříznuto)' : ''}`);
     } catch (e) {
       debug.push(`#${i}: threw "${(e as Error).message}"`);
     }
