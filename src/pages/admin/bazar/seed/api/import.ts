@@ -96,7 +96,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       imagePaths,
     });
 
-    return json({ ok: true, ...result });
+    return json({ ok: true, imageCount: imagePaths.length, ...result });
   } catch (e) {
     return json({ error: `Import selhal: ${(e as Error).message}` }, 500);
   }

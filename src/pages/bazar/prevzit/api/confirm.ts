@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { createServerClient } from '../../../../lib/supabase';
+import { getEnvVar } from '../../../../lib/env';
 import { confirmProspect, getProspectByToken, type EnsureUser } from '../../../../lib/bazar-seed';
 import { SITE_URL } from '../../../../lib/config';
 
@@ -60,6 +61,25 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     email,
     options: { redirectTo: `${SITE_URL}/bazar/auth/callback/?next=${nextPath}` },
   });
-  const actionLink = link?.properties?.action_link ?? `${SITE_URL}/bazar/moje/?welcome=1`;
-  return new Response(null, { status: 303, headers: { Location: actionLink } });
+  // Self-hosted Supabase (supabase.samecdigital.com) vrací action_link s INTERNÍ
+  // Docker adresou (http://supabase-kong:8000/…), kterou prohlížeč nenajde
+  // (DNS_PROBE_FINISHED_NXDOMAIN). Přepíšeme origin odkazu na veřejnou Supabase URL
+  // (PUBLIC_SUPABASE_URL); token i redirect_to v query zůstávají.
+  let actionLink = link?.properties?.action_link ?? '';
+  const publicSupabase = getEnvVar('PUBLIC_SUPABASE_URL');
+  if (actionLink && publicSupabase) {
+    try {
+      const a = new URL(actionLink);
+      const pub = new URL(publicSupabase);
+      a.protocol = pub.protocol;
+      a.host = pub.host;
+      actionLink = a.toString();
+    } catch {
+      /* nepovede-li se přepsat, necháme původní */
+    }
+  }
+  return new Response(null, {
+    status: 303,
+    headers: { Location: actionLink || `${SITE_URL}/bazar/moje/?welcome=1` },
+  });
 };

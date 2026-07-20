@@ -67,8 +67,10 @@ const { data: prospects } = await supabase
         }),
       });
       const data = await res.json();
-      msg.textContent = res.ok ? 'Hotovo — draft vytvořen.' : `Chyba: ${data.error}`;
-      if (res.ok) setTimeout(() => location.reload(), 800);
+      msg.textContent = res.ok
+        ? `Hotovo — draft vytvořen (${data.imageCount ?? 0} fotek stáhnuto).`
+        : `Chyba: ${data.error}`;
+      if (res.ok) setTimeout(() => location.reload(), 1500);
     });
 
     document.querySelectorAll('.copyBtn').forEach((b) =>
