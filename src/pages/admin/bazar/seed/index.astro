@@ -58,7 +58,7 @@ const { data: prospects } = await supabase
       e.preventDefault();
       msg.textContent = 'Importuji…';
       const fd = new FormData(form);
-      const res = await fetch('/admin/bazar/seed/api/import', {
+      const res = await fetch('/admin/bazar/seed/api/import/', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
@@ -80,7 +80,7 @@ const { data: prospects } = await supabase
     document.querySelectorAll('.sendBtn').forEach((b) =>
       b.addEventListener('click', async () => {
         (b as HTMLElement).textContent = 'Odesílám…';
-        const res = await fetch('/admin/bazar/seed/api/send', {
+        const res = await fetch('/admin/bazar/seed/api/send/', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ prospectId: (b as HTMLElement).dataset.id }),

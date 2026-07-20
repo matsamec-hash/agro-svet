@@ -71,7 +71,7 @@ if (state === 'ok' && prospect) {
           </article>
         ))}
 
-        <form method="POST" action="/bazar/prevzit/api/confirm" class="mt-6 rounded border p-4">
+        <form method="POST" action="/bazar/prevzit/api/confirm/" class="mt-6 rounded border p-4">
           <input type="hidden" name="token" value={token} />
           <input type="hidden" name="terms_version" value={TERMS_VERSION} />
           <label class="flex items-start gap-2 text-sm">
