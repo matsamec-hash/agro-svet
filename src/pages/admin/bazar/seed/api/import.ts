@@ -12,22 +12,44 @@ function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 }
 
-async function downloadImages(supabase: ReturnType<typeof createServerClient>, urls: string[]): Promise<string[]> {
+async function downloadImages(
+  supabase: ReturnType<typeof createServerClient>,
+  urls: string[],
+): Promise<{ paths: string[]; debug: string[] }> {
   const paths: string[] = [];
+  const debug: string[] = [];
   for (const [i, url] of urls.slice(0, 5).entries()) {
     try {
-      const res = await fetch(url);
-      if (!res.ok) continue;
+      // Hlavičky proti hotlink ochraně Bazoše (jinak www.bazos.cz může blokovat).
+      const res = await fetch(url, {
+        headers: {
+          'user-agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
+          referer: 'https://www.bazos.cz/',
+          accept: 'image/avif,image/webp,image/*,*/*;q=0.8',
+        },
+      });
+      if (!res.ok) {
+        debug.push(`#${i}: fetch HTTP ${res.status}`);
+        continue;
+      }
       const buf = new Uint8Array(await res.arrayBuffer());
       const ext = (url.split('.').pop() || 'jpg').split('?')[0].slice(0, 4);
       const path = `seed/${crypto.randomUUID()}-${i}.${ext}`;
       const { error } = await supabase.storage.from('bazar-images').upload(path, buf, {
         contentType: res.headers.get('content-type') || 'image/jpeg',
       });
-      if (!error) paths.push(path);
-    } catch { /* přeskoč nevalidní obrázek */ }
+      if (error) {
+        debug.push(`#${i}: upload "${error.message}"`);
+        continue;
+      }
+      paths.push(path);
+      debug.push(`#${i}: OK ${Math.round(buf.length / 1024)}KB`);
+    } catch (e) {
+      debug.push(`#${i}: threw "${(e as Error).message}"`);
+    }
   }
-  return paths;
+  return { paths, debug };
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
@@ -85,7 +107,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       ? `${structured.description}\n\nVýbava: ${structured.features.join(' • ')}`
       : structured.description;
 
-    const imagePaths = await downloadImages(supabase, parsed.imageUrls);
+    const { paths: imagePaths, debug: imageDebug } = await downloadImages(supabase, parsed.imageUrls);
 
     const result = await createProspectWithDraft(supabase, {
       adminId: user.id,
@@ -111,7 +133,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
       imagePaths,
     });
 
-    return json({ ok: true, imageCount: imagePaths.length, ...result });
+    return json({
+      ok: true,
+      imageCount: imagePaths.length,
+      imageUrlsFound: parsed.imageUrls.length,
+      imageDebug,
+      ...result,
+    });
   } catch (e) {
     return json({ error: `Import selhal: ${(e as Error).message}` }, 500);
   }
