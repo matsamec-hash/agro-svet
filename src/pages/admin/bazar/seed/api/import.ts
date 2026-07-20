@@ -109,6 +109,26 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const { paths: imagePaths, debug: imageDebug } = await downloadImages(supabase, parsed.imageUrls);
 
+    // Orientační poloha pro mapu (centrum města / PSČ), ať se seedovaný inzerát
+    // po zveřejnění zobrazí na /bazar/mapa. Bez souřadnic ho mapa nevykreslí.
+    // Lokální lookup pokryje ~230 CZ měst instantně; cizí lokality → null (bez pinu).
+    let latitude: number | null = null;
+    let longitude: number | null = null;
+    if (parsed.location) {
+      try {
+        const { geocode } = await import('../../../../../lib/geocode');
+        const geo = await geocode({ location: parsed.location });
+        // Držíme se v hrubých hranicích ČR — Nominatim může u cizí lokality vrátit
+        // nesmysl; radši žádný pin než pin v moři.
+        if (geo && geo.lat >= 48 && geo.lat <= 51.5 && geo.lng >= 12 && geo.lng <= 19) {
+          latitude = geo.lat;
+          longitude = geo.lng;
+        }
+      } catch (e) {
+        console.warn('[bazar/seed/import] geocode failed', e);
+      }
+    }
+
     const result = await createProspectWithDraft(supabase, {
       adminId: user.id,
       prospect: {
@@ -129,6 +149,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
         yearOfManufacture: structured.year,
         powerHp: structured.powerHp,
         hoursOperated: structured.hours,
+        latitude,
+        longitude,
       },
       imagePaths,
     });

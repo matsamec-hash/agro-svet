@@ -21,6 +21,8 @@ export interface DraftListingInput {
   yearOfManufacture?: number | null;
   powerHp?: number | null;
   hoursOperated?: number | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 /** Založí prospekta + jeho první draft listing (pending_claim, bez user_id). */
@@ -73,6 +75,8 @@ export async function addDraftListing(
       year_of_manufacture: listing.yearOfManufacture ?? null,
       power_hp: listing.powerHp ?? null,
       hours_operated: listing.hoursOperated ?? null,
+      latitude: listing.latitude ?? null,
+      longitude: listing.longitude ?? null,
     })
     .select('id')
     .single();
