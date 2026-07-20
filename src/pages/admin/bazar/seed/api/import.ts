@@ -50,41 +50,54 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const contact = body?.contact ?? {};
   if (!/^https?:\/\/.*bazos\.cz/i.test(url)) return json({ error: 'Zadejte platný odkaz na bazos.cz' }, 400);
 
-  const pageRes = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0 (agro-svet import)' } });
-  if (!pageRes.ok) return json({ error: `Stránku se nepodařilo stáhnout (${pageRes.status})` }, 502);
-  const html = await pageRes.text();
+  // Stažení stránky Bazoše — fetch může na produkčním Node serveru selhat
+  // (egress / blokace datacentra), proto ho obalujeme a vracíme čitelný důvod.
+  let html: string;
+  try {
+    const pageRes = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0 (agro-svet import)' } });
+    if (!pageRes.ok) return json({ error: `Stránku se nepodařilo stáhnout (HTTP ${pageRes.status})` }, 502);
+    html = await pageRes.text();
+  } catch (e) {
+    return json({ error: `Bazoš se ze serveru nepodařilo načíst: ${(e as Error).message}` }, 502);
+  }
 
   const parsed = parseBazosListing(html);
   if (!parsed.title) return json({ error: 'Z inzerátu se nepodařilo přečíst název — zkuste zadat ručně.' }, 422);
 
-  const rewritten = await rewriteListing({
-    title: parsed.title,
-    description: parsed.description ?? '',
-    apiKey: getEnvVar('ANTHROPIC_API_KEY') ?? '',
-  });
-  const category = suggestCategory(rewritten.title, rewritten.description);
+  // Zbytek (AI přepis, stažení fotek, zápis draftu) — jakoukoli chybu vrátíme
+  // jako čitelnou hlášku, ne jako neprůhledný 500.
+  try {
+    const rewritten = await rewriteListing({
+      title: parsed.title,
+      description: parsed.description ?? '',
+      apiKey: getEnvVar('ANTHROPIC_API_KEY') ?? '',
+    });
+    const category = suggestCategory(rewritten.title, rewritten.description);
 
-  const imagePaths = await downloadImages(supabase, parsed.imageUrls);
+    const imagePaths = await downloadImages(supabase, parsed.imageUrls);
 
-  const result = await createProspectWithDraft(supabase, {
-    adminId: user.id,
-    prospect: {
-      name: contact.name ?? '',
-      phone: contact.phone ?? parsed.phone ?? '',
-      email: contact.email ?? '',
-      sourceUrl: url,
-    },
-    listing: {
-      title: rewritten.title,
-      description: rewritten.description,
-      price: parsed.price,
-      category,
-      location: parsed.location ?? '',
-      phone: contact.phone ?? parsed.phone ?? '',
-      email: contact.email ?? '',
-    },
-    imagePaths,
-  });
+    const result = await createProspectWithDraft(supabase, {
+      adminId: user.id,
+      prospect: {
+        name: contact.name ?? '',
+        phone: contact.phone ?? parsed.phone ?? '',
+        email: contact.email ?? '',
+        sourceUrl: url,
+      },
+      listing: {
+        title: rewritten.title,
+        description: rewritten.description,
+        price: parsed.price,
+        category,
+        location: parsed.location ?? '',
+        phone: contact.phone ?? parsed.phone ?? '',
+        email: contact.email ?? '',
+      },
+      imagePaths,
+    });
 
-  return json({ ok: true, ...result });
+    return json({ ok: true, ...result });
+  } catch (e) {
+    return json({ error: `Import selhal: ${(e as Error).message}` }, 500);
+  }
 };
