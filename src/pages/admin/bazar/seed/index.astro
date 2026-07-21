@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import { createServerClient } from '../../../../lib/supabase';
 import { claimUrl } from '../../../../lib/bazar-seed-email';
+import { buildClaimWhatsAppMessage, claimWhatsAppUrl } from '../../../../lib/bazar-claim-whatsapp';
 
 // Middleware už gate-uje /admin/* přes is_admin (viz ostatní admin .astro
 // stránky — žádná z nich dělá vlastní kontrolu, locals.user navíc is_admin
@@ -13,6 +14,32 @@ const { data: prospects } = await supabase
   .select('id, name, email, phone, source_url, claim_token, status, created_at')
   .order('created_at', { ascending: false })
   .limit(100);
+
+// Titulky draftů (pro personalizovanou WhatsApp/claim zprávu) — jeden dotaz,
+// namapováno per prospekt přes seed_prospect_id.
+const prospectIds = (prospects ?? []).map((p) => p.id);
+const titleByProspect = new Map<string, string>();
+if (prospectIds.length > 0) {
+  const { data: drafts } = await supabase
+    .from('bazar_listings')
+    .select('seed_prospect_id, title')
+    .in('seed_prospect_id', prospectIds);
+  for (const d of drafts ?? []) {
+    const pid = (d as { seed_prospect_id?: string }).seed_prospect_id;
+    if (pid && !titleByProspect.has(pid)) titleByProspect.set(pid, (d as { title?: string }).title ?? '');
+  }
+}
+
+// Předpočítáme WhatsApp deep-link per prospekt s telefonem (klientský odkaz,
+// otevře WhatsApp s předvyplněnou claim zprávou; když tel. nejde normalizovat, null).
+function waUrlFor(p: { phone?: string | null; name?: string | null; claim_token: string; id: string }): string | null {
+  const message = buildClaimWhatsAppMessage({
+    name: p.name,
+    listingTitle: titleByProspect.get(p.id) ?? null,
+    url: claimUrl(p.claim_token),
+  });
+  return claimWhatsAppUrl(p.phone, message);
+}
 ---
 <Layout title="Bazar — Seeding">
   <main class="mx-auto max-w-4xl p-6">
@@ -46,18 +73,24 @@ const { data: prospects } = await supabase
         <th class="p-2">Prodejce</th><th class="p-2">Stav</th><th class="p-2">Odkaz</th>
       </tr></thead>
       <tbody>
-        {prospects?.map((p) => (
-          <tr class="border-b">
-            <td class="p-2">{p.name || '—'}<br /><span class="text-gray-500">{p.email || p.phone}</span></td>
-            <td class="p-2">{p.status}</td>
-            <td class="p-2">
-              <button type="button" class="copyBtn underline" data-url={claimUrl(p.claim_token)}>Kopírovat odkaz</button>
-              {p.email && (
-                <button type="button" class="sendBtn underline ml-3" data-id={p.id}>Poslat e-mailem</button>
-              )}
-            </td>
-          </tr>
-        ))}
+        {prospects?.map((p) => {
+          const waUrl = waUrlFor(p);
+          return (
+            <tr class="border-b">
+              <td class="p-2">{p.name || '—'}<br /><span class="text-gray-500">{p.email || p.phone}</span></td>
+              <td class="p-2">{p.status}</td>
+              <td class="p-2">
+                <button type="button" class="copyBtn underline" data-url={claimUrl(p.claim_token)}>Kopírovat odkaz</button>
+                {waUrl && (
+                  <a href={waUrl} target="_blank" rel="noopener" class="underline ml-3 text-green-700">WhatsApp</a>
+                )}
+                {p.email && (
+                  <button type="button" class="sendBtn underline ml-3" data-id={p.id}>Poslat e-mailem</button>
+                )}
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   </main>
