@@ -111,7 +111,7 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
     ],
   },
   {
-    section: 'data', labelKey: 'nav.data', href: '/statistiky/',
+    section: 'data', labelKey: 'nav.data', href: '/data/',
     children: [
       { labelKey: 'nav.data.markets', href: '/statistiky/' },
       { labelKey: 'nav.data.soil', href: '/puda/' },
