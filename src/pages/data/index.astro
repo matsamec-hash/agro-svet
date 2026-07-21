@@ -323,9 +323,10 @@ const href = (p: string) => navHref(locale, p);
   .dh-tile:hover .go{background:var(--yellow);border-color:var(--yellow);color:var(--ink)}
   .dh-tile:hover .go svg{transform:translate(2px,-2px)}
   .dh-tile .go svg{transition:transform .18s}
-  .dh-tile h3{font-size:25px;letter-spacing:-.02em;font-weight:800;margin-bottom:8px;text-shadow:0 1px 2px rgba(0,0,0,.92),0 0 12px rgba(0,0,0,.7),0 0 26px rgba(0,0,0,.5)}
+  .dh-tile h3{color:#fff;font-size:25px;letter-spacing:-.02em;font-weight:800;margin-bottom:8px;text-shadow:0 1px 2px rgba(0,0,0,.92),0 0 12px rgba(0,0,0,.7),0 0 26px rgba(0,0,0,.5)}
   .dh-tile p{font-size:14.5px;color:rgba(255,255,255,.92);max-width:44ch;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 12px rgba(0,0,0,.6)}
-  .dh-tile.feat h3,.dh-tile.feat p{text-shadow:none}
+  .dh-tile.feat h3{color:var(--ink);text-shadow:none}
+  .dh-tile.feat p{text-shadow:none}
   .dh-tile .tstat{margin-top:16px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
   .statpill{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:800;color:#fff;background:rgba(255,255,255,.14);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:7px 12px;font-variant-numeric:tabular-nums}
   .statpill .u{font-size:11px;color:rgba(255,255,255,.7);font-weight:600}
