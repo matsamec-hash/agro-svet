@@ -67,6 +67,13 @@ const images = (listing.bazar_images ?? []).map((img: any) => {
 
 const categoryLabel = CATEGORIES.find(c => c.value === listing.category)?.label ?? listing.category;
 const brandLabel = BRANDS.find(b => b.value === listing.brand)?.label ?? listing.brand;
+// Odkazuj na path-based landing pages (/bazar/kategorie/…) — konsoliduje SEO
+// signály z každého inzerátu na landing, ne na query-string filtr. Fallback na
+// query-string jen pro (vzácnou) neznámou kategorii/značku, ať nelinkujeme na 404.
+const catKnown = CATEGORIES.some(c => c.value === listing.category);
+const brandKnown = Boolean(listing.brand) && BRANDS.some(b => b.value === listing.brand);
+const categoryHref = catKnown ? `/bazar/kategorie/${listing.category}/` : `/bazar/?category=${listing.category}`;
+const brandHref = catKnown && brandKnown ? `/bazar/kategorie/${listing.category}/${listing.brand}/` : null;
 const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(listing.created_at));
 const priceText = listing.price ? `${listing.price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
 const sellerName = listing.bazar_users?.name ?? 'Neznámý';
@@ -99,7 +106,8 @@ const productJsonLd = bazarListingProductSchema(
 );
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Bazar', url: '/bazar/' },
-  { name: categoryLabel, url: `/bazar/?category=${listing.category}` },
+  { name: categoryLabel, url: categoryHref },
+  ...(brandHref ? [{ name: brandLabel as string, url: brandHref }] : []),
   { name: listing.title, url: `/bazar/${listing.id}/` },
 ]);
 ---
@@ -119,7 +127,13 @@ const breadcrumbJsonLd = breadcrumbSchema([
     <nav style="font-size:13px; color:#666; margin-bottom:20px;">
       <a href="/bazar/" style="color:#666; text-decoration:none;">Bazar</a>
       <span> &rarr; </span>
-      <a href={`/bazar/?category=${listing.category}`} style="color:#666; text-decoration:none;">{categoryLabel}</a>
+      <a href={categoryHref} style="color:#666; text-decoration:none;">{categoryLabel}</a>
+      {brandHref && (
+        <>
+          <span> &rarr; </span>
+          <a href={brandHref} style="color:#666; text-decoration:none;">{brandLabel}</a>
+        </>
+      )}
       <span> &rarr; </span>
       <span style="color:#555;">{listing.title}</span>
     </nav>

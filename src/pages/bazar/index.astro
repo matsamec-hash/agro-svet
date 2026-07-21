@@ -4,7 +4,7 @@ import BazarSidebar from '../../components/bazar/BazarSidebar.astro';
 import BazarListingRow from '../../components/bazar/BazarListingRow.astro';
 import BazarPagination from '../../components/bazar/BazarPagination.astro';
 import BazarFeaturedGrid from '../../components/bazar/BazarFeaturedGrid.astro';
-import { CATEGORIES } from '../../lib/bazar-constants';
+import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
 import { createServerClient } from '../../lib/supabase';
 import { isFeaturedActive } from '../../lib/bazar-featured';
 import { getModelBySlug } from '../../lib/stroje';
@@ -84,6 +84,29 @@ const hasFilters = Boolean(
 );
 const isDefaultView = page === 1 && !hasFilters;
 
+// --- SEO: konsolidace query-string filtrů do path-based landing pages ---
+// /bazar/?category=X (±brand) je near-duplikát /bazar/kategorie/X/ → canonical
+// na landing, ať se ranking signály nesplitují. Ostatní filtr-kombinace
+// (cena/rok/výkon/model/hledání/stránkování) jsou nekonečné thin views → noindex.
+const catKnown = Boolean(category) && CATEGORIES.some((c) => c.value === category);
+const brandKnown = Boolean(brand) && BRANDS.some((b) => b.value === brand);
+const hasExtraFilters = Boolean(
+  query || location || subcategory ||
+  priceFrom || priceTo || yearFrom || yearTo ||
+  powerFrom || powerTo || zaberFrom || zaberTo ||
+  nosnostFrom || nosnostTo || objemFrom || objemTo ||
+  modelSlugs.length
+);
+// "Landing-ekvivalent" = jen kategorie (±známá značka), 1. stránka, bez extra filtrů.
+const isLandingEquivalent = catKnown && !hasExtraFilters && page === 1;
+const bazarCanonical = isLandingEquivalent
+  ? (brandKnown
+      ? `${SITE_URL}/bazar/kategorie/${category}/${brand}/`
+      : `${SITE_URL}/bazar/kategorie/${category}/`)
+  : undefined;
+// Index jen default view a landing-ekvivalenty (ty přes canonical mířící na landing).
+const bazarNoindex = !isDefaultView && !isLandingEquivalent;
+
 // Edge-cache the default unfiltered landing — it's what 80% of visitors hit.
 // 60s s-maxage with 5min SWR keeps new listings near-realtime while collapsing
 // the per-request Supabase fan-out into a handful of cache misses per minute.
@@ -142,7 +165,7 @@ const itemListJsonLd = page === 1 && displayedListings.length > 0 ? {
 } : null;
 ---
 
-<Layout title={isDefaultView ? "Bazar zemědělské techniky — traktory, stroje, pozemky a zvířata" : "Agro bazar — inzeráty"} description="Inzerce zemědělských strojů, techniky, pozemků a zvířat. Inzeráty traktorů a kombajnů přímo od majitelů, bez provize. Vložte inzerát zdarma.">
+<Layout title={isDefaultView ? "Bazar zemědělské techniky — traktory, stroje, pozemky a zvířata" : "Agro bazar — inzeráty"} description="Inzerce zemědělských strojů, techniky, pozemků a zvířat. Inzeráty traktorů a kombajnů přímo od majitelů, bez provize. Vložte inzerát zdarma." canonical={bazarCanonical} noindex={bazarNoindex}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:32px 32px 80px;">
