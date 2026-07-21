@@ -5,7 +5,7 @@
 // SSR (prerender=false) kvůli locale rewrite jako zbytek /statistiky.
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { useTranslations, localizePath, navHref } from '../../../i18n/utils';
+import { useTranslations, localizePath, navHref, tf } from '../../../i18n/utils';
 import { udrzovatelSlug } from '../../../lib/plodiny';
 import statsCs from '../../../data/agro-stats.json';
 import statsSk from '../../../data/agro-stats-sk.json';
@@ -52,59 +52,61 @@ const chartData = {
   numLocale,
 };
 
-const title = `${series.name} — vývoj ceny | agro-svět.cz`;
-const description = `Aktuální cena komodity ${series.name}: ${fmt(price)} ${series.unit} (${month}). Kompletní cenová historie od roku ${firstYear}, meziroční změna, minima a maxima.`;
+const title = tf(locale, 'komodita.metaTitle', { name: series.name });
+const description = tf(locale, 'komodita.metaDesc', { name: series.name, price: fmt(price), unit: series.unit, month, year: firstYear });
+// Detail jen pro locale s reálnými daty+copy (cs + sk). uk/pl = cs fallback → noindex.
+const detailNoindex = locale !== 'cs' && locale !== 'sk';
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} noindex={detailNoindex} noHreflang={true}>
   <main class="kd">
     <div class="kd-wrap">
       <nav class="kd-crumb" aria-label="Drobečková navigace">
-        <a href={navHref(locale, '/data/')}>{t('stat.bc.home') || 'Data'}</a>
+        <a href={navHref(locale, '/data/')}>{t('nav.data')}</a>
         <span>/</span>
-        <a href={navHref(locale, '/statistiky/')}>Trhy a komodity</a>
+        <a href={navHref(locale, '/statistiky/')}>{t('komodita.crumbMarkets')}</a>
         <span>/</span>
         <b>{series.name}</b>
       </nav>
 
       <header class="kd-head">
         <div>
-          <span class="kd-eyebrow">Cena komodity · živě</span>
+          <span class="kd-eyebrow">{t('komodita.eyebrow')}</span>
           <h1>{series.name}</h1>
-          <p class="kd-sub">Vývoj ceny od roku {firstYear} · zdroj ČSÚ</p>
+          <p class="kd-sub">{tf(locale, 'komodita.since', { year: firstYear })}</p>
         </div>
         <div class="kd-price">
           <div class="kd-now">{fmt(price)} <small>{series.unit}</small></div>
           {yoy !== null && (
-            <span class={`kd-yoy ${yoy >= 0 ? 'up' : 'dn'}`}>{yoy >= 0 ? '▲' : '▼'} {Math.abs(yoy).toFixed(1).replace('.', ',')} % meziročně</span>
+            <span class={`kd-yoy ${yoy >= 0 ? 'up' : 'dn'}`}>{yoy >= 0 ? '▲' : '▼'} {Math.abs(yoy).toFixed(1).replace('.', ',')} % {t('komodita.yoy')}</span>
           )}
-          {month && <span class="kd-asof">poslední údaj · {month}</span>}
+          {month && <span class="kd-asof">{tf(locale, 'komodita.asof', { month })}</span>}
         </div>
       </header>
 
       <div class="kd-stats">
-        <div class="kd-stat"><span class="l">Maximum</span><span class="v">{fmt(maxV)} <small>{series.unit}</small></span><span class="d">{maxPt?.label}</span></div>
-        <div class="kd-stat"><span class="l">Minimum</span><span class="v">{fmt(minV)} <small>{series.unit}</small></span><span class="d">{minPt?.label}</span></div>
-        <div class="kd-stat"><span class="l">Aktuální</span><span class="v">{fmt(latest)} <small>{series.unit}</small></span><span class="d">{series.data[series.data.length - 1]?.label}</span></div>
-        <div class="kd-stat"><span class="l">Záznamů</span><span class="v">{series.data.length}</span><span class="d">měsíčních cen</span></div>
+        <div class="kd-stat"><span class="l">{t('komodita.max')}</span><span class="v">{fmt(maxV)} <small>{series.unit}</small></span><span class="d">{maxPt?.label}</span></div>
+        <div class="kd-stat"><span class="l">{t('komodita.min')}</span><span class="v">{fmt(minV)} <small>{series.unit}</small></span><span class="d">{minPt?.label}</span></div>
+        <div class="kd-stat"><span class="l">{t('komodita.current')}</span><span class="v">{fmt(latest)} <small>{series.unit}</small></span><span class="d">{series.data[series.data.length - 1]?.label}</span></div>
+        <div class="kd-stat"><span class="l">{t('komodita.records')}</span><span class="v">{series.data.length}</span><span class="d">{t('komodita.recordsSub')}</span></div>
       </div>
 
       <section class="kd-chartcard">
         <div class="kd-chart-head">
-          <h2>Cenová historie</h2>
-          <div class="kd-ranges" role="group" aria-label="Časový rozsah">
-            <button type="button" data-range="12">1 rok</button>
-            <button type="button" data-range="60">5 let</button>
-            <button type="button" class="on" data-range="all">Vše</button>
+          <h2>{t('komodita.chartTitle')}</h2>
+          <div class="kd-ranges" role="group" aria-label={t('komodita.chartTitle')}>
+            <button type="button" data-range="12">{t('komodita.range1y')}</button>
+            <button type="button" data-range="60">{t('komodita.range5y')}</button>
+            <button type="button" class="on" data-range="all">{t('komodita.rangeAll')}</button>
           </div>
         </div>
-        {avgSeries.length > 0 && <span class="kd-legend"><i class="dot ink"></i>{series.name}<i class="dot dash"></i>5letý sezónní průměr</span>}
+        {avgSeries.length > 0 && <span class="kd-legend"><i class="dot ink"></i>{series.name}<i class="dot dash"></i>{t('komodita.avgLegend')}</span>}
         <div class="kd-chartwrap"><canvas id="kdChart" height="300"></canvas></div>
       </section>
 
       {others.length > 0 && (
         <section class="kd-others">
-          <h2>Další komodity</h2>
+          <h2>{t('komodita.others')}</h2>
           <div class="kd-chips">
             {others.map((o: any) => (
               <a class="kd-chip" href={navHref(locale, `/statistiky/komodita/${o.slug}/`)}>{o.name}</a>
@@ -113,7 +115,7 @@ const description = `Aktuální cena komodity ${series.name}: ${fmt(price)} ${se
         </section>
       )}
 
-      <a class="kd-back" href={navHref(locale, '/statistiky/')}>← Zpět na všechny komodity a trhy</a>
+      <a class="kd-back" href={navHref(locale, '/statistiky/')}>{t('komodita.back')}</a>
     </div>
   </main>
 

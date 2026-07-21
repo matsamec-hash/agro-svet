@@ -31,7 +31,7 @@ export function localizePath(locale: Locale, path: string): string {
  *  noindex (servíruje cs tělo) dokud není lokalizován. */
 export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   cs: [],
-  sk: ['/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
+  sk: ['/data', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
   uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace'],
   // PL fáze 1: katalog (data-driven) + slovník. Fáze 3: + /puda (PL trh s půdou).
   // Zbylá jurisdikční data (statistiky/dotace) zůstávají cs → pozdější fáze.

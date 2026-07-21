@@ -40,6 +40,10 @@ interface Props {
   preloadHeroSizes?: string;
   /** Cap srcset width — useful when hero is small on mobile and w1600+ is wasted bytes. */
   preloadHeroMaxWidth?: number;
+  /** Potlačí cross-locale hreflang alternates (jen canonical). Pro stránky, jejichž
+   *  URL prostor se nemapuje 1:1 napříč locale (např. detail komodity — sk slugy
+   *  jsou jiné než cs). */
+  noHreflang?: boolean;
 }
 
 const {
@@ -56,6 +60,7 @@ const {
   preloadHeroImage,
   preloadHeroSizes,
   preloadHeroMaxWidth,
+  noHreflang = false,
 } = Astro.props;
 
 const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSizes, preloadHeroMaxWidth) : null;
@@ -118,7 +123,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
   <link rel="canonical" href={canonicalUrl} />
-  {anyAlt ? (
+  {noHreflang ? null : anyAlt ? (
     <>
       <link rel="alternate" hreflang="cs" href={hreflangCsUrl} />
       {skLaunchedPath && <link rel="alternate" hreflang="sk" href={hreflangSkUrl} />}

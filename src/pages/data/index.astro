@@ -39,39 +39,29 @@ const tickItems: Tick[] = [
 const nafta = latestFuels?.find((f: any) => /nafta/i.test(f.fuel));
 if (nafta) tickItems.push({ name: 'Nafta', value: `${fmt(nafta.price, 2)} ${locale === 'sk' ? 'EUR/l' : 'Kč/l'}`, changePct: null, href: `${navHref(locale, '/statistiky/')}#vstupy` });
 
-// ── Hero graf: posledních 24 měsíců vybraných komodit → klient ──
-const HERO_NAMES = ['Pšenice', 'Řepka', 'Kukuřice', 'Ječmen', 'Mléko'];
-const heroSeries = HERO_NAMES
-  .map((n) => commodityFull.find((s: any) => s.name === n))
-  .filter(Boolean)
+// ── Hero graf: posledních 24 měsíců prvních 5 komodit (locale-agnostic — sk má
+// jiné názvy, proto NE natvrdo české názvy) → klient ──
+const heroSeries = commodityFull
+  .filter((s: any) => Array.isArray(s.data) && s.data.length > 1)
+  .slice(0, 5)
   .map((s: any) => ({ name: s.name, unit: s.unit, points: s.data.slice(-24).map((d: any) => ({ label: d.label, value: d.value })) }));
 
 // ── Statpill: Pšenice pro Trhy dlaždici ──
 const wheat = commodityStats.find((c: any) => /pšenice|pšenica/i.test(c.name)) ?? commodityStats[0];
 
-// ── Copy (cs primár, sk fallback na cs) ──
-const CO: Record<string, any> = {
-  cs: {
-    eyebrow: 'Datová sekce · živě', h1a: 'Data o českém', h1mark: 'zemědělství',
-    lede: 'Živé ceny komodit, hodnota půdy, srovnání se světem a nástroje pro vaši farmu — na jednom místě.',
-    sDatasets: 'datových sad', sCountries: 'zemí světa', sYears: 'let historie',
-    live: 'Živá data', jump: 'Skočit na',
-    c1: 'Živá data — Česko', c1sub: 'Aktuální čísla u nás',
-    c2: 'Svět', c2sub: 'Jak si ČR stojí',
-    c3: 'Nástroje & dotace', c3sub: 'Spočítej to pro svoji farmu',
-    trhy: 'Trhy a komodity', trhyP: 'Ceny plodin, vstupů a hnojiv, cenové nůžky, produkce i stavy zvířat — v živých interaktivních grafech.',
-    puda: 'Zemědělská půda', pudaP: 'Cena, struktura, eroze a vlastnictví zemědělské půdy podle jednotlivých krajů.',
-    profily: 'Profily zemí', profilyP: 'Zemědělství 40+ zemí — výměry, výnosy, dotace a regionální mapy až na úroveň krajů.',
-    srovnani: 'Srovnání zemí', srovnaniP: 'Postavte kterékoli země vedle sebe a porovnejte výnosy, dotace i výměry v interaktivním grafu.',
-    cap: 'Kalkulačky & dotace CAP', capP: 'Zadejte výměru a plodiny — spočítáme odhad přímých plateb ze SZP. Plus úspora nafty, převody jednotek a další.',
-    dotace: 'Dotace', dotaceP: 'Přehled dotačních titulů, termínů a podmínek SZIF.',
-    popular: 'Nejoblíbenější', komodit: 'komodit', kraju: 'krajů', zemi: 'zemí',
-    regionMap: 'regionální data', multiGraf: 'interaktivní multi-graf', kalk5: '+ 5 kalkulaček', terminy: 'aktuální termíny',
-    metaTitle: 'Data o českém zemědělství — ceny, půda, dotace | agro-svět.cz',
-    metaDesc: 'Živé ceny komodit, hodnota zemědělské půdy, mezinárodní srovnání a kalkulačky dotací na jednom místě.',
-  },
+// ── Copy z i18n (cs/sk klíče; uk/pl fallback na cs přes t()) ──
+const k = (s: string) => t(`data.hub.${s}`);
+const c = {
+  eyebrow: k('eyebrow'), h1a: k('h1a'), h1mark: k('h1mark'), lede: k('lede'),
+  sDatasets: k('sDatasets'), sCountries: k('sCountries'), sYears: k('sYears'), jump: k('jump'),
+  c1: k('c1'), c1sub: k('c1sub'), c2: k('c2'), c2sub: k('c2sub'), c3: k('c3'), c3sub: k('c3sub'),
+  trhy: k('trhy'), trhyP: k('trhyP'), puda: k('puda'), pudaP: k('pudaP'),
+  profily: k('profily'), profilyP: k('profilyP'), srovnani: k('srovnani'), srovnaniP: k('srovnaniP'),
+  cap: k('cap'), capP: k('capP'), dotace: k('dotace'), dotaceP: k('dotaceP'),
+  popular: k('popular'), komodit: k('komodit'), kraju: k('kraju'), zemi: k('zemi'),
+  regionMap: k('regionMap'), multiGraf: k('multiGraf'), kalk5: k('kalk5'), terminy: k('terminy'),
+  metaTitle: k('metaTitle'), metaDesc: k('metaDesc'),
 };
-const c = CO[locale] ?? CO.cs;
 
 // ── Dlaždice (locale gating přes isLaunchedPath) ──
 const show = (p: string) => locale === 'cs' || isLaunchedPath(locale, p);
