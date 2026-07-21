@@ -30,6 +30,17 @@ const { data: prospects } = await supabase
       <p id="importMsg" class="text-sm mt-2"></p>
     </section>
 
+    <section class="mb-8 rounded border p-4">
+      <h2 class="font-semibold mb-2">Hromadný import (víc odkazů najednou)</h2>
+      <p class="text-sm text-gray-600 mb-2">Vlož odkazy na inzeráty z bazos.cz — jeden na řádek (max 20). Kontakt se vezme z inzerátu. Vytvoří se drafty ke schválení.</p>
+      <form id="batchForm" class="grid gap-2">
+        <textarea name="urls" rows="6" required placeholder="https://…bazos.cz/inzerat/…&#10;https://…bazos.cz/inzerat/…" class="border p-2 font-mono text-xs"></textarea>
+        <button class="bg-green-800 text-white p-2 rounded">Importovat vše</button>
+      </form>
+      <p id="batchMsg" class="text-sm mt-2"></p>
+      <ul id="batchResults" class="text-sm mt-2 space-y-1"></ul>
+    </section>
+
     <table class="w-full text-sm border-collapse">
       <thead><tr class="text-left border-b">
         <th class="p-2">Prodejce</th><th class="p-2">Stav</th><th class="p-2">Odkaz</th>
@@ -71,6 +82,42 @@ const { data: prospects } = await supabase
         ? `Hotovo — draft vytvořen. Fotky ${data.imageCount ?? 0}/${data.imageUrlsFound ?? 0} — ${(data.imageDebug || []).join(' | ') || 'žádné URL'}`
         : `Chyba: ${data.error}`;
       // Bez auto-reloadu, ať je diagnostika fotek čitelná; řádek se objeví po ručním F5.
+    });
+
+    const batchForm = document.getElementById('batchForm') as HTMLFormElement;
+    const batchMsg = document.getElementById('batchMsg')!;
+    const batchResults = document.getElementById('batchResults')!;
+    batchForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = batchForm.querySelector('button')!;
+      btn.disabled = true;
+      batchMsg.textContent = 'Importuji dávku… (může chvíli trvat)';
+      batchResults.innerHTML = '';
+      try {
+        const res = await fetch('/admin/bazar/seed/api/import/', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ urls: (new FormData(batchForm).get('urls') as string) }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.batch) {
+          batchMsg.textContent = `Chyba: ${data.error || 'neznámá'}`;
+        } else {
+          batchMsg.textContent = `Hotovo — ${data.succeeded}/${data.total} vytvořeno, ${data.failed} selhalo. Řádky se objeví po F5.`;
+          for (const r of data.results) {
+            const li = document.createElement('li');
+            li.textContent = r.ok
+              ? `✅ ${r.title || r.url} — fotky ${r.imageCount ?? 0}/${r.imageUrlsFound ?? 0}`
+              : `❌ ${r.url} — ${r.error}`;
+            li.className = r.ok ? 'text-green-700' : 'text-red-700';
+            batchResults.appendChild(li);
+          }
+        }
+      } catch (err) {
+        batchMsg.textContent = `Chyba sítě: ${(err as Error).message}`;
+      } finally {
+        btn.disabled = false;
+      }
     });
 
     document.querySelectorAll('.copyBtn').forEach((b) =>

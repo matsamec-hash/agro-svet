@@ -5,6 +5,7 @@ import { parseBazosListing } from '../../../../../lib/bazar-import-parse';
 import { suggestCategory, matchBrand } from '../../../../../lib/bazar-import-category';
 import { structureListing } from '../../../../../lib/bazar-import-structure';
 import { createProspectWithDraft } from '../../../../../lib/bazar-seed';
+import { parseBatchUrls } from '../../../../../lib/bazar-batch-urls';
 
 export const prerender = false;
 
@@ -73,39 +74,33 @@ async function downloadImages(
   return { paths, debug };
 }
 
-export const POST: APIRoute = async ({ request, locals }) => {
-  const user = locals.user;
-  if (!user) return json({ error: 'unauthenticated' }, 401);
+type ImportOk = { ok: true; imageCount: number; imageUrlsFound: number; imageDebug: string[]; [k: string]: unknown };
+type ImportErr = { ok: false; error: string; status: number };
 
-  const supabase = createServerClient();
-
-  // Defense in depth — middleware /admin/* už checkuje is_admin (locals.user
-  // nemá is_admin, ten žije v bazar_users; viz ostatní admin API routy).
-  const { data: profile } = await supabase
-    .from('bazar_users')
-    .select('is_admin')
-    .eq('id', user.id)
-    .maybeSingle();
-  if (!(profile as { is_admin?: boolean } | null)?.is_admin) return json({ error: 'forbidden' }, 403);
-
-  const body = await request.json().catch(() => null);
-  const url = typeof body?.url === 'string' ? body.url.trim() : '';
-  const contact = body?.contact ?? {};
-  if (!/^https?:\/\/.*bazos\.cz/i.test(url)) return json({ error: 'Zadejte platný odkaz na bazos.cz' }, 400);
-
+/**
+ * Import ONE bazos listing → pending_claim draft. Vrací strukturovaný výsledek
+ * (ne Response), aby ho mohl volat single i batch režim. Chování je identické
+ * s původním single-import flow (fetch → parse → AI → fotky → geocode → draft).
+ */
+async function importOne(
+  supabase: ReturnType<typeof createServerClient>,
+  url: string,
+  contact: { name?: string; phone?: string; email?: string },
+  adminId: string,
+): Promise<ImportOk | ImportErr> {
   // Stažení stránky Bazoše — fetch může na produkčním Node serveru selhat
   // (egress / blokace datacentra), proto ho obalujeme a vracíme čitelný důvod.
   let html: string;
   try {
     const pageRes = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0 (agro-svet import)' } });
-    if (!pageRes.ok) return json({ error: `Stránku se nepodařilo stáhnout (HTTP ${pageRes.status})` }, 502);
+    if (!pageRes.ok) return { ok: false, error: `Stránku se nepodařilo stáhnout (HTTP ${pageRes.status})`, status: 502 };
     html = await pageRes.text();
   } catch (e) {
-    return json({ error: `Bazoš se ze serveru nepodařilo načíst: ${(e as Error).message}` }, 502);
+    return { ok: false, error: `Bazoš se ze serveru nepodařilo načíst: ${(e as Error).message}`, status: 502 };
   }
 
   const parsed = parseBazosListing(html);
-  if (!parsed.title) return json({ error: 'Z inzerátu se nepodařilo přečíst název — zkuste zadat ručně.' }, 422);
+  if (!parsed.title) return { ok: false, error: 'Z inzerátu se nepodařilo přečíst název — zkuste zadat ručně.', status: 422 };
 
   // Zbytek (AI přepis, stažení fotek, zápis draftu) — jakoukoli chybu vrátíme
   // jako čitelnou hlášku, ne jako neprůhledný 500.
@@ -151,7 +146,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     const result = await createProspectWithDraft(supabase, {
-      adminId: user.id,
+      adminId,
       prospect: {
         name: contact.name ?? '',
         phone: contact.phone ?? parsed.phone ?? '',
@@ -176,14 +171,50 @@ export const POST: APIRoute = async ({ request, locals }) => {
       imagePaths,
     });
 
-    return json({
-      ok: true,
-      imageCount: imagePaths.length,
-      imageUrlsFound: parsed.imageUrls.length,
-      imageDebug,
-      ...result,
-    });
+    return { ok: true, title: structured.title, imageCount: imagePaths.length, imageUrlsFound: parsed.imageUrls.length, imageDebug, ...result };
   } catch (e) {
-    return json({ error: `Import selhal: ${(e as Error).message}` }, 500);
+    return { ok: false, error: `Import selhal: ${(e as Error).message}`, status: 500 };
   }
+}
+
+export const POST: APIRoute = async ({ request, locals }) => {
+  const user = locals.user;
+  if (!user) return json({ error: 'unauthenticated' }, 401);
+
+  const supabase = createServerClient();
+
+  // Defense in depth — middleware /admin/* už checkuje is_admin (locals.user
+  // nemá is_admin, ten žije v bazar_users; viz ostatní admin API routy).
+  const { data: profile } = await supabase
+    .from('bazar_users')
+    .select('is_admin')
+    .eq('id', user.id)
+    .maybeSingle();
+  if (!(profile as { is_admin?: boolean } | null)?.is_admin) return json({ error: 'forbidden' }, 403);
+
+  const body = await request.json().catch(() => null);
+  const contact = body?.contact ?? {};
+
+  // Batch režim: `urls` = blob vložených odkazů (víc na řádcích / oddělené čárkami).
+  // Projede se STEJNÝM ověřeným flow jako single, sekvenčně (šetrně k Bazoši),
+  // s tvrdým capem v parseBatchUrls. Kontakt se nechává prázdný → použije se
+  // telefon z inzerátu (parsed.phone).
+  const rawBatch = typeof body?.urls === 'string'
+    ? body.urls
+    : Array.isArray(body?.urls) ? body.urls.join('\n') : '';
+  const batchUrls = parseBatchUrls(rawBatch);
+  if (batchUrls.length > 0) {
+    const results: Array<{ url: string } & (ImportOk | ImportErr)> = [];
+    for (const u of batchUrls) {
+      results.push({ url: u, ...(await importOne(supabase, u, contact, user.id)) });
+    }
+    const succeeded = results.filter((r) => r.ok).length;
+    return json({ batch: true, total: results.length, succeeded, failed: results.length - succeeded, results });
+  }
+
+  // Single režim (zpětně kompatibilní — identická odpověď jako dřív).
+  const url = typeof body?.url === 'string' ? body.url.trim() : '';
+  if (!/^https?:\/\/.*bazos\.cz/i.test(url)) return json({ error: 'Zadejte platný odkaz na bazos.cz' }, 400);
+  const r = await importOne(supabase, url, contact, user.id);
+  return r.ok ? json(r) : json({ error: r.error }, r.status);
 };
