@@ -19,7 +19,9 @@ const { commodityFull, commodityStats, fiveYearAvgs } = stats;
 const slug = Astro.params.slug;
 
 const series = commodityFull.find((s: any) => udrzovatelSlug(s.name) === slug);
-if (!series) return new Response('Not found', { status: 404 });
+// Neznámý slug (vč. přepnutí jazyka na komoditu, která v daném locale neexistuje —
+// sk má jiné/méně komodit) → přesměruj na přehled trhů daného locale, ne 404.
+if (!series) return Astro.redirect(navHref(locale, '/statistiky/'), 302);
 const stat = commodityStats.find((c: any) => c.name === series.name);
 const avgSeries: { label: string; avg: number }[] = (fiveYearAvgs && fiveYearAvgs[series.name]) || [];
 const others = commodityFull
