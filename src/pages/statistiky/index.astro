@@ -14,7 +14,6 @@ import { statTakeaways, scissorsInsightText, livestockInsightText } from '../../
 import statsCs from '../../data/agro-stats.json';
 import statsSk from '../../data/agro-stats-sk.json';
 
-import DataSegmentNav from '../../components/DataSegmentNav.astro';
 import HomeWeather from '../../components/HomeWeather.astro';
 import Hero from '../../components/statistiky/Hero.astro';
 import SparklineTicker from '../../components/statistiky/SparklineTicker.astro';
@@ -150,7 +149,6 @@ const PILLS = [
   })} />
 
   <main class="sp-page">
-    <DataSegmentNav active="komodity" />
     <Hero
       datasetCount={datasetCount}
       yearsCovered={yearsCovered}

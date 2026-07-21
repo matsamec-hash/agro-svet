@@ -173,12 +173,21 @@ const itemListJsonLd = homepageItems.length > 0 ? {
       transform:translate(0,0);
       box-shadow:0 0 0 #0A0A0B;
     }
+    .data-kicker {
+      display:inline-flex; align-items:center; gap:6px;
+      font:800 11px 'Chakra Petch',sans-serif; letter-spacing:.18em; text-transform:uppercase;
+      color:#6E6E76; text-decoration:none; margin-bottom:8px;
+      transition:color .15s;
+    }
+    .data-kicker:hover { color:#0A0A0B; }
+    .data-kicker b { color:#0A0A0B; border-bottom:2px solid #FFEA00; padding-bottom:1px; }
   </style>
 
   <!-- Data: Zemědělská půda — Open-Meteo card s nadpisem (lazy, klient-side) -->
   <section style="max-width:1280px; margin:0 auto; padding:24px 32px;">
     <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
       <div>
+        <a href={localizeInternalHref(locale, '/data/')} class="data-kicker">Datová sekce → <b>vše na jednom místě</b></a>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);">Data: Zemědělská půda</h2>
       </div>
       <a href={localizeInternalHref(locale, '/puda/')} class="link-cta">Zobrazit celou sekci →</a>

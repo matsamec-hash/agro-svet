@@ -178,7 +178,7 @@ const FOOTER: { section: string; headingKey: string; links: { labelKey: string; 
       { labelKey: 'footer.techCatalog', href: '/stroje/' },
       { labelKey: 'footer.breeds', href: '/plemena/' },
       { labelKey: 'footer.soil', href: '/puda/' },
-      { labelKey: 'footer.dataStats', href: '/statistiky/' },
+      { labelKey: 'footer.dataStats', href: '/data/' },
     ],
   },
   {
