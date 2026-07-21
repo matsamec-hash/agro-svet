@@ -1,0 +1,230 @@
+---
+// Path-based category landing page — SEO target: "bazar traktorů",
+// "prodej kombajnů", "ojeté secí stroje". Mirrors /bazar/kraj/[slug]/.
+//
+// The bazar index (/bazar/) filters categories via query string
+// (?category=traktory), which Google does not index as a landing page. This
+// route gives every category a crawlable path with unique title/H1/intro copy,
+// its own listings, and internal links down to per-brand pages.
+
+export const prerender = false;
+
+import Layout from '../../../../layouts/Layout.astro';
+import { createServerClient } from '../../../../lib/supabase';
+import { CATEGORIES } from '../../../../lib/bazar-constants';
+import {
+  findCategory,
+  findBrand,
+  categoryIntro,
+  categoryTitle,
+  categoryDescription,
+} from '../../../../lib/bazar-landing';
+import { breadcrumbSchema, itemListSchema } from '../../../../lib/structured-data';
+import { SITE_URL } from '../../../../lib/config';
+import BazarListingRow from '../../../../components/bazar/BazarListingRow.astro';
+
+const { kat } = Astro.params;
+const category = findCategory(kat);
+if (!category) return Astro.rewrite('/404');
+
+const canonical = `${SITE_URL}/bazar/kategorie/${category.value}/`;
+const supabase = createServerClient();
+
+// Listings to display (featured first, then newest).
+const { data: listings } = await supabase
+  .from('bazar_listings')
+  .select('id, title, price, category, subcategory, brand, location, created_at, views, featured, pracovni_zaber_m, nosnost_kg, objem_nadrze_l, bazar_images(storage_path, position)')
+  .eq('status', 'active')
+  .eq('category', category.value)
+  .order('featured', { ascending: false })
+  .order('created_at', { ascending: false })
+  .limit(60);
+
+const count = listings?.length ?? 0;
+
+// Distinct brands present in this category → internal links to per-brand pages.
+const { data: brandRows } = await supabase
+  .from('bazar_listings')
+  .select('brand')
+  .eq('status', 'active')
+  .eq('category', category.value)
+  .not('brand', 'is', null);
+
+const brandsPresent = [...new Set((brandRows ?? []).map((r) => r.brand as string))]
+  .map((b) => findBrand(b))
+  .filter((b): b is NonNullable<typeof b> => Boolean(b))
+  .sort((a, b) => a.label.localeCompare(b.label, 'cs'));
+
+function getImageUrl(listing: any): string | null {
+  const img = (listing.bazar_images ?? []).sort((a: any, b: any) => a.position - b.position)[0];
+  if (!img) return null;
+  return supabase.storage.from('bazar-images').getPublicUrl(img.storage_path).data.publicUrl;
+}
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Bazar', url: '/bazar/' },
+  { name: category.label, url: canonical },
+]);
+
+const itemListJsonLd = itemListSchema(
+  (listings ?? []).slice(0, 20).map((l) => ({
+    url: `/bazar/${l.id}/`,
+    name: l.title,
+  })),
+  `Bazar — ${category.label}`,
+);
+
+const otherCategories = CATEGORIES.filter((c) => c.value !== category.value);
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=3600');
+---
+
+<Layout
+  title={categoryTitle(category)}
+  description={categoryDescription(category, count)}
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+
+  <div class="cat-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/bazar/">Bazar</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">{category.label}</span>
+    </nav>
+
+    <header class="cat-head">
+      <span class="kicker">Bazar techniky</span>
+      <h1>{category.label} — bazar zemědělské techniky</h1>
+      <p class="lede">{categoryIntro(category)}</p>
+      <div class="cat-stats">
+        <div class="cs"><strong>{count}</strong> aktivních inzerátů</div>
+      </div>
+    </header>
+
+    <div class="cat-cta">
+      <a href="/bazar/" class="btn-ghost">← Celý bazar</a>
+      <a href="/bazar/mapa/" class="btn-ghost">📍 Mapa inzerátů</a>
+      <a href="/bazar/novy/" class="btn-yellow">+ Přidat inzerát</a>
+    </div>
+
+    {brandsPresent.length > 0 && (
+      <section class="cat-brands" aria-label="Značky v kategorii">
+        <h2>Podle značky</h2>
+        <div class="brand-chips">
+          {brandsPresent.map((b) => (
+            <a href={`/bazar/kategorie/${category.value}/${b.value}/`} class="brand-chip">
+              {b.label}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {listings && listings.length > 0 ? (
+      <div class="cat-listings">
+        {listings.map((listing) => (
+          <BazarListingRow
+            id={listing.id}
+            title={listing.title}
+            price={listing.price}
+            location={listing.location}
+            category={listing.category}
+            brand={listing.brand}
+            createdAt={listing.created_at}
+            views={listing.views}
+            featured={listing.featured}
+            pracovniZaberM={listing.pracovni_zaber_m}
+            nosnostKg={listing.nosnost_kg}
+            objemNadrzeL={listing.objem_nadrze_l}
+            imageUrl={getImageUrl(listing)}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="cat-empty">
+        <p>V kategorii {category.label.toLowerCase()} momentálně nejsou aktivní inzeráty.</p>
+        <p>
+          Můžete <a href="/bazar/">projít celý bazar</a> nebo
+          <a href="/bazar/novy/">vložit vlastní inzerát zdarma</a>.
+        </p>
+      </div>
+    )}
+
+    <section class="cat-info">
+      <h2>Tipy k nákupu</h2>
+      <ul>
+        <li>🔧 <a href="/encyklopedie/">Encyklopedie strojů</a> — hloubkové profily traktorů a kombajnů</li>
+        <li>📊 <a href="/statistiky/">Statistiky cen komodit</a> — aktuální tržní situace</li>
+        <li>💶 <a href="/kalkulacka/dotace-cap/">Kalkulačka dotací CAP</a> — orientační výpočet pro vaši farmu</li>
+        <li>📍 <a href="/bazar/kraj/">Bazar podle krajů</a> — technika ve vašem okolí</li>
+      </ul>
+
+      <h3>Další kategorie</h3>
+      <div class="cat-other-grid">
+        {otherCategories.map((c) => (
+          <a href={`/bazar/kategorie/${c.value}/`} class="cat-other">{c.label}</a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .cat-root { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .cat-head { margin-bottom: 24px; max-width: 760px; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin: 12px 0 8px; color: #1a1a1a; }
+  .lede { font-size: 15px; color: #444; line-height: 1.6; margin: 0 0 14px; }
+  .cat-stats { display: flex; gap: 16px; font-size: 14px; color: #6B6B72; }
+  .cat-stats strong { color: #0B7A3B; font-size: 18px; font-weight: 800; font-family: 'Chakra Petch', sans-serif; }
+
+  .cat-cta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+  .btn-ghost, .btn-yellow {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 700; text-decoration: none;
+  }
+  .btn-ghost { background: #fff; border: 1.5px solid #DFDFE3; color: #0A0A0B; }
+  .btn-ghost:hover { border-color: #0A0A0B; }
+  .btn-yellow { background: #FFEA00; color: #0A0A0B; border: 1.5px solid #FFEA00; }
+  .btn-yellow:hover { background: #FFE100; }
+
+  .cat-brands { margin-bottom: 28px; }
+  .cat-brands h2 { font-size: 16px; font-weight: 700; color: #0A0A0B; margin: 0 0 12px; }
+  .brand-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .brand-chip {
+    display: inline-block; padding: 7px 14px; background: #fafafa;
+    border: 1px solid #eaeaec; border-radius: 999px;
+    font-size: 13px; font-weight: 600; color: #0A0A0B; text-decoration: none;
+    transition: border-color .15s, background .15s;
+  }
+  .brand-chip:hover { border-color: #FFEA00; background: #fff; }
+
+  .cat-listings { border: 1px solid #e8e8e8; border-radius: 14px; overflow: hidden; background: #fff; margin-bottom: 32px; }
+  .cat-empty { padding: 32px; text-align: center; background: #fafafa; border-radius: 12px; margin-bottom: 32px; color: #555; line-height: 1.7; }
+  .cat-empty a { color: #0B7A3B; text-decoration: underline; margin: 0 4px; }
+
+  .cat-info h2 { font-size: 20px; font-weight: 700; color: #0A0A0B; margin: 32px 0 14px; }
+  .cat-info h3 { font-size: 16px; font-weight: 700; color: #0A0A0B; margin: 24px 0 12px; }
+  .cat-info ul { list-style: none; padding: 0; margin: 0 0 24px; }
+  .cat-info ul li { font-size: 14px; line-height: 1.7; color: #444; padding: 6px 0; }
+  .cat-info ul li a { color: #0B7A3B; font-weight: 600; text-decoration: underline; }
+  .cat-other-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .cat-other {
+    display: block; padding: 10px 14px; background: #fafafa;
+    border: 1px solid #eaeaec; border-radius: 8px;
+    font-size: 13px; color: #0A0A0B; text-decoration: none;
+    transition: border-color .15s;
+  }
+  .cat-other:hover { border-color: #FFEA00; }
+</style>

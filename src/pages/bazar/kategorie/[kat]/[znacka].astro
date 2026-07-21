@@ -1,0 +1,200 @@
+---
+// Path-based category × brand landing page — long-tail SEO target:
+// "ojeté traktory Zetor", "kombajny Claas bazar". Mirrors the category page
+// one level deeper.
+//
+// Thin-content guard: when a (category, brand) combo has no active listings the
+// page is served with noindex, so empty long-tail combos never enter the index.
+// Only combos with listings are added to the sitemap (see sitemap.xml.ts).
+
+export const prerender = false;
+
+import Layout from '../../../../layouts/Layout.astro';
+import { createServerClient } from '../../../../lib/supabase';
+import {
+  findCategory,
+  findBrand,
+  categoryBrandTitle,
+  categoryBrandDescription,
+} from '../../../../lib/bazar-landing';
+import { breadcrumbSchema, itemListSchema } from '../../../../lib/structured-data';
+import { SITE_URL } from '../../../../lib/config';
+import BazarListingRow from '../../../../components/bazar/BazarListingRow.astro';
+
+const { kat, znacka } = Astro.params;
+const category = findCategory(kat);
+const brand = findBrand(znacka);
+if (!category || !brand) return Astro.rewrite('/404');
+
+const canonical = `${SITE_URL}/bazar/kategorie/${category.value}/${brand.value}/`;
+const supabase = createServerClient();
+
+const { data: listings } = await supabase
+  .from('bazar_listings')
+  .select('id, title, price, category, subcategory, brand, location, created_at, views, featured, pracovni_zaber_m, nosnost_kg, objem_nadrze_l, bazar_images(storage_path, position)')
+  .eq('status', 'active')
+  .eq('category', category.value)
+  .eq('brand', brand.value)
+  .order('featured', { ascending: false })
+  .order('created_at', { ascending: false })
+  .limit(60);
+
+const count = listings?.length ?? 0;
+
+// Other brands present in this category, for lateral internal links.
+const { data: brandRows } = await supabase
+  .from('bazar_listings')
+  .select('brand')
+  .eq('status', 'active')
+  .eq('category', category.value)
+  .not('brand', 'is', null);
+
+const otherBrands = [...new Set((brandRows ?? []).map((r) => r.brand as string))]
+  .map((b) => findBrand(b))
+  .filter((b): b is NonNullable<typeof b> => Boolean(b) && b!.value !== brand.value)
+  .sort((a, b) => a.label.localeCompare(b.label, 'cs'));
+
+function getImageUrl(listing: any): string | null {
+  const img = (listing.bazar_images ?? []).sort((a: any, b: any) => a.position - b.position)[0];
+  if (!img) return null;
+  return supabase.storage.from('bazar-images').getPublicUrl(img.storage_path).data.publicUrl;
+}
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Bazar', url: '/bazar/' },
+  { name: category.label, url: `${SITE_URL}/bazar/kategorie/${category.value}/` },
+  { name: brand.label, url: canonical },
+]);
+
+const itemListJsonLd = itemListSchema(
+  (listings ?? []).slice(0, 20).map((l) => ({
+    url: `/bazar/${l.id}/`,
+    name: l.title,
+  })),
+  `${brand.label} — ${category.label}`,
+);
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=3600');
+---
+
+<Layout
+  title={categoryBrandTitle(category, brand)}
+  description={categoryBrandDescription(category, brand, count)}
+  canonical={canonical}
+  noindex={count === 0}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  {count > 0 && (
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  )}
+
+  <div class="cat-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/bazar/">Bazar</a>
+      <span aria-hidden="true">›</span>
+      <a href={`/bazar/kategorie/${category.value}/`}>{category.label}</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">{brand.label}</span>
+    </nav>
+
+    <header class="cat-head">
+      <span class="kicker">{category.label}</span>
+      <h1>{brand.label} — {category.label.toLowerCase()}</h1>
+      <p class="lede">
+        {categoryBrandDescription(category, brand, count)}
+      </p>
+      <div class="cat-stats">
+        <div class="cs"><strong>{count}</strong> inzerátů {brand.label}</div>
+      </div>
+    </header>
+
+    <div class="cat-cta">
+      <a href={`/bazar/kategorie/${category.value}/`} class="btn-ghost">← Všechny {category.label.toLowerCase()}</a>
+      <a href="/bazar/novy/" class="btn-yellow">+ Přidat inzerát</a>
+    </div>
+
+    {listings && listings.length > 0 ? (
+      <div class="cat-listings">
+        {listings.map((listing) => (
+          <BazarListingRow
+            id={listing.id}
+            title={listing.title}
+            price={listing.price}
+            location={listing.location}
+            category={listing.category}
+            brand={listing.brand}
+            createdAt={listing.created_at}
+            views={listing.views}
+            featured={listing.featured}
+            pracovniZaberM={listing.pracovni_zaber_m}
+            nosnostKg={listing.nosnost_kg}
+            objemNadrzeL={listing.objem_nadrze_l}
+            imageUrl={getImageUrl(listing)}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="cat-empty">
+        <p>Inzeráty {brand.label} v kategorii {category.label.toLowerCase()} momentálně nejsou.</p>
+        <p>
+          Zkuste <a href={`/bazar/kategorie/${category.value}/`}>všechny {category.label.toLowerCase()}</a> nebo
+          <a href="/bazar/novy/">vložte vlastní inzerát</a>.
+        </p>
+      </div>
+    )}
+
+    {otherBrands.length > 0 && (
+      <section class="cat-info">
+        <h3>Další značky — {category.label.toLowerCase()}</h3>
+        <div class="brand-chips">
+          {otherBrands.map((b) => (
+            <a href={`/bazar/kategorie/${category.value}/${b.value}/`} class="brand-chip">{b.label}</a>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .cat-root { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+
+  .cat-head { margin-bottom: 24px; max-width: 760px; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin: 12px 0 8px; color: #1a1a1a; }
+  .lede { font-size: 15px; color: #444; line-height: 1.6; margin: 0 0 14px; }
+  .cat-stats { display: flex; gap: 16px; font-size: 14px; color: #6B6B72; }
+  .cat-stats strong { color: #0B7A3B; font-size: 18px; font-weight: 800; font-family: 'Chakra Petch', sans-serif; }
+
+  .cat-cta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+  .btn-ghost, .btn-yellow {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 700; text-decoration: none;
+  }
+  .btn-ghost { background: #fff; border: 1.5px solid #DFDFE3; color: #0A0A0B; }
+  .btn-ghost:hover { border-color: #0A0A0B; }
+  .btn-yellow { background: #FFEA00; color: #0A0A0B; border: 1.5px solid #FFEA00; }
+  .btn-yellow:hover { background: #FFE100; }
+
+  .cat-listings { border: 1px solid #e8e8e8; border-radius: 14px; overflow: hidden; background: #fff; margin-bottom: 32px; }
+  .cat-empty { padding: 32px; text-align: center; background: #fafafa; border-radius: 12px; margin-bottom: 32px; color: #555; line-height: 1.7; }
+  .cat-empty a { color: #0B7A3B; text-decoration: underline; margin: 0 4px; }
+
+  .cat-info h3 { font-size: 16px; font-weight: 700; color: #0A0A0B; margin: 24px 0 12px; }
+  .brand-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .brand-chip {
+    display: inline-block; padding: 7px 14px; background: #fafafa;
+    border: 1px solid #eaeaec; border-radius: 999px;
+    font-size: 13px; font-weight: 600; color: #0A0A0B; text-decoration: none;
+    transition: border-color .15s, background .15s;
+  }
+  .brand-chip:hover { border-color: #FFEA00; background: #fff; }
+</style>
