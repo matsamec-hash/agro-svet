@@ -22,6 +22,9 @@ const series = commodityFull.find((s: any) => udrzovatelSlug(s.name) === slug);
 if (!series) return new Response('Not found', { status: 404 });
 const stat = commodityStats.find((c: any) => c.name === series.name);
 const avgSeries: { label: string; avg: number }[] = (fiveYearAvgs && fiveYearAvgs[series.name]) || [];
+const others = commodityFull
+  .filter((s: any) => s.name !== series.name)
+  .map((s: any) => ({ name: s.name, slug: udrzovatelSlug(s.name) }));
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
@@ -89,10 +92,26 @@ const description = `Aktuální cena komodity ${series.name}: ${fmt(price)} ${se
       <section class="kd-chartcard">
         <div class="kd-chart-head">
           <h2>Cenová historie</h2>
-          {avgSeries.length > 0 && <span class="kd-legend"><i class="dot ink"></i>{series.name}<i class="dot dash"></i>5letý sezónní průměr</span>}
+          <div class="kd-ranges" role="group" aria-label="Časový rozsah">
+            <button type="button" data-range="12">1 rok</button>
+            <button type="button" data-range="60">5 let</button>
+            <button type="button" class="on" data-range="all">Vše</button>
+          </div>
         </div>
+        {avgSeries.length > 0 && <span class="kd-legend"><i class="dot ink"></i>{series.name}<i class="dot dash"></i>5letý sezónní průměr</span>}
         <div class="kd-chartwrap"><canvas id="kdChart" height="300"></canvas></div>
       </section>
+
+      {others.length > 0 && (
+        <section class="kd-others">
+          <h2>Další komodity</h2>
+          <div class="kd-chips">
+            {others.map((o: any) => (
+              <a class="kd-chip" href={navHref(locale, `/statistiky/komodita/${o.slug}/`)}>{o.name}</a>
+            ))}
+          </div>
+        </section>
+      )}
 
       <a class="kd-back" href={navHref(locale, '/statistiky/')}>← Zpět na všechny komodity a trhy</a>
     </div>
@@ -116,7 +135,7 @@ const description = `Aktuální cena komodity ${series.name}: ${fmt(price)} ${se
         label: '5letý sezónní průměr', data: d.avg, borderColor: 'rgba(10,10,12,.35)', borderDash: [5, 4],
         borderWidth: 1.6, pointRadius: 0, tension: 0.25, fill: false, spanGaps: true,
       });
-      new Chart(el, {
+      var chart = new Chart(el, {
         type: 'line',
         data: { labels: d.labels, datasets: ds },
         options: {
@@ -135,12 +154,30 @@ const description = `Aktuální cena komodity ${series.name}: ${fmt(price)} ${se
           },
         },
       });
+
+      // Přepínač časového rozsahu
+      function applyRange(r) {
+        var n = r === 'all' ? d.labels.length : Math.min(+r, d.labels.length);
+        var start = d.labels.length - n;
+        chart.data.labels = d.labels.slice(start);
+        chart.data.datasets[0].data = d.values.slice(start);
+        if (chart.data.datasets[1]) chart.data.datasets[1].data = d.avg.slice(start);
+        chart.update();
+      }
+      var btns = document.querySelectorAll('.kd-ranges button');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          btns.forEach(function (x) { x.classList.remove('on'); });
+          b.classList.add('on');
+          applyRange(b.getAttribute('data-range'));
+        });
+      });
     })();
   </script>
 </Layout>
 
 <style>
-  .kd{--yellow:#FFEA00;--ink:#0A0A0B;--line:#E7E7EA;--muted:#6E6E76;--paper:#FBFAF3;--soft:#F5F5F2;--green:#2E9E57;--red:#D6492B;
+  .kd{--yellow:#FFEA00;--yellow-d:#FFD400;--ink:#0A0A0B;--line:#E7E7EA;--muted:#6E6E76;--paper:#FBFAF3;--soft:#F5F5F2;--green:#2E9E57;--red:#D6492B;
     font-family:'Chakra Petch',system-ui,sans-serif;color:var(--ink);background:#fff}
   .kd-wrap{max-width:1000px;margin:0 auto;padding:26px 28px 72px}
   .kd a{text-decoration:none;color:inherit}
@@ -174,8 +211,18 @@ const description = `Aktuální cena komodity ${series.name}: ${fmt(price)} ${se
   .kd-legend .dot{width:14px;height:3px;border-radius:2px;display:inline-block}
   .kd-legend .dot.ink{background:var(--ink)}
   .kd-legend .dot.dash{background:repeating-linear-gradient(90deg,rgba(10,10,12,.4) 0 4px,transparent 4px 7px)}
-  .kd-chartwrap{position:relative;height:340px}
+  .kd-ranges{display:inline-flex;gap:4px;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:3px}
+  .kd-ranges button{font:700 12.5px 'Chakra Petch',sans-serif;color:var(--muted);background:transparent;border:0;border-radius:7px;padding:6px 12px;cursor:pointer;transition:.14s}
+  .kd-ranges button:hover{color:var(--ink)}
+  .kd-ranges button.on{background:var(--ink);color:#fff}
+  .kd-chartwrap{position:relative;height:340px;margin-top:12px}
   .kd-chartwrap canvas{max-height:340px}
+
+  .kd-others{margin-top:34px}
+  .kd-others h2{font-size:15px;font-weight:800;letter-spacing:.02em;margin-bottom:12px}
+  .kd-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .kd-chip{font-size:13.5px;font-weight:700;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:8px 14px;transition:.14s}
+  .kd-chip:hover{background:var(--yellow);border-color:var(--yellow-d);transform:translateY(-1px)}
 
   .kd-back{display:inline-block;margin-top:26px;font-size:14px;font-weight:700;color:var(--ink);border-bottom:2px solid var(--yellow);padding-bottom:2px}
   .kd-back:hover{background:var(--yellow)}
