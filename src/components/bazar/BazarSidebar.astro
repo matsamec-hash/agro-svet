@@ -7,7 +7,7 @@ interface Props {
   query?: string;
   category?: string;
   brand?: string;
-  modelSlug?: string;
+  modelSlugs?: string[];
   location?: string;
   priceFrom?: string;
   priceTo?: string;
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const {
-  query = '', category = '', brand = '', modelSlug = '', location = '',
+  query = '', category = '', brand = '', modelSlugs = [], location = '',
   priceFrom = '', priceTo = '',
   yearFrom = '', yearTo = '',
   powerFrom = '', powerTo = '',
@@ -36,14 +36,16 @@ const {
 const showMachineFilters = category === 'traktory' || category === 'kombajny' || !category;
 
 // Model/typ nabízíme až po výběru značky (katalog má stovky modelů na značku).
-// Seskupíme podle řady (series) do <optgroup>. Model závisí na značce → když se
-// změní značka, JS níže model vynuluje (a server ho stejně nezohlední vůči jiné značce).
+// Multi-select: checkboxy seskupené podle řady (series), s možností označit celou
+// řadu najednou. Model závisí na značce → když se změní značka, JS níže modely
+// odškrtne (a server je stejně nezohlední vůči jiné značce).
 const modelOptions = brand && showMachineFilters
   ? getModelOptions(category || undefined).filter((m) => m.brand_slug === brand)
   : [];
 const modelSeries = [...new Map(modelOptions.map((m) => [m.series_slug, m.series_name])).entries()]
   .map(([slug, name]) => ({ slug, name, models: modelOptions.filter((m) => m.series_slug === slug) }));
-const selectedModelName = modelOptions.find((m) => m.slug === modelSlug)?.name ?? '';
+const selectedModelSet = new Set(modelSlugs);
+const selectedModelNames = modelOptions.filter((m) => selectedModelSet.has(m.slug)).map((m) => m.name);
 const showZaberFilter = !category || ['zpracovani-pudy', 'seti', 'ochrana-rostlin', 'sklizen-picnin'].includes(category);
 const showNosnostFilter = !category || ['manipulace', 'doprava'].includes(category);
 const showObjemFilter = !category || ['hnojeni', 'ochrana-rostlin'].includes(category);
@@ -58,7 +60,12 @@ if (brand) {
   const br = BRANDS.find(b => b.value === brand);
   if (br) activeFilters.push({ label: br.label, removeParams: ['brand'] });
 }
-if (selectedModelName) activeFilters.push({ label: selectedModelName, removeParams: ['model'] });
+if (modelSlugs.length > 0) {
+  const label = selectedModelNames.length === 1
+    ? selectedModelNames[0]
+    : `${modelSlugs.length} model${modelSlugs.length >= 5 ? 'ů' : 'y'}`;
+  activeFilters.push({ label, removeParams: ['model'] });
+}
 if (location) activeFilters.push({ label: `📍 ${location}`, removeParams: ['location'] });
 if (priceFrom || priceTo) {
   const from = priceFrom ? `${parseInt(priceFrom).toLocaleString('cs-CZ')} Kč` : '';
@@ -138,17 +145,46 @@ function buildRemoveUrl(params: string[]): string {
 
     {modelSeries.length > 0 && (
       <div class="sf-field">
-        <label for="sf-model">Model / typ</label>
-        <select id="sf-model" name="model" class="form-input">
-          <option value="">Všechny</option>
-          {modelSeries.map(s => (
-            <optgroup label={s.name}>
-              {s.models.map(m => (
-                <option value={m.slug} selected={m.slug === modelSlug}>{m.name}</option>
-              ))}
-            </optgroup>
-          ))}
-        </select>
+        <label>Model / typ</label>
+        <details class="sf-multi" id="sf-model" open={modelSlugs.length > 0}>
+          <summary class="form-input sf-multi-summary">
+            <span class="sf-multi-label" data-count={modelSlugs.length}>
+              {modelSlugs.length === 0
+                ? 'Všechny'
+                : selectedModelNames.length === 1
+                  ? selectedModelNames[0]
+                  : `Vybráno: ${modelSlugs.length}`}
+            </span>
+            <svg class="sf-multi-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="sf-multi-panel">
+            {modelSeries.map(s => (
+              <div class="sf-multi-series">
+                <label class="sf-multi-row sf-multi-series-head">
+                  <input
+                    type="checkbox"
+                    class="sf-series-toggle"
+                    data-series={s.slug}
+                    checked={s.models.every(m => selectedModelSet.has(m.slug))}
+                  />
+                  <span>{s.name}</span>
+                </label>
+                {s.models.map(m => (
+                  <label class="sf-multi-row sf-multi-model">
+                    <input
+                      type="checkbox"
+                      name="model"
+                      value={m.slug}
+                      data-series={s.slug}
+                      checked={selectedModelSet.has(m.slug)}
+                    />
+                    <span>{m.name}</span>
+                  </label>
+                ))}
+              </div>
+            ))}
+          </div>
+        </details>
       </div>
     )}
 
@@ -273,14 +309,16 @@ function buildRemoveUrl(params: string[]): string {
     overlay?.addEventListener('click', closeDrawer);
 
     // Auto-apply: submit form via URL update (no full submit button needed).
-    // Debounce text inputs, immediate for selects.
+    // Debounce text inputs, immediate for selects/checkboxes. `append` (not
+    // `set`) so the multi-select model checkboxes can contribute several
+    // `model=` values.
     let debounceTimer = null;
     function applyNow() {
       const fd = new FormData(form);
       const params = new URLSearchParams();
       for (const [k, v] of fd.entries()) {
         const s = String(v).trim();
-        if (s) params.set(k, s);
+        if (s) params.append(k, s);
       }
       const qs = params.toString();
       const target = qs ? `/bazar/?${qs}` : '/bazar/';
@@ -288,24 +326,36 @@ function buildRemoveUrl(params: string[]): string {
       window.location.href = target;
     }
 
-    // Změna značky musí vynulovat model (nabídka modelů závisí na značce) — jinak
-    // by se do URL propsal model patřící k předchozí značce. Registrujeme PŘED
-    // generickým applyNow, ať se vynulování stihne dřív, než se čte FormData.
+    // Změna značky musí odškrtnout všechny modely (nabídka modelů závisí na
+    // značce) — jinak by se do URL propsal model patřící k předchozí značce.
     const brandSel = form.querySelector('#sf-brand');
     brandSel?.addEventListener('change', () => {
-      const modelSel = form.querySelector('#sf-model');
-      if (modelSel) modelSel.value = '';
+      form.querySelectorAll('#sf-model input[name="model"]').forEach((cb) => { cb.checked = false; });
+    });
+
+    // Označení celé série = zaškrtnout/odškrtnout všechny její modely, pak apply.
+    form.querySelectorAll('.sf-series-toggle').forEach((toggle) => {
+      toggle.addEventListener('change', () => {
+        const series = toggle.getAttribute('data-series');
+        form.querySelectorAll(`#sf-model input[name="model"][data-series="${series}"]`)
+          .forEach((cb) => { cb.checked = toggle.checked; });
+        applyNow();
+      });
     });
 
     form.querySelectorAll('select').forEach((el) => {
       el.addEventListener('change', applyNow);
     });
-    form.querySelectorAll('input').forEach((el) => {
+    // Skip series toggles here — they apply via their own handler after
+    // propagating to child model checkboxes.
+    form.querySelectorAll('input:not(.sf-series-toggle)').forEach((el) => {
       el.addEventListener('change', applyNow);
-      el.addEventListener('input', () => {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(applyNow, 450);
-      });
+      if (el.type !== 'checkbox') {
+        el.addEventListener('input', () => {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(applyNow, 450);
+        });
+      }
     });
   })();
 </script>
@@ -399,6 +449,41 @@ function buildRemoveUrl(params: string[]): string {
     align-items: center;
   }
   .sf-range span { color: #666; }
+
+  /* Multi-select model/série (native <details>, funguje i bez JS) */
+  .sf-multi { width: 100%; }
+  .sf-multi-summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .sf-multi-summary::-webkit-details-marker { display: none; }
+  .sf-multi-label {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    color: #666;
+  }
+  .sf-multi-label[data-count]:not([data-count="0"]) { color: #0A0A0B; font-weight: 600; }
+  .sf-multi-caret { flex-shrink: 0; color: #888; transition: transform .15s; }
+  .sf-multi[open] .sf-multi-caret { transform: rotate(180deg); }
+  .sf-multi-panel {
+    margin-top: 6px;
+    max-height: 280px; overflow-y: auto;
+    border: 1px solid #eaeaec; border-radius: 8px;
+    background: #fff; padding: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sf-multi-series + .sf-multi-series { border-top: 1px solid #f0f0f0; margin-top: 4px; padding-top: 4px; }
+  .sf-multi-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 8px; border-radius: 6px; cursor: pointer;
+    font-size: 14px; line-height: 1.2;
+  }
+  .sf-multi-row:hover { background: #fafafa; }
+  .sf-multi-row input {
+    width: 18px; height: 18px; flex-shrink: 0; margin: 0; cursor: pointer;
+    accent-color: #0B7A3B;
+  }
+  .sf-multi-series-head { font-weight: 700; color: #0A0A0B; }
+  .sf-multi-model { padding-left: 22px; color: #333; }
   .sf-section {
     font-family: 'Chakra Petch', sans-serif;
     font-size: 12px;

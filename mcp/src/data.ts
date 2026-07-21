@@ -131,7 +131,11 @@ export function loadCountries(): CountryProfile[] {
     const files = readdirSync(dir).filter(
       (f) => f.endsWith(".json") && f !== "index.json",
     );
-    _countries = files.map((f) => readJson<CountryProfile>(join(dir, f)));
+    // `svet/` also holds non-country JSON (population.json, …). Keep only real
+    // country profiles (those with a `nameCs`), else the sort throws.
+    _countries = files
+      .map((f) => readJson<CountryProfile>(join(dir, f)))
+      .filter((c) => c && typeof c.nameCs === "string");
     _countries.sort((a, b) => a.nameCs.localeCompare(b.nameCs, "cs"));
   }
   return _countries;

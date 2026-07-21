@@ -78,10 +78,12 @@ const brandModules = import.meta.glob<{ default: MachineryBrand }>(
 function buildDatasets(): Datasets {
   const commodities = Object.values(commoditiesModule)[0]!.default;
 
-  const countries = Object.entries(countryModules)
-    // Skip the svet index.json (it is not a country profile).
-    .filter(([path]) => !path.endsWith('/index.json'))
-    .map(([, m]) => m.default)
+  const countries = Object.values(countryModules)
+    .map((m) => m.default)
+    // `svet/` also holds non-country JSON (index.json, population.json, …).
+    // Keep only real country profiles — anything with a `nameCs` string —
+    // otherwise the sort below throws on the odd file and 500s the whole endpoint.
+    .filter((c): c is CountryProfile => Boolean(c && typeof c.nameCs === 'string'))
     .sort((a, b) => a.nameCs.localeCompare(b.nameCs, 'cs'));
 
   const varieties: Variety[] = [];
