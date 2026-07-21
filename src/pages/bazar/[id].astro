@@ -50,6 +50,11 @@ if (isPreview) {
   if (!allowed) return Astro.rewrite('/404');
 }
 
+// SEO: jen aktivní inzeráty patří do indexu. Prodané / expirované / draft
+// (pending_claim náhled) → noindex, ať mrtvé nabídky nerankují a neředí index.
+const listingStatus = (listing as any).status as string | undefined;
+const noindexListing = listingStatus !== 'active';
+
 // View counter moved to client-side beacon → /api/bazar/views/[id] (atomic RPC).
 // Removes the SSR read-modify-write race plus a Supabase write from the cache
 // miss hot path. Bot/cookie filtering happens server-side in the API endpoint.
@@ -99,7 +104,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
 ]);
 ---
 
-<Layout title={`${listing.title} — Agro bazar`} ogImage={images[0]?.url} ogType="product">
+<Layout title={`${listing.title} — Agro bazar`} ogImage={images[0]?.url} ogType="product" noindex={noindexListing}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <div style="max-width:1000px; margin:0 auto; padding:32px 24px 80px;">

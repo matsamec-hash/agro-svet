@@ -349,8 +349,15 @@ function buildRemoveUrl(params: string[]): string {
     // Skip series toggles here — they apply via their own handler after
     // propagating to child model checkboxes.
     form.querySelectorAll('input:not(.sf-series-toggle)').forEach((el) => {
-      el.addEventListener('change', applyNow);
-      if (el.type !== 'checkbox') {
+      if (el.type === 'checkbox') {
+        // Model checkboxy: debounce, ať jde zaškrtnout víc modelů po sobě a
+        // aplikuje se to jedním reloadem (na mobilu se drawer nezavírá po každém ťuku).
+        el.addEventListener('change', () => {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(applyNow, 700);
+        });
+      } else {
+        el.addEventListener('change', applyNow);
         el.addEventListener('input', () => {
           clearTimeout(debounceTimer);
           debounceTimer = setTimeout(applyNow, 450);
