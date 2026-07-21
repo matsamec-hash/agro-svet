@@ -42,6 +42,13 @@ import type {
   Variety,
   MachineryBrand,
 } from '../../../mcp/src/data.js';
+import {
+  BAZAR_PUBLIC_COLUMNS,
+  MAX_LIMIT as BAZAR_MAX_LIMIT,
+  type BazarFetcher,
+  type BazarListingRow,
+} from '../../../mcp/src/tools/bazar.js';
+import { createServerClient } from '../../lib/supabase';
 
 export const prerender = false;
 
@@ -92,10 +99,55 @@ function buildDatasets(): Datasets {
 // Built once per Worker isolate; reused across requests.
 const datasets = buildDatasets();
 
-/** Build a fresh MCP server wired to the (shared) datasets. */
+/**
+ * Live bazar fetcher: queries `bazar_listings` for PUBLIC, active listings only.
+ *
+ * - Selects strictly the whitelisted public columns (no phone/email/user_id).
+ * - Pushes the cheap indexed filters (category/subcategory/brand eq, price/
+ *   power/year ranges, title text) down to Postgres; the pure `searchBazar`
+ *   then re-applies every filter over the returned rows as the source of truth.
+ * - Caps rows at the tool's MAX_LIMIT so a single query can never return the
+ *   whole table.
+ */
+const fetchBazar: BazarFetcher = async (args): Promise<BazarListingRow[]> => {
+  const supabase = createServerClient();
+  let q = supabase
+    .from('bazar_listings')
+    .select(BAZAR_PUBLIC_COLUMNS.join(', '))
+    .eq('status', 'active')
+    .order('featured', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(BAZAR_MAX_LIMIT);
+
+  if (args.category) q = q.ilike('category', `%${args.category}%`);
+  if (args.subcategory) q = q.ilike('subcategory', `%${args.subcategory}%`);
+  if (args.brand) q = q.ilike('brand', `%${args.brand}%`);
+  if (args.query) {
+    // Mirror the pure searchBazar() semantics: title OR description OR brand.
+    // Strip PostgREST `or()` delimiters from the term so it can't break syntax.
+    const term = args.query.replace(/[,()*]/g, ' ').trim();
+    if (term) {
+      q = q.or(
+        `title.ilike.%${term}%,description.ilike.%${term}%,brand.ilike.%${term}%`,
+      );
+    }
+  }
+  if (args.price_min != null) q = q.gte('price', args.price_min);
+  if (args.price_max != null) q = q.lte('price', args.price_max);
+  if (args.power_min != null) q = q.gte('power_hp', args.power_min);
+  if (args.power_max != null) q = q.lte('power_hp', args.power_max);
+  if (args.year_from != null) q = q.gte('year_of_manufacture', args.year_from);
+  if (args.region) q = q.ilike('location', `%${args.region}%`);
+
+  const { data, error } = await q;
+  if (error) throw new Error(`bazar query failed: ${error.message}`);
+  return (data ?? []) as unknown as BazarListingRow[];
+};
+
+/** Build a fresh MCP server wired to the (shared) datasets + live bazar. */
 function createServer(): McpServer {
   const server = new McpServer(SERVER_INFO);
-  registerTools(server, datasets);
+  registerTools(server, datasets, fetchBazar);
   return server;
 }
 
