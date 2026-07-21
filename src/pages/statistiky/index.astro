@@ -7,6 +7,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { useTranslations, localizePath } from '../../i18n/utils';
+import { udrzovatelSlug } from '../../lib/plodiny';
 import { statTakeaways, scissorsInsightText, livestockInsightText } from '../../lib/agro-derived';
 // AGRO_EVENTS moved to /statistiky/commodity-data*.json endpoints — loaded
 // client-side by the chart, no longer needed at SSR time on this page.
@@ -95,10 +96,11 @@ const npk = (() => {
   return { name: SPARK.fertilizer, price: ll.price, year: ll.year, change: ch };
 })();
 
+const komoditaHref = (name: string) => localizePath(locale, `/statistiky/komodita/${udrzovatelSlug(name)}/`);
 const sparkMetrics = [
-  psenice && { name: SPARK.wheat, value: psenice.price, unit: psenice.unit, changePct: psenice.change, series: sparklineFor(SPARK.wheat), anchor: '#trh' },
-  repka && { name: SPARK.rapeseed, value: repka.price, unit: repka.unit, changePct: repka.change, series: sparklineFor(SPARK.rapeseed), anchor: '#trh' },
-  third && { name: SPARK.third, value: third.price, unit: third.unit, changePct: third.change, series: sparklineFor(SPARK.third), anchor: '#trh' },
+  psenice && { name: SPARK.wheat, value: psenice.price, unit: psenice.unit, changePct: psenice.change, series: sparklineFor(SPARK.wheat), anchor: '#trh', href: komoditaHref(SPARK.wheat) },
+  repka && { name: SPARK.rapeseed, value: repka.price, unit: repka.unit, changePct: repka.change, series: sparklineFor(SPARK.rapeseed), anchor: '#trh', href: komoditaHref(SPARK.rapeseed) },
+  third && { name: SPARK.third, value: third.price, unit: third.unit, changePct: third.change, series: sparklineFor(SPARK.third), anchor: '#trh', href: komoditaHref(SPARK.third) },
   nafta && { name: SPARK.diesel, value: nafta.price, unit: fuelUnit, changePct: null, series: fuelSeries.slice(-12).map(p => ({ label: p.label, value: p.value, sortKey: p.sortKey })), anchor: '#vstupy' },
   npk && { name: npk.name, value: npk.price, unit: 'Kč/t', changePct: npk.change, series: (fertSeries.find(f => f.name === npk.name)?.data ?? []).slice(-12).map((d, i) => ({ label: d.year, value: d.price, sortKey: i })), anchor: '#vstupy' },
 ].filter(Boolean) as any[];
@@ -260,6 +262,7 @@ const PILLS = [
         },
         options: {
           responsive: true, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: { display: false },
             tooltip: { backgroundColor: INK, padding: 12, cornerRadius: 10,

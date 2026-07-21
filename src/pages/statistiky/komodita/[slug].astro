@@ -1,0 +1,188 @@
+---
+// src/pages/statistiky/komodita/[slug].astro
+// Detail jedné komodity — plná cenová historie (interaktivní Chart.js graf),
+// aktuální cena, meziroční změna, min/max a sezónní 5letý průměr.
+// SSR (prerender=false) kvůli locale rewrite jako zbytek /statistiky.
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { useTranslations, localizePath, navHref } from '../../../i18n/utils';
+import { udrzovatelSlug } from '../../../lib/plodiny';
+import statsCs from '../../../data/agro-stats.json';
+import statsSk from '../../../data/agro-stats-sk.json';
+
+const locale = Astro.locals.locale ?? 'cs';
+const t = useTranslations(locale);
+const stats = (locale === 'sk' ? statsSk : statsCs) as any;
+const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+
+const { commodityFull, commodityStats, fiveYearAvgs } = stats;
+const slug = Astro.params.slug;
+
+const series = commodityFull.find((s: any) => udrzovatelSlug(s.name) === slug);
+if (!series) return new Response('Not found', { status: 404 });
+const stat = commodityStats.find((c: any) => c.name === series.name);
+const avgSeries: { label: string; avg: number }[] = (fiveYearAvgs && fiveYearAvgs[series.name]) || [];
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+const dec = /\/l$|tis/.test(series.unit) ? 0 : 0;
+const fmt = (v: number) => v.toLocaleString(numLocale, { minimumFractionDigits: dec, maximumFractionDigits: dec });
+
+const vals = series.data.map((d: any) => d.value);
+const latest = vals[vals.length - 1];
+const minV = Math.min(...vals);
+const maxV = Math.max(...vals);
+const minPt = series.data[vals.indexOf(minV)];
+const maxPt = series.data[vals.indexOf(maxV)];
+const firstYear = String(series.data[0]?.label ?? '').split(' ')[1] ?? '';
+const yoy = stat && stat.prevYearPrice ? ((stat.price - stat.prevYearPrice) / stat.prevYearPrice) * 100 : null;
+const price = stat?.price ?? latest;
+const month = stat?.month ?? '';
+
+// Data pro klientský graf (celá historie + sezónní 5letý průměr, zarovnaný podle labelu)
+const avgByLabel = new Map(avgSeries.map((a) => [a.label, a.avg]));
+const chartData = {
+  labels: series.data.map((d: any) => d.label),
+  values: vals,
+  avg: series.data.map((d: any) => avgByLabel.get(d.label) ?? null),
+  unit: series.unit,
+  numLocale,
+};
+
+const title = `${series.name} — vývoj ceny | agro-svět.cz`;
+const description = `Aktuální cena komodity ${series.name}: ${fmt(price)} ${series.unit} (${month}). Kompletní cenová historie od roku ${firstYear}, meziroční změna, minima a maxima.`;
+---
+
+<Layout title={title} description={description}>
+  <main class="kd">
+    <div class="kd-wrap">
+      <nav class="kd-crumb" aria-label="Drobečková navigace">
+        <a href={navHref(locale, '/data/')}>{t('stat.bc.home') || 'Data'}</a>
+        <span>/</span>
+        <a href={navHref(locale, '/statistiky/')}>Trhy a komodity</a>
+        <span>/</span>
+        <b>{series.name}</b>
+      </nav>
+
+      <header class="kd-head">
+        <div>
+          <span class="kd-eyebrow">Cena komodity · živě</span>
+          <h1>{series.name}</h1>
+          <p class="kd-sub">Vývoj ceny od roku {firstYear} · zdroj ČSÚ</p>
+        </div>
+        <div class="kd-price">
+          <div class="kd-now">{fmt(price)} <small>{series.unit}</small></div>
+          {yoy !== null && (
+            <span class={`kd-yoy ${yoy >= 0 ? 'up' : 'dn'}`}>{yoy >= 0 ? '▲' : '▼'} {Math.abs(yoy).toFixed(1).replace('.', ',')} % meziročně</span>
+          )}
+          {month && <span class="kd-asof">poslední údaj · {month}</span>}
+        </div>
+      </header>
+
+      <div class="kd-stats">
+        <div class="kd-stat"><span class="l">Maximum</span><span class="v">{fmt(maxV)} <small>{series.unit}</small></span><span class="d">{maxPt?.label}</span></div>
+        <div class="kd-stat"><span class="l">Minimum</span><span class="v">{fmt(minV)} <small>{series.unit}</small></span><span class="d">{minPt?.label}</span></div>
+        <div class="kd-stat"><span class="l">Aktuální</span><span class="v">{fmt(latest)} <small>{series.unit}</small></span><span class="d">{series.data[series.data.length - 1]?.label}</span></div>
+        <div class="kd-stat"><span class="l">Záznamů</span><span class="v">{series.data.length}</span><span class="d">měsíčních cen</span></div>
+      </div>
+
+      <section class="kd-chartcard">
+        <div class="kd-chart-head">
+          <h2>Cenová historie</h2>
+          {avgSeries.length > 0 && <span class="kd-legend"><i class="dot ink"></i>{series.name}<i class="dot dash"></i>5letý sezónní průměr</span>}
+        </div>
+        <div class="kd-chartwrap"><canvas id="kdChart" height="300"></canvas></div>
+      </section>
+
+      <a class="kd-back" href={navHref(locale, '/statistiky/')}>← Zpět na všechny komodity a trhy</a>
+    </div>
+  </main>
+
+  <script type="application/json" id="kdData" set:html={JSON.stringify(chartData)} />
+  <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script is:inline>
+    (function () {
+      var el = document.getElementById('kdChart');
+      var cfgEl = document.getElementById('kdData');
+      if (!el || !cfgEl || typeof Chart === 'undefined') return;
+      var d = JSON.parse(cfgEl.textContent);
+      var INK = '#0A0A0B', YELLOW = '#FFD400';
+      var hasAvg = d.avg.some(function (x) { return x != null; });
+      var ds = [{
+        label: 'Cena (' + d.unit + ')', data: d.values, borderColor: INK, backgroundColor: 'rgba(10,10,12,.06)',
+        borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, tension: 0.25, fill: true,
+      }];
+      if (hasAvg) ds.push({
+        label: '5letý sezónní průměr', data: d.avg, borderColor: 'rgba(10,10,12,.35)', borderDash: [5, 4],
+        borderWidth: 1.6, pointRadius: 0, tension: 0.25, fill: false, spanGaps: true,
+      });
+      new Chart(el, {
+        type: 'line',
+        data: { labels: d.labels, datasets: ds },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: INK, padding: 12, cornerRadius: 10,
+              callbacks: { label: function (ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString(d.numLocale) + ' ' + d.unit; } },
+            },
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { maxTicksLimit: 12, font: { size: 10 }, color: '#9A9AA2' } },
+            y: { grid: { color: 'rgba(10,10,12,.06)' }, ticks: { font: { size: 11 }, color: '#6E6E76', callback: function (v) { return v.toLocaleString(d.numLocale); } } },
+          },
+        },
+      });
+    })();
+  </script>
+</Layout>
+
+<style>
+  .kd{--yellow:#FFEA00;--ink:#0A0A0B;--line:#E7E7EA;--muted:#6E6E76;--paper:#FBFAF3;--soft:#F5F5F2;--green:#2E9E57;--red:#D6492B;
+    font-family:'Chakra Petch',system-ui,sans-serif;color:var(--ink);background:#fff}
+  .kd-wrap{max-width:1000px;margin:0 auto;padding:26px 28px 72px}
+  .kd a{text-decoration:none;color:inherit}
+  .kd-crumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .kd-crumb a:hover{color:var(--ink);text-decoration:underline}
+  .kd-crumb b{color:var(--ink)}
+
+  .kd-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+  .kd-eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  .kd-head h1{font-size:44px;letter-spacing:-.03em;font-weight:800;margin:8px 0 4px;line-height:1}
+  .kd-sub{font-size:14px;color:var(--muted)}
+  .kd-price{text-align:right}
+  .kd-now{font-size:36px;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .kd-now small{font-size:15px;color:var(--muted);font-weight:600}
+  .kd-yoy{display:inline-block;margin-top:8px;font-size:13px;font-weight:800;border-radius:999px;padding:5px 11px}
+  .kd-yoy.up{color:var(--green);background:rgba(46,158,87,.12)}
+  .kd-yoy.dn{color:var(--red);background:rgba(214,73,43,.12)}
+  .kd-asof{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+
+  .kd-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}
+  .kd-stat{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+  .kd-stat .l{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .kd-stat .v{font-size:22px;font-weight:800;letter-spacing:-.02em}
+  .kd-stat .v small{font-size:12px;color:var(--muted);font-weight:600}
+  .kd-stat .d{font-size:12px;color:var(--muted)}
+
+  .kd-chartcard{border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 1px 2px rgba(10,10,12,.03)}
+  .kd-chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+  .kd-chart-head h2{font-size:18px;letter-spacing:-.01em;font-weight:800}
+  .kd-legend{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);font-weight:600}
+  .kd-legend .dot{width:14px;height:3px;border-radius:2px;display:inline-block}
+  .kd-legend .dot.ink{background:var(--ink)}
+  .kd-legend .dot.dash{background:repeating-linear-gradient(90deg,rgba(10,10,12,.4) 0 4px,transparent 4px 7px)}
+  .kd-chartwrap{position:relative;height:340px}
+  .kd-chartwrap canvas{max-height:340px}
+
+  .kd-back{display:inline-block;margin-top:26px;font-size:14px;font-weight:700;color:var(--ink);border-bottom:2px solid var(--yellow);padding-bottom:2px}
+  .kd-back:hover{background:var(--yellow)}
+
+  @media(max-width:720px){
+    .kd-head{align-items:flex-start}.kd-price{text-align:left}
+    .kd-head h1{font-size:34px}
+    .kd-stats{grid-template-columns:1fr 1fr}
+  }
+</style>
