@@ -113,7 +113,7 @@ export const GET: APIRoute = async () => {
 
   const listingsRes = await supabase
     .from('bazar_listings')
-    .select('id, updated_at, created_at')
+    .select('id, updated_at, created_at, category, brand')
     .eq('status', 'active')
     .order('created_at', { ascending: false })
     .limit(2000);
@@ -247,6 +247,26 @@ export const GET: APIRoute = async () => {
   const { KRAJE } = await import('../lib/cap-dotace');
   for (const k of KRAJE) {
     urls.push({ loc: `${SITE_URL}/bazar/kraj/${k.slug}/`, changefreq: 'weekly', priority: '0.65', lastmod: latestListingLastmod ?? D_KRAJE });
+  }
+
+  // Category landing pages (/bazar/kategorie/<cat>/) — all categories, they are
+  // legitimate top-level targets ("bazar traktorů"). Category × brand pages are
+  // added ONLY for combos that actually have active listings (empty combos are
+  // served noindex, so they must not appear in the sitemap).
+  const { CATEGORIES: BAZAR_CATEGORIES, BRANDS: BAZAR_BRANDS } = await import('../lib/bazar-constants');
+  const validCat = new Set(BAZAR_CATEGORIES.map((c) => c.value));
+  const validBrand = new Set(BAZAR_BRANDS.map((b) => b.value));
+  for (const c of BAZAR_CATEGORIES) {
+    urls.push({ loc: `${SITE_URL}/bazar/kategorie/${c.value}/`, changefreq: 'weekly', priority: '0.7', lastmod: latestListingLastmod ?? D_KRAJE });
+  }
+  const catBrandCombos = new Set<string>();
+  for (const l of listingsDyn as Array<{ category?: string; brand?: string }>) {
+    if (l.category && l.brand && validCat.has(l.category) && validBrand.has(l.brand)) {
+      catBrandCombos.add(`${l.category}/${l.brand}`);
+    }
+  }
+  for (const combo of catBrandCombos) {
+    urls.push({ loc: `${SITE_URL}/bazar/kategorie/${combo}/`, changefreq: 'weekly', priority: '0.6', lastmod: latestListingLastmod ?? D_KRAJE });
   }
 
   // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.

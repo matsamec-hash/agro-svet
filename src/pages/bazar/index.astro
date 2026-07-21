@@ -168,6 +168,14 @@ const itemListJsonLd = page === 1 && displayedListings.length > 0 ? {
       </div>
     </div>
 
+    {isDefaultView && (
+      <nav class="bazar-cat-nav" aria-label="Kategorie bazaru">
+        {CATEGORIES.map((c) => (
+          <a href={`/bazar/kategorie/${c.value}/`} class="bazar-cat-link">{c.label}</a>
+        ))}
+      </nav>
+    )}
+
     <div class="bazar-grid">
       <BazarSidebar query={query} category={category} brand={brand} location={location} priceFrom={priceFrom} priceTo={priceTo} yearFrom={yearFrom} yearTo={yearTo} powerFrom={powerFrom} powerTo={powerTo} zaberFrom={zaberFrom} zaberTo={zaberTo} nosnostFrom={nosnostFrom} nosnostTo={nosnostTo} objemFrom={objemFrom} objemTo={objemTo} />
 
@@ -218,6 +226,18 @@ const itemListJsonLd = page === 1 && displayedListings.length > 0 ? {
 </Layout>
 
 <style>
+  .bazar-cat-nav {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 0 0 24px;
+  }
+  .bazar-cat-link {
+    display: inline-block; padding: 7px 14px;
+    background: #fafafa; border: 1px solid #eaeaec; border-radius: 999px;
+    font-size: 13px; font-weight: 600; color: #0A0A0B; text-decoration: none;
+    transition: border-color .15s, background .15s;
+  }
+  .bazar-cat-link:hover { border-color: #FFEA00; background: #fff; }
+
   .bazar-grid {
     display: grid;
     grid-template-columns: 280px 1fr;
