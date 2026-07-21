@@ -20,6 +20,8 @@ interface CompactListing {
   lng: number;
   img?: string;
   created_at: string;
+  year: number | null;
+  power: number | null;
 }
 
 export const GET: APIRoute = async ({ request, locals }) => {
@@ -29,7 +31,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
   const sb = createServerClient();
   const { data, error } = await sb
     .from('bazar_listings')
-    .select('id, title, price, category, brand, location, latitude, longitude, created_at, bazar_images(storage_path, position)')
+    .select('id, title, price, category, brand, location, latitude, longitude, created_at, year_of_manufacture, power_hp, bazar_images(storage_path, position)')
     .eq('status', 'active')
     .not('latitude', 'is', null)
     .not('longitude', 'is', null)
@@ -58,6 +60,8 @@ export const GET: APIRoute = async ({ request, locals }) => {
       lng: row.longitude,
       img,
       created_at: row.created_at,
+      year: row.year_of_manufacture ?? null,
+      power: row.power_hp ?? null,
     };
   });
 

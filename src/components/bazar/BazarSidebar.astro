@@ -1,11 +1,13 @@
 ---
 import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
+import { getModelOptions } from '../../lib/bazar-catalog';
 import LocationInput from './LocationInput.astro';
 
 interface Props {
   query?: string;
   category?: string;
   brand?: string;
+  modelSlug?: string;
   location?: string;
   priceFrom?: string;
   priceTo?: string;
@@ -22,7 +24,7 @@ interface Props {
 }
 
 const {
-  query = '', category = '', brand = '', location = '',
+  query = '', category = '', brand = '', modelSlug = '', location = '',
   priceFrom = '', priceTo = '',
   yearFrom = '', yearTo = '',
   powerFrom = '', powerTo = '',
@@ -32,6 +34,16 @@ const {
 } = Astro.props;
 
 const showMachineFilters = category === 'traktory' || category === 'kombajny' || !category;
+
+// Model/typ nabízíme až po výběru značky (katalog má stovky modelů na značku).
+// Seskupíme podle řady (series) do <optgroup>. Model závisí na značce → když se
+// změní značka, JS níže model vynuluje (a server ho stejně nezohlední vůči jiné značce).
+const modelOptions = brand && showMachineFilters
+  ? getModelOptions(category || undefined).filter((m) => m.brand_slug === brand)
+  : [];
+const modelSeries = [...new Map(modelOptions.map((m) => [m.series_slug, m.series_name])).entries()]
+  .map(([slug, name]) => ({ slug, name, models: modelOptions.filter((m) => m.series_slug === slug) }));
+const selectedModelName = modelOptions.find((m) => m.slug === modelSlug)?.name ?? '';
 const showZaberFilter = !category || ['zpracovani-pudy', 'seti', 'ochrana-rostlin', 'sklizen-picnin'].includes(category);
 const showNosnostFilter = !category || ['manipulace', 'doprava'].includes(category);
 const showObjemFilter = !category || ['hnojeni', 'ochrana-rostlin'].includes(category);
@@ -46,6 +58,7 @@ if (brand) {
   const br = BRANDS.find(b => b.value === brand);
   if (br) activeFilters.push({ label: br.label, removeParams: ['brand'] });
 }
+if (selectedModelName) activeFilters.push({ label: selectedModelName, removeParams: ['model'] });
 if (location) activeFilters.push({ label: `📍 ${location}`, removeParams: ['location'] });
 if (priceFrom || priceTo) {
   const from = priceFrom ? `${parseInt(priceFrom).toLocaleString('cs-CZ')} Kč` : '';
@@ -122,6 +135,22 @@ function buildRemoveUrl(params: string[]): string {
         ))}
       </select>
     </div>
+
+    {modelSeries.length > 0 && (
+      <div class="sf-field">
+        <label for="sf-model">Model / typ</label>
+        <select id="sf-model" name="model" class="form-input">
+          <option value="">Všechny</option>
+          {modelSeries.map(s => (
+            <optgroup label={s.name}>
+              {s.models.map(m => (
+                <option value={m.slug} selected={m.slug === modelSlug}>{m.name}</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+    )}
 
     <div class="sf-field">
       <label for="sf-location">Lokalita</label>
@@ -258,6 +287,15 @@ function buildRemoveUrl(params: string[]): string {
       if (target === window.location.pathname + window.location.search) return;
       window.location.href = target;
     }
+
+    // Změna značky musí vynulovat model (nabídka modelů závisí na značce) — jinak
+    // by se do URL propsal model patřící k předchozí značce. Registrujeme PŘED
+    // generickým applyNow, ať se vynulování stihne dřív, než se čte FormData.
+    const brandSel = form.querySelector('#sf-brand');
+    brandSel?.addEventListener('change', () => {
+      const modelSel = form.querySelector('#sf-model');
+      if (modelSel) modelSel.value = '';
+    });
 
     form.querySelectorAll('select').forEach((el) => {
       el.addEventListener('change', applyNow);

@@ -7,6 +7,7 @@ import BazarFeaturedGrid from '../../components/bazar/BazarFeaturedGrid.astro';
 import { CATEGORIES } from '../../lib/bazar-constants';
 import { createServerClient } from '../../lib/supabase';
 import { isFeaturedActive } from '../../lib/bazar-featured';
+import { getModelBySlug } from '../../lib/stroje';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
 
@@ -61,7 +62,17 @@ if (nosnostFrom) dbQuery = dbQuery.gte('nosnost_kg', parseInt(nosnostFrom));
 if (nosnostTo) dbQuery = dbQuery.lte('nosnost_kg', parseInt(nosnostTo));
 if (objemFrom) dbQuery = dbQuery.gte('objem_nadrze_l', parseInt(objemFrom));
 if (objemTo) dbQuery = dbQuery.lte('objem_nadrze_l', parseInt(objemTo));
-if (modelSlug) dbQuery = dbQuery.eq('model_slug', modelSlug);
+if (modelSlug) {
+  // Model matchujeme z katalogu (model_slug) NEBO podle názvu — seedované inzeráty
+  // z Bazoše mají model jen v titulku (model_slug=null). Do PostgREST .or() jde
+  // název jen když je „bezpečný" (bez čárek/závorek, které syntaxi .or rozbijí);
+  // jinak spadneme na čistý model_slug match.
+  const modelName = getModelBySlug(modelSlug)?.name ?? '';
+  const safeName = modelName && !/[,().*]/.test(modelName) ? modelName : '';
+  dbQuery = safeName
+    ? dbQuery.or(`model_slug.eq.${modelSlug},title.ilike.*${safeName}*`)
+    : dbQuery.eq('model_slug', modelSlug);
+}
 
 const { data: listings, count } = await dbQuery;
 
@@ -177,7 +188,7 @@ const itemListJsonLd = page === 1 && displayedListings.length > 0 ? {
     )}
 
     <div class="bazar-grid">
-      <BazarSidebar query={query} category={category} brand={brand} location={location} priceFrom={priceFrom} priceTo={priceTo} yearFrom={yearFrom} yearTo={yearTo} powerFrom={powerFrom} powerTo={powerTo} zaberFrom={zaberFrom} zaberTo={zaberTo} nosnostFrom={nosnostFrom} nosnostTo={nosnostTo} objemFrom={objemFrom} objemTo={objemTo} />
+      <BazarSidebar query={query} category={category} brand={brand} modelSlug={modelSlug} location={location} priceFrom={priceFrom} priceTo={priceTo} yearFrom={yearFrom} yearTo={yearTo} powerFrom={powerFrom} powerTo={powerTo} zaberFrom={zaberFrom} zaberTo={zaberTo} nosnostFrom={nosnostFrom} nosnostTo={nosnostTo} objemFrom={objemFrom} objemTo={objemTo} />
 
       <div class="bazar-main">
         {isDefaultView && featuredListings.length > 0 && (

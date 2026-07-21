@@ -1,11 +1,11 @@
 import type { APIRoute } from 'astro';
-import { createServerClient } from '../../../../lib/supabase';
+import { createAnonClient, createServerClient } from '../../../../lib/supabase';
 import { confirmProspect, getProspectByToken, type EnsureUser } from '../../../../lib/bazar-seed';
 import { SITE_URL } from '../../../../lib/config';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, clientAddress }) => {
+export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
   const form = await request.formData();
   const token = form.get('token')?.toString() ?? '';
   const termsVersion = form.get('terms_version')?.toString() ?? '';
@@ -53,13 +53,38 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return new Response(`Chyba: ${(e as Error).message}`, { status: 400 });
   }
 
-  // Passwordless přihlášení: vygeneruj magic link a přesměruj přes callback na /bazar/moje?welcome=1.
-  const nextPath = encodeURIComponent('/bazar/moje?welcome=1');
-  const { data: link } = await supabase.auth.admin.generateLink({
-    type: 'magiclink',
-    email,
-    options: { redirectTo: `${SITE_URL}/bazar/auth/callback/?next=${nextPath}` },
+  // Passwordless přihlášení BEZ round-tripu přes prohlížeč: dřív jsme prodejce
+  // přesměrovávali na Supabase magic-link → /bazar/auth/callback, jenže ten callback
+  // je PKCE flow a čeká code_verifier v prohlížeči. Server-generovaný odkaz žádný
+  // verifier nemá → getSession selhal → „Přihlášení přes Google selhalo". Místo toho
+  // session založíme rovnou tady: generateLink dá hashed_token, verifyOtp ho na
+  // anon klientovi vymění za session, a její tokeny uložíme do stejných cookies,
+  // které čte middleware (sb-access-token / sb-refresh-token).
+  try {
+    const { data: link } = await supabase.auth.admin.generateLink({ type: 'magiclink', email });
+    const tokenHash = link?.properties?.hashed_token;
+    if (tokenHash) {
+      const anon = createAnonClient();
+      const { data: verified } = await anon.auth.verifyOtp({ token_hash: tokenHash, type: 'magiclink' });
+      const session = verified?.session;
+      if (session?.access_token && session.refresh_token) {
+        const cookieOpts = {
+          path: '/',
+          httpOnly: true,
+          secure: import.meta.env.PROD,
+          sameSite: 'lax' as const,
+          maxAge: 60 * 60 * 24 * 7,
+        };
+        cookies.set('sb-access-token', session.access_token, cookieOpts);
+        cookies.set('sb-refresh-token', session.refresh_token, cookieOpts);
+      }
+    }
+  } catch {
+    // Když se auto-login nepovede, inzerát je i tak zveřejněný — prodejce se
+    // dostane do „Moje inzeráty" přes běžné přihlášení. Nezhazujeme kvůli tomu redirect.
+  }
+  return new Response(null, {
+    status: 303,
+    headers: { Location: `${SITE_URL}/bazar/moje/?welcome=1` },
   });
-  const actionLink = link?.properties?.action_link ?? `${SITE_URL}/bazar/moje/?welcome=1`;
-  return new Response(null, { status: 303, headers: { Location: actionLink } });
 };

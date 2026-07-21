@@ -1,0 +1,27 @@
+---
+export const prerender = false;
+import { createAnonClient } from '../../../lib/supabase';
+
+// Přihlašovací odkaz z e-mailu: token_hash vyměníme server-side za session
+// (verifyOtp) a uložíme do cookies. Žádný PKCE round-trip v prohlížeči.
+const t = Astro.url.searchParams.get('t') ?? '';
+if (!t) return Astro.redirect('/bazar/prihlaseni/?error=link');
+
+const anon = createAnonClient();
+const { data } = await anon.auth.verifyOtp({ token_hash: t, type: 'magiclink' });
+const session = data?.session;
+if (!session?.access_token || !session.refresh_token) {
+  return Astro.redirect('/bazar/prihlaseni/?error=link');
+}
+
+const cookieOpts = {
+  path: '/',
+  httpOnly: true,
+  secure: import.meta.env.PROD,
+  sameSite: 'lax' as const,
+  maxAge: 60 * 60 * 24 * 7,
+};
+Astro.cookies.set('sb-access-token', session.access_token, cookieOpts);
+Astro.cookies.set('sb-refresh-token', session.refresh_token, cookieOpts);
+return Astro.redirect('/bazar/moje/');
+---

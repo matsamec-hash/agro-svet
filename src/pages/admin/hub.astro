@@ -1,16 +1,15 @@
 ---
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
+// Rozcestník admina. POZOR: `/admin/` je zabraný Decap CMS (statický
+// public/admin/index.html), takže tenhle hub žije na `/admin/hub/`.
+// Middleware gate-uje celé /admin/* na is_admin=true.
 ---
 
 <Layout title="Admin — agro-svet" description="Admin rozcestník">
   <main class="admin-home">
     <h1>Admin</h1>
     <div class="tiles">
-      <a href="/admin/fotosoutez/" class="tile">
-        <h2>Fotosoutěž</h2>
-        <p>Moderace, kola, vítězové</p>
-      </a>
       <a href="/admin/bazar/" class="tile">
         <h2>Agro bazar — Topování</h2>
         <p>TOP inzeráty, aktivace, prodloužení</p>
@@ -19,6 +18,14 @@ import Layout from '../../layouts/Layout.astro';
         <h2>Agro bazar — Import / seeding</h2>
         <p>Import inzerátů z Bazoše, AI strukturace, claim odkazy</p>
       </a>
+      <a href="/admin/uzivatele/" class="tile">
+        <h2>Registrovaní uživatelé</h2>
+        <p>Přehled účtů bazaru, počet inzerátů</p>
+      </a>
+      <a href="/admin/fotosoutez/" class="tile">
+        <h2>Fotosoutěž</h2>
+        <p>Moderace, kola, vítězové</p>
+      </a>
       <a href="/admin/clanky/" class="tile">
         <h2>Články — featured na HP</h2>
         <p>Pin článků nahoru hero gridu</p>
@@ -26,6 +33,10 @@ import Layout from '../../layouts/Layout.astro';
       <a href="/admin/akce/" class="tile">
         <h2>Kalendář akcí</h2>
         <p>Moderace akcí čekajících na schválení</p>
+      </a>
+      <a href="/admin/" class="tile">
+        <h2>Obsah webu (CMS)</h2>
+        <p>Decap CMS — psaní a úpravy článků</p>
       </a>
     </div>
   </main>

@@ -17,21 +17,37 @@ const LISTING_COLUMNS = [
   'id, title, description, price, location, category, subcategory, brand',
   'model_slug, year_of_manufacture, power_hp, hours_operated',
   'pracovni_zaber_m, nosnost_kg, objem_nadrze_l',
-  'phone, email, views, created_at, status',
+  'phone, email, views, created_at, status, seed_prospect_id',
   'bazar_images(storage_path, position), bazar_users(name)',
 ].join(', ');
 
 const { data: listing } = await supabase
   .from('bazar_listings')
   .select(LISTING_COLUMNS)
-  // Neveřejné seed drafty (pending_claim) nesmí být přístupné ani přímo přes URL
-  // detailu — server-side klient obchází RLS, takže status filtrujeme explicitně.
   .eq('id', id)
-  .neq('status', 'pending_claim')
   .single();
 
 if (!listing) {
   return Astro.rewrite('/404');
+}
+
+// Neveřejné seed drafty (pending_claim) nejsou veřejně přístupné. Výjimka: NÁHLED
+// pro prodejce přes `?preview=<claim_token>` — token musí patřit právě tomuto draftu.
+// Server-side klient obchází RLS, takže gate-ujeme explicitně v kódu.
+const previewToken = Astro.url.searchParams.get('preview') ?? '';
+const isPreview = (listing as any).status === 'pending_claim';
+if (isPreview) {
+  let allowed = false;
+  if (previewToken && (listing as any).seed_prospect_id) {
+    const { data: prospect } = await supabase
+      .from('bazar_seed_prospects')
+      .select('id')
+      .eq('claim_token', previewToken)
+      .eq('id', (listing as any).seed_prospect_id)
+      .maybeSingle();
+    allowed = Boolean(prospect);
+  }
+  if (!allowed) return Astro.rewrite('/404');
 }
 
 // View counter moved to client-side beacon → /api/bazar/views/[id] (atomic RPC).
@@ -87,6 +103,12 @@ const breadcrumbJsonLd = breadcrumbSchema([
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <div style="max-width:1000px; margin:0 auto; padding:32px 24px 80px;">
+
+    {isPreview && (
+      <div style="background:#fffbe6; border:1px solid #f0d98a; border-radius:10px; padding:12px 16px; margin-bottom:20px; font-size:14px;">
+        👁️ <strong>Náhled</strong> — takto bude inzerát vypadat po zveřejnění. Zatím není veřejný.
+      </div>
+    )}
 
     <!-- Breadcrumb -->
     <nav style="font-size:13px; color:#666; margin-bottom:20px;">

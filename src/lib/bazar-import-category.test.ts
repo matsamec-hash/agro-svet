@@ -1,6 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { suggestCategory } from './bazar-import-category';
+import { suggestCategory, matchBrand } from './bazar-import-category';
 import { CATEGORIES } from './bazar-constants';
+
+describe('matchBrand', () => {
+  it('John Deere → john-deere', () => {
+    expect(matchBrand('John Deere 6210R', '')).toBe('john-deere');
+  });
+  it('Zetor v popisu → zetor', () => {
+    expect(matchBrand('Traktor', 'Prodám Zetor 7211')).toBe('zetor');
+  });
+  it('neznámá značka → null', () => {
+    expect(matchBrand('Nějaký stroj', 'bez značky')).toBeNull();
+  });
+});
 
 describe('suggestCategory', () => {
   it('traktor → traktory', () => {
@@ -16,7 +28,7 @@ describe('suggestCategory', () => {
     expect(suggestCategory('Xyz qwerty', '')).toBe('ostatni');
   });
   it('vždy vrací platnou hodnotu z CATEGORIES', () => {
-    const valid = new Set(CATEGORIES.map((c) => c.value));
+    const valid = new Set<string>(CATEGORIES.map((c) => c.value));
     expect(valid.has(suggestCategory('Traktor', ''))).toBe(true);
   });
 });

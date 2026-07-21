@@ -1,0 +1,85 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { createServerClient } from '../../../lib/supabase';
+
+// Middleware gate-uje /admin/* na is_admin=true. Přehled registrovaných účtů bazaru.
+const supabase = createServerClient();
+
+const { data: users } = await supabase
+  .from('bazar_users')
+  .select('id, name, email, phone, is_admin, created_at')
+  .order('created_at', { ascending: false })
+  .limit(1000);
+
+// Počty inzerátů na uživatele — jedním dotazem, sečteme v JS (dataset je malý).
+const { data: listings } = await supabase
+  .from('bazar_listings')
+  .select('user_id, status')
+  .not('user_id', 'is', null)
+  .limit(5000);
+
+const countByUser = new Map<string, { total: number; active: number }>();
+for (const l of listings ?? []) {
+  const uid = (l as any).user_id as string;
+  const c = countByUser.get(uid) ?? { total: 0, active: 0 };
+  c.total += 1;
+  if ((l as any).status === 'active') c.active += 1;
+  countByUser.set(uid, c);
+}
+
+const fmtDate = (iso: string | null) =>
+  iso ? new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' }).format(new Date(iso)) : '—';
+---
+
+<Layout title="Registrovaní uživatelé — Admin">
+  <main class="admin-users">
+    <p><a href="/admin/hub/" class="back">← Admin rozcestník</a></p>
+    <h1>Registrovaní uživatelé <span class="count">{users?.length ?? 0}</span></h1>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Jméno</th><th>E-mail</th><th>Telefon</th><th>Registrace</th>
+            <th class="num">Inzeráty</th><th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          {(users ?? []).map((u: any) => {
+            const c = countByUser.get(u.id) ?? { total: 0, active: 0 };
+            return (
+              <tr>
+                <td>{u.name || '—'}</td>
+                <td>{u.email || '—'}</td>
+                <td>{u.phone || '—'}</td>
+                <td>{fmtDate(u.created_at)}</td>
+                <td class="num">{c.active} / {c.total}</td>
+                <td>{u.is_admin ? <span class="admin-badge">admin</span> : '—'}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {(!users || users.length === 0) && <p class="empty">Zatím žádní registrovaní uživatelé.</p>}
+    </div>
+    <p class="hint">Inzeráty: aktivní / celkem. Data jsou jen pro tebe (admin).</p>
+  </main>
+
+  <style>
+    .admin-users { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
+    .back { color: #666; text-decoration: none; font-size: 14px; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-family: 'Chakra Petch', sans-serif; font-size: 1.8rem; margin: 12px 0 24px; }
+    .count { color: #999; font-weight: 400; }
+    .table-wrap { border: 1px solid #e8e8e8; border-radius: 12px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+    th { background: #fafafa; font-weight: 600; color: #555; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+    tr:last-child td { border-bottom: none; }
+    .num { text-align: right; }
+    .admin-badge { background: #1a1a1a; color: #FFFF00; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+    .empty { padding: 24px 16px; color: #999; }
+    .hint { color: #999; font-size: 12px; margin-top: 12px; }
+  </style>
+</Layout>

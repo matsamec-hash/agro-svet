@@ -53,7 +53,16 @@ const { data: listings } = await supabase
         <p class="text-sm mb-2">Chcete si nastavit heslo pro pozdější úpravy? (Nepovinné — příště vám
         pošleme přihlašovací odkaz e-mailem.)</p>
         <form id="pwForm" class="flex gap-2">
-          <input type="password" name="password" minlength="8" placeholder="Nové heslo" class="border p-2 flex-1" />
+          <div class="relative flex-1">
+            <input id="pwInput" type="password" name="password" minlength="8" placeholder="Nové heslo" class="border p-2 pr-10 w-full" />
+            <button type="button" id="pwToggle" aria-label="Zobrazit heslo" aria-pressed="false"
+              class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-800">
+              <svg id="pwEye" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
           <button class="bg-green-700 text-white px-4 rounded">Uložit heslo</button>
         </form>
         <p id="pwMsg" class="text-sm mt-1"></p>
@@ -125,14 +134,41 @@ const { data: listings } = await supabase
 </Layout>
 
 <script>
-  import { getSupabaseBrowser } from '../../../lib/supabase-browser';
+  // Show/hide toggle pro pole hesla.
+  const pwInput = document.getElementById('pwInput') as HTMLInputElement | null;
+  const pwToggle = document.getElementById('pwToggle') as HTMLButtonElement | null;
+  const pwEye = document.getElementById('pwEye');
+  pwToggle?.addEventListener('click', () => {
+    if (!pwInput) return;
+    const show = pwInput.type === 'password';
+    pwInput.type = show ? 'text' : 'password';
+    pwToggle.setAttribute('aria-pressed', String(show));
+    pwToggle.setAttribute('aria-label', show ? 'Skrýt heslo' : 'Zobrazit heslo');
+    // Přeškrtnuté oko = heslo je vidět.
+    if (pwEye) pwEye.innerHTML = show
+      ? '<path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c6.5 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><path d="M6.61 6.61A18.5 18.5 0 0 0 2 12s3.5 8 10 8a9.12 9.12 0 0 0 5.39-1.61"></path><line x1="2" y1="2" x2="22" y2="22"></line>'
+      : '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>';
+  });
+
+  // Uložení hesla přes server (locals.user z httpOnly cookie), ne přes browser klienta.
   const form = document.getElementById('pwForm') as HTMLFormElement | null;
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const pw = (new FormData(form).get('password') as string) || '';
-    const { error } = await getSupabaseBrowser().auth.updateUser({ password: pw });
     const msg = document.getElementById('pwMsg');
-    if (msg) msg.textContent = error ? `Chyba: ${error.message}` : 'Heslo uloženo ✓';
+    if (msg) msg.textContent = 'Ukládám…';
+    try {
+      const res = await fetch('/api/bazar/password/', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ password: pw }),
+      });
+      const data = await res.json();
+      if (msg) msg.textContent = res.ok ? 'Heslo uloženo ✓' : `Chyba: ${data.error}`;
+      if (res.ok) form.reset();
+    } catch {
+      if (msg) msg.textContent = 'Chyba: nepodařilo se uložit heslo.';
+    }
   });
 </script>
 

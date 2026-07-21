@@ -67,8 +67,10 @@ const { data: prospects } = await supabase
         }),
       });
       const data = await res.json();
-      msg.textContent = res.ok ? 'Hotovo — draft vytvořen.' : `Chyba: ${data.error}`;
-      if (res.ok) setTimeout(() => location.reload(), 800);
+      msg.textContent = res.ok
+        ? `Hotovo — draft vytvořen. Fotky ${data.imageCount ?? 0}/${data.imageUrlsFound ?? 0} — ${(data.imageDebug || []).join(' | ') || 'žádné URL'}`
+        : `Chyba: ${data.error}`;
+      // Bez auto-reloadu, ať je diagnostika fotek čitelná; řádek se objeví po ručním F5.
     });
 
     document.querySelectorAll('.copyBtn').forEach((b) =>

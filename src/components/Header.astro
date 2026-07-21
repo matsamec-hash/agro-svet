@@ -77,6 +77,8 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
         <a href="/bazar/moje/" class="user-dropdown-item">{tr('header.myAds')}</a>
         <a href="/bazar/novy/" class="user-dropdown-item">{tr('header.newAd')}</a>
         <a href="/bazar/profil/" class="user-dropdown-item">{tr('header.profile')}</a>
+        <div id="admin-sep" class="user-dropdown-sep" hidden></div>
+        <a id="admin-link" href="/admin/hub/" class="user-dropdown-item user-dropdown-item--admin" hidden>⚙️ Admin</a>
         <div class="user-dropdown-sep"></div>
         <a href="/bazar/odhlaseni/" class="user-dropdown-item">{tr('header.logout')}</a>
       </div>
@@ -629,6 +631,13 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
       if (data.logged_in) {
         menu.hidden = false;
         if (nameSpan && data.name) nameSpan.textContent = data.name;
+        // Odkaz na admin jen pro is_admin (server ho stejně gate-uje).
+        if (data.is_admin) {
+          const adminLink = document.getElementById('admin-link');
+          const adminSep = document.getElementById('admin-sep');
+          if (adminLink) adminLink.hidden = false;
+          if (adminSep) adminSep.hidden = false;
+        }
         btn?.addEventListener('click', () => {
           if (!dropdown) return;
           dropdown.hidden = !dropdown.hidden;
