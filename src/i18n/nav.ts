@@ -160,9 +160,12 @@ export function getNav(locale: Locale): NavItem[] {
           // Scope-nuté na uk+pl → sk nav beze změny (sk si cs-fallback děti ponechává).
           .filter((c) => (locale !== 'uk' && locale !== 'pl') || isLaunchedPath(locale, norm(c.href)))
           .map((c) => ({ label: t(locale, c.labelKey), href: c.href }));
-        // Pokud vlastní top-level href sekce ukazuje na locked cestu (a filtrujeme),
-        // přesměruj na první viditelné dítě, ať header nedead-linkuje na 307 redirect.
-        if (filterLocked && isLockedSectionPath(norm(item.href)) && out.children.length) {
+        // Pokud vlastní top-level href sekce ukazuje na locked cestu NEBO není pro daný
+        // locale launchnutá (a filtrujeme), přesměruj na první viditelné (launchnuté) dítě
+        // — jinak by header dead-linkoval na cs (např. pl „Dane"→/data/ není pl-launched,
+        // ale dítě /puda/ ano). cs beze změny (filterLocked=false).
+        if (filterLocked && out.children.length &&
+            (isLockedSectionPath(norm(item.href)) || !isLaunchedPath(locale, norm(item.href)))) {
           out.href = out.children[0].href;
         }
       }
