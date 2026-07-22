@@ -1,27 +1,26 @@
 ---
-export const prerender = true;
+// SSR (prerender=false): renderuje se i pod /sk /uk /pl (middleware rewrite na cs
+// routu s locals.locale) — prerendered by pod locale prefixem 302-leakla na cs.
+export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
-import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, categoryLabel, type FunctionalGroupSlug, type StrojKategorie } from '../../../../lib/stroje';
+import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, categoryLabel, functionalGroupLabel, type FunctionalGroupSlug, type StrojKategorie } from '../../../../lib/stroje';
 import { itemListSchema } from '../../../../lib/structured-data';
+import { useTranslations, getLocaleFromUrl, tf, localizePath } from '../../../../i18n/utils';
 
-export async function getStaticPaths() {
-  // Generujeme jen skupiny s alespoň jedním modelem. Prázdné jsou skryté i v UI a sitemapě;
-  // vrátíme až budou naplněné (viz project memory).
-  // effective_category resolves series.subcategory (Kverneland-style) to the listing slug.
-  const all = getAllModels();
-  return (Object.entries(FUNCTIONAL_GROUPS) as [string, typeof FUNCTIONAL_GROUPS[FunctionalGroupSlug]][])
-    .filter(([_, g]) => all.some((m) => (g.categories as readonly string[]).includes(m.effective_category)))
-    .map(([slug]) => ({ params: { group: slug } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 const { group: groupSlug } = Astro.params;
 const group = FUNCTIONAL_GROUPS[groupSlug as FunctionalGroupSlug];
 if (!group) return Astro.rewrite('/404');
+const groupName = functionalGroupLabel(groupSlug!, locale);
 
 const allBrands = getAllBrands();
 const allModels = getAllModels();
 const groupCats = group.categories as readonly StrojKategorie[];
 const groupModels = allModels.filter((m) => groupCats.includes(m.effective_category));
+// SSR: prázdné skupiny (dřív vyloučené v getStaticPaths) drž na 404.
+if (groupModels.length === 0) return Astro.rewrite('/404');
 const groupBrands = [...new Set(groupModels.map((m) => m.brand_slug))]
   .map((slug) => allBrands.find((b) => b.slug === slug))
   .filter((b): b is NonNullable<typeof b> => Boolean(b));
@@ -32,17 +31,17 @@ const subcategoryStats: SubcatStat[] = groupCats.map((cat) => {
   const cModels = groupModels.filter((m) => m.effective_category === cat);
   const cBrands = new Set(cModels.map((m) => m.brand_slug));
   // Kanonický CZ název kategorie (funkční subkategorie nemají `name` v YAML značek).
-  return { slug: cat, name: categoryLabel(cat), modelCount: cModels.length, brandCount: cBrands.size };
+  return { slug: cat, name: categoryLabel(cat, locale), modelCount: cModels.length, brandCount: cBrands.size };
 });
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Katalog strojů', item: 'https://agro-svet.cz/stroje/' },
-    { '@type': 'ListItem', position: 3, name: 'Zemědělské stroje', item: 'https://agro-svet.cz/stroje/zemedelske-stroje/' },
-    { '@type': 'ListItem', position: 4, name: group.name, item: `https://agro-svet.cz/stroje/zemedelske-stroje/${groupSlug}/` },
+    { '@type': 'ListItem', position: 1, name: tr('cat.bc.home'), item: `https://agro-svet.cz${localizePath(locale, '/')}` },
+    { '@type': 'ListItem', position: 2, name: tr('cat.bc.tech'), item: `https://agro-svet.cz${localizePath(locale, '/stroje/')}` },
+    { '@type': 'ListItem', position: 3, name: tr('cat.zem.back'), item: `https://agro-svet.cz${localizePath(locale, '/stroje/zemedelske-stroje/')}` },
+    { '@type': 'ListItem', position: 4, name: groupName, item: `https://agro-svet.cz${localizePath(locale, `/stroje/zemedelske-stroje/${groupSlug}/`)}` },
   ],
 };
 const subcatsWithModels = subcategoryStats.filter((s) => s.modelCount > 0);
@@ -52,36 +51,35 @@ const subcatListJsonLd = subcatsWithModels.length > 0
         url: `/stroje/${s.slug}/`,
         name: s.name,
       })),
-      `${group.name} — sub-kategorie`,
+      `${groupName} — ${tr('cat.zem.subcats')}`,
     )
   : null;
 ---
 
 <Layout
-  title={`${group.name} — katalog strojů`}
-  description={`${group.description}. ${groupModels.length} modelů od ${groupBrands.length} značek.`}
-  canonical={`https://agro-svet.cz/stroje/zemedelske-stroje/${groupSlug}/`}
+  title={tf(locale, 'cat.zem.groupTitle', { group: groupName })}
+  description={tf(locale, 'cat.zem.groupDesc', { group: groupName, n: groupModels.length, b: groupBrands.length })}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   {subcatListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(subcatListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px;">
-      <a href="/stroje/zemedelske-stroje/" style="font-size:13px; color:#666; text-decoration:none;">← Zemědělské stroje</a>
+      <a href={localizePath(locale, '/stroje/zemedelske-stroje/')} style="font-size:13px; color:#666; text-decoration:none;">← {tr('cat.zem.back')}</a>
     </div>
 
     <div style="margin-bottom:32px;">
-      <span style="display:inline-block; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#1a1a1a; background:#FFFF00; padding:4px 10px; border-radius:3px; margin-bottom:14px;">Zemědělské stroje</span>
-      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">{group.name}</h1>
-      <p style="font-size:16px; color:#666; max-width:720px; line-height:1.6;">{group.description}</p>
+      <span style="display:inline-block; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#1a1a1a; background:#FFFF00; padding:4px 10px; border-radius:3px; margin-bottom:14px;">{tr('cat.zem.back')}</span>
+      <h1 style="font-family:'Chakra Petch',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; letter-spacing:-1px; color:#1a1a1a; margin-bottom:14px;">{groupName}</h1>
+      {locale === 'cs' && <p style="font-size:16px; color:#666; max-width:720px; line-height:1.6;">{group.description}</p>}
     </div>
 
-    <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">Sub-kategorie</h2>
+    <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">{tr('cat.zem.subcats')}</h2>
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-bottom:40px;">
       {subcategoryStats.map((s) => (
         <a href={`/stroje/${s.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:border-color .2s, box-shadow .2s;" class="subcat-card">
           <h3 style="font-family:'Chakra Petch',sans-serif; font-size:17px; font-weight:700; color:#1a1a1a; margin-bottom:6px;">{s.name}</h3>
           <div style="font-size:12px; color:#767676;">
-            {s.modelCount > 0 ? `${s.modelCount} modelů · ${s.brandCount} značek` : 'Připravujeme'}
+            {s.modelCount > 0 ? `${s.modelCount} ${tr('cat.statModels')} · ${s.brandCount} ${tr('cat.zem.brandsWord')}` : tr('cat.zem.comingSoon')}
           </div>
         </a>
       ))}
@@ -89,10 +87,10 @@ const subcatListJsonLd = subcatsWithModels.length > 0
 
     {groupBrands.length > 0 && (
       <>
-        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">Značky v kategorii</h2>
+        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">{tr('cat.zem.brandsInCat')}</h2>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           {groupBrands.map((b) => (
-            <a href={`/stroje/${b.slug}/`} style="padding:6px 14px; border:1px solid #e0e0e0; border-radius:999px; font-size:13px; color:#1a1a1a; text-decoration:none; transition:background .15s, border-color .15s;" class="brand-pill">{b.name}</a>
+            <a href={localizePath(locale, `/stroje/${b.slug}/`)} style="padding:6px 14px; border:1px solid #e0e0e0; border-radius:999px; font-size:13px; color:#1a1a1a; text-decoration:none; transition:background .15s, border-color .15s;" class="brand-pill">{b.name}</a>
           ))}
         </div>
       </>
