@@ -114,6 +114,7 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
     section: 'data', labelKey: 'nav.data', href: '/data/',
     children: [
       { labelKey: 'nav.data.markets', href: '/statistiky/' },
+      { labelKey: 'nav.data.historie', href: '/historie/' },
       { labelKey: 'nav.data.soil', href: '/puda/' },
       { labelKey: 'nav.data.calculators', href: '/kalkulacka/' },
       { labelKey: 'nav.data.capCalc', href: '/kalkulacka/dotace-cap/' },

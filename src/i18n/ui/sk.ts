@@ -56,6 +56,7 @@ const sk: Record<string, string> = {
 
   // — navigácia: Dáta —
   'nav.data.markets': 'Trhy a komodity',
+  'nav.data.historie': 'História poľnohospodárstva',
   'nav.data.soil': 'Poľnohospodárska pôda',
   'nav.data.calculators': 'Kalkulačky',
   'nav.data.capCalc': 'Kalkulačka dotácií SPP',

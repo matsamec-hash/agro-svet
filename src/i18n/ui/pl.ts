@@ -58,6 +58,7 @@ const pl: Record<string, string> = {
 
   // — nawigacja: Dane —
   'nav.data.markets': 'Rynki i surowce',
+  'nav.data.historie': 'Historia rolnictwa',
   'nav.data.soil': 'Grunty rolne',
   'nav.data.calculators': 'Kalkulatory',
   'nav.data.capCalc': 'Kalkulator dopłat WPR',

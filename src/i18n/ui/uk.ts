@@ -61,6 +61,7 @@ const uk: Record<string, string> = {
 
   // — navigace: Data —
   'nav.data.markets': 'Ринки та товари',
+  'nav.data.historie': 'Історія сільського господарства',
   'nav.data.soil': 'Сільськогосподарська земля',
   'nav.data.calculators': 'Калькулятори',
   'nav.data.capCalc': 'Калькулятор субсидій CAP',

@@ -50,13 +50,13 @@ describe('getNav', () => {
     expect(data!.href).toBe('/data/');
   });
 
-  it('cs nav: data sekce má 5 původních dětí + Svět (profily/srovnání) na konci', () => {
+  it('cs nav: data sekce má původní děti + Historie + Svět (profily/srovnání) na konci', () => {
     const nav = getNav('cs');
     const data = nav.find((s) => s.section === 'data')!;
     expect(data.href).toBe('/data/');
     const hrefs = (data.children ?? []).map((c) => c.href);
     expect(hrefs).toEqual([
-      '/statistiky/', '/puda/', '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/',
+      '/statistiky/', '/historie/', '/puda/', '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/',
       '/svet/', '/svet/srovnani/',
     ]);
   });

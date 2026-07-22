@@ -56,6 +56,7 @@ const cs: Record<string, string> = {
 
   // — navigace: Data —
   'nav.data.markets': 'Trhy a komodity',
+  'nav.data.historie': 'Historie zemědělství',
   'nav.data.soil': 'Zemědělská půda',
   'nav.data.calculators': 'Kalkulačky',
   'nav.data.capCalc': 'Kalkulačka dotací CAP',
