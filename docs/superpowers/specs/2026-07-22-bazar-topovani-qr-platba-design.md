@@ -30,8 +30,8 @@ Nula ručních kroků, nula transakčních poplatků. Admin schválení zůstáv
 
 ## Návrh (delta oproti scaffoldu)
 
-### DB migrace `019_bazar_topovani_payments.sql`
-Nasadit na **self-hosted prod `supabase.samecdigital.com`** (Coolify), NE cloud. (Číslo 019 — 018 zabralo `018_akce_foto.sql`.)
+### DB migrace `020_bazar_topovani_payments.sql`
+Nasadit na **self-hosted prod `supabase.samecdigital.com`** (Coolify), NE cloud. (Číslo 020 — 018/019 zabraly akce migrace.)
 
 Rozšířit `bazar_featured_orders`:
 - `vs bigint UNIQUE` — číselný variabilní symbol z nové sekvence `bazar_vs_seq` (start např. 10000000, ať je VS 8-místný a nekoliduje).
@@ -73,7 +73,7 @@ Nová counter tabulka + RPC pro čísla faktur bez děr/duplicit:
 
 | Soubor | Odpovědnost |
 |--------|-------------|
-| `supabase/migrations/019_bazar_topovani_payments.sql` | Schema delta + VS sekvence + invoice counter RPC |
+| `supabase/migrations/020_bazar_topovani_payments.sql` | Schema delta + VS sekvence + invoice counter RPC |
 | `src/lib/spayd.ts` | SPAYD string builder + QR generace (čistá fce) |
 | `src/lib/fio.ts` | Fio REST client + parser transakcí (čistá fce nad JSON) |
 | `src/lib/invoice.ts` | PDF faktura (pdf-lib + fontkit) |

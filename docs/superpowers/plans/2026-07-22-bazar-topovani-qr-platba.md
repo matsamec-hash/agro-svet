@@ -22,7 +22,7 @@
 - Práce ve worktree z `origin/master`, deploy `git push HEAD:master` (sdílený checkout — paralelní session).
 
 ## File Structure
-- Create: `supabase/migrations/019_bazar_topovani_payments.sql`
+- Create: `supabase/migrations/020_bazar_topovani_payments.sql`
 - Create: `src/lib/bazar-vs.ts` (+ test) — číselný VS, formát/validace
 - Create: `src/lib/spayd.ts` (+ test) — SPAYD string builder
 - Create: `src/lib/fio.ts` (+ test) — parser Fio transakcí (čistá fce nad JSON)
@@ -73,11 +73,11 @@ git commit -m "chore(topovani): deps qrcode/pdf-lib/fontkit + DejaVu font asset"
 
 ### Task 2: Migrace 019 — platební sloupce + VS sekvence + čísla faktur
 
-**Files:** Create `supabase/migrations/019_bazar_topovani_payments.sql`
+**Files:** Create `supabase/migrations/020_bazar_topovani_payments.sql`
 
 - [ ] **Step 1: Napsat migraci**
 
-`supabase/migrations/019_bazar_topovani_payments.sql`:
+`supabase/migrations/020_bazar_topovani_payments.sql`:
 ```sql
 -- Topování přes QR platbu: VS párování (Fio), čísla faktur, buyer snapshot.
 -- Nasadit na self-hosted prod supabase.samecdigital.com (NE cloud).
@@ -133,7 +133,7 @@ Pozn.: nasazení na prod dělá uživatel (self-hosted psql). V rámci tasku jen
 
 - [ ] **Step 3: Commit**
 ```bash
-git add supabase/migrations/019_bazar_topovani_payments.sql
+git add supabase/migrations/020_bazar_topovani_payments.sql
 git commit -m "feat(topovani): migrace 019 — VS, fio_tx, invoice číslo/PDF, buyer snapshot"
 ```
 
@@ -804,7 +804,7 @@ const alreadyPaid = order.status === 'paid' || order.status === 'free';
 
 **Spec coverage:** migrace 019 (VS/fio_tx/invoice/buyer + counter RPC) ✔ · SPAYD/QR ✔ · Fio parser (idempotence přes fio_transaction_id, 2denní okno) ✔ · PDF faktura (pdf-lib + vložený DejaVu font kvůli diakritice) ✔ · číslo faktury bez děr (RPC) ✔ · request rozšíření (VS + IBAN + SPAYD) ✔ · status poll ✔ · reconcile cron (externí Bearer, ne CF scheduled — dle reálné architektury) ✔ · platební stránka ✔ · exact-amount matching + pending>14d expirace ✔ · oprava vadné copy ✔ · flag + provozní kroky ✔.
 
-**Odchylky od specu (opravené v plánu):** (1) `paid_at` už existuje (migrace 010) → 019 ho nepřidává. (2) Cron NENÍ CF Worker `scheduled()` — projekt běží na @astrojs/node adapteru, cron je externí pinger na `/api/cron/*` s Bearer (existující vzor). (3) Migrace = `019` (018 zabralo akce).
+**Odchylky od specu (opravené v plánu):** (1) `paid_at` už existuje (migrace 010) → 019 ho nepřidává. (2) Cron NENÍ CF Worker `scheduled()` — projekt běží na @astrojs/node adapteru, cron je externí pinger na `/api/cron/*` s Bearer (existující vzor). (3) Migrace = `020` (018 zabralo akce_foto, 019 akce_cena_galerie z paralelní session).
 
 **Placeholder scan:** pure funkce mají plný kód + testy; endpointy plný kód. Font se stahuje reálně (Task 1). Žádné TBD.
 

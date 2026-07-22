@@ -6,7 +6,7 @@ se neaktivuje. Zapni ho **až jako poslední krok**, po dokončení všeho níž
 
 ## Kroky na produkci (dělá uživatel)
 
-1. **Migrace DB** — nasadit `supabase/migrations/019_bazar_topovani_payments.sql` na
+1. **Migrace DB** — nasadit `supabase/migrations/020_bazar_topovani_payments.sql` na
    **self-hosted** `supabase.samecdigital.com` (Coolify psql), NE na cloud. Přidá VS
    sekvenci, sloupce (`vs`, `fio_transaction_id`, `invoice_number`, `invoice_pdf_path`,
    `buyer_*`), tabulku `bazar_invoice_counters` + RPC `bazar_next_vs()` a
