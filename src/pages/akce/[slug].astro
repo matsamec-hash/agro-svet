@@ -61,6 +61,7 @@ function relTermin(a: Akce): string {
   canonical={canonical}
   ogType="article"
   ogImage={heroImage ?? undefined}
+  noHreflang
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(eventJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />

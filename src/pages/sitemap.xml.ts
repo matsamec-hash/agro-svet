@@ -554,13 +554,13 @@ export const GET: APIRoute = async () => {
     akceUpByCombo.set(combo, (akceUpByCombo.get(combo) ?? 0) + 1);
   }
   urls.push({ loc: `${SITE_URL}/akce/`, changefreq: 'daily', priority: '0.7', lastmod: STATIC_LASTMOD });
+  // Typové stránky = evergreen kategorie (vlastní úvod) → vždy indexovatelné.
   for (const typ of AKCE_TYP_SLUGS) {
-    if ((akceUpByTyp.get(typ) ?? 0) >= AKCE_INDEX_MIN) {
-      urls.push({ loc: `${SITE_URL}/akce/typ/${typ}/`, changefreq: 'weekly', priority: '0.65', lastmod: STATIC_LASTMOD });
-    }
+    urls.push({ loc: `${SITE_URL}/akce/typ/${typ}/`, changefreq: 'weekly', priority: '0.65', lastmod: STATIC_LASTMOD });
   }
+  // Krajské stránky do sitemapy jen když mají ≥1 nadcházející akci (jinak noindex).
   for (const k of getKraje()) {
-    if ((akceUpByKraj.get(k.slug) ?? 0) >= AKCE_INDEX_MIN) {
+    if ((akceUpByKraj.get(k.slug) ?? 0) >= 1) {
       urls.push({ loc: `${SITE_URL}/akce/kraj/${k.slug}/`, changefreq: 'weekly', priority: '0.6', lastmod: STATIC_LASTMOD });
     }
   }

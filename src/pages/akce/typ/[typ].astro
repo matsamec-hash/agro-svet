@@ -5,7 +5,7 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import AkceLanding from '../../../components/akce/AkceLanding.astro';
 import { listByTyp } from '../../../lib/akce-supabase';
-import { isAkceTyp, akceTypLabel, AKCE_TYP_INTRO, AKCE_INDEX_MIN } from '../../../lib/akce-constants';
+import { isAkceTyp, akceTypLabel, AKCE_TYP_INTRO } from '../../../lib/akce-constants';
 import { getKraje } from '../../../lib/lokality';
 import { breadcrumbSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
@@ -16,7 +16,9 @@ if (!typ || !isAkceTyp(typ)) return Astro.rewrite('/404');
 const label = akceTypLabel(typ);
 const akce = await listByTyp(typ);
 const canonical = `${SITE_URL}/akce/typ/${typ}/`;
-const noindex = akce.length < AKCE_INDEX_MIN;
+// Typová stránka = evergreen kategorie s vlastním úvodem → indexovat vždy
+// (jako kategorie bazaru), nezávisle na počtu právě nadcházejících akcí.
+const noindex = false;
 
 // Kraje, kde tento typ akce reálně probíhá → prolinkování na kombinace.
 const kraje = getKraje();
@@ -44,6 +46,7 @@ const collectionJsonLd = {
   description={AKCE_TYP_INTRO[typ].slice(0, 155)}
   canonical={canonical}
   noindex={noindex}
+  noHreflang
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />

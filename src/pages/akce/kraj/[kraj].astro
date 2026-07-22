@@ -5,7 +5,7 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import AkceLanding from '../../../components/akce/AkceLanding.astro';
 import { listByKraj } from '../../../lib/akce-supabase';
-import { akceTypLabel, AKCE_INDEX_MIN, type AkceTyp } from '../../../lib/akce-constants';
+import { akceTypLabel, type AkceTyp } from '../../../lib/akce-constants';
 import { getKraje } from '../../../lib/lokality';
 import { breadcrumbSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
@@ -16,7 +16,9 @@ if (!kraj) return Astro.rewrite('/404');
 
 const akce = await listByKraj(kraj.slug);
 const canonical = `${SITE_URL}/akce/kraj/${kraj.slug}/`;
-const noindex = akce.length < AKCE_INDEX_MIN;
+// Krajská stránka indexovatelná už při ≥1 nadcházející akci (má reálný výpis);
+// úplně prázdný kraj → noindex (jen šablonový úvod = tenký obsah).
+const noindex = akce.length < 1;
 
 const intro = `Přehled nadcházejících zemědělských akcí v regionu ${kraj.name}: farmářské trhy, polní dny, výstavy a veletrhy, prodej ze dvora i chovatelské přehlídky. Termíny a místa konání aktualizujeme průběžně — svou akci můžete přidat zdarma.`;
 
@@ -43,6 +45,7 @@ const collectionJsonLd = {
   description={intro.slice(0, 155)}
   canonical={canonical}
   noindex={noindex}
+  noHreflang
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
