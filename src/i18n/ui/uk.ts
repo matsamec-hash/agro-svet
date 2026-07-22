@@ -746,8 +746,9 @@ const uk: Record<string, string> = {
   'cat.s.d.contextBrand': 'Бренд',
   'cat.s.d.contextSeries': 'Ряд',
   'cat.s.d.contextGeneration': 'Покоління',
-  'cat.s.d.titleSuffix': '{name} — параметри та ціна',
-  'cat.s.d.descFallback': '{title} — {singular} потужністю {power} к.с., роки випуску {years}. Технічні параметри та пропозиції на базарі.',
+  'cat.s.d.titleSuffix': '{name} — технічні характеристики та ціна',
+  'cat.s.d.titleSuffixNoPrice': '{name} — технічні характеристики та специфікації',
+  'cat.s.d.descFallback': '{title} — {singular}, потужність {power} к.с., роки випуску {years}. Технічні характеристики, параметри та ціни на базарі.',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'модель',

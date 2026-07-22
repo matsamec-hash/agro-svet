@@ -717,8 +717,9 @@ const pl: Record<string, string> = {
   'cat.s.d.contextBrand': 'Marka',
   'cat.s.d.contextSeries': 'Seria',
   'cat.s.d.contextGeneration': 'Generacja',
-  'cat.s.d.titleSuffix': '{name} — parametry i cena',
-  'cat.s.d.descFallback': '{title} — {singular} o mocy {power} KM, lata produkcji {years}. Parametry techniczne i oferty na giełdzie.',
+  'cat.s.d.titleSuffix': '{name} — dane techniczne i cena',
+  'cat.s.d.titleSuffixNoPrice': '{name} — dane techniczne i specyfikacja',
+  'cat.s.d.descFallback': '{title} — {singular}, moc {power} KM, lata produkcji {years}. Dane techniczne, parametry i ceny na giełdzie.',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'model',

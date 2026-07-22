@@ -167,9 +167,17 @@ const compareLinkText = '\n' + tr('cat.s.d.compareLink') + '\n';
 const ebProcessedText = '\n' + tr('cat.s.d.ebProcessed') + ' ';
 
 const pageTitle = `${brand.name} ${model.name}`;
-const pageDesc = model.description
-  ? model.description.slice(0, 160)
-  : tf(locale, 'cat.s.d.descFallback', { title: pageTitle, singular: categorySingular[category], power: model.power_hp ?? '?', years: yr });
+// Spec-led meta description pro modely s úplnou spec sadou (singular + výkon + roky = traktory/kombajny)
+// — trefuje hledané „technické údaje / cena" líp než náhodných 160 znaků prózy. Ostatní kategorie
+// (pluhy/lisy/nakladače bez výkonu) si drží prózu, jinak by šablona dala „undefined, výkon ? k".
+const specLedDesc = categorySingular[category] && model.power_hp && yr;
+const pageDesc = (
+  specLedDesc
+    ? tf(locale, 'cat.s.d.descFallback', { title: pageTitle, singular: categorySingular[category], power: model.power_hp, years: yr })
+    // Kategorie bez spec sady (pluhy/lisy/nakladače): próza modelu → série → aspoň název.
+    // Nikdy ne descFallback s „výkon ? k, roky výroby ." placeholdery.
+    : (model.description || series.description || pageTitle)
+).replace(/\s+/g, ' ').trim().slice(0, 160);
 
 const canonical = `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(model.slug)}/`)}`;
 const breadcrumbJsonLd = breadcrumbSchema([
@@ -228,7 +236,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 }
 ---
 
-<Layout title={tf(locale, 'cat.s.d.titleSuffix', { name: pageTitle })} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
+<Layout title={tf(locale, modelBazarCount > 0 ? 'cat.s.d.titleSuffix' : 'cat.s.d.titleSuffixNoPrice', { name: pageTitle })} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}

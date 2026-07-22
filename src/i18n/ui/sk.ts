@@ -774,8 +774,9 @@ const sk: Record<string, string> = {
   'cat.s.d.contextBrand': 'Značka',
   'cat.s.d.contextSeries': 'Rad',
   'cat.s.d.contextGeneration': 'Generácia',
-  'cat.s.d.titleSuffix': '{name} — parametre a cena',
-  'cat.s.d.descFallback': '{title} — {singular} s výkonom {power} k, roky výroby {years}. Technické parametre a ponuka v bazári.',
+  'cat.s.d.titleSuffix': '{name} — technické údaje a cena',
+  'cat.s.d.titleSuffixNoPrice': '{name} — technické údaje a špecifikácie',
+  'cat.s.d.descFallback': '{title} — {singular}, výkon {power} k, roky výroby {years}. Technické údaje, parametre a ceny v bazári.',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'model',
