@@ -12,7 +12,7 @@ const kraje = getKraje();
     <h1>Přidat akci do kalendáře</h1>
     <p>Akci po odeslání zkontrolujeme a poté zveřejníme. Vyplnění zabere minutu.</p>
 
-    <form id="akce-form" method="POST" action="/api/akce/submit">
+    <form id="akce-form" method="POST" action="/api/akce/submit" enctype="multipart/form-data">
       <input type="text" name="web_url" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
 
       <label>Název akce*
@@ -80,6 +80,11 @@ const kraje = getKraje();
         <textarea name="popis" required minlength="10" maxlength="2000" rows="5"></textarea>
       </label>
 
+      <label>Fotka (volitelné)
+        <input type="file" name="foto" accept="image/jpeg,image/png,image/webp" />
+        <small class="hint">JPG, PNG nebo WebP, max 5 MB. Zobrazí se u akce po schválení.</small>
+      </label>
+
       <button type="submit">Odeslat ke schválení</button>
       <p id="form-msg" role="status" aria-live="polite"></p>
     </form>
@@ -123,6 +128,8 @@ const kraje = getKraje();
   <style>
     .pridat { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
     .pridat label { display: block; margin: 12px 0; font-weight: 600; }
+    .pridat .hint { display: block; margin-top: 4px; font-weight: 400; font-size: .82rem; color: #777; }
+    .pridat input[type="file"] { display: block; margin-top: 6px; font-weight: 400; }
     .pridat input:not([type="radio"]):not([type="checkbox"]),
     .pridat select,
     .pridat textarea {

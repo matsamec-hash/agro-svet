@@ -29,14 +29,18 @@ function terminOf(a: {
 
 /** Vloží anonymní příspěvek se stavem 'ceka'. Vrací id+slug. */
 export async function insertSubmission(
-  input: AkceInput & { slug: string; lat: number | null; lng: number | null },
+  input: AkceInput & { slug: string; lat: number | null; lng: number | null; foto_path?: string | null },
 ): Promise<{ id: string; slug: string }> {
   const sb = createServerClient();
   const now = new Date();
   const pristi = computeNextOccurrence(terminOf(input), now);
+  // foto_path přidáme do insertu jen když fotka je — odolnost proti nasazení
+  // kódu před migrací 018 (bez fotky projde i na DB bez sloupce foto_path).
+  const fotoCol = input.foto_path ? { foto_path: input.foto_path } : {};
   const { data, error } = await sb
     .from('akce')
     .insert({
+      ...fotoCol,
       slug: input.slug,
       nazev: input.nazev,
       popis: input.popis,
@@ -145,6 +149,37 @@ export function akceFotoUrl(fotoPath: string | null | undefined): string | null 
   if (!fotoPath) return null;
   _fotoClient ??= createServerClient();
   return _fotoClient.storage.from('akce-images').getPublicUrl(fotoPath).data.publicUrl;
+}
+
+/** Povolené typy fotek + limit — sdíleno formulářem i adminem. */
+export const AKCE_FOTO_MAX_BYTES = 5 * 1024 * 1024;
+export const AKCE_FOTO_TYPES: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+};
+
+/** Nahraje fotku do bucketu akce-images (service-role → bypass RLS). Vrací cestu. */
+export async function uploadAkceFoto(buffer: ArrayBuffer, contentType: string): Promise<string> {
+  const ext = AKCE_FOTO_TYPES[contentType];
+  if (!ext) throw new Error(`Nepodporovaný typ obrázku: ${contentType}`);
+  const sb = createServerClient();
+  const path = `${crypto.randomUUID()}.${ext}`;
+  const { error } = await sb.storage.from('akce-images').upload(path, buffer, { contentType, upsert: false });
+  if (error) throw error;
+  return path;
+}
+
+/** Nastaví/odebere foto_path akce (admin). Starou fotku (pokud jiná) smaže. */
+export async function setAkceFoto(id: string, fotoPath: string | null): Promise<void> {
+  const sb = createServerClient();
+  const { data: prev } = await sb.from('akce').select('foto_path').eq('id', id).maybeSingle();
+  const oldPath = (prev as { foto_path?: string | null } | null)?.foto_path ?? null;
+  const { error } = await sb.from('akce').update({ foto_path: fotoPath, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) throw error;
+  if (oldPath && oldPath !== fotoPath) {
+    await sb.storage.from('akce-images').remove([oldPath]).catch(() => {});
+  }
 }
 
 /** Detail — jedna zveřejněná akce dle slugu (jinak null → 404). */

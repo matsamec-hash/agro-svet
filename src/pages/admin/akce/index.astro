@@ -1,7 +1,7 @@
 ---
 // src/pages/admin/akce/index.astro
 import Layout from '../../../layouts/Layout.astro';
-import { listPending } from '../../../lib/akce-supabase';
+import { listPending, akceFotoUrl } from '../../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../../lib/akce-recurrence';
 import { akceTypLabel, type AkceTyp } from '../../../lib/akce-constants';
 
@@ -25,6 +25,15 @@ function termin(a: (typeof pending)[number]): string {
         <p class="meta">{akceTypLabel(a.typ as AkceTyp)} · {a.obec} ({a.okres_slug}) · {termin(a)}</p>
         <p>{a.popis}</p>
         <p class="contact">{a.poradatel} · {a.email} · {a.web}</p>
+        <div class="foto-row">
+          {akceFotoUrl(a.foto_path)
+            ? <img class="foto-prev" src={akceFotoUrl(a.foto_path)} alt="" width="120" height="90" />
+            : <span class="foto-none">Bez fotky</span>}
+          <label class="foto-up">📷 Nahrát / nahradit
+            <input type="file" data-foto accept="image/jpeg,image/png,image/webp" hidden />
+          </label>
+          {akceFotoUrl(a.foto_path) && <button type="button" data-foto-remove>Odebrat fotku</button>}
+        </div>
         <div class="actions">
           <button data-action="approve">Schválit</button>
           <button data-action="reject">Zamítnout</button>
@@ -43,6 +52,25 @@ function termin(a: (typeof pending)[number]): string {
           const reason = prompt('Důvod zamítnutí (volitelné):') ?? '';
           act(id, 'reject', reason);
         });
+
+      const fotoInput = card.querySelector<HTMLInputElement>('[data-foto]');
+      fotoInput?.addEventListener('change', async () => {
+        const file = fotoInput.files?.[0];
+        if (!file) return;
+        const fd = new FormData();
+        fd.set('akce_id', id); fd.set('action', 'upload'); fd.set('foto', file);
+        const res = await fetch('/admin/akce/api/foto/', { method: 'POST', body: fd });
+        if (res.ok) location.reload();
+        else alert('Chyba nahrání fotky: ' + res.status);
+      });
+      card.querySelector<HTMLButtonElement>('[data-foto-remove]')?.addEventListener('click', async () => {
+        if (!confirm('Odebrat fotku?')) return;
+        const fd = new FormData();
+        fd.set('akce_id', id); fd.set('action', 'remove');
+        const res = await fetch('/admin/akce/api/foto/', { method: 'POST', body: fd });
+        if (res.ok) location.reload();
+        else alert('Chyba: ' + res.status);
+      });
     });
     async function act(id: string, action: string, reason = '') {
       const fd = new FormData();
@@ -61,5 +89,10 @@ function termin(a: (typeof pending)[number]): string {
     .card .contact { color: #888; font-size: .85rem; }
     .actions { display: flex; gap: 10px; margin-top: 12px; }
     .actions button { padding: 8px 18px; cursor: pointer; }
+    .foto-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .foto-prev { width: 120px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #e0e0e0; }
+    .foto-none { color: #999; font-size: .85rem; }
+    .foto-up { display: inline-block; padding: 6px 14px; border: 1px solid #c4c4c4; border-radius: 8px; cursor: pointer; font-size: .9rem; background: #fafafa; }
+    .foto-row button { padding: 6px 14px; cursor: pointer; border: 1px solid #d9b0b0; border-radius: 8px; background: #fff; color: #a33; }
   </style>
 </Layout>

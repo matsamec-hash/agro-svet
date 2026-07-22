@@ -1,14 +1,15 @@
 // src/pages/api/akce/submit.ts
 import type { APIRoute } from 'astro';
 import { validateAkceInput, slugifyAkce, type AkceInput } from '../../../lib/akce';
-import { insertSubmission } from '../../../lib/akce-supabase';
+import { insertSubmission, uploadAkceFoto, AKCE_FOTO_MAX_BYTES, AKCE_FOTO_TYPES } from '../../../lib/akce-supabase';
 import { geocode } from '../../../lib/geocode';
 import { sendSubmissionConfirmation, notifyModerator } from '../../../lib/akce-email';
 import { getEnvVar } from '../../../lib/env';
+import { edgeThrottle } from '../../../lib/edge-throttle';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress, locals }) => {
   const form = await request.formData();
 
   // Honeypot — boti vyplní; lidé ne (pole je skryté CSS).
@@ -45,6 +46,29 @@ export const POST: APIRoute = async ({ request }) => {
   const v = validateAkceInput(input);
   if (!v.ok) return json({ ok: false, errors: v.errors }, 400);
 
+  // Volitelná fotka — validace + rate-limit + upload do bucketu. Chyba fotky
+  // nesmí shodit odeslání akce (fotku lze doplnit v adminu), proto jen zalogujeme.
+  let foto_path: string | null = null;
+  const fotoFile = form.get('foto');
+  if (fotoFile instanceof File && fotoFile.size > 0) {
+    if (!AKCE_FOTO_TYPES[fotoFile.type]) {
+      return json({ ok: false, errors: ['Fotka musí být JPG, PNG nebo WebP.'] }, 400);
+    }
+    if (fotoFile.size > AKCE_FOTO_MAX_BYTES) {
+      return json({ ok: false, errors: ['Fotka je příliš velká (max 5 MB).'] }, 400);
+    }
+    const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+    const limit = await edgeThrottle({ bucket: 'akce-foto', key: ip, max: 5, windowS: 3600, ctx: (locals as any).cfContext });
+    if (!limit.ok) {
+      return json({ ok: false, errors: ['Příliš mnoho nahrání fotek, zkuste to prosím za chvíli.'] }, 429);
+    }
+    try {
+      foto_path = await uploadAkceFoto(await fotoFile.arrayBuffer(), fotoFile.type);
+    } catch (e) {
+      console.error('[akce/submit] foto upload failed', e);
+    }
+  }
+
   let lat: number | null = null, lng: number | null = null;
   try {
     const geo = await geocode({ location: input.obec });
@@ -56,7 +80,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   let id: string;
   try {
-    const res = await insertSubmission({ ...input, slug, lat, lng });
+    const res = await insertSubmission({ ...input, slug, lat, lng, foto_path });
     id = res.id;
   } catch (e) {
     console.error('[akce/submit] insert failed', e);
