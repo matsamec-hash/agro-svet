@@ -56,7 +56,7 @@ const categorySingular: Record<StrojKategorie, string> = {
 };
 // Popisek kategorie pro tag/alt: lokalizovaný traktory/kombajny, u nářadí fallback
 // na kanonický CZ název efektivní subkategorie (dřív prázdný tag).
-const catDisplayLabel = categoryLabels[category] ?? categoryLabel(series.subcategory ?? category);
+const catDisplayLabel = categoryLabels[category] ?? categoryLabel(series.subcategory ?? category, locale);
 const categoryHero: Record<StrojKategorie, string> = {
   traktory: '/images/traktor.webp',
   kombajny: '/images/kombajn.webp',

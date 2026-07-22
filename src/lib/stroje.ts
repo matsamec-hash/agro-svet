@@ -229,8 +229,74 @@ export const CATEGORY_LABELS: Record<StrojKategorie, string> = {
   'lesni-vyvazecky': 'Lesní vyvážečky',
 };
 
-export function categoryLabel(cat: StrojKategorie): string {
-  return CATEGORY_LABELS[cat] ?? cat;
+// Lokalizované názvy kategorií (sk/uk/pl). cs = CATEGORY_LABELS výše. Chybějící klíč
+// spadne na cs. ⚠️ uk/pl odborné termíny vhodné dát ověřit rodilému mluvčímu.
+const CATEGORY_LABELS_SK: Record<StrojKategorie, string> = {
+  traktory: 'Traktory', kombajny: 'Kombajny', pluhy: 'Pluhy',
+  'podmitace-diskove': 'Diskové podmietače', 'podmitace-radlickove': 'Radličkové podmietače',
+  kyprice: 'Kypriče', 'rotacni-brany': 'Rotačné brány', kompaktomaty: 'Kompaktomaty', valce: 'Valce',
+  'seci-stroje-mechanicke': 'Mechanické sejačky', 'seci-stroje-pneumaticke': 'Pneumatické sejačky',
+  'seci-stroje-presne': 'Presné sejačky', 'seci-kombinace': 'Sejacie kombinácie', 'sazecky-brambor': 'Sadzače zemiakov',
+  'rozmetadla-mineralni': 'Rozmetadlá minerálnych hnojív', 'rozmetadla-statkova': 'Rozmetadlá maštaľných hnojív',
+  'cisterny-kejda': 'Cisterny na hnojovicu', 'aplikatory-kejda': 'Aplikátory hnojovice',
+  'postrikovace-nesene': 'Nesené postrekovače', 'postrikovace-tazene': 'Ťahané postrekovače', 'postrikovace-samojizdne': 'Samohybné postrekovače',
+  'zaci-stroje': 'Žacie stroje', obracece: 'Obracače', shrnovace: 'Zhrňovače',
+  'lisy-valcove': 'Valcové lisy', 'lisy-hranolove': 'Hranolové lisy', obalovace: 'Obaľovače',
+  'rezacky-samojizdne': 'Samohybné rezačky', 'samosberaci-vozy': 'Zberacie vozy',
+  'sklizece-brambor': 'Zberače zemiakov', 'sklizece-repy': 'Zberače repy', vyoravace: 'Vyorávače',
+  'celni-nakladace': 'Čelné nakladače', teleskopy: 'Teleskopické manipulátory', 'kolove-nakladace': 'Kolesové nakladače',
+  'kloubove-nakladace': 'Kĺbové nakladače', 'smykove-nakladace': 'Šmykom riadené nakladače',
+  'navesy-sklapeci': 'Sklápacie návesy', 'navesy-valnik': 'Valníkové návesy', 'navesy-posuvne-dno': 'Návesy s posuvnou podlahou',
+  'cisterny-voda': 'Cisterny na vodu', 'prepravniky-zrna': 'Prepravníky zrna', 'krmne-vozy': 'Kŕmne vozy',
+  'dojici-roboti': 'Dojacie roboty', podestylace: 'Podstielače', mulcovace: 'Mulčovače',
+  stepkovace: 'Štiepkovače', 'lesni-vyvazecky': 'Lesné vyvážačky',
+};
+const CATEGORY_LABELS_UK: Record<StrojKategorie, string> = {
+  traktory: 'Трактори', kombajny: 'Комбайни', pluhy: 'Плуги',
+  'podmitace-diskove': 'Дискові лущильники', 'podmitace-radlickove': 'Лапові культиватори',
+  kyprice: 'Культиватори', 'rotacni-brany': 'Ротаційні борони', kompaktomaty: 'Комбіновані агрегати', valce: 'Котки',
+  'seci-stroje-mechanicke': 'Механічні сівалки', 'seci-stroje-pneumaticke': 'Пневматичні сівалки',
+  'seci-stroje-presne': 'Точні сівалки', 'seci-kombinace': 'Посівні комбінації', 'sazecky-brambor': 'Картоплесаджалки',
+  'rozmetadla-mineralni': 'Розкидачі мінеральних добрив', 'rozmetadla-statkova': 'Розкидачі органічних добрив',
+  'cisterny-kejda': 'Цистерни для рідкого гною', 'aplikatory-kejda': 'Аплікатори рідкого гною',
+  'postrikovace-nesene': 'Навісні обприскувачі', 'postrikovace-tazene': 'Причіпні обприскувачі', 'postrikovace-samojizdne': 'Самохідні обприскувачі',
+  'zaci-stroje': 'Косарки', obracece: 'Ворушилки', shrnovace: 'Валкоутворювачі',
+  'lisy-valcove': 'Рулонні прес-підбирачі', 'lisy-hranolove': 'Тюкові прес-підбирачі', obalovace: 'Обмотувачі',
+  'rezacky-samojizdne': 'Самохідні кормозбиральні комбайни', 'samosberaci-vozy': 'Самозавантажувальні візки',
+  'sklizece-brambor': 'Картоплезбиральні комбайни', 'sklizece-repy': 'Бурякозбиральні комбайни', vyoravace: 'Копачі',
+  'celni-nakladace': 'Фронтальні навантажувачі', teleskopy: 'Телескопічні навантажувачі', 'kolove-nakladace': 'Колісні навантажувачі',
+  'kloubove-nakladace': 'Шарнірно-зчленовані навантажувачі', 'smykove-nakladace': 'Навантажувачі з бортовим поворотом',
+  'navesy-sklapeci': 'Самоскидні напівпричепи', 'navesy-valnik': 'Бортові напівпричепи', 'navesy-posuvne-dno': 'Напівпричепи з рухомою підлогою',
+  'cisterny-voda': 'Цистерни для води', 'prepravniky-zrna': 'Зерновози', 'krmne-vozy': 'Кормороздавачі',
+  'dojici-roboti': 'Доїльні роботи', podestylace: 'Розкидачі підстилки', mulcovace: 'Мульчувачі',
+  stepkovace: 'Подрібнювачі', 'lesni-vyvazecky': 'Форвардери',
+};
+const CATEGORY_LABELS_PL: Record<StrojKategorie, string> = {
+  traktory: 'Ciągniki', kombajny: 'Kombajny', pluhy: 'Pługi',
+  'podmitace-diskove': 'Brony talerzowe', 'podmitace-radlickove': 'Kultywatory ścierniskowe',
+  kyprice: 'Kultywatory', 'rotacni-brany': 'Brony wirnikowe', kompaktomaty: 'Agregaty uprawowe', valce: 'Wały uprawowe',
+  'seci-stroje-mechanicke': 'Siewniki mechaniczne', 'seci-stroje-pneumaticke': 'Siewniki pneumatyczne',
+  'seci-stroje-presne': 'Siewniki punktowe', 'seci-kombinace': 'Agregaty uprawowo-siewne', 'sazecky-brambor': 'Sadzarki do ziemniaków',
+  'rozmetadla-mineralni': 'Rozsiewacze nawozów mineralnych', 'rozmetadla-statkova': 'Rozrzutniki obornika',
+  'cisterny-kejda': 'Wozy asenizacyjne', 'aplikatory-kejda': 'Aplikatory gnojowicy',
+  'postrikovace-nesene': 'Opryskiwacze zawieszane', 'postrikovace-tazene': 'Opryskiwacze ciągane', 'postrikovace-samojizdne': 'Opryskiwacze samojezdne',
+  'zaci-stroje': 'Kosiarki', obracece: 'Przetrząsacze', shrnovace: 'Zgrabiarki',
+  'lisy-valcove': 'Prasy zwijające', 'lisy-hranolove': 'Prasy kostkujące', obalovace: 'Owijarki',
+  'rezacky-samojizdne': 'Sieczkarnie samojezdne', 'samosberaci-vozy': 'Przyczepy samozbierające',
+  'sklizece-brambor': 'Kombajny ziemniaczane', 'sklizece-repy': 'Kombajny buraczane', vyoravace: 'Kopaczki',
+  'celni-nakladace': 'Ładowacze czołowe', teleskopy: 'Ładowarki teleskopowe', 'kolove-nakladace': 'Ładowarki kołowe',
+  'kloubove-nakladace': 'Ładowarki przegubowe', 'smykove-nakladace': 'Ładowarki burtowe',
+  'navesy-sklapeci': 'Przyczepy wywrotki', 'navesy-valnik': 'Przyczepy platformowe', 'navesy-posuvne-dno': 'Przyczepy z ruchomą podłogą',
+  'cisterny-voda': 'Cysterny na wodę', 'prepravniky-zrna': 'Przyczepy przeładunkowe', 'krmne-vozy': 'Wozy paszowe',
+  'dojici-roboti': 'Roboty udojowe', podestylace: 'Słomiarki', mulcovace: 'Mulczery',
+  stepkovace: 'Rębaki', 'lesni-vyvazecky': 'Forwardery',
+};
+const CATEGORY_LABELS_BY_LOCALE: Record<string, Record<StrojKategorie, string>> = {
+  cs: CATEGORY_LABELS, sk: CATEGORY_LABELS_SK, uk: CATEGORY_LABELS_UK, pl: CATEGORY_LABELS_PL,
+};
+
+export function categoryLabel(cat: StrojKategorie, locale: string = 'cs'): string {
+  return (CATEGORY_LABELS_BY_LOCALE[locale] ?? CATEGORY_LABELS)[cat] ?? CATEGORY_LABELS[cat] ?? cat;
 }
 
 // Vite plugin parses YAML at compile-time → default export is already an object.
