@@ -32,7 +32,11 @@ const categoryHero: Record<StrojKategorie, string> = {
   traktory: '/images/traktor.webp',
   kombajny: '/images/kombajn.webp',
 };
-const catLabel = categoryLabels[categorySlug as StrojKategorie] ?? categorySlug;
+// categorySlug je brand top-level klíč: traktory/kombajny (lokální mapa) nebo
+// funkční skupina (zpracovani-pudy…, název z FUNCTIONAL_GROUPS) — ne syrový slug.
+const catLabel = categoryLabels[categorySlug as StrojKategorie]
+  ?? FUNCTIONAL_GROUPS[categorySlug as keyof typeof FUNCTIONAL_GROUPS]?.name
+  ?? categorySlug;
 // Jen traktory/kombajny mají vhodný kategorijní fallback; u nářadí (secí stroje…)
 // raději brand gradient + silueta než zavádějící fotka traktoru.
 const catHeroFallback = categoryHero[categorySlug as StrojKategorie] ?? null;

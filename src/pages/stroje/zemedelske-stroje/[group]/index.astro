@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../../../layouts/Layout.astro';
-import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug, type StrojKategorie } from '../../../../lib/stroje';
+import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, categoryLabel, type FunctionalGroupSlug, type StrojKategorie } from '../../../../lib/stroje';
 import { itemListSchema } from '../../../../lib/structured-data';
 
 export async function getStaticPaths() {
@@ -31,13 +31,8 @@ type SubcatStat = { slug: StrojKategorie; name: string; modelCount: number; bran
 const subcategoryStats: SubcatStat[] = groupCats.map((cat) => {
   const cModels = groupModels.filter((m) => m.effective_category === cat);
   const cBrands = new Set(cModels.map((m) => m.brand_slug));
-  // Lookup pretty CZ name from any brand that has this category
-  let prettyName: string = cat;
-  for (const brand of allBrands) {
-    const catData = brand.categories?.[cat];
-    if (catData?.name) { prettyName = catData.name; break; }
-  }
-  return { slug: cat, name: prettyName, modelCount: cModels.length, brandCount: cBrands.size };
+  // Kanonický CZ název kategorie (funkční subkategorie nemají `name` v YAML značek).
+  return { slug: cat, name: categoryLabel(cat), modelCount: cModels.length, brandCount: cBrands.size };
 });
 
 const breadcrumbJsonLd = {
