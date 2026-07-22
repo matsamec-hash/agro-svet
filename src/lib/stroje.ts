@@ -299,6 +299,18 @@ export function categoryLabel(cat: StrojKategorie, locale: string = 'cs'): strin
   return (CATEGORY_LABELS_BY_LOCALE[locale] ?? CATEGORY_LABELS)[cat] ?? CATEGORY_LABELS[cat] ?? cat;
 }
 
+// Lokalizované názvy funkčních skupin (cs = FUNCTIONAL_GROUPS[].name). ⚠️ uk/pl k ověření.
+const FUNCTIONAL_GROUP_LABELS: Record<string, Record<string, string>> = {
+  sk: { 'zpracovani-pudy': 'Spracovanie pôdy', seti: 'Sejba a sadenie', hnojeni: 'Hnojenie', 'ochrana-rostlin': 'Ochrana rastlín', 'sklizen-picnin': 'Zber krmovín a slamy', 'sklizen-okopanin': 'Zber okopanín', manipulace: 'Manipulácia a nakladanie', doprava: 'Doprava', 'staj-chov': 'Maštaľ a chov', 'komunal-les': 'Komunál a les' },
+  uk: { 'zpracovani-pudy': 'Обробіток ґрунту', seti: 'Сівба та садіння', hnojeni: 'Внесення добрив', 'ochrana-rostlin': 'Захист рослин', 'sklizen-picnin': 'Заготівля кормів і соломи', 'sklizen-okopanin': 'Збирання коренеплодів', manipulace: 'Навантаження та переміщення', doprava: 'Транспорт', 'staj-chov': 'Тваринництво', 'komunal-les': 'Комунальна та лісова техніка' },
+  pl: { 'zpracovani-pudy': 'Uprawa gleby', seti: 'Siew i sadzenie', hnojeni: 'Nawożenie', 'ochrana-rostlin': 'Ochrona roślin', 'sklizen-picnin': 'Zbiór pasz i słomy', 'sklizen-okopanin': 'Zbiór okopowych', manipulace: 'Przeładunek', doprava: 'Transport', 'staj-chov': 'Obora i hodowla', 'komunal-les': 'Technika komunalna i leśna' },
+};
+export function functionalGroupLabel(slug: string, locale: string = 'cs'): string {
+  const loc = FUNCTIONAL_GROUP_LABELS[locale];
+  if (loc && loc[slug]) return loc[slug];
+  return (FUNCTIONAL_GROUPS as Record<string, { name: string }>)[slug]?.name ?? slug;
+}
+
 // Vite plugin parses YAML at compile-time → default export is already an object.
 const brandModules = import.meta.glob('/src/data/stroje/*.yaml', {
   eager: true,

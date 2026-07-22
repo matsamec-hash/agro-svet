@@ -1,42 +1,26 @@
 ---
-export const prerender = true;
+// SSR (prerender=false): stránka se renderuje i pod /sk /uk /pl (middleware rewrite
+// na cs routu s locals.locale) — prerendered by pod locale prefixem 404/302-leakla.
+export const prerender = false;
 import Layout from '../../../../../../layouts/Layout.astro';
-import { getAllBrands, getBrand, seriesFamily, familyLabel, FUNCTIONAL_GROUPS, type StrojKategorie } from '../../../../../../lib/stroje';
+import { getBrand, seriesFamily, familyLabel, categoryLabel, functionalGroupLabel, type StrojKategorie } from '../../../../../../lib/stroje';
+import { useTranslations, getLocaleFromUrl, tf, plural, localizePath } from '../../../../../../i18n/utils';
 
-export async function getStaticPaths() {
-  const paths: { params: { brand: string; category: string; family: string } }[] = [];
-  for (const b of getAllBrands()) {
-    for (const [catKey, cat] of Object.entries(b.categories ?? {})) {
-      const families = new Set<string>();
-      for (const s of cat.series ?? []) {
-        const fam = s.family ?? seriesFamily(s.slug);
-        families.add(String(fam));
-      }
-      for (const f of families) {
-        paths.push({ params: { brand: b.slug, category: catKey, family: f } });
-      }
-    }
-  }
-  return paths;
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 const { brand: brandSlug, category: categorySlug, family } = Astro.params;
-const brand = getBrand(brandSlug!);
+const brand = getBrand(brandSlug!, locale);
 if (!brand) return Astro.rewrite('/404');
 
-const categoryLabels: Record<StrojKategorie, string> = {
-  traktory: 'Traktory',
-  kombajny: 'Kombajny',
-};
 const categoryHero: Record<StrojKategorie, string> = {
   traktory: '/images/traktor.webp',
   kombajny: '/images/kombajn.webp',
 };
-// categorySlug je brand top-level klíč: traktory/kombajny (lokální mapa) nebo
-// funkční skupina (zpracovani-pudy…, název z FUNCTIONAL_GROUPS) — ne syrový slug.
-const catLabel = categoryLabels[categorySlug as StrojKategorie]
-  ?? FUNCTIONAL_GROUPS[categorySlug as keyof typeof FUNCTIONAL_GROUPS]?.name
-  ?? categorySlug;
+// categorySlug = brand top-level klíč: traktory/kombajny nebo funkční skupina — lokalizovaně.
+const catLabel = (categorySlug === 'traktory' || categorySlug === 'kombajny')
+  ? categoryLabel(categorySlug as StrojKategorie, locale)
+  : functionalGroupLabel(categorySlug!, locale);
 // Jen traktory/kombajny mají vhodný kategorijní fallback; u nářadí (secí stroje…)
 // raději brand gradient + silueta než zavádějící fotka traktoru.
 const catHeroFallback = categoryHero[categorySlug as StrojKategorie] ?? null;
@@ -125,7 +109,7 @@ const maxYear = !hasCurrent && allYearsTo.length
   ? Math.max(...(allYearsTo.filter((y): y is number => typeof y === 'number')))
   : null;
 const yearLine = minYear !== null
-  ? (hasCurrent ? `${minYear}–dosud` : (maxYear ? `${minYear}–${maxYear}` : `${minYear}`))
+  ? (hasCurrent ? `${minYear}–${tr('cat.rada.dosud')}` : (maxYear ? `${minYear}–${maxYear}` : `${minYear}`))
   : '';
 const hpLine = minHp !== null && maxHp !== null
   ? (minHp === maxHp ? `${minHp} k` : `${minHp}–${maxHp} k`)
@@ -152,30 +136,30 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
-    { '@type': 'ListItem', position: 2, name: 'Technika', item: 'https://agro-svet.cz/stroje/' },
-    { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz/stroje/${brand.slug}/` },
-    { '@type': 'ListItem', position: 4, name: catLabel, item: `https://agro-svet.cz/stroje/${categorySlug}/` },
-    { '@type': 'ListItem', position: 5, name: label, item: `https://agro-svet.cz/stroje/${brand.slug}/rada/${categorySlug}/${family}/` },
+    { '@type': 'ListItem', position: 1, name: tr('cat.bc.home'), item: `https://agro-svet.cz${localizePath(locale, '/')}` },
+    { '@type': 'ListItem', position: 2, name: tr('cat.bc.tech'), item: `https://agro-svet.cz${localizePath(locale, '/stroje/')}` },
+    { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/`)}` },
+    { '@type': 'ListItem', position: 4, name: catLabel, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${categorySlug}/`)}` },
+    { '@type': 'ListItem', position: 5, name: label, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/rada/${categorySlug}/${family}/`)}` },
   ],
 };
 ---
 
 <Layout
-  title={`${brand.name} ${label} ${catLabel.toLowerCase()} — všechny modely`}
-  description={`Všechny ${catLabel.toLowerCase()} řady ${brand.name} ${label}. ${totalModels} modelů${hpLine ? `, výkon ${hpLine}` : ''}${yearLine ? `, ${yearLine}` : ''}.`}
+  title={tf(locale, 'cat.rada.title', { brand: brand.name, label, cat: catLabel.toLowerCase() })}
+  description={tf(locale, 'cat.rada.desc', { cat: catLabel.toLowerCase(), brand: brand.name, label, n: totalModels })}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   <div class="rada-page">
 
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizePath(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/stroje/">Technika</a>
+      <a href={localizePath(locale, '/stroje/')}>{tr('cat.bc.tech')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={`/stroje/${brand.slug}/`}>{brand.name}</a>
+      <a href={localizePath(locale, `/stroje/${brand.slug}/`)}>{brand.name}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={categorySlug in FUNCTIONAL_GROUPS ? `/stroje/zemedelske-stroje/${categorySlug}/` : `/stroje/${categorySlug}/`}>{catLabel}</a>
+      <a href={(categorySlug === 'traktory' || categorySlug === 'kombajny') ? localizePath(locale, `/stroje/${categorySlug}/`) : localizePath(locale, `/stroje/zemedelske-stroje/${categorySlug}/`)}>{catLabel}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{label}</span>
     </nav>
@@ -185,26 +169,26 @@ const jsonLd = {
         <div class="hero-tags">
           <span class="tag tag-brand">{brand.name}</span>
           <span class="tag tag-cat">{catLabel}</span>
-          {hasCurrent && <span class="tag tag-current"><span class="dot"></span>Aktuální v prodeji</span>}
+          {hasCurrent && <span class="tag tag-current"><span class="dot"></span>{tr('cat.blockCurrent')}</span>}
         </div>
         <h1>{label}</h1>
         {lede && <p class="hero-lede">{lede}</p>}
 
         <div class="hero-stats">
-          <div class="s"><span class="n">{totalModels}</span><span class="l">modelů</span></div>
-          <div class="s"><span class="n">{seriesData.length}</span><span class="l">{seriesData.length === 1 ? 'generace' : seriesData.length < 5 ? 'generace' : 'generací'}</span></div>
-          {hpLine && <div class="s"><span class="n">{hpLine}</span><span class="l">výkon</span></div>}
-          {yearLine && <div class="s"><span class="n">{yearLine}</span><span class="l">období</span></div>}
+          <div class="s"><span class="n">{totalModels}</span><span class="l">{tr('cat.statModels')}</span></div>
+          <div class="s"><span class="n">{seriesData.length}</span><span class="l">{plural(locale, seriesData.length, { one: tr('cat.rada.genOne'), few: tr('cat.rada.genFew'), many: tr('cat.rada.genMany') })}</span></div>
+          {hpLine && <div class="s"><span class="n">{hpLine}</span><span class="l">{tr('cat.statPower')}</span></div>}
+          {yearLine && <div class="s"><span class="n">{yearLine}</span><span class="l">{tr('cat.rada.statPeriod')}</span></div>}
         </div>
 
         <div class="hero-actions">
           <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${categorySlug}&q=${encodeURIComponent(label)}`}>
-            Hledat {label} v bazaru
+            {tf(locale, 'cat.rada.searchInBazar', { label })}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-secondary" href={`/stroje/${brand.slug}/`}>
+          <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/`)}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Vše o {brand.name}
+            {tf(locale, 'cat.rada.allAbout', { brand: brand.name })}
           </a>
         </div>
       </div>
@@ -218,7 +202,7 @@ const jsonLd = {
               <circle cx="40" cy="68" r="8"/><circle cx="100" cy="68" r="8"/>
             </svg>
           )}
-          <div class="hero-photo-badge"><span class="n">{seriesData.length}</span> {seriesData.length === 1 ? 'generace' : seriesData.length < 5 ? 'generace' : 'generací'}</div>
+          <div class="hero-photo-badge"><span class="n">{seriesData.length}</span> {plural(locale, seriesData.length, { one: tr('cat.rada.genOne'), few: tr('cat.rada.genFew'), many: tr('cat.rada.genMany') })}</div>
           {heroCreditAuthor && heroCreditUrl && (
             <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
                title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons · upraveno (crop, konverze do WebP)`}>
@@ -232,8 +216,8 @@ const jsonLd = {
     {seriesData.length > 1 && (
       <div class="split-bar">
         <div class="split-inner">
-          <span class="split-kicker">Generace</span>
-          <nav class="series-pills" aria-label="Generace">
+          <span class="split-kicker">{tr('cat.rada.generations')}</span>
+          <nav class="series-pills" aria-label={tr('cat.rada.generations')}>
             {seriesData.map((s, i) => (
               <a class:list={['pill', { active: i === 0 }]} href={`#${s.slug}`}>
                 {s.isCurrent && <span class="ind"></span>}
@@ -248,7 +232,7 @@ const jsonLd = {
 
     {seriesData.map((s) => {
       const yr = s.year_from
-        ? (s.year_to ? `${s.year_from}–${s.year_to}` : `${s.year_from}–dosud`)
+        ? (s.year_to ? `${s.year_from}–${s.year_to}` : `${s.year_from}–${tr('cat.rada.dosud')}`)
         : '';
       const seriesHpAll = s.models.map((m) => m.power_hp).filter((x): x is number => typeof x === 'number');
       const sMinHp = seriesHpAll.length ? Math.min(...seriesHpAll) : null;
@@ -263,21 +247,21 @@ const jsonLd = {
           <div class="series-head">
             <div class="series-title">
               <div class="series-title-main">
-                <h2><a href={`/stroje/${brand.slug}/${s.slug}/`}>{seriesNameClean}</a></h2>
+                <h2><a href={localizePath(locale, `/stroje/${brand.slug}/${s.slug}/`)}>{seriesNameClean}</a></h2>
                 {s.isCurrent ? (
-                  <span class="badge current"><span class="dot"></span>Aktuální</span>
+                  <span class="badge current"><span class="dot"></span>{tr('cat.rada.badgeCurrent')}</span>
                 ) : (
-                  <span class="badge legacy">Historie</span>
+                  <span class="badge legacy">{tr('cat.rada.badgeLegacy')}</span>
                 )}
               </div>
               <div class="series-meta">
-                <strong>{s.models.length} {s.models.length === 1 ? 'model' : s.models.length < 5 ? 'modely' : 'modelů'}</strong>
+                <strong>{s.models.length} {plural(locale, s.models.length, { one: tr('cat.rada.modelOne'), few: tr('cat.rada.modelFew'), many: tr('cat.rada.modelMany') })}</strong>
                 {sHp && (<><span class="sep"></span><span>{sHp}</span></>)}
                 {yr && (<><span class="sep"></span><span>{yr}</span></>)}
               </div>
             </div>
-            <a class="series-cta" href={`/stroje/${brand.slug}/${s.slug}/`}>
-              Detail řady
+            <a class="series-cta" href={localizePath(locale, `/stroje/${brand.slug}/${s.slug}/`)}>
+              {tr('cat.rada.seriesDetail')}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>
@@ -286,18 +270,18 @@ const jsonLd = {
 
           <div class="series-table">
             <div class="st-head">
-              <span>Model</span>
-              <span class="st-col-year">Rok výroby</span>
-              <span class="st-col-power">Výkon</span>
+              <span>{tr('cat.rada.colModel')}</span>
+              <span class="st-col-year">{tr('cat.rada.colYear')}</span>
+              <span class="st-col-power">{tr('cat.rada.colPower')}</span>
               <span class="st-col-action"></span>
             </div>
             {s.models.map((m) => {
-              const myr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '—';
+              const myr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–${tr('cat.rada.dosud')}`) : '—';
               return (
-                <a href={`/stroje/${brand.slug}/${s.slug}/${m.urlSlug}/`} class="st-row">
+                <a href={localizePath(locale, `/stroje/${brand.slug}/${s.slug}/${m.urlSlug}/`)} class="st-row">
                   <span class="st-name">
                     {m.name}
-                    {m.isCurrent && <span class="dot-current" title="Aktuální"></span>}
+                    {m.isCurrent && <span class="dot-current" title={tr('cat.rada.badgeCurrent')}></span>}
                   </span>
                   <span class="st-year">{myr}</span>
                   <span class="st-power">
@@ -308,7 +292,7 @@ const jsonLd = {
                       </>
                     ) : '—'}
                   </span>
-                  <span class="st-go">Detail →</span>
+                  <span class="st-go">{tr('cat.rada.detail')}</span>
                 </a>
               );
             })}
@@ -319,15 +303,15 @@ const jsonLd = {
 
     <section class="big-cta">
       <div>
-        <span class="cta-kicker">Hledáte {label}?</span>
-        <h2>{brand.name} {label} v Agro bazaru<br />— inzeráty od soukromých prodejců i dealerů.</h2>
-        <p>Filtrujte podle modelu, výkonu a roku. Kontakt přímo na prodejce, bez provize.</p>
+        <span class="cta-kicker">{tf(locale, 'cat.rada.ctaKicker', { label })}</span>
+        <h2>{tf(locale, 'cat.rada.ctaHeading', { brand: brand.name, label })}</h2>
+        <p>{tr('cat.rada.ctaText')}</p>
         <div class="cta-actions">
           <a class="cta-btn primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${categorySlug}&q=${encodeURIComponent(label)}`}>
-            Otevřít bazar
+            {tr('cat.rada.ctaOpen')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-btn ghost" href="/bazar/novy/">Přidat vlastní inzerát</a>
+          <a class="cta-btn ghost" href="/bazar/novy/">{tr('cat.rada.ctaAddOwn')}</a>
         </div>
       </div>
       <div class="cta-right">
