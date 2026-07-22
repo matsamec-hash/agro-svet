@@ -1,0 +1,95 @@
+// GET /api/cron/bazar-reconcile — externí cron à 3 min (cron-job.org) s
+// Authorization: Bearer ${CRON_SECRET}. Napáruje Fio platby na pending ordery.
+import type { APIRoute } from 'astro';
+import { createServerClient } from '../../../lib/supabase';
+import { getEnvVar } from '../../../lib/env';
+import { fetchFioTransactions } from '../../../lib/fio';
+import { buildInvoicePdf } from '../../../lib/invoice-pdf';
+import { getPlanInfo } from '../../../lib/bazar-featured-pricing';
+import type { FeaturedPlan } from '../../../lib/bazar-featured';
+import { Resend } from 'resend';
+
+export const prerender = false;
+const FROM = 'Agro-svět bazar <bazar@mail.agro-svet.cz>';
+const ACCOUNTING_BCC = 'info@samecdigital.com';
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
+}
+
+export const GET: APIRoute = async ({ request }) => {
+  const auth = request.headers.get('authorization') ?? '';
+  const secret = getEnvVar('CRON_SECRET');
+  if (!secret || auth !== `Bearer ${secret}`) return json({ error: 'unauthorized' }, 401);
+
+  const sb = createServerClient();
+  const now = new Date();
+
+  const cutoff = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000).toISOString();
+  await sb.from('bazar_featured_orders').update({ status: 'failed', admin_note: 'auto-expired (14d)' })
+    .eq('status', 'pending').lt('created_at', cutoff);
+
+  let txs;
+  try { txs = await fetchFioTransactions(2, now); }
+  catch (e: any) { console.error('[reconcile] fio fetch', e); return json({ error: 'fio_error', message: e.message }, 502); }
+
+  const activated: string[] = [];
+  const mismatched: string[] = [];
+
+  for (const tx of txs) {
+    const { data: dup } = await sb.from('bazar_featured_orders').select('id').eq('fio_transaction_id', tx.id).limit(1).maybeSingle();
+    if (dup) continue;
+
+    const { data: order } = await sb.from('bazar_featured_orders')
+      .select('id, listing_id, user_id, plan, days, price_czk, status, buyer_name, buyer_ico, buyer_address, vs')
+      .eq('vs', Number(tx.vs)).eq('status', 'pending').maybeSingle();
+    if (!order) continue;
+
+    if (order.price_czk !== tx.amountCzk) {
+      mismatched.push(order.id);
+      await sb.from('bazar_featured_orders').update({ admin_note: `Částka nesouhlasí: přišlo ${tx.amountCzk}, čekáno ${order.price_czk} (fio tx ${tx.id})` }).eq('id', order.id);
+      continue;
+    }
+
+    const { data: rpcRows, error: rpcErr } = await sb.rpc('bazar_extend_featured', {
+      p_listing_id: order.listing_id, p_days: order.days, p_plan: order.plan as FeaturedPlan,
+    });
+    if (rpcErr || !rpcRows?.length) { console.error('[reconcile] extend rpc', rpcErr); continue; }
+    const featuredUntil: string = rpcRows[0].featured_until;
+
+    const { data: invNo } = await sb.rpc('bazar_next_invoice_number');
+    const invoiceNumber = String(invNo);
+    const planInfo = getPlanInfo(order.plan as FeaturedPlan);
+    const { data: owner } = await sb.from('bazar_users').select('email').eq('id', order.user_id).maybeSingle();
+    const buyerEmail = owner?.email ?? '';
+    const pdf = await buildInvoicePdf({
+      invoiceNumber, issueDate: now, planLabel: planInfo.label, days: order.days,
+      amountCzk: order.price_czk, vs: order.vs, buyerName: order.buyer_name,
+      buyerIco: order.buyer_ico, buyerAddress: order.buyer_address, buyerEmail,
+    });
+    const pdfPath = `${order.user_id}/${invoiceNumber}.pdf`;
+    await sb.storage.from('invoices').upload(pdfPath, pdf, { contentType: 'application/pdf', upsert: true });
+
+    await sb.from('bazar_featured_orders').update({
+      status: 'paid', paid_at: now.toISOString(), featured_until_after: featuredUntil,
+      fio_transaction_id: tx.id, invoice_number: invoiceNumber, invoice_pdf_path: pdfPath,
+    }).eq('id', order.id);
+
+    try {
+      const resendKey = getEnvVar('RESEND_API_KEY');
+      if (resendKey && buyerEmail) {
+        const resend = new Resend(resendKey);
+        await resend.emails.send({
+          from: FROM, to: buyerEmail, bcc: ACCOUNTING_BCC,
+          subject: `Topování aktivováno + faktura ${invoiceNumber}`,
+          text: `Děkujeme, platba dorazila. Topování inzerátu je aktivní do ${new Date(featuredUntil).toLocaleDateString('cs-CZ')}.\nV příloze faktura ${invoiceNumber}.`,
+          attachments: [{ filename: `faktura-${invoiceNumber}.pdf`, content: Buffer.from(pdf).toString('base64') }],
+        });
+      }
+    } catch (e) { console.error('[reconcile] email', e); }
+
+    activated.push(order.id);
+  }
+
+  return json({ ok: true, activated: activated.length, mismatched: mismatched.length, scanned: txs.length });
+};

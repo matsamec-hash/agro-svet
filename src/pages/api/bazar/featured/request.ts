@@ -9,10 +9,7 @@ import type { FeaturedPlan } from '../../../../lib/bazar-featured';
 import { edgeThrottle } from '../../../../lib/edge-throttle';
 import { getEnvVar } from '../../../../lib/env';
 import { BAZAR_TOPOVANI_ENABLED } from '../../../../lib/config';
-import { Resend } from 'resend';
-
-const ADMIN_EMAIL = 'info@samecdigital.com';
-const FROM = 'Agro-svět bazar <bazar@mail.agro-svet.cz>';
+import { buildSpayd } from '../../../../lib/spayd';
 
 export const prerender = false;
 
@@ -72,7 +69,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     return json({ error: 'listing_not_active', message: 'Topovat lze jen aktivní inzeráty.' }, 409);
   }
 
-  const plenInfo = getPlanInfo(plan);
+  const planInfo = getPlanInfo(plan);
 
   // Reject duplicate-pending: pokud user už má pending request pro tento listing,
   // nevytvářet další. (Necháme admin to vyřídit, ne zaplavit ho 10× tím samým.)
@@ -92,17 +89,31 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     }, 409);
   }
 
+  // Alokuj číselný variabilní symbol (VS) pro spárování Fio platby.
+  const { data: vsRow, error: vsErr } = await sb.rpc('bazar_next_vs');
+  if (vsErr || vsRow == null) {
+    console.error('[featured/request] vs alloc failed', vsErr);
+    return json({ error: 'db_error' }, 500);
+  }
+  const vs = Number(vsRow);
+
+  const buyer = body?.buyer ?? {};
+
   const { data: order, error: insertErr } = await sb
     .from('bazar_featured_orders')
     .insert({
       listing_id: listingId,
       user_id: user.id,
       plan,
-      days: plenInfo.days,
-      price_czk: plenInfo.priceCzk,
+      days: planInfo.days,
+      price_czk: planInfo.priceCzk,
       status: 'pending',
+      vs,
+      buyer_name: typeof buyer.name === 'string' ? buyer.name.slice(0, 200) : null,
+      buyer_ico: typeof buyer.ico === 'string' ? buyer.ico.slice(0, 20) : null,
+      buyer_address: typeof buyer.address === 'string' ? buyer.address.slice(0, 300) : null,
     })
-    .select('id, created_at')
+    .select('id, vs, created_at')
     .single();
 
   if (insertErr || !order) {
@@ -110,42 +121,18 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     return json({ error: 'db_error', message: insertErr?.message }, 500);
   }
 
-  // Admin notification — best-effort; failure doesn't block user flow.
-  try {
-    const resendKey = getEnvVar('RESEND_API_KEY');
-    if (resendKey) {
-      const resend = new Resend(resendKey);
-      const adminUrl = `https://agro-svet.cz/admin/bazar/?topovat=${order.id}`;
-      const userEmail = (user as any).email ?? '(unknown)';
-      const lines = [
-        'Nová žádost o topování inzerátu.',
-        '',
-        `Inzerát:   ${listing.title}`,
-        `Plán:      ${plenInfo.label} (${plenInfo.days} dní)`,
-        `Cena:      ${plenInfo.priceCzk} Kč`,
-        `Uživatel:  ${userEmail}`,
-        `Order ID:  ${order.id}`,
-        '',
-        `Schválit (admin): ${adminUrl}`,
-      ].join('\n');
-      await resend.emails.send({
-        from: FROM,
-        to: ADMIN_EMAIL,
-        replyTo: userEmail,
-        subject: `[agro-svět] Žádost o topování: ${listing.title}`,
-        text: lines,
-      });
-    }
-  } catch (e) {
-    console.error('[featured/request] admin email failed', e);
-  }
+  const iban = getEnvVar('TOPOVANI_IBAN') ?? '';
+  const spayd = buildSpayd({ iban, amountCzk: planInfo.priceCzk, vs, message: `Topovani inzeratu ${planInfo.label}` });
 
   return json({
     ok: true,
     orderId: order.id,
     plan,
-    priceCzk: plenInfo.priceCzk,
-    days: plenInfo.days,
-    message: 'Žádost přijata. Topování aktivujeme po manuálním ověření platby (Stripe brzy).',
-  }, 202);
+    priceCzk: planInfo.priceCzk,
+    days: planInfo.days,
+    vs,
+    iban,
+    spayd,
+    payUrl: `/bazar/moje/${listingId}/topovat/platba/?order=${order.id}`,
+  }, 201);
 };
