@@ -81,6 +81,7 @@ function relTermin(a: Akce): string {
     <header class="ad-head">
       <span class="ad-typ">{typLabel}</span>
       <h1>{akce.nazev}</h1>
+      {(icsStart ?? akce.pristi_vyskyt) && <span class="ad-countdown" id="ad-countdown" data-start={icsStart ?? akce.pristi_vyskyt}></span>}
     </header>
 
     <div class="ad-grid">
@@ -142,6 +143,13 @@ function relTermin(a: Akce): string {
     </div>
   </main>
 
+  {fotoUrl && (
+    <div class="foto-lightbox" id="foto-lightbox" hidden role="dialog" aria-modal="true" aria-label={akce.nazev}>
+      <button type="button" class="lb-close" id="lb-close" aria-label="Zavřít">✕</button>
+      <img src={fotoUrl} alt={akce.nazev} />
+    </div>
+  )}
+
   <script>
     const btn = document.getElementById('ics-btn');
     btn?.addEventListener('click', () => {
@@ -165,6 +173,37 @@ function relTermin(a: Akce): string {
       a.click();
       URL.revokeObjectURL(a.href);
     });
+
+    // Lightbox — klik na hero fotku ji zvětší přes celou obrazovku.
+    const heroImg = document.querySelector('.hero-img');
+    const lb = document.getElementById('foto-lightbox');
+    const lbClose = document.getElementById('lb-close');
+    function openLb() { if (lb) { lb.hidden = false; document.body.style.overflow = 'hidden'; } }
+    function closeLb() { if (lb) { lb.hidden = true; document.body.style.overflow = ''; } }
+    heroImg?.addEventListener('click', openLb);
+    lb?.addEventListener('click', (e) => { if (e.target === lb || e.target === lbClose) closeLb(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb && !lb.hidden) closeLb(); });
+
+    // Odpočet — "začíná za X dní" (klientsky, ať to nezastarává v edge cache).
+    const cd = document.getElementById('ad-countdown');
+    if (cd && cd.dataset.start) {
+      const start = new Date(cd.dataset.start).getTime();
+      const now = Date.now();
+      const dayMs = 86400000;
+      const diff = start - now;
+      if (diff < -dayMs) {
+        cd.textContent = 'Probíhá';
+      } else if (diff < 0) {
+        cd.textContent = '🔴 Probíhá právě teď'; cd.classList.add('today');
+      } else {
+        const days = Math.ceil(diff / dayMs);
+        const m10 = days % 10, m100 = days % 100;
+        const word = (m10 >= 2 && m10 <= 4 && !(m100 >= 12 && m100 <= 14)) ? 'dny' : 'dní';
+        if (days === 0) { cd.textContent = '🔴 Začíná dnes'; cd.classList.add('today'); }
+        else if (days === 1) { cd.textContent = '⏳ Začíná zítra'; cd.classList.add('soon'); }
+        else { cd.textContent = `⏳ Začíná za ${days} ${word}`; if (days <= 7) cd.classList.add('soon'); }
+      }
+    }
   </script>
 
   <style>
@@ -174,7 +213,16 @@ function relTermin(a: Akce): string {
     .crumbs a:hover { text-decoration: underline; }
     .hero-foto { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 20px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; max-height: 560px; }
     .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(24px) brightness(.55); transform: scale(1.1); }
-    .hero-img { position: relative; max-width: 100%; max-height: 560px; width: auto; height: auto; object-fit: contain; display: block; }
+    .hero-img { position: relative; max-width: 100%; max-height: 560px; width: auto; height: auto; object-fit: contain; display: block; cursor: zoom-in; }
+    .foto-lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,.92); display: flex; align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
+    .foto-lightbox[hidden] { display: none; }
+    .foto-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,.5); }
+    .lb-close { position: absolute; top: 16px; right: 20px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; font-size: 1.3rem; cursor: pointer; line-height: 1; }
+    .lb-close:hover { background: rgba(255,255,255,.28); }
+    .ad-countdown { display: inline-block; margin-top: 12px; padding: 6px 14px; border-radius: 999px; background: #eef4ea; color: #2f6a2a; font: 700 .9rem 'Chakra Petch', sans-serif; }
+    .ad-countdown:empty { display: none; }
+    .ad-countdown.soon { background: #fff2d6; color: #9a6a00; }
+    .ad-countdown.today { background: #ffe1e1; color: #b02020; }
     .ad-head { margin-bottom: 24px; }
     .ad-typ { display: inline-block; font: 800 11px/1 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #3a7d34; margin-bottom: 8px; }
     .ad-head h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.15; }
