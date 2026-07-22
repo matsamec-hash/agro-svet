@@ -3,7 +3,7 @@ export const prerender = false;
 import Layout from '../../../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, getSeries, seriesFamily, familyLabel, categoryLabel, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
 import { createServerClient } from '../../../../../lib/supabase';
-import { breadcrumbSchema, machineProductSchema, faqPageSchema } from '../../../../../lib/structured-data';
+import { breadcrumbSchema, machineProductSchema, machineAggregateOfferSchema, faqPageSchema } from '../../../../../lib/structured-data';
 import { generateModelFaq } from '../../../../../lib/faq-generator';
 import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 import { pairCombo } from '../../../../../lib/comparator';
@@ -76,17 +76,25 @@ const brandColors: Record<string, [string, string]> = {
 };
 const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
 
-// Live count inzerátů tohoto konkrétního modelu
+// Live count + cenové rozpětí inzerátů tohoto konkrétního modelu (naplňuje slib „cena")
 let modelBazarCount = 0;
+let priceStats: { min: number; max: number; count: number } | null = null;
 try {
   const supabase = createServerClient();
-  const { count } = await supabase
+  const { data, count } = await supabase
     .from('bazar_listings')
-    .select('id', { count: 'exact', head: true })
+    .select('price', { count: 'exact' })
     .eq('status', 'active')
     .eq('model_slug', model.slug);
   modelBazarCount = count ?? 0;
+  const prices = (data ?? [])
+    .map((r: { price: number | null }) => r.price)
+    .filter((p): p is number => typeof p === 'number' && p > 0);
+  if (prices.length > 0) {
+    priceStats = { min: Math.min(...prices), max: Math.max(...prices), count: prices.length };
+  }
 } catch {}
+const priceFmt = (n: number) => n.toLocaleString(locale === 'sk' ? 'sk-SK' : 'cs-CZ');
 
 const family = series.family || seriesFamily(series.slug);
 const familyLab = familyLabel(family);
@@ -132,6 +140,13 @@ if (model.transmission) drivetrainSpecs.push({ label: tr('cat.s.d.specTransmissi
 if (model.weight_kg) dimensionSpecs.push({ label: tr('cat.s.d.specWeight'), value: `${model.weight_kg.toLocaleString(numLocale)} kg` });
 if (model.cutting_width_m) dimensionSpecs.push({ label: tr('cat.s.d.specCuttingWidth'), value: `${model.cutting_width_m} m` });
 if (model.grain_tank_l) dimensionSpecs.push({ label: tr('cat.s.d.specGrainTank'), value: `${model.grain_tank_l.toLocaleString(numLocale)} l` });
+// Implement-specific typed fieldy (pluhy/nářadí) — dřív jen ve FAQ, teď i ve spec tabulce.
+if (model.pracovni_zaber_m) dimensionSpecs.push({ label: tr('cat.s.d.specZaber'), value: `${model.pracovni_zaber_m} m` });
+if (model.prikon_traktor_hp_min || model.prikon_traktor_hp_max) {
+  const pMin = model.prikon_traktor_hp_min, pMax = model.prikon_traktor_hp_max;
+  const pRange = pMin && pMax ? `${pMin}–${pMax}` : String(pMin ?? pMax);
+  performanceSpecs.push({ label: tr('cat.s.d.specPrikonTraktor'), value: `${pRange} k` });
+}
 if (yr) performanceSpecs.push({ label: tr('cat.s.d.specYears'), value: yr });
 
 if (model.specs) {
@@ -222,12 +237,22 @@ const productJsonLd = machineProductSchema({
   lang: locale === 'sk' ? 'sk-SK' : 'cs-CZ',
 });
 
+// Product + AggregateOffer jen když má model inzeráty s cenou (naplňuje slib „cena").
+const bazarSearchUrl = `/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`;
+const offerJsonLd = priceStats
+  ? machineAggregateOfferSchema(
+      { name: `${brand.name} ${model.name}`, url: canonical, offerUrl: bazarSearchUrl, imageUrl: heroPhoto, brandName: brand.name },
+      priceStats,
+    )
+  : null;
+
 const faqItems = generateModelFaq({
   brand,
   model,
   category,
   categorySingular: categorySingular[category],
   bazarCount: modelBazarCount,
+  priceStats,
   locale,
 });
 const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
@@ -254,6 +279,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 <Layout title={tf(locale, modelBazarCount > 0 ? 'cat.s.d.titleSuffix' : 'cat.s.d.titleSuffixNoPrice', { name: pageTitle })} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
+  {offerJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(offerJsonLd)} />}
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
   <div class="model-page">
 
@@ -492,6 +518,12 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         <div class="aside-card primary-cta-card">
           <span class="acc-kicker">{modelBazarCount > 0 ? tf(locale, 'cat.s.d.asideKickerCount', { count: modelBazarCount, unit: plural(locale, modelBazarCount, { one: tr('cat.s.d.asideKickerOne'), few: tr('cat.s.d.asideKickerFew'), many: tr('cat.s.d.asideKickerMany') }) }) : tr('cat.s.d.asideKickerNone')}</span>
           <h3>{brand.name} {model.name}<br/>{tr('cat.s.d.asideInBazar')}</h3>
+          {priceStats && (
+            <div class="aside-price">
+              <span class="ap-label">{tr('cat.s.d.priceLabel')}</span>
+              <span class="ap-value">{priceStats.min === priceStats.max ? `${priceFmt(priceStats.min)} Kč` : `${priceFmt(priceStats.min)} – ${priceFmt(priceStats.max)} Kč`}</span>
+            </div>
+          )}
           <p>{modelBazarCount > 0 ? tr('cat.s.d.asideTextHas') : tr('cat.s.d.asideTextNone')}</p>
           <a href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`} class="aside-btn primary">
             {modelBazarCount > 0 ? (modelBazarCount === 1 ? tr('cat.s.d.asideBtnShowOne') : tr('cat.s.d.asideBtnShowFew')) : tr('cat.s.d.asideBtnOpen')}
@@ -777,6 +809,9 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
     letter-spacing:-.01em;margin:0 0 8px;color:#fff;
   }
   .model-page .primary-cta-card p{font-size:13px;color:#c8c8d0;line-height:1.5;margin:0 0 14px}
+  .model-page .aside-price{display:flex;flex-direction:column;gap:2px;margin:0 0 14px;padding:12px 0;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+  .model-page .aside-price .ap-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#a0a0aa}
+  .model-page .aside-price .ap-value{font-family:'Chakra Petch',sans-serif;font-size:20px;font-weight:700;color:#FFFF00}
   .model-page .aside-btn{
     display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
     padding:11px 14px;border-radius:10px;text-decoration:none;

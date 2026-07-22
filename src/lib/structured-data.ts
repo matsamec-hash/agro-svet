@@ -326,6 +326,35 @@ export function machineProductSchema(m: MachineModelForSchema) {
   return schema;
 }
 
+// Product + AggregateOffer — emitován JEN když má model aktivní bazarové inzeráty s cenou.
+// Doplňuje (ne nahrazuje) Thing/Vehicle schema výše; teprve s offers je Product validní
+// pro Google (viz komentář v machineProductSchema) → kandidát na cenu v SERPu.
+export function machineAggregateOfferSchema(
+  m: { name: string; url: string; offerUrl: string; imageUrl?: string | null; brandName: string },
+  price: { min: number; max: number; count: number },
+) {
+  const url = m.url.startsWith('http') ? m.url : `${SITE_URL}${m.url}`;
+  const offerUrl = m.offerUrl.startsWith('http') ? m.offerUrl : `${SITE_URL}${m.offerUrl}`;
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: m.name,
+    url,
+    brand: { '@type': 'Brand', name: m.brandName },
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'CZK',
+      lowPrice: price.min,
+      highPrice: price.max,
+      offerCount: price.count,
+      availability: 'https://schema.org/InStock',
+      url: offerUrl,
+    },
+  };
+  if (m.imageUrl) schema.image = m.imageUrl.startsWith('http') ? m.imageUrl : `${SITE_URL}${m.imageUrl}`;
+  return schema;
+}
+
 export interface ExpertReviewInput {
   /** Page URL of the review (typically the encyklopedie detail). */
   url: string;

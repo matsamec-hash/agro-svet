@@ -17,6 +17,8 @@ interface ModelFaqInput {
   categorySingular: string;
   /** Live count of bazar listings for this model. Optional. */
   bazarCount?: number;
+  /** Cenové rozpětí z aktivních bazarových inzerátů (CZK). Optional. */
+  priceStats?: { min: number; max: number; count: number };
   /** Locale for the generated prose. Default 'cs' (byte-identické s původním). */
   locale?: Locale;
 }
@@ -29,6 +31,7 @@ export function generateModelFaq({
   category,
   categorySingular,
   bazarCount,
+  priceStats,
   locale = 'cs',
 }: ModelFaqInput): FaqItem[] | null {
   const isSk = locale === 'sk';
@@ -210,6 +213,22 @@ export function generateModelFaq({
         `${fullName} je ${label}. Pri výbere traktora tomu zodpovedá kategória trojbodového závesu a hydraulická kapacita.`,
         `${fullName} — ${label}. Під час вибору трактора цьому відповідає категорія триточкового навішування та гідравлічна продуктивність.`,
         `${fullName} jest ${label}. Przy wyborze ciągnika należy sprawdzić kategorię TUZ i wydajność hydrauliki.`,
+      ),
+    });
+  }
+
+  // Price — from active bazar listings. Naplňuje „cena" dotazy.
+  if (priceStats) {
+    const lo = fmtNumber(priceStats.min);
+    const hi = fmtNumber(priceStats.max);
+    const rangePhrase = priceStats.min === priceStats.max ? `${lo} Kč` : `${lo} – ${hi} Kč`;
+    items.push({
+      q: L(`Kolik stojí ${fullName}?`, `Koľko stojí ${fullName}?`, `Скільки коштує ${fullName}?`, `Ile kosztuje ${fullName}?`),
+      a: L(
+        `Podle aktuálních inzerátů v Agro bazaru se ${fullName} prodává za ${rangePhrase}. Cena se liší podle roku výroby, počtu motohodin a stavu stroje.`,
+        `Podľa aktuálnych inzerátov v Agro bazári sa ${fullName} predáva za ${rangePhrase}. Cena sa líši podľa roku výroby, počtu motohodín a stavu stroja.`,
+        `За актуальними оголошеннями в Агро базарі ${fullName} продається за ${rangePhrase}. Ціна залежить від року випуску, кількості мотогодин і стану машини.`,
+        `Według aktualnych ogłoszeń w Agro giełdzie ${fullName} sprzedawany jest za ${rangePhrase}. Cena zależy od roku produkcji, liczby motogodzin i stanu maszyny.`,
       ),
     });
   }
