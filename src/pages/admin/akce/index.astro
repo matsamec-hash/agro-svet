@@ -1,12 +1,13 @@
 ---
 // src/pages/admin/akce/index.astro
 import Layout from '../../../layouts/Layout.astro';
-import { listPending, akceFotoUrl } from '../../../lib/akce-supabase';
+import { listPending, listUpcoming, akceFotoUrl } from '../../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../../lib/akce-recurrence';
 import { akceTypLabel, type AkceTyp } from '../../../lib/akce-constants';
 
 export const prerender = false;
 const pending = await listPending();
+const published = await listUpcoming(300);
 
 function termin(a: (typeof pending)[number]): string {
   const t: TerminInput = a.druh === 'jednorazova'
@@ -40,15 +41,34 @@ function termin(a: (typeof pending)[number]): string {
         </div>
       </article>
     ))}
+
+    <section class="published">
+      <h2 class="pub-head">Zveřejněné akce <span>({published.length}) — správa fotek</span></h2>
+      {published.map((a) => (
+        <article class="card card--pub" data-id={a.id}>
+          <h3><a href={`/akce/${a.slug}/`} target="_blank" rel="noopener">{a.nazev} ↗</a></h3>
+          <p class="meta">{akceTypLabel(a.typ as AkceTyp)} · {a.obec} ({a.okres_slug}) · {termin(a)}</p>
+          <div class="foto-row">
+            {akceFotoUrl(a.foto_path)
+              ? <img class="foto-prev" src={akceFotoUrl(a.foto_path)} alt="" width="120" height="90" />
+              : <span class="foto-none">Bez fotky</span>}
+            <label class="foto-up">📷 {akceFotoUrl(a.foto_path) ? 'Nahradit' : 'Nahrát'} fotku
+              <input type="file" data-foto accept="image/jpeg,image/png,image/webp" hidden />
+            </label>
+            {akceFotoUrl(a.foto_path) && <button type="button" data-foto-remove>Odebrat</button>}
+          </div>
+        </article>
+      ))}
+    </section>
   </main>
 
   <script>
     document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
       const id = card.dataset.id!;
-      card.querySelector<HTMLButtonElement>('[data-action="approve"]')!
-        .addEventListener('click', () => act(id, 'approve'));
-      card.querySelector<HTMLButtonElement>('[data-action="reject"]')!
-        .addEventListener('click', () => {
+      card.querySelector<HTMLButtonElement>('[data-action="approve"]')
+        ?.addEventListener('click', () => act(id, 'approve'));
+      card.querySelector<HTMLButtonElement>('[data-action="reject"]')
+        ?.addEventListener('click', () => {
           const reason = prompt('Důvod zamítnutí (volitelné):') ?? '';
           act(id, 'reject', reason);
         });
@@ -94,5 +114,12 @@ function termin(a: (typeof pending)[number]): string {
     .foto-none { color: #999; font-size: .85rem; }
     .foto-up { display: inline-block; padding: 6px 14px; border: 1px solid #c4c4c4; border-radius: 8px; cursor: pointer; font-size: .9rem; background: #fafafa; }
     .foto-row button { padding: 6px 14px; cursor: pointer; border: 1px solid #d9b0b0; border-radius: 8px; background: #fff; color: #a33; }
+    .published { margin-top: 48px; border-top: 2px solid #eee; padding-top: 8px; }
+    .pub-head { font-size: 1.15rem; }
+    .pub-head span { font-weight: 400; color: #888; font-size: .8em; }
+    .card--pub { background: #fafafa; }
+    .card--pub h3 { margin: 0 0 4px; font-size: 1.05rem; }
+    .card--pub h3 a { color: #2f6a2a; text-decoration: none; }
+    .card--pub h3 a:hover { text-decoration: underline; }
   </style>
 </Layout>
