@@ -18,6 +18,7 @@ Disallow: /fotosoutez/moje/
 Disallow: /fotosoutez/nahrat
 Disallow: /hledat
 Disallow: /unlock
+Disallow: /kat/
 
 # AI search citation bots — allowed (real-time search, not training).
 # These crawl on-demand to answer user queries and cite source URLs.

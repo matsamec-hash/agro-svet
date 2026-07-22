@@ -29,8 +29,8 @@ describe('getNav', () => {
     expect(nav.map((i) => i.label)).toEqual([
       'Téma', 'Zvieratá', 'Technika', 'Dáta', 'Farmy',
     ]);
-    // top-level header sekce `data` nyní ukazuje na /statistiky/ (odemčeno Fáze 2b B)
-    expect(nav.some((i) => i.href === '/statistiky/')).toBe(true);
+    // top-level header sekce `data` ukazuje na /data/ (hub /data/ je živý; sk má /data launchnuté)
+    expect(nav.some((i) => i.href === '/data/')).toBe(true);
     expect(nav.some((i) => i.href === '/bazar/')).toBe(false);
     expect(nav.some((i) => i.href === '/fotosoutez/')).toBe(false);
   });
@@ -46,14 +46,14 @@ describe('getNav', () => {
     expect(hrefs).toContain('/kalkulacka/dotace-cap/');
     expect(hrefs).toContain('/statistiky/');
     expect(hrefs).toContain('/puda/');
-    // section header ukazuje na /statistiky/ (odemčeno, je to první/hlavní dítě)
-    expect(data!.href).toBe('/statistiky/');
+    // section header ukazuje na /data/ (hub); sk má /data launchnuté → bez redirectu na dítě
+    expect(data!.href).toBe('/data/');
   });
 
   it('cs nav: data sekce má 5 původních dětí + Svět (profily/srovnání) na konci', () => {
     const nav = getNav('cs');
     const data = nav.find((s) => s.section === 'data')!;
-    expect(data.href).toBe('/statistiky/');
+    expect(data.href).toBe('/data/');
     const hrefs = (data.children ?? []).map((c) => c.href);
     expect(hrefs).toEqual([
       '/statistiky/', '/puda/', '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/',
@@ -140,7 +140,8 @@ describe('getFooterColumns', () => {
     const hrefs = cols[0].links.map((l) => l.href);
     expect(hrefs).toContain('/stroje/');
     expect(hrefs).toContain('/puda/');
-    expect(hrefs).toContain('/statistiky/');
+    // footer „Data" link je /data/ (hub, cs+sk-only) → pro uk odfiltrován (není launchnutý)
+    expect(hrefs).not.toContain('/data/');
     expect(hrefs).not.toContain('/novinky/');
     expect(hrefs).not.toContain('/plemena/');
   });
@@ -150,7 +151,7 @@ describe('getFooterColumns', () => {
     const cols = getFooterColumns('sk');
     const allHrefs = cols.flatMap((c) => c.links.map((l) => l.href));
     expect(allHrefs).toContain('/puda/');
-    expect(allHrefs).toContain('/statistiky/');
+    expect(allHrefs).toContain('/data/');
   });
 });
 
