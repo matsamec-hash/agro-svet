@@ -77,7 +77,7 @@ function buildTilesForCategory(catKey: StrojKategorie): Tile[] {
     if (!t) {
       t = {
         family: fam,
-        label: labelOverride || familyLabel(fam),
+        label: labelOverride || familyLabel(fam, locale),
         modelCount: 0,
         seriesCount: 0,
         minHp: null,

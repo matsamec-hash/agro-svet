@@ -450,8 +450,13 @@ export function seriesFamily(slug: string): string {
   return m ? m[1] : slug;
 }
 
-export function familyLabel(family: string): string {
-  if (/^\d+$/.test(family)) return `${family}. řada`;
+export function familyLabel(family: string, locale: string = 'cs'): string {
+  if (/^\d+$/.test(family)) {
+    if (locale === 'sk') return `${family}. rad`;
+    if (locale === 'uk') return `Серія ${family}`;
+    if (locale === 'pl') return `Seria ${family}`;
+    return `${family}. řada`;
+  }
   if (family.length <= 4) return family.toUpperCase();
   return family[0].toUpperCase() + family.slice(1);
 }

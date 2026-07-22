@@ -42,7 +42,7 @@ const brandColors: Record<string, [string, string]> = {
 const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
 
 const family = series.family || seriesFamily(series.slug);
-const familyLab = familyLabel(family);
+const familyLab = familyLabel(family, locale);
 
 const yr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
 const isCurrent = series.year_to === null && series.year_from !== null;
