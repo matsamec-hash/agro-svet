@@ -1,0 +1,106 @@
+---
+// Sdílený obsah landing stránek akcí (typ / kraj / kombinace).
+// Head, JSON-LD a noindex řeší volající stránka; tato komponenta jen renderuje
+// úvod, výpis (seskupený po měsících, karty → detail) a prolinkování.
+import { groupByMonth } from '../../lib/akce-hub';
+import { formatTermin, type TerminInput } from '../../lib/akce-recurrence';
+import { akceTypLabel, type AkceTyp } from '../../lib/akce-constants';
+import { akceFotoUrl } from '../../lib/akce-supabase';
+import type { Akce } from '../../lib/akce';
+
+interface CrossLink { label: string; href: string }
+interface Props {
+  title: string;
+  intro: string;
+  akce: Akce[];
+  crossLinksTitle?: string;
+  crossLinks?: CrossLink[];
+}
+const { title, intro, akce, crossLinksTitle, crossLinks = [] } = Astro.props;
+const groups = groupByMonth(akce);
+
+function termin(a: Akce): string {
+  const t: TerminInput = a.druh === 'jednorazova'
+    ? { druh: 'jednorazova', zacatek: a.zacatek as string, konec: a.konec }
+    : { druh: 'opakovana', dny_v_tydnu: a.dny_v_tydnu ?? [], cas_od: a.cas_od ?? '', cas_do: a.cas_do, plati_od: a.plati_od as string, plati_do: a.plati_do };
+  return formatTermin(t);
+}
+---
+<main class="akce-landing">
+  <header class="al-head">
+    <h1>{title}</h1>
+    <p class="al-intro">{intro}</p>
+    <a href="/akce/pridat/" class="btn-add">+ Přidat akci</a>
+  </header>
+
+  {groups.length === 0 ? (
+    <p class="al-empty">Momentálně tu nemáme žádnou nadcházející akci. <a href="/akce/pridat/">Přidejte první</a> nebo zkuste <a href="/akce/">celý kalendář akcí</a>.</p>
+  ) : (
+    <div class="al-osa">
+      {groups.map((g) => (
+        <section class="al-mesic">
+          <h2 class="al-mesic-nadpis">{g.label}</h2>
+          <ul class="al-list">
+            {g.akce.map((a) => (
+              <li class="al-item">
+                <a class="al-card" href={`/akce/${a.slug}/`}>
+                  {akceFotoUrl(a.foto_path) && (
+                    <span class="al-thumb"><img src={akceFotoUrl(a.foto_path)} alt="" loading="lazy" width="120" height="90" /></span>
+                  )}
+                  <span class="al-body">
+                    <span class="al-typ">{akceTypLabel(a.typ as AkceTyp)}</span>
+                    <span class="al-nazev">{a.nazev}</span>
+                    <span class="al-meta">{termin(a)} · {a.obec}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  )}
+
+  {crossLinks.length > 0 && (
+    <nav class="al-cross" aria-label={crossLinksTitle ?? 'Související'}>
+      {crossLinksTitle && <h2>{crossLinksTitle}</h2>}
+      <ul>
+        {crossLinks.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+      </ul>
+    </nav>
+  )}
+
+  <p class="al-back"><a href="/akce/">← Zpět na kalendář akcí</a></p>
+</main>
+
+<style>
+  .akce-landing { max-width: 1000px; margin: 0 auto; padding: 32px 20px 80px; }
+  .al-head { margin-bottom: 28px; }
+  .al-head h1 { margin: 0 0 12px; font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.15; }
+  .al-intro { color: #444; line-height: 1.65; max-width: 68ch; margin: 0 0 16px; }
+  .btn-add { display: inline-block; padding: 10px 20px; background: #FFFF00; color: #111; font-weight: 700; border-radius: 8px; text-decoration: none; border: 1.5px solid #0A0A0B; }
+  .btn-add:hover { filter: brightness(0.96); }
+  .al-empty { color: #555; padding: 20px 0; }
+  .al-empty a { color: #3a7d34; }
+  .al-mesic { margin: 28px 0 0; }
+  .al-mesic:first-child { margin-top: 0; }
+  .al-mesic-nadpis { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; color: #6b7a1e; border-bottom: 2px solid #eef0e4; padding-bottom: 6px; }
+  .al-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+  .al-item { border: 1px solid #e8e8e8; border-radius: 12px; overflow: hidden; transition: border-color .15s, box-shadow .15s; }
+  .al-item:hover { border-color: #3a7d34; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+  .al-card { display: flex; gap: 14px; padding: 14px 16px; text-decoration: none; color: inherit; height: 100%; }
+  .al-thumb { flex: 0 0 auto; }
+  .al-thumb img { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; display: block; }
+  .al-body { display: flex; flex-direction: column; min-width: 0; }
+  .al-typ { font: 800 10px/1 'Chakra Petch', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #3a7d34; margin-bottom: 5px; }
+  .al-nazev { font-weight: 700; font-size: 1.1rem; line-height: 1.25; margin-bottom: 4px; }
+  .al-meta { margin-top: auto; color: #666; font-size: .9rem; }
+  .al-cross { margin-top: 44px; padding-top: 24px; border-top: 1px solid #eee; }
+  .al-cross h2 { font-size: 1.1rem; margin: 0 0 12px; }
+  .al-cross ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .al-cross a { display: inline-block; padding: 6px 14px; border: 1px solid #dde3d0; border-radius: 999px; background: #f6f7f2; color: #3a5a2f; text-decoration: none; font-size: .9rem; }
+  .al-cross a:hover { border-color: #3a7d34; background: #eef4ea; }
+  .al-back { margin-top: 32px; }
+  .al-back a { color: #3a7d34; text-decoration: none; }
+  .al-back a:hover { text-decoration: underline; }
+</style>

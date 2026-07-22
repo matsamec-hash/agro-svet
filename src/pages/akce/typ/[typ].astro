@@ -1,0 +1,57 @@
+---
+// Landing podle typu akce — long-tail SEO ("farmářské trhy", "polní dny"…).
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import AkceLanding from '../../../components/akce/AkceLanding.astro';
+import { listByTyp } from '../../../lib/akce-supabase';
+import { isAkceTyp, akceTypLabel, AKCE_TYP_INTRO, AKCE_INDEX_MIN } from '../../../lib/akce-constants';
+import { getKraje } from '../../../lib/lokality';
+import { breadcrumbSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+
+const { typ } = Astro.params;
+if (!typ || !isAkceTyp(typ)) return Astro.rewrite('/404');
+
+const label = akceTypLabel(typ);
+const akce = await listByTyp(typ);
+const canonical = `${SITE_URL}/akce/typ/${typ}/`;
+const noindex = akce.length < AKCE_INDEX_MIN;
+
+// Kraje, kde tento typ akce reálně probíhá → prolinkování na kombinace.
+const kraje = getKraje();
+const krajeWithAkce = [...new Set(akce.map((a) => a.kraj_slug))]
+  .map((slug) => kraje.find((k) => k.slug === slug))
+  .filter((k): k is NonNullable<typeof k> => !!k)
+  .sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+const crossLinks = krajeWithAkce.map((k) => ({ label: k.name, href: `/akce/typ/${typ}/${k.slug}/` }));
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalendář akcí', url: '/akce/' },
+  { name: label, url: canonical },
+]);
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${label} — kalendář zemědělských akcí`,
+  url: canonical,
+  description: AKCE_TYP_INTRO[typ],
+};
+---
+<Layout
+  title={`${label} v ČR — kalendář zemědělských akcí`}
+  description={AKCE_TYP_INTRO[typ].slice(0, 155)}
+  canonical={canonical}
+  noindex={noindex}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <AkceLanding
+    title={`${label} v ČR`}
+    intro={AKCE_TYP_INTRO[typ]}
+    akce={akce}
+    crossLinksTitle={`${label} podle kraje`}
+    crossLinks={crossLinks}
+  />
+</Layout>

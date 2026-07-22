@@ -1,0 +1,60 @@
+---
+// Landing kombinace typ × kraj — nejjemnější long-tail
+// ("farmářské trhy Jihočeský kraj"). Zpravidla noindex (málo akcí), ale
+// přístupné pro UX a crawl + interní prolinkování.
+export const prerender = false;
+
+import Layout from '../../../../layouts/Layout.astro';
+import AkceLanding from '../../../../components/akce/AkceLanding.astro';
+import { listByTypAndKraj } from '../../../../lib/akce-supabase';
+import { isAkceTyp, akceTypLabel, AKCE_TYP_INTRO, AKCE_INDEX_MIN } from '../../../../lib/akce-constants';
+import { getKraje } from '../../../../lib/lokality';
+import { breadcrumbSchema } from '../../../../lib/structured-data';
+import { SITE_URL } from '../../../../lib/config';
+
+const { typ, kraj: krajSlug } = Astro.params;
+if (!typ || !isAkceTyp(typ)) return Astro.rewrite('/404');
+const kraj = getKraje().find((k) => k.slug === krajSlug);
+if (!kraj) return Astro.rewrite('/404');
+
+const label = akceTypLabel(typ);
+const akce = await listByTypAndKraj(typ, kraj.slug);
+const canonical = `${SITE_URL}/akce/typ/${typ}/${kraj.slug}/`;
+const noindex = akce.length < AKCE_INDEX_MIN;
+
+const intro = `${label} v regionu ${kraj.name}. ${AKCE_TYP_INTRO[typ]}`;
+const crossLinks = [
+  { label: `Všechny: ${label} v ČR`, href: `/akce/typ/${typ}/` },
+  { label: `Všechny akce — ${kraj.name}`, href: `/akce/kraj/${kraj.slug}/` },
+];
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalendář akcí', url: '/akce/' },
+  { name: label, url: `/akce/typ/${typ}/` },
+  { name: kraj.name, url: canonical },
+]);
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${label} — ${kraj.name}`,
+  url: canonical,
+  description: intro,
+};
+---
+<Layout
+  title={`${label} — ${kraj.name} | kalendář zemědělských akcí`}
+  description={intro.slice(0, 155)}
+  canonical={canonical}
+  noindex={noindex}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <AkceLanding
+    title={`${label} — ${kraj.name}`}
+    intro={intro}
+    akce={akce}
+    crossLinksTitle="Zobrazit také"
+    crossLinks={crossLinks}
+  />
+</Layout>

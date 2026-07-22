@@ -1,0 +1,56 @@
+---
+// Landing podle kraje — long-tail SEO ("zemědělské akce Jihočeský kraj").
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import AkceLanding from '../../../components/akce/AkceLanding.astro';
+import { listByKraj } from '../../../lib/akce-supabase';
+import { akceTypLabel, AKCE_INDEX_MIN, type AkceTyp } from '../../../lib/akce-constants';
+import { getKraje } from '../../../lib/lokality';
+import { breadcrumbSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+
+const { kraj: krajSlug } = Astro.params;
+const kraj = getKraje().find((k) => k.slug === krajSlug);
+if (!kraj) return Astro.rewrite('/404');
+
+const akce = await listByKraj(kraj.slug);
+const canonical = `${SITE_URL}/akce/kraj/${kraj.slug}/`;
+const noindex = akce.length < AKCE_INDEX_MIN;
+
+const intro = `Přehled nadcházejících zemědělských akcí v regionu ${kraj.name}: farmářské trhy, polní dny, výstavy a veletrhy, prodej ze dvora i chovatelské přehlídky. Termíny a místa konání aktualizujeme průběžně — svou akci můžete přidat zdarma.`;
+
+// Typy akcí přítomné v kraji → prolinkování na kombinace.
+const typyWithAkce = [...new Set(akce.map((a) => a.typ as AkceTyp))]
+  .sort((a, b) => akceTypLabel(a).localeCompare(akceTypLabel(b), 'cs'));
+const crossLinks = typyWithAkce.map((t) => ({ label: akceTypLabel(t), href: `/akce/typ/${t}/${kraj.slug}/` }));
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalendář akcí', url: '/akce/' },
+  { name: kraj.name, url: canonical },
+]);
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `Zemědělské akce — ${kraj.name}`,
+  url: canonical,
+  description: intro,
+};
+---
+<Layout
+  title={`Zemědělské akce v regionu ${kraj.name} — kalendář`}
+  description={intro.slice(0, 155)}
+  canonical={canonical}
+  noindex={noindex}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <AkceLanding
+    title={`Zemědělské akce — ${kraj.name}`}
+    intro={intro}
+    akce={akce}
+    crossLinksTitle={`Akce v regionu ${kraj.name} podle typu`}
+    crossLinks={crossLinks}
+  />
+</Layout>
