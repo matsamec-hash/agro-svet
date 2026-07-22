@@ -7,7 +7,7 @@ over the **stdio** transport.
 Over stdio, only public **static reference** data is served — no database.
 
 The remote HTTP transport (`src/pages/api/mcp.ts`, served at
-`POST https://agro-svet.cz/api/mcp`) additionally exposes **`search_bazar`**,
+`POST https://agro-svet.cz/api/mcp/`) additionally exposes **`search_bazar`**,
 which queries the live marketplace. Even there, only **public, active** listings
 and their **public marketing fields** are returned — seller PII (`phone`,
 `email`, `user_id`) is never selected. No contest or account data is ever
@@ -127,8 +127,11 @@ The transport is the SDK's `WebStandardStreamableHTTPServerTransport`
 need no sessions or SSE streaming; each POST is a self-contained JSON-RPC
 request/response.
 
-> Note the **trailing slash**: the site uses `trailingSlash: 'always'`, so the
-> endpoint is `/api/mcp/` (a POST to `/api/mcp` 404s).
+> ⚠️ **Always use the trailing slash: `/api/mcp/`.** The site runs
+> `trailingSlash: 'always'`, so a POST to `/api/mcp` (no slash) gets a **301**
+> redirect to `/api/mcp/` — and most HTTP clients drop the request body when
+> following a 301 on POST, so the call silently fails. The trailing slash is the
+> only reliable form; every example and client config below uses it.
 
 ### MCP client config (remote)
 

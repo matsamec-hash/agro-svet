@@ -3,7 +3,11 @@
  *
  * Exposes the SAME read-only tools as the stdio MCP server (see `mcp/`) over
  * the MCP **Streamable HTTP** transport, served by this site's Worker at
- *   POST https://agro-svet.cz/api/mcp
+ *   POST https://agro-svet.cz/api/mcp/
+ *
+ * NB: the trailing slash is required. The site runs `trailingSlash: 'always'`,
+ * so a POST to `/api/mcp` (no slash) 301-redirects to `/api/mcp/` and clients
+ * typically drop the body when following a 301 on POST → the call fails.
  *
  * No separate Cloudflare Worker, no new DNS — it ships with the existing site.
  *
