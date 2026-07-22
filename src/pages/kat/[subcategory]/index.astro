@@ -1,0 +1,17 @@
+---
+// Interní SSR renderer listingu kategorie pro non-cs. Cíl rewritu z [brand]
+// (viz komentář tam). URL navenek zůstává /{locale}/stroje/{subcat}/; canonical
+// v komponentě míří na /stroje/{subcat}/. Cesta /kat/ je MIMO /stroje ať
+// nekoliduje s [brand]/[series]/[model]. (Astro vylučuje _-prefix, proto ne /_subcat.)
+export const prerender = false;
+import SubcategoryListing from '../../../components/stroje/SubcategoryListing.astro';
+import { getFunctionalGroupForCategory, type StrojKategorie } from '../../../lib/stroje';
+import { getLocaleFromUrl } from '../../../i18n/utils';
+
+const { subcategory } = Astro.params;
+if (!subcategory || !getFunctionalGroupForCategory(subcategory as StrojKategorie)) {
+  return Astro.rewrite('/404');
+}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+---
+<SubcategoryListing subcat={subcategory as StrojKategorie} locale={locale} />
