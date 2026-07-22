@@ -1,7 +1,7 @@
 // src/pages/api/akce/submit.ts
 import type { APIRoute } from 'astro';
 import { validateAkceInput, slugifyAkce, type AkceInput } from '../../../lib/akce';
-import { insertSubmission, uploadAkceFoto, AKCE_FOTO_MAX_BYTES, AKCE_FOTO_TYPES } from '../../../lib/akce-supabase';
+import { insertSubmission, uploadAkceFoto, addAkceImages, AKCE_FOTO_MAX_BYTES, AKCE_FOTO_TYPES } from '../../../lib/akce-supabase';
 import { geocode } from '../../../lib/geocode';
 import { sendSubmissionConfirmation, notifyModerator } from '../../../lib/akce-email';
 import { getEnvVar } from '../../../lib/env';
@@ -41,33 +41,39 @@ export const POST: APIRoute = async ({ request, clientAddress, locals }) => {
     telefon: str(form.get('telefon')),
     email: String(form.get('email') ?? '').trim(),
     popis: String(form.get('popis') ?? '').trim(),
+    cena: str(form.get('cena')),
   };
 
   const v = validateAkceInput(input);
   if (!v.ok) return json({ ok: false, errors: v.errors }, 400);
 
-  // Volitelná fotka — validace + rate-limit + upload do bucketu. Chyba fotky
-  // nesmí shodit odeslání akce (fotku lze doplnit v adminu), proto jen zalogujeme.
-  let foto_path: string | null = null;
-  const fotoFile = form.get('foto');
-  if (fotoFile instanceof File && fotoFile.size > 0) {
-    if (!AKCE_FOTO_TYPES[fotoFile.type]) {
-      return json({ ok: false, errors: ['Fotka musí být JPG, PNG nebo WebP.'] }, 400);
-    }
-    if (fotoFile.size > AKCE_FOTO_MAX_BYTES) {
-      return json({ ok: false, errors: ['Fotka je příliš velká (max 5 MB).'] }, 400);
+  // Volitelné fotky (až 6) — validace + rate-limit + upload. Chyba fotek nesmí
+  // shodit odeslání akce (lze doplnit v adminu), proto jen zalogujeme.
+  const fotoFiles = form.getAll('foto').filter((f): f is File => f instanceof File && f.size > 0).slice(0, 6);
+  const fotoPaths: string[] = [];
+  if (fotoFiles.length > 0) {
+    for (const f of fotoFiles) {
+      if (!AKCE_FOTO_TYPES[f.type]) {
+        return json({ ok: false, errors: ['Fotky musí být JPG, PNG nebo WebP.'] }, 400);
+      }
+      if (f.size > AKCE_FOTO_MAX_BYTES) {
+        return json({ ok: false, errors: ['Některá fotka je příliš velká (max 5 MB).'] }, 400);
+      }
     }
     const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
-    const limit = await edgeThrottle({ bucket: 'akce-foto', key: ip, max: 5, windowS: 3600, ctx: (locals as any).cfContext });
+    const limit = await edgeThrottle({ bucket: 'akce-foto', key: ip, max: 10, windowS: 3600, ctx: (locals as any).cfContext });
     if (!limit.ok) {
       return json({ ok: false, errors: ['Příliš mnoho nahrání fotek, zkuste to prosím za chvíli.'] }, 429);
     }
-    try {
-      foto_path = await uploadAkceFoto(await fotoFile.arrayBuffer(), fotoFile.type);
-    } catch (e) {
-      console.error('[akce/submit] foto upload failed', e);
+    for (const f of fotoFiles) {
+      try {
+        fotoPaths.push(await uploadAkceFoto(await f.arrayBuffer(), f.type));
+      } catch (e) {
+        console.error('[akce/submit] foto upload failed', e);
+      }
     }
   }
+  const foto_path = fotoPaths[0] ?? null;
 
   let lat: number | null = null, lng: number | null = null;
   try {
@@ -85,6 +91,12 @@ export const POST: APIRoute = async ({ request, clientAddress, locals }) => {
   } catch (e) {
     console.error('[akce/submit] insert failed', e);
     return json({ ok: false, errors: ['Uložení se nezdařilo, zkuste to prosím znovu.'] }, 500);
+  }
+
+  // Galerie (best-effort — foto_path primární už uložen v insertu; akce_images
+  // je navíc a pokud tabulka ještě není/selže, akce zůstane s primární fotkou).
+  if (fotoPaths.length > 0) {
+    try { await addAkceImages(id, fotoPaths); } catch (e) { console.error('[akce/submit] gallery insert failed', e); }
   }
 
   const apiKey = getEnvVar('RESEND_API_KEY') ?? '';

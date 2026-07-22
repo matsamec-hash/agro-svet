@@ -1,0 +1,36 @@
+---
+// Admin blok správy médií akce: galerie fotek (přidat/smazat) + cena.
+// JS obsluhuje stránka /admin/akce/ (deleguje přes data-atributy).
+interface Img { id: string; url: string }
+interface Props {
+  id: string;
+  cena: string | null;
+  images: Img[];
+  fotoFallbackUrl: string | null;
+}
+const { id, cena, images, fotoFallbackUrl } = Astro.props;
+---
+<div class="media-row" data-id={id}>
+  <div class="gallery">
+    {images.map((img) => (
+      <span class="g-thumb">
+        <img src={img.url} alt="" />
+        <button type="button" class="g-del" data-image-id={img.id} title="Smazat fotku">✕</button>
+      </span>
+    ))}
+    {images.length === 0 && fotoFallbackUrl && (
+      <span class="g-thumb">
+        <img src={fotoFallbackUrl} alt="" />
+        <button type="button" class="g-del" data-legacy title="Smazat fotku">✕</button>
+      </span>
+    )}
+    {images.length === 0 && !fotoFallbackUrl && <span class="foto-none">Bez fotky</span>}
+    <label class="foto-up">📷 Přidat fotky
+      <input type="file" data-foto accept="image/jpeg,image/png,image/webp" multiple hidden />
+    </label>
+  </div>
+  <div class="cena-row">
+    <input type="text" class="cena-input" data-cena value={cena ?? ''} placeholder="Vstupné / cena (např. zdarma, 100 Kč)" maxlength="120" />
+    <button type="button" class="cena-save" data-cena-save>Uložit cenu</button>
+  </div>
+</div>

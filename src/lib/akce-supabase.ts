@@ -34,13 +34,15 @@ export async function insertSubmission(
   const sb = createServerClient();
   const now = new Date();
   const pristi = computeNextOccurrence(terminOf(input), now);
-  // foto_path přidáme do insertu jen když fotka je — odolnost proti nasazení
-  // kódu před migrací 018 (bez fotky projde i na DB bez sloupce foto_path).
+  // foto_path/cena přidáme do insertu jen když jsou — odolnost proti nasazení
+  // kódu před migrací 018/019 (bez nich projde i na DB bez těch sloupců).
   const fotoCol = input.foto_path ? { foto_path: input.foto_path } : {};
+  const cenaCol = input.cena ? { cena: input.cena } : {};
   const { data, error } = await sb
     .from('akce')
     .insert({
       ...fotoCol,
+      ...cenaCol,
       slug: input.slug,
       nazev: input.nazev,
       popis: input.popis,
@@ -168,6 +170,106 @@ export async function uploadAkceFoto(buffer: ArrayBuffer, contentType: string): 
   const { error } = await sb.storage.from('akce-images').upload(path, buffer, { contentType, upsert: false });
   if (error) throw error;
   return path;
+}
+
+/** Galerie: veřejné URL všech fotek akce (position ASC). Fallback na foto_path,
+ *  když tabulka akce_images ještě neexistuje (před migrací 019) nebo je prázdná. */
+export async function getAkceImages(akce: { id: string; foto_path: string | null }): Promise<string[]> {
+  const sb = createServerClient();
+  try {
+    const { data, error } = await sb
+      .from('akce_images')
+      .select('storage_path, position')
+      .eq('akce_id', akce.id)
+      .order('position', { ascending: true });
+    if (error) throw error;
+    const urls = (data ?? []).map((r) => akceFotoUrl((r as { storage_path: string }).storage_path)).filter(Boolean) as string[];
+    if (urls.length > 0) return urls;
+  } catch (e) {
+    // tabulka ještě není → fallback níže
+  }
+  const primary = akceFotoUrl(akce.foto_path);
+  return primary ? [primary] : [];
+}
+
+/** Admin: fotky akce s id (pro mazání). Prázdné, pokud tabulka není. */
+export async function listAkceImagesAdmin(akceId: string): Promise<{ id: string; url: string }[]> {
+  const sb = createServerClient();
+  try {
+    const { data, error } = await sb
+      .from('akce_images')
+      .select('id, storage_path, position')
+      .eq('akce_id', akceId)
+      .order('position', { ascending: true });
+    if (error) throw error;
+    return (data ?? []).map((r) => ({ id: (r as { id: string }).id, url: akceFotoUrl((r as { storage_path: string }).storage_path)! })).filter((x) => x.url);
+  } catch {
+    return [];
+  }
+}
+
+/** Admin dávka: mapa akce_id → fotky (id+url), jedním dotazem (bez N+1). */
+export async function getAkceImagesMap(akceIds: string[]): Promise<Record<string, { id: string; url: string }[]>> {
+  const map: Record<string, { id: string; url: string }[]> = {};
+  if (!akceIds.length) return map;
+  const sb = createServerClient();
+  try {
+    const { data, error } = await sb
+      .from('akce_images')
+      .select('id, akce_id, storage_path, position')
+      .in('akce_id', akceIds)
+      .order('position', { ascending: true });
+    if (error) throw error;
+    for (const r of data ?? []) {
+      const row = r as { id: string; akce_id: string; storage_path: string };
+      const url = akceFotoUrl(row.storage_path);
+      if (!url) continue;
+      (map[row.akce_id] ??= []).push({ id: row.id, url });
+    }
+  } catch {
+    // tabulka akce_images ještě není → prázdná mapa (fallback na foto_path v UI)
+  }
+  return map;
+}
+
+/** Nastaví cenu akce (admin). */
+export async function setAkceCena(id: string, cena: string | null): Promise<void> {
+  const sb = createServerClient();
+  const { error } = await sb.from('akce').update({ cena, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) throw error;
+}
+
+/** Přidá fotky do galerie (append za max position) + nastaví primární foto_path,
+ *  pokud ještě není. Best-effort vůči akce_images (pokud tabulka není, hodí). */
+export async function addAkceImages(akceId: string, paths: string[]): Promise<void> {
+  if (!paths.length) return;
+  const sb = createServerClient();
+  const { data: last } = await sb.from('akce_images').select('position').eq('akce_id', akceId).order('position', { ascending: false }).limit(1);
+  let pos = last && last.length ? ((last[0] as { position: number }).position + 1) : 0;
+  const rows = paths.map((p) => ({ akce_id: akceId, storage_path: p, position: pos++ }));
+  const { error } = await sb.from('akce_images').insert(rows);
+  if (error) throw error;
+  const { data: a } = await sb.from('akce').select('foto_path').eq('id', akceId).maybeSingle();
+  if (!(a as { foto_path?: string | null } | null)?.foto_path) {
+    await sb.from('akce').update({ foto_path: paths[0], updated_at: new Date().toISOString() }).eq('id', akceId);
+  }
+}
+
+/** Odebere jednu fotku z galerie (řádek + storage) + přepne primární foto_path. */
+export async function removeAkceImage(imageId: string): Promise<void> {
+  const sb = createServerClient();
+  const { data: img } = await sb.from('akce_images').select('akce_id, storage_path').eq('id', imageId).maybeSingle();
+  if (!img) return;
+  const akceId = (img as { akce_id: string }).akce_id;
+  const path = (img as { storage_path: string }).storage_path;
+  await sb.from('akce_images').delete().eq('id', imageId);
+  await sb.storage.from('akce-images').remove([path]).catch(() => {});
+  const { data: a } = await sb.from('akce').select('foto_path').eq('id', akceId).maybeSingle();
+  if ((a as { foto_path?: string | null } | null)?.foto_path === path) {
+    const { data: next } = await sb.from('akce_images').select('storage_path').eq('akce_id', akceId).order('position', { ascending: true }).limit(1);
+    const newPrimary = next && next.length ? (next[0] as { storage_path: string }).storage_path : null;
+    await sb.from('akce').update({ foto_path: newPrimary, updated_at: new Date().toISOString() }).eq('id', akceId);
+  }
 }
 
 /** Nastaví/odebere foto_path akce (admin). Starou fotku (pokud jiná) smaže. */

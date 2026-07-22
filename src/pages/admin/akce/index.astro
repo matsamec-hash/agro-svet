@@ -1,19 +1,24 @@
 ---
 // src/pages/admin/akce/index.astro
 import Layout from '../../../layouts/Layout.astro';
-import { listPending, listUpcoming, akceFotoUrl } from '../../../lib/akce-supabase';
+import { listPending, listUpcoming, akceFotoUrl, getAkceImagesMap } from '../../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../../lib/akce-recurrence';
 import { akceTypLabel, type AkceTyp } from '../../../lib/akce-constants';
+import AdminAkceMedia from '../../../components/admin/AdminAkceMedia.astro';
 
 export const prerender = false;
 const pending = await listPending();
 const published = await listUpcoming(300);
+const imagesMap = await getAkceImagesMap([...pending, ...published].map((a) => a.id));
 
 function termin(a: (typeof pending)[number]): string {
   const t: TerminInput = a.druh === 'jednorazova'
     ? { druh: 'jednorazova', zacatek: a.zacatek as string, konec: a.konec }
     : { druh: 'opakovana', dny_v_tydnu: a.dny_v_tydnu ?? [], cas_od: a.cas_od ?? '', cas_do: a.cas_do, plati_od: a.plati_od as string, plati_do: a.plati_do };
   return formatTermin(t);
+}
+function fallbackUrl(a: (typeof pending)[number]): string | null {
+  return (imagesMap[a.id]?.length ? null : akceFotoUrl(a.foto_path));
 }
 ---
 <Layout title="Moderace akcí — admin" description="Schvalování akcí v kalendáři">
@@ -26,15 +31,7 @@ function termin(a: (typeof pending)[number]): string {
         <p class="meta">{akceTypLabel(a.typ as AkceTyp)} · {a.obec} ({a.okres_slug}) · {termin(a)}</p>
         <p>{a.popis}</p>
         <p class="contact">{a.poradatel} · {a.email} · {a.web}</p>
-        <div class="foto-row">
-          {akceFotoUrl(a.foto_path)
-            ? <img class="foto-prev" src={akceFotoUrl(a.foto_path)} alt="" width="120" height="90" />
-            : <span class="foto-none">Bez fotky</span>}
-          <label class="foto-up">📷 Nahrát / nahradit
-            <input type="file" data-foto accept="image/jpeg,image/png,image/webp" hidden />
-          </label>
-          {akceFotoUrl(a.foto_path) && <button type="button" data-foto-remove>Odebrat fotku</button>}
-        </div>
+        <AdminAkceMedia id={a.id} cena={a.cena} images={imagesMap[a.id] ?? []} fotoFallbackUrl={fallbackUrl(a)} />
         <div class="actions">
           <button data-action="approve">Schválit</button>
           <button data-action="reject">Zamítnout</button>
@@ -43,20 +40,12 @@ function termin(a: (typeof pending)[number]): string {
     ))}
 
     <section class="published">
-      <h2 class="pub-head">Zveřejněné akce <span>({published.length}) — správa fotek</span></h2>
+      <h2 class="pub-head">Zveřejněné akce <span>({published.length}) — správa fotek a ceny</span></h2>
       {published.map((a) => (
         <article class="card card--pub" data-id={a.id}>
           <h3><a href={`/akce/${a.slug}/`} target="_blank" rel="noopener">{a.nazev} ↗</a></h3>
           <p class="meta">{akceTypLabel(a.typ as AkceTyp)} · {a.obec} ({a.okres_slug}) · {termin(a)}</p>
-          <div class="foto-row">
-            {akceFotoUrl(a.foto_path)
-              ? <img class="foto-prev" src={akceFotoUrl(a.foto_path)} alt="" width="120" height="90" />
-              : <span class="foto-none">Bez fotky</span>}
-            <label class="foto-up">📷 {akceFotoUrl(a.foto_path) ? 'Nahradit' : 'Nahrát'} fotku
-              <input type="file" data-foto accept="image/jpeg,image/png,image/webp" hidden />
-            </label>
-            {akceFotoUrl(a.foto_path) && <button type="button" data-foto-remove>Odebrat</button>}
-          </div>
+          <AdminAkceMedia id={a.id} cena={a.cena} images={imagesMap[a.id] ?? []} fotoFallbackUrl={fallbackUrl(a)} />
         </article>
       ))}
     </section>
@@ -65,6 +54,7 @@ function termin(a: (typeof pending)[number]): string {
   <script>
     document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
       const id = card.dataset.id!;
+
       card.querySelector<HTMLButtonElement>('[data-action="approve"]')
         ?.addEventListener('click', () => act(id, 'approve'));
       card.querySelector<HTMLButtonElement>('[data-action="reject"]')
@@ -75,23 +65,40 @@ function termin(a: (typeof pending)[number]): string {
 
       const fotoInput = card.querySelector<HTMLInputElement>('[data-foto]');
       fotoInput?.addEventListener('change', async () => {
-        const file = fotoInput.files?.[0];
-        if (!file) return;
+        const files = fotoInput.files;
+        if (!files || !files.length) return;
         const fd = new FormData();
-        fd.set('akce_id', id); fd.set('action', 'upload'); fd.set('foto', file);
+        fd.set('akce_id', id); fd.set('action', 'upload');
+        for (const f of Array.from(files)) fd.append('foto', f);
         const res = await fetch('/admin/akce/api/foto/', { method: 'POST', body: fd });
         if (res.ok) location.reload();
         else alert('Chyba nahrání fotky: ' + res.status);
       });
-      card.querySelector<HTMLButtonElement>('[data-foto-remove]')?.addEventListener('click', async () => {
-        if (!confirm('Odebrat fotku?')) return;
+
+      card.querySelectorAll<HTMLButtonElement>('.g-del').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Smazat fotku?')) return;
+          const fd = new FormData();
+          fd.set('akce_id', id);
+          if (btn.dataset.imageId) { fd.set('action', 'remove_image'); fd.set('image_id', btn.dataset.imageId); }
+          else { fd.set('action', 'remove'); }
+          const res = await fetch('/admin/akce/api/foto/', { method: 'POST', body: fd });
+          if (res.ok) location.reload();
+          else alert('Chyba: ' + res.status);
+        });
+      });
+
+      const cenaSave = card.querySelector<HTMLButtonElement>('[data-cena-save]');
+      cenaSave?.addEventListener('click', async () => {
+        const input = card.querySelector<HTMLInputElement>('[data-cena]');
         const fd = new FormData();
-        fd.set('akce_id', id); fd.set('action', 'remove');
+        fd.set('akce_id', id); fd.set('action', 'cena'); fd.set('cena', input?.value ?? '');
         const res = await fetch('/admin/akce/api/foto/', { method: 'POST', body: fd });
-        if (res.ok) location.reload();
+        if (res.ok) { cenaSave.textContent = '✓ Uloženo'; setTimeout(() => { cenaSave.textContent = 'Uložit cenu'; }, 1500); }
         else alert('Chyba: ' + res.status);
       });
     });
+
     async function act(id: string, action: string, reason = '') {
       const fd = new FormData();
       fd.set('akce_id', id); fd.set('action', action); fd.set('reason', reason);
@@ -109,11 +116,18 @@ function termin(a: (typeof pending)[number]): string {
     .card .contact { color: #888; font-size: .85rem; }
     .actions { display: flex; gap: 10px; margin-top: 12px; }
     .actions button { padding: 8px 18px; cursor: pointer; }
-    .foto-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
-    .foto-prev { width: 120px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #e0e0e0; }
+
+    .media-row { margin-top: 12px; }
+    .gallery { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .g-thumb { position: relative; width: 92px; height: 70px; }
+    .g-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #e0e0e0; }
+    .g-del { position: absolute; top: -7px; right: -7px; width: 22px; height: 22px; border-radius: 50%; border: 0; background: #b02020; color: #fff; cursor: pointer; font-size: .8rem; line-height: 1; }
     .foto-none { color: #999; font-size: .85rem; }
     .foto-up { display: inline-block; padding: 6px 14px; border: 1px solid #c4c4c4; border-radius: 8px; cursor: pointer; font-size: .9rem; background: #fafafa; }
-    .foto-row button { padding: 6px 14px; cursor: pointer; border: 1px solid #d9b0b0; border-radius: 8px; background: #fff; color: #a33; }
+    .cena-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .cena-input { flex: 1; min-width: 200px; padding: 7px 10px; border: 1px solid #c4c4c4; border-radius: 8px; font: inherit; }
+    .cena-save { padding: 7px 14px; border: 1px solid #c4c4c4; border-radius: 8px; background: #fafafa; cursor: pointer; white-space: nowrap; }
+
     .published { margin-top: 48px; border-top: 2px solid #eee; padding-top: 8px; }
     .pub-head { font-size: 1.15rem; }
     .pub-head span { font-weight: 400; color: #888; font-size: .8em; }

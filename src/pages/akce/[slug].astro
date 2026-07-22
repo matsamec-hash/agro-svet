@@ -5,7 +5,7 @@
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
-import { getBySlug, listRelated, akceFotoUrl } from '../../lib/akce-supabase';
+import { getBySlug, listRelated, getAkceImages } from '../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../lib/akce-recurrence';
 import { akceTypLabel, type AkceTyp } from '../../lib/akce-constants';
 import { getKraje } from '../../lib/lokality';
@@ -26,7 +26,8 @@ function terminInput(a: Akce): TerminInput {
 const termin = formatTermin(terminInput(akce));
 const typLabel = akceTypLabel(akce.typ as AkceTyp);
 const kraj = getKraje().find((k) => k.slug === akce.kraj_slug);
-const fotoUrl = akceFotoUrl(akce.foto_path);
+const images = await getAkceImages(akce);
+const heroImage = images[0] ?? null;
 const related = await listRelated(akce, 4);
 const canonical = `${SITE_URL}/akce/${akce.slug}/`;
 
@@ -40,7 +41,7 @@ const mapQuery = akce.lat != null && akce.lng != null
   : encodeURIComponent([akce.misto_nazev, akce.adresa, akce.obec].filter(Boolean).join(', '));
 const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
 
-const eventJsonLd = eventSchema(akce, fotoUrl ? { imageUrl: fotoUrl } : undefined);
+const eventJsonLd = eventSchema(akce, heroImage ? { imageUrl: heroImage } : undefined);
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
   { name: 'Kalendář akcí', url: '/akce/' },
@@ -59,7 +60,7 @@ function relTermin(a: Akce): string {
   description={metaDesc}
   canonical={canonical}
   ogType="article"
-  ogImage={fotoUrl ?? undefined}
+  ogImage={heroImage ?? undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(eventJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -71,10 +72,20 @@ function relTermin(a: Akce): string {
       <a href={`/akce/typ/${akce.typ}/`}>{typLabel}</a>
     </nav>
 
-    {fotoUrl && (
+    {heroImage && (
       <div class="hero-foto">
-        <img class="hero-bg" src={fotoUrl} alt="" aria-hidden="true" loading="eager" />
-        <img class="hero-img" src={fotoUrl} alt={akce.nazev} loading="eager" />
+        <img class="hero-bg" src={heroImage} alt="" aria-hidden="true" loading="eager" />
+        <img class="hero-img" src={heroImage} alt={akce.nazev} loading="eager" data-idx="0" />
+      </div>
+    )}
+
+    {images.length > 1 && (
+      <div class="foto-thumbs">
+        {images.map((src, i) => (
+          <button type="button" class="thumb" data-idx={i} aria-label={`Fotka ${i + 1}`}>
+            <img src={src} alt="" loading="lazy" />
+          </button>
+        ))}
       </div>
     )}
 
@@ -100,6 +111,7 @@ function relTermin(a: Akce): string {
             <div>{akce.obec}{kraj ? `, ${kraj.name}` : ''}</div>
             <a class="map-link" href={mapUrl} target="_blank" rel="noopener">Zobrazit na mapě →</a>
           </dd>
+          {akce.cena && (<><dt>Vstupné</dt><dd>{akce.cena}</dd></>)}
           {akce.poradatel && (<><dt>Pořadatel</dt><dd>{akce.poradatel}</dd></>)}
           {akce.web && (<><dt>Web</dt><dd><a href={akce.web} target="_blank" rel="noopener nofollow">{akce.web.replace(/^https?:\/\//, '').replace(/\/$/, '')}</a></dd></>)}
           {akce.telefon && (<><dt>Telefon</dt><dd><a href={`tel:${akce.telefon}`}>{akce.telefon}</a></dd></>)}
@@ -143,12 +155,16 @@ function relTermin(a: Akce): string {
     </div>
   </main>
 
-  {fotoUrl && (
+  {heroImage && (
     <div class="foto-lightbox" id="foto-lightbox" hidden role="dialog" aria-modal="true" aria-label={akce.nazev}>
       <button type="button" class="lb-close" id="lb-close" aria-label="Zavřít">✕</button>
-      <img src={fotoUrl} alt={akce.nazev} />
+      {images.length > 1 && <button type="button" class="lb-nav lb-prev" id="lb-prev" aria-label="Předchozí">‹</button>}
+      <img id="lb-img" src={heroImage} alt={akce.nazev} />
+      {images.length > 1 && <button type="button" class="lb-nav lb-next" id="lb-next" aria-label="Další">›</button>}
+      {images.length > 1 && <span class="lb-counter" id="lb-counter"></span>}
     </div>
   )}
+  <script type="application/json" id="akce-images-data" set:html={JSON.stringify(images)}></script>{/* galerie pro lightbox */}
 
   <script>
     const btn = document.getElementById('ics-btn');
@@ -174,15 +190,32 @@ function relTermin(a: Akce): string {
       URL.revokeObjectURL(a.href);
     });
 
-    // Lightbox — klik na hero fotku ji zvětší přes celou obrazovku.
-    const heroImg = document.querySelector('.hero-img');
+    // Lightbox / galerie — klik na fotku ji zvětší; ‹ › + šipky procházejí.
+    const lbImages = JSON.parse(document.getElementById('akce-images-data')?.textContent || '[]');
     const lb = document.getElementById('foto-lightbox');
     const lbClose = document.getElementById('lb-close');
-    function openLb() { if (lb) { lb.hidden = false; document.body.style.overflow = 'hidden'; } }
+    const lbImg = document.getElementById('lb-img');
+    const lbCounter = document.getElementById('lb-counter');
+    let lbIdx = 0;
+    function showLb(i) {
+      if (!lbImages.length) return;
+      lbIdx = (i + lbImages.length) % lbImages.length;
+      if (lbImg) lbImg.src = lbImages[lbIdx];
+      if (lbCounter) lbCounter.textContent = `${lbIdx + 1} / ${lbImages.length}`;
+    }
+    function openLb(i) { if (lb) { showLb(i); lb.hidden = false; document.body.style.overflow = 'hidden'; } }
     function closeLb() { if (lb) { lb.hidden = true; document.body.style.overflow = ''; } }
-    heroImg?.addEventListener('click', openLb);
+    document.querySelector('.hero-img')?.addEventListener('click', () => openLb(0));
+    document.querySelectorAll('.thumb').forEach((t) => t.addEventListener('click', () => openLb(Number(t.dataset.idx))));
+    document.getElementById('lb-prev')?.addEventListener('click', (e) => { e.stopPropagation(); showLb(lbIdx - 1); });
+    document.getElementById('lb-next')?.addEventListener('click', (e) => { e.stopPropagation(); showLb(lbIdx + 1); });
     lb?.addEventListener('click', (e) => { if (e.target === lb || e.target === lbClose) closeLb(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb && !lb.hidden) closeLb(); });
+    document.addEventListener('keydown', (e) => {
+      if (!lb || lb.hidden) return;
+      if (e.key === 'Escape') closeLb();
+      else if (e.key === 'ArrowLeft') showLb(lbIdx - 1);
+      else if (e.key === 'ArrowRight') showLb(lbIdx + 1);
+    });
 
     // Odpočet — "začíná za X dní" (klientsky, ať to nezastarává v edge cache).
     const cd = document.getElementById('ad-countdown');
@@ -217,8 +250,16 @@ function relTermin(a: Akce): string {
     .foto-lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,.92); display: flex; align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
     .foto-lightbox[hidden] { display: none; }
     .foto-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,.5); }
-    .lb-close { position: absolute; top: 16px; right: 20px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; font-size: 1.3rem; cursor: pointer; line-height: 1; }
+    .lb-close { position: absolute; top: 16px; right: 20px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; font-size: 1.3rem; cursor: pointer; line-height: 1; z-index: 2; }
     .lb-close:hover { background: rgba(255,255,255,.28); }
+    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border: 0; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; font-size: 2rem; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
+    .lb-nav:hover { background: rgba(255,255,255,.28); }
+    .lb-prev { left: 16px; } .lb-next { right: 16px; }
+    .lb-counter { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #fff; font: 600 .9rem 'Chakra Petch', sans-serif; background: rgba(0,0,0,.4); padding: 4px 12px; border-radius: 999px; }
+    .foto-thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin: -8px 0 20px; }
+    .thumb { padding: 0; border: 2px solid transparent; border-radius: 8px; overflow: hidden; cursor: pointer; background: none; width: 72px; height: 72px; }
+    .thumb:hover { border-color: #3a7d34; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .ad-countdown { display: inline-block; margin-top: 12px; padding: 6px 14px; border-radius: 999px; background: #eef4ea; color: #2f6a2a; font: 700 .9rem 'Chakra Petch', sans-serif; }
     .ad-countdown:empty { display: none; }
     .ad-countdown.soon { background: #fff2d6; color: #9a6a00; }

@@ -72,6 +72,7 @@ const kraje = getKraje();
         <legend>Pořadatel a kontakt</legend>
         <label>Pořadatel (volitelné) <input type="text" name="poradatel" maxlength="120" /></label>
         <label>Web (volitelné) <input type="url" name="web" /></label>
+        <label>Vstupné / cena (volitelné) <input type="text" name="cena" maxlength="120" placeholder="Např. zdarma, 100 Kč, děti 50 Kč" /></label>
         <label>Telefon (volitelné) <input type="tel" name="telefon" /></label>
         <label>Váš e-mail* <input type="email" name="email" required /></label>
       </fieldset>
@@ -80,9 +81,9 @@ const kraje = getKraje();
         <textarea name="popis" required minlength="10" maxlength="2000" rows="5"></textarea>
       </label>
 
-      <label>Fotka (volitelné)
-        <input type="file" name="foto" accept="image/jpeg,image/png,image/webp" />
-        <small class="hint">JPG, PNG nebo WebP, max 5 MB. Zobrazí se u akce po schválení.</small>
+      <label>Fotky (volitelné)
+        <input type="file" name="foto" accept="image/jpeg,image/png,image/webp" multiple />
+        <small class="hint">JPG, PNG nebo WebP, max 5 MB / fotka, až 6 fotek. Zobrazí se u akce po schválení.</small>
       </label>
 
       <button type="submit">Odeslat ke schválení</button>

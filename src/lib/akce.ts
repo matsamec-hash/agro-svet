@@ -25,6 +25,7 @@ export interface AkceInput {
   telefon?: string | null;
   email: string;
   popis: string;
+  cena?: string | null;
 }
 
 export interface Akce extends AkceInput {
@@ -36,6 +37,7 @@ export interface Akce extends AkceInput {
   lng: number | null;
   pristi_vyskyt: string | null;
   foto_path: string | null;
+  cena: string | null;
   created_at: string;
   zverejneno_at: string | null;
 }
