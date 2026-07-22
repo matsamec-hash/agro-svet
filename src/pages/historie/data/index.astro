@@ -1,0 +1,54 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import HistorieLineChart from '../../../components/HistorieLineChart.astro';
+import { longRange } from '../../../lib/historie';
+
+const locale = Astro.locals.locale ?? 'cs';
+const csOnly = locale !== 'cs';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+---
+<Layout
+  title="Vývoj českého zemědělství v datech — dojivost, stavy zvířat, plochy"
+  description="Dlouhodobé grafy: dojivost krav, stavy skotu a prasat, osevní plochy a počty lidí v zemědělství od 60. let po dnešek."
+  canonical="/historie/data/"
+  noindex={csOnly}
+  noHreflang={true}
+>
+  <main class="hda">
+    <h1>Zemědělství v datech</h1>
+    <p class="hda-lede">Jak se měnily klíčové ukazatele českého zemědělství. Ceny komodit sleduj v sekci <a href="/statistiky/">Trhy a komodity</a>.</p>
+    {longRange.map((s, i) => (
+      <HistorieLineChart id={`hlc-${i}`} label={s.label} unit={s.unit} source={s.source} points={s.points} />
+    ))}
+  </main>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script is:inline>
+    (function () {
+      if (typeof Chart === 'undefined') return;
+      document.querySelectorAll('.historie-chart-data').forEach(function (el) {
+        var id = el.getAttribute('data-target');
+        var canvas = document.getElementById(id);
+        if (!canvas) return;
+        var cfg = JSON.parse(el.textContent);
+        new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels: cfg.labels,
+            datasets: cfg.datasets.map(function (d) {
+              return Object.assign({ borderColor: '#1c7c48', backgroundColor: 'rgba(28,124,72,.12)', fill: true, tension: 0.25, pointRadius: 2 }, d);
+            }),
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: false } } },
+        });
+      });
+    })();
+  </script>
+</Layout>
+
+<style>
+  .hda { max-width: 820px; margin: 0 auto; padding: 24px 16px 64px; }
+  .hda h1 { font-size: 28px; margin: 0 0 6px; }
+  .hda-lede { color: #567; margin: 0 0 28px; }
+  .hda-lede a { color: #1c7c48; }
+</style>

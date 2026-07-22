@@ -1,0 +1,50 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { machines } from '../../../lib/historie';
+
+const locale = Astro.locals.locale ?? 'cs';
+const csOnly = locale !== 'cs';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+const yr = (m: { yearsFrom: number; yearsTo: number | null }) => `${m.yearsFrom}–${m.yearsTo ?? 'dosud'}`;
+---
+<Layout
+  title="Historické zemědělské stroje — E-512, Zetor a další"
+  description="Legendární stroje československého zemědělství: kombajny, traktory a technika JZD. Specifikace, roky výroby a příběhy."
+  canonical="/historie/technika/"
+  noindex={csOnly}
+  noHreflang={true}
+>
+  <main class="ht">
+    <h1>Historická technika</h1>
+    <p class="ht-lede">Stroje, které vozily úrodu z polí JZD i státních statků.</p>
+    <section class="ht-grid">
+      {machines.map((m) => (
+        <a class="ht-card" href={`/historie/technika/${m.slug}/`}>
+          <div class="ht-img">{m.image ? <img src={m.image} alt={m.name} loading="lazy" /> : <span>🚜</span>}</div>
+          <div class="ht-body">
+            <h2>{m.name}</h2>
+            <p class="ht-meta">{m.maker} · {yr(m)}</p>
+          </div>
+        </a>
+      ))}
+    </section>
+    <p class="ht-cross"><a href="/stroje/">Dnešní katalog strojů →</a></p>
+  </main>
+</Layout>
+
+<style>
+  .ht { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+  .ht h1 { font-size: 28px; margin: 0 0 6px; }
+  .ht-lede { color: #567; margin: 0 0 24px; }
+  .ht-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .ht-card { border: 1px solid #dde5e0; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .15s; }
+  .ht-card:hover { border-color: #1c7c48; }
+  .ht-img { height: 140px; background: #0f1c14; display: flex; align-items: center; justify-content: center; font-size: 44px; }
+  .ht-img img { width: 100%; height: 100%; object-fit: cover; }
+  .ht-body { padding: 14px; }
+  .ht-body h2 { font-size: 18px; margin: 0 0 4px; }
+  .ht-meta { color: #789; font-size: 13px; margin: 0; }
+  .ht-cross { margin-top: 28px; }
+  .ht-cross a { color: #1c7c48; font-weight: 600; text-decoration: none; }
+</style>

@@ -1,0 +1,68 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { milestones, machines, trivia } from '../../lib/historie';
+
+const locale = Astro.locals.locale ?? 'cs';
+const csOnly = locale !== 'cs';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+const sections = [
+  { href: '/historie/technika/', emoji: '🚜', title: 'Technika', desc: 'Historické stroje — od Zetoru 25 po kombajn E-512.' },
+  { href: '/historie/data/', emoji: '📈', title: 'Data', desc: 'Dojivost, stavy zvířat, osevní plochy, lidé v zemědělství.' },
+  { href: '/historie/dobovy-tisk/', emoji: '📰', title: 'Dobový tisk', desc: 'Titulky a reportáže z dobových novin.' },
+  { href: '/historie/zajimavosti/', emoji: '💡', title: 'Zajímavosti', desc: 'Rekordy, kuriozity, kdysi vs. dnes.' },
+];
+---
+<Layout
+  title="Historie českého zemědělství — stroje, data a dobový kontext"
+  description="Jak se měnilo české zemědělství: historické stroje (E-512, Zetor), dojivost, osevní plochy, stavy zvířat, počty lidí a dobový tisk."
+  canonical="/historie/"
+  noindex={csOnly}
+  noHreflang={true}
+>
+  <main class="hh">
+    <header class="hh-hero">
+      <p class="hh-eyebrow">HISTORIE ČESKÉHO ZEMĚDĚLSTVÍ</p>
+      <h1>Sto let na poli — v datech, strojích a příbězích</h1>
+      <p class="hh-lede">Od kolektivizace přes velkovýrobu v JZD až po dnešek. Prohlédni si, jak se měnila technika, výnosy, stavy zvířat i lidé v oboru.</p>
+    </header>
+
+    <ol class="hh-timeline">
+      {milestones.map((m) => (
+        <li><span class="hh-year">{m.year}</span><span class="hh-mtitle">{m.title}</span></li>
+      ))}
+    </ol>
+
+    <section class="hh-tiles">
+      {sections.map((s) => (
+        <a class="hh-tile" href={s.href}>
+          <span class="hh-emoji">{s.emoji}</span>
+          <span class="hh-ttitle">{s.title}</span>
+          <span class="hh-tdesc">{s.desc}</span>
+        </a>
+      ))}
+    </section>
+
+    <p class="hh-stat">{machines.length} strojů · {milestones.length} milníků · {trivia.length} zajímavostí</p>
+  </main>
+</Layout>
+
+<style>
+  .hh { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+  .hh-hero { background: #0f1c14; color: #dfe; border-radius: 16px; padding: 40px 28px; margin-bottom: 28px; }
+  .hh-eyebrow { font-size: 12px; letter-spacing: 1px; color: #7a9; margin: 0 0 8px; }
+  .hh-hero h1 { font-size: 30px; margin: 0 0 12px; }
+  .hh-lede { color: #bcd; max-width: 60ch; }
+  .hh-timeline { list-style: none; display: flex; gap: 16px; overflow-x: auto; padding: 0 0 8px; margin: 0 0 28px; }
+  .hh-timeline li { flex: 0 0 auto; border-left: 2px solid #1c7c48; padding-left: 10px; }
+  .hh-year { display: block; color: #1c7c48; font-weight: 700; }
+  .hh-mtitle { font-size: 14px; }
+  .hh-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .hh-tile { display: flex; flex-direction: column; gap: 6px; padding: 20px; border: 1px solid #dde5e0; border-radius: 12px; text-decoration: none; color: inherit; transition: border-color .15s; }
+  .hh-tile:hover { border-color: #1c7c48; }
+  .hh-emoji { font-size: 28px; }
+  .hh-ttitle { font-weight: 700; font-size: 18px; }
+  .hh-tdesc { color: #567; font-size: 14px; }
+  .hh-stat { text-align: center; color: #789; margin-top: 28px; }
+</style>

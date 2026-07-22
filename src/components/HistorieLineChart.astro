@@ -1,0 +1,30 @@
+---
+// Jeden spojnicový graf historické série. Data předána jako props; Chart.js
+// inicializuje stránka (načte CDN jednou a projede všechny .historie-chart-data).
+interface Props {
+  id: string;
+  label: string;
+  unit: string;
+  source: string;
+  points: { year: number; value: number }[];
+}
+const { id, label, unit, source, points } = Astro.props;
+const chart = {
+  labels: points.map((p) => String(p.year)),
+  datasets: [{ label: `${label} (${unit})`, data: points.map((p) => p.value) }],
+};
+---
+<figure class="hlc">
+  <figcaption class="hlc-cap">{label} <span class="hlc-unit">({unit})</span></figcaption>
+  <div class="hlc-wrap"><canvas id={id} height="260"></canvas></div>
+  <script type="application/json" class="historie-chart-data" data-target={id} set:html={JSON.stringify(chart)} />
+  <p class="hlc-src">Zdroj: {source}</p>
+</figure>
+
+<style>
+  .hlc { margin: 0 0 28px; }
+  .hlc-cap { font-weight: 600; margin-bottom: 8px; }
+  .hlc-unit { color: #789; font-weight: 400; }
+  .hlc-wrap canvas { max-height: 300px; }
+  .hlc-src { font-size: 12px; color: #789; margin-top: 6px; }
+</style>

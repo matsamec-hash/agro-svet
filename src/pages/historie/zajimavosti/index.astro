@@ -1,0 +1,44 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { trivia } from '../../../lib/historie';
+
+const locale = Astro.locals.locale ?? 'cs';
+const csOnly = locale !== 'cs';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+---
+<Layout
+  title="Zajímavosti z historie českého zemědělství"
+  description="Rekordy, kuriozity a srovnání kdysi vs. dnes z historie československého a českého zemědělství."
+  canonical="/historie/zajimavosti/"
+  noindex={csOnly}
+  noHreflang={true}
+>
+  <main class="hz">
+    <h1>Zajímavosti</h1>
+    <section class="hz-grid">
+      {trivia.map((t) => (
+        <article class="hz-card">
+          <h2>{t.title}</h2>
+          <p>{t.body}</p>
+          {t.then && t.now && (
+            <div class="hz-vs"><span class="hz-then">{t.then}</span><span class="hz-arrow">→</span><span class="hz-now">{t.now}</span></div>
+          )}
+        </article>
+      ))}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .hz { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+  .hz h1 { font-size: 28px; margin: 0 0 24px; }
+  .hz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .hz-card { border: 1px solid #dde5e0; border-radius: 12px; padding: 20px; }
+  .hz-card h2 { font-size: 18px; margin: 0 0 8px; }
+  .hz-card p { color: #445; margin: 0 0 12px; line-height: 1.5; }
+  .hz-vs { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .hz-then { color: #789; }
+  .hz-arrow { color: #1c7c48; }
+  .hz-now { color: #1c7c48; }
+</style>

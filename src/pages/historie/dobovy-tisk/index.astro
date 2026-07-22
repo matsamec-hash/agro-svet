@@ -1,0 +1,41 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { press } from '../../../lib/historie';
+
+const locale = Astro.locals.locale ?? 'cs';
+const csOnly = locale !== 'cs';
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+---
+<Layout
+  title="Zemědělství v dobovém tisku — titulky z časů JZD"
+  description="Přepsané titulky a reportáže o zemědělství z dobových novin — jak o poli, žních a technice psal tehdejší tisk."
+  canonical="/historie/dobovy-tisk/"
+  noindex={csOnly}
+  noHreflang={true}
+>
+  <main class="hp">
+    <h1>Dobový tisk</h1>
+    <p class="hp-lede">Jak o zemědělství psaly dobové noviny. Titulky přepsané, s kontextem.</p>
+    <section class="hp-grid">
+      {press.map((c) => (
+        <article class="hp-clip">
+          <div class="hp-src">{c.source} · {c.year}</div>
+          <h2 class="hp-head">{c.headline}</h2>
+          <p class="hp-ctx">{c.context}</p>
+        </article>
+      ))}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .hp { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+  .hp h1 { font-size: 28px; margin: 0 0 6px; }
+  .hp-lede { color: #567; margin: 0 0 24px; }
+  .hp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .hp-clip { background: #efe9d8; border-radius: 8px; padding: 18px; font-family: Georgia, 'Times New Roman', serif; color: #1a150c; }
+  .hp-src { font-size: 11px; letter-spacing: .5px; border-bottom: 1px solid #c9bfa0; padding-bottom: 6px; margin-bottom: 8px; color: #5a5038; }
+  .hp-head { font-size: 20px; line-height: 1.25; margin: 0 0 8px; }
+  .hp-ctx { font-size: 14px; line-height: 1.5; color: #3a3222; margin: 0; }
+</style>
