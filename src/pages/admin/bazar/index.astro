@@ -71,7 +71,12 @@ function priceText(price: number | null): string {
 
     {listings && listings.length > 0 ? (
       <div class="admin-table">
+        <div class="bulk-bar" id="bulk-bar" hidden>
+          <span id="bulk-count">0 vybráno</span>
+          <button type="button" id="bulk-delete" class="btn-sm btn-danger">Smazat vybrané</button>
+        </div>
         <div class="table-head">
+          <div class="col-check"><input type="checkbox" id="check-all" aria-label="Vybrat vše" /></div>
           <div class="col-title">Titulek</div>
           <div class="col-author">Autor</div>
           <div class="col-price">Cena</div>
@@ -82,7 +87,8 @@ function priceText(price: number | null): string {
           const status = topStatus(listing);
           const authorEmail = listing.bazar_users?.email ?? '—';
           return (
-            <div class="table-row" data-listing-id={listing.id}>
+            <div class="table-row" data-listing-id={listing.id} data-title={listing.title}>
+              <div class="col-check"><input type="checkbox" class="row-check" aria-label="Vybrat inzerát" /></div>
               <div class="col-title">
                 <a href={`/bazar/${listing.id}/`} target="_blank" rel="noopener">{listing.title}</a>
               </div>
@@ -97,6 +103,7 @@ function priceText(price: number | null): string {
                 {listing.featured && (
                   <button type="button" class="btn-sm btn-danger" data-action="clear">Zrušit</button>
                 )}
+                <button type="button" class="btn-sm btn-danger" data-action="delete">Smazat</button>
               </div>
             </div>
           );
@@ -139,6 +146,17 @@ function priceText(price: number | null): string {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ listingId, ...body }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message ?? data.error ?? 'Request failed');
+      return data;
+    }
+
+    async function callApiDelete(listingIds: string[]): Promise<any> {
+      const res = await fetch('/admin/bazar/api/delete/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ listingIds }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message ?? data.error ?? 'Request failed');
@@ -191,6 +209,32 @@ function priceText(price: number | null): string {
           return;
         }
 
+        if (action === 'delete') {
+          const title = row.dataset.title || 'tento inzerát';
+          if (!confirm(`Opravdu natrvalo smazat „${title}"?\nNevratné — smaže i fotky ze storage.`)) return;
+          const b = btn as HTMLButtonElement;
+          const orig = b.textContent;
+          b.textContent = '…';
+          b.disabled = true;
+          try {
+            const data = await callApiDelete([listingId]);
+            if ((data.deleted ?? 0) > 0) {
+              row.remove();
+              refreshBulk();
+              if (data.imageWarning) alert(data.imageWarning);
+            } else {
+              alert('Nic se nesmazalo (inzerát už neexistuje?).');
+              b.textContent = orig;
+              b.disabled = false;
+            }
+          } catch (err: any) {
+            alert(`Chyba: ${err.message}`);
+            b.textContent = orig;
+            b.disabled = false;
+          }
+          return;
+        }
+
         const originalText = btn.textContent;
         btn.textContent = '…';
         (btn as HTMLButtonElement).disabled = true;
@@ -213,6 +257,63 @@ function priceText(price: number | null): string {
     }
 
     document.querySelectorAll<HTMLElement>('[data-action]').forEach(wireButton);
+
+    // ---- Výběr + hromadné mazání --------------------------------------------
+    const checkAll = document.getElementById('check-all') as HTMLInputElement | null;
+    const bulkBar = document.getElementById('bulk-bar') as HTMLElement | null;
+    const bulkCount = document.getElementById('bulk-count') as HTMLElement | null;
+    const bulkDeleteBtn = document.getElementById('bulk-delete') as HTMLButtonElement | null;
+
+    function rowChecks(): HTMLInputElement[] {
+      return Array.from(document.querySelectorAll<HTMLInputElement>('.row-check'));
+    }
+    function selectedRows(): HTMLElement[] {
+      return rowChecks()
+        .filter((c) => c.checked)
+        .map((c) => c.closest<HTMLElement>('[data-listing-id]'))
+        .filter((r): r is HTMLElement => r !== null);
+    }
+    function refreshBulk() {
+      const sel = selectedRows();
+      if (bulkCount) bulkCount.textContent = `${sel.length} vybráno`;
+      if (bulkBar) bulkBar.hidden = sel.length === 0;
+      if (checkAll) {
+        const all = rowChecks();
+        checkAll.checked = all.length > 0 && sel.length === all.length;
+        checkAll.indeterminate = sel.length > 0 && sel.length < all.length;
+      }
+    }
+
+    rowChecks().forEach((c) => c.addEventListener('change', refreshBulk));
+    checkAll?.addEventListener('change', () => {
+      const on = checkAll.checked;
+      rowChecks().forEach((c) => (c.checked = on));
+      refreshBulk();
+    });
+    bulkDeleteBtn?.addEventListener('click', async () => {
+      const rows = selectedRows();
+      if (rows.length === 0) return;
+      if (!confirm(`Natrvalo smazat ${rows.length} inzerát(ů)?\nNevratné — smaže i fotky ze storage.`)) return;
+      const ids = rows.map((r) => r.dataset.listingId!).filter(Boolean);
+      bulkDeleteBtn.disabled = true;
+      bulkDeleteBtn.textContent = 'Mažu…';
+      try {
+        const data = await callApiDelete(ids);
+        const del = new Set<string>(data.deletedIds ?? []);
+        rows.forEach((r) => {
+          if (del.has(r.dataset.listingId!)) r.remove();
+        });
+        refreshBulk();
+        if (data.imageWarning) alert(data.imageWarning);
+        if ((data.deleted ?? 0) === 0) alert('Nic se nesmazalo.');
+      } catch (err: any) {
+        alert(`Chyba: ${err.message}`);
+      } finally {
+        bulkDeleteBtn.disabled = false;
+        bulkDeleteBtn.textContent = 'Smazat vybrané';
+      }
+    });
+    // -------------------------------------------------------------------------
 
     customCancel.addEventListener('click', () => {
       modal.close();
@@ -304,11 +405,24 @@ function priceText(price: number | null): string {
     .table-head,
     .table-row {
       display: grid;
-      grid-template-columns: 3fr 2fr 1fr 2fr 3fr;
+      grid-template-columns: 28px 3fr 2fr 1fr 2fr 3fr;
       align-items: center;
       gap: 12px;
       padding: 12px 16px;
     }
+    .col-check { display: flex; align-items: center; justify-content: center; }
+    .col-check input { width: 16px; height: 16px; cursor: pointer; }
+    .bulk-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: #fff0f0;
+      border-bottom: 1px solid #ffcdd2;
+      font-size: 13px;
+      color: #c62828;
+    }
+    .bulk-bar[hidden] { display: none; }
     .table-head {
       background: #fafafa;
       border-bottom: 1px solid #e8e8e8;
