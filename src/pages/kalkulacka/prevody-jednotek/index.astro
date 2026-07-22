@@ -23,6 +23,22 @@ const breadcrumbJsonLd = breadcrumbSchema([
   { name: c.crumb, url: canonical },
 ]);
 const faqJsonLd = faqPageSchema(faqItems);
+
+// WebApplication schema — Google u online nástrojů rád ukazuje jako app rich result.
+const appJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: c.h1,
+  url: canonical,
+  applicationCategory: 'UtilitiesApplication',
+  applicationSubCategory: 'Kalkulačka',
+  operatingSystem: 'Web',
+  browserRequirements: 'Requires JavaScript',
+  inLanguage: locale,
+  isAccessibleForFree: true,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'CZK' },
+  description: c.metaDescription,
+};
 ---
 
 <Layout
@@ -32,6 +48,7 @@ const faqJsonLd = faqPageSchema(faqItems);
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(appJsonLd)} />
 
   <div class="pj-page">
     <nav class="breadcrumb" aria-label="Cesta">
@@ -58,17 +75,15 @@ const faqJsonLd = faqPageSchema(faqItems);
       ui={c.ui}
       unitNames={c.unitNames}
       comparisonsHeading="Kolik to je? Názorné srovnání"
-      comparisonsCaption="Plocha se vykreslí jako mřížka referenčních dlaždic — čím víc se jich vejde, tím jsou menší. Orientační rozměry: parkovací místo ≈ 12,5 m², byt 3+1 ≈ 75 m², tenisový kurt ≈ 261 m², hokejové kluziště ≈ 1 800 m², fotbalové hřiště ≈ 7 140 m² (0,71 ha), Staroměstské náměstí ≈ 9 000 m², Václavské náměstí ≈ 45 000 m², Pražský hrad ≈ 70 000 m², velký lán ≈ 180 000 m² (18 ha)."
+      comparisonsCaption="Plocha se vykreslí jako mřížka referenčních dlaždic — čím víc se jich vejde, tím jsou menší. Orientační rozměry: parkovací místo ≈ 12,5 m², tenisový kurt ≈ 261 m², hokejové kluziště ≈ 1 800 m², fotbalové hřiště ≈ 7 140 m² (0,71 ha), Staroměstské náměstí ≈ 9 000 m², Václavské náměstí ≈ 45 000 m², Pražský hrad ≈ 70 000 m²."
       comparisons={[
-        { emoji: '🅿️', name: 'parkovací místo', m2: 12.5 },
-        { emoji: '🏠', name: 'byt 3+1', m2: 75 },
-        { emoji: '🎾', name: 'tenisový kurt', m2: 261 },
-        { emoji: '🏒', name: 'hokejové kluziště', m2: 1800 },
-        { emoji: '⚽', name: 'fotbalové hřiště', m2: 7140 },
-        { emoji: '🕰️', name: 'Staroměstské náměstí', m2: 9000 },
-        { emoji: '🏛️', name: 'Václavské náměstí', m2: 45000 },
-        { emoji: '🏰', name: 'Pražský hrad', m2: 70000 },
-        { emoji: '🌾', name: 'velký lán (18 ha)', m2: 180000 },
+        { emoji: '🅿️', name: 'parkovací místo', m2: 12.5, slug: 'parkovaci-misto', credit: 'Foto: Gabriel Picard, CC BY-SA 4.0' },
+        { emoji: '🎾', name: 'tenisový kurt', m2: 261, slug: 'tenisovy-kurt', credit: 'Foto: KeepActive Australia, CC BY-SA 4.0' },
+        { emoji: '🏒', name: 'hokejové kluziště', m2: 1800, slug: 'hokejove-kluziste', credit: 'Foto: Frettie, CC BY-SA 3.0' },
+        { emoji: '⚽', name: 'fotbalové hřiště', m2: 7140, slug: 'fotbalove-hriste', credit: 'Foto: Stephen Kennard, CC BY-SA 3.0' },
+        { emoji: '🏛️', name: 'Staroměstské náměstí', m2: 9000, slug: 'staromestske-nam', credit: 'Foto: A.Savin, FAL' },
+        { emoji: '🏙️', name: 'Václavské náměstí', m2: 45000, slug: 'vaclavske-nam', credit: 'Foto: Slyronit, CC BY-SA 4.0' },
+        { emoji: '🏰', name: 'Pražský hrad', m2: 70000, slug: 'prazsky-hrad', credit: 'Foto: Dietmar Rabich, CC BY-SA 4.0' },
       ]}
     />
 

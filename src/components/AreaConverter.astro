@@ -15,8 +15,9 @@ export interface Props {
   ui?: { inputLabel?: string; unitSelectLabel?: string };
   /** Lokalizované názvy jednotek (id → name). Chybějící klíč → cs default. */
   unitNames?: Record<string, string>;
-  /** Vizuální srovnání plochy s referencemi (hřiště, náměstí…). Když prázdné, panel se nezobrazí. */
-  comparisons?: { emoji: string; name: string; m2: number }[];
+  /** Vizuální srovnání plochy s referencemi (hřiště, náměstí…). Když prázdné, panel se nezobrazí.
+   *  slug + credit (volitelné) → hero fotka z /images/srovnani/{slug}__v-w{400,800}.webp. */
+  comparisons?: { emoji: string; name: string; m2: number; slug?: string; credit?: string }[];
   comparisonsHeading?: string;
   comparisonsCaption?: string;
 }
@@ -64,50 +65,58 @@ const Heading = headingLevel;
 >
   <Heading class="ac-h">{heading}</Heading>
 
-  <form class="ac-form" autocomplete="off" onsubmit="return false">
-    <label class="ac-input-row">
-      <span class="ac-label">{uiText.inputLabel}</span>
-      <span class="ac-input-wrap">
-        <input
-          type="number"
-          inputmode="decimal"
-          step="any"
-          min="0"
-          class="ac-input"
-          id="ac-input"
-          value={defaultValue}
-        />
-        <select class="ac-unit" id="ac-unit" aria-label={uiText.unitSelectLabel}>
+  <div class="ac-grid">
+    <div class="ac-main">
+      <form class="ac-form" autocomplete="off" onsubmit="return false">
+        <label class="ac-input-row">
+          <span class="ac-label">{uiText.inputLabel}</span>
+          <span class="ac-input-wrap">
+            <input
+              type="number"
+              inputmode="decimal"
+              step="any"
+              min="0"
+              class="ac-input"
+              id="ac-input"
+              value={defaultValue}
+            />
+            <select class="ac-unit" id="ac-unit" aria-label={uiText.unitSelectLabel}>
+              {UNITS.map((u) => (
+                <option value={u.id} selected={u.id === defaultUnit}>{u.label} ({u.name})</option>
+              ))}
+            </select>
+          </span>
+        </label>
+
+        <div class="ac-results" id="ac-results" role="region" aria-live="polite">
           {UNITS.map((u) => (
-            <option value={u.id} selected={u.id === defaultUnit}>{u.label} ({u.name})</option>
+            <div class="ac-result" data-unit={u.id}>
+              <span class="ac-r-label">{u.label}</span>
+              <span class="ac-r-value">—</span>
+              <span class="ac-r-name">{u.name}</span>
+            </div>
           ))}
-        </select>
-      </span>
-    </label>
-
-    <div class="ac-results" id="ac-results" role="region" aria-live="polite">
-      {UNITS.map((u) => (
-        <div class="ac-result" data-unit={u.id}>
-          <span class="ac-r-label">{u.label}</span>
-          <span class="ac-r-value">—</span>
-          <span class="ac-r-name">{u.name}</span>
         </div>
-      ))}
-    </div>
-  </form>
+      </form>
 
-  {comparisons.length > 0 && (
-    <div class="ac-compare">
-      <h3 class="ac-cmp-h">{comparisonsHeading}</h3>
-      <p class="ac-cmp-primary" id="ac-cmp-primary" aria-live="polite"></p>
-      <div class="ac-cmp-field" id="ac-cmp-visual" aria-hidden="true"></div>
-      <p class="ac-cmp-legend" id="ac-cmp-legend" aria-live="polite"></p>
-      <div class="ac-cmp-refs" id="ac-cmp-refs" role="group" aria-label="Porovnat s"></div>
-      {comparisonsCaption && <p class="ac-cmp-caption">{comparisonsCaption}</p>}
+      {caption && <p class="ac-caption">{caption}</p>}
     </div>
-  )}
 
-  {caption && <p class="ac-caption">{caption}</p>}
+    {comparisons.length > 0 && (
+      <div class="ac-compare">
+        <h3 class="ac-cmp-h">{comparisonsHeading}</h3>
+        <figure class="ac-cmp-hero" id="ac-cmp-hero" hidden>
+          <img class="ac-cmp-hero-img" id="ac-cmp-hero-img" alt="" width="800" height="500" loading="lazy" decoding="async" />
+          <figcaption class="ac-cmp-hero-credit" id="ac-cmp-hero-credit"></figcaption>
+        </figure>
+        <p class="ac-cmp-primary" id="ac-cmp-primary" aria-live="polite"></p>
+        <div class="ac-cmp-field" id="ac-cmp-visual" aria-hidden="true"></div>
+        <p class="ac-cmp-legend" id="ac-cmp-legend" aria-live="polite"></p>
+        <div class="ac-cmp-refs" id="ac-cmp-refs" role="group" aria-label="Porovnat s"></div>
+        {comparisonsCaption && <p class="ac-cmp-caption">{comparisonsCaption}</p>}
+      </div>
+    )}
+  </div>
 </section>
 
 <script is:inline define:vars={{ UNITS, numberLocale, COMPARISONS: comparisons }}>
@@ -122,10 +131,14 @@ const Heading = headingLevel;
     const cmpVisual = root.querySelector('#ac-cmp-visual');
     const cmpLegend = root.querySelector('#ac-cmp-legend');
     const cmpRefs = root.querySelector('#ac-cmp-refs');
-    const VB_W = 320, VB_H = 200, CELL_CAP = 300, EMOJI_MIN = 30;
+    const heroFig = root.querySelector('#ac-cmp-hero');
+    const heroImg = root.querySelector('#ac-cmp-hero-img');
+    const heroCredit = root.querySelector('#ac-cmp-hero-credit');
+    const VB_W = 320, VB_H = 200, CELL_CAP = 300;
     const hasCompare = cmpRefs && COMPARISONS && COMPARISONS.length;
     let activeRef = null; // index reference; null = automatický výběr
     let lastM2 = NaN;
+    let heroSlug = null; // aktuálně zobrazená fotka — zabraň zbytečnému reloadu (problikávání)
     const fmtCount = (n) =>
       (n >= 100 ? Math.round(n) : n >= 10 ? Math.round(n * 10) / 10 : Math.round(n * 100) / 100)
         .toLocaleString(numberLocale, { maximumFractionDigits: 2 });
@@ -155,7 +168,6 @@ const Heading = headingLevel;
         return open +
           `<rect x="${p}" y="${p}" width="${ow}" height="${oh}" rx="8" class="ac-svg-ref"/>` +
           `<rect x="${p}" y="${iy.toFixed(1)}" width="${iw.toFixed(1)}" height="${ih.toFixed(1)}" rx="3" class="ac-svg-area"/>` +
-          `<text x="${VB_W - p - 8}" y="${p + 22}" text-anchor="end" class="ac-svg-emoji" style="font-size:24px">${r.emoji}</text>` +
           `</svg>`;
       }
       const capped = count > CELL_CAP;
@@ -170,7 +182,6 @@ const Heading = headingLevel;
       const ox = (VB_W - cols * cell) / 2, oy = (VB_H - rows * cell) / 2;
       const full = capped ? nCells : Math.floor(count + 1e-9);
       const frac = capped ? 0 : count - full;
-      const showEmoji = cell >= EMOJI_MIN;
       const rx = (cell * 0.1).toFixed(1);
       let cells = '';
       for (let i = 0; i < nCells; i++) {
@@ -180,7 +191,6 @@ const Heading = headingLevel;
         const sz = (cell - gap).toFixed(1);
         if (i < full) {
           cells += `<rect x="${x}" y="${y}" width="${sz}" height="${sz}" rx="${rx}" class="ac-svg-cell full"/>`;
-          if (showEmoji) cells += `<text x="${(cx + cell / 2).toFixed(1)}" y="${(cy + cell / 2).toFixed(1)}" text-anchor="middle" dominant-baseline="central" class="ac-svg-emoji" style="font-size:${(cell * 0.46).toFixed(1)}px">${r.emoji}</text>`;
         } else {
           const fh = (cell - gap) * frac;
           cells += `<rect x="${x}" y="${y}" width="${sz}" height="${sz}" rx="${rx}" class="ac-svg-cell empty"/>`;
@@ -188,6 +198,21 @@ const Heading = headingLevel;
         }
       }
       return open + cells + `</svg>`;
+    }
+
+    // Hero fotka aktivní reference (když má slug). Bez slug → skryto.
+    function setHero(r) {
+      if (!heroFig || !heroImg) return;
+      if (!r || !r.slug) { heroSlug = null; heroFig.hidden = true; return; }
+      if (r.slug === heroSlug) return; // stejná fotka → nesahat na src (jinak se reloaduje a header problikává)
+      heroSlug = r.slug;
+      const base = `/images/srovnani/${r.slug}`;
+      heroImg.src = `${base}__v-w800.webp`;
+      heroImg.srcset = `${base}__v-w400.webp 400w, ${base}__v-w800.webp 800w`;
+      heroImg.sizes = '(min-width: 820px) 42vw, 92vw';
+      heroImg.alt = r.name;
+      if (heroCredit) heroCredit.textContent = r.credit || '';
+      heroFig.hidden = false;
     }
 
     function updateCompare(m2) {
@@ -205,6 +230,7 @@ const Heading = headingLevel;
         if (cmpPrimary) cmpPrimary.textContent = '';
         if (cmpVisual) cmpVisual.innerHTML = '';
         if (cmpLegend) cmpLegend.textContent = '';
+        setHero(null);
         return;
       }
       const idx = activeRef != null ? activeRef : autoIdx(m2);
@@ -212,8 +238,9 @@ const Heading = headingLevel;
       const count = m2 / r.m2;
       const btns = cmpRefs.querySelectorAll('.ac-cmp-ref');
       if (btns[idx]) btns[idx].classList.add('active');
+      setHero(r);
       if (cmpPrimary) cmpPrimary.innerHTML =
-        `≈ <strong>${fmtCount(count)}×</strong> <span class="ac-cmp-emoji">${r.emoji}</span> ${r.name}`;
+        `≈ <strong>${fmtCount(count)}×</strong> ${r.name}`;
       if (cmpVisual) cmpVisual.innerHTML = buildSvg(count, r);
       if (cmpLegend) {
         cmpLegend.textContent = count < 1
@@ -285,6 +312,16 @@ const Heading = headingLevel;
     color: #0A0A0B;
     margin: 0 0 14px;
     letter-spacing: -0.3px;
+  }
+  /* 2sloupcový layout na širších obrazovkách: vlevo převodník, vpravo srovnání */
+  .ac-grid { display: grid; gap: 20px; }
+  .ac-main { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  @media (min-width: 820px) {
+    .ac-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 28px;
+      align-items: start;
+    }
   }
   .ac-form { display: flex; flex-direction: column; gap: 14px; }
   .ac-input-row { display: flex; flex-direction: column; gap: 6px; }
@@ -381,10 +418,43 @@ const Heading = headingLevel;
   }
 
   /* Vizuální srovnání plochy */
-  .ac-compare {
-    margin-top: 18px;
-    padding-top: 16px;
-    border-top: 1px dashed #e3e3d6;
+  .ac-compare { min-width: 0; }
+  @media (max-width: 819px) {
+    .ac-compare {
+      margin-top: 4px;
+      padding-top: 18px;
+      border-top: 1px dashed #e3e3d6;
+    }
+  }
+
+  /* Hero fotka aktivní reference */
+  .ac-cmp-hero {
+    margin: 0 0 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: #eef2e9;
+    line-height: 0;
+  }
+  .ac-cmp-hero[hidden] { display: none; }
+  .ac-cmp-hero-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+  .ac-cmp-hero-credit {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 3px 8px;
+    font-size: 10px;
+    line-height: 1.3;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    border-top-left-radius: 6px;
+    letter-spacing: 0.2px;
   }
   .ac-cmp-h {
     font-size: 12px;
@@ -426,7 +496,6 @@ const Heading = headingLevel;
     fill: #fff; stroke: #6ba84f; stroke-width: 2; stroke-dasharray: 5 4;
   }
   .ac-cmp-field :global(.ac-svg-area) { fill: #7fbf5f; stroke: #4d7a37; stroke-width: 1; }
-  .ac-cmp-field :global(.ac-svg-emoji) { pointer-events: none; }
   .ac-cmp-legend {
     margin: 0 0 12px;
     font-size: 12px;
