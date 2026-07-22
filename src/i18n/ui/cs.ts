@@ -754,6 +754,7 @@ const cs: Record<string, string> = {
   'cat.s.d.compareTitle': 'Srovnat {model} vs {competitor}',
   'cat.s.d.faqTitle': 'Časté otázky',
   'cat.s.d.relatedTitle': 'Další modely v řadě {series}',
+  'cat.s.d.relatedTitleBroad': 'Podobné modely {brand}',
   'cat.s.d.allModels': 'Všechny modely →',
   'cat.s.d.ebProcessed': 'Zpracováno',
   'cat.s.d.ebEditorial': 'redakcí agro-svět.cz',

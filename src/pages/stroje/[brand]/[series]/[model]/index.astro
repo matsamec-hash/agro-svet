@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../../../../../layouts/Layout.astro';
-import { getAllBrands, getSeries, seriesFamily, familyLabel, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
+import { getAllBrands, getAllModels, getSeries, seriesFamily, familyLabel, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
 import { createServerClient } from '../../../../../lib/supabase';
 import { breadcrumbSchema, machineProductSchema, faqPageSchema } from '../../../../../lib/structured-data';
 import { generateModelFaq } from '../../../../../lib/faq-generator';
@@ -93,11 +93,23 @@ const isCurrent = model.year_to === null && model.year_from !== null;
 const seriesNameClean = String(series.name).replace(/\s*\([^)]*\)\s*$/, '');
 const seriesYr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
 
-// Related models in same series
-const related = series.models
+// Related models: same series first, then backfilled with same-brand + same-category
+// models from OTHER series — so even small series always surface ~6 internal model
+// links (denser internal graph → víc odkazové síly na high-impression stránky).
+type RelatedItem = { slug: string; name: string; power_hp: number | null; year_from: number | null; year_to: number | null; series_slug: string };
+const byPowerProximity = (a: RelatedItem, b: RelatedItem) =>
+  Math.abs((a.power_hp ?? 0) - (model.power_hp ?? 0)) - Math.abs((b.power_hp ?? 0) - (model.power_hp ?? 0));
+const relatedSameSeries: RelatedItem[] = series.models
   .filter((m) => m.slug !== model.slug)
-  .sort((a, b) => Math.abs((a.power_hp ?? 0) - (model.power_hp ?? 0)) - Math.abs((b.power_hp ?? 0) - (model.power_hp ?? 0)))
-  .slice(0, 6);
+  .map((m) => ({ slug: m.slug, name: m.name, power_hp: m.power_hp, year_from: m.year_from, year_to: m.year_to, series_slug: series.slug }));
+const related: RelatedItem[] = relatedSameSeries.sort(byPowerProximity).slice(0, 6);
+if (related.length < 6) {
+  const backfill: RelatedItem[] = getAllModels()
+    .filter((m) => m.brand_slug === brand.slug && m.effective_category === (series.subcategory ?? category) && m.series_slug !== series.slug)
+    .map((m) => ({ slug: m.slug, name: m.name, power_hp: m.power_hp, year_from: m.year_from, year_to: m.year_to, series_slug: m.series_slug }));
+  related.push(...backfill.sort(byPowerProximity).slice(0, 6 - related.length));
+}
+const relatedBroadened = related.some((m) => m.series_slug !== series.slug);
 
 function modelUrlPart(slug: string): string {
   return slug.startsWith(brand.slug + '-') ? slug.slice(brand.slug.length + 1) : slug;
@@ -439,7 +451,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         {related.length > 0 && (
           <section class="related-card">
             <div class="card-head">
-              <h2>{tf(locale, 'cat.s.d.relatedTitle', { series: seriesNameClean })}</h2>
+              <h2>{relatedBroadened ? tf(locale, 'cat.s.d.relatedTitleBroad', { brand: brand.name }) : tf(locale, 'cat.s.d.relatedTitle', { series: seriesNameClean })}</h2>
               <a class="card-head-link" href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`)}>{tr('cat.s.d.allModels')}</a>
             </div>
             <div class="rel-grid">
@@ -447,7 +459,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
                 const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '';
                 const mIsCurrent = m.year_to === null && m.year_from !== null;
                 return (
-                  <a href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`)} class="rel-card">
+                  <a href={localizePath(locale, `/stroje/${brand.slug}/${m.series_slug}/${modelUrlPart(m.slug)}/`)} class="rel-card">
                     <div class="rel-title">
                       {m.name}
                       {mIsCurrent && <span class="dot-current" title={tr('cat.s.d.dotCurrent')}></span>}

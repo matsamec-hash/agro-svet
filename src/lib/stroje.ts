@@ -176,6 +176,63 @@ export function getFunctionalGroupForCategory(cat: StrojKategorie): FunctionalGr
   return null;
 }
 
+// Kanonické české názvy kategorií strojů (funkční subkategorie nemají `name` v YAML
+// značek → jinak se v title/H1/breadcrumb zobrazoval syrový slug „kolove-nakladace").
+export const CATEGORY_LABELS: Record<StrojKategorie, string> = {
+  traktory: 'Traktory',
+  kombajny: 'Kombajny',
+  pluhy: 'Pluhy',
+  'podmitace-diskove': 'Diskové podmítače',
+  'podmitace-radlickove': 'Radličkové podmítače',
+  kyprice: 'Kypřiče',
+  'rotacni-brany': 'Rotační brány',
+  kompaktomaty: 'Kompaktomaty',
+  valce: 'Válce',
+  'seci-stroje-mechanicke': 'Mechanické secí stroje',
+  'seci-stroje-pneumaticke': 'Pneumatické secí stroje',
+  'seci-stroje-presne': 'Přesné secí stroje',
+  'seci-kombinace': 'Secí kombinace',
+  'sazecky-brambor': 'Sázečky brambor',
+  'rozmetadla-mineralni': 'Rozmetadla minerálních hnojiv',
+  'rozmetadla-statkova': 'Rozmetadla statkových hnojiv',
+  'cisterny-kejda': 'Cisterny na kejdu',
+  'aplikatory-kejda': 'Aplikátory kejdy',
+  'postrikovace-nesene': 'Nesené postřikovače',
+  'postrikovace-tazene': 'Tažené postřikovače',
+  'postrikovace-samojizdne': 'Samojízdné postřikovače',
+  'zaci-stroje': 'Žací stroje',
+  obracece: 'Obraceče',
+  shrnovace: 'Shrnovače',
+  'lisy-valcove': 'Válcové lisy',
+  'lisy-hranolove': 'Hranolové lisy',
+  obalovace: 'Obalovače',
+  'rezacky-samojizdne': 'Samojízdné řezačky',
+  'samosberaci-vozy': 'Samosběrací vozy',
+  'sklizece-brambor': 'Sklízeče brambor',
+  'sklizece-repy': 'Sklízeče řepy',
+  vyoravace: 'Vyorávače',
+  'celni-nakladace': 'Čelní nakladače',
+  teleskopy: 'Teleskopické manipulátory',
+  'kolove-nakladace': 'Kolové nakladače',
+  'kloubove-nakladace': 'Kloubové nakladače',
+  'smykove-nakladace': 'Smykem řízené nakladače',
+  'navesy-sklapeci': 'Sklápěcí návěsy',
+  'navesy-valnik': 'Valníkové návěsy',
+  'navesy-posuvne-dno': 'Návěsy s posuvným dnem',
+  'cisterny-voda': 'Cisterny na vodu',
+  'prepravniky-zrna': 'Přepravníky zrna',
+  'krmne-vozy': 'Krmné vozy',
+  'dojici-roboti': 'Dojící roboti',
+  podestylace: 'Podestýlače',
+  mulcovace: 'Mulčovače',
+  stepkovace: 'Štěpkovače',
+  'lesni-vyvazecky': 'Lesní vyvážečky',
+};
+
+export function categoryLabel(cat: StrojKategorie): string {
+  return CATEGORY_LABELS[cat] ?? cat;
+}
+
 // Vite plugin parses YAML at compile-time → default export is already an object.
 const brandModules = import.meta.glob('/src/data/stroje/*.yaml', {
   eager: true,

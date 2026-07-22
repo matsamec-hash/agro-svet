@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
-import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, getFunctionalGroupForCategory, type StrojKategorie } from '../../../lib/stroje';
+import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, getFunctionalGroupForCategory, categoryLabel, type StrojKategorie } from '../../../lib/stroje';
 import { itemListSchema } from '../../../lib/structured-data';
 
 export async function getStaticPaths() {
@@ -22,15 +22,20 @@ const subcatBrands = [...new Set(subcatModels.map((m) => m.brand_slug))]
   .map((slug) => allBrands.find((b) => b.slug === slug))
   .filter((b): b is NonNullable<typeof b> => Boolean(b));
 
-// Pretty name
-let prettyName: string = subcat;
-for (const brand of allBrands) {
-  const catData = brand.categories?.[subcat];
-  if (catData?.name) { prettyName = catData.name; break; }
-}
+// Pretty name — kanonická mapa (funkční subkategorie nemají `name` v YAML značek).
+const prettyName: string = categoryLabel(subcat);
 
 const groupSlug = getFunctionalGroupForCategory(subcat);
 const group = groupSlug ? FUNCTIONAL_GROUPS[groupSlug] : null;
+
+// Přímé odkazy na modely (dřív jen na značky) — crawlovatelné interní odkazy do
+// modelových stránek této kategorie, seřazené podle výkonu.
+function modelUrlPart(slug: string, brandSlug: string): string {
+  return slug.startsWith(brandSlug + '-') ? slug.slice(brandSlug.length + 1) : slug;
+}
+const topModels = [...subcatModels]
+  .sort((a, b) => (b.power_hp ?? 0) - (a.power_hp ?? 0) || a.name.localeCompare(b.name, 'cs'))
+  .slice(0, 30);
 
 const breadcrumbItems: any[] = [
   { '@type': 'ListItem', position: 1, name: 'Domů', item: 'https://agro-svet.cz/' },
@@ -61,8 +66,8 @@ const brandsListJsonLd = subcatBrands.length > 0
 ---
 
 <Layout
-  title={`${prettyName} — katalog značek a modelů`}
-  description={`Přehled všech značek vyrábějících ${prettyName}. ${subcatModels.length} modelů od ${subcatBrands.length} značek.`}
+  title={`${prettyName} — technické údaje, značky a modely`}
+  description={`Přehled značek a modelů — ${prettyName.toLowerCase()}. ${subcatModels.length} modelů od ${subcatBrands.length} značek, technické údaje, parametry a specifikace.`}
   canonical={`https://agro-svet.cz/stroje/${subcat}/`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -109,9 +114,31 @@ const brandsListJsonLd = subcatBrands.length > 0
         </div>
       </>
     )}
+
+    {topModels.length > 0 && (
+      <div style="margin-top:48px;">
+        <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">Modely — {prettyName.toLowerCase()}</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px;">
+          {topModels.map((m) => {
+            const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '';
+            const meta = [m.power_hp ? `${m.power_hp} k` : '', mYr].filter(Boolean).join(' · ');
+            return (
+              <a href={`/stroje/${m.brand_slug}/${m.series_slug}/${modelUrlPart(m.slug, m.brand_slug)}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:12px; padding:14px 16px; transition:border-color .2s, box-shadow .2s;" class="model-card">
+                <div style="font-family:'Chakra Petch',sans-serif; font-size:15px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">{m.brand_name} {m.name}</div>
+                <div style="font-size:12px; color:#666;">{meta}</div>
+              </a>
+            );
+          })}
+        </div>
+        {subcatModels.length > topModels.length && (
+          <p style="font-size:13px; color:#767676; margin-top:12px;">Zobrazeno {topModels.length} z {subcatModels.length} modelů — další najdete přes stránky značek výše.</p>
+        )}
+      </div>
+    )}
   </div>
 
   <style>
     .brand-card:hover { border-color: #FFFF00 !important; box-shadow: 0 6px 20px rgba(0,0,0,.08); transform: translateY(-2px); }
+    .model-card:hover { border-color: #FFFF00 !important; box-shadow: 0 4px 14px rgba(0,0,0,.07); transform: translateY(-1px); }
   </style>
 </Layout>

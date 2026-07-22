@@ -726,6 +726,7 @@ const uk: Record<string, string> = {
   'cat.s.d.compareTitle': 'Порівняти {model} vs {competitor}',
   'cat.s.d.faqTitle': 'Часті запитання',
   'cat.s.d.relatedTitle': 'Інші моделі ряду {series}',
+  'cat.s.d.relatedTitleBroad': 'Схожі моделі {brand}',
   'cat.s.d.allModels': 'Усі моделі →',
   'cat.s.d.ebProcessed': 'Опрацьовано',
   'cat.s.d.ebEditorial': 'редакцією agro-svět.cz',
