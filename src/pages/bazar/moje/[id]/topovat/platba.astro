@@ -1,0 +1,66 @@
+---
+export const prerender = false;
+import Layout from '../../../../../layouts/Layout.astro';
+import { createServerClient } from '../../../../../lib/supabase';
+import { getEnvVar } from '../../../../../lib/env';
+import { buildSpayd } from '../../../../../lib/spayd';
+import { spaydToQrDataUri } from '../../../../../lib/qr';
+import { getPlanInfo } from '../../../../../lib/bazar-featured-pricing';
+import { BAZAR_TOPOVANI_ENABLED } from '../../../../../lib/config';
+
+const { id } = Astro.params;
+const orderId = Astro.url.searchParams.get('order') ?? '';
+const user = (Astro.locals as any).user;
+if (!BAZAR_TOPOVANI_ENABLED) return Astro.redirect(`/bazar/moje/${id}/`);
+if (!user) return Astro.redirect('/bazar/prihlaseni/');
+
+const sb = createServerClient();
+const { data: order } = await sb.from('bazar_featured_orders')
+  .select('id, user_id, plan, price_czk, vs, status').eq('id', orderId).maybeSingle();
+if (!order || order.user_id !== user.id) return Astro.redirect(`/bazar/moje/${id}/`);
+
+const iban = getEnvVar('TOPOVANI_IBAN') ?? '';
+const planInfo = getPlanInfo(order.plan as any);
+const spayd = buildSpayd({ iban, amountCzk: order.price_czk, vs: order.vs, message: `Topovani inzeratu ${planInfo.label}` });
+const qr = await spaydToQrDataUri(spayd);
+const alreadyPaid = order.status === 'paid' || order.status === 'free';
+---
+<Layout title="Platba za topování" noindex={true}>
+  <main class="pay" style="max-width:520px;margin:0 auto;padding:32px 16px;">
+    <h1>Zaplaťte topování</h1>
+    {alreadyPaid ? (
+      <p class="ok">Zaplaceno — topování je aktivní. <a href={`/bazar/moje/${id}/`}>Zpět na inzerát</a></p>
+    ) : (
+      <>
+        <p>Naskenujte QR ve své bance, nebo zadejte platbu ručně. Po připsání (do ~3 min) topování aktivujeme a pošleme fakturu.</p>
+        <img src={qr} alt="QR platba" width="280" height="280" style="display:block;margin:16px auto;" />
+        <ul class="pay-details" style="list-style:none;padding:0;line-height:1.9;">
+          <li><strong>Číslo účtu (IBAN):</strong> {iban}</li>
+          <li><strong>Částka:</strong> {order.price_czk} Kč</li>
+          <li><strong>Variabilní symbol:</strong> {order.vs}</li>
+        </ul>
+        <p id="pay-status" class="muted">Čekám na platbu…</p>
+      </>
+    )}
+  </main>
+  {!alreadyPaid && (
+    <script type="application/json" id="pay-cfg" set:html={JSON.stringify({ orderId: order.id, backUrl: `/bazar/moje/${id}/` })} />
+    <script is:inline>
+      (function(){
+        var cfg = JSON.parse(document.getElementById('pay-cfg').textContent);
+        var el = document.getElementById('pay-status');
+        var t = setInterval(async function(){
+          try {
+            var r = await fetch('/api/bazar/featured/status/?order=' + cfg.orderId, { headers: { 'accept': 'application/json' } });
+            var d = await r.json();
+            if (d.status === 'paid' || d.status === 'free') {
+              clearInterval(t);
+              el.textContent = 'Zaplaceno! Přesměrování…';
+              location.href = cfg.backUrl;
+            }
+          } catch(e){}
+        }, 10000);
+      })();
+    </script>
+  )}
+</Layout>

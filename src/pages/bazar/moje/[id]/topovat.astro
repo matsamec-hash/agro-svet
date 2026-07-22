@@ -132,6 +132,10 @@ const isCurrentlyFeatured = isFeaturedActive(listing);
               btn.textContent = original;
               return;
             }
+            if (j.payUrl) {
+              window.location.href = j.payUrl;
+              return;
+            }
             alert(j.message ?? 'Žádost přijata.');
             window.location.reload();
           } catch (e) {
