@@ -24,3 +24,38 @@ describe('historie — lib accessory', () => {
     expect(trivia.length).toBeGreaterThan(0);
   });
 });
+
+describe('historie — pokrytí dat', () => {
+  it('má aspoň 5 milníků a 6 strojů', () => {
+    expect(milestones.length).toBeGreaterThanOrEqual(5);
+    expect(machines.length).toBeGreaterThanOrEqual(6);
+  });
+  it('E-512 je v katalogu', () => {
+    expect(machines.some((m) => m.slug === 'kombajn-e-512')).toBe(true);
+  });
+  it('každý stroj má ≥3 specs a příběh ≥200 znaků', () => {
+    for (const m of machines) {
+      expect(Object.keys(m.specs).length).toBeGreaterThanOrEqual(3);
+      expect(m.story.length).toBeGreaterThanOrEqual(200);
+    }
+  });
+  it('slugy strojů jsou unikátní', () => {
+    const slugs = machines.map((m) => m.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+  });
+  it('povinné dlouhodobé série existují a mají ≥6 bodů se vzestupnými roky', () => {
+    for (const key of ['dojivost', 'skot', 'prasata', 'osevni-plocha', 'pracovnici']) {
+      const s = longRange.find((x) => x.key === key);
+      expect(s, `chybí série ${key}`).toBeDefined();
+      expect(s!.points.length).toBeGreaterThanOrEqual(6);
+      for (let i = 1; i < s!.points.length; i++) {
+        expect(s!.points[i].year).toBeGreaterThan(s!.points[i - 1].year);
+      }
+      expect(s!.source.length).toBeGreaterThan(0);
+    }
+  });
+  it('má ≥6 výstřižků a ≥8 zajímavostí', () => {
+    expect(press.length).toBeGreaterThanOrEqual(6);
+    expect(trivia.length).toBeGreaterThanOrEqual(8);
+  });
+});
