@@ -1,0 +1,210 @@
+---
+// Detail zemědělské akce — long-tail SEO stránka s Event JSON-LD.
+// Statické routy /akce/typ/ a /akce/kraj/ mají v Astro přednost, takže sem
+// spadne jen skutečný slug akce.
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { getBySlug, listRelated, akceFotoUrl } from '../../lib/akce-supabase';
+import { formatTermin, type TerminInput } from '../../lib/akce-recurrence';
+import { akceTypLabel, type AkceTyp } from '../../lib/akce-constants';
+import { getKraje } from '../../lib/lokality';
+import { eventSchema, breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+import type { Akce } from '../../lib/akce';
+
+const { slug } = Astro.params;
+const akce = await getBySlug(String(slug));
+if (!akce) return Astro.rewrite('/404');
+
+function terminInput(a: Akce): TerminInput {
+  return a.druh === 'jednorazova'
+    ? { druh: 'jednorazova', zacatek: a.zacatek as string, konec: a.konec }
+    : { druh: 'opakovana', dny_v_tydnu: a.dny_v_tydnu ?? [], cas_od: a.cas_od ?? '', cas_do: a.cas_do, plati_od: a.plati_od as string, plati_do: a.plati_do };
+}
+
+const termin = formatTermin(terminInput(akce));
+const typLabel = akceTypLabel(akce.typ as AkceTyp);
+const kraj = getKraje().find((k) => k.slug === akce.kraj_slug);
+const fotoUrl = akceFotoUrl(akce.foto_path);
+const related = await listRelated(akce, 4);
+const canonical = `${SITE_URL}/akce/${akce.slug}/`;
+
+// .ics — start/end pro klientské sestavení kalendářní položky.
+const icsStart = akce.druh === 'jednorazova' ? (akce.zacatek ?? akce.pristi_vyskyt) : akce.pristi_vyskyt;
+const icsEnd = akce.druh === 'jednorazova' ? akce.konec : null;
+
+// Mapový odkaz — geo pokud známe lat/lng, jinak fulltext obec + místo.
+const mapQuery = akce.lat != null && akce.lng != null
+  ? `${akce.lat},${akce.lng}`
+  : encodeURIComponent([akce.misto_nazev, akce.adresa, akce.obec].filter(Boolean).join(', '));
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+
+const eventJsonLd = eventSchema(akce, fotoUrl ? { imageUrl: fotoUrl } : undefined);
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Kalendář akcí', url: '/akce/' },
+  { name: typLabel, url: `/akce/typ/${akce.typ}/` },
+  { name: akce.nazev, url: canonical },
+]);
+
+const metaDesc = akce.popis.length > 155 ? akce.popis.slice(0, 152) + '…' : akce.popis;
+
+function relTermin(a: Akce): string {
+  return formatTermin(terminInput(a));
+}
+---
+<Layout
+  title={`${akce.nazev} — ${typLabel} ${akce.obec}`}
+  description={metaDesc}
+  canonical={canonical}
+  ogType="article"
+  ogImage={fotoUrl ?? undefined}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(eventJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <main class="akce-detail">
+    <nav class="crumbs" aria-label="Drobečková navigace">
+      <a href="/akce/">Kalendář akcí</a>
+      <span>›</span>
+      <a href={`/akce/typ/${akce.typ}/`}>{typLabel}</a>
+    </nav>
+
+    {fotoUrl && (
+      <div class="hero-foto">
+        <img src={fotoUrl} alt={akce.nazev} loading="eager" width="1280" height="720" />
+      </div>
+    )}
+
+    <header class="ad-head">
+      <span class="ad-typ">{typLabel}</span>
+      <h1>{akce.nazev}</h1>
+    </header>
+
+    <div class="ad-grid">
+      <article class="ad-main">
+        <div class="ad-popis">{akce.popis}</div>
+      </article>
+
+      <aside class="ad-side">
+        <dl class="ad-facts">
+          <dt>Termín</dt>
+          <dd>{termin}</dd>
+          <dt>Místo</dt>
+          <dd>
+            {akce.misto_nazev && <div>{akce.misto_nazev}</div>}
+            {akce.adresa && <div>{akce.adresa}</div>}
+            <div>{akce.obec}{kraj ? `, ${kraj.name}` : ''}</div>
+            <a class="map-link" href={mapUrl} target="_blank" rel="noopener">Zobrazit na mapě →</a>
+          </dd>
+          {akce.poradatel && (<><dt>Pořadatel</dt><dd>{akce.poradatel}</dd></>)}
+          {akce.web && (<><dt>Web</dt><dd><a href={akce.web} target="_blank" rel="noopener nofollow">{akce.web.replace(/^https?:\/\//, '').replace(/\/$/, '')}</a></dd></>)}
+          {akce.telefon && (<><dt>Telefon</dt><dd><a href={`tel:${akce.telefon}`}>{akce.telefon}</a></dd></>)}
+        </dl>
+
+        {icsStart && (
+          <button
+            type="button"
+            id="ics-btn"
+            class="btn-ics"
+            data-title={akce.nazev}
+            data-start={icsStart}
+            data-end={icsEnd ?? ''}
+            data-location={[akce.misto_nazev, akce.adresa, akce.obec].filter(Boolean).join(', ')}
+            data-url={canonical}
+          >📅 Přidat do kalendáře</button>
+        )}
+      </aside>
+    </div>
+
+    {related.length > 0 && (
+      <section class="ad-related">
+        <h2>Další akce v okolí</h2>
+        <ul class="rel-list">
+          {related.map((r) => (
+            <li>
+              <a href={`/akce/${r.slug}/`}>
+                <span class="rel-typ">{akceTypLabel(r.typ as AkceTyp)}</span>
+                <span class="rel-nazev">{r.nazev}</span>
+                <span class="rel-meta">{relTermin(r)} · {r.obec}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <div class="ad-cta">
+      <p>Pořádáte zemědělskou akci?</p>
+      <a href="/akce/pridat/" class="btn-add">+ Přidat akci zdarma</a>
+    </div>
+  </main>
+
+  <script>
+    const btn = document.getElementById('ics-btn');
+    btn?.addEventListener('click', () => {
+      const d = btn.dataset;
+      const toIcs = (iso: string) => new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+      const start = d.start ? toIcs(d.start) : '';
+      const end = d.end ? toIcs(d.end) : (d.start ? toIcs(new Date(new Date(d.start).getTime() + 2 * 3600e3).toISOString()) : '');
+      const esc = (s: string) => (s || '').replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
+      const lines = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//agro-svet.cz//akce//CS', 'BEGIN:VEVENT',
+        `UID:${d.start}-${(d.title || '').slice(0, 20)}@agro-svet.cz`,
+        `DTSTART:${start}`, end ? `DTEND:${end}` : '',
+        `SUMMARY:${esc(d.title || '')}`, `LOCATION:${esc(d.location || '')}`,
+        `URL:${d.url || ''}`, `DESCRIPTION:${d.url || ''}`,
+        'END:VEVENT', 'END:VCALENDAR',
+      ].filter(Boolean);
+      const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'akce.ics';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  </script>
+
+  <style>
+    .akce-detail { max-width: 1000px; margin: 0 auto; padding: 24px 20px 80px; }
+    .crumbs { font-size: .85rem; color: #666; margin-bottom: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .crumbs a { color: #3a7d34; text-decoration: none; }
+    .crumbs a:hover { text-decoration: underline; }
+    .hero-foto { border-radius: 16px; overflow: hidden; margin-bottom: 20px; aspect-ratio: 16/9; background: #f0f0ea; }
+    .hero-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ad-head { margin-bottom: 24px; }
+    .ad-typ { display: inline-block; font: 800 11px/1 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #3a7d34; margin-bottom: 8px; }
+    .ad-head h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.15; }
+    .ad-grid { display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: start; }
+    .ad-popis { white-space: pre-wrap; line-height: 1.7; color: #222; font-size: 1.02rem; }
+    .ad-side { position: sticky; top: 88px; }
+    .ad-facts { margin: 0 0 16px; padding: 18px 20px; border: 1px solid #e2e6d6; border-radius: 14px; background: #f6f7f2; }
+    .ad-facts dt { font: 700 .72rem/1 'Chakra Petch', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #6b7255; margin-top: 14px; }
+    .ad-facts dt:first-child { margin-top: 0; }
+    .ad-facts dd { margin: 4px 0 0; color: #222; font-size: .95rem; }
+    .ad-facts a { color: #3a7d34; }
+    .map-link { display: inline-block; margin-top: 6px; font-size: .88rem; text-decoration: none; }
+    .map-link:hover { text-decoration: underline; }
+    .btn-ics { width: 100%; padding: 12px 16px; border: 1.5px solid #0A0A0B; border-radius: 12px; background: #FFFF00; font: 700 14px 'Chakra Petch', sans-serif; cursor: pointer; box-shadow: 3px 3px 0 #0A0A0B; transition: transform .15s, box-shadow .15s; }
+    .btn-ics:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 #0A0A0B; }
+    .btn-ics:active { transform: translate(0, 0); box-shadow: 0 0 0 #0A0A0B; }
+    .ad-related { margin-top: 48px; }
+    .ad-related h2 { font-size: 1.4rem; margin: 0 0 16px; }
+    .rel-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .rel-list a { display: block; padding: 14px 16px; border: 1px solid #e8e8e8; border-radius: 12px; text-decoration: none; color: inherit; transition: border-color .15s, transform .15s; }
+    .rel-list a:hover { border-color: #3a7d34; transform: translateY(-2px); }
+    .rel-typ { display: block; font: 800 10px/1 'Chakra Petch', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #3a7d34; margin-bottom: 6px; }
+    .rel-nazev { display: block; font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+    .rel-meta { display: block; color: #666; font-size: .85rem; }
+    .ad-cta { margin-top: 48px; padding: 24px; border-radius: 16px; background: #f6f7f2; border: 1px solid #e2e6d6; text-align: center; }
+    .ad-cta p { margin: 0 0 12px; font-weight: 600; }
+    .btn-add { display: inline-block; padding: 12px 22px; background: #FFFF00; border: 1.5px solid #0A0A0B; border-radius: 12px; font: 700 15px 'Chakra Petch', sans-serif; text-decoration: none; color: #0A0A0B; box-shadow: 3px 3px 0 #0A0A0B; transition: transform .15s, box-shadow .15s; }
+    .btn-add:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 #0A0A0B; }
+
+    @media (max-width: 860px) {
+      .ad-grid { grid-template-columns: 1fr; gap: 24px; }
+      .ad-side { position: static; }
+    }
+  </style>
+</Layout>

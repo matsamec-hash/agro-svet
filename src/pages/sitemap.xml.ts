@@ -9,6 +9,9 @@ import { listPlodiny, listIndexableOdrudy, listSkupiny, listIndexableUdrzovatele
 import { listIndexableChoroby } from '../lib/choroby';
 import { expandedComparisonPairs, implementComparisonPairs } from '../lib/comparator';
 import { createAnonClient } from '../lib/supabase';
+import { listPublishedForMaintenance } from '../lib/akce-supabase';
+import { AKCE_TYP_SLUGS } from '../lib/akce-constants';
+import { getKraje } from '../lib/lokality';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
@@ -119,6 +122,14 @@ export const GET: APIRoute = async () => {
     .limit(2000);
   if (listingsRes.error) console.error('sitemap bazar query error', listingsRes.error);
   const listingsDyn = listingsRes.data ?? [];
+
+  // Zveřejněné akce (cs-only kalendář) — detail + landing URL níže.
+  let akceDyn: Awaited<ReturnType<typeof listPublishedForMaintenance>> = [];
+  try {
+    akceDyn = await listPublishedForMaintenance();
+  } catch (e) {
+    console.error('sitemap akce query error', e);
+  }
 
   // Hub pages whose freshness is driven by dynamic content underneath them.
   const latestArticleLastmod = maxIsoDate(articlesDyn.map((a) => (a as { published_at?: string }).published_at));
@@ -520,6 +531,43 @@ export const GET: APIRoute = async () => {
   const dotaceSkEntries = await getCollection('dotaceSk');
   for (const dt of dotaceSkEntries) {
     urls.push({ loc: `${SITE_URL}/sk/dotace/${dt.data.slug}/`, changefreq: 'monthly', priority: '0.8', lastmod: D_DOTACE_SK });
+  }
+
+  // Akce — hub vždy; detaily všechny zveřejněné; typ/kraj/kombinace jen když mají
+  // ≥ prahu nadcházejících akcí (shodné s noindex prahem na landing → sitemap
+  // nelistuje tenké/noindex stránky). cs-only, přidáno za mirrory → nezrcadlí se.
+  const AKCE_INDEX_MIN = 3;
+  const akceUpByTyp = new Map<string, number>();
+  const akceUpByKraj = new Map<string, number>();
+  const akceUpByCombo = new Map<string, number>();
+  for (const a of akceDyn) {
+    urls.push({
+      loc: `${SITE_URL}/akce/${a.slug}/`,
+      changefreq: 'weekly',
+      priority: '0.55',
+      lastmod: (a as { updated_at?: string }).updated_at?.slice(0, 10) ?? STATIC_LASTMOD,
+    });
+    if (!a.pristi_vyskyt) continue;
+    akceUpByTyp.set(a.typ, (akceUpByTyp.get(a.typ) ?? 0) + 1);
+    akceUpByKraj.set(a.kraj_slug, (akceUpByKraj.get(a.kraj_slug) ?? 0) + 1);
+    const combo = `${a.typ}/${a.kraj_slug}`;
+    akceUpByCombo.set(combo, (akceUpByCombo.get(combo) ?? 0) + 1);
+  }
+  urls.push({ loc: `${SITE_URL}/akce/`, changefreq: 'daily', priority: '0.7', lastmod: STATIC_LASTMOD });
+  for (const typ of AKCE_TYP_SLUGS) {
+    if ((akceUpByTyp.get(typ) ?? 0) >= AKCE_INDEX_MIN) {
+      urls.push({ loc: `${SITE_URL}/akce/typ/${typ}/`, changefreq: 'weekly', priority: '0.65', lastmod: STATIC_LASTMOD });
+    }
+  }
+  for (const k of getKraje()) {
+    if ((akceUpByKraj.get(k.slug) ?? 0) >= AKCE_INDEX_MIN) {
+      urls.push({ loc: `${SITE_URL}/akce/kraj/${k.slug}/`, changefreq: 'weekly', priority: '0.6', lastmod: STATIC_LASTMOD });
+    }
+  }
+  for (const [combo, n] of akceUpByCombo) {
+    if (n >= AKCE_INDEX_MIN) {
+      urls.push({ loc: `${SITE_URL}/akce/typ/${combo}/`, changefreq: 'weekly', priority: '0.5', lastmod: STATIC_LASTMOD });
+    }
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

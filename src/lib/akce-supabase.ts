@@ -138,6 +138,90 @@ export async function listUpcoming(limit = 60): Promise<Akce[]> {
   return (data ?? []) as Akce[];
 }
 
+/** Public URL fotky akce (bucket akce-images), nebo null. Klient se cachuje,
+ *  aby výpis stovek akcí nevytvářel klienta pro každou položku. */
+let _fotoClient: ReturnType<typeof createServerClient> | null = null;
+export function akceFotoUrl(fotoPath: string | null | undefined): string | null {
+  if (!fotoPath) return null;
+  _fotoClient ??= createServerClient();
+  return _fotoClient.storage.from('akce-images').getPublicUrl(fotoPath).data.publicUrl;
+}
+
+/** Detail — jedna zveřejněná akce dle slugu (jinak null → 404). */
+export async function getBySlug(slug: string): Promise<Akce | null> {
+  const sb = createServerClient();
+  const { data, error } = await sb
+    .from('akce')
+    .select('*')
+    .eq('slug', slug)
+    .eq('stav', 'zverejneno')
+    .maybeSingle();
+  if (error) throw error;
+  return (data as Akce | null) ?? null;
+}
+
+/** Landing: nadcházející zveřejněné akce daného typu. */
+export async function listByTyp(typ: string, limit = 100): Promise<Akce[]> {
+  const sb = createServerClient();
+  const { data, error } = await sb
+    .from('akce')
+    .select('*')
+    .eq('stav', 'zverejneno')
+    .eq('typ', typ)
+    .not('pristi_vyskyt', 'is', null)
+    .order('pristi_vyskyt', { ascending: true })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as Akce[];
+}
+
+/** Landing: nadcházející zveřejněné akce v daném kraji. */
+export async function listByKraj(krajSlug: string, limit = 100): Promise<Akce[]> {
+  const sb = createServerClient();
+  const { data, error } = await sb
+    .from('akce')
+    .select('*')
+    .eq('stav', 'zverejneno')
+    .eq('kraj_slug', krajSlug)
+    .not('pristi_vyskyt', 'is', null)
+    .order('pristi_vyskyt', { ascending: true })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as Akce[];
+}
+
+/** Landing kombinace typ × kraj. */
+export async function listByTypAndKraj(typ: string, krajSlug: string, limit = 100): Promise<Akce[]> {
+  const sb = createServerClient();
+  const { data, error } = await sb
+    .from('akce')
+    .select('*')
+    .eq('stav', 'zverejneno')
+    .eq('typ', typ)
+    .eq('kraj_slug', krajSlug)
+    .not('pristi_vyskyt', 'is', null)
+    .order('pristi_vyskyt', { ascending: true })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as Akce[];
+}
+
+/** Související akce pro detail — stejný kraj NEBO typ, mimo sebe, nadcházející. */
+export async function listRelated(a: Akce, limit = 4): Promise<Akce[]> {
+  const sb = createServerClient();
+  const { data, error } = await sb
+    .from('akce')
+    .select('*')
+    .eq('stav', 'zverejneno')
+    .neq('id', a.id)
+    .not('pristi_vyskyt', 'is', null)
+    .or(`kraj_slug.eq.${a.kraj_slug},typ.eq.${a.typ}`)
+    .order('pristi_vyskyt', { ascending: true })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as Akce[];
+}
+
 /** Pro údržbový skript: všechny zveřejněné akce. */
 export async function listPublishedForMaintenance(): Promise<Akce[]> {
   const sb = createServerClient();

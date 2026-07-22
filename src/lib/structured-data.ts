@@ -729,3 +729,65 @@ export function farmLocalBusinessSchema(f: FarmForSchema) {
   }
   return schema;
 }
+
+// ── Akce (schema.org/Event) ────────────────────────────────────────────────
+// Long-tail SEO: každá zveřejněná akce jako Event node → Google rich results
+// pro události (název, datum, místo, pořadatel). Termín se odvozuje z typu
+// (jednorázová = zacatek/konec, opakovaná = příští výskyt).
+export interface EventSchemaAkce {
+  slug: string;
+  nazev: string;
+  popis: string;
+  druh: 'jednorazova' | 'opakovana';
+  zacatek?: string | null;
+  konec?: string | null;
+  pristi_vyskyt: string | null;
+  misto_nazev?: string | null;
+  adresa?: string | null;
+  obec: string;
+  lat: number | null;
+  lng: number | null;
+  poradatel?: string | null;
+  web?: string | null;
+}
+
+export function eventSchema(a: EventSchemaAkce, opts?: { imageUrl?: string }) {
+  const url = `${SITE_URL}/akce/${a.slug}/`;
+  const startDate = a.druh === 'jednorazova' ? (a.zacatek ?? a.pristi_vyskyt) : a.pristi_vyskyt;
+
+  const location: Record<string, unknown> = {
+    '@type': 'Place',
+    name: a.misto_nazev || a.obec,
+    address: {
+      '@type': 'PostalAddress',
+      ...(a.adresa ? { streetAddress: a.adresa } : {}),
+      addressLocality: a.obec,
+      addressCountry: 'CZ',
+    },
+  };
+  if (a.lat != null && a.lng != null) {
+    location.geo = { '@type': 'GeoCoordinates', latitude: a.lat, longitude: a.lng };
+  }
+
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: a.nazev,
+    description: a.popis,
+    url,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location,
+  };
+  if (startDate) schema.startDate = startDate;
+  if (a.druh === 'jednorazova' && a.konec) schema.endDate = a.konec;
+  if (a.poradatel) {
+    schema.organizer = {
+      '@type': 'Organization',
+      name: a.poradatel,
+      ...(a.web ? { url: a.web } : {}),
+    };
+  }
+  if (opts?.imageUrl) schema.image = [opts.imageUrl];
+  return schema;
+}

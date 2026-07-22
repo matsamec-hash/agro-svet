@@ -1,0 +1,80 @@
+---
+// Homepage island (server:defer) — pár nejbližších zemědělských akcí.
+// Prázdný stav → nevykreslí nic (žádná prázdná sekce na homepage).
+import { listUpcoming } from '../lib/akce-supabase';
+import { formatTermin, type TerminInput } from '../lib/akce-recurrence';
+import { akceTypLabel, type AkceTyp } from '../lib/akce-constants';
+import type { Akce } from '../lib/akce';
+
+let akce: Akce[] = [];
+try {
+  akce = await listUpcoming(6);
+} catch (e) {
+  console.error('[UpcomingEvents] listUpcoming failed', e);
+}
+
+function terminInput(a: Akce): TerminInput {
+  return a.druh === 'jednorazova'
+    ? { druh: 'jednorazova', zacatek: a.zacatek as string, konec: a.konec }
+    : { druh: 'opakovana', dny_v_tydnu: a.dny_v_tydnu ?? [], cas_od: a.cas_od ?? '', cas_do: a.cas_do, plati_od: a.plati_od as string, plati_do: a.plati_do };
+}
+
+const MESICE = ['led', 'úno', 'bře', 'dub', 'kvě', 'čvn', 'čvc', 'srp', 'zář', 'říj', 'lis', 'pro'];
+function dateChip(iso: string | null): { den: string; mesic: string } | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  return { den: String(d.getUTCDate()), mesic: MESICE[d.getUTCMonth()] };
+}
+---
+{akce.length > 0 && (
+  <section class="ue-section">
+    <div class="ue-head">
+      <div>
+        <a href="/akce/" class="ue-kicker">Kalendář akcí → <b>farmářské trhy, polní dny, výstavy</b></a>
+        <h2>Nadcházející akce</h2>
+      </div>
+      <a href="/akce/" class="ue-cta">Celý kalendář →</a>
+    </div>
+
+    <ul class="ue-grid">
+      {akce.map((a) => {
+        const chip = dateChip(a.pristi_vyskyt);
+        return (
+          <li>
+            <a href={`/akce/${a.slug}/`}>
+              {chip && (
+                <span class="ue-chip"><span class="ue-den">{chip.den}</span><span class="ue-mes">{chip.mesic}</span></span>
+              )}
+              <span class="ue-body">
+                <span class="ue-typ">{akceTypLabel(a.typ as AkceTyp)}</span>
+                <span class="ue-nazev">{a.nazev}</span>
+                <span class="ue-meta">{formatTermin(terminInput(a))} · {a.obec}</span>
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+)}
+
+<style>
+  .ue-section { max-width: 1280px; margin: 0 auto; padding: 24px 32px 8px; }
+  .ue-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  .ue-head h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin: 0; }
+  .ue-kicker { display: inline-flex; align-items: center; gap: 6px; font: 800 11px 'Chakra Petch', sans-serif; letter-spacing: .18em; text-transform: uppercase; color: #6E6E76; text-decoration: none; margin-bottom: 8px; }
+  .ue-kicker b { color: #0A0A0B; border-bottom: 2px solid #FFEA00; padding-bottom: 1px; }
+  .ue-cta { display: inline-flex; align-items: center; gap: 8px; font: 700 14px 'Chakra Petch', sans-serif; letter-spacing: .02em; color: #0A0A0B; text-decoration: none; background: #FFFF00; padding: 10px 18px; border-radius: 12px; border: 1.5px solid #0A0A0B; box-shadow: 3px 3px 0 #0A0A0B; transition: transform .15s, box-shadow .15s; white-space: nowrap; }
+  .ue-cta:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 #0A0A0B; }
+
+  .ue-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .ue-grid a { display: flex; gap: 14px; padding: 14px 16px; border: 1px solid #e8e8e8; border-radius: 12px; text-decoration: none; color: inherit; height: 100%; transition: border-color .15s, transform .15s, box-shadow .15s; }
+  .ue-grid a:hover { border-color: #3a7d34; transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+  .ue-chip { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 10px; background: #eef4ea; color: #2f6a2a; }
+  .ue-den { font: 800 1.3rem/1 'Chakra Petch', sans-serif; }
+  .ue-mes { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
+  .ue-body { display: flex; flex-direction: column; min-width: 0; }
+  .ue-typ { font: 800 10px/1 'Chakra Petch', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #3a7d34; margin-bottom: 5px; }
+  .ue-nazev { font-weight: 700; font-size: 1.02rem; line-height: 1.25; margin-bottom: 4px; }
+  .ue-meta { margin-top: auto; color: #666; font-size: .85rem; }
+</style>

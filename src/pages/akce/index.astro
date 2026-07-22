@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { listUpcoming } from '../../lib/akce-supabase';
+import { listUpcoming, akceFotoUrl } from '../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../lib/akce-recurrence';
 import { akceTypLabel, AKCE_TYPES, type AkceTyp } from '../../lib/akce-constants';
 import { groupByMonth } from '../../lib/akce-hub';
@@ -30,6 +30,8 @@ const akceData = akce.map((a) => ({
       <a href="/akce/pridat/" class="btn-add">+ Přidat akci</a>
     </header>
 
+    <div class="hub-layout">
+    <aside class="hub-sidebar">
     <div class="filtr-bar" id="filtr-bar" hidden>
       <select id="f-kraj" aria-label="Kraj">
         <option value="">Všechny kraje</option>
@@ -57,7 +59,9 @@ const akceData = akce.map((a) => ({
       </div>
       <div class="mc-grid" id="mc-grid"></div>
     </div>
+    </aside>
 
+    <div class="hub-main">
     {groups.length === 0 && (
       <p class="empty">Zatím tu nejsou žádné nadcházející akce. <a href="/akce/pridat/">Přidejte první.</a></p>
     )}
@@ -69,9 +73,16 @@ const akceData = akce.map((a) => ({
           <ul class="akce-list">
             {g.akce.map((a) => (
               <li class="akce-item" data-id={a.id} data-kraj={a.kraj_slug} data-okres={a.okres_slug} data-typ={a.typ} data-date={a.pristi_vyskyt}>
-                <span class="akce-typ">{akceTypLabel(a.typ as AkceTyp)}</span>
-                <h3 class="akce-nazev">{a.nazev}</h3>
-                <p class="akce-meta">{termin(a)} · {a.obec}</p>
+                <a class="akce-card" href={`/akce/${a.slug}/`}>
+                  {akceFotoUrl(a.foto_path) && (
+                    <span class="akce-thumb"><img src={akceFotoUrl(a.foto_path)} alt="" loading="lazy" width="120" height="90" /></span>
+                  )}
+                  <span class="akce-body">
+                    <span class="akce-typ">{akceTypLabel(a.typ as AkceTyp)}</span>
+                    <span class="akce-nazev">{a.nazev}</span>
+                    <span class="akce-meta">{termin(a)} · {a.obec}</span>
+                  </span>
+                </a>
               </li>
             ))}
           </ul>
@@ -79,6 +90,8 @@ const akceData = akce.map((a) => ({
       ))}
     </div>
     <p class="empty" id="empty-filtr" hidden>Žádná akce neodpovídá filtru. <button type="button" id="empty-reset" class="linklike">Zrušit filtry</button></p>
+    </div>
+    </div>
   </main>
 
   <script type="application/json" id="akce-data" set:html={JSON.stringify(akceData)}></script>
@@ -187,18 +200,21 @@ const akceData = akce.map((a) => ({
   </script>
 
   <style>
-    .akce-hub { max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; }
+    .akce-hub { max-width: 1280px; margin: 0 auto; padding: 32px 20px 80px; }
     .hub-head h1 { margin: 0 0 8px; }
     .hub-head p { color: #555; margin: 0 0 16px; }
+    .hub-layout { display: grid; grid-template-columns: 300px 1fr; gap: 32px; align-items: start; margin-top: 8px; }
+    .hub-sidebar { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 16px; }
+    .hub-main { min-width: 0; }
     .btn-add { display: inline-block; padding: 10px 20px; background: #FFFF00; color: #111; font-weight: 700; border-radius: 8px; text-decoration: none; }
     .btn-add:hover { filter: brightness(0.95); }
 
-    .filtr-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 24px 0 12px; padding: 12px; background: #f6f7f2; border: 1px solid #e2e6d6; border-radius: 12px; }
-    .filtr-bar select { padding: 8px 10px; border: 1px solid #c4c4c4; border-radius: 8px; background: #fff; font: inherit; }
+    .filtr-bar { display: flex; flex-direction: column; gap: 8px; align-items: stretch; margin: 0; padding: 12px; background: #f6f7f2; border: 1px solid #e2e6d6; border-radius: 12px; }
+    .filtr-bar select { width: 100%; padding: 8px 10px; border: 1px solid #c4c4c4; border-radius: 8px; background: #fff; font: inherit; }
     .f-reset { padding: 8px 14px; border: 1px solid #c4c4c4; border-radius: 8px; background: #fff; cursor: pointer; font: inherit; }
-    .f-count { margin-left: auto; color: #555; font-size: .9rem; }
+    .f-count { color: #555; font-size: .9rem; text-align: center; }
 
-    .mini-cal { max-width: 320px; margin: 0 0 24px; padding: 12px; border: 1px solid #e8e8e8; border-radius: 12px; }
+    .mini-cal { max-width: none; margin: 0; padding: 12px; border: 1px solid #e8e8e8; border-radius: 12px; }
     .mc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     .mc-head button { border: 0; background: none; font-size: 1.1rem; cursor: pointer; padding: 2px 8px; }
     .mc-head button:disabled { opacity: .3; cursor: default; }
@@ -210,14 +226,25 @@ const akceData = akce.map((a) => ({
     .mc-has:hover { background: #d6e6cf; }
 
     .mesic { margin: 28px 0 0; }
+    .mesic:first-child { margin-top: 0; }
     .mesic-nadpis { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; color: #6b7a1e; border-bottom: 2px solid #eef0e4; padding-bottom: 6px; }
-    .akce-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 12px; }
-    .akce-item { border: 1px solid #e8e8e8; border-radius: 12px; padding: 14px 18px; }
+    .akce-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+    .akce-item { border: 1px solid #e8e8e8; border-radius: 12px; overflow: hidden; transition: border-color .15s, box-shadow .15s; }
+    .akce-item:hover { border-color: #3a7d34; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
     .akce-item.zvyrazni { border-color: #3a7d34; box-shadow: 0 0 0 3px rgba(58,125,52,.18); }
+    .akce-card { display: flex; gap: 14px; padding: 14px 16px; text-decoration: none; color: inherit; height: 100%; }
+    .akce-thumb { flex: 0 0 auto; }
+    .akce-thumb img { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; display: block; }
+    .akce-body { display: flex; flex-direction: column; min-width: 0; }
     .akce-typ { display: inline-block; font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; color: #6b7a1e; font-weight: 700; }
-    .akce-nazev { margin: 4px 0 6px; font-size: 1.15rem; }
-    .akce-meta { margin: 0; color: #555; font-size: .92rem; }
+    .akce-nazev { display: block; margin: 4px 0 6px; font-size: 1.12rem; font-weight: 700; line-height: 1.25; }
+    .akce-meta { display: block; margin: auto 0 0; color: #555; font-size: .92rem; }
     .empty { color: #555; margin: 24px 0; }
     .linklike { background: none; border: 0; color: #3a7d34; text-decoration: underline; cursor: pointer; font: inherit; padding: 0; }
+
+    @media (max-width: 900px) {
+      .hub-layout { grid-template-columns: 1fr; gap: 20px; }
+      .hub-sidebar { position: static; }
+    }
   </style>
 </Layout>

@@ -5,6 +5,7 @@ import Newsletter from '../components/Newsletter.astro';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
 import HomeWeather from '../components/HomeWeather.astro';
 import LatestArticles from '../components/home/LatestArticles.astro';
+import UpcomingEvents from '../components/UpcomingEvents.astro';
 import HomeUk from '../components/home/HomeUk.astro';
 import HomePl from '../components/home/HomePl.astro';
 import { createAnonClient } from '../lib/supabase';
@@ -150,6 +151,12 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   <LatestArticles server:defer>
     <div slot="fallback" style="min-height:520px;"></div>
   </LatestArticles>
+
+  {locale === 'cs' && (
+    <UpcomingEvents server:defer>
+      <div slot="fallback" style="min-height:120px;"></div>
+    </UpcomingEvents>
+  )}
   <!-- (CommodityChart, HomeWeather, Newsletter undeferred — simulátor penalizoval island scripty více než vyhrávalo HTML shrink) -->
 
   <style is:inline>

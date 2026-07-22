@@ -35,6 +35,7 @@ export interface Akce extends AkceInput {
   lat: number | null;
   lng: number | null;
   pristi_vyskyt: string | null;
+  foto_path: string | null;
   created_at: string;
   zverejneno_at: string | null;
 }
