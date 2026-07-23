@@ -126,6 +126,30 @@ export async function getProspectByToken(
   return (data as ProspectRow) ?? null;
 }
 
+/** Načte prospekta podle zadaného kódu (case-insensitive, trim). null když neexistuje. */
+export async function getProspectByCode(supabase: SupabaseClient, code: string): Promise<ProspectRow | null> {
+  const normalized = code.trim().toUpperCase();
+  if (!/^[A-Z0-9]{6}$/.test(normalized)) return null;
+  const { data } = await supabase
+    .from('bazar_seed_prospects')
+    .select('id, email, name, phone, claim_token, token_expires_at, status, user_id')
+    .eq('claim_code', normalized)
+    .single();
+  return (data as ProspectRow) ?? null;
+}
+
+/** Prospekti, na které jde ještě věšet inzeráty (nezpotvrzené). Pro admin select „přidat k prodejci". */
+export async function listOpenProspects(
+  supabase: SupabaseClient,
+): Promise<Array<{ id: string; name: string; email: string }>> {
+  const { data } = await supabase
+    .from('bazar_seed_prospects')
+    .select('id, name, email')
+    .in('status', ['draft', 'sent', 'opened'])
+    .order('created_at', { ascending: false });
+  return (data as Array<{ id: string; name: string; email: string }>) ?? [];
+}
+
 /** Zaznamenej otevření claim odkazu (idempotentně jen z 'sent'/'draft'). */
 export async function markProspectOpened(supabase: SupabaseClient, prospectId: string, nowIso: string): Promise<void> {
   await supabase

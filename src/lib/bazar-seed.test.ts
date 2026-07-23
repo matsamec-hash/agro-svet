@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createProspectWithDraft, markProspectSent, confirmProspect } from './bazar-seed';
+import { createProspectWithDraft, markProspectSent, confirmProspect, getProspectByCode } from './bazar-seed';
 
 function fakeSupabase(returns: Record<string, any>) {
   const calls: any[] = [];
@@ -114,5 +114,15 @@ describe('confirmProspect', () => {
     const publishUpd = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'update'
       && c._payload.status === 'active');
     expect(publishUpd._filters).toContainEqual(['id', ['L1', 'L2']]);
+  });
+});
+
+describe('getProspectByCode', () => {
+  it('normalizuje kód na velká písmena a hledá podle claim_code', async () => {
+    const sb = fakeSupabase({ 'bazar_seed_prospects.single': { data: { id: 'P1', claim_token: 'TOK' }, error: null } });
+    const p = await getProspectByCode(sb, ' ab2c3d ');
+    expect(p?.id).toBe('P1');
+    const q = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects');
+    expect(q._filters).toContainEqual(['claim_code', 'AB2C3D']);
   });
 });
