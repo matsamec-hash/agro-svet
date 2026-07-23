@@ -12,6 +12,23 @@ const teaser = (m: { specs: Record<string, string>; category: string }) =>
   m.specs['Výkon'] ?? m.specs['Záběr žací lišty'] ?? m.specs['Motor'] ?? '';
 const tractors = machines.filter((m) => m.category === 'traktor');
 const combines = machines.filter((m) => m.category === 'kombajn');
+
+const SITE = 'https://agro-svet.cz';
+const breadcrumbLd = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Historie českého zemědělství', item: `${SITE}/historie/` },
+    { '@type': 'ListItem', position: 2, name: 'Historická technika', item: `${SITE}/historie/technika/` },
+  ],
+};
+const itemListLd = {
+  '@context': 'https://schema.org', '@type': 'ItemList',
+  name: 'Historická zemědělská technika',
+  numberOfItems: machines.length,
+  itemListElement: machines.map((m, i) => ({
+    '@type': 'ListItem', position: i + 1, name: m.name, url: `${SITE}/historie/technika/${m.slug}/`,
+  })),
+};
 ---
 <Layout
   title="Historické zemědělské stroje — Zetor, Fortschritt a další"
@@ -20,6 +37,8 @@ const combines = machines.filter((m) => m.category === 'kombajn');
   noindex={csOnly}
   noHreflang={true}
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListLd)} />
   <main class="ht">
     <h1>Historická technika</h1>
     <p class="ht-lede">Stroje, které vozily úrodu z polí JZD i státních statků — od poválečného Zetoru 25 po výkonné kombajny éry velkovýroby. {tractors.length} traktorů a {combines.length} kombajny s fotografiemi, technickými údaji a příběhem.</p>

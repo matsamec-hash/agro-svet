@@ -28,6 +28,27 @@ const related = machines.filter((x) => x.slug !== m.slug && x.category === m.cat
 const relatedFill = related.length < 3
   ? [...related, ...machines.filter((x) => x.slug !== m.slug && x.category !== m.category)].slice(0, 4)
   : related;
+
+const SITE = 'https://agro-svet.cz';
+const url = `${SITE}/historie/technika/${m.slug}/`;
+const breadcrumbLd = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Historie českého zemědělství', item: `${SITE}/historie/` },
+    { '@type': 'ListItem', position: 2, name: 'Historická technika', item: `${SITE}/historie/technika/` },
+    { '@type': 'ListItem', position: 3, name: m.name, item: url },
+  ],
+};
+const articleLd = {
+  '@context': 'https://schema.org', '@type': 'Article',
+  headline: `${m.name} — ${m.maker} (${yr})`,
+  description: m.story,
+  inLanguage: 'cs-CZ',
+  mainEntityOfPage: url,
+  ...(m.image ? { image: `${SITE}${m.image}` } : {}),
+  isPartOf: { '@type': 'CollectionPage', name: 'Historická technika', url: `${SITE}/historie/technika/` },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: SITE },
+};
 ---
 <Layout
   title={`${m.name} — ${catLabel.toLowerCase()} ${m.maker} (${yr})`}
@@ -37,6 +58,8 @@ const relatedFill = related.length < 3
   noindex={csOnly}
   noHreflang={true}
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleLd)} />
   <main class={`hd era-${era}`}>
     <nav class="hd-crumb"><a href="/historie/">Historie</a> · <a href="/historie/technika/">Historická technika</a></nav>
 

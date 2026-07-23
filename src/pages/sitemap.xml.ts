@@ -570,6 +570,34 @@ export const GET: APIRoute = async () => {
     }
   }
 
+  // Historie českého zemědělství — cs-only sekce (non-cs noindex+noHreflang).
+  // Přidáno ZA mirrory → nezrcadlí se do sk/uk/pl. SSR (prerender:false), proto
+  // se do sitemapy musí přidat explicitně (Astro je sám neenumeruje).
+  const { machines: histMachines, milestones: histMilestones } = await import('../lib/historie');
+  const histHubs: Array<[string, string]> = [
+    ['/historie/', '0.75'],
+    ['/historie/technika/', '0.7'],
+    ['/historie/data/', '0.65'],
+    ['/historie/dobovy-tisk/', '0.65'],
+    ['/historie/zajimavosti/', '0.6'],
+  ];
+  for (const [path, priority] of histHubs) {
+    urls.push({ loc: `${SITE_URL}${path}`, changefreq: 'monthly', priority, lastmod: STATIC_LASTMOD });
+  }
+  for (const m of histMachines) {
+    urls.push({
+      loc: `${SITE_URL}/historie/technika/${m.slug}/`,
+      changefreq: 'monthly',
+      priority: '0.6',
+      lastmod: STATIC_LASTMOD,
+      images: m.image ? [m.image] : undefined,
+    });
+  }
+  for (const m of histMilestones) {
+    if (!m.slug) continue;
+    urls.push({ loc: `${SITE_URL}/historie/milnik/${m.slug}/`, changefreq: 'monthly', priority: '0.55', lastmod: STATIC_LASTMOD });
+  }
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">

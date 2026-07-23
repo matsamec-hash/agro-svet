@@ -24,6 +24,22 @@ const sections = [
 // Perioda pro barevné odlišení na časové ose.
 const era = (y: number) => (y < 1948 ? 'prvni-rep' : y < 1990 ? 'socialismus' : 'moderni');
 const eraLabel: Record<string, string> = { 'prvni-rep': 'První republika', socialismus: 'Éra JZD', moderni: 'Po roce 1989' };
+
+const SITE = 'https://agro-svet.cz';
+const breadcrumbLd = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'Historie českého zemědělství', item: `${SITE}/historie/` },
+  ],
+};
+const collectionLd = {
+  '@context': 'https://schema.org', '@type': 'CollectionPage',
+  name: 'Historie českého zemědělství',
+  url: `${SITE}/historie/`,
+  inLanguage: 'cs-CZ',
+  hasPart: sections.map((s) => ({ '@type': 'WebPage', name: s.title, url: `${SITE}${s.href}` })),
+};
 ---
 <Layout
   title="Historie českého zemědělství — stroje, data a dobový kontext"
@@ -32,6 +48,8 @@ const eraLabel: Record<string, string> = { 'prvni-rep': 'První republika', soci
   noindex={csOnly}
   noHreflang={true}
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionLd)} />
   <main class="hh">
     <header class="hh-hero">
       <p class="hh-eyebrow">HISTORIE ČESKÉHO ZEMĚDĚLSTVÍ</p>
