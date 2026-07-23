@@ -105,6 +105,14 @@ const Heading = headingLevel;
     {comparisons.length > 0 && (
       <div class="ac-compare">
         <h3 class="ac-cmp-h">{comparisonsHeading}</h3>
+        <label class="ac-cmp-picker">
+          <span class="ac-cmp-picker-label">Porovnat s</span>
+          <select class="ac-cmp-select" id="ac-cmp-select" aria-label="Vyber srovnávací objekt">
+            {comparisons.map((c, i) => (
+              <option value={i}>{c.emoji} {c.name}</option>
+            ))}
+          </select>
+        </label>
         <figure class="ac-cmp-hero" id="ac-cmp-hero" hidden>
           <img class="ac-cmp-hero-img" id="ac-cmp-hero-img" alt="" width="800" height="500" loading="lazy" decoding="async" />
           <figcaption class="ac-cmp-hero-credit" id="ac-cmp-hero-credit"></figcaption>
@@ -112,7 +120,6 @@ const Heading = headingLevel;
         <p class="ac-cmp-primary" id="ac-cmp-primary" aria-live="polite"></p>
         <div class="ac-cmp-field" id="ac-cmp-visual" aria-hidden="true"></div>
         <p class="ac-cmp-legend" id="ac-cmp-legend" aria-live="polite"></p>
-        <div class="ac-cmp-refs" id="ac-cmp-refs" role="group" aria-label="Porovnat s"></div>
         {comparisonsCaption && <p class="ac-cmp-caption">{comparisonsCaption}</p>}
       </div>
     )}
@@ -130,12 +137,12 @@ const Heading = headingLevel;
     const cmpPrimary = root.querySelector('#ac-cmp-primary');
     const cmpVisual = root.querySelector('#ac-cmp-visual');
     const cmpLegend = root.querySelector('#ac-cmp-legend');
-    const cmpRefs = root.querySelector('#ac-cmp-refs');
+    const cmpSelect = root.querySelector('#ac-cmp-select');
     const heroFig = root.querySelector('#ac-cmp-hero');
     const heroImg = root.querySelector('#ac-cmp-hero-img');
     const heroCredit = root.querySelector('#ac-cmp-hero-credit');
     const VB_W = 320, VB_H = 200, CELL_CAP = 300;
-    const hasCompare = cmpRefs && COMPARISONS && COMPARISONS.length;
+    const hasCompare = cmpSelect && COMPARISONS && COMPARISONS.length;
     let activeRef = null; // index reference; null = automatický výběr
     let lastM2 = NaN;
     let heroSlug = null; // aktuálně zobrazená fotka — zabraň zbytečnému reloadu (problikávání)
@@ -219,13 +226,6 @@ const Heading = headingLevel;
       if (!hasCompare) return;
       lastM2 = m2;
       const valid = isFinite(m2) && m2 > 0;
-      // výběrová tlačítka (s počtem u každé reference)
-      cmpRefs.innerHTML = COMPARISONS.map((r, i) =>
-        `<button type="button" class="ac-cmp-ref" data-ref="${i}">` +
-        `<span class="ac-cmp-emoji">${r.emoji}</span>` +
-        `<span class="ac-cmp-ref-name">${r.name}</span>` +
-        `<b>${valid ? fmtCount(m2 / r.m2) + '×' : '—'}</b></button>`
-      ).join('');
       if (!valid) {
         if (cmpPrimary) cmpPrimary.textContent = '';
         if (cmpVisual) cmpVisual.innerHTML = '';
@@ -236,8 +236,7 @@ const Heading = headingLevel;
       const idx = activeRef != null ? activeRef : autoIdx(m2);
       const r = COMPARISONS[idx];
       const count = m2 / r.m2;
-      const btns = cmpRefs.querySelectorAll('.ac-cmp-ref');
-      if (btns[idx]) btns[idx].classList.add('active');
+      if (cmpSelect && Number(cmpSelect.value) !== idx) cmpSelect.value = String(idx);
       setHero(r);
       if (cmpPrimary) cmpPrimary.innerHTML =
         `≈ <strong>${fmtCount(count)}×</strong> ${r.name}`;
@@ -250,10 +249,8 @@ const Heading = headingLevel;
       }
     }
 
-    if (hasCompare) cmpRefs.addEventListener('click', (e) => {
-      const btn = e.target.closest('.ac-cmp-ref');
-      if (!btn) return;
-      activeRef = Number(btn.dataset.ref);
+    if (hasCompare) cmpSelect.addEventListener('change', () => {
+      activeRef = Number(cmpSelect.value);
       updateCompare(lastM2);
     });
 
@@ -464,6 +461,40 @@ const Heading = headingLevel;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
+
+  /* Přepínač srovnávacího objektu — dropdown nad fotkou */
+  .ac-cmp-picker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 12px;
+    flex-wrap: wrap;
+  }
+  .ac-cmp-picker-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0A0A0B;
+    white-space: nowrap;
+  }
+  .ac-cmp-select {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 9px 34px 9px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0A0A0B;
+    background-color: #fff;
+    border: 1.5px solid #6ba84f;
+    border-radius: 8px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%234d7a37' stroke-width='2' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  .ac-cmp-select:focus { outline: none; border-color: #0A0A0B; }
+  .ac-cmp-select:hover { border-color: #4d7a37; }
+
   .ac-cmp-primary {
     margin: 0 0 12px;
     font-size: 17px;
@@ -505,32 +536,6 @@ const Heading = headingLevel;
     min-height: 16px;
   }
 
-  /* klikací výběr reference */
-  .ac-cmp-refs { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ac-cmp-refs :global(.ac-cmp-ref) {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 11px;
-    background: #fff;
-    border: 1px solid #e0e0d4;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #0A0A0B;
-    cursor: pointer;
-    transition: border-color .12s ease, background .12s ease;
-  }
-  .ac-cmp-refs :global(.ac-cmp-ref:hover) { border-color: #6ba84f; }
-  .ac-cmp-refs :global(.ac-cmp-ref-name) { color: #3a3a40; }
-  .ac-cmp-refs :global(.ac-cmp-ref b) {
-    font-weight: 800;
-    color: #2f6b2f;
-    font-variant-numeric: tabular-nums;
-    padding-left: 7px;
-    border-left: 1px solid #e8e8dc;
-  }
-  .ac-cmp-refs :global(.ac-cmp-ref.active) { background: #eaf5e2; border-color: #6ba84f; }
   .ac-cmp-caption { margin: 12px 0 0; font-size: 11px; color: #6B6B72; line-height: 1.5; }
 
   @media (max-width: 480px) {
