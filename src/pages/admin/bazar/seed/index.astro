@@ -146,6 +146,7 @@ for (const p of prospects ?? []) {
                   {p.email && (
                     <button type="button" class="sendBtn underline" data-id={p.id}>Poslat e-mailem</button>
                   )}
+                  <button type="button" class="delBtn underline text-red-700" data-id={p.id} data-status={p.status}>Smazat</button>
                 </div>
               </td>
             </tr>
@@ -229,6 +230,29 @@ for (const p of prospects ?? []) {
           body: JSON.stringify({ prospectId: (b as HTMLElement).dataset.id }),
         });
         (b as HTMLElement).textContent = res.ok ? 'Odesláno ✓' : 'Chyba';
+      }),
+    );
+    document.querySelectorAll('.delBtn').forEach((b) =>
+      b.addEventListener('click', async () => {
+        const el = b as HTMLElement;
+        if (el.dataset.status === 'confirmed') {
+          alert('Zveřejněný inzerát nelze smazat odsud — je živý na webu.');
+          return;
+        }
+        if (!confirm('Opravdu smazat tento prospekt i jeho draft inzerát? Akce je nevratná.')) return;
+        el.textContent = 'Mažu…';
+        const res = await fetch('/admin/bazar/seed/api/delete/', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ prospectId: el.dataset.id }),
+        });
+        if (res.ok) {
+          el.closest('tr')?.remove();
+        } else {
+          const data = await res.json().catch(() => ({}));
+          el.textContent = 'Chyba';
+          alert(data.error || 'Smazání selhalo');
+        }
       }),
     );
   </script>
