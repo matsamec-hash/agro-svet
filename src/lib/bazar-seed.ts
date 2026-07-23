@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { generateClaimToken, isTokenExpired } from './bazar-seed-token';
+import { generateClaimToken, generateClaimCode, isTokenExpired } from './bazar-seed-token';
 
 export interface ProspectInput {
   name: string;
@@ -31,6 +31,7 @@ export async function createProspectWithDraft(
   args: { adminId: string; prospect: ProspectInput; listing: DraftListingInput; imagePaths: string[] },
 ): Promise<{ prospectId: string; claimToken: string; listingId: string }> {
   const claimToken = generateClaimToken();
+  const claimCode = generateClaimCode();
   const { data: prospect, error: pErr } = await supabase
     .from('bazar_seed_prospects')
     .insert({
@@ -39,6 +40,7 @@ export async function createProspectWithDraft(
       email: args.prospect.email,
       source_url: args.prospect.sourceUrl,
       claim_token: claimToken,
+      claim_code: claimCode,
       created_by: args.adminId,
       status: 'draft',
     })

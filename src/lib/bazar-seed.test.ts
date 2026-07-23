@@ -40,6 +40,8 @@ describe('createProspectWithDraft', () => {
     expect(listingInsert._payload.status).toBe('pending_claim');
     expect(listingInsert._payload.seed_prospect_id).toBe('P1');
     expect(listingInsert._payload.user_id).toBeNull();
+    const prospectInsert = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects' && c._op === 'insert');
+    expect(prospectInsert._payload.claim_code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/);
   });
 });
 
