@@ -7,16 +7,27 @@ const locale = Astro.locals.locale ?? 'cs';
 const csOnly = locale !== 'cs';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
+// Čisté čárové SVG ikony (Lucide styl) místo emoji.
+const ico = {
+  technika: '<path d="M3 4h9l1 5"/><path d="M13 14h6"/><circle cx="7" cy="16" r="4"/><circle cx="18" cy="17" r="3"/><path d="M11 16h3l2-4h3l1 3"/>',
+  data: '<path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>',
+  tisk: '<path d="M4 5h13v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M17 8h3v10a2 2 0 0 1-2 2"/><path d="M7 8h7M7 11h7M7 14h4"/>',
+  zajimavosti: '<path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.3 1 2.5h6c0-1.2.3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
+};
 const sections = [
-  { href: '/historie/technika/', emoji: '🚜', title: 'Technika', desc: 'Historické stroje — od Zetoru 25 po kombajn E-512.' },
-  { href: '/historie/data/', emoji: '📈', title: 'Data', desc: 'Dojivost, stavy zvířat, osevní plochy, lidé v zemědělství.' },
-  { href: '/historie/dobovy-tisk/', emoji: '📰', title: 'Dobový tisk', desc: 'Titulky a reportáže z dobových novin.' },
-  { href: '/historie/zajimavosti/', emoji: '💡', title: 'Zajímavosti', desc: 'Rekordy, kuriozity, kdysi vs. dnes.' },
+  { href: '/historie/technika/', icon: ico.technika, title: 'Technika', desc: `Historické stroje — ${machines.length} traktorů a kombajnů se skutečnými fotografiemi.` },
+  { href: '/historie/data/', icon: ico.data, title: 'Data', desc: 'Dojivost, stavy zvířat, osevní plochy, lidé v zemědělství.' },
+  { href: '/historie/dobovy-tisk/', icon: ico.tisk, title: 'Dobový tisk', desc: 'Reportáže dobových novin — od první republiky po dnešek.' },
+  { href: '/historie/zajimavosti/', icon: ico.zajimavosti, title: 'Zajímavosti', desc: 'Rekordy, kuriozity, kdysi vs. dnes.' },
 ];
+
+// Perioda pro barevné odlišení na časové ose.
+const era = (y: number) => (y < 1948 ? 'prvni-rep' : y < 1990 ? 'socialismus' : 'moderni');
+const eraLabel: Record<string, string> = { 'prvni-rep': 'První republika', socialismus: 'Éra JZD', moderni: 'Po roce 1989' };
 ---
 <Layout
   title="Historie českého zemědělství — stroje, data a dobový kontext"
-  description="Jak se měnilo české zemědělství: historické stroje (E-512, Zetor), dojivost, osevní plochy, stavy zvířat, počty lidí a dobový tisk."
+  description="Jak se měnilo české zemědělství od první republiky po dnešek: historické stroje (Zetor, Fortschritt), dojivost, osevní plochy, stavy zvířat a dobový tisk."
   canonical="/historie/"
   noindex={csOnly}
   noHreflang={true}
@@ -25,21 +36,35 @@ const sections = [
     <header class="hh-hero">
       <p class="hh-eyebrow">HISTORIE ČESKÉHO ZEMĚDĚLSTVÍ</p>
       <h1>Sto let na poli — v datech, strojích a příbězích</h1>
-      <p class="hh-lede">Od kolektivizace přes velkovýrobu v JZD až po dnešek. Prohlédni si, jak se měnila technika, výnosy, stavy zvířat i lidé v oboru.</p>
+      <p class="hh-lede">Od první republiky přes kolektivizaci a velkovýrobu v JZD až po dnešek. Prohlédni si, jak se měnila technika, výnosy, stavy zvířat i lidé v oboru.</p>
     </header>
 
-    <ol class="hh-timeline">
-      {milestones.map((m) => (
-        <li><span class="hh-year">{m.year}</span><span class="hh-mtitle">{m.title}</span></li>
-      ))}
-    </ol>
+    <section class="hh-tl" aria-label="Časová osa">
+      <div class="hh-tl-track">
+        {milestones.map((m) => (
+          <div class={`hh-tl-item era-${era(m.year)}`}>
+            <span class="hh-tl-dot"></span>
+            <span class="hh-tl-year">{m.year}</span>
+            <span class="hh-tl-title">{m.title}</span>
+          </div>
+        ))}
+      </div>
+      <div class="hh-tl-legend">
+        {Object.entries(eraLabel).map(([k, v]) => (
+          <span class={`hh-tl-leg era-${k}`}><span class="hh-tl-dot"></span>{v}</span>
+        ))}
+      </div>
+    </section>
 
     <section class="hh-tiles">
       {sections.map((s) => (
         <a class="hh-tile" href={s.href}>
-          <span class="hh-emoji">{s.emoji}</span>
+          <span class="hh-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={s.icon}></svg></span>
           <span class="hh-ttitle">{s.title}</span>
           <span class="hh-tdesc">{s.desc}</span>
+          <span class="hh-tarrow">Otevřít
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
         </a>
       ))}
     </section>
@@ -49,20 +74,43 @@ const sections = [
 </Layout>
 
 <style>
-  .hh { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
-  .hh-hero { background: #0f1c14; color: #dfe; border-radius: 16px; padding: 40px 28px; margin-bottom: 28px; }
-  .hh-eyebrow { font-size: 12px; letter-spacing: 1px; color: #7a9; margin: 0 0 8px; }
-  .hh-hero h1 { font-size: 30px; margin: 0 0 12px; }
-  .hh-lede { color: #bcd; max-width: 60ch; }
-  .hh-timeline { list-style: none; display: flex; gap: 16px; overflow-x: auto; padding: 0 0 8px; margin: 0 0 28px; }
-  .hh-timeline li { flex: 0 0 auto; border-left: 2px solid #1c7c48; padding-left: 10px; }
-  .hh-year { display: block; color: #1c7c48; font-weight: 700; }
-  .hh-mtitle { font-size: 14px; }
-  .hh-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-  .hh-tile { display: flex; flex-direction: column; gap: 6px; padding: 20px; border: 1px solid #dde5e0; border-radius: 12px; text-decoration: none; color: inherit; transition: border-color .15s; }
-  .hh-tile:hover { border-color: #1c7c48; }
-  .hh-emoji { font-size: 28px; }
-  .hh-ttitle { font-weight: 700; font-size: 18px; }
-  .hh-tdesc { color: #567; font-size: 14px; }
-  .hh-stat { text-align: center; color: #789; margin-top: 28px; }
+  .hh { max-width: 1040px; margin: 0 auto; padding: 24px 16px 64px; }
+
+  .hh-hero { background: radial-gradient(700px 300px at 12% 0%, #16321f, transparent 60%), #0f1c14; color: #e8f3ec; border-radius: 18px; padding: 44px 32px; margin-bottom: 26px; }
+  .hh-eyebrow { font-size: 12px; letter-spacing: 2px; color: #6fae86; margin: 0 0 10px; font-weight: 600; }
+  .hh-hero h1 { font-size: clamp(24px, 4vw, 34px); margin: 0 0 12px; line-height: 1.1; }
+  .hh-lede { color: #b9cdc0; max-width: 62ch; line-height: 1.6; margin: 0; }
+
+  /* Časová osa */
+  .hh-tl { margin: 0 0 30px; }
+  .hh-tl-track { display: flex; gap: 0; overflow-x: auto; padding: 6px 0 14px; border-bottom: 2px solid #e6ece8; scrollbar-width: thin; }
+  .hh-tl-item { flex: 0 0 auto; min-width: 130px; position: relative; padding: 0 18px 14px 0; }
+  .hh-tl-dot { position: absolute; left: 0; bottom: -8px; width: 12px; height: 12px; border-radius: 50%; background: #1c7c48; border: 2px solid #fff; box-shadow: 0 0 0 2px #1c7c4833; }
+  .hh-tl-item.era-prvni-rep .hh-tl-dot { background: #b8860b; box-shadow: 0 0 0 2px #b8860b33; }
+  .hh-tl-item.era-socialismus .hh-tl-dot { background: #b23b3b; box-shadow: 0 0 0 2px #b23b3b33; }
+  .hh-tl-item.era-moderni .hh-tl-dot { background: #1c7c48; box-shadow: 0 0 0 2px #1c7c4833; }
+  .hh-tl-year { display: block; font-weight: 800; font-size: 18px; color: #0f1c14; letter-spacing: -.5px; }
+  .hh-tl-item.era-prvni-rep .hh-tl-year { color: #8a6508; }
+  .hh-tl-item.era-socialismus .hh-tl-year { color: #8f2f2f; }
+  .hh-tl-title { display: block; font-size: 13px; color: #56655c; line-height: 1.3; margin-top: 2px; }
+  .hh-tl-legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; }
+  .hh-tl-leg { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #56655c; }
+  .hh-tl-leg .hh-tl-dot { position: static; width: 9px; height: 9px; box-shadow: none; border: 0; }
+  .hh-tl-leg.era-prvni-rep .hh-tl-dot { background: #b8860b; }
+  .hh-tl-leg.era-socialismus .hh-tl-dot { background: #b23b3b; }
+  .hh-tl-leg.era-moderni .hh-tl-dot { background: #1c7c48; }
+
+  /* Dlaždice sekcí */
+  .hh-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+  .hh-tile { display: flex; flex-direction: column; padding: 22px; background: #fff; border: 1px solid #e2e9e4; border-radius: 16px; text-decoration: none; color: inherit; transition: transform .16s, box-shadow .16s, border-color .16s; }
+  .hh-tile:hover { transform: translateY(-3px); border-color: #1c7c48; box-shadow: 0 14px 30px -14px #1c7c4855; }
+  .hh-ic { width: 46px; height: 46px; border-radius: 12px; background: #e7f3ec; color: #1c7c48; display: grid; place-items: center; margin-bottom: 14px; }
+  .hh-ic svg { width: 24px; height: 24px; }
+  .hh-ttitle { font-weight: 700; font-size: 18px; margin-bottom: 5px; }
+  .hh-tdesc { color: #56655c; font-size: 14px; line-height: 1.5; flex: 1; }
+  .hh-tarrow { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font-size: 13px; font-weight: 700; color: #1c7c48; }
+  .hh-tile:hover .hh-tarrow svg { transform: translateX(3px); }
+  .hh-tarrow svg { transition: transform .16s; }
+
+  .hh-stat { text-align: center; color: #789; margin-top: 30px; font-size: 14px; }
 </style>

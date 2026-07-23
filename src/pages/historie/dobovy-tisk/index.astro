@@ -30,6 +30,9 @@ const featured = press.find((c) => c.featured) ?? press[press.length - 1];
 const rest = press.filter((c) => c !== featured);
 const yearsFrom = press[0]?.year;
 const yearsTo = press[press.length - 1]?.year;
+// Časová osa: chronologické roky s prolinkem na článek; barva podle éry.
+const timeline = [...press].sort((a, b) => a.year - b.year);
+const era = (y: number) => (y < 1948 ? 'prvni-rep' : y < 1990 ? 'socialismus' : 'moderni');
 ---
 <Layout
   title="Zemědělství v dobovém tisku — titulky z časů JZD"
@@ -49,7 +52,18 @@ const yearsTo = press[press.length - 1]?.year;
 
     <p class="dt-note">Reportáže jsou redakčně zpracované rekonstrukce dobového zpravodajství — shrnují, o čem a jak psal tehdejší zemědělský tisk. Nejde o doslovné přetisky; ilustrace jsou kreslené, nikoli archivní skeny.</p>
 
-    <article class="dt-clip dt-lead">
+    <nav class="dt-timeline" aria-label="Časová osa dobového tisku">
+      {timeline.map((c) => (
+        <a class={`dt-tl-chip era-${era(c.year)}`} href={`#rok-${c.year}`} title={c.headline}>{c.year}</a>
+      ))}
+    </nav>
+    <div class="dt-tl-legend">
+      <span class="dt-tl-leg era-prvni-rep">První republika</span>
+      <span class="dt-tl-leg era-socialismus">Éra JZD (1948–1989)</span>
+      <span class="dt-tl-leg era-moderni">Po roce 1989</span>
+    </div>
+
+    <article id={`rok-${featured.year}`} class="dt-clip dt-lead">
       <div class="dt-clip-head">
         <span class="dt-rubrika">{topicLabel[featured.topic] ?? featured.rubrika}</span>
         <span class="dt-dateline">{featured.source} · {featured.date}{featured.edition ? ` · ${featured.edition}` : ''}</span>
@@ -70,7 +84,7 @@ const yearsTo = press[press.length - 1]?.year;
 
     <div class="dt-grid">
       {rest.map((c) => (
-        <article class="dt-clip">
+        <article id={`rok-${c.year}`} class="dt-clip">
           <div class="dt-clip-head">
             <span class="dt-rubrika">{topicLabel[c.topic] ?? c.rubrika}</span>
             <span class="dt-dateline">{c.source} · {c.date}</span>
@@ -125,8 +139,32 @@ const yearsTo = press[press.length - 1]?.year;
   .dt-note {
     font: 12px/1.5 Georgia, serif; color: #6b5f42;
     background: #f3eeddaa; border-left: 3px solid #c9bfa0;
-    padding: 8px 12px; margin: 18px 0 26px; border-radius: 0 4px 4px 0;
+    padding: 8px 12px; margin: 18px 0 18px; border-radius: 0 4px 4px 0;
   }
+  /* Časová osa */
+  .dt-timeline {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    padding: 14px 0; border-top: 2px solid #241d10; border-bottom: 2px solid #241d10;
+  }
+  .dt-tl-chip {
+    font: 700 14px/1 Georgia, serif; color: #241d10; text-decoration: none;
+    padding: 6px 10px; border: 1px solid #cdbf9c; border-radius: 999px;
+    background: #efe9d8; transition: background .15s, border-color .15s, transform .1s;
+  }
+  .dt-tl-chip:hover { transform: translateY(-1px); border-color: #241d10; }
+  .dt-tl-chip.era-prvni-rep { border-color: #c8a24a; background: #f3e9cf; }
+  .dt-tl-chip.era-prvni-rep:hover { background: #ecdcb2; }
+  .dt-tl-chip.era-socialismus { border-color: #c99; background: #f3e2e2; }
+  .dt-tl-chip.era-socialismus:hover { background: #eccece; }
+  .dt-tl-chip.era-moderni { border-color: #9cbfa8; background: #e4f0e8; }
+  .dt-tl-chip.era-moderni:hover { background: #d2e7da; }
+  .dt-tl-legend { display: flex; flex-wrap: wrap; gap: 16px; margin: 10px 0 26px; }
+  .dt-tl-leg { font: 12px/1 Georgia, serif; color: #5a5038; display: inline-flex; align-items: center; gap: 6px; }
+  .dt-tl-leg::before { content: ""; width: 11px; height: 11px; border-radius: 3px; border: 1px solid; }
+  .dt-tl-leg.era-prvni-rep::before { background: #f3e9cf; border-color: #c8a24a; }
+  .dt-tl-leg.era-socialismus::before { background: #f3e2e2; border-color: #cc9999; }
+  .dt-tl-leg.era-moderni::before { background: #e4f0e8; border-color: #9cbfa8; }
+  .dt-clip { scroll-margin-top: 80px; }
   /* Clipping cards — newsprint */
   .dt-clip {
     background:
