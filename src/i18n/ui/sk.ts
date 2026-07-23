@@ -142,6 +142,7 @@ const sk: Record<string, string> = {
   'footer.tagline': 'Poľnohospodárska technika, novinky a encyklopédia. Štatistiky a prehľady — všetko pre slovenského poľnohospodára.',
   'footer.content': 'Obsah',
   'footer.news': 'Novinky',
+  'footer.events': 'Kalendár akcií',
   'footer.techCatalog': 'Katalóg techniky',
   'footer.breeds': 'Plemená zvierat',
   'footer.soil': 'Poľnohospodárska pôda',

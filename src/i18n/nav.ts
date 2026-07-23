@@ -179,6 +179,7 @@ const FOOTER: { section: string; headingKey: string; links: { labelKey: string; 
     section: 'content', headingKey: 'footer.content',
     links: [
       { labelKey: 'footer.news', href: '/novinky/' },
+      { labelKey: 'footer.events', href: '/akce/' },
       { labelKey: 'footer.techCatalog', href: '/stroje/' },
       { labelKey: 'footer.breeds', href: '/plemena/' },
       { labelKey: 'footer.soil', href: '/puda/' },

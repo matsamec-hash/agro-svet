@@ -85,6 +85,7 @@ const pl: Record<string, string> = {
   'footer.tagline': 'Technika rolnicza, aktualności i encyklopedia. Giełda, statystyki, konkurs fotograficzny — wszystko dla polskiego rolnika.',
   'footer.content': 'Treść',
   'footer.news': 'Aktualności',
+  'footer.events': 'Kalendarz wydarzeń',
   'footer.techCatalog': 'Katalog techniki',
   'footer.breeds': 'Rasy zwierząt',
   'footer.soil': 'Grunty rolne',

@@ -142,6 +142,7 @@ const cs: Record<string, string> = {
   'footer.tagline': 'Zemědělská technika, novinky a encyklopedie. Bazar, statistiky, fotosoutěž — vše pro českého zemědělce.',
   'footer.content': 'Obsah',
   'footer.news': 'Novinky',
+  'footer.events': 'Kalendář akcí',
   'footer.techCatalog': 'Katalog techniky',
   'footer.breeds': 'Plemena zvířat',
   'footer.soil': 'Zemědělská půda',

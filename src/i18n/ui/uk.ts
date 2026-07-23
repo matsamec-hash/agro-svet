@@ -88,6 +88,7 @@ const uk: Record<string, string> = {
   'footer.tagline': 'Сільськогосподарська техніка, новини та енциклопедія. Базар, статистика, фотоконкурс — усе для фермера.',
   'footer.content': 'Вміст',
   'footer.news': 'Новини',
+  'footer.events': 'Календар подій',
   'footer.techCatalog': 'Каталог техніки',
   'footer.breeds': 'Породи тварин',
   'footer.soil': 'Сільськогосподарська земля',
