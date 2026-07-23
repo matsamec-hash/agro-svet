@@ -22,6 +22,11 @@ if (Astro.request.method === 'POST') {
     } else if (action === 'extend') {
       const newExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
       await supabase.from('bazar_listings').update({ expires_at: newExpiry, status: 'active', updated_at: new Date().toISOString() }).eq('id', listingId).eq('user_id', user.id);
+    } else if (action === 'publish') {
+      const newExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+      await supabase.from('bazar_listings')
+        .update({ status: 'active', expires_at: newExpiry, updated_at: new Date().toISOString() })
+        .eq('id', listingId).eq('user_id', user.id).eq('status', 'pending_claim');
     }
   }
 }
@@ -76,7 +81,8 @@ const { data: listings } = await supabase
           const priceText = listing.price ? `${listing.price.toLocaleString('cs-CZ')} Kč` : 'Dohodou';
           const date = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'short' }).format(new Date(listing.created_at));
           const statusColors = { active: '#4caf50', sold: '#ff9800', expired: '#999' } as any;
-          const statusLabels = { active: 'Aktivní', sold: 'Prodáno', expired: 'Expirováno' } as any;
+          const statusLabels = { active: 'Aktivní', sold: 'Prodáno', expired: 'Expirováno', pending_claim: 'Připraveno ke zveřejnění' } as any;
+          const isDraft = listing.status === 'pending_claim';
           return (
             <div class={`my-listing-row ${listing.featured && isFeaturedActive(listing) ? 'is-featured' : ''}`}>
               <div class="my-listing-info">
@@ -100,10 +106,22 @@ const { data: listings } = await supabase
                   <span>{listing.views ?? 0}x zobrazeno</span>
                 </div>
               </div>
-              <span class="status-badge" style={`background:${statusColors[listing.status]}20; color:${statusColors[listing.status]};`}>
+              <span
+                class="status-badge"
+                style={isDraft
+                  ? 'background:#1a1a1a; color:#FFEA00;'
+                  : `background:${statusColors[listing.status]}20; color:${statusColors[listing.status]};`}
+              >
                 {statusLabels[listing.status] ?? listing.status}
               </span>
               <div class="my-listing-actions">
+                {isDraft && (
+                  <form method="POST" style="display:inline">
+                    <input type="hidden" name="action" value="publish" />
+                    <input type="hidden" name="listing_id" value={listing.id} />
+                    <button class="btn-primary" type="submit">Zveřejnit</button>
+                  </form>
+                )}
                 <a href={`/bazar/moje/${listing.id}/`} class="action-btn">Upravit</a>
                 <form method="POST" style="display:inline;">
                   <input type="hidden" name="listing_id" value={listing.id} />
