@@ -63,6 +63,37 @@ collections:
       - { label: Popis (krátký), name: popis, widget: text }
       - { label: Úvodní obrázek (URL), name: heroImage, widget: string, required: false }
       - { label: Klíčové vlastnosti, name: highlights, widget: list, default: [] }
+      - { label: Série (název), name: seriesName, widget: string, required: false }
+      - { label: Motor, name: engine, widget: string, required: false }
+      - { label: Převodovka, name: transmission, widget: string, required: false }
+      - { label: Výkon v koních (číslo), name: powerHp, widget: number, required: false, value_type: int }
+      - { label: Výkon v kW (číslo), name: powerKw, widget: number, required: false, value_type: int }
+      - { label: Hmotnost v kg (číslo), name: weightKg, widget: number, required: false, value_type: int }
+      - { label: Rok ukončení výroby, name: yearTo, widget: number, required: false, value_type: int }
+      - { label: Zdroj (URL výrobce), name: sourceUrl, widget: string, required: false }
+      - { label: Naposledy ověřeno, name: lastVerified, widget: datetime, required: false, format: "YYYY-MM-DD", date_format: "DD. MM. YYYY", time_format: false }
+      - { label: YouTube ID videa, name: youtubeId, widget: string, required: false, hint: "Jen ID videa, ne celá URL. Použij landscape video (16:9), NE vertikální Short." }
+      - { label: Titulek videa, name: youtubeTitle, widget: string, required: false }
+      - label: FAQ (časté dotazy)
+        name: faq
+        widget: list
+        required: false
+        label_singular: Dotaz
+        summary: "{{fields.q}}"
+        fields:
+          - { label: Otázka, name: q, widget: string }
+          - { label: Odpověď, name: a, widget: text }
+      - label: Redakční recenze (volitelné)
+        name: recenze
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: Hodnocení (1–5), name: hodnoceni, widget: number, value_type: float, min: 1, max: 5, step: 0.1 }
+          - { label: Verdikt, name: verdikt, widget: text }
+          - { label: Plusy, name: plusy, widget: list, required: false }
+          - { label: Minusy, name: minusy, widget: list, required: false }
+          - { label: Datum recenze, name: datum, widget: datetime, required: false, format: "YYYY-MM-DD", date_format: "DD. MM. YYYY", time_format: false }
       - { label: Obsah, name: body, widget: markdown }
 
   - name: znacky
