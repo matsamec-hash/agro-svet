@@ -7,44 +7,82 @@ const locale = Astro.locals.locale ?? 'cs';
 const csOnly = locale !== 'cs';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 const yr = (m: { yearsFrom: number; yearsTo: number | null }) => `${m.yearsFrom}–${m.yearsTo ?? 'dosud'}`;
+// Hlavní parametr do dlaždice (výkon nebo záběr) — „na první pohled".
+const teaser = (m: { specs: Record<string, string>; category: string }) =>
+  m.specs['Výkon'] ?? m.specs['Záběr žací lišty'] ?? m.specs['Motor'] ?? '';
+const tractors = machines.filter((m) => m.category === 'traktor');
+const combines = machines.filter((m) => m.category === 'kombajn');
 ---
 <Layout
-  title="Historické zemědělské stroje — E-512, Zetor a další"
-  description="Legendární stroje československého zemědělství: kombajny, traktory a technika JZD. Specifikace, roky výroby a příběhy."
+  title="Historické zemědělské stroje — Zetor, Fortschritt a další"
+  description="Legendární stroje československého zemědělství: traktory Zetor a Fortschritt i kombajny E-512 a SK-4. Fotografie, specifikace, roky výroby a příběhy strojů z časů JZD."
   canonical="/historie/technika/"
   noindex={csOnly}
   noHreflang={true}
 >
   <main class="ht">
     <h1>Historická technika</h1>
-    <p class="ht-lede">Stroje, které vozily úrodu z polí JZD i státních statků.</p>
+    <p class="ht-lede">Stroje, které vozily úrodu z polí JZD i státních statků — od poválečného Zetoru 25 po výkonné kombajny éry velkovýroby. {tractors.length} traktorů a {combines.length} kombajny s fotografiemi, technickými údaji a příběhem.</p>
+
+    <h2 class="ht-cat">Traktory</h2>
     <section class="ht-grid">
-      {machines.map((m) => (
+      {tractors.map((m) => (
         <a class="ht-card" href={`/historie/technika/${m.slug}/`}>
-          <div class="ht-img">{m.image ? <img src={m.image} alt={m.name} loading="lazy" /> : <span>🚜</span>}</div>
+          <div class="ht-img">
+            {m.image
+              ? <img src={m.image} alt={`${m.name} — dobový zemědělský traktor`} loading="lazy" width="400" height="260" />
+              : <span>🚜</span>}
+            <span class="ht-badge">{yr(m)}</span>
+          </div>
           <div class="ht-body">
-            <h2>{m.name}</h2>
-            <p class="ht-meta">{m.maker} · {yr(m)}</p>
+            <h3>{m.name}</h3>
+            <p class="ht-meta">{m.maker}</p>
+            {teaser(m) && <p class="ht-spec">{teaser(m)}</p>}
           </div>
         </a>
       ))}
     </section>
-    <p class="ht-cross"><a href="/stroje/">Dnešní katalog strojů →</a></p>
+
+    <h2 class="ht-cat">Kombajny</h2>
+    <section class="ht-grid">
+      {combines.map((m) => (
+        <a class="ht-card" href={`/historie/technika/${m.slug}/`}>
+          <div class="ht-img">
+            {m.image
+              ? <img src={m.image} alt={`${m.name} — dobový obilní kombajn`} loading="lazy" width="400" height="260" />
+              : <span>🚜</span>}
+            <span class="ht-badge">{yr(m)}</span>
+          </div>
+          <div class="ht-body">
+            <h3>{m.name}</h3>
+            <p class="ht-meta">{m.maker}</p>
+            {teaser(m) && <p class="ht-spec">{teaser(m)}</p>}
+          </div>
+        </a>
+      ))}
+    </section>
+
+    <p class="ht-credit">Fotografie strojů pocházejí z Wikimedia Commons (licence CC BY-SA / CC0 / volné dílo); autor a licence jsou uvedeny u každého stroje.</p>
+    <p class="ht-cross"><a href="/stroje/">Dnešní katalog strojů →</a> · <a href="/historie/">Historie zemědělství →</a></p>
   </main>
 </Layout>
 
 <style>
-  .ht { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+  .ht { max-width: 1040px; margin: 0 auto; padding: 24px 16px 64px; }
   .ht h1 { font-size: 28px; margin: 0 0 6px; }
-  .ht-lede { color: #567; margin: 0 0 24px; }
+  .ht-lede { color: #567; margin: 0 0 24px; max-width: 720px; line-height: 1.55; }
+  .ht-cat { font-size: 20px; margin: 28px 0 14px; padding-bottom: 6px; border-bottom: 2px solid #eef2f0; }
   .ht-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-  .ht-card { border: 1px solid #dde5e0; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .15s; }
-  .ht-card:hover { border-color: #1c7c48; }
-  .ht-img { height: 140px; background: #0f1c14; display: flex; align-items: center; justify-content: center; font-size: 44px; }
-  .ht-img img { width: 100%; height: 100%; object-fit: cover; }
-  .ht-body { padding: 14px; }
-  .ht-body h2 { font-size: 18px; margin: 0 0 4px; }
-  .ht-meta { color: #789; font-size: 13px; margin: 0; }
-  .ht-cross { margin-top: 28px; }
+  .ht-card { border: 1px solid #dde5e0; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s; background: #fff; }
+  .ht-card:hover { border-color: #1c7c48; box-shadow: 0 6px 18px #1c7c4818; }
+  .ht-img { position: relative; aspect-ratio: 4 / 3; background: #0f1c14; display: flex; align-items: center; justify-content: center; font-size: 44px; }
+  .ht-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ht-badge { position: absolute; left: 8px; bottom: 8px; background: #0b140eCC; color: #fff; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 999px; backdrop-filter: blur(2px); }
+  .ht-body { padding: 12px 14px 14px; }
+  .ht-body h3 { font-size: 17px; margin: 0 0 3px; }
+  .ht-meta { color: #789; font-size: 13px; margin: 0 0 6px; }
+  .ht-spec { color: #1c7c48; font-size: 13px; font-weight: 600; margin: 0; }
+  .ht-credit { color: #98a4ad; font-size: 12px; margin: 28px 0 8px; line-height: 1.5; }
+  .ht-cross { margin-top: 6px; }
   .ht-cross a { color: #1c7c48; font-weight: 600; text-decoration: none; }
 </style>

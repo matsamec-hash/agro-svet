@@ -13,6 +13,10 @@ export type Machine = {
   specs: Record<string, string>;
   story: string;
   image: string | null;
+  imageCredit?: string;
+  imageLicense?: string;
+  imageLicenseUrl?: string;
+  imageSource?: string;
 };
 export type SeriesPoint = { year: number; value: number };
 export type LongRange = {
@@ -22,7 +26,21 @@ export type LongRange = {
   source: string;
   points: SeriesPoint[];
 };
-export type PressClip = { year: number; source: string; headline: string; context: string };
+export type PressClip = {
+  year: number;
+  date: string;
+  source: string;
+  edition?: string;
+  rubrika: string;
+  topic: string;
+  featured?: boolean;
+  headline: string;
+  subhead: string;
+  context: string;
+  body: string[];
+  figureCaption: string;
+  pullQuote?: string;
+};
 export type Trivia = { title: string; body: string; then?: string; now?: string };
 export type Milestone = { year: number; title: string; note: string };
 

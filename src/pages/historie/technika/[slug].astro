@@ -25,7 +25,18 @@ const others = machines.filter((x) => x.slug !== m.slug).slice(0, 4);
     <nav class="hd-crumb"><a href="/historie/technika/">← Historická technika</a></nav>
     <h1>{m.name}</h1>
     <p class="hd-meta">{m.maker} · {yr} · {m.category}</p>
-    <div class="hd-img">{m.image ? <img src={m.image} alt={m.name} /> : <span>🚜</span>}</div>
+    <figure class="hd-fig">
+      <div class="hd-img">{m.image ? <img src={m.image} alt={`${m.name} — ${m.maker}, ${yr}`} width="760" height="500" /> : <span>🚜</span>}</div>
+      {m.image && (
+        <figcaption class="hd-credit">
+          Foto: {m.imageCredit}
+          {m.imageLicense && (m.imageLicenseUrl
+            ? <> · <a href={m.imageLicenseUrl} target="_blank" rel="noopener nofollow">{m.imageLicense}</a></>
+            : <> · {m.imageLicense}</>)}
+          {m.imageSource && <> · <a href={m.imageSource} target="_blank" rel="noopener nofollow">Wikimedia Commons</a></>}
+        </figcaption>
+      )}
+    </figure>
     <p class="hd-story">{m.story}</p>
     <h2>Technické údaje</h2>
     <table class="hd-specs">
@@ -45,8 +56,11 @@ const others = machines.filter((x) => x.slug !== m.slug).slice(0, 4);
   .hd-crumb a { color: #1c7c48; text-decoration: none; font-size: 14px; }
   .hd h1 { font-size: 30px; margin: 12px 0 4px; }
   .hd-meta { color: #789; margin: 0 0 20px; }
-  .hd-img { height: 260px; background: #0f1c14; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 60px; margin-bottom: 20px; }
-  .hd-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+  .hd-fig { margin: 0 0 22px; }
+  .hd-img { aspect-ratio: 3 / 2; background: #0f1c14; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 60px; overflow: hidden; }
+  .hd-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hd-credit { color: #98a4ad; font-size: 12px; margin: 8px 2px 0; line-height: 1.5; }
+  .hd-credit a { color: #789; }
   .hd-story { line-height: 1.7; margin-bottom: 28px; }
   .hd-specs { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
   .hd-specs th, .hd-specs td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e5ebe7; }

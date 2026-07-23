@@ -1,25 +1,38 @@
 {
   "generated": "2026-07-22",
   "milestones": [
-    { "year": 1949, "title": "Zákon o JZD", "note": "Zákon č. 69/1949 Sb. o jednotných zemědělských družstvech odstartoval kolektivizaci československého venkova." },
-    { "year": 1960, "title": "Vrchol kolektivizace", "note": "Koncem 50. let a kolem roku 1960 už hospodařila drtivá většina orné půdy v JZD a státních statcích." },
-    { "year": 1989, "title": "Sametová revoluce", "note": "Pád komunistického režimu ukončil éru centrálně plánovaného zemědělství a otevřel cestu k tržní transformaci." },
-    { "year": 1991, "title": "Zákon o půdě a restituce", "note": "Zákon č. 229/1991 Sb. zahájil navracení zemědělské půdy a majetku původním vlastníkům." },
-    { "year": 1992, "title": "Transformační zákon", "note": "Zákon č. 42/1992 Sb. přeměnil bývalá JZD na družstva a obchodní společnosti nového typu." },
-    { "year": 2004, "title": "Vstup ČR do EU", "note": "České zemědělství vstoupilo do Společné zemědělské politiky EU a systému přímých plateb a dotací." }
+    {
+      "year": 1949,
+      "title": "Zákon o JZD",
+      "note": "Zákon č. 69/1949 Sb. o jednotných zemědělských družstvech odstartoval kolektivizaci československého venkova."
+    },
+    {
+      "year": 1960,
+      "title": "Vrchol kolektivizace",
+      "note": "Koncem 50. let a kolem roku 1960 už hospodařila drtivá většina orné půdy v JZD a státních statcích."
+    },
+    {
+      "year": 1989,
+      "title": "Sametová revoluce",
+      "note": "Pád komunistického režimu ukončil éru centrálně plánovaného zemědělství a otevřel cestu k tržní transformaci."
+    },
+    {
+      "year": 1991,
+      "title": "Zákon o půdě a restituce",
+      "note": "Zákon č. 229/1991 Sb. zahájil navracení zemědělské půdy a majetku původním vlastníkům."
+    },
+    {
+      "year": 1992,
+      "title": "Transformační zákon",
+      "note": "Zákon č. 42/1992 Sb. přeměnil bývalá JZD na družstva a obchodní společnosti nového typu."
+    },
+    {
+      "year": 2004,
+      "title": "Vstup ČR do EU",
+      "note": "České zemědělství vstoupilo do Společné zemědělské politiky EU a systému přímých plateb a dotací."
+    }
   ],
   "machines": [
-    {
-      "slug": "kombajn-e-512",
-      "name": "Kombajn E-512",
-      "category": "kombajn",
-      "maker": "Fortschritt (NDR)",
-      "yearsFrom": 1970,
-      "yearsTo": 1985,
-      "specs": { "Záběr žací lišty": "5–6 m", "Motor": "vznětový, ~100 kW", "Zásobník zrna": "3 600 l" },
-      "story": "Východoněmecký kombajn E-512 od podniku Fortschritt se stal symbolem žní v JZD a na státních statcích. Robustní, jednoduchý na údržbu a s velkým výkonem nahradil starší sovětské kombajny SK-4. Po celém Československu jich jezdily tisíce a mnohé sloužily i dlouho po roce 1990.",
-      "image": null
-    },
     {
       "slug": "zetor-25",
       "name": "Zetor 25",
@@ -27,9 +40,41 @@
       "maker": "Zetor / Zbrojovka Brno",
       "yearsFrom": 1946,
       "yearsTo": 1961,
-      "specs": { "Motor": "dvouválcový vznětový, 2 078 cm³", "Výkon": "25 k (~18 kW) při 1 800 ot/min", "Chlazení": "vodní s nuceným oběhem", "Konstrukce": "bezrámová, samonosné tělo" },
-      "story": "První traktor značky Zetor sjel z linky 15. března 1946 jako model Z 25. Dvouválcový vznětový motor o výkonu 25 koní dal traktoru i jméno. Do konce roku 1947 jich vzniklo přes 3 500 kusů a v únoru 1949 opustil bránu už desetitisící stroj. Zetor 25 se stal poválečnou legendou a základem úspěchu celé značky.",
-      "image": null
+      "specs": {
+        "Motor": "dvouválcový vznětový",
+        "Objem": "cca 2,0 l",
+        "Výkon": "25 k (~18 kW)",
+        "Chlazení": "kapalinou",
+        "Hmotnost": "cca 1,6 t",
+        "Vyrobeno": "přes 150 000 kusů (typová řada)"
+      },
+      "story": "Zetor 25 byl prvním sériovým traktorem značky Zetor a nadlouho určil její pověst. Jednoduchý dvouválcový diesel se dal snadno opravit i v družstevní dílně, a tak stroj přežil dlouhá léta na polích i po skončení výroby. Ve verzích 25A a 25K se vyvážel do celého světa a stal se symbolem poválečné obnovy československého venkova.",
+      "image": "/images/historie/zetor-25.jpg",
+      "imageCredit": "Jiří Sedláček (Frettie)",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "imageSource": "https://commons.wikimedia.org/wiki/File:Zetor_25_at_Legendy_2018_in_Prague.jpg"
+    },
+    {
+      "slug": "zetor-50-super",
+      "name": "Zetor 50 Super",
+      "category": "traktor",
+      "maker": "Zetor Brno",
+      "yearsFrom": 1958,
+      "yearsTo": 1968,
+      "specs": {
+        "Motor": "čtyřválcový vznětový",
+        "Výkon": "50 k (~37 kW)",
+        "Řada": "Super",
+        "Převodovka": "mechanická, více rychlostí",
+        "Určení": "orba a těžší polní práce"
+      },
+      "story": "Řada Super posunula brněnské traktory k vyššímu výkonu, který velká družstevní pole potřebovala. Čtyřválcový Zetor 50 Super utáhl těžší pluhy i secí soupravy a stal se běžným koněm JZD přelomu 50. a 60. let. Vedle domácích lánů mířil i na export a upevňoval mezinárodní jméno značky.",
+      "image": "/images/historie/zetor-50-super.jpg",
+      "imageCredit": "Chr. Späth (ChiemseeMan)",
+      "imageLicense": "volné dílo",
+      "imageLicenseUrl": "",
+      "imageSource": "https://commons.wikimedia.org/wiki/File:Zetor_50_Super_50PS_1963.jpg"
     },
     {
       "slug": "zetor-3011",
@@ -38,9 +83,40 @@
       "maker": "Zetor Brno",
       "yearsFrom": 1960,
       "yearsTo": 1968,
-      "specs": { "Motor": "tříválcový vznětový, ~2,7 l", "Výkon": "38 k (~28 kW)", "Výroba": "Zetor Brno, 1960–1968", "Význam": "základní model unifikované řady UŘ I" },
-      "story": "Zetor 3011 byl základním modelem tzv. první unifikované řady (UŘ I), která přinesla stavebnicovou koncepci a sjednocené díly napříč typy. Tříválcový vznětový motor o výkonu 38 koní z něj udělal univerzální stroj středních JZD. Řada UŘ I zásadně zvedla technickou úroveň československých traktorů a proslavila Zetor i v zahraničí.",
-      "image": null
+      "specs": {
+        "Motor": "tříválcový vznětový",
+        "Objem": "2 340 cm³",
+        "Výkon": "38 k (~28 kW)",
+        "Řada": "UŘ I (unifikovaná řada)",
+        "Určení": "univerzální práce v JZD"
+      },
+      "story": "Zetor 3011 patřil k první unifikované řadě UŘ I, se kterou Brno sjednotilo konstrukci svých traktorů. Spolehlivý tříválec o objemu 2 340 cm³ se stal jedním z nejrozšířenějších traktorů československého zemědělství a mnohé kusy slouží sběratelům dodnes. Připravil půdu pro pozdější výkonnější Crystaly.",
+      "image": "/images/historie/zetor-3011.jpg",
+      "imageCredit": "Chr. Späth (ChiemseeMan)",
+      "imageLicense": "volné dílo",
+      "imageLicenseUrl": "",
+      "imageSource": "https://commons.wikimedia.org/wiki/File:Zetor_Diesel_3011_2340ccm_1964.JPG"
+    },
+    {
+      "slug": "zetor-5511",
+      "name": "Zetor 5511",
+      "category": "traktor",
+      "maker": "Zetor Brno",
+      "yearsFrom": 1968,
+      "yearsTo": 1984,
+      "specs": {
+        "Motor": "čtyřválcový vznětový",
+        "Výkon": "55 k (~40 kW)",
+        "Řada": "UŘ II (unifikovaná řada)",
+        "Určení": "univerzální traktor JZD",
+        "Kabina": "později bezpečnostní"
+      },
+      "story": "S řadou UŘ II přišel Zetor 5511 jako výkonnější a modernější univerzální traktor pro velkovýrobu. Čtyřválec o 55 koních zvládal orbu, dopravu i pohon strojů a patřil k páteři strojového parku družstev v 70. a 80. letech. Řada UŘ II se stala nejúspěšnější kapitolou brněnské produkce.",
+      "image": "/images/historie/zetor-5511.jpg",
+      "imageCredit": "Kirk",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "imageSource": "https://commons.wikimedia.org/wiki/File:Zetor_5511_1_Zetor_Gallery.jpg"
     },
     {
       "slug": "zetor-crystal-8011",
@@ -49,20 +125,40 @@
       "maker": "Zetor Brno",
       "yearsFrom": 1968,
       "yearsTo": 1987,
-      "specs": { "Motor": "čtyřválcový vznětový, ~4,6 l", "Výkon": "85 k (~62 kW)", "Převodovka": "16 rychlostních stupňů", "Rozvor / pohon": "verze 4×2 (8011) i 4×4 (8045)" },
-      "story": "Zetor Crystal 8011 patřil do druhé unifikované řady (UŘ II) a představoval výkonný traktor pro velké družstevní lány. Čtyřválcový vznětový motor o objemu zhruba 4,6 litru dával kolem 85 koní a šestnáctistupňová převodovka umožňovala nasazení od orby po transport. Crystal se vyráběl bezmála dvacet let a stal se páteří mechanizace v éře velkovýroby.",
-      "image": null
+      "specs": {
+        "Motor": "čtyřválcový vznětový",
+        "Výkon": "80 k (~59 kW)",
+        "Řada": "UŘ II (unifikovaná řada)",
+        "Určení": "těžké práce na velkých lánech",
+        "Vývoz": "desítky zemí"
+      },
+      "story": "Crystal 8011 byl vlajkovou lodí řady UŘ II a symbolem éry velkoplošného hospodaření. Osmdesátikoňový čtyřválec utáhl těžké pluhy i výkonné secí soupravy a zkrátil čas jarních a podzimních prací na obřích družstevních honech. Robustní a jednoduchý stroj se dobře vyvážel a zůstal legendou československého traktorového průmyslu.",
+      "image": "/images/historie/zetor-crystal-8011.jpg",
+      "imageCredit": "Mutney",
+      "imageLicense": "CC0 (volné dílo)",
+      "imageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0",
+      "imageSource": "https://commons.wikimedia.org/wiki/File:Zetor_Crystal_8011_tractor,_Rosudgeon_Vintage_Rally,_Cornwall_-_September_2024.jpg"
     },
     {
-      "slug": "skoda-st-180",
-      "name": "Škoda ŠT-180",
+      "slug": "fortschritt-zt-300",
+      "name": "Fortschritt ZT 300",
       "category": "traktor",
-      "maker": "Škoda / LIAZ",
-      "yearsFrom": 1968,
-      "yearsTo": 1992,
-      "specs": { "Motor": "LIAZ M634, řadový šestiválec, vznětový", "Výkon": "180 k (~132 kW)", "Převodovka": "10+2 (s redukcí Praga)", "Pohon": "4×4, stejný výkon na obě nápravy" },
-      "story": "Těžký kolový tahač ŠT-180 (Škoda – Traktor, 180 koní) byl nejsilnějším československým traktorem své doby. Šestiválcový motor LIAZ M634 o výkonu 180 koní z něj dělal stroj pro nejnáročnější orbu, hlubokou kultivaci i dusání siláže, kde je díky své hmotnosti oceňován dodnes. Vyráběl se od roku 1968 až do roku 1992.",
-      "image": null
+      "maker": "VEB Fortschritt (NDR)",
+      "yearsFrom": 1967,
+      "yearsTo": 1984,
+      "specs": {
+        "Motor": "čtyřválcový vznětový (4 VD 14,5)",
+        "Výkon": "100 k (~74 kW)",
+        "Koncepce": "univerzální kolový traktor",
+        "Určení": "orba, doprava, pohon strojů",
+        "Původ": "Německá demokratická republika"
+      },
+      "story": "Východoněmecký ZT 300 byl standardním výkonným traktorem zemí RVHP a v československých JZD patřil k nejběžnějším silným strojům. Stokoňový čtyřválec s charakteristickou hranatou kabinou zvládal těžkou orbu i dopravu a doplňoval domácí Zetory tam, kde bylo potřeba víc síly. Do zemědělství jich přišly tisíce a mnohé pracovaly dlouho po roce 1990.",
+      "image": "/images/historie/fortschritt-zt-300.jpg",
+      "imageCredit": "Fiver, der Hellseher",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "imageSource": "https://commons.wikimedia.org/wiki/File:Fortschritt_ZT_300_(1).jpg"
     },
     {
       "slug": "kombajn-sk-4",
@@ -71,9 +167,40 @@
       "maker": "Rostselmaš (SSSR)",
       "yearsFrom": 1962,
       "yearsTo": 1974,
-      "specs": { "Záběr žací lišty": "3,2–4,1 m", "Motor": "SMD, vznětový, ~48 kW", "Výrobce": "Rostselmaš, SSSR", "Typ": "samojízdný obilní kombajn" },
-      "story": "Sovětský samojízdný kombajn SK-4 z Rostselmaše byl v 60. letech nejrozšířenějším obilním kombajnem v československém zemědělství. Dovážel se v tisících kusů a poprvé masově nahradil ruční a maloplošnou sklizeň na velkých družstevních lánech. V 70. letech ho postupně vystřídaly výkonnější východoněmecké kombajny řady E-512.",
-      "image": null
+      "specs": {
+        "Motor": "vznětový, cca 48 kW (65 k)",
+        "Záběr žací lišty": "4,1 m",
+        "Zásobník zrna": "cca 1 800 l",
+        "Původ": "Sovětský svaz (Rostov na Donu)",
+        "Nástupce": "Fortschritt E-512"
+      },
+      "story": "Sovětský samojízdný kombajn SK-4 byl v 60. letech oporou žní v JZD a na státních statcích. Vyráběl se v obřích sériích a do Československa jich dorazily tisíce, než je v 70. letech nahradily výkonnější východoněmecké kombajny Fortschritt. Pro celou jednu generaci družstevníků znamenal SK-4 příchod moderní strojové sklizně obilí.",
+      "image": "/images/historie/kombajn-sk-4.jpg",
+      "imageCredit": "Zimin.V.G.",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "imageSource": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%BE%D0%BC%D0%B1%D0%B0%D0%B9%D0%BD_%D0%A1%D0%9A-4_%D0%A1%D0%BE%D0%BA%D0%BE%D0%BB_%D0%B3%D0%BE%D1%80%D0%B01.jpg"
+    },
+    {
+      "slug": "kombajn-e-512",
+      "name": "Kombajn E-512",
+      "category": "kombajn",
+      "maker": "Fortschritt (NDR)",
+      "yearsFrom": 1970,
+      "yearsTo": 1985,
+      "specs": {
+        "Motor": "šestiválcový vznětový, cca 77 kW (105 k)",
+        "Záběr žací lišty": "5–6 m",
+        "Zásobník zrna": "3 600 l",
+        "Výkon sklizně": "až kolem 1,5 ha/h",
+        "Původ": "Německá demokratická republika"
+      },
+      "story": "Východoněmecký kombajn E-512 od podniku Fortschritt se stal symbolem žní v JZD a na státních statcích. Robustní, jednoduchý na údržbu a s velkým výkonem nahradil starší sovětské kombajny SK-4. Po celém Československu jich jezdily tisíce a mnohé sloužily i dlouho po roce 1990.",
+      "image": "/images/historie/kombajn-e-512.jpg",
+      "imageCredit": "Fiver, der Hellseher",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "imageSource": "https://commons.wikimedia.org/wiki/File:M%C3%A4hdrescher_Fortschritt_E_512_(front)_(1).jpg"
     }
   ],
   "longRange": [
@@ -83,13 +210,34 @@
       "unit": "l/ks/rok",
       "source": "ČSÚ – České zemědělství očima statistiky 1918–2024",
       "points": [
-        { "year": 1921, "value": 1518 },
-        { "year": 1960, "value": 1950 },
-        { "year": 1980, "value": 3200 },
-        { "year": 2000, "value": 5255 },
-        { "year": 2010, "value": 6900 },
-        { "year": 2019, "value": 8471 },
-        { "year": 2024, "value": 9574 }
+        {
+          "year": 1921,
+          "value": 1518
+        },
+        {
+          "year": 1960,
+          "value": 1950
+        },
+        {
+          "year": 1980,
+          "value": 3200
+        },
+        {
+          "year": 2000,
+          "value": 5255
+        },
+        {
+          "year": 2010,
+          "value": 6900
+        },
+        {
+          "year": 2019,
+          "value": 8471
+        },
+        {
+          "year": 2024,
+          "value": 9574
+        }
       ]
     },
     {
@@ -98,14 +246,38 @@
       "unit": "ks",
       "source": "ČSÚ – Stavy hospodářských zvířat / České zemědělství očima statistiky",
       "points": [
-        { "year": 1950, "value": 2600000 },
-        { "year": 1960, "value": 3050000 },
-        { "year": 1982, "value": 3556000 },
-        { "year": 1990, "value": 3360000 },
-        { "year": 2000, "value": 1574000 },
-        { "year": 2011, "value": 1344000 },
-        { "year": 2020, "value": 1417000 },
-        { "year": 2024, "value": 1440000 }
+        {
+          "year": 1950,
+          "value": 2600000
+        },
+        {
+          "year": 1960,
+          "value": 3050000
+        },
+        {
+          "year": 1982,
+          "value": 3556000
+        },
+        {
+          "year": 1990,
+          "value": 3360000
+        },
+        {
+          "year": 2000,
+          "value": 1574000
+        },
+        {
+          "year": 2011,
+          "value": 1344000
+        },
+        {
+          "year": 2020,
+          "value": 1417000
+        },
+        {
+          "year": 2024,
+          "value": 1440000
+        }
       ]
     },
     {
@@ -114,14 +286,38 @@
       "unit": "ks",
       "source": "ČSÚ – Stavy hospodářských zvířat / České zemědělství očima statistiky",
       "points": [
-        { "year": 1950, "value": 2700000 },
-        { "year": 1960, "value": 3400000 },
-        { "year": 1981, "value": 5106000 },
-        { "year": 1990, "value": 4790000 },
-        { "year": 2000, "value": 3688000 },
-        { "year": 2009, "value": 1954000 },
-        { "year": 2020, "value": 1510000 },
-        { "year": 2023, "value": 1362000 }
+        {
+          "year": 1950,
+          "value": 2700000
+        },
+        {
+          "year": 1960,
+          "value": 3400000
+        },
+        {
+          "year": 1981,
+          "value": 5106000
+        },
+        {
+          "year": 1990,
+          "value": 4790000
+        },
+        {
+          "year": 2000,
+          "value": 3688000
+        },
+        {
+          "year": 2009,
+          "value": 1954000
+        },
+        {
+          "year": 2020,
+          "value": 1510000
+        },
+        {
+          "year": 2023,
+          "value": 1362000
+        }
       ]
     },
     {
@@ -130,12 +326,30 @@
       "unit": "tis. ha",
       "source": "ČSÚ – Úhrnné hodnoty druhů pozemků / katastr nemovitostí",
       "points": [
-        { "year": 1990, "value": 3219 },
-        { "year": 1995, "value": 3140 },
-        { "year": 2000, "value": 3082 },
-        { "year": 2010, "value": 3005 },
-        { "year": 2020, "value": 2932 },
-        { "year": 2024, "value": 2916 }
+        {
+          "year": 1990,
+          "value": 3219
+        },
+        {
+          "year": 1995,
+          "value": 3140
+        },
+        {
+          "year": 2000,
+          "value": 3082
+        },
+        {
+          "year": 2010,
+          "value": 3005
+        },
+        {
+          "year": 2020,
+          "value": 2932
+        },
+        {
+          "year": 2024,
+          "value": 2916
+        }
       ]
     },
     {
@@ -144,34 +358,354 @@
       "unit": "osob",
       "source": "ČSÚ – České zemědělství očima statistiky 1918–2024",
       "points": [
-        { "year": 1948, "value": 1300000 },
-        { "year": 1960, "value": 1000000 },
-        { "year": 1989, "value": 567000 },
-        { "year": 2000, "value": 242000 },
-        { "year": 2010, "value": 150000 },
-        { "year": 2020, "value": 132000 },
-        { "year": 2024, "value": 128000 }
+        {
+          "year": 1948,
+          "value": 1300000
+        },
+        {
+          "year": 1960,
+          "value": 1000000
+        },
+        {
+          "year": 1989,
+          "value": 567000
+        },
+        {
+          "year": 2000,
+          "value": 242000
+        },
+        {
+          "year": 2010,
+          "value": 150000
+        },
+        {
+          "year": 2020,
+          "value": 132000
+        },
+        {
+          "year": 2024,
+          "value": 128000
+        }
       ]
     }
   ],
   "press": [
-    { "year": 1949, "source": "Zemědělské noviny", "headline": "Rolníci zakládají jednotná zemědělská družstva", "context": "Po přijetí zákona o JZD začala mohutná propagandistická kampaň za vstup rolníků do družstev; první JZD vznikala v obcích po celé republice." },
-    { "year": 1958, "source": "Naše vesnice", "headline": "Socializace vesnice vstupuje do závěrečné etapy", "context": "Přelom 50. a 60. let znamenal dokončení kolektivizace; drobní hospodáři byli pod tlakem přinuceni vstoupit do JZD a soukromé hospodaření prakticky zaniklo." },
-    { "year": 1968, "source": "Mechanizace zemědělství", "headline": "Nový Zetor Crystal – síla pro velké lány", "context": "Uvedení řady UŘ II s modelem Crystal 8011 přineslo výkonnější traktory odpovídající velkoplošnému hospodaření družstev a státních statků." },
-    { "year": 1974, "source": "Zemědělské noviny", "headline": "Kombajny E-512 zrychlují žně v JZD", "context": "Dodávky výkonných východoněmeckých kombajnů Fortschritt E-512 nahrazovaly starší sovětské SK-4 a výrazně zkrátily dobu sklizně obilí." },
-    { "year": 1981, "source": "Mechanizace zemědělství", "headline": "Stavy prasat dosáhly rekordních pěti milionů", "context": "Počátek 80. let byl vrcholem živočišné výroby; stavy prasat v českých zemích překročily pět milionů kusů, stavy skotu se blížily 3,6 milionu." },
-    { "year": 1991, "source": "Zemědělské noviny", "headline": "Zákon o půdě otevírá cestu restitucím", "context": "Zákon č. 229/1991 Sb. zahájil navracení zemědělské půdy a majetku původním vlastníkům a spustil rozpad velkých družstevních celků." },
-    { "year": 2004, "source": "Zemědělec", "headline": "Vstup do Unie mění pravidla pro české farmáře", "context": "Se vstupem do EU získali čeští zemědělci přístup k přímým platbám a dotacím Společné zemědělské politiky, ale i k jednotnému trhu a jeho konkurenci." }
+    {
+      "year": 1927,
+      "date": "podzim 1927",
+      "source": "Venkov",
+      "edition": "hospodářská příloha",
+      "rubrika": "Stroje a hospodářství",
+      "topic": "traktor",
+      "featured": false,
+      "headline": "Domácí traktory vyjíždějí na česká pole",
+      "subhead": "Wikov a Škoda staví motorové pluhy, kůň však na vesnici zůstává pánem.",
+      "context": "Ve druhé polovině 20. let uváděly prostějovská Wikov a mladoboleslavská Škoda první sériové traktory; mechanizace byla ale výsadou velkostatků a bohatých sedláků.",
+      "body": [
+        "Na výstavních plochách hospodářských spolků přitahují pozornost stroje, jaké dosud česká vesnice neznala — motorové traktory domácí výroby. Prostějovská továrna Wikov představuje lehký typ pro střední hospodářství, mladoboleslavská Škoda ukazuje robustnější stroj vhodný k orbě i k pohonu mlátiček.",
+        "Nadšení odborníků však mírní střízlivý pohled do stájí. Traktor zůstává drahou investicí, kterou si může dovolit velkostatek nebo zámožný sedlák; drobný rolník i nadále spoléhá na potah koní a volů. Pozemková reforma sice rozparcelovala část velkostatků, na většině výměry se však stále hospodaří rukama a hřbety zvířat.",
+        "Zastánci mechanizace připomínají, že jeden stroj zastane práci několika spřežení a uvolní ruce pro jinou práci. Skeptici namítají, že bez laciného paliva a opraven po ruce zůstane traktor stát na dvoře jako drahá ozdoba."
+      ],
+      "figureCaption": "Motorový pluh na předváděcím poli hospodářského spolku.",
+      "pullQuote": "Jeden stroj zastane spřežení — má-li ovšem palivo a kováře nablízku."
+    },
+    {
+      "year": 1934,
+      "date": "jaro 1934",
+      "source": "Venkov",
+      "edition": "roč. XXIX",
+      "rubrika": "Trh a ceny",
+      "topic": "krize",
+      "featured": false,
+      "headline": "Obilní monopol má zastavit propad cen zrna",
+      "subhead": "Rolníci sevřeni nůžkami cen; stát zřizuje Československou obilní společnost.",
+      "context": "Hospodářská krize srazila ceny zemědělských výrobků; zákonem z roku 1934 vznikl obilní monopol, který měl garantovanou výkupní cenou ochránit rolníky.",
+      "body": [
+        "Ceny obilí padají už čtvrtým rokem a rozevřené nůžky cen — levné zrno proti drahým strojům, hnojivům a půjčkám — dusí venkov. Zadlužení sedláci prodávají pod výrobní cenou, exekuce na hospodářstvích přibývají.",
+        "Vláda sahá k mimořádnému kroku: zřizuje Československou obilní společnost s monopolem na výkup a dovoz obilí. Rolníkovi má zaručit pevnou cenu, mlynářům a pekařům dodávky, státu kontrolu nad chlebovinou. Agrárnický tisk vítá zásah jako záchranu selského stavu.",
+        "Kritici upozorňují, že garantovaná cena poroste jen pomalu a monopol sváže obchod. Pro tisíce zadlužených hospodářů je však jakákoli jistota výkupu vítanější než volný trh, který je přivádí na mizinu."
+      ],
+      "figureCaption": "Pytle s obilím ve výkupním skladu obilní společnosti.",
+      "pullQuote": "Levné zrno proti drahému stroji — v těch nůžkách se svírá celý venkov."
+    },
+    {
+      "year": 1949,
+      "date": "23. února 1949",
+      "source": "Zemědělské noviny",
+      "edition": "roč. V",
+      "rubrika": "Z našich vesnic",
+      "topic": "druzstvo",
+      "featured": true,
+      "headline": "Rolníci zakládají jednotná zemědělská družstva",
+      "subhead": "Přijat zákon o JZD; v obcích se scelují meze a zakládají první družstevní lány.",
+      "context": "Zákon č. 69/1949 Sb. o jednotných zemědělských družstvech spustil mohutnou kampaň za vstup rolníků do JZD; první družstva vznikala po celé republice.",
+      "body": [
+        "Národní shromáždění přijalo zákon o jednotných zemědělských družstvech a s ním odstartovala přeměna, jakou český venkov nepamatuje. V obcích se svolávají ustavující schůze, agitátoři chodí od stavení ke stavení a přesvědčují hospodáře, aby vložili pole, potah i stroje do společného.",
+        "Prvním viditelným činem je scelování — rozorávají se meze mezi pásky polí a z drobných záhonů vznikají široké družstevní lány, na nichž se má vyplatit traktor a kombajn. Tisk líčí družstvo jako cestu od dřiny na vlastním zápraží k moderní velkovýrobě.",
+        "Ne všude jde vstup hladce. Movitější sedláci — označovaní za \"vesnické boháče\" — se brání a čelí rostoucímu nátlaku dodávkových povinností i posměchu schůzí. Kampaň, která začíná přesvědčováním, se v následujících letech mění v tvrdý tlak: soukromé hospodaření má zaniknout.",
+        "Pro mnohé bezzemky a malorolníky ale družstvo znamená poprvé v životě stroj na poli, mzdu za odvedenou práci a naději, že se z věčného nádeníka stane hospodář společného."
+      ],
+      "figureCaption": "Traktor rozorává mez mezi dosud rozdělenými pásky polí.",
+      "pullQuote": "Rozoranou mezí mizí hranice pole i celý dosavadní řád vesnice."
+    },
+    {
+      "year": 1953,
+      "date": "léto 1953",
+      "source": "Mechanizace zemědělství",
+      "edition": "roč. III",
+      "rubrika": "Technika do družstev",
+      "topic": "traktor",
+      "featured": false,
+      "headline": "Strojní a traktorové stanice orají pro celý kraj",
+      "subhead": "STS soustřeďují techniku; jeden park traktorů obhospodařuje desítky družstev.",
+      "context": "Strojní a traktorové stanice (STS) soustřeďovaly nákladnou techniku a najímaly ji družstvům; byly páteří mechanizace 50. let, než stroje přešly přímo do JZD.",
+      "body": [
+        "Traktory, mlátičky a secí stroje se v padesátých letech nesoustřeďují na dvorech jednotlivých družstev, nýbrž ve strojních a traktorových stanicích. Odtud vyjíždějí kolony strojů na pole podle plánu prací — dnes zorat u sousedů, zítra zasít o vesnici dál.",
+        "Stanice mají zajistit, aby drahý stroj nestál a využil se naplno. Traktoristé STS se stávají novou profesí venkova; kdo umí řídit a opravit motor, má u družstevníků vážené postavení.",
+        "Systém má i své slabiny — na stroj se čeká, plán ne vždy odpovídá počasí a o techniku pečuje ten, kdo ji nevlastní. Přesto STS přinesly na česká pole motor v míře do té doby nevídané a připravily půdu pro dobu, kdy stroje převezmou přímo družstva."
+      ],
+      "figureCaption": "Kolona traktorů STS vyjíždí ráno na přidělená pole.",
+      "pullQuote": "Stroj nesmí stát — z traktorové stanice vyjíždí za prací celý kraj."
+    },
+    {
+      "year": 1958,
+      "date": "podzim 1958",
+      "source": "Naše vesnice",
+      "edition": "roč. IX",
+      "rubrika": "Socialistická vesnice",
+      "topic": "druzstvo",
+      "featured": false,
+      "headline": "Socializace vesnice vstupuje do závěrečné etapy",
+      "subhead": "Poslední soukromí hospodáři vstupují do JZD; kolektivizace se blíží konci.",
+      "context": "Přelom 50. a 60. let znamenal dokončení kolektivizace; drobní hospodáři byli pod tlakem přinuceni vstoupit do JZD a soukromé hospodaření prakticky zaniklo.",
+      "body": [
+        "Kampaň za \"dokončení socializace vesnice\" vrcholí. Okresní výbory hlásí obec za obcí, kde do družstva vstoupili i poslední jednotlivci; mapa soukromého hospodaření se rychle vyprazdňuje.",
+        "Tisk představuje závěrečnou etapu jako dobrovolné vyústění dějin — ve skutečnosti stojí za \"přesvědčováním\" nesplnitelné dodávky, přídělový tlak a hrozby. Kdo odolával nejdéle, platí za to nejvíc.",
+        "Výsledkem je vesnice bez samostatných sedláků, jakou český venkov po staletí neznal. Družstvo se stává jediným hospodářem v obci a s ním přichází velkovýroba — se svými přednostmi i s koncem starého selského světa."
+      ],
+      "figureCaption": "Podpis přihlášky do JZD na ustavující schůzi v obecním sále.",
+      "pullQuote": "Kdo vzdoroval nejdéle, zaplatil za svobodné hospodaření nejvíc."
+    },
+    {
+      "year": 1961,
+      "date": "jaro 1961",
+      "source": "Rovnost",
+      "edition": "brněnské vydání",
+      "rubrika": "Z brněnských závodů",
+      "topic": "traktor",
+      "featured": false,
+      "headline": "Zetory z Brna jedou do celého světa",
+      "subhead": "Řada Super rozšiřuje vývoz; brněnská značka se stává pojmem na polích pěti kontinentů.",
+      "context": "Brněnský Zetor se v 60. letech etabloval jako významný exportér; traktory řady Super mířily do desítek zemí a značka získala mezinárodní věhlas.",
+      "body": [
+        "Z bran brněnského Zetoru sjíždějí traktory nejen na tuzemská družstevní pole, ale stále častěji do přístavů. Řada Super putuje do zemí Evropy, Asie i zámoří; československý traktor se stává vývozním artiklem, na který je vlast hrdá.",
+        "Konstruktéři zdůrazňují jednoduchost a opravitelnost — stroj, který se dá spravit i daleko od servisu, si získává farmáře v rozvojových zemích. Doma řada Super nahrazuje dosluhující předválečné a poválečné typy a zvyšuje výkon jarních prací.",
+        "Pro Brno znamená Zetor prestiž a devizy, pro domácí družstva spolehlivého koně, který táhne orbu, setí i dopravu. Značka, jež bude na polích sloužit desítky let, si právě upevňuje jméno."
+      ],
+      "figureCaption": "Nové traktory řady Super připravené k expedici na nádvoří závodu.",
+      "pullQuote": "Traktor, který spravíš i daleko od servisu, si získá pole celého světa."
+    },
+    {
+      "year": 1968,
+      "date": "jaro 1968",
+      "source": "Mechanizace zemědělství",
+      "edition": "roč. XVIII",
+      "rubrika": "Nové stroje",
+      "topic": "traktor",
+      "featured": false,
+      "headline": "Nový Zetor Crystal — síla pro velké lány",
+      "subhead": "Řada UŘ II a model Crystal 8011 přinášejí výkon odpovídající velkovýrobě.",
+      "context": "Uvedení řady UŘ II s modelem Crystal 8011 přineslo výkonnější traktory odpovídající velkoplošnému hospodaření družstev a státních statků.",
+      "body": [
+        "Brněnský Zetor uvádí unifikovanou řadu UŘ II a s ní vlajkový Crystal 8011 — traktor, jaký velkovýroba potřebuje. Vyšší výkon motoru, robustní převodovka a pohodlnější kabina posouvají práci na širých družstevních lánech o kus dál.",
+        "Zatímco dřívější stroje sotva stačily rozorané mezi obřích honů, Crystal utáhne těžké pluhy i výkonné secí soupravy a zkracuje čas jarních i podzimních prací. Družstva hlásí, že jeden výkonný stroj nahradí několik starších.",
+        "Řada UŘ II se stává základem, na kterém Zetor staví po celá sedmdesátá léta. Crystal 8011 se zapíše jako jeden z traktorů, které symbolizují éru velkoplošného socialistického zemědělství."
+      ],
+      "figureCaption": "Zetor Crystal 8011 s taženým pluhem na družstevním honu.",
+      "pullQuote": "Velký lán volá po velkém stroji — a Crystal na něj konečně stačí."
+    },
+    {
+      "year": 1974,
+      "date": "žně 1974",
+      "source": "Zemědělské noviny",
+      "edition": "roč. XXX",
+      "rubrika": "Ze žní",
+      "topic": "zne",
+      "featured": false,
+      "headline": "Kombajny E-512 zrychlují žně v JZD",
+      "subhead": "Výkonné stroje Fortschritt nahrazují starší SK-4 a zkracují sklizeň o dny.",
+      "context": "Dodávky výkonných východoněmeckých kombajnů Fortschritt E-512 nahrazovaly starší sovětské SK-4 a výrazně zkrátily dobu sklizně obilí.",
+      "body": [
+        "Do žní vyjíždějí letos družstva s posilou — samojízdnými kombajny Fortschritt E-512 z NDR. Proti dosluhujícím sovětským SK-4 mají větší záběr, výkonnější mlátící ústrojí a pohodlnější obsluhu; jeden stroj skosí a vymlátí víc obilí za den.",
+        "Agronomové počítají, že s novými kombajny se sklizeň zkrátí o několik dní — a v žních, kdy o úrodu může připravit jediná bouře, je každý ušetřený den k nezaplacení. Kombajnéři pracují na směny, aby stroje nestály.",
+        "E-512 se stává tažným koněm československých žní na řadu let. Východoněmecký Fortschritt a domácí Zetor tvoří dvojici, s níž velkovýroba sklízí tisíce hektarů obilí."
+      ],
+      "figureCaption": "Kombajny E-512 v řadě za sebou na obilném lánu.",
+      "pullQuote": "V žních rozhoduje den — a nový kombajn jich úrodě několik zachrání."
+    },
+    {
+      "year": 1978,
+      "date": "zima 1978",
+      "source": "Zemědělské noviny",
+      "edition": "roč. XXXIV",
+      "rubrika": "Živočišná výroba",
+      "topic": "skot",
+      "featured": false,
+      "headline": "Velkokapacitní kravíny mění chov skotu",
+      "subhead": "Koncentrace a specializace; dojivost stoupá, stáje rostou do stovek kusů.",
+      "context": "V 70. letech pokročila koncentrace živočišné výroby do velkokapacitních stájí; užitkovost dojnic dlouhodobě rostla z poválečných 1518 litrů k dnešním hodnotám.",
+      "body": [
+        "Chov skotu se stěhuje z malých chlévů do velkokapacitních kravínů o stovkách kusů. Slučování družstev a specializace provozů mají zajistit, aby se vyplatila dojírna, míchárna krmiv i zootechnická péče.",
+        "Užitkovost dojnic dlouhodobě stoupá — z bídných poválečných průměrů kolem 1 518 litrů na krávu a rok se šlechtěním, krmivy a péčí posouvá výš a výš. Cílem plánu jsou desetitisíce tun mléka pro města.",
+        "Kritici tehdy i později upozorňují na odvrácenou stranu koncentrace: zápach a odpad z obřích provozů, ztrátu vztahu ke zvířeti i zranitelnost, když v jednom místě onemocní celé stádo. Velkochov se přesto stává tváří socialistické živočišné výroby."
+      ],
+      "figureCaption": "Dojnice v novém velkokapacitním kravíně s dojírnou.",
+      "pullQuote": "Z chléva o pár kusech do stáje o stovkách — a s ní i nové starosti."
+    },
+    {
+      "year": 1981,
+      "date": "podzim 1981",
+      "source": "Mechanizace zemědělství",
+      "edition": "roč. XXXI",
+      "rubrika": "Čísla a plány",
+      "topic": "prase",
+      "featured": false,
+      "headline": "Stavy prasat dosáhly rekordních pěti milionů",
+      "subhead": "Vrchol živočišné výroby; stavy skotu se blíží 3,6 milionu kusů.",
+      "context": "Počátek 80. let byl vrcholem živočišné výroby; stavy prasat v českých zemích překročily pět milionů kusů (1981), stavy skotu vrcholily kolem 3,56 milionu (1982).",
+      "body": [
+        "Statistika hlásí rekord: stavy prasat v českých zemích překročily pět milionů kusů. Velkovýkrmny běží naplno, výstavba nových provozů pokračuje a plán počítá s dalším růstem produkce masa.",
+        "Také skot se blíží svému vrcholu — přes tři a půl milionu kusů, s maximem, jehož dosáhne v následujícím roce. Nikdy předtím ani potom nebylo na českých pastvinách a ve stájích tolik hospodářských zvířat.",
+        "Rekordní čísla mají ovšem křehký základ: stojí na dotovaných krmivech, dovozech a plánem hnaném výkonu. Za deset let, po rozpadu družstev a konci dotací, stavy prudce klesnou. Rok 1981 zůstane historickým maximem, k němuž se české zemědělství už nevrátí."
+      ],
+      "figureCaption": "Výkrmna prasat v době rekordních stavů počátku 80. let.",
+      "pullQuote": "Pět milionů prasat — rekord, ke kterému se české chlévy už nevrátí."
+    },
+    {
+      "year": 1989,
+      "date": "prosinec 1989",
+      "source": "Zemědělské noviny",
+      "edition": "roč. XLV",
+      "rubrika": "Vesnice po Listopadu",
+      "topic": "druzstvo",
+      "featured": false,
+      "headline": "Vesnice se ptá, co bude s družstvy",
+      "subhead": "Po pádu režimu mizí jistota plánu; hospodáři vyhlížejí návrat půdy.",
+      "context": "Listopad 1989 ukončil éru centrálního plánování; na vesnici zavládla nejistota o osudu JZD a očekávání restitucí půdy zabrané při kolektivizaci.",
+      "body": [
+        "Sametová revoluce dorazila i na vesnici a s ní otázky, na které nikdo nezná odpověď. Co bude s jednotnými zemědělskými družstvy? Vrátí se půda těm, jimž byla před desítkami let sebrána? Kdo bude na obřích lánech hospodařit zítra?",
+        "Družstva zaměstnávají většinu venkova a obhospodařují prakticky veškerou půdu; jejich osud se najednou stává věcí veřejné rozpravy. Potomci sedláků vzpomínají na zabavené statky, dosavadní funkcionáři hájí, co bylo vybudováno.",
+        "Nad vesnicí visí naděje i obavy zároveň. Éra jistého plánu skončila; přichází doba, v níž se o půdě, majetku i práci bude znovu rozhodovat — a nikdo netuší, jak dopadne."
+      ],
+      "figureCaption": "Vývěska JZD v prosinci 1989 — plán mizí, budoucnost je otevřená.",
+      "pullQuote": "Éra jistého plánu skončila; o půdě se bude znovu rozhodovat."
+    },
+    {
+      "year": 1991,
+      "date": "21. května 1991",
+      "source": "Zemědělské noviny",
+      "edition": "roč. XLVII",
+      "rubrika": "Restituce a půda",
+      "topic": "puda",
+      "featured": false,
+      "headline": "Zákon o půdě otevírá cestu restitucím",
+      "subhead": "Zákon č. 229/1991 Sb. vrací pole původním vlastníkům; velká družstva se rozpadají.",
+      "context": "Zákon č. 229/1991 Sb. zahájil navracení zemědělské půdy a majetku původním vlastníkům a spustil rozpad velkých družstevních celků.",
+      "body": [
+        "Federální shromáždění přijalo zákon o půdě — normu, která má napravit křivdy kolektivizace. Zemědělská půda a majetek se mají vracet původním vlastníkům nebo jejich dědicům; na úřady míří první žádosti a na venkově se rozbíhá nesnadné dohledávání starých hranic a vlastníků.",
+        "Pro velká družstva to znamená otřes základů. Půda, na níž hospodařila jako na svém, najednou patří stovkám navrátivších se vlastníků. Následuje transformace — JZD se mění v akciové společnosti a družstva vlastníků, část majetku se dělí, část zaniká.",
+        "Ne každý restituent se vrací k pluhu; mnozí půdu pronajmou zpět nástupnickým podnikům. Přesto zákon obrací list dějin: končí čtyřicetiletá éra jednotného družstevního hospodáře a začíná pestrý, roztříštěný svět soukromých vlastníků a nájemců."
+      ],
+      "figureCaption": "Katastrální mapa a stará pozemková kniha při dohledávání hranic polí.",
+      "pullQuote": "Půda, na níž družstvo hospodařilo jako na svém, patří znovu stovkám lidí."
+    },
+    {
+      "year": 2004,
+      "date": "1. května 2004",
+      "source": "Zemědělec",
+      "edition": "odborný týdeník",
+      "rubrika": "Evropská unie",
+      "topic": "eu",
+      "featured": false,
+      "headline": "Vstup do Unie mění pravidla pro české farmáře",
+      "subhead": "Přímé platby a dotace SZP; s nimi ale jednotný trh a tvrdá konkurence.",
+      "context": "Se vstupem do EU získali čeští zemědělci přístup k přímým platbám a dotacím Společné zemědělské politiky, ale i k jednotnému trhu a jeho konkurenci.",
+      "body": [
+        "Prvního května vstupuje Česko do Evropské unie a pro zemědělce začíná nová éra. Otevírá se přístup k přímým platbám a dotacím Společné zemědělské politiky — poprvé po letech nejistoty přichází předvídatelná podpora na hektar.",
+        "Za peníze z Bruselu se ovšem platí pravidly. Farmáři se učí žádosti, evidence a normy jednotného trhu; kdo je zvládne, získá stabilní příjem, kdo ne, ocitá se v nevýhodě. Zároveň padají hranice — na pulty míří levnější dovozy a domácí produkce musí obstát v konkurenci celé Unie.",
+        "Vstup do EU tak zemědělce rozděluje na ty, kdo v dotacích a otevřeném trhu vidí příležitost, a ty, kdo se obávají závislosti na bruselských penězích. Jedno je jisté: pravidla hry se změnila natrvalo."
+      ],
+      "figureCaption": "Vlajka EU nad českým polem v den vstupu do Unie.",
+      "pullQuote": "Poprvé přichází předvídatelná podpora — ale za bruselské peníze se platí pravidly."
+    },
+    {
+      "year": 2022,
+      "date": "podzim 2022",
+      "source": "Zemědělec",
+      "edition": "odborný týdeník",
+      "rubrika": "Trh a náklady",
+      "topic": "krize",
+      "featured": false,
+      "headline": "Drahá nafta a hnojiva svírají farmy",
+      "subhead": "Energetická krize žene náklady vzhůru; sucho a ceny vstupů prověřují hospodaření.",
+      "context": "Energetická krize po roce 2021 prudce zvedla ceny paliv, hnojiv a energií; spolu se suchými roky to zvýšilo tlak na hospodaření českých farem.",
+      "body": [
+        "Zemědělci sčítají náklady, jaké dlouho nepamatují. Ceny nafty, plynu i minerálních hnojiv vylétly vzhůru — a s nimi cena každé orby, každého přihnojení. Energetická krize dohnala farmy až k přepočítávání, zda se některé plodiny vůbec vyplatí zasít.",
+        "K drahým vstupům se přidává počasí. Suché roky připomínají, jak zranitelná je rostlinná výroba vůči nedostatku vody; agronomové mluví o zádržnosti půdy, závlahách a odolných odrůdách jako o nutnosti, ne o luxusu.",
+        "Farmy hledají úspory — přesnější dávkování hnojiv, techniku šetřící palivo, vlastní energii ze střech. Krize prověřuje, kdo hospodaří efektivně; historicky nízké stavy hospodářských zvířat a rekordní náklady ukazují, jak daleko je dnešní zemědělství od časů rekordních plánů."
+      ],
+      "figureCaption": "Postřikovač na vyprahlém poli v suchém a nákladově napjatém roce.",
+      "pullQuote": "Sedlák dnes počítá, zda se plodina při ceně nafty a hnojiv vůbec vyplatí zasít."
+    }
   ],
   "trivia": [
-    { "title": "Dojivost se za sto let zešestinásobila", "body": "Zatímco v roce 1921 nadojila průměrná kráva zhruba 1 500 litrů mléka za rok, dnes je to přes 9 500 litrů. Zásluhu na tom má šlechtění, výživa i moderní technologie.", "then": "1 518 l (1921)", "now": "9 574 l (2024)" },
-    { "title": "V zemědělství pracuje desetkrát méně lidí", "body": "Po válce živila půda víc než milion lidí, dnes v oboru pracuje jen kolem 128 tisíc osob. Mechanizace a koncentrace do velkých podniků práci zcela proměnily.", "then": "1,3 mil. osob (1948)", "now": "128 tis. osob (2024)" },
-    { "title": "Prasat je dnes zlomek dřívějších stavů", "body": "Na začátku 80. let se v českých zemích chovalo přes pět milionů prasat. Levné dovozy vepřového a útlum chovů srazily stavy na necelou třetinu.", "then": "5,1 mil. ks (1981)", "now": "1,36 mil. ks (2023)" },
-    { "title": "Skotu ubyla víc než polovina", "body": "Vrchol stavů skotu přišel v roce 1982, kdy v českých zemích bylo přes 3,5 milionu kusů. Po transformaci zemědělství stavy prudce klesly a dnes se drží kolem 1,4 milionu.", "then": "3,56 mil. ks (1982)", "now": "~1,44 mil. ks (2024)" },
-    { "title": "Orné půdy pomalu ubývá", "body": "Od roku 1990 zmizelo v Česku bezmála 300 tisíc hektarů orné půdy – ustoupila zástavbě, skladům i zatravnění. Přesto pořád tvoří jádro naší krajiny.", "then": "3 219 tis. ha (1990)", "now": "2 916 tis. ha (2024)" },
-    { "title": "První Zetor slavil raketový úspěch", "body": "Model Zetor 25 z roku 1946 se prodával tak dobře, že už v únoru 1949 sjel z linky desetitisící kus. Dvouválcový motor o výkonu 25 koní dal traktoru i jeho jméno." },
-    { "title": "Kolektivizace zabrala skoro celou vesnici", "body": "Od zákona o JZD z roku 1949 trvalo něco přes deset let, než se do družstev a státních statků dostala drtivá většina zemědělské půdy a soukromé hospodaření prakticky zaniklo.", "then": "soukromé hospodaření (1949)", "now": "přes 90 % půdy v JZD (kolem 1960)" },
-    { "title": "SK-4 vystřídal E-512", "body": "V 60. letech kraloval žním sovětský kombajn SK-4, v 70. letech ho nahradily výkonnější východoněmecké stroje řady E-512. Jedna generace techniky tak vydržela zhruba deset let." },
-    { "title": "Nejsilnější traktor vážil jako náklaďák", "body": "Škoda ŠT-180 s šestiválcem LIAZ o výkonu 180 koní byl nejsilnějším československým traktorem. Díky vysoké hmotnosti se dodnes cení při dusání siláže." }
+    {
+      "title": "Dojivost se za sto let zešestinásobila",
+      "body": "Zatímco v roce 1921 nadojila průměrná kráva zhruba 1 500 litrů mléka za rok, dnes je to přes 9 500 litrů. Zásluhu na tom má šlechtění, výživa i moderní technologie.",
+      "then": "1 518 l (1921)",
+      "now": "9 574 l (2024)"
+    },
+    {
+      "title": "V zemědělství pracuje desetkrát méně lidí",
+      "body": "Po válce živila půda víc než milion lidí, dnes v oboru pracuje jen kolem 128 tisíc osob. Mechanizace a koncentrace do velkých podniků práci zcela proměnily.",
+      "then": "1,3 mil. osob (1948)",
+      "now": "128 tis. osob (2024)"
+    },
+    {
+      "title": "Prasat je dnes zlomek dřívějších stavů",
+      "body": "Na začátku 80. let se v českých zemích chovalo přes pět milionů prasat. Levné dovozy vepřového a útlum chovů srazily stavy na necelou třetinu.",
+      "then": "5,1 mil. ks (1981)",
+      "now": "1,36 mil. ks (2023)"
+    },
+    {
+      "title": "Skotu ubyla víc než polovina",
+      "body": "Vrchol stavů skotu přišel v roce 1982, kdy v českých zemích bylo přes 3,5 milionu kusů. Po transformaci zemědělství stavy prudce klesly a dnes se drží kolem 1,4 milionu.",
+      "then": "3,56 mil. ks (1982)",
+      "now": "~1,44 mil. ks (2024)"
+    },
+    {
+      "title": "Orné půdy pomalu ubývá",
+      "body": "Od roku 1990 zmizelo v Česku bezmála 300 tisíc hektarů orné půdy – ustoupila zástavbě, skladům i zatravnění. Přesto pořád tvoří jádro naší krajiny.",
+      "then": "3 219 tis. ha (1990)",
+      "now": "2 916 tis. ha (2024)"
+    },
+    {
+      "title": "První Zetor slavil raketový úspěch",
+      "body": "Model Zetor 25 z roku 1946 se prodával tak dobře, že už v únoru 1949 sjel z linky desetitisící kus. Dvouválcový motor o výkonu 25 koní dal traktoru i jeho jméno."
+    },
+    {
+      "title": "Kolektivizace zabrala skoro celou vesnici",
+      "body": "Od zákona o JZD z roku 1949 trvalo něco přes deset let, než se do družstev a státních statků dostala drtivá většina zemědělské půdy a soukromé hospodaření prakticky zaniklo.",
+      "then": "soukromé hospodaření (1949)",
+      "now": "přes 90 % půdy v JZD (kolem 1960)"
+    },
+    {
+      "title": "SK-4 vystřídal E-512",
+      "body": "V 60. letech kraloval žním sovětský kombajn SK-4, v 70. letech ho nahradily výkonnější východoněmecké stroje řady E-512. Jedna generace techniky tak vydržela zhruba deset let."
+    },
+    {
+      "title": "Nejsilnější traktor vážil jako náklaďák",
+      "body": "Škoda ŠT-180 s šestiválcem LIAZ o výkonu 180 koní byl nejsilnějším československým traktorem. Díky vysoké hmotnosti se dodnes cení při dusání siláže."
+    }
   ]
 }

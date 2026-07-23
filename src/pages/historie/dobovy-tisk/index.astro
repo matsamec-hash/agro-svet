@@ -6,36 +6,204 @@ import { press } from '../../../lib/historie';
 const locale = Astro.locals.locale ?? 'cs';
 const csOnly = locale !== 'cs';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+// Dobové ilustrace (rytina / novinový polotón) — kreslené SVG, nikoli archivní
+// skeny. Klíčem je `topic` z dat. Vykresleno inkoustově na "newsprint" pozadí
+// s polotónovým rastrem, aby to působilo jako dobový novinový štoček.
+const ink = '#241d10';
+const svg: Record<string, string> = {
+  traktor: `<g fill="none" stroke="${ink}" stroke-width="3" stroke-linejoin="round"><circle cx="60" cy="92" r="24" fill="#efe7d2"/><circle cx="60" cy="92" r="9" fill="${ink}"/><circle cx="150" cy="98" r="15" fill="#efe7d2"/><circle cx="150" cy="98" r="5" fill="${ink}"/><path d="M40 78 L40 58 L96 58 L110 44 L138 44 L138 84" fill="#efe7d2"/><path d="M100 58 L128 58 L128 46 L108 46 Z" fill="${ink}" stroke="none"/><path d="M40 84 L138 90" /><path d="M36 40 L36 58 M30 40 L42 40" stroke-linecap="round"/></g>`,
+  zne: `<g fill="none" stroke="${ink}" stroke-width="3" stroke-linejoin="round"><rect x="34" y="52" width="86" height="40" rx="4" fill="#efe7d2"/><rect x="120" y="60" width="34" height="20" fill="#efe7d2"/><circle cx="66" cy="98" r="16" fill="#efe7d2"/><circle cx="112" cy="98" r="10" fill="#efe7d2"/><path d="M154 66 L182 60 M154 74 L182 78" stroke-linecap="round"/><path d="M154 58 v24" /><g stroke-width="2"><path d="M44 96 v14 M52 96 v18 M60 112 v10 M154 96 v16 M164 96 v14"/></g></g>`,
+  druzstvo: `<g fill="none" stroke="${ink}" stroke-width="3" stroke-linejoin="round"><path d="M40 96 L40 60 L74 40 L108 60 L108 96 Z" fill="#efe7d2"/><path d="M74 40 L74 24 L120 24 M120 24 L156 44 L156 96 L108 96" fill="#efe7d2"/><rect x="58" y="70" width="20" height="26" fill="${ink}" stroke="none"/><g stroke-width="2"><path d="M128 62 v22 M138 60 v24 M148 62 v22"/></g><path d="M30 96 L170 96" stroke-width="3"/></g>`,
+  skot: `<g fill="none" stroke="${ink}" stroke-width="3" stroke-linejoin="round"><path d="M54 60 C54 46 78 46 82 58 L120 58 C126 46 150 48 150 62 L150 92 L134 92 L134 74 L70 74 L70 92 L54 92 Z" fill="#efe7d2"/><path d="M54 60 C42 54 40 66 50 68 M150 62 C162 56 166 70 154 72" /><circle cx="60" cy="66" r="2.5" fill="${ink}"/><path d="M70 92 v14 M84 74 v10 M120 74 v10 M134 92 v14" stroke-width="2"/></g>`,
+  prase: `<g fill="none" stroke="${ink}" stroke-width="3" stroke-linejoin="round"><path d="M58 66 C50 56 70 50 78 58 C96 48 132 48 146 64 C160 62 160 78 150 80 L150 94 L138 94 L138 82 L78 82 L78 94 L66 94 L66 78 C56 78 50 70 58 66 Z" fill="#efe7d2"/><ellipse cx="150" cy="70" rx="7" ry="9" fill="#efe7d2"/><circle cx="150" cy="68" r="2" fill="${ink}"/><circle cx="150" cy="73" r="2" fill="${ink}"/><path d="M62 62 L58 52 L70 56 M84 56 L82 46 L94 52" /><path d="M60 94 C56 100 64 100 62 94" stroke-width="2"/></g>`,
+  puda: `<g fill="none" stroke="${ink}" stroke-width="3" stroke-linejoin="round"><rect x="52" y="34" width="96" height="70" rx="3" fill="#efe7d2"/><path d="M64 50 L120 50 M64 62 L128 62 M64 74 L112 74" stroke-width="2"/><circle cx="126" cy="90" r="14" fill="#efe7d2"/><path d="M126 84 v12 M120 90 h12" stroke-width="2"/><path d="M126 104 L126 118 L120 112 M126 118 L132 112" /></g>`,
+  eu: `<g fill="none" stroke="${ink}" stroke-width="3"><circle cx="100" cy="66" r="40" fill="#efe7d2"/><g fill="${ink}" stroke="none">${Array.from({length:12},(_,i)=>{const a=(i/12)*Math.PI*2-Math.PI/2;const x=100+28*Math.cos(a);const y=66+28*Math.sin(a);return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4"/>`;}).join('')}</g></g>`,
+  krize: `<g fill="none" stroke="${ink}" stroke-width="3" stroke-linejoin="round"><path d="M40 100 L40 40 M40 100 L160 100" /><path d="M48 58 L78 72 L108 50 L138 84" /><path d="M138 84 L138 68 M138 84 L122 84" stroke-linecap="round"/><g stroke-width="2"><path d="M52 92 v6 M72 90 v8 M92 90 v8 M112 90 v8 M132 90 v8"/></g></g>`,
+};
+const topicLabel: Record<string, string> = {
+  traktor: 'Technika', zne: 'Žně', druzstvo: 'Družstva', skot: 'Chov skotu',
+  prase: 'Chov prasat', puda: 'Půda', eu: 'Evropská unie', krize: 'Trh a náklady',
+};
+
+const featured = press.find((c) => c.featured) ?? press[press.length - 1];
+const rest = press.filter((c) => c !== featured);
+const yearsFrom = press[0]?.year;
+const yearsTo = press[press.length - 1]?.year;
 ---
 <Layout
   title="Zemědělství v dobovém tisku — titulky z časů JZD"
-  description="Přepsané titulky a reportáže o zemědělství z dobových novin — jak o poli, žních a technice psal tehdejší tisk."
+  description="Dobové zemědělské zpravodajství 1927–2022: družstva, technika, žně i restituce. Redakčně zpracované reportáže s dobovými ilustracemi a kontextem."
   canonical="/historie/dobovy-tisk/"
   noindex={csOnly}
   noHreflang={true}
 >
-  <main class="hp">
-    <h1>Dobový tisk</h1>
-    <p class="hp-lede">Jak o zemědělství psaly dobové noviny. Titulky přepsané, s kontextem.</p>
-    <section class="hp-grid">
-      {press.map((c) => (
-        <article class="hp-clip">
-          <div class="hp-src">{c.source} · {c.year}</div>
-          <h2 class="hp-head">{c.headline}</h2>
-          <p class="hp-ctx">{c.context}</p>
+  <main class="dt">
+    <header class="dt-masthead">
+      <div class="dt-rule"></div>
+      <p class="dt-kicker">Historie českého zemědělství · přehled dobového tisku</p>
+      <h1>Zemědělské rozhledy</h1>
+      <p class="dt-meta">Družstva · technika · žně · restituce — jak o poli, stroji a stádu psal tisk v letech {yearsFrom}–{yearsTo}</p>
+      <div class="dt-rule dt-rule--thin"></div>
+    </header>
+
+    <p class="dt-note">Reportáže jsou redakčně zpracované rekonstrukce dobového zpravodajství — shrnují, o čem a jak psal tehdejší zemědělský tisk. Nejde o doslovné přetisky; ilustrace jsou kreslené, nikoli archivní skeny.</p>
+
+    <article class="dt-clip dt-lead">
+      <div class="dt-clip-head">
+        <span class="dt-rubrika">{topicLabel[featured.topic] ?? featured.rubrika}</span>
+        <span class="dt-dateline">{featured.source} · {featured.date}{featured.edition ? ` · ${featured.edition}` : ''}</span>
+      </div>
+      <h2 class="dt-head">{featured.headline}</h2>
+      {featured.subhead && <p class="dt-subhead">{featured.subhead}</p>}
+      <figure class="dt-fig">
+        <div class="dt-cut"><svg viewBox="0 0 200 130" role="img" aria-label={featured.figureCaption} set:html={svg[featured.topic] ?? svg.traktor}></svg></div>
+        <figcaption>{featured.figureCaption}</figcaption>
+      </figure>
+      <div class="dt-body dt-body--cols">
+        {featured.body.map((p, i) => (
+          <p class={i === 0 ? 'dt-drop' : ''}>{p}</p>
+        ))}
+      </div>
+      {featured.pullQuote && <blockquote class="dt-pull">„{featured.pullQuote}"</blockquote>}
+    </article>
+
+    <div class="dt-grid">
+      {rest.map((c) => (
+        <article class="dt-clip">
+          <div class="dt-clip-head">
+            <span class="dt-rubrika">{topicLabel[c.topic] ?? c.rubrika}</span>
+            <span class="dt-dateline">{c.source} · {c.date}</span>
+          </div>
+          <figure class="dt-fig dt-fig--sm">
+            <div class="dt-cut"><svg viewBox="0 0 200 130" role="img" aria-label={c.figureCaption} set:html={svg[c.topic] ?? svg.traktor}></svg></div>
+            <figcaption>{c.figureCaption}</figcaption>
+          </figure>
+          <h3 class="dt-head">{c.headline}</h3>
+          {c.subhead && <p class="dt-subhead">{c.subhead}</p>}
+          <div class="dt-body">
+            {c.body.map((p, i) => (
+              <p class={i === 0 ? 'dt-drop' : ''}>{p}</p>
+            ))}
+          </div>
+          {c.pullQuote && <blockquote class="dt-pull">„{c.pullQuote}"</blockquote>}
         </article>
       ))}
-    </section>
+    </div>
+
+    <nav class="dt-more">
+      <a href="/historie/">← Historie českého zemědělství</a>
+      <a href="/historie/technika/">Historická technika →</a>
+    </nav>
   </main>
 </Layout>
 
 <style>
-  .hp { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
-  .hp h1 { font-size: 28px; margin: 0 0 6px; }
-  .hp-lede { color: #567; margin: 0 0 24px; }
-  .hp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-  .hp-clip { background: #efe9d8; border-radius: 8px; padding: 18px; font-family: Georgia, 'Times New Roman', serif; color: #1a150c; }
-  .hp-src { font-size: 11px; letter-spacing: .5px; border-bottom: 1px solid #c9bfa0; padding-bottom: 6px; margin-bottom: 8px; color: #5a5038; }
-  .hp-head { font-size: 20px; line-height: 1.25; margin: 0 0 8px; }
-  .hp-ctx { font-size: 14px; line-height: 1.5; color: #3a3222; margin: 0; }
+  .dt {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 24px 16px 72px;
+    color: #241d10;
+  }
+  /* Masthead */
+  .dt-masthead { text-align: center; margin-bottom: 8px; }
+  .dt-rule { height: 4px; background: #241d10; }
+  .dt-rule--thin { height: 2px; margin-top: 10px; }
+  .dt-kicker {
+    font: 11px/1.4 Georgia, 'Times New Roman', serif;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #6b5f42; margin: 10px 0 4px;
+  }
+  .dt-masthead h1 {
+    font: 700 clamp(30px, 7vw, 54px)/1 Georgia, 'Times New Roman', serif;
+    letter-spacing: -1px; margin: 0 0 6px;
+  }
+  .dt-meta {
+    font: italic 14px/1.4 Georgia, serif;
+    color: #5a5038; margin: 0 auto; max-width: 640px;
+  }
+  .dt-note {
+    font: 12px/1.5 Georgia, serif; color: #6b5f42;
+    background: #f3eeddaa; border-left: 3px solid #c9bfa0;
+    padding: 8px 12px; margin: 18px 0 26px; border-radius: 0 4px 4px 0;
+  }
+  /* Clipping cards — newsprint */
+  .dt-clip {
+    background:
+      repeating-linear-gradient(180deg, transparent 0 3px, #00000005 3px 4px),
+      #efe9d8;
+    border: 1px solid #cdc3a4;
+    border-radius: 4px;
+    padding: 20px 22px 22px;
+    font-family: Georgia, 'Times New Roman', serif;
+    box-shadow: 0 1px 0 #fff inset, 0 2px 10px #241d1012;
+  }
+  .dt-lead { margin-bottom: 26px; padding: 26px 26px 28px; }
+  .dt-clip-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 10px; flex-wrap: wrap;
+    border-bottom: 2px solid #241d10; padding-bottom: 6px; margin-bottom: 12px;
+  }
+  .dt-rubrika {
+    font: 700 11px/1 Georgia, serif; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .dt-dateline { font: italic 12px/1 Georgia, serif; color: #5a5038; }
+  .dt-head { line-height: 1.15; margin: 0 0 8px; letter-spacing: -.3px; }
+  .dt-lead .dt-head { font-size: clamp(24px, 4.5vw, 36px); }
+  .dt-grid .dt-head { font-size: 21px; }
+  .dt-subhead {
+    font: italic 15px/1.4 Georgia, serif; color: #453c26;
+    margin: 0 0 14px; padding-bottom: 12px; border-bottom: 1px solid #d4caac;
+  }
+  /* Ilustrace — dobový štoček s polotónem */
+  .dt-fig { margin: 0 0 14px; }
+  .dt-cut {
+    position: relative;
+    background:
+      radial-gradient(#00000018 1px, transparent 1.4px) 0 0 / 6px 6px,
+      #e4dcc2;
+    border: 1px solid #241d10;
+    aspect-ratio: 200 / 130;
+    display: grid; place-items: center;
+    overflow: hidden;
+  }
+  .dt-cut :global(svg) { width: 78%; height: 78%; display: block; }
+  .dt-fig figcaption {
+    font: italic 12px/1.4 Georgia, serif; color: #5a5038;
+    padding: 6px 2px 0; border-bottom: 1px solid #d4caac;
+  }
+  .dt-lead .dt-fig { float: right; width: 300px; max-width: 42%; margin: 0 0 12px 22px; }
+  .dt-fig--sm .dt-cut { aspect-ratio: 200 / 118; }
+  /* Tělo článku */
+  .dt-body p { font-size: 15px; line-height: 1.6; margin: 0 0 12px; color: #2c2415; }
+  .dt-body p:last-child { margin-bottom: 0; }
+  .dt-body--cols { columns: 2; column-gap: 28px; }
+  .dt-body--cols p { break-inside: avoid; }
+  .dt-drop::first-letter {
+    float: left; font-size: 52px; line-height: .78; font-weight: 700;
+    padding: 4px 8px 0 0; color: #241d10;
+  }
+  .dt-pull {
+    margin: 16px 0 0; padding: 10px 0 4px;
+    border-top: 2px solid #241d10;
+    font: italic 700 17px/1.4 Georgia, serif; color: #241d10;
+  }
+  /* Grid výstřižků */
+  .dt-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+  }
+  /* Navigace */
+  .dt-more {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    margin-top: 34px; padding-top: 18px; border-top: 2px solid #241d10;
+  }
+  .dt-more a {
+    font: 700 14px/1 Georgia, serif; color: #241d10; text-decoration: none;
+  }
+  .dt-more a:hover { text-decoration: underline; }
+  @media (max-width: 640px) {
+    .dt-lead .dt-fig { float: none; width: auto; max-width: none; margin: 0 0 14px; }
+    .dt-body--cols { columns: 1; }
+  }
 </style>
