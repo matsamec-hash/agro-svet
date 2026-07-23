@@ -141,7 +141,7 @@ export type EnsureUser = (args: { email: string; name: string; phone: string }) 
 /** Potvrdí prospekta: ověří token, zajistí usera, zveřejní inzeráty, zapíše audit. */
 export async function confirmProspect(
   supabase: SupabaseClient,
-  args: { token: string; ip: string; termsVersion: string; ensureUser: EnsureUser; now?: Date },
+  args: { token: string; ip: string; termsVersion: string; ensureUser: EnsureUser; listingIds?: string[]; now?: Date },
 ): Promise<{ userId: string; prospectId: string }> {
   const now = args.now ?? new Date();
   const prospect = await getProspectByToken(supabase, args.token);
@@ -151,10 +151,19 @@ export async function confirmProspect(
 
   const userId = await args.ensureUser({ email: prospect.email, name: prospect.name, phone: prospect.phone });
 
-  const { error: lErr } = await supabase
+  // Vlastníka nastavíme VŠEM inzerátům prospekta (i těm, co teď prodejce nevybral —
+  // zůstanou jako jeho neveřejný draft v /bazar/moje/, nezmizí).
+  const { error: ownErr } = await supabase
     .from('bazar_listings')
-    .update({ status: 'active', user_id: userId })
+    .update({ user_id: userId })
     .eq('seed_prospect_id', prospect.id);
+  if (ownErr) throw new Error(`assign owner: ${ownErr.message}`);
+
+  // Zveřejníme jen vybrané. Když listingIds nezadané → zveřejni všechny (zpětná kompatibilita).
+  const publish = supabase.from('bazar_listings').update({ status: 'active' }).eq('seed_prospect_id', prospect.id);
+  const { error: lErr } = await (args.listingIds && args.listingIds.length
+    ? publish.in('id', args.listingIds)
+    : publish);
   if (lErr) throw new Error(`publish listings: ${lErr.message}`);
 
   const { error: pErr } = await supabase
