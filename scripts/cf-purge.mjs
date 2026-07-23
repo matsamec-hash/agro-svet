@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Cloudflare cache purge — runs after `wrangler deploy` to clear edge HTML cache
-// (Workers Build keeps cf-cache-status: HIT for ~70 min otherwise.)
+// Cloudflare cache purge — spusť po Coolify deployi (VPS) k pročištění edge HTML
+// cache (CF je pořád před VPS, jinak drží cf-cache-status: HIT ~70 min).
 //
 // Required env (load via `node --env-file=.env scripts/cf-purge.mjs`):
 //   CF_PURGE_TOKEN  — API token with permission: Zone → Cache Purge → Purge
