@@ -96,43 +96,50 @@ if (state === 'ok' && prospect) {
           Připravili jsme vám tento inzerát podle vaší nabídky na Bazoši. Zkontrolujte jej a jedním
           kliknutím zdarma zveřejněte na Agro-svět bazaru.
         </p>
-        {listings.map((l) => (
-          <article class="mb-4 rounded border p-4">
-            <h2 class="font-semibold">{l.title}</h2>
-            {l.price && <p class="text-green-700 font-bold">{l.price.toLocaleString('cs-CZ')} Kč</p>}
-            {l.specs.length > 0 && (
-              <dl class="my-3 flex flex-wrap gap-2">
-                {l.specs.map((s) => (
-                  <div class="rounded bg-gray-100 px-2 py-1 text-xs">
-                    <dt class="inline text-gray-500">{s.label}:</dt>{' '}
-                    <dd class="inline font-medium">{s.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-            <p class="text-sm text-gray-700 whitespace-pre-line">{l.description}</p>
-            <div class="mt-2 flex gap-2 flex-wrap">
-              {l.images.map((url) => (
-                <img src={url} alt="" class="h-24 w-24 object-cover rounded" />
-              ))}
-            </div>
-            <a href={`/bazar/${l.id}/?preview=${token}`} target="_blank" rel="noopener"
-              class="mt-3 inline-block text-sm text-green-700 underline">
-              👁️ Náhled inzerátu
-            </a>
-          </article>
-        ))}
-
         <form method="POST" action="/bazar/prevzit/api/confirm/" class="mt-6 rounded border p-4">
           <input type="hidden" name="token" value={token} />
           <input type="hidden" name="terms_version" value={TERMS_VERSION} />
+
+          <label class="text-sm block mb-3"><input type="checkbox" id="selectAllListings" checked /> Vybrat vše</label>
+
+          {listings.map((l) => (
+            <article class="mb-4 rounded border p-4">
+              <label class="flex items-center gap-2 mb-2 text-sm font-medium">
+                <input type="checkbox" name="listing_ids" value={l.id} checked class="listingChk" />
+                Zveřejnit tento inzerát
+              </label>
+              <h2 class="font-semibold">{l.title}</h2>
+              {l.price && <p class="text-green-700 font-bold">{l.price.toLocaleString('cs-CZ')} Kč</p>}
+              {l.specs.length > 0 && (
+                <dl class="my-3 flex flex-wrap gap-2">
+                  {l.specs.map((s) => (
+                    <div class="rounded bg-gray-100 px-2 py-1 text-xs">
+                      <dt class="inline text-gray-500">{s.label}:</dt>{' '}
+                      <dd class="inline font-medium">{s.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+              <p class="text-sm text-gray-700 whitespace-pre-line">{l.description}</p>
+              <div class="mt-2 flex gap-2 flex-wrap">
+                {l.images.map((url) => (
+                  <img src={url} alt="" class="h-24 w-24 object-cover rounded" />
+                ))}
+              </div>
+              <a href={`/bazar/${l.id}/?preview=${token}`} target="_blank" rel="noopener"
+                class="mt-3 inline-block text-sm text-green-700 underline">
+                👁️ Náhled inzerátu
+              </a>
+            </article>
+          ))}
+
           <label class="flex items-start gap-2 text-sm">
             <input type="checkbox" name="agree" required class="mt-1" />
             <span>Potvrzuji, že jsem vlastníkem inzerátu a fotek a mám právo je zveřejnit, a souhlasím
             s <a href="/bazar/pravidla/" class="underline" target="_blank">podmínkami bazaru</a>.</span>
           </label>
           <button class="mt-4 w-full rounded bg-green-700 p-3 text-white font-semibold">
-            Zveřejnit můj inzerát
+            Zveřejnit vybrané
           </button>
         </form>
 
@@ -147,3 +154,11 @@ if (state === 'ok' && prospect) {
     )}
   </main>
 </Layout>
+
+<script>
+  const all = document.getElementById('selectAllListings');
+  all?.addEventListener('change', () => {
+    const checked = (all as HTMLInputElement).checked;
+    document.querySelectorAll('.listingChk').forEach((c) => { (c as HTMLInputElement).checked = checked; });
+  });
+</script>
