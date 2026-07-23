@@ -84,12 +84,12 @@ function fallbackUrl(a: (typeof pending)[number]): string | null {
         });
 
       const fotoInput = card.querySelector<HTMLInputElement>('[data-foto]');
-      const fotoLabel = card.querySelector<HTMLElement>('.foto-up');
+      const fotoText = card.querySelector<HTMLElement>('[data-upload-text]');
       fotoInput?.addEventListener('change', async () => {
         const files = fotoInput.files;
         if (!files || !files.length) return;
-        const orig = fotoLabel?.textContent ?? '';
-        if (fotoLabel) fotoLabel.textContent = '⏳ Nahrávám…';
+        const orig = fotoText?.textContent ?? 'Přidat fotky';
+        if (fotoText) fotoText.textContent = 'Nahrávám…';
         const fd = new FormData();
         fd.set('akce_id', id); fd.set('action', 'upload');
         for (const f of Array.from(files)) fd.append('foto', f);
@@ -98,7 +98,7 @@ function fallbackUrl(a: (typeof pending)[number]): string | null {
           location.reload();
         } catch (e) {
           reportErr('Chyba nahrání fotky: ', e);
-          if (fotoLabel) fotoLabel.textContent = orig;
+          if (fotoText) fotoText.textContent = orig;
         }
       });
 
@@ -143,16 +143,23 @@ function fallbackUrl(a: (typeof pending)[number]): string | null {
     .actions { display: flex; gap: 10px; margin-top: 12px; }
     .actions button { padding: 8px 18px; cursor: pointer; }
 
-    .media-row { margin-top: 12px; }
+    .media-row { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+    .media-label { display: block; font-size: .68rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: #8a9070; margin-bottom: 8px; }
+    .media-label b { color: #3a7d34; }
     .gallery { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .g-thumb { position: relative; width: 92px; height: 70px; }
+    .g-thumb { position: relative; width: 100px; height: 75px; }
     .g-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #e0e0e0; }
-    .g-del { position: absolute; top: -7px; right: -7px; width: 22px; height: 22px; border-radius: 50%; border: 0; background: #b02020; color: #fff; cursor: pointer; font-size: .8rem; line-height: 1; }
-    .foto-none { color: #999; font-size: .85rem; }
-    .foto-up { display: inline-block; padding: 6px 14px; border: 1px solid #c4c4c4; border-radius: 8px; cursor: pointer; font-size: .9rem; background: #fafafa; }
-    .cena-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-    .cena-input { flex: 1; min-width: 200px; padding: 7px 10px; border: 1px solid #c4c4c4; border-radius: 8px; font: inherit; }
-    .cena-save { padding: 7px 14px; border: 1px solid #c4c4c4; border-radius: 8px; background: #fafafa; cursor: pointer; white-space: nowrap; }
+    .g-del { position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #fff; background: #b02020; color: #fff; cursor: pointer; font-size: .72rem; line-height: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+    .g-del:hover { background: #8a1818; }
+    .media-empty { color: #b0b0b0; font-size: .85rem; align-self: center; }
+    .btn-upload { display: inline-flex; align-items: center; gap: 5px; padding: 9px 16px; border: 1.5px dashed #3a7d34; border-radius: 8px; cursor: pointer; font-size: .88rem; font-weight: 600; background: #eef4ea; color: #2f6a2a; transition: background .15s, color .15s, border-style .15s; }
+    .btn-upload:hover { background: #3a7d34; color: #fff; border-style: solid; }
+    .cena-row { display: flex; gap: 8px; align-items: center; }
+    .cena-input { flex: 1; min-width: 0; padding: 9px 12px; border: 1px solid #cfd4c2; border-radius: 8px; font: inherit; background: #fff; }
+    .cena-input:focus { outline: none; border-color: #3a7d34; box-shadow: 0 0 0 3px rgba(58,125,52,.12); }
+    .btn-save { padding: 9px 16px; border: 1.5px solid #3a7d34; border-radius: 8px; background: #fff; color: #2f6a2a; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
+    .btn-save:hover { background: #3a7d34; color: #fff; }
+    @media (max-width: 560px) { .media-row { grid-template-columns: 1fr; } }
 
     .published { margin-top: 48px; border-top: 2px solid #eee; padding-top: 8px; }
     .pub-head { font-size: 1.15rem; }

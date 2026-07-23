@@ -9,28 +9,37 @@ interface Props {
   fotoFallbackUrl: string | null;
 }
 const { id, cena, images, fotoFallbackUrl } = Astro.props;
+const hasPhoto = images.length > 0 || !!fotoFallbackUrl;
 ---
 <div class="media-row" data-id={id}>
-  <div class="gallery">
-    {images.map((img) => (
-      <span class="g-thumb">
-        <img src={img.url} alt="" />
-        <button type="button" class="g-del" data-image-id={img.id} title="Smazat fotku">✕</button>
-      </span>
-    ))}
-    {images.length === 0 && fotoFallbackUrl && (
-      <span class="g-thumb">
-        <img src={fotoFallbackUrl} alt="" />
-        <button type="button" class="g-del" data-legacy title="Smazat fotku">✕</button>
-      </span>
-    )}
-    {images.length === 0 && !fotoFallbackUrl && <span class="foto-none">Bez fotky</span>}
-    <label class="foto-up">📷 Přidat fotky
-      <input type="file" data-foto accept="image/jpeg,image/png,image/webp" multiple hidden />
-    </label>
+  <div class="media-block">
+    <span class="media-label">Fotky {hasPhoto && <b>({images.length || 1})</b>}</span>
+    <div class="gallery">
+      {images.map((img) => (
+        <span class="g-thumb">
+          <img src={img.url} alt="" />
+          <button type="button" class="g-del" data-image-id={img.id} title="Smazat fotku">✕</button>
+        </span>
+      ))}
+      {images.length === 0 && fotoFallbackUrl && (
+        <span class="g-thumb">
+          <img src={fotoFallbackUrl} alt="" />
+          <button type="button" class="g-del" data-legacy title="Smazat fotku">✕</button>
+        </span>
+      )}
+      {!hasPhoto && <span class="media-empty">Zatím žádná fotka</span>}
+      <label class="btn-upload">
+        📷 <span data-upload-text>Přidat fotky</span>
+        <input type="file" data-foto accept="image/jpeg,image/png,image/webp" multiple hidden />
+      </label>
+    </div>
   </div>
-  <div class="cena-row">
-    <input type="text" class="cena-input" data-cena value={cena ?? ''} placeholder="Vstupné / cena (např. zdarma, 100 Kč)" maxlength="120" />
-    <button type="button" class="cena-save" data-cena-save>Uložit cenu</button>
+
+  <div class="media-block">
+    <span class="media-label">Vstupné / cena</span>
+    <div class="cena-row">
+      <input type="text" class="cena-input" data-cena value={cena ?? ''} placeholder="např. zdarma, 100 Kč, děti 50 Kč" maxlength="120" />
+      <button type="button" class="btn-save" data-cena-save>Uložit</button>
+    </div>
   </div>
 </div>
