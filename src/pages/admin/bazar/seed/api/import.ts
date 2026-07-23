@@ -4,7 +4,7 @@ import { getEnvVar } from '../../../../../lib/env';
 import { parseBazosListing } from '../../../../../lib/bazar-import-parse';
 import { suggestCategory, matchBrand } from '../../../../../lib/bazar-import-category';
 import { structureListing } from '../../../../../lib/bazar-import-structure';
-import { createProspectWithDraft } from '../../../../../lib/bazar-seed';
+import { createProspectWithDraft, addDraftListing } from '../../../../../lib/bazar-seed';
 import { parseBatchUrls } from '../../../../../lib/bazar-batch-urls';
 
 export const prerender = false;
@@ -87,6 +87,7 @@ async function importOne(
   url: string,
   contact: { name?: string; phone?: string; email?: string },
   adminId: string,
+  targetProspectId?: string,
 ): Promise<ImportOk | ImportErr> {
   // Stažení stránky Bazoše — fetch může na produkčním Node serveru selhat
   // (egress / blokace datacentra), proto ho obalujeme a vracíme čitelný důvod.
@@ -145,6 +146,25 @@ async function importOne(
       }
     }
 
+    if (targetProspectId) {
+      const listingId = await addDraftListing(supabase, targetProspectId, {
+        title: structured.title,
+        description,
+        price: parsed.price,
+        category: structured.category,
+        brand: structured.brand,
+        location: parsed.location ?? '',
+        phone: contact.phone ?? parsed.phone ?? '',
+        email: contact.email ?? '',
+        yearOfManufacture: structured.year,
+        powerHp: structured.powerHp,
+        hoursOperated: structured.hours,
+        latitude,
+        longitude,
+      }, imagePaths);
+      return { ok: true, title: structured.title, imageCount: imagePaths.length, imageUrlsFound: parsed.imageUrls.length, imageDebug, prospectId: targetProspectId, listingId };
+    }
+
     const result = await createProspectWithDraft(supabase, {
       adminId,
       prospect: {
@@ -194,6 +214,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   const body = await request.json().catch(() => null);
   const contact = body?.contact ?? {};
+  const targetProspectId = typeof body?.prospectId === 'string' && body.prospectId ? body.prospectId : undefined;
 
   // Batch režim: `urls` = blob vložených odkazů (víc na řádcích / oddělené čárkami).
   // Projede se STEJNÝM ověřeným flow jako single, sekvenčně (šetrně k Bazoši),
@@ -206,7 +227,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   if (batchUrls.length > 0) {
     const results: Array<{ url: string } & (ImportOk | ImportErr)> = [];
     for (const u of batchUrls) {
-      results.push({ url: u, ...(await importOne(supabase, u, contact, user.id)) });
+      results.push({ url: u, ...(await importOne(supabase, u, contact, user.id, targetProspectId)) });
     }
     const succeeded = results.filter((r) => r.ok).length;
     return json({ batch: true, total: results.length, succeeded, failed: results.length - succeeded, results });
@@ -215,6 +236,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
   // Single režim (zpětně kompatibilní — identická odpověď jako dřív).
   const url = typeof body?.url === 'string' ? body.url.trim() : '';
   if (!/^https?:\/\/.*bazos\.cz/i.test(url)) return json({ error: 'Zadejte platný odkaz na bazos.cz' }, 400);
-  const r = await importOne(supabase, url, contact, user.id);
+  const r = await importOne(supabase, url, contact, user.id, targetProspectId);
   return r.ok ? json(r) : json({ error: r.error }, r.status);
 };
