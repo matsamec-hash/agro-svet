@@ -41,7 +41,7 @@ export type PressClip = {
   figureCaption: string;
   pullQuote?: string;
 };
-export type Trivia = { title: string; body: string; then?: string; now?: string };
+export type Trivia = { title: string; body: string; then?: string; now?: string; era?: string };
 export type Milestone = { year: number; title: string; note: string };
 
 const data = raw as {

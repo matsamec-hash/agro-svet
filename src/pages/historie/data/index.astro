@@ -7,20 +7,65 @@ import { longRange } from '../../../lib/historie';
 const locale = Astro.locals.locale ?? 'cs';
 const csOnly = locale !== 'cs';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+// CZ formát celého čísla (mezery po tisících).
+const fmt = (n: number) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const shortLabel: Record<string, string> = {
+  dojivost: 'Dojivost krav',
+  skot: 'Stavy skotu',
+  prasata: 'Stavy prasat',
+  'osevni-plocha': 'Orná půda',
+  pracovnici: 'Lidé v zemědělství',
+};
+const kpis = longRange.map((s) => {
+  const from = s.points[0];
+  const to = s.points[s.points.length - 1];
+  const ratio = from.value ? to.value / from.value : 1;
+  const grew = to.value >= from.value;
+  const change = grew
+    ? '× ' + ratio.toFixed(1).replace('.', ',')
+    : '−' + Math.round((1 - ratio) * 100) + ' %';
+  return { key: s.key, short: shortLabel[s.key] ?? s.label, unit: s.unit, from, to, grew, change };
+});
 ---
 <Layout
   title="Vývoj českého zemědělství v datech — dojivost, stavy zvířat, plochy"
-  description="Dlouhodobé grafy: dojivost krav, stavy skotu a prasat, osevní plochy a počty lidí v zemědělství od 60. let po dnešek."
+  description="Dlouhodobé grafy podle ČSÚ: dojivost krav (od 1921), stavy skotu a prasat, orná půda a počty pracovníků v zemědělství od první republiky po dnešek."
   canonical="/historie/data/"
   noindex={csOnly}
   noHreflang={true}
 >
   <main class="hda">
-    <h1>Zemědělství v datech</h1>
-    <p class="hda-lede">Jak se měnily klíčové ukazatele českého zemědělství. Ceny komodit sleduj v sekci <a href="/statistiky/">Trhy a komodity</a>.</p>
+    <header class="hda-hero">
+      <p class="hda-eyebrow">HISTORIE ČESKÉHO ZEMĚDĚLSTVÍ</p>
+      <h1>Zemědělství v datech</h1>
+      <p class="hda-lede">Jak se měnily klíčové ukazatele českého zemědělství od první republiky po dnešek. Všechna data pocházejí z Českého statistického úřadu.</p>
+    </header>
+
+    <section class="hda-kpis" aria-label="Klíčové ukazatele">
+      {kpis.map((k) => (
+        <div class="kpi">
+          <span class="kpi-label">{k.short}</span>
+          <span class="kpi-nums">{fmt(k.from.value)} <span class="kpi-arw">→</span> {fmt(k.to.value)}</span>
+          <span class="kpi-unit">{k.unit}</span>
+          <span class="kpi-foot">
+            <span class={`kpi-change ${k.grew ? 'up' : 'down'}`}>{k.change}</span>
+            <span class="kpi-years">{k.from.year}–{k.to.year}</span>
+          </span>
+        </div>
+      ))}
+    </section>
+
+    <p class="hda-note">Ceny komodit (obilí, mléko, maso) sleduj v samostatné sekci <a href="/statistiky/">Trhy a komodity</a>. Historické stroje najdeš v sekci <a href="/historie/technika/">Historická technika</a>.</p>
+
     {longRange.map((s, i) => (
       <HistorieLineChart id={`hlc-${i}`} label={s.label} unit={s.unit} source={s.source} points={s.points} />
     ))}
+
+    <nav class="hda-more">
+      <a href="/historie/zajimavosti/">Zajímavosti a rekordy →</a>
+      <a href="/historie/">← Historie českého zemědělství</a>
+    </nav>
   </main>
   <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <script is:inline>
@@ -47,8 +92,29 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400
 </Layout>
 
 <style>
-  .hda { max-width: 820px; margin: 0 auto; padding: 24px 16px 64px; }
-  .hda h1 { font-size: 28px; margin: 0 0 6px; }
-  .hda-lede { color: #567; margin: 0 0 28px; }
-  .hda-lede a { color: #1c7c48; }
+  .hda { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+
+  .hda-hero { background: radial-gradient(700px 300px at 12% 0%, #16321f, transparent 60%), #0f1c14; color: #e8f3ec; border-radius: 18px; padding: 40px 32px; margin-bottom: 24px; }
+  .hda-eyebrow { font-size: 12px; letter-spacing: 2px; color: #6fae86; margin: 0 0 10px; font-weight: 600; }
+  .hda-hero h1 { font-size: clamp(24px, 4vw, 32px); margin: 0 0 12px; line-height: 1.1; }
+  .hda-lede { color: #b9cdc0; max-width: 62ch; line-height: 1.6; margin: 0; }
+
+  .hda-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .kpi { display: flex; flex-direction: column; gap: 3px; padding: 15px 16px; border: 1px solid #e2e9e4; border-radius: 12px; background: #fff; }
+  .kpi-label { font-size: 12px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: #56655c; }
+  .kpi-nums { font-size: 18px; font-weight: 800; color: #0f1c14; letter-spacing: -.3px; margin-top: 2px; }
+  .kpi-arw { color: #9fb3a6; font-weight: 600; }
+  .kpi-unit { font-size: 12px; color: #789; }
+  .kpi-foot { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .kpi-change { font-size: 13px; font-weight: 800; padding: 2px 8px; border-radius: 999px; }
+  .kpi-change.up { color: #14663a; background: #e2f1e8; }
+  .kpi-change.down { color: #9a3b2f; background: #f6e4df; }
+  .kpi-years { font-size: 12px; color: #98a4ad; }
+
+  .hda-note { color: #56655c; font-size: 14px; line-height: 1.55; margin: 0 0 28px; }
+  .hda-note a { color: #1c7c48; font-weight: 600; }
+
+  .hda-more { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 14px; padding-top: 18px; border-top: 1px solid #e6ece8; }
+  .hda-more a { color: #1c7c48; font-weight: 700; text-decoration: none; font-size: 14px; }
+  .hda-more a:hover { text-decoration: underline; }
 </style>
