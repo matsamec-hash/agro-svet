@@ -88,6 +88,11 @@ const productJsonLd = machineProductSchema({
 
 const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
 
+const lastVerifiedFmt = item.data.lastVerified
+  ? new Intl.DateTimeFormat(bcp47, { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
+  : null;
+const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : null;
+
 // Editorial review (volitelné, frontmatter recenze). Vyplnit jen pokud redakce
 // model skutečně posoudila — nelegitimní hvězdičky by uškodily důvěryhodnosti.
 const reviewJsonLd = item.data.recenze
@@ -119,11 +124,6 @@ const videoJsonLd = item.data.youtubeId
       uploadDate: item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : undefined,
     })
   : null;
-
-const lastVerifiedFmt = item.data.lastVerified
-  ? new Intl.DateTimeFormat(bcp47, { day: 'numeric', month: 'long', year: 'numeric' }).format(item.data.lastVerified)
-  : null;
-const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOString().slice(0, 10) : null;
 
 // Article schema with explicit author + dateModified — E-E-A-T signal.
 // Lives alongside Vehicle/Product schema (entity-rich); Google handles multiple types.

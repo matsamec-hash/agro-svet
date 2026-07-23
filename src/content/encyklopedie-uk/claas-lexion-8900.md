@@ -1,5 +1,5 @@
 ---
-name: Claas Lexion 8900
+name: CLAAS Lexion 8900
 slug: claas-lexion-8900
 znacka: claas
 kategorie: kombajn
@@ -16,8 +16,8 @@ transmission: Гідростатична, макс. 30 км/год
 seriesName: Lexion 8000
 lastVerified: 2026-05-02
 sourceUrl: https://www.claas.com/cs-cz/produkty/sklizecmlaticky/lexion-8000-7000
-youtubeId: QrHPKtn2iLk
-youtubeTitle: CLAAS Lexion 8900 — огляд зернозбирального комбайна
+youtubeId: l1UVX6NEB3E
+youtubeTitle: "CLAAS Lexion 8900 — офіційний walkaround (серія Lexion 8000)"
 highlights:
 - Двигун Mercedes-Benz OM 473, 790 к.с.
 - Зерновий бункер 18 000 літрів
