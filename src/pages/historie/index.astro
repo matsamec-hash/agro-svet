@@ -41,13 +41,16 @@ const eraLabel: Record<string, string> = { 'prvni-rep': 'První republika', soci
 
     <section class="hh-tl" aria-label="Časová osa">
       <div class="hh-tl-track">
-        {milestones.map((m) => (
-          <div class={`hh-tl-item era-${era(m.year)}`}>
-            <span class="hh-tl-dot"></span>
-            <span class="hh-tl-year">{m.year}</span>
-            <span class="hh-tl-title">{m.title}</span>
-          </div>
-        ))}
+        {milestones.map((m) => {
+          const Tag = m.slug ? 'a' : 'div';
+          return (
+            <Tag class={`hh-tl-item era-${era(m.year)}`} href={m.slug ? `/historie/milnik/${m.slug}/` : undefined}>
+              <span class="hh-tl-dot"></span>
+              <span class="hh-tl-year">{m.year}</span>
+              <span class="hh-tl-title">{m.title}</span>
+            </Tag>
+          );
+        })}
       </div>
       <div class="hh-tl-legend">
         {Object.entries(eraLabel).map(([k, v]) => (
@@ -84,7 +87,10 @@ const eraLabel: Record<string, string> = { 'prvni-rep': 'První republika', soci
   /* Časová osa */
   .hh-tl { margin: 0 0 30px; }
   .hh-tl-track { display: flex; gap: 0; overflow-x: auto; padding: 6px 0 14px; border-bottom: 2px solid #e6ece8; scrollbar-width: thin; }
-  .hh-tl-item { flex: 0 0 auto; min-width: 130px; position: relative; padding: 0 18px 14px 0; }
+  .hh-tl-item { flex: 0 0 auto; min-width: 130px; position: relative; padding: 0 18px 14px 0; text-decoration: none; color: inherit; }
+  a.hh-tl-item { cursor: pointer; }
+  a.hh-tl-item:hover .hh-tl-year { text-decoration: underline; }
+  a.hh-tl-item:hover .hh-tl-title { color: #0f1c14; }
   .hh-tl-dot { position: absolute; left: 0; bottom: -8px; width: 12px; height: 12px; border-radius: 50%; background: #1c7c48; border: 2px solid #fff; box-shadow: 0 0 0 2px #1c7c4833; }
   .hh-tl-item.era-prvni-rep .hh-tl-dot { background: #b8860b; box-shadow: 0 0 0 2px #b8860b33; }
   .hh-tl-item.era-socialismus .hh-tl-dot { background: #b23b3b; box-shadow: 0 0 0 2px #b23b3b33; }

@@ -24,7 +24,12 @@ const combines = machines.filter((m) => m.category === 'kombajn');
     <h1>Historická technika</h1>
     <p class="ht-lede">Stroje, které vozily úrodu z polí JZD i státních statků — od poválečného Zetoru 25 po výkonné kombajny éry velkovýroby. {tractors.length} traktorů a {combines.length} kombajny s fotografiemi, technickými údaji a příběhem.</p>
 
-    <h2 class="ht-cat">Traktory</h2>
+    <nav class="ht-toc" aria-label="Obsah">
+      <a href="#traktory">Traktory <span>{tractors.length}</span></a>
+      <a href="#kombajny">Kombajny <span>{combines.length}</span></a>
+    </nav>
+
+    <h2 id="traktory" class="ht-cat">Traktory</h2>
     <section class="ht-grid">
       {tractors.map((m) => (
         <a class="ht-card" href={`/historie/technika/${m.slug}/`}>
@@ -43,7 +48,7 @@ const combines = machines.filter((m) => m.category === 'kombajn');
       ))}
     </section>
 
-    <h2 class="ht-cat">Kombajny</h2>
+    <h2 id="kombajny" class="ht-cat">Kombajny</h2>
     <section class="ht-grid">
       {combines.map((m) => (
         <a class="ht-card" href={`/historie/technika/${m.slug}/`}>
@@ -71,7 +76,11 @@ const combines = machines.filter((m) => m.category === 'kombajn');
   .ht { max-width: 1040px; margin: 0 auto; padding: 24px 16px 64px; }
   .ht h1 { font-size: 28px; margin: 0 0 6px; }
   .ht-lede { color: #567; margin: 0 0 24px; max-width: 720px; line-height: 1.55; }
-  .ht-cat { font-size: 20px; margin: 28px 0 14px; padding-bottom: 6px; border-bottom: 2px solid #eef2f0; }
+  .ht-toc { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 8px; }
+  .ht-toc a { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border: 1px solid #dde5e0; border-radius: 999px; text-decoration: none; color: #0f1c14; font-weight: 700; font-size: 14px; transition: border-color .15s, background .15s; }
+  .ht-toc a:hover { border-color: #1c7c48; background: #e7f3ec; }
+  .ht-toc a span { background: #1c7c48; color: #fff; font-size: 12px; font-weight: 700; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; }
+  .ht-cat { font-size: 20px; margin: 28px 0 14px; padding-bottom: 6px; border-bottom: 2px solid #eef2f0; scroll-margin-top: 70px; }
   .ht-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
   .ht-card { border: 1px solid #dde5e0; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s; background: #fff; }
   .ht-card:hover { border-color: #1c7c48; box-shadow: 0 6px 18px #1c7c4818; }

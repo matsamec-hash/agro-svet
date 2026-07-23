@@ -1,15 +1,13 @@
 ---
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import HistorieLineChart from '../../../components/HistorieLineChart.astro';
 import { longRange } from '../../../lib/historie';
 
 const locale = Astro.locals.locale ?? 'cs';
 const csOnly = locale !== 'cs';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-// CZ formát celého čísla (mezery po tisících).
-const fmt = (n: number) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const fmt = (n: number) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 const shortLabel: Record<string, string> = {
   dojivost: 'Dojivost krav',
   skot: 'Stavy skotu',
@@ -17,20 +15,25 @@ const shortLabel: Record<string, string> = {
   'osevni-plocha': 'Orná půda',
   pracovnici: 'Lidé v zemědělství',
 };
-const kpis = longRange.map((s) => {
+const metrics = longRange.map((s, i) => {
   const from = s.points[0];
   const to = s.points[s.points.length - 1];
   const ratio = from.value ? to.value / from.value : 1;
   const grew = to.value >= from.value;
-  const change = grew
-    ? '× ' + ratio.toFixed(1).replace('.', ',')
-    : '−' + Math.round((1 - ratio) * 100) + ' %';
-  return { key: s.key, short: shortLabel[s.key] ?? s.label, unit: s.unit, from, to, grew, change };
+  const change = grew ? '× ' + ratio.toFixed(1).replace('.', ',') : '−' + Math.round((1 - ratio) * 100) + ' %';
+  return {
+    id: `hlc-${i}`,
+    short: shortLabel[s.key] ?? s.label,
+    unit: s.unit,
+    source: s.source,
+    from, to, grew, change,
+    chart: { labels: s.points.map((p) => String(p.year)), datasets: [{ label: `${shortLabel[s.key] ?? s.label} (${s.unit})`, data: s.points.map((p) => p.value) }] },
+  };
 });
 ---
 <Layout
   title="Vývoj českého zemědělství v datech — dojivost, stavy zvířat, plochy"
-  description="Dlouhodobé grafy podle ČSÚ: dojivost krav (od 1921), stavy skotu a prasat, orná půda a počty pracovníků v zemědělství od první republiky po dnešek."
+  description="Přehledné grafy podle ČSÚ: dojivost krav (od 1921), stavy skotu a prasat, orná půda a počty pracovníků v zemědělství od první republiky po dnešek."
   canonical="/historie/data/"
   noindex={csOnly}
   noHreflang={true}
@@ -39,28 +42,29 @@ const kpis = longRange.map((s) => {
     <header class="hda-hero">
       <p class="hda-eyebrow">HISTORIE ČESKÉHO ZEMĚDĚLSTVÍ</p>
       <h1>Zemědělství v datech</h1>
-      <p class="hda-lede">Jak se měnily klíčové ukazatele českého zemědělství od první republiky po dnešek. Všechna data pocházejí z Českého statistického úřadu.</p>
+      <p class="hda-lede">Pět klíčových ukazatelů českého zemědělství od první republiky po dnešek. Každá karta ukazuje hodnotu kdysi, dnes a její vývoj. Zdroj všech dat: Český statistický úřad.</p>
     </header>
 
-    <section class="hda-kpis" aria-label="Klíčové ukazatele">
-      {kpis.map((k) => (
-        <div class="kpi">
-          <span class="kpi-label">{k.short}</span>
-          <span class="kpi-nums">{fmt(k.from.value)} <span class="kpi-arw">→</span> {fmt(k.to.value)}</span>
-          <span class="kpi-unit">{k.unit}</span>
-          <span class="kpi-foot">
-            <span class={`kpi-change ${k.grew ? 'up' : 'down'}`}>{k.change}</span>
-            <span class="kpi-years">{k.from.year}–{k.to.year}</span>
-          </span>
-        </div>
+    <section class="hda-grid">
+      {metrics.map((m) => (
+        <article class="metric">
+          <header class="metric-head">
+            <span class="metric-title">{m.short}</span>
+            <span class={`metric-badge ${m.grew ? 'up' : 'down'}`}>{m.change}</span>
+          </header>
+          <div class="metric-now">
+            <span class="metric-now-v">{fmt(m.to.value)}</span>
+            <span class="metric-now-u">{m.unit} <span class="metric-now-y">({m.to.year})</span></span>
+          </div>
+          <div class="metric-from">{m.from.year}: {fmt(m.from.value)} {m.unit}</div>
+          <div class="metric-chart"><canvas id={m.id} height="200"></canvas></div>
+          <script type="application/json" class="historie-chart-data" data-target={m.id} set:html={JSON.stringify(m.chart)} />
+          <p class="metric-src">Zdroj: {m.source}</p>
+        </article>
       ))}
     </section>
 
-    <p class="hda-note">Ceny komodit (obilí, mléko, maso) sleduj v samostatné sekci <a href="/statistiky/">Trhy a komodity</a>. Historické stroje najdeš v sekci <a href="/historie/technika/">Historická technika</a>.</p>
-
-    {longRange.map((s, i) => (
-      <HistorieLineChart id={`hlc-${i}`} label={s.label} unit={s.unit} source={s.source} points={s.points} />
-    ))}
+    <p class="hda-note">Ceny komodit (obilí, mléko, maso) najdeš v sekci <a href="/statistiky/">Trhy a komodity</a>. Historické stroje v sekci <a href="/historie/technika/">Historická technika</a>.</p>
 
     <nav class="hda-more">
       <a href="/historie/zajimavosti/">Zajímavosti a rekordy →</a>
@@ -81,10 +85,17 @@ const kpis = longRange.map((s) => {
           data: {
             labels: cfg.labels,
             datasets: cfg.datasets.map(function (d) {
-              return Object.assign({ borderColor: '#1c7c48', backgroundColor: 'rgba(28,124,72,.12)', fill: true, tension: 0.25, pointRadius: 2 }, d);
+              return Object.assign({ borderColor: '#1c7c48', backgroundColor: 'rgba(28,124,72,.10)', fill: true, tension: 0.3, pointRadius: 2, borderWidth: 2 }, d);
             }),
           },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: false } } },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: false, ticks: { font: { size: 10 } }, grid: { color: '#eef2ef' } },
+              x: { ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true }, grid: { display: false } },
+            },
+          },
         });
       });
     })();
@@ -92,29 +103,33 @@ const kpis = longRange.map((s) => {
 </Layout>
 
 <style>
-  .hda { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+  .hda { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
 
   .hda-hero { background: radial-gradient(700px 300px at 12% 0%, #16321f, transparent 60%), #0f1c14; color: #e8f3ec; border-radius: 18px; padding: 40px 32px; margin-bottom: 24px; }
   .hda-eyebrow { font-size: 12px; letter-spacing: 2px; color: #6fae86; margin: 0 0 10px; font-weight: 600; }
   .hda-hero h1 { font-size: clamp(24px, 4vw, 32px); margin: 0 0 12px; line-height: 1.1; }
-  .hda-lede { color: #b9cdc0; max-width: 62ch; line-height: 1.6; margin: 0; }
+  .hda-lede { color: #b9cdc0; max-width: 64ch; line-height: 1.6; margin: 0; }
 
-  .hda-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .kpi { display: flex; flex-direction: column; gap: 3px; padding: 15px 16px; border: 1px solid #e2e9e4; border-radius: 12px; background: #fff; }
-  .kpi-label { font-size: 12px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: #56655c; }
-  .kpi-nums { font-size: 18px; font-weight: 800; color: #0f1c14; letter-spacing: -.3px; margin-top: 2px; }
-  .kpi-arw { color: #9fb3a6; font-weight: 600; }
-  .kpi-unit { font-size: 12px; color: #789; }
-  .kpi-foot { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-  .kpi-change { font-size: 13px; font-weight: 800; padding: 2px 8px; border-radius: 999px; }
-  .kpi-change.up { color: #14663a; background: #e2f1e8; }
-  .kpi-change.down { color: #9a3b2f; background: #f6e4df; }
-  .kpi-years { font-size: 12px; color: #98a4ad; }
+  .hda-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 26px; }
+  .metric { border: 1px solid #e2e9e4; border-radius: 14px; padding: 18px 18px 14px; background: #fff; }
+  .metric-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .metric-title { font-weight: 700; font-size: 16px; color: #0f1c14; }
+  .metric-badge { font-size: 13px; font-weight: 800; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .metric-badge.up { color: #14663a; background: #e2f1e8; }
+  .metric-badge.down { color: #9a3b2f; background: #f6e4df; }
+  .metric-now { display: flex; align-items: baseline; gap: 7px; }
+  .metric-now-v { font-size: 30px; font-weight: 800; color: #0f1c14; letter-spacing: -1px; line-height: 1; }
+  .metric-now-u { font-size: 13px; color: #56655c; }
+  .metric-now-y { color: #98a4ad; }
+  .metric-from { font-size: 13px; color: #789; margin: 4px 0 12px; }
+  .metric-chart { height: 200px; position: relative; }
+  .metric-chart canvas { max-height: 200px; }
+  .metric-src { font-size: 11.5px; color: #b0bac1; margin: 10px 0 0; padding-top: 8px; border-top: 1px solid #eef2ef; }
 
-  .hda-note { color: #56655c; font-size: 14px; line-height: 1.55; margin: 0 0 28px; }
+  .hda-note { color: #56655c; font-size: 14px; line-height: 1.55; margin: 0 0 20px; }
   .hda-note a { color: #1c7c48; font-weight: 600; }
 
-  .hda-more { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 14px; padding-top: 18px; border-top: 1px solid #e6ece8; }
+  .hda-more { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 18px; border-top: 1px solid #e6ece8; }
   .hda-more a { color: #1c7c48; font-weight: 700; text-decoration: none; font-size: 14px; }
   .hda-more a:hover { text-decoration: underline; }
 </style>

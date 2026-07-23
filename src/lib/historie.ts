@@ -17,7 +17,10 @@ export type Machine = {
   imageLicense?: string;
   imageLicenseUrl?: string;
   imageSource?: string;
+  sections?: { heading: string; body: string }[];
+  zajimavost?: string;
 };
+export type MilestoneDatum = { label: string; value: string; source?: string };
 export type SeriesPoint = { year: number; value: number };
 export type LongRange = {
   key: string;
@@ -42,7 +45,14 @@ export type PressClip = {
   pullQuote?: string;
 };
 export type Trivia = { title: string; body: string; then?: string; now?: string; era?: string };
-export type Milestone = { year: number; title: string; note: string };
+export type Milestone = {
+  year: number;
+  title: string;
+  note: string;
+  slug?: string;
+  detail?: string[];
+  data?: MilestoneDatum[];
+};
 
 const data = raw as {
   generated: string;
@@ -65,4 +75,7 @@ export function machineBySlug(slug: string): Machine | undefined {
 }
 export function seriesByKey(key: string): LongRange | undefined {
   return longRange.find((s) => s.key === key);
+}
+export function milestoneBySlug(slug: string): Milestone | undefined {
+  return milestones.find((m) => m.slug === slug);
 }

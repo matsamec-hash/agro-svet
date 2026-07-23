@@ -11,60 +11,161 @@ if (!m) return Astro.redirect('/historie/technika/', 302);
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
 const yr = `${m.yearsFrom}–${m.yearsTo ?? 'dosud'}`;
-const others = machines.filter((x) => x.slug !== m.slug).slice(0, 4);
+const catLabel = m.category === 'traktor' ? 'Traktor' : m.category === 'kombajn' ? 'Kombajn' : m.category;
+const era = m.yearsFrom < 1948 ? 'prvni-rep' : m.yearsFrom < 1990 ? 'socialismus' : 'moderni';
+
+// Rychlá fakta — jen z ověřených polí (bez cen, které nemáme doložené).
+const facts: { k: string; v: string }[] = [
+  { k: 'Výrobce', v: m.maker },
+  { k: 'Roky výroby', v: yr },
+  { k: 'Kategorie', v: catLabel },
+];
+for (const key of ['Výkon', 'Motor', 'Řada', 'Původ', 'Záběr žací lišty']) {
+  if (m.specs[key]) facts.push({ k: key, v: m.specs[key] });
+}
+
+const related = machines.filter((x) => x.slug !== m.slug && x.category === m.category).slice(0, 4);
+const relatedFill = related.length < 3
+  ? [...related, ...machines.filter((x) => x.slug !== m.slug && x.category !== m.category)].slice(0, 4)
+  : related;
 ---
 <Layout
-  title={`${m.name} — historický ${m.category}, specifikace a příběh`}
-  description={`${m.name} (${m.maker}, ${yr}). ${m.story.slice(0, 120)}`}
+  title={`${m.name} — ${catLabel.toLowerCase()} ${m.maker} (${yr})`}
+  description={`${m.name} (${m.maker}, ${yr}): výroba, konstrukce, technické údaje a nasazení v zemědělství. ${m.story.slice(0, 90)}`}
   canonical={`/historie/technika/${m.slug}/`}
   ogType="article"
   noindex={csOnly}
   noHreflang={true}
 >
-  <main class="hd">
-    <nav class="hd-crumb"><a href="/historie/technika/">← Historická technika</a></nav>
-    <h1>{m.name}</h1>
-    <p class="hd-meta">{m.maker} · {yr} · {m.category}</p>
-    <figure class="hd-fig">
-      <div class="hd-img">{m.image ? <img src={m.image} alt={`${m.name} — ${m.maker}, ${yr}`} width="760" height="500" /> : <span>🚜</span>}</div>
-      {m.image && (
-        <figcaption class="hd-credit">
-          Foto: {m.imageCredit}
-          {m.imageLicense && (m.imageLicenseUrl
-            ? <> · <a href={m.imageLicenseUrl} target="_blank" rel="noopener nofollow">{m.imageLicense}</a></>
-            : <> · {m.imageLicense}</>)}
-          {m.imageSource && <> · <a href={m.imageSource} target="_blank" rel="noopener nofollow">Wikimedia Commons</a></>}
-        </figcaption>
-      )}
-    </figure>
-    <p class="hd-story">{m.story}</p>
-    <h2>Technické údaje</h2>
-    <table class="hd-specs">
-      <tbody>
-        {Object.entries(m.specs).map(([k, v]) => (<tr><th>{k}</th><td>{v}</td></tr>))}
-      </tbody>
-    </table>
-    <h2>Další stroje</h2>
-    <ul class="hd-others">
-      {others.map((o) => (<li><a href={`/historie/technika/${o.slug}/`}>{o.name}</a></li>))}
-    </ul>
+  <main class={`hd era-${era}`}>
+    <nav class="hd-crumb"><a href="/historie/">Historie</a> · <a href="/historie/technika/">Historická technika</a></nav>
+
+    <div class="hd-top">
+      <div class="hd-media">
+        <figure class="hd-fig">
+          <div class="hd-img">{m.image ? <img src={m.image} alt={`${m.name} — ${m.maker}, ${yr}`} width="760" height="500" /> : <span>🚜</span>}</div>
+          {m.image && (
+            <figcaption class="hd-credit">
+              Foto: {m.imageCredit}
+              {m.imageLicense && (m.imageLicenseUrl
+                ? <> · <a href={m.imageLicenseUrl} target="_blank" rel="noopener nofollow">{m.imageLicense}</a></>
+                : <> · {m.imageLicense}</>)}
+              {m.imageSource && <> · <a href={m.imageSource} target="_blank" rel="noopener nofollow">Wikimedia Commons</a></>}
+            </figcaption>
+          )}
+        </figure>
+      </div>
+      <div class="hd-head">
+        <span class="hd-cat">{catLabel}</span>
+        <h1>{m.name}</h1>
+        <p class="hd-meta">{m.maker} · {yr}</p>
+        <p class="hd-perex">{m.story}</p>
+      </div>
+    </div>
+
+    <section class="hd-facts" aria-label="Rychlá fakta">
+      {facts.map((f) => (
+        <div class="hd-fact"><span class="hd-fact-k">{f.k}</span><span class="hd-fact-v">{f.v}</span></div>
+      ))}
+    </section>
+
+    {m.sections && m.sections.map((s) => (
+      <section class="hd-sec">
+        <h2>{s.heading}</h2>
+        <p>{s.body}</p>
+      </section>
+    ))}
+
+    {m.zajimavost && (
+      <aside class="hd-zaj">
+        <span class="hd-zaj-tag">Zajímavost</span>
+        <p>{m.zajimavost}</p>
+      </aside>
+    )}
+
+    <section class="hd-sec">
+      <h2>Technické údaje</h2>
+      <table class="hd-specs">
+        <tbody>
+          {Object.entries(m.specs).map(([k, v]) => (<tr><th>{k}</th><td>{v}</td></tr>))}
+        </tbody>
+      </table>
+      <p class="hd-specnote">Údaje jsou orientační. Historické pořizovací ceny se u těchto strojů spolehlivě nedochovaly, proto je neuvádíme.</p>
+    </section>
+
+    <section class="hd-sec">
+      <h2>Další historická technika</h2>
+      <div class="hd-rel">
+        {relatedFill.map((o) => (
+          <a class="hd-rel-card" href={`/historie/technika/${o.slug}/`}>
+            <div class="hd-rel-img">{o.image ? <img src={o.image} alt={o.name} loading="lazy" width="240" height="160" /> : <span>🚜</span>}</div>
+            <div class="hd-rel-body">
+              <span class="hd-rel-name">{o.name}</span>
+              <span class="hd-rel-meta">{o.maker} · {o.yearsFrom}–{o.yearsTo ?? 'dosud'}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <nav class="hd-more">
+      <a href="/historie/technika/">← Všechny stroje</a>
+      <a href="/stroje/">Dnešní katalog strojů →</a>
+    </nav>
   </main>
 </Layout>
 
 <style>
-  .hd { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
-  .hd-crumb a { color: #1c7c48; text-decoration: none; font-size: 14px; }
-  .hd h1 { font-size: 30px; margin: 12px 0 4px; }
-  .hd-meta { color: #789; margin: 0 0 20px; }
-  .hd-fig { margin: 0 0 22px; }
-  .hd-img { aspect-ratio: 3 / 2; background: #0f1c14; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 60px; overflow: hidden; }
+  .hd { max-width: 860px; margin: 0 auto; padding: 20px 16px 64px; --acc: #1c7c48; --accsoft: #e7f3ec; }
+  .hd.era-prvni-rep { --acc: #b8860b; --accsoft: #f6eed6; }
+  .hd.era-socialismus { --acc: #b23b3b; --accsoft: #f4e4e4; }
+
+  .hd-crumb { font-size: 14px; margin-bottom: 16px; color: #98a4ad; }
+  .hd-crumb a { color: var(--acc); text-decoration: none; font-weight: 600; }
+
+  .hd-top { display: grid; grid-template-columns: 1.1fr 1fr; gap: 26px; align-items: start; margin-bottom: 24px; }
+  .hd-fig { margin: 0; }
+  .hd-img { aspect-ratio: 3 / 2; background: #0f1c14; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 60px; overflow: hidden; }
   .hd-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .hd-credit { color: #98a4ad; font-size: 12px; margin: 8px 2px 0; line-height: 1.5; }
   .hd-credit a { color: #789; }
-  .hd-story { line-height: 1.7; margin-bottom: 28px; }
-  .hd-specs { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
-  .hd-specs th, .hd-specs td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e5ebe7; }
-  .hd-specs th { color: #567; font-weight: 600; width: 45%; }
-  .hd-others { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; }
-  .hd-others a { color: #1c7c48; text-decoration: none; }
+  .hd-cat { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--acc); background: var(--accsoft); padding: 4px 10px; border-radius: 999px; margin-bottom: 10px; }
+  .hd-head h1 { font-size: clamp(26px, 4.5vw, 36px); margin: 0 0 4px; line-height: 1.05; }
+  .hd-meta { color: #789; margin: 0 0 14px; font-weight: 600; }
+  .hd-perex { line-height: 1.65; color: #2c3730; margin: 0; }
+
+  .hd-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 0 0 30px; }
+  .hd-fact { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; background: #f7faf8; border: 1px solid #e6ece8; border-radius: 10px; }
+  .hd-fact-k { font-size: 11px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: #8a978d; }
+  .hd-fact-v { font-size: 14px; font-weight: 700; color: #14231a; }
+
+  .hd-sec { margin: 0 0 26px; }
+  .hd-sec h2 { font-size: 20px; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--accsoft); }
+  .hd-sec p { line-height: 1.7; color: #2c3730; margin: 0; }
+
+  .hd-zaj { background: var(--accsoft); border-radius: 12px; padding: 16px 18px; margin: 0 0 26px; }
+  .hd-zaj-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--acc); margin-bottom: 6px; }
+  .hd-zaj p { margin: 0; line-height: 1.6; color: #243029; }
+
+  .hd-specs { width: 100%; border-collapse: collapse; }
+  .hd-specs th, .hd-specs td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #e5ebe7; font-size: 14.5px; }
+  .hd-specs th { color: #56655c; font-weight: 600; width: 45%; }
+  .hd-specnote { font-size: 12.5px; color: #98a4ad; margin: 10px 2px 0; line-height: 1.5; }
+
+  .hd-rel { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .hd-rel-card { border: 1px solid #e2e9e4; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .15s, transform .15s; }
+  .hd-rel-card:hover { border-color: var(--acc); transform: translateY(-2px); }
+  .hd-rel-img { aspect-ratio: 3 / 2; background: #0f1c14; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+  .hd-rel-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hd-rel-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .hd-rel-name { font-weight: 700; font-size: 14px; }
+  .hd-rel-meta { font-size: 12px; color: #789; }
+
+  .hd-more { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 8px; padding-top: 18px; border-top: 1px solid #e6ece8; }
+  .hd-more a { color: var(--acc); font-weight: 700; text-decoration: none; font-size: 14px; }
+  .hd-more a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .hd-top { grid-template-columns: 1fr; gap: 16px; }
+  }
 </style>
