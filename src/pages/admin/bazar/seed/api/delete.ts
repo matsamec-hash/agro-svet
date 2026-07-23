@@ -7,10 +7,38 @@ function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 }
 
-// Admin cleanup — smaže naseedovaný prospekt + jeho draft inzerát (fotky → listings
-// → prospekt, stejný recept jako claim delete v bazar/prevzit/api/delete.ts).
-// Pojistky: gated is_admin; zveřejněný (confirmed) prospekt ani aktivní listing
-// se nemažou — to jsou živé inzeráty na webu.
+type DelResult = { id: string; ok: boolean; skipped?: string };
+
+// Smaže jeden prospekt + jeho draft (fotky → listings → prospekt, recept z claim
+// delete v bazar/prevzit/api/delete.ts). Jediná pojistka: napojený AKTIVNÍ listing
+// (živý inzerát na webu, public bazar filtruje status='active') se nemaže. Confirmed
+// prospekt bez aktivního listingu (typicky „Draft nenalezen") je jen balast → smažeme.
+async function deleteProspect(supabase: ReturnType<typeof createServerClient>, prospectId: string): Promise<DelResult> {
+  const { data: prospect } = await supabase
+    .from('bazar_seed_prospects')
+    .select('id, status')
+    .eq('id', prospectId)
+    .single();
+  if (!prospect) return { id: prospectId, ok: false, skipped: 'nenalezen' };
+
+  const { data: listings } = await supabase
+    .from('bazar_listings')
+    .select('id, status, bazar_images(storage_path)')
+    .eq('seed_prospect_id', prospectId);
+
+  if ((listings ?? []).some((l: any) => l.status === 'active')) return { id: prospectId, ok: false, skipped: 'aktivní' };
+
+  const paths = (listings ?? []).flatMap((l: any) =>
+    (l.bazar_images ?? []).map((img: { storage_path: string }) => img.storage_path),
+  );
+  if (paths.length) await supabase.storage.from('bazar-images').remove(paths);
+
+  await supabase.from('bazar_listings').delete().eq('seed_prospect_id', prospectId);
+  await supabase.from('bazar_seed_prospects').delete().eq('id', prospectId);
+  return { id: prospectId, ok: true };
+}
+
+// Admin cleanup — přijímá jeden `prospectId` nebo pole `prospectIds` (hromadně).
 export const POST: APIRoute = async ({ request, locals }) => {
   const user = locals.user;
   if (!user) return json({ error: 'unauthenticated' }, 401);
@@ -27,38 +55,24 @@ export const POST: APIRoute = async ({ request, locals }) => {
   if (!(profile as { is_admin?: boolean } | null)?.is_admin) return json({ error: 'forbidden' }, 403);
 
   const body = await request.json().catch(() => null);
-  const prospectId = typeof body?.prospectId === 'string' ? body.prospectId : '';
-  if (!prospectId) return json({ error: 'Chybí prospectId' }, 400);
+  const ids: string[] = Array.isArray(body?.prospectIds)
+    ? body.prospectIds.filter((x: unknown): x is string => typeof x === 'string')
+    : typeof body?.prospectId === 'string'
+      ? [body.prospectId]
+      : [];
+  if (!ids.length) return json({ error: 'Chybí prospectId' }, 400);
 
-  const { data: prospect } = await supabase
-    .from('bazar_seed_prospects')
-    .select('id, status')
-    .eq('id', prospectId)
-    .single();
-  if (!prospect) return json({ error: 'Prospekt nenalezen' }, 404);
+  const capped = ids.slice(0, 200); // strop proti omylu/abuse
+  const results: DelResult[] = [];
+  for (const id of capped) results.push(await deleteProspect(supabase, id));
 
-  // Pojistka: publikovaný prospekt = živý inzerát na webu, sem nepatří.
-  if (prospect.status === 'confirmed') {
-    return json({ error: 'Zveřejněný inzerát nelze smazat odsud (je živý na webu).' }, 409);
+  // Jeden záznam → zachovej původní tvar odpovědi (kvůli single-delete tlačítku).
+  if (ids.length === 1) {
+    const r = results[0];
+    return r.ok ? json({ ok: true }) : json({ error: `Nelze smazat (${r.skipped})` }, 409);
   }
 
-  // Fotky ze storage → listings → prospekt. Aktivní listing = živý na webu, blokujeme.
-  const { data: listings } = await supabase
-    .from('bazar_listings')
-    .select('id, status, bazar_images(storage_path)')
-    .eq('seed_prospect_id', prospectId);
-
-  if ((listings ?? []).some((l: any) => l.status === 'active')) {
-    return json({ error: 'Napojený inzerát je aktivní (živý na webu). Nelze smazat.' }, 409);
-  }
-
-  const paths = (listings ?? []).flatMap((l: any) =>
-    (l.bazar_images ?? []).map((img: { storage_path: string }) => img.storage_path),
-  );
-  if (paths.length) await supabase.storage.from('bazar-images').remove(paths);
-
-  await supabase.from('bazar_listings').delete().eq('seed_prospect_id', prospectId);
-  await supabase.from('bazar_seed_prospects').delete().eq('id', prospectId);
-
-  return json({ ok: true });
+  const deleted = results.filter((r) => r.ok).map((r) => r.id);
+  const skipped = results.filter((r) => !r.ok);
+  return json({ ok: true, deleted, deletedCount: deleted.length, skippedCount: skipped.length, skipped });
 };

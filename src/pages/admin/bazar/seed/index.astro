@@ -105,8 +105,14 @@ for (const p of prospects ?? []) {
       </p>
     </div>
 
+    <div class="mb-2">
+      <button type="button" id="bulkDelBtn" disabled class="bg-red-700 text-white text-sm px-3 py-1.5 rounded disabled:opacity-40 disabled:cursor-not-allowed">Smazat vybrané</button>
+      <span class="text-xs text-gray-500 ml-2">Aktivní inzeráty (živé na webu) se přeskočí.</span>
+    </div>
+
     <table class="w-full text-sm border-collapse">
       <thead><tr class="text-left border-b bg-gray-50">
+        <th class="p-2 w-8"><input type="checkbox" id="selectAll" title="Vybrat vše" /></th>
         <th class="p-2">Inzerát</th>
         <th class="p-2">Prodejce</th>
         <th class="p-2">Stav</th>
@@ -121,6 +127,7 @@ for (const p of prospects ?? []) {
           const st = statusInfo(p.status);
           return (
             <tr class="border-b align-top hover:bg-gray-50">
+              <td class="p-2"><input type="checkbox" class="rowChk" data-id={p.id} /></td>
               <td class="p-2">
                 {draft ? (
                   <>
@@ -235,10 +242,6 @@ for (const p of prospects ?? []) {
     document.querySelectorAll('.delBtn').forEach((b) =>
       b.addEventListener('click', async () => {
         const el = b as HTMLElement;
-        if (el.dataset.status === 'confirmed') {
-          alert('Zveřejněný inzerát nelze smazat odsud — je živý na webu.');
-          return;
-        }
         if (!confirm('Opravdu smazat tento prospekt i jeho draft inzerát? Akce je nevratná.')) return;
         el.textContent = 'Mažu…';
         const res = await fetch('/admin/bazar/seed/api/delete/', {
@@ -255,5 +258,46 @@ for (const p of prospects ?? []) {
         }
       }),
     );
+
+    // Hromadné mazání ---------------------------------------------------------
+    const selectAll = document.getElementById('selectAll') as HTMLInputElement | null;
+    const bulkBtn = document.getElementById('bulkDelBtn') as HTMLButtonElement | null;
+    const rowChecks = () => Array.from(document.querySelectorAll('.rowChk')) as HTMLInputElement[];
+    const checkedIds = () => rowChecks().filter((c) => c.checked).map((c) => c.dataset.id!).filter(Boolean);
+    function refreshBulk() {
+      const n = checkedIds().length;
+      if (bulkBtn) {
+        bulkBtn.disabled = n === 0;
+        bulkBtn.textContent = n ? `Smazat vybrané (${n})` : 'Smazat vybrané';
+      }
+    }
+    selectAll?.addEventListener('change', () => {
+      rowChecks().forEach((c) => (c.checked = selectAll.checked));
+      refreshBulk();
+    });
+    rowChecks().forEach((c) => c.addEventListener('change', refreshBulk));
+    bulkBtn?.addEventListener('click', async () => {
+      const ids = checkedIds();
+      if (!ids.length) return;
+      if (!confirm(`Opravdu smazat ${ids.length} vybraných záznamů i jejich drafty? Akce je nevratná.`)) return;
+      bulkBtn.disabled = true;
+      bulkBtn.textContent = `Mažu ${ids.length}…`;
+      const res = await fetch('/admin/bazar/seed/api/delete/', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ prospectIds: ids }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        const deleted: string[] = data.deleted ?? [];
+        deleted.forEach((id) => document.querySelector(`.rowChk[data-id="${id}"]`)?.closest('tr')?.remove());
+        if (selectAll) selectAll.checked = false;
+        if (data.skippedCount) alert(`Smazáno ${data.deletedCount}. Přeskočeno ${data.skippedCount} (aktivní inzerát na webu).`);
+      } else {
+        alert(data.error || 'Hromadné smazání selhalo');
+      }
+      refreshBulk();
+    });
+    refreshBulk();
   </script>
 </Layout>
