@@ -165,7 +165,7 @@ export type EnsureUser = (args: { email: string; name: string; phone: string }) 
 /** Potvrdí prospekta: ověří token, zajistí usera, zveřejní inzeráty, zapíše audit. */
 export async function confirmProspect(
   supabase: SupabaseClient,
-  args: { token: string; ip: string; termsVersion: string; ensureUser: EnsureUser; listingIds?: string[]; now?: Date },
+  args: { token: string; ip: string; termsVersion: string; ensureUser: EnsureUser; listingIds?: string[]; email?: string; now?: Date },
 ): Promise<{ userId: string; prospectId: string }> {
   const now = args.now ?? new Date();
   const prospect = await getProspectByToken(supabase, args.token);
@@ -173,7 +173,12 @@ export async function confirmProspect(
   if (prospect.status === 'confirmed') throw new Error('Tento inzerát už byl potvrzen.');
   if (isTokenExpired(prospect.token_expires_at, now)) throw new Error('Platnost odkazu vypršela (expiroval).');
 
-  const userId = await args.ensureUser({ email: prospect.email, name: prospect.name, phone: prospect.phone });
+  // Účet se zakládá přes e-mail. Prospekt založený jen podle telefonu e-mail nemá —
+  // vezmeme ten, který prodejce zadal na claim stránce (args.email), a uložíme ho.
+  const effectiveEmail = (prospect.email && prospect.email.trim()) || (args.email?.trim() ?? '');
+  if (!effectiveEmail) throw new Error('Zadejte e-mail pro zveřejnění inzerátu.');
+
+  const userId = await args.ensureUser({ email: effectiveEmail, name: prospect.name, phone: prospect.phone });
 
   // Vlastníka nastavíme VŠEM inzerátům prospekta (i těm, co teď prodejce nevybral —
   // zůstanou jako jeho neveřejný draft v /bazar/moje/, nezmizí).
@@ -198,6 +203,7 @@ export async function confirmProspect(
       confirmed_ip: args.ip,
       terms_version: args.termsVersion,
       user_id: userId,
+      email: effectiveEmail,
     })
     .eq('id', prospect.id);
   if (pErr) throw new Error(`confirm prospect: ${pErr.message}`);

@@ -115,6 +115,25 @@ describe('confirmProspect', () => {
       && c._payload.status === 'active');
     expect(publishUpd._filters).toContainEqual(['id', ['L1', 'L2']]);
   });
+
+  it('prázdný e-mail prospekta + args.email → použije zadaný e-mail a uloží ho', async () => {
+    const sb = fakeSupabase({ 'bazar_seed_prospects.single': { data: { ...baseProspect, email: '' }, error: null } });
+    const ensureUser = vi.fn(async () => 'U1');
+    await confirmProspect(sb, {
+      token: 'TOK', ip: '1.2.3.4', termsVersion: 'v1', ensureUser,
+      listingIds: ['L1'], email: '  Seller@X.cz  ', now: new Date('2026-01-01T00:00:00Z'),
+    });
+    expect(ensureUser).toHaveBeenCalledWith({ email: 'Seller@X.cz', name: 'Jan', phone: '777' });
+    const prospectUpd = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects' && c._op === 'update');
+    expect(prospectUpd._payload.email).toBe('Seller@X.cz');
+  });
+
+  it('prázdný e-mail prospekta + žádný args.email → chyba', async () => {
+    const sb = fakeSupabase({ 'bazar_seed_prospects.single': { data: { ...baseProspect, email: '' }, error: null } });
+    await expect(confirmProspect(sb, {
+      token: 'TOK', ip: '1.2.3.4', termsVersion: 'v1', ensureUser: async () => 'U1', listingIds: ['L1'],
+    })).rejects.toThrow(/e-mail/i);
+  });
 });
 
 describe('getProspectByCode', () => {

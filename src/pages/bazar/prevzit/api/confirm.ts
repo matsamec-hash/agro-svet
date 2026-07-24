@@ -15,6 +15,10 @@ export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
   const listingIds = form.getAll('listing_ids').map((v) => v.toString()).filter(Boolean);
   if (!listingIds.length) return new Response('Vyberte alespoň jeden inzerát ke zveřejnění', { status: 400 });
 
+  // Prodejce založený jen podle telefonu zadá e-mail teprve tady (pole se zobrazí,
+  // když prospekt e-mail nemá). Přes něj se zakládá a přihlašuje účet.
+  const formEmail = form.get('email')?.toString().trim() ?? '';
+
   const supabase = createServerClient();
 
   // Zajisti auth usera: dohledej podle e-mailu (bazar_users), jinak vytvoř passwordless.
@@ -45,13 +49,17 @@ export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
   const ip = request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown';
   try {
     const prospect = await getProspectByToken(supabase, token);
-    email = prospect?.email ?? '';
+    const effectiveEmail = (prospect?.email && prospect.email.trim()) || formEmail;
+    if (!effectiveEmail) return new Response('Zadejte e-mail pro zveřejnění inzerátu.', { status: 400 });
+    if (!/.+@.+\..+/.test(effectiveEmail)) return new Response('Zadejte platný e-mail.', { status: 400 });
+    email = effectiveEmail;
     await confirmProspect(supabase, {
       token,
       ip,
       termsVersion,
       ensureUser,
       listingIds,
+      email: formEmail,
     });
   } catch (e) {
     return new Response(`Chyba: ${(e as Error).message}`, { status: 400 });

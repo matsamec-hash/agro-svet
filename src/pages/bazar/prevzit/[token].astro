@@ -31,6 +31,10 @@ else if (!prospect) state = 'invalid';
 else if (prospect.status === 'confirmed') state = 'done';
 else if (isTokenExpired(prospect.token_expires_at)) state = 'expired';
 
+// Prospekt založený jen podle telefonu nemá e-mail — na claim stránce si ho vyžádáme,
+// jinak by poslední krok (založení účtu přes e-mail) spadl.
+const needsEmail = !(prospect?.email && prospect.email.trim());
+
 interface Spec {
   label: string;
   value: string;
@@ -92,61 +96,74 @@ if (state === 'ok' && prospect) {
 
     {state === 'ok' && (
       <>
-        <p class="mb-4 rounded bg-amber-50 p-3 text-sm">
-          Připravili jsme vám tento inzerát podle vaší nabídky na Bazoši. Zkontrolujte jej a jedním
-          kliknutím zdarma zveřejněte na Agro-svět bazaru.
+        <span class="section-label">Agro bazar</span>
+        <h1 style="font-size:clamp(1.6rem,4vw,2.2rem);margin:2px 0 10px;">Vaše připravené inzeráty</h1>
+        <p style="color:#555;line-height:1.6;margin-bottom:22px;">
+          Připravili jsme vám {listings.length === 1 ? 'tento inzerát' : `${listings.length} inzerátů`} podle vaší
+          nabídky. Vyberte, které chcete <strong>zdarma</strong> zveřejnit na Agro-svět bazaru — zbytek
+          zůstane jako váš neveřejný koncept.
         </p>
-        <form method="POST" action="/bazar/prevzit/api/confirm/" class="mt-6 rounded border p-4">
+
+        <form method="POST" action="/bazar/prevzit/api/confirm/" id="confirmForm">
           <input type="hidden" name="token" value={token} />
           <input type="hidden" name="terms_version" value={TERMS_VERSION} />
 
-          <label class="text-sm block mb-3"><input type="checkbox" id="selectAllListings" checked /> Vybrat vše</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;margin-bottom:14px;">
+            <input type="checkbox" id="selectAllListings" checked /> Vybrat vše
+          </label>
 
           {listings.map((l) => (
-            <article class="mb-4 rounded border p-4">
-              <label class="flex items-center gap-2 mb-2 text-sm font-medium">
-                <input type="checkbox" name="listing_ids" value={l.id} checked class="listingChk" />
-                Zveřejnit tento inzerát
+            <article class="claim-card" data-selected="true">
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                <input type="checkbox" name="listing_ids" value={l.id} checked class="listingChk" style="width:18px;height:18px;flex:none;" />
+                <span style="font-family:var(--font-heading);font-weight:700;font-size:1.05rem;">{l.title}</span>
               </label>
-              <h2 class="font-semibold">{l.title}</h2>
-              {l.price && <p class="text-green-700 font-bold">{l.price.toLocaleString('cs-CZ')} Kč</p>}
+              {l.price && <p style="font-weight:700;font-size:1.1rem;margin:8px 0 0 28px;">{l.price.toLocaleString('cs-CZ')} Kč</p>}
               {l.specs.length > 0 && (
-                <dl class="my-3 flex flex-wrap gap-2">
+                <dl style="margin:10px 0 0 28px;display:flex;flex-wrap:wrap;gap:6px;">
                   {l.specs.map((s) => (
-                    <div class="rounded bg-gray-100 px-2 py-1 text-xs">
-                      <dt class="inline text-gray-500">{s.label}:</dt>{' '}
-                      <dd class="inline font-medium">{s.value}</dd>
+                    <div style="background:#f5f5f5;border-radius:6px;padding:3px 8px;font-size:12px;">
+                      <dt style="display:inline;color:#888;">{s.label}:</dt>{' '}
+                      <dd style="display:inline;font-weight:600;">{s.value}</dd>
                     </div>
                   ))}
                 </dl>
               )}
-              <p class="text-sm text-gray-700 whitespace-pre-line">{l.description}</p>
-              <div class="mt-2 flex gap-2 flex-wrap">
-                {l.images.map((url) => (
-                  <img src={url} alt="" class="h-24 w-24 object-cover rounded" />
-                ))}
-              </div>
-              <a href={`/bazar/${l.id}/?preview=${token}`} target="_blank" rel="noopener"
-                class="mt-3 inline-block text-sm text-green-700 underline">
-                👁️ Náhled inzerátu
-              </a>
+              <p style="font-size:14px;color:#444;white-space:pre-line;margin:10px 0 0 28px;">{l.description}</p>
+              {l.images.length > 0 && (
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0 28px;">
+                  {l.images.map((url) => (
+                    <img src={url} alt="" style="height:88px;width:88px;object-fit:cover;border-radius:8px;" />
+                  ))}
+                </div>
+              )}
+              <a href={`/bazar/${l.id}/?preview=${token}`} target="_blank" rel="noopener" class="link-underline"
+                style="display:inline-block;margin:12px 0 0 28px;font-size:13px;">👁️ Náhled inzerátu</a>
             </article>
           ))}
 
-          <label class="flex items-start gap-2 text-sm">
-            <input type="checkbox" name="agree" required class="mt-1" />
+          {needsEmail && (
+            <div class="form-group" style="margin-top:8px;">
+              <label for="sellerEmail">Váš e-mail <span style="color:#888;font-weight:400;">— pošleme na něj přihlašovací odkaz</span></label>
+              <input id="sellerEmail" type="email" name="email" required class="form-input" placeholder="vas@email.cz" autocomplete="email" />
+            </div>
+          )}
+
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:14px;margin-top:16px;">
+            <input type="checkbox" name="agree" required style="margin-top:3px;flex:none;" />
             <span>Potvrzuji, že jsem vlastníkem inzerátu a fotek a mám právo je zveřejnit, a souhlasím
-            s <a href="/bazar/pravidla/" class="underline" target="_blank">podmínkami bazaru</a>.</span>
+            s <a href="/bazar/pravidla/" class="link-underline" target="_blank">podmínkami bazaru</a>.</span>
           </label>
-          <button class="mt-4 w-full rounded bg-green-700 p-3 text-white font-semibold">
-            Zveřejnit vybrané
+
+          <button type="submit" id="publishBtn" class="btn-primary" style="width:100%;justify-content:center;margin-top:18px;">
+            Zveřejnit vybrané ({listings.length})
           </button>
         </form>
 
-        <form method="POST" action="/bazar/prevzit/api/delete/" class="mt-3 text-center"
+        <form method="POST" action="/bazar/prevzit/api/delete/" style="margin-top:14px;text-align:center;"
           onsubmit="return confirm('Opravdu smazat tento předchystaný inzerát? Akce je nevratná.');">
           <input type="hidden" name="token" value={token} />
-          <button class="text-sm text-gray-500 underline hover:text-red-700">
+          <button style="font-size:13px;color:#888;text-decoration:underline;">
             Nemám zájem — smazat inzerát
           </button>
         </form>
@@ -155,10 +172,41 @@ if (state === 'ok' && prospect) {
   </main>
 </Layout>
 
+<style>
+  .claim-card {
+    border: 2px solid var(--line, #e6e6e6);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+    transition: border-color .15s, background .15s, opacity .15s;
+  }
+  .claim-card[data-selected="true"] { border-color: #1a1a1a; background: #fffdf0; }
+  .claim-card[data-selected="false"] { opacity: .6; }
+</style>
+
 <script>
-  const all = document.getElementById('selectAllListings');
+  const all = document.getElementById('selectAllListings') as HTMLInputElement | null;
+  const chks = Array.from(document.querySelectorAll('.listingChk')) as HTMLInputElement[];
+  const btn = document.getElementById('publishBtn') as HTMLButtonElement | null;
+
+  function syncCard(chk: HTMLInputElement) {
+    const card = chk.closest('.claim-card') as HTMLElement | null;
+    if (card) card.dataset.selected = String(chk.checked);
+  }
+  function refresh() {
+    const n = chks.filter((c) => c.checked).length;
+    if (btn) {
+      btn.textContent = n > 0 ? `Zveřejnit vybrané (${n})` : 'Vyberte alespoň jeden inzerát';
+      btn.disabled = n === 0;
+      btn.style.opacity = n === 0 ? '.5' : '1';
+    }
+    if (all) all.checked = n === chks.length;
+  }
+
+  chks.forEach((c) => c.addEventListener('change', () => { syncCard(c); refresh(); }));
   all?.addEventListener('change', () => {
-    const checked = (all as HTMLInputElement).checked;
-    document.querySelectorAll('.listingChk').forEach((c) => { (c as HTMLInputElement).checked = checked; });
+    chks.forEach((c) => { c.checked = all.checked; syncCard(c); });
+    refresh();
   });
+  refresh();
 </script>
