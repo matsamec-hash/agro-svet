@@ -35,13 +35,13 @@ const default0 = commodityNames[0] ?? 'Pšenice';
   </header>
 
   <div class="sp-controls">
-    <div class="sp-pills-row" role="tablist" aria-label={tt('stat.commodity.ariaCommodity')}>
+    <div class="sp-pills-row" role="group" aria-label={tt('stat.commodity.ariaCommodity')}>
       {commodityNames.map((name, i) => (
         <button class:list={['sp-mini-pill', { active: i === 0 }]} data-commodity={name} type="button">{name}</button>
       ))}
     </div>
     {locale !== 'sk' && (
-      <div class="sp-time-row" role="tablist" aria-label={tt('stat.commodity.ariaWindow')}>
+      <div class="sp-time-row" role="group" aria-label={tt('stat.commodity.ariaWindow')}>
         <button class="sp-time-btn" data-window="1y" type="button">1 rok</button>
         <button class="sp-time-btn active" data-window="5y" type="button">5 let</button>
         <button class="sp-time-btn" data-window="all" type="button">Vše</button>
@@ -273,7 +273,7 @@ const default0 = commodityNames[0] ?? 'Pšenice';
   .sp-section-sub{display:block;font-size:13px;color:#6B6B72;margin-top:2px}
   .sp-src{
     display:inline-flex;align-items:center;gap:4px;margin-top:6px;
-    font-size:11.5px;color:#888;text-decoration:none;
+    font-size:11.5px;color:#6b6b6b;text-decoration:none;
     border-bottom:1px dotted #c0c0c5;padding-bottom:1px;
     transition:color .15s, border-color .15s;
   }
