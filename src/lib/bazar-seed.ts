@@ -52,6 +52,38 @@ export async function createProspectWithDraft(
   return { prospectId: prospect.id as string, claimToken: prospect.claim_token as string, listingId };
 }
 
+export interface ManualProspectInput {
+  name: string;
+  phone: string;
+  email: string;
+}
+
+/** Ručně založí prázdného prospekta (bez inzerátu) — admin ho pak naplní přes import
+ * „přidat k existujícímu prodejci". Vygeneruje claim token i kód. */
+export async function createProspect(
+  supabase: SupabaseClient,
+  args: { adminId: string; prospect: ManualProspectInput },
+): Promise<{ prospectId: string; claimToken: string; claimCode: string }> {
+  const claimToken = generateClaimToken();
+  const claimCode = generateClaimCode();
+  const { data, error } = await supabase
+    .from('bazar_seed_prospects')
+    .insert({
+      name: args.prospect.name,
+      phone: args.prospect.phone,
+      email: args.prospect.email,
+      source_url: '',
+      claim_token: claimToken,
+      claim_code: claimCode,
+      created_by: args.adminId,
+      status: 'draft',
+    })
+    .select('id')
+    .single();
+  if (error || !data) throw new Error(`prospect insert: ${error?.message}`);
+  return { prospectId: data.id as string, claimToken, claimCode };
+}
+
 /** Přidá další draft listing k existujícímu prospektovi. */
 export async function addDraftListing(
   supabase: SupabaseClient,

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createProspectWithDraft, markProspectSent, confirmProspect, getProspectByCode } from './bazar-seed';
+import { createProspectWithDraft, createProspect, markProspectSent, confirmProspect, getProspectByCode } from './bazar-seed';
 
 function fakeSupabase(returns: Record<string, any>) {
   const calls: any[] = [];
@@ -42,6 +42,21 @@ describe('createProspectWithDraft', () => {
     expect(listingInsert._payload.user_id).toBeNull();
     const prospectInsert = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects' && c._op === 'insert');
     expect(prospectInsert._payload.claim_code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/);
+  });
+});
+
+describe('createProspect', () => {
+  it('vloží prázdného prospekta (bez inzerátu) s kódem a tokenem', async () => {
+    const sb = fakeSupabase({ 'bazar_seed_prospects.single': { data: { id: 'P9' }, error: null } });
+    const r = await createProspect(sb, { adminId: 'A1', prospect: { name: 'Petr', phone: '777', email: '' } });
+    expect(r.prospectId).toBe('P9');
+    expect(r.claimCode).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/);
+    expect(r.claimToken).toBeTruthy();
+    const ins = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects' && c._op === 'insert');
+    expect(ins._payload.name).toBe('Petr');
+    expect(ins._payload.status).toBe('draft');
+    expect(ins._payload.source_url).toBe('');
+    expect(ins._payload.claim_code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/);
   });
 });
 

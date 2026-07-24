@@ -145,6 +145,19 @@ const tiles = [
       </div>
     </section>
 
+    <!-- Ruční založení prodejce -->
+    <section class="rounded-xl border p-5 mb-8">
+      <span class="section-label">Nebo založit prodejce ručně</span>
+      <p class="text-sm text-gray-500 mt-1 mb-3">Bez inzerátu — prodejce dostane kód a odkaz. Inzeráty mu pak navěsíš přes import výše („přidat k existujícímu prodejci").</p>
+      <form id="manualForm" class="grid gap-2 sm:grid-cols-3">
+        <input name="name" placeholder="Jméno prodejce" class="form-input" />
+        <input name="phone" placeholder="Telefon" class="form-input" />
+        <input name="email" type="email" placeholder="E-mail (nepovinné)" class="form-input" />
+        <button class="btn-primary justify-center sm:col-span-3">Založit prodejce</button>
+      </form>
+      <p id="manualMsg" class="text-sm mt-2"></p>
+    </section>
+
     <!-- Toolbar -->
     <div class="flex flex-wrap items-center gap-3 mb-4">
       <h2 class="font-semibold mr-auto" style="font-family:var(--font-heading);">Prodejci ({counts.total})</h2>
@@ -312,6 +325,28 @@ const tiles = [
         batchMsg.textContent = `Chyba sítě: ${(err as Error).message}`;
       } finally {
         btn.disabled = false;
+      }
+    });
+
+    // Ruční založení prodejce (prázdný prospekt) --------------------------------
+    const manualForm = document.getElementById('manualForm') as HTMLFormElement | null;
+    const manualMsg = document.getElementById('manualMsg')!;
+    manualForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      manualMsg.textContent = 'Zakládám…';
+      const fd = new FormData(manualForm);
+      const res = await fetch('/admin/bazar/seed/api/create-prospect/', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email') }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        manualMsg.innerHTML = `Hotovo — prodejce založen, kód <strong>${data.claimCode}</strong>. <button type="button" id="reloadManual" class="underline font-medium">↻ Zobrazit v seznamu</button>`;
+        document.getElementById('reloadManual')?.addEventListener('click', () => location.reload());
+        manualForm.reset();
+      } else {
+        manualMsg.textContent = `Chyba: ${data.error}`;
       }
     });
 
