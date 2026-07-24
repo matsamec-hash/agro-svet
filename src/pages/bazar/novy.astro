@@ -5,9 +5,11 @@ import CascadingPicker from '../../components/bazar/CascadingPicker.astro';
 import PhoneInput from '../../components/bazar/PhoneInput.astro';
 import { CATEGORIES, BRANDS, BAZAR_TO_CATALOG_SUBCATEGORIES } from '../../lib/bazar-constants';
 import LocationInput from '../../components/bazar/LocationInput.astro';
+import BazarAttributeControls from '../../components/bazar/BazarAttributeControls.astro';
 import { createServerClient, getPublicSupabaseConfig } from '../../lib/supabase';
 import { getModelOptions, getPlemenoOptions } from '../../lib/bazar-catalog';
 import { getModelBySlug } from '../../lib/stroje';
+import { attributesForCategory, validateAttributes } from '../../lib/bazar-attributes';
 
 const user = Astro.locals.user!;
 let error = '';
@@ -70,6 +72,17 @@ if (Astro.request.method === 'POST') {
     const objemNadrze = objemStr ? parseInt(objemStr) : null;
     const subcategory = modelSlug ? (getModelBySlug(modelSlug)?.category ?? null) : null;
 
+    // Atributy z formuláře (pole a_<key>) — seber a zvaliduj proti slovníku kategorie.
+    const rawAttrs: Record<string, unknown> = {};
+    for (const def of attributesForCategory(category)) {
+      const val = form.get(`a_${def.key}`);
+      if (val == null || val.toString() === '') continue;
+      rawAttrs[def.key] = def.type === 'bool'
+        ? (val === 'on' || val === '1' || val === 'true')
+        : val.toString();
+    }
+    const attributes = validateAttributes(category, rawAttrs);
+
     // Resolve coords. Client should pre-fill hidden inputs from the local
     // lookup; if that fails (rare city not in CZ_LOCATIONS_GEO), do a
     // server-side fallback using PSČ if provided.
@@ -111,6 +124,7 @@ if (Astro.request.method === 'POST') {
         nosnost_kg: nosnost,
         objem_nadrze_l: objemNadrze,
         subcategory,
+        attributes,
       })
       .select('id')
       .single();
@@ -227,6 +241,17 @@ const { data: profile } = await supabase
         />
       </div>
 
+      <!-- Atributy / výbava — sada polí se přepíná podle kategorie (JS v sync() níže).
+           Neaktivní kategorie mají pole disabled, aby se neodeslaly (sdílené a_stav je v DOM víckrát). -->
+      <div class="form-group" id="attr-fields-wrap" style="display:none;">
+        <label>Výbava a parametry</label>
+        {CATEGORIES.map((c) => (
+          <div class="attr-cat" data-cat={c.value} hidden>
+            <BazarAttributeControls category={c.value} mode="form" />
+          </div>
+        ))}
+      </div>
+
       <div class="form-group" id="brand-group">
         <label for="brand">Značka</label>
         <select id="brand" name="brand" class="form-select">
@@ -338,6 +363,17 @@ const { data: profile } = await supabase
           const cats = (g.getAttribute('data-categories') || '').split(',');
           g.style.display = cats.includes(v) ? '' : 'none';
         });
+
+        // Atributová pole: ukaž jen sadu vybrané kategorie; neaktivní disabled (neodešlou se).
+        const attrWrap = document.getElementById('attr-fields-wrap');
+        if (attrWrap) {
+          attrWrap.style.display = v ? '' : 'none';
+          attrWrap.querySelectorAll('.attr-cat').forEach((el) => {
+            const active = el.getAttribute('data-cat') === v;
+            el.hidden = !active;
+            el.querySelectorAll('input, select').forEach((f) => { f.disabled = !active; });
+          });
+        }
 
         // Legacy "Značka" dropdown is redundant when cascading picker
         // is present (traktory/kombajny) or irrelevant (zvířata).
