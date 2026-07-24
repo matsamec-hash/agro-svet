@@ -1,6 +1,7 @@
 // JSON-LD structured data helpers — schema.org markup pro Google rich results.
 // Konzistentní formát napříč pages, jeden zdroj pravdy.
 import { SITE_URL } from './config';
+import { attrDef } from './bazar-attributes';
 
 export interface BreadcrumbItem {
   name: string;
@@ -157,6 +158,7 @@ export interface BazarListingForSchema {
   year_of_manufacture?: number | null;
   power_hp?: number | null;
   hours_operated?: number | null;
+  attributes?: Record<string, unknown> | null;
 }
 
 const VEHICLE_BAZAR_CATEGORIES = new Set(['traktory', 'kombajny']);
@@ -227,6 +229,20 @@ export function bazarListingProductSchema(
       },
     };
   }
+
+  // Strukturovaná výbava → additionalProperty (bot/LLM čitelné).
+  const attrs = listing.attributes && typeof listing.attributes === 'object' ? listing.attributes : {};
+  const additionalProperty = Object.entries(attrs).map(([key, value]) => {
+    const def = attrDef(key);
+    const name = def?.label ?? key;
+    let v: string;
+    if (value === true) v = 'Ano';
+    else if (def?.type === 'enum') v = def.optionLabels?.[String(value)] ?? String(value);
+    else v = String(value);
+    return { '@type': 'PropertyValue', name, value: v };
+  });
+  if (additionalProperty.length > 0) schema.additionalProperty = additionalProperty;
+
   return schema;
 }
 
