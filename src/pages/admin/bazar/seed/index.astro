@@ -1,20 +1,20 @@
 ---
 export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
-import { createServerClient } from '../../../../lib/supabase';
 import { claimUrl } from '../../../../lib/bazar-seed-email';
 import { buildClaimWhatsAppMessage, claimWhatsAppUrl } from '../../../../lib/bazar-claim-whatsapp';
+import { createServerClient } from '../../../../lib/supabase';
 import { listOpenProspects } from '../../../../lib/bazar-seed';
 
 // Middleware už gate-uje /admin/* přes is_admin (viz ostatní admin .astro
-// stránky — žádná z nich dělá vlastní kontrolu, locals.user navíc is_admin
+// stránky — žádná z nich nedělá vlastní kontrolu, locals.user navíc is_admin
 // vůbec nemá jako pole, ten žije v bazar_users).
 const supabase = createServerClient();
 const { data: prospects } = await supabase
   .from('bazar_seed_prospects')
   .select('id, name, email, phone, source_url, claim_token, claim_code, status, created_at')
   .order('created_at', { ascending: false })
-  .limit(100);
+  .limit(200);
 
 // Drafty (id/title/price/status) per prospekt — VŠECHNY, ne jen první (jeden
 // prodejce může mít víc připravených inzerátů). Jeden dotaz, namapováno přes
@@ -22,6 +22,7 @@ const { data: prospects } = await supabase
 const prospectIds = (prospects ?? []).map((p) => p.id);
 type Draft = { id: string; title: string; price: number | null; status: string };
 const draftsByProspect = new Map<string, Draft[]>();
+let draftsTotal = 0;
 if (prospectIds.length > 0) {
   const { data: drafts } = await supabase
     .from('bazar_listings')
@@ -33,6 +34,7 @@ if (prospectIds.length > 0) {
     const arr = draftsByProspect.get(row.seed_prospect_id) ?? [];
     arr.push({ id: row.id, title: row.title ?? '', price: row.price ?? null, status: row.status ?? '' });
     draftsByProspect.set(row.seed_prospect_id, arr);
+    draftsTotal++;
   }
 }
 // Prospekti, ke kterým jde ještě přidat další inzerát (import s cílem „existující prodejce").
@@ -59,77 +61,117 @@ function previewUrlFor(p: { id: string; claim_token: string }): string | null {
   return d ? `/bazar/${d.id}/?preview=${encodeURIComponent(p.claim_token)}` : null;
 }
 
+// Stavy: prospekt = draft/sent/opened/confirmed/expired; listing draft = pending_claim/active.
 function statusInfo(s: string): { label: string; cls: string } {
   switch (s) {
-    case 'pending_claim': return { label: 'Čeká na potvrzení', cls: 'bg-amber-100 text-amber-800' };
-    case 'confirmed': return { label: 'Zveřejněno', cls: 'bg-green-100 text-green-800' };
-    case 'active': return { label: 'Zveřejněno', cls: 'bg-green-100 text-green-800' };
+    case 'draft': return { label: 'Koncept', cls: 'bg-gray-100 text-gray-700' };
     case 'sent': return { label: 'Odesláno', cls: 'bg-blue-100 text-blue-800' };
+    case 'opened': return { label: 'Otevřeno', cls: 'bg-amber-100 text-amber-800' };
+    case 'confirmed': return { label: 'Zveřejněno', cls: 'bg-green-100 text-green-800' };
+    case 'expired': return { label: 'Vypršelo', cls: 'bg-gray-100 text-gray-500' };
+    case 'pending_claim': return { label: 'Čeká na zveřejnění', cls: 'bg-amber-100 text-amber-800' };
+    case 'active': return { label: 'Zveřejněno', cls: 'bg-green-100 text-green-800' };
     default: return { label: s, cls: 'bg-gray-100 text-gray-700' };
   }
 }
 
-// Souhrn stavů pro hlavičku tabulky.
-const counts = { pending_claim: 0, confirmed: 0, total: prospects?.length ?? 0 };
-for (const p of prospects ?? []) {
-  if (p.status === 'pending_claim') counts.pending_claim++;
-  else if (p.status === 'confirmed') counts.confirmed++;
-}
+// Souhrn — prospekt nemá status 'pending_claim' (to je stav listingu), proto
+// „nezpracované" = vše kromě confirmed/expired.
+const counts = {
+  total: prospects?.length ?? 0,
+  pending: (prospects ?? []).filter((p) => ['draft', 'sent', 'opened'].includes(p.status)).length,
+  confirmed: (prospects ?? []).filter((p) => p.status === 'confirmed').length,
+  drafts: draftsTotal,
+};
+
+const tiles = [
+  { label: 'Prodejci', value: counts.total },
+  { label: 'Nezpracované', value: counts.pending, accent: true },
+  { label: 'Zveřejněno', value: counts.confirmed },
+  { label: 'Inzerátů celkem', value: counts.drafts },
+];
 ---
 <Layout title="Bazar — Seeding">
-  <main class="mx-auto max-w-4xl p-6">
-    <h1 class="text-2xl font-bold mb-4">Předchystané inzeráty (seeding)</h1>
+  <main class="mx-auto max-w-4xl px-6 py-10">
+    <span class="section-label">Agro bazar · admin</span>
+    <h1 style="font-size:clamp(1.6rem,4vw,2.2rem);margin:2px 0 20px;">Předchystané inzeráty</h1>
 
-    <section class="mb-8 rounded border p-4">
-      <h2 class="font-semibold mb-2">Import z URL (Bazoš)</h2>
-      <form id="importForm" class="grid gap-2 sm:grid-cols-2">
-        <select name="prospectId" class="form-select sm:col-span-2">
-          <option value="">➕ Nový prodejce</option>
-          {openProspects.map((p) => (
-            <option value={p.id}>{p.name || p.email || 'Prodejce'} ({p.email})</option>
-          ))}
-        </select>
-        <input name="url" required placeholder="Odkaz na inzerát na bazos.cz" class="border p-2 sm:col-span-2" />
-        <input name="name" placeholder="Jméno prodejce" class="border p-2" />
-        <input name="phone" placeholder="Telefon" class="border p-2" />
-        <input name="email" type="email" placeholder="E-mail prodejce" class="border p-2 sm:col-span-2" />
-        <button class="bg-green-700 text-white p-2 rounded sm:col-span-2">Importovat a vytvořit draft</button>
-      </form>
-      <p id="importMsg" class="text-sm mt-2"></p>
-    </section>
-
-    <section class="mb-8 rounded border p-4">
-      <h2 class="font-semibold mb-2">Hromadný import (víc odkazů najednou)</h2>
-      <p class="text-sm text-gray-600 mb-2">Vlož odkazy na inzeráty z bazos.cz — jeden na řádek (max 20). Kontakt se vezme z inzerátu. Vytvoří se drafty ke schválení.</p>
-      <form id="batchForm" class="grid gap-2">
-        <select name="prospectId" class="form-select sm:col-span-2">
-          <option value="">➕ Nový prodejce</option>
-          {openProspects.map((p) => (
-            <option value={p.id}>{p.name || p.email || 'Prodejce'} ({p.email})</option>
-          ))}
-        </select>
-        <textarea name="urls" rows="6" required placeholder="https://…bazos.cz/inzerat/…&#10;https://…bazos.cz/inzerat/…" class="border p-2 font-mono text-xs"></textarea>
-        <button class="bg-green-800 text-white p-2 rounded">Importovat vše</button>
-      </form>
-      <p id="batchMsg" class="text-sm mt-2"></p>
-      <ul id="batchResults" class="text-sm mt-2 space-y-1"></ul>
-    </section>
-
-    <div class="flex items-center justify-between mb-2">
-      <h2 class="font-semibold">Importovaní prodejci ({counts.total})</h2>
-      <p class="text-sm text-gray-600">
-        <span class="text-amber-700 font-medium">{counts.pending_claim} čeká na potvrzení</span>
-        · <span class="text-green-700 font-medium">{counts.confirmed} zveřejněno</span>
-      </p>
+    <!-- Souhrn -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+      {tiles.map((t) => (
+        <div class="rounded-xl border-2 p-4" style={`border-color:${t.accent && t.value > 0 ? '#1a1a1a' : '#e6e6e6'};${t.accent && t.value > 0 ? 'background:#fffdf0;' : ''}`}>
+          <div style="font-family:var(--font-heading);font-size:1.8rem;font-weight:700;line-height:1;">{t.value}</div>
+          <div class="text-xs text-gray-500 mt-1">{t.label}</div>
+        </div>
+      ))}
     </div>
 
-    <div class="mb-3 flex items-center gap-3">
-      <label class="flex items-center gap-1 text-sm text-gray-600">
+    <!-- Import -->
+    <section class="rounded-xl border p-5 mb-5">
+      <span class="section-label">Import z Bazoše</span>
+      <div class="grid gap-5 md:grid-cols-2 mt-2">
+        <form id="importForm" class="grid gap-2 content-start">
+          <p class="text-sm font-semibold">Jeden inzerát</p>
+          <select name="prospectId" class="form-select">
+            <option value="">➕ Nový prodejce</option>
+            {openProspects.map((p) => (
+              <option value={p.id}>{p.name || p.email || 'Prodejce'} ({p.email || p.phone || '—'})</option>
+            ))}
+          </select>
+          <input name="url" required placeholder="Odkaz na inzerát na bazos.cz" class="form-input" />
+          <div class="grid grid-cols-2 gap-2">
+            <input name="name" placeholder="Jméno prodejce" class="form-input" />
+            <input name="phone" placeholder="Telefon" class="form-input" />
+          </div>
+          <input name="email" type="email" placeholder="E-mail prodejce (nepovinné)" class="form-input" />
+          <button class="btn-primary justify-center">Importovat a vytvořit draft</button>
+          <p id="importMsg" class="text-sm"></p>
+        </form>
+
+        <form id="batchForm" class="grid gap-2 content-start">
+          <p class="text-sm font-semibold">Hromadně (víc odkazů)</p>
+          <select name="prospectId" class="form-select">
+            <option value="">➕ Nový prodejce (pro každý zvlášť)</option>
+            {openProspects.map((p) => (
+              <option value={p.id}>{p.name || p.email || 'Prodejce'} ({p.email || p.phone || '—'})</option>
+            ))}
+          </select>
+          <textarea name="urls" rows="5" required placeholder="https://…bazos.cz/inzerat/…&#10;https://…bazos.cz/inzerat/…" class="form-input font-mono text-xs"></textarea>
+          <p class="text-xs text-gray-500">Jeden odkaz na řádek (max 20). Kontakt se vezme z inzerátu.</p>
+          <button class="btn-primary justify-center">Importovat vše</button>
+          <p id="batchMsg" class="text-sm"></p>
+          <ul id="batchResults" class="text-sm space-y-1"></ul>
+        </form>
+      </div>
+    </section>
+
+    <!-- Toolbar -->
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <h2 class="font-semibold mr-auto" style="font-family:var(--font-heading);">Prodejci ({counts.total})</h2>
+      <input id="prospectSearch" type="search" placeholder="Hledat jméno / e-mail / telefon…" class="form-input" style="max-width:260px;padding:8px 12px;" />
+      <select id="statusFilter" class="form-select" style="max-width:180px;padding:8px 12px;">
+        <option value="">Všechny stavy</option>
+        <option value="draft">Koncept</option>
+        <option value="sent">Odesláno</option>
+        <option value="opened">Otevřeno</option>
+        <option value="confirmed">Zveřejněno</option>
+      </select>
+    </div>
+
+    <div class="flex items-center gap-3 mb-4 text-sm">
+      <label class="flex items-center gap-1 text-gray-600">
         <input type="checkbox" id="selectAll" title="Vybrat vše" /> Vybrat vše
       </label>
-      <button type="button" id="bulkDelBtn" disabled class="bg-red-700 text-white text-sm px-3 py-1.5 rounded disabled:opacity-40 disabled:cursor-not-allowed">Smazat vybrané</button>
-      <span class="text-xs text-gray-500">Aktivní inzeráty (živé na webu) se přeskočí.</span>
+      <button type="button" id="bulkDelBtn" disabled class="rounded-lg border-2 border-red-600 text-red-700 font-semibold px-3 py-1.5 disabled:opacity-30 disabled:cursor-not-allowed">Smazat vybrané</button>
+      <span class="text-xs text-gray-400">Aktivní inzeráty (živé na webu) se přeskočí.</span>
     </div>
+
+    {counts.total === 0 && (
+      <div class="rounded-xl border-2 border-dashed p-10 text-center text-gray-500">
+        <p class="font-semibold text-gray-700">Zatím žádní prodejci</p>
+        <p class="text-sm mt-1">Naimportuj první inzerát z Bazoše formulářem výše.</p>
+      </div>
+    )}
 
     <div id="prospectCards">
       {prospects?.map((p) => {
@@ -137,53 +179,56 @@ for (const p of prospects ?? []) {
         const preview = previewUrlFor(p);
         const st = statusInfo(p.status);
         const drafts = draftsByProspect.get(p.id) ?? [];
+        const search = `${p.name ?? ''} ${p.email ?? ''} ${p.phone ?? ''}`.toLowerCase();
         return (
-          <div class="mb-3 rounded border p-4" data-prospect-id={p.id}>
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div class="flex items-start gap-2">
-                <input type="checkbox" class="rowChk mt-1" data-id={p.id} />
-                <div>
-                  <div class="font-semibold">{p.name || '—'}</div>
-                  <div class="text-sm text-gray-500">{p.email || '—'} · {p.phone || '—'}</div>
+          <div class="prospect-card mb-3 rounded-xl border-2 p-4" style="border-color:#e6e6e6;" data-prospect-id={p.id} data-status={p.status} data-search={search}>
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div class="flex items-start gap-2 min-w-0">
+                <input type="checkbox" class="rowChk mt-1.5" data-id={p.id} />
+                <div class="min-w-0">
+                  <div class="font-semibold truncate" style="font-family:var(--font-heading);">{p.name || 'Bez jména'}</div>
+                  <div class="text-sm text-gray-500 truncate">{p.email || '—'} · {p.phone || '—'}</div>
                 </div>
               </div>
               <div class="text-right shrink-0">
-                <span class={`inline-block rounded px-2 py-0.5 text-xs font-medium ${st.cls}`}>{st.label}</span>
-                <div class="text-xs text-gray-500 mt-1 whitespace-nowrap">{fmtDate(p.created_at)}</div>
+                <span class={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${st.cls}`}>{st.label}</span>
+                <div class="text-xs text-gray-400 mt-1 whitespace-nowrap">{fmtDate(p.created_at)}</div>
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-x-3 gap-y-1 mb-3 text-sm">
-              {preview && (
-                <a href={preview} target="_blank" rel="noopener" class="underline font-medium">Náhled</a>
-              )}
-              <button type="button" class="copyBtn underline" data-url={claimUrl(p.claim_token)}>Kopírovat odkaz</button>
-              <button type="button" class="copyCodeBtn underline" data-code={p.claim_code}>Kopírovat kód</button>
-              {waUrl && (
-                <a href={waUrl} target="_blank" rel="noopener" class="underline text-green-700">WhatsApp</a>
-              )}
-              {p.email && (
-                <button type="button" class="sendBtn underline" data-id={p.id}>Poslat e-mailem</button>
-              )}
-              <button type="button" class="delBtn underline text-red-700" data-id={p.id} data-status={p.status}>Smazat</button>
+            <!-- Kód + odkaz -->
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span class="text-xs text-gray-500">Kód:</span>
+              <code class="rounded bg-[#1a1a1a] text-[#FFEA00] px-2 py-0.5 text-sm font-mono tracking-widest">{p.claim_code || '—'}</code>
+              <button type="button" class="copyCodeBtn text-xs underline text-gray-600" data-code={p.claim_code}>kopírovat</button>
             </div>
 
+            <!-- Akce -->
+            <div class="flex flex-wrap gap-2 mb-3">
+              {preview && <a href={preview} target="_blank" rel="noopener" class="action-pill">👁 Náhled</a>}
+              <button type="button" class="copyBtn action-pill" data-url={claimUrl(p.claim_token)}>🔗 Odkaz</button>
+              {waUrl && <a href={waUrl} target="_blank" rel="noopener" class="action-pill" style="color:#128c7e;">WhatsApp</a>}
+              {p.email && <button type="button" class="sendBtn action-pill" data-id={p.id}>✉ Poslat e-mail</button>}
+              <button type="button" class="delBtn action-pill" style="color:#b00020;" data-id={p.id} data-status={p.status}>Smazat</button>
+            </div>
+
+            <!-- Inzeráty -->
             <div class="border-t pt-2">
-              <p class="text-xs text-gray-500 mb-1">Inzeráty ({drafts.length})</p>
+              <p class="text-xs text-gray-400 mb-1.5">Inzeráty ({drafts.length})</p>
               {drafts.length === 0 ? (
-                <p class="text-sm text-gray-400 italic">Draft nenalezen</p>
+                <p class="text-sm text-gray-400 italic">Žádný draft</p>
               ) : (
-                <ul class="space-y-1 text-sm">
+                <ul class="space-y-1.5 text-sm">
                   {drafts.map((draft) => (
                     <li class="flex items-center justify-between gap-2 flex-wrap">
-                      <span>
+                      <span class="min-w-0">
                         <a href={`/bazar/${draft.id}/?preview=${encodeURIComponent(p.claim_token)}`} target="_blank" rel="noopener" class="underline font-medium">{draft.title || 'Bez názvu'}</a>
                         <span class="text-gray-500"> — {fmtPrice(draft.price)}</span>
                       </span>
                       {draft.status === 'pending_claim' ? (
-                        <button type="button" class="removeListingBtn underline text-red-700 text-xs" data-id={draft.id}>Odebrat</button>
+                        <button type="button" class="removeListingBtn text-xs underline text-red-700" data-id={draft.id}>Odebrat</button>
                       ) : (
-                        <span class="text-xs text-gray-500">{statusInfo(draft.status).label}</span>
+                        <span class={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${statusInfo(draft.status).cls}`}>{statusInfo(draft.status).label}</span>
                       )}
                     </li>
                   ))}
@@ -194,7 +239,20 @@ for (const p of prospects ?? []) {
         );
       })}
     </div>
+
+    <p id="noResults" class="hidden text-center text-gray-400 py-8">Nic neodpovídá filtru.</p>
   </main>
+
+  <style>
+    .action-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 13px; font-weight: 600; color: #333;
+      border: 1.5px solid #e0e0e0; border-radius: 8px;
+      padding: 5px 10px; text-decoration: none; background: #fff; cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .action-pill:hover { border-color: #1a1a1a; background: #fafafa; }
+  </style>
 
   <script>
     const form = document.getElementById('importForm') as HTMLFormElement;
@@ -260,13 +318,15 @@ for (const p of prospects ?? []) {
     document.querySelectorAll('.copyBtn').forEach((b) =>
       b.addEventListener('click', () => {
         navigator.clipboard.writeText((b as HTMLElement).dataset.url!);
-        (b as HTMLElement).textContent = 'Zkopírováno ✓';
+        const el = b as HTMLElement; const t = el.textContent; el.textContent = 'Zkopírováno ✓';
+        setTimeout(() => { el.textContent = t; }, 1500);
       }),
     );
     document.querySelectorAll('.copyCodeBtn').forEach((b) =>
       b.addEventListener('click', () => {
         navigator.clipboard.writeText((b as HTMLElement).dataset.code!);
-        (b as HTMLElement).textContent = 'Zkopírováno ✓';
+        const el = b as HTMLElement; el.textContent = 'zkopírováno ✓';
+        setTimeout(() => { el.textContent = 'kopírovat'; }, 1500);
       }),
     );
     document.querySelectorAll('.sendBtn').forEach((b) =>
@@ -311,7 +371,28 @@ for (const p of prospects ?? []) {
       });
     });
 
-    // Hromadné mazání ---------------------------------------------------------
+    // Hledání + filtr stavu -----------------------------------------------------
+    const searchInput = document.getElementById('prospectSearch') as HTMLInputElement | null;
+    const statusFilter = document.getElementById('statusFilter') as HTMLSelectElement | null;
+    const noResults = document.getElementById('noResults');
+    function applyFilter() {
+      const q = (searchInput?.value ?? '').trim().toLowerCase();
+      const s = statusFilter?.value ?? '';
+      let visible = 0;
+      document.querySelectorAll('.prospect-card').forEach((el) => {
+        const card = el as HTMLElement;
+        const okSearch = !q || (card.dataset.search ?? '').includes(q);
+        const okStatus = !s || card.dataset.status === s;
+        const show = okSearch && okStatus;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      if (noResults) noResults.classList.toggle('hidden', visible !== 0 || document.querySelectorAll('.prospect-card').length === 0);
+    }
+    searchInput?.addEventListener('input', applyFilter);
+    statusFilter?.addEventListener('change', applyFilter);
+
+    // Hromadné mazání -----------------------------------------------------------
     const selectAll = document.getElementById('selectAll') as HTMLInputElement | null;
     const bulkBtn = document.getElementById('bulkDelBtn') as HTMLButtonElement | null;
     const rowChecks = () => Array.from(document.querySelectorAll('.rowChk')) as HTMLInputElement[];
@@ -324,7 +405,11 @@ for (const p of prospects ?? []) {
       }
     }
     selectAll?.addEventListener('change', () => {
-      rowChecks().forEach((c) => (c.checked = selectAll.checked));
+      // jen viditelné karty (respektuj filtr)
+      rowChecks().forEach((c) => {
+        const card = c.closest('[data-prospect-id]') as HTMLElement | null;
+        if (card && card.style.display !== 'none') c.checked = selectAll.checked;
+      });
       refreshBulk();
     });
     rowChecks().forEach((c) => c.addEventListener('change', refreshBulk));
