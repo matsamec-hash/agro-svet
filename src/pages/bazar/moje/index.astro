@@ -1,7 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { createServerClient } from '../../../lib/supabase';
-import { CATEGORIES } from '../../../lib/bazar-constants';
+import { CATEGORIES, SHOW_LISTING_VIEWS } from '../../../lib/bazar-constants';
 import { isFeaturedActive, formatFeaturedUntil } from '../../../lib/bazar-featured';
 
 const user = Astro.locals.user!;
@@ -103,7 +103,7 @@ const { data: listings } = await supabase
                   <span>{categoryLabel}</span>
                   <span>{priceText}</span>
                   <span>{date}</span>
-                  <span>{listing.views ?? 0}x zobrazeno</span>
+                  {SHOW_LISTING_VIEWS && <span>{listing.views ?? 0}x zobrazeno</span>}
                 </div>
               </div>
               <span

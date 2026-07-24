@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import BazarGallery from '../../components/bazar/BazarGallery.astro';
-import { CATEGORIES, BRANDS } from '../../lib/bazar-constants';
+import { CATEGORIES, BRANDS, SHOW_LISTING_VIEWS } from '../../lib/bazar-constants';
 import { createServerClient } from '../../lib/supabase';
 import { resolveModelLabel } from '../../lib/bazar-catalog';
 import { getAllPlemena } from '../../lib/plemena';
@@ -225,7 +225,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
         <div class="sidebar-box" style="font-size:13px; color:#666;">
           <p>Lokalita: {listing.location}</p>
           <p>Datum: {date}</p>
-          <p>{listing.views ?? 0}x zobrazeno</p>
+          {SHOW_LISTING_VIEWS && <p>{listing.views ?? 0}x zobrazeno</p>}
         </div>
 
         <!-- Report listing -->

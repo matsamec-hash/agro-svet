@@ -1,3 +1,8 @@
+// Zobrazovat počet zhlédnutí („142× zobrazeno") na inzerátech a v „Moje inzeráty"?
+// Zatím vypnuto — na novém bazaru jsou čísla nízká a spíš odrazují. Měření běží dál
+// (čítač se plní), takže až budou zajímavá čísla, stačí přepnout na true.
+export const SHOW_LISTING_VIEWS = false;
+
 export const CATEGORIES = [
   { value: 'traktory', label: 'Traktory' },
   { value: 'kombajny', label: 'Kombajny' },
