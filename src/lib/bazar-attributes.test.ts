@@ -25,6 +25,14 @@ describe('attributesForCategory', () => {
     const keys = attributesForCategory('traktory').map((a) => a.key);
     expect(keys).not.toContain('plemeno'); // zvirata-only
   });
+  it('strojní atributy (klimatizace/pohon/TP-SPZ) nejsou u nestrojních kategorií', () => {
+    for (const cat of ['zvirata', 'pozemky', 'sluzby', 'osiva-hnojiva']) {
+      const keys = attributesForCategory(cat).map((a) => a.key);
+      expect(keys, cat).not.toContain('klimatizace');
+      expect(keys, cat).not.toContain('pohon');
+      expect(keys, cat).not.toContain('tp_spz');
+    }
+  });
 });
 
 describe('validateAttributes', () => {

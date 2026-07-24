@@ -12,12 +12,19 @@ export interface AttrDef {
   seoLanding?: boolean; // default false
 }
 
+/** Strojní kategorie — atributy jako klimatizace/pohon/TP-SPZ dávají smysl jen tady
+ * (ne u zvířat, pozemků, osiv, služeb). Používá se jako „skupina strojů" ve slovníku. */
+export const MACHINE_CATEGORIES = [
+  'traktory','kombajny','zpracovani-pudy','seti','hnojeni','ochrana-rostlin',
+  'sklizen-picnin','sklizen-okopanin','manipulace','doprava','komunal-les','staj-chov',
+];
+
 export const ATTRIBUTES: AttrDef[] = [
-  // Sdílené (stroje i obecně)
+  // Sdílené — stav platí obecně (i díly/příslušenství/osivo); zbytek jen skupina strojů
   { key: 'stav', label: 'Stav', type: 'enum', options: ['nove','pouzite','repasovane'], optionLabels: { nove:'Nové', pouzite:'Použité', repasovane:'Repasované' }, categories: ['*'] },
-  { key: 'klimatizace', label: 'Klimatizace', type: 'bool', categories: ['*'], seoLanding: true },
-  { key: 'pohon', label: 'Pohon', type: 'enum', options: ['2x4','4x4'], optionLabels: { '2x4':'2×4', '4x4':'4×4' }, categories: ['*'], seoLanding: true },
-  { key: 'tp_spz', label: 'TP a SPZ', type: 'bool', categories: ['*'], seoLanding: true },
+  { key: 'klimatizace', label: 'Klimatizace', type: 'bool', categories: MACHINE_CATEGORIES, seoLanding: true },
+  { key: 'pohon', label: 'Pohon', type: 'enum', options: ['2x4','4x4'], optionLabels: { '2x4':'2×4', '4x4':'4×4' }, categories: MACHINE_CATEGORIES, seoLanding: true },
+  { key: 'tp_spz', label: 'TP a SPZ', type: 'bool', categories: ['traktory','doprava','manipulace','komunal-les'], seoLanding: true },
   { key: 'celni_nakladac', label: 'Čelní nakladač', type: 'bool', categories: ['traktory','manipulace'], seoLanding: true },
   // traktory
   { key: 'prevodovka', label: 'Převodovka', type: 'enum', options: ['manual','powershift','cvt'], optionLabels: { manual:'Manuální', powershift:'Powershift', cvt:'CVT / plynulá' }, categories: ['traktory'] },
