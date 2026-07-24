@@ -1,0 +1,96 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import BazarListingRow from '../../../components/bazar/BazarListingRow.astro';
+import { createServerClient } from '../../../lib/supabase';
+import { isFeaturedActive } from '../../../lib/bazar-featured';
+import { SITE_URL } from '../../../lib/config';
+
+const { id } = Astro.params;
+const supabase = createServerClient();
+
+// Prodejce (bazar_users_select je veřejné). Bereme jen jméno + lokalitu, ne kontakt.
+const { data: seller } = id
+  ? await supabase.from('bazar_users').select('id, name, location').eq('id', id).maybeSingle()
+  : { data: null };
+
+// Aktivní inzeráty prodejce, TOP první.
+const { data: listings } = seller
+  ? await supabase
+      .from('bazar_listings')
+      .select(
+        'id, title, price, location, category, brand, created_at, featured, featured_until, pracovni_zaber_m, nosnost_kg, objem_nadrze_l, bazar_images(storage_path, position)',
+      )
+      .eq('user_id', seller.id)
+      .eq('status', 'active')
+      .order('featured', { ascending: false })
+      .order('created_at', { ascending: false })
+  : { data: [] };
+
+function getImageUrl(listing: any): string | null {
+  const images = listing.bazar_images;
+  if (!images || images.length === 0) return null;
+  const sorted = [...images].sort((a: any, b: any) => a.position - b.position);
+  const { data } = supabase.storage.from('bazar-images').getPublicUrl(sorted[0].storage_path);
+  return data.publicUrl;
+}
+
+const rows = listings ?? [];
+const count = rows.length;
+const sellerName = seller?.name?.trim() || 'Prodejce';
+// Skloňování počítáme tady (ne v marku) — Astro compiler bere `<=` ve výrazu jako tag.
+const inzWord = count === 1 ? 'aktivní inzerát' : count >= 2 && count <= 4 ? 'aktivní inzeráty' : 'aktivních inzerátů';
+
+if (!seller) Astro.response.status = 404;
+
+const title = seller ? `${sellerName} — inzeráty na Agro bazaru` : 'Prodejce nenalezen';
+const description = seller
+  ? `${sellerName} nabízí ${count} ${count === 1 ? 'inzerát' : count >= 2 && count <= 4 ? 'inzeráty' : 'inzerátů'} zemědělské techniky na bazaru Agro-svět.`
+  : 'Tento prodejce neexistuje.';
+---
+<Layout title={title} description={description} canonical={`${SITE_URL}/bazar/prodejce/${id}/`} noindex={!seller || count === 0}>
+  <div style="max-width:1000px; margin:0 auto; padding:48px 24px 80px;">
+    <a href="/bazar/" class="link-underline" style="font-size:13px; color:#666;">← Zpět na bazar</a>
+
+    {!seller ? (
+      <div style="text-align:center; padding:64px 0; color:#666;">
+        <h1 style="font-size:1.6rem;">Prodejce nenalezen</h1>
+        <p style="margin-top:8px;">Tento profil neexistuje. <a href="/bazar/" class="link-underline">Přejít na bazar</a></p>
+      </div>
+    ) : (
+      <>
+        <div style="margin:12px 0 28px;">
+          <span class="section-label">Prodejce na Agro bazaru</span>
+          <h1 style="font-size:clamp(1.8rem,4vw,2.5rem); margin:2px 0 6px;">{sellerName}</h1>
+          <p style="color:#666;">
+            {seller.location && <span>{seller.location} · </span>}
+            {count} {inzWord}
+          </p>
+        </div>
+
+        {count > 0 ? (
+          <div style="border:1px solid #e8e8e8; border-radius:14px; overflow:hidden; background:#fff;">
+            {rows.map((listing: any) => (
+              <BazarListingRow
+                id={listing.id}
+                title={listing.title}
+                price={listing.price}
+                location={listing.location}
+                category={listing.category}
+                brand={listing.brand}
+                imageUrl={getImageUrl(listing)}
+                createdAt={listing.created_at}
+                featured={isFeaturedActive(listing)}
+                pracovniZaberM={listing.pracovni_zaber_m}
+                nosnostKg={listing.nosnost_kg}
+                objemNadrzeL={listing.objem_nadrze_l}
+              />
+            ))}
+          </div>
+        ) : (
+          <p style="color:#666; padding:32px 0;">Tento prodejce nemá momentálně žádné aktivní inzeráty.</p>
+        )}
+      </>
+    )}
+  </div>
+</Layout>

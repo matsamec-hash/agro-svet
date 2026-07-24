@@ -12,7 +12,7 @@ import { listOpenProspects } from '../../../../lib/bazar-seed';
 const supabase = createServerClient();
 const { data: prospects } = await supabase
   .from('bazar_seed_prospects')
-  .select('id, name, email, phone, source_url, claim_token, claim_code, status, created_at')
+  .select('id, name, email, phone, source_url, claim_token, claim_code, status, created_at, user_id')
   .order('created_at', { ascending: false })
   .limit(200);
 
@@ -199,7 +199,11 @@ const tiles = [
               <div class="flex items-start gap-2 min-w-0">
                 <input type="checkbox" class="rowChk mt-1.5" data-id={p.id} />
                 <div class="min-w-0">
-                  <div class="font-semibold truncate" style="font-family:var(--font-heading);">{p.name || 'Bez jména'}</div>
+                  {p.user_id ? (
+                    <a href={`/bazar/prodejce/${p.user_id}/`} target="_blank" rel="noopener" class="font-semibold truncate inline-block underline" style="font-family:var(--font-heading);">{p.name || 'Bez jména'} ↗</a>
+                  ) : (
+                    <div class="font-semibold truncate" style="font-family:var(--font-heading);">{p.name || 'Bez jména'}</div>
+                  )}
                   <div class="text-sm text-gray-500 truncate">{p.email || '—'} · {p.phone || '—'}</div>
                 </div>
               </div>
