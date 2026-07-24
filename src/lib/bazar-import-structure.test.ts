@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { buildStructurePrompt, parseStructureResponse, structureListing } from './bazar-import-structure';
+import {
+  buildStructurePrompt,
+  parseStructureResponse,
+  structureListing,
+  extractAttributesFallback,
+} from './bazar-import-structure';
+import { attributesForCategory } from './bazar-attributes';
 
 const FALLBACK = { brand: 'john-deere', category: 'traktory', hours: 8251 };
 
@@ -49,5 +55,43 @@ describe('structureListing', () => {
     };
     const r = await structureListing({ title: 'A', description: 'B', apiKey: 'x', fallback: FALLBACK, llm });
     expect(r).toMatchObject({ title: 'A', brand: 'john-deere', hours: 8251 });
+  });
+});
+
+describe('atributy — AI', () => {
+  it('structureListing vrátí validní attributes z LLM a zahodí smetí', async () => {
+    const llm = async () => JSON.stringify({
+      title: 'Zetor 5245', description: 'popis', brand: 'zetor', category: 'traktory',
+      type: null, year: null, hours: null, powerHp: null, features: [],
+      attributes: { klimatizace: true, pohon: '4x4', neznamy: 'x' },
+    });
+    const r = await structureListing({
+      title: 'Zetor 5245', description: 'popis', apiKey: 'x',
+      fallback: { brand: 'zetor', category: 'traktory', hours: null },
+      categoryAttributes: attributesForCategory('traktory'), llm,
+    });
+    expect(r.attributes).toEqual({ klimatizace: true, pohon: '4x4' });
+  });
+});
+
+describe('extractAttributesFallback (regexy)', () => {
+  it('najde klimatizaci, 4x4, TP+SPZ, čelní nakladač', () => {
+    const out = extractAttributesFallback('traktory',
+      'Traktor s klimatizací, pohon 4x4, čelní nakladač, prodám s TP a SPZ');
+    expect(out).toEqual({ klimatizace: true, pohon: '4x4', celni_nakladac: true, tp_spz: true });
+  });
+  it('nenajde nic v prázdném textu', () => {
+    expect(extractAttributesFallback('traktory', '')).toEqual({});
+  });
+});
+
+describe('structureListing bez apiKey použije fallback atributy', () => {
+  it('vytáhne atributy regexem', async () => {
+    const r = await structureListing({
+      title: 'Zetor s klimatizací 4x4', description: 'čelní nakladač',
+      apiKey: '', fallback: { brand: 'zetor', category: 'traktory', hours: null },
+      categoryAttributes: attributesForCategory('traktory'),
+    });
+    expect(r.attributes).toEqual({ klimatizace: true, pohon: '4x4', celni_nakladac: true });
   });
 });

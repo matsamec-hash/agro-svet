@@ -1,4 +1,5 @@
 import { CATEGORIES, BRANDS } from './bazar-constants';
+import { validateAttributes, type AttrDef } from './bazar-attributes';
 
 /** Strukturovaná data inzerátu vytažená AI (OpenAI) z Bazoš textu. */
 export interface StructuredListing {
@@ -11,6 +12,7 @@ export interface StructuredListing {
   hours: number | null; // motohodiny
   powerHp: number | null; // výkon v koních
   features: string[]; // klíčová výbava
+  attributes: Record<string, unknown>; // strukturované per-kategorie atributy (výbava)
 }
 
 /** Funkce, která pošle prompt do LLM a vrátí textovou odpověď. Injektovatelné kvůli testům. */
@@ -20,8 +22,8 @@ const MODEL = 'gpt-4o-mini';
 const BRAND_SLUGS: string[] = BRANDS.map((b) => b.value).filter((v) => v !== 'jina');
 const CATEGORY_SLUGS: string[] = CATEGORIES.map((c) => c.value);
 
-export function buildStructurePrompt(title: string, description: string): string {
-  return [
+export function buildStructurePrompt(title: string, description: string, attrs: AttrDef[] = []): string {
+  const lines = [
     'Jsi asistent pro český zemědělský inzertní portál. Z inzerátu vytáhni strukturovaná',
     'data a přepiš text. Vrať POUZE validní JSON objekt, nic jiného.',
     '',
@@ -36,11 +38,37 @@ export function buildStructurePrompt(title: string, description: string): string
     '- "title": stručný výstižný SEO titulek (zachovej značku i model).',
     '- "description": čtivý, originální, SEO-laděný popis v češtině. Zachovej VŠECHNA fakta, nic si nevymýšlej.',
     '',
-    'Formát: {"title","description","brand","category","type","year","hours","powerHp","features"}',
+    'Formát: {"title","description","brand","category","type","year","hours","powerHp","features","attributes"}',
+  ];
+  if (attrs.length) {
+    const spec = attrs.map((a) => {
+      if (a.type === 'bool') return `  "${a.key}": true (jen když ANO; jinak vynech) — ${a.label}`;
+      if (a.type === 'enum') return `  "${a.key}": jeden z [${a.options?.join(', ')}] — ${a.label}`;
+      return `  "${a.key}": číslo${a.unit ? ' v ' + a.unit : ''} — ${a.label}`;
+    }).join('\n');
+    lines.push(
+      '',
+      'Dále vyplň objekt "attributes" — POUZE tyto klíče, jen co lze z textu jednoznačně určit,',
+      'co nelze určit VYNECH (klíč neuváděj). Nehádej. Povolené klíče/hodnoty:',
+      spec,
+    );
+  }
+  lines.push(
     '',
     `Původní titulek: ${title}`,
     `Původní popis: ${description}`,
-  ].join('\n');
+  );
+  return lines.join('\n');
+}
+
+/** Deterministická extrakce nejjasnějších atributů z textu (bez AI). */
+export function extractAttributesFallback(category: string, text: string): Record<string, unknown> {
+  const raw: Record<string, unknown> = {};
+  if (/klimatizac/i.test(text)) raw.klimatizace = true;
+  if (/\b4\s?x\s?4\b|4wd|pohon\s+všech|náhon.{0,10}4/i.test(text)) raw.pohon = '4x4';
+  if (/čelní\s+naklada/i.test(text)) raw.celni_nakladac = true;
+  if (/\bTP\b/.test(text) && /\bSPZ\b/.test(text)) raw.tp_spz = true;
+  return validateAttributes(category, raw);
 }
 
 export function parseStructureResponse(raw: string): Record<string, unknown> | null {
@@ -89,8 +117,14 @@ export async function structureListing(opts: {
   description: string;
   apiKey: string;
   fallback: { brand: string | null; category: string; hours: number | null };
+  categoryAttributes?: AttrDef[];
   llm?: LlmClient;
 }): Promise<StructuredListing> {
+  const attrs = opts.categoryAttributes ?? [];
+  const fallbackAttributes = extractAttributesFallback(
+    opts.fallback.category,
+    `${opts.title} ${opts.description}`,
+  );
   const base: StructuredListing = {
     title: opts.title,
     description: opts.description,
@@ -101,14 +135,19 @@ export async function structureListing(opts: {
     hours: opts.fallback.hours,
     powerHp: null,
     features: [],
+    attributes: fallbackAttributes,
   };
   if (!opts.apiKey) return base;
   const llm = opts.llm ?? ((p: string) => openaiClient(opts.apiKey, p));
   try {
-    const o = parseStructureResponse(await llm(buildStructurePrompt(opts.title, opts.description)));
+    const o = parseStructureResponse(await llm(buildStructurePrompt(opts.title, opts.description, attrs)));
     if (!o) return base;
     const brand = typeof o.brand === 'string' && BRAND_SLUGS.includes(o.brand) ? o.brand : base.brand;
     const category = typeof o.category === 'string' && CATEGORY_SLUGS.includes(o.category) ? o.category : base.category;
+    const aiAttributes = validateAttributes(
+      typeof o.category === 'string' ? o.category : base.category,
+      (o.attributes && typeof o.attributes === 'object' ? o.attributes : {}) as Record<string, unknown>,
+    );
     return {
       title: typeof o.title === 'string' && o.title.trim() ? o.title.trim() : base.title,
       description:
@@ -122,6 +161,7 @@ export async function structureListing(opts: {
       features: Array.isArray(o.features)
         ? o.features.filter((f): f is string => typeof f === 'string' && f.trim().length > 0).slice(0, 10)
         : [],
+      attributes: Object.keys(aiAttributes).length ? aiAttributes : fallbackAttributes,
     };
   } catch {
     return base;
