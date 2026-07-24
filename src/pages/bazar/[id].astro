@@ -274,7 +274,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
     {listing.user_id && sellerOthersTotal > 0 && (
       <section style="margin-top:48px;">
         <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
-          <h2 style="font-size:1.3rem;">Další inzeráty od <strong>{sellerName}</strong></h2>
+          <h2 style="font-size:1.3rem;">Další inzeráty tohoto prodejce</h2>
           <a href={`/bazar/prodejce/${listing.user_id}/`} class="link-underline" style="font-size:14px; white-space:nowrap;">Zobrazit všech {sellerOthersTotal + 1} →</a>
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px;">
