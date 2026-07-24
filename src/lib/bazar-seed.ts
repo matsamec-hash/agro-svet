@@ -23,6 +23,7 @@ export interface DraftListingInput {
   hoursOperated?: number | null;
   latitude?: number | null;
   longitude?: number | null;
+  attributes?: Record<string, unknown>;
 }
 
 /** Založí prospekta + jeho první draft listing (pending_claim, bez user_id). */
@@ -111,6 +112,7 @@ export async function addDraftListing(
       hours_operated: listing.hoursOperated ?? null,
       latitude: listing.latitude ?? null,
       longitude: listing.longitude ?? null,
+      attributes: listing.attributes ?? {},
     })
     .select('id')
     .single();

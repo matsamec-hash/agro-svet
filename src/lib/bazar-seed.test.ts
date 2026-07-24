@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createProspectWithDraft, createProspect, markProspectSent, confirmProspect, getProspectByCode } from './bazar-seed';
+import { createProspectWithDraft, createProspect, markProspectSent, confirmProspect, getProspectByCode, addDraftListing } from './bazar-seed';
 
 function fakeSupabase(returns: Record<string, any>) {
   const calls: any[] = [];
@@ -148,6 +148,27 @@ describe('confirmProspect', () => {
     await expect(confirmProspect(sb, {
       token: 'TOK', ip: '1.2.3.4', termsVersion: 'v1', ensureUser: async () => 'U1', listingIds: ['L1'],
     })).rejects.toThrow(/e-mail/i);
+  });
+});
+
+describe('addDraftListing — attributes', () => {
+  it('zapíše attributes do insertu', async () => {
+    const sb = fakeSupabase({ 'bazar_listings.single': { data: { id: 'L1' }, error: null } });
+    await addDraftListing(sb, 'P1', {
+      title: 'T', description: 'D', price: null, category: 'traktory', brand: 'zetor',
+      location: '', phone: '', email: '', attributes: { klimatizace: true },
+    }, []);
+    const ins = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'insert');
+    expect(ins._payload.attributes).toEqual({ klimatizace: true });
+  });
+  it('když attributes chybí, zapíše prázdný objekt', async () => {
+    const sb = fakeSupabase({ 'bazar_listings.single': { data: { id: 'L1' }, error: null } });
+    await addDraftListing(sb, 'P1', {
+      title: 'T', description: 'D', price: null, category: 'traktory',
+      location: '', phone: '', email: '',
+    }, []);
+    const ins = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'insert');
+    expect(ins._payload.attributes).toEqual({});
   });
 });
 
