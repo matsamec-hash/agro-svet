@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { ATTRIBUTES, attributesForCategory, attrDef, validateAttributes } from './bazar-attributes';
+import { CATEGORIES } from './bazar-constants';
 
 describe('ATTRIBUTES integrita', () => {
   it('má unikátní kombinace key (globálně unikátní klíče)', () => {
@@ -43,5 +44,27 @@ describe('validateAttributes', () => {
   });
   it('zahodí atribut kategorie, do které nepatří', () => {
     expect(validateAttributes('zvirata', { prevodovka: 'manual' })).toEqual({});
+  });
+});
+
+describe('pokrytí kategorií', () => {
+  // Kategorie, které mají mít vlastní (nesdílené) atributy.
+  const RICH = ['traktory','kombajny','zpracovani-pudy','seti','hnojeni','ochrana-rostlin',
+    'sklizen-picnin','sklizen-okopanin','manipulace','doprava','komunal-les','staj-chov',
+    'nahradni-dily','prislusenstvi','osiva-hnojiva','pozemky','zvirata','sluzby'];
+  it('každá RICH kategorie má alespoň jeden vlastní atribut', () => {
+    for (const cat of RICH) {
+      const own = ATTRIBUTES.filter((a) => a.categories.includes(cat));
+      expect(own.length, `kategorie ${cat}`).toBeGreaterThan(0);
+    }
+  });
+  it('všechny categories ve slovníku existují v CATEGORIES nebo jsou *', () => {
+    const valid = new Set<string>(CATEGORIES.map((c) => c.value));
+    for (const a of ATTRIBUTES) {
+      for (const c of a.categories) {
+        if (c === '*') continue;
+        expect(valid.has(c), `${a.key} → ${c}`).toBe(true);
+      }
+    }
   });
 });
