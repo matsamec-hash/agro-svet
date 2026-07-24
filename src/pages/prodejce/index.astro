@@ -1,0 +1,35 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { getEnvVar } from '../../lib/env';
+
+// Read at request time (Worker/Node env in prod, Vite .env in dev) —
+// stejný vzor jako fotosoutěž (src/pages/fotosoutez/nahrat.astro).
+const turnstileSiteKey = getEnvVar('PUBLIC_TURNSTILE_SITE_KEY') ?? '';
+const error = Astro.url.searchParams.get('error');
+---
+<Layout title="Vaše připravené inzeráty — Agro-svět bazar">
+  <main style="max-width:520px;margin:0 auto;padding:56px 24px 80px;">
+    <span class="section-label">Agro bazar</span>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.5rem);">Zadejte svůj kód</h1>
+    <p style="color:#555;margin:12px 0 24px;line-height:1.6;">
+      Poslali jsme vám 6místný kód. Zadejte ho níže a uvidíte všechny inzeráty, které jsme vám
+      připravili — zdarma je zveřejníte nebo smažete.
+    </p>
+    {error && <div class="form-error">{error}</div>}
+    <form method="POST" action="/prodejce/api/verify-code/">
+      <div class="form-group">
+        <label for="code">Kód</label>
+        <input id="code" name="code" class="form-input" required maxlength="6"
+          autocomplete="one-time-code" autocapitalize="characters" spellcheck="false"
+          style="text-transform:uppercase;letter-spacing:4px;font-size:20px;text-align:center;" placeholder="ABC234" />
+      </div>
+      <div class="cf-turnstile" data-sitekey={turnstileSiteKey} style="margin:16px 0;"></div>
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">Zobrazit moje inzeráty</button>
+    </form>
+    <p style="color:#888;font-size:13px;margin-top:20px;">
+      Máte odkaz z e-mailu? Stačí na něj kliknout — kód pak nepotřebujete.
+    </p>
+  </main>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</Layout>

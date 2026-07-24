@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createProspectWithDraft, markProspectSent, confirmProspect } from './bazar-seed';
+import { createProspectWithDraft, markProspectSent, confirmProspect, getProspectByCode } from './bazar-seed';
 
 function fakeSupabase(returns: Record<string, any>) {
   const calls: any[] = [];
@@ -40,6 +40,8 @@ describe('createProspectWithDraft', () => {
     expect(listingInsert._payload.status).toBe('pending_claim');
     expect(listingInsert._payload.seed_prospect_id).toBe('P1');
     expect(listingInsert._payload.user_id).toBeNull();
+    const prospectInsert = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects' && c._op === 'insert');
+    expect(prospectInsert._payload.claim_code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/);
   });
 });
 
@@ -89,12 +91,38 @@ describe('confirmProspect', () => {
     });
     expect(ensureUser).toHaveBeenCalledWith({ email: 'a@b.cz', name: 'Jan', phone: '777' });
     expect(r.userId).toBe('U1');
-    const listingUpd = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'update');
-    expect(listingUpd._payload.status).toBe('active');
-    expect(listingUpd._payload.user_id).toBe('U1');
+    const ownerUpd = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'update' && c._payload.user_id === 'U1');
+    expect(ownerUpd).toBeTruthy();
+    const publishUpd = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'update' && c._payload.status === 'active');
+    expect(publishUpd).toBeTruthy();
     const prospectUpd = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects' && c._op === 'update');
     expect(prospectUpd._payload.status).toBe('confirmed');
     expect(prospectUpd._payload.confirmed_ip).toBe('1.2.3.4');
     expect(prospectUpd._payload.terms_version).toBe('v1');
+  });
+
+  it('s listingIds zveřejní jen vybrané a všem nastaví user_id', async () => {
+    const sb = fakeSupabase({ 'bazar_seed_prospects.single': { data: baseProspect, error: null } });
+    await confirmProspect(sb, {
+      token: 'TOK', ip: '1.2.3.4', termsVersion: 'v1', ensureUser: async () => 'U1',
+      listingIds: ['L1', 'L2'], now: new Date('2026-01-01T00:00:00Z'),
+    });
+    const ownerUpd = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'update'
+      && c._payload.user_id === 'U1' && c._payload.status === undefined);
+    expect(ownerUpd).toBeTruthy();
+    expect(ownerUpd._filters).toContainEqual(['seed_prospect_id', 'P1']);
+    const publishUpd = sb._calls.find((c: any) => c.table === 'bazar_listings' && c._op === 'update'
+      && c._payload.status === 'active');
+    expect(publishUpd._filters).toContainEqual(['id', ['L1', 'L2']]);
+  });
+});
+
+describe('getProspectByCode', () => {
+  it('normalizuje kód na velká písmena a hledá podle claim_code', async () => {
+    const sb = fakeSupabase({ 'bazar_seed_prospects.single': { data: { id: 'P1', claim_token: 'TOK' }, error: null } });
+    const p = await getProspectByCode(sb, ' ab2c3d ');
+    expect(p?.id).toBe('P1');
+    const q = sb._calls.find((c: any) => c.table === 'bazar_seed_prospects');
+    expect(q._filters).toContainEqual(['claim_code', 'AB2C3D']);
   });
 });

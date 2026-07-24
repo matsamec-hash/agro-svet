@@ -36,17 +36,18 @@ export const POST: APIRoute = async ({ request, locals }) => {
     .single();
   if (!prospect?.email) return json({ error: 'Prospekt nemá e-mail' }, 422);
 
-  const { data: listing } = await supabase
+  const { data: listings } = await supabase
     .from('bazar_listings')
     .select('title')
-    .eq('seed_prospect_id', prospectId)
-    .limit(1)
-    .single();
+    .eq('seed_prospect_id', prospectId);
+  const listingCount = listings?.length ?? 1;
+  const firstTitle = (listings?.[0]?.title as string) ?? 'Váš inzerát';
 
   const ok = await sendClaimEmail(getEnvVar('RESEND_API_KEY') ?? '', prospect.email as string, {
     name: (prospect.name as string) ?? '',
     token: prospect.claim_token as string,
-    listingTitle: (listing?.title as string) ?? 'Váš inzerát',
+    listingTitle: firstTitle,
+    listingCount,
   });
   if (!ok) return json({ error: 'E-mail se nepodařilo odeslat' }, 502);
 

@@ -4,6 +4,7 @@ import Layout from '../../../../layouts/Layout.astro';
 import { createServerClient } from '../../../../lib/supabase';
 import { claimUrl } from '../../../../lib/bazar-seed-email';
 import { buildClaimWhatsAppMessage, claimWhatsAppUrl } from '../../../../lib/bazar-claim-whatsapp';
+import { listOpenProspects } from '../../../../lib/bazar-seed';
 
 // Middleware už gate-uje /admin/* přes is_admin (viz ostatní admin .astro
 // stránky — žádná z nich dělá vlastní kontrolu, locals.user navíc is_admin
@@ -11,46 +12,50 @@ import { buildClaimWhatsAppMessage, claimWhatsAppUrl } from '../../../../lib/baz
 const supabase = createServerClient();
 const { data: prospects } = await supabase
   .from('bazar_seed_prospects')
-  .select('id, name, email, phone, source_url, claim_token, status, created_at')
+  .select('id, name, email, phone, source_url, claim_token, claim_code, status, created_at')
   .order('created_at', { ascending: false })
   .limit(100);
 
-// Draft (id/title/price) per prospekt — identita inzerátu + náhled + WhatsApp zpráva.
-// Jeden dotaz, namapováno přes seed_prospect_id.
+// Drafty (id/title/price/status) per prospekt — VŠECHNY, ne jen první (jeden
+// prodejce může mít víc připravených inzerátů). Jeden dotaz, namapováno přes
+// seed_prospect_id.
 const prospectIds = (prospects ?? []).map((p) => p.id);
-type Draft = { id: string; title: string; price: number | null };
-const draftByProspect = new Map<string, Draft>();
+type Draft = { id: string; title: string; price: number | null; status: string };
+const draftsByProspect = new Map<string, Draft[]>();
 if (prospectIds.length > 0) {
   const { data: drafts } = await supabase
     .from('bazar_listings')
-    .select('id, seed_prospect_id, title, price')
+    .select('id, seed_prospect_id, title, price, status')
     .in('seed_prospect_id', prospectIds);
   for (const d of drafts ?? []) {
-    const row = d as { id: string; seed_prospect_id?: string; title?: string; price?: number | null };
-    if (row.seed_prospect_id && !draftByProspect.has(row.seed_prospect_id)) {
-      draftByProspect.set(row.seed_prospect_id, { id: row.id, title: row.title ?? '', price: row.price ?? null });
-    }
+    const row = d as { id: string; seed_prospect_id?: string; title?: string; price?: number | null; status?: string };
+    if (!row.seed_prospect_id) continue;
+    const arr = draftsByProspect.get(row.seed_prospect_id) ?? [];
+    arr.push({ id: row.id, title: row.title ?? '', price: row.price ?? null, status: row.status ?? '' });
+    draftsByProspect.set(row.seed_prospect_id, arr);
   }
 }
+// Prospekti, ke kterým jde ještě přidat další inzerát (import s cílem „existující prodejce").
+const openProspects = await listOpenProspects(supabase);
 
 const dateFmt = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 const fmtDate = (iso?: string | null): string => (iso ? dateFmt.format(new Date(iso)) : '—');
 const fmtPrice = (p: number | null): string => (p ? `${p.toLocaleString('cs-CZ')} Kč` : 'Dohodou');
 
 // WhatsApp deep-link per prospekt s telefonem (klientský odkaz s předvyplněnou
-// claim zprávou; null když tel. nejde normalizovat).
+// claim zprávou; null když tel. nejde normalizovat). Zpráva bere název z PRVNÍHO draftu.
 function waUrlFor(p: { phone?: string | null; name?: string | null; claim_token: string; id: string }): string | null {
   const message = buildClaimWhatsAppMessage({
     name: p.name,
-    listingTitle: draftByProspect.get(p.id)?.title ?? null,
+    listingTitle: draftsByProspect.get(p.id)?.[0]?.title ?? null,
     url: claimUrl(p.claim_token),
   });
   return claimWhatsAppUrl(p.phone, message);
 }
 
-// Náhled draftu (pending_claim je neveřejný) — /bazar/<id>/?preview=<claim_token>.
+// Náhled PRVNÍHO draftu (pending_claim je neveřejný) — /bazar/<id>/?preview=<claim_token>.
 function previewUrlFor(p: { id: string; claim_token: string }): string | null {
-  const d = draftByProspect.get(p.id);
+  const d = draftsByProspect.get(p.id)?.[0];
   return d ? `/bazar/${d.id}/?preview=${encodeURIComponent(p.claim_token)}` : null;
 }
 
@@ -58,6 +63,7 @@ function statusInfo(s: string): { label: string; cls: string } {
   switch (s) {
     case 'pending_claim': return { label: 'Čeká na potvrzení', cls: 'bg-amber-100 text-amber-800' };
     case 'confirmed': return { label: 'Zveřejněno', cls: 'bg-green-100 text-green-800' };
+    case 'active': return { label: 'Zveřejněno', cls: 'bg-green-100 text-green-800' };
     case 'sent': return { label: 'Odesláno', cls: 'bg-blue-100 text-blue-800' };
     default: return { label: s, cls: 'bg-gray-100 text-gray-700' };
   }
@@ -77,6 +83,12 @@ for (const p of prospects ?? []) {
     <section class="mb-8 rounded border p-4">
       <h2 class="font-semibold mb-2">Import z URL (Bazoš)</h2>
       <form id="importForm" class="grid gap-2 sm:grid-cols-2">
+        <select name="prospectId" class="form-select sm:col-span-2">
+          <option value="">➕ Nový prodejce</option>
+          {openProspects.map((p) => (
+            <option value={p.id}>{p.name || p.email || 'Prodejce'} ({p.email})</option>
+          ))}
+        </select>
         <input name="url" required placeholder="Odkaz na inzerát na bazos.cz" class="border p-2 sm:col-span-2" />
         <input name="name" placeholder="Jméno prodejce" class="border p-2" />
         <input name="phone" placeholder="Telefon" class="border p-2" />
@@ -90,6 +102,12 @@ for (const p of prospects ?? []) {
       <h2 class="font-semibold mb-2">Hromadný import (víc odkazů najednou)</h2>
       <p class="text-sm text-gray-600 mb-2">Vlož odkazy na inzeráty z bazos.cz — jeden na řádek (max 20). Kontakt se vezme z inzerátu. Vytvoří se drafty ke schválení.</p>
       <form id="batchForm" class="grid gap-2">
+        <select name="prospectId" class="form-select sm:col-span-2">
+          <option value="">➕ Nový prodejce</option>
+          {openProspects.map((p) => (
+            <option value={p.id}>{p.name || p.email || 'Prodejce'} ({p.email})</option>
+          ))}
+        </select>
         <textarea name="urls" rows="6" required placeholder="https://…bazos.cz/inzerat/…&#10;https://…bazos.cz/inzerat/…" class="border p-2 font-mono text-xs"></textarea>
         <button class="bg-green-800 text-white p-2 rounded">Importovat vše</button>
       </form>
@@ -98,69 +116,84 @@ for (const p of prospects ?? []) {
     </section>
 
     <div class="flex items-center justify-between mb-2">
-      <h2 class="font-semibold">Importované inzeráty ({counts.total})</h2>
+      <h2 class="font-semibold">Importovaní prodejci ({counts.total})</h2>
       <p class="text-sm text-gray-600">
         <span class="text-amber-700 font-medium">{counts.pending_claim} čeká na potvrzení</span>
         · <span class="text-green-700 font-medium">{counts.confirmed} zveřejněno</span>
       </p>
     </div>
 
-    <div class="mb-2">
+    <div class="mb-3 flex items-center gap-3">
+      <label class="flex items-center gap-1 text-sm text-gray-600">
+        <input type="checkbox" id="selectAll" title="Vybrat vše" /> Vybrat vše
+      </label>
       <button type="button" id="bulkDelBtn" disabled class="bg-red-700 text-white text-sm px-3 py-1.5 rounded disabled:opacity-40 disabled:cursor-not-allowed">Smazat vybrané</button>
-      <span class="text-xs text-gray-500 ml-2">Aktivní inzeráty (živé na webu) se přeskočí.</span>
+      <span class="text-xs text-gray-500">Aktivní inzeráty (živé na webu) se přeskočí.</span>
     </div>
 
-    <table class="w-full text-sm border-collapse">
-      <thead><tr class="text-left border-b bg-gray-50">
-        <th class="p-2 w-8"><input type="checkbox" id="selectAll" title="Vybrat vše" /></th>
-        <th class="p-2">Inzerát</th>
-        <th class="p-2">Prodejce</th>
-        <th class="p-2">Stav</th>
-        <th class="p-2">Přidáno</th>
-        <th class="p-2">Akce</th>
-      </tr></thead>
-      <tbody>
-        {prospects?.map((p) => {
-          const waUrl = waUrlFor(p);
-          const draft = draftByProspect.get(p.id);
-          const preview = previewUrlFor(p);
-          const st = statusInfo(p.status);
-          return (
-            <tr class="border-b align-top hover:bg-gray-50">
-              <td class="p-2"><input type="checkbox" class="rowChk" data-id={p.id} /></td>
-              <td class="p-2">
-                {draft ? (
-                  <>
-                    <span class="font-medium">{draft.title || 'Bez názvu'}</span><br />
-                    <span class="text-gray-500">{fmtPrice(draft.price)}</span>
-                  </>
-                ) : (
-                  <span class="text-gray-400 italic">Draft nenalezen</span>
-                )}
-              </td>
-              <td class="p-2">{p.name || '—'}<br /><span class="text-gray-500">{p.email || p.phone || '—'}</span></td>
-              <td class="p-2"><span class={`inline-block rounded px-2 py-0.5 text-xs font-medium ${st.cls}`}>{st.label}</span></td>
-              <td class="p-2 whitespace-nowrap text-gray-600">{fmtDate(p.created_at)}</td>
-              <td class="p-2">
-                <div class="flex flex-wrap gap-x-3 gap-y-1">
-                  {preview && (
-                    <a href={preview} target="_blank" rel="noopener" class="underline font-medium">Náhled</a>
-                  )}
-                  <button type="button" class="copyBtn underline" data-url={claimUrl(p.claim_token)}>Kopírovat odkaz</button>
-                  {waUrl && (
-                    <a href={waUrl} target="_blank" rel="noopener" class="underline text-green-700">WhatsApp</a>
-                  )}
-                  {p.email && (
-                    <button type="button" class="sendBtn underline" data-id={p.id}>Poslat e-mailem</button>
-                  )}
-                  <button type="button" class="delBtn underline text-red-700" data-id={p.id} data-status={p.status}>Smazat</button>
+    <div id="prospectCards">
+      {prospects?.map((p) => {
+        const waUrl = waUrlFor(p);
+        const preview = previewUrlFor(p);
+        const st = statusInfo(p.status);
+        const drafts = draftsByProspect.get(p.id) ?? [];
+        return (
+          <div class="mb-3 rounded border p-4" data-prospect-id={p.id}>
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div class="flex items-start gap-2">
+                <input type="checkbox" class="rowChk mt-1" data-id={p.id} />
+                <div>
+                  <div class="font-semibold">{p.name || '—'}</div>
+                  <div class="text-sm text-gray-500">{p.email || '—'} · {p.phone || '—'}</div>
                 </div>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+              </div>
+              <div class="text-right shrink-0">
+                <span class={`inline-block rounded px-2 py-0.5 text-xs font-medium ${st.cls}`}>{st.label}</span>
+                <div class="text-xs text-gray-500 mt-1 whitespace-nowrap">{fmtDate(p.created_at)}</div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-x-3 gap-y-1 mb-3 text-sm">
+              {preview && (
+                <a href={preview} target="_blank" rel="noopener" class="underline font-medium">Náhled</a>
+              )}
+              <button type="button" class="copyBtn underline" data-url={claimUrl(p.claim_token)}>Kopírovat odkaz</button>
+              <button type="button" class="copyCodeBtn underline" data-code={p.claim_code}>Kopírovat kód</button>
+              {waUrl && (
+                <a href={waUrl} target="_blank" rel="noopener" class="underline text-green-700">WhatsApp</a>
+              )}
+              {p.email && (
+                <button type="button" class="sendBtn underline" data-id={p.id}>Poslat e-mailem</button>
+              )}
+              <button type="button" class="delBtn underline text-red-700" data-id={p.id} data-status={p.status}>Smazat</button>
+            </div>
+
+            <div class="border-t pt-2">
+              <p class="text-xs text-gray-500 mb-1">Inzeráty ({drafts.length})</p>
+              {drafts.length === 0 ? (
+                <p class="text-sm text-gray-400 italic">Draft nenalezen</p>
+              ) : (
+                <ul class="space-y-1 text-sm">
+                  {drafts.map((draft) => (
+                    <li class="flex items-center justify-between gap-2 flex-wrap">
+                      <span>
+                        <a href={`/bazar/${draft.id}/?preview=${encodeURIComponent(p.claim_token)}`} target="_blank" rel="noopener" class="underline font-medium">{draft.title || 'Bez názvu'}</a>
+                        <span class="text-gray-500"> — {fmtPrice(draft.price)}</span>
+                      </span>
+                      {draft.status === 'pending_claim' ? (
+                        <button type="button" class="removeListingBtn underline text-red-700 text-xs" data-id={draft.id}>Odebrat</button>
+                      ) : (
+                        <span class="text-xs text-gray-500">{statusInfo(draft.status).label}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   </main>
 
   <script>
@@ -176,6 +209,7 @@ for (const p of prospects ?? []) {
         body: JSON.stringify({
           url: fd.get('url'),
           contact: { name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email') },
+          prospectId: fd.get('prospectId'),
         }),
       });
       const data = await res.json();
@@ -195,16 +229,17 @@ for (const p of prospects ?? []) {
       batchMsg.textContent = 'Importuji dávku… (může chvíli trvat)';
       batchResults.innerHTML = '';
       try {
+        const batchFd = new FormData(batchForm);
         const res = await fetch('/admin/bazar/seed/api/import/', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ urls: (new FormData(batchForm).get('urls') as string) }),
+          body: JSON.stringify({ urls: (batchFd.get('urls') as string), prospectId: batchFd.get('prospectId') }),
         });
         const data = await res.json();
         if (!res.ok || !data.batch) {
           batchMsg.textContent = `Chyba: ${data.error || 'neznámá'}`;
         } else {
-          batchMsg.innerHTML = `Hotovo — ${data.succeeded}/${data.total} vytvořeno, ${data.failed} selhalo. <button type="button" id="reloadTable" class="underline font-medium">↻ Zobrazit v tabulce</button>`;
+          batchMsg.innerHTML = `Hotovo — ${data.succeeded}/${data.total} vytvořeno, ${data.failed} selhalo. <button type="button" id="reloadTable" class="underline font-medium">↻ Zobrazit v seznamu</button>`;
           document.getElementById('reloadTable')?.addEventListener('click', () => location.reload());
           for (const r of data.results) {
             const li = document.createElement('li');
@@ -228,6 +263,12 @@ for (const p of prospects ?? []) {
         (b as HTMLElement).textContent = 'Zkopírováno ✓';
       }),
     );
+    document.querySelectorAll('.copyCodeBtn').forEach((b) =>
+      b.addEventListener('click', () => {
+        navigator.clipboard.writeText((b as HTMLElement).dataset.code!);
+        (b as HTMLElement).textContent = 'Zkopírováno ✓';
+      }),
+    );
     document.querySelectorAll('.sendBtn').forEach((b) =>
       b.addEventListener('click', async () => {
         (b as HTMLElement).textContent = 'Odesílám…';
@@ -242,7 +283,7 @@ for (const p of prospects ?? []) {
     document.querySelectorAll('.delBtn').forEach((b) =>
       b.addEventListener('click', async () => {
         const el = b as HTMLElement;
-        if (!confirm('Opravdu smazat tento prospekt i jeho draft inzerát? Akce je nevratná.')) return;
+        if (!confirm('Opravdu smazat tohoto prodejce i všechny jeho draft inzeráty? Akce je nevratná.')) return;
         el.textContent = 'Mažu…';
         const res = await fetch('/admin/bazar/seed/api/delete/', {
           method: 'POST',
@@ -250,7 +291,7 @@ for (const p of prospects ?? []) {
           body: JSON.stringify({ prospectId: el.dataset.id }),
         });
         if (res.ok) {
-          el.closest('tr')?.remove();
+          el.closest('[data-prospect-id]')?.remove();
         } else {
           const data = await res.json().catch(() => ({}));
           el.textContent = 'Chyba';
@@ -258,6 +299,17 @@ for (const p of prospects ?? []) {
         }
       }),
     );
+    document.querySelectorAll('.removeListingBtn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Odebrat tento připravený inzerát? Zůstane pouze tento inzerát smazán.')) return;
+        const res = await fetch('/admin/bazar/seed/api/remove-listing/', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ listingId: btn.getAttribute('data-id') }),
+        });
+        if (res.ok) location.reload();
+        else alert('Nepodařilo se odebrat: ' + (await res.json()).error);
+      });
+    });
 
     // Hromadné mazání ---------------------------------------------------------
     const selectAll = document.getElementById('selectAll') as HTMLInputElement | null;
@@ -279,7 +331,7 @@ for (const p of prospects ?? []) {
     bulkBtn?.addEventListener('click', async () => {
       const ids = checkedIds();
       if (!ids.length) return;
-      if (!confirm(`Opravdu smazat ${ids.length} vybraných záznamů i jejich drafty? Akce je nevratná.`)) return;
+      if (!confirm(`Opravdu smazat ${ids.length} vybraných prodejců i jejich drafty? Akce je nevratná.`)) return;
       bulkBtn.disabled = true;
       bulkBtn.textContent = `Mažu ${ids.length}…`;
       const res = await fetch('/admin/bazar/seed/api/delete/', {
@@ -290,7 +342,7 @@ for (const p of prospects ?? []) {
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         const deleted: string[] = data.deleted ?? [];
-        deleted.forEach((id) => document.querySelector(`.rowChk[data-id="${id}"]`)?.closest('tr')?.remove());
+        deleted.forEach((id) => document.querySelector(`.rowChk[data-id="${id}"]`)?.closest('[data-prospect-id]')?.remove());
         if (selectAll) selectAll.checked = false;
         if (data.skippedCount) alert(`Smazáno ${data.deletedCount}. Přeskočeno ${data.skippedCount} (aktivní inzerát na webu).`);
       } else {

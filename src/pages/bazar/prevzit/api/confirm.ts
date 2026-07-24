@@ -12,6 +12,9 @@ export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
   const agree = form.get('agree')?.toString() === 'on';
   if (!token || !agree) return new Response('Chybí souhlas nebo token', { status: 400 });
 
+  const listingIds = form.getAll('listing_ids').map((v) => v.toString()).filter(Boolean);
+  if (!listingIds.length) return new Response('Vyberte alespoň jeden inzerát ke zveřejnění', { status: 400 });
+
   const supabase = createServerClient();
 
   // Zajisti auth usera: dohledej podle e-mailu (bazar_users), jinak vytvoř passwordless.
@@ -48,6 +51,7 @@ export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
       ip,
       termsVersion,
       ensureUser,
+      listingIds,
     });
   } catch (e) {
     return new Response(`Chyba: ${(e as Error).message}`, { status: 400 });

@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { generateClaimToken, isTokenExpired } from './bazar-seed-token';
+import { generateClaimToken, generateClaimCode, isTokenExpired } from './bazar-seed-token';
 
 export interface ProspectInput {
   name: string;
@@ -31,6 +31,7 @@ export async function createProspectWithDraft(
   args: { adminId: string; prospect: ProspectInput; listing: DraftListingInput; imagePaths: string[] },
 ): Promise<{ prospectId: string; claimToken: string; listingId: string }> {
   const claimToken = generateClaimToken();
+  const claimCode = generateClaimCode();
   const { data: prospect, error: pErr } = await supabase
     .from('bazar_seed_prospects')
     .insert({
@@ -39,6 +40,7 @@ export async function createProspectWithDraft(
       email: args.prospect.email,
       source_url: args.prospect.sourceUrl,
       claim_token: claimToken,
+      claim_code: claimCode,
       created_by: args.adminId,
       status: 'draft',
     })
@@ -124,6 +126,30 @@ export async function getProspectByToken(
   return (data as ProspectRow) ?? null;
 }
 
+/** Načte prospekta podle zadaného kódu (case-insensitive, trim). null když neexistuje. */
+export async function getProspectByCode(supabase: SupabaseClient, code: string): Promise<ProspectRow | null> {
+  const normalized = code.trim().toUpperCase();
+  if (!/^[A-Z0-9]{6}$/.test(normalized)) return null;
+  const { data } = await supabase
+    .from('bazar_seed_prospects')
+    .select('id, email, name, phone, claim_token, token_expires_at, status, user_id')
+    .eq('claim_code', normalized)
+    .single();
+  return (data as ProspectRow) ?? null;
+}
+
+/** Prospekti, na které jde ještě věšet inzeráty (nezpotvrzené). Pro admin select „přidat k prodejci". */
+export async function listOpenProspects(
+  supabase: SupabaseClient,
+): Promise<Array<{ id: string; name: string; email: string }>> {
+  const { data } = await supabase
+    .from('bazar_seed_prospects')
+    .select('id, name, email')
+    .in('status', ['draft', 'sent', 'opened'])
+    .order('created_at', { ascending: false });
+  return (data as Array<{ id: string; name: string; email: string }>) ?? [];
+}
+
 /** Zaznamenej otevření claim odkazu (idempotentně jen z 'sent'/'draft'). */
 export async function markProspectOpened(supabase: SupabaseClient, prospectId: string, nowIso: string): Promise<void> {
   await supabase
@@ -139,7 +165,7 @@ export type EnsureUser = (args: { email: string; name: string; phone: string }) 
 /** Potvrdí prospekta: ověří token, zajistí usera, zveřejní inzeráty, zapíše audit. */
 export async function confirmProspect(
   supabase: SupabaseClient,
-  args: { token: string; ip: string; termsVersion: string; ensureUser: EnsureUser; now?: Date },
+  args: { token: string; ip: string; termsVersion: string; ensureUser: EnsureUser; listingIds?: string[]; now?: Date },
 ): Promise<{ userId: string; prospectId: string }> {
   const now = args.now ?? new Date();
   const prospect = await getProspectByToken(supabase, args.token);
@@ -149,10 +175,19 @@ export async function confirmProspect(
 
   const userId = await args.ensureUser({ email: prospect.email, name: prospect.name, phone: prospect.phone });
 
-  const { error: lErr } = await supabase
+  // Vlastníka nastavíme VŠEM inzerátům prospekta (i těm, co teď prodejce nevybral —
+  // zůstanou jako jeho neveřejný draft v /bazar/moje/, nezmizí).
+  const { error: ownErr } = await supabase
     .from('bazar_listings')
-    .update({ status: 'active', user_id: userId })
+    .update({ user_id: userId })
     .eq('seed_prospect_id', prospect.id);
+  if (ownErr) throw new Error(`assign owner: ${ownErr.message}`);
+
+  // Zveřejníme jen vybrané. Když listingIds nezadané → zveřejni všechny (zpětná kompatibilita).
+  const publish = supabase.from('bazar_listings').update({ status: 'active' }).eq('seed_prospect_id', prospect.id);
+  const { error: lErr } = await (args.listingIds && args.listingIds.length
+    ? publish.in('id', args.listingIds)
+    : publish);
   if (lErr) throw new Error(`publish listings: ${lErr.message}`);
 
   const { error: pErr } = await supabase
