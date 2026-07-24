@@ -8,6 +8,7 @@ import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../lib/articles-i18n';
 import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
 import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
+import { newsCategorySlug } from '../../lib/news-category';
 
 const PER_PAGE = 24;
 
@@ -80,7 +81,8 @@ const totalPages = Math.ceil((count ?? 0) / PER_PAGE);
 const catCounts = new Map<string, number>();
 const tagCounts = new Map<string, number>();
 for (const a of allForMeta ?? []) {
-  const c = (a.category as string) || 'novinky';
+  // Kanonizace: 'Zemědělství'/'zemědělství'/'Pruvodce'… splynou do jedné dlaždice.
+  const c = newsCategorySlug(a.category as string | null);
   catCounts.set(c, (catCounts.get(c) ?? 0) + 1);
   for (const t of (a.tags as string[]) ?? []) {
     tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);

@@ -12,7 +12,8 @@ import { createAnonClient } from '../lib/supabase';
 import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 import { imgSrcset } from '../lib/image-variants';
-import { getLocaleFromUrl, localizeInternalHref } from '../i18n/utils';
+import { getLocaleFromUrl, localizeInternalHref, localizedCategory } from '../i18n/utils';
+import { newsCategorySlug } from '../lib/news-category';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
@@ -113,7 +114,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
           </a>
           <div class="hero-tags">
             <a href={localizeInternalHref(locale, '/novinky/')} class="hero-tag">Novinky</a>
-            {featured.category && <a href={localizeInternalHref(locale, `/novinky/kategorie/${featured.category}/`)} class="hero-tag">{featured.category}</a>}
+            {featured.category && <a href={localizeInternalHref(locale, `/novinky/kategorie/${newsCategorySlug(featured.category)}/`)} class="hero-tag">{localizedCategory(locale, newsCategorySlug(featured.category))}</a>}
           </div>
         </div>
       )}
@@ -134,8 +135,8 @@ const itemListJsonLd = homepageItems.length > 0 ? {
               <h3>{article.title}</h3>
             </div>
           </a>
-          <a href={article.category ? `/novinky/kategorie/${article.category}/` : '/novinky/'} class="hero-tag">
-            {article.category ?? 'Novinky'}
+          <a href={localizeInternalHref(locale, article.category ? `/novinky/kategorie/${newsCategorySlug(article.category)}/` : '/novinky/')} class="hero-tag">
+            {article.category ? localizedCategory(locale, newsCategorySlug(article.category)) : 'Novinky'}
           </a>
         </div>
       ))}

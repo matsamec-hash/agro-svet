@@ -11,10 +11,10 @@ import { breadcrumbSchema } from '../../../../lib/structured-data';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../../../lib/articles-i18n';
 import { localizePath, t, localizedCategory } from '../../../../i18n/utils';
 import { isNewsCategoryHidden } from '../../../../i18n/nav';
+import { NEWS_CATEGORIES, newsCategorySlug } from '../../../../lib/news-category';
 
-const VALID_CATS = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
 const { kat } = Astro.params;
-if (!kat || !VALID_CATS.includes(kat)) return Astro.rewrite('/404');
+if (!kat || !(NEWS_CATEGORIES as readonly string[]).includes(kat)) return Astro.rewrite('/404');
 const locale = Astro.locals.locale ?? 'cs';
 // Jurisdikčně uzamčená kategorie (CZ dotace/legislativa/trh) pod /sk neexistuje.
 if (isNewsCategoryHidden(locale, kat)) return Astro.rewrite('/404');
@@ -58,10 +58,12 @@ if (!noTranslated) {
     .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
     .eq('site_id', SITE_ID)
     .eq('status', 'published')
-    .eq('category', kat)
     .order('published_at', { ascending: false });
   if (translatedIds) q = q.in('id', [...translatedIds]);
-  articles = (await q).data;
+  // Kategorie v DB jsou surové a nekonzistentní ('Zemědělství' vs 'zemědělství'
+  // vs 'Novinky a zprávy'). Filtrujeme podle normalizovaného kanonického slugu,
+  // takže /kategorie/novinky/ pobere i 'zemědělství'/'Průvodce'/null.
+  articles = ((await q).data ?? []).filter((a) => newsCategorySlug(a.category) === kat);
 }
 
 let items = articles ?? [];

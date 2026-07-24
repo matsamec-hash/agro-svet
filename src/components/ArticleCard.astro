@@ -2,6 +2,7 @@
 import { categoryStyle } from '../lib/tag-color';
 import { imgSrcset } from '../lib/image-variants';
 import { localizePath, tf, localizedCategory } from '../i18n/utils';
+import { newsCategorySlug } from '../lib/news-category';
 import type { Locale } from '../i18n/config';
 
 interface Props {
@@ -23,10 +24,13 @@ const heroVariants = imgSrcset(heroImage, '(max-width: 600px) 100vw, 400px');
 
 const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ';
 const date = new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(publishDate);
-const catLabel = localizedCategory(locale, category);
+// Surová kategorie z DB je nekonzistentní; odkaz i štítek stavíme z kanonického
+// slugu, jinak vede badge na 404 (/kategorie/Zemědělství/ apod.).
+const catSlug = newsCategorySlug(category);
+const catLabel = localizedCategory(locale, catSlug);
 const catTitle = tf(locale, 'nov.cat.allInTitle', { label: catLabel });
 const articleHref = localizePath(locale, `/novinky/${slug}/`);
-const categoryHref = localizePath(locale, `/novinky/kategorie/${category}/`);
+const categoryHref = localizePath(locale, `/novinky/kategorie/${catSlug}/`);
 ---
 
 <div class="card-wrap">
@@ -62,7 +66,7 @@ const categoryHref = localizePath(locale, `/novinky/kategorie/${category}/`);
   <a
     href={categoryHref}
     class="tag"
-    style={categoryStyle(category)}
+    style={categoryStyle(catSlug)}
     title={catTitle}
   >
     {catLabel}

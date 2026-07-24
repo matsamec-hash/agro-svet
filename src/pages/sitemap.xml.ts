@@ -17,8 +17,9 @@ import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 import { dsDate, FALLBACK_LASTMOD } from '../lib/content-dates';
 import svetIndex from '../data/svet/index.json';
+import { NEWS_CATEGORIES } from '../lib/news-category';
 
-const NOVINKY_CATEGORIES = ['technika', 'dotace', 'trh', 'legislativa', 'znacky', 'novinky'];
+const NOVINKY_CATEGORIES = NEWS_CATEGORIES;
 
 // Per-dataset content dates, baked at build time from git history
 // (scripts/gen-content-dates.mjs). A URL's <lastmod> reflects when its CONTENT
