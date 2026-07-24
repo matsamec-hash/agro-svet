@@ -6,6 +6,7 @@ import { suggestCategory, matchBrand } from '../../../../../lib/bazar-import-cat
 import { structureListing } from '../../../../../lib/bazar-import-structure';
 import { createProspectWithDraft, addDraftListing } from '../../../../../lib/bazar-seed';
 import { parseBatchUrls } from '../../../../../lib/bazar-batch-urls';
+import { attributesForCategory } from '../../../../../lib/bazar-attributes';
 
 export const prerender = false;
 
@@ -117,6 +118,7 @@ async function importOne(
         category: suggestCategory(parsed.title, parsed.description ?? ''),
         hours: parsed.hours,
       },
+      categoryAttributes: attributesForCategory(suggestCategory(parsed.title, parsed.description ?? '')),
     });
 
     // Vybavení (pokud AI nějaké vrátila) doplníme na konec popisu, ať se neztratí.
@@ -161,6 +163,7 @@ async function importOne(
         hoursOperated: structured.hours,
         latitude,
         longitude,
+        attributes: structured.attributes,
       }, imagePaths);
       return { ok: true, title: structured.title, imageCount: imagePaths.length, imageUrlsFound: parsed.imageUrls.length, imageDebug, prospectId: targetProspectId, listingId };
     }
@@ -187,6 +190,7 @@ async function importOne(
         hoursOperated: structured.hours,
         latitude,
         longitude,
+        attributes: structured.attributes,
       },
       imagePaths,
     });

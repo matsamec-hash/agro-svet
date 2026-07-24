@@ -17,6 +17,7 @@ import { parseBazosListing } from '../src/lib/bazar-import-parse';
 import { suggestCategory, matchBrand } from '../src/lib/bazar-import-category';
 import { structureListing } from '../src/lib/bazar-import-structure';
 import { createProspect, addDraftListing } from '../src/lib/bazar-seed';
+import { attributesForCategory } from '../src/lib/bazar-attributes';
 import { geocode } from '../src/lib/geocode';
 
 type Supa = ReturnType<typeof createServerClient>;
@@ -97,6 +98,7 @@ async function main() {
           category: suggestCategory(parsed.title, parsed.description ?? ''),
           hours: parsed.hours,
         },
+        categoryAttributes: attributesForCategory(suggestCategory(parsed.title, parsed.description ?? '')),
       });
       const description = structured.features.length
         ? `${structured.description}\n\nVýbava: ${structured.features.join(' • ')}`
@@ -129,6 +131,7 @@ async function main() {
         hoursOperated: structured.hours,
         latitude,
         longitude,
+        attributes: structured.attributes,
       }, imagePaths);
       ok++;
       console.log(`    ✓ „${structured.title}" — ${parsed.price ?? '?'} Kč, ${structured.category}${structured.brand ? '/' + structured.brand : ''}, ${imagePaths.length} foto → ${listingId}`);
