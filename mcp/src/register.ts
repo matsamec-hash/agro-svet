@@ -239,8 +239,10 @@ export function registerTools(
           "are returned; each result includes a canonical listing URL. No " +
           "seller contact details are exposed. Filters: free-text query " +
           "(title/description/brand), category, subcategory, brand, price range " +
-          "(CZK), engine power range (hp), minimum year of manufacture, and " +
-          "region (location substring). Default limit 30, max 100.",
+          "(CZK), engine power range (hp), minimum year of manufacture, " +
+          "region (location substring), and structured equipment attributes " +
+          "(e.g. air-conditioning, 4x4 drive, front loader). Each result also " +
+          "returns its attributes. Default limit 30, max 100.",
         inputSchema: {
           query: z
             .string()
@@ -277,6 +279,14 @@ export function registerTools(
             .string()
             .optional()
             .describe("Location/region substring, e.g. 'Jihomoravský'."),
+          attributes: z
+            .record(z.string(), z.union([z.string(), z.number(), z.boolean()]))
+            .optional()
+            .describe(
+              'Equipment/attribute filters as key→value, e.g. {"klimatizace":true,"pohon":"4x4"}. ' +
+                "Common keys: klimatizace (bool), pohon ('2x4'|'4x4'), tp_spz (bool), " +
+                "celni_nakladac (bool), prevodovka ('manual'|'powershift'|'cvt'), palivo, stav.",
+            ),
           limit: z
             .number()
             .int()

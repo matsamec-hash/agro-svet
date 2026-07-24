@@ -37,6 +37,7 @@ export const BAZAR_PUBLIC_COLUMNS = [
   "pracovni_zaber_m",
   "nosnost_kg",
   "objem_nadrze_l",
+  "attributes",
   "featured",
   "created_at",
 ] as const;
@@ -58,6 +59,7 @@ export interface BazarListingRow {
   pracovni_zaber_m?: number | null;
   nosnost_kg?: number | null;
   objem_nadrze_l?: number | null;
+  attributes?: Record<string, unknown> | null;
   featured?: boolean | null;
   created_at?: string | null;
 }
@@ -79,6 +81,12 @@ export interface BazarSearchArgs {
   year_from?: number;
   /** Location / region, case-insensitive substring (e.g. "Jihomoravský"). */
   region?: string;
+  /**
+   * Equipment/attribute filters — key → required value. Matched exactly (loosely
+   * by string) against a listing's structured `attributes`. Booleans use `true`.
+   * E.g. `{ klimatizace: true, pohon: "4x4" }`.
+   */
+  attributes?: Record<string, string | number | boolean>;
   limit?: number;
 }
 
@@ -97,6 +105,8 @@ export interface BazarHit {
   pracovni_zaber_m: number | null;
   nosnost_kg: number | null;
   objem_nadrze_l: number | null;
+  /** Structured equipment attributes (key → value), e.g. { klimatizace: true }. */
+  attributes: Record<string, unknown> | null;
   /** Short plain-text excerpt of the description (max 240 chars). */
   excerpt: string | null;
   /** Canonical public URL of the listing detail page. */
@@ -140,6 +150,7 @@ function toHit(row: BazarListingRow): BazarHit {
     pracovni_zaber_m: row.pracovni_zaber_m ?? null,
     nosnost_kg: row.nosnost_kg ?? null,
     objem_nadrze_l: row.objem_nadrze_l ?? null,
+    attributes: row.attributes && typeof row.attributes === "object" ? row.attributes : null,
     excerpt: excerpt(row.description),
     url: `${SITE_ORIGIN}/bazar/${row.id}`,
     created_at: row.created_at ?? null,
@@ -199,6 +210,15 @@ export function searchBazar(
         r.year_of_manufacture < args.year_from
       ) {
         return false;
+      }
+    }
+    if (args.attributes) {
+      const attrs =
+        r.attributes && typeof r.attributes === "object" ? r.attributes : {};
+      for (const [k, v] of Object.entries(args.attributes)) {
+        const rv = (attrs as Record<string, unknown>)[k];
+        // Loose match: true === "true", "4x4" === "4x4", 4 === "4".
+        if (rv !== v && String(rv) !== String(v)) return false;
       }
     }
     return true;

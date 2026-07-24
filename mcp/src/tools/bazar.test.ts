@@ -126,4 +126,42 @@ describe("searchBazar", () => {
       expect(BAZAR_PUBLIC_COLUMNS as readonly string[]).not.toContain(forbidden);
     }
   });
+
+  it("selects the attributes column (for equipment filtering)", () => {
+    expect(BAZAR_PUBLIC_COLUMNS as readonly string[]).toContain("attributes");
+  });
+});
+
+describe("searchBazar — attributes filtr", () => {
+  const attrRows: BazarListingRow[] = [
+    { id: "a", title: "Zetor s klimatizací 4x4", category: "traktory", attributes: { klimatizace: true, pohon: "4x4" }, created_at: "2026-07-01T00:00:00Z" },
+    { id: "b", title: "Zetor bez klimy 2x4", category: "traktory", attributes: { pohon: "2x4" }, created_at: "2026-07-02T00:00:00Z" },
+    { id: "c", title: "Traktor bez atributů", category: "traktory", attributes: null, created_at: "2026-07-03T00:00:00Z" },
+  ];
+
+  it("filtruje podle bool atributu (klimatizace)", () => {
+    const r = searchBazar(attrRows, { attributes: { klimatizace: true } });
+    expect(r.results.map((h) => h.id)).toEqual(["a"]);
+  });
+
+  it("filtruje podle enum atributu (pohon)", () => {
+    const r = searchBazar(attrRows, { attributes: { pohon: "4x4" } });
+    expect(r.results.map((h) => h.id)).toEqual(["a"]);
+  });
+
+  it("kombinuje víc atributů (AND)", () => {
+    const r = searchBazar(attrRows, { attributes: { klimatizace: true, pohon: "4x4" } });
+    expect(r.results.map((h) => h.id)).toEqual(["a"]);
+    expect(searchBazar(attrRows, { attributes: { klimatizace: true, pohon: "2x4" } }).results).toHaveLength(0);
+  });
+
+  it("loose match: bool true == string 'true'", () => {
+    const r = searchBazar(attrRows, { attributes: { klimatizace: "true" as unknown as boolean } });
+    expect(r.results.map((h) => h.id)).toEqual(["a"]);
+  });
+
+  it("výsledek obsahuje attributes", () => {
+    const hit = searchBazar(attrRows, { query: "klimatizací" }).results[0];
+    expect(hit.attributes).toEqual({ klimatizace: true, pohon: "4x4" });
+  });
 });
