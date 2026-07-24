@@ -148,6 +148,9 @@ const columns = getFooterColumns(locale);
     display: flex;
     gap: 8px;
     align-items: center;
+    /* Explicitní tmavé pozadí (shodné se .site-footer) — axe/Lighthouse jinak
+       nedohledá pozadí přes flex kontejner a chybně počítá kontrast vůči bílé. */
+    background: #1a1a1a;
   }
   .footer-bottom-links a {
     color: #bbb;
