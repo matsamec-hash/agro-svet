@@ -66,7 +66,7 @@ export function extractAttributesFallback(category: string, text: string): Recor
   const raw: Record<string, unknown> = {};
   if (/klimatizac/i.test(text)) raw.klimatizace = true;
   if (/\b4\s?x\s?4\b|4wd|pohon\s+všech|náhon.{0,10}4/i.test(text)) raw.pohon = '4x4';
-  if (/čelní\s+naklada/i.test(text)) raw.celni_nakladac = true;
+  if (/čeln\S*\s+naklada/i.test(text)) raw.celni_nakladac = true; // skloňování: čelní/čelním/čelního
   if (/\bTP\b/.test(text) && /\bSPZ\b/.test(text)) raw.tp_spz = true;
   return validateAttributes(category, raw);
 }
@@ -161,7 +161,9 @@ export async function structureListing(opts: {
       features: Array.isArray(o.features)
         ? o.features.filter((f): f is string => typeof f === 'string' && f.trim().length > 0).slice(0, 10)
         : [],
-      attributes: Object.keys(aiAttributes).length ? aiAttributes : fallbackAttributes,
+      // Merge: deterministický fallback jako podlaha, AI hodnoty vyhrávají. Re-validace
+      // proti finální kategorii (AI ji mohla přeřadit) zahodí případný nevalidní klíč.
+      attributes: validateAttributes(category, { ...fallbackAttributes, ...aiAttributes }),
     };
   } catch {
     return base;

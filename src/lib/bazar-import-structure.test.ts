@@ -83,6 +83,26 @@ describe('extractAttributesFallback (regexy)', () => {
   it('nenajde nic v prázdném textu', () => {
     expect(extractAttributesFallback('traktory', '')).toEqual({});
   });
+  it('čelní nakladač i ve skloňovaných tvarech', () => {
+    expect(extractAttributesFallback('traktory', 's čelním nakladačem')).toEqual({ celni_nakladac: true });
+    expect(extractAttributesFallback('traktory', 'montáž čelního nakladače')).toEqual({ celni_nakladac: true });
+  });
+});
+
+describe('structureListing merge fallback ∪ AI', () => {
+  it('doplní deterministický atribut, který AI vynechala (AI hodnoty vyhrávají)', async () => {
+    const llm = async () => JSON.stringify({
+      title: 'Zetor 9540', description: 'popis', brand: 'zetor', category: 'traktory',
+      type: null, year: null, hours: null, powerHp: null, features: [],
+      attributes: { prevodovka: 'manual' }, // AND: neuvedla celni_nakladac, ač je v textu
+    });
+    const r = await structureListing({
+      title: 'Zetor 9540 s čelním nakladačem a SPZ', description: 'prodám s TP a SPZ',
+      apiKey: 'x', fallback: { brand: 'zetor', category: 'traktory', hours: null },
+      categoryAttributes: attributesForCategory('traktory'), llm,
+    });
+    expect(r.attributes).toEqual({ prevodovka: 'manual', celni_nakladac: true, tp_spz: true });
+  });
 });
 
 describe('structureListing bez apiKey použije fallback atributy', () => {
