@@ -84,8 +84,10 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
       </div>
     </div>
 
-    <!-- Guest link (shown when not logged in) -->
-    <a href="/bazar/prihlaseni/" id="guest-link" class="guest-link" hidden>{tr('header.login')}</a>
+    <!-- Guest link — viditelný ve výchozím stavu (SSR nezná auth stav; většina
+         návštěvníků je nepřihlášená → žádné probliknutí). JS ho skryje jen když
+         /api/bazar/me potvrdí přihlášení a ukáže user-menu. -->
+    <a href="/bazar/prihlaseni/" id="guest-link" class="guest-link">{tr('header.login')}</a>
 
     <!-- Mobile hamburger -->
     <button
@@ -629,6 +631,7 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
       const res = await fetch('/api/bazar/me', { credentials: 'same-origin' });
       const data = await res.json();
       if (data.logged_in) {
+        guest.hidden = true;
         menu.hidden = false;
         if (nameSpan && data.name) nameSpan.textContent = data.name;
         // Odkaz na admin jen pro is_admin (server ho stejně gate-uje).
