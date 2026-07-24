@@ -9,6 +9,7 @@ import { createServerClient } from '../../lib/supabase';
 import { isFeaturedActive } from '../../lib/bazar-featured';
 import { getModelBySlug } from '../../lib/stroje';
 import { buildModelFilterExpr, parseSelectedModelSlugs } from '../../lib/bazar-model-filter';
+import { parseAttributeFilters } from '../../lib/bazar-attribute-filter';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
 
@@ -71,6 +72,12 @@ if (modelSlugs.length > 0) {
   const models = modelSlugs.map((slug) => ({ slug, name: getModelBySlug(slug)?.name ?? null }));
   const expr = buildModelFilterExpr(models);
   if (expr) dbQuery = dbQuery.or(expr);
+}
+
+// Atributové filtry (bool/enum) → JSONB @> (GIN index). Prázdný objekt = žádný filtr.
+const attributeFilters = parseAttributeFilters(url.searchParams, category);
+if (Object.keys(attributeFilters).length > 0) {
+  dbQuery = dbQuery.contains('attributes', attributeFilters);
 }
 
 const { data: listings, count } = await dbQuery;
