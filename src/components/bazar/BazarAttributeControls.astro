@@ -1,0 +1,55 @@
+---
+// src/components/bazar/BazarAttributeControls.astro
+// Vykreslí ovládací prvky atributů pro danou kategorii ze slovníku.
+// mode="filter": bool = checkbox (a_<key>=1), enum = select (a_<key>). Číselné se ve filtru vynechají.
+// mode="form":   bool = checkbox, enum = select, number = number input. Prefix name = a_<key>.
+import { attributesForCategory, type AttrDef } from '../../lib/bazar-attributes';
+
+interface Props {
+  category: string;
+  mode: 'filter' | 'form';
+  values?: Record<string, unknown>; // předvyplnění (filter: z query; form: edit)
+}
+const { category, mode, values = {} } = Astro.props as Props;
+const defs: AttrDef[] = attributesForCategory(category).filter((a) => a.filter !== false);
+const shown = mode === 'filter' ? defs.filter((a) => a.type !== 'number') : defs;
+---
+{shown.length > 0 && (
+  <div class="attr-controls">
+    {shown.map((a) => (
+      <div class="attr-row">
+        {a.type === 'bool' && (
+          <label class="attr-check">
+            <input type="checkbox" name={`a_${a.key}`} value="1" checked={values[a.key] === true} />
+            <span>{a.label}</span>
+          </label>
+        )}
+        {a.type === 'enum' && (
+          <label class="attr-field">
+            <span>{a.label}</span>
+            <select name={`a_${a.key}`} class="form-input">
+              <option value="">—</option>
+              {a.options?.map((opt) => (
+                <option value={opt} selected={values[a.key] === opt}>{a.optionLabels?.[opt] ?? opt}</option>
+              ))}
+            </select>
+          </label>
+        )}
+        {a.type === 'number' && mode === 'form' && (
+          <label class="attr-field">
+            <span>{a.label}{a.unit ? ` (${a.unit})` : ''}</span>
+            <input type="number" name={`a_${a.key}`} class="form-input" value={values[a.key] != null ? String(values[a.key]) : ''} min="0" />
+          </label>
+        )}
+      </div>
+    ))}
+  </div>
+)}
+
+<style>
+  .attr-controls { display: flex; flex-direction: column; gap: 8px; }
+  .attr-row { display: flex; }
+  .attr-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .attr-field { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+  .attr-field > span { font-size: 13px; color: var(--color-text-muted, #555); }
+</style>
