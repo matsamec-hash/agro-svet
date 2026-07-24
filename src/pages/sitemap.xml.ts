@@ -117,7 +117,7 @@ export const GET: APIRoute = async () => {
 
   const listingsRes = await supabase
     .from('bazar_listings')
-    .select('id, updated_at, created_at, category, brand')
+    .select('id, updated_at, created_at, category, brand, attributes')
     .eq('status', 'active')
     .order('created_at', { ascending: false })
     .limit(2000);
@@ -279,6 +279,29 @@ export const GET: APIRoute = async () => {
   }
   for (const combo of catBrandCombos) {
     urls.push({ loc: `${SITE_URL}/bazar/kategorie/${combo}/`, changefreq: 'weekly', priority: '0.6', lastmod: latestListingLastmod ?? D_KRAJE });
+  }
+
+  // Atributové landingy (…/kategorie/<cat>/vybava/<slug>/) — jen indexovatelné
+  // (≥3 aktivních inzerátů; pod prahem se servírují noindex, do sitemapy nepatří).
+  // Počítáme in-memory z listingsDyn (má attributes), abychom nedělali N count dotazů.
+  const { landingEntriesForCategory } = await import('../lib/bazar-attribute-landing');
+  const ATTR_LANDING_THRESHOLD = 3;
+  const attrLandingCounts = new Map<string, number>(); // `${cat}/${slug}` → počet
+  for (const l of listingsDyn as Array<{ category?: string; attributes?: Record<string, unknown> | null }>) {
+    if (!l.category) continue; // landingEntriesForCategory vrátí [] pro neznámou kategorii
+    const attrs = l.attributes && typeof l.attributes === 'object' ? l.attributes : {};
+    for (const entry of landingEntriesForCategory(l.category)) {
+      const matches = Object.entries(entry.filter).every(([k, v]) => (attrs as Record<string, unknown>)[k] === v);
+      if (matches) {
+        const key = `${l.category}/${entry.slug}`;
+        attrLandingCounts.set(key, (attrLandingCounts.get(key) ?? 0) + 1);
+      }
+    }
+  }
+  for (const [key, cnt] of attrLandingCounts) {
+    if (cnt >= ATTR_LANDING_THRESHOLD) {
+      urls.push({ loc: `${SITE_URL}/bazar/kategorie/${key.split('/')[0]}/vybava/${key.split('/')[1]}/`, changefreq: 'weekly', priority: '0.55', lastmod: latestListingLastmod ?? D_KRAJE });
+    }
   }
 
   // Stroje funkční skupiny (hub → groups) — pouze skupiny s modely.
