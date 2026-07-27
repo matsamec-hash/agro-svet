@@ -28,8 +28,8 @@
  * JSON-RPC request/response. A fresh server+transport is created per request
  * (stateless), which is the SDK's recommended pattern for serverless runtimes.
  *
- * Auth / rate-limiting: NOT implemented yet (public read-only data). See README
- * "Follow-ups".
+ * Auth: none (public read-only data). Rate-limiting: per-IP in-memory sliding
+ * window on POST — see `src/lib/mcp-ratelimit.ts`.
  */
 import type { APIRoute } from 'astro';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -53,6 +53,7 @@ import {
   type BazarListingRow,
 } from '../../../mcp/src/tools/bazar.js';
 import { createServerClient } from '../../lib/supabase';
+import { checkMcpRateLimit, clientIpFrom } from '../../lib/mcp-ratelimit';
 
 export const prerender = false;
 
@@ -178,7 +179,30 @@ async function handle(request: Request): Promise<Response> {
   return response;
 }
 
-export const POST: APIRoute = ({ request }) => handle(request);
+// Rate-limit POST (kde jsou reálné tool cally + bazar DB dotazy). Per-IP,
+// in-memory (viz mcp-ratelimit.ts). Při překročení → 429 s JSON-RPC chybou.
+export const POST: APIRoute = ({ request, clientAddress }) => {
+  const ip = clientIpFrom(request, clientAddress);
+  const { limited, retryAfter } = checkMcpRateLimit(ip);
+  if (limited) {
+    return new Response(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        error: { code: -32029, message: 'Rate limit exceeded — zkuste to za chvíli.' },
+        id: null,
+      }),
+      {
+        status: 429,
+        headers: {
+          'content-type': 'application/json',
+          'retry-after': String(retryAfter),
+          'access-control-allow-origin': '*',
+        },
+      },
+    );
+  }
+  return handle(request);
+};
 
 // The Streamable HTTP transport also accepts GET (for SSE streams) and DELETE
 // (session teardown). In stateless mode GET returns 405 and DELETE is a no-op,
