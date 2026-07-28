@@ -1,0 +1,76 @@
+---
+// Hub srovnání značek — grid top párů. cs-only (v1).
+import Layout from '../../../layouts/Layout.astro';
+import { brandPairs } from '../../../lib/brand-comparator';
+import { breadcrumbSchema } from '../../../lib/structured-data';
+
+const pairs = brandPairs(40);
+const title = 'Srovnání značek zemědělské techniky';
+const description =
+  'Porovnejte značky traktorů a strojů vedle sebe — výkon, počet modelů, kategorie a přímé souboje konkrétních strojů.';
+const canonical = 'https://agro-svet.cz/znacky/srovnani/';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Značky', url: '/znacky/' },
+  { name: 'Srovnání značek', url: '/znacky/srovnani/' },
+]);
+---
+
+<Layout title={title} description={description} canonical={canonical}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <div class="cmp-page">
+    <nav class="breadcrumb" aria-label="Drobečková navigace">
+      <a href="/znacky/">Značky</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">Srovnání značek</span>
+    </nav>
+    <header class="hero">
+      <span class="kicker">Srovnání značek</span>
+      <h1>Srovnání značek</h1>
+      <p class="hero-lede">{description}</p>
+    </header>
+    <section class="related-cmp" aria-labelledby="pairs-h">
+      <h2 id="pairs-h">Populární srovnání</h2>
+      <ul class="related-list">
+        {pairs.map((p) => (
+          <li>
+            <a href={`/znacky/srovnani/${p.combo}/`}>
+              <span class="rl-pair">{p.a.name} <em>vs</em> {p.b.name}</span>
+              <span class="rl-cta">Porovnat</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .cmp-page {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; flex-wrap:wrap; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:40px 44px; margin-bottom:22px; position:relative; overflow:hidden; box-shadow:var(--sh-3); }
+  .hero .kicker { display:inline-flex; gap:8px; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; }
+  .hero h1 { font:700 clamp(2rem,5vw,3.6rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:16px 0 0; line-height:1.05; }
+  .hero-lede { color:#c8c8d0; max-width:680px; font-size:15.5px; line-height:1.6; margin:14px 0 0; }
+
+  .related-cmp { background:var(--bg-cream); border-radius:18px; padding:24px 28px; }
+  .related-cmp h2 { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.01em; color:var(--ink); margin:0 0 14px; }
+  .related-list { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:8px; }
+  .related-list a { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 16px; background:#fff; border:1px solid var(--line); border-radius:10px; text-decoration:none; color:var(--ink); transition:.15s; }
+  .related-list a:hover { background:var(--yellow-soft); border-color:var(--yellow); transform:translateY(-1px); }
+  .rl-pair { font:600 14px 'Chakra Petch',sans-serif; letter-spacing:-.005em; }
+  .rl-pair em { font-style:normal; color:var(--muted); margin:0 6px; }
+  .rl-cta { font:700 12px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:.04em; flex-shrink:0; }
+</style>
