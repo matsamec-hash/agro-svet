@@ -107,6 +107,9 @@ const js = {
       <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; position:relative; z-index:2;">
         <a href="/zebricky/" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none;" set:html={tr('cat.sr.ctaTiers')}></a>
         <a href="#picker" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:rgba(255,255,255,.08); color:#fff; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none; border:1px solid rgba(255,255,255,.2);" set:html={tr('cat.sr.ctaBuild')}></a>
+        {locale === 'cs' && (
+          <a href="/znacky/srovnani/" style="display:inline-flex; align-items:center; gap:6px; padding:10px 16px; background:rgba(255,255,255,.08); color:#fff; font-weight:700; font-size:13px; border-radius:8px; text-decoration:none; border:1px solid rgba(255,255,255,.2);">Srovnat celé značky →</a>
+        )}
       </div>
     </header>
 
