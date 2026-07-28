@@ -7,12 +7,15 @@ describe('pl auto-linker / interní href lokalizace', () => {
     expect(localizeInternalHref('pl', '/znacky/fendt/')).toBe('/pl/znacky/fendt/');
     expect(localizeInternalHref('pl', '/srovnani/')).toBe('/pl/srovnani/');
     expect(localizeInternalHref('pl', '/stroje/traktory/')).toBe('/pl/stroje/traktory/');
+    expect(localizeInternalHref('pl', '/statistiky/')).toBe('/pl/statistiky/');
+    expect(localizeInternalHref('pl', '/data/')).toBe('/pl/data/');
     expect(localizeInternalHref('pl', '/')).toBe('/pl/');
   });
   it('NElaunchnutá sekce → cs href beze změny (žádný 302/leak)', () => {
-    expect(localizeInternalHref('pl', '/statistiky/')).toBe('/statistiky/');
     expect(localizeInternalHref('pl', '/novinky/')).toBe('/novinky/');
     expect(localizeInternalHref('pl', '/dotace/')).toBe('/dotace/');
+    // /encyklopedie NElaunchnutá pro pl (chybí encyklopediePl overlay) → cs href
+    expect(localizeInternalHref('pl', '/encyklopedie/fendt-900/')).toBe('/encyklopedie/fendt-900/');
     expect(localizeInternalHref('pl', '/plemena/skot/')).toBe('/plemena/skot/');
   });
   it('cs no-op', () => {

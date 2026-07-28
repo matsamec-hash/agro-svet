@@ -29,9 +29,11 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // ukazuje jen sekce s reálným UA obsahem: `tech` (katalog + slovník) a `data`
   // (statistiky/půda/dotace) — stejný princip jako homepage rozcestník.
   uk: ['bazar', 'photo', 'tema', 'animals', 'farms'],
-  // PL fáze 1: stejně jako uk — jen sekce s reálným PL obsahem (tech: katalog +
-  // slovník). data sekce zatím bez launchnutých dětí (statistiky/puda/dotace =
-  // pozdější fáze), novinky/plemena/farmy jsou české články.
+  // PL fáze 2: jako uk — jen sekce s reálným PL obsahem. `tech` (katalog +
+  // slovník) a `data` (statistiky + půda + /data hub, česká data v PL jazyce)
+  // zůstávají viditelné; getNav odfiltruje NElaunchnuté data-děti (kalkulačky,
+  // dotace, /svet, /historie) přes isLaunchedPath. novinky/plemena/farmy jsou
+  // české články → skryté.
   pl: ['bazar', 'photo', 'tema', 'animals', 'farms'],
 };
 

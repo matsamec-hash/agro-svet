@@ -33,9 +33,15 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   cs: [],
   sk: ['/data', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
   uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace'],
-  // PL fáze 1: katalog (data-driven) + slovník. Fáze 3: + /puda (PL trh s půdou).
-  // Zbylá jurisdikční data (statistiky/dotace) zůstávají cs → pozdější fáze.
-  pl: ['/stroje', '/znacky', '/srovnani', '/slovnik', '/puda'],
+  // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
+  // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
+  // přes stat.*/data.hub./komodita. klíče. /dotace + /jak-na-to zůstávají cs
+  // (PL má vlastní dotační systém / jiný how-to obsah) → pozdější fáze.
+  // /encyklopedie ZÁMĚRNĚ NENÍ launchnuté: [slug].astro čte z per-locale overlay
+  // kolekce (ENC_COLLECTION), a `encyklopediePl` obsah neexistuje (0 md, sk/uk
+  // mají po 42) → každá /pl/encyklopedie stránka by 404-ovala. Odemknout až po
+  // vytvoření src/content/encyklopedie-pl/ + kolekce + pl klíče v ENC_COLLECTION/bcp47.
+  pl: ['/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

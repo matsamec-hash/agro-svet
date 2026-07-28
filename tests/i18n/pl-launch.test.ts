@@ -11,8 +11,11 @@ describe('PL fáze 1 launch (stroje/znacky/srovnani/slovnik)', () => {
       expect(isLaunchedPath('pl', `${p}/cokoli/`)).toBe(true);
     }
   });
-  it('zbylé jurisdikční sekce NEjsou launchnuté pro pl', () => {
-    for (const p of ['/statistiky', '/dotace', '/novinky']) {
+  it('zbylé jurisdikční / cs-only sekce NEjsou launchnuté pro pl', () => {
+    // /dotace + /jak-na-to = PL má vlastní dotační/how-to obsah (jiná jurisdikce);
+    // /encyklopedie = per-locale overlay kolekce `encyklopediePl` neexistuje →
+    // launch by 404-oval; /novinky = české články.
+    for (const p of ['/dotace', '/jak-na-to', '/encyklopedie', '/novinky']) {
       expect(isLaunchedPath('pl', p)).toBe(false);
     }
   });
@@ -20,6 +23,23 @@ describe('PL fáze 1 launch (stroje/znacky/srovnani/slovnik)', () => {
     expect(isLaunchedPath('cs', '/slovnik/adblue/')).toBe(false);
   });
   it('launchnuté nejsou locked', () => {
+    for (const p of launched) expect(isLockedSectionPath(p)).toBe(false);
+  });
+});
+
+describe('PL fáze 2 launch (statistiky + data hub)', () => {
+  const launched = ['/statistiky', '/data'];
+  it('datová sekce je launchnutá pro pl (česká data v PL jazyce)', () => {
+    for (const p of launched) {
+      expect(LAUNCHED_PREFIXES.pl).toContain(p);
+      expect(isLaunchedPath('pl', p)).toBe(true);
+      expect(isLaunchedPath('pl', `${p}/cokoli/`)).toBe(true);
+    }
+  });
+  it('/statistiky komodita podcesta je launchnutá (hub indexovatelný; detail noindex řeší stránka)', () => {
+    expect(isLaunchedPath('pl', '/statistiky/komodita/psenice/')).toBe(true);
+  });
+  it('datová sekce není locked', () => {
     for (const p of launched) expect(isLockedSectionPath(p)).toBe(false);
   });
 });

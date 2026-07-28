@@ -19,7 +19,7 @@ export default defineConfig({
   security: { checkOrigin: false },
   i18n: {
     defaultLocale: 'cs',
-    locales: ['cs', 'sk', 'uk'],
+    locales: ['cs', 'sk', 'uk', 'pl'],
     routing: { prefixDefaultLocale: false },
   },
   // Inline všechny (malé) stylesheety do HTML — odstraní render-blocking CSS
