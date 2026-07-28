@@ -1,0 +1,143 @@
+---
+// Standalone, chrome-less widget určený k vložení přes <iframe> na cizí weby.
+// Prerendered (statický, cacheovatelný, rychlý) — bez site nav/footer/locale rewrite.
+// Backlink na agro-svet.cz je v patičce widgetu i v embed snippetu (/widget).
+export const prerender = true;
+
+import commodities from '../../data/commodities.json';
+
+const SITE = 'https://agro-svet.cz';
+
+type Point = { label: string; value: number; sortKey: number };
+type Commodity = { name: string; unit: string; data: Point[] };
+
+const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 0 });
+const pf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 1, signDisplay: 'exceptZero' });
+
+const fiveYear = (commodities as any).fiveYearAvgs as Record<string, { label: string; avg: number }[]>;
+
+const rows = (commodities.commodityFull as Commodity[]).map((c) => {
+  const d = c.data;
+  const latest = d[d.length - 1];
+  const prev = d[d.length - 2];
+  const momPct = prev && prev.value ? ((latest.value - prev.value) / prev.value) * 100 : 0;
+  const avgArr = fiveYear?.[c.name];
+  const avg = avgArr && avgArr.length ? avgArr[avgArr.length - 1].avg : null;
+  const vsAvgPct = avg ? ((latest.value - avg) / avg) * 100 : null;
+  return {
+    name: c.name,
+    unit: c.unit,
+    value: latest.value,
+    label: latest.label,
+    momPct,
+    vsAvgPct,
+  };
+});
+
+const updated = rows[0]?.label ?? '';
+const genDate = new Date((commodities as any).generated).toLocaleDateString('cs-CZ', {
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, follow" />
+    <title>Ceny zemědělských komodit | agro-svět.cz</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #14231a;
+        --muted: #5b6b60;
+        --line: #e6ebe6;
+        --brand: #2e7d32;
+        --up: #1b8a3a;
+        --down: #c62828;
+        --chip: #f2f6f1;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1512;
+          --fg: #e8efe8;
+          --muted: #9bb0a2;
+          --line: #223029;
+          --brand: #6fce74;
+          --up: #59d47a;
+          --down: #ff6b6b;
+          --chip: #17211b;
+        }
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; }
+      .w {
+        font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: var(--fg);
+        background: var(--bg);
+        max-width: 460px;
+        margin: 0 auto;
+        padding: 14px 16px 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+      .hd { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+      .ttl { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+      .upd { font-size: 11px; color: var(--muted); white-space: nowrap; }
+      table { width: 100%; border-collapse: collapse; }
+      th { font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; text-align: right; padding: 0 0 6px; }
+      th:first-child { text-align: left; }
+      td { padding: 7px 0; border-top: 1px solid var(--line); text-align: right; vertical-align: baseline; }
+      td:first-child { text-align: left; font-weight: 600; }
+      .unit { display: block; font-size: 10.5px; color: var(--muted); font-weight: 400; }
+      .val { font-variant-numeric: tabular-nums; font-weight: 700; }
+      .chg { font-variant-numeric: tabular-nums; font-size: 12.5px; }
+      .up { color: var(--up); }
+      .down { color: var(--down); }
+      .flat { color: var(--muted); }
+      .ft { margin-top: 11px; padding-top: 9px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); }
+      .ft a { color: var(--brand); font-weight: 700; text-decoration: none; }
+      .ft a:hover { text-decoration: underline; }
+      .src { font-size: 10.5px; }
+    </style>
+  </head>
+  <body>
+    <div class="w">
+      <div class="hd">
+        <div class="ttl">🌾 Ceny zemědělských komodit</div>
+        <div class="upd">{updated}</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Komodita</th>
+            <th>Cena</th>
+            <th>Měsíc</th>
+            <th>vs 5letý⌀</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => {
+            const momCls = r.momPct > 0.05 ? 'up' : r.momPct < -0.05 ? 'down' : 'flat';
+            const momArrow = r.momPct > 0.05 ? '▲' : r.momPct < -0.05 ? '▼' : '–';
+            const avgCls = r.vsAvgPct == null ? 'flat' : r.vsAvgPct > 0 ? 'up' : 'down';
+            return (
+              <tr>
+                <td>{r.name}<span class="unit">{r.unit}</span></td>
+                <td class="val">{nf.format(r.value)}</td>
+                <td class={`chg ${momCls}`}>{momArrow} {pf.format(r.momPct)} %</td>
+                <td class={`chg ${avgCls}`}>{r.vsAvgPct == null ? '–' : `${pf.format(r.vsAvgPct)} %`}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div class="ft">
+        <span class="src">Data: ČSÚ · {genDate}</span>
+        <a href={SITE + '/statistiky/?utm_source=widget&utm_medium=embed&utm_campaign=ceny-komodit'} target="_blank" rel="noopener">agro-svět.cz →</a>
+      </div>
+    </div>
+  </body>
+</html>
