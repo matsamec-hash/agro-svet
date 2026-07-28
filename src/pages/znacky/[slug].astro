@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { itemListSchema } from '../../lib/structured-data';
 import { getAllModels } from '../../lib/stroje';
+import { brandPairs } from '../../lib/brand-comparator';
 import { TIER_LISTS, rankForTierList } from '../../lib/tier-lists';
 import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../i18n/utils';
 
@@ -58,6 +59,11 @@ const brandEncyclopedia = encyklopedie
   .filter((e) => e.data.znacka === znacka.id)
   .sort((a, b) => (b.data.rok_uvedeni ?? 0) - (a.data.rok_uvedeni ?? 0))
   .slice(0, 8);
+
+// Značka-vs-značka srovnání (cs-only v1) — top páry obsahující tuto značku.
+const brandCompares = locale === 'cs'
+  ? brandPairs(300).filter((p) => p.a.slug === znacka.id || p.b.slug === znacka.id).slice(0, 6)
+  : [];
 const brandModels = brandEncyclopedia;
 
 // Catalog models from stroje YAML (broader than encyklopedie). Sorted by
@@ -256,6 +262,25 @@ const modelListJsonLd = brandModels.length > 0
         {catalogModels.length > catalogTop.length && (
           <a class="hub-section-more" href={localizeInternalHref(locale, `/stroje/${znacka.id}/`)}>{tf(locale, 'cat.zn.d.catalogMore', { count: catalogModels.length, brand: znacka.data.name })}</a>
         )}
+      </section>
+    )}
+
+    {brandCompares.length > 0 && (
+      <section class="hub-section" aria-labelledby="srovnani-znacek-heading">
+        <header class="hub-section-head">
+          <h2 id="srovnani-znacek-heading">Porovnat {znacka.data.name} s jinou značkou</h2>
+        </header>
+        <div class="enc-grid">
+          {brandCompares.map((p) => {
+            const other = p.a.slug === znacka.id ? p.b : p.a;
+            return (
+              <a href={`/znacky/srovnani/${p.combo}/`} class="enc-card">
+                <h3>{znacka.data.name} vs {other.name}</h3>
+                <p>Srovnání výkonu, počtu modelů a přímé souboje konkrétních strojů.</p>
+              </a>
+            );
+          })}
+        </div>
       </section>
     )}
 

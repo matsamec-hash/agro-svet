@@ -137,6 +137,7 @@ export const GET: APIRoute = async () => {
   lines.push('## Srovnání modelů');
   lines.push('');
   lines.push(`- [Hub srovnání](${SITE_URL}/srovnani/) — head-to-head srovnání traktorů a kombajnů`);
+  lines.push(`- [Srovnání značek](${SITE_URL}/znacky/srovnani/) — porovnání celých značek (výkon, modely, přímé souboje)`);
   lines.push('');
 
   // Statistiky + magazín

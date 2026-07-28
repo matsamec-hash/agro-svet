@@ -8,6 +8,7 @@ import { getAllHlemyzdi } from '../lib/hlemyzdi';
 import { listPlodiny, listIndexableOdrudy, listSkupiny, listIndexableUdrzovatele } from '../lib/plodiny';
 import { listIndexableChoroby } from '../lib/choroby';
 import { expandedComparisonPairs, implementComparisonPairs } from '../lib/comparator';
+import { brandPairs } from '../lib/brand-comparator';
 import { createAnonClient } from '../lib/supabase';
 import { listPublishedForMaintenance } from '../lib/akce-supabase';
 import { AKCE_TYP_SLUGS } from '../lib/akce-constants';
@@ -170,6 +171,7 @@ export const GET: APIRoute = async () => {
     ['/svet/', 'weekly', '0.85', D_SVET],
     ['/svet/srovnani/', 'monthly', '0.6', D_SVET],
     ['/srovnani/', 'weekly', '0.85', D_STROJE],
+    ['/znacky/srovnani/', 'weekly', '0.7', D_ZNACKY],
     ['/zebricky/', 'weekly', '0.8', D_STROJE],
     ['/slovnik/', 'monthly', '0.75', D_SLOVNIK],
     ['/kviz/', 'monthly', '0.7', STATIC_LASTMOD],
@@ -451,6 +453,11 @@ export const GET: APIRoute = async () => {
   // Implement (nářadí) páry — párované dle záběru, match limit z [combo]/getStaticPaths.
   for (const pair of implementComparisonPairs(4000)) {
     urls.push({ loc: `${SITE_URL}/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.6', lastmod: D_STROJE });
+  }
+
+  // Značka-vs-značka páry (cs-only) — match limit z /znacky/srovnani/[combo]/getStaticPaths.
+  for (const pair of brandPairs(300)) {
+    urls.push({ loc: `${SITE_URL}/znacky/srovnani/${pair.combo}/`, changefreq: 'monthly', priority: '0.6', lastmod: D_ZNACKY });
   }
 
   for (const a of articlesDyn) {

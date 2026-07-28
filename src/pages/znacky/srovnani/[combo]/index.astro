@@ -1,0 +1,318 @@
+---
+// Značka-vs-značka srovnání. Prerender top párů (getStaticPaths) + SSR fallback
+// pro jakýkoli validní pár (žádné 404 na validní kombinaci). cs-only (v1).
+export const prerender = false;
+import Layout from '../../../../layouts/Layout.astro';
+import { getBrand } from '../../../../lib/stroje';
+import {
+  parseBrandCombo,
+  brandCombo,
+  brandPairs,
+  brandStats,
+  findBrandModelPairs,
+  brandComparisonInsights,
+  MIN_BRAND_MODELS,
+} from '../../../../lib/brand-comparator';
+import { modelDisplayName } from '../../../../lib/comparator';
+import { breadcrumbSchema, faqPageSchema } from '../../../../lib/structured-data';
+
+export async function getStaticPaths() {
+  return brandPairs(300).map((p) => ({ params: { combo: p.combo } }));
+}
+
+const { combo } = Astro.params;
+const parsed = parseBrandCombo(combo!);
+if (!parsed) return Astro.rewrite('/404');
+const a = getBrand(parsed[0]);
+const b = getBrand(parsed[1]);
+if (!a || !b) return Astro.rewrite('/404');
+if (brandCombo(a.slug, b.slug) !== combo) return Astro.rewrite('/404');
+
+const sa = brandStats(a);
+const sb = brandStats(b);
+const shared = sa.categories.filter((c) => sb.categories.includes(c));
+if (shared.length === 0 || sa.modelCount < MIN_BRAND_MODELS || sb.modelCount < MIN_BRAND_MODELS) {
+  return Astro.rewrite('/404');
+}
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+const insights = brandComparisonInsights(a, sa, b, sb);
+const modelDuels = findBrandModelPairs(a, b, 6);
+const canonical = `https://agro-svet.cz/znacky/srovnani/${combo}/`;
+const title = `${a.name} vs ${b.name} — srovnání značek zemědělské techniky`;
+
+const rows = [
+  {
+    label: 'Počet modelů',
+    a: String(sa.modelCount),
+    b: String(sb.modelCount),
+    aWin: sa.modelCount > sb.modelCount,
+    bWin: sb.modelCount > sa.modelCount,
+  },
+  {
+    label: 'Rozsah výkonu',
+    a: sa.powerMin != null ? `${sa.powerMin}–${sa.powerMax} k` : '—',
+    b: sb.powerMin != null ? `${sb.powerMin}–${sb.powerMax} k` : '—',
+    aWin: (sa.powerMax ?? 0) > (sb.powerMax ?? 0),
+    bWin: (sb.powerMax ?? 0) > (sa.powerMax ?? 0),
+  },
+  {
+    label: 'Kategorie strojů',
+    a: String(sa.categories.length),
+    b: String(sb.categories.length),
+    aWin: sa.categories.length > sb.categories.length,
+    bWin: sb.categories.length > sa.categories.length,
+  },
+  {
+    label: 'Země / založení',
+    a: `${a.country} · ${a.founded}`,
+    b: `${b.country} · ${b.founded}`,
+    aWin: false,
+    bWin: false,
+  },
+];
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Značky', url: '/znacky/' },
+  { name: 'Srovnání značek', url: '/znacky/srovnani/' },
+  { name: `${a.name} vs ${b.name}`, url: `/znacky/srovnani/${combo}/` },
+]);
+const faqJsonLd = faqPageSchema(insights.faqs);
+
+function modelUrl(m: (typeof modelDuels)[number]['a']): string {
+  const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
+  return `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`;
+}
+---
+
+<Layout title={title} description={insights.shortDescription} canonical={canonical}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="cmp-page">
+    <nav class="breadcrumb" aria-label="Drobečková navigace">
+      <a href="/znacky/">Značky</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="/znacky/srovnani/">Srovnání značek</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="current">{a.name} vs {b.name}</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Srovnání značek</span>
+      <h1>{a.name} <em>vs</em> {b.name}</h1>
+      <p class="hero-lede">{insights.tldr}</p>
+    </header>
+
+    <section class="duo">
+      <article class="duo-card">
+        <div class="duo-body">
+          <span class="duo-brand">{a.country} · založeno {a.founded}</span>
+          <h2 class="duo-name"><a href={`/znacky/${a.slug}/`}>{a.name}</a></h2>
+          <div class="duo-stats">
+            <span class="ds-hp">{sa.modelCount} modelů</span>
+            {sa.powerMax != null && <span class="ds-year">{sa.powerMin}–{sa.powerMax} k</span>}
+          </div>
+        </div>
+      </article>
+
+      <div class="duo-vs" aria-hidden="true">VS</div>
+
+      <article class="duo-card">
+        <div class="duo-body">
+          <span class="duo-brand">{b.country} · založeno {b.founded}</span>
+          <h2 class="duo-name"><a href={`/znacky/${b.slug}/`}>{b.name}</a></h2>
+          <div class="duo-stats">
+            <span class="ds-hp">{sb.modelCount} modelů</span>
+            {sb.powerMax != null && <span class="ds-year">{sb.powerMin}–{sb.powerMax} k</span>}
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="spec-table-wrap" aria-labelledby="spec-table-h">
+      <h2 id="spec-table-h">Značka vs značka</h2>
+      <div class="spec-table">
+        <div class="st-header">
+          <div class="st-th">Parametr</div>
+          <div class="st-th st-th-a">{a.name}</div>
+          <div class="st-th st-th-b">{b.name}</div>
+        </div>
+        {rows.map((r) => (
+          <div class="st-row">
+            <div class="st-label">{r.label}</div>
+            <div class:list={['st-cell', r.aWin && 'is-winner']}>{r.a}</div>
+            <div class:list={['st-cell', r.bWin && 'is-winner']}>{r.b}</div>
+          </div>
+        ))}
+      </div>
+      <p class="st-note">Data z databáze zemědělské techniky agro-svet.cz. „★" označuje vyšší hodnotu.</p>
+    </section>
+
+    {modelDuels.length > 0 && (
+      <section class="related-cmp" aria-labelledby="duels-h">
+        <h2 id="duels-h">Přímé souboje modelů</h2>
+        <ul class="related-list">
+          {modelDuels.map((p) => (
+            <li>
+              <a href={`/srovnani/${p.combo}/`}>
+                <span class="rl-pair">{modelDisplayName(p.a)} <em>vs</em> {modelDisplayName(p.b)}</span>
+                <span class="rl-cta">Otevřít</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="decision" aria-labelledby="decision-h">
+      <h2 id="decision-h">Kdy {a.name}, kdy {b.name}</h2>
+      <div class="decision-grid">
+        <article class="dc-card dc-a">
+          <span class="dc-brand">{a.country}</span>
+          <h3 class="dc-name">{a.name}</h3>
+          <p class="dc-text">{insights.verdictA}</p>
+          <a class="dc-link" href={`/znacky/${a.slug}/`}>Modely {a.name}</a>
+        </article>
+        <article class="dc-card dc-b">
+          <span class="dc-brand">{b.country}</span>
+          <h3 class="dc-name">{b.name}</h3>
+          <p class="dc-text">{insights.verdictB}</p>
+          <a class="dc-link" href={`/znacky/${b.slug}/`}>Modely {b.name}</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="cmp-faq" aria-labelledby="faq-h">
+      <h2 id="faq-h">Časté otázky</h2>
+      <div class="faq-list">
+        {insights.faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <div class="faq-answer">{f.a}</div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="big-cta">
+      <div>
+        <span class="bc-kicker">Bazar</span>
+        <h2>Prohlédnout {a.name} i {b.name} v bazaru</h2>
+        <p>Aktuální nabídka ojetých strojů obou značek od prodejců i soukromníků.</p>
+        <div class="bc-actions">
+          <a class="bc-btn primary" href={`/bazar/?brand=${a.slug}`}>{a.name} v bazaru</a>
+          <a class="bc-btn ghost" href={`/bazar/?brand=${b.slug}`}>{b.name} v bazaru</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .cmp-page {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --green:#0B7A3B; --green-soft:#E3F3EA;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-2:0 4px 14px rgba(10,10,12,.06), 0 0 0 1px rgba(10,10,12,.04);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; flex-wrap:wrap; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:40px 44px; margin-bottom:22px; position:relative; overflow:hidden; box-shadow:var(--sh-3); }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; gap:8px; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(2rem,5vw,3.6rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:16px 0 0; line-height:1.05; position:relative; z-index:2; }
+  .hero h1 em { font-style:normal; color:var(--yellow); margin:0 14px; }
+  .hero-lede { color:#c8c8d0; max-width:680px; font-size:15.5px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
+
+  .duo { display:grid; grid-template-columns:1fr 80px 1fr; gap:18px; align-items:stretch; margin-bottom:32px; }
+  .duo-card { background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:var(--sh-1); display:flex; flex-direction:column; }
+  .duo-body { padding:22px 20px; flex:1; display:flex; flex-direction:column; gap:10px; }
+  .duo-brand { font:700 11px 'Chakra Petch',sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .duo-name { font:700 22px 'Chakra Petch',sans-serif; color:var(--ink); margin:0; letter-spacing:-.01em; line-height:1.15; }
+  .duo-name a { color:inherit; text-decoration:none; }
+  .duo-name a:hover { text-decoration:underline; text-decoration-color:var(--yellow); text-decoration-thickness:3px; text-underline-offset:4px; }
+  .duo-stats { display:flex; gap:10px; flex-wrap:wrap; }
+  .ds-hp, .ds-year { font:600 13px 'Chakra Petch',sans-serif; padding:4px 10px; background:var(--yellow-soft); color:var(--ink); border-radius:6px; }
+  .ds-year { background:#FBFAF4; color:var(--muted); }
+  .duo-vs { display:flex; align-items:center; justify-content:center; font:800 28px 'Chakra Petch',sans-serif; letter-spacing:.06em; color:var(--ink); background:var(--yellow); border-radius:50%; width:80px; height:80px; align-self:center; box-shadow:0 14px 40px -10px var(--yellow-glow); }
+
+  .spec-table-wrap { margin-bottom:36px; }
+  .spec-table-wrap h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0 0 16px; }
+  .spec-table { background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:var(--sh-1); }
+  .st-header { display:grid; grid-template-columns:200px 1fr 1fr; background:var(--bg-cream); border-bottom:1px solid var(--line); }
+  .st-th { padding:14px 18px; font:700 12px 'Chakra Petch',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .st-th-a, .st-th-b { color:var(--ink); }
+  .st-row { display:grid; grid-template-columns:200px 1fr 1fr; border-bottom:1px solid var(--line); }
+  .st-row:last-child { border-bottom:0; }
+  .st-label { padding:14px 18px; font:600 13.5px 'Chakra Petch',sans-serif; color:var(--muted); background:var(--bg-cream); }
+  .st-cell { padding:14px 18px; font:600 15px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:-.005em; }
+  .st-cell.is-winner { background:var(--green-soft); color:var(--green); position:relative; }
+  .st-cell.is-winner::after { content:"★"; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--green); font-size:12px; }
+  .st-note { font-size:12.5px; color:var(--muted); line-height:1.55; margin:12px 4px 0; }
+
+  .related-cmp { background:var(--bg-cream); border-radius:18px; padding:24px 28px; margin-bottom:24px; }
+  .related-cmp h2 { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.01em; color:var(--ink); margin:0 0 14px; }
+  .related-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+  .related-list a { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 14px; background:#fff; border:1px solid var(--line); border-radius:10px; text-decoration:none; color:var(--ink); transition:.15s; }
+  .related-list a:hover { background:var(--yellow-soft); border-color:var(--yellow); transform:translateY(-1px); }
+  .rl-pair { font:600 14px 'Chakra Petch',sans-serif; letter-spacing:-.005em; }
+  .rl-pair em { font-style:normal; color:var(--muted); margin:0 6px; }
+  .rl-cta { font:700 12px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:.04em; flex-shrink:0; }
+
+  .decision { margin:32px 0; }
+  .decision h2 { font:700 22px 'Chakra Petch',sans-serif; letter-spacing:-.015em; color:var(--ink); margin:0 0 16px; }
+  .decision-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .dc-card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px 24px; box-shadow:var(--sh-1); display:flex; flex-direction:column; gap:8px; }
+  .dc-card.dc-a { border-left:4px solid var(--yellow); }
+  .dc-card.dc-b { border-left:4px solid var(--ink); }
+  .dc-brand { font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  .dc-name { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.015em; color:var(--ink); margin:0; }
+  .dc-text { font-size:14.5px; line-height:1.55; color:var(--body); margin:4px 0 6px; }
+  .dc-link { font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.03em; color:var(--ink); text-decoration:none; align-self:flex-start; padding:8px 14px; background:var(--yellow-soft); border-radius:8px; transition:.15s; }
+  .dc-link:hover { background:var(--yellow); transform:translateY(-1px); }
+
+  .cmp-faq { margin:32px 0; }
+  .cmp-faq h2 { font:700 22px 'Chakra Petch',sans-serif; letter-spacing:-.015em; color:var(--ink); margin:0 0 16px; }
+  .faq-list { display:flex; flex-direction:column; gap:8px; }
+  .faq-item { background:#fff; border:1px solid var(--line); border-radius:12px; padding:0; box-shadow:var(--sh-1); overflow:hidden; }
+  .faq-item summary { cursor:pointer; padding:16px 20px; font:600 15px 'Chakra Petch',sans-serif; letter-spacing:-.005em; color:var(--ink); list-style:none; position:relative; padding-right:44px; transition:.15s; }
+  .faq-item summary::-webkit-details-marker { display:none; }
+  .faq-item summary::after { content:"+"; position:absolute; right:18px; top:50%; transform:translateY(-50%); font:700 22px sans-serif; color:var(--muted); transition:.15s; }
+  .faq-item[open] summary::after { content:"−"; color:var(--ink); }
+  .faq-item summary:hover { background:var(--bg-cream); }
+  .faq-answer { padding:0 20px 18px; font-size:14.5px; line-height:1.6; color:var(--body); }
+
+  .big-cta { background:linear-gradient(135deg, var(--yellow) 0%, #FFD400 100%); border-radius:24px; padding:30px 32px; box-shadow:0 10px 30px -8px var(--yellow-glow); }
+  .big-cta h2 { font:700 24px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:#0A0A0B; margin:6px 0; }
+  .big-cta p { color:#2a2a2a; font-size:14px; margin:0 0 14px; }
+  .bc-kicker { display:inline-block; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:#0A0A0B; background:rgba(0,0,0,.08); padding:5px 11px; border-radius:999px; }
+  .bc-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  .bc-btn { padding:11px 18px; border-radius:10px; text-decoration:none; font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.04em; transition:.15s; }
+  .bc-btn.primary { background:#0A0A0B; color:#fff; }
+  .bc-btn.primary:hover { transform:translateY(-1px); }
+  .bc-btn.ghost { background:rgba(255,255,255,.5); color:#0A0A0B; border:1px solid rgba(0,0,0,.15); }
+  .bc-btn.ghost:hover { background:rgba(255,255,255,.8); }
+
+  @media (max-width:760px) {
+    .duo { grid-template-columns:1fr; }
+    .duo-vs { order:2; width:60px; height:60px; font-size:22px; }
+    .st-header, .st-row { grid-template-columns:1fr 1fr 1fr; }
+    .st-label { padding:10px 12px; font-size:11.5px; }
+    .st-th, .st-cell { padding:10px 12px; font-size:13.5px; }
+    .hero { padding:28px 22px; }
+    .hero h1 { font-size:1.8rem; }
+    .hero h1 em { margin:0 8px; }
+    .decision-grid { grid-template-columns:1fr; }
+    .dc-card { padding:18px 20px; }
+  }
+</style>
