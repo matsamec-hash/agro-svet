@@ -383,7 +383,7 @@ const NL = '\n';
             return (
               <a
                 class="family-tile"
-                href={`/stroje/${s.slug}/rada/${category}/${t.family}/`}
+                href={localizeInternalHref(locale, `/stroje/${s.slug}/rada/${category}/${t.family}/`)}
                 data-brand={s.slug}
                 data-min-hp={t.minHp ?? ''}
                 data-max-hp={t.maxHp ?? ''}

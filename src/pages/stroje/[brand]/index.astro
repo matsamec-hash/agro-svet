@@ -449,7 +449,7 @@ const seriesListJsonLd = allSeries.length > 0
                 return (
                   <a
                     class="family-tile"
-                    href={`/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`}
+                    href={localizeInternalHref(locale, `/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`)}
                     data-min-hp={t.minHp ?? ''}
                     data-max-hp={t.maxHp ?? ''}
                     data-min-year={t.minYear ?? ''}
@@ -524,7 +524,7 @@ const seriesListJsonLd = allSeries.length > 0
                 return (
                   <a
                     class="family-tile is-legacy"
-                    href={`/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`}
+                    href={localizeInternalHref(locale, `/stroje/${brand.slug}/rada/${cat.slug}/${t.family}/`)}
                     data-min-hp={t.minHp ?? ''}
                     data-max-hp={t.maxHp ?? ''}
                     data-min-year={t.minYear ?? ''}

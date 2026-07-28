@@ -141,7 +141,7 @@ function pluralCs(n: number, one: string, few: string, many: string): string {
         <p class="sz-section-sub">{t('stroje.zem.groupsSub')}</p>
         <div class="sz-group-grid">
           {readyGroups.map((g) => (
-            <a href={`/stroje/zemedelske-stroje/${g.slug}/`} class="sz-group-card">
+            <a href={localizeInternalHref(locale, `/stroje/zemedelske-stroje/${g.slug}/`)} class="sz-group-card">
               <h3>{t(`stroje.fg.${g.slug}.name`)}</h3>
               <p>{t(`stroje.fg.${g.slug}.desc`)}</p>
               <div class="sz-group-meta">

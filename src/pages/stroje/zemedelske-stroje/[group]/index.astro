@@ -5,7 +5,7 @@ export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, categoryLabel, functionalGroupLabel, type FunctionalGroupSlug, type StrojKategorie } from '../../../../lib/stroje';
 import { itemListSchema } from '../../../../lib/structured-data';
-import { useTranslations, getLocaleFromUrl, tf, localizePath } from '../../../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, tf, localizePath, localizeInternalHref } from '../../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -76,7 +76,7 @@ const subcatListJsonLd = subcatsWithModels.length > 0
     <h2 style="font-family:'Chakra Petch',sans-serif; font-size:22px; font-weight:700; color:#1a1a1a; margin-bottom:14px;">{tr('cat.zem.subcats')}</h2>
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-bottom:40px;">
       {subcategoryStats.map((s) => (
-        <a href={`/stroje/${s.slug}/`} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:border-color .2s, box-shadow .2s;" class="subcat-card">
+        <a href={localizeInternalHref(locale, `/stroje/${s.slug}/`)} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:14px; padding:16px; transition:border-color .2s, box-shadow .2s;" class="subcat-card">
           <h3 style="font-family:'Chakra Petch',sans-serif; font-size:17px; font-weight:700; color:#1a1a1a; margin-bottom:6px;">{s.name}</h3>
           <div style="font-size:12px; color:#767676;">
             {s.modelCount > 0 ? `${s.modelCount} ${tr('cat.statModels')} · ${s.brandCount} ${tr('cat.zem.brandsWord')}` : tr('cat.zem.comingSoon')}
