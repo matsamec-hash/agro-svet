@@ -1,9 +1,9 @@
 ---
-// Polská homepage = kurátovaný rozcestník na 4 launchnuté PL sekce
-// (katalog strojů / značky / srovnání / slovník), NE český zpravodajský feed.
-// Renderuje se z index.astro když locale === 'pl'. Vzor: HomeUk.astro
-// (self-contained, vlastní <Layout>, polské stringy hardcoded).
-// Cesty hardcoded /pl/... — všechny 4 sekce jsou pro pl launchnuté (fáze 1).
+// Polská homepage = kurátovaný rozcestník na launchnuté PL sekce (katalog strojů /
+// značky / srovnání / slovník / půda / data+statistiky / kalkulačky), NE český
+// zpravodajský feed. Renderuje se z index.astro když locale === 'pl'.
+// Vzor: HomeUk.astro (self-contained, vlastní <Layout>, polské stringy hardcoded).
+// Cesty hardcoded /pl/... — všechny cílové sekce jsou pro pl launchnuté (fáze 1+2).
 import Layout from '../../layouts/Layout.astro';
 
 const SECTIONS = [
@@ -37,12 +37,24 @@ const SECTIONS = [
     title: 'Ziemia rolna',
     desc: 'Rynek ziemi rolnej w Polsce — ceny, dzierżawa, regulacja KOWR i stan gleb.',
   },
+  {
+    href: '/pl/statistiky/',
+    icon: '📊',
+    title: 'Ceny i statystyki',
+    desc: 'Żywe ceny surowców rolnych, produkcja, koszty nakładów i dane regionalne w interaktywnych wykresach.',
+  },
+  {
+    href: '/pl/kalkulacka/prevody-jednotek/',
+    icon: '🧮',
+    title: 'Kalkulatory',
+    desc: 'Przeliczniki jednostek powierzchni i masy — hektary, ary, akry, tony, buszle. Bez rejestracji.',
+  },
 ];
 ---
 
 <Layout
-  title="Świat rolnictwa — maszyny rolnicze, marki i porównania"
-  description="Katalog maszyn rolniczych: ciągniki, kombajny i maszyny z parametrami, porównania modeli, marki producentów oraz słownik pojęć rolniczych."
+  title="Świat rolnictwa — maszyny rolnicze, marki, porównania i kalkulatory"
+  description="Katalog maszyn rolniczych: ciągniki, kombajny i maszyny z parametrami, porównania modeli, marki producentów, ceny surowców, kalkulatory jednostek oraz słownik pojęć rolniczych."
 >
   <div class="hpl-root">
     <section class="hpl-hero">
@@ -50,7 +62,8 @@ const SECTIONS = [
       <h1>Świat <em>rolnictwa</em></h1>
       <p class="hpl-lede">
         Katalog techniki rolniczej i poradnik: ciągniki, kombajny i maszyny
-        z parametrami, porównania modeli, marki producentów oraz słownik pojęć.
+        z parametrami, porównania modeli, marki producentów, ceny surowców,
+        kalkulatory jednostek oraz słownik pojęć.
       </p>
     </section>
 
