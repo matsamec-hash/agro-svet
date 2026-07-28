@@ -146,14 +146,20 @@ const faqJsonLd = faqPageSchema(faqItems);
     </section>
 
     <aside class="ph-related">
-      <h2>Další užitečné stránky</h2>
+      <h2>{c.related?.heading ?? 'Další užitečné stránky'}</h2>
       <ul class="ph-related-list">
-        <li><a href={localizeInternalHref(locale, '/kalkulacka/prevody-jednotek/')}>📐 Převody jednotek plochy</a></li>
-        <li><a href="/slovnik/tuna/">⚖️ Tuna (t) — detail jednotky</a></li>
-        <li><a href="/slovnik/q-cent/">⚖️ Cent (q) — detail jednotky</a></li>
-        <li><a href="/slovnik/busl/">🌾 Bušl — detail s USDA tabulkou</a></li>
-        <li><a href="/slovnik/hektolitr/">🌾 Hektolitr — váha obilí</a></li>
-        <li><a href={localizeInternalHref(locale, '/kalkulacka/naklady-na-hektar/')}>💰 Náklady na hektar</a></li>
+        {c.related ? c.related.items.map((it) => (
+          <li><a href={it.href}>{it.label}</a></li>
+        )) : (
+          <>
+            <li><a href={localizeInternalHref(locale, '/kalkulacka/prevody-jednotek/')}>📐 Převody jednotek plochy</a></li>
+            <li><a href="/slovnik/tuna/">⚖️ Tuna (t) — detail jednotky</a></li>
+            <li><a href="/slovnik/q-cent/">⚖️ Cent (q) — detail jednotky</a></li>
+            <li><a href="/slovnik/busl/">🌾 Bušl — detail s USDA tabulkou</a></li>
+            <li><a href="/slovnik/hektolitr/">🌾 Hektolitr — váha obilí</a></li>
+            <li><a href={localizeInternalHref(locale, '/kalkulacka/naklady-na-hektar/')}>💰 Náklady na hektar</a></li>
+          </>
+        )}
       </ul>
     </aside>
   </div>

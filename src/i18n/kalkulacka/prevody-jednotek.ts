@@ -6,7 +6,10 @@ export interface PrevodyJednotekContent extends CalcMeta {
   converterCaption: string;
   ui: { inputLabel: string; unitSelectLabel: string };
   unitNames: Record<string, string>;
-  numberLocale: 'cs-CZ' | 'sk-SK';
+  numberLocale: 'cs-CZ' | 'sk-SK' | 'pl-PL';
+  /** Lokalizovaný blok „další stránky" — jen locale, které ho mají přeložený
+   *  (pl). Bez něj stránka renderuje výchozí cs seznam (cs/sk/uk beze změny). */
+  related?: { heading: string; items: { href: string; label: string }[] };
 }
 
 export const content: Record<Locale, PrevodyJednotekContent> = {
@@ -67,4 +70,40 @@ export const content: Record<Locale, PrevodyJednotekContent> = {
     ],
   },
   uk: {} as PrevodyJednotekContent,
+  pl: {
+    title: 'Przelicznik jednostek powierzchni — hektar, ar, m², akr, morga',
+    metaDescription:
+      'Kalkulator online do przeliczania jednostek powierzchni: hektar ↔ ar ↔ m² ↔ km² ↔ akr ↔ morga. Natychmiastowy wynik, dla rolników, geodetów i ewidencji gruntów.',
+    h1: 'Przeliczniki jednostek powierzchni',
+    crumb: 'Jednostki powierzchni',
+    kicker: 'Kalkulator · jednostki i pomiary',
+    lede:
+      'Wpisz wartość w dowolnej jednostce i od razu zobaczysz przeliczenie na wszystkie pozostałe — hektary, ary, metry kwadratowe, akry oraz jednostki historyczne. Kalkulator działa bez rejestracji, obliczenia wykonują się w przeglądarce.',
+    converterHeading: 'Kalkulator jednostek powierzchni online',
+    converterCaption:
+      'Wskazówka: kliknij w pole z wartością i pisz — wszystkie przeliczenia aktualizują się na żywo. Dla jednostek historycznych użyto wartości standaryzowanych z 1764 roku, warianty regionalne mogły się nieznacznie różnić.',
+    ui: { inputLabel: 'Wpisz wartość', unitSelectLabel: 'Wybierz jednostkę' },
+    unitNames: {
+      m2: 'metr kwadratowy', a: 'ar', ha: 'hektar', km2: 'kilometr kwadratowy',
+      acre: 'akr (acre)', jitro: 'jitro (austro-węgierskie)', korec: 'korzec (czeski)',
+      strych: 'strych (czeski)', morgen: 'morga pruska',
+    },
+    numberLocale: 'pl-PL',
+    faq: [
+      { q: 'Ile to 1 hektar w m² i arach?', a: '1 hektar (ha) = 10 000 m² = 100 arów (a) = 0,01 km². Hektar to kwadrat o boku 100 × 100 metrów. W rolnictwie hektar jest standardową jednostką powierzchni pól, dopłat na hektar oraz plonów (t/ha).' },
+      { q: 'Ile m² to 1 ar?', a: '1 ar (a) = 100 m² = kwadrat 10 × 10 m = 0,01 hektara. 100 arów tworzy jeden hektar. Ar używa się głównie do powierzchni ogrodów, małych działek i w zapisach ewidencyjnych.' },
+      { q: 'Ile to 1 akr w hektarach?', a: '1 akr (acre) = 4 046,86 m² = 0,4047 hektara = około 40,5 ara. Akr to jednostka anglosaska używana w USA, Wielkiej Brytanii, Kanadzie i Australii. Aby przeliczyć akry na hektary, pomnóż wartość przez 0,4047.' },
+      { q: 'Jak przeliczyć buszle na tony z hektara?', a: 'Zależy od towaru. Dla pszenicy i soi: bu/ac × 0,0673 = t/ha. Dla kukurydzy: bu/ac × 0,0628 = t/ha. Przykład: 175 bu/ac kukurydzy ≈ 11 t/ha. CBOT publikuje plony USA w buszlach na akr, UE w t/ha.' },
+      { q: 'Czym są jitro, korzec i strych? Jak duże są?', a: 'Historyczne czeskie jednostki powierzchni sprzed reformy metrycznej. Wartości standaryzowane z 1764 roku: austro-węgierskie jitro = 0,5755 ha (5 754 m²), praski korzec = strych = 0,288 ha (2 877 m²). Wciąż pojawiają się w starszych zapisach ewidencyjnych.' },
+      { q: 'Dlaczego istnieje masa hektolitrowa zboża?', a: 'Masa hektolitrowa (kg/hl) to parametr jakościowy — masa 100 litrów zboża. Wyższa masa hl = wyższa zawartość skrobi/oleju, lepsza jakość młynarska. Pszenica 78+ kg/hl = klasa konsumpcyjna, < 74 kg/hl = paszowa. Różnica ceny może być znacząca.' },
+    ],
+    related: {
+      heading: 'Inne przydatne strony',
+      items: [
+        { href: '/pl/kalkulacka/prevody-hmotnost/', label: '⚖️ Przelicznik jednostek masy' },
+        { href: '/pl/slovnik/', label: '📐 Słownik — jednostki i miary' },
+        { href: '/pl/stroje/', label: '🚜 Katalog ciągników i maszyn' },
+      ],
+    },
+  },
 };

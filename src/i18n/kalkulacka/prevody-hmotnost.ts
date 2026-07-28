@@ -8,7 +8,10 @@ export interface PrevodyHmotnostContent extends CalcMeta {
   ui: { inputLabel: string; commodityLabel: string; unitSelectLabel: string; commoditySelectLabel: string };
   unitNames: Record<string, string>;
   commodityNames: Record<string, string>;
-  numberLocale: 'cs-CZ' | 'sk-SK';
+  numberLocale: 'cs-CZ' | 'sk-SK' | 'pl-PL';
+  /** Lokalizovaný blok „další stránky" — jen locale, které ho mají přeložený
+   *  (pl). Bez něj stránka renderuje výchozí cs seznam (cs/sk/uk beze změny). */
+  related?: { heading: string; items: { href: string; label: string }[] };
 }
 
 export const content: Record<Locale, PrevodyHmotnostContent> = {
@@ -59,4 +62,35 @@ export const content: Record<Locale, PrevodyHmotnostContent> = {
     ],
   },
   uk: {} as PrevodyHmotnostContent,
+  pl: {
+    title: 'Przelicznik jednostek masy — tona, q, kg, buszel, funt',
+    metaDescription: 'Kalkulator online do przeliczania masy w rolnictwie: tona ↔ kwintal (q) ↔ kilogram ↔ buszel (pszenica, kukurydza, soja) ↔ funt. Masa buszla według towaru (standard USDA).',
+    h1: 'Przeliczniki jednostek masy',
+    crumb: 'Jednostki masy',
+    kicker: 'Kalkulator · jednostki masy',
+    lede: 'Tona, kwintal, kilogram, funt i buszel (z wyborem towaru) — natychmiastowe przeliczenie dla rolników, maklerów towarowych i czytelników raportów USDA. Buszel ma różną masę zależnie od uprawy, kalkulator liczy to dokładnie według standardu USDA.',
+    converterHeading: 'Kalkulator masy online',
+    converterCaption: 'Wskazówka: wybierz towar z listy poniżej, aby dostosować masę buszla (pszenica 27,2 kg, kukurydza 25,4 kg, owies 14,5 kg…).',
+    defaultCommodity: 'pszenica',
+    ui: { inputLabel: 'Podaj masę', commodityLabel: 'Towar (dla buszla)', unitSelectLabel: 'Wybierz jednostkę', commoditySelectLabel: 'Wybierz towar dla buszla' },
+    unitNames: { kg: 'kilogram', q: 'kwintal', t: 'tona', lb: 'funt (pound)', bu: 'buszel (bushel)' },
+    commodityNames: { wheat: 'pszenica', corn: 'kukurydza', soy: 'soja', barley: 'jęczmień', oats: 'owies', rye: 'żyto', canola: 'rzepak (canola)' },
+    numberLocale: 'pl-PL',
+    faq: [
+      { q: 'Ile to 1 tona w kilogramach i kwintalach?', a: '1 tona (t) = 1 000 kg = 10 kwintali (q). Tona to dominująca jednostka w rolnictwie dla plonów (t/ha), cen skupu i wydajności maszyn. Uwaga — amerykańska short ton (907 kg) i brytyjska long ton (1 016 kg) to inne jednostki.' },
+      { q: 'Ile to 1 buszel pszenicy w kg?', a: '1 buszel (bushel) pszenicy = 27,2155 kg = 60 funtów amerykańskich. Soja ma taką samą masę (27,2 kg), kukurydza 25,4 kg, jęczmień 21,8 kg, owies 14,5 kg. Buszel to jednostka objętościowa o stałej masie dla każdego towaru według standardu USDA.' },
+      { q: 'Jak przeliczyć cenę z CBOT (¢/buszel) na zł/t?', a: 'Przykład pszenica 600 ¢/bu: 6,00 USD ÷ 27,2155 kg × 1 000 = 220,4 USD/t. Przy kursie 4,00 zł/USD ≈ 882 zł/t (przed transportem i marżami). Dla kukurydzy dziel przez 25,4 zamiast 27,2.' },
+      { q: 'Jaka jest różnica między q a t?', a: 'Kwintal (q) = 100 kg, tona (t) = 1 000 kg. 1 t = 10 q. Plony można podawać w obu: 6 t/ha = 60 q/ha. Ceny towarów dziś zwykle w zł/t, ale niektórzy rolnicy nadal liczą w zł/q.' },
+      { q: 'Ile kg to 1 funt (pound, lb)?', a: '1 funt (lb) = 0,45359237 kg, praktycznie 0,4536 kg. Szybki szacunek: lb × 0,5 ≈ kg. Funt używany jest w raportach USDA, na kontraktach CBOT (olej sojowy w ¢/lb, live cattle w ¢/lb) oraz w amerykańskich tabelach paszowych.' },
+      { q: 'Czym jest masa hektolitrowa zboża?', a: 'Masa 100 litrów zboża w kg — parametr jakościowy przy skupie. Pszenica konsumpcyjna 78+ kg/hl, paszowa poniżej 74 kg/hl. Wyższa masa hl = lepsza skrobia/olej, wyższa cena.' },
+    ],
+    related: {
+      heading: 'Inne przydatne strony',
+      items: [
+        { href: '/pl/kalkulacka/prevody-jednotek/', label: '📐 Przelicznik jednostek powierzchni' },
+        { href: '/pl/slovnik/', label: '⚖️ Słownik — jednostki i miary' },
+        { href: '/pl/stroje/', label: '🚜 Katalog ciągników i maszyn' },
+      ],
+    },
+  },
 };

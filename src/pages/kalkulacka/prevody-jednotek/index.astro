@@ -207,13 +207,19 @@ const appJsonLd = {
     </section>
 
     <aside class="pj-related">
-      <h2>Další užitečné stránky</h2>
+      <h2>{c.related?.heading ?? 'Další užitečné stránky'}</h2>
       <ul class="pj-related-list">
-        <li><a href="/slovnik/?kategorie=jednotky">📐 Slovník — všechny jednotky a měření</a></li>
-        <li><a href={localizeInternalHref(locale, '/kalkulacka/naklady-na-hektar/')}>🌾 Kalkulačka nákladů na hektar</a></li>
-        <li><a href={localizeInternalHref(locale, '/kalkulacka/dotace-cap/')}>💶 Kalkulačka dotací CAP 2024</a></li>
-        <li><a href="/slovnik/hektar/">🟨 Hektar (ha) — detail jednotky</a></li>
-        <li><a href="/slovnik/q-cent/">⚖️ Cent (q) — jednotka výnosu</a></li>
+        {c.related ? c.related.items.map((it) => (
+          <li><a href={it.href}>{it.label}</a></li>
+        )) : (
+          <>
+            <li><a href="/slovnik/?kategorie=jednotky">📐 Slovník — všechny jednotky a měření</a></li>
+            <li><a href={localizeInternalHref(locale, '/kalkulacka/naklady-na-hektar/')}>🌾 Kalkulačka nákladů na hektar</a></li>
+            <li><a href={localizeInternalHref(locale, '/kalkulacka/dotace-cap/')}>💶 Kalkulačka dotací CAP 2024</a></li>
+            <li><a href="/slovnik/hektar/">🟨 Hektar (ha) — detail jednotky</a></li>
+            <li><a href="/slovnik/q-cent/">⚖️ Cent (q) — jednotka výnosu</a></li>
+          </>
+        )}
       </ul>
     </aside>
   </div>

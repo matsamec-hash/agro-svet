@@ -41,7 +41,10 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // kolekce (ENC_COLLECTION), a `encyklopediePl` obsah neexistuje (0 md, sk/uk
   // mají po 42) → každá /pl/encyklopedie stránka by 404-ovala. Odemknout až po
   // vytvoření src/content/encyklopedie-pl/ + kolekce + pl klíče v ENC_COLLECTION/bcp47.
-  pl: ['/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data'],
+  // Kalkulačky: jen 2 UNIVERZÁLNÍ převodníky (plocha/hmotnost) — bez jurisdikce.
+  // Finanční (leasing = čeští poskytovatelé, náklady/nafta = české ceny, CAP =
+  // české sazby) + /kalkulacka hub zůstávají cs → potřebují PL data, ne překlad.
+  pl: ['/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

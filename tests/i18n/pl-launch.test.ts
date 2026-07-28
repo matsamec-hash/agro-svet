@@ -44,6 +44,20 @@ describe('PL fáze 2 launch (statistiky + data hub)', () => {
   });
 });
 
+describe('PL fáze 2 launch (univerzální kalkulačky-převodníky)', () => {
+  it('2 převodníky (plocha/hmotnost) jsou launchnuté — bez jurisdikce', () => {
+    for (const p of ['/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost']) {
+      expect(isLaunchedPath('pl', p)).toBe(true);
+      expect(isLaunchedPath('pl', `${p}/`)).toBe(true);
+    }
+  });
+  it('finanční kalkulačky + hub NEjsou launchnuté (jurisdikční / české ceny)', () => {
+    for (const p of ['/kalkulacka', '/kalkulacka/leasing-traktoru', '/kalkulacka/naklady-na-hektar', '/kalkulacka/uspora-nafty', '/kalkulacka/dotace-cap']) {
+      expect(isLaunchedPath('pl', p)).toBe(false);
+    }
+  });
+});
+
 describe('PL fáze 3 launch (puda)', () => {
   it('/puda je launchnuté pro pl', () => {
     expect(LAUNCHED_PREFIXES.pl).toContain('/puda');
