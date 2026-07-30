@@ -573,9 +573,9 @@ export const GET: APIRoute = async () => {
     });
   }
 
-  // PL-only landing „dopłaty bezpośrednie" (ARiMR přímé platby) — nemá cs ekvivalent
-  // v base urls, přidáme explicitně.
+  // PL-only landingy (ARiMR) — nemají cs ekvivalent v base urls, přidáme explicitně.
   urls.push({ loc: `${SITE_URL}/pl/doplaty-bezposrednie/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+  urls.push({ loc: `${SITE_URL}/pl/ekoschematy/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
 
   // SK /dotace detail URL — vlastné slugy z kolekcie 'dotaceSk' (PPA SR výzvy).
   const dotaceSkEntries = await getCollection('dotaceSk');

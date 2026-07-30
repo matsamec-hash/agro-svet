@@ -218,6 +218,10 @@ const groups: { title: string; rows: Row[]; areaUnit: string }[] = [
         ))}
       </section>
 
+      <div class="db-related">
+        <a href={localizePath('pl', '/ekoschematy/')}>→ Ekoschematy 2025 — dodatkowe płatności obszarowe (stawki)</a>
+      </div>
+
       <footer class="db-src">
         <p>Źródło danych: <a href="https://www.gov.pl/web/arimr" target="_blank" rel="noopener">ARiMR / MRiRW</a> — oficjalne stawki płatności bezpośrednich oraz przejściowego wsparcia krajowego za rok 2024 i 2025. Ostatnia aktualizacja: <strong>{lastUpdated}</strong>.</p>
       </footer>
@@ -317,7 +321,11 @@ const groups: { title: string; rows: Row[]; areaUnit: string }[] = [
   .db-q[open] summary::after{content:'–'}
   .db-q p{font-size:14px;line-height:1.6;color:#2A2A2F;margin:0 0 14px}
 
-  .db-src{margin-top:34px;padding:18px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+  .db-related{margin-top:26px}
+  .db-related a{font-weight:700;font-size:15px;color:var(--ink);border-bottom:2px solid var(--yellow);padding-bottom:2px;text-decoration:none}
+  .db-related a:hover{background:var(--yellow)}
+
+  .db-src{margin-top:28px;padding:18px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
   .db-src p{font-size:13px;color:#2A2A2F;line-height:1.55;margin:0}
   .db-src a{text-decoration:underline}
 
