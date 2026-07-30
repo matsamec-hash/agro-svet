@@ -5,7 +5,8 @@ import { getAllDruhy } from '../lib/plemena';
 import { getAllFarms, regionsWithEnoughFarms } from '../lib/farmy';
 import { getAllVcely, getAllVybaveni, getAllMed } from '../lib/vcelarstvi';
 import { getAllHlemyzdi } from '../lib/hlemyzdi';
-import { listPlodiny, listIndexableOdrudy, listSkupiny, listIndexableUdrzovatele } from '../lib/plodiny';
+import { listPlodiny, listIndexableOdrudy, listSkupiny, listIndexableUdrzovatele, udrzovatelSlug } from '../lib/plodiny';
+import statsPlData from '../data/agro-stats-pl.json';
 import { listIndexableChoroby } from '../lib/choroby';
 import { expandedComparisonPairs, implementComparisonPairs } from '../lib/comparator';
 import { brandPairs } from '../lib/brand-comparator';
@@ -557,6 +558,20 @@ export const GET: APIRoute = async () => {
     })
     .map((u) => ({ ...u, loc: `${SITE_URL}/pl${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...plMirror);
+
+  // PL komoditní detaily — /pl/statistiky/komodita/<slug>/ jsou indexovatelné
+  // (reálná GUS data ceny skupu, viz [slug].astro noindex výjimka pro pl).
+  // Slugy z polských názvů komodit; base sitemap komoditní detaily neobsahuje
+  // pro žádný locale (jinak interní prolinkování), pro pl je přidáme explicitně
+  // kvůli rychlejší indexaci net-new obsahu.
+  for (const c of (statsPlData.commodityFull as Array<{ name: string }>)) {
+    urls.push({
+      loc: `${SITE_URL}/pl/statistiky/komodita/${udrzovatelSlug(c.name)}/`,
+      changefreq: 'weekly',
+      priority: '0.7',
+      lastmod: STATIC_LASTMOD,
+    });
+  }
 
   // SK /dotace detail URL — vlastné slugy z kolekcie 'dotaceSk' (PPA SR výzvy).
   const dotaceSkEntries = await getCollection('dotaceSk');
