@@ -525,6 +525,34 @@ categories:
             year_to: 2014
             power_hp: 85
             power_kw: 63
+            overview: >
+              Kompaktnější univerzál řady MF 5600 (2011–2014) s výkonem 85 koní
+              a čtyřválcovým motorem AGCO Power (SISU). Moderní ojetina s dobrým poměrem
+              výkonu a rozměru, oblíbená v živočišné výrobě i komunálu.
+            reliability: >
+              Blok AGCO Power / SISU platí za velmi odolný (běžně přes 15 000 motohodin);
+              slabiny jsou spíš v příslušenství motoru a emisní elektronice než v základu.
+            common_faults:
+              - issue: "Řídicí jednotka EEM2 po zahřátí odpojí palivové čerpadlo"
+                note: "Traktor přejde do nouzového režimu; typicky konektory a čidla, ne blok motoru — hlídat chování za tepla."
+              - issue: "Těsnění hlavy u starších kusů, ojediněle zvýšená spotřeba oleje"
+                note: "Při prohlídce sledovat spotřebu oleje a stopy po přetěsňování."
+            pros:
+              - "Velmi odolný motor SISU / AGCO Power"
+              - "Kompaktní rozměry a obratnost"
+              - "Moderní kabina a převodovka Dyna"
+              - "Slušná dostupnost dílů"
+            cons:
+              - "Emisní a řídicí elektronika (EEM2) může dělat problémy"
+              - "U některých kusů spotřeba oleje"
+              - "Vyšší cena než starší řady"
+            used_price:
+              min: 800000
+              max: 1200000
+              note: "Orientačně podle mezinárodní inzerce; ročníky 2011–2014 spíš při spodní hranici. Závisí na nájezdu a výbavě."
+            for_whom: >
+              Vhodný pro střední farmu a živočišnou výrobu chtějící moderní, obratný
+              a motorově spolehlivý traktor, který akceptuje emisní elektroniku.
           - slug: massey-ferguson-5609
             name: "5609"
             year_from: 2011
@@ -622,6 +650,29 @@ categories:
             year_to: 2002
             power_hp: 79
             power_kw: 58
+            overview: >
+              Střední traktor řady MF 6200 (1999–2002) s výkonem kolem 79 koní
+              a čtyřválcovým motorem Perkins. Jednoduchý, mechanicky nekomplikovaný
+              univerzál pro menší a střední hospodářství. Dnes levnější ojetina.
+            reliability: >
+              Motor Perkins řady 1000 má dobrou pověst odolnosti; celkově robustní
+              a opravitelný traktor bez složité elektroniky.
+            common_faults:
+              - issue: "Stav převodovky (Speedshift/Dynashift dle výbavy)"
+                note: "U ojetin prověřit řazení a případné opotřebení."
+              - issue: "Olejové netěsnosti dané stářím"
+                note: "Sledovat těsnění a stopy po přetěsňování."
+            pros:
+              - "Jednoduchá spolehlivá koncepce"
+              - "Osvědčený motor Perkins"
+              - "Snadný a levný servis"
+              - "Nízká pořizovací cena"
+            cons:
+              - "Zastaralý komfort a kabina"
+              - "U ojetin riziko opotřebení převodovky"
+            for_whom: >
+              Vhodný pro menší a střední farmu hledající levný, jednoduchý a opravitelný
+              pracovní traktor bez elektroniky.
           - slug: massey-ferguson-6245
             name: "6245"
             year_from: 1999
