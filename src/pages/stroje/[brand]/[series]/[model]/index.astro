@@ -318,7 +318,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </div>
         )}
 
-        {model.description && <p class="hero-lede">{model.description}</p>}
+        {(model.overview || model.description) && <p class="hero-lede">{model.overview || model.description}</p>}
 
         <div class="hero-actions">
           <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`}>
@@ -424,6 +424,56 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </section>
         )}
 
+        {(model.reliability || (model.common_faults && model.common_faults.length > 0)) && (
+          <section class="faults-card">
+            <div class="card-head">
+              <h2>{tr('cat.s.d.faultsTitle')}</h2>
+            </div>
+            {model.reliability && <p class="faults-lede">{model.reliability}</p>}
+            {model.common_faults && model.common_faults.length > 0 && (
+              <ul class="faults-list">
+                {model.common_faults.map((f) => (
+                  <li class="fault-item">
+                    <span class="fault-issue">{f.issue}</span>
+                    {f.note && <span class="fault-note">{f.note}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+
+        {((model.pros && model.pros.length > 0) || (model.cons && model.cons.length > 0)) && (
+          <section class="proscons-card">
+            <div class="card-head">
+              <h2>{tr('cat.s.d.prosconsTitle')}</h2>
+            </div>
+            <div class="pc-grid">
+              {model.pros && model.pros.length > 0 && (
+                <div class="pc-col pc-pros">
+                  <h3>{tr('cat.s.d.prosTitle')}</h3>
+                  <ul>{model.pros.map((p) => <li>{p}</li>)}</ul>
+                </div>
+              )}
+              {model.cons && model.cons.length > 0 && (
+                <div class="pc-col pc-cons">
+                  <h3>{tr('cat.s.d.consTitle')}</h3>
+                  <ul>{model.cons.map((c) => <li>{c}</li>)}</ul>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {model.for_whom && (
+          <section class="forwhom-card">
+            <div class="card-head">
+              <h2>{tf(locale, 'cat.s.d.forWhomTitle', { model: model.name })}</h2>
+            </div>
+            <p class="forwhom-text">{model.for_whom}</p>
+          </section>
+        )}
+
         {competitors.length > 0 && (
           <section class="competitor-card">
             <div class="card-head">
@@ -522,6 +572,13 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             <div class="aside-price">
               <span class="ap-label">{tr('cat.s.d.priceLabel')}</span>
               <span class="ap-value">{priceStats.min === priceStats.max ? `${priceFmt(priceStats.min)} Kč` : `${priceFmt(priceStats.min)} – ${priceFmt(priceStats.max)} Kč`}</span>
+            </div>
+          )}
+          {model.used_price && (
+            <div class="aside-price aside-used-price">
+              <span class="ap-label">{tr('cat.s.d.usedPriceLabel')}</span>
+              <span class="ap-value">{model.used_price.min === model.used_price.max ? `${priceFmt(model.used_price.min)} Kč` : `${priceFmt(model.used_price.min)} – ${priceFmt(model.used_price.max)} Kč`}</span>
+              {model.used_price.note && <span class="ap-note">{model.used_price.note}</span>}
             </div>
           )}
           <p>{modelBazarCount > 0 ? tr('cat.s.d.asideTextHas') : tr('cat.s.d.asideTextNone')}</p>
@@ -725,6 +782,23 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
     padding:7px 10px;border-radius:8px;text-decoration:none;transition:.15s;
   }
   .model-page .comp-compare-link:hover{background:var(--yellow);transform:translateY(-1px)}
+
+  .model-page .faults-card, .model-page .proscons-card, .model-page .forwhom-card{
+    background:var(--card,#fff);border:1px solid var(--line,#e5e5e5);border-radius:var(--r-lg,18px);padding:24px;margin-top:20px;
+  }
+  .model-page .faults-lede, .model-page .forwhom-text{margin:0 0 12px;line-height:1.6}
+  .model-page .faults-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+  .model-page .fault-item{display:flex;flex-direction:column;gap:2px;padding-left:16px;border-left:3px solid var(--yellow,#FFEA00)}
+  .model-page .fault-issue{font-weight:600}
+  .model-page .fault-note{font-size:.92em;color:#666}
+  .model-page .pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .model-page .pc-col h3{margin:0 0 8px;font-size:1rem}
+  .model-page .pc-col ul{margin:0;padding-left:18px;line-height:1.6}
+  .model-page .pc-pros h3{color:var(--green,#0B7A3B)}
+  .model-page .pc-cons h3{color:#b02a1a}
+  .model-page .aside-used-price{margin-top:8px}
+  .model-page .aside-used-price .ap-note{display:block;font-size:.85em;color:#666;margin-top:2px}
+  @media (max-width:560px){ .model-page .pc-grid{grid-template-columns:1fr} }
 
   .model-page .editorial-bar{
     margin-top:8px;padding:14px 18px;
