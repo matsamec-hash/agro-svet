@@ -49,6 +49,26 @@ const pozostale: Row[] = [
   { name: 'Materiał siewny kwalifikowany — ziemniaki', v: 436.76 },
 ];
 
+// Ekoschemat Dobrostan zwierząt 2025 (per gatunek/wariant, zł/szt) — świnie i bydło
+// systemem punktowym (80,38 zł/pkt). Źródło: gov.pl/MRiRW, Dz.U. 2026 poz. 560.
+type Dob = { g: string; w: string; v: number };
+const dobrostan: Dob[] = [
+  { g: 'Krowy mleczne', w: 'zwiększona powierzchnia bytowa +50%', v: 808.30 },
+  { g: 'Krowy mleczne', w: 'zwiększona powierzchnia bytowa +20%', v: 557.72 },
+  { g: 'Krowy mleczne', w: 'wypas', v: 250.57 },
+  { g: 'Krowy mleczne', w: 'dostęp do wybiegu', v: 161.66 },
+  { g: 'Krowy mamki', w: 'zwiększona powierzchnia +50%', v: 735.55 },
+  { g: 'Krowy mamki', w: 'zwiększona powierzchnia +20%', v: 290.98 },
+  { g: 'Bydło opasowe', w: 'wypas', v: 234.40 },
+  { g: 'Bydło opasowe', w: 'zwiększona powierzchnia +50%', v: 161.66 },
+  { g: 'Owce', w: 'za sztukę', v: 124.89 },
+  { g: 'Kozy', w: 'za sztukę', v: 120.61 },
+  { g: 'Konie', w: 'utrzymywane w budynkach', v: 349.75 },
+  { g: 'Konie', w: 'system otwarty', v: 158.34 },
+  { g: 'Kury nioski', w: 'za sztukę', v: 11.43 },
+  { g: 'Indyki', w: 'wariant podstawowy', v: 2.42 },
+];
+
 const fmt = (v: number) => v.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const maxWeglowe = Math.max(...weglowe.map((r) => r.v));
 const lastUpdated = new Date().toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -58,7 +78,7 @@ const faq = [
   { q: 'Ile wynoszą stawki ekoschematów w 2025 roku?', a: `Stawki zależą od praktyki. Najwyższą stawkę ma Integrowana Produkcja Roślin sadownicza (${fmt(1185.24)} zł/ha) oraz Obszary z roślinami miododajnymi (${fmt(931.07)} zł/ha). W Rolnictwie węglowym najwyżej punktowane praktyki (ekstensywne TUZ, międzyplony) dają ${fmt(437.60)} zł/ha.` },
   { q: 'Jak działa system punktowy w Rolnictwie węglowym?', a: `Rolnictwo węglowe i zarządzanie składnikami odżywczymi działa punktowo — za każdą praktykę rolnik otrzymuje punkty, a rolnik musi zrealizować praktyki za co najmniej 25% liczby punktów odpowiadającej powierzchni gospodarstwa. Wartość 1 punktu za 2025 r. to ok. ${PKT} zł.` },
   { q: 'Czy ekoschematy łączą się z dopłatami bezpośrednimi?', a: 'Tak. Ekoschematy są dodatkową, dobrowolną płatnością obszarową doliczaną do podstawowego wsparcia dochodów (PWD) i pozostałych płatności bezpośrednich. Część praktyk można łączyć na tej samej powierzchni.' },
-  { q: 'Jakie są stawki ekoschematu Dobrostan zwierząt?', a: 'Ekoschemat Dobrostan zwierząt również działa w systemie punktowym, ale jego stawki za 2025 r. zostały ustalone odrębnym rozporządzeniem w późniejszym terminie. Wartość punktu wynosi ok. 80,83 zł.' },
+  { q: 'Jakie są stawki ekoschematu Dobrostan zwierząt?', a: `Stawki zależą od gatunku i praktyki. Najwyższe są dla krów mlecznych — zwiększona powierzchnia bytowa o 50% to ${fmt(808.30)} zł/szt., a o 20% — ${fmt(557.72)} zł/szt. Owce ${fmt(124.89)} zł/szt., kozy ${fmt(120.61)} zł/szt., konie w budynkach ${fmt(349.75)} zł/szt. Dla świń i bydła płatność liczona jest punktowo (80,38 zł za punkt).` },
   { q: 'Jaki kurs euro zastosowano do przeliczenia stawek?', a: `Stawki przeliczono po kursie referencyjnym EBC z 30 września 2025 r., który wyniósł ${KURS} zł/EUR.` },
 ];
 
@@ -82,7 +102,7 @@ const jsonLd = {
 
 <Layout
   title="Ekoschematy 2025 — stawki płatności (zł/ha)"
-  description={`Aktualne stawki ekoschematów obszarowych ARiMR za 2025 r.: Rolnictwo węglowe, Integrowana Produkcja Roślin, Obszary z roślinami miododajnymi, Biologiczna ochrona, retencja wody. Pełna tabela stawek zł/ha i system punktowy.`}
+  description={`Aktualne stawki ekoschematów ARiMR za 2025 r.: Rolnictwo węglowe, Integrowana Produkcja Roślin, rośliny miododajne, Dobrostan zwierząt (krowy, owce, kozy, konie). Pełne tabele stawek zł/ha i zł/szt oraz system punktowy.`}
   noHreflang={true}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
@@ -165,8 +185,33 @@ const jsonLd = {
             </table>
           </div>
         </div>
-        <p class="db-tbl-src">Ekoschemat <strong>Dobrostan zwierząt</strong> działa punktowo (ok. 80,83 zł/pkt);
-          stawki za 2025 r. ustalono odrębnym rozporządzeniem. Kurs EBC: {KURS} zł/EUR.</p>
+        <p class="db-tbl-src">Kurs EBC: {KURS} zł/EUR.</p>
+      </section>
+
+      <!-- ── Dobrostan zwierząt ── -->
+      <section class="db-tables" aria-labelledby="d-h">
+        <h2 id="d-h">Ekoschemat Dobrostan zwierząt 2025</h2>
+        <p class="db-calc-sub">Płatność za podwyższone warunki utrzymania zwierząt. Dla świń i bydła liczona
+          punktowo (<strong>80,38 zł/pkt</strong>), dla pozostałych gatunków — stawka za sztukę. Wybrane warianty:</p>
+        <div class="db-tblcard">
+          <div class="db-tblscroll">
+            <table class="db-tbl">
+              <thead><tr><th>Gatunek</th><th>Wariant / praktyka</th><th class="num">Stawka 2025</th><th>Jedn.</th></tr></thead>
+              <tbody>
+                {dobrostan.map((r) => (
+                  <tr>
+                    <td><span class="db-tbl-name">{r.g}</span></td>
+                    <td>{r.w}</td>
+                    <td class="num strong">{fmt(r.v)}</td>
+                    <td class="unit">zł/szt.</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="db-tbl-src">Źródło: rozporządzenie MRiRW (Dz.U. 2026 poz. 560). Pełna lista wariantów i praktyk
+          dostępna w komunikacie ARiMR.</p>
       </section>
 
       <!-- ── FAQ ── -->
