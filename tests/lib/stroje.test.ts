@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getEffectiveZaber, getFunctionalGroupForCategory, FUNCTIONAL_GROUPS, applyStrojOverlay, type StrojKategorie } from '../../src/lib/stroje';
+import { getEffectiveZaber, getFunctionalGroupForCategory, FUNCTIONAL_GROUPS, applyStrojOverlay, getModelBySlug, type StrojKategorie } from '../../src/lib/stroje';
 
 describe('stroje lib — SK overlay modelů (Fáze stroje-detail)', () => {
   const base = {
@@ -87,5 +87,15 @@ describe('stroje lib — schema rozšíření', () => {
   it('seti obsahuje 5 sub-kategorií včetně sazecky-brambor', () => {
     expect(FUNCTIONAL_GROUPS['seti'].categories).toHaveLength(5);
     expect(FUNCTIONAL_GROUPS['seti'].categories).toContain('sazecky-brambor');
+  });
+});
+
+describe('StrojModel — nová editorial pole', () => {
+  // getModelBySlug vrací plochý StrojFlatModel (extends StrojModel), ne { brand, series, model }.
+  it('model bez nových polí se načte a pole jsou undefined (žádný crash)', () => {
+    const found = getModelBySlug('zetor-7745');
+    expect(found).toBeTruthy();
+    expect(found!.common_faults ?? undefined).toBeUndefined();
+    expect(found!.used_price ?? undefined).toBeUndefined();
   });
 });

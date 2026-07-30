@@ -29,6 +29,17 @@ export type StrojKategorie =
   // komunál-les (3)
   | 'mulcovace' | 'stepkovace' | 'lesni-vyvazecky';
 
+export interface CommonFault {
+  issue: string;
+  note?: string;
+}
+
+export interface UsedPrice {
+  min: number;        // CZK
+  max: number;        // CZK
+  note?: string;
+}
+
 export interface StrojModel {
   slug: string;
   name: string;
@@ -52,6 +63,14 @@ export interface StrojModel {
   prikon_traktor_hp_min?: number | null;
   prikon_traktor_hp_max?: number | null;
   typ_zavesu?: 'neseny' | 'tazeny' | 'poloneseny' | 'samojizdny' | 'navesny' | null;
+  // Editorial obohacení (vlna 2026-07 — SEO). Vše volitelné; sekce se renderuje jen když pole existuje.
+  overview?: string;
+  reliability?: string;
+  common_faults?: CommonFault[];
+  pros?: string[];
+  cons?: string[];
+  used_price?: UsedPrice;
+  for_whom?: string;
 }
 
 export interface StrojSeries {
