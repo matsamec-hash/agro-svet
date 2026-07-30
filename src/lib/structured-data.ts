@@ -327,15 +327,25 @@ export function machineProductSchema(m: MachineModelForSchema) {
   }
 
   // Vehicle/machine specs as PropertyValue pairs — entity-rich without Product type.
+  // PropertyValue názvy lokalizované dle m.lang (jinak by /sk /uk /pl JSON-LD nesly
+  // české labely). cs = default → byte-identické s původním chováním.
+  const L = ((lang?: string) => {
+    switch ((lang ?? 'cs-CZ').slice(0, 2)) {
+      case 'sk': return { power: 'Výkon', powerKw: 'Výkon (kW)', weight: 'Hmotnosť', engine: 'Motor', transmission: 'Prevodovka', years: 'Roky výroby', hp: 'k', present: 'súčasnosť' };
+      case 'uk': return { power: 'Потужність', powerKw: 'Потужність (кВт)', weight: 'Маса', engine: 'Двигун', transmission: 'Трансмісія', years: 'Роки випуску', hp: 'к.с.', present: 'дотепер' };
+      case 'pl': return { power: 'Moc', powerKw: 'Moc (kW)', weight: 'Masa', engine: 'Silnik', transmission: 'Przekładnia', years: 'Lata produkcji', hp: 'KM', present: 'obecnie' };
+      default: return { power: 'Výkon', powerKw: 'Výkon (kW)', weight: 'Hmotnost', engine: 'Motor', transmission: 'Převodovka', years: 'Roky výroby', hp: 'k', present: 'dosud' };
+    }
+  })(m.lang);
   const props: Array<Record<string, unknown>> = [];
-  if (m.powerHp) props.push({ '@type': 'PropertyValue', name: 'Výkon', value: m.powerHp, unitCode: 'BHP', unitText: 'k' });
-  if (m.powerKw) props.push({ '@type': 'PropertyValue', name: 'Výkon (kW)', value: m.powerKw, unitCode: 'KWT', unitText: 'kW' });
-  if (m.weightKg) props.push({ '@type': 'PropertyValue', name: 'Hmotnost', value: m.weightKg, unitCode: 'KGM', unitText: 'kg' });
-  if (m.engine) props.push({ '@type': 'PropertyValue', name: 'Motor', value: m.engine });
-  if (m.transmission) props.push({ '@type': 'PropertyValue', name: 'Převodovka', value: m.transmission });
+  if (m.powerHp) props.push({ '@type': 'PropertyValue', name: L.power, value: m.powerHp, unitCode: 'BHP', unitText: L.hp });
+  if (m.powerKw) props.push({ '@type': 'PropertyValue', name: L.powerKw, value: m.powerKw, unitCode: 'KWT', unitText: 'kW' });
+  if (m.weightKg) props.push({ '@type': 'PropertyValue', name: L.weight, value: m.weightKg, unitCode: 'KGM', unitText: 'kg' });
+  if (m.engine) props.push({ '@type': 'PropertyValue', name: L.engine, value: m.engine });
+  if (m.transmission) props.push({ '@type': 'PropertyValue', name: L.transmission, value: m.transmission });
   if (m.yearFrom) {
-    const yearValue = m.yearTo ? `${m.yearFrom}–${m.yearTo}` : `${m.yearFrom}–dosud`;
-    props.push({ '@type': 'PropertyValue', name: 'Roky výroby', value: yearValue });
+    const yearValue = m.yearTo ? `${m.yearFrom}–${m.yearTo}` : `${m.yearFrom}–${L.present}`;
+    props.push({ '@type': 'PropertyValue', name: L.years, value: yearValue });
   }
   if (props.length > 0) schema.additionalProperty = props;
 
