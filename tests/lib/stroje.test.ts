@@ -93,8 +93,8 @@ describe('stroje lib — schema rozšíření', () => {
 describe('StrojModel — nová editorial pole', () => {
   // getModelBySlug vrací plochý StrojFlatModel (extends StrojModel), ne { brand, series, model }.
   it('model bez editorial dat se načte a pole jsou undefined (žádný crash)', () => {
-    // zetor-6245 záměrně nenaplněn editorial poli.
-    const found = getModelBySlug('zetor-6245');
+    // zetor-4011 (první UŘ I, 1962) záměrně nenaplněn editorial poli — není GSC cíl.
+    const found = getModelBySlug('zetor-4011');
     expect(found).toBeTruthy();
     expect(found!.common_faults ?? undefined).toBeUndefined();
     expect(found!.used_price ?? undefined).toBeUndefined();
