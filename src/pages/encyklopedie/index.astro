@@ -12,12 +12,13 @@ import { useTranslations, getLocaleFromUrl, localizePath, tf, localizeInternalHr
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const isSk = locale === 'sk';
+const isPl = locale === 'pl';
 const t = useTranslations(locale);
-const base = isSk ? '/sk' : '';
+const base = isSk ? '/sk' : isPl ? '/pl' : '';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
-const items = await getCollection(isSk ? 'encyklopedieSk' : 'encyklopedie');
-const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, isSk ? 'sk' : 'cs'));
+const items = await getCollection(isSk ? 'encyklopedieSk' : isPl ? 'encyklopediePl' : 'encyklopedie');
+const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, isSk ? 'sk' : isPl ? 'pl' : 'cs'));
 
 const kategLabels: Record<string, string> = {
   traktor: t('enc.kat.traktor'), kombajn: t('enc.kat.kombajn'), stroj: t('enc.kat.stroj'), 'puda-technika': t('enc.kat.puda-technika'),

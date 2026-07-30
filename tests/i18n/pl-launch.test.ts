@@ -11,11 +11,14 @@ describe('PL fáze 1 launch (stroje/znacky/srovnani/slovnik)', () => {
       expect(isLaunchedPath('pl', `${p}/cokoli/`)).toBe(true);
     }
   });
+  it('/encyklopedie je launchnuté pro pl (encyklopediePl overlay, 42 md)', () => {
+    expect(isLaunchedPath('pl', '/encyklopedie')).toBe(true);
+    expect(isLaunchedPath('pl', '/encyklopedie/fendt-724-vario/')).toBe(true);
+  });
   it('zbylé jurisdikční / cs-only sekce NEjsou launchnuté pro pl', () => {
     // /dotace + /jak-na-to = PL má vlastní dotační/how-to obsah (jiná jurisdikce);
-    // /encyklopedie = per-locale overlay kolekce `encyklopediePl` neexistuje →
-    // launch by 404-oval; /novinky = české články.
-    for (const p of ['/dotace', '/jak-na-to', '/encyklopedie', '/novinky']) {
+    // /novinky = české články.
+    for (const p of ['/dotace', '/jak-na-to', '/novinky']) {
       expect(isLaunchedPath('pl', p)).toBe(false);
     }
   });

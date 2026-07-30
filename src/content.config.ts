@@ -75,6 +75,12 @@ const encyklopedieUk = defineCollection({
   schema: encyklopedieSchema(),
 });
 
+// PL-localizovaná overlay kolekce encyklopedie (slug = REUSE cs slug).
+const encyklopediePl = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie-pl' }),
+  schema: encyklopedieSchema(),
+});
+
 const znackySchema = () =>
   z.object({
     name: z.string(),
@@ -263,4 +269,4 @@ const howtoUk = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, znacky, znackySk, znackyUk, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk };
+export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk };

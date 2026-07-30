@@ -37,17 +37,15 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
   // přes stat.*/data.hub./komodita. klíče. /dotace + /jak-na-to zůstávají cs
   // (PL má vlastní dotační systém / jiný how-to obsah) → pozdější fáze.
-  // /encyklopedie ZÁMĚRNĚ NENÍ launchnuté: [slug].astro čte z per-locale overlay
-  // kolekce (ENC_COLLECTION), a `encyklopediePl` obsah neexistuje (0 md, sk/uk
-  // mají po 42) → každá /pl/encyklopedie stránka by 404-ovala. Odemknout až po
-  // vytvoření src/content/encyklopedie-pl/ + kolekce + pl klíče v ENC_COLLECTION/bcp47.
+  // /encyklopedie LAUNCHNUTÉ: `encyklopediePl` overlay kolekce (42 md, plná parita
+  // s cs/sk/uk) + pl klíče v ENC_COLLECTION/bcp47 ([slug].astro) + hub pl větev.
   // Kalkulačky: jen 2 UNIVERZÁLNÍ převodníky (plocha/hmotnost) — bez jurisdikce.
   // Finanční (leasing = čeští poskytovatelé, náklady/nafta = české ceny, CAP =
   // české sazby) + /kalkulacka hub zůstávají cs → potřebují PL data, ne překlad.
   // /doplaty-bezposrednie = PL-only landing (dopłaty bezpośrednie ARiMR), jurisdykčně
   // vázané, obsah přímo polsky (žádný cs ekvivalent → non-pl locale 404). Launchnuté
   // → index+self-canonical (noHreflang v Layoutu, žádné cross-locale alternates).
-  pl: ['/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie'],
+  pl: ['/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/encyklopedie'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
