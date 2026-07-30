@@ -126,6 +126,41 @@ categories:
             year_to: 2010
             power_hp: 102
             power_kw: 75
+            engine: "John Deere / DPS, 4-válec"
+            overview: >
+              Vstupní až střední čtyřválcový traktor (2003–2010) s výkonem kolem 101 koní
+              a motorem John Deere / DPS. Vychází z éry Renault–CLAAS. Dnes běžná a cenově
+              dostupná ojetina, obvykle s vyšším počtem motohodin.
+            reliability: >
+              Ohlasy jsou smíšené, ale u řady majitelů převažuje spokojenost — po letech
+              provozu jen drobnosti. Kritickým bodem je spojka reverzace převodovky
+              (Revershift).
+            common_faults:
+              - issue: "Selhání spojky reverzace Revershift"
+                note: "Známý problém (hlášeno i kolem 3 000–6 500 motohodin); interval řazení lze upravit v softwaru CLAAS."
+              - issue: "Ztráta výkonu pod zatížením s výstražnou kontrolkou"
+                note: "Podezření na prokluz spojky nebo powershiftu — doporučena diagnostika."
+              - issue: "Občasné potíže se startem nebo vypínání za jízdy"
+                note: "Elektrika — ventil/cívka, kontakty."
+              - issue: "Drobnosti dané stářím (těsnění, čidla, kontakty)"
+                note: "Běžné u kusů s vyšším nájezdem."
+            pros:
+              - "Jednoduchý a cenově dostupný traktor s osvědčeným motorem John Deere"
+              - "Vhodný výkon kolem 100 koní pro střední práce"
+              - "Dlouhá životnost při základní údržbě"
+              - "Dostupné náhradní díly"
+            cons:
+              - "Slabinou spojka reverzace Revershift"
+              - "Elektrické neduhy u starších kusů"
+              - "U vysoko naježděných kusů nutná rezerva na opravy"
+            used_price:
+              min: 360000
+              max: 730000
+              note: "České i evropské inzeráty podle stavu a nájezdu (v CZK vč. DPH bývá od cca 360 000 Kč). Před koupí prověřit stav spojky reverzace."
+            for_whom: >
+              Vhodný pro menší a střední farmu nebo jako druhý univerzální traktor pro toho,
+              kdo hledá dostupnou ojetinu kolem 100 koní; před koupí nechat prověřit spojku
+              reverzace a elektroinstalaci.
 
       # ========== Elios (2008+) ==========
       - slug: elios
@@ -816,6 +851,40 @@ categories:
             power_hp: 790
             power_kw: 581
             grain_tank_l: 13500
+            engine: "MAN D4276, 16,2 l"
+            overview: >
+              Vlajkový hybridní kombajn CLAAS řady Lexion 8000 s výkonem 790 koní.
+              Kombinuje tangenciální mlácení APS s dvojicí axiálních rotorů (APS Synflow
+              Hybrid) pro nejvyšší průchodnost při šetrném mlácení. Určený velkým podnikům
+              a žňovým službám; na trhu ojetin se objevují jen mladé kusy.
+            reliability: >
+              Po zaběhnutí spolehlivý stroj s vysokou průchodností a čistým vzorkem zrna;
+              rané série dostávaly průběžné servisní úpravy (retrofity).
+            common_faults:
+              - issue: "Zlomená plynová vzpěra závěsu vykládacího šneku"
+                note: "CLAAS dodatečně montoval výztuhu; u raných kusů řešeno provizorně."
+              - issue: "Hromadění plev a nečistot u vrtule (impeller)"
+                note: "U raných kusů řešeno drobnou úpravou v poli."
+              - issue: "Automatika CEMOS vyžaduje kalibraci dle plodiny"
+                note: "Bez doladění nastavení stroj nedává plný výkon."
+              - issue: "Sklon ke strhávání slámy v suchém obilí"
+                note: "Doladit nastavení mlátícího ústrojí."
+            pros:
+              - "Mimořádně čistý vzorek zrna i v polehlých porostech"
+              - "Vysoká průchodnost"
+              - "Nižší spotřeba paliva"
+              - "Rychlá vykládka a přepravní rychlost 40 km/h"
+            cons:
+              - "Sklon ke strhávání slámy v suchém obilí"
+              - "Nutná kalibrace automatiky pro plný výkon"
+              - "Cena a provozní náklady vlajkové třídy"
+            used_price:
+              min: 8500000
+              max: 10500000
+              note: "Orientačně z evropské inzerce mladých ojetin; ceny kolísají podle nájezdu, výbavy a kurzu."
+            for_whom: >
+              Vhodný pro velké podniky a žňové služby s tisíci hektary ročně, které
+              potřebují maximální denní výkon a čistotu zrna a unesou cenu vlajkové lodi.
 
       - slug: lexion-5000-8000
         name: "Lexion 5000/6000/7000/8000 (2019–dosud)"
@@ -949,6 +1018,26 @@ categories:
             power_hp: 790
             power_kw: 581
             grain_tank_l: 18000
+            engine: "MAN D4276, 16,2 l"
+            overview: >
+              Aktuální generace vlajkového hybridního kombajnu Lexion 8900 (od roku 2019)
+              s motorem MAN o výkonu 790 koní a zásobníkem zrna 18 000 litrů. Mlátící systém
+              APS Synflow Hybrid, k dispozici i v pásové verzi Terra Trac. Segment nových
+              strojů pro největší podniky.
+            reliability: >
+              Vyzrálá konstrukce po několika letech výroby s průběžnými ročními inovacemi;
+              dlouhodobá poruchovost současné generace je ve fórech zatím málo doložená.
+            pros:
+              - "Největší zásobník ve třídě (18 000 litrů) pro méně prostojů"
+              - "790 koní s funkcí Dynamic Power"
+              - "Vysoká průchodnost při šetrném mlácení"
+              - "Volitelná pásová verze Terra Trac"
+            cons:
+              - "Pořizovací cena a provozní náklady vlajkové třídy"
+              - "Rozměry a hmotnost pro menší pozemky nevhodné"
+            for_whom: >
+              Nový stroj pro největší podniky a žňové služby požadující nejvyšší denní
+              výkon, velký zásobník a moderní automatizaci.
 
       # ========== Trion (2021+) ==========
       - slug: trion
@@ -1026,6 +1115,35 @@ categories:
             power_hp: 435
             power_kw: 320
             grain_tank_l: 10000
+            overview: >
+              Kombajn střední třídy (od roku 2021), nástupce řady Tucano. Model 750 je
+              hybridní verze s mlátícím ústrojím APS Twin Hybrid a výkonem 435 koní, motor
+              Cummins Stage V, zásobník 10 000 litrů. Nabízí výkon Lexionu v kompaktnějším
+              těle.
+            reliability: >
+              Po dvou sezónách provozu hodnocen jako dobře vyvážený stroj; drobné poruchy
+              v rámci zaběhnutí, jinak spolehlivá každodenní práce.
+            common_faults:
+              - issue: "Prasknutí hlavní pohonné řemenice"
+                note: "Hlášeno v prvních dvou sezónách."
+              - issue: "Problémy s alternátorem"
+                note: "U raných kusů."
+              - issue: "Vadné navádění vykládacího šneku"
+                note: "Prověřit funkci."
+              - issue: "Opotřebení plastových skluzů za nožem lišty"
+                note: "Běžná výměna (řádově desítky kusů ročně)."
+            pros:
+              - "Vysoký výkon na třídu"
+              - "Osvědčený mlátící systém APS v užším těle"
+              - "Prostorná a tichá kabina, GPS Pilot a CEMOS"
+              - "Draper lišta Convio Flex pro polehlé porosty"
+            cons:
+              - "Silniční rychlost jen 30 km/h (dlouhé přejezdy)"
+              - "Řezání slámy výrazně zvyšuje zatížení motoru"
+              - "Pravidelná výměna opotřebních plastů lišty"
+            for_whom: >
+              Vhodný pro střední a větší farmy (stovky hektarů ročně), které chtějí výkon
+              Lexionu v kompaktnějším a dostupnějším těle.
 
   sklizen-picnin:
     name: Sklízecí řezačky
