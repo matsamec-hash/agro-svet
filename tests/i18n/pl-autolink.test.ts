@@ -14,8 +14,8 @@ describe('pl auto-linker / interní href lokalizace', () => {
   it('NElaunchnutá sekce → cs href beze změny (žádný 302/leak)', () => {
     expect(localizeInternalHref('pl', '/novinky/')).toBe('/novinky/');
     expect(localizeInternalHref('pl', '/dotace/')).toBe('/dotace/');
-    // /encyklopedie NElaunchnutá pro pl (chybí encyklopediePl overlay) → cs href
-    expect(localizeInternalHref('pl', '/encyklopedie/fendt-900/')).toBe('/encyklopedie/fendt-900/');
+    // /jak-na-to NElaunchnutá pro pl (jiná jurisdikce) → cs href beze změny
+    expect(localizeInternalHref('pl', '/jak-na-to/vyber-traktoru/')).toBe('/jak-na-to/vyber-traktoru/');
     expect(localizeInternalHref('pl', '/plemena/skot/')).toBe('/plemena/skot/');
   });
   it('cs no-op', () => {

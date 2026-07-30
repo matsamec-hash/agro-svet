@@ -12,14 +12,12 @@ import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../i18n/
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklopedieUk' } as const;
-// Locale bez encyklopedie overlaye (pl — sekce není launchnutá, `encyklopediePl`
-// neexistuje) → korektní 404 místo 500 z getEntry(undefined). Odemknout přidáním
-// pl kolekce sem + do LAUNCHED_PREFIXES.pl.
+const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklopedieUk', pl: 'encyklopediePl' } as const;
+// Locale bez encyklopedie overlaye → korektní 404 místo 500 z getEntry(undefined).
 const coll = (ENC_COLLECTION as Record<string, string | undefined>)[locale];
 if (!coll) return Astro.rewrite('/404');
 const base = locale === 'cs' ? '' : `/${locale}`;
-const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA' } as const)[locale];
+const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA', pl: 'pl-PL' } as const)[locale];
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
