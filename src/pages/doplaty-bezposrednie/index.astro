@@ -1,0 +1,330 @@
+---
+// src/pages/doplaty-bezposrednie/index.astro
+// PL-only landing: dopłaty bezpośrednie (přímé platby ARiMR) — stawki 2024/2025,
+// kalkulator zł/ha, tabela schematów, FAQ. Jurisdykčně vázané na PL → obsah je
+// psán přímo polsky (mirror vzoru sk dotaceSk), NE přes t() klíče.
+// SSR (prerender=false): middleware rewrite /pl/... → tato cs-root routa s locale=pl.
+// Non-pl locale → 404 (žádný cs ekvivalent; stránka existuje jen pod /pl).
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { localizePath } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? 'cs';
+if (locale !== 'pl') return Astro.rewrite('/404');
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+// ── Oficjalne stawki płatności bezpośrednich (ARiMR / MRiRW) ──
+// Źródło: gov.pl/web/arimr — „Stawki płatności bezpośrednich oraz przejściowego
+// wsparcia krajowego za rok 2024 / 2025". Kurs EBC: 2024 = 4,2788 zł/EUR,
+// 2025 = 4,2698 zł/EUR. Stawki ostateczne.
+const KURS = { 2024: '4,2788', 2025: '4,2698' };
+type Row = { name: string; v2024: number | null; v2025: number; unit: 'zł/ha' | 'zł/szt.' | 'zł/kg'; note?: string };
+
+const podstawowe: Row[] = [
+  { name: 'Podstawowe wsparcie dochodów (PWD)', v2024: 483.20, v2025: 488.55, unit: 'zł/ha', note: 'do wszystkich kwalifikujących się hektarów' },
+  { name: 'Płatność redystrybucyjna', v2024: 168.79, v2025: 176.84, unit: 'zł/ha', note: 'do 1–30 ha gospodarstwa' },
+  { name: 'Płatność dla młodych rolników', v2024: 256.55, v2025: 248.16, unit: 'zł/ha', note: 'do 50 ha, przez 5 lat' },
+  { name: 'Uzupełniająca płatność podstawowa (PWK)', v2024: 63.22, v2025: 55.95, unit: 'zł/ha' },
+  { name: 'Płatność dla małych gospodarstw', v2024: 962.73, v2025: 960.70, unit: 'zł/ha', note: 'zamiast pozostałych płatności obszarowych' },
+];
+const zwierzeta: Row[] = [
+  { name: 'Płatność do krów', v2024: 409.86, v2025: 412.63, unit: 'zł/szt.' },
+  { name: 'Płatność do bydła', v2024: 320.35, v2025: 322.49, unit: 'zł/szt.' },
+  { name: 'Płatność do owiec', v2024: 109.40, v2025: 110.16, unit: 'zł/szt.' },
+  { name: 'Płatność do kóz', v2024: 47.83, v2025: 48.12, unit: 'zł/szt.' },
+];
+const rosliny: Row[] = [
+  { name: 'Pomidory', v2024: 2097.56, v2025: 2097.56, unit: 'zł/ha' },
+  { name: 'Chmiel', v2024: 1852.03, v2025: 1864.49, unit: 'zł/ha' },
+  { name: 'Ziemniaki skrobiowe', v2024: 1580.89, v2025: 1580.89, unit: 'zł/ha' },
+  { name: 'Truskawki', v2024: 1154.20, v2025: 1495.79, unit: 'zł/ha' },
+  { name: 'Buraki cukrowe', v2024: 1253.34, v2025: 1284.14, unit: 'zł/ha' },
+  { name: 'Rośliny strączkowe na nasiona', v2024: 794.08, v2025: 879.96, unit: 'zł/ha' },
+  { name: 'Len', v2024: 431.98, v2025: 542.69, unit: 'zł/ha' },
+  { name: 'Rośliny pastewne', v2024: 430.18, v2025: 430.18, unit: 'zł/ha' },
+  { name: 'Konopie włókniste', v2024: 125.32, v2025: 168.99, unit: 'zł/ha' },
+];
+
+const fmt = (v: number) => v.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const yoy = (r: Row): number | null => (r.v2024 && r.v2024 > 0 ? ((r.v2025 - r.v2024) / r.v2024) * 100 : null);
+
+// Headline (2025)
+const pwd = podstawowe[0].v2025;
+const redys = podstawowe[1].v2025;
+const mlody = podstawowe[2].v2025;
+
+const lastUpdated = new Date().toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' });
+const pageUrl = 'https://agro-svet.cz/pl/doplaty-bezposrednie/';
+
+const faq = [
+  { q: 'Ile wynoszą dopłaty bezpośrednie w 2025 roku?', a: `Podstawowe wsparcie dochodów (PWD) za 2025 r. wynosi ${fmt(pwd)} zł/ha, płatność redystrybucyjna ${fmt(redys)} zł/ha (do 1–30 ha), a płatność dla młodych rolników ${fmt(mlody)} zł/ha. Do tego dochodzą ekoschematy oraz płatności związane z produkcją.` },
+  { q: 'Do ilu hektarów przysługuje płatność redystrybucyjna?', a: 'Płatność redystrybucyjna przysługuje do powierzchni od 1 do 30 ha w gospodarstwie. Powyżej 30 ha nie jest już naliczana.' },
+  { q: 'Jaki kurs euro zastosowano do przeliczenia stawek?', a: `Stawki przeliczane są po kursie referencyjnym Europejskiego Banku Centralnego z 30 września. Za 2025 r. kurs wyniósł ${KURS[2025]} zł/EUR, za 2024 r. — ${KURS[2024]} zł/EUR.` },
+  { q: 'Kiedy ARiMR wypłaca dopłaty bezpośrednie?', a: 'Zaliczki wypłacane są od połowy października, a płatności końcowe od 1 grudnia do 30 czerwca kolejnego roku.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Strona główna', item: `https://agro-svet.cz${localizePath('pl', '/')}` },
+        { '@type': 'ListItem', position: 2, name: 'Dopłaty bezpośrednie', item: pageUrl },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ],
+};
+
+const groups: { title: string; rows: Row[]; areaUnit: string }[] = [
+  { title: 'Płatności podstawowe i uzupełniające', rows: podstawowe, areaUnit: 'zł/ha' },
+  { title: 'Płatności związane z produkcją — zwierzęta', rows: zwierzeta, areaUnit: 'zł/szt.' },
+  { title: 'Płatności związane z produkcją — rośliny', rows: rosliny, areaUnit: 'zł/ha' },
+];
+---
+
+<Layout
+  title="Dopłaty bezpośrednie 2025 — stawki płatności (zł/ha)"
+  description={`Aktualne stawki dopłat bezpośrednich ARiMR za 2025 r.: podstawowe wsparcie dochodów ${fmt(pwd)} zł/ha, redystrybucyjna ${fmt(redys)} zł/ha, młody rolnik ${fmt(mlody)} zł/ha. Pełna tabela stawek 2024/2025, kalkulator dopłat na hektar i FAQ.`}
+  noHreflang={true}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <main class="db">
+    <div class="db-wrap">
+      <nav class="db-crumb" aria-label="Ścieżka nawigacji">
+        <a href={localizePath('pl', '/')}>Strona główna</a>
+        <span>/</span>
+        <b>Dopłaty bezpośrednie</b>
+      </nav>
+
+      <header class="db-head">
+        <span class="db-eyebrow">Płatności bezpośrednie ARiMR · rok 2025</span>
+        <h1>Dopłaty bezpośrednie 2025 — stawki</h1>
+        <p class="db-lead">
+          Oficjalne, ostateczne stawki płatności bezpośrednich za 2025 r. ustalone przez MRiRW na
+          podstawie danych ARiMR. Przeliczone po kursie EBC {KURS[2025]} zł/EUR. Poniżej pełna tabela
+          schematów, porównanie rok do roku oraz kalkulator dopłat na hektar.
+        </p>
+      </header>
+
+      <section class="db-hero-stats" aria-label="Najważniejsze stawki 2025">
+        <div class="db-stat db-stat--hl">
+          <span class="l">Podstawowe wsparcie dochodów</span>
+          <span class="v">{fmt(pwd)} <small>zł/ha</small></span>
+          <span class="d">do wszystkich hektarów</span>
+        </div>
+        <div class="db-stat">
+          <span class="l">Płatność redystrybucyjna</span>
+          <span class="v">{fmt(redys)} <small>zł/ha</small></span>
+          <span class="d">do 1–30 ha</span>
+        </div>
+        <div class="db-stat">
+          <span class="l">Młody rolnik</span>
+          <span class="v">{fmt(mlody)} <small>zł/ha</small></span>
+          <span class="d">do 50 ha, 5 lat</span>
+        </div>
+      </section>
+
+      <!-- ── Kalkulator ── -->
+      <section class="db-calc" aria-labelledby="calc-h">
+        <h2 id="calc-h">Kalkulator dopłat na hektar</h2>
+        <p class="db-calc-sub">Orientacyjne wyliczenie dwóch podstawowych płatności obszarowych za 2025 r.
+          (bez ekoschematów i płatności związanych). Podaj powierzchnię gospodarstwa.</p>
+        <div class="db-calc-box">
+          <label class="db-calc-field">
+            <span>Powierzchnia (ha)</span>
+            <input id="ha" type="number" min="0" step="0.1" value="20" inputmode="decimal" />
+          </label>
+          <div class="db-calc-out">
+            <div class="db-calc-line"><span>Podstawowe wsparcie dochodów</span><b id="o-pwd">—</b></div>
+            <div class="db-calc-line"><span>Płatność redystrybucyjna <em>(1–30 ha)</em></span><b id="o-red">—</b></div>
+            <div class="db-calc-line db-calc-total"><span>Razem (orientacyjnie)</span><b id="o-sum">—</b></div>
+          </div>
+        </div>
+        <p class="db-calc-note">Wyliczenie orientacyjne. Rzeczywista kwota zależy od kwalifikowalności
+          powierzchni, ekoschematów, płatności związanych z produkcją i statusu gospodarstwa.</p>
+      </section>
+
+      <!-- ── Tabela stawek ── -->
+      <section class="db-tables" aria-labelledby="tab-h">
+        <h2 id="tab-h">Stawki płatności bezpośrednich 2024 i 2025</h2>
+        {groups.map((g) => (
+          <div class="db-tblcard">
+            <h3>{g.title}</h3>
+            <div class="db-tblscroll">
+              <table class="db-tbl">
+                <thead>
+                  <tr>
+                    <th>Schemat</th>
+                    <th class="num">2024</th>
+                    <th class="num">2025</th>
+                    <th class="num">r/r</th>
+                    <th>Jedn.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {g.rows.map((r) => {
+                    const ch = yoy(r);
+                    return (
+                      <tr>
+                        <td>
+                          <span class="db-tbl-name">{r.name}</span>
+                          {r.note && <span class="db-tbl-note">{r.note}</span>}
+                        </td>
+                        <td class="num">{r.v2024 != null ? fmt(r.v2024) : '—'}</td>
+                        <td class="num strong">{fmt(r.v2025)}</td>
+                        <td class="num">
+                          {ch != null ? (
+                            <span class={`db-yoy ${ch >= 0 ? 'up' : 'dn'}`}>{ch >= 0 ? '▲' : '▼'} {Math.abs(ch).toFixed(1).replace('.', ',')}%</span>
+                          ) : '—'}
+                        </td>
+                        <td class="unit">{r.unit}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
+        <p class="db-tbl-src">Kurs EBC: 2024 — {KURS[2024]} zł/EUR, 2025 — {KURS[2025]} zł/EUR.</p>
+      </section>
+
+      <!-- ── Objaśnienia ── -->
+      <section class="db-explain" aria-labelledby="exp-h">
+        <h2 id="exp-h">Czym są poszczególne płatności</h2>
+        <div class="db-explain-grid">
+          <div class="db-exp"><h3>Podstawowe wsparcie dochodów (PWD)</h3><p>Płatność obszarowa do wszystkich kwalifikujących się hektarów użytków rolnych — podstawa systemu dopłat, zastępuje dawną jednolitą płatność obszarową (JPO).</p></div>
+          <div class="db-exp"><h3>Płatność redystrybucyjna</h3><p>Dodatkowe wsparcie do pierwszych 30 ha gospodarstwa — wyrównuje warunki mniejszych i średnich gospodarstw.</p></div>
+          <div class="db-exp"><h3>Płatność dla młodych rolników</h3><p>Wsparcie dla rolników do 40. roku życia rozpoczynających działalność — do 50 ha, maksymalnie przez 5 lat.</p></div>
+          <div class="db-exp"><h3>Płatności związane z produkcją</h3><p>Dodatkowe stawki do konkretnych zwierząt (krowy, bydło, owce, kozy) i roślin (buraki, ziemniaki skrobiowe, strączkowe, chmiel i inne), aby utrzymać produkcję wrażliwych sektorów.</p></div>
+        </div>
+      </section>
+
+      <!-- ── FAQ ── -->
+      <section class="db-faq" aria-labelledby="faq-h">
+        <h2 id="faq-h">Najczęstsze pytania</h2>
+        {faq.map((f) => (
+          <details class="db-q">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <footer class="db-src">
+        <p>Źródło danych: <a href="https://www.gov.pl/web/arimr" target="_blank" rel="noopener">ARiMR / MRiRW</a> — oficjalne stawki płatności bezpośrednich oraz przejściowego wsparcia krajowego za rok 2024 i 2025. Ostatnia aktualizacja: <strong>{lastUpdated}</strong>.</p>
+      </footer>
+    </div>
+  </main>
+
+  <script type="application/json" id="dbRates" set:html={JSON.stringify({ pwd, redys })} />
+  <script is:inline>
+    (function () {
+      var cfg = JSON.parse(document.getElementById('dbRates').textContent);
+      var ha = document.getElementById('ha');
+      var oP = document.getElementById('o-pwd'), oR = document.getElementById('o-red'), oS = document.getElementById('o-sum');
+      var f = function (v) { return v.toLocaleString('pl-PL', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' zł'; };
+      function calc() {
+        var h = parseFloat((ha.value || '0').replace(',', '.'));
+        if (isNaN(h) || h < 0) h = 0;
+        var p = h * cfg.pwd;
+        var r = Math.min(h, 30) * cfg.redys;
+        oP.textContent = f(p);
+        oR.textContent = f(r);
+        oS.textContent = f(p + r);
+      }
+      ha.addEventListener('input', calc);
+      calc();
+    })();
+  </script>
+</Layout>
+
+<style>
+  .db{--yellow:#FFEA00;--yellow-d:#FFD400;--ink:#0A0A0B;--line:#E7E7EA;--muted:#6E6E76;--paper:#FBFAF3;--soft:#F5F5F2;--green:#2E9E57;--red:#D6492B;
+    font-family:'Chakra Petch',system-ui,sans-serif;color:var(--ink);background:#fff}
+  .db-wrap{max-width:1000px;margin:0 auto;padding:26px 28px 72px}
+  .db a{color:inherit}
+  .db-crumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .db-crumb a{text-decoration:none}.db-crumb a:hover{color:var(--ink);text-decoration:underline}
+  .db-crumb b{color:var(--ink)}
+
+  .db-head{padding-bottom:22px;border-bottom:2px solid var(--ink)}
+  .db-eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  .db-head h1{font-size:44px;letter-spacing:-.03em;font-weight:800;margin:8px 0 12px;line-height:1.02}
+  .db-lead{font-size:15.5px;line-height:1.6;color:#2A2A2F;max-width:80ch}
+
+  .db-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+  .db-stat{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:5px}
+  .db-stat--hl{background:var(--yellow);border-color:var(--yellow-d)}
+  .db-stat .l{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .db-stat--hl .l{color:#5c5300}
+  .db-stat .v{font-size:30px;font-weight:800;letter-spacing:-.02em}
+  .db-stat .v small{font-size:14px;color:var(--muted);font-weight:600}
+  .db-stat--hl .v small{color:#5c5300}
+  .db-stat .d{font-size:12px;color:var(--muted)}
+  .db-stat--hl .d{color:#5c5300}
+
+  .db h2{font-size:24px;letter-spacing:-.02em;font-weight:800;margin:36px 0 6px}
+  .db h3{font-size:16px;font-weight:800;letter-spacing:-.01em}
+
+  .db-calc{margin-top:34px}
+  .db-calc-sub{font-size:14px;color:var(--muted);margin:0 0 14px;max-width:70ch}
+  .db-calc-box{display:grid;grid-template-columns:220px 1fr;gap:20px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .db-calc-field{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .db-calc-field input{font:800 26px 'Chakra Petch',sans-serif;color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;width:100%}
+  .db-calc-out{display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .db-calc-line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14.5px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .db-calc-line em{color:var(--muted);font-style:normal;font-size:12px}
+  .db-calc-line b{font-size:18px;font-weight:800;white-space:nowrap}
+  .db-calc-total{border-bottom:0;margin-top:2px}
+  .db-calc-total span{font-weight:700}
+  .db-calc-total b{font-size:24px;background:var(--yellow);padding:2px 8px;border-radius:8px}
+  .db-calc-note{font-size:12px;color:var(--muted);margin-top:10px}
+
+  .db-tblcard{margin-top:18px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .db-tblcard h3{padding:14px 18px;background:var(--soft);border-bottom:1px solid var(--line);margin:0}
+  .db-tblscroll{overflow-x:auto}
+  .db-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+  .db-tbl th,.db-tbl td{padding:11px 16px;text-align:left;border-bottom:1px solid var(--line)}
+  .db-tbl th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .db-tbl th.num,.db-tbl td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .db-tbl tr:last-child td{border-bottom:0}
+  .db-tbl-name{display:block;font-weight:700}
+  .db-tbl-note{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  .db-tbl td.strong{font-weight:800}
+  .db-tbl td.unit{color:var(--muted);font-size:12.5px;white-space:nowrap}
+  .db-yoy{font-weight:800;font-size:12.5px}
+  .db-yoy.up{color:var(--green)}.db-yoy.dn{color:var(--red)}
+  .db-tbl-src{font-size:12px;color:var(--muted);margin-top:12px}
+
+  .db-explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .db-exp{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .db-exp h3{margin:0 0 6px}
+  .db-exp p{font-size:13.5px;line-height:1.55;color:#2A2A2F;margin:0}
+
+  .db-faq{margin-top:8px}
+  .db-q{border:1px solid var(--line);border-radius:12px;padding:2px 18px;margin-top:10px;background:#fff}
+  .db-q summary{font-weight:700;font-size:15px;padding:13px 0;cursor:pointer;list-style:none}
+  .db-q summary::-webkit-details-marker{display:none}
+  .db-q summary::after{content:'+';float:right;color:var(--muted);font-weight:700}
+  .db-q[open] summary::after{content:'–'}
+  .db-q p{font-size:14px;line-height:1.6;color:#2A2A2F;margin:0 0 14px}
+
+  .db-src{margin-top:34px;padding:18px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+  .db-src p{font-size:13px;color:#2A2A2F;line-height:1.55;margin:0}
+  .db-src a{text-decoration:underline}
+
+  @media(max-width:720px){
+    .db-head h1{font-size:32px}
+    .db-hero-stats{grid-template-columns:1fr}
+    .db-calc-box{grid-template-columns:1fr}
+    .db-explain-grid{grid-template-columns:1fr}
+  }
+</style>
