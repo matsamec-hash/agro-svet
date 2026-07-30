@@ -92,10 +92,21 @@ describe('stroje lib — schema rozšíření', () => {
 
 describe('StrojModel — nová editorial pole', () => {
   // getModelBySlug vrací plochý StrojFlatModel (extends StrojModel), ne { brand, series, model }.
-  it('model bez nových polí se načte a pole jsou undefined (žádný crash)', () => {
-    const found = getModelBySlug('zetor-7745');
+  it('model bez editorial dat se načte a pole jsou undefined (žádný crash)', () => {
+    // zetor-6245 záměrně nenaplněn editorial poli.
+    const found = getModelBySlug('zetor-6245');
     expect(found).toBeTruthy();
     expect(found!.common_faults ?? undefined).toBeUndefined();
     expect(found!.used_price ?? undefined).toBeUndefined();
+  });
+
+  it('naplněný model (zetor-7745) nese editorial data z YAML', () => {
+    const found = getModelBySlug('zetor-7745');
+    expect(found).toBeTruthy();
+    expect(found!.common_faults?.length).toBeGreaterThan(0);
+    expect(found!.common_faults![0].issue).toBeTruthy();
+    expect(found!.used_price?.min).toBeGreaterThan(0);
+    expect(found!.used_price!.max).toBeGreaterThanOrEqual(found!.used_price!.min);
+    expect(typeof found!.overview).toBe('string');
   });
 });
