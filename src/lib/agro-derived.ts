@@ -192,7 +192,7 @@ export function livestockMilestone(
 
 // ── Locale-aware prose helpers ───────────────────────────────────────────────
 
-export type Locale = 'cs' | 'sk';
+export type Locale = 'cs' | 'sk' | 'uk' | 'pl';
 
 export interface ScissorsPoint {
   year: number;
@@ -285,8 +285,37 @@ const SK_STRINGS: LocaleStrings = {
   cattleNoData: 'Ročné údaje Eurostat.',
 };
 
+const PL_STRINGS: LocaleStrings = {
+  noData: 'Za mało danych do obliczenia nożyc cenowych.',
+  positive: (year, y, x, margin) =>
+    `W ${year} produkty ${y.toFixed(0)} vs. nakłady ${x.toFixed(0)} → marża dodatnia (+${margin.toFixed(0)} pkt).`,
+  negative: (year, x, y, margin) =>
+    `W ${year} nakłady ${x.toFixed(0)} > produkty ${y.toFixed(0)} → marża ujemna (${margin.toFixed(0)} pkt).`,
+  neutral: (year, x, y) =>
+    `W ${year} nakłady ${x.toFixed(0)}, produkty ${y.toFixed(0)} → marża neutralna.`,
+  livestockFallback: 'Dane roczne GUS — zob. wykres poniżej.',
+  livestockTrend: (first, last, drop, numLocale) =>
+    `Pogłowie bydła: ${first.toLocaleString(numLocale)} → ${last.toLocaleString(numLocale)} szt. (${drop.toFixed(0)} %).`,
+  wheatName: 'Pszenica',
+  wheatFallback: (price, unit, month, numLocale) =>
+    `Aktualna cena ${price.toLocaleString(numLocale)} ${unit} (${month}).`,
+  trhInsight: (dir, change, price, unit, numLocale) =>
+    `${dir}${change.toFixed(1)} % r/r. Aktualna cena ${price.toLocaleString(numLocale)} ${unit}.`,
+  fertName: 'NPK 15-15-15',
+  fertInsight: (inflPct) =>
+    `Nadal ${inflPct >= 0 ? '+' : ''}${inflPct.toFixed(0)} % względem roku 2019.`,
+  fertFallback: 'Ceny skupu głównych produktów rolnych wg GUS.',
+  fertFallbackTitle: 'Ceny skupu',
+  cattleDisplayName: 'Bydło',
+  cattleMilestone: (threshold, latestCount) =>
+    `Pogłowie poniżej ${(threshold / 1e6).toFixed(1)} mln szt. (obecnie ${(latestCount / 1e6).toFixed(2)} mln).`,
+  cattleFallback: (count, date, numLocale) =>
+    `Obecnie ${count.toLocaleString(numLocale)} szt. (${date}).`,
+  cattleNoData: 'Dane roczne GUS.',
+};
+
 function getStrings(locale: Locale): LocaleStrings {
-  return locale === 'sk' ? SK_STRINGS : CS_STRINGS;
+  return locale === 'sk' ? SK_STRINGS : locale === 'pl' ? PL_STRINGS : CS_STRINGS;
 }
 
 /** Human-readable price scissors insight for the given series. */
@@ -303,7 +332,7 @@ export function scissorsInsightText(scissorsPoints: ScissorsPoint[], locale: Loc
 /** Human-readable livestock (cattle) trend insight across full historical series. */
 export function livestockInsightText(livestockHistorical: LivestockStat[], locale: Locale): string {
   const s = getStrings(locale);
-  const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+  const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
   const skot = livestockHistorical
     .filter(l => l.animal === 'Skot')
     .sort((a, b) => a.date.localeCompare(b.date));
@@ -326,7 +355,7 @@ export function statTakeaways(
   locale: Locale,
 ): Takeaway[] {
   const s = getStrings(locale);
-  const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+  const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
   const FERT_BASE_YEAR = 2019;
   const SKOT_THRESHOLD = 1300000;
 

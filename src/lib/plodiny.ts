@@ -206,6 +206,8 @@ export function udrzovatelSlug(name: string): string {
   return name
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
+    // Polská ł/Ł se NFD nerozkládá (samostatné písmeno) → explicitně na l
+    .replace(/[łŁ]/g, 'l')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');

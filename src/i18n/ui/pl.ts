@@ -108,7 +108,7 @@ const pl: Record<string, string> = {
 
   // Detail surowca (/statistiky/komodita/[slug])
   'komodita.eyebrow': 'Cena surowca · na żywo',
-  'komodita.since': 'Zmiany ceny od roku {year} · źródło ČSÚ',
+  'komodita.since': 'Zmiany ceny od roku {year} · źródło GUS',
   'komodita.yoy': 'rok do roku',
   'komodita.crumbMarkets': 'Rynki i surowce',
   'komodita.max': 'Maksimum',
@@ -618,8 +618,8 @@ const pl: Record<string, string> = {
   // — CommodityChart —
   'stat.commodity.title': 'Ceny surowców rolnych',
   'stat.commodity.sub': 'Miesięczne średnie cen producentów z adnotacjami historycznych wydarzeń',
-  'stat.commodity.source': 'Źródło: ČSÚ — Indeksy cen producentów w rolnictwie',
-  'stat.commodity.sourceHref': 'https://csu.gov.cz/zemedelstvi',
+  'stat.commodity.source': 'Źródło: GUS — ceny skupu produktów rolnych',
+  'stat.commodity.sourceHref': 'https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/rolnictwo/',
   'stat.commodity.ariaCommodity': 'Surowiec',
   'stat.commodity.ariaWindow': 'Okno czasowe',
 

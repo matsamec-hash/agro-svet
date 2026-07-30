@@ -25,7 +25,11 @@ const SK_ROWS = [
   { label: 'Stavy zvierat:', value: 'Eurostat apro_mt_lscatl / apro_mt_lspig — ročné (ks)' },
 ];
 
-const rows = locale === 'sk' ? SK_ROWS : CS_ROWS;
+const PL_ROWS = [
+  { label: 'Ceny skupu:', value: 'GUS „Skup i ceny produktów rolnych" — przeciętne ceny skupu, dane roczne (zł/t, zł/kg, zł/hl)' },
+];
+
+const rows = locale === 'sk' ? SK_ROWS : locale === 'pl' ? PL_ROWS : CS_ROWS;
 ---
 
 <section class="sp-method" id="metodologie">
@@ -36,6 +40,12 @@ const rows = locale === 'sk' ? SK_ROWS : CS_ROWS;
       <a href="https://ec.europa.eu/eurostat" target="_blank" rel="noopener">Eurostatu</a>
       a <a href="https://datacube.statistics.sk" target="_blank" rel="noopener">Štatistického úradu SR</a>
       (DATAcube). Stránka bola naposledy aktualizovaná <strong>{lastUpdated}</strong>.
+    </p>
+  ) : locale === 'pl' ? (
+    <p>
+      Dane pochodzą z publikacji
+      <a href="https://stat.gov.pl" target="_blank" rel="noopener">Głównego Urzędu Statystycznego</a>
+      (roczne raporty „Skup i ceny produktów rolnych"). Strona została ostatnio zaktualizowana <strong>{lastUpdated}</strong>.
     </p>
   ) : (
     <p>
@@ -49,7 +59,7 @@ const rows = locale === 'sk' ? SK_ROWS : CS_ROWS;
       <li><strong>{row.label}</strong> {row.value}</li>
     ))}
   </ul>
-  {locale !== 'sk' && (
+  {locale === 'cs' && (
     <p class="note">
       Cenové nůžky a 5letý průměr jsou derivované metriky vypočtené v
       <code>src/lib/agro-derived.ts</code>. Historické anotace v grafech jsou

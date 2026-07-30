@@ -13,6 +13,7 @@ import { statTakeaways, scissorsInsightText, livestockInsightText } from '../../
 // client-side by the chart, no longer needed at SSR time on this page.
 import statsCs from '../../data/agro-stats.json';
 import statsSk from '../../data/agro-stats-sk.json';
+import statsPl from '../../data/agro-stats-pl.json';
 
 import HomeWeather from '../../components/HomeWeather.astro';
 import Hero from '../../components/statistiky/Hero.astro';
@@ -32,12 +33,12 @@ import StatistikyUk from '../../components/statistiky/StatistikyUk.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const t = useTranslations(locale);
-const statsData = locale === 'sk' ? statsSk : statsCs;
+const statsData = locale === 'sk' ? statsSk : locale === 'pl' ? statsPl : statsCs;
 
 // Žádný runtime fetch — čistý render importovaného JSONu → bezpečně cachovatelné na edge.
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
 
 const {
   commodityStats,
@@ -74,8 +75,10 @@ const lastUpdated = new Date().toLocaleDateString(numLocale, { day: 'numeric', m
 // Sparkline ticker — locale-aware metriky
 const SPARK = locale === 'sk'
   ? { wheat: 'Pšenica', rapeseed: 'Repka', third: 'Kukurica', diesel: 'Nafta', fertilizer: null as string | null }
+  : locale === 'pl'
+  ? { wheat: 'Pszenica', rapeseed: 'Rzepak', third: 'Kukurydza', diesel: 'Nafta', fertilizer: null as string | null }
   : { wheat: 'Pšenice', rapeseed: 'Řepka', third: 'Mléko', diesel: 'Nafta', fertilizer: 'NPK 15-15-15' as string | null };
-const fuelUnit = locale === 'sk' ? 'EUR/l' : 'Kč/l';
+const fuelUnit = locale === 'sk' ? 'EUR/l' : locale === 'pl' ? 'zł/l' : 'Kč/l';
 
 function sparklineFor(name: string, months = 12): { label: string; value: number; sortKey: number }[] {
   const series = commodityFull.find(s => s.name === name)?.data ?? [];
@@ -104,8 +107,13 @@ const sparkMetrics = [
   npk && { name: npk.name, value: npk.price, unit: 'Kč/t', changePct: npk.change, series: (fertSeries.find(f => f.name === npk.name)?.data ?? []).slice(-12).map((d, i) => ({ label: d.year, value: d.price, sortKey: i })), anchor: '#vstupy' },
 ].filter(Boolean) as any[];
 
-// Auto-takeaways — locale-aware próza (helper reprodukuje cs verbatim)
-const takeaways = statTakeaways({ commodityStats, fertilizers, livestock }, locale);
+// Auto-takeaways — locale-aware próza (helper reprodukuje cs verbatim). Ponech jen
+// karty, jejichž sekce se na stránce reálně vykreslí (pl = commodity-only → jen trh).
+const takeaways = statTakeaways({ commodityStats, fertilizers, livestock }, locale).filter(tk => {
+  if (tk.category === 'vstupy') return fuelSeries.length > 0;
+  if (tk.category === 'zvirata') return livestockHistorical.length > 0;
+  return true;
+});
 
 // Cenové nůžky — scissorsPoints precomputed v agro-stats.json
 const scissorsInsight = scissorsInsightText(scissorsPoints, locale);
@@ -123,13 +131,14 @@ const livestockFromYear = (() => {
   return dates.length ? Math.min(...dates) : null;
 })();
 
+// Pills jen pro sekce, které se reálně vykreslí (pl = commodity-only → jen #trh).
 const PILLS = [
-  { label: t('stat.pills.trh'), href: '#trh' },
-  { label: t('stat.pills.vstupy'), href: '#vstupy' },
-  { label: t('stat.pills.scissors'), href: '#cenove-nuzky' },
-  { label: t('stat.pills.produkce'), href: '#produkce' },
+  ...(commodityFull.length > 0 ? [{ label: t('stat.pills.trh'), href: '#trh' }] : []),
+  ...(fuelSeries.length > 0 ? [{ label: t('stat.pills.vstupy'), href: '#vstupy' }] : []),
+  ...(scissorsPoints.length > 0 ? [{ label: t('stat.pills.scissors'), href: '#cenove-nuzky' }] : []),
+  ...(crops.length > 0 ? [{ label: t('stat.pills.produkce'), href: '#produkce' }] : []),
   ...(regional.length > 0 ? [{ label: t('stat.pills.regiony'), href: '#regiony' }] : []),
-  { label: t('stat.pills.zvirata'), href: '#zvirata' },
+  ...(livestockHistorical.length > 0 ? [{ label: t('stat.pills.zvirata'), href: '#zvirata' }] : []),
   ...(locale === 'cs' ? [{ label: t('stat.pills.pribehy'), href: '#pribehy' }] : []),
 ];
 ---
@@ -165,7 +174,7 @@ const PILLS = [
     <PillsNav items={PILLS} />
 
     {commodityFull.length > 0 && (
-      <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} dataBase={locale === 'sk' ? '-sk' : ''} numLocale={locale === 'sk' ? 'sk-SK' : 'cs-CZ'} locale={locale} />
+      <CommodityChart commodityNames={commodityFull.map((s: { name: string }) => s.name)} dataBase={locale === 'sk' ? '-sk' : locale === 'pl' ? '-pl' : ''} numLocale={locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ'} locale={locale} />
     )}
 
     {fuelSeries.length > 0 && <InputsBlock fuelSeries={fuelSeries} fertSeries={fertSeries} />}
@@ -188,10 +197,10 @@ const PILLS = [
   <script type="application/json" id="statI18n" set:html={JSON.stringify({
     numLocale,
     animals: { Skot: t('stat.animal.cattle'), Prasata: t('stat.animal.pigs') },
-    fuelLabel:     locale === 'sk' ? 'Nafta (EUR/l)'          : 'Nafta (Kč/l)',
-    fuelTooltip:   locale === 'sk' ? 'EUR/l'                  : 'Kč/l',
-    fuelAxis:      locale === 'sk' ? '€'                      : 'Kč',
-    commodityUnit: locale === 'sk' ? 'EUR/t'                  : 'Kč/t',
+    fuelLabel:     locale === 'sk' ? 'Nafta (EUR/l)'          : locale === 'pl' ? 'Olej napędowy (zł/l)' : 'Nafta (Kč/l)',
+    fuelTooltip:   locale === 'sk' ? 'EUR/l'                  : locale === 'pl' ? 'zł/l' : 'Kč/l',
+    fuelAxis:      locale === 'sk' ? '€'                      : locale === 'pl' ? 'zł' : 'Kč',
+    commodityUnit: locale === 'sk' ? 'EUR/t'                  : locale === 'pl' ? 'zł/t' : 'Kč/t',
     scissorsInput: locale === 'sk' ? 'Index vstupných cien'  : 'Vstupy (nafta + NPK)',
     scissorsOutput:locale === 'sk' ? 'Index výstupných cien' : 'Výstupy (4 komodity)',
     scissorsAxis:  `Index ${locale === 'sk' ? 'cien' : 'cen'} (${BASE_YEAR} = 100)`,

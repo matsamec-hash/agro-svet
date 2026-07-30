@@ -9,11 +9,12 @@ import { useTranslations, localizePath, navHref, tf } from '../../../i18n/utils'
 import { udrzovatelSlug } from '../../../lib/plodiny';
 import statsCs from '../../../data/agro-stats.json';
 import statsSk from '../../../data/agro-stats-sk.json';
+import statsPl from '../../../data/agro-stats-pl.json';
 
 const locale = Astro.locals.locale ?? 'cs';
 const t = useTranslations(locale);
-const stats = (locale === 'sk' ? statsSk : statsCs) as any;
-const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+const stats = (locale === 'sk' ? statsSk : locale === 'pl' ? statsPl : statsCs) as any;
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
 
 const { commodityFull, commodityStats, fiveYearAvgs } = stats;
 const slug = Astro.params.slug;
@@ -30,7 +31,8 @@ const others = commodityFull
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-const dec = /\/l$|tis/.test(series.unit) ? 0 : 0;
+// Żywiec (zł/kg) potřebuje 2 desetinná místa; obiloviny/mléko (zł/t, zł/hl) celá čísla.
+const dec = /\/kg$/.test(series.unit) ? 2 : 0;
 const fmt = (v: number) => v.toLocaleString(numLocale, { minimumFractionDigits: dec, maximumFractionDigits: dec });
 
 const vals = series.data.map((d: any) => d.value);
@@ -39,7 +41,8 @@ const minV = Math.min(...vals);
 const maxV = Math.max(...vals);
 const minPt = series.data[vals.indexOf(minV)];
 const maxPt = series.data[vals.indexOf(maxV)];
-const firstYear = String(series.data[0]?.label ?? '').split(' ')[1] ?? '';
+// Poslední token labelu = rok. Zvládá jak měsíční ("Led 2014"), tak roční ("2015") labely (sk/pl).
+const firstYear = String(series.data[0]?.label ?? '').split(' ').pop() ?? '';
 const yoy = stat && stat.prevYearPrice ? ((stat.price - stat.prevYearPrice) / stat.prevYearPrice) * 100 : null;
 const price = stat?.price ?? latest;
 const month = stat?.month ?? '';
@@ -56,8 +59,8 @@ const chartData = {
 
 const title = tf(locale, 'komodita.metaTitle', { name: series.name });
 const description = tf(locale, 'komodita.metaDesc', { name: series.name, price: fmt(price), unit: series.unit, month, year: firstYear });
-// Detail jen pro locale s reálnými daty+copy (cs + sk). uk/pl = cs fallback → noindex.
-const detailNoindex = locale !== 'cs' && locale !== 'sk';
+// Detail jen pro locale s reálnými daty+copy (cs + sk + pl/GUS). uk = cs fallback → noindex.
+const detailNoindex = locale !== 'cs' && locale !== 'sk' && locale !== 'pl';
 ---
 
 <Layout title={title} description={description} noindex={detailNoindex} noHreflang={true}>
