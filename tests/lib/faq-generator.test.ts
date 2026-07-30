@@ -41,3 +41,34 @@ describe('generateModelFaq — locale', () => {
     expect(generateModelFaq({ brand: { name: 'B' }, model: thin, category: 'traktory', categorySingular: 'traktor' })).toBeNull();
   });
 });
+
+describe('generateModelFaq — editorial pole', () => {
+  const base: any = {
+    slug: 'zetor-7745', name: '7745', power_hp: 68, power_kw: 50,
+    year_from: 1986, year_to: 1992, engine: 'Zetor 7201', transmission: '10+2',
+  };
+
+  it('common_faults → otázka o závadách (cs)', () => {
+    const model = { ...base, common_faults: [{ issue: 'Netěsnost hydraulického rozvaděče' }, { issue: 'Opotřebení spojky' }] };
+    const faq = generateModelFaq({ brand: { name: 'Zetor' }, model, category: 'traktory', categorySingular: 'traktor' });
+    const q = faq!.find((i) => i.q.includes('závady'));
+    expect(q).toBeTruthy();
+    expect(q!.a).toContain('Netěsnost hydraulického rozvaděče');
+  });
+
+  it('used_price → otázka o ceně ojetiny (cs)', () => {
+    const model = { ...base, used_price: { min: 120000, max: 260000, note: 'Podle stavu a nájezdu.' } };
+    const faq = generateModelFaq({ brand: { name: 'Zetor' }, model, category: 'traktory', categorySingular: 'traktor' });
+    const q = faq!.find((i) => i.q.toLowerCase().includes('ojetý'));
+    expect(q).toBeTruthy();
+    expect(q!.a).toContain('120');
+    expect(q!.a).toContain('260');
+  });
+
+  it('sk varianta neobsahuje cs diakritiku ř/ě/ů', () => {
+    const model = { ...base, common_faults: [{ issue: 'Test' }], used_price: { min: 100000, max: 200000 } };
+    const faq = generateModelFaq({ brand: { name: 'Zetor' }, model, category: 'traktory', categorySingular: 'traktor', locale: 'sk' });
+    const blob = faq!.filter((i) => i.q.includes('poruch') || i.q.toLowerCase().includes('ojazd')).map((i) => i.q + ' ' + i.a).join(' ');
+    expect(blob).not.toMatch(/[řěůĚŘŮ]/);
+  });
+});

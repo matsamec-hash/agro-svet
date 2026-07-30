@@ -273,6 +273,46 @@ export function generateModelFaq({
     });
   }
 
+  // Časté závady (jen když jsou data).
+  if (model.common_faults && model.common_faults.length) {
+    const list = model.common_faults.map((f) => f.issue).slice(0, 5).join('; ');
+    items.push({
+      q: L(
+        `Jaké má ${fullName} časté závady?`,
+        `Aké má ${fullName} časté poruchy?`,
+        `Які поширені несправності має ${fullName}?`,
+        `Jakie są typowe usterki ${fullName}?`,
+      ),
+      a: L(
+        `Mezi častěji zmiňované slabiny ${fullName} patří: ${list}. Konkrétní stav vždy závisí na údržbě a nájezdu daného kusu.`,
+        `Medzi častejšie spomínané slabiny ${fullName} patria: ${list}. Konkrétny stav vždy závisí od údržby a najazdu daného kusu.`,
+        `До частіше згадуваних слабких місць ${fullName} належать: ${list}. Конкретний стан завжди залежить від обслуговування та напрацювання екземпляра.`,
+        `Do częściej wymienianych słabości ${fullName} należą: ${list}. Konkretny stan zawsze zależy od serwisowania i przebiegu danego egzemplarza.`,
+      ),
+    });
+  }
+
+  // Cena ojetiny (orientační trh, nezávisle na live bazaru).
+  if (model.used_price) {
+    const { min, max, note } = model.used_price;
+    const range = min === max ? `${fmtNumber(min)} Kč` : `${fmtNumber(min)}–${fmtNumber(max)} Kč`;
+    const notePart = note ? ` ${note}` : '';
+    items.push({
+      q: L(
+        `Kolik stojí ojetý ${fullName}?`,
+        `Koľko stojí ojazdený ${fullName}?`,
+        `Скільки коштує вживаний ${fullName}?`,
+        `Ile kosztuje używany ${fullName}?`,
+      ),
+      a: L(
+        `Ojetý ${fullName} se na sekundárním trhu pohybuje orientačně v rozpětí ${range}.${notePart}`,
+        `Ojazdený ${fullName} sa na sekundárnom trhu pohybuje orientačne v rozpätí ${range}.${notePart}`,
+        `Вживаний ${fullName} на вторинному ринку коштує орієнтовно в діапазоні ${range}.${notePart}`,
+        `Używany ${fullName} na rynku wtórnym kosztuje orientacyjnie w przedziale ${range}.${notePart}`,
+      ),
+    });
+  }
+
   // Quality gate: don't emit FAQ schema for thin content.
   if (items.length < 3) return null;
   return items;
