@@ -118,16 +118,19 @@ async function fetchCommodities() {
   return full;
 }
 
-// — Cenové nůžky: index výstupov (apri_pi20_outa) vs vstupov (apri_pi20_ina), báza 2020 —
-// Dimenzia 'product': výstup = '040000' (Total output), vstup = '200000' (Total inputs).
-// unit='I20' (index báza 2020=100), p_adj='NI' (nominálny).
+// — Cenové nůžky: index výstupov vs vstupov, báza 2020 —
+// Eurostat 2026 zrušil datasety apri_pi20_* (báza 2020, "not available for
+// dissemination") → nahrazené rebasing-agnostickými apri_pi_outa / apri_pi_ina
+// (dimenzia 'am_item' namiesto 'product'; unit='I20' = index báza 2020=100 stále
+// dostupný, dáta až do 2025). Total output = AM140000 (Agricultural goods incl.
+// fruit & veg), Total inputs = AM220000 (Input total). p_adj='NI' (nominálny).
 async function fetchScissors() {
-  const out = await esFetch('apri_pi20_outa', { unit: 'I20', p_adj: 'NI', product: '040000' });
-  const inp = await esFetch('apri_pi20_ina', { unit: 'I20', p_adj: 'NI', product: '200000' });
+  const out = await esFetch('apri_pi_outa', { unit: 'I20', p_adj: 'NI', am_item: 'AM140000' });
+  const inp = await esFetch('apri_pi_ina', { unit: 'I20', p_adj: 'NI', am_item: 'AM220000' });
   if (!out || !inp) return [];
 
-  const outSeries = pickSeries(out, { freq: 'A', unit: 'I20', p_adj: 'NI', product: '040000', geo: 'SK' });
-  const inSeries = pickSeries(inp, { freq: 'A', unit: 'I20', p_adj: 'NI', product: '200000', geo: 'SK' });
+  const outSeries = pickSeries(out, { freq: 'A', unit: 'I20', p_adj: 'NI', am_item: 'AM140000', geo: 'SK' });
+  const inSeries = pickSeries(inp, { freq: 'A', unit: 'I20', p_adj: 'NI', am_item: 'AM220000', geo: 'SK' });
 
   const inByYear = new Map(inSeries.map((p) => [p.time, p.value]));
   const points = [];
