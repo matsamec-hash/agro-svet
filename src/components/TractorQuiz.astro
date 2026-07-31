@@ -1,0 +1,313 @@
+---
+// Interaktivní kvíz „Poznáš značku?" — hráč hádá výrobce zemědělského stroje
+// podle reálné fotky. Data (fotky + značky) se staví při buildu z YAML katalogu
+// strojů; kvíz sám běží čistě client-side (vanilla JS, žádné závislosti).
+// Odkazuje zpět na detail série → interní prolinkování na /stroje/.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { getAllBrands } from '../lib/stroje';
+
+// Sestav bank otázek: každá série s ověřeně existující fotkou = jedna karta.
+const brands = getAllBrands();
+const pubDir = join(process.cwd(), 'public');
+const seen = new Set<string>();
+const POOL: { i: string; b: string; s: string; u: string }[] = [];
+
+for (const brand of brands) {
+  for (const [cat, group] of Object.entries(brand.categories)) {
+    if (!group) continue;
+    for (const series of group.series) {
+      const img = series.image_url;
+      if (!img) continue;
+      if (seen.has(img)) continue; // stejná fotka u víc sérií → jen jednou
+      if (!existsSync(join(pubDir, img))) continue; // rozbité fotky vynech
+      seen.add(img);
+      const effCat = series.subcategory ?? cat;
+      POOL.push({
+        i: img,
+        b: brand.name,
+        s: series.name,
+        u: `/stroje/${brand.slug}/${series.slug}/`,
+      });
+      void effCat;
+    }
+  }
+}
+
+// Unikátní značky pro generování špatných možností (distraktorů).
+const BRANDS = [...new Set(brands.map((b) => b.name))].sort((a, b) => a.localeCompare(b, 'cs'));
+const QUESTIONS_PER_GAME = 10;
+---
+
+<section class="tq" aria-label="Kvíz: poznej značku zemědělského stroje">
+  <!-- Úvodní obrazovka -->
+  <div class="tq-screen tq-intro" data-screen="intro">
+    <div class="tq-intro-icon" aria-hidden="true">🚜</div>
+    <h2 class="tq-intro-h">Poznáš značku podle fotky?</h2>
+    <p class="tq-intro-p">
+      Ukážeme ti {QUESTIONS_PER_GAME} reálných fotek traktorů, kombajnů a další techniky.
+      Tvůj úkol: uhodnout výrobce. Vybíráš ze {POOL.length}&nbsp;strojů a {BRANDS.length}&nbsp;značek.
+    </p>
+    <button type="button" class="tq-btn tq-btn-primary" data-action="start">Spustit kvíz</button>
+  </div>
+
+  <!-- Hrací obrazovka -->
+  <div class="tq-screen tq-play" data-screen="play" hidden>
+    <div class="tq-bar">
+      <span class="tq-progress" data-progress>1 / {QUESTIONS_PER_GAME}</span>
+      <span class="tq-score" data-score>Skóre: 0</span>
+    </div>
+
+    <figure class="tq-figure">
+      <img class="tq-img" data-img alt="Uhodni značku tohoto stroje" width="800" height="500" decoding="async" />
+    </figure>
+
+    <p class="tq-q">Jaká je to značka?</p>
+    <div class="tq-options" data-options role="group" aria-label="Možnosti odpovědi"></div>
+
+    <div class="tq-reveal" data-reveal hidden>
+      <p class="tq-reveal-text" data-reveal-text></p>
+      <div class="tq-reveal-actions">
+        <a class="tq-reveal-link" data-reveal-link href="#" target="_blank" rel="noopener">Zobrazit detail →</a>
+        <button type="button" class="tq-btn tq-btn-primary tq-next" data-action="next">Další</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Výsledek -->
+  <div class="tq-screen tq-result" data-screen="result" hidden>
+    <div class="tq-result-emoji" data-result-emoji aria-hidden="true">🏆</div>
+    <p class="tq-result-score" data-result-score>0 / {QUESTIONS_PER_GAME}</p>
+    <h2 class="tq-result-title" data-result-title>Výsledek</h2>
+    <p class="tq-result-sub" data-result-sub></p>
+    <div class="tq-result-actions">
+      <button type="button" class="tq-btn tq-btn-primary" data-action="restart">Hrát znovu</button>
+      <button type="button" class="tq-btn tq-btn-ghost" data-action="share">Sdílet výsledek</button>
+    </div>
+    <a class="tq-result-cta" href="/stroje/">Prozkoumat katalog strojů →</a>
+  </div>
+</section>
+
+<script is:inline define:vars={{ POOL, BRANDS, N: QUESTIONS_PER_GAME }}>
+  (function () {
+    const root = document.currentScript.previousElementSibling;
+    if (!root || !POOL.length) return;
+
+    const screens = {
+      intro: root.querySelector('[data-screen="intro"]'),
+      play: root.querySelector('[data-screen="play"]'),
+      result: root.querySelector('[data-screen="result"]'),
+    };
+    const el = {
+      progress: root.querySelector('[data-progress]'),
+      score: root.querySelector('[data-score]'),
+      img: root.querySelector('[data-img]'),
+      options: root.querySelector('[data-options]'),
+      reveal: root.querySelector('[data-reveal]'),
+      revealText: root.querySelector('[data-reveal-text]'),
+      revealLink: root.querySelector('[data-reveal-link]'),
+      resultEmoji: root.querySelector('[data-result-emoji]'),
+      resultScore: root.querySelector('[data-result-score]'),
+      resultTitle: root.querySelector('[data-result-title]'),
+      resultSub: root.querySelector('[data-result-sub]'),
+    };
+
+    let questions = [];
+    let idx = 0;
+    let score = 0;
+    let answered = false;
+
+    // Deterministický shuffle bez Math.random není potřeba — kvíz běží v prohlížeči.
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function buildQuestions() {
+      const picks = shuffle(POOL).slice(0, N);
+      return picks.map((p) => {
+        const distractors = shuffle(BRANDS.filter((b) => b !== p.b)).slice(0, 3);
+        const options = shuffle([p.b, ...distractors]);
+        return { item: p, options };
+      });
+    }
+
+    function show(name) {
+      for (const k in screens) if (screens[k]) screens[k].hidden = k !== name;
+    }
+
+    function renderQuestion() {
+      answered = false;
+      const q = questions[idx];
+      el.progress.textContent = `${idx + 1} / ${N}`;
+      el.score.textContent = `Skóre: ${score}`;
+      el.img.src = q.item.i;
+      el.img.alt = 'Uhodni značku tohoto stroje';
+      el.reveal.hidden = true;
+      el.options.innerHTML = '';
+      q.options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tq-opt';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => choose(btn, opt, q));
+        el.options.appendChild(btn);
+      });
+    }
+
+    function choose(btn, opt, q) {
+      if (answered) return;
+      answered = true;
+      const correct = q.item.b;
+      const buttons = el.options.querySelectorAll('.tq-opt');
+      buttons.forEach((b) => {
+        b.disabled = true;
+        if (b.textContent === correct) b.classList.add('is-correct');
+      });
+      if (opt === correct) {
+        score++;
+        el.score.textContent = `Skóre: ${score}`;
+        el.revealText.textContent = `Správně! ${q.item.b} — ${q.item.s}`;
+      } else {
+        btn.classList.add('is-wrong');
+        el.revealText.textContent = `Byla to značka ${q.item.b} — ${q.item.s}`;
+      }
+      el.revealLink.href = q.item.u;
+      el.reveal.hidden = false;
+    }
+
+    function next() {
+      idx++;
+      if (idx >= questions.length) return finish();
+      renderQuestion();
+    }
+
+    function finish() {
+      show('result');
+      el.resultScore.textContent = `${score} / ${N}`;
+      let emoji, title, sub;
+      const pct = score / N;
+      if (pct >= 1) { emoji = '🏆'; title = 'Traktorový expert!'; sub = 'Plný počet — znáš techniku líp než leckterý prodejce.'; }
+      else if (pct >= 0.7) { emoji = '🥇'; title = 'Znalec strojů'; sub = 'Skvělý přehled o značkách. Zvládneš i těžší kola?'; }
+      else if (pct >= 0.4) { emoji = '🚜'; title = 'Slušný sedlák'; sub = 'Základ máš. Ještě pár kol a budeš expert.'; }
+      else { emoji = '🌱'; title = 'Začátečník'; sub = 'Nevadí — projdi katalog a zkus to znovu.'; }
+      el.resultEmoji.textContent = emoji;
+      el.resultTitle.textContent = title;
+      el.resultSub.textContent = sub;
+    }
+
+    function start() {
+      questions = buildQuestions();
+      idx = 0;
+      score = 0;
+      show('play');
+      renderQuestion();
+    }
+
+    async function share() {
+      const text = `V kvízu „Poznáš značku zemědělského stroje?" jsem dal ${score}/${N} 🚜`;
+      const url = location.href;
+      if (navigator.share) {
+        try { await navigator.share({ title: 'Kvíz — poznáš značku?', text, url }); return; } catch (e) { /* zrušeno */ }
+      }
+      try {
+        await navigator.clipboard.writeText(`${text} ${url}`);
+        const b = root.querySelector('[data-action="share"]');
+        if (b) { const t = b.textContent; b.textContent = 'Zkopírováno ✓'; setTimeout(() => { b.textContent = t; }, 1800); }
+      } catch (e) { /* clipboard nedostupný */ }
+    }
+
+    root.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-action]');
+      if (!t) return;
+      const a = t.getAttribute('data-action');
+      if (a === 'start' || a === 'restart') start();
+      else if (a === 'next') next();
+      else if (a === 'share') share();
+    });
+  })();
+</script>
+
+<style>
+  .tq {
+    margin: 28px 0;
+    padding: 24px 22px;
+    background: linear-gradient(180deg, #fffef8 0%, #fff 100%);
+    border: 1.5px solid #FFEA00;
+    border-radius: 14px;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+  }
+  .tq-screen { display: flex; flex-direction: column; }
+  .tq-screen[hidden] { display: none; }
+
+  /* Intro + result sdílí centrované rozvržení */
+  .tq-intro, .tq-result { align-items: center; text-align: center; gap: 14px; margin: auto 0; }
+  .tq-intro-icon { font-size: 52px; line-height: 1; }
+  .tq-intro-h { font-size: 24px; font-weight: 800; color: #0A0A0B; margin: 0; letter-spacing: -0.4px; }
+  .tq-intro-p { font-size: 15px; color: #52525b; line-height: 1.6; margin: 0; max-width: 460px; }
+
+  .tq-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 12px 26px; font-size: 15px; font-weight: 800; border-radius: 10px;
+    border: 1.5px solid transparent; cursor: pointer; transition: transform .06s ease, background .15s ease;
+  }
+  .tq-btn:active { transform: translateY(1px); }
+  .tq-btn-primary { background: #0A0A0B; color: #fff; }
+  .tq-btn-primary:hover { background: #26262b; }
+  .tq-btn-ghost { background: #fff; color: #0A0A0B; border-color: #d4d4d8; }
+  .tq-btn-ghost:hover { border-color: #0A0A0B; }
+
+  /* Hrací lišta */
+  .tq-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .tq-progress, .tq-score {
+    font-size: 13px; font-weight: 800; color: #6B6B72;
+    text-transform: uppercase; letter-spacing: 0.4px; font-variant-numeric: tabular-nums;
+  }
+  .tq-score { color: #4d7a37; }
+
+  .tq-figure {
+    margin: 0 0 16px; border-radius: 12px; overflow: hidden; background: #eef2e9; line-height: 0;
+  }
+  .tq-img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+
+  .tq-q { font-size: 17px; font-weight: 800; color: #0A0A0B; margin: 0 0 12px; text-align: center; }
+
+  .tq-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tq-opt {
+    padding: 13px 14px; font-size: 15px; font-weight: 700; color: #0A0A0B;
+    background: #fff; border: 1.5px solid #d4d4d8; border-radius: 10px; cursor: pointer;
+    transition: border-color .12s ease, background .12s ease; text-align: center;
+  }
+  .tq-opt:hover:not(:disabled) { border-color: #0A0A0B; }
+  .tq-opt:disabled { cursor: default; }
+  .tq-opt.is-correct { background: #eaf7e1; border-color: #6ba84f; color: #2f5320; }
+  .tq-opt.is-wrong { background: #fdecec; border-color: #e06666; color: #7a2020; }
+
+  .tq-reveal { margin-top: 16px; padding-top: 16px; border-top: 1px dashed #e3e3d6; }
+  .tq-reveal-text { font-size: 15px; font-weight: 700; color: #0A0A0B; margin: 0 0 12px; line-height: 1.4; }
+  .tq-reveal-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .tq-reveal-link { font-size: 14px; font-weight: 700; color: #4d7a37; text-decoration: none; }
+  .tq-reveal-link:hover { text-decoration: underline; }
+  .tq-next { padding: 10px 22px; }
+
+  /* Výsledek */
+  .tq-result-emoji { font-size: 56px; line-height: 1; }
+  .tq-result-score { font-size: 34px; font-weight: 800; color: #0A0A0B; margin: 0; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+  .tq-result-title { font-size: 22px; font-weight: 800; color: #0A0A0B; margin: 0; }
+  .tq-result-sub { font-size: 15px; color: #52525b; line-height: 1.6; margin: 0; max-width: 420px; }
+  .tq-result-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+  .tq-result-cta { margin-top: 6px; font-size: 14px; font-weight: 700; color: #4d7a37; text-decoration: none; }
+  .tq-result-cta:hover { text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .tq { padding: 20px 16px; }
+    .tq-options { grid-template-columns: 1fr; }
+    .tq-intro-h { font-size: 21px; }
+  }
+</style>
