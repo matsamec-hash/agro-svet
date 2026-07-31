@@ -445,6 +445,34 @@ categories:
             year_to: 2008
             power_hp: 105
             power_kw: 78
+            overview: >
+              Užitkový traktor řady 4300 (2002–2008) s výkonem 105 koní a šestiválcovým
+              motorem Perkins. Jednoduchý pracovní stroj pro každodenní farmní nasazení
+              a manipulaci.
+            reliability: >
+              Motory Perkins jsou trvanlivé; u starších kusů přibývají olejové netěsnosti
+              a problémy s hlavou. Model-specifických stížností je málo.
+            common_faults:
+              - issue: "Olejové netěsnosti a těsnění hlavy u starších kusů"
+                note: "Perkins motory s věkem více prosakují."
+              - issue: "Obtížnější startování za tepla"
+                note: "Slabší tlak vstřikování u opotřebených kusů; hlášeno obecně u Perkins/MF."
+            pros:
+              - "Jednoduchá robustní konstrukce bez složité elektroniky"
+              - "Osvědčený šestiválec Perkins"
+              - "Dostupné díly"
+              - "Vhodný na nakladač a střední práce"
+            cons:
+              - "Starší kusy prosakují oleje"
+              - "Nižší komfort"
+              - "Málo dostupných referencí ke konkrétnímu modelu"
+            used_price:
+              min: 475000
+              max: 610000
+              note: "Orientačně dle zahraniční inzerce; v ČR bývá níže."
+            for_whom: >
+              Vhodný pro farmu hledající spolehlivý jednoduchý pracovní šestiválec střední
+              velikosti bez nároků na moderní elektroniku.
           - slug: massey-ferguson-4370
             name: "4370"
             year_from: 2002
@@ -464,6 +492,25 @@ categories:
             year_to: 2008
             power_hp: 82
             power_kw: 60
+            overview: >
+              Kompaktní univerzál řady 5400 (2004–2008) s výkonem 82 koní, čtyřválcovým
+              motorem SISU / AGCO Power a převodovkou Dyna-4. Obratný stroj nižší střední
+              třídy pro smíšené práce a nakladač.
+            reliability: >
+              Motory SISU / AGCO Power mají velmi dobrou pověst odolnosti; slabiny bývají
+              spíš v periferiích a elektronice než v bloku motoru.
+            pros:
+              - "Velmi spolehlivý motor SISU / AGCO Power"
+              - "Komfortní převodovka Dyna-4"
+              - "Obratný a lehký univerzál"
+              - "Vhodný pro nakladač"
+            cons:
+              - "Nižší výkon do těžších prací"
+              - "U kusů s elektronikou riziko chyb řídicí jednotky"
+              - "Málo model-specifických referencí"
+            for_whom: >
+              Vhodný pro menší až střední farmu chtějící úsporný obratný univerzál
+              s osvědčeným motorem na smíšené práce a nakladač.
           - slug: massey-ferguson-5435
             name: "5435"
             year_from: 2004
@@ -577,6 +624,35 @@ categories:
             year_to: 2014
             power_hp: 120
             power_kw: 88
+            overview: >
+              Univerzál řady 5600 (2011–2014) s výkonem 120 koní, čtyřválcovým motorem
+              AGCO Power / SISU a převodovkou Dyna-4. Příbuzný modelu 5608, s modernější
+              emisní technikou.
+            reliability: >
+              Motor je odolný, ale u řady se opakují potíže s chlazením i u nízkých nájezdů
+              a majitelé zmiňují náklady na emisní údržbu.
+            common_faults:
+              - issue: "Náchylnost chlazení k přehřívání"
+                note: "Hlášeno opakovaně i u nízkých nájezdů; nutné časté profukování chladiče."
+              - issue: "Netěsnost u vodního čerpadla"
+                note: "Poškozené těsnění kolem čerpadla."
+              - issue: "Softwarové chyby (např. funkce vývodového hřídele)"
+                note: "Řešeno aktualizací u dealera."
+              - issue: "Náklady a komplikace emisní techniky"
+                note: "Průběžná emisní údržba."
+            pros:
+              - "Dostatečný výkon 120 koní pro střední práce"
+              - "Komfortní převodovka Dyna-4"
+              - "Moderní kabina"
+              - "Známá platforma"
+            cons:
+              - "Náchylnost chlazení k přehřívání"
+              - "Netěsnosti vodního čerpadla"
+              - "Náklady emisní techniky"
+              - "Občasné softwarové zásahy"
+            for_whom: >
+              Vhodný pro střední farmu chtějící novější 120koňový univerzál s moderní kabinou,
+              s vědomím nákladů na emisní systém a nutnosti hlídat chlazení.
           - slug: massey-ferguson-5613
             name: "5613"
             year_from: 2011
@@ -602,6 +678,30 @@ categories:
             year_to: 1999
             power_hp: 80
             power_kw: 59
+            overview: >
+              Univerzál řady 6100 (1995–1999) s výkonem 80 koní, šestiválcovým motorem
+              Perkins a poloautomatickou převodovkou Dynashift. Traktor střední třídy
+              devadesátých let.
+            reliability: >
+              Převodovky Dynashift jsou u řady 6100 označovány za velmi spolehlivé; když
+              nastane porucha, bývá to elektrika (spínače, čidla), ne mechanika.
+            common_faults:
+              - issue: "Elektrické závady řazení Dynashift a reverzace"
+                note: "Výpadek řazení nebo chyby — obvykle opotřebený kontakt spínače; vyčíst chybové kódy."
+              - issue: "Olejové netěsnosti a hlava u motoru Perkins"
+                note: "S věkem více prosakuje."
+            pros:
+              - "Robustní a spolehlivá převodovka Dynashift"
+              - "Osvědčený šestiválec Perkins"
+              - "Jednoduchá logika řazení"
+              - "Dostupné díly"
+            cons:
+              - "Elektrické závady spínačů řazení mohou zlobit"
+              - "Diagnostika u dealera bývá dražší"
+              - "Starší kusy prosakují"
+            for_whom: >
+              Vhodný pro farmu hledající cenově dostupný šestiválec devadesátých let
+              s komfortem lastschaltu, kdo počítá s občasnou opravou elektriky řazení.
           - slug: massey-ferguson-6130
             name: "6130"
             year_from: 1995
