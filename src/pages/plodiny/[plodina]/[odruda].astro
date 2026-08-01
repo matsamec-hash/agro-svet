@@ -3,6 +3,7 @@ export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { listIndexableOdrudy, getPlodina, getOdruda, isOdrudaIndexable, udrzovatelSlug, SKUPINA_LABELS } from '../../../lib/plodiny';
 import { breadcrumbSchema, faqPageSchema, odrudaDatasetSchema, truncateAtBoundary } from '../../../lib/structured-data';
+import { chorobaChipsForPlodina } from '../../../lib/choroby';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
 
 export async function getStaticPaths() {
@@ -46,6 +47,10 @@ const dataset = odrudaDatasetSchema({
 const relatedOdrudy = plodina.odrudy
   .filter((o) => o.slug !== odruda.slug && isOdrudaIndexable(o))
   .slice(0, 6);
+
+// Choroby a škůdci téže plodiny — dřív odrůda nelinkovala do zbytku grafu (izolovaný
+// pilíř). Prolink na /choroby/ pomáhá crawl-depth i tematické relevanci.
+const chorobaChips = chorobaChipsForPlodina(plodina.slug);
 
 const metaDescription = truncateAtBoundary(
   e.popis ?? `Odrůda ${odruda.name} plodiny ${plodina.name.toLowerCase()}.`,
@@ -211,6 +216,19 @@ const metaDescription = truncateAtBoundary(
       </section>
     )}
 
+    {chorobaChips.length > 0 && (
+      <section class="card-section choroby-section">
+        <h2 class="section-title">Choroby a škůdci — {plodina.name.toLowerCase()}</h2>
+        <ul class="choroba-chips">
+          {chorobaChips.map((c) => (
+            c.slug
+              ? <li><a class="choroba-chip" href={`/choroby/${c.slug}/`}>{c.chip}</a></li>
+              : <li><span class="choroba-chip">{c.chip}</span></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
     <div class="card-section osiva-wrap">
       <OsivaLinks plodina={plodina.name} skupina={plodina.skupina} odruda={odruda.name} />
     </div>
@@ -344,6 +362,9 @@ const metaDescription = truncateAtBoundary(
     color: var(--green-dark); font-weight: 700; font-size: 14px; text-decoration: none;
   }
   .pl-detail .related-all:hover { text-decoration: underline; }
+  .pl-detail .choroba-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pl-detail .choroba-chip { display: inline-block; padding: 7px 13px; border: 1px solid #e0e0e0; border-radius: 999px; font-size: 14px; color: #1a1a1a; text-decoration: none; background: #fff; transition: background .15s, border-color .15s; }
+  .pl-detail a.choroba-chip:hover { background: #FFEA00; border-color: #1a1a1a; }
 
   /* ── Osiva wrapper ── */
   .pl-detail .osiva-wrap { border-top: 2px solid var(--green-soft); }

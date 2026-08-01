@@ -267,6 +267,9 @@ export interface MachineModelForSchema {
   /** BCP-47 language of the page (e.g. 'cs-CZ', 'sk-SK'). Default cs → no inLanguage
    *  emitted (byte-identický s původním výstupem). */
   lang?: string;
+  /** Absolutní URL druhé stránky téže entity (encyklopedie ↔ stroje) → sameAs.
+   *  Google spojí obě URL do jedné entity, každá může cílit jiný search intent. */
+  sameAs?: string;
 }
 
 // Categories that map to Schema.org Vehicle (self-propelled = vehicle).
@@ -325,6 +328,8 @@ export function machineProductSchema(m: MachineModelForSchema) {
   if (m.seriesName) {
     schema.isPartOf = { '@type': 'Thing', name: m.seriesName };
   }
+  // sameAs → druhá stránka téže entity (encyklopedie recenze ↔ stroje data).
+  if (m.sameAs) schema.sameAs = [m.sameAs.startsWith('http') ? m.sameAs : `${SITE_URL}${m.sameAs}`];
 
   // Vehicle/machine specs as PropertyValue pairs — entity-rich without Product type.
   // PropertyValue názvy lokalizované dle m.lang (jinak by /sk /uk /pl JSON-LD nesly
