@@ -3,10 +3,11 @@ import { getNav, getFooterColumns, HIDDEN_SECTIONS, HIDDEN_NEWS_CATEGORIES } fro
 import { isLaunchedPath } from '../../src/i18n/utils';
 
 describe('pl nav konfigurace', () => {
-  it('HIDDEN_SECTIONS.pl skrývá bazar/photo/tema/animals/farms', () => {
+  it('HIDDEN_SECTIONS.pl skrývá bazar/photo/tema/farms', () => {
     // `svet` už není top-level sekce (přesunuto pod Data); pro pl se /svet děti
     // filtrují přes isLaunchedPath (není launchnuté), ne přes HIDDEN_SECTIONS.
-    expect(HIDDEN_SECTIONS.pl).toEqual(['bazar', 'photo', 'tema', 'animals', 'farms']);
+    // 'animals' (/plemena) odemčeno 2026-08-01 → už NENÍ skryté.
+    expect(HIDDEN_SECTIONS.pl).toEqual(['bazar', 'photo', 'tema', 'farms']);
   });
   it('HIDDEN_NEWS_CATEGORIES.pl = dotace/legislativa', () => {
     expect(HIDDEN_NEWS_CATEGORIES.pl).toEqual(['dotace', 'legislativa']);
@@ -24,12 +25,13 @@ describe('pl nav konfigurace', () => {
     expect(hrefs).not.toContain('/kviz/');
     expect(hrefs).not.toContain('/prodejci/');
   });
-  it('pl nav neobsahuje skryté sekce (bazar/farmy/novinky/plemena)', () => {
+  it('pl nav neobsahuje skryté sekce (bazar/farmy/tema); animals launchnuté', () => {
     const sections = getNav('pl').map((i) => i.section);
     expect(sections).not.toContain('bazar');
     expect(sections).not.toContain('farms');
     expect(sections).not.toContain('tema');
-    expect(sections).not.toContain('animals');
+    // 'animals' (/plemena) je od 2026-08-01 launchnuté pro pl → viditelné v nav
+    expect(sections).toContain('animals');
   });
   it('pl footer ukazuje JEN odkazy na launchnuté sekce (žádné cs dead-linky)', () => {
     const cols = getFooterColumns('pl');
@@ -39,9 +41,9 @@ describe('pl nav konfigurace', () => {
       const root = href.replace(/\/+$/, '') || '/';
       expect(isLaunchedPath('pl', root), `footer odkaz ${href} musí být pl-launchnutý`).toBe(true);
     }
-    // konkrétně: /novinky/ a /plemena/ (cs-only) NESMÍ být v pl footeru
+    // konkrétně: /novinky/ (cs-only) NESMÍ být v pl footeru
+    // (/plemena/ je od 2026-08-01 launchnuté → smí být ve footeru)
     expect(allLinks).not.toContain('/novinky/');
-    expect(allLinks).not.toContain('/plemena/');
     // /stroje/ a /slovnik/ (launchnuté) tam být MOHOU — ověř, že aspoň /stroje/ je
     expect(allLinks).toContain('/stroje/');
   });

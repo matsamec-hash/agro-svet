@@ -8,10 +8,9 @@ import { itemListSchema } from '../../../lib/structured-data';
 import { useTranslations, getLocaleFromUrl, tf } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
-const isSk = locale === 'sk';
 const t = useTranslations(locale);
-const base = isSk ? '/sk' : '';
-const numLocale = isSk ? 'sk-SK' : 'cs-CZ';
+const base = locale === 'cs' ? '' : `/${locale}`;
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { druh: druhSlug } = Astro.params;

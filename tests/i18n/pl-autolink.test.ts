@@ -9,6 +9,7 @@ describe('pl auto-linker / interní href lokalizace', () => {
     expect(localizeInternalHref('pl', '/stroje/traktory/')).toBe('/pl/stroje/traktory/');
     expect(localizeInternalHref('pl', '/statistiky/')).toBe('/pl/statistiky/');
     expect(localizeInternalHref('pl', '/data/')).toBe('/pl/data/');
+    expect(localizeInternalHref('pl', '/plemena/skot/')).toBe('/pl/plemena/skot/');
     expect(localizeInternalHref('pl', '/')).toBe('/pl/');
   });
   it('NElaunchnutá sekce → cs href beze změny (žádný 302/leak)', () => {
@@ -16,7 +17,7 @@ describe('pl auto-linker / interní href lokalizace', () => {
     expect(localizeInternalHref('pl', '/dotace/')).toBe('/dotace/');
     // /jak-na-to NElaunchnutá pro pl (jiná jurisdikce) → cs href beze změny
     expect(localizeInternalHref('pl', '/jak-na-to/vyber-traktoru/')).toBe('/jak-na-to/vyber-traktoru/');
-    expect(localizeInternalHref('pl', '/plemena/skot/')).toBe('/plemena/skot/');
+    expect(localizeInternalHref('pl', '/vcelarstvi/vceli-produkty/')).toBe('/vcelarstvi/vceli-produkty/');
   });
   it('cs no-op', () => {
     expect(localizeInternalHref('cs', '/slovnik/adblue/')).toBe('/slovnik/adblue/');

@@ -44,11 +44,11 @@ export interface PlemenoFlat extends Plemeno {
   druh_name: string;
 }
 
-/** Podporovaná locale pro katalog plemen. cs = zdrojová YAML, sk = přeložená overlay. */
-export type PlemenaLocale = 'cs' | 'sk';
+/** Podporovaná locale pro katalog plemen. cs = zdrojová YAML, sk/pl = přeložená overlay. */
+export type PlemenaLocale = 'cs' | 'sk' | 'pl';
 
 // Vite plugin parses YAML at compile-time → default export is already an object.
-// cs = zdrojová data; sk = přeložená overlay se stejnými slugy (plemena-sk/*.yaml).
+// cs = zdrojová data; sk/pl = přeložená overlay se stejnými slugy (plemena-{sk,pl}/*.yaml).
 const druhModulesCs = import.meta.glob('/src/data/plemena/*.yaml', {
   eager: true,
   import: 'default',
@@ -57,10 +57,14 @@ const druhModulesSk = import.meta.glob('/src/data/plemena-sk/*.yaml', {
   eager: true,
   import: 'default',
 }) as Record<string, unknown>;
+const druhModulesPl = import.meta.glob('/src/data/plemena-pl/*.yaml', {
+  eager: true,
+  import: 'default',
+}) as Record<string, unknown>;
 
 // Per-locale cache (SSR: modul žije napříč requesty, cache je bezpečná – data jsou immutable).
-const cachedDruhy: Record<PlemenaLocale, Druh[] | null> = { cs: null, sk: null };
-const cachedFlat: Record<PlemenaLocale, PlemenoFlat[] | null> = { cs: null, sk: null };
+const cachedDruhy: Record<PlemenaLocale, Druh[] | null> = { cs: null, sk: null, pl: null };
+const cachedFlat: Record<PlemenaLocale, PlemenoFlat[] | null> = { cs: null, sk: null, pl: null };
 
 function coerceSlug(v: unknown): string {
   return typeof v === 'string' ? v : String(v);
@@ -75,14 +79,14 @@ function normalize(raw: any): Druh {
 }
 
 function localeOf(locale?: string): PlemenaLocale {
-  return locale === 'sk' ? 'sk' : 'cs';
+  return locale === 'sk' ? 'sk' : locale === 'pl' ? 'pl' : 'cs';
 }
 
 export function getAllDruhy(locale?: string): Druh[] {
   const loc = localeOf(locale);
   const cached = cachedDruhy[loc];
   if (cached) return cached;
-  const modules = loc === 'sk' ? druhModulesSk : druhModulesCs;
+  const modules = loc === 'sk' ? druhModulesSk : loc === 'pl' ? druhModulesPl : druhModulesCs;
   const out: Druh[] = [];
   for (const [path, raw] of Object.entries(modules)) {
     const parsed = raw as Druh;
@@ -145,7 +149,18 @@ const UZITKOVOST_LABELS_SK: Record<PlemenoUzitkovost, string> = {
   ostatni: 'Ostatné',
 };
 
-/** Lokalizované popisky užitkovosti. cs = výchozí, sk = přeložené. */
+const UZITKOVOST_LABELS_PL: Record<PlemenoUzitkovost, string> = {
+  maso: 'Mięsne',
+  mleko: 'Mleczne',
+  kombinovane: 'Kombinowane',
+  tazne: 'Pociągowe',
+  sportovni: 'Sportowe',
+  vlna: 'Wełna',
+  jezdecke: 'Wierzchowe',
+  ostatni: 'Pozostałe',
+};
+
+/** Lokalizované popisky užitkovosti. cs = výchozí, sk/pl = přeložené. */
 export function getUzitkovostLabels(locale?: string): Record<PlemenoUzitkovost, string> {
-  return locale === 'sk' ? UZITKOVOST_LABELS_SK : UZITKOVOST_LABELS;
+  return locale === 'sk' ? UZITKOVOST_LABELS_SK : locale === 'pl' ? UZITKOVOST_LABELS_PL : UZITKOVOST_LABELS;
 }
