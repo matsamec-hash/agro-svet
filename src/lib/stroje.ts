@@ -71,6 +71,24 @@ export interface StrojModel {
   cons?: string[];
   used_price?: UsedPrice;
   for_whom?: string;
+  // Média (vlna 2026-08). YouTube = embed (facade, VideoObject schema); galerie =
+  // legální foto (Wikimedia CC / vlastní) s POVINNOU atribucí → ImageObject schema.
+  youtube_id?: string | null;
+  youtube_title?: string | null;
+  gallery?: MachinePhoto[];
+}
+
+/** Jedna fotka modelu s atribucí. Zdroj musí být legální (Wikimedia CC, vlastní foto,
+ *  nebo výslovné svolení výrobce). Autor + licence povinné u CC → renderuje se popisek. */
+export interface MachinePhoto {
+  /** Lokální cesta (např. /images/stroje/wikimedia/zetor-7745-1.jpg) nebo absolutní URL. */
+  src: string;
+  author?: string | null;
+  /** Např. "CC BY-SA 4.0". */
+  license?: string | null;
+  /** URL zdrojové stránky (Wikimedia file page) pro atribuci. */
+  source_url?: string | null;
+  alt?: string | null;
 }
 
 export interface StrojSeries {
