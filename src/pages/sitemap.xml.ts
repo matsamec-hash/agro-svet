@@ -164,10 +164,8 @@ export const GET: APIRoute = async () => {
     ['/chov-hlemyzdu/', 'weekly', '0.85', D_HLEMYZDI],
     ['/kviz/jaka-vcela-pro-vas/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/puda/', 'weekly', undefined, D_PUDA],
-    ['/fotosoutez/', 'weekly', '0.8', STATIC_LASTMOD],
-    ['/fotosoutez/archiv/', 'monthly', undefined, STATIC_LASTMOD],
-    ['/fotosoutez/pravidla/', 'yearly', undefined, STATIC_LASTMOD],
-    ['/fotosoutez/gdpr/', 'yearly', undefined, STATIC_LASTMOD],
+    // Fotosoutěž dočasně vytažena ze sitemapy (2026-08-01): launch odložen,
+    // sekce skrytá přes HIDDEN_SECTIONS. Vrátit při spuštění soutěže.
     ['/statistiky/', 'weekly', undefined, STATIC_LASTMOD],
     ['/svet/', 'weekly', '0.85', D_SVET],
     ['/svet/srovnani/', 'monthly', '0.6', D_SVET],

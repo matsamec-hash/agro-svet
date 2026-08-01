@@ -12,7 +12,10 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // rozbitá kvůli vyčerpanému rate limitu vestavěného Supabase SMTP. Skrývá
   // jen nav + footer odkaz; /bazar stránky zůstávají funkční (přihlášení přes
   // Google). Vrátit na [] po nasazení custom SMTP (Resend).
-  cs: ['bazar'],
+  // 'photo' (fotosoutěž) dočasně skryt i pro cs (2026-08-01): launch 1.–31.8.
+  // odložen. Skrývá jen nav + footer odkaz; /fotosoutez stránky zůstávají
+  // funkční. Vrátit 'photo' ze seznamu při spuštění soutěže.
+  cs: ['bazar', 'photo'],
   // Fáze 2b A: `data` už sk neskrývá — /dotace a /kalkulacka/dotace-cap byly
   // odemčeny (SK obsah nasazen). Fáze 2b B: /statistiky taky odemčeno (SK obsah).
   // Fáze 2b C: /puda odemčeno → LOCKED_SECTION_PREFIXES je teď prázdné, takže
