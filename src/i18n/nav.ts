@@ -30,11 +30,11 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // (statistiky/půda/dotace) — stejný princip jako homepage rozcestník.
   uk: ['bazar', 'photo', 'tema', 'animals', 'farms'],
   // PL fáze 2: jako uk — jen sekce s reálným PL obsahem. `tech` (katalog +
-  // slovník) a `data` (statistiky + půda + /data hub, česká data v PL jazyce)
-  // zůstávají viditelné; getNav odfiltruje NElaunchnuté data-děti (kalkulačky,
-  // dotace, /svet, /historie) přes isLaunchedPath. novinky/plemena/farmy jsou
-  // české články → skryté.
-  pl: ['bazar', 'photo', 'tema', 'animals', 'farms'],
+  // slovník), `data` (statistiky + půda + /data hub) a `animals` (/plemena —
+  // přeložený overlay plemena-pl, launchnuto 2026-08-01) zůstávají viditelné;
+  // getNav odfiltruje NElaunchnuté data-děti (kalkulačky, dotace, /svet,
+  // /historie) přes isLaunchedPath. novinky/farmy jsou české články → skryté.
+  pl: ['bazar', 'photo', 'tema', 'farms'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české

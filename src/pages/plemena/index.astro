@@ -8,10 +8,9 @@ import { getAllDruhy, getAllPlemena, getUzitkovostLabels, type PlemenoUzitkovost
 import { useTranslations, getLocaleFromUrl, tf } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
-const isSk = locale === 'sk';
 const t = useTranslations(locale);
-const base = isSk ? '/sk' : '';
-const numLocale = isSk ? 'sk-SK' : 'cs-CZ';
+const base = locale === 'cs' ? '' : `/${locale}`;
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const druhy = getAllDruhy(locale);
@@ -71,7 +70,7 @@ const collectionJsonLd = {
   name: t('plem.idx.collName'),
   description: t('plem.idx.collDesc'),
   url: `https://agro-svet.cz${base}/plemena/`,
-  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
+  inLanguage: numLocale,
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: totalPlemena,
@@ -111,7 +110,7 @@ const plemenaI18n = JSON.stringify({
       <div class="hero-left">
         <span class="kicker"><span class="dot"></span>{t('plem.idx.kicker')}</span>
         <h1>{t('plem.idx.h1pre')}<em>{t('plem.idx.h1em')}</em></h1>
-        {isSk ? (
+        {locale !== 'cs' ? (
           <p class="hero-lede">{tf(locale, 'plem.idx.lede', { count: totalPlemena })}</p>
         ) : (
           <p class="hero-lede">
@@ -230,7 +229,7 @@ const plemenaI18n = JSON.stringify({
 
   <script is:inline set:html={`window.__PLEMENA_DATA__ = ${plemenaJson};`}></script>
   <script is:inline set:html={`window.__UZITKOVOST_LABELS__ = ${JSON.stringify(UZITKOVOST_LABELS)};`}></script>
-  {isSk && <script is:inline set:html={`window.__PLEMENA_I18N__ = ${plemenaI18n};`}></script>}
+  {locale !== 'cs' && <script is:inline set:html={`window.__PLEMENA_I18N__ = ${plemenaI18n};`}></script>}
 
   <script>
     type P = {

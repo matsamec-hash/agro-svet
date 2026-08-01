@@ -8,10 +8,9 @@ import { faqPageSchema } from '../../../../lib/structured-data';
 import { useTranslations, getLocaleFromUrl, tf, plural } from '../../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
-const isSk = locale === 'sk';
 const t = useTranslations(locale);
-const base = isSk ? '/sk' : '';
-const numLocale = isSk ? 'sk-SK' : 'cs-CZ';
+const base = locale === 'cs' ? '' : `/${locale}`;
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { druh: druhSlug, plemeno: plemenoSlug } = Astro.params;
@@ -102,7 +101,7 @@ const thingJsonLd: Record<string, unknown> = {
   name: plemeno.name,
   description: plemeno.description,
   url: canonical,
-  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
+  inLanguage: numLocale,
   ...(plemeno.alternative_names && plemeno.alternative_names.length > 0 && {
     alternateName: plemeno.alternative_names,
   }),
