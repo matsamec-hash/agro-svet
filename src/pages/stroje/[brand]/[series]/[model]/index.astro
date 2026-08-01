@@ -3,7 +3,10 @@ export const prerender = false;
 import Layout from '../../../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, getSeries, seriesFamily, familyLabel, categoryLabel, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
 import { createServerClient } from '../../../../../lib/supabase';
-import { breadcrumbSchema, machineProductSchema, machineAggregateOfferSchema, faqPageSchema } from '../../../../../lib/structured-data';
+import { breadcrumbSchema, machineProductSchema, machineAggregateOfferSchema, faqPageSchema, videoObjectSchema } from '../../../../../lib/structured-data';
+import { encUrlForStrojeSlug } from '../../../../../lib/machine-crosslink';
+import MachineVideo from '../../../../../components/MachineVideo.astro';
+import MachineGallery from '../../../../../components/MachineGallery.astro';
 import { generateModelFaq } from '../../../../../lib/faq-generator';
 import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 import { pairCombo } from '../../../../../lib/comparator';
@@ -217,6 +220,10 @@ const breadcrumbJsonLd = breadcrumbSchema([
   { name: seriesNameClean, url: localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`) },
   { name: model.name, url: canonical },
 ]);
+// Redakční recenze téhož modelu v encyklopedii (jen 42 modelů; jen pokud v tomto
+// locale existuje). Odkaz + sameAs rozlišuje intent: tato stránka = data, enc = recenze.
+const reviewUrl = await encUrlForStrojeSlug(model.slug, locale);
+const reviewHref = reviewUrl ? localizePath(locale, reviewUrl) : null;
 const productJsonLd = machineProductSchema({
   brandName: brand.name,
   brandSlug: brand.slug,
@@ -235,7 +242,20 @@ const productJsonLd = machineProductSchema({
   engine: model.engine,
   transmission: model.transmission,
   lang: locale === 'sk' ? 'sk-SK' : 'cs-CZ',
+  sameAs: reviewHref ?? undefined,
+  galleryImageUrls: (model.gallery ?? []).map((p) => p.src).filter(Boolean),
 });
+
+// Média: YouTube embed (facade + VideoObject) a foto galerie s atribucí. Vše volitelné.
+const galleryPhotos = (model.gallery ?? []).filter((p) => p && p.src);
+const videoJsonLd = model.youtube_id
+  ? videoObjectSchema({
+      youtubeId: model.youtube_id,
+      name: model.youtube_title ?? `${brand.name} ${model.name} — video`,
+      description: model.overview || model.description || `${brand.name} ${model.name}`,
+      pageUrl: canonical,
+    })
+  : null;
 
 // Product + AggregateOffer jen když má model inzeráty s cenou (naplňuje slib „cena").
 const bazarSearchUrl = `/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`;
@@ -281,6 +301,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   {offerJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(offerJsonLd)} />}
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
+  {videoJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(videoJsonLd)} />}
   <div class="model-page">
 
     <nav class="breadcrumb" aria-label={tr('cat.s.d.bcAria')}>
@@ -357,6 +378,24 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 
     <div class="content-grid">
       <div class="content-main">
+        {galleryPhotos.length > 0 && (
+          <MachineGallery
+            photos={galleryPhotos}
+            heading={tf(locale, 'cat.s.d.galleryHeading', { model: model.name })}
+            altFallback={tf(locale, 'cat.s.d.altPhoto', { model: model.name, category: catDisplayLabel })}
+            sourceLabel={tr('cat.s.d.gallerySource')}
+          />
+        )}
+        {model.youtube_id && (
+          <MachineVideo
+            youtubeId={model.youtube_id}
+            title={model.youtube_title ?? `${brand.name} ${model.name}`}
+            heading={tf(locale, 'cat.s.d.videoHeading', { model: model.name })}
+            playLabel={tr('cat.s.d.videoPlay')}
+            previewLabel={tr('cat.s.d.videoPreview')}
+            note={tr('cat.s.d.videoNote')}
+          />
+        )}
         {totalSpecCount > 0 ? (
           <section class="spec-card">
             <div class="card-head">
@@ -588,6 +627,14 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </a>
           <a href={localizePath(locale, '/bazar/novy/')} class="aside-btn ghost-light">{tr('cat.s.d.asideAddOwn')}</a>
         </div>
+
+        {reviewHref && (
+          <a class="aside-card review-card" href={reviewHref}>
+            <span class="acc-kicker">{tr('cat.s.d.reviewKicker')}</span>
+            <h3>{brand.name} {model.name}<br/>{tr('cat.s.d.reviewTitle')}</h3>
+            <span class="review-cta">{tr('cat.s.d.reviewBtn')}</span>
+          </a>
+        )}
 
         <div class="aside-card nav-card">
           <span class="acc-label">{tr('cat.s.d.contextLabel')}</span>
@@ -897,6 +944,18 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   .model-page .aside-btn.primary:hover{transform:translateY(-1px);box-shadow:0 10px 30px -8px var(--yellow-glow)}
   .model-page .aside-btn.ghost-light{background:rgba(255,255,255,.06);color:#c8c8d0;border:1px solid rgba(255,255,255,.16)}
   .model-page .aside-btn.ghost-light:hover{background:rgba(255,255,255,.12);color:#fff}
+
+  .model-page .review-card{
+    display:block;text-decoration:none;border:2px solid var(--ink);background:var(--card);
+    transition:background .15s, transform .15s;
+  }
+  .model-page .review-card:hover{background:var(--yellow);transform:translateY(-2px)}
+  .model-page .review-card h3{
+    font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:700;line-height:1.2;
+    letter-spacing:-.01em;margin:0 0 10px;color:var(--ink);
+  }
+  .model-page .review-card .acc-kicker{color:#0A0A0B;background:var(--yellow-soft);border-color:rgba(0,0,0,.12)}
+  .model-page .review-card .review-cta{font:700 13px 'Chakra Petch',sans-serif;letter-spacing:.04em;color:var(--ink)}
 
   .model-page .nav-card .acc-label{
     display:inline-block;font:600 11px 'Chakra Petch',sans-serif;letter-spacing:.18em;text-transform:uppercase;

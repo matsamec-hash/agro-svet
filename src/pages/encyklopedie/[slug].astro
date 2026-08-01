@@ -8,6 +8,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchema, expertReviewSchema } from '../../lib/structured-data';
+import { strojeUrlForEncSlug } from '../../lib/machine-crosslink';
 import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -53,6 +54,10 @@ const schemaCategory: Record<string, string> = {
 };
 
 const pageUrl = `${SITE_URL}${base}/encyklopedie/${slug}/`;
+// Datové dvojče v katalogu strojů (technická data + živé bazarové ceny). Odkaz +
+// sameAs rozlišuje intent: tato stránka = recenze, /stroje/ = data → konec kanibalizace.
+const strojeDataUrl = slug ? strojeUrlForEncSlug(slug) : null;
+const strojeDataHref = strojeDataUrl ? localizePath(locale, strojeDataUrl) : null;
 const heroImageAbs = item.data.heroImage
   ? (item.data.heroImage.startsWith('http') ? item.data.heroImage : `${SITE_URL}${item.data.heroImage}`)
   : undefined;
@@ -86,6 +91,7 @@ const productJsonLd = machineProductSchema({
   engine: item.data.engine,
   transmission: item.data.transmission,
   lang: bcp47,
+  sameAs: strojeDataHref ?? undefined,
 });
 
 const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
@@ -352,6 +358,14 @@ const articleJsonLd = {
       </section>
     )}
 
+    {strojeDataHref && (
+      <a class="data-crosslink" href={strojeDataHref}>
+        <span class="dc-kicker">{t('enc.crosslink.kicker')}</span>
+        <span class="dc-title">{item.data.name} — {t('enc.crosslink.title')}</span>
+        <span class="dc-cta">{t('enc.crosslink.cta')}</span>
+      </a>
+    )}
+
     <aside class="trust-bar" aria-label={t('enc.trust.label')}>
       <span class="trust-item">
         {t('enc.byline.pre')} <a href={localizePath(locale, '/redakce/')} class="trust-link">{t('enc.byline.redakce')}</a>
@@ -411,6 +425,13 @@ const articleJsonLd = {
   .related-cta { margin-top:8px; }
   .related-link { display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:600; color:#1a1a1a; text-decoration:none; padding:10px 16px; border:2px solid #1a1a1a; border-radius:8px; transition:background .15s, color .15s; }
   .related-link:hover { background:#1a1a1a; color:#fff; }
+
+  .data-crosslink { display:block; margin-top:40px; padding:20px 24px; border:2px solid #1a1a1a; border-radius:14px; text-decoration:none; color:#1a1a1a; background:#fff; transition:background .15s, transform .15s; }
+  .data-crosslink:hover { background:#FFEA00; transform:translateY(-2px); }
+  .data-crosslink .dc-kicker { display:block; font-size:11px; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#888; margin-bottom:6px; }
+  .data-crosslink:hover .dc-kicker { color:#5a5a5a; }
+  .data-crosslink .dc-title { display:block; font-size:18px; font-weight:700; line-height:1.3; margin-bottom:8px; }
+  .data-crosslink .dc-cta { display:inline-block; font-size:14px; font-weight:600; }
 
   .trust-bar { margin-top:32px; display:flex; gap:18px; flex-wrap:wrap; padding:14px 18px; background:#f8f8f8; border-radius:10px; font-size:13px; color:#555; }
   .trust-bar .trust-item { display:inline-flex; align-items:center; gap:6px; color:#555; text-decoration:none; }

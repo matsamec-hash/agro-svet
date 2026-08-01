@@ -256,6 +256,8 @@ export interface MachineModelForSchema {
   url: string;
   description?: string;
   imageUrl?: string;
+  /** Další fotky modelu (galerie) → Thing.image jako pole (hero + galerie). */
+  galleryImageUrls?: string[];
   // Vehicle fields (only traktory + kombajny use Vehicle type)
   powerHp?: number | null;
   powerKw?: number | null;
@@ -267,6 +269,9 @@ export interface MachineModelForSchema {
   /** BCP-47 language of the page (e.g. 'cs-CZ', 'sk-SK'). Default cs → no inLanguage
    *  emitted (byte-identický s původním výstupem). */
   lang?: string;
+  /** Absolutní URL druhé stránky téže entity (encyklopedie ↔ stroje) → sameAs.
+   *  Google spojí obě URL do jedné entity, každá může cílit jiný search intent. */
+  sameAs?: string;
 }
 
 // Categories that map to Schema.org Vehicle (self-propelled = vehicle).
@@ -314,7 +319,11 @@ export function machineProductSchema(m: MachineModelForSchema) {
   // Only emit inLanguage for non-default locales — keeps cs output byte-identical.
   if (m.lang && m.lang !== 'cs-CZ') schema.inLanguage = m.lang;
   if (m.description) schema.description = m.description;
-  if (m.imageUrl) schema.image = m.imageUrl.startsWith('http') ? m.imageUrl : `${SITE_URL}${m.imageUrl}`;
+  const abs = (u: string) => (u.startsWith('http') ? u : `${SITE_URL}${u}`);
+  const imgs = [m.imageUrl, ...(m.galleryImageUrls ?? [])].filter((u): u is string => !!u).map(abs);
+  const uniqImgs = [...new Set(imgs)];
+  if (uniqImgs.length === 1) schema.image = uniqImgs[0];
+  else if (uniqImgs.length > 1) schema.image = uniqImgs;
 
   // Brand and series as Thing references (non-Product types).
   schema.subjectOf = {
@@ -325,6 +334,8 @@ export function machineProductSchema(m: MachineModelForSchema) {
   if (m.seriesName) {
     schema.isPartOf = { '@type': 'Thing', name: m.seriesName };
   }
+  // sameAs → druhá stránka téže entity (encyklopedie recenze ↔ stroje data).
+  if (m.sameAs) schema.sameAs = [m.sameAs.startsWith('http') ? m.sameAs : `${SITE_URL}${m.sameAs}`];
 
   // Vehicle/machine specs as PropertyValue pairs — entity-rich without Product type.
   // PropertyValue názvy lokalizované dle m.lang (jinak by /sk /uk /pl JSON-LD nesly

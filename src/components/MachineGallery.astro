@@ -1,0 +1,50 @@
+---
+// Galerie fotek modelu s POVINNOU atribucí (Wikimedia CC / vlastní / se svolením).
+// Vizuálně posiluje stránku + přímo cílí na vyhledávání obrázků (alt = "model — popis").
+// Schema (ImageObject / Thing.image[]) emituje parent stránka.
+import type { MachinePhoto } from '../lib/stroje';
+interface Props {
+  photos: MachinePhoto[];
+  heading: string;
+  /** Fallback alt "<model> — <kategorie>"; per-foto alt má přednost. */
+  altFallback: string;
+  sourceLabel: string;
+}
+const { photos, heading, altFallback, sourceLabel } = Astro.props as Props;
+const items = (photos ?? []).filter((p) => p && p.src);
+---
+{items.length > 0 && (
+  <section class="machine-gallery" aria-labelledby="mgallery-heading">
+    <h2 id="mgallery-heading">{heading}</h2>
+    <div class="mg-grid">
+      {items.map((p, i) => (
+        <figure class="mg-item">
+          <img
+            src={p.src}
+            alt={p.alt || `${altFallback}${items.length > 1 ? ` (${i + 1})` : ''}`}
+            loading="lazy"
+            decoding="async"
+          />
+          {(p.author || p.license) && (
+            <figcaption class="mg-credit">
+              {p.source_url
+                ? <a href={p.source_url} target="_blank" rel="noopener noreferrer nofollow">{sourceLabel}: {p.author}{p.license ? ` · ${p.license}` : ''}</a>
+                : <span>{sourceLabel}: {p.author}{p.license ? ` · ${p.license}` : ''}</span>}
+            </figcaption>
+          )}
+        </figure>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .machine-gallery { margin:32px 0; }
+  .machine-gallery h2 { font-size:1.4rem; font-weight:700; margin:0 0 16px; letter-spacing:-.3px; color:#1a1a1a; }
+  .mg-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; }
+  .mg-item { margin:0; border-radius:12px; overflow:hidden; background:#f5f5f5; border:1px solid #ececec; }
+  .mg-item img { width:100%; height:200px; object-fit:cover; display:block; }
+  .mg-credit { font-size:11px; color:#8a8a8a; padding:6px 10px; line-height:1.4; }
+  .mg-credit a { color:#8a8a8a; text-decoration:underline; text-decoration-color:#dcdcdc; }
+  .mg-credit a:hover { color:#1a1a1a; }
+</style>
