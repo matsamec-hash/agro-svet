@@ -877,21 +877,30 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   }
   .model-page .spec-group-label::after{content:"";flex:1;height:1px;background:var(--line)}
   .model-page .spec-list{
-    display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0 28px;
+    display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:8px 12px;
     margin:0;padding:0;
   }
+  /* Parametry jako vyplněné „chipy" — čitelnější než tenké čárkované řádky, každý údaj vizuálně oddělen */
   .model-page .spec-item{
     display:flex;justify-content:space-between;align-items:baseline;gap:14px;
-    padding:11px 0;border-bottom:1px dashed var(--line);
+    padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg-cream);
+    transition:border-color .15s, background .15s;
   }
-  .model-page .spec-item:last-child{border-bottom:0}
+  .model-page .spec-item:hover{background:#fff;border-color:var(--line-2)}
   .model-page .spec-item dt{
-    font:500 12.5px 'Chakra Petch',sans-serif;color:var(--muted);
-    letter-spacing:.02em;text-transform:none;margin:0;
+    font:600 12.5px 'Chakra Petch',sans-serif;color:var(--body);
+    letter-spacing:.01em;text-transform:none;margin:0;
   }
   .model-page .spec-item dd{
-    font:600 14px 'Chakra Petch',sans-serif;color:var(--ink);
-    letter-spacing:-.005em;margin:0;text-align:right;
+    font:700 15.5px 'Chakra Petch',sans-serif;color:var(--ink);
+    letter-spacing:-.005em;margin:0;text-align:right;white-space:nowrap;
+  }
+  /* Žlutý accent na hlavičce tabulky parametrů — sekce víc „vystoupí" mezi ostatními kartami */
+  .model-page .spec-card .card-head h2{
+    display:flex;align-items:center;gap:10px;
+  }
+  .model-page .spec-card .card-head h2::before{
+    content:"";width:5px;height:22px;border-radius:3px;background:var(--yellow);flex:none;
   }
   .model-page .spec-empty p{color:var(--muted);font-style:italic;margin:0}
 
