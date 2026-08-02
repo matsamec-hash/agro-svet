@@ -29,6 +29,15 @@ const [druhC1, druhC2] = druhTone[druh.slug] ?? ['#5a4a30', '#2a2218'];
 
 const sorted = [...druh.plemena].sort((a, b) => a.name.localeCompare(b.name, locale));
 
+// Hero foto: volitelný druh-level override (hero_image), jinak reálné foto prvního
+// plemene (má vlastní CC atribuci) — nahrazuje emoji placeholder v hero kartě.
+const d = druh as unknown as { hero_image?: string; hero_image_credit?: string; hero_image_source_url?: string; hero_image_license?: string };
+const heroBreed = druh.plemena.find((p) => p.image_url);
+const heroImg = d.hero_image ?? heroBreed?.image_url ?? null;
+const heroImgCredit = d.hero_image_credit ?? heroBreed?.image_credit ?? null;
+const heroImgSource = d.hero_image_source_url ?? heroBreed?.image_source_url ?? null;
+const heroImgLicense = d.hero_image_license ?? heroBreed?.image_license ?? null;
+
 // Aggregate stats
 const countries = Array.from(new Set(sorted.map((p) => p.origin_country))).sort();
 const uzitSet = new Set<string>();
@@ -96,12 +105,19 @@ const plemenaListJsonLd = sorted.length > 0
       </div>
 
       <div class="hero-right">
-        <div class="hero-emoji-card">
-          <div class="hec-emoji" aria-hidden="true">{druhEmoji[druh.slug] ?? '🐾'}</div>
+        <div class={`hero-emoji-card${heroImg ? ' has-photo' : ''}`}>
+          {heroImg ? (
+            <img class="hec-photo" src={heroImg} alt={druh.name_plural} loading="eager" decoding="async" width="800" height="600" />
+          ) : (
+            <div class="hec-emoji" aria-hidden="true">{druhEmoji[druh.slug] ?? '🐾'}</div>
+          )}
           <div class="hec-info">
             <div class="hec-title">{druh.name_plural}</div>
             <div class="hec-c">{tf(locale, 'plem.druh.inDb', { count: sorted.length })}</div>
           </div>
+          {heroImg && heroImgCredit && (
+            <a class="hec-credit" href={heroImgSource ?? '#'} target="_blank" rel="noopener nofollow" title={`${heroImgCredit}${heroImgLicense ? ` · ${heroImgLicense}` : ''}`}>{heroImgCredit}{heroImgLicense ? ` · ${heroImgLicense}` : ''}</a>
+          )}
         </div>
       </div>
     </section>
@@ -274,6 +290,12 @@ const plemenaListJsonLd = sorted.length > 0
   .druh-page .hec-info{text-align:center}
   .druh-page .hec-title{font:700 22px 'Chakra Petch',sans-serif;color:#fff;letter-spacing:-.01em;margin-bottom:4px}
   .druh-page .hec-c{font:500 13px 'Chakra Petch',sans-serif;color:var(--yellow);letter-spacing:.06em}
+  /* Foto varianta: reálná fotka místo emoji, info přes gradient dole, atribuce v rohu */
+  .druh-page .hero-emoji-card.has-photo{padding:0;overflow:hidden;justify-content:flex-end;align-items:stretch;gap:0;position:relative}
+  .druh-page .hec-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .druh-page .hero-emoji-card.has-photo .hec-info{position:relative;z-index:2;text-align:left;width:100%;padding:20px 22px;background:linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.5) 55%, transparent 100%)}
+  .druh-page .hec-credit{position:absolute;top:10px;right:10px;z-index:2;font:500 10px 'Chakra Petch',sans-serif;color:rgba(255,255,255,.75);background:rgba(0,0,0,.42);padding:3px 8px;border-radius:999px;text-decoration:none;max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .druh-page .hec-credit:hover{color:#fff;background:rgba(0,0,0,.62)}
 
   .druh-page .section-title{
     font-family:'Chakra Petch',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;
