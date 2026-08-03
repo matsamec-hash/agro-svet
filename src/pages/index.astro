@@ -46,11 +46,22 @@ if (!isUk && !isPl) {
     .eq('status', 'published')
     .order('featured', { ascending: false })
     .order('published_at', { ascending: false })
-    .limit(11);
+    .limit(16);
 
   const sorted = articles ?? [];
-  featured = sorted[0];
-  heroRight = sorted.slice(1, 5);
+  // Hero diverzita: max 2 články na kategorii v hero (featured + heroRight),
+  // aby jedna kategorie (např. várka dotačních článků) nezaplavila celý hero.
+  const heroPick: any[] = [];
+  const catCount: Record<string, number> = {};
+  for (const a of sorted) {
+    const cat = a.category ?? '_';
+    if ((catCount[cat] ?? 0) >= 2) continue;
+    heroPick.push(a);
+    catCount[cat] = (catCount[cat] ?? 0) + 1;
+    if (heroPick.length >= 5) break;
+  }
+  featured = heroPick[0];
+  heroRight = heroPick.slice(1, 5);
 }
 
 // Commodity chart loads its data client-side from /statistiky/commodity-data-recent.json
