@@ -119,6 +119,8 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
     section: 'data', labelKey: 'nav.data', href: '/data/',
     children: [
       { labelKey: 'nav.data.markets', href: '/statistiky/' },
+      { labelKey: 'nav.data.sales', href: '/data/prodeje-techniky/' },
+      { labelKey: 'nav.data.stocks', href: '/akcie/' },
       { labelKey: 'nav.data.historie', href: '/historie/' },
       { labelKey: 'nav.data.soil', href: '/puda/' },
       { labelKey: 'nav.data.calculators', href: '/kalkulacka/' },
