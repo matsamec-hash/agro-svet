@@ -56,6 +56,7 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
                 </div>
                 <h3>{a.nazev}</h3>
                 <p class="ak-profil">{a.profil}</p>
+                <div class="ak-spark" data-ticker={a.ticker} aria-hidden="true"></div>
                 <div class="ak-meta">
                   <span class="ak-burza">{a.burza} · {a.mena}</span>
                   <span class="ak-kurz" data-ticker={a.ticker} data-mena={a.mena}></span>
@@ -67,7 +68,7 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
       ))}
 
       <section class="ak-note-block">
-        <p class="ak-soon">📈 <strong>Živé denní kurzy</strong> k jednotlivým firmám doplňujeme — sekce se průběžně rozšiřuje o grafy vývoje a klíčové ukazatele.</p>
+        <p class="ak-soon">📈 <strong>Živé denní kurzy</strong> a 3měsíční trendy u každé firmy; klikněte na kartu pro <strong>interaktivní graf</strong> vývoje kurzu a klíčové ukazatele.</p>
         <p class="ak-cross">
           → <a href="/data/prodeje-techniky/">Prodeje zemědělské techniky</a> — kolik strojů se prodá po zemích<br>
           → <a href="/svet/">Profily zemí</a> — zemědělství jednotlivých trhů<br>
@@ -98,6 +99,30 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
             }
             el.innerHTML = '<b>' + cena + '</b>' + chg;
             el.classList.add('has-kurz');
+          });
+        })
+        .catch(function () {});
+
+      // Sparkline trendy (3 měsíce, Yahoo) — batch pro všechny karty naráz.
+      fetch('/api/akcie/sparkliny.json', { headers: { accept: 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (!res || !res.ok || !res.sparkliny) return;
+          document.querySelectorAll('.ak-spark[data-ticker]').forEach(function (el) {
+            var c = res.sparkliny[el.getAttribute('data-ticker')];
+            if (!c || c.length < 3) return;
+            var W = 100, H = 30, p = 2;
+            var min = Math.min.apply(null, c), max = Math.max.apply(null, c), span = (max - min) || 1;
+            var x = function (i) { return p + (i / (c.length - 1)) * (W - 2 * p); };
+            var y = function (v) { return p + (1 - (v - min) / span) * (H - 2 * p); };
+            var d = '';
+            for (var i = 0; i < c.length; i++) d += (i === 0 ? 'M' : 'L') + x(i).toFixed(1) + ',' + y(c[i]).toFixed(1) + ' ';
+            var up = c[c.length - 1] >= c[0];
+            var stroke = up ? '#2E9E57' : '#C0392B';
+            el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
+              '<path d="' + d + 'L' + x(c.length - 1).toFixed(1) + ',' + (H - p) + ' L' + x(0).toFixed(1) + ',' + (H - p) + ' Z" fill="' + (up ? 'rgba(46,158,87,.09)' : 'rgba(192,57,43,.09)') + '"/>' +
+              '<path d="' + d + '" fill="none" stroke="' + stroke + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+            el.classList.add('has-spark');
           });
         })
         .catch(function () {});
@@ -138,7 +163,9 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
   .ak-flag { font-size:18px; }
   .ak-ticker { font-size:12px; font-weight:800; color:var(--ink); background:var(--yellow); border-radius:5px; padding:3px 8px; letter-spacing:.02em; }
   .ak-card h3 { font-size:15.5px; font-weight:800; margin:0 0 6px; line-height:1.25; }
-  .ak-profil { font-size:13.5px; color:#444; line-height:1.5; margin:0 0 12px; }
+  .ak-profil { font-size:13.5px; color:#444; line-height:1.5; margin:0 0 10px; }
+  .ak-spark { height:30px; margin:0 0 10px; }
+  .ak-spark svg { display:block; width:100%; height:100%; }
   .ak-meta { display:flex; align-items:center; justify-content:space-between; }
   .ak-burza { font-size:12px; color:var(--muted); font-weight:600; }
   .ak-kurz { font-size:13px; font-variant-numeric:tabular-nums; color:var(--ink); text-align:right; }

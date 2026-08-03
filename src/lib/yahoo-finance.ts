@@ -7,10 +7,10 @@ export interface StockHistory {
   c: number[]; // zavírací cena
 }
 
-/** Historie zavíracích cen pro graf (range=1y, denní). null při chybě. */
-export async function fetchYahooHistory(ticker: string): Promise<StockHistory | null> {
+/** Historie zavíracích cen pro graf (denní). range např. '1y' | '3mo'. null při chybě. */
+export async function fetchYahooHistory(ticker: string, range = '1y'): Promise<StockHistory | null> {
   try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?range=1y&interval=1d`;
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?range=${range}&interval=1d`;
     const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; agro-svet/1.0)' } });
     if (!r.ok) return null;
     const j: any = await r.json();
