@@ -4,6 +4,7 @@ import ImageAccordion from '../components/ImageAccordion.astro';
 import Newsletter from '../components/Newsletter.astro';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
 import HomeWeather from '../components/HomeWeather.astro';
+import Anketa from '../components/Anketa.astro';
 import LatestArticles from '../components/home/LatestArticles.astro';
 import UpcomingEvents from '../components/UpcomingEvents.astro';
 import HomeUk from '../components/home/HomeUk.astro';
@@ -221,6 +222,25 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   <div style="padding:32px 32px 0;">
     <HomeWeather mode="strip" />
   </div>
+
+  <!-- Anketa čtenářů -->
+  {locale === 'cs' && (
+  <section style="max-width:720px; margin:0 auto; padding:8px 32px 16px;">
+    <Anketa
+      slug="nejlepsi-znacka-traktoru"
+      question="Kterou značku traktoru byste koupili vy?"
+      options={[
+        { id: 'john-deere', label: 'John Deere' },
+        { id: 'zetor', label: 'Zetor' },
+        { id: 'fendt', label: 'Fendt' },
+        { id: 'new-holland', label: 'New Holland' },
+        { id: 'case-ih', label: 'Case IH' },
+        { id: 'kubota', label: 'Kubota' },
+      ]}
+      note="Průběžné výsledky napříč čtenáři · více v /ankety/"
+    />
+  </section>
+  )}
 
   <!-- Newsletter signup (always last before footer) -->
   <Newsletter />

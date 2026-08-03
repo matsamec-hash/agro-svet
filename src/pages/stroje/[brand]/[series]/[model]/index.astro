@@ -7,6 +7,7 @@ import { breadcrumbSchema, machineProductSchema, machineAggregateOfferSchema, fa
 import { encUrlForStrojeSlug } from '../../../../../lib/machine-crosslink';
 import MachineVideo from '../../../../../components/MachineVideo.astro';
 import MachineGallery from '../../../../../components/MachineGallery.astro';
+import Anketa from '../../../../../components/Anketa.astro';
 import { generateModelFaq } from '../../../../../lib/faq-generator';
 import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 import { pairCombo } from '../../../../../lib/comparator';
@@ -656,6 +657,22 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         </div>
       </aside>
     </div>
+
+    {locale === 'cs' && (
+      <div style="max-width:760px; margin:0 auto; padding:0 24px;">
+        <Anketa
+          slug={`znacka-${brand.slug}`}
+          question={`Doporučili byste značku ${brand.name}?`}
+          options={[
+            { id: 'urcite-ano', label: 'Určitě ano' },
+            { id: 'spis-ano', label: 'Spíš ano' },
+            { id: 'spis-ne', label: 'Spíš ne' },
+            { id: 'urcite-ne', label: 'Určitě ne' },
+          ]}
+          note="Hlasování čtenářů · průběžné výsledky"
+        />
+      </div>
+    )}
 
   </div>
 </Layout>

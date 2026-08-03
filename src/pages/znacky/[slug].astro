@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { itemListSchema } from '../../lib/structured-data';
 import { getAllModels } from '../../lib/stroje';
+import Anketa from '../../components/Anketa.astro';
 import { brandPairs } from '../../lib/brand-comparator';
 import { TIER_LISTS, rankForTierList } from '../../lib/tier-lists';
 import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../i18n/utils';
@@ -337,6 +338,20 @@ const modelListJsonLd = brandModels.length > 0
 
     {aktualizovanoStr && (
       <p class="updated-line">{tf(locale, 'cat.zn.d.updated', { date: aktualizovanoStr! })}</p>
+    )}
+
+    {locale === 'cs' && (
+      <Anketa
+        slug={`znacka-${znacka.id}`}
+        question={`Doporučili byste značku ${znacka.data.name}?`}
+        options={[
+          { id: 'urcite-ano', label: 'Určitě ano' },
+          { id: 'spis-ano', label: 'Spíš ano' },
+          { id: 'spis-ne', label: 'Spíš ne' },
+          { id: 'urcite-ne', label: 'Určitě ne' },
+        ]}
+        note="Hlasování čtenářů · průběžné výsledky"
+      />
     )}
 
     <div style="margin-top:48px; display:flex; gap:10px; flex-wrap:wrap;">
