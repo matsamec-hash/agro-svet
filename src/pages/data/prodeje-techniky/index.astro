@@ -1,0 +1,260 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import Anketa from '../../../components/Anketa.astro';
+import { breadcrumbSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import { ZEME, KOMBAJNY, SEKCE_AKTUALIZOVANO } from '../../../data/prodeje-techniky';
+
+const canonical = `${SITE_URL}/data/prodeje-techniky/`;
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Data', url: '/data/' },
+  { name: 'Prodeje techniky', url: canonical },
+]);
+
+const fmt = (n: number | null) => (n == null ? '—' : n.toLocaleString('cs-CZ'));
+
+// Roky pro tabulku
+const ROKY = [2022, 2023, 2024];
+const val = (z: (typeof ZEME)[number], rok: number) => z.roky.find((r) => r.rok === rok);
+
+// Žebříček 2024 (kde je číslo) pro bar chart — bez EU agregátu.
+const zebricek2024 = ZEME.filter((z) => z.kod !== 'eu')
+  .map((z) => ({ z, v: val(z, 2024)?.traktory ?? val(z, 2023)?.traktory ?? 0, rok: val(z, 2024)?.traktory ? 2024 : 2023 }))
+  .sort((a, b) => b.v - a.v);
+const maxBar = Math.max(...zebricek2024.map((x) => x.v), 1);
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: 'Prodeje zemědělské techniky v Evropě — registrace nových traktorů',
+  description: 'Přehled nových registrací zemědělských traktorů v ČR a hlavních evropských trzích (Německo, Francie, Itálie, Polsko, UK) podle publikovaných dat CEMA a národních registračních úřadů.',
+  creator: { '@type': 'Organization', name: 'agro-svět.cz' },
+  inLanguage: 'cs-CZ',
+  url: canonical,
+  isAccessibleForFree: true,
+};
+---
+
+<Layout
+  title="Prodeje zemědělské techniky v Evropě — registrace traktorů podle zemí a let"
+  description="Kolik nových traktorů se registruje v ČR, Německu, Francii, Itálii, Polsku a UK? Reálná data z CEMA a národních úřadů, žebříčky značek a trendy. Průběžně doplňujeme."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+
+  <main class="pt">
+    <!-- HERO -->
+    <section class="pt-hero">
+      <div class="pt-lines"></div>
+      <div class="pt-wrap pt-hero-in">
+        <nav class="pt-bc" aria-label="Cesta">
+          <a href="/">Domů</a><span>›</span><a href="/data/">Data</a><span>›</span><span class="cur">Prodeje techniky</span>
+        </nav>
+        <span class="pt-eyebrow"><span class="ln"></span>Datová sekce · Trh techniky</span>
+        <h1>Prodeje zemědělské techniky <mark>v Evropě</mark></h1>
+        <p class="pt-lede">
+          Kolik nových traktorů se ročně registruje v Česku a hlavních evropských trzích? Reálná, citovaná data z <strong>CEMA</strong> a národních registračních úřadů — podle zemí, let a značek. Bez odhadů: kde údaj není ověřený, uvádíme „—".
+        </p>
+        <div class="pt-hstat">
+          <div><div class="n">144 400</div><div class="l">traktorů v Evropě 2024</div></div>
+          <div><div class="n">7</div><div class="l">trhů v přehledu</div></div>
+          <div><div class="n">−8,1 %</div><div class="l">meziročně (CEMA)</div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="pt-body"><div class="pt-wrap">
+
+      <!-- ŽEBŘÍČEK ZEMÍ 2024 -->
+      <section class="pt-block">
+        <div class="pt-h"><span class="no">01</span><h2>Registrace nových traktorů podle zemí</h2></div>
+        <p class="pt-note">Poslední ověřený rok u každého trhu (u ČR rok 2023 — data SDA za 2024 zatím nezpracována). Řazeno podle objemu trhu.</p>
+        <div class="pt-bars">
+          {zebricek2024.map((x) => (
+            <div class="pt-bar">
+              <div class="pt-bar-lab"><span class="fl">{x.z.vlajka}</span> {x.z.nazev} <span class="yr">{x.rok}</span></div>
+              <div class="pt-bar-track">
+                <div class="pt-bar-fill" style={`width:${Math.max(4, Math.round((x.v / maxBar) * 100))}%`}></div>
+                <span class="pt-bar-val">{fmt(x.v)}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- TABULKA PODLE LET -->
+      <section class="pt-block">
+        <div class="pt-h"><span class="no">02</span><h2>Vývoj podle let (2022–2024)</h2></div>
+        <div class="pt-tablewrap">
+          <table class="pt-table">
+            <thead>
+              <tr><th>Trh</th>{ROKY.map((r) => <th class="num">{r}</th>)}<th>Úřad</th></tr>
+            </thead>
+            <tbody>
+              {ZEME.map((z) => (
+                <tr class={z.kod === 'eu' ? 'is-eu' : ''}>
+                  <td><span class="fl">{z.vlajka}</span> {z.nazev}</td>
+                  {ROKY.map((r) => {
+                    const rv = val(z, r);
+                    return <td class="num">{rv?.traktory != null ? fmt(rv.traktory) : '—'}{rv?.approx ? <span class="approx" title="dopočet z publikované meziroční změny">*</span> : null}</td>;
+                  })}
+                  <td class="urad">{z.urad}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="pt-legend"><span class="approx">*</span> hodnota dopočtená z publikované meziroční změny (ne přímo uvedené číslo). „—" = zatím neověřeno.</p>
+      </section>
+
+      <!-- ZNAČKY -->
+      <section class="pt-block">
+        <div class="pt-h"><span class="no">03</span><h2>Nejsilnější značky na trhu</h2></div>
+        <div class="pt-brands">
+          {ZEME.filter((z) => z.znacky && z.znacky.length).map((z) => (
+            <div class="pt-brandcard">
+              <div class="pt-brandcard-h"><span class="fl">{z.vlajka}</span> {z.nazev} <span class="yr">{z.znackyRok}</span></div>
+              <ol class="pt-brandlist">
+                {z.znacky!.map((b, i) => (
+                  <li>
+                    <span class="rk">{i + 1}</span>
+                    <span class="bn">{b.znacka}</span>
+                    {b.podil != null && <span class="bp">{b.podil.toLocaleString('cs-CZ')} %</span>}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- KOMBAJNY -->
+      <section class="pt-block">
+        <div class="pt-h"><span class="no">04</span><h2>Kombajny</h2></div>
+        <p class="pt-note">Trh kombajnů je řádově menší a data po zemích jsou útržkovitá. Uvádíme jen ověřené hodnoty — sekci průběžně doplňujeme.</p>
+        <div class="pt-tablewrap">
+          <table class="pt-table">
+            <thead><tr><th>Trh</th><th class="num">Rok</th><th class="num">Kusů</th><th class="num">Změna r/r</th></tr></thead>
+            <tbody>
+              {KOMBAJNY.map((k) => (
+                <tr><td><span class="fl">{k.vlajka}</span> {k.zeme}</td><td class="num">{k.rok}</td><td class="num">{fmt(k.kusy)}</td><td class="num">{k.zmena ?? '—'}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ANKETA -->
+      <Anketa
+        slug="nejlepsi-znacka-traktoru"
+        question="Kterou značku traktoru byste koupili vy?"
+        options={[
+          { id: 'john-deere', label: 'John Deere' },
+          { id: 'zetor', label: 'Zetor' },
+          { id: 'fendt', label: 'Fendt' },
+          { id: 'new-holland', label: 'New Holland' },
+          { id: 'case-ih', label: 'Case IH' },
+          { id: 'kubota', label: 'Kubota' },
+        ]}
+        note="Průběžné výsledky napříč návštěvníky."
+      />
+
+      <!-- METODIKA + ZDROJE -->
+      <section class="pt-block pt-metod">
+        <div class="pt-h"><span class="no">05</span><h2>Metodika a zdroje</h2></div>
+        <p>Uvádíme <strong>nové registrace zemědělských traktorů</strong> podle publikovaných dat asociací výrobců a národních registračních úřadů. Definice se mezi zeměmi mírně liší (např. UK počítá stroje nad 50 koní, Francie zahrnuje vinařské a sadové traktory), proto <strong>absolutní čísla nejsou 1:1 srovnatelná</strong> — slouží k porovnání trendů a řádů. Kde publikovaný zdroj uvádí jen meziroční změnu, dopočtenou hodnotu značíme hvězdičkou; kde ověřený údaj chybí, uvádíme „—". Nedopisujeme odhady jako fakt.</p>
+        <ul class="pt-sources">
+          {[...new Map(ZEME.flatMap((z) => z.zdroje).map((s) => [s.url, s])).values()].map((s) => (
+            <li><a href={s.url} target="_blank" rel="nofollow noopener">{s.label}</a></li>
+          ))}
+        </ul>
+        <p class="pt-updated">Aktualizováno {new Date(SEKCE_AKTUALIZOVANO).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}. Sekci průběžně rozšiřujeme o starší roky a další trhy.</p>
+        <p class="pt-cross">
+          → <a href="/prehled/nejprodavanejsi-traktory-2025/">Nejprodávanější traktory ČR 2025</a><br>
+          → <a href="/prehled/">Všechny přehledy a žebříčky</a><br>
+          → <a href="/data/">Datová sekce agro-svět</a>
+        </p>
+      </section>
+
+    </div></div>
+  </main>
+</Layout>
+
+<style>
+  .pt { --yellow:#FFEA00; --yellow-d:#FFD400; --ink:#0A0A0B; --line:#E7E7EA; --muted:#6E6E76; --soft:#F5F5F2; --green:#2E9E57;
+    font-family:'Chakra Petch',system-ui,sans-serif; background:#fff; color:var(--ink); line-height:1.55; }
+  .pt-wrap { max-width:1000px; margin:0 auto; padding:0 24px; }
+  .pt a { color:inherit; }
+
+  .pt-hero { background:var(--ink); color:#fff; position:relative; overflow:hidden; }
+  .pt-hero::before { content:""; position:absolute; inset:0; background:radial-gradient(680px 320px at 88% -10%, rgba(255,234,0,.18), transparent 60%); }
+  .pt-lines { position:absolute; inset:0; opacity:.05; background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px); background-size:44px 44px; }
+  .pt-hero-in { position:relative; z-index:1; padding:26px 24px 40px; }
+  .pt-bc { font-size:12.5px; color:rgba(255,255,255,.55); display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; }
+  .pt-bc a { color:rgba(255,255,255,.7); text-decoration:none; }
+  .pt-bc a:hover { color:#fff; }
+  .pt-bc .cur { color:#fff; }
+  .pt-eyebrow { display:inline-flex; align-items:center; gap:10px; font-size:11px; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:var(--yellow); margin-bottom:14px; }
+  .pt-eyebrow .ln { width:26px; height:1px; background:var(--yellow); opacity:.6; }
+  .pt-hero h1 { font-size:clamp(2rem,5vw,3.1rem); line-height:1.05; letter-spacing:-.02em; font-weight:800; margin:0 0 14px; }
+  .pt-hero h1 mark { background:var(--yellow); color:var(--ink); padding:0 10px; }
+  .pt-lede { font-size:16.5px; color:rgba(255,255,255,.82); max-width:60ch; margin:0 0 26px; }
+  .pt-lede strong { color:#fff; }
+  .pt-hstat { display:flex; gap:32px; flex-wrap:wrap; }
+  .pt-hstat .n { font-size:28px; font-weight:800; letter-spacing:-.02em; line-height:1; color:var(--yellow); font-variant-numeric:tabular-nums; }
+  .pt-hstat .l { font-size:11.5px; color:rgba(255,255,255,.6); text-transform:uppercase; letter-spacing:.08em; margin-top:7px; }
+
+  .pt-body { padding:44px 0 80px; }
+  .pt-block { margin-bottom:44px; }
+  .pt-h { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .pt-h .no { font-size:12px; font-weight:800; color:var(--ink); background:var(--yellow); border-radius:7px; padding:5px 9px; line-height:1; }
+  .pt-h h2 { font-size:22px; font-weight:800; letter-spacing:-.01em; margin:0; }
+  .pt-note { font-size:13.5px; color:var(--muted); margin:0 0 16px; }
+
+  .pt-bars { display:flex; flex-direction:column; gap:11px; }
+  .pt-bar-lab { font-size:14px; font-weight:600; margin-bottom:5px; }
+  .pt-bar-lab .fl { margin-right:4px; }
+  .pt-bar-lab .yr { font-size:11px; color:var(--muted); font-weight:700; margin-left:4px; }
+  .pt-bar-track { position:relative; background:var(--soft); border-radius:8px; height:34px; display:flex; align-items:center; }
+  .pt-bar-fill { position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg,#fff2a8,#ffe11f); border-radius:8px; }
+  .pt-bar-val { position:relative; z-index:1; margin-left:12px; font-weight:800; font-variant-numeric:tabular-nums; font-size:14px; }
+
+  .pt-tablewrap { overflow-x:auto; }
+  .pt-table { width:100%; border-collapse:collapse; font-size:14px; }
+  .pt-table th { text-align:left; padding:10px 12px; background:var(--soft); border-bottom:2px solid var(--ink); font-size:11.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); }
+  .pt-table th.num, .pt-table td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .pt-table td { padding:11px 12px; border-bottom:1px solid var(--line); }
+  .pt-table tr.is-eu { background:#fffdf0; font-weight:700; }
+  .pt-table .fl { margin-right:5px; }
+  .pt-table .urad { font-size:12px; color:var(--muted); }
+  .approx { color:var(--yellow-d); font-weight:800; }
+  .pt-legend { font-size:12.5px; color:var(--muted); margin-top:10px; }
+
+  .pt-brands { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; }
+  .pt-brandcard { border:1.5px solid var(--line); border-radius:14px; padding:16px 18px; background:linear-gradient(135deg,#fff,#fffef7); }
+  .pt-brandcard-h { font-size:14.5px; font-weight:800; margin-bottom:10px; }
+  .pt-brandcard-h .yr { font-size:11px; color:var(--muted); font-weight:700; }
+  .pt-brandlist { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
+  .pt-brandlist li { display:flex; align-items:center; gap:9px; font-size:14px; }
+  .pt-brandlist .rk { width:20px; height:20px; flex-shrink:0; background:var(--ink); color:var(--yellow); border-radius:5px; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .pt-brandlist .bn { flex:1; font-weight:600; }
+  .pt-brandlist .bp { font-weight:800; font-variant-numeric:tabular-nums; }
+
+  .pt-metod p { font-size:15px; line-height:1.7; color:#333; margin:0 0 14px; }
+  .pt-metod strong { color:var(--ink); }
+  .pt-sources { margin:0 0 14px; padding-left:20px; font-size:13.5px; }
+  .pt-sources li { margin-bottom:6px; }
+  .pt-sources a { color:var(--green); text-decoration:underline; }
+  .pt-updated { font-size:13px; color:var(--muted); }
+  .pt-cross { font-size:14.5px; line-height:1.9; }
+  .pt-cross a { color:var(--green); text-decoration:underline; }
+
+  @media (max-width:640px) {
+    .pt-hstat { gap:20px; }
+    .pt-table .urad { display:none; }
+  }
+</style>

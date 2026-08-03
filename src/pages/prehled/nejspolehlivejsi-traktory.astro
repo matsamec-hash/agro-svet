@@ -1,0 +1,152 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import Anketa from '../../components/Anketa.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/prehled/nejspolehlivejsi-traktory/`;
+const datePublished = '2026-02-01';
+const dateModified = '2026-08-02';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Přehledy', url: '/prehled/' },
+  { name: 'Nejspolehlivější traktory', url: canonical },
+]);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Nejspolehlivější traktory — žebříček podle poruchovosti a životnosti',
+  description: 'Které značky traktorů vydrží nejdéle a mají nejnižší poruchovost? Redakční žebříček podle servisních zkušeností, dostupnosti dílů a životnosti motorů.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished,
+  dateModified,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout
+  title="Nejspolehlivější traktory — žebříček podle poruchovosti a životnosti"
+  description="Které značky traktorů vydrží nejdéle a mají nejnižší poruchovost? Redakční žebříček podle servisních zkušeností, dostupnosti dílů a životnosti motorů."
+  canonical={canonical}
+  ogType="article"
+  publishedTime={datePublished}
+  modifiedTime={dateModified}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+
+  <article class="article-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/prehled/">Přehledy</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Nejspolehlivější traktory</span>
+    </nav>
+
+    <header class="article-head">
+      <span class="kicker">Redakční žebříček · Spolehlivost</span>
+      <h1>Nejspolehlivější traktory — žebříček podle poruchovosti a životnosti</h1>
+      <p class="lede">
+        Spolehlivost je při nákupu traktoru důležitější než maximální výkon — prostoj o žních stojí víc než pár koní navíc. Seřadili jsme značky podle poruchovosti, životnosti motorů a dostupnosti servisu v ČR.
+      </p>
+      <div class="article-meta">
+        <span>Aktualizováno 2. srpna 2026</span>
+        <span class="sep">·</span>
+        <span>Redakce agro-svět.cz</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p>Spolehlivost traktoru se neměří v katalogu, ale v servisní dílně po deseti letech. Náš žebříček vychází ze <strong>zkušeností autorizovaných i nezávislých servisů</strong>, dostupnosti náhradních dílů na českém trhu a životnosti klíčových komponent (motor, převodovka, hydraulika). Není to laboratorní test — je to praktický přehled toho, co v terénu vydrží.</p>
+
+      <h2>Žebříček spolehlivosti podle segmentů</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Pořadí</th><th>Značka / řada</th><th>Silná stránka</th><th>Životnost*</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1.</td><td><strong><a href="/stroje/zetor/forterra/">Zetor Forterra</a></strong></td><td>Jednoduchá konstrukce, levné díly</td><td class="up">15–20 let</td></tr>
+            <tr><td>2.</td><td><strong><a href="/stroje/john-deere/6m/">John Deere 6M</a></strong></td><td>Motor PowerTech, servisní síť</td><td class="up">12–18 let</td></tr>
+            <tr><td>3.</td><td><strong><a href="/stroje/new-holland/t6/">New Holland T6</a></strong></td><td>Osvědčený motor FPT</td><td class="up">12–16 let</td></tr>
+            <tr><td>4.</td><td><strong><a href="/stroje/fendt/">Fendt Vario</a></strong></td><td>Prémiová kvalita, drahý servis</td><td class="up">12–16 let</td></tr>
+            <tr><td>5.</td><td><strong><a href="/stroje/case-ih/maxxum/">Case IH Maxxum</a></strong></td><td>Robustní převodovka</td><td class="up">12–15 let</td></tr>
+            <tr><td>6.</td><td><strong><a href="/stroje/kubota/m7/">Kubota M7</a></strong></td><td>Japonská preciznost motoru</td><td class="up">12–15 let</td></tr>
+            <tr><td>7.</td><td><strong><a href="/stroje/massey-ferguson/">Massey Ferguson</a></strong></td><td>Dobrá cena/výkon</td><td class="up">10–15 let</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="aside">
+        <strong>*Životnost</strong> = orientační doba do generální opravy motoru při běžném provozu (400–800 mth/rok) a řádné údržbě. Redakční odhad na základě servisních zkušeností, ne měřená data výrobce.
+      </p>
+
+      <h2>Proč Zetor vede v poměru spolehlivost/cena</h2>
+      <p><a href="/znacky/zetor/">Zetor</a> nevyhrává absolutní kvalitou zpracování, ale <strong>opravitelností</strong>. Jednoduchá mechanická konstrukce z 90. let znamená, že traktor opraví i menší servis, díly jsou levné a skladem, a i po 15 letech má stroj zůstatkovou hodnotu. Pro farmu do 150 koní je to nejnižší celkové riziko prostoje.</p>
+
+      <h2>Kde spolehlivost nejčastěji selhává</h2>
+      <ul>
+        <li><strong>Elektronika a SCR/AdBlue systémy</strong> — nejčastější zdroj poruch u moderních strojů (Stage V). <a href="/slovnik/adblue/">Co je AdBlue →</a></li>
+        <li><strong>CVT převodovky</strong> — bezstupňové převodovky (Vario, AutoPowr) jsou skvělé, ale oprava je drahá a nutně u autorizovaného servisu.</li>
+        <li><strong>DPF filtry</strong> — u strojů provozovaných na krátké přejezdy se zanáší.</li>
+      </ul>
+      <p>→ <a href="/prehled/nejlevnejsi-provoz-traktory/">Traktory s nejnižší spotřebou nafty</a><br>
+      → <a href="/kviz/jaky-traktor-potrebujete/">Kvíz: Jaký traktor potřebujete?</a></p>
+
+      <Anketa
+        slug="nejspolehlivejsi-znacka"
+        question="Která značka je podle vás nejspolehlivější?"
+        options={[
+          { id: 'zetor', label: 'Zetor' },
+          { id: 'john-deere', label: 'John Deere' },
+          { id: 'fendt', label: 'Fendt' },
+          { id: 'new-holland', label: 'New Holland' },
+          { id: 'case-ih', label: 'Case IH' },
+          { id: 'kubota', label: 'Kubota' },
+        ]}
+        note="Váš hlas se přičte k průběžným výsledkům."
+      />
+
+      <hr>
+      <p class="closing"><em>Přehled aktualizujeme podle servisních zkušeností. Sledujte <a href="/novinky/">novinky agro-svět</a> nebo <a href="/rss.xml">RSS</a>.</em></p>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .article-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .article-head { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.6; margin: 0 0 16px; }
+  .article-meta { font-size: 13px; color: #6B6B72; display: flex; gap: 8px; }
+  .sep { color: #ccc; }
+  .article-body { font-size: 16px; line-height: 1.75; color: #333; }
+  .article-body h2 { font-size: 22px; font-weight: 700; color: #0A0A0B; margin: 36px 0 14px; }
+  .article-body p { margin: 0 0 16px; }
+  .article-body a { color: #0B7A3B; text-decoration: underline; }
+  .article-body a:hover { text-decoration-thickness: 2px; }
+  .article-body ul, .article-body ol { padding-left: 22px; margin: 0 0 18px; }
+  .article-body li { margin-bottom: 8px; }
+  .article-body strong { color: #0A0A0B; font-weight: 700; }
+  .article-body hr { border: 0; border-top: 1px solid #ebebeb; margin: 32px 0; }
+  .article-body .aside { font-size: 13px; color: #6B6B72; padding: 12px 16px; background: #fafafa; border-radius: 8px; border-left: 3px solid #FFEA00; }
+  .article-body .closing { font-size: 14px; color: #6B6B72; }
+  .table-wrap { overflow-x: auto; margin: 0 0 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  table td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  table td.up { color: #0B7A3B; font-weight: 700; }
+  table td.down { color: #C8102E; font-weight: 700; }
+</style>

@@ -1,0 +1,66 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import Anketa from '../../components/Anketa.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+import { ANKETY } from '../../data/ankety';
+
+const canonical = `${SITE_URL}/ankety/`;
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Ankety', url: canonical },
+]);
+---
+
+<Layout
+  title="Ankety — hlasujte o zemědělské technice | agro-svět"
+  description="Hlasujte v anketách o traktorech, kombajnech a značkách zemědělské techniky. Průběžné výsledky napříč čtenáři agro-svět.cz."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="an-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Ankety</span>
+    </nav>
+
+    <header class="an-head">
+      <span class="kicker">Hlasování čtenářů</span>
+      <h1>Ankety o zemědělské technice</h1>
+      <p class="lede">
+        Který traktor je nejspolehlivější? Jaká značka vede? Zapojte se do hlasování — výsledky se aktualizují průběžně, jak hlasují ostatní čtenáři. Jeden hlas na anketu.
+      </p>
+    </header>
+
+    <div class="an-list">
+      {ANKETY.map((a) => (
+        <div class="an-item">
+          <Anketa slug={a.slug} question={a.question} options={a.options} note={a.kontext ? `Souvisí s: ${a.kontext.label}` : undefined} />
+          {a.kontext && (
+            <p class="an-ctx">→ <a href={a.kontext.href}>{a.kontext.label}</a></p>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .an-root { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .an-head { margin-bottom: 20px; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin: 12px 0 8px; color: #1a1a1a; }
+  .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; max-width: 60ch; }
+  .an-list { display: flex; flex-direction: column; gap: 8px; }
+  .an-item { }
+  .an-item :global(.anketa) { margin: 20px auto 4px; }
+  .an-ctx { text-align: center; font-size: 13px; margin: 0 0 18px; }
+  .an-ctx a { color: #0B7A3B; text-decoration: underline; }
+</style>

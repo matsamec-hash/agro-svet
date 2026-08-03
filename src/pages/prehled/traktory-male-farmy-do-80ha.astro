@@ -1,0 +1,153 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import Anketa from '../../components/Anketa.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+
+const canonical = `${SITE_URL}/prehled/traktory-male-farmy-do-80ha/`;
+const datePublished = '2026-02-15';
+const dateModified = '2026-08-02';
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Přehledy', url: '/prehled/' },
+  { name: 'Traktory pro malé farmy do 80 ha', url: canonical },
+]);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Nejlepší traktory pro malé farmy do 80 ha — žebříček 2026',
+  description: 'Jaký traktor na malou farmu do 80 ha? Přehled nejvhodnějších modelů 60–120 koní podle ceny, servisu a univerzálnosti pro rodinné a menší hospodářství.',
+  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
+  datePublished,
+  dateModified,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: 'cs-CZ',
+};
+---
+
+<Layout
+  title="Nejlepší traktory pro malé farmy do 80 ha — žebříček 2026"
+  description="Jaký traktor na malou farmu do 80 ha? Přehled nejvhodnějších modelů 60–120 koní podle ceny, servisu a univerzálnosti pro rodinné a menší hospodářství."
+  canonical={canonical}
+  ogType="article"
+  publishedTime={datePublished}
+  modifiedTime={dateModified}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+
+  <article class="article-root">
+    <nav class="breadcrumb" aria-label="Cesta">
+      <a href="/">Domů</a>
+      <span aria-hidden="true">›</span>
+      <a href="/prehled/">Přehledy</a>
+      <span aria-hidden="true">›</span>
+      <span class="current">Traktory pro malé farmy do 80 ha</span>
+    </nav>
+
+    <header class="article-head">
+      <span class="kicker">Segmentový žebříček · Malé farmy</span>
+      <h1>Nejlepší traktory pro malé farmy do 80 ha</h1>
+      <p class="lede">
+        Na rodinnou farmu do 80 ha nepotřebujete 250 koní ani bezstupňovou převodovku za milion navíc. Rozhoduje pořizovací cena, servis do 30 minut a univerzálnost. Které stroje 60–120 koní dávají největší smysl?
+      </p>
+      <div class="article-meta">
+        <span>Aktualizováno 2. srpna 2026</span>
+        <span class="sep">·</span>
+        <span>Redakce agro-svět.cz</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p>Malá a střední farma má jiné priority než velkopodnik. Traktor tu musí umět <strong>všechno</strong> — orbu, dopravu, manipulaci s nakladačem, sečení — a přitom být levný na pořízení i servis. Přeplácet za technologie, které využijete pár desítek hodin ročně, nedává smysl. Náš žebříček řadí stroje podle poměru cena / univerzálnost / dostupnost servisu v ČR.</p>
+
+      <h2>Žebříček traktorů pro malé farmy (60–120 koní)</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Pořadí</th><th>Model</th><th>Výkon</th><th>Silná stránka</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1.</td><td><strong><a href="/stroje/zetor/proxima/">Zetor Proxima</a></strong></td><td>90–120 k</td><td class="up">cena, servis, díly</td></tr>
+            <tr><td>2.</td><td><strong><a href="/stroje/zetor/forterra/">Zetor Forterra</a></strong></td><td>110–145 k</td><td class="up">výkon za cenu</td></tr>
+            <tr><td>3.</td><td><strong><a href="/stroje/kubota/">Kubota M5 / M4</a></strong></td><td>60–115 k</td><td class="up">spolehlivost</td></tr>
+            <tr><td>4.</td><td><strong><a href="/stroje/new-holland/t5/">New Holland T5</a></strong></td><td>90–120 k</td><td class="up">komfort, nakladač</td></tr>
+            <tr><td>5.</td><td><strong><a href="/stroje/john-deere/5m/">John Deere 5M</a></strong></td><td>75–120 k</td><td class="up">servisní síť</td></tr>
+            <tr><td>6.</td><td><strong><a href="/stroje/case-ih/">Case IH Farmall</a></strong></td><td>65–115 k</td><td class="up">univerzálnost</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="aside">
+        <strong>Pozn.:</strong> Pořadí je redakční doporučení podle poměru cena/užitek pro segment do 80 ha, ne statistika prodejů. Konkrétní volba závisí na skladbě prací a lokálním servisu.
+      </p>
+
+      <h2>Proč Zetor pro malou farmu vede</h2>
+      <p><a href="/znacky/zetor/">Zetor</a> je pro rodinnou farmu logická volba: nejnižší cena za koně, 40+ autorizovaných dealerů v ČR, levné a skladem dostupné díly a jednoduchá konstrukce, kterou zvládne i menší servis. <strong>Proxima</strong> pokrývá lehčí práce a manipulaci, <strong>Forterra</strong> přidá výkon na orbu.</p>
+
+      <h2>Na co si dát pozor při nákupu</h2>
+      <ul>
+        <li><strong>Nakladač.</strong> Pro malou farmu klíčový — ověřte si nosnost a rychlospojku předního nakladače.</li>
+        <li><strong>Servis do 30 minut.</strong> O žních rozhoduje vzdálenost nejbližšího servisu víc než značka.</li>
+        <li><strong>Ojetina vs. nová.</strong> Kvalitní ojetý stroj 8–12 let bývá pro malou farmu ekonomicky nejlepší. Sledujte <a href="/bazar/">bazar agro-svět</a>.</li>
+        <li><strong>Nepřeplácejte výkon.</strong> Do 80 ha si vystačíte se 100–130 koňmi.</li>
+      </ul>
+
+      <p>→ <a href="/kviz/jaky-traktor-potrebujete/">Kvíz: Jaký traktor potřebujete?</a><br>
+      → <a href="/prehled/nejspolehlivejsi-traktory/">Nejspolehlivější traktory</a></p>
+
+      <Anketa
+        slug="traktor-mala-farma"
+        question="Který traktor byste zvolili na malou farmu?"
+        options={[
+          { id: 'zetor', label: 'Zetor' },
+          { id: 'kubota', label: 'Kubota' },
+          { id: 'new-holland', label: 'New Holland' },
+          { id: 'john-deere', label: 'John Deere' },
+          { id: 'case-ih', label: 'Case IH' },
+        ]}
+        note="Váš hlas se přičte k průběžným výsledkům."
+      />
+
+      <hr>
+      <p class="closing"><em>Přehled aktualizujeme průběžně. Sledujte <a href="/novinky/">novinky agro-svět</a> nebo <a href="/rss.xml">RSS</a>.</em></p>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .article-root { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; flex-wrap: wrap; }
+  .breadcrumb a { color: #666; text-decoration: none; }
+  .breadcrumb a:hover { color: #000; }
+  .breadcrumb .current { color: #000; font-weight: 600; }
+  .article-head { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #ebebeb; }
+  .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; margin: 14px 0 12px; color: #1a1a1a; }
+  .lede { font-size: 17px; color: #444; line-height: 1.6; margin: 0 0 16px; }
+  .article-meta { font-size: 13px; color: #6B6B72; display: flex; gap: 8px; }
+  .sep { color: #ccc; }
+  .article-body { font-size: 16px; line-height: 1.75; color: #333; }
+  .article-body h2 { font-size: 22px; font-weight: 700; color: #0A0A0B; margin: 36px 0 14px; }
+  .article-body h3 { font-size: 18px; font-weight: 700; color: #0A0A0B; margin: 28px 0 10px; }
+  .article-body p { margin: 0 0 16px; }
+  .article-body a { color: #0B7A3B; text-decoration: underline; }
+  .article-body a:hover { text-decoration-thickness: 2px; }
+  .article-body ul, .article-body ol { padding-left: 22px; margin: 0 0 18px; }
+  .article-body li { margin-bottom: 8px; }
+  .article-body strong { color: #0A0A0B; font-weight: 700; }
+  .article-body hr { border: 0; border-top: 1px solid #ebebeb; margin: 32px 0; }
+  .article-body .aside { font-size: 13px; color: #6B6B72; padding: 12px 16px; background: #fafafa; border-radius: 8px; border-left: 3px solid #FFEA00; }
+  .article-body .closing { font-size: 14px; color: #6B6B72; }
+  .table-wrap { overflow-x: auto; margin: 0 0 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table th { text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 2px solid #0A0A0B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B72; }
+  table td { padding: 12px; border-bottom: 1px solid #eaeaec; }
+  table td.up { color: #0B7A3B; font-weight: 700; }
+  table td.down { color: #C8102E; font-weight: 700; }
+</style>
