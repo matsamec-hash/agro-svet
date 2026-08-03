@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getEnvVar } from '../../../lib/env';
 import { AKCIE } from '../../../data/akcie-agro';
+import { fetchYahooHistory } from '../../../lib/yahoo-finance';
 
 export const prerender = false;
 
@@ -34,15 +35,18 @@ export const GET: APIRoute = async ({ params }) => {
   if (!ticker || !AKCIE.some((a) => a.ticker === ticker)) return json({ ok: false, reason: 'unknown' }, 404);
 
   const key = getEnvVar('FINNHUB_API_KEY');
-  if (!key) return json({ ok: false, reason: 'no_key' }, 200, 0);
 
+  // Historie pro graf jde z Yahoo (free, bez klíče) — původní ticker (BAYN.DE,
+  // YAR.OL… Yahoo je podporuje přímo), NE Finnhub SYMBOL_OVERRIDE. Tahá se vždy,
+  // i bez Finnhub klíče, aby graf fungoval nezávisle na fundamentech.
   const fhSym = SYMBOL_OVERRIDE[ticker] ?? ticker;
   const enc = encodeURIComponent(fhSym);
 
-  const [quote, profile, metrics] = await Promise.all([
-    fh(`quote?symbol=${enc}`, key),
-    fh(`stock/profile2?symbol=${enc}`, key),
-    fh(`stock/metric?symbol=${enc}&metric=all`, key),
+  const [quote, profile, metrics, historie] = await Promise.all([
+    key ? fh(`quote?symbol=${enc}`, key) : Promise.resolve(null),
+    key ? fh(`stock/profile2?symbol=${enc}`, key) : Promise.resolve(null),
+    key ? fh(`stock/metric?symbol=${enc}&metric=all`, key) : Promise.resolve(null),
+    fetchYahooHistory(ticker),
   ]);
 
   const m = metrics?.metric ?? {};
@@ -66,6 +70,7 @@ export const GET: APIRoute = async ({ params }) => {
       dividendYield: m.dividendYieldIndicatedAnnual ?? m.currentDividendYieldTTM ?? null,
       revenue: m.revenuePerShareTTM ?? null,
     },
+    historie, // { t:number[], c:number[] } | null — pro graf (Yahoo, 1r denní)
   };
 
   return json(out, 200, 1800);

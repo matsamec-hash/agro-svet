@@ -68,7 +68,7 @@ const orgJsonLd = {
     <div class="ad-body"><div class="ad-wrap">
 
       <div class="ad-disclaimer">
-        <strong>⚠️ Není investiční doporučení.</strong> Informační profil firmy. Kurz a ukazatele jsou orientační a zpožděné (zdroj Finnhub). Investice do akcií jsou rizikové.
+        <strong>⚠️ Není investiční doporučení.</strong> Informační profil firmy. Kurz a ukazatele jsou orientační a zpožděné (fundamenty Finnhub, graf kurzu Yahoo Finance). Investice do akcií jsou rizikové.
       </div>
 
       <!-- FUNDAMENT -->
@@ -84,6 +84,25 @@ const orgJsonLd = {
           <div class="ad-range-head"><span>52týdenní rozpětí</span><span id="rVals"></span></div>
           <div class="ad-range-bar"><span class="ad-range-fill" id="rFill"></span><span class="ad-range-dot" id="rDot"></span></div>
         </div>
+      </section>
+
+      <!-- GRAF KURZU -->
+      <section class="ad-block ad-chart-block" id="adChartBlock" hidden>
+        <div class="ad-chart-head">
+          <h2>Vývoj kurzu</h2>
+          <div class="ad-chart-ranges" id="adChartRanges" role="group" aria-label="Období grafu">
+            <button type="button" data-r="21">1M</button>
+            <button type="button" data-r="126">6M</button>
+            <button type="button" data-r="0" class="active">1R</button>
+          </div>
+        </div>
+        <div class="ad-chart" id="adChart">
+          <span class="ad-chart-cross" id="adCross"></span>
+          <span class="ad-chart-dot" id="adDot"></span>
+          <div class="ad-chart-tip" id="adChartTip" hidden></div>
+          <span class="ad-chart-empty" id="adChartEmpty">Načítám graf…</span>
+        </div>
+        <div class="ad-chart-foot"><span id="adChartMeta"></span><span>Zdroj: Yahoo Finance · zpožděno</span></div>
       </section>
 
       <!-- PROFIL -->
@@ -186,8 +205,88 @@ const orgJsonLd = {
             document.getElementById('rDot').style.left = pos + '%';
             document.getElementById('adRange').hidden = false;
           }
+          initChart(res.historie);
         })
         .catch(function () {});
+
+      // ── Interaktivní graf kurzu (Yahoo historie) ──
+      function initChart(hist) {
+        var block = document.getElementById('adChartBlock');
+        var chartEl = document.getElementById('adChart');
+        if (!block || !chartEl) return;
+        if (!hist || !hist.c || hist.c.length < 2) { block.hidden = true; return; }
+        block.hidden = false;
+        var empty = document.getElementById('adChartEmpty');
+        var cross = document.getElementById('adCross');
+        var dot = document.getElementById('adDot');
+        var tip = document.getElementById('adChartTip');
+        var meta = document.getElementById('adChartMeta');
+        var fullT = hist.t, fullC = hist.c;
+        var W = 800, H = 240, padX = 6, padTop = 12, padBot = 20;
+        var st = null;
+
+        function draw(n) {
+          var c = (!n || n >= fullC.length) ? fullC : fullC.slice(-n);
+          var t = (!n || n >= fullT.length) ? fullT : fullT.slice(-n);
+          var min = Math.min.apply(null, c), max = Math.max.apply(null, c);
+          var span = (max - min) || 1;
+          var X = function (i) { return padX + (i / (c.length - 1)) * (W - 2 * padX); };
+          var Y = function (v) { return padTop + (1 - (v - min) / span) * (H - padTop - padBot); };
+          var line = '';
+          for (var i = 0; i < c.length; i++) line += (i === 0 ? 'M' : 'L') + X(i).toFixed(1) + ',' + Y(c[i]).toFixed(1) + ' ';
+          var area = line + 'L' + X(c.length - 1).toFixed(1) + ',' + (H - padBot) + ' L' + X(0).toFixed(1) + ',' + (H - padBot) + ' Z';
+          var up = c[c.length - 1] >= c[0];
+          var stroke = up ? '#2E9E57' : '#C0392B';
+          var fill = up ? 'rgba(46,158,87,.10)' : 'rgba(192,57,43,.10)';
+          var old = chartEl.querySelector('svg'); if (old) old.remove();
+          chartEl.insertAdjacentHTML('afterbegin',
+            '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Graf vývoje kurzu">' +
+            '<path d="' + area + '" fill="' + fill + '"/>' +
+            '<path d="' + line + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>');
+          if (empty) empty.hidden = true;
+          dot.style.background = stroke;
+          st = { t: t, c: c, X: X, Y: Y };
+          var chg = ((c[c.length - 1] - c[0]) / c[0]) * 100;
+          if (meta) meta.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(1) + ' % za období';
+        }
+
+        function move(ev) {
+          if (!st) return;
+          var rect = chartEl.getBoundingClientRect();
+          var cx = ev.touches ? ev.touches[0].clientX : ev.clientX;
+          var frac = Math.max(0, Math.min(1, (cx - rect.left) / rect.width));
+          var idx = Math.round(frac * (st.c.length - 1));
+          var pxX = (st.X(idx) / W) * rect.width;
+          var pxY = (st.Y(st.c[idx]) / H) * rect.height;
+          cross.style.left = pxX + 'px'; cross.style.opacity = '1';
+          dot.style.left = pxX + 'px'; dot.style.top = pxY + 'px'; dot.style.opacity = '1';
+          var d = new Date(st.t[idx] * 1000);
+          var ds = d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'short', year: 'numeric' });
+          tip.innerHTML = '<b>' + fmt(st.c[idx], 2) + ' ' + mena + '</b><span>' + ds + '</span>';
+          tip.hidden = false;
+          var tw = tip.offsetWidth;
+          tip.style.left = Math.max(4, Math.min(rect.width - tw - 4, pxX - tw / 2)) + 'px';
+        }
+        function leave() { cross.style.opacity = '0'; dot.style.opacity = '0'; tip.hidden = true; }
+
+        chartEl.addEventListener('mousemove', move);
+        chartEl.addEventListener('mouseleave', leave);
+        chartEl.addEventListener('touchstart', move, { passive: true });
+        chartEl.addEventListener('touchmove', move, { passive: true });
+
+        var ranges = document.getElementById('adChartRanges');
+        if (ranges) ranges.addEventListener('click', function (e) {
+          var btn = e.target.closest ? e.target.closest('button') : null;
+          if (!btn) return;
+          var bs = ranges.querySelectorAll('button');
+          for (var i = 0; i < bs.length; i++) bs[i].classList.remove('active');
+          btn.classList.add('active');
+          leave();
+          draw(parseInt(btn.getAttribute('data-r'), 10) || 0);
+        });
+
+        draw(0);
+      }
     })();
   </script>
 </Layout>
@@ -231,6 +330,21 @@ const orgJsonLd = {
   .ad-range-bar { position:relative; height:8px; background:var(--soft); border-radius:5px; }
   .ad-range-fill { position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg,#fff2a8,#ffe11f); border-radius:5px; }
   .ad-range-dot { position:absolute; top:50%; width:14px; height:14px; border-radius:50%; background:var(--ink); border:2px solid var(--yellow); transform:translate(-50%,-50%); }
+
+  .ad-chart-block h2 { border:none; padding-bottom:0; margin:0; }
+  .ad-chart-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+  .ad-chart-ranges { display:flex; gap:4px; }
+  .ad-chart-ranges button { font:700 12px 'Chakra Petch',sans-serif; padding:4px 11px; border:1.5px solid var(--line); background:#fff; color:var(--muted); border-radius:6px; cursor:pointer; }
+  .ad-chart-ranges button.active { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .ad-chart { position:relative; width:100%; height:230px; border:1.5px solid var(--line); border-radius:12px; background:var(--soft); overflow:hidden; touch-action:none; }
+  .ad-chart svg { display:block; width:100%; height:100%; }
+  .ad-chart-empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--muted); }
+  .ad-chart-cross { position:absolute; top:0; bottom:0; width:1px; background:rgba(10,10,11,.3); opacity:0; pointer-events:none; transition:opacity .1s; }
+  .ad-chart-dot { position:absolute; width:11px; height:11px; border-radius:50%; background:var(--ink); border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.35); transform:translate(-50%,-50%); opacity:0; pointer-events:none; }
+  .ad-chart-tip { position:absolute; top:8px; background:var(--ink); color:#fff; font-size:12px; line-height:1.35; padding:5px 9px; border-radius:7px; pointer-events:none; white-space:nowrap; z-index:2; box-shadow:0 4px 12px rgba(0,0,0,.25); }
+  .ad-chart-tip b { display:block; font-variant-numeric:tabular-nums; }
+  .ad-chart-tip span { font-size:11px; opacity:.7; }
+  .ad-chart-foot { display:flex; justify-content:space-between; gap:12px; font-size:11.5px; color:var(--muted); margin-top:8px; flex-wrap:wrap; }
 
   .ad-facts { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
   .ad-fact { border:1.5px solid var(--line); border-radius:10px; padding:11px 14px; }
