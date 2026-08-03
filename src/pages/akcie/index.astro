@@ -58,6 +58,7 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
                 <p class="ak-profil">{a.profil}</p>
                 <div class="ak-meta">
                   <span class="ak-burza">{a.burza} · {a.mena}</span>
+                  <span class="ak-kurz" data-ticker={a.ticker} data-mena={a.mena}></span>
                 </div>
               </a>
             ))}
@@ -76,6 +77,31 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
 
     </div></div>
   </main>
+
+  <script is:inline>
+    (function () {
+      fetch('/api/akcie/kurzy.json', { headers: { accept: 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (!res || !res.ok || !res.kurzy) return;
+          document.querySelectorAll('.ak-kurz[data-ticker]').forEach(function (el) {
+            var t = el.getAttribute('data-ticker');
+            var k = res.kurzy[t];
+            if (!k || typeof k.cena !== 'number') return;
+            var cena = k.cena.toLocaleString('cs-CZ', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            var dp = k.zmenaPct;
+            var chg = '';
+            if (typeof dp === 'number') {
+              var cls = dp >= 0 ? 'up' : 'dn';
+              chg = ' <span class="ak-chg ' + cls + '">' + (dp >= 0 ? '▲' : '▼') + Math.abs(dp).toFixed(2) + ' %</span>';
+            }
+            el.innerHTML = '<b>' + cena + '</b>' + chg;
+            el.classList.add('has-kurz');
+          });
+        })
+        .catch(function () {});
+    })();
+  </script>
 </Layout>
 
 <style>
@@ -114,6 +140,11 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
   .ak-profil { font-size:13.5px; color:#444; line-height:1.5; margin:0 0 12px; }
   .ak-meta { display:flex; align-items:center; justify-content:space-between; }
   .ak-burza { font-size:12px; color:var(--muted); font-weight:600; }
+  .ak-kurz { font-size:13px; font-variant-numeric:tabular-nums; color:var(--ink); text-align:right; }
+  .ak-kurz b { font-weight:800; }
+  .ak-kurz .ak-chg { font-weight:700; margin-left:5px; }
+  .ak-kurz .ak-chg.up { color:var(--green); }
+  .ak-kurz .ak-chg.dn { color:#C8102E; }
 
   .ak-note-block { margin-top:8px; padding-top:24px; border-top:1px solid var(--line); }
   .ak-soon { font-size:14.5px; color:#333; background:var(--soft); border-radius:10px; padding:14px 16px; margin:0 0 18px; }
