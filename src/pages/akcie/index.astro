@@ -49,7 +49,7 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
           <h2>{KATEGORIE_LABEL[k]}</h2>
           <div class="ak-grid">
             {byKat(k).map((a) => (
-              <a class="ak-card" href={a.web} target="_blank" rel="nofollow noopener">
+              <a class="ak-card" href={`/akcie/${a.ticker}/`}>
                 <div class="ak-card-top">
                   <span class="ak-flag">{a.zeme}</span>
                   <span class="ak-ticker">{a.ticker}</span>

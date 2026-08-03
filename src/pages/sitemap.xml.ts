@@ -19,6 +19,7 @@ import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 import { dsDate, FALLBACK_LASTMOD } from '../lib/content-dates';
 import svetIndex from '../data/svet/index.json';
+import { AKCIE } from '../data/akcie-agro';
 import { NEWS_CATEGORIES } from '../lib/news-category';
 
 const NOVINKY_CATEGORIES = NEWS_CATEGORIES;
@@ -209,6 +210,7 @@ export const GET: APIRoute = async () => {
     ['/prehled/traktory-male-farmy-do-80ha/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/data/prodeje-techniky/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/akcie/', 'weekly', '0.7', STATIC_LASTMOD],
+    ...AKCIE.map((a) => [`/akcie/${a.ticker}/`, 'weekly', '0.6', STATIC_LASTMOD] as [string, string, string, typeof STATIC_LASTMOD]),
     ['/ankety/', 'weekly', '0.6', STATIC_LASTMOD],
     ['/pruvodce/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/pruvodce/jak-vybrat-traktor-100-150-koni/', 'monthly', '0.85', STATIC_LASTMOD],

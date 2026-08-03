@@ -33,6 +33,16 @@ export const AKCIE_DB_ZNACKY: Record<string, string[]> = {
   KUBTY: ['kubota'],
 };
 
+export const ZNACKA_LABEL: Record<string, string> = {
+  'john-deere': 'John Deere',
+  fendt: 'Fendt',
+  'massey-ferguson': 'Massey Ferguson',
+  valtra: 'Valtra',
+  'case-ih': 'Case IH',
+  'new-holland': 'New Holland',
+  kubota: 'Kubota',
+};
+
 export interface ProdejeProZemi {
   zeme: Zeme;
   rok: number;
@@ -73,3 +83,6 @@ export function prodejeProZemi(svetSlug: string): ProdejeProZemi | null {
 export function akcieProZemi(svetSlug: string): AgroAkcie[] {
   return AKCIE.filter((a) => FLAG_TO_SVET[a.zeme] === svetSlug);
 }
+
+/** /svet/ slug pro vlajku firmy (null, pokud země nemá profil). */
+export const svetSlugProVlajku = (vlajka: string): string | null => FLAG_TO_SVET[vlajka] ?? null;

@@ -1,0 +1,252 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import { AKCIE, KATEGORIE_LABEL } from '../../../data/akcie-agro';
+import { AKCIE_DB_ZNACKY, ZNACKA_LABEL, svetSlugProVlajku } from '../../../lib/agro-integrace';
+
+export async function getStaticPaths() {
+  return AKCIE.map((a) => ({ params: { ticker: a.ticker }, props: { a } }));
+}
+
+const { a } = Astro.props as { a: (typeof AKCIE)[number] };
+const canonical = `${SITE_URL}/akcie/${a.ticker}/`;
+
+const znacky = AKCIE_DB_ZNACKY[a.ticker] ?? [];
+const svetSlug = svetSlugProVlajku(a.zeme);
+const kratkyNazev = a.nazev.split(' (')[0];
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Data', url: '/data/' },
+  { name: 'Akcie agro firem', url: `${SITE_URL}/akcie/` },
+  { name: kratkyNazev, url: canonical },
+]);
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Corporation',
+  name: kratkyNazev,
+  tickerSymbol: a.ticker,
+  url: a.web,
+  ...(a.sidlo ? { location: a.sidlo } : {}),
+  ...(a.zalozeno ? { foundingDate: String(a.zalozeno) } : {}),
+  ...(a.popis ? { description: a.popis } : {}),
+};
+---
+
+<Layout
+  title={`${kratkyNazev} (${a.ticker}) — akcie, kurz a profil firmy | agro-svět`}
+  description={`${kratkyNazev}: kurz akcie, tržní kapitalizace, sídlo, ředitel, obrat a co firma dělá v zemědělství. ${a.profil}`}
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
+
+  <main class="ad" data-ticker={a.ticker} data-mena={a.mena}>
+    <section class="ad-hero">
+      <div class="ad-lines"></div>
+      <div class="ad-wrap ad-hero-in">
+        <nav class="ad-bc" aria-label="Cesta">
+          <a href="/">Domů</a><span>›</span><a href="/data/">Data</a><span>›</span><a href="/akcie/">Akcie</a><span>›</span><span class="cur">{kratkyNazev}</span>
+        </nav>
+        <div class="ad-head">
+          <div>
+            <span class="ad-cat">{a.zeme} {KATEGORIE_LABEL[a.kategorie]}</span>
+            <h1>{kratkyNazev}</h1>
+            <div class="ad-sub"><span class="ad-ticker">{a.ticker}</span> <span class="ad-burza">{a.burza} · {a.mena}</span></div>
+          </div>
+          <div class="ad-quote" id="adQuote">
+            <div class="ad-price" id="adPrice">—</div>
+            <div class="ad-chg" id="adChg"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ad-body"><div class="ad-wrap">
+
+      <div class="ad-disclaimer">
+        <strong>⚠️ Není investiční doporučení.</strong> Informační profil firmy. Kurz a ukazatele jsou orientační a zpožděné (zdroj Finnhub). Investice do akcií jsou rizikové.
+      </div>
+
+      <!-- FUNDAMENT -->
+      <section class="ad-block">
+        <h2>Klíčové ukazatele</h2>
+        <div class="ad-metrics" id="adMetrics">
+          <div class="ad-metric"><span class="l">Tržní kapitalizace</span><b id="mCap">—</b></div>
+          <div class="ad-metric"><span class="l">P/E (TTM)</span><b id="mPe">—</b></div>
+          <div class="ad-metric"><span class="l">Dividendový výnos</span><b id="mDiv">—</b></div>
+          <div class="ad-metric"><span class="l">Odvětví</span><b id="mInd">—</b></div>
+        </div>
+        <div class="ad-range" id="adRange" hidden>
+          <div class="ad-range-head"><span>52týdenní rozpětí</span><span id="rVals"></span></div>
+          <div class="ad-range-bar"><span class="ad-range-fill" id="rFill"></span><span class="ad-range-dot" id="rDot"></span></div>
+        </div>
+      </section>
+
+      <!-- PROFIL -->
+      {a.popis && (
+        <section class="ad-block">
+          <h2>Co firma dělá</h2>
+          <p class="ad-text">{a.popis}</p>
+          <div class="ad-facts">
+            {a.sidlo && <div class="ad-fact"><span class="l">Centrála</span><b>{a.sidlo}</b></div>}
+            {a.zalozeno && <div class="ad-fact"><span class="l">Založeno</span><b>{a.zalozeno}</b></div>}
+            {a.reditel && <div class="ad-fact"><span class="l">Ředitel (CEO)</span><b>{a.reditel}</b></div>}
+            {a.obrat && <div class="ad-fact"><span class="l">Roční obrat</span><b>{a.obrat}</b></div>}
+          </div>
+        </section>
+      )}
+
+      <!-- NAŠE PRODUKTY -->
+      {znacky.length > 0 && (
+        <section class="ad-block">
+          <h2>{znacky.length > 1 ? 'Značky této firmy u nás' : 'Modely této značky u nás'}</h2>
+          <p class="ad-text">Prohlédněte si katalog strojů a profil značky přímo na agro-svět:</p>
+          <div class="ad-brands">
+            {znacky.map((z) => (
+              <div class="ad-brandrow">
+                <span class="ad-brandname">{ZNACKA_LABEL[z] ?? z}</span>
+                <a href={`/stroje/${z}/`}>Modely →</a>
+                <a href={`/znacky/${z}/`}>Profil značky →</a>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- ÚSPĚCHY -->
+      {a.uspechy && a.uspechy.length > 0 && (
+        <section class="ad-block">
+          <h2>Největší úspěchy a milníky</h2>
+          <ul class="ad-list">
+            {a.uspechy.map((u) => <li>{u}</li>)}
+          </ul>
+        </section>
+      )}
+
+      <!-- ZASTOUPENÍ V ČR -->
+      {a.czZastoupeni && a.czZastoupeni.length > 0 && (
+        <section class="ad-block">
+          <h2>Zastoupení v Česku</h2>
+          <p class="ad-text">Prodej a servis v ČR zajišťuje:</p>
+          <ul class="ad-list">
+            {a.czZastoupeni.map((d) => <li><a href={d.url} target="_blank" rel="nofollow noopener">{d.name}</a></li>)}
+          </ul>
+        </section>
+      )}
+
+      <!-- ODKAZY -->
+      <section class="ad-block ad-links">
+        <h2>Odkazy</h2>
+        <p class="ad-cross">
+          → <a href={a.web} target="_blank" rel="nofollow noopener">Oficiální web firmy</a><br>
+          {svetSlug && <>→ <a href={`/svet/${svetSlug}/`}>Zemědělství — profil země, kde firma sídlí</a><br /></>}
+          → <a href="/akcie/">Všechny akcie zemědělských firem</a><br>
+          → <a href="/data/prodeje-techniky/">Prodeje zemědělské techniky v Evropě</a>
+        </p>
+      </section>
+
+    </div></div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var root = document.querySelector('.ad[data-ticker]');
+      if (!root) return;
+      var t = root.getAttribute('data-ticker');
+      var mena = root.getAttribute('data-mena') || 'USD';
+      function fmt(n, d) { return Number(n).toLocaleString('cs-CZ', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+      fetch('/api/akcie/' + encodeURIComponent(t) + '.json', { headers: { accept: 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (!res || !res.ok) return;
+          if (res.kurz && typeof res.kurz.cena === 'number') {
+            document.getElementById('adPrice').textContent = fmt(res.kurz.cena, 2) + ' ' + mena;
+            var dp = res.kurz.zmenaPct;
+            if (typeof dp === 'number') {
+              var el = document.getElementById('adChg');
+              el.textContent = (dp >= 0 ? '▲ ' : '▼ ') + Math.abs(dp).toFixed(2) + ' %';
+              el.className = 'ad-chg ' + (dp >= 0 ? 'up' : 'dn');
+            }
+          }
+          var p = res.profil || {}, m = res.metriky || {};
+          if (p.marketCap) document.getElementById('mCap').textContent = '≈ ' + fmt(p.marketCap / 1000, 1) + ' mld. ' + (p.mena || 'USD');
+          if (m.pe) document.getElementById('mPe').textContent = fmt(m.pe, 1);
+          if (m.dividendYield) document.getElementById('mDiv').textContent = fmt(m.dividendYield, 2) + ' %';
+          if (p.odvetvi) document.getElementById('mInd').textContent = p.odvetvi;
+          if (m.high52 && m.low52 && res.kurz && res.kurz.cena) {
+            var lo = m.low52, hi = m.high52, cur = res.kurz.cena;
+            var pos = Math.max(0, Math.min(100, ((cur - lo) / (hi - lo)) * 100));
+            document.getElementById('rVals').textContent = fmt(lo, 2) + ' – ' + fmt(hi, 2) + ' ' + mena;
+            document.getElementById('rFill').style.width = pos + '%';
+            document.getElementById('rDot').style.left = pos + '%';
+            document.getElementById('adRange').hidden = false;
+          }
+        })
+        .catch(function () {});
+    })();
+  </script>
+</Layout>
+
+<style>
+  .ad { --yellow:#FFEA00; --ink:#0A0A0B; --line:#E7E7EA; --muted:#6E6E76; --soft:#F5F5F2; --green:#2E9E57;
+    font-family:'Chakra Petch',system-ui,sans-serif; background:#fff; color:var(--ink); line-height:1.55; }
+  .ad-wrap { max-width:860px; margin:0 auto; padding:0 24px; }
+  .ad a { color:inherit; }
+
+  .ad-hero { background:var(--ink); color:#fff; position:relative; overflow:hidden; }
+  .ad-hero::before { content:""; position:absolute; inset:0; background:radial-gradient(600px 300px at 90% -10%, rgba(255,234,0,.16), transparent 60%); }
+  .ad-lines { position:absolute; inset:0; opacity:.05; background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px); background-size:44px 44px; }
+  .ad-hero-in { position:relative; z-index:1; padding:22px 24px 30px; }
+  .ad-bc { font-size:12.5px; color:rgba(255,255,255,.55); display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+  .ad-bc a { color:rgba(255,255,255,.7); text-decoration:none; } .ad-bc a:hover { color:#fff; } .ad-bc .cur { color:#fff; }
+  .ad-head { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+  .ad-cat { font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--yellow); }
+  .ad-head h1 { font-size:clamp(1.8rem,4vw,2.6rem); font-weight:800; letter-spacing:-.02em; margin:8px 0 8px; }
+  .ad-sub { display:flex; align-items:center; gap:10px; }
+  .ad-ticker { font-size:13px; font-weight:800; color:var(--ink); background:var(--yellow); border-radius:5px; padding:3px 9px; }
+  .ad-burza { font-size:13px; color:rgba(255,255,255,.7); }
+  .ad-quote { text-align:right; }
+  .ad-price { font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .ad-chg { font-size:14px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .ad-chg.up { color:#7CE0A0; } .ad-chg.dn { color:#FF9B84; }
+
+  .ad-body { padding:32px 0 80px; }
+  .ad-disclaimer { font-size:13px; line-height:1.6; color:#5a4a00; background:#fffbe6; border:1px solid #ffe66b; border-left:4px solid var(--yellow); border-radius:10px; padding:12px 14px; margin-bottom:30px; }
+  .ad-disclaimer strong { color:#0A0A0B; }
+  .ad-block { margin-bottom:32px; }
+  .ad-block h2 { font-size:19px; font-weight:800; letter-spacing:-.01em; margin:0 0 14px; padding-bottom:8px; border-bottom:2px solid var(--ink); }
+  .ad-text { font-size:15.5px; line-height:1.7; color:#333; margin:0 0 16px; }
+
+  .ad-metrics { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
+  .ad-metric { background:var(--soft); border-radius:10px; padding:12px 14px; }
+  .ad-metric .l { display:block; font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+  .ad-metric b { font-size:17px; font-variant-numeric:tabular-nums; }
+  .ad-range { margin-top:16px; }
+  .ad-range-head { display:flex; justify-content:space-between; font-size:12.5px; color:var(--muted); margin-bottom:6px; font-variant-numeric:tabular-nums; }
+  .ad-range-bar { position:relative; height:8px; background:var(--soft); border-radius:5px; }
+  .ad-range-fill { position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg,#fff2a8,#ffe11f); border-radius:5px; }
+  .ad-range-dot { position:absolute; top:50%; width:14px; height:14px; border-radius:50%; background:var(--ink); border:2px solid var(--yellow); transform:translate(-50%,-50%); }
+
+  .ad-facts { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
+  .ad-fact { border:1.5px solid var(--line); border-radius:10px; padding:11px 14px; }
+  .ad-fact .l { display:block; font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px; }
+  .ad-fact b { font-size:15px; }
+
+  .ad-brands { display:flex; flex-direction:column; gap:10px; }
+  .ad-brandrow { display:flex; align-items:center; gap:14px; flex-wrap:wrap; border:1.5px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .ad-brandname { font-weight:800; flex:1; min-width:120px; }
+  .ad-brandrow a { color:var(--green); text-decoration:underline; font-size:14px; font-weight:600; }
+
+  .ad-list { margin:0; padding-left:20px; font-size:15px; line-height:1.7; }
+  .ad-list li { margin-bottom:6px; }
+  .ad-list a { color:var(--green); text-decoration:underline; }
+
+  .ad-cross { font-size:15px; line-height:1.95; }
+  .ad-cross a { color:var(--green); text-decoration:underline; }
+
+  @media (max-width:560px) { .ad-head { align-items:flex-start; } .ad-quote { text-align:left; } }
+</style>
