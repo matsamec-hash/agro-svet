@@ -74,13 +74,14 @@ const { slug, question, options, note } = Astro.props as Props;
     }
 
     function fetchResults(slug) {
-      return fetch('/api/anketa/' + encodeURIComponent(slug), { headers: { accept: 'application/json' } })
+      // Trailing slash povinný — site jinak dělá 301 a prohlížeč by u POST změnil metodu na GET.
+      return fetch('/api/anketa/' + encodeURIComponent(slug) + '/', { headers: { accept: 'application/json' } })
         .then(function (r) { return r.json(); })
         .catch(function () { return { ok: false, tallies: {} }; });
     }
 
     function vote(slug, option) {
-      return fetch('/api/anketa/' + encodeURIComponent(slug), {
+      return fetch('/api/anketa/' + encodeURIComponent(slug) + '/', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ option: option }),
