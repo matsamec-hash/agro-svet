@@ -3,6 +3,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import { brandPairs } from '../../../lib/brand-comparator';
 import { breadcrumbSchema } from '../../../lib/structured-data';
+import { ZNACKA_LOGO } from '../../../lib/agro-integrace';
 
 const pairs = brandPairs(40);
 const title = 'Srovnání značek zemědělské techniky';
@@ -35,7 +36,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
         {pairs.map((p) => (
           <li>
             <a href={`/znacky/srovnani/${p.combo}/`}>
-              <span class="rl-pair">{p.a.name} <em>vs</em> {p.b.name}</span>
+              <span class="rl-pair">{ZNACKA_LOGO[p.a.slug] && <img class="rl-logo" src={ZNACKA_LOGO[p.a.slug]} alt={`Logo ${p.a.name}`} loading="lazy" decoding="async" />}{p.a.name} <em>vs</em> {ZNACKA_LOGO[p.b.slug] && <img class="rl-logo" src={ZNACKA_LOGO[p.b.slug]} alt={`Logo ${p.b.name}`} loading="lazy" decoding="async" />}{p.b.name}</span>
               <span class="rl-cta">Porovnat</span>
             </a>
           </li>
@@ -71,6 +72,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
   .related-list a { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 16px; background:#fff; border:1px solid var(--line); border-radius:10px; text-decoration:none; color:var(--ink); transition:.15s; }
   .related-list a:hover { background:var(--yellow-soft); border-color:var(--yellow); transform:translateY(-1px); }
   .rl-pair { font:600 14px 'Chakra Petch',sans-serif; letter-spacing:-.005em; }
+  .rl-logo { height:18px; max-width:52px; width:auto; object-fit:contain; vertical-align:middle; margin-right:6px; }
   .rl-pair em { font-style:normal; color:var(--muted); margin:0 6px; }
   .rl-cta { font:700 12px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:.04em; flex-shrink:0; }
 </style>
