@@ -43,6 +43,38 @@ export const ZNACKA_LABEL: Record<string, string> = {
   kubota: 'Kubota',
 };
 
+// značka (DB slug) → mateřská burzovní firma (ticker v AKCIE)
+export const ZNACKA_TO_AKCIE: Record<string, string> = {
+  'john-deere': 'DE',
+  fendt: 'AGCO',
+  'massey-ferguson': 'AGCO',
+  valtra: 'AGCO',
+  'case-ih': 'CNH',
+  'new-holland': 'CNH',
+  kubota: 'KUBTY',
+};
+
+/** Mateřská burzovní firma pro danou značku (nebo null). */
+export function akcieProZnacku(brandSlug: string): AgroAkcie | null {
+  const t = ZNACKA_TO_AKCIE[brandSlug];
+  return t ? AKCIE.find((a) => a.ticker === t) ?? null : null;
+}
+
+// název značky (jak se píše v datech prodejů) → DB slug (jen značky s profilem)
+const NAZEV_TO_ZNACKA_SLUG: Record<string, string> = {
+  'John Deere': 'john-deere',
+  Fendt: 'fendt',
+  'Massey Ferguson': 'massey-ferguson',
+  Valtra: 'valtra',
+  'Case IH': 'case-ih',
+  'New Holland': 'new-holland',
+  Kubota: 'kubota',
+  'Deutz-Fahr': 'deutz-fahr',
+  Claas: 'claas',
+  Zetor: 'zetor',
+};
+export const znackaSlugZNazvu = (nazev: string): string | null => NAZEV_TO_ZNACKA_SLUG[nazev] ?? null;
+
 export interface ProdejeProZemi {
   zeme: Zeme;
   rok: number;
