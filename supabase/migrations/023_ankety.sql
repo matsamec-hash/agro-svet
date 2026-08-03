@@ -17,6 +17,7 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+#variable_conflict use_column
 BEGIN
   INSERT INTO anketa_hlasy (poll_slug, option_id, votes)
   VALUES (p_slug, p_option, 1)
