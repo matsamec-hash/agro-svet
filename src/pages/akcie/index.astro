@@ -1,0 +1,122 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { breadcrumbSchema } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/config';
+import { AKCIE, KATEGORIE_LABEL } from '../../data/akcie-agro';
+
+const canonical = `${SITE_URL}/akcie/`;
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Domů', url: '/' },
+  { name: 'Data', url: '/data/' },
+  { name: 'Akcie agro firem', url: canonical },
+]);
+
+const kategorie = ['technika', 'agrochemie', 'komodity'] as const;
+const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie === k);
+---
+
+<Layout
+  title="Akcie zemědělských firem — John Deere, Bayer, AGCO a další | agro-svět"
+  description="Přehled akcií firem navázaných na zemědělství — technika (John Deere, AGCO, CNH), agrochemie a osiva (Bayer, BASF, Corteva) i komodity. Profily a burzovní symboly. Není investiční doporučení."
+  canonical={canonical}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <main class="ak">
+    <section class="ak-hero">
+      <div class="ak-lines"></div>
+      <div class="ak-wrap ak-hero-in">
+        <nav class="ak-bc" aria-label="Cesta">
+          <a href="/">Domů</a><span>›</span><a href="/data/">Data</a><span>›</span><span class="cur">Akcie agro firem</span>
+        </nav>
+        <span class="ak-eyebrow"><span class="ln"></span>Datová sekce · Trhy</span>
+        <h1>Akcie zemědělských firem <mark>na burze</mark></h1>
+        <p class="ak-lede">
+          Kdo stojí za technikou, osivy a hnojivy na vašich polích — a jak si vedou na burze. Přehled veřejně obchodovaných firem z agrosektoru: výrobci strojů, agrochemie i zpracovatelé komodit, z USA i Evropy.
+        </p>
+      </div>
+    </section>
+
+    <div class="ak-body"><div class="ak-wrap">
+
+      <div class="ak-disclaimer">
+        <strong>⚠️ Není investiční doporučení.</strong> Tato stránka je informační přehled firem navázaných na zemědělství. Neobsahuje nákupní ani prodejní doporučení. Investice do akcií jsou rizikové; před rozhodnutím se poraďte s licencovaným poradcem. Případné kurzy jsou orientační a zpožděné.
+      </div>
+
+      {kategorie.map((k) => (
+        <section class="ak-kat">
+          <h2>{KATEGORIE_LABEL[k]}</h2>
+          <div class="ak-grid">
+            {byKat(k).map((a) => (
+              <a class="ak-card" href={a.web} target="_blank" rel="nofollow noopener">
+                <div class="ak-card-top">
+                  <span class="ak-flag">{a.zeme}</span>
+                  <span class="ak-ticker">{a.ticker}</span>
+                </div>
+                <h3>{a.nazev}</h3>
+                <p class="ak-profil">{a.profil}</p>
+                <div class="ak-meta">
+                  <span class="ak-burza">{a.burza} · {a.mena}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      <section class="ak-note-block">
+        <p class="ak-soon">📈 <strong>Živé denní kurzy</strong> k jednotlivým firmám doplňujeme — sekce se průběžně rozšiřuje o grafy vývoje a klíčové ukazatele.</p>
+        <p class="ak-cross">
+          → <a href="/statistiky/">Ceny zemědělských komodit</a> (pšenice, kukuřice, řepka…)<br>
+          → <a href="/data/prodeje-techniky/">Prodeje zemědělské techniky</a><br>
+          → <a href="/data/">Datová sekce agro-svět</a>
+        </p>
+      </section>
+
+    </div></div>
+  </main>
+</Layout>
+
+<style>
+  .ak { --yellow:#FFEA00; --ink:#0A0A0B; --line:#E7E7EA; --muted:#6E6E76; --soft:#F5F5F2; --green:#2E9E57;
+    font-family:'Chakra Petch',system-ui,sans-serif; background:#fff; color:var(--ink); line-height:1.55; }
+  .ak-wrap { max-width:1040px; margin:0 auto; padding:0 24px; }
+  .ak a { color:inherit; }
+
+  .ak-hero { background:var(--ink); color:#fff; position:relative; overflow:hidden; }
+  .ak-hero::before { content:""; position:absolute; inset:0; background:radial-gradient(680px 320px at 88% -10%, rgba(255,234,0,.18), transparent 60%); }
+  .ak-lines { position:absolute; inset:0; opacity:.05; background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px); background-size:44px 44px; }
+  .ak-hero-in { position:relative; z-index:1; padding:26px 24px 40px; }
+  .ak-bc { font-size:12.5px; color:rgba(255,255,255,.55); display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; }
+  .ak-bc a { color:rgba(255,255,255,.7); text-decoration:none; }
+  .ak-bc a:hover { color:#fff; }
+  .ak-bc .cur { color:#fff; }
+  .ak-eyebrow { display:inline-flex; align-items:center; gap:10px; font-size:11px; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:var(--yellow); margin-bottom:14px; }
+  .ak-eyebrow .ln { width:26px; height:1px; background:var(--yellow); opacity:.6; }
+  .ak-hero h1 { font-size:clamp(2rem,5vw,3rem); line-height:1.05; letter-spacing:-.02em; font-weight:800; margin:0 0 14px; }
+  .ak-hero h1 mark { background:var(--yellow); color:var(--ink); padding:0 10px; }
+  .ak-lede { font-size:16.5px; color:rgba(255,255,255,.82); max-width:64ch; margin:0; }
+
+  .ak-body { padding:36px 0 80px; }
+  .ak-disclaimer { font-size:13.5px; line-height:1.6; color:#5a4a00; background:#fffbe6; border:1px solid #ffe66b; border-left:4px solid var(--yellow); border-radius:10px; padding:14px 16px; margin-bottom:36px; }
+  .ak-disclaimer strong { color:#0A0A0B; }
+
+  .ak-kat { margin-bottom:38px; }
+  .ak-kat h2 { font-size:20px; font-weight:800; letter-spacing:-.01em; margin:0 0 16px; padding-bottom:8px; border-bottom:2px solid var(--ink); }
+  .ak-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+  .ak-card { display:block; border:1.5px solid var(--line); border-radius:14px; padding:16px 18px; background:linear-gradient(135deg,#fff,#fffef7); transition:transform .15s, border-color .15s, box-shadow .15s; }
+  .ak-card:hover { transform:translateY(-3px); border-color:var(--yellow); box-shadow:0 10px 24px rgba(255,234,0,.14); }
+  .ak-card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .ak-flag { font-size:18px; }
+  .ak-ticker { font-size:12px; font-weight:800; color:var(--ink); background:var(--yellow); border-radius:5px; padding:3px 8px; letter-spacing:.02em; }
+  .ak-card h3 { font-size:15.5px; font-weight:800; margin:0 0 6px; line-height:1.25; }
+  .ak-profil { font-size:13.5px; color:#444; line-height:1.5; margin:0 0 12px; }
+  .ak-meta { display:flex; align-items:center; justify-content:space-between; }
+  .ak-burza { font-size:12px; color:var(--muted); font-weight:600; }
+
+  .ak-note-block { margin-top:8px; padding-top:24px; border-top:1px solid var(--line); }
+  .ak-soon { font-size:14.5px; color:#333; background:var(--soft); border-radius:10px; padding:14px 16px; margin:0 0 18px; }
+  .ak-cross { font-size:14.5px; line-height:1.9; }
+  .ak-cross a { color:var(--green); text-decoration:underline; }
+</style>

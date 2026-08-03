@@ -208,6 +208,7 @@ export const GET: APIRoute = async () => {
     ['/prehled/nejlevnejsi-provoz-traktory/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/prehled/traktory-male-farmy-do-80ha/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/data/prodeje-techniky/', 'monthly', '0.8', STATIC_LASTMOD],
+    ['/akcie/', 'weekly', '0.7', STATIC_LASTMOD],
     ['/ankety/', 'weekly', '0.6', STATIC_LASTMOD],
     ['/pruvodce/', 'monthly', '0.8', STATIC_LASTMOD],
     ['/pruvodce/jak-vybrat-traktor-100-150-koni/', 'monthly', '0.85', STATIC_LASTMOD],
