@@ -49,6 +49,7 @@ export const AKCIE: AgroAkcie[] = [
     popis: 'Americký koncern sdružující prémiové evropské i světové značky techniky. Vlajkový Fendt patří k technologické špičce, Massey Ferguson a Valtra pokrývají široký segment. Rozvíjí precizní zemědělství pod platformou Fuse/PTx.',
     sidlo: 'Duluth, Georgia (USA)', zalozeno: 1990, reditel: 'Eric Hansotia', obrat: '≈ 14,4 mld. USD (2023)',
     uspechy: ['Vybudování portfolia Fendt + Massey Ferguson + Valtra', 'Fendt jako technologický lídr (Vario CVT)', 'Akvizice precizních technologií (PTx Trimble)'],
+    czZastoupeni: [{ name: 'Agromex, s.r.o. (značky koncernu AGCO — Fendt aj.)', url: 'https://agromex.cz' }],
   },
   {
     ticker: 'CNH', nazev: 'CNH Industrial', burza: 'NYSE', mena: 'USD', kategorie: 'technika', zeme: '🇬🇧', web: 'https://www.cnhindustrial.com',
@@ -64,6 +65,7 @@ export const AKCIE: AgroAkcie[] = [
     popis: 'Japonský koncern — světová jednička v kompaktních a sub-kompaktních traktorech, dále motory, užitková technika, čerpadla a vodohospodářské systémy. V Evropě roste i v segmentu plnohodnotných traktorů (řada M).',
     sidlo: 'Ósaka (Japonsko)', zalozeno: 1890, reditel: 'Yuichi Kitao', obrat: '≈ 2,7 bil. JPY (2023)',
     uspechy: ['Světová jednička v kompaktních traktorech', 'Expanze do plnohodnotných traktorů (řada M7)', 'Vlastní spolehlivé dieselové motory'],
+    czZastoupeni: [{ name: 'Kubota Česká republika (K.B.T. PROFTECH s.r.o.)', url: 'https://www.kubota.cz' }],
   },
   {
     ticker: 'TSCO', nazev: 'Tractor Supply Company', burza: 'NASDAQ', mena: 'USD', kategorie: 'technika', zeme: '🇺🇸', web: 'https://www.tractorsupply.com',
@@ -87,6 +89,7 @@ export const AKCIE: AgroAkcie[] = [
     profil: 'Crop Science divize (osiva, přípravky) po akvizici Monsanta; také farma.',
     sidlo: 'Leverkusen (Německo)', zalozeno: 1863, reditel: 'Bill Anderson', obrat: '≈ 47,6 mld. EUR (2023)',
     uspechy: ['Akvizice Monsanto (2018) — jednička v osivech a ochraně rostlin', 'Vynález Aspirinu', 'Digitální platforma Climate FieldView'],
+    czZastoupeni: [{ name: 'Bayer — Crop Science Česká republika', url: 'https://www.cropscience.bayer.cz' }],
   },
   {
     ticker: 'BAS.DE', nazev: 'BASF SE', burza: 'Xetra', mena: 'EUR', kategorie: 'agrochemie', zeme: '🇩🇪', web: 'https://www.basf.com',
@@ -94,6 +97,7 @@ export const AKCIE: AgroAkcie[] = [
     profil: 'Největší chemička světa; agro divize — přípravky a osiva.',
     sidlo: 'Ludwigshafen (Německo)', zalozeno: 1865, reditel: 'Markus Kamieth', obrat: '≈ 68,9 mld. EUR (2023)',
     uspechy: ['Největší chemička světa', 'Verbund — integrovaná výroba', 'Fungicidy a osiva řepky/sóji'],
+    czZastoupeni: [{ name: 'BASF — Agro Česká republika (ochrana rostlin)', url: 'https://www.agro.basf.cz/cs/' }],
   },
   {
     ticker: 'CTVA', nazev: 'Corteva Agriscience', burza: 'NYSE', mena: 'USD', kategorie: 'agrochemie', zeme: '🇺🇸', web: 'https://www.corteva.com',
@@ -101,6 +105,7 @@ export const AKCIE: AgroAkcie[] = [
     profil: 'Čistě zemědělská firma (osiva Pioneer + přípravky), odštěpená z DowDuPont.',
     sidlo: 'Indianapolis, Indiana (USA)', zalozeno: 2019, reditel: 'Chuck Magro', obrat: '≈ 17,2 mld. USD (2023)',
     uspechy: ['Osiva Pioneer — světová špička v kukuřici a sóji', 'Vznik čistého agro hráče (2019)'],
+    czZastoupeni: [{ name: 'Corteva Agriscience Czech s.r.o. (osiva Pioneer)', url: 'https://www.corteva.cz' }],
   },
   {
     ticker: 'KWS.DE', nazev: 'KWS Saat SE', burza: 'Xetra', mena: 'EUR', kategorie: 'agrochemie', zeme: '🇩🇪', web: 'https://www.kws.com',
@@ -108,6 +113,7 @@ export const AKCIE: AgroAkcie[] = [
     profil: 'Německý šlechtitel osiv (cukrovka, kukuřice, obiloviny).',
     sidlo: 'Einbeck (Německo)', zalozeno: 1856, reditel: 'Felix Büchting', obrat: '≈ 1,68 mld. EUR (2022/23)',
     uspechy: ['Světová jednička ve šlechtění cukrové řepy', 'Přes 165 let nezávislého šlechtění'],
+    czZastoupeni: [{ name: 'KWS OSIVA s.r.o.', url: 'https://www.kws.com/cz/cs/' }],
   },
   {
     ticker: 'NTR', nazev: 'Nutrien', burza: 'NYSE', mena: 'USD', kategorie: 'agrochemie', zeme: '🇨🇦', web: 'https://www.nutrien.com',
@@ -122,6 +128,7 @@ export const AKCIE: AgroAkcie[] = [
     profil: 'Evropská jednička v dusíkatých hnojivech.',
     sidlo: 'Oslo (Norsko)', zalozeno: 1905, reditel: 'Svein Tore Holsether', obrat: '≈ 15,5 mld. USD (2023)',
     uspechy: ['Evropská jednička v dusíkatých hnojivech', 'Průkopník zeleného čpavku (dekarbonizace)'],
+    czZastoupeni: [{ name: 'Yara Agri Czech Republic s.r.o.', url: 'https://www.yaraagri.cz' }],
   },
   {
     ticker: 'MOS', nazev: 'The Mosaic Company', burza: 'NYSE', mena: 'USD', kategorie: 'agrochemie', zeme: '🇺🇸', web: 'https://www.mosaicco.com',
