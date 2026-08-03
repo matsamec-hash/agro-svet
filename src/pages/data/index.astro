@@ -215,6 +215,30 @@ const href = (p: string) => navHref(locale, p);
         </div>
       </section>)}
 
+      <!-- CLUSTER 04 — Trh techniky a agrobyznys (cs-only) -->
+      {locale === 'cs' && (
+      <section class="dh-cluster">
+        <div class="dh-chd"><span class="no">04</span><h2>Trh techniky a agrobyznys</h2><span class="rule"></span><span class="sub">Prodeje strojů a firmy na burze</span></div>
+        <div class="dh-tiles">
+          <a class="dh-tile noimg t-prodeje" href="/data/prodeje-techniky/">
+            <div class="ov"></div>
+            <div class="in">
+              <div class="trow"><span class="cic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-5"/></svg></span><span class="go"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+              <h3>Prodeje techniky</h3><p>Kolik nových traktorů se registruje v ČR a Evropě — podle zemí, let a značek. Reálná citovaná data.</p>
+              <div class="tstat"><span class="statpill">7 trhů</span><span class="statpill ghost">CEMA + národní úřady</span></div>
+            </div>
+          </a>
+          <a class="dh-tile noimg t-akcie" href="/akcie/">
+            <div class="ov"></div>
+            <div class="in">
+              <div class="trow"><span class="cic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l4-3 4 3v13M13 21v-7l3-2 3 2v7"/></svg></span><span class="go"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+              <h3>Akcie agro firem</h3><p>John Deere, Bayer, AGCO a další — živé kurzy, profily firem a napojení na naše značky.</p>
+              <div class="tstat"><span class="statpill">16 firem</span><span class="statpill ghost">živé kurzy</span></div>
+            </div>
+          </a>
+        </div>
+      </section>)}
+
     </div></div>
   </main>
 
@@ -335,6 +359,10 @@ const href = (p: string) => navHref(locale, p);
   .dh-tile.feat .statpill .u{color:rgba(10,10,12,.6)}
   .dh-tile .tag{position:absolute;top:22px;right:78px;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--yellow);border-radius:6px;padding:5px 9px;z-index:2}
 
+  .dh-tile.noimg{background:linear-gradient(135deg,#1c1c22 0%,#0a0a0b 100%)}
+  .dh-tile.noimg.t-prodeje{background:linear-gradient(140deg,#1e4230 0%,#0c1410 62%,#0a0a0b 100%)}
+  .dh-tile.noimg.t-akcie{background:linear-gradient(140deg,#3a3410 0%,#14120a 62%,#0a0a0b 100%)}
+  .dh-tile.noimg .ov{background:linear-gradient(to top,rgba(8,8,10,.5),rgba(8,8,10,0) 70%)}
   @media(prefers-reduced-motion:reduce){.dh-tile,.dh-tile .bg,.dh-track{transition:none!important;animation:none!important}}
   @media(max-width:900px){
     .dh-hero-in{grid-template-columns:1fr;gap:26px}
