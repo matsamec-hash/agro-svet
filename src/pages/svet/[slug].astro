@@ -132,7 +132,7 @@ const datasetJsonLd = datasetSchema({
           )}
           {akcieZeme.length > 0 && (
             <p class="svet-method">
-              Veřejně obchodované zemědělské firmy se sídlem {loc}: {akcieZeme.map((a, i) => (<>{i > 0 ? ', ' : ''}<a href="/akcie/">{a.nazev.split(' (')[0]}</a></>))}. <a href="/akcie/">Akcie agro firem na burze →</a>
+              Veřejně obchodované zemědělské firmy se sídlem {loc}: {akcieZeme.map((a, i) => (<>{i > 0 ? ', ' : ''}<a href={`/akcie/${a.ticker}/`}>{a.nazev.split(' (')[0]}</a></>))}. <a href="/akcie/">Akcie agro firem na burze →</a>
             </p>
           )}
         </div>

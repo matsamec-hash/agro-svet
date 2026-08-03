@@ -53,7 +53,7 @@ const wheat = commodityStats.find((c: any) => /pšenice|pšenica/i.test(c.name))
 const k = (s: string) => t(`data.hub.${s}`);
 const c = {
   eyebrow: k('eyebrow'), h1a: k('h1a'), h1mark: k('h1mark'), lede: k('lede'),
-  sDatasets: k('sDatasets'), sCountries: k('sCountries'), sYears: k('sYears'), jump: k('jump'),
+  sDatasets: k('sDatasets'), sCountries: k('sCountries'), sYears: k('sYears'), jump: k('jump'), akcie: k('akcie'),
   c1: k('c1'), c1sub: k('c1sub'), c2: k('c2'), c2sub: k('c2sub'), c3: k('c3'), c3sub: k('c3sub'),
   trhy: k('trhy'), trhyP: k('trhyP'), puda: k('puda'), pudaP: k('pudaP'),
   profily: k('profily'), profilyP: k('profilyP'), srovnani: k('srovnani'), srovnaniP: k('srovnaniP'),
@@ -122,6 +122,7 @@ const href = (p: string) => navHref(locale, p);
     <nav class="dh-qn" aria-label={c.jump}><div class="dh-wrap dh-qn-in">
       <span class="lab">{c.jump}</span>
       {show('/statistiky/') && <a class="chipnav" href={href('/statistiky/')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-5"/></svg>{c.trhy}</a>}
+      {show('/akcie/') && <a class="chipnav" href={href('/akcie/')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>{c.akcie}</a>}
       {show('/puda/') && <a class="chipnav" href={href('/puda/')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12c0-3 2-5 5-5 0 3-2 5-5 5z"/><path d="M12 12c0-3-2-5-5-5 0 3 2 5 5 5z"/></svg>{c.puda}</a>}
       {show('/svet/') && <a class="chipnav" href={href('/svet/')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg>{c.profily}</a>}
       {show('/svet/srovnani/') && <a class="chipnav" href={href('/svet/srovnani/')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M4 7h16M6 7l-3 6a3 3 0 0 0 6 0zM18 7l-3 6a3 3 0 0 0 6 0z"/></svg>{c.srovnani}</a>}

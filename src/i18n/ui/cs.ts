@@ -77,6 +77,7 @@ const cs: Record<string, string> = {
   'data.hub.sCountries': 'zemí světa',
   'data.hub.sYears': 'let historie',
   'data.hub.jump': 'Skočit na',
+  'data.hub.akcie': 'Akcie firem',
   'data.hub.c1': 'Živá data — Česko',
   'data.hub.c1sub': 'Aktuální čísla u nás',
   'data.hub.c2': 'Svět',
