@@ -1,0 +1,26 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
+import { SITE_URL } from '../../../lib/config';
+import { lis, defaults } from '../../../i18n/kalkulacka/navratnost';
+import { crumbs } from '../../../i18n/kalkulacka/common';
+import MachineRoi from '../../../components/calc/MachineRoi.astro';
+
+const locale = Astro.locals.locale ?? 'cs';
+const c = lis[locale] ?? lis.cs;
+const cr = crumbs[locale] ?? crumbs.cs;
+const canonical = `${SITE_URL}/kalkulacka/navratnost-lisu/`;
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: cr.home, url: locale === 'cs' ? '/' : `/${locale}/` },
+  { name: cr.hub, url: locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/` },
+  { name: c.crumb, url: canonical },
+]);
+const faqJsonLd = faqPageSchema(c.faq);
+---
+
+<Layout title={c.title} description={c.metaDescription} canonical={locale === 'cs' ? canonical : undefined}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <MachineRoi c={c} d={defaults.lis} locale={locale} cr={cr} />
+</Layout>

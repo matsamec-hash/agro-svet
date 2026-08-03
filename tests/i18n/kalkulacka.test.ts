@@ -30,13 +30,13 @@ describe('kalkulačka hub i18n', () => {
     const skSlugs = hub.sk.cards.map((c) => c.slug);
     expect(skSlugs).not.toContain('dotace-cap');
   });
-  it('cs hub obsahuje všech 6 karet včetně dotace-cap', () => {
+  it('cs hub obsahuje dotace-cap a všech 9 karet', () => {
     const csSlugs = hub.cs.cards.map((c) => c.slug);
     expect(csSlugs).toContain('dotace-cap');
-    expect(csSlugs).toHaveLength(6);
+    expect(csSlugs).toHaveLength(9);
   });
-  it('sk hub má 5 karet', () => {
-    expect(hub.sk.cards).toHaveLength(5);
+  it('sk hub má 8 karet', () => {
+    expect(hub.sk.cards).toHaveLength(8);
   });
   it('každá sk karta má neprázdné name/short/description', () => {
     for (const card of hub.sk.cards) {

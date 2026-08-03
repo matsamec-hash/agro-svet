@@ -89,6 +89,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return new Response('Cross-site request forbidden', { status: 403 });
   }
 
+  // Krátké „memorable" URL kalkulaček návratnosti (sdílí se na sítích, píšou se
+  // ručně z IG) → trvalý 308 redirect na kanonickou stránku. Řeší i chybějící
+  // trailing slash (`/kombajn` i `/kombajn/`), který by jinak spadl na 404.
+  const SHORT_CALC: Record<string, string> = {
+    '/kombajn': '/kalkulacka/navratnost-kombajnu/',
+    '/postrikovac': '/kalkulacka/navratnost-postrikovace/',
+    '/lis': '/kalkulacka/navratnost-lisu/',
+  };
+  const shortCalcTarget = SHORT_CALC[url.pathname.replace(/\/+$/, '')];
+  if (shortCalcTarget) return redirect(shortCalcTarget, 308);
+
   // Locale prefix: odvoď locale + původní cestu, propiš do locals. Pro ne-cs
   // se na konci rewritne na kanonickou cs routu (next(strippedPath)).
   const { locale, path: strippedPath } = stripLocale(url.pathname);

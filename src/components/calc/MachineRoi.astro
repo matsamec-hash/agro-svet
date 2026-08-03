@@ -1,0 +1,315 @@
+---
+// Znovupoužitelná kalkulačka návratnosti stroje (koupit vs. platit službu).
+// Řízená per-stroj configem z i18n/kalkulacka/navratnost.ts.
+import type { NavratnostContent, MachineDefaults } from '../../i18n/kalkulacka/navratnost';
+
+interface Props {
+  c: NavratnostContent;
+  d: MachineDefaults;
+  locale: string;
+  cr: { home: string; hub: string };
+}
+const { c, d, locale, cr } = Astro.props;
+const p = locale === 'cs' ? '' : `/${locale}`;
+const calcCfg = {
+  currency: c.currency,
+  numberLocale: c.numberLocale,
+  unit: c.unit,
+  js: c.js,
+};
+---
+
+<div class="calc-page">
+  <nav class="breadcrumb" aria-label="Cesta">
+    <a href={`${p}/`}>{cr.home}</a>
+    <span class="sep" aria-hidden="true">›</span>
+    <a href={`${p}/kalkulacka/`}>{cr.hub}</a>
+    <span class="sep" aria-hidden="true">›</span>
+    <span class="current">{c.crumb}</span>
+  </nav>
+
+  <header class="hero">
+    <span class="kicker">{c.kicker}</span>
+    <h1>{c.h1}</h1>
+    <p class="hero-lede">{c.lede}</p>
+  </header>
+
+<div class="calc-layout">
+  <form class="calc-form" id="calc-form" autocomplete="off">
+    <fieldset class="cf-section">
+      <legend>{c.sectionA}</legend>
+      <div class="cf-group">
+        <label for="qty">{c.form.qty}</label>
+        <div class="cf-input-unit">
+          <input type="number" id="qty" min="0" max={d.qtyMax} step="10" value={d.qty} inputmode="numeric" />
+          <span class="cf-unit">{c.unit}</span>
+        </div>
+      </div>
+      <div class="cf-group">
+        <label for="serviceRate">{c.form.serviceRate}</label>
+        <div class="cf-input-unit">
+          <input type="number" id="serviceRate" min="0" step="10" value={d.serviceRate} inputmode="numeric" />
+          <span class="cf-unit">Kč/{c.unit}</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="cf-section">
+      <legend>{c.sectionB}</legend>
+      <div class="cf-group">
+        <label for="price">{c.form.price}</label>
+        <div class="cf-input-unit">
+          <input type="number" id="price" min="0" step="50000" value={d.price} inputmode="numeric" />
+          <span class="cf-unit">Kč</span>
+        </div>
+      </div>
+      <div class="cf-group">
+        <label for="years">{c.form.years}</label>
+        <div class="cf-input-unit">
+          <input type="number" id="years" min="1" max="30" step="1" value={d.years} inputmode="numeric" />
+          <span class="cf-unit">{c.form.yearsUnit}</span>
+        </div>
+      </div>
+
+      <details class="cf-advanced">
+        <summary>Upřesnit náklady <span class="cf-adv-hint">(volitelné)</span></summary>
+        <div class="cf-adv-grid">
+          <div class="cf-group">
+            <label for="residual">{c.form.residual}</label>
+            <div class="cf-input-unit"><input type="number" id="residual" min="0" max="80" step="5" value={d.residual} inputmode="numeric" /><span class="cf-unit">%</span></div>
+          </div>
+          <div class="cf-group">
+            <label for="fixed">{c.form.fixed}</label>
+            <div class="cf-input-unit"><input type="number" id="fixed" min="0" max="15" step="0.5" value={d.fixed} inputmode="decimal" /><span class="cf-unit">%</span></div>
+          </div>
+          <div class="cf-group">
+            <label for="fuel">{c.form.fuel}</label>
+            <div class="cf-input-unit"><input type="number" id="fuel" min="0" step="0.5" value={d.fuel} inputmode="decimal" /><span class="cf-unit">l/{c.unit}</span></div>
+          </div>
+          <div class="cf-group">
+            <label for="fuelPrice">{c.form.fuelPrice}</label>
+            <div class="cf-input-unit"><input type="number" id="fuelPrice" min="0" step="1" value={d.fuelPrice} inputmode="decimal" /><span class="cf-unit">Kč/l</span></div>
+          </div>
+          <div class="cf-group">
+            <label for="maint">{c.form.maint}</label>
+            <div class="cf-input-unit"><input type="number" id="maint" min="0" step="10" value={d.maint} inputmode="numeric" /><span class="cf-unit">Kč/{c.unit}</span></div>
+          </div>
+          <div class="cf-group">
+            <label for="labor">{c.form.labor}</label>
+            <div class="cf-input-unit"><input type="number" id="labor" min="0" step="10" value={d.labor} inputmode="numeric" /><span class="cf-unit">Kč/{c.unit}</span></div>
+          </div>
+          <div class="cf-group cf-group-wide">
+            <label for="extra">{c.form.extra}</label>
+            <div class="cf-input-unit"><input type="number" id="extra" min="0" step="10" value={d.extra} inputmode="numeric" /><span class="cf-unit">{c.unit}</span></div>
+          </div>
+        </div>
+      </details>
+    </fieldset>
+  </form>
+
+  <div class="calc-result" id="calc-result">
+    <div class="cr-verdict" id="cr-verdict" data-mode="">
+      <span class="cr-badge" id="cr-badge">—</span>
+      <span class="cr-sub" id="cr-sub"></span>
+    </div>
+
+    <div class="cr-bars">
+      <div class="cr-bar-row">
+        <span class="crb-label">{c.result.ownAnnual}</span>
+        <div class="crb-track"><div class="crb-fill own" id="bar-own"></div></div>
+        <span class="crb-val" id="val-own">—</span>
+      </div>
+      <div class="cr-bar-row">
+        <span class="crb-label">{c.result.serviceAnnual}</span>
+        <div class="crb-track"><div class="crb-fill service" id="bar-service"></div></div>
+        <span class="crb-val" id="val-service">—</span>
+      </div>
+    </div>
+
+    <div class="cr-grid">
+      <div class="cr-stat"><span class="crs-label">{c.result.ownPerUnit} / {c.unit}</span><span class="crs-value" id="val-own-unit">—</span></div>
+      <div class="cr-stat"><span class="crs-label">{c.result.servicePerUnit} / {c.unit}</span><span class="crs-value" id="val-service-unit">—</span></div>
+      <div class="cr-stat cr-stat-hl"><span class="crs-label">{c.result.breakeven}</span><span class="crs-value" id="val-breakeven">—</span></div>
+      <div class="cr-stat"><span class="crs-label">{c.result.lifeDiff}</span><span class="crs-value" id="val-life">—</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="faq" aria-labelledby="faq-h">
+  <h2 id="faq-h">Časté otázky</h2>
+  <dl class="faq-list">
+    {c.faq.map((qa) => (
+      <div class="faq-item"><dt>{qa.q}</dt><dd>{qa.a}</dd></div>
+    ))}
+  </dl>
+</section>
+
+<section class="cross-cta">
+  <div>
+    <span class="cc-kicker">{c.cta.kicker}</span>
+    <h2>{c.cta.heading}</h2>
+    <div class="cc-actions">
+      <a class="cc-btn primary" href={`${p}/stroje/`}>{c.cta.catalog}</a>
+      <a class="cc-btn ghost" href={`${p}/kalkulacka/`}>{c.cta.compare}</a>
+      <a class="cc-btn ghost" href={`${p}/kalkulacka/naklady-na-hektar/`}>{c.cta.costs}</a>
+    </div>
+  </div>
+</section>
+</div>
+
+<script type="application/json" id="calc-cfg" set:html={JSON.stringify(calcCfg)}></script>
+
+<style>
+  .calc-page {
+    --yellow:#FFEA00; --yellow-soft:#FFF6A8; --yellow-glow:rgba(255,234,0,.35);
+    --ink:#0A0A0B; --body:#1E1E22; --muted:#6B6B72; --muted-2:#9A9AA3;
+    --line:#EAEAEC; --card:#FFFFFF; --bg-cream:#FBFAF4;
+    --green:#0B7A3B; --green-soft:#E3F3EA;
+    --sh-1:0 1px 2px rgba(10,10,12,.04), 0 0 0 1px rgba(10,10,12,.03);
+    --sh-2:0 4px 14px rgba(10,10,12,.06), 0 0 0 1px rgba(10,10,12,.04);
+    --sh-3:0 18px 40px -12px rgba(10,10,12,.18), 0 0 0 1px rgba(10,10,12,.04);
+    max-width:1280px; margin:0 auto; padding:26px 24px 96px; color:var(--body);
+  }
+  .breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:22px; flex-wrap:wrap; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:#000; }
+  .breadcrumb .current { color:#000; font-weight:600; }
+  .breadcrumb .sep { color:var(--muted-2); }
+  .hero { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%); color:#fff; border-radius:24px; padding:38px 42px; margin-bottom:24px; box-shadow:var(--sh-3); position:relative; overflow:hidden; }
+  .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%); }
+  .hero .kicker { display:inline-flex; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.3); padding:7px 13px; border-radius:999px; position:relative; z-index:2; }
+  .hero h1 { font:700 clamp(1.9rem,4.6vw,3.1rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:16px 0 0; line-height:1.05; position:relative; z-index:2; }
+  .hero-lede { color:#c8c8d0; max-width:720px; font-size:15.5px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
+
+  .calc-layout { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:32px; align-items:start; }
+  .calc-form { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px 24px; box-shadow:var(--sh-1); display:flex; flex-direction:column; gap:20px; }
+  .cf-section { border:0; padding:0; margin:0; display:flex; flex-direction:column; gap:14px; }
+  .cf-section legend { font:700 12px 'Chakra Petch',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--green); padding:0; margin-bottom:2px; }
+  .cf-group { display:flex; flex-direction:column; gap:7px; }
+  .cf-group label { font:600 12px 'Chakra Petch',sans-serif; letter-spacing:.02em; color:var(--muted); }
+  .cf-input-unit { display:flex; align-items:stretch; border:1.5px solid var(--line); border-radius:10px; overflow:hidden; transition:.12s; }
+  .cf-input-unit:focus-within { border-color:var(--yellow); box-shadow:0 0 0 3px rgba(255,234,0,.25); }
+  .cf-input-unit input { flex:1; border:0; outline:0; padding:12px 13px; font:700 16px 'Chakra Petch',sans-serif; color:var(--ink); background:#fff; min-width:0; }
+  .cf-unit { display:flex; align-items:center; padding:0 12px; background:var(--bg-cream); font:600 12.5px 'Chakra Petch',sans-serif; color:var(--muted); border-left:1px solid var(--line); white-space:nowrap; }
+  .cf-advanced { border-top:1px dashed var(--line); padding-top:14px; }
+  .cf-advanced summary { cursor:pointer; font:700 12.5px 'Chakra Petch',sans-serif; color:var(--ink); letter-spacing:.02em; user-select:none; }
+  .cf-adv-hint { color:var(--muted); font-weight:500; }
+  .cf-adv-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+  .cf-group-wide { grid-column:1 / -1; }
+
+  .calc-result { background:linear-gradient(135deg, #0E0E10 0%, #1C1C20 100%); color:#fff; border-radius:18px; padding:26px 28px; box-shadow:var(--sh-3); display:flex; flex-direction:column; gap:24px; position:sticky; top:16px; }
+  .cr-verdict { display:flex; flex-direction:column; gap:8px; padding-bottom:22px; border-bottom:1px solid rgba(255,255,255,.12); }
+  .cr-badge { display:inline-flex; align-self:flex-start; align-items:center; gap:8px; font:700 clamp(1.3rem,3.4vw,1.9rem) 'Chakra Petch',sans-serif; letter-spacing:-.01em; padding:9px 16px; border-radius:12px; line-height:1; }
+  .cr-verdict[data-mode="buy"] .cr-badge { background:var(--yellow); color:#0A0A0B; }
+  .cr-verdict[data-mode="service"] .cr-badge { background:#22b862; color:#04220F; }
+  .cr-sub { font:500 15px 'Chakra Petch',sans-serif; color:#d6d6dc; line-height:1.5; }
+  .cr-sub b { color:#fff; }
+
+  .cr-bars { display:flex; flex-direction:column; gap:16px; }
+  .cr-bar-row { display:grid; grid-template-columns:1fr; gap:6px; }
+  .crb-label { font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:#8a8a92; }
+  .crb-track { position:relative; height:30px; background:rgba(255,255,255,.08); border-radius:8px; overflow:hidden; }
+  .crb-fill { position:absolute; left:0; top:0; height:100%; width:0; border-radius:8px; transition:width .35s cubic-bezier(.4,0,.2,1); }
+  .crb-fill.own { background:linear-gradient(90deg,#FFEA00,#FFD400); }
+  .crb-fill.service { background:linear-gradient(90deg,#22b862,#0B7A3B); }
+  .crb-val { font:700 17px 'Chakra Petch',sans-serif; color:#fff; margin-top:2px; }
+
+  .cr-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 18px; }
+  .cr-stat { display:flex; flex-direction:column; gap:4px; }
+  .cr-stat-hl { grid-column:1 / -1; background:rgba(255,234,0,.08); border:1px solid rgba(255,234,0,.25); border-radius:12px; padding:12px 14px; }
+  .crs-label { font:500 10.5px 'Chakra Petch',sans-serif; letter-spacing:.08em; text-transform:uppercase; color:#8a8a92; }
+  .cr-stat-hl .crs-label { color:var(--yellow); }
+  .crs-value { font:700 18px 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.01em; }
+
+  .faq { margin-bottom:32px; }
+  .faq h2 { font:700 26px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:var(--ink); margin:0 0 16px; }
+  .faq-list { display:flex; flex-direction:column; gap:10px; }
+  .faq-item { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 22px; }
+  .faq-item dt { font:700 15.5px 'Chakra Petch',sans-serif; color:var(--ink); margin:0 0 7px; }
+  .faq-item dd { font-size:14px; color:#3a3a40; line-height:1.6; margin:0; }
+
+  .cross-cta { background:linear-gradient(135deg, var(--yellow) 0%, #FFD400 100%); border-radius:24px; padding:30px 34px; box-shadow:0 10px 30px -8px var(--yellow-glow); }
+  .cross-cta h2 { font:700 23px 'Chakra Petch',sans-serif; letter-spacing:-.02em; color:#0A0A0B; margin:6px 0 14px; }
+  .cc-kicker { display:inline-block; font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.2em; text-transform:uppercase; color:#0A0A0B; background:rgba(0,0,0,.08); padding:5px 11px; border-radius:999px; }
+  .cc-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .cc-btn { padding:11px 18px; border-radius:10px; text-decoration:none; font:700 13px 'Chakra Petch',sans-serif; letter-spacing:.04em; transition:.15s; }
+  .cc-btn.primary { background:#0A0A0B; color:#fff; }
+  .cc-btn.primary:hover { transform:translateY(-1px); }
+  .cc-btn.ghost { background:rgba(255,255,255,.5); color:#0A0A0B; border:1px solid rgba(0,0,0,.15); }
+  .cc-btn.ghost:hover { background:rgba(255,255,255,.8); }
+
+  @media (max-width:820px) {
+    .calc-layout { grid-template-columns:1fr; }
+    .calc-result { position:static; }
+  }
+  @media (max-width:600px) {
+    .cf-adv-grid { grid-template-columns:1fr; }
+    .cr-grid { grid-template-columns:1fr; }
+  }
+</style>
+
+<script>
+  // ── Návratnost stroje: koupit vs. služba ──────────────────────────────────
+  const cfg = JSON.parse(document.getElementById('calc-cfg')?.textContent || '{}');
+  const numberLocale: string = cfg.numberLocale ?? 'cs-CZ';
+  const currency: string = cfg.currency ?? 'CZK';
+  const unit: string = cfg.unit ?? 'ha';
+  const js = cfg.js ?? {};
+  const money = (n: number) => new Intl.NumberFormat(numberLocale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(Math.round(n));
+  const num = (n: number) => new Intl.NumberFormat(numberLocale, { maximumFractionDigits: 0 }).format(Math.round(n));
+
+  const val = (id: string) => Math.max(0, parseFloat((document.getElementById(id) as HTMLInputElement)?.value) || 0);
+  const set = (id: string, txt: string) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+
+  function recalc() {
+    const qty = val('qty');
+    const serviceRate = val('serviceRate');
+    const price = val('price');
+    const years = Math.max(1, val('years'));
+    const residual = Math.min(80, val('residual'));
+    const fixed = val('fixed');
+    const provozPerUnit = val('fuel') * val('fuelPrice') + val('maint') + val('labor');
+    const extra = val('extra');
+
+    const deprecYr = (price - price * residual / 100) / years;
+    const fixedYr = price * fixed / 100;
+    const extraIncomeYr = extra * serviceRate;
+    const ownFixedYr = deprecYr + fixedYr - extraIncomeYr;
+
+    const ownAnnual = ownFixedYr + provozPerUnit * qty;
+    const serviceAnnual = serviceRate * qty;
+    const ownPerUnit = qty > 0 ? ownAnnual / qty : 0;
+
+    // bod zvratu
+    const canBreakeven = serviceRate > provozPerUnit;
+    const breakeven = canBreakeven ? ownFixedYr / (serviceRate - provozPerUnit) : Infinity;
+
+    const buyCheaper = ownAnnual < serviceAnnual;
+    const savingYr = Math.abs(serviceAnnual - ownAnnual);
+
+    // verdikt
+    const verdict = document.getElementById('cr-verdict')!;
+    verdict.dataset.mode = buyCheaper ? 'buy' : 'service';
+    set('cr-badge', buyCheaper ? (js.buy ?? 'Koupit') : (js.service ?? 'Služba'));
+    const subEl = document.getElementById('cr-sub');
+    if (subEl) subEl.innerHTML = qty > 0
+      ? `${js.saveYear ?? 'Ušetříte'} <b>${money(savingYr)}${js.perYear ?? '/rok'}</b> · ${money(savingYr * years)} ${js.overLife ?? ''}`
+      : '';
+
+    // bary
+    const max = Math.max(ownAnnual, serviceAnnual, 1);
+    (document.getElementById('bar-own') as HTMLElement).style.width = `${(ownAnnual / max) * 100}%`;
+    (document.getElementById('bar-service') as HTMLElement).style.width = `${(serviceAnnual / max) * 100}%`;
+    set('val-own', money(ownAnnual));
+    set('val-service', money(serviceAnnual));
+
+    set('val-own-unit', money(ownPerUnit));
+    set('val-service-unit', money(serviceRate));
+    set('val-breakeven', canBreakeven ? `${num(breakeven)} ${unit}/${(js.breakevenUnit ?? 'rok')}` : '—');
+    const lifeDiff = (serviceAnnual - ownAnnual) * years;
+    set('val-life', `${lifeDiff >= 0 ? '+' : '−'}${money(Math.abs(lifeDiff))}`);
+  }
+
+  document.getElementById('calc-form')?.addEventListener('input', recalc);
+  recalc();
+</script>
