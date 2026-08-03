@@ -240,7 +240,7 @@ const orgJsonLd = {
           var fill = up ? 'rgba(46,158,87,.10)' : 'rgba(192,57,43,.10)';
           var old = chartEl.querySelector('svg'); if (old) old.remove();
           chartEl.insertAdjacentHTML('afterbegin',
-            '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Graf vývoje kurzu">' +
+            '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Graf vývoje kurzu" style="display:block;width:100%;height:100%">' +
             '<path d="' + area + '" fill="' + fill + '"/>' +
             '<path d="' + line + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>');
           if (empty) empty.hidden = true;
