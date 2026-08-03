@@ -50,7 +50,7 @@ export const ZNACKA_LOGO: Record<string, string> = {
   bednar: '/images/znacky/bednar.jpg',
   'case-ih': '/images/znacky/case-ih.png',
   claas: '/images/znacky/claas.svg',
-  'deutz-fahr': '/images/znacky/deutz-fahr.jpg',
+  'deutz-fahr': '/images/znacky/deutz-fahr.png',
   fendt: '/images/znacky/fendt.svg',
   horsch: '/images/znacky/horsch.svg',
   jcb: '/images/znacky/jcb.svg',
