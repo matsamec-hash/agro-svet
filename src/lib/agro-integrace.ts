@@ -67,6 +67,9 @@ export const ZNACKA_LOGO: Record<string, string> = {
   vaderstad: '/images/znacky/vaderstad.svg',
   valtra: '/images/znacky/valtra.png',
   zetor: '/images/znacky/zetor.png',
+  // Lemken nemá logo na Commons — reuse existující tmavé logo z katalogu strojů
+  // (sedí i na bílé pozadí).
+  lemken: '/images/stroje/brands/lemken.png',
 };
 
 // značka (DB slug) → mateřská burzovní firma (ticker v AKCIE)
