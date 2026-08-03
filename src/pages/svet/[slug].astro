@@ -7,6 +7,7 @@ import Layout from '../../layouts/Layout.astro';
 import IndicatorRow from '../../components/svet/IndicatorRow.astro';
 import RegionMap from '../../components/svet/RegionMap.astro';
 import { groupByPackage, fmtNum, COUNTRY_LOCATIVE } from '../../lib/svet/render';
+import { prodejeProZemi, akcieProZemi } from '../../lib/agro-integrace';
 import { assertCountryProfile } from '../../lib/svet/types';
 import { breadcrumbSchema, datasetSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
@@ -44,6 +45,11 @@ const title = `Zemědělství ${loc}`;
 const description = `Aktuální zemědělská data: ${profile.nameCs} — produkce, půda, ekonomika a srovnání s ČR. Zdroje Eurostat a World Bank.`;
 const pageUrl = `${SITE_URL}/svet/${profile.slug}/`;
 const ogImage = `${SITE_URL}/og/svet-${profile.slug}.png`;
+
+// Provázání: prodeje techniky + akcie firem se sídlem v této zemi.
+const prodejeTech = prodejeProZemi(profile.slug);
+const akcieZeme = akcieProZemi(profile.slug);
+const prodejeZnacky = (prodejeTech?.zeme.znacky ?? []).slice(0, 3).map((z) => z.znacka);
 
 // ---- Strukturovaná data (JSON-LD) ----
 const inds = Object.values(profile.indicators) as any[];
@@ -114,6 +120,24 @@ const datasetJsonLd = datasetSchema({
         </div>
       </section>
     ))}
+
+    {(prodejeTech || akcieZeme.length > 0) && (
+      <section class="svet-section">
+        <header class="svet-section-head"><h2>Zemědělská technika a agrobyznys</h2></header>
+        <div class="svet-rows">
+          {prodejeTech && (
+            <p class="svet-method">
+              Ročně se {loc} registruje přibližně <strong>{fmtNum(prodejeTech.traktory)} nových traktorů</strong> ({prodejeTech.rok}){prodejeTech.poradi === 1 ? <> — <strong>největší národní trh se zemědělskou technikou</strong> v našem přehledu</> : prodejeTech.poradi ? <> ({prodejeTech.poradi}. největší trh z {prodejeTech.poradiZCelku} sledovaných)</> : null}.{prodejeZnacky.length > 0 ? ` Nejsilnější značky: ${prodejeZnacky.join(', ')}.` : ''} <a href="/data/prodeje-techniky/">Prodeje zemědělské techniky v Evropě →</a>
+            </p>
+          )}
+          {akcieZeme.length > 0 && (
+            <p class="svet-method">
+              Veřejně obchodované zemědělské firmy se sídlem {loc}: {akcieZeme.map((a, i) => (<>{i > 0 ? ', ' : ''}<a href="/akcie/">{a.nazev.split(' (')[0]}</a></>))}. <a href="/akcie/">Akcie agro firem na burze →</a>
+            </p>
+          )}
+        </div>
+      </section>
+    )}
 
     <section class="svet-section">
       <header class="svet-section-head"><h2>Zdroje a metodika</h2></header>
