@@ -159,7 +159,7 @@ const orgJsonLd = {
       var t = root.getAttribute('data-ticker');
       var mena = root.getAttribute('data-mena') || 'USD';
       function fmt(n, d) { return Number(n).toLocaleString('cs-CZ', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
-      fetch('/api/akcie/' + encodeURIComponent(t) + '.json', { headers: { accept: 'application/json' } })
+      fetch('/api/akcie/' + encodeURIComponent(t) + '.json/', { headers: { accept: 'application/json' } })
         .then(function (r) { return r.json(); })
         .then(function (res) {
           if (!res || !res.ok) return;
