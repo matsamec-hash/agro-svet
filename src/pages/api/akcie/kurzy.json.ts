@@ -1,52 +1,31 @@
 import type { APIRoute } from 'astro';
-import { getEnvVar } from '../../../lib/env';
 import { AKCIE } from '../../../data/akcie-agro';
+import { fetchYahooQuote } from '../../../lib/yahoo-finance';
 
 export const prerender = false;
 
-// Finnhub symbol overrides — kde free tier nepokrývá evropskou burzu, zkusíme US ADR.
-// (Free Finnhub = US akcie + forex + crypto; EU burzy .DE/.OL bývají jen v placeném tieru.)
-const SYMBOL_OVERRIDE: Record<string, string> = {
-  'BAYN.DE': 'BAYRY', // Bayer ADR
-  'BAS.DE': 'BASFY',  // BASF ADR
-  'YAR.OL': 'YARIY',  // Yara ADR
-  // KWS.DE bez likvidního ADR → zůstane, pravděpodobně "—" na free tieru
-};
-
-const json = (body: unknown, status = 200, cacheS = 0) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      'content-type': 'application/json',
-      // Edge cache: kurzy se stahují max jednou za 30 min napříč všemi návštěvníky.
-      'cache-control': cacheS > 0 ? `public, max-age=300, s-maxage=${cacheS}` : 'no-store',
-    },
-  });
-
+// Živé kurzy pro karty na přehledu /akcie/. Zdroj Yahoo (free, bez klíče) —
+// NATIVNÍ měna, pokrývá i evropské burzy (.DE/.OL) a KWS.DE, které Finnhub free
+// tier nemá (dřív se řešilo US ADR overridy, ale ty daly cenu ve špatné měně).
+// Edge cache 30 min napříč všemi návštěvníky. Statický název souboru → funguje
+// BEZ trailing slash (dynamické [x].json naopak lomítko vyžaduje).
 export const GET: APIRoute = async () => {
-  const key = getEnvVar('FINNHUB_API_KEY');
-  if (!key) return json({ ok: false, reason: 'no_key', kurzy: {} }, 200, 0);
-
-  const symbols = AKCIE.map((a) => ({ ticker: a.ticker, fh: SYMBOL_OVERRIDE[a.ticker] ?? a.ticker }));
-
   const results = await Promise.all(
-    symbols.map(async ({ ticker, fh }) => {
-      try {
-        const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fh)}&token=${key}`);
-        if (!r.ok) return [ticker, null] as const;
-        const q = (await r.json()) as { c?: number; dp?: number };
-        // c = current price; 0 nebo undefined = symbol nepokryt free tierem
-        if (!q || !q.c || q.c === 0) return [ticker, null] as const;
-        return [ticker, { cena: q.c, zmenaPct: typeof q.dp === 'number' ? q.dp : null }] as const;
-      } catch {
-        return [ticker, null] as const;
-      }
+    AKCIE.map(async (a) => {
+      const q = await fetchYahooQuote(a.ticker);
+      if (!q) return [a.ticker, null] as const;
+      return [a.ticker, { cena: q.cena, zmenaPct: q.zmenaPct }] as const;
     })
   );
 
   const kurzy: Record<string, { cena: number; zmenaPct: number | null }> = {};
   for (const [ticker, data] of results) if (data) kurzy[ticker] = data;
 
-  // Cache 30 min na edge, i když je kurzů málo.
-  return json({ ok: true, kurzy, cas: null }, 200, 1800);
+  return new Response(JSON.stringify({ ok: true, kurzy, cas: null }), {
+    status: 200,
+    headers: {
+      'content-type': 'application/json',
+      'cache-control': 'public, max-age=300, s-maxage=1800, stale-while-revalidate=3600',
+    },
+  });
 };

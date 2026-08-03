@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getEnvVar } from '../../../lib/env';
 import { AKCIE } from '../../../data/akcie-agro';
-import { fetchYahooHistory } from '../../../lib/yahoo-finance';
+import { fetchYahooHistory, fetchYahooQuote } from '../../../lib/yahoo-finance';
 
 export const prerender = false;
 
@@ -36,14 +36,14 @@ export const GET: APIRoute = async ({ params }) => {
 
   const key = getEnvVar('FINNHUB_API_KEY');
 
-  // Historie pro graf jde z Yahoo (free, bez klíče) — původní ticker (BAYN.DE,
-  // YAR.OL… Yahoo je podporuje přímo), NE Finnhub SYMBOL_OVERRIDE. Tahá se vždy,
-  // i bez Finnhub klíče, aby graf fungoval nezávisle na fundamentech.
+  // Kurz + 52t rozpětí + graf: Yahoo (free, bez klíče, NATIVNÍ měna, pokrývá i
+  // evropské .DE/.OL a KWS.DE, které Finnhub free nemá). Původní ticker, NE
+  // Finnhub ADR override. Fundamenty (tržní kap./P-E/dividenda/odvětví): Finnhub.
   const fhSym = SYMBOL_OVERRIDE[ticker] ?? ticker;
   const enc = encodeURIComponent(fhSym);
 
-  const [quote, profile, metrics, historie] = await Promise.all([
-    key ? fh(`quote?symbol=${enc}`, key) : Promise.resolve(null),
+  const [yq, profile, metrics, historie] = await Promise.all([
+    fetchYahooQuote(ticker),
     key ? fh(`stock/profile2?symbol=${enc}`, key) : Promise.resolve(null),
     key ? fh(`stock/metric?symbol=${enc}&metric=all`, key) : Promise.resolve(null),
     fetchYahooHistory(ticker),
@@ -52,7 +52,7 @@ export const GET: APIRoute = async ({ params }) => {
   const m = metrics?.metric ?? {};
   const out = {
     ok: true,
-    kurz: quote && quote.c ? { cena: quote.c, zmenaPct: typeof quote.dp === 'number' ? quote.dp : null } : null,
+    kurz: yq ? { cena: yq.cena, zmenaPct: yq.zmenaPct } : null,
     profil: profile
       ? {
           marketCap: profile.marketCapitalization ?? null, // v mil. USD
@@ -65,8 +65,9 @@ export const GET: APIRoute = async ({ params }) => {
       : null,
     metriky: {
       pe: m.peTTM ?? m.peBasicExclExtraTTM ?? null,
-      high52: m['52WeekHigh'] ?? null,
-      low52: m['52WeekLow'] ?? null,
+      // 52t rozpětí z Yahoo (nativní měna, konzistentní s kurzem; fallback Finnhub).
+      high52: yq?.high52 ?? m['52WeekHigh'] ?? null,
+      low52: yq?.low52 ?? m['52WeekLow'] ?? null,
       dividendYield: m.dividendYieldIndicatedAnnual ?? m.currentDividendYieldTTM ?? null,
       revenue: m.revenuePerShareTTM ?? null,
     },
