@@ -43,6 +43,32 @@ export const ZNACKA_LABEL: Record<string, string> = {
   kubota: 'Kubota',
 };
 
+// značka (DB slug) → logo (staženo z Wikimedia Commons, P154). Lemken chybí
+// (na Commons nemá logo). Cesty do public/images/znacky/.
+export const ZNACKA_LOGO: Record<string, string> = {
+  amazone: '/images/znacky/amazone.png',
+  bednar: '/images/znacky/bednar.jpg',
+  'case-ih': '/images/znacky/case-ih.png',
+  claas: '/images/znacky/claas.svg',
+  'deutz-fahr': '/images/znacky/deutz-fahr.jpg',
+  fendt: '/images/znacky/fendt.svg',
+  horsch: '/images/znacky/horsch.svg',
+  jcb: '/images/znacky/jcb.svg',
+  'john-deere': '/images/znacky/john-deere.png',
+  joskin: '/images/znacky/joskin.jpg',
+  krone: '/images/znacky/krone.svg',
+  kubota: '/images/znacky/kubota.svg',
+  kuhn: '/images/znacky/kuhn.svg',
+  kverneland: '/images/znacky/kverneland.svg',
+  manitou: '/images/znacky/manitou.svg',
+  'massey-ferguson': '/images/znacky/massey-ferguson.png',
+  'new-holland': '/images/znacky/new-holland.png',
+  pottinger: '/images/znacky/pottinger.svg',
+  vaderstad: '/images/znacky/vaderstad.svg',
+  valtra: '/images/znacky/valtra.png',
+  zetor: '/images/znacky/zetor.png',
+};
+
 // značka (DB slug) → mateřská burzovní firma (ticker v AKCIE)
 export const ZNACKA_TO_AKCIE: Record<string, string> = {
   'john-deere': 'DE',
