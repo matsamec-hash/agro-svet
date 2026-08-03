@@ -17,7 +17,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
 const fmt = (n: number | null) => (n == null ? '—' : n.toLocaleString('cs-CZ'));
 
 // Roky pro tabulku
-const ROKY = [2022, 2023, 2024];
+const ROKY = [2021, 2022, 2023, 2024, 2025];
 const val = (z: (typeof ZEME)[number], rok: number) => z.roky.find((r) => r.rok === rok);
 
 // Žebříček 2024 (kde je číslo) pro bar chart — bez EU agregátu.

@@ -43,14 +43,18 @@ export const ZEME: Zeme[] = [
     vlajka: '🇪🇺',
     urad: 'CEMA — European Agricultural Machinery',
     roky: [
-      { rok: 2022, traktory: null },
+      { rok: 2019, traktory: 154321 },
+      { rok: 2020, traktory: 149667 },
+      { rok: 2021, traktory: 180000, approx: true },
+      { rok: 2022, traktory: 165200 },
       { rok: 2023, traktory: 157100, approx: true },
       { rok: 2024, traktory: 144400 },
     ],
     zdroje: [
       { label: 'CEMA — European tractor registrations at 10-year low in 2024 (04/2025)', url: 'https://www.cema-agri.org/publication/news/1093-european-tractor-registrations-at-10-year-low-in-2024-1' },
+      { label: 'CEMA — Tractor registrations remain high in 2022', url: 'https://www.cema-agri.org/market-trends/market-data/1016-tractor-registrations-remain-high-in-2022,-though-down-on-the-previous-year,-despite-price-and-supply-chain-challenges' },
     ],
-    poznamka: 'CEMA za rok 2024 uvádí 144 400 zemědělských traktorů (z 204 500 registrovaných traktorů celkem), −8,1 % r/r a nejnižší počet od roku 2014. Údaj za 2023 je dopočten z uvedené meziroční změny.',
+    poznamka: 'CEMA za rok 2024 uvádí 144 400 zemědělských traktorů (z 204 500 registrovaných traktorů celkem), −8,1 % r/r a nejnižší počet od roku 2014. Rok 2022 (165 200) byl −8,7 % proti rekordnímu 2021 (~180 tis.). Roky 2021 a 2023 dopočteny/zaokrouhleny z publikovaných změn.',
   },
   {
     kod: 'de',
@@ -58,9 +62,10 @@ export const ZEME: Zeme[] = [
     vlajka: '🇩🇪',
     urad: 'VDMA / KBA',
     roky: [
-      { rok: 2022, traktory: null },
+      { rok: 2022, traktory: 30357 },
       { rok: 2023, traktory: 30345 },
       { rok: 2024, traktory: 29291 },
+      { rok: 2025, traktory: 25742 },
     ],
     znacky: [
       { znacka: 'Fendt', podil: 25.2, kusy: 7394, rok: 2024 },
@@ -72,8 +77,9 @@ export const ZEME: Zeme[] = [
     znackyRok: 2024,
     zdroje: [
       { label: 'top agrar — Traktor-Zulassungen 2024 (VDMA)', url: 'https://www.topagrar.com/technik/news/traktor-zulassungen-2024-weniger-traktoren-gekauft-fendt-fuehrt-a-20010672.html' },
+      { label: 'agrarheute — Traktoren 2025: deutlich weniger neue Schlepper', url: 'https://www.agrarheute.com/technik/traktoren/traktoren-2025-landwirte-lassen-deutlich-weniger-neue-schlepper-638758' },
     ],
-    poznamka: '2024: 29 291 traktorů (−3,4 %). Trhu dlouhodobě dominuje Fendt — v 2024 s 7 394 kusy a podílem 25,2 %.',
+    poznamka: '2025: 25 742 traktorů — výrazný pokles. 2024: 29 291 (−3,4 %). Trhu dlouhodobě dominuje Fendt (2024: 7 394 ks, 25,2 %).',
   },
   {
     kod: 'fr',
@@ -150,6 +156,7 @@ export const ZEME: Zeme[] = [
     vlajka: '🇨🇿',
     urad: 'SDA (Svaz dovozců automobilů)',
     roky: [
+      { rok: 2021, traktory: 5815 },
       { rok: 2022, traktory: 6276 },
       { rok: 2023, traktory: 5954 },
       { rok: 2024, traktory: null },
