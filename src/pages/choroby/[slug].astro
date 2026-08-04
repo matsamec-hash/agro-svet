@@ -72,9 +72,54 @@ const metaDesc = `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` :
     )}
 
     <section class="card-section">
-      <h2 class="section-title">Příznaky a popis</h2>
-      <p class="lead-text">{choroba.popis}</p>
+      <h2 class="section-title">Příznaky</h2>
+      <p class="lead-text">{choroba.priznaky ?? choroba.popis}</p>
     </section>
+
+    {choroba.hostitele && choroba.hostitele.length > 0 && (
+      <section class="card-section">
+        <h2 class="section-title">Hostitelské plodiny</h2>
+        <ul class="chip-row">
+          {choroba.hostitele.map((h) => <li class="chip">{h}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {choroba.sireni && (
+      <section class="card-section">
+        <h2 class="section-title">Podmínky šíření</h2>
+        <p class="lead-text">{choroba.sireni}</p>
+      </section>
+    )}
+
+    {choroba.skodlivost && (
+      <section class="card-section skodlivost">
+        <h2 class="section-title">Škodlivost a práh ošetření</h2>
+        <p class="lead-text">{choroba.skodlivost}</p>
+      </section>
+    )}
+
+    {choroba.cyklus && (
+      <section class="card-section">
+        <h2 class="section-title">Životní cyklus a zdroj infekce</h2>
+        <p class="lead-text">{choroba.cyklus}</p>
+      </section>
+    )}
+
+    {choroba.ucinne_latky && choroba.ucinne_latky.length > 0 && (
+      <section class="card-section">
+        <h2 class="section-title">Účinné látky k ochraně</h2>
+        <p class="latky-note">Přehled běžně registrovaných fungicidních účinných látek. Registraci a dávkování vždy ověřte v Registru přípravků na ochranu rostlin ÚKZÚZ.</p>
+        <ul class="latky-list">
+          {choroba.ucinne_latky.map((u) => (
+            <li>
+              <span class="latka">{u.latka}</span>
+              {u.pripravky && <span class="pripravky">{u.pripravky}</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     {choroba.ochrana && (
       <section class="card-section ochrana">
@@ -180,6 +225,16 @@ const metaDesc = `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` :
   }
   .ch-detail .lead-text { font-size: 15.5px; line-height: 1.7; color: var(--body); margin: 0; }
   .ch-detail .ochrana { border-left: 4px solid var(--green); }
+  .ch-detail .skodlivost { border-left: 4px solid #C24414; }
+
+  .ch-detail .chip-row { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .ch-detail .chip { font-size: 13.5px; font-weight: 600; color: var(--green-dark); background: var(--green-soft); border: 1px solid #cfe0bd; padding: 6px 13px; border-radius: 999px; }
+
+  .ch-detail .latky-note { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0 0 16px; }
+  .ch-detail .latky-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .ch-detail .latky-list li { display: flex; flex-direction: column; gap: 3px; background: #F7F7FA; border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 15px; }
+  .ch-detail .latka { font-weight: 700; color: var(--ink); font-size: 14.5px; }
+  .ch-detail .pripravky { font-size: 12.5px; color: var(--muted); font-style: italic; }
 
   .ch-detail .plodiny-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
   .ch-detail .plodina-link {

@@ -15,6 +15,18 @@ export interface ChorobaYaml {
   puvodce?: string;
   /** Faktický popis — povinný pro indexaci (anti-thin). */
   popis: string;
+  /** Detailní příznaky (podle fází / orgánů rostliny). */
+  priznaky?: string;
+  /** Hostitelé — napadené plodiny a druhy. */
+  hostitele?: string[];
+  /** Podmínky šíření / epidemiologie (teplota, vlhkost, infekce). */
+  sireni?: string;
+  /** Škodlivost — dopad na výnos, práh ošetření. */
+  skodlivost?: string;
+  /** Životní cyklus patogenu, přezimování, zdroj infekce. */
+  cyklus?: string;
+  /** Registrované fungicidní účinné látky (látka + příklad přípravku). */
+  ucinne_latky?: { latka: string; pripravky?: string }[];
   /** Doporučená ochrana. */
   ochrana?: string;
   /**
