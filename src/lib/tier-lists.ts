@@ -231,6 +231,29 @@ export interface RankedModel {
   model: StrojFlatModel;
 }
 
+/** Umístění konkrétního modelu v žebříčku (pro cross-link z detailu stroje). */
+export interface ModelTierPlacement {
+  slug: string;
+  title: string;
+  rank: number;
+  total: number;
+}
+
+/**
+ * Žebříčky, v nichž se daný model (podle slug) umístil jako reprezentant své
+ * série. Cross-link z /stroje/<model>/ na /zebricky/<slug>/ — propojuje datovou
+ * a redakční vrstvu. Vrací seřazeno podle umístění (nejlepší první).
+ */
+export function tierListsForModel(modelSlug: string): ModelTierPlacement[] {
+  const out: ModelTierPlacement[] = [];
+  for (const def of TIER_LISTS) {
+    const ranked = rankForTierList(def);
+    const hit = ranked.find((r) => r.model.slug === modelSlug);
+    if (hit) out.push({ slug: def.slug, title: def.title, rank: hit.rank, total: ranked.length });
+  }
+  return out.sort((a, b) => a.rank - b.rank);
+}
+
 /** Apply the tier list to current models and return ranked entries. */
 export function rankForTierList(def: TierListDef): RankedModel[] {
   const all = getAllModels();

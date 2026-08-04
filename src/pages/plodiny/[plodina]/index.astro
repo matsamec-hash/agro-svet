@@ -32,6 +32,19 @@ const howTo = plodina.osevni_postup && plodina.osevni_postup.length > 0
   : null;
 const faq = plodina.faq && plodina.faq.length > 0 ? faqPageSchema(plodina.faq) : null;
 const chorobaChips = chorobaChipsForPlodina(plodina.slug);
+
+// Cross-link plodina → cenová statistika komodity (jen plodiny s cenovou řadou).
+const STAT_KOMODITA: Record<string, { slug: string; label: string }> = {
+  'psenice-ozima': { slug: 'psenice', label: 'Ceny pšenice' },
+  'psenice-jarni': { slug: 'psenice', label: 'Ceny pšenice' },
+  'jecmen-ozimy': { slug: 'jecmen', label: 'Ceny ječmene' },
+  'jecmen-jarni': { slug: 'jecmen', label: 'Ceny ječmene' },
+  'repka-ozima': { slug: 'repka', label: 'Ceny řepky' },
+  'repka-jarni': { slug: 'repka', label: 'Ceny řepky' },
+  kukurice: { slug: 'kukurice', label: 'Ceny kukuřice' },
+  mak: { slug: 'mak', label: 'Ceny máku' },
+};
+const statKomodita = STAT_KOMODITA[plodina.slug];
 const heroImageSchema = plodina.hero_image
   ? imageObjectSchema({
       contentUrl: plodina.hero_image,
@@ -253,6 +266,30 @@ const list = plodina.odrudy.length > 0
       </section>
     )}
 
+    <section class="card-section related-links">
+      <h2 class="section-title">Související</h2>
+      <div class="rl-grid">
+        {statKomodita && (
+          <a class="rl-item" href={`/statistiky/komodita/${statKomodita.slug}/`}>
+            <span class="rl-ico" aria-hidden="true">📈</span>
+            <span class="rl-txt"><strong>{statKomodita.label}</strong><small>Vývoj výkupních cen</small></span>
+          </a>
+        )}
+        <a class="rl-item" href="/kalkulacka/naklady-na-hektar/">
+          <span class="rl-ico" aria-hidden="true">🧮</span>
+          <span class="rl-txt"><strong>Náklady na hektar</strong><small>Kalkulačka provozních nákladů</small></span>
+        </a>
+        <a class="rl-item" href="/statistiky/">
+          <span class="rl-ico" aria-hidden="true">📊</span>
+          <span class="rl-txt"><strong>Statistiky a trhy</strong><small>Osevní plochy, sklizeň, ceny</small></span>
+        </a>
+        <a class="rl-item" href="/slovnik/">
+          <span class="rl-ico" aria-hidden="true">📖</span>
+          <span class="rl-txt"><strong>Slovník pojmů</strong><small>Agronomické názvosloví</small></span>
+        </a>
+      </div>
+    </section>
+
     <div class="card-section osiva-wrap">
       <OsivaLinks plodina={plodina.name} skupina={plodina.skupina} />
     </div>
@@ -277,6 +314,19 @@ const list = plodina.odrudy.length > 0
   .pl-detail .breadcrumb a:hover { color: #000; }
   .pl-detail .breadcrumb svg { color: var(--muted-2); flex-shrink: 0; }
   .pl-detail .breadcrumb .current { color: #000; font-weight: 600; }
+
+  /* ── Související ── */
+  .pl-detail .rl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .pl-detail .rl-item {
+    display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit;
+    background: #F7F7FA; border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 14px 16px; transition: .15s;
+  }
+  .pl-detail .rl-item:hover { background: var(--green-soft); border-color: #cfe0bd; transform: translateY(-1px); }
+  .pl-detail .rl-ico { font-size: 24px; line-height: 1; flex-shrink: 0; }
+  .pl-detail .rl-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .pl-detail .rl-txt strong { font-size: 14.5px; color: var(--ink); font-weight: 700; }
+  .pl-detail .rl-txt small { font-size: 12px; color: var(--muted); }
 
   /* ── Hero ── */
   .pl-detail .hero {
