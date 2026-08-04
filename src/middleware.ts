@@ -96,6 +96,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
     '/kombajn': '/kalkulacka/navratnost-kombajnu/',
     '/postrikovac': '/kalkulacka/navratnost-postrikovace/',
     '/lis': '/kalkulacka/navratnost-lisu/',
+    '/secacka': '/kalkulacka/navratnost-seciho-stroje/',
+    '/rozmetadlo': '/kalkulacka/navratnost-rozmetadla/',
+    '/telehandler': '/kalkulacka/navratnost-telehandleru/',
   };
   const shortCalcTarget = SHORT_CALC[url.pathname.replace(/\/+$/, '')];
   if (shortCalcTarget) return redirect(shortCalcTarget, 308);

@@ -4,7 +4,7 @@ import { content as prevodyHmotnost } from './prevody-hmotnost';
 import { content as leasingTraktoru } from './leasing-traktoru';
 import { content as usporaNafty } from './uspora-nafty';
 import { content as naklady } from './naklady-na-hektar';
-import { kombajn, postrikovac, lis } from './navratnost';
+import { kombajn, postrikovac, lis, secacka, rozmetadlo, telehandler } from './navratnost';
 
 export const calcRegistry: Record<string, Record<Locale, unknown>> = {
   'prevody-jednotek': prevodyJednotek,
@@ -15,4 +15,7 @@ export const calcRegistry: Record<string, Record<Locale, unknown>> = {
   'navratnost-kombajnu': kombajn,
   'navratnost-postrikovace': postrikovac,
   'navratnost-lisu': lis,
+  'navratnost-seciho-stroje': secacka,
+  'navratnost-rozmetadla': rozmetadlo,
+  'navratnost-telehandleru': telehandler,
 };

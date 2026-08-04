@@ -231,6 +231,63 @@ const MACHINES: Record<string, MachineOverride> = {
     },
     defaults: { qty: 6000, serviceRate: 25, price: 1800000, years: 10, residual: 25, fuel: 0.4, fuelPrice: 36, maint: 6, labor: 4, fixed: 2, extra: 0, qtyMax: 40000 },
   },
+  secacka: {
+    cs: {
+      title: 'Vyplatí se koupit secí stroj? Kalkulačka návratnosti | agro-svět',
+      metaDescription: 'Vlastní secí stroj, nebo setí na zakázku? Kalkulačka spočítá bod zvratu podle osetých hektarů za rok, sazby služby a ceny stroje.',
+      h1: 'Vyplatí se koupit secí stroj?',
+      crumb: 'Návratnost secího stroje',
+      lede: 'Pořídit vlastní secí stroj (secí kombinaci), nebo si nechat zaset na zakázku? Zadejte, kolik hektarů ročně sejete, cenu služby a cenu stroje — kalkulačka najde bod zvratu.',
+      noun: 'secí stroj', unit: 'ha',
+    },
+    sk: {
+      title: 'Oplatí sa kúpiť sejačku? Kalkulačka návratnosti | agro-svět',
+      metaDescription: 'Vlastná sejačka, alebo sejba na zákazku? Kalkulačka spočíta bod zvratu podľa osiatych hektárov za rok, sadzby služby a ceny stroja.',
+      h1: 'Oplatí sa kúpiť sejačku?',
+      crumb: 'Návratnosť sejačky',
+      lede: 'Kúpiť vlastnú sejačku (sejaciu kombináciu), alebo si nechať zasiať na zákazku? Zadajte, koľko hektárov ročne sejete, cenu služby a cenu stroja — kalkulačka nájde bod zvratu.',
+      noun: 'sejačka', unit: 'ha',
+    },
+    defaults: { qty: 300, serviceRate: 900, price: 2200000, years: 12, residual: 30, fuel: 12, fuelPrice: 36, maint: 120, labor: 150, fixed: 2, extra: 0, qtyMax: 3000 },
+  },
+  rozmetadlo: {
+    cs: {
+      title: 'Vyplatí se koupit rozmetadlo hnojiv? Kalkulačka návratnosti | agro-svět',
+      metaDescription: 'Vlastní rozmetadlo hnojiv, nebo hnojení na zakázku? Kalkulačka spočítá bod zvratu podle ošetřených hektarů za rok, sazby služby a ceny stroje.',
+      h1: 'Vyplatí se koupit rozmetadlo?',
+      crumb: 'Návratnost rozmetadla',
+      lede: 'Koupit vlastní rozmetadlo hnojiv, nebo platit hnojení na zakázku? Zadejte, kolik hektarů ročně pohnojíte, cenu služby a cenu stroje — kalkulačka najde bod zvratu.',
+      noun: 'rozmetadlo', unit: 'ha',
+    },
+    sk: {
+      title: 'Oplatí sa kúpiť rozmetadlo hnojív? Kalkulačka návratnosti | agro-svět',
+      metaDescription: 'Vlastné rozmetadlo hnojív, alebo hnojenie na zákazku? Kalkulačka spočíta bod zvratu podľa ošetrených hektárov za rok, sadzby služby a ceny stroja.',
+      h1: 'Oplatí sa kúpiť rozmetadlo?',
+      crumb: 'Návratnosť rozmetadla',
+      lede: 'Kúpiť vlastné rozmetadlo hnojív, alebo platiť hnojenie na zákazku? Zadajte, koľko hektárov ročne pohnojíte, cenu služby a cenu stroja — kalkulačka nájde bod zvratu.',
+      noun: 'rozmetadlo', unit: 'ha',
+    },
+    defaults: { qty: 500, serviceRate: 300, price: 650000, years: 10, residual: 25, fuel: 3, fuelPrice: 36, maint: 40, labor: 60, fixed: 2, extra: 0, qtyMax: 4000 },
+  },
+  telehandler: {
+    cs: {
+      title: 'Vyplatí se koupit telehandler? Kalkulačka návratnosti | agro-svět',
+      metaDescription: 'Vlastní teleskopický manipulátor, nebo práce na zakázku? Kalkulačka spočítá bod zvratu podle odpracovaných hodin za rok, sazby služby a ceny stroje.',
+      h1: 'Vyplatí se koupit telehandler?',
+      crumb: 'Návratnost telehandleru',
+      lede: 'Pořídit vlastní teleskopický manipulátor, nebo si najímat manipulaci na hodiny? Zadejte, kolik hodin ročně stroj potřebujete, cenu služby za hodinu a cenu stroje — kalkulačka najde bod zvratu.',
+      noun: 'telehandler', unit: 'hodin',
+    },
+    sk: {
+      title: 'Oplatí sa kúpiť telehandler? Kalkulačka návratnosti | agro-svět',
+      metaDescription: 'Vlastný teleskopický manipulátor, alebo práca na zákazku? Kalkulačka spočíta bod zvratu podľa odpracovaných hodín za rok, sadzby služby a ceny stroja.',
+      h1: 'Oplatí sa kúpiť telehandler?',
+      crumb: 'Návratnosť telehandlera',
+      lede: 'Kúpiť vlastný teleskopický manipulátor, alebo si najímať manipuláciu na hodiny? Zadajte, koľko hodín ročne stroj potrebujete, cenu služby za hodinu a cenu stroja — kalkulačka nájde bod zvratu.',
+      noun: 'telehandler', unit: 'hodín',
+    },
+    defaults: { qty: 400, serviceRate: 900, price: 2800000, years: 10, residual: 35, fuel: 6, fuelPrice: 36, maint: 150, labor: 250, fixed: 3, extra: 0, qtyMax: 3000 },
+  },
 };
 
 function build(slug: string): Record<Locale, NavratnostContent> {
@@ -247,8 +304,14 @@ export const defaults: Record<string, MachineDefaults> = {
   kombajn: MACHINES.kombajn.defaults,
   postrikovac: MACHINES.postrikovac.defaults,
   lis: MACHINES.lis.defaults,
+  secacka: MACHINES.secacka.defaults,
+  rozmetadlo: MACHINES.rozmetadlo.defaults,
+  telehandler: MACHINES.telehandler.defaults,
 };
 
 export const kombajn = build('kombajn');
 export const postrikovac = build('postrikovac');
 export const lis = build('lis');
+export const secacka = build('secacka');
+export const rozmetadlo = build('rozmetadlo');
+export const telehandler = build('telehandler');
