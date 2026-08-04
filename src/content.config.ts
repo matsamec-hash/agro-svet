@@ -1,20 +1,9 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const novinky = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/novinky' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    publishDate: z.date(),
-    category: z.enum(['technika', 'dotace', 'trh', 'legislativa', 'znacky']),
-    tags: z.array(z.string()),
-    znacka: z.string().optional(),
-    model: z.string().optional(),
-    heroImage: z.string().optional(),
-    featured: z.boolean().default(false),
-  }),
-});
+// Pozn.: legacy kolekce `novinky` (src/content/novinky/*.md) byla odstraněna —
+// živé novinky se čtou ze Supabase tabulky `articles` (viz src/pages/novinky/*).
+// Markdown soubory byly duplikáty už publikovaných článků a nic je nekonzumovalo.
 
 const encyklopedieSchema = () =>
   z.object({
@@ -269,4 +258,4 @@ const howtoUk = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { novinky, encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk };
+export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk };

@@ -35,16 +35,20 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export const GET: APIRoute = async () => {
   const supabase = createAnonClient();
-  const { data: articles } = await supabase
+  // POZOR: neselektovat `updated_at` — sloupec v tabulce `articles` neexistuje a
+  // PostgREST na neznámý sloupec vrací chybu → data=null → feed 0 položek (index
+  // i news-sitemap ho proto neselektují). buildDate stavíme z published_at.
+  const { data: articles, error } = await supabase
     .from('articles')
-    .select('slug, title, perex, published_at, updated_at, category, featured_image_url')
+    .select('slug, title, perex, published_at, category, featured_image_url')
     .eq('site_id', SITE_ID)
     .eq('status', 'published')
     .order('published_at', { ascending: false })
     .limit(ITEM_LIMIT);
+  if (error) console.error('rss articles query error', error);
 
   const buildDate = articles && articles.length > 0
-    ? rfc822((articles[0] as { updated_at?: string; published_at: string }).updated_at ?? articles[0].published_at)
+    ? rfc822(articles[0].published_at)
     : new Date().toUTCString();
 
   const items = (articles ?? []).map((a) => {
