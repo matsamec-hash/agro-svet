@@ -1,0 +1,216 @@
+---
+// Interaktivní choropleth mapa evropských zemí pro /svet/mapa/.
+// Vzor: RegionMap.astro — inline SVG server-rendered (SSR vybarví výchozí metriku
+// pro SEO/no-JS), klient jen přepíná metriku + zoom/pan + tooltip + panel.
+// Data: europe.json (geometrie) + map-metrics.json (reálné Eurostat/WB hodnoty).
+import europe from '../../data/svet/geo/europe.json';
+import mapData from '../../data/svet/map-metrics.json';
+import { colorFor, extent } from '../../lib/svet/mapcolor';
+
+const metrics = mapData.metrics as { key: string; label: string; unit: string; group: string }[];
+const countries = mapData.countries as Record<string, { slug: string; name: string; flag: string; region: string; values: Record<string, number | null>; series: Record<string, number[] | null> }>;
+const m0 = metrics[0];
+const e0 = extent(europe.regions.map((r) => countries[r.code]?.values?.[m0.key] ?? null));
+const groups: { g: string; items: typeof metrics }[] = [];
+for (const m of metrics) {
+  const grp = groups.find((x) => x.g === m.group);
+  if (grp) grp.items.push(m); else groups.push({ g: m.group, items: [m] });
+}
+const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+const abbr = (v: number) => (v >= 10000 ? Math.round(v / 1000) + 'k' : v >= 1000 ? (v / 1000).toFixed(1) + 'k' : nf.format(v));
+const payload = { metrics, countries };
+---
+
+<section class="agrimap">
+  <div class="agrimap-controls">
+    {groups.map((grp) => (
+      <div class="agrimap-grp">
+        <span class="agrimap-gl">{grp.g}</span>
+        <div class="agrimap-chips">
+          {grp.items.map((m) => (
+            <button type="button" class:list={['agrimap-metric', { active: m.key === m0.key }]} data-metric={m.key}>{m.label}</button>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <p class="agrimap-insight" id="agrimap-insight"></p>
+
+  <div class="agrimap-stage">
+    <div class="agrimap-mapcard">
+      <div class="agrimap-ztools">
+        <button type="button" id="agrimap-zin" title="Přiblížit" aria-label="Přiblížit">＋</button>
+        <button type="button" id="agrimap-zout" title="Oddálit" aria-label="Oddálit">−</button>
+        <button type="button" id="agrimap-reset" class="reset" title="Reset" aria-label="Reset zoomu">⤢</button>
+      </div>
+      <div class="agrimap-title" id="agrimap-title">{m0.label} ({m0.unit})</div>
+      <svg viewBox={europe.viewBox} class="agrimap-svg" id="agrimap-svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label={`Mapa Evropy — ${m0.label}`}>
+        <g id="agrimap-zoom">
+          {europe.regions.map((r) => {
+            const v = countries[r.code]?.values?.[m0.key] ?? null;
+            return (
+              <path class="agrimap-c" data-c={r.code} d={r.path} fill={colorFor(v, e0.min, e0.max)} stroke="#fff" stroke-width="0.8">
+                <title>{countries[r.code]?.name ?? r.code}</title>
+              </path>
+            );
+          })}
+          {europe.regions.map((r) => {
+            const v = countries[r.code]?.values?.[m0.key] ?? null;
+            const big = r.r > 15;
+            return <text class="agrimap-lbl" data-c={r.code} data-big={big ? '1' : ''} x={r.cx} y={r.cy}>{v != null && big ? abbr(v) : ''}</text>;
+          })}
+        </g>
+      </svg>
+      <div class="agrimap-legend"><span id="agrimap-lo"></span><div class="agrimap-barwrap"><div class="agrimap-bar"></div><div class="agrimap-tick avg" id="agrimap-tavg"><b>EU Ø</b></div><div class="agrimap-tick sel" id="agrimap-tsel"><b></b></div></div><span id="agrimap-hi"></span></div>
+    </div>
+
+    <aside class="agrimap-panel">
+      <div class="agrimap-phead"><div class="agrimap-rank" id="agrimap-rank"></div><div class="agrimap-flag" id="agrimap-flag"></div><div class="agrimap-reg" id="agrimap-reg"></div><h3 id="agrimap-name"></h3></div>
+      <div class="agrimap-rows" id="agrimap-rows"></div>
+      <a class="agrimap-cta" id="agrimap-cta" href="#">→ Detail země</a>
+    </aside>
+  </div>
+
+  <div class="agrimap-tip" id="agrimap-tip" hidden></div>
+  <script type="application/json" id="agrimap-data" set:html={JSON.stringify(payload)}></script>
+</section>
+
+<script>
+  const el = document.getElementById('agrimap-data');
+  if (el) {
+    const { metrics, countries } = JSON.parse(el.textContent || '{}');
+    const svg = document.getElementById('agrimap-svg') as SVGSVGElement | null;
+    const zg = document.getElementById('agrimap-zoom');
+    const tip = document.getElementById('agrimap-tip')!;
+    const reset = document.getElementById('agrimap-reset')!;
+    const FLAGS: Record<string, string> = {};
+    for (const [c, d] of Object.entries(countries as any)) FLAGS[c] = (d as any).flag;
+    const vb = (svg?.getAttribute('viewBox') || '0 0 1000 1165').split(' ').map(Number);
+    const VW = vb[2], VH = vb[3];
+    let active = metrics[0].key, sel = 'CZ', T = { k: 1, x: 0, y: 0 }, anim = false, moved = false, drag: any = null;
+    const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+    const fmtN = (v: number | null) => (v == null ? '—' : nf.format(v));
+    const abbr = (v: number) => (v >= 10000 ? Math.round(v / 1000) + 'k' : v >= 1000 ? (v / 1000).toFixed(1) + 'k' : nf.format(v));
+    // barva mirror mapcolor.ts (STOPS) — server (colorFor) i klient stejné
+    const STOPS = [[240, 247, 234], [162, 201, 130], [90, 150, 74], [31, 92, 31]];
+    const lerp = (a: number, b: number, t: number) => Math.round(a + (b - a) * t);
+    const color = (t: number) => { const x = Math.max(0, Math.min(1, t)); const seg = x * 3; const i = Math.min(2, Math.floor(seg)); const f = seg - i; return `rgb(${[0, 1, 2].map((c) => lerp(STOPS[i][c], STOPS[i + 1][c], f)).join(',')})`; };
+    const metricOf = (k: string) => metrics.find((m: any) => m.key === k);
+    const vals = (k: string) => Object.values(countries).map((d: any) => d.values[k]).filter((v: any) => typeof v === 'number') as number[];
+    const stat = (k: string) => { const vs = vals(k); return { min: Math.min(...vs), max: Math.max(...vs), avg: vs.reduce((a, b) => a + b, 0) / vs.length }; };
+    const rank = (code: string, k: string) => { const a = (Object.entries(countries) as any[]).filter(([, d]) => typeof d.values[k] === 'number').sort(([, x]: any, [, y]: any) => y.values[k] - x.values[k]); const i = a.findIndex(([c]: any) => c === code); return i < 0 ? null : [i + 1, a.length]; };
+    const spark = (s: number[] | null) => { if (!s || s.length < 2) return ''; const mn = Math.min(...s), mx = Math.max(...s); return s.map((v, i) => (i / (s.length - 1) * 64 + 1).toFixed(1) + ',' + (18 - (v - mn) / (mx - mn || 1) * 16).toFixed(1)).join(' '); };
+
+    function apply() { if (zg) { (zg as HTMLElement).style.transition = anim ? 'transform .5s cubic-bezier(.4,0,.2,1)' : 'none'; (zg as HTMLElement).style.transform = `translate(${T.x}px,${T.y}px) scale(${T.k})`; } reset.classList.toggle('on', T.k > 1.001); }
+    function zoomAround(cx: number, cy: number, k: number) { k = Math.min(8, Math.max(1, k)); const u = { x: (cx - T.x) / T.k, y: (cy - T.y) / T.k }; T.x = cx - k * u.x; T.y = cy - k * u.y; T.k = k; if (k <= 1.001) T = { k: 1, x: 0, y: 0 }; apply(); }
+    function vbPt(e: MouseEvent) { const p = svg!.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg!.getScreenCTM()!.inverse()); }
+
+    function paint() {
+      const s = stat(active), m = metricOf(active);
+      document.getElementById('agrimap-title')!.textContent = `${m.label} (${m.unit})`;
+      document.getElementById('agrimap-lo')!.textContent = fmtN(s.min);
+      document.getElementById('agrimap-hi')!.textContent = fmtN(s.max) + ' ' + m.unit;
+      (document.getElementById('agrimap-tavg') as HTMLElement).style.left = ((s.avg - s.min) / (s.max - s.min) * 100) + '%';
+      const sd = countries[sel]?.values[active]; const tS = document.getElementById('agrimap-tsel') as HTMLElement;
+      if (sd != null) { tS.style.display = 'block'; tS.style.left = ((sd - s.min) / (s.max - s.min) * 100) + '%'; tS.querySelector('b')!.textContent = FLAGS[sel]; } else tS.style.display = 'none';
+      document.querySelectorAll('path.agrimap-c').forEach((p) => { const d = countries[(p as HTMLElement).dataset.c!]; const v = d?.values[active]; (p as HTMLElement).style.fill = v == null ? '#e7e9e1' : color((v - s.min) / (s.max - s.min || 1)); p.classList.toggle('sel', (p as HTMLElement).dataset.c === sel); });
+      document.querySelectorAll('text.agrimap-lbl').forEach((t) => { const d = countries[(t as HTMLElement).dataset.c!]; const v = d?.values[active]; const big = (t as HTMLElement).dataset.big === '1'; t.textContent = v != null && big ? abbr(v) : ''; (t as HTMLElement).classList.toggle('lt', v != null && (v - s.min) / (s.max - s.min) > 0.62); });
+      const arr = (Object.entries(countries) as any[]).filter(([, d]) => d.values[active] != null).sort(([, x]: any, [, y]: any) => y.values[active] - x.values[active]);
+      const top = arr[0], bot = arr[arr.length - 1]; const ratio = top[1].values[active] / bot[1].values[active]; const cz = rank('CZ', active);
+      document.getElementById('agrimap-insight')!.innerHTML = `💡 ${top[1].flag} <b>${top[1].name}</b> vede (${fmtN(top[1].values[active])} ${m.unit}) — ${ratio >= 2 ? Math.round(ratio) + '× víc než ' : 'nejvíc, oproti '}${bot[1].flag} ${bot[1].name} (${fmtN(bot[1].values[active])}). 🇨🇿 Česko: <b>${cz ? cz[0] + '. místo' : '—'}</b> z ${cz ? cz[1] : '—'}.`;
+    }
+    function panel(code: string) {
+      const d = countries[code]; if (!d) return; sel = code;
+      document.getElementById('agrimap-flag')!.textContent = d.flag; document.getElementById('agrimap-name')!.textContent = d.name; document.getElementById('agrimap-reg')!.textContent = d.region + 'ní Evropa';
+      (document.getElementById('agrimap-cta') as HTMLAnchorElement).href = `/svet/${d.slug}/`;
+      const rk = rank(code, active); document.getElementById('agrimap-rank')!.innerHTML = rk ? `${rk[0]}.<br><span>z ${rk[1]}</span>` : '—';
+      const rows = document.getElementById('agrimap-rows')!; rows.innerHTML = '';
+      for (const m of metrics) {
+        const v = d.values[m.key], s = stat(m.key); const cmp = v == null ? '' : v >= s.avg ? 'up' : 'dn'; const pct = v == null ? '' : Math.round((v / s.avg - 1) * 100);
+        const pos = v == null ? 0 : Math.max(3, Math.round((v - s.min) / (s.max - s.min || 1) * 100));
+        const row = document.createElement('div'); row.className = 'agrimap-row' + (m.key === active ? ' hot' : '');
+        row.innerHTML = `<div class="rtop"><span class="k">${m.label}</span><span class="v">${fmtN(v)} ${v != null ? m.unit : ''} ${v != null ? `<span class="cmp ${cmp}">${pct >= 0 ? '+' : ''}${pct}%</span>` : ''}</span></div>` +
+          (v != null ? `<div class="rbot"><div class="mini"><i style="width:${pos}%;background:${color(pos / 100)}"></i></div><svg class="spark" viewBox="0 0 66 20"><polyline points="${spark(d.series[m.key])}" fill="none" stroke="#5a964a" stroke-width="1.5"/></svg></div>` : '');
+        rows.appendChild(row);
+      }
+      paint();
+    }
+    function zoomTo(code: string) { const p = document.querySelector(`path.agrimap-c[data-c="${code}"]`) as SVGGraphicsElement | null; if (!p) return; const b = p.getBBox(); const pad = b.width * 0.6 + 20; const bw = b.width + pad * 2, bh = b.height + pad * 2; const k = Math.min(VW / bw, VH / bh, 5); anim = true; T.k = k; T.x = VW / 2 - (b.x + b.width / 2) * k; T.y = VH / 2 - (b.y + b.height / 2) * k; apply(); }
+
+    document.querySelectorAll('.agrimap-metric').forEach((b) => b.addEventListener('click', () => { active = (b as HTMLElement).dataset.metric!; document.querySelectorAll('.agrimap-metric').forEach((x) => x.classList.remove('active')); b.classList.add('active'); panel(sel); }));
+    document.getElementById('agrimap-zin')!.addEventListener('click', () => { anim = true; zoomAround(VW / 2, VH / 2, T.k * 1.4); });
+    document.getElementById('agrimap-zout')!.addEventListener('click', () => { anim = true; zoomAround(VW / 2, VH / 2, T.k / 1.4); });
+    reset.addEventListener('click', () => { anim = true; T = { k: 1, x: 0, y: 0 }; apply(); });
+    if (svg) {
+      svg.addEventListener('wheel', (e) => { e.preventDefault(); anim = false; const c = vbPt(e); zoomAround(c.x, c.y, T.k * (e.deltaY < 0 ? 1.18 : 1 / 1.18)); }, { passive: false });
+      svg.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, tx: T.x, ty: T.y }; moved = false; svg.style.cursor = 'grabbing'; });
+      svg.addEventListener('pointermove', (e) => { if (!drag) return; const s = VW / svg.clientWidth; if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 3) moved = true; anim = false; T.x = drag.tx + (e.clientX - drag.x) * s; T.y = drag.ty + (e.clientY - drag.y) * s; apply(); });
+      window.addEventListener('pointerup', () => { drag = null; if (svg) svg.style.cursor = 'grab'; });
+      svg.addEventListener('mousemove', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) { const d = countries[p.dataset.c!]; const m = metricOf(active); tip.hidden = false; tip.innerHTML = `${d.flag} ${d.name} · <b>${fmtN(d.values[active])} ${m.unit}</b>`; tip.style.left = (e.clientX + 14) + 'px'; tip.style.top = (e.clientY - 10) + 'px'; } else tip.hidden = true; });
+      svg.addEventListener('mouseleave', () => (tip.hidden = true));
+      svg.addEventListener('mouseover', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) panel(p.dataset.c!); });
+      svg.addEventListener('click', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) { panel(p.dataset.c!); if (!moved) zoomTo(p.dataset.c!); } });
+    }
+    panel('CZ');
+  }
+</script>
+
+<style>
+  .agrimap { --ink: #0A0A0B; --accent: #FFEA00; --muted: #6b6b70; --line: #e9e9ec; }
+  .agrimap-controls { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-bottom: 12px; }
+  .agrimap-grp { display: flex; flex-direction: column; gap: 6px; }
+  .agrimap-gl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #b0b0b4; }
+  .agrimap-chips { display: flex; gap: 7px; flex-wrap: wrap; }
+  .agrimap-metric { border: 1.5px solid var(--line); background: #fff; border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; color: #333; transition: .15s; }
+  .agrimap-metric:hover { border-color: #c3c3c6; }
+  .agrimap-metric.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .agrimap-insight { background: linear-gradient(90deg, #fffdf0, #fff); border: 1px solid #f0ead0; border-left: 3px solid var(--accent); border-radius: 10px; padding: 8px 13px; font-size: 13px; margin: 0 0 12px; line-height: 1.45; }
+  .agrimap-stage { display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start; }
+  .agrimap-mapcard { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px 8px; position: relative; }
+  .agrimap-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 2px 4px 6px; }
+  .agrimap-ztools { position: absolute; top: 12px; right: 14px; z-index: 4; display: flex; flex-direction: column; gap: 5px; }
+  .agrimap-ztools button { width: 30px; height: 30px; background: #fff; border: 1.5px solid var(--line); border-radius: 8px; font-size: 16px; font-weight: 800; cursor: pointer; color: #333; display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0; }
+  .agrimap-ztools button:hover { border-color: #bbb; }
+  .agrimap-ztools .reset { display: none; }
+  .agrimap-ztools .reset.on { display: flex; }
+  .agrimap-svg { width: 100%; height: auto; max-height: 74vh; display: block; overflow: hidden; cursor: grab; touch-action: none; }
+  #agrimap-zoom { will-change: transform; }
+  path.agrimap-c { cursor: pointer; transition: fill .45s ease; }
+  path.agrimap-c:hover { filter: brightness(1.08); }
+  path.agrimap-c.sel { stroke: var(--ink); stroke-width: 1.6; }
+  text.agrimap-lbl { font-size: 9px; font-weight: 700; fill: #12331f; paint-order: stroke; stroke: #fff; stroke-width: 2px; pointer-events: none; text-anchor: middle; opacity: .9; }
+  text.agrimap-lbl.lt { fill: #fff; stroke: rgba(0, 0, 0, .25); }
+  .agrimap-legend { display: flex; align-items: center; gap: 10px; margin: 8px 6px 4px; font-size: 12px; color: var(--muted); }
+  .agrimap-barwrap { flex: 1; position: relative; height: 22px; display: flex; align-items: center; }
+  .agrimap-bar { height: 11px; width: 100%; border-radius: 6px; background: linear-gradient(90deg, #f0f7ea, #a2c982, #5a964a, #1f5c1f); }
+  .agrimap-tick { position: absolute; top: -2px; height: 15px; width: 2px; background: var(--ink); transform: translateX(-1px); }
+  .agrimap-tick.avg { background: #888; }
+  .agrimap-tick b { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 800; white-space: nowrap; }
+  .agrimap-tick.avg b { color: #888; }
+  .agrimap-panel { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .agrimap-phead { background: var(--ink); color: #fff; padding: 15px 18px 13px; position: relative; }
+  .agrimap-flag { font-size: 30px; line-height: 1; }
+  .agrimap-phead h3 { margin: 6px 0 0; font-size: 20px; }
+  .agrimap-reg { color: var(--accent); font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .agrimap-rank { position: absolute; top: 15px; right: 18px; background: var(--accent); color: var(--ink); font-weight: 800; font-size: 13px; padding: 6px 11px; border-radius: 9px; text-align: center; line-height: 1.1; }
+  .agrimap-rank span { font-weight: 600; font-size: 10px; }
+  .agrimap-rows { padding: 6px 18px 10px; }
+  .agrimap-row { padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .agrimap-row:last-child { border-bottom: none; }
+  .agrimap-row .rtop { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .agrimap-row .k { color: var(--muted); font-size: 12.5px; }
+  .agrimap-row .v { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 13.5px; white-space: nowrap; }
+  .agrimap-row.hot { background: linear-gradient(90deg, #fffdf0, #fff); margin: 0 -18px; padding: 9px 18px; border-left: 3px solid var(--accent); }
+  .agrimap-row .cmp { font-size: 11px; font-weight: 700; margin-left: 4px; }
+  .agrimap-row .cmp.up { color: #0B7A3B; }
+  .agrimap-row .cmp.dn { color: #b23; }
+  .agrimap-row .rbot { display: flex; align-items: center; gap: 8px; margin-top: 7px; }
+  .agrimap-row .mini { height: 5px; border-radius: 3px; background: #eee; flex: 1; position: relative; overflow: hidden; }
+  .agrimap-row .mini i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+  .agrimap-row .spark { width: 66px; height: 20px; flex: none; }
+  .agrimap-cta { display: block; text-align: center; margin: 4px 18px 18px; background: var(--accent); color: var(--ink); font-weight: 800; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; }
+  .agrimap-tip { position: fixed; pointer-events: none; background: var(--ink); color: #fff; padding: 7px 11px; border-radius: 8px; font-size: 12.5px; font-weight: 600; z-index: 99; white-space: nowrap; box-shadow: 0 6px 20px rgba(0, 0, 0, .25); }
+  .agrimap-tip b { color: var(--accent); }
+  @media (max-width: 820px) { .agrimap-stage { grid-template-columns: 1fr; } }
+</style>

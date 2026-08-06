@@ -1,0 +1,46 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import EuropeMap from '../../../components/svet/EuropeMap.astro';
+import mapData from '../../../data/svet/map-metrics.json';
+import '../../../styles/svet.css';
+
+const title = 'Mapa zemědělství Evropy — porovnání zemí';
+const description = 'Interaktivní mapa: výnosy, stavy zvířat, zemědělská plocha, počet farem, ekozemědělství a zaměstnanost napříč Evropou. Přepínejte metriky a porovnejte země. Zdroje Eurostat a World Bank.';
+const canonical = 'https://agro-svet.cz/svet/mapa/';
+
+const metrics = mapData.metrics as { key: string; label: string; source: string; sourceUrl: string }[];
+const sources = Array.from(new Map(metrics.filter((m) => m.source).map((m) => [m.source + m.sourceUrl, { source: m.source, url: m.sourceUrl }])).values());
+---
+
+<Layout title={title} description={description} canonical={canonical}>
+  <main class="svet-page">
+    <nav class="svet-crumbs" aria-label="Drobečková navigace" style="font-size:13px;color:#666;margin-bottom:8px;">
+      <a href="/" style="color:#666;text-decoration:none;">Domů</a> ·
+      <a href="/svet/" style="color:#666;text-decoration:none;">Svět</a> ·
+      <span>Mapa</span>
+    </nav>
+    <header class="svet-hero" style="padding-bottom:12px;">
+      <div class="svet-hero-inner">
+        <span class="svet-flag">🗺️</span>
+        <h1>{title}</h1>
+        <p class="svet-lede">{description}</p>
+      </div>
+    </header>
+
+    <EuropeMap />
+
+    <section class="svet-section" style="margin-top:28px;">
+      <header class="svet-section-head"><h2>Zdroje a metodika</h2></header>
+      <p style="color:#555;font-size:14px;line-height:1.6;">
+        Data pocházejí z oficiálních evropských a světových statistik. Nejnovější dostupný rok
+        za každou zemi; některé mimoevropské a menší země nemusí mít všechny ukazatele (zobrazeny šedě).
+        Mapa staví na profilech zemí v sekci <a href="/svet/">Svět</a> — kliknutím na zemi přejdete na její detail.
+      </p>
+      <ul style="color:#555;font-size:14px;line-height:1.7;">
+        {sources.map((s) => (
+          <li><strong>{s.source}</strong>{s.url ? <> — <a href={s.url} rel="nofollow noopener" target="_blank">zdrojová data</a></> : null}</li>
+        ))}
+      </ul>
+    </section>
+  </main>
+</Layout>
