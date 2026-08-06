@@ -1,0 +1,143 @@
+# PL overlay (opisy/pola) na strukturę cs. AI draft + edytor, wymaga review.
+
+country: "Francja"
+description: >-
+  Francuski producent z najszerszym portfolio maszyn rolniczych — pługi Master i Vari-Master, siewniki Espro i Venta, opryskiwacze Altis/Metris/Oceanis, rozsiewacze Axis i Aero, prasy VB/LSB, maszyny koszące GMD, wozy paszowe Euromix i Profile.
+
+categories:
+  hnojeni: "Nawożenie"
+  komunal-les: "Komunalne i leśne"
+  ochrana-rostlin: "Ochrona roślin"
+  seti: "Siew i sadzenie"
+  sklizen-picnin: "Zbiór pasz i słomy"
+  staj-chov: "Obora i hodowla"
+  zpracovani-pudy: "Uprawa gleby"
+
+series:
+  aero: >-
+    Pneumatyczne rozsiewacze nawozów mineralnych z ramieniem rozdzielczym o szerokości do 27 m.
+    Aero wykorzystuje rozprowadzenie powietrzne zamiast talerzy odśrodkowych, co gwarantuje ekstremalną
+    precyzję dawkowania nawet przy nawozach przemysłowych. Odpowiednie do aplikacji tram-line
+    i sektorowego wyłączania. Wersje ciągnione o pojemności powyżej 3 m³.
+  axis: >-
+    Flagowa seria zawieszanych rozsiewaczy odśrodkowych z elektronicznym systemem EMC,
+    który na bieżąco mierzy moment każdego talerza i koryguje dawkę w czasie rzeczywistym.
+    Szerokości robocze 12–50 m, pojemności zbiornika 1 000–4 500 l. Wersja H z ciągłym ważeniem
+    dla najwyższej precyzji na nierównym terenie i pochyleniach.
+  msp: >-
+    Uniwersalne rozsiewacze nawozów naturalnych z pionowymi bębnami lub talerzami.
+    Konstrukcja z nisko położonym środkiem ciężkości i hydrauliczną klapą tylną
+    umożliwia równomierną aplikację obornika, kompostu i digestatu.
+    Modele o pojemności skrzyni 8–24 m³, kompatybilne z ISOBUS.
+  pul: >-
+    Zawieszane i ciągnione zbiorniki na gnojowicę o pojemności 7–28 m³. Standardem jest napełnianie próżniowe
+    oraz możliwość kombinacji z aplikatorami (węże ciągnione, talerzowe, slot-injector).
+    Kompatybilne z ISOBUS i sekcyjnym wyłączaniem dla precyzyjnej aplikacji na terenach chronionych.
+  bp: >-
+    Uniwersalne mulczery do pielęgnacji trawników, poboczy i pożniwnych resztek.
+    Szerokości robocze 1,8–3,2 m z pływającym przegubem do kopiowania nierówności terenu.
+    Odwracalne warianty BPR umożliwiają montaż z przodu i z tyłu, odpowiednie
+    do współpracy z maszynami komunalnymi.
+  tbe: >-
+    Mulczery wysięgnikowe do pielęgnacji rowów, poboczy i żywopłotów.
+    Hydrauliczne ramię o zasięgu 5–8 m z obrotowym adapterem mulczującym.
+    Standardowo proporcjonalne sterowanie joystickiem i system bezpieczeństwa float
+    chroniący przed uderzeniami.
+  altis: >-
+    Zawieszane opryskiwacze polowe z zbiornikiem 1 000–1 800 l i szerokością ramion 18–28 m.
+    Hydraulicznie sterowane stalowe ramiona z zawieszeniem i sekcyjnym wyłączaniem.
+    Odpowiednie dla średnich gospodarstw i w połączeniu z przednim zbiornikiem
+    dla zwiększenia pojemności.
+  deltis: >-
+    Kompaktowe opryskiwacze zawieszane dla małych i średnich gospodarstw. Zbiornik 600–1 300 l,
+    ramiona 12–24 m z ręcznym lub hydraulicznym rozkładaniem. Standardowo komputer
+    DPAE do precyzyjnego dawkowania zależnego od prędkości.
+  lexis: >-
+    Kompaktowy ciągniony opryskiwacz klasy podstawowej ze zbiornikiem 2 400–3 000 l i ramionami
+    18–24 m. Jednoosiowe podwozie, mechanicznie sterowany dyszel i prosta obsługa.
+    Odpowiedni dla średnich gospodarstw szukających pierwszej maszyny ciągnionej.
+  metris: >-
+    Ciągniony opryskiwacz średniej klasy o pojemności zbiornika 3 200–4 100 l i ramionach
+    18–30 m. Wyposażony w system stabilizacji ramion Equilibra i aktywne sterowanie sekcjami.
+    ISOBUS z aplikacjami mapowymi i możliwością Auto-Section.
+  oceanis: >-
+    Flagowa seria ciągnionych opryskiwaczy ze zbiornikiem 4 600–7 700 l i aluminiowymi
+    ramionami do 44 m. Pneumatyczne zawieszenie, sterowana oś i stabilizacja ramion Equilibra+.
+    W pełni ISOBUS, kompatybilne z GPS sekcjonowaniem i dyszami PWM.
+  espro: >-
+    Ciągnione siewniki talerzowe do technologii minimalnej i konwencjonalnej.
+    Dwurzędowe talerze z regulowanym kątem, wały TF z efektem ugniatania
+    i równoległobok zawieszenia redlic. Szerokości 3–8 m, jedno- lub dwukomorowe
+    zbiorniki na siew mieszanek i międzyplonów.
+  maxima: >-
+    Precyzyjne siewniki do roślin rzędowych — kukurydzy, słonecznika, rzepaku
+    i buraka cukrowego. Elektryczny napęd zespołu wysiewającego z indywidualnym wyłączaniem
+    rzędów i selekcją pojedynczych nasion. Szerokość 4–18 rzędów, sterowanie przez terminal ISOBUS CCI.
+  sitera: >-
+    Mechaniczne siewniki do współpracy z brona rotacyjną HR. System wysiewu nasion Suprapack lub talerzowy CD dla różnych warunków glebowych. Hydrauliczne przejście do pozycji transportowej i możliwość dokarmiania nawozem. Szerokość 3–4 m.
+  venta: >-
+    Pneumatyczne siewniki do współpracy z aktywnym osprzętem. Centralne dawkowanie z napędem elektrycznym, pneumatyczne rozprowadzenie do redlic i duży zbiornik do 1 500 l. Odpowiednie dla intensywnych gospodarstw łączących bronę rotacyjną i siewnik w jednym przejeździe.
+  fc: >-
+    Maszyny koszące z kondycjonerem (stalowe palce lub wały) przyspieszające schnięcie pasz. Szerokości 2,4–13,4 m w wersjach zawieszanych, czołowych i potrójnych. Asymetryczny napęd Optidisc i hydropneumatyczne odciążenie Lift-Control dla delikatnej pracy na nierównym terenie.
+  ga: >-
+    Zgrabiarki pasz z jednym, dwoma lub czterema rotorami. Szerokości 3,2–15 m,
+    sterowane podwozie MASTER DRIVE GIII dla ekstremalnej trwałości i 3D ruch rotorów kopiujący teren. Modele 9531/15131 to flagowa seria dla dużych gospodarstw i profesjonalnej kiszonki.
+  gf: >-
+    Przewracarki pasz o szerokościach 4,5–17 m i 4–14 rotorach. Hydrauliczna regulacja kąta rozsiewu dla różnych typów plonów i delikatne przewracanie także młodej paszy. Obrotowa głowica digihead dla stabilności na stokach i nocnego transportu w pozycji złożonej.
+  gmd: >-
+    Talerzowe maszyny koszące bez kondycjonera do zastosowań zawieszanych i ciągnionych. Listwa tnąca Optidisc Elite z dużym rozstawem talerzy dla płynnego wyrzutu materiału. Szerokości 1,7–9,5 m, wersje zawieszane i potrójne z automatycznym omijaniem przeszkód (NSH).
+  lsb: >-
+    Prasy belujące średniej klasy z komorą 80×70 lub 80×90 cm. Pickup o szerokości 2,3 m i zintegrowany system cięcia do 23 noży. Odpowiednie do słomy, siana i kiszonki o wysokiej gęstości beli i niskich kosztach eksploatacji.
+  merge-maxx: >-
+    Gąsienicowy zgrabiacz (merger) z pickupem i taśmą transportową zamiast rotorów.
+    Delikatna obsługa paszy bez zanieczyszczeń ziemią — idealne do luksusowych kiszonek i upraw nasiennych. Szerokość 9,5 m z możliwością zgrabiania na prawo,
+    lewo i obustronnie.
+  profile-fs: >-
+    Samozaładowczy wóz z dużą pojemnością ładunkową 36–58 m³ DIN.
+    Pickup o szerokości 2 m i rotor nożowy z 35–46 nożami do krótkiego cięcia pasz.
+    Oś tandemowa z zawieszeniem i hydrauliczna podłoga wyrzutowa.
+  rw: >-
+    Ciągnione owijarki bel do bel okrągłych i prostokątnych. Podwójne jednostki naciągowe 500/750 mm i hydrauliczne przechylenie beli do pozycji umożliwiającej płynną pracę z ładowaczem. Modele RW 1410/1610 należą do najlepiej sprzedających się w Europie.
+  vb: >-
+    Prasy walcowe z komorą zmienną do bel o średnicy 0,8–1,85 m.
+    Nowy rotor Integral dla wysokiej wydajności także w wilgotnym materiale, system cięcia OptiCut z 14, 23 lub 25 nożami. Warianty VBP łączą prasę z owijarką w jednym przejeździe.
+  euromix: >-
+    Poziome wozy paszowe mieszające z 2–4 ślimakami/łopatkami i pojemnością 8–24 m³.
+    Delikatne mieszanie odpowiednie do TMR z udziałem pasz długosteblowych i siana. Standardowo programowalne ważenie z pamięcią receptur.
+  primor: >-
+    Maszyny do rozdrabniania i dmuchania słomy do obór — rozdrabniacz bel. Boczne wyrzucanie do 18 m, obrotowy komin do dmuchania słomy do głębokich obór.
+    Modele od 1,3 do 5,7 m³ z pickupem do dużych bel 120×120 cm.
+  profile-mixer: >-
+    Pionowe wozy paszowe mieszające z jednym lub dwoma ślimakami i pojemnością
+    12–46 m³. Ślimak z ostrymi nożami do szybkiego przetwarzania dużych bel
+    i kiszonki. Wersja Plus dodaje programowalne ważenie, interfejs ISOBUS
+    i tryb eco-drive.
+  spv: >-
+    Samobieżne wozy mieszające z zintegrowanym ramieniem załadowczym frezującym
+    i pojemnością 12–27 m³. Napęd hydrostatyczny, kabina z widokiem 360°
+    i możliwość konfiguracji napędu 4×4 lub 4×4×4 z kierowaną tylną osią.
+    Odpowiednie dla dużych hodowli z dziennym żywieniem 200+ sztuk.
+  tks: >-
+    Automatyczny system żywienia oparty na robocie jeżdżącym po szynie sufitowej obory. Załadowuje się paszą TMR i programowo omija stół paszowy o ustalonych porach. Obniża koszty pracy i stabilizuje dzienną dawkę — odpowiedni dla mlecznych farm z automatyczną dojarką.
+  cultimer: >-
+    Kultywatory z 2–4 rzędami lemieszy i hydrauliczną ochroną Non-Stop. Szerokości 3–6 m w wersji zawieszanej i 6–10 m w ciągnionej.
+    Wymienne lemiesze pozwalają na adaptację od płytkiej uprawy 5 cm
+    do głębokiego spulchniania 35 cm.
+  discover-xm2: >-
+    Krótki kultywator talerzowy do płytkiej uprawy i wyrównania powierzchni.
+    Talerze 510 mm z niezależnym zawieszeniem i hydrauliczną ochroną.
+    Odpowiedni dla wydajnych gospodarstw z ciągnikami 150+ KM i prędkością roboczą 12–15 km/h. Szerokości 3–6 m.
+  hr: >-
+    Brony rotacyjne z aktywnymi elementami obrotowymi do jakościowego przygotowania łóżka siewnego. Szerokości 3–8 m, wersje zawieszane i składane z przekładnią stałą lub opcją Speedline. Standardowo wał Maxipack i możliwość łączenia z mechanicznym lub pneumatycznym siewnikiem.
+  master: >-
+    Obracalne pługi zawieszane i półzawieszane z 3–8 lemieszami. Modele Master 103/153 oferują mechaniczne lub hydrauliczne ustawianie szerokości roboczej, Vari-Master płynną regulację szerokości bruzdy 30–55 cm. Lemiesze z stali borowej z zapasem na głębokie orki do 35 cm.
+  optimer: >-
+    Krótkie kultywatory talerzowe przeznaczone do płytkiej uprawy po zbiorach.
+    Talerze 510 mm z indywidualnym zawieszeniem na gumowych silentblokach.
+    Szerokości 3–7,5 m w wersjach zawieszanych i ciągnionych. Hydrauliczna regulacja
+    głębokości z kabiny dla adaptacji do różnych typów gleby.
+  prolander: >-
+    Kultywator z lemieszami do płytkiej uprawy i przygotowania łóżka siewnego.
+    Sześć rzędów lemieszy o rozstawie 6 cm zapewnia równomierny profil pracy
+    i dobre wymieszanie resztek pożniwnych. Szerokości 3–7,5 m,
+    wersje zawieszane i ciągnione.

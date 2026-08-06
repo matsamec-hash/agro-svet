@@ -1,0 +1,56 @@
+# PL overlay (opisy/pola) na strukturę cs. AI draft + edytor, wymaga review.
+
+country: "Niemcy"
+description: >-
+  Niemiecki specjalista (siedziba Hasbergen-Gaste) w rozrzutnikach nawozów mineralnych (serie ZA-V, ZA-TS, ZG-TS), opryskiwaczach (UF, UX, samobieżna Pantera), siewnikach (Cataya, Centaya, Cirrus, Precea, Primera DMC) oraz uprawie gleby (talerzowe agregaty uprawowe Catros/Catros XL, redlicowe Cenius/Cenio, głęboka kultywacja Cobra, brony rotacyjne KE/KG/KX). Znany z technologii ArgusTwin (rozrzutniki) i SmartSprayer (opryskiwacze).
+
+categories:
+  hnojeni: "Nawożenie"
+  ochrana-rostlin: "Ochrona roślin"
+  seti: "Siew i sadzenie"
+  zpracovani-pudy: "Uprawa gleby"
+
+series:
+  za-v: >-
+    ZA-V — zawieszany talerzowy rozrzutnik nawozów mineralnych dla średnich i większych gospodarstw.
+    Szerokość robocza 10–36 m, pojemność zbiornika 1 400–4 200 l w zależności od osprzętu. Regulacja dawki wagowa systemem AMADOS+, rozrzut graniczny BorderTS. Korzystny stosunek ceny do wydajności, idealny dla gospodarstw 100–500 ha. Waga i sekcyjny rozrzut opcjonalnie.
+  za-ts: >-
+    ZA-TS — flagowy model zawieszanych rozrzutników do precyzyjnej aplikacji. Szerokość robocza do 54 m, pojemność 1 400–4 200 l. System ArgusTwin nieustannie kontroluje kąt padania nawozu za pomocą czterech radarów i koryguje pozycję łopatek dla jednolitego rozrzutu. AutoTS umożliwia automatyczny rozrzut graniczny i na zakrętach bez wymiany łopatek. Odpowiedni do zmiennej aplikacji według map GPS.
+  za-m: >-
+    ZA-M — podstawowa seria zawieszanych rozrzutników o szerokości roboczej 10–36 m i pojemności 1 000–3 000 l. Prosta konstrukcja z mechanicznym lub hydraulicznym sterowaniem klap. Odpowiedni dla mniejszych gospodarstw i zastosowań komunalnych (nawożenie parków, sól zimą). Najbardziej ekonomiczny model w portfolio.
+  zg-ts: >-
+    ZG-TS — ciągniony rozrzutnik wielkoobszarowy do najbardziej wymagającej eksploatacji. Pojemność 5 500–10 500 l, szerokość robocza do 54 m z ArgusTwin i AutoTS. Hydrauliczne podwozie z zawieszeniem, sekcyjny rozrzut do zmiennej aplikacji według GPS. Przeznaczony dla gospodarstw powyżej 500 ha i serwisów nawozowych. Możliwość ISOBUS Section Control w połączeniu z nawigacją ciągnika.
+  pantera: >-
+    Pantera — samobieżny opryskiwacz z zbiornikiem 4 500 l i szerokością roboczą 24–40 m. Wersja H z hydropneumatycznym podwoziem 1,25 m, W z wyższym prześwitem do aplikacji w wysokich uprawach (kukurydza, słonecznik). Silnik Deutz 6-cylindrowy o mocy 218 KM (4503) lub 250 KM (4504). Hydrostatyczny napęd wszystkich kół, nawigacja GPS i sekcyjne wyłączanie AmaSwitch w standardzie. Opcjonalnie AmaSelect do przełączania dysz w trakcie jazdy.
+  ux: >-
+    UX — ciągniony opryskiwacz dla średnich i dużych gospodarstw. Pojemność zbiornika 4 200–11 200 l, szerokość robocza 21–42 m. Wersja Super z aktywnym kierowaniem osi, ContourControl do automatycznego kopiowania terenu belką. SmartCenter centrum sterowania z indukcyjnym napełnianiem. Odpowiedni do intensywnego uprawy zbóż i oleistych.
+  uf: >-
+    UF — zawieszany opryskiwacz o pojemności zbiornika 1 002–2 002 l i szerokości 12–30 m. Kompaktowe rozmiary dla małych i średnich gospodarstw lub jako uzupełnienie do maszyny samobieżnej. Centrum sterowania DC lub TC, kompatybilne z AmaSelect i AmaSwitch. Opcjonalnie przedni zbiornik FT 1502 zwiększający pojemność do 3 500 l bez utraty zwrotności.
+  cataya: >-
+    Cataya — zawieszany mechaniczny siewnik do kombinacji z broną rotacyjną KE lub kompaktomatem KG. Szerokość robocza 3,0–4,0 m, układ dozujący z napędem elektrycznym (eDrive) do zmiennej dawki według mapy. Stopki WS (tarcze) lub RoTeC do siewu w różnych warunkach. Wersja Special do klasycznego zastosowania, Super z systemem przeddozowania i wyższym komfortem.
+  centaya: >-
+    Centaya — zawieszany pneumatyczny siewnik o szerokości 3,0–4,0 m do kombinacji z broną rotacyjną KE/KG lub kompaktomatem KX. Centralne dozowanie z głowicą dystrybucyjną, stopki TwinTeC z naciskiem do 70 kg na stopkę dla pewnego umieszczenia w twardej glebie. Wersja Super z przeddozowaniem do płynnego dokręcania zakrętów, standard ISOBUS. Centaya 6000-2 Super (wariant 2C) to ciągniona wersja dwurzędowa dla dużych gospodarstw o szerokości 6 m.
+  cirrus: >-
+    Cirrus — ciągniona uniwersalna kombinacja siewna do siewu mulczowego i konwencjonalnego. Szerokość 3–9 m, tarczowe stopki TwinTeC z obniżonym oporem ciągnienia i naciskiem do 50 kg/stopkę. Wersje 02 (prosta), 2C (dwa zbiorniki na nasiona + nawóz do aplikacji pod stopkę) i 2CC (kombinacja plus mikrogranulat). Aktualna generacja 9004-2C i 6004-2C zastąpiła starsze modele 9003-2. ISOBUS, sekcyjne wyłączanie, GPS do zmiennej dawki.
+  precea: >-
+    Precea — precyzyjny siewnik nowej generacji do kukurydzy, słonecznika, buraka i innych szeroko rzędowych roślin. Szerokość 3–6 m, układ dozujący z turbiną próżniową pracującą do 15 km/h. Wersje 3000-A (zawieszana), 4500-2 i 6000-2 (ciągnione dwurzędowe), 6000-2CC (z mikrogranulatem) i TCC (z dużym zbiornikiem na nawóz). FertiSpot do punktowej aplikacji nawozu pod stopkę. Zastępuje stare serie ED i EDX.
+  primera-dmc: >-
+    Primera DMC — ciągniony siewnik specjalista do siewu bezpośredniego (no-till) w mulcz i pożniwny. Szerokość 6–9 m, redlicowe stopki z naciskiem do 130 kg do penetracji twardej, suchej gleby. Duży zbiornik 4 200–5 000 l, standard ISOBUS. Popularny model w obszarach suchych (południe Europy Środkowej, Węgry) i gospodarstwach z techniką konserwującą glebę.
+  catros: >-
+    Catros — kompaktowy talerzowy agregat uprawowy do płytkiej uprawy pożniwnej na głębokość 5–12 cm. Szerokość 3–12 m, talerze 510 mm w układzie X z indywidualnym zawieszeniem każdego talerza. Łożyska bezobsługowe, wały opcjonalne (klatkowy, zębaty, gumowy, podwójny). Wersje 2TX (ciągniony dwuoś) i 2TS (ciągniony do dużych szerokości z podwoziem). Odpowiedni do słomy, rzepaku i międzyplonów.
+  catros-xl: >-
+    Catros XL — wersja z większymi talerzami 610 mm do głębszej uprawy do 15 cm i lepszej penetracji twardej gleby. Szerokość 3–9 m, wyższy nacisk na talerz do cięcia obfitych resztek pożniwnych (kukurydza, słonecznik). Zalecany do pierwszej uprawy po zbiorze lub zielonego nawożenia z dużą masą.
+  cenius: >-
+    Cenius — redlicowy agregat uprawowy/kultywator do średnich głębokości 5–30 cm. Szerokość 3–8 m, rama trzypunktowa z rozstawem 28,5 cm. Opcjonalnie zabezpieczenie C-Mix Shear (śruba ścinająca) lub Cenius Super (sprężyna skręcona do warunków kamienistych). Uniwersalna maszyna do uprawy pożniwnej, przygotowania pod siew i głębszego spulchniania. Wersja 2TX ciągniona dwuoś do szerokości 4 m i więcej.
+  cenio: >-
+    Cenio — kompaktowy zawieszany redlicowy agregat uprawowy wprowadzony w 2022 jako model podstawowy pod Cenius. Szerokość 3–4 m, rama czterorzędowa z redlicami do płytkiej uprawy 5–15 cm. Wersja Special z sztywnymi redlicami, Super z zabezpieczeniem sprężynowym C-Mix Pro do gleb kamienistych. Odpowiedni dla małych i średnich gospodarstw.
+  ceus: >-
+    Ceus — kombinowany kultywator łączący dwa rzędy talerzy i trzy rzędy redlic do głębokości 10–30 cm w jednym przejeździe. Szerokość 4–7 m, konstrukcja ciągniona dwuoś. Oszczędza przejazdy: zastępuje osobną uprawę pożniwną i głębokie spulchnianie. Odpowiedni jako alternatywa dla pługa w systemach bezorkowych.
+  cobra: >-
+    Cobra — głęboki kultywator do rozluźniania zbitej warstwy podornej do głębokości 40 cm. Szerokość robocza 3 m, siedem wąskich redlic o niskim oporze ciągnienia. Chroni strukturę powierzchni — rozluźnia głęboką warstwę, ale nie miesza horyzontów. Zalecany do długotrwale bezorkowych gleb lub po zbiorze buraka cukrowego.
+  kg: >-
+    KG — wydajna brona rotacyjna do mocnych ciągników 130–360 KM. Szerokość 3,0–6,0 m, sześciokątna przekładnia, rotory z szybkozłącznymi zębami QuickChange. Wersje 2 (KG 4001-2, KG 6001-2) składane do dużych szerokości. Idealny partner dla Centaya/Cataya przy siewie kombinowanym.
+  ke: >-
+    KE — brona rotacyjna do średniej klasy mocy (do 200 KM). Szerokość 3,0–4,0 m, klasyczne rozwiązanie do kombinacji z siewnikiem Cataya lub Centaya. Wersja Special z przekładnią ślizgową, Super z zawieszeniem pływającym i zintegrowanym wałem. Oznaczenie 190 oznacza przekładnię do 190 KM.
+  kx: >-
+    KX — brona rotacyjna do średniej klasy, bardziej kompaktowa wersja niż KG. Szerokość robocza 3,0 m, zapotrzebowanie mocy ciągnika do 190 KM. Lżejsza konstrukcja, odpowiednia dla gospodarstw z ciągnikami 100–180 KM jako kombinacja z siewnikiem.
