@@ -27,11 +27,14 @@ const LAND_METRICS = [
 // Metriky z /svet/<slug>.json (label/unit z dat).
 const ENGINE_METRICS = [
   { key: 'wheat_yield', group: 'Produkce' },
+  { key: 'maize_yield', group: 'Produkce' },
   { key: 'cattle_count', group: 'Produkce' },
+  { key: 'pigs_count', group: 'Produkce' },
   { key: 'ag_land', group: 'Struktura' },
   { key: 'farm_count', group: 'Struktura' },
   { key: 'organic_share', group: 'Struktura' },
-  { key: 'ag_employment', group: 'Struktura' },
+  { key: 'ag_value_added_gdp', group: 'Ekonomika' },
+  { key: 'ag_employment', group: 'Ekonomika' },
 ];
 
 function loadCountry(slug) {
