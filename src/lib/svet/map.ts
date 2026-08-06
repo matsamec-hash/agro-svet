@@ -22,7 +22,10 @@ export const METRIC_DEFS: MetricDef[] = [
 
 export type Row = { code: string } & Partial<Record<MetricKey, number | null>>;
 
-/** min/max/avg přes ne-null hodnoty metriky. */
+// Barvy choropletu NEduplikuj — použij existující `mapcolor.ts`
+// (`rampColor` / `extent` / `colorFor`). Zde jen metriky/pořadí/měna, co tam nejsou.
+
+/** min/max/avg přes ne-null hodnoty metriky (avg navíc oproti mapcolor.extent — pro srovnání s EU Ø). */
 export function metricStat(rows: Row[], k: MetricKey): { min: number; max: number; avg: number } {
   const vs = rows.map((r) => r[k]).filter((v): v is number => typeof v === 'number');
   const min = Math.min(...vs);
@@ -47,20 +50,4 @@ export function convert(v: number, m: MetricDef, cur: 'czk' | 'eur', rate: numbe
 /** Jednotka dle měny (€/ha → Kč/ha). */
 export function unitOf(m: MetricDef, cur: 'czk' | 'eur'): string {
   return m.currency && cur === 'czk' ? m.unit.replace('€', 'Kč') : m.unit;
-}
-
-/** Sekvenční zelená škála, t ∈ <0,1>. */
-export function colorScale(t: number): string {
-  const s = [
-    [240, 249, 236],
-    [173, 221, 142],
-    [65, 171, 93],
-    [0, 68, 27],
-  ];
-  const g = Math.min(2, Math.floor(t * 3));
-  const lt = t * 3 - g;
-  const a = s[g];
-  const b = s[g + 1];
-  const c = (i: number) => Math.round(a[i] + (b[i] - a[i]) * lt);
-  return `rgb(${c(0)},${c(1)},${c(2)})`;
 }

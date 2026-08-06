@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { metricStat, rankOf, convert, unitOf, colorScale, METRIC_DEFS, type Row } from './map';
+import { metricStat, rankOf, convert, unitOf, METRIC_DEFS, type Row } from './map';
 
 const rows: Row[] = [
   { code: 'CZ', cap: 260 },
@@ -42,9 +42,3 @@ describe('unitOf', () => {
   });
 });
 
-describe('colorScale', () => {
-  it('krajní body škály', () => {
-    expect(colorScale(0)).toBe('rgb(240,249,236)');
-    expect(colorScale(1)).toBe('rgb(0,68,27)');
-  });
-});
