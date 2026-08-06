@@ -1,0 +1,22 @@
+---
+// Statický (SSR, bez JS) mini náhled evropské choropleth mapy — pro promo bloky.
+// Vybarví jednu metriku přes mapcolor. Dekorativní (pointer-events: none).
+import europe from '../../data/svet/geo/europe.json';
+import mapData from '../../data/svet/map-metrics.json';
+import { colorFor, extent } from '../../lib/svet/mapcolor';
+
+interface Props { metric?: string; }
+const { metric = 'wheat_yield' } = Astro.props as Props;
+const countries = mapData.countries as Record<string, { values: Record<string, number | null> }>;
+const e = extent(europe.regions.map((r) => countries[r.code]?.values?.[metric] ?? null));
+---
+<svg viewBox={europe.viewBox} class="agrimap-preview" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  {europe.regions.map((r) => {
+    const v = countries[r.code]?.values?.[metric] ?? null;
+    return <path d={r.path} fill={colorFor(v, e.min, e.max)} stroke="rgba(255,255,255,0.5)" stroke-width="0.7" />;
+  })}
+</svg>
+<style>
+  .agrimap-preview { width: 100%; height: 100%; display: block; pointer-events: none; }
+  .agrimap-preview path { transition: none; }
+</style>

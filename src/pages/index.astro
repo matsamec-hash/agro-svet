@@ -9,6 +9,7 @@ import LatestArticles from '../components/home/LatestArticles.astro';
 import UpcomingEvents from '../components/UpcomingEvents.astro';
 import HomeUk from '../components/home/HomeUk.astro';
 import HomePl from '../components/home/HomePl.astro';
+import AgriMapPreview from '../components/svet/AgriMapPreview.astro';
 import { createAnonClient } from '../lib/supabase';
 import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
@@ -162,16 +163,16 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 
   <!-- Mapa zemědělství Evropy (promo — nad novinkami) -->
   {locale === 'cs' && (
-  <section style="max-width:1280px; margin:0 auto; padding:12px 32px 20px;">
-    <a href="/svet/mapa/" style="display:block; text-decoration:none; color:inherit; background:linear-gradient(120deg,#0A0A0B,#153a1f); border-radius:18px; padding:32px 36px; position:relative; overflow:hidden;">
-      <div style="display:flex; align-items:center; gap:28px; flex-wrap:wrap; justify-content:space-between;">
-        <div style="max-width:640px;">
-          <span style="color:#FFEA00; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.08em;">Nová interaktivní mapa</span>
-          <h2 style="color:#fff; font-size:clamp(1.6rem,3.5vw,2.2rem); margin:8px 0 10px;">🗺️ Mapa zemědělství Evropy</h2>
-          <p style="color:#cfd8cf; font-size:15px; line-height:1.55; margin:0 0 16px;">Porovnejte 31 zemí — výnosy, stavy zvířat, zemědělská plocha, počet farem, ekozemědělství a zaměstnanost. Přepínejte metriky, najeďte na stát, proklikněte se na detail. Zdroje Eurostat a World Bank.</p>
-          <span style="display:inline-flex; align-items:center; gap:8px; background:#FFEA00; color:#0A0A0B; font-weight:800; font-size:14px; padding:11px 20px; border-radius:10px;">Otevřít mapu →</span>
-        </div>
-        <div style="font-size:96px; line-height:1; opacity:.9;">🇪🇺</div>
+  <section style="max-width:1280px; margin:0 auto; padding:8px 32px 16px;">
+    <a href="/svet/mapa/" class="mapa-promo" style="display:flex; align-items:center; flex-wrap:wrap; gap:20px 26px; text-decoration:none; color:inherit; background:linear-gradient(120deg,#0A0A0B 35%,#153a1f); border-radius:16px; padding:20px 26px; overflow:hidden;">
+      <div style="flex:1; min-width:240px;">
+        <span style="color:#FFEA00; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em;">🗺️ Nová interaktivní mapa</span>
+        <h2 style="color:#fff; font-size:clamp(1.35rem,3vw,1.85rem); margin:5px 0 6px; line-height:1.15;">Mapa zemědělství Evropy</h2>
+        <p style="color:#cfd8cf; font-size:14px; line-height:1.5; margin:0 0 13px; max-width:560px;">31 zemí, 11 ukazatelů — ceny půdy, pachtovné, výnosy, ekozemědělství. Přepínejte metriky a porovnejte.</p>
+        <span style="display:inline-flex; align-items:center; gap:8px; background:#FFEA00; color:#0A0A0B; font-weight:800; font-size:13px; padding:9px 18px; border-radius:9px;">Otevřít mapu →</span>
+      </div>
+      <div class="mapa-promo-thumb" style="width:180px; height:150px; flex:none; display:flex; align-items:center; justify-content:center; filter:drop-shadow(0 4px 14px rgba(0,0,0,.4));">
+        <AgriMapPreview metric="wheat_yield" />
       </div>
     </a>
   </section>
