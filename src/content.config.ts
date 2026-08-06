@@ -136,6 +136,12 @@ const znackyUk = defineCollection({
   schema: znackySchema(),
 });
 
+// PL-localized brand profiles (overlay collection).
+const znackyPl = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky-pl' }),
+  schema: znackySchema(),
+});
+
 const pudaSchema = () =>
   z.object({
     title: z.string(),
@@ -258,4 +264,4 @@ const howtoUk = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk };
+export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, znackyPl, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk };

@@ -22,8 +22,11 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 // Overlay kolekce dle locale; cs fallback zachován jako u SK (před launchem je
 // uk noindex, a launch nastane až po plné pokrytí všech ~24 značek).
-const ZN_COLLECTION = { sk: 'znackySk', uk: 'znackyUk' } as const;
-const localized = locale !== 'cs' ? await getEntry(ZN_COLLECTION[locale as 'sk' | 'uk'], slug!) : undefined;
+const ZN_COLLECTION = { sk: 'znackySk', uk: 'znackyUk', pl: 'znackyPl' } as const;
+// Overlay jen když pro daný locale kolekce existuje; jinak (a při chybějícím
+// překladu značky) fallback na cs — nikdy neshazuj getEntry(undefined) → 500.
+const znColl = ZN_COLLECTION[locale as keyof typeof ZN_COLLECTION];
+const localized = znColl ? await getEntry(znColl, slug!) : undefined;
 const znacka = localized ?? await getEntry('znacky', slug!);
 if (!znacka) return Astro.rewrite('/404');
 const { Content, headings } = await render(znacka);
