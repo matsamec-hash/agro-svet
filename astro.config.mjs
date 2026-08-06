@@ -17,6 +17,23 @@ export default defineConfig({
   // vlastní CSRF check v middleware.ts (host-based, schéma-necitlivý). NEvypínat
   // bez té middleware kontroly.
   security: { checkOrigin: false },
+  // 301 redirecty pro legacy URL (Ahrefs 404 report 2026-08-06). Cíle ověřeny 200 na produ.
+  // /srovnani/top/* byl starý název žebříčků → dnes /zebricky/* (slugy 1:1).
+  redirects: {
+    '/srovnani/top/': { status: 301, destination: '/zebricky/' },
+    '/srovnani/top/[slug]/': '/zebricky/[slug]/',
+    '/agro-bazar/': { status: 301, destination: '/bazar/' },
+    '/sklizeci-mlaticky/': { status: 301, destination: '/stroje/kombajny/' },
+    // staré cs subkategorie strojů (přejmenované) → kategorie zemědělských strojů
+    '/stroje/seti/': { status: 301, destination: '/stroje/zemedelske-stroje/' },
+    '/stroje/manipulace/': { status: 301, destination: '/stroje/zemedelske-stroje/' },
+    '/stroje/sklizen-picnin/': { status: 301, destination: '/stroje/zemedelske-stroje/' },
+    '/stroje/staj-chov/': { status: 301, destination: '/stroje/zemedelske-stroje/' },
+    '/stroje/komunal-les/': { status: 301, destination: '/stroje/zemedelske-stroje/' },
+    '/stroje/doprava/': { status: 301, destination: '/stroje/zemedelske-stroje/' },
+    '/stroje/hnojeni/': { status: 301, destination: '/stroje/zemedelske-stroje/' },
+    '/stroje/teleskopy-rotacni/': { status: 301, destination: '/stroje/zemedelske-stroje/' },
+  },
   i18n: {
     defaultLocale: 'cs',
     locales: ['cs', 'sk', 'uk', 'pl'],
