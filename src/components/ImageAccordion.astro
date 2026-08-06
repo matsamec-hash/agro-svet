@@ -1,33 +1,37 @@
 ---
-const items = [
+import AgriMapPreview from './svet/AgriMapPreview.astro';
+
+const items: { label: string; href: string; img?: string; map?: boolean }[] = [
   {
-    label: 'Traktory',
-    href: '/stroje/traktory/',
+    label: 'Stroje',
+    href: '/stroje/',
     img: '/images/traktor.webp',
-  },
-  {
-    label: 'Kombajny',
-    href: '/stroje/kombajny/',
-    img: '/images/kombajn.webp',
   },
   {
     label: 'Zvířata',
     href: '/plemena/',
     img: '/images/telata.webp',
   },
-  // 'Agro bazar' panel dočasně skryt (2026-06-09) — bazar schován z webu do
-  // nasazení custom SMTP. Vrátit obnovením položky { label:'Agro bazar', href:'/bazar/', img:'/images/bazar.webp' }.
+  {
+    label: 'Mapa Evropy',
+    href: '/svet/mapa/',
+    map: true,
+  },
 ];
 ---
 
 <div class="ia-wrap">
   <div class="ia-row">
     {items.map((item) => {
-      const base = item.img.replace(/\.webp$/, '');
-      const srcset = `${base}__v-w400.webp 400w, ${base}__v-w800.webp 800w, ${item.img} 1200w`;
+      const base = item.img ? item.img.replace(/\.webp$/, '') : '';
+      const srcset = item.img ? `${base}__v-w400.webp 400w, ${base}__v-w800.webp 800w, ${item.img} 1200w` : '';
       return (
       <a class="ia-panel" href={item.href} aria-label={`${item.label} — klepněte pro náhled`}>
-        <img src={`${base}__v-w800.webp`} srcset={srcset} sizes="(max-width: 768px) 100vw, (max-width: 1280px) 25vw, 320px" alt={item.label} class="ia-img" width="800" height="600" loading="lazy" decoding="async" />
+        {item.map ? (
+          <div class="ia-mapbg"><AgriMapPreview metric="wheat_yield" /></div>
+        ) : (
+          <img src={`${base}__v-w800.webp`} srcset={srcset} sizes="(max-width: 768px) 100vw, (max-width: 1280px) 25vw, 320px" alt={item.label} class="ia-img" width="800" height="600" loading="lazy" decoding="async" />
+        )}
         <div class="ia-overlay"></div>
         <div class="ia-content">
           <h3>{item.label}</h3>
@@ -79,6 +83,19 @@ const items = [
     height: 100%;
     object-fit: cover;
     transition: transform 1s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  /* Mapová dlaždice — živý mini-choropleth na tmavém pozadí místo fotky */
+  .ia-mapbg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0A0A0B, #163d22);
+    padding: 10px;
+    transition: transform 1s cubic-bezier(.4, 0, .2, 1);
+  }
+  .ia-panel:hover .ia-mapbg,
+  .ia-panel.is-expanded .ia-mapbg {
+    transform: scale(1.06);
   }
 
   .ia-overlay {
