@@ -14,6 +14,24 @@
 
 ---
 
+## ⚠️ REVIZE 2026-08-06 (objeven existující mapový systém /svet)
+
+Úvodní průzkum minul, že `/svet` **už má SSR choropleth systém**. Plán níže se tím koriguje:
+- **`src/components/svet/RegionMap.astro`** = etalon patternu: **inline SVG server-rendered, near-zero JS** (SSR vybarví výchozí metriku, klient jen přepíná metriku + tooltip). Geo tvar `{ viewBox:string, regions:[{code,name,path}] }`, data `{ year, source, sourceUrl, metrics:[{key,label,unit}], regions: Record<code, Record<key, number>> }`.
+- **`src/lib/svet/mapcolor.ts`** = `rampColor(t)` / `extent(values)` / `colorFor(value,min,max)` (zelená brand škála, chybí data = `#e7e9e1`). **REUSE — neduplikuj** (Task 1 už `colorScale` odstranil).
+- **`scripts/build-svet-geo.mjs`** = EXISTUJE, staví NUTS regiony z **Eurostat GISCO** (EPSG:3035) → `src/data/svet/regions/<slug>-geo.json`. **NEPŘEPISOVAT.**
+- `/svet/[slug].astro` už `RegionMap` renderuje (`hasMap`).
+
+**Korekce návrhu:**
+1. Komponenta = **`EuropeMap.astro` (Astro SSR, model dle RegionMap)** — NE Svelte island. Interakce (přepínač, měna, zoom/pan, panel, sparkline) = progresivní enhancement JS v `src/scripts/europe-map.ts` (jako RegionMap má klientský skript).
+2. Geometrie = **GISCO country-level (NUTS-0)** pro konzistenci s existující pipeline. Rozšířit `build-svet-geo.mjs` o country-pass **nebo** sibling `scripts/build-svet-europe-geo.mjs` → `src/data/svet/geo/europe.json` (stejná EPSG:3035 projekce, ne army-svet ad2010). Task 2 níže tím nahradit.
+3. Data = mirror `RegionData` tvaru (metrics[] + regions/countries map). Task 3 sladit.
+4. Barvy = `mapcolor.colorFor` všude. `map.ts` drží jen `METRIC_DEFS/metricStat/rankOf/convert/unitOf`.
+
+Tasky 3–7 níže platí koncepčně, ale komponenta je Astro SSR + mapcolor + GISCO (ne Svelte/ad2010).
+
+---
+
 ## File Structure
 - `scripts/build-svet-geo.mjs` — generuje `europe.json` z ad2010.json (jednorázově; commitne se výstup).
 - `src/data/svet/geo/europe.json` — geometrie (paths + centroidy per country code). Commitnuto.
