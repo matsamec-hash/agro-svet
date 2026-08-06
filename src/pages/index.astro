@@ -226,6 +226,23 @@ const itemListJsonLd = homepageItems.length > 0 ? {
     <CommodityChart commodityNames={COMMODITY_NAMES} />
   </section>
 
+  <!-- Data — Mapa zemědělství Evropy (promo) -->
+  {locale === 'cs' && (
+  <section style="max-width:1280px; margin:0 auto; padding:8px 32px 48px;">
+    <a href="/svet/mapa/" style="display:block; text-decoration:none; color:inherit; background:linear-gradient(120deg,#0A0A0B,#153a1f); border-radius:18px; padding:32px 36px; position:relative; overflow:hidden;">
+      <div style="display:flex; align-items:center; gap:28px; flex-wrap:wrap; justify-content:space-between;">
+        <div style="max-width:640px;">
+          <span style="color:#FFEA00; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.08em;">Nová interaktivní mapa</span>
+          <h2 style="color:#fff; font-size:clamp(1.6rem,3.5vw,2.2rem); margin:8px 0 10px;">🗺️ Mapa zemědělství Evropy</h2>
+          <p style="color:#cfd8cf; font-size:15px; line-height:1.55; margin:0 0 16px;">Porovnejte 31 zemí — výnosy, stavy zvířat, zemědělská plocha, počet farem, ekozemědělství a zaměstnanost. Přepínejte metriky, najeďte na stát, proklikněte se na detail. Zdroje Eurostat a World Bank.</p>
+          <span style="display:inline-flex; align-items:center; gap:8px; background:#FFEA00; color:#0A0A0B; font-weight:800; font-size:14px; padding:11px 20px; border-radius:10px;">Otevřít mapu →</span>
+        </div>
+        <div style="font-size:96px; line-height:1; opacity:.9;">🇪🇺</div>
+      </div>
+    </a>
+  </section>
+  )}
+
   {/* Fresh bazar listings dočasně skryto (2026-06-09) — bazar schován z webu
       do nasazení custom SMTP. Vrátit i import FreshBazarListings. */}
 

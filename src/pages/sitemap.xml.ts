@@ -170,6 +170,7 @@ export const GET: APIRoute = async () => {
     ['/statistiky/', 'weekly', undefined, STATIC_LASTMOD],
     ['/svet/', 'weekly', '0.85', D_SVET],
     ['/svet/srovnani/', 'monthly', '0.6', D_SVET],
+    ['/svet/mapa/', 'weekly', '0.8', D_SVET],
     ['/srovnani/', 'weekly', '0.85', D_STROJE],
     ['/znacky/srovnani/', 'weekly', '0.7', D_ZNACKY],
     ['/zebricky/', 'weekly', '0.8', D_STROJE],

@@ -67,6 +67,7 @@ const pl: Record<string, string> = {
   // — nawigacja: Świat (sekcja tylko-cs: profile krajów + porównanie) —
   'nav.svet.profiles': 'Profile krajów',
   'nav.svet.compare': 'Porównanie krajów',
+  'nav.svet.map': 'Mapa Evropy',
 
   // Data hub (/data/) — dane czeskie (ČSÚ)
   'data.hub.eyebrow': 'Sekcja danych · na żywo',

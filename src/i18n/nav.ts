@@ -132,6 +132,7 @@ const NAV: { section: string; labelKey: string; href: string; children?: { label
       // viditelná; proto explicitní gating /svet u non-cs řeší isLaunchedPath.
       { labelKey: 'nav.svet.profiles', href: '/svet/' },
       { labelKey: 'nav.svet.compare', href: '/svet/srovnani/' },
+      { labelKey: 'nav.svet.map', href: '/svet/mapa/' },
     ],
   },
   { section: 'farms', labelKey: 'nav.farms', href: '/farmy/' },

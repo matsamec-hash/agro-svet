@@ -67,6 +67,7 @@ const cs: Record<string, string> = {
   // — navigace: Svět (cs-only sekce: profily zemí + srovnání) —
   'nav.svet.profiles': 'Profily zemí',
   'nav.svet.compare': 'Srovnání zemí',
+  'nav.svet.map': 'Mapa Evropy',
 
   // Data hub (/data/)
   'data.hub.eyebrow': 'Datová sekce · živě',
