@@ -10,6 +10,21 @@ const canonical = 'https://agro-svet.cz/svet/mapa/';
 
 const metrics = mapData.metrics as { key: string; label: string; source: string; sourceUrl: string }[];
 const sources = Array.from(new Map(metrics.filter((m) => m.source).map((m) => [m.source + m.sourceUrl, { source: m.source, url: m.sourceUrl }])).values());
+
+// SSR tabulka zemí (crawlovatelný obsah + interní prolinky).
+const tCountries = mapData.countries as Record<string, { slug: string; name: string; flag: string; values: Record<string, number | null> }>;
+const nf0 = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+const fmt = (v: number | null | undefined) => (v == null ? '—' : nf0.format(v));
+const TCOLS = [
+  { key: 'land_price', label: 'Cena půdy', unit: '€/ha' },
+  { key: 'rent', label: 'Pachtovné', unit: '€/ha' },
+  { key: 'wheat_yield', label: 'Výnos pšenice', unit: 't/ha' },
+  { key: 'ag_land', label: 'Zeměd. plocha', unit: 'mil. ha' },
+  { key: 'organic_share', label: 'Eko', unit: '%' },
+];
+const tableRows = Object.entries(tCountries)
+  .map(([code, c]) => ({ code, ...c }))
+  .sort((a, b) => (b.values.land_price ?? -1) - (a.values.land_price ?? -1));
 ---
 
 <Layout title={title} description={description} canonical={canonical}>
@@ -28,6 +43,29 @@ const sources = Array.from(new Map(metrics.filter((m) => m.source).map((m) => [m
     </header>
 
     <EuropeMap />
+
+    <section class="svet-section" style="margin-top:24px;">
+      <header class="svet-section-head"><h2>Zemědělství podle zemí</h2></header>
+      <div style="overflow-x:auto; margin-top:8px;">
+        <table style="width:100%; border-collapse:collapse; font-size:14px; min-width:640px;">
+          <thead>
+            <tr style="border-bottom:2px solid #e5e5e8; text-align:right;">
+              <th style="text-align:left; padding:8px 10px;">Země</th>
+              {TCOLS.map((c) => (<th style="padding:8px 10px; font-weight:700; white-space:nowrap;">{c.label}<br /><span style="font-weight:400; color:#888; font-size:11px;">{c.unit}</span></th>))}
+            </tr>
+          </thead>
+          <tbody>
+            {tableRows.map((r) => (
+              <tr style="border-bottom:1px solid #eee;">
+                <td style="padding:8px 10px; white-space:nowrap;"><a href={`/svet/${r.slug}/`} style="color:#1a1a1a; text-decoration:none; font-weight:600;">{r.flag} {r.name}</a></td>
+                {TCOLS.map((c) => (<td style="padding:8px 10px; text-align:right; font-variant-numeric:tabular-nums;">{fmt(r.values[c.key])}</td>))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p style="color:#888; font-size:12.5px; margin-top:10px;">Řazeno podle ceny zemědělské půdy. Nejnovější dostupný rok za každou zemi; „—" = data nejsou v daném zdroji k dispozici.</p>
+    </section>
 
     <section class="svet-section" style="margin-top:28px;">
       <header class="svet-section-head"><h2>Zdroje a metodika</h2></header>
