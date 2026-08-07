@@ -87,19 +87,53 @@ const SLOVNIK_BY_SLUG = new Map(SLOVNIK.map((tt) => [tt.slug, tt.term]));
 //    (sdílený ctx = unikátní link na URL napříč celým article)
 const linkCtx = createLinkContext(pageUrl);
 
-const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
-  // Wikilinks first — pre-resolved <a> tags se ochrání před auto-linkerem
-  // (PROTECTED_TAGS zahrnuje 'a').
-  const withWikilinks = para.replace(/\[\[([a-z0-9-]+)\]\]/gi, (m, s) => {
-    const name = SLOVNIK_BY_SLUG.get(s);
+// Inline transforms (per řádek): wikilinks → <a>, **bold** → <strong>,
+// CS auto-linker (sdílený ctx = unikátní link napříč článkem).
+const inlineFmt = (s: string): string => {
+  const withWikilinks = s.replace(/\[\[([a-z0-9-]+)\]\]/gi, (m, slug) => {
+    const name = SLOVNIK_BY_SLUG.get(slug);
     if (!name) return m; // unknown slug — leave literal
-    return `<a href="${base}/slovnik/${s}/">${name}</a>`;
+    return `<a href="${base}/slovnik/${slug}/">${name}</a>`;
   });
   const withBold = withWikilinks.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  // CS-only auto-linker: injektovat CS značky/modely/slovník odkazy jen do CS textu.
-  // Pro uk/sk by to vložilo CS entity do přeloženého textu — vynecháno.
   return locale === 'cs' ? injectLinks(withBold, linkCtx) : withBold;
-});
+};
+
+// Block-aware renderer: řádky uvnitř `\n\n` bloku se klasifikují — odrážky
+// (`- `/`* `) → <ul>, číslované (`1. `) → <ol>, ostatní se spojí <br> do <p>.
+// Bez toho markdown seznamy v longDef splynou do jednoho odstavce (run-on text).
+const renderBlock = (block: string): string => {
+  const lines = block.split('\n').map((l) => l.trim()).filter(Boolean);
+  let html = '';
+  let i = 0;
+  while (i < lines.length) {
+    if (/^[-*]\s+/.test(lines[i])) {
+      const items: string[] = [];
+      while (i < lines.length && /^[-*]\s+/.test(lines[i])) { items.push(inlineFmt(lines[i].replace(/^[-*]\s+/, ''))); i++; }
+      html += `<ul>${items.map((x) => `<li>${x}</li>`).join('')}</ul>`;
+    } else if (/^\d+\.\s+/.test(lines[i])) {
+      const items: string[] = [];
+      while (i < lines.length && /^\d+\.\s+/.test(lines[i])) { items.push(inlineFmt(lines[i].replace(/^\d+\.\s+/, ''))); i++; }
+      html += `<ol>${items.map((x) => `<li>${x}</li>`).join('')}</ol>`;
+    } else {
+      // Plain řádky: seskup do <p> (spojené <br>), ale řádek tvořený jen tučným
+      // popiskem končícím dvojtečkou (`**Princip:**`, `**1. Salát ...:**`) = pod-
+      // nadpis sekce → vlastní <p class="slv-sub"> s odsazením (vizuální struktura).
+      const buf: string[] = [];
+      const flush = () => { if (buf.length) { html += `<p>${buf.join('<br>')}</p>`; buf.length = 0; } };
+      while (i < lines.length && !/^[-*]\s+/.test(lines[i]) && !/^\d+\.\s+/.test(lines[i])) {
+        const ln = lines[i];
+        if (/^\*\*[^*]+:\*\*$/.test(ln)) { flush(); html += `<p class="slv-sub">${inlineFmt(ln)}</p>`; }
+        else buf.push(inlineFmt(ln));
+        i++;
+      }
+      flush();
+    }
+  }
+  return html;
+};
+
+const bodyHtml = term.longDef.split(/\n\n+/).map(renderBlock).join('');
 ---
 
 <Layout
@@ -148,11 +182,7 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
       />
     )}
 
-    <div class="slv-d-body prose">
-      {renderedParagraphs.map((html) => (
-        <p set:html={html}></p>
-      ))}
-    </div>
+    <div class="slv-d-body prose" set:html={bodyHtml}></div>
 
     {term.zajimavosti && term.zajimavosti.length > 0 && (
       <section class="slv-d-zaj">
@@ -217,13 +247,9 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
   .slv-d-short { font-size: 17px; line-height: 1.6; color: #0A0A0B; margin: 12px 0 0; padding: 14px 16px; background: #fffef8; border-left: 3px solid #FFEA00; border-radius: 0 6px 6px 0; }
 
   .slv-d-body { font-size: 16px; line-height: 1.75; color: #333; }
-  .slv-d-body p { margin: 0 0 16px; }
-  .slv-d-body strong { color: #0A0A0B; }
-  .slv-d-body a { color: #0A0A0B; text-decoration: underline; text-decoration-color: #FFEA00; text-decoration-thickness: 2px; text-underline-offset: 3px; transition: background .15s; }
-  .slv-d-body a:hover { background: #FFEA00; }
-  .slv-d-body a.auto-link { text-decoration-color: #EAEAEC; text-decoration-style: dotted; }
-  .slv-d-body a.auto-link:hover { background: #FFEA00; text-decoration-color: #0A0A0B; }
-  .slv-d-body a.auto-link-external::after { content: " ↗"; font-size: 0.85em; opacity: 0.55; }
+  /* Obsah těla jde přes set:html (block-aware renderer) → vnitřní elementy nemají
+     data-astro-cid, scoped styly by se neaplikovaly. Proto jsou v <style is:global>
+     níže. Viz feedback-astro-scoped-styles-innerhtml. */
 
   .slv-d-zaj { margin: 32px 0 8px; }
   .slv-d-zaj h2 { font-size: 20px; font-weight: 700; color: #0A0A0B; margin: 0 0 12px; }
@@ -270,4 +296,25 @@ const renderedParagraphs = term.longDef.split('\n\n').map((para) => {
 
   .slv-d-back { display: inline-block; font-size: 13px; color: #666; text-decoration: none; font-weight: 600; }
   .slv-d-back:hover { color: #0A0A0B; }
+</style>
+
+<!-- Tělo hesla (.slv-d-body) se skládá přes set:html → vnitřní elementy nemají
+     data-astro-cid, takže tyto styly MUSÍ být globální (jinak zeď bez formátování).
+     Klíčované na .slv-d-body → žádný leak. Viz feedback-astro-scoped-styles-innerhtml. -->
+<style is:global>
+  .slv-d-body p { margin: 0 0 16px; }
+  .slv-d-body strong { color: #0A0A0B; }
+  .slv-d-body .slv-sub { margin: 26px 0 8px; line-height: 1.4; }
+  .slv-d-body .slv-sub strong { font-size: 17px; }
+  .slv-d-body ul, .slv-d-body ol { margin: 0 0 18px; padding-left: 0; list-style: none; }
+  .slv-d-body ol { counter-reset: slv-ol; }
+  .slv-d-body li { position: relative; padding-left: 26px; margin: 0 0 8px; line-height: 1.65; }
+  .slv-d-body ul > li::before { content: ''; position: absolute; left: 6px; top: 11px; width: 6px; height: 6px; background: #FFEA00; border-radius: 50%; box-shadow: 0 0 0 1px #d9c400; }
+  .slv-d-body ol > li { counter-increment: slv-ol; padding-left: 30px; }
+  .slv-d-body ol > li::before { content: counter(slv-ol); position: absolute; left: 0; top: 2px; width: 20px; height: 20px; background: #1a1a1a; color: #FFEA00; border-radius: 6px; font-family: 'Chakra Petch', sans-serif; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .slv-d-body a { color: #0A0A0B; text-decoration: underline; text-decoration-color: #FFEA00; text-decoration-thickness: 2px; text-underline-offset: 3px; transition: background .15s; }
+  .slv-d-body a:hover { background: #FFEA00; }
+  .slv-d-body a.auto-link { text-decoration-color: #EAEAEC; text-decoration-style: dotted; }
+  .slv-d-body a.auto-link:hover { background: #FFEA00; text-decoration-color: #0A0A0B; }
+  .slv-d-body a.auto-link-external::after { content: " ↗"; font-size: 0.85em; opacity: 0.55; }
 </style>
