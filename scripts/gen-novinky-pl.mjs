@@ -11,15 +11,19 @@ import os from 'node:os';
 import path from 'node:path';
 
 const ROOT = process.cwd();
-const env = fs.readFileSync(path.join(ROOT, '.env'), 'utf8');
+const args = process.argv.slice(2);
+// ‼️ SPLIT-BRAIN: prod = self-hosted supabase.samecdigital.com (.env.selfhost),
+// cloud obhypfuzmknvmknskdwh (.env) je jen dev mirror. Překlady MUSÍ jít na
+// self-hosted, jinak je prod (SSR) neuvidí. `--selfhost` = zapiš na prod.
+const SELFHOST = args.includes('--selfhost');
+const env = fs.readFileSync(path.join(ROOT, SELFHOST ? '.env.selfhost' : '.env'), 'utf8');
 const g = (k) => { const m = env.match(new RegExp('^' + k + '=(.*)$', 'm')); return m ? m[1].trim() : null; };
-const SUPABASE_URL = g('SUPABASE_URL');
-const SUPABASE_KEY = g('SUPABASE_SERVICE_KEY');
+const SUPABASE_URL = SELFHOST ? g('SH_SUPABASE_URL') : g('SUPABASE_URL');
+const SUPABASE_KEY = SELFHOST ? g('SH_SUPABASE_KEY') : g('SUPABASE_SERVICE_KEY');
 const OPENAI_KEY = fs.readFileSync(path.join(os.homedir(), '.army-svet-openai-key'), 'utf8').trim();
 const SITE_ID = 'cadc73fd-6bd9-4dc5-a0da-ea33725762e1';
 const MODEL = 'gpt-4.1-mini';
 
-const args = process.argv.slice(2);
 const DRY = args.includes('--dry');
 const ONLY = args.includes('--only') ? args[args.indexOf('--only') + 1] : null;
 

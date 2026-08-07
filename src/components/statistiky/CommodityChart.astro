@@ -18,7 +18,13 @@ interface Props {
 const { commodityNames, dataBase = '', numLocale = 'cs-CZ', locale = 'cs' } = Astro.props;
 const tt = useTranslations(locale);
 const isSk = locale === 'sk';
-const L = {
+const isPl = locale === 'pl';
+const L = isPl ? {
+  avgLabel:  'Średnia 5-letnia',
+  avgPrefix: 'Wartość obecna ',
+  avgSuffix: ' vs. średnia 5-letnia.',
+  nowPrefix: 'Obecnie ',
+} : {
   avgLabel:  isSk ? '5-ročný priemer'   : '5letý průměr',
   avgPrefix: isSk ? 'Aktuálna hodnota ' : 'Aktuální hodnota ',
   avgSuffix: isSk ? ' vs. 5-ročný priemer.' : ' vs. 5letý průměr.',
