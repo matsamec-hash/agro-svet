@@ -15,6 +15,8 @@ import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
 import { imgSrcset } from '../lib/image-variants';
 import { getLocaleFromUrl, localizeInternalHref, localizedCategory } from '../i18n/utils';
 import { newsCategorySlug } from '../lib/news-category';
+import { fetchTranslatedArticleIds, fetchArticleTranslations, buildTranslationMap, overlayArticle } from '../lib/articles-i18n';
+import { HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
@@ -39,29 +41,46 @@ let featured: any;
 let heroRight: any[] = [];
 if (!isUk && !isPl) {
   const supabase = createAnonClient();
-  const { data: articles } = await supabase
-    .from('articles')
-    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
-    .eq('site_id', SITE_ID)
-    .eq('status', 'published')
-    .order('featured', { ascending: false })
-    .order('published_at', { ascending: false })
-    .limit(16);
+  // Non-cs (sk): feed JEN z reálně přeložených článků + bez jurisdikčně skrytých
+  // kategorií (dotace/legislativa). Jinak hero ukazoval české titulky a odkazoval
+  // na /sk/novinky/<slug>/ = 404 (skrytá kat. / bez sk overlay). cs = beze změny.
+  const trIds = locale !== 'cs' ? await fetchTranslatedArticleIds(supabase, locale) : null;
+  const hidden = locale !== 'cs' ? HIDDEN_NEWS_CATEGORIES[locale] : [];
+  if (trIds && trIds.size === 0) {
+    // žádné překlady → prázdný hero (feed se nerendruje, žádný cs leak)
+  } else {
+    let q = supabase
+      .from('articles')
+      .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
+      .eq('site_id', SITE_ID)
+      .eq('status', 'published');
+    if (trIds) q = q.in('id', [...trIds]);
+    if (hidden.length) q = q.not('category', 'in', `(${hidden.join(',')})`);
+    const { data: articles } = await q
+      .order('featured', { ascending: false })
+      .order('published_at', { ascending: false })
+      .limit(16);
 
-  const sorted = articles ?? [];
-  // Hero diverzita: max 2 články na kategorii v hero (featured + heroRight),
-  // aby jedna kategorie (např. várka dotačních článků) nezaplavila celý hero.
-  const heroPick: any[] = [];
-  const catCount: Record<string, number> = {};
-  for (const a of sorted) {
-    const cat = a.category ?? '_';
-    if ((catCount[cat] ?? 0) >= 2) continue;
-    heroPick.push(a);
-    catCount[cat] = (catCount[cat] ?? 0) + 1;
-    if (heroPick.length >= 5) break;
+    let sorted = articles ?? [];
+    // Non-cs: overlay přeložených titulků/perexů na cs řádky.
+    if (locale !== 'cs' && sorted.length) {
+      const trMap = buildTranslationMap(await fetchArticleTranslations(supabase, sorted.map((a) => a.id), locale));
+      sorted = sorted.map((a) => overlayArticle(a, trMap.get(a.id)));
+    }
+    // Hero diverzita: max 2 články na kategorii v hero (featured + heroRight),
+    // aby jedna kategorie (např. várka dotačních článků) nezaplavila celý hero.
+    const heroPick: any[] = [];
+    const catCount: Record<string, number> = {};
+    for (const a of sorted) {
+      const cat = a.category ?? '_';
+      if ((catCount[cat] ?? 0) >= 2) continue;
+      heroPick.push(a);
+      catCount[cat] = (catCount[cat] ?? 0) + 1;
+      if (heroPick.length >= 5) break;
+    }
+    featured = heroPick[0];
+    heroRight = heroPick.slice(1, 5);
   }
-  featured = heroPick[0];
-  heroRight = heroPick.slice(1, 5);
 }
 
 // Commodity chart loads its data client-side from /statistiky/commodity-data-recent.json
