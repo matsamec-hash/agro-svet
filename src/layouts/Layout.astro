@@ -118,7 +118,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta name="google-site-verification" content="CY_qIX6BN8tWkMXGOKdM8d-k-_le-qmUsk-eoZwS5Eo" />
   <meta name="msvalidate.01" content="A401032123927401E73FAB1151E94F3D" />
   <meta name="seznam-wmt" content="H957FuP9Pc7eQLHuPaTpuyrG03OUV0FD" />
-  <title>{title} | agro-svět.cz</title>
+  <title>{title.includes('agro-svět.cz') ? title : `${title} | agro-svět.cz`}</title>
   <meta name="description" content={description} />
   <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
