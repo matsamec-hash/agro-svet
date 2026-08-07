@@ -211,25 +211,37 @@ function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>, l
   // × lookbehind regex = CF Worker CPU spike → error 1102 (10ms free / 50ms paid limit).
   // Pattern is precompiled at glossary build, so the only hot-path cost is includes().
   const textLower = text.toLowerCase();
-  let s = text;
+  // Segmentový přístup: vložené <a> se „zmrazí" (linked:true) a další termy se
+  // matchují JEN v plain segmentech. Bez toho by sekvenční string-replace mohl
+  // matchnout term uvnitř právě vloženého href (např. „axial-flow" v
+  // /stroje/case-ih/axial-flow-.../ ) → vnořený <a> = rozbité HTML.
+  let segments: Array<{ text: string; linked: boolean }> = [{ text, linked: false }];
   for (const entry of glossary) {
     if (used.size >= MAX_LINKS_PER_ARTICLE) break;
     if (used.has(entry.url)) continue;
     if (!textLower.includes(entry.termLower)) continue;
-    const match = entry.pattern.exec(s);
-    if (match) {
-      const before = s.slice(0, match.index);
+    for (let idx = 0; idx < segments.length; idx++) {
+      const seg = segments[idx];
+      if (seg.linked) continue;
+      const match = entry.pattern.exec(seg.text);
+      if (!match) continue;
+      const before = seg.text.slice(0, match.index);
       const matched = match[0];
-      const after = s.slice(match.index + matched.length);
+      const after = seg.text.slice(match.index + matched.length);
       const href = entry.localizable ? localizeInternalHref(locale, entry.url) : entry.url;
       const attrs = entry.external
         ? ` class="auto-link auto-link-external" target="_blank" rel="noopener"`
         : ` class="auto-link"`;
-      s = `${before}<a href="${href}"${attrs}>${matched}</a>${after}`;
+      const repl: Array<{ text: string; linked: boolean }> = [];
+      if (before) repl.push({ text: before, linked: false });
+      repl.push({ text: `<a href="${href}"${attrs}>${matched}</a>`, linked: true });
+      if (after) repl.push({ text: after, linked: false });
+      segments.splice(idx, 1, ...repl);
       used.add(entry.url);
+      break; // jeden link per term (jako dřív)
     }
   }
-  return s;
+  return segments.map((seg) => seg.text).join('');
 }
 
 function escapeHtml(s: string): string {
