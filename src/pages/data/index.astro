@@ -66,6 +66,12 @@ const c = {
 // ── Dlaždice (locale gating přes isLaunchedPath) ──
 const show = (p: string) => locale === 'cs' || isLaunchedPath(locale, p);
 const href = (p: string) => navHref(locale, p);
+
+// Vysvětlení ▲▼ hodnot: marquee/statpill = meziroční změna ceny (r/r, czso.ts).
+// Hero graf ale počítá deltu přes zobrazené okno (posledních 24 měsíců, data-hub.js:53)
+// → jiný titulek, ať není zaměnitelný s r/r.
+const deltaTitle = locale === 'sk' ? 'Medziročná zmena ceny (r/r)' : 'Meziroční změna ceny (r/r)';
+const heroDeltaTitle = locale === 'sk' ? 'Zmena za zobrazené obdobie (24 mesiacov)' : 'Změna za zobrazené období (24 měsíců)';
 ---
 
 <Layout title={c.metaTitle} description={c.metaDesc}>
@@ -91,7 +97,7 @@ const href = (p: string) => navHref(locale, p);
               <div><div class="dh-hc-lbl" id="hcLabel"></div><div class="dh-hc-price"><span id="hcPrice"></span></div></div>
               <button class="dh-arrow" id="hcNext" aria-label="Další komodita"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
             </div>
-            <span class="dh-chg" id="hcChg"></span>
+            <span class="dh-chg" id="hcChg" title={heroDeltaTitle}></span>
           </div>
           <div class="dh-chartwrap">
             <svg class="dh-area" id="hcSvg" viewBox="0 0 340 120" preserveAspectRatio="none">
@@ -113,7 +119,7 @@ const href = (p: string) => navHref(locale, p);
       {[...tickItems, ...tickItems].map((it) => (
         <a class="dh-it" href={it.href}>
           <span class="nm">{it.name}</span> <b>{it.value}</b>
-          {it.changePct != null && <b class={it.changePct >= 0 ? 'up' : 'dn'}>{it.changePct >= 0 ? '▲' : '▼'}{Math.abs(it.changePct)}%</b>}
+          {it.changePct != null && <b class={it.changePct >= 0 ? 'up' : 'dn'} title={deltaTitle}>{it.changePct >= 0 ? '▲' : '▼'}{Math.abs(it.changePct)}%</b>}
         </a>
       ))}
     </div></div>
@@ -143,7 +149,7 @@ const href = (p: string) => navHref(locale, p);
             <div class="in">
               <div class="trow"><span class="cic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-5"/></svg></span><span class="go"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
               <h3>{c.trhy}</h3><p>{c.trhyP}</p>
-              <div class="tstat"><span class="statpill">{wheat.name} {fmt(wheat.price)} <span class="u">{wheat.unit}</span> {typeof wheat.change === 'number' && <span class={`chg ${wheat.change >= 0 ? 'up' : 'dn'}`}>{wheat.change >= 0 ? '▲' : '▼'}{Math.abs(wheat.change)}%</span>}</span><span class="statpill ghost">{commodityStats.length} {c.komodit}</span></div>
+              <div class="tstat"><span class="statpill">{wheat.name} {fmt(wheat.price)} <span class="u">{wheat.unit}</span> {typeof wheat.change === 'number' && <span class={`chg ${wheat.change >= 0 ? 'up' : 'dn'}`} title={deltaTitle}>{wheat.change >= 0 ? '▲' : '▼'}{Math.abs(wheat.change)}%</span>}</span><span class="statpill ghost">{commodityStats.length} {c.komodit}</span></div>
             </div>
           </a>)}
           {show('/puda/') && (
