@@ -12,10 +12,15 @@
 // ‼️ SPLIT-BRAIN: prod čte self-hosted (.env.selfhost / SH_*), cloud (.env) je
 // dev mirror → pro prod VŽDY --selfhost. OpenAI klíč: ~/.army-svet-openai-key.
 //
-// SK vs PL strategie:
-//  - PL = REFRAMING (CZ rámování → PL/obecné) — PL homepage má být polská.
-//  - SK = nativní slovenština, DRŽÍ české rámování (portál je český; konzistence
-//    s 23 existujícími SK články, viz scripts/i18n-translate.py glosář).
+// SK i PL strategie = REFRAMING (CZ rámování → cílová země / obecné). User chce
+// SK obsah slovenský, ne o Česku ("Top 10 českých odrůd" na /sk/ nedává smysl).
+// Tržní tvrdenia viazané na krajinu SA GENERALIZUJÚ (nefabrikovať SK reálie).
+// (Dřív SK drželo české rámování dle i18n-translate.py — user to zrušil 2026-08-07.)
+//
+// SKIP_SLUGS = ručně upravené články, které NEpřegenerovávat (--force je přeskočí).
+const SKIP_SLUGS = new Set([
+  'tradicni-ceske-odrudy-plodin', // SK ručně přepsáno na slovenské plodiny (ne překlad)
+]);
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -59,11 +64,14 @@ Dostaneš český článok (titulok, perex, HTML telo) a vytvoríš jeho SLOVENS
 
 PRAVIDLÁ:
 - Píš prirodzenou spisovnou slovenčinou ako rodený Slovák — NIE doslovne, ale plynulo ako slovenský novinár.
-- GEOGRAFIA TRHU (DÔLEŽITÉ): portál je ČESKÝ. Konkrétne trhové/geografické tvrdenia viazané na Česko PONECHAJ
-  viazané na pôvodnú krajinu — len prelož: „v Česku / v České republice" → „v Českej republike",
-  „české pole / české zemědělství" → „české polia / české poľnohospodárstvo", „čeští zemědělci" → „českí poľnohospodári".
-  NEMEŇ Česko na Slovensko a NEVYMÝŠĽAJ slovenské reálie.
-- NEVYMÝŠĽAJ fakty, čísla ani inštitúcie. Čísla, jednotky, vlastné mená a modely strojov NEPREKLADAJ.
+- REFRAMING: článok má znieť ako písaný pre SLOVENSKÉHO/všeobecného čitateľa, NIE ako text o Česku.
+  * Rámovanie typu „české zemědělství / v Česku / čeští zemědělci / na českých polích / česká krajina" nahraď
+    slovenským alebo všeobecným kontextom („slovenské poľnohospodárstvo / na Slovensku / slovenskí poľnohospodári /
+    na poliach / naša krajina"), prípadne stredoeurópskym, ak znie prirodzenejšie.
+  * Tvrdenia o dostupnosti na trhu viazané na jednu krajinu ZOVŠEOBECNI („prichádza na trh / do Európy") —
+    NETVRÚĎ konkrétne, že model debutuje na Slovensku, ak na to nie je podklad.
+- NEVYMÝŠĽAJ slovenské fakty, čísla, dotácie ani inštitúcie. Univerzálne technické fakty (parametre strojov,
+  agronómia, dáta výrobcov) zachovaj bez zmien. Čísla, jednotky, vlastné mená a modely strojov NEPREKLADAJ.
 - HTML štruktúru (<p>, <h2>, <h3>, <ul>, <li>, <strong>, <a href>) zachovaj 1:1.
 - Vráť VÝLUČNE JSON objekt: title, perex, content, seo_title, seo_description (title bez sufixu portálu).`,
 };
@@ -101,7 +109,7 @@ async function upsert(row) {
 
   let pool;
   if (ONLY) pool = rows.filter((x) => x.slug === ONLY);
-  else pool = rows.filter((x) => !isJurisdictional(x.category) && (FORCE || !has.has(x.id)));
+  else pool = rows.filter((x) => !isJurisdictional(x.category) && !SKIP_SLUGS.has(x.slug) && (FORCE || !has.has(x.id)));
 
   console.log(`[${LOCALE}${SELFHOST ? '/PROD' : '/dev'}] k překladu: ${pool.length}${DRY ? ' (DRY)' : ''}` +
     ` (vynecháno jurisdikčních: ${rows.filter((x) => isJurisdictional(x.category)).length})`);
