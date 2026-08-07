@@ -103,13 +103,28 @@ for (const [code, ct] of Object.entries(countries)) {
   }
 }
 
+// Krátké vysvětlení každé metriky (co hodnota znamená) — zobrazí se přes „i" u názvu.
+const METRIC_NOTES = {
+  land_price: 'Průměrná tržní cena orné půdy za hektar. U některých zemí jsou dostupná jen regionální data.',
+  rent: 'Průměrné roční pachtovné (nájemné) za hektar zemědělské půdy.',
+  wheat_yield: 'Průměrný výnos pšenice v tunách na hektar sklizené plochy.',
+  maize_yield: 'Průměrný výnos kukuřice (na zrno) v tunách na hektar.',
+  cattle_count: 'Celkové stavy skotu v zemi (v milionech kusů).',
+  pigs_count: 'Celkové stavy prasat v zemi (v milionech kusů).',
+  ag_land: 'Rozloha zemědělské půdy — orná půda, trvalé kultury a pastviny (v milionech hektarů).',
+  farm_count: 'Počet zemědělských podniků v zemi (v milionech).',
+  organic_share: 'Podíl plochy v ekologickém zemědělství na celkové zemědělské ploše (%).',
+  ag_value_added_gdp: 'Podíl zemědělství (přidaná hodnota) na hrubém domácím produktu (%).',
+  ag_employment: 'Podíl pracujících v zemědělství na celkové zaměstnanosti (%).',
+};
+
 const metrics = [
   { key: 'cap_payments', group: 'Podpory', label: 'Přímé platby CAP (Ø)', unit: '€/ha', currency: true,
     source: 'Přímé platby: Annex V nařízení (EU) 2021/2115 (rok 2027); zeměd. plocha: World Bank',
     sourceUrl: 'https://eur-lex.europa.eu/eli/reg/2021/2115/oj',
     note: 'Orientační průměr = roční národní obálka přímých plateb ÷ zemědělská plocha. Skutečná sazba na hektar se u jednotlivých plateb (BISS, eko-schémata, ANC…) liší; non-EU země bez plateb.' },
-  ...LAND_METRICS.map((m) => ({ key: m.key, group: m.group, label: m.label, unit: m.unit, currency: true, source: m.source, sourceUrl: m.sourceUrl })),
-  ...ENGINE_METRICS.map(({ key, group }) => ({ key, group, label: engineMeta[key]?.label || key, unit: engineMeta[key]?.unit || '', source: engineMeta[key]?.source || '', sourceUrl: engineMeta[key]?.sourceUrl || '' })),
+  ...LAND_METRICS.map((m) => ({ key: m.key, group: m.group, label: m.label, unit: m.unit, currency: true, source: m.source, sourceUrl: m.sourceUrl, note: METRIC_NOTES[m.key] })),
+  ...ENGINE_METRICS.map(({ key, group }) => ({ key, group, label: engineMeta[key]?.label || key, unit: engineMeta[key]?.unit || '', source: engineMeta[key]?.source || '', sourceUrl: engineMeta[key]?.sourceUrl || '', note: METRIC_NOTES[key] })),
 ];
 
 fs.writeFileSync(OUT, JSON.stringify({ metrics, countries }) + '\n');
