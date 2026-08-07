@@ -192,21 +192,25 @@ h3 {
 }
 
 /* Prose (article content) */
-.prose :global(h2) { font-size: 1.5rem; font-weight: 600; margin: 2em 0 .75em; letter-spacing: -.3px; }
-.prose :global(h3) { font-size: 1.15rem; font-weight: 600; margin: 1.5em 0 .5em; }
-.prose :global(p) { font-size: 17px; line-height: 1.75; color: #333; margin-bottom: 1.25em; }
-.prose :global(li) { font-size: 16px; line-height: 1.7; color: #333; margin-bottom: .4em; }
-.prose :global(strong) { font-weight: 700; color: var(--black); }
-.prose :global(code) { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: .9em; font-family: var(--font-heading); }
-.prose :global(table) { width: 100%; border-collapse: collapse; margin-bottom: 1.5em; font-size: 15px; }
-.prose :global(th) { background: var(--gray-light); font-weight: 700; padding: 10px 14px; border: 1px solid #e0e0e0; text-align: left; }
-.prose :global(td) { padding: 10px 14px; border: 1px solid #e0e0e0; vertical-align: top; }
-.prose :global(tbody tr:nth-child(even)) { background: #faf9f5; }
-.prose :global(ul), .prose :global(ol) { margin: 0 0 1.25em; padding-left: 1.5em; }
-.prose :global(ul) { list-style: disc; }
-.prose :global(ol) { list-style: decimal; }
-.prose :global(a) { color: var(--black); text-decoration: underline; text-decoration-color: #FFEA00; text-decoration-thickness: 2px; text-underline-offset: 2px; }
-.prose :global(a:hover) { text-decoration-color: var(--black); }
+/* POZOR: tohle je PLAIN globální CSS (import v Layout.astro), NE Astro <style>.
+   `:global()` je CSS-Modules syntaxe — v plain .css je to NEPLATNÝ selektor a
+   prohlížeč celé pravidlo zahodí (dřív tu bylo `.prose :global(ul)` → .prose
+   seznamy neměly odrážky napříč celým webem). Používej prosté `.prose X`. */
+.prose h2 { font-size: 1.5rem; font-weight: 600; margin: 2em 0 .75em; letter-spacing: -.3px; }
+.prose h3 { font-size: 1.15rem; font-weight: 600; margin: 1.5em 0 .5em; }
+.prose p { font-size: 17px; line-height: 1.75; color: #333; margin-bottom: 1.25em; }
+.prose li { font-size: 16px; line-height: 1.7; color: #333; margin-bottom: .4em; }
+.prose strong { font-weight: 700; color: var(--black); }
+.prose code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: .9em; font-family: var(--font-heading); }
+.prose table { width: 100%; border-collapse: collapse; margin-bottom: 1.5em; font-size: 15px; }
+.prose th { background: var(--gray-light); font-weight: 700; padding: 10px 14px; border: 1px solid #e0e0e0; text-align: left; }
+.prose td { padding: 10px 14px; border: 1px solid #e0e0e0; vertical-align: top; }
+.prose tbody tr:nth-child(even) { background: #faf9f5; }
+.prose ul, .prose ol { margin: 0 0 1.25em; padding-left: 1.5em; }
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+.prose a { color: var(--black); text-decoration: underline; text-decoration-color: #FFEA00; text-decoration-thickness: 2px; text-underline-offset: 2px; }
+.prose a:hover { text-decoration-color: var(--black); }
 
 /* ===== Form Elements ===== */
 .form-group {
