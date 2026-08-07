@@ -34,3 +34,14 @@ export const COMMODITY_NAMES_PL = [
   'Żywiec wołowy',
   'Mleko',
 ] as const;
+
+// SK názvy komodit (homepage graf, dataBase='-sk'). Pořadí+názvy MUSÍ odpovídat
+// klíčům v /statistiky/commodity-data-recent-sk.json (agro-stats-sk.json → commodityFull).
+export const COMMODITY_NAMES_SK = [
+  'Pšenica',
+  'Jačmeň',
+  'Kukurica',
+  'Repka',
+  'Hovädzie',
+  'Bravčové',
+] as const;

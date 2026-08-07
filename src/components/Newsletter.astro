@@ -22,8 +22,16 @@ const STR = {
     submitting: '...', pending: 'Sprawdź e-mail i kliknij link potwierdzający.',
     already: 'Ten e-mail już subskrybuje newsletter.', invalid: 'Podaj prawidłowy e-mail.', error: 'Coś poszło nie tak. Spróbuj ponownie.',
   },
+  sk: {
+    title: 'Novinky zo sveta poľnohospodárstva do mailu',
+    perex: 'Raz týždenne to najdôležitejšie z poľnohospodárstva, techniky a trhu — priamo do schránky.',
+    placeholder: 'Váš e-mail', btn: 'Odoberať', msg: 'Žiadny spam. Odhlásenie kedykoľvek.',
+    gdprPre: 'Odoberaním súhlasíte so ', gdprLink: 'spracovaním osobných údajov', gdprPost: '. Odhlásiť sa môžete kedykoľvek.',
+    submitting: '...', pending: 'Skontrolujte e-mail a kliknite na potvrdzovací odkaz.',
+    already: 'Tento e-mail už newsletter odoberá.', invalid: 'Zadajte platný e-mail.', error: 'Niečo sa pokazilo. Skúste to znova.',
+  },
 } as const;
-const L = locale === 'pl' ? STR.pl : STR.cs;
+const L = STR[locale as keyof typeof STR] ?? STR.cs;
 ---
 
 <section class={`newsletter newsletter--${variant}`}>
