@@ -106,6 +106,17 @@ const payload = { metrics, countries };
     const isCur = (k: string) => !!metricOf(k)?.currency;
     const cv = (v: number | null, k: string) => (v == null ? v : (isCur(k) && cur === 'czk' ? Math.round((v as number) * RATE) : v));
     const uOf2 = (m: any) => (m.currency && cur === 'czk' ? m.unit.replace('€', 'Kč') : m.unit);
+    // Adaptivní číslo+jednotka: počty jsou v datech v milionech (mil. ks/farem);
+    // když je hodnota < 1 mil, zobraz v tisících (ať malé země nemají „0,03 mil. farem").
+    const dispVal = (v: number | null, m: any) => {
+      const x = cv(v, m.key);
+      if (x == null) return '—';
+      const u = uOf2(m);
+      if ((u === 'mil. ks' || u === 'mil. farem') && Math.abs(x as number) < 1) {
+        return `${nf.format(Math.round((x as number) * 1000))} tis. ${u.split(' ')[1]}`;
+      }
+      return `${fmtN(x)} ${u}`;
+    };
     const vals = (k: string) => Object.values(countries).map((d: any) => d.values[k]).filter((v: any) => typeof v === 'number') as number[];
     const stat = (k: string) => { const vs = vals(k); return { min: Math.min(...vs), max: Math.max(...vs), avg: vs.reduce((a, b) => a + b, 0) / vs.length }; };
     const rank = (code: string, k: string) => { const a = (Object.entries(countries) as any[]).filter(([, d]) => typeof d.values[k] === 'number').sort(([, x]: any, [, y]: any) => y.values[k] - x.values[k]); const i = a.findIndex(([c]: any) => c === code); return i < 0 ? null : [i + 1, a.length]; };
@@ -119,7 +130,7 @@ const payload = { metrics, countries };
       const s = stat(active), m = metricOf(active);
       document.getElementById('agrimap-title')!.textContent = `${m.label} (${uOf2(m)})`;
       document.getElementById('agrimap-lo')!.textContent = fmtN(cv(s.min, active));
-      document.getElementById('agrimap-hi')!.textContent = fmtN(cv(s.max, active)) + ' ' + uOf2(m);
+      document.getElementById('agrimap-hi')!.textContent = dispVal(s.max, m);
       (document.getElementById('agrimap-tavg') as HTMLElement).style.left = ((s.avg - s.min) / (s.max - s.min) * 100) + '%';
       const sd = countries[sel]?.values[active]; const tS = document.getElementById('agrimap-tsel') as HTMLElement;
       if (sd != null) { tS.style.display = 'block'; tS.style.left = ((sd - s.min) / (s.max - s.min) * 100) + '%'; tS.querySelector('b')!.textContent = FLAGS[sel]; } else tS.style.display = 'none';
@@ -127,7 +138,7 @@ const payload = { metrics, countries };
       document.querySelectorAll('text.agrimap-lbl').forEach((t) => { const d = countries[(t as HTMLElement).dataset.c!]; const v = d?.values[active]; const big = (t as HTMLElement).dataset.big === '1'; t.textContent = v != null && big ? abbr(cv(v, active)!) : ''; (t as HTMLElement).classList.toggle('lt', v != null && (v - s.min) / (s.max - s.min) > 0.62); });
       const arr = (Object.entries(countries) as any[]).filter(([, d]) => d.values[active] != null).sort(([, x]: any, [, y]: any) => y.values[active] - x.values[active]);
       const top = arr[0], bot = arr[arr.length - 1]; const ratio = top[1].values[active] / bot[1].values[active]; const cz = rank('CZ', active);
-      document.getElementById('agrimap-insight')!.innerHTML = `💡 ${top[1].flag} <b>${top[1].name}</b> vede (${fmtN(cv(top[1].values[active], active))} ${uOf2(m)}) — ${ratio >= 2 ? Math.round(ratio) + '× víc než ' : 'nejvíc, oproti '}${bot[1].flag} ${bot[1].name} (${fmtN(cv(bot[1].values[active], active))}). 🇨🇿 Česko: <b>${cz ? cz[0] + '. místo' : '—'}</b> z ${cz ? cz[1] : '—'}.`;
+      document.getElementById('agrimap-insight')!.innerHTML = `💡 ${top[1].flag} <b>${top[1].name}</b> vede (${dispVal(top[1].values[active], m)}) — ${ratio >= 2 ? Math.round(ratio) + '× víc než ' : 'nejvíc, oproti '}${bot[1].flag} ${bot[1].name} (${fmtN(cv(bot[1].values[active], active))}). 🇨🇿 Česko: <b>${cz ? cz[0] + '. místo' : '—'}</b> z ${cz ? cz[1] : '—'}.`;
     }
     function panel(code: string) {
       const d = countries[code]; if (!d) return; sel = code;
@@ -140,7 +151,7 @@ const payload = { metrics, countries };
         const row = document.createElement('div'); row.className = 'agrimap-row' + (m.key === active ? ' hot' : '');
         row.innerHTML = `<span class="k">${m.label}</span>` +
           (v != null ? `<svg class="spark" viewBox="0 0 66 20"><polyline points="${spark(d.series[m.key])}" fill="none" stroke="#5a964a" stroke-width="1.5"/></svg>` : '') +
-          `<span class="v">${fmtN(cv(v, m.key))} ${v != null ? uOf2(m) : ''}${v != null ? ` <span class="cmp ${cmp}">${pct >= 0 ? '+' : ''}${pct}%</span>` : ''}</span>`;
+          `<span class="v">${dispVal(v, m)}${v != null ? ` <span class="cmp ${cmp}">${pct >= 0 ? '+' : ''}${pct}%</span>` : ''}</span>`;
         rows.appendChild(row);
       }
       paint();
@@ -157,7 +168,7 @@ const payload = { metrics, countries };
       svg.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, tx: T.x, ty: T.y }; moved = false; svg.style.cursor = 'grabbing'; });
       svg.addEventListener('pointermove', (e) => { if (!drag) return; const s = VW / svg.clientWidth; if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 3) moved = true; anim = false; T.x = drag.tx + (e.clientX - drag.x) * s; T.y = drag.ty + (e.clientY - drag.y) * s; apply(); });
       window.addEventListener('pointerup', () => { drag = null; if (svg) svg.style.cursor = 'grab'; });
-      svg.addEventListener('mousemove', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) { const d = countries[p.dataset.c!]; const m = metricOf(active); tip.hidden = false; tip.innerHTML = `${d.flag} ${d.name} · <b>${fmtN(cv(d.values[active], active))} ${uOf2(m)}</b>`; tip.style.left = (e.clientX + 14) + 'px'; tip.style.top = (e.clientY - 10) + 'px'; } else tip.hidden = true; });
+      svg.addEventListener('mousemove', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) { const d = countries[p.dataset.c!]; const m = metricOf(active); tip.hidden = false; tip.innerHTML = `${d.flag} ${d.name} · <b>${dispVal(d.values[active], m)}</b>`; tip.style.left = (e.clientX + 14) + 'px'; tip.style.top = (e.clientY - 10) + 'px'; } else tip.hidden = true; });
       svg.addEventListener('mouseleave', () => (tip.hidden = true));
       svg.addEventListener('mouseover', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) panel(p.dataset.c!); });
       svg.addEventListener('click', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) { panel(p.dataset.c!); if (!moved) zoomTo(p.dataset.c!); } });

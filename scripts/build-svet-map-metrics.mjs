@@ -42,6 +42,11 @@ function loadCountry(slug) {
   return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : null;
 }
 
+// Metriky, které /svet json dodává v tisících (unit „1000 ks"/„1000 farem") →
+// hodnotu i řadu vydělíme 1000 a jednotku přepíšeme na miliony. Zobrazení pak
+// „1,81 mil. ks" místo ošklivého „1 813 1000 ks". Konzistentní s ag_land (mil. ha).
+const MILLIONS = { cattle_count: 'mil. ks', pigs_count: 'mil. ks', farm_count: 'mil. farem' };
+
 const engineMeta = {};
 const countries = {};
 for (const [code, [slug, region]] of Object.entries(COUNTRIES)) {
@@ -54,9 +59,15 @@ for (const [code, [slug, region]] of Object.entries(COUNTRIES)) {
   }
   for (const { key } of ENGINE_METRICS) {
     const ind = c?.indicators?.[key];
-    values[key] = ind?.latest?.value ?? null;
-    series[key] = Array.isArray(ind?.series) ? ind.series.map((s) => s.value) : null;
-    if (ind && !engineMeta[key]) engineMeta[key] = { label: ind.label, unit: ind.unit || ind.latest?.unit || '', source: ind.latest?.source || '', sourceUrl: ind.latest?.sourceUrl || '' };
+    let val = ind?.latest?.value ?? null;
+    let ser = Array.isArray(ind?.series) ? ind.series.map((s) => s.value) : null;
+    if (MILLIONS[key]) {
+      if (val != null) val = val / 1000;
+      if (ser) ser = ser.map((x) => (x == null ? x : x / 1000));
+    }
+    values[key] = val;
+    series[key] = ser;
+    if (ind && !engineMeta[key]) engineMeta[key] = { label: ind.label, unit: MILLIONS[key] || ind.unit || ind.latest?.unit || '', source: ind.latest?.source || '', sourceUrl: ind.latest?.sourceUrl || '' };
   }
   countries[code] = { slug, name: c?.nameCs || slug, flag: c?.flag || '', region, values, series };
 }
