@@ -73,6 +73,7 @@ const payload = { metrics, countries };
 
     <aside class="agrimap-panel">
       <div class="agrimap-phead"><div class="agrimap-rank" id="agrimap-rank"></div><div class="agrimap-flag" id="agrimap-flag"></div><div class="agrimap-reg" id="agrimap-reg"></div><h3 id="agrimap-name"></h3></div>
+      <div class="agrimap-pmode"><button type="button" class="agrimap-pm active" data-pm="num">Číslo</button><button type="button" class="agrimap-pm" data-pm="graph">Graf</button></div>
       <div class="agrimap-rows" id="agrimap-rows"></div>
       <a class="agrimap-cta" id="agrimap-cta" href="#">→ Detail země</a>
     </aside>
@@ -95,6 +96,7 @@ const payload = { metrics, countries };
     const vb = (svg?.getAttribute('viewBox') || '0 0 1000 1165').split(' ').map(Number);
     const VW = vb[2], VH = vb[3];
     let active = metrics[0].key, sel = 'CZ', T = { k: 1, x: 0, y: 0 }, anim = false, moved = false, drag: any = null;
+    let pmode = 'num'; // panel: 'num' = hodnoty+%, 'graph' = sparkliny
     const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
     const fmtN = (v: number | null) => (v == null ? '—' : nf.format(v));
     const abbr = (v: number) => (v >= 10000 ? Math.round(v / 1000) + 'k' : v >= 1000 ? (v / 1000).toFixed(1) + 'k' : nf.format(v));
@@ -153,10 +155,14 @@ const payload = { metrics, countries };
       const rows = document.getElementById('agrimap-rows')!; rows.innerHTML = '';
       for (const m of metrics) {
         const v = d.values[m.key], s = stat(m.key); const cmp = v == null ? '' : v >= s.avg ? 'up' : 'dn'; const pct = v == null ? '' : Math.round((v / s.avg - 1) * 100);
-        const row = document.createElement('div'); row.className = 'agrimap-row' + (m.key === active ? ' hot' : '');
+        const row = document.createElement('div'); row.className = 'agrimap-row agrimap-row--' + pmode + (m.key === active ? ' hot' : '');
+        // Přepínač Číslo/Graf: 'num' = jen hodnota+% (nezmáčknuté), 'graph' = sparkline + hodnota.
+        const sparkPts = v != null ? spark(d.series[m.key]) : '';
         row.innerHTML = `<span class="k">${m.label}</span>` +
-          (v != null ? `<svg class="spark" viewBox="0 0 66 20"><polyline points="${spark(d.series[m.key])}" fill="none" stroke="#5a964a" stroke-width="1.5"/></svg>` : '') +
-          `<span class="v">${dispVal(v, m)}${v != null ? ` <span class="cmp ${cmp}">${pct >= 0 ? '+' : ''}${pct}%</span>` : ''}</span>`;
+          (pmode === 'graph'
+            ? (sparkPts ? `<svg class="spark" viewBox="0 0 66 20"><polyline points="${sparkPts}" fill="none" stroke="#5a964a" stroke-width="1.5"/></svg>` : '<span class="spark spark--none"></span>') +
+              `<span class="v">${dispVal(v, m)}</span>`
+            : `<span class="v">${dispVal(v, m)}${v != null ? ` <span class="cmp ${cmp}">${pct >= 0 ? '+' : ''}${pct}%</span>` : ''}</span>`);
         rows.appendChild(row);
       }
       paint();
@@ -165,6 +171,7 @@ const payload = { metrics, countries };
 
     document.querySelectorAll('.agrimap-metric').forEach((b) => b.addEventListener('click', () => { active = (b as HTMLElement).dataset.metric!; document.querySelectorAll('.agrimap-metric').forEach((x) => x.classList.remove('active')); b.classList.add('active'); panel(sel); }));
     document.querySelectorAll('.agrimap-cur').forEach((b) => b.addEventListener('click', () => { cur = (b as HTMLElement).dataset.cur!; document.querySelectorAll('.agrimap-cur').forEach((x) => x.classList.remove('active')); b.classList.add('active'); panel(sel); }));
+    document.querySelectorAll('.agrimap-pm').forEach((b) => b.addEventListener('click', () => { pmode = (b as HTMLElement).dataset.pm!; document.querySelectorAll('.agrimap-pm').forEach((x) => x.classList.remove('active')); b.classList.add('active'); panel(sel); }));
     document.getElementById('agrimap-zin')!.addEventListener('click', () => { anim = true; zoomAround(VW / 2, VH / 2, T.k * 1.4); });
     document.getElementById('agrimap-zout')!.addEventListener('click', () => { anim = true; zoomAround(VW / 2, VH / 2, T.k / 1.4); });
     reset.addEventListener('click', () => { anim = true; T = { k: 1, x: 0, y: 0 }; apply(); });
@@ -189,6 +196,9 @@ const payload = { metrics, countries };
   .agrimap-curlbl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #b0b0b4; margin-right: 2px; }
   .agrimap-cur { border: none; background: transparent; border-radius: 999px; padding: 6px 13px; font-size: 13px; font-weight: 800; cursor: pointer; color: #777; transition: .15s; }
   .agrimap-cur.active { background: var(--ink); color: var(--accent); }
+  .agrimap-pmode { display: flex; gap: 4px; margin: 10px 18px 2px; background: #f4f5f1; border-radius: 999px; padding: 3px; }
+  .agrimap-pm { flex: 1; border: none; background: transparent; border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 800; cursor: pointer; color: #888; transition: .15s; }
+  .agrimap-pm.active { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
   .agrimap-grp { display: flex; flex-direction: column; gap: 6px; }
   .agrimap-gl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #b0b0b4; }
   .agrimap-chips { display: flex; gap: 7px; flex-wrap: wrap; }
@@ -264,6 +274,11 @@ const payload = { metrics, countries };
   .agrimap-row .cmp.up { color: #0B7A3B; }
   .agrimap-row .cmp.dn { color: #b23; }
   .agrimap-row .spark { width: 48px; height: 17px; flex: none; }
+  /* 'num' režim = bez sparkline (víc místa, label se neláme); 'graph' = větší sparkline. */
+  .agrimap-row--num .k { font-size: 13px; }
+  .agrimap-row--graph .spark { width: 62px; height: 22px; }
+  .agrimap-row--graph .spark--none { display: inline-block; width: 62px; flex: none; }
+  .agrimap-row--graph .v { font-size: 12.5px; }
   .agrimap-rank span { font-weight: 600; font-size: 10px; }
   .agrimap-tip b { color: #FFEA00; }
   .agrimap-insight b { color: #0A0A0B; }
