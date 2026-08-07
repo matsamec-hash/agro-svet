@@ -140,7 +140,7 @@ const articleDate = new Date(article.published_at).getTime();
 const prevArticle = pool.find((p) => new Date(p.published_at).getTime() < articleDate) ?? null; // older
 const nextArticle = [...pool].reverse().find((p) => new Date(p.published_at).getTime() > articleDate) ?? null; // newer
 
-const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ';
+const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
 const date = new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.published_at));
 
 const canonical = `https://agro-svet.cz${localizePath(locale, `/novinky/${article.slug}/`)}`;

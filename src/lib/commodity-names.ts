@@ -20,3 +20,17 @@ export const COMMODITY_NAMES = [
 ] as const;
 
 export type CommodityName = typeof COMMODITY_NAMES[number];
+
+// Polské názvy komodit pro homepage graf (locale='pl', dataBase='-pl'). Pořadí
+// i názvy MUSÍ odpovídat klíčům v /statistiky/commodity-data-recent-pl.json
+// (zdroj: agro-stats-pl.json → commodityFull) — jinak graf sérii nenajde.
+// Malý modul, ať homepage worker nebundluje celý agro-stats-pl.json.
+export const COMMODITY_NAMES_PL = [
+  'Pszenica',
+  'Jęczmień',
+  'Kukurydza',
+  'Rzepak',
+  'Żywiec wieprzowy',
+  'Żywiec wołowy',
+  'Mleko',
+] as const;

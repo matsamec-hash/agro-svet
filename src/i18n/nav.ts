@@ -183,7 +183,13 @@ export function getNav(locale: Locale): NavItem[] {
   // /poradniki je PL-only sekce (žádný cs ekvivalent) → do sdíleného cs-stromu
   // nepatří (leakla by do cs/sk nav → 404). Injektuj jen pro pl, jako první
   // (obsahový rozcestník, obdoba cs „Téma"). navHref přidá /pl prefix.
-  if (locale === 'pl') items.unshift({ section: 'poradniki', label: 'Poradniki', href: '/poradniki/' });
+  if (locale === 'pl') {
+    items.unshift({ section: 'poradniki', label: 'Poradniki', href: '/poradniki/' });
+    // Nowości = PL zpravodajský výpis (article_translations overlay, jen reálně
+    // přeložené obecné články). Sdílený `tema` dropdown je pro pl skrytý (cs-only
+    // děti) → injektuj samostatný jednoduchý top-level link. navHref přidá /pl.
+    items.unshift({ section: 'novinky', label: 'Nowości', href: '/novinky/' });
+  }
   return items;
 }
 

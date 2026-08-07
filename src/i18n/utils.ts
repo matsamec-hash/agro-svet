@@ -45,7 +45,9 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // /doplaty-bezposrednie = PL-only landing (dopłaty bezpośrednie ARiMR), jurisdykčně
   // vázané, obsah přímo polsky (žádný cs ekvivalent → non-pl locale 404). Launchnuté
   // → index+self-canonical (noHreflang v Layoutu, žádné cross-locale alternates).
-  pl: ['/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki'],
+  // '/' = homepage indexable (má reálný PL feed přes article_translations).
+  // '/novinky' = PL zpravodajský výpis (jen reálně přeložené články, žádný cs leak).
+  pl: ['/', '/novinky', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

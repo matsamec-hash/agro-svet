@@ -22,7 +22,7 @@ const focalCss = `${focalPoint?.x ?? 50}% ${focalPoint?.y ?? 50}%`;
 // to grab the 400 w variant on mobile, 800 w on larger viewports.
 const heroVariants = imgSrcset(heroImage, '(max-width: 600px) 100vw, 400px');
 
-const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ';
+const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
 const date = new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(publishDate);
 // Surová kategorie z DB je nekonzistentní; odkaz i štítek stavíme z kanonického
 // slugu, jinak vede badge na 404 (/kategorie/Zemědělství/ apod.).
