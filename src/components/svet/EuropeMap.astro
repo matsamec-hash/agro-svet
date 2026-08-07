@@ -137,10 +137,10 @@ const payload = { metrics, countries };
       const rows = document.getElementById('agrimap-rows')!; rows.innerHTML = '';
       for (const m of metrics) {
         const v = d.values[m.key], s = stat(m.key); const cmp = v == null ? '' : v >= s.avg ? 'up' : 'dn'; const pct = v == null ? '' : Math.round((v / s.avg - 1) * 100);
-        const pos = v == null ? 0 : Math.max(3, Math.round((v - s.min) / (s.max - s.min || 1) * 100));
         const row = document.createElement('div'); row.className = 'agrimap-row' + (m.key === active ? ' hot' : '');
-        row.innerHTML = `<div class="rtop"><span class="k">${m.label}</span><span class="v">${fmtN(cv(v, m.key))} ${v != null ? uOf2(m) : ''} ${v != null ? `<span class="cmp ${cmp}">${pct >= 0 ? '+' : ''}${pct}%</span>` : ''}</span></div>` +
-          (v != null ? `<div class="rbot"><div class="mini"><i style="width:${pos}%;background:${color(pos / 100)}"></i></div><svg class="spark" viewBox="0 0 66 20"><polyline points="${spark(d.series[m.key])}" fill="none" stroke="#5a964a" stroke-width="1.5"/></svg></div>` : '');
+        row.innerHTML = `<span class="k">${m.label}</span>` +
+          (v != null ? `<svg class="spark" viewBox="0 0 66 20"><polyline points="${spark(d.series[m.key])}" fill="none" stroke="#5a964a" stroke-width="1.5"/></svg>` : '') +
+          `<span class="v">${fmtN(cv(v, m.key))} ${v != null ? uOf2(m) : ''}${v != null ? ` <span class="cmp ${cmp}">${pct >= 0 ? '+' : ''}${pct}%</span>` : ''}</span>`;
         rows.appendChild(row);
       }
       paint();
@@ -209,7 +209,10 @@ const payload = { metrics, countries };
   .agrimap-reg { color: var(--accent); font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
   .agrimap-rank { position: absolute; top: 15px; right: 18px; background: var(--accent); color: var(--ink); font-weight: 800; font-size: 13px; padding: 6px 11px; border-radius: 9px; text-align: center; line-height: 1.1; }
   .agrimap-rank span { font-weight: 600; font-size: 10px; }
-  .agrimap-rows { padding: 6px 18px 10px; }
+  .agrimap-rows { padding: 6px 18px 10px; max-height: calc(74vh - 132px); overflow-y: auto; overscroll-behavior: contain; }
+  .agrimap-rows::-webkit-scrollbar { width: 6px; }
+  .agrimap-rows::-webkit-scrollbar-thumb { background: #d5d7d2; border-radius: 3px; }
+  .agrimap-rows { scrollbar-width: thin; scrollbar-color: #d5d7d2 transparent; }
   .agrimap-row { padding: 9px 0; border-bottom: 1px solid var(--line); }
   .agrimap-row:last-child { border-bottom: none; }
   .agrimap-row .rtop { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
@@ -232,19 +235,15 @@ const payload = { metrics, countries };
 <!-- Řádky panelu se skládají klientským JS (innerHTML) → Astro scoped styly se na ně
      neaplikují (chybí data-astro-cid). Proto tyto styly musí být GLOBÁLNÍ. -->
 <style is:global>
-  .agrimap-row { padding: 10px 0; border-bottom: 1px solid #e9e9ec; }
+  .agrimap-row { display: flex; align-items: center; gap: 9px; padding: 6px 0; border-bottom: 1px solid #e9e9ec; }
   .agrimap-row:last-child { border-bottom: none; }
-  .agrimap-row .rtop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-  .agrimap-row .k { color: #6b6b70; font-size: 13px; }
-  .agrimap-row .v { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 13.5px; white-space: nowrap; text-align: right; }
-  .agrimap-row.hot { background: linear-gradient(90deg, #fffdf0, #fff); margin: 0 -18px; padding: 10px 18px; border-left: 3px solid #FFEA00; }
-  .agrimap-row .cmp { font-size: 11px; font-weight: 700; margin-left: 5px; }
+  .agrimap-row .k { color: #6b6b70; font-size: 12.5px; line-height: 1.2; flex: 1; min-width: 0; }
+  .agrimap-row .v { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 13px; white-space: nowrap; flex: none; text-align: right; }
+  .agrimap-row.hot { background: linear-gradient(90deg, #fffdf0, #fff); margin: 0 -18px; padding: 6px 18px; border-left: 3px solid #FFEA00; }
+  .agrimap-row .cmp { font-size: 11px; font-weight: 700; margin-left: 4px; }
   .agrimap-row .cmp.up { color: #0B7A3B; }
   .agrimap-row .cmp.dn { color: #b23; }
-  .agrimap-row .rbot { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-  .agrimap-row .mini { height: 5px; border-radius: 3px; background: #eee; flex: 1; position: relative; overflow: hidden; }
-  .agrimap-row .mini i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
-  .agrimap-row .spark { width: 66px; height: 20px; flex: none; }
+  .agrimap-row .spark { width: 48px; height: 17px; flex: none; }
   .agrimap-rank span { font-weight: 600; font-size: 10px; }
   .agrimap-tip b { color: #FFEA00; }
   .agrimap-insight b { color: #0A0A0B; }
