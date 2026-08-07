@@ -75,7 +75,7 @@ async function translate(a) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + OPENAI_KEY },
     body: JSON.stringify({
-      model: MODEL, temperature: 0.4, response_format: { type: 'json_object' }, max_tokens: 8000,
+      model: MODEL, temperature: 0.4, response_format: { type: 'json_object' }, max_tokens: 16000,
       messages: [{ role: 'system', content: SYSTEM }, { role: 'user', content: user }],
     }),
   });

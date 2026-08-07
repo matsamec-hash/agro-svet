@@ -6,7 +6,10 @@ import { getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
 import { fetchTranslatedArticleIds, fetchArticleTranslations, buildTranslationMap, overlayArticle } from '../../lib/articles-i18n';
 import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
 
-const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+// ‼️ server:defer island se načítá z /_server-islands/… BEZ /locale prefixu →
+// Astro.locals.locale je tam vždy 'cs'. Proto locale předává PARENT jako prop
+// (index.astro), jinak /sk/ „Novinky" ukazuje český feed vč. skrytých dotací.
+const locale = Astro.props.locale ?? Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
 const supabase = createAnonClient();
 // Non-cs (sk): JEN reálně přeložené články + bez skrytých jurisdikčních kategorií

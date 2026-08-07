@@ -180,7 +180,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   </section>
 
   <!-- Latest novinky — server:defer odlité v islandu, vlastní supabase query -->
-  <LatestArticles server:defer>
+  <LatestArticles server:defer locale={locale}>
     <div slot="fallback" style="min-height:520px;"></div>
   </LatestArticles>
 
