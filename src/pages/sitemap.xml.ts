@@ -585,6 +585,12 @@ export const GET: APIRoute = async () => {
   urls.push({ loc: `${SITE_URL}/pl/doplaty-bezposrednie/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
   urls.push({ loc: `${SITE_URL}/pl/ekoschematy/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
 
+  // PL-only sekce /poradniki — hub + evergreen návody (poradnikiPl kolekce).
+  urls.push({ loc: `${SITE_URL}/pl/poradniki/`, changefreq: 'weekly', priority: '0.8', lastmod: STATIC_LASTMOD });
+  for (const p of await getCollection('poradnikiPl')) {
+    urls.push({ loc: `${SITE_URL}/pl/poradniki/${p.id}/`, changefreq: 'monthly', priority: '0.7', lastmod: STATIC_LASTMOD });
+  }
+
   // SK /dotace detail URL — vlastné slugy z kolekcie 'dotaceSk' (PPA SR výzvy).
   const dotaceSkEntries = await getCollection('dotaceSk');
   for (const dt of dotaceSkEntries) {

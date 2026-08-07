@@ -151,7 +151,7 @@ export function getNav(locale: Locale): NavItem[] {
   // je locale-agnostické, cs si všech 5 dětí + header /statistiky/ ponechává).
   const filterLocked = locale !== 'cs';
   const norm = (href: string) => href.replace(/\/+$/, '') || '/';
-  return NAV
+  const items = NAV
     .filter((item) => !hidden.includes(item.section))
     .map((item) => {
       const out: NavItem = { section: item.section, label: t(locale, item.labelKey), href: item.href };
@@ -180,6 +180,11 @@ export function getNav(locale: Locale): NavItem[] {
       }
       return out;
     });
+  // /poradniki je PL-only sekce (žádný cs ekvivalent) → do sdíleného cs-stromu
+  // nepatří (leakla by do cs/sk nav → 404). Injektuj jen pro pl, jako první
+  // (obsahový rozcestník, obdoba cs „Téma"). navHref přidá /pl prefix.
+  if (locale === 'pl') items.unshift({ section: 'poradniki', label: 'Poradniki', href: '/poradniki/' });
+  return items;
 }
 
 const FOOTER: { section: string; headingKey: string; links: { labelKey: string; href: string }[] }[] = [

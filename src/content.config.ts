@@ -264,4 +264,12 @@ const howtoUk = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, znackyPl, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk };
+// PL-only sekce /poradniki — polské evergreen návody (agrotechnika + technika).
+// Není overlay cs sekce (žádný cs ekvivalent), obsah přímo polsky. Stejné schema
+// jako howto (steps → HowTo JSON-LD). Chybějící slug pod /pl = 404.
+const poradnikiPl = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/poradniki-pl' }),
+  schema: howtoSchema(),
+});
+
+export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, znackyPl, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk, poradnikiPl };
