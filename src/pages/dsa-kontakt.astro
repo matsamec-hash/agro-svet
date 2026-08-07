@@ -3,10 +3,19 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
+const isPl = locale === 'pl';
+const isUk = locale === 'uk';
+const META = {
+  cs: { title: 'DSA kontaktní bod — Agro-svět', description: 'Jednotný kontaktní bod podle nařízení (EU) 2022/2065 (Digital Services Act, čl. 11 a 12) — pro orgány a uživatele.' },
+  sk: { title: 'DSA kontaktné miesto — Agro-svet', description: 'Jednotné kontaktné miesto podľa nariadenia (EÚ) 2022/2065 (Digital Services Act, čl. 11 a 12) — pre orgány a používateľov.' },
+  pl: { title: 'Punkt kontaktowy DSA — Agro-svet', description: 'Pojedynczy punkt kontaktowy zgodnie z rozporządzeniem (UE) 2022/2065 (Akt o usługach cyfrowych, art. 11 i 12) — dla organów i użytkowników.' },
+  uk: { title: 'Контактний пункт DSA — Agro-svet', description: 'Єдиний контактний пункт відповідно до Регламенту (ЄС) 2022/2065 (Акт про цифрові послуги, ст. 11 і 12) — для органів і користувачів.' },
+};
+const meta = META[locale] ?? META.cs;
 ---
 <Layout
-  title={isSk ? 'DSA kontaktné miesto — Agro-svet' : 'DSA kontaktní bod — Agro-svět'}
-  description={isSk ? 'Jednotné kontaktné miesto podľa nariadenia (EÚ) 2022/2065 (Digital Services Act, čl. 11 a 12) — pre orgány a používateľov.' : 'Jednotný kontaktní bod podle nařízení (EU) 2022/2065 (Digital Services Act, čl. 11 a 12) — pro orgány a uživatele.'}
+  title={meta.title}
+  description={meta.description}
 >
   <main class="legal-page">
   {isSk ? (
@@ -108,6 +117,206 @@ const isSk = locale === 'sk';
     </ul>
 
     <p class="effective"><strong>Účinnosť:</strong> 28. mája 2026</p>
+    </Fragment>
+  ) : isPl ? (
+    <Fragment>
+    <h1>Punkt kontaktowy DSA</h1>
+    <p class="lead">
+      Ta strona publikuje pojedynczy punkt kontaktowy do komunikacji z organami państw członkowskich,
+      Komisją Europejską, Radą ds. Usług Cyfrowych oraz użytkownikami zgodnie z
+      <strong>rozporządzeniem (UE) 2022/2065 z dnia 19 października 2022 r. w sprawie jednolitego rynku
+      usług cyfrowych (Akt o usługach cyfrowych)</strong>, art. 11 i 12.
+    </p>
+
+    <h2>1. Dostawca usługi hostingu</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong><br>
+      IČO: 29547539<br>
+      Siedziba: Na Břehu 378, 387 11 Katovice, Republika Czeska<br>
+      Web: <a href="https://agro-svet.cz">https://agro-svet.cz</a>
+    </p>
+
+    <h2>2. Punkt kontaktowy dla organów (DSA art. 11)</h2>
+    <p>
+      <strong>E-mail:</strong> <a href="mailto:info@samecdigital.com">info@samecdigital.com</a><br>
+      <strong>Temat:</strong> „DSA — organ" (w celu priorytetowej obsługi)<br>
+      <strong>Osoba kontaktowa:</strong> członek zarządu spółki<br>
+      <strong>Język komunikacji:</strong> czeski, słowacki, angielski
+    </p>
+    <p>
+      Komunikacja odbywa się drogą elektroniczną. Ten punkt kontaktowy służy organom wskazanym
+      w art. 11 ust. 1 DSA — koordynatorom ds. usług cyfrowych państw członkowskich, Komisji
+      Europejskiej i Radzie ds. Usług Cyfrowych.
+    </p>
+
+    <h2>3. Punkt kontaktowy dla użytkowników (DSA art. 12)</h2>
+    <p>
+      Użytkownicy mogą komunikować się z dostawcą bezpośrednio i szybko drogą elektroniczną:
+    </p>
+    <ul>
+      <li><strong>Kontakt ogólny:</strong> <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></li>
+      <li><strong>Zgłoszenie niedozwolonego ogłoszenia (DSA art. 16):</strong> formularz <a href="/bazar/nahlasit/">/bazar/nahlasit/</a></li>
+      <li><strong>Skarga na usunięcie ogłoszenia / blokadę konta:</strong> e-mail
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>, termin 14 dni
+        od powiadomienia, rozpatrzenie w ciągu 14 dni</li>
+      <li><strong>Wnioski na podstawie RODO (dostęp, sprostowanie, usunięcie, sprzeciw):</strong>
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — zob.
+        <a href="/zpracovani-osobnich-udaju/">Zasady przetwarzania danych osobowych</a></li>
+    </ul>
+    <p>
+      <strong>Język:</strong> czeski, słowacki lub angielski. Odpowiadamy zwykle w ciągu 5 dni
+      roboczych, przy zgłoszeniach DSA zgodnie z art. 16 w ciągu 7 dni, w przypadkach oczywiście bezprawnych niezwłocznie.
+    </p>
+
+    <h2>4. Kategoria usługi hostowanej</h2>
+    <p>
+      Agro-svet.cz jest <strong>usługą hostingu</strong> w rozumieniu art. 3 lit. g) ppkt (iii) DSA —
+      dostawca przechowuje informacje przekazane przez użytkownika (ogłoszenia w bazarze, zdjęcia,
+      komentarze w fotokonkursie) na jego żądanie.
+    </p>
+    <p>
+      Dostawca <strong>nie jest internetową platformą handlową</strong> w rozumieniu art. 3 lit. h) DSA —
+      nie pobiera płatności, nie jest stroną umów sprzedaży między użytkownikami i pośredniczy
+      jedynie w kontakcie. Obowiązki z art. 30–32 DSA (identyfikowalność przedsiębiorców, zgodność
+      w fazie projektowania, obowiązkowe informacje o towarze) nie mają zatem zastosowania, o ile
+      w bazarze nie ogłaszają przedsiębiorcy sprzedający konsumentom. Bazar jest zgodnie z <a href="/bazar/pravidla/">zasadami</a>
+      pomyślany dla osób fizycznych z własnym majątkiem oraz przedsiębiorców z obowiązkiem podania numeru identyfikacyjnego.
+    </p>
+
+    <h2>5. Kategoria według wielkości</h2>
+    <p>
+      Dostawca jest <strong>mikroprzedsiębiorstwem w rozumieniu zalecenia Komisji 2003/361/WE</strong>
+      (pracownicy &lt; 10, roczny obrót / suma bilansowa &lt; 2 mln EUR). Mają do niego zastosowanie
+      obowiązki usług hostingu zgodnie z rozdziałem III sekcją 2 DSA (art. 11, 12, 14,
+      16, 17, 18), <strong>nie mają do niego zastosowania</strong> obowiązki rozdziału III sekcji 3
+      (art. 19–22, zaufane podmioty sygnalizujące, wewnętrzny system rozpatrywania skarg dla dużych platform)
+      zgodnie z art. 19 ust. 2 DSA.
+    </p>
+
+    <h2>6. Roczne sprawozdania z przejrzystości</h2>
+    <p>
+      Mikroprzedsiębiorstwa są zgodnie z art. 15 ust. 2 DSA <strong>zwolnione z obowiązku</strong>
+      publikowania rocznych sprawozdań z przejrzystości. Dostawca ich nie publikuje i korzysta z tego wyłączenia.
+      Jeżeli w przyszłości przekroczy kategorię mikroprzedsiębiorstwa, opublikuje pierwsze sprawozdanie
+      w ciągu 12 miesięcy.
+    </p>
+
+    <h2>7. Mechanizmy DSA wdrożone przez dostawcę</h2>
+    <ul>
+      <li><strong>Art. 14</strong> (warunki korzystania) —
+        <a href="/podminky-pouziti/">Warunki korzystania</a>,
+        <a href="/bazar/pravidla/">Zasady bazaru</a>.</li>
+      <li><strong>Art. 16</strong> (notice and action) — formularz
+        <a href="/bazar/nahlasit/">/bazar/nahlasit/</a>, termin 7 dni.</li>
+      <li><strong>Art. 17</strong> (uzasadnienie decyzji) — użytkownik jest informowany o usunięciu
+        ogłoszenia lub blokadzie konta e-mailem z uzasadnieniem.</li>
+      <li><strong>Art. 18</strong> (zgłoszenie podejrzenia przestępstwa) — dostawca niezwłocznie
+        zgłasza podejrzenie organom ścigania.</li>
+      <li><strong>Skarga na decyzję</strong> — e-mailem na info@samecdigital.com,
+        termin 14 dni, rozpatrzenie w ciągu 14 dni.</li>
+    </ul>
+
+    <p class="effective"><strong>Data wejścia w życie:</strong> 28 maja 2026</p>
+    </Fragment>
+  ) : isUk ? (
+    <Fragment>
+    <h1>Контактний пункт DSA</h1>
+    <p class="lead">
+      Ця сторінка публікує єдиний контактний пункт для комунікації з органами держав-членів,
+      Європейською Комісією, Радою з цифрових послуг та користувачами відповідно до
+      <strong>Регламенту (ЄС) 2022/2065 від 19 жовтня 2022 року про єдиний ринок
+      цифрових послуг (Акт про цифрові послуги)</strong>, ст. 11 і 12.
+    </p>
+
+    <h2>1. Постачальник хостингової послуги</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong><br>
+      IČO: 29547539<br>
+      Місцезнаходження: Na Břehu 378, 387 11 Katovice, Чеська Республіка<br>
+      Веб: <a href="https://agro-svet.cz">https://agro-svet.cz</a>
+    </p>
+
+    <h2>2. Контактний пункт для органів (DSA ст. 11)</h2>
+    <p>
+      <strong>E-mail:</strong> <a href="mailto:info@samecdigital.com">info@samecdigital.com</a><br>
+      <strong>Тема:</strong> «DSA — орган» (для пріоритетного опрацювання)<br>
+      <strong>Контактна особа:</strong> директор компанії<br>
+      <strong>Мова комунікації:</strong> чеська, словацька, англійська
+    </p>
+    <p>
+      Комунікація здійснюється електронно. Цей контактний пункт слугує органам, зазначеним
+      у ст. 11 ч. 1 DSA — координаторам цифрових послуг держав-членів, Європейській
+      Комісії та Раді з цифрових послуг.
+    </p>
+
+    <h2>3. Контактний пункт для користувачів (DSA ст. 12)</h2>
+    <p>
+      Користувачі можуть спілкуватися з постачальником напряму та швидко електронно:
+    </p>
+    <ul>
+      <li><strong>Загальний контакт:</strong> <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></li>
+      <li><strong>Повідомлення про недопустиме оголошення (DSA ст. 16):</strong> формуляр <a href="/bazar/nahlasit/">/bazar/nahlasit/</a></li>
+      <li><strong>Скарга на видалення оголошення / блокування облікового запису:</strong> e-mail
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>, строк 14 днів
+        від повідомлення, розгляд протягом 14 днів</li>
+      <li><strong>Запити відповідно до GDPR (доступ, виправлення, видалення, заперечення):</strong>
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — див.
+        <a href="/zpracovani-osobnich-udaju/">Засади обробки персональних даних</a></li>
+    </ul>
+    <p>
+      <strong>Мова:</strong> чеська, словацька або англійська. Відповідаємо зазвичай протягом 5 робочих
+      днів, за повідомленнями DSA згідно зі ст. 16 — протягом 7 днів, в очевидно незаконних випадках невідкладно.
+    </p>
+
+    <h2>4. Категорія розміщеної послуги</h2>
+    <p>
+      Agro-svet.cz є <strong>хостинговою послугою</strong> у розумінні ст. 3 п. g) (iii) DSA —
+      постачальник зберігає інформацію, надану користувачем (оголошення в барахолці, фотографії,
+      коментарі у фотоконкурсі) на його прохання.
+    </p>
+    <p>
+      Постачальник <strong>не є онлайн-маркетплейсом</strong> у розумінні ст. 3 п. h) DSA —
+      не здійснює приймання платежів, не є стороною договорів купівлі-продажу між користувачами і посередничає
+      лише у контакті. Обов'язки ст. 30–32 DSA (простежуваність продавців, відповідність за задумом,
+      обов'язкова інформація про товар) тому не застосовуються, якщо в барахолці не оголошують
+      підприємці, що продають споживачам. Барахолка згідно з <a href="/bazar/pravidla/">правилами</a>
+      розрахована на фізичних осіб із власним майном та підприємців із обов'язком вказати IČO.
+    </p>
+
+    <h2>5. Категорія за розміром</h2>
+    <p>
+      Постачальник є <strong>мікропідприємством у розумінні рекомендації Комісії 2003/361/ЄС</strong>
+      (працівники &lt; 10, річний оборот / баланс &lt; 2 млн EUR). На нього поширюються
+      обов'язки хостингових послуг згідно з главою III розділу 2 DSA (ст. 11, 12, 14,
+      16, 17, 18), <strong>не поширюються</strong> на нього обов'язки глави III розділу 3
+      (ст. 19–22, довірені сигналізатори, внутрішня система розгляду скарг для великих платформ)
+      відповідно до ст. 19 ч. 2 DSA.
+    </p>
+
+    <h2>6. Річні звіти про прозорість</h2>
+    <p>
+      Мікропідприємства згідно зі ст. 15 ч. 2 DSA <strong>звільнені від обов'язку</strong>
+      публікувати річні звіти про прозорість. Постачальник їх не публікує і застосовує цей виняток.
+      Якщо в майбутньому він перевищить категорію мікропідприємства, опублікує перший звіт
+      протягом 12 місяців.
+    </p>
+
+    <h2>7. Механізми DSA, впроваджені постачальником</h2>
+    <ul>
+      <li><strong>Ст. 14</strong> (умови надання послуг) —
+        <a href="/podminky-pouziti/">Умови використання</a>,
+        <a href="/bazar/pravidla/">Правила барахолки</a>.</li>
+      <li><strong>Ст. 16</strong> (notice and action) — формуляр
+        <a href="/bazar/nahlasit/">/bazar/nahlasit/</a>, строк 7 днів.</li>
+      <li><strong>Ст. 17</strong> (обґрунтування рішення) — користувача інформують про видалення
+        оголошення або блокування облікового запису електронною поштою з обґрунтуванням.</li>
+      <li><strong>Ст. 18</strong> (повідомлення про підозру у вчиненні кримінального правопорушення) — постачальник
+        невідкладно повідомляє про підозру органи, що ведуть кримінальне провадження.</li>
+      <li><strong>Скарга на рішення</strong> — електронною поштою на info@samecdigital.com,
+        строк 14 днів, розгляд протягом 14 днів.</li>
+    </ul>
+
+    <p class="effective"><strong>Дата набрання чинності:</strong> 28 травня 2026</p>
     </Fragment>
   ) : (
     <Fragment>

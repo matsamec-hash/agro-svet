@@ -3,10 +3,19 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
+const isPl = locale === 'pl';
+const isUk = locale === 'uk';
+const META = {
+  cs: { title: 'Podmínky použití — Agro-svět', description: 'Podmínky použití webu agro-svet.cz — orientační charakter informací, vyloučení odpovědnosti, autorská práva, kontakt.' },
+  sk: { title: 'Podmienky používania — Agro-svet', description: 'Podmienky používania webu agro-svet.cz — orientačný charakter informácií, vylúčenie zodpovednosti, autorské práva, kontakt.' },
+  pl: { title: 'Warunki korzystania — Agro-svet', description: 'Warunki korzystania z serwisu agro-svet.cz — orientacyjny charakter informacji, wyłączenie odpowiedzialności, prawa autorskie, kontakt.' },
+  uk: { title: 'Умови використання — Agro-svet', description: 'Умови використання сайту agro-svet.cz — орієнтовний характер інформації, відмова від відповідальності, авторські права, контакт.' },
+};
+const meta = META[locale] ?? META.cs;
 ---
 <Layout
-  title={isSk ? 'Podmienky používania — Agro-svet' : 'Podmínky použití — Agro-svět'}
-  description={isSk ? 'Podmienky používania webu agro-svet.cz — orientačný charakter informácií, vylúčenie zodpovednosti, autorské práva, kontakt.' : 'Podmínky použití webu agro-svet.cz — orientační charakter informací, vyloučení odpovědnosti, autorská práva, kontakt.'}
+  title={meta.title}
+  description={meta.description}
 >
   <main class="legal-page">
   {isSk ? (
@@ -190,6 +199,369 @@ const isSk = locale === 'sk';
     </p>
 
     <p class="effective"><strong>Účinnosť:</strong> 28. mája 2026</p>
+    </Fragment>
+  ) : isPl ? (
+    <Fragment>
+    <h1>Warunki korzystania</h1>
+    <p class="lead">
+      Niniejsze warunki regulują korzystanie z serwisu <strong>agro-svet.cz</strong> prowadzonego przez spółkę
+      <strong>Samec Digital s.r.o.</strong>, IČO 29547539, z siedzibą Na Břehu 378, 387 11 Katovice
+      (dalej „operator"). Korzystając z serwisu, wyrażasz na nie zgodę.
+    </p>
+
+    <h2>1. Charakter treści — informacje mają wyłącznie charakter orientacyjny</h2>
+    <p>
+      Wszelkie dane, liczby, ceny, parametry techniki, statystyki, kalkulatory, przeliczniki jednostek,
+      hasła w słowniku i encyklopedii, informacje o dopłatach, rasach, glebie, maszynach, sprzedawcach,
+      markach oraz wszystkie pozostałe informacje publikowane w serwisie mają <strong>wyłącznie informacyjny
+      i orientacyjny charakter</strong>.
+    </p>
+    <p>
+      Operator <strong>nie gwarantuje</strong> ich dokładności, kompletności, aktualności ani przydatności
+      do konkretnego celu. Dane mogą się z czasem zmieniać, tracić aktualność lub zawierać błędy (techniczne,
+      typograficzne, przejęte ze źródeł zewnętrznych, generowane automatycznie).
+    </p>
+
+    <h2>2. Wyłączenie odpowiedzialności</h2>
+    <p>
+      Operator <strong>nie ponosi żadnej odpowiedzialności</strong> za:
+    </p>
+    <ul>
+      <li>poprawność, dokładność ani aktualność opublikowanych danych i informacji,</li>
+      <li>jakiekolwiek decyzje podjęte przez użytkownika na podstawie informacji z serwisu,</li>
+      <li>bezpośrednie i pośrednie szkody (finansowe, materialne, utracone korzyści) powstałe wskutek korzystania z treści serwisu,</li>
+      <li>wyniki obliczeń kalkulatorów, przeliczników jednostek i porównań — służą one wyłącznie do zgrubnego oszacowania,</li>
+      <li>treść ogłoszeń w bazarze — odpowiada za nią wyłącznie ich autor (ogłoszeniodawca),</li>
+      <li>treść i dostępność serwisów zewnętrznych, do których prowadzą odnośniki,</li>
+      <li>awarie, ograniczenie dostępności lub przerwy w działaniu serwisu.</li>
+    </ul>
+    <p>
+      <strong>Przed podjęciem jakiejkolwiek decyzji</strong> o skutkach finansowych, prawnych, technologicznych
+      lub operacyjnych (zakup techniki, wniosek o dopłatę, praktyki agronomiczne, żywienie roślin i zwierząt,
+      stosowanie środków ochrony roślin itp.) zawsze zweryfikuj informacje w <strong>oficjalnych źródłach</strong>,
+      u producenta, sprzedawcy, autoryzowanego doradcy, w ARiMR, PIORiN, Ministerstwie Rolnictwa i Rozwoju Wsi
+      lub u innego właściwego organu.
+    </p>
+
+    <h2>3. Bazar i treści użytkownika</h2>
+    <p>
+      Bazar agro-svet.cz to <strong>platforma ogłoszeniowa</strong> — operator jedynie
+      pośredniczy w kontakcie między ogłoszeniodawcą a zainteresowanym. Operator <strong>nie jest stroną
+      umowy sprzedaży</strong>, nie pobiera płatności, nie ręczy za stan, jakość ani istnienie
+      oferowanego towaru, ani za to, że druga strona wywiąże się ze swoich zobowiązań.
+    </p>
+    <p>
+      Za treść ogłoszenia, prawdziwość danych, cenę, stan oferowanego towaru, prawa autorskie
+      do zdjęć oraz za spełnienie wszystkich obowiązków ustawowych (przepisy o działalności gospodarczej,
+      odpowiedzialność z tytułu rękojmi, podatek dochodowy, VAT, obowiązek zgłoszeniowy) odpowiada <strong>wyłącznie
+      ogłoszeniodawca</strong>.
+    </p>
+
+    <h3>3.1 Kto może zamieszczać ogłoszenia</h3>
+    <ul>
+      <li><strong>Osoby fizyczne (nieprowadzące działalności)</strong> mogą ogłaszać <strong>swój
+        własny majątek</strong> — konkretne pojedyncze rzeczy sztuka po sztuce, z jasnym opisem
+        (jeden ciągnik, jeden pług, jedno cielę itp.). Nie można ogłaszać „magazynu", „oferty
+        z produkcji" ani nieokreślonej ilości.</li>
+      <li><strong>Przedsiębiorcy (samozatrudnieni, firmy, dealerzy)</strong> mogą ogłaszać
+        <strong>konkretny oferowany towar lub usługę</strong>. Ogłoszeniodawca-przedsiębiorca jest
+        zobowiązany podać w ogłoszeniu <strong>firmę albo imię i nazwisko oraz numer identyfikacyjny (IČO/NIP)</strong>
+        (na końcu ogłoszenia lub w polu „Imię / firma"). Niepodanie numeru identyfikacyjnego przez przedsiębiorcę jest
+        podstawą do usunięcia ogłoszenia i zablokowania konta.</li>
+      <li>Nie wolno ogłaszać <strong>działalności gospodarczej ogólnie</strong>
+        („oferujemy wszelką technikę rolniczą", „import maszyn z Niemiec") — wyłącznie
+        konkretny towar.</li>
+    </ul>
+
+    <h3>3.2 Treści zakazane</h3>
+    <p>W bazarze nie można ogłaszać w szczególności:</p>
+    <ul>
+      <li>podróbek i nieoryginalnych części zamiennych sprzedawanych jako oryginalne,</li>
+      <li>systemów MLM, prowizyjnych i piramidowych, „pracy z domu",</li>
+      <li>pożyczek, kredytów i usług finansowych podmiotów pozabankowych,</li>
+      <li>ogłoszeń erotycznych, portali randkowych, usług towarzyskich,</li>
+      <li>rzeczy kradzionych lub uzyskanych nielegalnie,</li>
+      <li>leków (dla ludzi i weterynaryjnych) bez odpowiedniego uprawnienia,</li>
+      <li>środków ochrony roślin w sprzeczności z ustawą nr 326/2004 Sb. (w szczególności
+        bez rejestracji ÚKZÚZ, poza profesjonalnymi użytkownikami tam, gdzie wymaga tego prawo),</li>
+      <li>broni, amunicji i materiałów wybuchowych w sprzeczności z ustawą nr 119/2002 Sb.,</li>
+      <li>żywych zwierząt bez świadectwa weterynaryjnego, gatunków chronionych bez CITES, martwych zwierząt,</li>
+      <li>wyrobów tytoniowych, alkoholu, środków odurzających i psychotropowych, e-papierosów,</li>
+      <li>kryptowalut, kont do gier, przedmiotów wirtualnych,</li>
+      <li>wszystkiego, co narusza prawa autorskie, przemysłowe lub dobra osobiste osób trzecich,</li>
+      <li>treści dyskryminujących, obraźliwych, nawołujących do nienawiści lub w inny sposób bezprawnych.</li>
+    </ul>
+    <p>
+      Szczegółowe zasady bazaru, w tym dalsze treści zakazane oraz tryb postępowania przy naruszeniu,
+      znajdziesz na stronie <a href="/bazar/pravidla/">Zasady bazaru</a>.
+    </p>
+
+    <h3>3.3 Usuwanie ogłoszeń i blokowanie kont</h3>
+    <p>
+      Operator jest uprawniony <strong>bez uprzedniego powiadomienia</strong> nie opublikować
+      ogłoszenia, usunąć opublikowane ogłoszenie, ewentualnie zablokować konto użytkownika, jeżeli:
+    </p>
+    <ul>
+      <li>ogłoszenie lub zachowanie użytkownika narusza niniejsze warunki, zasady bazaru
+        lub przepisy prawa,</li>
+      <li>ogłoszenie zawiera nieprawdziwe, mylące lub wprowadzające w błąd informacje,</li>
+      <li>użytkownik wielokrotnie zamieszcza zduplikowane lub spamowe ogłoszenia,</li>
+      <li>operator otrzyma <strong>kwalifikowane zgłoszenie</strong> o bezprawności
+        treści od osoby trzeciej lub organu.</li>
+    </ul>
+    <p>
+      Użytkownik zostanie poinformowany o powodzie usunięcia / blokady e-mailem zarejestrowanym do konta.
+      Od decyzji można wnieść uzasadnioną skargę na adres
+      <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> w terminie 14 dni;
+      operator rozpatrzy ją w ciągu 14 dni od doręczenia.
+    </p>
+
+    <h3>3.4 Zgłaszanie treści niedozwolonych (notice-and-action)</h3>
+    <p>
+      Jeżeli uważasz, że konkretne ogłoszenie narusza przepisy prawa lub niniejsze zasady,
+      użyj formularza <a href="/bazar/nahlasit/">Zgłoś niedozwolone ogłoszenie</a>
+      lub wyślij zgłoszenie e-mailem na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+      W zgłoszeniu podaj:
+    </p>
+    <ul>
+      <li>adres URL ogłoszenia lub jego ID,</li>
+      <li>powód, dla którego uważasz treść za niedozwoloną (naruszony przepis lub zasada),</li>
+      <li>swoje dane kontaktowe (opcjonalnie, na wypadek uzupełnienia informacji).</li>
+    </ul>
+    <p>
+      Operator rozpatrzy zgłoszenie <strong>bez zbędnej zwłoki</strong>, zwykle w ciągu
+      <strong>7 dni</strong>, i poinformuje Cię o wyniku, jeśli podałeś kontakt.
+      W uzasadnionych przypadkach (treść oczywiście bezprawna, zagrożenie zdrowia) działa niezwłocznie.
+    </p>
+
+    <h2>4. Zasady korzystania</h2>
+    <p>Użytkownik zobowiązuje się, że nie będzie:</p>
+    <ul>
+      <li>zakłócać działania serwisu, jego bezpieczeństwa ani używać zautomatyzowanych narzędzi (scraperów, botów) bez zgody,</li>
+      <li>zamieszczać treści wprowadzających w błąd, obraźliwych, bezprawnych lub spamowych,</li>
+      <li>podszywać się pod inną osobę lub podmiot,</li>
+      <li>obchodzić środków technicznych chroniących treść lub dostęp do niej.</li>
+    </ul>
+    <p>
+      Operator zastrzega sobie prawo do usunięcia bez uprzedniego powiadomienia treści naruszających
+      niniejsze warunki oraz do zablokowania konta użytkownika.
+    </p>
+
+    <h2>5. Prawa autorskie</h2>
+    <p>
+      Treść serwisu (teksty, grafika, projekt, bazy danych, zdjęcia redakcji, hasła słownikowe,
+      artykuły encyklopedyczne, statystyki i ich wizualizacje) jest chroniona prawem autorskim
+      oraz prawem do baz danych. Bez pisemnej zgody operatora nie wolno treści
+      kopiować, rozpowszechniać, modyfikować ani w inny sposób wykorzystywać komercyjnie.
+    </p>
+    <p>
+      Zdjęcia i treść ogłoszeń w bazarze pozostają własnością ogłoszeniodawcy; zamieszczając ogłoszenie,
+      ogłoszeniodawca udziela operatorowi niewyłącznej, nieodpłatnej licencji na ich wyświetlanie w ramach
+      działania serwisu.
+    </p>
+
+    <h2>6. Ochrona danych osobowych</h2>
+    <p>
+      Przetwarzanie danych osobowych regulują odrębne
+      <a href="/zpracovani-osobnich-udaju/">Zasady przetwarzania danych osobowych</a>.
+    </p>
+
+    <h2>7. Zmiany warunków</h2>
+    <p>
+      Operator jest uprawniony do zmiany niniejszych warunków w dowolnym czasie. Aktualna wersja jest zawsze
+      publikowana na tej stronie z podaniem daty wejścia w życie. Kontynuując korzystanie z serwisu po zmianie
+      warunków, wyrażasz zgodę na nowe brzmienie.
+    </p>
+
+    <h2>8. Kontakt</h2>
+    <p>
+      Samec Digital s.r.o., IČO 29547539<br>
+      Na Břehu 378, 387 11 Katovice<br>
+      E-mail: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+
+    <p class="effective"><strong>Data wejścia w życie:</strong> 28 maja 2026</p>
+    </Fragment>
+  ) : isUk ? (
+    <Fragment>
+    <h1>Умови використання</h1>
+    <p class="lead">
+      Ці умови регулюють використання сайту <strong>agro-svet.cz</strong>, який експлуатує компанія
+      <strong>Samec Digital s.r.o.</strong>, IČO 29547539, із місцезнаходженням Na Břehu 378, 387 11 Katovice
+      (далі «оператор»). Використовуючи сайт, ви висловлюєте свою згоду з ними.
+    </p>
+
+    <h2>1. Характер вмісту — інформація має лише орієнтовний характер</h2>
+    <p>
+      Усі дані, числа, ціни, параметри техніки, статистика, калькулятори, перерахунки одиниць,
+      гасла у словнику та енциклопедії, відомості про дотації, породи, ґрунт, машини, продавців,
+      марки та вся інша інформація, опублікована на сайті, мають <strong>виключно інформаційний
+      та орієнтовний характер</strong>.
+    </p>
+    <p>
+      Оператор <strong>не гарантує</strong> їх точності, повноти, актуальності чи придатності
+      для конкретної мети. Дані можуть із часом змінюватися, застарівати або містити помилки (технічні,
+      друкарські, взяті зі сторонніх джерел, згенеровані автоматично).
+    </p>
+
+    <h2>2. Відмова від відповідальності</h2>
+    <p>
+      Оператор <strong>не несе жодної відповідальності</strong> за:
+    </p>
+    <ul>
+      <li>правильність, точність чи актуальність опублікованих даних та інформації,</li>
+      <li>будь-які рішення, ухвалені користувачем на підставі інформації із сайту,</li>
+      <li>прямі та непрямі збитки (фінансові, матеріальні, упущену вигоду), що виникли внаслідок використання вмісту сайту,</li>
+      <li>результати обчислень калькуляторів, перерахунків одиниць і порівнянь — вони слугують лише для приблизної оцінки,</li>
+      <li>вміст оголошень у барахолці — за нього відповідає виключно їх автор (оголошувач),</li>
+      <li>вміст і доступність сторонніх сайтів, на які ведуть посилання,</li>
+      <li>збої, обмеження доступності або переривання роботи сайту.</li>
+    </ul>
+    <p>
+      <strong>Перед будь-яким рішенням</strong> із фінансовими, правовими, технологічними чи операційними
+      наслідками (купівля техніки, заявка на дотацію, агрономічні практики, живлення рослин і тварин,
+      застосування засобів захисту рослин тощо) завжди перевіряйте інформацію в <strong>офіційних джерелах</strong>,
+      у виробника, продавця, авторизованого консультанта або іншого компетентного органу.
+    </p>
+
+    <h2>3. Барахолка та вміст користувача</h2>
+    <p>
+      Барахолка agro-svet.cz — це <strong>платформа оголошень</strong> — оператор лише
+      посередничає у контакті між оголошувачем і зацікавленою особою. Оператор <strong>не є стороною
+      договору купівлі-продажу</strong>, не здійснює приймання платежів, не ручається за стан, якість чи існування
+      пропонованого товару, ані за те, що інша сторона виконає свої зобов'язання.
+    </p>
+    <p>
+      За вміст оголошення, правдивість даних, ціну, стан пропонованого товару, авторські права
+      на фотографії, а також за виконання всіх законодавчих обов'язків (законодавство про підприємницьку діяльність,
+      гарантійна відповідальність, податок на прибуток, ПДВ, обов'язок повідомлення) відповідає <strong>виключно
+      оголошувач</strong>.
+    </p>
+
+    <h3>3.1 Хто може подавати оголошення</h3>
+    <ul>
+      <li><strong>Фізичні особи (не підприємці)</strong> можуть оголошувати <strong>власне
+        майно</strong> — конкретні окремі речі поштучно, з чітким описом
+        (один трактор, один плуг, одне теля тощо). Не можна оголошувати «склад», «пропозицію
+        з виробництва» чи невизначену кількість.</li>
+      <li><strong>Підприємці (ФОП, компанії, дилери)</strong> можуть оголошувати
+        <strong>конкретний пропонований товар або послугу</strong>. Оголошувач-підприємець
+        зобов'язаний вказати в оголошенні <strong>найменування фірми або ім'я та ідентифікаційний номер (IČO)</strong>
+        (наприкінці оголошення чи в полі «Ім'я / фірма»). Невказання ідентифікаційного номера підприємцем є
+        підставою для видалення оголошення та блокування облікового запису.</li>
+      <li>Не дозволяється оголошувати <strong>підприємницьку діяльність загалом</strong>
+        («пропонуємо всю сільськогосподарську техніку», «імпорт машин із Німеччини») — лише
+        конкретний товар.</li>
+    </ul>
+
+    <h3>3.2 Заборонений вміст</h3>
+    <p>На барахолці не можна оголошувати, зокрема:</p>
+    <ul>
+      <li>підробки та неоригінальні запчастини, що видаються за оригінальні,</li>
+      <li>MLM, комісійні та пірамідальні схеми, «роботу вдома»,</li>
+      <li>позики, кредити та фінансові послуги небанківських суб'єктів,</li>
+      <li>еротичні оголошення, сайти знайомств, ескорт-послуги,</li>
+      <li>крадені або незаконно здобуті речі,</li>
+      <li>лікарські засоби (для людей і ветеринарні) без відповідного дозволу,</li>
+      <li>засоби захисту рослин усупереч закону № 326/2004 Sb. (зокрема
+        без реєстрації ÚKZÚZ, поза межами професійних користувачів там, де цього вимагає закон),</li>
+      <li>зброю, боєприпаси та вибухові речовини всупереч закону № 119/2002 Sb.,</li>
+      <li>живих тварин без ветеринарного свідоцтва, охоронювані види без CITES, мертвих тварин,</li>
+      <li>тютюнові вироби, алкоголь, наркотичні та психотропні речовини, електронні сигарети,</li>
+      <li>криптовалюти, ігрові акаунти, віртуальні предмети,</li>
+      <li>усе, що порушує авторські, промислові чи особисті права третіх осіб,</li>
+      <li>дискримінаційний, образливий, ненависницький або в інший спосіб незаконний вміст.</li>
+    </ul>
+    <p>
+      Докладні правила барахолки, зокрема інший заборонений вміст і порядок дій при порушенні,
+      знайдете на сторінці <a href="/bazar/pravidla/">Правила барахолки</a>.
+    </p>
+
+    <h3>3.3 Видалення оголошень і блокування облікових записів</h3>
+    <p>
+      Оператор має право <strong>без попереднього повідомлення</strong> не опублікувати
+      оголошення, видалити опубліковане оголошення, за потреби заблокувати обліковий запис користувача, якщо:
+    </p>
+    <ul>
+      <li>оголошення або поведінка користувача порушує ці умови, правила барахолки
+        або приписи законодавства,</li>
+      <li>оголошення містить неправдиву, оманливу чи вводить в оману інформацію,</li>
+      <li>користувач неодноразово подає дублікатні або спамові оголошення,</li>
+      <li>оператор отримає <strong>кваліфіковане повідомлення</strong> про незаконність
+        вмісту від третьої особи або органу.</li>
+    </ul>
+    <p>
+      Користувача буде поінформовано про причину видалення / блокування електронною поштою, зареєстрованою до облікового запису.
+      Проти рішення можна подати обґрунтовану скаргу на
+      <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> у строк 14 днів;
+      оператор розгляне її протягом 14 днів від отримання.
+    </p>
+
+    <h3>3.4 Повідомлення про недопустимий вміст (notice-and-action)</h3>
+    <p>
+      Якщо ви вважаєте, що конкретне оголошення порушує приписи законодавства або ці правила,
+      скористайтеся формуляром <a href="/bazar/nahlasit/">Повідомити про недопустиме оголошення</a>
+      або надішліть повідомлення електронною поштою на <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+      У повідомленні вкажіть:
+    </p>
+    <ul>
+      <li>URL оголошення або його ID,</li>
+      <li>причину, чому ви вважаєте вміст недопустимим (порушений припис або правило),</li>
+      <li>ваші контактні дані (за бажанням, на випадок доповнення інформації).</li>
+    </ul>
+    <p>
+      Оператор розгляне повідомлення <strong>без зайвого зволікання</strong>, зазвичай протягом
+      <strong>7 днів</strong>, і поінформує вас про результат, якщо ви вказали контакт.
+      В обґрунтованих випадках (очевидно незаконний вміст, загроза здоров'ю) діє невідкладно.
+    </p>
+
+    <h2>4. Правила використання</h2>
+    <p>Користувач зобов'язується, що не буде:</p>
+    <ul>
+      <li>порушувати роботу сайту, його безпеку, ані використовувати автоматизовані інструменти (скрапери, боти) без згоди,</li>
+      <li>розміщувати оманливий, образливий, незаконний або спамовий вміст,</li>
+      <li>видавати себе за іншу особу чи суб'єкта,</li>
+      <li>обходити технічні заходи, що захищають вміст або доступ до нього.</li>
+    </ul>
+    <p>
+      Оператор залишає за собою право без попереднього повідомлення видалити вміст, що порушує
+      ці умови, та заблокувати обліковий запис користувача.
+    </p>
+
+    <h2>5. Авторські права</h2>
+    <p>
+      Вміст сайту (тексти, графіка, дизайн, бази даних, фотографії редакції, словникові гасла,
+      енциклопедичні статті, статистика та її візуалізації) захищений авторським правом
+      і правом на бази даних. Без письмової згоди оператора не дозволяється вміст
+      копіювати, поширювати, змінювати чи в інший спосіб використовувати комерційно.
+    </p>
+    <p>
+      Фотографії та вміст оголошень у барахолці залишаються власністю оголошувача; розміщуючи оголошення,
+      оголошувач надає операторові невиключну безоплатну ліцензію на їх відображення в межах
+      роботи сайту.
+    </p>
+
+    <h2>6. Захист персональних даних</h2>
+    <p>
+      Обробку персональних даних регулюють окремі
+      <a href="/zpracovani-osobnich-udaju/">Засади обробки персональних даних</a>.
+    </p>
+
+    <h2>7. Зміни умов</h2>
+    <p>
+      Оператор має право будь-коли змінити ці умови. Актуальна редакція завжди опублікована
+      на цій сторінці із зазначенням дати набрання чинності. Продовжуючи використання сайту після зміни умов,
+      ви висловлюєте згоду з новою редакцією.
+    </p>
+
+    <h2>8. Контакт</h2>
+    <p>
+      Samec Digital s.r.o., IČO 29547539<br>
+      Na Břehu 378, 387 11 Katovice<br>
+      E-mail: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+
+    <p class="effective"><strong>Дата набрання чинності:</strong> 28 травня 2026</p>
     </Fragment>
   ) : (
     <Fragment>

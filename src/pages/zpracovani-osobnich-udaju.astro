@@ -3,10 +3,19 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
+const isPl = locale === 'pl';
+const isUk = locale === 'uk';
+const META = {
+  cs: { title: 'Zpracování osobních údajů — Agro-svět', description: 'Zásady zpracování osobních údajů na Agro-svět.cz — kdo jsme, jaké údaje zpracováváme, jak dlouho, vaše práva.' },
+  sk: { title: 'Spracúvanie osobných údajov — Agro-svet', description: 'Zásady spracúvania osobných údajov na agro-svet.cz — kto sme, aké údaje spracúvame, ako dlho, vaše práva.' },
+  pl: { title: 'Przetwarzanie danych osobowych — Agro-svet', description: 'Zasady przetwarzania danych osobowych w serwisie agro-svet.cz — kim jesteśmy, jakie dane przetwarzamy, jak długo, twoje prawa.' },
+  uk: { title: 'Обробка персональних даних — Agro-svet', description: 'Засади обробки персональних даних на agro-svet.cz — хто ми, які дані обробляємо, як довго, ваші права.' },
+};
+const meta = META[locale] ?? META.cs;
 ---
 <Layout
-  title={isSk ? 'Spracúvanie osobných údajov — Agro-svet' : 'Zpracování osobních údajů — Agro-svět'}
-  description={isSk ? 'Zásady spracúvania osobných údajov na agro-svet.cz — kto sme, aké údaje spracúvame, ako dlho, vaše práva.' : 'Zásady zpracování osobních údajů na Agro-svět.cz — kdo jsme, jaké údaje zpracováváme, jak dlouho, vaše práva.'}
+  title={meta.title}
+  description={meta.description}
 >
   <main class="legal-page">
   {isSk ? (
@@ -119,6 +128,226 @@ const isSk = locale === 'sk';
     <p>Web používa technicky nevyhnutné cookies na prevádzku (prihlasovanie, anti-fraud). Nepoužívame marketingové ani trackovacie cookies tretích strán bez vášho výslovného súhlasu.</p>
 
     <p class="effective"><strong>Účinnosť:</strong> 13. mája 2026</p>
+    </Fragment>
+  ) : isPl ? (
+    <Fragment>
+    <h1>Zasady przetwarzania danych osobowych</h1>
+    <p class="lead">Jak przetwarzamy dane osobowe użytkowników serwisu <strong>agro-svet.cz</strong> zgodnie z rozporządzeniem RODO (2016/679) oraz czeską ustawą nr 110/2019 Sb.</p>
+
+    <h2>1. Administrator danych osobowych</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong>, IČO 29547539, z siedzibą Na Břehu 378, 387 11 Katovice.<br>
+      Kontakt: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+
+    <h2>2. Jakie dane przetwarzamy</h2>
+
+    <h3>2.1 Newsletter (subskrypcja aktualności)</h3>
+    <ul>
+      <li>Adres e-mail</li>
+      <li>Data zapisu i potwierdzenia subskrypcji</li>
+      <li>Znaczniki czasu kliknięcia w link potwierdzający (anti-fraud)</li>
+    </ul>
+
+    <h3>2.2 Bazar — zarejestrowani użytkownicy</h3>
+    <ul>
+      <li>Imię (wyświetlane przy ogłoszeniu)</li>
+      <li>E-mail (logowanie, kontakt)</li>
+      <li>Telefon (kontakt do ogłoszeniodawcy)</li>
+      <li>Lokalizacja (miasto/region)</li>
+      <li>Hasło (zahaszowane, nigdy w postaci jawnej)</li>
+    </ul>
+
+    <h3>2.3 Bazar — ogłoszenia</h3>
+    <ul>
+      <li>Treść ogłoszenia (tytuł, opis, cena, kategoria, zdjęcia)</li>
+      <li>Dane kontaktowe podane w ogłoszeniu</li>
+    </ul>
+
+    <h3>2.4 Fotokonkurs</h3>
+    <p>Dla fotokonkursu obowiązują odrębne <a href="/fotosoutez/gdpr/">zasady przetwarzania</a>.</p>
+
+    <h3>2.5 Dane techniczne (wszyscy odwiedzający)</h3>
+    <ul>
+      <li>Adres IP (zanonimizowany w logu, anti-fraud, maks. 30 dni)</li>
+      <li>User-agent przeglądarki (statystyka, debugowanie)</li>
+      <li>Referer (z jakiego serwisu przyszedłeś)</li>
+    </ul>
+
+    <h2>3. Cel i podstawa prawna przetwarzania</h2>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Cel</th><th>Podstawa prawna (RODO art. 6)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Wysyłka newslettera</td><td>Zgoda — ust. 1 lit. a)</td></tr>
+        <tr><td>Prowadzenie konta użytkownika (bazar)</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
+        <tr><td>Publikowanie ogłoszeń</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
+        <tr><td>Anti-fraud, bezpieczeństwo działania</td><td>Prawnie uzasadniony interes — ust. 1 lit. f)</td></tr>
+        <tr><td>Wypełnienie obowiązków ustawowych (księgowość przy usługach płatnych)</td><td>Obowiązek prawny — ust. 1 lit. c)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Okres przechowywania</h2>
+    <ul>
+      <li><strong>Newsletter:</strong> do odwołania zgody (wypisania) — następnie 30 dni na liście wypisań w celu udokumentowania wypisania</li>
+      <li><strong>Konto bazaru:</strong> do usunięcia konta przez użytkownika; nieaktywne konta po 3 latach bez logowania usuwamy</li>
+      <li><strong>Aktywne ogłoszenia:</strong> 30 dni (potem status „expired"), trwale 1 rok od usunięcia w celach audytu</li>
+      <li><strong>Logi i adresy IP:</strong> 30 dni</li>
+    </ul>
+
+    <h2>5. Komu przekazujemy dane (podmioty przetwarzające)</h2>
+    <ul>
+      <li><strong>Cloudflare, Inc.</strong> (USA) — hosting, CDN, anti-DDoS. Standardowe klauzule umowne (SCC) zgodnie z art. 46 RODO.</li>
+      <li><strong>Supabase, Inc.</strong> (USA, regiony UE) — baza danych i uwierzytelnianie. SCC.</li>
+      <li><strong>Resend, Inc.</strong> (USA) — wysyłka e-maili transakcyjnych i newsletterowych. SCC.</li>
+    </ul>
+    <p>Twoich danych osobowych nie sprzedajemy ani nie przekazujemy stronom trzecim w celach marketingowych.</p>
+
+    <h2>6. Twoje prawa</h2>
+    <p>Zgodnie z RODO masz prawo do:</p>
+    <ul>
+      <li><strong>Dostępu</strong> do swoich danych (art. 15)</li>
+      <li><strong>Sprostowania</strong> nieprawidłowych danych (art. 16)</li>
+      <li><strong>Usunięcia</strong> („prawo do bycia zapomnianym", art. 17)</li>
+      <li><strong>Ograniczenia przetwarzania</strong> (art. 18)</li>
+      <li><strong>Przenoszenia</strong> danych (art. 20)</li>
+      <li><strong>Sprzeciwu</strong> wobec przetwarzania na podstawie prawnie uzasadnionego interesu (art. 21)</li>
+      <li><strong>Cofnięcia zgody</strong> w dowolnym momencie (art. 7 ust. 3) — dotyczy newslettera</li>
+    </ul>
+    <p>Wniosek wyślij na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Rozpatrzymy go w ciągu 30 dni.</p>
+
+    <h2>7. Wypisanie z newslettera</h2>
+    <p>Subskrypcję newslettera możesz w każdej chwili anulować:</p>
+    <ul>
+      <li>Odpowiadając na dowolny e-mail newslettera z tekstem „wypisz"</li>
+      <li>E-mailem na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></li>
+    </ul>
+
+    <h2>8. Skarga do organu nadzorczego</h2>
+    <p>
+      Jeżeli uważasz, że przetwarzając twoje dane osobowe naruszamy RODO, możesz wnieść skargę.
+      Ponieważ operator ma siedzibę w Republice Czeskiej, wiodącym organem nadzorczym jest
+      <strong>Urząd Ochrony Danych Osobowych (Úřad pro ochranu osobních údajů, Czechy)</strong>, Pplk. Sochora 27, 170 00 Praha 7,
+      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+      Jako użytkownik z Polski możesz zwrócić się także do
+      <strong>Prezesa Urzędu Ochrony Danych Osobowych (UODO)</strong>, ul. Stawki 2,
+      00-193 Warszawa, <a href="https://uodo.gov.pl" rel="noopener">uodo.gov.pl</a>.
+    </p>
+
+    <h2>9. Pliki cookie</h2>
+    <p>Serwis używa technicznie niezbędnych plików cookie do działania (logowanie, anti-fraud). Nie używamy marketingowych ani śledzących plików cookie stron trzecich bez twojej wyraźnej zgody.</p>
+
+    <p class="effective"><strong>Data wejścia w życie:</strong> 13 maja 2026</p>
+    </Fragment>
+  ) : isUk ? (
+    <Fragment>
+    <h1>Засади обробки персональних даних</h1>
+    <p class="lead">Як ми обробляємо персональні дані користувачів сайту <strong>agro-svet.cz</strong> відповідно до Регламенту GDPR (2016/679) та чеського закону № 110/2019 Sb.</p>
+
+    <h2>1. Контролер персональних даних</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong>, IČO 29547539, із місцезнаходженням Na Břehu 378, 387 11 Katovice.<br>
+      Контакт: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+
+    <h2>2. Які дані ми обробляємо</h2>
+
+    <h3>2.1 Розсилка (підписка на новини)</h3>
+    <ul>
+      <li>Адреса електронної пошти</li>
+      <li>Дата підписки та підтвердження</li>
+      <li>Часові позначки кліку на підтверджувальне посилання (anti-fraud)</li>
+    </ul>
+
+    <h3>2.2 Барахолка — зареєстровані користувачі</h3>
+    <ul>
+      <li>Ім'я (відображається біля оголошення)</li>
+      <li>E-mail (вхід, контакт)</li>
+      <li>Телефон (контакт для оголошувача)</li>
+      <li>Локація (місто/область)</li>
+      <li>Пароль (хешований, ніколи у відкритому вигляді)</li>
+    </ul>
+
+    <h3>2.3 Барахолка — оголошення</h3>
+    <ul>
+      <li>Вміст оголошення (назва, опис, ціна, категорія, фото)</li>
+      <li>Контактні дані, зазначені в оголошенні</li>
+    </ul>
+
+    <h3>2.4 Фотоконкурс</h3>
+    <p>Для фотоконкурсу діють окремі <a href="/fotosoutez/gdpr/">засади обробки</a>.</p>
+
+    <h3>2.5 Технічні дані (усі відвідувачі)</h3>
+    <ul>
+      <li>IP-адреса (анонімізована в лозі, anti-fraud, макс. 30 днів)</li>
+      <li>User-agent браузера (статистика, налагодження)</li>
+      <li>Referer (з якого сайту ви прийшли)</li>
+    </ul>
+
+    <h2>3. Мета та правова підстава обробки</h2>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Мета</th><th>Правова підстава (GDPR ст. 6)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Надсилання розсилки</td><td>Згода — ч. 1 п. a)</td></tr>
+        <tr><td>Робота облікового запису користувача (барахолка)</td><td>Виконання договору — ч. 1 п. b)</td></tr>
+        <tr><td>Публікація оголошень</td><td>Виконання договору — ч. 1 п. b)</td></tr>
+        <tr><td>Anti-fraud, безпека роботи</td><td>Законний інтерес — ч. 1 п. f)</td></tr>
+        <tr><td>Виконання законодавчих обов'язків (бухгалтерія при платних послугах)</td><td>Правовий обов'язок — ч. 1 п. c)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Строк зберігання</h2>
+    <ul>
+      <li><strong>Розсилка:</strong> до відкликання згоди (відписки) — потім 30 днів у списку відписок для підтвердження відписки</li>
+      <li><strong>Обліковий запис барахолки:</strong> до видалення облікового запису користувачем; неактивні облікові записи після 3 років без входу видаляємо</li>
+      <li><strong>Активні оголошення:</strong> 30 днів (потім статус «expired»), постійно 1 рік від видалення для аудиту</li>
+      <li><strong>Логи та IP-адреси:</strong> 30 днів</li>
+    </ul>
+
+    <h2>5. Кому ми передаємо дані (обробники)</h2>
+    <ul>
+      <li><strong>Cloudflare, Inc.</strong> (США) — хостинг, CDN, anti-DDoS. Стандартні договірні положення (SCC) відповідно до ст. 46 GDPR.</li>
+      <li><strong>Supabase, Inc.</strong> (США, регіони ЄС) — база даних та автентифікація. SCC.</li>
+      <li><strong>Resend, Inc.</strong> (США) — надсилання транзакційних і розсилкових e-mail. SCC.</li>
+    </ul>
+    <p>Ваші персональні дані ми не продаємо і не передаємо третім сторонам для маркетингових цілей.</p>
+
+    <h2>6. Ваші права</h2>
+    <p>Відповідно до GDPR ви маєте право на:</p>
+    <ul>
+      <li><strong>Доступ</strong> до своїх даних (ст. 15)</li>
+      <li><strong>Виправлення</strong> неточних даних (ст. 16)</li>
+      <li><strong>Видалення</strong> («право бути забутим», ст. 17)</li>
+      <li><strong>Обмеження обробки</strong> (ст. 18)</li>
+      <li><strong>Перенесення</strong> даних (ст. 20)</li>
+      <li><strong>Заперечення</strong> проти обробки на підставі законного інтересу (ст. 21)</li>
+      <li><strong>Відкликання згоди</strong> будь-коли (ст. 7 ч. 3) — стосується розсилки</li>
+    </ul>
+    <p>Запит надішліть на <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Розглянемо його протягом 30 днів.</p>
+
+    <h2>7. Відписка від розсилки</h2>
+    <p>Підписку на розсилку ви можете будь-коли скасувати:</p>
+    <ul>
+      <li>Відповіддю на будь-який лист розсилки з текстом «відписатися»</li>
+      <li>E-mail на <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></li>
+    </ul>
+
+    <h2>8. Скарга до наглядового органу</h2>
+    <p>
+      Якщо ви вважаєте, що обробкою ваших персональних даних ми порушуємо GDPR, ви можете подати скаргу.
+      Оскільки оператор має осідок у Чеській Республіці, провідним наглядовим органом є
+      <strong>Управління із захисту персональних даних (Úřad pro ochranu osobních údajů, Чехія)</strong>, Pplk. Sochora 27, 170 00 Praha 7,
+      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+      Як користувач з іншої країни ЄС ви можете звернутися також до наглядового органу за місцем свого проживання.
+    </p>
+
+    <h2>9. Файли cookie</h2>
+    <p>Сайт використовує технічно необхідні файли cookie для роботи (вхід, anti-fraud). Ми не використовуємо маркетингові чи трекінгові файли cookie третіх сторін без вашої явної згоди.</p>
+
+    <p class="effective"><strong>Дата набрання чинності:</strong> 13 травня 2026</p>
     </Fragment>
   ) : (
     <Fragment>
