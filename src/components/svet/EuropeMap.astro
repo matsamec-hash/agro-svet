@@ -5,9 +5,14 @@
 // Data: europe.json (geometrie) + map-metrics.json (reálné Eurostat/WB hodnoty).
 import europe from '../../data/svet/geo/europe.json';
 import mapData from '../../data/svet/map-metrics.json';
+import countryIndex from '../../data/svet/index.json';
 import { colorFor, extent } from '../../lib/svet/mapcolor';
 import { localizePath } from '../../i18n/utils';
 import { localizeMetric, localizeCountry } from '../../i18n/svet';
+
+// Detail /svet/<slug>/ existuje jen pro nereferenční země z index.json. Ostatní
+// (referenční ČR, země bez profilu jako Island) nesmí mít CTA odkaz → 404.
+const PAGE_SLUGS = new Set(countryIndex.countries.filter((c) => !c.reference).map((c) => c.slug));
 
 const locale = Astro.locals.locale ?? 'cs';
 const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
@@ -42,7 +47,10 @@ const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
 const abbr = (v: number) => (v >= 10000 ? Math.round(v / 1000) + 'k' : v >= 1000 ? (v / 1000).toFixed(1) + 'k' : nf.format(v));
 const cvv = (v: number | null, m: typeof m0) => (v == null ? v : (m.currency && cur0 === 'czk' ? Math.round(v * RATE) : v));
 const uOf = (m: typeof m0) => (m.currency && cur0 === 'czk' ? m.unit.replace('€', 'Kč') : m.unit);
-const payload = { metrics, countries };
+const countriesWithPage = Object.fromEntries(
+  Object.entries(countries).map(([code, c]) => [code, { ...c, hasPage: PAGE_SLUGS.has(c.slug) }])
+);
+const payload = { metrics, countries: countriesWithPage };
 ---
 
 <section class="agrimap">
@@ -182,7 +190,9 @@ const payload = { metrics, countries };
       const d = countries[code]; if (!d) return; sel = code;
       const pn = document.getElementById('agrimap-pnote'); if (pn) pn.style.display = pmode === 'num' ? 'block' : 'none';
       document.getElementById('agrimap-flag')!.textContent = d.flag; document.getElementById('agrimap-name')!.textContent = d.name; document.getElementById('agrimap-reg')!.textContent = d.region;
-      (document.getElementById('agrimap-cta') as HTMLAnchorElement).href = `${UI.detailBase || '/svet/'}${d.slug}/`;
+      const cta = document.getElementById('agrimap-cta') as HTMLAnchorElement;
+      if (d.hasPage) { cta.href = `${UI.detailBase || '/svet/'}${d.slug}/`; cta.style.display = ''; }
+      else { cta.removeAttribute('href'); cta.style.display = 'none'; }
       const rk = rank(code, active); document.getElementById('agrimap-rank')!.innerHTML = rk ? `${rk[0]}.<br><span>z ${rk[1]}</span>` : '—';
       const rows = document.getElementById('agrimap-rows')!; rows.innerHTML = '';
       for (const m of metrics) {

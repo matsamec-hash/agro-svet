@@ -2,9 +2,15 @@
 import Layout from '../../../layouts/Layout.astro';
 import EuropeMap from '../../../components/svet/EuropeMap.astro';
 import mapData from '../../../data/svet/map-metrics.json';
+import countryIndex from '../../../data/svet/index.json';
 import { localizePath } from '../../../i18n/utils';
 import { COUNTRY_NAMES, loc, localizeMetric, type SvetLang } from '../../../i18n/svet';
 import '../../../styles/svet.css';
+
+// Profil /svet/<slug>/ má jen nereferenční země z index.json (cesko = baseline).
+// Ostatní země mapy (referenční ČR, země bez profilu jako Island) nesmí mít odkaz —
+// stránka neexistuje a vracela 404 (nejnavštěvovanější sekce).
+const PAGE_SLUGS = new Set(countryIndex.countries.filter((c) => !c.reference).map((c) => c.slug));
 
 const locale = Astro.locals.locale ?? 'cs';
 const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
@@ -66,7 +72,9 @@ const tableRows = Object.entries(tCountries)
           <tbody>
             {tableRows.map((r) => (
               <tr style="border-bottom:1px solid #eee;">
-                <td style="padding:8px 10px; white-space:nowrap;"><a href={localizePath(locale, `/svet/${r.slug}/`)} style="color:#1a1a1a; text-decoration:none; font-weight:600;">{r.flag} {cName(r)}</a></td>
+                <td style="padding:8px 10px; white-space:nowrap;">{PAGE_SLUGS.has(r.slug)
+                  ? <a href={localizePath(locale, `/svet/${r.slug}/`)} style="color:#1a1a1a; text-decoration:none; font-weight:600;">{r.flag} {cName(r)}</a>
+                  : <span style="color:#1a1a1a; font-weight:600;">{r.flag} {cName(r)}</span>}</td>
                 {TCOLS.map((c) => (<td style="padding:8px 10px; text-align:right; font-variant-numeric:tabular-nums;">{fmt(r.values[c.key])}</td>))}
               </tr>
             ))}
