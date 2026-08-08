@@ -233,9 +233,9 @@ export const GET: APIRoute = async () => {
     urls.push({ loc: `${SITE_URL}${path}`, changefreq, priority, lastmod });
   }
 
-  // /svet country profiles (cs-only; reference country = the comparison baseline,
-  // it has no standalone profile page so skip it).
-  for (const c of svetIndex.countries.filter((c) => !c.reference)) {
+  // /svet country profiles — vč. reference (Česko má vlastní profilovou stránku
+  // cesko.json; sebe-porovnání je na ní potlačené). sk/pl mirror je auto (viz níže).
+  for (const c of svetIndex.countries) {
     urls.push({ loc: `${SITE_URL}/svet/${c.slug}/`, changefreq: 'monthly', priority: '0.7', lastmod: D_SVET });
   }
 

@@ -7,7 +7,12 @@ import '../../styles/svet.css';
 
 const locale = Astro.locals.locale ?? 'cs';
 const lang = locale as SvetLang; // loc() bere jen sk/pl; cs si stringy nechává z dat
-const countries = index.countries.filter((c) => !c.reference);
+// Česko (reference) MÁ vlastní profil (cesko.json) — zařaď ho do rozcestníku jako
+// první (domácí země, na mapě nejhledanější). Ostatní v původním pořadí.
+const countries = [
+  ...index.countries.filter((c) => c.reference),
+  ...index.countries.filter((c) => !c.reference),
+];
 
 const UI = {
   cs: { title: 'Zemědělství ve světě — data zemí', description: 'Zemědělská data evropských zemí i světa: produkce, půda, ekonomika. Profily zemí a srovnání s Českem. Zdroje Eurostat a World Bank.', profily: 'Profily zemí', cta: 'Zobrazit data →', compare: 'Porovnat země vedle sebe →' },

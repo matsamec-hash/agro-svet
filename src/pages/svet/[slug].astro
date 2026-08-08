@@ -15,17 +15,26 @@ import { SITE_URL } from '../../lib/config';
 import { localizePath } from '../../i18n/utils';
 import { COUNTRY_NAMES, INDICATOR_LABELS, PACKAGE_LABELS, loc, type SvetLang } from '../../i18n/svet';
 import index from '../../data/svet/index.json';
+import mapData from '../../data/svet/map-metrics.json';
 import '../../styles/svet.css';
 
 const { slug } = Astro.params;
-const known = index.countries.find((c) => c.slug === slug && !c.reference);
+// Reference (Česko) MÁ vlastní profil (cesko.json s daty) — proto NEfiltrujeme
+// `!reference`. Na vlastní stránce se jen potlačí sebe-porovnání „vs ČR".
+const known = index.countries.find((c) => c.slug === slug);
 const mods = import.meta.glob('../../data/svet/*.json', { eager: true });
 const regionMods = import.meta.glob('../../data/svet/regions/*.json', { eager: true });
 const profileMod = known ? (mods[`../../data/svet/${slug}.json`] as any) : null;
 if (!known || !profileMod) {
+  // Země, co je na mapě (map-metrics), ale nemá plný profil (např. Island) →
+  // mapa na ni odkazuje, takže místo 404 nasměruj 301 na rozcestník /svet/.
+  const isMapCountry = Object.values(mapData.countries as Record<string, { slug: string }>).some((c) => c.slug === slug);
+  const localeNow = Astro.locals.locale ?? 'cs';
+  if (isMapCountry) return Astro.redirect(localizePath(localeNow, '/svet/'), 301);
   return new Response('Country not found', { status: 404 });
 }
 const profile = profileMod.default;
+const isRef = !!known.reference; // Česko: potlač sebe-porovnání
 const regionGeo = (regionMods[`../../data/svet/regions/${slug}-geo.json`] as any)?.default ?? null;
 const regionData = (regionMods[`../../data/svet/regions/${slug}.json`] as any)?.default ?? null;
 assertCountryProfile(profile);
@@ -36,8 +45,9 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400
 
 const refMods = import.meta.glob('../../data/svet/cesko.json', { eager: true });
 const ref = (Object.values(refMods)[0] as any).default;
-const refVal = (key: string) => ref.indicators[key]?.latest?.value;
-const refSeries = (key: string) => ref.indicators[key]?.series ?? null;
+// Na vlastní stránce reference (Česko) sebe-porovnání nedává smysl → bez ref hodnot.
+const refVal = (key: string) => (isRef ? undefined : ref.indicators[key]?.latest?.value);
+const refSeries = (key: string) => (isRef ? null : ref.indicators[key]?.series ?? null);
 
 const locale = Astro.locals.locale ?? 'cs';
 const lang = locale as SvetLang;
