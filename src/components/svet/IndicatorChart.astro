@@ -17,9 +17,10 @@ interface Props {
   refName?: string;
 }
 const { series, refSeries = null, unit, label, countryName, refName = 'ČR' } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
 const O = DEFAULT_OPTS;
 const m = buildChartModel(series, refSeries, O);
-const caption = chartCaption(series, refSeries, unit, refName);
+const caption = chartCaption(series, refSeries, unit, refName, locale);
 
 // Data pro hover (souřadnice teček obou čar per rok).
 const refByYear = new Map(m.refPoints.map((p) => [p.year, p]));
@@ -75,7 +76,8 @@ const ariaSummary =
 <script>
   interface Row { year: number; x: number; cy: number; val: number; ry: number | null; refVal: number | null; diff: number | null; }
   interface ChartData { w: number; h: number; unit: string; countryName: string; refName: string; hasRef: boolean; rows: Row[]; }
-  const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+  const NUM_LOCALE = ({ cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA' } as Record<string, string>)[document.documentElement.lang] || 'cs-CZ';
+  const nf = new Intl.NumberFormat(NUM_LOCALE, { maximumFractionDigits: 2 });
 
   document.querySelectorAll<HTMLElement>('.svet-chart').forEach((fig) => {
     const dataEl = fig.querySelector('.svet-chart-data');

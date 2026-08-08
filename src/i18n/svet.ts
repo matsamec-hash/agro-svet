@@ -178,6 +178,39 @@ export const REGION_LABELS: Record<string, { cs: string; sk: string; pl: string 
   'Západní': { cs: 'Západní Evropa', sk: 'Západná Európa', pl: 'Europa Zachodnia' },
 };
 
+// ── Metriky regionální mapy (/svet/<slug> RegionMap) — 6 klíčů, label + popis ──
+export const REGION_METRIC: Record<string, { sk: { label: string; desc: string }; pl: { label: string; desc: string } }> = {
+  cattle_density: { sk: { label: 'Hustota dobytka', desc: 'Kusy hovädzieho dobytka na hektár poľnohospodárskej plochy' }, pl: { label: 'Gęstość bydła', desc: 'Sztuki bydła na hektar użytków rolnych' } },
+  arable_share: { sk: { label: 'Podiel ornej pôdy', desc: 'Orná pôda ako podiel poľnohospodárskej plochy (UAA)' }, pl: { label: 'Udział gruntów ornych', desc: 'Grunty orne jako udział w użytkach rolnych (UAA)' } },
+  grassland_share: { sk: { label: 'Podiel trávnych porastov', desc: 'Trvalé trávne porasty ako podiel UAA' }, pl: { label: 'Udział trwałych użytków zielonych', desc: 'Trwałe użytki zielone jako udział w UAA' } },
+  uaa_share: { sk: { label: 'Podiel poľnohospodárskej pôdy', desc: 'Poľnohospodárska plocha (UAA) ako podiel rozlohy regiónu' }, pl: { label: 'Udział użytków rolnych', desc: 'Użytki rolne (UAA) jako udział w powierzchni regionu' } },
+  cattle: { sk: { label: 'Stavy dobytka', desc: 'Počet kusov hovädzieho dobytka (v tisícoch)' }, pl: { label: 'Pogłowie bydła', desc: 'Liczba sztuk bydła (w tysiącach)' } },
+  uaa: { sk: { label: 'Poľnohospodárska plocha', desc: 'Využitá poľnohospodárska plocha (UAA), v tisícoch hektárov' }, pl: { label: 'Użytki rolne', desc: 'Wykorzystywana powierzchnia użytków rolnych (UAA), w tysiącach hektarów' } },
+};
+
+/** Přeloží label+desc regionální metriky (cs beze změny). */
+export function localizeRegionMetric<M extends { key: string; label: string; desc?: string }>(m: M, locale: string): M {
+  if (locale !== 'sk' && locale !== 'pl') return m;
+  const e = REGION_METRIC[m.key];
+  if (!e) return m;
+  const t = e[locale as SvetLang];
+  return { ...m, label: t.label, ...(m.desc != null ? { desc: t.desc } : {}) };
+}
+
+// ── Poznámka o granularitě (NUTS) pro RegionMap default (když data nemají regionNote) ──
+export const REGION_LEVEL_NOTE: Record<'NUTS1' | 'NUTS2', { cs: string; sk: string; pl: string }> = {
+  NUTS2: {
+    cs: 'úroveň régionů (NUTS-2). Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.',
+    sk: 'úroveň regiónov (NUTS-2). Nižšie jednotky (NUTS-3) nemajú v Eurostate regionálne dáta — pripravené pre nadväzujúce napojenie.',
+    pl: 'poziom regionów (NUTS-2). Niższe jednostki (NUTS-3) nie mają danych regionalnych w Eurostacie — przygotowane do dalszego podłączenia.',
+  },
+  NUTS1: {
+    cs: 'úroveň régionů (NUTS-1), agregováno z NUTS-2. Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.',
+    sk: 'úroveň regiónov (NUTS-1), agregované z NUTS-2. Nižšie jednotky (NUTS-3) nemajú v Eurostate regionálne dáta — pripravené pre nadväzujúce napojenie.',
+    pl: 'poziom regionów (NUTS-1), zagregowane z NUTS-2. Niższe jednostki (NUTS-3) nie mają danych regionalnych w Eurostacie — przygotowane do dalszego podłączenia.',
+  },
+};
+
 /** Plná fráze regionu ve zvoleném locale (cs/sk/pl); fallback = holá hodnota. */
 export function regionPhrase(region: string | undefined, locale: string): string {
   if (!region) return '';

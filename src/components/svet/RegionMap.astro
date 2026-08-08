@@ -3,6 +3,7 @@
 // (near-zero JS): SSR vybarví výchozí metriku, klient jen přepíná metriku + tooltip.
 // Data: {slug}-geo.json (SVG paths) + {slug}.json (hodnoty metrik per région).
 import { colorFor, extent } from '../../lib/svet/mapcolor';
+import { localizeRegionMetric, REGION_LEVEL_NOTE } from '../../i18n/svet';
 
 interface GeoRegion { code: string; name: string; path: string; }
 interface Geo { viewBox: string; regions: GeoRegion[]; }
@@ -13,19 +14,28 @@ interface RegionData {
 }
 const { geo, data, countryName } = Astro.props as { geo: Geo; data: RegionData; countryName: string };
 
-const m0 = data.metrics[0];
+const locale = Astro.locals.locale ?? 'cs';
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+const RUI = {
+  cs: { title: 'Regionální mapa —', metric: 'Ukazatel', metricAria: 'Metrika mapy', source: 'Zdroj:', noData: 'bez dat' },
+  sk: { title: 'Regionálna mapa —', metric: 'Ukazovateľ', metricAria: 'Metrika mapy', source: 'Zdroj:', noData: 'bez dát' },
+  pl: { title: 'Mapa regionalna —', metric: 'Wskaźnik', metricAria: 'Metryka mapy', source: 'Źródło:', noData: 'brak danych' },
+} as const;
+const RU = RUI[locale as keyof typeof RUI] ?? RUI.cs;
+
+const metricsL = data.metrics.map((m) => localizeRegionMetric(m, locale));
+const m0 = metricsL[0];
 const valsOf = (key: string) => geo.regions.map((r) => data.regions[r.code]?.[key]);
 const e0 = extent(valsOf(m0.key));
-const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+const nf = new Intl.NumberFormat(numLocale, { maximumFractionDigits: 2 });
 const fmt = (n: number) => nf.format(n);
-// Poznámka o granularitě: primárně z dat (data.regionNote), jinak EU/NUTS default.
+// Poznámka o granularitě: primárně z dat (data.regionNote — cs), jinak lokalizovaný NUTS default.
+const lvl = (data as any).level === 'NUTS1' ? 'NUTS1' : 'NUTS2';
 const levelNote = (data as any).regionNote
-  ?? ((data as any).level === 'NUTS2'
-    ? 'úroveň régionů (NUTS-2 = vojvodství). Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.'
-    : 'úroveň régionů (NUTS-1), agregováno z NUTS-2. Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.');
+  ?? (REGION_LEVEL_NOTE[lvl][locale as 'cs' | 'sk' | 'pl'] ?? REGION_LEVEL_NOTE[lvl].cs);
 ---
 <section class="svet-section svet-map">
-  <header class="svet-section-head"><h2>Regionální mapa — {countryName}</h2></header>
+  <header class="svet-section-head"><h2>{RU.title} {countryName}</h2></header>
 
   <div class="svet-map-layout">
     <div class="svet-map-wrap">
@@ -48,9 +58,9 @@ const levelNote = (data as any).regionNote
     </div>
 
     <aside class="svet-map-side">
-      <span class="svet-map-side-lbl">Ukazatel</span>
-      <div class="svet-map-modes" id="svet-map-modes" role="group" aria-label="Metrika mapy">
-        {data.metrics.map((m, i) => (
+      <span class="svet-map-side-lbl">{RU.metric}</span>
+      <div class="svet-map-modes" id="svet-map-modes" role="group" aria-label={RU.metricAria}>
+        {metricsL.map((m, i) => (
           <button type="button" data-metric={m.key} class={i === 0 ? 'active' : ''}>{m.label}</button>
         ))}
       </div>
@@ -62,12 +72,12 @@ const levelNote = (data as any).regionNote
         <span class="svet-map-legend-unit" id="svet-map-lunit">{m0.unit}</span>
       </div>
       <p class="svet-cmp-note svet-map-src">
-        Zdroj: <a href={data.sourceUrl} rel="nofollow">{data.source}</a> · {levelNote}
+        {RU.source} <a href={data.sourceUrl} rel="nofollow">{data.source}</a> · {levelNote}
       </p>
     </aside>
   </div>
 
-  <script type="application/json" id="svet-map-data" set:html={JSON.stringify({ regions: data.regions, metrics: data.metrics })}></script>
+  <script type="application/json" id="svet-map-data" set:html={JSON.stringify({ regions: data.regions, metrics: metricsL, noData: RU.noData })}></script>
   <script>
     import { colorFor, extent } from '../../lib/svet/mapcolor';
     interface Metric { key: string; label: string; unit: string; desc?: string; }
@@ -77,10 +87,12 @@ const levelNote = (data as any).regionNote
     const tip = document.getElementById('svet-map-tip');
     if (dataEl && svg && modes) {
       const parsed = JSON.parse(dataEl.textContent || '{}') as {
-        regions: Record<string, Record<string, number>>; metrics: Metric[];
+        regions: Record<string, Record<string, number>>; metrics: Metric[]; noData?: string;
       };
+      const NO_DATA = parsed.noData || 'bez dat';
       const byKey: Record<string, Metric> = Object.fromEntries(parsed.metrics.map((m) => [m.key, m]));
-      const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+      const NUM_LOCALE = ({ cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA' } as Record<string, string>)[document.documentElement.lang] || 'cs-CZ';
+      const nf = new Intl.NumberFormat(NUM_LOCALE, { maximumFractionDigits: 2 });
       const paths = Array.from(svg.querySelectorAll('path')) as SVGPathElement[];
       const desc = document.getElementById('svet-map-desc');
       const lmin = document.getElementById('svet-map-lmin');
@@ -117,7 +129,7 @@ const levelNote = (data as any).regionNote
         if (!tip) return;
         const m = byKey[metricKey];
         const v = parsed.regions[p.dataset.code || '']?.[metricKey];
-        tip.innerHTML = `<strong>${p.dataset.name}</strong><br>${v != null ? nf.format(v) + ' ' + m.unit : 'bez dat'}`;
+        tip.innerHTML = `<strong>${p.dataset.name}</strong><br>${v != null ? nf.format(v) + ' ' + m.unit : NO_DATA}`;
         tip.hidden = false;
         const wrap = tip.parentElement!.getBoundingClientRect();
         tip.style.left = ev.clientX - wrap.left + 12 + 'px';

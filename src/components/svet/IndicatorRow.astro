@@ -1,6 +1,7 @@
 ---
 import IndicatorChart from './IndicatorChart.astro';
 import { fmtNum, vsReference } from '../../lib/svet/render';
+import { INDICATOR_LABELS, loc, type SvetLang } from '../../i18n/svet';
 import type { Indicator, SeriesPoint } from '../../lib/svet/types';
 interface Props {
   indicator: Indicator;
@@ -10,15 +11,22 @@ interface Props {
   countryName: string;
 }
 const { indicator: ind, refValue, refSeries = null, refName = 'ČR', countryName } = Astro.props;
+const locale = Astro.locals.locale ?? 'cs';
+const label = locale === 'cs' ? ind.label : loc(INDICATOR_LABELS, ind.key, locale as SvetLang, ind.label);
 const cmp = refValue != null ? vsReference(ind.latest.value, refValue) : null;
 const periodNum = Number(ind.latest.referencePeriod);
 const stale = periodNum > 0 && periodNum <= 2020;
 const dirSign = cmp && cmp.dir === 'up' ? '+' : '';
-const vsTitle = `Poslední dostupná hodnota (${ind.latest.referencePeriod}) porovnaná se stejným ukazatelem v ${refName}. Vývoj po letech a rozdíl v jednotlivých letech ukazuje graf.`;
+const vsTitle = locale === 'sk'
+  ? `Posledná dostupná hodnota (${ind.latest.referencePeriod}) v porovnaní s rovnakým ukazovateľom v referenčnej krajine ${refName}. Vývoj a rozdiely po rokoch ukazuje graf.`
+  : locale === 'pl'
+  ? `Ostatnia dostępna wartość (${ind.latest.referencePeriod}) w porównaniu z tym samym wskaźnikiem w kraju referencyjnym ${refName}. Rozwój i różnice w latach pokazuje wykres.`
+  : `Poslední dostupná hodnota (${ind.latest.referencePeriod}) porovnaná se stejným ukazatelem v ${refName}. Vývoj po letech a rozdíl v jednotlivých letech ukazuje graf.`;
+const staleSuffix = locale === 'sk' ? ' (najnovšie dostupné)' : locale === 'pl' ? ' (najnowsze dostępne)' : ' (nejnovější dostupné)';
 ---
 <article class="svet-ind">
   <div class="svet-ind-top">
-    <span class="svet-ind-label">{ind.label}</span>
+    <span class="svet-ind-label">{label}</span>
     {cmp && (
       <span class={`svet-vs svet-vs-${cmp.dir}`} title={vsTitle}>
         {dirSign}{fmtNum(cmp.pct)} % vs {refName}<span class="svet-vs-info" aria-hidden="true">ⓘ</span>
@@ -29,8 +37,8 @@ const vsTitle = `Poslední dostupná hodnota (${ind.latest.referencePeriod}) por
     {fmtNum(ind.latest.value)} <span class="svet-ind-unit">{ind.unit}</span>
     {refValue != null && <span class="svet-ind-ref">· {refName} {fmtNum(refValue)}</span>}
   </div>
-  <IndicatorChart series={ind.series} refSeries={refSeries} unit={ind.unit} label={ind.label} countryName={countryName} refName={refName} />
+  <IndicatorChart series={ind.series} refSeries={refSeries} unit={ind.unit} label={label} countryName={countryName} refName={refName} />
   <div class="svet-ind-foot">
-    <a class="svet-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{ind.latest.source} · {ind.latest.referencePeriod}{stale ? ' (nejnovější dostupné)' : ''}</a>
+    <a class="svet-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{ind.latest.source} · {ind.latest.referencePeriod}{stale ? staleSuffix : ''}</a>
   </div>
 </article>

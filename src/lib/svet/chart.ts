@@ -99,7 +99,9 @@ export function chartCaption(
   refSeries: SeriesPoint[] | null | undefined,
   unit: string,
   refName = 'ČR',
+  locale: string = 'cs',
 ): string {
+  const L = locale === 'sk' ? CAPTION_SK : locale === 'pl' ? CAPTION_PL : CAPTION_CS;
   const pts = series.filter((p) => Number.isFinite(p.value));
   if (!pts.length) return '';
   const years = pts.map(yr);
@@ -108,8 +110,8 @@ export function chartCaption(
   const minV = Math.min(...vals), maxV = Math.max(...vals);
   const rangePart =
     minV === maxV
-      ? `Hodnota ${fmtNum(minV)} ${unit} (${minY}).`
-      : `Za sledované období ${minY}–${maxY} se pohybuje mezi ${fmtNum(minV)} a ${fmtNum(maxV)} ${unit}.`;
+      ? L.single(fmtNum(minV), unit, minY)
+      : L.range(minY, maxY, fmtNum(minV), fmtNum(maxV), unit);
 
   if (!refSeries || !refSeries.length) return rangePart;
   const refMap = refMapInRange(refSeries, minY, maxY);
@@ -120,9 +122,28 @@ export function chartCaption(
   const cVal = pts.find((p) => yr(p) === yStar)!.value;
   const rVal = refMap.get(yStar)!;
   const pct = Math.round((cVal / rVal - 1) * 100);
-  const cmp =
-    pct === 0
-      ? `V roce ${yStar} srovnatelné s ${refName}.`
-      : `V roce ${yStar} o ${Math.abs(pct)} % ${pct < 0 ? 'pod' : 'nad'} úrovní ${refName} (${fmtNum(rVal)} ${unit}).`;
+  const cmp = pct === 0
+    ? L.cmpEqual(yStar, refName)
+    : L.cmpDiff(yStar, Math.abs(pct), pct < 0, refName, fmtNum(rVal), unit);
   return `${rangePart} ${cmp}`;
 }
+
+// Šablony věty pod grafem per locale (cs/sk/pl).
+const CAPTION_CS = {
+  single: (v: string, u: string, y: number) => `Hodnota ${v} ${u} (${y}).`,
+  range: (a: number, b: number, lo: string, hi: string, u: string) => `Za sledované období ${a}–${b} se pohybuje mezi ${lo} a ${hi} ${u}.`,
+  cmpEqual: (y: number, ref: string) => `V roce ${y} srovnatelné s ${ref}.`,
+  cmpDiff: (y: number, abs: number, under: boolean, ref: string, rv: string, u: string) => `V roce ${y} o ${abs} % ${under ? 'pod' : 'nad'} úrovní ${ref} (${rv} ${u}).`,
+};
+const CAPTION_SK = {
+  single: (v: string, u: string, y: number) => `Hodnota ${v} ${u} (${y}).`,
+  range: (a: number, b: number, lo: string, hi: string, u: string) => `Za sledované obdobie ${a}–${b} sa pohybuje medzi ${lo} a ${hi} ${u}.`,
+  cmpEqual: (y: number, ref: string) => `V roku ${y} porovnateľné s ${ref}.`,
+  cmpDiff: (y: number, abs: number, under: boolean, ref: string, rv: string, u: string) => `V roku ${y} o ${abs} % ${under ? 'pod' : 'nad'} úrovňou ${ref} (${rv} ${u}).`,
+};
+const CAPTION_PL = {
+  single: (v: string, u: string, y: number) => `Wartość ${v} ${u} (${y}).`,
+  range: (a: number, b: number, lo: string, hi: string, u: string) => `W okresie ${a}–${b} waha się między ${lo} a ${hi} ${u}.`,
+  cmpEqual: (y: number, ref: string) => `W ${y} r. porównywalne z ${ref}.`,
+  cmpDiff: (y: number, abs: number, under: boolean, ref: string, rv: string, u: string) => `W ${y} r. o ${abs} % ${under ? 'poniżej' : 'powyżej'} poziomu ${ref} (${rv} ${u}).`,
+};
