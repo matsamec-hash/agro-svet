@@ -166,12 +166,44 @@ export const GROUP_LABELS: Record<string, T> = {
   Ekonomika: { sk: 'Ekonomika', pl: 'Gospodarka' },
 };
 
-// ── Regiony Evropy (insight v mapě). Bez „Evropa" — to se skládá zvlášť. ───────
-export const REGION_LABELS: Record<string, T> = {
-  'Jižní': { sk: 'Južná', pl: 'Południowa' },
-  'Pobaltí': { sk: 'Pobaltie', pl: 'Kraje bałtyckie' },
-  'Severní': { sk: 'Severná', pl: 'Północna' },
-  'Střední': { sk: 'Stredná', pl: 'Środkowa' },
-  'Východní': { sk: 'Východná', pl: 'Wschodnia' },
-  'Západní': { sk: 'Západná', pl: 'Zachodnia' },
+// ── Regiony Evropy (label v panelu mapy). Plná fráze vč. „Evropa" — data drží jen
+// holé „Střední"/„Severní"…; klient dřív skládal „+ 'ní Evropa'" (bug: „Středníní
+// Evropa"). Nově se region přeloží na plnou frázi na serveru pro VŠECHNY locale. ──
+export const REGION_LABELS: Record<string, { cs: string; sk: string; pl: string }> = {
+  'Jižní': { cs: 'Jižní Evropa', sk: 'Južná Európa', pl: 'Europa Południowa' },
+  'Pobaltí': { cs: 'Pobaltí', sk: 'Pobaltie', pl: 'Kraje bałtyckie' },
+  'Severní': { cs: 'Severní Evropa', sk: 'Severná Európa', pl: 'Europa Północna' },
+  'Střední': { cs: 'Střední Evropa', sk: 'Stredná Európa', pl: 'Europa Środkowa' },
+  'Východní': { cs: 'Východní Evropa', sk: 'Východná Európa', pl: 'Europa Wschodnia' },
+  'Západní': { cs: 'Západní Evropa', sk: 'Západná Európa', pl: 'Europa Zachodnia' },
 };
+
+/** Plná fráze regionu ve zvoleném locale (cs/sk/pl); fallback = holá hodnota. */
+export function regionPhrase(region: string | undefined, locale: string): string {
+  if (!region) return '';
+  const e = REGION_LABELS[region];
+  if (!e) return region;
+  return locale === 'sk' ? e.sk : locale === 'pl' ? e.pl : e.cs;
+}
+
+// ── Helpery pro hromadnou lokalizaci dat mapy (server-side overlay) ───────────
+type MetricLike = { key: string; label: string; unit?: string; group?: string; note?: string; source?: string; sourceUrl?: string; [k: string]: unknown };
+
+/** Přeloží label/note/source/group metriky do sk/pl (cs se vrací beze změny). */
+export function localizeMetric<M extends MetricLike>(m: M, locale: string): M {
+  if (locale !== 'sk' && locale !== 'pl') return m;
+  const lang = locale as SvetLang;
+  return {
+    ...m,
+    label: loc(METRIC_LABELS, m.key, lang, m.label),
+    ...(m.note != null ? { note: loc(METRIC_NOTES, m.key, lang, m.note) } : {}),
+    ...(m.source != null ? { source: loc(METRIC_SOURCE, m.key, lang, m.source) } : {}),
+    ...(m.group != null ? { group: loc(GROUP_LABELS, m.group, lang, m.group) } : {}),
+  };
+}
+
+/** Přeloží name+region země do sk/pl (cs beze změny, jen region → plná fráze). */
+export function localizeCountry<C extends { slug: string; name: string; region?: string; [k: string]: unknown }>(c: C, locale: string): C {
+  const name = locale === 'sk' || locale === 'pl' ? loc(COUNTRY_NAMES, c.slug, locale as SvetLang, c.name) : c.name;
+  return { ...c, name, ...(c.region != null ? { region: regionPhrase(c.region, locale) } : {}) };
+}

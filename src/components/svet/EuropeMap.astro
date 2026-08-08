@@ -6,11 +6,31 @@
 import europe from '../../data/svet/geo/europe.json';
 import mapData from '../../data/svet/map-metrics.json';
 import { colorFor, extent } from '../../lib/svet/mapcolor';
+import { localizePath } from '../../i18n/utils';
+import { localizeMetric, localizeCountry } from '../../i18n/svet';
 
-const metrics = mapData.metrics as { key: string; label: string; unit: string; group: string; currency?: boolean; source?: string; sourceUrl?: string }[];
+const locale = Astro.locals.locale ?? 'cs';
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+// Locale-specifická země zvýrazněná v insightu / výchozí v panelu.
+const homeCode = locale === 'sk' ? 'SK' : locale === 'pl' ? 'PL' : 'CZ';
+
+// UI chrome (cs/sk/pl). Datové labely/poznámky jdou přes localizeMetric/Country.
+const MAPUI = {
+  cs: { currency: 'Měna', zin: 'Přiblížit', zout: 'Oddálit', reset: 'Reset zoomu', info: 'Vysvětlení metriky', euAvg: 'EU Ø', modeNum: 'Číslo', modeGraph: 'Graf', deltaNote: 'Δ % = odchylka od průměru EU', detail: '→ Detail země', mapAria: 'Mapa Evropy —', source: 'Zdroj:', leads: 'vede', timesMore: '× víc než', mostVs: 'nejvíc, oproti', place: '. místo', of: 'z' },
+  sk: { currency: 'Mena', zin: 'Priblížiť', zout: 'Oddialiť', reset: 'Reset priblíženia', info: 'Vysvetlenie metriky', euAvg: 'EÚ Ø', modeNum: 'Číslo', modeGraph: 'Graf', deltaNote: 'Δ % = odchýlka od priemeru EÚ', detail: '→ Detail krajiny', mapAria: 'Mapa Európy —', source: 'Zdroj:', leads: 'vedie', timesMore: '× viac než', mostVs: 'najviac, oproti', place: '. miesto', of: 'z' },
+  pl: { currency: 'Waluta', zin: 'Powiększ', zout: 'Pomniejsz', reset: 'Reset powiększenia', info: 'Wyjaśnienie metryki', euAvg: 'UE Ø', modeNum: 'Liczba', modeGraph: 'Wykres', deltaNote: 'Δ % = odchylenie od średniej UE', detail: '→ Szczegóły kraju', mapAria: 'Mapa Europy —', source: 'Źródło:', leads: 'prowadzi', timesMore: '× więcej niż', mostVs: 'najwięcej, w porównaniu z', place: '. miejsce', of: 'z' },
+} as const;
+const UI = MAPUI[locale as keyof typeof MAPUI] ?? MAPUI.cs;
+const detailBase = localizePath(locale, '/svet/'); // klient složí /svet/<slug>/ s locale prefixem
+
+const metrics = (mapData.metrics as { key: string; label: string; unit: string; group: string; currency?: boolean; source?: string; sourceUrl?: string }[])
+  .map((m) => localizeMetric(m, locale));
 const RATE = 25.3;
-const cur0: 'czk' | 'eur' = 'czk';
-const countries = mapData.countries as Record<string, { slug: string; name: string; flag: string; region: string; values: Record<string, number | null>; series: Record<string, number[] | null> }>;
+const cur0: 'czk' | 'eur' = locale === 'cs' ? 'czk' : 'eur';
+const countries = Object.fromEntries(
+  Object.entries(mapData.countries as Record<string, { slug: string; name: string; flag: string; region: string; values: Record<string, number | null>; series: Record<string, number[] | null> }>)
+    .map(([code, c]) => [code, localizeCountry({ ...c }, locale)]),
+) as Record<string, { slug: string; name: string; flag: string; region: string; values: Record<string, number | null>; series: Record<string, number[] | null> }>;
 const m0 = metrics[0];
 const e0 = extent(europe.regions.map((r) => countries[r.code]?.values?.[m0.key] ?? null));
 const groups: { g: string; items: typeof metrics }[] = [];
@@ -27,7 +47,7 @@ const payload = { metrics, countries };
 
 <section class="agrimap">
   <div class="agrimap-controls">
-    <div class="agrimap-curbar"><span class="agrimap-curlbl">Měna</span><button type="button" class="agrimap-cur active" data-cur="czk">Kč</button><button type="button" class="agrimap-cur" data-cur="eur">€</button></div>
+    <div class="agrimap-curbar"><span class="agrimap-curlbl">{UI.currency}</span><button type="button" class:list={['agrimap-cur', { active: cur0 === 'czk' }]} data-cur="czk">Kč</button><button type="button" class:list={['agrimap-cur', { active: cur0 === 'eur' }]} data-cur="eur">€</button></div>
     {groups.map((grp) => (
       <div class="agrimap-grp">
         <span class="agrimap-gl">{grp.g}</span>
@@ -45,16 +65,16 @@ const payload = { metrics, countries };
   <div class="agrimap-stage">
     <div class="agrimap-mapcard">
       <div class="agrimap-ztools">
-        <button type="button" id="agrimap-zin" title="Přiblížit" aria-label="Přiblížit">＋</button>
-        <button type="button" id="agrimap-zout" title="Oddálit" aria-label="Oddálit">−</button>
-        <button type="button" id="agrimap-reset" class="reset" title="Reset" aria-label="Reset zoomu">⤢</button>
+        <button type="button" id="agrimap-zin" title={UI.zin} aria-label={UI.zin}>＋</button>
+        <button type="button" id="agrimap-zout" title={UI.zout} aria-label={UI.zout}>−</button>
+        <button type="button" id="agrimap-reset" class="reset" title={UI.reset} aria-label={UI.reset}>⤢</button>
       </div>
       <div class="agrimap-titlebar">
         <span class="agrimap-title" id="agrimap-title">{m0.label} ({uOf(m0)})</span>
-        <button type="button" class="agrimap-info" id="agrimap-info" aria-label="Vysvětlení metriky" aria-expanded="false">i</button>
+        <button type="button" class="agrimap-info" id="agrimap-info" aria-label={UI.info} aria-expanded="false">i</button>
         <div class="agrimap-pop" id="agrimap-pop" hidden></div>
       </div>
-      <svg viewBox={europe.viewBox} class="agrimap-svg" id="agrimap-svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label={`Mapa Evropy — ${m0.label}`}>
+      <svg viewBox={europe.viewBox} class="agrimap-svg" id="agrimap-svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label={`${UI.mapAria} ${m0.label}`}>
         <g id="agrimap-zoom">
           {europe.regions.map((r) => {
             const v = countries[r.code]?.values?.[m0.key] ?? null;
@@ -71,27 +91,29 @@ const payload = { metrics, countries };
           })}
         </g>
       </svg>
-      <div class="agrimap-legend"><span id="agrimap-lo"></span><div class="agrimap-barwrap"><div class="agrimap-bar"></div><div class="agrimap-tick avg" id="agrimap-tavg"><b>EU Ø</b></div><div class="agrimap-tick sel" id="agrimap-tsel"><b></b></div></div><span id="agrimap-hi"></span></div>
+      <div class="agrimap-legend"><span id="agrimap-lo"></span><div class="agrimap-barwrap"><div class="agrimap-bar"></div><div class="agrimap-tick avg" id="agrimap-tavg"><b>{UI.euAvg}</b></div><div class="agrimap-tick sel" id="agrimap-tsel"><b></b></div></div><span id="agrimap-hi"></span></div>
       <div class="agrimap-src" id="agrimap-src"></div>
     </div>
 
     <aside class="agrimap-panel">
       <div class="agrimap-phead"><div class="agrimap-rank" id="agrimap-rank"></div><div class="agrimap-flag" id="agrimap-flag"></div><div class="agrimap-reg" id="agrimap-reg"></div><h3 id="agrimap-name"></h3></div>
-      <div class="agrimap-pmode"><button type="button" class="agrimap-pm active" data-pm="num">Číslo</button><button type="button" class="agrimap-pm" data-pm="graph">Graf</button></div>
-      <div class="agrimap-pnote" id="agrimap-pnote">Δ % = odchylka od průměru EU</div>
+      <div class="agrimap-pmode"><button type="button" class="agrimap-pm active" data-pm="num">{UI.modeNum}</button><button type="button" class="agrimap-pm" data-pm="graph">{UI.modeGraph}</button></div>
+      <div class="agrimap-pnote" id="agrimap-pnote">{UI.deltaNote}</div>
       <div class="agrimap-rows" id="agrimap-rows"></div>
-      <a class="agrimap-cta" id="agrimap-cta" href="#">→ Detail země</a>
+      <a class="agrimap-cta" id="agrimap-cta" href="#">{UI.detail}</a>
     </aside>
   </div>
 
   <div class="agrimap-tip" id="agrimap-tip" hidden></div>
   <script type="application/json" id="agrimap-data" set:html={JSON.stringify(payload)}></script>
+  <script type="application/json" id="agrimap-ui" set:html={JSON.stringify({ ...UI, homeCode, numLocale, detailBase })}></script>
 </section>
 
 <script>
   const el = document.getElementById('agrimap-data');
   if (el) {
     const { metrics, countries } = JSON.parse(el.textContent || '{}');
+    const UI = JSON.parse(document.getElementById('agrimap-ui')?.textContent || '{}');
     const svg = document.getElementById('agrimap-svg') as SVGSVGElement | null;
     const zg = document.getElementById('agrimap-zoom');
     const tip = document.getElementById('agrimap-tip')!;
@@ -100,9 +122,9 @@ const payload = { metrics, countries };
     for (const [c, d] of Object.entries(countries as any)) FLAGS[c] = (d as any).flag;
     const vb = (svg?.getAttribute('viewBox') || '0 0 1000 1165').split(' ').map(Number);
     const VW = vb[2], VH = vb[3];
-    let active = metrics[0].key, sel = 'CZ', T = { k: 1, x: 0, y: 0 }, anim = false, moved = false, drag: any = null;
+    let active = metrics[0].key, sel = UI.homeCode || 'CZ', T = { k: 1, x: 0, y: 0 }, anim = false, moved = false, drag: any = null;
     let pmode = 'num'; // panel: 'num' = hodnoty+%, 'graph' = sparkliny
-    const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+    const nf = new Intl.NumberFormat(UI.numLocale || 'cs-CZ', { maximumFractionDigits: 2 });
     const fmtN = (v: number | null) => (v == null ? '—' : nf.format(v));
     const abbr = (v: number) => (v >= 10000 ? Math.round(v / 1000) + 'k' : v >= 1000 ? (v / 1000).toFixed(1) + 'k' : nf.format(v));
     // barva mirror mapcolor.ts (STOPS) — server (colorFor) i klient stejné
@@ -110,7 +132,7 @@ const payload = { metrics, countries };
     const lerp = (a: number, b: number, t: number) => Math.round(a + (b - a) * t);
     const color = (t: number) => { const x = Math.max(0, Math.min(1, t)); const seg = x * 3; const i = Math.min(2, Math.floor(seg)); const f = seg - i; return `rgb(${[0, 1, 2].map((c) => lerp(STOPS[i][c], STOPS[i + 1][c], f)).join(',')})`; };
     const metricOf = (k: string) => metrics.find((m: any) => m.key === k);
-    let cur = 'czk'; const RATE = 25.3;
+    let cur = (document.querySelector('.agrimap-cur.active') as HTMLElement | null)?.dataset.cur || 'czk'; const RATE = 25.3;
     const isCur = (k: string) => !!metricOf(k)?.currency;
     const cv = (v: number | null, k: string) => (v == null ? v : (isCur(k) && cur === 'czk' ? Math.round((v as number) * RATE) : v));
     const uOf2 = (m: any) => (m.currency && cur === 'czk' ? m.unit.replace('€', 'Kč') : m.unit);
@@ -145,20 +167,22 @@ const payload = { metrics, countries };
       document.querySelectorAll('path.agrimap-c').forEach((p) => { const d = countries[(p as HTMLElement).dataset.c!]; const v = d?.values[active]; (p as HTMLElement).style.fill = v == null ? '#e7e9e1' : color((v - s.min) / (s.max - s.min || 1)); p.classList.toggle('sel', (p as HTMLElement).dataset.c === sel); });
       document.querySelectorAll('text.agrimap-lbl').forEach((t) => { const d = countries[(t as HTMLElement).dataset.c!]; const v = d?.values[active]; const big = (t as HTMLElement).dataset.big === '1'; t.textContent = v != null && big ? abbr(cv(v, active)!) : ''; (t as HTMLElement).classList.toggle('lt', v != null && (v - s.min) / (s.max - s.min) > 0.62); });
       const arr = (Object.entries(countries) as any[]).filter(([, d]) => d.values[active] != null).sort(([, x]: any, [, y]: any) => y.values[active] - x.values[active]);
-      const top = arr[0], bot = arr[arr.length - 1]; const ratio = top[1].values[active] / bot[1].values[active]; const cz = rank('CZ', active);
-      document.getElementById('agrimap-insight')!.innerHTML = `💡 ${top[1].flag} <b>${top[1].name}</b> vede (${dispVal(top[1].values[active], m)}) — ${ratio >= 2 ? Math.round(ratio) + '× víc než ' : 'nejvíc, oproti '}${bot[1].flag} ${bot[1].name} (${fmtN(cv(bot[1].values[active], active))}). 🇨🇿 Česko: <b>${cz ? cz[0] + '. místo' : '—'}</b> z ${cz ? cz[1] : '—'}.`;
+      const top = arr[0], bot = arr[arr.length - 1]; const ratio = top[1].values[active] / bot[1].values[active];
+      const homeC = UI.homeCode || 'CZ'; const hr = rank(homeC, active); const home = countries[homeC];
+      const homeLabel = home ? `${home.flag} ${home.name}: <b>${hr ? hr[0] + UI.place : '—'}</b> ${UI.of} ${hr ? hr[1] : '—'}.` : '';
+      document.getElementById('agrimap-insight')!.innerHTML = `💡 ${top[1].flag} <b>${top[1].name}</b> ${UI.leads} (${dispVal(top[1].values[active], m)}) — ${ratio >= 2 ? Math.round(ratio) + UI.timesMore + ' ' : UI.mostVs + ' '}${bot[1].flag} ${bot[1].name} (${fmtN(cv(bot[1].values[active], active))}). ${homeLabel}`;
       const srcEl = document.getElementById('agrimap-src');
       if (srcEl) srcEl.innerHTML = m.source
-        ? `Zdroj: ${m.sourceUrl ? `<a href="${m.sourceUrl}" target="_blank" rel="noopener">${m.source}</a>` : m.source}`
+        ? `${UI.source} ${m.sourceUrl ? `<a href="${m.sourceUrl}" target="_blank" rel="noopener">${m.source}</a>` : m.source}`
         : '';
       const pop = document.getElementById('agrimap-pop');
-      if (pop) pop.innerHTML = `<b>${m.label}</b>${m.note ? `<p>${m.note}</p>` : ''}${m.source ? `<p class="src">Zdroj: ${m.sourceUrl ? `<a href="${m.sourceUrl}" target="_blank" rel="noopener">${m.source}</a>` : m.source}</p>` : ''}`;
+      if (pop) pop.innerHTML = `<b>${m.label}</b>${m.note ? `<p>${m.note}</p>` : ''}${m.source ? `<p class="src">${UI.source} ${m.sourceUrl ? `<a href="${m.sourceUrl}" target="_blank" rel="noopener">${m.source}</a>` : m.source}</p>` : ''}`;
     }
     function panel(code: string) {
       const d = countries[code]; if (!d) return; sel = code;
       const pn = document.getElementById('agrimap-pnote'); if (pn) pn.style.display = pmode === 'num' ? 'block' : 'none';
-      document.getElementById('agrimap-flag')!.textContent = d.flag; document.getElementById('agrimap-name')!.textContent = d.name; document.getElementById('agrimap-reg')!.textContent = d.region + 'ní Evropa';
-      (document.getElementById('agrimap-cta') as HTMLAnchorElement).href = `/svet/${d.slug}/`;
+      document.getElementById('agrimap-flag')!.textContent = d.flag; document.getElementById('agrimap-name')!.textContent = d.name; document.getElementById('agrimap-reg')!.textContent = d.region;
+      (document.getElementById('agrimap-cta') as HTMLAnchorElement).href = `${UI.detailBase || '/svet/'}${d.slug}/`;
       const rk = rank(code, active); document.getElementById('agrimap-rank')!.innerHTML = rk ? `${rk[0]}.<br><span>z ${rk[1]}</span>` : '—';
       const rows = document.getElementById('agrimap-rows')!; rows.innerHTML = '';
       for (const m of metrics) {
@@ -199,7 +223,7 @@ const payload = { metrics, countries };
       svg.addEventListener('mouseover', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) panel(p.dataset.c!); });
       svg.addEventListener('click', (e) => { const p = (e.target as Element).closest('path.agrimap-c') as HTMLElement | null; if (p && countries[p.dataset.c!]) { panel(p.dataset.c!); if (!moved) zoomTo(p.dataset.c!); } });
     }
-    panel('CZ');
+    panel(UI.homeCode || 'CZ');
   }
 </script>
 

@@ -2,37 +2,46 @@
 import Layout from '../../../layouts/Layout.astro';
 import EuropeMap from '../../../components/svet/EuropeMap.astro';
 import mapData from '../../../data/svet/map-metrics.json';
+import { localizePath } from '../../../i18n/utils';
+import { COUNTRY_NAMES, loc, localizeMetric, type SvetLang } from '../../../i18n/svet';
 import '../../../styles/svet.css';
 
-const title = 'Mapa zemědělství Evropy — porovnání zemí';
-const description = 'Interaktivní mapa: výnosy, stavy zvířat, zemědělská plocha, počet farem, ekozemědělství a zaměstnanost napříč Evropou. Přepínejte metriky a porovnejte země. Zdroje Eurostat a World Bank.';
-const canonical = 'https://agro-svet.cz/svet/mapa/';
+const locale = Astro.locals.locale ?? 'cs';
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
 
-const metrics = mapData.metrics as { key: string; label: string; source: string; sourceUrl: string }[];
+const UI = {
+  cs: { title: 'Mapa zemědělství Evropy — porovnání zemí', description: 'Interaktivní mapa: výnosy, stavy zvířat, zemědělská plocha, počet farem, ekozemědělství a zaměstnanost napříč Evropou. Přepínejte metriky a porovnejte země. Zdroje Eurostat a World Bank.', bcHome: 'Domů', bcSvet: 'Svět', bcMap: 'Mapa', byCountry: 'Zemědělství podle zemí', country: 'Země', sortNote: 'Řazeno podle ceny zemědělské půdy. Nejnovější dostupný rok za každou zemi; „—" = data nejsou v daném zdroji k dispozici.', method: 'Zdroje a metodika', methodP: 'Data pocházejí z oficiálních evropských a světových statistik. Nejnovější dostupný rok za každou zemi; některé mimoevropské a menší země nemusí mít všechny ukazatele (zobrazeny šedě). Mapa staví na profilech zemí v sekci', svetLink: 'Svět', methodP2: '— kliknutím na zemi přejdete na její detail.', srcData: 'zdrojová data',
+    cols: [{ key: 'land_price', label: 'Cena půdy', unit: '€/ha' }, { key: 'rent', label: 'Pachtovné', unit: '€/ha' }, { key: 'wheat_yield', label: 'Výnos pšenice', unit: 't/ha' }, { key: 'ag_land', label: 'Zeměd. plocha', unit: 'mil. ha' }, { key: 'organic_share', label: 'Eko', unit: '%' }] },
+  sk: { title: 'Mapa poľnohospodárstva Európy — porovnanie krajín', description: 'Interaktívna mapa: výnosy, stavy zvierat, poľnohospodárska plocha, počet fariem, ekopoľnohospodárstvo a zamestnanosť naprieč Európou. Prepínajte metriky a porovnajte krajiny. Zdroje Eurostat a World Bank.', bcHome: 'Domov', bcSvet: 'Svet', bcMap: 'Mapa', byCountry: 'Poľnohospodárstvo podľa krajín', country: 'Krajina', sortNote: 'Zoradené podľa ceny poľnohospodárskej pôdy. Najnovší dostupný rok za každú krajinu; „—" = dáta nie sú v danom zdroji k dispozícii.', method: 'Zdroje a metodika', methodP: 'Dáta pochádzajú z oficiálnych európskych a svetových štatistík. Najnovší dostupný rok za každú krajinu; niektoré mimoeurópske a menšie krajiny nemusia mať všetky ukazovatele (zobrazené sivo). Mapa stavia na profiloch krajín v sekcii', svetLink: 'Svet', methodP2: '— kliknutím na krajinu prejdete na jej detail.', srcData: 'zdrojové dáta',
+    cols: [{ key: 'land_price', label: 'Cena pôdy', unit: '€/ha' }, { key: 'rent', label: 'Nájomné', unit: '€/ha' }, { key: 'wheat_yield', label: 'Výnos pšenice', unit: 't/ha' }, { key: 'ag_land', label: 'Poľn. plocha', unit: 'mil. ha' }, { key: 'organic_share', label: 'Eko', unit: '%' }] },
+  pl: { title: 'Mapa rolnictwa Europy — porównanie krajów', description: 'Interaktywna mapa: plony, pogłowie zwierząt, powierzchnia użytków rolnych, liczba gospodarstw, rolnictwo ekologiczne i zatrudnienie w całej Europie. Przełączaj metryki i porównuj kraje. Źródła Eurostat i World Bank.', bcHome: 'Główna', bcSvet: 'Świat', bcMap: 'Mapa', byCountry: 'Rolnictwo według krajów', country: 'Kraj', sortNote: 'Sortowane według ceny ziemi rolnej. Najnowszy dostępny rok dla każdego kraju; „—" = dane niedostępne w danym źródle.', method: 'Źródła i metodyka', methodP: 'Dane pochodzą z oficjalnych statystyk europejskich i światowych. Najnowszy dostępny rok dla każdego kraju; niektóre kraje pozaeuropejskie i mniejsze mogą nie mieć wszystkich wskaźników (pokazane na szaro). Mapa opiera się na profilach krajów w sekcji', svetLink: 'Świat', methodP2: '— kliknięcie w kraj przenosi do jego profilu.', srcData: 'dane źródłowe',
+    cols: [{ key: 'land_price', label: 'Cena ziemi', unit: '€/ha' }, { key: 'rent', label: 'Czynsz', unit: '€/ha' }, { key: 'wheat_yield', label: 'Plon pszenicy', unit: 't/ha' }, { key: 'ag_land', label: 'Uż. rolne', unit: 'mln ha' }, { key: 'organic_share', label: 'Eko', unit: '%' }] },
+} as const;
+const L = UI[locale as keyof typeof UI] ?? UI.cs;
+const title = L.title;
+const description = L.description;
+const TCOLS = L.cols;
+
+const metricsRaw = mapData.metrics as { key: string; label: string; source: string; sourceUrl: string }[];
+const metrics = metricsRaw.map((m) => localizeMetric(m, locale));
 const sources = Array.from(new Map(metrics.filter((m) => m.source).map((m) => [m.source + m.sourceUrl, { source: m.source, url: m.sourceUrl }])).values());
 
 // SSR tabulka zemí (crawlovatelný obsah + interní prolinky).
 const tCountries = mapData.countries as Record<string, { slug: string; name: string; flag: string; values: Record<string, number | null> }>;
-const nf0 = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+const cName = (c: { slug: string; name: string }) => (locale === 'cs' ? c.name : loc(COUNTRY_NAMES, c.slug, locale as SvetLang, c.name));
+const nf0 = new Intl.NumberFormat(numLocale, { maximumFractionDigits: 2 });
 const fmt = (v: number | null | undefined) => (v == null ? '—' : nf0.format(v));
-const TCOLS = [
-  { key: 'land_price', label: 'Cena půdy', unit: '€/ha' },
-  { key: 'rent', label: 'Pachtovné', unit: '€/ha' },
-  { key: 'wheat_yield', label: 'Výnos pšenice', unit: 't/ha' },
-  { key: 'ag_land', label: 'Zeměd. plocha', unit: 'mil. ha' },
-  { key: 'organic_share', label: 'Eko', unit: '%' },
-];
 const tableRows = Object.entries(tCountries)
   .map(([code, c]) => ({ code, ...c }))
   .sort((a, b) => (b.values.land_price ?? -1) - (a.values.land_price ?? -1));
 ---
 
-<Layout title={title} description={description} canonical={canonical}>
+<Layout title={title} description={description}>
   <main class="svet-page">
     <nav class="svet-crumbs" aria-label="Drobečková navigace" style="font-size:13px;color:#666;margin-bottom:8px;">
-      <a href="/" style="color:#666;text-decoration:none;">Domů</a> ·
-      <a href="/svet/" style="color:#666;text-decoration:none;">Svět</a> ·
-      <span>Mapa</span>
+      <a href={localizePath(locale, '/')} style="color:#666;text-decoration:none;">{L.bcHome}</a> ·
+      <a href={localizePath(locale, '/svet/')} style="color:#666;text-decoration:none;">{L.bcSvet}</a> ·
+      <span>{L.bcMap}</span>
     </nav>
     <header class="svet-hero" style="padding-bottom:12px;">
       <div class="svet-hero-inner">
@@ -45,38 +54,36 @@ const tableRows = Object.entries(tCountries)
     <EuropeMap />
 
     <section class="svet-section" style="margin-top:24px;">
-      <header class="svet-section-head"><h2>Zemědělství podle zemí</h2></header>
+      <header class="svet-section-head"><h2>{L.byCountry}</h2></header>
       <div style="overflow-x:auto; margin-top:8px;">
         <table style="width:100%; border-collapse:collapse; font-size:14px; min-width:640px;">
           <thead>
             <tr style="border-bottom:2px solid #e5e5e8; text-align:right;">
-              <th style="text-align:left; padding:8px 10px;">Země</th>
+              <th style="text-align:left; padding:8px 10px;">{L.country}</th>
               {TCOLS.map((c) => (<th style="padding:8px 10px; font-weight:700; white-space:nowrap;">{c.label}<br /><span style="font-weight:400; color:#888; font-size:11px;">{c.unit}</span></th>))}
             </tr>
           </thead>
           <tbody>
             {tableRows.map((r) => (
               <tr style="border-bottom:1px solid #eee;">
-                <td style="padding:8px 10px; white-space:nowrap;"><a href={`/svet/${r.slug}/`} style="color:#1a1a1a; text-decoration:none; font-weight:600;">{r.flag} {r.name}</a></td>
+                <td style="padding:8px 10px; white-space:nowrap;"><a href={localizePath(locale, `/svet/${r.slug}/`)} style="color:#1a1a1a; text-decoration:none; font-weight:600;">{r.flag} {cName(r)}</a></td>
                 {TCOLS.map((c) => (<td style="padding:8px 10px; text-align:right; font-variant-numeric:tabular-nums;">{fmt(r.values[c.key])}</td>))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p style="color:#888; font-size:12.5px; margin-top:10px;">Řazeno podle ceny zemědělské půdy. Nejnovější dostupný rok za každou zemi; „—" = data nejsou v daném zdroji k dispozici.</p>
+      <p style="color:#888; font-size:12.5px; margin-top:10px;">{L.sortNote}</p>
     </section>
 
     <section class="svet-section" style="margin-top:28px;">
-      <header class="svet-section-head"><h2>Zdroje a metodika</h2></header>
+      <header class="svet-section-head"><h2>{L.method}</h2></header>
       <p style="color:#555;font-size:14px;line-height:1.6;">
-        Data pocházejí z oficiálních evropských a světových statistik. Nejnovější dostupný rok
-        za každou zemi; některé mimoevropské a menší země nemusí mít všechny ukazatele (zobrazeny šedě).
-        Mapa staví na profilech zemí v sekci <a href="/svet/">Svět</a> — kliknutím na zemi přejdete na její detail.
+        {L.methodP} <a href={localizePath(locale, '/svet/')}>{L.svetLink}</a> {L.methodP2}
       </p>
       <ul style="color:#555;font-size:14px;line-height:1.7;">
         {sources.map((s) => (
-          <li><strong>{s.source}</strong>{s.url ? <> — <a href={s.url} rel="nofollow noopener" target="_blank">zdrojová data</a></> : null}</li>
+          <li><strong>{s.source}</strong>{s.url ? <> — <a href={s.url} rel="nofollow noopener" target="_blank">{L.srcData}</a></> : null}</li>
         ))}
       </ul>
     </section>

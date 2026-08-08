@@ -3,7 +3,15 @@ import Layout from '../../../layouts/Layout.astro';
 import { compareMatrix, fmtNum, vsReference } from '../../../lib/svet/render';
 import { buildColorMap, buildMultiSeriesModel, MULTI_OPTS } from '../../../lib/svet/multichart';
 import populationData from '../../../data/svet/population.json';
+import { localizePath } from '../../../i18n/utils';
+import { COUNTRY_NAMES, INDICATOR_LABELS, loc, type SvetLang } from '../../../i18n/svet';
 import '../../../styles/svet.css';
+
+const locale = Astro.locals.locale ?? 'cs';
+const lang = locale as SvetLang;
+const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+const cName = (p: { slug: string; nameCs: string }) => (locale === 'cs' ? p.nameCs : loc(COUNTRY_NAMES, p.slug, lang, p.nameCs));
+const indLabel = (k: string, fallback: string) => (locale === 'cs' ? fallback : loc(INDICATOR_LABELS, k, lang, fallback));
 
 const pops: Record<string, number> = (populationData as any).population ?? {};
 
@@ -26,7 +34,7 @@ const colorMap = buildColorMap(profiles.map((p: any) => p.slug));
 
 // Payload pro klienta: latest (tabulka) + série (graf) + populace/ag_land (přepočty)
 const payload = profiles.map((p: any) => ({
-  slug: p.slug, nameCs: p.nameCs, flag: p.flag, population: pops[p.slug] ?? null,
+  slug: p.slug, nameCs: cName(p), flag: p.flag, population: pops[p.slug] ?? null,
   agLand: p.indicators['ag_land']?.latest?.value ?? null,
   indicators: Object.fromEntries(Object.entries(p.indicators).map(([k, v]: any) => [k, {
     value: v.latest.value, period: v.latest.referencePeriod,
@@ -44,23 +52,29 @@ const defaultSel = ['cesko', ...topDefault];
 
 // SSR výchozího grafu (absolutní režim, výchozí ukazatel) — progresivní enhancement
 const initInputs = profiles.filter((p: any) => defaultSel.includes(p.slug)).map((p: any) => ({
-  slug: p.slug, name: p.nameCs, color: colorMap[p.slug], isRef: p.slug === 'cesko',
+  slug: p.slug, name: cName(p), color: colorMap[p.slug], isRef: p.slug === 'cesko',
   points: (p.indicators[defaultKey]?.series ?? []).map((pt: any) => ({ year: Number(pt.period), value: pt.value })),
 })).filter((s: any) => s.points.length);
 const chart = buildMultiSeriesModel(initInputs, MULTI_OPTS);
 const O = MULTI_OPTS;
 
-const title = 'Srovnání zemědělství zemí';
-const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — výnosy, plochy, produkce, ekonomika — vývoj v čase i srovnání s ČR. Zdroje Eurostat a World Bank.';
+const UI = {
+  cs: { title: 'Srovnání zemědělství zemí', description: 'Porovnejte zemědělské ukazatele zemí vedle sebe — výnosy, plochy, produkce, ekonomika — vývoj v čase i srovnání s ČR. Zdroje Eurostat a World Bank.', bcHome: 'Domů', bcSvet: 'Zemědělství ve světě', bcCurrent: 'Srovnání', indicator: 'Ukazatel:', recalc: 'Přepočet:', ariaRecalc: 'Přepočet hodnot', modeAbs: 'Absolutní', modePerCap: 'Na 1000 obyv.', modePerHa: 'Na ha půdy', comparing: 'Srovnáváte ukazatel:', chartHead: 'Vývoj v čase', chartHint: '— klikni na zemi níže pro přidání/odebrání', ariaChart: 'Graf vývoje vybraného ukazatele v čase', thCountry: 'Země', thValue: 'Hodnota', thVs: 'vs ČR', vsTitle: 'O kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku. ČR = 0 %.', noteStrong: 'vs ČR', note: '= o kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku (ČR = 0 %). Zdroj: Eurostat / World Bank · poslední dostupná data u každého ukazatele.', modenote: 'Tento ukazatel je už poměrový — přepočet na obyvatele/hektar se nepoužije.' },
+  sk: { title: 'Porovnanie poľnohospodárstva krajín', description: 'Porovnajte poľnohospodárske ukazovatele krajín vedľa seba — výnosy, plochy, produkciu, ekonomiku — vývoj v čase i porovnanie s Českom. Zdroje Eurostat a World Bank.', bcHome: 'Domov', bcSvet: 'Poľnohospodárstvo vo svete', bcCurrent: 'Porovnanie', indicator: 'Ukazovateľ:', recalc: 'Prepočet:', ariaRecalc: 'Prepočet hodnôt', modeAbs: 'Absolútne', modePerCap: 'Na 1000 obyv.', modePerHa: 'Na ha pôdy', comparing: 'Porovnávate ukazovateľ:', chartHead: 'Vývoj v čase', chartHint: '— kliknite na krajinu nižšie pre pridanie/odobratie', ariaChart: 'Graf vývoja vybraného ukazovateľa v čase', thCountry: 'Krajina', thValue: 'Hodnota', thVs: 'vs Česko', vsTitle: 'O koľko % je hodnota vyššia (+) alebo nižšia (−) než v Česku. Česko = 0 %.', noteStrong: 'vs Česko', note: '= o koľko % je hodnota vyššia (+) alebo nižšia (−) než v Česku (Česko = 0 %). Zdroj: Eurostat / World Bank · posledné dostupné dáta pri každom ukazovateli.', modenote: 'Tento ukazovateľ je už pomerový — prepočet na obyvateľov/hektár sa nepoužije.' },
+  pl: { title: 'Porównanie rolnictwa krajów', description: 'Porównaj wskaźniki rolnicze krajów obok siebie — plony, powierzchnie, produkcję, gospodarkę — rozwój w czasie i porównanie z Czechami. Źródła Eurostat i World Bank.', bcHome: 'Główna', bcSvet: 'Rolnictwo na świecie', bcCurrent: 'Porównanie', indicator: 'Wskaźnik:', recalc: 'Przeliczenie:', ariaRecalc: 'Przeliczenie wartości', modeAbs: 'Bezwzględne', modePerCap: 'Na 1000 mieszk.', modePerHa: 'Na ha ziemi', comparing: 'Porównujesz wskaźnik:', chartHead: 'Zmiany w czasie', chartHint: '— kliknij kraj poniżej, aby dodać/usunąć', ariaChart: 'Wykres zmian wybranego wskaźnika w czasie', thCountry: 'Kraj', thValue: 'Wartość', thVs: 'vs Czechy', vsTitle: 'O ile % wartość jest wyższa (+) lub niższa (−) niż w Czechach. Czechy = 0 %.', noteStrong: 'vs Czechy', note: '= o ile % wartość jest wyższa (+) lub niższa (−) niż w Czechach (Czechy = 0 %). Źródło: Eurostat / World Bank · najnowsze dostępne dane dla każdego wskaźnika.', modenote: 'Ten wskaźnik jest już względny — przeliczenie na mieszkańców/hektar nie ma zastosowania.' },
+} as const;
+const L = UI[locale as keyof typeof UI] ?? UI.cs;
+const title = L.title;
+const description = L.description;
 ---
 <Layout title={title} description={description}>
   <main class="svet-page svet-cmp">
     <nav class="svet-crumbs" aria-label="Drobečková navigace">
-      <a href="/">Domů</a>
+      <a href={localizePath(locale, '/')}>{L.bcHome}</a>
       <span aria-hidden="true">›</span>
-      <a href="/svet/">Zemědělství ve světě</a>
+      <a href={localizePath(locale, '/svet/')}>{L.bcSvet}</a>
       <span aria-hidden="true">›</span>
-      <span aria-current="page">Srovnání</span>
+      <span aria-current="page">{L.bcCurrent}</span>
     </nav>
     <header class="svet-hero">
       <div class="svet-hero-inner">
@@ -70,27 +84,27 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
       </div>
     </header>
     <section class="svet-section">
-      <label class="svet-cmp-pick">Ukazatel:
+      <label class="svet-cmp-pick">{L.indicator}
         <select id="svet-indicator">
           {Object.entries(indicatorMeta).map(([k, m]) => (
-            <option value={k} selected={k === defaultKey}>{m.label} ({m.unit})</option>
+            <option value={k} selected={k === defaultKey}>{indLabel(k, m.label)} ({m.unit})</option>
           ))}
         </select>
       </label>
-      <div class="svet-cmp-modes" id="svet-cmp-modes" role="group" aria-label="Přepočet hodnot">
-        <span class="svet-cmp-modes-lbl">Přepočet:</span>
-        <button type="button" data-mode="absolute" class="active">Absolutní</button>
-        <button type="button" data-mode="perCapita">Na 1000 obyv.</button>
-        <button type="button" data-mode="perHa">Na ha půdy</button>
+      <div class="svet-cmp-modes" id="svet-cmp-modes" role="group" aria-label={L.ariaRecalc}>
+        <span class="svet-cmp-modes-lbl">{L.recalc}</span>
+        <button type="button" data-mode="absolute" class="active">{L.modeAbs}</button>
+        <button type="button" data-mode="perCapita">{L.modePerCap}</button>
+        <button type="button" data-mode="perHa">{L.modePerHa}</button>
       </div>
-      <p class="svet-cmp-current">Srovnáváte ukazatel: <strong id="svet-cmp-current">{indicatorMeta[defaultKey]?.label} <span>({defaultUnit})</span></strong></p>
+      <p class="svet-cmp-current">{L.comparing} <strong id="svet-cmp-current">{indLabel(defaultKey, indicatorMeta[defaultKey]?.label)} <span>({defaultUnit})</span></strong></p>
       <p class="svet-cmp-modenote" id="svet-cmp-modenote"></p>
 
       <!-- ---- Graf vývoje v čase ---- -->
       <div class="svet-cmp-chartblock">
-        <div class="svet-cmp-charthead">Vývoj v čase <span class="svet-cmp-charthint">— klikni na zemi níže pro přidání/odebrání</span></div>
+        <div class="svet-cmp-charthead">{L.chartHead} <span class="svet-cmp-charthint">{L.chartHint}</span></div>
         <div class="svet-cmp-chart-wrap" id="svet-cmp-chart-wrap">
-          <svg class="svet-cmp-svg" id="svet-cmp-svg" viewBox={`0 0 ${O.w} ${O.h}`} role="img" aria-label="Graf vývoje vybraného ukazatele v čase">
+          <svg class="svet-cmp-svg" id="svet-cmp-svg" viewBox={`0 0 ${O.w} ${O.h}`} role="img" aria-label={L.ariaChart}>
             {chart.yTicks.map((t) => (
               <>
                 <line class="svet-chart-grid" x1={O.ml} x2={O.w - O.mr} y1={t.y} y2={t.y} />
@@ -118,7 +132,7 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
             return (
               <button type="button" class={`svet-chip${on ? ' on' : ''}${cz ? ' cz' : ''}`} data-slug={p.slug} aria-pressed={on ? 'true' : 'false'} disabled={cz}
                 style={on ? `border-color:${col}; background:${cz ? '#e7f0e2' : col + '1f'}` : ''}>
-                <i style={on ? `background:${col}` : ''}></i>{p.flag} {p.nameCs}{cz ? ' 🔒' : ''}
+                <i style={on ? `background:${col}` : ''}></i>{p.flag} {cName(p)}{cz ? ' 🔒' : ''}
               </button>
             );
           })}
@@ -127,20 +141,21 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
 
       <div class="svet-cmp-tablewrap">
         <table class="svet-cmp-table">
-          <thead><tr><th>#</th><th>Země</th><th>Hodnota <span id="svet-unit-h" class="svet-cmp-unit">{defaultUnit && `(${defaultUnit})`}</span></th><th title="O kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku. ČR = 0 %.">vs ČR</th></tr></thead>
+          <thead><tr><th>#</th><th>{L.thCountry}</th><th>{L.thValue} <span id="svet-unit-h" class="svet-cmp-unit">{defaultUnit && `(${defaultUnit})`}</span></th><th title={L.vsTitle}>{L.thVs}</th></tr></thead>
           <tbody id="svet-cmp-body">
             {rows.map((c, i) => {
               const cmp = refValue != null ? vsReference(c.value!, refValue) : null;
-              return (<tr><td>{i + 1}</td><td>{c.flag} <a href={`/svet/${c.slug}/`}>{c.nameCs}</a></td><td>{fmtNum(c.value!)}</td><td>{cmp ? `${cmp.dir === 'up' ? '+' : ''}${fmtNum(cmp.pct)} %` : '—'}</td></tr>);
+              return (<tr><td>{i + 1}</td><td>{c.flag} <a href={localizePath(locale, `/svet/${c.slug}/`)}>{cName(c as any)}</a></td><td>{fmtNum(c.value!)}</td><td>{cmp ? `${cmp.dir === 'up' ? '+' : ''}${fmtNum(cmp.pct)} %` : '—'}</td></tr>);
             })}
           </tbody>
         </table>
       </div>
-      <p class="svet-cmp-note"><strong>vs ČR</strong> = o kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku (ČR = 0 %). Zdroj: Eurostat / World Bank · poslední dostupná data u každého ukazatele.</p>
+      <p class="svet-cmp-note"><strong>{L.noteStrong}</strong> {L.note}</p>
     </section>
     <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
     <script type="application/json" id="svet-units" set:html={JSON.stringify(units)}></script>
     <script type="application/json" id="svet-colors" set:html={JSON.stringify(colorMap)}></script>
+    <script type="application/json" id="svet-cmp-ui" set:html={JSON.stringify({ numLocale, modenote: L.modenote, detailBase: localizePath(locale, '/svet/') })}></script>
     <script>
       import { normalizeValue, normApplies, type NormMode } from '../../../lib/svet/render';
       import { buildMultiSeriesModel, MULTI_OPTS, type SeriesInput } from '../../../lib/svet/multichart';
@@ -149,6 +164,8 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
       const dataEl = document.getElementById('svet-data');
       const unitsEl = document.getElementById('svet-units');
       const colorsEl = document.getElementById('svet-colors');
+      const cmpUI = JSON.parse(document.getElementById('svet-cmp-ui')?.textContent || '{}');
+      const DETAIL_BASE = cmpUI.detailBase || '/svet/';
       const sel = document.getElementById('svet-indicator') as HTMLSelectElement | null;
       const tbody = document.getElementById('svet-cmp-body');
       const unitH = document.getElementById('svet-unit-h');
@@ -162,7 +179,7 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
         const profiles: CmpProfile[] = JSON.parse(dataEl.textContent || '[]');
         const units: Record<string, string> = JSON.parse(unitsEl?.textContent || '{}');
         const colors: Record<string, string> = JSON.parse(colorsEl?.textContent || '{}');
-        const nf = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 });
+        const nf = new Intl.NumberFormat(cmpUI.numLocale || 'cs-CZ', { maximumFractionDigits: 2 });
         const fmt = (n: number) => nf.format(n).replace(/[  \s]/g, ' ');
         const byId = Object.fromEntries(profiles.map((p) => [p.slug, p]));
         const rawOf = (p: CmpProfile, key: string) => { const i = p.indicators[key]; return i && i.value != null ? i.value : null; };
@@ -241,7 +258,7 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
             btn.disabled = !normApplies(key, bm);
             btn.classList.toggle('active', bm === mode);
           });
-          if (noteEl) noteEl.textContent = normable(key) ? '' : 'Tento ukazatel je už poměrový — přepočet na obyvatele/hektar se nepoužije.';
+          if (noteEl) noteEl.textContent = normable(key) ? '' : (cmpUI.modenote || '');
 
           const ref = byId['cesko'];
           const refVal = ref ? conv(key, rawOf(ref, key), ref, mode) : null;
@@ -263,7 +280,7 @@ const description = 'Porovnejte zemědělské ukazatele zemí vedle sebe — vý
           tbody!.innerHTML = trows.map((r, i) => {
             let vs = '—';
             if (refVal) { const pct = Math.round((r.v / refVal - 1) * 100); vs = (pct > 0 ? '+' : '') + fmt(pct) + ' %'; }
-            return `<tr><td>${i + 1}</td><td>${r.flag} <a href="/svet/${r.slug}/">${r.nameCs}</a></td><td>${fmt(r.v)}</td><td>${vs}</td></tr>`;
+            return `<tr><td>${i + 1}</td><td>${r.flag} <a href="${DETAIL_BASE}${r.slug}/">${r.nameCs}</a></td><td>${fmt(r.v)}</td><td>${vs}</td></tr>`;
           }).join('');
 
           renderChart(key, mode);
