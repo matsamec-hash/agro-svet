@@ -88,7 +88,7 @@ const datasetJsonLd = datasetSchema({
   description,
   url: pageUrl,
   countryName: name,
-  keywords: [name, 'zemědělství', 'zemědělská statistika', 'produkce', ...sources.map((s) => s.name)],
+  keywords: [name, ...(locale === 'sk' ? ['poľnohospodárstvo', 'poľnohospodárska štatistika', 'produkcia'] : locale === 'pl' ? ['rolnictwo', 'statystyka rolna', 'produkcja'] : ['zemědělství', 'zemědělská statistika', 'produkce']), ...sources.map((s) => s.name)],
   temporalCoverage,
   dateModified: profile.generated,
   variables: inds.map((i) => ({ name: (locale === 'cs' ? i.label : loc(INDICATOR_LABELS, i.key, lang, i.label)), unitText: i.unit })),

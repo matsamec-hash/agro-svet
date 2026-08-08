@@ -31,7 +31,7 @@ export function localizePath(locale: Locale, path: string): string {
  *  noindex (servíruje cs tělo) dokud není lokalizován. */
 export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   cs: [],
-  sk: ['/data', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
+  sk: ['/data', '/svet', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
   uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace'],
   // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
@@ -47,7 +47,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // → index+self-canonical (noHreflang v Layoutu, žádné cross-locale alternates).
   // '/' = homepage indexable (má reálný PL feed přes article_translations).
   // '/novinky' = PL zpravodajský výpis (jen reálně přeložené články, žádný cs leak).
-  pl: ['/', '/novinky', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki'],
+  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
