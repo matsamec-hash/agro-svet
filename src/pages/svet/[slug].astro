@@ -1,8 +1,9 @@
 ---
-// Statická data zemí (build-svet.mjs) → prerender s getStaticPaths.
-// Bez prerender:true by se v output:'server' route servírovala jako SSR,
-// kde se props z getStaticPaths nepředávají → profile=undefined → 500.
-export const prerender = true;
+// SSR: profil země se načítá podle slugu z URL. Dřív prerender=true + getStaticPaths,
+// jenže prerendered routy nejdou middleware-rewritnout pod /sk//pl/ (Astro Node SSR →
+// „unable to find a component instance" → 302 na cs). Pro launch /svet v sk/pl musí
+// být route SSR. Data jsou statický JSON import (žádný runtime fetch) → edge-cache.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import IndicatorRow from '../../components/svet/IndicatorRow.astro';
 import RegionMap from '../../components/svet/RegionMap.astro';
@@ -14,22 +15,22 @@ import { SITE_URL } from '../../lib/config';
 import index from '../../data/svet/index.json';
 import '../../styles/svet.css';
 
-export async function getStaticPaths() {
-  const mods = import.meta.glob('../../data/svet/*.json', { eager: true });
-  const regionMods = import.meta.glob('../../data/svet/regions/*.json', { eager: true });
-  return index.countries
-    .filter((c) => !c.reference)
-    .map((c) => {
-      const profile = (mods[`../../data/svet/${c.slug}.json`] as any).default;
-      const regionGeo = (regionMods[`../../data/svet/regions/${c.slug}-geo.json`] as any)?.default ?? null;
-      const regionData = (regionMods[`../../data/svet/regions/${c.slug}.json`] as any)?.default ?? null;
-      return { params: { slug: c.slug }, props: { profile, regionGeo, regionData } };
-    });
+const { slug } = Astro.params;
+const known = index.countries.find((c) => c.slug === slug && !c.reference);
+const mods = import.meta.glob('../../data/svet/*.json', { eager: true });
+const regionMods = import.meta.glob('../../data/svet/regions/*.json', { eager: true });
+const profileMod = known ? (mods[`../../data/svet/${slug}.json`] as any) : null;
+if (!known || !profileMod) {
+  return new Response('Country not found', { status: 404 });
 }
-
-const { profile, regionGeo, regionData } = Astro.props as { profile: any; regionGeo: any; regionData: any };
+const profile = profileMod.default;
+const regionGeo = (regionMods[`../../data/svet/regions/${slug}-geo.json`] as any)?.default ?? null;
+const regionData = (regionMods[`../../data/svet/regions/${slug}.json`] as any)?.default ?? null;
 assertCountryProfile(profile);
 const hasMap = regionGeo && regionData;
+
+// Statická data → agresivní edge-cache (jako ostatní /svet SSR stránky).
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
 const refMods = import.meta.glob('../../data/svet/cesko.json', { eager: true });
 const ref = (Object.values(refMods)[0] as any).default;
