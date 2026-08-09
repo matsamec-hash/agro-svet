@@ -148,6 +148,9 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
         );
       })}
     </ul>
+    <!-- Jazykový přepínač — na mobilu (≤640) je skrytý v horní liště (místo pro
+         hamburger), tady v draweru zůstává dostupný. -->
+    <div class="mn-lang"><LangSwitcher /></div>
   </nav>
 </header>
 
@@ -536,10 +539,13 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
 
   @media (max-width: 640px) {
     .header-inner {
-      padding: 0 16px;
-      gap: 12px;
+      padding: 0 14px;
+      gap: 8px;
       height: 72px;
     }
+    /* Jazykový přepínač se na mobilu přesouvá do draweru (jinak vytlačí hamburger
+       mimo obrazovku na úzkých telefonech). :global — je z jiné komponenty. */
+    .header-inner :global(.lang-dd) { display: none; }
     .header-logo { padding: 6px 12px; }
     .header-logo span { font-size: 22px; }
     .search-icon-btn { width: 40px; height: 40px; }
@@ -553,6 +559,21 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
     .search-container { margin-left: auto; }
     /* Search form slide-down starts below new header height */
     .search-form { top: 72px; padding: 10px 16px; }
+  }
+  /* Velmi úzké telefony (≤360, staré Androidy / SE) — zmenši logo + login, ať se
+     hamburger vejde i tam. */
+  @media (max-width: 360px) {
+    .header-inner { gap: 6px; padding: 0 12px; }
+    .header-logo { padding: 5px 9px; }
+    .header-logo span { font-size: 18px; }
+    .guest-link { padding: 7px 10px; font-size: 13px; }
+  }
+
+  /* Drawer: sekce jazykového přepínače dole */
+  .mn-lang {
+    padding: 16px 24px 4px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 4px;
   }
 </style>
 
