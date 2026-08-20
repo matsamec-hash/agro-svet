@@ -12,6 +12,18 @@ export interface PrevodyHmotnostContent extends CalcMeta {
   /** Lokalizovaný blok „další stránky" — jen locale, které ho mají přeložený
    *  (pl). Bez něj stránka renderuje výchozí cs seznam (cs/sk/uk beze změny). */
   related?: { heading: string; items: { href: string; label: string }[] };
+  /** Referenční tabulky + blok převodu výnosů. Volitelné se stejnou logikou
+   *  jako `related`: locale bez překladu (sk/uk) renderuje cs blok, takže se
+   *  jeho výstup nemění. Bez tohohle byla /pl stránka z poloviny česky. */
+  sections?: {
+    refHeading: string;
+    tables: { caption: string; rows: [string, string][] }[];
+    yieldHeading: string;
+    yieldLede: string;
+    yieldCols: [string, string, string, string];
+    yieldRows: [string, string, string, string][];
+    faqHeading: string;
+  };
 }
 
 export const content: Record<Locale, PrevodyHmotnostContent> = {
@@ -37,6 +49,44 @@ export const content: Record<Locale, PrevodyHmotnostContent> = {
       { q: 'Kolik kg je 1 libra (pound, lb)?', a: '1 libra (lb) = 0,45359237 kg, prakticky 0,4536 kg. Rychlý odhad: lb × 0,5 ≈ kg. Libra se používá v USDA reportech, na CBOT futures (sójový olej v ¢/lb, live cattle v ¢/lb) a v amerických krmných tabulkách.' },
       { q: 'Co je hektolitrová váha obilí?', a: 'Hmotnost 100 litrů obilí v kg — kvalitativní parametr pro výkup. Pšenice potravinářská 78+ kg/hl, krmná pod 74 kg/hl. Vyšší hl váha = lepší škrob/olej, vyšší cena. Rozdíl ceny krmné a potravinářské třídy může být 1 500+ Kč/t.' },
     ],
+    sections: {
+      refHeading: 'Referenční tabulka — nejčastější převody',
+      tables: [
+        { caption: 'Tuna (t) na další jednotky', rows: [
+          ['1 t', '= 1 000 kg'], ['1 t', '= 10 q (metrických centů)'],
+          ['1 t', '≈ 2 204,6 lb (anglických liber)'], ['1 t pšenice / sója', '≈ 36,7 bušlu'],
+          ['1 t kukuřice / žito', '≈ 39,4 bušlu'], ['1 t ječmen', '≈ 45,9 bušlu'],
+          ['1 t oves', '≈ 68,9 bušlu'],
+        ] },
+        { caption: 'Bušl (USDA standard) — kg / lb', rows: [
+          ['Pšenice / sója', '27,2155 kg / 60 lb'], ['Kukuřice / žito', '25,4012 kg / 56 lb'],
+          ['Řepka (canola)', '22,6796 kg / 50 lb'], ['Ječmen', '21,7724 kg / 48 lb'],
+          ['Oves', '14,5150 kg / 32 lb'],
+        ] },
+        { caption: 'Cent (q) a libra (lb)', rows: [
+          ['1 q', '= 100 kg = 0,1 t'], ['10 q', '= 1 t'], ['1 lb', '= 0,4536 kg'],
+          ['1 kg', '= 2,2046 lb'], ['1 US short ton', '= 907,18 kg = 2 000 lb'],
+          ['1 UK long ton', '= 1 016 kg = 2 240 lb'],
+        ] },
+        { caption: 'Hektolitrová váha pro výkup', rows: [
+          ['Pšenice potrav.', '78–84 kg/hl (třída A/E)'], ['Pšenice krmná', 'pod 74 kg/hl'],
+          ['Ječmen sladovnický', 'min. 64 kg/hl'], ['Ječmen krmný', '62–66 kg/hl'],
+          ['Žito potrav.', '72+ kg/hl'], ['Oves potrav.', '50+ kg/hl'],
+          ['Řepka ozimá', 'min. 62 kg/hl'],
+        ] },
+      ],
+      yieldHeading: 'Převod výnosů: bušl/akr ↔ t/hektar',
+      yieldLede: 'Pro porovnání US a EU výnosů. CBOT publikuje výnosy v bushel/acre, EU statistiky v t/ha. Násobicí faktor záleží na komoditě (kvůli různé hmotnosti bušlu a převodu akr→ha).',
+      yieldCols: ['Komodita', 'bu/ac → t/ha', 'Příklad US výnos', 'Ekvivalent CZ'],
+      yieldRows: [
+        ['Pšenice / sója', '× 0,06725', '50 bu/ac', '≈ 3,36 t/ha'],
+        ['Kukuřice / žito', '× 0,06277', '175 bu/ac', '≈ 10,98 t/ha'],
+        ['Řepka (canola)', '× 0,05604', '40 bu/ac', '≈ 2,24 t/ha'],
+        ['Ječmen', '× 0,05381', '80 bu/ac', '≈ 4,30 t/ha'],
+        ['Oves', '× 0,03587', '70 bu/ac', '≈ 2,51 t/ha'],
+      ],
+      faqHeading: 'Časté otázky',
+    },
   },
   sk: {
     title: 'Prevody jednotiek hmotnosti — tona, q, kg, bušel, libra',
@@ -91,6 +141,44 @@ export const content: Record<Locale, PrevodyHmotnostContent> = {
         { href: '/pl/slovnik/', label: '⚖️ Słownik — jednostki i miary' },
         { href: '/pl/stroje/', label: '🚜 Katalog ciągników i maszyn' },
       ],
+    },
+    sections: {
+      refHeading: 'Tabela przeliczeniowa — najczęstsze przeliczenia',
+      tables: [
+        { caption: 'Tona (t) na inne jednostki', rows: [
+          ['1 t', '= 1 000 kg'], ['1 t', '= 10 q (kwintali)'],
+          ['1 t', '≈ 2 204,6 lb (funtów)'], ['1 t pszenicy / soi', '≈ 36,7 buszla'],
+          ['1 t kukurydzy / żyta', '≈ 39,4 buszla'], ['1 t jęczmienia', '≈ 45,9 buszla'],
+          ['1 t owsa', '≈ 68,9 buszla'],
+        ] },
+        { caption: 'Buszel (standard USDA) — kg / lb', rows: [
+          ['Pszenica / soja', '27,2155 kg / 60 lb'], ['Kukurydza / żyto', '25,4012 kg / 56 lb'],
+          ['Rzepak (canola)', '22,6796 kg / 50 lb'], ['Jęczmień', '21,7724 kg / 48 lb'],
+          ['Owies', '14,5150 kg / 32 lb'],
+        ] },
+        { caption: 'Kwintal (q) i funt (lb)', rows: [
+          ['1 q', '= 100 kg = 0,1 t'], ['10 q', '= 1 t'], ['1 lb', '= 0,4536 kg'],
+          ['1 kg', '= 2,2046 lb'], ['1 US short ton', '= 907,18 kg = 2 000 lb'],
+          ['1 UK long ton', '= 1 016 kg = 2 240 lb'],
+        ] },
+        { caption: 'Masa hektolitrowa przy skupie', rows: [
+          ['Pszenica konsumpcyjna', '78–84 kg/hl (klasa A/E)'], ['Pszenica paszowa', 'poniżej 74 kg/hl'],
+          ['Jęczmień browarny', 'min. 64 kg/hl'], ['Jęczmień paszowy', '62–66 kg/hl'],
+          ['Żyto konsumpcyjne', '72+ kg/hl'], ['Owies konsumpcyjny', '50+ kg/hl'],
+          ['Rzepak ozimy', 'min. 62 kg/hl'],
+        ] },
+      ],
+      yieldHeading: 'Przeliczanie plonów: buszel/akr ↔ t/hektar',
+      yieldLede: 'Do porównywania plonów z USA i UE. CBOT podaje plony w bushel/acre, statystyki UE w t/ha. Mnożnik zależy od towaru (różna masa buszla i przeliczenie akr→ha).',
+      yieldCols: ['Towar', 'bu/ac → t/ha', 'Przykładowy plon USA', 'Odpowiednik w t/ha'],
+      yieldRows: [
+        ['Pszenica / soja', '× 0,06725', '50 bu/ac', '≈ 3,36 t/ha'],
+        ['Kukurydza / żyto', '× 0,06277', '175 bu/ac', '≈ 10,98 t/ha'],
+        ['Rzepak (canola)', '× 0,05604', '40 bu/ac', '≈ 2,24 t/ha'],
+        ['Jęczmień', '× 0,05381', '80 bu/ac', '≈ 4,30 t/ha'],
+        ['Owies', '× 0,03587', '70 bu/ac', '≈ 2,51 t/ha'],
+      ],
+      faqHeading: 'Częste pytania',
     },
   },
 };

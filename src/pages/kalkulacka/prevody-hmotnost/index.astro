@@ -13,6 +13,9 @@ import { localizeInternalHref } from '../../../i18n/utils';
 const locale = Astro.locals.locale ?? 'cs';
 const c = content[locale] ?? content.cs;
 const cr = crumbs[locale] ?? crumbs.cs;
+// Tabulky + blok výnosů: locale bez překladu (sk/uk) dostane cs, tedy dnešní
+// výstup. Dřív natvrdo česky v šabloně → /pl byla z poloviny česky.
+const sec = c.sections ?? content.cs.sections!;
 
 const canonical = `${SITE_URL}/kalkulacka/prevody-hmotnost/`;
 const faqItems = c.faq;
@@ -62,81 +65,34 @@ const faqJsonLd = faqPageSchema(faqItems);
     />
 
     <section class="ph-reference">
-      <h2>Referenční tabulka — nejčastější převody</h2>
+      <h2>{sec.refHeading}</h2>
       <div class="ph-tables">
-        <table class="ph-table">
-          <caption>Tuna (t) na další jednotky</caption>
-          <tbody>
-            <tr><th>1 t</th><td>= 1 000 kg</td></tr>
-            <tr><th>1 t</th><td>= 10 q (metrických centů)</td></tr>
-            <tr><th>1 t</th><td>≈ 2 204,6 lb (anglických liber)</td></tr>
-            <tr><th>1 t pšenice / sója</th><td>≈ 36,7 bušlu</td></tr>
-            <tr><th>1 t kukuřice / žito</th><td>≈ 39,4 bušlu</td></tr>
-            <tr><th>1 t ječmen</th><td>≈ 45,9 bušlu</td></tr>
-            <tr><th>1 t oves</th><td>≈ 68,9 bušlu</td></tr>
-          </tbody>
-        </table>
-
-        <table class="ph-table">
-          <caption>Bušl (USDA standard) — kg / lb</caption>
-          <tbody>
-            <tr><th>Pšenice / sója</th><td>27,2155 kg / 60 lb</td></tr>
-            <tr><th>Kukuřice / žito</th><td>25,4012 kg / 56 lb</td></tr>
-            <tr><th>Řepka (canola)</th><td>22,6796 kg / 50 lb</td></tr>
-            <tr><th>Ječmen</th><td>21,7724 kg / 48 lb</td></tr>
-            <tr><th>Oves</th><td>14,5150 kg / 32 lb</td></tr>
-          </tbody>
-        </table>
-
-        <table class="ph-table">
-          <caption>Cent (q) a libra (lb)</caption>
-          <tbody>
-            <tr><th>1 q</th><td>= 100 kg = 0,1 t</td></tr>
-            <tr><th>10 q</th><td>= 1 t</td></tr>
-            <tr><th>1 lb</th><td>= 0,4536 kg</td></tr>
-            <tr><th>1 kg</th><td>= 2,2046 lb</td></tr>
-            <tr><th>1 US short ton</th><td>= 907,18 kg = 2 000 lb</td></tr>
-            <tr><th>1 UK long ton</th><td>= 1 016 kg = 2 240 lb</td></tr>
-          </tbody>
-        </table>
-
-        <table class="ph-table">
-          <caption>Hektolitrová váha pro výkup</caption>
-          <tbody>
-            <tr><th>Pšenice potrav.</th><td>78–84 kg/hl (třída A/E)</td></tr>
-            <tr><th>Pšenice krmná</th><td>pod 74 kg/hl</td></tr>
-            <tr><th>Ječmen sladovnický</th><td>min. 64 kg/hl</td></tr>
-            <tr><th>Ječmen krmný</th><td>62–66 kg/hl</td></tr>
-            <tr><th>Žito potrav.</th><td>72+ kg/hl</td></tr>
-            <tr><th>Oves potrav.</th><td>50+ kg/hl</td></tr>
-            <tr><th>Řepka ozimá</th><td>min. 62 kg/hl</td></tr>
-          </tbody>
-        </table>
+        {sec.tables.map((t) => (
+          <table class="ph-table">
+            <caption>{t.caption}</caption>
+            <tbody>
+              {t.rows.map(([k, v]) => <tr><th>{k}</th><td>{v}</td></tr>)}
+            </tbody>
+          </table>
+        ))}
       </div>
     </section>
 
     <section class="ph-yield">
-      <h2>Převod výnosů: bušl/akr ↔ t/hektar</h2>
-      <p class="ph-yield-lede">
-        Pro porovnání US a EU výnosů. CBOT publikuje výnosy v bushel/acre,
-        EU statistiky v t/ha. Násobicí faktor záleží na komoditě (kvůli různé hmotnosti bušlu a převodu akr→ha).
-      </p>
+      <h2>{sec.yieldHeading}</h2>
+      <p class="ph-yield-lede">{sec.yieldLede}</p>
       <table class="ph-table">
         <thead>
-          <tr><th>Komodita</th><th>bu/ac → t/ha</th><th>Příklad US výnos</th><th>Ekvivalent CZ</th></tr>
+          <tr>{sec.yieldCols.map((col) => <th>{col}</th>)}</tr>
         </thead>
         <tbody>
-          <tr><td>Pšenice / sója</td><td>× 0,06725</td><td>50 bu/ac</td><td>≈ 3,36 t/ha</td></tr>
-          <tr><td>Kukuřice / žito</td><td>× 0,06277</td><td>175 bu/ac</td><td>≈ 10,98 t/ha</td></tr>
-          <tr><td>Řepka (canola)</td><td>× 0,05604</td><td>40 bu/ac</td><td>≈ 2,24 t/ha</td></tr>
-          <tr><td>Ječmen</td><td>× 0,05381</td><td>80 bu/ac</td><td>≈ 4,30 t/ha</td></tr>
-          <tr><td>Oves</td><td>× 0,03587</td><td>70 bu/ac</td><td>≈ 2,51 t/ha</td></tr>
+          {sec.yieldRows.map((row) => <tr>{row.map((cell) => <td>{cell}</td>)}</tr>)}
         </tbody>
       </table>
     </section>
 
     <section class="ph-faq">
-      <h2>Časté otázky</h2>
+      <h2>{sec.faqHeading}</h2>
       {faqItems.map((item) => (
         <details class="ph-faq-item">
           <summary>{item.q}</summary>
