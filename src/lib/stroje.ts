@@ -1,4 +1,5 @@
 // YAML imports parsed at compile-time by @modyfi/vite-plugin-yaml — no runtime js-yaml.
+import { localizeEngine, localizeVideoTitle } from './stroje-data-i18n';
 
 export type StrojKategorie =
   | 'traktory' | 'kombajny'
@@ -427,12 +428,28 @@ export function localizePresentToken(b: StrojBrand, locale: string): StrojBrand 
   return b;
 }
 
+/** Česká datová pole u modelu (`engine`, `youtube_title`) přepiš do locale.
+ *  Overlay YAML je nepokrývá — `models` v overlayi nese jen popis. */
+export function localizeModelDataTokens(b: StrojBrand, locale: string): StrojBrand {
+  if (locale === 'cs') return b;
+  const c = b as any;
+  for (const cat of Object.values(c.categories || {}) as any[]) {
+    for (const s of cat.series || []) {
+      for (const m of s.models || []) {
+        if (typeof m.engine === 'string') m.engine = localizeEngine(m.engine, locale);
+        if (typeof m.youtube_title === 'string') m.youtube_title = localizeVideoTitle(m.youtube_title, locale);
+      }
+    }
+  }
+  return b;
+}
+
 function localizeBrand(base: StrojBrand, locale: string): StrojBrand {
   const ov = getOverlay(base.slug, locale);
   // Bez overlaye by applyStrojOverlay vrátil base BEZ klonu — token swap by pak
   // přepsal sdílený cs objekt. Proto pro ne-cs bez overlaye klonuj explicitně.
   const merged = ov ? applyStrojOverlay(base, ov) : (locale === 'cs' ? base : structuredClone(base));
-  return localizePresentToken(merged, locale);
+  return localizeModelDataTokens(localizePresentToken(merged, locale), locale);
 }
 
 let cachedBrands: StrojBrand[] | null = null;
