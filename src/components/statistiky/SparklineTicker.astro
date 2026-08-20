@@ -1,7 +1,7 @@
 ---
 // src/components/statistiky/SparklineTicker.astro
 import type { TimeSeriesPoint } from '../../lib/czso';
-import { useTranslations } from '../../i18n/utils';
+import { bcp47, useTranslations } from '../../i18n/utils';
 
 export interface SparklineMetric {
   name: string;
@@ -23,15 +23,18 @@ const t = useTranslations(locale);
 // Vysvětlení hodnot: delta = meziroční změna ceny (r/r), sparkline = 12 měsíců.
 // change počítá czso.ts vs cena o rok dřív → r/r (viz trhInsight „r/r").
 const EXPL = {
-  cs: { delta: 'Meziroční změna ceny (r/r)', legend: '▲▼ meziroční změna ceny (r/r) · křivka = posledních 12 měsíců' },
-  sk: { delta: 'Medziročná zmena ceny (r/r)', legend: '▲▼ medziročná zmena ceny (r/r) · krivka = posledných 12 mesiacov' },
-  pl: { delta: 'Zmiana roczna ceny (r/r)', legend: '▲▼ zmiana roczna ceny (r/r) · wykres = ostatnie 12 miesięcy' },
+  cs: { delta: 'Meziroční změna ceny (r/r)', legend: '▲▼ meziroční změna ceny (r/r) · křivka = posledních 12 měsíců', change: 'změna' },
+  sk: { delta: 'Medziročná zmena ceny (r/r)', legend: '▲▼ medziročná zmena ceny (r/r) · krivka = posledných 12 mesiacov', change: 'zmena' },
+  pl: { delta: 'Zmiana roczna ceny (r/r)', legend: '▲▼ zmiana roczna ceny (r/r) · wykres = ostatnie 12 miesięcy', change: 'zmiana' },
+  uk: { delta: 'Річна зміна ціни (р/р)', legend: '▲▼ річна зміна ціни (р/р) · крива = останні 12 місяців', change: 'зміна' },
 } as const;
 const expl = EXPL[locale as keyof typeof EXPL] ?? EXPL.cs;
 
 function fmt(n: number): string {
-  if (n >= 1000) return n.toLocaleString('cs-CZ', { maximumFractionDigits: 0 });
-  return n.toLocaleString('cs-CZ', { maximumFractionDigits: 2 });
+  // Číselný formát byl natvrdo cs-CZ i pod /pl a /uk.
+  const nl = bcp47(locale);
+  if (n >= 1000) return n.toLocaleString(nl, { maximumFractionDigits: 0 });
+  return n.toLocaleString(nl, { maximumFractionDigits: 2 });
 }
 
 function buildSparklinePath(series: TimeSeriesPoint[], width: number, height: number): string {
@@ -60,7 +63,7 @@ function buildSparklinePath(series: TimeSeriesPoint[], width: number, height: nu
     const range = maxVal - minVal || 1;
     const lastY = 24 - ((lastVal - minVal) / range) * 24;
     return (
-      <a class="sp-ticker-card" href={m.href ?? m.anchor} aria-label={m.changePct !== null ? `${m.name}, ${fmt(m.value)} ${m.unit}, změna ${m.changePct.toFixed(1)}%` : `${m.name}, ${fmt(m.value)} ${m.unit}`}>
+      <a class="sp-ticker-card" href={m.href ?? m.anchor} aria-label={m.changePct !== null ? `${m.name}, ${fmt(m.value)} ${m.unit}, ${expl.change} ${m.changePct.toFixed(1)}%` : `${m.name}, ${fmt(m.value)} ${m.unit}`}>
         <span class="sp-ticker-name">{m.name}</span>
         <span class="sp-ticker-value">{fmt(m.value)}<small> {m.unit}</small></span>
         {m.changePct !== null && (

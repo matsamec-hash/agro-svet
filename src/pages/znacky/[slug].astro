@@ -302,15 +302,15 @@ const modelListJsonLd = brandModels.length > 0
     {brandCompares.length > 0 && (
       <section class="hub-section" aria-labelledby="srovnani-znacek-heading">
         <header class="hub-section-head">
-          <h2 id="srovnani-znacek-heading">Porovnat {znacka.data.name} s jinou značkou</h2>
+          <h2 id="srovnani-znacek-heading">{tf(locale, 'cat.zn.d.brandCmpH', { brand: znacka.data.name })}</h2>
         </header>
         <div class="enc-grid">
           {brandCompares.map((p) => {
             const other = p.a.slug === znacka.id ? p.b : p.a;
             return (
-              <a href={`/znacky/srovnani/${p.combo}/`} class="enc-card">
+              <a href={localizeInternalHref(locale, `/znacky/srovnani/${p.combo}/`)} class="enc-card">
                 <h3>{znacka.data.name} vs {other.name}</h3>
-                <p>Srovnání výkonu, počtu modelů a přímé souboje konkrétních strojů.</p>
+                <p>{tr('cat.zn.d.brandCmpDesc')}</p>
               </a>
             );
           })}

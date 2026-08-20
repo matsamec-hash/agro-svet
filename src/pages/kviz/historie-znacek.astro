@@ -93,7 +93,7 @@ const articleJsonLd = {
         <div class="kv-explanation" id="kv-explanation" hidden>
           <strong id="kv-verdict">—</strong>
           <p id="kv-explain-text">—</p>
-          <a id="kv-source" href="#" hidden>Více v slovníku →</a>
+          <a id="kv-source" href="#" hidden>{tr('kvz.q.source')}</a>
           <button class="kv-btn-next" id="kv-next">{tr('kvz.h.next')}</button>
         </div>
       </div>
@@ -106,7 +106,7 @@ const articleJsonLd = {
         <p class="kv-result-score"><strong id="kv-result-score">0</strong> / {QUESTIONS.length} {tr('kvz.h.correctOf')}</p>
         <p class="kv-result-desc" id="kv-result-desc">—</p>
         <div class="kv-result-cta">
-          <button class="kv-btn-restart" id="kv-restart">Hrát znovu</button>
+          <button class="kv-btn-restart" id="kv-restart">{tr('kvz.q.restart')}</button>
           <a href={localizeInternalHref(locale, '/kviz/')} class="kv-btn-ghost">{tr('kvz.h.more')}</a>
           <a href={localizeInternalHref(locale, '/slovnik/')} class="kv-btn-ghost">{tr('plod.d.rlGloss')}</a>
         </div>

@@ -9,7 +9,8 @@ import { tagStyle, getCategoryColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
 import { breadcrumbSchema } from '../../../../lib/structured-data';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../../../lib/articles-i18n';
-import { localizePath, t, localizedCategory, bcp47 } from '../../../../i18n/utils';
+import { localizePath, t, tf, plural, localizedCategory, bcp47 } from '../../../../i18n/utils';
+import { localizedTag } from '../../../../i18n/novinky-tagy';
 import { isNewsCategoryHidden } from '../../../../i18n/nav';
 import { NEWS_CATEGORIES, newsCategorySlug } from '../../../../lib/news-category';
 
@@ -19,25 +20,12 @@ const locale = Astro.locals.locale ?? 'cs';
 // Jurisdikčně uzamčená kategorie (CZ dotace/legislativa/trh) pod /sk neexistuje.
 if (isNewsCategoryHidden(locale, kat)) return Astro.rewrite('/404');
 
-const categoryDescriptions: Record<string, string> = {
-  technika: 'Novinky ze zemědělské techniky — traktory, kombajny, postřikovače, secí stroje a další stroje.',
-  dotace: 'Dotační programy, podpora zemědělství, Společná zemědělská politika EU, národní dotace.',
-  trh: 'Vývoj cen zemědělských komodit, trh s mlékem, masem, obilím, trendy a analýzy.',
-  legislativa: 'Novely zákonů, nařízení a vyhlášky pro zemědělce, pachty, udržitelnost.',
-  znacky: 'Zprávy od výrobců zemědělské techniky, tiskové zprávy, nové modely.',
-  novinky: 'Obecné zemědělské novinky.',
-};
-const categoryDescriptionsSk: Record<string, string> = {
-  technika: 'Novinky z poľnohospodárskej techniky — traktory, kombajny, postrekovače, sejačky a ďalšie stroje.',
-  dotace: 'Dotačné programy, podpora poľnohospodárstva, Spoločná poľnohospodárska politika EÚ, národné dotácie.',
-  trh: 'Vývoj cien poľnohospodárskych komodít, trh s mliekom, mäsom, obilím, trendy a analýzy.',
-  legislativa: 'Novely zákonov, nariadenia a vyhlášky pre poľnohospodárov, nájmy, udržateľnosť.',
-  znacky: 'Správy od výrobcov poľnohospodárskej techniky, tlačové správy, nové modely.',
-  novinky: 'Všeobecné poľnohospodárske novinky.',
-};
+// Popisy kategorií byly dvě cs/sk mapy přímo ve stránce — pl a uk tak spadly
+// do české. Teď jdou přes ui klíče `nov.kat.desc.<kat>` (parita hlídaná testem).
 const label = localizedCategory(locale, kat);
-const description = (locale === 'sk' ? categoryDescriptionsSk : categoryDescriptions)[kat]
-  ?? (locale === 'sk' ? `Články v kategórii ${label}.` : `Články v kategorii ${label}.`);
+const descKey = `nov.kat.desc.${kat}`;
+const descFromUi = t(locale, descKey);
+const description = descFromUi !== descKey ? descFromUi : tf(locale, 'nov.kat.descFallback', { label });
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: t(locale, 'nav.home'), url: localizePath(locale, '/') },
@@ -112,9 +100,12 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
         <span class="kat-count">
           {items.length === 0
             ? t(locale, 'nov.noArticles')
-            : (locale === 'sk'
-                ? `${items.length} ${items.length === 1 ? 'článok' : items.length < 5 ? 'články' : 'článkov'}`
-                : `${items.length} ${items.length === 1 ? 'článek' : items.length < 5 ? 'články' : 'článků'}`)}
+            : tf(locale, 'nov.kat.count', {
+                count: items.length,
+                unit: plural(locale, items.length, {
+                  one: t(locale, 'nov.article.one'), few: t(locale, 'nov.article.few'), many: t(locale, 'nov.article.many'),
+                }),
+              })}
         </span>
         <span class="kat-divider"></span>
         <p class="kat-desc">{description}</p>
@@ -130,7 +121,7 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;">
           {topTags.map(([tagName, count]) => (
             <a href={localizePath(locale, `/novinky/tema/${encodeURIComponent(tagName)}/`)} class="nov-tag" style={tagStyle(tagName)}>
-              #{tagName} <span class="nov-tag-count">{count}</span>
+              #{localizedTag(locale, tagName)} <span class="nov-tag-count">{count}</span>
             </a>
           ))}
         </div>

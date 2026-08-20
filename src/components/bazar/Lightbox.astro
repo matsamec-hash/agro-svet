@@ -1,12 +1,17 @@
 ---
 // Global single-instance lightbox used by BazarGallery + ImageUpload.
 // Any image (<img data-lightbox data-gallery="id">) will trigger it on click.
+// Renderuje ho Layout, takže jeho aria-labels byly na KAŽDÉ stránce webu —
+// natvrdo česky i pod /pl, /sk a /uk.
+import { useTranslations, getLocaleFromUrl } from '../../i18n/utils';
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 ---
 
-<div id="lb-root" class="lb-root" hidden role="dialog" aria-modal="true" aria-label="Galerie fotek">
-  <button type="button" class="lb-close" aria-label="Zavřít (Esc)">✕</button>
-  <button type="button" class="lb-prev" aria-label="Předchozí">‹</button>
-  <button type="button" class="lb-next" aria-label="Další">›</button>
+<div id="lb-root" class="lb-root" hidden role="dialog" aria-modal="true" aria-label={tr('a11y.lb.gallery')}>
+  <button type="button" class="lb-close" aria-label={tr('a11y.lb.close')}>✕</button>
+  <button type="button" class="lb-prev" aria-label={tr('a11y.lb.prev')}>‹</button>
+  <button type="button" class="lb-next" aria-label={tr('a11y.lb.next')}>›</button>
   <div class="lb-stage">
     <img id="lb-img" alt="" />
   </div>

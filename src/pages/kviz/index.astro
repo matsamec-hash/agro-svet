@@ -72,12 +72,12 @@ const quizCopy = (q: (typeof quizzes)[number]) =>
     <nav class="breadcrumb" aria-label="Cesta">
       <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <span aria-hidden="true">›</span>
-      <span class="current">Kvízy</span>
+      <span class="current">{tr('kvz.hub.crumb')}</span>
     </nav>
 
     <header class="hub-head">
       <span class="kicker">{tf(locale, 'kvz.hub.kicker', { count: visibleQuizzes.length })}</span>
-      <h1>Otestujte své znalosti</h1>
+      <h1>{tr('kvz.hub.h1')}</h1>
       <p class="lede">
         {tr('kvz.hub.intro')}
       </p>
@@ -90,11 +90,11 @@ const quizCopy = (q: (typeof quizzes)[number]) =>
           <h2>{q.title}</h2>
           <p>{q.description}</p>
           <div class="quiz-meta">
-            <span><strong>{q.questions}</strong> otázek</span>
+            <span><strong>{q.questions}</strong> {tr('kvz.card.questions')}</span>
             <span class="dot">·</span>
             <span>{q.duration}</span>
           </div>
-          <span class="quiz-cta">Spustit kvíz →</span>
+          <span class="quiz-cta">{tr('kvz.card.cta')}</span>
         </a>
       ))}
     </div>

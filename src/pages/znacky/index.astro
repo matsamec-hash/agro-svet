@@ -6,15 +6,18 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
-import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47 } from '../../i18n/utils';
 import { ZNACKA_LOGO } from '../../lib/agro-integrace';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 const NL = '\n';
 
-const znacky = await getCollection('znacky');
-const sorted = znacky.sort((a, b) => a.data.name.localeCompare(b.data.name, 'cs'));
+// Hub četl natvrdo českou kolekci, přestože znacky-{sk,uk,pl} existují v plné
+// paritě (22/22) — /pl/znacky/ tak servírovalo 22 českých popisů a zemí původu.
+const ZNACKY_COLLECTION = { cs: 'znacky', sk: 'znackySk', pl: 'znackyPl', uk: 'znackyUk' } as const;
+const znacky = await getCollection(ZNACKY_COLLECTION[locale] ?? 'znacky');
+const sorted = znacky.sort((a, b) => a.data.name.localeCompare(b.data.name, locale));
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
@@ -24,9 +27,9 @@ const itemListJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: tr('cat.zn.h1'),
-  description: locale === 'sk' ? tr('cat.zn.desc') : 'Přehled světových i domácích výrobců zemědělských strojů.',
+  description: locale === 'cs' ? 'Přehled světových i domácích výrobců zemědělských strojů.' : tr('cat.zn.desc'),
   url: `${SITE_URL}${localizePath(locale, '/znacky/')}`,
-  inLanguage: locale === 'sk' ? 'sk-SK' : 'cs-CZ',
+  inLanguage: bcp47(locale),
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: sorted.length,

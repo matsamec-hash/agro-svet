@@ -96,7 +96,7 @@ const faqJsonLd = faqPageSchema(faq);
     )}
 
     <section class="faq">
-      <h2>Časté otázky</h2>
+      <h2>{tr('sez.faqH')}</h2>
       {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
     </section>
 

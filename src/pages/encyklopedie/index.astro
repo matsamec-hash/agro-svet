@@ -8,17 +8,18 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
-import { useTranslations, getLocaleFromUrl, localizePath, tf, localizeInternalHref } from '../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, localizePath, tf, localizeInternalHref, bcp47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
-const isSk = locale === 'sk';
-const isPl = locale === 'pl';
 const t = useTranslations(locale);
-const base = isSk ? '/sk' : isPl ? '/pl' : '';
+const base = locale === 'cs' ? '' : `/${locale}`;
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
-const items = await getCollection(isSk ? 'encyklopedieSk' : isPl ? 'encyklopediePl' : 'encyklopedie');
-const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, isSk ? 'sk' : isPl ? 'pl' : 'cs'));
+// Vnořené ternáře vynechávaly uk — přestože `encyklopedieUk` existuje, ukrajinský
+// hub četl českou kolekci. Mapa je explicitní a nová locale se v ní nedá zapomenout.
+const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', pl: 'encyklopediePl', uk: 'encyklopedieUk' } as const;
+const items = await getCollection(ENC_COLLECTION[locale] ?? 'encyklopedie');
+const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, locale));
 
 const kategLabels: Record<string, string> = {
   traktor: t('enc.kat.traktor'), kombajn: t('enc.kat.kombajn'), stroj: t('enc.kat.stroj'), 'puda-technika': t('enc.kat.puda-technika'),
@@ -34,7 +35,7 @@ const collectionJsonLd = {
   name: t('enc.list.collName'),
   description: t('enc.list.collDesc'),
   url: `${SITE_URL}${base}/encyklopedie/`,
-  inLanguage: isSk ? 'sk-SK' : 'cs-CZ',
+  inLanguage: bcp47(locale),
   numberOfItems: sorted.length,
   mainEntity: {
     '@type': 'ItemList',
@@ -59,7 +60,9 @@ const collectionJsonLd = {
       <h1 style="font-size:clamp(2rem,5vw,3.2rem); font-weight:900; letter-spacing:-1px; line-height:1.1; color:#1a1a1a; margin-bottom:16px;">
         {t('enc.list.h1')}
       </h1>
-      {isSk ? (
+      {/* Bylo `isSk ? … : česky` — pl a uk tak spadly do české větve, přestože
+          enc.list.* klíče mají. Podmínka teď testuje cs, ne sk. */}
+      {locale !== 'cs' ? (
         <p style="font-size:16px; color:#666; max-width:680px; line-height:1.6;">
           {tf(locale, 'enc.list.introA', { count: sorted.length })}
           <a href={localizePath(locale, '/slovnik/')} style="color:#2d7a3e; font-weight:600; text-decoration:none;">{t('enc.list.introSlovnik')}</a>;

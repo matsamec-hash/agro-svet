@@ -12,7 +12,7 @@ import { prodejeProZemi, akcieProZemi } from '../../lib/agro-integrace';
 import { assertCountryProfile } from '../../lib/svet/types';
 import { breadcrumbSchema, datasetSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
-import { localizePath } from '../../i18n/utils';
+import { localizePath, t } from '../../i18n/utils';
 import { COUNTRY_NAMES, INDICATOR_LABELS, PACKAGE_LABELS, loc, type SvetLang } from '../../i18n/svet';
 import index from '../../data/svet/index.json';
 import mapData from '../../data/svet/map-metrics.json';
@@ -109,7 +109,7 @@ const datasetJsonLd = datasetSchema({
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />
   <main class="svet-page svet-profile">
-    <nav class="svet-crumbs" aria-label="Drobečková navigace">
+    <nav class="svet-crumbs" aria-label={t(locale, 'a11y.breadcrumb')}>
       <a href={localizePath(locale, '/')}>{L.bcHome}</a>
       <span aria-hidden="true">›</span>
       <a href={localizePath(locale, '/svet/')}>{L.bcSvet}</a>

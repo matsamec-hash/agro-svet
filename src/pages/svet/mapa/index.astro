@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import EuropeMap from '../../../components/svet/EuropeMap.astro';
 import mapData from '../../../data/svet/map-metrics.json';
 import countryIndex from '../../../data/svet/index.json';
-import { localizePath } from '../../../i18n/utils';
+import { localizePath, t } from '../../../i18n/utils';
 import { COUNTRY_NAMES, loc, localizeMetric, type SvetLang } from '../../../i18n/svet';
 import '../../../styles/svet.css';
 
@@ -44,7 +44,7 @@ const tableRows = Object.entries(tCountries)
 
 <Layout title={title} description={description}>
   <main class="svet-page">
-    <nav class="svet-crumbs" aria-label="Drobečková navigace" style="font-size:13px;color:#666;margin-bottom:8px;">
+    <nav class="svet-crumbs" aria-label={t(locale, 'a11y.breadcrumb')} style="font-size:13px;color:#666;margin-bottom:8px;">
       <a href={localizePath(locale, '/')} style="color:#666;text-decoration:none;">{L.bcHome}</a> ·
       <a href={localizePath(locale, '/svet/')} style="color:#666;text-decoration:none;">{L.bcSvet}</a> ·
       <span>{L.bcMap}</span>

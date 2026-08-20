@@ -1,11 +1,18 @@
 ---
+// Sdílená stránkovací komponenta (bazar + novinky). Popisky šly natvrdo česky,
+// takže pod /pl a /uk svítilo „Předchozí / Další".
+import { useTranslations } from '../../i18n/utils';
+import type { Locale } from '../../i18n/config';
+
 interface Props {
   currentPage: number;
   totalPages: number;
   baseUrl: string;
+  locale?: Locale;
 }
 
-const { currentPage, totalPages, baseUrl } = Astro.props;
+const { currentPage, totalPages, baseUrl, locale = 'cs' } = Astro.props;
+const tr = useTranslations(locale);
 
 function pageUrl(page: number): string {
   const url = new URL(baseUrl);
@@ -24,7 +31,7 @@ for (let i = 1; i <= totalPages; i++) {
 
 {totalPages > 1 && (
   <nav class="pagination">
-    {currentPage > 1 && <a href={pageUrl(currentPage - 1)} class="page-link">&larr; Předchozí</a>}
+    {currentPage > 1 && <a href={pageUrl(currentPage - 1)} class="page-link">{tr('nov.prev')}</a>}
     {pages.map((page, idx) => (
       <>
         {idx > 0 && pages[idx - 1] !== page - 1 && <span class="page-dots">...</span>}
@@ -34,7 +41,7 @@ for (let i = 1; i <= totalPages; i++) {
         }
       </>
     ))}
-    {currentPage < totalPages && <a href={pageUrl(currentPage + 1)} class="page-link">Další &rarr;</a>}
+    {currentPage < totalPages && <a href={pageUrl(currentPage + 1)} class="page-link">{tr('nov.next')}</a>}
   </nav>
 )}
 

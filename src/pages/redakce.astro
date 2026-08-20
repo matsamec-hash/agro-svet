@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import { SITE_URL } from '../lib/config';
 import { breadcrumbSchema } from '../lib/structured-data';
+import { t } from '../i18n/utils';
 
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
@@ -94,7 +95,7 @@ const orgJsonLd = {
     </Fragment>
   ) : isSk ? (
     <Fragment>
-    <nav class="breadcrumb" aria-label="Drobečková navigace">
+    <nav class="breadcrumb" aria-label={t(locale, 'a11y.breadcrumb')}>
       <a href={`${base}/`}>Domov</a>
       <span aria-hidden="true">›</span>
       <span aria-current="page">Redakcia</span>
@@ -143,7 +144,7 @@ const orgJsonLd = {
     </Fragment>
   ) : (
     <Fragment>
-    <nav class="breadcrumb" aria-label="Drobečková navigace">
+    <nav class="breadcrumb" aria-label={t(locale, 'a11y.breadcrumb')}>
       <a href="/">Domů</a>
       <span aria-hidden="true">›</span>
       <span aria-current="page">Redakce</span>

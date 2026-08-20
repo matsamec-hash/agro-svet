@@ -4,7 +4,7 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { tierLists, rankForTierList } from '../../lib/tier-lists';
-import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
+import { useTranslations, tf, plural, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
@@ -68,7 +68,9 @@ const kombajnyCards = tierCards.filter((c) => c.config.category === 'kombajny');
         <div class="hub-grid">
           {traktoryCards.map((c) => (
             <a class="hub-card" href={localizeInternalHref(locale, `/zebricky/${c.config.slug}/`)}>
-              <span class="hub-count">{c.count} modelů</span>
+              <span class="hub-count">{c.count} {plural(locale, c.count, {
+                one: tr('cat.rada.modelOne'), few: tr('cat.rada.modelFew'), many: tr('cat.rada.modelMany'),
+              })}</span>
               <h3>{c.config.title}</h3>
               <p>{c.config.description}</p>
               {c.topModel && <span class="hub-cta">#1 {c.topModel.brand_name} {c.topModel.name} →</span>}
@@ -84,7 +86,9 @@ const kombajnyCards = tierCards.filter((c) => c.config.category === 'kombajny');
         <div class="hub-grid">
           {kombajnyCards.map((c) => (
             <a class="hub-card" href={localizeInternalHref(locale, `/zebricky/${c.config.slug}/`)}>
-              <span class="hub-count">{c.count} modelů</span>
+              <span class="hub-count">{c.count} {plural(locale, c.count, {
+                one: tr('cat.rada.modelOne'), few: tr('cat.rada.modelFew'), many: tr('cat.rada.modelMany'),
+              })}</span>
               <h3>{c.config.title}</h3>
               <p>{c.config.description}</p>
               {c.topModel && <span class="hub-cta">#1 {c.topModel.brand_name} {c.topModel.name} →</span>}

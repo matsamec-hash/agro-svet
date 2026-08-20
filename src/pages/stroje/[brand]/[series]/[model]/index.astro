@@ -621,7 +621,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </section>
         )}
 
-        <aside class="editorial-bar" aria-label="Ověření obsahu">
+        <aside class="editorial-bar" aria-label={tr('enc.trust.label')}>
           <span class="eb-item">{ebProcessedText}<a href={localizePath(locale, '/redakce/')} class="eb-link">{tr('cat.s.d.ebEditorial')}</a>
           </span>
           <span class="eb-sep" aria-hidden="true">·</span>

@@ -6,7 +6,7 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { brandPairs } from '../../../lib/brand-comparator';
 import { breadcrumbSchema } from '../../../lib/structured-data';
-import { getLocaleFromUrl, localizePath, localizeInternalHref } from '../../../i18n/utils';
+import { getLocaleFromUrl, localizePath, localizeInternalHref, t as tUi } from '../../../i18n/utils';
 import { srovnaniStrings } from '../../../i18n/znacky-srovnani';
 import { ZNACKA_LOGO } from '../../../lib/agro-integrace';
 
@@ -29,7 +29,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
 <Layout title={title} description={description} canonical={canonical}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <div class="cmp-page">
-    <nav class="breadcrumb" aria-label="Drobečková navigace">
+    <nav class="breadcrumb" aria-label={tUi(locale, 'a11y.breadcrumb')}>
       <a href={localizePath(locale, '/znacky/')}>{t.crumbBrands}</a>
       <span class="sep" aria-hidden="true">›</span>
       <span class="current">{t.crumbCompare}</span>

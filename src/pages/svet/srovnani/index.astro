@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { compareMatrix, fmtNum, vsReference } from '../../../lib/svet/render';
 import { buildColorMap, buildMultiSeriesModel, MULTI_OPTS } from '../../../lib/svet/multichart';
 import populationData from '../../../data/svet/population.json';
-import { localizePath } from '../../../i18n/utils';
+import { localizePath, t } from '../../../i18n/utils';
 import { COUNTRY_NAMES, INDICATOR_LABELS, loc, type SvetLang } from '../../../i18n/svet';
 import '../../../styles/svet.css';
 
@@ -69,7 +69,7 @@ const description = L.description;
 ---
 <Layout title={title} description={description}>
   <main class="svet-page svet-cmp">
-    <nav class="svet-crumbs" aria-label="Drobečková navigace">
+    <nav class="svet-crumbs" aria-label={t(locale, 'a11y.breadcrumb')}>
       <a href={localizePath(locale, '/')}>{L.bcHome}</a>
       <span aria-hidden="true">›</span>
       <a href={localizePath(locale, '/svet/')}>{L.bcSvet}</a>

@@ -6,7 +6,7 @@ import { createAnonClient } from '../../lib/supabase';
 import { categoryStyle, tagStyle } from '../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../lib/articles-i18n';
-import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
+import { localizePath, t, tf, plural, bcp47, localizedCategory } from '../../i18n/utils';
 import { localizedTag } from '../../i18n/novinky-tagy';
 import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
 import { newsCategorySlug } from '../../lib/news-category';
@@ -127,7 +127,7 @@ const itemListJsonLd = sorted.length > 0 ? {
 
 <Layout
   title={activeLabel ? `${t(locale, 'nov.section')}: ${activeLabel}` : (query ? `${t(locale, 'nov.section')}: „${query}"` : t(locale, 'nov.section'))}
-  description={activeLabel ? (locale === 'cs' ? `Články v kategorii ${activeLabel}.` : `Články v kategórii ${activeLabel}.`) : t(locale, 'nov.desc.default')}
+  description={activeLabel ? tf(locale, 'nov.desc.cat', { label: activeLabel }) : t(locale, 'nov.desc.default')}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
@@ -222,9 +222,14 @@ const itemListJsonLd = sorted.length > 0 ? {
     {sorted.length > 0 ? (
       <>
         <div style="margin-bottom:14px; font-size:13px; color:#666;">
-          {locale === 'cs'
-            ? <>Nalezeno {(count ?? 0).toLocaleString('cs-CZ')} článků{hasFilters ? ' odpovídajících filtrům' : ''}{totalPages > 1 ? ` · stránka ${page} z ${totalPages}` : ''}.</>
-            : <>Nájdených {(count ?? 0).toLocaleString('sk-SK')} článkov{hasFilters ? ' zodpovedajúcich filtrom' : ''}{totalPages > 1 ? ` · strana ${page} z ${totalPages}` : ''}.</>}
+          {/* Binární cs/else větev předpokládala slovenštinu — pod /pl a /uk
+              svítilo „Nájdených N článkov". Teď přes i18n klíče + plural(). */}
+          {tf(locale, 'nov.found', {
+            count: (count ?? 0).toLocaleString(bcp47(locale)),
+            unit: plural(locale, count ?? 0, {
+              one: t(locale, 'nov.article.one'), few: t(locale, 'nov.article.few'), many: t(locale, 'nov.article.many'),
+            }),
+          })}{hasFilters ? t(locale, 'nov.matchingFilters') : ''}{totalPages > 1 ? tf(locale, 'nov.pageOf', { page, total: totalPages }) : ''}.
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
           {sorted.map(article => (
@@ -240,7 +245,7 @@ const itemListJsonLd = sorted.length > 0 ? {
             />
           ))}
         </div>
-        <BazarPagination currentPage={page} totalPages={totalPages} baseUrl={Astro.url.toString()} />
+        <BazarPagination currentPage={page} totalPages={totalPages} baseUrl={Astro.url.toString()} locale={locale} />
       </>
     ) : (
       <p style="color:#666; font-size:16px; padding:48px 0; text-align:center;">

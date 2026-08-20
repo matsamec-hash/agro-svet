@@ -4,7 +4,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { listPlodiny, listSkupiny } from '../../lib/plodiny';
-import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
+import { useTranslations, tf, plural, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -56,7 +56,7 @@ const list = itemListSchema(
         {hubHero ? (
           <img
             src={hubHero.hero_image}
-            alt={`Polní plodiny — ${hubHero.name.toLowerCase()}`}
+            alt={tf(locale, 'plod.hub.heroAlt', { name: hubHero.name.toLowerCase() })}
             width="280" height="210" loading="eager" decoding="async" class="hero-photo"
           />
         ) : (
@@ -87,7 +87,9 @@ const list = itemListSchema(
                 <div class="hc-title">{p.name}</div>
                 {p.description && <p class="hc-desc">{p.description}</p>}
                 {p.odrudy.length > 0 && (
-                  <span class="hc-badge">{p.odrudy.length} odrůd</span>
+                  <span class="hc-badge">{p.odrudy.length} {plural(locale, p.odrudy.length, {
+                    one: tr('plod.var.one'), few: tr('plod.var.few'), many: tr('plod.var.many'),
+                  })}</span>
                 )}
               </div>
               <svg class="hc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

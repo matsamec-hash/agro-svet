@@ -21,7 +21,7 @@ import {
   MIN_BRAND_MODELS,
 } from '../../../../lib/brand-comparator';
 import { modelDisplayName } from '../../../../lib/comparator';
-import { getLocaleFromUrl, localizeInternalHref, localizePath } from '../../../../i18n/utils';
+import { getLocaleFromUrl, localizeInternalHref, localizePath, t as tUi } from '../../../../i18n/utils';
 import { srovnaniStrings, fill } from '../../../../i18n/znacky-srovnani';
 import { breadcrumbSchema, faqPageSchema } from '../../../../lib/structured-data';
 
@@ -104,7 +104,7 @@ function modelUrl(m: (typeof modelDuels)[number]['a']): string {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
 
   <div class="cmp-page">
-    <nav class="breadcrumb" aria-label="Drobečková navigace">
+    <nav class="breadcrumb" aria-label={tUi(locale, 'a11y.breadcrumb')}>
       <a href={localizePath(locale, '/znacky/')}>{t.crumbBrands}</a>
       <span class="sep" aria-hidden="true">›</span>
       <a href={localizePath(locale, '/znacky/srovnani/')}>{t.crumbCompare}</a>

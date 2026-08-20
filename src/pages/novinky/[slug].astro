@@ -316,7 +316,7 @@ const jsonLd = {
             href={localizePath(locale, `/novinky/tema/${encodeURIComponent(tag)}/`)}
             class="article-tag"
             style={tagStyle(tag)}
-            title={tf(locale, 'nov.tagTitle', { tag })}
+            title={tf(locale, 'nov.tagTitle', { tag: localizedTag(locale, tag) })}
           >
             #{localizedTag(locale, tag)}
           </a>

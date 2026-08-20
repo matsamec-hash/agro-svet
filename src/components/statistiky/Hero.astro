@@ -1,6 +1,6 @@
 ---
 // src/components/statistiky/Hero.astro
-import { useTranslations } from '../../i18n/utils';
+import { tf, useTranslations } from '../../i18n/utils';
 
 interface Props {
   datasetCount: number;
@@ -28,7 +28,7 @@ const t = useTranslations(locale);
   </div>
   <div class="sp-hero-right">
     <div class="sp-hero-photo" style="background-image:url('/images/traktor.webp')">
-      <div class="sp-hero-photo-badge">Aktualizováno {lastUpdated}</div>
+      <div class="sp-hero-photo-badge">{tf(locale, 'stat.hero.updated', { date: lastUpdated })}</div>
     </div>
   </div>
 </section>

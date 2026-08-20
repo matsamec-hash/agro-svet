@@ -44,7 +44,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
   {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
 
   <div class="ch-detail">
-    <nav class="breadcrumb" aria-label="Drobečková navigace">
+    <nav class="breadcrumb" aria-label={tr('a11y.breadcrumb')}>
       <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <a href={localizeInternalHref(locale, '/choroby/')}>{tr('chor.hub.crumb')}</a>
@@ -132,7 +132,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
 
     {choroba.ochrana && (
       <section class="card-section ochrana">
-        <h2 class="section-title">Ochrana a prevence</h2>
+        <h2 class="section-title">{tr('chor.d.ochranaH')}</h2>
         <p class="lead-text">{choroba.ochrana}</p>
       </section>
     )}
@@ -159,7 +159,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
 
     {choroba.faq && choroba.faq.length > 0 && (
       <section class="card-section faq-section">
-        <h2 class="section-title">Časté dotazy</h2>
+        <h2 class="section-title">{tr('plod.d.faq')}</h2>
         <div class="faq-list">
           {choroba.faq.map((f) => (
             <div class="faq-item">
