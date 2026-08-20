@@ -48,9 +48,9 @@ const default0 = commodityNames[0] ?? 'Pšenice';
     </div>
     {locale !== 'sk' && (
       <div class="sp-time-row" role="group" aria-label={tt('stat.commodity.ariaWindow')}>
-        <button class="sp-time-btn" data-window="1y" type="button">1 rok</button>
-        <button class="sp-time-btn active" data-window="5y" type="button">5 let</button>
-        <button class="sp-time-btn" data-window="all" type="button">{__t('stat.timeAll')}</button>
+        <button class="sp-time-btn" data-window="1y" type="button">{tt('stat.time1y')}</button>
+        <button class="sp-time-btn active" data-window="5y" type="button">{tt('stat.time5y')}</button>
+        <button class="sp-time-btn" data-window="all" type="button">{tt('stat.timeAll')}</button>
       </div>
     )}
   </div>

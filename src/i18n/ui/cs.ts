@@ -482,6 +482,8 @@ const cs: Record<string, string> = {
   // — kvízy (kvz.*) —
   'kvz.h.lede': 'Otestujte své znalosti — kdo vynalezl tříbodový závěs, kdy přišlo první sériové CVT a co znamená Stage V. Po dokončení dostanete hodnocení.',
   'kvz.h.metaDesc': 'Otestujte své znalosti o historii zemědělských značek (John Deere, Fendt, Zetor…), technologiích (CVT, ISOBUS, AdBlue) a dotacích. {count} otázek, ~5 minut.',
+  'stat.time1y': '1 rok',
+  'stat.time5y': '5 let',
   'stat.timeAll': 'Vše',
 
   'kvz.hub.desc': 'Interaktivní kvízy ze zemědělství — historie značek, technologie traktorů, dotace. Hodnocení podle správných odpovědí.',
@@ -685,6 +687,18 @@ const cs: Record<string, string> = {
   'nov.tags': 'Tagy:',
   'nov.related': 'Další články k tématu',
   'nov.navAria': 'Navigace mezi články',
+  'nov.tema.desc': 'Články k tématu „{tag}" na agro-svět.cz — {count} {unit}{cats}.',
+  'nov.tema.descCats': ' z kategorií {cats}',
+  'nov.tema.empty': 'Pro téma „{tag}" zatím žádné články.',
+  'nov.tema.count': '{count} {unit} k tématu {tag}.',
+  'nov.kat.desc.technika': 'Novinky ze zemědělské techniky — traktory, kombajny, postřikovače, secí stroje a další stroje.',
+  'nov.kat.desc.dotace': 'Dotační programy, podpora zemědělství, Společná zemědělská politika EU, národní dotace.',
+  'nov.kat.desc.trh': 'Vývoj cen zemědělských komodit, trh s mlékem, masem, obilím, trendy a analýzy.',
+  'nov.kat.desc.legislativa': 'Novely zákonů, nařízení a vyhlášky pro zemědělce, pachty, udržitelnost.',
+  'nov.kat.desc.znacky': 'Zprávy od výrobců zemědělské techniky, tiskové zprávy, nové modely.',
+  'nov.kat.desc.novinky': 'Obecné zemědělské novinky.',
+  'nov.kat.descFallback': 'Články v kategorii {label}.',
+  'nov.kat.count': '{count} {unit}',
   'nov.tagTitle': 'Další články s tagem „{tag}"',
   'nov.entityMore': 'Další články o',
   'nov.entityBrandCta': 'Vše o značce {name} →',
@@ -737,6 +751,7 @@ const cs: Record<string, string> = {
   'stat.hero.h1Prefix': 'Co stojí české ',
   'stat.hero.h1Em': 'zemědělství',
   'stat.hero.lede': 'Aktuální ceny zemědělských komodit, sklizeň, vstupní náklady a regionální produkce z Českého statistického úřadu — každý měsíc aktualizovaná data.',
+  'stat.hero.updated': 'Aktualizováno {date}',
   'stat.hero.statDatasets': 'datasetů',
   'stat.hero.statYears': 'let',
   'stat.hero.statRegions': 'krajů',
@@ -1369,5 +1384,53 @@ const cs: Record<string, string> = {
   'plem.param.one': 'parametr',
   'plem.param.few': 'parametry',
   'plem.param.many': 'parametrů',
+
+  // ── Globální a11y chrome (Layout + Lightbox + breadcrumby) ──────────────────
+  // Bylo natvrdo česky v komponentách, takže screen reader dostal češtinu
+  // i pod /pl a /uk. Lightbox je v Layoutu → tekl na KAŽDÉ stránce.
+  'a11y.breadcrumb': 'Drobečková navigace',
+  'a11y.lb.gallery': 'Galerie fotek',
+  'a11y.lb.close': 'Zavřít (Esc)',
+  'a11y.lb.prev': 'Předchozí',
+  'a11y.lb.next': 'Další',
+
+  // ── Novinky: výpis a stránkování ────────────────────────────────────────────
+  'nov.found': 'Nalezeno {count} {unit}',
+  'nov.article.one': 'článek',
+  'nov.article.few': 'články',
+  'nov.article.many': 'článků',
+  'nov.desc.cat': 'Články v kategorii {label}.',
+  'nov.matchingFilters': ' odpovídajících filtrům',
+  'nov.pageOf': ' · stránka {page} z {total}',
+
+  // ── Plodiny: skupinová faceta + odrůdové počty ──────────────────────────────
+  'plod.var.one': 'odrůda',
+  'plod.var.few': 'odrůdy',
+  'plod.var.many': 'odrůd',
+  'plod.hub.heroAlt': 'Polní plodiny — {name}',
+  'plod.s.kicker': 'Skupina plodin · Plodiny a odrůdy',
+  'plod.s.lede': 'Přehled plodin ze skupiny {label} — agronomie, výsevek, hnojení, choroby a registrované odrůdy z databáze ÚKZÚZ.',
+  'plod.s.statCrops': 'plodin',
+  'plod.s.statVarieties': 'registrovaných odrůd',
+  'plod.s.allCrops': 'Všechny plodiny',
+  'plod.s.cropsH': 'Plodiny',
+
+  // ── Choroby: detail ─────────────────────────────────────────────────────────
+  'chor.d.ochranaH': 'Ochrana a prevence',
+  'chor.hub.cropsDb': 'Databáze plodin',
+
+  // ── Sezóna ──────────────────────────────────────────────────────────────────
+  'sez.faqH': 'Časté otázky',
+
+  // ── Kvízy ───────────────────────────────────────────────────────────────────
+  'kvz.hub.crumb': 'Kvízy',
+  'kvz.hub.h1': 'Otestujte své znalosti',
+  'kvz.card.questions': 'otázek',
+  'kvz.card.cta': 'Spustit kvíz →',
+  'kvz.q.source': 'Více ve slovníku →',
+  'kvz.q.restart': 'Hrát znovu',
+  'cat.zn.d.brandCmpH': 'Porovnat {brand} s jinou značkou',
+  'cat.zn.d.brandCmpDesc': 'Srovnání výkonu, počtu modelů a přímé souboje konkrétních strojů.',
+  'plod.d.statVynos': 't/ha výnos',
 };
 export default cs;

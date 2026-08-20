@@ -484,6 +484,8 @@ const pl: Record<string, string> = {
   // — kvízy (kvz.*) —
   'kvz.h.lede': 'Sprawdź swoją wiedzę — kto wynalazł trzypunktowy układ zawieszenia, kiedy pojawiła się pierwsza seryjna przekładnia CVT i co oznacza Stage V. Na koniec otrzymasz ocenę.',
   'kvz.h.metaDesc': 'Sprawdź swoją wiedzę o historii marek rolniczych (John Deere, Fendt, Zetor…), technologiach (CVT, ISOBUS, AdBlue) i dopłatach. {count} pytań, ~5 minut.',
+  'stat.time1y': '1 rok',
+  'stat.time5y': '5 lat',
   'stat.timeAll': 'Wszystko',
 
   'kvz.hub.desc': 'Interaktywne quizy rolnicze — historia marek, technologie ciągników, dopłaty. Ocena według poprawnych odpowiedzi.',
@@ -687,6 +689,18 @@ const pl: Record<string, string> = {
   'nov.tags': 'Tagi:',
   'nov.related': 'Inne artykuły na ten temat',
   'nov.navAria': 'Nawigacja między artykułami',
+  'nov.tema.desc': 'Artykuły na temat „{tag}" w agro-svět.cz — {count} {unit}{cats}.',
+  'nov.tema.descCats': ' z kategorii {cats}',
+  'nov.tema.empty': 'Brak artykułów na temat „{tag}".',
+  'nov.tema.count': '{count} {unit} na temat {tag}.',
+  'nov.kat.desc.technika': 'Nowości z techniki rolniczej — ciągniki, kombajny, opryskiwacze, siewniki i inne maszyny.',
+  'nov.kat.desc.dotace': 'Programy dopłat, wsparcie rolnictwa, Wspólna Polityka Rolna UE, dopłaty krajowe.',
+  'nov.kat.desc.trh': 'Ceny towarów rolnych, rynek mleka, mięsa i zbóż, trendy i analizy.',
+  'nov.kat.desc.legislativa': 'Nowelizacje ustaw, rozporządzenia i przepisy dla rolników, dzierżawa, zrównoważony rozwój.',
+  'nov.kat.desc.znacky': 'Wiadomości od producentów techniki rolniczej, komunikaty prasowe, nowe modele.',
+  'nov.kat.desc.novinky': 'Ogólne wiadomości rolnicze.',
+  'nov.kat.descFallback': 'Artykuły w kategorii {label}.',
+  'nov.kat.count': '{count} {unit}',
   'nov.tagTitle': 'Inne artykuły z tagiem „{tag}"',
   'nov.entityMore': 'Inne artykuły o',
   'nov.entityBrandCta': 'Wszystko o marce {name} →',
@@ -739,6 +753,7 @@ const pl: Record<string, string> = {
   'stat.hero.h1Prefix': 'Ile kosztuje czeskie ',
   'stat.hero.h1Em': 'rolnictwo',
   'stat.hero.lede': 'Aktualne ceny surowców rolnych, zbiory, koszty nakładów i produkcja regionalna z Czeskiego Urzędu Statystycznego — dane aktualizowane co miesiąc.',
+  'stat.hero.updated': 'Zaktualizowano {date}',
   'stat.hero.statDatasets': 'zbiorów danych',
   'stat.hero.statYears': 'lat',
   'stat.hero.statRegions': 'regionów',
@@ -1367,5 +1382,51 @@ const pl: Record<string, string> = {
   'plem.param.one': 'parametr',
   'plem.param.few': 'parametry',
   'plem.param.many': 'parametrów',
+
+  // ── Globalny a11y chrome (Layout + Lightbox + okruszki) ─────────────────────
+  'a11y.breadcrumb': 'Nawigacja okruszkowa',
+  'a11y.lb.gallery': 'Galeria zdjęć',
+  'a11y.lb.close': 'Zamknij (Esc)',
+  'a11y.lb.prev': 'Poprzednie',
+  'a11y.lb.next': 'Następne',
+
+  // ── Aktualności: lista i paginacja ──────────────────────────────────────────
+  'nov.found': 'Znaleziono {count} {unit}',
+  'nov.article.one': 'artykuł',
+  'nov.article.few': 'artykuły',
+  'nov.article.many': 'artykułów',
+  'nov.desc.cat': 'Artykuły w kategorii {label}.',
+  'nov.matchingFilters': ' pasujących do filtrów',
+  'nov.pageOf': ' · strona {page} z {total}',
+
+  // ── Rośliny uprawne: faseta grup + liczby odmian ────────────────────────────
+  'plod.var.one': 'odmiana',
+  'plod.var.few': 'odmiany',
+  'plod.var.many': 'odmian',
+  'plod.hub.heroAlt': 'Rośliny uprawne — {name}',
+  'plod.s.kicker': 'Grupa roślin · Rośliny i odmiany',
+  'plod.s.lede': 'Przegląd roślin z grupy {label} — agronomia, norma wysiewu, nawożenie, choroby i odmiany zarejestrowane w czeskiej bazie ÚKZÚZ.',
+  'plod.s.statCrops': 'roślin',
+  'plod.s.statVarieties': 'zarejestrowanych odmian',
+  'plod.s.allCrops': 'Wszystkie rośliny',
+  'plod.s.cropsH': 'Rośliny',
+
+  // ── Choroby: szczegóły ──────────────────────────────────────────────────────
+  'chor.d.ochranaH': 'Ochrona i profilaktyka',
+  'chor.hub.cropsDb': 'Baza roślin uprawnych',
+
+  // ── Sezon ───────────────────────────────────────────────────────────────────
+  'sez.faqH': 'Często zadawane pytania',
+
+  // ── Quizy ───────────────────────────────────────────────────────────────────
+  'kvz.hub.crumb': 'Quizy',
+  'kvz.hub.h1': 'Sprawdź swoją wiedzę',
+  'kvz.card.questions': 'pytań',
+  'kvz.card.cta': 'Zacznij quiz →',
+  'kvz.q.source': 'Więcej w słowniku →',
+  'kvz.q.restart': 'Zagraj ponownie',
+  'cat.zn.d.brandCmpH': 'Porównaj {brand} z inną marką',
+  'cat.zn.d.brandCmpDesc': 'Porównanie mocy, liczby modeli i bezpośrednie pojedynki konkretnych maszyn.',
+  'plod.d.statVynos': 't/ha plonu',
 };
 export default pl;
