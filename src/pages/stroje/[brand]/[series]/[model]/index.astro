@@ -289,7 +289,9 @@ const competitors = findCompetitors({
 }, { limit: 6 });
 
 // Use-case description from data (no hand-written content per model).
-const useCase = useCaseDescription(category, model.power_hp);
+// ‼️ Bez locale → funkce má polské znění připravené, ale vždy vracela cs.
+// /pl/stroje/<b>/<s>/<m>/ tak ukazovalo „Středně výkonná sklízecí mlátička…".
+const useCase = useCaseDescription(category, model.power_hp, locale);
 
 // Žebříčky, kde se model umístil — cross-link datová vrstva → redakční žebříčky.
 // Jen cs (žebříčky nejsou lokalizované). Odkaz + umístění posiluje vnitřní síť.

@@ -482,6 +482,10 @@ const pl: Record<string, string> = {
   'zeb.author': 'Redakcja agro-svět.cz',
 
   // — kvízy (kvz.*) —
+  'kvz.h.lede': 'Sprawdź swoją wiedzę — kto wynalazł trzypunktowy układ zawieszenia, kiedy pojawiła się pierwsza seryjna przekładnia CVT i co oznacza Stage V. Na koniec otrzymasz ocenę.',
+  'kvz.h.metaDesc': 'Sprawdź swoją wiedzę o historii marek rolniczych (John Deere, Fendt, Zetor…), technologiach (CVT, ISOBUS, AdBlue) i dopłatach. {count} pytań, ~5 minut.',
+  'stat.timeAll': 'Wszystko',
+
   'kvz.hub.desc': 'Interaktywne quizy rolnicze — historia marek, technologie ciągników, dopłaty. Ocena według poprawnych odpowiedzi.',
   'puda.crumbSelf': 'Gleba',
 

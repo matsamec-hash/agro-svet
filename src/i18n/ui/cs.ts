@@ -480,6 +480,10 @@ const cs: Record<string, string> = {
   'zeb.author': 'Redakce agro-svět.cz',
 
   // — kvízy (kvz.*) —
+  'kvz.h.lede': 'Otestujte své znalosti — kdo vynalezl tříbodový závěs, kdy přišlo první sériové CVT a co znamená Stage V. Po dokončení dostanete hodnocení.',
+  'kvz.h.metaDesc': 'Otestujte své znalosti o historii zemědělských značek (John Deere, Fendt, Zetor…), technologiích (CVT, ISOBUS, AdBlue) a dotacích. {count} otázek, ~5 minut.',
+  'stat.timeAll': 'Vše',
+
   'kvz.hub.desc': 'Interaktivní kvízy ze zemědělství — historie značek, technologie traktorů, dotace. Hodnocení podle správných odpovědí.',
   'puda.crumbSelf': 'Půda',
 

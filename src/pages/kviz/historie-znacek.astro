@@ -46,7 +46,7 @@ const articleJsonLd = {
 
 <Layout
   title={tr('kvz.h.title')}
-  description="Otestujte své znalosti o historii zemědělských značek (John Deere, Fendt, Zetor…), technologiích (CVT, ISOBUS, AdBlue) a dotacích CAP. 16 otázek, ~5 minut."
+  description={tf(locale, 'kvz.h.metaDesc', { count: QUESTIONS.length })}
   canonical={canonical}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -65,7 +65,7 @@ const articleJsonLd = {
       <span class="kicker">{tf(locale, 'kvz.h.kicker', { count: QUESTIONS.length })}</span>
       <h1>{tr('kvz.h.h1')}</h1>
       <p class="lede">
-        Otestujte své znalosti — kdo vynalezl tříbodový závěs, kdy přišlo první sériové CVT a co znamená Stage V. Po dokončení dostanete hodnocení.
+        {tr('kvz.h.lede')}
       </p>
     </header>
 
