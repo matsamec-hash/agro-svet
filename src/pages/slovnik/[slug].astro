@@ -166,6 +166,7 @@ const bodyHtml = term.longDef.split(/\n\n+/).map(renderBlock).join('');
 
     {areaUnit && (
       <AreaConverter
+        locale={locale}
         defaultUnit={areaUnit}
         defaultValue={1}
         heading={tf(locale, 'slovnik.detail.areaHeading', { term: term.term })}
@@ -175,6 +176,7 @@ const bodyHtml = term.longDef.split(/\n\n+/).map(renderBlock).join('');
 
     {weightUnit && (
       <WeightConverter
+        locale={locale}
         defaultUnit={weightUnit}
         defaultValue={1}
         heading={tf(locale, 'slovnik.detail.weightHeading', { term: term.term })}

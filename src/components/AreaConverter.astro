@@ -1,4 +1,6 @@
 ---
+import type { Locale } from '../i18n/config';
+import { areaDefaults, NUMBER_LOCALE } from '../i18n/prevodniky';
 // Interaktivní převodník jednotek plochy. Embedded ve /slovnik/* pro jednotky
 // plochy a ve standalone kalkulačce /kalkulacka/prevody-jednotek/.
 // Vanilla JS, žádné závislosti.
@@ -20,6 +22,9 @@ export interface Props {
   comparisons?: { emoji: string; name: string; m2: number; slug?: string; credit?: string }[];
   comparisonsHeading?: string;
   comparisonsCaption?: string;
+  /** Locale pro výchozí stringy. Explicitní `ui`/`unitNames`/`numberLocale`
+   *  mají přednost (kalkulačkové stránky si je předávají samy). */
+  locale?: Locale;
   /** Lokalizované stringy srovnávacího panelu (default = cs). Bez nich zůstávaly
    *  česky i na /pl — „Porovnat s", „1 dlaždice = …" — uprostřed jinak polské stránky. */
   cmpText?: {
@@ -34,7 +39,8 @@ const {
   heading = 'Převodník jednotek plochy',
   caption,
   headingLevel = 'h2',
-  numberLocale = 'cs-CZ',
+  locale = 'cs',
+  numberLocale,
   ui = {},
   unitNames = {},
   comparisons = [],
@@ -53,22 +59,24 @@ const CMP = {
   shownFirst: cmpText.shownFirst ?? 'zobrazeno prvních {n} z {total}',
 };
 
+const AD = areaDefaults(locale);
+const numLoc = numberLocale ?? NUMBER_LOCALE[locale] ?? 'cs-CZ';
 const uiText = {
-  inputLabel: ui.inputLabel ?? 'Zadej hodnotu',
-  unitSelectLabel: ui.unitSelectLabel ?? 'Vyber jednotku',
+  inputLabel: ui.inputLabel ?? AD.ui.inputLabel,
+  unitSelectLabel: ui.unitSelectLabel ?? AD.ui.unitSelectLabel,
 };
 
 // All factors in m² (square meters). `name` se lokalizuje přes unitNames override.
 const UNITS = [
-  { id: 'm2', label: 'm²', name: unitNames.m2 ?? 'metr čtvereční', factor: 1, decimals: 2 },
-  { id: 'a', label: 'a', name: unitNames.a ?? 'ar', factor: 100, decimals: 4 },
-  { id: 'ha', label: 'ha', name: unitNames.ha ?? 'hektar', factor: 10_000, decimals: 6 },
-  { id: 'km2', label: 'km²', name: unitNames.km2 ?? 'kilometr čtvereční', factor: 1_000_000, decimals: 8 },
-  { id: 'acre', label: 'akr', name: unitNames.acre ?? 'akr (acre)', factor: 4046.8564224, decimals: 5 },
-  { id: 'jitro', label: 'jitro', name: unitNames.jitro ?? 'rakouské/české jitro', factor: 5754.642, decimals: 5 },
-  { id: 'korec', label: 'korec', name: unitNames.korec ?? 'český korec', factor: 2877.32, decimals: 5 },
-  { id: 'strych', label: 'strych', name: unitNames.strych ?? 'český strych', factor: 2877.32, decimals: 5 },
-  { id: 'morgen', label: 'morgen', name: unitNames.morgen ?? 'pruský morgen', factor: 2553.2, decimals: 5 },
+  { id: 'm2', label: 'm²', name: unitNames.m2 ?? AD.unitNames.m2, factor: 1, decimals: 2 },
+  { id: 'a', label: 'a', name: unitNames.a ?? AD.unitNames.a, factor: 100, decimals: 4 },
+  { id: 'ha', label: 'ha', name: unitNames.ha ?? AD.unitNames.ha, factor: 10_000, decimals: 6 },
+  { id: 'km2', label: 'km²', name: unitNames.km2 ?? AD.unitNames.km2, factor: 1_000_000, decimals: 8 },
+  { id: 'acre', label: 'akr', name: unitNames.acre ?? AD.unitNames.acre, factor: 4046.8564224, decimals: 5 },
+  { id: 'jitro', label: 'jitro', name: unitNames.jitro ?? AD.unitNames.jitro, factor: 5754.642, decimals: 5 },
+  { id: 'korec', label: 'korec', name: unitNames.korec ?? AD.unitNames.korec, factor: 2877.32, decimals: 5 },
+  { id: 'strych', label: 'strych', name: unitNames.strych ?? AD.unitNames.strych, factor: 2877.32, decimals: 5 },
+  { id: 'morgen', label: 'morgen', name: unitNames.morgen ?? AD.unitNames.morgen, factor: 2553.2, decimals: 5 },
 ];
 
 const Heading = headingLevel;
@@ -143,7 +151,7 @@ const Heading = headingLevel;
   </div>
 </section>
 
-<script is:inline define:vars={{ UNITS, numberLocale, COMPARISONS: comparisons, CMP }}>
+<script is:inline define:vars={{ UNITS, numberLocale: numLoc, COMPARISONS: comparisons, CMP }}>
   (function () {
     const root = document.currentScript.previousElementSibling;
     if (!root) return;

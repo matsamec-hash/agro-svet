@@ -1,4 +1,6 @@
 ---
+import type { Locale } from '../i18n/config';
+import { weightDefaults, NUMBER_LOCALE } from '../i18n/prevodniky';
 // Interaktivní převodník jednotek hmotnosti pro zemědělství.
 // Specifikum: bušl (bushel) má různou hmotnost podle komodity, takže
 // widget má dropdown komodity + převod q ↔ t ↔ kg ↔ lb ↔ bu.
@@ -16,6 +18,8 @@ export interface Props {
   ui?: { inputLabel?: string; commodityLabel?: string; unitSelectLabel?: string; commoditySelectLabel?: string };
   unitNames?: Record<string, string>;
   commodityNames?: Record<string, string>;
+  /** Locale pro výchozí stringy; explicitní props mají přednost. */
+  locale?: Locale;
 }
 
 const {
@@ -25,35 +29,38 @@ const {
   heading = 'Převodník jednotek hmotnosti',
   caption,
   headingLevel = 'h2',
-  numberLocale = 'cs-CZ',
+  locale = 'cs',
+  numberLocale,
   ui = {},
   unitNames = {},
   commodityNames = {},
 } = Astro.props;
 
+const WD = weightDefaults(locale);
+const numLoc = numberLocale ?? NUMBER_LOCALE[locale] ?? 'cs-CZ';
 const uiText = {
-  inputLabel: ui.inputLabel ?? 'Zadej hmotnost',
-  commodityLabel: ui.commodityLabel ?? 'Komodita (pro bušl)',
-  unitSelectLabel: ui.unitSelectLabel ?? 'Vyber jednotku',
-  commoditySelectLabel: ui.commoditySelectLabel ?? 'Vyber komoditu pro bušl',
+  inputLabel: ui.inputLabel ?? WD.ui.inputLabel,
+  commodityLabel: ui.commodityLabel ?? WD.ui.commodityLabel,
+  unitSelectLabel: ui.unitSelectLabel ?? WD.ui.unitSelectLabel,
+  commoditySelectLabel: ui.commoditySelectLabel ?? WD.ui.commoditySelectLabel,
 };
 
 const UNITS = [
-  { id: 'kg', label: 'kg', name: unitNames.kg ?? 'kilogram', factor: 1, decimals: 2, commodityDependent: false },
-  { id: 'q', label: 'q', name: unitNames.q ?? 'metrický cent', factor: 100, decimals: 4, commodityDependent: false },
-  { id: 't', label: 't', name: unitNames.t ?? 'tuna', factor: 1000, decimals: 5, commodityDependent: false },
-  { id: 'lb', label: 'lb', name: unitNames.lb ?? 'libra (pound)', factor: 0.45359237, decimals: 3, commodityDependent: false },
-  { id: 'bu', label: 'bu', name: unitNames.bu ?? 'bušl (bushel)', factor: 0, decimals: 4, commodityDependent: true },
+  { id: 'kg', label: 'kg', name: unitNames.kg ?? WD.unitNames.kg, factor: 1, decimals: 2, commodityDependent: false },
+  { id: 'q', label: 'q', name: unitNames.q ?? WD.unitNames.q, factor: 100, decimals: 4, commodityDependent: false },
+  { id: 't', label: 't', name: unitNames.t ?? WD.unitNames.t, factor: 1000, decimals: 5, commodityDependent: false },
+  { id: 'lb', label: 'lb', name: unitNames.lb ?? WD.unitNames.lb, factor: 0.45359237, decimals: 3, commodityDependent: false },
+  { id: 'bu', label: 'bu', name: unitNames.bu ?? WD.unitNames.bu, factor: 0, decimals: 4, commodityDependent: true },
 ];
 
 const COMMODITIES = [
-  { id: 'wheat', label: commodityNames.wheat ?? 'pšenice', buKg: 27.2155 },
-  { id: 'corn', label: commodityNames.corn ?? 'kukuřice', buKg: 25.4012 },
-  { id: 'soy', label: commodityNames.soy ?? 'sója', buKg: 27.2155 },
-  { id: 'barley', label: commodityNames.barley ?? 'ječmen', buKg: 21.7724 },
-  { id: 'oats', label: commodityNames.oats ?? 'oves', buKg: 14.5150 },
-  { id: 'rye', label: commodityNames.rye ?? 'žito', buKg: 25.4012 },
-  { id: 'canola', label: commodityNames.canola ?? 'řepka (canola)', buKg: 22.6796 },
+  { id: 'wheat', label: commodityNames.wheat ?? WD.commodityNames.wheat, buKg: 27.2155 },
+  { id: 'corn', label: commodityNames.corn ?? WD.commodityNames.corn, buKg: 25.4012 },
+  { id: 'soy', label: commodityNames.soy ?? WD.commodityNames.soy, buKg: 27.2155 },
+  { id: 'barley', label: commodityNames.barley ?? WD.commodityNames.barley, buKg: 21.7724 },
+  { id: 'oats', label: commodityNames.oats ?? WD.commodityNames.oats, buKg: 14.5150 },
+  { id: 'rye', label: commodityNames.rye ?? WD.commodityNames.rye, buKg: 25.4012 },
+  { id: 'canola', label: commodityNames.canola ?? WD.commodityNames.canola, buKg: 22.6796 },
 ];
 
 const Heading = headingLevel;
@@ -111,7 +118,7 @@ const Heading = headingLevel;
   {caption && <p class="wc-caption">{caption}</p>}
 </section>
 
-<script is:inline define:vars={{ UNITS, COMMODITIES, numberLocale }}>
+<script is:inline define:vars={{ UNITS, COMMODITIES, numberLocale: numLoc }}>
   (function () {
     const root = document.currentScript.previousElementSibling;
     if (!root) return;
