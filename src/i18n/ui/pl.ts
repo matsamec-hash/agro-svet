@@ -501,6 +501,46 @@ const pl: Record<string, string> = {
   'kvz.h.source': 'Źródło',
   'kvz.h.articleDesc': 'Interaktywny quiz z {count} pytaniami o historii marek rolniczych i technologiach.',
 
+  // — sezóna (sez.*) —
+  'sez.hub.lead': 'Co dzieje się na polu w poszczególnych porach roku: wiosenne siewy, letnie żniwa, jesienne oziminy i zimowe przygotowania. Kalendarz siewu i zbioru roślin.',
+
+  'sez.d.sowPlanned': 'Co planuje się siać',
+
+  'sez.t.jaro': 'Siew zbóż jarych, przygotowanie gleby, wiosenne nawożenie',
+  'sez.t.leto': 'Żniwa zbóż, koszenie roślin pastewnych, prasowanie',
+  'sez.t.podzim': 'Zakładanie ozimin, zbiór okopowych, podorywka',
+  'sez.t.zima': 'Serwis maszyn, planowanie, dopłaty',
+  'sez.d.sowNow': 'Co się teraz sieje',
+  'sez.d.harvestNow': 'Co się teraz zbiera',
+  'sez.k.title': 'Kalendarz siewu i zbioru — kiedy siać i zbierać rośliny polowe',
+  'sez.k.desc': 'Przejrzysty kalendarz siewu i zbioru głównych roślin polowych: zboża, rzepak, okopowe, strączkowe i pastewne miesiąc po miesiącu.',
+  'sez.k.crumb': 'Sezon',
+  'sez.k.sowing': 'siew',
+  'sez.k.harvest': 'zbiór',
+  'sez.k.q1': 'Kiedy sieje się zboża jare?',
+  'sez.k.a1': 'Jęczmień jary i pszenica jara luty–marzec, mak, buraki cukrowe i słonecznik marzec–kwiecień, kukurydza i soja kwiecień–maj. Wczesny siew zbóż jarych zwiększa plon.',
+  'sez.k.q2': 'Kiedy sieje się oziminy?',
+  'sez.k.a2': 'Rzepak ozimy sierpień–wrzesień, pszenica ozima, jęczmień, żyto i pszenżyto wrzesień–październik. Termin siewu ozimin jest kluczowy dla dobrego przezimowania.',
+  'sez.k.q3': 'Kiedy szczyt żniw zbożowych?',
+  'sez.k.a3': 'W lipcu i sierpniu: najpierw jęczmień ozimy (czerwiec–lipiec), potem pszenica ozima, żyto i pszenżyto, na końcu zboża jare.',
+
+  'sez.d.harvestLbl': 'zbiór',
+  'sez.d.sowLbl': 'norma wysiewu',
+
+  'sez.d.title': '{season} na polu — prace, siew i zbiór | Kalendarz sezonowy',
+  'sez.d.h1': '{season} na polu',
+
+  'sez.crumb': 'Rok rolniczy',
+  'sez.hub.title': 'Rok rolniczy — prace polowe według pór roku',
+  'sez.now': 'właśnie teraz',
+  'sez.cal': 'Kalendarz siewu i zbioru',
+  'sez.calSub': 'Kiedy siać i zbierać 18 roślin polowych, miesiąc po miesiącu',
+  'sez.work': 'Prace polowe w sezonie',
+  'sez.allSeasons': '← Wszystkie pory roku',
+  'sez.backHub': '← Powrót do rozdroża sezonowego',
+  'sez.allCrops': 'Wszystkie rośliny uprawne i odmiany',
+  'sez.note': 'Terminy są orientacyjne dla warunków Europy Środkowej.',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Marki',
   'cat.zn.desc': 'Przegląd światowych producentów techniki rolniczej — od Claas i John Deere po Fendt, New Holland i Zetor.',

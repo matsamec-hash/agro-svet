@@ -499,6 +499,46 @@ const cs: Record<string, string> = {
   'kvz.h.source': 'Zdroj',
   'kvz.h.articleDesc': 'Interaktivní kvíz s {count} otázkami o historii zemědělských značek a technologiích.',
 
+  // — sezóna (sez.*) —
+  'sez.hub.lead': 'Co se na poli dělá v jednotlivých ročních obdobích: jarní setí, letní sklizeň, podzimní ozimy a zimní příprava. Kalendář setí a sklizně plodin.',
+
+  'sez.d.sowPlanned': 'Co se plánuje sít',
+
+  'sez.t.jaro': 'Setí jařin, příprava půdy, jarní hnojení',
+  'sez.t.leto': 'Sklizeň obilovin, seč pícnin, balíkování',
+  'sez.t.podzim': 'Zakládání ozimů, sklizeň okopanin, podmítka',
+  'sez.t.zima': 'Servis techniky, plánování, dotace',
+  'sez.d.sowNow': 'Co se teď seje',
+  'sez.d.harvestNow': 'Co se teď sklízí',
+  'sez.k.title': 'Kalendář setí a sklizně — kdy sít a sklízet polní plodiny',
+  'sez.k.desc': 'Přehledný kalendář setí a sklizně hlavních polních plodin: obiloviny, řepka, okopaniny, luskoviny a pícniny měsíc po měsíci.',
+  'sez.k.crumb': 'Sezóna',
+  'sez.k.sowing': 'setí',
+  'sez.k.harvest': 'sklizeň',
+  'sez.k.q1': 'Kdy se sejí jařiny?',
+  'sez.k.a1': 'Jarní ječmen a pšenice únor–březen, mák, cukrovka a slunečnice březen–duben, kukuřice a sója duben–květen. Raný výsev jařin zvyšuje výnos.',
+  'sez.k.q2': 'Kdy se sejí ozimy?',
+  'sez.k.a2': 'Ozimá řepka srpen–září, ozimá pšenice, ječmen, žito a tritikale září–říjen. Termín setí ozimů je klíčový pro dobré přezimování.',
+  'sez.k.q3': 'Kdy vrcholí sklizeň obilovin?',
+  'sez.k.a3': 'V červenci a srpnu: nejdříve ozimý ječmen (červen–červenec), pak ozimá pšenice, žito a tritikale, nakonec jarní obiloviny.',
+
+  'sez.d.harvestLbl': 'sklizeň',
+  'sez.d.sowLbl': 'výsevek',
+
+  'sez.d.title': '{season} na poli — práce, setí a sklizeň | Sezónní kalendář',
+  'sez.d.h1': '{season} na poli',
+
+  'sez.crumb': 'Zemědělský rok',
+  'sez.hub.title': 'Zemědělský rok — sezónní práce na poli',
+  'sez.now': 'právě teď',
+  'sez.cal': 'Kalendář setí a sklizně',
+  'sez.calSub': 'Kdy sít a sklízet 18 polních plodin, měsíc po měsíci',
+  'sez.work': 'Polní práce v sezóně',
+  'sez.allSeasons': '← Všechny sezóny',
+  'sez.backHub': '← Zpět na sezónní rozcestník',
+  'sez.allCrops': 'Všechny plodiny a odrůdy',
+  'sez.note': 'Termíny jsou orientační pro podmínky střední Evropy.',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Značky',
   'cat.zn.desc': 'Přehled světových výrobců zemědělské techniky — od Claas a John Deere po Fendt, New Holland a Zetor.',

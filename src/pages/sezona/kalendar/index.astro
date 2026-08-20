@@ -1,33 +1,40 @@
 ---
-export const prerender = true;
+// SSR — sekce je launchnutá pro pl.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { listPlodiny } from '../../../lib/plodiny';
-import { MONTH_NAMES_CS, MONTH_SHORT_CS } from '../../../lib/sezona';
+import { monthNames, monthShort } from '../../../lib/sezona';
+import { useTranslations, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const MN = monthNames(locale);
+const MS = monthShort(locale);
 import { SITE_URL } from '../../../lib/config';
 import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../../lib/structured-data';
 
-const plodiny = listPlodiny()
+const plodiny = listPlodiny(locale)
   .filter((p) => (p.seti_mesice?.length ?? 0) > 0 || (p.sklizen_mesice?.length ?? 0) > 0)
   .sort((a, b) => a.name.localeCompare(b.name, 'cs'));
 
-const pageUrl = `${SITE_URL}/sezona/kalendar/`;
-const title = 'Kalendář setí a sklizně — kdy sít a sklízet polní plodiny';
-const description = 'Přehledný kalendář setí a sklizně hlavních polních plodin v ČR: obiloviny, řepka, okopaniny, luskoviny a pícniny měsíc po měsíci.';
+const pageUrl = `${SITE_URL}${localizePath(locale, '/sezona/kalendar/')}`;
+const title = tr('sez.k.title');
+const description = tr('sez.k.desc');
 
 const faq = [
-  { q: 'Kdy se sejí jařiny?', a: 'Jarní ječmen a pšenice únor–březen, mák, cukrovka a slunečnice březen–duben, kukuřice a sója duben–květen. Raný výsev jařin zvyšuje výnos.' },
-  { q: 'Kdy se sejí ozimy?', a: 'Ozimá řepka srpen–září, ozimá pšenice, ječmen, žito a tritikale září–říjen. Termín setí ozimů je klíčový pro dobré přezimování.' },
-  { q: 'Kdy vrcholí sklizeň obilovin?', a: 'V červenci a srpnu: nejdříve ozimý ječmen (červen–červenec), pak ozimá pšenice, žito a tritikale, nakonec jarní obiloviny.' },
+  { q: tr('sez.k.q1'), a: tr('sez.k.a1') },
+  { q: tr('sez.k.q2'), a: tr('sez.k.a2') },
+  { q: tr('sez.k.q3'), a: tr('sez.k.a3') },
 ];
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Sezóna', url: '/sezona/' },
-  { name: 'Kalendář setí a sklizně', url: pageUrl },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('sez.k.crumb'), url: localizePath(locale, '/sezona/') },
+  { name: tr('sez.cal'), url: pageUrl },
 ]);
 const itemListJsonLd = itemListSchema(
   plodiny.map((p) => ({ url: `${SITE_URL}/plodiny/${p.slug}/`, name: p.name })),
-  'Kalendář setí a sklizně',
+  tr('sez.cal'),
 );
 const faqJsonLd = faqPageSchema(faq);
 const months = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -40,12 +47,12 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
   <div class="sezona-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a> <span aria-hidden="true">›</span>
-      <a href="/sezona/">Sezóna</a> <span aria-hidden="true">›</span>
-      <span class="current">Kalendář setí a sklizně</span>
+      <a href="/"{tr('cat.bc.home')}/a> <span aria-hidden="true">›</span>
+      <a href={localizeInternalHref(locale, '/sezona/')}>Sezóna</a> <span aria-hidden="true">›</span>
+      <span class="current">{tr('sez.cal')}</span>
     </nav>
 
-    <h1>Kalendář setí a sklizně</h1>
+    <h1>{tr('sez.cal')}</h1>
     <p class="lead">{description}</p>
 
     <div class="table-wrap">
@@ -53,7 +60,7 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
         <thead>
           <tr>
             <th scope="col">Plodina</th>
-            {months.map((m) => <th scope="col" data-month={m} title={MONTH_NAMES_CS[m - 1]}>{MONTH_SHORT_CS[m - 1]}</th>)}
+            {months.map((m) => <th scope="col" data-month={m} title={MN[m - 1]}>{MS[m - 1]}</th>)}
           </tr>
         </thead>
         <tbody>
@@ -81,14 +88,14 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
         </tbody>
       </table>
     </div>
-    <p class="legenda"><span class="k sow">S</span> setí &nbsp; <span class="k harvest">☑</span> sklizeň</p>
+    <p class="legenda"><span class="k sow">S</span> {tr('sez.k.sowing')} &nbsp; <span class="k harvest">☑</span> {tr('sez.k.harvest')}</p>
 
     <section class="faq">
       <h2>Časté otázky</h2>
       {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
     </section>
 
-    <p class="cross"><a href="/sezona/">← Zpět na sezónní rozcestník</a> · <a href="/plodiny/">Všechny plodiny a odrůdy</a></p>
+    <p class="cross"><a href={localizeInternalHref(locale, '/sezona/')}>{tr('sez.backHub')}</a> · <a href={localizeInternalHref(locale, '/plodiny/')}>{tr('sez.allCrops')}</a></p>
   </div>
 
   <script is:inline>

@@ -51,6 +51,10 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // '/novinky' = PL zpravodajský výpis (jen reálně přeložené články, žádný cs leak).
   // '/choroby' = atlas chorob polních plodin. Čistá agronomie, žádná jurisdikce
   // (patogeny nerespektují hranice) → pl overlay 11 entit, plná parita s cs.
+  // '/sezona' = sezónní práce + kalendář setí a sklizně. ‼️ Měsíce se NEMĚNÍ —
+  // na měsíční granularitě vycházejí pro ČR i PL stejně (Praha 50° / Varšava 52°),
+  // ale stránka to pod ne-cs říká nahlas (sez.note), ať to nevypadá jako polsky
+  // měřená data. Blok českých akcí se pod ne-cs skrývá celý.
   // Právní + redakční stránky: polské verze byly v kódu HOTOVÉ (isPl větve
   // v podminky-pouziti / zpracovani-osobnich-udaju / dsa-kontakt), jen nikdy
   // nelaunchnuté — takže /pl neměl polsky ani zásady zpracování údajů, ani
@@ -69,7 +73,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // zůstává cs-only: je to úřední popis ÚKZÚZ k odrůdě registrované v ČR,
   // Polsko má vlastní registr (COBORU). Pillar proto pod ne-cs odrůdy nelinkuje
   // a sitemapa detaily do pl mirroru nepouští (isOdrudaDetailPath).
-  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky', '/kviz', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
+  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky', '/kviz', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/sezona'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

@@ -1,32 +1,35 @@
 ---
-export const prerender = true;
+// SSR — viz kalendar/index.astro.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { SEASONS } from '../../lib/sezona';
+import { SEASONS, seasonName } from '../../lib/sezona';
+import { useTranslations, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 
-const pageUrl = `${SITE_URL}/sezona/`;
-const title = 'Zemědělský rok — sezónní práce, setí a sklizeň na poli';
-const description = 'Co se na poli dělá v jednotlivých ročních obdobích: jarní setí, letní sklizeň, podzimní ozimy a zimní příprava. Kalendář setí a sklizně plodin.';
+const pageUrl = `${SITE_URL}${localizePath(locale, '/sezona/')}`;
+const title = tr('sez.hub.title');
+const description = tr('sez.hub.lead');
 
 const emoji = { jaro: '🌱', leto: '🌾', podzim: '🍂', zima: '❄️' } as const;
-const teaser = {
-  jaro: 'Setí jařin, příprava půdy, jarní hnojení',
-  leto: 'Sklizeň obilovin, seč pícnin, balíkování',
-  podzim: 'Zakládání ozimů, sklizeň okopanin, podmítka',
-  zima: 'Servis techniky, plánování, dotace',
-} as const;
+// Teasery jdou přes i18n (sez.t.<slug>) — slugy zůstávají cs jako URL klíče.
+const teaser = Object.fromEntries(
+  SEASONS.map((s) => [s.slug, tr(`sez.t.${s.slug}`)]),
+) as Record<string, string>;
 
-const cards = SEASONS.map((s) => ({ href: `/sezona/${s.slug}/`, name: s.name, slug: s.slug, emoji: emoji[s.slug], desc: teaser[s.slug] }));
+const cards = SEASONS.map((s) => ({ href: localizeInternalHref(locale, `/sezona/${s.slug}/`), name: seasonName(s.slug, locale), slug: s.slug, emoji: emoji[s.slug], desc: teaser[s.slug] }));
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Sezóna', url: pageUrl },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('sez.crumb'), url: pageUrl },
 ]);
 const itemListJsonLd = itemListSchema(
   [...cards.map((c) => ({ url: `${SITE_URL}${c.href}`, name: c.name })),
-   { url: `${SITE_URL}/sezona/kalendar/`, name: 'Kalendář setí a sklizně' }],
-  'Zemědělský rok',
+   { url: `${SITE_URL}${localizePath(locale, '/sezona/kalendar/')}`, name: tr('sez.cal') }],
+  tr('sez.crumb'),
 );
 ---
 
@@ -36,11 +39,11 @@ const itemListJsonLd = itemListSchema(
 
   <div class="sezona-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a> <span aria-hidden="true">›</span>
-      <span class="current">Zemědělský rok</span>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a> <span aria-hidden="true">›</span>
+      <span class="current">{tr('sez.crumb')}</span>
     </nav>
 
-    <h1>Zemědělský rok</h1>
+    <h1>{tr('sez.crumb')}</h1>
     <p class="lead">{description}</p>
 
     <div class="grid">
@@ -49,13 +52,13 @@ const itemListJsonLd = itemListSchema(
           <span class="emoji">{c.emoji}</span>
           <span class="name">{c.name}</span>
           <span class="desc">{c.desc}</span>
-          <span class="now-badge">právě teď</span>
+          <span class="now-badge">{tr('sez.now')}</span>
         </a>
       ))}
-      <a class="card cal-card" href="/sezona/kalendar/">
+      <a class="card cal-card" href={localizeInternalHref(locale, '/sezona/kalendar/')}>
         <span class="emoji">📅</span>
-        <span class="name">Kalendář setí a sklizně</span>
-        <span class="desc">Kdy sít a sklízet 18 polních plodin, měsíc po měsíci</span>
+        <span class="name">{tr('sez.cal')}</span>
+        <span class="desc">{tr('sez.calSub')}</span>
       </a>
     </div>
   </div>

@@ -6,6 +6,8 @@ import type { Akce } from './akce';
 
 export type SeasonSlug = 'jaro' | 'leto' | 'podzim' | 'zima';
 
+import { MONTH_NAMES_PL, MONTH_SHORT_PL, SEASON_NAMES_PL, SEASON_CONTENT_PL } from './sezona.pl';
+
 export interface Season {
   slug: SeasonSlug;
   name: string;
@@ -48,22 +50,25 @@ function sortCs(arr: Plodina[]): Plodina[] {
   return [...arr].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
 }
 
-export function cropsSownInMonth(month: number): Plodina[] {
-  return sortCs(listPlodiny().filter((p) => p.seti_mesice?.includes(month)));
+// locale ovlivňuje jen NÁZVY plodin a jejich prózu; měsíce (seti_mesice /
+// sklizen_mesice) jsou v cs YAML a overlay je nepřebíjí, takže výběr i pořadí
+// zůstávají shodné napříč jazyky.
+export function cropsSownInMonth(month: number, locale: string = 'cs'): Plodina[] {
+  return sortCs(listPlodiny(locale).filter((p) => p.seti_mesice?.includes(month)));
 }
 
-export function cropsHarvestedInMonth(month: number): Plodina[] {
-  return sortCs(listPlodiny().filter((p) => p.sklizen_mesice?.includes(month)));
+export function cropsHarvestedInMonth(month: number, locale: string = 'cs'): Plodina[] {
+  return sortCs(listPlodiny(locale).filter((p) => p.sklizen_mesice?.includes(month)));
 }
 
-export function cropsSownInSeason(slug: SeasonSlug): Plodina[] {
+export function cropsSownInSeason(slug: SeasonSlug, locale: string = 'cs'): Plodina[] {
   const months = getSeason(slug)!.months;
-  return sortCs(listPlodiny().filter((p) => p.seti_mesice?.some((m) => months.includes(m))));
+  return sortCs(listPlodiny(locale).filter((p) => p.seti_mesice?.some((m) => months.includes(m))));
 }
 
-export function cropsHarvestedInSeason(slug: SeasonSlug): Plodina[] {
+export function cropsHarvestedInSeason(slug: SeasonSlug, locale: string = 'cs'): Plodina[] {
   const months = getSeason(slug)!.months;
-  return sortCs(listPlodiny().filter((p) => p.sklizen_mesice?.some((m) => months.includes(m))));
+  return sortCs(listPlodiny(locale).filter((p) => p.sklizen_mesice?.some((m) => months.includes(m))));
 }
 
 export interface SeasonalLink {
@@ -157,4 +162,29 @@ export function akceInSeason(akce: Akce[], seasonSlug: SeasonSlug, now: Date): A
       return months.includes(d.getMonth() + 1);
     })
     .sort((a, b) => (a.pristi_vyskyt! < b.pristi_vyskyt! ? -1 : a.pristi_vyskyt! > b.pristi_vyskyt! ? 1 : 0));
+}
+
+// ── Locale vrstva ────────────────────────────────────────────────────────────
+// Měsíce setí/sklizně zůstávají shodné (viz sezona.pl.ts), mění se jen texty.
+export function monthNames(locale: string = 'cs'): string[] {
+  return locale === 'pl' ? MONTH_NAMES_PL : MONTH_NAMES_CS;
+}
+export function monthShort(locale: string = 'cs'): string[] {
+  return locale === 'pl' ? MONTH_SHORT_PL : MONTH_SHORT_CS;
+}
+export function seasonName(slug: SeasonSlug, locale: string = 'cs'): string {
+  if (locale === 'pl') return SEASON_NAMES_PL[slug];
+  return SEASONS.find((s) => s.slug === slug)!.name;
+}
+function content(slug: SeasonSlug, locale: string): SeasonContent {
+  return locale === 'pl' ? SEASON_CONTENT_PL[slug] : SEASON_CONTENT[slug];
+}
+export function seasonLeadL(slug: SeasonSlug, locale: string = 'cs'): string {
+  return content(slug, locale).lead;
+}
+export function seasonWorkLinksL(slug: SeasonSlug, locale: string = 'cs'): SeasonalLink[] {
+  return content(slug, locale).workLinks;
+}
+export function seasonFaqL(slug: SeasonSlug, locale: string = 'cs'): { q: string; a: string }[] {
+  return content(slug, locale).faq;
 }

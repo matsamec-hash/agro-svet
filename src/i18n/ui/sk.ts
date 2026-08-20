@@ -499,6 +499,46 @@ const sk: Record<string, string> = {
   'kvz.h.source': 'Zdroj',
   'kvz.h.articleDesc': 'Interaktívny kvíz s {count} otázkami o histórii poľnohospodárskych značiek a technológiách.',
 
+  // — sezóna (sez.*) —
+  'sez.hub.lead': 'Čo sa na poli robí v jednotlivých ročných obdobiach: jarná sejba, letný zber, jesenné oziminy a zimná príprava. Kalendár sejby a zberu plodín.',
+
+  'sez.d.sowPlanned': 'Čo sa plánuje siať',
+
+  'sez.t.jaro': 'Sejba jarín, príprava pôdy, jarné hnojenie',
+  'sez.t.leto': 'Zber obilnín, kosba krmovín, balíkovanie',
+  'sez.t.podzim': 'Zakladanie ozimín, zber okopanín, podmietka',
+  'sez.t.zima': 'Servis techniky, plánovanie, dotácie',
+  'sez.d.sowNow': 'Čo sa teraz seje',
+  'sez.d.harvestNow': 'Čo sa teraz zbiera',
+  'sez.k.title': 'Kalendár sejby a zberu — kedy siať a zbierať poľné plodiny',
+  'sez.k.desc': 'Prehľadný kalendár sejby a zberu hlavných poľných plodín: obilniny, repka, okopaniny, strukoviny a krmoviny mesiac po mesiaci.',
+  'sez.k.crumb': 'Sezóna',
+  'sez.k.sowing': 'sejba',
+  'sez.k.harvest': 'zber',
+  'sez.k.q1': 'Kedy sa sejú jariny?',
+  'sez.k.a1': 'Jarný jačmeň a pšenica február–marec, mak, cukrová repa a slnečnica marec–apríl, kukurica a sója apríl–máj. Skorá sejba jarín zvyšuje úrodu.',
+  'sez.k.q2': 'Kedy sa sejú oziminy?',
+  'sez.k.a2': 'Ozimná repka august–september, ozimná pšenica, jačmeň, raž a tritikale september–október. Termín sejby ozimín je kľúčový pre dobré prezimovanie.',
+  'sez.k.q3': 'Kedy vrcholí zber obilnín?',
+  'sez.k.a3': 'V júli a auguste: najprv ozimný jačmeň (jún–júl), potom ozimná pšenica, raž a tritikale, nakoniec jarné obilniny.',
+
+  'sez.d.harvestLbl': 'zber',
+  'sez.d.sowLbl': 'výsevok',
+
+  'sez.d.title': '{season} na poli — práce, sejba a zber | Sezónny kalendár',
+  'sez.d.h1': '{season} na poli',
+
+  'sez.crumb': 'Poľnohospodársky rok',
+  'sez.hub.title': 'Poľnohospodársky rok — sezónne práce na poli',
+  'sez.now': 'práve teraz',
+  'sez.cal': 'Kalendár sejby a zberu',
+  'sez.calSub': 'Kedy siať a zbierať 18 poľných plodín, mesiac po mesiaci',
+  'sez.work': 'Poľné práce v sezóne',
+  'sez.allSeasons': '← Všetky sezóny',
+  'sez.backHub': '← Späť na sezónny rozcestník',
+  'sez.allCrops': 'Všetky plodiny a odrody',
+  'sez.note': 'Termíny sú orientačné pre podmienky strednej Európy.',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Značky',
   'cat.zn.desc': 'Prehľad svetových výrobcov poľnohospodárskej techniky — od Claas a John Deere po Fendt, New Holland a Zetor.',
