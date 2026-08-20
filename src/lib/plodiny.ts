@@ -244,8 +244,8 @@ export function listSkupiny(): SkupinaEntry[] {
     .sort((a, b) => a.label.localeCompare(b.label, 'cs'));
 }
 
-export function listPlodinyBySkupina(skupina: Skupina): Plodina[] {
-  return build().filter((p) => p.skupina === skupina);
+export function listPlodinyBySkupina(skupina: Skupina, locale: string = 'cs'): Plodina[] {
+  return build(locale).filter((p) => p.skupina === skupina);
 }
 
 /** Deterministický ASCII slug (bez diakritiky, jen [a-z0-9-]). */

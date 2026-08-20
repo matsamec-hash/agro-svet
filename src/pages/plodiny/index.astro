@@ -1,10 +1,15 @@
 ---
-export const prerender = true;
+// SSR — sekce je launchnutá pro pl a prerendered stránka pod locale prefixem
+// skončí ForbiddenRewrite → 302 na cs. Data statická, render levný, CF cachuje.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { listPlodiny, listSkupiny } from '../../lib/plodiny';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 
-const plodiny = listPlodiny();
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const plodiny = listPlodiny(locale);
 // Hero fotka hubu: reprezentativní plodina (pšenice ozimá), jinak první
 // plodina s fotkou. Dřív tu bylo jen emoji.
 const hubHero = plodiny.find((p) => p.slug === 'psenice-ozima' && p.hero_image) ?? plodiny.find((p) => p.hero_image);
@@ -12,39 +17,39 @@ const skupiny = listSkupiny();
 const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
 
 const breadcrumb = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Plodiny', url: '/plodiny/' },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('plod.hub.crumb'), url: localizePath(locale, '/plodiny/') },
 ]);
 const list = itemListSchema(
-  plodiny.map((p) => ({ url: `/plodiny/${p.slug}/`, name: p.name })),
-  'Plodiny',
+  plodiny.map((p) => ({ url: localizePath(locale, `/plodiny/${p.slug}/`), name: p.name })),
+  tr('plod.hub.listName'),
 );
 ---
 
 <Layout
-  title="Plodiny a odrůdy — databáze polních plodin"
-  description={`Databáze ${plodiny.length} polních plodin a ${totalOdrudy} registrovaných odrůd: agronomie, výsevek, hnojení, choroby, výnos a doporučení.`}
+  title={tr('plod.hub.title')}
+  description={tf(locale, 'plod.hub.desc', { crops: plodiny.length, varieties: totalOdrudy })}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
 
   <div class="pl-hub">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <span class="current">Plodiny</span>
+      <span class="current">{tr('plod.hub.crumb')}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Databáze · Polní plodiny</span>
-        <h1>Plodiny a <em>odrůdy</em></h1>
-        <p class="hero-lede">Encyklopedie polních plodin a databáze registrovaných odrůd — agronomie, výsevek, hnojení, choroby, výnos a pěstitelská doporučení.</p>
-        <p class="cal-link"><a href="/sezona/kalendar/">📅 Kalendář setí a sklizně →</a></p>
+        <span class="kicker"><span class="dot"></span>{tr('plod.hub.kicker')}</span>
+        <h1>{tr('plod.hub.h1a')} <em>{tr('plod.hub.h1em')}</em></h1>
+        <p class="hero-lede">{tr('plod.hub.lede')}</p>
+        <p class="cal-link"><a href={localizeInternalHref(locale, '/sezona/kalendar/')}>{tr('plod.hub.calendar')} →</a></p>
         <div class="hero-stats">
-          <div class="s"><span class="n">{plodiny.length}</span><span class="l">plodin</span></div>
-          <div class="s"><span class="n">{totalOdrudy}</span><span class="l">registrovaných odrůd</span></div>
-          <div class="s"><span class="n">{skupiny.length}</span><span class="l">skupin plodin</span></div>
+          <div class="s"><span class="n">{plodiny.length}</span><span class="l">{tr('plod.hub.statCrops')}</span></div>
+          <div class="s"><span class="n">{totalOdrudy}</span><span class="l">{tr('plod.hub.statVarieties')}</span></div>
+          <div class="s"><span class="n">{skupiny.length}</span><span class="l">{tr('plod.hub.statGroups')}</span></div>
         </div>
       </div>
       <div class="hero-right">
@@ -64,13 +69,13 @@ const list = itemListSchema(
       <section class="group">
         <div class="group-head">
           <h2 class="section-title">
-            <a href={`/plodiny/skupina/${s.skupina}/`}>{s.label}</a>
+            <a href={localizeInternalHref(locale, `/plodiny/skupina/${s.skupina}/`)}>{tr(`plod.skupina.${s.skupina}`)}</a>
             <span class="section-title-c">{s.count}</span>
           </h2>
         </div>
         <div class="hub-grid">
           {plodiny.filter((p) => p.skupina === s.skupina).map((p) => (
-            <a href={`/plodiny/${p.slug}/`} class="hub-card">
+            <a href={localizeInternalHref(locale, `/plodiny/${p.slug}/`)} class="hub-card">
               {p.hero_image && (
                 <img
                   src={p.hero_image}

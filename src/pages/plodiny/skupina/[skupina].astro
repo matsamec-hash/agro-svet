@@ -1,27 +1,30 @@
 ---
-export const prerender = true;
+// SSR — viz plodiny/index.astro (locale prefix a prerender se vylučují).
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { listSkupiny, listPlodinyBySkupina, SKUPINA_LABELS, type Skupina } from '../../../lib/plodiny';
+import { listSkupiny, listPlodinyBySkupina, type Skupina } from '../../../lib/plodiny';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../../i18n/utils';
 import { breadcrumbSchema, itemListSchema } from '../../../lib/structured-data';
-
-export async function getStaticPaths() {
-  return listSkupiny().map((s) => ({ params: { skupina: s.skupina } }));
-}
 
 const { skupina } = Astro.params;
 const sk = skupina as Skupina;
-const label = SKUPINA_LABELS[sk];
+// getStaticPaths odpadl s přechodem na SSR — validitu skupiny teď musí ověřit
+// stránka sama, jinak by /plodiny/skupina/cokoliv/ vyrenderovalo prázdno místo 404.
+if (!listSkupiny().some((s) => s.skupina === sk)) return Astro.rewrite('/404');
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const label = tr(`plod.skupina.${sk}`);
 if (!label) return Astro.rewrite('/404');
-const plodiny = listPlodinyBySkupina(sk);
+const plodiny = listPlodinyBySkupina(sk, locale);
 
 const base = `/plodiny/skupina/${sk}/`;
 const breadcrumb = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Plodiny', url: '/plodiny/' },
-  { name: label, url: base },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('plod.hub.crumb'), url: localizePath(locale, '/plodiny/') },
+  { name: label, url: localizePath(locale, base) },
 ]);
 const list = itemListSchema(
-  plodiny.map((p) => ({ url: `/plodiny/${p.slug}/`, name: p.name })),
+  plodiny.map((p) => ({ url: localizePath(locale, `/plodiny/${p.slug}/`), name: p.name })),
   label,
 );
 
@@ -29,8 +32,13 @@ const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
 ---
 
 <Layout
-  title={`${label} — plodiny a odrůdy`}
-  description={`Přehled ${plodiny.length} ${plodiny.length === 1 ? 'plodiny' : 'plodin'} skupiny ${label.toLowerCase()}: agronomie, výsevek, hnojení a ${totalOdrudy} registrovaných odrůd.`}
+  title={tf(locale, 'plod.s.title', { label })}
+  description={tf(locale, 'plod.s.desc', {
+    count: plodiny.length,
+    unit: plodiny.length === 1 ? tr('plod.s.cropOne') : tr('plod.s.cropMany'),
+    label: label.toLowerCase(),
+    varieties: totalOdrudy,
+  })}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
@@ -38,9 +46,9 @@ const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
   <div class="pl-skupina">
 
     <nav class="breadcrumb" aria-label="Drobečková navigace">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/plodiny/">Plodiny</a>
+      <a href={localizeInternalHref(locale, '/plodiny/')}>{tr('plod.hub.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{label}</span>
     </nav>
@@ -55,7 +63,7 @@ const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
           <div class="s"><span class="n">{totalOdrudy}</span><span class="l">registrovaných odrůd</span></div>
         </div>
         <div class="hero-actions">
-          <a class="cta-back" href="/plodiny/">
+          <a class="cta-back" href={localizeInternalHref(locale, '/plodiny/')}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
             Všechny plodiny
           </a>
@@ -75,7 +83,7 @@ const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
       </div>
       <div class="hub-grid">
         {plodiny.map((p) => (
-          <a href={`/plodiny/${p.slug}/`} class="hub-card">
+          <a href={localizeInternalHref(locale, `/plodiny/${p.slug}/`)} class="hub-card">
             <div class="hc-body">
               <div class="hc-title">{p.name}</div>
               {p.description && <p class="hc-desc">{p.description}</p>}

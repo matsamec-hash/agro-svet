@@ -1,37 +1,41 @@
 ---
-export const prerender = true;
+// SSR — viz plodiny/index.astro (locale prefix a prerender se vylučují).
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { listPlodiny, getPlodina, isOdrudaIndexable, SKUPINA_LABELS } from '../../../lib/plodiny';
+import { listPlodiny, getPlodina, isOdrudaIndexable } from '../../../lib/plodiny';
 import { chorobaChipsForPlodina } from '../../../lib/choroby';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../../i18n/utils';
 import { breadcrumbSchema, howToSchema, faqPageSchema, itemListSchema, imageObjectSchema } from '../../../lib/structured-data';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
 
-export async function getStaticPaths() {
-  return listPlodiny().map((p) => ({ params: { plodina: p.slug } }));
-}
-
 const { plodina: slug } = Astro.params;
-const plodina = getPlodina(slug!);
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const plodina = getPlodina(slug!, locale);
+// Detail odrůdy zůstává cs-only (úřední popisy ÚKZÚZ k odrůdám registrovaným
+// v ČR). Pod ne-cs locale proto odrůdy NElinkujeme — tabulka sama nese hodnotu
+// (název, rok, udržovatel) a nevzniká skok do češtiny ani 302.
+const linkOdrudy = locale === 'cs';
 if (!plodina) return Astro.rewrite('/404');
 
 const base = `/plodiny/${plodina.slug}/`;
 const breadcrumb = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Plodiny', url: '/plodiny/' },
-  { name: SKUPINA_LABELS[plodina.skupina], url: `/plodiny/skupina/${plodina.skupina}/` },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('plod.hub.crumb'), url: localizePath(locale, '/plodiny/') },
+  { name: tr(`plod.skupina.${plodina.skupina}`), url: localizePath(locale, `/plodiny/skupina/${plodina.skupina}/`) },
   { name: plodina.name, url: base },
 ]);
 
 const howTo = plodina.osevni_postup && plodina.osevni_postup.length > 0
   ? howToSchema({
-      name: `Osevní postup — ${plodina.name}`,
+      name: tf(locale, 'plod.d.osevniPostupName', { name: plodina.name }),
       description: `Jak pěstovat plodinu ${plodina.name.toLowerCase()}.`,
       url: base,
       steps: plodina.osevni_postup,
     })
   : null;
 const faq = plodina.faq && plodina.faq.length > 0 ? faqPageSchema(plodina.faq) : null;
-const chorobaChips = chorobaChipsForPlodina(plodina.slug);
+const chorobaChips = chorobaChipsForPlodina(plodina.slug, locale);
 
 // Cross-link plodina → cenová statistika komodity (jen plodiny s cenovou řadou).
 const STAT_KOMODITA: Record<string, { slug: string; label: string }> = {
@@ -66,8 +70,8 @@ const list = plodina.odrudy.length > 0
 ---
 
 <Layout
-  title={`${plodina.name} — pěstování, odrůdy, agronomie`}
-  description={`${plodina.name}: výsevek, hnojení, choroby, výnos a přehled ${plodina.odrudy.length} registrovaných odrůd.`}
+  title={tf(locale, 'plod.d.title', { name: plodina.name })}
+  description={tf(locale, 'plod.d.desc', { name: plodina.name, count: plodina.odrudy.length })}
   ogImage={`https://agro-svet.cz/og/plodiny-${plodina.slug}.png`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
@@ -79,38 +83,38 @@ const list = plodina.odrudy.length > 0
   <div class="pl-detail">
 
     <nav class="breadcrumb" aria-label="Drobečková navigace">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/plodiny/">Plodiny</a>
+      <a href={localizeInternalHref(locale, '/plodiny/')}>{tr('plod.hub.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={`/plodiny/skupina/${plodina.skupina}/`}>{SKUPINA_LABELS[plodina.skupina]}</a>
+      <a href={localizeInternalHref(locale, `/plodiny/skupina/${plodina.skupina}/`)}>{tr(`plod.skupina.${plodina.skupina}`)}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{plodina.name}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>{SKUPINA_LABELS[plodina.skupina]} · Plodina</span>
+        <span class="kicker"><span class="dot"></span>{tr(`plod.skupina.${plodina.skupina}`)} · {tr('plod.d.kickerSuffix')}</span>
         <h1>{plodina.name}</h1>
         <p class="hero-lede">{plodina.description}</p>
         <div class="hero-stats">
           {plodina.odrudy.length > 0 && (
-            <div class="s"><span class="n">{plodina.odrudy.length}</span><span class="l">odrůd</span></div>
+            <div class="s"><span class="n">{plodina.odrudy.length}</span><span class="l">{tr('plod.d.statOdrudLbl')}</span></div>
           )}
           {plodina.vynos_t_ha && (
             <div class="s"><span class="n">{plodina.vynos_t_ha}</span><span class="l">t/ha výnos</span></div>
           )}
           {plodina.osevni_postup && plodina.osevni_postup.length > 0 && (
-            <div class="s"><span class="n">{plodina.osevni_postup.length}</span><span class="l">kroků pěstování</span></div>
+            <div class="s"><span class="n">{plodina.osevni_postup.length}</span><span class="l">{tr('plod.d.statSteps2')}</span></div>
           )}
         </div>
         <div class="hero-actions">
-          <a class="cta-back" href="/plodiny/">
+          <a class="cta-back" href={localizeInternalHref(locale, '/plodiny/')}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Všechny plodiny
+            {tr('plod.d.backToHub')}
           </a>
-          <a class="cta-group" href={`/plodiny/skupina/${plodina.skupina}/`}>
-            {SKUPINA_LABELS[plodina.skupina]}
+          <a class="cta-group" href={localizeInternalHref(locale, `/plodiny/skupina/${plodina.skupina}/`)}>
+            {tr(`plod.skupina.${plodina.skupina}`)}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
@@ -135,45 +139,45 @@ const list = plodina.odrudy.length > 0
     {plodina.hero_image && (
       <p class="hero-attribution">
         {plodina.hero_license === 'Public domain' && !plodina.hero_author
-          ? <>Ilustrace: volné dílo (public domain), <a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a></>
+          ? <>{tr('plod.d.photoIllu')}, <a href={plodina.hero_source} target="_blank" rel="noopener nofollow">{tr('plod.d.srcLbl')}</a></>
           : plodina.hero_author
-            ? <>Foto: {plodina.hero_author}, {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
-            : <>Foto: {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
+            ? <>{tr('plod.d.photoLbl')}: {plodina.hero_author}, {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">{tr('plod.d.srcLbl')}</a>)</>
+            : <>{tr('plod.d.photoLbl')}: {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">{tr('plod.d.srcLbl')}</a>)</>
         }
       </p>
     )}
 
     {(plodina.vysevek || plodina.hnojeni || plodina.vynos_t_ha || plodina.sklizen || plodina.vyuziti) && (
       <section class="card-section agro-facts">
-        <h2 class="section-title">Agronomie</h2>
+        <h2 class="section-title">{tr('plod.d.agronomie')}</h2>
         <dl class="facts-dl">
           {plodina.vysevek && (
             <>
-              <dt>Výsevek</dt>
+              <dt>{tr('plod.d.vysevek')}</dt>
               <dd>{plodina.vysevek}</dd>
             </>
           )}
           {plodina.hnojeni && (
             <>
-              <dt>Hnojení</dt>
+              <dt>{tr('plod.d.hnojeni')}</dt>
               <dd>{plodina.hnojeni}</dd>
             </>
           )}
           {plodina.vynos_t_ha && (
             <>
-              <dt>Výnos</dt>
+              <dt>{tr('plod.d.vynos')}</dt>
               <dd>{plodina.vynos_t_ha} t/ha</dd>
             </>
           )}
           {plodina.sklizen && (
             <>
-              <dt>Sklizeň</dt>
+              <dt>{tr('plod.d.sklizen')}</dt>
               <dd>{plodina.sklizen}</dd>
             </>
           )}
           {plodina.vyuziti && (
             <>
-              <dt>Využití</dt>
+              <dt>{tr('plod.d.vyuziti')}</dt>
               <dd>{plodina.vyuziti}</dd>
             </>
           )}
@@ -183,7 +187,7 @@ const list = plodina.odrudy.length > 0
 
     {plodina.osevni_postup && plodina.osevni_postup.length > 0 && (
       <section class="card-section">
-        <h2 class="section-title">Osevní postup</h2>
+        <h2 class="section-title">{tr('plod.d.osevniPostup')}</h2>
         <ol class="how-to-list">
           {plodina.osevni_postup.map((s, i) => (
             <li id={`krok-${i + 1}`} class="how-to-step">
@@ -200,11 +204,11 @@ const list = plodina.odrudy.length > 0
 
     {chorobaChips.length > 0 && (
       <section class="card-section">
-        <h2 class="section-title">Choroby a škůdci</h2>
+        <h2 class="section-title">{tr('plod.d.choroby')}</h2>
         <ul class="tag-list">
           {chorobaChips.map((c) => (
             c.slug
-              ? <li class="tag-item"><a href={`/choroby/${c.slug}/`}>{c.chip}</a></li>
+              ? <li class="tag-item"><a href={localizeInternalHref(locale, `/choroby/${c.slug}/`)}>{c.chip}</a></li>
               : <li class="tag-item">{c.chip}</li>
           ))}
         </ul>
@@ -218,25 +222,26 @@ const list = plodina.odrudy.length > 0
     {plodina.odrudy.length > 0 && (
       <section class="card-section odrudy-section">
         <h2 class="section-title">
-          Odrůdy
+          {tr('plod.d.varietiesH')}
           <span class="section-title-c">{plodina.odrudy.length}</span>
         </h2>
+        {!linkOdrudy && <p class="odrudy-note">{tr('plod.d.varietiesNote')}</p>}
         <div class="table-wrap">
           <table class="odrudy-table">
             <thead>
               <tr>
-                <th>Odrůda</th>
-                <th>Typ</th>
-                <th>Ranost</th>
-                <th>Registrace</th>
-                <th>Udržovatel</th>
+                <th>{tr('plod.d.thOdruda')}</th>
+                <th>{tr('plod.d.thTyp')}</th>
+                <th>{tr('plod.d.thRanost')}</th>
+                <th>{tr('plod.d.thRegistrace')}</th>
+                <th>{tr('plod.d.thUdrzovatel')}</th>
               </tr>
             </thead>
             <tbody>
               {plodina.odrudy.map((o) => (
                 <tr>
                   <td class="td-name">
-                    {isOdrudaIndexable(o)
+                    {linkOdrudy && isOdrudaIndexable(o)
                       ? <a href={`${base}${o.slug}/`}>{o.name}</a>
                       : o.name}
                   </td>
@@ -254,7 +259,7 @@ const list = plodina.odrudy.length > 0
 
     {plodina.faq && plodina.faq.length > 0 && (
       <section class="card-section faq-section">
-        <h2 class="section-title">Časté dotazy</h2>
+        <h2 class="section-title">{tr('plod.d.faq')}</h2>
         <div class="faq-list">
           {plodina.faq.map((f) => (
             <div class="faq-item">
@@ -267,31 +272,34 @@ const list = plodina.odrudy.length > 0
     )}
 
     <section class="card-section related-links">
-      <h2 class="section-title">Související</h2>
+      <h2 class="section-title">{tr('plod.d.related')}</h2>
       <div class="rl-grid">
         {statKomodita && (
-          <a class="rl-item" href={`/statistiky/komodita/${statKomodita.slug}/`}>
+          <a class="rl-item" href={localizeInternalHref(locale, `/statistiky/komodita/${statKomodita.slug}/`)}>
             <span class="rl-ico" aria-hidden="true">📈</span>
-            <span class="rl-txt"><strong>{statKomodita.label}</strong><small>Vývoj výkupních cen</small></span>
+            <span class="rl-txt"><strong>{locale === 'cs' ? statKomodita.label : tf(locale, 'plod.d.pricesOf', { name: plodina.name })}</strong><small>{tr('plod.d.rlPrices')}</small></span>
           </a>
         )}
-        <a class="rl-item" href="/kalkulacka/naklady-na-hektar/">
+        <a class="rl-item" href={localizeInternalHref(locale, '/kalkulacka/naklady-na-hektar/')}>
           <span class="rl-ico" aria-hidden="true">🧮</span>
-          <span class="rl-txt"><strong>Náklady na hektar</strong><small>Kalkulačka provozních nákladů</small></span>
+          <span class="rl-txt"><strong>{tr('plod.d.rlCosts')}</strong><small>{tr('plod.d.rlCostsSub')}</small></span>
         </a>
-        <a class="rl-item" href="/statistiky/">
+        <a class="rl-item" href={localizeInternalHref(locale, '/statistiky/')}>
           <span class="rl-ico" aria-hidden="true">📊</span>
-          <span class="rl-txt"><strong>Statistiky a trhy</strong><small>Osevní plochy, sklizeň, ceny</small></span>
+          <span class="rl-txt"><strong>{tr('plod.d.rlStats')}</strong><small>{tr('plod.d.rlStatsSub')}</small></span>
         </a>
-        <a class="rl-item" href="/slovnik/">
+        <a class="rl-item" href={localizeInternalHref(locale, '/slovnik/')}>
           <span class="rl-ico" aria-hidden="true">📖</span>
-          <span class="rl-txt"><strong>Slovník pojmů</strong><small>Agronomické názvosloví</small></span>
+          <span class="rl-txt"><strong>{tr('plod.d.rlGloss')}</strong><small>{tr('plod.d.rlGlossSub')}</small></span>
         </a>
       </div>
     </section>
 
     <div class="card-section osiva-wrap">
-      <OsivaLinks plodina={plodina.name} skupina={plodina.skupina} />
+      {/* Síťový blok míří na české prodejce osiv (/prodejci/, farmakrty.cz) —
+          pod ne-cs locale nedává smysl a vedl by do češtiny. Neskrývá se
+          překladem, ale úplně: je to CZ obchodní kontext, ne obsah. */}
+      {locale === 'cs' && <OsivaLinks plodina={plodina.name} skupina={plodina.skupina} />}
     </div>
 
   </div>
@@ -454,6 +462,7 @@ const list = plodina.odrudy.length > 0
 
   /* ── Odrůdy table ── */
   .pl-detail .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--r-md); border: 1px solid var(--line); }
+  .pl-detail .odrudy-note { font-size: 13px; color: var(--muted); margin: -2px 0 12px; }
   .pl-detail .odrudy-table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .pl-detail .odrudy-table thead tr { background: #F7F7FA; }
   .pl-detail .odrudy-table th {
