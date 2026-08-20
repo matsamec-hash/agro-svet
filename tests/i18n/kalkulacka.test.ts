@@ -10,7 +10,12 @@ describe('kalkulačka i18n — parity klíčů sk ↔ cs', () => {
     expect(slugs.length).toBeGreaterThan(0);
   });
 
-  const CS_ONLY_PREFIXES = ['providers', 'providerSection'];
+  // `sections` (srovnávací panel, referenční tabulky, karty jednotek) je
+  // záměrně jen na cs + pl. Dřív byly tyhle bloky natvrdo česky v šabloně, tedy
+  // sk je dostávalo česky; po přesunu do i18n padá sk na cs fallback, takže se
+  // jeho výstup NEMĚNÍ. Až dostane sk vlastní překlad, stačí `sections` odsud
+  // odebrat a test začne paritu vyžadovat.
+  const CS_ONLY_PREFIXES = ['providers', 'providerSection', 'sections'];
   const stripCsOnly = (paths: string[]) =>
     paths.filter((p) => !CS_ONLY_PREFIXES.some((pre) => p === pre || p.startsWith(`${pre}[`) || p.startsWith(`${pre}.`)));
 

@@ -13,6 +13,10 @@ import { localizeInternalHref } from '../../../i18n/utils';
 const locale = Astro.locals.locale ?? 'cs';
 const c = content[locale] ?? content.cs;
 const cr = crumbs[locale] ?? crumbs.cs;
+// Sekce (srovnání, tabulky, karty) — locale bez překladu (sk/uk) dostane cs
+// blok, tedy přesně dnešní výstup. Dřív byly natvrdo česky v šabloně, takže
+// /pl stránka byla z poloviny česky navzdory přeloženému hero i FAQ.
+const sec = c.sections ?? content.cs.sections!;
 
 const canonical = `${SITE_URL}/kalkulacka/prevody-jednotek/`;
 const faqItems = c.faq;
@@ -74,130 +78,43 @@ const appJsonLd = {
       numberLocale={c.numberLocale}
       ui={c.ui}
       unitNames={c.unitNames}
-      comparisonsHeading="Kolik to je? Názorné srovnání"
-      comparisonsCaption="Plocha se vykreslí jako mřížka referenčních dlaždic — čím víc se jich vejde, tím jsou menší. Orientační rozměry: parkovací místo ≈ 12,5 m², tenisový kurt ≈ 261 m², hokejové kluziště ≈ 1 800 m², fotbalové hřiště ≈ 7 140 m² (0,71 ha), Staroměstské náměstí ≈ 9 000 m², Václavské náměstí ≈ 45 000 m², Pražský hrad ≈ 70 000 m²."
-      comparisons={[
-        { emoji: '🅿️', name: 'parkovací místo', m2: 12.5, slug: 'parkovaci-misto', credit: 'Foto: Gabriel Picard, CC BY-SA 4.0' },
-        { emoji: '🎾', name: 'tenisový kurt', m2: 261, slug: 'tenisovy-kurt', credit: 'Foto: KeepActive Australia, CC BY-SA 4.0' },
-        { emoji: '🏒', name: 'hokejové kluziště', m2: 1800, slug: 'hokejove-kluziste', credit: 'Foto: Frettie, CC BY-SA 3.0' },
-        { emoji: '⚽', name: 'fotbalové hřiště', m2: 7140, slug: 'fotbalove-hriste', credit: 'Foto: Stephen Kennard, CC BY-SA 3.0' },
-        { emoji: '🏛️', name: 'Staroměstské náměstí', m2: 9000, slug: 'staromestske-nam', credit: 'Foto: A.Savin, FAL' },
-        { emoji: '🏙️', name: 'Václavské náměstí', m2: 45000, slug: 'vaclavske-nam', credit: 'Foto: Slyronit, CC BY-SA 4.0' },
-        { emoji: '🏰', name: 'Pražský hrad', m2: 70000, slug: 'prazsky-hrad', credit: 'Foto: Dietmar Rabich, CC BY-SA 4.0' },
-      ]}
+      comparisonsHeading={sec.comparisonsHeading}
+      comparisonsCaption={sec.comparisonsCaption}
+      comparisons={sec.comparisons}
+      cmpText={sec.cmpText}
     />
 
     <section class="pj-reference">
-      <h2>Referenční tabulka — nejčastější převody</h2>
+      <h2>{sec.refHeading}</h2>
       <div class="pj-tables">
-        <table class="pj-table">
-          <caption>Hektar (ha) na další jednotky</caption>
-          <tbody>
-            <tr><th>1 ha</th><td>= 10 000 m²</td></tr>
-            <tr><th>1 ha</th><td>= 100 a (arů)</td></tr>
-            <tr><th>1 ha</th><td>= 0,01 km²</td></tr>
-            <tr><th>1 ha</th><td>≈ 2,471 akru</td></tr>
-            <tr><th>1 ha</th><td>≈ 1,738 jitra</td></tr>
-            <tr><th>1 ha</th><td>≈ 3,476 korce / strychu</td></tr>
-            <tr><th>1 ha</th><td>≈ 3,917 pruského morgenu</td></tr>
-          </tbody>
-        </table>
-
-        <table class="pj-table">
-          <caption>Ar (a) na další jednotky</caption>
-          <tbody>
-            <tr><th>1 a</th><td>= 100 m²</td></tr>
-            <tr><th>1 a</th><td>= 0,01 ha</td></tr>
-            <tr><th>1 a</th><td>≈ 0,0247 akru</td></tr>
-            <tr><th>100 a</th><td>= 1 ha</td></tr>
-            <tr><th>4 a</th><td>= 400 m² (malá zahrada)</td></tr>
-            <tr><th>10 a</th><td>= 1 000 m² (větší zahrada)</td></tr>
-          </tbody>
-        </table>
-
-        <table class="pj-table">
-          <caption>Akr (acre) na další jednotky</caption>
-          <tbody>
-            <tr><th>1 akr</th><td>= 4 046,86 m²</td></tr>
-            <tr><th>1 akr</th><td>≈ 0,4047 ha</td></tr>
-            <tr><th>1 akr</th><td>≈ 40,47 a</td></tr>
-            <tr><th>1 akr</th><td>= 4 840 yard²</td></tr>
-            <tr><th>2,471 akru</th><td>= 1 ha</td></tr>
-            <tr><th>640 akrů</th><td>= 1 mile² (US section)</td></tr>
-          </tbody>
-        </table>
-
-        <table class="pj-table">
-          <caption>Historické české jednotky</caption>
-          <tbody>
-            <tr><th>1 jitro</th><td>= 5 754 m² = 0,5755 ha</td></tr>
-            <tr><th>1 korec</th><td>= 2 877 m² = 0,288 ha</td></tr>
-            <tr><th>1 strych</th><td>= 2 877 m² (= korec)</td></tr>
-            <tr><th>2 korce</th><td>= 1 jitro</td></tr>
-            <tr><th>1 lán</th><td>≈ 64 korců ≈ 18 ha</td></tr>
-            <tr><th>1 morgen (pruský)</th><td>= 2 553 m² = 0,255 ha</td></tr>
-          </tbody>
-        </table>
+        {sec.tables.map((t) => (
+          <table class="pj-table">
+            <caption>{t.caption}</caption>
+            <tbody>
+              {t.rows.map(([k, v]) => <tr><th>{k}</th><td>{v}</td></tr>)}
+            </tbody>
+          </table>
+        ))}
       </div>
     </section>
 
     <section class="pj-context">
-      <h2>K čemu jsou jednotlivé jednotky dobré?</h2>
+      <h2>{sec.contextHeading}</h2>
       <div class="pj-cards">
-        <article class="pj-card">
-          <h3>Hektar (ha) <a href="/slovnik/hektar/" class="pj-card-link">detail →</a></h3>
-          <p>
-            Standardní jednotka v zemědělství a lesnictví. Používá se pro výměru farem, dotace na hektar
-            (BISS, CISS, EKO), výnosy plodin (t/ha) i ceny postřiků (l/ha). 1 ha = fotbalové hřiště 1,5×.
-          </p>
-        </article>
-
-        <article class="pj-card">
-          <h3>Ar (a) <a href="/slovnik/ar/" class="pj-card-link">detail →</a></h3>
-          <p>
-            Jednotka pro drobné pozemky — zahrady, malé parcely, vinice malých vinařů. 1 ar = čtverec
-            10 × 10 m. V katastru nemovitostí přetrvává v běžné řeči, oficiálně se eviduje v m².
-          </p>
-        </article>
-
-        <article class="pj-card">
-          <h3>Metr čtvereční (m²) <a href="/slovnik/metr-ctvrecni/" class="pj-card-link">detail →</a></h3>
-          <p>
-            Základní SI jednotka. Oficiální zápis v katastru nemovitostí, sazba daně z nemovitých věcí,
-            výměra stavebních parcel, bytů a hal. Univerzální napříč obory.
-          </p>
-        </article>
-
-        <article class="pj-card">
-          <h3>Akr (acre) <a href="/slovnik/akr/" class="pj-card-link">detail →</a></h3>
-          <p>
-            Anglosaská jednotka pro USA, UK, Kanadu, Austrálii. Pro CZ farmáře relevantní při čtení
-            USDA dat (výnosy v bu/ac), CBOT cenotvorby a při exportu komodit.
-          </p>
-        </article>
-
-        <article class="pj-card">
-          <h3>Jitro, korec, strych <a href="/slovnik/jitro/" class="pj-card-link">detail →</a></h3>
-          <p>
-            Historické české jednotky před metrickou reformou (1919). Setkáte se s nimi
-            v katastrálních zápisech, gruntovních knihách, urbářích a rodinných kronikách.
-            Pro dědická řízení a genealogii nutné znát.
-          </p>
-        </article>
-
-        <article class="pj-card">
-          <h3>Morgen <a href="/slovnik/morgen/" class="pj-card-link">detail →</a></h3>
-          <p>
-            Historická německá jednotka. Pruský morgen ≈ 0,255 ha, rakouský ≈ 0,575 ha (rovná se českému
-            jitru). Setkáte se v pohraničí (Sudety, jižní Morava), na pruských mapách a při nákupu
-            pozemků v severním Německu.
-          </p>
-        </article>
+        {sec.cards.map((card) => (
+          <article class="pj-card">
+            <h3>
+              {card.title}
+              <a href={localizeInternalHref(locale, card.href)} class="pj-card-link">detail →</a>
+            </h3>
+            <p>{card.text}</p>
+          </article>
+        ))}
       </div>
     </section>
 
     <section class="pj-faq">
-      <h2>Časté otázky</h2>
+      <h2>{sec.faqHeading}</h2>
       {faqItems.map((item) => (
         <details class="pj-faq-item">
           <summary>{item.q}</summary>

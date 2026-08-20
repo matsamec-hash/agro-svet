@@ -20,6 +20,12 @@ export interface Props {
   comparisons?: { emoji: string; name: string; m2: number; slug?: string; credit?: string }[];
   comparisonsHeading?: string;
   comparisonsCaption?: string;
+  /** Lokalizované stringy srovnávacího panelu (default = cs). Bez nich zůstávaly
+   *  česky i na /pl — „Porovnat s", „1 dlaždice = …" — uprostřed jinak polské stránky. */
+  cmpText?: {
+    pickerLabel?: string; selectAria?: string;
+    frameIs?: string; yourInput?: string; tileIs?: string; shownFirst?: string;
+  };
 }
 
 const {
@@ -34,7 +40,18 @@ const {
   comparisons = [],
   comparisonsHeading = 'Kolik to je?',
   comparisonsCaption,
+  cmpText = {},
 } = Astro.props;
+
+const CMP = {
+  pickerLabel: cmpText.pickerLabel ?? 'Porovnat s',
+  selectAria: cmpText.selectAria ?? 'Vyber srovnávací objekt',
+  frameIs: cmpText.frameIs ?? 'Rámeček =',
+  yourInput: cmpText.yourInput ?? 'zelená plocha = vaše zadání',
+  tileIs: cmpText.tileIs ?? '1 dlaždice =',
+  // {n} = počet zobrazených dlaždic, {total} = skutečný počet
+  shownFirst: cmpText.shownFirst ?? 'zobrazeno prvních {n} z {total}',
+};
 
 const uiText = {
   inputLabel: ui.inputLabel ?? 'Zadej hodnotu',
@@ -106,8 +123,8 @@ const Heading = headingLevel;
       <div class="ac-compare">
         <h3 class="ac-cmp-h">{comparisonsHeading}</h3>
         <label class="ac-cmp-picker">
-          <span class="ac-cmp-picker-label">Porovnat s</span>
-          <select class="ac-cmp-select" id="ac-cmp-select" aria-label="Vyber srovnávací objekt">
+          <span class="ac-cmp-picker-label">{CMP.pickerLabel}</span>
+          <select class="ac-cmp-select" id="ac-cmp-select" aria-label={CMP.selectAria}>
             {comparisons.map((c, i) => (
               <option value={i}>{c.emoji} {c.name}</option>
             ))}
@@ -126,7 +143,7 @@ const Heading = headingLevel;
   </div>
 </section>
 
-<script is:inline define:vars={{ UNITS, numberLocale, COMPARISONS: comparisons }}>
+<script is:inline define:vars={{ UNITS, numberLocale, COMPARISONS: comparisons, CMP }}>
   (function () {
     const root = document.currentScript.previousElementSibling;
     if (!root) return;
@@ -243,9 +260,11 @@ const Heading = headingLevel;
       if (cmpVisual) cmpVisual.innerHTML = buildSvg(count, r);
       if (cmpLegend) {
         cmpLegend.textContent = count < 1
-          ? `Rámeček = ${r.emoji} ${r.name} (${fmtM2(r.m2)} m²) · zelená plocha = vaše zadání`
-          : `1 dlaždice = ${r.emoji} ${r.name} · ${fmtM2(r.m2)} m²`
-            + (count > CELL_CAP ? ` · zobrazeno prvních ${CELL_CAP} z ${fmtCount(count)}` : '');
+          ? `${CMP.frameIs} ${r.emoji} ${r.name} (${fmtM2(r.m2)} m²) · ${CMP.yourInput}`
+          : `${CMP.tileIs} ${r.emoji} ${r.name} · ${fmtM2(r.m2)} m²`
+            + (count > CELL_CAP
+                ? ' · ' + CMP.shownFirst.replace('{n}', CELL_CAP).replace('{total}', fmtCount(count))
+                : '');
       }
     }
 
