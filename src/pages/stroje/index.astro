@@ -9,7 +9,7 @@ import { useTranslations, plural, tf, getLocaleFromUrl, localizePath, localizeIn
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 
-const brands = getAllBrands();
+const brands = getAllBrands(locale);
 const models = getAllModels();
 
 const kategorieLabel: Record<StrojKategorie, string> = {

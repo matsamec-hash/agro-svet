@@ -13,7 +13,7 @@ interface Props { subcat: StrojKategorie; locale: string; }
 const { subcat, locale } = Astro.props;
 const tr = useTranslations(locale);
 
-const allBrands = getAllBrands();
+const allBrands = getAllBrands(locale);
 const allModels = getAllModels();
 const subcatModels = allModels.filter((m) => m.effective_category === subcat);
 const subcatBrands = [...new Set(subcatModels.map((m) => m.brand_slug))]

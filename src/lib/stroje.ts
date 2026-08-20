@@ -398,6 +398,7 @@ function localizeBrand(base: StrojBrand, locale: string): StrojBrand {
 }
 
 let cachedBrands: StrojBrand[] | null = null;
+const cachedBrandsByLocale = new Map<string, StrojBrand[]>();
 let cachedFlat: StrojFlatModel[] | null = null;
 
 function coerceSlug(value: unknown): string {
@@ -417,7 +418,23 @@ function normalizeBrand(raw: any): StrojBrand {
   return raw as StrojBrand;
 }
 
-export function getAllBrands(): StrojBrand[] {
+/**
+ * Všechny značky. S `locale` vrací lokalizovanou variantu (country/description
+ * z overlaye /src/data/stroje/<locale>/<slug>.yaml) — bez něj čistá cs data.
+ *
+ * PROČ volitelný parametr: `getBrand(slug, locale)` lokalizaci uměl odjakživa,
+ * ale listingy volaly `getAllBrands()` bez locale, takže /sk/stroje/ i /uk/stroje/
+ * vypisovaly „Německo" česky. Default 'cs' = přesně dnešní chování, takže
+ * volající, kteří locale neřeší (sitemap, llms.txt, auto-linker), zůstávají beze změny.
+ */
+export function getAllBrands(locale: string = 'cs'): StrojBrand[] {
+  if (locale !== 'cs') {
+    const hit = cachedBrandsByLocale.get(locale);
+    if (hit) return hit;
+    const localized = getAllBrands().map((b) => localizeBrand(b, locale));
+    cachedBrandsByLocale.set(locale, localized);
+    return localized;
+  }
   if (cachedBrands) return cachedBrands;
   const brands: StrojBrand[] = [];
   for (const [path, raw] of Object.entries(brandModules)) {

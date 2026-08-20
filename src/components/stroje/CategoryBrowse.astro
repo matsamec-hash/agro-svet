@@ -173,7 +173,7 @@ function hpBar(min: number | null, max: number | null): { from: number; span: nu
 }
 
 const sections: BrandSection[] = [];
-for (const b of getAllBrands() as any[]) {
+for (const b of getAllBrands(locale) as any[]) {
   const tiles = buildTilesForCategory(b);
   if (tiles.length === 0) continue;
   const sorted = [...tiles].sort(tileSort);
