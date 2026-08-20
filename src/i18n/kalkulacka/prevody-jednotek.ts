@@ -105,6 +105,16 @@ export const content: Record<Locale, PrevodyJednotekContent> = {
       ],
       faqHeading: 'Časté otázky',
     },
+    related: {
+      heading: 'Další užitečné stránky',
+      items: [
+        { href: '/slovnik/?kategorie=jednotky', label: '📐 Slovník — všechny jednotky a měření' },
+        { href: '/kalkulacka/naklady-na-hektar/', label: '🌾 Kalkulačka nákladů na hektar' },
+        { href: '/kalkulacka/dotace-cap/', label: '💶 Kalkulačka dotací CAP 2024' },
+        { href: '/slovnik/hektar/', label: '🟨 Hektar (ha) — detail jednotky' },
+        { href: '/slovnik/q-cent/', label: '⚖️ Cent (q) — jednotka výnosu' },
+      ],
+    },
   },
   sk: {
     title: 'Prevody jednotiek plochy — hektár, ár, m², aker, jitro, korec',
@@ -133,6 +143,71 @@ export const content: Record<Locale, PrevodyJednotekContent> = {
       { q: 'Čo je jitro, korec a strych? Aké sú veľké?', a: 'Historické jednotky plochy z čias pred metrickou reformou. Štandardizované hodnoty z roku 1764: rakúsko-uhorské jitro = 0,5755 ha (5 754 m²), korec = strych = 0,288 ha (2 877 m²). Stále sa objavujú v starších katastrálnych zápisoch a rodinnej pamäti.' },
       { q: 'Prečo existuje hektolitrová hmotnosť obilia?', a: 'Hektolitrová hmotnosť (kg/hl) je kvalitatívny parameter — hmotnosť 100 litrov obilia. Vyššia hl hmotnosť = vyšší obsah škrobu/oleja, lepšia mlynárska kvalita. Pšenica 78+ kg/hl = potravinárska trieda, < 74 kg/hl = kŕmna. Rozdiel ceny môže byť výrazný.' },
     ],
+    sections: {
+      comparisonsHeading: 'Koľko to je? Názorné porovnanie',
+      comparisonsCaption:
+        'Plocha sa vykreslí ako mriežka referenčných dlaždíc — čím viac sa ich zmestí, tým sú menšie. Orientačné rozmery: parkovacie miesto ≈ 12,5 m², tenisový kurt ≈ 261 m², hokejové klzisko ≈ 1 800 m², futbalové ihrisko ≈ 7 140 m² (0,71 ha). Pražské objekty slúžia len ako mierka veľkosti: Staromestské námestie ≈ 9 000 m², Václavské námestie ≈ 45 000 m², Pražský hrad ≈ 70 000 m².',
+      comparisons: [
+        { emoji: '🅿️', name: 'parkovacie miesto', m2: 12.5, slug: 'parkovaci-misto', credit: 'Foto: Gabriel Picard, CC BY-SA 4.0' },
+        { emoji: '🎾', name: 'tenisový kurt', m2: 261, slug: 'tenisovy-kurt', credit: 'Foto: KeepActive Australia, CC BY-SA 4.0' },
+        { emoji: '🏒', name: 'hokejové klzisko', m2: 1800, slug: 'hokejove-kluziste', credit: 'Foto: Frettie, CC BY-SA 3.0' },
+        { emoji: '⚽', name: 'futbalové ihrisko', m2: 7140, slug: 'fotbalove-hriste', credit: 'Foto: Stephen Kennard, CC BY-SA 3.0' },
+        { emoji: '🏛️', name: 'Staromestské námestie v Prahe', m2: 9000, slug: 'staromestske-nam', credit: 'Foto: A.Savin, FAL' },
+        { emoji: '🏙️', name: 'Václavské námestie v Prahe', m2: 45000, slug: 'vaclavske-nam', credit: 'Foto: Slyronit, CC BY-SA 4.0' },
+        { emoji: '🏰', name: 'Pražský hrad', m2: 70000, slug: 'prazsky-hrad', credit: 'Foto: Dietmar Rabich, CC BY-SA 4.0' },
+      ],
+      cmpText: {
+        pickerLabel: 'Porovnať s', selectAria: 'Vyber porovnávací objekt',
+        frameIs: 'Rámček =', yourInput: 'zelená plocha = tvoje zadanie',
+        tileIs: '1 dlaždica =', shownFirst: 'zobrazených prvých {n} z {total}',
+      },
+      refHeading: 'Referenčná tabuľka — najčastejšie prevody',
+      tables: [
+        { caption: 'Hektár (ha) na ďalšie jednotky', rows: [
+          ['1 ha', '= 10 000 m²'], ['1 ha', '= 100 á (árov)'], ['1 ha', '= 0,01 km²'],
+          ['1 ha', '≈ 2,471 akra'], ['1 ha', '≈ 1,738 jutra'],
+          ['1 ha', '≈ 3,476 korca'], ['1 ha', '≈ 3,917 pruského morgenu'],
+        ] },
+        { caption: 'Ár (á) na ďalšie jednotky', rows: [
+          ['1 á', '= 100 m²'], ['1 á', '= 0,01 ha'], ['1 á', '≈ 0,0247 akra'],
+          ['100 á', '= 1 ha'], ['4 á', '= 400 m² (malá záhrada)'], ['10 á', '= 1 000 m² (väčšia záhrada)'],
+        ] },
+        { caption: 'Aker (acre) na ďalšie jednotky', rows: [
+          ['1 aker', '= 4 046,86 m²'], ['1 aker', '≈ 0,4047 ha'], ['1 aker', '≈ 40,47 á'],
+          ['1 aker', '= 4 840 yardov²'], ['2,471 akra', '= 1 ha'], ['640 akrov', '= 1 míľa² (US section)'],
+        ] },
+        // Slovensko bolo súčasťou Rakúsko-Uhorska, takže jutro/korec sa používali
+        // rovnako ako v českých krajinách; uhorské jutro (hold) je špecifikum juhu.
+        { caption: 'Historické jednotky (Rakúsko-Uhorsko)', rows: [
+          ['1 katastrálne jutro', '= 5 755 m² = 0,5755 ha'],
+          ['1 korec', '= 2 877 m² = 0,288 ha'],
+          ['2 korce', '= 1 jutro'],
+          ['1 uhorské jutro (hold)', '= 5 755 m² (1 200 štvorcových siah)'],
+          ['1 štvorcová siaha', '≈ 3,6 m²'],
+          ['1 pruský morgen', '= 2 553 m² = 0,255 ha'],
+        ] },
+      ],
+      contextHeading: 'Na čo sú jednotlivé jednotky dobré?',
+      cards: [
+        { title: 'Hektár (ha)', href: '/slovnik/hektar/', text: 'Štandardná jednotka v poľnohospodárstve a lesníctve. Používa sa na výmeru fariem, priame platby na hektár, úrody plodín (t/ha) aj dávky postrekov (l/ha). 1 ha = približne 1,5 futbalového ihriska.' },
+        { title: 'Ár (á)', href: '/slovnik/ar/', text: 'Jednotka pre drobné pozemky — záhrady, malé parcely, vinice malých vinárov. 1 ár = štvorec 10 × 10 m. V bežnej reči pretrváva, v katastri sa eviduje v m².' },
+        { title: 'Meter štvorcový (m²)', href: '/slovnik/metr-ctvrecni/', text: 'Základná jednotka SI. Oficiálny zápis v katastri nehnuteľností, základ dane z nehnuteľností, výmera stavebných parciel, bytov a hál.' },
+        { title: 'Aker (acre)', href: '/slovnik/akr/', text: 'Anglosaská jednotka používaná v USA, Spojenom kráľovstve, Kanade a Austrálii. Pre slovenského farmára dôležitá pri čítaní dát USDA (úrody v bu/ac), cenotvorby CBOT a pri exporte komodít.' },
+        { title: 'Jutro a korec', href: '/slovnik/jitro/', text: 'Historické jednotky z čias Rakúsko-Uhorska, pred metrickou reformou. Štandardizované hodnoty: katastrálne jutro = 0,5755 ha, korec = 0,288 ha. Stretneš sa s nimi v starých pozemkových knihách a rodinných kronikách.' },
+        { title: 'Morgen', href: '/slovnik/morgen/', text: 'Historická nemecká jednotka. Pruský morgen ≈ 0,255 ha, rakúsky ≈ 0,575 ha (rovná sa jutru). Objavuje sa na starých nemeckých mapách a v dokumentoch z pohraničia.' },
+      ],
+      faqHeading: 'Časté otázky',
+    },
+    related: {
+      heading: 'Ďalšie užitočné stránky',
+      items: [
+        { href: '/sk/slovnik/', label: '📐 Slovník — jednotky a merania' },
+        { href: '/sk/kalkulacka/naklady-na-hektar/', label: '🌾 Kalkulačka nákladov na hektár' },
+        { href: '/sk/kalkulacka/prevody-hmotnost/', label: '⚖️ Prevody jednotiek hmotnosti' },
+        { href: '/sk/slovnik/hektar/', label: '🟨 Hektár (ha) — detail jednotky' },
+        { href: '/sk/slovnik/q-cent/', label: '⚖️ Cent (q) — jednotka úrody' },
+      ],
+    },
   },
   uk: {} as PrevodyJednotekContent,
   pl: {

@@ -87,6 +87,17 @@ export const content: Record<Locale, PrevodyHmotnostContent> = {
       ],
       faqHeading: 'Časté otázky',
     },
+    related: {
+      heading: 'Další užitečné stránky',
+      items: [
+        { href: '/kalkulacka/prevody-jednotek/', label: '📐 Převody jednotek plochy' },
+        { href: '/slovnik/tuna/', label: '⚖️ Tuna (t) — detail jednotky' },
+        { href: '/slovnik/q-cent/', label: '⚖️ Cent (q) — detail jednotky' },
+        { href: '/slovnik/busl/', label: '🌾 Bušl — detail s USDA tabulkou' },
+        { href: '/slovnik/hektolitr/', label: '🌾 Hektolitr — váha obilí' },
+        { href: '/kalkulacka/naklady-na-hektar/', label: '💰 Náklady na hektar' },
+      ],
+    },
   },
   sk: {
     title: 'Prevody jednotiek hmotnosti — tona, q, kg, bušel, libra',
@@ -110,6 +121,55 @@ export const content: Record<Locale, PrevodyHmotnostContent> = {
       { q: 'Koľko kg je 1 libra (pound, lb)?', a: '1 libra (lb) = 0,45359237 kg, prakticky 0,4536 kg. Rýchly odhad: lb × 0,5 ≈ kg. Libra sa používa v USDA reportoch, na CBOT futures (sójový olej v ¢/lb, live cattle v ¢/lb) a v amerických kŕmnych tabuľkách.' },
       { q: 'Čo je hektolitrová hmotnosť obilia?', a: 'Hmotnosť 100 litrov obilia v kg — kvalitatívny parameter pre výkup. Pšenica potravinárska 78+ kg/hl, kŕmna pod 74 kg/hl. Vyššia hl hmotnosť = lepší škrob/olej, vyššia cena.' },
     ],
+    sections: {
+      refHeading: 'Referenčná tabuľka — najčastejšie prevody',
+      tables: [
+        { caption: 'Tona (t) na ďalšie jednotky', rows: [
+          ['1 t', '= 1 000 kg'], ['1 t', '= 10 q (metrických centov)'],
+          ['1 t', '≈ 2 204,6 lb (libier)'], ['1 t pšenice / sóje', '≈ 36,7 bušla'],
+          ['1 t kukurice / raže', '≈ 39,4 bušla'], ['1 t jačmeňa', '≈ 45,9 bušla'],
+          ['1 t ovsa', '≈ 68,9 bušla'],
+        ] },
+        { caption: 'Bušel (štandard USDA) — kg / lb', rows: [
+          ['Pšenica / sója', '27,2155 kg / 60 lb'], ['Kukurica / raž', '25,4012 kg / 56 lb'],
+          ['Repka (canola)', '22,6796 kg / 50 lb'], ['Jačmeň', '21,7724 kg / 48 lb'],
+          ['Ovos', '14,5150 kg / 32 lb'],
+        ] },
+        { caption: 'Metrický cent (q) a libra (lb)', rows: [
+          ['1 q', '= 100 kg = 0,1 t'], ['10 q', '= 1 t'], ['1 lb', '= 0,4536 kg'],
+          ['1 kg', '= 2,2046 lb'], ['1 US short ton', '= 907,18 kg = 2 000 lb'],
+          ['1 UK long ton', '= 1 016 kg = 2 240 lb'],
+        ] },
+        { caption: 'Hektolitrová hmotnosť pri výkupe', rows: [
+          ['Pšenica potravinárska', '78–84 kg/hl (trieda A/E)'], ['Pšenica kŕmna', 'pod 74 kg/hl'],
+          ['Jačmeň sladovnícky', 'min. 64 kg/hl'], ['Jačmeň kŕmny', '62–66 kg/hl'],
+          ['Raž potravinárska', '72+ kg/hl'], ['Ovos potravinársky', '50+ kg/hl'],
+          ['Repka ozimná', 'min. 62 kg/hl'],
+        ] },
+      ],
+      yieldHeading: 'Prevod úrod: bušel/aker ↔ t/hektár',
+      yieldLede: 'Na porovnanie úrod z USA a EÚ. CBOT publikuje úrody v bushel/acre, štatistiky EÚ v t/ha. Násobiteľ závisí od komodity (rôzna hmotnosť bušla a prevod aker→ha).',
+      yieldCols: ['Komodita', 'bu/ac → t/ha', 'Príklad úrody USA', 'Ekvivalent v t/ha'],
+      yieldRows: [
+        ['Pšenica / sója', '× 0,06725', '50 bu/ac', '≈ 3,36 t/ha'],
+        ['Kukurica / raž', '× 0,06277', '175 bu/ac', '≈ 10,98 t/ha'],
+        ['Repka (canola)', '× 0,05604', '40 bu/ac', '≈ 2,24 t/ha'],
+        ['Jačmeň', '× 0,05381', '80 bu/ac', '≈ 4,30 t/ha'],
+        ['Ovos', '× 0,03587', '70 bu/ac', '≈ 2,51 t/ha'],
+      ],
+      faqHeading: 'Časté otázky',
+    },
+    related: {
+      heading: 'Ďalšie užitočné stránky',
+      items: [
+        { href: '/sk/kalkulacka/prevody-jednotek/', label: '📐 Prevody jednotiek plochy' },
+        { href: '/sk/slovnik/tuna/', label: '⚖️ Tona (t) — detail jednotky' },
+        { href: '/sk/slovnik/q-cent/', label: '⚖️ Cent (q) — detail jednotky' },
+        { href: '/sk/slovnik/busl/', label: '🌾 Bušel — detail s tabuľkou USDA' },
+        { href: '/sk/slovnik/hektolitr/', label: '🌾 Hektoliter — hmotnosť obilia' },
+        { href: '/sk/kalkulacka/naklady-na-hektar/', label: '💰 Náklady na hektár' },
+      ],
+    },
   },
   uk: {} as PrevodyHmotnostContent,
   pl: {
