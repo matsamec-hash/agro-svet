@@ -41,9 +41,8 @@ describe('pl nav konfigurace', () => {
       const root = href.replace(/\/+$/, '') || '/';
       expect(isLaunchedPath('pl', root), `footer odkaz ${href} musí být pl-launchnutý`).toBe(true);
     }
-    // konkrétně: /novinky/ (cs-only) NESMÍ být v pl footeru
-    // (/plemena/ je od 2026-08-01 launchnuté → smí být ve footeru)
-    expect(allLinks).not.toContain('/novinky/');
+    // /novinky/ i /plemena/ jsou dnes pl-launchnuté → ve footeru být SMÍ; invariant
+    // výše (každý odkaz musí být launchnutý) je to, co skutečně brání dead-linkům.
     // /stroje/ a /slovnik/ (launchnuté) tam být MOHOU — ověř, že aspoň /stroje/ je
     expect(allLinks).toContain('/stroje/');
   });

@@ -13,11 +13,13 @@ describe('pl auto-linker / interní href lokalizace', () => {
     expect(localizeInternalHref('pl', '/')).toBe('/pl/');
   });
   it('NElaunchnutá sekce → cs href beze změny (žádný 302/leak)', () => {
-    expect(localizeInternalHref('pl', '/novinky/')).toBe('/novinky/');
     expect(localizeInternalHref('pl', '/dotace/')).toBe('/dotace/');
     // /jak-na-to NElaunchnutá pro pl (jiná jurisdikce) → cs href beze změny
     expect(localizeInternalHref('pl', '/jak-na-to/vyber-traktoru/')).toBe('/jak-na-to/vyber-traktoru/');
-    expect(localizeInternalHref('pl', '/vcelarstvi/vceli-produkty/')).toBe('/vcelarstvi/vceli-produkty/');
+  });
+  it('launchnutá sekce dostane /pl prefix (/novinky feed, /vcelarstvi PL overlay)', () => {
+    expect(localizeInternalHref('pl', '/novinky/')).toBe('/pl/novinky/');
+    expect(localizeInternalHref('pl', '/vcelarstvi/vceli-produkty/')).toBe('/pl/vcelarstvi/vceli-produkty/');
   });
   it('cs no-op', () => {
     expect(localizeInternalHref('cs', '/slovnik/adblue/')).toBe('/slovnik/adblue/');

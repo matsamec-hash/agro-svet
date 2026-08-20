@@ -21,9 +21,10 @@ describe('PL fáze 1 launch (stroje/znacky/srovnani/slovnik)', () => {
     expect(isLaunchedPath('pl', '/encyklopedie/fendt-724-vario/')).toBe(true);
   });
   it('zbylé jurisdikční / cs-only sekce NEjsou launchnuté pro pl', () => {
-    // /dotace + /jak-na-to = PL má vlastní dotační/how-to obsah (jiná jurisdikce);
-    // /novinky = české články.
-    for (const p of ['/dotace', '/jak-na-to', '/novinky']) {
+    // /dotace + /jak-na-to = PL má vlastní dotační/how-to obsah (jiná jurisdikce).
+    // /novinky už launchnuté NENÍ v tomhle seznamu — PL výpis servíruje jen reálně
+    // přeložené články (article_translations), takže žádný cs leak.
+    for (const p of ['/dotace', '/jak-na-to']) {
       expect(isLaunchedPath('pl', p)).toBe(false);
     }
   });

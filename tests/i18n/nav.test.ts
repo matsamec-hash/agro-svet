@@ -5,10 +5,11 @@ import { getNav, getFooterColumns, HIDDEN_SECTIONS, isLockedSectionPath } from '
 describe('getNav', () => {
   it('cs top-level strom — Svět je nově podsekce Data (ne top-level), bazar skrytý', () => {
     const nav = getNav('cs');
-    // 'Svět' už NENÍ top-level (přesunut pod Data 2026-06-21); 'bazar' je dočasně
-    // skrytý i pro cs (vyčerpaný SMTP rate limit) → ve viditelném stromu chybí.
+    // 'Svět' už NENÍ top-level (přesunut pod Data 2026-06-21); 'bazar' (rozbitá
+    // SMTP registrace) i 'photo' (odložený launch fotosoutěže 2026-08-01) jsou
+    // dočasně skryté i pro cs → ve viditelném stromu chybí.
     expect(nav.map((i) => i.label)).toEqual([
-      'Téma', 'Zvířata', 'Technika', 'Data', 'Farmy', 'Fotosoutěž',
+      'Téma', 'Zvířata', 'Technika', 'Data', 'Farmy',
     ]);
     expect(nav.some((i) => i.label === 'Svět')).toBe(false);
     // hrefs zachované
@@ -50,24 +51,29 @@ describe('getNav', () => {
     expect(data!.href).toBe('/data/');
   });
 
-  it('cs nav: data sekce má původní děti + Historie + Svět (profily/srovnání) na konci', () => {
+  it('cs nav: data sekce má původní děti + Prodeje/Akcie + Historie + Svět (profily/srovnání/mapa) na konci', () => {
     const nav = getNav('cs');
     const data = nav.find((s) => s.section === 'data')!;
     expect(data.href).toBe('/data/');
     const hrefs = (data.children ?? []).map((c) => c.href);
     expect(hrefs).toEqual([
-      '/statistiky/', '/historie/', '/puda/', '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/',
-      '/svet/', '/svet/srovnani/',
+      '/statistiky/', '/data/prodeje-techniky/', '/akcie/', '/historie/', '/puda/',
+      '/kalkulacka/', '/kalkulacka/dotace-cap/', '/dotace/',
+      '/svet/', '/svet/srovnani/', '/svet/mapa/',
     ]);
   });
 
-  it('non-cs nav: /svet děti (cs-only) se v data sekci NEzobrazí', () => {
-    for (const loc of ['sk', 'uk', 'pl'] as const) {
-      const data = getNav(loc).find((s) => s.section === 'data');
-      const hrefs = (data?.children ?? []).map((c) => c.href);
-      expect(hrefs).not.toContain('/svet/');
-      expect(hrefs).not.toContain('/svet/srovnani/');
+  it('/svet děti se ukážou jen tam, kde je /svet launchnuté (sk+pl ano, uk ne)', () => {
+    // Dřív bylo /svet cs-only. Od launche sk+pl (viz LAUNCHED_PREFIXES) je gate
+    // isLaunchedPath, ne „non-cs" — uk /svet stále nemá, takže tam děti chybí.
+    for (const loc of ['sk', 'pl'] as const) {
+      const hrefs = (getNav(loc).find((s) => s.section === 'data')?.children ?? []).map((c) => c.href);
+      expect(hrefs, `${loc} má /svet launchnuté → děti se musí zobrazit`).toContain('/svet/');
+      expect(hrefs).toContain('/svet/srovnani/');
     }
+    const ukHrefs = (getNav('uk').find((s) => s.section === 'data')?.children ?? []).map((c) => c.href);
+    expect(ukHrefs).not.toContain('/svet/');
+    expect(ukHrefs).not.toContain('/svet/srovnani/');
   });
 
   it('uk nav: data sekce viditelná, jen launchnuté děti (statistiky/puda/dotace; kalkulačky vynechané)', () => {
@@ -110,8 +116,8 @@ describe('getNav', () => {
     expect(tech.find((c) => c.href === '/srovnani/')!.label).toBe('Porovnanie modelov');
   });
 
-  it('HIDDEN_SECTIONS: cs skrývá jen bazar (dočasně, rozbitá SMTP registrace)', () => {
-    expect(HIDDEN_SECTIONS.cs).toEqual(['bazar']);
+  it('HIDDEN_SECTIONS: cs skrývá bazar (rozbitá SMTP registrace) + photo (odložený launch)', () => {
+    expect(HIDDEN_SECTIONS.cs).toEqual(['bazar', 'photo']);
     // UPDATED Fáze 2b A: `data` už sk neskrývá (jen bazar+photo); uk skrývá vše.
     expect(HIDDEN_SECTIONS.sk).toEqual(expect.arrayContaining(['bazar', 'photo']));
     expect(HIDDEN_SECTIONS.sk).not.toContain('data');
@@ -122,9 +128,9 @@ describe('getNav', () => {
 });
 
 describe('getFooterColumns', () => {
-  it('cs vrací 2 sloupce (content, photo) — bazar sloupec dočasně skrytý', () => {
+  it('cs vrací jen sloupec Obsah — bazar i photo sloupec dočasně skryté', () => {
     const cols = getFooterColumns('cs');
-    expect(cols.map((c) => c.heading)).toEqual(['Obsah', 'Fotosoutěž']);
+    expect(cols.map((c) => c.heading)).toEqual(['Obsah']);
     expect(cols[0].links[0]).toEqual({ label: 'Novinky', href: '/novinky/' });
   });
 

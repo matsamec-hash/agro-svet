@@ -61,7 +61,11 @@ describe('isSkLaunchedPath — kalkulačky (Fáze 2b launch)', () => {
     expect(isSkLaunchedPath('/novinky')).toBe(true);
   });
   it('nelaunchnuté sekce zůstávají false', () => {
-    expect(isSkLaunchedPath('/slovnik')).toBe(false);
+    // /slovnik už sk-launchnutý JE (306 hesel) — vzorek musí být sekce, které sk
+    // opravdu nemá: ÚKZÚZ odrůdy a české farmy.
+    expect(isSkLaunchedPath('/plodiny')).toBe(false);
+    expect(isSkLaunchedPath('/odrudy')).toBe(false);
+    expect(isSkLaunchedPath('/farmy')).toBe(false);
   });
 
   it('/dotace je SK-launched', () => {
