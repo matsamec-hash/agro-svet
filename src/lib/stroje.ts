@@ -402,8 +402,37 @@ export function applyStrojOverlay(base: StrojBrand, ov: StrojOverlay | null): St
   return b as StrojBrand;
 }
 
+// Otevřený konec výroby („–dosud") — jediný token, ne věta k překladu.
+const PRESENT_LABEL: Record<string, string> = {
+  cs: 'dosud', sk: 'súčasnosť', pl: 'obecnie', uk: 'дотепер',
+};
+
+// 102 ze 424 názvů řad nese v cs YAML rozsah výroby včetně českého „dosud"
+// („6R Series (2012–dosud)"). Není to text k překladu, ale jeden deterministický
+// token — proto ho pro ne-cs locale jen zaměníme. Překládat kvůli němu 102 názvů
+// do overlayů by data zduplikovalo a při každé nové řadě se rozešlo.
+// Běží AŽ po overlayi: kdyby overlay vlastní `name` měl, je už v cílovém jazyce
+// (žádné „dosud" v něm není), takže ho tenhle krok nechá být.
+export function localizePresentToken(b: StrojBrand, locale: string): StrojBrand {
+  const label = PRESENT_LABEL[locale];
+  if (!label || locale === 'cs') return b;
+  const c = b as any;
+  for (const cat of Object.values(c.categories || {}) as any[]) {
+    for (const s of cat.series || []) {
+      if (typeof s.name === 'string' && s.name.includes('dosud')) {
+        s.name = s.name.replace(/dosud/g, label);
+      }
+    }
+  }
+  return b;
+}
+
 function localizeBrand(base: StrojBrand, locale: string): StrojBrand {
-  return applyStrojOverlay(base, getOverlay(base.slug, locale));
+  const ov = getOverlay(base.slug, locale);
+  // Bez overlaye by applyStrojOverlay vrátil base BEZ klonu — token swap by pak
+  // přepsal sdílený cs objekt. Proto pro ne-cs bez overlaye klonuj explicitně.
+  const merged = ov ? applyStrojOverlay(base, ov) : (locale === 'cs' ? base : structuredClone(base));
+  return localizePresentToken(merged, locale);
 }
 
 let cachedBrands: StrojBrand[] | null = null;
@@ -540,6 +569,3 @@ export function formatYearRange(yearFrom: number | null, yearTo: number | null, 
   return `${yearFrom}–${yearTo}`;
 }
 
-const PRESENT_LABEL: Record<string, string> = {
-  cs: 'dosud', sk: 'súčasnosť', pl: 'obecnie', uk: 'дотепер',
-};

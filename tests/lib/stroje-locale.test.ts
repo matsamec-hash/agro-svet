@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatYearRange, familyLabel } from '../../src/lib/stroje';
+import { formatYearRange, familyLabel, localizePresentToken, getBrand } from '../../src/lib/stroje';
 
 // Regrese: „dosud"/„N. řada" se dřív vracely česky i pro sk/pl/uk.
 describe('stroje lib — locale-aware rozsahy a labely', () => {
@@ -26,5 +26,32 @@ describe('stroje lib — locale-aware rozsahy a labely', () => {
     expect(familyLabel('6', 'sk')).toBe('6. rad');
     expect(familyLabel('6', 'uk')).toBe('Серія 6');
     expect(familyLabel('steiger', 'pl')).toBe('Steiger');
+  });
+
+  // 102 ze 424 názvů řad má „(2012–dosud)" zapečené přímo v názvu, ne v šabloně —
+  // uniklo to i do <title> a meta description sk/pl/uk stránek řad.
+  it('localizePresentToken přepíše dosud v názvech řad, cs nechá být', () => {
+    const mk = () => ({
+      slug: 'x', name: 'X', categories: {
+        traktory: { name: 'Traktory', series: [
+          { slug: 'a', name: '6R Series (2012–dosud)' },
+          { slug: 'b', name: '5 Series (1990–2005)' },
+        ] },
+      },
+    }) as any;
+    expect(localizePresentToken(mk(), 'cs').categories.traktory.series[0].name).toBe('6R Series (2012–dosud)');
+    expect(localizePresentToken(mk(), 'pl').categories.traktory.series[0].name).toBe('6R Series (2012–obecnie)');
+    expect(localizePresentToken(mk(), 'sk').categories.traktory.series[0].name).toBe('6R Series (2012–súčasnosť)');
+    expect(localizePresentToken(mk(), 'uk').categories.traktory.series[0].name).toBe('6R Series (2012–дотепер)');
+    // uzavřený rozsah zůstává netknutý
+    expect(localizePresentToken(mk(), 'pl').categories.traktory.series[1].name).toBe('5 Series (1990–2005)');
+  });
+
+  it('getBrand nemutuje cs data přes locale variantu (žádný sdílený objekt)', () => {
+    const pl = getBrand('john-deere', 'pl');
+    const cs = getBrand('john-deere', 'cs');
+    const find = (b: any) => b!.categories.traktory.series.find((s: any) => s.slug === '6m');
+    expect(find(pl)!.name).toContain('obecnie');
+    expect(find(cs)!.name).toContain('dosud');
   });
 });
