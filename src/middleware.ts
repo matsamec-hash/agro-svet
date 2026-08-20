@@ -2,6 +2,7 @@ import { defineMiddleware } from 'astro:middleware';
 import { createAnonClient, createServerClient } from './lib/supabase';
 import { stripLocale } from './i18n/utils';
 import { isLockedSectionPath } from './i18n/nav';
+import { isPrerenderedRewriteError } from './lib/prerendered-rewrite';
 import {
   gateActive,
   isGateBypassed,
@@ -114,15 +115,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
       // Ne-cs locale: rewrite na kanonickou cs routu (zachová lokalizovaný URL navenek).
       return await next(strippedPath + url.search);
     } catch (err) {
-      // Astro Node SSR neumí `next()`-rewritnout na PRERENDERED routu
-      // (`export const prerender = true`: /zebricky, /pruvodce, /vcelarstvi, …).
-      // Takový rewrite hodí "unable to find a component instance for route …" → 500.
-      // Tyhle sekce jsou cs-only obsah → 302 na kanonickou cs URL místo 500.
-      // 302 (dočasný): až dostanou sk/uk lokalizaci, nesmí být redirect natvrdo zacachovaný.
-      // Cokoliv jiného (reálná chyba stránky) re-throw — ať skutečné 500 nezmizí.
-      if (err instanceof Error && err.message.includes('unable to find a component instance')) {
+      // cs-only prerendered sekce pod locale prefixem → 302 na kanonickou cs
+      // URL místo 500. 302 (dočasný): až dostanou lokalizaci, nesmí být
+      // redirect natvrdo zacachovaný. Detekce viz isPrerenderedRewriteError.
+      if (isPrerenderedRewriteError(err)) {
         return redirect(strippedPath + url.search, 302);
       }
+      // Cokoliv jiného (reálná chyba stránky) re-throw — ať skutečné 500 nezmizí.
       throw err;
     }
   };
