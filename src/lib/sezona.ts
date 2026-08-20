@@ -25,6 +25,17 @@ export const MONTH_NAMES_CS = [
   'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec',
 ];
 
+/**
+ * Ustálené české zkratky měsíců. NEODVOZOVAT je z MONTH_NAMES_CS přes
+ * `.slice(0, 3)` — „červen" i „červenec" tak dají „čer" a v kalendáři pak
+ * stojí dva nerozlišitelné sloupce vedle sebe. Stejné zkratky používá
+ * UpcomingEvents.astro i lib/czso.ts.
+ */
+export const MONTH_SHORT_CS = [
+  'led', 'úno', 'bře', 'dub', 'kvě', 'čvn',
+  'čvc', 'srp', 'zář', 'říj', 'lis', 'pro',
+];
+
 export function getSeason(slug: string): Season | undefined {
   return SEASONS.find((s) => s.slug === slug);
 }

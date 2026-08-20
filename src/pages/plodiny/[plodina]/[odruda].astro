@@ -143,9 +143,35 @@ const metaDescription = truncateAtBoundary(
         </div>
       </div>
       <div class="hero-right">
-        <div class="hero-emoji-tile" aria-hidden="true">🌾</div>
+        {plodina.hero_image ? (
+          <img
+            src={plodina.hero_image}
+            alt={`Plodina ${plodina.name} — ilustrační foto k odrůdě ${odruda.name}`}
+            width="280"
+            height="210"
+            loading="eager"
+            decoding="async"
+            class="hero-photo"
+          />
+        ) : (
+          <div class="hero-emoji-tile" aria-hidden="true">🌾</div>
+        )}
       </div>
     </section>
+
+    {plodina.hero_image && (
+      <p class="hero-attribution">
+        {/* Fotka je PLODINY, ne konkrétní odrůdy — ÚKZÚZ k odrůdám snímky nedodává.
+            Popisek to říká nahlas, ať to nevypadá jako fotografie téhle odrůdy. */}
+        Ilustrační foto plodiny {plodina.name.toLowerCase()} (ne konkrétní odrůdy).{' '}
+        {plodina.hero_license === 'Public domain' && !plodina.hero_author
+          ? <>Volné dílo (public domain), <a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a></>
+          : plodina.hero_author
+            ? <>Foto: {plodina.hero_author}, {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
+            : <>Foto: {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
+        }
+      </p>
+    )}
 
     {(odruda.typ || odruda.ranost || znaky.ranost || znaky.uziti || odruda.rok_registrace || odruda.udrzovatel) && (
       <section class="card-section agro-facts">
@@ -359,6 +385,17 @@ const metaDescription = truncateAtBoundary(
   .pl-detail .hero-lede { font-size: 16.5px; line-height: 1.6; color: #E0ECDA; max-width: 60ch; margin: 0 0 22px; }
   .pl-detail .hero-right { flex-shrink: 0; }
   .pl-detail .hero-emoji-tile { font-size: 92px; line-height: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,.4)); }
+  .pl-detail .hero-photo {
+    width: 280px; height: 210px; object-fit: cover;
+    border-radius: var(--r-lg); display: block;
+    box-shadow: 0 8px 32px rgba(0,0,0,.45);
+  }
+  .pl-detail .hero-attribution {
+    font-size: 11.5px; color: var(--muted-2); margin: -8px 0 20px;
+    padding: 0 4px; line-height: 1.5;
+  }
+  .pl-detail .hero-attribution a { color: var(--muted); text-decoration: underline; }
+  .pl-detail .hero-attribution a:hover { color: #000; }
   .pl-detail .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
   .pl-detail .cta-back {
     display: inline-flex; align-items: center; gap: 8px;

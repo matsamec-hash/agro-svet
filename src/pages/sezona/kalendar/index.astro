@@ -2,7 +2,7 @@
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { listPlodiny } from '../../../lib/plodiny';
-import { MONTH_NAMES_CS } from '../../../lib/sezona';
+import { MONTH_NAMES_CS, MONTH_SHORT_CS } from '../../../lib/sezona';
 import { SITE_URL } from '../../../lib/config';
 import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../../lib/structured-data';
 
@@ -53,13 +53,20 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
         <thead>
           <tr>
             <th scope="col">Plodina</th>
-            {months.map((m) => <th scope="col" data-month={m} title={MONTH_NAMES_CS[m - 1]}>{MONTH_NAMES_CS[m - 1].slice(0, 3)}</th>)}
+            {months.map((m) => <th scope="col" data-month={m} title={MONTH_NAMES_CS[m - 1]}>{MONTH_SHORT_CS[m - 1]}</th>)}
           </tr>
         </thead>
         <tbody>
           {plodiny.map((p) => (
             <tr>
-              <th scope="row"><a href={`/plodiny/${p.slug}/`}>{p.name}</a></th>
+              <th scope="row">
+                <a href={`/plodiny/${p.slug}/`} class="cal-crop">
+                  {p.hero_image && (
+                    <img src={p.hero_image} alt="" width="28" height="28" loading="lazy" decoding="async" class="cal-thumb" />
+                  )}
+                  <span>{p.name}</span>
+                </a>
+              </th>
               {months.map((m) => {
                 const sow = p.seti_mesice?.includes(m);
                 const harvest = p.sklizen_mesice?.includes(m);
@@ -110,6 +117,11 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
     .cal td.harvest { background: #fef3c7; }
     .cal td.sow.harvest { background: linear-gradient(135deg, #dcfce7 50%, #fef3c7 50%); }
     .cal .is-current-month { outline: 2px solid #15803d; outline-offset: -2px; }
+    .cal .cal-crop { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+    .cal .cal-thumb {
+      width: 28px; height: 28px; object-fit: cover; border-radius: 6px;
+      flex: none; background: #eaf4e0;
+    }
     .legenda { font-size: .8rem; color: #6b7280; margin: .6rem 0 2rem; }
     .legenda .k { display: inline-block; width: 1.4rem; text-align: center; border-radius: 4px; }
     .legenda .k.sow { background: #dcfce7; } .legenda .k.harvest { background: #fef3c7; }

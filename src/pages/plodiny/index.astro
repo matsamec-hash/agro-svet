@@ -5,6 +5,9 @@ import { listPlodiny, listSkupiny } from '../../lib/plodiny';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 
 const plodiny = listPlodiny();
+// Hero fotka hubu: reprezentativní plodina (pšenice ozimá), jinak první
+// plodina s fotkou. Dřív tu bylo jen emoji.
+const hubHero = plodiny.find((p) => p.slug === 'psenice-ozima' && p.hero_image) ?? plodiny.find((p) => p.hero_image);
 const skupiny = listSkupiny();
 const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
 
@@ -45,7 +48,15 @@ const list = itemListSchema(
         </div>
       </div>
       <div class="hero-right">
-        <div class="hero-emoji-tile" aria-hidden="true">🌾</div>
+        {hubHero ? (
+          <img
+            src={hubHero.hero_image}
+            alt={`Polní plodiny — ${hubHero.name.toLowerCase()}`}
+            width="280" height="210" loading="eager" decoding="async" class="hero-photo"
+          />
+        ) : (
+          <div class="hero-emoji-tile" aria-hidden="true">🌾</div>
+        )}
       </div>
     </section>
 
@@ -60,6 +71,13 @@ const list = itemListSchema(
         <div class="hub-grid">
           {plodiny.filter((p) => p.skupina === s.skupina).map((p) => (
             <a href={`/plodiny/${p.slug}/`} class="hub-card">
+              {p.hero_image && (
+                <img
+                  src={p.hero_image}
+                  alt=""
+                  width="72" height="72" loading="lazy" decoding="async" class="hc-thumb"
+                />
+              )}
               <div class="hc-body">
                 <div class="hc-title">{p.name}</div>
                 {p.description && <p class="hc-desc">{p.description}</p>}
@@ -128,6 +146,14 @@ const list = itemListSchema(
     transition: box-shadow .15s, transform .15s;
   }
   .pl-hub .hub-card:hover { box-shadow: var(--sh-3); transform: translateY(-2px); }
+  .pl-hub .hc-thumb {
+    width: 72px; height: 72px; object-fit: cover; border-radius: 10px;
+    flex-shrink: 0; display: block; background: #eaf4e0;
+  }
+  .pl-hub .hero-photo {
+    width: 280px; height: 210px; object-fit: cover; border-radius: var(--r-lg);
+    display: block; box-shadow: 0 8px 32px rgba(0,0,0,.45);
+  }
   .pl-hub .hc-body { flex: 1; min-width: 0; }
   .pl-hub .hc-title { font-size: 15.5px; font-weight: 700; color: var(--ink); margin-bottom: 5px; line-height: 1.3; }
   .pl-hub .hc-desc { font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
