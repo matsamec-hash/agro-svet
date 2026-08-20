@@ -1,14 +1,19 @@
 ---
-export const prerender = true;
+// SSR — pod ne-cs se seznam filtruje na kvízy, které v daném jazyce existují.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/kviz/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+
+const canonical = `${SITE_URL}${localizePath(locale, '/kviz/')}`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kvízy', url: canonical },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('kvz.crumb'), url: canonical },
 ]);
 
 const quizzes = [
@@ -37,10 +42,27 @@ const quizzes = [
     icon: '🚜',
   },
 ];
+
+// Lokalizované jsou zatím jen některé kvízy: „jaký traktor" doporučuje podle
+// servisní sítě značek v ČR a „jaká včela" cílí na české podmínky — ty by pod
+// /pl potřebovaly polská data, ne překlad. Zůstávají prerendered, takže pod
+// locale prefixem samy 302 na cs; hub je tam ale nesmí nabízet jako živý odkaz.
+const LOCALIZED_QUIZZES: Record<string, string[]> = {
+  pl: ['historie-znacek'],
+};
+const visibleQuizzes = locale === 'cs'
+  ? quizzes
+  : quizzes.filter((q) => (LOCALIZED_QUIZZES[locale] ?? []).includes(q.slug));
+
+// Titulek/popis/délka lokalizovaného kvízu berou i18n; cs zůstává z pole výše.
+const quizCopy = (q: (typeof quizzes)[number]) =>
+  locale === 'cs' || q.slug !== 'historie-znacek'
+    ? q
+    : { ...q, title: tr('kvz.h.h1'), description: tr('kvz.h.desc'), duration: tr('kvz.h.dur') };
 ---
 
 <Layout
-  title="Kvízy ze zemědělství — otestujte své znalosti"
+  title={tr('kvz.hub.title')}
   description="Interaktivní kvízy ze zemědělství — historie značek, technologie traktorů, dotace CAP. Hodnocení podle správných odpovědí."
   canonical={canonical}
 >
@@ -48,13 +70,13 @@ const quizzes = [
 
   <div class="kviz-hub">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <span aria-hidden="true">›</span>
       <span class="current">Kvízy</span>
     </nav>
 
     <header class="hub-head">
-      <span class="kicker">Kvízy · {quizzes.length}</span>
+      <span class="kicker">{tf(locale, 'kvz.hub.kicker', { count: visibleQuizzes.length })}</span>
       <h1>Otestujte své znalosti</h1>
       <p class="lede">
         Interaktivní kvízy o zemědělství, technice a dotacích. Hodnocení Začátečník → Hospodář → Expert → Legenda podle počtu správných odpovědí.
@@ -62,8 +84,8 @@ const quizzes = [
     </header>
 
     <div class="quiz-grid">
-      {quizzes.map((q) => (
-        <a href={`/kviz/${q.slug}/`} class="quiz-card">
+      {visibleQuizzes.map(quizCopy).map((q) => (
+        <a href={localizeInternalHref(locale, `/kviz/${q.slug}/`)} class="quiz-card">
           <div class="quiz-icon">{q.icon}</div>
           <h2>{q.title}</h2>
           <p>{q.description}</p>
@@ -78,7 +100,7 @@ const quizzes = [
     </div>
 
     <p class="kviz-foot">
-      Další kvízy připravujeme. Návrh tématu? Napište nám na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+      {tr('kvz.hub.foot')} <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
     </p>
   </div>
 </Layout>

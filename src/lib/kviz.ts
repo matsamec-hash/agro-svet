@@ -2,6 +2,8 @@
 // Statický set otázek — 15+ otázek, každá multi-choice s 4 možnostmi.
 // Hodnocení: 0–5 → "Začátečník", 6–10 → "Hospodář", 11–14 → "Expert", 15+ → "Legenda".
 
+import { KVIZ_HISTORIE_PL } from './kviz.pl';
+
 export interface QuizOption {
   text: string;
   /** Volitelný kratší vysvětlovací popisek za "Správně!" / "Špatně" hláškou. */
@@ -248,6 +250,27 @@ export const KVIZ_HISTORIE: QuizQuestion[] = [
   },
 ];
 
+/** Úrovně hodnocení per-locale. Prahy (%) jsou shodné, mění se jen texty. */
+const LEVELS_PL = [
+  { min: 90, name: 'Legenda', description: 'Jesteś żywą encyklopedią techniki rolniczej. Czapki z głów!', emoji: '🏆' },
+  { min: 70, name: 'Ekspert', description: 'Świetnie! Na gospodarstwie i technice znasz się lepiej niż większość.', emoji: '🎓' },
+  { min: 50, name: 'Gospodarz', description: 'Solidny wynik — podstawy historii i techniki masz w małym palcu.', emoji: '👨‍🌾' },
+  { min: 30, name: 'Uczeń', description: 'Kilka rzeczy już wiesz. Zajrzyj do encyklopedii i słownika — poprawa będzie wyraźna.', emoji: '📚' },
+  { min: 0, name: 'Początkujący', description: 'Bez obaw — wszystkiego można się nauczyć. Zacznij od naszych rankingów i słownika.', emoji: '🌱' },
+];
+
+/** Úrovně pro daný jazyk — pro klientský skript, který je dostane jako JSON. */
+export function quizLevels(locale: string = 'cs'): { min: number; name: string; description: string; emoji: string }[] {
+  if (locale === 'pl') return LEVELS_PL;
+  return [
+    { min: 90, name: 'Legenda', description: 'Vy jste živá encyklopedie zemědělské techniky. Klobouk dolů!', emoji: '🏆' },
+    { min: 70, name: 'Expert', description: 'Skvělé! V hospodářství i technice se vyznáte víc než většina.', emoji: '🎓' },
+    { min: 50, name: 'Hospodář', description: 'Solidní výsledek — základy historie a techniky máte v malíku.', emoji: '👨‍🌾' },
+    { min: 30, name: 'Učedník', description: 'Pár věcí už víte. Mrkněte na encyklopedii a slovník — uvidíte výrazné zlepšení.', emoji: '📚' },
+    { min: 0, name: 'Začátečník', description: 'Žádný strach — všechno se dá naučit. Začněte u našich žebříčků a slovníku.', emoji: '🌱' },
+  ];
+}
+
 export function getLevel(score: number, total: number): { name: string; description: string; emoji: string } {
   const pct = (score / total) * 100;
   if (pct >= 90) return { name: 'Legenda', description: 'Vy jste živá encyklopedie zemědělské techniky. Klobouk dolů!', emoji: '🏆' };
@@ -255,4 +278,10 @@ export function getLevel(score: number, total: number): { name: string; descript
   if (pct >= 50) return { name: 'Hospodář', description: 'Solidní výsledek — základy historie a techniky máte v malíku.', emoji: '👨‍🌾' };
   if (pct >= 30) return { name: 'Učedník', description: 'Pár věcí už víte. Mrkněte na encyklopedii a slovník — uvidíte výrazné zlepšení.', emoji: '📚' };
   return { name: 'Začátečník', description: 'Žádný strach — všechno se dá naučit. Začněte u našich žebříčků a slovníku.', emoji: '🌱' };
+}
+
+/** Sada otázek pro daný jazyk. cs = originál; pl má vlastní sadu, kde jsou
+ *  3 jurisdikčně vázané otázky nahrazené polskými (ne přeložené). */
+export function kvizHistorie(locale: string = 'cs'): QuizQuestion[] {
+  return locale === 'pl' ? KVIZ_HISTORIE_PL : KVIZ_HISTORIE;
 }

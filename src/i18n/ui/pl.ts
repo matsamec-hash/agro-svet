@@ -472,6 +472,35 @@ const pl: Record<string, string> = {
   'zeb.more': 'Kolejne rankingi',
   'zeb.author': 'Redakcja agro-svět.cz',
 
+  // — kvízy (kvz.*) —
+  'kvz.hub.title': 'Quizy rolnicze — sprawdź swoją wiedzę',
+  'kvz.hub.kicker': 'Quizy · {count}',
+  'kvz.hub.foot': 'Kolejne quizy w przygotowaniu. Masz pomysł na temat? Napisz na',
+  'kvz.h.dur': '~5 minut',
+  'kvz.h.desc': '16 pytań o historii marek, technologiach i praktyce rolniczej. Po każdej odpowiedzi wyjaśnienie i odnośnik do źródła.',
+
+  'kvz.h.how': 'Jak to działa',
+  'kvz.h.start': 'Rozpocznij quiz →',
+  'kvz.h.restart': 'Spróbuj ponownie',
+
+  'kvz.crumb': 'Quizy',
+  'kvz.h.title': 'Quiz: Historia marek i technologie rolnicze (16 pytań)',
+  'kvz.h.crumb': 'Historia marek',
+  'kvz.h.h1': 'Historia marek i technologie',
+  'kvz.h.kicker': 'Quiz · {count} pytań',
+  'kvz.h.rules1': '{count} pytań, każde z 4 odpowiedziami.',
+  'kvz.h.rules2': 'Po każdej odpowiedzi zobaczysz wyjaśnienie i odnośnik do źródła w agro-svět.',
+  'kvz.h.rules3': 'Na koniec otrzymasz ocenę (Początkujący → Legenda) i możliwość udostępnienia wyniku.',
+  'kvz.h.rules4': 'Bez logowania. Bez cookies. Bez podpowiadania poprawnej odpowiedzi z góry.',
+  'kvz.h.next': 'Następne pytanie →',
+  'kvz.h.more': 'Kolejne quizy',
+  'kvz.h.score': 'Wynik:',
+  'kvz.h.correctOf': 'poprawnych',
+  'kvz.h.ok': '✓ Dobrze!',
+  'kvz.h.bad': '✗ Źle',
+  'kvz.h.source': 'Źródło',
+  'kvz.h.articleDesc': 'Interaktywny quiz z {count} pytaniami o historii marek rolniczych i technologiach.',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Marki',
   'cat.zn.desc': 'Przegląd światowych producentów techniki rolniczej — od Claas i John Deere po Fendt, New Holland i Zetor.',

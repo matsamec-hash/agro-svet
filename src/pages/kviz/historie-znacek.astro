@@ -1,16 +1,32 @@
 ---
-export const prerender = true;
+// SSR — sada otázek se liší podle locale (pl má vlastní, ne přeloženou).
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
-import { KVIZ_HISTORIE } from '../../lib/kviz';
+import { kvizHistorie, quizLevels } from '../../lib/kviz';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 
-const canonical = `${SITE_URL}/kviz/historie-znacek/`;
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const QUESTIONS = kvizHistorie(locale);
+// Klientský skript si sadu dřív importoval napřímo, takže by pod /pl dostal
+// českou. Data i texty proto putují jako JSON v <script type="application/json">
+// — stejný vzor jako bp-i18n na stránce značky.
+const quizData = {
+  questions: QUESTIONS,
+  levels: quizLevels(locale),
+  ok: tr('kvz.h.ok'),
+  bad: tr('kvz.h.bad'),
+  source: tr('kvz.h.source'),
+};
+
+const canonical = `${SITE_URL}${localizePath(locale, '/kviz/historie-znacek/')}`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Kvízy', url: '/kviz/' },
-  { name: 'Historie značek', url: canonical },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('kvz.crumb'), url: localizePath(locale, '/kviz/') },
+  { name: tr('kvz.h.crumb'), url: canonical },
 ]);
 
 // Quiz schema (FAQPage hack — protect answers visible to user agent later via JS).
@@ -19,17 +35,17 @@ const breadcrumbJsonLd = breadcrumbSchema([
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'Kvíz: Historie značek a technologie zemědělství',
-  description: 'Interaktivní kvíz se 16 otázkami o historii zemědělských značek a technologiích.',
-  author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
+  headline: tr('kvz.h.h1'),
+  description: tf(locale, 'kvz.h.articleDesc', { count: QUESTIONS.length }),
+  author: { '@type': 'Organization', name: tr('zeb.author'), url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-  inLanguage: 'cs-CZ',
+  inLanguage: locale === 'pl' ? 'pl-PL' : locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ',
 };
 ---
 
 <Layout
-  title="Kvíz: Historie značek a technologie zemědělství (16 otázek)"
+  title={tr('kvz.h.title')}
   description="Otestujte své znalosti o historii zemědělských značek (John Deere, Fendt, Zetor…), technologiích (CVT, ISOBUS, AdBlue) a dotacích CAP. 16 otázek, ~5 minut."
   canonical={canonical}
 >
@@ -38,16 +54,16 @@ const articleJsonLd = {
 
   <div class="kv-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <span aria-hidden="true">›</span>
-      <a href="/kviz/">Kvízy</a>
+      <a href={localizeInternalHref(locale, '/kviz/')}>{tr('kvz.crumb')}</a>
       <span aria-hidden="true">›</span>
-      <span class="current">Historie značek</span>
+      <span class="current">{tr('kvz.h.crumb')}</span>
     </nav>
 
     <header class="kv-head">
-      <span class="kicker">Kvíz · {KVIZ_HISTORIE.length} otázek</span>
-      <h1>Historie značek a technologie</h1>
+      <span class="kicker">{tf(locale, 'kvz.h.kicker', { count: QUESTIONS.length })}</span>
+      <h1>{tr('kvz.h.h1')}</h1>
       <p class="lede">
         Otestujte své znalosti — kdo vynalezl tříbodový závěs, kdy přišlo první sériové CVT a co znamená Stage V. Po dokončení dostanete hodnocení.
       </p>
@@ -55,21 +71,21 @@ const articleJsonLd = {
 
     <div id="kv-intro" class="kv-intro">
       <div class="kv-intro-card">
-        <h2>Jak to funguje</h2>
+        <h2>{tr('kvz.h.how')}</h2>
         <ul>
-          <li>{KVIZ_HISTORIE.length} otázek, každá s 4 možnostmi.</li>
-          <li>Po každé odpovědi se ukáže vysvětlení + odkaz na zdroj v agro-svět.</li>
-          <li>Na konci dostanete hodnocení (Začátečník → Legenda) a možnost sdílet výsledek.</li>
-          <li>Žádný login. Žádné cookies. Žádné odhalování správné odpovědi předem.</li>
+          <li>{tf(locale, 'kvz.h.rules1', { count: QUESTIONS.length })}</li>
+          <li>{tr('kvz.h.rules2')}</li>
+          <li>{tr('kvz.h.rules3')}</li>
+          <li>{tr('kvz.h.rules4')}</li>
         </ul>
-        <button class="kv-btn-start" id="kv-start">Spustit kvíz →</button>
+        <button class="kv-btn-start" id="kv-start">{tr('kvz.h.start')}</button>
       </div>
     </div>
 
     <div id="kv-game" class="kv-game" hidden>
       <div class="kv-progress">
         <div class="kv-progress-bar"><div class="kv-progress-fill" id="kv-progress-fill" style="width:0%"></div></div>
-        <div class="kv-progress-text"><span id="kv-q-num">1</span> / {KVIZ_HISTORIE.length} · Skóre: <strong id="kv-score">0</strong></div>
+        <div class="kv-progress-text"><span id="kv-q-num">1</span> / {QUESTIONS.length} · {tr('kvz.h.score')} <strong id="kv-score">0</strong></div>
       </div>
       <div class="kv-question-card" id="kv-question-card">
         <h2 id="kv-question">—</h2>
@@ -78,7 +94,7 @@ const articleJsonLd = {
           <strong id="kv-verdict">—</strong>
           <p id="kv-explain-text">—</p>
           <a id="kv-source" href="#" hidden>Více v slovníku →</a>
-          <button class="kv-btn-next" id="kv-next">Další otázka →</button>
+          <button class="kv-btn-next" id="kv-next">{tr('kvz.h.next')}</button>
         </div>
       </div>
     </div>
@@ -87,19 +103,30 @@ const articleJsonLd = {
       <div class="kv-result-card">
         <div class="kv-result-emoji" id="kv-result-emoji">🌱</div>
         <h2 id="kv-result-level">—</h2>
-        <p class="kv-result-score"><strong id="kv-result-score">0</strong> / {KVIZ_HISTORIE.length} správně</p>
+        <p class="kv-result-score"><strong id="kv-result-score">0</strong> / {QUESTIONS.length} {tr('kvz.h.correctOf')}</p>
         <p class="kv-result-desc" id="kv-result-desc">—</p>
         <div class="kv-result-cta">
           <button class="kv-btn-restart" id="kv-restart">Hrát znovu</button>
-          <a href="/kviz/" class="kv-btn-ghost">Další kvízy</a>
-          <a href="/slovnik/" class="kv-btn-ghost">Slovník pojmů</a>
+          <a href={localizeInternalHref(locale, '/kviz/')} class="kv-btn-ghost">{tr('kvz.h.more')}</a>
+          <a href={localizeInternalHref(locale, '/slovnik/')} class="kv-btn-ghost">{tr('plod.d.rlGloss')}</a>
         </div>
       </div>
     </div>
   </div>
 
+  <script type="application/json" id="kv-data" set:html={JSON.stringify(quizData)} />
+
   <script>
-    import { KVIZ_HISTORIE, getLevel } from '../../lib/kviz';
+    type KvOpt = { text: string };
+    type KvQ = { question: string; options: KvOpt[]; correct: number; explanation: string; sourceUrl?: string; sourceLabel?: string };
+    type KvLevel = { min: number; name: string; description: string; emoji: string };
+    const DATA = JSON.parse(document.getElementById('kv-data')!.textContent || '{}') as {
+      questions: KvQ[]; levels: KvLevel[]; ok: string; bad: string; source: string;
+    };
+    const KVIZ_HISTORIE = DATA.questions;
+    // Prahy jsou v procentech a shodné napříč jazyky; mění se jen texty úrovní.
+    const getLevel = (score: number, total: number): KvLevel =>
+      DATA.levels.find((l) => (score / total) * 100 >= l.min) ?? DATA.levels[DATA.levels.length - 1];
 
     const intro = document.getElementById('kv-intro') as HTMLElement;
     const game = document.getElementById('kv-game') as HTMLElement;
@@ -157,12 +184,12 @@ const articleJsonLd = {
         if (i === picked && i !== q.correct) b.classList.add('wrong');
       });
 
-      verdictEl.textContent = correct ? '✓ Správně!' : '✗ Špatně';
+      verdictEl.textContent = correct ? DATA.ok : DATA.bad;
       verdictEl.className = correct ? 'verdict-ok' : 'verdict-bad';
       explainText.textContent = q.explanation;
       if (q.sourceUrl) {
         sourceLink.href = q.sourceUrl;
-        sourceLink.textContent = (q.sourceLabel ?? 'Zdroj') + ' →';
+        sourceLink.textContent = (q.sourceLabel ?? DATA.source) + ' →';
         sourceLink.hidden = false;
       } else {
         sourceLink.hidden = true;

@@ -23,9 +23,11 @@ describe('pl nav konfigurace', () => {
     // /zebricky je pro pl launchnuté (žebříčky jsou odvozené ze strojních dat,
     // žádná jurisdikce) → v dropdownu být MÁ.
     expect(hrefs).toContain('/zebricky/');
+    // /kviz je pro pl launchnuté — hub + kvíz historie značek (PL sada otázek
+    // má české dotační otázky nahrazené polskými, viz kviz.pl.ts).
+    expect(hrefs).toContain('/kviz/');
     // NElaunchnuté nesmí být v pl tech dropdownu:
-    // /kviz = zatím nepřeložený, /prodejci = čeští prodejci (jurisdikce).
-    expect(hrefs).not.toContain('/kviz/');
+    // /prodejci = čeští prodejci osiv a techniky (jurisdikce).
     expect(hrefs).not.toContain('/prodejci/');
   });
   it('pl nav neobsahuje skryté sekce (bazar/farmy/tema); animals launchnuté', () => {

@@ -470,6 +470,35 @@ const cs: Record<string, string> = {
   'zeb.more': 'Další žebříčky',
   'zeb.author': 'Redakce agro-svět.cz',
 
+  // — kvízy (kvz.*) —
+  'kvz.hub.title': 'Kvízy ze zemědělství — otestujte své znalosti',
+  'kvz.hub.kicker': 'Kvízy · {count}',
+  'kvz.hub.foot': 'Další kvízy připravujeme. Návrh tématu? Napište nám na',
+  'kvz.h.dur': '~5 minut',
+  'kvz.h.desc': '16 otázek o historii značek, technologiích a zemědělské praxi. Po každé odpovědi vysvětlení a odkaz na zdroj.',
+
+  'kvz.h.how': 'Jak to funguje',
+  'kvz.h.start': 'Spustit kvíz →',
+  'kvz.h.restart': 'Zkusit znovu',
+
+  'kvz.crumb': 'Kvízy',
+  'kvz.h.title': 'Kvíz: Historie značek a technologie zemědělství (16 otázek)',
+  'kvz.h.crumb': 'Historie značek',
+  'kvz.h.h1': 'Historie značek a technologie',
+  'kvz.h.kicker': 'Kvíz · {count} otázek',
+  'kvz.h.rules1': '{count} otázek, každá s 4 možnostmi.',
+  'kvz.h.rules2': 'Po každé odpovědi se ukáže vysvětlení + odkaz na zdroj v agro-svět.',
+  'kvz.h.rules3': 'Na konci dostanete hodnocení (Začátečník → Legenda) a možnost sdílet výsledek.',
+  'kvz.h.rules4': 'Žádný login. Žádné cookies. Žádné odhalování správné odpovědi předem.',
+  'kvz.h.next': 'Další otázka →',
+  'kvz.h.more': 'Další kvízy',
+  'kvz.h.score': 'Skóre:',
+  'kvz.h.correctOf': 'správně',
+  'kvz.h.ok': '✓ Správně!',
+  'kvz.h.bad': '✗ Špatně',
+  'kvz.h.source': 'Zdroj',
+  'kvz.h.articleDesc': 'Interaktivní kvíz s {count} otázkami o historii zemědělských značek a technologiích.',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Značky',
   'cat.zn.desc': 'Přehled světových výrobců zemědělské techniky — od Claas a John Deere po Fendt, New Holland a Zetor.',

@@ -51,6 +51,10 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // '/novinky' = PL zpravodajský výpis (jen reálně přeložené články, žádný cs leak).
   // '/choroby' = atlas chorob polních plodin. Čistá agronomie, žádná jurisdikce
   // (patogeny nerespektují hranice) → pl overlay 11 entit, plná parita s cs.
+  // '/kviz' = hub + kvíz historie značek. PL sada NENÍ překlad: 3 ze 16 otázek
+  // byly vázané na české dotace (VCS chmel v Kč, BISS, LPIS/SZIF) a jsou
+  // nahrazené polskými se skutečnými sazbami ARiMR. Zbylé dva kvízy
+  // (jaký traktor / jaká včela) zůstávají cs — hub je pod pl nenabízí.
   // '/zebricky' = žebříčky odvozené z katalogu strojů (výkon, kategorie) —
   // žádná jurisdikce, jen strojní data. Na rozdíl od /pruvodce (Kč, SZIF) a
   // /prehled (české registrace), které pro pl NEjdou přeložit, jen nahradit.
@@ -59,7 +63,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // zůstává cs-only: je to úřední popis ÚKZÚZ k odrůdě registrované v ČR,
   // Polsko má vlastní registr (COBORU). Pillar proto pod ne-cs odrůdy nelinkuje
   // a sitemapa detaily do pl mirroru nepouští (isOdrudaDetailPath).
-  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky'],
+  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky', '/kviz'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
