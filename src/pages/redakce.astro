@@ -6,17 +6,18 @@ import { breadcrumbSchema } from '../lib/structured-data';
 
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
-const base = isSk ? '/sk' : '';
+const isPl = locale === 'pl';
+const base = isSk ? '/sk' : isPl ? '/pl' : '';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: isSk ? 'Domov' : 'Domů', url: `${base}/` },
-  { name: isSk ? 'Redakcia' : 'Redakce', url: `${base}/redakce/` },
+  { name: isSk ? 'Domov' : isPl ? 'Strona główna' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Redakcia' : isPl ? 'Redakcja' : 'Redakce', url: `${base}/redakce/` },
 ]);
 
 const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'NewsMediaOrganization',
-  name: isSk ? 'Redakcia agro-svet.cz' : 'Redakce agro-svět.cz',
+  name: isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : 'Redakce agro-svět.cz',
   url: `${SITE_URL}${base}/redakce/`,
   logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png`, width: 512, height: 512 },
   parentOrganization: {
@@ -28,20 +29,70 @@ const orgJsonLd = {
   },
   diversityPolicy: `${SITE_URL}${base}/redakce/`,
   ethicsPolicy: `${SITE_URL}${base}/redakce/`,
-  contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'info@samecdigital.com', availableLanguage: isSk ? 'Slovak' : 'Czech' },
+  contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'info@samecdigital.com', availableLanguage: isSk ? 'Slovak' : isPl ? 'Polish' : 'Czech' },
 };
 ---
 
 <Layout
-  title={isSk ? 'Redakcia agro-svet.cz' : 'Redakce agro-svět.cz'}
-  description={isSk ? 'Redakcia poľnohospodárskeho portálu agro-svet.cz — kto stojí za obsahom, redakčné zásady a kontakt.' : 'Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt.'}
+  title={isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : 'Redakce agro-svět.cz'}
+  description={isSk ? 'Redakcia poľnohospodárskeho portálu agro-svet.cz — kto stojí za obsahom, redakčné zásady a kontakt.' : isPl ? 'Redakcja portalu rolniczego agro-svet.cz — kto stoi za treściami, zasady redakcyjne i kontakt.' : 'Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt.'}
   canonical={isSk ? undefined : `${SITE_URL}/redakce/`}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
 
   <main class="redakce">
-  {isSk ? (
+  {isPl ? (
+    <Fragment>
+    <nav class="breadcrumb" aria-label="Nawigacja okruszkowa">
+      <a href={`${base}/`}>Strona główna</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Redakcja</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">O nas</span>
+      <h1>Redakcja agro-svet.cz</h1>
+      <p class="lead">
+        Piszemy o rolnictwie, technice, dopłatach i życiu na wsi. Naszym celem jest dostarczać
+        rolnikom użyteczne, sprawdzone i aktualne informacje — z Polski i ze świata.
+      </p>
+    </header>
+
+    <section class="block">
+      <h2>Czym się zajmujemy</h2>
+      <p>
+        Śledzimy nowości ze świata techniki rolniczej, europejską politykę dopłat, zmiany cen
+        towarów rolnych i zmiany w przepisach. Prowadzimy też encyklopedię traktorów i kombajnów,
+        bazę ras zwierząt gospodarskich oraz atlas chorób roślin uprawnych.
+      </p>
+    </section>
+
+    <section class="block">
+      <h2>Zasady redakcyjne</h2>
+      <ul>
+        <li><strong>Sprawdzone źródła.</strong> Opieramy się na danych urzędowych (GUS, ARiMR, Eurostat) i informacjach prasowych producentów.</li>
+        <li><strong>Sprostowania.</strong> Jeśli w tekście pojawi się błąd, poprawiamy go i oznaczamy datę zmiany.</li>
+        <li><strong>Rozdział treści i reklam.</strong> Materiały komercyjne są zawsze wyraźnie oznaczone.</li>
+        <li><strong>Informacje lokalne.</strong> Stawki dopłat i przepisy podajemy dla Polski; tam, gdzie dane pochodzą z Czech, wyraźnie to zaznaczamy.</li>
+        <li><strong>Informacja zwrotna.</strong> Uwagi czytelników są mile widziane i odpowiadamy na nie.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Kontakt</h2>
+      <p>
+        W sprawie tematów, informacji prasowych i pytań ogólnych napisz na
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+        W sprawie współpracy reklamowej użyj tego samego adresu z tematem „Reklama".
+      </p>
+      <p class="provoz">
+        Serwis prowadzi <a href="https://samecdigital.com" target="_blank" rel="noopener">Samec Digital s.r.o.</a>,
+        IČO 29547539, z siedzibą Na Břehu 378, 387 11 Katovice, Czechy.
+      </p>
+    </section>
+    </Fragment>
+  ) : isSk ? (
     <Fragment>
     <nav class="breadcrumb" aria-label="Drobečková navigace">
       <a href={`${base}/`}>Domov</a>
