@@ -17,6 +17,7 @@ import { getKraje } from '../lib/lokality';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
 import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
+import { fetchTranslatedArticleIds } from '../lib/articles-i18n';
 import { dsDate, FALLBACK_LASTMOD } from '../lib/content-dates';
 import svetIndex from '../data/svet/index.json';
 import { AKCIE } from '../data/akcie-agro';
@@ -110,13 +111,39 @@ export const GET: APIRoute = async () => {
   const supabase = createAnonClient();
   const articlesRes = await supabase
     .from('articles')
-    .select('slug, published_at')
+    // `id` + `category` navíc kvůli gatingu non-cs mirrorů: bez nich se do
+    // /sk|/pl|/uk sitemapy dostávaly i články, které v daném jazyce 404-ují.
+    .select('id, slug, category, published_at')
     .eq('site_id', NOVINKY_SITE_ID)
     .eq('status', 'published')
     .order('published_at', { ascending: false })
     .limit(2000);
   if (articlesRes.error) console.error('sitemap articles query error', articlesRes.error);
   const articlesDyn = articlesRes.data ?? [];
+
+  // Non-cs mirror článků musí respektovat STEJNÉ brány jako stránka článku:
+  //  (a) HIDDEN_NEWS_CATEGORIES — jurisdikčně skryté kategorie (dotace,
+  //      legislativa) pod daným locale 404-ují,
+  //  (b) existence překladu — článek bez přeloženého titulku taky 404-uje.
+  // Bez toho sitemapa nabízela mrtvé URL: ověřeno 22 ze 76 non-cs článků (28 %).
+  const articleMeta = new Map<string, { id: string; category: string | null }>();
+  for (const a of articlesDyn as Array<{ id: string; slug: string; category: string | null }>) {
+    articleMeta.set(a.slug, { id: a.id, category: a.category ?? null });
+  }
+  const translatedIdsByLocale = new Map<string, Set<string>>();
+  for (const loc of ['sk', 'uk', 'pl'] as const) {
+    translatedIdsByLocale.set(loc, await fetchTranslatedArticleIds(supabase, loc));
+  }
+  const articleSlugMatch = /^\/novinky\/([^/]+)\/$/;
+  /** True, když /<locale>/novinky/<slug>/ na produkci 404-uje → nezrcadlit. */
+  const isDeadArticleForLocale = (p: string, locale: 'sk' | 'uk' | 'pl'): boolean => {
+    const m = p.match(articleSlugMatch);
+    if (!m) return false;
+    const meta = articleMeta.get(m[1]);
+    if (!meta) return false; // není článek (např. /novinky/kategorie/) → řeší jiný filtr
+    if (meta.category && HIDDEN_NEWS_CATEGORIES[locale].includes(meta.category)) return true;
+    return !translatedIdsByLocale.get(locale)!.has(meta.id);
+  };
 
   const listingsRes = await supabase
     .from('bazar_listings')
@@ -513,16 +540,17 @@ export const GET: APIRoute = async () => {
   // /sk-skryté novinkové kategorie (jurisdikčně uzamčené: dotace, legislativa)
   // pod /sk 404-ují → nezrcadlit do /sk sitemapy.
   const skHiddenCatMatch = /^\/novinky\/kategorie\/([^/]+)\//;
-  const isSkHiddenCategoryPath = (p: string) => {
+  const isHiddenCategoryPath = (p: string, locale: 'sk' | 'uk' | 'pl') => {
     const m = p.match(skHiddenCatMatch);
-    return !!m && HIDDEN_NEWS_CATEGORIES.sk.includes(m[1]);
+    return !!m && HIDDEN_NEWS_CATEGORIES[locale].includes(m[1]);
   };
   const skMirror: UrlEntry[] = urls
     .filter((u) => {
       if (!u.loc.startsWith(SITE_URL)) return false;
       const p = u.loc.slice(SITE_URL.length);
       if (isDotaceDetailPath(p)) return false;
-      if (isSkHiddenCategoryPath(p)) return false;
+      if (isHiddenCategoryPath(p, 'sk')) return false;
+      if (isDeadArticleForLocale(p, 'sk')) return false;
       // Lock přebíjí launch: zamčené pod-cesty (/kalkulacka/dotace-cap) nezrcadlit
       // do /sk sitemapy — na produkci 307-ují na cs.
       return isSkLaunchedPath(p) && !isLockedSectionPath(p);
@@ -547,7 +575,8 @@ export const GET: APIRoute = async () => {
       if (p.startsWith('/sk/')) return false; // nezrcadlit už zrcadlené sk URL
       if (isDotaceDetailPath(p)) return false;
       if (p === '/dotace/kalendar-kol/') return false; // uk: kalendar-kol 302→/uk/dotace/, nezrcadlit
-      if (isSkHiddenCategoryPath(p)) return false;
+      if (isHiddenCategoryPath(p, 'uk')) return false;
+      if (isDeadArticleForLocale(p, 'uk')) return false;
       if (isUkMissingHowto(p)) return false; // chybějící uk návod → 404, nezrcadlit
       return isLaunchedPath('uk', p) && !isLockedSectionPath(p);
     })
@@ -562,6 +591,9 @@ export const GET: APIRoute = async () => {
       if (!u.loc.startsWith(SITE_URL)) return false;
       const p = u.loc.slice(SITE_URL.length);
       if (p.startsWith('/sk/') || p.startsWith('/uk/')) return false; // nezrcadlit už zrcadlené
+      // pl mělo dosud gating novinek úplně vynechaný (ani skryté kategorie).
+      if (isHiddenCategoryPath(p, 'pl')) return false;
+      if (isDeadArticleForLocale(p, 'pl')) return false;
       return isLaunchedPath('pl', p) && !isLockedSectionPath(p);
     })
     .map((u) => ({ ...u, loc: `${SITE_URL}/pl${u.loc.slice(SITE_URL.length)}` }));

@@ -78,6 +78,12 @@ if (locale !== 'cs') {
   );
 }
 const article = overlayArticle(articleRaw, trMap.get(articleRaw.id));
+// Non-cs článek BEZ reálného překladu servíruje český text pod cizím `lang`
+// (a doteď s `index, follow`). Do sitemapy už se takové URL nedostane, ale
+// stránka sama musí být noindex — jinak ji Google najde přes interní odkazy
+// a zaindexuje český obsah jako polský/slovenský. 404 by rozbila existující
+// odkazy, noindex jen zastaví indexaci.
+const isUntranslatedFallback = locale !== 'cs' && !hasTranslatedTitle(trMap.get(articleRaw.id));
 // Non-cs: do related/prev/next poolu jen reálně přeložené články (žádný český
 // fallback v sekcích pod /sk ani /uk). cs → ponech vše (pool beze změny).
 const pool = poolRaw
@@ -199,6 +205,7 @@ const jsonLd = {
 ---
 
 <Layout
+  noindex={isUntranslatedFallback}
   title={article.seo_title || article.title}
   description={article.seo_description || article.perex}
   ogImage={article.featured_image_url || undefined}
