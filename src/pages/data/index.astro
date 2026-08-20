@@ -5,7 +5,7 @@
 // (žádný runtime fetch). prerender=false kvůli locale rewrite (stejně jako /statistiky).
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { useTranslations, navHref, isLaunchedPath } from '../../i18n/utils';
+import { useTranslations, navHref, isLaunchedPath, localizeInternalHref } from '../../i18n/utils';
 import { udrzovatelSlug } from '../../lib/plodiny';
 import { imgSrcset } from '../../lib/image-variants';
 import statsCs from '../../data/agro-stats.json';
@@ -227,7 +227,7 @@ const heroDeltaTitle = locale === 'sk' ? 'Zmena za zobrazené obdobie (24 mesiac
       <section class="dh-cluster">
         <div class="dh-chd"><span class="no">04</span><h2>Trh techniky a agrobyznys</h2><span class="rule"></span><span class="sub">Prodeje strojů a firmy na burze</span></div>
         <div class="dh-tiles">
-          <a class="dh-tile noimg t-prodeje" href="/data/prodeje-techniky/">
+          <a class="dh-tile noimg t-prodeje" href={localizeInternalHref(locale, '/data/prodeje-techniky/')}>
             <div class="ov"></div>
             <div class="in">
               <div class="trow"><span class="cic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-5"/></svg></span><span class="go"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>

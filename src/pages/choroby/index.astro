@@ -47,7 +47,7 @@ const list = itemListSchema(
           <div class="s"><span class="n">{totalVazby}</span><span class="l">vazeb na plodiny</span></div>
         </div>
         <div class="hero-actions">
-          <a class="cta-group" href="/plodiny/">
+          <a class="cta-group" href={localizeInternalHref(locale, '/plodiny/')}>
             {tr('chor.hub.cropsDb')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
@@ -60,7 +60,7 @@ const list = itemListSchema(
 
     <div class="hub-grid">
       {choroby.map((c) => (
-        <a href={`/choroby/${c.slug}/`} class="hub-card">
+        <a href={localizeInternalHref(locale, `/choroby/${c.slug}/`)} class="hub-card">
           <div class="hc-body">
             <div class="hc-title">{c.name}</div>
             {c.latinsky && <div class="hc-latin">{c.latinsky}</div>}

@@ -1,9 +1,13 @@
 ---
 import { getLocaleFromUrl, useTranslations, navHref } from '../i18n/utils';
-import { getFooterColumns } from '../i18n/nav';
+import { getFooterColumns, HIDDEN_SECTIONS } from '../i18n/nav';
 
 const year = new Date().getFullYear();
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+// Fotosoutěž je skrytá přes HIDDEN_SECTIONS ('photo'), ale odkaz na její GDPR
+// stránku visel v patičce dál — a to ve všech jazycích, přestože soutěž běží
+// jen v cs a je momentálně vypnutá.
+const showPhotoGdpr = !(HIDDEN_SECTIONS[locale] ?? []).includes('photo');
 const tr = useTranslations(locale);
 const columns = getFooterColumns(locale);
 // POZOR: whitespace v markupu níže je load-bearing — tagline jde přes
@@ -37,14 +41,14 @@ const columns = getFooterColumns(locale);
     <div class="footer-bottom">
       <p>&copy; {year} agro-svět.cz · {tr('footer.operatedBy')} <a href="https://samecdigital.com" target="_blank" rel="noopener" class="footer-operator-link">Samec Digital s.r.o.</a>, IČO 29547539</p>
       <div class="footer-bottom-links">
-        <a href="/hledat/">{tr('footer.search')}</a>
+        <a href={navHref(locale, '/hledat/')}>{tr('footer.search')}</a>
         <span aria-hidden="true">·</span>
         <a href={navHref(locale, '/redakce/')}>{tr('footer.editorial')}</a>
         <span aria-hidden="true">·</span>
         <a href={navHref(locale, '/podminky-pouziti/')}>{tr('footer.terms')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/fotosoutez/gdpr/">{tr('footer.gdpr')}</a>
-        <span aria-hidden="true">·</span>
+        {showPhotoGdpr && (<><a href="/fotosoutez/gdpr/">{tr('footer.gdpr')}</a>
+        <span aria-hidden="true">·</span></>)}
         <a href={navHref(locale, '/dsa-kontakt/')}>{tr('footer.dsa')}</a>
         <span aria-hidden="true">·</span>
         <a href="https://aktualizovano.cz" target="_blank" rel="noopener">aktualizovano.cz</a>

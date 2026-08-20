@@ -6,11 +6,13 @@ import Layout from '../../layouts/Layout.astro';
 import { getSlovnik, getKategorieLabels, type SlovnikKategorie } from '../../lib/slovnik';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
-import { useTranslations, getLocaleFromUrl, tf } from '../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const base = locale === 'uk' ? '/uk' : locale === 'sk' ? '/sk' : '';
+// Vnořený ternář zapomněl na pl → polský slovník linkoval všech ~200 hesel
+// na ČESKÉ detaily. localizePath pokrývá každý locale, i budoucí.
+const base = localizePath(locale, '/').replace(/\/$/, '');
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const SLOVNIK = getSlovnik(locale);

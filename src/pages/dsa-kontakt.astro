@@ -5,6 +5,9 @@ const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
 const isPl = locale === 'pl';
 const isUk = locale === 'uk';
+// Právní stránky se odkazují jedna na druhou; bez prefixu poslal polský
+// dokument čtenáře na ČESKÉ znění vedlejšího dokumentu.
+const lp = (path: string) => (locale === 'cs' ? path : `/${locale}${path}`);
 const META = {
   cs: { title: 'DSA kontaktní bod — Agro-svět', description: 'Jednotný kontaktní bod podle nařízení (EU) 2022/2065 (Digital Services Act, čl. 11 a 12) — pro orgány a uživatele.' },
   sk: { title: 'DSA kontaktné miesto — Agro-svet', description: 'Jednotné kontaktné miesto podľa nariadenia (EÚ) 2022/2065 (Digital Services Act, čl. 11 a 12) — pre orgány a používateľov.' },
@@ -61,7 +64,7 @@ const meta = META[locale] ?? META.cs;
         od oznámenia, vybavenie do 14 dní</li>
       <li><strong>Žiadosti podľa GDPR (prístup, oprava, výmaz, námietka):</strong>
         <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — pozri
-        <a href="/zpracovani-osobnich-udaju/">Zásady spracúvania osobných údajov</a></li>
+        <a href={lp('/zpracovani-osobnich-udaju/')}>Zásady spracúvania osobných údajov</a></li>
     </ul>
     <p>
       <strong>Jazyk:</strong> čeština alebo slovenčina. Odpovedáme spravidla do 5 pracovných
@@ -104,7 +107,7 @@ const meta = META[locale] ?? META.cs;
     <h2>7. Mechanizmy podľa DSA implementované prevádzkovateľom</h2>
     <ul>
       <li><strong>Čl. 14</strong> (zmluvné podmienky) —
-        <a href="/podminky-pouziti/">Podmienky používania</a>,
+        <a href={lp('/podminky-pouziti/')}>Podmienky používania</a>,
         <a href="/bazar/pravidla/">Pravidlá bazáru</a>.</li>
       <li><strong>Čl. 16</strong> (notice and action) — formulár
         <a href="/bazar/nahlasit/">/bazar/nahlasit/</a>, lehota 7 dní.</li>
@@ -161,7 +164,7 @@ const meta = META[locale] ?? META.cs;
         od powiadomienia, rozpatrzenie w ciągu 14 dni</li>
       <li><strong>Wnioski na podstawie RODO (dostęp, sprostowanie, usunięcie, sprzeciw):</strong>
         <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — zob.
-        <a href="/zpracovani-osobnich-udaju/">Zasady przetwarzania danych osobowych</a></li>
+        <a href={lp('/zpracovani-osobnich-udaju/')}>Zasady przetwarzania danych osobowych</a></li>
     </ul>
     <p>
       <strong>Język:</strong> czeski, słowacki lub angielski. Odpowiadamy zwykle w ciągu 5 dni
@@ -204,7 +207,7 @@ const meta = META[locale] ?? META.cs;
     <h2>7. Mechanizmy DSA wdrożone przez dostawcę</h2>
     <ul>
       <li><strong>Art. 14</strong> (warunki korzystania) —
-        <a href="/podminky-pouziti/">Warunki korzystania</a>,
+        <a href={lp('/podminky-pouziti/')}>Warunki korzystania</a>,
         <a href="/bazar/pravidla/">Zasady bazaru</a>.</li>
       <li><strong>Art. 16</strong> (notice and action) — formularz
         <a href="/bazar/nahlasit/">/bazar/nahlasit/</a>, termin 7 dni.</li>
@@ -261,7 +264,7 @@ const meta = META[locale] ?? META.cs;
         від повідомлення, розгляд протягом 14 днів</li>
       <li><strong>Запити відповідно до GDPR (доступ, виправлення, видалення, заперечення):</strong>
         <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — див.
-        <a href="/zpracovani-osobnich-udaju/">Засади обробки персональних даних</a></li>
+        <a href={lp('/zpracovani-osobnich-udaju/')}>Засади обробки персональних даних</a></li>
     </ul>
     <p>
       <strong>Мова:</strong> чеська, словацька або англійська. Відповідаємо зазвичай протягом 5 робочих
@@ -304,7 +307,7 @@ const meta = META[locale] ?? META.cs;
     <h2>7. Механізми DSA, впроваджені постачальником</h2>
     <ul>
       <li><strong>Ст. 14</strong> (умови надання послуг) —
-        <a href="/podminky-pouziti/">Умови використання</a>,
+        <a href={lp('/podminky-pouziti/')}>Умови використання</a>,
         <a href="/bazar/pravidla/">Правила барахолки</a>.</li>
       <li><strong>Ст. 16</strong> (notice and action) — формуляр
         <a href="/bazar/nahlasit/">/bazar/nahlasit/</a>, строк 7 днів.</li>
@@ -361,7 +364,7 @@ const meta = META[locale] ?? META.cs;
         od oznámení, vyřízení do 14 dnů</li>
       <li><strong>Žádosti podle GDPR (přístup, oprava, výmaz, námitka):</strong>
         <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — viz
-        <a href="/zpracovani-osobnich-udaju/">Zásady zpracování osobních údajů</a></li>
+        <a href={lp('/zpracovani-osobnich-udaju/')}>Zásady zpracování osobních údajů</a></li>
     </ul>
     <p>
       <strong>Jazyk:</strong> čeština nebo slovenština. Odpovídáme zpravidla do 5 pracovních
@@ -404,7 +407,7 @@ const meta = META[locale] ?? META.cs;
     <h2>7. Mechanismy podle DSA implementované provozovatelem</h2>
     <ul>
       <li><strong>Čl. 14</strong> (smluvní podmínky) —
-        <a href="/podminky-pouziti/">Podmínky použití</a>,
+        <a href={lp('/podminky-pouziti/')}>Podmínky použití</a>,
         <a href="/bazar/pravidla/">Pravidla bazaru</a>.</li>
       <li><strong>Čl. 16</strong> (notice and action) — formulář
         <a href="/bazar/nahlasit/">/bazar/nahlasit/</a>, lhůta 7 dnů.</li>

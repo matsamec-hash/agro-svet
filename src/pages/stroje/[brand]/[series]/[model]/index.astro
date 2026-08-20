@@ -12,7 +12,7 @@ import Anketa from '../../../../../components/Anketa.astro';
 import { generateModelFaq } from '../../../../../lib/faq-generator';
 import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 import { pairCombo } from '../../../../../lib/comparator';
-import { useTranslations, getLocaleFromUrl, tf, plural, localizePath } from '../../../../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeInternalHref } from '../../../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -566,7 +566,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             </div>
             <div class="tier-grid">
               {tierPlacements.map((t) => (
-                <a href={`/zebricky/${t.slug}/`} class="tier-item">
+                <a href={localizeInternalHref(locale, `/zebricky/${t.slug}/`)} class="tier-item">
                   <span class="tier-rank">{t.rank}.<span class="tier-rank-of"> z {t.total}</span></span>
                   <span class="tier-title">{t.title}</span>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -651,7 +651,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             {modelBazarCount > 0 ? (modelBazarCount === 1 ? tr('cat.s.d.asideBtnShowOne') : tr('cat.s.d.asideBtnShowFew')) : tr('cat.s.d.asideBtnOpen')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a href={localizePath(locale, '/bazar/novy/')} class="aside-btn ghost-light">{tr('cat.s.d.asideAddOwn')}</a>
+          <a href={localizeInternalHref(locale, '/bazar/novy/')} class="aside-btn ghost-light">{tr('cat.s.d.asideAddOwn')}</a>
         </div>
 
         {reviewHref && (

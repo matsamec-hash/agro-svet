@@ -1430,5 +1430,10 @@ const sk: Record<string, string> = {
   'cat.zn.d.brandCmpH': 'Porovnať {brand} s inou značkou',
   'cat.zn.d.brandCmpDesc': 'Porovnanie výkonu, počtu modelov a priame súboje konkrétnych strojov.',
   'plod.d.statVynos': 't/ha úroda',
+  'search.h1': 'Vyhľadávanie',
+  'search.label': 'Vyhľadávanie',
+  'search.titleQuery': 'Hľadám: „{q}"',
+  'search.resultsFor': 'Výsledky: „{q}"',
+  'search.metaDesc': 'Vyhľadávanie v novinkách, katalógu techniky a plemien, aj v bazári.',
 };
 export default sk;

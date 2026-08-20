@@ -41,18 +41,21 @@ const files = walk(ROOT);
 const KNOWN_KEYS = new Set([...Object.keys(cs), ...Object.keys(sk), ...Object.keys(pl), ...Object.keys(uk)]);
 
 describe('.astro — volání překladače', () => {
-  it('každý identifikátor překladače je v souboru zavedený', () => {
+  it('každý použitý i18n helper je v souboru zavedený', () => {
     const bad: string[] = [];
     for (const f of files) {
       const { fm, body } = split(readFileSync(f, 'utf8'));
-      // ident('klic') nebo ident(locale, 'klic')
+      // ident('klic') / ident(locale, 'klic') / ident(locale, `sablona`)
       const idents = new Set<string>();
-      for (const m of body.matchAll(/\b([A-Za-z_$][\w$]*)\(\s*(?:locale\s*,\s*)?'[\w.-]+'\s*[),]/g)) {
+      for (const m of body.matchAll(/\b([A-Za-z_$][\w$]*)\(\s*(?:locale\s*,\s*)?['`]/g)) {
         idents.add(m[1]);
       }
       for (const id of idents) {
-        // zajímají nás jen jména, která vypadají jako překladač
-        if (!/^(_*t|tr|tt|tUi|tf|_+[\w$]*)$/.test(id)) continue;
+        // Sledované helpery + cokoliv, co vypadá jako překladač. Omezený seznam,
+        // ať test nehlídá běžné JS built-iny (String, Number, JSON…).
+        const WATCHED = ['t', 'tr', 'tt', 'tUi', 'tf', 'plural', 'localizePath',
+          'localizeInternalHref', 'navHref', 'bcp47', 'localizedTag', 'localizedCategory'];
+        if (!WATCHED.includes(id) && !/^_+[\w$]*$/.test(id)) continue;
         const declared =
           new RegExp(`\\b(?:const|let|var|function)\\s+${id}\\b`).test(fm) ||
           new RegExp(`\\b${id}\\b\\s*(?:,|}|$)`, 'm').test(

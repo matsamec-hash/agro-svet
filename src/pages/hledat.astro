@@ -4,7 +4,7 @@ import { createAnonClient } from '../lib/supabase';
 import { getAllModels } from '../lib/stroje';
 import { getAllPlemena } from '../lib/plemena';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../lib/config';
-import { useTranslations, getLocaleFromUrl } from '../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl } from '../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -131,12 +131,12 @@ if (query.length >= 2) {
 }
 ---
 
-<Layout title={query ? `Hledám: „${query}"` : 'Vyhledávání'} description="Vyhledávání v novinkách, katalogu techniky a plemen, i v bazaru." noindex={true}>
+<Layout title={query ? tf(locale, 'search.titleQuery', { q: query }) : tr('search.h1')} description={tr('search.metaDesc')} noindex={true}>
   <div style="max-width:1000px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:24px;">
-      <span class="section-label">Vyhledávání</span>
+      <span class="section-label">{tr('search.label')}</span>
       <h1 style="font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:14px;">
-        {query ? `Výsledky: „${query}"` : 'Vyhledávání'}
+        {query ? tf(locale, 'search.resultsFor', { q: query }) : tr('search.h1')}
       </h1>
     </div>
 

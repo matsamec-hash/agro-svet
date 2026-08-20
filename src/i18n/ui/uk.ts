@@ -1457,5 +1457,10 @@ const uk: Record<string, string> = {
   'cat.zn.d.brandCmpH': 'Порівняти {brand} з іншою маркою',
   'cat.zn.d.brandCmpDesc': 'Порівняння потужності, кількості моделей і прямі дуелі конкретних машин.',
   'plod.d.statVynos': 'т/га врожайність',
+  'search.h1': 'Пошук',
+  'search.label': 'Пошук',
+  'search.titleQuery': 'Шукаю: «{q}»',
+  'search.resultsFor': 'Результати: «{q}»',
+  'search.metaDesc': 'Пошук у новинах, каталозі техніки та порід, а також на барахолці.',
 };
 export default uk;

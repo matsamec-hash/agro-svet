@@ -3,7 +3,7 @@ export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import { getSeries, seriesFamily, familyLabel, type StrojKategorie } from '../../../../lib/stroje';
 import { itemListSchema } from '../../../../lib/structured-data';
-import { useTranslations, getLocaleFromUrl, tf, plural, localizePath } from '../../../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeInternalHref } from '../../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -277,7 +277,7 @@ const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
         <div class="cta-actions">
           <a class="cta-btn primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>{ctaOpenText}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="cta-btn ghost" href={localizePath(locale, '/bazar/novy/')}>{tr('cat.s.d.s.ctaAdd')}</a>
+          <a class="cta-btn ghost" href={localizeInternalHref(locale, '/bazar/novy/')}>{tr('cat.s.d.s.ctaAdd')}</a>
         </div>
       </div>
       <div class="cta-right">

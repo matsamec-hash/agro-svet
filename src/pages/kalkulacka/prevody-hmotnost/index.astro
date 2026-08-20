@@ -40,7 +40,7 @@ const faqJsonLd = faqPageSchema(faqItems);
     <nav class="breadcrumb" aria-label="Cesta">
       <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <a href={locale === 'cs' ? '/kalkulacka/' : `/${locale}/kalkulacka/`}>{cr.hub}</a>
+      <a href={localizeInternalHref(locale, '/kalkulacka/')}>{cr.hub}</a>
       <span class="sep" aria-hidden="true">›</span>
       <span class="current">{c.crumb}</span>
     </nav>

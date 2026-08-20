@@ -105,7 +105,8 @@ const tierAppearances = tierLists(locale).flatMap((t) => {
 
 function modelUrl(m: { brand_slug: string; series_slug: string; slug: string }): string {
   const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
-  return `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`;
+  // Bez localizeInternalHref posílal polský profil značky návštěvníka do českého katalogu.
+  return localizeInternalHref(locale, `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`);
 }
 function yearRange(m: { year_from: number | null; year_to: number | null }): string {
   if (!m.year_from) return '';

@@ -171,7 +171,7 @@ function modelUrl(m: (typeof modelDuels)[number]['a']): string {
         <ul class="related-list">
           {modelDuels.map((p) => (
             <li>
-              <a href={`/srovnani/${p.combo}/`}>
+              <a href={localizeInternalHref(locale, `/srovnani/${p.combo}/`)}>
                 <span class="rl-pair">{modelDisplayName(p.a)} <em>vs</em> {modelDisplayName(p.b)}</span>
                 <span class="rl-cta">{t.duelsOpen}</span>
               </a>
@@ -188,13 +188,13 @@ function modelUrl(m: (typeof modelDuels)[number]['a']): string {
           <span class="dc-brand">{a.country}</span>
           <h3 class="dc-name">{a.name}</h3>
           <p class="dc-text">{insights.verdictA}</p>
-          <a class="dc-link" href={`/znacky/${a.slug}/`}>Modely {a.name}</a>
+          <a class="dc-link" href={localizeInternalHref(locale, `/znacky/${a.slug}/`)}>Modely {a.name}</a>
         </article>
         <article class="dc-card dc-b">
           <span class="dc-brand">{b.country}</span>
           <h3 class="dc-name">{b.name}</h3>
           <p class="dc-text">{insights.verdictB}</p>
-          <a class="dc-link" href={`/znacky/${b.slug}/`}>Modely {b.name}</a>
+          <a class="dc-link" href={localizeInternalHref(locale, `/znacky/${b.slug}/`)}>Modely {b.name}</a>
         </article>
       </div>
     </section>

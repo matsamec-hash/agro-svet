@@ -67,7 +67,7 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
           {plodiny.map((p) => (
             <tr>
               <th scope="row">
-                <a href={`/plodiny/${p.slug}/`} class="cal-crop">
+                <a href={localizeInternalHref(locale, `/plodiny/${p.slug}/`)} class="cal-crop">
                   {p.hero_image && (
                     <img src={p.hero_image} alt="" width="28" height="28" loading="lazy" decoding="async" class="cal-thumb" />
                   )}

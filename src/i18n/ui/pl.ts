@@ -1428,5 +1428,10 @@ const pl: Record<string, string> = {
   'cat.zn.d.brandCmpH': 'Porównaj {brand} z inną marką',
   'cat.zn.d.brandCmpDesc': 'Porównanie mocy, liczby modeli i bezpośrednie pojedynki konkretnych maszyn.',
   'plod.d.statVynos': 't/ha plonu',
+  'search.h1': 'Wyszukiwanie',
+  'search.label': 'Wyszukiwanie',
+  'search.titleQuery': 'Szukam: „{q}"',
+  'search.resultsFor': 'Wyniki: „{q}"',
+  'search.metaDesc': 'Wyszukiwanie w aktualnościach, katalogu maszyn i ras oraz w bazarze.',
 };
 export default pl;

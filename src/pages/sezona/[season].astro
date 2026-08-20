@@ -45,7 +45,7 @@ const faqJsonLd = faqPageSchema(faq);
   <div class="sezona-root">
     <nav class="breadcrumb" aria-label="Cesta">
       <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a> <span aria-hidden="true">›</span>
-      <a href={localizeInternalHref(locale, '/sezona/')}>Sezóna</a> <span aria-hidden="true">›</span>
+      <a href={localizeInternalHref(locale, '/sezona/')}>{tr('sez.crumb')}</a> <span aria-hidden="true">›</span>
       <span class="current">{seasonLabel}</span>
     </nav>
 
@@ -57,7 +57,7 @@ const faqJsonLd = faqPageSchema(faq);
         <h2>{tr('sez.work')}</h2>
         {locale !== 'cs' && <p class="sez-note">{tr('sez.note')}</p>}
         <ul class="links">
-          {workLinks.map((l) => (<li><a href={l.href}>{l.label}</a></li>))}
+          {workLinks.map((l) => (<li><a href={localizeInternalHref(locale, l.href)}>{l.label}</a></li>))}
         </ul>
       </section>
     )}

@@ -137,7 +137,8 @@ function formatCell(value: number | string | null | undefined, unit?: string): s
 
 function modelLink(m: typeof a): string {
   const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
-  return `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`;
+  // Srovnání pod /pl odkazovalo na ČESKÉ detaily obou porovnávaných strojů.
+  return localizeInternalHref(locale, `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`);
 }
 ---
 

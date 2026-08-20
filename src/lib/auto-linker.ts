@@ -23,7 +23,12 @@ interface GlossaryEntry {
   priority: number;
   /** External URL (cross-site link) — adds target="_blank" rel="noopener" in render. */
   external?: boolean;
-  /** Interní odkaz lokalizovatelný do /sk|/uk (jen brand+model — SSR launchnuté). */
+  /** ‼️ DEPRECATED — nepoužívá se při renderu. Byl to snapshot „co je launchnuté",
+   *  který zestárnul: nastavený byl jen u brand+model, takže odkazy na slovník,
+   *  plemena a žebříčky zůstávaly pod /pl a /sk české, přestože ty sekce mezitím
+   *  launchnuly. O prefixu teď rozhoduje `localizeInternalHref` → `isLaunchedPath`,
+   *  což se aktualizuje samo s LAUNCHED_PREFIXES. Ponecháno kvůli signatuře
+   *  `makeEntry`, kterou volá ~10 míst. */
   localizable?: boolean;
 }
 
@@ -228,7 +233,10 @@ function tryInject(text: string, glossary: GlossaryEntry[], used: Set<string>, l
       const before = seg.text.slice(0, match.index);
       const matched = match[0];
       const after = seg.text.slice(match.index + matched.length);
-      const href = entry.localizable ? localizeInternalHref(locale, entry.url) : entry.url;
+      // Externí (cross-site) odkazy nikdy nelokalizuj; u interních rozhodne
+      // localizeInternalHref sám podle LAUNCHED_PREFIXES — nelaunchnutá sekce
+      // dostane cs href beze změny, takže tu nehrozí leak do 302/češtiny.
+      const href = entry.external ? entry.url : localizeInternalHref(locale, entry.url);
       const attrs = entry.external
         ? ` class="auto-link auto-link-external" target="_blank" rel="noopener"`
         : ` class="auto-link"`;

@@ -5,6 +5,9 @@ const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
 const isPl = locale === 'pl';
 const isUk = locale === 'uk';
+// Právní stránky se odkazují jedna na druhou; bez prefixu poslal polský
+// dokument čtenáře na ČESKÉ znění vedlejšího dokumentu.
+const lp = (path: string) => (locale === 'cs' ? path : `/${locale}${path}`);
 const META = {
   cs: { title: 'Podmínky použití — Agro-svět', description: 'Podmínky použití webu agro-svet.cz — orientační charakter informací, vyloučení odpovědnosti, autorská práva, kontakt.' },
   sk: { title: 'Podmienky používania — Agro-svet', description: 'Podmienky používania webu agro-svet.cz — orientačný charakter informácií, vylúčenie zodpovednosti, autorské práva, kontakt.' },
@@ -181,7 +184,7 @@ const meta = META[locale] ?? META.cs;
     <h2>6. Ochrana osobných údajov</h2>
     <p>
       Spracúvanie osobných údajov upravujú samostatné
-      <a href="/zpracovani-osobnich-udaju/">Zásady spracúvania osobných údajov</a>.
+      <a href={lp('/zpracovani-osobnich-udaju/')}>Zásady spracúvania osobných údajov</a>.
     </p>
 
     <h2>7. Zmeny podmienok</h2>
@@ -363,7 +366,7 @@ const meta = META[locale] ?? META.cs;
     <h2>6. Ochrona danych osobowych</h2>
     <p>
       Przetwarzanie danych osobowych regulują odrębne
-      <a href="/zpracovani-osobnich-udaju/">Zasady przetwarzania danych osobowych</a>.
+      <a href={lp('/zpracovani-osobnich-udaju/')}>Zasady przetwarzania danych osobowych</a>.
     </p>
 
     <h2>7. Zmiany warunków</h2>
@@ -544,7 +547,7 @@ const meta = META[locale] ?? META.cs;
     <h2>6. Захист персональних даних</h2>
     <p>
       Обробку персональних даних регулюють окремі
-      <a href="/zpracovani-osobnich-udaju/">Засади обробки персональних даних</a>.
+      <a href={lp('/zpracovani-osobnich-udaju/')}>Засади обробки персональних даних</a>.
     </p>
 
     <h2>7. Зміни умов</h2>
@@ -726,7 +729,7 @@ const meta = META[locale] ?? META.cs;
     <h2>6. Ochrana osobních údajů</h2>
     <p>
       Zpracování osobních údajů upravují samostatné
-      <a href="/zpracovani-osobnich-udaju/">Zásady zpracování osobních údajů</a>.
+      <a href={lp('/zpracovani-osobnich-udaju/')}>Zásady zpracování osobních údajů</a>.
     </p>
 
     <h2>7. Změny podmínek</h2>
