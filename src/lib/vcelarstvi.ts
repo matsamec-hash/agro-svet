@@ -72,6 +72,9 @@ const medModules = import.meta.glob('/src/data/vcelarstvi/med*.yaml', { eager: t
 const vcelySkModules = import.meta.glob('/src/data/vcelarstvi/sk/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 const vybaveniSkModules = import.meta.glob('/src/data/vcelarstvi/sk/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 const medSkModules = import.meta.glob('/src/data/vcelarstvi/sk/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vcelyPlModules = import.meta.glob('/src/data/vcelarstvi/pl/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vybaveniPlModules = import.meta.glob('/src/data/vcelarstvi/pl/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const medPlModules = import.meta.glob('/src/data/vcelarstvi/pl/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 
 function collectArrays<T>(modules: Record<string, unknown>): T[] {
   const out: T[] = [];
@@ -90,13 +93,17 @@ function build<T extends { slug: unknown; name: string }>(modules: Record<string
 
 let cVcely: Vcela[] | null = null;
 let cVcelySk: Vcela[] | null = null;
+let cVcelyPl: Vcela[] | null = null;
 let cVybaveni: Vybaveni[] | null = null;
 let cVybaveniSk: Vybaveni[] | null = null;
+let cVybaveniPl: Vybaveni[] | null = null;
 let cMed: Med[] | null = null;
 let cMedSk: Med[] | null = null;
+let cMedPl: Med[] | null = null;
 
 export function getAllVcely(locale: Locale = 'cs'): Vcela[] {
   if (locale === 'sk') return (cVcelySk ??= build<Vcela>(vcelySkModules, 'sk'));
+  if (locale === 'pl') return (cVcelyPl ??= build<Vcela>(vcelyPlModules, 'pl'));
   return (cVcely ??= build<Vcela>(vcelyModules, 'cs'));
 }
 export function getVcela(slug: string, locale: Locale = 'cs'): Vcela | undefined {
@@ -105,6 +112,7 @@ export function getVcela(slug: string, locale: Locale = 'cs'): Vcela | undefined
 
 export function getAllVybaveni(locale: Locale = 'cs'): Vybaveni[] {
   if (locale === 'sk') return (cVybaveniSk ??= build<Vybaveni>(vybaveniSkModules, 'sk'));
+  if (locale === 'pl') return (cVybaveniPl ??= build<Vybaveni>(vybaveniPlModules, 'pl'));
   return (cVybaveni ??= build<Vybaveni>(vybaveniModules, 'cs'));
 }
 export function getVybaveni(slug: string, locale: Locale = 'cs'): Vybaveni | undefined {
@@ -113,6 +121,7 @@ export function getVybaveni(slug: string, locale: Locale = 'cs'): Vybaveni | und
 
 export function getAllMed(locale: Locale = 'cs'): Med[] {
   if (locale === 'sk') return (cMedSk ??= build<Med>(medSkModules, 'sk'));
+  if (locale === 'pl') return (cMedPl ??= build<Med>(medPlModules, 'pl'));
   return (cMed ??= build<Med>(medModules, 'cs'));
 }
 export function getMed(slug: string, locale: Locale = 'cs'): Med | undefined {
@@ -133,8 +142,17 @@ const VYBAVENI_KATEGORIE_LABELS_SK: Record<VybaveniKategorie, string> = {
   zpracovani: 'Spracovanie medu',
   krmeni: 'Kŕmenie a zazimovanie',
 };
+const VYBAVENI_KATEGORIE_LABELS_PL: Record<VybaveniKategorie, string> = {
+  ul: 'Ule',
+  ochrana: 'Odzież ochronna',
+  naradi: 'Narzędzia',
+  zpracovani: 'Przetwarzanie miodu',
+  krmeni: 'Karmienie i zazimowanie',
+};
 export function vybaveniKategorieLabel(k: VybaveniKategorie, locale: Locale = 'cs'): string {
-  return (locale === 'sk' ? VYBAVENI_KATEGORIE_LABELS_SK : VYBAVENI_KATEGORIE_LABELS)[k];
+  if (locale === 'sk') return VYBAVENI_KATEGORIE_LABELS_SK[k];
+  if (locale === 'pl') return VYBAVENI_KATEGORIE_LABELS_PL[k];
+  return VYBAVENI_KATEGORIE_LABELS[k];
 }
 
 export const MED_TYP_LABELS: Record<MedTyp, string> = {
@@ -147,8 +165,15 @@ const MED_TYP_LABELS_SK: Record<MedTyp, string> = {
   medovicovy: 'Medovicový',
   smiseny: 'Zmiešaný',
 };
+const MED_TYP_LABELS_PL: Record<MedTyp, string> = {
+  kvetovy: 'Nektarowy',
+  medovicovy: 'Spadziowy',
+  smiseny: 'Mieszany',
+};
 export function medTypLabel(typ: MedTyp, locale: Locale = 'cs'): string {
-  return (locale === 'sk' ? MED_TYP_LABELS_SK : MED_TYP_LABELS)[typ];
+  if (locale === 'sk') return MED_TYP_LABELS_SK[typ];
+  if (locale === 'pl') return MED_TYP_LABELS_PL[typ];
+  return MED_TYP_LABELS[typ];
 }
 
 // Enum hodnoty zobrazované „naživo" (temperament/výnos/rojivost/krystalizace) jsou
@@ -158,16 +183,29 @@ const VCELA_TEMPERAMENT_SK: Record<string, string> = { 'mírná': 'mierna', 'st�
 const VCELA_VYNOS_SK: Record<string, string> = { 'nízký': 'nízky', 'střední': 'stredný', 'vysoký': 'vysoký', 'velmi vysoký': 'veľmi vysoký' };
 const VCELA_ROJIVOST_SK: Record<string, string> = { 'nízká': 'nízka', 'střední': 'stredná', 'vyšší': 'vyššia' };
 const MED_KRYSTALIZACE_SK: Record<string, string> = { 'velmi pomalá': 'veľmi pomalá', 'pomalá': 'pomalá', 'střední': 'stredná', 'rychlá': 'rýchla' };
+// PL: „Temperament" je mužský rod, „Wydajność miodowa" / „Rojliwość" / „Krystalizacja" ženský.
+const VCELA_TEMPERAMENT_PL: Record<string, string> = { 'mírná': 'łagodny', 'střední': 'średni', 'obranná': 'obronny' };
+const VCELA_VYNOS_PL: Record<string, string> = { 'nízký': 'niska', 'střední': 'średnia', 'vysoký': 'wysoka', 'velmi vysoký': 'bardzo wysoka' };
+const VCELA_ROJIVOST_PL: Record<string, string> = { 'nízká': 'niska', 'střední': 'średnia', 'vyšší': 'wyższa' };
+const MED_KRYSTALIZACE_PL: Record<string, string> = { 'velmi pomalá': 'bardzo powolna', 'pomalá': 'powolna', 'střední': 'średnia', 'rychlá': 'szybka' };
 
 export function vcelaTemperamentLabel(v: string, locale: Locale = 'cs'): string {
-  return locale === 'sk' ? (VCELA_TEMPERAMENT_SK[v] ?? v) : v;
+  if (locale === 'sk') return VCELA_TEMPERAMENT_SK[v] ?? v;
+  if (locale === 'pl') return VCELA_TEMPERAMENT_PL[v] ?? v;
+  return v;
 }
 export function vcelaVynosLabel(v: string, locale: Locale = 'cs'): string {
-  return locale === 'sk' ? (VCELA_VYNOS_SK[v] ?? v) : v;
+  if (locale === 'sk') return VCELA_VYNOS_SK[v] ?? v;
+  if (locale === 'pl') return VCELA_VYNOS_PL[v] ?? v;
+  return v;
 }
 export function vcelaRojivostLabel(v: string, locale: Locale = 'cs'): string {
-  return locale === 'sk' ? (VCELA_ROJIVOST_SK[v] ?? v) : v;
+  if (locale === 'sk') return VCELA_ROJIVOST_SK[v] ?? v;
+  if (locale === 'pl') return VCELA_ROJIVOST_PL[v] ?? v;
+  return v;
 }
 export function medKrystalizaceLabel(v: string, locale: Locale = 'cs'): string {
-  return locale === 'sk' ? (MED_KRYSTALIZACE_SK[v] ?? v) : v;
+  if (locale === 'sk') return MED_KRYSTALIZACE_SK[v] ?? v;
+  if (locale === 'pl') return MED_KRYSTALIZACE_PL[v] ?? v;
+  return v;
 }

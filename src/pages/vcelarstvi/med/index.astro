@@ -7,9 +7,8 @@ import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../../i1
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const isSk = locale === 'sk';
-const base = isSk ? '/sk' : '';
-const bcp47 = isSk ? 'sk-SK' : 'cs-CZ';
+const base = locale === 'cs' ? '' : `/${locale}`;
+const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA', pl: 'pl-PL' } as const)[locale];
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const all = getAllMed(locale);

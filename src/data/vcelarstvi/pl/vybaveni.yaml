@@ -1,0 +1,227 @@
+# Polský overlay katalogu vybavení. `kategorie`, `slug`, `related`, `pro_zacatecniky`
+# a image_* zůstávají beze změny (klíče pro filtry/CSS/JSON-LD). Ceny jsou českého
+# trhu (zdroj dat) — ponechány v Kč jako u sk overlaye, jednotky přeloženy.
+- slug: nastavkovy-ul
+  name: Ul nadstawkowy
+  kategorie: ul
+  popis_kratky: Modułowy ul złożony z osobnych nadstawek, dzisiejszy standard.
+  description: >
+    Ul nadstawkowy składa się z rozdzielnych nadstawek ustawianych jedna na drugiej.
+    Pozwala pracować całymi nadstawkami, łatwo poszerzać gniazdo i odbierać miodnię.
+    W Czechach najczęściej spotyka się wymiar ramki Optimal (39×24 cm) lub Langstroth;
+    w Polsce odpowiednikami są przede wszystkim ul wielkopolski i ul warszawski poszerzany.
+    Dla początkującego to dobry pierwszy ul dzięki dostępności osprzętu i literatury.
+  pro_zacatecniky: true
+  orientacni_cena: 2 500–6 000 Kč za nadstawkę
+  image_url: /images/vcelarstvi/vybaveni/nastavkovy-ul.webp
+  image_credit: "Thomas Zimmermann (THWZ)"
+  image_source_url: https://commons.wikimedia.org/wiki/File:Imkerei_THWZ_0000.jpg
+  image_license: CC BY-SA 3.0 de
+  related:
+    - langstroth
+    - optimal
+
+- slug: langstroth
+  name: Ul Langstrotha
+  kategorie: ul
+  popis_kratky: Najbardziej rozpowszechniony wymiar ramki na świecie, z modułowym osprzętem kompatybilnym między producentami.
+  description: >
+    Ul Langstrotha zaprojektował w 1851 roku amerykański pastor Lorenzo Langstroth;
+    dziś dominuje w światowym pszczelarstwie przede wszystkim dzięki standaryzowanym
+    wymiarom ramki (448×232 mm).
+    Modułowość pozwala na wzajemną wymianę nadstawek i plastrów od różnych producentów,
+    co ułatwia kupowanie części zamiennych i dzielenie się sprzętem między pszczelarzami.
+    W Czechach jest mniej rozpowszechniony niż Optimal, ale wraz z rozwojem pszczelarstwa
+    ekologicznego i zawodowego jego udział rośnie.
+  pro_zacatecniky: true
+  orientacni_cena: 2 500–5 500 Kč za nadstawkę
+  image_url: /images/vcelarstvi/vybaveni/langstroth.webp
+  image_credit: "Easy n"
+  image_source_url: https://commons.wikimedia.org/wiki/File:Beehive.jpg
+  image_license: Public domain
+  related:
+    - nastavkovy-ul
+    - optimal
+
+- slug: optimal
+  name: Ul Optimal (39×24)
+  kategorie: ul
+  popis_kratky: Tradycyjny czeski wymiar ramki 39×24 cm, wciąż najpowszechniejszy w tamtejszych pasiekach.
+  description: >
+    Wymiar ramki Optimal (szerokość 390 mm, wysokość 240 mm) przyjął się w Czechach
+    jako standard po drugiej wojnie światowej i do dziś używa go większość tamtejszych
+    pszczelarzy. Odpowiednikiem o zbliżonym charakterze w polskich pasiekach jest
+    ul wielkopolski (360×260 mm).
+    Wysoki poziom dostępności ramek, węzy i nadstawek w czeskiej sieci sprzedaży czyni
+    z Optimalu logiczny wybór dla początkujących pszczelarzy w Czechach.
+    Osprzęt do tego systemu wytwarza wiele warsztatów czeskich i słowackich, a ceny
+    są zwykle niższe niż w przypadku importowanego Langstrotha.
+  pro_zacatecniky: true
+  orientacni_cena: 2 000–5 000 Kč za nadstawkę
+  image_url: null
+  related:
+    - nastavkovy-ul
+    - langstroth
+    - ramek
+
+- slug: mezistena
+  name: Węza
+  kategorie: naradi
+  popis_kratky: Woskowa płyta z wytłoczonymi zaczątkami komórek, którą pszczoły wbudowują w ramkę i szybko odbudowują w gotowy plaster.
+  description: >
+    Węza to cienka woskowa płyta z wytłoczonymi sześciokątnymi zaczątkami komórek,
+    która przyspiesza budowę plastrów i ukierunkowuje pszczoły na budowanie komórek
+    standardowej wielkości.
+    Wprawia się ją w przygotowaną ramkę z napiętymi drutami, które mechanicznie ją
+    usztywniają, a następnie mocuje przez wtopienie za pomocą zasilacza elektrycznego
+    lub podgrzewanego radełka.
+    Dobrej jakości węza jest wykonana z czystego wosku pszczelego bez domieszek parafiny;
+    jej czystość biologiczna wpływa bezpośrednio na zdrowie czerwiu w komórkach.
+  pro_zacatecniky: true
+  orientacni_cena: od 20 Kč za sztukę (Optimal), 100–350 Kč za kg wosku
+  image_url: /images/vcelarstvi/vybaveni/mezistena.webp
+  image_credit: "Plantsurfer"
+  image_source_url: https://commons.wikimedia.org/wiki/File:Beeswax_foundation.jpg
+  image_license: Public domain
+  related:
+    - ramek
+    - optimal
+    - langstroth
+
+- slug: ramek
+  name: Ramka
+  kategorie: naradi
+  popis_kratky: Drewniana lub plastikowa ramka niosąca plaster, wstawiana do nadstawki i pozwalająca wyjmować dzieło bez jego uszkodzenia.
+  description: >
+    Ramka stanowi podstawową jednostkę nośną plastra — pszczoły zabudowują ją woskiem,
+    odbudowują komórki na węzie, a matka składa w nich jaja albo robotnice magazynują
+    miód i pyłek.
+    Standardowe wykonanie jest drewniane, z górną beleczką, boczkami i dolną listewką;
+    między boczkami napina się druty stalowe lub mosiężne, na których mocuje się węzę.
+    Wymiary ramki wyznaczają wymiar ramki całego ula — wymiana ramek Optimal
+    i Langstroth nie jest możliwa bez przeróbki nadstawki.
+  pro_zacatecniky: true
+  orientacni_cena: 10–30 Kč za sztukę
+  image_url: /images/vcelarstvi/vybaveni/ramek.webp
+  image_credit: "Jolán Dénes"
+  image_source_url: https://commons.wikimedia.org/wiki/File:Frame_from_a_beehive;_closeup_-_2011.12.18.jpg
+  image_license: CC BY-SA 2.5
+  related:
+    - mezistena
+    - optimal
+    - langstroth
+    - nastavkovy-ul
+
+- slug: medomet
+  name: Miodarka
+  kategorie: zpracovani
+  popis_kratky: Wirówka do odwirowywania miodu z plastrów siłą odśrodkową, bez ich uszkadzania.
+  description: >
+    Miodarka działa na zasadzie wirówki — plastry (albo całe ramki) wkłada się
+    do obracającego się bębna, a siła odśrodkowa wypycha miód z komórek do walcowatego
+    zbiornika, skąd spływa kranikiem spustowym do naczynia.
+    Miodarki ręczne o pojemności 2–4 ramek są przystępne cenowo i wystarczają
+    dla mniejszej pasieki do 10 uli; urządzenia elektryczne o pojemności 6–9 ramek
+    i większej oszczędzają czas przy obfitszych zbiorach.
+    Kluczowym parametrem jest zgodność z wymiarem ramki (Optimal lub Langstroth),
+    ponieważ kaset w bębnie nie zawsze da się dopasować do obu wymiarów.
+  pro_zacatecniky: false
+  orientacni_cena: 2 000–6 000 Kč (ręczna), od 8 000 Kč (elektryczna)
+  image_url: /images/vcelarstvi/vybaveni/medomet.webp
+  image_credit: "Orce Wiki"
+  image_source_url: https://commons.wikimedia.org/wiki/File:Centrifuge_for_extracting_honey_-_Macedonian_traditional_agriculture.jpg
+  image_license: CC BY-SA 4.0
+  related:
+    - rozperka
+    - ramek
+
+- slug: kurak
+  name: Podkurzacz
+  kategorie: ochrana
+  popis_kratky: Narzędzie wytwarzające zimny dym, który uspokaja pszczoły przy pracy z ulem i zmniejsza ryzyko użądleń.
+  description: >
+    Podkurzacz składa się z nierdzewnego lub ocynowanego paleniska z miechem;
+    jako paliwo służy sucha trawa, trociny, kora albo specjalne pelety z materiałów
+    naturalnych.
+    Dym sprawia, że pszczoły odruchowo pobierają miód i przygotowują się do ucieczki
+    przed pożarem — w tym stanie są mniej agresywne i łatwiej znoszą ingerencję
+    pszczelarza.
+    Prawidłowe posługiwanie się podkurzaczem należy do podstawowych umiejętności
+    każdego pszczelarza i wyraźnie ogranicza liczbę użądleń — zarówno pszczelarza,
+    jak i sąsiadów podczas pracy na pasieczysku.
+  pro_zacatecniky: true
+  orientacni_cena: 300–800 Kč
+  image_url: /images/vcelarstvi/vybaveni/kurak.webp
+  image_credit: "Orce Wiki"
+  image_source_url: https://commons.wikimedia.org/wiki/File:Bee_smoker_(pufka)_-_Macedonian_traditional_agriculture.jpg
+  image_license: CC BY-SA 4.0
+  related:
+    - vcelarsky-oblek
+    - rozperka
+
+- slug: vcelarsky-oblek
+  name: Kombinezon pszczelarski i kapelusz z siatką
+  kategorie: ochrana
+  popis_kratky: Odzież ochronna i kapelusz z siatką chroniące przed użądleniami, początkującym zaleca się pełny kombinezon.
+  description: >
+    Kombinezon pszczelarski to jednoczęściowy strój z gęsto tkanego jasnego materiału
+    (bawełna albo poliester z bawełną) z elastycznymi mankietami na nadgarstkach
+    i kostkach, które uniemożliwiają pszczołom wejście pod odzież.
+    Kapelusz z metalową lub plastikową siatką chroni twarz i szyję; są zarówno
+    kapelusze osobne, do użycia z własną odzieżą, jak i wersje wszyte bezpośrednio
+    w kombinezon.
+    Początkującym organizacje branżowe zalecają pełny kombinezon z wszytym kapeluszem —
+    doświadczeni pszczelarze z łagodną rasą często pracują tylko w kapeluszu
+    i rękawicach.
+  pro_zacatecniky: true
+  orientacni_cena: 600–1 800 Kč (kapelusz), 1 500–4 000 Kč (pełny kombinezon)
+  image_url: /images/vcelarstvi/vybaveni/vcelarsky-oblek.webp
+  image_credit: "Migco"
+  image_source_url: https://commons.wikimedia.org/wiki/File:Beekeeper.jpg
+  image_license: Public domain
+  related:
+    - kurak
+    - rozperka
+
+- slug: rozperka
+  name: Dłuto pasieczne
+  kategorie: naradi
+  popis_kratky: Nierdzewne dłuto do rozdzielania sklejonych propolisem nadstawek i ramek, podstawowe codzienne narzędzie pszczelarza.
+  description: >
+    Dłuto pasieczne to profilowany pręt ze stali nierdzewnej o długości około 20–25 cm,
+    z lekko wygiętym klinowym końcem i prostym skrobakiem po drugiej stronie.
+    Służy do rozdzielania nadstawek sklejonych propolisem, do luzowania ramek
+    w wąskich szczelinach oraz do zeskrobywania osadzonego propolisu lub wosku
+    ze ścian nadstawki.
+    Bez tego narzędzia nie da się bezpiecznie otworzyć ula bez uszkodzenia dzieła
+    albo zgniatania pszczół — to więc pierwszy sprzęt, jaki kupuje każdy początkujący
+    pszczelarz.
+  pro_zacatecniky: true
+  orientacni_cena: 80–250 Kč
+  image_url: null
+  related:
+    - kurak
+    - vcelarsky-oblek
+    - medomet
+
+- slug: krmitko
+  name: Podkarmiaczka
+  kategorie: krmeni
+  popis_kratky: Naczynie umieszczane w ulu lub nad nim, służące do podawania syropu cukrowego przy zazimowaniu albo w karmieniu awaryjnym.
+  description: >
+    Podkarmiaczka służy do uzupełnienia zapasów energetycznych rodziny w okresie,
+    gdy naturalny pożytek nie wystarcza — typowo przy zazimowaniu we wrześniu
+    i październiku albo w ubogim bezpożytkowym okresie w środku lata.
+    Podkarmiaczka powałkowa (płaska, przykrywająca cały strop nadstawki) mieści
+    1–3 litry syropu, a pszczoły dostają się do niej przez otwór od spodu;
+    podkarmiaczka ramkowa ma kształt wąskiej ramki i wstawia się ją bezpośrednio
+    między plastry.
+    Syrop cukrowy przygotowuje się w proporcji 1:1 (podkarmianie pobudzające)
+    lub 2:1 (zapasy na zimę), a jego dawkowanie wynika z zalecanej masy zapasu
+    zimowego — zwykle 15–20 kg na zimującą rodzinę.
+  pro_zacatecniky: true
+  orientacni_cena: 100–400 Kč
+  image_url: null
+  related:
+    - nastavkovy-ul
+    - ramek

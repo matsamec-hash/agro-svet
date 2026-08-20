@@ -42,12 +42,14 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // Kalkulačky: jen 2 UNIVERZÁLNÍ převodníky (plocha/hmotnost) — bez jurisdikce.
   // Finanční (leasing = čeští poskytovatelé, náklady/nafta = české ceny, CAP =
   // české sazby) + /kalkulacka hub zůstávají cs → potřebují PL data, ne překlad.
+  // /vcelarstvi LAUNCHNUTÉ: `pl/` YAML overlay (6 včel + 10 vybavení + 7 medů), enum
+  // hodnoty zůstávají kanonicky česky (CSS třídy + JSON-LD), překládá je *Label().
   // /doplaty-bezposrednie = PL-only landing (dopłaty bezpośrednie ARiMR), jurisdykčně
   // vázané, obsah přímo polsky (žádný cs ekvivalent → non-pl locale 404). Launchnuté
   // → index+self-canonical (noHreflang v Layoutu, žádné cross-locale alternates).
   // '/' = homepage indexable (má reálný PL feed přes article_translations).
   // '/novinky' = PL zpravodajský výpis (jen reálně přeložené články, žádný cs leak).
-  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki'],
+  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

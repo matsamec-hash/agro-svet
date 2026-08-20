@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { LAUNCHED_PREFIXES, isLaunchedPath } from '../../src/i18n/utils';
 import { isLockedSectionPath } from '../../src/i18n/nav';
+import {
+  getAllVcely, getAllVybaveni, getAllMed,
+  vcelaTemperamentLabel, vcelaVynosLabel, vcelaRojivostLabel,
+  medKrystalizaceLabel, vybaveniKategorieLabel, medTypLabel,
+} from '../../src/lib/vcelarstvi';
 
 describe('PL fáze 1 launch (stroje/znacky/srovnani/slovnik)', () => {
   const launched = ['/stroje', '/znacky', '/srovnani', '/slovnik'];
@@ -44,6 +49,66 @@ describe('PL fáze 2 launch (statistiky + data hub)', () => {
   });
   it('datová sekce není locked', () => {
     for (const p of launched) expect(isLockedSectionPath(p)).toBe(false);
+  });
+});
+
+describe('PL launch /vcelarstvi (pl YAML overlay)', () => {
+  it('/vcelarstvi je launchnuté pro pl', () => {
+    expect(LAUNCHED_PREFIXES.pl).toContain('/vcelarstvi');
+    expect(isLaunchedPath('pl', '/vcelarstvi')).toBe(true);
+    for (const p of ['/vcelarstvi/druhy/kranska/', '/vcelarstvi/vybaveni/medomet/', '/vcelarstvi/med/pohankovy/']) {
+      expect(isLaunchedPath('pl', p)).toBe(true);
+    }
+  });
+  it('pl overlay má stejnou množinu slugů jako cs (pořadí se liší — řadí se dle locale)', () => {
+    const slugs = (arr: { slug: string }[]) => [...arr.map((v) => v.slug)].sort();
+    expect(slugs(getAllVcely('pl'))).toEqual(slugs(getAllVcely('cs')));
+    expect(slugs(getAllVybaveni('pl'))).toEqual(slugs(getAllVybaveni('cs')));
+    expect(slugs(getAllMed('pl'))).toEqual(slugs(getAllMed('cs')));
+  });
+  it('enum hodnoty + obrázky zůstávají v pl kanonicky české (klíče pro CSS/JSON-LD)', () => {
+    const plBySlug = new Map(getAllVcely('pl').map((v) => [v.slug, v]));
+    for (const c of getAllVcely('cs')) {
+      const p = plBySlug.get(c.slug)!;
+      expect(p.temperament).toBe(c.temperament);
+      expect(p.medny_vynos).toBe(c.medny_vynos);
+      expect(p.rojivost).toBe(c.rojivost);
+      expect(p.image_url).toBe(c.image_url);
+    }
+    const medBySlug = new Map(getAllMed('pl').map((v) => [v.slug, v]));
+    for (const c of getAllMed('cs')) {
+      expect(medBySlug.get(c.slug)!.typ).toBe(c.typ);
+      expect(medBySlug.get(c.slug)!.krystalizace).toBe(c.krystalizace);
+    }
+    const vybBySlug = new Map(getAllVybaveni('pl').map((v) => [v.slug, v]));
+    for (const c of getAllVybaveni('cs')) {
+      expect(vybBySlug.get(c.slug)!.kategorie).toBe(c.kategorie);
+      expect(vybBySlug.get(c.slug)!.pro_zacatecniky).toBe(c.pro_zacatecniky);
+    }
+  });
+  it('pl próza je skutečně přeložená (ne cs fallback)', () => {
+    const plBySlug = new Map(getAllVcely('pl').map((v) => [v.slug, v]));
+    for (const c of getAllVcely('cs')) {
+      // description se musí lišit vždy; `name` ne u vlastních jmen (Buckfast).
+      expect(plBySlug.get(c.slug)!.description).not.toBe(c.description);
+    }
+    expect(plBySlug.get('kranska')!.name).toBe('Pszczoła kraińska');
+    expect(getAllMed('pl').find((m) => m.slug === 'pohankovy')?.name).toBe('Miód gryczany');
+    expect(getAllVybaveni('pl').find((v) => v.slug === 'medomet')?.name).toBe('Miodarka');
+  });
+  it('enum labely se překládají do pl (data zůstávají česky)', () => {
+    expect(vcelaTemperamentLabel('mírná', 'pl')).toBe('łagodny');
+    expect(vcelaVynosLabel('velmi vysoký', 'pl')).toBe('bardzo wysoka');
+    expect(vcelaRojivostLabel('vyšší', 'pl')).toBe('wyższa');
+    expect(medKrystalizaceLabel('rychlá', 'pl')).toBe('szybka');
+    expect(vybaveniKategorieLabel('zpracovani', 'pl')).toBe('Przetwarzanie miodu');
+    expect(medTypLabel('medovicovy', 'pl')).toBe('Spadziowy');
+    // cs/sk beze změny
+    expect(vcelaTemperamentLabel('mírná', 'cs')).toBe('mírná');
+    expect(vcelaTemperamentLabel('mírná', 'sk')).toBe('mierna');
+  });
+  it('/vcelarstvi není locked', () => {
+    expect(isLockedSectionPath('/vcelarstvi')).toBe(false);
   });
 });
 
