@@ -73,6 +73,11 @@ const chorobyOverlayModules = import.meta.glob('/src/data/choroby/*/*.yaml', {
 const CHOROBA_OVERLAY_FIELDS = [
   'name', 'puvodce', 'popis', 'priznaky', 'hostitele',
   'sireni', 'skodlivost', 'cyklus', 'ochrana', 'faq',
+  // ‼️ `ucinne_latky` jsem původně z overlaye vyloučil s tím, že jsou to
+  // mezinárodní názvy. Chyba: 38 z 39 záznamů neslo českou prózu („např.
+  // Amistar", „měďnaté přípravky"). Navíc jsou obchodní názvy přípravků
+  // NÁRODNÍ (registrace se liší) — PL overlay proto nese jen účinné látky.
+  'ucinne_latky',
 ] as const;
 
 /** cs choroba + overlay → lokalizovaná. Nemutuje base. Exportováno kvůli testům. */

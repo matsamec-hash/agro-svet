@@ -3,7 +3,8 @@ name: Fendt
 slug: fendt
 zeme: Niemcy
 zalozena: 1930
-popis: Fendt to bawarski producent traktorów z Marktoberdorfu, znany z bezstopniowej skrzyni biegów Vario. Od 1997 roku jest marką grupy AGCO i jest synonimem premium w technice rolniczej.
+popis: Fendt to bawarski producent traktorów z Marktoberdorfu, znany z bezstopniowej skrzyni biegów Vario. Od 1997
+  roku jest marką grupy AGCO i jest synonimem premium w technice rolniczej.
 website: https://www.fendt.com
 wikipedia: https://en.wikipedia.org/wiki/Fendt
 wikidata: https://www.wikidata.org/wiki/Q666948
@@ -16,39 +17,40 @@ founder:
   name: Xaver Fendt
   note: Założyciel firmy w Marktoberdorfie (1930), twórca pierwszego traktora Dieselross.
 snapshot:
-- label: Založené
+- label: Założone
   value: '1930'
-- label: Sídlo
+- label: Siedziba
   value: Marktoberdorf (Niemcy)
-- label: Materská skupina
+- label: Grupa macierzysta
   value: AGCO (od 1997)
-- label: Vlajková technológia
+- label: Flagowa technologia
   value: Vario (bezstopniowa skrzynia biegów)
-- label: Pozícia v ČR
-  value: 2. najpredávanejšia značka (2024)
+- label: Pozycja
+  value: Marka premium grupy AGCO
 timeline:
 - year: 1930
-  label: Prvý traktor Dieselross
-  detail: Xaver Fendt w Marktoberdorfie skonstruował mały traktor Dieselross („dieselowy koń") o mocy 4,5 kW (6 KM).
+  label: Pierwszy traktor Dieselross
+  detail: Xaver Fendt w Marktoberdorfie skonstruował mały traktor Dieselross („dieselowy koń") o mocy 4,5 kW (6
+    KM).
 - year: 1937
-  label: Vznik firmy Xaver Fendt & Co.
+  label: Powstanie firmy Xaver Fendt & Co.
   detail: Firma wpisana do rejestru handlowego; do zarządu wszedł także brat Hermann Fendt.
 - year: 1938
   label: Dieselross F 22
   detail: Mocniejszy model (do 16 kW / 22 KM); seria Dieselross produkowana do 1958 roku.
 - year: 1995
-  label: Favorit 926 Vario — prvý sériový CVT traktor
+  label: Favorit 926 Vario — pierwszy seryjny ciągnik CVT
   detail: Premiera na targach Agritechnica; pierwszy duży seryjny traktor z bezstopniową skrzynią biegów.
 - year: 1996
-  label: Začiatok sériovej výroby Vario
+  label: Początek seryjnej produkcji Vario
 - year: 1997
   label: Vstup do skupiny AGCO
   detail: Od stycznia 1997 Fendt jest w pełni własnością AGCO Corporation.
 - year: 2015
-  label: Vlajkový Fendt 1000 Vario
+  label: Flagowy Fendt 1000 Vario
   detail: Rozpoczęcie seryjnej produkcji najwydajniejszej serii.
 - year: 2016
-  label: 250 000. vyrobená prevodovka Vario
+  label: 250 000. wyprodukowana przekładnia Vario
 sources:
 - title: Wikipedia — Fendt (EN)
   url: https://en.wikipedia.org/wiki/Fendt

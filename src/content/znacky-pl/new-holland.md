@@ -3,51 +3,58 @@ name: New Holland
 slug: new-holland
 zeme: Włochy / USA
 zalozena: 1895
-popis: New Holland Agriculture jest jednym z największych światowych producentów maszyn rolniczych. Marka jest częścią koncernu CNH Industrial i oferuje pełne portfolio od traktorów przez kombajny aż po samojezdne sieczkarnie. W ostatnich latach New Holland koncentruje się na alternatywnych napędach — ciągnikach wodorowych i maszynach na biometan.
+popis: New Holland Agriculture jest jednym z największych światowych producentów maszyn rolniczych. Marka jest częścią
+  koncernu CNH Industrial i oferuje pełne portfolio od traktorów przez kombajny aż po samojezdne sieczkarnie. W
+  ostatnich latach New Holland koncentruje się na alternatywnych napędach — ciągnikach wodorowych i maszynach na
+  biometan.
 website: https://www.newholland.com
 wikipedia: https://en.wikipedia.org/wiki/New_Holland_Agriculture
 wikidata: https://www.wikidata.org/wiki/Q1423217
-kategorie: ["Traktory", "Kombajny", "Sklízecí řezačky", "Teleskopické manipulátory"]
+kategorie:
+- Traktory
+- Kombajny
+- Sklízecí řezačky
+- Teleskopické manipulátory
 aktualizovano: 2026-05-29
 founder:
   name: Abram Zimmerman
   note: Zakladateľ firmy v mestečku New Holland v Pennsylvánii (1895), tvorca motora odolného proti zamrznutiu.
 snapshot:
-- label: Založené
+- label: Założone
   value: '1895'
-- label: Miesto vzniku
-  value: New Holland, Pennsylvánia (USA)
-- label: Materská skupina
+- label: Miejsce powstania
+  value: New Holland, Pensylwania (USA)
+- label: Grupa macierzysta
   value: CNH Industrial
-- label: Centrála agro divízie
-  value: Turín (Włochy)
-- label: Pozícia v ČR
-  value: 4. najpredávanejšia značka (2024)
+- label: Centrala dywizji rolniczej
+  value: Turyn (Włochy)
+- label: Pozycja
+  value: Marka maszyn rolniczych grupy CNH Industrial
 timeline:
 - year: 1895
-  label: Založenie dielne v New Holland
-  detail: Abram Zimmerman založil v pennsylvánskom mestečku New Holland kováčsku a strojárenskú dielňu.
+  label: Założenie warsztatu w New Holland
+  detail: Abram Zimmerman założył w pensylwańskim miasteczku New Holland warsztat kowalski i maszynowy.
 - year: 1903
-  label: Vznik New Holland Machine Company
-  detail: Zimmerman pretvoril firmu na akciovú spoločnosť.
+  label: Powstanie New Holland Machine Company
+  detail: Zimmerman przekształcił firmę w spółkę akcyjną.
 - year: 1940
-  label: Prvý samozväzný zberací lis
+  label: Pierwsza prasa zbierająca z wiązałką
 - year: 1947
-  label: Prevzatie skupinou Sperry Corporation
-  detail: Vznik značky Sperry New Holland.
+  label: Przejęcie przez Sperry Corporation
+  detail: Powstanie marki Sperry New Holland.
 - year: 1964
-  label: Akvizícia belgickej Claeys
-  detail: Vstup na európsky trh; výrobca kombajnov zo Zedelgemu.
+  label: Przejęcie belgijskiej firmy Claeys
+  detail: Wejście na rynek europejski; producent kombajnów z Zedelgem.
 - year: 1986
-  label: Akvizícia Fordom → Ford New Holland
+  label: Przejęcie przez Forda → Ford New Holland
 - year: 1991
-  label: Väčšinový podiel získava Fiat
-  detail: Zjednotenie produktov Ford a Fiat pod globálnu značku New Holland.
+  label: Większościowy pakiet przejmuje Fiat
+  detail: Ujednolicenie produktów Forda i Fiata pod globalną marką New Holland.
 - year: 1999
-  label: Fúzia s Case → CNH Global
+  label: Fuzja z Case → CNH Global
 - year: 2009
-  label: Prototyp vodíkového traktora NH2
-  detail: Predstavený na veľtrhu SIMA v Paríži.
+  label: Prototyp ciągnika wodorowego NH2
+  detail: Zaprezentowany na targach SIMA w Paryżu.
 - year: 2013
   label: Vznik CNH Industrial
 - year: 2022

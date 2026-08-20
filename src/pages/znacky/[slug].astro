@@ -7,8 +7,8 @@ import { getAllModels } from '../../lib/stroje';
 import Anketa from '../../components/Anketa.astro';
 import { akcieProZnacku, ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { brandPairs } from '../../lib/brand-comparator';
-import { TIER_LISTS, rankForTierList } from '../../lib/tier-lists';
-import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../i18n/utils';
+import { tierLists, rankForTierList } from '../../lib/tier-lists';
+import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -41,7 +41,7 @@ const sources: { title: string; url: string }[] = d.sources ?? [];
 const founder = d.founder as { name: string; birth?: string; death?: string; note?: string } | undefined;
 const aktualizovano: Date | undefined = d.aktualizovano;
 const aktualizovanoStr = aktualizovano
-  ? new Intl.DateTimeFormat(locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ', { month: 'long', year: 'numeric' }).format(aktualizovano)
+  ? new Intl.DateTimeFormat(bcp47(locale), { month: 'long', year: 'numeric' }).format(aktualizovano)
   : null;
 
 // Osnova (table of contents): nadpisy z prózy (depth 2) + sekce ze šablony.
@@ -61,7 +61,12 @@ if ((znacka.data as any).wikipedia) sameAsList.push((znacka.data as any).wikiped
 if ((znacka.data as any).wikidata) sameAsList.push((znacka.data as any).wikidata);
 if (znacka.data.website) sameAsList.push(znacka.data.website);
 
-const encyklopedie = await getCollection('encyklopedie');
+// ‼️ Bralo se natvrdo cs → /pl/znacky/<slug>/ vypisovalo české popisy modelů
+// („Vlajkový kolový traktor řady 8R…"), přestože encyklopediePl existuje
+// v plné paritě. Stejná mapa jako v encyklopedie/[slug].astro.
+const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklopedieUk', pl: 'encyklopediePl' } as const;
+const encColl = (ENC_COLLECTION as Record<string, string | undefined>)[locale] ?? 'encyklopedie';
+const encyklopedie = await getCollection(encColl as 'encyklopedie');
 const brandEncyclopedia = encyklopedie
   .filter((e) => e.data.znacka === znacka.id)
   .sort((a, b) => (b.data.rok_uvedeni ?? 0) - (a.data.rok_uvedeni ?? 0))
@@ -91,8 +96,8 @@ const catalogCountStr =
   + (catalogStrojeCount > 0 ? ` · ${catalogStrojeCount} ${tr('cat.zn.d.catalogStroje')}` : '') + ' ';
 
 // Tier-list occurrences: žebříčky kde značka figuruje v Top-12.
-const tierAppearances = TIER_LISTS.flatMap((t) => {
-  const ranked = rankForTierList(t);
+const tierAppearances = tierLists(locale).flatMap((t) => {
+  const ranked = rankForTierList(t, locale);
   const hit = ranked.find((r) => r.model.brand_slug === znacka.id);
   if (!hit) return [];
   return [{ tier: t, rank: hit.rank, model: hit.model }];
@@ -339,7 +344,7 @@ const modelListJsonLd = brandModels.length > 0
         </header>
         <div class="tier-grid">
           {tierAppearances.map((t) => (
-            <a href={`/zebricky/${t.tier.slug}/`} class="tier-card">
+            <a href={localizeInternalHref(locale, `/zebricky/${t.tier.slug}/`)} class="tier-card">
               <span class="tier-rank">#{t.rank}</span>
               <div class="tier-body">
                 <span class="tier-list-name">{t.tier.title}</span>

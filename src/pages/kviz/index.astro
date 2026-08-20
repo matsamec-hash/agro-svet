@@ -63,7 +63,7 @@ const quizCopy = (q: (typeof quizzes)[number]) =>
 
 <Layout
   title={tr('kvz.hub.title')}
-  description="Interaktivní kvízy ze zemědělství — historie značek, technologie traktorů, dotace CAP. Hodnocení podle správných odpovědí."
+  description={tr('kvz.hub.desc')}
   canonical={canonical}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -79,7 +79,7 @@ const quizCopy = (q: (typeof quizzes)[number]) =>
       <span class="kicker">{tf(locale, 'kvz.hub.kicker', { count: visibleQuizzes.length })}</span>
       <h1>Otestujte své znalosti</h1>
       <p class="lede">
-        Interaktivní kvízy o zemědělství, technice a dotacích. Hodnocení Začátečník → Hospodář → Expert → Legenda podle počtu správných odpovědí.
+        {tr('kvz.hub.intro')}
       </p>
     </header>
 

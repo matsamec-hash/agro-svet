@@ -356,7 +356,16 @@ const cs: Record<string, string> = {
   'cat.b.jsRowFew': 'řady',
   'cat.b.jsRowMany': 'řad',
 
+  'slov.czkNote': '',
   // — choroby (chor.*) —
+  'chor.hub.stat': 'chorob a škůdců',
+  'chor.d.cropsH': 'Ohrožené plodiny',
+  'kvz.hub.intro': 'Interaktivní kvízy o zemědělství, technice a dotacích. Hodnocení podle počtu správných odpovědí.',
+
+  'chor.d.cropsAtRisk': 'ohrožených plodin',
+  'chor.d.allDiseases': 'Všechny choroby',
+  'chor.d.eg': 'např.',
+
   'chor.hub.title': 'Choroby a škůdci polních plodin — atlas a ochrana',
   'chor.hub.desc': 'Atlas {count} chorob a škůdců polních plodin: příznaky, původce a doporučená ochrana. U každé choroby přehled plodin, které ohrožuje.',
   'chor.hub.crumb': 'Choroby a škůdci',
@@ -471,6 +480,9 @@ const cs: Record<string, string> = {
   'zeb.author': 'Redakce agro-svět.cz',
 
   // — kvízy (kvz.*) —
+  'kvz.hub.desc': 'Interaktivní kvízy ze zemědělství — historie značek, technologie traktorů, dotace. Hodnocení podle správných odpovědí.',
+  'puda.crumbSelf': 'Půda',
+
   'kvz.hub.title': 'Kvízy ze zemědělství — otestujte své znalosti',
   'kvz.hub.kicker': 'Kvízy · {count}',
   'kvz.hub.foot': 'Další kvízy připravujeme. Návrh tématu? Napište nám na',

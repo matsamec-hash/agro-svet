@@ -356,7 +356,16 @@ const sk: Record<string, string> = {
   'cat.b.jsRowFew': 'série',
   'cat.b.jsRowMany': 'sérií',
 
+  'slov.czkNote': 'Ceny sú orientačné z českého trhu (CZK) — na Slovensku sa môžu líšiť.',
   // — choroby (chor.*) —
+  'chor.hub.stat': 'chorôb a škodcov',
+  'chor.d.cropsH': 'Ohrozené plodiny',
+  'kvz.hub.intro': 'Interaktívne kvízy o poľnohospodárstve, technike a dotáciách. Hodnotenie podľa počtu správnych odpovedí.',
+
+  'chor.d.cropsAtRisk': 'ohrozených plodín',
+  'chor.d.allDiseases': 'Všetky choroby',
+  'chor.d.eg': 'napr.',
+
   'chor.hub.title': 'Choroby a škodcovia poľnohospodárskych plodín — atlas a ochrana',
   'chor.hub.desc': 'Atlas {count} chorôb a škodcov poľnohospodárskych plodín: príznaky, pôvodca a odporúčaná ochrana. U každej choroby prehľad plodín, ktoré ohrozuje.',
   'chor.hub.crumb': 'Choroby a škodcovia',
@@ -471,6 +480,9 @@ const sk: Record<string, string> = {
   'zeb.author': 'Redakcia agro-svět.cz',
 
   // — kvízy (kvz.*) —
+  'kvz.hub.desc': 'Interaktívne kvízy z poľnohospodárstva — história značiek, technológie traktorov, dotácie. Hodnotenie podľa správnych odpovedí.',
+  'puda.crumbSelf': 'Pôda',
+
   'kvz.hub.title': 'Kvízy z poľnohospodárstva — otestujte si znalosti',
   'kvz.hub.kicker': 'Kvízy · {count}',
   'kvz.hub.foot': 'Ďalšie kvízy pripravujeme. Návrh témy? Napíšte nám na',

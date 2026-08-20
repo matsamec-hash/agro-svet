@@ -25,7 +25,15 @@ type SpecRow = { label: string; value: string };
 const specs: SpecRow[] = [
   { label: t('vcel.spec.kategorie'), value: kategorieLabel },
 ];
-if (item.orientacni_cena) specs.push({ label: t('vcel.spec.orientacniCena'), value: item.orientacni_cena });
+// Ceny vybavení pocházejí z ČESKÉHO trhu (zdroj dat). Pod ne-cs se k hodnotě
+// připojí, odkud je — převádět na místní měnu by znamenalo vymýšlet kurz.
+if (item.orientacni_cena) {
+  const czk = locale !== 'cs' && /Kč/.test(String(item.orientacni_cena));
+  specs.push({
+    label: t('vcel.spec.orientacniCena'),
+    value: czk ? `${item.orientacni_cena} — ${t('slov.czkNote')}` : item.orientacni_cena,
+  });
+}
 if (item.pro_zacatecniky) specs.push({ label: t('vcel.spec.vhodnePro'), value: t('vcel.spec.zacatecniky') });
 
 const related = (item.related ?? []).map((s) => getVybaveni(s, locale)).filter(Boolean) as NonNullable<ReturnType<typeof getVybaveni>>[];

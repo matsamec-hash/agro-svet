@@ -9,7 +9,7 @@ import { tagStyle, getCategoryColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
 import { breadcrumbSchema } from '../../../../lib/structured-data';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../../../lib/articles-i18n';
-import { localizePath, t, localizedCategory } from '../../../../i18n/utils';
+import { localizePath, t, localizedCategory, bcp47 } from '../../../../i18n/utils';
 import { isNewsCategoryHidden } from '../../../../i18n/nav';
 import { NEWS_CATEGORIES, newsCategorySlug } from '../../../../lib/news-category';
 
@@ -78,7 +78,7 @@ const collectionJsonLd = {
   name: `${label} — agro-svět.cz`,
   description,
   url: `${SITE_URL}${localizePath(locale, `/novinky/kategorie/${kat}/`)}`,
-  inLanguage: locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : 'cs-CZ',
+  inLanguage: bcp47(locale),
   numberOfItems: items.length,
 };
 

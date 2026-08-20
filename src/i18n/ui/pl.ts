@@ -358,7 +358,16 @@ const pl: Record<string, string> = {
   'cat.b.jsRowFew': 'serie',
   'cat.b.jsRowMany': 'serii',
 
+  'slov.czkNote': 'Ceny są orientacyjne i pochodzą z rynku czeskiego (CZK) — w Polsce mogą się różnić.',
   // — choroby (chor.*) —
+  'chor.hub.stat': 'chorób i szkodników',
+  'chor.d.cropsH': 'Zagrożone rośliny',
+  'kvz.hub.intro': 'Interaktywne quizy o rolnictwie, technice i dopłatach. Ocena według liczby poprawnych odpowiedzi.',
+
+  'chor.d.cropsAtRisk': 'zagrożonych roślin',
+  'chor.d.allDiseases': 'Wszystkie choroby',
+  'chor.d.eg': 'np.',
+
   'chor.hub.title': 'Choroby i szkodniki roślin polowych — atlas i ochrona',
   'chor.hub.desc': 'Atlas {count} chorób i szkodników roślin polowych: objawy, sprawcy i zalecana ochrona. Przy każdej chorobie przegląd roślin, które są zagrożone.',
   'chor.hub.crumb': 'Choroby i szkodniki',
@@ -473,6 +482,9 @@ const pl: Record<string, string> = {
   'zeb.author': 'Redakcja agro-svět.cz',
 
   // — kvízy (kvz.*) —
+  'kvz.hub.desc': 'Interaktywne quizy rolnicze — historia marek, technologie ciągników, dopłaty. Ocena według poprawnych odpowiedzi.',
+  'puda.crumbSelf': 'Gleba',
+
   'kvz.hub.title': 'Quizy rolnicze — sprawdź swoją wiedzę',
   'kvz.hub.kicker': 'Quizy · {count}',
   'kvz.hub.foot': 'Kolejne quizy w przygotowaniu. Masz pomysł na temat? Napisz na',

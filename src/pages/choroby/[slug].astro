@@ -59,12 +59,12 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
         {choroba.latinsky && <p class="hero-latin">{choroba.latinsky}</p>}
         <p class="hero-lede">{choroba.popis}</p>
         <div class="hero-stats">
-          <div class="s"><span class="n">{choroba.plodiny.length}</span><span class="l">ohrožených plodin</span></div>
+          <div class="s"><span class="n">{choroba.plodiny.length}</span><span class="l">{tr('chor.d.cropsAtRisk')}</span></div>
         </div>
         <div class="hero-actions">
-          <a class="cta-back" href="/choroby/">
+          <a class="cta-back" href={localizeInternalHref(locale, '/choroby/')}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Všechny choroby
+            {tr('chor.d.allDiseases')}
           </a>
         </div>
       </div>
@@ -140,7 +140,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
     {choroba.plodiny.length > 0 && (
       <section class="card-section">
         <h2 class="section-title">
-          Ohrožené plodiny
+          {tr('chor.d.cropsH')}
           <span class="section-title-c">{choroba.plodiny.length}</span>
         </h2>
         <ul class="plodiny-list">

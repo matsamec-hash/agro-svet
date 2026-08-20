@@ -179,3 +179,14 @@ export function plural(
   if (abs >= 2 && abs <= 4) return forms.few;
   return forms.many;
 }
+
+/** BCP-47 tag pro Intl a JSON-LD `inLanguage`.
+ *  ‼️ Ternáře `locale === 'sk' ? 'sk-SK' : … : 'cs-CZ'` roztroušené po stránkách
+ *  na pl ZAPOMÍNALY — /pl/znacky/<slug>/ pak psalo „Treść ostatnio zweryfikowana:
+ *  květen 2026" (český měsíc). Používej tohle, ne vlastní ternář. */
+export const BCP47: Record<Locale, string> = {
+  cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA',
+};
+export function bcp47(locale: string): string {
+  return BCP47[locale as Locale] ?? BCP47.cs;
+}

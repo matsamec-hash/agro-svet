@@ -606,6 +606,9 @@ export const GET: APIRoute = async () => {
       // cs-only. Bez téhle brány by pl sitemapa nabrala 2710 URL, které pod /pl
       // stejně skončí 302 na cs (stránka je prerendered, viz middleware).
       if (isOdrudaDetailPath(p)) return false;
+      // /data je pro pl launchnuté (hub + statistiky), ale /data/prodeje-techniky
+      // je prerendered cs-only stránka → pod /pl 302 na cs. Do pl sitemapy nepatří.
+      if (p.startsWith('/data/prodeje-techniky')) return false;
       // Kvízy „jaký traktor" a „jaká včela" nejsou pro pl lokalizované (cílí na
       // servisní síť a podmínky v ČR) → pod /pl by 302-ovaly na cs. Hub /kviz/
       // ale zůstává — ten lokalizovaný JE a vypisuje jen dostupné kvízy.
