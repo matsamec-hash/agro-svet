@@ -671,6 +671,7 @@ const pl: Record<string, string> = {
   'cc.more': 'Więcej informacji',
   'cc.essentials': 'Tylko niezbędne',
   'cc.acceptAll': 'Zaakceptuj wszystkie',
+  'cc.settings': 'Ustawienia plików cookie',
 
   // — aktualności —
   'nov.section': 'Aktualności',

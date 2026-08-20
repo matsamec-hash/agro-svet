@@ -669,6 +669,7 @@ const sk: Record<string, string> = {
   'cc.more': 'Viac informácií',
   'cc.essentials': 'Iba nevyhnutné',
   'cc.acceptAll': 'Prijať všetko',
+  'cc.settings': 'Nastavenia cookies',
 
   // — novinky —
   'nov.section': 'Novinky',

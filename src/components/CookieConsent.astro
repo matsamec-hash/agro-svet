@@ -38,6 +38,21 @@ const tr = useTranslations(locale);
     if (stored === 'all') loadGA();
     else if (stored !== 'essentials') banner.hidden = false;
 
+    // Odvolání souhlasu (GDPR čl. 7 odst. 3 — musí být stejně snadné jako udělení).
+    // Bez tohohle se banner po prvním kliknutí už NIKDY neukázal a uživatel neměl
+    // jak analytiku vypnout jinak než smazáním localStorage.
+    // GA se v rámci session nedá odregistrovat → po odvolání reload.
+    document.querySelectorAll('[data-cc-reopen]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const had = localStorage.getItem(KEY);
+        localStorage.removeItem(KEY);
+        if (had === 'all') { location.reload(); return; }
+        banner.hidden = false;
+        banner.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      });
+    });
+
     document.getElementById('cc-essentials')?.addEventListener('click', () => {
       localStorage.setItem(KEY, 'essentials');
       banner.hidden = true;

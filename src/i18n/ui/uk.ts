@@ -674,6 +674,7 @@ const uk: Record<string, string> = {
   'cc.more': 'Докладніше',
   'cc.essentials': 'Лише необхідні',
   'cc.acceptAll': 'Прийняти всі',
+  'cc.settings': 'Налаштування cookie',
 
   // — novinky —
   'nov.section': 'Новини',
