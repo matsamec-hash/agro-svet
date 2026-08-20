@@ -1,0 +1,71 @@
+# Polský overlay plodin. slug, skupina, hero_*, seti_mesice, sklizen_mesice
+# a wikipedia zůstávají z cs (klíče, obrázky, kalendář). Pole choroby[] drží
+# STEJNÉ pořadí i délku jako cs — mapování na entitu jde přes cs index.
+slug: cukrovka
+name: Burak cukrowy
+name_plural: Cukrowka
+description: >-
+  Burak cukrowy (Beta vulgaris var. saccharifera) jest najważniejszą rośliną cukrowną strefy
+  umiarkowanej, uprawianą dla korzenia o zawartości cukru 16–20 %. Przetwarzany jest wyłącznie w
+  cukrowniach na cukier (sacharoza), a produkty uboczne (melasa, wytłoki buraczane) wykorzystywane
+  są w paszownictwie i biogazowniach.
+hnojeni: >-
+  N 120–160 kg/ha w zależności od zasobności gleby; K 180–250 kg K₂O/ha; Na 50–100 kg/ha (sód
+  poprawia plon cukru); bor 0,5–1 kg/ha
+vynos_t_ha: 60–80 (korzenie); cukrowość 16–20 %
+sklizen: wrzesień–listopad (przyjęcie kampanijne do cukrowni)
+vyuziti: >-
+  produkcja cukru (sacharoza), melasa (pasza, surowce fermentacyjne), wytłoki buraczane (pasza,
+  biogaz)
+choroby:
+  - chwościk buraka (Cercospora beticola) — najpowszechniejszy
+  - szara pleśń (Botrytis cinerea)
+  - zgnilizna twardzikowa korzeni (Rhizoctonia solani)
+  - wirusy (RŻW — wirus żółtaczki buraka, przenoszony przez mszyce)
+  - czerń buraka (Erysiphe betae)
+osevni_postup:
+  - name: Poprzednik i zmianowanie
+    text: >-
+      Cukrowka nie może być uprawiana powtarzalnie — minimalna przerwa 3 lata (najlepiej 4).
+      Najlepszymi poprzednikami są zboża (szczególnie pszenica po roślinach strączkowych lub
+      rzepaku).
+  - name: Przygotowanie gleby
+    text: >-
+      Głęboka jesienna orka 28–30 cm, ewentualne wapnowanie dla utrzymania pH 6,5–7,5. Wiosenne
+      przygotowanie drobnego łóżka siewnego bez grud.
+  - name: Siew
+    text: >-
+      Dokładny siew monosemionowymi nasionami od marca do kwietnia, głębokość 2–3 cm, odległość w
+      rzędzie 18–22 cm, odległość międzyrzędowa 45–50 cm.
+  - name: Nawożenie
+    text: >-
+      Nawozy organiczne korzystne; mineralne N w dawce 120–160 kg/ha, wysoka dawka K i Na. Bor 0,5–1
+      kg/ha nawozem dolistnym.
+  - name: Ochrona roślin
+    text: >-
+      Herbicydy (preemergentne + postemergentne BBCH 12–18), fungicydy przy wystąpieniu chwościka,
+      insektycydy przy wystąpieniu mszyc i stonki.
+  - name: Zbiór
+    text: >-
+      Zbiór kampanijny zgodnie z umownym terminem dostawy do cukrowni (wrzesień–listopad). Ostrożna
+      manipulacja minimalizuje mechaniczne straty cukru.
+faq:
+  - q: Jak wysoki jest plon cukrowki?
+    a: >-
+      Cukrowka osiąga plon korzeni 60–80 t/ha z cukrowością 16–20 %. Plon cukru wynosi więc około
+      10–14 t/ha.
+  - q: Dlaczego sód jest ważny dla cukrowki?
+    a: >-
+      Sód (Na) częściowo zastępuje potas w metabolizmie cukrowki i wspiera akumulację cukru w
+      korzeniu. Aplikacja 50–100 kg Na/ha bywa korzystna, szczególnie na lżejszych glebach.
+  - q: Co to jest chwościk i jak go rozpoznać?
+    a: >-
+      Chwościk (Cercospora beticola) to choroba grzybowa powodująca okrągłe plamy z
+      czerwonobrunatnym brzegiem na liściach. Silne wystąpienie powoduje przedwczesne obumieranie
+      liści i obniża plon oraz cukrowość.
+  - q: Jak przetwarzane są produkty uboczne z cukrowki?
+    a: >-
+      Melasa (reszta po ekstrakcji cukru) wykorzystywana jest jako pasza lub substrat do fermentacji
+      (drożdże, alkohol). Wytłoki buraczane (wyciśnięta miazga) służą jako pasza dla bydła lub jako
+      substrat do biogazu.
+vysevek: 1–1,2 polowego wschodu na 9–10 roślin/m² (dokładne siew monosemionowymi odmianami)

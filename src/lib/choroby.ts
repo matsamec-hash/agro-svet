@@ -62,6 +62,29 @@ const chorobyModules = import.meta.glob('/src/data/choroby/*.yaml', {
   import: 'default',
 }) as Record<string, ChorobaYaml>;
 
+// Per-locale prose overlay: /src/data/choroby/<locale>/<slug>.yaml.
+// `aliases` a `latinsky` zůstávají z cs — aliasy jsou mapovací klíče na chipy
+// plodin, latina je mezinárodní. `ucinne_latky` taky (názvy účinných látek).
+const chorobyOverlayModules = import.meta.glob('/src/data/choroby/*/*.yaml', {
+  eager: true,
+  import: 'default',
+}) as Record<string, Partial<ChorobaYaml>>;
+
+const CHOROBA_OVERLAY_FIELDS = [
+  'name', 'puvodce', 'popis', 'priznaky', 'hostitele',
+  'sireni', 'skodlivost', 'cyklus', 'ochrana', 'faq',
+] as const;
+
+/** cs choroba + overlay → lokalizovaná. Nemutuje base. Exportováno kvůli testům. */
+export function applyChorobaOverlay(base: ChorobaYaml, ov: Partial<ChorobaYaml> | null): ChorobaYaml {
+  if (!ov) return base;
+  const out = { ...base } as any;
+  for (const f of CHOROBA_OVERLAY_FIELDS) {
+    if (ov[f] !== undefined) out[f] = ov[f];
+  }
+  return out as ChorobaYaml;
+}
+
 function normChip(s: string): string {
   return s.trim();
 }
@@ -95,41 +118,57 @@ export function chorobaSlugForChip(chip: string): string | undefined {
 }
 
 let cache: ChorobaEntry[] | null = null;
+const cacheByLocale = new Map<string, ChorobaEntry[]>();
 
-function build(): ChorobaEntry[] {
-  if (cache) return cache;
+function build(locale: string = 'cs'): ChorobaEntry[] {
+  if (locale === 'cs') {
+    if (cache) return cache;
+  } else {
+    const hit = cacheByLocale.get(locale);
+    if (hit) return hit;
+  }
   const bySlug = new Map<string, ChorobaEntry>();
-  for (const c of Object.values(chorobyModules)) {
-    if (bySlug.has(c.slug)) {
-      throw new Error(`Duplicitní slug choroby: ${c.slug}`);
+  for (const base of Object.values(chorobyModules)) {
+    if (bySlug.has(base.slug)) {
+      throw new Error(`Duplicitní slug choroby: ${base.slug}`);
     }
-    bySlug.set(c.slug, { ...c, plodiny: [] });
+    const ov = locale === 'cs'
+      ? null
+      : (chorobyOverlayModules[`/src/data/choroby/${locale}/${base.slug}.yaml`] ?? null);
+    bySlug.set(base.slug, { ...applyChorobaOverlay(base, ov), plodiny: [] });
   }
   // Reverzní index: projdi plodiny a jejich chipy, přiřaď k entitám.
-  for (const p of listPlodiny()) {
+  // ‼️ Mapuje se přes cs chip (choroby_cs), protože aliasy jsou cs; zobrazuje
+  // se lokalizovaný chip na stejném indexu. Bez toho by pod /pl nesedělo nic.
+  for (const p of listPlodiny(locale)) {
     const seen = new Set<string>(); // jedna plodina → jedna choroba max 1×
-    for (const chip of p.choroby ?? []) {
-      const slug = chorobaSlugForChip(chip);
+    const chips = p.choroby ?? [];
+    const chipsCs = p.choroby_cs ?? chips;
+    for (let i = 0; i < chips.length; i++) {
+      const slug = chorobaSlugForChip(chipsCs[i] ?? chips[i]);
       if (!slug) continue;
       const entry = bySlug.get(slug);
       if (!entry || seen.has(slug)) continue;
       seen.add(slug);
-      entry.plodiny.push({ plodina_slug: p.slug, plodina_name: p.name, chip: normChip(chip) });
+      entry.plodiny.push({ plodina_slug: p.slug, plodina_name: p.name, chip: normChip(chips[i]) });
     }
   }
+  const coll = locale === 'cs' ? 'cs' : locale;
   for (const entry of bySlug.values()) {
-    entry.plodiny.sort((a, b) => a.plodina_name.localeCompare(b.plodina_name, 'cs'));
+    entry.plodiny.sort((a, b) => a.plodina_name.localeCompare(b.plodina_name, coll));
   }
-  cache = Array.from(bySlug.values()).sort((a, b) => a.name.localeCompare(b.name, 'cs'));
-  return cache;
+  const out = Array.from(bySlug.values()).sort((a, b) => a.name.localeCompare(b.name, coll));
+  if (locale === 'cs') cache = out;
+  else cacheByLocale.set(locale, out);
+  return out;
 }
 
-export function listChoroby(): ChorobaEntry[] {
-  return build();
+export function listChoroby(locale: string = 'cs'): ChorobaEntry[] {
+  return build(locale);
 }
 
-export function getChoroba(slug: string): ChorobaEntry | undefined {
-  return build().find((c) => c.slug === slug);
+export function getChoroba(slug: string, locale: string = 'cs'): ChorobaEntry | undefined {
+  return build(locale).find((c) => c.slug === slug);
 }
 
 /**
@@ -140,20 +179,23 @@ export function isChorobaIndexable(c: ChorobaEntry): boolean {
   return Boolean(c.popis && c.popis.trim().length > 0) && c.plodiny.length >= 1;
 }
 
-export function listIndexableChoroby(): ChorobaEntry[] {
-  return build().filter(isChorobaIndexable);
+export function listIndexableChoroby(locale: string = 'cs'): ChorobaEntry[] {
+  return build(locale).filter(isChorobaIndexable);
 }
 
 /**
  * Chipy „Choroby a škůdci" pro pillar stránku plodiny. Chip dostane odkaz jen
  * tehdy, mapuje-li se na indexovatelnou chorobu (jinak zůstává prostý text).
  */
-export function chorobaChipsForPlodina(plodinaSlug: string): ChorobaChip[] {
-  const p = listPlodiny().find((x) => x.slug === plodinaSlug);
+export function chorobaChipsForPlodina(plodinaSlug: string, locale: string = 'cs'): ChorobaChip[] {
+  const p = listPlodiny(locale).find((x) => x.slug === plodinaSlug);
   if (!p || !p.choroby) return [];
-  const indexable = new Set(listIndexableChoroby().map((c) => c.slug));
-  return p.choroby.map((chip) => {
-    const slug = chorobaSlugForChip(chip);
+  const indexable = new Set(listIndexableChoroby(locale).map((c) => c.slug));
+  // Chip se ZOBRAZUJE lokalizovaný, ale MAPUJE se přes cs originál na stejném
+  // indexu (aliasy entit jsou cs). U cs jsou obě pole totožná.
+  const chipsCs = p.choroby_cs ?? p.choroby;
+  return p.choroby.map((chip, i) => {
+    const slug = chorobaSlugForChip(chipsCs[i] ?? chip);
     return slug && indexable.has(slug) ? { chip, slug } : { chip };
   });
 }

@@ -1,51 +1,60 @@
 ---
-export const prerender = true;
+// SSR — viz choroby/index.astro (locale prefix + prerender se vylučují).
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { listIndexableChoroby, getChoroba } from '../../lib/choroby';
+import { getChoroba, isChorobaIndexable } from '../../lib/choroby';
 import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../lib/structured-data';
+import { useTranslations, tf, plural, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 
-export async function getStaticPaths() {
-  return listIndexableChoroby().map((c) => ({ params: { slug: c.slug } }));
-}
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 const { slug } = Astro.params;
-const choroba = getChoroba(slug!);
-if (!choroba) return Astro.rewrite('/404');
+const choroba = getChoroba(slug!, locale);
+// Anti-thin guardrail držel dosud getStaticPaths; při SSR ho musí držet stránka,
+// jinak by tenká choroba (bez popisu / bez plodin) dostala živou URL.
+if (!choroba || !isChorobaIndexable(choroba)) return Astro.rewrite('/404');
 
 const base = `/choroby/${choroba.slug}/`;
 const breadcrumb = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Choroby a škůdci', url: '/choroby/' },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('chor.hub.crumb'), url: localizePath(locale, '/choroby/') },
   { name: choroba.name, url: base },
 ]);
 const list = choroba.plodiny.length > 0
   ? itemListSchema(
-      choroba.plodiny.map((p) => ({ url: `/plodiny/${p.plodina_slug}/`, name: p.plodina_name })),
-      `Plodiny ohrožené chorobou ${choroba.name}`,
+      choroba.plodiny.map((p) => ({ url: localizePath(locale, `/plodiny/${p.plodina_slug}/`), name: p.plodina_name })),
+      tf(locale, 'chor.d.listName', { name: choroba.name }),
     )
   : null;
 const faq = choroba.faq && choroba.faq.length > 0 ? faqPageSchema(choroba.faq) : null;
 
-const metaDesc = `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` : ''}: příznaky, původce a ochrana. Ohrožuje ${choroba.plodiny.length} ${choroba.plodiny.length === 1 ? 'plodinu' : choroba.plodiny.length < 5 ? 'plodiny' : 'plodin'}.`;
+const metaDesc = tf(locale, 'chor.d.metaDesc', {
+  name: `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` : ''}`,
+  count: choroba.plodiny.length,
+  unit: plural(locale, choroba.plodiny.length, {
+    one: tr('chor.d.cropOne'), few: tr('chor.d.cropFew'), many: tr('chor.d.cropMany'),
+  }),
+});
 ---
 
-<Layout title={`${choroba.name} — příznaky, původce a ochrana`} description={metaDesc}>
+<Layout title={tf(locale, 'chor.d.titleSuffix', { name: choroba.name })} description={metaDesc}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
   {list && <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />}
   {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
 
   <div class="ch-detail">
     <nav class="breadcrumb" aria-label="Drobečková navigace">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href="/choroby/">Choroby a škůdci</a>
+      <a href={localizeInternalHref(locale, '/choroby/')}>{tr('chor.hub.crumb')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{choroba.name}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Choroby a škůdci · Ochrana rostlin</span>
+        <span class="kicker"><span class="dot"></span>{tr('chor.d.kicker')}</span>
         <h1>{choroba.name}</h1>
         {choroba.latinsky && <p class="hero-latin">{choroba.latinsky}</p>}
         <p class="hero-lede">{choroba.popis}</p>
@@ -66,19 +75,19 @@ const metaDesc = `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` :
 
     {choroba.puvodce && (
       <section class="card-section">
-        <h2 class="section-title">Původce</h2>
+        <h2 class="section-title">{tr('chor.d.puvodce')}</h2>
         <p class="lead-text">{choroba.puvodce}</p>
       </section>
     )}
 
     <section class="card-section">
-      <h2 class="section-title">Příznaky</h2>
+      <h2 class="section-title">{tr('chor.d.priznaky')}</h2>
       <p class="lead-text">{choroba.priznaky ?? choroba.popis}</p>
     </section>
 
     {choroba.hostitele && choroba.hostitele.length > 0 && (
       <section class="card-section">
-        <h2 class="section-title">Hostitelské plodiny</h2>
+        <h2 class="section-title">{tr('chor.d.hostitele')}</h2>
         <ul class="chip-row">
           {choroba.hostitele.map((h) => <li class="chip">{h}</li>)}
         </ul>
@@ -87,29 +96,29 @@ const metaDesc = `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` :
 
     {choroba.sireni && (
       <section class="card-section">
-        <h2 class="section-title">Podmínky šíření</h2>
+        <h2 class="section-title">{tr('chor.d.sireni')}</h2>
         <p class="lead-text">{choroba.sireni}</p>
       </section>
     )}
 
     {choroba.skodlivost && (
       <section class="card-section skodlivost">
-        <h2 class="section-title">Škodlivost a práh ošetření</h2>
+        <h2 class="section-title">{tr('chor.d.skodlivost')}</h2>
         <p class="lead-text">{choroba.skodlivost}</p>
       </section>
     )}
 
     {choroba.cyklus && (
       <section class="card-section">
-        <h2 class="section-title">Životní cyklus a zdroj infekce</h2>
+        <h2 class="section-title">{tr('chor.d.cyklus')}</h2>
         <p class="lead-text">{choroba.cyklus}</p>
       </section>
     )}
 
     {choroba.ucinne_latky && choroba.ucinne_latky.length > 0 && (
       <section class="card-section">
-        <h2 class="section-title">Účinné látky k ochraně</h2>
-        <p class="latky-note">Přehled běžně registrovaných fungicidních účinných látek. Registraci a dávkování vždy ověřte v Registru přípravků na ochranu rostlin ÚKZÚZ.</p>
+        <h2 class="section-title">{tr('chor.d.latky')}</h2>
+        <p class="latky-note">{tr('chor.d.latkyNote')}</p>
         <ul class="latky-list">
           {choroba.ucinne_latky.map((u) => (
             <li>
@@ -137,7 +146,7 @@ const metaDesc = `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` :
         <ul class="plodiny-list">
           {choroba.plodiny.map((p) => (
             <li>
-              <a href={`/plodiny/${p.plodina_slug}/`} class="plodina-link">
+              <a href={localizeInternalHref(locale, `/plodiny/${p.plodina_slug}/`)} class="plodina-link">
                 <span class="pl-name">{p.plodina_name}</span>
                 <span class="pl-chip">{p.chip}</span>
                 <svg class="pl-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

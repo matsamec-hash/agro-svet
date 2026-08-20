@@ -1,0 +1,70 @@
+# Polský overlay plodin. slug, skupina, hero_*, seti_mesice, sklizen_mesice
+# a wikipedia zůstávají z cs (klíče, obrázky, kalendář). Pole choroby[] drží
+# STEJNÉ pořadí i délku jako cs — mapování na entitu jde přes cs index.
+slug: kukurice
+name: Kukurydza zwyczajna
+name_plural: Kukurydze
+description: >-
+  Kukurydza zwyczajna (Zea mays) jest ciepłolubną rośliną jednoroczną o największym potencjale
+  plonotwórczym spośród wszystkich roślin polowych w Polsce. Uprawiana jest na ziarno, kiszonkę
+  (cały łan) oraz jako roślina energetyczna do biogazu. Wymaga ciepłych warunków oraz odpowiedniego
+  zaopatrzenia w wodę i składniki odżywcze.
+vysevek: 7–10 roślin/m² (65–95 tys. roślin/ha), w zależności od wczesności odmiany i stanowiska
+hnojeni: >-
+  N 120–200 kg/ha łącznie (dawkowanie startowe przy siewie + główne nawożenie); P, K i Mg według
+  analiz; kukurydza jest wymagająca pod względem cynku
+vynos_t_ha: 8–14 (ziarno); 40–60 t/ha świeżej masy kiszonki
+sklizen: wrzesień–październik (ziarno przy wilgotności <30 %; kiszonka przy 30–35 % suchej masy)
+vyuziti: kiszonka z kukurydzy (pasza dla bydła), kukurydza na ziarno (pasza, skrobia, bioetanol, żywność)
+choroby:
+  - fuzarioza łodygi i kolb (Fusarium spp.)
+  - helmintosporioza kukurydzy
+  - karłowatość kukurydzy (WDV i MDV, przenoszone przez owady)
+  - bakterioza kukurydzy
+osevni_postup:
+  - name: Przedplon i zmianowanie
+    text: >-
+      Najlepszym przedplonem są rośliny strączkowe, zboża i rzepak. Kukurydza znosi powtarzane
+      uprawy na tym samym polu, ale przy monokulturze wzrasta presja fuzarioz i szkodników
+      glebowych.
+  - name: Przygotowanie gleby
+    text: >-
+      Głęboka orka jesienna (25–30 cm) dla napowietrzenia, wiosenne przygotowanie łóżka siewnego.
+      Kukurydza wymaga dobrze nagrzanej gleby (minimum 8–10 °C na głębokości siewu).
+  - name: Siew
+    text: >-
+      Siew od końca kwietnia do połowy maja. Głębokość 4–6 cm, norma wysiewu 7–10 roślin/m² (w
+      zależności od wczesności). Odległość międzyrzędowa 70–75 cm (konwencjonalnie) lub 45–50 cm
+      (gęste rzędy).
+  - name: Nawożenie
+    text: >-
+      Dawkowanie startowe P+K+N przy siewie, główna aplikacja N (digestat, gnojowica lub nawozy
+      mineralne) przed lub podczas przygotowania gleby. Należy monitorować zaopatrzenie w Zn.
+  - name: Ochrona roślin
+    text: >-
+      Herbicydy (preemergentnie lub postemergentnie) są niezbędne. Insektycydowe zaprawianie nasion
+      chroni przed drutowcami i mszycami; monitoring omacnicy kukurydzianej.
+  - name: Zbiór
+    text: >-
+      Kiszonka przy zawartości suchej masy 30–35 % (około sierpień–wrzesień), ziarno przy
+      wilgotności poniżej 30 % (październik). Przy wilgotności powyżej 14–15 % należy dosuszyć
+      ziarno.
+faq:
+  - q: Kiedy jest najlepszy czas na siew kukurydzy?
+    a: >-
+      Kukurydza jest wysiewana od końca kwietnia do połowy maja, gdy temperatura gleby na głębokości
+      siewu osiągnie co najmniej 8–10 °C. Zbyt wczesny siew w zimną glebę spowalnia wschody i
+      zwiększa ryzyko chorób.
+  - q: Jaka jest różnica między kukurydzą kiszonkową a ziarniakową?
+    a: >-
+      Kukurydza kiszonkowa jest zbierana w całym łanie (łodyga + kolba) przy 30–35 % suchej masy
+      jako pasza dla bydła. Kukurydza ziarniakowa jest zbierana tylko ziarno przy wilgotności
+      poniżej 30 %, przeznaczona do karmienia lub przetwórstwa przemysłowego.
+  - q: Jakie są potrzeby azotu w kukurydzy?
+    a: >-
+      Kukurydza jest wymagającą rośliną — potrzebuje 120–200 kg N/ha łącznie. Część N jest zazwyczaj
+      dostarczana nawozami organicznymi (digestat, gnojowica), reszta nawozami mineralnymi.
+  - q: Jakie szkodniki należy monitorować w kukurydzy?
+    a: >-
+      Kluczowe są drutowce (larwy w glebie), omacnica kukurydziana (Ostrinia nubilalis) i mszyce.
+      Omacnicę można monitorować pułapkami feromonowymi i kontrolować biologicznie (Trichogramma).

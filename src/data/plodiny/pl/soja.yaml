@@ -1,0 +1,64 @@
+# Polský overlay plodin. slug, skupina, hero_*, seti_mesice, sklizen_mesice
+# a wikipedia zůstávají z cs (klíče, obrázky, kalendář). Pole choroby[] drží
+# STEJNÉ pořadí i délku jako cs — mapování na entitu jde přes cs index.
+slug: soja
+name: Soja zwyczajna
+name_plural: Soja
+description: >-
+  Soja zwyczajna (Glycine max) jest rośliną strączkową ciepłolubną, o najwyższej zawartości białka
+  (35–45 %) i oleju (18–22 %) spośród wszystkich roślin uprawnych. W Polsce uprawa soi się rozwija
+  dzięki hodowli odmian krótkodziennych oraz ociepleniu klimatu; jest doskonałą rośliną przedplonową
+  i źródłem azotu dla gleby.
+vysevek: 60–80 kiełkujących nasion/m² (550 000–700 000 roślin/ha)
+hnojeni: >-
+  N minimalne (biologiczne wiązanie); P 40–60 kg P₂O₅/ha; K 80–120 kg K₂O/ha; molibden i kobalt dla
+  funkcji bakterii brodawkowych
+vynos_t_ha: 2–4
+sklizen: wrzesień–październik (przy wilgotności nasion <14 %)
+vyuziti: pasza (białkowa pasza), olej sojowy spożywczy, tofu, mleko sojowe, zastosowanie techniczne
+choroby:
+  - fuzarioza łodygi i korzeni (Fusarium spp.)
+  - zgnilizna twardzikowa (Sclerotinia sclerotiorum)
+  - pleśń sojowa (Peronospora manshurica)
+  - bakterioza pęcherzykowa (Pseudomonas savastanoi pv. glycinea)
+osevni_postup:
+  - name: Roślina przedplonowa i zmienność
+    text: >-
+      Soja jest doskonałą rośliną przedplonową dla zbóż. Nie może być uprawiana po innej roślinie
+      strączkowej — minimalna przerwa 4 lata.
+  - name: Przygotowanie gleby
+    text: >-
+      Głębokie orka jesienna lub wiosenne przygotowanie. Soja dobrze rośnie na glebach średnio
+      ciężkich, dobrze odwadnianych i nagrzewających się, o pH 6,0–7,0.
+  - name: Inokulacja nasion
+    text: >-
+      Inokulacja nasion specyficznymi kulturami Bradyrhizobium japonicum jest niezbędna — bez
+      skutecznego wiązania nie można osiągnąć dobrego plonu bez nawożenia N.
+  - name: Siew
+    text: >-
+      Siew od końca kwietnia do połowy maja, gdy temperatura gleby osiągnie co najmniej 10 °C.
+      Głębokość 3–5 cm, norma wysiewu 60–80 kiełkujących nasion/m².
+  - name: Ochrona roślin
+    text: >-
+      Herbicydy są kluczowe — soja źle znosi konkurencję chwastów w młodym wieku. Fungicydy i
+      insektycydy w zależności od występowania chorób i szkodników.
+  - name: Zbiór
+    text: >-
+      Zbiór we wrześniu–październiku przy wilgotności nasion poniżej 14 %. Soja ma nisko osadzone
+      strąki — konieczne jest prawidłowe ustawienie wysokości zespołu żniwnego.
+faq:
+  - q: Dlaczego inokulacja soi jest tak ważna?
+    a: >-
+      Soja wiąże azot atmosferyczny przy pomocy specyficznych bakterii Bradyrhizobium japonicum. Te
+      bakterie nie są naturalnie obecne w polskich glebach (soja jest tutaj nową rośliną), dlatego
+      inokulacja nasion jest niezbędna do tworzenia skutecznych brodawek i biologicznego wiązania N.
+  - q: Jakie plony soi można osiągnąć w Polsce?
+    a: >-
+      Średni plon w Polsce wynosi 2,5–3,5 t/ha. Na nagrzewających się i urodzajnych stanowiskach z
+      korzystnym przebiegiem pogody można osiągnąć 4 t/ha. Soja jest wrażliwa na suszę w czasie
+      kwitnienia i formowania strąków.
+  - q: Czy można uprawiać soję w całej Polsce?
+    a: >-
+      Soja potrzebuje ciepłego klimatu — odpowiednie są cieplejsze nizinowe stanowiska południowej
+      Polski i środkowych Czech. W chłodniejszych obszarach (powyżej 350–400 m n.p.m.) uprawa jest
+      ryzykowna z powodu krótszego okresu wegetacyjnego.

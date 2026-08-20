@@ -67,6 +67,9 @@ export interface PlodinaYaml {
   sklizen_mesice?: number[];
   vyuziti?: string;
   choroby?: string[];
+  /** cs originály chipů `choroby` — mapovací klíč na entitu choroby, když je
+   *  `choroby` přeložené overlayem. U cs nedefinované (choroby už JSOU cs). */
+  choroby_cs?: string[];
   osevni_postup?: HowToStepData[];
   wikipedia?: string;
   wikidata?: string;
@@ -89,12 +92,46 @@ const yamlModules = import.meta.glob('/src/data/plodiny/*.yaml', {
   import: 'default',
 }) as Record<string, PlodinaYaml>;
 
+// Per-locale prose overlay: /src/data/plodiny/<locale>/<slug>.yaml. Překládá se
+// jen zobrazovaná próza — slug, skupina, hero_*, seti_mesice/sklizen_mesice a
+// wikipedia zůstávají z cs, protože jsou to klíče (mapování, obrázky, kalendář).
+// cs overlay neexistuje → cs větev je byte-identická s dosavadním chováním.
+const plodinaOverlayModules = import.meta.glob('/src/data/plodiny/*/*.yaml', {
+  eager: true,
+  import: 'default',
+}) as Record<string, Partial<PlodinaYaml>>;
+
+// Pole, která overlay SMÍ přebít. Cokoliv jiného se z cs kopíruje beze změny —
+// ať překlad nemůže rozbít mapování ani kalendář.
+const PLODINA_OVERLAY_FIELDS = [
+  'name', 'name_plural', 'description', 'vysevek', 'hnojeni',
+  'vynos_t_ha', 'sklizen', 'vyuziti', 'osevni_postup', 'faq',
+] as const;
+
+/** cs plodina + overlay → lokalizovaná. Nemutuje base. Exportováno kvůli testům. */
+export function applyPlodinaOverlay(base: PlodinaYaml, ov: Partial<PlodinaYaml> | null): PlodinaYaml {
+  if (!ov) return base;
+  const out = { ...base } as any;
+  for (const f of PLODINA_OVERLAY_FIELDS) {
+    if (ov[f] !== undefined) out[f] = ov[f];
+  }
+  // `choroby` jsou chipy mapované na entitu choroby PŘESNÝM aliasem, takže
+  // překlad by mapování rozbil. Overlay drží stejné pořadí i délku → cs zůstává
+  // mapovacím klíčem (choroby_cs) a zobrazuje se přeložený text.
+  if (Array.isArray(ov.choroby) && Array.isArray(base.choroby) && ov.choroby.length === base.choroby.length) {
+    out.choroby = ov.choroby;
+    out.choroby_cs = base.choroby;
+  }
+  return out as PlodinaYaml;
+}
+
 const odrudyModules = import.meta.glob('/src/data/plodiny/odrudy/*.json', {
   eager: true,
   import: 'default',
 }) as Record<string, OdrudaFakta[]>;
 
 let cached: Plodina[] | null = null;
+const cachedByLocale = new Map<string, Plodina[]>();
 
 function buildOdrudyIndex(): Record<string, OdrudaFakta[]> {
   const byPlodina: Record<string, OdrudaFakta[]> = {};
@@ -120,11 +157,20 @@ function mergeEnrichment(
   return { ...(yamlEnrichment ?? {}), popis: yamlEnrichment?.popis ?? popis };
 }
 
-function build(): Plodina[] {
-  if (cached) return cached;
+function build(locale: string = 'cs'): Plodina[] {
+  if (locale === 'cs') {
+    if (cached) return cached;
+  } else {
+    const hit = cachedByLocale.get(locale);
+    if (hit) return hit;
+  }
   const odrudyIndex = buildOdrudyIndex();
   const plodiny: Plodina[] = [];
-  for (const yaml of Object.values(yamlModules)) {
+  for (const base of Object.values(yamlModules)) {
+    const ov = locale === 'cs'
+      ? null
+      : (plodinaOverlayModules[`/src/data/plodiny/${locale}/${base.slug}.yaml`] ?? null);
+    const yaml = applyPlodinaOverlay(base, ov);
     if (yaml.slug === 'skupina') {
       throw new Error('Plodina nesmí mít rezervovaný slug "skupina"');
     }
@@ -136,17 +182,18 @@ function build(): Plodina[] {
     odrudy.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
     plodiny.push({ ...yaml, odrudy });
   }
-  plodiny.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
-  cached = plodiny;
+  plodiny.sort((a, b) => a.name.localeCompare(b.name, locale === 'cs' ? 'cs' : locale));
+  if (locale === 'cs') cached = plodiny;
+  else cachedByLocale.set(locale, plodiny);
   return plodiny;
 }
 
-export function listPlodiny(): Plodina[] {
-  return build();
+export function listPlodiny(locale: string = 'cs'): Plodina[] {
+  return build(locale);
 }
 
-export function getPlodina(slug: string): Plodina | undefined {
-  return build().find((p) => p.slug === slug);
+export function getPlodina(slug: string, locale: string = 'cs'): Plodina | undefined {
+  return build(locale).find((p) => p.slug === slug);
 }
 
 /**

@@ -358,6 +358,33 @@ const pl: Record<string, string> = {
   'cat.b.jsRowFew': 'serie',
   'cat.b.jsRowMany': 'serii',
 
+  // — choroby (chor.*) —
+  'chor.hub.title': 'Choroby i szkodniki roślin polowych — atlas i ochrona',
+  'chor.hub.desc': 'Atlas {count} chorób i szkodników roślin polowych: objawy, sprawcy i zalecana ochrona. Przy każdej chorobie przegląd roślin, które są zagrożone.',
+  'chor.hub.crumb': 'Choroby i szkodniki',
+  'chor.hub.kicker': 'Atlas · Ochrona roślin',
+  'chor.hub.h1a': 'Choroby i',
+  'chor.hub.h1em': 'szkodniki',
+  'chor.hub.h1b': 'roślin',
+  'chor.hub.lede': 'Przegląd najważniejszych chorób roślin polowych — objawy, sprawcy i zalecana ochrona. Przy każdej chorobie znajdziesz rośliny, które są zagrożone, z odnośnikami do ich uprawy.',
+  'chor.hub.listName': 'Choroby i szkodniki roślin',
+  'chor.d.titleSuffix': '{name} — objawy, sprawca i ochrona',
+  'chor.d.kicker': 'Choroby i szkodniki · Ochrona roślin',
+  'chor.d.puvodce': 'Sprawca',
+  'chor.d.priznaky': 'Objawy',
+  'chor.d.hostitele': 'Rośliny gospodarze',
+  'chor.d.sireni': 'Warunki rozprzestrzeniania',
+  'chor.d.skodlivost': 'Szkodliwość i próg ochrony',
+  'chor.d.cyklus': 'Cykl życiowy i źródło infekcji',
+  'chor.d.latky': 'Substancje czynne do ochrony',
+  'chor.d.latkyNote': 'Przegląd powszechnie zarejestrowanych substancji czynnych fungicydów. Rejestrację i dawkowanie zawsze weryfikuj w Rejestrze środków ochrony roślin ÚKZÚZ.',
+  'chor.d.listName': 'Rośliny zagrożone chorobą {name}',
+
+  'chor.d.metaDesc': '{name}: objawy, patogen i ochrona. Zagraża {count} {unit}.',
+  'chor.d.cropOne': 'roślinę',
+  'chor.d.cropFew': 'rośliny',
+  'chor.d.cropMany': 'roślin',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Marki',
   'cat.zn.desc': 'Przegląd światowych producentów techniki rolniczej — od Claas i John Deere po Fendt, New Holland i Zetor.',

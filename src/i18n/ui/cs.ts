@@ -356,6 +356,33 @@ const cs: Record<string, string> = {
   'cat.b.jsRowFew': 'řady',
   'cat.b.jsRowMany': 'řad',
 
+  // — choroby (chor.*) —
+  'chor.hub.title': 'Choroby a škůdci polních plodin — atlas a ochrana',
+  'chor.hub.desc': 'Atlas {count} chorob a škůdců polních plodin: příznaky, původce a doporučená ochrana. U každé choroby přehled plodin, které ohrožuje.',
+  'chor.hub.crumb': 'Choroby a škůdci',
+  'chor.hub.kicker': 'Atlas · Ochrana rostlin',
+  'chor.hub.h1a': 'Choroby a',
+  'chor.hub.h1em': 'škůdci',
+  'chor.hub.h1b': 'plodin',
+  'chor.hub.lede': 'Přehled nejvýznamnějších chorob polních plodin — příznaky, původce a doporučená ochrana. U každé choroby najdete plodiny, které ohrožuje, s odkazy na jejich pěstování.',
+  'chor.hub.listName': 'Choroby a škůdci plodin',
+  'chor.d.titleSuffix': '{name} — příznaky, původce a ochrana',
+  'chor.d.kicker': 'Choroby a škůdci · Ochrana rostlin',
+  'chor.d.puvodce': 'Původce',
+  'chor.d.priznaky': 'Příznaky',
+  'chor.d.hostitele': 'Hostitelské plodiny',
+  'chor.d.sireni': 'Podmínky šíření',
+  'chor.d.skodlivost': 'Škodlivost a práh ošetření',
+  'chor.d.cyklus': 'Životní cyklus a zdroj infekce',
+  'chor.d.latky': 'Účinné látky k ochraně',
+  'chor.d.latkyNote': 'Přehled běžně registrovaných fungicidních účinných látek. Registraci a dávkování vždy ověřte v Registru přípravků na ochranu rostlin ÚKZÚZ.',
+  'chor.d.listName': 'Plodiny ohrožené chorobou {name}',
+
+  'chor.d.metaDesc': '{name}: příznaky, původce a ochrana. Ohrožuje {count} {unit}.',
+  'chor.d.cropOne': 'plodinu',
+  'chor.d.cropFew': 'plodiny',
+  'chor.d.cropMany': 'plodin',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Značky',
   'cat.zn.desc': 'Přehled světových výrobců zemědělské techniky — od Claas a John Deere po Fendt, New Holland a Zetor.',

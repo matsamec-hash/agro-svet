@@ -1,41 +1,47 @@
 ---
-export const prerender = true;
+// SSR: sekce je launchnutá pro pl, a prerendered stránka pod locale prefixem
+// skončí ForbiddenRewrite → 302 na cs (viz middleware). Data jsou statická,
+// takže render je levný a CF ho stejně cachuje na edge.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { listIndexableChoroby } from '../../lib/choroby';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 
-const choroby = listIndexableChoroby();
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const choroby = listIndexableChoroby(locale);
 const totalVazby = choroby.reduce((n, c) => n + c.plodiny.length, 0);
 
 const breadcrumb = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Choroby a škůdci', url: '/choroby/' },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('chor.hub.crumb'), url: localizePath(locale, '/choroby/') },
 ]);
 const list = itemListSchema(
-  choroby.map((c) => ({ url: `/choroby/${c.slug}/`, name: c.name })),
-  'Choroby a škůdci plodin',
+  choroby.map((c) => ({ url: localizePath(locale, `/choroby/${c.slug}/`), name: c.name })),
+  tr('chor.hub.listName'),
 );
 ---
 
 <Layout
-  title="Choroby a škůdci polních plodin — atlas a ochrana"
-  description={`Atlas ${choroby.length} chorob a škůdců polních plodin: příznaky, původce a doporučená ochrana. U každé choroby přehled plodin, které ohrožuje.`}
+  title={tr('chor.hub.title')}
+  description={tf(locale, 'chor.hub.desc', { count: choroby.length })}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
 
   <div class="ch-hub">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <span class="current">Choroby a škůdci</span>
+      <span class="current">{tr('chor.hub.crumb')}</span>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <span class="kicker"><span class="dot"></span>Atlas · Ochrana rostlin</span>
-        <h1>Choroby a <em>škůdci</em> plodin</h1>
-        <p class="hero-lede">Přehled nejvýznamnějších chorob polních plodin — příznaky, původce a doporučená ochrana. U každé choroby najdete plodiny, které ohrožuje, s odkazy na jejich pěstování.</p>
+        <span class="kicker"><span class="dot"></span>{tr('chor.hub.kicker')}</span>
+        <h1>{tr('chor.hub.h1a')} <em>{tr('chor.hub.h1em')}</em> {tr('chor.hub.h1b')}</h1>
+        <p class="hero-lede">{tr('chor.hub.lede')}</p>
         <div class="hero-stats">
           <div class="s"><span class="n">{choroby.length}</span><span class="l">chorob a škůdců</span></div>
           <div class="s"><span class="n">{totalVazby}</span><span class="l">vazeb na plodiny</span></div>
