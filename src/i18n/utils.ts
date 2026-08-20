@@ -1,4 +1,5 @@
 import { locales, defaultLocale, isLocale, type Locale } from './config';
+import { localizedTag } from './novinky-tagy';
 import { ui } from './ui';
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
@@ -148,7 +149,11 @@ export function useTranslations(locale: Locale) {
 export function localizedCategory(locale: Locale, category: string): string {
   const key = `nov.cat.${category}`;
   const val = t(locale, key);
-  return val === key ? category : val;
+  if (val !== key) return val;
+  // Kategorie, které v DB nesou rovnou český NÁZEV (ne slug) — „Zemědělství",
+  // „zemědělství" — klíč `nov.cat.*` nemají. Zkus mapu štítků, ať pod /pl a /sk
+  // nezůstane česká kategorie; jinak vrať vstup beze změny.
+  return localizedTag(locale, category);
 }
 
 /** Překlad s interpolací {token} → params[token]. Fallback locale→cs→klíč. */

@@ -7,6 +7,7 @@ import { categoryStyle, tagStyle } from '../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, fetchTranslatedArticleIds } from '../../lib/articles-i18n';
 import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
+import { localizedTag } from '../../i18n/novinky-tagy';
 import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
 import { newsCategorySlug } from '../../lib/news-category';
 
@@ -191,7 +192,7 @@ const itemListJsonLd = sorted.length > 0 ? {
                   class:list={["nov-tag", { active: tagName === tag }]}
                   style={tagName !== tag ? tagStyle(tagName) : ''}
                 >
-                  #{tagName} <span class="nov-tag-count">{count}</span>
+                  #{localizedTag(locale, tagName)} <span class="nov-tag-count">{count}</span>
                 </a>
               ))}
             </div>
