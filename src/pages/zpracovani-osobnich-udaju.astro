@@ -79,10 +79,16 @@ const meta = META[locale] ?? META.cs;
 
     <h2>4. Doba uchovávania</h2>
     <ul>
-      <li><strong>Newsletter:</strong> do odvolania súhlasu (odhlásenia) — potom 30 dní v unsubscribe liste na preukázanie odhlásenia</li>
-      <li><strong>Účet bazáru:</strong> do zmazania účtu používateľom; neaktívne účty po 3 rokoch bez prihlásenia mažeme</li>
-      <li><strong>Aktívne inzeráty:</strong> 30 dní (potom status „expired"), trvalo 1 rok od zmazania na audit</li>
-      <li><strong>Logy a IP adresy:</strong> 30 dní</li>
+      <li><strong>Newsletter a upozornenia:</strong> do odvolania súhlasu (odhlásenia). Záznam
+        o odhlásení si ponechávame, aby sme vám neposielali ďalšie e-maily.</li>
+      <li><strong>Účet bazára:</strong> do zmazania účtu — zmažeme ho na vašu žiadosť.
+        Účty <strong>nemažeme automaticky</strong> po dobe nečinnosti.</li>
+      <li><strong>Inzeráty:</strong> aktívne 30 dní, potom status „expired" a zostávajú na účte.
+        Keď inzerát zmažete, <strong>zmaže sa okamžite a nevratne</strong> — žiadny archív si
+        neponechávame.</li>
+      <li><strong>IP adresy z anti-fraudu</strong> (pokusy o zadanie kódu): najviac 30 dní.</li>
+      <li><strong>Prevádzkové logy</strong> vznikajú u poskytovateľov infraštruktúry
+        (Cloudflare, hosting) a riadia sa ich lehotami, nie našimi.</li>
     </ul>
 
     <h2>5. Komu údaje odovzdávame (sprostredkovatelia)</h2>
@@ -131,7 +137,7 @@ const meta = META[locale] ?? META.cs;
     <p>Nepoužívame marketingové ani reklamné cookies tretích strán.</p>
     <p>Súhlas môžete kedykoľvek odvolať odkazom <strong>Nastavenia cookies</strong> v pätičke — odvolanie je rovnako jednoduché ako udelenie (čl. 7 ods. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnosť:</strong> 21. augusta 2026</p>
+    <p class="effective"><strong>Účinnosť:</strong> 22. augusta 2026</p>
     </Fragment>
   ) : isPl ? (
     <Fragment>
@@ -194,10 +200,16 @@ const meta = META[locale] ?? META.cs;
 
     <h2>4. Okres przechowywania</h2>
     <ul>
-      <li><strong>Newsletter:</strong> do odwołania zgody (wypisania) — następnie 30 dni na liście wypisań w celu udokumentowania wypisania</li>
-      <li><strong>Konto bazaru:</strong> do usunięcia konta przez użytkownika; nieaktywne konta po 3 latach bez logowania usuwamy</li>
-      <li><strong>Aktywne ogłoszenia:</strong> 30 dni (potem status „expired"), trwale 1 rok od usunięcia w celach audytu</li>
-      <li><strong>Logi i adresy IP:</strong> 30 dni</li>
+      <li><strong>Newsletter i powiadomienia:</strong> do odwołania zgody (wypisania). Zapis
+        o wypisaniu zachowujemy, aby nie wysyłać kolejnych e-maili.</li>
+      <li><strong>Konto bazaru:</strong> do usunięcia konta — usuwamy je na Twoje żądanie.
+        Kont <strong>nie usuwamy automatycznie</strong> po okresie nieaktywności.</li>
+      <li><strong>Ogłoszenia:</strong> aktywne 30 dni, potem status „expired" i pozostają na koncie.
+        Gdy usuniesz ogłoszenie, <strong>zostaje usunięte natychmiast i nieodwracalnie</strong> —
+        nie zachowujemy archiwum.</li>
+      <li><strong>Adresy IP z zabezpieczeń anti-fraud</strong> (próby wpisania kodu): maksymalnie 30 dni.</li>
+      <li><strong>Logi serwerowe</strong> powstają u dostawców infrastruktury (Cloudflare, hosting)
+        i podlegają ich terminom, nie naszym.</li>
     </ul>
 
     <h2>5. Komu przekazujemy dane (podmioty przetwarzające)</h2>
@@ -246,7 +258,7 @@ const meta = META[locale] ?? META.cs;
     <p>Nie używamy marketingowych ani reklamowych plików cookie stron trzecich.</p>
     <p>Zgodę możesz wycofać w dowolnym momencie linkiem <strong>Ustawienia plików cookie</strong> w stopce — wycofanie jest równie łatwe jak wyrażenie zgody (art. 7 ust. 3 RODO).</p>
 
-    <p class="effective"><strong>Data wejścia w życie:</strong> 21 sierpnia 2026</p>
+    <p class="effective"><strong>Data wejścia w życie:</strong> 22 sierpnia 2026</p>
     </Fragment>
   ) : isUk ? (
     <Fragment>
@@ -309,10 +321,16 @@ const meta = META[locale] ?? META.cs;
 
     <h2>4. Строк зберігання</h2>
     <ul>
-      <li><strong>Розсилка:</strong> до відкликання згоди (відписки) — потім 30 днів у списку відписок для підтвердження відписки</li>
-      <li><strong>Обліковий запис барахолки:</strong> до видалення облікового запису користувачем; неактивні облікові записи після 3 років без входу видаляємо</li>
-      <li><strong>Активні оголошення:</strong> 30 днів (потім статус «expired»), постійно 1 рік від видалення для аудиту</li>
-      <li><strong>Логи та IP-адреси:</strong> 30 днів</li>
+      <li><strong>Розсилка та сповіщення:</strong> до відкликання згоди (відписки). Запис про
+        відписку зберігаємо, щоб не надсилати вам подальші листи.</li>
+      <li><strong>Обліковий запис барахолки:</strong> до його видалення — видаляємо на ваш запит.
+        Облікові записи <strong>не видаляємо автоматично</strong> після періоду неактивності.</li>
+      <li><strong>Оголошення:</strong> активні 30 днів, потім статус «expired» і лишаються в акаунті.
+        Коли ви видаляєте оголошення, воно <strong>видаляється негайно й безповоротно</strong> —
+        архіву не зберігаємо.</li>
+      <li><strong>IP-адреси з anti-fraud</strong> (спроби введення коду): щонайбільше 30 днів.</li>
+      <li><strong>Технічні логи</strong> виникають у постачальників інфраструктури
+        (Cloudflare, хостинг) і підпорядковані їхнім строкам, не нашим.</li>
     </ul>
 
     <h2>5. Кому ми передаємо дані (обробники)</h2>
@@ -359,7 +377,7 @@ const meta = META[locale] ?? META.cs;
     <p>Ми не використовуємо маркетингові чи рекламні файли cookie третіх сторін.</p>
     <p>Згоду можна відкликати будь-коли посиланням <strong>Налаштування cookie</strong> в підвалі — відкликання таке саме просте, як і надання (ст. 7 п. 3 GDPR).</p>
 
-    <p class="effective"><strong>Дата набрання чинності:</strong> 21 серпня 2026</p>
+    <p class="effective"><strong>Дата набрання чинності:</strong> 22 серпня 2026</p>
     </Fragment>
   ) : (
     <Fragment>
@@ -422,10 +440,16 @@ const meta = META[locale] ?? META.cs;
 
     <h2>4. Doba uchování</h2>
     <ul>
-      <li><strong>Newsletter:</strong> do odvolání souhlasu (odhlášení) — pak 30 dní v unsubscribe listu pro prokázání odhlášení</li>
-      <li><strong>Účet bazaru:</strong> do smazání účtu uživatelem; neaktivní účty po 3 letech bez přihlášení mažeme</li>
-      <li><strong>Aktivní inzeráty:</strong> 30 dní (poté status „expired"), trvale 1 rok od smazání pro audit</li>
-      <li><strong>Logy a IP adresy:</strong> 30 dní</li>
+      <li><strong>Newsletter a upozornění:</strong> do odvolání souhlasu (odhlášení). Záznam
+        o odhlášení si ponecháváme, abychom vám neposílali další e-maily.</li>
+      <li><strong>Účet bazaru:</strong> do smazání účtu — smažeme ho na vaši žádost.
+        Účty <strong>nemažeme automaticky</strong> po době nečinnosti.</li>
+      <li><strong>Inzeráty:</strong> aktivní 30 dní, poté status „expired" a zůstávají na účtu.
+        Když inzerát smažete, <strong>smaže se okamžitě a nevratně</strong> — žádný archiv
+        si neponecháváme.</li>
+      <li><strong>IP adresy z anti-fraudu</strong> (pokusy o zadání kódu): nejvýše 30 dní.</li>
+      <li><strong>Provozní logy</strong> vznikají u poskytovatelů infrastruktury
+        (Cloudflare, hosting) a řídí se jejich lhůtami, ne našimi.</li>
     </ul>
 
     <h2>5. Komu údaje předáváme (zpracovatelé)</h2>
@@ -470,7 +494,7 @@ const meta = META[locale] ?? META.cs;
     <p>Nepoužíváme marketingové ani reklamní cookies třetích stran.</p>
     <p>Souhlas můžete kdykoli odvolat odkazem <strong>Nastavení cookies</strong> v patičce — odvolání je stejně snadné jako udělení (čl. 7 odst. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnost:</strong> 21. srpna 2026</p>
+    <p class="effective"><strong>Účinnost:</strong> 22. srpna 2026</p>
     </Fragment>
   )}
   </main>

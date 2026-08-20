@@ -8,3 +8,8 @@ export const SITE_URL = 'https://agro-svet.cz';
 // online platby (Stripe). Zpět zapneš přepnutím na `true`; vstupní CTA, stránka
 // /bazar/moje/[id]/topovat i API /api/bazar/featured/request se řídí touto vlajkou.
 export const BAZAR_TOPOVANI_ENABLED = false;
+
+// Vynucení retenčních lhůt (/api/cron/data-retention). Ve vypnutém stavu endpoint
+// jen REPORTUJE, co by smazal — mazání je nevratné, takže si čísla nejdřív projdi
+// nasucho a teprve pak přepni na `true`.
+export const DATA_RETENTION_ENABLED = false;
