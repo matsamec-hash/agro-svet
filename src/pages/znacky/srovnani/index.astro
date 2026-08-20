@@ -1,19 +1,28 @@
 ---
-// Hub srovnání značek — grid top párů. cs-only (v1).
+// Hub srovnání značek — grid top párů. Lokalizováno (dřív „cs-only v1"):
+// /znacky je launchnuté pro sk/pl/uk, takže tenhle rozcestník tam byl
+// indexovaný česky. Musí být SSR, aby dostal locale z middleware rewritu.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { brandPairs } from '../../../lib/brand-comparator';
 import { breadcrumbSchema } from '../../../lib/structured-data';
+import { getLocaleFromUrl, localizePath, localizeInternalHref } from '../../../i18n/utils';
+import { srovnaniStrings } from '../../../i18n/znacky-srovnani';
 import { ZNACKA_LOGO } from '../../../lib/agro-integrace';
 
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const t = srovnaniStrings(locale);
+const base = locale === 'cs' ? '' : `/${locale}`;
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
 const pairs = brandPairs(40);
-const title = 'Srovnání značek zemědělské techniky';
-const description =
-  'Porovnejte značky traktorů a strojů vedle sebe — výkon, počet modelů, kategorie a přímé souboje konkrétních strojů.';
-const canonical = 'https://agro-svet.cz/znacky/srovnani/';
+const title = t.hubTitle;
+const description = t.hubDescription;
+const canonical = `https://agro-svet.cz${base}/znacky/srovnani/`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Značky', url: '/znacky/' },
-  { name: 'Srovnání značek', url: '/znacky/srovnani/' },
+  { name: t.crumbBrands, url: `${base}/znacky/` },
+  { name: t.crumbCompare, url: `${base}/znacky/srovnani/` },
 ]);
 ---
 
@@ -21,23 +30,23 @@ const breadcrumbJsonLd = breadcrumbSchema([
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <div class="cmp-page">
     <nav class="breadcrumb" aria-label="Drobečková navigace">
-      <a href="/znacky/">Značky</a>
+      <a href={localizePath(locale, '/znacky/')}>{t.crumbBrands}</a>
       <span class="sep" aria-hidden="true">›</span>
-      <span class="current">Srovnání značek</span>
+      <span class="current">{t.crumbCompare}</span>
     </nav>
     <header class="hero">
-      <span class="kicker">Srovnání značek</span>
-      <h1>Srovnání značek</h1>
+      <span class="kicker">{t.kicker}</span>
+      <h1>{t.crumbCompare}</h1>
       <p class="hero-lede">{description}</p>
     </header>
     <section class="related-cmp" aria-labelledby="pairs-h">
-      <h2 id="pairs-h">Populární srovnání</h2>
+      <h2 id="pairs-h">{t.hubPopular}</h2>
       <ul class="related-list">
         {pairs.map((p) => (
           <li>
-            <a href={`/znacky/srovnani/${p.combo}/`}>
+            <a href={localizeInternalHref(locale, `/znacky/srovnani/${p.combo}/`)}>
               <span class="rl-pair">{ZNACKA_LOGO[p.a.slug] && <img class="rl-logo" src={ZNACKA_LOGO[p.a.slug]} alt={`Logo ${p.a.name}`} loading="lazy" decoding="async" />}{p.a.name} <em>vs</em> {ZNACKA_LOGO[p.b.slug] && <img class="rl-logo" src={ZNACKA_LOGO[p.b.slug]} alt={`Logo ${p.b.name}`} loading="lazy" decoding="async" />}{p.b.name}</span>
-              <span class="rl-cta">Porovnat</span>
+              <span class="rl-cta">{t.hubCompare}</span>
             </a>
           </li>
         ))}

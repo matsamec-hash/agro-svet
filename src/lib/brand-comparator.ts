@@ -3,6 +3,8 @@
 // deterministicky z dat. Model-souboje reuse-ují model-comparator (`comparator.ts`).
 
 import { getAllBrands, getAllModels, type StrojBrand, type StrojKategorie } from './stroje';
+import type { Locale } from '../i18n/config';
+import { srovnaniStrings, fill, type ZnackySrovnaniStrings } from '../i18n/znacky-srovnani';
 import { pairCombo, type ComparisonPair } from './comparator';
 
 const DELIM = '-vs-';
@@ -118,35 +120,55 @@ export interface BrandInsights {
   shortDescription: string;
 }
 
-const CZ_COUNTRIES = new Set(['Česko', 'Česká republika', 'Czechia']);
+// Pozor: `brand.country` je lokalizovaná (overlay per locale), takže sada musí
+// obsahovat i sk/pl/uk varianty — jinak by výhoda „český původ" u non-cs zmizela.
+const CZ_COUNTRIES = new Set([
+  'Česko', 'Česká republika', 'Czechia',
+  'Čechy', 'Česko a Slovensko',
+  'Czechy',
+  'Чехія',
+]);
 
-function edges(brand: StrojBrand, s: BrandStats, other: BrandStats): string[] {
+function edges(brand: StrojBrand, s: BrandStats, other: BrandStats, t: ZnackySrovnaniStrings): string[] {
   const e: string[] = [];
   if (s.powerAvg !== null && other.powerAvg !== null && s.powerAvg > other.powerAvg)
-    e.push('vyšší průměrný výkon — sedí na velké provozy a náročné nasazení');
+    e.push(t.edgeHigherPower);
   if (s.powerAvg !== null && other.powerAvg !== null && s.powerAvg < other.powerAvg)
-    e.push('nižší výkonovou třídu a dostupnost pro malé a střední farmy');
+    e.push(t.edgeLowerPower);
   if (CZ_COUNTRIES.has(brand.country))
-    e.push('český původ — snazší servis a dostupnost dílů v ČR');
+    e.push(t.edgeCzechOrigin);
   if (s.categories.length > other.categories.length)
-    e.push('širší záběr kategorií strojů');
+    e.push(t.edgeWiderRange);
   if (brand.founded < other.brand.founded)
-    e.push(`delší tradici (od roku ${brand.founded})`);
-  if (e.length === 0) e.push(`${s.modelCount} modelů v naší databázi`);
+    e.push(fill(t.edgeTradition, { year: brand.founded }));
+  if (e.length === 0) e.push(fill(t.edgeFallback, { count: s.modelCount }));
   return e;
 }
 
-function powerRange(s: BrandStats): string {
-  if (s.powerMin === null || s.powerMax === null) return 'neuvedeno';
+function powerRange(s: BrandStats, t: ZnackySrovnaniStrings): string {
+  if (s.powerMin === null || s.powerMax === null) return t.powerUnknown;
   return s.powerMin === s.powerMax ? `${s.powerMin} k` : `${s.powerMin}–${s.powerMax} k`;
 }
 
-export function brandComparisonInsights(a: StrojBrand, sa: BrandStats, b: StrojBrand, sb: BrandStats): BrandInsights {
-  const ea = edges(a, sa, sb);
-  const eb = edges(b, sb, sa);
-  const verdictA = `${a.name} zvolte, když chcete ${ea.slice(0, 2).join(' a ')}.`;
-  const verdictB = `${b.name} zvolte, když chcete ${eb.slice(0, 2).join(' a ')}.`;
-  const tldr = `${a.name} (${a.country}, ${sa.modelCount} modelů, ${powerRange(sa)}) vs ${b.name} (${b.country}, ${sb.modelCount} modelů, ${powerRange(sb)}). Přednost ${a.name}: ${ea[0]}; přednost ${b.name}: ${eb[0]}.`;
+export function brandComparisonInsights(
+  a: StrojBrand,
+  sa: BrandStats,
+  b: StrojBrand,
+  sb: BrandStats,
+  locale: Locale = 'cs',
+): BrandInsights {
+  const t = srovnaniStrings(locale);
+  const ea = edges(a, sa, sb, t);
+  const eb = edges(b, sb, sa, t);
+  const pa = powerRange(sa, t);
+  const pb = powerRange(sb, t);
+  const verdictA = fill(t.verdict, { a: a.name, edges: ea.slice(0, 2).join(t.and) });
+  const verdictB = fill(t.verdict, { a: b.name, edges: eb.slice(0, 2).join(t.and) });
+  const tldr = fill(t.tldr, {
+    a: a.name, ca: a.country, ma: sa.modelCount, pa,
+    b: b.name, cb: b.country, mb: sb.modelCount, pb,
+    ea: ea[0], eb: eb[0],
+  });
   const higherPower =
     sa.powerMax !== null && sb.powerMax !== null
       ? sa.powerMax > sb.powerMax
@@ -156,20 +178,20 @@ export function brandComparisonInsights(a: StrojBrand, sa: BrandStats, b: StrojB
           : null
       : null;
   const faqs = [
-    { q: `Je ${a.name}, nebo ${b.name} lepší?`, a: `Záleží na využití. ${verdictA} ${verdictB}` },
+    { q: fill(t.faq1q, { a: a.name, b: b.name }), a: fill(t.faq1a, { va: verdictA, vb: verdictB }) },
     {
-      q: `Odkud pochází ${a.name} a ${b.name}?`,
-      a: `${a.name} pochází z ${a.country} (značka od roku ${a.founded}), ${b.name} z ${b.country} (od roku ${b.founded}).`,
+      q: fill(t.faq2q, { a: a.name, b: b.name }),
+      a: fill(t.faq2a, { a: a.name, ca: a.country, fa: a.founded, b: b.name, cb: b.country, fb: b.founded }),
     },
     {
-      q: `Kolik modelů ${a.name} a ${b.name} najdu na agro-svet.cz?`,
-      a: `${a.name}: ${sa.modelCount} modelů (${powerRange(sa)}), ${b.name}: ${sb.modelCount} modelů (${powerRange(sb)}).`,
+      q: fill(t.faq3q, { a: a.name, b: b.name }),
+      a: fill(t.faq3a, { a: a.name, ma: sa.modelCount, pa, b: b.name, mb: sb.modelCount, pb }),
     },
     {
-      q: `Která značka má vyšší výkon?`,
-      a: higherPower ? `Nejvýkonnější model má ${higherPower}.` : `Obě značky nabízejí srovnatelný výkonový rozsah.`,
+      q: t.faq4q,
+      a: higherPower ? fill(t.faq4aWinner, { winner: higherPower }) : t.faq4aTie,
     },
   ];
-  const shortDescription = `Srovnání značek ${a.name} a ${b.name}: výkon, počet modelů, pokryté kategorie a přímé souboje konkrétních modelů. Nezávislé porovnání na agro-svet.cz.`;
+  const shortDescription = fill(t.shortDescription, { a: a.name, b: b.name });
   return { tldr, verdictA, verdictB, faqs, shortDescription };
 }
