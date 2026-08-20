@@ -5,6 +5,7 @@ import { listIndexableOdrudy, getPlodina, getOdruda, isOdrudaIndexable, udrzovat
 import { breadcrumbSchema, faqPageSchema, odrudaDatasetSchema, truncateAtBoundary } from '../../../lib/structured-data';
 import { chorobaChipsForPlodina } from '../../../lib/choroby';
 import { parseZnaky, maZnaky, popisOdstavce } from '../../../lib/odruda-znaky';
+import { podobneOdrudy } from '../../../lib/odruda-podobnost';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
 
 export async function getStaticPaths() {
@@ -87,11 +88,16 @@ const dataset = odrudaDatasetSchema({
   zdrojUrl: odruda.zdroj_url,
 });
 
-// Související odrůdy — dalších až 6 indexovaných odrůd téže plodiny (hlubší
-// prolink, nižší bounce). Bez současné odrůdy; deterministicky dle abecedy.
-const relatedOdrudy = plodina.odrudy
-  .filter((o) => o.slug !== odruda.slug && isOdrudaIndexable(o))
-  .slice(0, 6);
+// Podobné odrůdy — 6 odrůd téže plodiny s nejbližším profilem znaků (ranost,
+// užití, výška, poléhání, sdílené odolnosti). Dřív to bylo prvních 6 podle
+// abecedy, takže všech 1051 stránek kukuřice odkazovalo na tytéž 6 odrůd a
+// zbytek nedostal z detailů žádný interní odkaz. Výběr je deterministický.
+const relatedOdrudy = podobneOdrudy(
+  plodina.slug,
+  odruda,
+  plodina.odrudy.filter((o) => isOdrudaIndexable(o)),
+  6,
+);
 
 // Choroby a škůdci téže plodiny — dřív odrůda nelinkovala do zbytku grafu (izolovaný
 // pilíř). Prolink na /choroby/ pomáhá crawl-depth i tematické relevanci.
@@ -307,17 +313,20 @@ const metaDescription = truncateAtBoundary(
 
     {relatedOdrudy.length > 0 && (
       <section class="card-section related-section">
-        <h2 class="section-title">Související odrůdy ({plodina.name.toLowerCase()})</h2>
+        <h2 class="section-title">Podobné odrůdy ({plodina.name.toLowerCase()})</h2>
+        <p class="related-lede">Odrůdy s nejbližším profilem podle úředního popisu — ranost, užití a odolnosti.</p>
         <ul class="related-grid">
           {relatedOdrudy.map((o) => (
             <li>
               <a class="related-card" href={`/plodiny/${plodina.slug}/${o.slug}/`}>
-                <span class="related-name">{o.name}</span>
-                {(o.typ || o.rok_registrace) && (
-                  <span class="related-meta">
-                    {[o.typ, o.rok_registrace].filter(Boolean).join(' · ')}
-                  </span>
-                )}
+                <span class="related-text">
+                  <span class="related-name">{o.name}</span>
+                  {(o.znaky.length > 0 || o.rok_registrace) && (
+                    <span class="related-meta">
+                      {[...o.znaky, o.rok_registrace].filter(Boolean).join(' · ')}
+                    </span>
+                  )}
+                </span>
                 <svg class="related-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
             </li>
@@ -466,22 +475,26 @@ const metaDescription = truncateAtBoundary(
   .pl-detail .faq-q { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0 0 6px; }
   .pl-detail .faq-a { font-size: 14.5px; line-height: 1.65; color: var(--body); margin: 0; }
 
-  /* ── Související odrůdy ── */
+  /* ── Podobné odrůdy ── */
+  /* Meta byla dřív holý rok („2018") a vešla se vedle názvu. Teď nese i ranost
+     a užití („poloraná · pekařská · 2018"), což v horizontální kartě tlačilo
+     název do zalomení. Proto název na vlastní řádek a meta pod něj; šipka
+     zůstává vpravo, svisle na střed. */
+  .pl-detail .related-lede { font-size: 13.5px; color: var(--muted); margin: -4px 0 14px; }
   .pl-detail .related-grid {
     list-style: none; margin: 0 0 18px; padding: 0;
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px;
   }
   .pl-detail .related-card {
     display: flex; align-items: center; gap: 10px;
-    padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 13px 14px; border: 1px solid var(--line); border-radius: var(--r-md);
     background: #fff; text-decoration: none; transition: .15s; min-height: 100%;
   }
   .pl-detail .related-card:hover { border-color: var(--green); background: var(--green-soft); }
-  .pl-detail .related-name { font-weight: 700; color: var(--ink); font-size: 15px; }
-  .pl-detail .related-meta { font-size: 12.5px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+  .pl-detail .related-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+  .pl-detail .related-name { font-weight: 700; color: var(--ink); font-size: 15px; line-height: 1.25; }
+  .pl-detail .related-meta { font-size: 12px; color: var(--muted); line-height: 1.35; }
   .pl-detail .related-arrow { color: var(--green); flex-shrink: 0; }
-  .pl-detail .related-meta + .related-arrow { margin-left: 6px; }
-  .pl-detail .related-name + .related-arrow { margin-left: auto; }
   .pl-detail .related-all {
     display: inline-flex; align-items: center; gap: 8px;
     color: var(--green-dark); font-weight: 700; font-size: 14px; text-decoration: none;
