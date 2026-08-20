@@ -1,15 +1,20 @@
 ---
-export const prerender = true;
+// SSR — sekce je launchnutá pro pl; prerender a locale prefix se vylučují.
+export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
-import { TIER_LISTS, rankForTierList } from '../../lib/tier-lists';
+import { tierLists, rankForTierList } from '../../lib/tier-lists';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
-const pageUrl = `${SITE_URL}/zebricky/`;
 
-const tierCards = TIER_LISTS.map((t) => {
-  const ranked = rankForTierList(t);
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const TL = tierLists(locale);
+const pageUrl = `${SITE_URL}${localizePath(locale, '/zebricky/')}`;
+const tierCards = TL.map((t) => {
+  const ranked = rankForTierList(t, locale);
   return {
     config: t,
     count: ranked.length,
@@ -18,16 +23,16 @@ const tierCards = TIER_LISTS.map((t) => {
 });
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Žebříčky', url: pageUrl },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('zeb.crumb'), url: pageUrl },
 ]);
 
 const itemListJsonLd = itemListSchema(
-  TIER_LISTS.map((t) => ({
-    url: `${SITE_URL}/zebricky/${t.slug}/`,
+  TL.map((t) => ({
+    url: `${SITE_URL}${localizePath(locale, `/zebricky/${t.slug}/`)}`,
     name: t.title,
   })),
-  'Žebříčky strojů a kombajnů',
+  tr('zeb.listName'),
 );
 
 const traktoryCards = tierCards.filter((c) => c.config.category === 'traktory');
@@ -35,8 +40,8 @@ const kombajnyCards = tierCards.filter((c) => c.config.category === 'kombajny');
 ---
 
 <Layout
-  title="Žebříčky strojů — top traktory a kombajny 2026"
-  description="Kurátorované žebříčky aktuálně vyráběných traktorů a kombajnů podle výkonu. Top modely v každém segmentu od 80 koní po 700 koní."
+  title={tr('zeb.title')}
+  description={tr('zeb.desc')}
   canonical={pageUrl}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -44,16 +49,16 @@ const kombajnyCards = tierCards.filter((c) => c.config.category === 'kombajny');
 
   <div class="hub-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <span aria-hidden="true">›</span>
-      <span class="current">Žebříčky</span>
+      <span class="current">{tr('zeb.crumb')}</span>
     </nav>
 
     <header class="hub-head">
-      <span class="kicker">Žebříčky · {TIER_LISTS.length} segmentů</span>
-      <h1>Top stroje v každém segmentu</h1>
+      <span class="kicker">{tf(locale, 'zeb.kicker', { count: TL.length })}</span>
+      <h1>{tr('zeb.h1')}</h1>
       <p class="lede">
-        Vybrali jsme nejvýznamnější aktuálně vyráběné modely v každém výkonovém segmentu. Žebříčky aktualizujeme s každým rozšířením katalogu.
+        {tr('zeb.lede')}
       </p>
     </header>
 
@@ -62,7 +67,7 @@ const kombajnyCards = tierCards.filter((c) => c.config.category === 'kombajny');
         <h2 id="trak-heading">Traktory</h2>
         <div class="hub-grid">
           {traktoryCards.map((c) => (
-            <a class="hub-card" href={`/zebricky/${c.config.slug}/`}>
+            <a class="hub-card" href={localizeInternalHref(locale, `/zebricky/${c.config.slug}/`)}>
               <span class="hub-count">{c.count} modelů</span>
               <h3>{c.config.title}</h3>
               <p>{c.config.description}</p>
@@ -78,7 +83,7 @@ const kombajnyCards = tierCards.filter((c) => c.config.category === 'kombajny');
         <h2 id="komb-heading">Kombajny</h2>
         <div class="hub-grid">
           {kombajnyCards.map((c) => (
-            <a class="hub-card" href={`/zebricky/${c.config.slug}/`}>
+            <a class="hub-card" href={localizeInternalHref(locale, `/zebricky/${c.config.slug}/`)}>
               <span class="hub-count">{c.count} modelů</span>
               <h3>{c.config.title}</h3>
               <p>{c.config.description}</p>

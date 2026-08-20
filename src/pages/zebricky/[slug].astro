@@ -1,25 +1,27 @@
 ---
-export const prerender = true;
+// SSR — viz zebricky/index.astro (locale prefix a prerender se vylučují).
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { TIER_LISTS, getTierList, rankForTierList } from '../../lib/tier-lists';
+import { tierLists, getTierList, rankForTierList } from '../../lib/tier-lists';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
-export function getStaticPaths() {
-  return TIER_LISTS.map((t) => ({ params: { slug: t.slug } }));
-}
-
 const { slug } = Astro.params;
-const def = getTierList(slug!);
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+const TL = tierLists(locale);
+// getStaticPaths odpadl s přechodem na SSR → neplatný slug musí odchytit stránka.
+const def = getTierList(slug!, locale);
 if (!def) return Astro.rewrite('/404');
 
-const ranked = rankForTierList(def);
-const pageUrl = `${SITE_URL}/zebricky/${def.slug}/`;
-const catLabel = def.category === 'traktory' ? 'Traktor' : def.category === 'kombajny' ? 'Kombajn' : def.category;
+const ranked = rankForTierList(def, locale);
+const pageUrl = `${SITE_URL}${localizePath(locale, `/zebricky/${def.slug}/`)}`;
+const catLabel = def.category === 'traktory' ? tr('zeb.catTractor') : def.category === 'kombajny' ? tr('zeb.catCombine') : def.category;
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Žebříčky', url: '/zebricky/' },
+  { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
+  { name: tr('zeb.crumb'), url: localizePath(locale, '/zebricky/') },
   { name: def.title, url: pageUrl },
 ]);
 
@@ -42,7 +44,7 @@ const articleJsonLd = {
   description: def.description,
   author: {
     '@type': 'Organization',
-    name: 'Redakce agro-svět.cz',
+    name: tr('zeb.author'),
     url: 'https://agro-svet.cz/redakce/',
   },
   publisher: {
@@ -59,12 +61,12 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600,
 
 function modelUrl(m: typeof ranked[number]['model']): string {
   const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
-  return `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`;
+  return localizeInternalHref(locale, `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`);
 }
 function yearRange(m: typeof ranked[number]['model']): string {
   if (!m.year_from) return '';
   if (m.year_to) return `${m.year_from}–${m.year_to}`;
-  return `${m.year_from}–dosud`;
+  return `${m.year_from}–${tr('cat.rada.dosud')}`;
 }
 ---
 
@@ -75,15 +77,15 @@ function yearRange(m: typeof ranked[number]['model']): string {
 
   <div class="zeb-detail-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/">Domů</a>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a>
       <span aria-hidden="true">›</span>
-      <a href="/zebricky/">Žebříčky</a>
+      <a href={localizeInternalHref(locale, '/zebricky/')}>{tr('zeb.crumb')}</a>
       <span aria-hidden="true">›</span>
       <span class="current">{def.title}</span>
     </nav>
 
     <header class="zeb-d-head">
-      <span class="kicker">Žebříček · Top {ranked.length}</span>
+      <span class="kicker">{tf(locale, 'zeb.dKicker', { count: ranked.length })}</span>
       <h1>{def.title}</h1>
       <p class="lede">{def.description}</p>
     </header>
@@ -95,7 +97,7 @@ function yearRange(m: typeof ranked[number]['model']): string {
     </aside>
 
     {ranked.length === 0 ? (
-      <p class="zeb-empty">Žádný model neodpovídá kritériím. Databáze rosteme — vraťte se brzy.</p>
+      <p class="zeb-empty">{tr('zeb.empty')}</p>
     ) : (
       <ol class="zeb-list">
         {ranked.map((r) => (
@@ -104,7 +106,7 @@ function yearRange(m: typeof ranked[number]['model']): string {
             <div class="zeb-body">
               <div class="zeb-meta">
                 <span class="zeb-cat-chip">{catLabel}</span>
-                <a href={`/stroje/${r.model.brand_slug}/`} class="zeb-brand">{r.model.brand_name}</a>
+                <a href={localizeInternalHref(locale, `/stroje/${r.model.brand_slug}/`)} class="zeb-brand">{r.model.brand_name}</a>
                 <span class="zeb-sep">·</span>
                 <span class="zeb-series">{r.model.series_name}</span>
                 {yearRange(r.model) && (
@@ -139,11 +141,11 @@ function yearRange(m: typeof ranked[number]['model']): string {
     )}
 
     <section class="zeb-next">
-      <h2>Další žebříčky</h2>
+      <h2>{tr('zeb.more')}</h2>
       <div class="zeb-next-grid">
-        {TIER_LISTS.filter((t) => t.slug !== def.slug).slice(0, 4).map((t) => (
-          <a href={`/zebricky/${t.slug}/`} class="zeb-next-card">
-            <span class="zeb-next-cat">{t.category === 'traktory' ? 'Traktory' : t.category === 'kombajny' ? 'Kombajny' : t.category}</span>
+        {TL.filter((t) => t.slug !== def.slug).slice(0, 4).map((t) => (
+          <a href={localizeInternalHref(locale, `/zebricky/${t.slug}/`)} class="zeb-next-card">
+            <span class="zeb-next-cat">{t.category === 'traktory' ? tr('nav.tech.tractors') : t.category === 'kombajny' ? tr('nav.tech.combines') : t.category}</span>
             <span class="zeb-next-title">{t.title}</span>
           </a>
         ))}

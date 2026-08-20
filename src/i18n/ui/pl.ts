@@ -456,6 +456,22 @@ const pl: Record<string, string> = {
 
   'plod.d.pricesOf': 'Ceny — {name}',
 
+  // — žebříčky (zeb.*) —
+  'zeb.dKicker': 'Ranking · Top {count}',
+  'zeb.catTractor': 'Traktor',
+  'zeb.catCombine': 'Kombajn',
+
+  'zeb.crumb': 'Rankingi',
+  'zeb.title': 'Rankingi maszyn — najlepsze traktory i kombajny 2026',
+  'zeb.desc': 'Redakcyjne rankingi aktualnie produkowanych traktorów i kombajnów według mocy. Najlepsze modele w każdym segmencie od 80 do 700 KM.',
+  'zeb.kicker': 'Rankingi · {count} segmentów',
+  'zeb.h1': 'Najlepsze maszyny w każdym segmencie',
+  'zeb.lede': 'Wybraliśmy najważniejsze aktualnie produkowane modele w każdym segmencie mocy. Rankingi aktualizujemy przy każdym rozszerzeniu katalogu.',
+  'zeb.listName': 'Rankingi maszyn i kombajnów',
+  'zeb.empty': 'Żaden model nie spełnia kryteriów. Rozbudowujemy bazę — zajrzyj wkrótce.',
+  'zeb.more': 'Kolejne rankingi',
+  'zeb.author': 'Redakcja agro-svět.cz',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Marki',
   'cat.zn.desc': 'Przegląd światowych producentów techniki rolniczej — od Claas i John Deere po Fendt, New Holland i Zetor.',

@@ -16,12 +16,15 @@ describe('pl nav konfigurace', () => {
     const nav = getNav('pl');
     const tech = nav.find((i) => i.section === 'tech');
     const hrefs = (tech?.children ?? []).map((c) => c.href);
-    // launchnuté: /stroje/*, /znacky/, /srovnani/, /slovnik/
+    // launchnuté: /stroje/*, /znacky/, /srovnani/, /slovnik/, /zebricky/
     expect(hrefs).toContain('/znacky/');
     expect(hrefs).toContain('/srovnani/');
     expect(hrefs).toContain('/slovnik/');
+    // /zebricky je pro pl launchnuté (žebříčky jsou odvozené ze strojních dat,
+    // žádná jurisdikce) → v dropdownu být MÁ.
+    expect(hrefs).toContain('/zebricky/');
     // NElaunchnuté nesmí být v pl tech dropdownu:
-    expect(hrefs).not.toContain('/zebricky/');
+    // /kviz = zatím nepřeložený, /prodejci = čeští prodejci (jurisdikce).
     expect(hrefs).not.toContain('/kviz/');
     expect(hrefs).not.toContain('/prodejci/');
   });

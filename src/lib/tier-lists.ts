@@ -6,6 +6,7 @@
 // /zebricky/<slug>/. Z každé série jen 1 model (nejvýkonnější varianta).
 
 import { getAllModels, type StrojFlatModel, type StrojKategorie } from './stroje';
+import { tierListCopy } from './tier-lists.i18n';
 
 export interface TierListDef {
   slug: string;
@@ -222,8 +223,18 @@ export const TIER_LISTS: TierListDef[] = [
   },
 ];
 
-export function getTierList(slug: string): TierListDef | undefined {
-  return TIER_LISTS.find((t) => t.slug === slug);
+/** Žebříčky s prózou v daném jazyce. Struktura/filtry/řazení se nemění —
+ *  překládá se jen title/description/methodology/callToAction. cs = originál. */
+export function tierLists(locale: string = 'cs'): TierListDef[] {
+  if (locale === 'cs') return TIER_LISTS;
+  return TIER_LISTS.map((d) => {
+    const c = tierListCopy(d.slug, locale);
+    return c ? { ...d, ...c } : d;
+  });
+}
+
+export function getTierList(slug: string, locale: string = 'cs'): TierListDef | undefined {
+  return tierLists(locale).find((t) => t.slug === slug);
 }
 
 export interface RankedModel {
@@ -255,8 +266,10 @@ export function tierListsForModel(modelSlug: string): ModelTierPlacement[] {
 }
 
 /** Apply the tier list to current models and return ranked entries. */
-export function rankForTierList(def: TierListDef): RankedModel[] {
-  const all = getAllModels();
+export function rankForTierList(def: TierListDef, locale: string = 'cs'): RankedModel[] {
+  // locale mění jen zobrazované texty modelů (series_name nese rozsah výroby),
+  // filtry i skóre jedou nad shodnými čísly → pořadí je napříč jazyky stejné.
+  const all = getAllModels(locale);
   const filtered = all.filter((m) => m.effective_category === def.category && def.filter(m));
   filtered.sort((a, b) => def.score(b) - def.score(a));
   // De-duplicate: only one model per series — top-N would otherwise be dominated

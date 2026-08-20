@@ -454,6 +454,22 @@ const cs: Record<string, string> = {
 
   'plod.d.pricesOf': 'Ceny — {name}',
 
+  // — žebříčky (zeb.*) —
+  'zeb.dKicker': 'Žebříček · Top {count}',
+  'zeb.catTractor': 'Traktor',
+  'zeb.catCombine': 'Kombajn',
+
+  'zeb.crumb': 'Žebříčky',
+  'zeb.title': 'Žebříčky strojů — top traktory a kombajny 2026',
+  'zeb.desc': 'Kurátorované žebříčky aktuálně vyráběných traktorů a kombajnů podle výkonu. Top modely v každém segmentu od 80 koní po 700 koní.',
+  'zeb.kicker': 'Žebříčky · {count} segmentů',
+  'zeb.h1': 'Top stroje v každém segmentu',
+  'zeb.lede': 'Vybrali jsme nejvýznamnější aktuálně vyráběné modely v každém výkonovém segmentu. Žebříčky aktualizujeme s každým rozšířením katalogu.',
+  'zeb.listName': 'Žebříčky strojů a kombajnů',
+  'zeb.empty': 'Žádný model neodpovídá kritériím. Databázi rozšiřujeme — vraťte se brzy.',
+  'zeb.more': 'Další žebříčky',
+  'zeb.author': 'Redakce agro-svět.cz',
+
   // — znacky/index (cat.zn.*) —
   'cat.zn.title': 'Značky',
   'cat.zn.desc': 'Přehled světových výrobců zemědělské techniky — od Claas a John Deere po Fendt, New Holland a Zetor.',

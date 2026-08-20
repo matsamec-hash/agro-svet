@@ -77,4 +77,28 @@ describe('stroje lib — locale-aware rozsahy a labely', () => {
         (c.series ?? []).filter((s: any) => String(s.name).includes('dosud'))));
     expect(withDosud.length).toBeGreaterThan(50);
   });
+
+  // Můj dřívější extraktor hledal `- slug: X` a `name:` na SOUSEDNÍCH řádcích,
+  // takže minul zetor/ur-i (mezi slug a name jsou další klíče) — česká „Unifikovaná
+  // řada I" pak vylezla na /pl/zebricky/. Tenhle test jde přes naparsovaná data,
+  // ne přes text YAML, takže na uspořádání klíčů nezáleží.
+  it('žádný název řady pod sk/pl/uk nenese českou diakritiku', () => {
+    // ‼️ Marker MUSÍ být per-jazyk. Slovenština má č/š/ž/ť legitimně
+    // („súčasnosť"), takže polská sada na ni nasazená hlásí 110 falešných
+    // poplachů — tuhle chybu jsem už jednou udělal, viz
+    // reference-agro-svet-locale-leak-audit.
+    const MARKERS = { sk: /[ěřů]/, pl: /[ěřůčšžďťň]/, uk: /[ěřůčšž]/ } as const;
+    for (const loc of ['sk', 'pl', 'uk'] as const) {
+      const CZ = MARKERS[loc];
+      const offenders: string[] = [];
+      for (const b of getAllBrands(loc)) {
+        for (const cat of Object.values(b.categories ?? {}) as any[]) {
+          for (const s of cat.series ?? []) {
+            if (CZ.test(String(s.name))) offenders.push(`${loc}/${b.slug}/${s.slug}: ${s.name}`);
+          }
+        }
+      }
+      expect(offenders, `${loc}: české názvy řad bez overlay`).toEqual([]);
+    }
+  });
 });
