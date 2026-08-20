@@ -4,6 +4,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { listIndexableOdrudy, getPlodina, getOdruda, isOdrudaIndexable, udrzovatelSlug, SKUPINA_LABELS } from '../../../lib/plodiny';
 import { breadcrumbSchema, faqPageSchema, odrudaDatasetSchema, truncateAtBoundary } from '../../../lib/structured-data';
 import { chorobaChipsForPlodina } from '../../../lib/choroby';
+import { parseZnaky, maZnaky, popisOdstavce } from '../../../lib/odruda-znaky';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
 
 export async function getStaticPaths() {
@@ -18,6 +19,47 @@ const odruda = getOdruda(plodinaSlug!, odrudaSlug!);
 if (!plodina || !odruda) return Astro.rewrite('/404');
 
 const e = odruda.enrichment!;
+
+// Znaky vytěžené z oficiálního popisu ÚKZÚZ. `typ`/`ranost` jsou v datech
+// ÚKZÚZ prázdné u všech 3476 odrůd a kurátorovaná YAML enrichment vrstva je
+// zatím taky prázdná — bez tohohle kroku má stránka jen jeden odstavec prózy
+// a dvouřádkovou tabulku. Parser prózu POUZE strukturuje (nic nedomýšlí),
+// kurátorovaná data mají vždy přednost.
+const znaky = parseZnaky(e.popis);
+const odstavce = popisOdstavce(e.popis);
+const uvod = odstavce[0];
+const dalsiOdstavce = odstavce.slice(1);
+
+const cap = (v: string) => v.charAt(0).toUpperCase() + v.slice(1);
+
+// Vlastnosti: kurátorované z YAML mají přednost, jinak vytěžené z popisu.
+const vlastnostiRows: [string, string][] = e.vlastnosti && Object.keys(e.vlastnosti).length > 0
+  ? Object.entries(e.vlastnosti).map(([k, v]) => [k, String(v)])
+  : [
+      ...(znaky.vyska ? [['Výška rostlin', cap(znaky.vyska)] as [string, string]] : []),
+      ...(znaky.polehani ? [['Odolnost proti poléhání', cap(znaky.polehani)] as [string, string]] : []),
+      // Abiotické jevy (vymrzání, vybíhání do květu…) — ÚKZÚZ je píše jako
+      // odolnosti, ale mezi choroby a škůdce nepatří.
+      ...znaky.abioticke.map((a) => [`Odolnost proti ${a.znak}`, cap(a.uroven)] as [string, string]),
+    ];
+
+const odolnostiRows: [string, string][] = e.odolnosti && Object.keys(e.odolnosti).length > 0
+  ? Object.entries(e.odolnosti).map(([k, v]) => [k, String(v)])
+  : znaky.odolnosti.map((o) => [cap(o.choroba), cap(o.uroven)] as [string, string]);
+
+const vynosRows: [string, string][] = znaky.vynos.map((v) => [cap(v.znak), cap(v.uroven)]);
+
+// Pěstitelský kontext PLODINY (ne odrůdy) — v datech už je, jen se dosud
+// na odrůdě nezobrazoval. Popisky to explicitně přiznávají, ať to nevypadá
+// jako odrůdový údaj.
+const pestovaniRows: [string, string][] = [
+  ...(plodina.vysevek ? [['Výsevek', plodina.vysevek] as [string, string]] : []),
+  ...(plodina.hnojeni ? [['Hnojení', plodina.hnojeni] as [string, string]] : []),
+  ...(plodina.vynos_t_ha ? [['Obvyklý výnos', `${plodina.vynos_t_ha} t/ha`] as [string, string]] : []),
+  ...(plodina.sklizen ? [['Termín sklizně', plodina.sklizen] as [string, string]] : []),
+  ...(plodina.vyuziti ? [['Využití', plodina.vyuziti] as [string, string]] : []),
+];
+
 const base = `/plodiny/${plodina.slug}/${odruda.slug}/`;
 const breadcrumb = breadcrumbSchema([
   { name: 'Domů', url: '/' },
@@ -35,10 +77,13 @@ const dataset = odrudaDatasetSchema({
   description: e.popis ?? `Odrůda ${odruda.name} plodiny ${plodina.name.toLowerCase()}.`,
   udrzovatel: odruda.udrzovatel,
   rokRegistrace: odruda.rok_registrace,
-  typ: odruda.typ,
-  ranost: odruda.ranost,
-  vlastnosti: e.vlastnosti as Record<string, string | number> | undefined,
-  odolnosti: e.odolnosti as Record<string, string | number> | undefined,
+  typ: odruda.typ ?? znaky.uziti,
+  ranost: odruda.ranost ?? znaky.ranost,
+  // Dřív se sem posílaly `e.vlastnosti`/`e.odolnosti`, které jsou u VŠECH odrůd
+  // prázdné → Dataset neměl jedinou variableMeasured navíc. Teď dostane i znaky
+  // vytěžené z úředního popisu.
+  vlastnosti: Object.fromEntries(vlastnostiRows) as Record<string, string | number>,
+  odolnosti: Object.fromEntries(odolnostiRows) as Record<string, string | number>,
   zdrojUrl: odruda.zdroj_url,
 });
 
@@ -84,9 +129,7 @@ const metaDescription = truncateAtBoundary(
         <span class="kicker"><span class="dot"></span>{SKUPINA_LABELS[plodina.skupina]} · Odrůda</span>
         <h1>{odruda.name}</h1>
         <p class="hero-lede">
-          {e.popis
-            ? e.popis
-            : `Odrůda plodiny ${plodina.name.toLowerCase()}.`}
+          {uvod ?? `Odrůda plodiny ${plodina.name.toLowerCase()}.`}
         </p>
         <div class="hero-actions">
           <a class="cta-back" href={`/plodiny/${plodina.slug}/`}>
@@ -104,7 +147,7 @@ const metaDescription = truncateAtBoundary(
       </div>
     </section>
 
-    {(odruda.typ || odruda.ranost || odruda.rok_registrace || odruda.udrzovatel) && (
+    {(odruda.typ || odruda.ranost || znaky.ranost || znaky.uziti || odruda.rok_registrace || odruda.udrzovatel) && (
       <section class="card-section agro-facts">
         <h2 class="section-title">Základní údaje</h2>
         <dl class="facts-dl">
@@ -114,10 +157,16 @@ const metaDescription = truncateAtBoundary(
               <dd>{odruda.typ}</dd>
             </>
           )}
-          {odruda.ranost && (
+          {(odruda.ranost || znaky.ranost) && (
             <>
               <dt>Ranost</dt>
-              <dd>{odruda.ranost}</dd>
+              <dd>{odruda.ranost ?? cap(znaky.ranost!)}</dd>
+            </>
+          )}
+          {!odruda.typ && znaky.uziti && (
+            <>
+              <dt>Užití</dt>
+              <dd>{cap(znaky.uziti)}</dd>
             </>
           )}
           {odruda.rok_registrace && (
@@ -138,11 +187,11 @@ const metaDescription = truncateAtBoundary(
       </section>
     )}
 
-    {e.vlastnosti && Object.keys(e.vlastnosti).length > 0 && (
+    {vlastnostiRows.length > 0 && (
       <section class="card-section agro-facts">
         <h2 class="section-title">Vlastnosti</h2>
         <dl class="facts-dl">
-          {Object.entries(e.vlastnosti).map(([k, v]) => (
+          {vlastnostiRows.map(([k, v]) => (
             <>
               <dt>{k}</dt>
               <dd>{v}</dd>
@@ -152,11 +201,50 @@ const metaDescription = truncateAtBoundary(
       </section>
     )}
 
-    {e.odolnosti && Object.keys(e.odolnosti).length > 0 && (
+    {odolnostiRows.length > 0 && (
       <section class="card-section agro-facts">
-        <h2 class="section-title">Odolnosti</h2>
+        <h2 class="section-title">Odolnost proti chorobám a škůdcům</h2>
         <dl class="facts-dl">
-          {Object.entries(e.odolnosti).map(([k, v]) => (
+          {odolnostiRows.map(([k, v]) => (
+            <>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    {vynosRows.length > 0 && (
+      <section class="card-section agro-facts">
+        <h2 class="section-title">Výnos a kvalita</h2>
+        <dl class="facts-dl">
+          {vynosRows.map(([k, v]) => (
+            <>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    {dalsiOdstavce.length > 0 && (
+      <section class="card-section">
+        <h2 class="section-title">Úřední popis odrůdy</h2>
+        {dalsiOdstavce.map((o) => <p class="uredni-odstavec">{o}</p>)}
+        <p class="zdroj-note">
+          Zdroj: <a href={odruda.zdroj_url ?? 'https://ido.ukzuz.cz/ido/'} rel="nofollow noopener" target="_blank">ÚKZÚZ — Informační databáze odrůd</a>
+        </p>
+      </section>
+    )}
+
+    {pestovaniRows.length > 0 && (
+      <section class="card-section agro-facts">
+        <h2 class="section-title">Pěstování — {plodina.name.toLowerCase()}</h2>
+        <p class="pest-note">Agronomické údaje platí pro plodinu jako celek, ne pro konkrétní odrůdu.</p>
+        <dl class="facts-dl">
+          {pestovaniRows.map(([k, v]) => (
             <>
               <dt>{k}</dt>
               <dd>{v}</dd>
@@ -368,6 +456,14 @@ const metaDescription = truncateAtBoundary(
 
   /* ── Osiva wrapper ── */
   .pl-detail .osiva-wrap { border-top: 2px solid var(--green-soft); }
+
+  /* ── Úřední popis + pěstitelský kontext ── */
+  .pl-detail .uredni-odstavec { font-size: 15px; line-height: 1.7; color: var(--body); margin: 0 0 12px; }
+  .pl-detail .uredni-odstavec:last-of-type { margin-bottom: 16px; }
+  .pl-detail .zdroj-note { font-size: 13px; color: var(--muted); margin: 0; }
+  .pl-detail .zdroj-note a { color: var(--green); text-decoration: none; }
+  .pl-detail .zdroj-note a:hover { color: var(--green-dark); text-decoration: underline; }
+  .pl-detail .pest-note { font-size: 13px; color: var(--muted); margin: -8px 0 16px; }
 
   /* ── Responsive ── */
   @media (max-width: 720px) {
