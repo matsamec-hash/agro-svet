@@ -4,6 +4,10 @@ import { createAnonClient } from '../lib/supabase';
 import { getAllModels } from '../lib/stroje';
 import { getAllPlemena } from '../lib/plemena';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../lib/config';
+import { useTranslations, getLocaleFromUrl } from '../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
 
 const query = (Astro.url.searchParams.get('q') ?? '').trim();
 
@@ -56,7 +60,7 @@ if (query.length >= 2) {
   }
 
   // Stroje (client of static YAML)
-  const modelMatches = getAllModels().filter((m) => {
+  const modelMatches = getAllModels(locale).filter((m) => {
     const hay = `${m.brand_name} ${m.name} ${m.series_name}`.toLowerCase();
     return hay.includes(needle);
   });
@@ -71,7 +75,7 @@ if (query.length >= 2) {
           title: `${m.brand_name} ${m.name}`,
           url: `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`,
           snippet: m.description?.slice(0, 140) ?? undefined,
-          meta: `${m.series_name}${m.power_hp ? ` · ${m.power_hp} k` : ''}${m.year_from ? ` · ${m.year_from}${m.year_to ? '–' + m.year_to : '–dosud'}` : ''}`,
+          meta: `${m.series_name}${m.power_hp ? ` · ${m.power_hp} k` : ''}${m.year_from ? ` · ${m.year_from}${m.year_to ? '–' + m.year_to : `–${tr('cat.rada.dosud')}`}` : ''}`,
         };
       }),
       moreLink: modelMatches.length > 15 ? { href: `/stroje/?q=${encodeURIComponent(query)}`, label: `Všech ${modelMatches.length} modelů` } : undefined,

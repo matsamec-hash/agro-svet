@@ -75,7 +75,7 @@ const brandModels = brandEncyclopedia;
 
 // Catalog models from stroje YAML (broader than encyklopedie). Sorted by
 // power; cap at 12 for the "all models" grid.
-const catalogModels = getAllModels()
+const catalogModels = getAllModels(locale)
   .filter((m) => m.brand_slug === znacka.id)
   .sort((a, b) => (b.power_hp ?? 0) - (a.power_hp ?? 0));
 const catalogTop = catalogModels.slice(0, 12);
@@ -105,7 +105,7 @@ function modelUrl(m: { brand_slug: string; series_slug: string; slug: string }):
 function yearRange(m: { year_from: number | null; year_to: number | null }): string {
   if (!m.year_from) return '';
   if (m.year_to) return `${m.year_from}–${m.year_to}`;
-  return `${m.year_from}–dosud`;
+  return `${m.year_from}–${tr('cat.rada.dosud')}`;
 }
 
 const jsonLd = {

@@ -437,6 +437,7 @@ function localizeBrand(base: StrojBrand, locale: string): StrojBrand {
 
 let cachedBrands: StrojBrand[] | null = null;
 const cachedBrandsByLocale = new Map<string, StrojBrand[]>();
+const cachedFlatByLocale = new Map<string, StrojFlatModel[]>();
 let cachedFlat: StrojFlatModel[] | null = null;
 
 function coerceSlug(value: unknown): string {
@@ -494,10 +495,18 @@ export function getBrand(slug: string, locale: string = 'cs'): StrojBrand | unde
   return localizeBrand(base, locale);
 }
 
-export function getAllModels(): StrojFlatModel[] {
-  if (cachedFlat) return cachedFlat;
+// locale ovlivňuje jen zobrazované texty (series_name nese „(2012–dosud)"),
+// slugy a čísla zůstávají shodné. Default 'cs' = byte-identické s dosavadním
+// chováním pro ~20 volajících, kterým jde o data, ne o zobrazení.
+export function getAllModels(locale: string = 'cs'): StrojFlatModel[] {
+  if (locale === 'cs') {
+    if (cachedFlat) return cachedFlat;
+  } else {
+    const hit = cachedFlatByLocale.get(locale);
+    if (hit) return hit;
+  }
   const flat: StrojFlatModel[] = [];
-  for (const brand of getAllBrands()) {
+  for (const brand of getAllBrands(locale)) {
     for (const [catKey, cat] of Object.entries(brand.categories || {})) {
       const category = catKey as StrojKategorie;
       for (const series of cat.series || []) {
@@ -518,7 +527,8 @@ export function getAllModels(): StrojFlatModel[] {
       }
     }
   }
-  cachedFlat = flat;
+  if (locale === 'cs') cachedFlat = flat;
+  else cachedFlatByLocale.set(locale, flat);
   return flat;
 }
 

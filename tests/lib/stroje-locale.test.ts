@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatYearRange, familyLabel, localizePresentToken, getBrand } from '../../src/lib/stroje';
+import { formatYearRange, familyLabel, localizePresentToken, getBrand, getAllBrands } from '../../src/lib/stroje';
 
 // Regrese: „dosud"/„N. řada" se dřív vracely česky i pro sk/pl/uk.
 describe('stroje lib — locale-aware rozsahy a labely', () => {
@@ -53,5 +53,28 @@ describe('stroje lib — locale-aware rozsahy a labely', () => {
     const find = (b: any) => b!.categories.traktory.series.find((s: any) => s.slug === '6m');
     expect(find(pl)!.name).toContain('obecnie');
     expect(find(cs)!.name).toContain('dosud');
+  });
+
+  // Regresní síto nad reálnými daty: kdyby někdo přidal řadu s „(2020–dosud)"
+  // v názvu (a to je dnes tvar 102 ze 424), nesmí to projet do ne-cs locale.
+  it('žádný název řady ani značky neobsahuje "dosud" pod sk/pl/uk', () => {
+    for (const loc of ['sk', 'pl', 'uk'] as const) {
+      const offenders: string[] = [];
+      for (const b of getAllBrands(loc)) {
+        for (const cat of Object.values(b.categories ?? {}) as any[]) {
+          for (const s of cat.series ?? []) {
+            if (String(s.name).includes('dosud')) offenders.push(`${loc}/${b.slug}/${s.slug}: ${s.name}`);
+          }
+        }
+      }
+      expect(offenders, `${loc} má české "dosud" v názvech řad`).toEqual([]);
+    }
+  });
+
+  it('cs si "dosud" v názvech řad ponechává (není to překlep, ale zdrojová data)', () => {
+    const withDosud = getAllBrands('cs').flatMap((b) =>
+      Object.values(b.categories ?? {}).flatMap((c: any) =>
+        (c.series ?? []).filter((s: any) => String(s.name).includes('dosud'))));
+    expect(withDosud.length).toBeGreaterThan(50);
   });
 });
