@@ -61,6 +61,8 @@ const uk: Record<string, string> = {
 
   // — navigace: Data —
   'nav.data.markets': 'Ринки та товари',
+  'nav.data.sales': 'Продажі техніки',
+  'nav.data.stocks': 'Акції агрокомпаній',
   'nav.data.historie': 'Історія сільського господарства',
   'nav.data.soil': 'Сільськогосподарська земля',
   'nav.data.calculators': 'Калькулятори',
@@ -353,6 +355,7 @@ const uk: Record<string, string> = {
   'cat.b.ctaP': 'Фільтруйте за рядом, потужністю та роком. Контакт напряму з продавцем, без комісії.',
   'cat.b.ctaOpen': 'Відкрити базар {brand}',
   'cat.b.ctaAddOwn': 'Додати власне оголошення',
+  'cat.b.seriesListName': 'Модельні ряди {brand}',
   // klientský JS plural (ряд/ряди/рядів)
   'cat.b.jsRowOne': 'ряд',
   'cat.b.jsRowFew': 'ряди',

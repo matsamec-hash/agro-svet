@@ -46,6 +46,32 @@ describe('stroje lib — SK overlay modelů (Fáze stroje-detail)', () => {
     expect(s.models[0].description).toBe('укр модель');
     expect(base.description).toBe(undefined); // base nezmutován (žádné description na base)
   });
+
+  // Objektová forma ov.series — potřeba tam, kde je NÁZEV řady v cs YAML česky
+  // („Válce", „…4. generace"), ne značkové jméno. String forma musí dál fungovat.
+  it('objektová forma ov.series přepíše i name, string forma jen description', () => {
+    const out: any = applyStrojOverlay(base, {
+      series: { 'z-25': { name: 'Z 25 (wąskie)', description: 'PL seria' } },
+    });
+    const s = out.categories.traktory.series[0];
+    expect(s.name).toBe('Z 25 (wąskie)');
+    expect(s.description).toBe('PL seria');
+  });
+
+  it('objekt jen s name nechá cs description; jen s description nechá cs name', () => {
+    const onlyName: any = applyStrojOverlay(base, { series: { 'z-25': { name: 'Wały' } } });
+    expect(onlyName.categories.traktory.series[0].name).toBe('Wały');
+    expect(onlyName.categories.traktory.series[0].description).toBe('CS série popis');
+
+    const onlyDesc: any = applyStrojOverlay(base, { series: { 'z-25': { description: 'PL opis' } } });
+    expect(onlyDesc.categories.traktory.series[0].name).toBe('Z 25');
+    expect(onlyDesc.categories.traktory.series[0].description).toBe('PL opis');
+  });
+
+  it('string forma ov.series nesmí sáhnout na name (zpětná kompatibilita)', () => {
+    const out: any = applyStrojOverlay(base, { series: { 'z-25': 'SK série' } });
+    expect(out.categories.traktory.series[0].name).toBe('Z 25');
+  });
 });
 
 describe('stroje lib — schema rozšíření', () => {

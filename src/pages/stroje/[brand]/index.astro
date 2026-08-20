@@ -148,9 +148,14 @@ function tileSort(a: Tile, b: Tile): number {
   return String(a.family).localeCompare(String(b.family), 'cs');
 }
 
-function familySublabel(family: string): string {
-  if (/^\d+$/.test(family)) return `${family}. řada`;
-  return '';
+// Podtitulek dlaždice dává smysl JEN když se titulek liší od kanonického
+// „N. řada" — tj. když YAML nese vlastní family_label. Bez téhle podmínky se
+// v cs vypisovalo „6. řada / 6. řada" (duplicita) a v ne-cs „Seria 6 / 6. řada"
+// (natvrdo česky, mimo i18n).
+function familySublabel(family: string, label: string): string {
+  if (!/^\d+$/.test(family)) return '';
+  const canonical = familyLabel(family, locale);
+  return label === canonical ? '' : canonical;
 }
 
 type CategorySection = {
@@ -297,7 +302,7 @@ for (const cat of Object.values(brand.categories || {})) {
   }
 }
 const seriesListJsonLd = allSeries.length > 0
-  ? itemListSchema(allSeries, `Modelové řady ${brand.name}`)
+  ? itemListSchema(allSeries, tf(locale, 'cat.b.seriesListName', { brand: brand.name }))
   : null;
 ---
 
@@ -437,9 +442,9 @@ const seriesListJsonLd = allSeries.length > 0
               {cat.currentTiles.map((t) => {
                 const bar = hpBar(t.minHp, t.maxHp, cat.hpMaxForBar);
                 const yearStr = t.minYear !== null
-                  ? (t.hasCurrent ? `${t.minYear}–dosud` : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
+                  ? (t.hasCurrent ? `${t.minYear}–${tr('cat.rada.dosud')}` : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
                   : '';
-                const sub = familySublabel(t.family);
+                const sub = familySublabel(t.family, t.label);
                 const hpStr = t.minHp !== null && t.maxHp !== null
                   ? (t.minHp === t.maxHp ? `${t.minHp} k` : `${t.minHp}–${t.maxHp} k`)
                   : '';
@@ -514,7 +519,7 @@ const seriesListJsonLd = allSeries.length > 0
                 const yearStr = t.minYear !== null
                   ? (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`)
                   : '';
-                const sub = familySublabel(t.family);
+                const sub = familySublabel(t.family, t.label);
                 const hpStr = t.minHp !== null && t.maxHp !== null
                   ? (t.minHp === t.maxHp ? `${t.minHp} k` : `${t.minHp}–${t.maxHp} k`)
                   : '';

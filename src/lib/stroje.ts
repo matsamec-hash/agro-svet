@@ -365,7 +365,10 @@ interface StrojOverlay {
   country?: string;
   description?: string;
   categories?: Record<string, string>;
-  series?: Record<string, string>;
+  // string = jen popis (zpětně kompatibilní, drtivá většina záznamů).
+  // objekt = i lokalizovaný název řady — potřeba tam, kde je název v cs YAML
+  // česky („Válce", „Příslušenství pluhů", „…4. generace"), ne značkové jméno.
+  series?: Record<string, string | { name?: string; description?: string }>;
   models?: Record<string, string>; // model.slug -> SK popis (Fáze stroje-detail)
 }
 
@@ -384,7 +387,13 @@ export function applyStrojOverlay(base: StrojBrand, ov: StrojOverlay | null): St
   for (const [ck, cat] of Object.entries(b.categories || {}) as [string, any][]) {
     if (ov.categories?.[ck]) cat.name = ov.categories[ck];
     for (const s of cat.series || []) {
-      if (ov.series?.[s.slug]) s.description = ov.series[s.slug];
+      const so = ov.series?.[s.slug];
+      if (typeof so === 'string') {
+        s.description = so;
+      } else if (so) {
+        if (so.name) s.name = so.name;
+        if (so.description) s.description = so.description;
+      }
       for (const m of s.models || []) {
         if (ov.models?.[m.slug]) m.description = ov.models[m.slug];
       }
@@ -523,8 +532,14 @@ export function formatPowerRange(models: StrojModel[]): string {
   return min === max ? `${min} k` : `${min}–${max} k`;
 }
 
-export function formatYearRange(yearFrom: number | null, yearTo: number | null): string {
+export function formatYearRange(yearFrom: number | null, yearTo: number | null, locale: string = 'cs'): string {
   if (!yearFrom) return '';
-  if (!yearTo) return `${yearFrom}–dosud`;
+  // „dosud" má locale variantu (viz cat.rada.dosud) — bez parametru by tahle
+  // helper funkce vracela češtinu i pod /sk /pl /uk. Default 'cs' = beze změny.
+  if (!yearTo) return `${yearFrom}–${PRESENT_LABEL[locale] ?? PRESENT_LABEL.cs}`;
   return `${yearFrom}–${yearTo}`;
 }
+
+const PRESENT_LABEL: Record<string, string> = {
+  cs: 'dosud', sk: 'súčasnosť', pl: 'obecnie', uk: 'дотепер',
+};

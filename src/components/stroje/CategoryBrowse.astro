@@ -160,9 +160,12 @@ function tileSort(a: Tile, b: Tile): number {
   return a.family.localeCompare(b.family, 'cs');
 }
 
-function familySublabel(family: string): string {
-  if (/^\d+$/.test(family)) return `${family}. řada`;
-  return '';
+// Viz stroje/[brand]/index.astro — podtitulek jen když titulek nese
+// vlastní family_label, jinak duplikoval titulek (cs) / unikal česky (ne-cs).
+function familySublabel(family: string, label: string): string {
+  if (!/^\d+$/.test(family)) return '';
+  const canonical = familyLabel(family, locale);
+  return label === canonical ? '' : canonical;
 }
 
 function hpBar(min: number | null, max: number | null): { from: number; span: number } {
@@ -373,7 +376,7 @@ const NL = '\n';
             const yearStr = t.minYear !== null
               ? (t.hasCurrent ? tf(locale, 'cat.tileYearToNow', { from: t.minYear }) : (t.maxYear ? `${t.minYear}–${t.maxYear}` : `${t.minYear}`))
               : '';
-            const sub = familySublabel(t.family);
+            const sub = familySublabel(t.family, t.label);
             const hpStr = t.minHp !== null && t.maxHp !== null
               ? (t.minHp === t.maxHp ? `${t.minHp} k` : `${t.minHp}–${t.maxHp} k`)
               : '';

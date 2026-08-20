@@ -58,6 +58,8 @@ const pl: Record<string, string> = {
 
   // — nawigacja: Dane —
   'nav.data.markets': 'Rynki i surowce',
+  'nav.data.sales': 'Sprzedaż maszyn',
+  'nav.data.stocks': 'Akcje firm rolniczych',
   'nav.data.historie': 'Historia rolnictwa',
   'nav.data.soil': 'Grunty rolne',
   'nav.data.calculators': 'Kalkulatory',
@@ -350,6 +352,7 @@ const pl: Record<string, string> = {
   'cat.b.ctaP': 'Filtruj według serii, mocy i roku. Kontakt bezpośrednio ze sprzedawcą, bez prowizji.',
   'cat.b.ctaOpen': 'Otwórz giełdę {brand}',
   'cat.b.ctaAddOwn': 'Dodaj własne ogłoszenie',
+  'cat.b.seriesListName': 'Serie modeli {brand}',
   // klientský JS plural (seria/serie/serii)
   'cat.b.jsRowOne': 'seria',
   'cat.b.jsRowFew': 'serie',

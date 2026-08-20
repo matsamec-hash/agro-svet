@@ -24,11 +24,13 @@ series:
     ktorý priebežne meria moment každého kotúča a koriguje dávku v reálnom čase.
     Zábery 12–50 m, kapacity zásobníka 1 000–4 500 l. Verzia H s kontinuálnym vážením
     pre najvyššiu presnosť pri premenlivom teréne a sklone.
-  msp: >-
-    Univerzálne rozmetadlá statkových hnojív s vertikálnymi bubnami alebo taniermi.
-    Konštrukcia s nízko umiestneným ťažiskom a hydraulickým zadným šupátkom
-    umožňuje rovnomernú aplikáciu maštaľného hnoja, kompostu aj digestátu.
-    Modely s objemom korby 8–24 m³, kompatibilné s ISOBUS.
+  msp:
+    name: "Profile (rozmetadlá maštaľného hnoja)"
+    description: >-
+      Univerzálne rozmetadlá statkových hnojív s vertikálnymi bubnami alebo taniermi.
+      Konštrukcia s nízko umiestneným ťažiskom a hydraulickým zadným šupátkom
+      umožňuje rovnomernú aplikáciu maštaľného hnoja, kompostu aj digestátu.
+      Modely s objemom korby 8–24 m³, kompatibilné s ISOBUS.
   pul: >-
     Nesené aj ťahané cisterny na kejdu s objemom 7–28 m³. Štandardné je vákuové
     plnenie a možnosť kombinácie s aplikátormi (vlečné hadice, diskové, slot-injektor).
@@ -135,11 +137,13 @@ series:
     Stroje na rozdružovanie a fúkanie slamy do stajní — bale shredder. Bočný
     výhoz až 18 m, otočný komín na fúkanie slamy do hlbokých stajní.
     Modely od 1,3 do 5,7 m³ s pickupom na veľké balíky 120×120 cm.
-  profile-mixer: >-
-    Vertikálne kŕmne miešacie vozy s jednou alebo dvoma závitovkami a objemom
-    12–46 m³. Závitovka s ostrými nožmi pre rýchle spracovanie veľkých balíkov
-    a senáže. Verzia Plus pridáva programovateľné váženie, rozhranie ISOBUS
-    a režim eco-drive.
+  profile-mixer:
+    name: "Profile (kŕmne vozy)"
+    description: >-
+      Vertikálne kŕmne miešacie vozy s jednou alebo dvoma závitovkami a objemom
+      12–46 m³. Závitovka s ostrými nožmi pre rýchle spracovanie veľkých balíkov
+      a senáže. Verzia Plus pridáva programovateľné váženie, rozhranie ISOBUS
+      a režim eco-drive.
   spv: >-
     Samohybné miešacie vozy s integrovaným nakladacím frézovacím ramenom
     a objemom 12–27 m³. Hydrostatický pohon, kabína s 360° výhľadom

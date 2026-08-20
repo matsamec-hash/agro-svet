@@ -44,7 +44,7 @@ const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
 const family = series.family || seriesFamily(series.slug);
 const familyLab = familyLabel(family, locale);
 
-const yr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
+const yr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–${tr('cat.rada.dosud')}`) : '';
 const isCurrent = series.year_to === null && series.year_from !== null;
 const seriesNameClean = String(series.name).replace(/\s*\([^)]*\)\s*$/, '');
 
@@ -75,7 +75,7 @@ const siblings = (sameCategory?.series ?? [])
   .map((s) => {
     const sHpAll = (s.models ?? []).map((m) => m.power_hp).filter((x): x is number => x !== null);
     const sIsCurrent = (s.models ?? []).some((m) => m.year_to === null && m.year_from !== null);
-    const sYr = s.year_from ? (s.year_to ? `${s.year_from}–${s.year_to}` : `${s.year_from}–dosud`) : '';
+    const sYr = s.year_from ? (s.year_to ? `${s.year_from}–${s.year_to}` : `${s.year_from}–${tr('cat.rada.dosud')}`) : '';
     return {
       slug: s.slug,
       name: s.name.replace(/\s*\([^)]*\)\s*$/, ''),
@@ -208,7 +208,7 @@ const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
           <span class="mt-col-action"></span>
         </div>
         {sortedModels.map((m) => {
-          const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '—';
+          const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–${tr('cat.rada.dosud')}`) : '—';
           const mIsCurrent = m.year_to === null && m.year_from !== null;
           return (
             <a href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/${modelUrlPart(m.slug)}/`)} class="mt-row">

@@ -104,10 +104,10 @@ const priceFmt = (n: number) => n.toLocaleString(locale === 'sk' ? 'sk-SK' : 'cs
 const family = series.family || seriesFamily(series.slug);
 const familyLab = familyLabel(family, locale);
 
-const yr = model.year_from ? (model.year_to ? `${model.year_from}–${model.year_to}` : `${model.year_from}–dosud`) : '';
+const yr = model.year_from ? (model.year_to ? `${model.year_from}–${model.year_to}` : `${model.year_from}–${tr('cat.rada.dosud')}`) : '';
 const isCurrent = model.year_to === null && model.year_from !== null;
 const seriesNameClean = String(series.name).replace(/\s*\([^)]*\)\s*$/, '');
-const seriesYr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–dosud`) : '';
+const seriesYr = series.year_from ? (series.year_to ? `${series.year_from}–${series.year_to}` : `${series.year_from}–${tr('cat.rada.dosud')}`) : '';
 
 // Related models: same series first, then backfilled with same-brand + same-category
 // models from OTHER series — so even small series always surface ~6 internal model
@@ -529,7 +529,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             <div class="comp-grid">
               {competitors.map((c) => {
                 const cUrl = localizePath(locale, `/stroje/${c.brand_slug}/${c.series_slug}/${competitorUrlPart(c)}/`);
-                const cYr = c.year_from ? (c.year_to ? `${c.year_from}–${c.year_to}` : `${c.year_from}–dosud`) : '';
+                const cYr = c.year_from ? (c.year_to ? `${c.year_from}–${c.year_to}` : `${c.year_from}–${tr('cat.rada.dosud')}`) : '';
                 const cIsCurrent = c.year_to === null && c.year_from !== null;
                 // Compare with the source model — only meaningful when source has power data.
                 const compareCombo = model.power_hp !== null ? pairCombo(model.slug, c.slug) : null;
@@ -598,7 +598,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             </div>
             <div class="rel-grid">
               {related.map((m) => {
-                const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–dosud`) : '';
+                const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–${tr('cat.rada.dosud')}`) : '';
                 const mIsCurrent = m.year_to === null && m.year_from !== null;
                 return (
                   <a href={localizePath(locale, `/stroje/${brand.slug}/${m.series_slug}/${modelUrlPart(m.slug)}/`)} class="rel-card">

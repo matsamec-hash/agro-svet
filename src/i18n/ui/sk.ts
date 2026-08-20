@@ -56,6 +56,8 @@ const sk: Record<string, string> = {
 
   // — navigácia: Dáta —
   'nav.data.markets': 'Trhy a komodity',
+  'nav.data.sales': 'Predaje techniky',
+  'nav.data.stocks': 'Akcie agro firiem',
   'nav.data.historie': 'História poľnohospodárstva',
   'nav.data.soil': 'Poľnohospodárska pôda',
   'nav.data.calculators': 'Kalkulačky',
@@ -348,6 +350,7 @@ const sk: Record<string, string> = {
   'cat.b.ctaP': 'Filtrujte podľa série, výkonu a roku. Kontakt priamo na predajcu, bez provízie.',
   'cat.b.ctaOpen': 'Otvoriť bazár {brand}',
   'cat.b.ctaAddOwn': 'Pridať vlastný inzerát',
+  'cat.b.seriesListName': 'Modelové série {brand}',
   // klientský JS plural (séria/série/sérií)
   'cat.b.jsRowOne': 'séria',
   'cat.b.jsRowFew': 'série',

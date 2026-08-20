@@ -78,7 +78,6 @@ const cs: Record<string, string> = {
   'data.hub.sCountries': 'zemí světa',
   'data.hub.sYears': 'let historie',
   'data.hub.jump': 'Skočit na',
-  'data.hub.akcie': 'Akcie firem',
   'data.hub.c1': 'Živá data — Česko',
   'data.hub.c1sub': 'Aktuální čísla u nás',
   'data.hub.c2': 'Svět',
@@ -351,6 +350,7 @@ const cs: Record<string, string> = {
   'cat.b.ctaP': 'Filtrujte podle řady, výkonu a roku. Kontakt přímo na prodejce, bez provize.',
   'cat.b.ctaOpen': 'Otevřít bazar {brand}',
   'cat.b.ctaAddOwn': 'Přidat vlastní inzerát',
+  'cat.b.seriesListName': 'Modelové řady {brand}',
   // klientský JS plural (řada/řady/řad)
   'cat.b.jsRowOne': 'řada',
   'cat.b.jsRowFew': 'řady',
