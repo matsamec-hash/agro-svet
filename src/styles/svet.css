@@ -409,6 +409,35 @@
 .svet-cmp-table tbody a:hover { text-decoration-color: currentColor; }
 .svet-cmp-note { margin-top: 12px; color: #9aa0a6; font-size: .8rem; }
 
+/* ---------- TABULKA ZEMÍ (/svet/mapa/) ---------- */
+/* Odkaz na profil země šel dřív poznat jen tak, že do něj člověk trefil myší:
+   `text-decoration:none` + stejná barva i váha jako u zemí bez profilu, žádný
+   hover. Teď má klidové podtržení, hover barvu a zvýrazní se celý řádek. */
+.svet-ctable { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 640px; }
+.svet-ctable thead tr { border-bottom: 2px solid #e5e5e8; }
+.svet-ctable th { padding: 8px 10px; text-align: right; font-weight: 700; white-space: nowrap; }
+.svet-ctable th:first-child { text-align: left; }
+.svet-ctable th span { font-weight: 400; color: #888; font-size: 11px; }
+.svet-ctable td { padding: 8px 10px; text-align: right; font-variant-numeric: tabular-nums; }
+.svet-ctable td:first-child { text-align: left; white-space: nowrap; }
+.svet-ctable tbody tr { border-bottom: 1px solid #eee; }
+.svet-ctable tbody tr:hover { background: #fff; }
+.svet-ctable tbody a {
+  color: #1a1a1a;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(47, 107, 47, .38);
+  text-underline-offset: 3px;
+}
+.svet-ctable tbody a:hover,
+.svet-ctable tbody a:focus-visible {
+  color: var(--sv-green);
+  text-decoration-color: currentColor;
+}
+/* Země bez profilu (referenční ČR, Island…) — odlišené, ať je vidět, že tam
+   proklik není. Odkaz na neexistující stránku by byl 404. */
+.svet-ctable tbody .svet-ctable-plain { color: var(--sv-muted); font-weight: 600; }
+
 /* ---------- REGIONÁLNÍ MAPA (choropleth) ---------- */
 /* Layout: mapa vlevo (omezená na výšku viewportu), panel ovládání+info vpravo.
    Vše se vejde na jednu obrazovku a využije šířku; na mobilu se stackuje. */

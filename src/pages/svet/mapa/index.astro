@@ -62,20 +62,20 @@ const tableRows = Object.entries(tCountries)
     <section class="svet-section" style="margin-top:24px;">
       <header class="svet-section-head"><h2>{L.byCountry}</h2></header>
       <div style="overflow-x:auto; margin-top:8px;">
-        <table style="width:100%; border-collapse:collapse; font-size:14px; min-width:640px;">
+        <table class="svet-ctable">
           <thead>
-            <tr style="border-bottom:2px solid #e5e5e8; text-align:right;">
-              <th style="text-align:left; padding:8px 10px;">{L.country}</th>
-              {TCOLS.map((c) => (<th style="padding:8px 10px; font-weight:700; white-space:nowrap;">{c.label}<br /><span style="font-weight:400; color:#888; font-size:11px;">{c.unit}</span></th>))}
+            <tr>
+              <th>{L.country}</th>
+              {TCOLS.map((c) => (<th>{c.label}<br /><span>{c.unit}</span></th>))}
             </tr>
           </thead>
           <tbody>
             {tableRows.map((r) => (
-              <tr style="border-bottom:1px solid #eee;">
-                <td style="padding:8px 10px; white-space:nowrap;">{PAGE_SLUGS.has(r.slug)
-                  ? <a href={localizePath(locale, `/svet/${r.slug}/`)} style="color:#1a1a1a; text-decoration:none; font-weight:600;">{r.flag} {cName(r)}</a>
-                  : <span style="color:#1a1a1a; font-weight:600;">{r.flag} {cName(r)}</span>}</td>
-                {TCOLS.map((c) => (<td style="padding:8px 10px; text-align:right; font-variant-numeric:tabular-nums;">{fmt(r.values[c.key])}</td>))}
+              <tr>
+                <td>{PAGE_SLUGS.has(r.slug)
+                  ? <a href={localizePath(locale, `/svet/${r.slug}/`)}>{r.flag} {cName(r)}</a>
+                  : <span class="svet-ctable-plain">{r.flag} {cName(r)}</span>}</td>
+                {TCOLS.map((c) => (<td>{fmt(r.values[c.key])}</td>))}
               </tr>
             ))}
           </tbody>

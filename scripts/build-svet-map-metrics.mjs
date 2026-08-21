@@ -47,6 +47,11 @@ function loadCountry(slug) {
 // „1,81 mil. ks" místo ošklivého „1 813 1000 ks". Konzistentní s ag_land (mil. ha).
 const MILLIONS = { cattle_count: 'mil. ks', pigs_count: 'mil. ks', farm_count: 'mil. farem' };
 
+// Země, které jsou na mapě, ale nemají vlastní profil /svet/<slug>.json — jméno
+// ani vlajku není odkud vzít, takže v tabulce zůstával holý slug („island", bez
+// vlajky) mezi normálně pojmenovanými zeměmi.
+const FALLBACK = { IS: { nameCs: 'Island', flag: '\u{1F1EE}\u{1F1F8}' } };
+
 const engineMeta = {};
 const countries = {};
 for (const [code, [slug, region]] of Object.entries(COUNTRIES)) {
@@ -69,7 +74,8 @@ for (const [code, [slug, region]] of Object.entries(COUNTRIES)) {
     series[key] = ser;
     if (ind && !engineMeta[key]) engineMeta[key] = { label: ind.label, unit: MILLIONS[key] || ind.unit || ind.latest?.unit || '', source: ind.latest?.source || '', sourceUrl: ind.latest?.sourceUrl || '' };
   }
-  countries[code] = { slug, name: c?.nameCs || slug, flag: c?.flag || '', region, values, series };
+  const meta = c ?? FALLBACK[code];
+  countries[code] = { slug, name: meta?.nameCs || slug, flag: meta?.flag || '', region, values, series };
 }
 
 // CAP přímé platby (orientační průměr €/ha) = roční národní obálka ÷ zeměd. plocha.
