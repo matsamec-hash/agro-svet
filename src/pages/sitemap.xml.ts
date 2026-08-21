@@ -15,7 +15,7 @@ import { listPublishedForMaintenance } from '../lib/akce-supabase';
 import { AKCE_TYP_SLUGS } from '../lib/akce-constants';
 import { getKraje } from '../lib/lokality';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
-import { isSkLaunchedPath, isLaunchedPath } from '../i18n/utils';
+import { isSkLaunchedPath, isLaunchedPath, isPrerenderedOnlyPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 import { fetchTranslatedArticleIds } from '../lib/articles-i18n';
 import { dsDate, FALLBACK_LASTMOD } from '../lib/content-dates';
@@ -560,7 +560,7 @@ export const GET: APIRoute = async () => {
       if (isDeadArticleForLocale(p, 'sk')) return false;
       // Lock přebíjí launch: zamčené pod-cesty (/kalkulacka/dotace-cap) nezrcadlit
       // do /sk sitemapy — na produkci 307-ují na cs.
-      return isSkLaunchedPath(p) && !isLockedSectionPath(p);
+      return isSkLaunchedPath(p) && !isLockedSectionPath(p) && !isPrerenderedOnlyPath(p);
     })
     .map((u) => ({ ...u, loc: `${SITE_URL}/sk${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...skMirror);
@@ -585,7 +585,7 @@ export const GET: APIRoute = async () => {
       if (isHiddenCategoryPath(p, 'uk')) return false;
       if (isDeadArticleForLocale(p, 'uk')) return false;
       if (isUkMissingHowto(p)) return false; // chybějící uk návod → 404, nezrcadlit
-      return isLaunchedPath('uk', p) && !isLockedSectionPath(p);
+      return isLaunchedPath('uk', p) && !isLockedSectionPath(p) && !isPrerenderedOnlyPath(p);
     })
     .map((u) => ({ ...u, loc: `${SITE_URL}/uk${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...ukMirror);
@@ -606,14 +606,11 @@ export const GET: APIRoute = async () => {
       // cs-only. Bez téhle brány by pl sitemapa nabrala 2710 URL, které pod /pl
       // stejně skončí 302 na cs (stránka je prerendered, viz middleware).
       if (isOdrudaDetailPath(p)) return false;
-      // /data je pro pl launchnuté (hub + statistiky), ale /data/prodeje-techniky
-      // je prerendered cs-only stránka → pod /pl 302 na cs. Do pl sitemapy nepatří.
-      if (p.startsWith('/data/prodeje-techniky')) return false;
       // Kvízy „jaký traktor" a „jaká včela" nejsou pro pl lokalizované (cílí na
       // servisní síť a podmínky v ČR) → pod /pl by 302-ovaly na cs. Hub /kviz/
       // ale zůstává — ten lokalizovaný JE a vypisuje jen dostupné kvízy.
       if (p !== '/kviz/' && p.startsWith('/kviz/') && !p.startsWith('/kviz/historie-znacek')) return false;
-      return isLaunchedPath('pl', p) && !isLockedSectionPath(p);
+      return isLaunchedPath('pl', p) && !isLockedSectionPath(p) && !isPrerenderedOnlyPath(p);
     })
     .map((u) => ({ ...u, loc: `${SITE_URL}/pl${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...plMirror);

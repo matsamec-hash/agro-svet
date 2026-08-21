@@ -1,26 +1,43 @@
 ---
-export const prerender = true;
+// prerender=false (SSR): launchnuté ne-cs locale servíruje middleware rewrite,
+// který prerendered routy nepokrývá. Proto žádné getStaticPaths — ticker se
+// hledá z Astro.params a neznámý vrací 404.
+export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
-import { AKCIE, KATEGORIE_LABEL } from '../../../data/akcie-agro';
+import { AKCIE } from '../../../data/akcie-agro';
+import { akcieText } from '../../../data/akcie-agro-pl';
+import { akcieCopy } from '../../../i18n/akcie';
+import { localizeInternalHref } from '../../../i18n/utils';
 import { AKCIE_DB_ZNACKY, ZNACKA_LABEL, ZNACKA_LOGO, svetSlugProVlajku } from '../../../lib/agro-integrace';
 
-export async function getStaticPaths() {
-  return AKCIE.map((a) => ({ params: { ticker: a.ticker }, props: { a } }));
-}
+const raw = AKCIE.find((x) => x.ticker === Astro.params.ticker);
+if (!raw) return new Response('Not found', { status: 404 });
 
-const { a } = Astro.props as { a: (typeof AKCIE)[number] };
+const locale = Astro.locals.locale ?? 'cs';
+const c = akcieCopy(locale);
+// Kurátorské texty přes overlay — přímé raw.popis by do /pl vrátilo češtinu.
+const a = akcieText(raw, locale);
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
 const canonical = `${SITE_URL}/akcie/${a.ticker}/`;
+const href = (p: string) => localizeInternalHref(locale, p);
 
 const znacky = AKCIE_DB_ZNACKY[a.ticker] ?? [];
 const svetSlug = svetSlugProVlajku(a.zeme);
 const kratkyNazev = a.nazev.split(' (')[0];
+// „Zastoupení v ČR“ je informace o českém trhu — pod /pl by to byla rada mimo
+// zemi čtenáře (Polsko má vlastní distributory), tak se mimo cs neukazuje.
+const zastoupeni = locale === 'cs' ? a.czZastoupeni : undefined;
+
+const metaTitle = c.detailTitleTpl.replace('{name}', kratkyNazev).replace('{ticker}', a.ticker);
+const metaDescription = c.detailDescriptionTpl.replace('{name}', kratkyNazev).replace('{profil}', a.profil);
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Data', url: '/data/' },
-  { name: 'Akcie agro firem', url: `${SITE_URL}/akcie/` },
+  { name: c.crumbHome, url: '/' },
+  { name: c.crumbData, url: '/data/' },
+  { name: c.crumbSelf, url: `${SITE_URL}/akcie/` },
   { name: kratkyNazev, url: canonical },
 ]);
 
@@ -37,23 +54,23 @@ const orgJsonLd = {
 ---
 
 <Layout
-  title={`${kratkyNazev} (${a.ticker}) — akcie, kurz a profil firmy | agro-svět`}
-  description={`${kratkyNazev}: kurz akcie, tržní kapitalizace, sídlo, ředitel, obrat a co firma dělá v zemědělství. ${a.profil}`}
-  canonical={canonical}
+  title={metaTitle}
+  description={metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
 
-  <main class="ad" data-ticker={a.ticker} data-mena={a.mena}>
+  <main class="ad" data-ticker={a.ticker} data-mena={a.mena} data-numlocale={c.numberLocale} data-bln={c.bln} data-chartaria={c.chartAria} data-periodsuffix={c.chartPeriodSuffix}>
     <section class="ad-hero">
       <div class="ad-lines"></div>
       <div class="ad-wrap ad-hero-in">
-        <nav class="ad-bc" aria-label="Cesta">
-          <a href="/">Domů</a><span>›</span><a href="/data/">Data</a><span>›</span><a href="/akcie/">Akcie</a><span>›</span><span class="cur">{kratkyNazev}</span>
+        <nav class="ad-bc" aria-label={c.crumbAria}>
+          <a href={href('/')}>{c.crumbHome}</a><span>›</span><a href={href('/data/')}>{c.crumbData}</a><span>›</span><a href={href('/akcie/')}>{c.crumbAkcie}</a><span>›</span><span class="cur">{kratkyNazev}</span>
         </nav>
         <div class="ad-head">
           <div>
-            <span class="ad-cat">{a.zeme} {KATEGORIE_LABEL[a.kategorie]}</span>
+            <span class="ad-cat">{a.zeme} {c.kategorie[a.kategorie]}</span>
             <h1>{kratkyNazev}</h1>
             <div class="ad-sub"><span class="ad-ticker">{a.ticker}</span> <span class="ad-burza">{a.burza} · {a.mena}</span></div>
           </div>
@@ -68,20 +85,20 @@ const orgJsonLd = {
     <div class="ad-body"><div class="ad-wrap">
 
       <div class="ad-disclaimer">
-        <strong>⚠️ Není investiční doporučení.</strong> Informační profil firmy. Kurz a ukazatele jsou orientační a zpožděné (fundamenty Finnhub, graf kurzu Yahoo Finance). Investice do akcií jsou rizikové.
+        <strong>{c.detailDisclaimerStrong}</strong> {c.detailDisclaimerText}
       </div>
 
       <!-- FUNDAMENT -->
       <section class="ad-block">
-        <h2>Klíčové ukazatele</h2>
+        <h2>{c.metricsTitle}</h2>
         <div class="ad-metrics" id="adMetrics">
-          <div class="ad-metric"><span class="l">Tržní kapitalizace</span><b id="mCap">—</b></div>
-          <div class="ad-metric"><span class="l">P/E (TTM)</span><b id="mPe">—</b></div>
-          <div class="ad-metric"><span class="l">Dividendový výnos</span><b id="mDiv">—</b></div>
-          <div class="ad-metric"><span class="l">Odvětví</span><b id="mInd">—</b></div>
+          <div class="ad-metric"><span class="l">{c.mCap}</span><b id="mCap">—</b></div>
+          <div class="ad-metric"><span class="l">{c.mPe}</span><b id="mPe">—</b></div>
+          <div class="ad-metric"><span class="l">{c.mDiv}</span><b id="mDiv">—</b></div>
+          <div class="ad-metric"><span class="l">{c.mInd}</span><b id="mInd">—</b></div>
         </div>
         <div class="ad-range" id="adRange" hidden>
-          <div class="ad-range-head"><span>52týdenní rozpětí</span><span id="rVals"></span></div>
+          <div class="ad-range-head"><span>{c.range52}</span><span id="rVals"></span></div>
           <div class="ad-range-bar"><span class="ad-range-fill" id="rFill"></span><span class="ad-range-dot" id="rDot"></span></div>
         </div>
       </section>
@@ -89,8 +106,8 @@ const orgJsonLd = {
       <!-- GRAF KURZU -->
       <section class="ad-block ad-chart-block" id="adChartBlock" hidden>
         <div class="ad-chart-head">
-          <h2>Vývoj kurzu</h2>
-          <div class="ad-chart-ranges" id="adChartRanges" role="group" aria-label="Období grafu">
+          <h2>{c.chartTitle}</h2>
+          <div class="ad-chart-ranges" id="adChartRanges" role="group" aria-label={c.chartRangesAria}>
             <button type="button" data-r="21">1M</button>
             <button type="button" data-r="126">6M</button>
             <button type="button" data-r="0" class="active">1R</button>
@@ -100,21 +117,21 @@ const orgJsonLd = {
           <span class="ad-chart-cross" id="adCross"></span>
           <span class="ad-chart-dot" id="adDot"></span>
           <div class="ad-chart-tip" id="adChartTip" hidden></div>
-          <span class="ad-chart-empty" id="adChartEmpty">Načítám graf…</span>
+          <span class="ad-chart-empty" id="adChartEmpty">{c.chartLoading}</span>
         </div>
-        <div class="ad-chart-foot"><span id="adChartMeta"></span><span>Zdroj: Yahoo Finance · zpožděno</span></div>
+        <div class="ad-chart-foot"><span id="adChartMeta"></span><span>{c.chartSource}</span></div>
       </section>
 
       <!-- PROFIL -->
       {a.popis && (
         <section class="ad-block">
-          <h2>Co firma dělá</h2>
+          <h2>{c.profileTitle}</h2>
           <p class="ad-text">{a.popis}</p>
           <div class="ad-facts">
-            {a.sidlo && <div class="ad-fact"><span class="l">Centrála</span><b>{a.sidlo}</b></div>}
-            {a.zalozeno && <div class="ad-fact"><span class="l">Založeno</span><b>{a.zalozeno}</b></div>}
-            {a.reditel && <div class="ad-fact"><span class="l">Ředitel (CEO)</span><b>{a.reditel}</b></div>}
-            {a.obrat && <div class="ad-fact"><span class="l">Roční obrat</span><b>{a.obrat}</b></div>}
+            {a.sidlo && <div class="ad-fact"><span class="l">{c.factHq}</span><b>{a.sidlo}</b></div>}
+            {a.zalozeno && <div class="ad-fact"><span class="l">{c.factFounded}</span><b>{a.zalozeno}</b></div>}
+            {a.reditel && <div class="ad-fact"><span class="l">{c.factCeo}</span><b>{a.reditel}</b></div>}
+            {a.obrat && <div class="ad-fact"><span class="l">{c.factRevenue}</span><b>{a.obrat}</b></div>}
           </div>
         </section>
       )}
@@ -122,15 +139,15 @@ const orgJsonLd = {
       <!-- NAŠE PRODUKTY -->
       {znacky.length > 0 && (
         <section class="ad-block">
-          <h2>{znacky.length > 1 ? 'Značky této firmy u nás' : 'Modely této značky u nás'}</h2>
-          <p class="ad-text">Prohlédněte si katalog strojů a profil značky přímo na agro-svět:</p>
+          <h2>{znacky.length > 1 ? c.brandsTitleMulti : c.brandsTitleSingle}</h2>
+          <p class="ad-text">{c.brandsLede}</p>
           <div class="ad-brands">
             {znacky.map((z) => (
               <div class="ad-brandrow">
-                {ZNACKA_LOGO[z] && <img class="ad-brandlogo" src={ZNACKA_LOGO[z]} alt={`Logo ${ZNACKA_LABEL[z] ?? z}`} loading="lazy" decoding="async" />}
+                {ZNACKA_LOGO[z] && <img class="ad-brandlogo" src={ZNACKA_LOGO[z]} alt={`${c.logoAlt} ${ZNACKA_LABEL[z] ?? z}`} loading="lazy" decoding="async" />}
                 <span class="ad-brandname">{ZNACKA_LABEL[z] ?? z}</span>
-                <a href={`/stroje/${z}/`}>Modely →</a>
-                <a href={`/znacky/${z}/`}>Profil značky →</a>
+                <a href={href(`/stroje/${z}/`)}>{c.brandsModels}</a>
+                <a href={href(`/znacky/${z}/`)}>{c.brandsProfile}</a>
               </div>
             ))}
           </div>
@@ -140,7 +157,7 @@ const orgJsonLd = {
       <!-- ÚSPĚCHY -->
       {a.uspechy && a.uspechy.length > 0 && (
         <section class="ad-block">
-          <h2>Největší úspěchy a milníky</h2>
+          <h2>{c.achievementsTitle}</h2>
           <ul class="ad-list">
             {a.uspechy.map((u) => <li>{u}</li>)}
           </ul>
@@ -148,24 +165,24 @@ const orgJsonLd = {
       )}
 
       <!-- ZASTOUPENÍ V ČR -->
-      {a.czZastoupeni && a.czZastoupeni.length > 0 && (
+      {zastoupeni && zastoupeni.length > 0 && (
         <section class="ad-block">
           <h2>Zastoupení v Česku</h2>
           <p class="ad-text">Prodej a servis v ČR zajišťuje:</p>
           <ul class="ad-list">
-            {a.czZastoupeni.map((d) => <li><a href={d.url} target="_blank" rel="nofollow noopener">{d.name}</a></li>)}
+            {zastoupeni.map((d) => <li><a href={d.url} target="_blank" rel="nofollow noopener">{d.name}</a></li>)}
           </ul>
         </section>
       )}
 
       <!-- ODKAZY -->
       <section class="ad-block ad-links">
-        <h2>Odkazy</h2>
+        <h2>{c.linksTitle}</h2>
         <p class="ad-cross">
-          → <a href={a.web} target="_blank" rel="nofollow noopener">Oficiální web firmy</a><br>
-          {svetSlug && <>→ <a href={`/svet/${svetSlug}/`}>Zemědělství — profil země, kde firma sídlí</a><br /></>}
-          → <a href="/akcie/">Všechny akcie zemědělských firem</a><br>
-          → <a href="/data/prodeje-techniky/">Prodeje zemědělské techniky v Evropě</a>
+          → <a href={a.web} target="_blank" rel="nofollow noopener">{c.linkWeb}</a><br>
+          {svetSlug && <>→ <a href={href(`/svet/${svetSlug}/`)}>{c.linkCountry}</a><br /></>}
+          → <a href={href('/akcie/')}>{c.linkAll}</a><br>
+          → <a href={href('/data/prodeje-techniky/')}>{c.linkSales}</a>
         </p>
       </section>
 
@@ -178,7 +195,11 @@ const orgJsonLd = {
       if (!root) return;
       var t = root.getAttribute('data-ticker');
       var mena = root.getAttribute('data-mena') || 'USD';
-      function fmt(n, d) { return Number(n).toLocaleString('cs-CZ', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+      var NUM = root.getAttribute('data-numlocale') || 'cs-CZ';
+      var BLN = root.getAttribute('data-bln') || 'mld.';
+      var CHART_ARIA = root.getAttribute('data-chartaria') || '';
+      var PERIOD_SUFFIX = root.getAttribute('data-periodsuffix') || '';
+      function fmt(n, d) { return Number(n).toLocaleString(NUM, { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
       fetch('/api/akcie/' + encodeURIComponent(t) + '.json/', { headers: { accept: 'application/json' } })
         .then(function (r) { return r.json(); })
         .then(function (res) {
@@ -193,7 +214,7 @@ const orgJsonLd = {
             }
           }
           var p = res.profil || {}, m = res.metriky || {};
-          if (p.marketCap) document.getElementById('mCap').textContent = '≈ ' + fmt(p.marketCap / 1000, 1) + ' mld. ' + (p.mena || 'USD');
+          if (p.marketCap) document.getElementById('mCap').textContent = '≈ ' + fmt(p.marketCap / 1000, 1) + ' ' + BLN + ' ' + (p.mena || 'USD');
           if (m.pe) document.getElementById('mPe').textContent = fmt(m.pe, 1);
           if (m.dividendYield) document.getElementById('mDiv').textContent = fmt(m.dividendYield, 2) + ' %';
           if (p.odvetvi) document.getElementById('mInd').textContent = p.odvetvi;
@@ -240,14 +261,14 @@ const orgJsonLd = {
           var fill = up ? 'rgba(46,158,87,.10)' : 'rgba(192,57,43,.10)';
           var old = chartEl.querySelector('svg'); if (old) old.remove();
           chartEl.insertAdjacentHTML('afterbegin',
-            '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Graf vývoje kurzu" style="display:block;width:100%;height:100%">' +
+            '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="' + CHART_ARIA + '" style="display:block;width:100%;height:100%">' +
             '<path d="' + area + '" fill="' + fill + '"/>' +
             '<path d="' + line + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>');
           if (empty) empty.hidden = true;
           dot.style.background = stroke;
           st = { t: t, c: c, X: X, Y: Y };
           var chg = ((c[c.length - 1] - c[0]) / c[0]) * 100;
-          if (meta) meta.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(1) + ' % za období';
+          if (meta) meta.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(1) + PERIOD_SUFFIX;
         }
 
         function move(ev) {
@@ -261,7 +282,7 @@ const orgJsonLd = {
           cross.style.left = pxX + 'px'; cross.style.opacity = '1';
           dot.style.left = pxX + 'px'; dot.style.top = pxY + 'px'; dot.style.opacity = '1';
           var d = new Date(st.t[idx] * 1000);
-          var ds = d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'short', year: 'numeric' });
+          var ds = d.toLocaleDateString(NUM, { day: 'numeric', month: 'short', year: 'numeric' });
           tip.innerHTML = '<b>' + fmt(st.c[idx], 2) + ' ' + mena + '</b><span>' + ds + '</span>';
           tip.hidden = false;
           var tw = tip.offsetWidth;

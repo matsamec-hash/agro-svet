@@ -20,13 +20,21 @@ import { readFileSync } from 'node:fs';
 
 const BASE = process.env.LINK_BASE || 'https://www.agro-svet.cz';
 
+const UTILS_SRC = readFileSync(new URL('../src/i18n/utils.ts', import.meta.url), 'utf8');
+
 /** Čte LAUNCHED_PREFIXES přímo ze zdroje, ať se seznam nemůže rozejít. */
 function launchedPrefixes(locale) {
-  const src = readFileSync(new URL('../src/i18n/utils.ts', import.meta.url), 'utf8');
-  const block = src.match(/export const LAUNCHED_PREFIXES[\s\S]*?\n};/)[0];
+  const block = UTILS_SRC.match(/export const LAUNCHED_PREFIXES[\s\S]*?\n};/)[0];
   const line = block.match(new RegExp(`\\n\\s{2}${locale}:\\s*\\[([\\s\\S]*?)\\],`));
   if (!line) throw new Error(`LAUNCHED_PREFIXES.${locale} nenalezeno`);
   return [...line[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+}
+
+/** Cesty, které jsou uvnitř launchnuté sekce, ale prerendered cs-only → SPRÁVNĚ
+ *  nemají prefix. Bez tohohle je hlásí jako „BEZ-PREFIXU" napořád. */
+function prerenderedOnlyPaths() {
+  const block = UTILS_SRC.match(/export const PRERENDERED_ONLY_PATHS[^;]*;/);
+  return block ? [...block[0].matchAll(/'([^']+)'/g)].map((m) => m[1]) : [];
 }
 
 const [locale, ...urls] = process.argv.slice(2);
@@ -35,7 +43,9 @@ if (!locale || !urls.length) {
   process.exit(1);
 }
 const LAUNCHED = launchedPrefixes(locale);
-const isLaunched = (p) => p === '/' || LAUNCHED.some((l) => l !== '/' && (p === l || p.startsWith(`${l}/`)));
+const PRERENDERED_ONLY = prerenderedOnlyPaths();
+const isPrerenderedOnly = (p) => PRERENDERED_ONLY.some((l) => p === l || p === `${l}/` || p.startsWith(`${l}/`));
+const isLaunched = (p) => !isPrerenderedOnly(p) && (p === '/' || LAUNCHED.some((l) => l !== '/' && (p === l || p.startsWith(`${l}/`))));
 
 const bad = new Map();
 const add = (key, src) => {

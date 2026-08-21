@@ -74,7 +74,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // zůstává cs-only: je to úřední popis ÚKZÚZ k odrůdě registrované v ČR,
   // Polsko má vlastní registr (COBORU). Pillar proto pod ne-cs odrůdy nelinkuje
   // a sitemapa detaily do pl mirroru nepouští (isOdrudaDetailPath).
-  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky', '/kviz', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/sezona', '/hledat'],
+  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky', '/kviz', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/sezona', '/hledat', '/akcie'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
@@ -88,10 +88,22 @@ export function isSkLaunchedPath(csRootPath: string): boolean {
   return isLaunchedPath('sk', csRootPath);
 }
 
-/** Cesty uvnitř launchnutých sekcí, které ALE pod /sk 404-ují (jsou prerendered,
- *  nemají SSR routu pokrytou middleware-rewritem). V navigaci je drž na cs, ať
- *  /sk odkaz nevede na 404. Ověřeno živě. (Hub /stroje/ SSR funguje, kategorie ne.) */
-const SK_PRERENDERED_NAV_PATHS: string[] = [];
+/** Cesty uvnitř launchnutých sekcí, které ALE pod locale prefixem NEfungují:
+ *  jsou `prerender = true`, takže je middleware rewrite nepokryje a /sk|/uk|/pl
+ *  varianta 302-uje zpátky na cs.
+ *
+ *  Musí se držet na cs ve VŠECH třech místech, jinak vzniká tichý rozpad:
+ *  odkaz (localizeInternalHref), přepínač jazyka (langSwitchHref) a sitemapa.
+ *  `/data/prodeje-techniky` sem patří od 2026-08-21 — `/data` je launchnuté pro
+ *  sk i pl, takže hub /pl/data/ na tu stránku linkoval přes /pl/ (302) a sk
+ *  varianta se dokonce dostala do sitemapy. pl to obcházelo hackem přímo
+ *  v sitemap.xml.ts; sk a uk ne. */
+export const PRERENDERED_ONLY_PATHS: string[] = ['/data/prodeje-techniky'];
+
+/** True, pokud je cesta (nebo její podstrom) prerendered cs-only. */
+export function isPrerenderedOnlyPath(csRootPath: string): boolean {
+  return PRERENDERED_ONLY_PATHS.some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
+}
 
 /** Lokalizuje interní href pro daný locale POUZE u launchnutých (reálně
  *  renderovaných) sekcí; jinak vrací cs href beze změny. Pro cs no-op.
@@ -100,7 +112,7 @@ export function localizeInternalHref(locale: Locale, href: string): string {
   if (locale === defaultLocale) return href;
   const root = href.replace(/\/+$/, '') || '/';
   if (root === '/') return localizePath(locale, href);
-  if (isLaunchedPath(locale, root) && !SK_PRERENDERED_NAV_PATHS.includes(root)) return localizePath(locale, href);
+  if (isLaunchedPath(locale, root) && !isPrerenderedOnlyPath(root)) return localizePath(locale, href);
   return href;
 }
 
@@ -117,7 +129,7 @@ export function langSwitchHref(target: Locale, path: string, hiddenNewsCats: str
   const catMatch = path.match(/^\/novinky\/kategorie\/([^/]+)\/?$/);
   if (catMatch && hiddenNewsCats.includes(catMatch[1])) return localizePath(target, '/novinky/');
   const root = path.replace(/\/+$/, '') || '/';
-  if (root !== '/' && (!isLaunchedPath(target, root) || SK_PRERENDERED_NAV_PATHS.includes(root))) {
+  if (root !== '/' && (!isLaunchedPath(target, root) || isPrerenderedOnlyPath(root))) {
     return localizePath(target, '/');
   }
   return localizePath(target, path);

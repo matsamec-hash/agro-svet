@@ -27,11 +27,8 @@ export interface AgroAkcie {
   czZastoupeni?: CzZastoupeni[]; // zastoupení / distributor v ČR (jen ověřené)
 }
 
-export const KATEGORIE_LABEL: Record<AgroAkcie['kategorie'], string> = {
-  technika: 'Zemědělská technika',
-  agrochemie: 'Agrochemie, osiva a hnojiva',
-  komodity: 'Komodity a zpracování',
-};
+// Popisky kategorií žijí v src/i18n/akcie.ts (jsou lokalizované) — tady by
+// vznikl druhý zdroj pravdy.
 
 export const AKCIE: AgroAkcie[] = [
   // ── Technika ──

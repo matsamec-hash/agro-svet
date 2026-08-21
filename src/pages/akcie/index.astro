@@ -1,55 +1,67 @@
 ---
-export const prerender = true;
+// prerender=false (SSR): launchnuté ne-cs locale servíruje middleware rewrite,
+// který prerendered routy nepokrývá (→ „unable to find a component instance“
+// a 302 zpět na cs). Locale bereme JEN z Astro.locals.locale — po rewritu je
+// Astro.url česká cesta.
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
-import { AKCIE, KATEGORIE_LABEL } from '../../data/akcie-agro';
+import { AKCIE } from '../../data/akcie-agro';
+import { akcieText } from '../../data/akcie-agro-pl';
+import { akcieCopy } from '../../i18n/akcie';
+import { localizeInternalHref } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? 'cs';
+const c = akcieCopy(locale);
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
 const canonical = `${SITE_URL}/akcie/`;
+const href = (p: string) => localizeInternalHref(locale, p);
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: 'Domů', url: '/' },
-  { name: 'Data', url: '/data/' },
-  { name: 'Akcie agro firem', url: canonical },
+  { name: c.crumbHome, url: '/' },
+  { name: c.crumbData, url: '/data/' },
+  { name: c.crumbSelf, url: canonical },
 ]);
 
 const kategorie = ['technika', 'agrochemie', 'komodity'] as const;
-const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie === k);
+// Texty přes akcieText() — přímé a.profil by do /pl vrátilo češtinu.
+const byKat = (k: (typeof kategorie)[number]) =>
+  AKCIE.filter((a) => a.kategorie === k).map((a) => akcieText(a, locale));
 ---
 
 <Layout
-  title="Akcie zemědělských firem — John Deere, Bayer, AGCO a další | agro-svět"
-  description="Přehled akcií firem navázaných na zemědělství — technika (John Deere, AGCO, CNH), agrochemie a osiva (Bayer, BASF, Corteva) i komodity. Profily a burzovní symboly. Není investiční doporučení."
-  canonical={canonical}
+  title={c.metaTitle}
+  description={c.metaDescription}
+  canonical={locale === 'cs' ? canonical : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
 
-  <main class="ak">
+  <main class="ak" data-numlocale={c.numberLocale}>
     <section class="ak-hero">
       <div class="ak-lines"></div>
       <div class="ak-wrap ak-hero-in">
-        <nav class="ak-bc" aria-label="Cesta">
-          <a href="/">Domů</a><span>›</span><a href="/data/">Data</a><span>›</span><span class="cur">Akcie agro firem</span>
+        <nav class="ak-bc" aria-label={c.crumbAria}>
+          <a href={href('/')}>{c.crumbHome}</a><span>›</span><a href={href('/data/')}>{c.crumbData}</a><span>›</span><span class="cur">{c.crumbSelf}</span>
         </nav>
-        <span class="ak-eyebrow"><span class="ln"></span>Datová sekce · Trhy</span>
-        <h1>Akcie zemědělských firem <mark>na burze</mark></h1>
-        <p class="ak-lede">
-          Kdo stojí za technikou, osivy a hnojivy na vašich polích — a jak si vedou na burze. Přehled veřejně obchodovaných firem z agrosektoru: výrobci strojů, agrochemie i zpracovatelé komodit, z USA i Evropy.
-        </p>
+        <span class="ak-eyebrow"><span class="ln"></span>{c.eyebrow}</span>
+        <h1>{c.h1} <mark>{c.h1mark}</mark></h1>
+        <p class="ak-lede">{c.lede}</p>
       </div>
     </section>
 
     <div class="ak-body"><div class="ak-wrap">
 
       <div class="ak-disclaimer">
-        <strong>⚠️ Není investiční doporučení.</strong> Tato stránka je informační přehled firem navázaných na zemědělství. Neobsahuje nákupní ani prodejní doporučení. Investice do akcií jsou rizikové; před rozhodnutím se poraďte s licencovaným poradcem. Případné kurzy jsou orientační a zpožděné.
+        <strong>{c.disclaimerStrong}</strong> {c.disclaimerText}
       </div>
 
       {kategorie.map((k) => (
         <section class="ak-kat">
-          <h2>{KATEGORIE_LABEL[k]}</h2>
+          <h2>{c.kategorie[k]}</h2>
           <div class="ak-grid">
             {byKat(k).map((a) => (
-              <a class="ak-card" href={`/akcie/${a.ticker}/`}>
+              <a class="ak-card" href={href(`/akcie/${a.ticker}/`)}>
                 <div class="ak-card-top">
                   <span class="ak-flag">{a.zeme}</span>
                   <span class="ak-ticker">{a.ticker}</span>
@@ -68,12 +80,12 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
       ))}
 
       <section class="ak-note-block">
-        <p class="ak-soon">📈 <strong>Živé denní kurzy</strong> a 3měsíční trendy u každé firmy; klikněte na kartu pro <strong>interaktivní graf</strong> vývoje kurzu a klíčové ukazatele.</p>
+        <p class="ak-soon" set:html={c.hubNote} />
         <p class="ak-cross">
-          → <a href="/data/prodeje-techniky/">Prodeje zemědělské techniky</a> — kolik strojů se prodá po zemích<br>
-          → <a href="/svet/">Profily zemí</a> — zemědělství jednotlivých trhů<br>
-          → <a href="/statistiky/">Ceny zemědělských komodit</a> (pšenice, kukuřice, řepka…)<br>
-          → <a href="/data/">Datová sekce agro-svět</a>
+          → <a href={href('/data/prodeje-techniky/')}>{c.hubCrossSales}</a> — {c.hubCrossSalesNote}<br>
+          → <a href={href('/svet/')}>{c.hubCrossCountries}</a> — {c.hubCrossCountriesNote}<br>
+          → <a href={href('/statistiky/')}>{c.hubCrossPrices}</a><br>
+          → <a href={href('/data/')}>{c.hubCrossData}</a>
         </p>
       </section>
 
@@ -82,6 +94,8 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
 
   <script is:inline>
     (function () {
+      var root = document.querySelector('.ak[data-numlocale]');
+      var NUM = (root && root.getAttribute('data-numlocale')) || 'cs-CZ';
       fetch('/api/akcie/kurzy.json', { headers: { accept: 'application/json' } })
         .then(function (r) { return r.json(); })
         .then(function (res) {
@@ -90,7 +104,7 @@ const byKat = (k: (typeof kategorie)[number]) => AKCIE.filter((a) => a.kategorie
             var t = el.getAttribute('data-ticker');
             var k = res.kurzy[t];
             if (!k || typeof k.cena !== 'number') return;
-            var cena = k.cena.toLocaleString('cs-CZ', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            var cena = k.cena.toLocaleString(NUM, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var dp = k.zmenaPct;
             var chg = '';
             if (typeof dp === 'number') {

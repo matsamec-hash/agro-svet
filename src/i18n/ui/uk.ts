@@ -72,7 +72,7 @@ const uk: Record<string, string> = {
   // — navigace: Svět (cs-only sekce: профілі країн + порівняння) —
   'nav.svet.profiles': 'Профілі країн',
   'nav.svet.compare': 'Порівняння країн',
-  'nav.svet.map': 'Mapa Evropy',
+  'nav.svet.map': 'Карта Європи',
 
   // Data hub (/data/) — чеські дані (ЧСУ)
   'data.hub.eyebrow': 'Розділ даних · наживо',

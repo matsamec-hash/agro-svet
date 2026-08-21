@@ -1,6 +1,6 @@
 // src/i18n/nav.ts
 import type { Locale } from './config';
-import { t, isLaunchedPath } from './utils';
+import { t, isLaunchedPath, isPrerenderedOnlyPath } from './utils';
 
 export type NavLink = { label: string; href: string };
 export type NavItem = NavLink & { section: string; children?: NavLink[] };
@@ -164,6 +164,10 @@ export function getNav(locale: Locale): NavItem[] {
           // Data sekce (jurisdikční huby) u non-cs: ukaž jen launchnuté děti, ať
           // header nedead-linkuje na cs-fallback. cs = beze změny.
           .filter((c) => !(filterLocked && item.section === 'data') || isLaunchedPath(locale, norm(c.href)))
+          // …a stejně tak děti, které sice launchnuté jsou, ale jsou prerendered
+          // cs-only (/data/prodeje-techniky) → pod locale prefixem 302. Bez toho
+          // header nabízí českou stránku v polském/slovenském menu.
+          .filter((c) => !filterLocked || !isPrerenderedOnlyPath(norm(c.href)))
           // uk+pl: stejný launched-filtr na VŠECHNY viditelné sekce (tj. `tech`), ať
           // dropdown nedead-linkuje na cs (žebříčky/kvíz/prodejci nejsou launchnuté).
           // Scope-nuté na uk+pl → sk nav beze změny (sk si cs-fallback děti ponechává).
