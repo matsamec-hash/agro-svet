@@ -35,6 +35,7 @@ export const COUNTRIES = [
   { slug: 'kypr',        geo: 'CY', wb: 'CY', nameCs: 'Kypr',        flag: '🇨🇾' },
   { slug: 'malta',       geo: 'MT', wb: 'MT', nameCs: 'Malta',       flag: '🇲🇹' },
   // — EFTA + další Evropa —
+  { slug: 'island',      geo: 'IS', wb: 'IS', nameCs: 'Island',      flag: '🇮🇸' },
   { slug: 'svycarsko',   geo: 'CH', wb: 'CH', nameCs: 'Švýcarsko',   flag: '🇨🇭' },
   { slug: 'norsko',      geo: 'NO', wb: 'NO', nameCs: 'Norsko',      flag: '🇳🇴' },
   { slug: 'ukrajina',    geo: 'UA', wb: 'UA', nameCs: 'Ukrajina',    flag: '🇺🇦' },

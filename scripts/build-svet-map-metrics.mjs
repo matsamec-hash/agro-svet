@@ -47,12 +47,19 @@ function loadCountry(slug) {
 // „1,81 mil. ks" místo ošklivého „1 813 1000 ks". Konzistentní s ag_land (mil. ha).
 const MILLIONS = { cattle_count: 'mil. ks', pigs_count: 'mil. ks', farm_count: 'mil. farem' };
 
-// Země, které jsou na mapě, ale nemají vlastní profil /svet/<slug>.json — jméno
-// ani vlajku není odkud vzít, takže v tabulce zůstával holý slug („island", bez
-// vlajky) mezi normálně pojmenovanými zeměmi.
-const FALLBACK = { IS: { nameCs: 'Island', flag: '\u{1F1EE}\u{1F1F8}' } };
-
 const engineMeta = {};
+
+// Popisky, jednotky a odkazy „zdrojová data" ber z referenční země (ČR), ne
+// z „první země, která ten indikátor má". To bylo pořadí objektu COUNTRIES,
+// takže přidání jedné země (Island) přepsalo zdrojové odkazy u celé mapy z
+// Norska na Island. Fallback v cyklu níž zůstává pro klíče, které ČR nemá.
+const REF = loadCountry('cesko');
+for (const { key } of ENGINE_METRICS) {
+  const ind = REF?.indicators?.[key];
+  if (!ind) continue;
+  engineMeta[key] = { label: ind.label, unit: MILLIONS[key] || ind.unit || ind.latest?.unit || '', source: ind.latest?.source || '', sourceUrl: ind.latest?.sourceUrl || '' };
+}
+
 const countries = {};
 for (const [code, [slug, region]] of Object.entries(COUNTRIES)) {
   const c = loadCountry(slug);
@@ -74,8 +81,10 @@ for (const [code, [slug, region]] of Object.entries(COUNTRIES)) {
     series[key] = ser;
     if (ind && !engineMeta[key]) engineMeta[key] = { label: ind.label, unit: MILLIONS[key] || ind.unit || ind.latest?.unit || '', source: ind.latest?.source || '', sourceUrl: ind.latest?.sourceUrl || '' };
   }
-  const meta = c ?? FALLBACK[code];
-  countries[code] = { slug, name: meta?.nameCs || slug, flag: meta?.flag || '', region, values, series };
+  // Bez profilu není odkud vzít jméno ani vlajku a v tabulce by zůstal holý slug
+  // („island", bez vlajky) mezi normálně pojmenovanými zeměmi. Radši hlasitě.
+  if (!c) console.warn(`\u26A0 ${slug}: chybí src/data/svet/${slug}.json — doplň zemi do scripts/lib/svet/countries.mjs a spusť \`node scripts/build-svet.mjs ${slug}\``);
+  countries[code] = { slug, name: c?.nameCs || slug, flag: c?.flag || '', region, values, series };
 }
 
 // CAP přímé platby (orientační průměr €/ha) = roční národní obálka ÷ zeměd. plocha.

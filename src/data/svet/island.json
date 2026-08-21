@@ -1,0 +1,1193 @@
+{
+  "slug": "island",
+  "geo": "IS",
+  "nameCs": "Island",
+  "flag": "🇮🇸",
+  "generated": "2026-08-21",
+  "indicators": {
+    "wheat_yield": {
+      "key": "wheat_yield",
+      "label": "Výnos pšenice",
+      "pkg": "produkce",
+      "unit": "t/ha",
+      "latest": {
+        "value": 3.29,
+        "unit": "t/ha",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=C1100&strucpro=YLD_HUMD_EU_T_HA&geo=IS",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2022",
+          "value": 3.29
+        },
+        {
+          "period": "2024",
+          "value": 1.98
+        },
+        {
+          "period": "2025",
+          "value": 3.29
+        }
+      ]
+    },
+    "barley_yield": {
+      "key": "barley_yield",
+      "label": "Výnos ječmene",
+      "pkg": "produkce",
+      "unit": "t/ha",
+      "latest": {
+        "value": 3.91,
+        "unit": "t/ha",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=C1300&strucpro=YLD_HUMD_EU_T_HA&geo=IS",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2018",
+          "value": 2.72
+        },
+        {
+          "period": "2020",
+          "value": 2.77
+        },
+        {
+          "period": "2022",
+          "value": 2.94
+        },
+        {
+          "period": "2023",
+          "value": 2.57
+        },
+        {
+          "period": "2024",
+          "value": 1.94
+        },
+        {
+          "period": "2025",
+          "value": 3.91
+        }
+      ]
+    },
+    "rapeseed_yield": {
+      "key": "rapeseed_yield",
+      "label": "Výnos řepky",
+      "pkg": "produkce",
+      "unit": "t/ha",
+      "latest": {
+        "value": 1.87,
+        "unit": "t/ha",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cpsh1?format=JSON&freq=A&crops=I1110&strucpro=YLD_HUMD_EU_T_HA&geo=IS",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2022",
+          "value": 0.93
+        },
+        {
+          "period": "2023",
+          "value": 0.47
+        },
+        {
+          "period": "2024",
+          "value": 0.37
+        },
+        {
+          "period": "2025",
+          "value": 1.87
+        }
+      ]
+    },
+    "cattle_count": {
+      "key": "cattle_count",
+      "label": "Stavy skotu",
+      "pkg": "produkce",
+      "unit": "1000 ks",
+      "latest": {
+        "value": 77,
+        "unit": "1000 ks",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_mt_lscatl?format=JSON&freq=A&month=M11_M12&animals=A2000&unit=THS_HD&geo=IS",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2011",
+          "value": 73.6
+        },
+        {
+          "period": "2012",
+          "value": 72.8
+        },
+        {
+          "period": "2013",
+          "value": 73.2
+        },
+        {
+          "period": "2014",
+          "value": 73.7
+        },
+        {
+          "period": "2015",
+          "value": 75.9
+        },
+        {
+          "period": "2016",
+          "value": 79.9
+        },
+        {
+          "period": "2017",
+          "value": 80.9
+        },
+        {
+          "period": "2018",
+          "value": 81.4
+        },
+        {
+          "period": "2019",
+          "value": 80.9
+        },
+        {
+          "period": "2020",
+          "value": 81.4
+        },
+        {
+          "period": "2022",
+          "value": 79.93
+        },
+        {
+          "period": "2023",
+          "value": 78.73
+        },
+        {
+          "period": "2024",
+          "value": 76.9
+        },
+        {
+          "period": "2025",
+          "value": 77
+        }
+      ]
+    },
+    "pigs_count": {
+      "key": "pigs_count",
+      "label": "Stavy prasat",
+      "pkg": "produkce",
+      "unit": "1000 ks",
+      "latest": {
+        "value": 21,
+        "unit": "1000 ks",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_mt_lspig?format=JSON&freq=A&month=M11_M12&animals=A3100&unit=THS_HD&geo=IS",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2011",
+          "value": 38.2
+        },
+        {
+          "period": "2012",
+          "value": 36.3
+        },
+        {
+          "period": "2013",
+          "value": 36.3
+        },
+        {
+          "period": "2014",
+          "value": 36.5
+        },
+        {
+          "period": "2015",
+          "value": 36.4
+        },
+        {
+          "period": "2016",
+          "value": 38
+        },
+        {
+          "period": "2017",
+          "value": 37
+        },
+        {
+          "period": "2018",
+          "value": 36
+        },
+        {
+          "period": "2019",
+          "value": 35
+        },
+        {
+          "period": "2022",
+          "value": 24.3
+        },
+        {
+          "period": "2023",
+          "value": 21.1
+        },
+        {
+          "period": "2025",
+          "value": 21
+        }
+      ]
+    },
+    "cereal_yield": {
+      "key": "cereal_yield",
+      "label": "Výnos obilovin",
+      "pkg": "produkce",
+      "unit": "t/ha",
+      "latest": {
+        "value": 2.43,
+        "unit": "t/ha",
+        "referencePeriod": "2023",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/IS/indicator/AG.YLD.CREL.KG?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2015",
+          "value": 3.187
+        },
+        {
+          "period": "2016",
+          "value": 3.213
+        },
+        {
+          "period": "2017",
+          "value": 3.524
+        },
+        {
+          "period": "2018",
+          "value": 2.6
+        },
+        {
+          "period": "2019",
+          "value": 3.591
+        },
+        {
+          "period": "2020",
+          "value": 4.858
+        },
+        {
+          "period": "2021",
+          "value": 3.121
+        },
+        {
+          "period": "2022",
+          "value": 2.967
+        },
+        {
+          "period": "2023",
+          "value": 2.43
+        }
+      ]
+    },
+    "ag_land": {
+      "key": "ag_land",
+      "label": "Zemědělská plocha",
+      "pkg": "puda",
+      "unit": "mil. ha",
+      "latest": {
+        "value": 1.638,
+        "unit": "mil. ha",
+        "referencePeriod": "2023",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/IS/indicator/AG.LND.AGRI.K2?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "1990",
+          "value": 1.901
+        },
+        {
+          "period": "1991",
+          "value": 1.901
+        },
+        {
+          "period": "1992",
+          "value": 1.901
+        },
+        {
+          "period": "1993",
+          "value": 1.9
+        },
+        {
+          "period": "1994",
+          "value": 1.9
+        },
+        {
+          "period": "1995",
+          "value": 1.899
+        },
+        {
+          "period": "1996",
+          "value": 1.897
+        },
+        {
+          "period": "1997",
+          "value": 1.895
+        },
+        {
+          "period": "1998",
+          "value": 1.891
+        },
+        {
+          "period": "1999",
+          "value": 1.889
+        },
+        {
+          "period": "2000",
+          "value": 1.889
+        },
+        {
+          "period": "2001",
+          "value": 1.889
+        },
+        {
+          "period": "2002",
+          "value": 1.887
+        },
+        {
+          "period": "2003",
+          "value": 1.885
+        },
+        {
+          "period": "2004",
+          "value": 1.884
+        },
+        {
+          "period": "2005",
+          "value": 1.882
+        },
+        {
+          "period": "2006",
+          "value": 1.881
+        },
+        {
+          "period": "2007",
+          "value": 1.876
+        },
+        {
+          "period": "2008",
+          "value": 1.876
+        },
+        {
+          "period": "2009",
+          "value": 1.875
+        },
+        {
+          "period": "2010",
+          "value": 1.874
+        },
+        {
+          "period": "2011",
+          "value": 1.873
+        },
+        {
+          "period": "2012",
+          "value": 1.872
+        },
+        {
+          "period": "2013",
+          "value": 1.872
+        },
+        {
+          "period": "2014",
+          "value": 1.872
+        },
+        {
+          "period": "2015",
+          "value": 1.872
+        },
+        {
+          "period": "2016",
+          "value": 1.872
+        },
+        {
+          "period": "2017",
+          "value": 1.872
+        },
+        {
+          "period": "2018",
+          "value": 1.872
+        },
+        {
+          "period": "2019",
+          "value": 1.872
+        },
+        {
+          "period": "2020",
+          "value": 1.872
+        },
+        {
+          "period": "2021",
+          "value": 1.872
+        },
+        {
+          "period": "2022",
+          "value": 1.872
+        },
+        {
+          "period": "2023",
+          "value": 1.638
+        }
+      ]
+    },
+    "arable_land": {
+      "key": "arable_land",
+      "label": "Orná půda",
+      "pkg": "puda",
+      "unit": "mil. ha",
+      "latest": {
+        "value": 0.121,
+        "unit": "mil. ha",
+        "referencePeriod": "2023",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/IS/indicator/AG.LND.ARBL.HA?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "1990",
+          "value": 0.136
+        },
+        {
+          "period": "1991",
+          "value": 0.136
+        },
+        {
+          "period": "1992",
+          "value": 0.136
+        },
+        {
+          "period": "1993",
+          "value": 0.135
+        },
+        {
+          "period": "1994",
+          "value": 0.135
+        },
+        {
+          "period": "1995",
+          "value": 0.135
+        },
+        {
+          "period": "1996",
+          "value": 0.134
+        },
+        {
+          "period": "1997",
+          "value": 0.133
+        },
+        {
+          "period": "1998",
+          "value": 0.13
+        },
+        {
+          "period": "1999",
+          "value": 0.129
+        },
+        {
+          "period": "2000",
+          "value": 0.129
+        },
+        {
+          "period": "2001",
+          "value": 0.129
+        },
+        {
+          "period": "2002",
+          "value": 0.129
+        },
+        {
+          "period": "2003",
+          "value": 0.129
+        },
+        {
+          "period": "2004",
+          "value": 0.129
+        },
+        {
+          "period": "2005",
+          "value": 0.129
+        },
+        {
+          "period": "2006",
+          "value": 0.129
+        },
+        {
+          "period": "2007",
+          "value": 0.125
+        },
+        {
+          "period": "2008",
+          "value": 0.125
+        },
+        {
+          "period": "2009",
+          "value": 0.124
+        },
+        {
+          "period": "2010",
+          "value": 0.123
+        },
+        {
+          "period": "2011",
+          "value": 0.122
+        },
+        {
+          "period": "2012",
+          "value": 0.121
+        },
+        {
+          "period": "2013",
+          "value": 0.121
+        },
+        {
+          "period": "2014",
+          "value": 0.121
+        },
+        {
+          "period": "2015",
+          "value": 0.121
+        },
+        {
+          "period": "2016",
+          "value": 0.121
+        },
+        {
+          "period": "2017",
+          "value": 0.121
+        },
+        {
+          "period": "2018",
+          "value": 0.121
+        },
+        {
+          "period": "2019",
+          "value": 0.121
+        },
+        {
+          "period": "2020",
+          "value": 0.121
+        },
+        {
+          "period": "2021",
+          "value": 0.121
+        },
+        {
+          "period": "2022",
+          "value": 0.121
+        },
+        {
+          "period": "2023",
+          "value": 0.121
+        }
+      ]
+    },
+    "ag_value_added_gdp": {
+      "key": "ag_value_added_gdp",
+      "label": "Podíl zemědělství na HDP",
+      "pkg": "ekonomika",
+      "unit": "%",
+      "latest": {
+        "value": 3.541,
+        "unit": "%",
+        "referencePeriod": "2024",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/IS/indicator/NV.AGR.TOTL.ZS?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "1995",
+          "value": 9.128
+        },
+        {
+          "period": "1996",
+          "value": 8.908
+        },
+        {
+          "period": "1997",
+          "value": 7.931
+        },
+        {
+          "period": "1998",
+          "value": 7.978
+        },
+        {
+          "period": "1999",
+          "value": 7.491
+        },
+        {
+          "period": "2000",
+          "value": 6.888
+        },
+        {
+          "period": "2001",
+          "value": 7.385
+        },
+        {
+          "period": "2002",
+          "value": 7.404
+        },
+        {
+          "period": "2003",
+          "value": 6.348
+        },
+        {
+          "period": "2004",
+          "value": 5.227
+        },
+        {
+          "period": "2005",
+          "value": 4.659
+        },
+        {
+          "period": "2006",
+          "value": 4.712
+        },
+        {
+          "period": "2007",
+          "value": 4.144
+        },
+        {
+          "period": "2008",
+          "value": 4.845
+        },
+        {
+          "period": "2009",
+          "value": 5.6
+        },
+        {
+          "period": "2010",
+          "value": 6.306
+        },
+        {
+          "period": "2011",
+          "value": 6.804
+        },
+        {
+          "period": "2012",
+          "value": 6.788
+        },
+        {
+          "period": "2013",
+          "value": 6.049
+        },
+        {
+          "period": "2014",
+          "value": 5.248
+        },
+        {
+          "period": "2015",
+          "value": 5.382
+        },
+        {
+          "period": "2016",
+          "value": 4.471
+        },
+        {
+          "period": "2017",
+          "value": 3.75
+        },
+        {
+          "period": "2018",
+          "value": 4.165
+        },
+        {
+          "period": "2019",
+          "value": 4.425
+        },
+        {
+          "period": "2020",
+          "value": 4.793
+        },
+        {
+          "period": "2021",
+          "value": 4.411
+        },
+        {
+          "period": "2022",
+          "value": 4.206
+        },
+        {
+          "period": "2023",
+          "value": 4.301
+        },
+        {
+          "period": "2024",
+          "value": 3.541
+        }
+      ]
+    },
+    "ag_employment": {
+      "key": "ag_employment",
+      "label": "Zaměstnanost v zemědělství",
+      "pkg": "ekonomika",
+      "unit": "%",
+      "latest": {
+        "value": 3.7,
+        "unit": "%",
+        "referencePeriod": "2024",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/IS/indicator/SL.AGR.EMPL.ZS?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "1991",
+          "value": 10.189
+        },
+        {
+          "period": "1992",
+          "value": 10.453
+        },
+        {
+          "period": "1993",
+          "value": 9.192
+        },
+        {
+          "period": "1994",
+          "value": 9.061
+        },
+        {
+          "period": "1995",
+          "value": 9.573
+        },
+        {
+          "period": "1996",
+          "value": 9.976
+        },
+        {
+          "period": "1997",
+          "value": 9.084
+        },
+        {
+          "period": "1998",
+          "value": 8.648
+        },
+        {
+          "period": "1999",
+          "value": 8.916
+        },
+        {
+          "period": "2000",
+          "value": 8.713
+        },
+        {
+          "period": "2001",
+          "value": 7.712
+        },
+        {
+          "period": "2002",
+          "value": 7.369
+        },
+        {
+          "period": "2003",
+          "value": 6.984
+        },
+        {
+          "period": "2004",
+          "value": 6.321
+        },
+        {
+          "period": "2005",
+          "value": 6.53
+        },
+        {
+          "period": "2006",
+          "value": 6.314
+        },
+        {
+          "period": "2007",
+          "value": 5.919
+        },
+        {
+          "period": "2008",
+          "value": 4.604
+        },
+        {
+          "period": "2009",
+          "value": 4.834
+        },
+        {
+          "period": "2010",
+          "value": 5.587
+        },
+        {
+          "period": "2011",
+          "value": 5.489
+        },
+        {
+          "period": "2012",
+          "value": 5.549
+        },
+        {
+          "period": "2013",
+          "value": 4.445
+        },
+        {
+          "period": "2014",
+          "value": 4.536
+        },
+        {
+          "period": "2015",
+          "value": 4.239
+        },
+        {
+          "period": "2016",
+          "value": 3.895
+        },
+        {
+          "period": "2017",
+          "value": 3.756
+        },
+        {
+          "period": "2018",
+          "value": 4.03
+        },
+        {
+          "period": "2019",
+          "value": 4.036
+        },
+        {
+          "period": "2020",
+          "value": 4.043
+        },
+        {
+          "period": "2021",
+          "value": 4.094
+        },
+        {
+          "period": "2022",
+          "value": 4.093
+        },
+        {
+          "period": "2023",
+          "value": 3.777
+        },
+        {
+          "period": "2024",
+          "value": 3.7
+        }
+      ]
+    },
+    "fert_use": {
+      "key": "fert_use",
+      "label": "Spotřeba hnojiv",
+      "pkg": "obchod",
+      "unit": "kg/ha",
+      "latest": {
+        "value": 97.289,
+        "unit": "kg/ha",
+        "referencePeriod": "2023",
+        "source": "World Bank",
+        "sourceUrl": "https://api.worldbank.org/v2/country/IS/indicator/AG.CON.FERT.ZS?format=json&date=1990:2024&per_page=20000",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "1990",
+          "value": 170.316
+        },
+        {
+          "period": "1991",
+          "value": 168.515
+        },
+        {
+          "period": "1992",
+          "value": 147.235
+        },
+        {
+          "period": "1993",
+          "value": 170.37
+        },
+        {
+          "period": "1994",
+          "value": 148.874
+        },
+        {
+          "period": "1995",
+          "value": 144.904
+        },
+        {
+          "period": "1996",
+          "value": 140.985
+        },
+        {
+          "period": "1997",
+          "value": 145.113
+        },
+        {
+          "period": "1998",
+          "value": 143.846
+        },
+        {
+          "period": "1999",
+          "value": 169.767
+        },
+        {
+          "period": "2000",
+          "value": 164.341
+        },
+        {
+          "period": "2001",
+          "value": 140.93
+        },
+        {
+          "period": "2002",
+          "value": 145.752
+        },
+        {
+          "period": "2003",
+          "value": 122.884
+        },
+        {
+          "period": "2004",
+          "value": 137.922
+        },
+        {
+          "period": "2005",
+          "value": 133.558
+        },
+        {
+          "period": "2006",
+          "value": 167.822
+        },
+        {
+          "period": "2007",
+          "value": 194.168
+        },
+        {
+          "period": "2008",
+          "value": 199.88
+        },
+        {
+          "period": "2009",
+          "value": 123.847
+        },
+        {
+          "period": "2010",
+          "value": 148.699
+        },
+        {
+          "period": "2011",
+          "value": 159.165
+        },
+        {
+          "period": "2012",
+          "value": 176.485
+        },
+        {
+          "period": "2013",
+          "value": 168.804
+        },
+        {
+          "period": "2014",
+          "value": 201.733
+        },
+        {
+          "period": "2015",
+          "value": 147.752
+        },
+        {
+          "period": "2016",
+          "value": 181.529
+        },
+        {
+          "period": "2017",
+          "value": 148.008
+        },
+        {
+          "period": "2018",
+          "value": 136.281
+        },
+        {
+          "period": "2019",
+          "value": 117.686
+        },
+        {
+          "period": "2020",
+          "value": 130.099
+        },
+        {
+          "period": "2021",
+          "value": 139.868
+        },
+        {
+          "period": "2022",
+          "value": 126.033
+        },
+        {
+          "period": "2023",
+          "value": 97.289
+        }
+      ]
+    },
+    "ag_output_value": {
+      "key": "ag_output_value",
+      "label": "Hodnota zemědělské produkce",
+      "pkg": "ekonomika",
+      "unit": "mld €",
+      "latest": {
+        "value": 0.639,
+        "unit": "mld €",
+        "referencePeriod": "2025",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/aact_eaa01?format=JSON&freq=A&am_item=AM160000&indic_agr=PRD_BP&unit=MIO_EUR&geo=IS",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2007",
+          "value": 0.377
+        },
+        {
+          "period": "2008",
+          "value": 0.274
+        },
+        {
+          "period": "2009",
+          "value": 0.254
+        },
+        {
+          "period": "2010",
+          "value": 0.279
+        },
+        {
+          "period": "2011",
+          "value": 0.313
+        },
+        {
+          "period": "2012",
+          "value": 0.351
+        },
+        {
+          "period": "2013",
+          "value": 0.361
+        },
+        {
+          "period": "2014",
+          "value": 0.407
+        },
+        {
+          "period": "2015",
+          "value": 0.418
+        },
+        {
+          "period": "2016",
+          "value": 0.441
+        },
+        {
+          "period": "2017",
+          "value": 0.491
+        },
+        {
+          "period": "2018",
+          "value": 0.443
+        },
+        {
+          "period": "2019",
+          "value": 0.432
+        },
+        {
+          "period": "2020",
+          "value": 0.413
+        },
+        {
+          "period": "2021",
+          "value": 0.442
+        },
+        {
+          "period": "2022",
+          "value": 0.529
+        },
+        {
+          "period": "2023",
+          "value": 0.554
+        },
+        {
+          "period": "2024",
+          "value": 0.578
+        },
+        {
+          "period": "2025",
+          "value": 0.639
+        }
+      ]
+    },
+    "farm_count": {
+      "key": "farm_count",
+      "label": "Počet zemědělských podniků",
+      "pkg": "puda",
+      "unit": "1000 farem",
+      "latest": {
+        "value": 2.09,
+        "unit": "1000 farem",
+        "referencePeriod": "2020",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ef_m_farmleg?format=JSON&freq=A&statinfo=TOTAL&leg_form=TOTAL&farmtype=TOTAL&so_eur=TOTAL&uaarea=TOTAL&unit=HLD&geo=IS",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2010",
+          "value": 2.59
+        },
+        {
+          "period": "2020",
+          "value": 2.09
+        }
+      ]
+    },
+    "organic_share": {
+      "key": "organic_share",
+      "label": "Podíl eko plochy na ZP",
+      "pkg": "puda",
+      "unit": "%",
+      "latest": {
+        "value": 0.42,
+        "unit": "%",
+        "referencePeriod": "2021",
+        "source": "Eurostat",
+        "sourceUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_02_40?format=JSON&freq=A&unit=PC_UAA&crops=UAAXK0000&agprdmet=TOTAL&geo=IS",
+        "fetchedAt": "2026-08-21"
+      },
+      "series": [
+        {
+          "period": "2013",
+          "value": 0.49
+        },
+        {
+          "period": "2017",
+          "value": 0.44
+        },
+        {
+          "period": "2019",
+          "value": 0.37
+        },
+        {
+          "period": "2020",
+          "value": 0.32
+        },
+        {
+          "period": "2021",
+          "value": 0.42
+        }
+      ]
+    }
+  }
+}

@@ -18,7 +18,7 @@ export const COUNTRY_LOCATIVE: Record<string, string> = {
   finsko: 've Finsku', portugalsko: 'v Portugalsku', recko: 'v Řecku', madarsko: 'v Maďarsku', rumunsko: 'v Rumunsku',
   bulharsko: 'v Bulharsku', slovinsko: 've Slovinsku', chorvatsko: 'v Chorvatsku', litva: 'v Litvě',
   lotyssko: 'v Lotyšsku', estonsko: 'v Estonsku', lucembursko: 'v Lucembursku', kypr: 'na Kypru', malta: 'na Maltě',
-  svycarsko: 've Švýcarsku', norsko: 'v Norsku', ukrajina: 'na Ukrajině',
+  svycarsko: 've Švýcarsku', norsko: 'v Norsku', ukrajina: 'na Ukrajině', island: 'na Islandu',
 };
 
 export interface PackageGroup { pkg: PackageKey; label: string; indicators: Indicator[]; }

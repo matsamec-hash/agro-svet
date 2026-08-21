@@ -51,3 +51,19 @@ export function convert(v: number, m: MetricDef, cur: 'czk' | 'eur', rate: numbe
 export function unitOf(m: MetricDef, cur: 'czk' | 'eur'): string {
   return m.currency && cur === 'czk' ? m.unit.replace('€', 'Kč') : m.unit;
 }
+
+
+/**
+ * Slugy zemí, které mají profilovou stránku /svet/<slug>/.
+ *
+ * Pozor na `reference: true` (Česko): ČR profil MÁ (cesko.json, stránka vrací
+ * 200 a je v sitemapě), jen se na ní potlačí sebe-porovnání „vs ČR". Dřív ji
+ * mapa i tabulka vyfiltrovaly jako „stránka neexistuje" a jediná země, kterou
+ * Čech na české mapě hledá, nešla prokliknout.
+ *
+ * Zdroj pravdy je index.json — ten sestavuje build-svet.mjs právě z profilů,
+ * které opravdu vznikly.
+ */
+export function pageSlugs(index: { countries: { slug: string }[] }): Set<string> {
+  return new Set(index.countries.map((c) => c.slug));
+}

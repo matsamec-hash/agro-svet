@@ -5,12 +5,12 @@ import mapData from '../../../data/svet/map-metrics.json';
 import countryIndex from '../../../data/svet/index.json';
 import { localizePath, t } from '../../../i18n/utils';
 import { COUNTRY_NAMES, loc, localizeMetric, type SvetLang } from '../../../i18n/svet';
+import { pageSlugs } from '../../../lib/svet/map';
 import '../../../styles/svet.css';
 
-// Profil /svet/<slug>/ má jen nereferenční země z index.json (cesko = baseline).
-// Ostatní země mapy (referenční ČR, země bez profilu jako Island) nesmí mít odkaz —
-// stránka neexistuje a vracela 404 (nejnavštěvovanější sekce).
-const PAGE_SLUGS = new Set(countryIndex.countries.filter((c) => !c.reference).map((c) => c.slug));
+// Země bez profilu nesmí mít odkaz — /svet/<slug>/ by na ni vracelo 301 na
+// rozcestník. Zdroj pravdy je index.json, viz pageSlugs().
+const PAGE_SLUGS = pageSlugs(countryIndex);
 
 const locale = Astro.locals.locale ?? 'cs';
 const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
