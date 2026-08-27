@@ -226,8 +226,77 @@ const pl: AkcieCopy = {
   linkSales: 'Sprzedaż maszyn rolniczych w Europie',
 };
 
-/** sk/uk zatím nemají přeložený overlay firem → dostávají cs (a nejsou launchnuté). */
-export const content: Record<Locale, AkcieCopy> = { cs, pl, sk: cs, uk: cs };
+const sk: AkcieCopy = {
+  numberLocale: 'sk-SK',
+  bln: 'mld.',
+  crumbAria: 'Cesta',
+  crumbHome: 'Domov',
+  crumbData: 'Dáta',
+  crumbAkcie: 'Akcie',
+  metaTitle: 'Akcie poľnohospodárskych firiem — John Deere, Bayer, AGCO a ďalší | agro-svět',
+  metaDescription:
+    'Prehľad akcií firiem naviazaných na poľnohospodárstvo — technika (John Deere, AGCO, CNH), agrochémia a osivá (Bayer, BASF, Corteva) aj komodity. Profily a burzové symboly. Nie je investičné odporúčanie.',
+  crumbSelf: 'Akcie agro firiem',
+  eyebrow: 'Dátová sekcia · Trhy',
+  h1: 'Akcie poľnohospodárskych firiem',
+  h1mark: 'na burze',
+  lede:
+    'Kto stojí za technikou, osivami a hnojivami na vašich poliach — a ako sa im darí na burze. Prehľad verejne obchodovaných firiem z agrosektora: výrobcovia strojov, agrochémie aj spracovatelia komodít, zo Spojených štátov aj Európy.',
+  disclaimerStrong: '⚠️ Nie je investičné odporúčanie.',
+  disclaimerText:
+    'Táto stránka je informačný prehľad firiem naviazaných na poľnohospodárstvo. Neobsahuje nákupné ani predajné odporúčania. Investície do akcií sú rizikové; pred rozhodnutím sa poraďte s licencovaným poradcom. Prípadné kurzy sú orientačné a oneskorené.',
+  kategorie: {
+    technika: 'Poľnohospodárska technika',
+    agrochemie: 'Agrochémia, osivá a hnojivá',
+    komodity: 'Komodity a spracovanie',
+  },
+  hubNote:
+    '📈 <strong>Živé denné kurzy</strong> a 3-mesačné trendy pri každej firme; kliknite na kartu pre <strong>interaktívny graf</strong> vývoja kurzu a kľúčové ukazovatele.',
+  hubCrossSales: 'Predaje poľnohospodárskej techniky',
+  hubCrossSalesNote: 'koľko strojov sa predá podľa krajín',
+  hubCrossCountries: 'Profily krajín',
+  hubCrossCountriesNote: 'poľnohospodárstvo jednotlivých trhov',
+  hubCrossPrices: 'Ceny poľnohospodárskych komodít',
+  hubCrossData: 'Dátová sekcia agro-svět',
+  detailTitleTpl: '{name} ({ticker}) — akcie, kurz a profil spoločnosti | agro-svět',
+  detailDescriptionTpl:
+    '{name}: kurz akcie, trhová kapitalizácia, sídlo, riaditeľ, obrat a čo firma robí v poľnohospodárstve. {profil}',
+  detailDisclaimerStrong: '⚠️ Nie je investičné odporúčanie.',
+  detailDisclaimerText:
+    'Informačný profil firmy. Kurz a ukazovatele sú orientačné a oneskorené (fundamenty Finnhub, graf kurzu Yahoo Finance). Investície do akcií sú rizikové.',
+  metricsTitle: 'Kľúčové ukazovatele',
+  mCap: 'Trhová kapitalizácia',
+  mPe: 'P/E (TTM)',
+  mDiv: 'Dividendový výnos',
+  mInd: 'Odvetvie',
+  range52: '52-týždňové rozpätie',
+  chartTitle: 'Vývoj kurzu',
+  chartRangesAria: 'Obdobie grafu',
+  chartLoading: 'Načítavam graf…',
+  chartSource: 'Zdroj: Yahoo Finance · oneskorené',
+  chartAria: 'Graf vývoja kurzu',
+  chartPeriodSuffix: ' % za obdobie',
+  profileTitle: 'Čo firma robí',
+  factHq: 'Centrála',
+  factFounded: 'Založené',
+  factCeo: 'Riaditeľ (CEO)',
+  factRevenue: 'Ročný obrat',
+  brandsTitleMulti: 'Značky tejto firmy u nás',
+  brandsTitleSingle: 'Modely tejto značky u nás',
+  brandsLede: 'Prezrite si katalóg strojov a profil značky priamo na agro-svět:',
+  brandsModels: 'Modely →',
+  brandsProfile: 'Profil značky →',
+  logoAlt: 'Logo',
+  achievementsTitle: 'Najväčšie úspechy a míľniky',
+  linksTitle: 'Odkazy',
+  linkWeb: 'Oficiálna webstránka firmy',
+  linkCountry: 'Poľnohospodárstvo — profil krajiny, kde firma sídli',
+  linkAll: 'Všetky akcie poľnohospodárskych firiem',
+  linkSales: 'Predaje poľnohospodárskej techniky v Európe',
+};
+
+/** uk zatím nemá přeložený overlay firem → dostává cs (a není launchnuté). */
+export const content: Record<Locale, AkcieCopy> = { cs, pl, sk, uk: cs };
 
 export function akcieCopy(locale: string): AkcieCopy {
   return content[locale as Locale] ?? cs;
