@@ -6,6 +6,7 @@ import { isLockedSectionPath } from '../../src/i18n/nav';
 import { TIER_LISTS } from '../../src/lib/tier-lists';
 import { TIER_LIST_COPY } from '../../src/lib/tier-lists.i18n';
 import { seasonName, seasonLeadL, seasonFaqL, monthNames, monthShort } from '../../src/lib/sezona';
+import { kvizHistorie, quizLevels } from '../../src/lib/kviz';
 
 describe('SK homepage launch', () => {
   it('root je launchnutý pro sk (HomeSk.astro je plně slovenská)', () => {
@@ -14,8 +15,8 @@ describe('SK homepage launch', () => {
   });
 
   it('root v prefixech nezpůsobí over-match nelaunchnutých sekcí', () => {
-    // '/' se nesmí chovat jako wildcard — /kviz pro sk launchnuté není.
-    expect(isLaunchedPath('sk', '/kviz')).toBe(false);
+    // '/' se nesmí chovat jako wildcard — /historie pro sk launchnuté není.
+    expect(isLaunchedPath('sk', '/historie')).toBe(false);
     expect(isLaunchedPath('sk', '/farmy/nazev-farmy/')).toBe(false);
   });
 
@@ -104,6 +105,36 @@ describe('/sezona má pro každou launchnutou locale vlastní jazykovou vrstvu',
       expect(monthNames(locale)).not.toEqual(monthNames('cs'));
       expect(monthNames(locale)).toHaveLength(12);
       expect(monthShort(locale)).toHaveLength(12);
+    });
+  }
+});
+
+// /kviz: hub smí v cizí locale nabízet jen kvízy, které pro ni opravdu existují.
+// Zbytek je prerendered cs-only a pod prefixem 302 na češtinu — nabízet je jako
+// živý odkaz by posílalo uživatele i crawler na redirect.
+describe('/kviz má pro každou launchnutou locale vlastní sadu otázek', () => {
+  it('/kviz je launchnuté pro sk', () => {
+    expect(LAUNCHED_PREFIXES.sk).toContain('/kviz');
+  });
+
+  for (const locale of ['sk', 'pl'] as const) {
+    it(`${locale}: otázky, možnosti i úrovně jsou přeložené a strukturně shodné s cs`, () => {
+      const cs = kvizHistorie('cs');
+      const loc = kvizHistorie(locale);
+      expect(loc).toHaveLength(cs.length);
+
+      for (let i = 0; i < cs.length; i++) {
+        expect(loc[i].id, `pořadí otázek se rozešlo na indexu ${i}`).toBe(cs[i].id);
+        expect(loc[i].question, cs[i].id).not.toBe(cs[i].question);
+        // Index správné odpovědi se váže na pořadí možností → musí sedět počet i correct.
+        expect(loc[i].options, cs[i].id).toHaveLength(cs[i].options.length);
+        expect(loc[i].correct, cs[i].id).toBeLessThan(loc[i].options.length);
+      }
+
+      const lv = quizLevels(locale);
+      expect(lv).toHaveLength(quizLevels('cs').length);
+      expect(lv.map((l) => l.min)).toEqual(quizLevels('cs').map((l) => l.min));
+      expect(lv.map((l) => l.description)).not.toEqual(quizLevels('cs').map((l) => l.description));
     });
   }
 });

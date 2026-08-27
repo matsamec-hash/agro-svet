@@ -3,6 +3,7 @@
 // Hodnocení: 0–5 → "Začátečník", 6–10 → "Hospodář", 11–14 → "Expert", 15+ → "Legenda".
 
 import { KVIZ_HISTORIE_PL } from './kviz.pl';
+import { KVIZ_HISTORIE_SK, LEVELS_SK } from './kviz.sk';
 
 export interface QuizOption {
   text: string;
@@ -260,8 +261,11 @@ const LEVELS_PL = [
 ];
 
 /** Úrovně pro daný jazyk — pro klientský skript, který je dostane jako JSON. */
+const LEVELS_BY_LOCALE: Record<string, typeof LEVELS_PL> = { pl: LEVELS_PL, sk: LEVELS_SK };
+
 export function quizLevels(locale: string = 'cs'): { min: number; name: string; description: string; emoji: string }[] {
-  if (locale === 'pl') return LEVELS_PL;
+  const loc = LEVELS_BY_LOCALE[locale];
+  if (loc) return loc;
   return [
     { min: 90, name: 'Legenda', description: 'Vy jste živá encyklopedie zemědělské techniky. Klobouk dolů!', emoji: '🏆' },
     { min: 70, name: 'Expert', description: 'Skvělé! V hospodářství i technice se vyznáte víc než většina.', emoji: '🎓' },
@@ -280,8 +284,10 @@ export function getLevel(score: number, total: number): { name: string; descript
   return { name: 'Začátečník', description: 'Žádný strach — všechno se dá naučit. Začněte u našich žebříčků a slovníku.', emoji: '🌱' };
 }
 
-/** Sada otázek pro daný jazyk. cs = originál; pl má vlastní sadu, kde jsou
- *  3 jurisdikčně vázané otázky nahrazené polskými (ne přeložené). */
+/** Sada otázek pro daný jazyk. cs = originál; pl i sk mají vlastní sadu, kde
+ *  jsou 3 jurisdikčně vázané otázky nahrazené, ne přeložené. */
+const QUESTIONS_BY_LOCALE: Record<string, QuizQuestion[]> = { pl: KVIZ_HISTORIE_PL, sk: KVIZ_HISTORIE_SK };
+
 export function kvizHistorie(locale: string = 'cs'): QuizQuestion[] {
-  return locale === 'pl' ? KVIZ_HISTORIE_PL : KVIZ_HISTORIE;
+  return QUESTIONS_BY_LOCALE[locale] ?? KVIZ_HISTORIE;
 }
