@@ -80,3 +80,16 @@ describe('UK fáze 4d launch (dotace)', () => {
     expect(isLaunchedPath('cs', '/dotace/')).toBe(false);
   });
 });
+
+describe('UK homepage launch', () => {
+  it('root je launchnutý pro uk (HomeUk.astro je plně ukrajinská)', () => {
+    expect(LAUNCHED_PREFIXES.uk).toContain('/');
+    expect(isLaunchedPath('uk', '/')).toBe(true);
+  });
+
+  it("root v prefixech nedělá wildcard — nelaunchnuté sekce zůstávají cs", () => {
+    for (const p of ['/plodiny', '/zebricky', '/novinky', '/plemena']) {
+      expect(isLaunchedPath('uk', p)).toBe(false);
+    }
+  });
+});

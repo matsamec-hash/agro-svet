@@ -37,7 +37,11 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // a mimo sitemapu, takže 7k+ indexovaných /sk URL nemělo vstupní bod.
   // Všechny odkazy z HomeSk míří do launchnutých /sk sekcí (viz sk-launch.test.ts).
   sk: ['/', '/data', '/svet', '/slovnik', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/hledat', '/zebricky', '/plodiny', '/choroby', '/sezona', '/akcie', '/kviz'],
-  uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace', '/hledat'],
+  // '/' = UK homepage (HomeUk.astro — vlastní ukrajinský rozcestník na
+  // statistiku, trh s půdou, dotace a slovník). Stejný případ jako sk: byla
+  // hotová, ale negatovaná → noindex a mimo sitemapu, takže 6 956 /uk URL
+  // nemělo vstupní bod.
+  uk: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace', '/hledat'],
   // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
   // přes stat.*/data.hub./komodita. klíče. /dotace + /jak-na-to zůstávají cs
