@@ -104,9 +104,28 @@ export function isSkLaunchedPath(csRootPath: string): boolean {
  *  v sitemap.xml.ts; sk a uk ne. */
 export const PRERENDERED_ONLY_PATHS: string[] = ['/data/prodeje-techniky'];
 
-/** True, pokud je cesta (nebo její podstrom) prerendered cs-only. */
+/** Kvízy, které NEJSOU lokalizované — cílí na české podmínky (servisní síť
+ *  značek, český chov včel), takže by pod locale prefixem nešlo o překlad, ale
+ *  o jiná data. Zůstávají prerendered cs-only; hub /kviz/ lokalizovaný je
+ *  a vypisuje jen kvízy dostupné v dané locale (viz kviz/index.astro). */
+const CS_ONLY_QUIZZES = ['jaky-traktor-potrebujete', 'jaka-vcela-pro-vas', 'poznas-znacku'];
+
+/** Detail odrůdy: /plodiny/<plodina>/<odruda>/ — tři segmenty, kde druhý není
+ *  faceta `skupina`. Je to úřední popis ÚKZÚZ k odrůdě registrované v ČR, takže
+ *  zůstává cs-only i tam, kde je /plodiny launchnuté. */
+function isOdrudaDetailPath(csRootPath: string): boolean {
+  const seg = csRootPath.split('/').filter(Boolean);
+  return seg.length === 3 && seg[0] === 'plodiny' && seg[1] !== 'skupina';
+}
+
+/** True, pokud je cesta (nebo její podstrom) prerendered cs-only.
+ *  Takové cesty se nelokalizují (pod prefixem 302 na cs) a nesmí se dostat ani
+ *  do locale mirroru sitemapy — jinak sitemapa nabere tisíce redirectů. */
 export function isPrerenderedOnlyPath(csRootPath: string): boolean {
-  return PRERENDERED_ONLY_PATHS.some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
+  if (PRERENDERED_ONLY_PATHS.some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`))) return true;
+  if (isOdrudaDetailPath(csRootPath)) return true;
+  const quiz = csRootPath.split('/').filter(Boolean);
+  return quiz[0] === 'kviz' && quiz.length > 1 && CS_ONLY_QUIZZES.includes(quiz[1]);
 }
 
 /** Lokalizuje interní href pro daný locale POUZE u launchnutých (reálně
