@@ -31,6 +31,20 @@ describe('slovníky neobsahují cizí jazyk', () => {
     });
   }
 
+  // uk je psané azbukou, takže „cizí jazyk" se pozná obráceně: hodnota bez
+  // jediného cyrilického znaku je latinka, tedy neprošlý překlad. Výjimky jsou
+  // pojmenované — brand, zkratky, šablony a odkazy na zdroje.
+  it('uk.ts nemá hodnotu bez azbuky (kromě pojmenovaných výjimek)', () => {
+    const ALLOWED = new Set(['brand.name', 'footer.gdpr', 'footer.dsa', 'nov.kat.count',
+      'cat.s.d.asideKickerCount', 'cat.s.d.altPhoto']);
+    const bad = Object.entries(uk)
+      .filter(([k, v]) => !ALLOWED.has(k) && typeof v === 'string'
+        && /[A-Za-zÁ-ž]{3,}/.test(v) && !/[\u0400-\u04FF]/.test(v)
+        && !/^https?:\/\//.test(String(v).trim()))
+      .map(([k, v]) => `${k}: ${v}`);
+    expect(bad).toEqual([]);
+  });
+
   it('sk.ts neobsahuje polská slova bez diakritiky (wysiew / zmianowanie / nawożenie)', () => {
     const PL_WORDS = /wysiew|zmianowan|zmienowan|nawoz|nawoż|zachowuj|roślin|uprawow/i;
     const bad = Object.entries(sk).filter(([, v]) => PL_WORDS.test(String(v))).map(([k, v]) => `${k}: ${v}`);

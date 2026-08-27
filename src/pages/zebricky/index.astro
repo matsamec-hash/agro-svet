@@ -64,7 +64,7 @@ const kombajnyCards = tierCards.filter((c) => c.config.category === 'kombajny');
 
     {traktoryCards.length > 0 && (
       <section aria-labelledby="trak-heading">
-        <h2 id="trak-heading">Traktory</h2>
+        <h2 id="trak-heading">{tr('cat.label.traktory')}</h2>
         <div class="hub-grid">
           {traktoryCards.map((c) => (
             <a class="hub-card" href={localizeInternalHref(locale, `/zebricky/${c.config.slug}/`)}>
@@ -82,7 +82,7 @@ const kombajnyCards = tierCards.filter((c) => c.config.category === 'kombajny');
 
     {kombajnyCards.length > 0 && (
       <section aria-labelledby="komb-heading">
-        <h2 id="komb-heading">Kombajny</h2>
+        <h2 id="komb-heading">{tr('cat.label.kombajny')}</h2>
         <div class="hub-grid">
           {kombajnyCards.map((c) => (
             <a class="hub-card" href={localizeInternalHref(locale, `/zebricky/${c.config.slug}/`)}>

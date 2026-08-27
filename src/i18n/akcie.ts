@@ -75,6 +75,10 @@ export interface AkcieCopy {
   brandsProfile: string;
   logoAlt: string;
   achievementsTitle: string;
+  /** Sekce „kdo značku prodává a servisuje v ČR" — obsah je český, ale nadpis
+   *  ne (na /sk a /pl se zobrazuje ve zdejším jazyce). */
+  repTitle: string;
+  repLede: string;
   linksTitle: string;
   linkWeb: string;
   linkCountry: string;
@@ -146,6 +150,8 @@ const cs: AkcieCopy = {
   brandsModels: 'Modely →',
   brandsProfile: 'Profil značky →',
   logoAlt: 'Logo',
+  repTitle: 'Zastoupení v Česku',
+  repLede: 'Prodej a servis v ČR zajišťuje:',
   achievementsTitle: 'Největší úspěchy a milníky',
   linksTitle: 'Odkazy',
   linkWeb: 'Oficiální web firmy',
@@ -218,6 +224,8 @@ const pl: AkcieCopy = {
   brandsModels: 'Modele →',
   brandsProfile: 'Profil marki →',
   logoAlt: 'Logo',
+  repTitle: 'Przedstawicielstwo w Czechach',
+  repLede: 'Sprzedaż i serwis w Czechach zapewnia:',
   achievementsTitle: 'Największe osiągnięcia i kamienie milowe',
   linksTitle: 'Linki',
   linkWeb: 'Oficjalna strona spółki',
@@ -287,6 +295,8 @@ const sk: AkcieCopy = {
   brandsModels: 'Modely →',
   brandsProfile: 'Profil značky →',
   logoAlt: 'Logo',
+  repTitle: 'Zastúpenie v Česku',
+  repLede: 'Predaj a servis v ČR zabezpečuje:',
   achievementsTitle: 'Najväčšie úspechy a míľniky',
   linksTitle: 'Odkazy',
   linkWeb: 'Oficiálna webstránka firmy',

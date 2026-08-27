@@ -412,7 +412,7 @@ const uk: Record<string, string> = {
   'plod.d.statSteps': 'кроків вирощування',
   'plod.d.agronomie': 'Агрономія',
   'plod.d.vysevek': 'Норма wysiewu',
-  'plod.d.hnojeni': 'Nawożenie',
+  'plod.d.hnojeni': 'Удобрення',
   'plod.d.vynos': 'Врожай',
   'plod.d.sklizen': 'Збір',
   'plod.d.vyuziti': 'Використання',
@@ -483,6 +483,7 @@ const uk: Record<string, string> = {
   'zeb.empty': 'Жодна модель не відповідає критеріям. Ми розширюємо базу — завітайте згодом.',
   'zeb.more': 'Інші рейтинги',
   'zeb.author': 'Редакція agro-svět.cz',
+  'zeb.methodology': 'Методика',
 
   // — kvízy (kvz.*) —
   'kvz.h.lede': 'Перевірте свої знання — хто винайшов триточкову навіску, коли з’явилася перша серійна КВТ і що означає Stage V. Наприкінці отримаєте оцінку.',
@@ -966,6 +967,8 @@ const uk: Record<string, string> = {
   'puda.temata.h': 'Поглиблено за темами',
   'puda.card.cta': 'Читати далі →',
   'puda.sources.h': 'Джерела даних',
+  'puda.struktura.h': 'Структура сільськогосподарського земельного фонду',
+  'puda.ohrozeni.h': 'Загрози для ґрунтів',
   'puda.bn.cena.lbl': 'Середня ціна ріллі',
   'puda.bn.rust.lbl': 'Зростання ціни землі',
   'puda.bn.najem.lbl': 'Середня орендна плата',
@@ -1447,6 +1450,7 @@ const uk: Record<string, string> = {
 
   // ── Сезон ───────────────────────────────────────────────────────────────────
   'sez.faqH': 'Часті запитання',
+  'sez.d.eventsH': 'Події цього сезону',
 
   // ── Вікторини ───────────────────────────────────────────────────────────────
   'kvz.hub.crumb': 'Вікторини',

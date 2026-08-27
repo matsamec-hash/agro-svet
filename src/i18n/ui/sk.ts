@@ -478,6 +478,7 @@ const sk: Record<string, string> = {
   'zeb.empty': 'Žiadny model nezodpovedá kritériám. Databázu rozširujeme — vráťte sa čoskoro.',
   'zeb.more': 'Ďalšie rebríčky',
   'zeb.author': 'Redakcia agro-svět.cz',
+  'zeb.methodology': 'Metodika',
 
   // — kvízy (kvz.*) —
   'kvz.h.lede': 'Otestujte si znalosti — kto vynašiel trojbodový záves, kedy prišlo prvé sériové CVT a čo znamená Stage V. Po dokončení dostanete hodnotenie.',
@@ -943,6 +944,8 @@ const sk: Record<string, string> = {
   'puda.temata.h': 'Hĺbkovo k témam',
   'puda.card.cta': 'Čítať ďalej →',
   'puda.sources.h': 'Zdroje dát',
+  'puda.struktura.h': 'Štruktúra poľnohospodárskeho pôdneho fondu',
+  'puda.ohrozeni.h': 'Ohrozenie pôdy',
   'puda.bn.cena.lbl': 'Priemerná cena ornej pôdy',
   'puda.bn.rust.lbl': 'Rast ceny pôdy',
   'puda.bn.najem.lbl': 'Priemerné nájomné',
@@ -1420,6 +1423,7 @@ const sk: Record<string, string> = {
 
   // ── Sezóna ──────────────────────────────────────────────────────────────────
   'sez.faqH': 'Časté otázky',
+  'sez.d.eventsH': 'Akcie v tejto sezóne',
 
   // ── Kvízy ───────────────────────────────────────────────────────────────────
   'kvz.hub.crumb': 'Kvízy',

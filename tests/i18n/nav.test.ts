@@ -95,7 +95,7 @@ describe('getNav', () => {
     expect(nav.find((s) => s.section === 'data')!.href).toBe('/statistiky/');
   });
 
-  it('uk nav: tech sekce jen launchnuté děti (žádné žebříčky/kvíz/prodejci do cs)', () => {
+  it('uk nav: tech sekce jen launchnuté děti (žádný kvíz/prodejci do cs)', () => {
     const tech = getNav('uk').find((s) => s.section === 'tech')!;
     const hrefs = (tech.children ?? []).map((c) => c.href);
     // launchnuté pro uk
@@ -103,8 +103,8 @@ describe('getNav', () => {
     expect(hrefs).toContain('/znacky/');
     expect(hrefs).toContain('/srovnani/');
     expect(hrefs).toContain('/slovnik/');
+    expect(hrefs).toContain('/zebricky/'); // launchnuté od uk žebříčků
     // NElaunchnuté → vyfiltrované (vedly by do češtiny)
-    expect(hrefs).not.toContain('/zebricky/');
     expect(hrefs).not.toContain('/kviz/');
     expect(hrefs).not.toContain('/prodejci/');
   });

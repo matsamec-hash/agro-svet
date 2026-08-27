@@ -480,6 +480,7 @@ const pl: Record<string, string> = {
   'zeb.empty': 'Żaden model nie spełnia kryteriów. Rozbudowujemy bazę — zajrzyj wkrótce.',
   'zeb.more': 'Kolejne rankingi',
   'zeb.author': 'Redakcja agro-svět.cz',
+  'zeb.methodology': 'Metodologia',
 
   // — kvízy (kvz.*) —
   'kvz.h.lede': 'Sprawdź swoją wiedzę — kto wynalazł trzypunktowy układ zawieszenia, kiedy pojawiła się pierwsza seryjna przekładnia CVT i co oznacza Stage V. Na koniec otrzymasz ocenę.',
@@ -945,6 +946,8 @@ const pl: Record<string, string> = {
   'puda.temata.h': 'Szczegółowo według tematów',
   'puda.card.cta': 'Czytaj dalej →',
   'puda.sources.h': 'Źródła danych',
+  'puda.struktura.h': 'Struktura zasobu gruntów rolnych',
+  'puda.ohrozeni.h': 'Zagrożenia gleby',
   'puda.bn.cena.lbl': 'Średnia cena gruntów ornych',
   'puda.bn.rust.lbl': 'Wzrost ceny gruntów',
   'puda.bn.najem.lbl': 'Średni czynsz dzierżawny',
@@ -1418,6 +1421,7 @@ const pl: Record<string, string> = {
 
   // ── Sezon ───────────────────────────────────────────────────────────────────
   'sez.faqH': 'Często zadawane pytania',
+  'sez.d.eventsH': 'Wydarzenia w tym sezonie',
 
   // ── Quizy ───────────────────────────────────────────────────────────────────
   'kvz.hub.crumb': 'Quizy',

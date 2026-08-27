@@ -88,8 +88,15 @@ describe('UK homepage launch', () => {
   });
 
   it("root v prefixech nedělá wildcard — nelaunchnuté sekce zůstávají cs", () => {
-    for (const p of ['/plodiny', '/zebricky', '/novinky', '/plemena']) {
+    for (const p of ['/plodiny', '/sezona', '/novinky', '/plemena']) {
       expect(isLaunchedPath('uk', p)).toBe(false);
     }
+  });
+});
+
+describe('UK žebříčky (/zebricky)', () => {
+  it('/zebricky je launchnuté pro uk', () => {
+    expect(LAUNCHED_PREFIXES.uk).toContain('/zebricky');
+    expect(isLaunchedPath('uk', '/zebricky/kombajny-nad-500-koni/')).toBe(true);
   });
 });

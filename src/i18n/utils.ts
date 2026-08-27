@@ -41,7 +41,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // statistiku, trh s půdou, dotace a slovník). Stejný případ jako sk: byla
   // hotová, ale negatovaná → noindex a mimo sitemapu, takže 6 956 /uk URL
   // nemělo vstupní bod.
-  uk: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace', '/hledat'],
+  uk: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace', '/hledat', '/zebricky'],
   // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
   // přes stat.*/data.hub./komodita. klíče. /dotace + /jak-na-to zůstávají cs

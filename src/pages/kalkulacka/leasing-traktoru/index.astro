@@ -6,11 +6,12 @@ import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
 import { content } from '../../../i18n/kalkulacka/leasing-traktoru';
-import { crumbs } from '../../../i18n/kalkulacka/common';
+import { crumbs, faqTitle } from '../../../i18n/kalkulacka/common';
 
 const locale = Astro.locals.locale ?? 'cs';
 const c = content[locale] ?? content.cs;
 const cr = crumbs[locale] ?? crumbs.cs;
+const faqH = faqTitle[locale] ?? faqTitle.cs;
 
 const canonical = `${SITE_URL}/kalkulacka/leasing-traktoru/`;
 const faqItems = c.faq;
@@ -139,7 +140,7 @@ const faqJsonLd = faqPageSchema(faqItems);
     )}
 
     <section class="faq" aria-labelledby="faq-h">
-      <h2 id="faq-h">Časté otázky</h2>
+      <h2 id="faq-h">{faqH}</h2>
       <dl class="faq-list">
         {faqItems.map((qa) => (
           <div class="faq-item">

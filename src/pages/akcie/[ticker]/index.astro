@@ -167,8 +167,8 @@ const orgJsonLd = {
       <!-- ZASTOUPENÍ V ČR -->
       {zastoupeni && zastoupeni.length > 0 && (
         <section class="ad-block">
-          <h2>Zastoupení v Česku</h2>
-          <p class="ad-text">Prodej a servis v ČR zajišťuje:</p>
+          <h2>{c.repTitle}</h2>
+          <p class="ad-text">{c.repLede}</p>
           <ul class="ad-list">
             {zastoupeni.map((d) => <li><a href={d.url} target="_blank" rel="nofollow noopener">{d.name}</a></li>)}
           </ul>
