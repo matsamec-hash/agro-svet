@@ -117,7 +117,7 @@ describe('/kviz má pro každou launchnutou locale vlastní sadu otázek', () =>
     expect(LAUNCHED_PREFIXES.sk).toContain('/kviz');
   });
 
-  for (const locale of ['sk', 'pl'] as const) {
+  for (const locale of ['sk', 'pl', 'uk'] as const) {
     it(`${locale}: otázky, možnosti i úrovně jsou přeložené a strukturně shodné s cs`, () => {
       const cs = kvizHistorie('cs');
       const loc = kvizHistorie(locale);
