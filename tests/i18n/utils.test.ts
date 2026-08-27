@@ -152,7 +152,9 @@ describe('localizeInternalHref', () => {
   });
   it('sk: NElaunchnutá sekce → cs beze změny (žádné 302)', () => {
     expect(localizeInternalHref('sk', '/farmy/nazev/')).toBe('/farmy/nazev/');
-    expect(localizeInternalHref('sk', '/zebricky/nej-traktory/')).toBe('/zebricky/nej-traktory/');
+    // /zebricky je od SK launche přeložené (TIER_LIST_COPY.sk) → sem patří
+    // sekce, která pro sk pořád launchnutá NENÍ.
+    expect(localizeInternalHref('sk', '/plodiny/psenice-ozima/')).toBe('/plodiny/psenice-ozima/');
   });
   it('uk: launchnutá → /uk; nelaunchnutá (novinky není uk) → cs', () => {
     expect(localizeInternalHref('uk', '/stroje/')).toBe('/uk/stroje/');

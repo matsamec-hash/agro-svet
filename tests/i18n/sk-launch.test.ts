@@ -3,6 +3,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { LAUNCHED_PREFIXES, isLaunchedPath } from '../../src/i18n/utils';
 import { isLockedSectionPath } from '../../src/i18n/nav';
+import { TIER_LISTS } from '../../src/lib/tier-lists';
+import { TIER_LIST_COPY } from '../../src/lib/tier-lists.i18n';
 
 describe('SK homepage launch', () => {
   it('root je launchnutý pro sk (HomeSk.astro je plně slovenská)', () => {
@@ -44,6 +46,37 @@ describe('homepage odkazuje jen na launchnuté sekce (všechny locale)', () => {
 
       const notLaunched = paths.filter((p) => !isLaunchedPath(locale, p));
       expect(notLaunched).toEqual([]);
+    });
+  }
+});
+
+describe('SK žebříčky (/zebricky)', () => {
+  it('/zebricky je launchnuté pro sk', () => {
+    expect(LAUNCHED_PREFIXES.sk).toContain('/zebricky');
+    expect(isLaunchedPath('sk', '/zebricky')).toBe(true);
+    expect(isLaunchedPath('sk', '/zebricky/traktory-do-100-koni/')).toBe(true);
+  });
+});
+
+// Celá třída: každý locale, který má overlay textů žebříčků, musí pokrývat
+// VŠECHNY cs žebříčky — částečný overlay by tiše servíroval české texty
+// uprostřed jinak přeložené stránky (tierListCopy padá na cs).
+describe('overlay textů žebříčků je kompletní pro každý locale', () => {
+  const csSlugs = TIER_LISTS.map((d) => d.slug);
+
+  for (const locale of Object.keys(TIER_LIST_COPY)) {
+    it(`${locale}: pokrývá všech ${csSlugs.length} žebříčků a nic nenechává česky`, () => {
+      const copy = TIER_LIST_COPY[locale];
+      expect(Object.keys(copy).sort()).toEqual([...csSlugs].sort());
+
+      for (const d of TIER_LISTS) {
+        const c = copy[d.slug];
+        for (const field of ['title', 'description', 'methodology', 'callToAction'] as const) {
+          expect(c[field], `${locale}/${d.slug}.${field} je prázdné`).toBeTruthy();
+          // Shodný text s cs = neproběhl překlad (u těchhle polí je vždy próza).
+          expect(c[field], `${locale}/${d.slug}.${field} == cs (nepřeloženo)`).not.toBe(d[field]);
+        }
+      }
     });
   }
 });

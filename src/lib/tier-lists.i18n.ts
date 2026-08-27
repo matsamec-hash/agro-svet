@@ -116,6 +116,110 @@ export const TIER_LIST_COPY: Record<string, Record<string, TierListCopy>> = {
       callToAction: `Do prasowania i zbioru paszy zobacz inne maszyny do zbioru roślin paszowych.`,
     },
   },
+  sk: {
+    'traktory-do-100-koni': {
+      title: `Najlepšie traktory do 100 koní`,
+      description: `Rebríček najvýkonnejších traktorov s výkonom do 100 koní (74 kW). Vhodné pre menšie hospodárstva, sady a komunálne použitie.`,
+      methodology: `Modely zoradené podľa výkonu zostupne. Z každej série je zaradený len najvýkonnejší variant, aby rebríček nezahltili súrodenecké modely.`,
+      callToAction: `Hľadáte niečo silnejšie? Pozrite rebríček 100–150 koní alebo 150–250 koní.`,
+    },
+    'traktory-100-150-koni': {
+      title: `Najlepšie traktory 100–150 koní`,
+      description: `Rebríček stredne veľkých traktorov 100–150 koní. Štandard pre bežné poľné práce na Slovensku — orba, sejacie kombinácie, stredne veľké poľnohospodárske stroje.`,
+      methodology: `Modely zoradené podľa výkonu zostupne. Cielime na hlavné európske rady (JD 6M/6R, Fendt 500, NH T6, Case Maxxum, Zetor Forterra, MF 5S/6S).`,
+      callToAction: `Pre väčšie farmy si pozrite rebríček 150–250 koní.`,
+    },
+    'traktory-150-250-koni': {
+      title: `Najlepšie traktory 150–250 koní`,
+      description: `Veľké traktory pre stredné a väčšie farmy na Slovensku. 150–250 koní pokrýva väčšinu poľných prác vrátane hlbokej orby a ťahaných zberových liniek.`,
+      methodology: `Modely zoradené podľa výkonu zostupne. Hlavne Fendt 700, JD 6R/7R, NH T7, Case Puma/Magnum, MF 7S/8S, Deutz 7-Series.`,
+      callToAction: `Pre najväčšie farmy alebo špeciálne úlohy pozrite rebríček nad 250 koní.`,
+    },
+    'traktory-nad-250-koni': {
+      title: `Najvýkonnejšie traktory nad 250 koní`,
+      description: `Špička trhu — traktory s výkonom nad 250 koní pre veľkofarmy, lesné práce a špeciálne nasadenie. Väčšinou vlajkové modely značiek.`,
+      methodology: `Modely zoradené podľa výkonu zostupne. Zahŕňa JD 8R/9R/9RX, Fendt 900/1000, NH T8/T9, Case Magnum/Steiger/Quadtrac, Claas Xerion.`,
+      callToAction: `Hľadáte niečo menšie? Rebríček 150–250 koní ponúka praktickejšie voľby pre priemernú slovenskú farmu.`,
+    },
+    'kombajny-nejvykonnejsi': {
+      title: `Najvýkonnejšie kombajny`,
+      description: `Rebríček najvýkonnejších zberových mláťačiek. Hodnotené podľa výkonu motora — záber žacieho stola aj kapacita zásobníka sú v texte detailu.`,
+      methodology: `Zberové mláťačky zoradené podľa výkonu motora zostupne. Triedy IX a X (300+ koní), top modely Claas Lexion, JD S/T, Case Axial-Flow, NH CR/CX.`,
+      callToAction: `Pre menšie farmy zvážte kombajny s nižším výkonom — obstarávacia cena je výrazne nižšia a kapacita väčšinou stačí.`,
+    },
+    'kombajny-do-300-koni': {
+      title: `Najlepšie kombajny do 300 koní`,
+      description: `Zberové mláťačky pre menšie a stredné farmy 50–500 ha. Triedy III–VI s výkonom do 300 koní — nižšia obstarávacia cena, dostatočná kapacita pre štandardné žatvy.`,
+      methodology: `Modely zoradené podľa výkonu motora zostupne. Hlavne Claas Avero / Tucano / Trion, JD T-Series 500/600, Case Axial-Flow 4000/5000, NH TC/CX.`,
+      callToAction: `Pre veľkofarmy nad 500 ha pozrite rebríček najvýkonnejších kombajnov.`,
+    },
+    'kombajny-nad-500-koni': {
+      title: `Vlajkové kombajny nad 500 koní`,
+      description: `Špička trhu — kombajny s výkonom nad 500 koní pre veľkofarmy a poskytovateľov zberových služieb. Trieda X+ s najväčšími žacími stolmi (až 18 m) a zásobníkmi (14+ tisíc litrov).`,
+      methodology: `Zberové mláťačky zoradené podľa výkonu motora zostupne. Vlajkové lode Claas Lexion 8000/8900, JD X9, Case Axial-Flow 9250, NH CR10.90, Fendt IDEAL 9/10T.`,
+      callToAction: `Pre typickú slovenskú farmu sú tieto stroje predimenzované — pozrite nižšie rebríčky.`,
+    },
+    'traktory-klasiky-pre-2000': {
+      title: `Klasické traktory spred roku 2000`,
+      description: `Rebríček historických traktorov uvedených pred rokom 2000 — zberateľské a stále prevádzkované klasiky. Často s mechanickými prevodovkami a robustnou konštrukciou, ktorá vydrží.`,
+      methodology: `Modely s rokom uvedenia do roku 1999, zoradené podľa výkonu zostupne. De-dup na sériu pre prehľad naprieč značkami.`,
+      callToAction: `Hľadáte aktuálne vyrábaný stroj? Pozrite rebríčky podľa výkonu.`,
+    },
+    'traktory-male-kompaktni': {
+      title: `Najlepšie malé / kompaktné traktory (do 60 koní)`,
+      description: `Kompaktné traktory pre sady, vinohrady, komunálne použitie a hobby farmy. Výkon do 60 koní, menší polomer otáčania, lepšia manévrovateľnosť.`,
+      methodology: `Modely s výkonom do 60 koní zoradené zostupne. Hlavne Kubota L-Series, JD 3R, Massey Ferguson 1700E, Iseki, Zetor Major.`,
+      callToAction: `Pre stredne veľké farmy pozrite rebríček traktorov do 100 koní.`,
+    },
+    'nejsirsi-diskove-podmitace': {
+      title: `Najširšie diskové podmietače`,
+      description: `Rebríček diskových podmietačov podľa pracovného záberu. Širší záber = vyšší plošný výkon, ale vyšší nárok na výkon traktora. Vhodné na plytké spracovanie strniska.`,
+      methodology: `Modely zoradené podľa pracovného záberu zostupne. Z každej série len najširší variant. Naprieč značkami Amazone, Bednar, Horsch, Väderstad, Pöttinger.`,
+      callToAction: `Hľadáte hlbšie spracovanie? Pozrite rebríček radličkových podmietačov a kypričov.`,
+    },
+    'nejsirsi-radlickove-podmitace': {
+      title: `Najširšie radličkové podmietače`,
+      description: `Rebríček radličkových (dlátových) podmietačov podľa pracovného záberu. Radličky pracujú hlbšie ako disky — vhodné na prekyprenie a narušenie utužených vrstiev.`,
+      methodology: `Modely zoradené podľa pracovného záberu zostupne, de-dup na sériu. Naprieč značkami Amazone, Bednar, Horsch, Väderstad, Pöttinger.`,
+      callToAction: `Na plytké spracovanie strniska pozrite rebríček diskových podmietačov.`,
+    },
+    'nejsirsi-seci-kombinace': {
+      title: `Najširšie sejacie kombinácie`,
+      description: `Rebríček sejacích kombinácií (príprava pôdy + sejba v jednom prejazde) podľa pracovného záberu. Úspora prejazdov a času pri zakladaní porastov.`,
+      methodology: `Modely zoradené podľa pracovného záberu zostupne, de-dup na sériu. Naprieč značkami Amazone, Horsch, Väderstad, Pöttinger, Bednar.`,
+      callToAction: `Pre samostatné sejačky pozrite rebríček pneumatických a presných sejačiek.`,
+    },
+    'nejsirsi-pneumaticke-seci-stroje': {
+      title: `Najširšie pneumatické sejačky`,
+      description: `Rebríček pneumatických (výsevných) sejačiek podľa pracovného záberu. Pneumatická distribúcia osiva umožňuje väčší záber a presnejšie dávkovanie.`,
+      methodology: `Modely zoradené podľa pracovného záberu zostupne, de-dup na sériu. Naprieč piatimi hlavnými značkami na slovenskom trhu.`,
+      callToAction: `Pre presný výsev (kukurica, repa, slnečnica) pozrite rebríček presných sejačiek.`,
+    },
+    'nejsirsi-presne-seci-stroje': {
+      title: `Najširšie presné sejačky`,
+      description: `Rebríček presných (jednozrnných) sejačiek podľa pracovného záberu. Pre kukuricu, repu a slnečnicu — presné rozmiestnenie jednotlivých zŕn.`,
+      methodology: `Modely zoradené podľa pracovného záberu zostupne, de-dup na sériu. Záber presných sejačiek zvyčajne zodpovedá počtu riadkov × medziriadková vzdialenosť.`,
+      callToAction: `Pre husto siate plodiny (obilniny) pozrite rebríček pneumatických sejačiek.`,
+    },
+    'nejsirsi-kyprice': {
+      title: `Najširšie kypriče`,
+      description: `Rebríček kypričov podľa pracovného záberu. Kypriče spracúvajú pôdu do strednej a väčšej hĺbky bez obracania — základ minimalizačných technológií.`,
+      methodology: `Modely zoradené podľa pracovného záberu zostupne, de-dup na sériu. Naprieč značkami Amazone, Bednar, Horsch, Väderstad, Pöttinger.`,
+      callToAction: `Na plytké strnisko pozrite diskové podmietače, na sejbu sejacie kombinácie.`,
+    },
+    'nejsirsi-zaci-stroje': {
+      title: `Najširšie žacie stroje`,
+      description: `Rebríček žacích strojov (na krmoviny) podľa pracovného záberu. Väčší záber skracuje čas kosby a lepšie využíva počasie — kľúčové pri zbere objemových krmív.`,
+      methodology: `Modely zoradené podľa pracovného záberu zostupne, de-dup na sériu. Hlavne žacie kombinácie Krone a Pöttinger.`,
+      callToAction: `Na zhrňovanie a obracanie krmovín pozrite príslušné kategórie strojov na zber krmovín.`,
+    },
+    'nejvykonnejsi-samojizdne-rezacky': {
+      title: `Najvýkonnejšie samochodné rezačky`,
+      description: `Rebríček samochodných zberových rezačiek podľa výkonu motora. Na zber kukurice na siláž a trávnych porastov — najvýkonnejšie stroje na poli.`,
+      methodology: `Modely zoradené podľa výkonu motora zostupne, de-dup na sériu. Vlajkové lode Claas Jaguar a Krone BiG X.`,
+      callToAction: `Na lisovanie a zber krmovín pozrite ostatné stroje na zber krmovín.`,
+    },
+  },
 };
 
 /** Texty žebříčku pro locale; cs (a neznámé locale) → undefined = použij cs originál. */
