@@ -7,6 +7,7 @@ import { chorobaChipsForPlodina } from '../../../lib/choroby';
 import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../../i18n/utils';
 import { breadcrumbSchema, howToSchema, faqPageSchema, itemListSchema, imageObjectSchema } from '../../../lib/structured-data';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
+import { injectLinksInText, createLinkContext } from '../../../lib/auto-linker';
 
 const { plodina: slug } = Astro.params;
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -19,6 +20,9 @@ const linkOdrudy = locale === 'cs';
 if (!plodina) return Astro.rewrite('/404');
 
 const base = `/plodiny/${plodina.slug}/`;
+// Jeden sdílený kontext na celou stránku — cap 10 odkazů platí per kontext, takže
+// bez sdílení by každé pole dostalo vlastních 10 a stránka by byla přelinkovaná.
+const linkCtx = createLinkContext(base);
 const breadcrumb = breadcrumbSchema([
   { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
   { name: tr('plod.hub.crumb'), url: localizePath(locale, '/plodiny/') },
@@ -96,7 +100,7 @@ const list = plodina.odrudy.length > 0
       <div class="hero-left">
         <span class="kicker"><span class="dot"></span>{tr(`plod.skupina.${plodina.skupina}`)} · {tr('plod.d.kickerSuffix')}</span>
         <h1>{plodina.name}</h1>
-        <p class="hero-lede">{plodina.description}</p>
+        <p class="hero-lede" set:html={injectLinksInText(plodina.description, linkCtx, locale)} />
         <div class="hero-stats">
           {plodina.odrudy.length > 0 && (
             <div class="s"><span class="n">{plodina.odrudy.length}</span><span class="l">{tr('plod.d.statOdrudLbl')}</span></div>
@@ -154,13 +158,13 @@ const list = plodina.odrudy.length > 0
           {plodina.vysevek && (
             <>
               <dt>{tr('plod.d.vysevek')}</dt>
-              <dd>{plodina.vysevek}</dd>
+              <dd set:html={injectLinksInText(plodina.vysevek, linkCtx, locale)} />
             </>
           )}
           {plodina.hnojeni && (
             <>
               <dt>{tr('plod.d.hnojeni')}</dt>
-              <dd>{plodina.hnojeni}</dd>
+              <dd set:html={injectLinksInText(plodina.hnojeni, linkCtx, locale)} />
             </>
           )}
           {plodina.vynos_t_ha && (
@@ -178,7 +182,7 @@ const list = plodina.odrudy.length > 0
           {plodina.vyuziti && (
             <>
               <dt>{tr('plod.d.vyuziti')}</dt>
-              <dd>{plodina.vyuziti}</dd>
+              <dd set:html={injectLinksInText(plodina.vyuziti, linkCtx, locale)} />
             </>
           )}
         </dl>
@@ -194,7 +198,7 @@ const list = plodina.odrudy.length > 0
               <span class="step-num">{i + 1}</span>
               <div class="step-body">
                 <strong class="step-name">{s.name}</strong>
-                <p class="step-text">{s.text}</p>
+                <p class="step-text" set:html={injectLinksInText(s.text, linkCtx, locale)} />
               </div>
             </li>
           ))}
@@ -264,7 +268,7 @@ const list = plodina.odrudy.length > 0
           {plodina.faq.map((f) => (
             <div class="faq-item">
               <h3 class="faq-q">{f.q}</h3>
-              <p class="faq-a">{f.a}</p>
+              <p class="faq-a" set:html={injectLinksInText(f.a, linkCtx, locale)} />
             </div>
           ))}
         </div>

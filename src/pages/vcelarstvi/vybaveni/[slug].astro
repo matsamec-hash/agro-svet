@@ -4,6 +4,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { getAllVybaveni, getVybaveni, vybaveniKategorieLabel } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
 import { useTranslations, getLocaleFromUrl, localizePath, plural } from '../../../i18n/utils';
+import { injectLinks, injectLinksInText, createLinkContext } from '../../../lib/auto-linker';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
@@ -14,6 +15,8 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600,
 const { slug } = Astro.params;
 const item = getVybaveni(slug!, locale);
 if (!item) return Astro.rewrite('/404');
+// Sdílený kontext přes všechna pole — cap 10 odkazů platí per kontext.
+const linkCtx = createLinkContext(`/vcelarstvi/vybaveni/${item.slug}/`);
 
 const canonical = `${SITE_URL}${base}/vcelarstvi/vybaveni/${item.slug}/`;
 const pageTitle = item.name;
@@ -90,7 +93,7 @@ const thingJsonLd: Record<string, unknown> = {
           {item.pro_zacatecniky && <span class="tag tag-zac">{t('vcel.vyb.proZac')}</span>}
         </div>
         <h1>{item.name}</h1>
-        <p class="hero-lede">{item.popis_kratky}</p>
+        <p class="hero-lede" set:html={injectLinksInText(item.popis_kratky, linkCtx, locale)} />
         {item.orientacni_cena && (
           <div class="hero-cena">{t('vcel.vyb.heroCena')} <strong>{item.orientacni_cena}</strong></div>
         )}
@@ -147,7 +150,7 @@ const thingJsonLd: Record<string, unknown> = {
         </section>
 
         <section class="body-card">
-          <div class="prose" set:html={item.description.trim().split(/\n\n+/).map((p) => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('')} />
+          <div class="prose" set:html={injectLinks(item.description.trim().split(/\n\n+/).map((p) => `<p>${p.replace(/\n/g, '<br>')}</p>`).join(''), linkCtx, locale)} />
         </section>
 
         {related.length > 0 && (

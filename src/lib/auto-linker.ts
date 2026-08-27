@@ -6,8 +6,8 @@
 
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from './stroje';
 import { getAllDruhy, getAllPlemena } from './plemena';
-import { SLOVNIK } from './slovnik';
-import { TIER_LISTS } from './tier-lists';
+import { getSlovnik } from './slovnik';
+import { tierLists } from './tier-lists';
 import remoteCatalog from '../data/remote-catalog.json';
 import { localizeInternalHref, stripLocale } from '../i18n/utils';
 import { defaultLocale, type Locale } from '../i18n/config';
@@ -48,7 +48,10 @@ const MAX_LINKS_PER_ARTICLE = 10;
 /** Min term length — filters out ambiguous short tokens like "T4", "CX50", "7110". */
 const MIN_TERM_LENGTH = 5;
 
-let cachedGlossary: GlossaryEntry[] | null = null;
+// Glosář per locale: termíny se berou z lokalizovaných dat (slovník, plemena,
+// žebříčky), jinak by se na /sk|/pl|/uk stránkách nemělo co potkat. Značky
+// a modely jsou vlastní jména → shodné napříč jazyky.
+const cachedGlossary = new Map<Locale, GlossaryEntry[]>();
 
 function makeEntry(term: string, url: string, priority: number, external = false, localizable = false): GlossaryEntry {
   return {
@@ -62,7 +65,7 @@ function makeEntry(term: string, url: string, priority: number, external = false
   };
 }
 
-function buildGlossary(): GlossaryEntry[] {
+function buildGlossary(locale: Locale): GlossaryEntry[] {
   const entries: GlossaryEntry[] = [];
 
   for (const b of getAllBrands()) {
@@ -77,14 +80,14 @@ function buildGlossary(): GlossaryEntry[] {
     entries.push(makeEntry(m.name, `/stroje/${m.brand_slug}/${m.series_slug}/${m.slug}/`, 12, false, true));
   }
 
-  for (const d of getAllDruhy()) {
+  for (const d of getAllDruhy(locale)) {
     entries.push(makeEntry(d.name_plural, `/plemena/${d.slug}/`, 7));
     if (d.name && d.name !== d.name_plural) {
       entries.push(makeEntry(d.name, `/plemena/${d.slug}/`, 6));
     }
   }
 
-  for (const p of getAllPlemena()) {
+  for (const p of getAllPlemena(locale)) {
     entries.push(makeEntry(p.name, `/plemena/${p.druh_slug}/${p.slug}/`, 9));
     if (p.alternative_names) {
       for (const alt of p.alternative_names) {
@@ -103,7 +106,7 @@ function buildGlossary(): GlossaryEntry[] {
   // "CVT" jsou jednoznačné a auto-link na slovník přesně to, co text potřebuje
   // vysvětlit. Priorita 8 — pod brand (10) a model (12), aby v textu o
   // "John Deere AdBlue" wrappnuli značku, ne acronym.
-  for (const term of SLOVNIK) {
+  for (const term of getSlovnik(locale)) {
     // Hlavní jméno (case-insensitive regex match)
     if (term.term.length >= 3) {
       entries.push({
@@ -132,7 +135,7 @@ function buildGlossary(): GlossaryEntry[] {
 
   // Žebříčky — když článek zmiňuje "nejlepší traktory do 100 koní" nebo
   // "top 250 koní", link na konkrétní žebříček. Priorita 5 (under encyklopedie + slovník).
-  for (const t of TIER_LISTS) {
+  for (const t of tierLists(locale)) {
     entries.push(makeEntry(t.title, `/zebricky/${t.slug}/`, 5));
   }
 
@@ -156,9 +159,12 @@ function buildGlossary(): GlossaryEntry[] {
   return entries;
 }
 
-function getGlossary(): GlossaryEntry[] {
-  if (!cachedGlossary) cachedGlossary = buildGlossary();
-  return cachedGlossary;
+function getGlossary(locale: Locale): GlossaryEntry[] {
+  const hit = cachedGlossary.get(locale);
+  if (hit) return hit;
+  const built = buildGlossary(locale);
+  cachedGlossary.set(locale, built);
+  return built;
 }
 
 interface Token {
@@ -301,7 +307,7 @@ export function injectLinksInText(text: string, excludeUrlOrUsed?: string | Set<
 export function injectLinks(html: string, excludeUrlOrUsed?: string | Set<string>, locale: Locale = defaultLocale): string {
   if (!html) return html;
   try {
-    const glossary = getGlossary();
+    const glossary = getGlossary(locale);
     const used = excludeUrlOrUsed instanceof Set
       ? excludeUrlOrUsed
       : createLinkContext(excludeUrlOrUsed);

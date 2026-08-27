@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllVcely, getVcela, vcelaTemperamentLabel, vcelaVynosLabel, vcelaRojivostLabel } from '../../../lib/vcelarstvi';
 import { faqPageSchema } from '../../../lib/structured-data';
+import { injectLinks, injectLinksInText, createLinkContext } from '../../../lib/auto-linker';
 import { SITE_URL } from '../../../lib/config';
 import { useTranslations, getLocaleFromUrl, localizePath, plural } from '../../../i18n/utils';
 
@@ -15,6 +16,8 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600,
 const { slug } = Astro.params;
 const vcela = getVcela(slug!, locale);
 if (!vcela) return Astro.rewrite('/404');
+// Sdílený kontext přes všechna pole — cap 10 odkazů platí per kontext.
+const linkCtx = createLinkContext(`/vcelarstvi/druhy/${vcela.slug}/`);
 
 const canonical = `${SITE_URL}${base}/vcelarstvi/druhy/${vcela.slug}/`;
 const pageTitle = `${vcela.name} (${vcela.latinsky})`;
@@ -103,7 +106,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         </div>
         <h1>{vcela.name}</h1>
         <div class="hero-altnames">{vcela.latinsky}</div>
-        <p class="hero-lede">{vcela.vhodnost_cr}</p>
+        <p class="hero-lede" set:html={injectLinksInText(vcela.vhodnost_cr, linkCtx, locale)} />
         <div class="hero-actions">
           <a class="cta-secondary" href={localizePath(locale, '/vcelarstvi/druhy/')}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
@@ -157,7 +160,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         </section>
 
         <section class="body-card">
-          <div class="prose" set:html={vcela.description.trim().split(/\n\n+/).map((p) => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('')} />
+          <div class="prose" set:html={injectLinks(vcela.description.trim().split(/\n\n+/).map((p) => `<p>${p.replace(/\n/g, '<br>')}</p>`).join(''), linkCtx, locale)} />
         </section>
 
         {vcela.wikipedia && (

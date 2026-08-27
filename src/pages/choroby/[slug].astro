@@ -5,6 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getChoroba, isChorobaIndexable } from '../../lib/choroby';
 import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../lib/structured-data';
 import { useTranslations, tf, plural, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
+import { injectLinksInText, createLinkContext } from '../../lib/auto-linker';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -16,6 +17,8 @@ const choroba = getChoroba(slug!, locale);
 if (!choroba || !isChorobaIndexable(choroba)) return Astro.rewrite('/404');
 
 const base = `/choroby/${choroba.slug}/`;
+// Sdílený kontext přes všechna pole — cap 10 odkazů platí per kontext.
+const linkCtx = createLinkContext(base);
 const breadcrumb = breadcrumbSchema([
   { name: tr('cat.bc.home'), url: localizePath(locale, '/') },
   { name: tr('chor.hub.crumb'), url: localizePath(locale, '/choroby/') },
@@ -57,7 +60,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
         <span class="kicker"><span class="dot"></span>{tr('chor.d.kicker')}</span>
         <h1>{choroba.name}</h1>
         {choroba.latinsky && <p class="hero-latin">{choroba.latinsky}</p>}
-        <p class="hero-lede">{choroba.popis}</p>
+        <p class="hero-lede" set:html={injectLinksInText(choroba.popis, linkCtx, locale)} />
         <div class="hero-stats">
           <div class="s"><span class="n">{choroba.plodiny.length}</span><span class="l">{tr('chor.d.cropsAtRisk')}</span></div>
         </div>
@@ -82,7 +85,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
 
     <section class="card-section">
       <h2 class="section-title">{tr('chor.d.priznaky')}</h2>
-      <p class="lead-text">{choroba.priznaky ?? choroba.popis}</p>
+      <p class="lead-text" set:html={injectLinksInText(choroba.priznaky ?? choroba.popis, linkCtx, locale)} />
     </section>
 
     {choroba.hostitele && choroba.hostitele.length > 0 && (
@@ -97,21 +100,21 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
     {choroba.sireni && (
       <section class="card-section">
         <h2 class="section-title">{tr('chor.d.sireni')}</h2>
-        <p class="lead-text">{choroba.sireni}</p>
+        <p class="lead-text" set:html={injectLinksInText(choroba.sireni, linkCtx, locale)} />
       </section>
     )}
 
     {choroba.skodlivost && (
       <section class="card-section skodlivost">
         <h2 class="section-title">{tr('chor.d.skodlivost')}</h2>
-        <p class="lead-text">{choroba.skodlivost}</p>
+        <p class="lead-text" set:html={injectLinksInText(choroba.skodlivost, linkCtx, locale)} />
       </section>
     )}
 
     {choroba.cyklus && (
       <section class="card-section">
         <h2 class="section-title">{tr('chor.d.cyklus')}</h2>
-        <p class="lead-text">{choroba.cyklus}</p>
+        <p class="lead-text" set:html={injectLinksInText(choroba.cyklus, linkCtx, locale)} />
       </section>
     )}
 
@@ -133,7 +136,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
     {choroba.ochrana && (
       <section class="card-section ochrana">
         <h2 class="section-title">{tr('chor.d.ochranaH')}</h2>
-        <p class="lead-text">{choroba.ochrana}</p>
+        <p class="lead-text" set:html={injectLinksInText(choroba.ochrana, linkCtx, locale)} />
       </section>
     )}
 
@@ -164,7 +167,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
           {choroba.faq.map((f) => (
             <div class="faq-item">
               <h3 class="faq-q">{f.q}</h3>
-              <p class="faq-a">{f.a}</p>
+              <p class="faq-a" set:html={injectLinksInText(f.a, linkCtx, locale)} />
             </div>
           ))}
         </div>
