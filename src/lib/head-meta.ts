@@ -6,6 +6,8 @@
  *     i do og:url, kde absolutní URL je povinná.
  */
 
+import { truncateAtBoundary } from './structured-data';
+
 export const SITE_ORIGIN = 'https://agro-svet.cz';
 const BRAND = 'agro-svět.cz';
 
@@ -32,4 +34,17 @@ export function absoluteUrl(pathOrUrl: string, origin: string = SITE_ORIGIN): st
   const last = u.pathname.split('/').pop() ?? '';
   if (!u.pathname.endsWith('/') && !last.includes('.')) u.pathname = `${u.pathname}/`;
   return u.toString();
+}
+
+/**
+ * Meta description delší než ~165 znaků Google v SERPu stejně ořízne — a to
+ * natvrdo uprostřed slova. Nad hranicí zkracujeme sami na hranici věty (nebo
+ * slova + výpustka), aby snippet dával smysl. Popisy generují šablony napříč
+ * sekcemi i locale, takže je to jediné rozumné místo, kde to řešit.
+ */
+export function metaDescription(description: string, max = 160, limit = 165): string {
+  const d = (description ?? '').replace(/\s+/g, ' ').trim();
+  // Konec věty bereme jen když je blízko limitu (0,85) — jinak by se u popisu
+  // se dvěma větami zahodila skoro polovina snippetu a v SERPu zůstalo místo ladem.
+  return d.length > limit ? truncateAtBoundary(d, max, 0.85) : d;
 }

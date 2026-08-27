@@ -8,7 +8,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { siteSchemaGraph } from '../lib/structured-data';
 import { imgSrcset } from '../lib/image-variants';
-import { pageTitle, absoluteUrl } from '../lib/head-meta';
+import { pageTitle, absoluteUrl, metaDescription } from '../lib/head-meta';
 import { getLocaleFromUrl, t, stripLocale, isLaunchedPath } from '../i18n/utils';
 import { isLockedSectionPath } from '../i18n/nav';
 import Lightbox from '../components/bazar/Lightbox.astro';
@@ -76,6 +76,7 @@ const canonicalPath = localizedPathname.endsWith('/') ? localizedPathname : `${l
 // canonical z props může přijít relativní (/historie/…) — normalizujeme na
 // absolutní, protože stejná hodnota jde i do og:url.
 const canonicalUrl = absoluteUrl(canonical ?? canonicalPath, SITE_ORIGIN);
+const metaDesc = metaDescription(description);
 // Launch je path-scoped a per-locale: indexují se jen přeložené sekce daného
 // locale. cs se nemění (effectiveNoindex == noindex). SK chování beze změny.
 const csRootPath = stripLocale(localizedPathname).path;
@@ -122,7 +123,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta name="msvalidate.01" content="A401032123927401E73FAB1151E94F3D" />
   <meta name="seznam-wmt" content="H957FuP9Pc7eQLHuPaTpuyrG03OUV0FD" />
   <title>{pageTitle(title)}</title>
-  <meta name="description" content={description} />
+  <meta name="description" content={metaDesc} />
   <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
   <link rel="canonical" href={canonicalUrl} />
@@ -142,7 +143,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   )}
 
   <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
+  <meta property="og:description" content={metaDesc} />
   <meta property="og:type" content={ogType} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:locale" content={ogLocale} />

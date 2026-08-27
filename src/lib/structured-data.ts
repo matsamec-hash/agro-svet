@@ -698,7 +698,7 @@ export function imageObjectSchema(img: ImageObjectInput) {
  * jinak ořízne na poslední celé slovo, odstraní koncovou interpunkci/mezeru
  * a přidá výpustku „…". Text kratší než limit vrací beze změny.
  */
-export function truncateAtBoundary(text: string, max = 155): string {
+export function truncateAtBoundary(text: string, max = 155, sentenceEndMinRatio = 0.6): string {
   // Sjednotí vnitřní bílé znaky (ÚKZÚZ popisy mají zalomení řádků) na jednu mezeru.
   const t = text.replace(/\s+/g, ' ').trim();
   if (t.length <= max) return t;
@@ -706,7 +706,7 @@ export function truncateAtBoundary(text: string, max = 155): string {
 
   // Preferuj ukončení na hranici věty, pokud je rozumně blízko limitu.
   const sentenceEnd = Math.max(slice.lastIndexOf('. '), slice.lastIndexOf('! '), slice.lastIndexOf('? '));
-  if (sentenceEnd >= max * 0.6) {
+  if (sentenceEnd >= max * sentenceEndMinRatio) {
     return slice.slice(0, sentenceEnd + 1).trim();
   }
   // Jinak ořízni na poslední celé slovo + výpustka.
