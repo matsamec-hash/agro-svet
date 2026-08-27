@@ -76,11 +76,11 @@ describe('getNav', () => {
     expect(ukHrefs).not.toContain('/svet/srovnani/');
   });
 
-  it('uk nav: data sekce viditelná, jen launchnuté děti (statistiky/puda/dotace; kalkulačky vynechané)', () => {
+  it('uk nav: data sekce viditelná, jen launchnuté děti (statistiky/akcie/puda/dotace; kalkulačky vynechané)', () => {
     const data = getNav('uk').find((s) => s.section === 'data');
     expect(data).toBeTruthy();
     const hrefs = (data!.children ?? []).map((c) => c.href);
-    expect(hrefs).toEqual(['/statistiky/', '/puda/', '/dotace/']);
+    expect(hrefs).toEqual(['/statistiky/', '/akcie/', '/puda/', '/dotace/']);
     expect(hrefs).not.toContain('/kalkulacka/');
     expect(hrefs).not.toContain('/kalkulacka/dotace-cap/');
     // header sekce ukazuje na první launchnuté dítě (/statistiky/ je launchnuté pro uk)

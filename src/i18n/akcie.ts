@@ -305,8 +305,78 @@ const sk: AkcieCopy = {
   linkSales: 'Predaje poľnohospodárskej techniky v Európe',
 };
 
-/** uk zatím nemá přeložený overlay firem → dostává cs (a není launchnuté). */
-export const content: Record<Locale, AkcieCopy> = { cs, pl, sk, uk: cs };
+const uk: AkcieCopy = {
+  numberLocale: 'uk-UA',
+  bln: 'млрд',
+  crumbAria: 'Шлях',
+  crumbHome: 'Головна',
+  crumbData: 'Дані',
+  crumbAkcie: 'Акції',
+  metaTitle: 'Акції аграрних компаній — John Deere, Bayer, AGCO та інші | agro-svět',
+  metaDescription:
+    'Огляд акцій компаній, пов’язаних із сільським господарством — техніка (John Deere, AGCO, CNH), агрохімія та насіння (Bayer, BASF, Corteva) і сировина. Профілі та біржові символи. Не є інвестиційною порадою.',
+  crumbSelf: 'Акції аграрних компаній',
+  eyebrow: 'Датова секція · Ринки',
+  h1: 'Акції аграрних компаній',
+  h1mark: 'на біржі',
+  lede:
+    'Хто стоїть за технікою, насінням і добривами на ваших полях — і як вони представлені на біржі. Огляд публічних компаній агросектору: виробники техніки, агрохімії та переробники сировини зі Сполучених Штатів і Європи.',
+  disclaimerStrong: '⚠️ Не є інвестиційною порадою.',
+  disclaimerText:
+    'Ця сторінка — інформаційний огляд компаній, пов’язаних із сільським господарством. Не містить рекомендацій щодо купівлі чи продажу. Інвестиції в акції ризиковані; перед рішенням проконсультуйтеся з ліцензованим радником. Курси можуть бути орієнтовними та із затримкою.',
+  kategorie: {
+    technika: 'Сільськогосподарська техніка',
+    agrochemie: 'Агрохімія, насіння та добрива',
+    komodity: 'Сировина та переробка',
+  },
+  hubNote:
+    '📈 <strong>Живі денні котирування</strong> і 3-місячні тренди для кожної компанії; натисніть на картку для <strong>інтерактивного графіка</strong> динаміки курсу та ключових показників.',
+  hubCrossSales: 'Продажі сільськогосподарської техніки',
+  hubCrossSalesNote: 'скільки техніки продається по країнах',
+  hubCrossCountries: 'Профілі країн',
+  hubCrossCountriesNote: 'агросектор окремих ринків',
+  hubCrossPrices: 'Ціни сільськогосподарської сировини',
+  hubCrossData: 'Датова секція agro-svět',
+  detailTitleTpl: '{name} ({ticker}) — акції, курс і профіль компанії | agro-svět',
+  detailDescriptionTpl:
+    '{name}: курс акції, ринкова капіталізація, штаб-квартира, директор, обіг і чим займається компанія в агросекторі. {profil}',
+  detailDisclaimerStrong: '⚠️ Не є інвестиційною порадою.',
+  detailDisclaimerText:
+    'Інформаційний профіль компанії. Курс і показники орієнтовні та із затримкою (фундаментальні дані Finnhub, графік курсу Yahoo Finance). Інвестиції в акції ризиковані.',
+  metricsTitle: 'Ключові показники',
+  mCap: 'Ринкова капіталізація',
+  mPe: 'P/E (TTM)',
+  mDiv: 'Дивідендна дохідність',
+  mInd: 'Сектор',
+  range52: '52-тижневий діапазон',
+  chartTitle: 'Динаміка курсу',
+  chartRangesAria: 'Період графіка',
+  chartLoading: 'Завантаження графіка…',
+  chartSource: 'Джерело: Yahoo Finance · із затримкою',
+  chartAria: 'Графік динаміки курсу',
+  chartPeriodSuffix: ' % за період',
+  profileTitle: 'Чим займається компанія',
+  factHq: 'Штаб-квартира',
+  factFounded: 'Засновано',
+  factCeo: 'Директор (CEO)',
+  factRevenue: 'Річний обіг',
+  brandsTitleMulti: 'Бренди цієї компанії в Україні',
+  brandsTitleSingle: 'Моделі цього бренду в Україні',
+  brandsLede: 'Ознайомтеся з каталогом техніки та профілем бренду безпосередньо на agro-svět:',
+  brandsModels: 'Моделі →',
+  brandsProfile: 'Профіль бренду →',
+  logoAlt: 'Логотип',
+  repTitle: 'Представництво в Україні',
+  repLede: 'Продаж і сервіс в Україні забезпечує:',
+  achievementsTitle: 'Найбільші досягнення та віхи',
+  linksTitle: 'Посилання',
+  linkWeb: 'Офіційний сайт компанії',
+  linkCountry: 'Сільське господарство — профіль країни, де розташована компанія',
+  linkAll: 'Усі акції аграрних компаній',
+  linkSales: 'Продажі сільськогосподарської техніки в Європі',
+};
+
+export const content: Record<Locale, AkcieCopy> = { cs, pl, sk, uk };
 
 export function akcieCopy(locale: string): AkcieCopy {
   return content[locale as Locale] ?? cs;

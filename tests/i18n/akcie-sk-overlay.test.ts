@@ -7,12 +7,14 @@ import { isLaunchedPath, localizeInternalHref } from '../../src/i18n/utils';
 // Stejná logika jako u akcie-pl-overlay, ale psaná přes VŠECHNY launchnuté
 // locale: přidat další jazyk pak znamená doplnit overlay, ne další kopii testu.
 // Bez téhle kontroly by nová firma v akcie-agro.ts tiše přidala českou kartu.
-const LOCALES = ['sk', 'pl'] as const;
+const LOCALES = ['sk', 'pl', 'uk'] as const;
 // Slovenština sdílí s češtinou skoro celou abecedu — na únik stačí ě/ř/ů
 // plus slovník českých tvarů z téhle domény.
 const CZ_MARKERS: Record<string, RegExp> = {
   sk: /[ěřůĚŘŮ]|zemědělsk|společnost|největší|výrobce|hnojiv[ay]\b|osiva\b/i,
   pl: /[ěščřžýáíéúůťďň]/i,
+  // uk je azbukou — únik se pozná obráceně: text bez jediného cyrilického znaku.
+  uk: /^[^\u0400-\u04FF]*$/,
 };
 
 // Slovenština a čeština píšou některé odborné termíny shodně — shoda tam není
@@ -21,6 +23,7 @@ const CZ_MARKERS: Record<string, RegExp> = {
 const SAME_AS_CS: Record<string, Set<string>> = {
   // „Dividendový výnos" i „Profil značky →" se cs a sk píšou shodně.
   sk: new Set(['mDiv', 'brandsProfile']),
+  uk: new Set(),
   pl: new Set(),
 };
 

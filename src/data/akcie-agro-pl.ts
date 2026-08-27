@@ -14,6 +14,7 @@
 // tests/i18n/akcie-pl-overlay.test.ts).
 
 import { AKCIE_SK } from './akcie-agro-sk';
+import { AKCIE_UK } from './akcie-agro-uk';
 
 export interface AkcieTextOverlay {
   profil?: string;
@@ -179,7 +180,7 @@ export const AKCIE_PL: Record<string, AkcieTextOverlay> = {
 /** Overlaye podle locale. cs = žádný overlay (zdroj je akcie-agro.ts).
  *  Dispatcher bydlí tady z historických důvodů (pl byl první overlay);
  *  další jazyky se přidávají importem, ne kopií akcieText(). */
-const OVERLAYS: Record<string, Record<string, AkcieTextOverlay>> = { pl: AKCIE_PL, sk: AKCIE_SK };
+const OVERLAYS: Record<string, Record<string, AkcieTextOverlay>> = { pl: AKCIE_PL, sk: AKCIE_SK, uk: AKCIE_UK };
 
 /**
  * Vrátí textové pole firmy v daném jazyce; bez overlaye padá na české originály.
