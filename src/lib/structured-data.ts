@@ -616,9 +616,12 @@ export function odrudaDatasetSchema(d: OdrudaDatasetInput) {
       alternateName: 'ÚKZÚZ',
       url: 'https://www.ukzuz.cz/',
     },
+    // Vnořený Dataset musí mít vlastní description — jinak GSC hlásí
+    // „Chybí pole description" u položky „Odrůdy plodiny …".
     isPartOf: {
       '@type': 'Dataset',
       name: `Odrůdy plodiny ${d.plodinaName}`,
+      description: `Přehled registrovaných odrůd plodiny ${d.plodinaName} v České republice: vlastnosti, odolnosti, udržovatel a rok registrace podle ÚKZÚZ.`,
       url: `${SITE_URL}/plodiny/${d.plodinaSlug}/`,
     },
   };

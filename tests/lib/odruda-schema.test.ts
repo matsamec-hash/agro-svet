@@ -34,6 +34,15 @@ describe('odrudaDatasetSchema', () => {
     expect(s.isPartOf.url).toBe('https://agro-svet.cz/plodiny/psenice-ozima/');
   });
 
+  // GSC „Chybí pole description" hlásí vnořený Dataset v isPartOf, ne kořen.
+  it('vnořený Dataset v isPartOf má vlastní description', () => {
+    const s = odrudaDatasetSchema(base) as any;
+    expect(s.isPartOf['@type']).toBe('Dataset');
+    expect(typeof s.isPartOf.description).toBe('string');
+    expect(s.isPartOf.description.length).toBeGreaterThan(20);
+    expect(s.isPartOf.description).toContain('Pšenice ozimá');
+  });
+
   it('mapuje fakta a vlastnosti/odolnosti do variableMeasured', () => {
     const s = odrudaDatasetSchema(base) as any;
     const names = s.variableMeasured.map((v: any) => v.name);
