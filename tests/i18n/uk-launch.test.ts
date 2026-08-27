@@ -88,7 +88,7 @@ describe('UK homepage launch', () => {
   });
 
   it("root v prefixech nedělá wildcard — nelaunchnuté sekce zůstávají cs", () => {
-    for (const p of ['/plodiny', '/sezona', '/novinky', '/plemena']) {
+    for (const p of ['/sezona', '/novinky', '/plemena', '/vcelarstvi']) {
       expect(isLaunchedPath('uk', p)).toBe(false);
     }
   });

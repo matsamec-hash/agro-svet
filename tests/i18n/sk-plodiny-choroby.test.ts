@@ -10,12 +10,39 @@ import { listChoroby } from '../../src/lib/choroby';
 const KEY_FIELDS = new Set(['slug', 'skupina', 'hero_image', 'hero_author', 'hero_license', 'hero_source',
   'seti_mesice', 'sklizen_mesice', 'wikipedia', 'latinsky', 'aliases', 'ucinne_latky']);
 
-describe('SK launch /plodiny + /choroby', () => {
-  it('obě sekce jsou launchnuté pro sk', () => {
-    for (const p of ['/plodiny', '/choroby']) {
-      expect(LAUNCHED_PREFIXES.sk).toContain(p);
-      expect(isLaunchedPath('sk', `${p}/cokoli/`)).toBe(true);
-    }
+describe('launch /plodiny + /choroby', () => {
+  for (const locale of ['sk', 'uk'] as const) {
+    it(`obě sekce jsou launchnuté pro ${locale}`, () => {
+      for (const p of ['/plodiny', '/choroby']) {
+        expect(LAUNCHED_PREFIXES[locale]).toContain(p);
+        expect(isLaunchedPath(locale, `${p}/cokoli/`)).toBe(true);
+      }
+    });
+  }
+});
+
+// Ukrajinština je psaná azbukou, takže „nepřeloženo" se pozná obráceně než
+// u slovenštiny: hodnota bez jediného cyrilického znaku je latinka.
+describe('UK data plodin a chorob jsou opravdu ukrajinská', () => {
+  it('názvy plodin i chorob jsou v azbuce', () => {
+    const noCyr = [...listPlodiny('uk'), ...listChoroby('uk')]
+      .filter((e) => !/[\u0400-\u04FF]/.test(e.name))
+      .map((e) => e.slug);
+    expect(noCyr).toEqual([]);
+  });
+
+  it('UK texty neodkazují na český ÚKZÚZ (má být ukrajinský registr)', () => {
+    const blob = JSON.stringify(listChoroby('uk')) + JSON.stringify(listPlodiny('uk'));
+    expect(blob).not.toContain('ÚKZÚZ');
+  });
+
+  it('u plodin je řečeno, že termíny jsou české (jinak by stránka tvrdila nepravdu)', () => {
+    // Zdrojová data mají české termíny sevby a sklizně; pro ukrajinské podmínky
+    // neplatí, takže overlay musí uvádět, odkud údaj je.
+    const bezZdroje = listPlodiny('uk')
+      .filter((p) => !JSON.stringify(p).includes('Чех'))
+      .map((p) => p.slug);
+    expect(bezZdroje).toEqual([]);
   });
 });
 

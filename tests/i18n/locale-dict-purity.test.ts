@@ -45,11 +45,15 @@ describe('slovníky neobsahují cizí jazyk', () => {
     expect(bad).toEqual([]);
   });
 
-  it('sk.ts neobsahuje polská slova bez diakritiky (wysiew / zmianowanie / nawożenie)', () => {
-    const PL_WORDS = /wysiew|zmianowan|zmienowan|nawoz|nawoż|zachowuj|roślin|uprawow/i;
-    const bad = Object.entries(sk).filter(([, v]) => PL_WORDS.test(String(v))).map(([k, v]) => `${k}: ${v}`);
-    expect(bad).toEqual([]);
-  });
+  // Únik z pl.ts se nedrží jednoho slovníku: „Norma wysiewu" byla v sk.ts
+  // i v uk.ts (tam dokonce uprostřed azbuky, takže kontrola písma ji nechytí).
+  it.each([['cs', cs], ['sk', sk], ['uk', uk]] as const)(
+    '%s.ts neobsahuje polská slova (wysiew / zmianowanie / nawożenie)',
+    (name, dict) => {
+      const PL_WORDS = /wysiew|zmianowan|zmienowan|nawoz|nawoż|zachowuj|roślin|uprawow/i;
+      const bad = Object.entries(dict).filter(([, v]) => PL_WORDS.test(String(v))).map(([k, v]) => `${k}: ${v}`);
+      expect(bad, `${name}.ts`).toEqual([]);
+    });
 
   it('cs.ts nezůstal v žádném cizím slovníku beze změny u prózy (>60 znaků)', () => {
     // Dlouhé texty shodné s cs = nepřeložený klíč (u krátkých labelů je shoda běžná).

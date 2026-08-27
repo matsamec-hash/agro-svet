@@ -409,6 +409,7 @@ const cs: Record<string, string> = {
   'plod.d.vysevek': 'Výsevek',
   'plod.d.hnojeni': 'Hnojení',
   'plod.d.vynos': 'Výnos',
+  'plod.d.unitTha': 't/ha',
   'plod.d.sklizen': 'Sklizeň',
   'plod.d.vyuziti': 'Využití',
   'plod.d.osevniPostup': 'Osevní postup',

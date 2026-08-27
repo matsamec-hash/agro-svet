@@ -411,6 +411,7 @@ const pl: Record<string, string> = {
   'plod.d.vysevek': 'Norma wysiewu',
   'plod.d.hnojeni': 'Nawożenie',
   'plod.d.vynos': 'Plon',
+  'plod.d.unitTha': 't/ha',
   'plod.d.sklizen': 'Zbiór',
   'plod.d.vyuziti': 'Wykorzystanie',
   'plod.d.osevniPostup': 'Zmianowanie',
