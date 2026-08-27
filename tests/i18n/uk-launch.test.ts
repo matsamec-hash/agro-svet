@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { LAUNCHED_PREFIXES, isLaunchedPath } from '../../src/i18n/utils';
 import { isLockedSectionPath } from '../../src/i18n/nav';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 describe('UK fáze 2 launch (stroje/srovnani/znacky/encyklopedie)', () => {
   const launched = ['/stroje', '/srovnani', '/znacky', '/encyklopedie'];
@@ -98,5 +100,26 @@ describe('UK žebříčky (/zebricky)', () => {
   it('/zebricky je launchnuté pro uk', () => {
     expect(LAUNCHED_PREFIXES.uk).toContain('/zebricky');
     expect(isLaunchedPath('uk', '/zebricky/kombajny-nad-500-koni/')).toBe(true);
+  });
+});
+
+// Právní a redakční stránky měly ukrajinské znění hotové (isUk větev v šabloně),
+// jen nebyly v prefixech — takže se pod /uk servírovaly jako noindex. /redakce
+// ukrajinskou variantu neměla vůbec a dopsala se.
+describe('UK právní a redakční stránky', () => {
+  const PAGES = ['/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'];
+
+  it('jsou launchnuté pro uk', () => {
+    for (const p of PAGES) expect(LAUNCHED_PREFIXES.uk).toContain(p);
+  });
+
+  it('každá stránka má v šabloně ukrajinskou větev i azbuku', () => {
+    const chybi: string[] = [];
+    for (const p of PAGES) {
+      const src = readFileSync(join(process.cwd(), 'src/pages', `${p.slice(1)}.astro`), 'utf8');
+      if (!/isUk/.test(src)) chybi.push(`${p}: chybí isUk větev`);
+      if (!/[Ѐ-ӿ]/.test(src)) chybi.push(`${p}: v souboru není azbuka`);
+    }
+    expect(chybi).toEqual([]);
   });
 });

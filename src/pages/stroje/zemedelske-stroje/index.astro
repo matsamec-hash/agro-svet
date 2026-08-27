@@ -82,7 +82,9 @@ function pluralCs(n: number, one: string, few: string, many: string): string {
 <Layout
   title={t('stroje.zem.title')}
   description={t('stroje.zem.desc')}
-  canonical="https://agro-svet.cz/stroje/zemedelske-stroje/"
+  {/* Self-canonical: /sk|/uk|/pl varianta téhle stránky je launchnutá
+      a indexovatelná, takže nesmí kanonizovat na české znění. */}
+  canonical={locale === 'cs' ? 'https://agro-svet.cz/stroje/zemedelske-stroje/' : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
 

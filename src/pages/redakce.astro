@@ -8,17 +8,18 @@ import { t } from '../i18n/utils';
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
 const isPl = locale === 'pl';
-const base = isSk ? '/sk' : isPl ? '/pl' : '';
+const isUk = locale === 'uk';
+const base = isSk ? '/sk' : isPl ? '/pl' : isUk ? '/uk' : '';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: isSk ? 'Domov' : isPl ? 'Strona główna' : 'Domů', url: `${base}/` },
-  { name: isSk ? 'Redakcia' : isPl ? 'Redakcja' : 'Redakce', url: `${base}/redakce/` },
+  { name: isSk ? 'Domov' : isPl ? 'Strona główna' : isUk ? 'Головна' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Redakcia' : isPl ? 'Redakcja' : isUk ? 'Редакція' : 'Redakce', url: `${base}/redakce/` },
 ]);
 
 const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'NewsMediaOrganization',
-  name: isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : 'Redakce agro-svět.cz',
+  name: isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : isUk ? 'Редакція agro-svet.cz' : 'Redakce agro-svět.cz',
   url: `${SITE_URL}${base}/redakce/`,
   logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png`, width: 512, height: 512 },
   parentOrganization: {
@@ -30,20 +31,73 @@ const orgJsonLd = {
   },
   diversityPolicy: `${SITE_URL}${base}/redakce/`,
   ethicsPolicy: `${SITE_URL}${base}/redakce/`,
-  contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'info@samecdigital.com', availableLanguage: isSk ? 'Slovak' : isPl ? 'Polish' : 'Czech' },
+  contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'info@samecdigital.com', availableLanguage: isSk ? 'Slovak' : isPl ? 'Polish' : isUk ? 'Ukrainian' : 'Czech' },
 };
 ---
 
 <Layout
-  title={isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : 'Redakce agro-svět.cz'}
-  description={isSk ? 'Redakcia poľnohospodárskeho portálu agro-svet.cz — kto stojí za obsahom, redakčné zásady a kontakt.' : isPl ? 'Redakcja portalu rolniczego agro-svet.cz — kto stoi za treściami, zasady redakcyjne i kontakt.' : 'Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt.'}
-  canonical={isSk ? undefined : `${SITE_URL}/redakce/`}
+  title={isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : isUk ? 'Редакція agro-svet.cz' : 'Redakce agro-svět.cz'}
+  description={isSk ? 'Redakcia poľnohospodárskeho portálu agro-svet.cz — kto stojí za obsahom, redakčné zásady a kontakt.' : isPl ? 'Redakcja portalu rolniczego agro-svet.cz — kto stoi za treściami, zasady redakcyjne i kontakt.' : isUk ? 'Редакція аграрного порталу agro-svet.cz — хто стоїть за контентом, редакційні засади та контакт.' : 'Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt.'}
+  {/* Self-canonical pro každou locale. Dřív tu bylo `isSk ? undefined : cs URL`,
+      takže /pl/redakce/ (a nově i /uk/) kanonizovalo na české znění — hreflang
+      říkal „alternativa", canonical „duplikát". */}
+  canonical={locale === 'cs' ? `${SITE_URL}/redakce/` : undefined}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
 
   <main class="redakce">
-  {isPl ? (
+  {isUk ? (
+    <Fragment>
+    <nav class="breadcrumb" aria-label={t(locale, 'a11y.breadcrumb')}>
+      <a href={`${base}/`}>Головна</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Редакція</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Про нас</span>
+      <h1>Редакція agro-svet.cz</h1>
+      <p class="lead">
+        Пишемо про сільське господарство, техніку, субсидії та життя на селі. Мета — давати
+        аграріям корисну, перевірену та актуальну інформацію.
+      </p>
+    </header>
+
+    <section class="block">
+      <h2>Чим ми займаємося</h2>
+      <p>
+        Стежимо за новинками світу сільськогосподарської техніки, аграрною політикою ЄС, динамікою
+        цін на товарних ринках і змінами в законодавстві. Ведемо енциклопедію тракторів і комбайнів,
+        базу порівнянь моделей, атлас хвороб польових культур і словник аграрних термінів.
+      </p>
+    </section>
+
+    <section class="block">
+      <h2>Редакційні засади</h2>
+      <ul>
+        <li><strong>Перевірені джерела.</strong> Спираємося на офіційні дані (ČSÚ, Eurostat) і пресрелізи виробників.</li>
+        <li><strong>Звідки дані.</strong> Агрономічні строки сівби та збирання, врожайність і реєстри сортів походять із чеських джерел — у тексті це завжди зазначено формулюванням „у Чехії". Для українських умов їх треба брати як орієнтир, не як норму.</li>
+        <li><strong>Виправлення.</strong> Якщо в тексті з'явиться помилка, виправляємо її та позначаємо дату зміни.</li>
+        <li><strong>Розділення контенту й реклами.</strong> Комерційні матеріали завжди чітко позначені.</li>
+        <li><strong>Зворотний зв'язок.</strong> Зауваження читачів вітаємо й відповідаємо на них.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Контакт</h2>
+      <p>
+        Щодо тем, пресрелізів і загальних запитань пишіть на
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+        Щодо рекламної співпраці використайте ту саму адресу з темою „Реклама".
+      </p>
+      <p class="provoz">
+        Сайт веде <a href="https://samecdigital.com" target="_blank" rel="noopener">Samec Digital s.r.o.</a>,
+        IČO 29547539, юридична адреса Na Břehu 378, 387 11 Katovice, Чехія.
+      </p>
+    </section>
+    </Fragment>
+  ) : isPl ? (
     <Fragment>
     <nav class="breadcrumb" aria-label="Nawigacja okruszkowa">
       <a href={`${base}/`}>Strona główna</a>
