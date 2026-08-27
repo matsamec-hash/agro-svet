@@ -90,7 +90,7 @@ describe('UK homepage launch', () => {
   });
 
   it("root v prefixech nedělá wildcard — nelaunchnuté sekce zůstávají cs", () => {
-    for (const p of ['/sezona', '/novinky', '/plemena', '/vcelarstvi']) {
+    for (const p of ['/sezona', '/novinky', '/data', '/svet']) {
       expect(isLaunchedPath('uk', p)).toBe(false);
     }
   });
@@ -121,5 +121,14 @@ describe('UK právní a redakční stránky', () => {
       if (!/[Ѐ-ӿ]/.test(src)) chybi.push(`${p}: v souboru není azbuka`);
     }
     expect(chybi).toEqual([]);
+  });
+});
+
+describe('UK plemena a včelařství', () => {
+  it('obě sekce jsou launchnuté pro uk', () => {
+    for (const p of ['/plemena', '/vcelarstvi']) {
+      expect(LAUNCHED_PREFIXES.uk).toContain(p);
+      expect(isLaunchedPath('uk', `${p}/cokoli/`)).toBe(true);
+    }
   });
 });

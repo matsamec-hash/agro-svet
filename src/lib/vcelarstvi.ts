@@ -75,6 +75,17 @@ const medSkModules = import.meta.glob('/src/data/vcelarstvi/sk/med*.yaml', { eag
 const vcelyPlModules = import.meta.glob('/src/data/vcelarstvi/pl/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 const vybaveniPlModules = import.meta.glob('/src/data/vcelarstvi/pl/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 const medPlModules = import.meta.glob('/src/data/vcelarstvi/pl/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vcelyUkModules = import.meta.glob('/src/data/vcelarstvi/uk/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vybaveniUkModules = import.meta.glob('/src/data/vcelarstvi/uk/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const medUkModules = import.meta.glob('/src/data/vcelarstvi/uk/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+
+// Modul per (dataset, locale). Mapa místo tří if-řetězců na tři gettery — přesně
+// tam se při přidávání locale zapomíná jedna větev a sekce tiše servíruje češtinu.
+const MODULES = {
+  vcely: { cs: vcelyModules, sk: vcelySkModules, pl: vcelyPlModules, uk: vcelyUkModules },
+  vybaveni: { cs: vybaveniModules, sk: vybaveniSkModules, pl: vybaveniPlModules, uk: vybaveniUkModules },
+  med: { cs: medModules, sk: medSkModules, pl: medPlModules, uk: medUkModules },
+} satisfies Record<string, Record<Locale, Record<string, unknown>>>;
 
 function collectArrays<T>(modules: Record<string, unknown>): T[] {
   const out: T[] = [];
@@ -91,38 +102,38 @@ function build<T extends { slug: unknown; name: string }>(modules: Record<string
   return out;
 }
 
-let cVcely: Vcela[] | null = null;
-let cVcelySk: Vcela[] | null = null;
-let cVcelyPl: Vcela[] | null = null;
-let cVybaveni: Vybaveni[] | null = null;
-let cVybaveniSk: Vybaveni[] | null = null;
-let cVybaveniPl: Vybaveni[] | null = null;
-let cMed: Med[] | null = null;
-let cMedSk: Med[] | null = null;
-let cMedPl: Med[] | null = null;
+/** Cache per (dataset, locale). SSR: modul žije napříč requesty, data jsou immutable. */
+const cache = new Map<string, unknown[]>();
+
+function dataset<T extends { slug: unknown; name: string }>(
+  key: keyof typeof MODULES,
+  locale: Locale,
+): T[] {
+  const loc = MODULES[key][locale] ? locale : 'cs';
+  const id = `${key}:${loc}`;
+  const hit = cache.get(id);
+  if (hit) return hit as T[];
+  const built = build<T>(MODULES[key][loc], loc);
+  cache.set(id, built);
+  return built;
+}
 
 export function getAllVcely(locale: Locale = 'cs'): Vcela[] {
-  if (locale === 'sk') return (cVcelySk ??= build<Vcela>(vcelySkModules, 'sk'));
-  if (locale === 'pl') return (cVcelyPl ??= build<Vcela>(vcelyPlModules, 'pl'));
-  return (cVcely ??= build<Vcela>(vcelyModules, 'cs'));
+  return dataset<Vcela>('vcely', locale);
 }
 export function getVcela(slug: string, locale: Locale = 'cs'): Vcela | undefined {
   return getAllVcely(locale).find((v) => v.slug === slug);
 }
 
 export function getAllVybaveni(locale: Locale = 'cs'): Vybaveni[] {
-  if (locale === 'sk') return (cVybaveniSk ??= build<Vybaveni>(vybaveniSkModules, 'sk'));
-  if (locale === 'pl') return (cVybaveniPl ??= build<Vybaveni>(vybaveniPlModules, 'pl'));
-  return (cVybaveni ??= build<Vybaveni>(vybaveniModules, 'cs'));
+  return dataset<Vybaveni>('vybaveni', locale);
 }
 export function getVybaveni(slug: string, locale: Locale = 'cs'): Vybaveni | undefined {
   return getAllVybaveni(locale).find((v) => v.slug === slug);
 }
 
 export function getAllMed(locale: Locale = 'cs'): Med[] {
-  if (locale === 'sk') return (cMedSk ??= build<Med>(medSkModules, 'sk'));
-  if (locale === 'pl') return (cMedPl ??= build<Med>(medPlModules, 'pl'));
-  return (cMed ??= build<Med>(medModules, 'cs'));
+  return dataset<Med>('med', locale);
 }
 export function getMed(slug: string, locale: Locale = 'cs'): Med | undefined {
   return getAllMed(locale).find((v) => v.slug === slug);

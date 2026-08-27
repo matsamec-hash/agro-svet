@@ -1382,7 +1382,7 @@ const uk: Record<string, string> = {
   'plem.druh.cta.p': 'Оголошення на 30 днів, контакт безпосередньо з фермером, жодної плати за публікацію.',
   'plem.druh.listName': 'Породи виду {name}',
   'plem.altPhoto': 'Порода {name}',
-  'plem.detail.title': '{name} — порода {druh}',
+  'plem.detail.title': '{name} ({druh}) — характеристика породи',
   'plem.detail.searchBazarName': 'Шукати {name} на базарі',
   'plem.detail.allOf': 'Усі {name}',
   'plem.detail.recognized': 'Визнано {year}',

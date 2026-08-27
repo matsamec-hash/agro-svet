@@ -140,7 +140,7 @@ describe('getFooterColumns', () => {
     expect(cols[0].links.find((l) => l.href === '/stroje/')!.label).toBe('Katalóg techniky');
   });
 
-  it('uk footer: sloupec Obsah jen launchnuté odkazy (bez /novinky/, /plemena/)', () => {
+  it('uk footer: sloupec Obsah jen launchnuté odkazy (bez /novinky/, /data/)', () => {
     const cols = getFooterColumns('uk');
     expect(cols.map((c) => c.section)).toEqual(['content']);
     const hrefs = cols[0].links.map((l) => l.href);
@@ -149,7 +149,7 @@ describe('getFooterColumns', () => {
     // footer „Data" link je /data/ (hub, cs+sk-only) → pro uk odfiltrován (není launchnutý)
     expect(hrefs).not.toContain('/data/');
     expect(hrefs).not.toContain('/novinky/');
-    expect(hrefs).not.toContain('/plemena/');
+    expect(hrefs).toContain('/plemena/'); // launchnuté od uk plemen
   });
 
   it('sk footer zobrazuje odemčené /statistiky i /puda (Fáze 2b B+C)', () => {
