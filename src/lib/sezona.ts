@@ -7,6 +7,7 @@ import type { Akce } from './akce';
 export type SeasonSlug = 'jaro' | 'leto' | 'podzim' | 'zima';
 
 import { MONTH_NAMES_PL, MONTH_SHORT_PL, SEASON_NAMES_PL, SEASON_CONTENT_PL } from './sezona.pl';
+import { MONTH_NAMES_SK, MONTH_SHORT_SK, SEASON_NAMES_SK, SEASON_CONTENT_SK } from './sezona.sk';
 
 export interface Season {
   slug: SeasonSlug;
@@ -166,18 +167,26 @@ export function akceInSeason(akce: Akce[], seasonSlug: SeasonSlug, now: Date): A
 
 // ── Locale vrstva ────────────────────────────────────────────────────────────
 // Měsíce setí/sklizně zůstávají shodné (viz sezona.pl.ts), mění se jen texty.
+const MONTHS_BY_LOCALE: Record<string, { names: string[]; short: string[] }> = {
+  pl: { names: MONTH_NAMES_PL, short: MONTH_SHORT_PL },
+  sk: { names: MONTH_NAMES_SK, short: MONTH_SHORT_SK },
+};
+const SEASON_BY_LOCALE: Record<string, { names: Record<SeasonSlug, string>; content: Record<SeasonSlug, SeasonContent> }> = {
+  pl: { names: SEASON_NAMES_PL, content: SEASON_CONTENT_PL },
+  sk: { names: SEASON_NAMES_SK, content: SEASON_CONTENT_SK },
+};
+
 export function monthNames(locale: string = 'cs'): string[] {
-  return locale === 'pl' ? MONTH_NAMES_PL : MONTH_NAMES_CS;
+  return MONTHS_BY_LOCALE[locale]?.names ?? MONTH_NAMES_CS;
 }
 export function monthShort(locale: string = 'cs'): string[] {
-  return locale === 'pl' ? MONTH_SHORT_PL : MONTH_SHORT_CS;
+  return MONTHS_BY_LOCALE[locale]?.short ?? MONTH_SHORT_CS;
 }
 export function seasonName(slug: SeasonSlug, locale: string = 'cs'): string {
-  if (locale === 'pl') return SEASON_NAMES_PL[slug];
-  return SEASONS.find((s) => s.slug === slug)!.name;
+  return SEASON_BY_LOCALE[locale]?.names[slug] ?? SEASONS.find((s) => s.slug === slug)!.name;
 }
 function content(slug: SeasonSlug, locale: string): SeasonContent {
-  return locale === 'pl' ? SEASON_CONTENT_PL[slug] : SEASON_CONTENT[slug];
+  return SEASON_BY_LOCALE[locale]?.content[slug] ?? SEASON_CONTENT[slug];
 }
 export function seasonLeadL(slug: SeasonSlug, locale: string = 'cs'): string {
   return content(slug, locale).lead;

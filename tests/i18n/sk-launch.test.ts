@@ -5,6 +5,7 @@ import { LAUNCHED_PREFIXES, isLaunchedPath } from '../../src/i18n/utils';
 import { isLockedSectionPath } from '../../src/i18n/nav';
 import { TIER_LISTS } from '../../src/lib/tier-lists';
 import { TIER_LIST_COPY } from '../../src/lib/tier-lists.i18n';
+import { seasonName, seasonLeadL, seasonFaqL, monthNames, monthShort } from '../../src/lib/sezona';
 
 describe('SK homepage launch', () => {
   it('root je launchnutý pro sk (HomeSk.astro je plně slovenská)', () => {
@@ -77,6 +78,32 @@ describe('overlay textů žebříčků je kompletní pro každý locale', () => 
           expect(c[field], `${locale}/${d.slug}.${field} == cs (nepřeloženo)`).not.toBe(d[field]);
         }
       }
+    });
+  }
+});
+
+// Sezónní sekce: launch bez locale vrstvy by servíroval české názvy období
+// a měsíců (content() padá na cs). Test kryje každou launchnutou locale.
+describe('/sezona má pro každou launchnutou locale vlastní jazykovou vrstvu', () => {
+  const SLUGS = ['jaro', 'leto', 'podzim', 'zima'] as const;
+
+  it('/sezona je launchnuté pro sk', () => {
+    expect(LAUNCHED_PREFIXES.sk).toContain('/sezona');
+  });
+
+  for (const locale of ['sk', 'pl', 'uk'] as const) {
+    it(`${locale}: názvy období, měsíce i próza nejsou české`, () => {
+      if (!isLaunchedPath(locale, '/sezona')) return;
+      // „Zima" se cs/sk/pl píše stejně → porovnáváme celou sadu, ne jednotlivě.
+      expect(SLUGS.map((s) => seasonName(s, locale)))
+        .not.toEqual(SLUGS.map((s) => seasonName(s, 'cs')));
+      for (const s of SLUGS) {
+        expect(seasonLeadL(s, locale)).not.toBe(seasonLeadL(s, 'cs'));
+        expect(seasonFaqL(s, locale).length).toBe(seasonFaqL(s, 'cs').length);
+      }
+      expect(monthNames(locale)).not.toEqual(monthNames('cs'));
+      expect(monthNames(locale)).toHaveLength(12);
+      expect(monthShort(locale)).toHaveLength(12);
     });
   }
 });

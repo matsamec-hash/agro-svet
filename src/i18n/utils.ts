@@ -36,7 +36,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // article_translations + rozcestník). Byla hotová, ale negatovaná → noindex
   // a mimo sitemapu, takže 7k+ indexovaných /sk URL nemělo vstupní bod.
   // Všechny odkazy z HomeSk míří do launchnutých /sk sekcí (viz sk-launch.test.ts).
-  sk: ['/', '/data', '/svet', '/slovnik', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/hledat', '/zebricky', '/plodiny', '/choroby'],
+  sk: ['/', '/data', '/svet', '/slovnik', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/hledat', '/zebricky', '/plodiny', '/choroby', '/sezona'],
   uk: ['/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace', '/hledat'],
   // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
