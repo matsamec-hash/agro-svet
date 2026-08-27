@@ -15,7 +15,7 @@ describe('SK homepage launch', () => {
   it('root v prefixech nezpůsobí over-match nelaunchnutých sekcí', () => {
     // '/' se nesmí chovat jako wildcard — /kviz pro sk launchnuté není.
     expect(isLaunchedPath('sk', '/kviz')).toBe(false);
-    expect(isLaunchedPath('sk', '/plodiny/psenice/')).toBe(false);
+    expect(isLaunchedPath('sk', '/farmy/nazev-farmy/')).toBe(false);
   });
 
   it('root není locked', () => {

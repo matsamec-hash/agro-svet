@@ -63,7 +63,7 @@ describe('isSkLaunchedPath — kalkulačky (Fáze 2b launch)', () => {
   it('nelaunchnuté sekce zůstávají false', () => {
     // /slovnik už sk-launchnutý JE (306 hesel) — vzorek musí být sekce, které sk
     // opravdu nemá: ÚKZÚZ odrůdy a české farmy.
-    expect(isSkLaunchedPath('/plodiny')).toBe(false);
+    expect(isSkLaunchedPath('/farmy')).toBe(false);
     expect(isSkLaunchedPath('/odrudy')).toBe(false);
     expect(isSkLaunchedPath('/farmy')).toBe(false);
   });
@@ -154,7 +154,7 @@ describe('localizeInternalHref', () => {
     expect(localizeInternalHref('sk', '/farmy/nazev/')).toBe('/farmy/nazev/');
     // /zebricky je od SK launche přeložené (TIER_LIST_COPY.sk) → sem patří
     // sekce, která pro sk pořád launchnutá NENÍ.
-    expect(localizeInternalHref('sk', '/plodiny/psenice-ozima/')).toBe('/plodiny/psenice-ozima/');
+    expect(localizeInternalHref('sk', '/farmy/nazev-farmy/')).toBe('/farmy/nazev-farmy/');
   });
   it('uk: launchnutá → /uk; nelaunchnutá (novinky není uk) → cs', () => {
     expect(localizeInternalHref('uk', '/stroje/')).toBe('/uk/stroje/');

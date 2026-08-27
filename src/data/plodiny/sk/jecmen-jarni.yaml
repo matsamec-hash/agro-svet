@@ -1,0 +1,64 @@
+# Slovenský overlay plodin. slug, skupina, hero_*, seti_mesice, sklizen_mesice
+# a wikipedia zůstávají z cs (klíče, obrázky, kalendář). Pole choroby[] drží
+# STEJNÉ pořadí i délku jako cs — mapování na entitu jde přes cs index.
+slug: jecmen-jarni
+name: Jačmeň jarný
+name_plural: Jačmeň jarný
+description: >-
+  Jačmeň jarný (Hordeum vulgare) je najvýznamnejšou jarnou obilninou v Česku, pestovanou najmä na
+  výrobu sladovníckeho sladu (pivo), krmivo a potraviny. Vyžaduje kvalitnú predplodinu a skorú
+  sejbu, pretože neskorý termín sejby výrazne znižuje úrodu a zhoršuje sladovnícke parametre.
+vysevek: 300–400 klíčivých zŕn/m²
+hnojeni: N 60–90 kg/ha (sladovnícky jačmeň max. 80 kg/ha, aby nebol prekročený limit bielkovín v zrne)
+vynos_t_ha: 4–7
+sklizen: júl až začiatok augusta
+vyuziti: sladovnícky slad (výroba piva), krmné zrno, potravinárstvo (krúpy, múka)
+choroby:
+  - hnedá škvrnitosť jačmeňa (rynchosporióza)
+  - pruhovitosť jačmeňa (pyrenofóra)
+  - múčnatka trávová
+  - prašná sneť jačmenná
+  - BYDV (vírusové žltnutie jačmeňa, prenášajú vošky)
+osevni_postup:
+  - name: Predplodina
+    text: >-
+      Sladovnícky jačmeň vyžaduje kvalitnú predplodinu — ideálne okopaniny alebo strukoviny. Po
+      pšenici narastá riziko chorôb a zhoršenie sladovníckej kvality.
+  - name: Príprava pôdy
+    text: >-
+      Jesenná orba a kvalitná príprava sejbového lôžka na jar; jačmeň jarný je citlivý na utuženie a
+      kyslú reakciu pôdy (optimum pH 6,0–7,0).
+  - name: Sejba
+    text: >-
+      Čo najskôr po vyschnutí pôdy (február–marec). Hĺbka 3–4 cm, výsevok 300–400 klíčivých zŕn/m².
+      Neskorá sejba znižuje úrodu aj sladovnícku kvalitu.
+  - name: Hnojenie
+    text: >-
+      Pri sladovníckom jačmeni obmedziť N na max. 80 kg/ha (vyšší prísun zvyšuje bielkoviny nad
+      limit sladu). Fosfor a draslík podľa rozborov.
+  - name: Ochrana rastlín
+    text: >-
+      Morenie osiva (pruhovitosť, sneť), insekticídne morenie alebo postrek pri výskyte vošiek
+      (prenášače BYDV), fungicídy podľa prahu škodlivosti.
+  - name: Zber
+    text: >-
+      Zber pri vlhkosti 13–15 % (júl–august). Pri sladovníckom jačmeni sledovať parametre kvality
+      (klíčivosť, obsah bielkovín, objemová hmotnosť).
+faq:
+  - q: Prečo je dôležitá skorá sejba jarného jačmeňa?
+    a: >-
+      Skorá sejba (február–marec) využíva jarnú vlahu, predlžuje vegetáciu a zlepšuje úrodu aj
+      sladovnícku kvalitu. Každý týždeň oneskorenia sejby môže znížiť úrodu o 0,2–0,3 t/ha.
+  - q: Aký je limit dusíka pre sladovnícky jačmeň?
+    a: >-
+      Pre sladovnícky jačmeň sa odporúča max. 80 kg N/ha. Vyššie dávky zvyšujú obsah bielkovín v
+      zrne nad prijateľnú hranicu pre sladovanie (zvyčajne >12 %).
+  - q: Akú úrodu možno od jarného jačmeňa očakávať?
+    a: >-
+      Na kvalitných stanovištiach s dobrou agrotechnikou dosahuje jačmeň jarný 5–7 t/ha, v suchších
+      podmienkach alebo pri neskorej sejbe 4–5 t/ha.
+  - q: Ako morenie osiva chráni jarný jačmeň?
+    a: >-
+      Morenie chráni pred pruhovitosťou jačmeňa a prašnou sneťou jačmennou, ktoré sa prenášajú
+      infikovaným osivom. Insekticídne morenie navyše obmedzuje skoré napadnutie voškami
+      prenášajúcimi vírus BYDV.

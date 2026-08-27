@@ -1,0 +1,68 @@
+# Slovenský overlay plodin. slug, skupina, hero_*, seti_mesice, sklizen_mesice
+# a wikipedia zůstávají z cs (klíče, obrázky, kalendář). Pole choroby[] drží
+# STEJNÉ pořadí i délku jako cs — mapování na entitu jde přes cs index.
+slug: kukurice
+name: Kukurica siata
+name_plural: Kukurica
+description: >-
+  Kukurica siata (Zea mays) je teplomilná jednoročná plodina s najväčším výnosovým potenciálom zo
+  všetkých poľných plodín v Česku. Pestuje sa na zrno, siláž (celý porast) aj ako energetická
+  plodina pre bioplyn. Vyžaduje teplé podmienky a adekvátne zásobenie vodou a živinami.
+vysevek: 7–10 rastlín/m² (65–95 tis. rastlín/ha), podľa skorosti odrody a stanovišťa
+hnojeni: >-
+  N 120–200 kg/ha celkovo (štartovacia dávka pri sejbe + hlavné hnojenie); P, K a Mg podľa rozborov;
+  kukurica je náročná na zinok
+vynos_t_ha: 8–14 (zrno); 40–60 t/ha čerstvej hmoty siláže
+sklizen: september–október (zrno pri vlhkosti <30 %; siláž pri 30–35 % sušiny)
+vyuziti: >-
+  silážna kukurica (krmivo pre hovädzí dobytok), kukurica na zrno (krmivo, škrob, bioetanol,
+  potraviny)
+choroby:
+  - fuzarióza stebla a šúľkov (Fusarium spp.)
+  - helmintosporióza kukurice
+  - zakrpatenosť kukurice (WDV a MDV, prenáša hmyz)
+  - bakterióza kukurice
+osevni_postup:
+  - name: Predplodina a osevný postup
+    text: >-
+      Najlepšou predplodinou sú strukoviny, obilniny a repka. Kukurica znáša opakované pestovanie na
+      tom istom poli, ale pri monokultúre narastá tlak fuzarióz a pôdnych škodcov.
+  - name: Príprava pôdy
+    text: >-
+      Hlboká jesenná orba (25–30 cm) na prevzdušnenie, jarná príprava sejbového lôžka. Kukurica
+      vyžaduje dobre prehriatu pôdu (minimálne 8–10 °C v hĺbke sejby).
+  - name: Sejba
+    text: >-
+      Sejba od konca apríla do polovice mája. Hĺbka 4–6 cm, výsevok 7–10 rastlín/m² (podľa
+      skorosti). Medziriadková vzdialenosť 70–75 cm (konvenčné) alebo 45–50 cm (husté riadky).
+  - name: Hnojenie
+    text: >-
+      Štartovacia dávka P+K+N pri sejbe, hlavná aplikácia N (digestát, hnojovica alebo minerálne
+      hnojivá) pred alebo pri príprave pôdy. Sledovať zásobenosť Zn.
+  - name: Ochrana rastlín
+    text: >-
+      Herbicídy (preemergentne alebo postemergentne) sú nevyhnutné. Insekticídne morenie osiva
+      chráni pred drôtovcami a voškami; monitoring zavíjača kukuričného.
+  - name: Zber
+    text: >-
+      Siláž pri obsahu sušiny 30–35 % (približne august–september), zrno pri vlhkosti pod 30 %
+      (október). Pri vlhkosti nad 14–15 % je potrebné zrno dosušiť.
+faq:
+  - q: Kedy je najlepšie siať kukuricu?
+    a: >-
+      Kukurica sa vysieva od konca apríla do polovice mája, keď teplota pôdy v hĺbke sejby dosiahne
+      aspoň 8–10 °C. Príliš skorý výsev do studenej pôdy spomaľuje vzchádzanie a zvyšuje riziko
+      chorôb.
+  - q: Aký je rozdiel medzi silážnou a zrnovou kukuricou?
+    a: >-
+      Silážna kukurica sa zberá celý porast (steBlo + šúľok) pri 30–35 % sušiny ako krmivo pre
+      hovädzí dobytok. Zrnová kukurica sa zberá len zrno pri vlhkosti pod 30 %, určená na kŕmenie
+      alebo priemyselné spracovanie.
+  - q: Aká je potreba dusíka u kukurice?
+    a: >-
+      Kukurica je náročná plodina — potrebuje 120–200 kg N/ha celkovo. Časť N sa bežne dodáva
+      organickými hnojivami (digestát, hnojovica), zvyšok minerálnymi hnojivami.
+  - q: Akých škodcov sledovať pri kukurici?
+    a: >-
+      Kľúčové sú drôtovce (larvy v pôde), zavíjač kukuričný (Ostrinia nubilalis) a vošky. Zavíjača
+      možno monitorovať feromónovými lapačmi a biologicky regulovať (Trichogramma).
