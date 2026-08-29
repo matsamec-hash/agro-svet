@@ -14,7 +14,7 @@ const { subcat, locale } = Astro.props;
 const tr = useTranslations(locale);
 
 const allBrands = getAllBrands(locale);
-const allModels = getAllModels();
+const allModels = getAllModels(locale);
 const subcatModels = allModels.filter((m) => m.effective_category === subcat);
 const subcatBrands = [...new Set(subcatModels.map((m) => m.brand_slug))]
   .map((slug) => allBrands.find((b) => b.slug === slug))
@@ -110,7 +110,7 @@ const brandsListJsonLd = subcatBrands.length > 0
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px;">
           {topModels.map((m) => {
             const mYr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : `${m.year_from}–${tr('cat.rada.dosud')}`) : '';
-            const meta = [m.power_hp ? `${m.power_hp} k` : '', mYr].filter(Boolean).join(' · ');
+            const meta = [m.power_hp ? `${m.power_hp} ${tr('cmp.unitHp')}` : '', mYr].filter(Boolean).join(' · ');
             return (
               <a href={localizePath(locale, `/stroje/${m.brand_slug}/${m.series_slug}/${modelUrlPart(m.slug, m.brand_slug)}/`)} style="display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8e8; border-radius:12px; padding:14px 16px; transition:border-color .2s, box-shadow .2s;" class="model-card">
                 <div style="font-family:'Chakra Petch',sans-serif; font-size:15px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">{m.brand_name} {m.name}</div>

@@ -41,9 +41,11 @@ export function parsePairCombo(combo: string): [string, string] | null {
   return [a, b];
 }
 
-/** Look up a flat model by its full slug (e.g. `john-deere-8r-410`). */
-export function findModelBySlug(slug: string): StrojFlatModel | null {
-  return getAllModels().find((m) => m.slug === slug) ?? null;
+/** Look up a flat model by its full slug (e.g. `john-deere-8r-410`).
+ *  `locale` vrací model s lokalizovanými datovými poli (engine, názvy) —
+ *  bez něj by se do renderu dostala česká hodnota („3-válec"). */
+export function findModelBySlug(slug: string, locale: string = 'cs'): StrojFlatModel | null {
+  return getAllModels(locale).find((m) => m.slug === slug) ?? null;
 }
 
 /**

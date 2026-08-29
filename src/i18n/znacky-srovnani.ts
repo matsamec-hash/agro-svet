@@ -11,9 +11,9 @@
 // (Německo / Nemecko / Niemcy / Німеччина). Stránka ho jen musela volat
 // s locale, což nedělala.
 //
-// Jednotka výkonu zůstává „k" i v non-cs: celý katalog /stroje ji tak píše
-// (např. /pl/stroje/traktory/ ukazuje „6–830 k"), takže lokalizovat ji jen
-// na srovnávacích stránkách by uvnitř jednoho jazyka vytvořilo nekonzistenci.
+// Jednotka výkonu: katalog /stroje ji od DE mutace bere z i18n (`cmp.unitHp`
+// → k / KM / к.с. / PS). Tady zůstává v textech tak, jak ji píše generátor
+// v lib/brand-comparator.ts — až se bude lokalizovat, ať se to udělá naráz.
 import type { Locale } from './config';
 
 export interface ZnackySrovnaniStrings {
@@ -263,6 +263,53 @@ export const znackySrovnani: Record<Locale, ZnackySrovnaniStrings> = {
     hubDescription: 'Порівняйте марки тракторів і техніки поруч — потужність, кількість моделей, категорії та прямі зіставлення конкретних машин.',
     hubPopular: 'Популярні порівняння',
     hubCompare: 'Порівняти',
+  },
+  de: {
+    edgeHigherPower: 'höhere Durchschnittsleistung — passt zu großen Betrieben und schwerem Einsatz',
+    edgeLowerPower: 'niedrigere Leistungsklasse und Erschwinglichkeit für kleine und mittlere Betriebe',
+    edgeCzechOrigin: 'tschechische Herkunft — einfacherer Service und Teileverfügbarkeit in Mitteleuropa',
+    edgeWiderRange: 'eine breitere Palette an Maschinenkategorien',
+    edgeTradition: 'die längere Tradition (seit {year})',
+    edgeFallback: '{count} Modelle in unserer Datenbank',
+    powerUnknown: 'keine Angabe',
+    verdict: '{a} wählen Sie, wenn Ihnen wichtig ist, was die Marke bietet: {edges}.',
+    and: ' und ',
+    tldr: '{a} ({ca}, {ma} Modelle, {pa}) vs. {b} ({cb}, {mb} Modelle, {pb}). Stärke von {a}: {ea}; Stärke von {b}: {eb}.',
+    models: '{n} Modelle',
+    faq1q: 'Was ist besser — {a} oder {b}?',
+    faq1a: 'Das hängt vom Einsatz ab. {va} {vb}',
+    faq2q: 'Woher stammen die Marken {a} und {b}?',
+    faq2a: '{a} stammt aus {ca} (Marke seit {fa}), {b} aus {cb} (seit {fb}).',
+    faq3q: 'Wie viele Modelle von {a} und {b} finde ich auf agro-svet.cz?',
+    faq3a: '{a}: {ma} Modelle ({pa}), {b}: {mb} Modelle ({pb}).',
+    faq4q: 'Welche Marke hat die höhere Leistung?',
+    faq4aWinner: 'Das stärkste Modell hat {winner}.',
+    faq4aTie: 'Beide Marken bieten ein vergleichbares Leistungsspektrum.',
+    shortDescription: 'Vergleich der Marken {a} und {b}: Leistung, Modellanzahl, abgedeckte Kategorien und direkte Duelle konkreter Modelle. Unabhängiger Vergleich auf agro-svet.cz.',
+    title: '{a} vs. {b} — Vergleich der Landmaschinenmarken',
+    crumbBrands: 'Marken',
+    crumbCompare: 'Markenvergleich',
+    kicker: 'Markenvergleich',
+    specHeading: 'Marke vs. Marke',
+    specParam: 'Parameter',
+    duelsHeading: 'Direkte Modellduelle',
+    duelsOpen: 'Öffnen',
+    decisionHeading: 'Wann {a}, wann {b}',
+    faqHeading: 'Häufige Fragen',
+    bazarKicker: 'Agro-Markt',
+    bazarHeading: '{a} und {b} im Agro-Markt ansehen',
+    rowModelCount: 'Anzahl der Modelle',
+    rowPower: 'Leistung',
+    rowFounded: 'Gegründet',
+    rowCountry: 'Herkunftsland',
+    rowCategories: 'Maschinenkategorien',
+    foundedIn: 'gegründet {year}',
+    specNote: 'Daten aus der Landmaschinen-Datenbank von agro-svet.cz. „★“ kennzeichnet den höheren Wert.',
+    bazarNote: 'Aktuelles Gebrauchtmaschinenangebot beider Marken von Händlern und Privatpersonen.',
+    hubTitle: 'Vergleich der Landmaschinenmarken',
+    hubDescription: 'Vergleichen Sie Traktoren- und Maschinenmarken nebeneinander — Leistung, Modellanzahl, Kategorien und direkte Duelle konkreter Maschinen.',
+    hubPopular: 'Beliebte Vergleiche',
+    hubCompare: 'Vergleichen',
   },
 };
 

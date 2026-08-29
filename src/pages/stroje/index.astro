@@ -4,13 +4,13 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, type StrojKategorie } from '../../lib/stroje';
-import { useTranslations, plural, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../i18n/utils';
+import { useTranslations, plural, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 
 const brands = getAllBrands(locale);
-const models = getAllModels();
+const models = getAllModels(locale);
 
 const kategorieLabel: Record<StrojKategorie, string> = {
   traktory: 'Traktory',
@@ -45,9 +45,9 @@ const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: tr('cat.s.title'),
-  description: locale === 'sk' ? tr('cat.s.desc') : 'Kompletní databáze traktorů a kombajnů od světových výrobců.',
+  description: locale === 'cs' ? 'Kompletní databáze traktorů a kombajnů od světových výrobců.' : tr('cat.s.desc'),
   url: `https://agro-svet.cz${localizePath(locale, '/stroje/')}`,
-  inLanguage: locale === 'sk' ? 'sk-SK' : 'cs-CZ',
+  inLanguage: bcp47(locale),
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: brands.length,
@@ -124,7 +124,7 @@ const NL = '\n';
           <div class="s"><span class="n">{totalModels}+</span><span class="l">{tr('cat.statModels')}</span></div>
           <div class="s"><span class="n">{brands.length}</span><span class="l">{tr('cat.statBrands')}</span></div>
           <div class="s"><span class="n">{totalSeries}</span><span class="l">{tr('cat.s.statSeries')}</span></div>
-          <div class="s"><span class="n">{minHp}–{maxHp} k</span><span class="l">{tr('cat.statPower')}</span></div>
+          <div class="s"><span class="n">{minHp}–{maxHp} {tr('cmp.unitHp')}</span><span class="l">{tr('cat.statPower')}</span></div>
         </div>
 
         <div class="hero-actions">
@@ -358,7 +358,7 @@ const NL = '\n';
     }
 
     function renderCard(m: Model): string {
-      const hp = m.power_hp ? `${m.power_hp} k` : '—';
+      const hp = m.power_hp ? `${m.power_hp} ${tr('cmp.unitHp')}` : '—';
       const kw = m.power_kw ? ` · ${m.power_kw} kW` : '';
       const yr = m.year_from ? (m.year_to ? `${m.year_from}–${m.year_to}` : I18N.yearToNow.replace('{from}', String(m.year_from))) : '';
       const isCurrent = (m.year_to ?? null) === null;

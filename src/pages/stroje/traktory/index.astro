@@ -9,7 +9,7 @@ import { useTranslations } from '../../../i18n/utils';
 const locale = Astro.locals.locale ?? 'cs';
 const t = useTranslations(locale);
 
-const brandsWithTraktory = getAllBrands().filter((b) => (b.categories?.traktory?.series?.length ?? 0) > 0);
+const brandsWithTraktory = getAllBrands(locale).filter((b) => (b.categories?.traktory?.series?.length ?? 0) > 0);
 const brandListJsonLd = brandsWithTraktory.length > 0
   ? itemListSchema(
       brandsWithTraktory.map((b) => ({

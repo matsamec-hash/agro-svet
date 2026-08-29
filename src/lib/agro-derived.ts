@@ -192,7 +192,9 @@ export function livestockMilestone(
 
 // ── Locale-aware prose helpers ───────────────────────────────────────────────
 
-export type Locale = 'cs' | 'sk' | 'uk' | 'pl';
+// 'de' zatím bez vlastních řetězců — /statistiky NENÍ pro de launchnuté (česká
+// data ČSÚ), takže getStrings() spadne na CS_STRINGS stejně jako u 'uk'.
+export type Locale = 'cs' | 'sk' | 'uk' | 'pl' | 'de';
 
 export interface ScissorsPoint {
   year: number;

@@ -112,7 +112,7 @@ const yearLine = minYear !== null
   ? (hasCurrent ? `${minYear}–${tr('cat.rada.dosud')}` : (maxYear ? `${minYear}–${maxYear}` : `${minYear}`))
   : '';
 const hpLine = minHp !== null && maxHp !== null
-  ? (minHp === maxHp ? `${minHp} k` : `${minHp}–${maxHp} k`)
+  ? (minHp === maxHp ? `${minHp} ${tr('cmp.unitHp')}` : `${minHp}–${maxHp} ${tr('cmp.unitHp')}`)
   : '';
 
 // Pick hero photo: first current series with image_url, else any series with image_url, else category fallback
@@ -238,7 +238,7 @@ const jsonLd = {
       const sMinHp = seriesHpAll.length ? Math.min(...seriesHpAll) : null;
       const sMaxHp = seriesHpAll.length ? Math.max(...seriesHpAll) : null;
       const sHp = sMinHp !== null && sMaxHp !== null
-        ? (sMinHp === sMaxHp ? `${sMinHp} k` : `${sMinHp}–${sMaxHp} k`)
+        ? (sMinHp === sMaxHp ? `${sMinHp} ${tr('cmp.unitHp')}` : `${sMinHp}–${sMaxHp} ${tr('cmp.unitHp')}`)
         : '';
       // Strip the year suffix from the name to display as just "Series" name
       const seriesNameClean = s.name.replace(/\s*\([^)]*\)\s*$/, '');
@@ -287,7 +287,7 @@ const jsonLd = {
                   <span class="st-power">
                     {typeof m.power_hp === 'number' ? (
                       <>
-                        <strong>{m.power_hp} k</strong>
+                        <strong>{m.power_hp} {tr('cmp.unitHp')}</strong>
                         {m.power_kw && <span class="kw"> · {m.power_kw} kW</span>}
                       </>
                     ) : '—'}

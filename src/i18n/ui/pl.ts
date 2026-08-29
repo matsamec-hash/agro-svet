@@ -749,6 +749,7 @@ const pl: Record<string, string> = {
   'lang.sk': 'SK',
   'lang.uk': 'UA',
   'lang.pl': 'PL',
+  'lang.de': 'DE',
   'puda.pl.crumbHome': 'Strona główna',
   'puda.pl.crumbSelf': 'Ziemia rolna',
   'puda.pl.h.reforma': 'Regulacja rynku ziemi',

@@ -20,4 +20,5 @@ export const crumbs: Record<Locale, CalcCrumbs> = {
   sk: { home: 'Domov', hub: 'Kalkulačky' },
   uk: { home: 'Домів', hub: 'Калькулятори' },
   pl: { home: 'Strona główna', hub: 'Kalkulatory' },
+  de: { home: 'Startseite', hub: 'Rechner' },
 };

@@ -1,6 +1,6 @@
 ---
 // src/components/LangSwitcher.astro
-// CZ/SK/UA/PL header switcher jako dropdown. Builds the localized equivalent of
+// CZ/SK/UA/PL/DE header switcher jako dropdown. Builds the localized equivalent of
 // the current cs-root path via stripLocale + localizePath. uk added in Fáze 3,
 // pl ve fázi 1 PL. Native <details> = funguje i bez JS; drobný skript přidá
 // zavření kliknutím mimo / Esc (progressive enhancement).
@@ -17,12 +17,15 @@ const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk);
 const ukHref = langSwitchHref('uk', path, []);
 // PL cíl: nelaunchnuté sekce padají na /pl/ (PL homepage, noindex) — nikdy 404.
 const plHref = langSwitchHref('pl', path, HIDDEN_NEWS_CATEGORIES.pl);
+// DE cíl: nelaunchnuté sekce padají na /de/ (DE homepage, noindex) — nikdy 404.
+const deHref = langSwitchHref('de', path, HIDDEN_NEWS_CATEGORIES.de);
 
 const options = [
   { code: 'cs', href: csHref, hreflang: 'cs' },
   { code: 'sk', href: skHref, hreflang: 'sk' },
   { code: 'uk', href: ukHref, hreflang: 'uk' },
   { code: 'pl', href: plHref, hreflang: 'pl' },
+  { code: 'de', href: deHref, hreflang: 'de' },
 ];
 const currentLabel = t(locale, `lang.${locale}`);
 ---

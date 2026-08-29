@@ -85,6 +85,21 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // Polsko má vlastní registr (COBORU). Pillar proto pod ne-cs odrůdy nelinkuje
   // a sitemapa detaily do pl mirroru nepouští (isOdrudaDetailPath).
   pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky', '/kviz', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/sezona', '/hledat', '/akcie'],
+
+  // DE fáze 1 (trh: Německo + Rakousko). Launchnuté jen NEjurisdikční sekce —
+  // katalog techniky je pan-evropský (tytéž značky, tytéž modely, tytéž
+  // technické údaje), takže se překládá 1:1. NElaunchnuto záměrně:
+  //   /statistiky, /data, /puda  → česká data (ČSÚ, FARMY.CZ index)
+  //   /dotace, /kalkulacka/*     → české sazby a čeští poskytovatelé
+  //   /novinky, /akce, /farmy    → český obsah vázaný na ČR
+  //   /jak-na-to, /pruvodce      → návody psané pro české podmínky
+  // Pro DE/AT vzniká vlastní obsah (Direktzahlungen/GAP DE, ÖPUL AT, Destatis /
+  // Statistik Austria) — ne překlad českého. /slovnik, /encyklopedie a /plemena
+  // čekají na de overlay dat (slovnik.de.ts, encyklopedieDe, plemena-de).
+  // /znacky taky ne: profily značek jsou české .md (kolekce `znacky`) a overlay
+  // `znackyDe` zatím neexistuje → launch by indexoval německou hlavičku nad
+  // českým tělem. Přidat spolu s overlayem.
+  de: ['/stroje', '/srovnani'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
@@ -204,7 +219,7 @@ export function tf(locale: Locale, key: string, params: Record<string, string | 
 }
 
 /** Pluralizace.
- *  cs/sk: 1 / 2–4 / 5+.
+ *  cs/sk: 1 / 2–4 / 5+. de: 1 / jinak plurál.
  *  uk (východoslovanská): one = n%10==1 & n%100!=11; few = n%10∈2..4 & n%100∉12..14;
  *  many = zbytek (0, 5–20, x5–x9, 11–14). Tři tvary se mapují na stejné `forms`
  *  (one = nominativ sg, few = tvar 2–4, many = genitiv pl). */
@@ -214,6 +229,9 @@ export function plural(
   forms: { one: string; few: string; many: string },
 ): string {
   const abs = Math.abs(n);
+  // de: germánská dvojtvarost — 1 = singulár, všechno ostatní (vč. 0) = plurál.
+  // `few` se pro de nikdy nepoužije; v de.ts je proto few === many.
+  if (locale === 'de') return abs === 1 ? forms.one : forms.many;
   if (locale === 'uk' || locale === 'pl') {
     const mod10 = abs % 10;
     const mod100 = abs % 100;
@@ -231,7 +249,7 @@ export function plural(
  *  na pl ZAPOMÍNALY — /pl/znacky/<slug>/ pak psalo „Treść ostatnio zweryfikowana:
  *  květen 2026" (český měsíc). Používej tohle, ne vlastní ternář. */
 export const BCP47: Record<Locale, string> = {
-  cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA',
+  cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA', de: 'de-DE',
 };
 export function bcp47(locale: string): string {
   return BCP47[locale as Locale] ?? BCP47.cs;

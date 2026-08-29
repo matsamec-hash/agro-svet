@@ -3,7 +3,7 @@
 // Returns null if fewer than 3 valid Q&A — short FAQ blocks read as thin content.
 //
 // Locale-aware: cs větve jsou DOSLOVNÉ originály (byte-identita konstrukcí),
-// sk přidáno přes helper L(cs, sk). Default locale='cs' → cs užití beze změny.
+// sk/uk/pl/de přidáno přes helper L(cs, sk, uk, pl, de). Default locale='cs'.
 
 import type { FaqItem } from './structured-data';
 import type { StrojBrand, StrojModel, StrojKategorie } from './stroje';
@@ -37,9 +37,11 @@ export function generateModelFaq({
   const isSk = locale === 'sk';
   const isUk = locale === 'uk';
   const isPl = locale === 'pl';
-  const L = (cs: string, sk: string, uk: string, pl: string): string => (isSk ? sk : isUk ? uk : isPl ? pl : cs);
+  const isDe = locale === 'de';
+  const L = (cs: string, sk: string, uk: string, pl: string, de: string): string =>
+    (isSk ? sk : isUk ? uk : isPl ? pl : isDe ? de : cs);
   const fmtNumber = (n: number): string =>
-    n.toLocaleString(isSk ? 'sk-SK' : isUk ? 'uk-UA' : isPl ? 'pl-PL' : 'cs-CZ');
+    n.toLocaleString(isSk ? 'sk-SK' : isUk ? 'uk-UA' : isPl ? 'pl-PL' : isDe ? 'de-DE' : 'cs-CZ');
 
   const fullName = `${brand.name} ${model.name}`;
   const items: FaqItem[] = [];
@@ -47,22 +49,22 @@ export function generateModelFaq({
   const yearPhrase = (): string | null => {
     if (!model.year_from) return null;
     if (model.year_to) return `${model.year_from}–${model.year_to}`;
-    return L(`od roku ${model.year_from}`, `od roku ${model.year_from}`, `з ${model.year_from} року`, `od ${model.year_from} roku`);
+    return L(`od roku ${model.year_from}`, `od roku ${model.year_from}`, `з ${model.year_from} року`, `od ${model.year_from} roku`, `ab Baujahr ${model.year_from}`);
   };
 
   // Power — most-asked question for vehicles + self-propelled machines.
   if (model.power_hp) {
     const kwPart = model.power_kw ? ` (${model.power_kw} kW)` : '';
     const enginePart = model.engine
-      ? L(` Pohání ho ${model.engine}.`, ` Poháňa ho ${model.engine}.`, ` Його приводить у рух ${model.engine}.`, ` Napędza go silnik ${model.engine}.`)
+      ? L(` Pohání ho ${model.engine}.`, ` Poháňa ho ${model.engine}.`, ` Його приводить у рух ${model.engine}.`, ` Napędza go silnik ${model.engine}.`, ` Angetrieben wird er vom Motor ${model.engine}.`)
       : '';
     items.push({
-      q: L(`Jaký výkon má ${fullName}?`, `Aký výkon má ${fullName}?`, `Яку потужність має ${fullName}?`, `Jaką moc ma ${fullName}?`),
+      q: L(`Jaký výkon má ${fullName}?`, `Aký výkon má ${fullName}?`, `Яку потужність має ${fullName}?`, `Jaką moc ma ${fullName}?`, `Wie viel Leistung hat ${fullName}?`),
       a: L(
         `${fullName} má jmenovitý výkon ${model.power_hp} koní${kwPart}.${enginePart}`,
         `${fullName} má menovitý výkon ${model.power_hp} koní${kwPart}.${enginePart}`,
         `${fullName} має номінальну потужність ${model.power_hp} к.с.${kwPart}.${enginePart}`,
-        `${fullName} ma moc nominalną ${model.power_hp} KM${kwPart}.${enginePart}`,
+        `${fullName} ma moc nominalną ${model.power_hp} KM${kwPart}.${enginePart}`, `${fullName} hat eine Nennleistung von ${model.power_hp} PS${kwPart}.${enginePart}`,
       ),
     });
   }
@@ -70,12 +72,12 @@ export function generateModelFaq({
   // Weight.
   if (model.weight_kg) {
     items.push({
-      q: L(`Kolik váží ${fullName}?`, `Koľko váži ${fullName}?`, `Скільки важить ${fullName}?`, `Ile waży ${fullName}?`),
+      q: L(`Kolik váží ${fullName}?`, `Koľko váži ${fullName}?`, `Скільки важить ${fullName}?`, `Ile waży ${fullName}?`, `Wie viel wiegt ${fullName}?`),
       a: L(
         `Provozní hmotnost ${fullName} je přibližně ${fmtNumber(model.weight_kg)} kg. Konkrétní hmotnost se může lišit podle vybavení a osazené zátěže.`,
         `Prevádzková hmotnosť ${fullName} je približne ${fmtNumber(model.weight_kg)} kg. Konkrétna hmotnosť sa môže líšiť podľa výbavy a osadenej záťaže.`,
         `Робоча маса ${fullName} становить приблизно ${fmtNumber(model.weight_kg)} кг. Конкретна маса може відрізнятися залежно від комплектації та встановленого баласту.`,
-        `Masa eksploatacyjna ${fullName} wynosi około ${fmtNumber(model.weight_kg)} kg. Konkretna masa może się różnić w zależności od wyposażenia i zamontowanego balastu.`,
+        `Masa eksploatacyjna ${fullName} wynosi około ${fmtNumber(model.weight_kg)} kg. Konkretna masa może się różnić w zależności od wyposażenia i zamontowanego balastu.`, `Das Betriebsgewicht von ${fullName} beträgt rund ${fmtNumber(model.weight_kg)} kg. Das konkrete Gewicht hängt von Ausstattung und montierter Ballastierung ab.`,
       ),
     });
   }
@@ -85,22 +87,22 @@ export function generateModelFaq({
   if (yr) {
     if (model.year_to) {
       items.push({
-        q: L(`V jakých letech se ${fullName} vyráběl?`, `V akých rokoch sa ${fullName} vyrábal?`, `У які роки випускався ${fullName}?`, `W jakich latach produkowano ${fullName}?`),
+        q: L(`V jakých letech se ${fullName} vyráběl?`, `V akých rokoch sa ${fullName} vyrábal?`, `У які роки випускався ${fullName}?`, `W jakich latach produkowano ${fullName}?`, `In welchen Jahren wurde ${fullName} gebaut?`),
         a: L(
           `${fullName} se vyráběl v letech ${yr}. Na sekundárním trhu (bazar) zůstává běžně dostupný a náhradní díly jsou stále nabízeny.`,
           `${fullName} sa vyrábal v rokoch ${yr}. Na sekundárnom trhu (bazár) zostáva bežne dostupný a náhradné diely sú stále ponúkané.`,
           `${fullName} випускався у ${yr} роках. На вторинному ринку залишається загальнодоступним, а запасні частини й досі пропонуються.`,
-          `${fullName} był produkowany w latach ${yr}. Na rynku wtórnym (giełda) pozostaje powszechnie dostępny, a części zamienne są nadal oferowane.`,
+          `${fullName} był produkowany w latach ${yr}. Na rynku wtórnym (giełda) pozostaje powszechnie dostępny, a części zamienne są nadal oferowane.`, `${fullName} wurde in den Jahren ${yr} gebaut. Auf dem Gebrauchtmarkt ist er weiterhin gut verfügbar, Ersatzteile werden nach wie vor angeboten.`,
         ),
       });
     } else {
       items.push({
-        q: L(`Vyrábí se ${fullName} stále?`, `Vyrába sa ${fullName} stále?`, `Чи ${fullName} досі випускається?`, `Czy ${fullName} jest nadal produkowany?`),
+        q: L(`Vyrábí se ${fullName} stále?`, `Vyrába sa ${fullName} stále?`, `Чи ${fullName} досі випускається?`, `Czy ${fullName} jest nadal produkowany?`, `Wird ${fullName} noch gebaut?`),
         a: L(
           `Ano, ${fullName} je v aktuální výrobní nabídce — vyrábí se ${yr} a patří mezi modely, které lze nově objednat.`,
           `Áno, ${fullName} je v aktuálnej výrobnej ponuke — vyrába sa ${yr} a patrí medzi modely, ktoré možno novo objednať.`,
           `Так, ${fullName} є в актуальній виробничій пропозиції — випускається ${yr} і належить до моделей, які можна замовити як нові.`,
-          `Tak, ${fullName} jest w aktualnej ofercie produkcyjnej — produkowany jest ${yr} i należy do modeli, które można nowo zamówić.`,
+          `Tak, ${fullName} jest w aktualnej ofercie produkcyjnej — produkowany jest ${yr} i należy do modeli, które można nowo zamówić.`, `Ja, ${fullName} steht im aktuellen Programm — er wird ${yr} gebaut und gehört zu den Modellen, die sich neu bestellen lassen.`,
         ),
       });
     }
@@ -109,12 +111,12 @@ export function generateModelFaq({
   // Transmission (vehicles).
   if (model.transmission && VEHICLE_CATEGORIES.has(category)) {
     items.push({
-      q: L(`Jakou převodovku má ${fullName}?`, `Akú prevodovku má ${fullName}?`, `Яку коробку передач має ${fullName}?`, `Jaką skrzynię biegów ma ${fullName}?`),
+      q: L(`Jakou převodovku má ${fullName}?`, `Akú prevodovku má ${fullName}?`, `Яку коробку передач має ${fullName}?`, `Jaką skrzynię biegów ma ${fullName}?`, `Welches Getriebe hat ${fullName}?`),
       a: L(
         `${fullName} má převodovku: ${model.transmission}.`,
         `${fullName} má prevodovku: ${model.transmission}.`,
         `${fullName} має коробку передач: ${model.transmission}.`,
-        `${fullName} ma skrzynię biegów: ${model.transmission}.`,
+        `${fullName} ma skrzynię biegów: ${model.transmission}.`, `${fullName} hat folgendes Getriebe: ${model.transmission}.`,
       ),
     });
   }
@@ -122,12 +124,12 @@ export function generateModelFaq({
   // Combine-specific: cutting width.
   if (category === 'kombajny' && model.cutting_width_m) {
     items.push({
-      q: L(`Jaký záběr žacího stolu má ${fullName}?`, `Aký záber žacieho stola má ${fullName}?`, `Яку ширину захвату жниварки має ${fullName}?`, `Jaką szerokość roboczą hederem ma ${fullName}?`),
+      q: L(`Jaký záběr žacího stolu má ${fullName}?`, `Aký záber žacieho stola má ${fullName}?`, `Яку ширину захвату жниварки має ${fullName}?`, `Jaką szerokość roboczą hederem ma ${fullName}?`, `Welche Schneidwerksbreite hat ${fullName}?`),
       a: L(
         `${fullName} pracuje se žacím stolem o záběru až ${model.cutting_width_m} m. Konkrétní záběr záleží na zvoleném adaptéru a typu plodiny.`,
         `${fullName} pracuje so žacím stolom so záberom až ${model.cutting_width_m} m. Konkrétny záber závisí od zvoleného adaptéra a typu plodiny.`,
         `${fullName} працює з жниваркою із шириною захвату до ${model.cutting_width_m} м. Конкретна ширина захвату залежить від обраної жниварки та типу культури.`,
-        `${fullName} pracuje z hederem o szerokości roboczej do ${model.cutting_width_m} m. Konkretna szerokość robocza zależy od wybranego adaptera i rodzaju uprawy.`,
+        `${fullName} pracuje z hederem o szerokości roboczej do ${model.cutting_width_m} m. Konkretna szerokość robocza zależy od wybranego adaptera i rodzaju uprawy.`, `${fullName} arbeitet mit einem Schneidwerk von bis zu ${model.cutting_width_m} m Breite. Die konkrete Arbeitsbreite hängt vom gewählten Vorsatzgerät und der Kultur ab.`,
       ),
     });
   }
@@ -135,12 +137,12 @@ export function generateModelFaq({
   // Combine-specific: grain tank.
   if (category === 'kombajny' && model.grain_tank_l) {
     items.push({
-      q: L(`Jak velký je zásobník zrna u ${fullName}?`, `Aký veľký je zásobník zrna pri ${fullName}?`, `Який об'єм бункера для зерна у ${fullName}?`, `Jak duży jest zbiornik ziarna w ${fullName}?`),
+      q: L(`Jak velký je zásobník zrna u ${fullName}?`, `Aký veľký je zásobník zrna pri ${fullName}?`, `Який об'єм бункера для зерна у ${fullName}?`, `Jak duży jest zbiornik ziarna w ${fullName}?`, `Wie groß ist der Korntank von ${fullName}?`),
       a: L(
         `Zásobník zrna ${fullName} pojme ${fmtNumber(model.grain_tank_l)} litrů. Vyplatí se zejména na velkých půdních blocích, kde delší interval vyložení snižuje prostoje.`,
         `Zásobník zrna ${fullName} pojme ${fmtNumber(model.grain_tank_l)} litrov. Oplatí sa najmä na veľkých pôdnych blokoch, kde dlhší interval vyloženia znižuje prestoje.`,
         `Бункер для зерна ${fullName} вміщує ${fmtNumber(model.grain_tank_l)} літрів. Це вигідно насамперед на великих полях, де довший інтервал між вивантаженнями зменшує простої.`,
-        `Zbiornik ziarna ${fullName} mieści ${fmtNumber(model.grain_tank_l)} litrów. Opłaca się szczególnie na dużych polach, gdzie dłuższy odstęp opróżniania zmniejsza przestoje.`,
+        `Zbiornik ziarna ${fullName} mieści ${fmtNumber(model.grain_tank_l)} litrów. Opłaca się szczególnie na dużych polach, gdzie dłuższy odstęp opróżniania zmniejsza przestoje.`, `Der Korntank von ${fullName} fasst ${fmtNumber(model.grain_tank_l)} Liter. Das zahlt sich vor allem auf großen Schlägen aus, wo längere Entleerungsintervalle die Standzeiten senken.`,
       ),
     });
   }
@@ -148,12 +150,12 @@ export function generateModelFaq({
   // Implement-specific: working width.
   if (model.pracovni_zaber_m) {
     items.push({
-      q: L(`Jaký pracovní záběr má ${fullName}?`, `Aký pracovný záber má ${fullName}?`, `Яку робочу ширину захвату має ${fullName}?`, `Jaką szerokość roboczą ma ${fullName}?`),
+      q: L(`Jaký pracovní záběr má ${fullName}?`, `Aký pracovný záber má ${fullName}?`, `Яку робочу ширину захвату має ${fullName}?`, `Jaką szerokość roboczą ma ${fullName}?`, `Welche Arbeitsbreite hat ${fullName}?`),
       a: L(
         `Pracovní záběr ${fullName} je ${model.pracovni_zaber_m} m. Záběr ovlivňuje rychlost zpracování plochy a požadavky na výkon agregovaného traktoru.`,
         `Pracovný záber ${fullName} je ${model.pracovni_zaber_m} m. Záber ovplyvňuje rýchlosť spracovania plochy a požiadavky na výkon agregovaného traktora.`,
         `Робоча ширина захвату ${fullName} становить ${model.pracovni_zaber_m} м. Ширина захвату впливає на швидкість обробітку площі та вимоги до потужності агрегованого трактора.`,
-        `Szerokość robocza ${fullName} wynosi ${model.pracovni_zaber_m} m. Szerokość robocza wpływa na szybkość uprawy powierzchni i wymagania co do mocy agregowanego ciągnika.`,
+        `Szerokość robocza ${fullName} wynosi ${model.pracovni_zaber_m} m. Szerokość robocza wpływa na szybkość uprawy powierzchni i wymagania co do mocy agregowanego ciągnika.`, `Die Arbeitsbreite von ${fullName} beträgt ${model.pracovni_zaber_m} m. Sie bestimmt die Flächenleistung und die Anforderungen an die Leistung des Zugtraktors.`,
       ),
     });
   }
@@ -164,12 +166,12 @@ export function generateModelFaq({
     const max = model.prikon_traktor_hp_max;
     const range = min && max ? `${min}–${max}` : (min ?? max);
     items.push({
-      q: L(`Jaký traktor potřebuje ${fullName}?`, `Aký traktor potrebuje ${fullName}?`, `Який трактор потрібен для ${fullName}?`, `Jakiego ciągnika wymaga ${fullName}?`),
+      q: L(`Jaký traktor potřebuje ${fullName}?`, `Aký traktor potrebuje ${fullName}?`, `Який трактор потрібен для ${fullName}?`, `Jakiego ciągnika wymaga ${fullName}?`, `Welchen Traktor braucht ${fullName}?`),
       a: L(
         `Pro agregaci ${fullName} výrobce doporučuje traktor s výkonem ${range} koní. Slabší traktor sníží pracovní rychlost; výrazně silnější traktor nepřinese plný benefit a může přetížit záběs.`,
         `Pre agregáciu ${fullName} výrobca odporúča traktor s výkonom ${range} koní. Slabší traktor zníži pracovnú rýchlosť; výrazne silnejší traktor neprinesie plný benefit a môže preťažiť záves.`,
         `Для агрегатування ${fullName} виробник рекомендує трактор потужністю ${range} к.с. Слабший трактор знизить робочу швидкість; значно потужніший трактор не дасть повної віддачі та може перевантажити зчіпку.`,
-        `Do agregowania ${fullName} producent zaleca ciągnik o mocy ${range} KM. Słabszy ciągnik obniży prędkość roboczą; znacznie mocniejszy ciągnik nie przyniesie pełnych korzyści i może przeciążyć TUZ.`,
+        `Do agregowania ${fullName} producent zaleca ciągnik o mocy ${range} KM. Słabszy ciągnik obniży prędkość roboczą; znacznie mocniejszy ciągnik nie przyniesie pełnych korzyści i może przeciążyć TUZ.`, `Für den Anbau von ${fullName} empfiehlt der Hersteller einen Traktor mit ${range} PS. Ein schwächerer Traktor senkt die Arbeitsgeschwindigkeit; ein deutlich stärkerer bringt keinen vollen Nutzen und kann das Hubwerk überlasten.`,
       ),
     });
   }
@@ -204,31 +206,40 @@ export function generateModelFaq({
       samojizdny: 'samojezdny (własny napęd)',
       navesny: 'półprzyczepiany',
     };
-    const labels = isSk ? labelsSk : isUk ? labelsUk : isPl ? labelsPl : labelsCs;
+    const labelsDe: Record<string, string> = {
+      neseny: 'ein Anbaugerät (Dreipunkt-Anbau)',
+      tazeny: 'ein gezogenes Gerät (Zugdeichsel)',
+      poloneseny: 'ein aufgesatteltes Gerät (Kombination aus Anbau und Zug)',
+      samojizdny: 'selbstfahrend (eigener Antrieb)',
+      navesny: 'ein Aufsattelgerät',
+    };
+    const labels = isSk ? labelsSk : isUk ? labelsUk : isPl ? labelsPl : isDe ? labelsDe : labelsCs;
     const label = labels[model.typ_zavesu] ?? model.typ_zavesu;
     items.push({
-      q: L(`Jak se ${fullName} připojuje k traktoru?`, `Ako sa ${fullName} pripája k traktoru?`, `Як ${fullName} приєднується до трактора?`, `Jak ${fullName} jest podłączany do ciągnika?`),
+      q: L(`Jak se ${fullName} připojuje k traktoru?`, `Ako sa ${fullName} pripája k traktoru?`, `Як ${fullName} приєднується до трактора?`, `Jak ${fullName} jest podłączany do ciągnika?`, `Wie wird ${fullName} am Traktor angebaut?`),
       a: L(
         `${fullName} je ${label}. Při výběru traktoru tomu odpovídá kategorie tříbodového závěsu a hydraulická kapacita.`,
         `${fullName} je ${label}. Pri výbere traktora tomu zodpovedá kategória trojbodového závesu a hydraulická kapacita.`,
         `${fullName} — ${label}. Під час вибору трактора цьому відповідає категорія триточкового навішування та гідравлічна продуктивність.`,
-        `${fullName} jest ${label}. Przy wyborze ciągnika należy sprawdzić kategorię TUZ i wydajność hydrauliki.`,
+        `${fullName} jest ${label}. Przy wyborze ciągnika należy sprawdzić kategorię TUZ i wydajność hydrauliki.`, `${fullName} ist ${label}. Bei der Traktorwahl entscheiden darüber die Kategorie des Dreipunkt-Hubwerks und die Hydraulikleistung.`,
       ),
     });
   }
 
   // Price — from active bazar listings. Naplňuje „cena" dotazy.
-  if (priceStats) {
+  // de: cena je v Kč z ČESKÉHO bazaru → pro německý trh zavádějící. Vynechat,
+  // dokud nebude cenový zdroj v EUR pro DE/AT.
+  if (priceStats && !isDe) {
     const lo = fmtNumber(priceStats.min);
     const hi = fmtNumber(priceStats.max);
     const rangePhrase = priceStats.min === priceStats.max ? `${lo} Kč` : `${lo} – ${hi} Kč`;
     items.push({
-      q: L(`Kolik stojí ${fullName}?`, `Koľko stojí ${fullName}?`, `Скільки коштує ${fullName}?`, `Ile kosztuje ${fullName}?`),
+      q: L(`Kolik stojí ${fullName}?`, `Koľko stojí ${fullName}?`, `Скільки коштує ${fullName}?`, `Ile kosztuje ${fullName}?`, `Was kostet ${fullName}?`),
       a: L(
         `Podle aktuálních inzerátů v Agro bazaru se ${fullName} prodává za ${rangePhrase}. Cena se liší podle roku výroby, počtu motohodin a stavu stroje.`,
         `Podľa aktuálnych inzerátov v Agro bazári sa ${fullName} predáva za ${rangePhrase}. Cena sa líši podľa roku výroby, počtu motohodín a stavu stroja.`,
         `За актуальними оголошеннями в Агро базарі ${fullName} продається за ${rangePhrase}. Ціна залежить від року випуску, кількості мотогодин і стану машини.`,
-        `Według aktualnych ogłoszeń w Agro giełdzie ${fullName} sprzedawany jest za ${rangePhrase}. Cena zależy od roku produkcji, liczby motogodzin i stanu maszyny.`,
+        `Według aktualnych ogłoszeń w Agro giełdzie ${fullName} sprzedawany jest za ${rangePhrase}. Cena zależy od roku produkcji, liczby motogodzin i stanu maszyny.`, `Nach aktuellen Anzeigen auf dem Agro-Markt wird ${fullName} für ${rangePhrase} angeboten. Der Preis hängt von Baujahr, Betriebsstunden und Zustand der Maschine ab.`,
       ),
     });
   }
@@ -254,46 +265,52 @@ export function generateModelFaq({
         ? bazarCount === 1 ? 'одне оголошення' : `${bazarCount} ${ukPlural(bazarCount)}`
         : isPl
           ? bazarCount === 1 ? 'jedno ogłoszenie' : `${bazarCount} ${plPlural(bazarCount)}`
-          : bazarCount === 1 ? 'jeden inzerát' : bazarCount < 5 ? `${bazarCount} inzeráty` : `${bazarCount} inzerátů`;
+          : isDe
+            ? bazarCount === 1 ? 'gibt es derzeit eine Anzeige' : `gibt es derzeit ${bazarCount} Anzeigen`
+            : bazarCount === 1 ? 'jeden inzerát' : bazarCount < 5 ? `${bazarCount} inzeráty` : `${bazarCount} inzerátů`;
     const what = isSk
       ? categorySingular === 'traktor' ? 'tohto traktora' : categorySingular === 'kombajn' ? 'tohto kombajnu' : 'tohto stroja'
       : isUk
         ? categorySingular === 'traktor' ? 'цього трактора' : categorySingular === 'kombajn' ? 'цього комбайна' : 'цієї машини'
         : isPl
           ? categorySingular === 'traktor' ? 'tego ciągnika' : categorySingular === 'kombajn' ? 'tego kombajnu' : 'tej maszyny'
-          : categorySingular === 'traktor' ? 'tohoto traktoru' : categorySingular === 'kombajn' ? 'této sklízecí mlátičky' : 'tohoto stroje';
+          : isDe
+            ? categorySingular === 'traktor' ? 'für diesen Traktor' : categorySingular === 'kombajn' ? 'für diesen Mähdrescher' : 'für diese Maschine'
+            : categorySingular === 'traktor' ? 'tohoto traktoru' : categorySingular === 'kombajn' ? 'této sklízecí mlátičky' : 'tohoto stroje';
     items.push({
-      q: L(`Lze koupit ${fullName} v bazaru?`, `Dá sa kúpiť ${fullName} v bazári?`, `Чи можна купити ${fullName} на ринку вживаної техніки?`, `Czy można kupić ${fullName} na giełdzie używanych maszyn?`),
+      q: L(`Lze koupit ${fullName} v bazaru?`, `Dá sa kúpiť ${fullName} v bazári?`, `Чи можна купити ${fullName} на ринку вживаної техніки?`, `Czy można kupić ${fullName} na giełdzie używanych maszyn?`, `Kann man ${fullName} gebraucht kaufen?`),
       a: L(
         `Ano, v Agro bazaru je aktuálně ${inflect} ${what}. Kontakt přímo na prodejce, bez provize.`,
         `Áno, v Agro bazári je aktuálne ${inflect} ${what}. Kontakt priamo na predajcu, bez provízie.`,
         `Так, в Агро базарі наразі ${inflect} ${what}. Контакт безпосередньо з продавцем, без комісії.`,
-        `Tak, w Agro giełdzie jest aktualnie ${inflect} ${what}. Kontakt bezpośrednio ze sprzedawcą, bez prowizji.`,
+        `Tak, w Agro giełdzie jest aktualnie ${inflect} ${what}. Kontakt bezpośrednio ze sprzedawcą, bez prowizji.`, `Ja, auf dem Agro-Markt ${inflect} ${what}. Direkter Kontakt zum Verkäufer, ohne Provision.`,
       ),
     });
   }
 
   // Časté závady (jen když jsou data).
-  if (model.common_faults && model.common_faults.length) {
+  // de: `issue` texty jsou v datech česky → německá věta s českým výčtem. Vynechat.
+  if (model.common_faults && model.common_faults.length && !isDe) {
     const list = model.common_faults.map((f) => f.issue).slice(0, 5).join('; ');
     items.push({
       q: L(
         `Jaké má ${fullName} časté závady?`,
         `Aké má ${fullName} časté poruchy?`,
         `Які поширені несправності має ${fullName}?`,
-        `Jakie są typowe usterki ${fullName}?`,
+        `Jakie są typowe usterki ${fullName}?`, `Welche typischen Schwachstellen hat ${fullName}?`,
       ),
       a: L(
         `Mezi častěji zmiňované slabiny ${fullName} patří: ${list}. Konkrétní stav vždy závisí na údržbě a nájezdu daného kusu.`,
         `Medzi častejšie spomínané slabiny ${fullName} patria: ${list}. Konkrétny stav vždy závisí od údržby a najazdu daného kusu.`,
         `До частіше згадуваних слабких місць ${fullName} належать: ${list}. Конкретний стан завжди залежить від обслуговування та напрацювання екземпляра.`,
-        `Do częściej wymienianych słabości ${fullName} należą: ${list}. Konkretny stan zawsze zależy od serwisowania i przebiegu danego egzemplarza.`,
+        `Do częściej wymienianych słabości ${fullName} należą: ${list}. Konkretny stan zawsze zależy od serwisowania i przebiegu danego egzemplarza.`, `Zu den häufiger genannten Schwachstellen von ${fullName} zählen: ${list}. Der konkrete Zustand hängt immer von Wartung und Betriebsstunden des jeweiligen Exemplars ab.`,
       ),
     });
   }
 
   // Cena ojetiny (orientační trh, nezávisle na live bazaru).
-  if (model.used_price) {
+  // de: rozpětí v Kč + česká poznámka → vynechat (viz priceStats výše).
+  if (model.used_price && !isDe) {
     const { min, max, note } = model.used_price;
     const range = min === max ? `${fmtNumber(min)} Kč` : `${fmtNumber(min)}–${fmtNumber(max)} Kč`;
     const notePart = note ? ` ${note}` : '';
@@ -302,13 +319,13 @@ export function generateModelFaq({
         `Kolik stojí ojetý ${fullName}?`,
         `Koľko stojí ojazdený ${fullName}?`,
         `Скільки коштує вживаний ${fullName}?`,
-        `Ile kosztuje używany ${fullName}?`,
+        `Ile kosztuje używany ${fullName}?`, `Was kostet ein gebrauchter ${fullName}?`,
       ),
       a: L(
         `Ojetý ${fullName} se na sekundárním trhu pohybuje orientačně v rozpětí ${range}.${notePart}`,
         `Ojazdený ${fullName} sa na sekundárnom trhu pohybuje orientačne v rozpätí ${range}.${notePart}`,
         `Вживаний ${fullName} на вторинному ринку коштує орієнтовно в діапазоні ${range}.${notePart}`,
-        `Używany ${fullName} na rynku wtórnym kosztuje orientacyjnie w przedziale ${range}.${notePart}`,
+        `Używany ${fullName} na rynku wtórnym kosztuje orientacyjnie w przedziale ${range}.${notePart}`, `Ein gebrauchter ${fullName} liegt auf dem Gebrauchtmarkt orientierungsweise im Bereich ${range}.${notePart}`,
       ),
     });
   }

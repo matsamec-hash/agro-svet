@@ -1,0 +1,63 @@
+# DE overlay (Prosa-Felder) über der cs-Struktur. Markt: Deutschland + Österreich.
+
+country: "Tschechien"
+description: >-
+  Traditioneller tschechischer Traktorenhersteller aus Brünn, 1946 aus der Zbrojovka Brno hervorgegangen (ursprünglich Flugmotoren Aero/Avia). Der Name setzt sich aus **Z**brojovka und Trak**tor** zusammen. Die prägende Baureihe **UR I** (ab 1962) wurde zum Rückgrat der tschechischen und osteuropäischen Landwirtschaft. Die aktuellen Baureihen **Major, Proxima, Forterra, Crystal HD** decken 53–170 PS ab. Seit 2018 besteht eine Zusammenarbeit mit John Deere. Eigentümer: HTC Investments. Export in mehr als 60 Länder.
+
+categories:
+  traktory: "Traktoren"
+
+series:
+  z-25: >-
+    Der erste Traktor von Zetor, vorgestellt **1946** in Brünn. Er entstand auf dem Gelände der **Zbrojovka Brno** (vor dem Krieg Flugmotoren Aero/Avia) und definierte das **Zetor-System** — einfache Bedienung, bezahlbarer Service, ein Kraftstoffsystem für die gesamte Baureihe. Die Version **Z 25K** (1950) brachte eine bessere Kabine, der **Z 25A** (1952) ein hydraulisches Dreipunkt-Hubwerk. Insgesamt wurden über **158 500 Stück** gebaut — der prägende Traktor der tschechoslowakischen Nachkriegslandwirtschaft.
+  ur-i: >-
+    Die ikonische vereinheitlichte Baureihe, **1962** mit den Modellen 4011/5511/6711 eingeführt — das Rückgrat der tschechischen und osteuropäischen Landwirtschaft. Die erste Generation (1962–1979) hatte eine offene Kabine und Zetor-Motoren 4001/5001 (4-Zylinder); die **Modernisierung 1980** brachte eine neue geschlossene Kabine, neue Motoren Zetor 5201/7201 (3-Zylinder) und die Modelle 5211/7211/7745, die bis **1998** gebaut wurden. Getriebe 10/2, einfache Konstruktion, sprichwörtliche Unverwüstlichkeit.
+  ur-ii: >-
+    Die größere und stärkere vereinheitlichte Baureihe, **1968** mit dem Modell **Crystal 8011** eingeführt — dem ersten Sechszylinder-Zetor. Der **Crystal 12011** (1972) kam mit Turbo und erlangte als **Forstversion** für den Holztransport Kultstatus. Für mittlere und größere Betriebe. Motoren Zetor 7401 (4-Zylinder) und 8001/8101 (6-Zylinder), Getriebe 10/2 oder 16/8 mit Kriechgang. Die Modernisierung 1986 brachte eine neue Kabine (8111/9111/10111).
+  super: >-
+    Modernisierung der UR II mit neuer Kabine und dem Motor Zetor Z 1505. Zwischenstufe zur Baureihe Forterra.
+  forterra: >-
+    Die Flaggschiff-Baureihe — moderne Kabine Horizon II, voll synchronisiertes Getriebe 24/18 mit Wendeschaltung und Allradantrieb. Motor Zetor Z 1505/1605 mit Turbolader und Ladeluftkühler.
+  forterra-hsx-hd-cl: >-
+    Modernisierung der Forterra mit neuer Motorhaube, Display und Zetor-Motor nach Abgasstufe IV/V. Varianten HSX (Powershift), HD (Premium) und CL (klassisch).
+  proxima-gen1: >-
+    Nachfolger der Baureihe Super. Preislich zugänglicher Traktor für kleinere Betriebe. Motor Z 1205, synchronisiertes Getriebe 10/10 oder 20/20 mit Wendeschaltung.
+  proxima-cl-gp-hs: >-
+    Die aktuelle Generation der Proxima in mehreren Varianten — CL (Classic), GP (General Purpose), HS (High Spec), Power und Plus. Motor Zetor 1204 / 1605 nach Abgasstufe V.
+  crystal: >-
+    Die Rückkehr des legendären Namens Crystal (ursprünglich Crystal 8011/12011 in den 1970er- und 80er-Jahren). Der stärkste aktuelle Zetor — 150–170 PS, Motor **Deutz TCD 6.1** (6-Zylinder), Getriebe ZF 16/16 mit Powershift, gefederte Vorderachse.
+  major: >-
+    Die kleinste Baureihe von Zetor — Utility-Traktor für Kommunen, Obstbau und kleine Betriebe. Motor **Iveco F5C** (4-Zylinder, 3,2 l), synchronisiertes Getriebe 12/12. Die Varianten **CL** (Comfort Line) und **HT** (High Tech) kamen 2018 dazu.
+  utilix-compax: >-
+    Kompakttraktoren von 25–55 PS für den Kommunal- und Spezialeinsatz. OEM-Rebrands (Utilix HT von TYM Korea, Compax von TAFE Indien), die unter der Marke Zetor verkauft wurden. Die Produktion endete 2020 — die Klasse bleibt im Portfolio unbesetzt (die Major beginnt bei 53 PS).
+
+# Popisy jednotlivých modelů (model.slug → DE text). V základních datech
+# jsou česky a overlay je jinak nepokrývá — bez tohohle bloku svítila na
+# /de/stroje/<značka>/<řada>/<model>/ česká věta pod německým nadpisem.
+models:
+  zetor-25: >-
+    Der allererste Serien-Zetor. Gebaut von 1946 bis 1949 (rund 43 000 Stück).
+  zetor-25k: >-
+    Konstruktiv überarbeitete Version — verbesserte Kabine und Geräteaufnahme.
+  zetor-25a: >-
+    Der am weitesten entwickelte Z 25 — hydraulische Dreipunktaufhängung, modernisierte Hydraulik. Parallel zur UR I bis 1968 gebaut.
+  zetor-4011: >-
+    Das erste Modell der UR I — Einstiegsklasse. Prägte die Baureihe gemeinsam mit 5511 und 6711.
+  zetor-5511: >-
+    Mittelgroße UR I. Das meistverkaufte Modell der 1960er-Jahre in der Tschechoslowakei.
+  zetor-6711: >-
+    Obere Mittelklasse der UR I. 1966 als Antwort auf wachsende Betriebe ergänzt.
+  zetor-7011: >-
+    Spitzenmodell der ursprünglichen UR I. 1980 durch den modernisierten 7211 ersetzt.
+  zetor-7245-horal: >-
+    Spezielle Bergversion mit erhöhter Standfestigkeit.
+  zetor-crystal-8011: >-
+    Der allererste Sechszylinder-Zetor. Er eröffnete die UR-II-Ära und gab den Namen Crystal später an die moderne HD-Baureihe weiter (ab 2014).
+  zetor-crystal-10011: >-
+    Zwischenstufe zwischen 8011 und 12011. Sechszylinder-Saugmotor.
+  zetor-crystal-12011: >-
+    Der Spitzen-Zetor der 1970er-Jahre. Die Forstversion (Lesní 12011) mit Schutzrahmen und Seilwinde war eine Ikone der tschechoslowakischen Wälder — noch im 21. Jahrhundert für den Holztransport im Einsatz.
+  zetor-16245: >-
+    Das stärkste Modell der UR II, Sechszylinder mit Turbolader.
+  zetor-proxima-power-120: >-
+    Zetor Proxima Power 120 der neuen Generation (ab 2024) — neuer Motor, neue Kabine, digitales Display. Inspiriert vom italienischen Design von SDF (Same Deutz-Fahr).

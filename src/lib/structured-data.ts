@@ -345,6 +345,7 @@ export function machineProductSchema(m: MachineModelForSchema) {
       case 'sk': return { power: 'Výkon', powerKw: 'Výkon (kW)', weight: 'Hmotnosť', engine: 'Motor', transmission: 'Prevodovka', years: 'Roky výroby', hp: 'k', present: 'súčasnosť' };
       case 'uk': return { power: 'Потужність', powerKw: 'Потужність (кВт)', weight: 'Маса', engine: 'Двигун', transmission: 'Трансмісія', years: 'Роки випуску', hp: 'к.с.', present: 'дотепер' };
       case 'pl': return { power: 'Moc', powerKw: 'Moc (kW)', weight: 'Masa', engine: 'Silnik', transmission: 'Przekładnia', years: 'Lata produkcji', hp: 'KM', present: 'obecnie' };
+      case 'de': return { power: 'Leistung', powerKw: 'Leistung (kW)', weight: 'Gewicht', engine: 'Motor', transmission: 'Getriebe', years: 'Baujahre', hp: 'PS', present: 'heute' };
       default: return { power: 'Výkon', powerKw: 'Výkon (kW)', weight: 'Hmotnost', engine: 'Motor', transmission: 'Převodovka', years: 'Roky výroby', hp: 'k', present: 'dosud' };
     }
   })(m.lang);

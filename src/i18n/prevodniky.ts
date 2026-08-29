@@ -12,10 +12,10 @@
 // cs hodnoty jsou doslovná kopie původních hardcoded defaultů (byte-identita).
 import type { Locale } from './config';
 
-export type NumberLocale = 'cs-CZ' | 'sk-SK' | 'pl-PL' | 'uk-UA';
+export type NumberLocale = 'cs-CZ' | 'sk-SK' | 'pl-PL' | 'uk-UA' | 'de-DE';
 
 export const NUMBER_LOCALE: Record<Locale, NumberLocale> = {
-  cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA',
+  cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA', de: 'de-DE',
 };
 
 export interface AreaDefaults {
@@ -54,6 +54,18 @@ export const AREA_DEFAULTS: Record<Locale, AreaDefaults> = {
       m2: 'квадратний метр', a: 'ар', ha: 'гектар', km2: 'квадратний кілометр',
       acre: 'акр (acre)', jitro: 'йітро (австро-угорське)', korec: 'корець (чеський)',
       strych: 'стрих (чеський)', morgen: 'прусський морген',
+    },
+  },
+  // ‼️ Sada jednotek je pevná a historické jednotky jsou české/rakouské
+  // (jitro, korec, strych). Pro DE/AT se NEPŘEJMENOVÁVAJÍ na Tagwerk apod. —
+  // to by byl jiný převodní poměr. Popisek jen říká, odkud jednotka je.
+  // Rakouské jitro = Joch, proto u `jitro` německý název existuje.
+  de: {
+    ui: { inputLabel: 'Wert eingeben', unitSelectLabel: 'Einheit wählen' },
+    unitNames: {
+      m2: 'Quadratmeter', a: 'Ar', ha: 'Hektar', km2: 'Quadratkilometer',
+      acre: 'Acre', jitro: 'Joch (österreichisch)', korec: 'Korec (tschechisch)',
+      strych: 'Strych (tschechisch)', morgen: 'preußischer Morgen',
     },
   },
 };
@@ -107,6 +119,17 @@ export const WEIGHT_DEFAULTS: Record<Locale, WeightDefaults> = {
     commodityNames: {
       wheat: 'пшениця', corn: 'кукурудза', soy: 'соя', barley: 'ячмінь',
       oats: 'овес', rye: 'жито', canola: 'ріпак (canola)',
+    },
+  },
+  de: {
+    ui: {
+      inputLabel: 'Masse eingeben', commodityLabel: 'Kultur (für Bushel)',
+      unitSelectLabel: 'Einheit wählen', commoditySelectLabel: 'Kultur für Bushel wählen',
+    },
+    unitNames: { kg: 'Kilogramm', q: 'Doppelzentner', t: 'Tonne', lb: 'Pfund (pound)', bu: 'Bushel' },
+    commodityNames: {
+      wheat: 'Weizen', corn: 'Mais', soy: 'Soja', barley: 'Gerste',
+      oats: 'Hafer', rye: 'Roggen', canola: 'Raps (Canola)',
     },
   },
 };

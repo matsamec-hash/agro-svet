@@ -8,8 +8,8 @@ import { useTranslations, localizeInternalHref } from '../../../i18n/utils';
 const locale = Astro.locals.locale ?? 'cs';
 const t = useTranslations(locale);
 
-const brands = getAllBrands();
-const allModels = getAllModels();
+const brands = getAllBrands(locale);
+const allModels = getAllModels(locale);
 
 // Live counts inzerátů per brand z bazar_listings
 const bazarCountByBrand: Record<string, number> = {};

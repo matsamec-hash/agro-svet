@@ -1,5 +1,5 @@
 // YAML imports parsed at compile-time by @modyfi/vite-plugin-yaml — no runtime js-yaml.
-import { localizeEngine, localizeVideoTitle } from './stroje-data-i18n';
+import { localizeEngine, localizeVideoTitle, localizeName, localizeSpecValue } from './stroje-data-i18n';
 
 export type StrojKategorie =
   | 'traktory' | 'kombajny'
@@ -329,8 +329,59 @@ const CATEGORY_LABELS_PL: Record<StrojKategorie, string> = {
   'dojici-roboti': 'Roboty udojowe', podestylace: 'Słomiarki', mulcovace: 'Mulczery',
   stepkovace: 'Rębaki', 'lesni-vyvazecky': 'Forwardery',
 };
+const CATEGORY_LABELS_DE: Record<StrojKategorie, string> = {
+  traktory: 'Traktoren',
+  kombajny: 'Mähdrescher',
+  pluhy: 'Pflüge',
+  'podmitace-diskove': 'Scheibeneggen',
+  'podmitace-radlickove': 'Grubber (Schargrubber)',
+  kyprice: 'Tiefenlockerer',
+  'rotacni-brany': 'Kreiseleggen',
+  kompaktomaty: 'Saatbettkombinationen',
+  valce: 'Walzen',
+  'seci-stroje-mechanicke': 'Mechanische Sämaschinen',
+  'seci-stroje-pneumaticke': 'Pneumatische Sämaschinen',
+  'seci-stroje-presne': 'Einzelkornsämaschinen',
+  'seci-kombinace': 'Sämaschinenkombinationen',
+  'sazecky-brambor': 'Kartoffellegemaschinen',
+  'rozmetadla-mineralni': 'Mineraldüngerstreuer',
+  'rozmetadla-statkova': 'Stalldungstreuer',
+  'cisterny-kejda': 'Güllefässer',
+  'aplikatory-kejda': 'Gülleausbringtechnik',
+  'postrikovace-nesene': 'Anbau-Feldspritzen',
+  'postrikovace-tazene': 'Anhänge-Feldspritzen',
+  'postrikovace-samojizdne': 'Selbstfahrende Feldspritzen',
+  'zaci-stroje': 'Mähwerke',
+  obracece: 'Kreiselheuer',
+  shrnovace: 'Schwader',
+  'lisy-valcove': 'Rundballenpressen',
+  'lisy-hranolove': 'Quaderballenpressen',
+  obalovace: 'Ballenwickler',
+  'rezacky-samojizdne': 'Selbstfahrende Feldhäcksler',
+  'samosberaci-vozy': 'Ladewagen',
+  'sklizece-brambor': 'Kartoffelroder',
+  'sklizece-repy': 'Rübenroder',
+  vyoravace: 'Roder',
+  'celni-nakladace': 'Frontlader',
+  teleskopy: 'Teleskoplader',
+  'kolove-nakladace': 'Radlader',
+  'kloubove-nakladace': 'Knicklader',
+  'smykove-nakladace': 'Kompaktlader',
+  'navesy-sklapeci': 'Kipper',
+  'navesy-valnik': 'Plattformanhänger',
+  'navesy-posuvne-dno': 'Schubbodenauflieger',
+  'cisterny-voda': 'Wasserfässer',
+  'prepravniky-zrna': 'Überladewagen',
+  'krmne-vozy': 'Futtermischwagen',
+  'dojici-roboti': 'Melkroboter',
+  podestylace: 'Einstreugeräte',
+  mulcovace: 'Mulcher',
+  stepkovace: 'Holzhäcksler',
+  'lesni-vyvazecky': 'Forwarder',
+};
+
 const CATEGORY_LABELS_BY_LOCALE: Record<string, Record<StrojKategorie, string>> = {
-  cs: CATEGORY_LABELS, sk: CATEGORY_LABELS_SK, uk: CATEGORY_LABELS_UK, pl: CATEGORY_LABELS_PL,
+  cs: CATEGORY_LABELS, sk: CATEGORY_LABELS_SK, uk: CATEGORY_LABELS_UK, pl: CATEGORY_LABELS_PL, de: CATEGORY_LABELS_DE,
 };
 
 export function categoryLabel(cat: StrojKategorie, locale: string = 'cs'): string {
@@ -342,6 +393,7 @@ const FUNCTIONAL_GROUP_LABELS: Record<string, Record<string, string>> = {
   sk: { 'zpracovani-pudy': 'Spracovanie pôdy', seti: 'Sejba a sadenie', hnojeni: 'Hnojenie', 'ochrana-rostlin': 'Ochrana rastlín', 'sklizen-picnin': 'Zber krmovín a slamy', 'sklizen-okopanin': 'Zber okopanín', manipulace: 'Manipulácia a nakladanie', doprava: 'Doprava', 'staj-chov': 'Maštaľ a chov', 'komunal-les': 'Komunál a les' },
   uk: { 'zpracovani-pudy': 'Обробіток ґрунту', seti: 'Сівба та садіння', hnojeni: 'Внесення добрив', 'ochrana-rostlin': 'Захист рослин', 'sklizen-picnin': 'Заготівля кормів і соломи', 'sklizen-okopanin': 'Збирання коренеплодів', manipulace: 'Навантаження та переміщення', doprava: 'Транспорт', 'staj-chov': 'Тваринництво', 'komunal-les': 'Комунальна та лісова техніка' },
   pl: { 'zpracovani-pudy': 'Uprawa gleby', seti: 'Siew i sadzenie', hnojeni: 'Nawożenie', 'ochrana-rostlin': 'Ochrona roślin', 'sklizen-picnin': 'Zbiór pasz i słomy', 'sklizen-okopanin': 'Zbiór okopowych', manipulace: 'Przeładunek', doprava: 'Transport', 'staj-chov': 'Obora i hodowla', 'komunal-les': 'Technika komunalna i leśna' },
+  de: { 'zpracovani-pudy': 'Bodenbearbeitung', seti: 'Saat und Pflanzung', hnojeni: 'Düngung', 'ochrana-rostlin': 'Pflanzenschutz', 'sklizen-picnin': 'Futter- und Strohernte', 'sklizen-okopanin': 'Hackfruchternte', manipulace: 'Umschlag und Laden', doprava: 'Transport', 'staj-chov': 'Stall und Tierhaltung', 'komunal-les': 'Kommunal- und Forsttechnik' },
 };
 export function functionalGroupLabel(slug: string, locale: string = 'cs'): string {
   const loc = FUNCTIONAL_GROUP_LABELS[locale];
@@ -405,7 +457,7 @@ export function applyStrojOverlay(base: StrojBrand, ov: StrojOverlay | null): St
 
 // Otevřený konec výroby („–dosud") — jediný token, ne věta k překladu.
 const PRESENT_LABEL: Record<string, string> = {
-  cs: 'dosud', sk: 'súčasnosť', pl: 'obecnie', uk: 'дотепер',
+  cs: 'dosud', sk: 'súčasnosť', pl: 'obecnie', uk: 'дотепер', de: 'heute',
 };
 
 // 102 ze 424 názvů řad nese v cs YAML rozsah výroby včetně českého „dosud"
@@ -435,9 +487,19 @@ export function localizeModelDataTokens(b: StrojBrand, locale: string): StrojBra
   const c = b as any;
   for (const cat of Object.values(c.categories || {}) as any[]) {
     for (const s of cat.series || []) {
+      // ‼️ Popisné názvy (série i modelu) jsou v základních datech česky —
+      // overlay pokrývá jen `description`, takže bez tohohle svítilo
+      // „Lemken Předradličky" i na /de a /pl listingu.
+      if (typeof s.name === 'string') s.name = localizeName(s.name, locale);
       for (const m of s.models || []) {
+        if (typeof m.name === 'string') m.name = localizeName(m.name, locale);
         if (typeof m.engine === 'string') m.engine = localizeEngine(m.engine, locale);
         if (typeof m.youtube_title === 'string') m.youtube_title = localizeVideoTitle(m.youtube_title, locale);
+        if (m.specs && typeof m.specs === 'object') {
+          for (const [k, v] of Object.entries(m.specs)) {
+            if (typeof v === 'string') (m.specs as Record<string, string>)[k] = localizeSpecValue(v, locale);
+          }
+        }
       }
     }
   }
@@ -574,6 +636,7 @@ export function familyLabel(family: string, locale: string = 'cs'): string {
     if (locale === 'sk') return `${family}. rad`;
     if (locale === 'uk') return `Серія ${family}`;
     if (locale === 'pl') return `Seria ${family}`;
+    if (locale === 'de') return `Baureihe ${family}`;
     return `${family}. řada`;
   }
   if (family.length <= 4) return family.toUpperCase();

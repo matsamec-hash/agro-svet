@@ -25,7 +25,7 @@ import { useCaseDescription } from '../../../lib/competitor-finder';
 import { getSeries } from '../../../lib/stroje';
 import { comparisonInsights } from '../../../lib/comparison-insights';
 import { implementComparisonInsights } from '../../../lib/implement-comparison-insights';
-import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref } from '../../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47 } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -59,8 +59,8 @@ let pair: ComparisonPair | null = pairProp ?? null;
 if (!pair) {
   const parsed = parsePairCombo(combo!);
   if (parsed) {
-    const a = findModelBySlug(parsed[0]);
-    const b = findModelBySlug(parsed[1]);
+    const a = findModelBySlug(parsed[0], locale);
+    const b = findModelBySlug(parsed[1], locale);
     if (a && b && a.effective_category === b.effective_category && a.brand_slug !== b.brand_slug) {
       const canonical = pairCombo(a, b);
       if (canonical !== combo) return Astro.rewrite('/404');
@@ -73,7 +73,11 @@ if (!pair) return Astro.rewrite('/404');
 // 24h edge cache + 7d SWR — pair data se mění jen když přibudou modely.
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-const { a, b } = pair;
+// ‼️ Dvojice se staví v getStaticPaths z ČESKÝCH dat (musí být napříč jazyky
+// identická, jinak by se rozešly URL). `pair.a/b` proto nesou české `engine`
+// („FARMotion 35 3-válec") — pro render je vyzvedni z lokalizovaného katalogu.
+const a = findModelBySlug(pair.a.slug, locale) ?? pair.a;
+const b = findModelBySlug(pair.b.slug, locale) ?? pair.b;
 const aDisplay = modelDisplayName(a);
 const bDisplay = modelDisplayName(b);
 
@@ -111,7 +115,7 @@ const description = insights.shortDescription;
 
 const related = relatedComparisonsFor(a, 6).filter((p) => p.combo !== pair.combo).slice(0, 5);
 
-const lastUpdatedHuman = new Date(insights.lastUpdatedIso).toLocaleDateString(locale === 'sk' ? 'sk-SK' : 'cs-CZ', {
+const lastUpdatedHuman = new Date(insights.lastUpdatedIso).toLocaleDateString(bcp47(locale), {
   year: 'numeric', month: 'long', day: 'numeric',
 });
 
@@ -177,9 +181,9 @@ function modelLink(m: typeof a): string {
           <span class="duo-brand">{a.brand_name}</span>
           <h2 class="duo-name"><a href={modelLink(a)}>{a.name}</a></h2>
           <div class="duo-stats">
-            {a.power_hp !== null && <span class="ds-hp">{a.power_hp} k</span>}
+            {a.power_hp !== null && <span class="ds-hp">{a.power_hp} {tr('cmp.unitHp')}</span>}
             {a.year_from !== null && (
-              <span class="ds-year">{a.year_to === null ? `${a.year_from}–dosud` : `${a.year_from}–${a.year_to}`}</span>
+              <span class="ds-year">{a.year_to === null ? `${a.year_from}–${tr('cat.rada.dosud')}` : `${a.year_from}–${a.year_to}`}</span>
             )}
           </div>
           {aUseCase && <p class="duo-usecase">{aUseCase}</p>}
@@ -194,9 +198,9 @@ function modelLink(m: typeof a): string {
           <span class="duo-brand">{b.brand_name}</span>
           <h2 class="duo-name"><a href={modelLink(b)}>{b.name}</a></h2>
           <div class="duo-stats">
-            {b.power_hp !== null && <span class="ds-hp">{b.power_hp} k</span>}
+            {b.power_hp !== null && <span class="ds-hp">{b.power_hp} {tr('cmp.unitHp')}</span>}
             {b.year_from !== null && (
-              <span class="ds-year">{b.year_to === null ? `${b.year_from}–dosud` : `${b.year_from}–${b.year_to}`}</span>
+              <span class="ds-year">{b.year_to === null ? `${b.year_from}–${tr('cat.rada.dosud')}` : `${b.year_from}–${b.year_to}`}</span>
             )}
           </div>
           {bUseCase && <p class="duo-usecase">{bUseCase}</p>}

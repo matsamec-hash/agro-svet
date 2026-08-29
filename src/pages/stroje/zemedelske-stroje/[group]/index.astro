@@ -15,8 +15,8 @@ const group = FUNCTIONAL_GROUPS[groupSlug as FunctionalGroupSlug];
 if (!group) return Astro.rewrite('/404');
 const groupName = functionalGroupLabel(groupSlug!, locale);
 
-const allBrands = getAllBrands();
-const allModels = getAllModels();
+const allBrands = getAllBrands(locale);
+const allModels = getAllModels(locale);
 const groupCats = group.categories as readonly StrojKategorie[];
 const groupModels = allModels.filter((m) => groupCats.includes(m.effective_category));
 // SSR: prázdné skupiny (dřív vyloučené v getStaticPaths) drž na 404.

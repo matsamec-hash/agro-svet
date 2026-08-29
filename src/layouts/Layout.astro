@@ -66,7 +66,7 @@ const SITE_ORIGIN = 'https://agro-svet.cz';
 // i původní (locale-prefixovaná) cesta se čtou z locals (fallback pro jistotu).
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const localizedPathname = Astro.locals.localizedPathname ?? Astro.url.pathname;
-const ogLocale = { cs: 'cs_CZ', sk: 'sk_SK', uk: 'uk_UA', pl: 'pl_PL' }[locale];
+const ogLocale = { cs: 'cs_CZ', sk: 'sk_SK', uk: 'uk_UA', pl: 'pl_PL', de: 'de_DE' }[locale];
 const canonicalPath = localizedPathname.endsWith('/') ? localizedPathname : `${localizedPathname}/`;
 // canonical z props může přijít relativní (/historie/…) — normalizujeme na
 // absolutní, protože stejná hodnota jde i do og:url.
@@ -85,12 +85,14 @@ const effectiveNoindex = noindex || (locale === 'cs' ? false : !launchedForLocal
 const skLaunchedPath = isLaunchedPath('sk', csRootPath) && !locked;
 const ukLaunchedPath = isLaunchedPath('uk', csRootPath) && !locked;
 const plLaunchedPath = isLaunchedPath('pl', csRootPath) && !locked;
-const anyAlt = skLaunchedPath || ukLaunchedPath || plLaunchedPath;
+const deLaunchedPath = isLaunchedPath('de', csRootPath) && !locked;
+const anyAlt = skLaunchedPath || ukLaunchedPath || plLaunchedPath || deLaunchedPath;
 const csRootCanonical = csRootPath.endsWith('/') ? csRootPath : `${csRootPath}/`;
 const hreflangCsUrl = new URL(csRootCanonical, SITE_ORIGIN).toString();
 const hreflangSkUrl = new URL(`/sk${csRootCanonical}`, SITE_ORIGIN).toString();
 const hreflangUkUrl = new URL(`/uk${csRootCanonical}`, SITE_ORIGIN).toString();
 const hreflangPlUrl = new URL(`/pl${csRootCanonical}`, SITE_ORIGIN).toString();
+const hreflangDeUrl = new URL(`/de${csRootCanonical}`, SITE_ORIGIN).toString();
 
 // Route-based OG fallback: páry top-level cest k landing PNGs vygenerovaným
 // v scripts/build-og-images.mjs. Pokud konkrétní stránka nepředala ogImage,
@@ -128,6 +130,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
       {skLaunchedPath && <link rel="alternate" hreflang="sk" href={hreflangSkUrl} />}
       {ukLaunchedPath && <link rel="alternate" hreflang="uk" href={hreflangUkUrl} />}
       {plLaunchedPath && <link rel="alternate" hreflang="pl" href={hreflangPlUrl} />}
+      {deLaunchedPath && <link rel="alternate" hreflang="de" href={hreflangDeUrl} />}
       <link rel="alternate" hreflang="x-default" href={hreflangCsUrl} />
     </>
   ) : (

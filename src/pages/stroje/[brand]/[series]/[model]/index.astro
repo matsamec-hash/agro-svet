@@ -12,7 +12,7 @@ import Anketa from '../../../../../components/Anketa.astro';
 import { generateModelFaq } from '../../../../../lib/faq-generator';
 import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 import { pairCombo } from '../../../../../lib/comparator';
-import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeInternalHref } from '../../../../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeInternalHref, bcp47 } from '../../../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -99,7 +99,7 @@ try {
     priceStats = { min: Math.min(...prices), max: Math.max(...prices), count: prices.length };
   }
 } catch {}
-const priceFmt = (n: number) => n.toLocaleString(locale === 'sk' ? 'sk-SK' : 'cs-CZ');
+const priceFmt = (n: number) => n.toLocaleString(bcp47(locale));
 
 const family = series.family || seriesFamily(series.slug);
 const familyLab = familyLabel(family, locale);
@@ -120,7 +120,7 @@ const relatedSameSeries: RelatedItem[] = series.models
   .map((m) => ({ slug: m.slug, name: m.name, power_hp: m.power_hp, year_from: m.year_from, year_to: m.year_to, series_slug: series.slug }));
 const related: RelatedItem[] = relatedSameSeries.sort(byPowerProximity).slice(0, 6);
 if (related.length < 6) {
-  const backfill: RelatedItem[] = getAllModels()
+  const backfill: RelatedItem[] = getAllModels(locale)
     .filter((m) => m.brand_slug === brand.slug && m.effective_category === (series.subcategory ?? category) && m.series_slug !== series.slug)
     .map((m) => ({ slug: m.slug, name: m.name, power_hp: m.power_hp, year_from: m.year_from, year_to: m.year_to, series_slug: m.series_slug }));
   related.push(...backfill.sort(byPowerProximity).slice(0, 6 - related.length));
@@ -138,7 +138,7 @@ const drivetrainSpecs: SpecRow[] = [];
 const dimensionSpecs: SpecRow[] = [];
 const otherSpecs: SpecRow[] = [];
 
-const numLocale = locale === 'sk' ? 'sk-SK' : 'cs-CZ';
+const numLocale = bcp47(locale);
 if (model.power_hp) performanceSpecs.push({ label: tr('cat.s.d.specPower'), value: `${model.power_hp} k${model.power_kw ? ` (${model.power_kw} kW)` : ''}` });
 if (model.engine) drivetrainSpecs.push({ label: tr('cat.s.d.specEngine'), value: model.engine });
 if (model.transmission) drivetrainSpecs.push({ label: tr('cat.s.d.specTransmission'), value: model.transmission });
@@ -150,7 +150,7 @@ if (model.pracovni_zaber_m) dimensionSpecs.push({ label: tr('cat.s.d.specZaber')
 if (model.prikon_traktor_hp_min || model.prikon_traktor_hp_max) {
   const pMin = model.prikon_traktor_hp_min, pMax = model.prikon_traktor_hp_max;
   const pRange = pMin && pMax ? `${pMin}–${pMax}` : String(pMin ?? pMax);
-  performanceSpecs.push({ label: tr('cat.s.d.specPrikonTraktor'), value: `${pRange} k` });
+  performanceSpecs.push({ label: tr('cat.s.d.specPrikonTraktor'), value: `${pRange} ${tr('cmp.unitHp')}` });
 }
 if (yr) performanceSpecs.push({ label: tr('cat.s.d.specYears'), value: yr });
 
@@ -243,7 +243,7 @@ const productJsonLd = machineProductSchema({
   yearTo: model.year_to,
   engine: model.engine,
   transmission: model.transmission,
-  lang: locale === 'sk' ? 'sk-SK' : 'cs-CZ',
+  lang: bcp47(locale),
   sameAs: reviewHref ?? undefined,
   galleryImageUrls: (model.gallery ?? []).map((p) => p.src).filter(Boolean),
 });
@@ -374,7 +374,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           />
           <div class="hero-photo-badge">
             <span class="n">{model.name}</span>
-            {model.power_hp && <span class="pwr">{model.power_hp} k</span>}
+            {model.power_hp && <span class="pwr">{model.power_hp} {tr('cmp.unitHp')}</span>}
           </div>
           {heroCreditAuthor && heroCreditUrl && (
             <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
@@ -544,7 +544,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
                         {cIsCurrent && <span class="dot-current" title={tr('cat.s.d.dotCurrent')}></span>}
                       </div>
                       <div class="comp-meta">
-                        <span class="comp-power"><strong>{c.power_hp} k</strong>{c.power_kw ? ` · ${c.power_kw} kW` : ''}</span>
+                        <span class="comp-power"><strong>{c.power_hp} {tr('cmp.unitHp')}</strong>{c.power_kw ? ` · ${c.power_kw} kW` : ''}</span>
                         {cYr && <span class="comp-year">{cYr}</span>}
                       </div>
                     </a>
@@ -610,7 +610,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
                     </div>
                     <div class="rel-meta">
                       <span class="rel-power">
-                        {m.power_hp !== null ? <><strong>{m.power_hp} k</strong></> : '—'}
+                        {m.power_hp !== null ? <><strong>{m.power_hp} {tr('cmp.unitHp')}</strong></> : '—'}
                       </span>
                       <span class="rel-year">{mYr}</span>
                     </div>

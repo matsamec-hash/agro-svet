@@ -17,8 +17,8 @@ const pairs = topComparisonPairs(220);
 
 // Custom picker data: all eligible models for the dropdowns. Cap fields to keep
 // payload small (one row per option). Frontend filters brand → models.
-const allBrands = getAllBrands();
-const allModelsForPicker = getAllModels()
+const allBrands = getAllBrands(locale);
+const allModelsForPicker = getAllModels(locale)
   .filter((m) => m.category === 'traktory' || m.category === 'kombajny')
   .map((m) => ({
     slug: m.slug,
@@ -182,13 +182,13 @@ const js = {
                 <div class="cc-model">
                   <div class="cc-brand">{p.a.brand_name}</div>
                   <div class="cc-name">{p.a.name}</div>
-                  {p.a.power_hp !== null && <div class="cc-hp">{p.a.power_hp} k</div>}
+                  {p.a.power_hp !== null && <div class="cc-hp">{p.a.power_hp} {tr('cmp.unitHp')}</div>}
                 </div>
                 <div class="cc-vs" aria-hidden="true">VS</div>
                 <div class="cc-model">
                   <div class="cc-brand">{p.b.brand_name}</div>
                   <div class="cc-name">{p.b.name}</div>
-                  {p.b.power_hp !== null && <div class="cc-hp">{p.b.power_hp} k</div>}
+                  {p.b.power_hp !== null && <div class="cc-hp">{p.b.power_hp} {tr('cmp.unitHp')}</div>}
                 </div>
               </div>
               <div class="cc-cta">{tr('cat.sr.cardCta')}</div>
@@ -214,13 +214,13 @@ const js = {
                 <div class="cc-model">
                   <div class="cc-brand">{p.a.brand_name}</div>
                   <div class="cc-name">{p.a.name}</div>
-                  {p.a.power_hp !== null && <div class="cc-hp">{p.a.power_hp} k</div>}
+                  {p.a.power_hp !== null && <div class="cc-hp">{p.a.power_hp} {tr('cmp.unitHp')}</div>}
                 </div>
                 <div class="cc-vs" aria-hidden="true">VS</div>
                 <div class="cc-model">
                   <div class="cc-brand">{p.b.brand_name}</div>
                   <div class="cc-name">{p.b.name}</div>
-                  {p.b.power_hp !== null && <div class="cc-hp">{p.b.power_hp} k</div>}
+                  {p.b.power_hp !== null && <div class="cc-hp">{p.b.power_hp} {tr('cmp.unitHp')}</div>}
                 </div>
               </div>
               <div class="cc-cta">{tr('cat.sr.cardCta')}</div>

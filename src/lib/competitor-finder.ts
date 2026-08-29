@@ -126,14 +126,14 @@ export function findImplementCompetitors(
 }
 
 /** Generate a use-case description from power range + category. Static, factual.
- *  cs branch is byte-identical to the original; sk and uk add localized variants. */
+ *  cs branch is byte-identical to the original; sk/uk/pl/de add localized variants. */
 export function useCaseDescription(
   category: StrojKategorie,
   powerHp: number | null,
   locale: Locale = 'cs',
 ): string | null {
-  const pick = (cs: string, sk: string, uk: string, pl: string): string =>
-    locale === 'sk' ? sk : locale === 'uk' ? uk : locale === 'pl' ? pl : cs;
+  const pick = (cs: string, sk: string, uk: string, pl: string, de: string): string =>
+    locale === 'sk' ? sk : locale === 'uk' ? uk : locale === 'pl' ? pl : locale === 'de' ? de : cs;
   if (category === 'traktory' && powerHp !== null) {
     if (powerHp < 50) {
       return pick(
@@ -141,6 +141,7 @@ export function useCaseDescription(
         'Kompaktný traktor pre malé hospodárstvo, sady, vinice a komunálne využitie. Vhodný pre výmeru do približne 30 hektárov.',
         'Компактний трактор для невеликого господарства, садів, виноградників і комунального використання. Підходить для площі приблизно до 30 гектарів.',
         'Kompaktowy ciągnik do małego gospodarstwa, sadów, winnic i zastosowania komunalnego. Odpowiedni dla powierzchni do ok. 30 hektarów.',
+        'Kompakttraktor für kleine Betriebe, Obst- und Weinbau sowie den Kommunaleinsatz. Geeignet für eine Fläche bis etwa 30 Hektar.',
       );
     }
     if (powerHp < 90) {
@@ -149,6 +150,7 @@ export function useCaseDescription(
         'Univerzálny traktor pre menšie a stredné farmy s výmerou 30–100 hektárov. Zvládne poľnú prácu s ľahšími agregátmi, zber trávy a manipuláciu s nakladačom.',
         'Універсальний трактор для невеликих і середніх ферм площею 30–100 гектарів. Упорається з польовими роботами з легшими агрегатами, заготівлею трав і навантажувальними роботами.',
         'Wszechstronny ciągnik do mniejszych i średnich gospodarstw o powierzchni 30–100 hektarów. Poradzi sobie z pracami polowymi z lżejszymi agregatami, zbiorem trawy i pracą z ładowaczem.',
+        'Universaltraktor für kleinere und mittlere Betriebe mit 30–100 Hektar. Schafft Feldarbeit mit leichteren Geräten, Grünlandernte und Frontladerarbeit.',
       );
     }
     if (powerHp < 160) {
@@ -157,6 +159,7 @@ export function useCaseDescription(
         'Stredne výkonný traktor pre farmy s výmerou 100–300 hektárov. Optimálny na orbu, sejacie kombinácie, poľný postrek a lisovanie.',
         'Трактор середньої потужності для ферм площею 100–300 гектарів. Оптимальний для оранки, посівних комбінацій, польового обприскування та пресування.',
         'Ciągnik średniej mocy do gospodarstw o powierzchni 100–300 hektarów. Optymalny do orki, agregatów siewnych, oprysku polowego i prasowania.',
+        'Traktor mittlerer Leistungsklasse für Betriebe mit 100–300 Hektar. Optimal für Pflugarbeit, Sägeräte-Kombinationen, Feldspritze und Pressen.',
       );
     }
     if (powerHp < 250) {
@@ -165,6 +168,7 @@ export function useCaseDescription(
         'Výkonný traktor pre veľké farmy s výmerou 300–600 hektárov. Plný potenciál uplatní pri širokých sejacích kombináciách, kypričoch a samohybných postrekovačoch.',
         'Потужний трактор для великих ферм площею 300–600 гектарів. Повний потенціал розкриває з широкозахватними посівними комбінаціями, культиваторами та самохідними обприскувачами.',
         'Wydajny ciągnik do dużych gospodarstw o powierzchni 300–600 hektarów. Pełny potencjał ujawnia przy szerokich agregatach siewnych, kultywatorach i samojezdnych opryskiwaczach.',
+        'Leistungsstarker Traktor für große Betriebe mit 300–600 Hektar. Sein volles Potenzial zeigt er bei breiten Sägeräte-Kombinationen, Grubbern und Anbauspritzen.',
       );
     }
     return pick(
@@ -172,6 +176,7 @@ export function useCaseDescription(
       'Vlajkový traktor pre veľkovýrobu s výmerou nad 500 hektárov. Určený pre najširšie agregácie, autonómne riadenie a maximálnu dennú produktivitu na poli.',
       'Флагманський трактор для великотоварного виробництва площею понад 500 гектарів. Призначений для найширших агрегацій, автономного керування та максимальної денної продуктивності в полі.',
       'Flagowy ciągnik do wielkoobszarowej produkcji powyżej 500 hektarów. Przeznaczony do najszerszych agregatów, autonomicznego sterowania i maksymalnej dziennej wydajności w polu.',
+      'Flaggschiff-Traktor für Großbetriebe mit über 500 Hektar. Ausgelegt auf breiteste Gerätekombinationen, autonome Lenksysteme und maximale Tagesleistung auf dem Feld.',
     );
   }
   if (category === 'kombajny' && powerHp !== null) {
@@ -181,6 +186,7 @@ export function useCaseDescription(
         'Kompaktný kombajn pre stredné farmy s plochou obilnín do 200 hektárov. Záber žacieho stola typicky 5–6 m.',
         'Компактний зернозбиральний комбайн для середніх ферм із площею зернових до 200 гектарів. Ширина захвату жниварки зазвичай 5–6 м.',
         'Kompaktowy kombajn zbożowy do średnich gospodarstw z powierzchnią zbóż do 200 hektarów. Szerokość robocza hedera typowo 5–6 m.',
+        'Kompakter Mähdrescher für mittlere Betriebe mit einer Getreidefläche bis 200 Hektar. Schneidwerksbreite typischerweise 5–6 m.',
       );
     }
     if (powerHp < 400) {
@@ -189,6 +195,7 @@ export function useCaseDescription(
         'Stredne výkonný kombajn pre farmy s plochou obilnín 200–500 hektárov. Záber 6–9 m, kapacita zásobníka obvykle 8 000–10 000 l.',
         'Зернозбиральний комбайн середньої потужності для ферм із площею зернових 200–500 гектарів. Ширина захвату 6–9 м, об’єм бункера зазвичай 8 000–10 000 л.',
         'Kombajn zbożowy średniej mocy do gospodarstw z powierzchnią zbóż 200–500 hektarów. Szerokość robocza 6–9 m, pojemność zbiornika zazwyczaj 8 000–10 000 l.',
+        'Mähdrescher mittlerer Leistungsklasse für Betriebe mit 200–500 Hektar Getreidefläche. Schneidwerksbreite 6–9 m, Korntankvolumen üblicherweise 8 000–10 000 l.',
       );
     }
     if (powerHp < 600) {
@@ -197,6 +204,7 @@ export function useCaseDescription(
         'Výkonný kombajn pre veľké farmy s plochou obilnín nad 500 hektárov. Záber 9–12 m, kapacita zásobníka 10 000–14 000 l.',
         'Потужний зернозбиральний комбайн для великих ферм із площею зернових понад 500 гектарів. Ширина захвату 9–12 м, об’єм бункера 10 000–14 000 л.',
         'Wydajny kombajn zbożowy do dużych gospodarstw z powierzchnią zbóż powyżej 500 hektarów. Szerokość robocza 9–12 m, pojemność zbiornika 10 000–14 000 l.',
+        'Leistungsstarker Mähdrescher für große Betriebe mit über 500 Hektar Getreidefläche. Schneidwerksbreite 9–12 m, Korntankvolumen 10 000–14 000 l.',
       );
     }
     return pick(
@@ -204,6 +212,7 @@ export function useCaseDescription(
       'Vlajkový kombajn pre veľkovýrobu — najväčšie zábery (12 m+), zásobník 14 000+ l, určené pre najvyššiu dennú produktivitu na rozsiahlych poliach.',
       'Флагманський зернозбиральний комбайн для великотоварного виробництва — найбільша ширина захвату (12 м+), бункер 14 000+ л, призначений для найвищої денної продуктивності на великих полях.',
       'Flagowy kombajn zbożowy do wielkoobszarowej produkcji — największa szerokość robocza (12 m+), zbiornik 14 000+ l, przeznaczony do najwyższej dziennej wydajności na rozległych polach.',
+      'Flaggschiff-Mähdrescher für Großbetriebe — größte Schneidwerksbreiten (12 m+), Korntank 14 000+ l, ausgelegt auf höchste Tagesleistung auf weiten Feldern.',
     );
   }
   return null;

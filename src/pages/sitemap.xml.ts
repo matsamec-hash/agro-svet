@@ -601,6 +601,19 @@ export const GET: APIRoute = async () => {
     .map((u) => ({ ...u, loc: `${SITE_URL}/pl${u.loc.slice(SITE_URL.length)}` }));
   urls.push(...plMirror);
 
+  // DE launch (fáze 1): zrcadli launchnuté sekce (stroje/znacky/srovnani).
+  // Stejný vzorec jako plMirror — vyloučit už zrcadlené /sk/, /uk/ a /pl/ URL,
+  // ať se mirror nezrcadlí sám do sebe.
+  const deMirror: UrlEntry[] = urls
+    .filter((u) => {
+      if (!u.loc.startsWith(SITE_URL)) return false;
+      const p = u.loc.slice(SITE_URL.length);
+      if (p.startsWith('/sk/') || p.startsWith('/uk/') || p.startsWith('/pl/')) return false;
+      return isLaunchedPath('de', p) && !isLockedSectionPath(p);
+    })
+    .map((u) => ({ ...u, loc: `${SITE_URL}/de${u.loc.slice(SITE_URL.length)}` }));
+  urls.push(...deMirror);
+
   // PL komoditní detaily — /pl/statistiky/komodita/<slug>/ jsou indexovatelné
   // (reálná GUS data ceny skupu, viz [slug].astro noindex výjimka pro pl).
   // Slugy z polských názvů komodit; base sitemap komoditní detaily neobsahuje
