@@ -1,79 +1,385 @@
 ---
+/**
+ * Lišta souhlasu s cookies.
+ *
+ * ‼️ Předchozí verze pouštěla Microsoft Clarity (nahrávání sezení + heatmapy,
+ *   cookies `_clck`/`_clsk`) natvrdo z Layout.astro, mimo souhlas. Komentář
+ *   u toho tvrdil, že Clarity „běží anonymous bez PII → neblokuje cookie
+ *   consent"; to neplatí — Clarity zapisuje do prohlížeče vlastní cookies,
+ *   takže podle § 89 odst. 3 zákona o elektronických komunikacích potřebuje
+ *   souhlas stejně jako GA4. Kdo klikl „Pouze nezbytné", byl dál nahráván.
+ *   Od téhle verze se Clarity načítá jen z téhle komponenty a jen po souhlasu.
+ *
+ * ‼️ Volba se ukládá jako JSON s časem rozhodnutí a po `PLATNOST_DNI` propadá.
+ *   Starý formát byl holý řetězec `'all'` / `'essentials'` bez data, takže
+ *   souhlas platil věčně — migrace níž ho přečte a převede, aby nikdo nedostal
+ *   lištu znovu hned po nasazení.
+ *
+ * Odvolání souhlasu (GDPR čl. 7 odst. 3 — musí být stejně snadné jako udělení)
+ * obstará jakýkoli prvek s atributem `data-cc-reopen`; v patičce je na to odkaz.
+ * Posluchač je delegovaný na `document`, takže funguje i pro odkazy, které se
+ * na stránku dostanou později.
+ */
 import { getLocaleFromUrl, useTranslations, navHref } from '../i18n/utils';
-const GA_ID = "G-HC3JY466RR";
+
+const GA_ID = 'G-HC3JY466RR';
+/** Microsoft Clarity — ID je veřejné (stejně se objeví v HTML). */
+const CLARITY_ID = 'ws6puxcjnb';
+const KLIC = 'agrosvet-cookie-consent';
+/** Po roce se zeptáme znovu; delší platnost se u souhlasu nedoporučuje. */
+const PLATNOST_DNI = 365;
+
 // Po middleware rewritu je Astro.url kanonická cs cesta → locale MUSÍ z locals
 // (jinak banner vždy cs i na /sk). Fallback na URL pro jistotu.
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 ---
-<div id="cc" class="cc" hidden>
-  <div class="cc-inner">
-    <p><Fragment set:html={tr('cc.text')} /> <a href={navHref(locale, '/zpracovani-osobnich-udaju/')}>{tr('cc.more')}</a></p>
-    <div class="cc-actions">
-      <button id="cc-essentials" class="btn-ghost">{tr('cc.essentials')}</button>
-      <button id="cc-all" class="btn-primary">{tr('cc.acceptAll')}</button>
+
+<div
+  id="cc"
+  class="cc"
+  role="dialog"
+  aria-labelledby="cc-nadpis"
+  aria-describedby="cc-popis"
+  tabindex="-1"
+  hidden
+>
+  <div class="cc-karta">
+    <!-- 1. vrstva: text + tři rovnocenné volby -->
+    <div class="cc-uvod" data-cc-vrstva="uvod">
+      <div class="cc-text">
+        <h2 id="cc-nadpis">{tr('cc.title')}</h2>
+        <p id="cc-popis">
+          <Fragment set:html={tr('cc.text')} />
+          {' '}<a href={navHref(locale, '/zpracovani-osobnich-udaju/')}>{tr('cc.more')}</a>
+        </p>
+      </div>
+      <div class="cc-tlacitka">
+        <button type="button" id="cc-nastaveni" class="cc-btn cc-btn--tichy">{tr('cc.settings')}</button>
+        <button type="button" id="cc-odmitnout" class="cc-btn cc-btn--obrys">{tr('cc.essentials')}</button>
+        <button type="button" id="cc-vse" class="cc-btn cc-btn--hlavni">{tr('cc.acceptAll')}</button>
+      </div>
+    </div>
+
+    <!-- 2. vrstva: podrobné nastavení -->
+    <div class="cc-detail" data-cc-vrstva="detail" hidden>
+      <h2 class="cc-detail-nadpis">{tr('cc.settings')}</h2>
+      <ul class="cc-kategorie">
+        <li>
+          <label>
+            <input type="checkbox" checked disabled />
+            <span>
+              <strong>{tr('cc.necessary')}</strong>
+              <em>{tr('cc.always')}</em>
+              <small>{tr('cc.necessaryDesc')}</small>
+            </span>
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" id="cc-analytika" />
+            <span>
+              <strong>{tr('cc.analytics')}</strong>
+              <small>{tr('cc.analyticsDesc')}</small>
+            </span>
+          </label>
+        </li>
+      </ul>
+      <div class="cc-tlacitka">
+        <button type="button" id="cc-zpet" class="cc-btn cc-btn--tichy">{tr('cc.back')}</button>
+        <button type="button" id="cc-ulozit" class="cc-btn cc-btn--hlavni">{tr('cc.save')}</button>
+      </div>
     </div>
   </div>
 </div>
 
-<script define:vars={{ GA_ID }}>
-  function ccInit() {
-    const KEY = 'agrosvet-cookie-consent';
-    const banner = document.getElementById('cc');
-    const stored = localStorage.getItem(KEY);
+<script is:inline define:vars={{ GA_ID, CLARITY_ID, KLIC, PLATNOST_DNI }}>
+  (function () {
+    var lista = document.getElementById('cc');
+    if (!lista) return;
 
-    function loadGA() {
-      if (!GA_ID) return;
-      const s = document.createElement('script');
-      s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-      s.async = true;
-      document.head.appendChild(s);
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){ window.dataLayer.push(arguments); }
-      window.gtag = gtag;
-      gtag('js', new Date());
-      gtag('config', GA_ID, { anonymize_ip: true });
+    var uvod = lista.querySelector('[data-cc-vrstva="uvod"]');
+    var detail = lista.querySelector('[data-cc-vrstva="detail"]');
+    var prepinacAnalytika = document.getElementById('cc-analytika');
+
+    /* ---- uložený stav ---------------------------------------------------- */
+
+    /** Vrací uloženou volbu, nebo `null`, když nic uloženého (či nečitelného) není. */
+    function nacti() {
+      var syrove = null;
+      try { syrove = localStorage.getItem(KLIC); } catch (e) { return null; }
+      if (!syrove) return null;
+
+      // Starý formát: holý řetězec bez data rozhodnutí.
+      if (syrove === 'all') return { analytika: true, kdy: null };
+      if (syrove === 'essentials') return { analytika: false, kdy: null };
+
+      try {
+        var s = JSON.parse(syrove);
+        if (!s || typeof s !== 'object') return null;
+        return { analytika: s.analytika === true, kdy: typeof s.kdy === 'string' ? s.kdy : null };
+      } catch (e) { return null; }
     }
 
-    if (stored === 'all') loadGA();
-    else if (stored !== 'essentials') banner.hidden = false;
+    /** Platí volba ještě, nebo je starší než `PLATNOST_DNI` a ptáme se znovu? */
+    function platny(stav) {
+      if (!stav || !stav.kdy) return false;
+      var stari = Date.now() - Date.parse(stav.kdy);
+      return isNaN(stari) ? true : stari < PLATNOST_DNI * 86400000;
+    }
 
-    // Odvolání souhlasu (GDPR čl. 7 odst. 3 — musí být stejně snadné jako udělení).
-    // Bez tohohle se banner po prvním kliknutí už NIKDY neukázal a uživatel neměl
-    // jak analytiku vypnout jinak než smazáním localStorage.
-    // GA se v rámci session nedá odregistrovat → po odvolání reload.
-    document.querySelectorAll('[data-cc-reopen]').forEach((el) => {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        const had = localStorage.getItem(KEY);
-        localStorage.removeItem(KEY);
-        if (had === 'all') { location.reload(); return; }
-        banner.hidden = false;
-        banner.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    function uloz(analytika) {
+      try {
+        localStorage.setItem(KLIC, JSON.stringify({
+          v: 2, analytika: analytika, kdy: new Date().toISOString(),
+        }));
+      } catch (e) { /* privátní režim — volba platí aspoň pro tuhle session */ }
+    }
+
+    /* ---- měřicí skripty -------------------------------------------------- */
+
+    var nacteno = false;
+
+    function spustMereni() {
+      if (nacteno) return;
+      nacteno = true;
+
+      if (GA_ID) {
+        var ga = document.createElement('script');
+        ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        ga.async = true;
+        document.head.appendChild(ga);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', GA_ID, { anonymize_ip: true });
+      }
+
+      if (CLARITY_ID) {
+        // Až po `load` a v nečinné chvíli — Clarity je těžká a LCP stojí na fotce.
+        var start = function () {
+          window.clarity = window.clarity || function () {
+            (window.clarity.q = window.clarity.q || []).push(arguments);
+          };
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.clarity.ms/tag/' + CLARITY_ID;
+          document.head.appendChild(s);
+        };
+        if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 4000 });
+        else setTimeout(start, 2500);
+      }
+    }
+
+    /**
+     * GA ani Clarity se za běhu nedají odregistrovat — jakmile jednou naběhly,
+     * měří dál. Po odvolání souhlasu proto stránku načteme znovu a cookies
+     * mažeme až při startu, kdy ještě žádný měřicí skript neběží.
+     *
+     * ‼️ Mazat je hned při odvolání nestačí: `_ga_<ID>` je session cookie, kterou
+     *   si gtag přepíše při nejbližší události, takže ji stihne obnovit mezi
+     *   smazáním a reloadem. (Odhaleno testem — `_ga` zmizela, `_ga_HC3…` ne.)
+     */
+    var PREFIXY = ['_ga', '_gid', '_gat', '_gcl_au', '_clck', '_clsk', 'CLID', 'MUID', 'ANONCHK', 'SM'];
+
+    function smazMericiCookies() {
+      var domeny = ['', '.' + location.hostname, location.hostname];
+      var casti = location.hostname.split('.');
+      var jeIp = /^[\d.]+$/.test(location.hostname);
+      if (!jeIp && casti.length > 2) domeny.push('.' + casti.slice(-2).join('.'));
+
+      document.cookie.split(';').forEach(function (kus) {
+        var jmeno = kus.split('=')[0].trim();
+        var nase = PREFIXY.some(function (p) { return jmeno.indexOf(p) === 0; });
+        if (!nase) return;
+        domeny.forEach(function (d) {
+          document.cookie = jmeno + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
+            + (d ? '; domain=' + d : '');
+        });
       });
+    }
+
+    /* ---- zobrazení ------------------------------------------------------- */
+
+    var vratitFokusNa = null;
+
+    function otevri(rovnouDetail) {
+      uvod.hidden = !!rovnouDetail;
+      detail.hidden = !rovnouDetail;
+      lista.hidden = false;
+      if (vratitFokusNa) lista.focus();
+    }
+
+    function zavri() {
+      lista.hidden = true;
+      if (vratitFokusNa && document.contains(vratitFokusNa)) vratitFokusNa.focus();
+      vratitFokusNa = null;
+    }
+
+    function dokonci(analytika) {
+      uloz(analytika);
+      zavri();
+      document.dispatchEvent(new CustomEvent('cc:zmena', { detail: { analytika: analytika } }));
+
+      if (analytika) { spustMereni(); return; }
+      // `nacteno` = měřicí skripty v téhle session opravdu naběhly → jen tehdy
+      // má reload smysl. Cookies uklidí start po načtení.
+      if (nacteno) location.reload();
+      else smazMericiCookies();
+    }
+
+    /* ---- start ----------------------------------------------------------- */
+
+    var stav = nacti();
+    // Migrace starého formátu: volbu respektujeme, ale orazítkujeme dneškem,
+    // ať jí od téhle chvíle běží roční platnost (dřív platila napořád).
+    if (stav && !stav.kdy) { uloz(stav.analytika); stav = nacti(); }
+
+    if (platny(stav) && stav.analytika) {
+      spustMereni();
+    } else {
+      // Bez platného souhlasu nemá po měření zůstat ani cookie — ať už proto,
+      // že uživatel odmítl, nebo že mu souhlas propadl.
+      smazMericiCookies();
+      if (!platny(stav)) otevri(false);
+    }
+    if (prepinacAnalytika) prepinacAnalytika.checked = !!(stav && stav.analytika);
+
+    document.getElementById('cc-vse').addEventListener('click', function () { dokonci(true); });
+    document.getElementById('cc-odmitnout').addEventListener('click', function () { dokonci(false); });
+    document.getElementById('cc-ulozit').addEventListener('click', function () {
+      dokonci(!!(prepinacAnalytika && prepinacAnalytika.checked));
+    });
+    document.getElementById('cc-nastaveni').addEventListener('click', function () {
+      uvod.hidden = true; detail.hidden = false;
+      if (prepinacAnalytika) prepinacAnalytika.focus();
+    });
+    document.getElementById('cc-zpet').addEventListener('click', function () {
+      detail.hidden = true; uvod.hidden = false;
+      document.getElementById('cc-nastaveni').focus();
     });
 
-    document.getElementById('cc-essentials')?.addEventListener('click', () => {
-      localStorage.setItem(KEY, 'essentials');
-      banner.hidden = true;
+    // Odvolání / změna souhlasu odkudkoli ze stránky.
+    document.addEventListener('click', function (e) {
+      var spoust = e.target.closest && e.target.closest('[data-cc-reopen]');
+      if (!spoust) return;
+      e.preventDefault();
+      vratitFokusNa = spoust;
+      var s = nacti();
+      if (prepinacAnalytika) prepinacAnalytika.checked = platny(s) && s.analytika;
+      otevri(true);
     });
-    document.getElementById('cc-all')?.addEventListener('click', () => {
-      localStorage.setItem(KEY, 'all');
-      banner.hidden = true;
-      loadGA();
+
+    // Esc zavírá jen tehdy, když už volba padla — jinak by zavření lišty
+    // bez rozhodnutí vypadalo jako souhlas.
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || lista.hidden) return;
+      if (platny(nacti())) zavri();
     });
-  }
-  if (document.readyState === 'complete') ccInit();
-  else window.addEventListener('load', ccInit, { once: true });
+  })();
 </script>
 
 <style>
-  .cc { position: fixed; bottom: 16px; left: 16px; right: 16px; max-width: 760px; margin: 0 auto; background: #1a1a1a; color: #fff; border-radius: 12px; padding: 18px 22px; z-index: 1000; box-shadow: 0 8px 32px rgba(0,0,0,.3); font-family: 'Chakra Petch', system-ui, sans-serif; }
-  .cc-inner { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-  .cc p { margin: 0; font-size: 13px; color: rgba(255,255,255,.85); flex: 1; min-width: 260px; line-height: 1.5; }
-  .cc a { color: #FFFF00; text-decoration: underline; }
-  .cc-actions { display: flex; gap: 8px; }
-  .cc-actions button { padding: 9px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; border: 1px solid; cursor: pointer; font-family: inherit; }
-  .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.3); }
-  .btn-primary { background: #FFFF00; color: #1a1a1a; border-color: #FFFF00; }
+  .cc {
+    position: fixed;
+    inset-inline: 16px;
+    bottom: 16px;
+    z-index: 1000;
+    max-width: 840px;
+    margin-inline: auto;
+    font-family: 'Chakra Petch', system-ui, sans-serif;
+  }
+  .cc[hidden] { display: none; }
+
+  .cc-karta {
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 12px;
+    padding: 18px 22px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    animation: cc-prichod 0.28s ease-out;
+  }
+  @keyframes cc-prichod {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc-karta { animation: none; }
+  }
+
+  .cc-uvod { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .cc-text { flex: 1; min-width: 260px; }
+  .cc h2 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .cc p { margin: 0; font-size: 13px; line-height: 1.5; color: rgba(255, 255, 255, 0.85); }
+  .cc a { color: #ff0; text-decoration: underline; }
+
+  .cc-tlacitka { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cc-btn {
+    padding: 9px 16px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .cc-btn:focus-visible { outline: 2px solid #ff0; outline-offset: 2px; }
+  /* „Odmítnout" a „Přijmout" musí být stejně dostupné — liší se jen barvou,
+     ne velikostí ani významem, aby lišta nebyla dark pattern. */
+  .cc-btn--obrys { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.45); }
+  .cc-btn--obrys:hover { border-color: #fff; }
+  .cc-btn--hlavni { background: #ff0; color: #1a1a1a; border-color: #ff0; }
+  .cc-btn--hlavni:hover { background: #fff; border-color: #fff; }
+  .cc-btn--tichy {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.75);
+    border-color: transparent;
+    text-decoration: underline;
+    padding-inline: 8px;
+  }
+  .cc-btn--tichy:hover { color: #fff; }
+
+  .cc-detail-nadpis {
+    margin: 0 0 12px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .cc-kategorie { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 12px; }
+  .cc-kategorie label { display: flex; gap: 10px; align-items: start; cursor: pointer; }
+  .cc-kategorie input { margin-top: 3px; width: 16px; height: 16px; accent-color: #ff0; }
+  .cc-kategorie input:disabled { cursor: default; opacity: 0.6; }
+  .cc-kategorie span { display: block; font-size: 13px; }
+  .cc-kategorie strong { font-size: 13px; }
+  .cc-kategorie em {
+    font-style: normal;
+    font-size: 11px;
+    margin-left: 8px;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+  }
+  .cc-kategorie small {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .cc-detail .cc-tlacitka { justify-content: flex-end; }
+
+  @media (max-width: 560px) {
+    .cc { inset-inline: 8px; bottom: 8px; }
+    .cc-karta { padding: 16px; }
+    .cc-tlacitka { width: 100%; }
+    /* Na úzkém displeji vedle sebe jen dvě hlavní volby (ať se do nich vejde
+       text na jeden řádek); „Nastavení" jde pod ně přes celou šířku. */
+    .cc-uvod .cc-tlacitka { display: grid; grid-template-columns: 1fr 1fr; }
+    .cc-uvod .cc-btn--tichy { grid-column: 1 / -1; order: 1; }
+  }
 </style>

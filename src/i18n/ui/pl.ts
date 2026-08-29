@@ -669,11 +669,19 @@ const pl: Record<string, string> = {
   'cat.sr.c.ctaBazar': 'Giełda {brand}',
 
   // — cookie consent —
-  'cc.text': 'Używamy plików cookie do podstawowej funkcjonalności serwisu oraz&nbsp;(za Twoją zgodą) do anonimowej analizy przez Google Analytics.',
+  'cc.text': 'Niezbędne pliki cookie są potrzebne do&nbsp;działania serwisu. Za Twoją zgodą dodamy anonimowy pomiar ruchu, dzięki któremu wiemy, co warto pisać.',
   'cc.more': 'Więcej informacji',
   'cc.essentials': 'Tylko niezbędne',
   'cc.acceptAll': 'Zaakceptuj wszystkie',
   'cc.settings': 'Ustawienia plików cookie',
+  'cc.title': 'Pliki cookie',
+  'cc.necessary': 'Niezbędne',
+  'cc.necessaryDesc': 'Trzymają serwis w całości — wybrany język, logowanie i ten wybór. Bez nich serwis nie działa, dlatego nie da się ich wyłączyć.',
+  'cc.analytics': 'Analityczne',
+  'cc.analyticsDesc': 'Google Analytics i Microsoft Clarity — anonimowe statystyki ruchu i mapy ciepła, z których wiemy, których stron nikt nie czyta do końca.',
+  'cc.always': 'zawsze włączone',
+  'cc.back': 'Wstecz',
+  'cc.save': 'Zapisz wybór',
 
   // — aktualności —
   'nov.section': 'Aktualności',

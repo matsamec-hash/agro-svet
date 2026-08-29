@@ -667,11 +667,19 @@ const sk: Record<string, string> = {
   'cat.sr.c.ctaBazar': 'Bazár {brand}',
 
   // — cookie consent —
-  'cc.text': 'Používame cookies pre základnú funkčnosť webu a&nbsp;(ak súhlasíte) pre anonymnú analytiku cez Google Analytics.',
+  'cc.text': 'Nevyhnutné cookies web potrebuje na&nbsp;prevádzku. So súhlasom k&nbsp;nim pridáme anonymné meranie návštevnosti, z ktorého spoznáme, čo má zmysel písať.',
   'cc.more': 'Viac informácií',
   'cc.essentials': 'Iba nevyhnutné',
   'cc.acceptAll': 'Prijať všetko',
   'cc.settings': 'Nastavenia cookies',
+  'cc.title': 'Cookies',
+  'cc.necessary': 'Nevyhnutné',
+  'cc.necessaryDesc': 'Držia web pohromade — zvolený jazyk, prihlásenie a táto voľba. Bez nich web nefunguje, preto sa nedajú vypnúť.',
+  'cc.analytics': 'Analytické',
+  'cc.analyticsDesc': 'Google Analytics a Microsoft Clarity — anonymné štatistiky návštevnosti a heatmapy, z ktorých spoznáme, ktoré stránky nikto nedočíta.',
+  'cc.always': 'vždy zapnuté',
+  'cc.back': 'Späť',
+  'cc.save': 'Uložiť voľbu',
 
   // — novinky —
   'nov.section': 'Novinky',
