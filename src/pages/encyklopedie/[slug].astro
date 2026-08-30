@@ -9,7 +9,7 @@ import { getCollection, getEntry, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchema, expertReviewSchema } from '../../lib/structured-data';
 import { strojeUrlForEncSlug } from '../../lib/machine-crosslink';
-import { useTranslations, getLocaleFromUrl, localizePath, tf } from '../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, localizePath, tf, BCP47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
@@ -18,7 +18,7 @@ const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklop
 const coll = (ENC_COLLECTION as Record<string, string | undefined>)[locale];
 if (!coll) return Astro.rewrite('/404');
 const base = locale === 'cs' ? '' : `/${locale}`;
-const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA', pl: 'pl-PL' } as const)[locale];
+const bcp47 = BCP47[locale as keyof typeof BCP47] ?? 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
@@ -105,6 +105,7 @@ const lastVerifiedIso = item.data.lastVerified ? item.data.lastVerified.toISOStr
 // model skutečně posoudila — nelegitimní hvězdičky by uškodily důvěryhodnosti.
 const reviewJsonLd = item.data.recenze
   ? expertReviewSchema({
+      lang: bcp47,
       url: pageUrl,
       itemName: `${brandPretty} ${item.data.name}`.replace(`${brandPretty} ${brandPretty}`, brandPretty),
       itemUrl: pageUrl,
@@ -125,6 +126,7 @@ const reviewJsonLd = item.data.recenze
 // VideoObject JSON-LD only when an encyklopedie entry references a YouTube video.
 const videoJsonLd = item.data.youtubeId
   ? videoObjectSchema({
+      lang: bcp47,
       youtubeId: item.data.youtubeId,
       name: item.data.youtubeTitle ?? `${item.data.name} — video`,
       description: item.data.popis,

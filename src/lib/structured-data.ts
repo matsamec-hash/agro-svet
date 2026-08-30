@@ -1,6 +1,7 @@
 // JSON-LD structured data helpers — schema.org markup pro Google rich results.
 // Konzistentní formát napříč pages, jeden zdroj pravdy.
 import { SITE_URL } from './config';
+import { BCP47 } from '../i18n/utils';
 import { attrDef } from './bazar-attributes';
 
 export interface BreadcrumbItem {
@@ -79,10 +80,12 @@ export function siteSchemaGraph(locale: string = 'cs') {
         name: 'agro-svět.cz',
         alternateName: 'agro-svet.cz',
         url: SITE_URL + '/',
-        // Dvojjazyčný portál — WebSite entita je sdílená (stejné @id) napříč cs i sk
-        // URL, proto deklarujeme oba jazyky polem místo jediné hodnoty. Per-page jazyk
-        // řeší <html lang> + page-level inLanguage (Article/CollectionPage).
-        inLanguage: ['cs-CZ', 'sk-SK'],
+        // Vícejazyčný portál — WebSite entita je sdílená (stejné @id) napříč všemi
+        // jazykovými URL, proto deklarujeme jazyky polem místo jediné hodnoty.
+        // ‼️ Komentář i hodnota tvrdily „dvojjazyčný, cs + sk" dávno poté, co
+        // přibyly pl, uk a de — Googlu jsme tedy o třech mutacích neřekli.
+        // Per-page jazyk řeší <html lang> + page-level inLanguage.
+        inLanguage: Object.values(BCP47),
         description: ORG_DESCRIPTION,
         publisher: { '@id': ORG_ID },
         potentialAction: {
@@ -424,6 +427,8 @@ export interface ExpertReviewInput {
   datePublished?: string;
   dateModified?: string;
   authorName?: string;
+  /** BCP-47 jazyk stránky. Bez něj JSON-LD tvrdí cs-CZ i pod /de. */
+  lang?: string;
 }
 
 // Editorial Review of a machine model. Mapped to schema.org Review with
@@ -446,7 +451,7 @@ export function expertReviewSchema(r: ExpertReviewInput) {
     url: reviewUrl,
     name: `Hodnocení redakce — ${r.itemName}`,
     reviewBody,
-    inLanguage: 'cs-CZ',
+    inLanguage: r.lang ?? 'cs-CZ',
     datePublished: r.datePublished ?? new Date().toISOString().slice(0, 10),
     ...(r.dateModified ? { dateModified: r.dateModified } : {}),
     author: {
@@ -504,6 +509,8 @@ export interface VideoObjectInput {
   pageUrl: string;
   /** Optional ISO 8601 upload date; defaults to lastVerified or today. */
   uploadDate?: string;
+  /** BCP-47 jazyk stránky. Bez něj JSON-LD tvrdí cs-CZ i pod /de. */
+  lang?: string;
 }
 
 export function videoObjectSchema(v: VideoObjectInput) {
@@ -517,7 +524,7 @@ export function videoObjectSchema(v: VideoObjectInput) {
     uploadDate: v.uploadDate ?? new Date().toISOString().slice(0, 10),
     contentUrl: `https://www.youtube.com/watch?v=${v.youtubeId}`,
     embedUrl: `https://www.youtube-nocookie.com/embed/${v.youtubeId}`,
-    inLanguage: 'cs-CZ',
+    inLanguage: v.lang ?? 'cs-CZ',
   };
 }
 
@@ -537,6 +544,8 @@ export interface HowToInput {
   tools?: string[];
   supplies?: string[];
   steps: HowToStep[];
+  /** BCP-47 jazyk stránky. Bez něj JSON-LD tvrdí cs-CZ i pod /de. */
+  lang?: string;
 }
 
 export function howToSchema(h: HowToInput) {
@@ -546,7 +555,7 @@ export function howToSchema(h: HowToInput) {
     '@type': 'HowTo',
     name: h.name,
     description: h.description,
-    inLanguage: 'cs-CZ',
+    inLanguage: h.lang ?? 'cs-CZ',
   };
   if (h.imageUrl) schema.image = h.imageUrl.startsWith('http') ? h.imageUrl : `${SITE_URL}${h.imageUrl}`;
   if (h.totalTime) schema.totalTime = h.totalTime;

@@ -3,12 +3,12 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllVybaveni, vybaveniKategorieLabel, type VybaveniKategorie } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
-import { useTranslations, getLocaleFromUrl, localizePath } from '../../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, localizePath, BCP47 } from '../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 const base = locale === 'cs' ? '' : `/${locale}`;
-const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA', pl: 'pl-PL' } as const)[locale];
+const bcp47 = BCP47[locale as keyof typeof BCP47] ?? 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const all = getAllVybaveni(locale);
@@ -99,7 +99,16 @@ const collectionJsonLd = {
                 <div class="vc-name">{item.name}</div>
                 <p class="vc-desc">{item.popis_kratky}</p>
                 {item.orientacni_cena && (
-                  <div class="vc-cena">{item.orientacni_cena}</div>
+                  /* ‼️ Tentýž signál jde dvěma cestami: detail (vybaveni/[slug])
+                     u korunové ceny přidává poznámku, že jde o český trh —
+                     výpis ji ale neměl, takže německý čtenář viděl holé „Kč".
+                     Gatuj obě cesty, ne jen tu, kde sis chyby všiml. */
+                  <div class="vc-cena">
+                    {item.orientacni_cena}
+                    {locale !== 'cs' && /Kč/.test(String(item.orientacni_cena)) && (
+                      <span class="vc-cena-note">{t('slov.czkNote')}</span>
+                    )}
+                  </div>
                 )}
               </div>
             </a>
@@ -232,6 +241,9 @@ const collectionJsonLd = {
   .vybaveni-listing-root .vc-tag-pro-zac { background: var(--yellow); color: #0A0A0B; border-color: transparent; }
   .vybaveni-listing-root .vc-name { font: 700 19px 'Chakra Petch', sans-serif; color: var(--ink); letter-spacing: -.01em; }
   .vybaveni-listing-root .vc-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 4px 0 0; }
+  .vybaveni-listing-root .vc-cena-note {
+    display:block; margin-top:3px; font-size:11px; font-weight:500; line-height:1.35; opacity:.72;
+  }
   .vybaveni-listing-root .vc-cena {
     font: 600 12px 'Chakra Petch', sans-serif; color: var(--muted); letter-spacing: .04em;
     margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--line);

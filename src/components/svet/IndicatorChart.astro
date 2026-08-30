@@ -76,7 +76,7 @@ const ariaSummary =
 <script>
   interface Row { year: number; x: number; cy: number; val: number; ry: number | null; refVal: number | null; diff: number | null; }
   interface ChartData { w: number; h: number; unit: string; countryName: string; refName: string; hasRef: boolean; rows: Row[]; }
-  const NUM_LOCALE = ({ cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA' } as Record<string, string>)[document.documentElement.lang] || 'cs-CZ';
+  const NUM_LOCALE = ({ cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA', de: 'de-DE' } as Record<string, string>)[document.documentElement.lang] || 'cs-CZ';
   const nf = new Intl.NumberFormat(NUM_LOCALE, { maximumFractionDigits: 2 });
 
   document.querySelectorAll<HTMLElement>('.svet-chart').forEach((fig) => {

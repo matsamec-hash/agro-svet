@@ -600,3 +600,39 @@ describe('fáze 3c — choroby de overlay a sitewide JSON-LD', () => {
     expect(layout, 'Layout musí locale předat').toContain('siteSchemaGraph(locale)');
   });
 });
+
+describe('JSON-LD jazyk — třída „lokální BCP47 mapa"', () => {
+  const ROOT = process.cwd();
+  const walk = (dir: string): string[] =>
+    fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`]);
+
+  // ‼️ i18n/utils.ts má sdílenou BCP47 mapu a u ní komentář „používej tohle,
+  // ne vlastní ternář". Přesto v projektu žilo 12 lokálních map — a většina
+  // neznala de (dvě ani pl). Nejhorší dopad: /encyklopedie je pro de LAUNCHNUTÉ,
+  // takže německé stránky posílaly Googlu inLanguage: undefined.
+  it('žádná stránka si nedrží vlastní BCP47 mapu', () => {
+    const offenders = walk('src/pages')
+      .concat(walk('src/layouts'))
+      .filter((f) => /\.(astro|ts)$/.test(f))
+      .filter((f) => /const bcp47 = \(\{/.test(fs.readFileSync(path.join(ROOT, f), 'utf8')));
+    expect(offenders, `lokální BCP47 mapa: ${offenders.join(', ')}`).toEqual([]);
+  });
+
+  it('sitewide WebSite deklaruje všechny jazyky portálu', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/lib/structured-data.ts'), 'utf8');
+    // Bylo natvrdo ['cs-CZ','sk-SK'] i dlouho poté, co přibyly pl, uk a de.
+    expect(src, 'inLanguage musí vycházet ze sdílené mapy').toContain('inLanguage: Object.values(BCP47)');
+  });
+
+  it('schémata na launchnutých de stránkách přijímají jazyk', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/lib/structured-data.ts'), 'utf8');
+    for (const iface of ['ExpertReviewInput', 'VideoObjectInput', 'HowToInput']) {
+      const i = src.indexOf(`interface ${iface} {`);
+      expect(i, `chybí ${iface}`).toBeGreaterThan(-1);
+      expect(src.slice(i, src.indexOf('\n}', i)), `${iface} nemá lang`).toContain('lang?: string');
+    }
+    const enc = fs.readFileSync(path.join(ROOT, 'src/pages/encyklopedie/[slug].astro'), 'utf8');
+    expect(enc, 'encyklopedie musí jazyk předat').toContain('lang: bcp47');
+  });
+});

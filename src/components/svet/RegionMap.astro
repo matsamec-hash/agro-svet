@@ -91,7 +91,7 @@ const levelNote = (data as any).regionNote
       };
       const NO_DATA = parsed.noData || 'bez dat';
       const byKey: Record<string, Metric> = Object.fromEntries(parsed.metrics.map((m) => [m.key, m]));
-      const NUM_LOCALE = ({ cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA' } as Record<string, string>)[document.documentElement.lang] || 'cs-CZ';
+      const NUM_LOCALE = ({ cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', uk: 'uk-UA', de: 'de-DE' } as Record<string, string>)[document.documentElement.lang] || 'cs-CZ';
       const nf = new Intl.NumberFormat(NUM_LOCALE, { maximumFractionDigits: 2 });
       const paths = Array.from(svg.querySelectorAll('path')) as SVGPathElement[];
       const desc = document.getElementById('svet-map-desc');

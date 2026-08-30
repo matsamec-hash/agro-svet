@@ -3,13 +3,13 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllVybaveni, getVybaveni, vybaveniKategorieLabel } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
-import { useTranslations, getLocaleFromUrl, localizePath, plural } from '../../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, localizePath, plural, BCP47 } from '../../../i18n/utils';
 import { injectLinks, injectLinksInText, createLinkContext } from '../../../lib/auto-linker';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 const base = locale === 'cs' ? '' : `/${locale}`;
-const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA', pl: 'pl-PL' } as const)[locale];
+const bcp47 = BCP47[locale as keyof typeof BCP47] ?? 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;

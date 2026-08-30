@@ -7,7 +7,7 @@ import { getEntry } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
 import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
-import { useTranslations } from '../../i18n/utils';
+import { useTranslations, BCP47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
@@ -24,7 +24,7 @@ if (!item) return new Response(null, { status: 404 });
 const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/puda/${slug}/`, locale);
 
 const pageUrl = `${SITE_URL}${base}/puda/${slug}/`;
-const bcp47 = ({ cs: 'cs-CZ', sk: 'sk-SK', uk: 'uk-UA' } as const)[locale as 'cs' | 'sk' | 'uk'] ?? 'cs-CZ';
+const bcp47 = BCP47[locale as keyof typeof BCP47] ?? 'cs-CZ';
 const homeLabel = locale === 'uk' ? t('puda.uk.crumbHome') : (isSk ? 'Domov' : 'Domů');
 const pudaLabel = locale === 'uk' ? t('puda.uk.crumbSelf') : (isSk ? 'Poľnohospodárska pôda' : 'Zemědělská půda');
 const breadcrumbJsonLd = breadcrumbSchema([
