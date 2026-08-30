@@ -5,6 +5,7 @@ const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
 const isPl = locale === 'pl';
 const isUk = locale === 'uk';
+const isDe = locale === 'de';
 // Právní stránky se odkazují jedna na druhou; bez prefixu poslal polský
 // dokument čtenáře na ČESKÉ znění vedlejšího dokumentu.
 const lp = (path: string) => (locale === 'cs' ? path : `/${locale}${path}`);
@@ -13,6 +14,7 @@ const META = {
   sk: { title: 'DSA kontaktné miesto — Agro-svet', description: 'Jednotné kontaktné miesto podľa nariadenia (EÚ) 2022/2065 (Digital Services Act, čl. 11 a 12) — pre orgány a používateľov.' },
   pl: { title: 'Punkt kontaktowy DSA — Agro-svet', description: 'Pojedynczy punkt kontaktowy zgodnie z rozporządzeniem (UE) 2022/2065 (Akt o usługach cyfrowych, art. 11 i 12) — dla organów i użytkowników.' },
   uk: { title: 'Контактний пункт DSA — Agro-svet', description: 'Єдиний контактний пункт відповідно до Регламенту (ЄС) 2022/2065 (Акт про цифрові послуги, ст. 11 і 12) — для органів і користувачів.' },
+  de: { title: 'DSA-Kontaktstelle — Agro-svet', description: 'Zentrale Kontaktstelle nach der Verordnung (EU) 2022/2065 (Gesetz über digitale Dienste, Art. 11 und 12) — für Behörden und Nutzer.' },
 };
 const meta = META[locale] ?? META.cs;
 ---
@@ -320,6 +322,116 @@ const meta = META[locale] ?? META.cs;
     </ul>
 
     <p class="effective"><strong>Дата набрання чинності:</strong> 21 серпня 2026</p>
+    </Fragment>
+  ) : isDe ? (
+    <Fragment>
+    <h1>DSA-Kontaktstelle</h1>
+    <p class="lead">
+      Diese Seite veröffentlicht die zentrale Kontaktstelle für die Kommunikation mit den Behörden
+      der Mitgliedstaaten, der Europäischen Kommission, dem Gremium für digitale Dienste sowie mit
+      Nutzern gemäß <strong>Verordnung (EU) 2022/2065 vom 19. Oktober 2022 über einen Binnenmarkt
+      für digitale Dienste (Gesetz über digitale Dienste)</strong>, Art. 11 und 12.
+    </p>
+
+    <h2>1. Anbieter des Hostingdienstes</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong><br>
+      Identifikationsnummer (IČO): 29547539<br>
+      Sitz: Na Břehu 378, 387 11 Katovice, Tschechische Republik<br>
+      Web: <a href="https://agro-svet.cz">https://agro-svet.cz</a>
+    </p>
+    <p>
+      Der Anbieter ist in der Tschechischen Republik niedergelassen. Zuständige Aufsichtsbehörde
+      ist damit der tschechische Koordinator für digitale Dienste (Český telekomunikační úřad),
+      nicht die Bundesnetzagentur.
+    </p>
+
+    <h2>2. Kontaktstelle für Behörden (DSA Art. 11)</h2>
+    <p>
+      <strong>E-Mail:</strong> <a href="mailto:info@samecdigital.com">info@samecdigital.com</a><br>
+      <strong>Betreff:</strong> „DSA — Behörde" (zur vorrangigen Bearbeitung)<br>
+      <strong>Ansprechpartner:</strong> Geschäftsführer der Gesellschaft<br>
+      <strong>Kommunikationssprache:</strong> Tschechisch, Slowakisch, Englisch
+    </p>
+    <p>
+      Die Kommunikation erfolgt elektronisch. Diese Kontaktstelle dient den in Art. 11 Abs. 1 DSA
+      genannten Behörden — den Koordinatoren für digitale Dienste der Mitgliedstaaten, der
+      Europäischen Kommission und dem Gremium für digitale Dienste.
+    </p>
+
+    <h2>3. Kontaktstelle für Nutzer (DSA Art. 12)</h2>
+    <p>
+      Nutzer können mit dem Anbieter unmittelbar und zügig auf elektronischem Weg kommunizieren:
+    </p>
+    <ul>
+      <li><strong>Allgemeiner Kontakt:</strong> <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></li>
+      <li><strong>Meldung eines rechtswidrigen Inserats (DSA Art. 16):</strong> Formular
+        <a href="/bazar/nahlasit/">/bazar/nahlasit/</a> (auf Tschechisch) — alternativ per E-Mail
+        in deutscher Sprache</li>
+      <li><strong>Beschwerde gegen die Entfernung eines Inserats / die Sperrung eines Kontos:</strong> E-Mail
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>, Frist 14 Tage
+        ab Mitteilung, Bearbeitung binnen 14 Tagen</li>
+      <li><strong>Anträge nach der DSGVO (Auskunft, Berichtigung, Löschung, Widerspruch):</strong>
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — siehe
+        <a href={lp('/zpracovani-osobnich-udaju/')}>Datenschutzerklärung</a></li>
+    </ul>
+    <p>
+      <strong>Sprache:</strong> Tschechisch, Slowakisch, Deutsch oder Englisch. Wir antworten in der
+      Regel binnen 5 Werktagen, bei DSA-Meldungen nach Art. 16 binnen 7 Tagen, in offensichtlich
+      rechtswidrigen Fällen unverzüglich.
+    </p>
+
+    <h2>4. Kategorie des gehosteten Dienstes</h2>
+    <p>
+      Agro-svet.cz ist ein <strong>Hostingdienst</strong> im Sinne von Art. 3 Buchst. g) Ziffer iii)
+      DSA — der Anbieter speichert von Nutzern bereitgestellte Informationen (Inserate im
+      Gebrauchtmarkt, Fotos, Kommentare beim Fotowettbewerb) in deren Auftrag.
+    </p>
+    <p>
+      Der Anbieter ist <strong>kein Online-Marktplatz</strong> im Sinne von Art. 3 Buchst. h) DSA —
+      er zieht keine Zahlungen ein, ist nicht Partei der Kaufverträge zwischen Nutzern und
+      vermittelt lediglich den Kontakt. Die Pflichten aus Art. 30–32 DSA (Rückverfolgbarkeit von
+      Unternehmern, Konzeption zur Einhaltung der Vorschriften, Pflichtangaben zur Ware) finden
+      daher keine Anwendung, sofern im Gebrauchtmarkt keine Unternehmer an Verbraucher verkaufen.
+      Der Gebrauchtmarkt ist nach den <a href="/bazar/pravidla/">Regeln</a> für natürliche Personen
+      mit eigenem Eigentum sowie für Unternehmer mit der Pflicht zur Angabe ihrer
+      Identifikationsnummer konzipiert.
+    </p>
+
+    <h2>5. Einstufung nach der Größe</h2>
+    <p>
+      Der Anbieter ist ein <strong>Kleinstunternehmen im Sinne der Empfehlung der Kommission
+      2003/361/EG</strong> (Beschäftigte &lt; 10, Jahresumsatz / Bilanzsumme &lt; 2 Mio. EUR). Für ihn
+      gelten die Pflichten für Hostingdienste nach Kapitel III Abschnitt 2 DSA (Art. 11, 12, 14,
+      16, 17, 18); <strong>nicht</strong> für ihn gelten die Pflichten aus Kapitel III Abschnitt 3
+      (Art. 19–22, vertrauenswürdige Hinweisgeber, internes Beschwerdemanagementsystem für große
+      Plattformen) gemäß Art. 19 Abs. 2 DSA.
+    </p>
+
+    <h2>6. Jährliche Transparenzberichte</h2>
+    <p>
+      Kleinstunternehmen sind nach Art. 15 Abs. 2 DSA <strong>von der Pflicht befreit</strong>,
+      jährliche Transparenzberichte zu veröffentlichen. Der Anbieter veröffentlicht sie nicht und
+      nimmt diese Ausnahme in Anspruch. Sollte er künftig die Kategorie des Kleinstunternehmens
+      überschreiten, veröffentlicht er den ersten Bericht binnen 12 Monaten.
+    </p>
+
+    <h2>7. Vom Anbieter umgesetzte DSA-Mechanismen</h2>
+    <ul>
+      <li><strong>Art. 14</strong> (Allgemeine Geschäftsbedingungen) —
+        <a href={lp('/podminky-pouziti/')}>Nutzungsbedingungen</a>,
+        <a href="/bazar/pravidla/">Regeln des Gebrauchtmarkts</a>.</li>
+      <li><strong>Art. 16</strong> (Melde- und Abhilfeverfahren) — Formular
+        <a href="/bazar/nahlasit/">/bazar/nahlasit/</a>, Frist 7 Tage.</li>
+      <li><strong>Art. 17</strong> (Begründung der Entscheidung) — der Nutzer wird über die Löschung
+        eines Inserats oder die Sperrung eines Kontos per E-Mail mit Begründung informiert.</li>
+      <li><strong>Art. 18</strong> (Meldung des Verdachts einer Straftat) — der Anbieter meldet den
+        Verdacht unverzüglich den Strafverfolgungsbehörden.</li>
+      <li><strong>Beschwerde gegen eine Entscheidung</strong> — per E-Mail an info@samecdigital.com,
+        Frist 14 Tage, Bearbeitung binnen 14 Tagen.</li>
+    </ul>
+
+    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 30. August 2026</p>
     </Fragment>
   ) : (
     <Fragment>

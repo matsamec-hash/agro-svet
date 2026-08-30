@@ -482,6 +482,8 @@ const pl: Record<string, string> = {
   'zeb.more': 'Kolejne rankingi',
   'zeb.author': 'Redakcja agro-svět.cz',
   'zeb.methodology': 'Metodologia',
+  'zeb.detailLink': 'Szczegóły modelu',
+  'zeb.widthSpec': 'szerokość {w} m',
 
   // — kvízy (kvz.*) —
   'kvz.h.lede': 'Sprawdź swoją wiedzę — kto wynalazł trzypunktowy układ zawieszenia, kiedy pojawiła się pierwsza seryjna przekładnia CVT i co oznacza Stage V. Na koniec otrzymasz ocenę.',

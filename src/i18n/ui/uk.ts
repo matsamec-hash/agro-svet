@@ -485,6 +485,8 @@ const uk: Record<string, string> = {
   'zeb.more': 'Інші рейтинги',
   'zeb.author': 'Редакція agro-svět.cz',
   'zeb.methodology': 'Методика',
+  'zeb.detailLink': 'Деталі моделі',
+  'zeb.widthSpec': 'захват {w} м',
 
   // — kvízy (kvz.*) —
   'kvz.h.lede': 'Перевірте свої знання — хто винайшов триточкову навіску, коли з’явилася перша серійна КВТ і що означає Stage V. Наприкінці отримаєте оцінку.',

@@ -9,17 +9,18 @@ const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
 const isPl = locale === 'pl';
 const isUk = locale === 'uk';
-const base = isSk ? '/sk' : isPl ? '/pl' : isUk ? '/uk' : '';
+const isDe = locale === 'de';
+const base = isSk ? '/sk' : isPl ? '/pl' : isUk ? '/uk' : isDe ? '/de' : '';
 
 const breadcrumbJsonLd = breadcrumbSchema([
-  { name: isSk ? 'Domov' : isPl ? 'Strona główna' : isUk ? 'Головна' : 'Domů', url: `${base}/` },
-  { name: isSk ? 'Redakcia' : isPl ? 'Redakcja' : isUk ? 'Редакція' : 'Redakce', url: `${base}/redakce/` },
+  { name: isSk ? 'Domov' : isPl ? 'Strona główna' : isUk ? 'Головна' : isDe ? 'Startseite' : 'Domů', url: `${base}/` },
+  { name: isSk ? 'Redakcia' : isPl ? 'Redakcja' : isUk ? 'Редакція' : isDe ? 'Redaktion' : 'Redakce', url: `${base}/redakce/` },
 ]);
 
 const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'NewsMediaOrganization',
-  name: isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : isUk ? 'Редакція agro-svet.cz' : 'Redakce agro-svět.cz',
+  name: isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : isUk ? 'Редакція agro-svet.cz' : isDe ? 'Redaktion agro-svet.cz' : 'Redakce agro-svět.cz',
   url: `${SITE_URL}${base}/redakce/`,
   logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png`, width: 512, height: 512 },
   parentOrganization: {
@@ -31,13 +32,13 @@ const orgJsonLd = {
   },
   diversityPolicy: `${SITE_URL}${base}/redakce/`,
   ethicsPolicy: `${SITE_URL}${base}/redakce/`,
-  contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'info@samecdigital.com', availableLanguage: isSk ? 'Slovak' : isPl ? 'Polish' : isUk ? 'Ukrainian' : 'Czech' },
+  contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'info@samecdigital.com', availableLanguage: isSk ? 'Slovak' : isPl ? 'Polish' : isUk ? 'Ukrainian' : isDe ? 'German' : 'Czech' },
 };
 ---
 
 <Layout
-  title={isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : isUk ? 'Редакція agro-svet.cz' : 'Redakce agro-svět.cz'}
-  description={isSk ? 'Redakcia poľnohospodárskeho portálu agro-svet.cz — kto stojí za obsahom, redakčné zásady a kontakt.' : isPl ? 'Redakcja portalu rolniczego agro-svet.cz — kto stoi za treściami, zasady redakcyjne i kontakt.' : isUk ? 'Редакція аграрного порталу agro-svet.cz — хто стоїть за контентом, редакційні засади та контакт.' : 'Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt.'}
+  title={isSk ? 'Redakcia agro-svet.cz' : isPl ? 'Redakcja agro-svet.cz' : isUk ? 'Редакція agro-svet.cz' : isDe ? 'Redaktion agro-svet.cz' : 'Redakce agro-svět.cz'}
+  description={isSk ? 'Redakcia poľnohospodárskeho portálu agro-svet.cz — kto stojí za obsahom, redakčné zásady a kontakt.' : isPl ? 'Redakcja portalu rolniczego agro-svet.cz — kto stoi za treściami, zasady redakcyjne i kontakt.' : isUk ? 'Редакція аграрного порталу agro-svet.cz — хто стоїть за контентом, редакційні засади та контакт.' : isDe ? 'Redaktion des Agrarportals agro-svet.cz — wer hinter den Inhalten steht, redaktionelle Grundsätze und Kontakt.' : 'Redakce zemědělského portálu agro-svět.cz — kdo stojí za obsahem, redakční zásady a kontakt.'}
   {/* Self-canonical pro každou locale. Dřív tu bylo `isSk ? undefined : cs URL`,
       takže /pl/redakce/ (a nově i /uk/) kanonizovalo na české znění — hreflang
       říkal „alternativa", canonical „duplikát". */}
@@ -193,6 +194,59 @@ const orgJsonLd = {
       <p class="provoz">
         Web prevádzkuje <a href="https://samecdigital.com" target="_blank" rel="noopener">Samec Digital s.r.o.</a>,
         IČO 29547539, so sídlom Na Břehu 378, 387 11 Katovice.
+      </p>
+    </section>
+    </Fragment>
+  ) : isDe ? (
+    <Fragment>
+    <nav class="breadcrumb" aria-label="Brotkrumen-Navigation">
+      <a href={`${base}/`}>Startseite</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Redaktion</span>
+    </nav>
+
+    <header class="hero">
+      <span class="kicker">Über uns</span>
+      <h1>Redaktion agro-svet.cz</h1>
+      <p class="lead">
+        Wir schreiben über Landwirtschaft, Technik, Förderung und das Leben auf dem Land. Unser Ziel
+        ist es, Landwirtinnen und Landwirten nützliche, geprüfte und aktuelle Informationen zu
+        liefern — aus Deutschland, Österreich und der Welt.
+      </p>
+    </header>
+
+    <section class="block">
+      <h2>Womit wir uns beschäftigen</h2>
+      <p>
+        Wir verfolgen Neuheiten aus der Landtechnik, die europäische Förderpolitik, die Entwicklung
+        der Agrarpreise und Änderungen der Vorschriften. Außerdem pflegen wir eine Enzyklopädie der
+        Traktoren und Mähdrescher, eine Datenbank der Nutztierrassen sowie einen Atlas der
+        Krankheiten von Feldkulturen.
+      </p>
+    </section>
+
+    <section class="block">
+      <h2>Redaktionelle Grundsätze</h2>
+      <ul>
+        <li><strong>Geprüfte Quellen.</strong> Wir stützen uns auf amtliche Daten (Destatis, BMLEH, AMA, Statistik Austria, Eurostat) und auf Pressemitteilungen der Hersteller.</li>
+        <li><strong>Berichtigungen.</strong> Enthält ein Text einen Fehler, korrigieren wir ihn und weisen das Datum der Änderung aus.</li>
+        <li><strong>Trennung von Inhalt und Werbung.</strong> Kommerzielle Beiträge sind stets deutlich gekennzeichnet.</li>
+        <li><strong>Förderbeträge.</strong> Die Einheitsbeträge geben wir für Deutschland und Österreich an, jeweils mit Quelle und Stand. Wo wir zwischen endgültigen und geplanten Beträgen unterscheiden müssen, sagen wir es ausdrücklich.</li>
+        <li><strong>Regionale Angaben.</strong> Stammen Daten aus Tschechien, kennzeichnen wir das eindeutig — etwa bei Preisangaben des tschechischen Marktes.</li>
+        <li><strong>Rückmeldungen.</strong> Hinweise unserer Leserinnen und Leser sind willkommen, und wir beantworten sie.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Kontakt</h2>
+      <p>
+        Für Themenvorschläge, Pressemitteilungen und allgemeine Fragen schreiben Sie an
+        <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+        Für Werbekooperationen nutzen Sie dieselbe Adresse mit dem Betreff „Werbung".
+      </p>
+      <p class="provoz">
+        Betrieben wird das Portal von <a href="https://samecdigital.com" target="_blank" rel="noopener">Samec Digital s.r.o.</a>,
+        IČO 29547539, mit Sitz Na Břehu 378, 387 11 Katovice, Tschechische Republik.
       </p>
     </section>
     </Fragment>

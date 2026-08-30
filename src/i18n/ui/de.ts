@@ -1323,6 +1323,8 @@ const de: Record<string, string> = {
   'zeb.more': 'Weitere Ranglisten',
   'zeb.author': 'Redaktion agro-svět.cz',
   'zeb.methodology': 'Methodik',
+  'zeb.detailLink': 'Zum Modell',
+  'zeb.widthSpec': '{w} m Arbeitsbreite',
 
   // — /kviz —
   'kvz.crumb': 'Quiz',

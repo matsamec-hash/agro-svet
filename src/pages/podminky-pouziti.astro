@@ -5,6 +5,7 @@ const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
 const isPl = locale === 'pl';
 const isUk = locale === 'uk';
+const isDe = locale === 'de';
 // Právní stránky se odkazují jedna na druhou; bez prefixu poslal polský
 // dokument čtenáře na ČESKÉ znění vedlejšího dokumentu.
 const lp = (path: string) => (locale === 'cs' ? path : `/${locale}${path}`);
@@ -13,6 +14,7 @@ const META = {
   sk: { title: 'Podmienky používania — Agro-svet', description: 'Podmienky používania webu agro-svet.cz — orientačný charakter informácií, vylúčenie zodpovednosti, autorské práva, kontakt.' },
   pl: { title: 'Warunki korzystania — Agro-svet', description: 'Warunki korzystania z serwisu agro-svet.cz — orientacyjny charakter informacji, wyłączenie odpowiedzialności, prawa autorskie, kontakt.' },
   uk: { title: 'Умови використання — Agro-svet', description: 'Умови використання сайту agro-svet.cz — орієнтовний характер інформації, відмова від відповідальності, авторські права, контакт.' },
+  de: { title: 'Nutzungsbedingungen — Agro-svet', description: 'Nutzungsbedingungen der Website agro-svet.cz — orientierender Charakter der Angaben, Haftungsausschluss, Urheberrecht, Kontakt.' },
 };
 const meta = META[locale] ?? META.cs;
 ---
@@ -710,6 +712,265 @@ const meta = META[locale] ?? META.cs;
     </p>
 
     <p class="effective"><strong>Дата набрання чинності:</strong> 22 серпня 2026</p>
+    </Fragment>
+  ) : isDe ? (
+    <Fragment>
+    <h1>Nutzungsbedingungen</h1>
+    <p class="lead">
+      Diese Bedingungen regeln die Nutzung der Website <strong>agro-svet.cz</strong>, betrieben von der
+      Gesellschaft <strong>Samec Digital s.r.o.</strong>, IČO 29547539, mit Sitz Na Břehu 378,
+      387 11 Katovice, Tschechische Republik (nachfolgend „Betreiber"). Mit der Nutzung der Website
+      erklären Sie Ihr Einverständnis mit diesen Bedingungen.
+    </p>
+
+    <h2>1. Charakter der Inhalte — die Angaben sind ausschließlich Orientierungswerte</h2>
+    <p>
+      Sämtliche Daten, Zahlen, Preise, technische Parameter, Statistiken, Rechner, Einheitenumrechner,
+      Wörterbuch- und Enzyklopädieeinträge, Angaben zu Fördermitteln, Rassen, Böden, Maschinen,
+      Händlern, Marken sowie alle übrigen auf der Website veröffentlichten Informationen haben
+      <strong>ausschließlich informativen und orientierenden Charakter</strong>.
+    </p>
+    <p>
+      Der Betreiber <strong>übernimmt keine Gewähr</strong> für deren Richtigkeit, Vollständigkeit,
+      Aktualität oder Eignung für einen bestimmten Zweck. Daten können sich im Zeitverlauf ändern,
+      ihre Aktualität verlieren oder Fehler enthalten (technische, typografische, aus externen
+      Quellen übernommene, automatisch erzeugte).
+    </p>
+    <p>
+      <strong>Förderbeträge</strong> geben wir mit Quelle und Stand an und unterscheiden dabei
+      ausdrücklich zwischen <strong>endgültigen</strong> und <strong>geplanten</strong> Beträgen.
+      Geplante Beträge werden erst nach der tatsächlich beantragten Fläche berechnet und können
+      sich noch ändern. Maßgeblich ist stets die amtliche Bekanntmachung.
+    </p>
+
+    <h2>2. Haftungsausschluss</h2>
+    <p>
+      Die Website wird unentgeltlich und „wie besehen" bereitgestellt. Der Betreiber
+      <strong>haftet nicht</strong> für:
+    </p>
+    <ul>
+      <li>die Richtigkeit, Genauigkeit oder Aktualität der veröffentlichten Daten und Informationen,</li>
+      <li>Entscheidungen jeglicher Art, die der Nutzer auf Grundlage von Informationen der Website trifft,</li>
+      <li>unmittelbare und mittelbare Schäden (finanzielle, materielle, entgangener Gewinn), die durch die Nutzung der Inhalte entstehen,</li>
+      <li>die Ergebnisse von Rechnern, Einheitenumrechnern und Vergleichen — sie dienen ausschließlich einer groben Abschätzung,</li>
+      <li>den Inhalt der Inserate im Gebrauchtmarkt — dafür haftet ausschließlich deren Verfasser (der Inserent),</li>
+      <li>Inhalt und Verfügbarkeit externer Websites, auf die verlinkt wird,</li>
+      <li>Störungen, eingeschränkte Verfügbarkeit oder Unterbrechungen des Betriebs der Website.</li>
+    </ul>
+    <p>
+      <strong>Was nicht ausgeschlossen werden kann.</strong> Die vorstehenden Beschränkungen
+      <strong>gelten nicht</strong> für vorsätzlich oder grob fahrlässig verursachte Schäden sowie
+      für Schäden an Leben und Gesundheit — auf eine solche Haftung kann im Voraus nicht verzichtet
+      werden (§ 2898 des tschechischen Bürgerlichen Gesetzbuchs). Sind Sie Verbraucher, bleiben
+      Ihre Rechte aus zwingenden verbraucherschützenden Vorschriften hiervon unberührt.
+    </p>
+    <p>
+      <strong>Vor jeder Entscheidung</strong> mit finanziellen, rechtlichen, technologischen oder
+      betrieblichen Folgen (Kauf von Technik, Förderantrag, agronomische Maßnahmen, Pflanzen- und
+      Tierernährung, Anwendung von Pflanzenschutzmitteln usw.) prüfen Sie die Informationen stets
+      anhand <strong>amtlicher Quellen</strong>, beim Hersteller, Händler, einer zugelassenen
+      Beratung, bei der Landwirtschaftskammer, der BLE oder dem BMLEH (Deutschland), bei der AMA
+      oder dem BML (Österreich) oder bei einer anderen zuständigen Stelle.
+    </p>
+
+    <h2>3. Gebrauchtmarkt und Nutzerinhalte</h2>
+    <p>
+      Der Gebrauchtmarkt von agro-svet.cz ist eine <strong>Inserateplattform</strong> — der Betreiber
+      vermittelt lediglich den Kontakt zwischen Inserent und Interessent. Der Betreiber ist
+      <strong>nicht Partei des Kaufvertrags</strong>, zieht keine Zahlungen ein und steht weder für
+      Zustand, Qualität und Existenz der angebotenen Ware ein noch dafür, dass die Gegenseite ihre
+      Verpflichtungen erfüllt.
+    </p>
+    <p>
+      Für den Inhalt des Inserats, die Richtigkeit der Angaben, den Preis, den Zustand der
+      angebotenen Ware, die Urheberrechte an den Fotos sowie für die Erfüllung sämtlicher
+      gesetzlicher Pflichten (Gewerberecht, Gewährleistung, Einkommensteuer, Umsatzsteuer,
+      Anzeigepflichten) haftet <strong>ausschließlich der Inserent</strong>.
+    </p>
+
+    <h3>3.1 Wer inserieren darf</h3>
+    <ul>
+      <li><strong>Natürliche Personen (nicht gewerblich)</strong> dürfen <strong>eigenes Eigentum</strong>
+        inserieren — konkrete Einzelstücke, Stück für Stück, mit klarer Beschreibung (ein Traktor,
+        ein Pflug, ein Kalb usw.). Nicht inseriert werden dürfen „Lagerbestände", „Angebote aus der
+        Produktion" oder unbestimmte Mengen.</li>
+      <li><strong>Unternehmer (Selbstständige, Firmen, Händler)</strong> dürfen <strong>konkrete
+        angebotene Waren oder Dienstleistungen</strong> inserieren. Der gewerbliche Inserent ist
+        verpflichtet, im Inserat <strong>die Firma oder Vor- und Nachnamen sowie die
+        Identifikationsnummer (IČO / Handelsregisternummer / UID)</strong> anzugeben (am Ende des
+        Inserats oder im Feld „Name / Firma"). Fehlt bei einem Unternehmer diese Angabe, ist dies
+        Grund für die Löschung des Inserats und die Sperrung des Kontos.</li>
+      <li>Nicht inseriert werden darf eine <strong>gewerbliche Tätigkeit im Allgemeinen</strong>
+        („wir bieten jede Art von Landtechnik", „Maschinenimport aus Deutschland") — nur konkrete Ware.</li>
+    </ul>
+
+    <h3>3.2 Verbotene Inhalte</h3>
+    <p>Im Gebrauchtmarkt darf insbesondere nicht inseriert werden:</p>
+    <ul>
+      <li>Fälschungen und Nachbauteile, die als Originalteile verkauft werden,</li>
+      <li>MLM-, Provisions- und Pyramidensysteme, „Heimarbeit",</li>
+      <li>Darlehen, Kredite und Finanzdienstleistungen von Nichtbanken,</li>
+      <li>Erotikanzeigen, Partnervermittlungen, Begleitdienste,</li>
+      <li>gestohlene oder rechtswidrig erlangte Sachen,</li>
+      <li>Arzneimittel (Human- und Tierarzneimittel) ohne entsprechende Zulassung,</li>
+      <li>Pflanzenschutzmittel entgegen dem Gesetz Nr. 326/2004 Sb. (insbesondere ohne Registrierung
+        des ÚKZÚZ, außerhalb beruflicher Verwender, soweit das Recht dies verlangt); für Deutschland
+        und Österreich gelten zusätzlich das Pflanzenschutzgesetz bzw. das Pflanzenschutzmittelgesetz
+        und der Sachkundenachweis,</li>
+      <li>Waffen, Munition und Sprengstoffe entgegen dem Gesetz Nr. 119/2002 Sb. bzw. dem
+        Waffengesetz des Wohnsitzstaats,</li>
+      <li>lebende Tiere ohne Veterinärbescheinigung, geschützte Arten ohne CITES, tote Tiere,</li>
+      <li>Tabakerzeugnisse, Alkohol, Betäubungs- und psychotrope Stoffe, E-Zigaretten,</li>
+      <li>Kryptowährungen, Spielkonten, virtuelle Gegenstände,</li>
+      <li>alles, was Urheber-, gewerbliche Schutz- oder Persönlichkeitsrechte Dritter verletzt,</li>
+      <li>diskriminierende, beleidigende, zu Hass aufstachelnde oder sonst rechtswidrige Inhalte.</li>
+    </ul>
+    <p>
+      Die ausführlichen Regeln des Gebrauchtmarkts einschließlich weiterer verbotener Inhalte und
+      des Vorgehens bei Verstößen finden Sie auf der Seite
+      <a href="/bazar/pravidla/">Regeln des Gebrauchtmarkts</a>.
+    </p>
+
+    <h3>3.3 Löschung von Inseraten und Sperrung von Konten</h3>
+    <p>
+      Der Betreiber ist berechtigt, <strong>ohne vorherige Ankündigung</strong> ein Inserat nicht zu
+      veröffentlichen, ein veröffentlichtes Inserat zu löschen oder das Nutzerkonto zu sperren, wenn:
+    </p>
+    <ul>
+      <li>das Inserat oder das Verhalten des Nutzers gegen diese Bedingungen, die Regeln des
+        Gebrauchtmarkts oder Rechtsvorschriften verstößt,</li>
+      <li>das Inserat unwahre, irreführende oder täuschende Angaben enthält,</li>
+      <li>der Nutzer wiederholt doppelte Inserate oder Spam einstellt,</li>
+      <li>der Betreiber eine <strong>qualifizierte Meldung</strong> über die Rechtswidrigkeit des
+        Inhalts von einem Dritten oder einer Behörde erhält.</li>
+    </ul>
+    <p>
+      Der Nutzer wird über den Grund der Löschung / Sperrung per E-Mail an die im Konto
+      hinterlegte Adresse informiert. Gegen die Entscheidung kann binnen 14 Tagen eine begründete
+      Beschwerde an <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> gerichtet
+      werden; der Betreiber bearbeitet sie binnen 14 Tagen nach Zugang.
+    </p>
+
+    <h3>3.4 Meldung unzulässiger Inhalte (notice and action)</h3>
+    <p>
+      Wenn Sie der Ansicht sind, dass ein konkretes Inserat gegen Rechtsvorschriften oder diese
+      Regeln verstößt, nutzen Sie das Formular
+      <a href="/bazar/nahlasit/">Unzulässiges Inserat melden</a> oder senden Sie die Meldung per
+      E-Mail an <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
+      Geben Sie in der Meldung an:
+    </p>
+    <ul>
+      <li>die URL des Inserats oder dessen ID,</li>
+      <li>den Grund, aus dem Sie den Inhalt für unzulässig halten (verletzte Vorschrift oder Regel),</li>
+      <li>Ihre Kontaktdaten (freiwillig, für den Fall von Rückfragen).</li>
+    </ul>
+    <p>
+      Der Betreiber bearbeitet die Meldung <strong>ohne unnötigen Verzug</strong>, in der Regel binnen
+      <strong>7 Tagen</strong>, und informiert Sie über das Ergebnis, sofern Sie einen Kontakt
+      angegeben haben. In begründeten Fällen (offensichtlich rechtswidriger Inhalt, Gefahr für die
+      Gesundheit) handelt er unverzüglich.
+    </p>
+
+    <h2>4. Nutzungsregeln</h2>
+    <p>Der Nutzer verpflichtet sich, nicht:</p>
+    <ul>
+      <li>den Betrieb der Website oder deren Sicherheit zu stören oder ohne Zustimmung automatisierte
+        Werkzeuge (Scraper, Bots) einzusetzen,</li>
+      <li>irreführende, beleidigende, rechtswidrige Inhalte oder Spam einzustellen,</li>
+      <li>sich als eine andere Person oder Einrichtung auszugeben,</li>
+      <li>technische Maßnahmen zu umgehen, die den Inhalt oder den Zugang dazu schützen.</li>
+    </ul>
+    <p>
+      Der Betreiber behält sich vor, Inhalte, die gegen diese Bedingungen verstoßen, ohne vorherige
+      Ankündigung zu entfernen und das Nutzerkonto zu sperren.
+    </p>
+
+    <h2>5. Urheberrecht</h2>
+    <p>
+      Der Inhalt der Website (Texte, Grafiken, Gestaltung, Datenbanken, Fotos der Redaktion,
+      Wörterbucheinträge, Enzyklopädieartikel, Statistiken und deren Visualisierungen) ist durch das
+      Urheberrecht sowie durch das Datenbankherstellerrecht geschützt. Ohne schriftliche Zustimmung
+      des Betreibers dürfen die Inhalte nicht kopiert, verbreitet, verändert oder anderweitig
+      kommerziell verwertet werden.
+    </p>
+    <p>
+      Fotos und Inhalte der Inserate im Gebrauchtmarkt verbleiben beim <strong>Inserenten</strong> —
+      der Betreiber erwirbt daran weder Eigentum noch ausschließliche Rechte. Mit dem Einstellen
+      eines Inserats erteilt der Inserent dem Betreiber eine <strong>nicht ausschließliche,
+      unentgeltliche und räumlich unbeschränkte Lizenz</strong> ausschließlich zu folgenden Zwecken:
+    </p>
+    <ul>
+      <li>Anzeige des Inserats auf der Website einschließlich Vorschauen, Miniaturansichten und Ergebnislisten,</li>
+      <li>technische Verarbeitung, die für den Betrieb erforderlich ist (Größenänderung, Format, Cache, Sicherungskopien),</li>
+      <li>Bewerbung des betreffenden Inserats in Listen, in der Suche und in E-Mail-Benachrichtigungen der Website.</li>
+    </ul>
+    <p>
+      Die Lizenz gilt für die Dauer der Veröffentlichung des Inserats und <strong>erlischt mit dessen
+      Löschung</strong> (Sicherungskopien und Cache laufen technisch aus und dienen nicht der
+      Anzeige). Der Betreiber <strong>verkauft die Inhalte der Inserate nicht und stellt sie Dritten
+      nicht für deren eigene Werbung zur Verfügung</strong>.
+    </p>
+    <p>
+      Der Inserent haftet dafür, dass er <strong>über die erforderlichen Rechte an den eingestellten
+      Inhalten verfügt</strong> (insbesondere an den Fotos) und dass deren Veröffentlichung keine
+      Rechte Dritter verletzt.
+    </p>
+
+    <h2>6. Schutz personenbezogener Daten</h2>
+    <p>
+      Die Verarbeitung personenbezogener Daten regelt die gesonderte
+      <a href={lp('/zpracovani-osobnich-udaju/')}>Datenschutzerklärung</a>.
+    </p>
+
+    <h2>7. Änderungen der Bedingungen</h2>
+    <p>
+      Der Betreiber ist berechtigt, diese Bedingungen jederzeit zu ändern. Die aktuelle Fassung wird
+      stets auf dieser Seite unter Angabe des Datums des Inkrafttretens veröffentlicht. Wenn Sie die
+      Website nach einer Änderung weiter nutzen, erklären Sie Ihr Einverständnis mit der neuen Fassung.
+    </p>
+
+    <h2>8. Anwendbares Recht und Streitbeilegung</h2>
+    <p>
+      Das Verhältnis zwischen Betreiber und Nutzer unterliegt dem <strong>Recht der Tschechischen
+      Republik</strong>. Sind Sie Verbraucher mit gewöhnlichem Aufenthalt in einem anderen
+      EU-Mitgliedstaat, <strong>entzieht Ihnen die Rechtswahl nicht den Schutz</strong> der zwingenden
+      Vorschriften Ihres Aufenthaltsstaats (Art. 6 Abs. 2 der Rom-I-Verordnung). Verbraucher in
+      Deutschland schützen daher weiterhin unter anderem die §§ 305 ff. und 312 ff. BGB, Verbraucher
+      in Österreich das KSchG und das FAGG.
+    </p>
+    <p>
+      Einen etwaigen Streit versuchen wir zunächst gütlich beizulegen — schreiben Sie an
+      <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Kommt keine Einigung
+      zustande, steht Verbrauchern die <strong>außergerichtliche Streitbeilegung</strong> offen.
+      Gegenüber einem Betreiber mit Sitz in Tschechien ist die
+      <strong>Tschechische Handelsinspektion</strong> zuständig,
+      <a href="https://adr.coi.cz" rel="noopener">adr.coi.cz</a>. In <strong>Deutschland</strong>
+      hilft die <strong>Universalschlichtungsstelle des Bundes</strong> in Kehl,
+      <a href="https://www.verbraucher-schlichter.de" rel="noopener">verbraucher-schlichter.de</a>;
+      in <strong>Österreich</strong> die <strong>Schlichtung für Verbrauchergeschäfte</strong>,
+      <a href="https://www.verbraucherschlichtung.at" rel="noopener">verbraucherschlichtung.at</a>.
+      Der Betreiber ist zur Teilnahme an einem Streitbeilegungsverfahren vor einer
+      Verbraucherschlichtungsstelle nicht verpflichtet und nimmt daran nicht teil.
+    </p>
+    <p>
+      Gerichtliche Streitigkeiten entscheiden die Gerichte der Tschechischen Republik. Das Recht des
+      Verbrauchers, Klage vor dem Gericht seines Wohnsitzstaats zu erheben, bleibt hiervon unberührt
+      (Art. 18 der Brüssel-Ia-Verordnung).
+    </p>
+    <p>
+      Der Betreiber ist <strong>nicht Partei der Kaufverträge</strong>, die zwischen den Nutzern des
+      Gebrauchtmarkts geschlossen werden — Streitigkeiten aus diesen Verträgen tragen Verkäufer und
+      Käufer untereinander aus.
+    </p>
+
+    <h2>9. Kontakt</h2>
+    <p>
+      Samec Digital s.r.o., IČO 29547539<br>
+      Na Břehu 378, 387 11 Katovice, Tschechische Republik<br>
+      E-Mail: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+
+    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 30. August 2026</p>
     </Fragment>
   ) : (
     <Fragment>

@@ -11,6 +11,8 @@ import cs from '../../src/i18n/ui/cs';
 import { LAUNCHED_PREFIXES, isLaunchedPath, plural, localizeInternalHref } from '../../src/i18n/utils';
 import { HIDDEN_SECTIONS, HIDDEN_NEWS_CATEGORIES, getNav, getFooterColumns } from '../../src/i18n/nav';
 import { CATEGORY_LABELS, FUNCTIONAL_GROUPS, categoryLabel, functionalGroupLabel, familyLabel } from '../../src/lib/stroje';
+import { TIER_LISTS } from '../../src/lib/tier-lists';
+import { TIER_LIST_COPY } from '../../src/lib/tier-lists.i18n';
 
 const STROJE_DIR = path.join(process.cwd(), 'src/data/stroje');
 
@@ -343,5 +345,55 @@ describe('DE homepage a DE-only landingy', () => {
     const sm = fs.readFileSync(path.join(ROOT, 'src/pages/sitemap.xml.ts'), 'utf8');
     expect(sm).toContain('/de/direktzahlungen/');
     expect(sm).toContain('/de/oeko-regelungen/');
+  });
+});
+
+describe('fáze 3a — žebříčky a právní stránky', () => {
+  const ROOT = process.cwd();
+
+  // ‼️ TŘÍDA CHYBY, ne jedno místo: launchnutá sekce, jejíž próza pro daný
+  // locale chybí, se tiše vyrenderuje ČESKY pod cizojazyčným chrome. Přesně
+  // to udělala /de/ homepage i /uk/ před ní. Test proto neptá „má de blok?",
+  // ale „má KAŽDÝ launchnutý locale próza ke KAŽDÉMU žebříčku?".
+  it('každý locale s launchnutým /zebricky má překlad všech žebříčků', () => {
+    const slugs = TIER_LISTS.map((t) => t.slug);
+    for (const loc of Object.keys(LAUNCHED_PREFIXES)) {
+      if (loc === 'cs' || !isLaunchedPath(loc as never, '/zebricky')) continue;
+      const copy = TIER_LIST_COPY[loc] ?? {};
+      const missing = slugs.filter((s) => !copy[s]);
+      expect(missing, `${loc}: chybí próza žebříčků ${missing.join(', ')}`).toEqual([]);
+      for (const s of slugs) {
+        for (const f of ['title', 'description', 'methodology', 'callToAction'] as const) {
+          expect((copy[s] as Record<string, string>)[f]?.trim(), `${loc}/${s}.${f} je prázdné`).toBeTruthy();
+        }
+      }
+    }
+  });
+
+  it('detail žebříčku nemá natvrdo české texty ani cs formátování čísel', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/pages/zebricky/[slug].astro'), 'utf8');
+    // Padalo na „Detail modelu", „m záběr" a `k` jako jednotce koní.
+    expect(src, 'popisek odkazu musí jít přes i18n').not.toMatch(/>\s*Detail modelu\s*</);
+    expect(src, 'záběr musí jít přes i18n').not.toContain('m záběr');
+    expect(src, 'jednotka koní musí jít přes cmp.unitHp').toContain("tr('cmp.unitHp')");
+    expect(src, 'čísla se nesmí formátovat natvrdo česky').not.toContain("toLocaleString('cs-CZ')");
+  });
+
+  it('právní a redakční stránky mají de větev', () => {
+    for (const f of ['podminky-pouziti', 'zpracovani-osobnich-udaju', 'dsa-kontakt', 'redakce']) {
+      const src = fs.readFileSync(path.join(ROOT, `src/pages/${f}.astro`), 'utf8');
+      expect(src, `${f}: chybí isDe`).toContain("const isDe = locale === 'de';");
+      expect(src, `${f}: chybí de větev v renderu`).toContain(') : isDe ? (');
+      expect(isLaunchedPath('de', `/${f}`), `${f} není launchnuté`).toBe(true);
+    }
+  });
+
+  // Německý čtenář musí najít svůj dozorový úřad, ne jen český.
+  it('GDPR stránka odkazuje na německý i rakouský dozorový úřad', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/pages/zpracovani-osobnich-udaju.astro'), 'utf8');
+    const de = src.slice(src.indexOf(') : isDe ? ('), src.lastIndexOf(') : ('));
+    expect(de).toContain('bfdi.bund.de');
+    expect(de).toContain('dsb.gv.at');
+    expect(de, 'vedoucí úřad zůstává český — provozovatel sídlí v ČR').toContain('uoou.cz');
   });
 });

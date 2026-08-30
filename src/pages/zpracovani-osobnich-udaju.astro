@@ -5,11 +5,13 @@ const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
 const isPl = locale === 'pl';
 const isUk = locale === 'uk';
+const isDe = locale === 'de';
 const META = {
   cs: { title: 'Zpracování osobních údajů — Agro-svět', description: 'Zásady zpracování osobních údajů na Agro-svět.cz — kdo jsme, jaké údaje zpracováváme, jak dlouho, vaše práva.' },
   sk: { title: 'Spracúvanie osobných údajov — Agro-svet', description: 'Zásady spracúvania osobných údajov na agro-svet.cz — kto sme, aké údaje spracúvame, ako dlho, vaše práva.' },
   pl: { title: 'Przetwarzanie danych osobowych — Agro-svet', description: 'Zasady przetwarzania danych osobowych w serwisie agro-svet.cz — kim jesteśmy, jakie dane przetwarzamy, jak długo, twoje prawa.' },
   uk: { title: 'Обробка персональних даних — Agro-svet', description: 'Засади обробки персональних даних на agro-svet.cz — хто ми, які дані обробляємо, як довго, ваші права.' },
+  de: { title: 'Datenschutzerklärung — Agro-svet', description: 'Datenschutzerklärung für agro-svet.cz — wer wir sind, welche Daten wir verarbeiten, wie lange, Ihre Rechte.' },
 };
 const meta = META[locale] ?? META.cs;
 ---
@@ -381,6 +383,141 @@ const meta = META[locale] ?? META.cs;
     <p>Згоду можна відкликати будь-коли посиланням <strong>Налаштування cookie</strong> в підвалі — відкликання таке саме просте, як і надання (ст. 7 п. 3 GDPR).</p>
 
     <p class="effective"><strong>Дата набрання чинності:</strong> 22 серпня 2026</p>
+    </Fragment>
+  ) : isDe ? (
+    <Fragment>
+    <h1>Datenschutzerklärung</h1>
+    <p class="lead">Wie wir personenbezogene Daten der Nutzerinnen und Nutzer der Website <strong>agro-svet.cz</strong> im Einklang mit der Datenschutz-Grundverordnung (DSGVO, 2016/679) und dem tschechischen Gesetz Nr. 110/2019 Sb. verarbeiten.</p>
+
+    <h2>1. Verantwortlicher</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong>, IČO 29547539, Sitz Na Břehu 378, 387 11 Katovice, Tschechische Republik.<br>
+      Kontakt: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>
+    </p>
+    <p>
+      Ein Datenschutzbeauftragter ist nicht bestellt — die Voraussetzungen des Art. 37 DSGVO
+      liegen nicht vor. Anfragen richten Sie bitte an die oben genannte Adresse.
+    </p>
+
+    <h2>2. Welche Daten wir verarbeiten</h2>
+
+    <h3>2.1 Newsletter (Abonnement von Neuigkeiten)</h3>
+    <ul>
+      <li>E-Mail-Adresse</li>
+      <li>Datum der Anmeldung und der Bestätigung des Abonnements</li>
+      <li>Zeitstempel des Klicks auf den Bestätigungslink (Betrugsprävention)</li>
+    </ul>
+
+    <h3>2.2 Gebrauchtmarkt — registrierte Nutzer</h3>
+    <ul>
+      <li>Name (Anzeige beim Inserat)</li>
+      <li>E-Mail (Anmeldung, Kontakt)</li>
+      <li>Telefon (Kontakt zum Inserenten)</li>
+      <li>Ort (Stadt/Region)</li>
+      <li>Passwort (gehasht, niemals im Klartext)</li>
+    </ul>
+
+    <h3>2.3 Gebrauchtmarkt — Inserate</h3>
+    <ul>
+      <li>Inhalt des Inserats (Titel, Beschreibung, Preis, Kategorie, Fotos)</li>
+      <li>Im Inserat angegebene Kontaktdaten</li>
+    </ul>
+
+    <h3>2.4 Fotowettbewerb</h3>
+    <p>Für den Fotowettbewerb gelten gesonderte <a href="/fotosoutez/gdpr/">Verarbeitungsgrundsätze</a>.</p>
+
+    <h3>2.5 Technische Daten (alle Besucher)</h3>
+    <ul>
+      <li>IP-Adresse (im Protokoll anonymisiert, Betrugsprävention, max. 30 Tage)</li>
+      <li>User-Agent des Browsers (Statistik, Fehlersuche)</li>
+      <li>Referrer (von welcher Website Sie gekommen sind)</li>
+    </ul>
+
+    <h2>3. Zweck und Rechtsgrundlage der Verarbeitung</h2>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Zweck</th><th>Rechtsgrundlage (Art. 6 DSGVO)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Versand des Newsletters</td><td>Einwilligung — Abs. 1 Buchst. a)</td></tr>
+        <tr><td>Führung des Nutzerkontos (Gebrauchtmarkt)</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
+        <tr><td>Veröffentlichung von Inseraten</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
+        <tr><td>Betrugsprävention, Betriebssicherheit</td><td>Berechtigtes Interesse — Abs. 1 Buchst. f)</td></tr>
+        <tr><td>Erfüllung gesetzlicher Pflichten (Buchhaltung bei kostenpflichtigen Diensten)</td><td>Rechtliche Verpflichtung — Abs. 1 Buchst. c)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Speicherdauer</h2>
+    <ul>
+      <li><strong>Newsletter und Benachrichtigungen:</strong> bis zum Widerruf der Einwilligung
+        (Abmeldung). Den Vermerk über die Abmeldung bewahren wir auf, um keine weiteren E-Mails
+        zu versenden.</li>
+      <li><strong>Konto im Gebrauchtmarkt:</strong> bis zur Löschung des Kontos — wir löschen es
+        auf Ihr Verlangen. Konten werden <strong>nicht automatisch</strong> nach einer Zeit der
+        Inaktivität gelöscht.</li>
+      <li><strong>Inserate:</strong> 30 Tage aktiv, danach Status „expired"; sie verbleiben im Konto.
+        Löschen Sie ein Inserat, wird es <strong>sofort und unwiderruflich gelöscht</strong> —
+        wir führen kein Archiv.</li>
+      <li><strong>IP-Adressen aus der Betrugsprävention</strong> (Versuche der Code-Eingabe): höchstens 30 Tage.</li>
+      <li><strong>Server-Protokolle</strong> entstehen bei den Infrastrukturanbietern (Cloudflare,
+        Hosting) und unterliegen deren Fristen, nicht unseren.</li>
+    </ul>
+
+    <h2>5. An wen wir Daten weitergeben (Auftragsverarbeiter)</h2>
+    <ul>
+      <li><strong>Cloudflare, Inc.</strong> (USA) — Hosting, CDN, Anti-DDoS. Standardvertragsklauseln (SCC) nach Art. 46 DSGVO.</li>
+      <li><strong>Supabase, Inc.</strong> (USA, EU-Regionen) — Datenbank und Authentifizierung. SCC.</li>
+      <li><strong>Resend, Inc.</strong> (USA) — Versand von Transaktions- und Newsletter-E-Mails. SCC.</li>
+      <li><strong>Google Ireland Limited</strong> (Irland) — Google Analytics 4 (Mess-ID G-HC3JY466RR), anonyme Besuchsstatistik. Wird <strong>erst nach Ihrer Einwilligung</strong> geladen, mit Anonymisierung der IP-Adresse. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
+      <li><strong>Microsoft Ireland Operations Limited</strong> (Irland) — Microsoft Clarity (Projekt-ID ws6puxcjnb), anonyme Heatmaps und Aufzeichnungen der Bewegung auf der Seite. Wird <strong>erst nach Ihrer Einwilligung</strong> geladen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
+    </ul>
+    <p>Wir verkaufen Ihre personenbezogenen Daten nicht und geben sie nicht zu Marketingzwecken an Dritte weiter.</p>
+
+    <h2>6. Ihre Rechte</h2>
+    <p>Nach der DSGVO haben Sie das Recht auf:</p>
+    <ul>
+      <li><strong>Auskunft</strong> über Ihre Daten (Art. 15)</li>
+      <li><strong>Berichtigung</strong> unrichtiger Daten (Art. 16)</li>
+      <li><strong>Löschung</strong> („Recht auf Vergessenwerden", Art. 17)</li>
+      <li><strong>Einschränkung der Verarbeitung</strong> (Art. 18)</li>
+      <li><strong>Datenübertragbarkeit</strong> (Art. 20)</li>
+      <li><strong>Widerspruch</strong> gegen eine Verarbeitung auf Grundlage berechtigter Interessen (Art. 21)</li>
+      <li><strong>Widerruf der Einwilligung</strong> jederzeit (Art. 7 Abs. 3) — betrifft den Newsletter</li>
+    </ul>
+    <p>Ihren Antrag senden Sie an <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Wir bearbeiten ihn binnen 30 Tagen.</p>
+
+    <h2>7. Abmeldung vom Newsletter</h2>
+    <p>Das Newsletter-Abonnement können Sie jederzeit beenden:</p>
+    <ul>
+      <li>durch Antwort auf eine beliebige Newsletter-E-Mail mit dem Text „abmelden"</li>
+      <li>per E-Mail an <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></li>
+    </ul>
+
+    <h2>8. Beschwerde bei einer Aufsichtsbehörde</h2>
+    <p>
+      Wenn Sie der Ansicht sind, dass wir bei der Verarbeitung Ihrer personenbezogenen Daten gegen
+      die DSGVO verstoßen, können Sie Beschwerde einlegen. Da der Betreiber seinen Sitz in der
+      Tschechischen Republik hat, ist federführende Aufsichtsbehörde das
+      <strong>Amt für den Schutz personenbezogener Daten (Úřad pro ochranu osobních údajů,
+      Tschechien)</strong>, Pplk. Sochora 27, 170 00 Praha 7,
+      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+    </p>
+    <p>
+      Nach Art. 77 Abs. 1 DSGVO können Sie sich jedoch stets auch an die Aufsichtsbehörde Ihres
+      gewöhnlichen Aufenthaltsorts wenden — in <strong>Deutschland</strong> an die
+      Landesdatenschutzbeauftragte oder den Landesdatenschutzbeauftragten Ihres Bundeslandes
+      (Übersicht unter <a href="https://www.bfdi.bund.de" rel="noopener">bfdi.bund.de</a>), in
+      <strong>Österreich</strong> an die <strong>Datenschutzbehörde</strong>, Barichgasse 40–42,
+      1030 Wien, <a href="https://www.dsb.gv.at" rel="noopener">dsb.gv.at</a>.
+    </p>
+
+    <h2>9. Cookies</h2>
+    <p><strong>Technisch notwendige Cookies</strong> (Anmeldung, Betrugsprävention, Speicherung Ihrer Entscheidung zur Einwilligung) werden immer verwendet — ohne sie funktioniert die Website nicht.</p>
+    <p><strong>Analyse-Cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) und Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — werden <strong>ausschließlich mit Ihrer Einwilligung</strong> geladen. Sie messen eine anonyme Besuchsstatistik und die Art der Bewegung auf der Seite; die IP-Adresse wird anonymisiert. Wählen Sie „Nur notwendige", wird kein Skript von Google oder Microsoft geladen und deren Cookies werden aus dem Browser gelöscht.</p>
+    <p>Wir verwenden keine Marketing- oder Werbe-Cookies Dritter.</p>
+    <p>Ihre Einwilligung können Sie jederzeit über den Link <strong>Cookie-Einstellungen</strong> in der Fußzeile widerrufen — der Widerruf ist ebenso einfach wie die Erteilung (Art. 7 Abs. 3 DSGVO).</p>
+
+    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 30. August 2026</p>
     </Fragment>
   ) : (
     <Fragment>

@@ -3,7 +3,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { tierLists, getTierList, rankForTierList } from '../../lib/tier-lists';
-import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath, BCP47 } from '../../i18n/utils';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 
@@ -123,15 +123,15 @@ function yearRange(m: typeof ranked[number]['model']): string {
                 <p class="zeb-shortdesc">{r.model.description.slice(0, 220)}{r.model.description.length > 220 ? '…' : ''}</p>
               )}
               <div class="zeb-specs">
-                {r.model.power_hp != null && <span class="spec"><strong>{r.model.power_hp}</strong> k</span>}
+                {r.model.power_hp != null && <span class="spec"><strong>{r.model.power_hp}</strong> {tr('cmp.unitHp')}</span>}
                 {r.model.power_kw != null && <span class="spec muted">{r.model.power_kw} kW</span>}
-                {r.model.weight_kg != null && <span class="spec">{r.model.weight_kg.toLocaleString('cs-CZ')} kg</span>}
+                {r.model.weight_kg != null && <span class="spec">{r.model.weight_kg.toLocaleString(BCP47[locale] ?? 'cs-CZ')} kg</span>}
                 {r.model.engine && <span class="spec">{r.model.engine}</span>}
                 {r.model.transmission && <span class="spec">{r.model.transmission}</span>}
-                {r.model.cutting_width_m != null && <span class="spec">{r.model.cutting_width_m} m záběr</span>}
+                {r.model.cutting_width_m != null && <span class="spec">{tf(locale, 'zeb.widthSpec', { w: r.model.cutting_width_m })}</span>}
               </div>
               <a href={modelUrl(r.model)} class="zeb-cta">
-                Detail modelu
+                {tr('zeb.detailLink')}
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
             </div>

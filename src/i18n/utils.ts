@@ -105,7 +105,19 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // '/direktzahlungen' + '/oeko-regelungen' = DE-only landingy s německými
   // sazbami GAP (obdoba pl /doplaty-bezposrednie a /ekoschematy). Jurisdikčně
   // vázané, žádný cs ekvivalent → non-de locale na nich dostane 404.
-  de: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/direktzahlungen', '/oeko-regelungen'],
+  // Fáze 3a: +/zebricky (žebříčky nad katalogem strojů — žádná jurisdikce;
+  // ‼️ vyžaduje de blok v tier-lists.i18n.ts, jinak by se pod německým
+  // chrome vypsaly ČESKÉ názvy žebříčků — přesně past HomeDe/HomeUk)
+  // + právní a redakční stránky. Ty de větev NEMĚLY vůbec, takže /de
+  // neměl německy ani zásady zpracování údajů, ani kontaktní bod podle DSA.
+  // Provozovatel a sídlo zůstávají české — to je fakt, ne lokalizovatelný údaj;
+  // dozorový úřad je proto ÚOOÚ, stránka ale odkazuje i na německé zemské
+  // úřady a rakouskou DSB (čl. 77 odst. 1 GDPR).
+  // /hledat ZÁMĚRNĚ nelaunchnuté: je noindex a tahá české články z Supabase
+  // + má natvrdo české labely („Všechny články") → launch by pod /de/
+  // servíroval český obsah. Doplnit spolu s gatingem novinek a bazaru.
+  de: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/direktzahlungen', '/oeko-regelungen',
+    '/zebricky', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

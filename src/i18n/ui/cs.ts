@@ -480,6 +480,8 @@ const cs: Record<string, string> = {
   'zeb.more': 'Další žebříčky',
   'zeb.author': 'Redakce agro-svět.cz',
   'zeb.methodology': 'Metodika',
+  'zeb.detailLink': 'Detail modelu',
+  'zeb.widthSpec': '{w} m záběr',
 
   // — kvízy (kvz.*) —
   'kvz.h.lede': 'Otestujte své znalosti — kdo vynalezl tříbodový závěs, kdy přišlo první sériové CVT a co znamená Stage V. Po dokončení dostanete hodnocení.',

@@ -12,6 +12,110 @@ export interface TierListCopy {
 }
 
 export const TIER_LIST_COPY: Record<string, Record<string, TierListCopy>> = {
+  de: {
+    'traktory-do-100-koni': {
+      title: `Die besten Traktoren bis 100 PS`,
+      description: `Rangliste der stärksten Traktoren bis 100 PS (74 kW). Geeignet für kleinere Betriebe, Obstanlagen und den Kommunaleinsatz.`,
+      methodology: `Die Modelle sind absteigend nach Leistung geordnet. Aus jeder Baureihe ist nur die stärkste Ausführung berücksichtigt, damit die Rangliste nicht von verwandten Modellen überlagert wird.`,
+      callToAction: `Sie suchen etwas Stärkeres? Sehen Sie sich die Rangliste 100–150 PS oder 150–250 PS an.`,
+    },
+    'traktory-100-150-koni': {
+      title: `Die besten Traktoren 100–150 PS`,
+      description: `Rangliste der mittelgroßen Traktoren von 100 bis 150 PS. Der Standard für die übliche Feldarbeit in Deutschland und Österreich — Pflügen, Sämaschinen, mittelgroße Anbaugeräte.`,
+      methodology: `Die Modelle sind absteigend nach Leistung geordnet. Im Mittelpunkt stehen die großen europäischen Baureihen (JD 6M/6R, Fendt 500, NH T6, Case Maxxum, Zetor Forterra, MF 5S/6S).`,
+      callToAction: `Für größere Betriebe lohnt sich ein Blick auf die Rangliste 150–250 PS.`,
+    },
+    'traktory-150-250-koni': {
+      title: `Die besten Traktoren 150–250 PS`,
+      description: `Große Traktoren für mittlere und größere Betriebe. 150 bis 250 PS decken den Großteil der Feldarbeit ab, einschließlich tiefem Pflügen und gezogener Erntetechnik.`,
+      methodology: `Die Modelle sind absteigend nach Leistung geordnet. Überwiegend Fendt 700, JD 6R/7R, NH T7, Case Puma/Magnum, MF 7S/8S, Deutz 7-Series.`,
+      callToAction: `Für die größten Betriebe oder Sonderaufgaben sehen Sie sich die Rangliste über 250 PS an.`,
+    },
+    'traktory-nad-250-koni': {
+      title: `Die stärksten Traktoren über 250 PS`,
+      description: `Die Spitze des Marktes — Traktoren mit über 250 PS für große Betriebe, Forstarbeit und Sondereinsätze. In der Regel die Flaggschiffe der Marken.`,
+      methodology: `Die Modelle sind absteigend nach Leistung geordnet. Enthält JD 8R/9R/9RX, Fendt 900/1000, NH T8/T9, Case Magnum/Steiger/Quadtrac, Claas Xerion.`,
+      callToAction: `Sie suchen etwas Kleineres? Die Rangliste 150–250 PS bietet die praxisnäheren Optionen für einen durchschnittlichen Betrieb.`,
+    },
+    'kombajny-nejvykonnejsi': {
+      title: `Die leistungsstärksten Mähdrescher`,
+      description: `Rangliste der leistungsstärksten Mähdrescher. Bewertet wird die Motorleistung — Schneidwerksbreite und Korntankvolumen sind im Text im Einzelnen beschrieben.`,
+      methodology: `Die Mähdrescher sind absteigend nach Motorleistung geordnet. Klasse IX und X (ab 300 PS), die stärksten Modelle von Claas Lexion, JD S/T, Case Axial-Flow, NH CR/CX.`,
+      callToAction: `Für kleinere Betriebe lohnen Mähdrescher mit geringerer Leistung — der Anschaffungspreis liegt deutlich niedriger und der Durchsatz reicht meist aus.`,
+    },
+    'kombajny-do-300-koni': {
+      title: `Die besten Mähdrescher bis 300 PS`,
+      description: `Mähdrescher für kleinere und mittlere Betriebe von 50 bis 500 Hektar. Klasse III–VI mit bis zu 300 PS — niedrigerer Anschaffungspreis, ausreichender Durchsatz für die übliche Ernte.`,
+      methodology: `Die Modelle sind absteigend nach Motorleistung geordnet. Überwiegend Claas Avero / Tucano / Trion, JD T-Series 500/600, Case Axial-Flow 4000/5000, NH TC/CX.`,
+      callToAction: `Für große Betriebe über 500 Hektar sehen Sie sich die Rangliste der leistungsstärksten Mähdrescher an.`,
+    },
+    'kombajny-nad-500-koni': {
+      title: `Flaggschiff-Mähdrescher über 500 PS`,
+      description: `Die Spitze des Marktes — Mähdrescher mit über 500 PS für große Betriebe und Lohnunternehmen. Klasse X+ mit den breitesten Schneidwerken (bis 18 m) und Korntanks (über 14 000 Liter).`,
+      methodology: `Die Mähdrescher sind absteigend nach Motorleistung geordnet. Die Flaggschiffe Claas Lexion 8000/8900, JD X9, Case Axial-Flow 9250, NH CR10.90, Fendt IDEAL 9/10T.`,
+      callToAction: `Für einen typischen Betrieb sind diese Maschinen überdimensioniert — sehen Sie sich die niedrigeren Ranglisten an.`,
+    },
+    'traktory-klasiky-pre-2000': {
+      title: `Klassische Traktoren vor dem Jahr 2000`,
+      description: `Rangliste historischer Traktoren, die vor dem Jahr 2000 eingeführt wurden — Sammlerstücke und noch immer eingesetzte Klassiker. Häufig mit mechanischen Getrieben und einer robusten Bauweise, die hält.`,
+      methodology: `Die Modelle sind absteigend nach Leistung geordnet, begrenzt auf das Einführungsjahr vor 2000. Enthält Legenden wie Fendt Favorit, JD 6000/7000, Zetor Crystal oder Steyr.`,
+      callToAction: `Sie suchen eine aktuelle Maschine? Sehen Sie sich die Ranglisten nach Leistungsklassen an.`,
+    },
+    'traktory-male-kompaktni': {
+      title: `Die besten kleinen und kompakten Traktoren (bis 60 PS)`,
+      description: `Kompakttraktoren bis 60 PS für kleine Betriebe, Obstanlagen, Weinberge, Kommunaltechnik und die Pflege von Grünflächen. Wendig, schmal und sparsam.`,
+      methodology: `Die Modelle sind absteigend nach Leistung geordnet, begrenzt auf 60 PS. Überwiegend Kubota, Kioti, JD 3er/4er-Serie, New Holland Boomer, Zetor Major.`,
+      callToAction: `Brauchen Sie mehr Leistung für die Feldarbeit? Sehen Sie sich die Rangliste bis 100 PS an.`,
+    },
+    'nejsirsi-diskove-podmitace': {
+      title: `Die breitesten Scheibeneggen`,
+      description: `Rangliste der Scheibeneggen nach Arbeitsbreite. Die breitesten Maschinen schaffen die Stoppelbearbeitung in einer Überfahrt und sparen Diesel wie Zeit.`,
+      methodology: `Die Modelle sind absteigend nach Arbeitsbreite geordnet. Aus jeder Baureihe ist nur die breiteste Ausführung berücksichtigt.`,
+      callToAction: `Eine große Arbeitsbreite verlangt einen entsprechend starken Traktor — sehen Sie sich die Rangliste über 250 PS an.`,
+    },
+    'nejsirsi-radlickove-podmitace': {
+      title: `Die breitesten Schargrubber`,
+      description: `Rangliste der Grubber mit Scharen nach Arbeitsbreite. Im Vergleich zur Scheibenegge arbeiten sie tiefer und mischen die Ernterückstände gründlicher ein.`,
+      methodology: `Die Modelle sind absteigend nach Arbeitsbreite geordnet. Aus jeder Baureihe ist nur die breiteste Ausführung berücksichtigt.`,
+      callToAction: `Sie suchen eine flachere Bearbeitung? Sehen Sie sich die Rangliste der breitesten Scheibeneggen an.`,
+    },
+    'nejsirsi-seci-kombinace': {
+      title: `Die breitesten Sämaschinenkombinationen`,
+      description: `Rangliste der Sämaschinenkombinationen nach Arbeitsbreite — Bodenbearbeitung und Aussaat in einer Überfahrt. Die breitesten Maschinen bestellen große Flächen in kurzer Zeit.`,
+      methodology: `Die Modelle sind absteigend nach Arbeitsbreite geordnet. Aus jeder Baureihe ist nur die breiteste Ausführung berücksichtigt.`,
+      callToAction: `Für reine Aussaat ohne Bodenbearbeitung sehen Sie sich die pneumatischen Sämaschinen an.`,
+    },
+    'nejsirsi-pneumaticke-seci-stroje': {
+      title: `Die breitesten pneumatischen Sämaschinen`,
+      description: `Rangliste der pneumatischen Sämaschinen nach Arbeitsbreite. Die Verteilung des Saatguts über einen Luftstrom ermöglicht große Arbeitsbreiten bei gleichmäßiger Ablage.`,
+      methodology: `Die Modelle sind absteigend nach Arbeitsbreite geordnet. Aus jeder Baureihe ist nur die breiteste Ausführung berücksichtigt.`,
+      callToAction: `Für Reihenkulturen wie Mais und Zuckerrüben sehen Sie sich die Einzelkornsämaschinen an.`,
+    },
+    'nejsirsi-presne-seci-stroje': {
+      title: `Die breitesten Einzelkornsämaschinen`,
+      description: `Rangliste der Einzelkornsämaschinen nach Arbeitsbreite beziehungsweise Reihenzahl. Für Mais, Zuckerrüben, Sonnenblumen und Raps — jedes Korn wird einzeln abgelegt.`,
+      methodology: `Die Modelle sind absteigend nach Arbeitsbreite geordnet. Aus jeder Baureihe ist nur die breiteste Ausführung berücksichtigt.`,
+      callToAction: `Für Getreide sehen Sie sich die pneumatischen Sämaschinen an.`,
+    },
+    'nejsirsi-kyprice': {
+      title: `Die breitesten Tiefenlockerer`,
+      description: `Rangliste der Tiefenlockerer nach Arbeitsbreite. Sie brechen Verdichtungen unterhalb der Bearbeitungssohle auf, ohne den Boden zu wenden.`,
+      methodology: `Die Modelle sind absteigend nach Arbeitsbreite geordnet. Aus jeder Baureihe ist nur die breiteste Ausführung berücksichtigt.`,
+      callToAction: `Die Tiefenlockerung verlangt viel Zugkraft — sehen Sie sich die Rangliste der Traktoren über 250 PS an.`,
+    },
+    'nejsirsi-zaci-stroje': {
+      title: `Die breitesten Mähwerke`,
+      description: `Rangliste der Mähwerke nach Arbeitsbreite. Schmetterlingskombinationen mähen in einer Überfahrt mehrere Meter Grünland — entscheidend, wenn das Wetterfenster knapp ist.`,
+      methodology: `Die Modelle sind absteigend nach Arbeitsbreite geordnet. Aus jeder Baureihe ist nur die breiteste Ausführung berücksichtigt.`,
+      callToAction: `Für die Ernte von Silomais sehen Sie sich die selbstfahrenden Feldhäcksler an.`,
+    },
+    'nejvykonnejsi-samojizdne-rezacky': {
+      title: `Die leistungsstärksten selbstfahrenden Feldhäcksler`,
+      description: `Rangliste der selbstfahrenden Feldhäcksler nach Motorleistung. Maschinen für die Ernte von Silomais und Gras — die stärksten überschreiten 1 000 PS.`,
+      methodology: `Die Modelle sind absteigend nach Motorleistung geordnet. Überwiegend Claas Jaguar, JD 8000/9000, Krone BiG X, New Holland FR.`,
+      callToAction: `Für kleinere Betriebe ist ein gezogener Feldhäcksler oder ein Lohnunternehmen die wirtschaftlichere Lösung.`,
+    },
+  },
   pl: {
     'traktory-do-100-koni': {
       title: `Najlepsze traktory do 100 KM`,
