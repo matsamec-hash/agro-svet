@@ -132,7 +132,12 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // jurisdikce (patogeny hranice nerespektují). ‼️ Registrace přípravků
     // ale jurisdikční JE: de overlay nese jen účinné látky (INN) a odkazuje
     // na BVL a BAES/AGES místo českého ÚKZÚZ.
-    '/choroby'],
+    '/choroby',
+    // /vcelarstvi — de YAML overlay (6 včel + 10 vybavení + 7 medů). Enum
+    // hodnoty zůstávají kanonicky česky (CSS třídy + JSON-LD), překládá je
+    // *Label(). ‼️ Ceny vybavení jsou v Kč z českého trhu — stránka to říká
+    // nahlas přes slov.czkNote, a to nově i ve výpisu, nejen v detailu.
+    '/vcelarstvi'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

@@ -12,6 +12,7 @@ import { LAUNCHED_PREFIXES, isLaunchedPath, plural, localizeInternalHref } from 
 import { HIDDEN_SECTIONS, HIDDEN_NEWS_CATEGORIES, getNav, getFooterColumns } from '../../src/i18n/nav';
 import { CATEGORY_LABELS, FUNCTIONAL_GROUPS, categoryLabel, functionalGroupLabel, familyLabel } from '../../src/lib/stroje';
 import { getUzitkovostLabels } from '../../src/lib/plemena';
+import { vcelaTemperamentLabel, vcelaVynosLabel, vcelaRojivostLabel, medKrystalizaceLabel, vybaveniKategorieLabel, medTypLabel } from '../../src/lib/vcelarstvi';
 import { TIER_LISTS } from '../../src/lib/tier-lists';
 import { TIER_LIST_COPY } from '../../src/lib/tier-lists.i18n';
 
@@ -634,5 +635,80 @@ describe('JSON-LD jazyk — třída „lokální BCP47 mapa"', () => {
     }
     const enc = fs.readFileSync(path.join(ROOT, 'src/pages/encyklopedie/[slug].astro'), 'utf8');
     expect(enc, 'encyklopedie musí jazyk předat').toContain('lang: bcp47');
+  });
+});
+
+describe('fáze 3c — vcelarstvi de overlay', () => {
+  const ROOT = process.cwd();
+  const SETS = ['vcely', 'vybaveni', 'med'] as const;
+  const load = (dir: string, f: string) =>
+    yaml.load(fs.readFileSync(path.join(ROOT, `src/data/vcelarstvi/${dir}${f}.yaml`), 'utf8')) as
+      Record<string, unknown>[];
+
+  it('de overlay pokrývá všechny položky', () => {
+    for (const f of SETS) {
+      const cs = load('', f).map((x) => x.slug);
+      const de = load('de/', f).map((x) => x.slug);
+      expect(de.sort()).toEqual(cs.sort());
+    }
+  });
+
+  it('de overlay je německy — včetně FAQ a latinského názvu', () => {
+    const CZ = /[ěščřžůťďň]/;
+    // ‼️ `faq` jsem při prvním průchodu přehlédl úplně: nerenderuje se v těle
+    // stránky nápadně, ale jde do JSON-LD FAQPage. `latinsky` je jinak
+    // mezinárodní, u buckfastu ale nese dovětek „(šlechtěný hybrid)".
+    const PROSE: Record<string, string[]> = {
+      vcely: ['name', 'latinsky', 'puvod', 'zimuvzdornost', 'vhodnost_cr', 'barva', 'description'],
+      vybaveni: ['name', 'popis_kratky', 'description'],
+      med: ['name', 'zdroj_snusky', 'barva', 'chut', 'popis_kratky', 'description'],
+    };
+    for (const f of SETS) {
+      for (const item of load('de/', f)) {
+        for (const k of PROSE[f]) {
+          const v = item[k];
+          if (typeof v === 'string') expect(CZ.test(v), `${f}/${item.slug}.${k} zůstalo česky`).toBe(false);
+        }
+        for (const q of (item.faq as { q: string; a: string }[] | undefined) ?? []) {
+          expect(CZ.test(q.q) || CZ.test(q.a), `${f}/${item.slug}: FAQ zůstalo česky`).toBe(false);
+        }
+      }
+    }
+  });
+
+  // ‼️ TŘÍDA: labely enumů byly řetězené ify `sk … pl … return v`, takže
+  // UKRAJINŠTINA dostávala české „mírná" a „vysoký", přestože /vcelarstvi je
+  // pro uk launchnuté. Test hlídá KAŽDÝ launchnutý locale, ne jen de.
+  it('každý launchnutý locale má přeložené enum labely', () => {
+    const CASES: [string, (v: string, l: never) => string][] = [
+      ['mírná', vcelaTemperamentLabel as never], ['vysoký', vcelaVynosLabel as never],
+      ['vyšší', vcelaRojivostLabel as never], ['velmi pomalá', medKrystalizaceLabel as never],
+    ];
+    for (const loc of Object.keys(LAUNCHED_PREFIXES)) {
+      if (loc === 'cs' || !isLaunchedPath(loc as never, '/vcelarstvi')) continue;
+      // ‼️ Shoda s češtinou NENÍ důkaz nepřeloženosti — slovenština má „vysoký"
+      // stejně jako čeština. Tichý fallback by se ale shodoval VŠUDE, takže
+      // invariant je většinová odlišnost.
+      const differ = CASES.filter(([cz, fn]) => fn(cz, loc as never) !== cz);
+      expect(differ.length, `${loc}: enum labely vypadají jako český fallback`).toBeGreaterThan(CASES.length / 2);
+      // Kategorie a typ medu: slovenština má „Úle" i „Medovicový" shodně
+      // s češtinou, takže se hlídá jen to, že se celá sada neshoduje.
+      const cat = ['ul', 'ochrana', 'naradi', 'zpracovani', 'krmeni'] as const;
+      const csCat = cat.map((k) => vybaveniKategorieLabel(k as never, 'cs' as never));
+      const locCat = cat.map((k) => vybaveniKategorieLabel(k as never, loc as never));
+      expect(locCat.filter((v, i) => v !== csCat[i]).length,
+        `${loc}: kategorie vybavení vypadají jako český fallback`).toBeGreaterThan(cat.length / 2);
+    }
+    // de kontrolujeme adresně — žádný enum ani kategorie se nesmí shodovat s češtinou.
+    for (const [cz, fn] of CASES) {
+      expect(fn(cz, 'de' as never), `de: enum „${cz}" zůstal český`).not.toBe(cz);
+    }
+    expect(vybaveniKategorieLabel('ul' as never, 'de' as never)).toBe('Beuten');
+    expect(medTypLabel('kvetovy' as never, 'de' as never)).toBe('Blütenhonig');
+  });
+
+  it('výpis vybavení přiznává, že ceny jsou z českého trhu', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/pages/vcelarstvi/vybaveni/index.astro'), 'utf8');
+    expect(src, 'výpis musí u Kč zobrazit poznámku stejně jako detail').toContain("slov.czkNote");
   });
 });

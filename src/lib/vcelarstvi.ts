@@ -78,13 +78,16 @@ const medPlModules = import.meta.glob('/src/data/vcelarstvi/pl/med*.yaml', { eag
 const vcelyUkModules = import.meta.glob('/src/data/vcelarstvi/uk/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 const vybaveniUkModules = import.meta.glob('/src/data/vcelarstvi/uk/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 const medUkModules = import.meta.glob('/src/data/vcelarstvi/uk/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vcelyDeModules = import.meta.glob('/src/data/vcelarstvi/de/vcely*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const vybaveniDeModules = import.meta.glob('/src/data/vcelarstvi/de/vybaveni*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
+const medDeModules = import.meta.glob('/src/data/vcelarstvi/de/med*.yaml', { eager: true, import: 'default' }) as Record<string, unknown>;
 
 // Modul per (dataset, locale). Mapa místo tří if-řetězců na tři gettery — přesně
 // tam se při přidávání locale zapomíná jedna větev a sekce tiše servíruje češtinu.
 const MODULES = {
-  vcely: { cs: vcelyModules, sk: vcelySkModules, pl: vcelyPlModules, uk: vcelyUkModules },
-  vybaveni: { cs: vybaveniModules, sk: vybaveniSkModules, pl: vybaveniPlModules, uk: vybaveniUkModules },
-  med: { cs: medModules, sk: medSkModules, pl: medPlModules, uk: medUkModules },
+  vcely: { cs: vcelyModules, sk: vcelySkModules, pl: vcelyPlModules, uk: vcelyUkModules, de: vcelyDeModules },
+  vybaveni: { cs: vybaveniModules, sk: vybaveniSkModules, pl: vybaveniPlModules, uk: vybaveniUkModules, de: vybaveniDeModules },
+  med: { cs: medModules, sk: medSkModules, pl: medPlModules, uk: medUkModules, de: medDeModules },
 } satisfies Record<string, Record<Locale, Record<string, unknown>>>;
 
 function collectArrays<T>(modules: Record<string, unknown>): T[] {
@@ -160,10 +163,27 @@ const VYBAVENI_KATEGORIE_LABELS_PL: Record<VybaveniKategorie, string> = {
   zpracovani: 'Przetwarzanie miodu',
   krmeni: 'Karmienie i zazimowanie',
 };
+const VYBAVENI_KATEGORIE_LABELS_UK: Record<VybaveniKategorie, string> = {
+  ul: 'Вулики',
+  ochrana: 'Захисне спорядження',
+  naradi: 'Інструменти',
+  zpracovani: 'Переробка меду',
+  krmeni: 'Годівля та зазимівля',
+};
+const VYBAVENI_KATEGORIE_LABELS_DE: Record<VybaveniKategorie, string> = {
+  ul: 'Beuten',
+  ochrana: 'Schutzausrüstung',
+  naradi: 'Werkzeug',
+  zpracovani: 'Honigverarbeitung',
+  krmeni: 'Fütterung und Einwinterung',
+};
+/** ‼️ Mapa místo řetězených ifů — viz ENUM_LABELS níže. uk sem propadalo na cs. */
+const VYBAVENI_KATEGORIE_BY_LOCALE: Record<string, Record<VybaveniKategorie, string>> = {
+  cs: VYBAVENI_KATEGORIE_LABELS, sk: VYBAVENI_KATEGORIE_LABELS_SK, pl: VYBAVENI_KATEGORIE_LABELS_PL,
+  uk: VYBAVENI_KATEGORIE_LABELS_UK, de: VYBAVENI_KATEGORIE_LABELS_DE,
+};
 export function vybaveniKategorieLabel(k: VybaveniKategorie, locale: Locale = 'cs'): string {
-  if (locale === 'sk') return VYBAVENI_KATEGORIE_LABELS_SK[k];
-  if (locale === 'pl') return VYBAVENI_KATEGORIE_LABELS_PL[k];
-  return VYBAVENI_KATEGORIE_LABELS[k];
+  return (VYBAVENI_KATEGORIE_BY_LOCALE[locale as string] ?? VYBAVENI_KATEGORIE_LABELS)[k];
 }
 
 export const MED_TYP_LABELS: Record<MedTyp, string> = {
@@ -181,10 +201,22 @@ const MED_TYP_LABELS_PL: Record<MedTyp, string> = {
   medovicovy: 'Spadziowy',
   smiseny: 'Mieszany',
 };
+const MED_TYP_LABELS_UK: Record<MedTyp, string> = {
+  kvetovy: 'Квітковий',
+  medovicovy: 'Падевий',
+  smiseny: 'Змішаний',
+};
+const MED_TYP_LABELS_DE: Record<MedTyp, string> = {
+  kvetovy: 'Blütenhonig',
+  medovicovy: 'Honigtauhonig',
+  smiseny: 'Mischhonig',
+};
+const MED_TYP_BY_LOCALE: Record<string, Record<MedTyp, string>> = {
+  cs: MED_TYP_LABELS, sk: MED_TYP_LABELS_SK, pl: MED_TYP_LABELS_PL,
+  uk: MED_TYP_LABELS_UK, de: MED_TYP_LABELS_DE,
+};
 export function medTypLabel(typ: MedTyp, locale: Locale = 'cs'): string {
-  if (locale === 'sk') return MED_TYP_LABELS_SK[typ];
-  if (locale === 'pl') return MED_TYP_LABELS_PL[typ];
-  return MED_TYP_LABELS[typ];
+  return (MED_TYP_BY_LOCALE[locale as string] ?? MED_TYP_LABELS)[typ];
 }
 
 // Enum hodnoty zobrazované „naživo" (temperament/výnos/rojivost/krystalizace) jsou
@@ -199,24 +231,40 @@ const VCELA_TEMPERAMENT_PL: Record<string, string> = { 'mírná': 'łagodny', 's
 const VCELA_VYNOS_PL: Record<string, string> = { 'nízký': 'niska', 'střední': 'średnia', 'vysoký': 'wysoka', 'velmi vysoký': 'bardzo wysoka' };
 const VCELA_ROJIVOST_PL: Record<string, string> = { 'nízká': 'niska', 'střední': 'średnia', 'vyšší': 'wyższa' };
 const MED_KRYSTALIZACE_PL: Record<string, string> = { 'velmi pomalá': 'bardzo powolna', 'pomalá': 'powolna', 'střední': 'średnia', 'rychlá': 'szybka' };
+const VCELA_TEMPERAMENT_UK: Record<string, string> = { 'mírná': 'лагідний', 'střední': 'середній', 'obranná': 'оборонний' };
+const VCELA_VYNOS_UK: Record<string, string> = { 'nízký': 'низька', 'střední': 'середня', 'vysoký': 'висока', 'velmi vysoký': 'дуже висока' };
+const VCELA_ROJIVOST_UK: Record<string, string> = { 'nízká': 'низька', 'střední': 'середня', 'vyšší': 'підвищена' };
+const MED_KRYSTALIZACE_UK: Record<string, string> = { 'velmi pomalá': 'дуже повільна', 'pomalá': 'повільна', 'střední': 'середня', 'rychlá': 'швидка' };
+const VCELA_TEMPERAMENT_DE: Record<string, string> = { 'mírná': 'sanftmütig', 'střední': 'mittel', 'obranná': 'verteidigungsbereit' };
+const VCELA_VYNOS_DE: Record<string, string> = { 'nízký': 'gering', 'střední': 'mittel', 'vysoký': 'hoch', 'velmi vysoký': 'sehr hoch' };
+const VCELA_ROJIVOST_DE: Record<string, string> = { 'nízká': 'gering', 'střední': 'mittel', 'vyšší': 'erhöht' };
+const MED_KRYSTALIZACE_DE: Record<string, string> = { 'velmi pomalá': 'sehr langsam', 'pomalá': 'langsam', 'střední': 'mittel', 'rychlá': 'schnell' };
+
+/** ‼️ MAPA, ne řetězený if. Původní `if sk … if pl … return v` vracel pro uk
+ *  ČESKOU hodnotu, přestože /vcelarstvi je pro uk launchnuté — pod ukrajinskou
+ *  hlavičkou tedy svítilo „mírná" a „vysoký". Mapa dělá chybějící locale
+ *  viditelnou místo tichého pádu na češtinu. */
+const ENUM_LABELS: Record<string, Record<string, Record<string, string>>> = {
+  temperament: { sk: VCELA_TEMPERAMENT_SK, pl: VCELA_TEMPERAMENT_PL, uk: VCELA_TEMPERAMENT_UK, de: VCELA_TEMPERAMENT_DE },
+  vynos: { sk: VCELA_VYNOS_SK, pl: VCELA_VYNOS_PL, uk: VCELA_VYNOS_UK, de: VCELA_VYNOS_DE },
+  rojivost: { sk: VCELA_ROJIVOST_SK, pl: VCELA_ROJIVOST_PL, uk: VCELA_ROJIVOST_UK, de: VCELA_ROJIVOST_DE },
+  krystalizace: { sk: MED_KRYSTALIZACE_SK, pl: MED_KRYSTALIZACE_PL, uk: MED_KRYSTALIZACE_UK, de: MED_KRYSTALIZACE_DE },
+};
+
+function enumLabel(kind: string, v: string, locale: Locale): string {
+  return ENUM_LABELS[kind]?.[locale as string]?.[v] ?? v;
+}
 
 export function vcelaTemperamentLabel(v: string, locale: Locale = 'cs'): string {
-  if (locale === 'sk') return VCELA_TEMPERAMENT_SK[v] ?? v;
-  if (locale === 'pl') return VCELA_TEMPERAMENT_PL[v] ?? v;
-  return v;
+  return enumLabel('temperament', v, locale);
 }
 export function vcelaVynosLabel(v: string, locale: Locale = 'cs'): string {
-  if (locale === 'sk') return VCELA_VYNOS_SK[v] ?? v;
-  if (locale === 'pl') return VCELA_VYNOS_PL[v] ?? v;
-  return v;
+  return enumLabel('vynos', v, locale);
 }
 export function vcelaRojivostLabel(v: string, locale: Locale = 'cs'): string {
-  if (locale === 'sk') return VCELA_ROJIVOST_SK[v] ?? v;
-  if (locale === 'pl') return VCELA_ROJIVOST_PL[v] ?? v;
-  return v;
+  return enumLabel('rojivost', v, locale);
 }
 export function medKrystalizaceLabel(v: string, locale: Locale = 'cs'): string {
-  if (locale === 'sk') return MED_KRYSTALIZACE_SK[v] ?? v;
-  if (locale === 'pl') return MED_KRYSTALIZACE_PL[v] ?? v;
-  return v;
+  return enumLabel('krystalizace', v, locale);
 }
+
