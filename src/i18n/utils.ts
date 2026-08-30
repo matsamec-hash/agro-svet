@@ -123,7 +123,11 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // a stránky to musí říkat nahlas místo předstírané přesnosti.
   de: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/direktzahlungen', '/oeko-regelungen',
     '/zebricky', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce',
-    '/oepul', '/direktzahlungen-oesterreich'],
+    '/oepul', '/direktzahlungen-oesterreich',
+    // Fáze 3c: /plemena — plemena-de overlay (78 plemen ve 4 druzích).
+    // Pan-evropská data (rasy hranice nerespektují), enum užitkovosti zůstává
+    // kanonicky česky a překládá ho getUzitkovostLabels.
+    '/plemena'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

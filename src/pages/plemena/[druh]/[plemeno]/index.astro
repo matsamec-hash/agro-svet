@@ -6,12 +6,12 @@ import Layout from '../../../../layouts/Layout.astro';
 import { getPlemeno, getUzitkovostLabels } from '../../../../lib/plemena';
 import { faqPageSchema } from '../../../../lib/structured-data';
 import { injectLinks, injectLinksInText, createLinkContext } from '../../../../lib/auto-linker';
-import { useTranslations, getLocaleFromUrl, tf, plural } from '../../../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, tf, plural, BCP47 } from '../../../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 const base = locale === 'cs' ? '' : `/${locale}`;
-const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+const numLocale = BCP47[locale as keyof typeof BCP47] ?? 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { druh: druhSlug, plemeno: plemenoSlug } = Astro.params;

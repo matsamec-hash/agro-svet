@@ -11,6 +11,7 @@ import cs from '../../src/i18n/ui/cs';
 import { LAUNCHED_PREFIXES, isLaunchedPath, plural, localizeInternalHref } from '../../src/i18n/utils';
 import { HIDDEN_SECTIONS, HIDDEN_NEWS_CATEGORIES, getNav, getFooterColumns } from '../../src/i18n/nav';
 import { CATEGORY_LABELS, FUNCTIONAL_GROUPS, categoryLabel, functionalGroupLabel, familyLabel } from '../../src/lib/stroje';
+import { getUzitkovostLabels } from '../../src/lib/plemena';
 import { TIER_LISTS } from '../../src/lib/tier-lists';
 import { TIER_LIST_COPY } from '../../src/lib/tier-lists.i18n';
 
@@ -77,9 +78,9 @@ describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () 
     }
   });
   it('sekce bez de overlaye dat launchnuté NEJSOU', () => {
-    // /plemena a /slovnik = pořád bez de dat. /znacky a /encyklopedie už
-    // launchnuté jsou (kolekce znacky-de 22/22, encyklopedie-de 42/42).
-    for (const p of ['/plemena', '/slovnik']) {
+    // /slovnik = pořád bez de dat. /znacky, /encyklopedie a /plemena už
+    // launchnuté jsou (znacky-de 22/22, encyklopedie-de 42/42, plemena-de 78/78).
+    for (const p of ['/slovnik']) {
       expect(isLaunchedPath('de', p), `${p} nemá de overlay → nesmí být launchnuté`).toBe(false);
     }
   });
@@ -442,5 +443,88 @@ describe('fáze 3b — rakouská jurisdikce', () => {
     const umv40 = Number(/const UMV_40 = (\d+)/.exec(dz)![1]);
     expect(basis + umv20, 'LKO uvádí 252 €/ha pro prvních 20 ha').toBe(252);
     expect(basis + umv40, 'LKO uvádí 230 €/ha pro 21.–40. ha').toBe(230);
+  });
+});
+
+describe('fáze 3c — plemena-de overlay', () => {
+  const ROOT = process.cwd();
+  const FILES = ['hovezi', 'kone', 'ovce', 'prasata'];
+  const load = (dir: string, f: string) =>
+    yaml.load(fs.readFileSync(path.join(ROOT, `src/data/${dir}/${f}.yaml`), 'utf8')) as {
+      name: string; description: string; plemena: { slug: string; name: string; description: string; body?: string }[];
+    };
+
+  it('de overlay má stejné druhy i slugy jako cs', () => {
+    for (const f of FILES) {
+      const cs = load('plemena', f);
+      const de = load('plemena-de', f);
+      expect(de.plemena.map((p) => p.slug), `${f}: jiné slugy`).toEqual(cs.plemena.map((p) => p.slug));
+    }
+  });
+
+  // ‼️ Overlay se stejnými slugy může být kompletní a přesto ČESKÝ — parita
+  // klíčů nic neříká o jazyku hodnot. Sítko na diakritiku, která v němčině
+  // není, s výjimkou vlastních jmen (ta jsou u plemen legitimní: „Česká
+  // červinka" je název, ne neproložený text).
+  it('de overlay je německy, ne česky', () => {
+    // ‼️ NE diakritika: „Přeštice-Schwarzbunt" a „Česká červinka" jsou legitimní
+    // vlastní jména v německém textu. Česká SLOVA jsou spolehlivější signál.
+    const CZ_WORDS = ['plemeno', 'plemena', 'plemen', 'chovan', 'užitkovost', 'hmotnost',
+      'vlastnosti', 'vhodné', 'odolné', 'výborn', 'nejrozšířenější', 'maso s', 'mléko'];
+    const czech = (t: string) => CZ_WORDS.filter((w) => t.toLowerCase().includes(w));
+    for (const f of FILES) {
+      const de = load('plemena-de', f);
+      expect(czech(de.description), `${f}: popis druhu zůstal česky`).toEqual([]);
+      for (const p of de.plemena) {
+        expect(czech(p.description), `${f}/${p.slug}: popis zůstal česky`).toEqual([]);
+        if (p.body) {
+          // Cizojazyčný termín patří do <em> („umgangssprachlich <em>přeštičky</em>",
+          // „tschechisch <em>bílé otcovské plemeno</em>") — ten se z kontroly vyjme.
+          // Česká věta MIMO kurzívu je naopak nepřeložený zbytek.
+          // Pořadí: nejdřív pryč <em> i s obsahem, pak zbylé značky — jinak by
+          // kontrola zabrala na href="/de/plemena/..." místo na textu.
+          const text = p.body.replace(/<em>[\s\S]*?<\/em>/g, ' ').replace(/<[^>]+>/g, ' ');
+          expect(czech(text), `${f}/${p.slug}: v body zůstala česká věta`).toEqual([]);
+        }
+      }
+    }
+  });
+
+  it('de overlay není kopie cs', () => {
+    for (const f of FILES) {
+      const cs = load('plemena', f);
+      const de = load('plemena-de', f);
+      const same = de.plemena.filter((p, i) => p.description.trim() === cs.plemena[i].description.trim());
+      expect(same.map((p) => p.slug), `${f}: nepřeložené popisy`).toEqual([]);
+    }
+  });
+
+  // ‼️ TŘÍDA: ternář `sk ? SK : pl ? PL : CS` mlčky vracel ČESKÉ popisky
+  // užitkovosti pro uk, přestože /plemena je pro uk launchnuté. Test hlídá
+  // všechny locale, ne jen de — jinak by stejná díra vznikla u dalšího jazyka.
+  it('každý launchnutý locale má vlastní popisky užitkovosti', () => {
+    const cs = getUzitkovostLabels('cs');
+    for (const loc of Object.keys(LAUNCHED_PREFIXES)) {
+      if (loc === 'cs' || !isLaunchedPath(loc as never, '/plemena')) continue;
+      const l = getUzitkovostLabels(loc);
+      expect(l, `${loc}: chybí popisky užitkovosti`).toBeTruthy();
+      // ‼️ Shoda s češtinou NENÍ důkaz nepřeloženosti — slovenština má
+      // „Kombinované" i „Vlna" stejně jako čeština. Invariant je proto:
+      // většina popisků se od češtiny liší (tichý fallback by byl shodný VŠUDE).
+      const differ = Object.keys(cs).filter((k) => l[k as keyof typeof l] !== cs[k as keyof typeof cs]);
+      expect(differ.length, `${loc}: popisky užitkovosti vypadají jako český fallback`).toBeGreaterThan(Object.keys(cs).length / 2);
+    }
+    // de kontrolujeme adresně — žádný popisek se nesmí shodovat s češtinou.
+    const de = getUzitkovostLabels('de');
+    expect(Object.keys(cs).filter((k) => de[k as keyof typeof de] === cs[k as keyof typeof cs])).toEqual([]);
+  });
+
+  it('stránky plemen formátují čísla podle locale, ne natvrdo česky', () => {
+    for (const p of ['src/pages/plemena/index.astro', 'src/pages/plemena/[druh]/index.astro',
+      'src/pages/plemena/[druh]/[plemeno]/index.astro']) {
+      const src = fs.readFileSync(path.join(ROOT, p), 'utf8');
+      expect(src, `${p}: ternář zná jen sk/pl, uk a de spadnou na cs-CZ`).not.toContain("locale === 'pl' ? 'pl-PL' : 'cs-CZ'");
+      expect(src, `${p}: musí použít BCP47`).toContain('BCP47');
+    }
   });
 });

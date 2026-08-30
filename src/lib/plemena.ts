@@ -45,7 +45,7 @@ export interface PlemenoFlat extends Plemeno {
 }
 
 /** Podporovaná locale pro katalog plemen. cs = zdrojová YAML, ostatní = přeložená overlay. */
-export type PlemenaLocale = 'cs' | 'sk' | 'pl' | 'uk';
+export type PlemenaLocale = 'cs' | 'sk' | 'pl' | 'uk' | 'de';
 
 // Vite plugin parses YAML at compile-time → default export is already an object.
 // cs = zdrojová data; ostatní = přeložená overlay se stejnými slugy (plemena-<locale>/*.yaml).
@@ -65,16 +65,20 @@ const druhModulesUk = import.meta.glob('/src/data/plemena-uk/*.yaml', {
   eager: true,
   import: 'default',
 }) as Record<string, unknown>;
+const druhModulesDe = import.meta.glob('/src/data/plemena-de/*.yaml', {
+  eager: true,
+  import: 'default',
+}) as Record<string, unknown>;
 
 /** Overlay podle locale; cs = zdroj. Mapa místo řetězených ternárů — s další
  *  locale se jinak zapomene některé z míst, kde se volí modul. */
 const DRUH_MODULES: Record<PlemenaLocale, Record<string, unknown>> = {
-  cs: druhModulesCs, sk: druhModulesSk, pl: druhModulesPl, uk: druhModulesUk,
+  cs: druhModulesCs, sk: druhModulesSk, pl: druhModulesPl, uk: druhModulesUk, de: druhModulesDe,
 };
 
 // Per-locale cache (SSR: modul žije napříč requesty, cache je bezpečná – data jsou immutable).
-const cachedDruhy: Record<PlemenaLocale, Druh[] | null> = { cs: null, sk: null, pl: null, uk: null };
-const cachedFlat: Record<PlemenaLocale, PlemenoFlat[] | null> = { cs: null, sk: null, pl: null, uk: null };
+const cachedDruhy: Record<PlemenaLocale, Druh[] | null> = { cs: null, sk: null, pl: null, uk: null, de: null };
+const cachedFlat: Record<PlemenaLocale, PlemenoFlat[] | null> = { cs: null, sk: null, pl: null, uk: null, de: null };
 
 function coerceSlug(v: unknown): string {
   return typeof v === 'string' ? v : String(v);
@@ -89,7 +93,7 @@ function normalize(raw: any): Druh {
 }
 
 function localeOf(locale?: string): PlemenaLocale {
-  return locale === 'sk' || locale === 'pl' || locale === 'uk' ? locale : 'cs';
+  return locale === 'sk' || locale === 'pl' || locale === 'uk' || locale === 'de' ? locale : 'cs';
 }
 
 export function getAllDruhy(locale?: string): Druh[] {
@@ -170,7 +174,41 @@ const UZITKOVOST_LABELS_PL: Record<PlemenoUzitkovost, string> = {
   ostatni: 'Pozostałe',
 };
 
-/** Lokalizované popisky užitkovosti. cs = výchozí, sk/pl = přeložené. */
+const UZITKOVOST_LABELS_UK: Record<PlemenoUzitkovost, string> = {
+  maso: 'М\'ясні',
+  mleko: 'Молочні',
+  kombinovane: 'Комбіновані',
+  tazne: 'Тяглові',
+  sportovni: 'Спортивні',
+  vlna: 'Вовна',
+  jezdecke: 'Верхові',
+  ostatni: 'Інші',
+};
+
+const UZITKOVOST_LABELS_DE: Record<PlemenoUzitkovost, string> = {
+  maso: 'Fleisch',
+  mleko: 'Milch',
+  kombinovane: 'Zweinutzung',
+  tazne: 'Zug',
+  sportovni: 'Sport',
+  vlna: 'Wolle',
+  jezdecke: 'Reiten',
+  ostatni: 'Sonstige',
+};
+
+/** Lokalizované popisky užitkovosti.
+ *  ‼️ MAPA, ne ternář. Původní `sk ? SK : pl ? PL : CS` mlčky vracel ČESKÉ
+ *  popisky pro uk, přestože /plemena je pro uk launchnuté — pod ukrajinskou
+ *  hlavičkou tedy svítilo „Masné / Mléčné". Mapa dělá chybějící locale
+ *  viditelnou (undefined) místo tichého pádu na češtinu. */
+const UZITKOVOST_BY_LOCALE: Record<PlemenaLocale, Record<PlemenoUzitkovost, string>> = {
+  cs: UZITKOVOST_LABELS,
+  sk: UZITKOVOST_LABELS_SK,
+  pl: UZITKOVOST_LABELS_PL,
+  uk: UZITKOVOST_LABELS_UK,
+  de: UZITKOVOST_LABELS_DE,
+};
+
 export function getUzitkovostLabels(locale?: string): Record<PlemenoUzitkovost, string> {
-  return locale === 'sk' ? UZITKOVOST_LABELS_SK : locale === 'pl' ? UZITKOVOST_LABELS_PL : UZITKOVOST_LABELS;
+  return UZITKOVOST_BY_LOCALE[localeOf(locale)];
 }

@@ -5,12 +5,12 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getAllDruhy, getAllPlemena, getUzitkovostLabels, type PlemenoUzitkovost } from '../../lib/plemena';
-import { useTranslations, getLocaleFromUrl, tf } from '../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, tf, BCP47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 const base = locale === 'cs' ? '' : `/${locale}`;
-const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+const numLocale = BCP47[locale as keyof typeof BCP47] ?? 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const druhy = getAllDruhy(locale);
