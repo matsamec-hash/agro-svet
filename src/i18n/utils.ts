@@ -127,7 +127,12 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // Fáze 3c: /plemena — plemena-de overlay (78 plemen ve 4 druzích).
     // Pan-evropská data (rasy hranice nerespektují), enum užitkovosti zůstává
     // kanonicky česky a překládá ho getUzitkovostLabels.
-    '/plemena'],
+    '/plemena',
+    // /choroby — atlas chorob polních plodin. Čistá agronomie, žádná
+    // jurisdikce (patogeny hranice nerespektují). ‼️ Registrace přípravků
+    // ale jurisdikční JE: de overlay nese jen účinné látky (INN) a odkazuje
+    // na BVL a BAES/AGES místo českého ÚKZÚZ.
+    '/choroby'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

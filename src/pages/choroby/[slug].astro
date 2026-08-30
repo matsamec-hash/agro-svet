@@ -4,7 +4,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getChoroba, isChorobaIndexable } from '../../lib/choroby';
 import { breadcrumbSchema, itemListSchema, faqPageSchema } from '../../lib/structured-data';
-import { useTranslations, tf, plural, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
+import { useTranslations, tf, plural, getLocaleFromUrl, localizeInternalHref, localizePath, isLaunchedPath } from '../../i18n/utils';
 import { injectLinksInText, createLinkContext } from '../../lib/auto-linker';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -24,9 +24,15 @@ const breadcrumb = breadcrumbSchema([
   { name: tr('chor.hub.crumb'), url: localizePath(locale, '/choroby/') },
   { name: choroba.name, url: base },
 ]);
-const list = choroba.plodiny.length > 0
+// ‼️ Vazba na plodiny je KŘÍŽOVÝ ODKAZ do jiné sekce. Když ta pro daný locale
+// launchnutá není (de), nese `plodina_name` český název a odkaz míří na
+// /de/plodiny/..., které 302-uje na češtinu. V JSON-LD to Googlu servíruje
+// české názvy pod německou stránkou — stejná past jako dřív u /znacky/[slug].
+const showPlodiny = isLaunchedPath(locale, '/plodiny');
+const plodinyList = showPlodiny ? choroba.plodiny : [];
+const list = plodinyList.length > 0
   ? itemListSchema(
-      choroba.plodiny.map((p) => ({ url: localizePath(locale, `/plodiny/${p.plodina_slug}/`), name: p.plodina_name })),
+      plodinyList.map((p) => ({ url: localizePath(locale, `/plodiny/${p.plodina_slug}/`), name: p.plodina_name })),
       tf(locale, 'chor.d.listName', { name: choroba.name }),
     )
   : null;
@@ -34,8 +40,8 @@ const faq = choroba.faq && choroba.faq.length > 0 ? faqPageSchema(choroba.faq) :
 
 const metaDesc = tf(locale, 'chor.d.metaDesc', {
   name: `${choroba.name}${choroba.latinsky ? ` (${choroba.latinsky})` : ''}`,
-  count: choroba.plodiny.length,
-  unit: plural(locale, choroba.plodiny.length, {
+  count: plodinyList.length,
+  unit: plural(locale, plodinyList.length, {
     one: tr('chor.d.cropOne'), few: tr('chor.d.cropFew'), many: tr('chor.d.cropMany'),
   }),
 });
@@ -62,7 +68,7 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
         {choroba.latinsky && <p class="hero-latin">{choroba.latinsky}</p>}
         <p class="hero-lede" set:html={injectLinksInText(choroba.popis, linkCtx, locale)} />
         <div class="hero-stats">
-          <div class="s"><span class="n">{choroba.plodiny.length}</span><span class="l">{tr('chor.d.cropsAtRisk')}</span></div>
+          <div class="s"><span class="n">{plodinyList.length}</span><span class="l">{tr('chor.d.cropsAtRisk')}</span></div>
         </div>
         <div class="hero-actions">
           <a class="cta-back" href={localizeInternalHref(locale, '/choroby/')}>
@@ -140,14 +146,14 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
       </section>
     )}
 
-    {choroba.plodiny.length > 0 && (
+    {plodinyList.length > 0 && (
       <section class="card-section">
         <h2 class="section-title">
           {tr('chor.d.cropsH')}
-          <span class="section-title-c">{choroba.plodiny.length}</span>
+          <span class="section-title-c">{plodinyList.length}</span>
         </h2>
         <ul class="plodiny-list">
-          {choroba.plodiny.map((p) => (
+          {plodinyList.map((p) => (
             <li>
               <a href={localizeInternalHref(locale, `/plodiny/${p.plodina_slug}/`)} class="plodina-link">
                 <span class="pl-name">{p.plodina_name}</span>

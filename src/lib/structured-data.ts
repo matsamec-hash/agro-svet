@@ -15,12 +15,23 @@ export interface BreadcrumbItem {
 export const ORG_ID = `${SITE_URL}/#organization`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 
-const ORG_DESCRIPTION =
-  'Zemědělský portál — encyklopedie traktorů a kombajnů, plemena hospodářských zvířat, agro bazar zdarma a aktuální novinky.';
+// ‼️ Sitewide Organization JSON-LD jede na KAŽDÉ stránce včetně /de, /pl, /sk
+// a /uk. Popis byl natvrdo česky, takže Googlu na německé stránce popisoval
+// web česky — únik neviditelný v těle stránky, zato ve strukturovaných datech.
+// Není to i18n klíč: structured-data.ts je čistý lib bez přístupu k locale
+// slovníku, a popis organizace je krátký a stabilní.
+const ORG_DESCRIPTION_BY_LOCALE: Record<string, string> = {
+  cs: 'Zemědělský portál — encyklopedie traktorů a kombajnů, plemena hospodářských zvířat, agro bazar zdarma a aktuální novinky.',
+  sk: 'Poľnohospodársky portál — encyklopédia traktorov a kombajnov, plemená hospodárskych zvierat, agro bazár zadarmo a aktuálne novinky.',
+  pl: 'Portal rolniczy — encyklopedia ciągników i kombajnów, rasy zwierząt gospodarskich, darmowy bazar rolniczy i aktualne wiadomości.',
+  uk: 'Аграрний портал — енциклопедія тракторів і комбайнів, породи сільськогосподарських тварин, безкоштовний агро базар та актуальні новини.',
+  de: 'Agrarportal — Enzyklopädie der Traktoren und Mähdrescher, Nutztierrassen, Landmaschinenkatalog und die Beträge der Agrarförderung je Hektar.',
+};
 
 // Sitewide @graph emitovaný v Layout.astro na KAŽDÉ stránce. Definuje kanonickou
 // Organization + WebSite entitu jednou; ostatní stránky už jen referencují @id.
-export function siteSchemaGraph() {
+export function siteSchemaGraph(locale: string = 'cs') {
+  const ORG_DESCRIPTION = ORG_DESCRIPTION_BY_LOCALE[locale] ?? ORG_DESCRIPTION_BY_LOCALE.cs;
   return {
     '@context': 'https://schema.org',
     '@graph': [

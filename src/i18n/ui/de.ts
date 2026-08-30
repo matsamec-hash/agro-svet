@@ -1196,6 +1196,7 @@ const de: Record<string, string> = {
 
   // — /choroby —
   'chor.hub.stat': 'Krankheiten und Schädlinge',
+  'chor.hub.statLinks': 'Verknüpfungen zu Kulturen',
   'chor.hub.title': 'Krankheiten und Schädlinge an Ackerkulturen — Atlas und Pflanzenschutz',
   'chor.hub.desc': 'Atlas von {count} Krankheiten und Schädlingen an Ackerkulturen: Symptome, Erreger und empfohlener Pflanzenschutz. Zu jeder Krankheit eine Übersicht der gefährdeten Kulturen.',
   'chor.hub.crumb': 'Krankheiten und Schädlinge',

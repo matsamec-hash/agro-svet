@@ -359,6 +359,7 @@ const sk: Record<string, string> = {
   'slov.czkNote': 'Ceny sú orientačné z českého trhu (CZK) — na Slovensku sa môžu líšiť.',
   // — choroby (chor.*) —
   'chor.hub.stat': 'chorôb a škodcov',
+  'chor.hub.statLinks': 'väzieb na plodiny',
   'chor.d.cropsH': 'Ohrozené plodiny',
   'kvz.hub.intro': 'Interaktívne kvízy o poľnohospodárstve, technike a dotáciách. Hodnotenie podľa počtu správnych odpovedí.',
 

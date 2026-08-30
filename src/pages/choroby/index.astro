@@ -6,7 +6,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { listIndexableChoroby } from '../../lib/choroby';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
-import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath, plural } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -44,7 +44,7 @@ const list = itemListSchema(
         <p class="hero-lede">{tr('chor.hub.lede')}</p>
         <div class="hero-stats">
           <div class="s"><span class="n">{choroby.length}</span><span class="l">{tr('chor.hub.stat')}</span></div>
-          <div class="s"><span class="n">{totalVazby}</span><span class="l">vazeb na plodiny</span></div>
+          <div class="s"><span class="n">{totalVazby}</span><span class="l">{tr('chor.hub.statLinks')}</span></div>
         </div>
         <div class="hero-actions">
           <a class="cta-group" href={localizeInternalHref(locale, '/plodiny/')}>
@@ -65,7 +65,7 @@ const list = itemListSchema(
             <div class="hc-title">{c.name}</div>
             {c.latinsky && <div class="hc-latin">{c.latinsky}</div>}
             <p class="hc-desc">{c.popis}</p>
-            <span class="hc-badge">{c.plodiny.length} {c.plodiny.length === 1 ? 'plodina' : c.plodiny.length < 5 ? 'plodiny' : 'plodin'}</span>
+            <span class="hc-badge">{c.plodiny.length} {plural(locale, c.plodiny.length, { one: tr('chor.d.cropOne'), few: tr('chor.d.cropFew'), many: tr('chor.d.cropMany') })}</span>
           </div>
           <svg class="hc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>

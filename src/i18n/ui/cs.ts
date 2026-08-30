@@ -359,6 +359,7 @@ const cs: Record<string, string> = {
   'slov.czkNote': '',
   // — choroby (chor.*) —
   'chor.hub.stat': 'chorob a škůdců',
+  'chor.hub.statLinks': 'vazeb na plodiny',
   'chor.d.cropsH': 'Ohrožené plodiny',
   'kvz.hub.intro': 'Interaktivní kvízy o zemědělství, technice a dotacích. Hodnocení podle počtu správných odpovědí.',
 

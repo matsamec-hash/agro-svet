@@ -161,7 +161,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
 
   <!-- Sitewide Organization + WebSite entity (@graph). Stránkové JSON-LD bloky
        referencují tyto @id místo duplikace → Google slučuje do jedné entity. -->
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(siteSchemaGraph())} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(siteSchemaGraph(locale))} />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />

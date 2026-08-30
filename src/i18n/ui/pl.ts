@@ -361,6 +361,7 @@ const pl: Record<string, string> = {
   'slov.czkNote': 'Ceny są orientacyjne i pochodzą z rynku czeskiego (CZK) — w Polsce mogą się różnić.',
   // — choroby (chor.*) —
   'chor.hub.stat': 'chorób i szkodników',
+  'chor.hub.statLinks': 'powiązań z uprawami',
   'chor.d.cropsH': 'Zagrożone rośliny',
   'kvz.hub.intro': 'Interaktywne quizy o rolnictwie, technice i dopłatach. Ocena według liczby poprawnych odpowiedzi.',
 

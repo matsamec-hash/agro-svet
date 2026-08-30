@@ -175,7 +175,7 @@ const UZITKOVOST_LABELS_PL: Record<PlemenoUzitkovost, string> = {
 };
 
 const UZITKOVOST_LABELS_UK: Record<PlemenoUzitkovost, string> = {
-  maso: 'М\'ясні',
+  maso: 'М’ясні',
   mleko: 'Молочні',
   kombinovane: 'Комбіновані',
   tazne: 'Тяглові',

@@ -528,3 +528,75 @@ describe('fáze 3c — plemena-de overlay', () => {
     }
   });
 });
+
+describe('fáze 3c — choroby de overlay a sitewide JSON-LD', () => {
+  const ROOT = process.cwd();
+  const SLUGS = fs.readdirSync(path.join(ROOT, 'src/data/choroby'))
+    .filter((f) => f.endsWith('.yaml')).map((f) => f.replace(/\.yaml$/, ''));
+  const loadDe = (slug: string) =>
+    yaml.load(fs.readFileSync(path.join(ROOT, `src/data/choroby/de/${slug}.yaml`), 'utf8')) as {
+      name: string; popis: string; priznaky: string; sireni: string; skodlivost: string;
+      cyklus: string; ochrana: string; hostitele: string[];
+      ucinne_latky?: { latka: string; pripravky?: string }[];
+      faq?: { q: string; a: string }[];
+    };
+
+  it('de overlay pokrývá všechny choroby', () => {
+    const have = fs.readdirSync(path.join(ROOT, 'src/data/choroby/de')).map((f) => f.replace(/\.yaml$/, ''));
+    expect(have.sort()).toEqual(SLUGS.sort());
+  });
+
+  it('de overlay je německy', () => {
+    const CZ = /[ěščřžůťďň]/;
+    for (const slug of SLUGS) {
+      const d = loadDe(slug);
+      for (const f of ['name', 'popis', 'priznaky', 'sireni', 'skodlivost', 'cyklus', 'ochrana'] as const) {
+        expect(CZ.test(d[f]), `${slug}.${f} zůstalo česky`).toBe(false);
+      }
+      for (const h of d.hostitele) expect(CZ.test(h), `${slug}: hostitel „${h}" zůstal česky`).toBe(false);
+      for (const q of d.faq ?? []) {
+        expect(CZ.test(q.q) || CZ.test(q.a), `${slug}: FAQ zůstalo česky`).toBe(false);
+      }
+    }
+  });
+
+  // ‼️ Registrace přípravků je NÁRODNÍ. Obchodní název z českého registru
+  // („např. Flexity") v Německu platit nemusí — de overlay proto nese jen
+  // účinné látky. A ne každá `latka` je INN: jedna nesla „měďnaté přípravky".
+  it('účinné látky neobsahují obchodní názvy ani češtinu', () => {
+    for (const slug of SLUGS) {
+      for (const u of loadDe(slug).ucinne_latky ?? []) {
+        expect(u.pripravky, `${slug}: obchodní názvy jsou národní, do de nepatří`).toBeUndefined();
+        expect(/[ěščřžůťďňáíé]/.test(u.latka), `${slug}: účinná látka „${u.latka}" zůstala česky`).toBe(false);
+      }
+    }
+  });
+
+  it('detail choroby nelinkuje na nelaunchnuté /plodiny', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/pages/choroby/[slug].astro'), 'utf8');
+    expect(src, 'seznam plodin se musí gatovat').toContain("isLaunchedPath(locale, '/plodiny')");
+    // Počítadlo i JSON-LD musí vycházet ze SKRYTÉHO seznamu, ne z původního —
+    // jinak stránka hlásí „7 Kulturen" a žádnou nezobrazí.
+    expect(src, 'JSON-LD musí jet z gatovaného seznamu').toContain('plodinyList.map');
+    expect(src, 'nikde nesmí zůstat negatovaný přístup').not.toContain('choroba.plodiny.map');
+  });
+
+  it('hub chorob nemá natvrdo české skloňování', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/pages/choroby/index.astro'), 'utf8');
+    expect(src).not.toContain("'plodina' :");
+    expect(src).not.toContain('vazeb na plodiny');
+  });
+
+  // ‼️ TŘÍDA: sitewide Organization JSON-LD jede na KAŽDÉ stránce každé locale.
+  // Popis byl natvrdo česky, takže Googlu popisoval německý web česky. Únik
+  // neviditelný v těle stránky — proto ho žádná dřívější kontrola nechytila.
+  it('sitewide Organization JSON-LD má popis pro každý locale', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/lib/structured-data.ts'), 'utf8');
+    expect(src, 'popis nesmí být jedna natvrdo česká konstanta').toContain('ORG_DESCRIPTION_BY_LOCALE');
+    for (const loc of Object.keys(LAUNCHED_PREFIXES)) {
+      expect(src, `chybí popis organizace pro ${loc}`).toMatch(new RegExp(`^\\s{2}${loc}: '`, 'm'));
+    }
+    const layout = fs.readFileSync(path.join(ROOT, 'src/layouts/Layout.astro'), 'utf8');
+    expect(layout, 'Layout musí locale předat').toContain('siteSchemaGraph(locale)');
+  });
+});
