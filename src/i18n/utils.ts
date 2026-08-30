@@ -116,8 +116,14 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // /hledat ZÁMĚRNĚ nelaunchnuté: je noindex a tahá české články z Supabase
   // + má natvrdo české labely („Všechny články") → launch by pod /de/
   // servíroval český obsah. Doplnit spolu s gatingem novinek a bazaru.
+  // Fáze 3b: RAKOUSKO. Trh je DE+AT, ale dosud tu byla jen německá jurisdikce.
+  // /oepul = agrárně-environmentální program (2. pilíř), /direktzahlungen-oesterreich
+  // = 1. pilíř. ‼️ Rakousko NEvyhlašuje roční Einheitsbeträge jako německý
+  // Bundesanzeiger — zdroje uvádějí „rund/etwa" pro celé období 2023–2027,
+  // a stránky to musí říkat nahlas místo předstírané přesnosti.
   de: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/direktzahlungen', '/oeko-regelungen',
-    '/zebricky', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce'],
+    '/zebricky', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce',
+    '/oepul', '/direktzahlungen-oesterreich'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

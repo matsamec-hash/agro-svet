@@ -636,6 +636,8 @@ export const GET: APIRoute = async () => {
   // ekvivalent v base urls, takže je do /de mirroru nedostane žádné zrcadlení.
   urls.push({ loc: `${SITE_URL}/de/direktzahlungen/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
   urls.push({ loc: `${SITE_URL}/de/oeko-regelungen/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+  urls.push({ loc: `${SITE_URL}/de/oepul/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+  urls.push({ loc: `${SITE_URL}/de/direktzahlungen-oesterreich/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
 
   // PL-only sekce /poradniki — hub + evergreen návody (poradnikiPl kolekce).
   urls.push({ loc: `${SITE_URL}/pl/poradniki/`, changefreq: 'weekly', priority: '0.8', lastmod: STATIC_LASTMOD });

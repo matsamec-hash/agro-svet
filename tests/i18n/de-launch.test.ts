@@ -335,7 +335,8 @@ describe('DE homepage a DE-only landingy', () => {
   });
 
   it('DE-only landingy existují a jsou v sitemapě', () => {
-    for (const p of ['src/pages/direktzahlungen/index.astro', 'src/pages/oeko-regelungen/index.astro']) {
+    for (const p of ['src/pages/direktzahlungen/index.astro', 'src/pages/oeko-regelungen/index.astro',
+      'src/pages/oepul/index.astro', 'src/pages/direktzahlungen-oesterreich/index.astro']) {
       expect(fs.existsSync(path.join(ROOT, p)), `chybí ${p}`).toBe(true);
       const src = fs.readFileSync(path.join(ROOT, p), 'utf8');
       // Non-de locale nesmí dostat německou jurisdikční stránku.
@@ -345,6 +346,8 @@ describe('DE homepage a DE-only landingy', () => {
     const sm = fs.readFileSync(path.join(ROOT, 'src/pages/sitemap.xml.ts'), 'utf8');
     expect(sm).toContain('/de/direktzahlungen/');
     expect(sm).toContain('/de/oeko-regelungen/');
+    expect(sm).toContain('/de/oepul/');
+    expect(sm).toContain('/de/direktzahlungen-oesterreich/');
   });
 });
 
@@ -395,5 +398,49 @@ describe('fáze 3a — žebříčky a právní stránky', () => {
     expect(de).toContain('bfdi.bund.de');
     expect(de).toContain('dsb.gv.at');
     expect(de, 'vedoucí úřad zůstává český — provozovatel sídlí v ČR').toContain('uoou.cz');
+  });
+});
+
+describe('fáze 3b — rakouská jurisdikce', () => {
+  const ROOT = process.cwd();
+
+  // Trh je DE+AT. Když je launchnutá jen německá jurisdikce, rakouský čtenář
+  // dostane sazby, které pro něj neplatí — horší než žádná stránka.
+  it('rakouské landingy jsou launchnuté a odmítnou non-de locale', () => {
+    for (const r of ['/oepul', '/direktzahlungen-oesterreich']) {
+      expect(isLaunchedPath('de', r), `${r} není launchnuté`).toBe(true);
+      for (const loc of ['cs', 'sk', 'pl', 'uk']) {
+        expect(isLaunchedPath(loc as never, r), `${r} nesmí být launchnuté pro ${loc}`).toBe(false);
+      }
+    }
+  });
+
+  // ‼️ Rakouské zdroje uvádějí sazby jako „rund/etwa" pro celé období, ne jako
+  // roční úřední Einheitsbetrag. Stránka nesmí předstírat přesnost, kterou
+  // zdroj nemá — jinak je to YMYL chyba, ne jen stylistika.
+  it('rakouské stránky přiznávají, že jde o orientační sazby', () => {
+    const dz = fs.readFileSync(path.join(ROOT, 'src/pages/direktzahlungen-oesterreich/index.astro'), 'utf8');
+    expect(dz, 'chybí upozornění na richtwerty').toContain('Richtwerte');
+    expect(dz, 'sazby se musí uvádět s „rund"').toContain('rund {fmt(BASIS_HEIMGUT)}');
+    expect(dz, 'musí odkázat na závaznost bescheidu AMA').toMatch(/Bescheid der\s*<a[^>]*>AMA|Bescheid der AMA/);
+
+    // ÖPUL: pojistka proti tomu, že by se výchozí sazby 2023 vydávaly za aktuální.
+    const op = fs.readFileSync(path.join(ROOT, 'src/pages/oepul/index.astro'), 'utf8');
+    expect(op, 'chybí varování o zvýšení sazeb od 2024').toContain('Impulsprogramm');
+    expect(op, 'u tabulek starých sazeb musí být uveden rok').toContain('Ausgangssätze des Jahres 2023');
+    // Řada 2023→2025 je jediné místo, kde je vidět dopad zvýšení.
+    expect(op).toContain('v2023: 70');
+    expect(op).toContain('v2025: 85');
+  });
+
+  it('obě rakouské sazby v FAQ sedí s daty v tabulkách', () => {
+    const dz = fs.readFileSync(path.join(ROOT, 'src/pages/direktzahlungen-oesterreich/index.astro'), 'utf8');
+    // Efektivní sazba na prvních 20 ha = základ + umverteilung. Kdyby se jedno
+    // číslo změnilo a druhé ne, FAQ by tvrdilo něco jiného než tabulka.
+    const basis = Number(/const BASIS_HEIMGUT = (\d+)/.exec(dz)![1]);
+    const umv20 = Number(/const UMV_20 = (\d+)/.exec(dz)![1]);
+    const umv40 = Number(/const UMV_40 = (\d+)/.exec(dz)![1]);
+    expect(basis + umv20, 'LKO uvádí 252 €/ha pro prvních 20 ha').toBe(252);
+    expect(basis + umv40, 'LKO uvádí 230 €/ha pro 21.–40. ha').toBe(230);
   });
 });

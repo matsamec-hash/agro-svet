@@ -1,0 +1,341 @@
+---
+// src/pages/direktzahlungen-oesterreich/index.astro
+// DE-only landing: přímé platby GAP v RAKOUSKU (1. pilíř) — Basiseinkommens-
+// stützung, Umverteilung, Junglandwirte, gekoppelte Stützung Almauftrieb.
+// Jurisdikčně vázané na AT → obsah psán přímo německy, NE přes t() klíče.
+// Non-de locale → 404 (žádný cs ekvivalent; stránka existuje jen pod /de).
+//
+// ‼️ ZÁSADNÍ ROZDÍL PROTI NĚMECKU: Rakousko NEvyhlašuje roční Einheitsbeträge
+// v obdobě Bundesanzeigeru. Ministerstvo i komora uvádějí sazby slovem
+// „rund" / „etwa" jako orientační hodnoty pro celé období 2023–2027. Stránka
+// to musí říkat nahlas — jinak by tvrdila přesnost, kterou zdroj nemá.
+//
+// Zdroje (ověřeno křížem, shodují se):
+//   - BMLUK, „Einkommenssicherung" a „Unterstützung Junglandwirtinnen und
+//     Junglandwirte" (bmluk.gv.at) — nationaler GAP-Strategieplan
+//   - Landwirtschaftskammer Österreich, „Direktzahlungen ab 2023" (lko.at)
+// ✅ Křížová kontrola sedí i aritmeticky: LKO uvádí 252 €/ha pro prvních 20 ha
+//    a 230 €/ha pro 21.–40. ha, což je přesně 208 + 44 a 208 + 22.
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { localizePath } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? 'cs';
+if (locale !== 'de') return Astro.rewrite('/404');
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+const BASIS_HEIMGUT = 208;
+const BASIS_ALM = 41;
+const UMV_20 = 44;
+const UMV_40 = 22;
+const JUNG = 66;
+
+type Row = { name: string; v: number; unit: '€/ha' | '€/RGVE'; note?: string };
+
+const flaeche: Row[] = [
+  { name: 'Basiseinkommensstützung — Heimgutflächen', v: BASIS_HEIMGUT, unit: '€/ha', note: 'Acker, Dauergrünland, Dauerkulturen' },
+  { name: 'Basiseinkommensstützung — Almweideflächen', v: BASIS_ALM, unit: '€/ha', note: 'eigener, deutlich niedrigerer Satz' },
+  { name: 'Umverteilungseinkommensstützung — 1. bis 20. Hektar', v: UMV_20, unit: '€/ha', note: 'Zuschlag zur Basiszahlung' },
+  { name: 'Umverteilungseinkommensstützung — 21. bis 40. Hektar', v: UMV_40, unit: '€/ha', note: 'ab dem 41. Hektar entfällt sie' },
+  { name: 'Einkommensstützung für Junglandwirte', v: JUNG, unit: '€/ha', note: 'max. 40 ha, höchstens 5 Jahre' },
+];
+
+const tiere: Row[] = [
+  { name: 'Gekoppelte Einkommensstützung — Kühe, Zuchtschafe und -ziegen', v: 100, unit: '€/RGVE', note: 'nur bei Almauftrieb' },
+  { name: 'Gekoppelte Einkommensstützung — sonstige Rinder (Kalbinnen, Ochsen)', v: 50, unit: '€/RGVE', note: 'nur bei Almauftrieb' },
+];
+
+// Effektiver Satz je Hektar nach Staffelung — das, was Betriebe tatsächlich interessiert.
+const staffel = [
+  { label: '1. bis 20. Hektar', v: BASIS_HEIMGUT + UMV_20 },
+  { label: '21. bis 40. Hektar', v: BASIS_HEIMGUT + UMV_40 },
+  { label: 'ab dem 41. Hektar', v: BASIS_HEIMGUT },
+];
+
+const fmt = (v: number) => v.toLocaleString('de-DE', { maximumFractionDigits: 0 });
+const lastUpdated = new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+const pageUrl = 'https://agro-svet.cz/de/direktzahlungen-oesterreich/';
+
+const faq = [
+  { q: 'Wie hoch ist die Basiseinkommensstützung in Österreich?', a: `Die Basiseinkommensstützung beträgt rund ${fmt(BASIS_HEIMGUT)} €/ha für Heimgutflächen — also Acker, Dauergrünland und Dauerkulturen. Für Almweideflächen gilt ein eigener, deutlich niedrigerer Satz von rund ${fmt(BASIS_ALM)} €/ha. Es handelt sich um Richtwerte des nationalen GAP-Strategieplans für die Periode 2023 bis 2027, nicht um jährlich amtlich bekannt gemachte Einheitsbeträge.` },
+  { q: 'Wie funktioniert die Umverteilungseinkommensstützung?', a: `Sie ist ein Zuschlag auf die ersten 40 Hektar, gestaffelt in zwei Stufen: rund ${fmt(UMV_20)} €/ha für den 1. bis 20. Hektar und rund ${fmt(UMV_40)} €/ha für den 21. bis 40. Hektar. Ab dem 41. Hektar entfällt sie. Damit erhält ein Betrieb auf den ersten 20 Hektar effektiv rund ${fmt(BASIS_HEIMGUT + UMV_20)} €/ha, auf den Hektaren 21 bis 40 rund ${fmt(BASIS_HEIMGUT + UMV_40)} €/ha.` },
+  { q: 'Was bekommen Junglandwirtinnen und Junglandwirte?', a: `Rund ${fmt(JUNG)} €/ha für maximal 40 Hektar förderfähige Fläche und höchstens fünf aufeinanderfolgende Jahre. Voraussetzung: Die Person darf im Jahr der Betriebsgründung das 40. Lebensjahr nicht überschritten haben, muss den Betrieb selbst führen und eine einschlägige Qualifikation nachweisen — Facharbeiterprüfung, einschlägige höhere Schule oder Studium. Der Nachweis kann bis zu zwei Jahre nach Beginn nachgereicht werden.` },
+  { q: 'Was ist die gekoppelte Einkommensstützung für den Almauftrieb?', a: 'Eine an Tiere gebundene Zahlung, die es nur für auf die Alm aufgetriebene Tiere gibt. Für Kühe sowie Zuchtschafe und -ziegen sind es rund 100 € je raufutterverzehrender Großvieheinheit (RGVE), für sonstige Rinder wie Kalbinnen und Ochsen rund 50 € je RGVE. Sie soll die Almbewirtschaftung erhalten, die sonst wirtschaftlich unter Druck steht.' },
+  { q: 'Sind das exakte Beträge?', a: 'Nein. Anders als in Deutschland, wo das BMLEH die endgültigen Einheitsbeträge jährlich im Bundesanzeiger bekannt macht, nennen das österreichische Ministerium und die Landwirtschaftskammer die Sätze ausdrücklich mit „rund" beziehungsweise „etwa". Es sind Richtwerte des GAP-Strategieplans für 2023 bis 2027. Der tatsächlich ausgezahlte Betrag hängt von der beantragten Fläche und dem verfügbaren Budget ab. Verbindlich ist der AMA-Bescheid.' },
+  { q: 'Wann zahlt die AMA aus?', a: 'Die Hauptauszahlung der Direktzahlungen erfolgt in der Regel im Dezember des Antragsjahres. Die AMA gibt den genauen Termin jährlich bekannt; Teilzahlungen können früher erfolgen.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Startseite', item: `https://agro-svet.cz${localizePath('de', '/')}` },
+        { '@type': 'ListItem', position: 2, name: 'Direktzahlungen Österreich', item: pageUrl },
+      ],
+    },
+    { '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  ],
+};
+
+const groups: { title: string; rows: Row[] }[] = [
+  { title: 'Flächenbezogene Zahlungen', rows: flaeche },
+  { title: 'Gekoppelte Einkommensstützung — Almauftrieb', rows: tiere },
+];
+---
+
+<Layout
+  title="Direktzahlungen Österreich — Beträge je Hektar (AMA)"
+  description={`Die Direktzahlungen der GAP in Österreich: Basiseinkommensstützung rund ${fmt(BASIS_HEIMGUT)} €/ha, Umverteilung ${fmt(UMV_20)} €/ha für die ersten 20 Hektar, Junglandwirte ${fmt(JUNG)} €/ha. Vollständige Tabelle, Staffelung und Prämienrechner.`}
+  noHreflang={true}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <main class="db">
+    <div class="db-wrap">
+      <nav class="db-crumb" aria-label="Brotkrumennavigation">
+        <a href={localizePath('de', '/')}>Startseite</a>
+        <span>/</span>
+        <b>Direktzahlungen Österreich</b>
+      </nav>
+
+      <header class="db-head">
+        <span class="db-eyebrow">GAP-Direktzahlungen Österreich · Periode 2023–2027</span>
+        <h1>Direktzahlungen in Österreich — Beträge je Hektar</h1>
+        <p class="db-lead">
+          Die Sätze der ersten Säule nach dem österreichischen GAP-Strategieplan: Basiseinkommens­stützung,
+          Umverteilung auf die ersten 40 Hektar, Junglandwirte und die gekoppelte Stützung für den Almauftrieb.
+          Unten die vollständige Tabelle, die effektive Staffelung je Hektar und ein Rechner.
+        </p>
+      </header>
+
+      <div class="db-flag">
+        <strong>Richtwerte, keine amtlich fixierten Jahresbeträge.</strong> Anders als in Deutschland
+        veröffentlicht Österreich keine jährlichen Einheitsbeträge in einem Amtsblatt. Ministerium und
+        Landwirtschaftskammer nennen die Sätze ausdrücklich mit „rund" und „etwa" — als Richtwerte für
+        die gesamte Periode 2023 bis 2027. Verbindlich ist allein der Bescheid der AMA.
+      </div>
+
+      <section class="db-hero-stats" aria-label="Wichtigste Beträge">
+        <div class="db-stat db-stat--hl">
+          <span class="db-stat-l">Basis — Heimgut</span>
+          <b class="db-stat-v">rund {fmt(BASIS_HEIMGUT)} <em>€/ha</em></b>
+        </div>
+        <div class="db-stat">
+          <span class="db-stat-l">1. bis 20. Hektar effektiv</span>
+          <b class="db-stat-v">rund {fmt(BASIS_HEIMGUT + UMV_20)} <em>€/ha</em></b>
+        </div>
+        <div class="db-stat">
+          <span class="db-stat-l">Junglandwirte</span>
+          <b class="db-stat-v">rund {fmt(JUNG)} <em>€/ha</em></b>
+        </div>
+        <div class="db-stat">
+          <span class="db-stat-l">Almweidefläche</span>
+          <b class="db-stat-v">rund {fmt(BASIS_ALM)} <em>€/ha</em></b>
+        </div>
+      </section>
+
+      <section class="db-calc" aria-labelledby="calc-h">
+        <h2 id="calc-h">Prämienrechner — Heimgutfläche</h2>
+        <p class="db-calc-sub">Überschlägige Berechnung der Basiseinkommensstützung samt Umverteilung
+          für Heimgutflächen. Almweideflächen und die gekoppelte Stützung sind nicht enthalten.</p>
+        <div class="db-calc-box">
+          <label class="db-calc-field">
+            Hektar
+            <input id="ha" type="number" min="0" step="0.1" value="30" inputmode="decimal" />
+          </label>
+          <div class="db-calc-out">
+            <div class="db-calc-line"><span>Basiseinkommensstützung</span><b id="o-grund">—</b></div>
+            <div class="db-calc-line"><span>Umverteilung <em>(1.–40. ha, gestaffelt)</em></span><b id="o-umv">—</b></div>
+            <div class="db-calc-line db-calc-total"><span>Summe (überschlägig)</span><b id="o-sum">—</b></div>
+          </div>
+        </div>
+        <p class="db-calc-note">Überschlägige Berechnung mit Richtwerten. Der tatsächliche Betrag hängt von
+          der beantragten Fläche, der Konditionalität und dem verfügbaren Budget ab.</p>
+      </section>
+
+      <section class="db-tables" aria-labelledby="tab-h">
+        <h2 id="tab-h">Alle Zahlungsarten im Überblick</h2>
+        {groups.map((g) => (
+          <div class="db-tw">
+            <h3>{g.title}</h3>
+            <table class="db-table">
+              <thead>
+                <tr><th scope="col">Zahlungsart</th><th scope="col">Betrag</th><th scope="col">Anmerkung</th></tr>
+              </thead>
+              <tbody>
+                {g.rows.map((r) => (
+                  <tr>
+                    <td>{r.name}</td>
+                    <td class="db-num">rund {fmt(r.v)} {r.unit}</td>
+                    <td class="db-note">{r.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </section>
+
+      <section class="db-tables" aria-labelledby="dev-h">
+        <h2 id="dev-h">Effektiver Satz je Hektar nach Staffelung</h2>
+        <p class="db-calc-sub">Was ein Betrieb auf Heimgutflächen je Hektar tatsächlich erhält, wenn man
+          Basiszahlung und Umverteilung zusammenzählt.</p>
+        <div class="db-tw">
+          <table class="db-table">
+            <thead><tr><th scope="col">Flächenbereich</th><th scope="col">Basis + Umverteilung</th></tr></thead>
+            <tbody>
+              {staffel.map((s) => (
+                <tr><td>{s.label}</td><td class="db-num">rund {fmt(s.v)} €/ha</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="db-explain" aria-labelledby="exp-h">
+        <h2 id="exp-h">Was die einzelnen Zahlungen bedeuten</h2>
+        <div class="db-explain-grid">
+          <div class="db-exp"><h3>Basiseinkommensstützung</h3><p>Die Flächenzahlung auf alle förderfähigen Hektar und die Basis des Systems. Sie ist an die Einhaltung der Konditionalität gebunden. Almweideflächen haben einen eigenen, deutlich niedrigeren Satz, weil ihr Ertragspotenzial nicht mit dem Heimgut vergleichbar ist.</p></div>
+          <div class="db-exp"><h3>Umverteilungseinkommensstützung</h3><p>Ein Zuschlag auf die ersten 40 Hektar in zwei Stufen. Er stärkt gezielt kleinere und mittlere Betriebe — in Österreich mit seiner kleinstrukturierten Landwirtschaft ein Instrument mit spürbarer Wirkung. Ab dem 41. Hektar entfällt er.</p></div>
+          <div class="db-exp"><h3>Einkommensstützung für Junglandwirte</h3><p>Ein Zuschlag für Betriebsleiterinnen und Betriebsleiter bis 40 Jahre — für maximal 40 Hektar und höchstens fünf aufeinanderfolgende Jahre. Verlangt wird eine einschlägige Qualifikation, die bis zu zwei Jahre nach Beginn nachgereicht werden kann.</p></div>
+          <div class="db-exp"><h3>Gekoppelte Stützung Almauftrieb</h3><p>Eine an die Tierzahl gebundene Zahlung, die es ausschließlich für auf die Alm aufgetriebene Tiere gibt. Gerechnet wird in raufutterverzehrenden Großvieheinheiten (RGVE); Kühe sowie Zuchtschafe und -ziegen erhalten den doppelten Satz gegenüber sonstigen Rindern.</p></div>
+        </div>
+      </section>
+
+      <section class="db-faq" aria-labelledby="faq-h">
+        <h2 id="faq-h">Häufige Fragen</h2>
+        {faq.map((f) => (
+          <details class="db-q">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <div class="db-related">
+        <a href={localizePath('de', '/oepul/')}>→ ÖPUL 2023 — das österreichische Agrarumweltprogramm (Prämien)</a>
+        <a href={localizePath('de', '/direktzahlungen/')}>→ Direktzahlungen in Deutschland — Einheitsbeträge im Vergleich</a>
+      </div>
+
+      <footer class="db-src">
+        <p>Datenquellen: <a href="https://www.bmluk.gv.at/themen/landwirtschaft/gemeinsame-agrarpolitik-foerderungen/nationaler-strategieplan/direktzahlungen-ab-2023/einkommenssicherung.html" target="_blank" rel="noopener">BMLUK — Einkommenssicherung</a> und <a href="https://www.bmluk.gv.at/themen/landwirtschaft/gemeinsame-agrarpolitik-foerderungen/nationaler-strategieplan/direktzahlungen-ab-2023/unterstuetzungjunglandwirtinnenundjunglandwirte.html" target="_blank" rel="noopener">BMLUK — Unterstützung Junglandwirtinnen und Junglandwirte</a>, gegengeprüft mit <a href="https://www.lko.at/direktzahlungen-ab-2023+2400+3555847" target="_blank" rel="noopener">Landwirtschaftskammer Österreich — Direktzahlungen ab 2023</a>. Beide Quellen nennen die Sätze als Richtwerte für die Periode 2023–2027. Verbindlich ist der Bescheid der <a href="https://www.ama.at" target="_blank" rel="noopener">AMA</a>. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
+      </footer>
+    </div>
+  </main>
+
+  <script type="application/json" id="dbRates" set:html={JSON.stringify({ grund: BASIS_HEIMGUT, umv20: UMV_20, umv40: UMV_40 })} />
+  <script is:inline>
+    (function () {
+      var cfg = JSON.parse(document.getElementById('dbRates').textContent);
+      var ha = document.getElementById('ha');
+      var oG = document.getElementById('o-grund'), oU = document.getElementById('o-umv'), oS = document.getElementById('o-sum');
+      var f = function (v) { return v.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' €'; };
+      function calc() {
+        var h = parseFloat((ha.value || '0').replace(',', '.'));
+        if (isNaN(h) || h < 0) h = 0;
+        var g = h * cfg.grund;
+        var u = Math.min(h, 20) * cfg.umv20 + Math.max(0, Math.min(h, 40) - 20) * cfg.umv40;
+        oG.textContent = f(g);
+        oU.textContent = f(u);
+        oS.textContent = f(g + u);
+      }
+      ha.addEventListener('input', calc);
+      calc();
+    })();
+  </script>
+</Layout>
+
+<style>
+  .db{--yellow:#FFEA00;--yellow-d:#FFD400;--ink:#0A0A0B;--line:#E7E7EA;--muted:#6E6E76;--paper:#FBFAF3;--soft:#F5F5F2;--green:#2E9E57;--red:#D6492B;
+    font-family:'Chakra Petch',system-ui,sans-serif;color:var(--ink);background:#fff}
+  .db-wrap{max-width:1000px;margin:0 auto;padding:26px 28px 72px}
+  .db a{color:inherit}
+  .db-crumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .db-crumb a{text-decoration:none}.db-crumb a:hover{color:var(--ink);text-decoration:underline}
+  .db-crumb b{color:var(--ink)}
+
+  .db-head{padding-bottom:22px;border-bottom:2px solid var(--ink)}
+  .db-eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  .db-head h1{font-size:44px;letter-spacing:-.03em;font-weight:800;margin:8px 0 12px;line-height:1.02}
+  .db-lead{font-size:15.5px;line-height:1.6;color:#2A2A2F;max-width:80ch}
+
+  .db-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+  .db-stat{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:5px}
+  .db-stat--hl{background:var(--yellow);border-color:var(--yellow-d)}
+  .db-stat .l{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .db-stat--hl .l{color:#5c5300}
+  .db-stat .v{font-size:30px;font-weight:800;letter-spacing:-.02em}
+  .db-stat .v small{font-size:14px;color:var(--muted);font-weight:600}
+  .db-stat--hl .v small{color:#5c5300}
+  .db-stat .d{font-size:12px;color:var(--muted)}
+  .db-stat--hl .d{color:#5c5300}
+
+  .db h2{font-size:24px;letter-spacing:-.02em;font-weight:800;margin:36px 0 6px}
+  .db h3{font-size:16px;font-weight:800;letter-spacing:-.01em}
+
+  .db-calc{margin-top:34px}
+  .db-calc-sub{font-size:14px;color:var(--muted);margin:0 0 14px;max-width:70ch}
+  .db-calc-box{display:grid;grid-template-columns:220px 1fr;gap:20px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .db-calc-field{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .db-calc-field input{font:800 26px 'Chakra Petch',sans-serif;color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;width:100%}
+  .db-calc-out{display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .db-calc-line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14.5px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .db-calc-line em{color:var(--muted);font-style:normal;font-size:12px}
+  .db-calc-line b{font-size:18px;font-weight:800;white-space:nowrap}
+  .db-calc-total{border-bottom:0;margin-top:2px}
+  .db-calc-total span{font-weight:700}
+  .db-calc-total b{font-size:24px;background:var(--yellow);padding:2px 8px;border-radius:8px}
+  .db-calc-note{font-size:12px;color:var(--muted);margin-top:10px}
+
+  .db-tblcard{margin-top:18px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .db-tblcard h3{padding:14px 18px;background:var(--soft);border-bottom:1px solid var(--line);margin:0}
+  .db-tblscroll{overflow-x:auto}
+  .db-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+  .db-tbl th,.db-tbl td{padding:11px 16px;text-align:left;border-bottom:1px solid var(--line)}
+  .db-tbl th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .db-tbl th.num,.db-tbl td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .db-tbl tr:last-child td{border-bottom:0}
+  .db-tbl-name{display:block;font-weight:700}
+  .db-tbl-note{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  .db-tbl td.strong{font-weight:800}
+  .db-tbl td.unit{color:var(--muted);font-size:12.5px;white-space:nowrap}
+  .db-yoy{font-weight:800;font-size:12.5px}
+  .db-yoy.up{color:var(--green)}.db-yoy.dn{color:var(--red)}
+  .db-tbl-src{font-size:12px;color:var(--muted);margin-top:12px}
+
+  .db-explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .db-exp{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .db-exp h3{margin:0 0 6px}
+  .db-exp p{font-size:13.5px;line-height:1.55;color:#2A2A2F;margin:0}
+
+  .db-faq{margin-top:8px}
+  .db-q{border:1px solid var(--line);border-radius:12px;padding:2px 18px;margin-top:10px;background:#fff}
+  .db-q summary{font-weight:700;font-size:15px;padding:13px 0;cursor:pointer;list-style:none}
+  .db-q summary::-webkit-details-marker{display:none}
+  .db-q summary::after{content:'+';float:right;color:var(--muted);font-weight:700}
+  .db-q[open] summary::after{content:'–'}
+  .db-q p{font-size:14px;line-height:1.6;color:#2A2A2F;margin:0 0 14px}
+
+  .db-related{margin-top:26px}
+  .db-related a{font-weight:700;font-size:15px;color:var(--ink);border-bottom:2px solid var(--yellow);padding-bottom:2px;text-decoration:none}
+  .db-related a:hover{background:var(--yellow)}
+
+  .db-src{margin-top:28px;padding:18px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+  .db-src p{font-size:13px;color:#2A2A2F;line-height:1.55;margin:0}
+  .db-src a{text-decoration:underline}
+
+  @media(max-width:720px){
+    .db-head h1{font-size:32px}
+    .db-hero-stats{grid-template-columns:1fr}
+    .db-calc-box{grid-template-columns:1fr}
+    .db-explain-grid{grid-template-columns:1fr}
+  }
+</style>
+
+<style>
+  .db-flag{margin:22px 0 4px;padding:16px 18px;border-radius:14px;background:#FFF8DB;border:1px solid #F0DFA0;font-size:14.5px;line-height:1.55}
+  .db-flag strong{display:block;margin-bottom:4px}
+</style>
