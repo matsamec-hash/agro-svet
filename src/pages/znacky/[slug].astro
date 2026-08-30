@@ -64,7 +64,7 @@ if (znacka.data.website) sameAsList.push(znacka.data.website);
 // ‼️ Bralo se natvrdo cs → /pl/znacky/<slug>/ vypisovalo české popisy modelů
 // („Vlajkový kolový traktor řady 8R…"), přestože encyklopediePl existuje
 // v plné paritě. Stejná mapa jako v encyklopedie/[slug].astro.
-const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklopedieUk', pl: 'encyklopediePl' } as const;
+const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklopedieUk', pl: 'encyklopediePl', de: 'encyklopedieDe' } as const;
 // ‼️ ŽÁDNÝ fallback na cs. Locale bez vlastní encyklopedie (de) by jinak pod
 // německým nadpisem vypsalo české perexy a linkovalo do nelaunchnuté sekce.
 // Podmínka je vázaná na LAUNCHED_PREFIXES, ne na existenci kolekce — sekci,

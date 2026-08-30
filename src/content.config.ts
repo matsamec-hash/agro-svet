@@ -70,6 +70,12 @@ const encyklopediePl = defineCollection({
   schema: encyklopedieSchema(),
 });
 
+// DE-localized encyclopedia entries (overlay collection). Trh Německo + Rakousko.
+const encyklopedieDe = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/encyklopedie-de' }),
+  schema: encyklopedieSchema(),
+});
+
 const znackySchema = () =>
   z.object({
     name: z.string(),
@@ -278,4 +284,4 @@ const poradnikiPl = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, znackyPl, znackyDe, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk, poradnikiPl };
+export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, encyklopedieDe, znacky, znackySk, znackyUk, znackyPl, znackyDe, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk, poradnikiPl };

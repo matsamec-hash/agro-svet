@@ -60,6 +60,8 @@ describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () 
     expect(isLaunchedPath('de', '/srovnani')).toBe(true);
     expect(isLaunchedPath('de', '/znacky')).toBe(true);
     expect(isLaunchedPath('de', '/znacky/zetor')).toBe(true);
+    expect(isLaunchedPath('de', '/encyklopedie')).toBe(true);
+    expect(isLaunchedPath('de', '/encyklopedie/fendt-1050-vario')).toBe(true);
   });
   it('CZ-jurisdikční sekce launchnuté NEJSOU (mají vzniknout jako DE/AT obsah)', () => {
     for (const p of ['/dotace', '/statistiky', '/puda', '/data', '/kalkulacka', '/novinky', '/akce', '/farmy', '/historie']) {
@@ -67,9 +69,9 @@ describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () 
     }
   });
   it('sekce bez de overlaye dat launchnuté NEJSOU', () => {
-    // /encyklopedie, /plemena, /slovnik = pořád bez de dat. /znacky už launchnuté je
-    // (kolekce znacky-de, 22/22) — proto ho tenhle seznam nesmí obsahovat.
-    for (const p of ['/encyklopedie', '/plemena', '/slovnik']) {
+    // /plemena a /slovnik = pořád bez de dat. /znacky a /encyklopedie už
+    // launchnuté jsou (kolekce znacky-de 22/22, encyklopedie-de 42/42).
+    for (const p of ['/plemena', '/slovnik']) {
       expect(isLaunchedPath('de', p), `${p} nemá de overlay → nesmí být launchnuté`).toBe(false);
     }
   });
@@ -251,5 +253,55 @@ describe('launchnutá sekce musí mít vlastní data (invariant, ne jen /znacky)
       .filter(([prefix, hasData]) => hasData() && !LAUNCHED_PREFIXES.de.includes(prefix))
       .map(([prefix]) => prefix);
     expect(ready, `data hotová, ale nelaunchnuto: ${ready.join(', ')}`).toEqual([]);
+  });
+});
+
+describe('encyklopedie-de — hesla encyklopedie', () => {
+  const ENC_DIR = path.join(process.cwd(), 'src/content/encyklopedie');
+  const ENC_DE = path.join(process.cwd(), 'src/content/encyklopedie-de');
+  const csFiles = fs.readdirSync(ENC_DIR).filter((f) => f.endsWith('.md'));
+
+  it('de má heslo pro každé české', () => {
+    const missing = csFiles.filter((f) => !fs.existsSync(path.join(ENC_DE, f)));
+    expect(missing, `chybí de heslo: ${missing.join(', ')}`).toEqual([]);
+  });
+
+  it('žádné de heslo není navíc', () => {
+    const extra = fs.readdirSync(ENC_DE).filter((f) => f.endsWith('.md') && !csFiles.includes(f));
+    expect(extra, `de heslo bez cs protějšku: ${extra.join(', ')}`).toEqual([]);
+  });
+
+  // Hlídá TŘÍDU: frontmatter (popis, vykon, highlights, faq) i próza se snadno
+  // zapomenou — stránka se nerozbije, jen svítí česky pod německým chrome.
+  it('frontmatter i próza jsou německé (žádná uniklá čeština)', () => {
+    const CZ = /[ěščřžůďťň]/;
+    const PROPER = ['agro-svět', 'Brno', 'Zbrojovka', 'Kněžnou'];
+    const strip = (v: string) => PROPER.reduce((acc, n) => acc.split(n).join(''), v);
+    const bad: string[] = [];
+    for (const f of csFiles) {
+      const raw = fs.readFileSync(path.join(ENC_DE, f), 'utf8');
+      raw.split('\n').forEach((line, i) => {
+        if (CZ.test(strip(line))) bad.push(`${f}:${i + 1} → ${line.trim().slice(0, 100)}`);
+      });
+    }
+    expect(bad, `česká diakritika v encyklopedie-de:\n${bad.join('\n')}`).toEqual([]);
+  });
+
+  it('de heslo není bajtová kopie českého', () => {
+    const same = csFiles.filter(
+      (f) => fs.readFileSync(path.join(ENC_DIR, f), 'utf8') === fs.readFileSync(path.join(ENC_DE, f), 'utf8'),
+    );
+    expect(same, `nepřeložená kopie: ${same.join(', ')}`).toEqual([]);
+  });
+
+  // „k" jako jednotka výkonu je česká zkratka (koní) — v němčině musí být PS.
+  it('vykon a highlights používají PS, ne české „k"', () => {
+    const bad: string[] = [];
+    for (const f of csFiles) {
+      const raw = fs.readFileSync(path.join(ENC_DE, f), 'utf8');
+      const m = raw.match(/^vykon:\s*"?([^"\n]+)"?/m);
+      if (m && /\d\s*k\b/.test(m[1])) bad.push(`${f} → vykon: ${m[1]}`);
+    }
+    expect(bad, `česká jednotka výkonu:\n${bad.join('\n')}`).toEqual([]);
   });
 });

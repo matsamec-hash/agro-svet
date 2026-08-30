@@ -101,7 +101,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // českým tělem. Přidat spolu s overlayem.
   // Fáze 2: +/znacky — profily 22 značek mají německý overlay (znacky-de),
   // stejně jako srovnávací podsekce /znacky/srovnani (znackySrovnani.de).
-  de: ['/stroje', '/srovnani', '/znacky'],
+  de: ['/stroje', '/srovnani', '/znacky', '/encyklopedie'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

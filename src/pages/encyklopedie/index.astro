@@ -17,7 +17,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600,
 
 // Vnořené ternáře vynechávaly uk — přestože `encyklopedieUk` existuje, ukrajinský
 // hub četl českou kolekci. Mapa je explicitní a nová locale se v ní nedá zapomenout.
-const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', pl: 'encyklopediePl', uk: 'encyklopedieUk' } as const;
+const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', pl: 'encyklopediePl', uk: 'encyklopedieUk', de: 'encyklopedieDe' } as const;
 const items = await getCollection(ENC_COLLECTION[locale] ?? 'encyklopedie');
 const sorted = items.sort((a, b) => a.data.name.localeCompare(b.data.name, locale));
 
