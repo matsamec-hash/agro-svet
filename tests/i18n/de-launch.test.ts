@@ -54,10 +54,12 @@ describe('de plurál (germánská dvojtvarost)', () => {
 });
 
 describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () => {
-  it('katalog techniky je launchnutý', () => {
+  it('katalog techniky a značky jsou launchnuté', () => {
     expect(isLaunchedPath('de', '/stroje')).toBe(true);
     expect(isLaunchedPath('de', '/stroje/traktory/fendt')).toBe(true);
     expect(isLaunchedPath('de', '/srovnani')).toBe(true);
+    expect(isLaunchedPath('de', '/znacky')).toBe(true);
+    expect(isLaunchedPath('de', '/znacky/zetor')).toBe(true);
   });
   it('CZ-jurisdikční sekce launchnuté NEJSOU (mají vzniknout jako DE/AT obsah)', () => {
     for (const p of ['/dotace', '/statistiky', '/puda', '/data', '/kalkulacka', '/novinky', '/akce', '/farmy', '/historie']) {
@@ -65,8 +67,9 @@ describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () 
     }
   });
   it('sekce bez de overlaye dat launchnuté NEJSOU', () => {
-    // /znacky = české .md profily, /encyklopedie, /plemena, /slovnik = bez de dat
-    for (const p of ['/znacky', '/encyklopedie', '/plemena', '/slovnik']) {
+    // /encyklopedie, /plemena, /slovnik = pořád bez de dat. /znacky už launchnuté je
+    // (kolekce znacky-de, 22/22) — proto ho tenhle seznam nesmí obsahovat.
+    for (const p of ['/encyklopedie', '/plemena', '/slovnik']) {
       expect(isLaunchedPath('de', p), `${p} nemá de overlay → nesmí být launchnuté`).toBe(false);
     }
   });
@@ -182,5 +185,71 @@ describe('src/data/stroje/de overlay — plné pokrytí katalogu', () => {
       walk(ov, '');
     }
     expect(bad, `česká/polská diakritika v de overlayi:\n${bad.join('\n')}`).toEqual([]);
+  });
+});
+
+describe('znacky-de — profily značek', () => {
+  const ZN_DIR = path.join(process.cwd(), 'src/content/znacky');
+  const ZN_DE = path.join(process.cwd(), 'src/content/znacky-de');
+  const csFiles = fs.readdirSync(ZN_DIR).filter((f) => f.endsWith('.md'));
+
+  it('de má profil pro každou českou značku', () => {
+    const missing = csFiles.filter((f) => !fs.existsSync(path.join(ZN_DE, f)));
+    expect(missing, `chybí de profil: ${missing.join(', ')}`).toEqual([]);
+  });
+
+  it('žádný de profil není navíc (sirotek by se nikde nevykreslil)', () => {
+    const extra = fs.readdirSync(ZN_DE).filter((f) => f.endsWith('.md') && !csFiles.includes(f));
+    expect(extra, `de profil bez cs protějšku: ${extra.join(', ')}`).toEqual([]);
+  });
+
+  // Hlídá TŘÍDU: `zeme`, `popis` a nadpisy prózy se snadno zapomenou přeložit
+  // a stránka se nerozbije — jen svítí česky pod německým chrome.
+  it('frontmatter i próza jsou německé (žádná uniklá čeština)', () => {
+    const CZ = /[ěščřžůďťň]/;
+    // Vlastní jména a české reálie, které se ani v němčině nepřekládají.
+    const PROPER = ['agro-svět', 'Rychnov nad Kněžnou', 'Kněžnou', 'Zbrojovka', 'Lesní', 'Brno'];
+    const strip = (v: string) => PROPER.reduce((acc, n) => acc.split(n).join(''), v);
+    const bad: string[] = [];
+    for (const f of csFiles) {
+      const raw = fs.readFileSync(path.join(ZN_DE, f), 'utf8');
+      raw.split('\n').forEach((line, i) => {
+        if (CZ.test(strip(line))) bad.push(`${f}:${i + 1} → ${line.trim().slice(0, 100)}`);
+      });
+    }
+    expect(bad, `česká diakritika v znacky-de:\n${bad.join('\n')}`).toEqual([]);
+  });
+
+  it('de profil není bajtová kopie českého', () => {
+    const same = csFiles.filter(
+      (f) => fs.readFileSync(path.join(ZN_DIR, f), 'utf8') === fs.readFileSync(path.join(ZN_DE, f), 'utf8'),
+    );
+    expect(same, `nepřeložená kopie: ${same.join(', ')}`).toEqual([]);
+  });
+});
+
+describe('launchnutá sekce musí mít vlastní data (invariant, ne jen /znacky)', () => {
+  // Regrese: /znacky se dalo launchnout dřív, než vznikla kolekce znacky-de —
+  // stránka by nespadla, jen by přes cs fallback servírovala české profily.
+  // Stejná past čeká na /encyklopedie, /plemena a /slovnik.
+  const DATA_FOR_PREFIX: Record<string, () => boolean> = {
+    '/znacky': () => fs.existsSync(path.join(process.cwd(), 'src/content/znacky-de')),
+    '/encyklopedie': () => fs.existsSync(path.join(process.cwd(), 'src/content/encyklopedie-de')),
+    '/plemena': () => fs.existsSync(path.join(process.cwd(), 'src/data/plemena-de')),
+    '/slovnik': () => fs.existsSync(path.join(process.cwd(), 'src/lib/slovnik.de.ts')),
+  };
+
+  it('žádný launchnutý prefix nestojí na chybějících de datech', () => {
+    const broken = Object.entries(DATA_FOR_PREFIX)
+      .filter(([prefix, hasData]) => LAUNCHED_PREFIXES.de.includes(prefix) && !hasData())
+      .map(([prefix]) => prefix);
+    expect(broken, `launchnuto bez de dat: ${broken.join(', ')}`).toEqual([]);
+  });
+
+  it('sekce s hotovými de daty nezůstala omylem nelaunchnutá', () => {
+    const ready = Object.entries(DATA_FOR_PREFIX)
+      .filter(([prefix, hasData]) => hasData() && !LAUNCHED_PREFIXES.de.includes(prefix))
+      .map(([prefix]) => prefix);
+    expect(ready, `data hotová, ale nelaunchnuto: ${ready.join(', ')}`).toEqual([]);
   });
 });

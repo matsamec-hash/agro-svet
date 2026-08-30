@@ -142,6 +142,12 @@ const znackyPl = defineCollection({
   schema: znackySchema(),
 });
 
+// DE-localized brand profiles (overlay collection). Trh Německo + Rakousko.
+const znackyDe = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/znacky-de' }),
+  schema: znackySchema(),
+});
+
 const pudaSchema = () =>
   z.object({
     title: z.string(),
@@ -272,4 +278,4 @@ const poradnikiPl = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, znackyPl, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk, poradnikiPl };
+export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, znacky, znackySk, znackyUk, znackyPl, znackyDe, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk, poradnikiPl };

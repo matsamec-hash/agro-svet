@@ -8,7 +8,7 @@ import Anketa from '../../components/Anketa.astro';
 import { akcieProZnacku, ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { brandPairs } from '../../lib/brand-comparator';
 import { tierLists, rankForTierList } from '../../lib/tier-lists';
-import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47 } from '../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47, isLaunchedPath } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 // Overlay kolekce dle locale; cs fallback zachován jako u SK (před launchem je
 // uk noindex, a launch nastane až po plné pokrytí všech ~24 značek).
-const ZN_COLLECTION = { sk: 'znackySk', uk: 'znackyUk', pl: 'znackyPl' } as const;
+const ZN_COLLECTION = { sk: 'znackySk', uk: 'znackyUk', pl: 'znackyPl', de: 'znackyDe' } as const;
 // Overlay jen když pro daný locale kolekce existuje; jinak (a při chybějícím
 // překladu značky) fallback na cs — nikdy neshazuj getEntry(undefined) → 500.
 const znColl = ZN_COLLECTION[locale as keyof typeof ZN_COLLECTION];
@@ -65,8 +65,14 @@ if (znacka.data.website) sameAsList.push(znacka.data.website);
 // („Vlajkový kolový traktor řady 8R…"), přestože encyklopediePl existuje
 // v plné paritě. Stejná mapa jako v encyklopedie/[slug].astro.
 const ENC_COLLECTION = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklopedieUk', pl: 'encyklopediePl' } as const;
-const encColl = (ENC_COLLECTION as Record<string, string | undefined>)[locale] ?? 'encyklopedie';
-const encyklopedie = await getCollection(encColl as 'encyklopedie');
+// ‼️ ŽÁDNÝ fallback na cs. Locale bez vlastní encyklopedie (de) by jinak pod
+// německým nadpisem vypsalo české perexy a linkovalo do nelaunchnuté sekce.
+// Podmínka je vázaná na LAUNCHED_PREFIXES, ne na existenci kolekce — sekci,
+// kterou pro daný jazyk neindexujeme, nemá smysl ani křížově odkazovat.
+const encColl = isLaunchedPath(locale, '/encyklopedie')
+  ? (ENC_COLLECTION as Record<string, string | undefined>)[locale]
+  : undefined;
+const encyklopedie = encColl ? await getCollection(encColl as 'encyklopedie') : [];
 const brandEncyclopedia = encyklopedie
   .filter((e) => e.data.znacka === znacka.id)
   .sort((a, b) => (b.data.rok_uvedeni ?? 0) - (a.data.rok_uvedeni ?? 0))
@@ -96,7 +102,9 @@ const catalogCountStr =
   + (catalogStrojeCount > 0 ? ` · ${catalogStrojeCount} ${tr('cat.zn.d.catalogStroje')}` : '') + ' ';
 
 // Tier-list occurrences: žebříčky kde značka figuruje v Top-12.
-const tierAppearances = tierLists(locale).flatMap((t) => {
+// Stejné pravidlo jako u encyklopedie: pro locale bez launchnutých /zebricky
+// (de) by se vypsaly české tituly žebříčků („Nejlepší malé traktory…").
+const tierAppearances = (isLaunchedPath(locale, '/zebricky') ? tierLists(locale) : []).flatMap((t) => {
   const ranked = rankForTierList(t, locale);
   const hit = ranked.find((r) => r.model.brand_slug === znacka.id);
   if (!hit) return [];

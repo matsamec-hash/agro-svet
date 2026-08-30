@@ -15,7 +15,7 @@ const NL = '\n';
 
 // Hub četl natvrdo českou kolekci, přestože znacky-{sk,uk,pl} existují v plné
 // paritě (22/22) — /pl/znacky/ tak servírovalo 22 českých popisů a zemí původu.
-const ZNACKY_COLLECTION = { cs: 'znacky', sk: 'znackySk', pl: 'znackyPl', uk: 'znackyUk' } as const;
+const ZNACKY_COLLECTION = { cs: 'znacky', sk: 'znackySk', pl: 'znackyPl', uk: 'znackyUk', de: 'znackyDe' } as const;
 const znacky = await getCollection(ZNACKY_COLLECTION[locale] ?? 'znacky');
 const sorted = znacky.sort((a, b) => a.data.name.localeCompare(b.data.name, locale));
 

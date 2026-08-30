@@ -11,6 +11,8 @@ interface CompetitorOptions {
   tolerancePct?: number;
   /** Max number of competitors to return. */
   limit?: number;
+  /** Locale pro lokalizovaná datová pole vracených modelů (jména, engine). */
+  locale?: string;
 }
 
 interface SourceModel {
@@ -26,14 +28,17 @@ export function findCompetitors(
   options: CompetitorOptions = {},
 ): StrojFlatModel[] {
   if (source.power_hp === null) return [];
-  const { tolerancePct = 15, limit = 6 } = options;
+  // ‼️ `locale` není kosmetika: jména konkurentů se rendrují v bloku „podobné
+  // stroje" → bez něj svítilo na /de/stroje/kubota/b/b2650/ „Dieselross G25
+  // (dřevoplynový)". Default 'cs' drží dosavadní chování cs stránek.
+  const { tolerancePct = 15, limit = 6, locale = 'cs' } = options;
 
   const minHp = source.power_hp * (1 - tolerancePct / 100);
   const maxHp = source.power_hp * (1 + tolerancePct / 100);
 
   const sourceIsCurrent = source.year_to === null;
 
-  const candidates = getAllModels().filter(
+  const candidates = getAllModels(locale).filter(
     (m) =>
       m.category === source.category &&
       m.brand_slug !== source.brand_slug &&
@@ -88,14 +93,14 @@ export function findImplementCompetitors(
   options: CompetitorOptions = {},
 ): StrojFlatModel[] {
   if (source.pracovni_zaber_m === null) return [];
-  const { tolerancePct = 25, limit = 6 } = options;
+  const { tolerancePct = 25, limit = 6, locale = 'cs' } = options;
 
   const minZ = source.pracovni_zaber_m * (1 - tolerancePct / 100);
   const maxZ = source.pracovni_zaber_m * (1 + tolerancePct / 100);
   // year_to may be undefined (field absent from YAML) or null — both mean "current production".
   const sourceIsCurrent = source.year_to == null;
 
-  const candidates = getAllModels().filter(
+  const candidates = getAllModels(locale).filter(
     (m) =>
       m.effective_category === source.effective_category &&
       m.brand_slug !== source.brand_slug &&

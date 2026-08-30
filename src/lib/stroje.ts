@@ -511,7 +511,10 @@ function localizeBrand(base: StrojBrand, locale: string): StrojBrand {
   // Bez overlaye by applyStrojOverlay vrátil base BEZ klonu — token swap by pak
   // přepsal sdílený cs objekt. Proto pro ne-cs bez overlaye klonuj explicitně.
   const merged = ov ? applyStrojOverlay(base, ov) : (locale === 'cs' ? base : structuredClone(base));
-  return localizeModelDataTokens(localizePresentToken(merged, locale), locale);
+  // ‼️ POŘADÍ: localizeName hledá klíč s českým „dosud“ („Steiger (kloubové, 1990–dosud)“).
+  // Kdyby PRESENT_LABEL běžel první, klíč by se změnil na „…1990–heute“ a lookup
+  // by tiše minul — název by zůstal napůl česky.
+  return localizePresentToken(localizeModelDataTokens(merged, locale), locale);
 }
 
 let cachedBrands: StrojBrand[] | null = null;

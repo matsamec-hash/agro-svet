@@ -16,6 +16,14 @@ import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeIn
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
+// ‼️ Redakční detail modelu (overview / reliability / common_faults / pros /
+// cons / for_whom / used_price) žije v základních datech POUZE česky a žádný
+// locale pro něj nemá overlay. Pro čerstvě launchnutou němčinu ho proto
+// neukazujeme — radši chybějící blok než český odstavec pod německým nadpisem.
+// Ceny navíc nesou Kč a odkazují na český bazar, což pro DE/AT nedává smysl.
+// sk/uk/pl to zobrazují dál (je to tak měsíce živé a indexované); až vznikne
+// jejich overlay, pusť to sem všem najednou.
+const showCsEditorial = locale !== 'de';
 
 export async function getStaticPaths() {
   const paths: { params: { brand: string; series: string; model: string }; props: { modelSlug: string } }[] = [];
@@ -254,7 +262,7 @@ const videoJsonLd = model.youtube_id
   ? videoObjectSchema({
       youtubeId: model.youtube_id,
       name: model.youtube_title ?? `${brand.name} ${model.name} — video`,
-      description: model.overview || model.description || `${brand.name} ${model.name}`,
+      description: (showCsEditorial ? model.overview : undefined) || model.description || `${brand.name} ${model.name}`,
       pageUrl: canonical,
     })
   : null;
@@ -286,12 +294,13 @@ const competitors = findCompetitors({
   category,
   power_hp: model.power_hp,
   year_to: model.year_to,
-}, { limit: 6 });
+}, { limit: 6, locale });
 
 // Use-case description from data (no hand-written content per model).
 // ‼️ Bez locale → funkce má polské znění připravené, ale vždy vracela cs.
 // /pl/stroje/<b>/<s>/<m>/ tak ukazovalo „Středně výkonná sklízecí mlátička…".
 const useCase = useCaseDescription(category, model.power_hp, locale);
+
 
 // Žebříčky, kde se model umístil — cross-link datová vrstva → redakční žebříčky.
 // Jen cs (žebříčky nejsou lokalizované). Odkaz + umístění posiluje vnitřní síť.
@@ -342,12 +351,12 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         {model.power_hp && (
           <div class="power-pill">
             <span class="pp-num">{model.power_hp}</span>
-            <span class="pp-unit">k</span>
+            <span class="pp-unit">{tr('cmp.unitHp')}</span>
             {model.power_kw && <span class="pp-kw">· {model.power_kw} kW</span>}
           </div>
         )}
 
-        {(model.overview || model.description) && <p class="hero-lede">{model.overview || model.description}</p>}
+        {(showCsEditorial ? (model.overview || model.description) : model.description) && <p class="hero-lede">{showCsEditorial ? (model.overview || model.description) : model.description}</p>}
 
         <div class="hero-actions">
           <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`}>
@@ -471,7 +480,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </section>
         )}
 
-        {(model.reliability || (model.common_faults && model.common_faults.length > 0)) && (
+        {showCsEditorial && (model.reliability || (model.common_faults && model.common_faults.length > 0)) && (
           <section class="faults-card">
             <div class="card-head">
               <h2>{tr('cat.s.d.faultsTitle')}</h2>
@@ -490,7 +499,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </section>
         )}
 
-        {((model.pros && model.pros.length > 0) || (model.cons && model.cons.length > 0)) && (
+        {showCsEditorial && ((model.pros && model.pros.length > 0) || (model.cons && model.cons.length > 0)) && (
           <section class="proscons-card">
             <div class="card-head">
               <h2>{tr('cat.s.d.prosconsTitle')}</h2>
@@ -512,7 +521,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
           </section>
         )}
 
-        {model.for_whom && (
+        {showCsEditorial && model.for_whom && (
           <section class="forwhom-card">
             <div class="card-head">
               <h2>{tf(locale, 'cat.s.d.forWhomTitle', { model: model.name })}</h2>
@@ -633,13 +642,13 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
         <div class="aside-card primary-cta-card">
           <span class="acc-kicker">{modelBazarCount > 0 ? tf(locale, 'cat.s.d.asideKickerCount', { count: modelBazarCount, unit: plural(locale, modelBazarCount, { one: tr('cat.s.d.asideKickerOne'), few: tr('cat.s.d.asideKickerFew'), many: tr('cat.s.d.asideKickerMany') }) }) : tr('cat.s.d.asideKickerNone')}</span>
           <h3>{brand.name} {model.name}<br/>{tr('cat.s.d.asideInBazar')}</h3>
-          {priceStats && (
+          {showCsEditorial && priceStats && (
             <div class="aside-price">
               <span class="ap-label">{tr('cat.s.d.priceLabel')}</span>
               <span class="ap-value">{priceStats.min === priceStats.max ? `${priceFmt(priceStats.min)} Kč` : `${priceFmt(priceStats.min)} – ${priceFmt(priceStats.max)} Kč`}</span>
             </div>
           )}
-          {model.used_price && (
+          {showCsEditorial && model.used_price && (
             <div class="aside-price aside-used-price">
               <span class="ap-label">{tr('cat.s.d.usedPriceLabel')}</span>
               <span class="ap-value">{model.used_price.min === model.used_price.max ? `${priceFmt(model.used_price.min)} Kč` : `${priceFmt(model.used_price.min)} – ${priceFmt(model.used_price.max)} Kč`}</span>

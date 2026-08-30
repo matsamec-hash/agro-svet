@@ -51,7 +51,7 @@ if (shared.length === 0 || sa.modelCount < MIN_BRAND_MODELS || sb.modelCount < M
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
 const insights = brandComparisonInsights(a, sa, b, sb, locale);
-const modelDuels = findBrandModelPairs(a, b, 6);
+const modelDuels = findBrandModelPairs(a, b, 6, locale);
 const canonical = `https://agro-svet.cz${base}/znacky/srovnani/${combo}/`;
 const title = fill(t.title, { a: a.name, b: b.name });
 

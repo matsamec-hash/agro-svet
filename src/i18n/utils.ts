@@ -99,7 +99,9 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // /znacky taky ne: profily značek jsou české .md (kolekce `znacky`) a overlay
   // `znackyDe` zatím neexistuje → launch by indexoval německou hlavičku nad
   // českým tělem. Přidat spolu s overlayem.
-  de: ['/stroje', '/srovnani'],
+  // Fáze 2: +/znacky — profily 22 značek mají německý overlay (znacky-de),
+  // stejně jako srovnávací podsekce /znacky/srovnani (znackySrovnani.de).
+  de: ['/stroje', '/srovnani', '/znacky'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

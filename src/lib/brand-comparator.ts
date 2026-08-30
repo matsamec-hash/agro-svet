@@ -87,8 +87,10 @@ export function brandPairs(limit = 300): BrandPair[] {
   return out.slice(0, limit);
 }
 
-export function findBrandModelPairs(a: StrojBrand, b: StrojBrand, limit = 6): ComparisonPair[] {
-  const models = getAllModels();
+export function findBrandModelPairs(a: StrojBrand, b: StrojBrand, limit = 6, locale: string = 'cs'): ComparisonPair[] {
+  // ‼️ Dvojice se na stránce rendrují jménem modelu → musí být z lokalizovaného
+  // katalogu. Bez locale svítilo na /de/znacky/srovnani/ „Dieselross G25 (dřevoplynový)".
+  const models = getAllModels(locale);
   const aModels = models.filter((m) => m.brand_slug === a.slug);
   const bModels = models.filter((m) => m.brand_slug === b.slug);
   const seen = new Set<string>();
