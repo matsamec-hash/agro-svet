@@ -632,6 +632,11 @@ export const GET: APIRoute = async () => {
   urls.push({ loc: `${SITE_URL}/pl/doplaty-bezposrednie/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
   urls.push({ loc: `${SITE_URL}/pl/ekoschematy/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
 
+  // DE-only landingy (GAP Deutschland) — stejný důvod jako u PL: nemají cs
+  // ekvivalent v base urls, takže je do /de mirroru nedostane žádné zrcadlení.
+  urls.push({ loc: `${SITE_URL}/de/direktzahlungen/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+  urls.push({ loc: `${SITE_URL}/de/oeko-regelungen/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+
   // PL-only sekce /poradniki — hub + evergreen návody (poradnikiPl kolekce).
   urls.push({ loc: `${SITE_URL}/pl/poradniki/`, changefreq: 'weekly', priority: '0.8', lastmod: STATIC_LASTMOD });
   for (const p of await getCollection('poradnikiPl')) {

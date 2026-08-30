@@ -101,7 +101,11 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // českým tělem. Přidat spolu s overlayem.
   // Fáze 2: +/znacky — profily 22 značek mají německý overlay (znacky-de),
   // stejně jako srovnávací podsekce /znacky/srovnani (znackySrovnani.de).
-  de: ['/stroje', '/srovnani', '/znacky', '/encyklopedie'],
+  // '/' = kurátovaný německý rozcestník (HomeDe), ne český feed → indexovatelné.
+  // '/direktzahlungen' + '/oeko-regelungen' = DE-only landingy s německými
+  // sazbami GAP (obdoba pl /doplaty-bezposrednie a /ekoschematy). Jurisdikčně
+  // vázané, žádný cs ekvivalent → non-de locale na nich dostane 404.
+  de: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/direktzahlungen', '/oeko-regelungen'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

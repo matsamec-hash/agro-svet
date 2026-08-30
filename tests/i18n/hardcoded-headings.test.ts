@@ -18,7 +18,7 @@ const PAGES = join(process.cwd(), 'src/pages');
 
 /** Sekce, které existují JEN pro jednu non-cs locale — literál je tam v jejím
  *  jazyce a překládat ho není co. */
-const SINGLE_LOCALE_SECTIONS = ['/doplaty-bezposrednie', '/ekoschematy', '/poradniki'];
+const SINGLE_LOCALE_SECTIONS = ['/doplaty-bezposrednie', '/ekoschematy', '/poradniki', '/direktzahlungen', '/oeko-regelungen'];
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const e of readdirSync(dir)) {

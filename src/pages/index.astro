@@ -10,6 +10,7 @@ import UpcomingEvents from '../components/UpcomingEvents.astro';
 import HomeUk from '../components/home/HomeUk.astro';
 import HomePl from '../components/home/HomePl.astro';
 import HomeSk from '../components/home/HomeSk.astro';
+import HomeDe from '../components/home/HomeDe.astro';
 import { createAnonClient } from '../lib/supabase';
 import { COMMODITY_NAMES } from '../lib/commodity-names';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../lib/config';
@@ -32,6 +33,11 @@ const isPl = locale === 'pl';
 // SK homepage = plná slovenská verze (HomeSk) místo sdílené CZ šablony —
 // jinak feed ukazoval české články + skryté dotace (404) a sekce byly česky.
 const isSk = locale === 'sk';
+// DE homepage = kurátovaný rozcestník (HomeDe) na launchnuté DE sekce. Bez něj
+// servírovalo /de/ německý chrome nad ČESKÝM tělem a s českým <title> — přesně
+// ta past, kvůli které vznikl HomeUk. České články nemají DE překlad, feed tedy
+// přeskočíme úplně.
+const isDe = locale === 'de';
 
 // Edge cache: 5min s-maxage + 30min SWR. Většina requestů HIT na CF edge,
 // nový článek se objeví do ~5min (akceptovatelný trade-off vs 0 Worker
@@ -43,7 +49,7 @@ Astro.response.headers.set('cache-control', 'public, s-maxage=300, stale-while-r
 // UA hub feed nepotřebuje → dotaz přeskočíme.
 let featured: any;
 let heroRight: any[] = [];
-if (!isUk && !isPl && !isSk) {
+if (!isUk && !isPl && !isSk && !isDe) {
   const supabase = createAnonClient();
   // Non-cs (sk): feed JEN z reálně přeložených článků + bez jurisdikčně skrytých
   // kategorií (dotace/legislativa). Jinak hero ukazoval české titulky a odkazoval
@@ -119,7 +125,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 } : null;
 ---
 
-{isSk ? <HomeSk /> : isPl ? <HomePl /> : isUk ? <HomeUk /> : (
+{isSk ? <HomeSk /> : isPl ? <HomePl /> : isUk ? <HomeUk /> : isDe ? <HomeDe /> : (
 <Layout
   title="agro-svět.cz — zemědělská technika, bazar a novinky"
   description={homeDescription}

@@ -62,6 +62,12 @@ describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () 
     expect(isLaunchedPath('de', '/znacky/zetor')).toBe(true);
     expect(isLaunchedPath('de', '/encyklopedie')).toBe(true);
     expect(isLaunchedPath('de', '/encyklopedie/fendt-1050-vario')).toBe(true);
+    // Homepage: bez vlastního rozcestníku by /de/ bylo německé chrome nad
+    // ČESKÝM tělem — přesně to, kvůli čemu vznikl HomeUk.
+    expect(isLaunchedPath('de', '/')).toBe(true);
+    // DE-only landingy s německými sazbami GAP.
+    expect(isLaunchedPath('de', '/direktzahlungen')).toBe(true);
+    expect(isLaunchedPath('de', '/oeko-regelungen')).toBe(true);
   });
   it('CZ-jurisdikční sekce launchnuté NEJSOU (mají vzniknout jako DE/AT obsah)', () => {
     for (const p of ['/dotace', '/statistiky', '/puda', '/data', '/kalkulacka', '/novinky', '/akce', '/farmy', '/historie']) {
@@ -303,5 +309,39 @@ describe('encyklopedie-de — hesla encyklopedie', () => {
       if (m && /\d\s*k\b/.test(m[1])) bad.push(`${f} → vykon: ${m[1]}`);
     }
     expect(bad, `česká jednotka výkonu:\n${bad.join('\n')}`).toEqual([]);
+  });
+});
+
+describe('DE homepage a DE-only landingy', () => {
+  const ROOT = process.cwd();
+
+  it('HomeDe komponenta existuje a je zapojená v index.astro', () => {
+    expect(fs.existsSync(path.join(ROOT, 'src/components/home/HomeDe.astro'))).toBe(true);
+    const idx = fs.readFileSync(path.join(ROOT, 'src/pages/index.astro'), 'utf8');
+    expect(idx, 'HomeDe se musí importovat').toContain("import HomeDe from '../components/home/HomeDe.astro'");
+    expect(idx, 'isDe větev musí být v renderu').toMatch(/isDe \? <HomeDe \/>/);
+    // ‼️ Bez tohohle by se pro de pořád tahal český supabase feed.
+    expect(idx, 'feed se pro de musí přeskočit').toContain('!isDe');
+  });
+
+  it('HomeDe odkazuje jen na launchnuté DE sekce', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/components/home/HomeDe.astro'), 'utf8');
+    const hrefs = [...src.matchAll(/href: '(\/de\/[^']*)'/g)].map((m) => m[1]);
+    expect(hrefs.length, 'rozcestník nesmí být prázdný').toBeGreaterThan(3);
+    const notLaunched = hrefs.filter((h) => !isLaunchedPath('de', h.replace(/^\/de/, '')));
+    expect(notLaunched, `odkaz do nelaunchnuté sekce: ${notLaunched.join(', ')}`).toEqual([]);
+  });
+
+  it('DE-only landingy existují a jsou v sitemapě', () => {
+    for (const p of ['src/pages/direktzahlungen/index.astro', 'src/pages/oeko-regelungen/index.astro']) {
+      expect(fs.existsSync(path.join(ROOT, p)), `chybí ${p}`).toBe(true);
+      const src = fs.readFileSync(path.join(ROOT, p), 'utf8');
+      // Non-de locale nesmí dostat německou jurisdikční stránku.
+      expect(src, `${p} musí odmítnout non-de locale`).toContain("if (locale !== 'de') return Astro.rewrite('/404')");
+    }
+    // Nemají cs ekvivalent → do /de mirroru je nedostane žádné zrcadlení.
+    const sm = fs.readFileSync(path.join(ROOT, 'src/pages/sitemap.xml.ts'), 'utf8');
+    expect(sm).toContain('/de/direktzahlungen/');
+    expect(sm).toContain('/de/oeko-regelungen/');
   });
 });

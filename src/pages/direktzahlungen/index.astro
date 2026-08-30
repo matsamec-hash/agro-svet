@@ -1,0 +1,370 @@
+---
+// src/pages/direktzahlungen/index.astro
+// DE-only landing: Direktzahlungen (přímé platby GAP v Německu) — Einheitsbeträge
+// 2025 (final) vs 2026 (geplant), kalkulačka €/ha, tabulky, FAQ. Jurisdikčně
+// vázané na DE → obsah psán přímo německy (mirror vzoru /doplaty-bezposrednie),
+// NE přes t() klíče.
+// SSR (prerender=false): middleware rewrite /de/... → tato cs-root routa s locale=de.
+// Non-de locale → 404 (žádný cs ekvivalent; stránka existuje jen pod /de).
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { localizePath } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? 'cs';
+if (locale !== 'de') return Astro.rewrite('/404');
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+// ── Einheitsbeträge der Direktzahlungen ──────────────────────────────────────
+// ‼️ ROZLIŠUJ finální a plánované sazby. Finální za rok 2025 vyhlásilo BMLEH
+// v Bundesanzeigeru 1. 12. 2025; sazby pro 2026/2027 jsou zatím PLÁNOVANÉ
+// a mění se podle skutečně přihlášené výměry (dopočítávají se až koncem
+// listopadu daného roku). Stránka to musí říkat nahlas, ne tvrdit jistotu.
+//
+// Zdroje (obojí ověřeno křížem, shodují se na 152,44 €/ha pro 2025):
+//   - Landwirtschaft Sachsen, „Entwicklung Direktzahlung (Kalkulationshilfe)",
+//     stav 1. 12. 2025 → finální sazby 2025
+//   - Bayerische LfL, GAP-Prämienrechner 2026 → řada 2023–2027
+// ‼️ Cestou se ukázalo, že dřívější „voraussichtliche" sazby (154,72 €/ha)
+// se od finálních liší — nikdy neber předběžné číslo jako hotové.
+type Row = { name: string; v2025: number | null; v2026: number | null; unit: '€/ha' | '€/Tier'; note?: string };
+
+const flaeche: Row[] = [
+  { name: 'Einkommensgrundstützung für Nachhaltigkeit', v2025: 152.44, v2026: 147.38, unit: '€/ha', note: 'auf alle förderfähigen Hektar' },
+  { name: 'Umverteilungseinkommensstützung — 1. bis 40. Hektar', v2025: 68.05, v2026: 65.31, unit: '€/ha', note: 'zusätzlich zur Grundstützung' },
+  { name: 'Umverteilungseinkommensstützung — 41. bis 60. Hektar', v2025: 40.83, v2026: 39.19, unit: '€/ha', note: 'ab dem 61. Hektar entfällt sie' },
+  { name: 'Einkommensstützung für Junglandwirte', v2025: 120.64, v2026: 134.04, unit: '€/ha', note: 'max. 120 ha, für 5 Jahre' },
+];
+const tiere: Row[] = [
+  { name: 'Gekoppelte Einkommensstützung — Mutterkühe', v2025: 89.37, v2026: 85.22, unit: '€/Tier', note: 'ab 3 Tieren' },
+  { name: 'Gekoppelte Einkommensstützung — Mutterschafe und -ziegen', v2025: 36.14, v2026: 37.89, unit: '€/Tier', note: 'ab 6 Tieren' },
+];
+
+// Vývoj základní sazby — jediná položka, u které mám celou řadu 2023–2027.
+const grundstuetzung: { year: number; v: number; final: boolean }[] = [
+  { year: 2023, v: 170.93, final: true },
+  { year: 2024, v: 157.93, final: true },
+  { year: 2025, v: 152.44, final: true },
+  { year: 2026, v: 147.38, final: false },
+  { year: 2027, v: 147.38, final: false },
+];
+
+const fmt = (v: number) => v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const yoy = (r: Row): number | null => (r.v2025 && r.v2025 > 0 && r.v2026 != null ? ((r.v2026 - r.v2025) / r.v2025) * 100 : null);
+
+const grund = flaeche[0].v2025!;
+const umv40 = flaeche[1].v2025!;
+const umv60 = flaeche[2].v2025!;
+const jung = flaeche[3].v2025!;
+
+const lastUpdated = new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+const pageUrl = 'https://agro-svet.cz/de/direktzahlungen/';
+
+const faq = [
+  { q: 'Wie hoch sind die Direktzahlungen 2025?', a: `Die Einkommensgrundstützung für Nachhaltigkeit beträgt für das Antragsjahr 2025 ${fmt(grund)} €/ha. Dazu kommt die Umverteilungseinkommensstützung mit ${fmt(umv40)} €/ha für den 1. bis 40. Hektar und ${fmt(umv60)} €/ha für den 41. bis 60. Hektar. Junglandwirte erhalten zusätzlich ${fmt(jung)} €/ha für maximal 120 Hektar. Die Beträge sind final und wurden im Bundesanzeiger bekannt gemacht.` },
+  { q: 'Bis zu wie vielen Hektar gibt es die Umverteilungseinkommensstützung?', a: 'Die Umverteilungseinkommensstützung wird für die ersten 60 Hektar gezahlt, gestaffelt in zwei Stufen: für den 1. bis 40. Hektar der höhere Satz, für den 41. bis 60. Hektar der niedrigere. Ab dem 61. Hektar entfällt sie vollständig.' },
+  { q: 'Warum sinkt die Einkommensgrundstützung von Jahr zu Jahr?', a: `Der Einheitsbetrag ergibt sich aus dem festen nationalen Finanzrahmen geteilt durch die bundesweit tatsächlich beantragte förderfähige Fläche. Steigt die beantragte Fläche oder wird Geld in andere Instrumente wie die Öko-Regelungen umgeschichtet, sinkt der Betrag je Hektar. Von ${fmt(170.93)} €/ha (2023) ging es auf ${fmt(grund)} €/ha (2025) zurück.` },
+  { q: 'Sind die Beträge für 2026 schon sicher?', a: 'Nein. Die Werte für 2026 und 2027 sind geplante Einheitsbeträge. Der tatsächliche Betrag steht erst fest, wenn alle Anträge und Kontrollen ausgewertet sind — er wird üblicherweise Ende November des jeweiligen Jahres berechnet und anschließend im Bundesanzeiger bekannt gemacht.' },
+  { q: 'Wann werden die Direktzahlungen ausgezahlt?', a: 'Die Auszahlung erfolgt in der Regel ab Dezember des Antragsjahres durch die zuständige Landesbehörde. Der genaue Termin unterscheidet sich je Bundesland; einzelne Länder zahlen bereits Teilbeträge früher aus.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Startseite', item: `https://agro-svet.cz${localizePath('de', '/')}` },
+        { '@type': 'ListItem', position: 2, name: 'Direktzahlungen', item: pageUrl },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ],
+};
+
+const groups: { title: string; rows: Row[] }[] = [
+  { title: 'Flächenbezogene Zahlungen', rows: flaeche },
+  { title: 'Gekoppelte Einkommensstützung — Tiere', rows: tiere },
+];
+---
+
+<Layout
+  title="Direktzahlungen 2025 — Einheitsbeträge in Euro je Hektar"
+  description={`Die finalen Einheitsbeträge der Direktzahlungen für das Antragsjahr 2025: Einkommensgrundstützung ${fmt(grund)} €/ha, Umverteilung ${fmt(umv40)} €/ha (1.–40. ha), Junglandwirte ${fmt(jung)} €/ha. Vollständige Tabelle 2025/2026, Prämienrechner je Hektar und FAQ.`}
+  noHreflang={true}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <main class="db">
+    <div class="db-wrap">
+      <nav class="db-crumb" aria-label="Brotkrumennavigation">
+        <a href={localizePath('de', '/')}>Startseite</a>
+        <span>/</span>
+        <b>Direktzahlungen</b>
+      </nav>
+
+      <header class="db-head">
+        <span class="db-eyebrow">GAP-Direktzahlungen Deutschland · Antragsjahr 2025</span>
+        <h1>Direktzahlungen 2025 — Einheitsbeträge</h1>
+        <p class="db-lead">
+          Die finalen Einheitsbeträge für das Antragsjahr 2025, bekannt gemacht im Bundesanzeiger.
+          Unten die vollständige Tabelle aller Zahlungsarten mit den geplanten Beträgen für 2026,
+          die Entwicklung der Grundstützung seit 2023 und ein Rechner je Hektar.
+        </p>
+      </header>
+
+      <section class="db-hero-stats" aria-label="Wichtigste Einheitsbeträge 2025">
+        <div class="db-stat db-stat--hl">
+          <span class="l">Einkommensgrundstützung</span>
+          <span class="v">{fmt(grund)} <small>€/ha</small></span>
+          <span class="d">auf alle förderfähigen Hektar</span>
+        </div>
+        <div class="db-stat">
+          <span class="l">Umverteilung 1.–40. ha</span>
+          <span class="v">{fmt(umv40)} <small>€/ha</small></span>
+          <span class="d">41.–60. ha: {fmt(umv60)} €/ha</span>
+        </div>
+        <div class="db-stat">
+          <span class="l">Junglandwirte</span>
+          <span class="v">{fmt(jung)} <small>€/ha</small></span>
+          <span class="d">max. 120 ha, 5 Jahre</span>
+        </div>
+      </section>
+
+      <!-- ── Rechner ── -->
+      <section class="db-calc" aria-labelledby="calc-h">
+        <h2 id="calc-h">Prämienrechner je Hektar</h2>
+        <p class="db-calc-sub">Überschlägige Berechnung der beiden flächenbezogenen Grundzahlungen für 2025
+          (ohne Öko-Regelungen und gekoppelte Zahlungen). Geben Sie die Betriebsfläche an.</p>
+        <div class="db-calc-box">
+          <label class="db-calc-field">
+            <span>Fläche (ha)</span>
+            <input id="ha" type="number" min="0" step="0.1" value="60" inputmode="decimal" />
+          </label>
+          <div class="db-calc-out">
+            <div class="db-calc-line"><span>Einkommensgrundstützung</span><b id="o-grund">—</b></div>
+            <div class="db-calc-line"><span>Umverteilung <em>(1.–60. ha, gestaffelt)</em></span><b id="o-umv">—</b></div>
+            <div class="db-calc-line db-calc-total"><span>Summe (überschlägig)</span><b id="o-sum">—</b></div>
+          </div>
+        </div>
+        <p class="db-calc-note">Überschlägige Berechnung. Der tatsächliche Betrag hängt von der
+          förderfähigen Fläche, den beantragten Öko-Regelungen, den gekoppelten Zahlungen und
+          der Einhaltung der Konditionalität ab.</p>
+      </section>
+
+      <!-- ── Tabelle ── -->
+      <section class="db-tables" aria-labelledby="tab-h">
+        <h2 id="tab-h">Einheitsbeträge 2025 und 2026</h2>
+        {groups.map((g) => (
+          <div class="db-tblcard">
+            <h3>{g.title}</h3>
+            <div class="db-tblscroll">
+              <table class="db-tbl">
+                <thead>
+                  <tr>
+                    <th>Zahlungsart</th>
+                    <th class="num">2025</th>
+                    <th class="num">2026</th>
+                    <th class="num">Änderung</th>
+                    <th>Einheit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {g.rows.map((r) => {
+                    const ch = yoy(r);
+                    return (
+                      <tr>
+                        <td>
+                          <span class="db-tbl-name">{r.name}</span>
+                          {r.note && <span class="db-tbl-note">{r.note}</span>}
+                        </td>
+                        <td class="num strong">{r.v2025 != null ? fmt(r.v2025) : '—'}</td>
+                        <td class="num">{r.v2026 != null ? fmt(r.v2026) : '—'}</td>
+                        <td class="num">
+                          {ch != null ? (
+                            <span class={`db-yoy ${ch >= 0 ? 'up' : 'dn'}`}>{ch >= 0 ? '▲' : '▼'} {Math.abs(ch).toFixed(1).replace('.', ',')}%</span>
+                          ) : '—'}
+                        </td>
+                        <td class="unit">{r.unit}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
+        <p class="db-tbl-src">Die Beträge für 2025 sind final. Die Werte für 2026 sind
+          <strong>geplante</strong> Einheitsbeträge — der tatsächliche Betrag wird erst nach
+          Auswertung aller Anträge berechnet.</p>
+      </section>
+
+      <!-- ── Entwicklung ── -->
+      <section class="db-tables" aria-labelledby="dev-h">
+        <h2 id="dev-h">Entwicklung der Einkommensgrundstützung</h2>
+        <div class="db-tblcard">
+          <div class="db-tblscroll">
+            <table class="db-tbl">
+              <thead>
+                <tr><th>Antragsjahr</th><th class="num">€/ha</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                {grundstuetzung.map((g) => (
+                  <tr>
+                    <td><span class="db-tbl-name">{g.year}</span></td>
+                    <td class="num strong">{fmt(g.v)}</td>
+                    <td class="unit">{g.final ? 'final' : 'geplant'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="db-tbl-src">Der Einheitsbetrag ergibt sich aus dem nationalen Finanzrahmen geteilt
+          durch die bundesweit beantragte förderfähige Fläche — er sinkt, wenn mehr Fläche beantragt
+          oder Geld in die Öko-Regelungen umgeschichtet wird.</p>
+      </section>
+
+      <!-- ── Erläuterungen ── -->
+      <section class="db-explain" aria-labelledby="exp-h">
+        <h2 id="exp-h">Was die einzelnen Zahlungen bedeuten</h2>
+        <div class="db-explain-grid">
+          <div class="db-exp"><h3>Einkommensgrundstützung für Nachhaltigkeit</h3><p>Die Flächenzahlung auf alle förderfähigen Hektar — die Basis des Systems. Sie löste die frühere Basisprämie ab und ist an die Einhaltung der Konditionalität gebunden.</p></div>
+          <div class="db-exp"><h3>Umverteilungseinkommensstützung</h3><p>Ein Zuschlag auf die ersten 60 Hektar, gestaffelt in zwei Stufen. Er stärkt gezielt kleinere und mittlere Betriebe; ab dem 61. Hektar entfällt er.</p></div>
+          <div class="db-exp"><h3>Einkommensstützung für Junglandwirte</h3><p>Ein Zuschlag für Betriebsleiterinnen und Betriebsleiter bis 40 Jahre in den ersten Jahren nach der Niederlassung — für maximal 120 Hektar und höchstens fünf Jahre.</p></div>
+          <div class="db-exp"><h3>Gekoppelte Einkommensstützung</h3><p>Eine an die Tierzahl gebundene Zahlung für Mutterkühe sowie Mutterschafe und -ziegen. Sie soll die Weidetierhaltung in Regionen erhalten, in denen sie sonst wirtschaftlich unter Druck steht.</p></div>
+        </div>
+      </section>
+
+      <!-- ── FAQ ── -->
+      <section class="db-faq" aria-labelledby="faq-h">
+        <h2 id="faq-h">Häufige Fragen</h2>
+        {faq.map((f) => (
+          <details class="db-q">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <div class="db-related">
+        <a href={localizePath('de', '/oeko-regelungen/')}>→ Öko-Regelungen 2025 — zusätzliche Flächenprämien (Beträge)</a>
+      </div>
+
+      <footer class="db-src">
+        <p>Datenquellen: <a href="https://www.landwirtschaft.sachsen.de/entwicklung-direktzahlung-kalkulationshilfe-15699.html" target="_blank" rel="noopener">Landwirtschaft Sachsen — Entwicklung Direktzahlung</a> (finale Beträge 2025, Stand 1. Dezember 2025) und <a href="https://www.lfl.bayern.de/iba/unternehmensfuehrung/371535/index.php" target="_blank" rel="noopener">Bayerische Landesanstalt für Landwirtschaft — GAP-Prämienrechner</a> (Reihe 2023–2027). Die finalen Einheitsbeträge macht das BMLEH jährlich im Bundesanzeiger bekannt. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
+      </footer>
+    </div>
+  </main>
+
+  <script type="application/json" id="dbRates" set:html={JSON.stringify({ grund, umv40, umv60 })} />
+  <script is:inline>
+    (function () {
+      var cfg = JSON.parse(document.getElementById('dbRates').textContent);
+      var ha = document.getElementById('ha');
+      var oG = document.getElementById('o-grund'), oU = document.getElementById('o-umv'), oS = document.getElementById('o-sum');
+      var f = function (v) { return v.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' €'; };
+      function calc() {
+        var h = parseFloat((ha.value || '0').replace(',', '.'));
+        if (isNaN(h) || h < 0) h = 0;
+        var g = h * cfg.grund;
+        var u = Math.min(h, 40) * cfg.umv40 + Math.max(0, Math.min(h, 60) - 40) * cfg.umv60;
+        oG.textContent = f(g);
+        oU.textContent = f(u);
+        oS.textContent = f(g + u);
+      }
+      ha.addEventListener('input', calc);
+      calc();
+    })();
+  </script>
+</Layout>
+
+<style>
+  .db{--yellow:#FFEA00;--yellow-d:#FFD400;--ink:#0A0A0B;--line:#E7E7EA;--muted:#6E6E76;--paper:#FBFAF3;--soft:#F5F5F2;--green:#2E9E57;--red:#D6492B;
+    font-family:'Chakra Petch',system-ui,sans-serif;color:var(--ink);background:#fff}
+  .db-wrap{max-width:1000px;margin:0 auto;padding:26px 28px 72px}
+  .db a{color:inherit}
+  .db-crumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .db-crumb a{text-decoration:none}.db-crumb a:hover{color:var(--ink);text-decoration:underline}
+  .db-crumb b{color:var(--ink)}
+
+  .db-head{padding-bottom:22px;border-bottom:2px solid var(--ink)}
+  .db-eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  .db-head h1{font-size:44px;letter-spacing:-.03em;font-weight:800;margin:8px 0 12px;line-height:1.02}
+  .db-lead{font-size:15.5px;line-height:1.6;color:#2A2A2F;max-width:80ch}
+
+  .db-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+  .db-stat{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:5px}
+  .db-stat--hl{background:var(--yellow);border-color:var(--yellow-d)}
+  .db-stat .l{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .db-stat--hl .l{color:#5c5300}
+  .db-stat .v{font-size:30px;font-weight:800;letter-spacing:-.02em}
+  .db-stat .v small{font-size:14px;color:var(--muted);font-weight:600}
+  .db-stat--hl .v small{color:#5c5300}
+  .db-stat .d{font-size:12px;color:var(--muted)}
+  .db-stat--hl .d{color:#5c5300}
+
+  .db h2{font-size:24px;letter-spacing:-.02em;font-weight:800;margin:36px 0 6px}
+  .db h3{font-size:16px;font-weight:800;letter-spacing:-.01em}
+
+  .db-calc{margin-top:34px}
+  .db-calc-sub{font-size:14px;color:var(--muted);margin:0 0 14px;max-width:70ch}
+  .db-calc-box{display:grid;grid-template-columns:220px 1fr;gap:20px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .db-calc-field{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .db-calc-field input{font:800 26px 'Chakra Petch',sans-serif;color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;width:100%}
+  .db-calc-out{display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .db-calc-line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14.5px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .db-calc-line em{color:var(--muted);font-style:normal;font-size:12px}
+  .db-calc-line b{font-size:18px;font-weight:800;white-space:nowrap}
+  .db-calc-total{border-bottom:0;margin-top:2px}
+  .db-calc-total span{font-weight:700}
+  .db-calc-total b{font-size:24px;background:var(--yellow);padding:2px 8px;border-radius:8px}
+  .db-calc-note{font-size:12px;color:var(--muted);margin-top:10px}
+
+  .db-tblcard{margin-top:18px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .db-tblcard h3{padding:14px 18px;background:var(--soft);border-bottom:1px solid var(--line);margin:0}
+  .db-tblscroll{overflow-x:auto}
+  .db-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+  .db-tbl th,.db-tbl td{padding:11px 16px;text-align:left;border-bottom:1px solid var(--line)}
+  .db-tbl th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .db-tbl th.num,.db-tbl td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .db-tbl tr:last-child td{border-bottom:0}
+  .db-tbl-name{display:block;font-weight:700}
+  .db-tbl-note{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  .db-tbl td.strong{font-weight:800}
+  .db-tbl td.unit{color:var(--muted);font-size:12.5px;white-space:nowrap}
+  .db-yoy{font-weight:800;font-size:12.5px}
+  .db-yoy.up{color:var(--green)}.db-yoy.dn{color:var(--red)}
+  .db-tbl-src{font-size:12px;color:var(--muted);margin-top:12px}
+
+  .db-explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .db-exp{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .db-exp h3{margin:0 0 6px}
+  .db-exp p{font-size:13.5px;line-height:1.55;color:#2A2A2F;margin:0}
+
+  .db-faq{margin-top:8px}
+  .db-q{border:1px solid var(--line);border-radius:12px;padding:2px 18px;margin-top:10px;background:#fff}
+  .db-q summary{font-weight:700;font-size:15px;padding:13px 0;cursor:pointer;list-style:none}
+  .db-q summary::-webkit-details-marker{display:none}
+  .db-q summary::after{content:'+';float:right;color:var(--muted);font-weight:700}
+  .db-q[open] summary::after{content:'–'}
+  .db-q p{font-size:14px;line-height:1.6;color:#2A2A2F;margin:0 0 14px}
+
+  .db-related{margin-top:26px}
+  .db-related a{font-weight:700;font-size:15px;color:var(--ink);border-bottom:2px solid var(--yellow);padding-bottom:2px;text-decoration:none}
+  .db-related a:hover{background:var(--yellow)}
+
+  .db-src{margin-top:28px;padding:18px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+  .db-src p{font-size:13px;color:#2A2A2F;line-height:1.55;margin:0}
+  .db-src a{text-decoration:underline}
+
+  @media(max-width:720px){
+    .db-head h1{font-size:32px}
+    .db-hero-stats{grid-template-columns:1fr}
+    .db-calc-box{grid-template-columns:1fr}
+    .db-explain-grid{grid-template-columns:1fr}
+  }
+</style>

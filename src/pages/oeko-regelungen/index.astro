@@ -1,0 +1,309 @@
+---
+// src/pages/oeko-regelungen/index.astro
+// DE-only landing: Öko-Regelungen (dobrovolné ekoschémata 1. pilíře GAP v Německu)
+// — Einheitsbeträge 2025 podle BMLEH. Jurisdikčně vázané na DE, obsah přímo
+// německy (mirror vzoru /ekoschematy pro pl). Non-de locale → 404.
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { localizePath } from '../../i18n/utils';
+
+const locale = Astro.locals.locale ?? 'cs';
+if (locale !== 'de') return Astro.rewrite('/404');
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
+
+// ── Einheitsbeträge der Öko-Regelungen ───────────────────────────────────────
+// Zdroj: BMLEH, „Öko-Regelungen" (bmleh.de) — geplante Einheitsbeträge pro
+// Antragsjahr 2025. ‼️ Ministerstvo je vede jako PLÁNOVANÉ: skutečná částka
+// se dopočítá až podle toho, kolik plochy se v daném roce reálně přihlásí.
+// Přihlášená plocha u ÖR v roce 2025 výrazně vzrostla (tisková zpráva BMEL),
+// což sazby tlačí dolů — proto stránka nikde netvrdí, že jde o jistotu.
+type Stufe = { label: string; v: number };
+type Oer = { code: string; name: string; desc: string; stufen: Stufe[] };
+
+const oer: Oer[] = [
+  {
+    code: 'ÖR 1a', name: 'Nichtproduktive Ackerflächen',
+    desc: 'Freiwillige Stilllegung über die Konditionalität hinaus. Der Betrag ist nach dem Anteil an der Ackerfläche gestaffelt — die ersten Flächen werden am höchsten vergütet.',
+    stufen: [
+      { label: 'bis 1 % der Ackerfläche (mind. 1 ha)', v: 1300 },
+      { label: 'über 1 % bis 2 %', v: 500 },
+      { label: 'über 2 % bis 6 %', v: 300 },
+    ],
+  },
+  {
+    code: 'ÖR 1b', name: 'Blühstreifen und -flächen auf Ackerland',
+    desc: 'Anlage von Blühstreifen oder -flächen auf dem Acker als Nahrungsangebot für Insekten.',
+    stufen: [{ label: 'je Hektar', v: 200 }],
+  },
+  {
+    code: 'ÖR 1c', name: 'Blühstreifen und -flächen in Dauerkulturen',
+    desc: 'Dieselbe Maßnahme in Dauerkulturen — etwa in Obstanlagen, Weinbergen oder Hopfengärten.',
+    stufen: [{ label: 'je Hektar', v: 200 }],
+  },
+  {
+    code: 'ÖR 1d', name: 'Altgrasstreifen und -flächen im Dauergrünland',
+    desc: 'Stehenlassen von Altgras über den Winter als Rückzugsraum für Insekten. Ebenfalls nach Flächenanteil gestaffelt.',
+    stufen: [
+      { label: 'bis 1 % des Dauergrünlands (mind. 1 ha)', v: 900 },
+      { label: 'über 1 % bis 3 %', v: 400 },
+      { label: 'über 3 % bis 6 %', v: 200 },
+    ],
+  },
+  {
+    code: 'ÖR 2', name: 'Vielfältige Kulturen im Ackerbau',
+    desc: 'Anbau von mindestens fünf Hauptfruchtarten mit Mindestanteil an Leguminosen — eine weite Fruchtfolge statt enger Rotationen.',
+    stufen: [{ label: 'je Hektar Ackerfläche', v: 60 }],
+  },
+  {
+    code: 'ÖR 3', name: 'Agroforstwirtschaft',
+    desc: 'Gehölzstreifen auf Acker- oder Grünland. Vergütet wird die Fläche der Gehölzstreifen selbst, nicht der gesamte Schlag.',
+    stufen: [{ label: 'je Hektar Gehölzfläche', v: 200 }],
+  },
+  {
+    code: 'ÖR 4', name: 'Extensivierung des gesamten Dauergrünlands',
+    desc: 'Bewirtschaftung des gesamten Dauergrünlands eines Betriebs mit begrenztem Viehbesatz und ohne mineralische Stickstoffdüngung.',
+    stufen: [{ label: 'je Hektar Dauergrünland', v: 100 }],
+  },
+  {
+    code: 'ÖR 5', name: 'Kennarten im Dauergrünland',
+    desc: 'Nachweis einer artenreichen Grünlandnarbe anhand vorgegebener Kennarten — belohnt wird das Ergebnis, nicht die einzelne Maßnahme.',
+    stufen: [{ label: 'je Hektar', v: 225 }],
+  },
+  {
+    code: 'ÖR 6', name: 'Verzicht auf chemisch-synthetische Pflanzenschutzmittel',
+    desc: 'Vollständiger Verzicht auf chemisch-synthetischen Pflanzenschutz. Der Betrag unterscheidet sich nach Kulturgruppe.',
+    stufen: [
+      { label: 'Dauerkulturen und bestimmte Kulturen', v: 150 },
+      { label: 'übrige Kulturen', v: 50 },
+    ],
+  },
+  {
+    code: 'ÖR 7', name: 'Bewirtschaftung in Natura-2000-Gebieten',
+    desc: 'Zusätzliche Vergütung für Flächen in ausgewiesenen Natura-2000-Gebieten, in denen besondere Auflagen gelten.',
+    stufen: [{ label: 'je Hektar', v: 40 }],
+  },
+];
+
+const fmt = (v: number) => v.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+const maxBetrag = Math.max(...oer.flatMap((o) => o.stufen.map((s) => s.v)));
+
+const lastUpdated = new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+const pageUrl = 'https://agro-svet.cz/de/oeko-regelungen/';
+
+const faq = [
+  { q: 'Was sind die Öko-Regelungen?', a: 'Die Öko-Regelungen sind freiwillige einjährige Umweltmaßnahmen in der ersten Säule der GAP. Wer sie beantragt, erhält zusätzlich zu den Direktzahlungen einen Betrag je Hektar. Anders als Agrarumweltmaßnahmen der zweiten Säule binden sie den Betrieb nicht über mehrere Jahre — die Entscheidung fällt jedes Jahr neu.' },
+  { q: 'Wie hoch ist die höchste Prämie?', a: `Den höchsten Betrag zahlt die Öko-Regelung 1a für nichtproduktive Ackerflächen: bis zu ${fmt(maxBetrag)} €/ha für die erste Stufe (bis 1 % der Ackerfläche). Bei größerem Flächenanteil sinkt der Betrag stufenweise auf 500 und 300 €/ha.` },
+  { q: 'Warum sind die Beträge gestaffelt?', a: 'Die Staffelung soll möglichst viele Betriebe zu einem kleinen Beitrag bewegen, statt wenige Betriebe große Flächen stilllegen zu lassen. Die ersten Prozent der Fläche sind deshalb deutlich höher vergütet als die weiteren.' },
+  { q: 'Sind die genannten Beträge garantiert?', a: 'Nein. Es handelt sich um geplante Einheitsbeträge. Der tatsächliche Betrag hängt davon ab, wie viel Fläche bundesweit für die jeweilige Öko-Regelung angemeldet wird — wird mehr beantragt als eingeplant, sinkt der Betrag je Hektar. Die Nachfrage nach den Öko-Regelungen ist 2025 deutlich gestiegen.' },
+  { q: 'Kann man mehrere Öko-Regelungen kombinieren?', a: 'Ja, mehrere Öko-Regelungen lassen sich auf einem Betrieb kombinieren. Für dieselbe Fläche gelten allerdings Ausschlüsse — nicht jede Maßnahme lässt sich mit jeder anderen auf demselben Schlag stapeln.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Startseite', item: `https://agro-svet.cz${localizePath('de', '/')}` },
+        { '@type': 'ListItem', position: 2, name: 'Öko-Regelungen', item: pageUrl },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ],
+};
+---
+
+<Layout
+  title="Öko-Regelungen 2025 — Beträge je Hektar (ÖR 1 bis 7)"
+  description={`Alle Öko-Regelungen 2025 mit ihren Einheitsbeträgen: ÖR 1a bis ${fmt(maxBetrag)} €/ha, Blühstreifen 200 €/ha, vielfältige Kulturen 60 €/ha, Kennarten im Grünland 225 €/ha. Vollständige Tabelle mit Staffelung und FAQ.`}
+  noHreflang={true}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <main class="db">
+    <div class="db-wrap">
+      <nav class="db-crumb" aria-label="Brotkrumennavigation">
+        <a href={localizePath('de', '/')}>Startseite</a>
+        <span>/</span>
+        <b>Öko-Regelungen</b>
+      </nav>
+
+      <header class="db-head">
+        <span class="db-eyebrow">Freiwillige Umweltmaßnahmen der 1. Säule · Antragsjahr 2025</span>
+        <h1>Öko-Regelungen 2025 — Beträge</h1>
+        <p class="db-lead">
+          Die sieben Öko-Regelungen sind freiwillige, einjährige Umweltmaßnahmen. Wer sie beantragt,
+          bekommt zusätzlich zu den Direktzahlungen einen Betrag je Hektar. Unten alle Maßnahmen
+          mit ihrer Staffelung — und ein deutlicher Hinweis darauf, was an diesen Zahlen noch
+          nicht endgültig ist.
+        </p>
+      </header>
+
+      <section class="db-hero-stats" aria-label="Spannweite der Beträge">
+        <div class="db-stat db-stat--hl">
+          <span class="l">Höchster Betrag (ÖR 1a, Stufe 1)</span>
+          <span class="v">{fmt(maxBetrag)} <small>€/ha</small></span>
+          <span class="d">bis 1 % der Ackerfläche</span>
+        </div>
+        <div class="db-stat">
+          <span class="l">Kennarten im Dauergrünland</span>
+          <span class="v">225 <small>€/ha</small></span>
+          <span class="d">ergebnisorientiert (ÖR 5)</span>
+        </div>
+        <div class="db-stat">
+          <span class="l">Vielfältige Kulturen</span>
+          <span class="v">60 <small>€/ha</small></span>
+          <span class="d">mind. 5 Hauptfruchtarten (ÖR 2)</span>
+        </div>
+      </section>
+
+      <section class="db-tables" aria-labelledby="tab-h">
+        <h2 id="tab-h">Alle Öko-Regelungen mit Beträgen</h2>
+        {oer.map((o) => (
+          <div class="db-tblcard">
+            <h3>{o.code} — {o.name}</h3>
+            <p class="db-calc-sub">{o.desc}</p>
+            <div class="db-tblscroll">
+              <table class="db-tbl">
+                <thead>
+                  <tr><th>Stufe</th><th class="num">Betrag</th><th>Einheit</th></tr>
+                </thead>
+                <tbody>
+                  {o.stufen.map((s) => (
+                    <tr>
+                      <td><span class="db-tbl-name">{s.label}</span></td>
+                      <td class="num strong">{fmt(s.v)}</td>
+                      <td class="unit">€/ha</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
+        <p class="db-tbl-src">Es handelt sich um <strong>geplante</strong> Einheitsbeträge. Der
+          tatsächliche Betrag ergibt sich erst aus der bundesweit angemeldeten Fläche — wird mehr
+          beantragt als eingeplant, sinkt der Betrag je Hektar.</p>
+      </section>
+
+      <section class="db-explain" aria-labelledby="exp-h">
+        <h2 id="exp-h">Wie sich die Öko-Regelungen einordnen</h2>
+        <div class="db-explain-grid">
+          <div class="db-exp"><h3>Erste Säule, aber freiwillig</h3><p>Die Öko-Regelungen liegen in der ersten Säule der GAP, sind aber freiwillig. Sie kommen zu den Direktzahlungen hinzu und ersetzen sie nicht.</p></div>
+          <div class="db-exp"><h3>Einjährig statt mehrjährig</h3><p>Anders als die Agrarumwelt- und Klimamaßnahmen der zweiten Säule binden sie den Betrieb nicht über mehrere Jahre. Die Entscheidung fällt in jedem Antragsjahr neu.</p></div>
+          <div class="db-exp"><h3>Gestaffelte Beträge</h3><p>Bei ÖR 1a und 1d sinkt der Betrag mit steigendem Flächenanteil. Das soll viele Betriebe zu einem kleinen Beitrag bewegen, statt wenige zu großflächiger Stilllegung.</p></div>
+          <div class="db-exp"><h3>Kombinierbar mit Grenzen</h3><p>Mehrere Öko-Regelungen lassen sich im Betrieb kombinieren. Auf derselben Fläche gelten jedoch Ausschlüsse — nicht jede Maßnahme lässt sich mit jeder anderen stapeln.</p></div>
+        </div>
+      </section>
+
+      <section class="db-faq" aria-labelledby="faq-h">
+        <h2 id="faq-h">Häufige Fragen</h2>
+        {faq.map((f) => (
+          <details class="db-q">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <div class="db-related">
+        <a href={localizePath('de', '/direktzahlungen/')}>→ Direktzahlungen 2025 — Einheitsbeträge je Hektar</a>
+      </div>
+
+      <footer class="db-src">
+        <p>Datenquelle: <a href="https://www.bmleh.de/DE/themen/landwirtschaft/eu-agrarpolitik-und-foerderung/direktzahlung/oeko-regelungen.html" target="_blank" rel="noopener">BMLEH — Öko-Regelungen</a>, geplante Einheitsbeträge für das Antragsjahr 2025. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
+      </footer>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .db{--yellow:#FFEA00;--yellow-d:#FFD400;--ink:#0A0A0B;--line:#E7E7EA;--muted:#6E6E76;--paper:#FBFAF3;--soft:#F5F5F2;--green:#2E9E57;--red:#D6492B;
+    font-family:'Chakra Petch',system-ui,sans-serif;color:var(--ink);background:#fff}
+  .db-wrap{max-width:1000px;margin:0 auto;padding:26px 28px 72px}
+  .db a{color:inherit}
+  .db-crumb{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap}
+  .db-crumb a{text-decoration:none}.db-crumb a:hover{color:var(--ink);text-decoration:underline}
+  .db-crumb b{color:var(--ink)}
+
+  .db-head{padding-bottom:22px;border-bottom:2px solid var(--ink)}
+  .db-eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  .db-head h1{font-size:44px;letter-spacing:-.03em;font-weight:800;margin:8px 0 12px;line-height:1.02}
+  .db-lead{font-size:15.5px;line-height:1.6;color:#2A2A2F;max-width:80ch}
+
+  .db-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+  .db-stat{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:5px}
+  .db-stat--hl{background:var(--yellow);border-color:var(--yellow-d)}
+  .db-stat .l{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .db-stat--hl .l{color:#5c5300}
+  .db-stat .v{font-size:30px;font-weight:800;letter-spacing:-.02em}
+  .db-stat .v small{font-size:14px;color:var(--muted);font-weight:600}
+  .db-stat--hl .v small{color:#5c5300}
+  .db-stat .d{font-size:12px;color:var(--muted)}
+  .db-stat--hl .d{color:#5c5300}
+
+  .db h2{font-size:24px;letter-spacing:-.02em;font-weight:800;margin:36px 0 6px}
+  .db h3{font-size:16px;font-weight:800;letter-spacing:-.01em}
+
+  .db-calc{margin-top:34px}
+  .db-calc-sub{font-size:14px;color:var(--muted);margin:0 0 14px;max-width:70ch}
+  .db-calc-box{display:grid;grid-template-columns:220px 1fr;gap:20px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .db-calc-field{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .db-calc-field input{font:800 26px 'Chakra Petch',sans-serif;color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;width:100%}
+  .db-calc-out{display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .db-calc-line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14.5px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .db-calc-line em{color:var(--muted);font-style:normal;font-size:12px}
+  .db-calc-line b{font-size:18px;font-weight:800;white-space:nowrap}
+  .db-calc-total{border-bottom:0;margin-top:2px}
+  .db-calc-total span{font-weight:700}
+  .db-calc-total b{font-size:24px;background:var(--yellow);padding:2px 8px;border-radius:8px}
+  .db-calc-note{font-size:12px;color:var(--muted);margin-top:10px}
+
+  .db-tblcard{margin-top:18px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .db-tblcard h3{padding:14px 18px;background:var(--soft);border-bottom:1px solid var(--line);margin:0}
+  .db-tblscroll{overflow-x:auto}
+  .db-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+  .db-tbl th,.db-tbl td{padding:11px 16px;text-align:left;border-bottom:1px solid var(--line)}
+  .db-tbl th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .db-tbl th.num,.db-tbl td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .db-tbl tr:last-child td{border-bottom:0}
+  .db-tbl-name{display:block;font-weight:700}
+  .db-tbl-note{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  .db-tbl td.strong{font-weight:800}
+  .db-tbl td.unit{color:var(--muted);font-size:12.5px;white-space:nowrap}
+  .db-yoy{font-weight:800;font-size:12.5px}
+  .db-yoy.up{color:var(--green)}.db-yoy.dn{color:var(--red)}
+  .db-tbl-src{font-size:12px;color:var(--muted);margin-top:12px}
+
+  .db-explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .db-exp{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .db-exp h3{margin:0 0 6px}
+  .db-exp p{font-size:13.5px;line-height:1.55;color:#2A2A2F;margin:0}
+
+  .db-faq{margin-top:8px}
+  .db-q{border:1px solid var(--line);border-radius:12px;padding:2px 18px;margin-top:10px;background:#fff}
+  .db-q summary{font-weight:700;font-size:15px;padding:13px 0;cursor:pointer;list-style:none}
+  .db-q summary::-webkit-details-marker{display:none}
+  .db-q summary::after{content:'+';float:right;color:var(--muted);font-weight:700}
+  .db-q[open] summary::after{content:'–'}
+  .db-q p{font-size:14px;line-height:1.6;color:#2A2A2F;margin:0 0 14px}
+
+  .db-related{margin-top:26px}
+  .db-related a{font-weight:700;font-size:15px;color:var(--ink);border-bottom:2px solid var(--yellow);padding-bottom:2px;text-decoration:none}
+  .db-related a:hover{background:var(--yellow)}
+
+  .db-src{margin-top:28px;padding:18px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+  .db-src p{font-size:13px;color:#2A2A2F;line-height:1.55;margin:0}
+  .db-src a{text-decoration:underline}
+
+  @media(max-width:720px){
+    .db-head h1{font-size:32px}
+    .db-hero-stats{grid-template-columns:1fr}
+    .db-calc-box{grid-template-columns:1fr}
+    .db-explain-grid{grid-template-columns:1fr}
+  }
+</style>
