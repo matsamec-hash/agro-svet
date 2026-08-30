@@ -672,11 +672,19 @@ const uk: Record<string, string> = {
   'cat.sr.c.ctaBazar': 'Базар {brand}',
 
   // — cookie consent —
-  'cc.text': 'Ми використовуємо файли cookie для базової роботи сайту та&nbsp;(за вашої згоди) для анонімної аналітики через Google Analytics.',
+  'cc.text': 'Необхідні файли cookie потрібні сайту для&nbsp;роботи. За вашої згоди додамо анонімне вимірювання відвідуваності, щоб знати, про що варто писати.',
   'cc.more': 'Докладніше',
   'cc.essentials': 'Лише необхідні',
   'cc.acceptAll': 'Прийняти всі',
   'cc.settings': 'Налаштування cookie',
+  'cc.title': 'Файли cookie',
+  'cc.necessary': 'Необхідні',
+  'cc.necessaryDesc': 'Тримають сайт укупі — обрана мова, вхід і цей вибір. Без них сайт не працює, тому вимкнути їх не можна.',
+  'cc.analytics': 'Аналітичні',
+  'cc.analyticsDesc': 'Google Analytics і Microsoft Clarity — анонімна статистика відвідуваності та теплові карти, з яких видно, які сторінки ніхто не дочитує.',
+  'cc.always': 'завжди увімкнено',
+  'cc.back': 'Назад',
+  'cc.save': 'Зберегти вибір',
 
   // — novinky —
   'nov.section': 'Новини',

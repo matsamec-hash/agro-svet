@@ -42,7 +42,9 @@ const REQUIRED_KEYS = [
   'nf.home', 'nf.news', 'nf.techCatalog', 'nf.bazar', 'nf.breeds', 'nf.search',
   'nf.errorHint', 'nf.operatedBy',
   // cookie consent
-  'cc.text', 'cc.more', 'cc.essentials', 'cc.acceptAll',
+  'cc.text', 'cc.more', 'cc.essentials', 'cc.acceptAll', 'cc.settings',
+  'cc.title', 'cc.necessary', 'cc.necessaryDesc', 'cc.analytics',
+  'cc.analyticsDesc', 'cc.always', 'cc.back', 'cc.save',
 ];
 
 describe('UI dictionaries — plné pokrytí', () => {
