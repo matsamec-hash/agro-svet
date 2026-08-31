@@ -1,0 +1,44 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: repka-jarni
+name: Sommerraps
+name_plural: Sommerraps
+description: Sommerraps wird im Frühjahr gesät und im August geerntet. In Deutschland ist er eine ausgesprochene
+  Nischenkultur und dient überwiegend als Ersatz, wenn der Winterraps ausgewintert oder vom Erdfloh vernichtet
+  wurde. Ertrag und Ölgehalt liegen deutlich unter dem Winterraps.
+vysevek: 80–120 keimfähige Körner/m² — mehr als Winterraps, weil er sich kaum verzweigt
+hnojeni: N 100–140 kg/ha nach Düngebedarfsermittlung, überwiegend zur Saat; Schwefel 30–50 kg/ha
+vynos_t_ha: 1,8–2,5
+sklizen: August
+vyuziti: Speiseöl, Biodiesel, Extraktionsschrot als Futtermittel
+choroby:
+- Alternaria-Rapsschwärze
+- Weißstängeligkeit (Sclerotinia sclerotiorum)
+- Echter Mehltau der Kreuzblütler
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Dieselben Anbaupausen wie beim Winterraps — mindestens vier Jahre, und keine kreuzblütigen Zwischenfrüchte
+    in der Fruchtfolge.
+- name: Bodenbearbeitung
+  text: Im Frühjahr flach und schonend; das Saatbett muss fein und rückverfestigt sein, weil das Korn
+    winzig und flach abzulegen ist.
+- name: Aussaat
+  text: So früh wie möglich ab Ende März, 1,5–2 cm tief. Die kurze Vegetationszeit lässt keinen Spielraum
+    — späte Saat kostet unmittelbar Ertrag.
+- name: Düngung
+  text: Stickstoff überwiegend zur Saat; Schwefel ist wie beim Winterraps unverzichtbar.
+- name: Pflanzenschutz
+  text: Rapsglanzkäfer im Knospenstadium ist der Hauptschädling; der Erdfloh spielt anders als beim Winterraps
+    kaum eine Rolle. Fungizid zur Blüte gegen Sclerotinia bei feuchter Witterung.
+- name: Ernte
+  text: Drusch im August bei 9 % Feuchte, meist gemeinsam mit dem Sommergetreide.
+faq:
+- q: Wann lohnt sich Sommerraps?
+  a: Vor allem als Ersatzkultur nach ausgewintertem oder vom Erdfloh vernichtetem Winterraps — dann rettet
+    er die Fläche und die Ölmühlenlieferung.
+- q: Warum ist der Ertrag so viel niedriger?
+  a: Die Vegetationszeit ist nur halb so lang, die Pflanze verzweigt sich kaum und die Blüte fällt in
+    die Frühsommertrockenheit.

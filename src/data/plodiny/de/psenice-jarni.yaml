@@ -1,0 +1,50 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: psenice-jarni
+name: Sommerweizen
+name_plural: Sommerweizen
+description: Sommerweizen wird im Frühjahr gesät und im August gedroschen. In Deutschland ist er mit rund
+  40.000 Hektar eine Nischen- und vor allem Ersatzkultur, wenn der Winterweizen ausgewintert ist. Er erreicht
+  regelmäßig hohe Proteingehalte und ist ein starker Aufmischweizen.
+vysevek: 400–500 keimfähige Körner/m² — deutlich mehr als Winterweizen, weil er kaum bestockt
+hnojeni: N 120–160 kg/ha nach Düngebedarfsermittlung, überwiegend zur Saat und zum Schossen; Schwefel
+  20 kg/ha
+vynos_t_ha: 4,5–6,0
+sklizen: August
+vyuziti: Backmehl und Aufmischweizen, Futtergetreide
+choroby:
+- Blattdürre (Zymoseptoria tritici)
+- Echter Mehltau
+- Gelb- und Braunrost
+- Ährenfusariose
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Als Sommerung unterbricht er die winterungslastige Fruchtfolge und schwächt den Acker-Fuchsschwanz
+    wirksamer als jede Herbizidstrategie. Gute Vorfrüchte sind Hackfrüchte und Leguminosen.
+- name: Bodenbearbeitung
+  text: Im Herbst Grundbodenbearbeitung, im Frühjahr nur flach und so wenig wie möglich — jeder Zentimeter
+    mehr trocknet den Boden zusätzlich aus.
+- name: Aussaat
+  text: So früh wie möglich, ab Ende Februar bis Anfang April, 3–5 cm tief. Jede Woche Verzug ab Mitte
+    März kostet Ertrag, weil die Kornfüllung in die Frühsommertrockenheit fällt.
+- name: Düngung
+  text: Stickstoff überwiegend zur Saat, weil die kurze Vegetationszeit wenig Spielraum für Teilgaben
+    lässt; eine Spätgabe sichert den Proteingehalt.
+- name: Pflanzenschutz
+  text: Geringerer Krankheitsdruck als beim Winterweizen — meist genügen ein bis zwei Fungizidmaßnahmen.
+    Herbizid im Nachauflauf.
+- name: Ernte
+  text: Drusch bei 14 % Kornfeuchte im August, meist unmittelbar nach der Wintergerste und vor dem Winterweizen.
+faq:
+- q: Wann wird Sommerweizen gesät?
+  a: So früh wie der Boden befahrbar ist, ab Ende Februar bis Anfang April. Späte Saat wird von der Frühsommertrockenheit
+    bestraft.
+- q: Warum ist die Saatstärke höher als bei Winterweizen?
+  a: Weil Sommerweizen kaum bestockt. Die Bestandesdichte muss deshalb weitgehend über die Kornzahl je
+    Quadratmeter eingestellt werden.
+- q: Wofür lohnt sich Sommerweizen?
+  a: Als Ersatz nach ausgewintertem Bestand, als starker Aufmischweizen mit hohem Protein und als Sommerung
+    gegen Ungrasresistenzen in engen Getreidefruchtfolgen.

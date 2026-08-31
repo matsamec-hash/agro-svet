@@ -1,0 +1,55 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: vojteska
+name: Luzerne
+name_plural: Luzerne
+description: Luzerne (Medicago sativa) ist die ertragreichste und langlebigste Futterleguminose — Bestände
+  stehen drei bis fünf Jahre. Ihre Pfahlwurzel reicht mehrere Meter tief, was sie außergewöhnlich trockenheitstolerant
+  macht. Mit 18 bis 22 % Rohprotein ist sie das eiweißreichste heimische Grundfutter.
+vysevek: 25–30 kg/ha in Reinsaat; im Luzernegras 18–22 kg/ha plus Gräser
+hnojeni: 'KEIN Stickstoff. Hoher Kaliumbedarf — Luzerne entzieht je Schnitt erhebliche Mengen. ‼️ Kalkung
+  ist entscheidend: unter pH 6,0 kümmert sie, das Optimum liegt bei 6,5–7,5'
+vynos_t_ha: 10–15 t/ha Trockenmasse in drei bis vier Schnitten
+sklizen: Mai bis September (drei bis vier Schnitte)
+vyuziti: Anwelksilage und Heu für Milchvieh, Luzernecobs, Gründüngung, Bienenweide
+choroby:
+- Verticillium-Welke (Verticillium albo-atrum)
+- Fusarium-Wurzel- und Stängelfäule
+- Falscher Mehltau der Luzerne (Peronospora aestivalis)
+- Bakterielle Welke (Clavibacter michiganensis subsp. insidiosus)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Vier bis fünf Jahre Anbaupause. Als mehrjähriger Bestand ist Luzerne die wirksamste Maßnahme gegen
+    Ungräser überhaupt — der regelmäßige Schnitt lässt Acker-Fuchsschwanz nicht zur Samenreife kommen.
+- name: Bodenbearbeitung
+  text: ‼️ Die Pfahlwurzel braucht einen tiefgründigen, verdichtungsfreien und vor allem NICHT staunassen
+    Boden. Staunässe verträgt Luzerne von allen Futterleguminosen am schlechtesten.
+- name: Aussaat
+  text: Saat im Frühjahr oder Spätsommer, höchstens 1–2 cm tief auf gut rückverfestigtem Saatbett. Auf
+    Flächen ohne Luzernehistorie sollte das Saatgut geimpft werden.
+- name: Düngung
+  text: Kein Stickstoff, dafür konsequente Kalkung und Kaliumversorgung nach jedem Schnitt. Ein zu niedriger
+    pH ist die häufigste Ursache für kümmernde Bestände.
+- name: Pflanzenschutz
+  text: 'Geringer Pflanzenschutzbedarf. Der begrenzende Faktor ist nicht die Krankheit, sondern die Schnittführung:
+    Zu tiefer oder zu später letzter Schnitt schwächt die Wurzelreserven und kostet Winterhärte.'
+- name: Ernte
+  text: Drei bis vier Schnitte, der erste zu Beginn der Knospe. ‼️ Schnitthöhe mindestens 7 cm und der
+    letzte Schnitt spätestens Anfang September — die Pflanze muss vor Winter Reserven in der Wurzel einlagern.
+    Beim Anwelken bricht das eiweißreiche Blatt leicht ab; schonende Werbung entscheidet über den Futterwert.
+faq:
+- q: Wie lange steht ein Luzernebestand?
+  a: Drei bis fünf Jahre. Danach lässt der Ertrag nach und die Verunkrautung nimmt zu; die Wiederkehr
+    auf derselben Fläche sollte vier bis fünf Jahre warten.
+- q: Warum ist Kalkung bei Luzerne so wichtig?
+  a: Unter pH 6,0 arbeiten die Knöllchenbakterien schlecht und der Bestand kümmert. Ein Boden-pH von 6,5
+    bis 7,5 ist die wichtigste Voraussetzung für den Anbau.
+- q: Warum ist die Schnittführung entscheidend?
+  a: Luzerne lagert Reserven in der Pfahlwurzel ein. Zu tiefer Schnitt unter 7 cm oder ein zu später letzter
+    Schnitt zehren diese Reserven auf und kosten Winterhärte.
+- q: Was macht Luzerne so trockenheitstolerant?
+  a: Die Pfahlwurzel reicht mehrere Meter tief und erschließt Wasser aus Schichten, die anderen Futterpflanzen
+    unzugänglich sind.

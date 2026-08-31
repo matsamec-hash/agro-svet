@@ -1,0 +1,51 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: slunecnice
+name: Sonnenblume
+name_plural: Sonnenblumen
+description: Die Sonnenblume (Helianthus annuus) ist eine trockenheitstolerante Ölfrucht, deren Anbaufläche
+  in Deutschland mit dem Klimawandel und den Schwierigkeiten im Rapsanbau deutlich wächst. In Österreich
+  ist sie im pannonischen Osten seit Langem etabliert.
+vysevek: 6–8 Pflanzen/m² als Einzelkornsaat bei 45–75 cm Reihenabstand
+hnojeni: N 60–100 kg/ha nach Düngebedarfsermittlung — deutlich weniger als Raps; zu viel verlängert die
+  Vegetation und verzögert die Abreife. Bor beachten
+vynos_t_ha: 2,2–3,0
+sklizen: September bis Oktober
+vyuziti: Speiseöl (Linol- und High-Oleic-Typen), Vogelfutter, Extraktionsschrot
+choroby:
+- Weißstängeligkeit (Sclerotinia sclerotiorum) — die gefährlichste
+- Falscher Mehltau (Plasmopara halstedii)
+- Alternaria-Blattflecken
+- Diaporthe-Stängelfäule (Phomopsis)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Mindestens vier bis fünf Jahre Anbaupause wegen Sclerotinia — dieselbe Weißfäule wie im Raps,
+    weshalb beide Kulturen einander in der Fruchtfolge nicht nahe stehen sollten.
+- name: Bodenbearbeitung
+  text: Die tiefe Pfahlwurzel verlangt einen durchwurzelbaren Unterboden ohne Verdichtung. Verdichtungen
+    kosten bei der Sonnenblume mehr als bei jeder anderen Sommerung.
+- name: Aussaat
+  text: Saat ab Mitte April bei 8–10 °C Bodentemperatur, 3–5 cm tief. Die weite Reihe erlaubt mechanische
+    Unkrautregulierung.
+- name: Düngung
+  text: Geringer Stickstoffbedarf; entscheidend ist die Bor- und Kaliumversorgung. Die Pfahlwurzel erschließt
+    den Unterboden gut.
+- name: Pflanzenschutz
+  text: Sclerotinia ist der Hauptgegner, dazu Vogelfraß an reifenden Körben. Der Herbizidbedarf ist gering,
+    weil der Bestand rasch schließt; zugelassene Mittel sind allerdings knapp.
+- name: Ernte
+  text: Drusch bei 9–12 % Feuchte. In Mitteleuropa kommen die Körbe oft mit 15–20 % vom Feld und müssen
+    getrocknet werden — die Abreife im Herbst ist der eigentliche Engpass.
+faq:
+- q: Warum wächst der Sonnenblumenanbau in Deutschland?
+  a: Sie ist deutlich trockenheitstoleranter als Raps, passt zu wärmeren Sommern und ist die naheliegende
+    Alternative, seit der Rapsanbau durch den Erdfloh schwieriger geworden ist.
+- q: Welche Sonnenblumentypen gibt es?
+  a: Linolsäure-Typen für klassisches Speiseöl und High-Oleic-Typen mit hohem Ölsäureanteil, die hitzestabiler
+    sind und meist über Anbauverträge mit Aufschlag laufen.
+- q: Was ist die größte Anbauhürde?
+  a: Die Abreife im Herbst. Sonnenblumen werden bei 9 bis 12 % Feuchte gedroschen, kommen aber oft feuchter
+    vom Feld — die Trocknung frisst einen Teil der Marge.

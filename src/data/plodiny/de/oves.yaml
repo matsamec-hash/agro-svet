@@ -1,0 +1,54 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: oves
+name: Hafer
+name_plural: Hafer
+description: Hafer (Avena sativa) ist die anspruchsloseste Getreideart und die beste Gesundungsfrucht
+  der Fruchtfolge — er ist kein Wirt für Halmbruch, Schwarzbeinigkeit und Getreidezystennematoden. Nach
+  jahrzehntelangem Rückgang wächst die Fläche wieder, getrieben vom Haferdrink.
+vysevek: 350–450 keimfähige Körner/m²
+hnojeni: 'N 80–120 kg/ha nach Düngebedarfsermittlung — und das ist wörtlich zu nehmen: Hafer wird bei
+  Überversorgung sehr lang und lagert'
+vynos_t_ha: 4,5–5,5
+sklizen: August
+vyuziti: Haferflocken, Müsli und Haferdrink für die Humanernährung, Pferde- und Rinderfutter
+choroby:
+- Echter Mehltau
+- Kronen- und Schwarzrost
+- Flugbrand des Hafers
+- Blattfleckenkrankheit (Pyrenophora avenae)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: '‼️ Hafer ist die wertvollste Gesundungsfrucht der Fruchtfolge: kein Wirt für Halmbruch, Schwarzbeinigkeit
+    und Getreidezystennematoden. Eine Haferpause senkt den Befallsdruck der Folgekulturen nachweislich
+    — der Nutzen zeigt sich im Weizen danach.'
+- name: Bodenbearbeitung
+  text: Geringe Ansprüche; Hafer kommt auch auf leichten, sauren Böden zurecht. Flache Bearbeitung genügt.
+- name: Aussaat
+  text: Früh säen ab Mitte März, sobald der Boden befahrbar ist, 3–4 cm tief.
+- name: Düngung
+  text: Knapp bemessener Stickstoff. Hafer wird 110 bis 140 cm hoch bei dünnem Halm; Überversorgung führt
+    unmittelbar zum Lager und kostet Ertrag wie Qualität.
+- name: Pflanzenschutz
+  text: Sehr geringer Pflanzenschutzbedarf — meist genügt eine Herbizidmaßnahme, Fungizide sind oft entbehrlich.
+    Genau das macht Hafer zur Schlüsselkultur im Ökolandbau.
+- name: Ernte
+  text: Drusch bei 14 % Feuchte. Für die Schälmühle zählen hoher Schälhaferanteil, ein Hektolitergewicht
+    möglichst über 52 kg/hl, geringer Besatz und einwandfreie Farbe — nur solche Partien erzielen den
+    Aufpreis.
+faq:
+- q: Warum ist Hafer eine Gesundungsfrucht?
+  a: Weil er kein Wirt für Halmbruch, Schwarzbeinigkeit und Getreidezystennematoden ist. Er unterbricht
+    damit den Aufbau der Fußkrankheiten in engen Getreidefruchtfolgen.
+- q: Warum darf Hafer nicht zu viel Stickstoff bekommen?
+  a: Weil er sehr hoch wird und einen dünnen Halm hat. Überversorgung führt zum Lager, was Ertrag, Qualität
+    und Druschfähigkeit zugleich kostet.
+- q: Was verlangt die Schälmühle?
+  a: Hohen Schälhaferanteil mit gleichmäßig großen Körnern, ein Hektolitergewicht über 52 kg/hl, geringen
+    Besatz und gute Farbe. Was das nicht erfüllt, geht ins Futter.
+- q: Warum wächst der Haferanbau wieder?
+  a: Wegen der stark gestiegenen Nachfrage nach Haferdrink und Flocken. Für Beta-Glucan ist zudem eine
+    cholesterolsenkende Wirkung gesundheitsbezogen zugelassen.

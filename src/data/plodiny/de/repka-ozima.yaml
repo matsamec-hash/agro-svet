@@ -1,0 +1,57 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: repka-ozima
+name: Winterraps
+name_plural: Winterraps
+description: Winterraps (Brassica napus) ist mit rund 1,1 Millionen Hektar die wichtigste Ölfrucht Deutschlands
+  und die tragende Blattfrucht in getreidereichen Fruchtfolgen. Seit dem Verbot der neonikotinoiden Beize
+  2018 ist der Anbau deutlich schwieriger geworden — der Rapserdfloh ist zum limitierenden Faktor geworden.
+vysevek: 30–50 keimfähige Körner/m² als Einzelkornsaat; dünnere Bestände sind gesünder und standfester
+hnojeni: N 160–200 kg/ha nach Düngebedarfsermittlung, überwiegend im Frühjahr; die Herbstgabe ist begrenzt.
+  Schwefel 50–80 kg/ha — Raps ist der mit Abstand hungrigste Schwefelverbraucher. Bor beachten
+vynos_t_ha: 3,5–4,0
+sklizen: Juli
+vyuziti: Speiseöl, Biodiesel, Rapsextraktionsschrot als heimisches Eiweißfuttermittel
+choroby:
+- Wurzelhals- und Stängelfäule (Phoma, Leptosphaeria maculans)
+- Weißstängeligkeit (Sclerotinia sclerotiorum)
+- Alternaria-Rapsschwärze
+- Grauschimmel (Botrytis cinerea)
+- Rapsschwärze (Alternaria brassicae)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Mindestens vier Jahre Anbaupause wegen Sclerotinia und Kohlhernie. Beste Vorfrucht ist Wintergerste,
+    weil sie früh räumt. Kreuzblütler als Zwischenfrucht — Senf, Ölrettich — gehören nicht in rapsstarke
+    Fruchtfolgen.
+- name: Bodenbearbeitung
+  text: Unmittelbar nach der Gerstenernte; entscheidend ist ein feinkrümeliges, gut rückverfestigtes Saatbett
+    mit Anschluss ans Kapillarwasser. Raps hat winzige Körner und eine empfindliche Jugendentwicklung.
+- name: Aussaat
+  text: Saat von Mitte bis Ende August. Der Bestand muss vor Winter acht bis zehn Laubblätter und eine
+    kräftige Pfahlwurzel bilden — zu spät gesäter Raps überwintert schlecht.
+- name: Düngung
+  text: 'Der Schwerpunkt liegt im Frühjahr. Schwefel ist zwingend: Ohne ihn kann Raps den Stickstoff nicht
+    verwerten, und der Mangel zeigt sich an den JUNGEN Blättern — genau umgekehrt zum Stickstoffmangel.'
+- name: Pflanzenschutz
+  text: Der kritische Punkt ist der Rapserdfloh im Herbst; seine Larven minieren unsichtbar im Vegetationskegel.
+    Pyrethroide versagen vielerorts durch Resistenz. Im Frühjahr Rapsglanzkäfer, zur Blüte Fungizid gegen
+    Sclerotinia.
+- name: Ernte
+  text: Drusch im Juli bei 9 % Feuchte. Gegen Schotenplatzen helfen Schotenversiegler oder Seitenmesser
+    am Schneidwerk; Sikkation ist in Mitteleuropa unüblich.
+faq:
+- q: Warum ist Rapsanbau seit 2018 schwieriger?
+  a: Weil die neonikotinoide Saatgutbeize für Freilandkulturen EU-weit verboten ist. Sie hielt den Rapserdfloh
+    zuverlässig fern; seither versagen vielerorts auch die verbliebenen Pyrethroide durch Resistenz.
+- q: Wie viel Schwefel braucht Raps?
+  a: 50 bis 80 kg S/ha — mehr als jede andere heimische Kultur. Seit der Entschwefelung von Kraftwerken
+    liefert die Luft kaum noch etwas, Schwefel muss gedüngt werden.
+- q: Wann wird Winterraps gesät?
+  a: Von Mitte bis Ende August, unmittelbar nach der Gerstenernte. Der Bestand braucht acht bis zehn Blätter
+    vor Winter.
+- q: Warum sind dünne Rapsbestände besser?
+  a: Weil die Einzelpflanze dann eine kräftigere Pfahlwurzel und einen tiefer sitzenden Vegetationskegel
+    bildet. Das verbessert Winterhärte, Standfestigkeit und die Toleranz gegenüber Erdflohlarven.

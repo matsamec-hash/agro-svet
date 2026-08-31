@@ -1,0 +1,49 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: tritikale
+name: Triticale
+name_plural: Triticale
+description: Triticale ist die gezüchtete Kreuzung aus Weizen und Roggen — die erste vom Menschen geschaffene
+  Getreideart. Sie vereint den Ertrag des Weizens mit der Anspruchslosigkeit des Roggens und steht in
+  Deutschland auf rund 300.000 Hektar, überwiegend als Futtergetreide.
+vysevek: 280–350 keimfähige Körner/m²
+hnojeni: N 100–140 kg/ha nach Düngebedarfsermittlung in zwei Gaben — zwischen Weizen und Roggen
+vynos_t_ha: 6,0–8,0
+sklizen: Juli bis Anfang August
+vyuziti: Futtergetreide für Schweine und Geflügel, Ganzpflanzensilage für Biogas und Rinder, Brennerei
+choroby:
+- Echter Mehltau
+- Gelb- und Schwarzrost
+- Ährenfusariose
+- Blattdürre (Septoria)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Triticale verträgt schwächere Standorte und engere Fruchtfolgen als Weizen. Als Vorfrucht für
+    Raps ist sie wegen des späteren Erntetermins weniger geeignet als Wintergerste.
+- name: Bodenbearbeitung
+  text: Auf leichten Böden genügt flache Bearbeitung. Triticale ist bei der Saatbettqualität deutlich
+    weniger anspruchsvoll als Weizen.
+- name: Aussaat
+  text: Saat von Mitte September bis Anfang Oktober, 3–5 cm tief.
+- name: Düngung
+  text: Zwei Stickstoffgaben. Der Bedarf liegt zwischen Weizen und Roggen; bei Überversorgung neigt Triticale
+    zum Lager.
+- name: Pflanzenschutz
+  text: Geringerer Krankheitsdruck als Weizen — Mehltau und Septoria spielen kaum eine Rolle, sodass meist
+    eine Fungizidmaßnahme genügt oder ganz entfällt. Auf Mutterkorn achten, das vom Roggen mitgeerbt ist.
+- name: Ernte
+  text: Drusch bei 14 % Kornfeuchte. Bei Nutzung als Ganzpflanzensilage wird deutlich früher geerntet,
+    was eine Zweitfrucht ermöglicht.
+faq:
+- q: Was ist Triticale?
+  a: Eine gezüchtete Kreuzung aus Weizen (Triticum) und Roggen (Secale), deren Chromosomensatz durch Verdopplung
+    fruchtbar gemacht wurde. Der Name setzt sich aus beiden Gattungsnamen zusammen.
+- q: Wofür wird Triticale verwendet?
+  a: Überwiegend als Futter für Schweine und Geflügel — der Lysingehalt ist höher als beim Weizen — sowie
+    als Ganzpflanzensilage für Biogas und Rinderfütterung.
+- q: Eignet sich Triticale zum Backen?
+  a: Kaum. Der Kleber ist schwach und die Enzymaktivität hoch — sie hat hier die Nachteile beider Eltern
+    statt ihrer Vorteile.

@@ -1,0 +1,57 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: cukrovka
+name: Zuckerrübe
+name_plural: Zuckerrüben
+description: Die Zuckerrübe (Beta vulgaris) ist die ertragsstärkste Ackerkultur Mitteleuropas und die
+  einzige heimische Zuckerpflanze. In Deutschland stehen rund 400.000 Hektar, in Österreich etwa 35.000.
+  Angebaut wird praktisch ausschließlich im Vertrag mit der Zuckerfabrik.
+vysevek: 1,1–1,3 Saateinheiten/ha als Einzelkornsaat bei 45 oder 50 cm Reihenabstand; pilliertes Saatgut
+hnojeni: N nur 100–150 kg/ha in einer frühen Gabe. ‼️ Zu viel Stickstoff SENKT den Erlös — er treibt die
+  Rübenmasse, drückt aber den Zuckergehalt und erhöht den Amino-Stickstoff als Melassebildner
+vynos_t_ha: 70–85 (Rüben) bei 17–19 % Zuckergehalt
+sklizen: September bis Dezember (Kampagne)
+vyuziti: Zucker, Melasse und Rübenschnitzel als Futter, Bioethanol, Biogas
+choroby:
+- Cercospora-Blattflecken (Cercospora beticola) — die wichtigste
+- Grauschimmel (Botrytis cinerea)
+- Rhizoctonia-Wurzelfäule
+- Vergilbungsviren (durch Blattläuse übertragen)
+- Echter Mehltau der Rübe (Erysiphe betae)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Drei bis vier Jahre Anbaupause wegen der Rübenzystennematode. Nematodenresistente Zwischenfrüchte
+    — Senf oder Ölrettich mit ausgewiesener Resistenz — sind Bestandteil praktisch jedes Anbauvertrags
+    und senken den Besatz um 50 bis 80 %.
+- name: Bodenbearbeitung
+  text: Tiefe, verdichtungsfreie Lockerung im Herbst; im Frühjahr nur flach, um Wasser zu halten. Ein
+    ebenes Feld ist wichtig, weil flach gerodet wird.
+- name: Aussaat
+  text: Saat ab Mitte März bei 5–8 °C Bodentemperatur, 2–3 cm tief. Frühe Saat verlängert die Zeit zum
+    Reihenschluss und damit die Zuckerbildung.
+- name: Düngung
+  text: Der Stickstoff wird bewusst knapp gehalten. Bezahlt wird nach bereinigtem Zuckergehalt, in den
+    Kalium, Natrium und Amino-Stickstoff als Melassebildner abzugswirksam eingehen.
+- name: Pflanzenschutz
+  text: ‼️ Seit dem Wegfall der neonikotinoiden Beize sind die von Blattläusen übertragenen Vergilbungsviren
+    das drängendste Problem — der EuGH hat 2023 auch Notfallzulassungen ausgeschlossen. Dazu Cercospora
+    mit wachsender Fungizidresistenz und die sich ausbreitende Bakteriose SBR.
+- name: Ernte
+  text: Rodung als Kampagne von September bis Dezember mit sechsreihigen Selbstfahrern, nach dem Lieferplan
+    der Zuckerfabrik. Erdanhang und Kopfanteil gehen in die Abrechnung ein.
+faq:
+- q: Warum senkt zu viel Stickstoff den Erlös?
+  a: Weil nach bereinigtem Zuckergehalt bezahlt wird. Stickstoff treibt die Rübenmasse, drückt aber den
+    Zuckergehalt und erhöht den Amino-Stickstoff — beides mindert die Abrechnung.
+- q: Was ist seit dem Neonikotinoid-Verbot das Hauptproblem?
+  a: Die von Blattläusen übertragenen Vergilbungsviren. Sie senken Rübenertrag und Zuckergehalt zugleich,
+    um bis zu 30 bis 50 % in starken Jahren, und lassen sich nicht heilen.
+- q: Wozu dienen nematodenresistente Zwischenfrüchte?
+  a: Bestimmte Senf- und Ölrettichsorten regen die Rübenzystennematode zum Schlüpfen an, lassen aber keine
+    Vermehrung zu — der Besatz sinkt um 50 bis 80 %.
+- q: Wie wird die Zuckerrübe vermarktet?
+  a: Praktisch ausschließlich im Anbauvertrag mit der Zuckerfabrik, mit vorab festgelegter Menge, Lieferzeitfenster
+    und Preisformel.

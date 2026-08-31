@@ -1,0 +1,52 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: jecmen-ozimy
+name: Wintergerste
+name_plural: Wintergerste
+description: 'Wintergerste (Hordeum vulgare) steht in Deutschland auf rund 1,3 Millionen Hektar und ist
+  die wichtigste Futtergetreideart. Ihr großer ackerbaulicher Vorteil ist der Erntetermin: Sie ist die
+  erste Frucht des Jahres und damit die ideale Vorfrucht für Winterraps.'
+vysevek: 280–350 keimfähige Körner/m²; mehrzeilige Sorten am unteren, zweizeilige am oberen Rand
+hnojeni: N 140–180 kg/ha nach Düngebedarfsermittlung in zwei bis drei Gaben; Schwefel 20–30 kg/ha; P und
+  K nach Gehaltsklasse
+vynos_t_ha: 7,0–7,5
+sklizen: Anfang bis Mitte Juli
+vyuziti: Futtergetreide für Rinder, Schweine und Geflügel; Ganzpflanzensilage
+choroby:
+- Rhynchosporium (Blattfleckenkrankheit)
+- Netzflecken (Pyrenophora teres)
+- Echter Mehltau
+- Zwergrost
+- Gerstengelbmosaikvirus (BaYMV, bodenbürtig)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Gerste ist selbstunverträglich und reagiert empfindlich auf enge Getreidefolgen. Nach ihr passt
+    Winterraps ideal, weil sie früh das Feld räumt.
+- name: Bodenbearbeitung
+  text: Flache Stoppelbearbeitung nach der Vorfrucht; Gerste braucht ein abgesetztes, gut rückverfestigtes
+    Saatbett.
+- name: Aussaat
+  text: Saat von Mitte September bis Anfang Oktober und damit ein bis zwei Wochen vor Winterweizen — Gerste
+    muss vor Winter kräftig entwickelt sein.
+- name: Düngung
+  text: Zwei bis drei Stickstoffgaben; die Andüngung zu Vegetationsbeginn ist bei Gerste wichtiger als
+    beim Weizen, weil sie ihre Ertragsanlagen früher festlegt.
+- name: Pflanzenschutz
+  text: Blattbehandlung gegen Netzflecken, Rhynchosporium und Ramularia. Gegen das bodenbürtige Gelbmosaikvirus
+    hilft nur die resistente Sorte. Gegen Blattläuse als Virusvektoren im Herbst behandeln oder spät säen.
+- name: Ernte
+  text: Erste Getreideernte des Jahres, meist Anfang Juli bei 14 % Kornfeuchte. Der frühe Termin entzerrt
+    die Erntespitze und lässt Zeit für Zwischenfrüchte.
+faq:
+- q: Warum wird Wintergerste vor Winterweizen gesät?
+  a: Weil sie vor Winter deutlich weiter entwickelt sein muss. Zu späte Saat kostet bei Gerste mehr Ertrag
+    als bei Weizen.
+- q: Was ist der Vorteil des frühen Erntetermins?
+  a: Er macht Wintergerste zur idealen Rapsvorfrucht, entzerrt die Auslastung von Mähdrescher und Trocknung
+    und lässt Zeit für eine voll entwickelte Zwischenfrucht.
+- q: Zwei- oder mehrzeilig?
+  a: Mehrzeilige Sorten bringen mehr Ertrag, zweizeilige ein gleichmäßigeres, schwereres Korn. Für die
+    Fütterung zählt der Ertrag, weshalb mehrzeilige Sorten dominieren.

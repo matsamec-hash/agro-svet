@@ -1,0 +1,55 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: jecmen-jarni
+name: Sommergerste
+name_plural: Sommergerste
+description: 'Sommergerste wird im Frühjahr gesät und im August geerntet. Ihre wirtschaftlich wichtigste
+  Verwendung ist die Braugerste für die Malz- und Bierherstellung — und die stellt Anforderungen, die
+  dem übrigen Ackerbau entgegenlaufen: gefordert wird ein möglichst niedriger Eiweißgehalt von 9,5 bis
+  11,5 %.'
+vysevek: 320–400 keimfähige Körner/m²; frühe Saat am unteren Rand
+hnojeni: Bei Braugerste nur 60–100 kg N/ha und vollständig früh bis Schossbeginn — eine späte Gabe landet
+  direkt im Korneiweiß und kostet die Annahme. Futtergerste 90–130 kg N/ha
+vynos_t_ha: 5,0–6,5
+sklizen: Juli bis August
+vyuziti: Braugerste für Malz und Bier; Futtergetreide
+choroby:
+- Rhynchosporium (Blattfleckenkrankheit)
+- Netzflecken (Pyrenophora teres)
+- Echter Mehltau
+- Ramularia-Sprenkelkrankheit
+- Gerstengelbverzwergungsvirus (BYDV, durch Blattläuse)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Beste Vorfrüchte sind Hackfrüchte und Raps — sie hinterlassen wenig Reststickstoff, was für Braugerste
+    ausdrücklich erwünscht ist.
+- name: Bodenbearbeitung
+  text: Im Herbst Grundbodenbearbeitung, im Frühjahr flach und schonend. Braugerste braucht ein gleichmäßiges
+    Saatbett, weil ungleicher Aufgang später ungleiche Kornqualität bedeutet.
+- name: Aussaat
+  text: So früh wie möglich, ab Mitte März. Späte Saat verkürzt die Kornfüllung und treibt den Eiweißgehalt
+    über die Annahmegrenze.
+- name: Düngung
+  text: 'Der entscheidende Unterschied zu allen anderen Kulturen: Bei Braugerste senkt zu viel Stickstoff
+    den Erlös. Die Gabe erfolgt knapp bemessen und vollständig früh.'
+- name: Pflanzenschutz
+  text: Ein bis zwei Fungizidmaßnahmen gegen Netzflecken, Rhynchosporium und Ramularia. Bei Braugerste
+    ist zusätzlich der Fusariumbefall im Auge zu behalten — Mykotoxine sind im Bier nicht zulässig.
+- name: Ernte
+  text: Drusch bei 14 % Kornfeuchte. Bei Braugerste darf die Trocknung 40 °C nicht überschreiten, sonst
+    geht die Keimfähigkeit verloren und die Partie ist für die Mälzerei wertlos.
+faq:
+- q: Warum braucht Braugerste wenig Stickstoff?
+  a: Weil die Mälzerei Stärke braucht, nicht Eiweiß. Ein Rohproteingehalt über 11,5 % führt zur Ablehnung;
+    die Partie geht dann mit Abschlag ins Futter.
+- q: Warum darf Braugerste nicht heiß getrocknet werden?
+  a: Malz entsteht durch kontrolliertes Keimen. Über 40 °C stirbt der Keimling ab, und ohne Keimfähigkeit
+    von mindestens 95 % ist das Korn für die Mälzerei unbrauchbar.
+- q: Welche Sorten darf man anbauen?
+  a: In Deutschland empfiehlt der Berliner Programm-Ausschuss jährlich die von Mälzereien akzeptierten
+    Sorten. Für nicht empfohlene Sorten findet sich oft kein Abnehmer.
+- q: Wann wird Sommergerste gesät?
+  a: So früh wie möglich ab Mitte März — jede Woche Verzug kostet Ertrag und hebt zugleich den Eiweißgehalt.

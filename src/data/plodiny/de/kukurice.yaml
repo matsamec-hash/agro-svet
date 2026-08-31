@@ -1,0 +1,56 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: kukurice
+name: Mais
+name_plural: Mais
+description: Mais (Zea mays) ist als C4-Pflanze außergewöhnlich wasser- und lichteffizient. In Deutschland
+  stehen rund 2,1 Millionen Hektar Silomais und etwa 0,5 Millionen Hektar Körnermais — Silomais ist die
+  Grundlage der Rinderfütterung und der Biogaserzeugung zugleich.
+vysevek: 7–10 Pflanzen/m² (65.000–95.000 je Hektar) je nach Reifezahl und Standort
+hnojeni: N 120–200 kg/ha nach Düngebedarfsermittlung, meist als Unterfußdüngung plus Hauptgabe; P, K und
+  Magnesium nach Gehaltsklasse. Mais reagiert deutlich auf Zink
+vynos_t_ha: 9–12 (Korn); 45–60 t/ha Frischmasse (Silage)
+sklizen: September bis Oktober
+vyuziti: Silomais für Rinderfütterung und Biogas, Körnermais als Futter, Stärke und Bioethanol
+choroby:
+- Fusarium-Stängel- und Kolbenfäule
+- Helminthosporium-Blattflecken
+- Verzwergungsviren (durch Zikaden und Blattläuse)
+- Bakterienwelke und Stängelfäule
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: ‼️ In Befallsgebieten des Westlichen Maiswurzelbohrers begrenzen Allgemeinverfügungen der Länder
+    den Anbau von Mais nach Mais. Der Fruchtwechsel ist zugleich die wirksamste Gegenmaßnahme, weil sich
+    die Larven nur an Maiswurzeln entwickeln.
+- name: Bodenbearbeitung
+  text: 'Der Boden muss sich erwärmen können. Auf schweren, kalten Böden hilft Strip-Till: Nur der Saatstreifen
+    wird bearbeitet und gedüngt, der Zwischenraum bleibt bedeckt.'
+- name: Aussaat
+  text: Saat als Einzelkorn ab Mitte April bei 8–10 °C Bodentemperatur, 4–6 cm tief bei 75 cm Reihenabstand.
+- name: Düngung
+  text: Die Unterfußdüngung ist bei Mais besonders wirksam, weil die junge Wurzel in kalten Frühjahren
+    nur wenig Phosphor erschließt. Gülle wird zunehmend per Injektion ins Saatband abgelegt.
+- name: Pflanzenschutz
+  text: Der Maiszünsler ist der wichtigste Schädling — bekämpft über Stoppelbearbeitung und Trichogramma-Schlupfwespen
+    per Drohne. Herbizid im Nachauflauf, zunehmend als Bandspritzung mit gleichzeitigem Hacken.
+- name: Ernte
+  text: Silomais bei 30–35 % Trockensubstanz mit Corn Cracker; Körnermais bei unter 30 % Feuchte mit anschließender
+    Trocknung. ‼️ Die Maisstoppeln müssen unmittelbar zerkleinert werden — sie tragen sowohl Fusarium
+    als auch die überwinternden Maiszünslerraupen.
+faq:
+- q: Warum ist die Stoppelbearbeitung bei Mais so wichtig?
+  a: Weil die Maisstoppeln zugleich Fusarium für die Folgekultur und die überwinternden Maiszünslerraupen
+    beherbergen. Gründliches Zerkleinern und Einarbeiten ist die wirksamste Einzelmaßnahme gegen beide.
+- q: Was ist beim Maiswurzelbohrer zu beachten?
+  a: In Befallsgebieten begrenzen die Pflanzenschutzdienste den Anbau von Mais nach Mais. Da sich die
+    Larven ausschließlich an Maiswurzeln entwickeln, unterbricht ein einziger Fruchtwechsel den Zyklus
+    vollständig.
+- q: Wann wird Silomais geerntet?
+  a: Bei 30 bis 35 % Trockensubstanz. Darunter drohen Sickersaft und Fehlgärung, darüber lässt sich das
+    Silo nicht mehr verdichten und es kommt zur Nacherwärmung.
+- q: Wozu dient der Corn Cracker?
+  a: Zwei gegenläufige Reibwalzen brechen die Maiskörner auf. Ohne ihn laufen ganze Körner unverdaut durch
+    das Tier — der Aufschlussgrad entscheidet über den Futterwert der Silage.

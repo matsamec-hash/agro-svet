@@ -1,0 +1,53 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: hrach
+name: Körnererbse
+name_plural: Körnererbsen
+description: Die Körnererbse (Pisum sativum) ist neben der Ackerbohne die wichtigste heimische Körnerleguminose.
+  Sie bindet 100 bis 200 kg Luftstickstoff je Hektar, hinterlässt der Folgekultur 30 bis 50 kg und liefert
+  mit 20 bis 25 % Rohprotein heimisches Eiweiß — zunehmend auch für pflanzliche Fleischalternativen.
+vysevek: 70–90 keimfähige Körner/m², 4–6 cm tief
+hnojeni: KEIN Stickstoff — eine Startgabe unterdrückt die Knöllchenbildung. P und K nach Gehaltsklasse;
+  pH 6,0–7,0
+vynos_t_ha: 3,0–4,5
+sklizen: Juli bis August
+vyuziti: Futter für Schweine und Geflügel als heimischer Sojaersatz, Erbsenprotein für die Humanernährung
+choroby:
+- Brennfleckenkrankheit (Ascochyta pisi)
+- Fusarium-Wurzel- und Stängelfäule
+- Falscher Mehltau der Erbse (Peronospora viciae)
+- Erbsenmosaikvirus (durch Blattläuse übertragen)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: ‼️ Fünf bis sechs Jahre Anbaupause — die härteste Beschränkung der Kultur. Bei zu enger Folge
+    treten Fußkrankheiten und der Erbsenwurzelbohrer auf. Als Blattfrucht unterbricht sie die Getreidefolge
+    und senkt den Druck von Fußkrankheiten.
+- name: Bodenbearbeitung
+  text: Ein ebenes Feld ist wichtig, weil die Erbse zur Ernte oft lagert und flach gedroschen werden muss.
+    Steine sollten abgewalzt sein.
+- name: Aussaat
+  text: Sehr frühe Saat ab Ende Februar oder Anfang März, sobald der Boden befahrbar ist — Erbsen vertragen
+    Frost bis etwa −5 °C und nutzen die Frühjahrsfeuchte.
+- name: Düngung
+  text: Kein Stickstoff. Die Versorgung läuft vollständig über die Knöllchenbakterien, die anders als
+    bei Soja in mitteleuropäischen Böden natürlich vorkommen.
+- name: Pflanzenschutz
+  text: Blattrandkäfer, dessen Larven an den Knöllchen fressen, Erbsenwickler und Blattläuse als Virusvektoren.
+    Bei den Pilzen Brennflecken und Falscher Mehltau. Der Herbizidbedarf ist wegen der schwachen Jugendentwicklung
+    hoch.
+- name: Ernte
+  text: Drusch bei 14–15 % Feuchte, sehr flach mit Ährenhebern. Moderne halbblattlose Sorten stützen sich
+    über Ranken gegenseitig und haben die Standfestigkeit erheblich verbessert.
+faq:
+- q: Warum wird die Erbse nicht mit Stickstoff gedüngt?
+  a: Weil eine mineralische Gabe die Knöllchenbildung unterdrückt. Die Pflanze stellt die eigene Stickstoffbindung
+    ein und liefert am Ende weniger.
+- q: Wie lang muss die Anbaupause sein?
+  a: Fünf bis sechs Jahre. Kürzere Abstände führen zu Fußkrankheiten und Erbsenmüdigkeit — das ist die
+    wichtigste Einschränkung im Erbsenanbau.
+- q: Welchen Vorfruchtwert hat die Erbse?
+  a: Sie hinterlässt 30 bis 50 kg Stickstoff und unterbricht die Getreidefolge. Der Weizen nach Erbse
+    bringt regelmäßig 5 bis 10 % Mehrertrag bei geringerem Düngebedarf.

@@ -1,0 +1,58 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: brambory
+name: Kartoffel
+name_plural: Kartoffeln
+description: Die Kartoffel (Solanum tuberosum) steht in Deutschland auf rund 260.000 Hektar, in Österreich
+  auf etwa 25.000. Der Schwerpunkt liegt bei Verarbeitungsware für Pommes, Chips und Stärke. Die Kraut-
+  und Knollenfäule ist die bestimmende Krankheit und verlangt in feuchten Jahren sieben bis zwölf Behandlungen.
+vysevek: 40.000–55.000 Knollen/ha je nach Verwendung; Pflanzgut zertifiziert und vorgekeimt
+hnojeni: N 120–180 kg/ha nach Düngebedarfsermittlung. ‼️ Kalium als SULFAT, nicht als Chlorid — Chlorid
+  senkt den Stärkegehalt und verschlechtert die Verarbeitungsqualität
+vynos_t_ha: 40–50
+sklizen: Juli bis Oktober je nach Reifegruppe
+vyuziti: Speisekartoffeln, Pommes und Chips, Stärkeindustrie, Pflanzgut
+choroby:
+- Kraut- und Knollenfäule (Phytophthora infestans) — die gefährlichste
+- Dürrfleckenkrankheit (Alternaria solani)
+- Virosen (Y-Virus, Blattrollvirus, Mosaike)
+- Rhizoctonia solani (Wurzeltöterkrankheit)
+- Kartoffelschorf (Streptomyces scabies)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Mindestens vier Jahre Anbaupause wegen Kartoffelzystennematoden und Rhizoctonia. ‼️ Der Kartoffelzystennematode
+    ist ein Quarantäneschädling — bei Nachweis ordnet der Pflanzenschutzdienst Bewirtschaftungsauflagen
+    an.
+- name: Bodenbearbeitung
+  text: Tiefe, verdichtungsfreie Lockerung; die Knolle braucht Raum. Steinseparierung ist bei Verarbeitungsware
+    Standard, weil Steine beim Roden Beschädigungen verursachen.
+- name: Aussaat
+  text: Legen ab Mitte April bei 8 °C Bodentemperatur in Dämme, 8–12 cm tief. Vorgekeimtes Pflanzgut bringt
+    Frühreife und Ertragssicherheit.
+- name: Düngung
+  text: Kalium ausschließlich als Sulfat. Der Stickstoff wird knapp bemessen, weil Überversorgung die
+    Abreife verzögert und den Stärkegehalt drückt.
+- name: Pflanzenschutz
+  text: 'Die Krautfäule bestimmt alles: Behandelt wird streng vorbeugend nach Prognosemodellen wie SIMPHYT,
+    mit sieben bis zwölf Maßnahmen im feuchten Jahr und konsequentem Wirkstoffwechsel. Dazu Kartoffelkäfer
+    gegen junge Larven und Blattläuse als Virusvektoren.'
+- name: Ernte
+  text: ‼️ Zwei bis drei Wochen vor der Rodung Krautabtötung — sie härtet die Schale ab und verhindert,
+    dass die Krautfäule vom sterbenden Kraut in die Knollen wandert. Seit dem Wegfall von Diquat kombiniert
+    man Krautschlagen mit einem PPO-Hemmer oder arbeitet elektrisch.
+faq:
+- q: Warum kein Kaliumchlorid bei Kartoffeln?
+  a: Chlorid senkt den Stärkegehalt und verschlechtert die Verarbeitungsqualität — Pommes und Chips werden
+    dunkler. Zu düngen ist mit Kaliumsulfat oder Patentkali.
+- q: Wie viele Fungizidbehandlungen braucht die Krautfäule?
+  a: In feuchten Jahren sieben bis zwölf, im Abstand von sieben bis zehn Tagen, gesteuert über Prognosemodelle.
+    Kurativ ist gegen Phytophthora praktisch nichts zu erreichen.
+- q: Warum wird das Kraut vor der Ernte abgetötet?
+  a: Damit die Schale abhärtet, die Knollen beim Roden nicht beschädigt werden und der Erreger der Krautfäule
+    nicht vom absterbenden Kraut in die Knollen wandert.
+- q: Was hat sich seit dem Diquat-Verbot geändert?
+  a: Die Krautabtötung ist teurer und aufwendiger geworden — üblich ist heute mechanisches Krautschlagen
+    mit chemischer Nachbehandlung oder das elektrische Verfahren, das auch im Ökolandbau zugelassen ist.

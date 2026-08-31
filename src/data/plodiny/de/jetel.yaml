@@ -1,0 +1,55 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: jetel
+name: Rotklee
+name_plural: Rotklee
+description: Rotklee (Trifolium pratense) ist eine zwei- bis dreijährige Futterleguminose mit kräftiger
+  Pfahlwurzel. Über die Knöllchenbakterien bindet ein Bestand 150 bis 250 kg Luftstickstoff je Hektar
+  und Jahr — im Ökolandbau die Grundlage der Nährstoffversorgung, im konventionellen Betrieb ein erheblicher
+  Vorfruchtwert.
+vysevek: in Reinsaat 20–25 kg/ha; im Kleegras 8–12 kg/ha Klee plus Gräser
+hnojeni: KEIN Stickstoff. P und K nach Gehaltsklasse — Klee entzieht viel Kalium. Kalkung auf pH 6,0–7,0;
+  Schwefel und Bor beachten
+vynos_t_ha: 8–12 t/ha Trockenmasse in zwei bis vier Schnitten
+sklizen: Mai bis September (zwei bis vier Schnitte)
+vyuziti: Anwelksilage und Heu für Rinder, Gründüngung, Bienenweide, Saatgutvermehrung
+choroby:
+- Kleekrebs (Sclerotinia trifoliorum) — Auswinterungsfäule
+- Kleeanthraknose (Colletotrichum trifolii)
+- Kleemosaikvirus
+- Phytophthora-Wurzelfäule
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: ‼️ Vier bis fünf Jahre Anbaupause wegen Kleemüdigkeit — bei zu enger Wiederkehr treten Kleekrebs
+    und Nematoden auf. Als mehrjähriger Bestand unterdrückt Kleegras Ungräser wirksam; im Ökolandbau ist
+    das der wichtigste Hebel gegen Acker-Fuchsschwanz.
+- name: Bodenbearbeitung
+  text: Feinkrümeliges, gut rückverfestigtes Saatbett — das Korn ist klein und wird flach abgelegt.
+- name: Aussaat
+  text: Saat im Frühjahr oder als Untersaat in Getreide, höchstens 1–2 cm tief. Die Untersaat spart einen
+    Arbeitsgang und nutzt das Jahr besser aus.
+- name: Düngung
+  text: Kein Stickstoff. Wichtig ist dagegen die Kalium- und Schwefelversorgung sowie ein Boden-pH über
+    6 — auf sauren Böden arbeiten die Knöllchenbakterien schlecht.
+- name: Pflanzenschutz
+  text: Geringer Pflanzenschutzbedarf. Zu beachten sind Kleekrebs bei feuchter Überwinterung und Kleeseide
+    als parasitische Pflanze, die über verunreinigtes Saatgut eingeschleppt wird.
+- name: Ernte
+  text: Zwei bis vier Schnitte je Jahr. Für die Silage auf 30 bis 40 % Trockensubstanz anwelken. ‼️ Beim
+    Beweiden von frischem Bestand droht Blähsucht — Klee angewelkt oder mit strukturreichem Futter anbieten.
+faq:
+- q: Wie viel Stickstoff bindet Rotklee?
+  a: 150 bis 250 kg je Hektar und Jahr über die Symbiose mit Knöllchenbakterien. Für die Folgekultur bleiben
+    davon 40 bis 80 kg verfügbar.
+- q: Was ist Kleemüdigkeit?
+  a: Der Ertragsabfall bei zu enger Wiederkehr, verursacht von Kleekrebs und Nematoden. Vier bis fünf
+    Jahre Anbaupause sind einzuhalten.
+- q: Warum wird Klee meist im Gemenge mit Gras angebaut?
+  a: Kleegras ist ertragssicherer, siliert besser und liefert ein günstigeres Energie-Eiweiß-Verhältnis
+    als Klee in Reinsaat.
+- q: Was ist beim Verfüttern zu beachten?
+  a: Beim Beweiden von frischem Bestand droht Blähsucht. Außerdem enthält Rotklee Phytoöstrogene, die
+    in großen Mengen die Fruchtbarkeit tragender Tiere beeinträchtigen können.

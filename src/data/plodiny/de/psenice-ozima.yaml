@@ -1,0 +1,56 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: psenice-ozima
+name: Winterweizen
+name_plural: Winterweizen
+description: Winterweizen (Triticum aestivum) ist mit rund 2,7 Millionen Hektar die wichtigste Ackerkultur
+  Deutschlands. Er wird im Herbst gesät, überwintert und im Juli gedroschen. Über den Preis entscheiden
+  die Qualitätsgruppen E, A, B und C, die sich an Rohprotein, Fallzahl und Hektolitergewicht bemessen.
+vysevek: 280–380 keimfähige Körner/m²; die frühe Saat am unteren, die späte am oberen Rand
+hnojeni: N 180–220 kg/ha nach Düngebedarfsermittlung in drei Gaben (Andüngung, Schossen, Ährenschieben);
+  in roten Gebieten 20 % darunter. Schwefel 20–40 kg/ha; P und K nach Gehaltsklasse
+vynos_t_ha: 7,5–8,0
+sklizen: Juli bis Anfang August
+vyuziti: Brot- und Backmehl, Futtergetreide, Stärke, Bioethanol
+choroby:
+- Blattdürre (Zymoseptoria tritici) — die Leitkrankheit
+- Ährenfusariose und Fußkrankheiten
+- Echter Mehltau
+- Gelb- und Braunrost
+- Zwergsteinbrand
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Beste Vorfrüchte sind Raps, Körnerleguminosen und Zuckerrüben. Weizen nach Mais ist die kritische
+    Konstellation — die Maisstoppeln tragen Fusarium.
+- name: Bodenbearbeitung
+  text: Nach Mais wendende Bearbeitung oder zumindest gründliches Zerkleinern der Stoppeln. Sonst genügt
+    flache Stoppelbearbeitung und pfluglose Bestellung.
+- name: Aussaat
+  text: Saat von Ende September bis Ende Oktober, 2–4 cm tief. Späte Saat senkt den Druck durch Acker-Fuchsschwanz
+    und Virusvektoren erheblich und kostet kaum Ertrag.
+- name: Düngung
+  text: Stickstoff in drei Gaben; die Gesamtmenge ergibt sich verbindlich aus der Düngebedarfsermittlung
+    nach Düngeverordnung. Die letzte Gabe steuert den Proteingehalt und damit die Qualitätsgruppe.
+- name: Pflanzenschutz
+  text: Herbizid gegen Ungräser im Herbst oder Frühjahr, Fungizid ein- bis dreimal — die Fahnenblattbehandlung
+    ist die wichtigste, die Ährenbehandlung gegen Fusarium die qualitätsentscheidende. Wachstumsregler
+    nach Lagerrisiko.
+- name: Ernte
+  text: Drusch bei 14 % Kornfeuchte. Verzögert Regen die Ernte, drohen Auswuchs und Fallzahlverlust —
+    aus Brotweizen wird dann Futterweizen.
+faq:
+- q: Wann wird Winterweizen gesät?
+  a: Von Ende September bis Ende Oktober. Eine Saat ab Anfang Oktober senkt den Druck durch Acker-Fuchsschwanz
+    und Blattlausübertragene Viren deutlich, bei geringem Ertragsnachteil.
+- q: Wie hoch ist der Stickstoffbedarf?
+  a: 180 bis 220 kg N/ha in drei Gaben, verbindlich begrenzt durch die Düngebedarfsermittlung. In den
+    roten Gebieten ist der ermittelte Bedarf um 20 % zu unterschreiten.
+- q: Welchen Ertrag bringt Winterweizen in Deutschland?
+  a: Im mehrjährigen Mittel 75 bis 80 dt/ha, auf besten Standorten deutlich mehr. Österreich liegt wegen
+    des höheren Anteils trockener Lagen darunter.
+- q: Was entscheidet über die Qualitätsgruppe?
+  a: Rohprotein, Fallzahl von mindestens 220 Sekunden und ein Hektolitergewicht ab 76 kg/hl. Reißt eine
+    dieser Größen, rutscht die Partie eine Gruppe tiefer oder ins Futter.

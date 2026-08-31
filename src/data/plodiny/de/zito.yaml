@@ -1,0 +1,54 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: zito
+name: Winterroggen
+name_plural: Winterroggen
+description: Winterroggen (Secale cereale) gedeiht auf leichten, sauren Sandböden, auf denen Weizen versagt.
+  Deutschland ist der größte Roggenerzeuger der Welt mit rund 500.000 bis 650.000 Hektar, Schwerpunkt
+  in Brandenburg, Mecklenburg-Vorpommern und Niedersachsen. Roggenbrot braucht zwingend Sauerteig, weil
+  Roggen kein Klebergerüst bildet.
+vysevek: 220–300 keimfähige Körner/m² bei Hybridroggen, 300–350 bei Populationssorten — Roggen bestockt
+  stark
+hnojeni: N 80–130 kg/ha nach Düngebedarfsermittlung in zwei Gaben; Roggen ist deutlich genügsamer als
+  Weizen und neigt bei Überversorgung zum Lager
+vynos_t_ha: 6,0–8,0 (Hybridroggen); 4,5–5,5 (Populationssorten)
+sklizen: Ende Juli bis August
+vyuziti: Brotmehl für Misch- und Vollkornbrot, Futtergetreide, Brennerei, Ganzpflanzensilage für Biogas
+choroby:
+- Mutterkorn (Claviceps purpurea) — toxisch, EU-Höchstgehalte beachten
+- Echter Mehltau
+- Braun- und Schwarzrost
+- Schneeschimmel
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Roggen ist die selbstverträglichste Getreideart und lässt sich auch nach sich selbst anbauen —
+    ein Grund für seine Bedeutung auf schwachen Standorten mit engen Fruchtfolgen.
+- name: Bodenbearbeitung
+  text: Auf leichten Böden genügt flache Bearbeitung; entscheidend ist ein rückverfestigtes Saatbett,
+    damit das Korn Anschluss ans Kapillarwasser behält.
+- name: Aussaat
+  text: Saat von Anfang bis Ende September und damit zwei bis drei Wochen vor Weizen — Roggen braucht
+    eine lange Herbstentwicklung.
+- name: Düngung
+  text: Zwei Stickstoffgaben, insgesamt deutlich weniger als bei Weizen. Roggen wird 130 bis 180 cm hoch;
+    Überversorgung führt zum Lager.
+- name: Pflanzenschutz
+  text: Geringer Fungizidbedarf, meist genügt eine Maßnahme. Wachstumsregler sind wegen der Wuchshöhe
+    fast immer nötig. Entscheidend ist die Mutterkornkontrolle — Roggen ist als Fremdbefruchter mit offener
+    Blüte besonders anfällig.
+- name: Ernte
+  text: Drusch bei 14 % Kornfeuchte. Die Partie muss gereinigt werden, damit die EU-Höchstgehalte für
+    Mutterkornsklerotien und -alkaloide eingehalten werden; sie wurden zuletzt deutlich verschärft.
+faq:
+- q: Warum ist Roggen auf Sandböden im Vorteil?
+  a: Sein tiefreichendes, feines Wurzelsystem erschließt Wasser und Nährstoffe, wo Weizen aufgibt. Er
+    verträgt saure Böden bis pH 5 und ist außerordentlich winterhart.
+- q: Was ist Mutterkorn und warum ist es wichtig?
+  a: Der Pilz Claviceps purpurea ersetzt einzelne Körner durch dunkle Sklerotien mit hochwirksamen Alkaloiden.
+    Die EU hat die Höchstgehalte verschärft — Reinigung und Sortenwahl entscheiden über die Verkehrsfähigkeit.
+- q: Was bringt Hybridroggen?
+  a: 20 bis 40 % Mehrertrag gegenüber Populationssorten. Das Saatgut ist teurer und muss jedes Jahr neu
+    gekauft werden, weil sich der Heterosiseffekt nicht vererbt.

@@ -1,0 +1,52 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: soja
+name: Sojabohne
+name_plural: Sojabohnen
+description: Die Sojabohne (Glycine max) hat sich in den letzten Jahren von der Exotik zur festen Größe
+  entwickelt — in Österreich mit über 80.000 Hektar deutlich stärker als in Deutschland. Sie ist eiweißreich,
+  bindet Luftstickstoff und bedient die Nachfrage nach gentechnikfreiem, europäischem Eiweiß.
+vysevek: 55–70 keimfähige Körner/m² bei 12,5–50 cm Reihenabstand je nach Verfahren
+hnojeni: KEIN Stickstoff — eine Startgabe unterdrückt die Knöllchenbildung. P und K nach Gehaltsklasse;
+  Kalkung auf pH 6,5–7,0
+vynos_t_ha: 2,5–3,5
+sklizen: September bis Oktober
+vyuziti: Futtermittel (Extraktionsschrot, Vollfettsoja), Tofu und Sojadrink für die Humanernährung, Öl
+choroby:
+- Fusarium-Stängel- und Wurzelfäule
+- Weißstängeligkeit (Sclerotinia sclerotiorum)
+- Falscher Mehltau (Peronospora manshurica)
+- Bakterielle Pustelkrankheit (Pseudomonas savastanoi pv. glycinea)
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Vier Jahre Anbaupause; Sclerotinia verbindet sie mit Raps und Sonnenblume, weshalb diese Kulturen
+    zusammen zu betrachten sind. Als Leguminose hinterlässt Soja 30–50 kg N für die Folgekultur.
+- name: Bodenbearbeitung
+  text: Der Boden muss sich erwärmen können — Soja ist kälteempfindlich. Ein ebenes Feld ist wichtig,
+    weil die untersten Hülsen tief ansetzen und flach gedroschen werden muss.
+- name: Aussaat
+  text: Saat ab Ende April bis Mitte Mai bei mindestens 10 °C Bodentemperatur, 3–4 cm tief. ‼️ Das Saatgut
+    MUSS mit Bradyrhizobium japonicum geimpft werden — dieses Bakterium kommt in mitteleuropäischen Böden
+    nicht natürlich vor.
+- name: Düngung
+  text: Kein Stickstoff. Die gesamte Versorgung läuft über die Knöllchenbakterien; eine mineralische Gabe
+    schaltet sie ab und kostet Ertrag.
+- name: Pflanzenschutz
+  text: Der Krankheitsdruck ist gering, der Herbizidbedarf dagegen hoch — die Jugendentwicklung ist schwach
+    und die Zahl zugelassener Mittel klein. Mechanische Regulierung mit Hacke ist verbreitet.
+- name: Ernte
+  text: Drusch bei 13–14 % Feuchte, sehr flach mit Flexschneidwerk, weil die untersten Hülsen wenige Zentimeter
+    über dem Boden sitzen. Ein unebenes Feld kostet hier unmittelbar Ertrag.
+faq:
+- q: Muss Sojasaatgut geimpft werden?
+  a: Ja, zwingend. Bradyrhizobium japonicum kommt in mitteleuropäischen Böden nicht natürlich vor. Ohne
+    Impfung bildet die Pflanze keine Knöllchen und hungert.
+- q: Warum wird Soja nicht mit Stickstoff gedüngt?
+  a: Weil eine mineralische Gabe die Symbiose mit den Knöllchenbakterien unterdrückt. Die Pflanze stellt
+    die eigene Stickstoffbindung ein und liefert am Ende weniger.
+- q: Warum ist Österreich beim Sojaanbau weiter als Deutschland?
+  a: Wärmere Lagen im pannonischen Osten, eine früh aufgebaute Verarbeitungs- und Vermarktungskette für
+    gentechnikfreie Ware und gezielte Förderung.

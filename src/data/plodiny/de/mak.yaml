@@ -1,0 +1,52 @@
+# Německý overlay plodin (trh Německo + Rakousko). slug, skupina, hero_*,
+# seti_mesice, sklizen_mesice a wikipedia zůstávají z cs — jsou to klíče
+# (mapování, obrázky, kalendář), ne text.
+# ‼️ Pole choroby[] drží STEJNÉ pořadí i délku jako cs — mapování na entitu
+# choroby jde přes cs index; jiná délka overlay tiše zahodí.
+slug: mak
+name: Mohn
+name_plural: Mohn
+description: 'Mohn (Papaver somniferum) wird für Backmohn und Mohnöl angebaut. Der entscheidende Unterschied
+  zwischen den Ländern ist rechtlicher Natur: In Deutschland ist der Anbau nach dem Betäubungsmittelgesetz
+  erlaubnispflichtig, in Österreich hat er im Waldviertel eine ungebrochene Tradition.'
+vysevek: 0,8–1,5 kg/ha — das Korn ist winzig, die Ablage darf höchstens ein bis zwei Zentimeter tief sein
+hnojeni: N 60–90 kg/ha nach Düngebedarfsermittlung; zu viel Stickstoff führt zum Lager und verzögert die
+  Abreife
+vynos_t_ha: 0,6–1,2
+sklizen: August
+vyuziti: Backmohn, kaltgepresstes Mohnöl, Pharmazie (nur bei entsprechender Erlaubnis)
+choroby:
+- Falscher Mehltau des Mohns (Peronospora arborescens)
+- Bakterielle Blattfleckenkrankheit (Xanthomonas)
+- Fusarium-Wurzel- und Stängelfäule
+- Rübenmosaikvirus und weitere Virosen
+osevni_postup:
+- name: Vorfrucht und Fruchtfolge
+  text: Vier bis fünf Jahre Anbaupause. Mohn passt gut in getreidereiche Fruchtfolgen als Blattfrucht
+    und ist eine gute Vorfrucht für Wintergetreide.
+- name: Bodenbearbeitung
+  text: Ein feinkrümeliges, gut rückverfestigtes Saatbett ist bei Mohn wichtiger als bei fast jeder anderen
+    Kultur — das winzige Korn braucht sicheren Bodenschluss.
+- name: Aussaat
+  text: Saat sehr früh im Frühjahr, sobald der Boden befahrbar ist, höchstens 1–2 cm tief. ‼️ In Deutschland
+    ist zuvor die Erlaubnis des BfArM einzuholen und die Fläche zu melden.
+- name: Düngung
+  text: Maßvolle Stickstoffgabe. Mohn ist wenig anspruchsvoll und reagiert auf Überversorgung mit Lager.
+- name: Pflanzenschutz
+  text: Die Verunkrautung ist das größte Anbaurisiko — die Jugendentwicklung ist ausgesprochen schwach
+    und die Zahl zugelassener Herbizide klein. Falscher Mehltau bei feuchter Witterung.
+- name: Ernte
+  text: Drusch bei vollständig abgereiften, rasselnden Kapseln mit stark abgesenkter Trommeldrehzahl.
+    Der Samen ist bruchempfindlich und muss unmittelbar heruntergetrocknet werden.
+faq:
+- q: Darf man in Deutschland Mohn anbauen?
+  a: Nur mit einer Erlaubnis des Bundesinstituts für Arzneimittel und Medizinprodukte nach dem Betäubungsmittelgesetz,
+    gebunden an eine morphinarme Sorte, Anbaumeldung und Flächenkontrolle. Anbau ohne Erlaubnis ist strafbar
+    — auch im Hausgarten.
+- q: Wie ist die Lage in Österreich?
+  a: 'Deutlich anders: Der Anbau hat im Waldviertel eine lange Tradition, der Waldviertler Graumohn ist
+    als geschützte Ursprungsbezeichnung eingetragen und der Anbau über das Suchtmittelrecht praktisch
+    etabliert.'
+- q: Was ist die größte Anbauhürde?
+  a: Die Verunkrautung. Mohn entwickelt sich in der Jugend sehr langsam und es stehen kaum zugelassene
+    Herbizide zur Verfügung — ein sauberes Feld ist Voraussetzung.

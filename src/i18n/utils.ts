@@ -163,7 +163,17 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // /akcie — kurzy akcií agro firem. Faktická data (ticker, burza, měna) jsou
     // jazykově neutrální, kurátorské texty má de overlay akcie-agro-de.ts
     // (16/16 tickerů). Žádná jurisdikce — jsou to světové firmy.
-    '/akcie'],
+    '/akcie',
+    // /plodiny — de YAML overlay (18 plodin v src/data/plodiny/de/). Překládá se
+    // JEN próza; slug, skupina, hero_*, seti_mesice/sklizen_mesice a wikipedia
+    // zůstávají z cs, protože jsou to klíče (mapování, obrázky, kalendář).
+    // ‼️ choroby[] drží stejné pořadí i délku jako cs — chipy se mapují na
+    // entitu choroby přes cs index, jiná délka overlay tiše zahodí.
+    // ‼️ DETAIL ODRŮDY zůstává cs-only: je to úřední popis ÚKZÚZ k odrůdě
+    // registrované v ČR, Německo má vlastní registr (Bundessortenamt).
+    // Řeší isOdrudaDetailPath — pillar pod ne-cs odrůdy nelinkuje a sitemapa
+    // je do de mirroru nepouští.
+    '/plodiny'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
