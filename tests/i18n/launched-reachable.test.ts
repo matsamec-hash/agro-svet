@@ -127,3 +127,28 @@ describe('launchnutý /kviz nabízí aspoň jeden kvíz', () => {
     expect(missing, `/kviz launchnuté, ale hub by byl prázdný: ${missing.join(', ')}`).toEqual([]);
   });
 });
+
+
+// Nalezeno 2026-08-31 při launchi /de/akcie: i18n/akcie.ts měl
+// `content: Record<Locale, AkcieCopy> = { cs, pl, sk, uk }` — bez `de`.
+// TypeScript to nezachytil (projekt neběží ve strict check), takže se stránka
+// tiše vyrenderovala s NĚMECKÝM chrome a ČESKÝM titulkem, ledem i disclaimerem.
+// Tenhle test hlídá třídu: sekce s vlastním copy souborem ho musí mít pro
+// každý locale, kde je launchnutá.
+describe('sekce s vlastním copy souborem ho mají pro každý launchnutý locale', () => {
+  const SECTION_COPY: { file: string; prefix: string }[] = [
+    { file: 'src/i18n/akcie.ts', prefix: '/akcie' },
+  ];
+  for (const { file, prefix } of SECTION_COPY) {
+    it(`${file} pokrývá každý locale s launchnutým ${prefix}`, () => {
+      const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
+      const m = src.match(/export const content: Record<Locale,[^>]*> = \{([^}]*)\}/);
+      expect(m, `v ${file} nenalezena mapa content`).toBeTruthy();
+      const covered = m![1].split(',').map((x) => x.trim()).filter(Boolean);
+      const missing = (['sk', 'uk', 'pl', 'de'] as Locale[])
+        .filter((l) => LAUNCHED_PREFIXES[l].includes(prefix))
+        .filter((l) => !covered.includes(l));
+      expect(missing, `${prefix} launchnuté, ale copy chybí pro: ${missing.join(', ')}`).toEqual([]);
+    });
+  }
+});

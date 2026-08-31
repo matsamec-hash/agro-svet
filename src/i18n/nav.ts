@@ -60,7 +60,12 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // `tema` odemčena kvůli /choroby (de overlay, fáze 3c); ostatní děti jsou
   // nelaunchnuté a odfiltruje je isLaunchedPath. `data` zůstává skrytá — všechny
   // její děti jsou česká jurisdikční data (ČSÚ, SZIF), bez de ekvivalentu.
-  de: ['bazar', 'photo', 'farms', 'data'],
+  // `data` odemčena spolu s launchem /akcie — kurzy akcií agro firem jsou
+  // světová data bez jurisdikce. Ostatní děti sekce (/statistiky, /puda,
+  // /kalkulacka, /dotace, /svet, /historie) launchnuté nejsou a odfiltruje je
+  // isLaunchedPath, takže „Daten" nabízí jen to, co reálně existuje; top-level
+  // href se přesměruje na první viditelné dítě.
+  de: ['bazar', 'photo', 'farms'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české

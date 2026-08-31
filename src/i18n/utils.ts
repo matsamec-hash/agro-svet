@@ -154,7 +154,11 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // byly vázané na české dotace (VCS chmel v Kč, BISS v Kč, LPIS pod SZIF)
     // a jsou nahrazené německými se sazbami z /de/direktzahlungen. Zbylé dva
     // kvízy (jaký traktor / jaká včela) zůstávají cs — hub je pod de nenabízí.
-    '/kviz'],
+    '/kviz',
+    // /akcie — kurzy akcií agro firem. Faktická data (ticker, burza, měna) jsou
+    // jazykově neutrální, kurátorské texty má de overlay akcie-agro-de.ts
+    // (16/16 tickerů). Žádná jurisdikce — jsou to světové firmy.
+    '/akcie'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

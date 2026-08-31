@@ -376,7 +376,81 @@ const uk: AkcieCopy = {
   linkSales: 'Продажі сільськогосподарської техніки в Європі',
 };
 
-export const content: Record<Locale, AkcieCopy> = { cs, pl, sk, uk };
+const de: AkcieCopy = {
+  numberLocale: 'de-DE',
+  bln: 'Mrd.',
+
+  crumbAria: 'Pfad',
+  crumbHome: 'Startseite',
+  crumbData: 'Daten',
+  crumbAkcie: 'Aktien',
+
+  metaTitle: 'Aktien von Agrarunternehmen — John Deere, Bayer, AGCO und weitere | agro-svět',
+  metaDescription:
+    'Übersicht der börsennotierten Unternehmen des Agrarsektors — Landtechnik (John Deere, AGCO, CNH), Agrarchemie und Saatgut (Bayer, BASF, Corteva) sowie Rohstoffhandel. Profile und Börsenkürzel. Keine Anlageempfehlung.',
+  crumbSelf: 'Aktien von Agrarunternehmen',
+  eyebrow: 'Datenbereich · Märkte',
+  h1: 'Aktien von Agrarunternehmen',
+  h1mark: 'an der Börse',
+  lede:
+    'Wer hinter Technik, Saatgut und Dünger auf Ihren Feldern steht — und wie sich diese Unternehmen an der Börse schlagen. Eine Übersicht der börsennotierten Firmen des Agrarsektors: Maschinenbauer, Agrarchemie und Rohstoffverarbeiter aus Europa und den USA.',
+  disclaimerStrong: '⚠️ Keine Anlageempfehlung.',
+  disclaimerText:
+    'Diese Seite ist eine informative Übersicht über Unternehmen mit Bezug zur Landwirtschaft. Sie enthält weder Kauf- noch Verkaufsempfehlungen. Aktieninvestitionen sind mit Risiken verbunden; holen Sie vor einer Entscheidung den Rat einer zugelassenen Beratung ein. Angezeigte Kurse sind unverbindlich und zeitverzögert.',
+  kategorie: {
+    technika: 'Landtechnik',
+    agrochemie: 'Agrarchemie, Saatgut und Dünger',
+    komodity: 'Rohstoffe und Verarbeitung',
+  },
+  hubNote:
+    '📈 <strong>Tagesaktuelle Kurse</strong> und Dreimonatstrends zu jedem Unternehmen; ein Klick auf die Karte öffnet den <strong>interaktiven Kursverlauf</strong> und die wichtigsten Kennzahlen.',
+  hubCrossSales: 'Maschinenverkäufe',
+  hubCrossSalesNote: 'wie viele Maschinen je Land verkauft werden',
+  hubCrossCountries: 'Länderprofile',
+  hubCrossCountriesNote: 'die Landwirtschaft der einzelnen Märkte',
+  hubCrossPrices: 'Preise für Agrarrohstoffe',
+  hubCrossData: 'Datenbereich von agro-svět',
+
+  detailTitleTpl: '{name} ({ticker}) — Aktie, Kurs und Unternehmensprofil | agro-svět',
+  detailDescriptionTpl:
+    '{name}: Aktienkurs, Marktkapitalisierung, Sitz, Vorstandsvorsitz, Umsatz und was das Unternehmen in der Landwirtschaft macht. {profil}',
+  detailDisclaimerStrong: '⚠️ Keine Anlageempfehlung.',
+  detailDisclaimerText:
+    'Informatives Unternehmensprofil. Kurs und Kennzahlen sind unverbindlich und zeitverzögert (Fundamentaldaten von Finnhub, Kursverlauf von Yahoo Finance). Aktieninvestitionen sind mit Risiken verbunden.',
+  metricsTitle: 'Wichtige Kennzahlen',
+  mCap: 'Marktkapitalisierung',
+  mPe: 'KGV (TTM)',
+  mDiv: 'Dividendenrendite',
+  mInd: 'Branche',
+  range52: '52-Wochen-Spanne',
+  chartTitle: 'Kursverlauf',
+  chartRangesAria: 'Zeitraum des Diagramms',
+  chartLoading: 'Diagramm wird geladen…',
+  chartSource: 'Quelle: Yahoo Finance · zeitverzögert',
+  chartAria: 'Diagramm des Kursverlaufs',
+  chartPeriodSuffix: ' % im Zeitraum',
+  profileTitle: 'Was das Unternehmen macht',
+  factHq: 'Hauptsitz',
+  factFounded: 'Gegründet',
+  factCeo: 'Vorstandsvorsitz (CEO)',
+  factRevenue: 'Jahresumsatz',
+  brandsTitleMulti: 'Marken dieses Unternehmens im Katalog',
+  brandsTitleSingle: 'Modelle dieser Marke im Katalog',
+  brandsLede: 'Sehen Sie sich Maschinenkatalog und Markenprofil direkt auf agro-svět an:',
+  brandsModels: 'Modelle →',
+  brandsProfile: 'Markenprofil →',
+  logoAlt: 'Logo',
+  repTitle: 'Vertretung im deutschsprachigen Raum',
+  repLede: 'Vertrieb und Service übernimmt:',
+  achievementsTitle: 'Die wichtigsten Erfolge und Meilensteine',
+  linksTitle: 'Links',
+  linkWeb: 'Offizielle Website des Unternehmens',
+  linkCountry: 'Landwirtschaft — Profil des Landes, in dem das Unternehmen sitzt',
+  linkAll: 'Alle Aktien von Agrarunternehmen',
+  linkSales: 'Verkäufe von Landmaschinen in Europa',
+};
+
+export const content: Record<Locale, AkcieCopy> = { cs, pl, sk, uk, de };
 
 export function akcieCopy(locale: string): AkcieCopy {
   return content[locale as Locale] ?? cs;
