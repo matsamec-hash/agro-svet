@@ -5,6 +5,7 @@
 import { KVIZ_HISTORIE_PL } from './kviz.pl';
 import { KVIZ_HISTORIE_SK, LEVELS_SK } from './kviz.sk';
 import { KVIZ_HISTORIE_UK, LEVELS_UK } from './kviz.uk';
+import { KVIZ_HISTORIE_DE, LEVELS_DE } from './kviz.de';
 
 export interface QuizOption {
   text: string;
@@ -262,7 +263,7 @@ const LEVELS_PL = [
 ];
 
 /** Úrovně pro daný jazyk — pro klientský skript, který je dostane jako JSON. */
-const LEVELS_BY_LOCALE: Record<string, typeof LEVELS_PL> = { pl: LEVELS_PL, sk: LEVELS_SK, uk: LEVELS_UK };
+const LEVELS_BY_LOCALE: Record<string, typeof LEVELS_PL> = { pl: LEVELS_PL, sk: LEVELS_SK, uk: LEVELS_UK, de: LEVELS_DE };
 
 export function quizLevels(locale: string = 'cs'): { min: number; name: string; description: string; emoji: string }[] {
   const loc = LEVELS_BY_LOCALE[locale];
@@ -287,7 +288,7 @@ export function getLevel(score: number, total: number): { name: string; descript
 
 /** Sada otázek pro daný jazyk. cs = originál; pl, sk i uk mají vlastní sadu,
  *  kde jsou 3 jurisdikčně vázané otázky nahrazené, ne přeložené. */
-const QUESTIONS_BY_LOCALE: Record<string, QuizQuestion[]> = { pl: KVIZ_HISTORIE_PL, sk: KVIZ_HISTORIE_SK, uk: KVIZ_HISTORIE_UK };
+const QUESTIONS_BY_LOCALE: Record<string, QuizQuestion[]> = { pl: KVIZ_HISTORIE_PL, sk: KVIZ_HISTORIE_SK, uk: KVIZ_HISTORIE_UK, de: KVIZ_HISTORIE_DE };
 
 export function kvizHistorie(locale: string = 'cs'): QuizQuestion[] {
   return QUESTIONS_BY_LOCALE[locale] ?? KVIZ_HISTORIE;

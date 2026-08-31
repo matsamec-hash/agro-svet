@@ -149,7 +149,12 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // (Praha 50°, Berlín 52°, Vídeň 48° = tentýž pás); stránka to říká nahlas
     // přes sez.note. Odkazy na práce míří jen do launchnutých DE sekcí, protože
     // /jak-na-to a /pruvodce pro de launchnuté nejsou.
-    '/sezona'],
+    '/sezona',
+    // /kviz — hub + kvíz historie značek. DE sada NENÍ překlad: 3 ze 16 otázek
+    // byly vázané na české dotace (VCS chmel v Kč, BISS v Kč, LPIS pod SZIF)
+    // a jsou nahrazené německými se sazbami z /de/direktzahlungen. Zbylé dva
+    // kvízy (jaký traktor / jaká včela) zůstávají cs — hub je pod de nenabízí.
+    '/kviz'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

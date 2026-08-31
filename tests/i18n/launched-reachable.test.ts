@@ -108,3 +108,22 @@ describe('HIDDEN_SECTIONS neschovává sekci, která už obsah má', () => {
     });
   }
 });
+
+
+// Nalezeno 2026-08-31 při launchi /de/kviz: sekce byla launchnutá, hub se
+// vyrenderoval — a nenabízel jediný kvíz, protože LOCALIZED_QUIZZES pro de
+// chyběl. Launch sekce a viditelnost jejího obsahu jsou dvě různé věci.
+describe('launchnutý /kviz nabízí aspoň jeden kvíz', () => {
+  it('LOCALIZED_QUIZZES pokrývá každý locale, kde je /kviz launchnuté', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/pages/kviz/index.astro'), 'utf8');
+    const block = src.match(/const LOCALIZED_QUIZZES[^{]*\{([\s\S]*?)\n\};/);
+    expect(block, 'LOCALIZED_QUIZZES nenalezeno').toBeTruthy();
+    const covered = [...block![1].matchAll(/^\s*(\w+):\s*\[([^\]]*)\]/gm)]
+      .filter((m) => m[2].trim().length > 0)
+      .map((m) => m[1]);
+    const missing = (['sk', 'uk', 'pl', 'de'] as Locale[])
+      .filter((l) => LAUNCHED_PREFIXES[l].includes('/kviz'))
+      .filter((l) => !covered.includes(l));
+    expect(missing, `/kviz launchnuté, ale hub by byl prázdný: ${missing.join(', ')}`).toEqual([]);
+  });
+});

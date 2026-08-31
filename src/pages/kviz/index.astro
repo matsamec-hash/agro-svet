@@ -47,10 +47,13 @@ const quizzes = [
 // servisní sítě značek v ČR a „jaká včela" cílí na české podmínky — ty by pod
 // /pl potřebovaly polská data, ne překlad. Zůstávají prerendered, takže pod
 // locale prefixem samy 302 na cs; hub je tam ale nesmí nabízet jako živý odkaz.
+// ‼️ Přidat jazyk sem MUSÍ doprovázet každý launch /kviz — jinak hub vyrenderuje
+// prázdný seznam a sekce je sice launchnutá, ale nevede na ni odkaz.
 const LOCALIZED_QUIZZES: Record<string, string[]> = {
   pl: ['historie-znacek'],
   sk: ['historie-znacek'],
   uk: ['historie-znacek'],
+  de: ['historie-znacek'],
 };
 const visibleQuizzes = locale === 'cs'
   ? quizzes
