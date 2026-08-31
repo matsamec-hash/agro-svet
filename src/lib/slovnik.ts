@@ -38,6 +38,7 @@ import { SLOVNIK_EXTRA } from './slovnik-extra';
 import { SLOVNIK_UK, KATEGORIE_LABELS_UK } from './slovnik.uk';
 import { SLOVNIK_PL, KATEGORIE_LABELS_PL } from './slovnik.pl';
 import { SLOVNIK_SK, KATEGORIE_LABELS_SK } from './slovnik.sk';
+import { SLOVNIK_DE, KATEGORIE_LABELS_DE } from './slovnik.de';
 
 const SLOVNIK_CORE: SlovnikTerm[] = [
   // ── POHON / MOTOR / EMISE ───────────────────────────────────────────
@@ -9355,12 +9356,13 @@ export const KATEGORIE_LABELS: Record<SlovnikKategorie, string> = {
   vcelarstvi: 'Včelařství',
 };
 
-const SLOVNIK_BY_LOCALE: Record<string, SlovnikTerm[]> = { cs: SLOVNIK, uk: SLOVNIK_UK, pl: SLOVNIK_PL, sk: SLOVNIK_SK };
+const SLOVNIK_BY_LOCALE: Record<string, SlovnikTerm[]> = { cs: SLOVNIK, uk: SLOVNIK_UK, pl: SLOVNIK_PL, sk: SLOVNIK_SK, de: SLOVNIK_DE };
 const KATEGORIE_LABELS_BY_LOCALE: Record<string, Record<SlovnikKategorie, string>> = {
   cs: KATEGORIE_LABELS,
   uk: KATEGORIE_LABELS_UK,
   pl: KATEGORIE_LABELS_PL,
   sk: KATEGORIE_LABELS_SK,
+  de: KATEGORIE_LABELS_DE,
 };
 
 /** Vrátí slovník pro daný locale; neznámý locale → cs. CS chování beze změny. */

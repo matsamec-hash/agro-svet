@@ -15,6 +15,8 @@ import { getUzitkovostLabels } from '../../src/lib/plemena';
 import { vcelaTemperamentLabel, vcelaVynosLabel, vcelaRojivostLabel, medKrystalizaceLabel, vybaveniKategorieLabel, medTypLabel } from '../../src/lib/vcelarstvi';
 import { TIER_LISTS } from '../../src/lib/tier-lists';
 import { TIER_LIST_COPY } from '../../src/lib/tier-lists.i18n';
+import { SLOVNIK } from '../../src/lib/slovnik';
+import { SLOVNIK_DE, KATEGORIE_LABELS_DE } from '../../src/lib/slovnik.de';
 
 const STROJE_DIR = path.join(process.cwd(), 'src/data/stroje');
 
@@ -78,11 +80,16 @@ describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () 
       expect(isLaunchedPath('de', p), `${p} nesmí být pro de launchnuté`).toBe(false);
     }
   });
-  it('sekce bez de overlaye dat launchnuté NEJSOU', () => {
-    // /slovnik = pořád bez de dat. /znacky, /encyklopedie a /plemena už
-    // launchnuté jsou (znacky-de 22/22, encyklopedie-de 42/42, plemena-de 78/78).
-    for (const p of ['/slovnik']) {
-      expect(isLaunchedPath('de', p), `${p} nemá de overlay → nesmí být launchnuté`).toBe(false);
+  it('každá launchnutá de sekce má reálný overlay dat', () => {
+    // Invariant místo výčtu: co je launchnuté, musí mít vlastní data. /slovnik
+    // je od fáze 3d launchnuté, protože slovnik.de.ts existuje a je kompletní.
+    const OVERLAY_GUARD: Record<string, () => boolean> = {
+      '/slovnik': () => SLOVNIK_DE.length === SLOVNIK.length,
+    };
+    for (const [p, hasData] of Object.entries(OVERLAY_GUARD)) {
+      if (isLaunchedPath('de', p)) {
+        expect(hasData(), `${p} je launchnuté, ale overlay dat není kompletní`).toBe(true);
+      }
     }
   });
   it('sk/uk/pl launch se nezměnil', () => {
@@ -710,5 +717,77 @@ describe('fáze 3c — vcelarstvi de overlay', () => {
   it('výpis vybavení přiznává, že ceny jsou z českého trhu', () => {
     const src = fs.readFileSync(path.join(ROOT, 'src/pages/vcelarstvi/vybaveni/index.astro'), 'utf8');
     expect(src, 'výpis musí u Kč zobrazit poznámku stejně jako detail').toContain("slov.czkNote");
+  });
+});
+
+
+describe('slovnik.de.ts — německý slovník (fáze 3d)', () => {
+  const csBySlug = new Map(SLOVNIK.map((t) => [t.slug, t]));
+
+  it('má přesně stejné slugy a pořadí jako cs', () => {
+    expect(SLOVNIK_DE.map((t) => t.slug)).toEqual(SLOVNIK.map((t) => t.slug));
+  });
+
+  it('kategorie a related jsou identické s cs (jsou to klíče, ne text)', () => {
+    for (const d of SLOVNIK_DE) {
+      const c = csBySlug.get(d.slug)!;
+      expect(d.kategorie, d.slug).toBe(c.kategorie);
+      expect(d.related ?? [], d.slug).toEqual(c.related ?? []);
+    }
+  });
+
+  it('žádné pole není prázdné', () => {
+    for (const d of SLOVNIK_DE) {
+      expect(d.term.trim().length, d.slug).toBeGreaterThan(0);
+      expect(d.shortDef.trim().length, d.slug).toBeGreaterThan(20);
+      expect(d.longDef.trim().length, d.slug).toBeGreaterThan(200);
+    }
+  });
+
+  // ‼️ FAQ teče do FAQPage JSON-LD. Když se nepřeloží, Google dostane české
+  // otázky pod německou stránkou a v těle to není vidět — přesně ta třída
+  // úniku, kterou popisuje feedback-json-ld-nikdy-neproslo-sitem-na-cestinu.
+  it('každé heslo, které má FAQ v cs, má PŘELOŽENÉ FAQ v de', () => {
+    const notTranslated: string[] = [];
+    for (const d of SLOVNIK_DE) {
+      const c = csBySlug.get(d.slug)!;
+      if (!c.faq?.length) continue;
+      expect(d.faq?.length, `${d.slug} přišlo o FAQ`).toBeGreaterThan(0);
+      if (JSON.stringify(d.faq) === JSON.stringify(c.faq)) notTranslated.push(d.slug);
+    }
+    expect(notTranslated, `FAQ spadlo zpátky na češtinu: ${notTranslated.join(', ')}`).toEqual([]);
+  });
+
+  it('žádný externí odkaz nemíří na český zdroj', () => {
+    const bad = SLOVNIK_DE.filter((t) => t.externalUrl && /cs\.wikipedia\.org|szif\.cz|eagri\.cz|ukzuz\.cz|cschm\.cz|svscr\.cz/.test(t.externalUrl));
+    expect(bad.map((t) => t.slug), 'český externí odkaz v de slovníku').toEqual([]);
+  });
+
+  // Adresná kontrola: němčina je od češtiny dost vzdálená, takže shoda
+  // definice s českou znamená tichý fallback, ne shodu jazyků.
+  it('žádná definice se neshoduje s českou', () => {
+    const same = SLOVNIK_DE.filter((t) => {
+      const c = csBySlug.get(t.slug)!;
+      return t.shortDef === c.shortDef || t.longDef === c.longDef;
+    });
+    expect(same.map((t) => t.slug), 'nepřeložená definice').toEqual([]);
+  });
+
+  it('longDef neobsahuje česká slova mimo kurzívu', () => {
+    const CZECH = /\b(zemědělsk\w*|rostlin\w*|půd\w*|hnojiv\w*|plodin\w*|sklizeň|osiv\w*|traktor(u|em|y)|České republice|v ČR|Kč)\b/;
+    const bad: string[] = [];
+    for (const d of SLOVNIK_DE) {
+      const body = d.longDef.replace(/\*[^*]+\*/g, ' ').replace(/\[\[[^\]]+\]\]/g, ' ');
+      if (CZECH.test(body)) bad.push(d.slug);
+    }
+    expect(bad, `česká slova v německém textu: ${bad.join(', ')}`).toEqual([]);
+  });
+
+  it('KATEGORIE_LABELS_DE pokrývá všechny kategorie a je německy', () => {
+    const cats = new Set(SLOVNIK.map((t) => t.kategorie));
+    for (const c of cats) {
+      expect(KATEGORIE_LABELS_DE[c], `chybí label pro ${c}`).toBeTruthy();
+      expect(/[ěščřžýáíéůúňťď]/i.test(KATEGORIE_LABELS_DE[c]), `${c} label je česky`).toBe(false);
+    }
   });
 });

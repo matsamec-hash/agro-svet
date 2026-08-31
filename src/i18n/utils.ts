@@ -137,7 +137,14 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // hodnoty zůstávají kanonicky česky (CSS třídy + JSON-LD), překládá je
     // *Label(). ‼️ Ceny vybavení jsou v Kč z českého trhu — stránka to říká
     // nahlas přes slov.czkNote, a to nově i ve výpisu, nejen v detailu.
-    '/vcelarstvi'],
+    '/vcelarstvi',
+    // Fáze 3d: /slovnik — slovnik.de.ts, 306 hesel. ‼️ NENÍ to překlad:
+    // jurisdikčně vázaná hesla jsou NAHRAZENA německým/rakouským ekvivalentem
+    // (DZES→GLÖZ, jednotná žádost→Sammelantrag/MFA, ÚKZÚZ→BVL/BAES,
+    // ČSCHM→D.I.B./Biene Österreich, robota→Frondienst/Robot, grunt→Bauerngut).
+    // Přeložené je i FAQ (102 hesel) — teče do FAQPage JSON-LD, takže by jinak
+    // Google dostal české otázky pod německou stránkou.
+    '/slovnik'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
