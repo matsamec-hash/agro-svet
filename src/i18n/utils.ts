@@ -144,7 +144,12 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // ČSCHM→D.I.B./Biene Österreich, robota→Frondienst/Robot, grunt→Bauerngut).
     // Přeložené je i FAQ (102 hesel) — teče do FAQPage JSON-LD, takže by jinak
     // Google dostal české otázky pod německou stránkou.
-    '/slovnik'],
+    '/slovnik',
+    // Fáze 3e: /sezona — sezona.de.ts. ‼️ Měsíce setí a sklizně se NEMĚNÍ
+    // (Praha 50°, Berlín 52°, Vídeň 48° = tentýž pás); stránka to říká nahlas
+    // přes sez.note. Odkazy na práce míří jen do launchnutých DE sekcí, protože
+    // /jak-na-to a /pruvodce pro de launchnuté nejsou.
+    '/sezona'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

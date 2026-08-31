@@ -8,6 +8,7 @@ export type SeasonSlug = 'jaro' | 'leto' | 'podzim' | 'zima';
 
 import { MONTH_NAMES_PL, MONTH_SHORT_PL, SEASON_NAMES_PL, SEASON_CONTENT_PL } from './sezona.pl';
 import { MONTH_NAMES_SK, MONTH_SHORT_SK, SEASON_NAMES_SK, SEASON_CONTENT_SK } from './sezona.sk';
+import { MONTH_NAMES_DE, MONTH_SHORT_DE, SEASON_NAMES_DE, SEASON_CONTENT_DE } from './sezona.de';
 
 export interface Season {
   slug: SeasonSlug;
@@ -170,10 +171,12 @@ export function akceInSeason(akce: Akce[], seasonSlug: SeasonSlug, now: Date): A
 const MONTHS_BY_LOCALE: Record<string, { names: string[]; short: string[] }> = {
   pl: { names: MONTH_NAMES_PL, short: MONTH_SHORT_PL },
   sk: { names: MONTH_NAMES_SK, short: MONTH_SHORT_SK },
+  de: { names: MONTH_NAMES_DE, short: MONTH_SHORT_DE },
 };
 const SEASON_BY_LOCALE: Record<string, { names: Record<SeasonSlug, string>; content: Record<SeasonSlug, SeasonContent> }> = {
   pl: { names: SEASON_NAMES_PL, content: SEASON_CONTENT_PL },
   sk: { names: SEASON_NAMES_SK, content: SEASON_CONTENT_SK },
+  de: { names: SEASON_NAMES_DE, content: SEASON_CONTENT_DE },
 };
 
 export function monthNames(locale: string = 'cs'): string[] {
