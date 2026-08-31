@@ -92,7 +92,10 @@ describe('/sezona má pro každou launchnutou locale vlastní jazykovou vrstvu',
     expect(LAUNCHED_PREFIXES.sk).toContain('/sezona');
   });
 
-  for (const locale of ['sk', 'pl', 'uk'] as const) {
+  // ‼️ Seznam MUSÍ obsahovat každý jazyk, kde je /sezona launchnuté. Do
+  // 2026-08-31 tu de chybělo, takže se německá vrstva nikdy nezkontrolovala —
+  // test se jmenoval „pro každou launchnutou locale" a měl natvrdo tři.
+  for (const locale of ['sk', 'pl', 'uk', 'de'] as const) {
     it(`${locale}: názvy období, měsíce i próza nejsou české`, () => {
       if (!isLaunchedPath(locale, '/sezona')) return;
       // „Zima" se cs/sk/pl píše stejně → porovnáváme celou sadu, ne jednotlivě.
@@ -117,7 +120,10 @@ describe('/kviz má pro každou launchnutou locale vlastní sadu otázek', () =>
     expect(LAUNCHED_PREFIXES.sk).toContain('/kviz');
   });
 
-  for (const locale of ['sk', 'pl', 'uk'] as const) {
+  // ‼️ Seznam MUSÍ obsahovat každý jazyk, kde je /sezona launchnuté. Do
+  // 2026-08-31 tu de chybělo, takže se německá vrstva nikdy nezkontrolovala —
+  // test se jmenoval „pro každou launchnutou locale" a měl natvrdo tři.
+  for (const locale of ['sk', 'pl', 'uk', 'de'] as const) {
     it(`${locale}: otázky, možnosti i úrovně jsou přeložené a strukturně shodné s cs`, () => {
       const cs = kvizHistorie('cs');
       const loc = kvizHistorie(locale);

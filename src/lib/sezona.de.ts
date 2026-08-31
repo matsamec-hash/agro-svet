@@ -73,12 +73,10 @@ export const SEASON_CONTENT_DE: Record<SeasonSlug, SeasonContent> = {
     workLinks: [
       { href: '/de/stroje/', label: `Maschinenkatalog für die Anschaffungsplanung` },
       { href: '/de/direktzahlungen/', label: `Direktzahlungen — Beträge je Hektar` },
-      { href: '/de/oeko-regelungen/', label: `Öko-Regelungen für die Antragsplanung` },
     ],
     faq: [
       { q: `Welche Arbeiten fallen im Winter an?`, a: `Wartung und Instandsetzung der Maschinen, Anbauplanung und Fruchtfolge, Bodenuntersuchung, Düngebedarfsermittlung, Sortenwahl, Saatgut- und Betriebsmittelbestellung sowie die Vorbereitung des Antrags.` },
       { q: `Wann wird der Sammelantrag gestellt?`, a: `In Deutschland läuft die Antragstellung im Frühjahr mit Frist Mitte Mai, in Österreich endet der Mehrfachantrag Ende April. Die Vorbereitung — Flächenabgleich, Nutzungscodes, Auswahl der Öko-Regelungen — gehört in den Winter.` },
-      { q: `Warum ist die Bodenuntersuchung eine Winterarbeit?`, a: `Weil die Ergebnisse für die Düngeplanung des kommenden Jahres vorliegen müssen. Für Phosphor, Kalium, Magnesium und den pH-Wert wird nach Gehaltsklassen gedüngt — ohne aktuelle Werte ist weder die Menge zu begründen noch die Vorgabe der Düngeverordnung zu erfüllen.` },
     ],
   },
 };

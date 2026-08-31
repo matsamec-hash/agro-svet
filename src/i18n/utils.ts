@@ -43,7 +43,12 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // nemělo vstupní bod.
   uk: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace', '/hledat', '/zebricky', '/plodiny', '/choroby', '/akcie', '/kviz',
     '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce',
-    '/plemena', '/vcelarstvi'],
+    '/plemena', '/vcelarstvi',
+    // 2026-08-31: /sezona — sezona.uk.ts. Měsíce se NEMĚNÍ (Praha 50°,
+    // Kyjev 50,5° = tentýž pás), ale SKLADBA PLODIN ano: kukuřice a slunečnice
+    // jsou hlavní exportní plodiny, ne doplňkové, a na jihu začíná sklizeň
+    // o 2–3 týdny dřív. Text je ukrajinský obsah, ne překlad českého.
+    '/sezona'],
   // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
   // přes stat.*/data.hub./komodita. klíče. /dotace + /jak-na-to zůstávají cs
