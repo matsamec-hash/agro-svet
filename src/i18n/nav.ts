@@ -31,18 +31,36 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // (/farmy/) skryté — nemají UA obsah, vedly by celé do češtiny. UA hlavička tak
   // ukazuje jen sekce s reálným UA obsahem: `tech` (katalog + slovník) a `data`
   // (statistiky/půda/dotace) — stejný princip jako homepage rozcestník.
-  uk: ['bazar', 'photo', 'tema', 'animals', 'farms'],
+  // 2026-08-31: `tema` a `animals` ODEMČENY. Byly skryté z doby, kdy uk mělo jen
+  // katalog + data — jenže mezitím se launchnulo /plemena, /vcelarstvi, /plodiny,
+  // /choroby i /jak-na-to, a ty všechny visí právě pod nimi. Menu je tak celé
+  // zamykalo, i když stránky žily → 22 launchnutých sekcí a v hlavičce dvě.
+  // Děti filtruje isLaunchedPath, takže se nelaunchnuté (/akce, /sezona, novinky)
+  // neukážou samy od sebe. `tema` top-level href (/novinky/) launchnuté není →
+  // getNav ho přesměruje na první viditelné dítě.
+  uk: ['bazar', 'photo', 'farms'],
   // PL fáze 2: jako uk — jen sekce s reálným PL obsahem. `tech` (katalog +
   // slovník), `data` (statistiky + půda + /data hub) a `animals` (/plemena —
   // přeložený overlay plemena-pl, launchnuto 2026-08-01) zůstávají viditelné;
   // getNav odfiltruje NElaunchnuté data-děti (kalkulačky, dotace, /svet,
   // /historie) přes isLaunchedPath. novinky/farmy jsou české články → skryté.
-  pl: ['bazar', 'photo', 'tema', 'farms'],
+  // 2026-08-31: `tema` ODEMČENA. Byla skrytá jako „české články", jenže pod ní
+  // visí /plodiny, /sezona a /choroby — všechny tři mají pl overlay a jsou
+  // launchnuté, takže je menu zamykalo. /novinky je pro pl taky launchnuté
+  // (article_translations), takže top-level odkaz sedí a samostatná injektáž
+  // „Nowości" níže se ruší jako duplicitní.
+  pl: ['bazar', 'photo', 'farms'],
   // DE fáze 1: viditelná je jen `tech` (katalog techniky = jediný pan-evropský,
   // reálně přeložený obsah). `data` skrytá, protože VŠECHNY její děti jsou
   // česká jurisdikční data — bez skrytí by top-level „Daten" dead-linkovalo
   // na český /data/. `animals` skrytá do doby, než vznikne overlay plemena-de.
-  de: ['bazar', 'photo', 'tema', 'farms', 'data', 'animals'],
+  // 2026-08-31: `animals` a `tema` ODEMČENY — stejná zaseknutá past jako u uk.
+  // `animals` byla skrytá „do doby, než vznikne overlay plemena-de"; ten vznikl
+  // ve fázi 3c (78 plemen) spolu s /vcelarstvi, jen se filtr nikdy nesundal.
+  // `tema` odemčena kvůli /choroby (de overlay, fáze 3c); ostatní děti jsou
+  // nelaunchnuté a odfiltruje je isLaunchedPath. `data` zůstává skrytá — všechny
+  // její děti jsou česká jurisdikční data (ČSÚ, SZIF), bez de ekvivalentu.
+  de: ['bazar', 'photo', 'farms', 'data'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české
@@ -200,10 +218,21 @@ export function getNav(locale: Locale): NavItem[] {
   // (obsahový rozcestník, obdoba cs „Téma"). navHref přidá /pl prefix.
   if (locale === 'pl') {
     items.unshift({ section: 'poradniki', label: 'Poradniki', href: '/poradniki/' });
-    // Nowości = PL zpravodajský výpis (article_translations overlay, jen reálně
-    // přeložené obecné články). Sdílený `tema` dropdown je pro pl skrytý (cs-only
-    // děti) → injektuj samostatný jednoduchý top-level link. navHref přidá /pl.
-    items.unshift({ section: 'novinky', label: 'Nowości', href: '/novinky/' });
+    // PL-only jurisdikční landingy + sekce, na které sdílený cs strom nemá
+    // položku. Bez toho byly osiřelé: /doplaty-bezposrednie a /ekoschematy jsou
+    // vlajkové polské stránky (sazby ARiMR) a nevedl na ně žádný odkaz,
+    // /encyklopedie a univerzální převodníky taktéž. Injektuje se JEN pro pl,
+    // takže sdílený strom (a tím cs/sk/uk/de nav) zůstává nedotčený.
+    items.unshift({
+      section: 'doplaty', label: 'Dopłaty', href: '/doplaty-bezposrednie/',
+      children: [
+        { label: 'Dopłaty bezpośrednie', href: '/doplaty-bezposrednie/' },
+        { label: 'Ekoschematy', href: '/ekoschematy/' },
+        { label: 'Encyklopedia maszyn', href: '/encyklopedie/' },
+        { label: 'Przelicznik powierzchni', href: '/kalkulacka/prevody-jednotek/' },
+        { label: 'Przelicznik masy', href: '/kalkulacka/prevody-hmotnost/' },
+      ],
+    });
   }
   return items;
 }

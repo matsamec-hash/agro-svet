@@ -1,12 +1,46 @@
 ---
-// Ukrajinská homepage = kurátovaný rozcestník na 4 launchnuté UA sekce
-// (statistiky / puda / dotace / slovnik), NE český zpravodajský feed.
-// Renderuje se z index.astro když locale === 'uk'. Vzor: PudaUk.astro
-// (self-contained, vlastní <Layout>, ukrajinské stringy hardcoded).
-// Cesty hardcoded /uk/... — všechny 4 sekce jsou launchnuté a UA-only.
+// Ukrajinská homepage = kurátovaný rozcestník na launchnuté UA sekce,
+// NE český zpravodajský feed. Renderuje se z index.astro když locale === 'uk'.
+// Vzor: PudaUk.astro (self-contained, vlastní <Layout>, ukrajinské stringy).
+// ‼️ 2026-08-31: rozcestník tu roky nabízel JEN 4 karty (statistiky / puda /
+// dotace / slovnik), přestože uk má launchnutých 22 sekcí — katalog techniky,
+// značky, encyklopedie, srovnání, žebříčky, plodiny, choroby, plemena,
+// včelařství, jak-na-to, kvíz i akcie žily a nevedl na ně jediný odkaz.
+// Launch sekce a odkaz na ni jsou DVĚ různé věci; hlídá to uk-launch.test.ts.
+// Cesty hardcoded /uk/... — každá odpovídá záznamu v LAUNCHED_PREFIXES.uk.
 import Layout from '../../layouts/Layout.astro';
 
 const SECTIONS = [
+  {
+    href: '/uk/stroje/',
+    icon: '🚜',
+    title: 'Каталог техніки',
+    desc: 'Трактори, комбайни та причіпна техніка 22 брендів — технічні дані, серії та моделі.',
+  },
+  {
+    href: '/uk/znacky/',
+    icon: '🏭',
+    title: 'Бренди',
+    desc: 'Профілі виробників сільгосптехніки — історія, модельний ряд і місце на ринку.',
+  },
+  {
+    href: '/uk/encyklopedie/',
+    icon: '📚',
+    title: 'Енциклопедія машин',
+    desc: 'Докладні описи окремих моделей: двигун, трансмісія, оснащення та для кого вони призначені.',
+  },
+  {
+    href: '/uk/srovnani/',
+    icon: '⚖️',
+    title: 'Порівняння моделей',
+    desc: 'Дві машини поруч — потужність, вага та оснащення у прямому зіставленні.',
+  },
+  {
+    href: '/uk/zebricky/',
+    icon: '🏆',
+    title: 'Рейтинги',
+    desc: 'Добірки за потужністю та шириною захвату — від компактних тракторів до кормозбиральних комбайнів.',
+  },
   {
     href: '/uk/statistiky/',
     icon: '📊',
@@ -26,25 +60,68 @@ const SECTIONS = [
     desc: 'Гранти й воєнна підтримка, програма «Власна справа», кредити 5-7-9 та донори.',
   },
   {
+    href: '/uk/akcie/',
+    icon: '📈',
+    title: 'Акції агрокомпаній',
+    desc: 'Курси акцій найбільших аграрних компаній світу та їхній рух на біржах.',
+  },
+  {
+    href: '/uk/plodiny/',
+    icon: '🌾',
+    title: 'Культури та сорти',
+    desc: 'Агрономія польових культур — норма висіву, удобрення, сівозміна та врожайність.',
+  },
+  {
+    href: '/uk/choroby/',
+    icon: '🍂',
+    title: 'Хвороби та шкідники',
+    desc: 'Атлас хвороб і шкідників польових культур: симптоми, збудники та рекомендований захист.',
+  },
+  {
+    href: '/uk/plemena/',
+    icon: '🐄',
+    title: 'Породи тварин',
+    desc: 'ВРХ, коні, вівці та свині — походження, напрям продуктивності та умови утримання.',
+  },
+  {
+    href: '/uk/vcelarstvi/',
+    icon: '🐝',
+    title: 'Бджільництво',
+    desc: 'Породи бджіл, обладнання та сорти меду — путівник для початківців і досвідчених пасічників.',
+  },
+  {
+    href: '/uk/jak-na-to/',
+    icon: '🛠️',
+    title: 'Як це зробити',
+    desc: 'Покрокові інструкції для практичної роботи в господарстві.',
+  },
+  {
     href: '/uk/slovnik/',
     icon: '📖',
     title: 'Словник',
     desc: 'Понад 300 аграрних термінів з поясненнями — від гектара до субсидій ЄС.',
   },
+  {
+    href: '/uk/kviz/',
+    icon: '🎯',
+    title: 'Вікторини',
+    desc: 'Перевірте свої знання про сільськогосподарську техніку та аграрну справу.',
+  },
 ];
 ---
 
 <Layout
-  title="Аграрний світ — дані про сільське господарство України"
-  description="Аграрні дані України: статистика експорту та виробництва, ринок землі, субсидії й воєнна підтримка, словник аграрних термінів."
+  title="Аграрний світ — техніка, дані та довідник для сільського господарства України"
+  description="Аграрний портал українською: каталог сільгосптехніки 22 брендів, статистика експорту та виробництва, ринок землі, субсидії й воєнна підтримка, культури, хвороби, породи тварин і словник аграрних термінів."
 >
   <div class="huk-root">
     <section class="huk-hero">
-      <span class="huk-kicker"><span class="dot"></span>АГРАРНІ ДАНІ · ДОВІДНИК</span>
+      <span class="huk-kicker"><span class="dot"></span>ТЕХНІКА · ДАНІ · ДОВІДНИК</span>
       <h1>Аграрний світ <em>України</em></h1>
       <p class="huk-lede">
-        Перевірені дані та довідник про українське сільське господарство:
-        статистика експорту, ринок землі, державна підтримка й словник термінів.
+        Техніка, дані та довідник в одному місці: каталог машин 22 брендів,
+        статистика експорту й ринок землі, державна підтримка, культури та їхні
+        хвороби, породи тварин і словник аграрних термінів.
       </p>
     </section>
 

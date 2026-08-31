@@ -63,21 +63,43 @@ const SECTIONS = [
     title: 'Ranglisten',
     desc: 'Kuratierte Ranglisten nach Leistung und Arbeitsbreite — von Kompakttraktoren bis zu Feldhäckslern über 1 000 PS.',
   },
+  // Fáze 3c sekce. ‼️ Launchnuly se v LAUNCHED_PREFIXES, ale sem se nikdy
+  // nedopsaly — z pohledu návštěvníka tedy neexistovaly. Launch sekce a odkaz
+  // na ni jsou DVĚ různé věci; hlídá to de-launch.test.ts.
+  {
+    href: '/de/plemena/',
+    icon: '🐄',
+    title: 'Nutztierrassen',
+    desc: 'Rinder, Pferde, Schafe und Schweine — Herkunft, Leistungsrichtung und wofür sich jede Rasse eignet.',
+  },
+  {
+    href: '/de/choroby/',
+    icon: '🍂',
+    title: 'Krankheiten und Schädlinge',
+    desc: 'Atlas der wichtigsten Krankheiten und Schädlinge im Ackerbau: Symptome, Erreger und Bekämpfung.',
+  },
+  {
+    href: '/de/vcelarstvi/',
+    icon: '🐝',
+    title: 'Imkerei',
+    desc: 'Bienenrassen, Ausrüstung und Honigsorten — der Einstieg in die Imkerei Schritt für Schritt.',
+  },
 ];
 ---
 
 <Layout
   title="Landmaschinen und Agrarförderung — Daten und Katalog"
-  description="Landtechnik und Agrarförderung im Überblick: Maschinenkatalog mit 22 Marken, Modellvergleich, Enzyklopädie sowie die Beträge der Direktzahlungen und Öko-Regelungen je Hektar."
+  description="Landtechnik und Agrarwissen im Überblick: Maschinenkatalog mit 22 Marken, Modellvergleich und Enzyklopädie, die Beträge der Direktzahlungen und Öko-Regelungen für Deutschland und Österreich sowie Nutztierrassen, Pflanzenkrankheiten und Imkerei."
 >
   <div class="hde-root">
     <section class="hde-hero">
-      <span class="hde-kicker"><span class="dot"></span>LANDTECHNIK · FÖRDERUNG · DATEN</span>
-      <h1>Landmaschinen und <em>Agrarförderung</em></h1>
+      <span class="hde-kicker"><span class="dot"></span>LANDTECHNIK · FÖRDERUNG · TIERE · PFLANZEN</span>
+      <h1>Landmaschinen und <em>Agrarwissen</em></h1>
       <p class="hde-lede">
-        Ein Katalog der Landtechnik und die Zahlen zur Agrarförderung an einem Ort:
-        Maschinen von 22 Marken mit technischen Daten, direkte Modellvergleiche und
-        die aktuellen Förderbeträge je Hektar für Deutschland und Österreich.
+        Landtechnik, Förderung und Fachwissen an einem Ort: Maschinen von 22 Marken
+        mit technischen Daten und direktem Modellvergleich, die aktuellen Förderbeträge
+        je Hektar für Deutschland und Österreich sowie Nutztierrassen, Pflanzenkrankheiten
+        und Imkerei.
       </p>
     </section>
 

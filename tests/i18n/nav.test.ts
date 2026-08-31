@@ -87,12 +87,11 @@ describe('getNav', () => {
     expect(data!.href).toBe('/statistiky/');
   });
 
-  it('uk nav: jen sekce s UA obsahem — tech + data (tema/animals/farms skryté)', () => {
-    const nav = getNav('uk');
-    expect(nav.map((i) => i.section)).toEqual(['tech', 'data']);
-    // top-level hrefs = launchnuté cs-root cesty (navHref je lokalizuje na /uk/)
-    expect(nav.find((s) => s.section === 'tech')!.href).toBe('/stroje/');
-    expect(nav.find((s) => s.section === 'data')!.href).toBe('/statistiky/');
+  it('uk nav: sekce s UA obsahem — tema/animals/tech/data (farms skryté)', () => {
+    // 2026-08-31: `tema` a `animals` odemčeny. Pod nimi visí launchnuté
+    // /plodiny, /choroby, /jak-na-to, /plemena a /vcelarstvi — menu je do té
+    // doby zamykalo, přestože stránky žily (viz launched-reachable.test.ts).
+    expect(getNav('uk').map((i) => i.section)).toEqual(['tema', 'animals', 'tech', 'data']);
   });
 
   it('uk nav: tech sekce jen launchnuté děti (žádní prodejci do cs)', () => {

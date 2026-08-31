@@ -3,11 +3,13 @@ import { getNav, getFooterColumns, HIDDEN_SECTIONS, HIDDEN_NEWS_CATEGORIES } fro
 import { isLaunchedPath } from '../../src/i18n/utils';
 
 describe('pl nav konfigurace', () => {
-  it('HIDDEN_SECTIONS.pl skrývá bazar/photo/tema/farms', () => {
+  it('HIDDEN_SECTIONS.pl skrývá bazar/photo/farms', () => {
     // `svet` už není top-level sekce (přesunuto pod Data); pro pl se /svet děti
     // filtrují přes isLaunchedPath (není launchnuté), ne přes HIDDEN_SECTIONS.
     // 'animals' (/plemena) odemčeno 2026-08-01 → už NENÍ skryté.
-    expect(HIDDEN_SECTIONS.pl).toEqual(['bazar', 'photo', 'tema', 'farms']);
+    // 'tema' odemčeno 2026-08-31: pod ním visí launchnuté /plodiny, /sezona
+    // a /choroby, které menu jinak zamykalo (viz launched-reachable.test.ts).
+    expect(HIDDEN_SECTIONS.pl).toEqual(['bazar', 'photo', 'farms']);
   });
   it('HIDDEN_NEWS_CATEGORIES.pl = dotace/legislativa', () => {
     expect(HIDDEN_NEWS_CATEGORIES.pl).toEqual(['dotace', 'legislativa']);
@@ -30,13 +32,21 @@ describe('pl nav konfigurace', () => {
     // /prodejci = čeští prodejci osiv a techniky (jurisdikce).
     expect(hrefs).not.toContain('/prodejci/');
   });
-  it('pl nav neobsahuje skryté sekce (bazar/farmy/tema); animals launchnuté', () => {
+  it('pl nav neobsahuje skryté sekce (bazar/farmy); animals+tema launchnuté', () => {
     const sections = getNav('pl').map((i) => i.section);
     expect(sections).not.toContain('bazar');
     expect(sections).not.toContain('farms');
-    expect(sections).not.toContain('tema');
     // 'animals' (/plemena) je od 2026-08-01 launchnuté pro pl → viditelné v nav
     expect(sections).toContain('animals');
+    // 'tema' od 2026-08-31 taky — kvůli /plodiny, /sezona a /choroby.
+    expect(sections).toContain('tema');
+    // PL-only injektáž: dopłaty + ekoschematy + encyklopedia + przeliczniki.
+    // Bez ní byly tyhle launchnuté cesty osiřelé (žádný odkaz v celém webu).
+    const doplaty = getNav('pl').find((i) => i.section === 'doplaty');
+    expect(doplaty?.children?.map((c) => c.href)).toEqual([
+      '/doplaty-bezposrednie/', '/ekoschematy/', '/encyklopedie/',
+      '/kalkulacka/prevody-jednotek/', '/kalkulacka/prevody-hmotnost/',
+    ]);
   });
   it('pl footer ukazuje JEN odkazy na launchnuté sekce (žádné cs dead-linky)', () => {
     const cols = getFooterColumns('pl');
