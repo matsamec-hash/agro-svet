@@ -214,7 +214,17 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // zemědělství („na českých polích", sazby SZIF), což se pro DE/AT nepřekládá,
     // ale píše znovu. Kategorie `dotace` a `legislativa` navíc drží
     // HIDDEN_NEWS_CATEGORIES.de mimo.
-    '/novinky'],
+    '/novinky',
+    // Fáze 3j: /jak-na-to — overlay kolekce `howtoDe`, 10 z 12 návodů.
+    // ‼️ Dva jurisdikční NEpřeloženy záměrně: `registrace-vcelaru` (evidence
+    // u ČMSCH podle českého veterinárního zákona) a
+    // `jak-naplanovat-dotaci-na-techniku` (SZIF, kola PRV). Chybějící slug
+    // pod /de vrací 404, ne český fallback. Ve zbylých návodech jsou české
+    // reálie NAHRAZENÉ, ne přeložené: hlášení včelstev jde na Veterinäramt
+    // a Tierseuchenkasse (DE) resp. do VIS (AT), ČSV → Imkerverein / D.I.B. /
+    // Biene Österreich, metodika SVS → Bieneninstitute a AGES, prodej medu
+    // podle Honigverordnung. Ceny v Kč vypuštěné — německé si nevymýšlím.
+    '/jak-na-to'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

@@ -276,6 +276,16 @@ const howtoUk = defineCollection({
   schema: howtoSchema(),
 });
 
+// DE-localizovaná overlay kolekce howto (slug = REUSE cs slug). Chybějící de
+// slug pod /de = 404 (žádný cs leak). Dva jurisdikční návody NEpřeloženy
+// záměrně: `registrace-vcelaru` (evidence u ČMSCH a povinnosti podle českého
+// veterinárního zákona) a `jak-naplanovat-dotaci-na-techniku` (SZIF, kola PRV).
+// Pro DE/AT k nim vznikne vlastní obsah, ne překlad.
+const howtoDe = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/howto-de' }),
+  schema: howtoSchema(),
+});
+
 // PL-only sekce /poradniki — polské evergreen návody (agrotechnika + technika).
 // Není overlay cs sekce (žádný cs ekvivalent), obsah přímo polsky. Stejné schema
 // jako howto (steps → HowTo JSON-LD). Chybějící slug pod /pl = 404.
@@ -284,4 +294,4 @@ const poradnikiPl = defineCollection({
   schema: howtoSchema(),
 });
 
-export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, encyklopedieDe, znacky, znackySk, znackyUk, znackyPl, znackyDe, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk, poradnikiPl };
+export const collections = { encyklopedie, encyklopedieSk, encyklopedieUk, encyklopediePl, encyklopedieDe, znacky, znackySk, znackyUk, znackyPl, znackyDe, puda, pudaSk, pudaUk, pudaPl, dotace, dotaceSk, howto, howtoSk, howtoUk, howtoDe, poradnikiPl };

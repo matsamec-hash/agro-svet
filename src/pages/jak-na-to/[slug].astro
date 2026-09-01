@@ -16,7 +16,9 @@ const bcp47 = BCP47[locale as keyof typeof BCP47] ?? 'cs-CZ';
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
-const HOWTO_COLLECTION = { cs: 'howto', sk: 'howtoSk', uk: 'howtoUk' } as const;
+// ‼️ Mapa bez `de` by pro němčinu vrátila undefined a getCollection(undefined)
+// spadne — proto se sem musí přidat KAŽDÝ launchnutý jazyk (viz jak-na-to.test.ts).
+const HOWTO_COLLECTION = { cs: 'howto', sk: 'howtoSk', uk: 'howtoUk', de: 'howtoDe' } as const;
 const items = await getCollection(HOWTO_COLLECTION[locale]);
 const item = items.find((i) => i.id === slug);
 if (!item) return Astro.rewrite('/404');
