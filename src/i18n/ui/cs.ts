@@ -1455,5 +1455,26 @@ const cs: Record<string, string> = {
   'search.titleQuery': 'Hledám: „{q}"',
   'search.resultsFor': 'Výsledky: „{q}"',
   'search.metaDesc': 'Vyhledávání v novinkách, katalogu techniky a plemen, i v bazaru.',
+  // Doplněno 2026-09-01: /hledat mělo těchto 18 řetězců natvrdo česky, přestože
+  // je launchnuté i pro sk/pl/uk. Skupiny výsledků se navíc gatují podle toho,
+  // jestli je CÍLOVÁ sekce v dané locale launchnutá — jinak by odkaz vedl do cs.
+  'search.placeholder': 'Zadej hledaný výraz — značka, model, plemeno, inzerát…',
+  'search.minChars': 'Zadej alespoň 2 znaky.',
+  'search.found': 'Nalezeno celkem {n} výsledků ve {s} sekcích.',
+  'search.empty': 'Pro „{q}" nic nenalezeno.',
+  'search.emptyHint': 'Zkus jiný výraz nebo obecnější termín.',
+  'search.g.novinky': 'Novinky',
+  'search.g.stroje': 'Technika',
+  'search.g.plemena': 'Zvířata',
+  'search.g.bazar': 'Agro bazar',
+  'search.more.novinky': 'Všechny články',
+  'search.more.stroje': 'Všech {n} modelů',
+  'search.more.plemena': 'Všech {n} plemen',
+  'search.more.bazar': 'Všechny inzeráty',
+  'search.scopeIntro': 'Hledání prohledává:',
+  'search.scope.novinky': 'název a perex',
+  'search.scope.stroje': 'značku, model a řadu',
+  'search.scope.plemena': 'název, původ a alternativní názvy',
+  'search.scope.bazar': 'název a popis',
 };
 export default cs;

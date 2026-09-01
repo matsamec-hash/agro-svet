@@ -4,12 +4,29 @@ import { createAnonClient } from '../lib/supabase';
 import { getAllModels } from '../lib/stroje';
 import { getAllPlemena } from '../lib/plemena';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../lib/config';
-import { useTranslations, tf, getLocaleFromUrl } from '../i18n/utils';
+import {
+  useTranslations,
+  tf,
+  getLocaleFromUrl,
+  searchGroupsFor,
+  localizeInternalHref,
+  localizedCategory,
+} from '../i18n/utils';
+import { defaultLocale } from '../i18n/config';
+import { buildTranslationMap, hasTranslatedTitle, overlayArticle } from '../lib/articles-i18n';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 
 const query = (Astro.url.searchParams.get('q') ?? '').trim();
+
+/** Jediný zdroj pravdy o tom, co se v této locale prohledává (viz
+ *  searchGroupsFor). Používá se ZÁROVEŇ na dotazy i na výčet „co prohledáváme",
+ *  aby stránka neslibovala sekci, do které nikdy nesáhne. */
+const searchable = new Set(searchGroupsFor(locale));
+const has = (id: string) => searchable.has(id);
+/** Lokalizovaný odkaz s dotazem: cestu prefixuje locale, query zůstává. */
+const hrefQ = (csPath: string) => `${localizeInternalHref(locale, csPath)}?q=${encodeURIComponent(query)}`;
 
 type ResultItem = {
   title: string;
@@ -31,104 +48,150 @@ let totalHits = 0;
 
 if (query.length >= 2) {
   const needle = query.toLowerCase();
-
-  // Articles (fulltext on title + perex)
   const supabase = createAnonClient();
-  const { data: articles } = await supabase
-    .from('articles')
-    .select('title, slug, perex, category, published_at')
-    .eq('site_id', SITE_ID)
-    .eq('status', 'published')
-    .or(`title.ilike.%${query}%,perex.ilike.%${query}%`)
-    .order('published_at', { ascending: false })
-    .limit(10);
 
-  if (articles && articles.length > 0) {
-    groups.push({
-      id: 'novinky',
-      label: 'Novinky',
-      icon: 'news',
-      items: articles.map((a: any) => ({
-        title: a.title,
-        url: `/novinky/${a.slug}/`,
-        snippet: a.perex,
-        meta: a.category,
-      })),
-      moreLink: { href: `/novinky/?q=${encodeURIComponent(query)}`, label: 'Všechny články' },
-    });
-    totalHits += articles.length;
+  // Novinky. cs hledá v `articles`; ne-cs hledá v PŘELOŽENÝCH titulcích a
+  // perexech (`article_translations`), ne v českých — jinak by /pl/hledat
+  // reagovalo na české slovo a vypsalo článek, který polsky vůbec není.
+  if (has('novinky')) {
+    let articles: any[] = [];
+    if (locale === defaultLocale) {
+      const { data } = await supabase
+        .from('articles')
+        .select('id, title, slug, perex, category, published_at')
+        .eq('site_id', SITE_ID)
+        .eq('status', 'published')
+        .or(`title.ilike.%${query}%,perex.ilike.%${query}%`)
+        .order('published_at', { ascending: false })
+        .limit(10);
+      articles = data ?? [];
+    } else {
+      const { data: trs } = await supabase
+        .from('article_translations')
+        .select('article_id, title, perex')
+        .eq('locale', locale)
+        .or(`title.ilike.%${query}%,perex.ilike.%${query}%`)
+        .limit(10);
+      const rows = (trs ?? []).filter((r: any) => r?.article_id && hasTranslatedTitle(r));
+      if (rows.length > 0) {
+        const map = buildTranslationMap(rows as any);
+        const { data: cs } = await supabase
+          .from('articles')
+          .select('id, title, slug, perex, category, published_at')
+          .eq('site_id', SITE_ID)
+          .eq('status', 'published')
+          .in('id', rows.map((r: any) => r.article_id))
+          .order('published_at', { ascending: false });
+        articles = (cs ?? []).map((a: any) => overlayArticle(a, map.get(a.id)));
+      }
+    }
+
+    if (articles.length > 0) {
+      groups.push({
+        id: 'novinky',
+        label: tr('search.g.novinky'),
+        icon: 'news',
+        items: articles.map((a: any) => ({
+          title: a.title,
+          url: localizeInternalHref(locale, `/novinky/${a.slug}/`),
+          snippet: a.perex,
+          meta: a.category ? localizedCategory(locale, a.category) : undefined,
+        })),
+        moreLink: { href: hrefQ('/novinky/'), label: tr('search.more.novinky') },
+      });
+      totalHits += articles.length;
+    }
   }
 
-  // Stroje (client of static YAML)
-  const modelMatches = getAllModels(locale).filter((m) => {
-    const hay = `${m.brand_name} ${m.name} ${m.series_name}`.toLowerCase();
-    return hay.includes(needle);
-  });
-  if (modelMatches.length > 0) {
-    groups.push({
-      id: 'stroje',
-      label: 'Technika',
-      icon: 'tractor',
-      items: modelMatches.slice(0, 15).map((m) => {
-        const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
-        return {
-          title: `${m.brand_name} ${m.name}`,
-          url: `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`,
-          snippet: m.description?.slice(0, 140) ?? undefined,
-          meta: `${m.series_name}${m.power_hp ? ` · ${m.power_hp} k` : ''}${m.year_from ? ` · ${m.year_from}${m.year_to ? '–' + m.year_to : `–${tr('cat.rada.dosud')}`}` : ''}`,
-        };
-      }),
-      moreLink: modelMatches.length > 15 ? { href: `/stroje/?q=${encodeURIComponent(query)}`, label: `Všech ${modelMatches.length} modelů` } : undefined,
+  // Stroje (katalog ze statických YAML, pan-evropský)
+  if (has('stroje')) {
+    const modelMatches = getAllModels(locale).filter((m) => {
+      const hay = `${m.brand_name} ${m.name} ${m.series_name}`.toLowerCase();
+      return hay.includes(needle);
     });
-    totalHits += modelMatches.length;
+    if (modelMatches.length > 0) {
+      groups.push({
+        id: 'stroje',
+        label: tr('search.g.stroje'),
+        icon: 'tractor',
+        items: modelMatches.slice(0, 15).map((m) => {
+          const short = m.slug.startsWith(m.brand_slug + '-') ? m.slug.slice(m.brand_slug.length + 1) : m.slug;
+          return {
+            title: `${m.brand_name} ${m.name}`,
+            url: localizeInternalHref(locale, `/stroje/${m.brand_slug}/${m.series_slug}/${short}/`),
+            snippet: m.description?.slice(0, 140) ?? undefined,
+            meta: `${m.series_name}${m.power_hp ? ` · ${m.power_hp} ${tr('cmp.unitHp')}` : ''}${m.year_from ? ` · ${m.year_from}${m.year_to ? '–' + m.year_to : `–${tr('cat.rada.dosud')}`}` : ''}`,
+          };
+        }),
+        moreLink: modelMatches.length > 15
+          ? { href: hrefQ('/stroje/'), label: tf(locale, 'search.more.stroje', { n: modelMatches.length }) }
+          : undefined,
+      });
+      totalHits += modelMatches.length;
+    }
   }
 
   // Plemena
-  const plemenaMatches = getAllPlemena().filter((p) => {
-    const hay = `${p.name} ${(p.alternative_names ?? []).join(' ')} ${p.origin_country}`.toLowerCase();
-    return hay.includes(needle);
-  });
-  if (plemenaMatches.length > 0) {
-    groups.push({
-      id: 'plemena',
-      label: 'Zvířata',
-      icon: 'animal',
-      items: plemenaMatches.slice(0, 12).map((p) => ({
-        title: p.name,
-        url: `/plemena/${p.druh_slug}/${p.slug}/`,
-        snippet: p.description?.slice(0, 140),
-        meta: `${p.druh_name} · ${p.origin_country}`,
-      })),
-      moreLink: plemenaMatches.length > 12 ? { href: `/plemena/?q=${encodeURIComponent(query)}`, label: `Všech ${plemenaMatches.length} plemen` } : undefined,
+  if (has('plemena')) {
+    const plemenaMatches = getAllPlemena(locale).filter((p) => {
+      const hay = `${p.name} ${(p.alternative_names ?? []).join(' ')} ${p.origin_country}`.toLowerCase();
+      return hay.includes(needle);
     });
-    totalHits += plemenaMatches.length;
+    if (plemenaMatches.length > 0) {
+      groups.push({
+        id: 'plemena',
+        label: tr('search.g.plemena'),
+        icon: 'animal',
+        items: plemenaMatches.slice(0, 12).map((p) => ({
+          title: p.name,
+          url: localizeInternalHref(locale, `/plemena/${p.druh_slug}/${p.slug}/`),
+          snippet: p.description?.slice(0, 140),
+          meta: `${p.druh_name} · ${p.origin_country}`,
+        })),
+        moreLink: plemenaMatches.length > 12
+          ? { href: hrefQ('/plemena/'), label: tf(locale, 'search.more.plemena', { n: plemenaMatches.length }) }
+          : undefined,
+      });
+      totalHits += plemenaMatches.length;
+    }
   }
 
-  // Bazar listings (fulltext on title)
-  const { data: listings } = await supabase
-    .from('bazar_listings')
-    .select('id, title, price, location, category, brand, year_of_manufacture, power_hp, created_at')
-    .eq('status', 'active')
-    .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
-    .order('created_at', { ascending: false })
-    .limit(10);
+  // Bazar (cs-only — viz SEARCH_GROUP_SECTIONS)
+  if (has('bazar')) {
+    const { data: listings } = await supabase
+      .from('bazar_listings')
+      .select('id, title, price, location, category, brand, year_of_manufacture, power_hp, created_at')
+      .eq('status', 'active')
+      .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+      .order('created_at', { ascending: false })
+      .limit(10);
 
-  if (listings && listings.length > 0) {
-    groups.push({
-      id: 'bazar',
-      label: 'Agro bazar',
-      icon: 'tag',
-      items: listings.map((l: any) => ({
-        title: l.title,
-        url: `/bazar/${l.id}/`,
-        snippet: `${l.location}${l.year_of_manufacture ? ` · rok ${l.year_of_manufacture}` : ''}${l.power_hp ? ` · ${l.power_hp} k` : ''}`,
-        meta: l.price ? `${l.price.toLocaleString('cs-CZ')} Kč` : 'Dohodou',
-      })),
-      moreLink: { href: `/bazar/?q=${encodeURIComponent(query)}`, label: 'Všechny inzeráty' },
-    });
-    totalHits += listings.length;
+    if (listings && listings.length > 0) {
+      groups.push({
+        id: 'bazar',
+        label: tr('search.g.bazar'),
+        icon: 'tag',
+        items: listings.map((l: any) => ({
+          title: l.title,
+          url: `/bazar/${l.id}/`,
+          snippet: `${l.location}${l.year_of_manufacture ? ` · rok ${l.year_of_manufacture}` : ''}${l.power_hp ? ` · ${l.power_hp} ${tr('cmp.unitHp')}` : ''}`,
+          meta: l.price ? `${l.price.toLocaleString('cs-CZ')} Kč` : 'Dohodou',
+        })),
+        moreLink: { href: hrefQ('/bazar/'), label: tr('search.more.bazar') },
+      });
+      totalHits += listings.length;
+    }
   }
 }
+
+/** Co vyhledávání prohledává — drží se stejných podmínek jako skupiny výše,
+ *  aby stránka neslibovala sekci, kterou v dané locale nikdy neprohledá. */
+const scope = [
+  has('novinky') && { label: tr('search.g.novinky'), detail: tr('search.scope.novinky') },
+  has('stroje') && { label: tr('search.g.stroje'), detail: tr('search.scope.stroje') },
+  has('plemena') && { label: tr('search.g.plemena'), detail: tr('search.scope.plemena') },
+  has('bazar') && { label: tr('search.g.bazar'), detail: tr('search.scope.bazar') },
+].filter(Boolean) as Array<{ label: string; detail: string }>;
 ---
 
 <Layout title={query ? tf(locale, 'search.titleQuery', { q: query }) : tr('search.h1')} description={tr('search.metaDesc')} noindex={true}>
@@ -140,7 +203,7 @@ if (query.length >= 2) {
       </h1>
     </div>
 
-    <form method="GET" action="/hledat/" style="margin-bottom:32px;">
+    <form method="GET" action={localizeInternalHref(locale, '/hledat/')} style="margin-bottom:32px;">
       <div style="position:relative;">
         <svg style="position:absolute; left:20px; top:50%; transform:translateY(-50%); pointer-events:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
@@ -149,13 +212,13 @@ if (query.length >= 2) {
           type="search"
           name="q"
           value={query}
-          placeholder="Zadej hledaný výraz — značka, model, plemeno, inzerát…"
+          placeholder={tr('search.placeholder')}
           autofocus
           style="width:100%; height:56px; padding:0 20px 0 52px; font-size:17px; background:#fff; border:1px solid #d9d9d9; border-radius:14px;"
         />
       </div>
       {query.length >= 1 && query.length < 2 && (
-        <p style="font-size:13px; color:#767676; margin-top:8px;">Zadej alespoň 2 znaky.</p>
+        <p style="font-size:13px; color:#767676; margin-top:8px;">{tr('search.minChars')}</p>
       )}
     </form>
 
@@ -163,12 +226,12 @@ if (query.length >= 2) {
       <>
         {totalHits > 0 ? (
           <div style="margin-bottom:14px; font-size:14px; color:#666;">
-            Nalezeno celkem {totalHits} výsledků ve {groups.length} sekcích.
+            {tf(locale, 'search.found', { n: totalHits, s: groups.length })}
           </div>
         ) : (
           <div style="padding:48px 0; text-align:center; color:#666;">
-            <p style="font-size:16px;">Pro „{query}" nic nenalezeno.</p>
-            <p style="font-size:13px; margin-top:8px;">Zkus jiný výraz nebo obecnější termín.</p>
+            <p style="font-size:16px;">{tf(locale, 'search.empty', { q: query })}</p>
+            <p style="font-size:13px; margin-top:8px;">{tr('search.emptyHint')}</p>
           </div>
         )}
 
@@ -218,12 +281,11 @@ if (query.length >= 2) {
 
     {!query && (
       <div style="padding:32px 0; color:#666; line-height:1.6; font-size:15px;">
-        <p>Hledání prohledává:</p>
+        <p>{tr('search.scopeIntro')}</p>
         <ul style="margin-top:10px; padding-left:22px;">
-          <li>Články v <strong>Novinkách</strong> (název + perex)</li>
-          <li><strong>Katalog techniky</strong> (značka + model + řada)</li>
-          <li><strong>Katalog plemen</strong> (název + původ + alternativy)</li>
-          <li><strong>Inzeráty v bazaru</strong> (název + popis)</li>
+          {scope.map((s) => (
+            <li><strong>{s.label}</strong> — {s.detail}</li>
+          ))}
         </ul>
       </div>
     )}

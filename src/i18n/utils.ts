@@ -118,9 +118,11 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // Provozovatel a sídlo zůstávají české — to je fakt, ne lokalizovatelný údaj;
   // dozorový úřad je proto ÚOOÚ, stránka ale odkazuje i na německé zemské
   // úřady a rakouskou DSB (čl. 77 odst. 1 GDPR).
-  // /hledat ZÁMĚRNĚ nelaunchnuté: je noindex a tahá české články z Supabase
-  // + má natvrdo české labely („Všechny články") → launch by pod /de/
-  // servíroval český obsah. Doplnit spolu s gatingem novinek a bazaru.
+  // /hledat: DOŘEŠENO 2026-09-01 (fáze 3g). Důvod odkladu byl platný — stránka
+  // měla 18 řetězců natvrdo česky a prohledávala české `articles` i český bazar.
+  // Teď se skupiny výsledků gatují podle toho, jestli je CÍLOVÁ sekce v dané
+  // locale launchnutá (/de tak hledá v technice a plemenech, ne v novinkách),
+  // ne-cs články se hledají v `article_translations` a bazar zůstává cs-only.
   // Fáze 3b: RAKOUSKO. Trh je DE+AT, ale dosud tu byla jen německá jurisdikce.
   // /oepul = agrárně-environmentální program (2. pilíř), /direktzahlungen-oesterreich
   // = 1. pilíř. ‼️ Rakousko NEvyhlašuje roční Einheitsbeträge jako německý
@@ -173,12 +175,42 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // registrované v ČR, Německo má vlastní registr (Bundessortenamt).
     // Řeší isOdrudaDetailPath — pillar pod ne-cs odrůdy nelinkuje a sitemapa
     // je do de mirroru nepouští.
-    '/plodiny'],
+    '/plodiny',
+    // Fáze 3g: /hledat — noindex, ale je to vstupní bod z hlavičky. Skupiny
+    // výsledků se gatují podle launchnutých sekcí (viz hledat.astro), takže
+    // /de/hledat prohledává katalog techniky a plemena; novinky a bazar ne.
+    '/hledat'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
 export function isLaunchedPath(locale: Locale, csRootPath: string): boolean {
   return (LAUNCHED_PREFIXES[locale] ?? []).some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
+}
+
+/** Sekce, do které která skupina výsledků vyhledávání odkazuje. `null` = skupina
+ *  je cs-only. `bazar` takový je: inzeráty jsou české texty s cenami v Kč a
+ *  českými lokalitami, takže pod ne-cs jde o únik jazyka, ne o překlad — a
+ *  /bazar navíc není launchnuté v žádné locale. */
+export const SEARCH_GROUP_SECTIONS: Record<string, string | null> = {
+  novinky: '/novinky',
+  stroje: '/stroje',
+  plemena: '/plemena',
+  bazar: null,
+};
+
+/** Skupiny, které /hledat v dané locale reálně prohledá. JEDINÝ zdroj pravdy —
+ *  gatuje zároveň dotazy i výčet „co vyhledávání prohledává". Kdyby to byly dvě
+ *  nezávislé podmínky, /de by slibovalo novinky, které nikdy neprohledá.
+ *  Skupina projde jen tehdy, když je její cílová sekce v locale launchnutá;
+ *  jinak by výsledek odkazoval na české URL (localizeInternalHref u
+ *  nelaunchnuté sekce vrací cs cestu) a uživatel by z německého vyhledávání
+ *  propadl do češtiny. */
+export function searchGroupsFor(locale: Locale): string[] {
+  return Object.entries(SEARCH_GROUP_SECTIONS)
+    .filter(([, section]) =>
+      section === null ? locale === defaultLocale : locale === defaultLocale || isLaunchedPath(locale, section),
+    )
+    .map(([id]) => id);
 }
 
 /** Zpětně kompatibilní SK alias (volá ho Layout/sitemap; ponecháno kvůli minimal-diff). */

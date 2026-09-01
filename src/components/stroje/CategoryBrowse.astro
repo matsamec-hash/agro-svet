@@ -261,7 +261,9 @@ const NL = '\n';
         )}
       </div>
 
-      <form class="search" role="search" action="/hledat/" method="GET">
+      <!-- ‼️ Stejná past jako v hlavičce: natvrdo psané "/hledat/" poslalo
+           hledání z /de|/uk|/pl|/sk katalogu na ČESKOU stránku vyhledávání. -->
+      <form class="search" role="search" action={localizeInternalHref(locale, '/hledat/')} method="GET">
         <input type="search" name="q" placeholder={tr('cat.searchPlaceholder')} aria-label={tr('cat.searchAria')} />
         <button type="submit">{NL + tr('cat.searchButton') + NL}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>

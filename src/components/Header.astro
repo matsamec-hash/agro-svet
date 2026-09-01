@@ -58,7 +58,11 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
         </svg>
       </button>
-      <form class="search-form" id="search-form" action="/hledat/" method="GET" hidden>
+      <!-- ‼️ action MUSÍ jít přes navHref: natvrdo psané "/hledat/" poslalo lupu
+           z /de i /uk na ČESKOU stránku vyhledávání (footer to dělal správně,
+           hlavička ne). U nelaunchnuté locale vrátí navHref cs cestu, tedy
+           přesně dosavadní chování. -->
+      <form class="search-form" id="search-form" action={navHref(locale, '/hledat/')} method="GET" hidden>
         <input type="search" name="q" placeholder={tr('header.searchPlaceholder')} class="search-field" id="search-field" />
       </form>
     </div>

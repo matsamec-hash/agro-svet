@@ -45,6 +45,11 @@ describe('.astro — volání překladače', () => {
     const bad: string[] = [];
     for (const f of files) {
       const { fm, body } = split(readFileSync(f, 'utf8'));
+      // ‼️ Víceřádkový `import {\n  a,\n  b,\n} from '…'`: filtr na řádky
+      // ZAČÍNAJÍCÍ „import" z něj uvidí jen první řádek, takže by test hlásil
+      // nedeklarovaný helper, který ve skutečnosti zavedený je. Bereme proto
+      // celé příkazy včetně zalomení (hledat.astro, 2026-09-01).
+      const importText = (fm.match(/\bimport\b[\s\S]*?from\s*['"][^'"]+['"]/g) ?? []).join('\n');
       // ident('klic') / ident(locale, 'klic') / ident(locale, `sablona`)
       const idents = new Set<string>();
       for (const m of body.matchAll(/\b([A-Za-z_$][\w$]*)\(\s*(?:locale\s*,\s*)?['`]/g)) {
@@ -58,9 +63,7 @@ describe('.astro — volání překladače', () => {
         if (!WATCHED.includes(id) && !/^_+[\w$]*$/.test(id)) continue;
         const declared =
           new RegExp(`\\b(?:const|let|var|function)\\s+${id}\\b`).test(fm) ||
-          new RegExp(`\\b${id}\\b\\s*(?:,|}|$)`, 'm').test(
-            fm.split('\n').filter((l) => l.trim().startsWith('import')).join('\n'),
-          );
+          new RegExp(`\\b${id}\\b\\s*(?:,|}|$)`, 'm').test(importText);
         if (!declared) bad.push(`${f.replace(process.cwd() + '/', '')}: ${id}(...)`);
       }
     }
