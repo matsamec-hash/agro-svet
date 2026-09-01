@@ -8,7 +8,7 @@ import mapData from '../../data/svet/map-metrics.json';
 import countryIndex from '../../data/svet/index.json';
 import { colorFor, extent } from '../../lib/svet/mapcolor';
 import { pageSlugs } from '../../lib/svet/map';
-import { localizePath } from '../../i18n/utils';
+import { localizePath, bcp47 } from '../../i18n/utils';
 import { localizeMetric, localizeCountry } from '../../i18n/svet';
 
 // CTA „Detail země" jen pro země, které profil opravdu mají — jinak by odkaz
@@ -16,14 +16,19 @@ import { localizeMetric, localizeCountry } from '../../i18n/svet';
 const PAGE_SLUGS = pageSlugs(countryIndex);
 
 const locale = Astro.locals.locale ?? 'cs';
-const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+const numLocale = bcp47(locale); // ‼️ sdílená mapa, ne vlastní ternář — ten neznal de ani uk
 // Locale-specifická země zvýrazněná v insightu / výchozí v panelu.
-const homeCode = locale === 'sk' ? 'SK' : locale === 'pl' ? 'PL' : 'CZ';
+// Zvýrazněná „domácí" země na mapě. ‼️ Ternář znal jen sk/pl, takže /de i /uk
+// dostávaly zvýrazněné Česko — mapa tak německému čtenáři ukazovala cizí zemi.
+const HOME_CODE: Record<string, string> = { cs: 'CZ', sk: 'SK', pl: 'PL', de: 'DE', uk: 'UA' };
+const homeCode = HOME_CODE[locale] ?? 'CZ';
 
 // UI chrome (cs/sk/pl). Datové labely/poznámky jdou přes localizeMetric/Country.
 const MAPUI = {
   cs: { currency: 'Měna', zin: 'Přiblížit', zout: 'Oddálit', reset: 'Reset zoomu', info: 'Vysvětlení metriky', euAvg: 'EU Ø', modeNum: 'Číslo', modeGraph: 'Graf', deltaNote: 'Δ % = odchylka od průměru EU', detail: '→ Detail země', mapAria: 'Mapa Evropy —', source: 'Zdroj:', leads: 'vede', timesMore: '× víc než', mostVs: 'nejvíc, oproti', place: '. místo', of: 'z' },
   sk: { currency: 'Mena', zin: 'Priblížiť', zout: 'Oddialiť', reset: 'Reset priblíženia', info: 'Vysvetlenie metriky', euAvg: 'EÚ Ø', modeNum: 'Číslo', modeGraph: 'Graf', deltaNote: 'Δ % = odchýlka od priemeru EÚ', detail: '→ Detail krajiny', mapAria: 'Mapa Európy —', source: 'Zdroj:', leads: 'vedie', timesMore: '× viac než', mostVs: 'najviac, oproti', place: '. miesto', of: 'z' },
+  de: { currency: 'Währung', zin: 'Vergrößern', zout: 'Verkleinern', reset: 'Zoom zurücksetzen', info: 'Erläuterung der Kennzahl', euAvg: 'EU Ø', modeNum: 'Zahl', modeGraph: 'Diagramm', deltaNote: 'Δ % = Abweichung vom EU-Durchschnitt', detail: '→ Länderprofil', mapAria: 'Karte Europas —', source: 'Quelle:', leads: 'führt', timesMore: '× mehr als', mostVs: 'am meisten, gegenüber', place: '. Platz', of: 'von' },
+  uk: { currency: 'Валюта', zin: 'Наблизити', zout: 'Віддалити', reset: 'Скинути масштаб', info: 'Пояснення показника', euAvg: 'ЄС Ø', modeNum: 'Число', modeGraph: 'Графік', deltaNote: 'Δ % = відхилення від середнього по ЄС', detail: '→ Профіль країни', mapAria: 'Карта Європи —', source: 'Джерело:', leads: 'лідирує', timesMore: '× більше ніж', mostVs: 'найбільше, порівняно з', place: '. місце', of: 'з' },
   pl: { currency: 'Waluta', zin: 'Powiększ', zout: 'Pomniejsz', reset: 'Reset powiększenia', info: 'Wyjaśnienie metryki', euAvg: 'UE Ø', modeNum: 'Liczba', modeGraph: 'Wykres', deltaNote: 'Δ % = odchylenie od średniej UE', detail: '→ Szczegóły kraju', mapAria: 'Mapa Europy —', source: 'Źródło:', leads: 'prowadzi', timesMore: '× więcej niż', mostVs: 'najwięcej, w porównaniu z', place: '. miejsce', of: 'z' },
 } as const;
 const UI = MAPUI[locale as keyof typeof MAPUI] ?? MAPUI.cs;

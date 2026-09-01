@@ -17,6 +17,10 @@ const countries = [
 const UI = {
   cs: { title: 'Zemědělství ve světě — data zemí', description: 'Zemědělská data evropských zemí i světa: produkce, půda, ekonomika. Profily zemí a srovnání s Českem. Zdroje Eurostat a World Bank.', profily: 'Profily zemí', cta: 'Zobrazit data →', compare: 'Porovnat země vedle sebe →' },
   sk: { title: 'Poľnohospodárstvo vo svete — dáta krajín', description: 'Poľnohospodárske dáta európskych krajín i sveta: produkcia, pôda, ekonomika. Profily krajín a porovnanie s Českom. Zdroje Eurostat a World Bank.', profily: 'Profily krajín', cta: 'Zobraziť dáta →', compare: 'Porovnať krajiny vedľa seba →' },
+  // ‼️ „srovnání s Českem" se pro de/uk mění na jejich vlastní trh — viz
+  // SVET_REFERENCE. Německému čtenáři neříká odchylka od Česka nic.
+  de: { title: 'Landwirtschaft weltweit — Länderdaten', description: 'Agrardaten europäischer Länder und der Welt: Produktion, Boden, Wirtschaft. Länderprofile und Vergleich mit Deutschland. Quellen Eurostat und World Bank.', profily: 'Länderprofile', cta: 'Daten ansehen →', compare: 'Länder nebeneinander vergleichen →' },
+  uk: { title: 'Сільське господарство світу — дані країн', description: 'Аграрні дані країн Європи та світу: виробництво, земля, економіка. Профілі країн і порівняння з Україною. Джерела Eurostat і World Bank.', profily: 'Профілі країн', cta: 'Переглянути дані →', compare: 'Порівняти країни поруч →' },
   pl: { title: 'Rolnictwo na świecie — dane krajów', description: 'Dane rolnicze krajów europejskich i świata: produkcja, ziemia, gospodarka. Profile krajów i porównanie z Czechami. Źródła Eurostat i World Bank.', profily: 'Profile krajów', cta: 'Zobacz dane →', compare: 'Porównaj kraje obok siebie →' },
 } as const;
 const L = UI[locale as keyof typeof UI] ?? UI.cs;

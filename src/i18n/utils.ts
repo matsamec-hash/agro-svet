@@ -54,7 +54,12 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // pro присадибні ділянки a historická jednotka je десятина (1,0925 ha),
     // ne české jitro. Tabulka to uvádí místo českých jednotek.
     // ‼️ Tyhle dvě URL vracely na produkci HTTP 500 (prázdný blok v mapě).
-    '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost'],
+    '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost',
+    // Fáze 3h: /svet — profily zemí, mapa Evropy a srovnání. Data jsou Eurostat
+    // a World Bank, tedy jazykově neutrální; překládají se jen labely (i18n/svet).
+    // ‼️ Referenční zemí NENÍ Česko: uk se poměřuje s Ukrajinou (SVET_REFERENCE),
+    // jinak by tabulka Ukrajinci hlásila odchylku od cizí země.
+    '/svet'],
   // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
   // přes stat.*/data.hub./komodita. klíče. /dotace + /jak-na-to zůstávají cs
@@ -190,7 +195,11 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // jednotky se nepřejmenovávají (jiný převodní poměr) — rakouské jitro ALE
     // Joch je, takže se tak jmenuje. Referenční tabulka navíc uvádí Joch,
     // bavorský Tagwerk a pruský Morgen; Doppelzentner místo „q".
-    '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost'],
+    '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost',
+    // /svet — referenční zemí je Německo, ne Česko (SVET_REFERENCE), a mapa
+    // zvýrazňuje DE. Historicky tu byl ternář `locale === 'sk' ? 'SK' : … : 'CZ'`,
+    // takže by /de dostalo zvýrazněné Česko.
+    '/svet'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

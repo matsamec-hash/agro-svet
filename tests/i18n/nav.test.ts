@@ -1,5 +1,6 @@
 // tests/i18n/nav.test.ts
 import { describe, it, expect } from 'vitest';
+import { isLaunchedPath } from '../../src/i18n/utils';
 import { getNav, getFooterColumns, HIDDEN_SECTIONS, isLockedSectionPath } from '../../src/i18n/nav';
 
 describe('getNav', () => {
@@ -63,24 +64,24 @@ describe('getNav', () => {
     ]);
   });
 
-  it('/svet děti se ukážou jen tam, kde je /svet launchnuté (sk+pl ano, uk ne)', () => {
-    // Dřív bylo /svet cs-only. Od launche sk+pl (viz LAUNCHED_PREFIXES) je gate
-    // isLaunchedPath, ne „non-cs" — uk /svet stále nemá, takže tam děti chybí.
-    for (const loc of ['sk', 'pl'] as const) {
+  it('/svet děti se ukážou přesně tam, kde je /svet launchnuté', () => {
+    // Dřív bylo /svet cs-only, pak jen sk+pl. Test proto NEJMENUJE jazyky —
+    // odvozuje očekávání z LAUNCHED_PREFIXES, takže při launchi dalšího jazyka
+    // (2026-09-01: de a uk) nezůstane viset na starém stavu.
+    for (const loc of ['sk', 'pl', 'uk', 'de'] as const) {
       const hrefs = (getNav(loc).find((s) => s.section === 'data')?.children ?? []).map((c) => c.href);
-      expect(hrefs, `${loc} má /svet launchnuté → děti se musí zobrazit`).toContain('/svet/');
-      expect(hrefs).toContain('/svet/srovnani/');
+      const launched = isLaunchedPath(loc, '/svet');
+      expect(hrefs.includes('/svet/'), `${loc}: /svet launchnuté=${launched}, v menu=${hrefs.includes('/svet/')}`).toBe(launched);
+      expect(hrefs.includes('/svet/srovnani/')).toBe(launched);
     }
-    const ukHrefs = (getNav('uk').find((s) => s.section === 'data')?.children ?? []).map((c) => c.href);
-    expect(ukHrefs).not.toContain('/svet/');
-    expect(ukHrefs).not.toContain('/svet/srovnani/');
   });
 
   it('uk nav: data sekce viditelná, jen launchnuté děti (statistiky/akcie/puda/dotace; kalkulačky vynechané)', () => {
     const data = getNav('uk').find((s) => s.section === 'data');
     expect(data).toBeTruthy();
     const hrefs = (data!.children ?? []).map((c) => c.href);
-    expect(hrefs).toEqual(['/statistiky/', '/akcie/', '/puda/', '/dotace/']);
+    // 2026-09-01: +/svet (profily, srovnání, mapa) — launchnuté pro uk.
+    expect(hrefs).toEqual(['/statistiky/', '/akcie/', '/puda/', '/dotace/', '/svet/', '/svet/srovnani/', '/svet/mapa/']);
     expect(hrefs).not.toContain('/kalkulacka/');
     expect(hrefs).not.toContain('/kalkulacka/dotace-cap/');
     // header sekce ukazuje na první launchnuté dítě (/statistiky/ je launchnuté pro uk)

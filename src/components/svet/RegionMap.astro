@@ -3,6 +3,7 @@
 // (near-zero JS): SSR vybarví výchozí metriku, klient jen přepíná metriku + tooltip.
 // Data: {slug}-geo.json (SVG paths) + {slug}.json (hodnoty metrik per région).
 import { colorFor, extent } from '../../lib/svet/mapcolor';
+import { bcp47 } from '../../i18n/utils';
 import { localizeRegionMetric, REGION_LEVEL_NOTE } from '../../i18n/svet';
 
 interface GeoRegion { code: string; name: string; path: string; }
@@ -15,10 +16,12 @@ interface RegionData {
 const { geo, data, countryName } = Astro.props as { geo: Geo; data: RegionData; countryName: string };
 
 const locale = Astro.locals.locale ?? 'cs';
-const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+const numLocale = bcp47(locale); // ‼️ sdílená mapa, ne vlastní ternář — ten neznal de ani uk
 const RUI = {
   cs: { title: 'Regionální mapa —', metric: 'Ukazatel', metricAria: 'Metrika mapy', source: 'Zdroj:', noData: 'bez dat' },
   sk: { title: 'Regionálna mapa —', metric: 'Ukazovateľ', metricAria: 'Metrika mapy', source: 'Zdroj:', noData: 'bez dát' },
+  de: { title: 'Regionalkarte —', metric: 'Kennzahl', metricAria: 'Kartenmetrik', source: 'Quelle:', noData: 'keine Daten' },
+  uk: { title: 'Регіональна карта —', metric: 'Показник', metricAria: 'Метрика карти', source: 'Джерело:', noData: 'немає даних' },
   pl: { title: 'Mapa regionalna —', metric: 'Wskaźnik', metricAria: 'Metryka mapy', source: 'Źródło:', noData: 'brak danych' },
 } as const;
 const RU = RUI[locale as keyof typeof RUI] ?? RUI.cs;

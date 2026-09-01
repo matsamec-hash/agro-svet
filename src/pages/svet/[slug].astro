@@ -13,7 +13,8 @@ import { assertCountryProfile } from '../../lib/svet/types';
 import { breadcrumbSchema, datasetSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 import { localizePath, t } from '../../i18n/utils';
-import { COUNTRY_NAMES, INDICATOR_LABELS, PACKAGE_LABELS, loc, type SvetLang } from '../../i18n/svet';
+import { COUNTRY_NAMES, INDICATOR_LABELS, PACKAGE_LABELS, SVET_REFERENCE, loc, type SvetLang } from '../../i18n/svet';
+import type { Locale } from '../../i18n/config';
 import index from '../../data/svet/index.json';
 import mapData from '../../data/svet/map-metrics.json';
 import '../../styles/svet.css';
@@ -34,7 +35,12 @@ if (!known || !profileMod) {
   return new Response('Country not found', { status: 404 });
 }
 const profile = profileMod.default;
-const isRef = !!known.reference; // Česko: potlač sebe-porovnání
+const localeEarly = (Astro.locals.locale ?? 'cs') as Locale;
+// ‼️ Referenční země NENÍ napevno Česko. „O 12 % víc než v Česku" je pro
+// německého čtenáře informace o cizí zemi; de se proto poměřuje s Německem
+// a uk s Ukrajinou (SVET_REFERENCE). cs/sk/pl zůstávají u Česka → beze změny.
+const refSlug = SVET_REFERENCE[localeEarly] ?? 'cesko';
+const isRef = slug === refSlug; // na stránce referenční země potlač sebe-porovnání
 const regionGeo = (regionMods[`../../data/svet/regions/${slug}-geo.json`] as any)?.default ?? null;
 const regionData = (regionMods[`../../data/svet/regions/${slug}.json`] as any)?.default ?? null;
 assertCountryProfile(profile);
@@ -43,16 +49,18 @@ const hasMap = regionGeo && regionData;
 // Statická data → agresivní edge-cache (jako ostatní /svet SSR stránky).
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-const refMods = import.meta.glob('../../data/svet/cesko.json', { eager: true });
-const ref = (Object.values(refMods)[0] as any).default;
-// Na vlastní stránce reference (Česko) sebe-porovnání nedává smysl → bez ref hodnot.
-const refVal = (key: string) => (isRef ? undefined : ref.indicators[key]?.latest?.value);
-const refSeries = (key: string) => (isRef ? null : ref.indicators[key]?.series ?? null);
+// `mods` už globuje všechny profily, takže referenční profil je zdarma —
+// vlastní glob na cesko.json by navíc referenci zabetonoval do češtiny.
+const ref = (mods[`../../data/svet/${refSlug}.json`] as any)?.default ?? null;
+// Na stránce samotné reference sebe-porovnání nedává smysl → bez ref hodnot.
+const refVal = (key: string) => (isRef || !ref ? undefined : ref.indicators[key]?.latest?.value);
+const refSeries = (key: string) => (isRef || !ref ? null : ref.indicators[key]?.series ?? null);
 
-const locale = Astro.locals.locale ?? 'cs';
+const locale = localeEarly;
 const lang = locale as SvetLang;
 const name = locale === 'cs' ? profile.nameCs : loc(COUNTRY_NAMES, profile.slug, lang, profile.nameCs);
-const refName = locale === 'sk' ? 'Česko' : locale === 'pl' ? 'Czechy' : 'ČR';
+// cs drží zkratku „ČR" (beze změny výstupu), ostatní berou název z COUNTRY_NAMES.
+const refName = locale === 'cs' ? 'ČR' : loc(COUNTRY_NAMES, refSlug, lang, 'ČR');
 const pkgLabel = (g: { pkg: string; label: string }) => (locale === 'cs' ? g.label : loc(PACKAGE_LABELS, g.pkg, lang, g.label));
 const indLabel = (k: { key: string; label: string }) => (locale === 'cs' ? k.label : loc(INDICATOR_LABELS, k.key, lang, k.label));
 
@@ -61,9 +69,21 @@ const heroKeys = ['ag_land', 'ag_output_value', 'farm_count', 'cattle_count'];
 const heroKpis = heroKeys.map((k) => profile.indicators[k]).filter(Boolean);
 
 const loc0 = COUNTRY_LOCATIVE[profile.slug] ?? `v ${profile.nameCs}`;
+// Klíčová slova do Dataset JSON-LD. ‼️ Teče to Googlu, ne na stránku — česká
+// slova pod /de by tam zůstala neviditelně (viz feedback-json-ld…).
+const DS_KEYWORDS: Record<string, string[]> = {
+  cs: ['zemědělství', 'zemědělská statistika', 'produkce'],
+  sk: ['poľnohospodárstvo', 'poľnohospodárska štatistika', 'produkcia'],
+  pl: ['rolnictwo', 'statystyka rolna', 'produkcja'],
+  de: ['Landwirtschaft', 'Agrarstatistik', 'Produktion'],
+  uk: ['сільське господарство', 'аграрна статистика', 'виробництво'],
+};
+
 const UI = {
   cs: { title: `Zemědělství ${loc0}`, description: `Aktuální zemědělská data: ${profile.nameCs} — produkce, půda, ekonomika a srovnání s ČR. Zdroje Eurostat a World Bank.`, bcHome: 'Domů', bcSvet: 'Zemědělství ve světě', method: 'Zdroje a metodika', methodP: `Data se stahují automaticky z oficiálních otevřených zdrojů (Eurostat, World Bank); u každého ukazatele je uvedeno období a odkaz na zdroj. Hodnoty jsou srovnatelné mezi zeměmi a „vs ČR" porovnává poslední dostupnou hodnotu s Českem. Aktualizováno ${profile.generated}.`, compare: 'Porovnat země vedle sebe →', dsName: `Zemědělská data — ${profile.nameCs}` },
   sk: { title: `${name} — poľnohospodárstvo a dáta`, description: `Aktuálne poľnohospodárske dáta: ${name} — produkcia, pôda, ekonomika a porovnanie s Českom. Zdroje Eurostat a World Bank.`, bcHome: 'Domov', bcSvet: 'Poľnohospodárstvo vo svete', method: 'Zdroje a metodika', methodP: `Dáta sa sťahujú automaticky z oficiálnych otvorených zdrojov (Eurostat, World Bank); pri každom ukazovateli je uvedené obdobie a odkaz na zdroj. Hodnoty sú porovnateľné medzi krajinami a „vs Česko" porovnáva poslednú dostupnú hodnotu s Českom. Aktualizované ${profile.generated}.`, compare: 'Porovnať krajiny vedľa seba →', dsName: `Poľnohospodárske dáta — ${name}` },
+  de: { title: `${name} — Landwirtschaft und Daten`, description: `Aktuelle Agrardaten: ${name} — Produktion, Boden, Wirtschaft und Vergleich mit Deutschland. Quellen Eurostat und World Bank.`, bcHome: 'Startseite', bcSvet: 'Landwirtschaft weltweit', method: 'Quellen und Methodik', methodP: `Die Daten werden automatisch aus amtlichen offenen Quellen bezogen (Eurostat, World Bank); bei jeder Kennzahl stehen Zeitraum und Quellenlink. Die Werte sind zwischen Ländern vergleichbar und „vs. DE" stellt den zuletzt verfügbaren Wert Deutschland gegenüber. Aktualisiert ${profile.generated}.`, compare: 'Länder nebeneinander vergleichen →', dsName: `Agrardaten — ${name}` },
+  uk: { title: `${name} — сільське господарство та дані`, description: `Актуальні аграрні дані: ${name} — виробництво, земля, економіка та порівняння з Україною. Джерела Eurostat і World Bank.`, bcHome: 'Домів', bcSvet: 'Сільське господарство світу', method: 'Джерела та методика', methodP: `Дані завантажуються автоматично з офіційних відкритих джерел (Eurostat, World Bank); для кожного показника вказано період і посилання на джерело. Значення порівнянні між країнами, а „vs Україна" зіставляє останнє доступне значення з Україною. Оновлено ${profile.generated}.`, compare: 'Порівняти країни поруч →', dsName: `Аграрні дані — ${name}` },
   pl: { title: `${name} — rolnictwo i dane`, description: `Aktualne dane rolnicze: ${name} — produkcja, ziemia, gospodarka i porównanie z Czechami. Źródła Eurostat i World Bank.`, bcHome: 'Główna', bcSvet: 'Rolnictwo na świecie', method: 'Źródła i metodyka', methodP: `Dane pobierane są automatycznie z oficjalnych otwartych źródeł (Eurostat, World Bank); przy każdym wskaźniku podano okres i odnośnik do źródła. Wartości są porównywalne między krajami, a „vs Czechy" porównuje ostatnią dostępną wartość z Czechami. Zaktualizowano ${profile.generated}.`, compare: 'Porównaj kraje obok siebie →', dsName: `Dane rolnicze — ${name}` },
 } as const;
 const L = UI[locale as keyof typeof UI] ?? UI.cs;
@@ -98,7 +118,7 @@ const datasetJsonLd = datasetSchema({
   description,
   url: pageUrl,
   countryName: name,
-  keywords: [name, ...(locale === 'sk' ? ['poľnohospodárstvo', 'poľnohospodárska štatistika', 'produkcia'] : locale === 'pl' ? ['rolnictwo', 'statystyka rolna', 'produkcja'] : ['zemědělství', 'zemědělská statistika', 'produkce']), ...sources.map((s) => s.name)],
+  keywords: [name, ...(DS_KEYWORDS[locale] ?? DS_KEYWORDS.cs), ...sources.map((s) => s.name)],
   temporalCoverage,
   dateModified: profile.generated,
   variables: inds.map((i) => ({ name: (locale === 'cs' ? i.label : loc(INDICATOR_LABELS, i.key, lang, i.label)), unitText: i.unit })),

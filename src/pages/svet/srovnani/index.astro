@@ -4,12 +4,18 @@ import { compareMatrix, fmtNum, vsReference } from '../../../lib/svet/render';
 import { buildColorMap, buildMultiSeriesModel, MULTI_OPTS } from '../../../lib/svet/multichart';
 import populationData from '../../../data/svet/population.json';
 import { localizePath, t } from '../../../i18n/utils';
-import { COUNTRY_NAMES, INDICATOR_LABELS, loc, type SvetLang } from '../../../i18n/svet';
+import { COUNTRY_NAMES, INDICATOR_LABELS, SVET_REFERENCE, loc, type SvetLang } from '../../../i18n/svet';
+import type { Locale } from '../../../i18n/config';
 import '../../../styles/svet.css';
 
 const locale = Astro.locals.locale ?? 'cs';
 const lang = locale as SvetLang;
-const numLocale = locale === 'sk' ? 'sk-SK' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+// ‼️ Mapa, ne ternář — chybějící jazyk je pak vidět místo tichého 'cs-CZ'.
+const NUM_LOCALE: Record<string, string> = { cs: 'cs-CZ', sk: 'sk-SK', pl: 'pl-PL', de: 'de-DE', uk: 'uk-UA' };
+const numLocale = NUM_LOCALE[locale] ?? 'cs-CZ';
+// Referenční země podle trhu: de se poměřuje s Německem, uk s Ukrajinou.
+// cs/sk/pl zůstávají u Česka → jejich výstup se nemění.
+const refSlug = SVET_REFERENCE[locale as Locale] ?? 'cesko';
 const cName = (p: { slug: string; nameCs: string }) => (locale === 'cs' ? p.nameCs : loc(COUNTRY_NAMES, p.slug, lang, p.nameCs));
 const indLabel = (k: string, fallback: string) => (locale === 'cs' ? fallback : loc(INDICATOR_LABELS, k, lang, fallback));
 
@@ -19,14 +25,14 @@ const mods = import.meta.glob('../../../data/svet/*.json', { eager: true });
 const profiles = Object.values(mods)
   .map((m: any) => m.default)
   .filter((p: any) => p && p.slug && p.indicators);
-profiles.sort((a: any, b: any) => (a.slug === 'cesko' ? -1 : b.slug === 'cesko' ? 1 : a.nameCs.localeCompare(b.nameCs, 'cs')));
+profiles.sort((a: any, b: any) => (a.slug === refSlug ? -1 : b.slug === refSlug ? 1 : cName(a).localeCompare(cName(b), locale)));
 
 const indicatorMeta: Record<string, { label: string; unit: string }> = {};
 for (const p of profiles) for (const k of Object.keys(p.indicators)) indicatorMeta[k] ??= { label: p.indicators[k].label, unit: p.indicators[k].unit };
 
 const defaultKey = 'wheat_yield';
 const defaultUnit = indicatorMeta[defaultKey]?.unit ?? '';
-const refValue = (profiles.find((p: any) => p.slug === 'cesko') as any)?.indicators[defaultKey]?.latest.value;
+const refValue = (profiles.find((p: any) => p.slug === refSlug) as any)?.indicators[defaultKey]?.latest.value;
 const rows = compareMatrix(profiles as any, defaultKey).filter((c) => c.value != null).sort((a, b) => (b.value! - a.value!));
 
 // Barvy zemí stabilní přes celý web srovnání
@@ -43,16 +49,16 @@ const payload = profiles.map((p: any) => ({
 }));
 const units = Object.fromEntries(Object.entries(indicatorMeta).map(([k, m]) => [k, m.unit]));
 
-// Výchozí výběr zemí: ČR + 6 nejvyšších dle výchozího ukazatele
+// Výchozí výběr zemí: referenční země + 6 nejvyšších dle výchozího ukazatele
 const topDefault = profiles
-  .filter((p: any) => p.slug !== 'cesko' && p.indicators[defaultKey]?.latest?.value != null)
+  .filter((p: any) => p.slug !== refSlug && p.indicators[defaultKey]?.latest?.value != null)
   .sort((a: any, b: any) => b.indicators[defaultKey].latest.value - a.indicators[defaultKey].latest.value)
   .slice(0, 6).map((p: any) => p.slug);
-const defaultSel = ['cesko', ...topDefault];
+const defaultSel = [refSlug, ...topDefault];
 
 // SSR výchozího grafu (absolutní režim, výchozí ukazatel) — progresivní enhancement
 const initInputs = profiles.filter((p: any) => defaultSel.includes(p.slug)).map((p: any) => ({
-  slug: p.slug, name: cName(p), color: colorMap[p.slug], isRef: p.slug === 'cesko',
+  slug: p.slug, name: cName(p), color: colorMap[p.slug], isRef: p.slug === refSlug,
   points: (p.indicators[defaultKey]?.series ?? []).map((pt: any) => ({ year: Number(pt.period), value: pt.value })),
 })).filter((s: any) => s.points.length);
 const chart = buildMultiSeriesModel(initInputs, MULTI_OPTS);
@@ -61,6 +67,10 @@ const O = MULTI_OPTS;
 const UI = {
   cs: { title: 'Srovnání zemědělství zemí', description: 'Porovnejte zemědělské ukazatele zemí vedle sebe — výnosy, plochy, produkce, ekonomika — vývoj v čase i srovnání s ČR. Zdroje Eurostat a World Bank.', bcHome: 'Domů', bcSvet: 'Zemědělství ve světě', bcCurrent: 'Srovnání', indicator: 'Ukazatel:', recalc: 'Přepočet:', ariaRecalc: 'Přepočet hodnot', modeAbs: 'Absolutní', modePerCap: 'Na 1000 obyv.', modePerHa: 'Na ha půdy', comparing: 'Srovnáváte ukazatel:', chartHead: 'Vývoj v čase', chartHint: '— klikni na zemi níže pro přidání/odebrání', ariaChart: 'Graf vývoje vybraného ukazatele v čase', thCountry: 'Země', thValue: 'Hodnota', thVs: 'vs ČR', vsTitle: 'O kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku. ČR = 0 %.', noteStrong: 'vs ČR', note: '= o kolik % je hodnota vyšší (+) nebo nižší (−) než v Česku (ČR = 0 %). Zdroj: Eurostat / World Bank · poslední dostupná data u každého ukazatele.', modenote: 'Tento ukazatel je už poměrový — přepočet na obyvatele/hektar se nepoužije.' },
   sk: { title: 'Porovnanie poľnohospodárstva krajín', description: 'Porovnajte poľnohospodárske ukazovatele krajín vedľa seba — výnosy, plochy, produkciu, ekonomiku — vývoj v čase i porovnanie s Českom. Zdroje Eurostat a World Bank.', bcHome: 'Domov', bcSvet: 'Poľnohospodárstvo vo svete', bcCurrent: 'Porovnanie', indicator: 'Ukazovateľ:', recalc: 'Prepočet:', ariaRecalc: 'Prepočet hodnôt', modeAbs: 'Absolútne', modePerCap: 'Na 1000 obyv.', modePerHa: 'Na ha pôdy', comparing: 'Porovnávate ukazovateľ:', chartHead: 'Vývoj v čase', chartHint: '— kliknite na krajinu nižšie pre pridanie/odobratie', ariaChart: 'Graf vývoja vybraného ukazovateľa v čase', thCountry: 'Krajina', thValue: 'Hodnota', thVs: 'vs Česko', vsTitle: 'O koľko % je hodnota vyššia (+) alebo nižšia (−) než v Česku. Česko = 0 %.', noteStrong: 'vs Česko', note: '= o koľko % je hodnota vyššia (+) alebo nižšia (−) než v Česku (Česko = 0 %). Zdroj: Eurostat / World Bank · posledné dostupné dáta pri každom ukazovateli.', modenote: 'Tento ukazovateľ je už pomerový — prepočet na obyvateľov/hektár sa nepoužije.' },
+  // ‼️ Referenční zemí NENÍ Česko: de se poměřuje s Německem, uk s Ukrajinou
+  // (SVET_REFERENCE). Texty proto mluví o vlastním trhu, ne o ČR.
+  de: { title: 'Landwirtschaft der Länder im Vergleich', description: 'Agrarkennzahlen von Ländern nebeneinander vergleichen — Erträge, Flächen, Produktion, Wirtschaft — Entwicklung über die Zeit und Vergleich mit Deutschland. Quellen Eurostat und World Bank.', bcHome: 'Startseite', bcSvet: 'Landwirtschaft weltweit', bcCurrent: 'Vergleich', indicator: 'Kennzahl:', recalc: 'Umrechnung:', ariaRecalc: 'Werte umrechnen', modeAbs: 'Absolut', modePerCap: 'Je 1000 Einw.', modePerHa: 'Je ha Fläche', comparing: 'Verglichene Kennzahl:', chartHead: 'Entwicklung über die Zeit', chartHint: '— unten ein Land anklicken zum Hinzufügen/Entfernen', ariaChart: 'Diagramm der Entwicklung der gewählten Kennzahl', thCountry: 'Land', thValue: 'Wert', thVs: 'vs. DE', vsTitle: 'Um wie viel Prozent der Wert höher (+) oder niedriger (−) liegt als in Deutschland. Deutschland = 0 %.', noteStrong: 'vs. DE', note: '= um wie viel Prozent der Wert höher (+) oder niedriger (−) liegt als in Deutschland (Deutschland = 0 %). Quelle: Eurostat / World Bank · jeweils die zuletzt verfügbaren Daten.', modenote: 'Diese Kennzahl ist bereits ein Verhältniswert — eine Umrechnung je Einwohner oder Hektar entfällt.' },
+  uk: { title: 'Порівняння сільського господарства країн', description: 'Порівняйте аграрні показники країн поруч — урожайність, площі, виробництво, економіку — динаміку в часі та порівняння з Україною. Джерела Eurostat і World Bank.', bcHome: 'Домів', bcSvet: 'Сільське господарство світу', bcCurrent: 'Порівняння', indicator: 'Показник:', recalc: 'Перерахунок:', ariaRecalc: 'Перерахунок значень', modeAbs: 'Абсолютні', modePerCap: 'На 1000 осіб', modePerHa: 'На га угідь', comparing: 'Порівнюєте показник:', chartHead: 'Динаміка в часі', chartHint: '— натисніть країну нижче, щоб додати або прибрати', ariaChart: 'Графік динаміки вибраного показника в часі', thCountry: 'Країна', thValue: 'Значення', thVs: 'vs Україна', vsTitle: 'На скільки відсотків значення вище (+) або нижче (−), ніж в Україні. Україна = 0 %.', noteStrong: 'vs Україна', note: '= на скільки відсотків значення вище (+) або нижче (−), ніж в Україні (Україна = 0 %). Джерело: Eurostat / World Bank · останні доступні дані для кожного показника.', modenote: 'Цей показник уже відносний — перерахунок на особу чи гектар не застосовується.' },
   pl: { title: 'Porównanie rolnictwa krajów', description: 'Porównaj wskaźniki rolnicze krajów obok siebie — plony, powierzchnie, produkcję, gospodarkę — rozwój w czasie i porównanie z Czechami. Źródła Eurostat i World Bank.', bcHome: 'Główna', bcSvet: 'Rolnictwo na świecie', bcCurrent: 'Porównanie', indicator: 'Wskaźnik:', recalc: 'Przeliczenie:', ariaRecalc: 'Przeliczenie wartości', modeAbs: 'Bezwzględne', modePerCap: 'Na 1000 mieszk.', modePerHa: 'Na ha ziemi', comparing: 'Porównujesz wskaźnik:', chartHead: 'Zmiany w czasie', chartHint: '— kliknij kraj poniżej, aby dodać/usunąć', ariaChart: 'Wykres zmian wybranego wskaźnika w czasie', thCountry: 'Kraj', thValue: 'Wartość', thVs: 'vs Czechy', vsTitle: 'O ile % wartość jest wyższa (+) lub niższa (−) niż w Czechach. Czechy = 0 %.', noteStrong: 'vs Czechy', note: '= o ile % wartość jest wyższa (+) lub niższa (−) niż w Czechach (Czechy = 0 %). Źródło: Eurostat / World Bank · najnowsze dostępne dane dla każdego wskaźnika.', modenote: 'Ten wskaźnik jest już względny — przeliczenie na mieszkańców/hektar nie ma zastosowania.' },
 } as const;
 const L = UI[locale as keyof typeof UI] ?? UI.cs;
@@ -127,7 +137,7 @@ const description = L.description;
         <div class="svet-cmp-chips" id="svet-cmp-chips">
           {profiles.map((p: any) => {
             const on = defaultSel.includes(p.slug);
-            const cz = p.slug === 'cesko';
+            const cz = p.slug === refSlug;
             const col = colorMap[p.slug];
             return (
               <button type="button" class={`svet-chip${on ? ' on' : ''}${cz ? ' cz' : ''}`} data-slug={p.slug} aria-pressed={on ? 'true' : 'false'} disabled={cz}
@@ -155,7 +165,7 @@ const description = L.description;
     <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
     <script type="application/json" id="svet-units" set:html={JSON.stringify(units)}></script>
     <script type="application/json" id="svet-colors" set:html={JSON.stringify(colorMap)}></script>
-    <script type="application/json" id="svet-cmp-ui" set:html={JSON.stringify({ numLocale, modenote: L.modenote, detailBase: localizePath(locale, '/svet/') })}></script>
+    <script type="application/json" id="svet-cmp-ui" set:html={JSON.stringify({ numLocale, modenote: L.modenote, detailBase: localizePath(locale, '/svet/'), refSlug })}></script>
     <script>
       import { normalizeValue, normApplies, type NormMode } from '../../../lib/svet/render';
       import { buildMultiSeriesModel, MULTI_OPTS, type SeriesInput } from '../../../lib/svet/multichart';
@@ -166,6 +176,9 @@ const description = L.description;
       const colorsEl = document.getElementById('svet-colors');
       const cmpUI = JSON.parse(document.getElementById('svet-cmp-ui')?.textContent || '{}');
       const DETAIL_BASE = cmpUI.detailBase || '/svet/';
+      // ‼️ Referenční zemi posílá server (cmpUI.refSlug). Natvrdo 'cesko' by pod
+      // /de po prvním překreslení tabulky přepsalo německou referenci českou.
+      const REF_SLUG: string = cmpUI.refSlug || 'cesko';
       const sel = document.getElementById('svet-indicator') as HTMLSelectElement | null;
       const tbody = document.getElementById('svet-cmp-body');
       const unitH = document.getElementById('svet-unit-h');
@@ -212,7 +225,7 @@ const description = L.description;
             const points = ind.series
               .map(([year, raw]) => ({ year, value: conv(key, raw, p, m) }))
               .filter((pt): pt is { year: number; value: number } => pt.value != null);
-            if (points.length) inputs.push({ slug: p.slug, name: p.nameCs, color: colors[p.slug], isRef: p.slug === 'cesko', points });
+            if (points.length) inputs.push({ slug: p.slug, name: p.nameCs, color: colors[p.slug], isRef: p.slug === REF_SLUG, points });
           }
           const model = buildMultiSeriesModel(inputs, O);
           // vyčisti dynamický obsah (ponech nic — překreslíme vše)
@@ -236,7 +249,7 @@ const description = L.description;
             year = Math.max(model.xMin, Math.min(model.xMax, year));
             guide.setAttribute('x1', String(xOf(year))); guide.setAttribute('x2', String(xOf(year))); guide.setAttribute('opacity', '0.4');
             const at = inputs
-              .map((s) => { const pt = s.points.find((q) => q.year === year); return pt ? { name: s.name, slug: s.slug, v: pt.value, isRef: s.slug === 'cesko' } : null; })
+              .map((s) => { const pt = s.points.find((q) => q.year === year); return pt ? { name: s.name, slug: s.slug, v: pt.value, isRef: s.slug === REF_SLUG } : null; })
               .filter(Boolean).sort((a: any, b: any) => b.v - a.v) as { name: string; slug: string; v: number; isRef: boolean }[];
             if (!at.length) { readout.hidden = true; return; }
             readout.innerHTML = `<div class="ro-h">${year}</div>` + at.map((r2) =>
@@ -260,7 +273,7 @@ const description = L.description;
           });
           if (noteEl) noteEl.textContent = normable(key) ? '' : (cmpUI.modenote || '');
 
-          const ref = byId['cesko'];
+          const ref = byId[REF_SLUG];
           const refVal = ref ? conv(key, rawOf(ref, key), ref, mode) : null;
 
           let unit = '';
