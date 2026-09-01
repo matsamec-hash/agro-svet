@@ -15,8 +15,8 @@ import { listPublishedForMaintenance } from '../lib/akce-supabase';
 import { AKCE_TYP_SLUGS } from '../lib/akce-constants';
 import { getKraje } from '../lib/lokality';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from '../lib/config';
-import { isSkLaunchedPath, isLaunchedPath, isPrerenderedOnlyPath } from '../i18n/utils';
-import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
+import { HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
+import { allowInMirror, MIRROR_LOCALES, type MirrorContext, type MirrorLocale } from '../lib/sitemap-mirror';
 import { fetchTranslatedArticleIds } from '../lib/articles-i18n';
 import { dsDate, FALLBACK_LASTMOD } from '../lib/content-dates';
 import svetIndex from '../data/svet/index.json';
@@ -130,20 +130,10 @@ export const GET: APIRoute = async () => {
   for (const a of articlesDyn as Array<{ id: string; slug: string; category: string | null }>) {
     articleMeta.set(a.slug, { id: a.id, category: a.category ?? null });
   }
-  const translatedIdsByLocale = new Map<string, Set<string>>();
-  for (const loc of ['sk', 'uk', 'pl'] as const) {
+  const translatedIdsByLocale = new Map<MirrorLocale, Set<string>>();
+  for (const loc of MIRROR_LOCALES) {
     translatedIdsByLocale.set(loc, await fetchTranslatedArticleIds(supabase, loc));
   }
-  const articleSlugMatch = /^\/novinky\/([^/]+)\/$/;
-  /** True, když /<locale>/novinky/<slug>/ na produkci 404-uje → nezrcadlit. */
-  const isDeadArticleForLocale = (p: string, locale: 'sk' | 'uk' | 'pl'): boolean => {
-    const m = p.match(articleSlugMatch);
-    if (!m) return false;
-    const meta = articleMeta.get(m[1]);
-    if (!meta) return false; // není článek (např. /novinky/kategorie/) → řeší jiný filtr
-    if (meta.category && HIDDEN_NEWS_CATEGORIES[locale].includes(meta.category)) return true;
-    return !translatedIdsByLocale.get(locale)!.has(meta.id);
-  };
 
   const listingsRes = await supabase
     .from('bazar_listings')
@@ -526,93 +516,46 @@ export const GET: APIRoute = async () => {
     urls.push({ loc: `${SITE_URL}/farmy/kraj/${r.slug}/`, changefreq: 'weekly', priority: '0.7', lastmod: D_FARMY });
   }
 
-  // SK launch (Fáze 1c-obsah): pre přeložené katalogové sekcie (/stroje, /znacky,
-  // /srovnani) pridáme /sk zrkadlové URL. cs časť vyššie zostáva byte-identická —
-  // /sk záznamy len appendujeme na koniec.
+  // Locale mirrory: pro launchnuté sekce přidáme /<locale> zrcadlové URL.
+  // cs část výše zůstává byte-identická — mirrory se jen appendují na konec.
   //
-  // Pozn.: /dotace DETAIL stránky majú pre sk INÉ slugy (PPA SR výzvy z kolekcie
-  // 'dotaceSk'), takže ich nemožno len zrkadliť z cs slugov — tie /sk URL by 404-ovali.
-  // Cestu cs /dotace/<slug>/ preto z mirroru vylúčime a sk detaily pridáme explicitne
-  // nižšie z getCollection('dotaceSk'). Hub /dotace/ a /dotace/kalendar-kol/ zdieľajú
-  // rovnaké cesty pre cs aj sk, tie sa mirrorujú normálne.
-  const isDotaceDetailPath = (p: string) =>
-    p.startsWith('/dotace/') && p !== '/dotace/' && p !== '/dotace/kalendar-kol/';
-  // /sk-skryté novinkové kategorie (jurisdikčně uzamčené: dotace, legislativa)
-  // pod /sk 404-ují → nezrcadlit do /sk sitemapy.
-  const skHiddenCatMatch = /^\/novinky\/kategorie\/([^/]+)\//;
-  const isHiddenCategoryPath = (p: string, locale: 'sk' | 'uk' | 'pl') => {
-    const m = p.match(skHiddenCatMatch);
-    return !!m && HIDDEN_NEWS_CATEGORIES[locale].includes(m[1]);
+  // JEDNA brána pro všechny jazyky (allowInMirror). Dřív to byly čtyři
+  // nezávislé filtry a každý další jazyk si musel brány zkopírovat; `de`
+  // přibylo bez nich a sitemapa mu nabízela 2 710 detailů odrůd + 2 cs-only
+  // kvízy (302 na cs) a ~45 novinkových a howto URL se 404.
+  //
+  // Per-locale odlišnosti, které NEJDOU vyjádřit branou, zůstávají explicitní
+  // níž: sk /dotace detaily mají vlastní slugy (kolekce dotaceSk), pl má
+  // /poradniki a komoditní detaily, de a pl mají vlastní jurisdikční landingy.
+  const howtoSlugsByLocale = new Map<MirrorLocale, Set<string>>();
+  for (const [loc, collection] of [
+    ['sk', 'howtoSk'],
+    ['uk', 'howtoUk'],
+    ['de', 'howtoDe'],
+  ] as const) {
+    howtoSlugsByLocale.set(loc, new Set((await getCollection(collection)).map((h) => h.id)));
+  }
+  const mirrorCtx: MirrorContext = {
+    articleMeta,
+    translatedIds: translatedIdsByLocale,
+    howtoSlugs: howtoSlugsByLocale,
   };
-  const skMirror: UrlEntry[] = urls
-    .filter((u) => {
-      if (!u.loc.startsWith(SITE_URL)) return false;
-      const p = u.loc.slice(SITE_URL.length);
-      if (isDotaceDetailPath(p)) return false;
-      if (isHiddenCategoryPath(p, 'sk')) return false;
-      if (isDeadArticleForLocale(p, 'sk')) return false;
-      // Lock přebíjí launch: zamčené pod-cesty (/kalkulacka/dotace-cap) nezrcadlit
-      // do /sk sitemapy — na produkci 307-ují na cs.
-      return isSkLaunchedPath(p) && !isLockedSectionPath(p) && !isPrerenderedOnlyPath(p);
-    })
-    .map((u) => ({ ...u, loc: `${SITE_URL}/sk${u.loc.slice(SITE_URL.length)}` }));
-  urls.push(...skMirror);
 
-  // UK launch (Fáze 2-obsah): pro přeložené sekce přidáme /uk zrcadlové URL.
-  // Stejné filtry jako sk (skryté dotace-detaily/kategorie + lock). Před launchem
-  // je LAUNCHED_PREFIXES.uk prázdné → ukMirror == [] (žádná změna sitemapy).
-  // Fáze 3: howto-uk je PODMNOŽINA cs howto (2 jurisdikční návody nepřeloženy →
-  // /uk/jak-na-to/<slug>/ = 404). Nezrcadlit cs howto slugy chybějící v howtoUk.
-  const ukHowtoSlugs = new Set((await getCollection('howtoUk')).map((h) => h.id));
-  const isUkMissingHowto = (p: string): boolean => {
-    const m = p.match(/^\/jak-na-to\/([^/]+)\/$/);
-    return !!m && !ukHowtoSlugs.has(m[1]);
-  };
-  const ukMirror: UrlEntry[] = urls
-    .filter((u) => {
-      if (!u.loc.startsWith(SITE_URL)) return false;
-      const p = u.loc.slice(SITE_URL.length);
-      if (p.startsWith('/sk/')) return false; // nezrcadlit už zrcadlené sk URL
-      if (isDotaceDetailPath(p)) return false;
-      if (p === '/dotace/kalendar-kol/') return false; // uk: kalendar-kol 302→/uk/dotace/, nezrcadlit
-      if (isHiddenCategoryPath(p, 'uk')) return false;
-      if (isDeadArticleForLocale(p, 'uk')) return false;
-      if (isUkMissingHowto(p)) return false; // chybějící uk návod → 404, nezrcadlit
-      return isLaunchedPath('uk', p) && !isLockedSectionPath(p) && !isPrerenderedOnlyPath(p);
-    })
-    .map((u) => ({ ...u, loc: `${SITE_URL}/uk${u.loc.slice(SITE_URL.length)}` }));
-  urls.push(...ukMirror);
-
-  // PL launch (Fáze 1): zrcadli launchnuté sekce (stroje/znacky/srovnani/slovnik).
-  // Žádné per-locale slug-divergence (na rozdíl od sk/uk dotace/howto) → prostý
-  // filtr na launchnuté & nelocked, vyloučit už zrcadlené /sk/ a /uk/ URL.
-  const plMirror: UrlEntry[] = urls
-    .filter((u) => {
-      if (!u.loc.startsWith(SITE_URL)) return false;
-      const p = u.loc.slice(SITE_URL.length);
-      if (p.startsWith('/sk/') || p.startsWith('/uk/')) return false; // nezrcadlit už zrcadlené
-      // pl mělo dosud gating novinek úplně vynechaný (ani skryté kategorie).
-      if (isHiddenCategoryPath(p, 'pl')) return false;
-      if (isDeadArticleForLocale(p, 'pl')) return false;
-      // Detail odrůdy a nelokalizované kvízy vyřazuje isPrerenderedOnlyPath()
-      // níž — dřív to byly brány jen tady, takže je sk launch musel zkopírovat.
-      return isLaunchedPath('pl', p) && !isLockedSectionPath(p) && !isPrerenderedOnlyPath(p);
-    })
-    .map((u) => ({ ...u, loc: `${SITE_URL}/pl${u.loc.slice(SITE_URL.length)}` }));
-  urls.push(...plMirror);
-
-  // DE launch (fáze 1): zrcadli launchnuté sekce (stroje/znacky/srovnani).
-  // Stejný vzorec jako plMirror — vyloučit už zrcadlené /sk/, /uk/ a /pl/ URL,
-  // ať se mirror nezrcadlí sám do sebe.
-  const deMirror: UrlEntry[] = urls
-    .filter((u) => {
-      if (!u.loc.startsWith(SITE_URL)) return false;
-      const p = u.loc.slice(SITE_URL.length);
-      if (p.startsWith('/sk/') || p.startsWith('/uk/') || p.startsWith('/pl/')) return false;
-      return isLaunchedPath('de', p) && !isLockedSectionPath(p);
-    })
-    .map((u) => ({ ...u, loc: `${SITE_URL}/de${u.loc.slice(SITE_URL.length)}` }));
-  urls.push(...deMirror);
+  // Pořadí je závazné (MIRROR_LOCALES): každý mirror vylučuje cesty už
+  // zrcadlené těmi před ním, ať se mirror nezrcadlí sám do sebe.
+  const mirroredPrefixes: string[] = [];
+  for (const locale of MIRROR_LOCALES) {
+    const mirror: UrlEntry[] = urls
+      .filter((u) => {
+        if (!u.loc.startsWith(SITE_URL)) return false;
+        const p = u.loc.slice(SITE_URL.length);
+        if (mirroredPrefixes.some((pref) => p.startsWith(pref))) return false;
+        return allowInMirror(p, locale, mirrorCtx);
+      })
+      .map((u) => ({ ...u, loc: `${SITE_URL}/${locale}${u.loc.slice(SITE_URL.length)}` }));
+    urls.push(...mirror);
+    mirroredPrefixes.push(`/${locale}/`);
+  }
 
   // PL komoditní detaily — /pl/statistiky/komodita/<slug>/ jsou indexovatelné
   // (reálná GUS data ceny skupu, viz [slug].astro noindex výjimka pro pl).
