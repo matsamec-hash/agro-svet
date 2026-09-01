@@ -17,6 +17,10 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600,
 
 const SLOVNIK = getSlovnik(locale);
 const KATEGORIE_LABELS = getKategorieLabels(locale);
+// Karty ve výpisu ukazují shortDef, a ten u části hesel obsahuje orientační
+// ceny z ČESKÉHO trhu. Detail se k tomu přiznává přes slov.czkNote už dřív,
+// výpis ne — čtenář tak viděl korunovou cenu bez jakéhokoli kontextu.
+const showsCzk = locale !== 'cs' && SLOVNIK.some((x) => /Kč/.test(x.shortDef));
 const canonical = `${SITE_URL}${base}/slovnik/`;
 
 const byCategory = SLOVNIK.reduce((acc, t2) => {
@@ -61,6 +65,7 @@ const itemListJsonLd = itemListSchema(
       <p class="lede">
         {t('slovnik.index.lede')}
       </p>
+      {showsCzk && <p class="slv-czk-note">{t('slov.czkNote')}</p>}
     </header>
 
     {Object.entries(byCategory).map(([cat, terms]) => (
@@ -82,6 +87,7 @@ const itemListJsonLd = itemListSchema(
 
 <style>
   .slv-root { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
+  .slv-czk-note { margin-top: 10px; font-size: 13px; color: #767676; }
   .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #666; margin-bottom: 20px; }
   .breadcrumb a { color: #666; text-decoration: none; }
   .breadcrumb a:hover { color: #000; }

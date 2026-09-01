@@ -134,10 +134,19 @@ const renderBlock = (block: string): string => {
 };
 
 const bodyHtml = term.longDef.split(/\n\n+/).map(renderBlock).join('');
-// Slovník cituje ORIENTAČNÍ CENY Z ČESKÉHO TRHU (534 zmínek Kč jen v pl verzi).
+// Slovník cituje ORIENTAČNÍ CENY Z ČESKÉHO TRHU (přes 100 hesel na jazyk).
 // Převádět je na místní měnu by znamenalo vymýšlet kurz, který zastará — místo
 // toho se pod ne-cs jednou větou přizná, odkud čísla jsou.
-const showsCzk = locale !== 'cs' && /Kč/.test(term.longDef);
+// ‼️ Test musí zahrnout i shortDef: u části hesel je cena JEN ve shrnutí
+// (16 sk / 17 pl / 3 uk), takže se poznámka neukázala právě tam, kde je první
+// věc, kterou čtenář uvidí. Sazby dotací se sem nepočítají — ty se z korun
+// odstranily úplně, protože jde o právní nárok, ne o orientační cenu.
+const showsCzk = locale !== 'cs' && /Kč/.test(
+  // ‼️ Do sítka patří i karty SOUVISEJÍCÍCH hesel — ta ukazují cizí shortDef,
+  // takže se korunová cena mohla objevit i na stránce, jejíž vlastní text
+  // žádnou cenu nemá (to byl případ /sk/slovnik/jednotna-zadost/ a BISS).
+  [term.shortDef, term.longDef, ...relatedTerms.map((rt) => rt.shortDef)].join(' '),
+);
 ---
 
 <Layout

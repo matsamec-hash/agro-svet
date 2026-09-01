@@ -90,3 +90,35 @@ describe('slovník — cizí jurisdikce musí být pojmenovaná', () => {
     expect(bad, `české úřady v německém slovníku:\n${bad.join(', ')}`).toEqual([]);
   });
 });
+
+describe('slovník — české ceny musí být přiznané', () => {
+  const page = (f: string) => readFileSync(join(process.cwd(), f), 'utf8');
+
+  it('každá locale s korunami ve slovníku má neprázdnou poznámku o českém trhu', () => {
+    for (const loc of LOCALES) {
+      const hasCzk = load(loc).some((e) => /Kč/.test(`${e.shortDef ?? ''} ${e.longDef ?? ''}`));
+      if (!hasCzk) continue;
+      const ui = page(`src/i18n/ui/${loc}.ts`);
+      const m = ui.match(/'slov\.czkNote': '([^']*)'/);
+      expect(m?.[1], `${loc}: slovník cituje Kč, ale czkNote je prázdná`).toBeTruthy();
+    }
+  });
+
+  it('výpis slovníku poznámku renderuje, ne jen detail', () => {
+    // Karty ve výpisu ukazují shortDef s cenami — bez poznámky viděl čtenář
+    // korunovou cenu úplně bez kontextu.
+    const idx = page('src/pages/slovnik/index.astro');
+    expect(idx).toContain('showsCzk');
+    expect(idx).toContain("t('slov.czkNote')");
+  });
+
+  it('detail bere v úvahu shrnutí i karty souvisejících hesel', () => {
+    // U části hesel je cena JEN v shortDef; a karta souvisejícího hesla může
+    // přinést korunu na stránku, jejíž vlastní text žádnou nemá.
+    const det = page('src/pages/slovnik/[slug].astro');
+    const m = det.match(/const showsCzk = [\s\S]{0,400}?\);/);
+    expect(m, 'showsCzk nenalezen').toBeTruthy();
+    expect(m![0]).toContain('term.shortDef');
+    expect(m![0]).toContain('relatedTerms');
+  });
+});
