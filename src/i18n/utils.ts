@@ -199,7 +199,15 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // /svet — referenční zemí je Německo, ne Česko (SVET_REFERENCE), a mapa
     // zvýrazňuje DE. Historicky tu byl ternář `locale === 'sk' ? 'SK' : … : 'CZ'`,
     // takže by /de dostalo zvýrazněné Česko.
-    '/svet'],
+    '/svet',
+    // Fáze 3i: /novinky — výpis se omezuje na REÁLNĚ přeložené články
+    // (fetchTranslatedArticleIds), takže žádný český článek do /de neprosákne.
+    // ‼️ Feed je zatím úzký (5 strojních novinek: Fendt, Claas, New Holland,
+    // Zetor) a je to záměr, ne nedodělek — zbytek fondu je reportáž o ČESKÉM
+    // zemědělství („na českých polích", sazby SZIF), což se pro DE/AT nepřekládá,
+    // ale píše znovu. Kategorie `dotace` a `legislativa` navíc drží
+    // HIDDEN_NEWS_CATEGORIES.de mimo.
+    '/novinky'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */

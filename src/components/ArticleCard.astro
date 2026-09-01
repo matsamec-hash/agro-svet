@@ -1,7 +1,7 @@
 ---
 import { categoryStyle } from '../lib/tag-color';
 import { imgSrcset } from '../lib/image-variants';
-import { localizePath, tf, localizedCategory } from '../i18n/utils';
+import { localizePath, tf, localizedCategory, bcp47 } from '../i18n/utils';
 import { newsCategorySlug } from '../lib/news-category';
 import type { Locale } from '../i18n/config';
 
@@ -22,7 +22,8 @@ const focalCss = `${focalPoint?.x ?? 50}% ${focalPoint?.y ?? 50}%`;
 // to grab the 400 w variant on mobile, 800 w on larger viewports.
 const heroVariants = imgSrcset(heroImage, '(max-width: 600px) 100vw, 400px');
 
-const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+const dateLocale = bcp47(locale); // ‼️ sdílená mapa, ne ternář — ten neznal de,
+// takže německý článek dostal české datum A `inLanguage: 'cs-CZ'` do JSON-LD.
 const date = new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(publishDate);
 // Surová kategorie z DB je nekonzistentní; odkaz i štítek stavíme z kanonického
 // slugu, jinak vede badge na 404 (/kategorie/Zemědělství/ apod.).

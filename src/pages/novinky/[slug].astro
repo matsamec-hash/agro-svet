@@ -10,7 +10,7 @@ import { getAllPlemena } from '../../lib/plemena';
 import { imgSrcset } from '../../lib/image-variants';
 import { ORG_ID, WEBSITE_ID } from '../../lib/structured-data';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, hasTranslatedTitle } from '../../lib/articles-i18n';
-import { localizePath, t, tf, localizedCategory } from '../../i18n/utils';
+import { localizePath, t, tf, localizedCategory, bcp47 } from '../../i18n/utils';
 import { localizedTag } from '../../i18n/novinky-tagy';
 import { HIDDEN_NEWS_CATEGORIES, isNewsCategoryHidden } from '../../i18n/nav';
 
@@ -147,7 +147,8 @@ const articleDate = new Date(article.published_at).getTime();
 const prevArticle = pool.find((p) => new Date(p.published_at).getTime() < articleDate) ?? null; // older
 const nextArticle = [...pool].reverse().find((p) => new Date(p.published_at).getTime() > articleDate) ?? null; // newer
 
-const dateLocale = locale === 'sk' ? 'sk-SK' : locale === 'uk' ? 'uk-UA' : locale === 'pl' ? 'pl-PL' : 'cs-CZ';
+const dateLocale = bcp47(locale); // ‼️ sdílená mapa, ne ternář — ten neznal de,
+// takže německý článek dostal české datum A `inLanguage: 'cs-CZ'` do JSON-LD.
 const date = new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.published_at));
 
 const canonical = `https://agro-svet.cz${localizePath(locale, `/novinky/${article.slug}/`)}`;
@@ -191,7 +192,13 @@ const jsonLd = {
         cssSelector: ['#article-headline', '#article-lead'],
       },
       ...(articleSectionLabel && { articleSection: articleSectionLabel }),
-      ...(article.tags?.length > 0 && { keywords: article.tags.join(', ') }),
+      // ‼️ Štítky do JSON-LD MUSÍ projít localizedTag stejně jako čipy pod
+      // článkem. Syrové `article.tags` posílaly Googlu české „traktor, kombajn,
+      // sklizeň" pod NĚMECKÝM článkem — v těle stránky to není vidět, protože
+      // tam se překlad použil. Klasický únik ve strukturovaných datech.
+      ...(article.tags?.length > 0 && {
+        keywords: (article.tags as string[]).map((tag) => localizedTag(locale, tag)).join(', '),
+      }),
     },
     {
       '@type': 'BreadcrumbList',

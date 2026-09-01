@@ -5,8 +5,10 @@
 // sloupce pro štítky ani kategorii nemá, takže oprava v datech by znamenala
 // migraci schématu na produkci. Mapa v kódu je bezpečnější a vratná.
 //
-// PROČ NE V ui/*.ts: bylo by to ~40 klíčů × 4 jazyky navíc v paritním testu,
-// přestože uk novinky vůbec nezobrazuje (HIDDEN_NEWS_CATEGORIES).
+// PROČ NE V ui/*.ts: bylo by to ~40 klíčů × 4 jazyky navíc v paritním testu.
+//
+// ‼️ Značky (Fendt, Claas, Zetor, New Holland) ani typová označení (T6, LNG,
+// Stage V, Proxima) se NEPŘEKLÁDAJÍ — jsou to vlastní jména, mapa je vynechává.
 //
 // Klíč = přesná cs hodnota z DB. Co tu není, propadne beze změny (raději
 // český štítek než vymyšlený překlad).
@@ -127,7 +129,39 @@ const SK: TagMap = {
   'Novinky a zprávy': 'Novinky a správy',
 };
 
-const MAPS: Record<string, TagMap> = { pl: PL, sk: SK };
+
+// Německá mapa. Zatím pokrývá jen štítky a kategorie článků, které mají německý
+// překlad v `article_translations` (strojní novinky) — co tu není, propadne
+// beze změny, tedy raději český štítek než vymyšlený překlad.
+const DE: TagMap = {
+  // kategorie
+  'technika': 'Technik',
+  'Technika': 'Technik',
+  'Zemědělství': 'Landwirtschaft',
+  'zemědělství': 'Landwirtschaft',
+  'novinky': 'Nachrichten',
+  'Novinky a zprávy': 'Nachrichten und Meldungen',
+  'trh': 'Markt',
+  // štítky strojních novinek
+  'traktor': 'Traktor',
+  'kombajn': 'Mähdrescher',
+  'sklizeň': 'Ernte',
+  'rekord': 'Rekord',
+  'test': 'Test',
+  'premium': 'Premium',
+  'biometan': 'Biomethan',
+  'alternativní pohony': 'alternative Antriebe',
+  'alternativni-paliva': 'alternative Kraftstoffe',
+  'kabina Crystal': 'Kabine Crystal',
+  'technologie': 'Technologie',
+  'inovace': 'Innovation',
+  'udržitelnost': 'Nachhaltigkeit',
+  'drony': 'Drohnen',
+  'precizní zemědělství': 'Precision Farming',
+  'technologická inovace': 'technologische Innovation',
+};
+
+const MAPS: Record<string, TagMap> = { pl: PL, sk: SK, de: DE };
 
 /** Lokalizovaný štítek/kategorie; cs a neznámé hodnoty vrací vstup beze změny. */
 export function localizedTag(locale: string, tag: string): string {

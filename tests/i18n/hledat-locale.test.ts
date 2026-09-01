@@ -35,9 +35,10 @@ describe('/hledat — gatování skupin podle launchnutých sekcí', () => {
     // sk a pl mají /novinky launchnuté (reálné překlady přes article_translations)
     expect(searchGroupsFor('sk')).toEqual(['novinky', 'stroje', 'plemena']);
     expect(searchGroupsFor('pl')).toEqual(['novinky', 'stroje', 'plemena']);
-    // uk a de /novinky launchnuté NEMAJÍ → skupina se ani nedotáže, ani neslíbí
+    // de má /novinky od 2026-09-01 (5 německých strojních novinek); uk zatím ne,
+    // protože CHECK constraint v DB locale 'uk' v article_translations nepouští.
+    expect(searchGroupsFor('de')).toEqual(['novinky', 'stroje', 'plemena']);
     expect(searchGroupsFor('uk')).toEqual(['stroje', 'plemena']);
-    expect(searchGroupsFor('de')).toEqual(['stroje', 'plemena']);
   });
 
   it('každá nabídnutá skupina má v dané locale launchnutou cílovou sekci', () => {

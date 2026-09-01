@@ -22,6 +22,25 @@ const STR = {
     submitting: '...', pending: 'Sprawdź e-mail i kliknij link potwierdzający.',
     already: 'Ten e-mail już subskrybuje newsletter.', invalid: 'Podaj prawidłowy e-mail.', error: 'Coś poszło nie tak. Spróbuj ponownie.',
   },
+  // ‼️ Doplněno 2026-09-01: de a uk blok chyběly, takže newsletterový box pod
+  // KAŽDÝM článkem i na rozcestníku servíroval české „Novinky z agro světa do
+  // mailu" uprostřed jinak německé stránky. Fallback na cs je tichý.
+  de: {
+    title: 'Agrar-News per E-Mail',
+    perex: 'Einmal in der Woche das Wichtigste aus Landwirtschaft, Technik und Markt — direkt ins Postfach.',
+    placeholder: 'Ihre E-Mail', btn: 'Abonnieren', msg: 'Kein Spam. Abmeldung jederzeit möglich.',
+    gdprPre: 'Mit dem Abonnement stimmen Sie der ', gdprLink: 'Verarbeitung personenbezogener Daten', gdprPost: ' zu. Sie können sich jederzeit abmelden.',
+    submitting: '...', pending: 'Bitte prüfen Sie Ihr Postfach und klicken Sie den Bestätigungslink an.',
+    already: 'Diese E-Mail-Adresse ist bereits angemeldet.', invalid: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.', error: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
+  },
+  uk: {
+    title: 'Аграрні новини на пошту',
+    perex: 'Раз на тиждень найважливіше із сільського господарства, техніки та ринку — просто у скриньку.',
+    placeholder: 'Ваша е-пошта', btn: 'Підписатися', msg: 'Жодного спаму. Відписатися можна будь-коли.',
+    gdprPre: 'Підписуючись, ви погоджуєтеся з ', gdprLink: 'обробкою персональних даних', gdprPost: '. Відписатися можна будь-коли.',
+    submitting: '...', pending: 'Перевірте пошту та натисніть посилання для підтвердження.',
+    already: 'Ця адреса вже підписана на розсилку.', invalid: 'Введіть дійсну адресу е-пошти.', error: 'Щось пішло не так. Спробуйте ще раз.',
+  },
   sk: {
     title: 'Novinky zo sveta poľnohospodárstva do mailu',
     perex: 'Raz týždenne to najdôležitejšie z poľnohospodárstva, techniky a trhu — priamo do schránky.',

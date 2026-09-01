@@ -76,7 +76,11 @@ describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () 
     expect(isLaunchedPath('de', '/oeko-regelungen')).toBe(true);
   });
   it('CZ-jurisdikční sekce launchnuté NEJSOU (mají vzniknout jako DE/AT obsah)', () => {
-    for (const p of ['/dotace', '/statistiky', '/puda', '/data', '/kalkulacka', '/novinky', '/akce', '/farmy', '/historie']) {
+    // /novinky ze seznamu ven (2026-09-01): výpis je omezený na REÁLNĚ přeložené
+    // články přes fetchTranslatedArticleIds, takže žádný český text neprosákne,
+    // a kategorie `dotace` i `legislativa` drží HIDDEN_NEWS_CATEGORIES.de mimo.
+    // Sekce jako taková tedy CZ-jurisdikční není — jurisdikční je OBSAH v ní.
+    for (const p of ['/dotace', '/statistiky', '/puda', '/data', '/kalkulacka', '/akce', '/farmy', '/historie']) {
       expect(isLaunchedPath('de', p), `${p} nesmí být pro de launchnuté`).toBe(false);
     }
   });
