@@ -20,7 +20,12 @@ export interface HubContent {
   cards: HubCard[];
 }
 
-export const content: Record<Locale, HubContent> = {
+// ‼️ Mapa je ZÁMĚRNĚ Partial: locale bez překladu tu klíč prostě NEMÁ.
+// Dřív tu stálo `uk: {} as XContent` — platný TypeScript, ale za běhu prázdný
+// objekt, na který `content[locale] ?? content.cs` NESÁHNE (`{}` je truthy).
+// Stránka pak četla `c.title` = undefined, Astro na tom utne SSR stream
+// a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
+export const content: Partial<Record<Locale, HubContent>> = {
   cs: {
     title: 'Kalkulačky pro zemědělce — převody jednotek, leasing, náklady',
     metaDescription:
@@ -68,5 +73,4 @@ export const content: Record<Locale, HubContent> = {
       { slug: 'navratnost-telehandleru', name: 'Oplatí sa kúpiť telehandler?', short: 'Návratnosť telehandlera', description: 'Vlastný teleskopický manipulátor, alebo práca na zákazku? Zadajte odpracované hodiny za rok, sadzbu a cenu stroja.', icon: '🏗️' },
     ],
   },
-  uk: {} as HubContent,
 };

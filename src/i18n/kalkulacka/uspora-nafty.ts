@@ -22,7 +22,12 @@ export interface UsporaNaftyContent extends CalcMeta, CalcCurrency {
   defaults: { hours: number; price: number };
 }
 
-export const content: Record<Locale, UsporaNaftyContent> = {
+// ‼️ Mapa je ZÁMĚRNĚ Partial: locale bez překladu tu klíč prostě NEMÁ.
+// Dřív tu stálo `uk: {} as XContent` — platný TypeScript, ale za běhu prázdný
+// objekt, na který `content[locale] ?? content.cs` NESÁHNE (`{}` je truthy).
+// Stránka pak četla `c.title` = undefined, Astro na tom utne SSR stream
+// a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
+export const content: Partial<Record<Locale, UsporaNaftyContent>> = {
   cs: {
     title: 'Kalkulačka úspory nafty mezi traktory',
     metaDescription: 'Spočítejte, kolik ušetříte na naftě při výměně traktoru — porovnání spotřeby dvou modelů, roční náklady a doba návratnosti investice.',
@@ -137,5 +142,4 @@ export const content: Record<Locale, UsporaNaftyContent> = {
       { q: 'Čo ak mám veľmi špecifické využitie (napr. len ťah)?', a: 'V poli "spotreba l/h" môžete prepísať východiskový odhad vlastným údajom. Ak poznáte meranú spotrebu z vášho aktuálneho stroja pri typickej práci, použite ju. Pre nový stroj odhadnite na základe DLG testov konkrétneho modelu (Profi DLG Test publikuje detailné dáta).' },
     ],
   },
-  uk: {} as UsporaNaftyContent,
 };

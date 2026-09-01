@@ -26,7 +26,12 @@ export interface PrevodyHmotnostContent extends CalcMeta {
   };
 }
 
-export const content: Record<Locale, PrevodyHmotnostContent> = {
+// ‼️ Mapa je ZÁMĚRNĚ Partial: locale bez překladu tu klíč prostě NEMÁ.
+// Dřív tu stálo `uk: {} as XContent` — platný TypeScript, ale za běhu prázdný
+// objekt, na který `content[locale] ?? content.cs` NESÁHNE (`{}` je truthy).
+// Stránka pak četla `c.title` = undefined, Astro na tom utne SSR stream
+// a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
+export const content: Partial<Record<Locale, PrevodyHmotnostContent>> = {
   cs: {
     title: 'Převody jednotek hmotnosti — tuna, q, kg, bušl, libra',
     metaDescription: 'Online kalkulačka pro převody hmotnosti v zemědělství: tuna ↔ metrický cent (q) ↔ kilogram ↔ bušl (pšenice, kukuřice, sója) ↔ libra. Hodnoty bušlu podle komodity (USDA standard).',
@@ -171,7 +176,6 @@ export const content: Record<Locale, PrevodyHmotnostContent> = {
       ],
     },
   },
-  uk: {} as PrevodyHmotnostContent,
   pl: {
     title: 'Przelicznik jednostek masy — tona, q, kg, buszel, funt',
     metaDescription: 'Kalkulator online do przeliczania masy w rolnictwie: tona ↔ kwintal (q) ↔ kilogram ↔ buszel (pszenica, kukurydza, soja) ↔ funt. Masa buszla według towaru (standard USDA).',

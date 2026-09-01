@@ -12,7 +12,12 @@ export interface LeasingContent extends CalcMeta, CalcCurrency {
   providerSection: { heading: string; lede: string; thProvider: string; thRate: string; thMonthly: string; thTotal: string; disclaimer: string } | null;
 }
 
-export const content: Record<Locale, LeasingContent> = {
+// ‼️ Mapa je ZÁMĚRNĚ Partial: locale bez překladu tu klíč prostě NEMÁ.
+// Dřív tu stálo `uk: {} as XContent` — platný TypeScript, ale za běhu prázdný
+// objekt, na který `content[locale] ?? content.cs` NESÁHNE (`{}` je truthy).
+// Stránka pak četla `c.title` = undefined, Astro na tom utne SSR stream
+// a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
+export const content: Partial<Record<Locale, LeasingContent>> = {
   cs: {
     title: 'Kalkulačka leasingu traktoru — měsíční splátka a srovnání 2026',
     metaDescription: 'Spočítejte měsíční splátku, celkové přeplacení a RPSN leasingu traktoru. Srovnání ČSOB Leasing, John Deere Financial, AGRI CS a AGROTEC.',
@@ -67,5 +72,4 @@ export const content: Record<Locale, LeasingContent> = {
       { q: 'Ako znížiť celkové preplatenie leasingu?', a: 'Najväčší vplyv má výška akontácie a dĺžka splácania: vyššia akontácia a kratšia doba znižujú zaplatené úroky. Balónová (zostatková) splátka zníži mesačnú splátku, ale celkové preplatenie zvyčajne zvýši. Porovnávajte ponuky podľa RPMN, nie len podľa sadzby.' },
     ],
   },
-  uk: {} as LeasingContent,
 };

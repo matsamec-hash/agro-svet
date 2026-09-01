@@ -290,13 +290,16 @@ const MACHINES: Record<string, MachineOverride> = {
   },
 };
 
-function build(slug: string): Record<Locale, NavratnostContent> {
+// ‼️ Mapa je ZÁMĚRNĚ Partial: locale bez překladu tu klíč prostě NEMÁ.
+// Dřív tu stálo `uk: {} as XContent` — platný TypeScript, ale za běhu prázdný
+// objekt, na který `content[locale] ?? content.cs` NESÁHNE (`{}` je truthy).
+// Stránka pak četla `c.title` = undefined, Astro na tom utne SSR stream
+// a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
+function build(slug: string): Partial<Record<Locale, NavratnostContent>> {
   const m = MACHINES[slug];
   return {
     cs: { ...baseCs, ...m.cs },
     sk: { ...baseSk, ...m.sk },
-    uk: {} as NavratnostContent,
-    pl: {} as NavratnostContent,
   };
 }
 

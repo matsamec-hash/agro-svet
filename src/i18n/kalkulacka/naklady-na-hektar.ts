@@ -16,7 +16,12 @@ export interface NakladyContent extends CalcMeta, CalcCurrency {
   defaults: { fuelPrice: number; laborCost: number; maintenance: number; area: number };
 }
 
-export const content: Record<Locale, NakladyContent> = {
+// ‼️ Mapa je ZÁMĚRNĚ Partial: locale bez překladu tu klíč prostě NEMÁ.
+// Dřív tu stálo `uk: {} as XContent` — platný TypeScript, ale za běhu prázdný
+// objekt, na který `content[locale] ?? content.cs` NESÁHNE (`{}` je truthy).
+// Stránka pak četla `c.title` = undefined, Astro na tom utne SSR stream
+// a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
+export const content: Partial<Record<Locale, NakladyContent>> = {
   cs: {
     title: 'Kalkulačka provozních nákladů na hektar — palivo, práce, údržba',
     metaDescription: 'Spočítejte provozní náklady na hektar pro orbu, setí, postřik nebo sklizeň. Spotřeba nafty, výkon plochy, práce obsluhy — Kč/ha pro plánování farmy.',
@@ -85,5 +90,4 @@ export const content: Record<Locale, NakladyContent> = {
       { q: 'Akú cenu nafty mám zadať?', a: 'Zadajte cenu, za ktorú reálne tankujete — poľnohospodári často využívajú vrátenie spotrebnej dane z minerálnych olejov (tzv. zelená nafta), takže efektívna cena býva nižšia než pumpová. Na plánovanie použite cenu po vrátení.' },
     ],
   },
-  uk: {} as NakladyContent,
 };

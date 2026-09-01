@@ -27,7 +27,12 @@ export interface PrevodyJednotekContent extends CalcMeta {
   };
 }
 
-export const content: Record<Locale, PrevodyJednotekContent> = {
+// ‼️ Mapa je ZÁMĚRNĚ Partial: locale bez překladu tu klíč prostě NEMÁ.
+// Dřív tu stálo `uk: {} as XContent` — platný TypeScript, ale za běhu prázdný
+// objekt, na který `content[locale] ?? content.cs` NESÁHNE (`{}` je truthy).
+// Stránka pak četla `c.title` = undefined, Astro na tom utne SSR stream
+// a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
+export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
   cs: {
     title: 'Převody jednotek plochy — hektar, ar, m², akr, jitro, korec',
     metaDescription:
@@ -209,7 +214,6 @@ export const content: Record<Locale, PrevodyJednotekContent> = {
       ],
     },
   },
-  uk: {} as PrevodyJednotekContent,
   pl: {
     title: 'Przelicznik jednostek powierzchni — hektar, ar, m², akr, morga',
     metaDescription:
