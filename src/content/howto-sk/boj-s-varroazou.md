@@ -3,7 +3,7 @@ title: 'Boj s varroázou: monitoring a ošetrenie krok za krokom'
 slug: boj-s-varroazou
 description: Ako merať zamorenie roztočom Varroa destructor, kedy a čím ošetrovať a ako skontrolovať účinnosť liečby.
 datePublished: 2026-05-29
-lastVerified: 2026-05-29
+lastVerified: 2026-09-01
 obtiznost: Základná prax
 tools:
 - Podložka alebo zasieťovaná spodná doska
@@ -23,7 +23,7 @@ steps:
 - name: Skontrolujte účinnosť ošetrenia
   text: Po dokončení liečby sa sleduje spad roztočov na podložke — pri účinnom ošetrení prudko klesne. Porovnanie spadu pred liečbou a po nej dá orientačný obraz o miere zamorenosti a efekte liečby.
 - name: Koordinujte ošetrenie so susednými včelármi
-  text: Varroáza sa rýchlo šíri spätnou prepadavosťou včiel zo susedných stanovíšť. Ošetrenie synchronizované s okolnými včelármi výrazne znižuje riziko reinvazie po liečbe. Spolupráca v rámci miestnej organizácie ČSV je odporúčaná veterinárnymi orgánmi.
+  text: Varroáza sa rýchlo šíri spätnou prepadavosťou včiel zo susedných stanovíšť. Ošetrenie synchronizované s okolnými včelármi výrazne znižuje riziko reinvazie po liečbe. Spolupráca v rámci miestnej základnej organizácie Slovenského zväzu včelárov (SZV) je odporúčaná veterinárnymi orgánmi.
 faq:
 - q: Kedy sa vykonáva letné ošetrenie varroázy?
   a: Letné ošetrenie sa vykonáva čo najskôr po poslednom vytočení medu — typicky v júli alebo auguste. Čím skôr liečba prebehne, tým menej roztočov sa dostane do zimnej generácie včiel, ktorá má rozhodujúci vplyv na prezimovanie.
@@ -59,6 +59,6 @@ Obe metódy majú porovnateľnú účinnosť pri správnom prevedení. Výber z�
 
 ## Koordinácia so susedmi
 
-Reinvázia zo susedných neliečených stanovíšť môže rýchlo anulovať efekt ošetrenia. Miestne pobočky Českého zväzu včelárov organizujú koordinované termínové ošetrenia — zapojenie do nich výrazne zvyšuje celkový efekt liečby v regióne.
+Reinvázia zo susedných neliečených stanovíšť môže rýchlo anulovať efekt ošetrenia. Miestne základné organizácie Slovenského zväzu včelárov organizujú koordinované termínové ošetrenia — zapojenie do nich výrazne zvyšuje celkový efekt liečby v regióne.
 
 Podrobný prehľad celého [včelárskeho roka](/jak-na-to/vcelarsky-rok/) a postup [zazimovania](/jak-na-to/zazimovani-vcelstev/) sú dostupné v nadväzujúcich sprievodcoch.

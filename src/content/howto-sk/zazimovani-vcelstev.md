@@ -3,7 +3,7 @@ title: Zazimovanie včelstiev krok za krokom
 slug: zazimovani-vcelstev
 description: Ako správne pripraviť včelie rodiny na zimu — kontrola zásob, kŕmenie cukrovým roztokom, zúženie česna, zateplenie a ochrana pred hlodavcami.
 datePublished: 2026-05-29
-lastVerified: 2026-05-29
+lastVerified: 2026-09-01
 totalTime: PT2H
 obtiznost: Základná prax
 tools:
@@ -16,7 +16,7 @@ supplies:
 - Voda
 steps:
 - name: Skontrolujte zásoby
-  text: Na konci leta alebo začiatkom jesene skontrolujte celkovú hmotnosť úľa alebo orientačne odhadnite zásoby priamo v hniezde. Dostatočná zásoba pre prezimovanie sa pohybuje v rádoch kilogramov — presná hodnota závisí od sily rodiny a dĺžky zimy v danom regióne; podrobné odporúčania uvádzajú metodiky ČSV.
+  text: Na konci leta alebo začiatkom jesene skontrolujte celkovú hmotnosť úľa alebo orientačne odhadnite zásoby priamo v hniezde. Dostatočná zásoba pre prezimovanie sa pohybuje v rádoch kilogramov — presná hodnota závisí od sily rodiny a dĺžky zimy v danom regióne; podrobné odporúčania uvádzajú metodiky Slovenského zväzu včelárov a poradenské pracoviská.
 - name: Nakŕmte cukrovým roztokom
   text: Rodiny s nedostatočnými zásobami sa nakŕmia cukrovým roztokom. Kŕmenie musí byť dokončené dostatočne skoro, aby včely stihli roztok spracovať a odviesť prebytočnú vodu pred nástupom chladného počasia — spravidla najneskôr do konca septembra. Presné termíny závisia od klimatických podmienok stanovišťa.
 - name: Zúžte česno
@@ -31,7 +31,7 @@ faq:
 - q: Kedy je najlepšie zazimovať včelstvá?
   a: Presný termín závisí od počasia a regiónu. Kľúčové je dokončiť kŕmenie tak, aby včely stihli sirup spracovať ešte za teplejších nocí. V kontinentálnych podmienkach Česka to spravidla znamená ukončiť kŕmenie do konca septembra.
 - q: Koľko cukru potrebujem na zazimovanie jedného včelstva?
-  a: Množstvo cukru sa odvíja od aktuálneho stavu zásob v úli a sily rodiny. Presné odporúčanie poskytuje miestny poradca alebo metodika ČSV — všeobecne sa jedná o jednotky kilogramov cukru na jedno podpriemerne zásobené včelstvo.
+  a: Množstvo cukru sa odvíja od aktuálneho stavu zásob v úli a sily rodiny. Presné odporúčanie poskytuje miestny poradca alebo metodika Slovenského zväzu včelárov — všeobecne sa jedná o jednotky kilogramov cukru na jedno podpriemerne zásobené včelstvo.
 - q: Musí sa úľ v zime vetrať?
   a: Áno. Včely v zimnom chumáči produkujú vodnú paru, ktorá musí mať kadiaľ odísť. Uzavretý, nevetraný úľ hrozí kondenzáciou vody, ktorá môže spôsobiť plesne a oslabenie rodiny. Zasietovaná spodná doska alebo malá vetracia štrbina pod vekom zabezpečujú dostatočnú cirkuláciu vzduchu.
 relatedUrl: /jak-na-to/boj-s-varroazou/

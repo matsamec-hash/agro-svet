@@ -4,7 +4,7 @@ slug: jak-naplanovat-dotaci-na-techniku
 description: Návod krok za krokom, ako naplánovať dotáciu na poľnohospodársku techniku — od definície zámeru cez výber dotačného titulu, kontrolu podmienok a rozpočtu až po podanie žiadosti a archiváciu.
 heroImage: /images/stroje/john-deere/john-deere-6r-250k.webp
 datePublished: 2026-05-15
-lastVerified: 2026-05-15
+lastVerified: 2026-09-01
 totalTime: PT3H
 obtiznost: Pokročilý
 tools:
@@ -33,7 +33,7 @@ steps:
   text: Po schválení musíte projekt zrealizovať podľa pravidiel — dodržať účel, termíny, výber dodávateľa a pravidlá publicity. Všetky doklady (faktúry, zmluvy, doklady o úhrade) starostlivo archivujte po celú dobu udržateľnosti projektu. Kontrola môže prísť aj roky po preplatení dotácie.
 faq:
 - q: Kde nájdem aktuálne dotačné výzvy na poľnohospodársku techniku?
-  a: Dotačné tituly pre modernizáciu fariem a techniku vyhlasuje SZIF v rámci Strategického plánu SZP. Aktuálne aj plánované výzvy nájdete na webe SZIF a v Portáli farmára. Príjem žiadostí býva časovo obmedzený a vyhlasuje sa obvykle dvakrát ročne, preto sa oplatí sledovať kalendár výziev.
+  a: Dotačné tituly pre modernizáciu fariem a techniku vyhlasuje Pôdohospodárska platobná agentúra (PPA) v rámci Strategického plánu SZP. Aktuálne aj plánované výzvy nájdete na webe PPA a v Portáli farmára. Príjem žiadostí býva časovo obmedzený a vyhlasuje sa obvykle dvakrát ročne, preto sa oplatí sledovať kalendár výziev.
 - q: Akú časť ceny techniky dotácia pokryje?
   a: Výška dotácie závisí od konkrétneho titulu, typu výroby a žiadateľa — percento aj strop sú uvedené v Pravidlách danej výzvy. U mobilných strojov často platia dodatočné obmedzenia, napríklad maximálny podiel na celkových oprávnených výdavkoch. Vždy počítajte s tým, že podstatnú časť investície musíte profinancovať sami.
 - q: Môžem si žiadosť o dotáciu podať sám, alebo potrebujem poradcu?

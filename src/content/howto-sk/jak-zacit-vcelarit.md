@@ -3,7 +3,7 @@ title: 'Ako začať včeláriť: kompletný sprievodca pre začiatočníkov'
 slug: jak-zacit-vcelarit
 description: Čo potrebujete k prvému včelstvu, koľko to stojí, akú včelu zvoliť a ako postupovať v prvej sezóne.
 datePublished: 2026-05-29
-lastVerified: 2026-05-29
+lastVerified: 2026-09-01
 obtiznost: Pre začiatočníkov
 tools:
 - Nástavkový úľ
@@ -16,7 +16,7 @@ supplies:
 - Medzistienky
 steps:
 - name: Zistite si povinnosti a zaregistrujte sa
-  text: Včelárov a stanovištia je nutné nahlásiť ústrednej evidencii (ČMSCH). Prejdite si tiež obecné vyhlášky a vzťahy so susedmi.
+  text: Včelárov a stanovištia je nutné nahlásiť do Centrálnej evidencie hospodárskych zvierat (CEHZ). Prejdite si tiež obecné vyhlášky a vzťahy so susedmi.
 - name: Vyberte umiestnenie stanovišťa
   text: Pokojné, slnečné miesto s ranným slnkom, závetrím a dostatkom znášky v okolí (do ~3 km).
 - name: Zaobstarajte úľ a základné vybavenie
@@ -27,7 +27,7 @@ steps:
   text: Pravidelná kontrola, prevencia rojenia, monitoring varroázy a včasné rozširovanie úľa.
 faq:
 - q: Koľko stojí začať včeláriť?
-  a: Základná výbava (úľ, oblek, náradie) a oddielok vyjdú orientačne na 6 000–12 000 Kč.
+  a: Základná výbava (úľ, oblek, náradie) a oddielok predstavujú vstupnú investíciu, ktorej výška závisí od kvality vybavenia a od toho, či kupujete nové alebo použité. Aktuálne ceny nájdete v cenníkoch predajcov včelárskych potrieb a poradí aj miestna organizácia SZV.
 - q: Koľko včelstiev je dobré mať na začiatku?
   a: Ideálne dve — môžete ich porovnávať a v prípade problému jedno zachrániť z druhého.
 relatedUrl: /vcelarstvi/vybaveni/
@@ -40,7 +40,7 @@ Kľúčom nie je mať hneď veľký počet včelstiev, ale pochopiť ročný cyk
 
 ## Registrácia a zákonné povinnosti
 
-Každý včelár je povinný sa zaregistrovať a nahlásiť stanovište v ústrednej evidencii spravovanej [ČMSCH](/slovnik/cmsch/). Registrácia sa vykonáva pred umiestnením prvého včelstva — nie až po zakúpení. Podmienky sa menia, preto je vhodné aktuálny postup overiť priamo na webe ČMSCH alebo u miestnej včelárskej organizácie (ČSV — Český svaz včelařů).
+Každý včelár je povinný sa zaregistrovať a nahlásiť stanovište v [Centrálnej evidencii hospodárskych zvierat (CEHZ)](/slovnik/cmsch/), ktorú vedú Plemenárske služby Slovenskej republiky, š. p. Registrácia sa vykonáva pred umiestnením prvého včelstva — nie až po zakúpení. Podmienky sa menia, preto je vhodné aktuálny postup overiť priamo na stránkach CEHZ alebo u miestnej včelárskej organizácie (Slovenský zväz včelárov, SZV).
 
 Vedľa ústrednej evidencie je dobré preveriť obecné predpisy pre umiestnenie úľov a informovať susedov, najmä v zastavanom území. Predchádzanie susedským sporom patrí k dobrým zvyklostiam chovu.
 
@@ -60,12 +60,12 @@ Bezpečnou voľbou pre väčšinu Česka je pokojná forma kraňskej včely (*Ap
 
 Po inštalácii oddielku je potrebné kontrolovať zásoby a priestor v úli približne raz za 10–14 dní. V predjarí a na jar sa sleduje kladenie matky a rozvoj rodiny; v rojovej nálade (približne od mája) sa vykonáva rozširovanie a prípadné delenie. V lete sa vytáča med a vykonáva letné ošetrenie [varroázy](/slovnik/varroaza/). Na jeseň sa rodina nakŕmi na zazimovanie.
 
-Základný kurz ČSV alebo spolupráca s miestnym mentorom výrazne znižuje riziko fatálnych chýb v prvej sezóne.
+Základný kurz SZV alebo spolupráca s miestnym mentorom výrazne znižuje riziko fatálnych chýb v prvej sezóne.
 
 ## Celkové náklady na začiatok
 
 Orientačné obstarávacie náklady na prvé včelstvo zahŕňajú cenu úľa, základného vybavenia (oblek, dymák, náradie) a samotného oddielku. Celková vstupná investícia sa pohybuje orientačne v ráde tisícov až desiatok tisíc korún podľa zvolenej kvality vybavenia. Presné ceny závisia na trhu v danom roku.
 
-Prevádzkové náklady v prvých rokoch tvoria predovšetkým cukor na zazimovanie a veterinárne prípravky pre ošetrenie varroázy. Na včelstvá je dostupná podpora v rámci dotácií SZIF (intervencia 1.D), ktorej podmienky sú každoročne upresňované.
+Prevádzkové náklady v prvých rokoch tvoria predovšetkým cukor na zazimovanie a veterinárne prípravky pre ošetrenie varroázy. Podporu pre sektor včelárstva administruje Pôdohospodárska platobná agentúra (PPA) v rámci sektorovej intervencie Strategického plánu SPP; časť opatrení ide cez uznané včelárske organizácie. Podmienky a termíny sa vyhlasujú pre každé obdobie zvlášť.
 
 Podrobnejší prehľad potrebného [vybavenia pre včelárov](/vcelarstvi/vybaveni/) a [druhov včiel](/vcelarstvi/druhy/) je k dispozícii v ďalších sekciách.
