@@ -9374,3 +9374,37 @@ export function getSlovnik(locale: string = 'cs'): SlovnikTerm[] {
 export function getKategorieLabels(locale: string = 'cs'): Record<SlovnikKategorie, string> {
   return KATEGORIE_LABELS_BY_LOCALE[locale] ?? KATEGORIE_LABELS;
 }
+
+/**
+ * Meta description pro detail hesla.
+ *
+ * Dřív se do popisku posílal celý `shortDef`, takže Google ukazoval hotovou definici
+ * („Hektar (ha) je jednotka plochy = 10 000 m²…") a uživatel neměl důvod kliknout:
+ * 306 hesel udělalo 36 416 zobrazení a jen 216 prokliků (0,59 % CTR na průměrné
+ * pozici 13,5). Popisek proto slibuje, co je na stránce navíc, a definici nechává
+ * za proklikem — `shortDef` dál nese DefinedTerm schema pro AI Overviews.
+ *
+ * Slibuje se jen to, co se opravdu vykreslí: `hasConverter` říká, jestli heslo dostane
+ * widget převodníku (mapy jednotek žijí v šabloně stránky, ne v datech hesla).
+ */
+export function slovnikMetaDescription(
+  term: SlovnikTerm,
+  locale: string,
+  hasConverter: boolean,
+  t: (key: string) => string,
+  tf: (locale: any, key: string, vars: Record<string, string>) => string,
+): string {
+  const parts = [t('slovnik.detail.metaExplain')];
+  if (hasConverter) parts.push(t('slovnik.detail.metaConverter'));
+  if (term.faq && term.faq.length > 0) parts.push(t('slovnik.detail.metaFaq'));
+  if ((term.related ?? []).length > 0) parts.push(t('slovnik.detail.metaRelated'));
+
+  const list = parts.length > 1
+    ? `${parts.slice(0, -1).join(', ')}${t('slovnik.detail.metaAnd')}${parts[parts.length - 1]}`
+    : parts[0];
+
+  return tf(locale, 'slovnik.detail.metaTemplate', { term: term.term, list })
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 160);
+}
