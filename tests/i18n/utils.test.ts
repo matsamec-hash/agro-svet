@@ -157,9 +157,12 @@ describe('localizeInternalHref', () => {
     // sekce, která pro sk pořád launchnutá NENÍ.
     expect(localizeInternalHref('sk', '/farmy/nazev-farmy/')).toBe('/farmy/nazev-farmy/');
   });
-  it('uk: launchnutá → /uk; nelaunchnutá (novinky není uk) → cs', () => {
+  it('uk: launchnutá → /uk; nelaunchnutá (/akce) → cs', () => {
     expect(localizeInternalHref('uk', '/stroje/')).toBe('/uk/stroje/');
-    expect(localizeInternalHref('uk', '/novinky/')).toBe('/novinky/');
+    // /novinky bylo do 2026-09-01 nelaunchnuté a sloužilo tu jako protipříklad;
+    // po launchi ho nahrazuje /akce, které pro uk launchnuté není.
+    expect(localizeInternalHref('uk', '/novinky/')).toBe('/uk/novinky/');
+    expect(localizeInternalHref('uk', '/akce/')).toBe('/akce/');
   });
   it('non-path vstup se nerozbije', () => {
     expect(localizeInternalHref('sk', '#sekce')).toBe('#sekce');

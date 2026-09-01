@@ -91,8 +91,8 @@ describe('UK homepage launch', () => {
 
   it("root v prefixech nedělá wildcard — nelaunchnuté sekce zůstávají cs", () => {
     // /sezona launchnuté od 2026-08-31 (sezona.uk.ts) → ze seznamu ven.
-    // /svet launchnuté od 2026-09-01 (i18n/svet + ukrajinská reference) → taky.
-    for (const p of ['/novinky', '/data']) {
+    // /svet i /novinky launchnuté od 2026-09-01 → taky.
+    for (const p of ['/data', '/akce']) {
       expect(isLaunchedPath('uk', p)).toBe(false);
     }
   });

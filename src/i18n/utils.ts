@@ -59,7 +59,14 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // a World Bank, tedy jazykově neutrální; překládají se jen labely (i18n/svet).
     // ‼️ Referenční zemí NENÍ Česko: uk se poměřuje s Ukrajinou (SVET_REFERENCE),
     // jinak by tabulka Ukrajinci hlásila odchylku od cizí země.
-    '/svet'],
+    '/svet',
+    // Fáze 3i: /novinky — stejný princip jako de. Výpis drží jen REÁLNĚ
+    // přeložené články (fetchTranslatedArticleIds), `dotace` a `legislativa`
+    // navíc drží mimo HIDDEN_NEWS_CATEGORIES.uk.
+    // ‼️ Odemknutí si vyžádalo migraci na produkční CMS databázi: CHECK
+    // constraint `article_translations_locale_check` locale 'uk' nepouštěl
+    // (povolené byly en/es/pt/sk/de/fr/it/pl). Zapsáno 2026-09-01.
+    '/novinky'],
   // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
   // přes stat.*/data.hub./komodita. klíče. /dotace + /jak-na-to zůstávají cs

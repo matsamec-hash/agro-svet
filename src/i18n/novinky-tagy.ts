@@ -161,7 +161,39 @@ const DE: TagMap = {
   'technologická inovace': 'technologische Innovation',
 };
 
-const MAPS: Record<string, TagMap> = { pl: PL, sk: SK, de: DE };
+
+// Ukrajinská mapa. Stejný rozsah jako DE — pokrývá štítky a kategorie článků,
+// které mají ukrajinský překlad (strojní novinky). Co tu není, propadne beze
+// změny, tedy raději český štítek než vymyšlený překlad.
+const UK: TagMap = {
+  // kategorie
+  'technika': 'Техніка',
+  'Technika': 'Техніка',
+  'Zemědělství': 'Сільське господарство',
+  'zemědělství': 'сільське господарство',
+  'novinky': 'Новини',
+  'Novinky a zprávy': 'Новини та повідомлення',
+  'trh': 'Ринок',
+  // štítky strojních novinek
+  'traktor': 'трактор',
+  'kombajn': 'комбайн',
+  'sklizeň': 'жнива',
+  'rekord': 'рекорд',
+  'test': 'тест',
+  'premium': 'преміум',
+  'biometan': 'біометан',
+  'alternativní pohony': 'альтернативні приводи',
+  'alternativni-paliva': 'альтернативні палива',
+  'kabina Crystal': 'кабіна Crystal',
+  'technologie': 'технології',
+  'inovace': 'інновації',
+  'udržitelnost': 'сталий розвиток',
+  'drony': 'дрони',
+  'precizní zemědělství': 'точне землеробство',
+  'technologická inovace': 'технологічна інновація',
+};
+
+const MAPS: Record<string, TagMap> = { pl: PL, sk: SK, de: DE, uk: UK };
 
 /** Lokalizovaný štítek/kategorie; cs a neznámé hodnoty vrací vstup beze změny. */
 export function localizedTag(locale: string, tag: string): string {
