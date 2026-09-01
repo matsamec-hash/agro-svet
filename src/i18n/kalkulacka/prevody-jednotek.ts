@@ -5,8 +5,10 @@ export interface PrevodyJednotekContent extends CalcMeta {
   converterHeading: string;
   converterCaption: string;
   ui: { inputLabel: string; unitSelectLabel: string };
+  /** Popisek odkazu v kartě jednotky. Bez něj se použije cs „detail". */
+  cardLinkLabel?: string;
   unitNames: Record<string, string>;
-  numberLocale: 'cs-CZ' | 'sk-SK' | 'pl-PL';
+  numberLocale: 'cs-CZ' | 'sk-SK' | 'pl-PL' | 'uk-UA' | 'de-DE';
   /** Lokalizovaný blok „další stránky" — jen locale, které ho mají přeložený
    *  (pl). Bez něj stránka renderuje výchozí cs seznam (cs/sk/uk beze změny). */
   related?: { heading: string; items: { href: string; label: string }[] };
@@ -306,6 +308,200 @@ export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
         { title: 'Morga pruska', href: '/slovnik/morgen/', text: 'Niemiecka jednostka historyczna (Morgen) ≈ 0,255 ha. Dominuje w dokumentach z zaboru pruskiego — Wielkopolska, Pomorze, Śląsk — oraz na dawnych mapach niemieckich. Przydatna przy badaniu starych zapisów gruntowych.' },
       ],
       faqHeading: 'Częste pytania',
+    },
+  },
+  // Fáze 3g: DE/AT. Sada jednotek v převodníku je PEVNÁ (m², a, ha, km², akr,
+  // jitro, korec, strych, morgen) — historické jednotky se nepřejmenovávají na
+  // Tagwerk apod., to by byl jiný převodní poměr. Rakouské jitro ALE Joch je,
+  // takže se tak i jmenuje. Referenční tabulka navíc uvádí Tagwerk, Joch
+  // a preußischer Morgen jako informaci, ne jako položku převodníku.
+  de: {
+    title: 'Flächeneinheiten umrechnen — Hektar, Ar, m², Acre, Joch, Morgen',
+    metaDescription:
+      'Online-Rechner für Flächeneinheiten: Hektar ↔ Ar ↔ m² ↔ km² ↔ Acre ↔ Joch ↔ Morgen. Sofortiges Ergebnis, für Landwirte, Vermesser und Grundbuchauszüge in Deutschland und Österreich.',
+    h1: 'Flächeneinheiten umrechnen',
+    crumb: 'Flächeneinheiten',
+    kicker: 'Rechner · Einheiten und Maße',
+    lede:
+      'Wert in einer beliebigen Einheit eingeben und sofort die Umrechnung in alle anderen sehen — Hektar, Ar, Quadratmeter, Acre sowie historische Einheiten. Der Rechner läuft ohne Anmeldung, gerechnet wird im Browser.',
+    converterHeading: 'Online-Umrechner für Flächeneinheiten',
+    converterCaption:
+      'Tipp: ins Wertfeld klicken und tippen — alle Umrechnungen aktualisieren sich live. Für historische Einheiten gelten die 1764 standardisierten Werte; regionale Varianten konnten leicht abweichen.',
+    ui: { inputLabel: 'Wert eingeben', unitSelectLabel: 'Einheit wählen' },
+    cardLinkLabel: 'Details',
+    unitNames: {
+      m2: 'Quadratmeter', a: 'Ar', ha: 'Hektar', km2: 'Quadratkilometer',
+      acre: 'Acre', jitro: 'Joch (österreichisch)', korec: 'Korec (tschechisch)',
+      strych: 'Strych (tschechisch)', morgen: 'preußischer Morgen',
+    },
+    numberLocale: 'de-DE',
+    faq: [
+      { q: 'Wie viel sind 1 Hektar in m² und Ar?', a: '1 Hektar (ha) = 10 000 m² = 100 Ar (a) = 0,01 km². Ein Hektar ist ein Quadrat von 100 × 100 Metern. In der Landwirtschaft ist der Hektar die Standardeinheit für Schlaggrößen, Direktzahlungen je Hektar und Erträge (t/ha).' },
+      { q: 'Wie viele m² hat 1 Ar?', a: '1 Ar (a) = 100 m² = Quadrat von 10 × 10 m = 0,01 Hektar. 100 Ar ergeben einen Hektar. In Österreich und Süddeutschland ist das Ar bei Gärten und kleinen Parzellen noch geläufig.' },
+      { q: 'Wie viel ist 1 Acre in Hektar?', a: '1 Acre = 4 046,86 m² = 0,4047 Hektar = rund 40,5 Ar. Der Acre ist die angelsächsische Einheit in den USA, Großbritannien, Kanada und Australien. Zum Umrechnen Acre mit 0,4047 multiplizieren.' },
+      { q: 'Wie rechnet man Bushel je Acre in Tonnen je Hektar um?', a: 'Je nach Kultur. Für Weizen und Soja: bu/ac × 0,0673 = t/ha. Für Mais: bu/ac × 0,0628 = t/ha. Beispiel: 175 bu/ac Mais ≈ 11 t/ha. Das USDA veröffentlicht Erträge in Bushel je Acre, die EU in t/ha.' },
+      { q: 'Was ist ein Joch, ein Tagwerk und ein Morgen?', a: 'Historische Flächenmaße vor der metrischen Reform. Das österreichische Joch (auch niederösterreichisches Joch) = 5 755 m² = 0,5755 ha, das bayerische Tagwerk = 3 407 m² = 0,3407 ha, der preußische Morgen = 2 553 m² = 0,2553 ha. Alle drei stehen für die Fläche, die ein Gespann an einem Tag pflügen konnte — daher die Unterschiede.' },
+      { q: 'Wozu dient das Hektolitergewicht bei Getreide?', a: 'Das Hektolitergewicht (kg/hl) ist ein Qualitätsmerkmal — die Masse von 100 Litern Getreide. Höheres hl-Gewicht bedeutet mehr Stärke beziehungsweise Öl und bessere Mahlqualität. Weizen ab 78 kg/hl gilt als Brotweizen, unter 74 kg/hl als Futterweizen.' },
+    ],
+    related: {
+      heading: 'Weitere nützliche Seiten',
+      items: [
+        { href: '/de/kalkulacka/prevody-hmotnost/', label: '⚖️ Masseeinheiten umrechnen' },
+        { href: '/de/slovnik/', label: '📐 Fachbegriffe — Einheiten und Maße' },
+        { href: '/de/stroje/', label: '🚜 Traktoren- und Maschinenkatalog' },
+      ],
+    },
+    sections: {
+      comparisonsHeading: 'Wie viel ist das? Anschaulicher Vergleich',
+      comparisonsCaption:
+        'Die Fläche wird als Raster aus Referenzkacheln gezeichnet — je mehr hineinpassen, desto kleiner sind sie. Richtwerte: Parkplatz ≈ 12,5 m², Tennisplatz ≈ 261 m², Eishockeyfeld ≈ 1 800 m², Fußballfeld ≈ 7 140 m² (0,71 ha). Die Prager Objekte dienen nur als Größenmaßstab: Altstädter Ring ≈ 9 000 m², Wenzelsplatz ≈ 45 000 m², Prager Burg ≈ 70 000 m².',
+      // Fotky leží pod /images/srovnani/<slug> — tytéž soubory jako v cs, takže
+      // objekty zůstávají a překládají se jen názvy. Pražské body jsou výslovně
+      // označené jako pražské, ať nevypadají jako německé či rakouské.
+      comparisons: [
+        { emoji: '🅿️', name: 'Parkplatz', m2: 12.5, slug: 'parkovaci-misto', credit: 'Foto: Gabriel Picard, CC BY-SA 4.0' },
+        { emoji: '🎾', name: 'Tennisplatz', m2: 261, slug: 'tenisovy-kurt', credit: 'Foto: KeepActive Australia, CC BY-SA 4.0' },
+        { emoji: '🏒', name: 'Eishockeyfeld', m2: 1800, slug: 'hokejove-kluziste', credit: 'Foto: Frettie, CC BY-SA 3.0' },
+        { emoji: '⚽', name: 'Fußballfeld', m2: 7140, slug: 'fotbalove-hriste', credit: 'Foto: Stephen Kennard, CC BY-SA 3.0' },
+        { emoji: '🏛️', name: 'Altstädter Ring in Prag', m2: 9000, slug: 'staromestske-nam', credit: 'Foto: A.Savin, FAL' },
+        { emoji: '🏙️', name: 'Wenzelsplatz in Prag', m2: 45000, slug: 'vaclavske-nam', credit: 'Foto: Slyronit, CC BY-SA 4.0' },
+        { emoji: '🏰', name: 'Prager Burg', m2: 70000, slug: 'prazsky-hrad', credit: 'Foto: Dietmar Rabich, CC BY-SA 4.0' },
+      ],
+      cmpText: {
+        pickerLabel: 'Vergleichen mit', selectAria: 'Vergleichsobjekt wählen',
+        frameIs: 'Rahmen =', yourInput: 'grüne Fläche = deine Eingabe',
+        tileIs: '1 Kachel =', shownFirst: 'erste {n} von {total} angezeigt',
+      },
+      refHeading: 'Referenztabelle — die häufigsten Umrechnungen',
+      tables: [
+        { caption: 'Hektar (ha) in andere Einheiten', rows: [
+          ['1 ha', '= 10 000 m²'], ['1 ha', '= 100 a (Ar)'], ['1 ha', '= 0,01 km²'],
+          ['1 ha', '≈ 2,471 Acre'], ['1 ha', '≈ 1,738 Joch (österreichisch)'],
+          ['1 ha', '≈ 2,935 Tagwerk (bayerisch)'], ['1 ha', '≈ 3,917 preußische Morgen'],
+        ] },
+        { caption: 'Ar (a) in andere Einheiten', rows: [
+          ['1 a', '= 100 m²'], ['1 a', '= 0,01 ha'], ['1 a', '≈ 0,0247 Acre'],
+          ['100 a', '= 1 ha'], ['4 a', '= 400 m² (kleiner Garten)'], ['10 a', '= 1 000 m² (größerer Garten)'],
+        ] },
+        { caption: 'Acre in andere Einheiten', rows: [
+          ['1 Acre', '= 4 046,86 m²'], ['1 Acre', '≈ 0,4047 ha'], ['1 Acre', '≈ 40,47 a'],
+          ['1 Acre', '= 4 840 Quadratyard'], ['2,471 Acre', '= 1 ha'], ['640 Acre', '= 1 Quadratmeile (US section)'],
+        ] },
+        // Historické jednotky DE/AT — pro německého čtenáře podstatnější než
+        // české jitro a korec, které v převodníku zůstávají označené jako české.
+        { caption: 'Historische Einheiten in Deutschland und Österreich', rows: [
+          ['1 Joch (Österreich)', '= 5 755 m² = 0,5755 ha'],
+          ['1 Tagwerk (Bayern)', '= 3 407 m² = 0,3407 ha'],
+          ['1 preußischer Morgen', '= 2 553 m² = 0,2553 ha'],
+          ['1 Hufe (Bauernstelle)', '≈ 30 Morgen ≈ 7,5 ha'],
+          ['1 Quadratrute (preußisch)', '≈ 14,18 m²'],
+          ['180 Quadratruten', '= 1 preußischer Morgen'],
+        ] },
+      ],
+      contextHeading: 'Wofür sind die einzelnen Einheiten gut?',
+      cards: [
+        { title: 'Hektar (ha)', href: '/slovnik/hektar/', text: 'Standardeinheit in Land- und Forstwirtschaft. Sie bestimmt Betriebsgrößen, Direktzahlungen je Hektar, Erträge (t/ha) und Aufwandmengen im Pflanzenschutz (l/ha). 1 ha entspricht etwa 1,4 Fußballfeldern.' },
+        { title: 'Ar (a)', href: '/slovnik/ar/', text: 'Einheit für kleine Flächen — Gärten, Hausparzellen, Weinbergsflächen kleiner Winzer. 1 Ar = Quadrat von 10 × 10 m. In Österreich im Sprachgebrauch weiterhin verbreitet, im Grundbuch wird in m² geführt.' },
+        { title: 'Quadratmeter (m²)', href: '/slovnik/metr-ctvrecni/', text: 'SI-Basiseinheit der Fläche. Amtlicher Eintrag im Liegenschaftskataster, Grundlage der Grundsteuer, Maß für Baugrundstücke, Wohnungen und Hallen. Fachübergreifend universell.' },
+        { title: 'Acre', href: '/slovnik/akr/', text: 'Angelsächsische Einheit für USA, Großbritannien, Kanada und Australien. Für Betriebe hier vor allem beim Lesen von USDA-Daten (Erträge in bu/ac), CBOT-Notierungen und im Exportgeschäft relevant.' },
+        { title: 'Joch und Tagwerk', href: '/slovnik/jitro/', text: 'Historische Maße im Alpenraum und in Süddeutschland. Österreichisches Joch ≈ 0,5755 ha, bayerisches Tagwerk ≈ 0,3407 ha. Beide begegnen einem in alten Grundbuchauszügen, Erbteilungen und Hofchroniken.' },
+        { title: 'Morgen', href: '/slovnik/morgen/', text: 'Preußischer Morgen ≈ 0,2553 ha. Er dominiert in Unterlagen aus Norddeutschland, Brandenburg und Schlesien sowie auf alten preußischen Katasterkarten. Beim Kauf älterer Flächen hilfreich zu kennen.' },
+      ],
+      faqHeading: 'Häufige Fragen',
+    },
+  },
+  // Ukrajinština: „сотка" (= ар) je v UA běžná jednotka pro zahrady a přídomkové
+  // pozemky, proto je v FAQ i v tabulce zmíněná výslovně. Historická jednotka
+  // není české jitro, ale десятина (1,0925 ha) — ta v převodníku není, tabulka
+  // ji proto uvádí jako referenci.
+  uk: {
+    title: 'Переведення одиниць площі — гектар, ар, м², акр, десятина',
+    metaDescription:
+      'Онлайн-калькулятор переведення одиниць площі: гектар ↔ ар (сотка) ↔ м² ↔ км² ↔ акр. Миттєвий результат — для аграріїв, землевпорядників і роботи з витягами.',
+    h1: 'Переведення одиниць площі',
+    crumb: 'Одиниці площі',
+    kicker: 'Калькулятор · одиниці та виміри',
+    lede:
+      'Введіть значення в будь-якій одиниці й одразу побачите переведення в усі інші — гектари, ари (сотки), квадратні метри, акри та історичні одиниці. Калькулятор працює без реєстрації, обчислення виконуються у браузері.',
+    converterHeading: 'Онлайн-конвертер одиниць площі',
+    converterCaption:
+      'Порада: клацніть у поле зі значенням і почніть друкувати — усі переведення оновлюються наживо. Для історичних одиниць використано стандартизовані значення 1764 року, регіональні варіанти могли трохи відрізнятися.',
+    ui: { inputLabel: 'Введіть значення', unitSelectLabel: 'Виберіть одиницю' },
+    cardLinkLabel: 'детальніше',
+    unitNames: {
+      m2: 'квадратний метр', a: 'ар', ha: 'гектар', km2: 'квадратний кілометр',
+      acre: 'акр (acre)', jitro: 'йітро (австро-угорське)', korec: 'корець (чеський)',
+      strych: 'стрих (чеський)', morgen: 'прусський морген',
+    },
+    numberLocale: 'uk-UA',
+    faq: [
+      { q: 'Скільки це 1 гектар у м² та арах?', a: '1 гектар (га) = 10 000 м² = 100 арів (соток) = 0,01 км². Гектар — це квадрат 100 × 100 метрів. В агросекторі це стандартна одиниця для площі полів, ставок оренди паю та врожайності (т/га).' },
+      { q: 'Скільки м² в одному арі (сотці)?', a: '1 ар (а) = 100 м² = квадрат 10 × 10 м = 0,01 гектара. В Україні ар зазвичай називають соткою: 100 соток = 1 гектар. Присадибні ділянки й городи міряють саме в сотках.' },
+      { q: 'Скільки це 1 акр у гектарах?', a: '1 акр (acre) = 4 046,86 м² = 0,4047 гектара = приблизно 40,5 сотки. Акр — англосаксонська одиниця, яку використовують США, Велика Британія, Канада й Австралія. Щоб перевести акри в гектари, помножте значення на 0,4047.' },
+      { q: 'Як перевести бушелі на акр у тонни з гектара?', a: 'Залежить від культури. Для пшениці та сої: бушель/акр × 0,0673 = т/га. Для кукурудзи: × 0,0628. Приклад: 175 бушелів/акр кукурудзи ≈ 11 т/га. USDA публікує врожайність у бушелях на акр, ЄС — у т/га.' },
+      { q: 'Що таке десятина і скільки вона має?', a: 'Історична одиниця площі, поширена в Україні до метричної реформи. Казенна десятина = 10 925 м² = 1,0925 га (2 400 квадратних сажнів). Трапляється у старих документах на землю, церковних книгах і родинних архівах. Господарська десятина була більшою — до 1,45 га.' },
+      { q: 'Навіщо потрібна натура зерна?', a: 'Натура (кг/гл) — це маса 100 літрів зерна, показник якості при прийманні. Вища натура означає більший вміст крохмалю чи олії та кращі млинарські властивості. Пшениця від 78 кг/гл — продовольча, менш ніж 74 кг/гл — фуражна.' },
+    ],
+    related: {
+      heading: 'Інші корисні сторінки',
+      items: [
+        { href: '/uk/kalkulacka/prevody-hmotnost/', label: '⚖️ Переведення одиниць маси' },
+        { href: '/uk/slovnik/', label: '📐 Словник — одиниці та виміри' },
+        { href: '/uk/stroje/', label: '🚜 Каталог тракторів і техніки' },
+      ],
+    },
+    sections: {
+      comparisonsHeading: 'Скільки це? Наочне порівняння',
+      comparisonsCaption:
+        'Площа малюється як сітка з еталонних плиток — що більше їх уміщується, то вони дрібніші. Орієнтовні розміри: паркомісце ≈ 12,5 м², тенісний корт ≈ 261 м², хокейний майданчик ≈ 1 800 м², футбольне поле ≈ 7 140 м² (0,71 га). Празькі обʼєкти наведені лише як масштаб: Староміська площа ≈ 9 000 м², Вацлавська площа ≈ 45 000 м², Празький град ≈ 70 000 м².',
+      comparisons: [
+        { emoji: '🅿️', name: 'паркомісце', m2: 12.5, slug: 'parkovaci-misto', credit: 'Фото: Gabriel Picard, CC BY-SA 4.0' },
+        { emoji: '🎾', name: 'тенісний корт', m2: 261, slug: 'tenisovy-kurt', credit: 'Фото: KeepActive Australia, CC BY-SA 4.0' },
+        { emoji: '🏒', name: 'хокейний майданчик', m2: 1800, slug: 'hokejove-kluziste', credit: 'Фото: Frettie, CC BY-SA 3.0' },
+        { emoji: '⚽', name: 'футбольне поле', m2: 7140, slug: 'fotbalove-hriste', credit: 'Фото: Stephen Kennard, CC BY-SA 3.0' },
+        { emoji: '🏛️', name: 'Староміська площа в Празі', m2: 9000, slug: 'staromestske-nam', credit: 'Фото: A.Savin, FAL' },
+        { emoji: '🏙️', name: 'Вацлавська площа в Празі', m2: 45000, slug: 'vaclavske-nam', credit: 'Фото: Slyronit, CC BY-SA 4.0' },
+        { emoji: '🏰', name: 'Празький град', m2: 70000, slug: 'prazsky-hrad', credit: 'Фото: Dietmar Rabich, CC BY-SA 4.0' },
+      ],
+      cmpText: {
+        pickerLabel: 'Порівняти з', selectAria: 'Виберіть обʼєкт для порівняння',
+        frameIs: 'Рамка =', yourInput: 'зелена площа = ваше значення',
+        tileIs: '1 плитка =', shownFirst: 'показано перші {n} з {total}',
+      },
+      refHeading: 'Довідкова таблиця — найчастіші переведення',
+      tables: [
+        { caption: 'Гектар (га) в інші одиниці', rows: [
+          ['1 га', '= 10 000 м²'], ['1 га', '= 100 арів (соток)'], ['1 га', '= 0,01 км²'],
+          ['1 га', '≈ 2,471 акра'], ['1 га', '≈ 0,9153 казенної десятини'],
+          ['1 га', '≈ 3,917 прусського моргена'],
+        ] },
+        { caption: 'Ар (сотка) в інші одиниці', rows: [
+          ['1 сотка', '= 100 м²'], ['1 сотка', '= 0,01 га'], ['1 сотка', '≈ 0,0247 акра'],
+          ['100 соток', '= 1 га'], ['6 соток', '= 600 м² (класична дача)'], ['25 соток', '= 2 500 м² (садиба)'],
+        ] },
+        { caption: 'Акр (acre) в інші одиниці', rows: [
+          ['1 акр', '= 4 046,86 м²'], ['1 акр', '≈ 0,4047 га'], ['1 акр', '≈ 40,47 сотки'],
+          ['1 акр', '= 4 840 квадратних ярдів'], ['2,471 акра', '= 1 га'], ['640 акрів', '= 1 квадратна миля (US section)'],
+        ] },
+        { caption: 'Історичні одиниці, поширені в Україні', rows: [
+          ['1 казенна десятина', '= 10 925 м² = 1,0925 га'],
+          ['1 господарська десятина', '≈ 14 567 м² ≈ 1,4567 га'],
+          ['1 квадратний сажень', '≈ 4,552 м²'],
+          ['2 400 кв. сажнів', '= 1 казенна десятина'],
+          ['1 морг (галицький)', '≈ 5 755 м² ≈ 0,5755 га'],
+          ['1 прусський морген', '= 2 553 м² = 0,2553 га'],
+        ] },
+      ],
+      contextHeading: 'Для чого потрібна кожна одиниця?',
+      cards: [
+        { title: 'Гектар (га)', href: '/slovnik/hektar/', text: 'Стандартна одиниця в агросекторі та лісівництві. Нею міряють площу господарств, орендні ставки за пай, урожайність (т/га) і норми внесення (л/га). 1 га — це приблизно 1,4 футбольного поля.' },
+        { title: 'Ар (сотка)', href: '/slovnik/ar/', text: 'Одиниця для невеликих ділянок — городи, присадибні ділянки, дачі. 1 сотка = квадрат 10 × 10 м. У побуті домінує саме сотка, у документах площу записують у гектарах або м².' },
+        { title: 'Квадратний метр (м²)', href: '/slovnik/metr-ctvrecni/', text: 'Базова одиниця СІ. Офіційний запис у Державному земельному кадастрі, основа для плати за землю, площа будівельних ділянок, квартир і ангарів.' },
+        { title: 'Акр (acre)', href: '/slovnik/akr/', text: 'Англосаксонська одиниця для США, Великої Британії, Канади й Австралії. Для українського аграрія важлива при читанні даних USDA (урожайність у бушелях на акр), котирувань CBOT і в експортних контрактах.' },
+        { title: 'Десятина', href: '/slovnik/jitro/', text: 'Історична одиниця площі до метричної реформи. Казенна десятина ≈ 1,0925 га, господарська — до 1,4567 га. Трапляється у старих документах на землю, метричних книгах і родинних архівах.' },
+        { title: 'Морген і морг', href: '/slovnik/morgen/', text: 'Прусський морген ≈ 0,2553 га, галицький морг ≈ 0,5755 га. Перший трапляється в німецьких документах, другий — у документах із західних областей часів Австро-Угорщини.' },
+      ],
+      faqHeading: 'Часті запитання',
     },
   },
 };

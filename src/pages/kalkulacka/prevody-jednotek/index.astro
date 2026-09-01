@@ -35,7 +35,7 @@ const appJsonLd = {
   name: c.h1,
   url: canonical,
   applicationCategory: 'UtilitiesApplication',
-  applicationSubCategory: 'Kalkulačka',
+  applicationSubCategory: cr.calcWord,
   operatingSystem: 'Web',
   browserRequirements: 'Requires JavaScript',
   inLanguage: locale,
@@ -55,7 +55,7 @@ const appJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(appJsonLd)} />
 
   <div class="pj-page">
-    <nav class="breadcrumb" aria-label="Cesta">
+    <nav class="breadcrumb" aria-label={cr.nav}>
       <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span class="sep" aria-hidden="true">›</span>
       <a href={localizeInternalHref(locale, '/kalkulacka/')}>{cr.hub}</a>
@@ -105,7 +105,7 @@ const appJsonLd = {
           <article class="pj-card">
             <h3>
               {card.title}
-              <a href={localizeInternalHref(locale, card.href)} class="pj-card-link">detail →</a>
+              <a href={localizeInternalHref(locale, card.href)} class="pj-card-link">{c.cardLinkLabel ?? 'detail'} →</a>
             </h3>
             <p>{card.text}</p>
           </article>

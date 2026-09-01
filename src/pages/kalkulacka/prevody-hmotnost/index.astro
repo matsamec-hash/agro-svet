@@ -37,7 +37,7 @@ const faqJsonLd = faqPageSchema(faqItems);
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
 
   <div class="ph-page">
-    <nav class="breadcrumb" aria-label="Cesta">
+    <nav class="breadcrumb" aria-label={cr.nav}>
       <a href={locale === 'cs' ? '/' : `/${locale}/`}>{cr.home}</a>
       <span class="sep" aria-hidden="true">›</span>
       <a href={localizeInternalHref(locale, '/kalkulacka/')}>{cr.hub}</a>

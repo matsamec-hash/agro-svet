@@ -8,7 +8,7 @@ export interface PrevodyHmotnostContent extends CalcMeta {
   ui: { inputLabel: string; commodityLabel: string; unitSelectLabel: string; commoditySelectLabel: string };
   unitNames: Record<string, string>;
   commodityNames: Record<string, string>;
-  numberLocale: 'cs-CZ' | 'sk-SK' | 'pl-PL';
+  numberLocale: 'cs-CZ' | 'sk-SK' | 'pl-PL' | 'uk-UA' | 'de-DE';
   /** Lokalizovaný blok „další stránky" — jen locale, které ho mají přeložený
    *  (pl). Bez něj stránka renderuje výchozí cs seznam (cs/sk/uk beze změny). */
   related?: { heading: string; items: { href: string; label: string }[] };
@@ -243,6 +243,150 @@ export const content: Partial<Record<Locale, PrevodyHmotnostContent>> = {
         ['Owies', '× 0,03587', '70 bu/ac', '≈ 2,51 t/ha'],
       ],
       faqHeading: 'Częste pytania',
+    },
+  },
+  // Fáze 3g: DE/AT. Hmotnost bushelu je standard USDA a je stejná všude —
+  // překládají se jen názvy komodit a popisy. Doppelzentner (dt) je v Německu
+  // běžnější zápis než „q", proto je uvedený obojí.
+  de: {
+    title: 'Masseeinheiten umrechnen — Tonne, Doppelzentner, kg, Bushel, Pfund',
+    metaDescription: 'Online-Rechner für Massen in der Landwirtschaft: Tonne ↔ Doppelzentner (dt) ↔ Kilogramm ↔ Bushel (Weizen, Mais, Soja) ↔ Pfund. Bushel-Gewicht je Kultur nach USDA-Standard.',
+    h1: 'Masseeinheiten umrechnen',
+    crumb: 'Masseeinheiten',
+    kicker: 'Rechner · Masseeinheiten',
+    lede: 'Tonne, Doppelzentner, Kilogramm, Pfund und Bushel (mit Auswahl der Kultur) — sofortige Umrechnung für Landwirte, Händler und Leser von USDA-Berichten. Ein Bushel wiegt je nach Kultur unterschiedlich, der Rechner berücksichtigt das nach USDA-Standard.',
+    converterHeading: 'Online-Umrechner für Massen',
+    converterCaption: 'Tipp: Kultur unten auswählen, um das Bushel-Gewicht anzupassen (Weizen 27,2 kg, Mais 25,4 kg, Hafer 14,5 kg …).',
+    defaultCommodity: 'Weizen',
+    ui: { inputLabel: 'Masse eingeben', commodityLabel: 'Kultur (für Bushel)', unitSelectLabel: 'Einheit wählen', commoditySelectLabel: 'Kultur für Bushel wählen' },
+    unitNames: { kg: 'Kilogramm', q: 'Doppelzentner', t: 'Tonne', lb: 'Pfund (pound)', bu: 'Bushel' },
+    commodityNames: { wheat: 'Weizen', corn: 'Mais', soy: 'Soja', barley: 'Gerste', oats: 'Hafer', rye: 'Roggen', canola: 'Raps (Canola)' },
+    numberLocale: 'de-DE',
+    faq: [
+      { q: 'Wie viel sind 1 Tonne in Kilogramm und Doppelzentnern?', a: '1 Tonne (t) = 1 000 kg = 10 Doppelzentner (dt, auch q). Die Tonne ist die übliche Einheit für Erträge (t/ha), Erzeugerpreise und Maschinenleistung. Achtung: die US short ton (907 kg) und die britische long ton (1 016 kg) sind andere Einheiten.' },
+      { q: 'Wie viel wiegt 1 Bushel Weizen in kg?', a: '1 Bushel Weizen = 27,2155 kg = 60 amerikanische Pfund. Soja wiegt gleich viel (27,2 kg), Mais 25,4 kg, Gerste 21,8 kg, Hafer 14,5 kg. Der Bushel ist ein Volumenmaß mit je Kultur festgelegtem Gewicht nach USDA-Standard.' },
+      { q: 'Wie rechnet man CBOT-Preise (¢/Bushel) in Euro je Tonne um?', a: 'Beispiel Weizen 600 ¢/bu: 6,00 USD ÷ 27,2155 kg × 1 000 = 220,4 USD/t. Bei einem Kurs von 1,08 USD/EUR ergibt das rund 204 EUR/t — vor Fracht und Handelsspanne. Für Mais statt durch 27,2 durch 25,4 teilen.' },
+      { q: 'Was ist der Unterschied zwischen dt und t?', a: 'Ein Doppelzentner (dt) = 100 kg, eine Tonne (t) = 1 000 kg, also 1 t = 10 dt. Erträge lassen sich in beidem angeben: 6 t/ha = 60 dt/ha. Erzeugerpreise werden heute meist in EUR/t genannt, in der Praxis rechnen viele Betriebe weiterhin in dt.' },
+      { q: 'Wie viel kg sind 1 Pfund (pound, lb)?', a: '1 Pfund (lb) = 0,45359237 kg, praktisch 0,4536 kg. Faustregel: lb × 0,5 ≈ kg. Das Pfund begegnet einem in USDA-Berichten, bei CBOT-Kontrakten (Sojaöl in ¢/lb, live cattle in ¢/lb) und in amerikanischen Fütterungstabellen. Nicht zu verwechseln mit dem alten deutschen Pfund von 500 g.' },
+      { q: 'Was sagt das Hektolitergewicht aus?', a: 'Die Masse von 100 Litern Getreide in Kilogramm — ein Qualitätsparameter bei der Übernahme. Brotweizen ab 78 kg/hl, Futterweizen unter 74 kg/hl. Höheres hl-Gewicht bedeutet mehr Stärke beziehungsweise Öl und einen besseren Preis.' },
+    ],
+    related: {
+      heading: 'Weitere nützliche Seiten',
+      items: [
+        { href: '/de/kalkulacka/prevody-jednotek/', label: '📐 Flächeneinheiten umrechnen' },
+        { href: '/de/slovnik/', label: '⚖️ Fachbegriffe — Einheiten und Maße' },
+        { href: '/de/stroje/', label: '🚜 Traktoren- und Maschinenkatalog' },
+      ],
+    },
+    sections: {
+      refHeading: 'Referenztabelle — die häufigsten Umrechnungen',
+      tables: [
+        { caption: 'Tonne (t) in andere Einheiten', rows: [
+          ['1 t', '= 1 000 kg'], ['1 t', '= 10 dt (Doppelzentner)'],
+          ['1 t', '≈ 2 204,6 lb (Pfund)'], ['1 t Weizen / Soja', '≈ 36,7 Bushel'],
+          ['1 t Mais / Roggen', '≈ 39,4 Bushel'], ['1 t Gerste', '≈ 45,9 Bushel'],
+          ['1 t Hafer', '≈ 68,9 Bushel'],
+        ] },
+        { caption: 'Bushel (USDA-Standard) — kg / lb', rows: [
+          ['Weizen / Soja', '27,2155 kg / 60 lb'], ['Mais / Roggen', '25,4012 kg / 56 lb'],
+          ['Raps (Canola)', '22,6796 kg / 50 lb'], ['Gerste', '21,7724 kg / 48 lb'],
+          ['Hafer', '14,5150 kg / 32 lb'],
+        ] },
+        { caption: 'Doppelzentner (dt) und Pfund (lb)', rows: [
+          ['1 dt', '= 100 kg = 0,1 t'], ['10 dt', '= 1 t'], ['1 lb', '= 0,4536 kg'],
+          ['1 kg', '= 2,2046 lb'], ['1 US short ton', '= 907,18 kg = 2 000 lb'],
+          ['1 UK long ton', '= 1 016 kg = 2 240 lb'],
+        ] },
+        { caption: 'Hektolitergewicht bei der Übernahme', rows: [
+          ['Brotweizen', '78–84 kg/hl (A/E-Qualität)'], ['Futterweizen', 'unter 74 kg/hl'],
+          ['Braugerste', 'mindestens 64 kg/hl'], ['Futtergerste', '62–66 kg/hl'],
+          ['Brotroggen', 'ab 72 kg/hl'], ['Schälhafer', 'ab 50 kg/hl'],
+          ['Winterraps', 'mindestens 62 kg/hl'],
+        ] },
+      ],
+      yieldHeading: 'Erträge umrechnen: Bushel je Acre ↔ t je Hektar',
+      yieldLede: 'Zum Vergleich von US- und EU-Erträgen. Das USDA gibt Erträge in Bushel je Acre an, die EU-Statistik in t/ha. Der Faktor hängt von der Kultur ab (unterschiedliches Bushel-Gewicht plus Umrechnung Acre → Hektar).',
+      yieldCols: ['Kultur', 'bu/ac → t/ha', 'Beispielertrag USA', 'Entspricht in t/ha'],
+      yieldRows: [
+        ['Weizen / Soja', '× 0,06725', '50 bu/ac', '≈ 3,36 t/ha'],
+        ['Mais / Roggen', '× 0,06277', '175 bu/ac', '≈ 10,98 t/ha'],
+        ['Raps (Canola)', '× 0,05604', '40 bu/ac', '≈ 2,24 t/ha'],
+        ['Gerste', '× 0,05381', '80 bu/ac', '≈ 4,30 t/ha'],
+        ['Hafer', '× 0,03587', '70 bu/ac', '≈ 2,51 t/ha'],
+      ],
+      faqHeading: 'Häufige Fragen',
+    },
+  },
+  // Ukrajinsky: центнер (ц) je v UA standardní jednotka výnosu (ц/га), proto
+  // je zmíněný explicitně. Ceny se v příkladu přepočítávají přes USD/t, ne
+  // přes hřivnu — kurz je pohyblivý a stránka by jinak zastarala.
+  uk: {
+    title: 'Переведення одиниць маси — тонна, центнер, кг, бушель, фунт',
+    metaDescription: 'Онлайн-калькулятор маси в агросекторі: тонна ↔ центнер (ц) ↔ кілограм ↔ бушель (пшениця, кукурудза, соя) ↔ фунт. Маса бушеля за культурою згідно зі стандартом USDA.',
+    h1: 'Переведення одиниць маси',
+    crumb: 'Одиниці маси',
+    kicker: 'Калькулятор · одиниці маси',
+    lede: 'Тонна, центнер, кілограм, фунт і бушель (з вибором культури) — миттєве переведення для аграріїв, трейдерів і читачів звітів USDA. Бушель важить по-різному залежно від культури, калькулятор рахує це за стандартом USDA.',
+    converterHeading: 'Онлайн-конвертер маси',
+    converterCaption: 'Порада: виберіть культуру зі списку нижче, щоб задати масу бушеля (пшениця 27,2 кг, кукурудза 25,4 кг, овес 14,5 кг…).',
+    defaultCommodity: 'пшениця',
+    ui: { inputLabel: 'Введіть масу', commodityLabel: 'Культура (для бушеля)', unitSelectLabel: 'Виберіть одиницю', commoditySelectLabel: 'Виберіть культуру для бушеля' },
+    unitNames: { kg: 'кілограм', q: 'центнер', t: 'тонна', lb: 'фунт (pound)', bu: 'бушель (bushel)' },
+    commodityNames: { wheat: 'пшениця', corn: 'кукурудза', soy: 'соя', barley: 'ячмінь', oats: 'овес', rye: 'жито', canola: 'ріпак (canola)' },
+    numberLocale: 'uk-UA',
+    faq: [
+      { q: 'Скільки це 1 тонна в кілограмах і центнерах?', a: '1 тонна (т) = 1 000 кг = 10 центнерів (ц). Тонна — основна одиниця для врожаю, закупівельних цін і продуктивності техніки. Увага: американська short ton (907 кг) і британська long ton (1 016 кг) — це інші одиниці.' },
+      { q: 'Скільки важить 1 бушель пшениці в кг?', a: '1 бушель пшениці = 27,2155 кг = 60 американських фунтів. Соя важить стільки ж (27,2 кг), кукурудза 25,4 кг, ячмінь 21,8 кг, овес 14,5 кг. Бушель — це одиниця обʼєму з фіксованою масою для кожної культури за стандартом USDA.' },
+      { q: 'Як перевести ціну з CBOT (¢/бушель) у USD за тонну?', a: 'Приклад для пшениці 600 ¢/бушель: 6,00 USD ÷ 27,2155 кг × 1 000 = 220,4 USD/т — до фрахту й маржі трейдера. Для кукурудзи діліть на 25,4 замість 27,2. Перерахунок у гривню робіть за поточним курсом.' },
+      { q: 'Чим відрізняється центнер від тонни?', a: 'Центнер (ц) = 100 кг, тонна (т) = 1 000 кг, тобто 1 т = 10 ц. В Україні врожайність традиційно наводять у центнерах з гектара: 60 ц/га = 6 т/га. Експортні контракти оперують тоннами.' },
+      { q: 'Скільки кілограмів в одному фунті (pound, lb)?', a: '1 фунт (lb) = 0,45359237 кг, практично 0,4536 кг. Швидка оцінка: lb × 0,5 ≈ кг. Фунт трапляється у звітах USDA, у контрактах CBOT (соєва олія в ¢/lb, live cattle в ¢/lb) та в американських кормових таблицях.' },
+      { q: 'Що таке натура зерна?', a: 'Маса 100 літрів зерна в кілограмах — показник якості при прийманні на елеватор. Продовольча пшениця від 78 кг/гл, фуражна — менш ніж 74 кг/гл. Вища натура означає більше крохмалю чи олії та кращу ціну.' },
+    ],
+    related: {
+      heading: 'Інші корисні сторінки',
+      items: [
+        { href: '/uk/kalkulacka/prevody-jednotek/', label: '📐 Переведення одиниць площі' },
+        { href: '/uk/slovnik/', label: '⚖️ Словник — одиниці та виміри' },
+        { href: '/uk/stroje/', label: '🚜 Каталог тракторів і техніки' },
+      ],
+    },
+    sections: {
+      refHeading: 'Довідкова таблиця — найчастіші переведення',
+      tables: [
+        { caption: 'Тонна (т) в інші одиниці', rows: [
+          ['1 т', '= 1 000 кг'], ['1 т', '= 10 ц (центнерів)'],
+          ['1 т', '≈ 2 204,6 фунта'], ['1 т пшениці / сої', '≈ 36,7 бушеля'],
+          ['1 т кукурудзи / жита', '≈ 39,4 бушеля'], ['1 т ячменю', '≈ 45,9 бушеля'],
+          ['1 т вівса', '≈ 68,9 бушеля'],
+        ] },
+        { caption: 'Бушель (стандарт USDA) — кг / фунти', rows: [
+          ['Пшениця / соя', '27,2155 кг / 60 lb'], ['Кукурудза / жито', '25,4012 кг / 56 lb'],
+          ['Ріпак (canola)', '22,6796 кг / 50 lb'], ['Ячмінь', '21,7724 кг / 48 lb'],
+          ['Овес', '14,5150 кг / 32 lb'],
+        ] },
+        { caption: 'Центнер (ц) і фунт (lb)', rows: [
+          ['1 ц', '= 100 кг = 0,1 т'], ['10 ц', '= 1 т'], ['1 lb', '= 0,4536 кг'],
+          ['1 кг', '= 2,2046 lb'], ['1 US short ton', '= 907,18 кг = 2 000 lb'],
+          ['1 UK long ton', '= 1 016 кг = 2 240 lb'],
+        ] },
+        { caption: 'Натура зерна при прийманні', rows: [
+          ['Пшениця продовольча', '78–84 кг/гл'], ['Пшениця фуражна', 'менш ніж 74 кг/гл'],
+          ['Ячмінь пивоварний', 'від 64 кг/гл'], ['Ячмінь фуражний', '62–66 кг/гл'],
+          ['Жито продовольче', 'від 72 кг/гл'], ['Овес продовольчий', 'від 50 кг/гл'],
+          ['Ріпак озимий', 'від 62 кг/гл'],
+        ] },
+      ],
+      yieldHeading: 'Переведення врожайності: бушель/акр ↔ т/га',
+      yieldLede: 'Для порівняння врожайності США та ЄС. USDA наводить урожайність у бушелях на акр, статистика ЄС — у тоннах на гектар. Множник залежить від культури (різна маса бушеля плюс переведення акр → гектар).',
+      yieldCols: ['Культура', 'бушель/акр → т/га', 'Приклад урожайності США', 'Відповідник у т/га'],
+      yieldRows: [
+        ['Пшениця / соя', '× 0,06725', '50 бушелів/акр', '≈ 3,36 т/га'],
+        ['Кукурудза / жито', '× 0,06277', '175 бушелів/акр', '≈ 10,98 т/га'],
+        ['Ріпак (canola)', '× 0,05604', '40 бушелів/акр', '≈ 2,24 т/га'],
+        ['Ячмінь', '× 0,05381', '80 бушелів/акр', '≈ 4,30 т/га'],
+        ['Овес', '× 0,03587', '70 бушелів/акр', '≈ 2,51 т/га'],
+      ],
+      faqHeading: 'Часті запитання',
     },
   },
 };

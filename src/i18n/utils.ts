@@ -48,7 +48,13 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // Kyjev 50,5° = tentýž pás), ale SKLADBA PLODIN ano: kukuřice a slunečnice
     // jsou hlavní exportní plodiny, ne doplňkové, a na jihu začíná sklizeň
     // o 2–3 týdny dřív. Text je ukrajinský obsah, ne překlad českého.
-    '/sezona'],
+    '/sezona',
+    // Fáze 3g: univerzální převodníky. Sada jednotek je bez jurisdikce, ALE
+    // ukrajinský blok není překlad českého: „сотка" (= ар) je běžná jednotka
+    // pro присадибні ділянки a historická jednotka je десятина (1,0925 ha),
+    // ne české jitro. Tabulka to uvádí místo českých jednotek.
+    // ‼️ Tyhle dvě URL vracely na produkci HTTP 500 (prázdný blok v mapě).
+    '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost'],
   // PL fáze 2: katalog (data-driven) + slovník + /puda + datová sekce
   // (/data hub + /statistiky). Data jsou česká (ČSÚ), servírovaná v PL jazyce
   // přes stat.*/data.hub./komodita. klíče. /dotace + /jak-na-to zůstávají cs
@@ -179,7 +185,12 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // Fáze 3g: /hledat — noindex, ale je to vstupní bod z hlavičky. Skupiny
     // výsledků se gatují podle launchnutých sekcí (viz hledat.astro), takže
     // /de/hledat prohledává katalog techniky a plemena; novinky a bazar ne.
-    '/hledat'],
+    '/hledat',
+    // Univerzální převodníky. Sada jednotek v převodníku je PEVNÁ a historické
+    // jednotky se nepřejmenovávají (jiný převodní poměr) — rakouské jitro ALE
+    // Joch je, takže se tak jmenuje. Referenční tabulka navíc uvádí Joch,
+    // bavorský Tagwerk a pruský Morgen; Doppelzentner místo „q".
+    '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost'],
 };
 
 /** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
