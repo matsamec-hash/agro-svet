@@ -1314,6 +1314,7 @@ const de: Record<string, string> = {
   'plod.skupina.okopaniny': 'Hackfrüchte',
   'plod.skupina.luskoviny': 'Körnerleguminosen',
   'plod.skupina.picniny': 'Futterpflanzen',
+  'plod.skupina.zelenina': 'Gemüse',
 
   // — /zebricky —
   'zeb.crumb': 'Ranglisten',

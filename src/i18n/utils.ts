@@ -282,6 +282,27 @@ export const PRERENDERED_ONLY_PATHS: string[] = ['/data/prodeje-techniky'];
  *  a vypisuje jen kvízy dostupné v dané locale (viz kviz/index.astro). */
 const CS_ONLY_QUIZZES = ['jaky-traktor-potrebujete', 'jaka-vcela-pro-vas', 'poznas-znacku'];
 
+/** Plodiny, které vědomě žijí JEN v češtině — zeleninový registr ÚKZÚZ (2026-09).
+ *  Overlay do sk/pl/uk/de pro ně neexistuje, a protože `/plodiny` JE pro sk i uk
+ *  launchnuté, musí je brána držet mimo: jinak by `applyPlodinaOverlay` spadl na cs
+ *  a uprostřed přeložené sekce by seděla česká stránka, na kterou navíc míří sitemapa.
+ *  ‼️ Až pro plodinu vznikne overlay ve VŠECH locale, smaž ji odsud — jinak zůstane
+ *  skrytá i po přeložení. Hlídá to test `plodiny-zelenina`. */
+export const CS_ONLY_PLODINY: readonly string[] = [
+  'bob-zahradni', 'brokolice', 'celer', 'cesnek', 'cibule', 'fazol', 'kaderavek',
+  'kapusta', 'kedluben', 'kvetak', 'lilek', 'meloun', 'mrkev', 'okurka', 'paprika',
+  'pazitka', 'petrzel', 'por', 'rajce', 'redkev', 'redkvicka', 'repa-salatova',
+  'salat', 'tykev', 'zeli', 'zeli-pekingske',
+];
+
+/** /plodiny/<cs-only plodina>/ i /plodiny/skupina/zelenina/ — pod cizím locale 404. */
+function isCsOnlyPlodinaPath(csRootPath: string): boolean {
+  const seg = csRootPath.split('/').filter(Boolean);
+  if (seg[0] !== 'plodiny') return false;
+  if (seg.length === 2 && CS_ONLY_PLODINY.includes(seg[1]!)) return true;
+  return seg.length === 3 && seg[1] === 'skupina' && seg[2] === 'zelenina';
+}
+
 /** Detail odrůdy: /plodiny/<plodina>/<odruda>/ — tři segmenty, kde druhý není
  *  faceta `skupina`. Je to úřední popis ÚKZÚZ k odrůdě registrované v ČR, takže
  *  zůstává cs-only i tam, kde je /plodiny launchnuté. */
@@ -296,6 +317,7 @@ function isOdrudaDetailPath(csRootPath: string): boolean {
 export function isPrerenderedOnlyPath(csRootPath: string): boolean {
   if (PRERENDERED_ONLY_PATHS.some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`))) return true;
   if (isOdrudaDetailPath(csRootPath)) return true;
+  if (isCsOnlyPlodinaPath(csRootPath)) return true;
   const quiz = csRootPath.split('/').filter(Boolean);
   return quiz[0] === 'kviz' && quiz.length > 1 && CS_ONLY_QUIZZES.includes(quiz[1]);
 }

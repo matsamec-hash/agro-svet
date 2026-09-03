@@ -437,6 +437,7 @@ const uk: Record<string, string> = {
   'plod.skupina.okopaniny': 'Коренеплоди',
   'plod.skupina.luskoviny': 'Бобові',
   'plod.skupina.picniny': 'Кормові рослини',
+  'plod.skupina.zelenina': 'Овочі',
 
   'plod.hub.calendar': 'Календар сівби та збирання',
   'plod.hub.statCrops': 'культур',

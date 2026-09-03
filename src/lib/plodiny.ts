@@ -1,3 +1,4 @@
+import { CS_ONLY_PLODINY as CS_ONLY_PLODINY_LIST } from '../i18n/utils';
 // Compile-time data: YAML přes @modyfi/vite-plugin-yaml, JSON nativně. Žádná runtime DB.
 
 export type Skupina =
@@ -5,7 +6,8 @@ export type Skupina =
   | 'olejniny'
   | 'okopaniny'
   | 'luskoviny'
-  | 'picniny';
+  | 'picniny'
+  | 'zelenina';
 
 export const SKUPINA_LABELS: Record<Skupina, string> = {
   obiloviny: 'Obiloviny',
@@ -13,6 +15,7 @@ export const SKUPINA_LABELS: Record<Skupina, string> = {
   okopaniny: 'Okopaniny',
   luskoviny: 'Luskoviny',
   picniny: 'Pícniny',
+  zelenina: 'Zelenina',
 };
 
 /** Faktická vrstva odrůdy — generovaná z ÚKZÚZ, commitovaná jako JSON. */
@@ -157,6 +160,11 @@ function mergeEnrichment(
   return { ...(yamlEnrichment ?? {}), popis: yamlEnrichment?.popis ?? popis };
 }
 
+/** Jediný zdroj pravdy je `src/i18n/utils.ts` — tamtéž sedí routovací brána
+ *  (`isPrerenderedOnlyPath`), která tyhle plodiny drží mimo cizí locale, mimo
+ *  locale mirrory sitemapy i mimo křížové odkazy. Tady jen jako Set pro filtr. */
+export const CS_ONLY_PLODINY: ReadonlySet<string> = new Set(CS_ONLY_PLODINY_LIST);
+
 function build(locale: string = 'cs'): Plodina[] {
   if (locale === 'cs') {
     if (cached) return cached;
@@ -167,6 +175,7 @@ function build(locale: string = 'cs'): Plodina[] {
   const odrudyIndex = buildOdrudyIndex();
   const plodiny: Plodina[] = [];
   for (const base of Object.values(yamlModules)) {
+    if (locale !== 'cs' && CS_ONLY_PLODINY.has(base.slug)) continue;
     const ov = locale === 'cs'
       ? null
       : (plodinaOverlayModules[`/src/data/plodiny/${locale}/${base.slug}.yaml`] ?? null);
@@ -236,9 +245,14 @@ export function listIndexableOdrudy(): IndexableOdrudaEntry[] {
 
 export interface SkupinaEntry { skupina: Skupina; label: string; count: number }
 
-export function listSkupiny(): SkupinaEntry[] {
+/**
+ * ‼️ Musí počítat z `build(locale)`, ne z češtiny. Skupina, jejíž plodiny jsou v daném
+ * jazyce odgatované (viz CS_ONLY_PLODINY), by se jinak nabízela ve výpisu a vedla na
+ * prázdnou stránku — tenká URL a slepý odkaz uprostřed přeložené sekce.
+ */
+export function listSkupiny(locale: string = 'cs'): SkupinaEntry[] {
   const counts = new Map<Skupina, number>();
-  for (const p of build()) counts.set(p.skupina, (counts.get(p.skupina) ?? 0) + 1);
+  for (const p of build(locale)) counts.set(p.skupina, (counts.get(p.skupina) ?? 0) + 1);
   return Array.from(counts.entries())
     .map(([skupina, count]) => ({ skupina, label: SKUPINA_LABELS[skupina], count }))
     .sort((a, b) => a.label.localeCompare(b.label, 'cs'));

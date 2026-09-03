@@ -432,6 +432,7 @@ const sk: Record<string, string> = {
   'plod.skupina.okopaniny': 'Okopaniny',
   'plod.skupina.luskoviny': 'Luskoviny',
   'plod.skupina.picniny': 'Rastliny pastevné',
+  'plod.skupina.zelenina': 'Zelenina',
 
   'plod.hub.calendar': 'Kalendár sejby a zberu',
   'plod.hub.statCrops': 'plodín',

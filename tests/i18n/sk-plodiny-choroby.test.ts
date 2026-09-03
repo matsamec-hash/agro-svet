@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { LAUNCHED_PREFIXES, isLaunchedPath } from '../../src/i18n/utils';
 import { listPlodiny } from '../../src/lib/plodiny';
 import { listChoroby } from '../../src/lib/choroby';
+import { CS_ONLY_PLODINY } from '../../src/lib/plodiny';
 
 /** Klíče, které se z cs NEPŘEKLÁDAJÍ (mapování, obrázky, kalendář, latina). */
 const KEY_FIELDS = new Set(['slug', 'skupina', 'hero_image', 'hero_author', 'hero_license', 'hero_source',
@@ -57,7 +58,13 @@ describe('per-locale overlaye plodin a chorob jsou kompletní', () => {
 
   for (const { dir, label } of cases) {
     const root = join(process.cwd(), dir);
-    const csSlugs = readdirSync(root).filter((f) => f.endsWith('.yaml')).sort();
+    // Plodiny vedené jako cs-only (zeleninový registr ÚKZÚZ) se do parity nepočítají —
+    // v cizích locale se vůbec nenabízejí, viz CS_ONLY_PLODINY a jeho gate v build().
+    // Že se za tím neschovává rozdělaný překlad, hlídá test `plodiny-zelenina`.
+    const csSlugs = readdirSync(root)
+      .filter((f) => f.endsWith('.yaml'))
+      .filter((f) => !(label === 'plodiny' && CS_ONLY_PLODINY.has(f.replace(/\.yaml$/, ''))))
+      .sort();
     const localeDirs = readdirSync(root, { withFileTypes: true })
       .filter((e) => e.isDirectory() && /^[a-z]{2}$/.test(e.name))
       .map((e) => e.name);

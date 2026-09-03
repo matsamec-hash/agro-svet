@@ -23,8 +23,18 @@
  *   ÚKZÚZ nemá samostatná pole „typ"/„ranost" v této odpovědi → zůstávají null
  *   (doplní se kurátorovanou enrichment vrstvou, viz OdrudaEnrichment v src/lib/plodiny.ts).
  *
- * Spuštění: npx tsx scripts/import-odrudy.ts <plodina_slug> <ukzuz_druh>
- *   např.:  npx tsx scripts/import-odrudy.ts oves "Oves setý"
+ * Spuštění:
+ *   npx tsx scripts/import-odrudy.ts <plodina_slug> <ukzuz_druh>   — legacy, SUBSTRING
+ *     např.: npx tsx scripts/import-odrudy.ts oves "Oves setý"
+ *   npx tsx scripts/import-odrudy.ts <plodina_slug>                — PŘESNÝ match dle mapy
+ *   npx tsx scripts/import-odrudy.ts --all                         — všechny plodiny z mapy
+ *
+ * ‼️ Substring na `speciesName` sbírá cizí druhy: needle „salát" chytne i „Okurka
+ * (salátová)" a „Řepa salátová", „květák" chytne „Brokolice (květáková)". Proto má
+ * `scripts/plodiny-druhy.json` u každé plodiny VÝČET PŘESNÝCH názvů druhů z ÚKZÚZ
+ * a nové plodiny se importují jen tímto režimem. Legacy substring zůstal kvůli
+ * 18 původním polním plodinám, u kterých je ověřeno, že nic cizího nenabírá.
+ *
  * Generovaný JSON se COMMITUJE (data v repu = build bez síťové závislosti).
  */
 import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
@@ -117,17 +127,26 @@ export function normalizeOdruda(raw: Record<string, unknown>, plodinaSlug: strin
  * Stránkuje (limit=100) a filtruje klientsky dle `speciesName` ~ <ukzuzDruh>.
  * Bere jen REGISTROVANÉ odrůdy (regDecisionDate != null).
  */
-async function fetchRaw(ukzuzDruh: string): Promise<Record<string, unknown>[]> {
-  const needle = ukzuzDruh.toLowerCase();
+/** Přesný match dle výčtu názvů druhů (case-insensitive, trim). */
+export function exactMatcher(druhy: string[]): (speciesName: string) => boolean {
+  const set = new Set(druhy.map((d) => d.trim().toLowerCase()));
+  return (s) => set.has(s.trim().toLowerCase());
+}
+
+/** Legacy substring match — jen pro 18 původních polních plodin. */
+export function substringMatcher(needle: string): (speciesName: string) => boolean {
+  const n = needle.toLowerCase();
+  return (s) => s.toLowerCase().includes(n);
+}
+
+async function fetchRaw(matches: (speciesName: string) => boolean): Promise<Record<string, unknown>[]> {
 
   // Lokální cache: IDO_CACHE=cesta k JSON poli všech raw záznamů (jedno stažení
   // → generace všech plodin bez opakovaného volání ÚKZÚZ). Filtruje stejně.
   const cachePath = process.env.IDO_CACHE;
   if (cachePath) {
     const arr = JSON.parse(readFileSync(cachePath, 'utf8')) as Record<string, unknown>[];
-    return arr.filter(
-      (v) => String(v.speciesName ?? '').toLowerCase().includes(needle) && v.regDecisionDate,
-    );
+    return arr.filter((v) => matches(String(v.speciesName ?? '')) && v.regDecisionDate);
   }
 
   const base = 'https://ido.ukzuz.cz/ido/api/varieties';
@@ -150,22 +169,25 @@ async function fetchRaw(ukzuzDruh: string): Promise<Record<string, unknown>[]> {
     const values = json.values ?? [];
     if (values.length === 0) break;
     for (const v of values) {
-      const species = String(v.speciesName ?? '').toLowerCase();
-      if (species.includes(needle) && v.regDecisionDate) out.push(v);
+      if (matches(String(v.speciesName ?? '')) && v.regDecisionDate) out.push(v);
     }
     page += 1;
   }
   return out;
 }
 
-async function main() {
-  const [plodinaSlug, ukzuzDruh] = process.argv.slice(2);
-  if (!plodinaSlug || !ukzuzDruh) {
-    console.error('Použití: npx tsx scripts/import-odrudy.ts <plodina_slug> <ukzuz_druh>');
-    console.error('Příklad: npx tsx scripts/import-odrudy.ts oves "Oves setý"');
-    process.exit(1);
-  }
-  const raw = await fetchRaw(ukzuzDruh);
+/** Mapa plodina_slug → PŘESNÉ názvy druhů v ÚKZÚZ (viz hlavička). */
+function loadDruhyMap(): Record<string, string[]> {
+  return JSON.parse(
+    readFileSync(resolve('scripts/plodiny-druhy.json'), 'utf8'),
+  ) as Record<string, string[]>;
+}
+
+async function importPlodina(
+  plodinaSlug: string,
+  matches: (speciesName: string) => boolean,
+): Promise<number> {
+  const raw = await fetchRaw(matches);
   const seen = new Set<string>();
   const odrudy = raw
     .map((r) => normalizeOdruda(r, plodinaSlug))
@@ -176,6 +198,45 @@ async function main() {
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, JSON.stringify(odrudy, null, 2) + '\n');
   console.log(`✓ ${odrudy.length} odrůd → ${out}`);
+  return odrudy.length;
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+
+  if (args[0] === '--all') {
+    const map = loadDruhyMap();
+    let total = 0;
+    for (const [slug, druhy] of Object.entries(map)) {
+      total += await importPlodina(slug, exactMatcher(druhy));
+    }
+    console.log(`\n✓ celkem ${total} odrůd v ${Object.keys(map).length} plodinách`);
+    return;
+  }
+
+  const [plodinaSlug, ukzuzDruh] = args;
+  if (!plodinaSlug) {
+    console.error('Použití:');
+    console.error('  npx tsx scripts/import-odrudy.ts --all');
+    console.error('  npx tsx scripts/import-odrudy.ts <plodina_slug>            (přesný match z mapy)');
+    console.error('  npx tsx scripts/import-odrudy.ts <plodina_slug> <druh>     (legacy substring)');
+    process.exit(1);
+  }
+
+  if (ukzuzDruh) {
+    await importPlodina(plodinaSlug, substringMatcher(ukzuzDruh));
+    return;
+  }
+
+  const map = loadDruhyMap();
+  const druhy = map[plodinaSlug];
+  if (!druhy) {
+    console.error(
+      `Plodina „${plodinaSlug}" není v scripts/plodiny-druhy.json — doplň výčet přesných názvů druhů, nebo použij legacy režim s needle.`,
+    );
+    process.exit(1);
+  }
+  await importPlodina(plodinaSlug, exactMatcher(druhy));
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

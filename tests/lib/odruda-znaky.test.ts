@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { parseZnaky, maZnaky, prvniVeta, popisOdstavce } from '../../src/lib/odruda-znaky';
 import { readFileSync, readdirSync } from 'node:fs';
+import { CS_ONLY_PLODINY } from '../../src/lib/plodiny';
 
 // Reálné popisy ÚKZÚZ (zkopírované z src/data/plodiny/odrudy/*.json).
 const GAUDIO = `Gaudio je pekařská poloraná odrůda.\r\nRostliny středně vysoké, středně odolné až odolné proti poléhání. Zrno středně velké.\r\nStředně odolná až odolná proti napadení padlím pšenice na listu, středně odolná proti napadení komplexem listových skvrnitostí, středně odolná proti napadení žlutou rzivostí pšenice.`;
@@ -79,34 +80,53 @@ describe('parseZnaky — extrakce znaků z popisu ÚKZÚZ', () => {
   });
 });
 
-// Regresní stráž nad REÁLNÝMI daty ÚKZÚZ (2710 popisů). Drží laťku pokrytí —
-// kdyby úprava parseru začala znaky ztrácet, test spadne.
+// Regresní stráž nad REÁLNÝMI daty ÚKZÚZ. Drží laťku pokrytí — kdyby úprava parseru
+// začala znaky ztrácet, test spadne.
+//
+// ‼️ Laťka je ROZDĚLENÁ na polní plodiny a zeleninu a nesmí se slít do jedné. Popisy
+// zeleniny jsou stavěné jinak (ÚKZÚZ u nich neuvádí výšku rostlin ani výnos, zato
+// popisuje tvar a barvu plodu), takže společný průměr by laťku pro obilniny stáhl
+// dolů a stráž by přestala být citlivá právě tam, kde je dat nejvíc.
 describe('parseZnaky nad reálnými daty ÚKZÚZ', () => {
-  const popisy: string[] = [];
   const dir = 'src/data/plodiny/odrudy';
-  for (const f of readdirSync(dir)) {
-    const j = JSON.parse(readFileSync(`${dir}/${f}`, 'utf-8'));
-    for (const o of (Array.isArray(j) ? j : (j.odrudy ?? []))) if (o.popis) popisy.push(o.popis);
-  }
+  const nacti = (zelenina: boolean) => {
+    const popisy: string[] = [];
+    for (const f of readdirSync(dir)) {
+      if (CS_ONLY_PLODINY.has(f.replace(/\.json$/, '')) !== zelenina) continue;
+      const j = JSON.parse(readFileSync(`${dir}/${f}`, 'utf-8'));
+      for (const o of (Array.isArray(j) ? j : (j.odrudy ?? []))) if (o.popis) popisy.push(o.popis);
+    }
+    return popisy;
+  };
+  const polni = nacti(false);
+  const zelenina = nacti(true);
+  const pct = (popisy: string[], f: (x: ReturnType<typeof parseZnaky>) => boolean) =>
+    Math.round((popisy.map((p) => parseZnaky(p)).filter(f).length * 100) / popisy.length);
 
   it('dataset má očekávaný rozsah', () => {
-    expect(popisy.length).toBeGreaterThan(2600);
+    expect(polni.length).toBeGreaterThan(2600);
+    expect(zelenina.length).toBeGreaterThan(1300);
   });
 
-  it('pokrytí znaků neklesne pod dosaženou laťku', () => {
-    const n = popisy.length;
-    const z = popisy.map((p) => parseZnaky(p));
-    const pct = (f: (x: ReturnType<typeof parseZnaky>) => boolean) =>
-      Math.round((z.filter(f).length * 100) / n);
-    expect(pct((x) => Boolean(x.ranost))).toBeGreaterThanOrEqual(95);
-    expect(pct((x) => Boolean(x.vyska))).toBeGreaterThanOrEqual(78);
-    expect(pct((x) => x.vynos.length > 0)).toBeGreaterThanOrEqual(93);
-    expect(pct((x) => x.odolnosti.length > 0)).toBeGreaterThanOrEqual(58);
-    expect(pct(maZnaky)).toBeGreaterThanOrEqual(96);
+  it('pokrytí znaků u polních plodin neklesne pod dosaženou laťku', () => {
+    expect(pct(polni, (x) => Boolean(x.ranost))).toBeGreaterThanOrEqual(95);
+    expect(pct(polni, (x) => Boolean(x.vyska))).toBeGreaterThanOrEqual(78);
+    expect(pct(polni, (x) => x.vynos.length > 0)).toBeGreaterThanOrEqual(93);
+    expect(pct(polni, (x) => x.odolnosti.length > 0)).toBeGreaterThanOrEqual(58);
+    expect(pct(polni, maZnaky)).toBeGreaterThanOrEqual(96);
+  });
+
+  it('pokrytí znaků u zeleniny neklesne pod dosaženou laťku', () => {
+    // Naměřeno 2026-09 nad 1 445 popisy: ranost 90, odolnosti 34, maZnaky 91.
+    // `vyska` (7 %) a `vynos` (8 %) se ZÁMĚRNĚ netestují — ÚKZÚZ je u zeleniny
+    // v popisu neuvádí, takže laťka by hlídala vlastnost, kterou data nemají.
+    expect(pct(zelenina, (x) => Boolean(x.ranost))).toBeGreaterThanOrEqual(85);
+    expect(pct(zelenina, (x) => x.odolnosti.length > 0)).toBeGreaterThanOrEqual(30);
+    expect(pct(zelenina, maZnaky)).toBeGreaterThanOrEqual(88);
   });
 
   it('nikdy nevrátí prázdnou/uťatou úroveň ani slepenec chorob', () => {
-    for (const p of popisy) {
+    for (const p of [...polni, ...zelenina]) {
       for (const o of parseZnaky(p).odolnosti) {
         expect(o.uroven.length).toBeGreaterThan(3);
         expect(o.choroba).not.toMatch(/^\s|\.$/);

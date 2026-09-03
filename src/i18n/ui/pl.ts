@@ -434,6 +434,7 @@ const pl: Record<string, string> = {
   'plod.skupina.okopaniny': 'Rośliny okopowe',
   'plod.skupina.luskoviny': 'Rośliny strączkowe',
   'plod.skupina.picniny': 'Rośliny pastewne',
+  'plod.skupina.zelenina': 'Warzywa',
 
   'plod.hub.calendar': 'Kalendarz siewu i zbioru',
   'plod.hub.statCrops': 'roślin uprawnych',

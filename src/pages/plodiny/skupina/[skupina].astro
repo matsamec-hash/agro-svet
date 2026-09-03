@@ -10,8 +10,10 @@ const { skupina } = Astro.params;
 const sk = skupina as Skupina;
 // getStaticPaths odpadl s přechodem na SSR — validitu skupiny teď musí ověřit
 // stránka sama, jinak by /plodiny/skupina/cokoliv/ vyrenderovalo prázdno místo 404.
-if (!listSkupiny().some((s) => s.skupina === sk)) return Astro.rewrite('/404');
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+// Platnost se ověřuje V DANÉM LOCALE — skupina bez plodin v tomto jazyce nesmí vrátit
+// prázdnou 200 (viz CS_ONLY_PLODINY: zelenina existuje jen v cs).
+if (!listSkupiny(locale).some((s) => s.skupina === sk)) return Astro.rewrite('/404');
 const tr = useTranslations(locale);
 const label = tr(`plod.skupina.${sk}`);
 if (!label) return Astro.rewrite('/404');

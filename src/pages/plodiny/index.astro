@@ -13,7 +13,7 @@ const plodiny = listPlodiny(locale);
 // Hero fotka hubu: reprezentativní plodina (pšenice ozimá), jinak první
 // plodina s fotkou. Dřív tu bylo jen emoji.
 const hubHero = plodiny.find((p) => p.slug === 'psenice-ozima' && p.hero_image) ?? plodiny.find((p) => p.hero_image);
-const skupiny = listSkupiny();
+const skupiny = listSkupiny(locale);
 const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
 
 const breadcrumb = breadcrumbSchema([
