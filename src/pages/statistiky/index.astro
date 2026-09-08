@@ -8,6 +8,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { useTranslations, localizePath } from '../../i18n/utils';
 import { udrzovatelSlug } from '../../lib/plodiny';
+import { commodityDataset, type StatsLocale } from '../../lib/statistiky-dataset';
 import { statTakeaways, scissorsInsightText, livestockInsightText } from '../../lib/agro-derived';
 // AGRO_EVENTS moved to /statistiky/commodity-data*.json endpoints — loaded
 // client-side by the chart, no longer needed at SSR time on this page.
@@ -71,6 +72,20 @@ const yearsCovered = (() => {
   return allYears.length ? new Date().getFullYear() - Math.min(...allYears) + 1 : 14;
 })();
 const lastUpdated = new Date().toLocaleDateString(numLocale, { day: 'numeric', month: 'long', year: 'numeric' });
+
+// Dataset JSON-LD — cenové řady komodit jako citovatelná datová sada
+// (Google Dataset Search + AI). Název/popis bereme z i18n titulku stránky,
+// ať se nerozejde s tím, co je vidět, a ať sedí jazyk.
+const datasetJsonLd = commodityDataset({
+  locale: locale as StatsLocale,
+  name: t('stat.meta.title'),
+  description: t('stat.meta.description'),
+  url: localizePath(locale, '/statistiky/'),
+  series: (statsData as any).commodityFull ?? [],
+  dateModified: (statsData as any).generated,
+  csvPath: '/statistiky/komodity.csv',
+  extraKeywords: ['ceny komodit', 'zemědělská statistika', 'ceny výrobců'],
+});
 
 // Sparkline ticker — locale-aware metriky
 const SPARK = locale === 'sk'
@@ -156,6 +171,7 @@ const PILLS = [
       { '@type': 'ListItem', position: 2, name: t('stat.bc.current'), item: `https://agro-svet.cz${localizePath(locale, '/statistiky/')}` },
     ],
   })} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />
 
   <main class="sp-page">
     <Hero

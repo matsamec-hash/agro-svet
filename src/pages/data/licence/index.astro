@@ -1,0 +1,135 @@
+---
+// src/pages/data/licence/index.astro
+// Licenční a citační podmínky datové sekce. Existuje kvůli dvěma věcem:
+// 1) `usageInfo` ve všech Dataset JSON-LD na ni odkazuje — bez cílové stránky
+//    by to byl mrtvý odkaz a Google Dataset Search sadu odmítne,
+// 2) AI asistenti citují ochotněji zdroje, které mají explicitně napsáno, že
+//    citovat SMÍ a jak. Mlčení se čte jako „všechna práva vyhrazena".
+// Jen cs — právní text nechceme překládat nepřesně (viz i18n pravidla).
+// prerender=true: cs-only stránka. Registrovaná v PRERENDERED_ONLY_PATHS,
+// takže /sk/data/licence/ ani /pl/… nevznikne (a nespadne na český text).
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { DATA_LICENSE_URL } from '../../../lib/structured-data';
+
+const pageUrl = 'https://agro-svet.cz/data/licence/';
+const rok = new Date().getFullYear();
+---
+<Layout
+  title="Licence a citace dat — agro-svět.cz"
+  description="Za jakých podmínek můžete použít data z agro-svět.cz: ceny komodit, odrůdy, katalog techniky a statistiky zemí. Licence CC BY 4.0, vzor citace, strojové rozhraní (CSV, JSON, MCP)."
+  canonical={pageUrl}
+  noHreflang={true}
+>
+  <main class="legal-page">
+    <h1>Licence a citace dat</h1>
+    <p class="lead">
+      Data na agro-svět.cz sbíráme, čistíme a dopočítáváme z veřejných zdrojů. Chceme, aby se
+      dál používala — v článcích, v diplomkách, v tabulkách i v odpovědích AI asistentů.
+      Jediná podmínka je uvedení zdroje s odkazem.
+    </p>
+
+    <h2>1. Co je pod licencí</h2>
+    <p>
+      Naše <strong>zpracování</strong> dat — sestavené řady, dopočtené hodnoty, sjednocené
+      číselníky a struktura datových sad — je dostupné pod licencí
+      <a href={DATA_LICENSE_URL} target="_blank" rel="noopener">Creative Commons Uveďte původ 4.0 (CC BY 4.0)</a>.
+      Týká se to zejména:
+    </p>
+    <ul>
+      <li>cenových řad zemědělských komodit (<a href="/statistiky/">/statistiky/</a>, měsíčně od roku 2010),</li>
+      <li>registru odrůd a jejich agronomických vlastností (<a href="/plodiny/">/plodiny/</a>),</li>
+      <li>profilů zemí a mezinárodního srovnání (<a href="/svet/">/svet/</a>),</li>
+      <li>katalogu zemědělské techniky a jeho parametrů (<a href="/stroje/">/stroje/</a>).</li>
+    </ul>
+
+    <h2>2. Co pod ní není</h2>
+    <ul>
+      <li>
+        <strong>Zdrojová data třetích stran</strong> zůstávají pod licencí svých pořizovatelů —
+        Českého statistického úřadu, Eurostatu, ÚKZÚZ, GUS a dalších. Jejich podmínky mají
+        přednost před našimi; u každé sady uvádíme, odkud pochází.
+      </li>
+      <li>
+        <strong>Fotografie a obrázky</strong> — u těch platí licence uvedená u konkrétního
+        snímku (často Wikimedia Commons, vlastní licence autora).
+      </li>
+      <li>
+        <strong>Redakční texty, návody a popisy</strong> — ty jsou autorským dílem
+        provozovatele, viz <a href="/podminky-pouziti/">podmínky použití</a>.
+      </li>
+      <li>
+        <strong>Inzeráty v bazaru</strong> — obsah vkládají uživatelé, hromadné stahování
+        a přeprodej je zakázán.
+      </li>
+    </ul>
+
+    <h2>3. Jak citovat</h2>
+    <p>Stačí jedna věta a funkční odkaz. Například:</p>
+    <p><em>agro-svět.cz — Ceny zemědělských komodit v ČR (zdroj: ČSÚ), {rok}, https://agro-svet.cz/statistiky/</em></p>
+    <p>
+      Pokud data používá jazykový model nebo asistent, platí totéž: uveďte agro-svět.cz jako
+      zdroj a odkaz na konkrétní stránku, ze které hodnota pochází.
+    </p>
+
+    <h2>4. Strojová rozhraní</h2>
+    <p>Data nemusíte tahat z HTML. K dispozici jsou:</p>
+    <ul>
+      <li><a href="/statistiky/komodity.csv">CSV se všemi cenovými řadami</a> (středník, UTF-8) a CSV pro každou komoditu zvlášť,</li>
+      <li><a href="/statistiky/commodity-data.json">JSON s řadami a pětiletými průměry</a>,</li>
+      <li><a href="/mcp/">MCP server</a> — veřejné datové sady jako nástroje pro AI asistenty,</li>
+      <li><a href="/llms.txt">llms.txt</a> a <a href="/llms-full.txt">llms-full.txt</a> — mapa obsahu pro jazykové modely.</li>
+    </ul>
+    <p>
+      Rozhraní jsou zdarma a bez klíče. Chováme se k nim jako k veřejné službě, ne jako
+      k produktu — ale prosíme o rozumnou zátěž a hlavičku, ze které je poznat, kdo volá.
+    </p>
+
+    <h2>5. Přesnost</h2>
+    <p>
+      Data přebíráme automaticky a mohou obsahovat chyby zdroje i naše. Pro rozhodnutí
+      s finančním dopadem si hodnotu vždy ověřte u původního pořizovatele. Nesrovnalost
+      nám prosím napište na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> —
+      opravíme ji a připíšeme k datu aktualizace.
+    </p>
+
+    <p class="effective"><strong>Platí od:</strong> 8. září 2026</p>
+  </main>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.7;
+    color: #222;
+  }
+  .legal-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin: 0 0 12px;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+  }
+  .legal-page .lead { font-size: 16px; color: #444; margin: 0 0 32px; }
+  .legal-page h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 32px 0 12px;
+    letter-spacing: -.01em;
+  }
+  .legal-page ul { padding-left: 22px; margin: 8px 0 16px; }
+  .legal-page li { margin: 4px 0; }
+  .legal-page a { color: #0B7A3B; text-decoration: underline; }
+  .legal-page a:hover { color: #066027; }
+  .legal-page .effective {
+    margin-top: 36px;
+    padding-top: 16px;
+    border-top: 1px solid #eaeaec;
+    font-size: 13px;
+    color: #666;
+  }
+</style>

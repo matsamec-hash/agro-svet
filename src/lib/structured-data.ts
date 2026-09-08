@@ -116,6 +116,21 @@ export function breadcrumbSchema(items: BreadcrumbItem[]) {
 
 export interface DatasetVariable { name: string; unitText?: string }
 export interface DatasetSource { name: string; url?: string }
+/** Stažitelná podoba datové sady (CSV/JSON). Google Dataset Search bere sady
+ *  s `distribution` výrazně vážněji než ty bez — a AI má co citovat. */
+export interface DatasetDistribution {
+  url: string;
+  encodingFormat: 'text/csv' | 'application/json';
+  name?: string;
+}
+
+// Vlastní zpracování cizích veřejných dat (ČSÚ, Eurostat, ÚKZÚZ, FAO) pouštíme
+// pod CC BY 4.0 — podmínkou užití je uvedení zdroje s odkazem. Přesně to od
+// AI asistentů i agregátorů chceme: citaci, ne mlčení. Zdrojová data zůstávají
+// pod licencí svých pořizovatelů, viz /data/licence/.
+export const DATA_LICENSE_URL = 'https://creativecommons.org/licenses/by/4.0/';
+export const DATA_LICENSE_PAGE = `${SITE_URL}/data/licence/`;
+
 export interface DatasetInput {
   name: string;
   description: string;
@@ -126,6 +141,10 @@ export interface DatasetInput {
   dateModified?: string;       // 'YYYY-MM-DD'
   variables?: DatasetVariable[];
   sources?: DatasetSource[];
+  distribution?: DatasetDistribution[];
+  /** BCP-47 jazyk stránky. Výchozí cs-CZ; /sk /pl mutace musí poslat vlastní,
+   *  jinak by hlásily český obsah. */
+  lang?: string;
 }
 
 // schema.org/Dataset — profily zemí /svet JSOU datové sady (zemědělská
@@ -137,8 +156,10 @@ export function datasetSchema(input: DatasetInput) {
     name: input.name,
     description: input.description,
     url: input.url.startsWith('http') ? input.url : `${SITE_URL}${input.url}`,
-    inLanguage: 'cs-CZ',
+    inLanguage: input.lang ?? 'cs-CZ',
     isAccessibleForFree: true,
+    license: DATA_LICENSE_URL,
+    usageInfo: DATA_LICENSE_PAGE,
     publisher: { '@id': ORG_ID },
     spatialCoverage: { '@type': 'Place', name: input.countryName },
   };
@@ -157,7 +178,18 @@ export function datasetSchema(input: DatasetInput) {
       name: s.name,
       ...(s.url ? { url: s.url } : {}),
     }));
+  if (input.distribution?.length) node.distribution = distributionNodes(input.distribution);
   return node;
+}
+
+// DataDownload nody — sdílené mezi datasetSchema a případnými dalšími sadami.
+export function distributionNodes(dists: DatasetDistribution[]) {
+  return dists.map((d) => ({
+    '@type': 'DataDownload',
+    encodingFormat: d.encodingFormat,
+    contentUrl: d.url.startsWith('http') ? d.url : `${SITE_URL}${d.url}`,
+    ...(d.name ? { name: d.name } : {}),
+  }));
 }
 
 export interface BazarListingForSchema {
@@ -631,6 +663,8 @@ export function odrudaDatasetSchema(d: OdrudaDatasetInput) {
     url,
     inLanguage: 'cs-CZ',
     isAccessibleForFree: true,
+    license: DATA_LICENSE_URL,
+    usageInfo: DATA_LICENSE_PAGE,
     creator: {
       '@type': 'GovernmentOrganization',
       name: 'Ústřední kontrolní a zkušební ústav zemědělský',

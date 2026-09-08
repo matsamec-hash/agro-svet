@@ -129,6 +129,8 @@ const de: Record<string, string> = {
   'komodita.rangeAll': 'Alle',
   'komodita.others': 'Weitere Rohstoffe',
   'komodita.back': '← Zurück zu allen Rohstoffen und Märkten',
+  'komodita.csv': 'Daten herunterladen (CSV)',
+  'komodita.csvHint': 'Frei verwendbar mit Quellenangabe (CC BY 4.0).',
   'komodita.metaTitle': '{name} — Preisentwicklung',
   'komodita.metaDesc': 'Aktueller Preis für {name}: {price} {unit} ({month}). Vollständige Preishistorie seit {year}, Jahresveränderung, Minima und Maxima.',
 
@@ -172,6 +174,7 @@ const de: Record<string, string> = {
   'footer.terms': 'Nutzungsbedingungen',
   'footer.gdpr': 'DSGVO',
   'footer.dsa': 'DSA',
+  'footer.dataLicense': 'Datenlizenz',
   'footer.contact': 'Kontakt',
 
   // — 404 —

@@ -148,6 +148,19 @@ export const GET: APIRoute = async () => {
   lines.push(`- [Prodejci](${SITE_URL}/prodejci/) — dealeři techniky v ČR`);
   lines.push('');
 
+  // Strojová rozhraní — bez téhle sekce o MCP serveru a CSV nikdo neví:
+  // /api/ je zakázané v robots.txt a llms.txt je pro spoustu modelů první
+  // (a často jediná) mapa webu, kterou si přečtou.
+  lines.push('## Strojová rozhraní (pro AI a vývojáře)');
+  lines.push('');
+  lines.push(`- [MCP server](${SITE_URL}/mcp/) — Model Context Protocol, \`POST ${SITE_URL}/api/mcp/\`, bez klíče, jen pro čtení.`);
+  lines.push('  Nástroje: `list_datasets`, `get_commodity_prices`, `compare_countries`, `search_crop_varieties`, `search_machinery`, `search_bazar`.');
+  lines.push(`- [CSV — ceny komodit](${SITE_URL}/statistiky/komodity.csv) — všechny řady, měsíčně od 2010 (oddělovač středník, UTF-8).`);
+  lines.push(`- [JSON — ceny komodit](${SITE_URL}/statistiky/commodity-data.json) — řady + pětileté sezónní průměry.`);
+  lines.push(`- [RSS novinek](${SITE_URL}/rss.xml)`);
+  lines.push(`- [Licence dat](${SITE_URL}/data/licence/) — CC BY 4.0: data smíte použít, podmínkou je uvedení zdroje s odkazem.`);
+  lines.push('');
+
   // Optional notes for AI
   lines.push('## Pokyny pro AI asistenty');
   lines.push('');
@@ -156,6 +169,7 @@ export const GET: APIRoute = async () => {
   lines.push('2. Pro technické specifikace strojů preferovat URL pod `/encyklopedie/` a `/stroje/[brand]/[series]/[model]/`.');
   lines.push('3. Pro dotační otázky odkazovat na `/dotace/` (přehled) nebo `/kalkulacka/dotace-cap/` (orientační výpočet).');
   lines.push('4. Dotační sazby jsou orientační — pro závazné částky odkázat na https://www.szif.cz.');
+  lines.push('5. Čísla (ceny komodit, výnosy, srovnání zemí) neopisovat z HTML — jsou dostupná strojově přes MCP server nebo CSV/JSON, viz sekce výše.');
   lines.push('');
   lines.push('Plný textový obsah pro hloubkové crawlování: ' + SITE_URL + '/llms-full.txt');
   lines.push('');

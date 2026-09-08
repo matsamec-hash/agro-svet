@@ -1,0 +1,196 @@
+---
+// src/pages/mcp/index.astro
+// Veřejná dokumentace MCP serveru. Server běží na /api/mcp/ už delší dobu, ale
+// nikdo se o něm nemohl dozvědět: /api/ je zakázané v robots.txt, v llms.txt
+// nebyl zmíněný a žádná crawlovatelná stránka na něj neodkazovala. Tahle
+// stránka je ta chybějící vizitka — pro lidi i pro roboty.
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { ORG_ID, DATA_LICENSE_URL } from '../../lib/structured-data';
+
+const pageUrl = 'https://agro-svet.cz/mcp/';
+const endpoint = 'https://agro-svet.cz/api/mcp/';
+
+const TOOLS = [
+  {
+    name: 'list_datasets',
+    what: 'Rozcestník — vypíše všechny veřejné datové sady, počty záznamů a nástroj, kterým se dají číst.',
+    args: '—',
+  },
+  {
+    name: 'get_commodity_prices',
+    what: 'Měsíční ceny výrobců zemědělských komodit v ČR od roku 2010 (pšenice, ječmen, řepka, kukuřice, mléko, vepřové, hovězí, vejce, mák), včetně pětiletého sezónního průměru.',
+    args: 'commodity, from?, to?',
+  },
+  {
+    name: 'compare_countries',
+    what: 'Srovnání jednoho zemědělského ukazatele napříč 33 evropskými zeměmi + USA a Ukrajinou, s uvedením zdroje u každé hodnoty.',
+    args: 'indicator, countries?',
+  },
+  {
+    name: 'search_crop_varieties',
+    what: 'Vyhledávání v registru odrůd ÚKZÚZ — přes 3 400 záznamů u 18 plodin, filtr podle plodiny, roku registrace a udržovatele.',
+    args: 'crop?, year_from?, year_to?, query?, limit?',
+  },
+  {
+    name: 'search_machinery',
+    what: 'Katalog zemědělské techniky — přes 2 000 modelů od 22 značek, filtr podle značky, kategorie, výkonu a roku výroby.',
+    args: 'brand?, category?, power_min?, power_max?, query?, limit?',
+  },
+  {
+    name: 'search_bazar',
+    what: 'Živé inzeráty z bazaru agro-svět.cz. Vrací jen veřejná pole aktivních inzerátů — kontakt na prodejce se přes MCP nikdy neposílá.',
+    args: 'query?, category?, brand?, price_max?, limit?',
+  },
+];
+
+const CONFIG = `{
+  "mcpServers": {
+    "agro-svet": {
+      "type": "http",
+      "url": "${endpoint}"
+    }
+  }
+}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebAPI',
+  name: 'agro-svět.cz MCP server',
+  description:
+    'Veřejný Model Context Protocol server nad daty agro-svět.cz — ceny zemědělských komodit, registr odrůd ÚKZÚZ, katalog techniky, mezinárodní srovnání a živé inzeráty bazaru. Bez klíče, jen pro čtení.',
+  url: pageUrl,
+  documentation: pageUrl,
+  provider: { '@id': ORG_ID },
+  inLanguage: 'cs-CZ',
+  isAccessibleForFree: true,
+  license: DATA_LICENSE_URL,
+  termsOfService: 'https://agro-svet.cz/data/licence/',
+  potentialAction: {
+    '@type': 'ConsumeAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: endpoint,
+      httpMethod: 'POST',
+      contentType: 'application/json',
+    },
+  },
+};
+---
+<Layout
+  title="MCP server — data agro-svět.cz pro AI asistenty"
+  description="Veřejný MCP server nad daty agro-svět.cz: ceny komodit od 2010, registr odrůd ÚKZÚZ, katalog 2 000+ strojů, srovnání zemí a živý bazar. Šest nástrojů, bez klíče, jen pro čtení."
+  canonical={pageUrl}
+  noHreflang={true}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <main class="mcp-page">
+    <header class="mcp-hero">
+      <span class="mcp-eyebrow">Pro vývojáře a AI asistenty</span>
+      <h1>MCP server</h1>
+      <p class="mcp-lead">
+        Data agro-svět.cz jsou dostupná přes <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">Model Context Protocol</a>.
+        Připojte si server do Claude, ChatGPT nebo vlastního agenta a ptejte se rovnou na čísla —
+        bez scrapování HTML a bez registrace.
+      </p>
+      <p class="mcp-endpoint"><code>POST {endpoint}</code></p>
+    </header>
+
+    <section class="mcp-block">
+      <h2>Připojení</h2>
+      <p>Do konfigurace MCP klienta přidejte:</p>
+      <pre class="mcp-code"><code>{CONFIG}</code></pre>
+      <p class="mcp-note">
+        Server je <strong>jen pro čtení</strong> a <strong>bez autentizace</strong>. Nic nezapisuje,
+        nic si nepamatuje a nevydává osobní údaje — z bazaru vrací pouze veřejná pole inzerátu,
+        nikdy telefon ani e-mail prodejce.
+      </p>
+    </section>
+
+    <section class="mcp-block">
+      <h2>Nástroje</h2>
+      <div class="mcp-tools">
+        {TOOLS.map((t) => (
+          <article class="mcp-tool">
+            <h3><code>{t.name}</code></h3>
+            <p>{t.what}</p>
+            <p class="mcp-args">Parametry: <code>{t.args}</code></p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mcp-block">
+      <h2>Odkud data jsou</h2>
+      <ul>
+        <li>Ceny komodit — <a href="https://csu.gov.cz/" target="_blank" rel="noopener">Český statistický úřad</a>, měsíční průměry výrobců.</li>
+        <li>Odrůdy — <a href="https://www.ukzuz.cz/" target="_blank" rel="noopener">ÚKZÚZ</a>, registr povolených odrůd.</li>
+        <li>Srovnání zemí — Eurostat a FAO, s uvedením zdroje u každé hodnoty.</li>
+        <li>Technika — vlastní katalog agro-svět.cz sestavený z podkladů výrobců.</li>
+      </ul>
+      <p>
+        Použití se řídí <a href="/data/licence/">licencí datové sekce</a> (CC BY 4.0 — uveďte zdroj s odkazem).
+      </p>
+    </section>
+
+    <section class="mcp-block">
+      <h2>Jiné cesty ke stejným datům</h2>
+      <ul>
+        <li><a href="/statistiky/komodity.csv">CSV se všemi cenovými řadami</a></li>
+        <li><a href="/statistiky/commodity-data.json">JSON s řadami a pětiletými průměry</a></li>
+        <li><a href="/llms.txt">llms.txt</a> — mapa obsahu pro jazykové modely</li>
+        <li><a href="/rss.xml">RSS novinek</a></li>
+      </ul>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .mcp-page { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; line-height: 1.7; color: #222; }
+  .mcp-eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #0B7A3B; }
+  .mcp-hero h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    margin: 6px 0 12px;
+    letter-spacing: -.02em;
+  }
+  .mcp-lead { font-size: 17px; color: #444; margin: 0 0 18px; }
+  .mcp-endpoint code {
+    display: inline-block;
+    background: #f4f6f4;
+    border: 1px solid #e2e6e2;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  .mcp-block { margin-top: 40px; }
+  .mcp-block h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+  }
+  .mcp-code {
+    background: #14171a;
+    color: #e8eae8;
+    border-radius: 12px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .mcp-note { font-size: 14px; color: #555; margin-top: 12px; }
+  .mcp-tools { display: grid; gap: 14px; }
+  .mcp-tool { border: 1px solid #e6e8e6; border-radius: 14px; padding: 14px 16px; }
+  .mcp-tool h3 { margin: 0 0 6px; font-size: 15px; }
+  .mcp-tool h3 code { background: #eef3ee; border-radius: 6px; padding: 2px 7px; font-size: 14px; }
+  .mcp-tool p { margin: 0; font-size: 14px; color: #444; }
+  .mcp-args { margin-top: 6px !important; font-size: 13px !important; color: #6a6f6a !important; }
+  .mcp-args code { font-size: 12px; }
+  .mcp-page ul { padding-left: 22px; margin: 8px 0 16px; }
+  .mcp-page li { margin: 4px 0; }
+  .mcp-page a { color: #0B7A3B; text-decoration: underline; }
+  .mcp-page a:hover { color: #066027; }
+</style>

@@ -51,6 +51,12 @@ const columns = getFooterColumns(locale);
         <span aria-hidden="true">·</span></>)}
         <a href={navHref(locale, '/dsa-kontakt/')}>{tr('footer.dsa')}</a>
         <span aria-hidden="true">·</span>
+        {/* Datové rozhraní a licence — cs-only stránky, proto BEZ navHref
+            (pod /sk /uk /pl neexistují a odkaz by vedl na 404). */}
+        <a href="/data/licence/">{tr('footer.dataLicense')}</a>
+        <span aria-hidden="true">·</span>
+        <a href="/mcp/">MCP</a>
+        <span aria-hidden="true">·</span>
         <a href="#" data-cc-reopen>{tr('cc.settings')}</a>
         <span aria-hidden="true">·</span>
         <a href="https://aktualizovano.cz" target="_blank" rel="noopener">aktualizovano.cz</a>

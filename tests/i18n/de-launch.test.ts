@@ -356,7 +356,7 @@ describe('DE homepage a DE-only landingy', () => {
       expect(src, `${p} musí odmítnout non-de locale`).toContain("if (locale !== 'de') return Astro.rewrite('/404')");
     }
     // Nemají cs ekvivalent → do /de mirroru je nedostane žádné zrcadlení.
-    const sm = fs.readFileSync(path.join(ROOT, 'src/pages/sitemap.xml.ts'), 'utf8');
+    const sm = fs.readFileSync(path.join(ROOT, 'src/lib/sitemap-entries.ts'), 'utf8');
     expect(sm).toContain('/de/direktzahlungen/');
     expect(sm).toContain('/de/oeko-regelungen/');
     expect(sm).toContain('/de/oepul/');

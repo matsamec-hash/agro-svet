@@ -273,8 +273,11 @@ export function isSkLaunchedPath(csRootPath: string): boolean {
  *  `/data/prodeje-techniky` sem patří od 2026-08-21 — `/data` je launchnuté pro
  *  sk i pl, takže hub /pl/data/ na tu stránku linkoval přes /pl/ (302) a sk
  *  varianta se dokonce dostala do sitemapy. pl to obcházelo hackem přímo
- *  v sitemap.xml.ts; sk a uk ne. */
-export const PRERENDERED_ONLY_PATHS: string[] = ['/data/prodeje-techniky'];
+ *  v sitemap.xml.ts; sk a uk ne.
+ *  `/data/licence` sem patří od 2026-09-08 ze stejného důvodu: licenční text
+ *  je psaný česky a překládat právní podmínky nechceme (viz pravidlo o cizí
+ *  jurisdikci), ale `/data` je launchnuté pro sk i pl. */
+export const PRERENDERED_ONLY_PATHS: string[] = ['/data/prodeje-techniky', '/data/licence'];
 
 /** Kvízy, které NEJSOU lokalizované — cílí na české podmínky (servisní síť
  *  značek, český chov včel), takže by pod locale prefixem nešlo o překlad, ale

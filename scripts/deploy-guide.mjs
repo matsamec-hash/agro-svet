@@ -28,6 +28,10 @@ console.log(`
 │ 2) Pročisti Cloudflare edge cache (CF je pořád před VPS):
 │      npm run purge
 │    (pusť AŽ po doběhnutí Coolify buildu, jinak CDN nacachuje staré)
+│
+│ 3) Oznam změny Bingu a Seznamu (Google se řídí sitemapou sám):
+│      npm run indexnow
+│    (bere URL s dnešním lastmod ze živé sitemapy; --days N pro víc dnů)
 ├──────────────────────────────────────────────────────────────
 │ Stav teď:
 │   branch:        ${branch}

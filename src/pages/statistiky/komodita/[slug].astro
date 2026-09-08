@@ -7,6 +7,7 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { useTranslations, localizePath, navHref, tf } from '../../../i18n/utils';
 import { udrzovatelSlug } from '../../../lib/plodiny';
+import { commodityDataset, type StatsLocale } from '../../../lib/statistiky-dataset';
 import statsCs from '../../../data/agro-stats.json';
 import statsSk from '../../../data/agro-stats-sk.json';
 import statsPl from '../../../data/agro-stats-pl.json';
@@ -61,9 +62,29 @@ const title = tf(locale, 'komodita.metaTitle', { name: series.name });
 const description = tf(locale, 'komodita.metaDesc', { name: series.name, price: fmt(price), unit: series.unit, month, year: firstYear });
 // Detail jen pro locale s reálnými daty+copy (cs + sk + pl/GUS). uk = cs fallback → noindex.
 const detailNoindex = locale !== 'cs' && locale !== 'sk' && locale !== 'pl';
+
+// CSV existuje jen pro česká data (agro-stats.json). sk/pl mají vlastní řady
+// v jiných souborech — odkaz na české CSV by tam byl lež.
+const csvHref = locale === 'cs' || locale === 'uk' ? `/statistiky/komodita/${slug}.csv` : null;
+
+// Dataset JSON-LD jedné cenové řady + odkaz na její CSV. Emitujeme jen tam,
+// kde stránku vůbec indexujeme — u noindex mutace by to byl signál do prázdna.
+const datasetJsonLd = detailNoindex
+  ? null
+  : commodityDataset({
+      locale: locale as StatsLocale,
+      name: series.name,
+      description,
+      url: navHref(locale, `/statistiky/komodita/${slug}/`),
+      series: [series],
+      dateModified: stats.generated,
+      csvPath: csvHref ?? undefined,
+      extraKeywords: ['cena', 'vývoj ceny', 'zemědělská komodita'],
+    });
 ---
 
 <Layout title={title} description={description} noindex={detailNoindex} noHreflang={true}>
+  {datasetJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />}
   <main class="kd">
     <div class="kd-wrap">
       <nav class="kd-crumb" aria-label={t('a11y.breadcrumb')}>
@@ -107,6 +128,12 @@ const detailNoindex = locale !== 'cs' && locale !== 'sk' && locale !== 'pl';
         </div>
         {avgSeries.length > 0 && <span class="kd-legend"><i class="dot ink"></i>{series.name}<i class="dot dash"></i>{t('komodita.avgLegend')}</span>}
         <div class="kd-chartwrap"><canvas id="kdChart" height="300"></canvas></div>
+        {csvHref && (
+          <p class="kd-dl">
+            <a href={csvHref} download>{t('komodita.csv')}</a>
+            <span>{t('komodita.csvHint')}</span>
+          </p>
+        )}
       </section>
 
       {others.length > 0 && (
@@ -215,6 +242,8 @@ const detailNoindex = locale !== 'cs' && locale !== 'sk' && locale !== 'pl';
   .kd-chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
   .kd-chart-head h2{font-size:18px;letter-spacing:-.01em;font-weight:800}
   .kd-legend{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);font-weight:600}
+  .kd-dl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--muted)}
+  .kd-dl a{font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
   .kd-legend .dot{width:14px;height:3px;border-radius:2px;display:inline-block}
   .kd-legend .dot.ink{background:var(--ink)}
   .kd-legend .dot.dash{background:repeating-linear-gradient(90deg,rgba(10,10,12,.4) 0 4px,transparent 4px 7px)}

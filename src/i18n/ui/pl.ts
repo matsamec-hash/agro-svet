@@ -127,6 +127,8 @@ const pl: Record<string, string> = {
   'komodita.rangeAll': 'Wszystko',
   'komodita.others': 'Inne surowce',
   'komodita.back': '← Powrót do wszystkich surowców i rynków',
+  'komodita.csv': 'Pobierz dane (CSV)',
+  'komodita.csvHint': 'Do swobodnego użytku z podaniem źródła (CC BY 4.0).',
   'komodita.metaTitle': '{name} — zmiany ceny',
   'komodita.metaDesc': 'Aktualna cena surowca {name}: {price} {unit} ({month}). Pełna historia cen od roku {year}, zmiana rok do roku, minima i maksima.',
 
@@ -170,6 +172,7 @@ const pl: Record<string, string> = {
   'footer.terms': 'Warunki użytkowania',
   'footer.gdpr': 'GDPR',
   'footer.dsa': 'DSA',
+  'footer.dataLicense': 'Licencja danych',
   'footer.contact': 'Kontakt',
 
   // — 404 —

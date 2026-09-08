@@ -8,6 +8,9 @@ const NORMAL_BODY = `User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /api/
+# Výjimka: MCP server je veřejné datové rozhraní, ne interní API. Dokumentace
+# k němu je na /mcp/, endpoint tady — ať ho crawler smí ověřit.
+Allow: /api/mcp/
 Disallow: /bazar/moje/
 Disallow: /bazar/prihlaseni
 Disallow: /bazar/registrace
@@ -40,6 +43,11 @@ Allow: /
 # AI training crawlers are blocked at Cloudflare's edge (GPTBot, ClaudeBot,
 # CCBot, Bytespider, Google-Extended, meta-externalagent, …).
 
+# Machine-readable data: /llms.txt (content map), /mcp/ (MCP server docs),
+# /data/licence/ (CC BY 4.0 — cite with a link).
+
+# /sitemap.xml je sitemap INDEX; dílčí sitemapy jsou
+# /sitemap/<sekce>.xml (stroje, plodiny, chov, bazar, novinky, ostatni, sk, uk, pl, de).
 Sitemap: https://agro-svet.cz/sitemap.xml
 Sitemap: https://agro-svet.cz/news-sitemap.xml
 `;

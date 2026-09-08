@@ -130,6 +130,8 @@ const uk: Record<string, string> = {
   'komodita.rangeAll': 'Все',
   'komodita.others': 'Інші товари',
   'komodita.back': '← Назад до всіх товарів і ринків',
+  'komodita.csv': 'Завантажити дані (CSV)',
+  'komodita.csvHint': 'Вільне використання із зазначенням джерела (CC BY 4.0).',
   'komodita.metaTitle': '{name} — динаміка ціни',
   'komodita.metaDesc': 'Актуальна ціна товару {name}: {price} {unit} ({month}). Повна історія цін від {year} року, зміна рік до року, мінімуми та максимуми.',
 
@@ -173,6 +175,7 @@ const uk: Record<string, string> = {
   'footer.terms': 'Умови використання',
   'footer.gdpr': 'GDPR',
   'footer.dsa': 'DSA',
+  'footer.dataLicense': 'Ліцензія даних',
   'footer.contact': 'Контакт',
 
   // — 404 —

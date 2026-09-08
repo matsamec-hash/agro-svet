@@ -82,8 +82,10 @@ describe('brána locale mirroru sitemapy', () => {
     expect(allowInMirror('/dotace/34-73-zpracovani/', 'sk', ctx)).toBe(false);
   });
 
-  it('sitemap.xml.ts staví VŠECHNY mirrory přes sdílenou bránu, ne vlastními filtry', () => {
-    const sm = fs.readFileSync(path.join(ROOT, 'src/pages/sitemap.xml.ts'), 'utf8');
+  it('generátor sitemapy staví VŠECHNY mirrory přes sdílenou bránu, ne vlastními filtry', () => {
+    // Od rozdělení sitemapy na index + sekce žije generátor v src/lib/sitemap-entries.ts;
+    // src/pages/sitemap*.xml.ts jsou už jen tenké routy nad ním.
+    const sm = fs.readFileSync(path.join(ROOT, 'src/lib/sitemap-entries.ts'), 'utf8');
     expect(sm).toContain('allowInMirror');
     // žádný per-locale filtr nesmí obcházet bránu vlastní kopií isLaunchedPath
     expect(sm).not.toMatch(/isLaunchedPath\('(sk|uk|pl|de)'/);

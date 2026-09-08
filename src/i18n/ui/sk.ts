@@ -125,6 +125,8 @@ const sk: Record<string, string> = {
   'komodita.rangeAll': 'Všetko',
   'komodita.others': 'Ďalšie komodity',
   'komodita.back': '← Späť na všetky komodity a trhy',
+  'komodita.csv': 'Stiahnuť dáta (CSV)',
+  'komodita.csvHint': 'Voľne použiteľné s uvedením zdroja (CC BY 4.0).',
   'komodita.metaTitle': '{name} — vývoj ceny',
   'komodita.metaDesc': 'Aktuálna cena komodity {name}: {price} {unit} ({month}). Kompletná cenová história od roku {year}, medziročná zmena, minimá a maximá.',
 
@@ -168,6 +170,7 @@ const sk: Record<string, string> = {
   'footer.terms': 'Podmienky používania',
   'footer.gdpr': 'GDPR',
   'footer.dsa': 'DSA',
+  'footer.dataLicense': 'Licencia dát',
   'footer.contact': 'Kontakt',
 
   // — 404 —
