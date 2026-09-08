@@ -117,9 +117,10 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta name="generator" content={Astro.generator} />
   <meta name="google-site-verification" content="QXiqxpCmcP9HJZMH7M6I3J-X6j7p6U8lhk1aehxG7Io" />
   <meta name="google-site-verification" content="CY_qIX6BN8tWkMXGOKdM8d-k-_le-qmUsk-eoZwS5Eo" />
-  {/* Seznam Webmaster — ověření vlastnictví. Sedí vedle Google verification
-      ze stejného důvodu: Seznam ho čte na homepage, ale sitewide je levnější
-      než větvení podle cesty a nic to nerozbíjí. */}
+  {/* Seznam Webmaster — ověření vlastnictví. Dva tokeny záměrně: H957Fu… je
+      původní z 5/2026 (viz eb7a519), tVqSWO… vygenerovaný 8. 9. 2026 pod
+      účtem MatejSamec@seznam.cz. Starý NEMAZAT, dokud není jisté, pod jakým
+      účtem drží ověření — stejně jako u dvou google-site-verification výš. */}
   <meta name="seznam-wmt" content="tVqSWOTiGDhGkWaul7Nfe0VPw9AezsFq" />
   <meta name="msvalidate.01" content="A401032123927401E73FAB1151E94F3D" />
   <meta name="seznam-wmt" content="H957FuP9Pc7eQLHuPaTpuyrG03OUV0FD" />
