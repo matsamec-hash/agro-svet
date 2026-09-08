@@ -40,8 +40,14 @@ Allow: /
 User-agent: ChatGPT-User
 Allow: /
 
-# AI training crawlers are blocked at Cloudflare's edge (GPTBot, ClaudeBot,
-# CCBot, Bytespider, Google-Extended, meta-externalagent, …).
+# NOTE (2026-09-08): an older comment here claimed AI training crawlers were
+# blocked at Cloudflare's edge. They were not — AI Crawl Control showed 104k of
+# 105k AI crawler requests ALLOWED in 24h (GPTBot 68.2k, PerplexityBot 21.3k,
+# ClaudeBot 7.2k; Googlebot only 1.2k for comparison). Nothing is blocked, and
+# that is deliberate: the point is to be a cited source, and blocking training
+# crawlers costs presence in the models without stopping citation traffic.
+# If you ever DO want to block them, do it in Cloudflare AI Crawl Control —
+# a Disallow here is a request, not a block, and training crawlers ignore it.
 
 # Machine-readable data: /llms.txt (content map), /mcp/ (MCP server docs),
 # /data/licence/ (CC BY 4.0 — cite with a link).
