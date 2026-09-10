@@ -8,7 +8,6 @@ import {
   canonicalPath,
   licenseUrlFor,
   requiresAuthor,
-  isTrademark,
 } from '../../src/lib/photo-credit';
 
 /**
@@ -20,8 +19,9 @@ import {
  *
  * 10. 9. 2026 sneseno na nulu: každý obrázek v `public/images`, na který se
  * někde odkazuje, má buď dohledatelného autora, nebo licenci bez povinné
- * atribuce (Unsplash/Pexels/Pixabay/volné dílo), nebo je to logo značky.
- * Nová fotka bez atribuce tedy neprojde.
+ * atribuce (Unsplash/Pexels/Pixabay/volné dílo). Loga značek žádnou výjimku
+ * nemají — ochranná známka neříká nic o autorských právech k souboru.
+ * Nová fotka ani logo bez doloženého původu tedy neprojde.
  */
 const LIMIT_BEZ_KREDITU = 0;
 
@@ -63,7 +63,6 @@ describe('atribuce fotek', () => {
     expect(used.length).toBeGreaterThan(150);
 
     const bez = used.filter((path) => {
-      if (isTrademark(path)) return false; // loga značek = ochranné známky, ne fotky
       const c = creditFor(path);
       if (!c) return true;
       if (!requiresAuthor(c.license)) return false;
@@ -140,6 +139,17 @@ describe('atribuce fotek', () => {
     ]);
     expect(out).toHaveLength(1);
     expect(out[0]!.author).toBe('Susanne Nilsson');
+  });
+
+  it('každé logo značky má doloženou licenci z Commons', async () => {
+    const { ZNACKA_LOGO, ZNACKA_LOGO_LICENCE } = await import('../../src/lib/agro-integrace');
+    for (const [slug, path] of Object.entries(ZNACKA_LOGO)) {
+      const l = ZNACKA_LOGO_LICENCE[slug];
+      expect(l, `${slug} — logo bez záznamu o licenci`).toBeTruthy();
+      expect(l!.source, slug).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
+      if (requiresAuthor(l!.license)) expect(l!.author, slug).toBeTruthy();
+      expect(existsSync(join(ROOT, 'public', path)), `${slug} — soubor ${path} chybí`).toBe(true);
+    }
   });
 
   it('plodiny s CC licencí mají vyplněného autora (jinak vyjde „Foto: CC BY-SA 3.0")', () => {

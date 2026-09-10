@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
+import { ZNACKA_LOGO } from '../../../lib/agro-integrace';
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from '../../../lib/stroje';
 import { createServerClient } from '../../../lib/supabase';
 import { useTranslations, localizeInternalHref } from '../../../i18n/utils';
@@ -174,7 +175,7 @@ function pluralCs(n: number, one: string, few: string, many: string): string {
               <div class="sz-brand-card-wrap">
                 <a href={localizeInternalHref(locale, `/stroje/${b.slug}/`)} class="sz-brand-card">
                   <div class="sz-brand-logo" data-letter={b.name.charAt(0).toUpperCase()}>
-                    <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" width="56" height="56" onerror="this.remove()" />
+                    {ZNACKA_LOGO[b.slug] && <img src={ZNACKA_LOGO[b.slug]} alt={`${b.name} logo`} loading="lazy" width="56" height="56" onerror="this.remove()" />}
                   </div>
                   <div class="sz-brand-info">
                     <strong>{b.name}</strong>

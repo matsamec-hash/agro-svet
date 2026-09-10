@@ -45,12 +45,21 @@ export const ZNACKA_LABEL: Record<string, string> = {
 
 // značka (DB slug) → logo (staženo z Wikimedia Commons, P154). Lemken chybí
 // (na Commons nemá logo). Cesty do public/images/znacky/.
+/**
+ * Loga značek. Všechna jsou z Wikimedia Commons (Wikidata P154) a mají doloženou
+ * licenci — viz ZNACKA_LOGO_LICENCE níž. Starší sada v `/images/stroje/brands/`
+ * byla stažená z webů výrobců bez jakéhokoli záznamu o původu a je smazaná;
+ * kdo logo potřebuje, bere ho odsud.
+ *
+ * ‼️ Nové logo přidávej jen s doloženou licencí. Bez ní se značka vykreslí bez
+ * loga (všechna místa mají podmíněný render) — to je správně, ne rozbité.
+ */
 export const ZNACKA_LOGO: Record<string, string> = {
   amazone: '/images/znacky/amazone.png',
   bednar: '/images/znacky/bednar.jpg',
   'case-ih': '/images/znacky/case-ih.png',
   claas: '/images/znacky/claas.svg',
-  'deutz-fahr': '/images/znacky/deutz-fahr.png',
+  'deutz-fahr': '/images/znacky/deutz-fahr.svg',
   fendt: '/images/znacky/fendt.svg',
   horsch: '/images/znacky/horsch.svg',
   jcb: '/images/znacky/jcb.svg',
@@ -61,15 +70,41 @@ export const ZNACKA_LOGO: Record<string, string> = {
   kuhn: '/images/znacky/kuhn.svg',
   kverneland: '/images/znacky/kverneland.svg',
   manitou: '/images/znacky/manitou.svg',
-  'massey-ferguson': '/images/znacky/massey-ferguson.png',
   'new-holland': '/images/znacky/new-holland.png',
   pottinger: '/images/znacky/pottinger.svg',
   vaderstad: '/images/znacky/vaderstad.svg',
   valtra: '/images/znacky/valtra.png',
   zetor: '/images/znacky/zetor.png',
-  // Lemken nemá logo na Commons — reuse existující tmavé logo z katalogu strojů
-  // (sedí i na bílé pozadí).
-  lemken: '/images/stroje/brands/lemken.png',
+  // Lemken a Massey Ferguson na Commons použitelné logo nemají (MF je tam jen
+  // jako začerněný obdélník) → renderují se bez loga.
+};
+
+/**
+ * Licence log — autor, licence a odkaz na soubor na Commons. Vykresluje se
+ * v bloku „Fotografie" na stránce značky; u licencí bez povinné atribuce
+ * (public domain) se neukazuje, ale evidovaná je.
+ */
+export const ZNACKA_LOGO_LICENCE: Record<string, { author: string; license: string; source: string }> = {
+  amazone: { author: 'Amazone (Germany)', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Logo_wordmark_Amazone_H._Dreyer_GmbH_%26_Co._KG.png' },
+  bednar: { author: 'Cz-bd-1', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:BEDNAR_logo_2019_RGB.jpg' },
+  'case-ih': { author: 'Case IH', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Logo_Case_IH.png' },
+  claas: { author: 'Claas', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Claas-Logo.svg' },
+  'deutz-fahr': { author: 'SAME Deutz-Fahr', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Deutz-Fahr-Logo.svg' },
+  fendt: { author: 'Fendt', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Fendt-Logo.svg' },
+  horsch: { author: 'Horsch Maschinen', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Horsch_Maschinen_Logo.svg' },
+  jcb: { author: 'JCB', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:JCB_(J.C._Bamford_Excavators_Limited)_logo.svg' },
+  'john-deere': { author: 'John Deere', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:John_Deere_text_only.png' },
+  joskin: { author: 'Joskin', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Joskin.jpg' },
+  krone: { author: 'Krone Agriculture SE', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:KRONE_Agriculture_Logo_RGB.svg' },
+  kubota: { author: 'Kubota', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Kubota-Logo.svg' },
+  kuhn: { author: 'Kuhn Landmaschinen', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Kuhn-Logo.svg' },
+  kverneland: { author: 'Kverneland Group', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Kverneland_201x_logo.svg' },
+  manitou: { author: 'Manitou BF SA', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Manitou_Group_Logo.svg' },
+  'new-holland': { author: 'New Holland Agriculture', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:New_Holland_Logo_2023.png' },
+  pottinger: { author: 'Pöttinger', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Poettinger-logo.svg' },
+  vaderstad: { author: 'Väderstad', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:V%C3%A4derstad_logo.svg' },
+  valtra: { author: 'Valtra', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Valtra_Logo_Black_Outline_RGB.png' },
+  zetor: { author: 'Fruitman cz', license: 'Public domain', source: 'https://commons.wikimedia.org/wiki/File:Zetor_logo_red.png' },
 };
 
 // značka (DB slug) → mateřská burzovní firma (ticker v AKCIE)

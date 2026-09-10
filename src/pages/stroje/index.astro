@@ -3,6 +3,7 @@
 // locals.locale. cs výstup identický (rovnaký kód). Canonical odvodí Layout.
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
+import { ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { getAllBrands, getAllModels, type StrojKategorie } from '../../lib/stroje';
 import { useTranslations, plural, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47 } from '../../i18n/utils';
 
@@ -215,7 +216,7 @@ const NL = '\n';
         <a href={localizeInternalHref(locale, `/stroje/${b.slug}/`)} class="brand-card">
           <div class="bc-head">
             <div class="bc-logo" data-letter={b.name.charAt(0).toUpperCase()}>
-              <img src={`/images/stroje/brands/${b.slug}.png`} alt={tf(locale, 'cat.brandLogoAlt', { brand: b.name })} loading="lazy" width="64" height="64" onerror="this.remove()" />
+              {ZNACKA_LOGO[b.slug] && <img src={ZNACKA_LOGO[b.slug]} alt={tf(locale, 'cat.brandLogoAlt', { brand: b.name })} loading="lazy" width="64" height="64" onerror="this.remove()" />}
             </div>
             <div class="bc-title">
               <h3>{b.name}</h3>

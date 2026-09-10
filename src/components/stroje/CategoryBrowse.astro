@@ -1,5 +1,6 @@
 ---
 import { getAllBrands, seriesFamily, familyLabel, type StrojKategorie } from '../../lib/stroje';
+import { ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { useTranslations, plural, tf, getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
 
 interface Props {
@@ -347,7 +348,7 @@ const NL = '\n';
         <div class="brand-head">
           <div class="brand-title">
             <div class="brand-logo" data-letter={s.name.charAt(0).toUpperCase()}>
-              <img src={`/images/stroje/brands/${s.slug}.png`} alt={tf(locale, 'cat.brandLogoAlt', { brand: s.name })} loading="lazy" onerror="this.remove()" />
+              {ZNACKA_LOGO[s.slug] && <img src={ZNACKA_LOGO[s.slug]} alt={tf(locale, 'cat.brandLogoAlt', { brand: s.name })} loading="lazy" onerror="this.remove()" />}
             </div>
             <div class="brand-name">
               <h2><a href={localizeInternalHref(locale, `/stroje/${s.slug}/`)}>{s.name}</a></h2>

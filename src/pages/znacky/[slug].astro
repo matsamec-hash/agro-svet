@@ -1,11 +1,12 @@
 ---
 export const prerender = false;
+import PhotoCredits from '../../components/PhotoCredits.astro';
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { itemListSchema } from '../../lib/structured-data';
 import { getAllModels } from '../../lib/stroje';
 import Anketa from '../../components/Anketa.astro';
-import { akcieProZnacku, ZNACKA_LOGO } from '../../lib/agro-integrace';
+import { akcieProZnacku, ZNACKA_LOGO, ZNACKA_LOGO_LICENCE } from '../../lib/agro-integrace';
 import { brandPairs } from '../../lib/brand-comparator';
 import { tierLists, rankForTierList } from '../../lib/tier-lists';
 import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47, isLaunchedPath } from '../../i18n/utils';
@@ -401,6 +402,10 @@ const modelListJsonLd = brandModels.length > 0
       <a href={localizeInternalHref(locale, `/stroje/${znacka.id}/`)} style="display:inline-flex; align-items:center; gap:8px; background:#0A0A0B; color:#FFEA00; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">{NL}{tf(locale, 'cat.zn.d.allModels', { brand: znacka.data.name })}{NL}</a>
       <a href={`/bazar/?znacka=${znacka.id}`} style="display:inline-flex; align-items:center; gap:8px; background:#FFEA00; color:#0A0A0B; font-weight:700; font-size:14px; text-decoration:none; padding:12px 18px; border-radius:8px;">{NL}{tr('cat.zn.d.bazarAds')}{NL}</a>
     </div>
+
+    {/* Logo je z Commons; u licencí s povinnou atribucí (Bednar, Joskin) se
+        autor musí uvést, jinak ho tu držet nesmíme. */}
+    <PhotoCredits images={ZNACKA_LOGO_LICENCE[znacka.id] ? [ZNACKA_LOGO[znacka.id]] : []} locale={locale} />
   </div>
 </Layout>
 

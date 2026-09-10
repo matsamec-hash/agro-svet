@@ -1,6 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
+import { ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { getAllBrands } from '../../lib/stroje';
 import { breadcrumbSchema, itemListSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
@@ -90,7 +91,7 @@ function websiteHost(url: string | undefined): string {
           <article class="dealer-card">
             <div class="dc-head">
               <div class="dc-logo">
-                <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" onerror="this.remove()" />
+                {ZNACKA_LOGO[b.slug] && <img src={ZNACKA_LOGO[b.slug]} alt={`${b.name} logo`} loading="lazy" onerror="this.remove()" />}
               </div>
               <div class="dc-title">
                 <h3>{b.name}</h3>
@@ -124,7 +125,7 @@ function websiteHost(url: string | undefined): string {
           <article class="dealer-card">
             <div class="dc-head">
               <div class="dc-logo">
-                <img src={`/images/stroje/brands/${b.slug}.png`} alt={`${b.name} logo`} loading="lazy" onerror="this.remove()" />
+                {ZNACKA_LOGO[b.slug] && <img src={ZNACKA_LOGO[b.slug]} alt={`${b.name} logo`} loading="lazy" onerror="this.remove()" />}
               </div>
               <div class="dc-title">
                 <h3>{b.name}</h3>

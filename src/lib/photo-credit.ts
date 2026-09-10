@@ -15,6 +15,8 @@
 // `tests/lib/photo-credit.test.ts`, která hlídá, že počet nekreditovaných
 // obrázků může jen klesat.
 
+import { ZNACKA_LOGO, ZNACKA_LOGO_LICENCE } from './agro-integrace';
+
 export interface PhotoCredit {
   /** Jméno autora tak, jak ho uvádí Commons. Prázdné jen u licencí bez atribuce. */
   author: string;
@@ -291,15 +293,18 @@ function stockCreditFor(path: string): PhotoCredit | null {
 }
 
 /**
- * Loga značek nejsou fotky — jde o ochranné známky výrobců použité nominativně
- * (k označení té značky). Autorskoprávní atribuce se u nich neuvádí, ale musí
- * být vidět, že jsme je do přehledu zahrnuli vědomě.
+ * Loga značek. Dřív byla z kontroly vyjmutá jako „ochranné známky" — jenže
+ * ochranná známka neříká nic o autorských právech k tomu souboru a stará sada
+ * v `/images/stroje/brands/` byla stažená z webů výrobců bez záznamu o původu.
+ * Teď jsou všechna z Commons s doloženou licencí a projdou stejnou rohatkou
+ * jako fotky; výjimka žádná není.
  */
-const TRADEMARK_PREFIXES = ['/images/znacky/', '/images/stroje/brands/'];
-
-export function isTrademark(path: string): boolean {
-  return TRADEMARK_PREFIXES.some((p) => canonicalPath(path).startsWith(p));
-}
+const LOGO_CREDITS: Record<string, PhotoCredit> = Object.fromEntries(
+  Object.entries(ZNACKA_LOGO).map(([slug, path]) => {
+    const l = ZNACKA_LOGO_LICENCE[slug];
+    return [canonicalPath(path), { author: l?.author ?? '', license: l?.license ?? '', source: l?.source }];
+  }),
+);
 
 const DATA_CREDITS = collect();
 
@@ -309,7 +314,7 @@ const DATA_CREDITS = collect();
  * každý záznam; ruční `licenseUrl` (např. FAL) má přednost.
  */
 export const PHOTO_CREDITS: Record<string, PhotoCredit> = Object.fromEntries(
-  Object.entries({ ...EXTRA_CREDITS, ...DATA_CREDITS }).map(([k, c]) => [
+  Object.entries({ ...EXTRA_CREDITS, ...LOGO_CREDITS, ...DATA_CREDITS }).map(([k, c]) => [
     k,
     { ...c, licenseUrl: c.licenseUrl ?? licenseUrlFor(c.license) },
   ]),
