@@ -6,6 +6,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { localizePath } from '../../i18n/utils';
+import { DE_OER_MAX } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
 if (locale !== 'de') return Astro.rewrite('/404');
@@ -26,7 +27,7 @@ const oer: Oer[] = [
     code: 'ÖR 1a', name: 'Nichtproduktive Ackerflächen',
     desc: 'Freiwillige Stilllegung über die Konditionalität hinaus. Der Betrag ist nach dem Anteil an der Ackerfläche gestaffelt — die ersten Flächen werden am höchsten vergütet.',
     stufen: [
-      { label: 'bis 1 % der Ackerfläche (mind. 1 ha)', v: 1300 },
+      { label: 'bis 1 % der Ackerfläche (mind. 1 ha)', v: DE_OER_MAX },
       { label: 'über 1 % bis 2 %', v: 500 },
       { label: 'über 2 % bis 6 %', v: 300 },
     ],

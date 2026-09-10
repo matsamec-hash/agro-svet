@@ -16,6 +16,10 @@ const de: Record<string, string> = {
   'brand.name': 'agro-svět.cz',
   'a11y.skipToContent': 'Zum Inhalt springen',
 
+  // — obrázkový rozcestník na homepage (ImageAccordion) —
+  'ia.cta': 'Zum Bereich →',
+  'ia.preview': 'zur Vorschau klicken',
+
   // — navigace: top-level —
   'nav.tema': 'Themen',
   'nav.animals': 'Tiere',

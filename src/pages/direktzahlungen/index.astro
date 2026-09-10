@@ -9,6 +9,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { localizePath } from '../../i18n/utils';
+import { DE_GRUNDSTUETZUNG_2025 } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
 if (locale !== 'de') return Astro.rewrite('/404');
@@ -30,7 +31,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400
 type Row = { name: string; v2025: number | null; v2026: number | null; unit: '€/ha' | '€/Tier'; note?: string };
 
 const flaeche: Row[] = [
-  { name: 'Einkommensgrundstützung für Nachhaltigkeit', v2025: 152.44, v2026: 147.38, unit: '€/ha', note: 'auf alle förderfähigen Hektar' },
+  { name: 'Einkommensgrundstützung für Nachhaltigkeit', v2025: DE_GRUNDSTUETZUNG_2025, v2026: 147.38, unit: '€/ha', note: 'auf alle förderfähigen Hektar' },
   { name: 'Umverteilungseinkommensstützung — 1. bis 40. Hektar', v2025: 68.05, v2026: 65.31, unit: '€/ha', note: 'zusätzlich zur Grundstützung' },
   { name: 'Umverteilungseinkommensstützung — 41. bis 60. Hektar', v2025: 40.83, v2026: 39.19, unit: '€/ha', note: 'ab dem 61. Hektar entfällt sie' },
   { name: 'Einkommensstützung für Junglandwirte', v2025: 120.64, v2026: 134.04, unit: '€/ha', note: 'max. 120 ha, für 5 Jahre' },
@@ -44,7 +45,7 @@ const tiere: Row[] = [
 const grundstuetzung: { year: number; v: number; final: boolean }[] = [
   { year: 2023, v: 170.93, final: true },
   { year: 2024, v: 157.93, final: true },
-  { year: 2025, v: 152.44, final: true },
+  { year: 2025, v: DE_GRUNDSTUETZUNG_2025, final: true },
   { year: 2026, v: 147.38, final: false },
   { year: 2027, v: 147.38, final: false },
 ];

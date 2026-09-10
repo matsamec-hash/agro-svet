@@ -1,23 +1,33 @@
 ---
+// ‼️ Popisky i odkazy byly tvrdě česky — pod /de by to servírovalo „Stroje"
+// a „Přejít na sekci" pod německou hlavičkou, přesně past HomeDe/HomeUk.
+// Teď label z t(), href přes localizeInternalHref (pod nelaunchnutým locale
+// tedy zůstane cs cesta, ne mrtvý odkaz).
 import AgriMapPreview from './svet/AgriMapPreview.astro';
+import { getLocaleFromUrl, localizeInternalHref, t } from '../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
 const items: { label: string; href: string; img?: string; map?: boolean }[] = [
   {
-    label: 'Stroje',
-    href: '/stroje/',
+    label: t(locale, 'nav.machines'),
+    href: localizeInternalHref(locale, '/stroje/'),
     img: '/images/traktor.webp',
   },
   {
-    label: 'Zvířata',
-    href: '/plemena/',
+    label: t(locale, 'nav.animals'),
+    href: localizeInternalHref(locale, '/plemena/'),
     img: '/images/telata.webp',
   },
   {
-    label: 'Mapa Evropy',
-    href: '/svet/mapa/',
+    label: t(locale, 'nav.svet.map'),
+    href: localizeInternalHref(locale, '/svet/mapa/'),
     map: true,
   },
 ];
+
+const ctaLabel = t(locale, 'ia.cta');
+const previewHint = t(locale, 'ia.preview');
 ---
 
 <div class="ia-wrap">
@@ -26,7 +36,7 @@ const items: { label: string; href: string; img?: string; map?: boolean }[] = [
       const base = item.img ? item.img.replace(/\.webp$/, '') : '';
       const srcset = item.img ? `${base}__v-w400.webp 400w, ${base}__v-w800.webp 800w, ${item.img} 1200w` : '';
       return (
-      <a class="ia-panel" href={item.href} aria-label={`${item.label} — klepněte pro náhled`}>
+      <a class="ia-panel" href={item.href} aria-label={`${item.label} — ${previewHint}`}>
         {item.map ? (
           <div class="ia-mapbg"><AgriMapPreview metric="wheat_yield" /></div>
         ) : (
@@ -35,7 +45,7 @@ const items: { label: string; href: string; img?: string; map?: boolean }[] = [
         <div class="ia-overlay"></div>
         <div class="ia-content">
           <h3>{item.label}</h3>
-          <span class="ia-btn">Přejít na sekci →</span>
+          <span class="ia-btn">{ctaLabel}</span>
         </div>
         <span class="ia-hint" aria-hidden="true">{item.label} →</span>
       </a>

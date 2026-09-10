@@ -347,6 +347,31 @@ describe('DE homepage a DE-only landingy', () => {
     expect(notLaunched, `odkaz do nelaunchnuté sekce: ${notLaunched.join(', ')}`).toEqual([]);
   });
 
+  // ‼️ Opačný směr než test nad ním: tam šlo o „nelinkuj mimo launchnuté",
+  // tady o „nezapomeň odkázat launchnuté". launched-reachable.test.ts uzná
+  // i odkaz v hlavičce — a přesně tak se stalo, že /de/plodiny, /de/jak-na-to
+  // a /de/svet byly od 1. 9. živé, ale na homepage po nich nebylo ani stopy.
+  it('HomeDe odkazuje na KAŽDOU launchnutou obsahovou DE sekci', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/components/home/HomeDe.astro'), 'utf8');
+    const hrefs = [...src.matchAll(/href: '(\/de\/[^']*)'/g)].map((m) => m[1].replace(/^\/de/, '').replace(/\/+$/, ''));
+    // Právní a redakční stránky patří do patičky, ne na rozcestník; '/' je
+    // sama homepage a '/hledat' má lupu v hlavičce.
+    const NOT_ON_HUB = new Set(['/', '/hledat', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce']);
+    const missing = LAUNCHED_PREFIXES.de.filter((p) => !NOT_ON_HUB.has(p) && !hrefs.includes(p));
+    expect(missing, `launchnuto, ale na homepage neodkázáno: ${missing.join(', ')}`).toEqual([]);
+  });
+
+  // ‼️ Sazby ukazuje homepage i detailní stránka. Kdyby si je homepage opsala,
+  // po první aktualizaci by každá tvrdila něco jiného — proto smí jen importovat.
+  it('HomeDe nemá vlastní kopii sazeb — bere je z data/foerderung-de', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src/components/home/HomeDe.astro'), 'utf8');
+    expect(src).toContain("from '../../data/foerderung-de'");
+    const body = src.split('---')[1] ?? '';
+    // Číslo těsně před €/ha nebo v roli sazby = opsaná hodnota.
+    const hardcoded = [...body.matchAll(/value:\s*['`][^'`]*\d/g)].map((m) => m[0]);
+    expect(hardcoded, `sazba opsaná do HomeDe: ${hardcoded.join(' | ')}`).toEqual([]);
+  });
+
   it('DE-only landingy existují a jsou v sitemapě', () => {
     for (const p of ['src/pages/direktzahlungen/index.astro', 'src/pages/oeko-regelungen/index.astro',
       'src/pages/oepul/index.astro', 'src/pages/direktzahlungen-oesterreich/index.astro']) {
@@ -447,12 +472,15 @@ describe('fáze 3b — rakouská jurisdikce', () => {
   });
 
   it('obě rakouské sazby v FAQ sedí s daty v tabulkách', () => {
-    const dz = fs.readFileSync(path.join(ROOT, 'src/pages/direktzahlungen-oesterreich/index.astro'), 'utf8');
+    // Sazby se od 2026-09-10 drží v src/data/foerderung-de.ts, protože je vedle
+    // detailní stránky ukazuje i německá homepage — dvě kopie by po první
+    // aktualizaci driftovaly. Test proto čte modul, ne stránku.
+    const dz = fs.readFileSync(path.join(ROOT, 'src/data/foerderung-de.ts'), 'utf8');
     // Efektivní sazba na prvních 20 ha = základ + umverteilung. Kdyby se jedno
     // číslo změnilo a druhé ne, FAQ by tvrdilo něco jiného než tabulka.
-    const basis = Number(/const BASIS_HEIMGUT = (\d+)/.exec(dz)![1]);
-    const umv20 = Number(/const UMV_20 = (\d+)/.exec(dz)![1]);
-    const umv40 = Number(/const UMV_40 = (\d+)/.exec(dz)![1]);
+    const basis = Number(/AT_BASIS_HEIMGUT = (\d+)/.exec(dz)![1]);
+    const umv20 = Number(/AT_UMV_20 = (\d+)/.exec(dz)![1]);
+    const umv40 = Number(/AT_UMV_40 = (\d+)/.exec(dz)![1]);
     expect(basis + umv20, 'LKO uvádí 252 €/ha pro prvních 20 ha').toBe(252);
     expect(basis + umv40, 'LKO uvádí 230 €/ha pro 21.–40. ha').toBe(230);
   });

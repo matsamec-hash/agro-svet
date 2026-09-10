@@ -19,17 +19,18 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { localizePath } from '../../i18n/utils';
+import { AT_BASIS_HEIMGUT, AT_BASIS_ALM, AT_UMV_20, AT_UMV_40, AT_JUNG } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
 if (locale !== 'de') return Astro.rewrite('/404');
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-const BASIS_HEIMGUT = 208;
-const BASIS_ALM = 41;
-const UMV_20 = 44;
-const UMV_40 = 22;
-const JUNG = 66;
+const BASIS_HEIMGUT = AT_BASIS_HEIMGUT;
+const BASIS_ALM = AT_BASIS_ALM;
+const UMV_20 = AT_UMV_20;
+const UMV_40 = AT_UMV_40;
+const JUNG = AT_JUNG;
 
 type Row = { name: string; v: number; unit: '€/ha' | '€/RGVE'; note?: string };
 

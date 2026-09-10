@@ -1,269 +1,392 @@
 ---
-// Německá homepage = kurátovaný rozcestník na launchnuté DE sekce, NE český
-// zpravodajský feed. Renderuje se z index.astro když locale === 'de'.
-// ‼️ PROČ: /de/ dřív servírovalo německý chrome (menu, cookie lišta) nad
-// ČESKÝM tělem homepage a s českým <title> — pro návštěvníka to vypadalo
-// rozbitě. Přesně stejná past jako dřív u /uk/, vzor je proto HomeUk.astro.
-// Cesty hardcoded /de/... — všechny odkazované sekce jsou launchnuté a
-// buď pan-evropské (katalog), nebo DE-only (Direktzahlungen, Öko-Regelungen).
+// Německá homepage. Do 2026-09-10 to byl holý rozcestník (hero + 18 stejných
+// dlaždic), zatímco cs/sk jsou magazín — a bylo to na první pohled poznat.
+// Teď stejná kostra jako CZ/SK: zpravodajský hero → obrázkový rozcestník →
+// datový blok → sekce → newsletter. Renderuje se z index.astro pro locale='de'.
+//
+// ‼️ PROČ vlastní komponenta a ne sdílená CZ šablona: /de/ kdysi servírovalo
+// německý chrome nad ČESKÝM tělem a s českým <title>. Feed se proto plní JEN
+// z reálně přeložených článků (article_translations, locale='de') — český
+// článek se do /de nesmí dostat ani omylem.
+//
+// ‼️ Sazby €/ha se sem NEOPISUJÍ. Importují se z data/foerderung-de, odkud je
+// berou i detailní stránky — jinak by homepage a detail po první aktualizaci
+// tvrdily každý něco jiného.
 import Layout from '../../layouts/Layout.astro';
+import ArticleCard from '../ArticleCard.astro';
+import ImageAccordion from '../ImageAccordion.astro';
+import Newsletter from '../Newsletter.astro';
+import { createAnonClient } from '../../lib/supabase';
+import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
+import { imgSrcset } from '../../lib/image-variants';
+import { localizeInternalHref, localizedCategory } from '../../i18n/utils';
+import { newsCategorySlug } from '../../lib/news-category';
+import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
+import {
+  fetchArticleTranslations,
+  fetchTranslatedArticleIds,
+  buildTranslationMap,
+  overlayArticle,
+} from '../../lib/articles-i18n';
+import {
+  DE_GRUNDSTUETZUNG_2025,
+  DE_OER_MAX,
+  AT_BASIS_HEIMGUT,
+  AT_OEPUL_BIO_GRUENLAND_MAX,
+} from '../../data/foerderung-de';
 
-const SECTIONS = [
-  {
-    href: '/de/stroje/',
-    icon: '🚜',
-    title: 'Maschinenkatalog',
-    desc: 'Traktoren, Mähdrescher und Anbaugeräte von 22 Marken — technische Daten, Baureihen und Modelle.',
-  },
-  {
-    href: '/de/znacky/',
-    icon: '🏭',
-    title: 'Marken',
-    desc: 'Profile der Landtechnikhersteller — Geschichte, Produktprogramm und Einordnung im Markt.',
-  },
-  {
-    href: '/de/encyklopedie/',
-    icon: '📚',
-    title: 'Maschinen-Enzyklopädie',
-    desc: 'Ausführliche Porträts einzelner Modelle: Motor, Getriebe, Ausstattung und für wen sie gedacht sind.',
-  },
-  {
-    href: '/de/srovnani/',
-    icon: '⚖️',
-    title: 'Modellvergleich',
-    desc: 'Zwei Maschinen nebeneinander — Leistung, Gewicht und Ausstattung direkt gegenübergestellt.',
-  },
+const LOCALE = 'de' as const;
+
+const supabase = createAnonClient();
+const translatedIds = await fetchTranslatedArticleIds(supabase, LOCALE);
+const idList = [...translatedIds];
+const hidden = HIDDEN_NEWS_CATEGORIES[LOCALE];
+
+let feed: any[] = [];
+if (idList.length) {
+  let q = supabase
+    .from('articles')
+    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .in('id', idList);
+  if (hidden.length) q = q.not('category', 'in', `(${hidden.join(',')})`);
+  const { data } = await q
+    .order('featured', { ascending: false })
+    .order('published_at', { ascending: false })
+    .limit(14);
+  const rows = data ?? [];
+  const trMap = buildTranslationMap(await fetchArticleTranslations(supabase, rows.map((a) => a.id), LOCALE));
+  feed = rows.map((a) => overlayArticle(a, trMap.get(a.id)));
+}
+
+// ‼️ Německých článků je zatím pět — hero je spotřebuje všechny a `rest` zůstane
+// prázdný. To NENÍ chyba: sekce se pak nerendruje vůbec (žádný prázdný blok),
+// a jakmile přibude šestý článek, výpis se objeví sám.
+const featured = feed[0];
+const heroRight = feed.slice(1, 5);
+const rest = feed.slice(5, 14);
+
+// ‼️ Odkazy na sekce se drží v POLÍCH, kde je cesta zapsaná jako řetězcový
+// literál u klíče href — právě tenhle tvar parsuje
+// tests/i18n/launched-reachable.test.ts, aby nešlo launchnout sekci a zapomenout
+// na ni odkázat (přesně to se stalo /de/plodiny, /de/jak-na-to a /de/svet).
+const NEWS_LINK = { href: '/de/novinky/', label: 'Alle Nachrichten' };
+
+const FOERDERUNG: { href: string; land: string; title: string; value: string; unit: string; note: string }[] = [
   {
     href: '/de/direktzahlungen/',
-    icon: '💶',
+    land: '🇩🇪 Deutschland',
     title: 'Direktzahlungen',
-    desc: 'Die Einheitsbeträge der GAP-Direktzahlungen je Hektar, ihre Entwicklung und ein Prämienrechner.',
+    value: DE_GRUNDSTUETZUNG_2025.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    unit: '€/ha',
+    note: 'Einkommensgrundstützung, Antragsjahr 2025 — final im Bundesanzeiger.',
   },
   {
     href: '/de/oeko-regelungen/',
-    icon: '🌱',
+    land: '🇩🇪 Deutschland',
     title: 'Öko-Regelungen',
-    desc: 'Alle sieben Öko-Regelungen mit ihren Beträgen je Hektar und der Staffelung nach Flächenanteil.',
+    value: `bis ${DE_OER_MAX.toLocaleString('de-DE')}`,
+    unit: '€/ha',
+    note: 'ÖR 1a, erste Stufe. Alle sieben Öko-Regelungen mit Staffelung.',
   },
   {
     href: '/de/direktzahlungen-oesterreich/',
-    icon: '🇦🇹',
-    title: 'Direktzahlungen Österreich',
-    desc: 'Die erste Säule in Österreich: Basiseinkommensstützung, Umverteilung auf die ersten 40 Hektar und der Almauftrieb.',
+    land: '🇦🇹 Österreich',
+    title: 'Basiseinkommensstützung',
+    value: AT_BASIS_HEIMGUT.toLocaleString('de-DE'),
+    unit: '€/ha',
+    note: 'Heimgutflächen, dazu Umverteilung auf die ersten 40 Hektar.',
   },
   {
     href: '/de/oepul/',
-    icon: '🌾',
+    land: '🇦🇹 Österreich',
     title: 'ÖPUL 2023',
-    desc: 'Das österreichische Agrarumweltprogramm — Basismodule UBB und Bio, Zuschläge und die neuen Maßnahmen ab 2025.',
-  },
-  {
-    href: '/de/zebricky/',
-    icon: '🏆',
-    title: 'Ranglisten',
-    desc: 'Kuratierte Ranglisten nach Leistung und Arbeitsbreite — von Kompakttraktoren bis zu Feldhäckslern über 1 000 PS.',
-  },
-  // Fáze 3c sekce. ‼️ Launchnuly se v LAUNCHED_PREFIXES, ale sem se nikdy
-  // nedopsaly — z pohledu návštěvníka tedy neexistovaly. Launch sekce a odkaz
-  // na ni jsou DVĚ různé věci; hlídá to de-launch.test.ts.
-  {
-    href: '/de/plemena/',
-    icon: '🐄',
-    title: 'Nutztierrassen',
-    desc: 'Rinder, Pferde, Schafe und Schweine — Herkunft, Leistungsrichtung und wofür sich jede Rasse eignet.',
-  },
-  {
-    href: '/de/choroby/',
-    icon: '🍂',
-    title: 'Krankheiten und Schädlinge',
-    desc: 'Atlas der wichtigsten Krankheiten und Schädlinge im Ackerbau: Symptome, Erreger und Bekämpfung.',
-  },
-  {
-    href: '/de/vcelarstvi/',
-    icon: '🐝',
-    title: 'Imkerei',
-    desc: 'Bienenrassen, Ausrüstung und Honigsorten — der Einstieg in die Imkerei Schritt für Schritt.',
-  },
-  {
-    href: '/de/slovnik/',
-    icon: '📖',
-    title: 'Fachbegriffe',
-    desc: 'Über 300 Fachbegriffe erklärt — von GLÖZ und Sammelantrag bis zur Zapfwelle.',
-  },
-  {
-    href: '/de/sezona/',
-    icon: '📅',
-    title: 'Landwirtschaftsjahr',
-    desc: 'Saisonale Arbeiten Monat für Monat sowie der Aussaat- und Erntekalender.',
-  },
-  {
-    href: '/de/akcie/',
-    icon: '📈',
-    title: 'Aktien von Agrarunternehmen',
-    desc: 'Kurse der größten Landtechnik-, Agrarchemie- und Rohstoffkonzerne der Welt.',
-  },
-  {
-    href: '/de/kviz/',
-    icon: '🎯',
-    title: 'Quiz',
-    desc: 'Testen Sie Ihr Wissen über Markengeschichte, Technik und Agrarförderung.',
-  },
-  {
-    href: '/de/kalkulacka/prevody-jednotek/',
-    icon: '📐',
-    title: 'Flächeneinheiten umrechnen',
-    desc: 'Hektar, Ar, m², Acre — dazu Joch, Tagwerk und preußischer Morgen aus alten Grundbuchauszügen.',
-  },
-  {
-    href: '/de/kalkulacka/prevody-hmotnost/',
-    icon: '⚖️',
-    title: 'Masseeinheiten umrechnen',
-    desc: 'Tonne, Doppelzentner, Bushel und Pfund — mit Bushel-Gewicht je Kultur nach USDA-Standard.',
+    value: `bis ${AT_OEPUL_BIO_GRUENLAND_MAX.toLocaleString('de-DE')}`,
+    unit: '€/ha',
+    note: 'Bio-Grünland. Richtwert für 2023–2027, kein jährlicher Einheitsbetrag.',
   },
 ];
+
+const GROUPS: { heading: string; lede: string; items: { href: string; icon: string; title: string; desc: string }[] }[] = [
+  {
+    heading: 'Technik',
+    lede: 'Der Maschinenteil ist pan-europäisch — dieselben Marken, dieselben Baureihen, dieselben technischen Daten wie in der tschechischen Ausgabe.',
+    items: [
+      { href: '/de/stroje/', icon: '🚜', title: 'Maschinenkatalog', desc: 'Traktoren, Mähdrescher und Anbaugeräte von 22 Marken — technische Daten, Baureihen und Modelle.' },
+      { href: '/de/znacky/', icon: '🏭', title: 'Marken', desc: 'Profile der Landtechnikhersteller — Geschichte, Produktprogramm und Einordnung im Markt.' },
+      { href: '/de/encyklopedie/', icon: '📚', title: 'Maschinen-Enzyklopädie', desc: 'Ausführliche Porträts einzelner Modelle: Motor, Getriebe, Ausstattung und für wen sie gedacht sind.' },
+      { href: '/de/srovnani/', icon: '⚖️', title: 'Modellvergleich', desc: 'Zwei Maschinen nebeneinander — Leistung, Gewicht und Ausstattung direkt gegenübergestellt.' },
+      { href: '/de/zebricky/', icon: '🏆', title: 'Ranglisten', desc: 'Kuratierte Ranglisten nach Leistung und Arbeitsbreite — von Kompakttraktoren bis zu Feldhäckslern über 1 000 PS.' },
+      { href: '/de/akcie/', icon: '📈', title: 'Aktien von Agrarunternehmen', desc: 'Kurse der größten Landtechnik-, Agrarchemie- und Rohstoffkonzerne der Welt.' },
+    ],
+  },
+  {
+    heading: 'Acker und Tiere',
+    lede: 'Agronomie und Zucht kennen keine Staatsgrenzen — Krankheitserreger und Rassen schon gar nicht. Wo die Zulassung doch national ist, nennen die Seiten BVL und BAES statt der tschechischen Behörde.',
+    items: [
+      { href: '/de/plodiny/', icon: '🌾', title: 'Kulturpflanzen', desc: 'Aussaatstärke, Düngung und Fruchtfolge für 18 Ackerkulturen — von Winterweizen bis Raps.' },
+      { href: '/de/choroby/', icon: '🍂', title: 'Krankheiten und Schädlinge', desc: 'Atlas der wichtigsten Krankheiten und Schädlinge im Ackerbau: Symptome, Erreger und Bekämpfung.' },
+      { href: '/de/plemena/', icon: '🐄', title: 'Nutztierrassen', desc: 'Rinder, Pferde, Schafe und Schweine — Herkunft, Leistungsrichtung und wofür sich jede Rasse eignet.' },
+      { href: '/de/vcelarstvi/', icon: '🐝', title: 'Imkerei', desc: 'Bienenrassen, Ausrüstung und Honigsorten — der Einstieg in die Imkerei Schritt für Schritt.' },
+      { href: '/de/sezona/', icon: '📅', title: 'Landwirtschaftsjahr', desc: 'Saisonale Arbeiten Monat für Monat sowie der Aussaat- und Erntekalender.' },
+      { href: '/de/jak-na-to/', icon: '📋', title: 'Anleitungen', desc: 'Praxis Schritt für Schritt — Bienenvölker anmelden, Honig verkaufen, Technik richtig auswählen.' },
+    ],
+  },
+  {
+    heading: 'Daten und Werkzeuge',
+    lede: 'Was sich rechnen oder nachschlagen lässt. Agrarstatistik für Deutschland und Österreich aus Destatis und Statistik Austria kommt als Nächstes — abgeschriebene tschechische Zahlen wären hier wertlos.',
+    items: [
+      { href: '/de/svet/', icon: '🗺️', title: 'Länderprofile', desc: 'Landwirtschaft im Ländervergleich — Flächen, Erträge und Tierbestände auf der Europakarte.' },
+      { href: '/de/slovnik/', icon: '📖', title: 'Fachbegriffe', desc: 'Über 300 Fachbegriffe erklärt — von GLÖZ und Sammelantrag bis zur Zapfwelle.' },
+      { href: '/de/kalkulacka/prevody-jednotek/', icon: '📐', title: 'Flächeneinheiten umrechnen', desc: 'Hektar, Ar, m², Acre — dazu Joch, Tagwerk und preußischer Morgen aus alten Grundbuchauszügen.' },
+      { href: '/de/kalkulacka/prevody-hmotnost/', icon: '⚖️', title: 'Masseeinheiten umrechnen', desc: 'Tonne, Doppelzentner, Bushel und Pfund — mit Bushel-Gewicht je Kultur nach USDA-Standard.' },
+      { href: '/de/kviz/', icon: '🎯', title: 'Quiz', desc: 'Testen Sie Ihr Wissen über Markengeschichte, Technik und Agrarförderung.' },
+    ],
+  },
+];
+
+const heroTagLabel = (cat: string | null) => (cat ? localizedCategory(LOCALE, newsCategorySlug(cat)) : 'Nachrichten');
+
+const homepageItems = [...(featured ? [featured] : []), ...heroRight];
+const itemListJsonLd = homepageItems.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'agro-svět.cz — Nachrichten (DE)',
+  numberOfItems: homepageItems.length,
+  itemListElement: homepageItems.map((a, i) => ({
+    '@type': 'ListItem', position: i + 1,
+    url: `${SITE_URL}/de/novinky/${a.slug}/`, name: a.title,
+  })),
+} : null;
 ---
 
 <Layout
   title="Landmaschinen und Agrarförderung — Daten und Katalog"
   description="Landtechnik und Agrarwissen im Überblick: Maschinenkatalog mit 22 Marken, Modellvergleich und Enzyklopädie, die Beträge der Direktzahlungen und Öko-Regelungen für Deutschland und Österreich sowie Nutztierrassen, Pflanzenkrankheiten und Imkerei."
+  preloadHeroImage={featured?.featured_image_url ?? undefined}
+  preloadHeroSizes="(max-width: 900px) 100vw, 800px"
+  preloadHeroMaxWidth={800}
 >
-  <div class="hde-root">
-    <section class="hde-hero">
-      <span class="hde-kicker"><span class="dot"></span>LANDTECHNIK · FÖRDERUNG · TIERE · PFLANZEN</span>
-      <h1>Landmaschinen und <em>Agrarwissen</em></h1>
-      <p class="hde-lede">
-        Landtechnik, Förderung und Fachwissen an einem Ort: Maschinen von 22 Marken
-        mit technischen Daten und direktem Modellvergleich, die aktuellen Förderbeträge
-        je Hektar für Deutschland und Österreich sowie Nutztierrassen, Pflanzenkrankheiten
-        und Imkerei.
-      </p>
-    </section>
+  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
 
-    <section class="hde-grid" aria-label="Bereiche">
-      {SECTIONS.map((s) => (
-        <a href={s.href} class="hde-card">
-          <span class="hde-card-icon" aria-hidden="true">{s.icon}</span>
-          <h2>{s.title}</h2>
-          <p>{s.desc}</p>
-          <span class="hde-card-cta">Zum Bereich →</span>
+  <h1 class="visually-hidden">Landmaschinen und Agrarförderung — Daten und Katalog</h1>
+
+  {featured && (
+    <section class="hero-section">
+      <div class="hero-grid">
+        <div class="hero-card hero-main hero-wrap">
+          <a href={localizeInternalHref(LOCALE, `/novinky/${featured.slug}/`)} class="hero-link">
+            {featured.featured_image_url && (() => {
+              const v = imgSrcset(featured.featured_image_url, '(max-width: 900px) 100vw, 800px', 800);
+              return <img src={v.src} srcset={v.srcset} sizes={v.sizes} alt={featured.title} width="800" height="600" fetchpriority="high" decoding="async" style={`object-position: ${featured.focal_point?.x ?? 50}% ${featured.focal_point?.y ?? 50}%;`} />;
+            })()}
+            <div class="hero-overlay"></div>
+            <div class="hero-card-content"><h2>{featured.title}</h2></div>
+          </a>
+          <div class="hero-tags">
+            <a href={localizeInternalHref(LOCALE, '/novinky/')} class="hero-tag">Nachrichten</a>
+            {featured.category && <a href={localizeInternalHref(LOCALE, `/novinky/kategorie/${newsCategorySlug(featured.category)}/`)} class="hero-tag">{heroTagLabel(featured.category)}</a>}
+          </div>
+        </div>
+
+        {heroRight.map((article) => (
+          <div class="hero-card hero-small hero-wrap">
+            <a href={localizeInternalHref(LOCALE, `/novinky/${article.slug}/`)} class="hero-link">
+              {article.featured_image_url
+                ? (() => {
+                    const v = imgSrcset(article.featured_image_url, '(max-width: 900px) 50vw, 400px');
+                    return <img src={v.src} srcset={v.srcset} sizes={v.sizes} alt={article.title} width="400" height="300" loading="lazy" decoding="async" />;
+                  })()
+                : <div class="hero-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+              }
+              <div class="hero-overlay"></div>
+              <div class="hero-card-content"><h3>{article.title}</h3></div>
+            </a>
+            <a href={localizeInternalHref(LOCALE, article.category ? `/novinky/kategorie/${newsCategorySlug(article.category)}/` : '/novinky/')} class="hero-tag">{heroTagLabel(article.category)}</a>
+          </div>
+        ))}
+      </div>
+      <div class="hde-newsbar">
+        <a href={NEWS_LINK.href} class="hde-newslink">{NEWS_LINK.label} →</a>
+      </div>
+    </section>
+  )}
+
+  <section class="hde-accordion">
+    <ImageAccordion />
+  </section>
+
+  {rest.length > 0 && (
+    <section class="hde-feed">
+      <div class="hde-head">
+        <h2>Neueste Nachrichten</h2>
+        <a href={NEWS_LINK.href} class="hde-cta">{NEWS_LINK.label} →</a>
+      </div>
+      <div class="hde-cards">
+        {rest.map((article) => (
+          <ArticleCard
+            title={article.title}
+            description={article.perex}
+            slug={article.slug}
+            publishDate={new Date(article.published_at)}
+            category={article.category}
+            heroImage={article.featured_image_url}
+            focalPoint={article.focal_point}
+            locale={LOCALE}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="hde-block">
+    <div class="hde-head">
+      <div>
+        <span class="hde-kicker">Deutschland und Österreich</span>
+        <h2>Daten: Agrarförderung</h2>
+      </div>
+    </div>
+    <p class="hde-lede">
+      Die Einheitsbeträge je Hektar für beide Länder, mit Quelle und Stand — und dort,
+      wo es keinen jährlich verkündeten Betrag gibt, sagen die Seiten das laut,
+      statt Genauigkeit vorzutäuschen.
+    </p>
+    <div class="hde-tiles">
+      {FOERDERUNG.map((f) => (
+        <a href={f.href} class="hde-tile">
+          <span class="hde-tile-land">{f.land}</span>
+          <span class="hde-tile-value">{f.value} <small>{f.unit}</small></span>
+          <h3>{f.title}</h3>
+          <p>{f.note}</p>
         </a>
       ))}
+    </div>
+  </section>
+
+  {GROUPS.map((g) => (
+    <section class="hde-block">
+      <div class="hde-head">
+        <h2>{g.heading}</h2>
+      </div>
+      <p class="hde-lede">{g.lede}</p>
+      <div class="hde-grid">
+        {g.items.map((s) => (
+          <a href={s.href} class="hde-card">
+            <span class="hde-card-icon" aria-hidden="true">{s.icon}</span>
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+            <span class="hde-card-cta">Zum Bereich →</span>
+          </a>
+        ))}
+      </div>
     </section>
-  </div>
+  ))}
+
+  <Newsletter />
 </Layout>
 
 <style>
-  .hde-root {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 48px 32px 64px;
-  }
-
-  .hde-hero {
-    max-width: 760px;
-    margin: 0 auto 48px;
-    text-align: center;
-  }
-
-  .hde-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font: 700 12px 'Chakra Petch', sans-serif;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: #0A0A0B;
-    background: #FFFF00;
-    padding: 6px 14px;
-    border-radius: 999px;
-    border: 1.5px solid #0A0A0B;
-  }
-  .hde-kicker .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #0A0A0B;
-  }
-
-  .hde-hero h1 {
-    font-family: 'Chakra Petch', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 700;
-    line-height: 1.1;
-    margin: 18px 0 14px;
-    color: #0A0A0B;
-  }
-  .hde-hero h1 em {
-    font-style: normal;
-    background: #FFFF00;
-    padding: 0 .12em;
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
-  }
-
-  .hde-lede {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    line-height: 1.55;
-    color: #444;
-    margin: 0;
-  }
-
-  .hde-grid {
+  /* ===== Hero grid (parita s CZ/SK homepage) ===== */
+  .hero-section { max-width: 1280px; margin: 0 auto; padding: 28px 32px 16px; }
+  .hero-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: 5fr 2fr 2fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 14px;
+    height: min(38vh, 340px);
+  }
+  .hero-card { position: relative; border-radius: 22px; overflow: hidden; background: #e8e8e8; box-shadow: 0 0 10px rgba(0,0,0,.12); }
+  .hero-link { display: block; position: absolute; inset: 0; text-decoration: none; color: inherit; z-index: 0; }
+  .hero-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.4,0,.2,1); }
+  .hero-card:hover img { transform: scale(1.06); }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.6) 0%, rgba(0,0,0,.05) 55%, transparent 100%); transition: background .8s; }
+  .hero-card:hover .hero-overlay { background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.2) 55%, rgba(0,0,0,.08) 100%); }
+  .hero-card-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; z-index: 1; }
+  .hero-tags { position: absolute; top: 20px; left: 20px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 2; }
+  .hero-tag {
+    position: absolute; top: 20px; left: 20px; z-index: 2;
+    display: inline-flex; align-items: center; min-height: 24px;
+    background: #FFFF00; color: #000; font-family: 'Chakra Petch', sans-serif;
+    font-size: 9px; font-weight: 400; padding: 6px 12px; border-radius: 6px;
+    text-transform: uppercase; text-decoration: none; transition: background .15s, color .15s;
+  }
+  .hero-tags .hero-tag { position: static; }
+  .hero-tag:hover { background: #1a1a1a; color: #FFFF00; }
+  .hero-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .hero-main { grid-column: 1; grid-row: 1 / 3; }
+  .hero-main .hero-card-content { padding: 28px; }
+  .hero-card-content h2 { color: #fff; font-family: 'Chakra Petch', sans-serif; font-size: 17px; font-weight: 300; line-height: 1.35; margin: 0; text-shadow: 0 1px 6px rgba(0,0,0,.35); }
+  .hero-small .hero-card-content h3 { color: #fff; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 300; line-height: 1.35; margin: 0; text-shadow: 0 1px 4px rgba(0,0,0,.35); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .hero-small .hero-card-content { padding: 14px; }
+  .hero-small .hero-tag { margin-bottom: 6px; }
+  @media (max-width: 768px) {
+    .hero-section { padding: 20px 16px 0; }
+    .hero-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 220px auto; height: auto; }
+    .hero-main { grid-column: 1 / 3; }
+    .hero-small { height: 140px; }
+  }
+  @media (max-width: 480px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-main { grid-column: 1; height: 220px; }
+    .hero-small { height: 130px; }
   }
 
-  .hde-card {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 28px;
-    border-radius: 20px;
-    background: #fff;
-    border: 1.5px solid #0A0A0B;
-    box-shadow: 4px 4px 0 #0A0A0B;
-    text-decoration: none;
-    color: inherit;
+  /* ===== Lišta pod herem ===== */
+  .hde-newsbar { display: flex; justify-content: flex-end; padding-top: 14px; }
+  .hde-newslink { font: 700 14px 'Chakra Petch', sans-serif; color: #0A0A0B; text-decoration: none; border-bottom: 2px solid #FFEA00; padding-bottom: 1px; }
+  .hde-newslink:hover { border-bottom-color: #0A0A0B; }
+
+  /* ===== Sdílené sekce ===== */
+  .hde-accordion { padding: 28px 0 0; }
+  .hde-feed, .hde-block { max-width: 1280px; margin: 0 auto; padding: 48px 32px; }
+  .hde-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; }
+  .hde-head h2 { font-family: 'Chakra Petch', sans-serif; font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 700; margin: 0; color: #0A0A0B; }
+  .hde-kicker { display: block; font: 800 11px 'Chakra Petch', sans-serif; letter-spacing: .18em; text-transform: uppercase; color: #6E6E76; margin-bottom: 8px; }
+  .hde-lede { max-width: 68ch; font-size: 1rem; line-height: 1.6; color: #555; margin: 0 0 28px; }
+  .hde-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    font: 700 14px 'Chakra Petch', sans-serif; letter-spacing: .02em;
+    color: #0A0A0B; text-decoration: none; background: #FFFF00;
+    padding: 10px 18px; border-radius: 12px; border: 1.5px solid #0A0A0B;
+    box-shadow: 3px 3px 0 #0A0A0B; transition: transform .15s, box-shadow .15s, background .15s; white-space: nowrap;
+  }
+  .hde-cta:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #0A0A0B; background: #FFEA00; }
+  .hde-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+  /* Dlaždice se sazbami */
+  .hde-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .hde-tile {
+    display: flex; flex-direction: column; gap: 6px; padding: 24px;
+    border-radius: 20px; background: #fff; border: 1.5px solid #0A0A0B;
+    box-shadow: 4px 4px 0 #0A0A0B; text-decoration: none; color: inherit;
     transition: transform .15s, box-shadow .15s;
   }
-  .hde-card:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 7px 7px 0 #0A0A0B;
-  }
+  .hde-tile:hover { transform: translate(-3px,-3px); box-shadow: 7px 7px 0 #0A0A0B; }
+  .hde-tile-land { font: 800 11px 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #6E6E76; }
+  .hde-tile-value { font-family: 'Chakra Petch', sans-serif; font-size: 2rem; font-weight: 700; line-height: 1.1; color: #0A0A0B; }
+  .hde-tile-value small { font-size: .9rem; font-weight: 700; color: #6E6E76; }
+  .hde-tile h3 { font-family: 'Chakra Petch', sans-serif; font-size: 1.05rem; font-weight: 700; margin: 4px 0 0; color: #0A0A0B; }
+  .hde-tile p { font-size: .9rem; line-height: 1.5; color: #555; margin: 0; }
 
-  .hde-card-icon {
-    font-size: 2rem;
-    line-height: 1;
+  /* Rozcestník sekcí */
+  .hde-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .hde-card {
+    display: flex; flex-direction: column; gap: 10px; padding: 28px;
+    border-radius: 20px; background: #fff; border: 1.5px solid #0A0A0B;
+    box-shadow: 4px 4px 0 #0A0A0B; text-decoration: none; color: inherit;
+    transition: transform .15s, box-shadow .15s;
   }
+  .hde-card:hover { transform: translate(-3px,-3px); box-shadow: 7px 7px 0 #0A0A0B; }
+  .hde-card-icon { font-size: 2rem; line-height: 1; }
+  .hde-card h3 { font-family: 'Chakra Petch', sans-serif; font-size: 1.25rem; font-weight: 700; margin: 0; color: #0A0A0B; }
+  .hde-card p { font-size: .96rem; line-height: 1.5; color: #555; margin: 0; flex: 1; }
+  .hde-card-cta { font: 700 14px 'Chakra Petch', sans-serif; color: #0A0A0B; margin-top: 6px; }
 
-  .hde-card h2 {
-    font-family: 'Chakra Petch', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin: 0;
-    color: #0A0A0B;
-  }
-
-  .hde-card p {
-    font-size: .98rem;
-    line-height: 1.5;
-    color: #555;
-    margin: 0;
-    flex: 1;
-  }
-
-  .hde-card-cta {
-    font: 700 14px 'Chakra Petch', sans-serif;
-    color: #0A0A0B;
-    margin-top: 6px;
-  }
-
-  @media (max-width: 980px) {
-    .hde-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+  @media (max-width: 1100px) { .hde-tiles { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) { .hde-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 680px) {
-    .hde-root { padding: 32px 16px 48px; }
-    .hde-grid { grid-template-columns: 1fr; }
+    .hde-feed, .hde-block { padding: 36px 16px; }
+    .hde-grid, .hde-tiles { grid-template-columns: 1fr; }
   }
 </style>

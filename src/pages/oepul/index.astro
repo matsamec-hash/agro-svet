@@ -20,6 +20,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { localizePath } from '../../i18n/utils';
+import { AT_OEPUL_BIO_GRUENLAND_MAX } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
 if (locale !== 'de') return Astro.rewrite('/404');
@@ -38,7 +39,7 @@ type Row = { name: string; v: number | [number, number]; unit: string; note?: st
 
 const basis: Row[] = [
   { name: 'UBB — Grünland, Nicht-Tierhalter', v: 25, unit: '€/ha' },
-  { name: 'Bio — Grünland, Tierhalter bis 1,4 RGVE/ha', v: 215, unit: '€/ha', note: 'höchster Grünlandsatz' },
+  { name: 'Bio — Grünland, Tierhalter bis 1,4 RGVE/ha', v: AT_OEPUL_BIO_GRUENLAND_MAX, unit: '€/ha', note: 'höchster Grünlandsatz' },
   { name: 'Bio — Grünland, Tierhalter über 1,4 RGVE/ha', v: 205, unit: '€/ha' },
   { name: 'Bio — Grünland, Nicht-Tierhalter', v: 70, unit: '€/ha' },
 ];
