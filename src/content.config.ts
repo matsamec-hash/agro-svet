@@ -17,6 +17,47 @@ const encyklopedieSchema = () =>
     rok_uvedeni: z.number(),
     popis: z.string(),
     heroImage: z.string().optional(),
+    // Atribuce hero fotky. POVINNÁ u CC snímků (Wikimedia) — bez ní se licence porušuje.
+    heroCredit: z.object({
+      author: z.string(),
+      license: z.string(),
+      sourceUrl: z.string().optional(),
+    }).optional(),
+    // Galerie modelu. Zdroj musí být legální (Wikimedia CC / vlastní / se svolením)
+    // a autor + licence se renderují u každého snímku.
+    galerie: z.array(z.object({
+      src: z.string(),
+      alt: z.string(),
+      author: z.string().optional(),
+      license: z.string().optional(),
+      sourceUrl: z.string().optional(),
+    })).optional(),
+    // Plná tabulka technických údajů. Popisky nesou přímo lokalizované soubory,
+    // takže nepotřebuje registr klíčů v i18n. `mereno: true` odliší nezávisle
+    // NAMĚŘENOU hodnotu od údaje výrobce — to je to, co nikdo jiný neuvádí.
+    technickeUdaje: z.object({
+      zdroj: z.string().optional(),
+      zdrojUrl: z.string().optional(),
+      zdrojMereni: z.string().optional(),
+      zdrojMereniUrl: z.string().optional(),
+      skupiny: z.array(z.object({
+        nazev: z.string(),
+        polozky: z.array(z.object({
+          k: z.string(),
+          v: z.string(),
+          mereno: z.boolean().optional(),
+        })),
+      })),
+    }).optional(),
+    // Interaktivní 3D model (glTF/GLB) — renderuje se přes <model-viewer>.
+    model3d: z.object({
+      src: z.string(),
+      poster: z.string().optional(),
+      autor: z.string().optional(),
+      licence: z.string().optional(),
+      zdrojUrl: z.string().optional(),
+      popis: z.string().optional(),
+    }).optional(),
     highlights: z.array(z.string()),
     // Structured numeric fields — feed Vehicle JSON-LD when present.
     powerHp: z.number().optional(),

@@ -169,6 +169,14 @@ if (model.specs) {
     predni_zaves_kg: 'dim',
     emise: 'drive',
     kabina: 'other',
+    objem_cm3: 'drive',
+    max_toc_moment_nm: 'drive',
+    nadrz_l: 'drive',
+    adblue_l: 'drive',
+    max_rychlost_kmh: 'perf',
+    rozvor_mm: 'dim',
+    pneu_predni: 'dim',
+    pneu_zadni: 'dim',
   };
   const specLabels: Record<string, string> = {
     hydraulika_l_min: tr('cat.s.d.specHydraulika'),
@@ -176,11 +184,25 @@ if (model.specs) {
     predni_zaves_kg: tr('cat.s.d.specPredniZaves'),
     emise: tr('cat.s.d.specEmise'),
     kabina: tr('cat.s.d.specKabina'),
+    objem_cm3: tr('cat.s.d.specObjem'),
+    max_toc_moment_nm: tr('cat.s.d.specTocMoment'),
+    nadrz_l: tr('cat.s.d.specNadrz'),
+    adblue_l: tr('cat.s.d.specAdBlue'),
+    max_rychlost_kmh: tr('cat.s.d.specMaxRychlost'),
+    rozvor_mm: tr('cat.s.d.specRozvor'),
+    pneu_predni: tr('cat.s.d.specPneuPredni'),
+    pneu_zadni: tr('cat.s.d.specPneuZadni'),
   };
   const specUnits: Record<string, string> = {
     hydraulika_l_min: ' l/min',
     zadni_zaves_kg: ' kg',
     predni_zaves_kg: ' kg',
+    objem_cm3: ' cm³',
+    max_toc_moment_nm: ' Nm',
+    nadrz_l: ' l',
+    adblue_l: ' l',
+    max_rychlost_kmh: ' km/h',
+    rozvor_mm: ' mm',
   };
   for (const [k, v] of Object.entries(model.specs)) {
     if (v === null || v === undefined || v === '') continue;

@@ -107,3 +107,38 @@ describe('stroje lib — locale-aware rozsahy a labely', () => {
     }
   });
 });
+
+// ‼️ Prosak češtiny do katalogu přes `engine` a `transmission`.
+// Nález: u Fendtu 1050 Vario svítilo na /de „řadový šestiválec" a „bezstupňová".
+// `engine` sice tokenizérem prochází, ale jen na slova, která zná;
+// `transmission` se nelokalizuje VŮBEC, takže tam české slovo nesmí být.
+// Test nekontroluje jen ten jeden model — projíždí celý katalog.
+describe('katalog strojů — čeština neprosakuje do cizích locale', () => {
+  // Slova, která jsou výhradně česká (ne mezinárodní typové označení).
+  // ‼️ ŽÁDNÉ \b — v JS je hranice slova ASCII, takže za „bezstupňov*á*" ani před
+  // „*ř*adový" neplatí a test by tiše procházel. (Chytlo mě to při psaní tohohle testu.)
+  const CESKA_SLOVA = /(řadový|šestiválec|čtyřválec|bezstupňov|vzduchem chlazený|přímý vstřik|přeplňovaný)/iu;
+
+  for (const locale of ['de', 'pl', 'uk', 'sk'] as const) {
+    it(`/${locale}: žádný engine ani transmission nenese české slovo`, () => {
+      const nalezy: string[] = [];
+      for (const brand of getAllBrands(locale)) {
+        for (const cat of Object.values(brand.categories ?? {})) {
+          for (const s of (cat as any).series ?? []) {
+            for (const m of s.models ?? []) {
+              for (const pole of ['engine', 'transmission'] as const) {
+                const v = m[pole];
+                // sk je češtině blízká — „bezstupňová" je i slovensky správně
+                if (locale === 'sk') continue;
+                if (typeof v === 'string' && CESKA_SLOVA.test(v)) {
+                  nalezy.push(`${brand.slug}/${m.slug} · ${pole} = "${v}"`);
+                }
+              }
+            }
+          }
+        }
+      }
+      expect(nalezy).toEqual([]);
+    });
+  }
+});

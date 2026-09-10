@@ -21,24 +21,28 @@ const CYLINDERS: Record<string, string> = {
 
 const TOKENS: Record<string, TokenMap> = {
   sk: [
+    { re: /řadový /gi, to: 'radový ' },
     { re: /vzduchem chlazený/gi, to: 'vzduchom chladený' },
     { re: /přímý vstřik/gi, to: 'priamy vstrek' },
     { re: /Dřevoplynový/g, to: 'Drevoplynový' },
     { re: /benzín \/ nafta/gi, to: 'benzín / nafta' },
   ],
   pl: [
+    { re: /řadový /gi, to: 'rzędowy ' },
     { re: /vzduchem chlazený/gi, to: 'chłodzony powietrzem' },
     { re: /přímý vstřik/gi, to: 'wtrysk bezpośredni' },
     { re: /Dřevoplynový/g, to: 'Gazogeneratorowy' },
     { re: /benzín \/ nafta/gi, to: 'benzyna / olej napędowy' },
   ],
   uk: [
+    { re: /řadový /gi, to: 'рядний ' },
     { re: /vzduchem chlazený/gi, to: 'повітряне охолодження' },
     { re: /přímý vstřik/gi, to: 'безпосереднє впорскування' },
     { re: /Dřevoplynový/g, to: 'Газогенераторний' },
     { re: /benzín \/ nafta/gi, to: 'бензин / дизель' },
   ],
   de: [
+    { re: /řadový /gi, to: 'Reihen-' },
     { re: /vzduchem chlazený/gi, to: 'luftgekühlt' },
     { re: /přímý vstřik/gi, to: 'Direkteinspritzung' },
     { re: /Dřevoplynový/g, to: 'Holzgas' },
