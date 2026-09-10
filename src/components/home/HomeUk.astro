@@ -1,270 +1,249 @@
 ---
-// Ukrajinská homepage = kurátovaný rozcestník na launchnuté UA sekce,
-// NE český zpravodajský feed. Renderuje se z index.astro když locale === 'uk'.
-// Vzor: PudaUk.astro (self-contained, vlastní <Layout>, ukrajinské stringy).
-// ‼️ 2026-08-31: rozcestník tu roky nabízel JEN 4 karty (statistiky / puda /
-// dotace / slovnik), přestože uk má launchnutých 22 sekcí — katalog techniky,
-// značky, encyklopedie, srovnání, žebříčky, plodiny, choroby, plemena,
-// včelařství, jak-na-to, kvíz i akcie žily a nevedl na ně jediný odkaz.
-// Launch sekce a odkaz na ni jsou DVĚ různé věci; hlídá to uk-launch.test.ts.
-// Cesty hardcoded /uk/... — každá odpovídá záznamu v LAUNCHED_PREFIXES.uk.
+// Ukrajinská homepage. Do 2026-09-10 to byl holý rozcestník s 19 stejnými
+// dlaždicemi, zatímco cs/sk/pl/de jsou magazín — poslední jazyk, kterému to
+// zbylo. Teď stejná kostra jako ostatní: zpravodajský hero → obrázkový
+// rozcestník → sekce ve skupinách → newsletter. Renderuje se z index.astro
+// pro locale='uk'.
+//
+// ‼️ Feed se plní JEN z reálně přeložených článků (article_translations,
+// locale='uk'). Český článek se do /uk nesmí dostat ani omylem — kvůli tomu
+// tahle komponenta kdysi vznikla.
+//
+// ‼️ 2026-08-31: rozcestník tu roky nabízel JEN 4 karty, přestože uk má
+// launchnutých 21 sekcí. Launch sekce a odkaz na ni jsou DVĚ různé věci;
+// hlídá to uk-launch.test.ts. Odkazy se proto drží v POLÍCH, kde je cesta
+// řetězcový literál u klíče href — právě ten tvar testy parsují.
+//
+// ‼️ Blok s čísly (jako má /de se sazbami €/ha) tu NENÍ schválně: pro graf
+// komodit neexistuje ukrajinská datová sada (COMMODITY_NAMES_UK ani
+// commodity-data-recent-uk.json), a české ceny by pod ukrajinskou hlavičkou
+// byly horší než žádné. Doplnit až se zdrojem, ne překladem.
 import Layout from '../../layouts/Layout.astro';
+import ArticleCard from '../ArticleCard.astro';
+import ImageAccordion from '../ImageAccordion.astro';
+import Newsletter from '../Newsletter.astro';
+import '../../styles/home.css';
+import { createAnonClient } from '../../lib/supabase';
+import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
+import { imgSrcset } from '../../lib/image-variants';
+import { localizeInternalHref, localizedCategory } from '../../i18n/utils';
+import { newsCategorySlug } from '../../lib/news-category';
+import { HIDDEN_NEWS_CATEGORIES } from '../../i18n/nav';
+import {
+  fetchArticleTranslations,
+  fetchTranslatedArticleIds,
+  buildTranslationMap,
+  overlayArticle,
+} from '../../lib/articles-i18n';
 
-const SECTIONS = [
+const LOCALE = 'uk' as const;
+
+const supabase = createAnonClient();
+const translatedIds = await fetchTranslatedArticleIds(supabase, LOCALE);
+const idList = [...translatedIds];
+const hidden = HIDDEN_NEWS_CATEGORIES[LOCALE];
+
+let feed: any[] = [];
+if (idList.length) {
+  let q = supabase
+    .from('articles')
+    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
+    .eq('site_id', SITE_ID)
+    .eq('status', 'published')
+    .in('id', idList);
+  if (hidden.length) q = q.not('category', 'in', `(${hidden.join(',')})`);
+  const { data } = await q
+    .order('featured', { ascending: false })
+    .order('published_at', { ascending: false })
+    .limit(14);
+  const rows = data ?? [];
+  const trMap = buildTranslationMap(await fetchArticleTranslations(supabase, rows.map((a) => a.id), LOCALE));
+  feed = rows.map((a) => overlayArticle(a, trMap.get(a.id)));
+}
+
+// Ukrajinských článků je zatím pět — hero je spotřebuje všechny a `rest`
+// zůstane prázdný, takže se výpis nerendruje vůbec (žádný prázdný blok).
+// U šestého článku se objeví sám.
+const featured = feed[0];
+const heroRight = feed.slice(1, 5);
+const rest = feed.slice(5, 14);
+
+const NEWS_LINK = { href: '/uk/novinky/', label: 'Усі новини' };
+
+const GROUPS: { heading: string; lede: string; items: { href: string; icon: string; title: string; desc: string }[] }[] = [
   {
-    href: '/uk/stroje/',
-    icon: '🚜',
-    title: 'Каталог техніки',
-    desc: 'Трактори, комбайни та причіпна техніка 22 брендів — технічні дані, серії та моделі.',
+    heading: 'Техніка',
+    lede: 'Каталог машин спільний для всіх мовних версій — ті самі бренди, ті самі серії, ті самі технічні дані.',
+    items: [
+      { href: '/uk/stroje/', icon: '🚜', title: 'Каталог техніки', desc: 'Трактори, комбайни та причіпна техніка 22 брендів — технічні дані, серії та моделі.' },
+      { href: '/uk/znacky/', icon: '🏭', title: 'Бренди', desc: 'Профілі виробників сільгосптехніки — історія, модельний ряд і місце на ринку.' },
+      { href: '/uk/encyklopedie/', icon: '📚', title: 'Енциклопедія машин', desc: 'Докладні описи окремих моделей: двигун, трансмісія, оснащення та для кого вони призначені.' },
+      { href: '/uk/srovnani/', icon: '⚖️', title: 'Порівняння моделей', desc: 'Дві машини поруч — потужність, вага та оснащення у прямому зіставленні.' },
+      { href: '/uk/zebricky/', icon: '🏆', title: 'Рейтинги', desc: 'Добірки за потужністю та шириною захвату — від компактних тракторів до кормозбиральних комбайнів.' },
+      { href: '/uk/akcie/', icon: '📈', title: 'Акції агрокомпаній', desc: 'Курси акцій найбільших аграрних компаній світу та їхній рух на біржах.' },
+    ],
   },
   {
-    href: '/uk/znacky/',
-    icon: '🏭',
-    title: 'Бренди',
-    desc: 'Профілі виробників сільгосптехніки — історія, модельний ряд і місце на ринку.',
+    heading: 'Дані',
+    lede: 'Статистика, ринок землі та підтримка — з українських джерел. Це не перекладені чеські цифри: там, де даних немає, розділу теж немає.',
+    items: [
+      { href: '/uk/statistiky/', icon: '📊', title: 'Статистика', desc: 'Експорт, виробництво та ціни головних культур України — пшениця, кукурудза, соняшник.' },
+      { href: '/uk/puda/', icon: '🌱', title: 'Ринок землі', desc: 'Відкриття ринку, ціни та оренда, структура культур і стан ґрунтів.' },
+      { href: '/uk/dotace/', icon: '💰', title: 'Субсидії', desc: 'Гранти й воєнна підтримка, програма «Власна справа», кредити 5-7-9 та донори.' },
+      { href: '/uk/svet/', icon: '🗺️', title: 'Профілі країн', desc: 'Сільське господарство у порівнянні країн — площі, врожайність і поголів’я на карті Європи.' },
+    ],
   },
   {
-    href: '/uk/encyklopedie/',
-    icon: '📚',
-    title: 'Енциклопедія машин',
-    desc: 'Докладні описи окремих моделей: двигун, трансмісія, оснащення та для кого вони призначені.',
+    heading: 'Поле і тварини',
+    lede: 'Агрономія та розведення державних кордонів не знають — збудники хвороб і породи тим більше.',
+    items: [
+      { href: '/uk/plodiny/', icon: '🌾', title: 'Культури та сорти', desc: 'Агрономія польових культур — норма висіву, удобрення, сівозміна та врожайність.' },
+      { href: '/uk/choroby/', icon: '🍂', title: 'Хвороби та шкідники', desc: 'Атлас хвороб і шкідників польових культур: симптоми, збудники та рекомендований захист.' },
+      { href: '/uk/plemena/', icon: '🐄', title: 'Породи тварин', desc: 'ВРХ, коні, вівці та свині — походження, напрям продуктивності та умови утримання.' },
+      { href: '/uk/vcelarstvi/', icon: '🐝', title: 'Бджільництво', desc: 'Породи бджіл, обладнання та сорти меду — путівник для початківців і досвідчених пасічників.' },
+      { href: '/uk/sezona/', icon: '📅', title: 'Аграрний рік', desc: 'Сезонні польові роботи місяць за місяцем та календар сівби і збирання.' },
+      { href: '/uk/jak-na-to/', icon: '🛠️', title: 'Як це зробити', desc: 'Покрокові інструкції для практичної роботи в господарстві.' },
+    ],
   },
   {
-    href: '/uk/srovnani/',
-    icon: '⚖️',
-    title: 'Порівняння моделей',
-    desc: 'Дві машини поруч — потужність, вага та оснащення у прямому зіставленні.',
-  },
-  {
-    href: '/uk/zebricky/',
-    icon: '🏆',
-    title: 'Рейтинги',
-    desc: 'Добірки за потужністю та шириною захвату — від компактних тракторів до кормозбиральних комбайнів.',
-  },
-  {
-    href: '/uk/statistiky/',
-    icon: '📊',
-    title: 'Статистика',
-    desc: 'Експорт, виробництво та ціни головних культур України — пшениця, кукурудза, соняшник.',
-  },
-  {
-    href: '/uk/puda/',
-    icon: '🌱',
-    title: 'Ринок землі',
-    desc: 'Відкриття ринку, ціни та оренда, структура культур і стан ґрунтів.',
-  },
-  {
-    href: '/uk/dotace/',
-    icon: '💰',
-    title: 'Субсидії',
-    desc: 'Гранти й воєнна підтримка, програма «Власна справа», кредити 5-7-9 та донори.',
-  },
-  {
-    href: '/uk/akcie/',
-    icon: '📈',
-    title: 'Акції агрокомпаній',
-    desc: 'Курси акцій найбільших аграрних компаній світу та їхній рух на біржах.',
-  },
-  {
-    href: '/uk/plodiny/',
-    icon: '🌾',
-    title: 'Культури та сорти',
-    desc: 'Агрономія польових культур — норма висіву, удобрення, сівозміна та врожайність.',
-  },
-  {
-    href: '/uk/choroby/',
-    icon: '🍂',
-    title: 'Хвороби та шкідники',
-    desc: 'Атлас хвороб і шкідників польових культур: симптоми, збудники та рекомендований захист.',
-  },
-  {
-    href: '/uk/plemena/',
-    icon: '🐄',
-    title: 'Породи тварин',
-    desc: 'ВРХ, коні, вівці та свині — походження, напрям продуктивності та умови утримання.',
-  },
-  {
-    href: '/uk/vcelarstvi/',
-    icon: '🐝',
-    title: 'Бджільництво',
-    desc: 'Породи бджіл, обладнання та сорти меду — путівник для початківців і досвідчених пасічників.',
-  },
-  {
-    href: '/uk/jak-na-to/',
-    icon: '🛠️',
-    title: 'Як це зробити',
-    desc: 'Покрокові інструкції для практичної роботи в господарстві.',
-  },
-  {
-    href: '/uk/slovnik/',
-    icon: '📖',
-    title: 'Словник',
-    desc: 'Понад 300 аграрних термінів з поясненнями — від гектара до субсидій ЄС.',
-  },
-  {
-    href: '/uk/kviz/',
-    icon: '🎯',
-    title: 'Вікторини',
-    desc: 'Перевірте свої знання про сільськогосподарську техніку та аграрну справу.',
-  },
-  {
-    href: '/uk/sezona/',
-    icon: '📅',
-    title: 'Аграрний рік',
-    desc: 'Сезонні польові роботи місяць за місяцем та календар сівби і збирання.',
-  },
-  {
-    href: '/uk/kalkulacka/prevody-jednotek/',
-    icon: '📐',
-    title: 'Переведення одиниць площі',
-    desc: 'Гектари, ари (сотки), м² та акри — і десятина зі старих документів на землю.',
-  },
-  {
-    href: '/uk/kalkulacka/prevody-hmotnost/',
-    icon: '⚖️',
-    title: 'Переведення одиниць маси',
-    desc: 'Тонни, центнери, бушелі та фунти — з масою бушеля за культурою згідно зі стандартом USDA.',
+    heading: 'Довідник та інструменти',
+    lede: 'Те, що можна порахувати або швидко подивитися.',
+    items: [
+      { href: '/uk/slovnik/', icon: '📖', title: 'Словник', desc: 'Понад 300 аграрних термінів з поясненнями — від гектара до субсидій ЄС.' },
+      { href: '/uk/kalkulacka/prevody-jednotek/', icon: '📐', title: 'Переведення одиниць площі', desc: 'Гектари, ари (сотки), м² та акри — і десятина зі старих документів на землю.' },
+      { href: '/uk/kalkulacka/prevody-hmotnost/', icon: '⚖️', title: 'Переведення одиниць маси', desc: 'Тонни, центнери, бушелі та фунти — з масою бушеля за культурою згідно зі стандартом USDA.' },
+      { href: '/uk/kviz/', icon: '🎯', title: 'Вікторини', desc: 'Перевірте свої знання про сільськогосподарську техніку та аграрну справу.' },
+    ],
   },
 ];
+
+const heroTagLabel = (cat: string | null) => (cat ? localizedCategory(LOCALE, newsCategorySlug(cat)) : 'Новини');
+
+const homepageItems = [...(featured ? [featured] : []), ...heroRight];
+const itemListJsonLd = homepageItems.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'agro-svět.cz — новини (UK)',
+  numberOfItems: homepageItems.length,
+  itemListElement: homepageItems.map((a, i) => ({
+    '@type': 'ListItem', position: i + 1,
+    url: `${SITE_URL}/uk/novinky/${a.slug}/`, name: a.title,
+  })),
+} : null;
 ---
 
 <Layout
   title="Аграрний світ — техніка, дані та довідник для сільського господарства України"
   description="Аграрний портал українською: каталог сільгосптехніки 22 брендів, статистика експорту та виробництва, ринок землі, субсидії й воєнна підтримка, культури, хвороби, породи тварин і словник аграрних термінів."
+  preloadHeroImage={featured?.featured_image_url ?? undefined}
+  preloadHeroSizes="(max-width: 900px) 100vw, 800px"
+  preloadHeroMaxWidth={800}
 >
-  <div class="huk-root">
-    <section class="huk-hero">
-      <span class="huk-kicker"><span class="dot"></span>ТЕХНІКА · ДАНІ · ДОВІДНИК</span>
-      <h1>Аграрний світ <em>України</em></h1>
-      <p class="huk-lede">
-        Техніка, дані та довідник в одному місці: каталог машин 22 брендів,
-        статистика експорту й ринок землі, державна підтримка, культури та їхні
-        хвороби, породи тварин і словник аграрних термінів.
-      </p>
-    </section>
+  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
 
-    <section class="huk-grid" aria-label="Розділи">
-      {SECTIONS.map((s) => (
-        <a href={s.href} class="huk-card">
-          <span class="huk-card-icon" aria-hidden="true">{s.icon}</span>
-          <h2>{s.title}</h2>
-          <p>{s.desc}</p>
-          <span class="huk-card-cta">Перейти до розділу →</span>
-        </a>
-      ))}
+  <h1 class="visually-hidden">Аграрний світ — техніка, дані та довідник для сільського господарства України</h1>
+
+  {featured && (
+    <section class="hero-section">
+      <div class="hero-grid">
+        <div class="hero-card hero-main hero-wrap">
+          <a href={localizeInternalHref(LOCALE, `/novinky/${featured.slug}/`)} class="hero-link">
+            {featured.featured_image_url && (() => {
+              const v = imgSrcset(featured.featured_image_url, '(max-width: 900px) 100vw, 800px', 800);
+              return <img src={v.src} srcset={v.srcset} sizes={v.sizes} alt={featured.title} width="800" height="600" fetchpriority="high" decoding="async" style={`object-position: ${featured.focal_point?.x ?? 50}% ${featured.focal_point?.y ?? 50}%;`} />;
+            })()}
+            <div class="hero-overlay"></div>
+            <div class="hero-card-content"><h2>{featured.title}</h2></div>
+          </a>
+          <div class="hero-tags">
+            <a href={localizeInternalHref(LOCALE, '/novinky/')} class="hero-tag">Новини</a>
+            {featured.category && <a href={localizeInternalHref(LOCALE, `/novinky/kategorie/${newsCategorySlug(featured.category)}/`)} class="hero-tag">{heroTagLabel(featured.category)}</a>}
+          </div>
+        </div>
+
+        {heroRight.map((article) => (
+          <div class="hero-card hero-small hero-wrap">
+            <a href={localizeInternalHref(LOCALE, `/novinky/${article.slug}/`)} class="hero-link">
+              {article.featured_image_url
+                ? (() => {
+                    const v = imgSrcset(article.featured_image_url, '(max-width: 900px) 50vw, 400px');
+                    return <img src={v.src} srcset={v.srcset} sizes={v.sizes} alt={article.title} width="400" height="300" loading="lazy" decoding="async" />;
+                  })()
+                : <div class="hero-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+              }
+              <div class="hero-overlay"></div>
+              <div class="hero-card-content"><h3>{article.title}</h3></div>
+            </a>
+            <a href={localizeInternalHref(LOCALE, article.category ? `/novinky/kategorie/${newsCategorySlug(article.category)}/` : '/novinky/')} class="hero-tag">{heroTagLabel(article.category)}</a>
+          </div>
+        ))}
+      </div>
+      <div class="huk-newsbar">
+        <a href={NEWS_LINK.href} class="huk-newslink">{NEWS_LINK.label} →</a>
+      </div>
     </section>
-  </div>
+  )}
+
+  <section class="huk-accordion">
+    <ImageAccordion />
+  </section>
+
+  {rest.length > 0 && (
+    <section class="home-feed">
+      <div class="home-head">
+        <h2>Останні новини</h2>
+        <a href={NEWS_LINK.href} class="home-cta">{NEWS_LINK.label} →</a>
+      </div>
+      <div class="home-cards">
+        {rest.map((article) => (
+          <ArticleCard
+            title={article.title}
+            description={article.perex}
+            slug={article.slug}
+            publishDate={new Date(article.published_at)}
+            category={article.category}
+            heroImage={article.featured_image_url}
+            focalPoint={article.focal_point}
+            locale={LOCALE}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  {GROUPS.map((g) => (
+    <section class="home-sections">
+      <div class="home-head">
+        <h2>{g.heading}</h2>
+      </div>
+      <p class="huk-lede">{g.lede}</p>
+      <div class="home-grid">
+        {g.items.map((s) => (
+          <a href={s.href} class="home-card">
+            <span class="home-card-icon" aria-hidden="true">{s.icon}</span>
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+            <span class="home-card-cta">До розділу →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <Newsletter />
 </Layout>
 
 <style>
-  .huk-root {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 48px 32px 64px;
-  }
+  /* Hero i karty rozcestníku žijí v src/styles/home.css — sdílí je sk, pl, de
+     i uk, takže se do odpovědi vkládají jednou, ne pětkrát. Tady zůstává jen
+     to, co má vlastní jen ukrajinská verze. */
+  .huk-newsbar { display: flex; justify-content: flex-end; padding-top: 14px; }
+  .huk-newslink { font: 700 14px 'Chakra Petch', sans-serif; color: #0A0A0B; text-decoration: none; border-bottom: 2px solid #FFEA00; padding-bottom: 1px; }
+  .huk-newslink:hover { border-bottom-color: #0A0A0B; }
 
-  .huk-hero {
-    max-width: 760px;
-    margin: 0 auto 48px;
-    text-align: center;
-  }
+  .huk-accordion { padding: 28px 0 0; }
 
-  .huk-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font: 700 12px 'Chakra Petch', sans-serif;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: #0A0A0B;
-    background: #FFFF00;
-    padding: 6px 14px;
-    border-radius: 999px;
-    border: 1.5px solid #0A0A0B;
-  }
-  .huk-kicker .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #0A0A0B;
-  }
-
-  .huk-hero h1 {
-    font-family: 'Chakra Petch', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 700;
-    line-height: 1.1;
-    margin: 18px 0 14px;
-    color: #0A0A0B;
-  }
-  .huk-hero h1 em {
-    font-style: normal;
-    background: #FFFF00;
-    padding: 0 .12em;
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
-  }
-
-  .huk-lede {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    line-height: 1.55;
-    color: #444;
-    margin: 0;
-  }
-
-  .huk-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .huk-card {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 28px;
-    border-radius: 20px;
-    background: #fff;
-    border: 1.5px solid #0A0A0B;
-    box-shadow: 4px 4px 0 #0A0A0B;
-    text-decoration: none;
-    color: inherit;
-    transition: transform .15s, box-shadow .15s;
-  }
-  .huk-card:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 7px 7px 0 #0A0A0B;
-  }
-
-  .huk-card-icon {
-    font-size: 2rem;
-    line-height: 1;
-  }
-
-  .huk-card h2 {
-    font-family: 'Chakra Petch', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin: 0;
-    color: #0A0A0B;
-  }
-
-  .huk-card p {
-    font-size: .98rem;
-    line-height: 1.5;
-    color: #555;
-    margin: 0;
-    flex: 1;
-  }
-
-  .huk-card-cta {
-    font: 700 14px 'Chakra Petch', sans-serif;
-    color: #0A0A0B;
-    margin-top: 6px;
-  }
-
-  @media (max-width: 680px) {
-    .huk-root { padding: 32px 16px 48px; }
-    .huk-grid { grid-template-columns: 1fr; }
-  }
+  /* Nadpis sekce má pod sebou ještě perex, takže menší mezera než ve sdíleném. */
+  .home-head { margin-bottom: 12px; }
+  .huk-lede { max-width: 68ch; font-size: 1rem; line-height: 1.6; color: #555; margin: 0 0 28px; }
 </style>

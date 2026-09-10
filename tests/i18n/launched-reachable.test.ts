@@ -32,6 +32,7 @@ const HUB_FILE: Partial<Record<Locale, string>> = {
   de: 'src/components/home/HomeDe.astro',
   uk: 'src/components/home/HomeUk.astro',
   sk: 'src/components/home/HomeSk.astro',
+  pl: 'src/components/home/HomePl.astro',
 };
 
 function hubHrefs(locale: Locale): string[] {
@@ -83,6 +84,44 @@ describe('rozcestník nelinkuje mimo launchnuté', () => {
         (h) => !launched.some((p) => h === p || h.startsWith(`${p}/`)),
       );
       expect(bad, `${locale} — karty na NElaunchnuté cesty: ${bad.join(', ')}`).toEqual([]);
+    });
+  }
+});
+
+/** Sekce, které daný rozcestník zatím NEODKAZUJE.
+ *
+ *  ‼️ Je to RATCHET, ne trvalá výjimka: seznam smí jen zkracovat. Test nad ním
+ *  hlídá obojí — že nevznikne nová díra (sekce mimo seznam), a že v seznamu
+ *  nezůstane položka, která už doplněná je. Doplnit kartu a zapomenout ji odsud
+ *  smazat proto neprojde.
+ *
+ *  Proč to vůbec hlídat, když test výš říká „není osiřelá": osiřelá není,
+ *  vede na ni odkaz z menu. Jenže homepage je nejsilnější stránka webu a
+ *  rozdává nejvíc odkazové síly — sekce, na kterou z ní nevede karta, o ni
+ *  přichází. /de a /uk mají 0 děr, /sk a /pl je zdědily z doby, kdy jejich
+ *  rozcestník vznikal s devíti kartami. */
+const HUB_GAPS: Partial<Record<Locale, string[]>> = {
+  sk: ['/data', '/svet', '/slovnik', '/novinky', '/kalkulacka', '/dotace', '/pruvodce',
+    '/zebricky', '/plodiny', '/choroby', '/sezona', '/akcie', '/kviz'],
+  pl: ['/novinky', '/svet', '/statistiky', '/data', '/kalkulacka/prevody-jednotek',
+    '/kalkulacka/prevody-hmotnost', '/encyklopedie', '/vcelarstvi', '/choroby',
+    '/plodiny', '/zebricky', '/kviz', '/sezona', '/akcie'],
+};
+
+describe('rozcestník odkazuje na každou launchnutou sekci', () => {
+  for (const locale of Object.keys(HUB_FILE) as Locale[]) {
+    it(`${locale}: díry na rozcestníku jen ty známé, a žádná zbytečná`, () => {
+      const hub = hubHrefs(locale);
+      const missing = LAUNCHED_PREFIXES[locale]
+        .filter((p) => !NOT_REQUIRED.has(p))
+        .filter((p) => !reaches(hub, p));
+      const known = HUB_GAPS[locale] ?? [];
+
+      const fresh = missing.filter((p) => !known.includes(p));
+      expect(fresh, `${locale} — NOVÁ díra na rozcestníku: ${fresh.join(', ')}`).toEqual([]);
+
+      const stale = known.filter((p) => !missing.includes(p));
+      expect(stale, `${locale} — už doplněno, smaž ze seznamu HUB_GAPS: ${stale.join(', ')}`).toEqual([]);
     });
   }
 });
