@@ -39,9 +39,13 @@ export default defineConfig({
     locales: ['cs', 'sk', 'uk', 'pl'],
     routing: { prefixDefaultLocale: false },
   },
-  // Inline všechny (malé) stylesheety do HTML — odstraní render-blocking CSS
-  // requesty (~467ms na 4G dle Lighthouse). Celkový CSS je ~15 KB, takže
-  // navýšení HTML je zanedbatelné oproti ušetřeným round-tripům k LCP.
+  // Inline všechny stylesheety do HTML — odstraní render-blocking CSS requesty
+  // (~467 ms na 4G dle Lighthouse).
+  // ‼️ POZOR, komentář tu roky tvrdil „celkový CSS je ~15 KB". K 2026-09-10 je
+  // to ~87 KB a inlinuje se do KAŽDÉ odpovědi, takže se nedá nacachovat zvlášť —
+  // při pěti prokliknutích se přenese pětkrát. Než se tohle číslo bude dál
+  // zvětšovat, stojí za to přeměřit, jestli se 'auto' (jeden cachovatelný
+  // .css soubor za cenu jednoho round-tripu) nevyplatí víc.
   build: { inlineStylesheets: 'always' },
   vite: {
     plugins: [tailwindcss(), yaml()],

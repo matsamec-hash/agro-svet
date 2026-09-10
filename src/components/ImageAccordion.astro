@@ -3,7 +3,6 @@
 // a „Přejít na sekci" pod německou hlavičkou, přesně past HomeDe/HomeUk.
 // Teď label z t(), href přes localizeInternalHref (pod nelaunchnutým locale
 // tedy zůstane cs cesta, ne mrtvý odkaz).
-import AgriMapPreview from './svet/AgriMapPreview.astro';
 import { getLocaleFromUrl, localizeInternalHref, t } from '../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -37,8 +36,12 @@ const previewHint = t(locale, 'ia.preview');
       const srcset = item.img ? `${base}__v-w400.webp 400w, ${base}__v-w800.webp 800w, ${item.img} 1200w` : '';
       return (
       <a class="ia-panel" href={item.href} aria-label={`${item.label} — ${previewHint}`}>
+        {/* ‼️ Mapa byla inline <svg> (AgriMapPreview) — ~63 kB cest v KAŽDÉ
+            odpovědi homepage a znovu při každém prokliku. Je dekorativní a
+            statická, takže se předgeneruje do public/ (viz
+            scripts/build-agrimap-preview.mjs) a prohlížeč si ji nacachuje. */}
         {item.map ? (
-          <div class="ia-mapbg"><AgriMapPreview metric="wheat_yield" /></div>
+          <div class="ia-mapbg"><img src="/images/agrimap-wheat-yield.svg" alt="" width="1237" height="1416" loading="lazy" decoding="async" class="ia-map" /></div>
         ) : (
           <img src={`${base}__v-w800.webp`} srcset={srcset} sizes="(max-width: 768px) 100vw, (max-width: 1280px) 25vw, 320px" alt={item.label} class="ia-img" width="800" height="600" loading="lazy" decoding="async" />
         )}
@@ -55,6 +58,8 @@ const previewHint = t(locale, 'ia.preview');
 </div>
 
 <style>
+  .ia-map { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; }
+
   .ia-wrap {
     max-width: 1280px;
     margin: 0 auto;
