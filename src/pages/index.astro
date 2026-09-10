@@ -155,7 +155,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
           </a>
           <div class="hero-tags">
             <a href={localizeInternalHref(locale, '/novinky/')} class="hero-tag">Novinky</a>
-            {featured.category && <a href={localizeInternalHref(locale, `/novinky/kategorie/${newsCategorySlug(featured.category)}/`)} class="hero-tag">{localizedCategory(locale, newsCategorySlug(featured.category))}</a>}
+            {featured.category && localizedCategory(locale, newsCategorySlug(featured.category)) !== 'Novinky' && <a href={localizeInternalHref(locale, `/novinky/kategorie/${newsCategorySlug(featured.category)}/`)} class="hero-tag">{localizedCategory(locale, newsCategorySlug(featured.category))}</a>}
           </div>
         </div>
       )}
