@@ -117,7 +117,12 @@ const GROUPS: { heading: string; lede: string; items: { href: string; icon: stri
   },
 ];
 
-const heroTagLabel = (cat: string | null) => (cat ? localizedCategory(LOCALE, newsCategorySlug(cat)) : 'Новини');
+// ‼️ Štítek sekce i štítek kategorie `novinky` musí být TENTÝŽ řetězec,
+// jinak se nad hlavním článkem objeví dva štítky pro totéž. Polština to
+// předvedla: sekce „Nowości", kategorie „Aktualności". Proto se obojí
+// bere z localizedCategory, ne z literálu.
+const NEWS_TAG = localizedCategory(LOCALE, 'novinky');
+const heroTagLabel = (cat: string | null) => (cat ? localizedCategory(LOCALE, newsCategorySlug(cat)) : NEWS_TAG);
 
 const homepageItems = [...(featured ? [featured] : []), ...heroRight];
 const itemListJsonLd = homepageItems.length > 0 ? {
@@ -156,8 +161,8 @@ const itemListJsonLd = homepageItems.length > 0 ? {
             <div class="hero-card-content"><h2>{featured.title}</h2></div>
           </a>
           <div class="hero-tags">
-            <a href={localizeInternalHref(LOCALE, '/novinky/')} class="hero-tag">Новини</a>
-            {featured.category && heroTagLabel(featured.category) !== 'Новини' && <a href={localizeInternalHref(LOCALE, `/novinky/kategorie/${newsCategorySlug(featured.category)}/`)} class="hero-tag">{heroTagLabel(featured.category)}</a>}
+            <a href={localizeInternalHref(LOCALE, '/novinky/')} class="hero-tag">{NEWS_TAG}</a>
+            {featured.category && heroTagLabel(featured.category) !== NEWS_TAG && <a href={localizeInternalHref(LOCALE, `/novinky/kategorie/${newsCategorySlug(featured.category)}/`)} class="hero-tag">{heroTagLabel(featured.category)}</a>}
           </div>
         </div>
 

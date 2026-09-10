@@ -1494,7 +1494,7 @@ const pl: Record<string, string> = {
   'search.found': 'Znaleziono łącznie {n} wyników w {s} sekcjach.',
   'search.empty': 'Dla „{q}" nic nie znaleziono.',
   'search.emptyHint': 'Spróbuj innej lub ogólniejszej frazy.',
-  'search.g.novinky': 'Nowości',
+  'search.g.novinky': 'Aktualności',
   'search.g.stroje': 'Technika',
   'search.g.plemena': 'Zwierzęta',
   'search.g.bazar': 'Agro bazar',

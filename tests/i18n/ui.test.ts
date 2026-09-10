@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
 import { ui } from '../../src/i18n/ui';
+import { locales } from '../../src/i18n/config';
 import { t, useTranslations } from '../../src/i18n/utils';
 
 describe('UI dictionaries', () => {
@@ -40,5 +43,27 @@ describe('UI dictionaries', () => {
   it('useTranslations vrací funkci vázanou na locale', () => {
     const tr = useTranslations('sk');
     expect(tr('nav.home')).toBe('Domov');
+  });
+});
+
+describe('štítek novinek se nesmí rozejít sám se sebou', () => {
+  // ‼️ Nad hlavním článkem hera stojí vedle sebe štítek SEKCE a štítek
+  // KATEGORIE. Když článek spadá do kategorie `novinky`, jsou to tytéž dva
+  // popisky — komponenta druhý skrývá porovnáním řetězců. Polština to
+  // obešla tím, že pro totéž měla dvě slova: sekce „Nowości“, kategorie
+  // „Aktualności“ — a na homepage svítily obě.
+  it('každý jazyk má pro novinky JEDEN termín napříč klíči', () => {
+    for (const loc of locales) {
+      expect(ui[loc]['search.g.novinky'], `${loc}: vyhledávání říká novinkám jinak než výpis`)
+        .toBe(ui[loc]['nov.cat.novinky']);
+    }
+  });
+
+  it('rozcestníky neberou štítek z literálu, ale z localizedCategory', () => {
+    for (const f of ['HomeSk', 'HomePl', 'HomeDe', 'HomeUk']) {
+      const src = fs.readFileSync(path.join(process.cwd(), `src/components/home/${f}.astro`), 'utf8');
+      expect(src, `${f}: štítek sekce musí vycházet z localizedCategory`).toContain("const NEWS_TAG = localizedCategory(LOCALE, 'novinky');");
+      expect(src, `${f}: v šabloně zůstal natvrdo psaný štítek`).toContain('class="hero-tag">{NEWS_TAG}</a>');
+    }
   });
 });
