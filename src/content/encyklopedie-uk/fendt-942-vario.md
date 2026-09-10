@@ -7,7 +7,7 @@ vykon: 415 к.с. (305 кВт)
 hmotnost: прибл. 12 800 кг
 rok_uvedeni: 2020
 popis: Найпотужніша модель серії 900 Vario з 415 кінськими силами — найпотужніший Fendt у звичайному колісному виконанні, з двигуном MAN 9,0 л та приводом VarioDrive.
-heroImage: /images/stroje/fendt/fendt-900-415k.webp
+heroImage: /images/stroje/fendt/fendt-942-vario.jpg
 powerHp: 415
 powerKw: 305
 weightKg: 12800

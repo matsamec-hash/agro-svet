@@ -7,7 +7,7 @@ vykon: "530 k (395 kW)"
 hmotnost: "15 500 kg"
 rok_uvedeni: 1997
 popis: "Systémový traktor Claas se čtyřmi stejně velkými koly a otočnou kabinou Trac VC. Motor Mercedes-Benz, hydromechanická převodovka HM4. Koncept určený pro tažení i nesené nasazení."
-heroImage: "/images/stroje/claas/claas-xerion-700k.webp"
+heroImage: "/images/stroje/claas/claas-xerion-5000.jpg"
 powerHp: 530
 powerKw: 395
 weightKg: 15500

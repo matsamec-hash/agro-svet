@@ -1518,5 +1518,9 @@ const cs: Record<string, string> = {
   'search.scope.stroje': 'značku, model a řadu',
   'search.scope.plemena': 'název, původ a alternativní názvy',
   'search.scope.bazar': 'název a popis',
+
+  // Blok „Fotografie“ (PhotoCredits.astro) — atribuce fotek pod CC BY / CC BY-SA.
+  'foto.blok.nadpis': 'Fotografie',
+  'foto.blok.zdroj': 'zdroj',
 };
 export default cs;

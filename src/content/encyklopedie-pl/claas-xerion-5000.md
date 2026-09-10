@@ -7,7 +7,7 @@ vykon: "530 KM (395 kW)"
 hmotnost: "15 500 kg"
 rok_uvedeni: 1997
 popis: "Ciągnik systemowy Claas z czterema kołami tej samej wielkości i obrotową kabiną Trac VC. Silnik Mercedes-Benz, przekładnia hydromechaniczna HM4. Koncepcja przeznaczona zarówno do pracy z maszynami ciągnionymi, jak i zawieszanymi."
-heroImage: "/images/stroje/claas/claas-xerion-700k.webp"
+heroImage: "/images/stroje/claas/claas-xerion-5000.jpg"
 powerHp: 530
 powerKw: 395
 weightKg: 15500

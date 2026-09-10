@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../i18n/config';
 import { areaDefaults, NUMBER_LOCALE } from '../i18n/prevodniky';
+import PhotoCredits from './PhotoCredits.astro';
 // Interaktivní převodník jednotek plochy. Embedded ve /slovnik/* pro jednotky
 // plochy a ve standalone kalkulačce /kalkulacka/prevody-jednotek/.
 // Vanilla JS, žádné závislosti.
@@ -146,6 +147,12 @@ const Heading = headingLevel;
         <div class="ac-cmp-field" id="ac-cmp-visual" aria-hidden="true"></div>
         <p class="ac-cmp-legend" id="ac-cmp-legend" aria-live="polite"></p>
         {comparisonsCaption && <p class="ac-cmp-caption">{comparisonsCaption}</p>}
+        {/* Popisek pod fotkou přepisuje JS přes textContent, odkaz na licenci
+            do něj nedostaneme — atribuce s odkazy je proto pod panelem. */}
+        <PhotoCredits
+          images={comparisons.map((c) => (c.slug ? `/images/srovnani/${c.slug}.webp` : null))}
+          locale={locale}
+        />
       </div>
     )}
   </div>

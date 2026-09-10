@@ -7,7 +7,7 @@ vykon: "435 k (324 kW)"
 hmotnost: "15 800 kg"
 rok_uvedeni: 2021
 popis: "Sklízecí mlátička střední a vyšší třídy — nástupce řady Tucano na zcela nové platformě mezi Tucano a vlajkovým Lexionem. Varianty APS a APS HYBRID, svahová verze Montana."
-heroImage: "/images/stroje/claas/claas-trion-435k.webp"
+heroImage: "/images/stroje/claas/claas-trion-730.jpg"
 powerHp: 435
 powerKw: 324
 weightKg: 15800

@@ -4,6 +4,7 @@
 // Teď label z t(), href přes localizeInternalHref (pod nelaunchnutým locale
 // tedy zůstane cs cesta, ne mrtvý odkaz).
 import { getLocaleFromUrl, localizeInternalHref, t } from '../i18n/utils';
+import PhotoCredits from './PhotoCredits.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 
@@ -55,6 +56,10 @@ const previewHint = t(locale, 'ia.preview');
       );
     })}
   </div>
+
+  {/* Fotka telat je z Commons pod CC BY-SA — na panelu není kam popisek dát,
+      atribuce je tedy hned pod rozcestníkem. */}
+  <PhotoCredits images={items.map((i) => i.img)} locale={locale} />
 </div>
 
 <style>

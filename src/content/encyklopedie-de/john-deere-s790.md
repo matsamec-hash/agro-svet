@@ -7,7 +7,7 @@ vykon: "543 PS (400 kW)"
 hmotnost: "ca. 17 500 kg"
 rok_uvedeni: 2020
 popis: "Der Einrotor-Spitzenmähdrescher der Baureihe S von John Deere mit 543 PS, 14 800 Litern Korntank und der Automatik HarvestSmart."
-heroImage: "/images/stroje/john-deere/john-deere-s-series-543k.webp"
+heroImage: "/images/stroje/john-deere/john-deere-s790.jpg"
 powerHp: 543
 powerKw: 400
 weightKg: 17500

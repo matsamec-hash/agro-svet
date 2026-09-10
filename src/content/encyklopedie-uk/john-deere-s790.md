@@ -7,7 +7,7 @@ vykon: 543 к.с. (400 кВт)
 hmotnost: прибл. 17 500 кг
 rok_uvedeni: 2020
 popis: Топовий однороторний комбайн серії S John Deere з потужністю 543 кінських сил, зерновим бункером 14 800 літрів та автоматикою HarvestSmart.
-heroImage: /images/stroje/john-deere/john-deere-s-series-543k.webp
+heroImage: /images/stroje/john-deere/john-deere-s790.jpg
 powerHp: 543
 powerKw: 400
 weightKg: 17500

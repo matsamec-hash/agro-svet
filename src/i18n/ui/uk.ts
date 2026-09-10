@@ -1540,5 +1540,9 @@ const uk: Record<string, string> = {
   'search.scope.stroje': 'марку, модель і серію',
   'search.scope.plemena': 'назву, походження та альтернативні назви',
   'search.scope.bazar': 'заголовок і опис',
+
+  // Blok „Fotografie“ (PhotoCredits.astro) — atribuce fotek pod CC BY / CC BY-SA.
+  'foto.blok.nadpis': 'Фотографії',
+  'foto.blok.zdroj': 'джерело',
 };
 export default uk;

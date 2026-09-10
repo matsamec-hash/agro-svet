@@ -7,7 +7,7 @@ vykon: 634 к.с. (466 кВт)
 hmotnost: близько 19 000 кг
 rok_uvedeni: 2020
 popis: Флагманський однороторний комбайн Case IH потужністю 634 кінських сил, із зерновим бункером 14 441 літр та автоматикою AFS Harvest Command.
-heroImage: /images/stroje/case-ih/case-ih-axial-flow-150-250-series-634k.webp
+heroImage: /images/stroje/case-ih/case-ih-axial-flow-9250.jpg
 powerHp: 634
 powerKw: 466
 weightKg: 19000

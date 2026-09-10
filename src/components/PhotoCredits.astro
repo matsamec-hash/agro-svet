@@ -1,0 +1,83 @@
+---
+// Blok „Fotografie" na konci stránky — autor, licence (s odkazem na její text)
+// a odkaz na zdroj ke každé použité fotce. Na přehledech s desítkami miniatur
+// by se popisek pod každou fotkou nevešel; souhrn na konci stránky atribuci
+// splní stejně a nerozbíjí layout.
+//
+// Vypisují se jen licence, které atribuci opravdu vyžadují (CC BY / CC BY-SA
+// a spol.). Unsplash, Pexels, Pixabay a volné dílo se do bloku netahají.
+import { creditsFor } from '../lib/photo-credit';
+import { t } from '../i18n/utils';
+import type { Locale } from '../i18n/config';
+
+interface Props {
+  /** Cesty k obrázkům na stránce. Responzivní varianty `__v-w800` jsou v pořádku. */
+  images: (string | null | undefined)[];
+  locale?: Locale;
+}
+
+const { images, locale = (Astro.locals.locale ?? 'cs') as Locale } = Astro.props;
+const credits = creditsFor(images);
+---
+
+{credits.length > 0 && (
+  <section class="photo-credits" id="fotografie">
+    <h2>{t(locale, 'foto.blok.nadpis')}</h2>
+    <ul>
+      {credits.map((c) => (
+        <li>
+          <span class="pc-author">{c.author}</span>
+          {c.license && (
+            <>
+              {' · '}
+              {c.licenseUrl ? (
+                <a href={c.licenseUrl} rel="license nofollow noopener" target="_blank">{c.license}</a>
+              ) : (
+                c.license
+              )}
+            </>
+          )}
+          {c.source && (
+            <>
+              {' · '}
+              <a href={c.source} rel="nofollow noopener" target="_blank">{t(locale, 'foto.blok.zdroj')}</a>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .photo-credits {
+    margin: 32px 0 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+  }
+  .photo-credits h2 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted, #6b7280);
+  }
+  .photo-credits ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+  }
+  .photo-credits li {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted, #6b7280);
+  }
+  .photo-credits a {
+    color: inherit;
+    text-decoration: underline;
+  }
+</style>

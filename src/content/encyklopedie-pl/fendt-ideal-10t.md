@@ -7,7 +7,7 @@ vykon: "ok. 790 KM"
 hmotnost: "ok. 22 000 kg"
 rok_uvedeni: 2017
 popis: "Topowy gąsienicowy model kombajnu Fendt IDEAL — dwurotorowa platforma rozwijana siedem lat, optymalizacja żniw dzięki systemowi IDEALharvest."
-heroImage: "/images/stroje/fendt/fendt-ideal-790k.webp"
+heroImage: "/images/stroje/fendt/fendt-ideal-10t.jpg"
 powerHp: 790
 engine: "MAN, 6-cylindrowy, Stage V"
 transmission: "Napęd hydrostatyczny, podwozie gąsienicowe"

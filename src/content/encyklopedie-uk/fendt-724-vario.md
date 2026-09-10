@@ -7,7 +7,7 @@ vykon: 240 к.с. (176 кВт)
 hmotnost: 9 850 кг
 rok_uvedeni: 2021
 popis: Середньорозмірний трактор з безступеневою трансмісією Vario, ідеальний для змішаних ферм. Потужність 240 к.с. з можливістю boost до 260 к.с.
-heroImage: /images/stroje/fendt/fendt-700-310k.webp
+heroImage: /images/stroje/fendt/fendt-728-vario.jpg
 powerHp: 240
 powerKw: 176
 weightKg: 9850

@@ -7,7 +7,7 @@ vykon: 240 k (176 kW)
 hmotnost: 9 850 kg
 rok_uvedeni: 2021
 popis: Stredne veľký traktor s bezstupňovou prevodovkou Vario, ideálny pre zmiešané farmy. Výkon 240 k s možnosťou boost na 260 k.
-heroImage: /images/stroje/fendt/fendt-700-310k.webp
+heroImage: /images/stroje/fendt/fendt-728-vario.jpg
 powerHp: 240
 powerKw: 176
 weightKg: 9850

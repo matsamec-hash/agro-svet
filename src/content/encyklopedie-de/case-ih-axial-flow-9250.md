@@ -7,7 +7,7 @@ vykon: "634 PS (466 kW)"
 hmotnost: "ca. 19 000 kg"
 rok_uvedeni: 2020
 popis: "Der Einrotor-Mähdrescher als Flaggschiff von Case IH mit 634 PS, 14 441 Litern Korntank und der Automatik AFS Harvest Command."
-heroImage: "/images/stroje/case-ih/case-ih-axial-flow-150-250-series-634k.webp"
+heroImage: "/images/stroje/case-ih/case-ih-axial-flow-9250.jpg"
 powerHp: 634
 powerKw: 466
 weightKg: 19000

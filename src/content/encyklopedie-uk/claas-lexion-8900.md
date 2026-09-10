@@ -7,7 +7,7 @@ vykon: 790 к.с. (581 кВт)
 hmotnost: 22 800 кг
 rok_uvedeni: 2020
 popis: Найбільший комбайн світу з ємністю бункера 18 000 літрів і системою автоматичної оптимізації CEMOS AUTO.
-heroImage: /images/stroje/claas/claas-lexion-5000-8000-790k.webp
+heroImage: /images/stroje/claas/claas-lexion-8900.jpg
 powerHp: 790
 powerKw: 581
 weightKg: 22800

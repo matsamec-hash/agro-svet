@@ -1515,5 +1515,9 @@ const de: Record<string, string> = {
   'cc.back': 'Zurück',
   'cc.save': 'Auswahl speichern',
 
+
+  // Blok „Fotografie“ (PhotoCredits.astro) — atribuce fotek pod CC BY / CC BY-SA.
+  'foto.blok.nadpis': 'Fotos',
+  'foto.blok.zdroj': 'Quelle',
 };
 export default de;

@@ -1,0 +1,78 @@
+---
+// Atribuce přilepená do rohu hero fotky: autor · licence (odkaz na její text) ·
+// zdroj. Používá se tam, kde je na stránce jedna velká fotka; přehledy s mnoha
+// miniaturami mají místo toho souhrnný blok `PhotoCredits.astro`.
+//
+// `credit` má přednost (frontmatter u konkrétního stroje), jinak se autor
+// a licence dotáhnou z registru podle cesty k obrázku.
+import { creditFor, licenseUrlFor, type PhotoCredit } from '../lib/photo-credit';
+import { t } from '../i18n/utils';
+import type { Locale } from '../i18n/config';
+
+interface Props {
+  image?: string | null;
+  credit?: { author?: string; license?: string; sourceUrl?: string } | null;
+  locale?: Locale;
+}
+
+const { image, credit, locale = (Astro.locals.locale ?? 'cs') as Locale } = Astro.props;
+
+const resolved: PhotoCredit | null = credit?.author
+  ? {
+      author: credit.author,
+      license: credit.license ?? '',
+      licenseUrl: licenseUrlFor(credit.license),
+      source: credit.sourceUrl,
+    }
+  : (() => {
+      const c = creditFor(image);
+      return c && c.author ? c : null;
+    })();
+---
+
+{resolved && (
+  <div class="hero-photo-credit">
+    © {resolved.author}
+    {resolved.license && (
+      <>
+        {' · '}
+        {resolved.licenseUrl ? (
+          <a href={resolved.licenseUrl} target="_blank" rel="license noopener noreferrer nofollow">{resolved.license}</a>
+        ) : (
+          resolved.license
+        )}
+      </>
+    )}
+    {resolved.source && (
+      <>
+        {' · '}
+        <a href={resolved.source} target="_blank" rel="noopener noreferrer nofollow">{t(locale, 'foto.blok.zdroj')}</a>
+      </>
+    )}
+  </div>
+)}
+
+<style>
+  .hero-photo-credit {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    z-index: 2;
+    font-size: 11px;
+    line-height: 1.3;
+    padding: 5px 9px;
+    border-radius: 6px;
+    background: rgba(10, 10, 11, 0.62);
+    color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(4px);
+  }
+  .hero-photo-credit a {
+    color: inherit;
+    text-decoration: underline;
+  }
+  .hero-photo-credit:hover {
+    background: rgba(10, 10, 11, 0.85);
+    color: #fff;
+  }
+</style>

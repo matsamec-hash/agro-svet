@@ -7,7 +7,7 @@ vykon: "147 k (108 kW)"
 hmotnost: "5 700 kg"
 rok_uvedeni: 2014
 popis: "Nejvýkonnější model modernizované řady Forterra. Vlastní motor Zetor Stage V, převodovka s funkcí power shift. Robustní český traktor pro střední farmy a smíšené hospodaření."
-heroImage: "/images/stroje/zetor/zetor-forterra-150k.webp"
+heroImage: "/images/stroje/zetor/zetor-forterra-hsx.jpg"
 powerHp: 147
 powerKw: 108
 weightKg: 5700

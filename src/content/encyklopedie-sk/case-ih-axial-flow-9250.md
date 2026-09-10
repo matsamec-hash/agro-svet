@@ -7,7 +7,7 @@ vykon: 634 k (466 kW)
 hmotnost: cca 19 000 kg
 rok_uvedeni: 2020
 popis: Vlajkový jednorotorový kombajn Case IH s výkonom 634 koní, zásobníkom zrna 14 441 litrov a automatikou AFS Harvest Command.
-heroImage: /images/stroje/case-ih/case-ih-axial-flow-150-250-series-634k.webp
+heroImage: /images/stroje/case-ih/case-ih-axial-flow-9250.jpg
 powerHp: 634
 powerKw: 466
 weightKg: 19000

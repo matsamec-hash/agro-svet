@@ -1511,5 +1511,9 @@ const pl: Record<string, string> = {
   'search.scope.stroje': 'markę, model i serię',
   'search.scope.plemena': 'nazwę, pochodzenie i nazwy alternatywne',
   'search.scope.bazar': 'tytuł i opis',
+
+  // Blok „Fotografie“ (PhotoCredits.astro) — atribuce fotek pod CC BY / CC BY-SA.
+  'foto.blok.nadpis': 'Zdjęcia',
+  'foto.blok.zdroj': 'źródło',
 };
 export default pl;

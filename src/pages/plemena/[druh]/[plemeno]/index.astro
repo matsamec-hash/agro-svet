@@ -3,6 +3,7 @@
 // sk čte z plemena-sk overlay (getPlemeno(...,'sk')); cs render = literály VERBATIM.
 export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
+import { licenseUrlFor } from '../../../../lib/photo-credit';
 import { getPlemeno, getUzitkovostLabels } from '../../../../lib/plemena';
 import { faqPageSchema } from '../../../../lib/structured-data';
 import { injectLinks, injectLinksInText, createLinkContext } from '../../../../lib/auto-linker';
@@ -186,7 +187,16 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
                 ) : (
                   <span>{plemeno.image_credit}</span>
                 )}
-                {plemeno.image_license && <span class="hero-photo-license"> · {plemeno.image_license}</span>}
+                {plemeno.image_license && (
+                  <span class="hero-photo-license">
+                    {' · '}
+                    {licenseUrlFor(plemeno.image_license) ? (
+                      <a href={licenseUrlFor(plemeno.image_license)} target="_blank" rel="license noopener noreferrer nofollow">{plemeno.image_license}</a>
+                    ) : (
+                      plemeno.image_license
+                    )}
+                  </span>
+                )}
               </figcaption>
             )}
           </figure>

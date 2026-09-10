@@ -5,6 +5,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getAllDruhy, getAllPlemena, getUzitkovostLabels, type PlemenoUzitkovost } from '../../lib/plemena';
+import PhotoCredits from '../../components/PhotoCredits.astro';
 import { useTranslations, getLocaleFromUrl, tf, BCP47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -209,6 +210,10 @@ const plemenaI18n = JSON.stringify({
     </div>
 
     <div id="results-grid" class="results-grid"></div>
+
+    {/* Dlaždice druhů jsou fotky z Commons vykreslené přes CSS `--bg-img`,
+        takže atribuce nemá kam „pod fotku" — souhrn na konci stránky. */}
+    <PhotoCredits images={druhy.map((d) => druhPhoto[d.slug])} locale={locale} />
 
     <section class="big-cta">
       <div>

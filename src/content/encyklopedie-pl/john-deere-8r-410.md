@@ -7,7 +7,7 @@ vykon: "410 KM (301 kW)"
 hmotnost: "14 200 kg"
 rok_uvedeni: 2022
 popis: "Flagowy ciągnik kołowy serii 8R o mocy 410 koni, z automatycznym napędem 4WD i systemem autonomicznego prowadzenia AutoPath."
-heroImage: "/images/stroje/john-deere/john-deere-8r-410k.webp"
+heroImage: "/images/stroje/john-deere/john-deere-8r-410.jpg"
 powerHp: 410
 powerKw: 301
 weightKg: 14200

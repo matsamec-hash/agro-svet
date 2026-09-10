@@ -7,7 +7,7 @@ vykon: "543 k (400 kW)"
 hmotnost: "cca 17 500 kg"
 rok_uvedeni: 2020
 popis: "Vrcholný jednorotorový kombajn řady S John Deere s výkonem 543 koní, zásobníkem zrna 14 800 litrů a automatikou HarvestSmart."
-heroImage: "/images/stroje/john-deere/john-deere-s-series-543k.webp"
+heroImage: "/images/stroje/john-deere/john-deere-s790.jpg"
 powerHp: 543
 powerKw: 400
 weightKg: 17500

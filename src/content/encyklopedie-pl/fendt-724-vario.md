@@ -7,7 +7,7 @@ vykon: "240 KM (176 kW)"
 hmotnost: "9 850 kg"
 rok_uvedeni: 2021
 popis: "Średniej wielkości ciągnik z bezstopniową przekładnią Vario, idealny dla gospodarstw mieszanych. Moc 240 KM z możliwością boost do 260 KM."
-heroImage: "/images/stroje/fendt/fendt-700-310k.webp"
+heroImage: "/images/stroje/fendt/fendt-728-vario.jpg"
 powerHp: 240
 powerKw: 176
 weightKg: 9850

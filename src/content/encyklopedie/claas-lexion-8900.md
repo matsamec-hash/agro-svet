@@ -7,7 +7,7 @@ vykon: "790 k (581 kW)"
 hmotnost: "22 800 kg"
 rok_uvedeni: 2020
 popis: "Největší sériová sklízecí mlátička světa: 790 koní, zásobník 18 000 litrů, hybridní mlácení APS SYNFLOW HYBRID a plná automatizace CEMOS AUTO. Kompletní parametry, cena, spotřeba a srovnání s konkurencí."
-heroImage: "/images/stroje/claas/claas-lexion-5000-8000-790k.webp"
+heroImage: "/images/stroje/claas/claas-lexion-8900.jpg"
 powerHp: 790
 powerKw: 581
 weightKg: 22800

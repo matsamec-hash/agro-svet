@@ -7,7 +7,7 @@ vykon: "790 KM (581 kW)"
 hmotnost: "22 800 kg"
 rok_uvedeni: 2020
 popis: "Największy seryjny kombajn zbożowy świata: 790 koni, zbiornik 18 000 litrów, hybrydowe młócenie APS SYNFLOW HYBRID i pełna automatyzacja CEMOS AUTO. Kompletne parametry, cena, zużycie i porównanie z konkurencją."
-heroImage: "/images/stroje/claas/claas-lexion-5000-8000-790k.webp"
+heroImage: "/images/stroje/claas/claas-lexion-8900.jpg"
 powerHp: 790
 powerKw: 581
 weightKg: 22800

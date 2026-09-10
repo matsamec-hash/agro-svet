@@ -7,7 +7,7 @@ vykon: прибл. 790 к.с.
 hmotnost: прибл. 22 000 кг
 rok_uvedeni: 2017
 popis: Флагманська гусенична модель комбайна Fendt IDEAL — двороторна платформа, що розроблялася сім років, з оптимізацією збирання за допомогою системи IDEALharvest.
-heroImage: /images/stroje/fendt/fendt-ideal-790k.webp
+heroImage: /images/stroje/fendt/fendt-ideal-10t.jpg
 powerHp: 790
 engine: MAN, 6-циліндровий, Stage V
 transmission: Гідростатичний хід, гусеничне шасі

@@ -8,6 +8,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
+import PhotoCredits from '../../components/PhotoCredits.astro';
 import { useTranslations, getLocaleFromUrl, localizePath, tf, localizeInternalHref, bcp47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -109,6 +110,8 @@ const collectionJsonLd = {
         </a>
       ))}
     </div>
+
+    <PhotoCredits images={sorted.map((i) => i.data.heroImage)} locale={locale} />
   </div>
 </Layout>
 

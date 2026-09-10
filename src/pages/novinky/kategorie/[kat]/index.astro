@@ -4,6 +4,7 @@
 export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
+import PhotoCredits from '../../../../components/PhotoCredits.astro';
 import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, getCategoryColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
@@ -129,6 +130,7 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
     )}
 
     {items.length > 0 ? (
+      <>
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
         {items.map((a: any) => (
           <ArticleCard
@@ -142,6 +144,8 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
           />
         ))}
       </div>
+      <PhotoCredits images={items.map((a: any) => a.featured_image_url)} locale={locale} />
+      </>
     ) : (
       <p style="padding:48px 0; text-align:center; color:#666;">
         <a href={localizePath(locale, '/novinky/')} style="color:#1a1a1a;">{t(locale, 'nov.back')}</a>

@@ -8,6 +8,7 @@ import { injectLinks, injectLinksInText, createLinkContext } from '../../lib/aut
 import { getAllBrands } from '../../lib/stroje';
 import { getAllPlemena } from '../../lib/plemena';
 import { imgSrcset } from '../../lib/image-variants';
+import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
 import { ORG_ID, WEBSITE_ID } from '../../lib/structured-data';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, hasTranslatedTitle } from '../../lib/articles-i18n';
 import { localizePath, t, tf, localizedCategory, bcp47 } from '../../i18n/utils';
@@ -245,6 +246,10 @@ const jsonLd = {
         style={`width:100%; height:100%; object-fit:cover; object-position: ${article.focal_point?.x ?? 50}% ${article.focal_point?.y ?? 50}%;`}
       />
       <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.35));"></div>
+      {/* CMS pole pro autora fotky nemá; u coverů z Commons drží atribuci
+          registr v lib/photo-credit.ts. Fotobanky (Pexels/Unsplash/Pixabay)
+          atribuci nevyžadují a badge se u nich nevykreslí. */}
+      <HeroPhotoCredit image={article.featured_image_url} locale={locale} />
     </div>
     );
   })()}

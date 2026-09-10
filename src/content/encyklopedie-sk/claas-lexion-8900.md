@@ -7,7 +7,7 @@ vykon: 790 k (581 kW)
 hmotnost: 22 800 kg
 rok_uvedeni: 2020
 popis: Najväčší kombajn sveta s kapacitou zásobníka 18 000 litrov a systémom automatickej optimalizácie CEMOS AUTO.
-heroImage: /images/stroje/claas/claas-lexion-5000-8000-790k.webp
+heroImage: /images/stroje/claas/claas-lexion-8900.jpg
 powerHp: 790
 powerKw: 581
 weightKg: 22800

@@ -9,6 +9,8 @@ import { getCollection, getEntry, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchema, expertReviewSchema } from '../../lib/structured-data';
 import { strojeUrlForEncSlug } from '../../lib/machine-crosslink';
+import { licenseUrlFor } from '../../lib/photo-credit';
+import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
 import { useTranslations, getLocaleFromUrl, localizePath, tf, BCP47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -98,6 +100,7 @@ const productJsonLd = machineProductSchema({
 // a property access na něm hlásí chyby (v tomto souboru už desítky). Nové sekce
 // proto čtou přes jeden typovaný alias, aby ten šum dál nerostly.
 type EncMedia = {
+  heroImage?: string;
   heroCredit?: { author: string; license: string; sourceUrl?: string };
   galerie?: { src: string; alt: string; author?: string; license?: string; sourceUrl?: string }[];
   technickeUdaje?: {
@@ -107,6 +110,7 @@ type EncMedia = {
   model3d?: { src: string; poster?: string; autor?: string; licence?: string; zdrojUrl?: string; popis?: string };
 };
 const media = item.data as unknown as EncMedia;
+
 
 const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
 
@@ -213,13 +217,10 @@ const articleJsonLd = {
         style="width:100%; height:100%; object-fit:cover;"
       />
       <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.4));"></div>
-      {media.heroCredit && (
-        <div class="hero-credit">
-          {media.heroCredit.sourceUrl
-            ? <a href={media.heroCredit.sourceUrl} target="_blank" rel="noopener noreferrer nofollow">© {media.heroCredit.author} · {media.heroCredit.license}</a>
-            : <span>© {media.heroCredit.author} · {media.heroCredit.license}</span>}
-        </div>
-      )}
+      {/* Kredit: frontmatter ho má jen u pár strojů; u zbytku fotka pochází
+          z /src/data/stroje/*.yaml, kde autor a licence jsou — jen se sem
+          nikdy nepropsaly a stránka fotku ukazovala bez atribuce. */}
+      <HeroPhotoCredit image={media.heroImage} credit={media.heroCredit} locale={locale} />
     </div>
   )}
 
@@ -424,9 +425,18 @@ const articleJsonLd = {
               />
               {(ph.author || ph.license) && (
                 <figcaption class="eg-credit">
-                  {ph.sourceUrl
-                    ? <a href={ph.sourceUrl} target="_blank" rel="noopener noreferrer nofollow">© {ph.author}{ph.license ? ` · ${ph.license}` : ''}</a>
-                    : <span>© {ph.author}{ph.license ? ` · ${ph.license}` : ''}</span>}
+                  © {ph.author}
+                  {ph.license && (
+                    <>
+                      {' · '}
+                      {licenseUrlFor(ph.license)
+                        ? <a href={licenseUrlFor(ph.license)} target="_blank" rel="license noopener noreferrer nofollow">{ph.license}</a>
+                        : ph.license}
+                    </>
+                  )}
+                  {ph.sourceUrl && (
+                    <>{' · '}<a href={ph.sourceUrl} target="_blank" rel="noopener noreferrer nofollow">{t('foto.blok.zdroj')}</a></>
+                  )}
                 </figcaption>
               )}
             </figure>
@@ -539,16 +549,6 @@ const articleJsonLd = {
 </Layout>
 
 <style>
-  /* --- atribuce hero fotky --- */
-  .hero-credit{
-    position:absolute; right:10px; bottom:10px; z-index:2;
-    font-size:11px; line-height:1; padding:5px 9px; border-radius:6px;
-    background:rgba(10,10,11,.62); color:rgba(255,255,255,.85);
-    border:1px solid rgba(255,255,255,.14); backdrop-filter:blur(4px);
-  }
-  .hero-credit a{ color:inherit; text-decoration:none; }
-  .hero-credit:hover{ background:rgba(10,10,11,.85); color:#fff; }
-
   /* --- kompletní technické údaje --- */
   .techdata{ margin:48px 0 8px; }
   .techdata h2{ font-size:1.5rem; font-weight:700; margin:0 0 20px; letter-spacing:-.3px; color:#1a1a1a; }

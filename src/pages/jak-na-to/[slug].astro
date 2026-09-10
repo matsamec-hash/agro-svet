@@ -4,6 +4,7 @@
 // chybějící sk slug = 404 (žádný cs leak). cs render = dnešní literály VERBATIM.
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
+import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, howToSchema, faqPageSchema } from '../../lib/structured-data';
@@ -104,6 +105,7 @@ const articleJsonLd = {
         style="width:100%; height:100%; object-fit:cover;"
       />
       <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.4));"></div>
+      <HeroPhotoCredit image={item.data.heroImage} locale={locale} />
     </div>
   )}
 

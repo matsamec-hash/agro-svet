@@ -7,7 +7,7 @@ vykon: "410 PS (301 kW)"
 hmotnost: "14 200 kg"
 rok_uvedeni: 2022
 popis: "Der Radtraktor als Flaggschiff der Baureihe 8R mit 410 PS, automatischem Allradantrieb und dem Spurführungssystem AutoPath."
-heroImage: "/images/stroje/john-deere/john-deere-8r-410k.webp"
+heroImage: "/images/stroje/john-deere/john-deere-8r-410.jpg"
 powerHp: 410
 powerKw: 301
 weightKg: 14200

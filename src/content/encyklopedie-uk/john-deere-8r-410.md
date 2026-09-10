@@ -7,7 +7,7 @@ vykon: 410 к.с. (301 кВт)
 hmotnost: 14 200 кг
 rok_uvedeni: 2022
 popis: Флагманський колісний трактор ряду 8R потужністю 410 кінських сил, з автоматичним приводом 4WD та системою автономного водіння AutoPath.
-heroImage: /images/stroje/john-deere/john-deere-8r-410k.webp
+heroImage: /images/stroje/john-deere/john-deere-8r-410.jpg
 powerHp: 410
 powerKw: 301
 weightKg: 14200

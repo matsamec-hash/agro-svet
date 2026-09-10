@@ -7,7 +7,7 @@ vykon: "790 PS (581 kW)"
 hmotnost: "22 800 kg"
 rok_uvedeni: 2020
 popis: "Der größte Serienmähdrescher der Welt: 790 PS, 18 000 Liter Korntank, Hybriddrusch APS SYNFLOW HYBRID und volle Automatisierung CEMOS AUTO. Komplette Daten, Preis, Verbrauch und Vergleich mit dem Wettbewerb."
-heroImage: "/images/stroje/claas/claas-lexion-5000-8000-790k.webp"
+heroImage: "/images/stroje/claas/claas-lexion-8900.jpg"
 powerHp: 790
 powerKw: 581
 weightKg: 22800

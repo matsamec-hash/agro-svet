@@ -7,7 +7,7 @@ vykon: "415 PS (305 kW)"
 hmotnost: "ca. 12 800 kg"
 rok_uvedeni: 2020
 popis: "Das stärkste Modell der Baureihe 900 Vario mit 415 PS — der stärkste Fendt in konventioneller Radausführung, mit MAN-Motor 9,0 L und VarioDrive-Antrieb."
-heroImage: "/images/stroje/fendt/fendt-900-415k.webp"
+heroImage: "/images/stroje/fendt/fendt-942-vario.jpg"
 powerHp: 415
 powerKw: 305
 weightKg: 12800

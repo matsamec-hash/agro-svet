@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import PhotoCredits from '../../components/PhotoCredits.astro';
 import BazarPagination from '../../components/bazar/BazarPagination.astro';
 import { createAnonClient } from '../../lib/supabase';
 import { categoryStyle, tagStyle } from '../../lib/tag-color';
@@ -246,6 +247,7 @@ const itemListJsonLd = sorted.length > 0 ? {
           ))}
         </div>
         <BazarPagination currentPage={page} totalPages={totalPages} baseUrl={Astro.url.toString()} locale={locale} />
+        <PhotoCredits images={sorted.map((a) => a.featured_image_url)} locale={locale} />
       </>
     ) : (
       <p style="color:#666; font-size:16px; padding:48px 0; text-align:center;">

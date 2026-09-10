@@ -7,7 +7,7 @@ vykon: 305 к.с. (224 кВт)
 hmotnost: 11 100 кг
 rok_uvedeni: 2020
 popis: Флагманська модель преміальної row-crop серії 8S. Двигун AGCO Power 7,4 л, безступінчаста трансмісія Dyna-VT із Dynamic Tractor Management. Кабіна Protect-U з ізольованою конструкцією, відокремленою від двигуна.
-heroImage: /images/stroje/massey-ferguson/massey-ferguson-8s-305k.webp
+heroImage: /images/stroje/massey-ferguson/massey-ferguson-8s.jpg
 powerHp: 305
 powerKw: 224
 weightKg: 11100

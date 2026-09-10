@@ -7,7 +7,7 @@ vykon: "634 KM (466 kW)"
 hmotnost: "ok. 19 000 kg"
 rok_uvedeni: 2020
 popis: "Flagowy jednorotorowy kombajn zbożowy Case IH o mocy 634 koni, ze zbiornikiem ziarna 14 441 litrów i automatyką AFS Harvest Command."
-heroImage: "/images/stroje/case-ih/case-ih-axial-flow-150-250-series-634k.webp"
+heroImage: "/images/stroje/case-ih/case-ih-axial-flow-9250.jpg"
 powerHp: 634
 powerKw: 466
 weightKg: 19000

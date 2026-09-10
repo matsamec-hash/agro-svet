@@ -7,7 +7,7 @@ vykon: "303 KM (223 kW)"
 hmotnost: "ok. 9 800 kg"
 rok_uvedeni: 2023
 popis: "Topowy model nowej generacji 700 Vario Gen7 o mocy 303 koni, z silnikiem AGCO Power 7,5 L z systemem eHybrid i bezstopniową przekładnią Vario."
-heroImage: "/images/stroje/fendt/fendt-700-310k.webp"
+heroImage: "/images/stroje/fendt/fendt-728-vario.jpg"
 powerHp: 303
 powerKw: 223
 weightKg: 9800

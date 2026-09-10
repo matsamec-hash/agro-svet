@@ -7,7 +7,7 @@ vykon: 435 к.с. (324 кВт)
 hmotnost: 15 800 кг
 rok_uvedeni: 2021
 popis: Комбайн середнього та вищого класу — наступник серії Tucano на цілком новій платформі між Tucano та флагманським Lexion. Варіанти APS та APS HYBRID, схилова версія Montana.
-heroImage: /images/stroje/claas/claas-trion-435k.webp
+heroImage: /images/stroje/claas/claas-trion-730.jpg
 powerHp: 435
 powerKw: 324
 weightKg: 15800

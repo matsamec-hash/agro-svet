@@ -7,7 +7,7 @@ vykon: "435 KM (324 kW)"
 hmotnost: "15 800 kg"
 rok_uvedeni: 2021
 popis: "Kombajn zbożowy klasy średniej i wyższej — następca serii Tucano na całkowicie nowej platformie plasujący się między Tucano a flagowym Lexionem. Warianty APS i APS HYBRID, wersja stokowa Montana."
-heroImage: "/images/stroje/claas/claas-trion-435k.webp"
+heroImage: "/images/stroje/claas/claas-trion-730.jpg"
 powerHp: 435
 powerKw: 324
 weightKg: 15800

@@ -7,7 +7,7 @@ vykon: "410 k (301 kW)"
 hmotnost: "14 200 kg"
 rok_uvedeni: 2022
 popis: "Vlajkový kolový traktor řady 8R s výkonem 410 koní, automatickým pohonem 4WD a systémem autonomního řízení AutoPath."
-heroImage: "/images/stroje/john-deere/john-deere-8r-410k.webp"
+heroImage: "/images/stroje/john-deere/john-deere-8r-410.jpg"
 powerHp: 410
 powerKw: 301
 weightKg: 14200
