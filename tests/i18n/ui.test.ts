@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ui } from '../../src/i18n/ui';
 import { locales } from '../../src/i18n/config';
+import { HIDDEN_SECTIONS } from '../../src/i18n/nav';
 import { t, useTranslations } from '../../src/i18n/utils';
 
 describe('UI dictionaries', () => {
@@ -64,6 +65,37 @@ describe('štítek novinek se nesmí rozejít sám se sebou', () => {
       const src = fs.readFileSync(path.join(process.cwd(), `src/components/home/${f}.astro`), 'utf8');
       expect(src, `${f}: štítek sekce musí vycházet z localizedCategory`).toContain("const NEWS_TAG = localizedCategory(LOCALE, 'novinky');");
       expect(src, `${f}: v šabloně zůstal natvrdo psaný štítek`).toContain('class="hero-tag">{NEWS_TAG}</a>');
+    }
+  });
+});
+
+describe('popisek modelu neslibuje, co web nemá', () => {
+  // ‼️ Do 10. 9. 2026 slibovaly popisky u všech 2 092 modelů ceny v bazaru —
+  // ve všech pěti jazycích, i když je bazar z webu schovaný od června 2026.
+  // V Polsku to stálo 283 z 297 cenových dotazů s NULOU prokliků: Google
+  // stránku zobrazil, protože mluvila o ceně, a návštěvník žádnou nenašel.
+  //
+  // Test se váže na HIDDEN_SECTIONS: dokud je `bazar` skrytý ve VŠECH jazycích,
+  // popisek o cenách mluvit nesmí. Až se bazar vrátí, test si to všimne sám
+  // a přestane platit — nebude ho třeba mazat, jen bude tolerovat obojí.
+  const PRICE_WORDS = /cen[ay]|ceny|giełd|gield|Preise|ціни|cenník|cennik/i;
+
+  it('dokud je bazar skrytý, popisek modelu ceny neslibuje', () => {
+    const bazarHiddenEverywhere = locales.every((l) => HIDDEN_SECTIONS[l].includes('bazar'));
+    if (!bazarHiddenEverywhere) return; // bazar je zpátky → slib je legitimní
+
+    for (const loc of locales) {
+      const desc = ui[loc]['cat.s.d.descFallback'];
+      expect(desc, `${loc}: popisek slibuje ceny, ale bazar je skrytý`).not.toMatch(PRICE_WORDS);
+    }
+  });
+
+  it('spec-led začátek zůstává — ten je změřený jako funkční', () => {
+    // ⛔ Nesahat: /stroje překonává svou pozici, viz plán docs/plan-polsko-2026-09.md
+    for (const loc of locales) {
+      const desc = ui[loc]['cat.s.d.descFallback'];
+      expect(desc, `${loc}: chybí {power}`).toContain('{power}');
+      expect(desc, `${loc}: chybí {years}`).toContain('{years}');
     }
   });
 });

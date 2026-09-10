@@ -1097,7 +1097,11 @@ const pl: Record<string, string> = {
   'cat.s.d.contextGeneration': 'Generacja',
   'cat.s.d.titleSuffix': '{name} — dane techniczne i cena',
   'cat.s.d.titleSuffixNoPrice': '{name} — dane techniczne i specyfikacja',
-  'cat.s.d.descFallback': '{title} — {singular}, moc {power} KM, lata produkcji {years}. Dane techniczne, parametry i ceny na giełdzie.',
+  // ‼️ NESLIBOVAT CENY: popisek do 10. 9. 2026 končil „ceny v bazaru" (pl „ceny na
+  // giełdzie", de „Preise auf dem Agro-Markt") u všech 2 092 modelů — jenže bazar je
+  // z webu schovaný od června 2026. V Polsku to stálo 283 z 297 cenových dotazů
+  // s NULOU prokliků. Spec-led začátek zůstává, ten je změřený jako funkční.
+  'cat.s.d.descFallback': '{title} — {singular}, moc {power} KM, lata produkcji {years}. Pełna tabela danych technicznych.',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'model',

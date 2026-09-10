@@ -1095,7 +1095,11 @@ const sk: Record<string, string> = {
   'cat.s.d.contextGeneration': 'Generácia',
   'cat.s.d.titleSuffix': '{name} — technické údaje a cena',
   'cat.s.d.titleSuffixNoPrice': '{name} — technické údaje a špecifikácie',
-  'cat.s.d.descFallback': '{title} — {singular}, výkon {power} k, roky výroby {years}. Technické údaje, parametre a ceny v bazári.',
+  // ‼️ NESLIBOVAT CENY: popisek do 10. 9. 2026 končil „ceny v bazaru" (pl „ceny na
+  // giełdzie", de „Preise auf dem Agro-Markt") u všech 2 092 modelů — jenže bazar je
+  // z webu schovaný od června 2026. V Polsku to stálo 283 z 297 cenových dotazů
+  // s NULOU prokliků. Spec-led začátek zůstává, ten je změřený jako funkční.
+  'cat.s.d.descFallback': '{title} — {singular}, výkon {power} k, roky výroby {years}. Kompletná tabuľka technických parametrov.',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'model',
