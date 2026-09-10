@@ -145,7 +145,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 
   {featured && (
     <section class="hero-section">
-      <div class="hero-grid">
+      <div class={`hero-grid${heroRight.length === 3 ? ' hero-grid-3' : ''}`}>
         <div class="hero-card hero-main hero-wrap">
           <a href={localizeInternalHref(LOCALE, `/novinky/${featured.slug}/`)} class="hero-link">
             {featured.featured_image_url && (() => {
