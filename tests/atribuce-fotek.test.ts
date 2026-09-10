@@ -10,7 +10,9 @@ import yaml from 'js-yaml';
  *
  * Zástupné (AI generované) obrázky strojů kredit nepotřebují — jsou vlastní.
  */
-const ZAKAZANI_AUTORI = /^(wikimedia commons|commons|wikipedia|unknown|neznámý|own work|internet)$/i;
+const ZAKAZANI_AUTORI = /^(wikimedia commons|commons|wikipedia|unknown|unknown author|own work|internet)$/i;
+/** Licence, u kterých se jméno autora uvádět nemusí. */
+const BEZ_ATRIBUCE = /(^|\b)(cc0|public domain|volné dílo|pd-)/i;
 const ZAKAZANE_LICENCE = /(editorial|press use|press only|volné užití)/i;
 
 function souboryYaml(dir: string): string[] {
@@ -57,7 +59,9 @@ describe('atribuce fotek', () => {
   });
 
   it('žádný autor není jen zdroj („Wikimedia Commons")', () => {
-    const spatne = sKreditem.filter((z) => !z.autor || ZAKAZANI_AUTORI.test(z.autor.trim()));
+    const spatne = sKreditem
+      .filter((z) => !BEZ_ATRIBUCE.test(z.licence ?? ''))
+      .filter((z) => !z.autor || ZAKAZANI_AUTORI.test(z.autor.trim()));
     expect(spatne.map((z) => `${z.img} → ${z.autor}`)).toEqual([]);
   });
 
@@ -71,8 +75,9 @@ describe('atribuce fotek', () => {
     expect(spatne.map((z) => z.img)).toEqual([]);
   });
 
-  it('zdroje míří na Wikimedia Commons, ne na web výrobce', () => {
-    const cizi = sKreditem.filter((z) => z.zdroj && !/commons\.wikimedia\.org|unsplash\.com|pexels\.com/.test(z.zdroj));
-    expect(cizi.map((z) => `${z.img} → ${z.zdroj}`)).toEqual([]);
+  it('licence je rozpoznatelně volná, ne domněnka o „press use"', () => {
+    const VOLNA = /(cc0|cc by|public domain|volné dílo|gfdl|pd-)/i;
+    const spatne = sKreditem.filter((z) => !z.licence || !VOLNA.test(z.licence));
+    expect(spatne.map((z) => `${z.img} → ${z.licence}`)).toEqual([]);
   });
 });
