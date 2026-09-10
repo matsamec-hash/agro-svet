@@ -16,6 +16,11 @@ const uk: Record<string, string> = {
 
   // — obrázkový rozcestník na homepage (ImageAccordion) —
   'ia.cta': 'Перейти до розділу →',
+
+  // — RSS feed (rss.xml.ts) —
+  'rss.title': 'agro-svět.cz — новини',
+  'rss.desc': 'Актуальні новини аграрного сектору — техніка, ринок, бренди.',
+  'rss.linkTitle': 'agro-svět.cz — новини (RSS)',
   'ia.preview': 'натисніть для перегляду',
 
   // — navigace: top-level —

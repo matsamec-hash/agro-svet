@@ -9,7 +9,7 @@ import Footer from '../components/Footer.astro';
 import { siteSchemaGraph } from '../lib/structured-data';
 import { imgSrcset } from '../lib/image-variants';
 import { pageTitle, absoluteUrl, metaDescription } from '../lib/head-meta';
-import { getLocaleFromUrl, t, stripLocale, isLaunchedPath } from '../i18n/utils';
+import { getLocaleFromUrl, t, stripLocale, isLaunchedPath, localizePath } from '../i18n/utils';
 import { isLockedSectionPath } from '../i18n/nav';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
@@ -162,7 +162,7 @@ const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content={resolvedOgImage} />
 
-  <link rel="alternate" type="application/rss+xml" title="agro-svět.cz — novinky (RSS)" href="/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title={t(locale, 'rss.linkTitle')} href={localizePath(locale, '/rss.xml')} />
 
   <!-- Sitewide Organization + WebSite entity (@graph). Stránkové JSON-LD bloky
        referencují tyto @id místo duplikace → Google slučuje do jedné entity. -->
