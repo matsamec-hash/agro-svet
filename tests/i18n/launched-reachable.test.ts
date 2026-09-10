@@ -101,11 +101,10 @@ describe('rozcestník nelinkuje mimo launchnuté', () => {
  *  přichází. /de a /uk mají 0 děr, /sk a /pl je zdědily z doby, kdy jejich
  *  rozcestník vznikal s devíti kartami. */
 const HUB_GAPS: Partial<Record<Locale, string[]>> = {
-  sk: ['/data', '/svet', '/slovnik', '/novinky', '/kalkulacka', '/dotace', '/pruvodce',
-    '/zebricky', '/plodiny', '/choroby', '/sezona', '/akcie', '/kviz'],
-  pl: ['/novinky', '/svet', '/statistiky', '/data', '/kalkulacka/prevody-jednotek',
-    '/kalkulacka/prevody-hmotnost', '/encyklopedie', '/vcelarstvi', '/choroby',
-    '/plodiny', '/zebricky', '/kviz', '/sezona', '/akcie'],
+  // Prázdné od 2026-09-10: všechny čtyři rozcestníky odkazují na každou
+  // launchnutou sekci. Nová položka sem patří jen tehdy, když se sekce
+  // launchne dřív, než se na ni stihne odkázat — a má odsud zmizet hned,
+  // jak se karta doplní. Test hlásí obojí.
 };
 
 describe('rozcestník odkazuje na každou launchnutou sekci', () => {

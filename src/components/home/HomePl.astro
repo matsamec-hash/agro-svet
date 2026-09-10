@@ -49,16 +49,59 @@ const featured = feed[0];
 const heroRight = feed.slice(1, 5);
 const rest = feed.slice(5, 14);
 
-const SECTIONS = [
-  { href: '/pl/stroje/', icon: '🚜', title: 'Katalog maszyn', desc: 'Ciągniki, kombajny i maszyny rolnicze z parametrami technicznymi, mocą i opisem.' },
-  { href: '/pl/znacky/', icon: '🏷️', title: 'Marki', desc: 'Przegląd producentów techniki rolniczej — od Fendta i John Deere po Zetora.' },
-  { href: '/pl/srovnani/', icon: '⚖️', title: 'Porównania', desc: 'Bezpośrednie porównania modeli — moc, masa, parametry i werdykt, co wybrać.' },
-  { href: '/pl/plemena/', icon: '🐄', title: 'Rasy zwierząt', desc: 'Bydło, świnie, owce i drób — pochodzenie, użytkowość i cechy hodowlane ras.' },
-  { href: '/pl/poradniki/', icon: '📋', title: 'Poradniki', desc: 'Praktyczne poradniki krok po kroku — agrotechnika, dobór maszyn i hodowla.' },
-  { href: '/pl/slovnik/', icon: '📖', title: 'Słownik', desc: 'Ponad 300 pojęć rolniczych i technicznych z wyjaśnieniami — od hektara po dopłaty UE.' },
-  { href: '/pl/puda/', icon: '🌱', title: 'Ziemia rolna', desc: 'Rynek ziemi rolnej w Polsce — ceny, dzierżawa, regulacja KOWR i stan gleb.' },
-  { href: '/pl/doplaty-bezposrednie/', icon: '💶', title: 'Dopłaty bezpośrednie', desc: 'Aktualne stawki płatności bezpośrednich ARiMR — na hektar i na sztukę, kalkulator i FAQ.' },
-  { href: '/pl/ekoschematy/', icon: '🌿', title: 'Ekoschematy', desc: 'Stawki ekoschematów obszarowych — Rolnictwo węglowe, IP, rośliny miododajne i system punktowy.' },
+const NEWS_LINK = { href: '/pl/novinky/', label: 'Wszystkie aktualności' };
+
+// ‼️ Rozcestník miał dziewięć kart, choć pl ma launchnutých 23 sekcí. Launch
+// sekce a odkaz na ni jsou DVĚ různé věci — hlídá to launched-reachable.test.ts.
+// Cesty se drží v POLÍCH, kde je cesta řetězcový literál u klíče href;
+// právě ten tvar test parsuje.
+const GROUPS: { heading: string; lede: string; items: { href: string; icon: string; title: string; desc: string }[] }[] = [
+  {
+    heading: 'Technika',
+    lede: 'Katalog maszyn jest wspólny dla wszystkich wersji językowych — te same marki, te same serie, te same dane techniczne.',
+    items: [
+      { href: '/pl/stroje/', icon: '🚜', title: 'Katalog maszyn', desc: 'Ciągniki, kombajny i maszyny rolnicze z parametrami technicznymi, mocą i opisem.' },
+      { href: '/pl/znacky/', icon: '🏷️', title: 'Marki', desc: 'Przegląd producentów techniki rolniczej — od Fendta i John Deere po Zetora.' },
+      { href: '/pl/encyklopedie/', icon: '📚', title: 'Encyklopedia maszyn', desc: 'Szczegółowe portrety modeli: silnik, przekładnia, wyposażenie i dla kogo są przeznaczone.' },
+      { href: '/pl/srovnani/', icon: '⚖️', title: 'Porównanie modeli', desc: 'Bezpośrednie porównania modeli — moc, masa, parametry i werdykt, co wybrać.' },
+      { href: '/pl/zebricky/', icon: '🏆', title: 'Rankingi', desc: 'Zestawienia według mocy i szerokości roboczej — od ciągników kompaktowych po sieczkarnie powyżej 1 000 KM.' },
+      { href: '/pl/akcie/', icon: '📈', title: 'Akcje firm rolniczych', desc: 'Kursy akcji największych producentów maszyn, agrochemii i koncernów surowcowych świata.' },
+    ],
+  },
+  {
+    heading: 'Dopłaty i dane',
+    lede: 'Stawki ARiMR i dane rynkowe. Dopłaty i ekoschematy są polskie — to nie jest przetłumaczona czeska strona.',
+    items: [
+      { href: '/pl/doplaty-bezposrednie/', icon: '💶', title: 'Dopłaty bezpośrednie', desc: 'Aktualne stawki płatności bezpośrednich ARiMR — na hektar i na sztukę, kalkulator i FAQ.' },
+      { href: '/pl/ekoschematy/', icon: '🌿', title: 'Ekoschematy', desc: 'Stawki ekoschematów obszarowych — Rolnictwo węglowe, IP, rośliny miododajne i system punktowy.' },
+      { href: '/pl/statistiky/', icon: '📊', title: 'Rynki i surowce', desc: 'Ceny zbóż i rzepaku, produkcja i koszty środków produkcji w interaktywnych wykresach.' },
+      { href: '/pl/puda/', icon: '🌱', title: 'Ziemia rolna', desc: 'Rynek ziemi rolnej w Polsce — ceny, dzierżawa, regulacja KOWR i stan gleb.' },
+      { href: '/pl/data/', icon: '🗂️', title: 'Sekcja danych', desc: 'Wszystkie dane w jednym miejscu — rynki, ziemia i sprzedaż maszyn.' },
+      { href: '/pl/svet/', icon: '🗺️', title: 'Świat', desc: 'Rolnictwo w porównaniu krajów — powierzchnie, plony i pogłowie na mapie Europy.' },
+    ],
+  },
+  {
+    heading: 'Pole i zwierzęta',
+    lede: 'Agronomia i hodowla nie znają granic państwowych — patogeny i rasy tym bardziej.',
+    items: [
+      { href: '/pl/plodiny/', icon: '🌾', title: 'Rośliny i odmiany', desc: 'Agronomia roślin polowych — norma wysiewu, nawożenie, zmianowanie i plonowanie.' },
+      { href: '/pl/choroby/', icon: '🍂', title: 'Choroby i szkodniki', desc: 'Atlas chorób i szkodników roślin polowych: objawy, sprawcy i ochrona.' },
+      { href: '/pl/plemena/', icon: '🐄', title: 'Rasy zwierząt', desc: 'Bydło, świnie, owce i drób — pochodzenie, użytkowość i cechy hodowlane ras.' },
+      { href: '/pl/vcelarstvi/', icon: '🐝', title: 'Pszczelarstwo', desc: 'Rasy pszczół, sprzęt i odmiany miodu — przewodnik dla początkujących i doświadczonych.' },
+      { href: '/pl/sezona/', icon: '📅', title: 'Rok rolniczy', desc: 'Prace sezonowe miesiąc po miesiącu oraz kalendarz siewu i zbioru.' },
+      { href: '/pl/poradniki/', icon: '📋', title: 'Poradniki', desc: 'Praktyczne poradniki krok po kroku — agrotechnika, dobór maszyn i hodowla.' },
+    ],
+  },
+  {
+    heading: 'Słownik i narzędzia',
+    lede: 'To, co da się sprawdzić albo przeliczyć.',
+    items: [
+      { href: '/pl/slovnik/', icon: '📖', title: 'Słownik', desc: 'Ponad 300 pojęć rolniczych i technicznych z wyjaśnieniami — od hektara po dopłaty UE.' },
+      { href: '/pl/kalkulacka/prevody-jednotek/', icon: '📐', title: 'Przeliczanie jednostek powierzchni', desc: 'Hektary, ary, m² i akry — a do tego morgi ze starych ksiąg wieczystych.' },
+      { href: '/pl/kalkulacka/prevody-hmotnost/', icon: '⚖️', title: 'Przeliczanie jednostek masy', desc: 'Tony, decytony, buszle i funty — z masą buszla według standardu USDA.' },
+      { href: '/pl/kviz/', icon: '🎯', title: 'Quizy', desc: 'Sprawdź swoją wiedzę o technice, markach i rolnictwie.' },
+    ],
+  },
 ];
 
 const heroTagLabel = (cat: string | null) => (cat ? localizedCategory(LOCALE, newsCategorySlug(cat)) : 'Nowości');
@@ -123,6 +166,9 @@ const itemListJsonLd = homepageItems.length > 0 ? {
           </div>
         ))}
       </div>
+      <div class="home-newsbar">
+        <a href={NEWS_LINK.href} class="home-newslink">{NEWS_LINK.label} →</a>
+      </div>
     </section>
   )}
 
@@ -149,21 +195,24 @@ const itemListJsonLd = homepageItems.length > 0 ? {
     </section>
   )}
 
-  <section class="home-sections">
-    <div class="home-head">
-      <h2>Działy portalu</h2>
-    </div>
-    <div class="home-grid">
-      {SECTIONS.map((s) => (
-        <a href={s.href} class="home-card">
-          <span class="home-card-icon" aria-hidden="true">{s.icon}</span>
-          <h3>{s.title}</h3>
-          <p>{s.desc}</p>
-          <span class="home-card-cta">Przejdź do działu →</span>
-        </a>
-      ))}
-    </div>
-  </section>
+  {GROUPS.map((g) => (
+    <section class="home-sections">
+      <div class="home-head">
+        <h2>{g.heading}</h2>
+      </div>
+      <p class="hpl-lede">{g.lede}</p>
+      <div class="home-grid">
+        {g.items.map((s) => (
+          <a href={s.href} class="home-card">
+            <span class="home-card-icon" aria-hidden="true">{s.icon}</span>
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+            <span class="home-card-cta">Przejdź do działu →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
 
   <section class="home-commodity">
     <div class="home-head">
@@ -175,3 +224,12 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 
   <Newsletter />
 </Layout>
+
+<style>
+  /* Nadpis skupiny má pod sebou perex, takže menší mezera než ve sdíleném. */
+  .home-head { margin-bottom: 12px; }
+  .hpl-lede { max-width: 68ch; font-size: 1rem; line-height: 1.6; color: #555; margin: 0 0 28px; }
+  .home-newsbar { display: flex; justify-content: flex-end; padding-top: 14px; }
+  .home-newslink { font: 700 14px 'Chakra Petch', sans-serif; color: #0A0A0B; text-decoration: none; border-bottom: 2px solid #FFEA00; padding-bottom: 1px; }
+  .home-newslink:hover { border-bottom-color: #0A0A0B; }
+</style>

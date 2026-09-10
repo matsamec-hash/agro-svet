@@ -51,16 +51,58 @@ const featured = feed[0];
 const heroRight = feed.slice(1, 5);
 const rest = feed.slice(5, 14);
 
-const SECTIONS = [
-  { href: '/sk/stroje/', icon: '🚜', title: 'Katalóg strojov', desc: 'Traktory, kombajny a poľnohospodárske stroje s technickými parametrami, výkonom a popisom.' },
-  { href: '/sk/znacky/', icon: '🏷️', title: 'Značky', desc: 'Prehľad výrobcov poľnohospodárskej techniky — od Fendtu a John Deere po Zetor.' },
-  { href: '/sk/srovnani/', icon: '⚖️', title: 'Porovnania', desc: 'Priame porovnania modelov — výkon, hmotnosť, parametre a verdikt, čo vybrať.' },
-  { href: '/sk/plemena/', icon: '🐄', title: 'Plemená zvierat', desc: 'Hovädzí dobytok, ošípané, ovce a hydina — pôvod, úžitkovosť a chovné vlastnosti plemien.' },
-  { href: '/sk/encyklopedie/', icon: '📚', title: 'Encyklopédia', desc: 'Pojmy z poľnohospodárstva a techniky prehľadne vysvetlené — od stroja po agronómiu.' },
-  { href: '/sk/jak-na-to/', icon: '📋', title: 'Ako na to', desc: 'Praktické návody krok za krokom — agrotechnika, výber strojov a chov.' },
-  { href: '/sk/statistiky/', icon: '📊', title: 'Ceny a štatistiky', desc: 'Živé ceny komodít, produkcia, náklady na vstupy a regionálne dáta v interaktívnych grafoch.' },
-  { href: '/sk/puda/', icon: '🌱', title: 'Poľnohospodárska pôda', desc: 'Trh s poľnohospodárskou pôdou — ceny, nájom a stav pôd.' },
-  { href: '/sk/vcelarstvi/', icon: '🐝', title: 'Včelárstvo', desc: 'Chov včiel, medobranie a starostlivosť o včelstvá — praktické rady pre včelárov.' },
+const NEWS_LINK = { href: '/sk/novinky/', label: 'Všetky novinky' };
+
+// ‼️ Rozcestník mal deväť kariet, hoci sk má launchnutých 22 sekcií. Launch
+// sekcie a odkaz na ňu sú DVE rôzne veci — hlídá to launched-reachable.test.ts.
+// Cesty sa držia v POLIACH, kde je cesta reťazcový literál pri kľúči href;
+// práve ten tvar test parsuje.
+const GROUPS: { heading: string; lede: string; items: { href: string; icon: string; title: string; desc: string }[] }[] = [
+  {
+    heading: 'Technika',
+    lede: 'Katalóg strojov je spoločný pre všetky jazykové verzie — tie isté značky, tie isté série, tie isté technické údaje.',
+    items: [
+      { href: '/sk/stroje/', icon: '🚜', title: 'Katalóg strojov', desc: 'Traktory, kombajny a poľnohospodárske stroje s technickými parametrami, výkonom a popisom.' },
+      { href: '/sk/znacky/', icon: '🏷️', title: 'Značky', desc: 'Prehľad výrobcov poľnohospodárskej techniky — od Fendtu a John Deere po Zetor.' },
+      { href: '/sk/encyklopedie/', icon: '📚', title: 'Encyklopédia', desc: 'Pojmy z poľnohospodárstva a techniky prehľadne vysvetlené — od stroja po agronómiu.' },
+      { href: '/sk/srovnani/', icon: '⚖️', title: 'Porovnanie modelov', desc: 'Priame porovnania modelov — výkon, hmotnosť, parametre a verdikt, čo vybrať.' },
+      { href: '/sk/zebricky/', icon: '🏆', title: 'Rebríčky', desc: 'Zostavy podľa výkonu a záberu — od kompaktných traktorov po rezačky nad 1 000 koní.' },
+      { href: '/sk/akcie/', icon: '📈', title: 'Akcie agro firiem', desc: 'Kurzy akcií najväčších výrobcov techniky, agrochémie a komoditných koncernov sveta.' },
+    ],
+  },
+  {
+    heading: 'Dáta',
+    lede: 'Ceny, pôda a dotácie. ‼️ Časť čísel je českých — stránky to hovoria nahlas tam, kde slovenský zdroj zatiaľ nemáme.',
+    items: [
+      { href: '/sk/statistiky/', icon: '📊', title: 'Trhy a komodity', desc: 'Živé ceny komodít, produkcia, náklady na vstupy a regionálne dáta v interaktívnych grafoch.' },
+      { href: '/sk/puda/', icon: '🌱', title: 'Poľnohospodárska pôda', desc: 'Trh s poľnohospodárskou pôdou — ceny, nájom a stav pôd.' },
+      { href: '/sk/dotace/', icon: '💶', title: 'Dotácie', desc: 'Priame platby a eko-schémy s prepočtom na hektár.' },
+      { href: '/sk/data/', icon: '🗂️', title: 'Dátová sekcia', desc: 'Všetky dáta na jednom mieste — trhy, pôda, predaje techniky a história.' },
+      { href: '/sk/svet/', icon: '🗺️', title: 'Svet', desc: 'Poľnohospodárstvo v porovnaní krajín — plochy, úrody a stavy zvierat na mape Európy.' },
+      { href: '/sk/kalkulacka/', icon: '📐', title: 'Kalkulačky', desc: 'Prevody jednotiek plochy a hmotnosti, náklady a ďalšie prepočty pre bežnú prax.' },
+    ],
+  },
+  {
+    heading: 'Pole a zvieratá',
+    lede: 'Agronómia a chov štátne hranice nepoznajú — pôvodcovia chorôb a plemená už vôbec nie.',
+    items: [
+      { href: '/sk/plodiny/', icon: '🌾', title: 'Plodiny a odrody', desc: 'Agronómia poľných plodín — výsevok, hnojenie, osevný postup a úroda.' },
+      { href: '/sk/choroby/', icon: '🍂', title: 'Choroby a škodcovia', desc: 'Atlas chorôb a škodcov poľných plodín: príznaky, pôvodcovia a ochrana.' },
+      { href: '/sk/plemena/', icon: '🐄', title: 'Plemená zvierat', desc: 'Hovädzí dobytok, ošípané, ovce a hydina — pôvod, úžitkovosť a chovné vlastnosti plemien.' },
+      { href: '/sk/vcelarstvi/', icon: '🐝', title: 'Včelárstvo', desc: 'Chov včiel, medobranie a starostlivosť o včelstvá — praktické rady pre včelárov.' },
+      { href: '/sk/sezona/', icon: '📅', title: 'Poľnohospodársky rok', desc: 'Sezónne práce mesiac po mesiaci a kalendár sejby a zberu.' },
+      { href: '/sk/jak-na-to/', icon: '📋', title: 'Ako na to', desc: 'Praktické návody krok za krokom — agrotechnika, výber strojov a chov.' },
+    ],
+  },
+  {
+    heading: 'Sprievodca a nástroje',
+    lede: 'To, čo sa dá vyhľadať alebo prepočítať.',
+    items: [
+      { href: '/sk/slovnik/', icon: '📖', title: 'Slovník pojmov', desc: 'Vyše 300 pojmov z poľnohospodárstva a techniky vysvetlených bez omáčky.' },
+      { href: '/sk/pruvodce/', icon: '🧭', title: 'Sprievodca nákupom', desc: 'Ako vyberať stroj — na čo sa pýtať, čo porovnávať a čomu sa vyhnúť.' },
+      { href: '/sk/kviz/', icon: '🎯', title: 'Kvízy', desc: 'Overte si znalosti o technike, značkách a poľnohospodárstve.' },
+    ],
+  },
 ];
 
 const heroTagLabel = (cat: string | null) => (cat ? localizedCategory(LOCALE, newsCategorySlug(cat)) : 'Novinky');
@@ -124,6 +166,9 @@ const itemListJsonLd = homepageItems.length > 0 ? {
           </div>
         ))}
       </div>
+      <div class="home-newsbar">
+        <a href={NEWS_LINK.href} class="home-newslink">{NEWS_LINK.label} →</a>
+      </div>
     </section>
   )}
 
@@ -150,21 +195,24 @@ const itemListJsonLd = homepageItems.length > 0 ? {
     </section>
   )}
 
-  <section class="home-sections">
-    <div class="home-head">
-      <h2>Sekcie portálu</h2>
-    </div>
-    <div class="home-grid">
-      {SECTIONS.map((s) => (
-        <a href={s.href} class="home-card">
-          <span class="home-card-icon" aria-hidden="true">{s.icon}</span>
-          <h3>{s.title}</h3>
-          <p>{s.desc}</p>
-          <span class="home-card-cta">Prejsť do sekcie →</span>
-        </a>
-      ))}
-    </div>
-  </section>
+  {GROUPS.map((g) => (
+    <section class="home-sections">
+      <div class="home-head">
+        <h2>{g.heading}</h2>
+      </div>
+      <p class="hsk-lede">{g.lede}</p>
+      <div class="home-grid">
+        {g.items.map((s) => (
+          <a href={s.href} class="home-card">
+            <span class="home-card-icon" aria-hidden="true">{s.icon}</span>
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+            <span class="home-card-cta">Prejsť do sekcie →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
 
   <section class="home-commodity">
     <div class="home-head">
@@ -176,3 +224,12 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 
   <Newsletter />
 </Layout>
+
+<style>
+  /* Nadpis skupiny má pod sebou perex, takže menší mezera než ve sdíleném. */
+  .home-head { margin-bottom: 12px; }
+  .hsk-lede { max-width: 68ch; font-size: 1rem; line-height: 1.6; color: #555; margin: 0 0 28px; }
+  .home-newsbar { display: flex; justify-content: flex-end; padding-top: 14px; }
+  .home-newslink { font: 700 14px 'Chakra Petch', sans-serif; color: #0A0A0B; text-decoration: none; border-bottom: 2px solid #FFEA00; padding-bottom: 1px; }
+  .home-newslink:hover { border-bottom-color: #0A0A0B; }
+</style>
