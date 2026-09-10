@@ -16,6 +16,11 @@ export interface Plemeno {
   milk_yield_kg_year?: number | null;
   height_cm?: number | null;
   image_url?: string | null;
+  /** Atribuce fotky: jméno autora, název licence a odkaz na soubor na Commons.
+   *  V YAML byly odjakživa, jen chyběly v typu — detail plemene je vykresluje. */
+  image_credit?: string | null;
+  image_license?: string | null;
+  image_source_url?: string | null;
   specs?: Record<string, string | number | null>;
   /** Wikipedia URL (cs preferred). Feeds JSON-LD sameAs — Knowledge Graph signal. */
   wikipedia?: string;

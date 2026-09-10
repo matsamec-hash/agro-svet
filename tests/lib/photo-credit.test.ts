@@ -102,6 +102,7 @@ describe('atribuce fotek', () => {
     expect(licenseUrlFor('CC BY 2.0')).toBe('https://creativecommons.org/licenses/by/2.0/');
     expect(licenseUrlFor('CC BY-SA 3.0 de')).toBe('https://creativecommons.org/licenses/by-sa/3.0/de/');
     expect(licenseUrlFor('CC0')).toBe('https://creativecommons.org/publicdomain/zero/1.0/');
+    // Neznámý název licence odkaz nedostane — radši nic než odkaz jinam.
     expect(licenseUrlFor('Editorial / press use')).toBeUndefined();
   });
 
