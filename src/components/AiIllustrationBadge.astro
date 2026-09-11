@@ -1,0 +1,62 @@
+---
+// Plaketka „AI ilustrace" přes roh obrázku.
+//
+// PROČ: 10 plemen nemá fotku, ale snímek vygenerovaný modelem (v datech licence
+// „Synthetic — illustrative only"). Taková licence atribuci nevyžaduje, takže ji
+// `requiresAuthor()` pouští dál a souhrnný blok „Fotografie" ji vynechá —
+// výsledek byl, že u obrázku nestálo vůbec nic a čtenář ho četl jako fotografii
+// konkrétního zvířete. Plaketka to říká na místě, kde je obrázek vidět.
+//
+// Není to atribuce (tu AI snímek nepotřebuje), je to varování před záměnou.
+import { isSynthetic } from '../lib/photo-credit';
+import { t } from '../i18n/utils';
+import type { Locale } from '../i18n/config';
+
+interface Props {
+  license?: string | null;
+  locale?: Locale;
+  /** `sm` do mřížky miniatur, `md` k hero fotce. */
+  size?: 'sm' | 'md';
+}
+
+const { license, locale = (Astro.locals.locale ?? 'cs') as Locale, size = 'md' } = Astro.props;
+const show = isSynthetic(license);
+---
+
+{show && (
+  <span class:list={['ai-illu', size === 'sm' && 'ai-illu-sm']} title={t(locale, 'foto.aiIlustraceTip')}>
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" />
+    </svg>
+    {t(locale, 'foto.aiIlustrace')}
+  </span>
+)}
+
+<style>
+  /* Rodič musí mít `position: relative` — plaketka se lepí do levého horního
+     rohu obrázku, kde na žádné z těch karet nic jiného neleží. */
+  .ai-illu {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font: 600 11px/1.3 'Chakra Petch', sans-serif;
+    letter-spacing: 0.02em;
+    color: #0a0a0b;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(10, 10, 11, 0.12);
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+  }
+  .ai-illu-sm {
+    left: 6px;
+    top: 6px;
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+</style>

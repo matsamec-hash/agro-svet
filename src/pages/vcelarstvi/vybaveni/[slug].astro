@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
+import { licenseUrlFor } from '../../../lib/photo-credit';
 import { getAllVybaveni, getVybaveni, vybaveniKategorieLabel } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
 import { useTranslations, getLocaleFromUrl, localizePath, plural, BCP47 } from '../../../i18n/utils';
@@ -118,7 +119,13 @@ const thingJsonLd: Record<string, unknown> = {
                 ) : (
                   <span>{item.image_credit}</span>
                 )}
-                {item.image_license && <span class="hero-photo-license"> · {item.image_license}</span>}
+                {/* Licence musí být proklik na svůj text, ne holý řetězec — bez odkazu
+                    není CC BY / CC BY-SA atribuce splněná. */}
+                {item.image_license && (
+                  <span class="hero-photo-license"> · {licenseUrlFor(item.image_license)
+                    ? <a href={licenseUrlFor(item.image_license)} target="_blank" rel="license noopener noreferrer nofollow">{item.image_license}</a>
+                    : item.image_license}</span>
+                )}
               </figcaption>
             )}
           </figure>

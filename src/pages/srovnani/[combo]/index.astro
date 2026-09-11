@@ -8,6 +8,7 @@
 export const prerender = false;
 
 import Layout from '../../../layouts/Layout.astro';
+import PhotoCredits from '../../../components/PhotoCredits.astro';
 import {
   topComparisonPairs,
   expandedComparisonPairs,
@@ -304,6 +305,10 @@ function modelLink(m: typeof a): string {
         </div>
       </div>
     </section>
+
+    <!-- Obě fotky jedou jako CSS background-image, takže na ně nejde pověsit
+         popisek u obrázku; atribuci nese souhrnný blok na konci stránky. -->
+    <PhotoCredits images={[aPhoto, bPhoto]} locale={locale} />
 
   </div>
 </Layout>

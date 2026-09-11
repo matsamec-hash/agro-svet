@@ -11,7 +11,8 @@ import type { Locale } from '../i18n/config';
 
 interface Props {
   image?: string | null;
-  credit?: { author?: string; license?: string; sourceUrl?: string } | null;
+  /** `licenseUrl` dodej tam, kde se z názvu licence odvodit nedá (fotobanky). */
+  credit?: { author?: string; license?: string; licenseUrl?: string; sourceUrl?: string } | null;
   locale?: Locale;
 }
 
@@ -21,7 +22,7 @@ const resolved: PhotoCredit | null = credit?.author
   ? {
       author: credit.author,
       license: credit.license ?? '',
-      licenseUrl: licenseUrlFor(credit.license),
+      licenseUrl: credit.licenseUrl ?? licenseUrlFor(credit.license),
       source: credit.sourceUrl,
     }
   : (() => {

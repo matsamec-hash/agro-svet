@@ -1522,5 +1522,7 @@ const cs: Record<string, string> = {
   // Blok „Fotografie“ (PhotoCredits.astro) — atribuce fotek pod CC BY / CC BY-SA.
   'foto.blok.nadpis': 'Fotografie',
   'foto.blok.zdroj': 'zdroj',
+  'foto.aiIlustrace': 'AI ilustrace',
+  'foto.aiIlustraceTip': 'Snímek vygeneroval model, nejde o fotografii konkrétního zvířete.',
 };
 export default cs;

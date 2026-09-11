@@ -36,6 +36,20 @@ export function requiresAuthor(license: string | undefined | null): boolean {
   return !NO_ATTRIBUTION.test(license.trim());
 }
 
+/**
+ * Fotka, kterou nevyfotil nikdo — vygeneroval ji model (dnes 10 plemen, licence
+ * „Synthetic — illustrative only").
+ *
+ * Atribuci nevyžaduje, takže ji `requiresAuthor()` pouští dál a souhrnný blok
+ * „Fotografie" ji vynechává — jenže tím o ní čtenář nezjistil vůbec nic
+ * a u katalogu plemen si snadno splete ilustraci se snímkem zvířete. Proto
+ * vlastní příznak: kde se taková fotka ukáže, musí u ní být vidět, že je to
+ * ilustrace.
+ */
+export function isSynthetic(license: string | undefined | null): boolean {
+  return /^synthetic|^ai[-\s]?gener/i.test((license ?? '').trim());
+}
+
 /** Z názvu licence odvodí odkaz na její text. Neznámou licenci nechá bez odkazu. */
 export function licenseUrlFor(license: string | undefined | null): string | undefined {
   if (!license) return undefined;
@@ -257,10 +271,11 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
     source: 'https://commons.wikimedia.org/wiki/File:Prag,_Prager_Burg,_Veitsdom_--_2019_--_6690.jpg',
   },
 
-  // /novinky — cover fotky článků. CMS (admin.samecdigital.com) pole pro kredit
-  // nemá, takže fotky z Commons se tam nedají doplnit u zdroje; dokud ho
-  // nedostane, drží se atribuce tady. Zbytek coverů jsou Pexels/Unsplash/Pixabay,
-  // ty pozná `stockCreditFor` podle názvu souboru.
+  // /novinky — cover fotky článků. Zdroj pravdy je sloupec
+  // `articles.featured_image_credit` (viz `creditFromArticle` níž); tenhle
+  // seznam je záložní pro případ, že řádek v databázi kredit nemá.
+  // (Dřív tu stálo, že CMS pole pro kredit vůbec nemá — mělo ho 28 z 38
+  // publikovaných článků, jen ho web nečetl.)
   'https://cdn.samecdigital.com/rehost-fendt-1050-vario-rekordni-priplatek.webp': {
     author: 'MarcelX42',
     license: 'CC BY-SA 4.0',
@@ -361,16 +376,101 @@ export function creditFor(path: string | null | undefined): PhotoCredit | null {
   return stockCreditFor(key);
 }
 
+// ---------------------------------------------------------------------------
+// Kredit z databáze článků
+// ---------------------------------------------------------------------------
+
+/**
+ * Licence fotobanky podle jejího názvu v `articles.featured_image_credit`.
+ *
+ * Jen banky, které mají JEDNU licenci pro celý katalog. Wikimedia Commons tu
+ * schválně není — na Commons má každý soubor licenci vlastní, z názvu „commons"
+ * se odvodit nedá a uhodnutá licence je horší než žádná. Takový řádek musí mít
+ * `license` vyplněnou přímo.
+ */
+const PROVIDER_LICENSE: Record<string, { license: string; licenseUrl: string }> = {
+  unsplash: { license: 'Unsplash License', licenseUrl: 'https://unsplash.com/license' },
+  pexels: { license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/' },
+  pixabay: { license: 'Pixabay Content License', licenseUrl: 'https://pixabay.com/service/license-summary/' },
+};
+
+/** Tvar sloupce `articles.featured_image_credit` (jsonb). Starší řádky nesou prostý text. */
+export type ArticleImageCredit =
+  | string
+  | {
+      provider?: string | null;
+      source_url?: string | null;
+      photographer_name?: string | null;
+      photographer_url?: string | null;
+      /** Název licence u zdrojů, kde ji provider neurčuje (Commons, vlastní snímky). */
+      license?: string | null;
+    }
+  | null
+  | undefined;
+
+/**
+ * Kredit ke cover fotce článku ze sloupce `articles.featured_image_credit`.
+ *
+ * ‼️ Tenhle sloupec je zdroj pravdy — CMS ho plní při výběru fotky z banky
+ * a nese jméno fotografa (28 z 38 publikovaných článků). Web ho do 9/2026
+ * vůbec nečetl a spoléhal se jen na `stockCreditFor()`, který licenci HÁDÁ
+ * z názvu souboru („…-pexels-30685678__v-w1600.webp"). Hádání zůstává jako
+ * fallback pro starší soubory, ale vyplněný sloupec má vždycky přednost —
+ * jméno fotografa se z názvu souboru dozvědět nedá.
+ *
+ * Prostý text (dva staré řádky „Foto: Pexels") se bere jako název zdroje bez
+ * autora; licenci k němu dohledá `PROVIDER_LICENSE` podle názvu banky.
+ */
+export function creditFromArticle(
+  credit: ArticleImageCredit,
+  imageUrl?: string | null,
+): PhotoCredit | null {
+  const fallback = () => creditFor(imageUrl);
+
+  if (typeof credit === 'string') {
+    const text = credit.trim();
+    if (!text) return fallback();
+    const provider = Object.keys(PROVIDER_LICENSE).find((p) => new RegExp(`\\b${p}\\b`, 'i').test(text));
+    // „Foto: Pexels" není jméno fotografa, jen banka — autor zůstane prázdný,
+    // ať se do kreditu nedostane zdroj vydávaný za autora.
+    if (provider) return { author: '', ...PROVIDER_LICENSE[provider]! };
+    return fallback();
+  }
+
+  if (credit && typeof credit === 'object') {
+    const provider = (credit.provider ?? '').toLowerCase();
+    const known = PROVIDER_LICENSE[provider];
+    const explicit = (credit.license ?? '').trim();
+    const license = explicit || known?.license || '';
+    const author = (credit.photographer_name ?? '').trim();
+    const source = (credit.source_url ?? '').trim() || undefined;
+    // Samotný odkaz na zdroj kredit není („Wikimedia Commons" byla přesně ta
+    // vada, za kterou přišla výzva). Bez licence i bez autora se padá zpátky
+    // na registr, ať z toho nevznikne prázdná plaketka.
+    if (license || author) {
+      return {
+        author,
+        license,
+        licenseUrl: explicit ? licenseUrlFor(explicit) : known?.licenseUrl,
+        source,
+      };
+    }
+  }
+
+  return fallback();
+}
+
 /**
  * Kredity pro seznam obrázků — deduplikované podle (autor, licence, zdroj),
  * v pořadí prvního výskytu. Licence bez povinné atribuce se do bloku
  * nevypisují: u Unsplash/Pexels/volného díla nemá co splňovat.
  */
-export function creditsFor(paths: (string | null | undefined)[]): PhotoCredit[] {
+export function creditsFor(paths: (string | PhotoCredit | null | undefined)[]): PhotoCredit[] {
   const seen = new Set<string>();
   const out: PhotoCredit[] = [];
   for (const p of paths) {
-    const c = creditFor(p);
+    // Hotový kredit (z databáze) se nedohledává znovu podle cesty k souboru.
+    const c = typeof p === 'object' && p !== null ? p : creditFor(p);
     if (!c || !requiresAuthor(c.license)) continue;
     const key = `${c.author}|${c.license}|${c.source ?? ''}`;
     if (seen.has(key)) continue;

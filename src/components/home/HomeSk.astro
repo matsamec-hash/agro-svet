@@ -13,6 +13,8 @@ import '../../styles/home.css';
 import ArticleCard from '../ArticleCard.astro';
 import CommodityChart from '../statistiky/CommodityChart.astro';
 import Newsletter from '../Newsletter.astro';
+import PhotoCredits from '../PhotoCredits.astro';
+import { creditFromArticle } from '../../lib/photo-credit';
 import { createAnonClient } from '../../lib/supabase';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../lib/config';
 import { imgSrcset } from '../../lib/image-variants';
@@ -33,7 +35,7 @@ let feed: any[] = [];
 if (idList.length) {
   let q = supabase
     .from('articles')
-    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
+    .select('id, title, slug, perex, featured_image_url, featured_image_credit, focal_point, category, tags, published_at, featured')
     .eq('site_id', SITE_ID)
     .eq('status', 'published')
     .in('id', idList);
@@ -226,6 +228,10 @@ const itemListJsonLd = homepageItems.length > 0 ? {
     </div>
     <CommodityChart commodityNames={COMMODITY_NAMES_SK} dataBase="-sk" numLocale="sk-SK" locale={LOCALE} />
   </section>
+
+  <!-- Kredit k fotkám hero mřížky i feedu — jazykové homepage ho na rozdíl
+       od cs verze nedostávaly vůbec, přes ně jde jen titulek článku. -->
+  <PhotoCredits credits={[featured, ...heroRight, ...rest].filter(Boolean).map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={LOCALE} />
 
   <Newsletter />
 </Layout>

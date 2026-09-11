@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
+import PhotoCredits from '../../../components/PhotoCredits.astro';
 import { getAllVcely, vcelaTemperamentLabel, vcelaVynosLabel } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
 import { useTranslations, getLocaleFromUrl, localizePath, BCP47 } from '../../../i18n/utils';
@@ -109,6 +110,10 @@ const collectionJsonLd = {
         </div>
       </div>
     </section>
+
+    <!-- Miniatury jedou jako CSS background-image, popisek u fotky se tam
+         nevejde; atribuci nese souhrnný blok na konci výpisu. -->
+    <PhotoCredits images={vcely.map((v) => v.image_url)} locale={locale} />
 
   </div>
 </Layout>

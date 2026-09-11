@@ -1,6 +1,7 @@
 ---
 import ArticleCard from '../ArticleCard.astro';
 import PhotoCredits from '../PhotoCredits.astro';
+import { creditFromArticle } from '../../lib/photo-credit';
 import { createAnonClient } from '../../lib/supabase';
 import { AGRO_SVET_SITE_ID as SITE_ID } from '../../lib/config';
 import { getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
@@ -22,7 +23,7 @@ let latest: any[] = [];
 if (!(trIds && trIds.size === 0)) {
   let q = supabase
     .from('articles')
-    .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
+    .select('id, title, slug, perex, featured_image_url, featured_image_credit, focal_point, category, tags, published_at, featured')
     .eq('site_id', SITE_ID)
     .eq('status', 'published');
   if (trIds) q = q.in('id', [...trIds]);
@@ -65,6 +66,6 @@ const allCta = locale === 'sk' ? 'Všetky novinky →' : locale === 'pl' ? 'Wszy
       />
     ))}
   </div>
-  <PhotoCredits images={latest.map((a) => a.featured_image_url)} locale={locale} />
+  <PhotoCredits credits={latest.map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={locale} />
 </section>
 )}

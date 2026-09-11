@@ -7,6 +7,7 @@ import { chorobaChipsForPlodina } from '../../../lib/choroby';
 import { useTranslations, tf, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../../i18n/utils';
 import { breadcrumbSchema, howToSchema, faqPageSchema, itemListSchema, imageObjectSchema } from '../../../lib/structured-data';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
+import { licenseUrlFor } from '../../../lib/photo-credit';
 import { injectLinksInText, createLinkContext } from '../../../lib/auto-linker';
 
 const { plodina: slug } = Astro.params;
@@ -141,12 +142,19 @@ const list = plodina.odrudy.length > 0
     </section>
 
     {plodina.hero_image && (
+      /* Název licence je proklik na její text. Samotné „CC BY-SA 3.0" v textu
+         podmínku nesplní — CC BY i CC BY-SA chtějí jméno autora, název licence
+         A odkaz na její znění. */
       <p class="hero-attribution">
         {plodina.hero_license === 'Public domain' && !plodina.hero_author
           ? <>{tr('plod.d.photoIllu')}, <a href={plodina.hero_source} target="_blank" rel="noopener nofollow">{tr('plod.d.srcLbl')}</a></>
-          : plodina.hero_author
-            ? <>{tr('plod.d.photoLbl')}: {plodina.hero_author}, {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">{tr('plod.d.srcLbl')}</a>)</>
-            : <>{tr('plod.d.photoLbl')}: {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">{tr('plod.d.srcLbl')}</a>)</>
+          : <>
+              {tr('plod.d.photoLbl')}: {plodina.hero_author ? `${plodina.hero_author}, ` : ''}
+              {licenseUrlFor(plodina.hero_license)
+                ? <a href={licenseUrlFor(plodina.hero_license)} target="_blank" rel="license noopener nofollow">{plodina.hero_license}</a>
+                : plodina.hero_license}
+              {' ('}<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">{tr('plod.d.srcLbl')}</a>{')'}
+            </>
         }
       </p>
     )}

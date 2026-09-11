@@ -5,6 +5,7 @@ export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import PhotoCredits from '../../../../components/PhotoCredits.astro';
+import { creditFromArticle } from '../../../../lib/photo-credit';
 import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, getCategoryColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
@@ -44,7 +45,7 @@ let articles: any[] | null = null;
 if (!noTranslated) {
   let q = supabase
     .from('articles')
-    .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+    .select('id, title, slug, perex, featured_image_url, featured_image_credit, category, tags, published_at')
     .eq('site_id', SITE_ID)
     .eq('status', 'published')
     .order('published_at', { ascending: false });
@@ -144,7 +145,7 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
           />
         ))}
       </div>
-      <PhotoCredits images={items.map((a: any) => a.featured_image_url)} locale={locale} />
+      <PhotoCredits credits={items.map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={locale} />
       </>
     ) : (
       <p style="padding:48px 0; text-align:center; color:#666;">

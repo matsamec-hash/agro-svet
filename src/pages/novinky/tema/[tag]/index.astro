@@ -5,6 +5,7 @@ export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import ArticleCard from '../../../../components/ArticleCard.astro';
 import PhotoCredits from '../../../../components/PhotoCredits.astro';
+import { creditFromArticle } from '../../../../lib/photo-credit';
 import { createAnonClient } from '../../../../lib/supabase';
 import { tagStyle, categoryStyle, getTagColor } from '../../../../lib/tag-color';
 import { AGRO_SVET_SITE_ID as SITE_ID, SITE_URL } from '../../../../lib/config';
@@ -30,7 +31,7 @@ let articles: any[] | null = null;
 if (!noTranslated) {
   let articlesQuery = supabase
     .from('articles')
-    .select('id, title, slug, perex, featured_image_url, category, tags, published_at')
+    .select('id, title, slug, perex, featured_image_url, featured_image_credit, category, tags, published_at')
     .eq('site_id', SITE_ID)
     .eq('status', 'published')
     .contains('tags', [tag])
@@ -147,7 +148,7 @@ const collectionJsonLd = {
           />
         ))}
       </div>
-      <PhotoCredits images={items.map((a: any) => a.featured_image_url)} locale={locale} />
+      <PhotoCredits credits={items.map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={locale} />
       </>
     ) : (
       <p style="padding:48px 0; text-align:center; color:#666;">

@@ -14,68 +14,7 @@ function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 }
 
-async function downloadImages(
-  supabase: ReturnType<typeof createServerClient>,
-  urls: string[],
-): Promise<{ paths: string[]; debug: string[] }> {
-  const paths: string[] = [];
-  const debug: string[] = [];
-  for (const [i, url] of urls.slice(0, 5).entries()) {
-    try {
-      // Hlavičky proti hotlink ochraně Bazoše (jinak www.bazos.cz může blokovat).
-      const res = await fetch(url, {
-        headers: {
-          'user-agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
-          referer: 'https://www.bazos.cz/',
-          accept: 'image/avif,image/webp,image/*,*/*;q=0.8',
-        },
-      });
-      if (!res.ok) {
-        debug.push(`#${i}: fetch HTTP ${res.status}`);
-        continue;
-      }
-      const raw = Buffer.from(await res.arrayBuffer());
-      // Ořízni spodní pruh s vodoznakem Bazoše (ve výšce loga). Přes sharp: uřízneme
-      // spodní ~7 % výšky. Když sharp selže, nahrajeme originál (fotka je důležitější
-      // než ořez). Výstup normalizujeme na JPEG.
-      let out: Buffer = raw;
-      let cropped = false;
-      try {
-        const sharp = (await import('sharp')).default;
-        const img = sharp(raw);
-        const meta = await img.metadata();
-        if (meta.height && meta.width) {
-          const cropPx = Math.round(meta.height * 0.07);
-          if (cropPx > 4 && meta.height - cropPx > 80) {
-            out = await img
-              .extract({ left: 0, top: 0, width: meta.width, height: meta.height - cropPx })
-              .jpeg({ quality: 85 })
-              .toBuffer();
-            cropped = true;
-          }
-        }
-      } catch (e) {
-        debug.push(`#${i}: ořez přeskočen (${(e as Error).message})`);
-      }
-      const path = `seed/${crypto.randomUUID()}-${i}.jpg`;
-      const { error } = await supabase.storage.from('bazar-images').upload(path, out, {
-        contentType: 'image/jpeg',
-      });
-      if (error) {
-        debug.push(`#${i}: upload "${error.message}"`);
-        continue;
-      }
-      paths.push(path);
-      debug.push(`#${i}: OK ${Math.round(out.length / 1024)}KB${cropped ? ' (oříznuto)' : ''}`);
-    } catch (e) {
-      debug.push(`#${i}: threw "${(e as Error).message}"`);
-    }
-  }
-  return { paths, debug };
-}
-
-type ImportOk = { ok: true; imageCount: number; imageUrlsFound: number; imageDebug: string[]; [k: string]: unknown };
+type ImportOk = { ok: true; photosLeftAtSeller: number; [k: string]: unknown };
 type ImportErr = { ok: false; error: string; status: number };
 
 /**
@@ -126,7 +65,14 @@ async function importOne(
       ? `${structured.description}\n\nVýbava: ${structured.features.join(' • ')}`
       : structured.description;
 
-    const { paths: imagePaths, debug: imageDebug } = await downloadImages(supabase, parsed.imageUrls);
+    // Fotky se ZÁMĚRNĚ nestahují. Dřív se tady s podvrženou hlavičkou prohlížeče
+    // stáhla cizí fotka z Bazoše, `sharp.extract()` uřízl spodních ~7 % výšky
+    // (tam je vodoznak) a výsledek se nahrál do našeho bucketu. Odstranění
+    // informace o správě práv je samostatný delikt podle § 43 autorského zákona
+    // a k samotné fotce nemáme licenci ani od prodejce, ani od Bazoše.
+    // Fotka zůstává u prodejce; svoje fotky si k inzerátu nahraje sám, až si ho
+    // převezme (`/bazar/prevzit/<token>`). Počet fotek jen ohlásíme.
+    const photosLeftAtSeller = parsed.imageUrls.length;
 
     // Orientační poloha pro mapu (centrum města / PSČ), ať se seedovaný inzerát
     // po zveřejnění zobrazí na /bazar/mapa. Bez souřadnic ho mapa nevykreslí.
@@ -164,8 +110,8 @@ async function importOne(
         latitude,
         longitude,
         attributes: structured.attributes,
-      }, imagePaths);
-      return { ok: true, title: structured.title, imageCount: imagePaths.length, imageUrlsFound: parsed.imageUrls.length, imageDebug, prospectId: targetProspectId, listingId };
+      });
+      return { ok: true, title: structured.title, photosLeftAtSeller, prospectId: targetProspectId, listingId };
     }
 
     const result = await createProspectWithDraft(supabase, {
@@ -192,10 +138,9 @@ async function importOne(
         longitude,
         attributes: structured.attributes,
       },
-      imagePaths,
     });
 
-    return { ok: true, title: structured.title, imageCount: imagePaths.length, imageUrlsFound: parsed.imageUrls.length, imageDebug, ...result };
+    return { ok: true, title: structured.title, photosLeftAtSeller, ...result };
   } catch (e) {
     return { ok: false, error: `Import selhal: ${(e as Error).message}`, status: 500 };
   }

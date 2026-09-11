@@ -289,9 +289,9 @@ const tiles = [
       });
       const data = await res.json();
       msg.textContent = res.ok
-        ? `Hotovo — draft vytvořen. Fotky ${data.imageCount ?? 0}/${data.imageUrlsFound ?? 0} — ${(data.imageDebug || []).join(' | ') || 'žádné URL'}`
+        ? `Hotovo — draft vytvořen (jen text). Fotky se z cizího inzerátu nestahují, ${data.photosLeftAtSeller ?? 0} jich zůstalo u prodejce — nahraje si je sám při převzetí.`
         : `Chyba: ${data.error}`;
-      // Bez auto-reloadu, ať je diagnostika fotek čitelná; řádek se objeví po ručním F5.
+      // Bez auto-reloadu, ať je hláška čitelná; řádek se objeví po ručním F5.
     });
 
     const batchForm = document.getElementById('batchForm') as HTMLFormElement;
@@ -319,7 +319,7 @@ const tiles = [
           for (const r of data.results) {
             const li = document.createElement('li');
             li.textContent = r.ok
-              ? `✅ ${r.title || r.url} — fotky ${r.imageCount ?? 0}/${r.imageUrlsFound ?? 0}`
+              ? `✅ ${r.title || r.url} — jen text, ${r.photosLeftAtSeller ?? 0} fotek zůstalo u prodejce`
               : `❌ ${r.url} — ${r.error}`;
             li.className = r.ok ? 'text-green-700' : 'text-red-700';
             batchResults.appendChild(li);

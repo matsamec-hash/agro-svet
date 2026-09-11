@@ -3,6 +3,7 @@
 // locals.locale. cs výstup identický (rovnaký kód). Canonical odvodí Layout.
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
+import PhotoCredits from '../../components/PhotoCredits.astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema } from '../../lib/structured-data';
@@ -76,6 +77,10 @@ const itemListJsonLd = {
         </a>
       ))}
     </div>
+
+    <!-- Loga na kartách jsou z Commons a dvě z nich (Bednar, Joskin) jsou
+         CC BY-SA — ochranná známka o autorských právech k souboru nic neříká. -->
+    <PhotoCredits images={sorted.map((z) => ZNACKA_LOGO[z.id])} locale={locale} />
   </div>
 </Layout>
 

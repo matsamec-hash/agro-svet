@@ -1,25 +1,18 @@
 #!/usr/bin/env node
-// Audit all photo image_url fields across stroje/*.yaml — list photo files and confirm
-// each has a known/legal source. Output: report of OK / MISSING source / on-disk-but-not-in-YAML.
+// Audit fotek v `src/data/stroje/*.yaml` — u každé série ověří, že u fotky stojí
+// doložený zdroj (odkaz na soubor), a vypíše, co na disku leží navíc.
+//
+// ‼️ Do 9/2026 tu byla tabulka `BRAND_OFFICIAL`, která fotce bez zdroje dosadila
+// web výrobce a licenci „Editorial / press use". Taková licence neexistuje —
+// byla to domněnka, ne doklad, a audit díky ní hlásil zelenou u fotek, ke kterým
+// jsme neměli nic. Fotka bez `image_credit_url` je od teď nález, ne „brand
+// fallback".
 //
 // Usage: node scripts/photos-audit.mjs
 
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import yaml from 'js-yaml';
-
-const BRAND_OFFICIAL = {
-  'john-deere':       { source: 'deere.cz',       license: 'Editorial / press use', url: 'https://www.deere.cz/cs/traktory/' },
-  fendt:              { source: 'fendt.com',      license: 'Editorial / press use', url: 'https://www.fendt.com/cz/traktory' },
-  claas:              { source: 'claas.com',      license: 'Editorial / press use', url: 'https://www.claas.com/cs-cz/zemedelske-stroje/traktory' },
-  zetor:              { source: 'zetor.com',      license: 'Editorial / press use', url: 'https://www.zetor.com/cs/zetor-products' },
-  'massey-ferguson':  { source: 'masseyferguson.com', license: 'Editorial / press use', url: 'https://www.masseyferguson.com/en.html' },
-  'new-holland':      { source: 'newhollandag.com', license: 'Editorial / press use', url: null },
-  'case-ih':          { source: 'caseih.com',     license: 'Editorial / press use', url: null },
-  'deutz-fahr':       { source: 'deutz-fahr.com', license: 'Editorial / press use', url: null },
-  valtra:             { source: 'valtra.com',     license: 'Editorial / press use', url: null },
-  kubota:             { source: 'kubota.com',     license: 'Editorial / press use', url: null },
-};
 
 const STROJE_DIR = 'src/data/stroje';
 const PHOTO_DIR = 'public/images/stroje';
@@ -42,11 +35,10 @@ for (const file of yamlFiles) {
         continue;
       }
       photosInYaml.add(s.image_url);
-      const credit = s.image_credit_url || BRAND_OFFICIAL[brandSlug]?.url;
-      if (!credit) {
-        issues.missing_source.push(`[${brandSlug}/${cat}] ${s.slug} → ${s.image_url} (no credit URL)`);
+      if (!s.image_credit_url) {
+        issues.missing_source.push(`[${brandSlug}/${cat}] ${s.slug} → ${s.image_url} (bez odkazu na zdroj)`);
       } else {
-        const src = s.image_credit_url ? new URL(s.image_credit_url).hostname.replace(/^www\./, '') : BRAND_OFFICIAL[brandSlug].source;
+        const src = new URL(s.image_credit_url).hostname.replace(/^www\./, '');
         ok.push(`[${brandSlug}] ${s.slug}: ${s.image_url.split('/').pop()} ← ${src}`);
       }
     }
@@ -67,13 +59,13 @@ for (const brandDir of brandDirs) {
 }
 
 console.log('==== Photos audit ====\n');
-console.log(`✓ ${ok.length} photos with proper attribution`);
-console.log(`⚠ ${issues.missing_source.length} photos missing source URL (using brand fallback)`);
+console.log(`✓ ${ok.length} fotek s doloženým zdrojem`);
+console.log(`⚠ ${issues.missing_source.length} fotek bez odkazu na zdroj — nemají doložený původ`);
 console.log(`✗ ${issues.no_image.length} current series without image (will use brand-color gradient)`);
 console.log(`⊘ ${issues.orphaned_files.length} files on disk not referenced in YAML`);
 
 if (issues.missing_source.length > 0) {
-  console.log('\n== Missing source URL ==');
+  console.log('\n== Bez odkazu na zdroj ==');
   for (const x of issues.missing_source.slice(0, 20)) console.log(`  ${x}`);
 }
 if (issues.no_image.length > 0) {

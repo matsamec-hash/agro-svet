@@ -4,11 +4,14 @@ import { join, relative } from 'node:path';
 import {
   PHOTO_CREDITS,
   creditFor,
+  creditFromArticle,
   creditsFor,
   canonicalPath,
+  isSynthetic,
   licenseUrlFor,
   requiresAuthor,
 } from '../../src/lib/photo-credit';
+import yaml from 'js-yaml';
 
 /**
  * Rohatka atribuce fotek.
@@ -158,5 +161,119 @@ describe('atribuce fotek', () => {
       expect(c, slug).toBeTruthy();
       if (requiresAuthor(c!.license)) expect(c!.author, slug).toBeTruthy();
     }
+  });
+});
+
+/**
+ * Cover fotky článků. Zdroj pravdy je sloupec `articles.featured_image_credit`
+ * — CMS do něj zapisuje banku, jméno fotografa a odkaz na originál. Web ho do
+ * 9/2026 nečetl a licenci si HÁDAL z názvu souboru; hádání zůstává jen jako
+ * fallback pro starší soubory.
+ */
+describe('kredit z databáze článků', () => {
+  it('objekt z CMS má přednost před hádáním z názvu souboru', () => {
+    const c = creditFromArticle(
+      {
+        provider: 'pexels',
+        source_url: 'https://www.pexels.com/photo/brown-cattle-30685678/',
+        photographer_name: 'Roman Biernacki',
+        photographer_url: 'https://www.pexels.com/@szafran',
+      },
+      'https://cdn.samecdigital.com/1777293361099-pexels-30685678__v-w1600.webp',
+    );
+    // Z názvu souboru se dá poznat jen banka; jméno fotografa nese databáze.
+    expect(c?.author).toBe('Roman Biernacki');
+    expect(c?.license).toBe('Pexels License');
+    expect(c?.source).toContain('pexels.com/photo/');
+  });
+
+  it('licence vyplněná v řádku přebije provider (Commons nemá jednu licenci)', () => {
+    const c = creditFromArticle({
+      provider: 'wikimedia-commons',
+      license: 'CC BY-SA 4.0',
+      photographer_name: 'MarcelX42',
+      source_url: 'https://commons.wikimedia.org/wiki/File:Fendt_1050_Vario_Agritechnica_2023_(DSC05113).jpg',
+    });
+    expect(c?.license).toBe('CC BY-SA 4.0');
+    expect(c?.licenseUrl).toBe('https://creativecommons.org/licenses/by-sa/4.0/');
+    expect(requiresAuthor(c!.license)).toBe(true);
+    expect(c?.author).toBe('MarcelX42');
+  });
+
+  it('starý prostý text „Foto: Pexels" je zdroj, ne jméno fotografa', () => {
+    const c = creditFromArticle('Foto: Pexels', '/images/telata.webp');
+    expect(c?.author).toBe('');
+    expect(c?.license).toBe('Pexels License');
+  });
+
+  it('prázdný sloupec spadne zpět na registr', () => {
+    expect(creditFromArticle(null, '/images/telata.webp')?.author).toBe('Susanne Nilsson');
+    expect(creditFromArticle({}, '/images/telata.webp')?.author).toBe('Susanne Nilsson');
+    expect(creditFromArticle(null, null)).toBeNull();
+  });
+
+  it('samotný odkaz na zdroj se za kredit nevydává', () => {
+    // „Wikimedia Commons" místo jména autora byla přesně ta vada, za kterou
+    // přišla výzva — řádek jen s URL proto kredit nedělá.
+    const c = creditFromArticle(
+      { source_url: 'https://commons.wikimedia.org/wiki/File:Cokoli.jpg' },
+      '/images/telata.webp',
+    );
+    expect(c?.author).toBe('Susanne Nilsson');
+  });
+});
+
+/**
+ * AI snímky plemen. Licence „Synthetic — illustrative only" atribuci
+ * nevyžaduje, takže je `requiresAuthor()` pustí a souhrnný blok „Fotografie"
+ * je vynechá — o obrázku by se pak čtenář nedozvěděl vůbec nic. Plaketku
+ * „AI ilustrace" vykresluje `AiIllustrationBadge.astro` podle `isSynthetic()`,
+ * takže příznak musí sedět ve VŠECH jazykových overlayích: jinak by cizojazyčná
+ * verze téhož plemene ukázala ilustraci jako fotografii.
+ */
+describe('AI generované fotky plemen', () => {
+  const AI_SLUGS = [
+    'belgicke-modrobile', 'bile-otcovske', 'bile-uslechtile', 'brown-swiss',
+    'ceska-landrasa', 'czech-moravsky-kun', 'gasconne', 'merinolandschaf',
+    'slezsky-norik', 'valaska',
+  ];
+
+  function syntheticIn(dir: string): { slug: string; credit?: string }[] {
+    const out: { slug: string; credit?: string }[] = [];
+    const walk = (n: unknown) => {
+      if (Array.isArray(n)) return n.forEach(walk);
+      if (!n || typeof n !== 'object') return;
+      const o = n as Record<string, unknown>;
+      if (isSynthetic(o.image_license as string)) {
+        out.push({ slug: String(o.slug), credit: o.image_credit as string | undefined });
+      }
+      Object.values(o).forEach(walk);
+    };
+    for (const f of readdirSync(join(ROOT, dir))) {
+      if (!/\.ya?ml$/.test(f)) continue;
+      walk(yaml.load(readFileSync(join(ROOT, dir, f), 'utf8')));
+    }
+    return out;
+  }
+
+  it('isSynthetic pozná licenci i kredit generátoru', () => {
+    expect(isSynthetic('Synthetic — illustrative only')).toBe(true);
+    expect(isSynthetic('AI-generated (gpt-image-1)')).toBe(true);
+    expect(isSynthetic('CC BY-SA 4.0')).toBe(false);
+    expect(isSynthetic('Public domain')).toBe(false);
+    expect(isSynthetic(null)).toBe(false);
+  });
+
+  it('všech 10 snímků je označených, a to ve všech jazycích', () => {
+    for (const dir of ['src/data/plemena', 'src/data/plemena-de', 'src/data/plemena-pl', 'src/data/plemena-sk', 'src/data/plemena-uk']) {
+      const found = syntheticIn(dir);
+      expect(found.map((x) => x.slug).sort(), dir).toEqual(AI_SLUGS);
+      // Kredit musí říct, co obrázek vyrobilo — „ilustrace" bez původu je málo.
+      for (const x of found) expect(x.credit, `${dir}/${x.slug}`).toMatch(/AI-generated/i);
+    }
+  });
+
+  it('AI snímek se nedostane do souhrnného bloku jako by ho někdo vyfotil', () => {
+    expect(creditsFor(['/images/plemena/hovezi/brown-swiss.webp'])).toHaveLength(0);
   });
 });

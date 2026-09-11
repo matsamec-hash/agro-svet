@@ -29,7 +29,7 @@ export interface DraftListingInput {
 /** Založí prospekta + jeho první draft listing (pending_claim, bez user_id). */
 export async function createProspectWithDraft(
   supabase: SupabaseClient,
-  args: { adminId: string; prospect: ProspectInput; listing: DraftListingInput; imagePaths: string[] },
+  args: { adminId: string; prospect: ProspectInput; listing: DraftListingInput; imagePaths?: string[] },
 ): Promise<{ prospectId: string; claimToken: string; listingId: string }> {
   const claimToken = generateClaimToken();
   const claimCode = generateClaimCode();
@@ -85,12 +85,18 @@ export async function createProspect(
   return { prospectId: data.id as string, claimToken, claimCode };
 }
 
-/** Přidá další draft listing k existujícímu prospektovi. */
+/**
+ * Přidá další draft listing k existujícímu prospektovi.
+ *
+ * `imagePaths` je volitelné a u importu z cizího inzertního serveru zůstává
+ * prázdné — k cizím fotkám nemáme licenci, takže se nestahují. Fotky si
+ * k inzerátu nahraje prodejce sám, až si ho převezme.
+ */
 export async function addDraftListing(
   supabase: SupabaseClient,
   prospectId: string,
   listing: DraftListingInput,
-  imagePaths: string[],
+  imagePaths: string[] = [],
 ): Promise<string> {
   const { data, error } = await supabase
     .from('bazar_listings')

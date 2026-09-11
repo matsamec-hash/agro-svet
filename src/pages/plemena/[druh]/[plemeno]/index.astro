@@ -4,6 +4,7 @@
 export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import { licenseUrlFor } from '../../../../lib/photo-credit';
+import AiIllustrationBadge from '../../../../components/AiIllustrationBadge.astro';
 import { getPlemeno, getUzitkovostLabels } from '../../../../lib/plemena';
 import { faqPageSchema } from '../../../../lib/structured-data';
 import { injectLinks, injectLinksInText, createLinkContext } from '../../../../lib/auto-linker';
@@ -178,6 +179,7 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
         {plemeno.image_url ? (
           <figure class="hero-photo">
             <img src={plemeno.image_url} alt={`${tf(locale, 'plem.altPhoto', { name: plemeno.name })}${plemeno.origin_country ? ` — ${plemeno.origin_country}` : ''}`} width="800" height="600" loading="eager" decoding="async" />
+            <AiIllustrationBadge license={plemeno.image_license} locale={locale} />
             {(plemeno.image_credit || plemeno.image_license) && (
               <figcaption class="hero-photo-credit">
                 {plemeno.image_source_url ? (

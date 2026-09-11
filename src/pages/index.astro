@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import ImageAccordion from '../components/ImageAccordion.astro';
 import Newsletter from '../components/Newsletter.astro';
+import PhotoCredits from '../components/PhotoCredits.astro';
+import { creditFromArticle } from '../lib/photo-credit';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
 import HomeWeather from '../components/HomeWeather.astro';
 import Anketa from '../components/Anketa.astro';
@@ -61,7 +63,7 @@ if (!isUk && !isPl && !isSk && !isDe) {
   } else {
     let q = supabase
       .from('articles')
-      .select('id, title, slug, perex, featured_image_url, focal_point, category, tags, published_at, featured')
+      .select('id, title, slug, perex, featured_image_url, featured_image_credit, focal_point, category, tags, published_at, featured')
       .eq('site_id', SITE_ID)
       .eq('status', 'published');
     if (trIds) q = q.in('id', [...trIds]);
@@ -281,6 +283,11 @@ const itemListJsonLd = homepageItems.length > 0 ? {
     />
   </section>
   )}
+
+  <!-- Hero fotky nemají místo na plaketku v rohu (přes ně jde titulek), takže
+       atribuci nese souhrnný blok. ImageAccordion a LatestArticles si kredit
+       vypisují samy, tenhle kryje jen hero mřížku. -->
+  <PhotoCredits credits={homepageItems.map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={locale} />
 
   <!-- Newsletter signup (always last before footer) -->
   <Newsletter />

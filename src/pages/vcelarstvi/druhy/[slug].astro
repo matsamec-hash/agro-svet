@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
+import { licenseUrlFor } from '../../../lib/photo-credit';
 import { getAllVcely, getVcela, vcelaTemperamentLabel, vcelaVynosLabel, vcelaRojivostLabel } from '../../../lib/vcelarstvi';
 import { faqPageSchema } from '../../../lib/structured-data';
 import { injectLinks, injectLinksInText, createLinkContext } from '../../../lib/auto-linker';
@@ -128,7 +129,13 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
                 ) : (
                   <span>{vcela.image_credit}</span>
                 )}
-                {vcela.image_license && <span class="hero-photo-license"> · {vcela.image_license}</span>}
+                {/* Licence musí být proklik na svůj text, ne holý řetězec — bez odkazu
+                    není CC BY / CC BY-SA atribuce splněná. */}
+                {vcela.image_license && (
+                  <span class="hero-photo-license"> · {licenseUrlFor(vcela.image_license)
+                    ? <a href={licenseUrlFor(vcela.image_license)} target="_blank" rel="license noopener noreferrer nofollow">{vcela.image_license}</a>
+                    : vcela.image_license}</span>
+                )}
               </figcaption>
             )}
           </figure>

@@ -1,6 +1,7 @@
 ---
 import { getAllBrands, seriesFamily, familyLabel, type StrojKategorie } from '../../lib/stroje';
 import { ZNACKA_LOGO } from '../../lib/agro-integrace';
+import { creditFor, licenseUrlFor, requiresAuthor, type PhotoCredit } from '../../lib/photo-credit';
 import { useTranslations, plural, tf, getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
 
 interface Props {
@@ -15,23 +16,6 @@ const categoryHero: Record<StrojKategorie, string> = {
   traktory: '/images/traktor.webp',
   kombajny: '/images/kombajn.webp',
 };
-
-const brandCreditUrl: Record<string, string> = {
-  'john-deere': 'https://www.deere.cz/cs/traktory/',
-  fendt: 'https://www.fendt.com/cz/traktory',
-  claas: 'https://www.claas.com/cs-cz/zemedelske-stroje/traktory',
-  zetor: 'https://www.zetor.com/cs/zetor-products',
-  'massey-ferguson': 'https://www.masseyferguson.com/en.html',
-};
-function brandCreditLabel(slug: string): string {
-  const url = brandCreditUrl[slug];
-  if (!url) return '';
-  try {
-    return new URL(url).hostname.replace(/^www\./, '');
-  } catch {
-    return '';
-  }
-}
 
 const brandColors: Record<string, [string, string]> = {
   'john-deere': ['#4A9838', '#2E6B22'],
@@ -79,6 +63,49 @@ type Tile = {
   coverCreditAuthor: string | null;
   coverCreditLicense: string | null;
 };
+
+/**
+ * Kredit k fotce dlaždice. Bere se VÝHRADNĚ z doložených dat — nejdřív kredit
+ * u konkrétní řady (`image_credit*` v `src/data/stroje`), pak registr
+ * `creditFor()` podle cesty k souboru.
+ *
+ * PROČ: do 9/2026 se tu u pěti značek dosazovala tabulka `brandCreditUrl`
+ * a dlaždice hlásila „Foto: deere.cz", přestože snímek byl z Wikimedia Commons.
+ * Nepravdivý původ, navíc bez autora a bez licence — přesně ta vada, za kterou
+ * přišla advokátní výzva PhotoClaim. Když kredit doložený není, zůstane
+ * dlaždice bez plaketky; smyšlený zdroj se nevypisuje.
+ */
+function tileCredit(t: Tile): PhotoCredit | null {
+  const c: PhotoCredit | null =
+    t.coverCreditAuthor || t.coverCreditLicense
+      ? {
+          author: t.coverCreditAuthor ?? '',
+          license: t.coverCreditLicense ?? '',
+          licenseUrl: licenseUrlFor(t.coverCreditLicense),
+          source: t.coverCreditUrl ?? undefined,
+        }
+      : creditFor(t.coverImage);
+  if (!c) return null;
+  // Unsplash, volné dílo apod. atribuci nevyžadují — plaketka by jen šuměla.
+  if (!requiresAuthor(c.license)) return null;
+  // Bez jména autora není co uvést; zdroj („deere.cz") autora nenahradí.
+  if (!c.author) return null;
+  return c;
+}
+
+/**
+ * Doplňkový popisek odkazu na zdroj — celé znění kreditu včetně poznámky
+ * o úpravě (crop + konverze do WebP), na kterou CC BY-SA pamatuje. Je to
+ * DOPLNĚK viditelné plaketky, ne její náhrada: `title` na mobilu neexistuje.
+ */
+function creditTitle(c: PhotoCredit, host: string): string {
+  const license = c.license ? ` · ${c.license}` : '';
+  // Hláška `cat.s.d.photoTitle` má „via Wikimedia Commons" natvrdo, takže platí
+  // jen pro Commons (odkud je 186 ze 187 fotek strojů); jinde skládáme z hostu.
+  return host === 'commons.wikimedia.org'
+    ? tf(locale, 'cat.s.d.photoTitle', { author: c.author, license })
+    : `${tr('cat.photo')} ${c.author}${license} · ${host}`;
+}
 
 type BrandSection = {
   slug: string;
@@ -356,12 +383,6 @@ const NL = '\n';
                 <span>{s.country} · {tr('cat.brandFoundedPrefix')} <strong>{s.founded}</strong></span><span class="sep"></span>
                 <strong>{s.modelCount} {tr('cat.brandModelsLabel')}</strong> <span>{tf(locale, 'cat.brandSeriesLabel', { count: s.seriesCount })}</span>
                 {s.minHp !== null && s.maxHp !== null && (<><span class="sep"></span><strong>{s.minHp}–{s.maxHp} {tr('cmp.unitHp')}</strong></>)}
-                {brandCreditUrl[s.slug] && (
-                  <>
-                    <span class="sep"></span>
-                    <span class="brand-credit">{tr('cat.photo')} <a href={brandCreditUrl[s.slug]} target="_blank" rel="noopener">{brandCreditLabel(s.slug)}</a></span>
-                  </>
-                )}
               </div>
             </div>
           </div>
@@ -386,10 +407,17 @@ const NL = '\n';
             const coverStyle = t.coverImage
               ? `background-image:url('${t.coverImage}'); background-color:#FFFFFF; background-size:cover; background-position:center;`
               : `background:linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
+            const credit = t.coverImage ? tileCredit(t) : null;
+            let creditHost = '';
+            if (credit?.source) {
+              try { creditHost = new URL(credit.source).hostname.replace(/^www\./, ''); } catch {}
+            }
+            // Obal nese data pro filtr i pozici pro plaketu s atribucí. Kredit
+            // MUSÍ ležet mimo kotvu dlaždice: odkaz na licenci a na zdroj uvnitř
+            // <a> by byl vnořený odkaz, což prohlížeč rozhodí.
             return (
-              <a
-                class="family-tile"
-                href={localizeInternalHref(locale, `/stroje/${s.slug}/rada/${category}/${t.family}/`)}
+              <div
+                class="family-tile-wrap"
                 data-brand={s.slug}
                 data-min-hp={t.minHp ?? ''}
                 data-max-hp={t.maxHp ?? ''}
@@ -397,21 +425,11 @@ const NL = '\n';
                 data-max-year={t.maxYear ?? ''}
                 data-current={t.hasCurrent ? '1' : '0'}
               >
+              <a
+                class="family-tile"
+                href={localizeInternalHref(locale, `/stroje/${s.slug}/rada/${category}/${t.family}/`)}
+              >
                 <div class="ft-cover" data-has-photo={t.coverImage ? 'true' : 'false'} style={coverStyle}>
-                  {t.coverImage && (() => {
-                    const url = t.coverCreditUrl || brandCreditUrl[s.slug];
-                    if (!url) return null;
-                    let host = '';
-                    try { host = new URL(url).hostname.replace(/^www\./, ''); } catch {}
-                    if (!host) return null;
-                    // For Wikipedia/CC photos, show author + license
-                    if (t.coverCreditAuthor && t.coverCreditLicense) {
-                      const short = t.coverCreditAuthor.length > 30 ? t.coverCreditAuthor.slice(0, 28) + '…' : t.coverCreditAuthor;
-                      const titleAttr = `${tr('cat.photo')} ${t.coverCreditAuthor} (${t.coverCreditLicense}) via ${host} · upraveno (crop, WebP)\n${url}`;
-                      return <span class="ft-credit" title={titleAttr}>© {short} / {t.coverCreditLicense}</span>;
-                    }
-                    return <span class="ft-credit" title={`${tr('cat.photo')} ${host} (${url})`}>{tr('cat.photo')} {host}</span>;
-                  })()}
                   {!t.coverImage && (
                     <svg class="ft-silhouette" width="120" height="68" viewBox="0 0 140 80" fill="rgba(0,0,0,.18)" aria-hidden="true">
                       {category === 'traktory' ? (
@@ -452,6 +470,30 @@ const NL = '\n';
                   </div>
                 </div>
               </a>
+              {credit && (
+                <div class="ft-credit-slot">
+                  <span class="ft-credit">
+                    © {credit.author}
+                    {credit.license && (
+                      <>
+                        {' · '}
+                        {credit.licenseUrl ? (
+                          <a href={credit.licenseUrl} target="_blank" rel="license nofollow noopener noreferrer">{credit.license}</a>
+                        ) : (
+                          credit.license
+                        )}
+                      </>
+                    )}
+                    {credit.source && (
+                      <>
+                        {' · '}
+                        <a href={credit.source} target="_blank" rel="nofollow noopener noreferrer" title={creditTitle(credit, creditHost)}>{tr('foto.blok.zdroj')}</a>
+                      </>
+                    )}
+                  </span>
+                </div>
+              )}
+              </div>
             );
           })}
         </div>
@@ -668,13 +710,23 @@ const NL = '\n';
   @keyframes cb-pulse{0%,100%{box-shadow:0 0 0 0 rgba(11,122,59,.4)}50%{box-shadow:0 0 0 5px rgba(11,122,59,0)}}
 
   .catalog-page .family-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-  .catalog-page .family-tile{
+  /* Buňkou mřížky je obal, ne kotva — uvnitř něj leží dlaždice a vedle ní
+     (mimo <a>) plaketa s atribucí. `flex` drží dlaždici přes celou výšku
+     buňky, ať zůstanou karty v řádku stejně vysoké. */
+  .catalog-page .family-tile-wrap{
     position:relative;display:flex;flex-direction:column;
+    transition:transform .25s cubic-bezier(.2,.7,.2,1);
+  }
+  .catalog-page .family-tile-wrap:hover{transform:translateY(-2px)}
+  .catalog-page .family-tile{
+    position:relative;display:flex;flex-direction:column;flex:1;
     background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
     overflow:hidden;text-decoration:none;color:inherit;
     transition:.25s cubic-bezier(.2,.7,.2,1);
   }
-  .catalog-page .family-tile:hover{transform:translateY(-2px);box-shadow:var(--sh-3);border-color:var(--yellow)}
+  /* Zdvih i zvýraznění visí na obalu: kdyby byly na kotvě, dlaždice by při
+     najetí myší na plaketu (ta je mimo <a>) klesla zpátky. */
+  .catalog-page .family-tile-wrap:hover .family-tile{box-shadow:var(--sh-3);border-color:var(--yellow)}
   .catalog-page .family-tile:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
   .catalog-page .ft-cover{
     height:140px;position:relative;overflow:hidden;
@@ -689,18 +741,26 @@ const NL = '\n';
     position:absolute;left:8px;bottom:8px;width:120px;height:auto;
     opacity:.85;pointer-events:none;
   }
-  .catalog-page .ft-credit{
-    position:absolute;right:6px;bottom:6px;z-index:2;
-    background:rgba(255,255,255,.92);backdrop-filter:blur(4px);
-    color:#0A0A0B;font:500 9px 'Chakra Petch',sans-serif;
-    padding:3px 7px;border-radius:4px;letter-spacing:.04em;
-    opacity:0;transition:opacity .15s;pointer-events:none;
-    white-space:nowrap;
+  /* Slot kopíruje výšku obálky (.ft-cover), aby plaketa seděla u jejího
+     spodního okraje i když se kredit zalomí na dva řádky. Sám je průchozí pro
+     myš, klikatelná je jen plaketa — zbytek obálky patří odkazu dlaždice. */
+  .catalog-page .ft-credit-slot{
+    position:absolute;left:0;right:0;top:0;height:140px;z-index:3;
+    display:flex;align-items:flex-end;justify-content:flex-end;
+    padding:6px;pointer-events:none;
   }
-  .catalog-page .family-tile:hover .ft-credit{opacity:1}
-  .catalog-page .brand-credit{font-size:12px;color:var(--muted)}
-  .catalog-page .brand-credit a{color:var(--muted);text-decoration:underline;text-decoration-color:var(--line-2)}
-  .catalog-page .brand-credit a:hover{color:#000;text-decoration-color:#000}
+  /* ‼️ Kredit, který není vidět, atribuci nesplní. Dřív měla plaketa
+     `opacity:0` a vynořila se jen při hoveru myší — na mobilu tedy nikdy.
+     Teď je vidět trvale a `title` slouží jen jako doplněk. */
+  .catalog-page .ft-credit{
+    background:rgba(255,255,255,.92);backdrop-filter:blur(4px);
+    color:#0A0A0B;font:500 10px/1.35 'Chakra Petch',sans-serif;
+    padding:3px 7px;border-radius:4px;letter-spacing:.02em;
+    max-width:100%;text-align:right;pointer-events:auto;
+  }
+  .catalog-page .ft-credit a{color:inherit;text-decoration:underline;text-decoration-color:rgba(10,10,11,.35)}
+  .catalog-page .ft-credit a:hover{text-decoration-color:#0A0A0B}
+  .catalog-page .ft-credit a:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:2px}
   .catalog-page .ft-body{padding:14px 16px 14px;display:flex;flex-direction:column;gap:9px;flex:1}
   .catalog-page .ft-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
   .catalog-page .ft-title{font:700 18px 'Chakra Petch',sans-serif;color:var(--ink);letter-spacing:-.01em;line-height:1.1}
@@ -731,7 +791,7 @@ const NL = '\n';
   .catalog-page .ft-foot .year{display:inline-flex;align-items:center;gap:5px;font:500 12px 'Chakra Petch',sans-serif;color:#17171A}
   .catalog-page .ft-foot .year svg{width:13px;height:13px;color:var(--muted)}
   .catalog-page .ft-foot .go{font:700 13px 'Chakra Petch',sans-serif;color:#0A0A0B;display:inline-flex;align-items:center;gap:4px;transition:transform .15s}
-  .catalog-page .family-tile:hover .ft-foot .go{transform:translateX(2px)}
+  .catalog-page .family-tile-wrap:hover .ft-foot .go{transform:translateX(2px)}
 
   .catalog-page .show-all-cta{
     display:flex;justify-content:space-between;align-items:center;gap:12px;
@@ -854,7 +914,7 @@ const NL = '\n';
   }
 
   /* Filtered-out states */
-  .catalog-page .family-tile.is-hidden,
+  .catalog-page .family-tile-wrap.is-hidden,
   .catalog-page .brand.is-hidden,
   .catalog-page .pill.is-hidden {
     display:none !important;
@@ -897,7 +957,9 @@ const NL = '\n';
   const resetBtn = document.getElementById('filter-reset');
   const resultEl = document.getElementById('filter-result');
   const emptyEl = document.getElementById('filter-empty');
-  const tiles = Array.from(document.querySelectorAll<HTMLElement>('.catalog-page .family-tile'));
+  // Filtruje se obal dlaždice (`.family-tile-wrap`), protože buňkou mřížky je
+  // on — kotva samotná by se schovala, ale prázdná buňka by v mřížce zůstala.
+  const tiles = Array.from(document.querySelectorAll<HTMLElement>('.catalog-page .family-tile-wrap'));
   const brandSections = Array.from(document.querySelectorAll<HTMLElement>('.catalog-page .brand[id]'));
   const brandPills = Array.from(document.querySelectorAll<HTMLAnchorElement>('.catalog-page .brand-pills .pill'));
 

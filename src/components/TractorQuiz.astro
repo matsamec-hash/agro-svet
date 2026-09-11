@@ -6,12 +6,32 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { getAllBrands } from '../lib/stroje';
+import { creditFor, licenseUrlFor, requiresAuthor } from '../lib/photo-credit';
 
 // Sestav bank otázek: každá série s ověřeně existující fotkou = jedna karta.
 const brands = getAllBrands();
 const pubDir = join(process.cwd(), 'public');
 const seen = new Set<string>();
-const POOL: { i: string; b: string; s: string; u: string }[] = [];
+
+// Licence se opakují (dnes 11 různých na 186 fotek), takže je nosíme v číselníku
+// a karta si drží jen index — jinak by se do inline JSON payloadu přidalo
+// přes 10 kB té samé adresy creativecommons.org.
+const LICENSES: { n: string; u?: string }[] = [];
+const licIdx = new Map<string, number>();
+function licenseIndex(name: string, url?: string): number {
+  const key = `${name}|${url ?? ''}`;
+  let i = licIdx.get(key);
+  if (i === undefined) {
+    i = LICENSES.length;
+    LICENSES.push({ n: name, u: url });
+    licIdx.set(key, i);
+  }
+  return i;
+}
+
+/** i = obrázek, b = značka, s = série, u = detail, a = autor, lc = index licence, z = zdroj. */
+const POOL: { i: string; b: string; s: string; u: string; a: string; lc: number; z?: string }[] = [];
+let bezAtribuce = 0;
 
 for (const brand of brands) {
   for (const [cat, group] of Object.entries(brand.categories)) {
@@ -22,16 +42,46 @@ for (const brand of brands) {
       if (seen.has(img)) continue; // stejná fotka u víc sérií → jen jednou
       if (!existsSync(join(pubDir, img))) continue; // rozbité fotky vynech
       seen.add(img);
+
+      // Atribuce. Zdroj pravdy jsou pole u série v YAML, registr `creditFor()`
+      // je pojistka pro fotky, které kredit u sebe nemají. Registr navíc už má
+      // vyčištěné „autory", kteří jsou ve skutečnosti jen zdroj („Wikimedia
+      // Commons", „own work") — když u téže fotky autora zahodí, nesmíme ho
+      // vzít zpátky z YAML.
+      const reg = creditFor(img);
+      const yamlAutor = (series.image_credit ?? '').trim();
+      const autor = reg && !reg.author ? '' : yamlAutor || reg?.author || '';
+      const licence = (series.image_license ?? '').trim() || reg?.license || '';
+      const licenceUrl = licenseUrlFor(licence) ?? reg?.licenseUrl;
+      const zdroj = (series.image_credit_url ?? '').trim() || reg?.source || '';
+
+      // Fotka bez dohledatelného autora (u licence, která ho vyžaduje) nebo bez
+      // názvu licence se nedá legálně okreditovat → do kvízu vůbec nepatří.
+      // Radši kratší bank otázek než advokátní výzva à la PhotoClaim. Vlastní
+      // a AI fotky projdou, jakmile mají v datech licenci bez povinné atribuce
+      // („Public domain", „synthetic"…).
+      if (!licence || (requiresAuthor(licence) && !autor)) {
+        bezAtribuce++;
+        continue;
+      }
+
       const effCat = series.subcategory ?? cat;
       POOL.push({
         i: img,
         b: brand.name,
         s: series.name,
         u: `/stroje/${brand.slug}/${series.slug}/`,
+        a: autor,
+        lc: licenseIndex(licence, licenceUrl),
+        z: zdroj || undefined,
       });
       void effCat;
     }
   }
+}
+
+if (bezAtribuce > 0) {
+  console.warn(`[kviz] ${bezAtribuce} fotek vynecháno — chybí autor nebo licence.`);
 }
 
 // Unikátní značky pro generování špatných možností (distraktorů).
@@ -60,6 +110,11 @@ const QUESTIONS_PER_GAME = 10;
 
     <figure class="tq-figure">
       <img class="tq-img" data-img alt="Uhodni značku tohoto stroje" width="800" height="500" decoding="async" />
+      {/* Kredit je vidět hned, ne až po odpovědi ani na hover: CC BY-SA vyžaduje
+          atribuci ve chvíli, kdy je fotka na obrazovce. Že jméno fotografa občas
+          napoví značku (AGCO-Fendt, JDDeutschland), je menší škoda než
+          nekreditovaná fotka — hráč hádá podle stroje, ne podle fotografa. */}
+      <figcaption class="tq-credit" data-credit></figcaption>
     </figure>
 
     <p class="tq-q">Jaká je to značka?</p>
@@ -88,7 +143,7 @@ const QUESTIONS_PER_GAME = 10;
   </div>
 </section>
 
-<script is:inline define:vars={{ POOL, BRANDS, N: QUESTIONS_PER_GAME }}>
+<script is:inline define:vars={{ POOL, BRANDS, LICENSES, N: QUESTIONS_PER_GAME }}>
   (function () {
     const root = document.currentScript.previousElementSibling;
     if (!root || !POOL.length) return;
@@ -102,6 +157,7 @@ const QUESTIONS_PER_GAME = 10;
       progress: root.querySelector('[data-progress]'),
       score: root.querySelector('[data-score]'),
       img: root.querySelector('[data-img]'),
+      credit: root.querySelector('[data-credit]'),
       options: root.querySelector('[data-options]'),
       reveal: root.querySelector('[data-reveal]'),
       revealText: root.querySelector('[data-reveal-text]'),
@@ -140,6 +196,34 @@ const QUESTIONS_PER_GAME = 10;
       for (const k in screens) if (screens[k]) screens[k].hidden = k !== name;
     }
 
+    // Atribuce se skládá z uzlů, ne z innerHTML — jména autorů z Commons nesou
+    // uvozovky i lomítka a přes textContent se nedají odnikud vylomit.
+    function renderCredit(item) {
+      const box = el.credit;
+      if (!box) return;
+      box.textContent = '';
+      const text = (s) => box.appendChild(document.createTextNode(s));
+      const link = (href, label, rel) => {
+        const a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        a.rel = rel;
+        a.textContent = label;
+        box.appendChild(a);
+      };
+      const lic = LICENSES[item.lc];
+      text(item.a ? `© ${item.a}` : 'Foto');
+      if (lic && lic.n) {
+        text(' · ');
+        if (lic.u) link(lic.u, lic.n, 'license noopener noreferrer nofollow');
+        else text(lic.n);
+      }
+      if (item.z) {
+        text(' · ');
+        link(item.z, 'Zdroj', 'noopener noreferrer nofollow');
+      }
+    }
+
     function renderQuestion() {
       answered = false;
       const q = questions[idx];
@@ -147,6 +231,7 @@ const QUESTIONS_PER_GAME = 10;
       el.score.textContent = `Skóre: ${score}`;
       el.img.src = q.item.i;
       el.img.alt = 'Uhodni značku tohoto stroje';
+      renderCredit(q.item);
       el.reveal.hidden = true;
       el.options.innerHTML = '';
       q.options.forEach((opt) => {
@@ -275,6 +360,22 @@ const QUESTIONS_PER_GAME = 10;
     margin: 0 0 16px; border-radius: 12px; overflow: hidden; background: #eef2e9; line-height: 0;
   }
   .tq-img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+  /* Kredit pod fotkou, ne přelepený přes ni — přes fotku by se na úzkém
+     displeji zalamoval do tří řádků a překryl stroj, který se má hádat.
+     `.tq-figure` má line-height: 0 kvůli obrázku, popisek si ho musí vrátit. */
+  .tq-credit {
+    line-height: 1.4;
+    font-size: 12px;
+    color: #52525b;
+    background: #f6f6f1;
+    border-top: 1px solid #e3e3d6;
+    padding: 6px 10px;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+  .tq-credit:empty { display: none; }
+  .tq-credit a { color: inherit; text-decoration: underline; }
+  .tq-credit a:hover { color: #0A0A0B; }
 
   .tq-q { font-size: 17px; font-weight: 800; color: #0A0A0B; margin: 0 0 12px; text-align: center; }
 
@@ -309,5 +410,8 @@ const QUESTIONS_PER_GAME = 10;
     .tq { padding: 20px 16px; }
     .tq-options { grid-template-columns: 1fr; }
     .tq-intro-h { font-size: 21px; }
+    /* Dlouhá jména autorů z Commons se na mobilu zalomí — zarovnání doleva
+       drží kredit čitelný, velikost písma nesnižujeme (musí být vidět). */
+    .tq-credit { text-align: left; }
   }
 </style>

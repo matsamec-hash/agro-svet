@@ -3,6 +3,7 @@
 // Vizuálně posiluje stránku + přímo cílí na vyhledávání obrázků (alt = "model — popis").
 // Schema (ImageObject / Thing.image[]) emituje parent stránka.
 import type { MachinePhoto } from '../lib/stroje';
+import { licenseUrlFor } from '../lib/photo-credit';
 interface Props {
   photos: MachinePhoto[];
   heading: string;
@@ -26,10 +27,21 @@ const items = (photos ?? []).filter((p) => p && p.src);
             decoding="async"
           />
           {(p.author || p.license) && (
+            /* Název licence musí být proklik na její text — „CC BY-SA 4.0" jako
+               holý text podmínku atribuce nesplní. Odkaz na zdroj je zvlášť,
+               aby se nespojily do jednoho odkazu, který vede jinam, než slibuje. */
             <figcaption class="mg-credit">
               {p.source_url
-                ? <a href={p.source_url} target="_blank" rel="noopener noreferrer nofollow">{sourceLabel}: {p.author}{p.license ? ` · ${p.license}` : ''}</a>
-                : <span>{sourceLabel}: {p.author}{p.license ? ` · ${p.license}` : ''}</span>}
+                ? <a href={p.source_url} target="_blank" rel="noopener noreferrer nofollow">{sourceLabel}: {p.author}</a>
+                : <span>{sourceLabel}: {p.author}</span>}
+              {p.license && (
+                <>
+                  {' · '}
+                  {licenseUrlFor(p.license)
+                    ? <a href={licenseUrlFor(p.license)} target="_blank" rel="license noopener noreferrer nofollow">{p.license}</a>
+                    : <span>{p.license}</span>}
+                </>
+              )}
             </figcaption>
           )}
         </figure>

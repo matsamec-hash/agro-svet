@@ -3,6 +3,7 @@
 // locals.locale. cs výstup identický (rovnaký kód). Canonical odvodí Layout.
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
+import PhotoCredits from '../../components/PhotoCredits.astro';
 import { ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { getAllBrands, getAllModels, type StrojKategorie } from '../../lib/stroje';
 import { useTranslations, plural, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47 } from '../../i18n/utils';
@@ -264,6 +265,10 @@ const NL = '\n';
         <div class="cta-photo" style="background-image:url('/images/traktor.webp')"></div>
       </div>
     </section>
+
+    <!-- Loga v mřížce značek jsou z Commons a dvě z nich (Bednar, Joskin) jsou
+         CC BY-SA — ochranná známka o autorských právech k souboru nic neříká. -->
+    <PhotoCredits images={brandCards.map((b) => ZNACKA_LOGO[b.slug])} locale={locale} />
 
   </div>
 

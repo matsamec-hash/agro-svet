@@ -6,18 +6,24 @@
 //
 // Vypisují se jen licence, které atribuci opravdu vyžadují (CC BY / CC BY-SA
 // a spol.). Unsplash, Pexels, Pixabay a volné dílo se do bloku netahají.
-import { creditsFor } from '../lib/photo-credit';
+import { creditsFor, type PhotoCredit } from '../lib/photo-credit';
 import { t } from '../i18n/utils';
 import type { Locale } from '../i18n/config';
 
 interface Props {
   /** Cesty k obrázkům na stránce. Responzivní varianty `__v-w800` jsou v pořádku. */
-  images: (string | null | undefined)[];
+  images?: (string | null | undefined)[];
+  /**
+   * Už hotové kredity — pro fotky, jejichž původ nedrží registr, ale databáze
+   * (cover článků, `articles.featured_image_credit`). Mají přednost před
+   * odvozením z cesty k souboru.
+   */
+  credits?: (PhotoCredit | null | undefined)[];
   locale?: Locale;
 }
 
-const { images, locale = (Astro.locals.locale ?? 'cs') as Locale } = Astro.props;
-const credits = creditsFor(images);
+const { images = [], credits: given = [], locale = (Astro.locals.locale ?? 'cs') as Locale } = Astro.props;
+const credits = creditsFor([...given, ...images]);
 ---
 
 {credits.length > 0 && (

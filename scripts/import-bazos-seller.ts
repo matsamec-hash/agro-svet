@@ -5,6 +5,13 @@
  * Reuse ověřených lib funkcí (parse/structure/seed) — stejný flow jako admin
  * batch import, jen sekvenčně z CLI a vše pod jeden prospekt.
  *
+ * ‼️ Importuje se POUZE text inzerátu. Fotky zůstávají u prodejce — k cizím
+ * snímkům nemáme licenci a dřívější varianta tohohle skriptu je navíc stahovala
+ * s podvrženou hlavičkou prohlížeče a `sharp.extract()` z nich ořezávala spodní
+ * pruh s vodoznakem. Odstranění informace o správě práv je samostatný delikt
+ * podle § 43 autorského zákona. Svoje fotky si prodejce nahraje sám, až si
+ * inzerát převezme.
+ *
  * Env (nastav před spuštěním): SUPABASE_URL, SUPABASE_SERVICE_KEY (cílová DB =
  * self-host prod), OPENAI_API_KEY (AI strukturování; bez něj deterministický fallback).
  *
@@ -19,48 +26,6 @@ import { structureListing } from '../src/lib/bazar-import-structure';
 import { createProspect, addDraftListing } from '../src/lib/bazar-seed';
 import { attributesForCategory } from '../src/lib/bazar-attributes';
 import { geocode } from '../src/lib/geocode';
-
-type Supa = ReturnType<typeof createServerClient>;
-
-async function downloadImages(supabase: Supa, urls: string[]): Promise<string[]> {
-  const paths: string[] = [];
-  for (const [i, url] of urls.slice(0, 5).entries()) {
-    try {
-      const res = await fetch(url, {
-        headers: {
-          'user-agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
-          referer: 'https://www.bazos.cz/',
-          accept: 'image/avif,image/webp,image/*,*/*;q=0.8',
-        },
-      });
-      if (!res.ok) { console.log(`    foto #${i}: HTTP ${res.status}`); continue; }
-      const raw = Buffer.from(await res.arrayBuffer());
-      let out: Buffer = raw;
-      let cropped = false;
-      try {
-        const sharp = (await import('sharp')).default;
-        const img = sharp(raw);
-        const meta = await img.metadata();
-        if (meta.height && meta.width) {
-          const cropPx = Math.round(meta.height * 0.07);
-          if (cropPx > 4 && meta.height - cropPx > 80) {
-            out = await img.extract({ left: 0, top: 0, width: meta.width, height: meta.height - cropPx }).jpeg({ quality: 85 }).toBuffer();
-            cropped = true;
-          }
-        }
-      } catch { /* ořez best-effort */ }
-      const path = `seed/${crypto.randomUUID()}-${i}.jpg`;
-      const { error } = await supabase.storage.from('bazar-images').upload(path, out, { contentType: 'image/jpeg' });
-      if (error) { console.log(`    foto #${i}: upload "${error.message}"`); continue; }
-      paths.push(path);
-      console.log(`    foto #${i}: OK ${Math.round(out.length / 1024)}KB${cropped ? ' (oříznuto)' : ''}`);
-    } catch (e) {
-      console.log(`    foto #${i}: throw "${(e as Error).message}"`);
-    }
-  }
-  return paths;
-}
 
 async function main() {
   const [adminId, prospectName, ...urls] = process.argv.slice(2);
@@ -104,8 +69,6 @@ async function main() {
         ? `${structured.description}\n\nVýbava: ${structured.features.join(' • ')}`
         : structured.description;
 
-      const imagePaths = await downloadImages(supabase, parsed.imageUrls);
-
       let latitude: number | null = null;
       let longitude: number | null = null;
       if (parsed.location) {
@@ -132,9 +95,9 @@ async function main() {
         latitude,
         longitude,
         attributes: structured.attributes,
-      }, imagePaths);
+      });
       ok++;
-      console.log(`    ✓ „${structured.title}" — ${parsed.price ?? '?'} Kč, ${structured.category}${structured.brand ? '/' + structured.brand : ''}, ${imagePaths.length} foto → ${listingId}`);
+      console.log(`    ✓ „${structured.title}" — ${parsed.price ?? '?'} Kč, ${structured.category}${structured.brand ? '/' + structured.brand : ''}, bez fotek (${parsed.imageUrls.length} zůstalo u prodejce) → ${listingId}`);
     } catch (e) {
       console.log(`    ✗ ${(e as Error).message}`);
     }

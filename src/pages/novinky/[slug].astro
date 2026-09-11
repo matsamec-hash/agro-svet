@@ -9,6 +9,7 @@ import { getAllBrands } from '../../lib/stroje';
 import { getAllPlemena } from '../../lib/plemena';
 import { imgSrcset } from '../../lib/image-variants';
 import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
+import { creditFromArticle } from '../../lib/photo-credit';
 import { ORG_ID, WEBSITE_ID } from '../../lib/structured-data';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, hasTranslatedTitle } from '../../lib/articles-i18n';
 import { localizePath, t, tf, localizedCategory, bcp47 } from '../../i18n/utils';
@@ -25,7 +26,7 @@ const supabase = createAnonClient();
 // "last modified" lives in `last_updated_at` (added by aktualizovano in
 // migration 024) and isn't populated for agro-svet articles. Falling
 // back to `published_at` for dateModified is correct here.
-const ARTICLE_COLUMNS = 'id, title, slug, perex, content, featured_image_url, focal_point, category, tags, published_at, seo_title, seo_description';
+const ARTICLE_COLUMNS = 'id, title, slug, perex, content, featured_image_url, featured_image_credit, focal_point, category, tags, published_at, seo_title, seo_description';
 const POOL_COLUMNS = 'id, title, slug, perex, featured_image_url, category, tags, published_at';
 
 const [articleRes, poolRes] = await Promise.all([
@@ -80,6 +81,12 @@ if (locale !== 'cs') {
   );
 }
 const article = overlayArticle(articleRaw, trMap.get(articleRaw.id));
+// Kredit ke cover fotce: sloupec z CMS má přednost, registr a fotobanka podle
+// názvu souboru jsou fallback. Překlad kredit nemění — fotku má článek jednu.
+const heroCredit = creditFromArticle(
+  (articleRaw as { featured_image_credit?: unknown }).featured_image_credit as never,
+  articleRaw.featured_image_url,
+);
 // Non-cs článek BEZ reálného překladu servíruje český text pod cizím `lang`
 // (a doteď s `index, follow`). Do sitemapy už se takové URL nedostane, ale
 // stránka sama musí být noindex — jinak ji Google najde přes interní odkazy
@@ -246,10 +253,16 @@ const jsonLd = {
         style={`width:100%; height:100%; object-fit:cover; object-position: ${article.focal_point?.x ?? 50}% ${article.focal_point?.y ?? 50}%;`}
       />
       <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.35));"></div>
-      {/* CMS pole pro autora fotky nemá; u coverů z Commons drží atribuci
-          registr v lib/photo-credit.ts. Fotobanky (Pexels/Unsplash/Pixabay)
-          atribuci nevyžadují a badge se u nich nevykreslí. */}
-      <HeroPhotoCredit image={article.featured_image_url} locale={locale} />
+      {/* Zdroj pravdy je sloupec `articles.featured_image_credit` — CMS do něj
+          při výběru fotky zapisuje banku, jméno fotografa a odkaz na originál.
+          (Dřív tu stálo, že to pole v CMS není; mělo ho 28 z 38 článků a web
+          ho jen nečetl.) Registr v lib/photo-credit.ts a hádání banky z názvu
+          souboru zůstávají jako fallback pro starší cover fotky. */}
+      <HeroPhotoCredit
+        image={article.featured_image_url}
+        credit={heroCredit && { author: heroCredit.author, license: heroCredit.license, licenseUrl: heroCredit.licenseUrl, sourceUrl: heroCredit.source }}
+        locale={locale}
+      />
     </div>
     );
   })()}

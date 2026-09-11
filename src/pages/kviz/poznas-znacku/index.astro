@@ -22,7 +22,7 @@ const faqItems = [
   {
     question: 'Odkud jsou fotky a data?',
     answer:
-      'Fotky pocházejí z otevřených zdrojů (Wikimedia Commons) a jsou navázané na náš katalog strojů — traktory, kombajny a další techniku 22 značek. Každá otázka odkazuje na detail konkrétní série.',
+      'Fotky jsou navázané na náš katalog strojů — traktory, kombajny a další techniku 22 značek. Většina pochází z Wikimedia Commons pod licencemi Creative Commons; autor, licence a odkaz na zdroj jsou uvedené přímo pod každou fotkou v kvízu. Každá otázka navíc odkazuje na detail konkrétní série.',
   },
   {
     question: 'Kolik je otázek a dá se hrát opakovaně?',
@@ -30,6 +30,12 @@ const faqItems = [
       'Každá hra má 10 otázek náhodně vybraných z celého katalogu, takže pokaždé dostaneš jinou sadu. Po dohrání můžeš hrát znovu a zlepšovat skóre.',
   },
 ];
+
+// OG kartička musí být vlastní. Dřív tu byla fotka Case IH Farmall od Joachima
+// Kohlera (CC BY-SA 4.0) — na Facebooku ani na Twitteru se ke sdílenému náhledu
+// atribuce nedá připojit, takže licenci splnit nejde. `/og/landing-stroje.png`
+// je naše typografická kartička z scripts/build-og-images.mjs.
+const ogImage = `${SITE_URL}/og/landing-stroje.png`;
 
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
@@ -53,7 +59,7 @@ const gameJsonLd = {
 };
 ---
 
-<Layout title={title} description={metaDescription} canonical={canonical} noHreflang={true} ogImage="/images/stroje/case-ih/case-ih-farmall.webp">
+<Layout title={title} description={metaDescription} canonical={canonical} noHreflang={true} ogImage={ogImage}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(gameJsonLd)} />
