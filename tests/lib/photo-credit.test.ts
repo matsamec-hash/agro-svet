@@ -277,3 +277,36 @@ describe('AI generované fotky plemen', () => {
     expect(creditsFor(['/images/plemena/hovezi/brown-swiss.webp'])).toHaveLength(0);
   });
 });
+
+/**
+ * Skripty v `scripts/` nesmí vyrobit licenci, která neexistuje.
+ *
+ * „Editorial / press use" nebyla licence, ale domněnka: dva importéry stahovaly
+ * fotky přímo z deere.cz a valtra.cz a tímhle řetězcem je označovaly. Fotky už
+ * z dat zmizely (vyměněné za Commons), importéry taky — tenhle test hlídá, aby
+ * se ani jedno nevrátilo.
+ */
+describe('žádná vymyšlená licence v nástrojích', () => {
+  it('„Editorial / press use" se v repozitáři nevyskytuje jako licence', () => {
+    const nalezy: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        if (e.name === 'node_modules' || e.name.startsWith('.') || e.name === 'dist') continue;
+        const p = join(dir, e.name);
+        if (e.isDirectory()) {
+          walk(p);
+          continue;
+        }
+        if (!/\.(ts|mjs|js|astro|yaml|yml|json)$/.test(e.name)) continue;
+        const txt = readFileSync(p, 'utf8');
+        for (const m of txt.matchAll(/^.*(editorial \/ press use|press only).*$/gim)) {
+          // Komentář, který vysvětluje, PROČ to tu není, je v pořádku.
+          if (/^\s*(\/\/|\*|#)/.test(m[0]!)) continue;
+          nalezy.push(`${relative(ROOT, p)}: ${m[0]!.trim().slice(0, 100)}`);
+        }
+      }
+    };
+    for (const dir of ['scripts', 'src']) walk(join(ROOT, dir));
+    expect(nalezy, nalezy.join('\n')).toHaveLength(0);
+  });
+});
