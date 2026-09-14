@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
 import { createAnonClient, createServerClient } from './lib/supabase';
 import { stripLocale } from './i18n/utils';
+import { isRetiredLocale } from './i18n/config';
 import { isLockedSectionPath } from './i18n/nav';
 import { isPrerenderedRewriteError } from './lib/prerendered-rewrite';
 import {
@@ -77,6 +78,32 @@ function isCrossSite(request: Request, host: string): boolean {
   }
 }
 
+/** Tělo odpovědi 410 pro staženou jazykovou mutaci. Německy (návštěvník přišel
+ *  na německou URL) s odkazem na českou homepage — jediná verze, která existuje
+ *  pro každou sekci. Držíme ho jako prostý řetězec, ne Astro stránku: 410 se
+ *  vrací z middleware ještě před routerem, takže žádná routa se nerenderuje. */
+const RETIRED_LOCALE_BODY = `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Diese Seite gibt es nicht mehr — agro-svet.cz</title>
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;max-width:34rem;margin:18vh auto;padding:0 1.5rem;color:#0A0A0B;line-height:1.6}
+h1{font-size:1.4rem;margin:0 0 .75rem}
+p{margin:0 0 1rem;color:#4a4a52}
+a{color:#0A0A0B;font-weight:700}
+</style>
+</head>
+<body>
+<h1>Diese Seite gibt es nicht mehr</h1>
+<p>Die deutschsprachige Ausgabe von agro-sv\u011Bt.cz wurde eingestellt. Die Inhalte sind nur noch auf Tschechisch verf\u00FCgbar.</p>
+<p><a href="https://agro-svet.cz/">agro-sv\u011Bt.cz &rarr;</a></p>
+</body>
+</html>
+`;
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
 
@@ -103,6 +130,29 @@ export const onRequest = defineMiddleware(async (context, next) => {
   };
   const shortCalcTarget = SHORT_CALC[url.pathname.replace(/\/+$/, '')];
   if (shortCalcTarget) return redirect(shortCalcTarget, 308);
+
+  // ---- Stažená jazyková mutace → 410 Gone -----------------------------------
+  // /de/* staženo 2026-09-14 (RETIRED_LOCALES v i18n/config.ts). 410, ne 404:
+  // „Gone" je pro Google explicitní „tohle se nevrátí", a URL z indexu vyhazuje
+  // rychleji než 404, které si ještě chvíli ověřuje. 301 na češtinu by stránku
+  // jen přesměroval — pořád by šla ve výsledcích dohledat, a to je přesně to,
+  // co se tímhle ruší.
+  // Kryje i /sitemap/de.xml, která by po vypnutí zrcadlení jinak vracela
+  // prázdný <urlset> (GSC to hlásí jako chybu sitemapy).
+  // ‼️ Tohle MUSÍ zůstat crawlovatelné — žádný Disallow: /de/ do robots.txt,
+  // jinak Googlebot 410 nikdy neuvidí a URL v indexu zůstanou.
+  const retiredPrefix = url.pathname.split('/')[1] ?? '';
+  const retiredSitemap = url.pathname.match(/^\/sitemap\/([a-z]{2})\.xml$/)?.[1] ?? '';
+  if (isRetiredLocale(retiredPrefix) || isRetiredLocale(retiredSitemap)) {
+    return new Response(RETIRED_LOCALE_BODY, {
+      status: 410,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'X-Robots-Tag': 'noindex, nofollow',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    });
+  }
 
   // Locale prefix: odvoď locale + původní cestu, propiš do locals. Pro ne-cs
   // se na konci rewritne na kanonickou cs routu (next(strippedPath)).

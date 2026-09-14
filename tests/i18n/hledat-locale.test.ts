@@ -35,11 +35,13 @@ describe('/hledat — gatování skupin podle launchnutých sekcí', () => {
     // sk a pl mají /novinky launchnuté (reálné překlady přes article_translations)
     expect(searchGroupsFor('sk')).toEqual(['novinky', 'stroje', 'plemena']);
     expect(searchGroupsFor('pl')).toEqual(['novinky', 'stroje', 'plemena']);
-    // de i uk mají /novinky od 2026-09-01 (5 strojních novinek v každém jazyce).
-    // U uk to vyžadovalo migraci CHECK constraintu na produkční CMS databázi —
-    // `article_translations_locale_check` locale 'uk' do té doby nepouštěl.
-    expect(searchGroupsFor('de')).toEqual(['novinky', 'stroje', 'plemena']);
+    // uk má /novinky od 2026-09-01 (5 strojních novinek). Vyžádalo si to migraci
+    // CHECK constraintu na produkční CMS databázi — `article_translations_locale_check`
+    // locale 'uk' do té doby nepouštěl.
     expect(searchGroupsFor('uk')).toEqual(['novinky', 'stroje', 'plemena']);
+    // de je od 2026-09-14 stažené (RETIRED_LOCALES) → neprohledává NIC. Kdyby
+    // vyhledávání skupinu nabídlo, odkazovalo by do 410.
+    expect(searchGroupsFor('de')).toEqual([]);
   });
 
   it('každá nabídnutá skupina má v dané locale launchnutou cílovou sekci', () => {

@@ -53,7 +53,9 @@ Allow: /
 # /data/licence/ (CC BY 4.0 — cite with a link).
 
 # /sitemap.xml je sitemap INDEX; dílčí sitemapy jsou
-# /sitemap/<sekce>.xml (stroje, plodiny, chov, bazar, novinky, ostatni, sk, uk, pl, de).
+# /sitemap/<sekce>.xml (stroje, plodiny, chov, bazar, novinky, ostatni, sk, uk, pl).
+# ‼️ /de/ tu SCHVÁLNĚ nemá Disallow, i když je mutace stažená: vrací 410 a
+# Googlebot ho musí smět načíst, jinak URL z indexu nikdy nevypadnou.
 Sitemap: https://agro-svet.cz/sitemap.xml
 Sitemap: https://agro-svet.cz/news-sitemap.xml
 `;

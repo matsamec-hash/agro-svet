@@ -1,4 +1,4 @@
-import { locales, defaultLocale, isLocale, type Locale } from './config';
+import { locales, defaultLocale, isLocale, isRetiredLocale, type Locale } from './config';
 import { localizedTag } from './novinky-tagy';
 import { ui } from './ui';
 
@@ -227,8 +227,15 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     '/jak-na-to'],
 };
 
-/** True, pokud cs-root cesta patří do launchnuté sekce daného locale. */
+/** True, pokud cs-root cesta patří do launchnuté sekce daného locale.
+ *
+ *  Stažená mutace (RETIRED_LOCALES) není launchnutá NIKDE, ať má v
+ *  LAUNCHED_PREFIXES cokoli — data se schválně nemažou, aby šel jazyk vrátit.
+ *  Tahle jediná podmínka drží celý útlum: hreflang (Layout.astro), zrcadlení do
+ *  sitemapy (lib/sitemap-mirror), nav + footer (i18n/nav) i skupiny /hledat se
+ *  ptají právě sem. Samotné URL odbavuje 410 v middleware.ts. */
 export function isLaunchedPath(locale: Locale, csRootPath: string): boolean {
+  if (isRetiredLocale(locale)) return false;
   return (LAUNCHED_PREFIXES[locale] ?? []).some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
 }
 

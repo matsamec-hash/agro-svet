@@ -23,6 +23,7 @@ import { getKraje } from './lokality';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from './config';
 import { HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 import { allowInMirror, MIRROR_LOCALES, type MirrorContext, type MirrorLocale } from './sitemap-mirror';
+import { isRetiredLocale } from '../i18n/config';
 import { fetchTranslatedArticleIds } from './articles-i18n';
 import { dsDate, FALLBACK_LASTMOD } from './content-dates';
 import svetIndex from '../data/svet/index.json';
@@ -670,7 +671,18 @@ export async function buildSitemapEntries(): Promise<UrlEntry[]> {
   urls.push({ loc: `${SITE_URL}/mcp/`, changefreq: 'monthly', priority: '0.5', lastmod: STATIC_LASTMOD });
   urls.push({ loc: `${SITE_URL}/data/licence/`, changefreq: 'yearly', priority: '0.4', lastmod: STATIC_LASTMOD });
 
-  return urls;
+  // Poslední síto: žádná URL staženého jazyka (RETIRED_LOCALES) se do sitemapy
+  // nedostane. Zrcadlení už ji sem nepustí (isLaunchedPath je false), ALE
+  // jazykově výlučné landingy se do `urls` pushují napřímo, mimo bránu mirroru
+  // — přesně tak /de/direktzahlungen/ a tři další přežily vypnutí němčiny
+  // a držely /sitemap/de.xml v indexu sitemap. Filtr je tu proto jako poslední
+  // instance: ať do `urls` přibude cokoli, stažený jazyk ven neprojde.
+  // Ty čtyři pushe se schválně nemažou — jazyk se vrací smazáním řádku
+  // z RETIRED_LOCALES, ne dohledáváním, co se kde odmazalo.
+  return urls.filter((u) => {
+    const seg = new URL(u.loc).pathname.split('/')[1] ?? '';
+    return !isRetiredLocale(seg);
+  });
 }
 
 // Dělení na sekce žije v ./sitemap-sections (bez těžkých importů) — sem jen

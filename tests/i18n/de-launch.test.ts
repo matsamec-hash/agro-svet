@@ -3,6 +3,7 @@
 // nemáme reálně přeloženou, a že katalogový overlay pokrývá VŠECHNY značky
 // a série — jinak by indexovaná /de stránka nesla české tělo.
 import { describe, it, expect } from 'vitest';
+import { isRetiredLocale } from '../../src/i18n/config';
 import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
@@ -19,6 +20,22 @@ import { SLOVNIK } from '../../src/lib/slovnik';
 import { SLOVNIK_DE, KATEGORIE_LABELS_DE } from '../../src/lib/slovnik.de';
 
 const STROJE_DIR = path.join(process.cwd(), 'src/data/stroje');
+
+// DE mutace byla 2026-09-14 STAŽENA (RETIRED_LOCALES v i18n/config.ts): /de/*
+// vrací 410. Testy, které ověřují, že je německá sekce LAUNCHNUTÁ (indexovaná,
+// v navigaci, v sitemapě), si proto navzájem odporují se stavem webu — jsou
+// níž označené `describe.skipIf(DE_RETIRED)`.
+//
+// Není to zametená díra: aktuální stav („de není vidět NIKDE") hlídá
+// tests/i18n/retired-locale.test.ts, a to úplně. Přeskočené bloky hlídají ten
+// druhý, opačný stav a naskočí samy ve chvíli, kdy se `de` smaže
+// z RETIRED_LOCALES — tedy přesně když je zas bude potřeba.
+//
+// Testy překladů samotných (parita klíčů s cs, plurál, overlaye katalogu,
+// značek, plemen, chorob, včelařství, slovníku, JSON-LD jazyk) běží DÁL:
+// německá data v repu zůstala a nesmí se mezitím rozpadnout, jinak by nebylo
+// co vracet.
+const DE_RETIRED = isRetiredLocale('de');
 
 describe('ui/de.ts — parita s cs', () => {
   it('de má přesně stejné klíče jako cs', () => {
@@ -59,7 +76,7 @@ describe('de plurál (germánská dvojtvarost)', () => {
   });
 });
 
-describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () => {
+describe.skipIf(DE_RETIRED)('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () => {
   it('katalog techniky a značky jsou launchnuté', () => {
     expect(isLaunchedPath('de', '/stroje')).toBe(true);
     expect(isLaunchedPath('de', '/stroje/traktory/fendt')).toBe(true);
@@ -103,7 +120,7 @@ describe('LAUNCHED_PREFIXES.de — launchujeme jen skutečně přeložené', () 
   });
 });
 
-describe('de navigace neodkazuje do češtiny', () => {
+describe.skipIf(DE_RETIRED)('de navigace neodkazuje do češtiny', () => {
   it('nav i footer obsahují jen launchnuté cesty', () => {
     const norm = (h: string) => h.replace(/\/+$/, '') || '/';
     for (const item of getNav('de')) {
@@ -327,7 +344,7 @@ describe('encyklopedie-de — hesla encyklopedie', () => {
   });
 });
 
-describe('DE homepage a DE-only landingy', () => {
+describe.skipIf(DE_RETIRED)('DE homepage a DE-only landingy', () => {
   const ROOT = process.cwd();
 
   it('HomeDe komponenta existuje a je zapojená v index.astro', () => {
@@ -389,7 +406,7 @@ describe('DE homepage a DE-only landingy', () => {
   });
 });
 
-describe('fáze 3a — žebříčky a právní stránky', () => {
+describe.skipIf(DE_RETIRED)('fáze 3a — žebříčky a právní stránky', () => {
   const ROOT = process.cwd();
 
   // ‼️ TŘÍDA CHYBY, ne jedno místo: launchnutá sekce, jejíž próza pro daný
@@ -439,7 +456,7 @@ describe('fáze 3a — žebříčky a právní stránky', () => {
   });
 });
 
-describe('fáze 3b — rakouská jurisdikce', () => {
+describe.skipIf(DE_RETIRED)('fáze 3b — rakouská jurisdikce', () => {
   const ROOT = process.cwd();
 
   // Trh je DE+AT. Když je launchnutá jen německá jurisdikce, rakouský čtenář

@@ -5,6 +5,7 @@
 // pl ve fázi 1 PL. Native <details> = funguje i bez JS; drobný skript přidá
 // zavření kliknutím mimo / Esc (progressive enhancement).
 import { stripLocale, localizePath, langSwitchHref, t } from '../i18n/utils';
+import { isRetiredLocale } from '../i18n/config';
 import { HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 
 const localizedPathname = Astro.locals.localizedPathname ?? Astro.url.pathname;
@@ -17,16 +18,20 @@ const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk);
 const ukHref = langSwitchHref('uk', path, []);
 // PL cíl: nelaunchnuté sekce padají na /pl/ (PL homepage, noindex) — nikdy 404.
 const plHref = langSwitchHref('pl', path, HIDDEN_NEWS_CATEGORIES.pl);
-// DE cíl: nelaunchnuté sekce padají na /de/ (DE homepage, noindex) — nikdy 404.
+// DE cíl: nelaunchnuté sekce padaly na /de/ (DE homepage, noindex) — nikdy 404.
+// Od 2026-09-14 je de v RETIRED_LOCALES (celá mutace vrací 410), takže ho
+// filtr níž z nabídky vyhodí. Řádek zůstává, ať se jazyk dá vrátit smazáním
+// jediného prvku z RETIRED_LOCALES.
 const deHref = langSwitchHref('de', path, HIDDEN_NEWS_CATEGORIES.de);
 
+// Stažené mutace se v přepínači nenabízejí — odkaz do 410 je horší než žádný.
 const options = [
   { code: 'cs', href: csHref, hreflang: 'cs' },
   { code: 'sk', href: skHref, hreflang: 'sk' },
   { code: 'uk', href: ukHref, hreflang: 'uk' },
   { code: 'pl', href: plHref, hreflang: 'pl' },
   { code: 'de', href: deHref, hreflang: 'de' },
-];
+].filter((o) => !isRetiredLocale(o.code));
 const currentLabel = t(locale, `lang.${locale}`);
 ---
 <details class="lang-dd" aria-label={t(locale, 'lang.switch')}>

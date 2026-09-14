@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   allowInMirror,
   MIRROR_LOCALES,
+  ALL_MIRROR_LOCALES,
   type MirrorContext,
   type MirrorLocale,
 } from '../../src/lib/sitemap-mirror';
@@ -25,7 +26,7 @@ const ctx: MirrorContext = {
     MIRROR_LOCALES.map((l) => [l, new Set(['a-prelozeny'])] as const),
   ),
   howtoSlugs: new Map(
-    (['sk', 'uk', 'de'] as MirrorLocale[]).map(
+    (['sk', 'uk'] as MirrorLocale[]).map(
       (l) => [l, new Set(l === 'sk' ? ['jak-zalozit-louku', 'registrace-vcelaru'] : ['jak-zalozit-louku'])] as const,
     ),
   ),
@@ -62,17 +63,27 @@ describe('brána locale mirroru sitemapy', () => {
       expect(allowInMirror('/novinky/kategorie/dotace/', locale, ctx)).toBe(false);
       expect(allowInMirror('/novinky/kategorie/legislativa/', locale, ctx)).toBe(false);
     }
-    for (const locale of ['sk', 'uk', 'pl', 'de'] as MirrorLocale[]) {
+    for (const locale of MIRROR_LOCALES) {
       expect(allowInMirror('/novinky/fendt-1050-vario-rekordni-priplatek/', locale, ctx)).toBe(true);
     }
   });
 
-  it('chybějící overlay návodu se nezrcadlí — ani pro de', () => {
-    expect(allowInMirror('/jak-na-to/jak-zalozit-louku/', 'de', ctx)).toBe(true);
-    expect(allowInMirror('/jak-na-to/registrace-vcelaru/', 'de', ctx)).toBe(false);
+  it('chybějící overlay návodu se nezrcadlí', () => {
+    // uk má overlay jen pro jeden ze dvou návodů → zrcadlí se jen ten.
+    expect(allowInMirror('/jak-na-to/jak-zalozit-louku/', 'uk', ctx)).toBe(true);
     expect(allowInMirror('/jak-na-to/registrace-vcelaru/', 'uk', ctx)).toBe(false);
     // sk má plnou paritu → brána je pro něj no-op
     expect(allowInMirror('/jak-na-to/registrace-vcelaru/', 'sk', ctx)).toBe(true);
+  });
+
+  it('stažený jazyk se nezrcadlí vůbec a není ani ve výčtu mirrorů', () => {
+    // de staženo 2026-09-14 (RETIRED_LOCALES). Brána ho musí odmítnout i pro
+    // cestu, kterou má pořád v LAUNCHED_PREFIXES — jinak by se stažené URL
+    // vrátily do sitemapy.
+    expect(MIRROR_LOCALES).not.toContain('de');
+    expect(ALL_MIRROR_LOCALES).toContain('de');
+    expect(allowInMirror('/plodiny/', 'de', ctx)).toBe(false);
+    expect(allowInMirror('/stroje/', 'de', ctx)).toBe(false);
   });
 
   it('sk si ponechává /dotace/kalendar-kol/, uk ne (302 na hub)', () => {

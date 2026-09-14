@@ -11,12 +11,24 @@
 // všechny brány automaticky a rozdíly se deklarují daty, ne kopií filtru.
 import { isLaunchedPath, isPrerenderedOnlyPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
+import { isRetiredLocale } from '../i18n/config';
 
 export type MirrorLocale = 'sk' | 'uk' | 'pl' | 'de';
 
-/** Pořadí je závazné: každý mirror vylučuje už zrcadlené cesty těch před ním,
- *  aby se mirror nezrcadlil sám do sebe. */
-export const MIRROR_LOCALES: readonly MirrorLocale[] = ['sk', 'uk', 'pl', 'de'];
+/** Všechny jazyky, které kdy sitemapa zrcadlila — včetně stažených. Slouží jen
+ *  k tomu, aby typ a data (HIDDEN_NEWS_CATEGORIES, howto overlaye) zůstaly
+ *  kompletní; zrcadlí se podle MIRROR_LOCALES níž. */
+export const ALL_MIRROR_LOCALES: readonly MirrorLocale[] = ['sk', 'uk', 'pl', 'de'];
+
+/** Jazyky, které se REÁLNĚ zrcadlí do sitemapy. Pořadí je závazné: každý mirror
+ *  vylučuje už zrcadlené cesty těch před ním, aby se mirror nezrcadlil sám do
+ *  sebe — filtrování stažených jazyků pořadí zachovává.
+ *  Stažený jazyk (RETIRED_LOCALES) by stejně neprošel `allowInMirror`
+ *  (isLaunchedPath je pro něj false); vyřazuje se rovnou tady, ať generátor
+ *  zbytečně neprochází tisíce cest jen proto, aby je všechny zahodil. */
+export const MIRROR_LOCALES: readonly MirrorLocale[] = ALL_MIRROR_LOCALES.filter(
+  (l) => !isRetiredLocale(l),
+);
 
 export interface ArticleMeta {
   id: string;
