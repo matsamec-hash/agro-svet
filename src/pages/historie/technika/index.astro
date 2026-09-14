@@ -86,7 +86,34 @@ const itemListLd = {
       ))}
     </section>
 
-    <p class="ht-credit">Fotografie strojů pocházejí z Wikimedia Commons (licence CC BY-SA / CC0 / volné dílo); autor a licence jsou uvedeny u každého stroje.</p>
+    {/* Jména autorů patří na TUHLE stránku, ne jen o proklik dál na detail —
+        miniatura je plnohodnotné užití díla a licence CC BY-SA jméno vyžaduje.
+        Paušální „Fotografie pocházejí z Wikimedia Commons" je zdroj, ne autor;
+        přesně na tom stála advokátní výzva na sesterském webu (10. 9. 2026). */}
+    <section class="ht-credits">
+      <h2 class="ht-cat">Fotografie</h2>
+      <ul>
+        {machines
+          .filter((m) => m.image && m.imageCredit)
+          .filter((m, i, all) => all.findIndex((x) => x.imageSource === m.imageSource) === i)
+          .map((m) => (
+            <li>
+              {m.imageCredit}
+              {m.imageLicense && (
+                <>
+                  {' · '}
+                  {m.imageLicenseUrl
+                    ? <a href={m.imageLicenseUrl} rel="license nofollow noopener" target="_blank">{m.imageLicense}</a>
+                    : m.imageLicense}
+                </>
+              )}
+              {m.imageSource && (
+                <> · <a href={m.imageSource} rel="nofollow noopener" target="_blank">zdroj</a></>
+              )}
+            </li>
+          ))}
+      </ul>
+    </section>
     <p class="ht-cross"><a href="/stroje/">Dnešní katalog strojů →</a> · <a href="/historie/">Historie zemědělství →</a></p>
   </main>
 </Layout>
@@ -111,6 +138,10 @@ const itemListLd = {
   .ht-meta { color: #789; font-size: 13px; margin: 0 0 6px; }
   .ht-spec { color: #1c7c48; font-size: 13px; font-weight: 600; margin: 0; }
   .ht-credit { color: #98a4ad; font-size: 12px; margin: 28px 0 8px; line-height: 1.5; }
+  .ht-credits { margin: 28px 0 0; }
+  .ht-credits ul { margin: 8px 0 0; padding-left: 18px; }
+  .ht-credits li { font-size: 12px; line-height: 1.7; color: var(--muted, #667); }
+  .ht-credits a { color: inherit; }
   .ht-cross { margin-top: 6px; }
   .ht-cross a { color: #1c7c48; font-weight: 600; text-decoration: none; }
 </style>
