@@ -106,7 +106,9 @@ function resolveDefaultOg(pathname: string): string {
   if (landings.has(seg)) return `${SITE_ORIGIN}/og/landing-${seg}.png`;
   return `${SITE_ORIGIN}/og/default.png`;
 }
-const resolvedOgImage = ogImage ?? resolveDefaultOg(Astro.url.pathname);
+// og:image musí být absolutní, jinak si ho sociální sítě nenačtou. Stránka smí
+// předat i cestu od kořene (self-hostované fotky) — absolutní URL projde beze změny.
+const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : resolveDefaultOg(Astro.url.pathname);
 ---
 
 <!DOCTYPE html>

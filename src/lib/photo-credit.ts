@@ -227,6 +227,27 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
   '/images/novinky/dotace-49-75.jpg': { author: '', license: 'Public domain', source: 'https://www.usda.gov/' },
   '/images/novinky/dotace-prv-8-kolo.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
 
+  // /chov-hlemyzdu — úvodní fotky článků. Původně hotlink na images.pexels.com;
+  // staženo k sobě, protože cizí server ukládal návštěvníkovi cookies Cloudflare
+  // ještě před souhlasem. Pexels License atribuci nevyžaduje, zdroj vedeme kvůli
+  // dohledatelnosti.
+  '/images/hlemyzdi/chov-hlemyzdu-kompletni-pruvodce.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/3977265/' },
+  '/images/hlemyzdi/cim-krmit-hlemyzde.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/25384646/' },
+  '/images/hlemyzdi/clarksonova-farma-hlemyzdi-sliz.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/17953065/' },
+  '/images/hlemyzdi/co-potrebujes-k-chovu-hlemyzdu.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/8425102/' },
+  '/images/hlemyzdi/co-se-z-hlemyzdu-vyrabi.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/8250714/' },
+  '/images/hlemyzdi/ekonomika-chovu-hlemyzdu.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/35471644/' },
+  '/images/hlemyzdi/hlemyzdi-sliz-mucin-jak-vznika.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/35333031/' },
+  '/images/hlemyzdi/jaky-druh-hlemyzde-chovat.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/34325970/' },
+  '/images/hlemyzdi/legislativa-hygiena-chov-hlemyzdu-cr.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/12674838/' },
+  '/images/hlemyzdi/nemoci-predatori-chyby-chov-hlemyzdu.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/7898266/' },
+  '/images/hlemyzdi/sezonnost-zimovani-chov-hlemyzdu.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/39249/' },
+  '/images/hlemyzdi/sneci-farmy-v-cr.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/34018929/' },
+  '/images/hlemyzdi/sneci-kaviar-vajicka-delikatesa.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/35587616/' },
+  '/images/hlemyzdi/sneci-maso-escargot-chov.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/13189279/' },
+  '/images/hlemyzdi/ulity-vedlejsi-produkty-hlemyzdu.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/7855589/' },
+  '/images/hlemyzdi/zivotni-cyklus-rozmnozovani-hlemyzdu.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/36235066/' },
+
   // /plemena — dlaždice druhů (scripts/druhy-zvirat-photos.mjs, Wikimedia Commons).
   // Čtvercová i „wide" varianta jsou výřezy z téhož snímku → týž kredit.
   ...DRUHY_CREDITS,
