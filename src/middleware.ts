@@ -4,6 +4,7 @@ import { stripLocale } from './i18n/utils';
 import { isRetiredLocale } from './i18n/config';
 import { isLockedSectionPath } from './i18n/nav';
 import { isPrerenderedRewriteError } from './lib/prerendered-rewrite';
+import { applySecurityHeaders } from './lib/security-headers';
 import {
   gateActive,
   isGateBypassed,
@@ -104,7 +105,13 @@ a{color:#0A0A0B;font-weight:700}
 </html>
 `;
 
-export const onRequest = defineMiddleware(async (context, next) => {
+/**
+ * Vlastní logika webu. Obaluje ji `onRequest` níž, aby hlavičky dostala KAŽDÁ
+ * odpověď — 403 na cross-site POST, 410 stažené mutace, 308 zkratky kalkulaček,
+ * 307 na zamčené sekce, redirecty site gate i normální stránka. Proto wrapper,
+ * a ne `sequence()`: návratových bodů tu přibývá a na každý se zapomene.
+ */
+const handleRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
 
   // CSRF: blokuj cross-site nebezpečné POSTy (host-based, viz výše).
@@ -284,4 +291,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   return response;
+});
+
+export const onRequest = defineMiddleware(async (context, next) => {
+  const response = await handleRequest(context, next);
+  return applySecurityHeaders(response as Response, context.url.pathname);
 });
