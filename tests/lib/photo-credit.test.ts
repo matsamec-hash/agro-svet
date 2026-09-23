@@ -10,6 +10,9 @@ import {
   isSynthetic,
   licenseUrlFor,
   requiresAuthor,
+  jePouhePd,
+  pdDuvodFor,
+  PD_DUVODY,
 } from '../../src/lib/photo-credit';
 import yaml from 'js-yaml';
 
@@ -84,6 +87,36 @@ describe('atribuce fotek', () => {
       if (!c.license) bad.push(`${path} — chybí název licence`);
     }
     expect(bad, bad.join('\n')).toHaveLength(0);
+  });
+
+  it('„Public domain" nesmí zůstat bez doloženého důvodu a jurisdikce', () => {
+    // Štítek na Commons platí pro zemi původu a USA. Bez konkrétní šablony
+    // a jurisdikce se do ČR převzít nedá — a přesně tohle 23. 9. 2026 poslalo
+    // z webu pryč fotky s PD-US-expired, PD-USGov-USDA a „Author assumed".
+    const bez: string[] = [];
+    for (const [path, c] of Object.entries(PHOTO_CREDITS)) {
+      if (!jePouhePd(c.license)) continue;
+      const d = pdDuvodFor(path);
+      if (!d) { bez.push(`${path} — „${c.license}" bez důvodu v PD_DUVODY`); continue; }
+      if (!d.sablona || !d.duvod || !d.jurisdikce) bez.push(`${path} — neúplný důvod`);
+    }
+    expect(bez, bez.join('\n')).toHaveLength(0);
+  });
+
+  it('důvod volnosti se neváže jen na cizí jurisdikci', () => {
+    // US-only důvody („volné v USA") na český web nestačí. Kdo je sem vrátí,
+    // spadne tady.
+    const cizi = Object.entries(PD_DUVODY).filter(
+      ([, d]) => /^(USA|US|Spojené státy)/i.test(d.jurisdikce) || /US-gov|US-expired/i.test(d.sablona),
+    );
+    expect(cizi.map(([p]) => p), 'důvod platí jen mimo ČR').toHaveLength(0);
+  });
+
+  it('každý záznam v PD_DUVODY má pod sebou obrázek na disku', () => {
+    const chibi = Object.keys(PD_DUVODY).filter(
+      (p) => !existsSync(join(ROOT, 'public', p)) && !existsSync(join(ROOT, 'public', p.replace(/(\.[a-z0-9]+)$/, '__v-w800$1'))),
+    );
+    expect(chibi, chibi.join('\n')).toHaveLength(0);
   });
 
   it('autor nesmí být jen zdroj („Wikimedia Commons", „Own work")', () => {

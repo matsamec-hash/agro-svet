@@ -29,7 +29,7 @@ export interface PhotoCredit {
 }
 
 /** Licence, u kterých se atribuce nevyžaduje — netřeba autora, jen licenci. */
-const NO_ATTRIBUTION = /^(public domain|cc0|volné dílo|unsplash|pexels|pixabay|synthetic)/i;
+const NO_ATTRIBUTION = /^(public domain|cc0|volné dílo|unsplash|pexels|pixabay|synthetic|vlastní grafika)/i;
 
 export function requiresAuthor(license: string | undefined | null): boolean {
   if (!license) return true;
@@ -198,6 +198,144 @@ const DRUHY_CREDITS: Record<string, PhotoCredit> = Object.fromEntries(
   }),
 );
 
+// ---------------------------------------------------------------------------
+// „Public domain" — proč a kde
+// ---------------------------------------------------------------------------
+
+/**
+ * Štítek „Public domain" na Wikimedia Commons je tvrzení o právním stavu
+ * v zemi původu a v USA. Do ČR se převzít nedá — italská fotka volná po
+ * 20 letech je u nás pořád chráněná. Doložitelné je jen to, co ke štítku
+ * dodá KONKRÉTNÍ důvod a jurisdikci; proto tahle tabulka a rohatka nad ní.
+ *
+ * Kategorie, které 23. 9. 2026 na webu zůstaly. Všechno ostatní odešlo:
+ *   • PD-US-expired a PD-USGov-USDA — volné v USA, v ČR neprokázané,
+ *   • zdroj bez konkrétního souboru („https://www.usda.gov/"),
+ *   • „Author assumed" — Commons si autorem sám není jistý.
+ */
+export interface PdDuvod {
+  /** Šablona na Commons, ze které volnost plyne. */
+  sablona: string;
+  /** Proč je dílo volné — česky, ať to unese i právník. */
+  duvod: string;
+  /** Kde tenhle důvod platí. */
+  jurisdikce: string;
+}
+
+const PD_LOGO: PdDuvod = {
+  sablona: 'PD-textlogo / PD-shape',
+  duvod:
+    'Logo tvoří jen text v běžném písmu a jednoduché geometrické tvary. Není to jedinečný ' +
+    'výsledek tvůrčí činnosti autora (§ 2 odst. 1 autorského zákona), autorské právo tedy ' +
+    'nevzniklo. Ochranná známka zůstává v platnosti — logo užíváme k označení výrobce ' +
+    'a jeho strojů, což dovoluje § 10 odst. 3 zák. č. 441/2003 Sb.',
+  jurisdikce: 'celosvětově — autorské dílo nevzniklo',
+};
+
+const PD_AUTOR: PdDuvod = {
+  sablona: 'PD-self / PD-user / PD-author / PD-PDphoto.org',
+  duvod:
+    'Autor snímek sám uvolnil do volného díla. Šablona obsahuje i podpůrné svolení pro ' +
+    'právní řády, které úplné vzdání se majetkových práv neumožňují (mj. ČR) — tam se ' +
+    'prohlášení čte jako bezúplatná licence k jakémukoli užití.',
+  jurisdikce: 'celosvětově — prohlášení autora',
+};
+
+const PD_LHUTA: PdDuvod = {
+  sablona: 'PD-old / PD-scan / PD-Art',
+  duvod:
+    'Botanické tabule z let 1793–1897. Autoři předloh zemřeli před více než 70 lety ' +
+    '(O. W. Thomé † 1925, F. E. Köhler † 1904, A. Masclef † 1911, W. Woodville † 1805), ' +
+    'majetková práva tedy zanikla podle § 27 autorského zákona. Věrný sken dvourozměrné ' +
+    'předlohy nezakládá nová práva.',
+  jurisdikce: 'ČR a EU — § 27 autorského zákona, 70 let po smrti autora',
+};
+
+/** Cesta k obrázku → důvod, proč je volný. Klíče jsou bez varianty `__v-w800`. */
+export const PD_DUVODY: Record<string, PdDuvod> = {
+
+  // Loga výrobců: 18 × šablona PD-textlogo / PD-shape.
+  '/images/znacky/amazone.png': PD_LOGO, // PD-textlogo
+  '/images/znacky/case-ih.png': PD_LOGO, // PD-textlogo
+  '/images/znacky/claas.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/deutz-fahr.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/fendt.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/horsch.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/jcb.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/john-deere.png': PD_LOGO, // PD-textlogo
+  '/images/znacky/krone.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/kubota.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/kuhn.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/kverneland.svg': PD_LOGO, // PD-shape
+  '/images/znacky/manitou.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/new-holland.png': PD_LOGO, // PD-textlogo
+  '/images/znacky/pottinger.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/vaderstad.svg': PD_LOGO, // PD-textlogo
+  '/images/znacky/valtra.png': PD_LOGO, // PD-textlogo
+  '/images/znacky/zetor.png': PD_LOGO, // pd-textlogo
+
+  // Uvolnil sám autor: 21 × šablona PD-self / PD-user / PD-author / PD-PDphoto.org.
+  '/images/historie/zetor-3011.jpg': PD_AUTOR, // PD-self
+  '/images/historie/zetor-50-super.jpg': PD_AUTOR, // PD-self
+  '/images/plemena/kone/arab.webp': PD_AUTOR, // PD-author-FlickrPDM
+  '/images/plemena/kone/ardenny.webp': PD_AUTOR, // PD-self
+  '/images/plemena/kone/fjordsky-kun.webp': PD_AUTOR, // PD-user-w
+  '/images/plemena/ovce/charollais.webp': PD_AUTOR, // PD-self
+  '/images/plodiny/kapusta.jpg': PD_AUTOR, // PD-self
+  '/images/plodiny/rajce.jpg': PD_AUTOR, // PD-self
+  '/images/plodiny/redkvicka.jpg': PD_AUTOR, // PD-self
+  '/images/plodiny/slunecnice.jpg': PD_AUTOR, // PD-PDphoto.org
+  '/images/plodiny/tykev.jpg': PD_AUTOR, // PD-self
+  '/images/stroje/amazone/amazone-ux.webp': PD_AUTOR, // self
+  '/images/stroje/claas/claas-ares.jpg': PD_AUTOR, // PD-author
+  '/images/stroje/joskin/joskin-komfort-2.webp': PD_AUTOR, // self
+  '/images/stroje/kubota/kubota-dc-105k.webp': PD_AUTOR, // PD-self
+  '/images/stroje/valtra/valtra-t-gen1.jpg': PD_AUTOR, // PD-self
+  '/images/stroje/zetor/zetor-forterra.jpg': PD_AUTOR, // PD-user
+  '/images/stroje/zetor/zetor-proxima-gen1.jpg': PD_AUTOR, // PD-self
+  '/images/vcelarstvi/vybaveni/langstroth.webp': PD_AUTOR, // PD-user-he
+  '/images/vcelarstvi/vybaveni/mezistena.webp': PD_AUTOR, // PD-user-en
+  '/images/vcelarstvi/vybaveni/vcelarsky-oblek.webp': PD_AUTOR, // PD-self
+
+  // Uplynulá doba ochrany: 15 × šablona PD-old / PD-scan / PD-Art (botanické tabule 1793–1897).
+  '/images/plodiny/bob-zahradni.jpg': PD_LHUTA, // PD-old
+  '/images/plodiny/celer.jpg': PD_LHUTA, // PD-scan
+  '/images/plodiny/cesnek.jpg': PD_LHUTA, // PD-Art
+  '/images/plodiny/cukrovka.jpg': PD_LHUTA, // PD-Art
+  '/images/plodiny/hrach.jpg': PD_LHUTA, // PD-scan
+  '/images/plodiny/kukurice.jpg': PD_LHUTA, // PD-old
+  '/images/plodiny/mak.jpg': PD_LHUTA, // PD-scan
+  '/images/plodiny/mrkev.jpg': PD_LHUTA, // PD-scan + GFDL
+  '/images/plodiny/okurka.jpg': PD_LHUTA, // PD-scan
+  '/images/plodiny/oves.jpg': PD_LHUTA, // PD-scan
+  '/images/plodiny/psenice-jarni.jpg': PD_LHUTA, // PD-scan
+  '/images/plodiny/psenice-ozima.jpg': PD_LHUTA, // PD-scan
+  '/images/plodiny/repka-jarni.jpg': PD_LHUTA, // PD-old
+  '/images/plodiny/repka-ozima.jpg': PD_LHUTA, // PD-old
+  '/images/plodiny/vojteska.jpg': PD_LHUTA, // PD-Art
+};
+
+/** Vrátí doložený důvod volnosti, nebo null (= štítek „Public domain" bez opory). */
+export function pdDuvodFor(path: string | null | undefined): PdDuvod | null {
+  if (!path) return null;
+  return PD_DUVODY[canonicalPath(path)] ?? null;
+}
+
+/** Je licence pouhý štítek „volné dílo" bez uvedení konkrétního důvodu? */
+export function jePouhePd(license: string | undefined | null): boolean {
+  return /^(public domain|volné dílo|pd)$/i.test((license ?? '').trim());
+}
+
+/**
+ * Zástupný obrázek s logem webu. Leží tam, kde původní fotka odešla kvůli
+ * nedoloženému oprávnění, ale cesta musela zůstat (hero článku drží CMS).
+ */
+export const ZASTUPNY: PhotoCredit = {
+  author: 'agro-svet.cz',
+  license: 'Vlastní grafika',
+  source: '',
+};
+
 export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
   // Homepage / rozcestníky — ImageAccordion, hero fotky sekcí.
   '/images/telata.webp': {
@@ -218,13 +356,18 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
   '/images/data-hub/trhy-komodity.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
   '/images/data-hub/zemedelska-puda.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
 
-  // /novinky — cover fotky článků o 8. kole PRV. US-gov (USDA/NRCS, US Forest
-  // Service, NPS, USDA FPAC) → volné dílo, atribuce se nevyžaduje.
-  '/images/novinky/dotace-34-73.jpg': { author: '', license: 'Public domain', source: 'https://www.usda.gov/' },
-  '/images/novinky/dotace-38-73.jpg': { author: '', license: 'Public domain', source: 'https://www.usda.gov/' },
-  '/images/novinky/dotace-39-73.jpg': { author: '', license: 'Public domain', source: 'https://www.usda.gov/' },
-  '/images/novinky/dotace-44-73.jpg': { author: '', license: 'Public domain', source: 'https://www.usda.gov/' },
-  '/images/novinky/dotace-49-75.jpg': { author: '', license: 'Public domain', source: 'https://www.usda.gov/' },
+  // /novinky — cover fotky článků o 8. kole PRV. Dřív tu ležely snímky
+  // označené „Public domain" se zdrojem `https://www.usda.gov/` — tedy odkazem
+  // na titulní stranu úřadu, ne na konkrétní soubor. Bez čísla snímku a bez
+  // licenční stránky se původ nedal doložit, takže fotky 23. 9. 2026 odešly
+  // a na jejich cestách teď leží zástupný obrázek s logem
+  // (`scripts/make-zastupny-obrazek.mjs`). Cesta zůstala, protože hero článku
+  // je uložené v CMS.
+  '/images/novinky/dotace-34-73.jpg': ZASTUPNY,
+  '/images/novinky/dotace-38-73.jpg': ZASTUPNY,
+  '/images/novinky/dotace-39-73.jpg': ZASTUPNY,
+  '/images/novinky/dotace-44-73.jpg': ZASTUPNY,
+  '/images/novinky/dotace-49-75.jpg': ZASTUPNY,
   '/images/novinky/dotace-prv-8-kolo.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
 
   // /chov-hlemyzdu — úvodní fotky článků. Původně hotlink na images.pexels.com;
@@ -274,12 +417,6 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
     author: 'Stephen Kennard',
     license: 'CC BY-SA 3.0',
     source: 'https://commons.wikimedia.org/wiki/File:Aerial_view_of_the_Chatham_Town_FC_football_pitch.jpg',
-  },
-  '/images/srovnani/staromestske-nam.webp': {
-    author: 'A.Savin',
-    license: 'FAL',
-    licenseUrl: 'https://artlibre.org/licence/lal/en/',
-    source: 'https://commons.wikimedia.org/wiki/File:Prague_07-2016_View_from_Old_Town_Hall_Tower_img3.jpg',
   },
   '/images/srovnani/vaclavske-nam.webp': {
     author: 'Slyronit',

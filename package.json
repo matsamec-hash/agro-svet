@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/gen-content-dates.mjs && node scripts/build-og-images.mjs && tsx scripts/build-agrimap-preview.mjs && astro build",
+    "build": "node scripts/check-photo-credits.mjs && node scripts/gen-content-dates.mjs && node scripts/build-og-images.mjs && tsx scripts/build-agrimap-preview.mjs && astro build",
     "build:og": "node scripts/build-og-images.mjs",
     "preview": "astro preview",
     "astro": "astro",
@@ -23,7 +23,8 @@
     "bazar:cleanup": "node --env-file=.env scripts/bazar-seed-cleanup.mjs",
     "data:world": "node scripts/build-svet.mjs",
     "test": "vitest run --passWithNoTests",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:fotky": "node scripts/check-photo-credits.mjs"
   },
   "dependencies": {
     "@astrojs/node": "10.1.3",
