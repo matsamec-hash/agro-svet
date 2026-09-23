@@ -79,6 +79,16 @@ for (const f of souboryDat(DATA)) {
   }
 }
 
+// --- fotobanky: licence bez uvedení KTERÉ fotky ---
+// „Unsplash License" se zdrojem na stránku licence neříká nic o tom, odkud
+// soubor je. 23. 9. 2026 se u tří takových snímků ukázalo, že to Unsplash
+// vůbec nebyl. Zdroj musí ukazovat na konkrétní fotku.
+for (const m of src.matchAll(/'(\/images\/[^']+)':\s*\{[^}]*license:\s*'(Unsplash|Pexels|Pixabay)[^']*'[^}]*\}/g)) {
+  const zaznam = m[0];
+  const konkretni = /source:\s*'[^']*\/(photo|photos)\//.test(zaznam);
+  if (!konkretni) chyby.push(`${canon(m[1])} (photo-credit.ts): „${m[2]} License" bez odkazu na konkrétní fotku`);
+}
+
 // --- registr: EXTRA_CREDITS a spol. ---
 for (const m of src.matchAll(/'(\/images\/[^']+)'\s*:\s*\{[^}]*license:\s*'([^']+)'/g)) {
   if (!PUHE_PD.test(m[2].trim())) continue;

@@ -343,19 +343,26 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
     license: 'CC BY-SA 2.0',
     source: 'https://commons.wikimedia.org/wiki/File:2_Calves_in_Denmark_(9515170125).jpg',
   },
-  '/images/traktor.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-  '/images/kombajn.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-  '/images/stroje.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-  '/images/bazar.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-
-  // /data — hub dlaždice, Unsplash (atribuce se nevyžaduje).
-  '/images/data-hub/dotace.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-  '/images/data-hub/kalkulacka-cap.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-  '/images/data-hub/profily-zemi.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-  '/images/data-hub/srovnani-zemi.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-  '/images/data-hub/trhy-komodity.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-  '/images/data-hub/zemedelska-puda.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-
+  // Dlaždice ImageAccordionu a hubu /data. Vedly se jako „Unsplash License"
+  // se zdrojem na stránku licence — tedy bez údaje, KTERÁ fotka to je.
+  // 23. 9. 2026 se to dalo ověřit: historie si pamatuje, že accordion dřív
+  // hotlinkoval tři konkrétní fotky z images.unsplash.com. Po stažení a
+  // porovnání vyšlo najevo, že lokální soubory jsou JINÉ snímky (traktor:
+  // u nás Fendt na strništi, na Unsplash rýžové pole v Indii — odchylka
+  // perceptuálního otisku 36/64). Štítek „Unsplash" tedy nedokládal nic
+  // a u /images/traktor.webp to vypadá na propagační snímek výrobce.
+  // Všechny nahrazeny zástupným obrázkem s logem; cesty zůstaly, ať se
+  // nerozbijí šablony ani hero uložená v CMS.
+  '/images/traktor.webp': ZASTUPNY,
+  '/images/kombajn.webp': ZASTUPNY,
+  '/images/stroje.webp': ZASTUPNY,
+  '/images/bazar.webp': ZASTUPNY,
+  '/images/data-hub/dotace.webp': ZASTUPNY,
+  '/images/data-hub/kalkulacka-cap.webp': ZASTUPNY,
+  '/images/data-hub/profily-zemi.webp': ZASTUPNY,
+  '/images/data-hub/srovnani-zemi.webp': ZASTUPNY,
+  '/images/data-hub/trhy-komodity.webp': ZASTUPNY,
+  '/images/data-hub/zemedelska-puda.webp': ZASTUPNY,
   // /novinky — cover fotky článků o 8. kole PRV. Dřív tu ležely snímky
   // označené „Public domain" se zdrojem `https://www.usda.gov/` — tedy odkazem
   // na titulní stranu úřadu, ne na konkrétní soubor. Bez čísla snímku a bez
@@ -368,8 +375,7 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
   '/images/novinky/dotace-39-73.jpg': ZASTUPNY,
   '/images/novinky/dotace-44-73.jpg': ZASTUPNY,
   '/images/novinky/dotace-49-75.jpg': ZASTUPNY,
-  '/images/novinky/dotace-prv-8-kolo.webp': { author: '', license: 'Unsplash License', source: 'https://unsplash.com/license' },
-
+  '/images/novinky/dotace-prv-8-kolo.webp': ZASTUPNY,
   // /chov-hlemyzdu — úvodní fotky článků. Původně hotlink na images.pexels.com;
   // staženo k sobě, protože cizí server ukládal návštěvníkovi cookies Cloudflare
   // ještě před souhlasem. Pexels License atribuci nevyžaduje, zdroj vedeme kvůli
