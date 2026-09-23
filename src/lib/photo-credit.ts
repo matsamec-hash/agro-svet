@@ -343,26 +343,60 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
     license: 'CC BY-SA 2.0',
     source: 'https://commons.wikimedia.org/wiki/File:2_Calves_in_Denmark_(9515170125).jpg',
   },
-  // Dlaždice ImageAccordionu a hubu /data. Vedly se jako „Unsplash License"
-  // se zdrojem na stránku licence — tedy bez údaje, KTERÁ fotka to je.
-  // 23. 9. 2026 se to dalo ověřit: historie si pamatuje, že accordion dřív
-  // hotlinkoval tři konkrétní fotky z images.unsplash.com. Po stažení a
-  // porovnání vyšlo najevo, že lokální soubory jsou JINÉ snímky (traktor:
-  // u nás Fendt na strništi, na Unsplash rýžové pole v Indii — odchylka
-  // perceptuálního otisku 36/64). Štítek „Unsplash" tedy nedokládal nic
-  // a u /images/traktor.webp to vypadá na propagační snímek výrobce.
-  // Všechny nahrazeny zástupným obrázkem s logem; cesty zůstaly, ať se
-  // nerozbijí šablony ani hero uložená v CMS.
-  '/images/traktor.webp': ZASTUPNY,
-  '/images/kombajn.webp': ZASTUPNY,
+  // Dlaždice ImageAccordionu a hubu /data. Do 23. 9. 2026 se vedly jako
+  // „Unsplash License" se zdrojem na stránku licence — tedy bez údaje, KTERÁ
+  // fotka to je. Historie repa přitom pamatovala tři konkrétní hotlinky na
+  // images.unsplash.com; po stažení originálů a porovnání otisků vyšlo najevo,
+  // že lokální soubory jsou JINÉ snímky (traktor: u nás Fendt na strništi,
+  // na Unsplash rýžové pole v Indii, odchylka 36/64). Štítek nedokládal nic.
+  //
+  // Všechny nahrazeny ověřenými snímky z Commons — každý před nasazením
+  // vizuálně zkontrolovaný, licence jen CC0 / CC BY / CC BY-SA s verzí.
+  // Kde se nic vhodného nenašlo, zůstává ZASTUPNY (logo webu):
+  //   /images/stroje.webp            — jen záložní OG kartička, logo stačí
+  //   /images/novinky/dotace-49-75   — u „mladého zemědělce" byli všichni
+  //                                    kandidáti identifikovatelní lidé
+  '/images/traktor.webp': {
+    author: 'Petar Milošević',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Tractor_New_Holland_T6.165_plowing_(Zadobrova,_Ljubljana).jpg',
+  },
+  '/images/kombajn.webp': {
+    author: 'Graham Robson',
+    license: 'CC BY-SA 2.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Harvesting_wheat_at_New_Barns_-_geograph.org.uk_-_4682011.jpg',
+  },
   '/images/stroje.webp': ZASTUPNY,
-  '/images/bazar.webp': ZASTUPNY,
-  '/images/data-hub/dotace.webp': ZASTUPNY,
-  '/images/data-hub/kalkulacka-cap.webp': ZASTUPNY,
-  '/images/data-hub/profily-zemi.webp': ZASTUPNY,
-  '/images/data-hub/srovnani-zemi.webp': ZASTUPNY,
-  '/images/data-hub/trhy-komodity.webp': ZASTUPNY,
-  '/images/data-hub/zemedelska-puda.webp': ZASTUPNY,
+  '/images/data-hub/dotace.webp': {
+    author: 'Ksheera Piraati',
+    license: 'CC BY 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Young_seedling_of_tomato_emerging_from_soil_-_India.jpg',
+  },
+  '/images/data-hub/kalkulacka-cap.webp': {
+    author: 'Dietmar Rabich',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:D%C3%BClmen,_Kirchspiel,_Dernekamp,_Getreide_bei_Sonnenaufgang_--_2021_--_8812.jpg',
+  },
+  '/images/data-hub/profily-zemi.webp': {
+    author: 'Roman Eisele',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Neckargerach_-_Mittelberg_-_Westhang_an_Oktoberabend.jpg',
+  },
+  '/images/data-hub/srovnani-zemi.webp': {
+    author: 'Trevor Littlewood',
+    license: 'CC BY-SA 2.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Hedge_dividing_two_fields_-_geograph.org.uk_-_5925522.jpg',
+  },
+  '/images/data-hub/trhy-komodity.webp': {
+    author: 'Brieuc Daniel',
+    license: 'CC BY-SA 3.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Golden_Summer_(76909415).jpeg',
+  },
+  '/images/data-hub/zemedelska-puda.webp': {
+    author: 'Dietmar Rabich',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Dorsten,_Lembeck,_Felder_--_2026_--_0372.jpg',
+  },
   // /novinky — cover fotky článků o 8. kole PRV. Dřív tu ležely snímky
   // označené „Public domain" se zdrojem `https://www.usda.gov/` — tedy odkazem
   // na titulní stranu úřadu, ne na konkrétní soubor. Bez čísla snímku a bez
@@ -370,12 +404,32 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
   // a na jejich cestách teď leží zástupný obrázek s logem
   // (`scripts/make-zastupny-obrazek.mjs`). Cesta zůstala, protože hero článku
   // je uložené v CMS.
-  '/images/novinky/dotace-34-73.jpg': ZASTUPNY,
-  '/images/novinky/dotace-38-73.jpg': ZASTUPNY,
-  '/images/novinky/dotace-39-73.jpg': ZASTUPNY,
-  '/images/novinky/dotace-44-73.jpg': ZASTUPNY,
+  '/images/novinky/dotace-34-73.jpg': {
+    author: 'U.S. Department of Agriculture',
+    license: 'CC BY 2.0',
+    source: 'https://commons.wikimedia.org/wiki/File:The_processing_plant_at_Lakota_Foods_(15690553980).jpg',
+  },
+  '/images/novinky/dotace-38-73.jpg': {
+    author: 'UuMUfQ',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Wartenberg_Angersbach_Clearcut_Area_Bark_Beetle_Cleanup_2022.png',
+  },
+  '/images/novinky/dotace-39-73.jpg': {
+    author: 'ZO CSOP Vlasim',
+    license: 'CC BY-SA 3.0',
+    source: 'https://commons.wikimedia.org/wiki/File:P%C3%A9%C4%8De_o_nelesn%C3%AD_zele%C5%88.JPG',
+  },
+  '/images/novinky/dotace-44-73.jpg': {
+    author: 'Radosław Botev',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Low_Tatras_-_forests_(1).jpg',
+  },
   '/images/novinky/dotace-49-75.jpg': ZASTUPNY,
-  '/images/novinky/dotace-prv-8-kolo.webp': ZASTUPNY,
+  '/images/novinky/dotace-prv-8-kolo.webp': {
+    author: 'Dietmar Rabich',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:D%C3%BClmen,_Kirchspiel,_B%C3%B6rnste,_Feldweg_--_2017_--_3180-6.jpg',
+  },
   // /chov-hlemyzdu — úvodní fotky článků. Původně hotlink na images.pexels.com;
   // staženo k sobě, protože cizí server ukládal návštěvníkovi cookies Cloudflare
   // ještě před souhlasem. Pexels License atribuci nevyžaduje, zdroj vedeme kvůli

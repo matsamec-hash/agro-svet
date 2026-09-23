@@ -204,7 +204,9 @@ describe('atribuce fotek', () => {
     const out = creditsFor([
       '/images/telata.webp',
       '/images/telata__v-w400.webp', // tatáž fotka jinou variantou
-      '/images/traktor.webp', // Unsplash → do bloku nepatří
+      // Pexels atribuci nevyžaduje → do bloku nepatří. (Dřív tu stál traktor;
+      // ten je od 23. 9. 2026 pod CC BY-SA 4.0, takže do bloku patřit MÁ.)
+      '/images/hlemyzdi/cim-krmit-hlemyzde.webp',
       null,
     ]);
     expect(out).toHaveLength(1);
