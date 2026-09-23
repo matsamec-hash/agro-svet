@@ -1544,6 +1544,8 @@ const uk: Record<string, string> = {
   // Blok „Fotografie“ (PhotoCredits.astro) — atribuce fotek pod CC BY / CC BY-SA.
   'foto.blok.nadpis': 'Фотографії',
   'foto.blok.zdroj': 'джерело',
+  'foto.blok.upravy': 'Знімки можуть бути обрізані та конвертовані у формат WebP.',
+  'foto.blok.upravenoKratce': 'змінено',
   'foto.aiIlustrace': 'Ілюстрація, згенерована ШІ',
   'foto.aiIlustraceTip': 'Зображення згенерувала модель, це не фотографія конкретної тварини.',
 };

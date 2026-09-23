@@ -50,6 +50,9 @@ const resolved: PhotoCredit | null = credit?.author
         <a href={resolved.source} target="_blank" rel="noopener noreferrer nofollow">{t(locale, 'foto.blok.zdroj')}</a>
       </>
     )}
+    {/* CC BY i CC BY-SA žádají uvést, že dílo bylo upraveno — hero fotky
+        ořezáváme do poměru a převádíme do WebP. */}
+    {' · '}<span title={t(locale, 'foto.blok.upravy')}>{t(locale, 'foto.blok.upravenoKratce')}</span>
   </div>
 )}
 

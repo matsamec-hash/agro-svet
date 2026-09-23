@@ -52,10 +52,18 @@ const credits = creditsFor([...given, ...images]);
         </li>
       ))}
     </ul>
+    {/* CC BY i CC BY-SA žádají uvést, že dílo bylo upraveno. Fotky
+        ořezáváme do poměru dlaždice a převádíme do WebP. */}
+    <p class="pc-upravy">{t(locale, 'foto.blok.upravy')}</p>
   </section>
 )}
 
 <style>
+  .pc-upravy {
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: var(--muted, #6b7280);
+  }
   .photo-credits {
     margin: 32px 0 8px;
     padding-top: 16px;
