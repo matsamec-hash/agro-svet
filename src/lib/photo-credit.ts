@@ -463,10 +463,36 @@ const STOCK_BANKS: [RegExp, string, string][] = [
   [/(^|[-/])pixabay([-.]|$)|pixabay\.com/i, 'Pixabay Content License', 'https://pixabay.com/service/license-summary/'],
 ];
 
+/**
+ * Odkaz na KONKRÉTNÍ fotku vytěžený z názvu souboru. Samotné „Pexels License"
+ * se zdrojem na stránku licence neříká, která fotka to je — a 23. 9. 2026 se
+ * u tří snímků ukázalo, že štítek fotobanky nemusí sedět vůbec. ID naštěstí
+ * v názvu je, tak z něj odkaz postavíme.
+ *
+ *   1777040807501-pexels-18838679.webp          → pexels.com/photo/18838679/
+ *   1777140968908-unsplash-QvkAQTNj4zk.webp     → unsplash.com/photos/QvkAQTNj4zk
+ *   1777057259380-drone-eft-75HRJ8os80k-unsplash.webp → tentýž tvar, jen zezadu
+ *   1777041233333-pixabay-2638559.webp          → pixabay.com/images/id-2638559/
+ */
+function stockSourceFrom(name: string): string | null {
+  const bez = name.replace(/__v-w\d+(?=\.[a-z0-9]+$)/i, '').replace(/\.[a-z0-9]+$/i, '');
+  let m = /(?:^|-)pexels-(\d{3,})(?:-|$)/i.exec(bez);
+  if (m) return `https://www.pexels.com/photo/${m[1]}/`;
+  m = /(?:^|-)pixabay-(\d{3,})(?:-|$)/i.exec(bez);
+  if (m) return `https://pixabay.com/images/id-${m[1]}/`;
+  // ID na Unsplash má 11 znaků a smí obsahovat „-", takže délku fixujeme —
+  // jinak by se do něj u názvu „drone-eft-75HRJ8os80k-unsplash" nacpal i slug.
+  m = /(?:^|-)unsplash-([A-Za-z0-9_-]{11})(?:-|$)/.exec(bez) ?? /-([A-Za-z0-9_-]{11})-unsplash(?:-|$)/.exec(bez);
+  if (m) return `https://unsplash.com/photos/${m[1]}`;
+  return null;
+}
+
 function stockCreditFor(path: string): PhotoCredit | null {
   const name = path.split('/').pop() ?? '';
   for (const [re, license, url] of STOCK_BANKS) {
-    if (re.test(name)) return { author: '', license, licenseUrl: url, source: url };
+    if (!re.test(name)) continue;
+    // Zdroj = konkrétní fotka, když ji z názvu poznáme; jinak aspoň text licence.
+    return { author: '', license, licenseUrl: url, source: stockSourceFrom(name) ?? url };
   }
   return null;
 }

@@ -9,6 +9,7 @@ import { breadcrumbSchema } from '../../../lib/structured-data';
 import { getLocaleFromUrl, localizePath, localizeInternalHref, t as tUi } from '../../../i18n/utils';
 import { srovnaniStrings } from '../../../i18n/znacky-srovnani';
 import { ZNACKA_LOGO } from '../../../lib/agro-integrace';
+import PhotoCredits from '../../../components/PhotoCredits.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const t = srovnaniStrings(locale);
@@ -53,6 +54,10 @@ const breadcrumbJsonLd = breadcrumbSchema([
       </ul>
     </section>
   </div>
+  {/* Loga značek: většina je PD (text a jednoduché tvary), ale Bednar
+      a Joskin jsou CC BY-SA 4.0 a atribuce k nim patří všude, kde se
+      ukážou. Blok se vykreslí jen tehdy, když ho něco opravdu vyžaduje. */}
+  <PhotoCredits images={pairs.flatMap((p) => [ZNACKA_LOGO[p.a.slug], ZNACKA_LOGO[p.b.slug]])} locale={locale} />
 </Layout>
 
 <style>

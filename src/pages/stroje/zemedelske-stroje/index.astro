@@ -5,6 +5,7 @@ import { ZNACKA_LOGO } from '../../../lib/agro-integrace';
 import { getAllBrands, getAllModels, FUNCTIONAL_GROUPS, type FunctionalGroupSlug } from '../../../lib/stroje';
 import { createServerClient } from '../../../lib/supabase';
 import { useTranslations, localizeInternalHref } from '../../../i18n/utils';
+import PhotoCredits from '../../../components/PhotoCredits.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const t = useTranslations(locale);
@@ -561,4 +562,8 @@ function pluralCs(n: number, one: string, few: string, many: string): string {
       .sz-group-grid { grid-template-columns: 1fr; }
     }
   </style>
+  {/* Loga značek: většina je PD (text a jednoduché tvary), ale Bednar
+      a Joskin jsou CC BY-SA 4.0 a atribuce k nim patří všude, kde se
+      ukážou. Blok se vykreslí jen tehdy, když ho něco opravdu vyžaduje. */}
+  <PhotoCredits images={strojeBrands.map((b) => ZNACKA_LOGO[b.slug])} locale={locale} />
 </Layout>

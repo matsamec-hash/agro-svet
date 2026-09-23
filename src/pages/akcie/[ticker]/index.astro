@@ -11,6 +11,7 @@ import { akcieText } from '../../../data/akcie-agro-pl';
 import { akcieCopy } from '../../../i18n/akcie';
 import { localizeInternalHref } from '../../../i18n/utils';
 import { AKCIE_DB_ZNACKY, ZNACKA_LABEL, ZNACKA_LOGO, svetSlugProVlajku } from '../../../lib/agro-integrace';
+import PhotoCredits from '../../../components/PhotoCredits.astro';
 
 const raw = AKCIE.find((x) => x.ticker === Astro.params.ticker);
 if (!raw) return new Response('Not found', { status: 404 });
@@ -310,6 +311,10 @@ const orgJsonLd = {
       }
     })();
   </script>
+  {/* Loga značek: většina je PD (text a jednoduché tvary), ale Bednar
+      a Joskin jsou CC BY-SA 4.0 a atribuce k nim patří všude, kde se
+      ukážou. Blok se vykreslí jen tehdy, když ho něco opravdu vyžaduje. */}
+  <PhotoCredits images={znacky.map((z) => ZNACKA_LOGO[z])} locale={locale} />
 </Layout>
 
 <style>

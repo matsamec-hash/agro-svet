@@ -24,6 +24,7 @@ import { modelDisplayName } from '../../../../lib/comparator';
 import { getLocaleFromUrl, localizeInternalHref, localizePath, t as tUi } from '../../../../i18n/utils';
 import { srovnaniStrings, fill } from '../../../../i18n/znacky-srovnani';
 import { breadcrumbSchema, faqPageSchema } from '../../../../lib/structured-data';
+import PhotoCredits from '../../../../components/PhotoCredits.astro';
 
 export async function getStaticPaths() {
   return brandPairs(300).map((p) => ({ params: { combo: p.combo } }));
@@ -223,6 +224,10 @@ function modelUrl(m: (typeof modelDuels)[number]['a']): string {
       </div>
     </section>
   </div>
+  {/* Loga značek: většina je PD (text a jednoduché tvary), ale Bednar
+      a Joskin jsou CC BY-SA 4.0 a atribuce k nim patří všude, kde se
+      ukážou. Blok se vykreslí jen tehdy, když ho něco opravdu vyžaduje. */}
+  <PhotoCredits images={[ZNACKA_LOGO[a.slug], ZNACKA_LOGO[b.slug]]} locale={locale} />
 </Layout>
 
 <style>

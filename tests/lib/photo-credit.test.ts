@@ -119,6 +119,40 @@ describe('atribuce fotek', () => {
     expect(chibi, chibi.join('\n')).toHaveLength(0);
   });
 
+  it('každá šablona, která kreslí logo značky, vypisuje i kredity', () => {
+    // Bednar a Joskin jsou CC BY-SA 4.0 — atribuce k nim patří všude, kde se
+    // logo ukáže, ne jen na profilu značky. 23. 9. 2026 jich sedm typů stránek
+    // kreslilo bez kreditu.
+    const bez: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        if (e.name === 'node_modules' || e.name.startsWith('.')) continue;
+        const p = join(dir, e.name);
+        if (e.isDirectory()) { walk(p); continue; }
+        if (!e.name.endsWith('.astro')) continue;
+        const txt = readFileSync(p, 'utf8');
+        if (/ZNACKA_LOGO\[/.test(txt) && !/PhotoCredits/.test(txt)) bez.push(relative(ROOT, p));
+      }
+    };
+    walk(join(ROOT, 'src'));
+    expect(bez, `logo bez kreditů:\n${bez.join('\n')}`).toHaveLength(0);
+  });
+
+  it('kredit fotobanky míří na konkrétní fotku, ne jen na text licence', () => {
+    // ID fotky je v názvu souboru, takže odkaz jde postavit. Bez něj se nedá
+    // zjistit, která fotka to je — a jestli z té banky vůbec je.
+    const vzorky = [
+      ['1777040807501-pexels-18838679.webp', 'https://www.pexels.com/photo/18838679/'],
+      ['1777140968908-unsplash-QvkAQTNj4zk.webp', 'https://unsplash.com/photos/QvkAQTNj4zk'],
+      ['1777041233333-pixabay-2638559__v-w1600.webp', 'https://pixabay.com/images/id-2638559/'],
+      // slug před ID nesmí skončit v odkazu
+      ['1777057259380-drone-eft-75HRJ8os80k-unsplash.webp', 'https://unsplash.com/photos/75HRJ8os80k'],
+    ] as const;
+    for (const [name, cekano] of vzorky) {
+      expect(creditFor(`https://cdn.samecdigital.com/${name}`)?.source, name).toBe(cekano);
+    }
+  });
+
   it('autor nesmí být jen zdroj („Wikimedia Commons", „Own work")', () => {
     for (const [path, c] of Object.entries(PHOTO_CREDITS)) {
       expect(c.author, path).not.toMatch(/^(wikimedia commons|commons|own work|vlastní dílo|unknown)$/i);

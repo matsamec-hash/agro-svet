@@ -3,6 +3,7 @@ import { getAllBrands, seriesFamily, familyLabel, type StrojKategorie } from '..
 import { ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { creditFor, licenseUrlFor, requiresAuthor, type PhotoCredit } from '../../lib/photo-credit';
 import { useTranslations, plural, tf, getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
+import PhotoCredits from '../PhotoCredits.astro';
 
 interface Props {
   category: StrojKategorie;
@@ -935,6 +936,11 @@ const NL = '\n';
     .catalog-page .filter-result{margin-left:0;width:100%}
   }
 </style>
+
+  {/* Loga značek: většina je PD (text a jednoduché tvary), ale Bednar
+      a Joskin jsou CC BY-SA 4.0 a atribuce k nim patří všude, kde se
+      ukážou. Blok se vykreslí jen tehdy, když ho něco opravdu vyžaduje. */}
+  <PhotoCredits images={sections.map((s) => ZNACKA_LOGO[s.slug])} locale={locale} />
 
 <script>
   // ── Filter logic ──────────────────────────────────────────────────────────
