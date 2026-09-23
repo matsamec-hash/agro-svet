@@ -5,6 +5,7 @@ export const prerender = false;
 import Layout from '../../../../../../layouts/Layout.astro';
 import { getBrand, seriesFamily, familyLabel, categoryLabel, functionalGroupLabel, type StrojKategorie } from '../../../../../../lib/stroje';
 import { useTranslations, getLocaleFromUrl, tf, plural, localizePath } from '../../../../../../i18n/utils';
+import HeroPhotoCredit from '../../../../../../components/HeroPhotoCredit.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -209,6 +210,9 @@ const jsonLd = {
               © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''} · upraveno
             </a>
           )}
+          {/* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
+              k ní patří stejně jako k fotce konkrétní řady. */}
+          {!(heroCreditAuthor && heroCreditUrl) && <HeroPhotoCredit image={heroPhoto} />}
         </div>
       </div>
     </section>

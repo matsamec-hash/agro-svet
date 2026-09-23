@@ -6,6 +6,7 @@ import { useTranslations } from '../../i18n/utils';
 import { buildLineChart, pudaPlPriceGrowthPct, type PudaPlData } from '../../lib/puda-pl';
 import raw from '../../data/agro-puda-pl.json';
 import { getCollection } from 'astro:content';
+import HeroPhotoCredit from '../HeroPhotoCredit.astro';
 
 const d = raw as unknown as PudaPlData;
 const t = useTranslations('pl');
@@ -44,7 +45,9 @@ const PILLS = [
         <p class="sp-hero-lede">Ziemia to najcenniejszy zasób rolnictwa. Tutaj — ceny gruntów ornych, dzierżawa, regulacja rynku i prawo pierwokupu KOWR, struktura upraw i stan gleb.</p>
       </div>
       <div class="sp-hero-right">
-        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')"></div>
+        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')">
+          <HeroPhotoCredit image="/images/kombajn.webp" />
+        </div>
       </div>
     </section>
 

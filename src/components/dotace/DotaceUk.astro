@@ -4,6 +4,7 @@ import PillsNav from '../../components/statistiky/PillsNav.astro';
 import { useTranslations } from '../../i18n/utils';
 import type { DotaceUkData } from '../../lib/dotace-uk';
 import raw from '../../data/agro-dotace-uk.json';
+import HeroPhotoCredit from '../HeroPhotoCredit.astro';
 
 const d = raw as unknown as DotaceUkData;
 const t = useTranslations('uk');
@@ -28,7 +29,9 @@ const PILLS = [
         <p class="sp-hero-lede">Як аграрії в Україні можуть отримати державну підтримку — від реєстрації в Державному аграрному реєстрі до воєнних грантів, доступних кредитів і програм ЄС та міжнародних донорів.</p>
       </div>
       <div class="sp-hero-right">
-        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')"></div>
+        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')">
+          <HeroPhotoCredit image="/images/kombajn.webp" />
+        </div>
       </div>
     </section>
 

@@ -6,6 +6,7 @@ import { useTranslations } from '../../i18n/utils';
 import { buildLineChart, pudaUkPriceGrowthPct, type PudaUkData } from '../../lib/puda-uk';
 import raw from '../../data/agro-puda-uk.json';
 import { getCollection } from 'astro:content';
+import HeroPhotoCredit from '../HeroPhotoCredit.astro';
 
 const d = raw as unknown as PudaUkData;
 const t = useTranslations('uk');
@@ -44,7 +45,9 @@ const PILLS = [
         <p class="sp-hero-lede">Земля — найцінніший аграрний ресурс України. Тут — відкриття ринку землі, ціни та оренда, структура культур і стан ґрунтів.</p>
       </div>
       <div class="sp-hero-right">
-        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')"></div>
+        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')">
+          <HeroPhotoCredit image="/images/kombajn.webp" />
+        </div>
       </div>
     </section>
 

@@ -1,6 +1,7 @@
 ---
 // src/components/statistiky/BottomCTA.astro
 import { useTranslations, localizeInternalHref } from '../../i18n/utils';
+import HeroPhotoCredit from '../HeroPhotoCredit.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const t = useTranslations(locale);
@@ -17,7 +18,9 @@ const t = useTranslations(locale);
     </a>
   </div>
   <div class="cta-right">
-    <div class="cta-photo" style="background-image:url('/images/traktor.webp')"></div>
+    <div class="cta-photo" style="background-image:url('/images/traktor.webp')">
+      <HeroPhotoCredit image="/images/traktor.webp" />
+    </div>
   </div>
 </section>
 

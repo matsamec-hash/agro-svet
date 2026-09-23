@@ -10,6 +10,7 @@ import { udrzovatelSlug } from '../../lib/plodiny';
 import { imgSrcset } from '../../lib/image-variants';
 import statsCs from '../../data/agro-stats.json';
 import statsSk from '../../data/agro-stats-sk.json';
+import PhotoCredits from '../../components/PhotoCredits.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const t = useTranslations(locale);
@@ -251,6 +252,8 @@ const heroDeltaTitle = locale === 'sk' ? 'Zmena za zobrazené obdobie (24 mesiac
 
   <script type="application/json" id="dhChartData" set:html={JSON.stringify({ series: heroSeries, numLocale })} />
   <script src="/scripts/data-hub.js" is:inline></script>
+  {/* Fotodlaždice jsou pod CC BY-SA — jméno autora k nim patří. */}
+  <PhotoCredits images={['/images/data-hub/trhy-komodity.webp', '/images/data-hub/zemedelska-puda.webp', '/images/data-hub/profily-zemi.webp', '/images/data-hub/srovnani-zemi.webp', '/images/data-hub/kalkulacka-cap.webp', '/images/data-hub/dotace.webp']} />
 </Layout>
 
 <style>

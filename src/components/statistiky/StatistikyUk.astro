@@ -6,6 +6,7 @@ import { useTranslations } from '../../i18n/utils';
 import { buildLineChart } from '../../lib/statistiky-uk';
 import type { StatistikyUkData } from '../../lib/statistiky-uk-types';
 import raw from '../../data/agro-stats-uk.json';
+import HeroPhotoCredit from '../HeroPhotoCredit.astro';
 
 const d = raw as unknown as StatistikyUkData;
 const t = useTranslations('uk');
@@ -39,7 +40,9 @@ const PILLS = [
         <p class="sp-hero-lede">Україна — один зі світових лідерів експорту зерна та олії. Тут — світова роль, виробництво й експорт ключових культур та вплив війни на врожаї.</p>
       </div>
       <div class="sp-hero-right">
-        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')"></div>
+        <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')">
+          <HeroPhotoCredit image="/images/kombajn.webp" />
+        </div>
       </div>
     </section>
 

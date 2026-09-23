@@ -138,6 +138,32 @@ describe('atribuce fotek', () => {
     expect(bez, `logo bez kreditů:\n${bez.join('\n')}`).toHaveLength(0);
   });
 
+  it('každá šablona, která kreslí fotku s povinnou atribucí, vypisuje kredity', () => {
+    // CC BY / CC BY-SA chtějí jméno autora tam, kde se fotka ukáže — ne jen
+    // na jedné zastrčené stránce. 23. 9. 2026 takhle propadlo deset šablon,
+    // když dlaždice homepage a hubu /data dostaly místo loga skutečné fotky.
+    const bez: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        if (e.name === 'node_modules' || e.name.startsWith('.')) continue;
+        const p = join(dir, e.name);
+        if (e.isDirectory()) { walk(p); continue; }
+        if (!e.name.endsWith('.astro')) continue;
+        const txt = readFileSync(p, 'utf8');
+        // Kredit smí vypsat souhrnný blok i plaketka v rohu hero fotky.
+        if (/PhotoCredits|HeroPhotoCredit/.test(txt)) continue;
+        const cesty = [...new Set([...txt.matchAll(/(?<![\w.])(\/images\/[A-Za-z0-9._\-/]+\.(?:webp|jpe?g|png))/g)].map((m) => m[1]))];
+        const vyzaduji = cesty.filter((c) => {
+          const kredit = creditFor(c);
+          return kredit && requiresAuthor(kredit.license) && kredit.author;
+        });
+        if (vyzaduji.length) bez.push(`${relative(ROOT, p)} → ${vyzaduji.join(', ')}`);
+      }
+    };
+    walk(join(ROOT, 'src'));
+    expect(bez, `fotka s povinnou atribucí bez bloku kreditů:\n${bez.join('\n')}`).toHaveLength(0);
+  });
+
   it('kredit fotobanky míří na konkrétní fotku, ne jen na text licence', () => {
     // ID fotky je v názvu souboru, takže odkaz jde postavit. Bez něj se nedá
     // zjistit, která fotka to je — a jestli z té banky vůbec je.

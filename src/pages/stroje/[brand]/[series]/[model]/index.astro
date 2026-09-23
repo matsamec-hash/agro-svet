@@ -13,6 +13,7 @@ import { generateModelFaq } from '../../../../../lib/faq-generator';
 import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 import { pairCombo } from '../../../../../lib/comparator';
 import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeInternalHref, bcp47 } from '../../../../../i18n/utils';
+import HeroPhotoCredit from '../../../../../components/HeroPhotoCredit.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -411,6 +412,9 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
                title={heroCreditTitle}>{heroCreditText}</a>
           )}
+          {/* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
+              k ní patří stejně jako k fotce konkrétní řady. */}
+          {!(heroCreditAuthor && heroCreditUrl) && <HeroPhotoCredit image={heroPhoto} />}
         </div>
       </div>
     </section>

@@ -13,6 +13,7 @@ import { pudaBigNumbers, pudaCenaInsight } from '../../lib/puda-derived';
 import pudaSkData from '../../data/agro-puda-sk.json';
 import PudaUk from '../../components/puda/PudaUk.astro';
 import PudaPl from '../../components/puda/PudaPl.astro';
+import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const isSk = locale === 'sk';
@@ -110,6 +111,7 @@ const donutSegs = struktura.map((s) => {
       </div>
       <div class="sp-hero-right">
         <div class="sp-hero-photo" style="background-image:url('/images/kombajn.webp')">
+      <HeroPhotoCredit image="/images/kombajn.webp" />
           <div class="sp-hero-photo-badge">{isSk ? `${new Intl.NumberFormat('sk-SK').format(skBn.cena)} €/ha · ${skBn.cenaYear}` : '372 550 Kč/ha · 2025'}</div>
         </div>
       </div>
