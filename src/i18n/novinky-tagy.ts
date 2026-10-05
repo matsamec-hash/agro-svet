@@ -71,6 +71,11 @@ const PL: TagMap = {
   'udržitelné pěstování': 'zrównoważona uprawa',
   'ekologie': 'ekologia',
   'Novinky a zprávy': 'Aktualności',
+  // ceny vstupů a komodit
+  'hnojiva': 'nawozy',
+  'pšenice': 'pszenica',
+  'ceny komodit': 'ceny surowców rolnych',
+  'rekord': 'rekord',
 };
 
 const SK: TagMap = {
@@ -127,6 +132,11 @@ const SK: TagMap = {
   'udržitelné pěstování': 'udržateľné pestovanie',
   'ekologie': 'ekológia',
   'Novinky a zprávy': 'Novinky a správy',
+  // ceny vstupov a komodít
+  'hnojiva': 'hnojivá',
+  'pšenice': 'pšenica',
+  'ceny komodit': 'ceny komodít',
+  'rekord': 'rekord',
 };
 
 
@@ -191,6 +201,10 @@ const UK: TagMap = {
   'drony': 'дрони',
   'precizní zemědělství': 'точне землеробство',
   'technologická inovace': 'технологічна інновація',
+  // ціни на ресурси та сировину
+  'hnojiva': 'добрива',
+  'pšenice': 'пшениця',
+  'ceny komodit': 'ціни на сировину',
 };
 
 const MAPS: Record<string, TagMap> = { pl: PL, sk: SK, de: DE, uk: UK };
