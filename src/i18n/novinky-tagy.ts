@@ -76,6 +76,8 @@ const PL: TagMap = {
   'pšenice': 'pszenica',
   'ceny komodit': 'ceny surowców rolnych',
   'rekord': 'rekord',
+  'sucho': 'susza',
+  'kukuřice': 'kukurydza',
 };
 
 const SK: TagMap = {
@@ -137,6 +139,8 @@ const SK: TagMap = {
   'pšenice': 'pšenica',
   'ceny komodit': 'ceny komodít',
   'rekord': 'rekord',
+  'sucho': 'sucho',
+  'kukuřice': 'kukurica',
 };
 
 
@@ -205,6 +209,8 @@ const UK: TagMap = {
   'hnojiva': 'добрива',
   'pšenice': 'пшениця',
   'ceny komodit': 'ціни на сировину',
+  'sucho': 'посуха',
+  'kukuřice': 'кукурудза',
 };
 
 const MAPS: Record<string, TagMap> = { pl: PL, sk: SK, de: DE, uk: UK };
