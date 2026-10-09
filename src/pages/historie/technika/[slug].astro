@@ -2,6 +2,7 @@
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { machineBySlug, machines } from '../../../lib/historie';
+import PhotoCredits from '../../../components/PhotoCredits.astro';
 
 const locale = Astro.locals.locale ?? 'cs';
 const csOnly = locale !== 'cs';
@@ -129,6 +130,10 @@ const articleLd = {
           </a>
         ))}
       </div>
+      {/* Náhledy dalších strojů jsou fotky z Commons (CC BY / CC BY-SA) —
+          autor patří ke každé, kde se ukáže. Blok nese i hlavní fotku a větu
+          o tom, že snímky ořezáváme a převádíme do WebP. */}
+      <PhotoCredits images={[m.image, ...relatedFill.map((o) => o.image)]} locale="cs" />
     </section>
 
     <nav class="hd-more">

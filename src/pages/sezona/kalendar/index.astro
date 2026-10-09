@@ -2,6 +2,7 @@
 // SSR — sekce je launchnutá pro pl.
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
+import PhotoCredits from '../../../components/PhotoCredits.astro';
 import { listPlodiny } from '../../../lib/plodiny';
 import { monthNames, monthShort } from '../../../lib/sezona';
 import { useTranslations, getLocaleFromUrl, localizeInternalHref, localizePath } from '../../../i18n/utils';
@@ -96,6 +97,10 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
     </section>
 
     <p class="cross"><a href={localizeInternalHref(locale, '/sezona/')}>{tr('sez.backHub')}</a> · <a href={localizeInternalHref(locale, '/plodiny/')}>{tr('sez.allCrops')}</a></p>
+
+    {/* Miniatury plodin v tabulce jsou fotky z Commons (CC BY / CC BY-SA) —
+        na popisek u každé není místo, autoři patří do souhrnného bloku. */}
+    <PhotoCredits images={plodiny.map((p) => p.hero_image)} locale={locale} />
   </div>
 
   <script is:inline>

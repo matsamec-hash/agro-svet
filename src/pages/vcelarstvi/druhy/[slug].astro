@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { licenseUrlFor } from '../../../lib/photo-credit';
+import { licenseUrlFor, requiresAuthor } from '../../../lib/photo-credit';
 import { getAllVcely, getVcela, vcelaTemperamentLabel, vcelaVynosLabel, vcelaRojivostLabel } from '../../../lib/vcelarstvi';
 import { faqPageSchema } from '../../../lib/structured-data';
 import { injectLinks, injectLinksInText, createLinkContext } from '../../../lib/auto-linker';
@@ -135,6 +135,10 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
                   <span class="hero-photo-license"> · {licenseUrlFor(vcela.image_license)
                     ? <a href={licenseUrlFor(vcela.image_license)} target="_blank" rel="license noopener noreferrer nofollow">{vcela.image_license}</a>
                     : vcela.image_license}</span>
+                )}
+                {/* CC BY i CC BY-SA chtějí uvést, že dílo bylo upraveno (ořez, WebP). */}
+                {requiresAuthor(vcela.image_license) && (
+                  <span class="hero-photo-license" title={t('foto.blok.upravy')}> · {t('foto.blok.upravenoKratce')}</span>
                 )}
               </figcaption>
             )}

@@ -3,7 +3,7 @@
 // sk čte z plemena-sk overlay (getPlemeno(...,'sk')); cs render = literály VERBATIM.
 export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
-import { licenseUrlFor } from '../../../../lib/photo-credit';
+import { licenseUrlFor, requiresAuthor } from '../../../../lib/photo-credit';
 import AiIllustrationBadge from '../../../../components/AiIllustrationBadge.astro';
 import { getPlemeno, getUzitkovostLabels } from '../../../../lib/plemena';
 import { faqPageSchema } from '../../../../lib/structured-data';
@@ -198,6 +198,10 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
                       plemeno.image_license
                     )}
                   </span>
+                )}
+                {/* CC BY i CC BY-SA chtějí uvést, že dílo bylo upraveno (ořez, WebP). */}
+                {requiresAuthor(plemeno.image_license) && (
+                  <span class="hero-photo-license" title={t('foto.blok.upravy')}> · {t('foto.blok.upravenoKratce')}</span>
                 )}
               </figcaption>
             )}

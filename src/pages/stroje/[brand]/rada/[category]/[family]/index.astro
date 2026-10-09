@@ -205,10 +205,7 @@ const jsonLd = {
           )}
           <div class="hero-photo-badge"><span class="n">{seriesData.length}</span> {plural(locale, seriesData.length, { one: tr('cat.rada.genOne'), few: tr('cat.rada.genFew'), many: tr('cat.rada.genMany') })}</div>
           {heroCreditAuthor && heroCreditUrl && (
-            <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
-               title={`Foto: ${heroCreditAuthor}${heroCreditLicense ? ` (${heroCreditLicense})` : ''} via Wikimedia Commons · upraveno (crop, konverze do WebP)`}>
-              © {heroCreditAuthor}{heroCreditLicense ? ` · ${heroCreditLicense}` : ''} · upraveno
-            </a>
+            <HeroPhotoCredit image={heroPhoto} credit={{ author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl }} locale={locale} />
           )}
           {/* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
               k ní patří stejně jako k fotce konkrétní řady. */}

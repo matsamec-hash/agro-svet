@@ -4,6 +4,7 @@ import { ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { creditFor, licenseUrlFor, requiresAuthor, type PhotoCredit } from '../../lib/photo-credit';
 import { useTranslations, plural, tf, getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
 import PhotoCredits from '../PhotoCredits.astro';
+import HeroPhotoCredit from '../HeroPhotoCredit.astro';
 
 interface Props {
   category: StrojKategorie;
@@ -302,6 +303,8 @@ const NL = '\n';
     <div class="hero-right">
       <div class="hero-photo" style={`background-image:url('${catHeroImage}')`}>
         <div class="hero-photo-badge"><span class="n">{totalModels}+</span> {tr('cat.badge')}</div>
+        {/* Hero fotka kategorie (traktor/kombajn) je pod CC BY-SA. */}
+        <HeroPhotoCredit image={catHeroImage} locale={locale} />
       </div>
     </div>
   </section>
@@ -940,7 +943,7 @@ const NL = '\n';
   {/* Loga značek: většina je PD (text a jednoduché tvary), ale Bednar
       a Joskin jsou CC BY-SA 4.0 a atribuce k nim patří všude, kde se
       ukážou. Blok se vykreslí jen tehdy, když ho něco opravdu vyžaduje. */}
-  <PhotoCredits images={sections.map((s) => ZNACKA_LOGO[s.slug])} locale={locale} />
+  <PhotoCredits images={[catHeroImage, ...sections.map((s) => ZNACKA_LOGO[s.slug])]} locale={locale} />
 
 <script>
   // ── Filter logic ──────────────────────────────────────────────────────────

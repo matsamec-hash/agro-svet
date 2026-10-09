@@ -122,7 +122,6 @@ const modelListJsonLd = sortedModels.length > 0
 const heroSearchText = '\n' + tf(locale, 'cat.s.d.s.heroSearch', { series: seriesNameClean }) + '\n';
 const heroAllGenText = '\n' + tf(locale, 'cat.s.d.s.heroAllGen', { fam: familyLab }) + ' ';
 const sibTitleText = tf(locale, 'cat.s.d.s.sibTitle', { fam: familyLab });
-const heroCreditText = '\n' + tf(locale, 'cat.s.d.photoCredit', { author: heroCreditAuthor ?? '', license: heroCreditLicense ? ` · ${heroCreditLicense}` : '' }) + '\n';
 const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
 ---
 
@@ -183,8 +182,7 @@ const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
             <div class="hero-photo-badge"><span class="n">{series.models.length}</span> {modelPlural(series.models.length)}</div>
           )}
           {heroCreditAuthor && heroCreditUrl && (
-            <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
-               title={tf(locale, 'cat.s.d.photoTitle', { author: heroCreditAuthor, license: heroCreditLicense ? ` (${heroCreditLicense})` : '' })}>{heroCreditText}</a>
+            <HeroPhotoCredit image={heroPhoto} credit={{ author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl }} locale={locale} />
           )}
           {/* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
               k ní patří stejně jako k fotce konkrétní řady. */}

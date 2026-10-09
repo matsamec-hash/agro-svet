@@ -225,9 +225,6 @@ const heroPhoto = series.image_url || categoryHero[category] || '/images/traktor
 const heroCreditUrl: string | null = series.image_url ? (series.image_credit_url || null) : null;
 const heroCreditAuthor: string | null = series.image_url ? (series.image_credit || null) : null;
 const heroCreditLicense: string | null = series.image_url ? (series.image_license || null) : null;
-const heroCreditTitle = tf(locale, 'cat.s.d.photoTitle', { author: heroCreditAuthor ?? '', license: heroCreditLicense ? ` (${heroCreditLicense})` : '' });
-const heroCreditTextRaw = tf(locale, 'cat.s.d.photoCredit', { author: heroCreditAuthor ?? '', license: heroCreditLicense ? ` · ${heroCreditLicense}` : '' });
-const heroCreditText = '\n' + heroCreditTextRaw + '\n';
 const wholeSeriesText = '\n' + tf(locale, 'cat.s.d.wholeSeries', { series: seriesNameClean }) + ' ';
 const compareLinkText = '\n' + tr('cat.s.d.compareLink') + '\n';
 const ebProcessedText = '\n' + tr('cat.s.d.ebProcessed') + ' ';
@@ -409,8 +406,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             {model.power_hp && <span class="pwr">{model.power_hp} {tr('cmp.unitHp')}</span>}
           </div>
           {heroCreditAuthor && heroCreditUrl && (
-            <a class="hero-photo-credit" href={heroCreditUrl} target="_blank" rel="noopener noreferrer"
-               title={heroCreditTitle}>{heroCreditText}</a>
+            <HeroPhotoCredit image={heroPhoto} credit={{ author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl }} locale={locale} />
           )}
           {/* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
               k ní patří stejně jako k fotce konkrétní řady. */}

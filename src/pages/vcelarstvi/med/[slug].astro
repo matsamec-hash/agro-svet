@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
-import { licenseUrlFor } from '../../../lib/photo-credit';
+import { licenseUrlFor, requiresAuthor } from '../../../lib/photo-credit';
 import { getAllMed, getMed, medTypLabel, medKrystalizaceLabel } from '../../../lib/vcelarstvi';
 import { SITE_URL } from '../../../lib/config';
 import { useTranslations, getLocaleFromUrl, localizePath, plural, BCP47 } from '../../../i18n/utils';
@@ -119,6 +119,10 @@ const thingJsonLd: Record<string, unknown> = {
                   <span class="hero-photo-license"> · {licenseUrlFor(med.image_license)
                     ? <a href={licenseUrlFor(med.image_license)} target="_blank" rel="license noopener noreferrer nofollow">{med.image_license}</a>
                     : med.image_license}</span>
+                )}
+                {/* CC BY i CC BY-SA chtějí uvést, že dílo bylo upraveno (ořez, WebP). */}
+                {requiresAuthor(med.image_license) && (
+                  <span class="hero-photo-license" title={t('foto.blok.upravy')}> · {t('foto.blok.upravenoKratce')}</span>
                 )}
               </figcaption>
             )}

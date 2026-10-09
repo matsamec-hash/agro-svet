@@ -268,7 +268,9 @@ const NL = '\n';
 
     <!-- Loga v mřížce značek jsou z Commons a dvě z nich (Bednar, Joskin) jsou
          CC BY-SA — ochranná známka o autorských právech k souboru nic neříká. -->
-    <PhotoCredits images={brandCards.map((b) => ZNACKA_LOGO[b.slug])} locale={locale} />
+    {/* Dlaždice v hero (traktor, kombajn) a fotka v CTA jsou pod CC BY-SA —
+        kredit k nim patří stejně jako k logům. */}
+    <PhotoCredits images={['/images/traktor.webp', '/images/kombajn.webp', ...brandCards.map((b) => ZNACKA_LOGO[b.slug])]} locale={locale} />
 
   </div>
 

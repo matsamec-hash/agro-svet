@@ -154,6 +154,8 @@ const list = plodina.odrudy.length > 0
                 ? <a href={licenseUrlFor(plodina.hero_license)} target="_blank" rel="license noopener nofollow">{plodina.hero_license}</a>
                 : plodina.hero_license}
               {' ('}<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">{tr('plod.d.srcLbl')}</a>{')'}
+              {/* CC BY i CC BY-SA chtějí uvést, že dílo bylo upraveno. */}
+              {' · '}<span title={tr('foto.blok.upravy')}>{tr('foto.blok.upravenoKratce')}</span>
             </>
         }
       </p>

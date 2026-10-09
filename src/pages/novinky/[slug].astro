@@ -9,6 +9,7 @@ import { getAllBrands } from '../../lib/stroje';
 import { getAllPlemena } from '../../lib/plemena';
 import { imgSrcset } from '../../lib/image-variants';
 import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
+import PhotoCredits from '../../components/PhotoCredits.astro';
 import { creditFromArticle } from '../../lib/photo-credit';
 import { ORG_ID, WEBSITE_ID } from '../../lib/structured-data';
 import { fetchArticleTranslations, overlayArticle, buildTranslationMap, hasTranslatedTitle } from '../../lib/articles-i18n';
@@ -27,7 +28,7 @@ const supabase = createAnonClient();
 // migration 024) and isn't populated for agro-svet articles. Falling
 // back to `published_at` for dateModified is correct here.
 const ARTICLE_COLUMNS = 'id, title, slug, perex, content, featured_image_url, featured_image_credit, focal_point, category, tags, published_at, seo_title, seo_description';
-const POOL_COLUMNS = 'id, title, slug, perex, featured_image_url, category, tags, published_at';
+const POOL_COLUMNS = 'id, title, slug, perex, featured_image_url, featured_image_credit, category, tags, published_at';
 
 const [articleRes, poolRes] = await Promise.all([
   supabase
@@ -397,6 +398,13 @@ const jsonLd = {
             </a>
           ))}
         </div>
+        {/* Náhledy souvisejících článků jsou jejich cover fotky — u fotek
+            z Commons (CC BY / CC BY-SA) musí být autor vidět i tady, ne jen
+            na detailu toho článku. */}
+        <PhotoCredits
+          credits={related.map((r) => creditFromArticle((r as { featured_image_credit?: unknown }).featured_image_credit as never, r.featured_image_url))}
+          locale={locale}
+        />
       </div>
     </aside>
   )}

@@ -7,6 +7,7 @@ import { chorobaChipsForPlodina } from '../../../lib/choroby';
 import { parseZnaky, maZnaky, popisOdstavce } from '../../../lib/odruda-znaky';
 import { podobneOdrudy } from '../../../lib/odruda-podobnost';
 import OsivaLinks from '../../../components/OsivaLinks.astro';
+import { licenseUrlFor } from '../../../lib/photo-credit';
 
 export async function getStaticPaths() {
   return listIndexableOdrudy().map((e) => ({
@@ -172,9 +173,15 @@ const metaDescription = truncateAtBoundary(
         Ilustrační foto plodiny {plodina.name.toLowerCase()} (ne konkrétní odrůdy).{' '}
         {plodina.hero_license === 'Public domain' && !plodina.hero_author
           ? <>Volné dílo (public domain), <a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a></>
-          : plodina.hero_author
-            ? <>Foto: {plodina.hero_author}, {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
-            : <>Foto: {plodina.hero_license} (<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>)</>
+          : <>
+              Foto: {plodina.hero_author && <>{plodina.hero_author}, </>}
+              {/* CC licence chce vedle názvu i odkaz na svůj text (u verzí 2.0
+                  a 3.0 výslovně) a poznámku, že dílo bylo upraveno. */}
+              {licenseUrlFor(plodina.hero_license)
+                ? <a href={licenseUrlFor(plodina.hero_license)} target="_blank" rel="license noopener nofollow">{plodina.hero_license}</a>
+                : plodina.hero_license}
+              {' '}(<a href={plodina.hero_source} target="_blank" rel="noopener nofollow">zdroj</a>), upraveno (ořez, zmenšení)
+            </>
         }
       </p>
     )}
