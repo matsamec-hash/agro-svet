@@ -390,6 +390,9 @@ categories:
       # ========== CS Series (1998-2003) ==========
       - slug: cs-series
         name: "CS Series (1998–2003)"
+        # Ne odvozené „cs" — kód češtiny v URL vrací 404 (viz tests/lib/stroje.test.ts).
+        family: cs-series
+        family_label: CS
         year_from: 1998
         year_to: 2003
         description: >

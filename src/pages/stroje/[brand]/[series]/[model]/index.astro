@@ -111,7 +111,7 @@ try {
 const priceFmt = (n: number) => n.toLocaleString(bcp47(locale));
 
 const family = series.family || seriesFamily(series.slug);
-const familyLab = familyLabel(family, locale);
+const familyLab = series.family_label || familyLabel(family, locale);
 
 const yr = model.year_from ? (model.year_to ? `${model.year_from}–${model.year_to}` : `${model.year_from}–${tr('cat.rada.dosud')}`) : '';
 const isCurrent = model.year_to === null && model.year_from !== null;

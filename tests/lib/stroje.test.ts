@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { getEffectiveZaber, getFunctionalGroupForCategory, FUNCTIONAL_GROUPS, applyStrojOverlay, getModelBySlug, type StrojKategorie } from '../../src/lib/stroje';
+import { getEffectiveZaber, getFunctionalGroupForCategory, FUNCTIONAL_GROUPS, applyStrojOverlay, getModelBySlug, getAllBrands, seriesFamily, type StrojKategorie } from '../../src/lib/stroje';
+import { locales } from '../../src/i18n/config';
 
 describe('stroje lib — SK overlay modelů (Fáze stroje-detail)', () => {
   const base = {
@@ -134,5 +135,22 @@ describe('StrojModel — nová editorial pole', () => {
     expect(found!.used_price?.min).toBeGreaterThan(0);
     expect(found!.used_price!.max).toBeGreaterThanOrEqual(found!.used_price!.min);
     expect(typeof found!.overview).toBe('string');
+  });
+});
+
+describe('URL rodin řad', () => {
+  // Astro i18n (prefixDefaultLocale: false) vrací 404 pro KAŽDOU cestu, která má
+  // kdekoli segment „cs" — /stroje/case-ih/rada/traktory/cs/ tak padala ve všech
+  // jazycích, ač byla v sitemapě. Kód jazyka proto nesmí být rodinou řady.
+  it('žádná rodina není kód jazyka', () => {
+    const kolize = getAllBrands().flatMap((b) =>
+      Object.entries(b.categories ?? {}).flatMap(([cat, c]) =>
+        (c.series ?? [])
+          .map((s) => String(s.family || seriesFamily(s.slug)))
+          .filter((fam) => (locales as readonly string[]).includes(fam))
+          .map((fam) => `${b.slug}/rada/${cat}/${fam}`),
+      ),
+    );
+    expect(kolize).toEqual([]);
   });
 });

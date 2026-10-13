@@ -96,7 +96,8 @@ seriesData.sort((a, b) => {
   return (b.year_from ?? 0) - (a.year_from ?? 0);
 });
 
-const label = familyLabel(family!, locale);
+// family_label z YAML má přednost stejně jako na dlaždici rodiny na stránce značky.
+const label = matchingSeries.find((s: any) => s.family_label)?.family_label || familyLabel(family!, locale);
 const totalModels = seriesData.reduce((acc, s) => acc + s.models.length, 0);
 const allHp = seriesData.flatMap((s) => s.models.map((r) => r.power_hp)).filter((x): x is number => typeof x === 'number');
 const allYearsFrom = seriesData.flatMap((s) => s.models.map((r) => r.year_from)).filter((x): x is number => typeof x === 'number');
