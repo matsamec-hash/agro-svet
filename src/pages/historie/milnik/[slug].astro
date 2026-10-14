@@ -4,7 +4,10 @@ import Layout from '../../../layouts/Layout.astro';
 import { milestoneBySlug, milestones, press, machines } from '../../../lib/historie';
 
 const locale = Astro.locals.locale ?? 'cs';
-const csOnly = locale !== 'cs';
+// Historie je cs-only (žádný překlad) → pod /sk|/uk|/pl 404, stejně jako
+// nepřeložený návod v /jak-na-to. Dřív tu byl celý český článek s HTTP 200
+// a jen `noindex`. Huby /historie/* zůstávají (noindex), detail ne.
+if (locale !== 'cs') return Astro.rewrite('/404');
 const slug = Astro.params.slug!;
 const m = milestoneBySlug(slug);
 if (!m) return Astro.redirect('/historie/', 302);
@@ -47,7 +50,6 @@ const articleLd = {
   description={`${m.title} (${m.year}). ${(m.detail?.[0] ?? m.note).slice(0, 150)}`}
   canonical={`/historie/milnik/${slug}/`}
   ogType="article"
-  noindex={csOnly}
   noHreflang={true}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)} />

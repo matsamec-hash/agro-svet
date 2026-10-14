@@ -19,6 +19,10 @@ const c = content[locale] ?? content.cs;
 const tituly = (locale === 'sk' ? await getCollection('dotaceSk') : await getCollection('dotace')).sort(
   (a, b) => a.data.name.localeCompare(b.data.name, locale === 'sk' ? 'sk' : 'cs'),
 );
+// Detail titulu existuje jen pod cs a sk (viz [slug].astro). Pod ostatními
+// prefixy (pl — sekce nelaunchnutá, celá stránka noindex) vede výpis na český
+// detail, ne na /pl/dotace/<slug>/, které vrací 404.
+const titulBase = locale === 'sk' ? linkBase(locale) : '';
 const kolaData = locale === 'sk' ? kolaSk : kolaCs;
 const kola = kolaData.kola;
 const canonical = `${SITE_URL}/dotace/`;
@@ -28,7 +32,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
   { name: c.crumbSelf, url: `${linkBase(locale)}/dotace/` },
 ]);
 const itemListJsonLd = itemListSchema(
-  tituly.map((t) => ({ url: `${linkBase(locale)}/dotace/${t.data.slug}/`, name: t.data.name })),
+  tituly.map((t) => ({ url: `${titulBase}/dotace/${t.data.slug}/`, name: t.data.name })),
   c.itemListName,
 );
 
@@ -68,7 +72,7 @@ const statusLabel = c.statusLabel;
       <h2 id="tituly-h">{c.titulyTitle}</h2>
       <div class="titul-grid">
         {tituly.map((t) => (
-          <a href={`${linkBase(locale)}/dotace/${t.data.slug}/`} class="titul-card">
+          <a href={`${titulBase}/dotace/${t.data.slug}/`} class="titul-card">
             <span class="tc-code">{t.data.intervence}</span>
             <h3>{t.data.name}</h3>
             <p>{t.data.popis}</p>

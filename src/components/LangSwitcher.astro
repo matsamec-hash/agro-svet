@@ -4,25 +4,29 @@
 // the current cs-root path via stripLocale + localizePath. uk added in Fáze 3,
 // pl ve fázi 1 PL. Native <details> = funguje i bez JS; drobný skript přidá
 // zavření kliknutím mimo / Esc (progressive enhancement).
-import { stripLocale, localizePath, langSwitchHref, t } from '../i18n/utils';
+import { stripLocale, langSwitchHref, t } from '../i18n/utils';
 import { isRetiredLocale } from '../i18n/config';
 import { HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 
 const localizedPathname = Astro.locals.localizedPathname ?? Astro.url.pathname;
 const { locale, path } = stripLocale(localizedPathname);
-const csHref = localizePath('cs', path);
+// Detail s překladem po položkách (článek, návod…) může v cílovém jazyce
+// chybět, i když je sekce launchnutá → pak 404. Stránka to hlásí přes
+// locals.availableLocales a přepínač místo detailu míří na hub sekce.
+const available = Astro.locals.availableLocales;
+const csHref = langSwitchHref('cs', path, [], available);
 // SK cíl: u skrytých novinkových kategorií / nelaunchnutých sekcí spadne na SK
 // hub místo 404, ať přepnutí jazyka nevede na chybovou stránku.
-const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk);
+const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk, available);
 // UK cíl: nelaunchnuté sekce padají na /uk/ (UK homepage) — nikdy 404.
-const ukHref = langSwitchHref('uk', path, []);
+const ukHref = langSwitchHref('uk', path, [], available);
 // PL cíl: nelaunchnuté sekce padají na /pl/ (PL homepage, noindex) — nikdy 404.
-const plHref = langSwitchHref('pl', path, HIDDEN_NEWS_CATEGORIES.pl);
+const plHref = langSwitchHref('pl', path, HIDDEN_NEWS_CATEGORIES.pl, available);
 // DE cíl: nelaunchnuté sekce padaly na /de/ (DE homepage, noindex) — nikdy 404.
 // Od 2026-09-14 je de v RETIRED_LOCALES (celá mutace vrací 410), takže ho
 // filtr níž z nabídky vyhodí. Řádek zůstává, ať se jazyk dá vrátit smazáním
 // jediného prvku z RETIRED_LOCALES.
-const deHref = langSwitchHref('de', path, HIDDEN_NEWS_CATEGORIES.de);
+const deHref = langSwitchHref('de', path, HIDDEN_NEWS_CATEGORIES.de, available);
 
 // Stažené mutace se v přepínači nenabízejí — odkaz do 410 je horší než žádný.
 const options = [

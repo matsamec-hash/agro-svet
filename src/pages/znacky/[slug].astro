@@ -21,14 +21,13 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-// Overlay kolekce dle locale; cs fallback zachován jako u SK (před launchem je
-// uk noindex, a launch nastane až po plné pokrytí všech ~24 značek).
-const ZN_COLLECTION = { sk: 'znackySk', uk: 'znackyUk', pl: 'znackyPl', de: 'znackyDe' } as const;
-// Overlay jen když pro daný locale kolekce existuje; jinak (a při chybějícím
-// překladu značky) fallback na cs — nikdy neshazuj getEntry(undefined) → 500.
-const znColl = ZN_COLLECTION[locale as keyof typeof ZN_COLLECTION];
-const localized = znColl ? await getEntry(znColl, slug!) : undefined;
-const znacka = localized ?? await getEntry('znacky', slug!);
+// Overlay kolekce dle locale, BEZ cs fallbacku — chybějící překlad značky = 404,
+// stejně jako /jak-na-to a /encyklopedie. Hub (/znacky/) čte stejnou kolekci,
+// takže na nepřeloženou značku pod prefixem nikdy neodkazuje. Locale bez
+// kolekce → 404 místo getEntry(undefined) → 500.
+const ZN_COLLECTION = { cs: 'znacky', sk: 'znackySk', uk: 'znackyUk', pl: 'znackyPl', de: 'znackyDe' } as const;
+const znColl = (ZN_COLLECTION as Record<string, (typeof ZN_COLLECTION)[keyof typeof ZN_COLLECTION] | undefined>)[locale];
+const znacka = znColl ? await getEntry(znColl, slug!) : undefined;
 if (!znacka) return Astro.rewrite('/404');
 const { Content, headings } = await render(znacka);
 

@@ -82,11 +82,19 @@ const launchedForLocale = isLaunchedPath(locale, csRootPath) && !locked;
 const effectiveNoindex = noindex || (locale === 'cs' ? false : !launchedForLocale);
 // Reciproční hreflang: nezávisle per-locale (sk/uk emitujeme jen kde je sekce
 // pro daný locale launchnutá). cs je vždy. x-default = cs.
-const skLaunchedPath = isLaunchedPath('sk', csRootPath) && !locked;
-const ukLaunchedPath = isLaunchedPath('uk', csRootPath) && !locked;
-const plLaunchedPath = isLaunchedPath('pl', csRootPath) && !locked;
-const deLaunchedPath = isLaunchedPath('de', csRootPath) && !locked;
+// Detail s překladem po položkách (článek, návod, dotační titul) navíc hlásí,
+// ve kterých jazycích reálně existuje — hreflang na jazyk bez překladu by
+// mířil na 404 (locals.availableLocales, nenastaveno = jen launch sekce).
+const availableLocales = Astro.locals.availableLocales;
+const hasContentIn = (l: 'sk' | 'uk' | 'pl' | 'de') => !availableLocales || availableLocales.includes(l);
+const skLaunchedPath = isLaunchedPath('sk', csRootPath) && !locked && hasContentIn('sk');
+const ukLaunchedPath = isLaunchedPath('uk', csRootPath) && !locked && hasContentIn('uk');
+const plLaunchedPath = isLaunchedPath('pl', csRootPath) && !locked && hasContentIn('pl');
+const deLaunchedPath = isLaunchedPath('de', csRootPath) && !locked && hasContentIn('de');
 const anyAlt = skLaunchedPath || ukLaunchedPath || plLaunchedPath || deLaunchedPath;
+// Obsah, který česky neexistuje (sk-only dotační výzvy PPA SR), nemá kam
+// hreflang vést — cs alternate i x-default by mířily na 404.
+const csHasContent = !availableLocales || availableLocales.includes('cs');
 const csRootCanonical = csRootPath.endsWith('/') ? csRootPath : `${csRootPath}/`;
 const hreflangCsUrl = new URL(csRootCanonical, SITE_ORIGIN).toString();
 const hreflangSkUrl = new URL(`/sk${csRootCanonical}`, SITE_ORIGIN).toString();
@@ -131,7 +139,7 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
   <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
   <link rel="canonical" href={canonicalUrl} />
-  {noHreflang ? null : anyAlt ? (
+  {noHreflang || !csHasContent ? null : anyAlt ? (
     <>
       <link rel="alternate" hreflang="cs" href={hreflangCsUrl} />
       {skLaunchedPath && <link rel="alternate" hreflang="sk" href={hreflangSkUrl} />}

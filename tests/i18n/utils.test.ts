@@ -117,6 +117,22 @@ describe('langSwitchHref', () => {
   it('home → SK home', () => {
     expect(langSwitchHref('sk', '/', hidden)).toBe('/sk/');
   });
+
+  it('detail bez překladu do cíle (availableLocales) → hub sekce místo 404', () => {
+    const avail = ['cs', 'sk'] as const;
+    expect(langSwitchHref('sk', '/novinky/clanek/', hidden, avail)).toBe('/sk/novinky/clanek/');
+    expect(langSwitchHref('uk', '/novinky/clanek/', [], avail)).toBe('/uk/novinky/');
+    expect(langSwitchHref('pl', '/novinky/clanek/', hidden, avail)).toBe('/pl/novinky/');
+    expect(langSwitchHref('cs', '/novinky/clanek/', [], avail)).toBe('/novinky/clanek/');
+  });
+
+  it('obsah, který česky neexistuje (sk dotační výzva) → cs přepínač na hub', () => {
+    expect(langSwitchHref('cs', '/dotace/sk-vyzva/', [], ['sk'])).toBe('/dotace/');
+  });
+
+  it('hub sekce nelaunchnuté v cíli dál padá na home', () => {
+    expect(langSwitchHref('pl', '/dotace/titul/', hidden, ['cs'])).toBe('/pl/');
+  });
 });
 
 describe('navHref/langSwitchHref per-locale (uk po launchi fáze 2)', () => {

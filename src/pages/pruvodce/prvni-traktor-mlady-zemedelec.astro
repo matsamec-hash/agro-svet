@@ -8,6 +8,10 @@ import { getLocaleFromUrl } from '../../i18n/utils';
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const isSk = locale === 'sk';
 const base = isSk ? '/sk' : '';
+// Průvodce má jen cs a sk (sk větve přímo v šabloně). Pod /uk|/pl by se
+// servíroval celý český článek s HTTP 200 → 404, stejně jako nepřeložený
+// návod v /jak-na-to. Hub /pruvodce/ zůstává (výpis, noindex).
+if (locale !== 'cs' && !isSk) return Astro.rewrite('/404');
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
 
 const canonical = `${SITE_URL}${base}/pruvodce/prvni-traktor-mlady-zemedelec/`;

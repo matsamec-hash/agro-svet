@@ -15,9 +15,12 @@ const t = useTranslations(locale);
 const base = locale === 'cs' ? '' : `/${locale}`;
 const { slug } = Astro.params;
 
+// Locale bez vlastní kolekce NEpadá na cs (dřív `?? 'puda'`) — chybějící překlad
+// = 404 přes stránku /404, stejně jako /jak-na-to (dřív holé 404 s prázdným tělem).
 const PUDA_COLLECTION = { cs: 'puda', sk: 'pudaSk', uk: 'pudaUk', pl: 'pudaPl' } as const;
-const item = slug ? await getEntry(PUDA_COLLECTION[locale as 'cs' | 'sk' | 'uk' | 'pl'] ?? 'puda', slug) : undefined;
-if (!item) return new Response(null, { status: 404 });
+const pudaColl = PUDA_COLLECTION[locale as keyof typeof PUDA_COLLECTION] as (typeof PUDA_COLLECTION)[keyof typeof PUDA_COLLECTION] | undefined;
+const item = slug && pudaColl ? await getEntry(pudaColl, slug) : undefined;
+if (!item) return Astro.rewrite('/404');
 
 // Auto-linker je locale-aware (siloing): pro uk lokalizuje interní odkazy na /uk
 // launchnuté sekce, jinak cs fallback — žádný cs leak v UK textu.
