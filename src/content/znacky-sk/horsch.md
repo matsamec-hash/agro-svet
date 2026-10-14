@@ -5,7 +5,7 @@ zeme: Nemecko
 zalozena: 1984
 popis: Nemecký priekopník no-till a minimalizačných technológií so sídlom v Schwandorfe. Pneumatické sejačky Pronto a Sprinter, presné sejačky Maestro, no-till sejačka Avatar, hĺbkové kypriče Tiger.
 website: https://www.horsch.com/
-wikipedia: https://en.wikipedia.org/wiki/Horsch
+wikipedia: https://de.wikipedia.org/wiki/Horsch_Maschinen
 wikidata: https://www.wikidata.org/wiki/Q1628943
 kategorie:
 - stroj

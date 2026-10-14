@@ -5,7 +5,7 @@ zeme: Niemcy
 zalozena: 1984
 popis: Niemiecki pionier technologii no-till i minimalizacyjnych z siedzibą w Schwandorfie. Pneumatyczne siewniki Pronto i Sprinter, precyzyjne siewniki Maestro, siewnik no-till Avatar, głębokie kultywatory Tiger.
 website: https://www.horsch.com/
-wikipedia: https://en.wikipedia.org/wiki/Horsch
+wikipedia: https://pl.wikipedia.org/wiki/Horsch_Maschinen
 wikidata: https://www.wikidata.org/wiki/Q1628943
 kategorie:
 - stroj

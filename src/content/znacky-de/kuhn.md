@@ -5,7 +5,7 @@ zeme: "Frankreich"
 zalozena: 1828
 popis: "Französischer Hersteller mit dem breitesten Landtechnik-Portfolio überhaupt — Pflüge, Sämaschinen, Feldspritzen, Streuer, Pressen, Mähwerke und Futtermischwagen. Tradition seit 1828."
 website: "https://www.kuhn.com/"
-wikipedia: "https://de.wikipedia.org/wiki/Kuhn_(Landmaschinenhersteller)"
+wikipedia: "https://de.wikipedia.org/wiki/Kuhn_(Unternehmen)"
 wikidata: "https://www.wikidata.org/wiki/Q1669214"
 kategorie: ["Maschine"]
 ---

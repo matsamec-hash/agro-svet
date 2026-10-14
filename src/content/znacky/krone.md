@@ -4,7 +4,7 @@ slug: "krone"
 zeme: "Německo"
 zalozena: 1906
 popis: "Německý rodinný výrobce ze Spelle, světový specialista na sklizeň pícnin a slámy. Žací stroje EasyCut, samojízdné BiG M, válcové lisy Comprima, hranolové BiG Pack a řezačky BiG X."
-website: "https://landmaschinen.krone.de/"
+website: "https://www.krone-agriculture.com/"
 wikipedia: "https://en.wikipedia.org/wiki/Krone_Agriculture"
 wikidata: "https://www.wikidata.org/wiki/Q1767448"
 kategorie: ["stroj"]

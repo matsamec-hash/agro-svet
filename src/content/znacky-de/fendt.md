@@ -5,7 +5,7 @@ zeme: "Deutschland"
 zalozena: 1930
 popis: "Fendt ist ein bayerischer Traktorenhersteller aus Marktoberdorf, bekannt für das stufenlose Getriebe Vario. Seit 1997 gehört die Marke zur AGCO-Gruppe und zählt zu den Synonymen für Premium-Landtechnik."
 website: "https://www.fendt.com"
-wikipedia: https://de.wikipedia.org/wiki/Fendt
+wikipedia: https://de.wikipedia.org/wiki/Fendt_(Marke)
 wikidata: https://www.wikidata.org/wiki/Q666948
 kategorie: ["Traktor", "Mähdrescher", "Maschine"]
 aktualizovano: 2026-05-29
@@ -48,7 +48,7 @@ timeline:
     label: "250 000. gefertigtes Vario-Getriebe"
 sources:
   - title: "Wikipedia — Fendt (DE)"
-    url: "https://de.wikipedia.org/wiki/Fendt"
+    url: "https://de.wikipedia.org/wiki/Fendt_(Marke)"
   - title: "Wikipedia — AGCO (EN)"
     url: "https://en.wikipedia.org/wiki/AGCO"
   - title: "Fendt — offizielle Markengeschichte"

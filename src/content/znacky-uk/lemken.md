@@ -5,7 +5,7 @@ zeme: Німеччина
 zalozena: 1780
 popis: Німецький виробник техніки для обробітку ґрунту та сівби з традицією, що сягає 1780 року. Класичні навісні плуги Juwel і Diamant, лущильники Rubin, культиватори Karat, сівалки Solitair.
 website: https://lemken.com/
-wikipedia: https://en.wikipedia.org/wiki/Lemken
+wikipedia: https://de.wikipedia.org/wiki/Lemken_(Unternehmen)
 wikidata: https://www.wikidata.org/wiki/Q1816878
 kategorie:
 - stroj

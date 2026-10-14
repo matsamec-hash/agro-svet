@@ -5,7 +5,7 @@ zeme: Francja
 zalozena: 1828
 popis: Francuski producent z najszerszym portfolio maszyn rolniczych w ogóle — pługi, siewniki, opryskiwacze, rozsiewacze, prasy, maszyny do koszenia oraz wozy paszowe. Tradycja od 1828 roku.
 website: https://www.kuhn.com/
-wikipedia: https://cs.wikipedia.org/wiki/Kuhn
+wikipedia: https://pl.wikipedia.org/wiki/Kuhn_(przedsi%C4%99biorstwo)
 wikidata: https://www.wikidata.org/wiki/Q1669214
 kategorie:
 - stroj

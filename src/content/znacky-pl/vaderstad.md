@@ -5,7 +5,7 @@ zeme: Szwecja
 zalozena: 1962
 popis: Szwedzki producent wysokowydajnych siewników (Tempo, Rapid, Spirit) oraz maszyn do uprawy gleby (Carrier, TopDown, Opus). Globalny lider precyzyjnego siewu kukurydzy i buraków.
 website: https://www.vaderstad.com/
-wikipedia: https://en.wikipedia.org/wiki/V%C3%A4derstad_Group
+wikipedia: https://pl.wikipedia.org/wiki/V%C3%A4derstad-Verken_AB
 wikidata: https://www.wikidata.org/wiki/Q2535939
 kategorie:
 - stroj

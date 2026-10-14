@@ -5,7 +5,7 @@ zeme: Niemcy
 zalozena: 1780
 popis: Niemiecki producent maszyn do uprawy gleby i siewu z tradycją sięgającą roku 1780. Klasyczne pługi zawieszane Juwel i Diamant, kultywatory Rubin, spulchniacze Karat, siewniki Solitair.
 website: https://lemken.com/
-wikipedia: https://en.wikipedia.org/wiki/Lemken
+wikipedia: https://pl.wikipedia.org/wiki/Lemken
 wikidata: https://www.wikidata.org/wiki/Q1816878
 kategorie:
 - stroj

@@ -5,7 +5,7 @@ zeme: "Deutschland"
 zalozena: 1780
 popis: "Deutscher Hersteller von Bodenbearbeitungs- und Sätechnik mit einer Tradition bis ins Jahr 1780. Klassische Anbaupflüge Juwel und Diamant, Scheibeneggen Rubin, Grubber Karat, Sämaschinen Solitair."
 website: "https://lemken.com/"
-wikipedia: "https://de.wikipedia.org/wiki/Lemken"
+wikipedia: "https://de.wikipedia.org/wiki/Lemken_(Unternehmen)"
 wikidata: "https://www.wikidata.org/wiki/Q1816878"
 kategorie: ["Maschine"]
 ---

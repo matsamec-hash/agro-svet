@@ -4,7 +4,7 @@ slug: bednar
 zeme: Česko
 zalozena: 1997
 popis: Český výrobca prémiových strojov na spracovanie pôdy, sejbu a aplikáciu hnojív. Sídlo v Rychnove nad Kněžnou. Robustné stroje pre veľké prevádzky s dôrazom na pracovný výkon a univerzálnosť.
-website: https://www.bednar-machinery.com/
+website: https://www.bednar.com/
 wikipedia: https://cs.wikipedia.org/wiki/BEDNAR_FMT
 wikidata: https://www.wikidata.org/wiki/Q36877873
 kategorie:

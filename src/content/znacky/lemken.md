@@ -5,7 +5,7 @@ zeme: "Německo"
 zalozena: 1780
 popis: "Německý výrobce techniky pro zpracování půdy a setí s tradicí sahající do roku 1780. Klasické nesené pluhy Juwel a Diamant, podmítače Rubin, kypřiče Karat, secí stroje Solitair."
 website: "https://lemken.com/"
-wikipedia: "https://en.wikipedia.org/wiki/Lemken"
+wikipedia: "https://de.wikipedia.org/wiki/Lemken_(Unternehmen)"
 wikidata: "https://www.wikidata.org/wiki/Q1816878"
 kategorie: ["stroj"]
 ---

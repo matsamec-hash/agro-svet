@@ -5,7 +5,7 @@ zeme: Швеція
 zalozena: 1962
 popis: Шведський виробник високопродуктивних сівалок (Tempo, Rapid, Spirit) та машин для обробітку ґрунту (Carrier, TopDown, Opus). Світовий лідер точної сівби кукурудзи та буряку.
 website: https://www.vaderstad.com/
-wikipedia: https://en.wikipedia.org/wiki/V%C3%A4derstad_Group
+wikipedia: https://de.wikipedia.org/wiki/V%C3%A4derstad
 wikidata: https://www.wikidata.org/wiki/Q2535939
 kategorie:
 - stroj

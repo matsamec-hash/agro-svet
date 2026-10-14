@@ -4,7 +4,7 @@ slug: krone
 zeme: Nemecko
 zalozena: 1906
 popis: Nemecký rodinný výrobca zo Spelle, svetový špecialista na zber krmovín a slamy. Žacie stroje EasyCut, samohybné BiG M, valcové lisy Comprima, hranolové BiG Pack a rezačky BiG X.
-website: https://landmaschinen.krone.de/
+website: https://www.krone-agriculture.com/
 wikipedia: https://en.wikipedia.org/wiki/Krone_Agriculture
 wikidata: https://www.wikidata.org/wiki/Q1767448
 kategorie:
