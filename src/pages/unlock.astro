@@ -1,5 +1,11 @@
 ---
 import '../styles/global.css';
+// Stejná písma jako Layout: Chakra Petch self-hostovaná přes @fontsource
+// (global.css), tělo systémový font. Dřív se tu navíc tahala z Google Fonts
+// (+ Roboto Condensed, kterou zbytek webu nepoužívá) — jediná stránka, která
+// posílala návštěvníka na fonts.googleapis.com / fonts.gstatic.com.
+import chakraPetch400 from '@fontsource/chakra-petch/files/chakra-petch-latin-400-normal.woff2?url';
+import chakraPetch700 from '@fontsource/chakra-petch/files/chakra-petch-latin-700-normal.woff2?url';
 
 const url = Astro.url;
 const next = url.searchParams.get('next') || '/';
@@ -21,12 +27,8 @@ const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/';
   <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
   <meta name="theme-color" content="#FFFF00" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Roboto+Condensed:wght@400;500&display=swap"
-  />
+  <link rel="preload" as="font" type="font/woff2" href={chakraPetch400} crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href={chakraPetch700} crossorigin />
 </head>
 <body class="gate-body">
   <main class="gate-wrap">
@@ -77,7 +79,7 @@ const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/';
         radial-gradient(ellipse at top, rgba(255, 255, 0, 0.08), transparent 60%),
         radial-gradient(ellipse at bottom, rgba(255, 255, 0, 0.04), transparent 70%);
       color: #1a1a1a;
-      font-family: 'Roboto Condensed', sans-serif;
+      font-family: var(--font-body);
       display: flex;
       align-items: center;
       justify-content: center;
