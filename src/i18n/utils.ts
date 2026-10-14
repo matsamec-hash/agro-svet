@@ -350,8 +350,20 @@ export const navHref = localizeInternalHref;
  *  (skrytá novinková kategorie, nelaunchnutá sekce nebo prerendered-pod-/sk
  *  cesta), spadne na lokalizovaný hub místo 404 — uživatel reálně přepne jazyk
  *  místo přistání na chybě. cs je kanonické → vrací cestu beze změny.
- *  `hiddenNewsCats` = skryté novinkové kategorie cílového locale. */
-export function langSwitchHref(target: Locale, path: string, hiddenNewsCats: string[]): string {
+ *  `hiddenNewsCats` = skryté novinkové kategorie cílového locale.
+ *  `available` = jazyky, ve kterých existuje obsah TÉTO stránky (locals.
+ *  availableLocales). Chybí-li v nich cíl, míří přepínač na hub sekce — detail
+ *  bez překladu vrací 404, ačkoli je sekce launchnutá. */
+export function langSwitchHref(
+  target: Locale,
+  path: string,
+  hiddenNewsCats: string[],
+  available?: readonly Locale[],
+): string {
+  if (available && !available.includes(target)) {
+    const section = path.split('/').filter(Boolean)[0];
+    path = section ? `/${section}/` : '/';
+  }
   if (target === defaultLocale) return localizePath(target, path);
   const catMatch = path.match(/^\/novinky\/kategorie\/([^/]+)\/?$/);
   if (catMatch && hiddenNewsCats.includes(catMatch[1])) return localizePath(target, '/novinky/');

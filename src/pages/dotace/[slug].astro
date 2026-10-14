@@ -16,12 +16,22 @@ const locale = Astro.locals.locale ?? 'cs';
 const loc = content[locale] ?? content.cs;
 const c = loc.detail;
 const { slug } = Astro.params;
-const titul = slug && locale !== 'uk'
-  ? locale === 'sk'
-    ? await getEntry('dotaceSk', slug)
-    : await getEntry('dotace', slug)
-  : undefined;
-if (!titul) return new Response(null, { status: 404 });
+// Detail titulu má jen locale s vlastní kolekcí: cs (SZIF) a sk (PPA SR). Pro
+// ostatní (uk má vlastní rozcestník, pl nic) → 404 stejně jako /jak-na-to —
+// dřív /pl/dotace/<slug>/ vracelo 200 s českým titulem a jen noindex.
+// Stránka /404, ne holé 404 s prázdným tělem.
+const titul = !slug
+  ? undefined
+  : locale === 'cs'
+    ? await getEntry('dotace', slug)
+    : locale === 'sk'
+      ? await getEntry('dotaceSk', slug)
+      : undefined;
+if (!titul) return Astro.rewrite('/404');
+// cs (SZIF) a sk (PPA SR) mají různé tituly s různými slugy — tentýž slug
+// v druhém jazyce neexistuje. Bez toho by hreflang i přepínač jazyka mířily
+// na /sk|/uk/dotace/<cs-slug>/ (404); přepínač teď vede na hub /dotace/.
+Astro.locals.availableLocales = [locale];
 
 // processes remark/rehype plugins; body rendered via contentHtml
 await render(titul);

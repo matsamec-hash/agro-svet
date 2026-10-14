@@ -86,3 +86,29 @@ export async function fetchTranslatedArticleIds(
   }
   return ids;
 }
+
+/** Řádky `article_translations` (jen locale + titulek) pro JEDEN článek — kvůli
+ *  tomu, ve kterých jazycích článek existuje (hreflang, přepínač jazyka). */
+export async function fetchArticleLocaleRows(
+  supabase: { from: (t: string) => any },
+  articleId: string,
+): Promise<Array<{ locale?: string | null; title?: string | null }>> {
+  const { data } = await supabase
+    .from('article_translations')
+    .select('locale, title')
+    .eq('article_id', articleId);
+  return data ?? [];
+}
+
+/** Jazyky, ve kterých článek reálně existuje: cs vždy, ostatní jen s neprázdným
+ *  přeloženým titulkem (stejné kritérium jako hasTranslatedTitle — pod jiným
+ *  jazykem článek 404-uje). Jurisdikčně skryté kategorie odfiltruje volající. */
+export function translatedLocales(
+  rows: Array<{ locale?: string | null; title?: string | null }> | null | undefined,
+): string[] {
+  const out = ['cs'];
+  for (const r of rows ?? []) {
+    if (r?.locale && !out.includes(r.locale) && hasTranslatedTitle(r)) out.push(r.locale);
+  }
+  return out;
+}
