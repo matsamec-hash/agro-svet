@@ -18,8 +18,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "anc-platba",
       "podminenost"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Dobrý_zemědělský_a_environmentální_stav",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží DZES?",
@@ -46,8 +44,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "anc-platba",
       "cap-2024"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Jednotná_platba_na_plochu",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá SAPS?",
@@ -94,7 +90,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "ekoschemata",
       "podminenost"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Nitrátová_směrnice",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Nitr%C3%A1tov%C3%A1_sm%C4%9Brnice",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -171,8 +167,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "prv",
       "cap-2024"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Ekoplatba",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží ekoschémata?",
@@ -203,8 +197,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "prv",
       "gaec"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Podmíněnost",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je to podmíněnost v zemědělství?",
@@ -235,8 +227,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "ekoschemata",
       "cap-2024"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Zastropování",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co znamená zastropování přímých plateb?",
@@ -267,7 +257,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "zastropovani",
       "ozeleneni"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Program_rozvoje_venkova",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Program_rozvoje_venkova",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -296,8 +286,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "ozeleneni",
       "redistributivni-platba"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Platba_pro_mladé_zemědělce",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je platba pro mladé zemědělce?",
@@ -328,8 +316,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "prv",
       "cap-2024"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Ozelenění",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je ozelenění v zemědělství?",
@@ -726,8 +712,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "powershift",
       "auto-steering"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Load_sensing",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak funguje load-sensing hydraulika?",
@@ -754,7 +738,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "common-rail",
       "emisni-normy-stage"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Intercooler",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Mezichladi%C4%8D",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -783,8 +767,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "emisni-normy-stage",
       "auto-steering"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Variabilní_geometrie_turba",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak funguje variabilní geometrie turba?",
@@ -811,7 +793,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "auto-steering",
       "teleskopicky-manipulator"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Posilovač_řízení",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Posilova%C4%8D_%C5%99%C3%ADzen%C3%AD",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -839,8 +821,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "celni-nakladac",
       "auto-steering"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Vývodový_hřídel",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží přední vývodový hřídel?",
@@ -867,8 +847,6 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "hloubkove-kypreni",
       "predsetova-priprava"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Smykování",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je smykování u traktorů?",
