@@ -14,6 +14,7 @@ export const FARM_PRODUCTS = {
   'vejce': 'Vejce',
   'med': 'Med',
   'obiloviny': 'Obiloviny a mouka',
+  'seno-slama': 'Seno a sláma',
   'bylinky': 'Bylinky',
   'kvety': 'Květiny',
   'vino': 'Víno',
@@ -29,6 +30,7 @@ export const FARM_TYPES = {
   'vcelarstvi': 'Včelařství',
   'vinarstvi': 'Vinařství',
   'druzstvo': 'Zemědělské družstvo',
+  'rostlinna': 'Rostlinná výroba',
 } as const;
 export type FarmType = keyof typeof FARM_TYPES;
 
