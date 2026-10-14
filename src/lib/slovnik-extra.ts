@@ -2555,6 +2555,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "MATIF je pařížská komoditní burza specializující se na obchodování s futures kontrakty.",
+    "titulek": "MATIF — pařížská komoditní burza: co to je a jak funguje",
     "longDef": "MATIF, známá jako pařížská komoditní burza, je významná evropská burza zaměřená na obchodování s futures kontrakty na zemědělské komodity a finanční produkty. \n\nBurza poskytuje platformu pro obchodování s komoditami jako jsou pšenice, kukuřice a další zemědělské produkty, což umožňuje producentům a obchodníkům zajišťovat ceny a řídit rizika. \n\nV České republice slouží MATIF jako referenční bod pro stanovení cen zemědělských komodit, což je důležité pro producenty při plánování a uzavírání obchodních smluv.",
     "related": [
       "komoditni-burza",

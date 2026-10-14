@@ -32,6 +32,13 @@ export interface SlovnikTerm {
   faq?: { q: string; a: string }[];
   /** Zajímavosti — méně známé fakty, renderují se jako odrážky. */
   zajimavosti?: string[];
+  /**
+   * Titulek stránky (bez brandu, max. 60 znaků) s odpovědí přímo v něm —
+   * „Hektar (ha) = 10 000 m² — převod na ary, akry a m²". Volitelné; bez něj
+   * obecné „{term} — co to je? Vysvětlení". Slibovat jen to, co stránka má
+   * (převod jen u hesel s převodníkem). Hlídá tests/lib/seo-titles.test.ts.
+   */
+  titulek?: string;
 }
 
 import { SLOVNIK_EXTRA } from './slovnik-extra';
@@ -623,6 +630,7 @@ Olej: hydraulický + převodový společný (UTTO — Universal Tractor Transmis
     alias: ['ha', 'jednotka plochy'],
     kategorie: 'jednotky',
     shortDef: 'Hektar (ha) je jednotka plochy = 10 000 m² = 100 × 100 m. Standardní jednotka v zemědělství pro výměru polí, dotace, výnosy.',
+    titulek: 'Hektar (ha) = 10 000 m² — převod na ary, akry a m²',
     longDef: `Hektar (ha) je jednotka plošného obsahu metrické soustavy. 1 ha = 10 000 m² = 100 a (arů). Vizuálně: čtverec 100 × 100 m, nebo fotbalové hřiště 1,5×.
 
 V zemědělství je hektar základní jednotka pro:
@@ -648,6 +656,7 @@ V ČR farmy 1–50 ha = "drobní farmáři", 50–500 ha = "střední", 500–50
     alias: ['q', 'metrický cent', 'kvintál'],
     kategorie: 'jednotky',
     shortDef: 'Cent (q) je jednotka hmotnosti = 100 kg. V zemědělství se používá pro výnosy a ceny komodit — pšenice 60 q/ha = 6 t/ha.',
+    titulek: 'Metrický cent (q) = 100 kg — převod na tuny a kg',
     longDef: `Cent (latinsky centum = 100, značka **q** z italského "quintale") je jednotka hmotnosti, standardně 100 kilogramů. V CZ a EU zemědělství je dominantní jednotkou pro:
 
 - **Výnosy plodin**: pšenice 60–80 q/ha, kukuřice 80–120 q/ha, řepka 35–45 q/ha. 1 q/ha = 100 kg/ha = 0,1 t/ha.
@@ -669,6 +678,7 @@ Pro velké výnosy (kukuřice silážní, traviny na siláž) se počítá v t (
     alias: ['a', 'sto metrů čtverečních'],
     kategorie: 'jednotky',
     shortDef: 'Ar (a) je jednotka plochy = 100 m² = čtverec 10 × 10 m. 100 arů = 1 hektar. Používá se pro zahrady, parcely a malé pozemky v katastru nemovitostí.',
+    titulek: 'Ar (a) = 100 m² = 0,01 ha — převod na m² a hektary',
     longDef: `Ar je jednotka plošného obsahu, odvozená od latinského *area*. 1 ar = 100 m² = čtverec o straně 10 m. V soustavě SI je ar (a) přijímaná jednotka mimo SI, přípustná pro pozemkovou agendu.
 
 Převody:
@@ -697,6 +707,7 @@ Historicky byl ar zaveden ve Francii v roce 1795 jako součást metrické sousta
     alias: ['acre', 'akre', 'anglický akr'],
     kategorie: 'jednotky',
     shortDef: 'Akr (acre) je anglosaská jednotka plochy = 4 046,86 m² = 0,4047 hektaru. Standardní jednotka v USA, UK, Kanadě a Austrálii pro zemědělské pozemky.',
+    titulek: 'Akr (acre) = 4 046,86 m² = 0,4047 ha — převod na m² a ha',
     longDef: `Akr (anglicky *acre*) je tradiční anglosaská jednotka plošného obsahu, dnes přesně definovaná jako **4 046,8564224 m²** (mezinárodní akr). V USA a UK je dodnes dominantní jednotkou pro zemědělské pozemky a real estate.
 
 Přesné převody:
@@ -911,6 +922,7 @@ Viz též [[hektar]], [[ar]], [[korec]], [[strych]], [[lan]], [[morgen]].`,
     alias: ['celý lán', 'selský lán', 'kmetcí lán'],
     kategorie: 'jednotky',
     shortDef: 'Lán je středověká česká jednotka plochy ≈ 18 ha (přesněji 16–24 ha podle regionu). Plocha selského hospodářství, které uživí jednu rodinu. Dnes obsoletní, ale historicky zásadní jednotka.',
+    titulek: 'Lán ≈ 18 ha (16–24 ha) — stará česká míra plochy',
     longDef: `Lán je historická česká jednotka plošného obsahu, používaná od raného středověku do 18. století. Velikost lánu se výrazně lišila podle regionu, doby a typu (selský/královský/kmetcí), ale ve standardu z urbáře platilo:
 
 **Český lán (kmetcí, selský)**: typicky 64 strychů ≈ **18 ha** (16–24 ha v praxi).
@@ -949,6 +961,7 @@ Viz též [[jitro]], [[korec]], [[strych]], [[hektar]].`,
     alias: ['český korec', 'pražský korec', 'historická míra'],
     kategorie: 'jednotky',
     shortDef: 'Korec je historická česká jednotka plochy ≈ 0,2877 ha (28,77 a). Plocha, na kterou se vyseje 1 korec (objemová míra) obilí. V katastrálních zápisech a rodinné paměti přežívá dodnes.',
+    titulek: 'Korec = 2 877 m² (0,288 ha) — stará česká míra, převodník',
     longDef: `Korec je historická česká jednotka plošného obsahu, etymologicky odvozená od **korce jako objemové míry obilí** (asi 93 litrů). Korec půdy = plocha, na kterou se vyseje 1 korec osiva.
 
 **Standardizovaný český (pražský) korec**: 2 877,32 m² = **28,77 a ≈ 0,288 ha**.
@@ -1035,6 +1048,7 @@ Viz též [[korec]] (synonymum), [[jitro]] (= 2 strychy), [[lan]], [[hektar]].`,
     alias: ['t', 'metrická tuna', 'megagram'],
     kategorie: 'jednotky',
     shortDef: 'Tuna (t) je jednotka hmotnosti = 1 000 kg = 10 metrických centů (q). Standardní jednotka v zemědělství pro výnosy plodin (t/ha), výkupní ceny komodit (Kč/t) i kapacity strojů.',
+    titulek: 'Tuna (t) = 1 000 kg = 10 q — převod na kg, q a libry',
     longDef: `Metrická tuna (značka **t**, někdy *Mg* — megagram) je jednotka hmotnosti = 1 000 kg = 10⁶ gramů. V SI je tuna přijímaná jednotka mimo SI, ale fakticky dominantní pro praktické vážení v zemědělství, obchodu i průmyslu.
 
 Převody:
@@ -3000,6 +3014,7 @@ Viz též [[lan]], [[robota]], [[trojhonny-system]], [[mez]], [[jitro]], [[korec
     alias: ['šlapací stroj', 'žentourový stroj'],
     kategorie: 'historie',
     shortDef: 'Žentour je historický stroj poháněný silou dobytka (koně, voli) — kruhové zařízení, kde zvíře chodí po obvodu a otáčí hřídelí napojenou na mlátičku, šrotovník nebo lis. Předchůdce parního a elektrického pohonu.',
+    titulek: 'Žentour — stroj poháněný koňmi a voly: jak fungoval',
     longDef: `Žentour (něm. *Göpel*, z latinského *gyrum* = kruh) je **historický stroj poháněný tažnou silou dobytka** — koně, volů, oslů. Princip: zvíře kráčí po kruhové trati (průměr 6–10 m) a otáčí svislou nebo vodorovnou hřídelí, která pohání cílový stroj.
 
 **Konstrukce:**
@@ -3781,6 +3796,7 @@ Viz též [[rijnost]], [[oteleni]], [[jalovice]], [[usni-znamka]], [[dojirna]].`
     alias: ['heifer', 'jalůvka', 'sirka'],
     kategorie: 'chov',
     shortDef: 'Jalovice je samice skotu od narození do prvního otelení — typicky 0–24 měsíců. Klíčová investice chovu (12–18 měs. odchovu bez výroby), genetický potenciál nové generace. Po prvním otelení se z ní stává „prvotelka" (cow).',
+    titulek: 'Jalovice — samice skotu do 1. otelení, fáze odchovu',
     longDef: `Jalovice (lidově *jalůvka*, dialekt *sirka*, anglicky *heifer*) je **samice skotu od narození do prvního otelení**. Po prvním otelení už není jalovice ale **kráva** (cow), konkrétně „prvotelka" (= primipara). Doba odchovu jalovice je **klíčovou investicí** chovu — 22–24 měsíců nákladů bez výroby mléka.
 
 **Fáze odchovu jalovice:**
@@ -9387,6 +9403,46 @@ export function getKategorieLabels(locale: string = 'cs'): Record<SlovnikKategor
  * Slibuje se jen to, co se opravdu vykreslí: `hasConverter` říká, jestli heslo dostane
  * widget převodníku (mapy jednotek žijí v šabloně stránky, ne v datech hesla).
  */
+/**
+ * Hesla, která na stránce dostanou převodník (slug → výchozí jednotka).
+ * Jediný zdroj pravdy pro šablonu stránky i pro slib „převod" v titulku/popisku.
+ */
+export const SLOVNIK_AREA_UNIT_BY_SLUG: Record<string, string> = {
+  hektar: 'ha',
+  ar: 'a',
+  'metr-ctvrecni': 'm2',
+  'kilometr-ctvrecni': 'km2',
+  akr: 'acre',
+  jitro: 'jitro',
+  korec: 'korec',
+  strych: 'strych',
+  morgen: 'morgen',
+};
+export const SLOVNIK_WEIGHT_UNIT_BY_SLUG: Record<string, string> = {
+  'q-cent': 'q',
+  tuna: 't',
+  kilogram: 'kg',
+  libra: 'lb',
+  busl: 'bu',
+  hektolitr: 'kg',
+};
+export function slovnikHasConverter(slug: string): boolean {
+  return slug in SLOVNIK_AREA_UNIT_BY_SLUG || slug in SLOVNIK_WEIGHT_UNIT_BY_SLUG;
+}
+
+/**
+ * <title> detailu hesla (bez brandu — ten přidá Layout, jen když se vejde).
+ *
+ * U jednotek a hesel s velkým počtem zobrazení a mizivým proklikem (hektar:
+ * 16 827 zobrazení / 11 prokliků za 3 měsíce) dává `titulek` odpověď rovnou do
+ * titulku: hledající vidí, že stránka převod opravdu má. Popisek (níž) dál
+ * slibuje, co je za proklikem, a definici nevyzrazuje.
+ */
+export function slovnikSeoTitle(term: SlovnikTerm, t: (key: string) => string): string {
+  const custom = term.titulek?.replace(/\s+/g, ' ').trim();
+  return custom || `${term.term}${t('slovnik.detail.titleSuffix')}`;
+}
+
 export function slovnikMetaDescription(
   term: SlovnikTerm,
   locale: string,

@@ -11,6 +11,8 @@ import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchem
 import { strojeUrlForEncSlug } from '../../lib/machine-crosslink';
 import { licenseUrlFor } from '../../lib/photo-credit';
 import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
+import { encSeoTitle } from '../../lib/seo-titles';
+import { TITLE_MAX } from '../../lib/head-meta';
 import { useTranslations, getLocaleFromUrl, localizePath, tf, BCP47 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -110,6 +112,13 @@ type EncMedia = {
   model3d?: { src: string; poster?: string; autor?: string; licence?: string; zdrojUrl?: string; popis?: string };
 };
 const media = item.data as unknown as EncMedia;
+// <title>: dřív holé „CLAAS Lexion 8900" — ve výsledcích nic neříkalo. Teď výkon
+// a „technické údaje" (header stránky je ukazuje vždy), nebo ruční `titulek`.
+const seoTitle = encSeoTitle(locale, {
+  name: item.data.name,
+  powerHp: item.data.powerHp,
+  titulek: (item.data as { titulek?: string }).titulek,
+});
 
 
 const faqJsonLd = item.data.faq && item.data.faq.length > 0 ? faqPageSchema(item.data.faq) : null;
@@ -196,7 +205,7 @@ const articleJsonLd = {
 };
 ---
 
-<Layout title={item.data.name} description={item.data.popis} canonical={locale === 'cs' ? pageUrl : undefined} ogType="product" ogImage={ogImageAbs}>
+<Layout title={seoTitle} titleMaxLength={TITLE_MAX} description={item.data.popis} canonical={locale === 'cs' ? pageUrl : undefined} ogType="product" ogImage={ogImageAbs}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />

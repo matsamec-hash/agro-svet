@@ -16,6 +16,10 @@ const encyklopedieSchema = () =>
     hmotnost: z.string(),
     rok_uvedeni: z.number(),
     popis: z.string(),
+    // Ruční <title> (bez brandu, max. 60 znaků) — jen když stránka nabízí víc,
+    // než říká šablona „{name} — technické údaje, výkon {power} k" (např. cenu
+    // a spotřebu). Slibovat smí jen sekce, které v textu opravdu jsou.
+    titulek: z.string().max(60).optional(),
     heroImage: z.string().optional(),
     // Atribuce hero fotky. POVINNÁ u CC snímků (Wikimedia) — bez ní se licence porušuje.
     heroCredit: z.object({

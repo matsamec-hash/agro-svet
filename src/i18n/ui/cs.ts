@@ -1093,13 +1093,25 @@ const cs: Record<string, string> = {
   'cat.s.d.contextBrand': 'Značka',
   'cat.s.d.contextSeries': 'Řada',
   'cat.s.d.contextGeneration': 'Generace',
-  'cat.s.d.titleSuffix': '{name} — technické údaje a cena',
-  'cat.s.d.titleSuffixNoPrice': '{name} — technické údaje a specifikace',
+  // Titulek detailu modelu skládá lib/seo-titles.ts (machineSeoTitle):
+  // „{name} — technické údaje: 77 k, 1980–1998". Cenu jen když ji stránka ukáže.
+  'cat.s.d.seoTitle': '{name} — technické údaje',
+  'cat.s.d.seoTitlePrice': '{name} — technické údaje a cena',
+  'cat.s.d.seoPower': '{power} k',
+  'cat.s.d.seoSince': 'od {year}',
   // ‼️ NESLIBOVAT CENY: popisek do 10. 9. 2026 končil „ceny v bazaru" (pl „ceny na
   // giełdzie", de „Preise auf dem Agro-Markt") u všech 2 092 modelů — jenže bazar je
   // z webu schovaný od června 2026. V Polsku to stálo 283 z 297 cenových dotazů
   // s NULOU prokliků. Spec-led začátek zůstává, ten je změřený jako funkční.
-  'cat.s.d.descFallback': '{title} — {singular}, výkon {power} k, roky výroby {years}. Kompletní tabulka technických parametrů.',
+  // {kw} a {extra} (motor, hmotnost) doplňuje machineSeoDescription; spec-led začátek beze změny.
+  'cat.s.d.descFallback': '{title} — {singular}, výkon {power} k{kw}, roky výroby {years}{extra}.',
+  'cat.s.d.descKw': ' ({kw} kW)',
+  'cat.s.d.descEngine': 'motor {engine}',
+  'cat.s.d.descWeight': 'hmotnost {kg} kg',
+  'cat.s.d.descOfferTable': 'kompletní tabulka technických parametrů',
+  'cat.s.d.descOfferFaults': 'časté závady',
+  'cat.s.d.descOfferUsedPrice': 'obvyklá cena ojetiny',
+  'cat.s.d.descAnd': ' a ',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'model',
@@ -1136,6 +1148,8 @@ const cs: Record<string, string> = {
 
   // — encyklopedie strojů (detail + listing) —
   'enc.crumb': 'Encyklopedie',
+  'enc.seoTitle': '{name} — technické údaje, výkon {power} k',
+  'enc.seoTitleShort': '{name} — výkon {power} k',
   'enc.list.title': 'Encyklopedie strojů',
   'enc.list.description': 'Databáze zemědělských strojů — traktory, kombajny, sklízecí mlátičky a stroje. Technické parametry, popis a srovnání.',
   'enc.list.label': 'Encyklopedie',

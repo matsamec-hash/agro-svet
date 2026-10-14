@@ -15,17 +15,30 @@ const BRAND = 'agro-svět.cz';
 const TRAILING_BRAND = /\s*[|–—-]\s*agro-svět(\.cz)?\s*$/i;
 
 /**
+ * Délka <title>, kterou Google v SERPu zobrazí celou (~600 px ≈ 60 znaků).
+ * Šablony titulků (stroje, slovník, encyklopedie) se do ní vejdou samy a brand
+ * dostanou jen tehdy, když se vejde i s ním — viz `maxLength` v pageTitle.
+ */
+export const TITLE_MAX = 60;
+
+/**
  * Sjednotí <title> na tvar „Titulek | agro-svět.cz" s brandem právě jednou.
  * Titulky, které mají brand uvnitř věty (homepage, /redakce/), nechá být.
+ *
+ * `maxLength`: brand se přilepí jen tehdy, když se celý titulek vejde do limitu.
+ * Jinak by Google ořízl konec titulku — a tam je u šablon to podstatné
+ * (výkon, roky, převod), ne brand. Bez `maxLength` chování beze změny.
  */
-export function pageTitle(title: string): string {
+export function pageTitle(title: string, opts: { maxLength?: number } = {}): string {
   let t = (title ?? '').trim();
   for (let prev = ''; t !== prev; ) {
     prev = t;
     t = t.replace(TRAILING_BRAND, '').trim();
   }
   if (!t) return BRAND;
-  return /agro-sv[ěe]t/i.test(t) ? t : `${t} | ${BRAND}`;
+  if (/agro-sv[ěe]t/i.test(t)) return t;
+  const branded = `${t} | ${BRAND}`;
+  return opts.maxLength && branded.length > opts.maxLength ? t : branded;
 }
 
 /** Absolutní URL z cesty i z už absolutní URL; doplní koncové lomítko u adresářů. */

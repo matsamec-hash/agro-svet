@@ -40,6 +40,9 @@ interface Props {
    *  URL prostor se nemapuje 1:1 napříč locale (např. detail komodity — sk slugy
    *  jsou jiné než cs). */
   noHreflang?: boolean;
+  /** Brand „| agro-svět.cz" připojit jen když se celý <title> vejde do tolika
+   *  znaků (viz TITLE_MAX v lib/head-meta). Bez propu se brand lepí vždy. */
+  titleMaxLength?: number;
 }
 
 const {
@@ -57,6 +60,7 @@ const {
   preloadHeroSizes,
   preloadHeroMaxWidth,
   noHreflang = false,
+  titleMaxLength,
 } = Astro.props;
 
 const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSizes, preloadHeroMaxWidth) : null;
@@ -134,7 +138,7 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
   <meta name="seznam-wmt" content="tVqSWOTiGDhGkWaul7Nfe0VPw9AezsFq" />
   <meta name="msvalidate.01" content="A401032123927401E73FAB1151E94F3D" />
   <meta name="seznam-wmt" content="H957FuP9Pc7eQLHuPaTpuyrG03OUV0FD" />
-  <title>{pageTitle(title)}</title>
+  <title>{pageTitle(title, { maxLength: titleMaxLength })}</title>
   <meta name="description" content={metaDesc} />
   <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 

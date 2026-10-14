@@ -433,6 +433,7 @@ export const SLOVNIK_PL: SlovnikTerm[] = [
     "term": "Hektar (ha)",
     "kategorie": "jednotky",
     "shortDef": "Hektar (ha) to jednostka powierzchni = 10 000 m² = 100 × 100 m. Standardowa jednostka w rolnictwie dla powierzchni pól, dotacji, plonów.",
+    "titulek": "Hektar (ha) = 10 000 m² — przelicznik na ary, akry i m²",
     "longDef": "Hektar (ha) to jednostka powierzchni w układzie metrycznym. 1 ha = 10 000 m² = 100 a (arów). Wizualnie: kwadrat 100 × 100 m, lub 1,5-krotność boiska piłkarskiego.\n\nW rolnictwie hektar to podstawowa jednostka dla:\n- **Powierzchni pola** — całe gospodarstwo mierzy się w ha (50 ha, 200 ha, 1000 ha).\n- **Dotacji** — Kč/ha (BISS 2150 Kč/ha, CISS 1450 Kč/ha).\n- **Plonów roślin** — t/ha lub q/ha (1 q = 100 kg = 1 kwintal metryczny).\n- **Zużycia nawozów** — kg/ha (200 kg NPK/ha).\n- **Dawkowania oprysków** — l/ha (5 l Roundup/ha).\n- **Wydajności maszyn** — ha/h (opryskiwacz 12 m szerokości × 12 km/h = 14,4 ha/h teoretycznie).\n\nPreliwiczenia:\n- 1 km² = 100 ha\n- 1 mila² (USA) = 259 ha\n- 1 akr (USA) = 0,405 ha (akr × 0,405 = ha)\n- 1 morgen (DE/AT) = 0,25–0,34 ha w zależności od regionu (historyczny)\n\nW ČR gospodarstwa 1–50 ha = \"drobni rolnicy\", 50–500 ha = \"średnie\", 500–5000 ha = \"duże\", 5000+ ha = \"przemysłowe\".",
     "alias": [
       "ha",

@@ -1,7 +1,8 @@
 ---
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { getSlovnik, getSlovnikTerm, getKategorieLabels, slovnikMetaDescription } from '../../lib/slovnik';
+import { getSlovnik, getSlovnikTerm, getKategorieLabels, slovnikMetaDescription, slovnikSeoTitle, SLOVNIK_AREA_UNIT_BY_SLUG, SLOVNIK_WEIGHT_UNIT_BY_SLUG } from '../../lib/slovnik';
+import { TITLE_MAX } from '../../lib/head-meta';
 import { breadcrumbSchema, faqPageSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 import AreaConverter from '../../components/AreaConverter.astro';
@@ -25,31 +26,10 @@ const relatedTerms = (term.related ?? [])
   .map((s) => getSlovnikTerm(s, locale))
   .filter((rt): rt is NonNullable<typeof rt> => !!rt);
 
-// Mapování slovnik slug → výchozí jednotka pro inline AreaConverter.
-// Jen slugy v této mapě dostanou widget (jen jednotky plochy).
-const AREA_UNIT_BY_SLUG: Record<string, string> = {
-  hektar: 'ha',
-  ar: 'a',
-  'metr-ctvrecni': 'm2',
-  'kilometr-ctvrecni': 'km2',
-  akr: 'acre',
-  jitro: 'jitro',
-  korec: 'korec',
-  strych: 'strych',
-  morgen: 'morgen',
-};
-const areaUnit = AREA_UNIT_BY_SLUG[term.slug];
-
-// Mapování pro WeightConverter — slovnik slug → výchozí jednotka hmotnosti.
-const WEIGHT_UNIT_BY_SLUG: Record<string, string> = {
-  'q-cent': 'q',
-  tuna: 't',
-  kilogram: 'kg',
-  libra: 'lb',
-  busl: 'bu',
-  hektolitr: 'kg',
-};
-const weightUnit = WEIGHT_UNIT_BY_SLUG[term.slug];
+// Převodník (plocha / hmotnost) jen u hesel z map v lib/slovnik — titulek
+// a popisek ho slibují podle téže mapy, takže slib a stránka se nerozejdou.
+const areaUnit = SLOVNIK_AREA_UNIT_BY_SLUG[term.slug];
+const weightUnit = SLOVNIK_WEIGHT_UNIT_BY_SLUG[term.slug];
 
 const metaDesc = slovnikMetaDescription(term, locale, Boolean(areaUnit || weightUnit), t, tf);
 
@@ -152,7 +132,8 @@ const showsCzk = locale !== 'cs' && /Kč/.test(
 ---
 
 <Layout
-  title={`${term.term}${t('slovnik.detail.titleSuffix')}`}
+  title={slovnikSeoTitle(term, t)}
+  titleMaxLength={TITLE_MAX}
   description={metaDesc}
   canonical={pageUrl}
   ogType="article"

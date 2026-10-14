@@ -1124,13 +1124,25 @@ const uk: Record<string, string> = {
   'cat.s.d.contextBrand': 'Бренд',
   'cat.s.d.contextSeries': 'Ряд',
   'cat.s.d.contextGeneration': 'Покоління',
-  'cat.s.d.titleSuffix': '{name} — технічні характеристики та ціна',
-  'cat.s.d.titleSuffixNoPrice': '{name} — технічні характеристики та специфікації',
+  // Titulek detailu modelu skládá lib/seo-titles.ts (machineSeoTitle):
+  // „{name} — technické údaje: 77 k, 1980–1998". Cenu jen když ji stránka ukáže.
+  'cat.s.d.seoTitle': '{name} — технічні характеристики',
+  'cat.s.d.seoTitlePrice': '{name} — технічні характеристики та ціна',
+  'cat.s.d.seoPower': '{power} к.с.',
+  'cat.s.d.seoSince': 'з {year}',
   // ‼️ NESLIBOVAT CENY: popisek do 10. 9. 2026 končil „ceny v bazaru" (pl „ceny na
   // giełdzie", de „Preise auf dem Agro-Markt") u všech 2 092 modelů — jenže bazar je
   // z webu schovaný od června 2026. V Polsku to stálo 283 z 297 cenových dotazů
   // s NULOU prokliků. Spec-led začátek zůstává, ten je změřený jako funkční.
-  'cat.s.d.descFallback': '{title} — {singular}, потужність {power} к.с., роки випуску {years}. Повна таблиця технічних характеристик.',
+  // {kw} a {extra} (motor, hmotnost) doplňuje machineSeoDescription; spec-led začátek beze změny.
+  'cat.s.d.descFallback': '{title} — {singular}, потужність {power} к.с.{kw}, роки випуску {years}{extra}.',
+  'cat.s.d.descKw': ' ({kw} кВт)',
+  'cat.s.d.descEngine': 'двигун {engine}',
+  'cat.s.d.descWeight': 'маса {kg} кг',
+  'cat.s.d.descOfferTable': 'повна таблиця технічних характеристик',
+  'cat.s.d.descOfferFaults': 'поширені несправності',
+  'cat.s.d.descOfferUsedPrice': 'звичайна ціна вживаного',
+  'cat.s.d.descAnd': ' та ',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'модель',
@@ -1167,6 +1179,8 @@ const uk: Record<string, string> = {
 
   // — encyklopedie strojů (detail + listing) —
   'enc.crumb': 'Енциклопедія',
+  'enc.seoTitle': '{name} — технічні характеристики, {power} к.с.',
+  'enc.seoTitleShort': '{name} — {power} к.с.',
   'enc.list.title': 'Енциклопедія техніки',
   'enc.list.description': 'База сільськогосподарської техніки — трактори, комбайни, зернозбиральні молотарки та машини. Технічні параметри, опис і порівняння.',
   'enc.list.label': 'Енциклопедія',

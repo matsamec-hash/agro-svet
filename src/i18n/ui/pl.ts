@@ -1095,13 +1095,25 @@ const pl: Record<string, string> = {
   'cat.s.d.contextBrand': 'Marka',
   'cat.s.d.contextSeries': 'Seria',
   'cat.s.d.contextGeneration': 'Generacja',
-  'cat.s.d.titleSuffix': '{name} — dane techniczne i cena',
-  'cat.s.d.titleSuffixNoPrice': '{name} — dane techniczne i specyfikacja',
+  // Titulek detailu modelu skládá lib/seo-titles.ts (machineSeoTitle):
+  // „{name} — technické údaje: 77 k, 1980–1998". Cenu jen když ji stránka ukáže.
+  'cat.s.d.seoTitle': '{name} — dane techniczne',
+  'cat.s.d.seoTitlePrice': '{name} — dane techniczne i cena',
+  'cat.s.d.seoPower': '{power} KM',
+  'cat.s.d.seoSince': 'od {year}',
   // ‼️ NESLIBOVAT CENY: popisek do 10. 9. 2026 končil „ceny v bazaru" (pl „ceny na
   // giełdzie", de „Preise auf dem Agro-Markt") u všech 2 092 modelů — jenže bazar je
   // z webu schovaný od června 2026. V Polsku to stálo 283 z 297 cenových dotazů
   // s NULOU prokliků. Spec-led začátek zůstává, ten je změřený jako funkční.
-  'cat.s.d.descFallback': '{title} — {singular}, moc {power} KM, lata produkcji {years}. Pełna tabela danych technicznych.',
+  // {kw} a {extra} (motor, hmotnost) doplňuje machineSeoDescription; spec-led začátek beze změny.
+  'cat.s.d.descFallback': '{title} — {singular}, moc {power} KM{kw}, lata produkcji {years}{extra}.',
+  'cat.s.d.descKw': ' ({kw} kW)',
+  'cat.s.d.descEngine': 'silnik {engine}',
+  'cat.s.d.descWeight': 'masa {kg} kg',
+  'cat.s.d.descOfferTable': 'pełna tabela danych technicznych',
+  'cat.s.d.descOfferFaults': 'typowe usterki',
+  'cat.s.d.descOfferUsedPrice': 'typowa cena używanego',
+  'cat.s.d.descAnd': ' i ',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'model',
@@ -1138,6 +1150,8 @@ const pl: Record<string, string> = {
 
   // — encyklopedia maszyn (szczegóły + lista) —
   'enc.crumb': 'Encyklopedia',
+  'enc.seoTitle': '{name} — dane techniczne, moc {power} KM',
+  'enc.seoTitleShort': '{name} — moc {power} KM',
   'enc.list.title': 'Encyklopedia maszyn',
   'enc.list.description': 'Baza maszyn rolniczych — ciągniki, kombajny, młocarnie i maszyny. Parametry techniczne, opis i porównanie.',
   'enc.list.label': 'Encyklopedia',

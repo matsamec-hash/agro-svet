@@ -14,6 +14,8 @@ import { findCompetitors, useCaseDescription } from '../../../../../lib/competit
 import { pairCombo } from '../../../../../lib/comparator';
 import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeInternalHref, bcp47 } from '../../../../../i18n/utils';
 import HeroPhotoCredit from '../../../../../components/HeroPhotoCredit.astro';
+import { machineSeoTitle, machineSeoDescription } from '../../../../../lib/seo-titles';
+import { TITLE_MAX } from '../../../../../lib/head-meta';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -230,13 +232,38 @@ const compareLinkText = '\n' + tr('cat.s.d.compareLink') + '\n';
 const ebProcessedText = '\n' + tr('cat.s.d.ebProcessed') + ' ';
 
 const pageTitle = `${brand.name} ${model.name}`;
+// Redakční bloky (časté závady, obvyklá cena ojetiny) jsou v datech jen česky —
+// pod /sk|pl|uk se sice vykreslí, ale česky a s cenou v Kč. Titulek a popisek je
+// proto slibují jen v češtině, jinde by slibovaly něco, co čtenář nenajde.
+const editorialPromise = locale === 'cs';
+const hasFaults = editorialPromise && Boolean(model.reliability || (model.common_faults && model.common_faults.length > 0));
+const hasUsedPrice = editorialPromise && Boolean(model.used_price);
+// „cena" v titulku jen když ji stránka opravdu ukáže (aside-price / aside-used-price).
+const showsPrice = editorialPromise && Boolean(priceStats || model.used_price);
+const seoTitle = machineSeoTitle(locale, {
+  name: pageTitle,
+  powerHp: model.power_hp,
+  yearFrom: model.year_from,
+  yearTo: model.year_to,
+  hasPrice: showsPrice,
+});
 // Spec-led meta description pro modely s úplnou spec sadou (singular + výkon + roky = traktory/kombajny)
 // — trefuje hledané „technické údaje / cena" líp než náhodných 160 znaků prózy. Ostatní kategorie
 // (pluhy/lisy/nakladače bez výkonu) si drží prózu, jinak by šablona dala „undefined, výkon ? k".
 const specLedDesc = categorySingular[category] && model.power_hp && yr;
 const pageDesc = (
   specLedDesc
-    ? tf(locale, 'cat.s.d.descFallback', { title: pageTitle, singular: categorySingular[category], power: model.power_hp, years: yr })
+    ? machineSeoDescription(locale, {
+        title: pageTitle,
+        singular: categorySingular[category],
+        powerHp: model.power_hp!,
+        powerKw: model.power_kw,
+        years: yr,
+        engine: model.engine,
+        weightKg: model.weight_kg,
+        hasFaults,
+        hasUsedPrice,
+      })
     // Kategorie bez spec sady (pluhy/lisy/nakladače): próza modelu → série → aspoň název.
     // Nikdy ne descFallback s „výkon ? k, roky výroby ." placeholdery.
     : (model.description || series.description || pageTitle)
@@ -333,7 +360,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 }
 ---
 
-<Layout title={tf(locale, modelBazarCount > 0 ? 'cat.s.d.titleSuffix' : 'cat.s.d.titleSuffixNoPrice', { name: pageTitle })} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
+<Layout title={seoTitle} titleMaxLength={TITLE_MAX} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
   {offerJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(offerJsonLd)} />}

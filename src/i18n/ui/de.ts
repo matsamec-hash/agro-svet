@@ -859,13 +859,25 @@ const de: Record<string, string> = {
   'cat.s.d.contextBrand': 'Marke',
   'cat.s.d.contextSeries': 'Baureihe',
   'cat.s.d.contextGeneration': 'Generation',
-  'cat.s.d.titleSuffix': '{name} — technische Daten und Preis',
-  'cat.s.d.titleSuffixNoPrice': '{name} — technische Daten und Spezifikationen',
+  // Titulek detailu modelu skládá lib/seo-titles.ts (machineSeoTitle):
+  // „{name} — technické údaje: 77 k, 1980–1998". Cenu jen když ji stránka ukáže.
+  'cat.s.d.seoTitle': '{name} — technische Daten',
+  'cat.s.d.seoTitlePrice': '{name} — technische Daten und Preis',
+  'cat.s.d.seoPower': '{power} PS',
+  'cat.s.d.seoSince': 'seit {year}',
   // ‼️ NESLIBOVAT CENY: popisek do 10. 9. 2026 končil „ceny v bazaru" (pl „ceny na
   // giełdzie", de „Preise auf dem Agro-Markt") u všech 2 092 modelů — jenže bazar je
   // z webu schovaný od června 2026. V Polsku to stálo 283 z 297 cenových dotazů
   // s NULOU prokliků. Spec-led začátek zůstává, ten je změřený jako funkční.
-  'cat.s.d.descFallback': '{title} — {singular}, Leistung {power} PS, Baujahre {years}. Vollständige Tabelle der technischen Daten.',
+  // {kw} a {extra} (motor, hmotnost) doplňuje machineSeoDescription; spec-led začátek beze změny.
+  'cat.s.d.descFallback': '{title} — {singular}, Leistung {power} PS{kw}, Baujahre {years}{extra}.',
+  'cat.s.d.descKw': ' ({kw} kW)',
+  'cat.s.d.descEngine': 'Motor {engine}',
+  'cat.s.d.descWeight': 'Gewicht {kg} kg',
+  'cat.s.d.descOfferTable': 'vollständige Tabelle der technischen Daten',
+  'cat.s.d.descOfferFaults': 'typische Schwachstellen',
+  'cat.s.d.descOfferUsedPrice': 'üblicher Gebrauchtpreis',
+  'cat.s.d.descAnd': ' und ',
   'cat.s.d.altPhoto': '{model} — {category}',
   // — Series detail page (cat.s.d.s.*) —
   'cat.s.d.s.modelOne': 'Modell',
@@ -902,6 +914,8 @@ const de: Record<string, string> = {
 
   // — encyklopedie strojů (detail + listing) —
   'enc.crumb': 'Enzyklopädie',
+  'enc.seoTitle': '{name} — technische Daten, Leistung {power} PS',
+  'enc.seoTitleShort': '{name} — Leistung {power} PS',
   'enc.list.title': 'Maschinen-Enzyklopädie',
   'enc.list.description': 'Datenbank der Landmaschinen — Traktoren, Mähdrescher und Anbaugeräte. Technische Daten, Beschreibung und Vergleich.',
   'enc.list.label': 'Enzyklopädie',
