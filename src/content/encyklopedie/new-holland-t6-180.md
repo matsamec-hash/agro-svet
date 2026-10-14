@@ -15,7 +15,7 @@ engine: "FPT NEF 6,7 L, 6-válec, Stage V"
 transmission: "Electro Command 16/16 nebo Auto Command CVT"
 seriesName: "T6 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.newholland.com/cs-cz/zemedelska-technika/produkty/traktory/t6"
+sourceUrl: "https://agriculture.newholland.com/en-gb/europe/products/agricultural-tractors/t6-stage-v"
 highlights:
   - "180 koní z šestiválce FPT NEF 6,7 L"
   - "Volba převodovky Electro Command (16/16) nebo Auto Command CVT"

@@ -15,7 +15,7 @@ engine: "John Deere 18,0 L, 6-Zylinder, Stage V"
 transmission: "e18 PowerShift 18/6"
 seriesName: "9R/9RX"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.deere.de/de/traktoren/4wd-und-raupentraktoren/"
+sourceUrl: "https://www.deere.de/de-de/produkte-und-loesungen/traktoren/grosstraktoren/9rx-830-traktor-otkymfjx"
 youtubeId: "q_kyf7WExcc"
 youtubeTitle: "John Deere 9RX 830 Walkaround — most powerful production tractor"
 highlights:

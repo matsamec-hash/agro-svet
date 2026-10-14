@@ -15,7 +15,7 @@ engine: "AGCO Power 7,5 L Core75, 6-Zylinder, Stage V, eHybrid 48V"
 transmission: "Vario TA 150, stufenlos (CVT)"
 seriesName: "700 Vario Gen7"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.fendt.com/de/traktoren/700-vario"
+sourceUrl: "https://www.fendt.com/de/landmaschinen/traktoren/fendt-700-vario-gen7"
 highlights:
   - "303 PS aus dem Sechszylinder AGCO Power 7,5 L Core75"
   - "eHybrid-System mit 48-V-Generator"

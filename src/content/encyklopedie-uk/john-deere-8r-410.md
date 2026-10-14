@@ -15,7 +15,7 @@ engine: PowerTech PSX 9.0 л, 6-циліндровий, Stage V
 transmission: DirectDrive 16/5 автоматична, макс. 40 км/год
 seriesName: 8R
 lastVerified: 2026-05-02
-sourceUrl: https://www.deere.cz/cs/traktory/velke-traktory/8r-rada/
+sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/tractors/large-tractors/8r-410-tractor-ode2mvjx"
 youtubeId: K3WmtzFIUbA
 youtubeTitle: John Deere 8R 410 eAutoPowr — Power Meets Precision
 highlights:

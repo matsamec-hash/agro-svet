@@ -13,7 +13,7 @@ engine: "MAN, 6-cylindrowy, Stage V"
 transmission: "Napęd hydrostatyczny, podwozie gąsienicowe"
 seriesName: "IDEAL"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.fendt.com/cz/kombajny/ideal"
+sourceUrl: "https://www.fendt.com/int/agricultural-machinery/combines/fendt-ideal"
 highlights:
   - "Topowy model serii IDEAL — wykonanie gąsienicowe 10T"
   - "Dwurotorowa platforma z rotorami HARVEST CORE"

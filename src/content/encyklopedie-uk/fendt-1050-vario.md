@@ -50,7 +50,7 @@ engine: MAN D2676, 6-циліндровий, 12,4 л, Stage V
 transmission: TA 400 Vario безступенева з VarioDrive
 seriesName: 1000 Vario
 lastVerified: 2026-05-14
-sourceUrl: https://www.fendt.com/cz/traktory/1000-vario
+sourceUrl: "https://api.fendt.com/techdata/GB/en/1152748/Fendt-1000-Vario"
 youtubeId: ojRzfKwCxTY
 youtubeTitle: Fendt 1050 Vario — тест landwirt.com
 technickeUdaje:

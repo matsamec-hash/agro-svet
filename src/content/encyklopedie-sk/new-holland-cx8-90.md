@@ -15,7 +15,7 @@ engine: FPT, 6-válec, Stage V
 transmission: Hydrostatický pojezd
 seriesName: CX Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.newholland.com/cs-cz/zemedelska-technika/produkty/sklizne/kombajny/cx
+sourceUrl: "https://agriculture.newholland.com/en-gb/europe/products/combine-harvesters/cx7-cx8-stage-v"
 highlights:
 - Vrcholný konvenčný kombajn radu CX — 490 koní
 - 'Klasický výmlatový systém: bubon a slamienky'

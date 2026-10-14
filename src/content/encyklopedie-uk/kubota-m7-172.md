@@ -15,7 +15,8 @@ engine: Kubota V6108, 4-циліндровий, 6,1 л, common-rail, Stage V
 transmission: Powershift 24/24 або KVT (безступінчаста)
 seriesName: M7 Series
 lastVerified: 2026-05-14
-sourceUrl: https://www.kubota.cz/produkty/traktory/serie-m7
+sourceUrl: "https://www.tractordata.com/farm-tractors/010/1/0/10109-kubota-m7-172.html"
+sourceName: "TractorData.com"
 youtubeId: qDVzGQYsPKM
 youtubeTitle: Kubota M7-172 — walk around and verdict
 highlights:

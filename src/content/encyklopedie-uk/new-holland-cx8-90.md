@@ -15,7 +15,7 @@ engine: FPT, 6-циліндровий, Stage V
 transmission: Гідростатичний привід
 seriesName: CX Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.newholland.com/cs-cz/zemedelska-technika/produkty/sklizne/kombajny/cx
+sourceUrl: "https://agriculture.newholland.com/en-gb/europe/products/combine-harvesters/cx7-cx8-stage-v"
 highlights:
 - Топовий конвенційний комбайн серії CX — 490 коней
 - 'Класична обмолотна система: барабан і соломотряси'

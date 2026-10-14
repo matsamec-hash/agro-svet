@@ -15,7 +15,7 @@ engine: "Mercedes-Benz OM 473, 6-cylindrowy 15,6 l, Stage V"
 transmission: "Hydrostatyczna, maks. 30 km/h"
 seriesName: "Lexion 8000"
 lastVerified: 2026-05-02
-sourceUrl: "https://www.claas.com/cs-cz/produkty/sklizecmlaticky/lexion-8000-7000"
+sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/sklizeci-mlaticky/lexion-8000"
 youtubeId: "l1UVX6NEB3E"
 youtubeTitle: "CLAAS Lexion 8900 — oficjalny walkaround (seria Lexion 8000)"
 recenze:

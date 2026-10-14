@@ -15,7 +15,6 @@ engine: "Kubota V6108, 4-Zylinder, 6,1 L"
 transmission: "Powershift 24/24, optional CVT"
 seriesName: "M6 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.kubota.de/produkte/traktoren"
 highlights:
   - "175 PS aus dem Vierzylinder Kubota V6108 6,1 L"
   - "Getriebe Powershift 24/24, optional CVT"

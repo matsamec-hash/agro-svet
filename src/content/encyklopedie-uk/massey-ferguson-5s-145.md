@@ -15,7 +15,7 @@ engine: AGCO Power 4,4 л, 4-циліндровий, Stage V
 transmission: Dyna-4 Powershift
 seriesName: MF 5S
 lastVerified: 2026-05-15
-sourceUrl: https://www.masseyferguson.com/cs-cz/traktory/mf-5s.html
+sourceUrl: "https://www.masseyferguson.com/uk_ua/product/tractors/mf-5s.html"
 highlights:
 - 145 кінських сил від чотирициліндрового AGCO Power 4,4 л
 - Трансмісія Dyna-4 Powershift

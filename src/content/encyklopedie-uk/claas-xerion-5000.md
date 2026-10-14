@@ -15,7 +15,7 @@ engine: Mercedes-Benz OM471, 6-циліндровий, 12,8 л, Stage V
 transmission: HM4 гідромеханічна 4-режимна CVT
 seriesName: Xerion
 lastVerified: 2026-05-14
-sourceUrl: https://www.claas.com/cs-cz/zemedelske-stroje/traktory/xerion
+sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/traktory/xerion-5000-4200"
 youtubeId: ObI96Hc7skQ
 youtubeTitle: CLAAS Xerion 5000 — огляд
 highlights:

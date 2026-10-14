@@ -15,7 +15,7 @@ engine: "John Deere PowerTech 13,6 L, 6-Zylinder, Stage V"
 transmission: "Hydrostatischer Fahrantrieb"
 seriesName: "X Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.deere.de/de/ernte/maehdrescher/"
+sourceUrl: "https://www.deere.de/de-de/produkte-und-loesungen/getreideernte/maehdrescher/x9-1100-maehdrescher-ndaxr0g"
 youtubeId: "OOXS1YoCsK4"
 youtubeTitle: "John Deere X9 1100 Combine — Walkaround"
 highlights:

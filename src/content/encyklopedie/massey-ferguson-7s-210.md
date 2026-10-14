@@ -15,7 +15,7 @@ engine: "AGCO Power 6,6 L, 6-válec, Stage V"
 transmission: "Dyna-6 Powershift nebo Dyna-VT (CVT)"
 seriesName: "MF 7S"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.masseyferguson.com/cs-cz/traktory/mf-7s.html"
+sourceUrl: "https://www.masseyferguson.com/en/product/tractors/mf-7s.html"
 highlights:
   - "210 koní z šestiválce AGCO Power 6,6 L"
   - "Systém EPM přidává až 30 koní při náročných operacích"

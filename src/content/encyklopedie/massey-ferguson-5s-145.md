@@ -15,7 +15,7 @@ engine: "AGCO Power 4,4 L, 4-válec, Stage V"
 transmission: "Dyna-4 Powershift"
 seriesName: "MF 5S"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.masseyferguson.com/cs-cz/traktory/mf-5s.html"
+sourceUrl: "https://www.masseyferguson.com/en/product/tractors/mf-5s.html"
 highlights:
   - "145 koní ze čtyřválce AGCO Power 4,4 L"
   - "Převodovka Dyna-4 Powershift"

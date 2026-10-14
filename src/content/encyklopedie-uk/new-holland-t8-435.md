@@ -15,7 +15,8 @@ engine: FPT Cursor 9, 6-циліндровий, 8,7 л, Stage V
 transmission: Ultra Command Powershift або Auto Command (CVT)
 seriesName: T8 Series
 lastVerified: 2026-05-14
-sourceUrl: https://www.newholland.com/cs-cz/zemedelska-technika/produkty/traktory/t8
+sourceUrl: "https://www.tractordata.com/farm-tractors/009/1/9/9199-new-holland-t8435.html"
+sourceName: "TractorData.com"
 youtubeId: BISfgcJj1bo
 youtubeTitle: New Holland T8.435 — інтер'єр і зовнішній огляд
 highlights:

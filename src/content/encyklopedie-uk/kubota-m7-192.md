@@ -15,7 +15,6 @@ engine: Kubota V6108, 6-циліндровий, 6,1 л, common-rail
 transmission: Powershift 24/24 або KVT (CVT)
 seriesName: M7 Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.kubota.cz/produkty/traktory
 highlights:
 - 190 кінських сил — найпотужніший трактор Kubota
 - Шестициліндровий двигун Kubota V6108 6,1 л common-rail

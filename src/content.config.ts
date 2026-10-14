@@ -75,7 +75,12 @@ const encyklopedieSchema = () =>
     faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
     // Editorial trust signals.
     lastVerified: z.date().optional(),
-    sourceUrl: z.string().optional(),
+    // Odkaz na zdroj technických údajů. Jen https a konkrétní stránka modelu/řady
+    // (ne homepage, ne odhadnutá URL) — hlídá tests/lib/zdroje-url.test.ts.
+    sourceUrl: z.string().url().startsWith('https://').optional(),
+    // Když zdroj NENÍ oficiální stránka výrobce (TractorData, archiv), jméno zdroje.
+    // Bez něj trust bar tvrdí „oficiální specifikace výrobce“.
+    sourceName: z.string().optional(),
     // Volitelný YouTube embed — feeduje VideoObject JSON-LD + lazy facade na detailu.
     youtubeId: z.string().optional(),
     youtubeTitle: z.string().optional(),

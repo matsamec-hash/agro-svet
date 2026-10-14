@@ -15,7 +15,7 @@ engine: "PowerTech PSX 9.0 L, 6-Zylinder, Stage V"
 transmission: "DirectDrive 16/5 automatisch, max. 40 km/h"
 seriesName: "8R"
 lastVerified: 2026-05-02
-sourceUrl: "https://www.deere.de/de/traktoren/grosse-traktoren/8r-serie/"
+sourceUrl: "https://www.deere.de/de-de/produkte-und-loesungen/traktoren/grosstraktoren/8r-410-traktor-ode2mvjx"
 youtubeId: "K3WmtzFIUbA"
 youtubeTitle: "John Deere 8R 410 eAutoPowr — Power Meets Precision"
 highlights:

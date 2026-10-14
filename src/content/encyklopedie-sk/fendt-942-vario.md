@@ -15,7 +15,7 @@ engine: MAN D3876, 6-válec, 9,0 L, Stage V
 transmission: Vario, bezstupňová (CVT) s pohonem VarioDrive
 seriesName: 900 Vario
 lastVerified: 2026-05-15
-sourceUrl: https://www.fendt.com/cz/traktory/900-vario
+sourceUrl: "https://www.fendt.com/int/agricultural-machinery/tractors/fendt-900-vario"
 youtubeId: ByCerXS8Row
 youtubeTitle: Fendt 942 Vario Profi+ — walkaround
 highlights:

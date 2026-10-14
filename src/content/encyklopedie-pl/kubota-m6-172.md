@@ -15,7 +15,6 @@ engine: "Kubota V6108, 4-cylindrowy, 6,1 L"
 transmission: "Przekładnia Powershift 24/24, opcjonalnie CVT"
 seriesName: "M6 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.kubota.cz/produkty/traktory"
 highlights:
   - "175 koni z czterocylindrowego Kubota V6108 6,1 L"
   - "Przekładnia Powershift 24/24, opcjonalnie CVT"

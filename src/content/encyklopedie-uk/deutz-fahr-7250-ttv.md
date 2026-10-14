@@ -15,7 +15,7 @@ engine: Deutz TCD 6.1 L, 6-циліндровий, Stage V
 transmission: TTV, безступенева (CVT) або Powershift
 seriesName: 7 Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.deutz-fahr.com/cs-cz/traktory
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/7-ttv-series"
 highlights:
 - 263 кінських сил від шестициліндрового Deutz TCD 6.1 L
 - Безступенева трансмісія TTV або Powershift

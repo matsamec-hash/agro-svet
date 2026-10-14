@@ -15,7 +15,7 @@ engine: FPT Cursor 16, 6-циліндровий, 15,9 л, Stage V
 transmission: Гідростатичний привід
 seriesName: CR Series
 lastVerified: 2026-05-14
-sourceUrl: https://www.newholland.com/cs-cz/zemedelska-technika/produkty/sklizne/kombajny/cr
+sourceUrl: "https://agriculture.newholland.com/en-gb/europe/products/combine-harvesters/cr10-and-cr11"
 youtubeId: 48CQ4BGsPmg
 youtubeTitle: New Holland CR11 — флагманський комбайн із Dynamic Feed Roll
 highlights:

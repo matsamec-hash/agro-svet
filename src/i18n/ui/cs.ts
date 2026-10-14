@@ -1192,6 +1192,7 @@ const cs: Record<string, string> = {
   'enc.trust.label': 'Ověření obsahu',
   'enc.trust.verified': 'Naposledy ověřeno:',
   'enc.trust.source': 'Zdroj: oficiální specifikace výrobce',
+  'enc.trust.sourceNamed': 'Zdroj: {zdroj}',
   'enc.back': '← Zpět na encyklopedii',
   'enc.alt.hero': 'hlavní pohled',
   'enc.alt.koni': 'koní',

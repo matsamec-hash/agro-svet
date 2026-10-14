@@ -15,7 +15,7 @@ engine: "AGCO Power 6,6 L, 6-Zylinder, Stage V"
 transmission: "Dyna-6 Powershift oder Dyna-VT (CVT)"
 seriesName: "MF 7S"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.masseyferguson.com/de-de/traktoren/mf-7s.html"
+sourceUrl: "https://www.masseyferguson.com/de_de/product/tractors/mf-7s.html"
 highlights:
   - "210 PS aus dem Sechszylinder AGCO Power 6,6 L"
   - "Das System EPM legt bei anspruchsvollen Arbeiten bis zu 30 PS zu"

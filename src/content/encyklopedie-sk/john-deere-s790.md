@@ -15,7 +15,8 @@ engine: John Deere PowerTech 13,5 L, 6-válec, Stage V
 transmission: Hydrostatický pojezd
 seriesName: S Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.deere.cz/cs/sklizen/kombajny/
+sourceUrl: "https://web.archive.org/web/20210605140110/https://www.deere.co.uk/en/combines/s700-series/s790/"
+sourceName: "deere.co.uk (Wayback Machine, 2021)"
 highlights:
 - Vrcholný jednorotorový kombajn radu S — 543 koní
 - Zásobník zrna 14 800 litrov

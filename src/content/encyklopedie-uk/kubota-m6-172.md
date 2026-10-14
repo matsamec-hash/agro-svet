@@ -15,7 +15,6 @@ engine: Kubota V6108, 4-циліндровий, 6,1 л
 transmission: Powershift 24/24, опційно CVT
 seriesName: M6 Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.kubota.cz/produkty/traktory
 highlights:
 - 175 кінських сил від чотирициліндрового Kubota V6108 6,1 л
 - Трансмісія Powershift 24/24, опційно CVT

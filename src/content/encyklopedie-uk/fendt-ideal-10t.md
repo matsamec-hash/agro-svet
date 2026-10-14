@@ -13,7 +13,7 @@ engine: MAN, 6-циліндровий, Stage V
 transmission: Гідростатичний хід, гусеничне шасі
 seriesName: IDEAL
 lastVerified: 2026-05-15
-sourceUrl: https://www.fendt.com/cz/kombajny/ideal
+sourceUrl: "https://www.fendt.com/int/agricultural-machinery/combines/fendt-ideal"
 highlights:
 - Флагманська модель серії IDEAL — гусеничне виконання 10T
 - Двороторна платформа з роторами HARVEST CORE

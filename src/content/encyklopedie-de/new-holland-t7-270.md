@@ -15,7 +15,7 @@ engine: "FPT F6HFA, 6-Zylinder 6,7 l, Stage V"
 transmission: "Auto Command CVT stufenlos, max. 50 km/h"
 seriesName: "T7"
 lastVerified: 2026-05-02
-sourceUrl: "https://agriculture.newholland.com/eu/de-de/ausruestung/produkte/landwirtschaftliche-traktoren/t7-series"
+sourceUrl: "https://agriculture.newholland.com/de-de/europe/produkte/traktoren/t7-lwb-mit-plm-intelligence"
 highlights:
   - "270 PS mit Leistungsreserve für anspruchsvolle Bedingungen"
   - "PLM Intelligence — Precision Farming direkt im Traktor integriert"

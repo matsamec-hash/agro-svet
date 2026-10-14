@@ -15,7 +15,7 @@ engine: "Deutz, 4-cylindrowy, Stage V"
 transmission: "Powershift, RVshift 20F/16R lub TTV (CVT)"
 seriesName: "6C Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.deutz-fahr.com/cs-cz/traktory"
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/6c-series"
 highlights:
   - "143 konie z czterocylindrowego silnika Deutz Stage V"
   - "Trzy warianty przekładni: Powershift, RVshift lub TTV (CVT)"

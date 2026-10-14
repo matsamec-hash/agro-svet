@@ -13,7 +13,7 @@ engine: "MAN, 6-Zylinder, Stage V"
 transmission: "Hydrostatischer Fahrantrieb, Raupenfahrwerk"
 seriesName: "IDEAL"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.fendt.com/de/maehdrescher/ideal"
+sourceUrl: "https://www.fendt.com/de/landmaschinen/maehdrescher/fendt-ideal"
 highlights:
   - "Spitzenmodell der Baureihe IDEAL — Raupenausführung 10T"
   - "Zweirotorplattform mit den Rotoren HARVEST CORE"

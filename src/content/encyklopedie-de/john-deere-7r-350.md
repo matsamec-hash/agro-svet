@@ -15,7 +15,7 @@ engine: "PowerTech PSS 9.0 L, 6-Zylinder, Stage V"
 transmission: "e23 PowerShift 23/11 oder AutoPowr IVT, max. 40/50 km/h"
 seriesName: "7R Gen3"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.deere.de/de/traktoren/grosse-traktoren/7r-serie/"
+sourceUrl: "https://www.deere.de/de-de/produkte-und-loesungen/traktoren/grosstraktoren/7r-350-traktor-oda3mfjx"
 youtubeId: "WWryeED9B4Y"
 youtubeTitle: "John Deere 7R 350 Walkaround"
 highlights:

@@ -15,7 +15,7 @@ engine: Iveco F5C, 4-válec, 3,2 L
 transmission: 12/12 synchronizovaná
 seriesName: Major
 lastVerified: 2026-05-15
-sourceUrl: https://www.zetor.cz/zetor-major
+sourceUrl: "https://www.zetor.cz/file/zetor-major-cz.pdf"
 highlights:
 - 77 koní zo štvorvalca Iveco F5C 3,2 L
 - Synchronizovaná prevodovka 12/12

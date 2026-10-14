@@ -15,7 +15,7 @@ engine: "FPT Cursor 13, 6-cylindrowy, Stage V"
 transmission: "Napęd hydrostatyczny"
 seriesName: "Axial-Flow 150/250 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.caseih.com/emea/cs-cz/products/harvesting/axial-flow-combines"
+sourceUrl: "https://www.caseih.com/pl-pl/poland/produkty/sprzet-zniwny/kombajny-axial-flow-serii-250"
 highlights:
   - "634 koni — flagowy kombajn Case IH"
   - "Jednorotorowy system Axial-Flow — wynalazek Case IH z 1977 roku"

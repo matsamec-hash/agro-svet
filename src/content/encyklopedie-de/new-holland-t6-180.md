@@ -15,7 +15,7 @@ engine: "FPT NEF 6,7 L, 6-Zylinder, Stage V"
 transmission: "Electro Command 16/16 oder Auto Command CVT"
 seriesName: "T6 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://agriculture.newholland.com/eu/de-de/ausruestung/produkte/landwirtschaftliche-traktoren/t6-series"
+sourceUrl: "https://agriculture.newholland.com/de-de/europe/produkte/traktoren/t6-stufe-v"
 highlights:
   - "180 PS aus dem Sechszylinder FPT NEF 6,7 L"
   - "Getriebewahl Electro Command (16/16) oder Auto Command CVT"

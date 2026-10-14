@@ -15,7 +15,7 @@ engine: "6-Zylinder, Stage V"
 transmission: "Hydrostatischer Fahrantrieb"
 seriesName: "Trion"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/sklizen/kombajny/trion"
+sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/sklizeci-mlaticky/trion-700"
 youtubeId: "-KIN7Vlg_sk"
 youtubeTitle: "Claas Trion 750 — Demo und Walkaround"
 highlights:

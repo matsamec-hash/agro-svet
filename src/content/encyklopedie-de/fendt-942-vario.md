@@ -15,7 +15,7 @@ engine: "MAN D3876, 6-Zylinder, 9,0 L, Stage V"
 transmission: "Vario, stufenlos (CVT) mit VarioDrive-Antrieb"
 seriesName: "900 Vario"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.fendt.com/de/traktoren/900-vario"
+sourceUrl: "https://www.fendt.com/de/landmaschinen/traktoren/fendt-900-vario"
 youtubeId: "ByCerXS8Row"
 youtubeTitle: "Fendt 942 Vario Profi+ — Walkaround"
 highlights:

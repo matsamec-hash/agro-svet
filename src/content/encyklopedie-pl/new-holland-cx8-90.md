@@ -15,7 +15,7 @@ engine: "FPT, 6-cylindrowy, Stage V"
 transmission: "Napęd hydrostatyczny"
 seriesName: "CX Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.newholland.com/cs-cz/zemedelska-technika/produkty/sklizne/kombajny/cx"
+sourceUrl: "https://agriculture.newholland.com/pl-pl/europe/produkty/kombajny-zbozowe/cx7-i-cx8-stage-v"
 highlights:
   - "Szczytowy kombajn konwencjonalny serii CX — 490 koni"
   - "Klasyczny system omłotu: bęben i wytrząsacze"

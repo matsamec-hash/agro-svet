@@ -15,7 +15,7 @@ engine: "Zetor, 4-Zylinder, Stage V"
 transmission: "Lastschaltung (HSX)"
 seriesName: "Forterra HSX"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.zetor.com/cs/forterra"
+sourceUrl: "https://www.zetor.cz/file/traktory-forterra-cz.pdf"
 youtubeId: "VHg-REzI5Y4"
 youtubeTitle: "Zetor Forterra HSX 150 — Arbeit mit dem Güllefass"
 highlights:

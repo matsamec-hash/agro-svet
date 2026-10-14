@@ -15,7 +15,8 @@ engine: "John Deere PowerTech 13,5 L, 6-cylindrowy, Stage V"
 transmission: "Napęd hydrostatyczny"
 seriesName: "S Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.deere.cz/cs/sklizen/kombajny/"
+sourceUrl: "https://web.archive.org/web/20210605140110/https://www.deere.co.uk/en/combines/s700-series/s790/"
+sourceName: "deere.co.uk (Wayback Machine, 2021)"
 highlights:
   - "Szczytowy jednorotorowy kombajn serii S — 543 koni"
   - "Zbiornik ziarna 14 800 litrów"

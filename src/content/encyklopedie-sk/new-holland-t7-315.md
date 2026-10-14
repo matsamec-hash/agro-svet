@@ -15,7 +15,7 @@ engine: FPT, 6-válec, Stage V
 transmission: Auto Command (bezstupňová CVT)
 seriesName: T7 Series
 lastVerified: 2026-05-14
-sourceUrl: https://www.newholland.com/cs-cz/zemedelska-technika/produkty/traktory/t7
+sourceUrl: "https://agriculture.newholland.com/en-gb/europe/products/agricultural-tractors/t7-heavy-duty-with-plm-intelligence"
 youtubeId: hkvedZ6TLtk
 youtubeTitle: New Holland T7.315 — demo walkaround
 highlights:

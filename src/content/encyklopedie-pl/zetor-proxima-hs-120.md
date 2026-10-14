@@ -15,7 +15,7 @@ engine: "Zetor 1204, 4-cylindrowy, Stage V"
 transmission: "High Spec (HS) z grupami power shift"
 seriesName: "Proxima HS"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.zetor.com/cs/proxima"
+sourceUrl: "https://www.zetor.cz/file/22ND_Leaflet_PROXIMA_CZ_Stage_V.pdf"
 highlights:
   - "Własny silnik Zetor 1204 — marka z własną fabryką silników"
   - "Specyfikacja HS (High Spec) z grupami power shift"
