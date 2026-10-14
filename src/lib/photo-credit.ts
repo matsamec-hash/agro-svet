@@ -116,9 +116,14 @@ function creditOf(node: Record<string, unknown>): PhotoCredit | null {
     pick(src, (k) => /licen[sc]e/.test(k) && !k.includes('url')) ??
     pick(node, (k) => /licen[sc]e/.test(k) && !k.includes('url')) ??
     '';
+  // Zdroj = odkaz na konkrétní soubor. `imageLicenseUrl` (agro-historie.json)
+  // míří na text licence — dokud tu stál ve stejné skupině jako `imageSource`,
+  // vyhrával pořadím klíčů a „zdroj" v bloku Fotografie odkazoval na licenci.
   const source =
-    pick(src, (k) => /(source|crediturl|licenceurl|licenseurl|fileurl)/.test(k)) ??
-    pick(node, (k) => /(source|crediturl|licenceurl|licenseurl|fileurl)/.test(k)) ??
+    pick(src, (k) => /(source|crediturl|fileurl)/.test(k)) ??
+    pick(node, (k) => /(source|crediturl|fileurl)/.test(k)) ??
+    pick(src, (k) => /(licenceurl|licenseurl)/.test(k)) ??
+    pick(node, (k) => /(licenceurl|licenseurl)/.test(k)) ??
     undefined;
 
   if (!author && !license) return null;
@@ -503,6 +508,15 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
     author: 'JDDeutschland',
     license: 'CC BY-SA 4.0',
     source: 'https://commons.wikimedia.org/wiki/File:9RX_830.jpg',
+  },
+  // Řádek v databázi kredit nemá a název souboru původ neprozradí. Dohledáno
+  // 13. 10. 2026 porovnáním otisků s výsledky vyhledávání ve fotobankách
+  // (odchylka 2/64 = tentýž snímek).
+  'https://cdn.samecdigital.com/rehost-claas-lexion-8900-rekord.webp': {
+    author: 'Steven Weeks',
+    license: 'Unsplash License',
+    licenseUrl: 'https://unsplash.com/license',
+    source: 'https://unsplash.com/photos/green-plant-on-brown-soil-DUPFowqI6oI',
   },
 };
 

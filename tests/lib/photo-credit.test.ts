@@ -405,3 +405,17 @@ describe('žádná vymyšlená licence v nástrojích', () => {
     expect(nalezy, nalezy.join('\n')).toHaveLength(0);
   });
 });
+
+describe('zdroj fotky je konkrétní soubor, ne text licence', () => {
+  it('historie techniky odkazuje na soubor na Commons', () => {
+    expect(creditFor('/images/historie/zetor-25.jpg')?.source).toBe(
+      'https://commons.wikimedia.org/wiki/File:Zetor_25_at_Legendy_2018_in_Prague.jpg',
+    );
+  });
+  it('žádný kredit nemá jako zdroj odkaz na licenci', () => {
+    const spatne = Object.entries(PHOTO_CREDITS)
+      .filter(([, c]) => /creativecommons\.org\/(licenses|publicdomain)/.test(c.source ?? ''))
+      .map(([k]) => k);
+    expect(spatne).toEqual([]);
+  });
+});
