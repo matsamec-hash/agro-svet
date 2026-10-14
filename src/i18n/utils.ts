@@ -354,12 +354,28 @@ export const navHref = localizeInternalHref;
  *  `available` = jazyky, ve kterých existuje obsah TÉTO stránky (locals.
  *  availableLocales). Chybí-li v nich cíl, míří přepínač na hub sekce — detail
  *  bez překladu vrací 404, ačkoli je sekce launchnutá. */
+/** Sekce, které existují jen v jednom jazyce (jurisdikční landingy, PL poradniki).
+ *  Stránka pod jiným locale vrací 404 a cs ekvivalent nemá — přepínač proto
+ *  míří na homepage cílového jazyka. Dřív vedl z /pl/poradniki/… na /poradniki/…
+ *  (404 pro cs) a takových odkazů Google našel přes 20. */
+export const LOCALE_ONLY_SECTIONS: Readonly<Record<string, Locale>> = {
+  poradniki: 'pl',
+  'doplaty-bezposrednie': 'pl',
+  ekoschematy: 'pl',
+  direktzahlungen: 'de',
+  'direktzahlungen-oesterreich': 'de',
+  'oeko-regelungen': 'de',
+  oepul: 'de',
+};
+
 export function langSwitchHref(
   target: Locale,
   path: string,
   hiddenNewsCats: string[],
   available?: readonly Locale[],
 ): string {
+  const owner = LOCALE_ONLY_SECTIONS[path.split('/').filter(Boolean)[0] ?? ''];
+  if (owner && owner !== target) return localizePath(target, '/');
   if (available && !available.includes(target)) {
     const section = path.split('/').filter(Boolean)[0];
     path = section ? `/${section}/` : '/';
