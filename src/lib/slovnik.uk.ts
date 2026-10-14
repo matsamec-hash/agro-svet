@@ -3589,8 +3589,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "anc-platba",
       "podminenost"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Dobrý_zemědělský_a_environmentální_stav",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Для чого слугує DZES?",
@@ -3617,8 +3615,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "anc-platba",
       "cap-2024"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Jednotná_platba_na_plochu",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як розраховується SAPS?",
@@ -3665,7 +3661,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ekoschemata",
       "podminenost"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Nitrátová_směrnice",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%94%D0%B8%D1%80%D0%B5%D0%BA%D1%82%D0%B8%D0%B2%D0%B0_%D0%BF%D1%80%D0%BE_%D0%BD%D1%96%D1%82%D1%80%D0%B0%D1%82%D0%B8",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -3742,8 +3738,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "prv",
       "cap-2024"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Ekoplatba",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Для чого слугують екосхеми?",
@@ -3774,8 +3768,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "prv",
       "gaec"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Podmíněnost",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що таке умовність у сільському господарстві?",
@@ -3806,8 +3798,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ekoschemata",
       "cap-2024"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Zastropování",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що означає обмеження прямих платежів?",
@@ -3838,7 +3828,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "zastropovani",
       "ozeleneni"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Program_rozvoje_venkova",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Program_rozvoje_venkova",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -3867,8 +3857,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ozeleneni",
       "redistributivni-platba"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Platba_pro_mladé_zemědělce",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що таке виплата для молодих фермерів?",
@@ -3899,8 +3887,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "prv",
       "cap-2024"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Ozelenění",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що таке озеленення в сільському господарстві?",
@@ -4297,8 +4283,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "powershift",
       "auto-steering"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Load_sensing",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як працює load-sensing гідравліка?",
@@ -4325,7 +4309,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "common-rail",
       "emisni-normy-stage"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Intercooler",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D0%BA%D1%83%D0%BB%D0%B5%D1%80",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4354,8 +4338,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "emisni-normy-stage",
       "auto-steering"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Variabilní_geometrie_turba",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як працює турбіна зі змінною геометрією?",
@@ -4382,7 +4364,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "auto-steering",
       "teleskopicky-manipulator"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Posilovač_řízení",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9F%D1%96%D0%B4%D1%81%D0%B8%D0%BB%D1%8E%D0%B2%D0%B0%D1%87_%D0%BA%D0%B5%D1%80%D0%BC%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4410,8 +4392,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "celni-nakladac",
       "auto-steering"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Vývodový_hřídel",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Для чого слугує передній вал відбору потужності?",
@@ -4438,8 +4418,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "hloubkove-kypreni",
       "predsetova-priprava"
     ],
-    "externalUrl": "uk.wikipedia.org/wiki/Smykování",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що таке буксування у тракторів?",

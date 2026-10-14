@@ -293,7 +293,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "CAP 2024 (Common Agricultural Policy, česky SZP) je program priamych platieb EÚ pre poľnohospodárov v období 2023–2027. Hlavné platby: BISS, CISS, EKO, ANC, VCS.",
-    "longDef": "Spoločná poľnohospodárska politika (SZP, EN: CAP — Common Agricultural Policy) je hlavný finančný nástroj EÚ pre podporu poľnohospodárstva. Aktuálne obdobie 2023–2027 prinieslo zásadnú reformu — viac dôrazu na ekologiu (greening), redistribúciu v prospech menších fariem a zachovanie prírodných zdrojov. Hlavné složky pre SR (orientačné sadzby 2024):\n1. **BISS** (Basic Income Support for Sustainability) — Základná platba, podľa sadzby vyhlásenej PPA na daný rok na všetky spôsobilé plochy.\n2. **CISS** (Complementary Redistributive Income Support) — Redistributívna platba, podľa sadzby vyhlásenej PPA na daný rok pre prvých 150 ha. Podporuje malé farmy.\n3. **EKO-platba** (Eco-scheme) — Základnápodľa sadzby vyhlásenej PPA na daný rok, premiumpodľa sadzby vyhlásenej PPA na daný rok za viac eko-praktík (meziplodiny, biopásy, neproduktivní plochy).\n4. **ANC** (Areas with Natural Constraints) — Menej priaznivé oblasti, horskápodľa sadzby vyhlásenej PPA na daný rok, OA/SVpodľa sadzby vyhlásenej PPA na daný rok.\n5. **Mladý poľnohospodár** — Bonuspodľa sadzby vyhlásenej PPA na daný rok pre prvých 150 ha (do 40 rokov, max 5 rokov).\n6. **VCS** (Voluntary Coupled Support) — Citlivé sektory: chmeľpodľa sadzby vyhlásenej PPA na daný rok, polná zeleninapodľa sadzby vyhlásenej PPA na daný rok, cukrová repapodľa sadzby vyhlásenej PPA na daný rok, ovociepodľa sadzby vyhlásenej PPA na daný rok, zemiaky na škrobpodľa sadzby vyhlásenej PPA na daný rok, bielkovinypodľa sadzby vyhlásenej PPA na daný rok, ľanpodľa sadzby vyhlásenej PPA na daný rok, krmnépodľa sadzby vyhlásenej PPA na daný rok. Žiadosť sa podáva jednorazovo v Jednotnej žiadosti (typicky apríl–jún, podáva sa elektronicky cez Portál farmára SZIF). Záväzné sadzby SZIF zverejňuje po uzávierke kampane. Pre orientačný výpočet: [Kalkulačka dotácií CAP](/kalkulacka/dotacie-cap/).",
+    "longDef": "Spoločná poľnohospodárska politika (SZP, EN: CAP — Common Agricultural Policy) je hlavný finančný nástroj EÚ pre podporu poľnohospodárstva. Aktuálne obdobie 2023–2027 prinieslo zásadnú reformu — viac dôrazu na ekologiu (greening), redistribúciu v prospech menších fariem a zachovanie prírodných zdrojov. Hlavné složky pre SR (orientačné sadzby 2024):\n1. **BISS** (Basic Income Support for Sustainability) — Základná platba, podľa sadzby vyhlásenej PPA na daný rok na všetky spôsobilé plochy.\n2. **CISS** (Complementary Redistributive Income Support) — Redistributívna platba, podľa sadzby vyhlásenej PPA na daný rok pre prvých 150 ha. Podporuje malé farmy.\n3. **EKO-platba** (Eco-scheme) — Základnápodľa sadzby vyhlásenej PPA na daný rok, premiumpodľa sadzby vyhlásenej PPA na daný rok za viac eko-praktík (meziplodiny, biopásy, neproduktivní plochy).\n4. **ANC** (Areas with Natural Constraints) — Menej priaznivé oblasti, horskápodľa sadzby vyhlásenej PPA na daný rok, OA/SVpodľa sadzby vyhlásenej PPA na daný rok.\n5. **Mladý poľnohospodár** — Bonuspodľa sadzby vyhlásenej PPA na daný rok pre prvých 150 ha (do 40 rokov, max 5 rokov).\n6. **VCS** (Voluntary Coupled Support) — Citlivé sektory: chmeľpodľa sadzby vyhlásenej PPA na daný rok, polná zeleninapodľa sadzby vyhlásenej PPA na daný rok, cukrová repapodľa sadzby vyhlásenej PPA na daný rok, ovociepodľa sadzby vyhlásenej PPA na daný rok, zemiaky na škrobpodľa sadzby vyhlásenej PPA na daný rok, bielkovinypodľa sadzby vyhlásenej PPA na daný rok, ľanpodľa sadzby vyhlásenej PPA na daný rok, krmnépodľa sadzby vyhlásenej PPA na daný rok. Žiadosť sa podáva jednorazovo v Jednotnej žiadosti (typicky apríl–jún, podáva sa elektronicky cez Portál farmára SZIF). Záväzné sadzby SZIF zverejňuje po uzávierke kampane. Pre orientačný výpočet: [Kalkulačka dotácií CAP](/kalkulacka/dotace-cap/).",
     "related": [
       "eko-platba",
       "mezi-plodiny",
@@ -3590,8 +3590,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "anc-platba",
       "podminenost"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Dobrý_zemědělský_a_environmentální_stav",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží DZES?",
@@ -3618,8 +3616,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "anc-platba",
       "cap-2024"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Jednotná_platba_na_plochu",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá SAPS?",
@@ -3667,7 +3663,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "ekoschemata",
       "podminenost"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Nitrátová_směrnice",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Nitr%C3%A1tov%C3%A1_sm%C4%9Brnice",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -3746,8 +3742,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "prv",
       "cap-2024"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Ekoplatba",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží ekoschémata?",
@@ -3778,8 +3772,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "prv",
       "gaec"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Podmíněnost",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je to podmíněnost v zemědělství?",
@@ -3810,8 +3802,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "ekoschemata",
       "cap-2024"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Zastropování",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co znamená zastropování přímých plateb?",
@@ -3842,7 +3832,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "zastropovani",
       "ozeleneni"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Program_rozvoje_venkova",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Program_rozvoje_venkova",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -3871,8 +3861,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "ozeleneni",
       "redistributivni-platba"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Platba_pro_mladé_zemědělce",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je platba pro mladé zemědělce?",
@@ -3904,8 +3892,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "prv",
       "cap-2024"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Ozelenění",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je ozelenění v zemědělství?",
@@ -4302,8 +4288,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "powershift",
       "auto-steering"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Load_sensing",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak funguje load-sensing hydraulika?",
@@ -4330,7 +4314,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "common-rail",
       "emisni-normy-stage"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Intercooler",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Mezichladi%C4%8D",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4359,8 +4343,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "emisni-normy-stage",
       "auto-steering"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Variabilní_geometrie_turba",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak funguje variabilní geometrie turba?",
@@ -4387,7 +4369,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "auto-steering",
       "teleskopicky-manipulator"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Posilovač_řízení",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Posilova%C4%8D_%C5%99%C3%ADzen%C3%AD",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4415,8 +4397,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "celni-nakladac",
       "auto-steering"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Vývodový_hřídel",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží přední vývodový hřídel?",
@@ -4443,8 +4423,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "hloubkove-kypreni",
       "predsetova-priprava"
     ],
-    "externalUrl": "cs.wikipedia.org/wiki/Smykování",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je smykování u traktorů?",
