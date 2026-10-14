@@ -9,7 +9,7 @@ import Footer from '../components/Footer.astro';
 import { siteSchemaGraph } from '../lib/structured-data';
 import { imgSrcset } from '../lib/image-variants';
 import { pageTitle, absoluteUrl, metaDescription } from '../lib/head-meta';
-import { getLocaleFromUrl, t, stripLocale, isLaunchedPath, localizePath } from '../i18n/utils';
+import { getLocaleFromUrl, t, stripLocale, isLaunchedPath, isPrerenderedOnlyPath, localizePath } from '../i18n/utils';
 import { isLockedSectionPath } from '../i18n/nav';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
@@ -86,7 +86,11 @@ const effectiveNoindex = noindex || (locale === 'cs' ? false : !launchedForLocal
 // ve kterých jazycích reálně existuje — hreflang na jazyk bez překladu by
 // mířil na 404 (locals.availableLocales, nenastaveno = jen launch sekce).
 const availableLocales = Astro.locals.availableLocales;
-const hasContentIn = (l: 'sk' | 'uk' | 'pl' | 'de') => !availableLocales || availableLocales.includes(l);
+// cs-only cesty uvnitř launchnuté sekce (detail odrůdy, zeleninové plodiny,
+// cs kvízy…) pod locale prefixem vrací 302 na cs nebo 404 — alternate na ně
+// by Google hlásil jako nefunkční odkaz.
+const csOnlyPath = isPrerenderedOnlyPath(csRootPath);
+const hasContentIn = (l: 'sk' | 'uk' | 'pl' | 'de') => !csOnlyPath && (!availableLocales || availableLocales.includes(l));
 const skLaunchedPath = isLaunchedPath('sk', csRootPath) && !locked && hasContentIn('sk');
 const ukLaunchedPath = isLaunchedPath('uk', csRootPath) && !locked && hasContentIn('uk');
 const plLaunchedPath = isLaunchedPath('pl', csRootPath) && !locked && hasContentIn('pl');

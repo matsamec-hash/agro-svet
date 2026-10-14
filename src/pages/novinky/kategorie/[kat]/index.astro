@@ -15,12 +15,15 @@ import { localizePath, t, tf, plural, localizedCategory, bcp47 } from '../../../
 import { localizedTag } from '../../../../i18n/novinky-tagy';
 import { isNewsCategoryHidden } from '../../../../i18n/nav';
 import { NEWS_CATEGORIES, newsCategorySlug } from '../../../../lib/news-category';
+import { locales } from '../../../../i18n/config';
 
 const { kat } = Astro.params;
 if (!kat || !(NEWS_CATEGORIES as readonly string[]).includes(kat)) return Astro.rewrite('/404');
 const locale = Astro.locals.locale ?? 'cs';
 // Jurisdikčně uzamčená kategorie (CZ dotace/legislativa/trh) pod /sk neexistuje.
 if (isNewsCategoryHidden(locale, kat)) return Astro.rewrite('/404');
+// …a proto na ni nesmí mířit ani hreflang alternate cs stránky.
+Astro.locals.availableLocales = locales.filter((l) => !isNewsCategoryHidden(l, kat));
 
 // Popisy kategorií byly dvě cs/sk mapy přímo ve stránce — pl a uk tak spadly
 // do české. Teď jdou přes ui klíče `nov.kat.desc.<kat>` (parita hlídaná testem).

@@ -19,7 +19,9 @@ const csHref = langSwitchHref('cs', path, [], available);
 // hub místo 404, ať přepnutí jazyka nevede na chybovou stránku.
 const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk, available);
 // UK cíl: nelaunchnuté sekce padají na /uk/ (UK homepage) — nikdy 404.
-const ukHref = langSwitchHref('uk', path, [], available);
+// Skryté kategorie novinek (dotace, legislativa) jako u sk/pl — dřív se
+// předávalo [] a /novinky/kategorie/dotace/ vedlo na /uk/… 404.
+const ukHref = langSwitchHref('uk', path, HIDDEN_NEWS_CATEGORIES.uk, available);
 // PL cíl: nelaunchnuté sekce padají na /pl/ (PL homepage, noindex) — nikdy 404.
 const plHref = langSwitchHref('pl', path, HIDDEN_NEWS_CATEGORIES.pl, available);
 // DE cíl: nelaunchnuté sekce padaly na /de/ (DE homepage, noindex) — nikdy 404.
