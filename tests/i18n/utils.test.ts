@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   getLocaleFromUrl, stripLocale, localizePath, getAlternates, isSkLaunchedPath, langSwitchHref,
   isLaunchedPath, LAUNCHED_PREFIXES, navHref, localizeInternalHref,
+  ceskaVerzeNebo404,
 } from '../../src/i18n/utils';
 
 describe('getLocaleFromUrl', () => {
@@ -187,5 +188,23 @@ describe('localizeInternalHref', () => {
   it('navHref je identický alias', () => {
     expect(navHref('sk', '/stroje/')).toBe(localizeInternalHref('sk', '/stroje/'));
     expect(navHref('uk', '/novinky/')).toBe(localizeInternalHref('uk', '/novinky/'));
+  });
+});
+
+describe('ceskaVerzeNebo404', () => {
+  const astro = (locale: string, localizedPathname: string, search = '') => ({
+    locals: { locale, localizedPathname } as App.Locals,
+    url: new URL(`https://agro-svet.cz${localizedPathname}${search}`),
+    redirect: (path: string, status?: number) => new Response(null, { status, headers: { location: path } }),
+    rewrite: async (path: string) => new Response(path, { status: 404 }),
+  });
+  it('pod prefixem přesměruje 302 na českou cestu i s query', async () => {
+    const res = await ceskaVerzeNebo404(astro('sk', '/sk/novinky/pestovani-lanyzu/', '?utm=x') as never);
+    expect(res.status).toBe(302);
+    expect(res.headers.get('location')).toBe('/novinky/pestovani-lanyzu/?utm=x');
+  });
+  it('pod češtinou vrací 404 — jinak by se přesměrovávala sama na sebe', async () => {
+    const res = await ceskaVerzeNebo404(astro('cs', '/novinky/neexistuje/') as never);
+    expect(res.status).toBe(404);
   });
 });

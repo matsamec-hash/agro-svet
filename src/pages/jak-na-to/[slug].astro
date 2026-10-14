@@ -8,7 +8,7 @@ import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, howToSchema, faqPageSchema } from '../../lib/structured-data';
-import { useTranslations, getLocaleFromUrl, localizePath, BCP47 } from '../../i18n/utils';
+import { useTranslations, getLocaleFromUrl, localizePath, BCP47, ceskaVerzeNebo404 } from '../../i18n/utils';
 import type { Locale } from '../../i18n/config';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -23,9 +23,9 @@ const { slug } = Astro.params;
 const HOWTO_COLLECTION = { cs: 'howto', sk: 'howtoSk', uk: 'howtoUk', de: 'howtoDe' } as const;
 const items = await getCollection(HOWTO_COLLECTION[locale]);
 const item = items.find((i) => i.id === slug);
-if (!item) return Astro.rewrite('/404');
+if (!item) return ceskaVerzeNebo404(Astro);
 // Návod v některém jazyce záměrně chybí (jurisdikční: registrace včelařů,
-// dotace SZIF) a tam vrací 404 → hreflang ani přepínač jazyka na něj nesmí.
+// dotace SZIF) a tam přesměrovává na češtinu → hreflang ani přepínač jazyka na něj nesmí.
 const availableLocales: Locale[] = [];
 for (const [loc, coll] of Object.entries(HOWTO_COLLECTION) as [Locale, (typeof HOWTO_COLLECTION)[keyof typeof HOWTO_COLLECTION]][]) {
   if ((await getCollection(coll)).some((i) => i.id === slug)) availableLocales.push(loc);

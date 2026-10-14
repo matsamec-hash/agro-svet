@@ -21,7 +21,7 @@ const tituly = (locale === 'sk' ? await getCollection('dotaceSk') : await getCol
 );
 // Detail titulu existuje jen pod cs a sk (viz [slug].astro). Pod ostatními
 // prefixy (pl — sekce nelaunchnutá, celá stránka noindex) vede výpis na český
-// detail, ne na /pl/dotace/<slug>/, které vrací 404.
+// detail, ne na /pl/dotace/<slug>/, které jen přesměrovává na češtinu.
 const titulBase = locale === 'sk' ? linkBase(locale) : '';
 const kolaData = locale === 'sk' ? kolaSk : kolaCs;
 const kola = kolaData.kola;

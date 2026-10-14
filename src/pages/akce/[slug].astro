@@ -1,4 +1,5 @@
 ---
+import { ceskaVerzeNebo404 } from '../../i18n/utils';
 // Detail zemědělské akce — long-tail SEO stránka s Event JSON-LD.
 // Statické routy /akce/typ/ a /akce/kraj/ mají v Astro přednost, takže sem
 // spadne jen skutečný slug akce.
@@ -13,14 +14,14 @@ import { eventSchema, breadcrumbSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 import type { Akce } from '../../lib/akce';
 
-// Akce jsou české záznamy bez překladu → pod /sk|/uk|/pl 404, stejně jako
-// nepřeložený návod v /jak-na-to. Dřív tu byl celý český detail s HTTP 200
+// Akce jsou české záznamy bez překladu → pod /sk|/uk|/pl 302 na českou verzi
+// (ceskaVerzeNebo404). Dřív tu byl celý český detail s HTTP 200
 // a jen `noindex`. Výpisy /akce/* pod prefixem zůstávají (noindex).
-if ((Astro.locals.locale ?? 'cs') !== 'cs') return Astro.rewrite('/404');
+if ((Astro.locals.locale ?? 'cs') !== 'cs') return ceskaVerzeNebo404(Astro);
 
 const { slug } = Astro.params;
 const akce = await getBySlug(String(slug));
-if (!akce) return Astro.rewrite('/404');
+if (!akce) return ceskaVerzeNebo404(Astro);
 
 function terminInput(a: Akce): TerminInput {
   return a.druh === 'jednorazova'

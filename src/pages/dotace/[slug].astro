@@ -1,4 +1,5 @@
 ---
+import { ceskaVerzeNebo404 } from '../../i18n/utils';
 // SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
 // locals.locale. sk číta z 'dotaceSk' (PPA SR výzvy), BEZ cs fallbacku —
 // chýbajúci sk slug = 404 (nezobrazí cs obsah na /sk URL).
@@ -17,7 +18,7 @@ const loc = content[locale] ?? content.cs;
 const c = loc.detail;
 const { slug } = Astro.params;
 // Detail titulu má jen locale s vlastní kolekcí: cs (SZIF) a sk (PPA SR). Pro
-// ostatní (uk má vlastní rozcestník, pl nic) → 404 stejně jako /jak-na-to —
+// ostatní (uk má vlastní rozcestník, pl nic) → 302 na českou verzi —
 // dřív /pl/dotace/<slug>/ vracelo 200 s českým titulem a jen noindex.
 // Stránka /404, ne holé 404 s prázdným tělem.
 const titul = !slug
@@ -27,10 +28,10 @@ const titul = !slug
     : locale === 'sk'
       ? await getEntry('dotaceSk', slug)
       : undefined;
-if (!titul) return Astro.rewrite('/404');
+if (!titul) return ceskaVerzeNebo404(Astro);
 // cs (SZIF) a sk (PPA SR) mají různé tituly s různými slugy — tentýž slug
 // v druhém jazyce neexistuje. Bez toho by hreflang i přepínač jazyka mířily
-// na /sk|/uk/dotace/<cs-slug>/ (404); přepínač teď vede na hub /dotace/.
+// na /sk|/uk/dotace/<cs-slug>/ (přesměrování); přepínač teď vede na hub /dotace/.
 Astro.locals.availableLocales = [locale];
 
 // processes remark/rehype plugins; body rendered via contentHtml

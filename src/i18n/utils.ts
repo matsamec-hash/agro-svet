@@ -449,3 +449,23 @@ export const BCP47: Record<Locale, string> = {
 export function bcp47(locale: string): string {
   return BCP47[locale as Locale] ?? BCP47.cs;
 }
+
+/**
+ * Detail, který v jazyce prefixu neexistuje → 302 na českou verzi; pod češtinou
+ * 404 (není kam). Dřív se pod /sk|uk|pl servíroval celý český text s HTTP 200
+ * a jen `noindex`. Čistá 404 by ale zahodila prokliky na URL, které Google už
+ * zná (např. /sk/novinky/pestovani-lanyzu/ — 10 prokliků za 3 měsíce v GSC)
+ * i odkazy zvenku. 302, ne 301: překlad může přibýt a trvalý redirect by
+ * prohlížeče i CDN držely dál. Stejně to dělá middleware u cs-only sekcí.
+ */
+export function ceskaVerzeNebo404(astro: {
+  locals: App.Locals;
+  url: URL;
+  redirect: (path: string, status?: 301 | 302 | 303 | 307 | 308) => Response;
+  rewrite: (path: string) => Promise<Response>;
+}): Response | Promise<Response> {
+  const locale = astro.locals.locale ?? defaultLocale;
+  if (locale === defaultLocale) return astro.rewrite('/404');
+  const { path } = stripLocale(astro.locals.localizedPathname ?? astro.url.pathname);
+  return astro.redirect(path + astro.url.search, 302);
+}

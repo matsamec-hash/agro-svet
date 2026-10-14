@@ -2,7 +2,8 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 
 /**
- * Nepřeložený obsah pod jazykovým prefixem = 404, ne český text.
+ * Nepřeložený obsah pod jazykovým prefixem = 302 na českou verzi, ne český
+ * text pod cizím `lang` (dřív HTTP 200 + noindex).
  *
  * `/sk|uk|pl/novinky/<slug>/` bez řádku v `article_translations` vracelo
  * HTTP 200 s ČESKÝM tělem pod cizím `lang` — zachraňoval to jen `noindex`.
@@ -93,17 +94,18 @@ async function renderArticle(locale: string, translations: Row[]): Promise<Respo
 
 describe('novinky pod jazykovým prefixem', () => {
   for (const locale of ['sk', 'uk', 'pl']) {
-    it(`/${locale}/novinky/<slug>/ bez překladu → 404, žádný český text`, async () => {
+    it(`/${locale}/novinky/<slug>/ bez překladu → 302 na češtinu, žádný český text pod prefixem`, async () => {
       const res = await renderArticle(locale, []);
       const html = await res.text();
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(302);
+      expect(res.headers.get('location')).toBe(`/novinky/${ARTICLE.slug}/`);
       expect(html).not.toContain('Český text článku.');
     });
   }
 
-  it('prázdný řádek překladu (bez titulku) se nepočítá jako překlad → 404', async () => {
+  it('prázdný řádek překladu (bez titulku) se nepočítá jako překlad → 302', async () => {
     const res = await renderArticle('uk', [{ article_id: 'a1', locale: 'uk', title: '  ', perex: null, content: null }]);
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(302);
   });
 
   it('přeložený článek pod /uk/ → 200 s ukrajinským textem, indexovatelný', async () => {
@@ -173,12 +175,13 @@ describe('obsahové kolekce pod jazykovým prefixem', () => {
 
   for (const c of cases) {
     for (const locale of c.locales) {
-      it(`/${locale}${c.path} bez překladu → 404, česká kolekce se nečte`, async () => {
+      it(`/${locale}${c.path} bez překladu → 302 na češtinu, česká kolekce se nečte`, async () => {
         const calls = await mockCsOnlyContent([c.cs]);
         const page = (await import(/* @vite-ignore */ `../../src/pages/${c.route}`)).default;
         const res = await renderPage(page, locale, c.path, { slug: c.slug });
         const html = await res.text();
-        expect(res.status).toBe(404);
+        expect(res.status).toBe(302);
+        expect(res.headers.get('location')).toBe(c.path);
         expect(html).not.toContain('Český text položky.');
         expect(calls, `pod /${locale}/ se četla česká kolekce '${c.cs}'`).not.toContain(c.cs);
       });
@@ -191,13 +194,14 @@ describe('obsahové kolekce pod jazykovým prefixem', () => {
 // ---------------------------------------------------------------------------
 
 describe('cs-only články pod jazykovým prefixem', () => {
-  it('/<locale>/historie/milnik/<slug>/ → 404, cs zůstává 200', async () => {
+  it('/<locale>/historie/milnik/<slug>/ → 302 na češtinu, cs zůstává 200', async () => {
     const { milestones } = await import('../../src/lib/historie');
     const m = milestones.find((x) => x.slug)!;
     const page = (await import('../../src/pages/historie/milnik/[slug].astro')).default;
     for (const locale of ['sk', 'uk', 'pl']) {
       const res = await renderPage(page, locale, `/historie/milnik/${m.slug}/`, { slug: m.slug! });
-      expect(res.status, `/${locale}/historie/milnik/${m.slug}/`).toBe(404);
+      expect(res.status, `/${locale}/historie/milnik/${m.slug}/`).toBe(302);
+      expect(res.headers.get('location')).toBe(`/historie/milnik/${m.slug}/`);
       expect(await res.text()).not.toContain(m.title);
     }
     const cs = await renderPage(page, 'cs', `/historie/milnik/${m.slug}/`, { slug: m.slug! });
@@ -205,25 +209,27 @@ describe('cs-only články pod jazykovým prefixem', () => {
     expect(await cs.text()).toContain(m.title);
   });
 
-  it('/<locale>/historie/technika/<slug>/ → 404, cs zůstává 200', async () => {
+  it('/<locale>/historie/technika/<slug>/ → 302 na češtinu, cs zůstává 200', async () => {
     const { machines } = await import('../../src/lib/historie');
     const m = machines[0]!;
     const page = (await import('../../src/pages/historie/technika/[slug].astro')).default;
     for (const locale of ['sk', 'uk', 'pl']) {
       const res = await renderPage(page, locale, `/historie/technika/${m.slug}/`, { slug: m.slug });
-      expect(res.status, `/${locale}/historie/technika/${m.slug}/`).toBe(404);
+      expect(res.status, `/${locale}/historie/technika/${m.slug}/`).toBe(302);
+      expect(res.headers.get('location')).toBe(`/historie/technika/${m.slug}/`);
       expect(await res.text()).not.toContain(m.story.slice(0, 60));
     }
     const cs = await renderPage(page, 'cs', `/historie/technika/${m.slug}/`, { slug: m.slug });
     expect(cs.status).toBe(200);
   });
 
-  it('/<locale>/pruvodce/<článek>/ → 404 pod uk a pl, sk (přeložený) a cs zůstávají 200', async () => {
+  it('/<locale>/pruvodce/<článek>/ → 302 na češtinu pod uk a pl, sk (přeložený) a cs zůstávají 200', async () => {
     const page = (await import('../../src/pages/pruvodce/jak-vybrat-postrikovac.astro')).default;
     const path = '/pruvodce/jak-vybrat-postrikovac/';
     for (const locale of ['uk', 'pl']) {
       const res = await renderPage(page, locale, path, {});
-      expect(res.status, `/${locale}${path}`).toBe(404);
+      expect(res.status, `/${locale}${path}`).toBe(302);
+      expect(res.headers.get('location')).toBe(path);
       expect(await res.text()).not.toContain('Jak vybrat postřikovač');
     }
     const sk = await renderPage(page, 'sk', path, {});
@@ -234,7 +240,7 @@ describe('cs-only články pod jazykovým prefixem', () => {
     expect(await cs.text()).toContain('Jak vybrat postřikovač');
   });
 
-  it('/<locale>/akce/<slug>/ → 404 a databáze se vůbec nečte', async () => {
+  it('/<locale>/akce/<slug>/ → 302 na češtinu a databáze se vůbec nečte', async () => {
     const getBySlug = vi.fn(async () => null);
     vi.resetModules();
     vi.doMock('../../src/lib/akce-supabase', () => ({
@@ -246,7 +252,8 @@ describe('cs-only články pod jazykovým prefixem', () => {
       const page = (await import('../../src/pages/akce/[slug].astro')).default;
       for (const locale of ['sk', 'uk', 'pl']) {
         const res = await renderPage(page, locale, '/akce/den-zemedelce/', { slug: 'den-zemedelce' });
-        expect(res.status, `/${locale}/akce/den-zemedelce/`).toBe(404);
+        expect(res.status, `/${locale}/akce/den-zemedelce/`).toBe(302);
+        expect(res.headers.get('location')).toBe('/akce/den-zemedelce/');
       }
       expect(getBySlug).not.toHaveBeenCalled();
     } finally {

@@ -9,7 +9,7 @@ import Anketa from '../../components/Anketa.astro';
 import { akcieProZnacku, ZNACKA_LOGO, ZNACKA_LOGO_LICENCE } from '../../lib/agro-integrace';
 import { brandPairs } from '../../lib/brand-comparator';
 import { tierLists, rankForTierList } from '../../lib/tier-lists';
-import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47, isLaunchedPath } from '../../i18n/utils';
+import { useTranslations, tf, getLocaleFromUrl, localizePath, localizeInternalHref, bcp47, isLaunchedPath, ceskaVerzeNebo404 } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -21,14 +21,14 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-// Overlay kolekce dle locale, BEZ cs fallbacku — chybějící překlad značky = 404,
+// Overlay kolekce dle locale, BEZ cs fallbacku — chybějící překlad značky = 302 na češtinu,
 // stejně jako /jak-na-to a /encyklopedie. Hub (/znacky/) čte stejnou kolekci,
 // takže na nepřeloženou značku pod prefixem nikdy neodkazuje. Locale bez
 // kolekce → 404 místo getEntry(undefined) → 500.
 const ZN_COLLECTION = { cs: 'znacky', sk: 'znackySk', uk: 'znackyUk', pl: 'znackyPl', de: 'znackyDe' } as const;
 const znColl = (ZN_COLLECTION as Record<string, (typeof ZN_COLLECTION)[keyof typeof ZN_COLLECTION] | undefined>)[locale];
 const znacka = znColl ? await getEntry(znColl, slug!) : undefined;
-if (!znacka) return Astro.rewrite('/404');
+if (!znacka) return ceskaVerzeNebo404(Astro);
 const { Content, headings } = await render(znacka);
 
 const d = znacka.data as any;
