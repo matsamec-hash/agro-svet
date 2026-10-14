@@ -87,7 +87,7 @@ const era = (y: number) => (y < 1948 ? 'prvni-rep' : y < 1990 ? 'socialismus' : 
         <article id={`rok-${c.year}`} class="dt-clip">
           <div class="dt-clip-head">
             <span class="dt-rubrika">{topicLabel[c.topic] ?? c.rubrika}</span>
-            <span class="dt-dateline">{c.source} · {c.date}</span>
+            <span class="dt-dateline">Rekonstrukce · ve stylu {c.source} · {c.date}</span>
           </div>
           <figure class="dt-fig dt-fig--sm">
             <div class="dt-cut"><svg viewBox="0 0 200 130" role="img" aria-label={c.figureCaption} set:html={svg[c.topic] ?? svg.traktor}></svg></div>
