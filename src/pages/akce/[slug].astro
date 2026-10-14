@@ -6,7 +6,7 @@ import { ceskaVerzeNebo404 } from '../../i18n/utils';
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
-import { getBySlug, listRelated, getAkceImages, listRocniky } from '../../lib/akce-supabase';
+import { getBySlug, listRelated, getAkceImages, listRocniky, nahradniRocnik } from '../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../lib/akce-recurrence';
 import { akceTypLabel, type AkceTyp } from '../../lib/akce-constants';
 import { getKraje } from '../../lib/lokality';
@@ -21,7 +21,13 @@ if ((Astro.locals.locale ?? 'cs') !== 'cs') return ceskaVerzeNebo404(Astro);
 
 const { slug } = Astro.params;
 const akce = await getBySlug(String(slug));
-if (!akce) return ceskaVerzeNebo404(Astro);
+if (!akce) {
+  // Ročník, který z webu zmizel, posílá na jiný ročník téže akce (301) —
+  // jeho URL může mít v Google pozice i odkazy zvenku.
+  const nahrada = await nahradniRocnik(String(slug));
+  if (nahrada) return Astro.redirect(`/akce/${nahrada.slug}/`, 301);
+  return ceskaVerzeNebo404(Astro);
+}
 
 function terminInput(a: Akce): TerminInput {
   return a.druh === 'jednorazova'

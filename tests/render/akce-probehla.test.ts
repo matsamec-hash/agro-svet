@@ -18,16 +18,19 @@ const BASE = {
 const R2026 = { ...BASE, id: 'a', slug: 'den-zemedelce-kamen-2026', nazev: 'Den zemědělce 2026', stav: 'probehla', zacatek: '2026-09-13T07:00:00+00:00' };
 const R2027 = { ...BASE, id: 'b', slug: 'den-zemedelce-kamen-2027', nazev: 'Den zemědělce 2027', stav: 'zverejneno', zacatek: '2027-09-12T07:00:00+00:00', pristi_vyskyt: '2027-09-12T07:00:00+00:00' };
 
-async function render(rocniky: unknown[]) {
+async function render(rocniky: unknown[], opts: { chybi?: boolean; nahrada?: unknown } = {}) {
   vi.resetModules();
   vi.doMock('../../src/lib/akce-supabase', () => ({
-    getBySlug: async () => R2026,
+    getBySlug: async () => (opts.chybi ? null : R2026),
+    nahradniRocnik: async () => opts.nahrada ?? null,
     listRocniky: async () => rocniky,
     listRelated: async () => [],
     getAkceImages: async () => [],
   }));
   const page = (await import('../../src/pages/akce/[slug].astro')).default;
   const container = await AstroContainer.create();
+  // Astro.rewrite('/404') potřebuje v kontejneru routu, jinak hodí výjimku.
+  container.insertPageRoute('/404', (await import('../../src/pages/404.astro')).default);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return container.renderToResponse(page as any, {
     params: { slug: R2026.slug },
@@ -55,5 +58,16 @@ describe('proběhlá akce', () => {
     expect(html).toContain('Termín dalšího ročníku pořadatel zatím nezveřejnil');
     expect(html).toContain('href="https://denzemedelce.cz/"');
     expect(html).not.toContain('Další ročníky');
+  });
+
+  it('ročník, který z webu zmizel, přesměruje 301 na jiný ročník téže akce', async () => {
+    const res = await render([], { chybi: true, nahrada: R2027 });
+    expect(res.status).toBe(301);
+    expect(res.headers.get('location')).toBe('/akce/den-zemedelce-kamen-2027/');
+  });
+
+  it('bez náhradního ročníku zůstává 404', async () => {
+    const res = await render([], { chybi: true });
+    expect(res.status).toBe(404);
   });
 });

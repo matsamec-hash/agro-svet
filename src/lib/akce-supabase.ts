@@ -374,19 +374,44 @@ export function serieSlug(slug: string): string | null {
   return m ? m[1]! : null;
 }
 
+/**
+ * Akce, které putují mezi místy, mají v každém městě vlastní řadu slugů —
+ * Den zemědělce (Profi Press) byl 2023 v Kámeni, 2026 v Unčovicích a 2027 je
+ * zase v Kámeni. Řady ze stejné skupiny se berou jako ročníky jedné akce.
+ */
+const SKUPINY_RAD: string[][] = [['den-zemedelce-kamen', 'den-zemedelce-uncovice']];
+
+function radySkupiny(serie: string): string[] {
+  return SKUPINY_RAD.find((g) => g.includes(serie)) ?? [serie];
+}
+
 /** Všechny veřejné ročníky téže akce (včetně té zadané), od nejstaršího. */
 export async function listRocniky(slug: string): Promise<Akce[]> {
   const serie = serieSlug(slug);
   if (!serie) return [];
+  const rady = radySkupiny(serie);
   const sb = createServerClient();
   const { data, error } = await sb
     .from('akce')
     .select('*')
-    .like('slug', `${serie}-%`)
+    .or(rady.map((r) => `slug.like.${r}-*`).join(','))
     .in('stav', [...VEREJNE_STAVY])
     .order('zacatek', { ascending: true });
   if (error) throw error;
-  return ((data ?? []) as Akce[]).filter((a) => serieSlug(a.slug) === serie);
+  return ((data ?? []) as Akce[]).filter((a) => rady.includes(serieSlug(a.slug) ?? ''));
+}
+
+/**
+ * Kam poslat adresu ročníku, který na webu není (stažený, zamítnutý) —
+ * nejbližší nadcházející ročník téže akce, jinak poslední proběhlý. null = 404.
+ * Např. /akce/den-zemedelce-kamen-2026/: ročník vznikl odhadem a v Kámeni se
+ * v roce 2026 nekonal, Google ho ale zná jako nejnavštěvovanější stránku webu.
+ */
+export async function nahradniRocnik(slug: string, now = new Date()): Promise<Akce | null> {
+  const rocniky = (await listRocniky(slug)).filter((a) => a.slug !== slug);
+  if (rocniky.length === 0) return null;
+  const nyni = now.toISOString();
+  return rocniky.find((a) => a.stav === 'zverejneno' && (a.zacatek ?? '') >= nyni) ?? rocniky[rocniky.length - 1]!;
 }
 
 /** Pro sitemapu: akce, které proběhly za posledních `months` měsíců. */
