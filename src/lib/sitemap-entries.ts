@@ -17,7 +17,7 @@ import { listIndexableChoroby } from './choroby';
 import { expandedComparisonPairs, implementComparisonPairs } from './comparator';
 import { brandPairs } from './brand-comparator';
 import { createAnonClient } from './supabase';
-import { listPublishedForMaintenance } from './akce-supabase';
+import { listPublishedForMaintenance, listRecentlyPast } from './akce-supabase';
 import { AKCE_TYP_SLUGS } from './akce-constants';
 import { getKraje } from './lokality';
 import { AGRO_SVET_SITE_ID as NOVINKY_SITE_ID, SITE_URL } from './config';
@@ -153,8 +153,9 @@ export async function buildSitemapEntries(): Promise<UrlEntry[]> {
 
   // Zveřejněné akce (cs-only kalendář) — detail + landing URL níže.
   let akceDyn: Awaited<ReturnType<typeof listPublishedForMaintenance>> = [];
+  let akcePast: Awaited<ReturnType<typeof listRecentlyPast>> = [];
   try {
-    akceDyn = await listPublishedForMaintenance();
+    [akceDyn, akcePast] = await Promise.all([listPublishedForMaintenance(), listRecentlyPast()]);
   } catch (e) {
     console.error('sitemap akce query error', e);
   }
@@ -620,6 +621,16 @@ export async function buildSitemapEntries(): Promise<UrlEntry[]> {
     akceUpByKraj.set(a.kraj_slug, (akceUpByKraj.get(a.kraj_slug) ?? 0) + 1);
     const combo = `${a.typ}/${a.kraj_slug}`;
     akceUpByCombo.set(combo, (akceUpByCombo.get(combo) ?? 0) + 1);
+  }
+  // Proběhlé akce (13 měsíců zpět) — stránka dál nese hledání „<akce> <rok>"
+  // a odkaz na další ročník; starší ročníky už sitemapa nevypisuje.
+  for (const a of akcePast) {
+    urls.push({
+      loc: `${SITE_URL}/akce/${a.slug}/`,
+      changefreq: 'monthly',
+      priority: '0.4',
+      lastmod: (a as { updated_at?: string }).updated_at?.slice(0, 10) ?? STATIC_LASTMOD,
+    });
   }
   urls.push({ loc: `${SITE_URL}/akce/`, changefreq: 'daily', priority: '0.7', lastmod: STATIC_LASTMOD });
   // Typové stránky = evergreen kategorie (vlastní úvod) → vždy indexovatelné.

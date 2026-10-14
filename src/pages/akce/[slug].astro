@@ -6,7 +6,7 @@ import { ceskaVerzeNebo404 } from '../../i18n/utils';
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
-import { getBySlug, listRelated, getAkceImages } from '../../lib/akce-supabase';
+import { getBySlug, listRelated, getAkceImages, listRocniky } from '../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../lib/akce-recurrence';
 import { akceTypLabel, type AkceTyp } from '../../lib/akce-constants';
 import { getKraje } from '../../lib/lokality';
@@ -37,8 +37,15 @@ const heroImage = images[0] ?? null;
 const related = await listRelated(akce, 4);
 const canonical = `${SITE_URL}/akce/${akce.slug}/`;
 
+// Proběhlá akce zůstává veřejná (viz VEREJNE_STAVY) — bez odpočtu a kalendáře,
+// ale s jasným označením a cestou na další ročník téže akce.
+const probehla = akce.stav === 'probehla';
+const rocniky = await listRocniky(akce.slug);
+const ostatniRocniky = rocniky.filter((r) => r.slug !== akce.slug);
+const dalsiRocnik = ostatniRocniky.find((r) => (r.zacatek ?? '') > (akce.zacatek ?? ''));
+
 // .ics — start/end pro klientské sestavení kalendářní položky.
-const icsStart = akce.druh === 'jednorazova' ? (akce.zacatek ?? akce.pristi_vyskyt) : akce.pristi_vyskyt;
+const icsStart = probehla ? null : akce.druh === 'jednorazova' ? (akce.zacatek ?? akce.pristi_vyskyt) : akce.pristi_vyskyt;
 const icsEnd = akce.druh === 'jednorazova' ? akce.konec : null;
 
 // Mapový odkaz — geo pokud známe lat/lng, jinak fulltext obec + místo.
@@ -55,11 +62,14 @@ const breadcrumbJsonLd = breadcrumbSchema([
   { name: akce.nazev, url: canonical },
 ]);
 
-const metaDesc = akce.popis.length > 155 ? akce.popis.slice(0, 152) + '…' : akce.popis;
-
 function relTermin(a: Akce): string {
   return formatTermin(terminInput(a));
 }
+
+const metaZaklad = probehla
+  ? `Proběhlo ${termin}. ${dalsiRocnik ? `Další ročník: ${relTermin(dalsiRocnik)}. ` : ''}${akce.popis}`
+  : akce.popis;
+const metaDesc = metaZaklad.length > 155 ? metaZaklad.slice(0, 152) + '…' : metaZaklad;
 ---
 <Layout
   title={`${akce.nazev} — ${typLabel} ${akce.obec}`}
@@ -99,8 +109,19 @@ function relTermin(a: Akce): string {
     <header class="ad-head">
       <span class="ad-typ">{typLabel}</span>
       <h1>{akce.nazev}</h1>
-      {(icsStart ?? akce.pristi_vyskyt) && <span class="ad-countdown" id="ad-countdown" data-start={icsStart ?? akce.pristi_vyskyt}></span>}
+      {!probehla && (icsStart ?? akce.pristi_vyskyt) && <span class="ad-countdown" id="ad-countdown" data-start={icsStart ?? akce.pristi_vyskyt}></span>}
     </header>
+
+    {probehla && (
+      <div class="ad-probehla" role="status">
+        <strong>Tato akce už proběhla</strong> ({termin}).
+        {dalsiRocnik ? (
+          <> Další ročník: <a href={`/akce/${dalsiRocnik.slug}/`}>{dalsiRocnik.nazev}</a> — {relTermin(dalsiRocnik)}.</>
+        ) : (
+          <> Termín dalšího ročníku pořadatel zatím nezveřejnil{akce.web ? <> — sledujte <a href={akce.web} target="_blank" rel="noopener nofollow">web pořadatele</a></> : ''}.</>
+        )}
+      </div>
+    )}
 
     <div class="ad-grid">
       <article class="ad-main">
@@ -138,6 +159,22 @@ function relTermin(a: Akce): string {
         )}
       </aside>
     </div>
+
+    {ostatniRocniky.length > 0 && (
+      <section class="ad-related">
+        <h2>Další ročníky</h2>
+        <ul class="rel-list">
+          {ostatniRocniky.map((r) => (
+            <li>
+              <a href={`/akce/${r.slug}/`}>
+                <span class="rel-nazev">{r.nazev}</span>
+                <span class="rel-meta">{relTermin(r)}{r.stav === 'probehla' ? ' · proběhla' : ''}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     {related.length > 0 && (
       <section class="ad-related">
@@ -247,6 +284,9 @@ function relTermin(a: Akce): string {
   </script>
 
   <style>
+  .ad-probehla { margin: 0 0 20px; padding: 12px 16px; border-radius: 10px; background: #FFF6D6; border: 1px solid #F1D98A; color: #3a3320; font-size: 15px; line-height: 1.5; }
+  .ad-probehla a { color: inherit; font-weight: 700; text-decoration: underline; }
+
     .akce-detail { max-width: 1000px; margin: 0 auto; padding: 24px 20px 80px; }
     .crumbs { font-size: .85rem; color: #666; margin-bottom: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .crumbs a { color: #3a7d34; text-decoration: none; }

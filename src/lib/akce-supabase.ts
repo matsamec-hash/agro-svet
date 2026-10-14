@@ -284,14 +284,23 @@ export async function setAkceFoto(id: string, fotoPath: string | null): Promise<
   }
 }
 
-/** Detail — jedna zveřejněná akce dle slugu (jinak null → 404). */
+/**
+ * Stavy s veřejným detailem. Proběhlá akce zůstává dostupná: údržba ji po
+ * termínu přepne na 'probehla' a do 14. 10. 2026 tím stránka spadla na 404 —
+ * i /akce/den-zemedelce-kamen-2026/, nejnavštěvovanější stránka webu z Google
+ * (151 prokliků za 3 měsíce). Lidé ji hledají i po akci a hlavně z ní vede
+ * cesta na další ročník.
+ */
+const VEREJNE_STAVY = ['zverejneno', 'probehla'] as const;
+
+/** Detail — jedna zveřejněná nebo proběhlá akce dle slugu (jinak null → 404). */
 export async function getBySlug(slug: string): Promise<Akce | null> {
   const sb = createServerClient();
   const { data, error } = await sb
     .from('akce')
     .select('*')
     .eq('slug', slug)
-    .eq('stav', 'zverejneno')
+    .in('stav', [...VEREJNE_STAVY])
     .maybeSingle();
   if (error) throw error;
   return (data as Akce | null) ?? null;
@@ -355,6 +364,41 @@ export async function listRelated(a: Akce, limit = 4): Promise<Akce[]> {
     .or(`kraj_slug.eq.${a.kraj_slug},typ.eq.${a.typ}`)
     .order('pristi_vyskyt', { ascending: true })
     .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as Akce[];
+}
+
+/** Řada ročníků téže akce: slug bez koncového roku (den-zemedelce-kamen-2026 → den-zemedelce-kamen). */
+export function serieSlug(slug: string): string | null {
+  const m = slug.match(/^(.+)-(?:19|20)\d{2}$/);
+  return m ? m[1]! : null;
+}
+
+/** Všechny veřejné ročníky téže akce (včetně té zadané), od nejstaršího. */
+export async function listRocniky(slug: string): Promise<Akce[]> {
+  const serie = serieSlug(slug);
+  if (!serie) return [];
+  const sb = createServerClient();
+  const { data, error } = await sb
+    .from('akce')
+    .select('*')
+    .like('slug', `${serie}-%`)
+    .in('stav', [...VEREJNE_STAVY])
+    .order('zacatek', { ascending: true });
+  if (error) throw error;
+  return ((data ?? []) as Akce[]).filter((a) => serieSlug(a.slug) === serie);
+}
+
+/** Pro sitemapu: akce, které proběhly za posledních `months` měsíců. */
+export async function listRecentlyPast(months = 13, now = new Date()): Promise<Akce[]> {
+  const od = new Date(now);
+  od.setMonth(od.getMonth() - months);
+  const sb = createServerClient();
+  const { data, error } = await sb
+    .from('akce')
+    .select('*')
+    .eq('stav', 'probehla')
+    .gte('zacatek', od.toISOString());
   if (error) throw error;
   return (data ?? []) as Akce[];
 }
