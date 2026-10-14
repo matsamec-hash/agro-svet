@@ -598,6 +598,10 @@ export function getAllModels(locale: string = 'cs'): StrojFlatModel[] {
             ...model,
             year_from: model.year_from ?? null,
             year_to: model.year_to ?? null,
+            // Chybějící výkon v YAML = undefined, ne null → srovnání (`!== null`)
+            // pak volalo toLocaleString na undefined a vracelo 500 (JCB Fastrac).
+            power_hp: model.power_hp ?? null,
+            power_kw: model.power_kw ?? null,
             brand_slug: brand.slug,
             brand_name: brand.name,
             category,
