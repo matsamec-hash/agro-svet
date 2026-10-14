@@ -66,7 +66,16 @@ describe('computeNextOccurrence — opakovaná', () => {
 describe('formatTermin', () => {
   it('jednorázová: čitelné datum', () => {
     const t: TerminInput = { druh: 'jednorazova', zacatek: '2026-08-28T09:00:00.000Z' };
-    expect(formatTermin(t)).toContain('28.');
+    expect(formatTermin(t)).toBe('28. 8. 2026 od 11:00');
+  });
+  it('vícedenní: rozsah dní, čas jen když je známý', () => {
+    expect(formatTermin({ druh: 'jednorazova', zacatek: '2027-09-08T07:00:00Z', konec: '2027-09-09T14:00:00Z' }))
+      .toBe('8.–9. 9. 2027 od 9:00');
+    // 0:00 pražského času = pořadatel hodiny nezveřejnil
+    expect(formatTermin({ druh: 'jednorazova', zacatek: '2027-09-07T22:00:00Z', konec: '2027-09-09T21:59:00Z' }))
+      .toBe('8.–9. 9. 2027');
+    expect(formatTermin({ druh: 'jednorazova', zacatek: '2027-04-28T22:00:00Z', konec: '2027-05-09T21:59:00Z' }))
+      .toBe('29. 4. – 9. 5. 2027');
   });
   it('opakovaná: dny + čas', () => {
     const t: TerminInput = {

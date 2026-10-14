@@ -3,6 +3,7 @@
 import { SITE_URL } from './config';
 import { BCP47 } from '../i18n/utils';
 import { attrDef } from './bazar-attributes';
+import { casZnamy } from './akce-recurrence';
 
 export interface BreadcrumbItem {
   name: string;
@@ -874,8 +875,13 @@ export function eventSchema(a: EventSchemaAkce, opts?: { imageUrl?: string }) {
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location,
   };
-  if (startDate) schema.startDate = startDate;
-  if (a.druh === 'jednorazova' && a.konec) schema.endDate = a.konec;
+  // Bez zveřejněného času (0:00 pražského času) jen datum — schema.org Date
+  // je poctivější než vymyšlená půlnoc.
+  const pragueDate = (iso: string) =>
+    new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Prague', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(iso));
+  const bezCasu = !!(startDate && !casZnamy(startDate));
+  if (startDate) schema.startDate = bezCasu ? pragueDate(startDate) : startDate;
+  if (a.druh === 'jednorazova' && a.konec) schema.endDate = bezCasu ? pragueDate(a.konec) : a.konec;
   if (a.poradatel) {
     schema.organizer = {
       '@type': 'Organization',

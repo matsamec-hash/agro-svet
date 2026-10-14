@@ -64,16 +64,37 @@ function czWeekday(d: Date): number {
   return map[name] ?? 1;
 }
 
+/** Den, měsíc, rok a čas v Europe/Prague. */
+function pragueParts(d: Date): { den: number; mesic: number; rok: number; cas: string } {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/Prague', day: 'numeric', month: 'numeric', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+    }).formatToParts(d).map((x) => [x.type, x.value]),
+  );
+  return { den: Number(p.day), mesic: Number(p.month), rok: Number(p.year), cas: `${Number(p.hour)}:${p.minute}` };
+}
+
+/**
+ * Začátek v 0:00 pražského času = pořadatel čas nezveřejnil. Termín se pak
+ * vypisuje bez hodin — „od 9:00" by byl vymyšlený údaj.
+ */
+export function casZnamy(iso: string): boolean {
+  return pragueParts(new Date(iso)).cas !== '0:00';
+}
+
 export function formatTermin(t: TerminInput): string {
   if (t.druh === 'jednorazova') {
-    const d = new Date(t.zacatek);
-    const datum = new Intl.DateTimeFormat('cs-CZ', {
-      timeZone: 'Europe/Prague', day: 'numeric', month: 'numeric', year: 'numeric',
-    }).format(d);
-    const cas = new Intl.DateTimeFormat('cs-CZ', {
-      timeZone: 'Europe/Prague', hour: 'numeric', minute: '2-digit',
-    }).format(d);
-    return `${datum} od ${cas}`;
+    const a = pragueParts(new Date(t.zacatek));
+    const b = t.konec ? pragueParts(new Date(t.konec)) : null;
+    let datum = `${a.den}. ${a.mesic}. ${a.rok}`;
+    if (b && (b.den !== a.den || b.mesic !== a.mesic || b.rok !== a.rok)) {
+      datum =
+        b.rok !== a.rok ? `${a.den}. ${a.mesic}. ${a.rok} – ${b.den}. ${b.mesic}. ${b.rok}`
+        : b.mesic !== a.mesic ? `${a.den}. ${a.mesic}. – ${b.den}. ${b.mesic}. ${b.rok}`
+        : `${a.den}.–${b.den}. ${a.mesic}. ${a.rok}`;
+    }
+    return casZnamy(t.zacatek) ? `${datum} od ${a.cas}` : datum;
   }
   const dny = t.dny_v_tydnu.map((w) => DEN_NAZEV[w]).join(', ');
   const cas = t.cas_do ? `${stripLeadingZero(t.cas_od)}–${stripLeadingZero(t.cas_do)}` : `od ${stripLeadingZero(t.cas_od)}`;
