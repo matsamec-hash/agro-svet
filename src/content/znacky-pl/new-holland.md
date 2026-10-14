@@ -86,7 +86,7 @@ Po założeniu New Holland Machine Company skoncentrowała się na produkcji mob
 
 ### Sperry New Holland (1947–1986)
 
-W roku **1947** New Holland Machine Company kupiła amerykańska firma **Sperry Corporation**, powstała marka **Sperry New Holland**. W roku **1964** Sperry New Holland nabyła większościowy udział w belgijskiej firmie **Claeys** — jednym z największych europejskich producentów kombajnów — co umożliwiło wejście marki na rynek europejski. Zakład w belgijskim Zedelgem produkuje kombajny New Holland do dziś.
+Rok **1947** przyniósł nowego właściciela — firmę przejęła amerykańska **Sperry Corporation**, a maszyny sprzedawano dalej pod nazwą **Sperry New Holland**. Droga do Europy wiodła przez Belgię: w **1964** roku Sperry objął większość w rodzinnym przedsiębiorstwie **Claeys** z Zedelgem, należącym wówczas do czołówki europejskich producentów kombajnów. Zedelgem pozostał centrum produkcji kombajnów New Holland do dziś.
 
 ### Ford i tradycja Fordsona (1917–1986)
 

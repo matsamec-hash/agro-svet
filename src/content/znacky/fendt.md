@@ -63,15 +63,15 @@ Fendt z bavorského Marktoberdorfu je pro mnoho zemědělců synonymem prémiov�
 
 <h2 id="zakladatel">Zakladatel: Xaver Fendt</h2>
 
-Značku založil v roce 1930 **Xaver Fendt** v bavorském Marktoberdorfu. Prvním strojem byl malý traktor **Dieselross** („dieselový oř") o výkonu 4,5 kW (6 koní). V roce 1937 byla firma zapsána do obchodního rejstříku pod názvem **Xaver Fendt & Co.** a do jejího vedení vstoupil i Xaverův bratr Hermann. Modely Dieselross — včetně výkonnějšího F 22 z roku 1938 — se vyráběly až do roku 1958.
+Jméno **Dieselross** („dieselový oř") nesly traktory z Marktoberdorfu bezmála tři desetiletí — poslední vznikly v roce 1958. Na začátku přitom stál jediný malý stroj se šestikoňovým dieselem (4,5 kW), který v roce 1930 postavil **Xaver Fendt**. Z rodinné dílny se brzy stal podnik: od roku 1937 ho Xaver řídil společně s bratrem Hermannem jako **Xaver Fendt & Co.** a hned další rok přibyl silnější Dieselross F 22.
 
 ## Vario — průlomová převodovka
 
-Nejvýznamnější technologií Fendtu je bezstupňová převodovka **Vario**. Prvním sériovým traktorem s touto převodovkou byl **Favorit 926 Vario**, představený na veletrhu Agritechnica v roce 1995; sériová výroba začala v roce 1996. Šlo o vůbec první velký sériový traktor s plynule měnitelnou převodovkou a technologie se postupně stala v oboru standardem, který napodobují prakticky všichni konkurenti. V roce 2016 vyrobil Fendt 250 000. převodovku Vario.
+Kdo dnes kupuje velký traktor, počítá s plynule měnitelnou převodovkou jako se samozřejmostí — a za to může z velké části Fendt. Na Agritechnice 1995 ukázal **Favorit 926 Vario**, první velký traktor s takovou převodovkou, který šel o rok později do sériové výroby. Převodovka **Vario** se pak stala měřítkem, k němuž se konkurence postupně dopracovala vlastními řešeními. Jak velký zlom to byl, ukazuje číslo z roku 2016: z linky sjela čtvrtmiliontá převodovka Vario.
 
 ## Součást skupiny AGCO
 
-Od ledna 1997 je Fendt plně vlastněnou značkou americké skupiny **AGCO Corporation** (sídlo Duluth, Georgia; burza NYSE: AGCO), do níž patří také značky Massey Ferguson a Valtra. Vlajkovou řadou nejvyššího výkonu je **Fendt 1000 Vario**, jehož sériová výroba začala v roce 2015.
+Samostatnou firmou už Fendt není od ledna 1997, kdy ho celý koupila americká **AGCO Corporation** (Duluth, Georgia; NYSE: AGCO). V koncernu vedle Massey Fergusonu a Valtry zastává roli prémiové značky. Na vrcholu nabídky stojí od roku 2015 řada **Fendt 1000 Vario**.
 
 ## Fendt v České republice
 
