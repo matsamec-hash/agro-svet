@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
-import { listIndexableOdrudy, getPlodina, getOdruda, isOdrudaIndexable, udrzovatelSlug, SKUPINA_LABELS } from '../../../lib/plodiny';
+import { listIndexableOdrudy, getPlodina, getOdruda, isOdrudaIndexable, udrzovatelHref, SKUPINA_LABELS } from '../../../lib/plodiny';
 import { breadcrumbSchema, faqPageSchema, odrudaDatasetSchema, truncateAtBoundary } from '../../../lib/structured-data';
 import { chorobaChipsForPlodina } from '../../../lib/choroby';
 import { parseZnaky, maZnaky, popisOdstavce } from '../../../lib/odruda-znaky';
@@ -21,6 +21,7 @@ const odruda = getOdruda(plodinaSlug!, odrudaSlug!);
 if (!plodina || !odruda) return Astro.rewrite('/404');
 
 const e = odruda.enrichment!;
+const udrzovatelUrl = udrzovatelHref(odruda.udrzovatel);
 
 // Znaky vytěžené z oficiálního popisu ÚKZÚZ. `typ`/`ranost` jsou v datech
 // ÚKZÚZ prázdné u všech 3476 odrůd a kurátorovaná YAML enrichment vrstva je
@@ -218,7 +219,7 @@ const metaDescription = truncateAtBoundary(
             <>
               <dt>Udržovatel</dt>
               <dd>
-                <a href={`/odrudy/udrzovatel/${udrzovatelSlug(odruda.udrzovatel)}/`}>{odruda.udrzovatel}</a>
+                {udrzovatelUrl ? <a href={udrzovatelUrl}>{odruda.udrzovatel}</a> : odruda.udrzovatel}
               </dd>
             </>
           )}

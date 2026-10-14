@@ -306,3 +306,17 @@ export const UDRZOVATEL_INDEX_MIN = 2;
 export function listIndexableUdrzovatele(): UdrzovatelEntry[] {
   return listUdrzovatele().filter((u) => u.odrudy.length >= UDRZOVATEL_INDEX_MIN);
 }
+
+let indexableUdrzovatelSlugs: Set<string> | null = null;
+
+/**
+ * Odkaz na stránku udržovatele, nebo null. Stránka existuje jen pro udržovatele
+ * s ≥ UDRZOVATEL_INDEX_MIN odrůdami — detail odrůdy dřív odkazoval na všechny
+ * a ~40 jednoodrůdových udržovatelů vracelo 404.
+ */
+export function udrzovatelHref(name: string | null | undefined): string | null {
+  const slug = udrzovatelSlug((name ?? '').trim());
+  if (!slug) return null;
+  indexableUdrzovatelSlugs ??= new Set(listIndexableUdrzovatele().map((u) => u.slug));
+  return indexableUdrzovatelSlugs.has(slug) ? `/odrudy/udrzovatel/${slug}/` : null;
+}
