@@ -5,7 +5,7 @@ zeme: "Švédsko"
 zalozena: 1962
 popis: "Švédský výrobce vysokovýkonných secích strojů (Tempo, Rapid, Spirit) a strojů na zpracování půdy (Carrier, TopDown, Opus). Globální lídr precizního setí kukuřice a řepy."
 website: "https://www.vaderstad.com/"
-wikipedia: "https://en.wikipedia.org/wiki/V%C3%A4derstad_Group"
+wikipedia: "https://de.wikipedia.org/wiki/V%C3%A4derstad"
 wikidata: "https://www.wikidata.org/wiki/Q2535939"
 kategorie: ["stroj"]
 ---

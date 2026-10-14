@@ -4,7 +4,7 @@ slug: bednar
 zeme: Чехія
 zalozena: 1997
 popis: Чеський виробник преміальних машин для обробітку ґрунту, сівби та внесення добрив. Штаб-квартира в Рихнові-над-Кнєжноу. Надійні машини для великих господарств з акцентом на робочу продуктивність та універсальність.
-website: https://www.bednar-machinery.com/
+website: https://www.bednar.com/
 wikipedia: https://cs.wikipedia.org/wiki/BEDNAR_FMT
 wikidata: https://www.wikidata.org/wiki/Q36877873
 kategorie:

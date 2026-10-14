@@ -4,7 +4,7 @@ slug: bednar
 zeme: Czechy
 zalozena: 1997
 popis: Czeski producent maszyn premium do uprawy gleby, siewu i aplikacji nawozów. Siedziba w Rychnovie nad Kněžnou. Solidne maszyny dla dużych gospodarstw z naciskiem na wydajność pracy i uniwersalność.
-website: https://www.bednar-machinery.com/
+website: https://www.bednar.com/
 wikipedia: https://cs.wikipedia.org/wiki/BEDNAR_FMT
 wikidata: https://www.wikidata.org/wiki/Q36877873
 kategorie:

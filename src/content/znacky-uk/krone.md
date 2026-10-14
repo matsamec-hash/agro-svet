@@ -4,7 +4,7 @@ slug: krone
 zeme: Німеччина
 zalozena: 1906
 popis: Німецький сімейний виробник зі Шпелле, світовий спеціаліст із заготівлі кормів та соломи. Косарки EasyCut, самохідні BiG M, рулонні преси Comprima, тюкові BiG Pack та кормозбиральні комбайни BiG X.
-website: https://landmaschinen.krone.de/
+website: https://www.krone-agriculture.com/
 wikipedia: https://en.wikipedia.org/wiki/Krone_Agriculture
 wikidata: https://www.wikidata.org/wiki/Q1767448
 kategorie:

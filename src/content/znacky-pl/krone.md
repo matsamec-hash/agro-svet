@@ -4,7 +4,7 @@ slug: krone
 zeme: Niemcy
 zalozena: 1906
 popis: Niemiecki rodzinny producent ze Spelle, światowy specjalista w zbiorze pasz i słomy. Kosiarki EasyCut, samojezdne BiG M, prasy zwijające Comprima, prasy kostkujące BiG Pack oraz sieczkarnie BiG X.
-website: https://landmaschinen.krone.de/
+website: https://www.krone-agriculture.com/
 wikipedia: https://en.wikipedia.org/wiki/Krone_Agriculture
 wikidata: https://www.wikidata.org/wiki/Q1767448
 kategorie:

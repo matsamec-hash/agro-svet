@@ -4,7 +4,7 @@ slug: "bednar"
 zeme: "Tschechien"
 zalozena: 1997
 popis: "Tschechischer Hersteller von Premium-Maschinen für Bodenbearbeitung, Aussaat und Düngerausbringung. Sitz in Rychnov nad Kněžnou. Robuste Maschinen für Großbetriebe mit Fokus auf Flächenleistung und Vielseitigkeit."
-website: "https://www.bednar-machinery.com/"
+website: "https://www.bednar.com/"
 wikipedia: "https://cs.wikipedia.org/wiki/BEDNAR_FMT"
 wikidata: "https://www.wikidata.org/wiki/Q36877873"
 kategorie: ["Maschine"]

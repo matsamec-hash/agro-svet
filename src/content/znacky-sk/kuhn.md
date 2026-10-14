@@ -5,7 +5,7 @@ zeme: Francúzsko
 zalozena: 1828
 popis: Francúzsky výrobca s najširším portfóliom poľnohospodárskej techniky vôbec — pluhy, sejačky, postrekovače, rozmetadlá, lisy, žacie stroje aj miešacie vozy. Tradícia od roku 1828.
 website: https://www.kuhn.com/
-wikipedia: https://cs.wikipedia.org/wiki/Kuhn
+wikipedia: https://de.wikipedia.org/wiki/Kuhn_(Unternehmen)
 wikidata: https://www.wikidata.org/wiki/Q1669214
 kategorie:
 - stroj

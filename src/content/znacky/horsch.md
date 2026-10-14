@@ -5,7 +5,7 @@ zeme: "Německo"
 zalozena: 1984
 popis: "Německý průkopník no-till a minimalizačních technologií se sídlem v Schwandorfu. Pneumatické secí stroje Pronto a Sprinter, přesné secí stroje Maestro, no-till sečka Avatar, hloubkové kypřiče Tiger."
 website: "https://www.horsch.com/"
-wikipedia: "https://en.wikipedia.org/wiki/Horsch"
+wikipedia: "https://de.wikipedia.org/wiki/Horsch_Maschinen"
 wikidata: "https://www.wikidata.org/wiki/Q1628943"
 kategorie: ["stroj"]
 ---

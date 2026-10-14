@@ -5,7 +5,7 @@ zeme: Німеччина
 zalozena: 1984
 popis: Німецький піонер технологій no-till та мінімізаційного обробітку зі штаб-квартирою у Швандорфі. Пневматичні сівалки Pronto та Sprinter, точні сівалки Maestro, no-till сівалка Avatar, глибокорозпушувачі Tiger.
 website: https://www.horsch.com/
-wikipedia: https://en.wikipedia.org/wiki/Horsch
+wikipedia: https://de.wikipedia.org/wiki/Horsch_Maschinen
 wikidata: https://www.wikidata.org/wiki/Q1628943
 kategorie:
 - stroj

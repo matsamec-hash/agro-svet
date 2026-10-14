@@ -5,7 +5,7 @@ zeme: "Frankreich"
 zalozena: 1958
 popis: "Französischer Marktführer bei Teleskopladern und Ladern für die Landwirtschaft. Die Flaggschiff-Baureihe MLT NewAg mit Premiumkabine, Telematik EasyManager und bis zu 6 t Tragkraft."
 website: "https://www.manitou-group.com/"
-wikipedia: "https://de.wikipedia.org/wiki/Manitou_BF"
+wikipedia: "https://de.wikipedia.org/wiki/Manitou_Group"
 wikidata: "https://www.wikidata.org/wiki/Q599791"
 kategorie: ["Maschine"]
 ---

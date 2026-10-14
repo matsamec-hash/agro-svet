@@ -4,7 +4,7 @@ slug: "krone"
 zeme: "Deutschland"
 zalozena: 1906
 popis: "Deutscher Familienhersteller aus Spelle, weltweiter Spezialist für Futter- und Stroherntetechnik. Mähwerke EasyCut, selbstfahrende BiG M, Rundballenpressen Comprima, Quaderballenpressen BiG Pack und Feldhäcksler BiG X."
-website: "https://landmaschinen.krone.de/"
+website: "https://www.krone-agriculture.com/"
 wikipedia: "https://de.wikipedia.org/wiki/Maschinenfabrik_Bernard_Krone"
 wikidata: "https://www.wikidata.org/wiki/Q1767448"
 kategorie: ["Maschine"]

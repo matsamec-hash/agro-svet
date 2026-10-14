@@ -5,7 +5,7 @@ zeme: "Vereinigtes Königreich"
 zalozena: 1945
 popis: "Britischer Familienhersteller von Bau- und Landmaschinen. Für die Landwirtschaft baut JCB die ikonischen Teleskoplader Loadall und die schnellen Traktoren Fastrac mit vollwertiger Federung aller Räder."
 website: "https://www.jcb.com/"
-wikipedia: "https://de.wikipedia.org/wiki/JCB_(Unternehmen)"
+wikipedia: "https://de.wikipedia.org/wiki/J.C._Bamford_Excavators"
 wikidata: "https://www.wikidata.org/wiki/Q1542317"
 kategorie: ["Traktor", "Maschine"]
 ---

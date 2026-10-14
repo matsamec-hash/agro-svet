@@ -5,7 +5,7 @@ zeme: Italien / USA
 zalozena: 1895
 popis: New Holland Agriculture ist einer der größten Landtechnikhersteller der Welt. Die Marke gehört zum Konzern CNH Industrial und bietet ein komplettes Portfolio von Traktoren über Mähdrescher bis zu Feldhäckslern. In den letzten Jahren setzt New Holland stark auf alternative Antriebe — Wasserstofftraktoren und Maschinen für Biomethan.
 website: https://www.newholland.com
-wikipedia: https://de.wikipedia.org/wiki/New_Holland_(Landmaschinen)
+wikipedia: https://de.wikipedia.org/wiki/New_Holland_(Unternehmen)
 wikidata: https://www.wikidata.org/wiki/Q1423217
 kategorie: ["Traktoren", "Mähdrescher", "Feldhäcksler", "Teleskoplader"]
 aktualizovano: 2026-05-29
@@ -53,8 +53,8 @@ timeline:
   - year: 2022
     label: "Prototyp T7 Methane Power (LNG)"
 sources:
-  - title: "Wikipedia — New Holland (Landmaschinen, DE)"
-    url: "https://de.wikipedia.org/wiki/New_Holland_(Landmaschinen)"
+  - title: "Wikipedia — New Holland (Unternehmen, DE)"
+    url: "https://de.wikipedia.org/wiki/New_Holland_(Unternehmen)"
   - title: "Wikipedia — New Holland Machine Company (EN)"
     url: "https://en.wikipedia.org/wiki/New_Holland_Machine_Company"
   - title: "Wikipedia — CNH Industrial (EN)"

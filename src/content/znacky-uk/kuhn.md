@@ -5,7 +5,7 @@ zeme: Франція
 zalozena: 1828
 popis: Французький виробник із найширшим портфоліом сільськогосподарської техніки взагалі — плуги, сівалки, обприскувачі, розкидачі, преси, косарки, а також кормозмішувачі. Традиція від 1828 року.
 website: https://www.kuhn.com/
-wikipedia: https://cs.wikipedia.org/wiki/Kuhn
+wikipedia: https://de.wikipedia.org/wiki/Kuhn_(Unternehmen)
 wikidata: https://www.wikidata.org/wiki/Q1669214
 kategorie:
 - stroj

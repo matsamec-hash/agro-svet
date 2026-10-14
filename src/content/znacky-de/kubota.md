@@ -4,8 +4,8 @@ slug: "kubota"
 zeme: "Japan"
 zalozena: 1890
 popis: "Japanischer Hersteller mit reicher Tradition. Starke Position bei Kompakt- und Mittelklassetraktoren — historisch für Obstbau, Weinbau und Kommunaldienste. In den letzten Jahren Expansion in die Row-Crop-Klasse mit der Baureihe M7."
-website: "https://www.kubota.de"
-wikipedia: "https://de.wikipedia.org/wiki/Kubota"
+website: "https://www.kubota-eu.com/"
+wikipedia: "https://de.wikipedia.org/wiki/Kubota_(Unternehmen)"
 wikidata: "https://www.wikidata.org/wiki/Q1514221"
 kategorie: ["Traktor", "Mähdrescher"]
 ---

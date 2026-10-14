@@ -88,7 +88,7 @@ sources:
 - title: Encyclopædia Britannica — John Deere
   url: https://www.britannica.com/biography/John-Deere
 - title: Deere & Company — wyniki roczne FY2024
-  url: https://www.deere.com/en/news/all-news/fy24-fourth-quarter-earnings/
+  url: https://www.deere.com/assets/pdfs/common/news/deere-4q24-earnings-release.pdf
 - title: Deere & Company — 10-K FY2024 (SEC)
   url: https://www.sec.gov/Archives/edgar/data/0000315189/000155837024016169/de-20241027x10k.htm
 - title: CNBC — przejęcie Blue River Technology (305 mln USD)
