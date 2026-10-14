@@ -87,7 +87,7 @@ sources:
   - title: "Deere & Company — výroční výsledky FY2024"
     url: "https://www.deere.com/assets/pdfs/common/news/deere-4q24-earnings-release.pdf"
   - title: "Deere & Company — 10-K FY2024 (SEC)"
-    url: "https://www.sec.gov/Archives/edgar/data/0000315189/000155837024016169/de-20241027x10k.htm"
+    url: "https://www.sec.gov/Archives/edgar/data/315189/000155837024016169/de-20241027x10k.htm"
   - title: "CNBC — akvizice Blue River Technology (305 mil. USD)"
     url: "https://www.cnbc.com/2017/09/06/deere-is-acquiring-blue-river-technology-for-305-million.html"
   - title: "Wikipedia — Heinrich Lanz AG (akvizice 1956)"
