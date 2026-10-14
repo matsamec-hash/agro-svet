@@ -15,7 +15,7 @@ engine: "Deutz TCD 6.1 L, 6-cylindrowy, Stage V"
 transmission: "TTV, bezstopniowa (CVT) lub Powershift"
 seriesName: "7 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.deutz-fahr.com/cs-cz/traktory"
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/7-ttv-series"
 highlights:
   - "263 konie z sześciocylindrowego Deutz TCD 6.1 L"
   - "Bezstopniowa przekładnia TTV lub Powershift"

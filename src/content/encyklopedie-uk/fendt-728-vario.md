@@ -15,7 +15,7 @@ engine: AGCO Power 7,5 л Core75, 6-циліндровий, Stage V, eHybrid 48 
 transmission: Vario TA 150, безступінчаста (CVT)
 seriesName: 700 Vario Gen7
 lastVerified: 2026-05-15
-sourceUrl: https://www.fendt.com/cz/traktory/700-vario
+sourceUrl: "https://www.fendt.com/int/agricultural-machinery/tractors/fendt-700-vario-gen7"
 highlights:
 - 303 кінські сили від шестициліндрового AGCO Power 7,5 л Core75
 - Система eHybrid із генератором 48 В

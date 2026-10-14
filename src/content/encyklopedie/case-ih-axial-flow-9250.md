@@ -15,7 +15,7 @@ engine: "FPT Cursor 13, 6-válec, Stage V"
 transmission: "Hydrostatický pojezd"
 seriesName: "Axial-Flow 150/250 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.caseih.com/emea/cs-cz/products/harvesting/axial-flow-combines"
+sourceUrl: "https://www.caseih.com/en-gb/europe/products/harvesting/axial-flow-250-series"
 highlights:
   - "634 koní — vlajkový kombajn Case IH"
   - "Jednorotorový systém Axial-Flow — vynález Case IH z roku 1977"

@@ -15,7 +15,7 @@ engine: Zetor, 4-válec, Stage V
 transmission: Power shift (HSX)
 seriesName: Forterra HSX
 lastVerified: 2026-05-14
-sourceUrl: https://www.zetor.com/cs/forterra
+sourceUrl: "https://www.zetor.cz/file/traktory-forterra-cz.pdf"
 youtubeId: VHg-REzI5Y4
 youtubeTitle: Zetor Forterra HSX 150 — práce s cisternou
 highlights:

@@ -15,7 +15,7 @@ engine: "FPT Cursor 9, 6-Zylinder, Stage V"
 transmission: "CVXDrive, stufenlos (CVT)"
 seriesName: "Optum CVX"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.caseih.com/emea/cs-cz/products/tractors/optum-series"
+sourceUrl: "https://www.caseih.com/de-de/germany/produkte/traktoren/optum-series"
 highlights:
   - "340 PS aus dem Sechszylinder FPT Cursor 9"
   - "Stufenloses Getriebe CVXDrive"

@@ -15,7 +15,7 @@ engine: "Deutz TCD 6.1, 6-válec"
 transmission: "ZF 16/16 PowerShift"
 seriesName: "Crystal HD"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.zetor.cz/zetor-crystal"
+sourceUrl: "https://www.zetor.cz/file/traktory-crystal-cz.pdf"
 highlights:
   - "171 koní — nejvýkonnější současný Zetor"
   - "Šestiválcový motor Deutz TCD 6.1"

@@ -15,7 +15,6 @@ engine: "Kubota V6108, 6-cylindrowy, 6,1 L, common-rail"
 transmission: "Powershift 24/24 lub KVT (CVT)"
 seriesName: "M7 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.kubota.cz/produkty/traktory"
 highlights:
   - "190 koni — najmocniejszy ciągnik Kubota"
   - "Sześciocylindrowy silnik Kubota V6108 6,1 L common-rail"

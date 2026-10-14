@@ -15,7 +15,7 @@ engine: "Iveco F5C, 4-Zylinder, 3,2 L"
 transmission: "12/12 synchronisiert"
 seriesName: "Major"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.zetor.cz/zetor-major"
+sourceUrl: "https://www.zetor.cz/file/zetor-major-cz.pdf"
 highlights:
   - "77 PS aus dem Vierzylinder Iveco F5C 3,2 L"
   - "Synchronisiertes Getriebe 12/12"

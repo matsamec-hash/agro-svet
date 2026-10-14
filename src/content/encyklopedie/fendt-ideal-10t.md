@@ -13,7 +13,7 @@ engine: "MAN, 6-válec, Stage V"
 transmission: "Hydrostatický pojezd, pásový podvozek"
 seriesName: "IDEAL"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.fendt.com/cz/kombajny/ideal"
+sourceUrl: "https://www.fendt.com/int/agricultural-machinery/combines/fendt-ideal"
 highlights:
   - "Vrcholný model řady IDEAL — pásové provedení 10T"
   - "Dvourotorová platforma s rotory HARVEST CORE"

@@ -15,7 +15,7 @@ engine: "FPT Cursor 16, 6-Zylinder, 15,9 L, Stage V"
 transmission: "Hydrostatischer Fahrantrieb"
 seriesName: "CR Series"
 lastVerified: 2026-05-14
-sourceUrl: "https://agriculture.newholland.com/eu/de-de/ausruestung/produkte/ernte/maehdrescher/cr-series"
+sourceUrl: "https://agriculture.newholland.com/de-de/europe/produkte/mahdrescher/cr10-und-cr11"
 youtubeId: "48CQ4BGsPmg"
 youtubeTitle: "New Holland CR11 — Flaggschiff-Mähdrescher mit Dynamic Feed Roll"
 highlights:

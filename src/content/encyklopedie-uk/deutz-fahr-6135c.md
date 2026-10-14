@@ -15,7 +15,7 @@ engine: Deutz, 4-циліндровий, Stage V
 transmission: Powershift, RVshift 20F/16R або TTV (CVT)
 seriesName: 6C Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.deutz-fahr.com/cs-cz/traktory
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/6c-series"
 highlights:
 - 143 кінських сил від чотирициліндрового двигуна Deutz Stage V
 - 'Три варіанти трансмісії: Powershift, RVshift або TTV (CVT)'

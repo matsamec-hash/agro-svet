@@ -15,7 +15,7 @@ engine: "FPT Cursor 9, 6-cylindrowy, Stage V"
 transmission: "CVXDrive, bezstopniowa (CVT)"
 seriesName: "Optum CVX"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.caseih.com/emea/cs-cz/products/tractors/optum-series"
+sourceUrl: "https://www.caseih.com/pl-pl/poland/produkty/ciagniki/seria-optum"
 highlights:
   - "340 koni z sześciocylindrowego FPT Cursor 9"
   - "Bezstopniowa przekładnia CVXDrive"

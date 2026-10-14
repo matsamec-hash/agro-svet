@@ -15,7 +15,8 @@ engine: "FPT Cursor 9, 6-Zylinder, 8,7 L, Stage V"
 transmission: "CMATIC (stufenloses CVT auf Basis ZF Eccom)"
 seriesName: "Axion 900"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/traktory/axion-900"
+sourceUrl: "https://www.tractordata.com/farm-tractors/010/0/6/10063-claas-axion-960.html"
+sourceName: "TractorData.com"
 youtubeId: "lge2R0ExD9A"
 youtubeTitle: "CLAAS Axion 9 (Axion 960) — offizieller Walkaround"
 highlights:

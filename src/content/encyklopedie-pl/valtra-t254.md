@@ -15,7 +15,7 @@ engine: "AGCO Power 7,4 L, 6-cylindrowy, Stage V"
 transmission: "HiTech / Active / Versu (Powershift 5×5) / Direct (CVT)"
 seriesName: "T Series"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.valtra.cz/traktory/t-serie.html"
+sourceUrl: "https://www.valtra.sk/produkty/tseria/t254.html"
 youtubeId: "1hA8Zy3bzQo"
 youtubeTitle: "Valtra T254 — walkaround"
 highlights:

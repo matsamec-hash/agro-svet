@@ -15,7 +15,7 @@ engine: "AGCO Power 4,9 L, 4-cylindrowy, Stage V"
 transmission: "Dyna-6 Powershift lub Dyna-VT (CVT)"
 seriesName: "MF 6S"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.masseyferguson.com/cs-cz/traktory/mf-6s.html"
+sourceUrl: "https://www.masseyferguson.com/pl_pl/product/tractors/mf-6s.html"
 highlights:
   - "180 koni z czterocylindrowego AGCO Power 4,9 L"
   - "Najwyższa moc z czterocylindrowego silnika na rynku"

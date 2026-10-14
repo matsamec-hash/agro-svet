@@ -15,7 +15,6 @@ engine: "Kubota V6108, 6-Zylinder, 6,1 L, Common Rail"
 transmission: "Powershift 24/24 oder KVT (CVT)"
 seriesName: "M7 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.kubota.de/produkte/traktoren"
 highlights:
   - "190 PS — der stärkste Kubota-Traktor"
   - "Sechszylindermotor Kubota V6108 6,1 L mit Common Rail"

@@ -15,7 +15,8 @@ engine: "John Deere PowerTech 13,5 L, 6-Zylinder, Stage V"
 transmission: "Hydrostatischer Fahrantrieb"
 seriesName: "S Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.deere.de/de/ernte/maehdrescher/"
+sourceUrl: "https://web.archive.org/web/20210605140110/https://www.deere.co.uk/en/combines/s700-series/s790/"
+sourceName: "deere.co.uk (Wayback Machine, 2021)"
 highlights:
   - "Einrotor-Spitzenmähdrescher der Baureihe S — 543 PS"
   - "Korntank mit 14 800 Litern"

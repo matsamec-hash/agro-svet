@@ -15,7 +15,7 @@ engine: Deutz, 4-válec, Stage V
 transmission: Powershift, RVshift 20F/16R nebo TTV (CVT)
 seriesName: 6C Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.deutz-fahr.com/cs-cz/traktory
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/6c-series"
 highlights:
 - 143 koní zo štvorvalcového motora Deutz Stage V
 - 'Tri varianty prevodovky: Powershift, RVshift alebo TTV (CVT)'

@@ -1180,6 +1180,7 @@ const pl: Record<string, string> = {
   'enc.trust.label': 'Weryfikacja treści',
   'enc.trust.verified': 'Ostatnio zweryfikowano:',
   'enc.trust.source': 'Źródło: oficjalna specyfikacja producenta',
+  'enc.trust.sourceNamed': 'Źródło: {zdroj}',
   'enc.back': '← Powrót do encyklopedii',
   'enc.alt.hero': 'widok główny',
   'enc.alt.koni': 'KM',

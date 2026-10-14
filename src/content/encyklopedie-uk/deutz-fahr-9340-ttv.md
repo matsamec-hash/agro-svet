@@ -15,7 +15,7 @@ engine: Deutz TCD 7.8, 6-циліндровий, 7,8 л, Stage V
 transmission: TTV безступенева (CVT)
 seriesName: 9 Series
 lastVerified: 2026-05-14
-sourceUrl: https://www.deutz-fahr.com/cs-cz/produkty/traktory/serie-9
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/9-series"
 youtubeId: qNiL1HWUwPE
 youtubeTitle: Deutz-Fahr 9340 TTV Warrior — глибоке розпушування в полі
 highlights:

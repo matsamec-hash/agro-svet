@@ -15,7 +15,6 @@ engine: Kubota V6108, 4-válec, 6,1 L
 transmission: Powershift 24/24, volitelně CVT
 seriesName: M6 Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.kubota.cz/produkty/traktory
 highlights:
 - 175 koní zo štvorvalca Kubota V6108 6,1 L
 - Prevodovka Powershift 24/24, voliteľne CVT

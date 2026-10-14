@@ -15,7 +15,7 @@ engine: "FPT, 6-Zylinder, Stage V"
 transmission: "Hydrostatischer Fahrantrieb"
 seriesName: "CX Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://agriculture.newholland.com/eu/de-de/ausruestung/produkte/ernte/maehdrescher/cx-series"
+sourceUrl: "https://agriculture.newholland.com/en-gb/europe/products/combine-harvesters/cx7-cx8-stage-v"
 highlights:
   - "Stärkster konventioneller Mähdrescher der Baureihe CX — 490 PS"
   - "Klassisches Dreschsystem: Trommel und Schüttler"

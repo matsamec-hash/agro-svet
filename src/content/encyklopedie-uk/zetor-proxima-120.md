@@ -15,7 +15,6 @@ engine: Zetor Z 1104, 4-циліндровий, 4,2 л, Stage V
 transmission: 40/8 синхронізована, макс. 40 км/год
 seriesName: Proxima
 lastVerified: 2026-05-02
-sourceUrl: https://www.zetor.com/cs/proxima
 youtubeId: 13VJ2CAnnvU
 youtubeTitle: Zetor Proxima 120 — презентація
 highlights:

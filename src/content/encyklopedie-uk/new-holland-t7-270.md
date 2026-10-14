@@ -15,7 +15,7 @@ engine: FPT F6HFA, 6-циліндровий 6,7 л, Stage V
 transmission: Auto Command CVT безступінчаста, макс. 50 км/год
 seriesName: T7
 lastVerified: 2026-05-02
-sourceUrl: https://agriculture.newholland.com/eu/cs-cz/equipment/products/agricultural-tractors/t7-series
+sourceUrl: "https://agriculture.newholland.com/en-gb/europe/products/agricultural-tractors/t7-lwb-with-plm-intelligence"
 highlights:
 - Потужність 270 к.с. із резервом потужності для складних умов
 - PLM Intelligence — точне землеробство, інтегроване в трактор

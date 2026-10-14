@@ -15,7 +15,7 @@ engine: Iveco F5C, 4-циліндровий, 3,2 л
 transmission: 12/12 синхронізована
 seriesName: Major
 lastVerified: 2026-05-15
-sourceUrl: https://www.zetor.cz/zetor-major
+sourceUrl: "https://www.zetor.cz/file/zetor-major-cz.pdf"
 highlights:
 - 77 кінських сил із чотирициліндрового Iveco F5C 3,2 л
 - Синхронізована трансмісія 12/12

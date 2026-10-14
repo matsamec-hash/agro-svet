@@ -15,7 +15,7 @@ engine: FPT Cursor 16, 6-válec, 15,9 L, Stage V
 transmission: Hydrostatický pojezd
 seriesName: CR Series
 lastVerified: 2026-05-14
-sourceUrl: https://www.newholland.com/cs-cz/zemedelska-technika/produkty/sklizne/kombajny/cr
+sourceUrl: "https://agriculture.newholland.com/en-gb/europe/products/combine-harvesters/cr10-and-cr11"
 youtubeId: 48CQ4BGsPmg
 youtubeTitle: New Holland CR11 — flagship combine with Dynamic Feed Roll
 highlights:

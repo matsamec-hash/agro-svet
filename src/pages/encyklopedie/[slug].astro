@@ -531,7 +531,7 @@ const articleJsonLd = {
       )}
       {item.data.sourceUrl && (
         <a class="trust-item trust-link" href={item.data.sourceUrl} target="_blank" rel="noopener nofollow">
-          {t('enc.trust.source')}
+          {item.data.sourceName ? tf(locale, 'enc.trust.sourceNamed', { zdroj: item.data.sourceName }) : t('enc.trust.source')}
         </a>
       )}
     </aside>

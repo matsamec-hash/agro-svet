@@ -15,7 +15,7 @@ engine: John Deere PowerTech 13,6 L, 6-válec, Stage V
 transmission: Hydrostatický pojezd
 seriesName: X Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.deere.cz/cs/sklizen/kombajny/
+sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/harvesting/combines/x9-1100-combine-ndaxr0g"
 youtubeId: OOXS1YoCsK4
 youtubeTitle: John Deere X9 1100 Combine — walkaround
 highlights:

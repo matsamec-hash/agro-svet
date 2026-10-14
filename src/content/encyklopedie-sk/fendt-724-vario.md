@@ -15,7 +15,7 @@ engine: MAN D0836, 6-válec, Stage V
 transmission: Vario CVT bezstupňová, max. 60 km/h
 seriesName: 700 Vario Gen6
 lastVerified: 2026-05-02
-sourceUrl: https://www.fendt.com/cz/traktory/700-vario
+sourceUrl: "https://www.fendt.com/int/consultation-purchase/test-reports/fendt-700-vario-tested"
 youtubeId: oyI4HWXMlAY
 youtubeTitle: Fendt 724 Vario Profi Plus — Cereals 2022
 highlights:

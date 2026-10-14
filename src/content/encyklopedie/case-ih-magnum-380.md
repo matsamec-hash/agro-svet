@@ -15,7 +15,7 @@ engine: "FPT Cursor 13, 6-válec, 12,9 L, Stage V"
 transmission: "Full Powershift 19/4 nebo CVXDrive (bezstupňová)"
 seriesName: "Magnum"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.caseih.com/emea/cs-cz/products/tractors/magnum-series"
+sourceUrl: "https://www.caseih.com/en-gb/europe/products/tractors/magnum-afs-connect/magnum"
 youtubeId: "66sq7LgV8jQ"
 youtubeTitle: "Case IH Magnum 380 AFS Connect — testdrive a walkaround"
 highlights:

@@ -15,7 +15,7 @@ engine: "Deutz TCD 6.1, 6-Zylinder"
 transmission: "ZF 16/16 PowerShift"
 seriesName: "Crystal HD"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.zetor.cz/zetor-crystal"
+sourceUrl: "https://www.zetor.cz/file/traktory-crystal-cz.pdf"
 highlights:
   - "171 PS — der stärkste aktuelle Zetor"
   - "Sechszylindermotor Deutz TCD 6.1"

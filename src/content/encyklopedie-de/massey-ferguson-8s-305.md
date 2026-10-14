@@ -15,7 +15,7 @@ engine: "AGCO Power 7,4 L, 6-Zylinder, Stage V"
 transmission: "Dyna-VT stufenlos (CVT)"
 seriesName: "8S Series"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.masseyferguson.com/de-de/traktoren/8s.html"
+sourceUrl: "https://www.masseyferguson.com/en/product/tractors/mf-8s.html"
 youtubeId: "6dBSV7eT1rw"
 youtubeTitle: "Massey Ferguson 8S.305 — Demo-Walkaround"
 highlights:

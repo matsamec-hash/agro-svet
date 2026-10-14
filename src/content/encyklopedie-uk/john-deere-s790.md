@@ -15,7 +15,8 @@ engine: John Deere PowerTech 13,5 л, 6-циліндровий, Stage V
 transmission: Гідростатичний привід
 seriesName: S Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.deere.cz/cs/sklizen/kombajny/
+sourceUrl: "https://web.archive.org/web/20210605140110/https://www.deere.co.uk/en/combines/s700-series/s790/"
+sourceName: "deere.co.uk (Wayback Machine, 2021)"
 highlights:
 - Топовий однороторний комбайн серії S — 543 кінських сил
 - Зерновий бункер 14 800 літрів

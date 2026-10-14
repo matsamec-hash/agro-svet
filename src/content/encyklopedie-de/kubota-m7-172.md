@@ -15,7 +15,8 @@ engine: "Kubota V6108, 4-Zylinder, 6,1 L, Common Rail, Stage V"
 transmission: "Powershift 24/24 oder KVT (stufenlos)"
 seriesName: "M7 Series"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.kubota.de/produkte/traktoren/serie-m7"
+sourceUrl: "https://www.tractordata.com/farm-tractors/010/1/0/10109-kubota-m7-172.html"
+sourceName: "TractorData.com"
 youtubeId: "qDVzGQYsPKM"
 youtubeTitle: "Kubota M7-172 — Walkaround und Fazit"
 highlights:

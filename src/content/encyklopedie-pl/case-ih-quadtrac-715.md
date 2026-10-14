@@ -15,7 +15,7 @@ engine: "FPT Cursor 16, 6-cylindrowy, 16,0 L"
 transmission: "Full Powershift 16/2"
 seriesName: "Quadtrac"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.caseih.com/emea/cs-cz/products/tractors/steiger-quadtrac-series"
+sourceUrl: "https://www.caseih.com/pl-pl/poland/produkty/ciagniki/seria-quadtrac-steiger"
 youtubeId: "6ZoOa6i5Tno"
 youtubeTitle: "Case IH Quadtrac 715 — walkaround flagowego, czterogąsienicowego ciągnika"
 highlights:

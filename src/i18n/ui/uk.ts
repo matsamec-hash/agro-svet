@@ -1209,6 +1209,7 @@ const uk: Record<string, string> = {
   'enc.trust.label': 'Перевірка вмісту',
   'enc.trust.verified': 'Востаннє перевірено:',
   'enc.trust.source': 'Джерело: офіційна специфікація виробника',
+  'enc.trust.sourceNamed': 'Джерело: {zdroj}',
   'enc.back': '← Назад до енциклопедії',
   'enc.alt.hero': 'головний вигляд',
   'enc.alt.koni': 'к.с.',

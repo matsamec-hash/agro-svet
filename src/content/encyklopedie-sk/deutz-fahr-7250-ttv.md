@@ -15,7 +15,7 @@ engine: Deutz TCD 6.1 L, 6-válec, Stage V
 transmission: TTV, bezstupňová (CVT) nebo Powershift
 seriesName: 7 Series
 lastVerified: 2026-05-15
-sourceUrl: https://www.deutz-fahr.com/cs-cz/traktory
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/7-ttv-series"
 highlights:
 - 263 koní zo šesťvalca Deutz TCD 6.1 L
 - Bezstupňová prevodovka TTV alebo Powershift

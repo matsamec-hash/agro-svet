@@ -941,6 +941,7 @@ const de: Record<string, string> = {
   'enc.trust.label': 'Inhaltsprüfung',
   'enc.trust.verified': 'Zuletzt geprüft:',
   'enc.trust.source': 'Quelle: offizielle Herstellerspezifikation',
+  'enc.trust.sourceNamed': 'Quelle: {zdroj}',
   'enc.back': '← Zurück zur Enzyklopädie',
   'enc.alt.hero': 'Hauptansicht',
   'enc.alt.koni': 'PS',

@@ -15,7 +15,7 @@ engine: "Deutz TCD 7.8, 6-válec, 7,8 L, Stage V"
 transmission: "TTV bezstupňová (CVT)"
 seriesName: "9 Series"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.deutz-fahr.com/cs-cz/produkty/traktory/serie-9"
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/9-series"
 youtubeId: "qNiL1HWUwPE"
 youtubeTitle: "Deutz-Fahr 9340 TTV Warrior — hloubkové kypření v poli"
 highlights:

@@ -15,7 +15,7 @@ engine: "Deutz TCD 6.1 L, 6-Zylinder, Stage V"
 transmission: "TTV, stufenlos (CVT) oder Powershift"
 seriesName: "7 Series"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.deutz-fahr.com/cs-cz/traktory"
+sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/7-ttv-series"
 highlights:
   - "263 PS aus dem Sechszylinder Deutz TCD 6.1 L"
   - "Stufenloses TTV-Getriebe oder Powershift"

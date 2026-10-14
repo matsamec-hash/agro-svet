@@ -1178,6 +1178,7 @@ const sk: Record<string, string> = {
   'enc.trust.label': 'Overenie obsahu',
   'enc.trust.verified': 'Naposledy overené:',
   'enc.trust.source': 'Zdroj: oficiálne špecifikácie výrobcu',
+  'enc.trust.sourceNamed': 'Zdroj: {zdroj}',
   'enc.back': '← Späť na encyklopédiu',
   'enc.alt.hero': 'hlavný pohľad',
   'enc.alt.koni': 'koní',

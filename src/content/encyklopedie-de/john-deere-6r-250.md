@@ -15,7 +15,7 @@ engine: "John Deere PowerTech PSS, 6-Zylinder, 6,8 L, Stage V"
 transmission: "AutoPowr IVT (stufenlos) oder CommandPro Powershift"
 seriesName: "6R Series"
 lastVerified: 2026-05-14
-sourceUrl: "https://www.deere.de/de/traktoren/mittlere-traktoren/6r-serie/"
+sourceUrl: "https://www.deere.de/de-de/produkte-und-loesungen/traktoren/mittelgrosse-traktoren/6r-250-traktor-mejqnew"
 youtubeId: "NtRf8VfCgkY"
 youtubeTitle: "John Deere 6R 250 in Action — Real Work, Real Results"
 highlights:

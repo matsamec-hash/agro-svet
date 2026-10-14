@@ -15,7 +15,7 @@ engine: "FPT Cursor 9, 6-Zylinder, Stage V"
 transmission: "Full Powershift 18/6 oder CVXDrive (CVT)"
 seriesName: "Puma"
 lastVerified: 2026-05-15
-sourceUrl: "https://www.caseih.com/emea/cs-cz/products/tractors/puma-series"
+sourceUrl: "https://www.caseih.com/de-de/germany/produkte/traktoren/puma/puma-185-240"
 highlights:
   - "240 PS aus dem Sechszylinder FPT Cursor 9"
   - "Getriebewahl Full Powershift 18/6 oder CVXDrive (CVT)"
