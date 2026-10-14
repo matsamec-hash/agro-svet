@@ -3,7 +3,7 @@
 // na cs routu s locals.locale) — prerendered by pod locale prefixem 404/302-leakla.
 export const prerender = false;
 import Layout from '../../../../../../layouts/Layout.astro';
-import { getBrand, seriesFamily, familyLabel, categoryLabel, functionalGroupLabel, type StrojKategorie } from '../../../../../../lib/stroje';
+import { getBrand, seriesFamily, familyLabel, categoryLabel, functionalGroupLabel, categoryListingPath, type StrojKategorie } from '../../../../../../lib/stroje';
 import { useTranslations, getLocaleFromUrl, tf, plural, localizePath } from '../../../../../../i18n/utils';
 import HeroPhotoCredit from '../../../../../../components/HeroPhotoCredit.astro';
 
@@ -28,6 +28,8 @@ const catHeroFallback = categoryHero[categorySlug as StrojKategorie] ?? null;
 
 const cat = brand.categories?.[categorySlug as StrojKategorie];
 if (!cat) return Astro.rewrite('/404');
+// Výpis kategorie napříč značkami (drobečková navigace + JSON-LD).
+const catListing = categoryListingPath(categorySlug!);
 
 // String() cast on both sides — YAML `family:` may be numeric (e.g. 150) while
 // the route param is always a string, so a raw === would never match.
@@ -141,7 +143,7 @@ const jsonLd = {
     { '@type': 'ListItem', position: 1, name: tr('cat.bc.home'), item: `https://agro-svet.cz${localizePath(locale, '/')}` },
     { '@type': 'ListItem', position: 2, name: tr('cat.bc.tech'), item: `https://agro-svet.cz${localizePath(locale, '/stroje/')}` },
     { '@type': 'ListItem', position: 3, name: brand.name, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/`)}` },
-    { '@type': 'ListItem', position: 4, name: catLabel, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${categorySlug}/`)}` },
+    { '@type': 'ListItem', position: 4, name: catLabel, item: `https://agro-svet.cz${localizePath(locale, catListing)}` },
     { '@type': 'ListItem', position: 5, name: label, item: `https://agro-svet.cz${localizePath(locale, `/stroje/${brand.slug}/rada/${categorySlug}/${family}/`)}` },
   ],
 };
@@ -161,7 +163,7 @@ const jsonLd = {
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <a href={localizePath(locale, `/stroje/${brand.slug}/`)}>{brand.name}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      <a href={(categorySlug === 'traktory' || categorySlug === 'kombajny') ? localizePath(locale, `/stroje/${categorySlug}/`) : localizePath(locale, `/stroje/zemedelske-stroje/${categorySlug}/`)}>{catLabel}</a>
+      <a href={localizePath(locale, catListing)}>{catLabel}</a>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       <span class="current">{label}</span>
     </nav>

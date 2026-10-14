@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
 import { createAnonClient, createServerClient } from './lib/supabase';
-import { stripLocale } from './i18n/utils';
+import { stripLocale, localizePath } from './i18n/utils';
+import { legacyRedirectTarget } from './lib/legacy-redirects';
 import { isRetiredLocale } from './i18n/config';
 import { isLockedSectionPath } from './i18n/nav';
 import { isPrerenderedRewriteError } from './lib/prerendered-rewrite';
@@ -166,6 +167,11 @@ const handleRequest = defineMiddleware(async (context, next) => {
   const { locale, path: strippedPath } = stripLocale(url.pathname);
   locals.locale = locale;
   locals.localizedPathname = url.pathname;
+
+  // Legacy URL z dřív rozbitých interních odkazů → 301 na platnou stránku
+  // ve stejném jazyce (pravidla v lib/legacy-redirects.ts).
+  const legacyTarget = legacyRedirectTarget(strippedPath);
+  if (legacyTarget) return redirect(localizePath(locale, legacyTarget) + url.search, 301);
   const advance = async (): Promise<Response> => {
     if (locale === 'cs') return next();
     try {
