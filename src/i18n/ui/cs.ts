@@ -1068,7 +1068,7 @@ const cs: Record<string, string> = {
   'cat.s.d.allModels': 'Všechny modely →',
   'cat.s.d.ebProcessed': 'Zpracováno',
   'cat.s.d.ebEditorial': 'redakcí agro-svět.cz',
-  'cat.s.d.ebSpec': 'Specifikace na základě veřejných materiálů výrobce',
+  'cat.s.d.ebSpec': 'Specifikace podle materiálů výrobce a odborných databází — může obsahovat chyby',
   'cat.s.d.asideKickerOne': 'aktuální inzerát',
   'cat.s.d.asideKickerFew': 'aktuální inzeráty',
   'cat.s.d.asideKickerMany': 'aktuálních inzerátů',

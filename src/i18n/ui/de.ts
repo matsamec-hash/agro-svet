@@ -843,7 +843,7 @@ const de: Record<string, string> = {
   'cat.s.d.allModels': 'Alle Modelle →',
   'cat.s.d.ebProcessed': 'Bearbeitet',
   'cat.s.d.ebEditorial': 'von der Redaktion agro-svět.cz',
-  'cat.s.d.ebSpec': 'Spezifikationen auf Basis öffentlicher Herstellerunterlagen',
+  'cat.s.d.ebSpec': 'Spezifikationen nach Herstellerangaben und Fachdatenbanken — Fehler sind möglich',
   'cat.s.d.asideKickerOne': 'aktuelle Anzeige',
   'cat.s.d.asideKickerFew': 'aktuelle Anzeigen',
   'cat.s.d.asideKickerMany': 'aktuelle Anzeigen',

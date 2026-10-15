@@ -1070,7 +1070,7 @@ const pl: Record<string, string> = {
   'cat.s.d.allModels': 'Wszystkie modele →',
   'cat.s.d.ebProcessed': 'Opracowano',
   'cat.s.d.ebEditorial': 'przez redakcję agro-svět.cz',
-  'cat.s.d.ebSpec': 'Specyfikacja na podstawie publicznych materiałów producenta',
+  'cat.s.d.ebSpec': 'Specyfikacja według materiałów producenta i branżowych baz danych — może zawierać błędy',
   'cat.s.d.asideKickerOne': 'aktualne ogłoszenie',
   'cat.s.d.asideKickerFew': 'aktualne ogłoszenia',
   'cat.s.d.asideKickerMany': 'aktualnych ogłoszeń',

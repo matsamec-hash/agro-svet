@@ -2,7 +2,7 @@ import { defineMiddleware } from 'astro:middleware';
 import { createAnonClient, createServerClient } from './lib/supabase';
 import { stripLocale, localizePath } from './i18n/utils';
 import { legacyRedirectTarget } from './lib/legacy-redirects';
-import { isRetiredLocale } from './i18n/config';
+import { isRetiredLocale, isWithdrawnPath } from './i18n/config';
 import { isLockedSectionPath } from './i18n/nav';
 import { isPrerenderedRewriteError } from './lib/prerendered-rewrite';
 import { applySecurityHeaders } from './lib/security-headers';
@@ -106,6 +106,29 @@ a{color:#0A0A0B;font-weight:700}
 </html>
 `;
 
+/** 410 pro sekci staženou z jedné mutace (WITHDRAWN_SECTIONS). Jen de ji zatím má. */
+const WITHDRAWN_SECTION_BODY = `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Dieser Bereich ist derzeit nicht verf\u00FCgbar — agro-svet.cz</title>
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;max-width:34rem;margin:18vh auto;padding:0 1.5rem;color:#0A0A0B;line-height:1.6}
+h1{font-size:1.4rem;margin:0 0 .75rem}
+p{margin:0 0 1rem;color:#4a4a52}
+a{color:#0A0A0B;font-weight:700}
+</style>
+</head>
+<body>
+<h1>Dieser Bereich ist derzeit nicht verf\u00FCgbar</h1>
+<p>Wir haben ihn vor\u00FCbergehend offline genommen, bis die Nutzungsrechte an den verwendeten Daten gekl\u00E4rt sind.</p>
+<p><a href="/de/">agro-sv\u011Bt.cz &rarr;</a></p>
+</body>
+</html>
+`;
+
 /**
  * Vlastní logika webu. Obaluje ji `onRequest` níž, aby hlavičky dostala KAŽDÁ
  * odpověď — 403 na cross-site POST, 410 stažené mutace, 308 zkratky kalkulaček,
@@ -167,6 +190,18 @@ const handleRequest = defineMiddleware(async (context, next) => {
   const { locale, path: strippedPath } = stripLocale(url.pathname);
   locals.locale = locale;
   locals.localizedPathname = url.pathname;
+
+  // Sekce stažená z téhle mutace (licence dat) → 410, ne noindex render.
+  if (isWithdrawnPath(locale, strippedPath)) {
+    return new Response(WITHDRAWN_SECTION_BODY, {
+      status: 410,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'X-Robots-Tag': 'noindex, nofollow',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    });
+  }
 
   // Legacy URL z dřív rozbitých interních odkazů → 301 na platnou stránku
   // ve stejném jazyce (pravidla v lib/legacy-redirects.ts).

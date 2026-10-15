@@ -1099,7 +1099,7 @@ const uk: Record<string, string> = {
   'cat.s.d.allModels': 'Усі моделі →',
   'cat.s.d.ebProcessed': 'Опрацьовано',
   'cat.s.d.ebEditorial': 'редакцією agro-svět.cz',
-  'cat.s.d.ebSpec': 'Специфікація на основі публічних матеріалів виробника',
+  'cat.s.d.ebSpec': 'Специфікація за матеріалами виробника та галузевими базами даних — може містити помилки',
   'cat.s.d.asideKickerOne': 'актуальне оголошення',
   'cat.s.d.asideKickerFew': 'актуальні оголошення',
   'cat.s.d.asideKickerMany': 'актуальних оголошень',

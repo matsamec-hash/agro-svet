@@ -7,6 +7,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { SVET_LANGS, localizeUnit, REGION_NOTE } from '../../src/i18n/svet';
 import { chartCaption } from '../../src/lib/svet/chart';
+import { isWithdrawnPath } from '../../src/i18n/config';
+import { isLaunchedPath } from '../../src/i18n/utils';
 
 const SVET_DIR = path.join(process.cwd(), 'src/data/svet');
 const read = (p: string) => fs.readFileSync(path.join(process.cwd(), p), 'utf8');
@@ -176,5 +178,55 @@ describe('rizika mimo fotky (audit 2026-10-15)', () => {
     expect(h).toMatch(/showLogin = locale === 'cs' \|\| isLaunchedPath\(locale, '\/bazar'\)/);
     expect(h).toMatch(/id="guest-link"[^>]*hidden=\{!showLogin\}/);
     expect(h).toMatch(/\.guest-link\[hidden\] \{ display: none; \}/);
+  });
+});
+
+describe('právní texty po rešerši 2026-10-15', () => {
+  it('DSA kontakt cituje správně: čl. 3 h) není tržiště, výjimky jsou čl. 19 odst. 1 a čl. 29 odst. 1', () => {
+    const dsa = read('src/pages/dsa-kontakt.astro');
+    expect(dsa).not.toMatch(/3 (Buchst|písm|lit|п)\.? ?h\)/);
+    expect(dsa).not.toMatch(/19 (Abs|odst|ods|ust|ч)\. 2/);
+    expect(dsa.match(/29 (Abs|odst|ods|ust|ч)\. 1/g)?.length).toBe(5);
+    expect(dsa.match(/24 (Abs|odst|ods|ust|ч)\. 3/g)?.length).toBe(5);
+  });
+
+  it('de podmínky neposílají na rozhodčí orgány, které podnikatele z CZ neřeší', () => {
+    const t = read('src/pages/podminky-pouziti.astro');
+    expect(t).not.toMatch(/Universalschlichtungsstelle|verbraucherschlichtung\.at|nimmt daran nicht teil/);
+    expect(t).toMatch(/evz\.de/);
+    expect(t).toMatch(/europakonsument\.at/);
+  });
+
+  it('zásady: odpověď do měsíce (čl. 12 odst. 3) a samostatně právo námitky (čl. 21) ve všech jazycích', () => {
+    const z = read('src/pages/zpracovani-osobnich-udaju.astro');
+    expect(z).not.toMatch(/binnen 30 Tagen|do 30 dní\.|w ciągu 30 dni|протягом 30 днів/);
+    expect(z.match(/12 (Abs|odst|ods|ust|ч)\. 3/g)?.length).toBe(5);
+    expect(z.match(/<strong>[^<]*\((Art|čl|art|ст)\. 21 (DSGVO|GDPR|RODO)\):<\/strong>/g)?.length).toBe(5);
+  });
+
+  it('pod německými články není newsletter (potvrzení chodí česky)', () => {
+    expect(read('src/pages/novinky/[slug].astro')).toMatch(/\{locale !== 'de' && <Newsletter \/>\}/);
+  });
+});
+
+describe('sekce stažené z de kvůli licenci dat (2026-10-15)', () => {
+  it('/akcie a /svet nejsou launchnuté a vracejí 410, ostatní mutace beze změny', () => {
+    for (const p of ['/akcie', '/akcie/', '/akcie/DE/', '/svet', '/svet/nemecko/', '/svet/mapa/']) {
+      expect(isWithdrawnPath('de', p), p).toBe(true);
+    }
+    expect(isWithdrawnPath('de', '/svetlo')).toBe(false);
+    expect(isWithdrawnPath('de', '/stroje/')).toBe(false);
+    expect(isWithdrawnPath('pl', '/akcie/DE/')).toBe(false);
+    expect(isLaunchedPath('de', '/akcie')).toBe(false);
+    expect(isLaunchedPath('de', '/svet')).toBe(false);
+    const mw = read('src/middleware.ts');
+    expect(mw).toMatch(/if \(isWithdrawnPath\(locale, strippedPath\)\) \{\n\s*return new Response\(WITHDRAWN_SECTION_BODY, \{\n\s*status: 410/);
+  });
+
+  it('popisek specifikací neslibuje jen „veřejné materiály výrobce“', () => {
+    for (const l of ['cs', 'sk', 'pl', 'uk', 'de']) {
+      const row = read(`src/i18n/ui/${l}.ts`).split('\n').find((r) => r.includes("'cat.s.d.ebSpec':")) ?? '';
+      expect(row, l).not.toMatch(/veřejných|verejných|publicznych|публічних|öffentlicher/);
+    }
   });
 });

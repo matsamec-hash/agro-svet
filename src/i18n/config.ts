@@ -25,6 +25,22 @@ export function isRetiredLocale(value: string): boolean {
   return (RETIRED_LOCALES as readonly string[]).includes(value);
 }
 
+/** Sekce stažené z jedné jazykové mutace kvůli licenci dat → 410 (middleware).
+ *  Samotné vyřazení z LAUNCHED_PREFIXES nestačí: nelaunchnutá cesta se dál
+ *  vykreslí (noindex), takže data by byla pořád veřejně vidět.
+ *  2026-10-15 (audit licencí, ~/agro-svet/foto-audit/de/rizika/B-licence-dat.md):
+ *  /akcie — kurzy z neoficiálního Yahoo Finance, fundamenty z Finnhubu; podmínky
+ *           obou zakazují komerční použití a redistribuci.
+ *  /svet  — hranice NUTS z GISCO („not for commercial purposes“) a mapa Evropy
+ *           z historical-basemaps (GPL-3.0, nejasný původ). */
+export const WITHDRAWN_SECTIONS: Partial<Record<Locale, readonly string[]>> = {
+  de: ['/akcie', '/svet'],
+};
+
+export function isWithdrawnPath(locale: Locale, csPath: string): boolean {
+  return (WITHDRAWN_SECTIONS[locale] ?? []).some((p) => csPath === p || csPath === `${p}/` || csPath.startsWith(`${p}/`));
+}
+
 /** Locale, které web reálně servíruje (= `locales` bez stažených). */
 export const activeLocales: readonly Locale[] = locales.filter((l) => !isRetiredLocale(l));
 

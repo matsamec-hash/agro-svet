@@ -189,7 +189,10 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // /akcie — kurzy akcií agro firem. Faktická data (ticker, burza, měna) jsou
     // jazykově neutrální, kurátorské texty má de overlay akcie-agro-de.ts
     // (16/16 tickerů). Žádná jurisdikce — jsou to světové firmy.
-    '/akcie',
+    // ‼️ 2026-10-15 STAŽENO z de: kurzy jdou z neoficiálního endpointu Yahoo
+    // Finance a fundamenty z Finnhubu — podmínky obou zakazují komerční použití
+    // a redistribuci (audit licencí, ~/agro-svet/foto-audit/de/rizika/B-licence-dat.md).
+    // Vrátit až s licencovaným zdrojem kurzů.
     // /plodiny — de YAML overlay (18 plodin v src/data/plodiny/de/). Překládá se
     // JEN próza; slug, skupina, hero_*, seti_mesice/sklizen_mesice a wikipedia
     // zůstávají z cs, protože jsou to klíče (mapování, obrázky, kalendář).
@@ -212,7 +215,10 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // /svet — referenční zemí je Německo, ne Česko (SVET_REFERENCE), a mapa
     // zvýrazňuje DE. Historicky tu byl ternář `locale === 'sk' ? 'SK' : … : 'CZ'`,
     // takže by /de dostalo zvýrazněné Česko.
-    '/svet',
+    // ‼️ 2026-10-15 STAŽENO z de: regionální mapy kreslí hranice NUTS z GISCO,
+    // jejichž podmínky říkají „will not be used for commercial purposes“, a mapa
+    // Evropy pochází z aourednik/historical-basemaps (GPL-3.0, nejasný původ).
+    // Vrátit po přestavbě geometrií z public-domain zdroje (Natural Earth).
     // Fáze 3i: /novinky — výpis se omezuje na REÁLNĚ přeložené články
     // (fetchTranslatedArticleIds), takže žádný český článek do /de neprosákne.
     // ‼️ Feed je zatím úzký (5 strojních novinek: Fendt, Claas, New Holland,

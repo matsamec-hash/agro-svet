@@ -419,8 +419,9 @@ const jsonLd = {
     </aside>
   )}
 
-  <!-- Newsletter signup -->
-  <Newsletter />
+  {/* Newsletter pod de ne: potvrzení i přehled článků chodí česky (stejně jako
+      na HomeDe). Ostatní jazyky ho mají na své homepage, takže beze změny. */}
+  {locale !== 'de' && <Newsletter />}
 </Layout>
 
 <style>
