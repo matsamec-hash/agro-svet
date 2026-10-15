@@ -1,105 +1,107 @@
 ---
 // src/pages/oeko-regelungen/index.astro
-// DE-only landing: Öko-Regelungen (dobrovolné ekoschémata 1. pilíře GAP v Německu)
-// — Einheitsbeträge 2025 podle BMLEH. Jurisdikčně vázané na DE, obsah přímo
-// německy (mirror vzoru /ekoschematy pro pl). Non-de locale → 404.
+// DE-only landing: Öko-Regelungen (dobrovolné ekoschémata 1. pilíře GAP v Německu).
+// Jurisdikčně vázané na DE, obsah přímo německy. Non-de locale → 404.
+//
+// ‼️ 2026-10-15 přepsáno podle zdrojů, ne podle přehledů:
+//   - částky 2025 = SKUTEČNÉ (BAnz AT 01.12.2025 B6), shodují se s plánem;
+//   - plánované 2026 = GAPDZV Anlage 4 (ÖR 1d 1000/450/200, ÖR 3 600, ÖR 5 210);
+//   - pravidla = GAPDZV Anlage 5 (ÖR 1a do 8 % orné, 1-Hektar-Regel; ÖR 6
+//     stupeň 2 jen Ackerfutter; ÖR 4 hnojení jen do 1,4 RGV/ha).
+//   Dřív: „über 2 % bis 6 %", „mind. 1 ha", ÖR 6 „übrige Kulturen 50", ÖR 4
+//   „ohne mineralische N-Düngung", 2025 jako „geplant" — vše opraveno.
+// Zdroje stažené v ~/agro-svet/foto-audit/de/zdroje (banz1–3, gapdzv.txt, oer2026).
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { localizePath, isLaunchedPath } from '../../i18n/utils';
 import { DE_OER_MAX } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
-// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de. Od 2026-10-14 stažené, než se
-// opraví sazby a tvrzení podle ověření proti BMLEH/AMA (viz LAUNCHED_PREFIXES.de).
+// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de (stránka se dá znovu stáhnout jedním řádkem).
 if (locale !== 'de' || !isLaunchedPath('de', '/oeko-regelungen')) return Astro.rewrite('/404');
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-// ── Einheitsbeträge der Öko-Regelungen ───────────────────────────────────────
-// Zdroj: BMLEH, „Öko-Regelungen" (bmleh.de) — geplante Einheitsbeträge pro
-// Antragsjahr 2025. ‼️ Ministerstvo je vede jako PLÁNOVANÉ: skutečná částka
-// se dopočítá až podle toho, kolik plochy se v daném roce reálně přihlásí.
-// Přihlášená plocha u ÖR v roce 2025 výrazně vzrostla (tisková zpráva BMEL),
-// což sazby tlačí dolů — proto stránka nikde netvrdí, že jde o jistotu.
-type Stufe = { label: string; v: number };
+type Stufe = { label: string; v2025: number; v2026: number };
 type Oer = { code: string; name: string; desc: string; stufen: Stufe[] };
 
 const oer: Oer[] = [
   {
-    code: 'ÖR 1a', name: 'Nichtproduktive Ackerflächen',
-    desc: 'Freiwillige Stilllegung über die Konditionalität hinaus. Der Betrag ist nach dem Anteil an der Ackerfläche gestaffelt — die ersten Flächen werden am höchsten vergütet.',
+    code: 'ÖR 1a', name: 'Nichtproduktive Ackerflächen (Brache)',
+    desc: 'Ackerland, das über die Pflicht aus der Konditionalität hinaus brachliegt — begünstigt bis höchstens 8 % des förderfähigen Ackerlands. Gestaffelt nach Flächenanteil; mit der 1-Hektar-Regel gilt Stufe 1 für bis zu einen ganzen Hektar, auch wenn das mehr als 1 % ist (Betriebe über 10 ha Ackerland, ab 2026 auch Weinbaubetriebe).',
     stufen: [
-      { label: 'bis 1 % der Ackerfläche (mind. 1 ha)', v: DE_OER_MAX },
-      { label: 'über 1 % bis 2 %', v: 500 },
-      { label: 'über 2 % bis 6 %', v: 300 },
+      { label: 'Stufe 1 — bis 1 % des Ackerlands bzw. erster Hektar', v2025: DE_OER_MAX, v2026: DE_OER_MAX },
+      { label: 'Stufe 2 — über 1 % bis 2 %', v2025: 500, v2026: 500 },
+      { label: 'Stufe 3 — über 2 % bis 8 %', v2025: 300, v2026: 300 },
     ],
   },
   {
-    code: 'ÖR 1b', name: 'Blühstreifen und -flächen auf Ackerland',
-    desc: 'Anlage von Blühstreifen oder -flächen auf dem Acker als Nahrungsangebot für Insekten.',
-    stufen: [{ label: 'je Hektar', v: 200 }],
+    code: 'ÖR 1b', name: 'Blühstreifen und -flächen auf ÖR-1a-Flächen',
+    desc: 'Eingesät mit einer vorgegebenen Blühmischung auf Flächen, die bereits als ÖR 1a brachliegen — zusätzlich zur ÖR-1a-Prämie. Je Streifen oder Fläche 0,1 bis 3 Hektar, Aussaat bis 15. Mai.',
+    stufen: [{ label: 'je Hektar', v2025: 200, v2026: 200 }],
   },
   {
     code: 'ÖR 1c', name: 'Blühstreifen und -flächen in Dauerkulturen',
-    desc: 'Dieselbe Maßnahme in Dauerkulturen — etwa in Obstanlagen, Weinbergen oder Hopfengärten.',
-    stufen: [{ label: 'je Hektar', v: 200 }],
+    desc: 'Dieselben Blühmischungen in Dauerkulturen wie Obst, Wein oder Hopfen.',
+    stufen: [{ label: 'je Hektar', v2025: 200, v2026: 200 }],
   },
   {
     code: 'ÖR 1d', name: 'Altgrasstreifen und -flächen im Dauergrünland',
-    desc: 'Stehenlassen von Altgras über den Winter als Rückzugsraum für Insekten. Ebenfalls nach Flächenanteil gestaffelt.',
+    desc: 'Altgras, das erst ab 1. September genutzt werden darf — mindestens 1 % und höchstens 6 % des Dauergrünlands, je Fläche höchstens 20 %. Gestaffelt wie ÖR 1a, ebenfalls mit 1-Hektar-Regel. Für 2026 sind die ersten beiden Stufen angehoben.',
     stufen: [
-      { label: 'bis 1 % des Dauergrünlands (mind. 1 ha)', v: 900 },
-      { label: 'über 1 % bis 3 %', v: 400 },
-      { label: 'über 3 % bis 6 %', v: 200 },
+      { label: 'Stufe 1 — bis 1 % des Dauergrünlands bzw. erster Hektar', v2025: 900, v2026: 1000 },
+      { label: 'Stufe 2 — über 1 % bis 3 %', v2025: 400, v2026: 450 },
+      { label: 'Stufe 3 — über 3 % bis 6 %', v2025: 200, v2026: 200 },
     ],
   },
   {
     code: 'ÖR 2', name: 'Vielfältige Kulturen im Ackerbau',
-    desc: 'Anbau von mindestens fünf Hauptfruchtarten mit Mindestanteil an Leguminosen — eine weite Fruchtfolge statt enger Rotationen.',
-    stufen: [{ label: 'je Hektar Ackerfläche', v: 60 }],
+    desc: 'Mindestens fünf Hauptfruchtarten, jede auf 10 bis 30 % der Fläche, darunter mindestens 10 % Leguminosen; Getreide höchstens 66 %.',
+    stufen: [{ label: 'je Hektar Ackerland (ohne Brache)', v2025: 60, v2026: 60 }],
   },
   {
-    code: 'ÖR 3', name: 'Agroforstwirtschaft',
-    desc: 'Gehölzstreifen auf Acker- oder Grünland. Vergütet wird die Fläche der Gehölzstreifen selbst, nicht der gesamte Schlag.',
-    stufen: [{ label: 'je Hektar Gehölzfläche', v: 200 }],
+    code: 'ÖR 3', name: 'Agroforst',
+    desc: 'Beibehaltung von Gehölzstreifen auf Acker oder Grünland — 2 bis 40 % der Fläche, mindestens zwei Streifen. Vergütet wird nur die Gehölzfläche. Für 2026 ist der Betrag verdreifacht.',
+    stufen: [{ label: 'je Hektar Gehölzfläche', v2025: 200, v2026: 600 }],
   },
   {
     code: 'ÖR 4', name: 'Extensivierung des gesamten Dauergrünlands',
-    desc: 'Bewirtschaftung des gesamten Dauergrünlands eines Betriebs mit begrenztem Viehbesatz und ohne mineralische Stickstoffdüngung.',
-    stufen: [{ label: 'je Hektar Dauergrünland', v: 100 }],
+    desc: 'Im ganzen Betrieb 0,3 bis 1,4 raufutterfressende Großvieheinheiten je Hektar Dauergrünland. Gedüngt werden darf nur im Umfang des Dunganfalls von 1,4 RGV je Hektar; keine Pflanzenschutzmittel, kein Pflügen.',
+    stufen: [{ label: 'je Hektar Dauergrünland', v2025: 100, v2026: 100 }],
   },
   {
     code: 'ÖR 5', name: 'Kennarten im Dauergrünland',
-    desc: 'Nachweis einer artenreichen Grünlandnarbe anhand vorgegebener Kennarten — belohnt wird das Ergebnis, nicht die einzelne Maßnahme.',
-    stufen: [{ label: 'je Hektar', v: 225 }],
+    desc: 'Nachweis von mindestens vier Kennarten des artenreichen Grünlands aus der Liste des Bundeslandes — bezahlt wird das Ergebnis, nicht eine bestimmte Bewirtschaftung.',
+    stufen: [{ label: 'je Hektar', v2025: 225, v2026: 210 }],
   },
   {
     code: 'ÖR 6', name: 'Verzicht auf chemisch-synthetische Pflanzenschutzmittel',
-    desc: 'Vollständiger Verzicht auf chemisch-synthetischen Pflanzenschutz. Der Betrag unterscheidet sich nach Kulturgruppe.',
+    desc: 'Kein chemisch-synthetischer Pflanzenschutz auf den bezeichneten Flächen; Mittel mit geringem Risiko und für den Ökolandbau zugelassene Mittel bleiben erlaubt. Die Stufe richtet sich nach der Kultur.',
     stufen: [
-      { label: 'Dauerkulturen und bestimmte Kulturen', v: 150 },
-      { label: 'übrige Kulturen', v: 50 },
+      { label: 'Stufe 1 — Sommergetreide inkl. Mais, Leguminosen (außer Ackerfutter), Sommer-Ölsaaten, Hackfrüchte, Feldgemüse, Dauerkulturen', v2025: 150, v2026: 150 },
+      { label: 'Stufe 2 — Gras und Grünfutter, Leguminosen als Ackerfutter', v2025: 50, v2026: 50 },
     ],
   },
   {
     code: 'ÖR 7', name: 'Bewirtschaftung in Natura-2000-Gebieten',
-    desc: 'Zusätzliche Vergütung für Flächen in ausgewiesenen Natura-2000-Gebieten, in denen besondere Auflagen gelten.',
-    stufen: [{ label: 'je Hektar', v: 40 }],
+    desc: 'Für landwirtschaftliche Flächen in Natura-2000-Gebieten, auf denen die dort geltenden Auflagen eingehalten werden.',
+    stufen: [{ label: 'je Hektar', v2025: 40, v2026: 40 }],
   },
 ];
 
 const fmt = (v: number) => v.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-const maxBetrag = Math.max(...oer.flatMap((o) => o.stufen.map((s) => s.v)));
+const maxBetrag = DE_OER_MAX;
 
 const lastUpdated = new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
 const pageUrl = 'https://agro-svet.cz/de/oeko-regelungen/';
 
 const faq = [
-  { q: 'Was sind die Öko-Regelungen?', a: 'Die Öko-Regelungen sind freiwillige einjährige Umweltmaßnahmen in der ersten Säule der GAP. Wer sie beantragt, erhält zusätzlich zu den Direktzahlungen einen Betrag je Hektar. Anders als Agrarumweltmaßnahmen der zweiten Säule binden sie den Betrieb nicht über mehrere Jahre — die Entscheidung fällt jedes Jahr neu.' },
-  { q: 'Wie hoch ist die höchste Prämie?', a: `Den höchsten Betrag zahlt die Öko-Regelung 1a für nichtproduktive Ackerflächen: bis zu ${fmt(maxBetrag)} €/ha für die erste Stufe (bis 1 % der Ackerfläche). Bei größerem Flächenanteil sinkt der Betrag stufenweise auf 500 und 300 €/ha.` },
-  { q: 'Warum sind die Beträge gestaffelt?', a: 'Die Staffelung soll möglichst viele Betriebe zu einem kleinen Beitrag bewegen, statt wenige Betriebe große Flächen stilllegen zu lassen. Die ersten Prozent der Fläche sind deshalb deutlich höher vergütet als die weiteren.' },
-  { q: 'Sind die genannten Beträge garantiert?', a: 'Nein. Es handelt sich um geplante Einheitsbeträge. Der tatsächliche Betrag hängt davon ab, wie viel Fläche bundesweit für die jeweilige Öko-Regelung angemeldet wird — wird mehr beantragt als eingeplant, sinkt der Betrag je Hektar. Die Nachfrage nach den Öko-Regelungen ist 2025 deutlich gestiegen.' },
-  { q: 'Kann man mehrere Öko-Regelungen kombinieren?', a: 'Ja, mehrere Öko-Regelungen lassen sich auf einem Betrieb kombinieren. Für dieselbe Fläche gelten allerdings Ausschlüsse — nicht jede Maßnahme lässt sich mit jeder anderen auf demselben Schlag stapeln.' },
+  { q: 'Was sind die Öko-Regelungen?', a: 'Freiwillige Umweltmaßnahmen in der ersten Säule der GAP. Wer sie beantragt, erhält zusätzlich zu den Direktzahlungen einen Betrag je Hektar. Sie gelten jeweils für ein Antragsjahr und werden mit dem Sammelantrag beantragt — anders als die mehrjährigen Agrarumweltmaßnahmen der zweiten Säule.' },
+  { q: 'Wie hoch ist die höchste Prämie?', a: `Die ÖR 1a für nichtproduktive Ackerflächen: ${fmt(maxBetrag)} €/ha in Stufe 1, also für das erste Prozent des Ackerlands beziehungsweise den ersten Hektar. Darüber 500 €/ha bis 2 % und 300 €/ha bis zur Obergrenze von 8 %.` },
+  { q: 'Sind die Beträge für 2025 endgültig?', a: 'Ja. Das BMLEH hat die tatsächlichen Einheitsbeträge für 2025 am 1. Dezember 2025 im Bundesanzeiger bekannt gemacht; sie entsprechen den geplanten. Das war nicht immer so: 2023 lag ÖR 1a in Stufe 1 bei 1 690 €/ha und 2024 bei 1 410,83 €/ha, jeweils über dem geplanten Betrag von 1 300 €/ha.' },
+  { q: 'Was ändert sich 2026?', a: 'Die geplanten Beträge für Altgrasstreifen (ÖR 1d) steigen auf 1 000 und 450 €/ha in den ersten beiden Stufen, für Agroforst (ÖR 3) von 200 auf 600 €/ha Gehölzfläche. Für Kennarten im Grünland (ÖR 5) sind 210 statt 225 €/ha geplant. Weinbaubetriebe können die 1-Hektar-Regel der ÖR 1a künftig auch mit weniger als 10 Hektar Ackerland nutzen.' },
+  { q: 'Warum sind die Beträge gestaffelt?', a: 'Die ersten Prozent einer Fläche werden deutlich höher vergütet als die weiteren. So lohnt sich schon ein kleiner Beitrag, und viele Betriebe machen mit, statt dass wenige große Flächen stilllegen.' },
+  { q: 'Kann man mehrere Öko-Regelungen kombinieren?', a: 'Im Betrieb ja, auf derselben Fläche nur eingeschränkt. ÖR 1b baut sogar ausdrücklich auf ÖR-1a-Flächen auf; andere Kombinationen auf demselben Schlag sind ausgeschlossen.' },
 ];
 
 const jsonLd = {
@@ -121,8 +123,8 @@ const jsonLd = {
 ---
 
 <Layout
-  title="Öko-Regelungen 2025 — Beträge je Hektar (ÖR 1 bis 7)"
-  description={`Alle Öko-Regelungen 2025 mit ihren Einheitsbeträgen: ÖR 1a bis ${fmt(maxBetrag)} €/ha, Blühstreifen 200 €/ha, vielfältige Kulturen 60 €/ha, Kennarten im Grünland 225 €/ha. Vollständige Tabelle mit Staffelung und FAQ.`}
+  title="Öko-Regelungen 2025 und 2026 — Beträge je Hektar (ÖR 1 bis 7)"
+  description={`Die Öko-Regelungen mit ihren Einheitsbeträgen: 2025 endgültig laut Bundesanzeiger, 2026 geplant. ÖR 1a bis ${fmt(maxBetrag)} €/ha, Blühstreifen 200 €/ha, Agroforst 2026 600 €/ha. Staffelung, Regeln und FAQ.`}
   noHreflang={true}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
@@ -136,26 +138,25 @@ const jsonLd = {
       </nav>
 
       <header class="db-head">
-        <span class="db-eyebrow">Freiwillige Umweltmaßnahmen der 1. Säule · Antragsjahr 2025</span>
-        <h1>Öko-Regelungen 2025 — Beträge</h1>
+        <span class="db-eyebrow">Freiwillige Umweltmaßnahmen der 1. Säule · Antragsjahr 2025 und 2026</span>
+        <h1>Öko-Regelungen — Beträge je Hektar</h1>
         <p class="db-lead">
           Die sieben Öko-Regelungen sind freiwillige, einjährige Umweltmaßnahmen. Wer sie beantragt,
-          bekommt zusätzlich zu den Direktzahlungen einen Betrag je Hektar. Unten alle Maßnahmen
-          mit ihrer Staffelung — und ein deutlicher Hinweis darauf, was an diesen Zahlen noch
-          nicht endgültig ist.
+          bekommt zusätzlich zu den Direktzahlungen einen Betrag je Hektar. Unten jede Maßnahme mit
+          ihren Regeln, dem endgültigen Betrag für 2025 und dem geplanten für 2026.
         </p>
       </header>
 
-      <section class="db-hero-stats" aria-label="Spannweite der Beträge">
+      <section class="db-hero-stats" aria-label="Beispiele">
         <div class="db-stat db-stat--hl">
-          <span class="l">Höchster Betrag (ÖR 1a, Stufe 1)</span>
+          <span class="l">ÖR 1a, Stufe 1</span>
           <span class="v">{fmt(maxBetrag)} <small>€/ha</small></span>
-          <span class="d">bis 1 % der Ackerfläche</span>
+          <span class="d">erstes Prozent bzw. erster Hektar</span>
         </div>
         <div class="db-stat">
-          <span class="l">Kennarten im Dauergrünland</span>
-          <span class="v">225 <small>€/ha</small></span>
-          <span class="d">ergebnisorientiert (ÖR 5)</span>
+          <span class="l">Agroforst 2026</span>
+          <span class="v">600 <small>€/ha</small></span>
+          <span class="d">geplant, je Hektar Gehölzfläche (ÖR 3)</span>
         </div>
         <div class="db-stat">
           <span class="l">Vielfältige Kulturen</span>
@@ -173,14 +174,14 @@ const jsonLd = {
             <div class="db-tblscroll">
               <table class="db-tbl">
                 <thead>
-                  <tr><th>Stufe</th><th class="num">Betrag</th><th>Einheit</th></tr>
+                  <tr><th>Stufe</th><th class="num">2025 (endgültig)</th><th class="num">2026 (geplant)</th></tr>
                 </thead>
                 <tbody>
                   {o.stufen.map((s) => (
                     <tr>
                       <td><span class="db-tbl-name">{s.label}</span></td>
-                      <td class="num strong">{fmt(s.v)}</td>
-                      <td class="unit">€/ha</td>
+                      <td class="num strong">{fmt(s.v2025)} €/ha</td>
+                      <td class="num">{fmt(s.v2026)} €/ha</td>
                     </tr>
                   ))}
                 </tbody>
@@ -188,18 +189,18 @@ const jsonLd = {
             </div>
           </div>
         ))}
-        <p class="db-tbl-src">Es handelt sich um <strong>geplante</strong> Einheitsbeträge. Der
-          tatsächliche Betrag ergibt sich erst aus der bundesweit angemeldeten Fläche — wird mehr
-          beantragt als eingeplant, sinkt der Betrag je Hektar.</p>
+        <p class="db-tbl-src">Für 2026 sind es <strong>geplante</strong> Einheitsbeträge. Den tatsächlichen
+          Betrag macht das BMLEH nach Auswertung aller Anträge Ende des Jahres im Bundesanzeiger bekannt;
+          er kann höher oder niedriger ausfallen, je nachdem, wie viel Fläche bundesweit beantragt wird.</p>
       </section>
 
       <section class="db-explain" aria-labelledby="exp-h">
         <h2 id="exp-h">Wie sich die Öko-Regelungen einordnen</h2>
         <div class="db-explain-grid">
           <div class="db-exp"><h3>Erste Säule, aber freiwillig</h3><p>Die Öko-Regelungen liegen in der ersten Säule der GAP, sind aber freiwillig. Sie kommen zu den Direktzahlungen hinzu und ersetzen sie nicht.</p></div>
-          <div class="db-exp"><h3>Einjährig statt mehrjährig</h3><p>Anders als die Agrarumwelt- und Klimamaßnahmen der zweiten Säule binden sie den Betrieb nicht über mehrere Jahre. Die Entscheidung fällt in jedem Antragsjahr neu.</p></div>
-          <div class="db-exp"><h3>Gestaffelte Beträge</h3><p>Bei ÖR 1a und 1d sinkt der Betrag mit steigendem Flächenanteil. Das soll viele Betriebe zu einem kleinen Beitrag bewegen, statt wenige zu großflächiger Stilllegung.</p></div>
-          <div class="db-exp"><h3>Kombinierbar mit Grenzen</h3><p>Mehrere Öko-Regelungen lassen sich im Betrieb kombinieren. Auf derselben Fläche gelten jedoch Ausschlüsse — nicht jede Maßnahme lässt sich mit jeder anderen stapeln.</p></div>
+          <div class="db-exp"><h3>Jedes Jahr neu</h3><p>Sie gelten für ein Antragsjahr. Ob ein Betrieb teilnimmt, entscheidet er mit jedem Sammelantrag neu — anders als bei mehrjährigen Agrarumweltmaßnahmen.</p></div>
+          <div class="db-exp"><h3>Gestaffelte Beträge</h3><p>Bei ÖR 1a und 1d sinkt der Betrag mit dem Flächenanteil. Die 1-Hektar-Regel sorgt dafür, dass auch kleinere Betriebe einen ganzen Hektar zum höchsten Satz einbringen können.</p></div>
+          <div class="db-exp"><h3>Geplant und tatsächlich</h3><p>Geplante Beträge stehen in der GAP-Direktzahlungen-Verordnung. Der tatsächliche Betrag hängt von der beantragten Fläche ab — 2023 und 2024 lag er bei ÖR 1a über dem Plan, 2025 genau darauf.</p></div>
         </div>
       </section>
 
@@ -214,11 +215,11 @@ const jsonLd = {
       </section>
 
       <div class="db-related">
-        <a href={localizePath('de', '/direktzahlungen/')}>→ Direktzahlungen 2025 — Einheitsbeträge je Hektar</a>
+        <a href={localizePath('de', '/direktzahlungen/')}>→ Direktzahlungen — Einheitsbeträge je Hektar</a>
       </div>
 
       <footer class="db-src">
-        <p>Datenquelle: <a href="https://www.bmleh.de/DE/themen/landwirtschaft/eu-agrarpolitik-und-foerderung/direktzahlung/oeko-regelungen.html" target="_blank" rel="noopener">BMLEH — Öko-Regelungen</a>, geplante Einheitsbeträge für das Antragsjahr 2025. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
+        <p>Datenquellen: <a href="https://www.bundesanzeiger.de/pub/publication/6jX01V1HVYmvLWWWWGS/content/6jX01V1HVYmvLWWWWGS/BAnz%20AT%2001.12.2025%20B6.pdf" target="_blank" rel="noopener">Bundesanzeiger, BAnz AT 01.12.2025 B6</a> (tatsächliche Einheitsbeträge 2025), <a href="https://www.gesetze-im-internet.de/gapdzv/" target="_blank" rel="noopener">GAP-Direktzahlungen-Verordnung</a> (Anlage 4: geplante Beträge 2026; Anlage 5: Verpflichtungen) und <a href="https://www.bmleh.de/DE/themen/landwirtschaft/eu-agrarpolitik-und-foerderung/direktzahlung/oeko-regelungen.html" target="_blank" rel="noopener">BMLEH — Öko-Regelungen</a>. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
       </footer>
     </div>
   </main>

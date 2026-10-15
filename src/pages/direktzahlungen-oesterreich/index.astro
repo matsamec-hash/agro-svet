@@ -1,72 +1,68 @@
 ---
 // src/pages/direktzahlungen-oesterreich/index.astro
-// DE-only landing: přímé platby GAP v RAKOUSKU (1. pilíř) — Basiseinkommens-
-// stützung, Umverteilung, Junglandwirte, gekoppelte Stützung Almauftrieb.
-// Jurisdikčně vázané na AT → obsah psán přímo německy, NE přes t() klíče.
-// Non-de locale → 404 (žádný cs ekvivalent; stránka existuje jen pod /de).
+// DE-only landing: přímé platby GAP v RAKOUSKU (1. pilíř) — Basiszahlung,
+// Umverteilung, Junglandwirte, Almauftriebsprämie. Jurisdikčně vázané na AT
+// → obsah psán přímo německy, NE přes t() klíče. Non-de locale → 404.
 //
-// ‼️ ZÁSADNÍ ROZDÍL PROTI NĚMECKU: Rakousko NEvyhlašuje roční Einheitsbeträge
-// v obdobě Bundesanzeigeru. Ministerstvo i komora uvádějí sazby slovem
-// „rund" / „etwa" jako orientační hodnoty pro celé období 2023–2027. Stránka
-// to musí říkat nahlas — jinak by tvrdila přesnost, kterou zdroj nemá.
-//
-// Zdroje (ověřeno křížem, shodují se):
-//   - BMLUK, „Einkommenssicherung" a „Unterstützung Junglandwirtinnen und
-//     Junglandwirte" (bmluk.gv.at) — nationaler GAP-Strategieplan
-//   - Landwirtschaftskammer Österreich, „Direktzahlungen ab 2023" (lko.at)
-// ✅ Křížová kontrola sedí i aritmeticky: LKO uvádí 252 €/ha pro prvních 20 ha
-//    a 230 €/ha pro 21.–40. ha, což je přesně 208 + 44 a 208 + 22.
+// ‼️ 2026-10-15 přepsáno. Dřívější verze tvrdila, že Rakousko „nevyhlašuje
+// roční Einheitsbeträge" a uváděla „Richtwerte" 208/41/44/22/66/100/50 z LKÖ
+// (2022, návrh strategického plánu). Ve skutečnosti AMA částky dopočítává
+// a vyhlašuje každý rok v prosinci (§ 21 Abs. 11 GSP-AV). Teď: 2025 konečné,
+// 2026 předběžné — data v src/data/foerderung-de.ts (AT_DZ).
+// Zdroje (stažené v ~/agro-svet/foto-audit/de/zdroje):
+//   - AMA, Prämienbetrag gemäß § 21 Abs. 11 GSP-AV (Antragsjahr 2025)
+//   - AMA, Merkblatt Direktzahlungen 2026 (13. 11. 2025) — ca.-Beträge 2026,
+//     MFA-Frist, Junglandwirte, Umverteilung, Kappung, Almauftrieb
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { localizePath, isLaunchedPath } from '../../i18n/utils';
-import { AT_BASIS_HEIMGUT, AT_BASIS_ALM, AT_UMV_20, AT_UMV_40, AT_JUNG } from '../../data/foerderung-de';
+import { AT_DZ } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
-// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de. Od 2026-10-14 stažené, než se
-// opraví sazby a tvrzení podle ověření proti BMLEH/AMA (viz LAUNCHED_PREFIXES.de).
+// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de (stránka se dá znovu stáhnout jedním řádkem).
 if (locale !== 'de' || !isLaunchedPath('de', '/direktzahlungen-oesterreich')) return Astro.rewrite('/404');
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-const BASIS_HEIMGUT = AT_BASIS_HEIMGUT;
-const BASIS_ALM = AT_BASIS_ALM;
-const UMV_20 = AT_UMV_20;
-const UMV_40 = AT_UMV_40;
-const JUNG = AT_JUNG;
+const A = AT_DZ[2025];
+const B = AT_DZ[2026];
 
-type Row = { name: string; v: number; unit: '€/ha' | '€/RGVE'; note?: string };
+type Row = { name: string; v2025: number; v2026: number; unit: '€/ha' | '€/RGVE'; note: string };
 
 const flaeche: Row[] = [
-  { name: 'Basiseinkommensstützung — Heimgutflächen', v: BASIS_HEIMGUT, unit: '€/ha', note: 'Acker, Dauergrünland, Dauerkulturen' },
-  { name: 'Basiseinkommensstützung — Almweideflächen', v: BASIS_ALM, unit: '€/ha', note: 'eigener, deutlich niedrigerer Satz' },
-  { name: 'Umverteilungseinkommensstützung — 1. bis 20. Hektar', v: UMV_20, unit: '€/ha', note: 'Zuschlag zur Basiszahlung' },
-  { name: 'Umverteilungseinkommensstützung — 21. bis 40. Hektar', v: UMV_40, unit: '€/ha', note: 'ab dem 41. Hektar entfällt sie' },
-  { name: 'Einkommensstützung für Junglandwirte', v: JUNG, unit: '€/ha', note: 'max. 40 ha, höchstens 5 Jahre' },
+  { name: 'Basiszahlung — Heimgutflächen', v2025: A.heimgut, v2026: B.heimgut, unit: '€/ha', note: 'Acker, Grünland und Dauerkulturen im Tal' },
+  { name: 'Basiszahlung — Almweideflächen', v2025: A.alm, v2026: B.alm, unit: '€/ha', note: 'eigener, deutlich niedrigerer Satz' },
+  { name: 'Umverteilungszahlung — 1. bis 20. Hektar', v2025: A.umv20, v2026: B.umv20, unit: '€/ha', note: 'zusätzlich, nur Heimgut' },
+  { name: 'Umverteilungszahlung — 21. bis 40. Hektar', v2025: A.umv40, v2026: B.umv40, unit: '€/ha', note: 'halber Satz, ab dem 41. Hektar nichts' },
+  { name: 'Zahlung für Junglandwirtinnen und Junglandwirte', v2025: A.jung, v2026: B.jung, unit: '€/ha', note: 'höchstens 40 ha, höchstens 5 Jahre' },
 ];
 
 const tiere: Row[] = [
-  { name: 'Gekoppelte Einkommensstützung — Kühe, Zuchtschafe und -ziegen', v: 100, unit: '€/RGVE', note: 'nur bei Almauftrieb' },
-  { name: 'Gekoppelte Einkommensstützung — sonstige Rinder (Kalbinnen, Ochsen)', v: 50, unit: '€/RGVE', note: 'nur bei Almauftrieb' },
+  { name: 'Almauftriebsprämie — Kühe', v2025: A.almKuehe, v2026: B.almKuehe, unit: '€/RGVE', note: 'nur für aufgetriebene Tiere' },
+  { name: 'Almauftriebsprämie — Mutterschafe und Mutterziegen', v2025: A.almSchafeZiegen, v2026: B.almSchafeZiegen, unit: '€/RGVE', note: 'nur für aufgetriebene Tiere' },
+  { name: 'Almauftriebsprämie — Rinder ohne Kühe', v2025: A.almRinder, v2026: B.almRinder, unit: '€/RGVE', note: 'etwa Kalbinnen und Ochsen' },
 ];
 
-// Effektiver Satz je Hektar nach Staffelung — das, was Betriebe tatsächlich interessiert.
+// Effektiver Satz je Hektar Heimgut nach Staffelung (Antragsjahr 2025, endgültig).
 const staffel = [
-  { label: '1. bis 20. Hektar', v: BASIS_HEIMGUT + UMV_20 },
-  { label: '21. bis 40. Hektar', v: BASIS_HEIMGUT + UMV_40 },
-  { label: 'ab dem 41. Hektar', v: BASIS_HEIMGUT },
+  { label: '1. bis 20. Hektar', v: A.heimgut + A.umv20 },
+  { label: '21. bis 40. Hektar', v: A.heimgut + A.umv40 },
+  { label: 'ab dem 41. Hektar', v: A.heimgut },
 ];
 
-const fmt = (v: number) => v.toLocaleString('de-DE', { maximumFractionDigits: 0 });
+const fmt = (v: number) => v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmt0 = (v: number) => v.toLocaleString('de-DE', { maximumFractionDigits: 0 });
 const lastUpdated = new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
 const pageUrl = 'https://agro-svet.cz/de/direktzahlungen-oesterreich/';
 
 const faq = [
-  { q: 'Wie hoch ist die Basiseinkommensstützung in Österreich?', a: `Die Basiseinkommensstützung beträgt rund ${fmt(BASIS_HEIMGUT)} €/ha für Heimgutflächen — also Acker, Dauergrünland und Dauerkulturen. Für Almweideflächen gilt ein eigener, deutlich niedrigerer Satz von rund ${fmt(BASIS_ALM)} €/ha. Es handelt sich um Richtwerte des nationalen GAP-Strategieplans für die Periode 2023 bis 2027, nicht um jährlich amtlich bekannt gemachte Einheitsbeträge.` },
-  { q: 'Wie funktioniert die Umverteilungseinkommensstützung?', a: `Kleinere Betriebe sollen je Hektar mehr bekommen als große. Deshalb gibt es auf die ersten 40 Hektar einen Aufschlag in zwei Stufen — rund ${fmt(UMV_20)} €/ha bis zum 20. Hektar, danach nur noch rund ${fmt(UMV_40)} €/ha; jeder weitere Hektar erhält allein die Basiszahlung. Rechnet man beides zusammen, ergeben sich effektiv rund ${fmt(BASIS_HEIMGUT + UMV_20)} €/ha (Hektar 1–20) und rund ${fmt(BASIS_HEIMGUT + UMV_40)} €/ha (Hektar 21–40).` },
-  { q: 'Was bekommen Junglandwirtinnen und Junglandwirte?', a: `Gedacht ist der Zuschlag für alle, die im Jahr der Betriebsgründung höchstens 40 Jahre alt sind und den Hof selbst führen. Sie erhalten rund ${fmt(JUNG)} €/ha obendrauf — angerechnet werden bis zu 40 Hektar, und nach spätestens fünf aufeinanderfolgenden Jahren endet die Zahlung. Eine fachliche Ausbildung gehört dazu, etwa die Facharbeiterprüfung, eine einschlägige höhere Schule oder ein Studium; das Zeugnis darf noch bis zu zwei Jahre nach dem Einstieg nachgereicht werden.` },
-  { q: 'Was ist die gekoppelte Einkommensstützung für den Almauftrieb?', a: 'Eine an Tiere gebundene Zahlung, die es nur für auf die Alm aufgetriebene Tiere gibt. Abgerechnet wird je raufutterverzehrender Großvieheinheit (RGVE): Kühe, Zuchtschafe und Zuchtziegen bringen rund 100 €, Kalbinnen, Ochsen und die übrigen Rinder die Hälfte, also rund 50 €. Sie soll die Almbewirtschaftung erhalten, die sonst wirtschaftlich unter Druck steht.' },
-  { q: 'Sind das exakte Beträge?', a: 'Nein. Anders als in Deutschland, wo das BMLEH die endgültigen Einheitsbeträge jährlich im Bundesanzeiger bekannt macht, nennen das österreichische Ministerium und die Landwirtschaftskammer die Sätze ausdrücklich mit „rund" beziehungsweise „etwa". Es sind Richtwerte des GAP-Strategieplans für 2023 bis 2027. Der tatsächlich ausgezahlte Betrag hängt von der beantragten Fläche und dem verfügbaren Budget ab. Verbindlich ist der AMA-Bescheid.' },
-  { q: 'Wann zahlt die AMA aus?', a: 'Die Hauptauszahlung der Direktzahlungen erfolgt in der Regel im Dezember des Antragsjahres. Die AMA gibt den genauen Termin jährlich bekannt; Teilzahlungen können früher erfolgen.' },
+  { q: 'Wie hoch ist die Basiszahlung in Österreich?', a: `Für das Antragsjahr 2025 hat die AMA ${fmt(A.heimgut)} € je Hektar Heimgutfläche festgesetzt. Almweideflächen erhalten einen eigenen Satz von ${fmt(A.alm)} €/ha. Für 2026 nennt die AMA vorläufig rund ${fmt0(B.heimgut)} bzw. ${fmt0(B.alm)} €/ha; der genaue Betrag folgt im Dezember 2026.` },
+  { q: 'Gibt es in Österreich jährliche Einheitsbeträge?', a: 'Ja. Die AMA rechnet die Beträge jedes Jahr neu: Das für Österreich verfügbare Budget einer Maßnahme wird auf die österreichweit beantragten förderfähigen Hektar beziehungsweise RGVE verteilt. Das Ergebnis veröffentlicht sie im Dezember auf ama.at (§ 21 Abs. 11 GSP-AV). Vor der Antragstellung gibt es nur vorläufige Werte im Merkblatt. Verbindlich für den einzelnen Betrieb ist der Bescheid der AMA.' },
+  { q: 'Wie wird die Umverteilungszahlung berechnet?', a: `Sie kommt zur Basiszahlung hinzu, aber nur auf Heimgutflächen und höchstens auf 40 Hektar. Die ersten 20 Hektar erhalten den vollen Satz (2025: ${fmt(A.umv20)} €/ha), der 21. bis 40. Hektar den halben (${fmt(A.umv40)} €/ha). Almweideflächen sind ausgenommen. Zusammen mit der Basiszahlung ergeben sich 2025 effektiv ${fmt(A.heimgut + A.umv20)} €/ha für die ersten 20 Hektar.` },
+  { q: 'Welche Bedingungen gelten für Junglandwirtinnen und Junglandwirte?', a: `Wer einen Betrieb übernimmt oder gründet, darf im Jahr der Aufnahme der Tätigkeit höchstens 40 Jahre alt sein. Die passende landwirtschaftliche Ausbildung muss spätestens zwei Jahre danach abgeschlossen sein; in begründeten Fällen verlängert die AMA die Frist um ein Jahr. Gezahlt werden ${fmt(A.jung)} €/ha (2025) für höchstens 40 Hektar und längstens fünf aufeinanderfolgende Jahre ab dem ersten Antrag — in der laufenden Periode bis spätestens 2027.` },
+  { q: 'Wofür gibt es die Almauftriebsprämie?', a: `Für Tiere, die tatsächlich auf eine Alm aufgetrieben und rechtzeitig gemeldet werden. Gerechnet wird je raufutterverzehrender Großvieheinheit (RGVE): 2025 gab es ${fmt(A.almKuehe)} € für Kühe sowie für Mutterschafe und Mutterziegen und ${fmt(A.almRinder)} € für die übrigen Rinder. 2026 müssen die Tiere bis spätestens 15. Juli aufgetrieben und gemeldet sein.` },
+  { q: 'Bis wann muss der Antrag gestellt werden?', a: 'Basiszahlung, Umverteilung, Junglandwirte und Almauftriebsprämie werden im Mehrfachantrag (MFA) beantragt — 2026 bis 15. April, eingereicht über eAMA. Den Auszahlungstermin gibt die AMA jährlich auf ihrer Website bekannt.' },
+  { q: 'Gibt es eine Obergrenze?', a: 'Ja. Die Basiszahlung ist je Betrieb grundsätzlich auf 100 000 € begrenzt. Löhne und Gehälter für die landwirtschaftliche Tätigkeit samt Steuern und Sozialabgaben dürfen dabei angerechnet werden, wenn sie der AMA mit dem MFA nachgewiesen werden.' },
 ];
 
 const jsonLd = {
@@ -85,13 +81,13 @@ const jsonLd = {
 
 const groups: { title: string; rows: Row[] }[] = [
   { title: 'Flächenbezogene Zahlungen', rows: flaeche },
-  { title: 'Gekoppelte Einkommensstützung — Almauftrieb', rows: tiere },
+  { title: 'Almauftriebsprämie (gekoppelte Einkommensstützung)', rows: tiere },
 ];
 ---
 
 <Layout
-  title="Direktzahlungen Österreich — Beträge je Hektar (AMA)"
-  description={`Die Direktzahlungen der GAP in Österreich: Basiseinkommensstützung rund ${fmt(BASIS_HEIMGUT)} €/ha, Umverteilung ${fmt(UMV_20)} €/ha für die ersten 20 Hektar, Junglandwirte ${fmt(JUNG)} €/ha. Vollständige Tabelle, Staffelung und Prämienrechner.`}
+  title="Direktzahlungen Österreich 2025 — Einheitsbeträge der AMA"
+  description={`Die Einheitsbeträge der Direktzahlungen in Österreich: Basiszahlung ${fmt(A.heimgut)} €/ha Heimgut (2025, AMA), Umverteilung ${fmt(A.umv20)} €/ha auf die ersten 20 Hektar, Junglandwirte ${fmt(A.jung)} €/ha. Vorläufige Werte 2026 und Prämienrechner.`}
   noHreflang={true}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
@@ -105,58 +101,58 @@ const groups: { title: string; rows: Row[] }[] = [
       </nav>
 
       <header class="db-head">
-        <span class="db-eyebrow">GAP-Direktzahlungen Österreich · Periode 2023–2027</span>
+        <span class="db-eyebrow">GAP-Direktzahlungen Österreich · Antragsjahr 2025 und 2026</span>
         <h1>Direktzahlungen in Österreich — Beträge je Hektar</h1>
         <p class="db-lead">
-          Die Sätze der ersten Säule nach dem österreichischen GAP-Strategieplan: Basiseinkommens­stützung,
-          Umverteilung auf die ersten 40 Hektar, Junglandwirte und die gekoppelte Stützung für den Almauftrieb.
-          Unten die vollständige Tabelle, die effektive Staffelung je Hektar und ein Rechner.
+          Basiszahlung, Umverteilung auf die ersten 40 Hektar, Junglandwirte und Almauftriebsprämie:
+          die von der AMA festgesetzten Einheitsbeträge für 2025, die vorläufigen Werte für 2026,
+          die effektive Staffelung je Hektar und ein Rechner.
         </p>
       </header>
 
       <div class="db-flag">
-        <strong>Richtwerte, keine amtlich fixierten Jahresbeträge.</strong> Anders als in Deutschland
-        veröffentlicht Österreich keine jährlichen Einheitsbeträge in einem Amtsblatt. Ministerium und
-        Landwirtschaftskammer nennen die Sätze ausdrücklich mit „rund" und „etwa" — als Richtwerte für
-        die gesamte Periode 2023 bis 2027. Verbindlich ist allein der Bescheid der AMA.
+        <strong>2025 endgültig, 2026 vorläufig.</strong> Die AMA berechnet die Beträge jedes Jahr neu und
+        veröffentlicht sie im Dezember. Die Werte für 2025 sind die festgesetzten Einheitsbeträge; für 2026
+        gibt es bisher nur die gerundeten Werte aus dem Merkblatt, den genauen Betrag verlautbart die AMA im
+        Dezember 2026. Verbindlich für den einzelnen Betrieb ist der Bescheid der AMA.
       </div>
 
-      <section class="db-hero-stats" aria-label="Wichtigste Beträge">
+      <section class="db-hero-stats" aria-label="Wichtigste Beträge 2025">
         <div class="db-stat db-stat--hl">
-          <span class="db-stat-l">Basis — Heimgut</span>
-          <b class="db-stat-v">rund {fmt(BASIS_HEIMGUT)} <em>€/ha</em></b>
+          <span class="db-stat-l">Basiszahlung Heimgut 2025</span>
+          <b class="db-stat-v">{fmt(A.heimgut)} <em>€/ha</em></b>
         </div>
         <div class="db-stat">
           <span class="db-stat-l">1. bis 20. Hektar effektiv</span>
-          <b class="db-stat-v">rund {fmt(BASIS_HEIMGUT + UMV_20)} <em>€/ha</em></b>
+          <b class="db-stat-v">{fmt(A.heimgut + A.umv20)} <em>€/ha</em></b>
         </div>
         <div class="db-stat">
           <span class="db-stat-l">Junglandwirte</span>
-          <b class="db-stat-v">rund {fmt(JUNG)} <em>€/ha</em></b>
+          <b class="db-stat-v">{fmt(A.jung)} <em>€/ha</em></b>
         </div>
         <div class="db-stat">
           <span class="db-stat-l">Almweidefläche</span>
-          <b class="db-stat-v">rund {fmt(BASIS_ALM)} <em>€/ha</em></b>
+          <b class="db-stat-v">{fmt(A.alm)} <em>€/ha</em></b>
         </div>
       </section>
 
       <section class="db-calc" aria-labelledby="calc-h">
         <h2 id="calc-h">Prämienrechner — Heimgutfläche</h2>
-        <p class="db-calc-sub">Überschlägige Berechnung der Basiseinkommensstützung samt Umverteilung
-          für Heimgutflächen. Almweideflächen und die gekoppelte Stützung sind nicht enthalten.</p>
+        <p class="db-calc-sub">Basiszahlung und Umverteilung für Heimgutflächen mit den Beträgen 2025.
+          Almweideflächen, Junglandwirte und die Almauftriebsprämie sind nicht enthalten.</p>
         <div class="db-calc-box">
           <label class="db-calc-field">
             Hektar
             <input id="ha" type="number" min="0" step="0.1" value="30" inputmode="decimal" />
           </label>
           <div class="db-calc-out">
-            <div class="db-calc-line"><span>Basiseinkommensstützung</span><b id="o-grund">—</b></div>
+            <div class="db-calc-line"><span>Basiszahlung</span><b id="o-grund">—</b></div>
             <div class="db-calc-line"><span>Umverteilung <em>(1.–40. ha, gestaffelt)</em></span><b id="o-umv">—</b></div>
             <div class="db-calc-line db-calc-total"><span>Summe (überschlägig)</span><b id="o-sum">—</b></div>
           </div>
         </div>
-        <p class="db-calc-note">Überschlägige Berechnung mit Richtwerten. Der tatsächliche Betrag hängt von
-          der beantragten Fläche, der Konditionalität und dem verfügbaren Budget ab.</p>
+        <p class="db-calc-note">Überschlägige Rechnung. Abzüge aus Kontrollen, die Konditionalität und die
+          Obergrenze von 100 000 € Basiszahlung je Betrieb sind nicht berücksichtigt.</p>
       </section>
 
       <section class="db-tables" aria-labelledby="tab-h">
@@ -166,13 +162,14 @@ const groups: { title: string; rows: Row[] }[] = [
             <h3>{g.title}</h3>
             <table class="db-table">
               <thead>
-                <tr><th scope="col">Zahlungsart</th><th scope="col">Betrag</th><th scope="col">Anmerkung</th></tr>
+                <tr><th scope="col">Zahlungsart</th><th scope="col">2025 (endgültig)</th><th scope="col">2026 (vorläufig)</th><th scope="col">Anmerkung</th></tr>
               </thead>
               <tbody>
                 {g.rows.map((r) => (
                   <tr>
                     <td>{r.name}</td>
-                    <td class="db-num">rund {fmt(r.v)} {r.unit}</td>
+                    <td class="db-num">{fmt(r.v2025)} {r.unit}</td>
+                    <td class="db-num">ca. {fmt0(r.v2026)} {r.unit}</td>
                     <td class="db-note">{r.note}</td>
                   </tr>
                 ))}
@@ -184,14 +181,13 @@ const groups: { title: string; rows: Row[] }[] = [
 
       <section class="db-tables" aria-labelledby="dev-h">
         <h2 id="dev-h">Effektiver Satz je Hektar nach Staffelung</h2>
-        <p class="db-calc-sub">Was ein Betrieb auf Heimgutflächen je Hektar tatsächlich erhält, wenn man
-          Basiszahlung und Umverteilung zusammenzählt.</p>
+        <p class="db-calc-sub">Basiszahlung und Umverteilung zusammen, Heimgutflächen, Antragsjahr 2025.</p>
         <div class="db-tw">
           <table class="db-table">
             <thead><tr><th scope="col">Flächenbereich</th><th scope="col">Basis + Umverteilung</th></tr></thead>
             <tbody>
               {staffel.map((s) => (
-                <tr><td>{s.label}</td><td class="db-num">rund {fmt(s.v)} €/ha</td></tr>
+                <tr><td>{s.label}</td><td class="db-num">{fmt(s.v)} €/ha</td></tr>
               ))}
             </tbody>
           </table>
@@ -201,10 +197,10 @@ const groups: { title: string; rows: Row[] }[] = [
       <section class="db-explain" aria-labelledby="exp-h">
         <h2 id="exp-h">Was die einzelnen Zahlungen bedeuten</h2>
         <div class="db-explain-grid">
-          <div class="db-exp"><h3>Basiseinkommensstützung</h3><p>Die Flächenzahlung auf alle förderfähigen Hektar und die Basis des Systems. Sie ist an die Einhaltung der Konditionalität gebunden. Almweideflächen haben einen eigenen, deutlich niedrigeren Satz, weil ihr Ertragspotenzial nicht mit dem Heimgut vergleichbar ist.</p></div>
-          <div class="db-exp"><h3>Umverteilungseinkommensstützung</h3><p>Ein Zuschlag auf die ersten 40 Hektar in zwei Stufen. Er stärkt gezielt kleinere und mittlere Betriebe — in Österreich mit seiner kleinstrukturierten Landwirtschaft ein Instrument mit spürbarer Wirkung. Ab dem 41. Hektar entfällt er.</p></div>
-          <div class="db-exp"><h3>Einkommensstützung für Junglandwirte</h3><p>Ein Zuschlag für alle, die mit höchstens 40 Jahren einen Betrieb übernehmen. Er läuft längstens fünf Jahre in Folge, angerechnet werden bis zu 40 Hektar. Eine einschlägige Ausbildung ist Pflicht — das Zeugnis darf aber bis zu zwei Jahre später kommen.</p></div>
-          <div class="db-exp"><h3>Gekoppelte Stützung Almauftrieb</h3><p>Eine an die Tierzahl gebundene Zahlung, die es ausschließlich für auf die Alm aufgetriebene Tiere gibt. Gerechnet wird in raufutterverzehrenden Großvieheinheiten (RGVE); Kühe sowie Zuchtschafe und -ziegen erhalten den doppelten Satz gegenüber sonstigen Rindern.</p></div>
+          <div class="db-exp"><h3>Basiszahlung</h3><p>Die Grundlage des Systems: ein Betrag je förderfähigem Hektar, gebunden an die Konditionalität. Für Almweiden gilt ein eigener, viel niedrigerer Satz, weil eine Hochweide nicht dasselbe trägt wie ein Talbetrieb. Je Betrieb ist die Basiszahlung auf 100 000 € begrenzt; Lohnkosten lassen sich anrechnen.</p></div>
+          <div class="db-exp"><h3>Umverteilungszahlung</h3><p>Ein Aufschlag für die ersten Hektar, der kleinere Betriebe stärkt — gerade in Österreich mit seinen vielen kleinen Höfen. Bis 20 Hektar voll, vom 21. bis zum 40. Hektar zur Hälfte, darüber nichts. Almweideflächen zählen nicht mit.</p></div>
+          <div class="db-exp"><h3>Junglandwirtinnen und Junglandwirte</h3><p>Ein Zuschlag je Hektar für den Einstieg in die Landwirtschaft: Altersgrenze 40 Jahre im Jahr der Aufnahme, Ausbildung spätestens zwei Jahre danach. Höchstens 40 Hektar, höchstens fünf Jahre hintereinander.</p></div>
+          <div class="db-exp"><h3>Almauftriebsprämie</h3><p>Die einzige an Tiere gekoppelte Direktzahlung: Sie gibt es nur für Kühe, übrige Rinder sowie Mutterschafe und Mutterziegen, die auf eine Alm getrieben werden. Kühe und Muttertiere erhalten je RGVE doppelt so viel wie die übrigen Rinder.</p></div>
         </div>
       </section>
 
@@ -224,12 +220,12 @@ const groups: { title: string; rows: Row[] }[] = [
       </div>
 
       <footer class="db-src">
-        <p>Datenquellen: <a href="https://www.bmluk.gv.at/themen/landwirtschaft/gemeinsame-agrarpolitik-foerderungen/nationaler-strategieplan/direktzahlungen-ab-2023/einkommenssicherung.html" target="_blank" rel="noopener">BMLUK — Einkommenssicherung</a> und <a href="https://www.bmluk.gv.at/themen/landwirtschaft/gemeinsame-agrarpolitik-foerderungen/nationaler-strategieplan/direktzahlungen-ab-2023/unterstuetzungjunglandwirtinnenundjunglandwirte.html" target="_blank" rel="noopener">BMLUK — Unterstützung Junglandwirtinnen und Junglandwirte</a>, gegengeprüft mit <a href="https://www.lko.at/direktzahlungen-ab-2023+2400+3555847" target="_blank" rel="noopener">Landwirtschaftskammer Österreich — Direktzahlungen ab 2023</a>. Beide Quellen nennen die Sätze als Richtwerte für die Periode 2023–2027. Verbindlich ist der Bescheid der <a href="https://www.ama.at" target="_blank" rel="noopener">AMA</a>. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
+        <p>Datenquellen: <a href="https://www.ama.at/fachliche-informationen/direktzahlungen/praemienbetrag-gemaess-21-abs-11-gsp-av" target="_blank" rel="noopener">AMA — Prämienbetrag gemäß § 21 Abs. 11 GSP-AV</a> (Einheitsbeträge 2025, veröffentlicht am 15. Dezember 2025) und <a href="https://www.ama.at/media/uzrh0lop/merkblatt_diza2026_endversion_13112025.pdf" target="_blank" rel="noopener">AMA — Merkblatt Direktzahlungen 2026</a> (vorläufige Beträge, Fristen und Voraussetzungen). Verbindlich ist der Bescheid der AMA. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
       </footer>
     </div>
   </main>
 
-  <script type="application/json" id="dbRates" set:html={JSON.stringify({ grund: BASIS_HEIMGUT, umv20: UMV_20, umv40: UMV_40 })} />
+  <script type="application/json" id="dbRates" set:html={JSON.stringify({ grund: A.heimgut, umv20: A.umv20, umv40: A.umv40 })} />
   <script is:inline>
     (function () {
       var cfg = JSON.parse(document.getElementById('dbRates').textContent);

@@ -90,8 +90,7 @@ describe.skipIf(DE_RETIRED)('LAUNCHED_PREFIXES.de — launchujeme jen skutečně
     expect(isLaunchedPath('de', '/')).toBe(true);
     // DE-only landingy s německými sazbami GAP.
     expect(isLaunchedPath('de', '/direktzahlungen')).toBe(true);
-    // Öko-Regelungen stažené 2026-10-14 — ÖR 1a do 8 % (ne 6 %), ÖR 6 a sazby 2026.
-    expect(isLaunchedPath('de', '/oeko-regelungen')).toBe(false);
+    expect(isLaunchedPath('de', '/oeko-regelungen')).toBe(true);
   });
   it('CZ-jurisdikční sekce launchnuté NEJSOU (mají vzniknout jako DE/AT obsah)', () => {
     // /novinky ze seznamu ven (2026-09-01): výpis je omezený na REÁLNĚ přeložené
@@ -399,11 +398,13 @@ describe.skipIf(DE_RETIRED)('DE homepage a DE-only landingy', () => {
       expect(src, `${p} musí odmítnout non-de locale`).toMatch(/if \(locale !== 'de'.*\) return Astro\.rewrite\('\/404'\);/);
     }
     // Nemají cs ekvivalent → do /de mirroru je nedostane žádné zrcadlení.
-    // Stažené landingy (2026-10-14) v sitemapě být nesmí — samy vracejí 404.
+    // Landingy bez záznamu v LAUNCHED_PREFIXES.de samy vracejí 404 (2026-10-14 tak
+    // byly tři dočasně stažené) — guard musí v každé zůstat.
     const sm = fs.readFileSync(path.join(ROOT, 'src/lib/sitemap-entries.ts'), 'utf8');
-    expect(sm).toContain('${SITE_URL}/de/direktzahlungen/');
+    for (const p of ['direktzahlungen', 'oeko-regelungen', 'oepul', 'direktzahlungen-oesterreich']) {
+      expect(sm).toContain('${SITE_URL}/de/' + p + '/');
+    }
     for (const p of ['oeko-regelungen', 'oepul', 'direktzahlungen-oesterreich']) {
-      expect(sm).not.toContain('${SITE_URL}/de/' + p + '/');
       expect(fs.readFileSync(path.join(ROOT, `src/pages/${p}/index.astro`), 'utf8')).toContain(`!isLaunchedPath('de', '/${p}')`);
     }
   });
@@ -462,49 +463,48 @@ describe.skipIf(DE_RETIRED)('fáze 3a — žebříčky a právní stránky', () 
 describe.skipIf(DE_RETIRED)('fáze 3b — rakouská jurisdikce', () => {
   const ROOT = process.cwd();
 
-  // ‼️ 2026-10-14: rakouské landingy jsou STAŽENÉ. Ověření proti AMA ukázalo, že
-  // Rakousko Einheitsbeträge vyhlašuje každý rok (prosinec, § 21 Abs. 11 GSP-AV)
-  // a ÖPUL měl několik chybných sazeb. Až se opraví, vrať je do LAUNCHED_PREFIXES.de
-  // a tenhle test otoč zpátky.
-  it('rakouské landingy jsou stažené a non-de locale je nedostane', () => {
+  it('rakouské landingy jsou launchnuté jen pro de', () => {
     for (const r of ['/oepul', '/direktzahlungen-oesterreich']) {
-      expect(isLaunchedPath('de', r), `${r} je pořád launchnuté`).toBe(false);
+      expect(isLaunchedPath('de', r), `${r} není launchnuté`).toBe(true);
       for (const loc of ['cs', 'sk', 'pl', 'uk']) {
         expect(isLaunchedPath(loc as never, r), `${r} nesmí být launchnuté pro ${loc}`).toBe(false);
       }
     }
   });
 
-  // ‼️ CHYBNÝ PŘEDPOKLAD (opraveno 2026-10-14): Rakousko roční Einheitsbetrag MÁ —
-  // AMA ho vyhlašuje v prosinci. Test níž hlídá STARÝ obsah stažených stránek;
-  // při jejich opravě ho přepiš na skutečné sazby AMA, ne „Richtwerte".
-  it('rakouské stránky (stažené) — starý obsah', () => {
+  // ‼️ Do 2026-10 stránka tvrdila, že Rakousko roční Einheitsbeträge NEMÁ, a uváděla
+  // „Richtwerte" 208/41/44/22/66 z přehledu LKÖ z roku 2022. Ve skutečnosti je AMA
+  // vyhlašuje každý prosinec (§ 21 Abs. 11 GSP-AV). Test hlídá, aby se to nevrátilo.
+  it('rakouské přímé platby = Einheitsbeträge AMA, ne „Richtwerte"', async () => {
+    const { AT_DZ } = await import('../../src/data/foerderung-de');
+    expect(AT_DZ[2025]).toMatchObject({ heimgut: 207.64, alm: 38.18, umv20: 45.54, umv40: 22.77, jung: 67.1, almKuehe: 98.08, almRinder: 49.04 });
+    // 21.–40. hektar dostává polovinu sazby prvního stupně (Merkblatt DIZA 2026, bod 4.2).
+    // (2026 jsou jen zaokrouhlená „ca." čísla z Merkblattu, proto kontrola na 2025.)
+    expect(AT_DZ[2025].umv40).toBeCloseTo(AT_DZ[2025].umv20 / 2, 2);
     const dz = fs.readFileSync(path.join(ROOT, 'src/pages/direktzahlungen-oesterreich/index.astro'), 'utf8');
-    expect(dz, 'chybí upozornění na richtwerty').toContain('Richtwerte');
-    expect(dz, 'sazby se musí uvádět s „rund"').toContain('rund {fmt(BASIS_HEIMGUT)}');
-    expect(dz, 'musí odkázat na závaznost bescheidu AMA').toMatch(/Bescheid der\s*<a[^>]*>AMA|Bescheid der AMA/);
-
-    // ÖPUL: pojistka proti tomu, že by se výchozí sazby 2023 vydávaly za aktuální.
-    const op = fs.readFileSync(path.join(ROOT, 'src/pages/oepul/index.astro'), 'utf8');
-    expect(op, 'chybí varování o zvýšení sazeb od 2024').toContain('Impulsprogramm');
-    expect(op, 'u tabulek starých sazeb musí být uveden rok').toContain('Ausgangssätze des Jahres 2023');
-    // Řada 2023→2025 je jediné místo, kde je vidět dopad zvýšení.
-    expect(op).toContain('v2023: 70');
-    expect(op).toContain('v2025: 85');
+    const body = dz.slice(dz.indexOf('\n---', 3));
+    expect(body).not.toContain('Richtwerte');
+    expect(body).not.toMatch(/keine jährlichen Einheitsbeträge/);
+    expect(body).toContain('praemienbetrag-gemaess-21-abs-11-gsp-av');
   });
 
-  it('obě rakouské sazby v FAQ sedí s daty v tabulkách', () => {
-    // Sazby se od 2026-09-10 drží v src/data/foerderung-de.ts, protože je vedle
-    // detailní stránky ukazuje i německá homepage — dvě kopie by po první
-    // aktualizaci driftovaly. Test proto čte modul, ne stránku.
-    const dz = fs.readFileSync(path.join(ROOT, 'src/data/foerderung-de.ts'), 'utf8');
-    // Efektivní sazba na prvních 20 ha = základ + umverteilung. Kdyby se jedno
-    // číslo změnilo a druhé ne, FAQ by tvrdilo něco jiného než tabulka.
-    const basis = Number(/AT_BASIS_HEIMGUT = (\d+)/.exec(dz)![1]);
-    const umv20 = Number(/AT_UMV_20 = (\d+)/.exec(dz)![1]);
-    const umv40 = Number(/AT_UMV_40 = (\d+)/.exec(dz)![1]);
-    expect(basis + umv20, 'LKO uvádí 252 €/ha pro prvních 20 ha').toBe(252);
-    expect(basis + umv40, 'LKO uvádí 230 €/ha pro 21.–40. ha').toBe(230);
+  it('ÖPUL: sazby podle Sonderrichtlinie, Impulsprogramm jen pro čl. 70/72', () => {
+    const op = fs.readFileSync(path.join(ROOT, 'src/pages/oepul/index.astro'), 'utf8');
+    expect(op).toContain('v2023: 70, v2024: 75.6, v2025: 85');
+    expect(op).toContain('v2023: 205, v2024: 221.4, v2025: 235');
+    // Querdämme/Anhäufungen bei Kartoffeln: 150 (2023) → 162, NE 550.
+    expect(op).toMatch(/Anhäufungen bei Kartoffeln', v: 162/);
+    // Öko-Regelungen uvnitř ÖPUL se o 8 % nezvyšovaly — stránka to musí říkat.
+    expect(op).toMatch(/Öko-Regelungen innerhalb von ÖPUL[^']*nicht/);
+  });
+
+  it('Öko-Regelungen DE: ÖR 1a do 8 %, 2025 endgültig, 2026 podle GAPDZV', () => {
+    const oer = fs.readFileSync(path.join(ROOT, 'src/pages/oeko-regelungen/index.astro'), 'utf8');
+    expect(oer).toContain('über 2 % bis 8 %');
+    expect(oer).not.toMatch(/label: '[^']*über 2 % bis 6 %/);
+    expect(oer).toMatch(/Stufe 1 — bis 1 % des Dauergrünlands bzw\. erster Hektar', v2025: 900, v2026: 1000/);
+    expect(oer).toMatch(/je Hektar Gehölzfläche', v2025: 200, v2026: 600/);
+    expect(oer).toContain('BAnz%20AT%2001.12.2025%20B6');
   });
 });
 

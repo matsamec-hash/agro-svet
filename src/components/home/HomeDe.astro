@@ -30,7 +30,12 @@ import {
   buildTranslationMap,
   overlayArticle,
 } from '../../lib/articles-i18n';
-import { DE_GRUNDSTUETZUNG_2025 } from '../../data/foerderung-de';
+import {
+  DE_GRUNDSTUETZUNG_2025,
+  DE_OER_MAX,
+  AT_BASIS_HEIMGUT,
+  AT_OEPUL_BIO_GRUENLAND_MAX,
+} from '../../data/foerderung-de';
 
 const LOCALE = 'de' as const;
 
@@ -79,8 +84,30 @@ const FOERDERUNG: { href: string; land: string; title: string; value: string; un
     unit: '€/ha',
     note: 'Einkommensgrundstützung, Antragsjahr 2025 — final im Bundesanzeiger.',
   },
-  // Öko-Regelungen, Direktzahlungen Österreich a ÖPUL jsou od 2026-10-14 stažené
-  // (viz LAUNCHED_PREFIXES.de) — karty se vrátí spolu se stránkami.
+  {
+    href: '/de/oeko-regelungen/',
+    land: '🇩🇪 Deutschland',
+    title: 'Öko-Regelungen',
+    value: `bis ${DE_OER_MAX.toLocaleString('de-DE')}`,
+    unit: '€/ha',
+    note: 'ÖR 1a, Stufe 1. Alle sieben Öko-Regelungen, 2025 endgültig und 2026 geplant.',
+  },
+  {
+    href: '/de/direktzahlungen-oesterreich/',
+    land: '🇦🇹 Österreich',
+    title: 'Basiszahlung',
+    value: AT_BASIS_HEIMGUT.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    unit: '€/ha',
+    note: 'Heimgutflächen, Antragsjahr 2025 — festgesetzt von der AMA.',
+  },
+  {
+    href: '/de/oepul/',
+    land: '🇦🇹 Österreich',
+    title: 'ÖPUL',
+    value: `bis ${AT_OEPUL_BIO_GRUENLAND_MAX.toLocaleString('de-DE')}`,
+    unit: '€/ha',
+    note: 'Bio-Grünland, Satz seit 2024 laut Sonderrichtlinie ÖPUL 2023.',
+  },
 ];
 
 const GROUPS: { heading: string; lede: string; items: { href: string; icon: string; title: string; desc: string }[] }[] = [
@@ -143,7 +170,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 
 <Layout
   title="Landmaschinen und Agrarförderung — Daten und Katalog"
-  description="Landtechnik und Agrarwissen im Überblick: Maschinenkatalog mit 22 Marken, Modellvergleich und Enzyklopädie, die Beträge der Direktzahlungen in Deutschland sowie Nutztierrassen, Pflanzenkrankheiten und Imkerei."
+  description="Landtechnik und Agrarwissen im Überblick: Maschinenkatalog mit 22 Marken, Modellvergleich und Enzyklopädie, die Beträge der Direktzahlungen und Öko-Regelungen für Deutschland und Österreich sowie Nutztierrassen, Pflanzenkrankheiten und Imkerei."
   preloadHeroImage={featured?.featured_image_url ?? undefined}
   preloadHeroSizes="(max-width: 900px) 100vw, 800px"
   preloadHeroMaxWidth={800}
@@ -223,13 +250,13 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   <section class="home-sections">
     <div class="home-head">
       <div>
-        <span class="hde-kicker">Deutschland</span>
+        <span class="hde-kicker">Deutschland und Österreich</span>
         <h2>Daten: Agrarförderung</h2>
       </div>
     </div>
     <p class="hde-lede">
-      Die Einheitsbeträge der Direktzahlungen je Hektar, mit Quelle und Stand — und mit
-      klarer Trennung zwischen endgültigen und geplanten Beträgen.
+      Die Beträge je Hektar für beide Länder, mit Quelle und Stand — und mit klarer
+      Trennung zwischen endgültigen und geplanten Beträgen.
     </p>
     <div class="hde-tiles">
       {FOERDERUNG.map((f) => (

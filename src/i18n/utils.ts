@@ -146,14 +146,13 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // = 1. pilíř. ‼️ Rakousko NEvyhlašuje roční Einheitsbeträge jako německý
   // Bundesanzeiger — zdroje uvádějí „rund/etwa" pro celé období 2023–2027,
   // a stránky to musí říkat nahlas místo předstírané přesnosti.
-  // ‼️ 2026-10-14 (návrat němčiny): /oeko-regelungen, /oepul a /direktzahlungen-oesterreich
-  // zůstaly STAŽENÉ. Ověření proti BMLEH, Bundesanzeigeru a AMA našlo chyby:
-  // Rakousko své Einheitsbeträge vyhlašuje každý rok (AMA, prosinec, § 21 Abs. 11
-  // GSP-AV) — stránka tvrdila opak; ÖPUL měl špatně Querdämme, Mulch-/Direktsaat,
-  // Humus, plošných +8 % i Bio-Grünland; Öko-Regelungen 1a do 8 % (ne 6 %), ÖR 6
-  // a sazby 2026. Vrátit je až po opravě — stránky samy vracejí 404, dokud tu nejsou.
-  de: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/direktzahlungen',
+  // ‼️ /oeko-regelungen, /oepul a /direktzahlungen-oesterreich byly 2026-10-14 stažené
+  // (Rakousko prý nevyhlašuje Einheitsbeträge — vyhlašuje je AMA každý prosinec;
+  // chybné sazby ÖPUL a ÖR). 2026-10-15 přepsané podle BAnz, GAPDZV, SRL ÖPUL 10/2026
+  // a AMA a vrácené. Každá z nich bez záznamu tady vrací 404.
+  de: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/direktzahlungen', '/oeko-regelungen',
     '/zebricky', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce',
+    '/oepul', '/direktzahlungen-oesterreich',
     // /impressum — DE-only Anbieterkennzeichnung (od návratu němčiny 2026-10-14).
     '/impressum',
     // Fáze 3c: /plemena — plemena-de overlay (78 plemen ve 4 druzích).

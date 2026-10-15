@@ -1,73 +1,77 @@
 ---
 // src/pages/oepul/index.astro
-// DE-only landing: ÖPUL 2023 — rakouský agrárně-environmentální program
-// (2. pilíř GAP). Obdoba německých /oeko-regelungen, ale jiná jurisdikce
-// i jiná logika: ÖPUL je modulární (Basismodul + Zuschläge), ne bodový.
+// DE-only landing: ÖPUL 2023 — rakouský agroenvironmentální program.
 // Non-de locale → 404 (žádný cs ekvivalent).
 //
-// ‼️ PAST V DATECH: skoro všechny veřejně dohledatelné přehledy uvádějí
-// VÝCHOZÍ sazby roku 2023. Od žádosti 2024 ale Rakousko v rámci
-// „Impulsprogramm" zvedlo VŠECHNY sazby ÖPUL nejméně o 8 % a u části
-// měr přidalo znovu od 2025. Kdyby stránka psala „70 €/ha" jako aktuální
-// sazbu UBB, lhala by — proto je u každé tabulky uveden ROK sazby a
-// u dvou hlavních modulů celá řada 2023 → 2024 → 2025.
-//
-// Zdroje (ověřeno křížem, shodují se na 70 €/ha UBB a 205 €/ha Bio pro 2023):
-//   - AMA, „Höhere Prämien und Neuerungen bei ÖPUL-Maßnahmen" (ama.at)
-//     → řada 2023/2024/2025 a nové míry a zuschlägy od 2025
-//   - Landwirtschaftskammer Österreich, „ÖPUL 2023 — ein Überblick" (lko.at)
-//     → sazby jednotlivých měr, výchozí rok 2023
+// ‼️ 2026-10-15 přepsáno podle Sonderrichtlinie ÖPUL 2023 (Fassung 01.10.2026)
+// a informačních listů AMA. Dřívější verze (z přehledu LKÖ 2022) měla chyby:
+// „Impulsprogramm +8 % na KAŽDOU sazbu" (jen opatření čl. 70/72, ne Öko-
+// Regelungen v ÖPUL), Querdämme 550 (správně 150/162), Mulch-/Direktsaat pod
+// Begrünung (patří pod Erosionsschutz Acker), Humus podle sklonu (podle
+// Grünlandzahl), Bio Grünland v sazbách 2023.
+// Zdroje (stažené v ~/agro-svet/foto-audit/de/zdroje):
+//   - SRL ÖPUL 2023, Fassung 01.10.2026 — bod 1.9.3.2 (Öko-Regelungen), Impulsprogramm
+//   - AMA Informationsblätter: UBB 10/2026, Biologische Wirtschaftsweise 10/2026,
+//     Erosionsschutz Acker 04/2026, Begrünung – Zwischenfruchtanbau 10/2026,
+//     Vorbeugender Grundwasserschutz – Acker 04/2026, Humuserhalt 10/2026,
+//     Nichtproduktive Ackerflächen und Agroforststreifen 10/2026, Almbewirtschaftung 04/2026
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { localizePath, isLaunchedPath } from '../../i18n/utils';
 import { AT_OEPUL_BIO_GRUENLAND_MAX } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
-// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de. Od 2026-10-14 stažené, než se
-// opraví sazby a tvrzení podle ověření proti BMLEH/AMA (viz LAUNCHED_PREFIXES.de).
+// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de (stránka se dá znovu stáhnout jedním řádkem).
 if (locale !== 'de' || !isLaunchedPath('de', '/oepul')) return Astro.rewrite('/404');
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
-// ── Basismodule mit vollständiger Reihe ──────────────────────────────────────
+// ── Basismodule auf Ackerflächen: vollständige Reihe ──────────────────────────
 type Serie = { name: string; v2023: number; v2024: number; v2025: number; note?: string };
 const serien: Serie[] = [
-  { name: 'UBB — Basismodulprämie auf Ackerflächen', v2023: 70, v2024: 75.6, v2025: 85, note: 'Umweltgerechte und biodiversitätsfördernde Bewirtschaftung' },
-  { name: 'Biologische Wirtschaftsweise — Basismodulprämie auf Ackerflächen', v2023: 205, v2024: 221.4, v2025: 235, note: 'Bio-Basismodul' },
+  { name: 'UBB — Basismodulprämie Ackerflächen', v2023: 70, v2024: 75.6, v2025: 85 },
+  { name: 'Biologische Wirtschaftsweise — Basismodulprämie Ackerflächen', v2023: 205, v2024: 221.4, v2025: 235 },
 ];
 
-// ── Weitere Sätze: Ausgangswerte 2023 ────────────────────────────────────────
+// ── Weitere Sätze (gültig ab 2024, wo nicht anders angegeben) ─────────────────
 type Row = { name: string; v: number | [number, number]; unit: string; note?: string };
 
-const basis: Row[] = [
-  { name: 'UBB — Grünland, Nicht-Tierhalter', v: 25, unit: '€/ha' },
-  { name: 'Bio — Grünland, Tierhalter bis 1,4 RGVE/ha', v: AT_OEPUL_BIO_GRUENLAND_MAX, unit: '€/ha', note: 'höchster Grünlandsatz' },
-  { name: 'Bio — Grünland, Tierhalter über 1,4 RGVE/ha', v: 205, unit: '€/ha' },
-  { name: 'Bio — Grünland, Nicht-Tierhalter', v: 70, unit: '€/ha' },
+const gruenland: Row[] = [
+  { name: 'UBB — Grünland, tierhaltender Betrieb', v: 75.6, unit: '€/ha' },
+  { name: 'UBB — Grünland, nicht-tierhaltender Betrieb', v: 27, unit: '€/ha' },
+  { name: 'Bio — Grünland, tierhaltend unter 1,40 RGVE/ha', v: AT_OEPUL_BIO_GRUENLAND_MAX, unit: '€/ha', note: 'höchster Grünlandsatz' },
+  { name: 'Bio — Grünland, tierhaltend ab 1,40 RGVE/ha', v: 221.4, unit: '€/ha' },
+  { name: 'Bio — Grünland, nicht-tierhaltender Betrieb', v: 75.6, unit: '€/ha' },
 ];
 
 const acker: Row[] = [
-  { name: 'Begrünung — Mulchsaat', v: 50, unit: '€/ha' },
-  { name: 'Begrünung — Direktsaat und Strip-Till', v: 80, unit: '€/ha', note: 'höherer Satz für bodenschonende Verfahren' },
-  { name: 'Begrünung — Winterraps', v: 90, unit: '€/ha' },
-  { name: 'Erosionsschutz Acker — Querdämme bei Kartoffeln', v: 550, unit: '€/ha' },
-  { name: 'Erosionsschutz Acker — begrünte Abflusswege', v: 550, unit: '€/ha' },
-  { name: 'Grundwasserschutz Acker', v: 50, unit: '€/ha', note: 'in Oberösterreich mit regionalem Zuschlag 80 €/ha' },
-  { name: 'Humuserhalt und Bodenschutz — Grünland', v: [30, 100], unit: '€/ha', note: 'gestaffelt nach Hangneigung' },
+  { name: 'Erosionsschutz Acker — Mulchsaat', v: 54, unit: '€/ha', note: 'bei Reihenkulturen wie Mais, Rüben, Soja, Sonnenblumen' },
+  { name: 'Erosionsschutz Acker — Direktsaat oder Strip-Till', v: 86.4, unit: '€/ha' },
+  { name: 'Erosionsschutz Acker — Anhäufungen bei Kartoffeln', v: 162, unit: '€/ha', note: 'nicht mit Mulch- oder Direktsaat auf derselben Fläche' },
+  { name: 'Erosionsschutz Acker — begrünte Abflusswege', v: 594, unit: '€/ha' },
+  { name: 'Erosionsschutz Acker — Untersaaten', v: 81, unit: '€/ha', note: 'plus 16,2 €/ha bei Bio; Mais und Sorghum ab 2025' },
+  { name: 'Vorbeugender Grundwasserschutz Acker — Basisprämie', v: 54, unit: '€/ha', note: '27 €/ha bei Teilnahme an Bio oder „Einschränkung ertragssteigernder Betriebsmittel“' },
+  { name: 'Humuserhalt und Bodenschutz — Grünland unter 18 % Hangneigung', v: [32.4, 108], unit: '€/ha', note: 'gestaffelt nach Grünlandzahl (bis 20 / 20–30 / 30–40 / ab 40)' },
 ];
 
-// ── Neu ab dem Antragsjahr 2025 ──────────────────────────────────────────────
+// Öko-Regelungen innerhalb von ÖPUL: Prämienbänder, keine Erhöhung durch das Impulsprogramm.
+const oeko: Row[] = [
+  { name: 'Begrünung Zwischenfruchtanbau — Variante 1', v: [180, 220], unit: '€/ha', note: 'Prämienband, garantiert ist der untere Wert' },
+  { name: 'Begrünung Zwischenfruchtanbau — Variante 2', v: [171, 209], unit: '€/ha' },
+  { name: 'Begrünung Zwischenfruchtanbau — Variante 4', v: [153, 187], unit: '€/ha' },
+  { name: 'Begrünung Zwischenfruchtanbau — Variante 5', v: [135, 165], unit: '€/ha' },
+  { name: 'Begrünung Zwischenfruchtanbau — Varianten 3 und 6', v: [108, 132], unit: '€/ha' },
+  { name: 'Begrünung Zwischenfruchtanbau — Variante 7', v: [81, 99], unit: '€/ha' },
+  { name: 'Nichtproduktive Ackerflächen', v: [350, 450], unit: '€/ha', note: 'ab 2025, höchstens 4 % der Ackerfläche' },
+  { name: 'Agroforststreifen', v: [600, 800], unit: '€/ha', note: 'ab 2025' },
+];
+
 const neu2025: Row[] = [
-  { name: 'Nichtproduktive Ackerflächen', v: [350, 450], unit: '€/ha', note: 'neue Maßnahme ab 2025' },
-  { name: 'Agroforststreifen', v: [600, 800], unit: '€/ha', note: 'neue Maßnahme ab 2025' },
-  { name: 'Neueinsaat Biodiversitätsflächen (Grünbrache)', v: 324, unit: '€/ha' },
-  { name: 'Pheromonfallen bei Zuckerrüben', v: 150, unit: '€/ha' },
-  { name: 'Belassen von Altgrasflächen', v: 150, unit: '€/ha' },
-  { name: 'Untersaaten bei Mais und Sorghum', v: [81, 97.2], unit: '€/ha', note: 'je nach Ausführung' },
-  { name: 'Kreislaufwirtschaft', v: 40, unit: '€/ha' },
-  { name: 'Cultan-Düngung', v: 40, unit: '€/ha' },
-  { name: 'Almweideplan — erste 20 Hektar', v: 20, unit: '€/ha' },
-  { name: 'Betriebsbezogene Transaktionskosten', v: 400, unit: '€/Betrieb', note: 'je Betrieb, nicht je Hektar' },
+  { name: 'UBB — Zuschlag Belassen von Altgrasflächen', v: 150, unit: '€/ha' },
+  { name: 'Zuschlag Pheromonfallen bei Zuckerrüben', v: 150, unit: '€/ha' },
+  { name: 'Bio — Neueinsaat von Biodiversitätsflächen mit regionaler Acker-Saatgutmischung', v: 324, unit: '€/ha' },
+  { name: 'Bio — Zuschlag für betriebsbezogene Transaktionskosten', v: 400, unit: '€/Betrieb', note: 'je Betrieb, nicht je Hektar' },
+  { name: 'Almbewirtschaftung — Zuschlag Almweideplan', v: 20, unit: '€/ha', note: 'für die ersten 20 Hektar je Alm' },
 ];
 
 const fmt = (v: number) => v.toLocaleString('de-DE', { maximumFractionDigits: 1 });
@@ -79,13 +83,14 @@ const ubb = serien[0];
 const bio = serien[1];
 
 const faq = [
-  { q: 'Was ist ÖPUL?', a: 'ÖPUL ist das österreichische Programm für umweltgerechte Landwirtschaft — der Agrarumwelt-Teil der zweiten Säule der GAP. Es ist freiwillig: Betriebe verpflichten sich für die Programmperiode zu Maßnahmen, die über die gesetzlichen Mindestanforderungen hinausgehen, und erhalten dafür eine Prämie je Hektar. ÖPUL 2023 läuft in der Periode 2023 bis 2027.' },
-  { q: 'Wie hoch ist die UBB-Prämie?', a: `Die Basismodulprämie der Maßnahme „Umweltgerechte und biodiversitätsfördernde Bewirtschaftung" auf Ackerflächen betrug im Jahr 2023 ${fmt(ubb.v2023)} €/ha, 2024 ${fmt(ubb.v2024)} €/ha und 2025 ${fmt(ubb.v2025)} €/ha. Auf das Basismodul kommen je nach Betrieb Zuschläge für einzelne Zusatzleistungen.` },
-  { q: 'Wie hoch ist die Bio-Prämie?', a: `Das Basismodul der Maßnahme „Biologische Wirtschaftsweise" auf Ackerflächen lag 2023 bei ${fmt(bio.v2023)} €/ha, 2024 bei ${fmt(bio.v2024)} €/ha und 2025 bei ${fmt(bio.v2025)} €/ha. Im Grünland hängt der Satz von der Tierhaltung ab: Tierhalter bis 1,4 RGVE je Hektar erhalten 215 €/ha, darüber 205 €/ha, Nicht-Tierhalter 70 €/ha.` },
-  { q: 'Warum sind die Prämien seit 2024 höher?', a: 'Wer ältere Übersichten liest, findet dort meist noch die Ausgangssätze von 2023. Seither ging es in zwei Schritten nach oben: Das Impulsprogramm hat ab dem Antragsjahr 2024 jeden ÖPUL-Satz um wenigstens 8 Prozent angehoben, und einzelne Maßnahmen bekamen ab 2025 einen weiteren Aufschlag.' },
-  { q: 'Was ist ab 2025 neu?', a: 'Neu ist vor allem die Maßnahme „Nichtproduktive Ackerflächen und Agroforststreifen" mit 350 bis 450 €/ha für nichtproduktive Ackerflächen und 600 bis 800 €/ha für Agroforststreifen. Dazu kamen mehrere Zuschläge, etwa für die Neueinsaat von Biodiversitätsflächen (324 €/ha), Pheromonfallen bei Zuckerrüben (150 €/ha), das Belassen von Altgrasflächen (150 €/ha) sowie Untersaaten bei Mais und Sorghum.' },
-  { q: 'Kann man UBB und Bio kombinieren?', a: 'Nein, die beiden Basismodule schließen einander aus — ein Betrieb wählt entweder die Maßnahme „Umweltgerechte und biodiversitätsfördernde Bewirtschaftung" oder „Biologische Wirtschaftsweise". Beide lassen sich aber mit zahlreichen weiteren ÖPUL-Maßnahmen und Zuschlägen kombinieren, etwa Begrünung, Erosionsschutz oder Grundwasserschutz.' },
-  { q: 'Sind die genannten Beträge verbindlich?', a: 'Nein. Die Sätze stammen aus den Informationsunterlagen der AMA und der Landwirtschaftskammer und gelten für das jeweils angegebene Antragsjahr. Die tatsächliche Auszahlung hängt vom Antragsumfang, der Einhaltung der Auflagen und dem verfügbaren Budget ab. Verbindlich ist allein der Bescheid der AMA; maßgeblich sind die Merkblätter zur jeweiligen Maßnahme.' },
+  { q: 'Was ist ÖPUL?', a: 'ÖPUL ist das österreichische Agrarumweltprogramm. Es bündelt die Agrarumwelt- und Klimamaßnahmen der zweiten Säule und — eine österreichische Besonderheit — auch einige Öko-Regelungen der ersten Säule, etwa die Begrünung von Ackerflächen, Tierwohl – Weide und seit 2025 die nichtproduktiven Ackerflächen. Die Teilnahme ist freiwillig; mehrjährige Verpflichtungen laufen bis 31. Dezember 2028.' },
+  { q: 'Wie hoch ist die UBB-Prämie auf dem Acker?', a: `Das Basismodul „Umweltgerechte und biodiversitätsfördernde Bewirtschaftung" brachte auf Ackerflächen ${fmt(ubb.v2023)} €/ha im Jahr 2023, ${fmt(ubb.v2024)} €/ha 2024 und seit 2025 ${fmt(ubb.v2025)} €/ha. Auf das Basismodul kommen betriebsindividuell Zuschläge für zusätzliche Leistungen.` },
+  { q: 'Wie hoch ist die Bio-Prämie?', a: `Auf Ackerflächen ${fmt(bio.v2023)} €/ha (2023), ${fmt(bio.v2024)} €/ha (2024) und seit 2025 ${fmt(bio.v2025)} €/ha. Im Grünland entscheidet der Tierbesatz: Seit 2024 erhalten tierhaltende Betriebe unter 1,40 RGVE je Hektar ${fmt(AT_OEPUL_BIO_GRUENLAND_MAX)} €/ha, ab 1,40 RGVE 221,4 €/ha und nicht-tierhaltende Betriebe 75,6 €/ha.` },
+  { q: 'Warum sind viele Prämien seit 2024 höher?', a: 'Mit dem Impulsprogramm für die österreichische Landwirtschaft wurden ab dem Antragsjahr 2024 alle Prämiensätze der Maßnahmen nach Art. 70 und 72 der GAP-Strategieplan-Verordnung um 8 % angehoben. Nicht betroffen sind die Öko-Regelungen innerhalb von ÖPUL — Zwischenfruchtanbau, System Immergrün und Tierwohl – Weide —, die mit Prämienbändern aus dem EU-Agrargarantiefonds bezahlt werden. Die Basismodule auf dem Acker stiegen 2025 zusätzlich.' },
+  { q: 'Was ist ab 2025 neu?', a: 'Vor allem die Öko-Regelung „Nichtproduktive Ackerflächen und Agroforststreifen" mit Prämienbändern von 350 bis 450 €/ha beziehungsweise 600 bis 800 €/ha. Dazu kamen Zuschläge wie das Belassen von Altgrasflächen, Pheromonfallen bei Zuckerrüben, der Almweideplan sowie in der Bio-Maßnahme ein Zuschlag für betriebsbezogene Transaktionskosten von 400 € je Betrieb.' },
+  { q: 'Was bedeutet „Prämienband"?', a: 'Bei den Öko-Regelungen innerhalb von ÖPUL steht der Betrag nicht von vornherein fest. Garantiert ist der untere Wert des Bandes; wie viel darüber hinaus gezahlt wird, hängt davon ab, wie viel Fläche österreichweit beantragt wird und wie viel Geld zur Verfügung steht.' },
+  { q: 'Kann man UBB und Bio kombinieren?', a: 'Nein. Ein Betrieb wählt eines der beiden Basismodule. Beide lassen sich aber mit vielen weiteren ÖPUL-Maßnahmen verbinden, etwa mit Erosionsschutz, Grundwasserschutz oder der Begrünung von Ackerflächen.' },
+  { q: 'Sind die Beträge verbindlich?', a: 'Die Sätze stammen aus der Sonderrichtlinie ÖPUL 2023 und den Informationsblättern der AMA. Was ein Betrieb tatsächlich erhält, hängt von der beantragten Fläche, der Einhaltung der Auflagen und bei Prämienbändern vom verfügbaren Budget ab. Verbindlich ist der Bescheid der AMA.' },
 ];
 
 const jsonLd = {
@@ -103,15 +108,16 @@ const jsonLd = {
 };
 
 const groups: { title: string; sub: string; rows: Row[] }[] = [
-  { title: 'Weitere Basismodulsätze', sub: 'Ausgangssätze des Jahres 2023 — ab 2024 um mindestens 8 % angehoben.', rows: basis },
-  { title: 'Acker, Boden und Wasser', sub: 'Ausgangssätze des Jahres 2023 — ab 2024 um mindestens 8 % angehoben.', rows: acker },
-  { title: 'Neue Maßnahmen und Zuschläge ab 2025', sub: 'Sätze für das Antragsjahr 2025 laut AMA.', rows: neu2025 },
+  { title: 'Basismodule im Grünland', sub: 'Sätze ab dem Antragsjahr 2024.', rows: gruenland },
+  { title: 'Acker, Boden und Wasser', sub: 'Sätze ab dem Antragsjahr 2024 (Impulsprogramm eingerechnet).', rows: acker },
+  { title: 'Öko-Regelungen innerhalb von ÖPUL', sub: 'Prämienbänder — garantiert ist der untere Wert; keine Erhöhung durch das Impulsprogramm.', rows: oeko },
+  { title: 'Neue Zuschläge ab 2025', sub: 'Sätze ab dem Antragsjahr 2025.', rows: neu2025 },
 ];
 ---
 
 <Layout
   title="ÖPUL 2023 — Prämien des österreichischen Agrarumweltprogramms"
-  description={`Die Prämien des ÖPUL 2023 je Hektar: UBB-Basismodul ${fmt(ubb.v2025)} €/ha und Bio-Basismodul ${fmt(bio.v2025)} €/ha im Jahr 2025, Begrünung, Erosions- und Grundwasserschutz sowie die neuen Maßnahmen ab 2025.`}
+  description={`Die Prämien des ÖPUL je Hektar: UBB-Basismodul ${fmt(ubb.v2025)} €/ha und Bio-Basismodul ${fmt(bio.v2025)} €/ha auf dem Acker seit 2025, Grünland, Erosions- und Grundwasserschutz, Begrünung und die neuen Maßnahmen ab 2025.`}
   noHreflang={true}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
@@ -125,51 +131,49 @@ const groups: { title: string; sub: string; rows: Row[] }[] = [
       </nav>
 
       <header class="db-head">
-        <span class="db-eyebrow">Agrarumweltprogramm Österreich · Periode 2023–2027</span>
+        <span class="db-eyebrow">Agrarumweltprogramm Österreich · Stand Antragsjahr 2025/2026</span>
         <h1>ÖPUL 2023 — Prämien je Hektar</h1>
         <p class="db-lead">
-          Das österreichische Programm für umweltgerechte Landwirtschaft ist modular aufgebaut:
-          Ein Betrieb wählt ein Basismodul — UBB oder Bio — und ergänzt es um Zuschläge für
-          einzelne Zusatzleistungen. Unten die Sätze der wichtigsten Maßnahmen, die Entwicklung
-          der beiden Basismodule seit 2023 und die neuen Maßnahmen ab 2025.
+          Das österreichische Agrarumweltprogramm ist modular: Ein Betrieb wählt ein Basismodul — UBB oder
+          Bio — und ergänzt es um weitere Maßnahmen und Zuschläge. Unten die Entwicklung der beiden
+          Basismodule seit 2023, die aktuellen Sätze der wichtigsten Maßnahmen und die Neuerungen ab 2025.
         </p>
       </header>
 
       <div class="db-flag">
-        <strong>Achtung bei älteren Übersichten.</strong> Die Sätze von 2023 gelten nicht mehr: Das
-        Impulsprogramm hat ab dem Antragsjahr 2024 <em>jeden</em> ÖPUL-Prämiensatz um wenigstens 8 %
-        erhöht, einzelne Maßnahmen bekamen 2025 noch einen Aufschlag. Viele frei zugängliche
-        Zusammenstellungen führen trotzdem weiterhin die Ausgangswerte. Bei jeder Tabelle unten steht
-        deshalb, für welches Jahr der Satz gilt.
+        <strong>Ältere Übersichten zeigen meist die Sätze von 2023.</strong> Seit dem Antragsjahr 2024
+        liegen die Prämien der klassischen Agrarumweltmaßnahmen um 8 % höher (Impulsprogramm), die
+        Basismodule auf dem Acker stiegen 2025 noch einmal. Die Öko-Regelungen innerhalb von ÖPUL wurden
+        nicht erhöht — sie werden mit Prämienbändern bezahlt. Bei jeder Tabelle steht, ab wann der Satz gilt.
       </div>
 
-      <section class="db-hero-stats" aria-label="Wichtigste Prämien 2025">
+      <section class="db-hero-stats" aria-label="Wichtigste Prämien">
         <div class="db-stat db-stat--hl">
-          <span class="db-stat-l">UBB Acker · 2025</span>
+          <span class="db-stat-l">UBB Acker · ab 2025</span>
           <b class="db-stat-v">{fmt(ubb.v2025)} <em>€/ha</em></b>
         </div>
         <div class="db-stat db-stat--hl">
-          <span class="db-stat-l">Bio Acker · 2025</span>
+          <span class="db-stat-l">Bio Acker · ab 2025</span>
           <b class="db-stat-v">{fmt(bio.v2025)} <em>€/ha</em></b>
         </div>
         <div class="db-stat">
-          <span class="db-stat-l">Agroforststreifen</span>
-          <b class="db-stat-v">600–800 <em>€/ha</em></b>
+          <span class="db-stat-l">Bio Grünland · ab 2024</span>
+          <b class="db-stat-v">bis {fmt(AT_OEPUL_BIO_GRUENLAND_MAX)} <em>€/ha</em></b>
         </div>
         <div class="db-stat">
-          <span class="db-stat-l">Erosionsschutz Acker</span>
-          <b class="db-stat-v">550 <em>€/ha</em></b>
+          <span class="db-stat-l">Agroforststreifen · ab 2025</span>
+          <b class="db-stat-v">600–800 <em>€/ha</em></b>
         </div>
       </section>
 
       <section class="db-tables" aria-labelledby="dev-h">
-        <h2 id="dev-h">Entwicklung der beiden Basismodule</h2>
-        <p class="db-calc-sub">Die einzigen beiden Sätze, für die eine vollständige Reihe vorliegt.
-          Sie zeigen die Wirkung des Impulsprogramms unmittelbar.</p>
+        <h2 id="dev-h">Entwicklung der Basismodule auf dem Acker</h2>
+        <p class="db-calc-sub">Hier sieht man beide Erhöhungen: 2024 durch das Impulsprogramm, 2025 durch
+          die Anhebung der Acker-Basismodule.</p>
         <div class="db-tw">
           <table class="db-table">
             <thead>
-              <tr><th scope="col">Basismodul (Ackerflächen)</th><th scope="col">2023</th><th scope="col">2024</th><th scope="col">2025</th></tr>
+              <tr><th scope="col">Basismodul (Ackerflächen)</th><th scope="col">2023</th><th scope="col">2024</th><th scope="col">ab 2025</th></tr>
             </thead>
             <tbody>
               {serien.map((s) => (
@@ -212,10 +216,10 @@ const groups: { title: string; sub: string; rows: Row[] }[] = [
       <section class="db-explain" aria-labelledby="exp-h">
         <h2 id="exp-h">Wie ÖPUL aufgebaut ist</h2>
         <div class="db-explain-grid">
-          <div class="db-exp"><h3>Basismodul zuerst</h3><p>Jeder teilnehmende Betrieb wählt ein Basismodul: entweder UBB — umweltgerechte und biodiversitätsfördernde Bewirtschaftung — oder die biologische Wirtschaftsweise. Beide schließen einander aus. Das Basismodul bestimmt den Grundsatz je Hektar.</p></div>
-          <div class="db-exp"><h3>Zuschläge obendrauf</h3><p>Auf das Basismodul lassen sich zahlreiche Zusatzleistungen legen — Begrünungsvarianten, Erosionsschutz, Grundwasserschutz, Pheromonfallen, Untersaaten. Der Gesamtbetrag je Hektar ergibt sich erst aus der Kombination.</p></div>
-          <div class="db-exp"><h3>Grünland nach Tierbesatz</h3><p>Im Grünland richtet sich der Bio-Satz nach dem Tierbesatz: Betriebe mit bis zu 1,4 RGVE je Hektar erhalten den höchsten Satz, darüber sinkt er, und Nicht-Tierhalter bekommen deutlich weniger. Die Systematik honoriert extensive Weidehaltung.</p></div>
-          <div class="db-exp"><h3>Mehrjährige Verpflichtung</h3><p>ÖPUL ist freiwillig, aber nicht unverbindlich: Wer teilnimmt, verpflichtet sich für die Programmperiode. Wird eine Auflage nicht eingehalten, drohen Kürzungen und Rückforderungen — die Prämie ist Entgelt für eine tatsächlich erbrachte Leistung.</p></div>
+          <div class="db-exp"><h3>Basismodul zuerst</h3><p>Jeder teilnehmende Betrieb entscheidet sich für UBB oder für die biologische Wirtschaftsweise — beides zugleich geht nicht. Das Basismodul legt den Grundbetrag je Hektar fest, getrennt für Acker und Grünland.</p></div>
+          <div class="db-exp"><h3>Zuschläge und Einzelmaßnahmen</h3><p>Erosionsschutz, Grundwasserschutz, Humuserhalt, Begrünung oder Pheromonfallen kommen je nach Betrieb dazu. Erst die Kombination ergibt, was ein Hektar tatsächlich bringt.</p></div>
+          <div class="db-exp"><h3>Grünland nach Tierbesatz</h3><p>Im Grünland hängt der Satz davon ab, ob und wie viele Tiere gehalten werden. Bei Bio bekommen Betriebe unter 1,40 RGVE je Hektar am meisten — ein Anreiz für extensive Haltung.</p></div>
+          <div class="db-exp"><h3>Mehrjährig oder einjährig</h3><p>Die Basismodule und Maßnahmen wie Erosionsschutz Acker, Grundwasserschutz oder Almbewirtschaftung sind Verpflichtungen bis Ende 2028. Andere laufen jeweils ein Kalenderjahr — darunter die Öko-Regelungen der ersten Säule: Begrünung, Tierwohl – Weide und die nichtproduktiven Ackerflächen.</p></div>
         </div>
       </section>
 
@@ -230,12 +234,12 @@ const groups: { title: string; sub: string; rows: Row[] }[] = [
       </section>
 
       <div class="db-related">
-        <a href={localizePath('de', '/direktzahlungen-oesterreich/')}>→ Direktzahlungen in Österreich — die erste Säule (Beträge je Hektar)</a>
+        <a href={localizePath('de', '/direktzahlungen-oesterreich/')}>→ Direktzahlungen in Österreich — Einheitsbeträge der AMA</a>
         <a href={localizePath('de', '/oeko-regelungen/')}>→ Öko-Regelungen in Deutschland — das Gegenstück im Vergleich</a>
       </div>
 
       <footer class="db-src">
-        <p>Datenquellen: <a href="https://www.ama.at/fachliche-informationen/oepul/aktuelles/2024/hoehere-praemien-und-neuerungen-bei-oepul-massnahmen/" target="_blank" rel="noopener">AMA — Höhere Prämien und Neuerungen bei ÖPUL-Maßnahmen</a> (Reihe 2023–2025, neue Maßnahmen ab 2025), gegengeprüft mit <a href="https://www.lko.at/%C3%B6pul-2023-ein-%C3%BCberblick+2400+3563571" target="_blank" rel="noopener">Landwirtschaftskammer Österreich — ÖPUL 2023, ein Überblick</a> (Sätze der Einzelmaßnahmen). Die Merkblätter zu allen Maßnahmen veröffentlicht die <a href="https://www.ama.at/fachliche-informationen/oepul" target="_blank" rel="noopener">AMA</a>. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
+        <p>Datenquellen: <a href="https://www.ama.at/media/tp2fbtou/srl_oepul_2023_20261001.pdf" target="_blank" rel="noopener">Sonderrichtlinie ÖPUL 2023 (Fassung 1. Oktober 2026)</a> und die Informationsblätter zu den einzelnen Maßnahmen auf der <a href="https://www.ama.at/fachliche-informationen/oepul/merkblaetter" target="_blank" rel="noopener">AMA-Seite „ÖPUL — Merkblätter"</a>. Verbindlich ist der Bescheid der AMA. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
       </footer>
     </div>
   </main>
