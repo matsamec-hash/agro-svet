@@ -16,7 +16,6 @@ import Layout from '../../layouts/Layout.astro';
 import '../../styles/home.css';
 import ArticleCard from '../ArticleCard.astro';
 import ImageAccordion from '../ImageAccordion.astro';
-import Newsletter from '../Newsletter.astro';
 import PhotoCredits from '../PhotoCredits.astro';
 import { creditFromArticle } from '../../lib/photo-credit';
 import { createAnonClient } from '../../lib/supabase';
@@ -31,12 +30,7 @@ import {
   buildTranslationMap,
   overlayArticle,
 } from '../../lib/articles-i18n';
-import {
-  DE_GRUNDSTUETZUNG_2025,
-  DE_OER_MAX,
-  AT_BASIS_HEIMGUT,
-  AT_OEPUL_BIO_GRUENLAND_MAX,
-} from '../../data/foerderung-de';
+import { DE_GRUNDSTUETZUNG_2025 } from '../../data/foerderung-de';
 
 const LOCALE = 'de' as const;
 
@@ -85,30 +79,8 @@ const FOERDERUNG: { href: string; land: string; title: string; value: string; un
     unit: '€/ha',
     note: 'Einkommensgrundstützung, Antragsjahr 2025 — final im Bundesanzeiger.',
   },
-  {
-    href: '/de/oeko-regelungen/',
-    land: '🇩🇪 Deutschland',
-    title: 'Öko-Regelungen',
-    value: `bis ${DE_OER_MAX.toLocaleString('de-DE')}`,
-    unit: '€/ha',
-    note: 'ÖR 1a, erste Stufe. Alle sieben Öko-Regelungen mit Staffelung.',
-  },
-  {
-    href: '/de/direktzahlungen-oesterreich/',
-    land: '🇦🇹 Österreich',
-    title: 'Basiseinkommensstützung',
-    value: AT_BASIS_HEIMGUT.toLocaleString('de-DE'),
-    unit: '€/ha',
-    note: 'Heimgutflächen, dazu Umverteilung auf die ersten 40 Hektar.',
-  },
-  {
-    href: '/de/oepul/',
-    land: '🇦🇹 Österreich',
-    title: 'ÖPUL 2023',
-    value: `bis ${AT_OEPUL_BIO_GRUENLAND_MAX.toLocaleString('de-DE')}`,
-    unit: '€/ha',
-    note: 'Bio-Grünland. Richtwert für 2023–2027, kein jährlicher Einheitsbetrag.',
-  },
+  // Öko-Regelungen, Direktzahlungen Österreich a ÖPUL jsou od 2026-10-14 stažené
+  // (viz LAUNCHED_PREFIXES.de) — karty se vrátí spolu se stránkami.
 ];
 
 const GROUPS: { heading: string; lede: string; items: { href: string; icon: string; title: string; desc: string }[] }[] = [
@@ -171,7 +143,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
 
 <Layout
   title="Landmaschinen und Agrarförderung — Daten und Katalog"
-  description="Landtechnik und Agrarwissen im Überblick: Maschinenkatalog mit 22 Marken, Modellvergleich und Enzyklopädie, die Beträge der Direktzahlungen und Öko-Regelungen für Deutschland und Österreich sowie Nutztierrassen, Pflanzenkrankheiten und Imkerei."
+  description="Landtechnik und Agrarwissen im Überblick: Maschinenkatalog mit 22 Marken, Modellvergleich und Enzyklopädie, die Beträge der Direktzahlungen in Deutschland sowie Nutztierrassen, Pflanzenkrankheiten und Imkerei."
   preloadHeroImage={featured?.featured_image_url ?? undefined}
   preloadHeroSizes="(max-width: 900px) 100vw, 800px"
   preloadHeroMaxWidth={800}
@@ -251,14 +223,13 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   <section class="home-sections">
     <div class="home-head">
       <div>
-        <span class="hde-kicker">Deutschland und Österreich</span>
+        <span class="hde-kicker">Deutschland</span>
         <h2>Daten: Agrarförderung</h2>
       </div>
     </div>
     <p class="hde-lede">
-      Die Einheitsbeträge je Hektar für beide Länder, mit Quelle und Stand — und dort,
-      wo es keinen jährlich verkündeten Betrag gibt, sagen die Seiten das laut,
-      statt Genauigkeit vorzutäuschen.
+      Die Einheitsbeträge der Direktzahlungen je Hektar, mit Quelle und Stand — und mit
+      klarer Trennung zwischen endgültigen und geplanten Beträgen.
     </p>
     <div class="hde-tiles">
       {FOERDERUNG.map((f) => (
@@ -295,7 +266,9 @@ const itemListJsonLd = homepageItems.length > 0 ? {
        od cs verze nedostávaly vůbec, přes ně jde jen titulek článku. -->
   <PhotoCredits credits={[featured, ...heroRight, ...rest].filter(Boolean).map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={LOCALE} />
 
-  <Newsletter />
+  {/* Newsletter tu není: potvrzovací e-mail i samotný přehled článků chodí česky
+      a odkazuje na české zásady — německý odběratel by dostal něco jiného, než
+      formulář slibuje. Vrátit, až bude německé vydání. */}
 </Layout>
 
 <style>

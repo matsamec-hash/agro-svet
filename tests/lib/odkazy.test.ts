@@ -13,7 +13,7 @@ import {
 import { udrzovatelHref, listIndexableUdrzovatele, listUdrzovatele } from '../../src/lib/plodiny';
 import { getSlovnik } from '../../src/lib/slovnik';
 import { SLOVNIK_DE } from '../../src/lib/slovnik.de';
-import { langSwitchHref, LOCALE_ONLY_SECTIONS } from '../../src/i18n/utils';
+import { langSwitchHref, LOCALE_ONLY_SECTIONS, isLaunchedPath } from '../../src/i18n/utils';
 import { HIDDEN_NEWS_CATEGORIES } from '../../src/i18n/nav';
 import { activeLocales } from '../../src/i18n/config';
 
@@ -106,9 +106,10 @@ describe('přepínač jazyka', () => {
     expect(langSwitchHref('cs', '/ekoschematy/', [])).toBe('/');
     expect(langSwitchHref('sk', '/ekoschematy/', [])).toBe('/sk/');
     expect(langSwitchHref('pl', '/poradniki/jak-dobrac-opony-rolnicze/', [])).toBe('/pl/poradniki/jak-dobrac-opony-rolnicze/');
-    // de je stažená (410) — vlastníka ověř jen u servírovaných jazyků.
+    // Vlastníka ověř jen u servírovaných jazyků a launchnutých sekcí (de měla
+    // 2026-10-14 tři dotační landingy stažené — přepínač pak míří na /de/).
     for (const [section, owner] of Object.entries(LOCALE_ONLY_SECTIONS)) {
-      if (!activeLocales.includes(owner)) continue;
+      if (!activeLocales.includes(owner) || !isLaunchedPath(owner, `/${section}`)) continue;
       expect(langSwitchHref(owner, `/${section}/`, [])).toBe(`/${owner}/${section}/`);
       expect(langSwitchHref('cs', `/${section}/`, [])).toBe('/');
     }

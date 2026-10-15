@@ -24,10 +24,8 @@ const skHref = langSwitchHref('sk', path, HIDDEN_NEWS_CATEGORIES.sk, available);
 const ukHref = langSwitchHref('uk', path, HIDDEN_NEWS_CATEGORIES.uk, available);
 // PL cíl: nelaunchnuté sekce padají na /pl/ (PL homepage, noindex) — nikdy 404.
 const plHref = langSwitchHref('pl', path, HIDDEN_NEWS_CATEGORIES.pl, available);
-// DE cíl: nelaunchnuté sekce padaly na /de/ (DE homepage, noindex) — nikdy 404.
-// Od 2026-09-14 je de v RETIRED_LOCALES (celá mutace vrací 410), takže ho
-// filtr níž z nabídky vyhodí. Řádek zůstává, ať se jazyk dá vrátit smazáním
-// jediného prvku z RETIRED_LOCALES.
+// DE cíl: nelaunchnuté sekce padají na /de/ (DE homepage, noindex) — nikdy 404.
+// (2026-09-14 až 2026-10-14 bylo de v RETIRED_LOCALES a filtr níž ho skrýval.)
 const deHref = langSwitchHref('de', path, HIDDEN_NEWS_CATEGORIES.de, available);
 
 // Stažené mutace se v přepínači nenabízejí — odkaz do 410 je horší než žádný.

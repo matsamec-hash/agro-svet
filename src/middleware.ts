@@ -140,7 +140,7 @@ const handleRequest = defineMiddleware(async (context, next) => {
   if (shortCalcTarget) return redirect(shortCalcTarget, 308);
 
   // ---- Stažená jazyková mutace → 410 Gone -----------------------------------
-  // /de/* staženo 2026-09-14 (RETIRED_LOCALES v i18n/config.ts). 410, ne 404:
+  // Jazyk v RETIRED_LOCALES (i18n/config.ts; de tam bylo 2026-09-14 až 2026-10-14). 410, ne 404:
   // „Gone" je pro Google explicitní „tohle se nevrátí", a URL z indexu vyhazuje
   // rychleji než 404, které si ještě chvíli ověřuje. 301 na češtinu by stránku
   // jen přesměroval — pořád by šla ve výsledcích dohledat, a to je přesně to,

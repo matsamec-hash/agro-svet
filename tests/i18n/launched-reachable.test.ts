@@ -25,6 +25,7 @@ const NOT_REQUIRED = new Set([
   '/zpracovani-osobnich-udaju',
   '/dsa-kontakt',
   '/redakce',
+  '/impressum',                   // DE-only právní, odkaz v patičce (Footer.astro)
 ]);
 
 /** Rozcestník (locale homepage) pro daný jazyk, pokud existuje. */

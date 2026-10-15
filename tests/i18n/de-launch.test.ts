@@ -90,7 +90,8 @@ describe.skipIf(DE_RETIRED)('LAUNCHED_PREFIXES.de — launchujeme jen skutečně
     expect(isLaunchedPath('de', '/')).toBe(true);
     // DE-only landingy s německými sazbami GAP.
     expect(isLaunchedPath('de', '/direktzahlungen')).toBe(true);
-    expect(isLaunchedPath('de', '/oeko-regelungen')).toBe(true);
+    // Öko-Regelungen stažené 2026-10-14 — ÖR 1a do 8 % (ne 6 %), ÖR 6 a sazby 2026.
+    expect(isLaunchedPath('de', '/oeko-regelungen')).toBe(false);
   });
   it('CZ-jurisdikční sekce launchnuté NEJSOU (mají vzniknout jako DE/AT obsah)', () => {
     // /novinky ze seznamu ven (2026-09-01): výpis je omezený na REÁLNĚ přeložené
@@ -373,7 +374,7 @@ describe.skipIf(DE_RETIRED)('DE homepage a DE-only landingy', () => {
     const hrefs = [...src.matchAll(/href: '(\/de\/[^']*)'/g)].map((m) => m[1].replace(/^\/de/, '').replace(/\/+$/, ''));
     // Právní a redakční stránky patří do patičky, ne na rozcestník; '/' je
     // sama homepage a '/hledat' má lupu v hlavičce.
-    const NOT_ON_HUB = new Set(['/', '/hledat', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce']);
+    const NOT_ON_HUB = new Set(['/', '/hledat', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/impressum']);
     const missing = LAUNCHED_PREFIXES.de.filter((p) => !NOT_ON_HUB.has(p) && !hrefs.includes(p));
     expect(missing, `launchnuto, ale na homepage neodkázáno: ${missing.join(', ')}`).toEqual([]);
   });
@@ -395,14 +396,16 @@ describe.skipIf(DE_RETIRED)('DE homepage a DE-only landingy', () => {
       expect(fs.existsSync(path.join(ROOT, p)), `chybí ${p}`).toBe(true);
       const src = fs.readFileSync(path.join(ROOT, p), 'utf8');
       // Non-de locale nesmí dostat německou jurisdikční stránku.
-      expect(src, `${p} musí odmítnout non-de locale`).toContain("if (locale !== 'de') return Astro.rewrite('/404')");
+      expect(src, `${p} musí odmítnout non-de locale`).toMatch(/if \(locale !== 'de'.*\) return Astro\.rewrite\('\/404'\);/);
     }
     // Nemají cs ekvivalent → do /de mirroru je nedostane žádné zrcadlení.
+    // Stažené landingy (2026-10-14) v sitemapě být nesmí — samy vracejí 404.
     const sm = fs.readFileSync(path.join(ROOT, 'src/lib/sitemap-entries.ts'), 'utf8');
-    expect(sm).toContain('/de/direktzahlungen/');
-    expect(sm).toContain('/de/oeko-regelungen/');
-    expect(sm).toContain('/de/oepul/');
-    expect(sm).toContain('/de/direktzahlungen-oesterreich/');
+    expect(sm).toContain('${SITE_URL}/de/direktzahlungen/');
+    for (const p of ['oeko-regelungen', 'oepul', 'direktzahlungen-oesterreich']) {
+      expect(sm).not.toContain('${SITE_URL}/de/' + p + '/');
+      expect(fs.readFileSync(path.join(ROOT, `src/pages/${p}/index.astro`), 'utf8')).toContain(`!isLaunchedPath('de', '/${p}')`);
+    }
   });
 });
 
@@ -452,28 +455,30 @@ describe.skipIf(DE_RETIRED)('fáze 3a — žebříčky a právní stránky', () 
     const de = src.slice(src.indexOf(') : isDe ? ('), src.lastIndexOf(') : ('));
     expect(de).toContain('bfdi.bund.de');
     expect(de).toContain('dsb.gv.at');
-    expect(de, 'vedoucí úřad zůstává český — provozovatel sídlí v ČR').toContain('uoou.cz');
+    expect(de, 'vedoucí úřad zůstává český — provozovatel sídlí v ČR').toContain('uoou.gov.cz');
   });
 });
 
 describe.skipIf(DE_RETIRED)('fáze 3b — rakouská jurisdikce', () => {
   const ROOT = process.cwd();
 
-  // Trh je DE+AT. Když je launchnutá jen německá jurisdikce, rakouský čtenář
-  // dostane sazby, které pro něj neplatí — horší než žádná stránka.
-  it('rakouské landingy jsou launchnuté a odmítnou non-de locale', () => {
+  // ‼️ 2026-10-14: rakouské landingy jsou STAŽENÉ. Ověření proti AMA ukázalo, že
+  // Rakousko Einheitsbeträge vyhlašuje každý rok (prosinec, § 21 Abs. 11 GSP-AV)
+  // a ÖPUL měl několik chybných sazeb. Až se opraví, vrať je do LAUNCHED_PREFIXES.de
+  // a tenhle test otoč zpátky.
+  it('rakouské landingy jsou stažené a non-de locale je nedostane', () => {
     for (const r of ['/oepul', '/direktzahlungen-oesterreich']) {
-      expect(isLaunchedPath('de', r), `${r} není launchnuté`).toBe(true);
+      expect(isLaunchedPath('de', r), `${r} je pořád launchnuté`).toBe(false);
       for (const loc of ['cs', 'sk', 'pl', 'uk']) {
         expect(isLaunchedPath(loc as never, r), `${r} nesmí být launchnuté pro ${loc}`).toBe(false);
       }
     }
   });
 
-  // ‼️ Rakouské zdroje uvádějí sazby jako „rund/etwa" pro celé období, ne jako
-  // roční úřední Einheitsbetrag. Stránka nesmí předstírat přesnost, kterou
-  // zdroj nemá — jinak je to YMYL chyba, ne jen stylistika.
-  it('rakouské stránky přiznávají, že jde o orientační sazby', () => {
+  // ‼️ CHYBNÝ PŘEDPOKLAD (opraveno 2026-10-14): Rakousko roční Einheitsbetrag MÁ —
+  // AMA ho vyhlašuje v prosinci. Test níž hlídá STARÝ obsah stažených stránek;
+  // při jejich opravě ho přepiš na skutečné sazby AMA, ne „Richtwerte".
+  it('rakouské stránky (stažené) — starý obsah', () => {
     const dz = fs.readFileSync(path.join(ROOT, 'src/pages/direktzahlungen-oesterreich/index.astro'), 'utf8');
     expect(dz, 'chybí upozornění na richtwerty').toContain('Richtwerte');
     expect(dz, 'sazby se musí uvádět s „rund"').toContain('rund {fmt(BASIS_HEIMGUT)}');

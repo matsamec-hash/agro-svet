@@ -5,7 +5,10 @@ export const defaultLocale: Locale = 'cs';
 
 /** Jazykové mutace STAŽENÉ z provozu.
  *
- *  `de` staženo 2026-09-14 na přání vlastníka. Mutace se NEsmaže z kódu —
+ *  `de` bylo stažené 2026-09-14 až 2026-10-14 na přání vlastníka a vrátilo se
+ *  po auditu práv k fotkám (všechny /de stránky), textů a právních stránek.
+ *  Mechanismus zůstává pro případ, že by bylo potřeba jazyk znovu stáhnout.
+ *  Stažená mutace se NEsmaže z kódu —
  *  překlady (i18n/ui/de.ts, slovnik.de, sezona.de, kviz.de, HomeDe.astro,
  *  overlaye) a LAUNCHED_PREFIXES.de zůstávají nedotčené, aby šla kdykoli
  *  vrátit jediným smazáním řádku z tohohle pole. Odstraněný jazyk je gatnutý
@@ -16,7 +19,7 @@ export const defaultLocale: Locale = 'cs';
  *
  *  ‼️ NEPŘIDÁVAT `Disallow: /de/` do robots.txt. Zakázaná cesta se nescrawluje,
  *  takže by Googlebot to 410 nikdy neviděl a URL by v indexu zůstaly viset. */
-export const RETIRED_LOCALES = ['de'] as const satisfies readonly Locale[];
+export const RETIRED_LOCALES = [] as const satisfies readonly Locale[];
 
 export function isRetiredLocale(value: string): boolean {
   return (RETIRED_LOCALES as readonly string[]).includes(value);

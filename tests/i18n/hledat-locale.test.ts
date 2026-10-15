@@ -39,9 +39,9 @@ describe('/hledat — gatování skupin podle launchnutých sekcí', () => {
     // CHECK constraintu na produkční CMS databázi — `article_translations_locale_check`
     // locale 'uk' do té doby nepouštěl.
     expect(searchGroupsFor('uk')).toEqual(['novinky', 'stroje', 'plemena']);
-    // de je od 2026-09-14 stažené (RETIRED_LOCALES) → neprohledává NIC. Kdyby
-    // vyhledávání skupinu nabídlo, odkazovalo by do 410.
-    expect(searchGroupsFor('de')).toEqual([]);
+    // de bylo 2026-09-14 až 2026-10-14 stažené a neprohledávalo nic. Po návratu
+    // hledá zase v novinkách (jen reálně přeložené), technice a plemenech.
+    expect(searchGroupsFor('de')).toEqual(['novinky', 'stroje', 'plemena']);
   });
 
   it('každá nabídnutá skupina má v dané locale launchnutou cílovou sekci', () => {

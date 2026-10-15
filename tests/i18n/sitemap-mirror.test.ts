@@ -76,14 +76,13 @@ describe('brána locale mirroru sitemapy', () => {
     expect(allowInMirror('/jak-na-to/registrace-vcelaru/', 'sk', ctx)).toBe(true);
   });
 
-  it('stažený jazyk se nezrcadlí vůbec a není ani ve výčtu mirrorů', () => {
-    // de staženo 2026-09-14 (RETIRED_LOCALES). Brána ho musí odmítnout i pro
-    // cestu, kterou má pořád v LAUNCHED_PREFIXES — jinak by se stažené URL
-    // vrátily do sitemapy.
-    expect(MIRROR_LOCALES).not.toContain('de');
+  it('de se po návratu (2026-10-14) zase zrcadlí', () => {
+    // de bylo 2026-09-14 až 2026-10-14 v RETIRED_LOCALES a brána ho odmítala
+    // pro všechno. Po vrácení musí být zpátky ve výčtu mirrorů.
+    expect(MIRROR_LOCALES).toContain('de');
     expect(ALL_MIRROR_LOCALES).toContain('de');
-    expect(allowInMirror('/plodiny/', 'de', ctx)).toBe(false);
-    expect(allowInMirror('/stroje/', 'de', ctx)).toBe(false);
+    expect(allowInMirror('/plodiny/', 'de', ctx)).toBe(true);
+    expect(allowInMirror('/stroje/', 'de', ctx)).toBe(true);
   });
 
   it('sk si ponechává /dotace/kalendar-kol/, uk ne (302 na hub)', () => {

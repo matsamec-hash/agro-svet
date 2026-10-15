@@ -586,9 +586,9 @@ export async function buildSitemapEntries(): Promise<UrlEntry[]> {
   // DE-only landingy (GAP Deutschland) — stejný důvod jako u PL: nemají cs
   // ekvivalent v base urls, takže je do /de mirroru nedostane žádné zrcadlení.
   urls.push({ loc: `${SITE_URL}/de/direktzahlungen/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
-  urls.push({ loc: `${SITE_URL}/de/oeko-regelungen/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
-  urls.push({ loc: `${SITE_URL}/de/oepul/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
-  urls.push({ loc: `${SITE_URL}/de/direktzahlungen-oesterreich/`, changefreq: 'monthly', priority: '0.8', lastmod: STATIC_LASTMOD });
+  // /de/oeko-regelungen, /de/oepul a /de/direktzahlungen-oesterreich jsou od 2026-10-14
+  // stažené (viz LAUNCHED_PREFIXES.de) — vrátit sem spolu s nimi.
+  urls.push({ loc: `${SITE_URL}/de/impressum/`, changefreq: 'yearly', priority: '0.3', lastmod: STATIC_LASTMOD });
 
   // PL-only sekce /poradniki — hub + evergreen návody (poradnikiPl kolekce).
   urls.push({ loc: `${SITE_URL}/pl/poradniki/`, changefreq: 'weekly', priority: '0.8', lastmod: STATIC_LASTMOD });

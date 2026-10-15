@@ -1,12 +1,13 @@
 // tests/i18n/retired-locale.test.ts
-// Stažená jazyková mutace (de, 2026-09-14). Hlídá, že „stažená" znamená
-// opravdu neviditelná: žádný hreflang, nic v sitemapě, nic v navigaci a nic
-// v přepínači jazyků. Samotné 410 na /de/* dělá middleware — testuje se tady
-// přes stejnou podmínku, na které middleware stojí (isRetiredLocale).
+// Stažená jazyková mutace. Hlídá, že „stažená" znamená opravdu neviditelná:
+// žádný hreflang, nic v sitemapě, nic v navigaci a nic v přepínači jazyků.
+// Samotné 410 na /<locale>/* dělá middleware — testuje se tady přes stejnou
+// podmínku, na které middleware stojí (isRetiredLocale).
 //
-// ‼️ Kdyby tenhle soubor začal padat po přidání jazyka, NEUPRAVUJ ho tak, aby
-// prošel — buď je jazyk stažený, nebo není. Vrácení jazyka = smazat ho
-// z RETIRED_LOCALES, pak tyhle testy přestanou dávat smysl jako celek.
+// de bylo stažené 2026-09-14 až 2026-10-14. Vrátilo se po auditu práv
+// k fotkám, textů a právních stránek; RETIRED_LOCALES je teď prázdné, takže
+// bloky níž, které procházejí stažené jazyky, nic nekontrolují — mechanismus
+// ale zůstává a naskočí, jakmile se do pole cokoli vrátí.
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,8 +32,8 @@ const EMPTY_CTX: MirrorContext = {
 };
 
 describe('RETIRED_LOCALES', () => {
-  it('de je stažené', () => {
-    expect(isRetiredLocale('de')).toBe(true);
+  it('de je od 2026-10-14 zpátky v provozu', () => {
+    expect(isRetiredLocale('de')).toBe(false);
   });
 
   it('stažené locale je pořád platné locale (překlady se nemažou → jde vrátit)', () => {
@@ -43,8 +44,8 @@ describe('RETIRED_LOCALES', () => {
   });
 
   it('activeLocales = locales bez stažených', () => {
-    expect(activeLocales).toEqual(['cs', 'sk', 'uk', 'pl']);
-    expect(activeLocales).not.toContain('de');
+    expect(activeLocales).toEqual(locales.filter((l) => !RETIRED.includes(l)));
+    expect(activeLocales).toContain('de');
   });
 
   it('cs (default) stažené být nesmí — shodilo by celý web', () => {
