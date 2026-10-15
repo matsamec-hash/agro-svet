@@ -1,10 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { compareMatrix, fmtNum, vsReference } from '../../../lib/svet/render';
+import { compareMatrix, fmtNum, vsReference, normalizeValue, normApplies } from '../../../lib/svet/render';
 import { buildColorMap, buildMultiSeriesModel, MULTI_OPTS } from '../../../lib/svet/multichart';
 import populationData from '../../../data/svet/population.json';
 import { localizePath, t } from '../../../i18n/utils';
-import { COUNTRY_NAMES, INDICATOR_LABELS, SVET_REFERENCE, loc, type SvetLang } from '../../../i18n/svet';
+import { COUNTRY_NAMES, INDICATOR_LABELS, SVET_REFERENCE, loc, localizeUnit, type SvetLang } from '../../../i18n/svet';
 import type { Locale } from '../../../i18n/config';
 import '../../../styles/svet.css';
 
@@ -28,7 +28,7 @@ const profiles = Object.values(mods)
 profiles.sort((a: any, b: any) => (a.slug === refSlug ? -1 : b.slug === refSlug ? 1 : cName(a).localeCompare(cName(b), locale)));
 
 const indicatorMeta: Record<string, { label: string; unit: string }> = {};
-for (const p of profiles) for (const k of Object.keys(p.indicators)) indicatorMeta[k] ??= { label: p.indicators[k].label, unit: p.indicators[k].unit };
+for (const p of profiles) for (const k of Object.keys(p.indicators)) indicatorMeta[k] ??= { label: p.indicators[k].label, unit: localizeUnit(p.indicators[k].unit, locale) };
 
 const defaultKey = 'wheat_yield';
 const defaultUnit = indicatorMeta[defaultKey]?.unit ?? '';
@@ -48,6 +48,11 @@ const payload = profiles.map((p: any) => ({
   }])),
 }));
 const units = Object.fromEntries(Object.entries(indicatorMeta).map(([k, m]) => [k, m.unit]));
+// Jednotky přepočtů (na 1000 obyv., na ha) skládá normalizeValue česky — přeložené
+// je posílá server, klient je jen čte.
+const normUnits = Object.fromEntries(Object.keys(indicatorMeta).map((k) => [k, Object.fromEntries(
+  (['perCapita', 'perHa'] as const).filter((m) => normApplies(k, m)).map((m) => [m, localizeUnit(normalizeValue(k, 1, m, 1, 1)?.unit ?? '', locale)]),
+)]));
 
 // Výchozí výběr zemí: referenční země + 6 nejvyšších dle výchozího ukazatele
 const topDefault = profiles
@@ -165,7 +170,7 @@ const description = L.description;
     <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
     <script type="application/json" id="svet-units" set:html={JSON.stringify(units)}></script>
     <script type="application/json" id="svet-colors" set:html={JSON.stringify(colorMap)}></script>
-    <script type="application/json" id="svet-cmp-ui" set:html={JSON.stringify({ numLocale, modenote: L.modenote, detailBase: localizePath(locale, '/svet/'), refSlug })}></script>
+    <script type="application/json" id="svet-cmp-ui" set:html={JSON.stringify({ numLocale, modenote: L.modenote, detailBase: localizePath(locale, '/svet/'), refSlug, normUnits })}></script>
     <script>
       import { normalizeValue, normApplies, type NormMode } from '../../../lib/svet/render';
       import { buildMultiSeriesModel, MULTI_OPTS, type SeriesInput } from '../../../lib/svet/multichart';
@@ -281,7 +286,7 @@ const description = L.description;
             .map((p) => { const v = conv(key, rawOf(p, key), p, mode); return { flag: p.flag, nameCs: p.nameCs, slug: p.slug, v }; })
             .filter((r): r is { flag: string; nameCs: string; slug: string; v: number } => r.v != null)
             .sort((a, b) => b.v - a.v);
-          if (mode !== 'absolute') { const anyNorm = ref ? normalizeValue(key, 1, mode, ref.population, ref.agLand) : null; if (anyNorm) unit = anyNorm.unit; }
+          if (mode !== 'absolute') { const anyNorm = ref ? normalizeValue(key, 1, mode, ref.population, ref.agLand) : null; if (anyNorm) unit = cmpUI.normUnits?.[key]?.[mode] || anyNorm.unit; }
           if (!unit) unit = units[key] || '';
 
           if (unitH) unitH.textContent = unit ? `(${unit})` : '';

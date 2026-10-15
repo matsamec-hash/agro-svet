@@ -49,7 +49,7 @@ const yr = series.year_from ? (series.year_to ? `${series.year_from}–${series.
 const isCurrent = series.year_to === null && series.year_from !== null;
 const seriesNameClean = String(series.name).replace(/\s*\([^)]*\)\s*$/, '');
 
-const hpValues = series.models.map((m) => m.power_hp).filter((x): x is number => x !== null);
+const hpValues = series.models.map((m) => m.power_hp).filter((x): x is number => typeof x === 'number');
 const minHp = hpValues.length ? Math.min(...hpValues) : null;
 const maxHp = hpValues.length ? Math.max(...hpValues) : null;
 const hpRange = minHp !== null && maxHp !== null
@@ -74,7 +74,7 @@ const sameCategory = brand.categories?.[category];
 const siblings = (sameCategory?.series ?? [])
   .filter((s) => s.slug !== series.slug && (s.family || seriesFamily(s.slug)) === family)
   .map((s) => {
-    const sHpAll = (s.models ?? []).map((m) => m.power_hp).filter((x): x is number => x !== null);
+    const sHpAll = (s.models ?? []).map((m) => m.power_hp).filter((x): x is number => typeof x === 'number');
     const sIsCurrent = (s.models ?? []).some((m) => m.year_to === null && m.year_from !== null);
     const sYr = s.year_from ? (s.year_to ? `${s.year_from}–${s.year_to}` : `${s.year_from}–${tr('cat.rada.dosud')}`) : '';
     return {

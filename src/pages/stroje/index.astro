@@ -21,7 +21,7 @@ const kategorieLabel: Record<StrojKategorie, string> = {
 
 const totalModels = models.length;
 const totalSeries = new Set(models.map((m) => `${m.brand_slug}:${m.series_slug}`)).size;
-const hpValues = models.map((m) => m.power_hp).filter((x): x is number => x !== null);
+const hpValues = models.map((m) => m.power_hp).filter((x): x is number => typeof x === 'number');
 const minHp = hpValues.length ? Math.min(...hpValues) : 0;
 const maxHp = hpValues.length ? Math.max(...hpValues) : 0;
 const years = models.map((m) => m.year_from).filter((x): x is number => x !== null);
@@ -65,7 +65,7 @@ const collectionJsonLd = {
 // Brand cards data
 const brandCards = brands.map((b) => {
   const bModels = models.filter((m) => m.brand_slug === b.slug);
-  const bHp = bModels.map((m) => m.power_hp).filter((x): x is number => x !== null);
+  const bHp = bModels.map((m) => m.power_hp).filter((x): x is number => typeof x === 'number');
   return {
     slug: b.slug,
     name: b.name,

@@ -32,6 +32,24 @@ export function loc(map: Record<string, T>, key: string, lang: SvetLang, fallbac
   return typeof v === 'string' && v !== '' ? v : fallback;
 }
 
+// ── Jednotky ─────────────────────────────────────────────────────────────────
+// Data drží jednotky česky („mil. ha", „1000 ks", „1000 farem", „mld €", z přepočtů
+// „ks / 1000 obyv."). Bez překladu je /de/svet ukazovalo uprostřed německé stránky.
+// Překládá se po slovech, takže projdou i složené tvary (`ks/ha`, `€/ha·rok`).
+const UNIT_WORDS: Record<SvetLang, Record<string, string>> = {
+  sk: { mld: 'mld.', farem: 'fariem' },
+  pl: { ks: 'szt.', farem: 'gospodarstw', 'obyv.': 'mieszk.', 'mil.': 'mln', 'tis.': 'tys.' },
+  de: { ks: 'Stück', farem: 'Betriebe', 'obyv.': 'Einw.', 'mil.': 'Mio.', mld: 'Mrd.', 'tis.': 'Tsd.', rok: 'Jahr' },
+  uk: { ks: 'гол.', farem: 'господарств', 'obyv.': 'мешк.', 'mil.': 'млн', mld: 'млрд', 'tis.': 'тис.', rok: 'рік', ha: 'га', kg: 'кг', t: 'т' },
+};
+
+/** Jednotka ve zvoleném jazyce (cs a neznámá slova beze změny). */
+export function localizeUnit(unit: string, locale: string): string {
+  if (!unit || !isSvetLang(locale)) return unit;
+  const words = UNIT_WORDS[locale];
+  return unit.replace(/[\p{L}]+\.?/gu, (w) => words[w] ?? (w.endsWith('.') ? (words[w.slice(0, -1)] ?? w.slice(0, -1)) + '.' : w));
+}
+
 /** Země, se kterou se na /svet/srovnani poměřuje zbytek („vs ČR").
  *  ‼️ Není to kosmetika: německému čtenáři neříká „o 12 % víc než v Česku" nic,
  *  zatímco „než v Deutschland" ano. cs/sk/pl zůstávají u Česka záměrně —
@@ -269,13 +287,24 @@ export const REGION_METRIC: Record<string, RegionMetricT> = {
 };
 
 /** Přeloží label+desc regionální metriky (cs beze změny). */
-export function localizeRegionMetric<M extends { key: string; label: string; desc?: string }>(m: M, locale: string): M {
+export function localizeRegionMetric<M extends { key: string; label: string; unit?: string; desc?: string }>(m: M, locale: string): M {
   if (!isSvetLang(locale)) return m;
+  const unit = m.unit != null ? { unit: localizeUnit(m.unit, locale) } : {};
   const e = REGION_METRIC[m.key];
-  if (!e) return m;
+  if (!e) return { ...m, ...unit };
   const t = e[locale];
-  return { ...m, label: t.label, ...(m.desc != null ? { desc: t.desc } : {}) };
+  return { ...m, ...unit, label: t.label, ...(m.desc != null ? { desc: t.desc } : {}) };
 }
+
+// ── Poznámka o granularitě z dat (`regionNote` v regions/<slug>.json je česky) ──
+export const REGION_NOTE: Record<string, Record<SvetLang, string>> = {
+  usa: {
+    sk: 'úroveň štátov (50 štátov). District of Columbia nemá poľnohospodársky census, zobrazuje sa bez dát.',
+    pl: 'poziom stanów (50 stanów). Dystrykt Kolumbii nie ma spisu rolnego, wyświetla się bez danych.',
+    de: 'Ebene der Bundesstaaten (50 Staaten). Für den District of Columbia gibt es keinen Agrarzensus, er wird ohne Daten angezeigt.',
+    uk: 'рівень штатів (50 штатів). Округ Колумбія не має сільськогосподарського перепису, показано без даних.',
+  },
+};
 
 // ── Poznámka o granularitě (NUTS) pro RegionMap default (když data nemají regionNote) ──
 export const REGION_LEVEL_NOTE: Record<'NUTS1' | 'NUTS2', Record<Locale, string>> = {
@@ -315,6 +344,7 @@ export function localizeMetric<M extends MetricLike>(m: M, locale: string): M {
   return {
     ...m,
     label: loc(METRIC_LABELS, m.key, lang, m.label),
+    ...(m.unit != null ? { unit: localizeUnit(m.unit, lang) } : {}),
     ...(m.note != null ? { note: loc(METRIC_NOTES, m.key, lang, m.note) } : {}),
     ...(m.source != null ? { source: loc(METRIC_SOURCE, m.key, lang, m.source) } : {}),
     ...(m.group != null ? { group: loc(GROUP_LABELS, m.group, lang, m.group) } : {}),

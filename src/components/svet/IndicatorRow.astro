@@ -1,7 +1,7 @@
 ---
 import IndicatorChart from './IndicatorChart.astro';
 import { fmtNum, vsReference } from '../../lib/svet/render';
-import { INDICATOR_LABELS, loc, type SvetLang } from '../../i18n/svet';
+import { INDICATOR_LABELS, loc, localizeUnit, type SvetLang } from '../../i18n/svet';
 import type { Indicator, SeriesPoint } from '../../lib/svet/types';
 interface Props {
   indicator: Indicator;
@@ -13,6 +13,7 @@ interface Props {
 const { indicator: ind, refValue, refSeries = null, refName = 'ČR', countryName } = Astro.props;
 const locale = Astro.locals.locale ?? 'cs';
 const label = locale === 'cs' ? ind.label : loc(INDICATOR_LABELS, ind.key, locale as SvetLang, ind.label);
+const unit = localizeUnit(ind.unit, locale);
 const cmp = refValue != null ? vsReference(ind.latest.value, refValue) : null;
 const periodNum = Number(ind.latest.referencePeriod);
 const stale = periodNum > 0 && periodNum <= 2020;
@@ -43,10 +44,10 @@ const staleSuffix = STALE_SUFFIX[locale] ?? STALE_SUFFIX.cs;
     )}
   </div>
   <div class="svet-ind-value">
-    {fmtNum(ind.latest.value)} <span class="svet-ind-unit">{ind.unit}</span>
+    {fmtNum(ind.latest.value)} <span class="svet-ind-unit">{unit}</span>
     {refValue != null && <span class="svet-ind-ref">· {refName} {fmtNum(refValue)}</span>}
   </div>
-  <IndicatorChart series={ind.series} refSeries={refSeries} unit={ind.unit} label={label} countryName={countryName} refName={refName} />
+  <IndicatorChart series={ind.series} refSeries={refSeries} unit={unit} label={label} countryName={countryName} refName={refName} />
   <div class="svet-ind-foot">
     <a class="svet-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{ind.latest.source} · {ind.latest.referencePeriod}{stale ? staleSuffix : ''}</a>
   </div>

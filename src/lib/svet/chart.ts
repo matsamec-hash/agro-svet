@@ -101,7 +101,8 @@ export function chartCaption(
   refName = 'ČR',
   locale: string = 'cs',
 ): string {
-  const L = locale === 'sk' ? CAPTION_SK : locale === 'pl' ? CAPTION_PL : CAPTION_CS;
+  // ‼️ Mapa, ne ternář: de a uk dřív tiše dostaly českou větu pod německým grafem.
+  const L = CAPTIONS[locale] ?? CAPTION_CS;
   const pts = series.filter((p) => Number.isFinite(p.value));
   if (!pts.length) return '';
   const years = pts.map(yr);
@@ -147,3 +148,16 @@ const CAPTION_PL = {
   cmpEqual: (y: number, ref: string) => `W ${y} r. porównywalne z ${ref}.`,
   cmpDiff: (y: number, abs: number, under: boolean, ref: string, rv: string, u: string) => `W ${y} r. o ${abs} % ${under ? 'poniżej' : 'powyżej'} poziomu ${ref} (${rv} ${u}).`,
 };
+const CAPTION_DE = {
+  single: (v: string, u: string, y: number) => `Wert ${v} ${u} (${y}).`,
+  range: (a: number, b: number, lo: string, hi: string, u: string) => `Im Zeitraum ${a}–${b} zwischen ${lo} und ${hi} ${u}.`,
+  cmpEqual: (y: number, ref: string) => `${y} vergleichbar mit ${ref}.`,
+  cmpDiff: (y: number, abs: number, under: boolean, ref: string, rv: string, u: string) => `${y} um ${abs} % ${under ? 'unter' : 'über'} dem Niveau von ${ref} (${rv} ${u}).`,
+};
+const CAPTION_UK = {
+  single: (v: string, u: string, y: number) => `Значення ${v} ${u} (${y}).`,
+  range: (a: number, b: number, lo: string, hi: string, u: string) => `За період ${a}–${b} коливається між ${lo} і ${hi} ${u}.`,
+  cmpEqual: (y: number, ref: string) => `У ${y} р. на рівні ${ref}.`,
+  cmpDiff: (y: number, abs: number, under: boolean, ref: string, rv: string, u: string) => `У ${y} р. на ${abs} % ${under ? 'нижче' : 'вище'} рівня ${ref} (${rv} ${u}).`,
+};
+const CAPTIONS: Record<string, typeof CAPTION_CS> = { cs: CAPTION_CS, sk: CAPTION_SK, pl: CAPTION_PL, de: CAPTION_DE, uk: CAPTION_UK };
