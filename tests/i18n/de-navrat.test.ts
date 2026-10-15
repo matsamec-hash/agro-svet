@@ -126,7 +126,7 @@ describe('právní audit 2026-10-14', () => {
 
   it('Cloudflare neschovává e-maily za JavaScript', () => {
     const l = read('src/layouts/Layout.astro');
-    expect(l).toContain('<!--email_off-->');
+    expect(l).toContain("set:html={'<!--email_off-->'}");
     expect(l).toContain('<!--/email_off-->');
   });
 });

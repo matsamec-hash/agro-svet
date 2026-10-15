@@ -213,7 +213,7 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
   {/* Cloudflare Email Obfuscation přepisuje každý e-mail na „[email protected]" a zpátky
       ho skládá až JavaScript. Kontakt na provozovatele (právní stránky, patička) má být
       čitelný i bez JS, proto je obfuskace pro celou stránku vypnutá. */}
-  <Fragment set:html="<!--email_off-->" />
+  <Fragment set:html={'<!--email_off-->'} />
   <a href="#main-content" class="skip-link">{t(locale, 'a11y.skipToContent')}</a>
   <CookieConsent />
   <Header />
@@ -222,6 +222,6 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
   </main>
   <Lightbox />
   <Footer />
-  <Fragment set:html="<!--/email_off-->" />
+  <Fragment set:html={'<!--/email_off-->'} />
 </body>
 </html>
