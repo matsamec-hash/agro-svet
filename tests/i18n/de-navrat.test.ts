@@ -147,3 +147,34 @@ describe('Impressum (/de)', () => {
     }
   });
 });
+
+describe('rizika mimo fotky (audit 2026-10-15)', () => {
+  const ui = ['cs', 'sk', 'pl', 'uk', 'de'].map((l) => [l, read(`src/i18n/ui/${l}.ts`)] as const);
+  const lisy = (src: string) => src.split('\n').filter((r) => /^\s*'cc\.(text|analyticsDesc)':/.test(r)).join('\n');
+
+  it('měření se nevydává za anonymní — GA4 drží trvalé ID až 2 roky, Clarity nahrává návštěvy', () => {
+    for (const [l, src] of ui) expect(lisy(src), l).not.toMatch(/anonym|анонім/i);
+    const zasady = read('src/pages/zpracovani-osobnich-udaju.astro');
+    // Řádky o IP v logu bazaru (anti-fraud) se měření netýkají.
+    const mereni = zasady.split('\n').filter((r) => /Analytics|Clarity|Ahrefs/.test(r)).join('\n');
+    expect(mereni).not.toMatch(/anonymi[sz]|anonymn|anonimow|анонім|anonyme Besuch/);
+    expect(zasady.match(/<code>_clsk<\/code> 1 (Tag|den|deň|dzień|день)/g)?.length).toBe(5);
+  });
+
+  it('poznámka u videa říká, že YouTube dostane IP a může data poslat do USA', () => {
+    for (const [l, src] of ui) {
+      for (const k of ['enc.video.note', 'cat.s.d.videoNote']) {
+        const row = src.split('\n').find((r) => r.includes(`'${k}':`)) ?? '';
+        expect(row, `${l} ${k}`).toMatch(/IP/);
+        expect(row, `${l} ${k}`).toMatch(/USA|США/);
+      }
+    }
+  });
+
+  it('„Anmelden“ se mimo češtinu nezobrazuje — vede na českou přihlášku, která stahuje esm.sh', () => {
+    const h = read('src/components/Header.astro');
+    expect(h).toMatch(/showLogin = locale === 'cs' \|\| isLaunchedPath\(locale, '\/bazar'\)/);
+    expect(h).toMatch(/id="guest-link"[^>]*hidden=\{!showLogin\}/);
+    expect(h).toMatch(/\.guest-link\[hidden\] \{ display: none; \}/);
+  });
+});

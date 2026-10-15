@@ -1,11 +1,16 @@
 ---
-import { getLocaleFromUrl, stripLocale, navHref } from '../i18n/utils';
+import { getLocaleFromUrl, stripLocale, navHref, isLaunchedPath } from '../i18n/utils';
 import { useTranslations } from '../i18n/utils';
 import { getNav } from '../i18n/nav';
 import LangSwitcher from './LangSwitcher.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
+// Přihlášení patří k bazaru, který je jen česky. Pod ostatními jazyky by
+// „Anmelden“ vedlo na českou přihlášku, která navíc hned stahuje knihovnu
+// z esm.sh (cizí server, IP návštěvníka bez souhlasu). Přihlášenému se menu
+// ukáže dál — skript skrývá jen odkaz pro hosta.
+const showLogin = locale === 'cs' || isLaunchedPath(locale, '/bazar');
 const nav = getNav(locale);
 // Active-nav porovnává proti neprefixovaným hrefs, tak strip locale prefix
 // (pro cs no-op → cs bit-identické; pro sk/uk se highlight zase chytí).
@@ -91,7 +96,7 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
     <!-- Guest link — viditelný ve výchozím stavu (SSR nezná auth stav; většina
          návštěvníků je nepřihlášená → žádné probliknutí). JS ho skryje jen když
          /api/bazar/me potvrdí přihlášení a ukáže user-menu. -->
-    <a href="/bazar/prihlaseni/" id="guest-link" class="guest-link">{tr('header.login')}</a>
+    <a href="/bazar/prihlaseni/" id="guest-link" class="guest-link" hidden={!showLogin}>{tr('header.login')}</a>
 
     <!-- Mobile hamburger -->
     <button
@@ -410,6 +415,7 @@ const current = stripLocale(Astro.locals.localizedPathname ?? Astro.url.pathname
     border-radius: 10px;
   }
   .guest-link:hover { background: #000; }
+  .guest-link[hidden] { display: none; }
 
   .hamburger-btn {
     display: none;
