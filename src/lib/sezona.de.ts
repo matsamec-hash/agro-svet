@@ -76,7 +76,7 @@ export const SEASON_CONTENT_DE: Record<SeasonSlug, SeasonContent> = {
     ],
     faq: [
       { q: `Welche Arbeiten fallen im Winter an?`, a: `Wartung und Instandsetzung der Maschinen, Anbauplanung und Fruchtfolge, Bodenuntersuchung, Düngebedarfsermittlung, Sortenwahl, Saatgut- und Betriebsmittelbestellung sowie die Vorbereitung des Antrags.` },
-      { q: `Wann wird der Sammelantrag gestellt?`, a: `In Deutschland läuft die Antragstellung im Frühjahr mit Frist Mitte Mai, in Österreich endet der Mehrfachantrag Ende April. Die Vorbereitung — Flächenabgleich, Nutzungscodes, Auswahl der Öko-Regelungen — gehört in den Winter.` },
+      { q: `Wann wird der Sammelantrag gestellt?`, a: `In Deutschland läuft die Antragstellung im Frühjahr mit Frist 15. Mai, in Österreich ist der Mehrfachantrag bis 15. April einzureichen. Die Vorbereitung — Flächenabgleich, Nutzungscodes, Auswahl der Öko-Regelungen — gehört in den Winter.` },
     ],
   },
 };

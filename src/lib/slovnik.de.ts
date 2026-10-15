@@ -309,14 +309,14 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "Die GAP 2023–2027 ist die Förderperiode der Gemeinsamen Agrarpolitik der EU. Die Direktzahlungen bestehen aus Einkommensgrundstützung, Umverteilung, Junglandwirteförderung, Öko-Regelungen und gekoppelter Stützung.",
-    "longDef": "Die Gemeinsame Agrarpolitik (GAP) ist das wichtigste Finanzinstrument der EU zur Förderung der Landwirtschaft. Die laufende Periode 2023 bis 2027 brachte eine grundlegende Reform — mehr Gewicht auf Umweltleistungen, Umverteilung zugunsten kleinerer Betriebe und Erhalt der natürlichen Ressourcen. Jeder Mitgliedstaat setzt sie über einen eigenen **nationalen Strategieplan** um, weshalb sich die Beträge zwischen Deutschland und Österreich deutlich unterscheiden.\n\n**Deutschland** (endgültige Einheitsbeträge Antragsjahr 2025, bekannt gemacht im Bundesanzeiger):\n1. **Einkommensgrundstützung für Nachhaltigkeit** — 152,44 €/ha auf alle förderfähigen Hektar.\n2. **Umverteilungseinkommensstützung** — 68,05 €/ha für den 1. bis 40. Hektar, 40,83 €/ha für den 41. bis 60. Hektar; ab dem 61. Hektar entfällt sie.\n3. **Einkommensstützung für Junglandwirte** — 120,64 €/ha, höchstens 120 ha, für fünf Jahre.\n4. **Öko-Regelungen** — sieben freiwillige Maßnahmen mit eigenen Beträgen.\n5. **Gekoppelte Einkommensstützung** — Mutterkühe 89,37 €/Tier, Mutterschafe und -ziegen 36,14 €/Tier.\n\n**Österreich** (Richtwerte des Strategieplans für die gesamte Periode):\n1. **Basiseinkommensstützung** — rund 208 €/ha Heimgutfläche, rund 41 €/ha Almweidefläche.\n2. **Umverteilung** — rund 44 €/ha für den 1. bis 20., rund 22 €/ha für den 21. bis 40. Hektar.\n3. **Junglandwirte** — rund 66 €/ha, höchstens 40 ha, für fünf Jahre.\n4. **ÖPUL** — das Agrarumweltprogramm der zweiten Säule.\n5. **Gekoppelte Stützung Almauftrieb** — rund 100 €/RGVE für Kühe sowie Zuchtschafe und -ziegen, rund 50 €/RGVE für sonstige Rinder.\n\n‼️ Ein wesentlicher Unterschied: Deutschland macht die **endgültigen** Beträge jährlich im Bundesanzeiger bekannt, Österreich nennt **Richtwerte** für die Periode. Verbindlich ist in beiden Fällen erst der Bescheid der Bewilligungsstelle beziehungsweise der AMA.\n\nDer Antrag wird einmal jährlich im Sammelantrag gestellt (Deutschland über die Portale der Länder, Österreich über eAMA), üblicherweise bis Mitte Mai.",
+    "longDef": "Die Gemeinsame Agrarpolitik (GAP) ist das wichtigste Finanzinstrument der EU zur Förderung der Landwirtschaft. Die laufende Periode 2023 bis 2027 brachte eine grundlegende Reform — mehr Gewicht auf Umweltleistungen, Umverteilung zugunsten kleinerer Betriebe und Erhalt der natürlichen Ressourcen. Jeder Mitgliedstaat setzt sie über einen eigenen **nationalen Strategieplan** um, weshalb sich die Beträge zwischen Deutschland und Österreich deutlich unterscheiden.\n\n**Deutschland** (endgültige Einheitsbeträge Antragsjahr 2025, bekannt gemacht im Bundesanzeiger):\n1. **Einkommensgrundstützung für Nachhaltigkeit** — 152,44 €/ha auf alle förderfähigen Hektar.\n2. **Umverteilungseinkommensstützung** — 68,05 €/ha für den 1. bis 40. Hektar, 40,83 €/ha für den 41. bis 60. Hektar; ab dem 61. Hektar entfällt sie.\n3. **Einkommensstützung für Junglandwirte** — 120,64 €/ha, höchstens 120 ha, für fünf Jahre.\n4. **Öko-Regelungen** — sieben freiwillige Maßnahmen mit eigenen Beträgen.\n5. **Gekoppelte Einkommensstützung** — Mutterkühe 89,37 €/Tier, Mutterschafe und -ziegen 36,14 €/Tier.\n\n**Österreich** (Einheitsbeträge für das Antragsjahr 2025, veröffentlicht von der AMA):\n1. **Basiszahlung** — 207,64 €/ha Heimgutfläche, 38,18 €/ha Almweidefläche.\n2. **Umverteilung** — 45,54 €/ha für den 1. bis 20., 22,77 €/ha für den 21. bis 40. Hektar.\n3. **Junglandwirte** — 67,10 €/ha, höchstens 40 ha, für fünf Jahre.\n4. **ÖPUL** — das Agrarumweltprogramm; in Österreich sind darin auch die Öko-Regelungen der ersten Säule eingebettet.\n5. **Gekoppelte Stützung Almauftrieb** — 98,08 €/RGVE für Kühe sowie Mutterschafe und Mutterziegen, 49,04 €/RGVE für Rinder ohne Kühe.\n\n‼️ Beide Länder legen die endgültigen Beträge jedes Jahr neu fest: Deutschland macht sie im Bundesanzeiger bekannt, in Österreich veröffentlicht sie die AMA im Dezember. Verbindlich ist in beiden Fällen erst der Bescheid der Bewilligungsstelle beziehungsweise der AMA.\n\nDer Antrag wird einmal jährlich gestellt — in Deutschland als Sammelantrag über die Portale der Länder, üblicherweise bis 15. Mai, in Österreich als Mehrfachantrag (MFA) über eAMA bis 15. April.",
     "related": [
       "eko-platba",
       "mezi-plodiny",
       "biopasy"
     ],
-    "externalUrl": "https://www.bmel.de/DE/themen/landwirtschaft/eu-agrarpolitik-und-foerderung/gap/gap-reform.html",
-    "externalLabel": "BMEL — GAP-Reform"
+    "externalUrl": "https://www.bmleh.de/DE/themen/landwirtschaft/eu-agrarpolitik-und-foerderung/gap/gap_node.html",
+    "externalLabel": "BMLEH — Gemeinsame Agrarpolitik"
   },
   {
     "slug": "eko-platba",
@@ -328,7 +328,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "Die Öko-Regelungen sind der freiwillige Umweltteil der Direktzahlungen. In Deutschland gibt es sieben Maßnahmen mit eigenen Beträgen je Hektar, in Österreich übernimmt diese Rolle das ÖPUL.",
-    "longDef": "Die Öko-Regelungen (Eco-Schemes) sind der freiwillige Umweltbestandteil der Direktzahlungen der ersten Säule. Sie honorieren Leistungen, die über die verpflichtende Konditionalität hinausgehen.\n\nIn **Deutschland** gibt es sieben Öko-Regelungen (geplante Beträge Antragsjahr 2025 laut BMLEH):\n- **ÖR 1a** Nichtproduktive Ackerflächen — gestaffelt: 1 300 €/ha bis 1 % der Ackerfläche, 500 €/ha über 1 bis 2 %, 300 €/ha über 2 bis 6 %.\n- **ÖR 1b** Blühstreifen auf Ackerland — 200 €/ha.\n- **ÖR 1c** Blühstreifen in Dauerkulturen — 200 €/ha.\n- **ÖR 1d** Altgrasstreifen im Dauergrünland — 900 / 400 / 200 €/ha, ebenfalls gestaffelt.\n- **ÖR 2** Vielfältige Kulturen im Ackerbau — 60 €/ha.\n- **ÖR 3** Agroforstwirtschaft — 200 €/ha Gehölzfläche.\n- **ÖR 4** Extensivierung des gesamten Dauergrünlands — 100 €/ha.\n- **ÖR 5** Kennarten im Dauergrünland — 225 €/ha.\n- **ÖR 6** Verzicht auf chemisch-synthetische Pflanzenschutzmittel — 150 €/ha in Dauerkulturen, 50 €/ha in übrigen Kulturen.\n- **ÖR 7** Extensive Bewirtschaftung in Natura-2000-Gebieten — 40 €/ha.\n\n‼️ Die Beträge sind **geplant**, nicht endgültig — sie werden nach der tatsächlich beantragten Fläche berechnet. Steigt die Beteiligung, sinkt der Betrag je Hektar.\n\nIn **Österreich** gibt es keine gesonderten Öko-Regelungen der ersten Säule; die Rolle übernimmt das **ÖPUL** in der zweiten Säule mit den Basismodulen UBB und Biologische Wirtschaftsweise sowie zahlreichen Zuschlägen.\n\nOb sich die Teilnahme lohnt, hängt vom Aufwand ab: Übersteigt der Betrag je Hektar die Kosten aus Saatgut, Aussaat und Pflege sowie den entgangenen Ertrag, ist sie wirtschaftlich. Bei ÖR 1a mit gestaffeltem Satz lohnen sich vor allem die ersten Prozent der Ackerfläche.",
+    "longDef": "Die Öko-Regelungen (Eco-Schemes) sind der freiwillige Umweltbestandteil der Direktzahlungen der ersten Säule. Sie honorieren Leistungen, die über die verpflichtende Konditionalität hinausgehen.\n\nIn **Deutschland** gibt es sieben Öko-Regelungen (geplante Beträge Antragsjahr 2025 laut BMLEH):\n- **ÖR 1a** Nichtproduktive Ackerflächen — gestaffelt: 1 300 €/ha bis 1 % der Ackerfläche, 500 €/ha über 1 bis 2 %, 300 €/ha über 2 bis 6 %.\n- **ÖR 1b** Blühstreifen auf Ackerland — 200 €/ha.\n- **ÖR 1c** Blühstreifen in Dauerkulturen — 200 €/ha.\n- **ÖR 1d** Altgrasstreifen im Dauergrünland — 900 / 400 / 200 €/ha, ebenfalls gestaffelt.\n- **ÖR 2** Vielfältige Kulturen im Ackerbau — 60 €/ha.\n- **ÖR 3** Agroforstwirtschaft — 200 €/ha Gehölzfläche.\n- **ÖR 4** Extensivierung des gesamten Dauergrünlands — 100 €/ha.\n- **ÖR 5** Kennarten im Dauergrünland — 225 €/ha.\n- **ÖR 6** Verzicht auf chemisch-synthetische Pflanzenschutzmittel — 150 €/ha in Dauerkulturen, 50 €/ha in übrigen Kulturen.\n- **ÖR 7** Extensive Bewirtschaftung in Natura-2000-Gebieten — 40 €/ha.\n\n‼️ Die Beträge sind **geplant**, nicht endgültig — sie werden nach der tatsächlich beantragten Fläche berechnet. Steigt die Beteiligung, sinkt der Betrag je Hektar.\n\nIn **Österreich** sind die Öko-Regelungen der ersten Säule in das Agrarumweltprogramm **ÖPUL** eingebettet (etwa die Begrünung von Ackerflächen und Tierwohl – Weide) und werden gemeinsam mit den ÖPUL-Maßnahmen der zweiten Säule beantragt — mit den Basismodulen UBB und Biologische Wirtschaftsweise sowie zahlreichen Zuschlägen.\n\nOb sich die Teilnahme lohnt, hängt vom Aufwand ab: Übersteigt der Betrag je Hektar die Kosten aus Saatgut, Aussaat und Pflege sowie den entgangenen Ertrag, ist sie wirtschaftlich. Bei ÖR 1a mit gestaffeltem Satz lohnen sich vor allem die ersten Prozent der Ackerfläche.",
     "related": [
       "cap-2024",
       "mezi-plodiny",
@@ -352,8 +352,8 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "biss",
       "dpb"
     ],
-    "externalUrl": "https://www.bmel.de/DE/themen/landwirtschaft/eu-agrarpolitik-und-foerderung/direktzahlungen/",
-    "externalLabel": "BMEL — Direktzahlungen"
+    "externalUrl": "https://www.bmleh.de/DE/themen/landwirtschaft/eu-agrarpolitik-und-foerderung/direktzahlung/direktzahlungen.html",
+    "externalLabel": "BMLEH — Direktzahlungen"
   },
   {
     "slug": "biss",
@@ -365,7 +365,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "Die Einkommensgrundstützung für Nachhaltigkeit ist die wichtigste Direktzahlung der GAP — sie wird auf alle förderfähigen Hektar gezahlt und löste die frühere Basisprämie ab.",
-    "longDef": "Die Einkommensgrundstützung für Nachhaltigkeit (EU-Kürzel BISS — Basic Income Support for Sustainability) ist die Basis der Direktzahlungen der ersten Säule. Sie wird auf jeden förderfähigen Hektar gezahlt, der im Referenzsystem (Feldblockkataster) geführt wird, und ersetzte zum Antragsjahr 2023 die frühere Basisprämie.\n\n**Deutschland**: 152,44 €/ha für das Antragsjahr 2025 (endgültiger Einheitsbetrag, bekannt gemacht im Bundesanzeiger). Der Betrag sinkt von Jahr zu Jahr, weil der feste nationale Finanzrahmen durch die tatsächlich beantragte Fläche geteilt und Geld in die Öko-Regelungen umgeschichtet wird — 2023 lag er noch bei 170,93 €/ha.\n\n**Österreich**: rund 208 €/ha Heimgutfläche, rund 41 €/ha Almweidefläche (Richtwerte des GAP-Strategieplans).\n\nVoraussetzungen für den Anspruch:\n1. **Aktiver Landwirt** — tatsächliche landwirtschaftliche Tätigkeit, nicht bloßes Halten von Flächen.\n2. **Sammelantrag** — einmal jährlich, in Deutschland über das Portal des jeweiligen Bundeslandes, in Österreich über eAMA; Frist üblicherweise Mitte Mai.\n3. **Mindestfläche** — je nach Mitgliedstaat ein Hektar oder ein Mindestbetrag.\n4. **Konditionalität** — Einhaltung der GLÖZ-Standards und der Grundanforderungen an die Betriebsführung (GAB).\n\nAusgezahlt wird in der Regel ab Dezember des Antragsjahres. Werden bei einer Kontrolle Abweichungen festgestellt, drohen Kürzungen und die Rückforderung bereits gezahlter Beträge.",
+    "longDef": "Die Einkommensgrundstützung für Nachhaltigkeit (EU-Kürzel BISS — Basic Income Support for Sustainability) ist die Basis der Direktzahlungen der ersten Säule. Sie wird auf jeden förderfähigen Hektar gezahlt, der im Referenzsystem (Feldblockkataster) geführt wird, und ersetzte zum Antragsjahr 2023 die frühere Basisprämie.\n\n**Deutschland**: 152,44 €/ha für das Antragsjahr 2025 (endgültiger Einheitsbetrag, bekannt gemacht im Bundesanzeiger). Der Betrag sinkt von Jahr zu Jahr, weil der feste nationale Finanzrahmen durch die tatsächlich beantragte Fläche geteilt und Geld in die Öko-Regelungen umgeschichtet wird — 2023 lag er noch bei 170,93 €/ha.\n\n**Österreich**: 207,64 €/ha Heimgutfläche und 38,18 €/ha Almweidefläche für das Antragsjahr 2025 (Einheitsbeträge der AMA).\n\nVoraussetzungen für den Anspruch:\n1. **Aktiver Landwirt** — tatsächliche landwirtschaftliche Tätigkeit, nicht bloßes Halten von Flächen.\n2. **Sammelantrag** — einmal jährlich, in Deutschland über das Portal des jeweiligen Bundeslandes, in Österreich über eAMA; Frist in Deutschland üblicherweise der 15. Mai, in Österreich der 15. April.\n3. **Mindestfläche** — je nach Mitgliedstaat ein Hektar oder ein Mindestbetrag.\n4. **Konditionalität** — Einhaltung der GLÖZ-Standards und der Grundanforderungen an die Betriebsführung (GAB).\n\nAusgezahlt wird in der Regel ab Dezember des Antragsjahres. Werden bei einer Kontrolle Abweichungen festgestellt, drohen Kürzungen und die Rückforderung bereits gezahlter Beträge.",
     "related": [
       "cap-2024",
       "lpis",
@@ -465,6 +465,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "jednotky",
     "shortDef": "Der Hektar (ha) ist eine Flächeneinheit von 10 000 m², also einem Quadrat von 100 × 100 m. In der Landwirtschaft die Standardeinheit für Flächen, Förderung und Erträge.",
+    "titulek": "Hektar (ha) = 10 000 m² — Umrechnung in Ar, Acre und m²",
     "longDef": "Der Hektar (ha) ist die Flächeneinheit des metrischen Systems: 1 ha = 10 000 m² = 100 Ar. Anschaulich ein Quadrat von 100 × 100 Metern oder etwa anderthalb Fußballfelder.\n\nIn der Landwirtschaft ist der Hektar die Bezugsgröße für:\n- **Betriebsfläche** — ganze Betriebe werden in Hektar gemessen.\n- **Förderung** — €/ha (Einkommensgrundstützung 152,44 €/ha in Deutschland 2025).\n- **Erträge** — t/ha oder dt/ha (1 dt = 100 kg).\n- **Düngung** — kg/ha.\n- **Pflanzenschutz** — l/ha.\n- **Flächenleistung von Maschinen** — ha/h (eine Feldspritze mit 24 m Arbeitsbreite bei 12 km/h schafft theoretisch knapp 29 ha/h).\n\nUmrechnungen:\n- 1 km² = 100 ha\n- 1 Acre (USA/GB) = 0,4047 ha\n- 1 Morgen (historisch, regional verschieden) = 0,25 bis 0,36 ha\n- 1 Tagwerk (Bayern, historisch) = 0,3407 ha\n- 1 Joch (Österreich, historisch) = 0,5755 ha\n\nZur Einordnung: Der durchschnittliche landwirtschaftliche Betrieb in Deutschland bewirtschaftet gut 60 Hektar, in Österreich rund 24 Hektar — beides deutlich weniger als in Tschechien, wo der Durchschnitt über 130 Hektar liegt.",
     "related": [
       "ar",
@@ -736,7 +737,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "Juchart"
     ],
     "kategorie": "jednotky",
-    "shortDef": "Der Morgen ist ein historisches deutsches Flächenmaß — die Fläche, die ein Gespann an einem Vormittag pflügt. Der preußische Morgen maß 0,2553 ha, das bayerische Tagwerk 0,3407 ha.",
+    "shortDef": "Als Morgen galt im deutschen Raum ursprünglich so viel Land, wie ein Gespann an einem Vormittag umpflügen konnte — ein altes Flächenmaß mit vielen regionalen Größen. Der preußische Morgen maß 0,2553 ha, das bayerische Tagwerk 0,3407 ha.",
     "longDef": "Der Morgen ist das klassische deutsche Flächenmaß: die Fläche, die ein Gespann an einem Vormittag — einem Morgen — pflügen konnte. Weil Böden, Pflüge und Gespanne verschieden waren, unterschied sich das Maß von Land zu Land erheblich. Vor der Reichseinigung 1871 hatte praktisch jedes deutsche Territorium seinen eigenen Morgen.\n\nDie wichtigsten Varianten:\n- **Preußischer (Magdeburger) Morgen**: 2 553,2 m², rund **0,2553 ha** — der verbreitetste.\n- **Bayerisches Tagwerk**: 3 407,3 m², rund **0,3407 ha**.\n- **Sächsischer Morgen**: 2 767 m², rund 0,277 ha.\n- **Hessischer Morgen**: 2 500 m², im 19. Jahrhundert auf glatte 0,25 ha gerundet.\n- **Württembergischer Morgen**: 3 152 m², rund 0,315 ha.\n- **Badische Juchart**: 3 600 m², rund 0,36 ha.\n- **Österreichisches Joch**: 5 754,6 m², rund 0,5755 ha — mehr als doppelt so groß wie der preußische Morgen, siehe [[jitro]].\n\nMit der metrischen Reform im Deutschen Reich (1872) wurde der Morgen als amtliches Maß abgeschafft. In der Umgangssprache hält er sich bis heute — **besonders im Norden und Osten Deutschlands** rechnen ältere Landwirte Flächen selbstverständlich in Morgen, und in Grundbüchern des 19. Jahrhunderts ist er die Regel.\n\nUmrechnungen für den preußischen Morgen:\n- **1 Morgen = 0,2553 ha = 25,53 a = 2 553 m²**\n- **1 Morgen ≈ 0,631 Acre**\n- **4 Morgen ≈ 1 ha**\n- **1 ha = 3,92 Morgen**\n\n‼️ Beim Lesen alter Karten und Urkunden ist stets zuerst zu klären, aus welchem Territorium sie stammen — der Unterschied zwischen preußischem Morgen und österreichischem Joch beträgt mehr als das Doppelte.\n\nSiehe auch [[jitro]] (österreichisches Joch), [[akr]], [[hektar]], [[korec]].",
     "related": [
       "jitro",
@@ -936,7 +937,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "Die Agrarumwelt- und Klimamaßnahmen sind mehrjährige freiwillige Verpflichtungen der zweiten Säule für umweltschonende Bewirtschaftung — mit höheren Sätzen, aber strengeren Auflagen als die Öko-Regelungen.",
-    "longDef": "Die Agrarumwelt- und Klimamaßnahmen (AUM, teils AUKM) sind Förderprogramme der **zweiten Säule** der GAP. Anders als die Öko-Regelungen, die jährlich neu gewählt werden, verpflichtet sich der Betrieb hier für **mehrere Jahre** — üblicherweise fünf.\n\nIn **Deutschland** werden sie von den Ländern ausgestaltet, die Programme heißen je nach Land unterschiedlich (etwa KULAP in Bayern und Thüringen, FAKT in Baden-Württemberg, AUKM in Niedersachsen). Typische Maßnahmen:\n- **Extensive Grünlandnutzung** — späte Schnittzeitpunkte nach der Brut, begrenzter Viehbesatz.\n- **Blühflächen und Blühstreifen** — mehrjährig, mit vorgegebenen Mischungen.\n- **Ökologischer Landbau** — Einführung und Beibehaltung, gestaffelt nach Kultur.\n- **Umwandlung von Acker in Grünland** — Ausgleich für den Ertragsverzicht.\n- **Erhalt von Streuobstwiesen.**\n- **Gewässerschutz** — Verzicht auf Dünger und Pflanzenschutz in Randstreifen.\n\nIn **Österreich** übernimmt diese Rolle das **ÖPUL** mit den Basismodulen UBB und Biologische Wirtschaftsweise sowie zahlreichen Zuschlägen — siehe die eigene Übersicht der ÖPUL-Prämien.\n\nDie Regeln:\n- **Mehrjährige Bindung** — wer vorzeitig aussteigt, muss die bereits erhaltenen Zahlungen in der Regel zurückzahlen.\n- **Kombinierbarkeit** — nicht alle Maßnahmen lassen sich miteinander oder mit Öko-Regelungen kombinieren; die Programme enthalten Ausschlusslisten.\n- **Vor-Ort-Kontrollen** ergänzend zur Satellitenüberwachung.\n\nFür wen sich das lohnt: Betriebe mit langfristiger Ausrichtung auf Grünland, Ökolandbau oder Gewässerschutz. Für einen intensiv wirtschaftenden Ackerbaubetrieb ist der Verwaltungsaufwand oft höher als der Zusatzertrag gegenüber den Öko-Regelungen — die Empfehlung lautet, zunächst die Öko-Regelungen auszuschöpfen und AUM gezielt dort zu ergänzen, wo sie zur Betriebsstruktur passen.",
+    "longDef": "Die Agrarumwelt- und Klimamaßnahmen (AUM, teils AUKM) sind Förderprogramme der **zweiten Säule** der GAP. Anders als die Öko-Regelungen, die jährlich neu gewählt werden, verpflichtet sich der Betrieb hier für **mehrere Jahre** — üblicherweise fünf.\n\nIn **Deutschland** werden sie von den Ländern ausgestaltet, die Programme heißen je nach Land unterschiedlich (etwa KULAP in Bayern und Thüringen, FAKT in Baden-Württemberg, AUKM in Niedersachsen). Typische Maßnahmen:\n- **Extensive Grünlandnutzung** — späte Schnittzeitpunkte nach der Brut, begrenzter Viehbesatz.\n- **Blühflächen und Blühstreifen** — mehrjährig, mit vorgegebenen Mischungen.\n- **Ökologischer Landbau** — Einführung und Beibehaltung, gestaffelt nach Kultur.\n- **Umwandlung von Acker in Grünland** — Ausgleich für den Ertragsverzicht.\n- **Erhalt von Streuobstwiesen.**\n- **Gewässerschutz** — Verzicht auf Dünger und Pflanzenschutz in Randstreifen.\n\nIn **Österreich** übernimmt diese Rolle das **ÖPUL** mit den Basismodulen UBB und Biologische Wirtschaftsweise sowie zahlreichen Zuschlägen; die Prämien nennen die ÖPUL-Merkblätter der AMA.\n\nDie Regeln:\n- **Mehrjährige Bindung** — wer vorzeitig aussteigt, muss die bereits erhaltenen Zahlungen in der Regel zurückzahlen.\n- **Kombinierbarkeit** — nicht alle Maßnahmen lassen sich miteinander oder mit Öko-Regelungen kombinieren; die Programme enthalten Ausschlusslisten.\n- **Vor-Ort-Kontrollen** ergänzend zur Satellitenüberwachung.\n\nFür wen sich das lohnt: Betriebe mit langfristiger Ausrichtung auf Grünland, Ökolandbau oder Gewässerschutz. Für einen intensiv wirtschaftenden Ackerbaubetrieb ist der Verwaltungsaufwand oft höher als der Zusatzertrag gegenüber den Öko-Regelungen — die Empfehlung lautet, zunächst die Öko-Regelungen auszuschöpfen und AUM gezielt dort zu ergänzen, wo sie zur Betriebsstruktur passen.",
     "related": [
       "cap-2024",
       "eko-platba",
@@ -1197,7 +1198,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "regulace",
     "shortDef": "Auf öffentlichen Straßen gelten für Traktoren Grenzen bei Breite, Höhe und Länge, Kennzeichnungspflichten für Anbaugeräte sowie eigene Führerscheinklassen und Untersuchungsfristen.",
-    "longDef": "Der Betrieb von Traktoren auf öffentlichen Straßen ist in **Deutschland** über StVZO und StVO geregelt, in **Österreich** über das Kraftfahrgesetz (KFG).\n\n**Abmessungen (Deutschland)**:\n- **Breite**: allgemein 2,55 m; für land- und forstwirtschaftliche Fahrzeuge und Anbaugeräte sind unter Auflagen **bis 3,00 m** zulässig. Darüber ist eine **Ausnahmegenehmigung** nach § 70 StVZO beziehungsweise § 29 StVO erforderlich, ab etwa 3,50 m kommen Begleitfahrzeuge hinzu.\n- **Höhe**: 4,00 m.\n- **Länge**: Zug mit Anhänger bis 18,00 m; darüber hinaus gelten Sonderregelungen.\n\nIn **Österreich** liegt die Grenze ebenfalls bei 2,55 m, für landwirtschaftliche Fahrzeuge sind 3,00 m zulässig; darüber braucht es eine Bewilligung nach § 104 KFG.\n\n**Kennzeichnung überbreiter Geräte**:\n- **Warntafeln** nach DIN 11030 — rot-weiß schraffiert, an den äußeren Begrenzungen.\n- **Begrenzungsleuchten** und Rückstrahler, bei Dunkelheit und schlechter Sicht zwingend.\n- **Rundumkennleuchte** für Fahrzeuge mit Überbreite.\n- Der Sichtbereich des Fahrers darf nicht durch Frontanbaugeräte verdeckt werden — andernfalls sind Spiegel oder eine Einweisung nötig.\n\n**Führerscheinklassen (Deutschland)**:\n- **Klasse L** — Zugmaschinen bis 40 km/h bauartbedingter Höchstgeschwindigkeit im land- und forstwirtschaftlichen Einsatz, ab 16 Jahren.\n- **Klasse T** — Zugmaschinen bis 60 km/h, ab 16 Jahren (bis 40 km/h) beziehungsweise 18 Jahren.\nIn **Österreich** entspricht dem die **Klasse F**.\n\n**Technische Überwachung**:\n- In **Deutschland** sind land- und forstwirtschaftliche Zugmaschinen **bis 40 km/h von der wiederkehrenden Hauptuntersuchung befreit**; über 40 km/h ist sie alle zwei Jahre fällig. Anhänger unterliegen eigenen Fristen.\n- In **Österreich** gilt die **wiederkehrende Begutachtung nach § 57a KFG** („Pickerl\") auch für Zugmaschinen, mit eigenen Intervallen.\n\n**Versicherung**: Eine Kfz-Haftpflicht ist Pflicht; grüne Kennzeichen kennzeichnen in Deutschland die steuerbefreite land- und forstwirtschaftliche Nutzung — sie ist an diesen Zweck gebunden, gewerbliche Fahrten sind damit unzulässig.\n\n‼️ Die Angaben sind ein Überblick. Maßgeblich sind die jeweils geltenden Fassungen von StVZO, StVO und KFG sowie die Auflagen der zuständigen Straßenverkehrsbehörde.",
+    "longDef": "Der Betrieb von Traktoren auf öffentlichen Straßen ist in **Deutschland** über StVZO und StVO geregelt, in **Österreich** über das Kraftfahrgesetz (KFG).\n\n**Abmessungen (Deutschland)**:\n- **Breite**: allgemein 2,55 m; für land- und forstwirtschaftliche Fahrzeuge und Anbaugeräte sind unter Auflagen **bis 3,00 m** zulässig. Darüber ist eine **Ausnahmegenehmigung** nach § 70 StVZO beziehungsweise § 29 StVO erforderlich, ab etwa 3,50 m kommen Begleitfahrzeuge hinzu.\n- **Höhe**: 4,00 m.\n- **Länge**: Zug mit Anhänger bis 18,00 m; darüber hinaus gelten Sonderregelungen.\n\nIn **Österreich** liegt die Grenze ebenfalls bei 2,55 m, für landwirtschaftliche Fahrzeuge sind 3,00 m zulässig; darüber braucht es eine Bewilligung nach § 104 KFG.\n\n**Kennzeichnung überbreiter Geräte**:\n- **Warntafeln** nach DIN 11030 — rot-weiß schraffiert, an den äußeren Begrenzungen.\n- **Begrenzungsleuchten** und Rückstrahler, bei Dunkelheit und schlechter Sicht zwingend.\n- **Rundumkennleuchte** für Fahrzeuge mit Überbreite.\n- Der Sichtbereich des Fahrers darf nicht durch Frontanbaugeräte verdeckt werden — andernfalls sind Spiegel oder eine Einweisung nötig.\n\n**Führerscheinklassen (Deutschland)**:\n- **Klasse L** — Zugmaschinen bis 40 km/h bauartbedingter Höchstgeschwindigkeit im land- und forstwirtschaftlichen Einsatz, ab 16 Jahren.\n- **Klasse T** — Zugmaschinen bis 60 km/h, ab 16 Jahren (bis 40 km/h) beziehungsweise 18 Jahren.\nIn **Österreich** entspricht dem die **Klasse F**.\n\n**Technische Überwachung**:\n- In **Deutschland** müssen land- und forstwirtschaftliche Zugmaschinen zur **wiederkehrenden Hauptuntersuchung** (§ 29 StVZO): bei einer bauartbestimmten Höchstgeschwindigkeit **bis 40 km/h alle 24 Monate**, schnellere Zugmaschinen mit mehr als 3,5 t zulässiger Gesamtmasse **alle 12 Monate** (Anlage VIII StVZO). Anhänger unterliegen eigenen Fristen.\n- In **Österreich** gilt die **wiederkehrende Begutachtung nach § 57a KFG** („Pickerl\") auch für Zugmaschinen, mit eigenen Intervallen.\n\n**Versicherung**: Eine Kfz-Haftpflicht ist Pflicht; grüne Kennzeichen kennzeichnen in Deutschland die steuerbefreite land- und forstwirtschaftliche Nutzung — sie ist an diesen Zweck gebunden, gewerbliche Fahrten sind damit unzulässig.\n\n‼️ Die Angaben sind ein Überblick. Maßgeblich sind die jeweils geltenden Fassungen von StVZO, StVO und KFG sowie die Auflagen der zuständigen Straßenverkehrsbehörde.",
     "related": [
       "allwheel-drive",
       "duala"
@@ -1468,7 +1469,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "Der GAP-Strategieplan ist die nationale Umsetzung der EU-Agrarpolitik. Jeder Mitgliedstaat legt darin fest, wie er die Mittel auf Direktzahlungen, Öko-Regelungen und ländliche Entwicklung verteilt.",
-    "longDef": "Der GAP-Strategieplan ist das von der Europäischen Kommission genehmigte Programmdokument, mit dem jeder Mitgliedstaat die Gemeinsame Agrarpolitik für die Periode 2023 bis 2027 national ausgestaltet. Er ist der Grund, warum sich Fördersätze und Auflagen zwischen den Ländern erheblich unterscheiden, obwohl der Rahmen derselbe ist.\n\n**Deutschland** — der GAP-Strategieplan verteilt jährlich rund sechs Milliarden Euro:\n\n*Erste Säule (Direktzahlungen):*\n- **Einkommensgrundstützung** — 152,44 €/ha (Antragsjahr 2025).\n- **Umverteilungseinkommensstützung** — 68,05 €/ha für den 1. bis 40., 40,83 €/ha für den 41. bis 60. Hektar.\n- **Junglandwirteförderung** — 120,64 €/ha, höchstens 120 ha.\n- **Öko-Regelungen** — sieben Maßnahmen, für die rund 23 % der Mittel der ersten Säule vorgesehen sind.\n- **Gekoppelte Einkommensstützung** — Mutterkühe, Mutterschafe und -ziegen.\n\n*Zweite Säule (ländliche Entwicklung):* Die Länder setzen sie über eigene Programme um — Agrarumwelt- und Klimamaßnahmen, Ausgleichszulage für benachteiligte Gebiete, Ökolandbauförderung, Investitionsförderung, Tierwohlmaßnahmen und Vertragsnaturschutz.\n\n**Österreich** — der Strategieplan setzt stärker auf die zweite Säule, was zur kleinstrukturierten und stark von Grünland und Bergland geprägten Landwirtschaft passt:\n- **Basiseinkommensstützung** rund 208 €/ha Heimgut, rund 41 €/ha Almweide.\n- **Umverteilung** rund 44 beziehungsweise 22 €/ha für die ersten 40 Hektar.\n- **Junglandwirte** rund 66 €/ha.\n- **ÖPUL** als umfangreiches Agrarumweltprogramm mit hoher Beteiligung.\n- **Ausgleichszulage** nach dem Berghöfekataster, der die Bewirtschaftungserschwernis abbildet.\n\n**Für die Praxis** heißt das vor allem: Die maßgeblichen Regeln stehen nicht in der EU-Verordnung, sondern im nationalen Strategieplan und den darauf gestützten Richtlinien — in Deutschland zusätzlich in den Programmen der einzelnen Bundesländer. Wer Flächen über Landesgrenzen hinweg bewirtschaftet, muss mit unterschiedlichen Auflagen und Sätzen rechnen.",
+    "longDef": "Der GAP-Strategieplan ist das von der Europäischen Kommission genehmigte Programmdokument, mit dem jeder Mitgliedstaat die Gemeinsame Agrarpolitik für die Periode 2023 bis 2027 national ausgestaltet. Er ist der Grund, warum sich Fördersätze und Auflagen zwischen den Ländern erheblich unterscheiden, obwohl der Rahmen derselbe ist.\n\n**Deutschland** — der GAP-Strategieplan verteilt jährlich rund sechs Milliarden Euro:\n\n*Erste Säule (Direktzahlungen):*\n- **Einkommensgrundstützung** — 152,44 €/ha (Antragsjahr 2025).\n- **Umverteilungseinkommensstützung** — 68,05 €/ha für den 1. bis 40., 40,83 €/ha für den 41. bis 60. Hektar.\n- **Junglandwirteförderung** — 120,64 €/ha, höchstens 120 ha.\n- **Öko-Regelungen** — sieben Maßnahmen, für die rund 23 % der Mittel der ersten Säule vorgesehen sind.\n- **Gekoppelte Einkommensstützung** — Mutterkühe, Mutterschafe und -ziegen.\n\n*Zweite Säule (ländliche Entwicklung):* Die Länder setzen sie über eigene Programme um — Agrarumwelt- und Klimamaßnahmen, Ausgleichszulage für benachteiligte Gebiete, Ökolandbauförderung, Investitionsförderung, Tierwohlmaßnahmen und Vertragsnaturschutz.\n\n**Österreich** — der Strategieplan setzt stärker auf die zweite Säule, was zur kleinstrukturierten und stark von Grünland und Bergland geprägten Landwirtschaft passt:\n- **Basiszahlung** 207,64 €/ha Heimgut, 38,18 €/ha Almweide (Antragsjahr 2025).\n- **Umverteilung** 45,54 beziehungsweise 22,77 €/ha für die ersten 40 Hektar.\n- **Junglandwirte** 67,10 €/ha.\n- **ÖPUL** als umfangreiches Agrarumweltprogramm mit hoher Beteiligung.\n- **Ausgleichszulage** nach dem Berghöfekataster, der die Bewirtschaftungserschwernis abbildet.\n\n**Für die Praxis** heißt das vor allem: Die maßgeblichen Regeln stehen nicht in der EU-Verordnung, sondern im nationalen Strategieplan und den darauf gestützten Richtlinien — in Deutschland zusätzlich in den Programmen der einzelnen Bundesländer. Wer Flächen über Landesgrenzen hinweg bewirtschaftet, muss mit unterschiedlichen Auflagen und Sätzen rechnen.",
     "related": [
       "cap-2024",
       "biss",
@@ -1668,7 +1669,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "historie",
     "shortDef": "Die Tenne ist die feste Dreschfläche in der Scheune — bis ins 19. Jahrhundert der Mittelpunkt der winterlichen Hofarbeit.",
-    "longDef": "Die Tenne ist die befestigte, ebene Fläche in der Mitte der Scheune, auf der das Getreide gedroschen wurde — also Korn, Stroh und Spreu getrennt wurden.\n\n**Der Bau** folgte überall derselben Logik: gestampfter Lehm, oft mit Kalk oder Ochsenblut gehärtet, seltener Bohlen oder Pflaster; beiderseits die **Bansen**, in denen die ungedroschenen Garben lagerten; und an beiden Enden ein großes Tor. Die gegenüberliegenden Tore waren kein Zufall — der **Durchzug** trug beim Worfeln die leichte Spreu fort, während das schwere Korn zu Boden fiel.\n\n**Das Dreschen mit dem Flegel** war Winterarbeit von November bis März. Ein Drescher schaffte am Tag 50 bis 80 kg Korn. Mehrere Drescher schlugen im Wechsel und in festem Rhythmus — bei vier Männern der sogenannte Vierschlag, dessen Takt in Volksliedern nachklingt. Es war die zuverlässigste Beschäftigung des Winterhalbjahrs und zugleich der Grund, warum ein Hof überhaupt so viele Leute über den Winter halten konnte.\n\n**Die Ablösung** kam in drei Schritten. Ab dem frühen 19. Jahrhundert übernahm die **Göpeldreschmaschine** mit 200 bis 500 kg je Stunde, siehe [[zentour]]. Ab etwa 1870 zog die **Dampfdreschmaschine** mit der Lokomobile von Hof zu Hof und schaffte über eine Tonne je Stunde — gedroschen wurde nun in wenigen Tagen im Hof statt monatelang in der Scheune. Und ab den 1950er-Jahren verlagerte der **Mähdrescher** den Vorgang endgültig aufs Feld.\n\n**Die soziale Folge** wird oft übersehen: Mit dem Wegfall der winterlichen Dreschzeit verlor das Landgesinde seine Beschäftigung im Winterhalbjahr. Die Dreschmaschine hat die Landflucht des 19. Jahrhunderts mit angetrieben.\n\nDie Tenne selbst wurde zur Maschinenhalle, zum Lager — oder abgerissen. Erhalten ist das Wort in Flurnamen, im **Tennentor** der Fachwerkscheune und in der Redensart, etwas werde „auf die Tenne gebracht\".",
+    "longDef": "In der Mitte der Scheune lag die Tenne, ein befestigter, ebener Boden zum Dreschen: Hier wurden Korn, Stroh und Spreu voneinander getrennt.\n\n**Der Bau** folgte überall derselben Logik: gestampfter Lehm, oft mit Kalk oder Ochsenblut gehärtet, seltener Bohlen oder Pflaster; beiderseits die **Bansen**, in denen die ungedroschenen Garben lagerten; und an beiden Enden ein großes Tor. Die gegenüberliegenden Tore waren kein Zufall — der **Durchzug** trug beim Worfeln die leichte Spreu fort, während das schwere Korn zu Boden fiel.\n\n**Das Dreschen mit dem Flegel** war Winterarbeit von November bis März. Ein Drescher schaffte am Tag 50 bis 80 kg Korn. Mehrere Drescher schlugen im Wechsel und in festem Rhythmus — bei vier Männern der sogenannte Vierschlag, dessen Takt in Volksliedern nachklingt. Es war die zuverlässigste Beschäftigung des Winterhalbjahrs und zugleich der Grund, warum ein Hof überhaupt so viele Leute über den Winter halten konnte.\n\n**Die Ablösung** kam in drei Schritten. Ab dem frühen 19. Jahrhundert übernahm die **Göpeldreschmaschine** mit 200 bis 500 kg je Stunde, siehe [[zentour]]. Ab etwa 1870 zog die **Dampfdreschmaschine** mit der Lokomobile von Hof zu Hof und schaffte über eine Tonne je Stunde — gedroschen wurde nun in wenigen Tagen im Hof statt monatelang in der Scheune. Und ab den 1950er-Jahren verlagerte der **Mähdrescher** den Vorgang endgültig aufs Feld.\n\n**Die soziale Folge** wird oft übersehen: Mit dem Wegfall der winterlichen Dreschzeit verlor das Landgesinde seine Beschäftigung im Winterhalbjahr. Die Dreschmaschine hat die Landflucht des 19. Jahrhunderts mit angetrieben.\n\nDie Tenne selbst wurde zur Maschinenhalle, zum Lager — oder abgerissen. Erhalten ist das Wort in Flurnamen, im **Tennentor** der Fachwerkscheune und in der Redensart, etwas werde „auf die Tenne gebracht\".",
     "related": [
       "zentour",
       "grunt",
@@ -2289,7 +2290,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "plodiny",
     "shortDef": "Deutschland ist der größte Roggenproduzent der Welt. Roggen gedeiht auf leichten, sauren Sandböden, auf denen Weizen versagt, und liefert das Mehl für das deutsche Brot.",
-    "longDef": "Winterroggen (*Secale cereale*) steht in Deutschland auf rund 500.000 bis 650.000 Hektar — **Deutschland ist damit der größte Roggenerzeuger der Welt**, gefolgt von Polen. Der Schwerpunkt liegt auf den leichten Sandböden Brandenburgs, Mecklenburg-Vorpommerns und Niedersachsens.\n\n**Warum gerade dort**: Roggen ist die anspruchsloseste Brotgetreideart. Sein tiefreichendes, feines Wurzelsystem erschließt Wasser und Nährstoffe, wo Weizen längst aufgibt; er verträgt saure Böden bis pH 5, ist außerordentlich winterhart und kommt mit 80 bis 130 kg N/ha aus. Auf einem märkischen Sandboden ist er nicht die zweite Wahl, sondern die einzig sinnvolle.\n\n**Der Hybridroggen** hat die Kultur seit den 1980er-Jahren verwandelt: Er bringt 20 bis 40 % mehr Ertrag als Populationssorten, sodass heute 60 bis 80 dt/ha erreichbar sind. Das Saatgut ist teuer und muss jedes Jahr neu gekauft werden, weil sich der Heterosiseffekt nicht vererbt — siehe [[f1-hybrid]].\n\n**Die Backeigenschaften** unterscheiden sich grundlegend vom Weizen. Roggen bildet **kein Klebergerüst**; sein Teig wird stattdessen von Schleimstoffen, den Pentosanen, getragen. Deshalb braucht Roggenbrot zwingend **Sauerteig** — die Säure hemmt den stärkeabbauenden Enzymkomplex, ohne den der Krumenaufbau zusammenbräche. Genau daran hängt die deutsche Brotkultur mit Vollkornbrot, Pumpernickel und Mischbroten.\n\n**Ein Punkt, der rechtlich an Gewicht gewonnen hat, ist das Mutterkorn.** Der Pilz *Claviceps purpurea* ersetzt einzelne Körner durch dunkle Sklerotien, die hochwirksame Alkaloide enthalten; im Mittelalter löste er als Antoniusfeuer verheerende Vergiftungen aus. Roggen ist als Fremdbefruchter mit offener Blüte besonders anfällig. Die EU hat die **Höchstgehalte für Mutterkornsklerotien und Mutterkornalkaloide** in Getreideerzeugnissen zuletzt deutlich verschärft — die Reinigung der Partie und die Sortenwahl sind damit keine Kür mehr, sondern Voraussetzung der Verkehrsfähigkeit.\n\n**Verwendung**: etwa zur Hälfte Brotgetreide, daneben Futter, Brennerei und in erheblichem Umfang **Biogas** — als Grünroggen im Ganzpflanzensilage-Verfahren mit anschließendem Mais als Zweitfrucht.",
+    "longDef": "Winterroggen (*Secale cereale*) steht in Deutschland auf rund 500.000 bis 650.000 Hektar — **Deutschland ist damit der größte Roggenerzeuger der Welt**, gefolgt von Polen. Der Schwerpunkt liegt auf den leichten Sandböden Brandenburgs, Mecklenburg-Vorpommerns und Niedersachsens.\n\n**Warum gerade dort**: Roggen ist die anspruchsloseste Brotgetreideart. Sein tiefreichendes, feines Wurzelsystem erschließt Wasser und Nährstoffe, wo Weizen längst aufgibt; er verträgt saure Böden bis pH 5, ist außerordentlich winterhart und kommt mit 80 bis 130 kg N/ha aus. Auf einem märkischen Sandboden ist er nicht die zweite Wahl, sondern die einzig sinnvolle.\n\n**Der Hybridroggen** hat die Kultur seit den 1980er-Jahren verwandelt: Er bringt 20 bis 40 % mehr Ertrag als Populationssorten, sodass heute 60 bis 80 dt/ha erreichbar sind. Das Saatgut ist teuer und muss jedes Jahr neu gekauft werden, weil sich der Heterosiseffekt nicht vererbt — siehe [[f1-hybrid]].\n\nVollkornbrot, Pumpernickel, die vielen Mischbrote — die deutsche Brotkultur steht und fällt mit dem **Sauerteig**, und der Grund liegt im Roggen selbst. Anders als Weizen baut er **kein Klebergerüst** auf; Halt geben dem Teig stattdessen Schleimstoffe, die Pentosane. Ohne Säure würden die stärkeabbauenden Enzyme die Krume zerlegen, bevor sie sich festigen kann — erst der Sauerteig bremst sie aus.\n\n**Ein Punkt, der rechtlich an Gewicht gewonnen hat, ist das Mutterkorn.** Der Pilz *Claviceps purpurea* ersetzt einzelne Körner durch dunkle Sklerotien, die hochwirksame Alkaloide enthalten; im Mittelalter löste er als Antoniusfeuer verheerende Vergiftungen aus. Roggen ist als Fremdbefruchter mit offener Blüte besonders anfällig. Die EU hat die **Höchstgehalte für Mutterkornsklerotien und Mutterkornalkaloide** in Getreideerzeugnissen zuletzt deutlich verschärft — die Reinigung der Partie und die Sortenwahl sind damit keine Kür mehr, sondern Voraussetzung der Verkehrsfähigkeit.\n\n**Verwendung**: etwa zur Hälfte Brotgetreide, daneben Futter, Brennerei und in erheblichem Umfang **Biogas** — als Grünroggen im Ganzpflanzensilage-Verfahren mit anschließendem Mais als Zweitfrucht.",
     "related": [
       "psenice-ozima",
       "oves-jarni",
@@ -3046,7 +3047,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "Schwarmstimmung"
     ],
     "kategorie": "vcelarstvi",
-    "shortDef": "Das Schwärmen ist die natürliche Vermehrung des Bienenvolkes: Die alte Königin verlässt mit einem Teil der Arbeiterinnen den Stock und gründet ein neues Nest.",
+    "shortDef": "Beim Schwärmen vermehrt sich ein Bienenvolk auf natürliche Weise: Ein Teil der Arbeiterinnen zieht zusammen mit der alten Königin aus und gründet anderswo ein neues Nest.",
     "longDef": "Das Schwärmen ist eine evolutionär verankerte Vermehrungsstrategie. Ausgelöst wird es durch das Zusammentreffen mehrerer Faktoren: Platzmangel im Stock, nachlassende Weiselsubstanz einer älteren Königin, reichliche Drohnenbrut und passende Witterung von Ende Mai bis Juni. Die Arbeiterinnen beginnen Weiselzellen zu ziehen — für den Imker das erste sichtbare Signal.\n\nDer Vorschwarm zieht an einem warmen, sonnigen Tag um die Mittagszeit aus, meist an dem Tag, an dem die erste Weiselzelle verdeckelt wird. Mit der alten Königin verlassen 30 bis 50 % der Arbeiterinnen den Stock. Der Schwarm sammelt sich als Traube an einem Ast oder einer anderen Unterlage im Umkreis von bis zu 300 m und wartet dort ein bis drei Tage, bis die Spurbienen eine neue Behausung gefunden haben.\n\nDer Imker kann den Schwarm einfangen und daraus ein neues Volk bilden. Zieht der Schwarm ab, bleibt das Muttervolk mit den Weiselzellen zurück; die zuerst geschlüpfte Königin tötet ihre Konkurrentinnen in den übrigen Zellen ab. Nach Hochzeitsflug und Begattung nimmt sie die Eiablage auf.\n\nDie Schwarmkontrolle ist eine der zentralen Arbeiten der Saison. Vorbeugend wirken junge Königinnen, rechtzeitiges Erweitern mit Honigräumen, das Brechen von Weiselzellen sowie der vorweggenommene Schwarm in Form eines Ablegers.",
     "related": [
       "roj",
@@ -3176,7 +3177,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
     ],
     "kategorie": "vcelarstvi",
     "shortDef": "Die Varroose ist die wirtschaftlich bedeutendste Bienenkrankheit; die Milbe Varroa destructor schwächt die Brut und überträgt Viren.",
-    "longDef": "Varroa destructor — 2000 als eigene Art von Varroa jacobsoni abgetrennt, die nur die Östliche Honigbiene Apis cerana befällt — ist eine aus Asien eingeschleppte ektoparasitische Milbe, die heute praktisch jedes Volk der Westlichen Honigbiene in Europa befällt. Das Weibchen ist rotbraun, oval, 1,1 × 1,6 mm groß und saugt am Fettkörper von Puppen und erwachsenen Bienen.\n\nDie Vermehrung findet in der verdeckelten Brut statt: Das Weibchen schlüpft kurz vor der Verdeckelung in die Zelle, legt ein männliches und vier bis fünf weibliche Eier; die fertigen Milben verlassen die Zelle zusammen mit der schlüpfenden Biene. Drohnenbrut wird bevorzugt, weil deren längere Entwicklungszeit mehr Nachkommen zulässt — genau darauf beruht das Ausschneiden der Drohnenbrut als biotechnische Maßnahme.\n\nUnbehandelt bricht ein Volk in der Regel innerhalb von zwei bis vier Jahren zusammen. Neben dem direkten Schaden schwächt die Milbe die Immunabwehr und überträgt Viren, allen voran das Flügeldeformationsvirus DWV. In Deutschland und Österreich hat sich das Behandlungskonzept aus Sommerbehandlung mit Ameisensäure nach der Abschleuderung und Restentmilbung mit Oxalsäure im brutfreien Winter durchgesetzt; zugelassen sind daneben Thymolpräparate sowie Amitraz- und Pyrethroidstreifen.\n\nDer Befall wird über den natürlichen Milbenfall auf der Bodeneinlage, über die Puderzuckermethode oder die Alkoholauswaschung überwacht. Als Handlungsschwelle gelten im Sommer etwa zehn Milben natürlicher Tagesfall oder rund drei Milben je hundert Bienen.",
+    "longDef": "Varroa destructor — 2000 als eigene Art von Varroa jacobsoni abgetrennt, die nur die Östliche Honigbiene Apis cerana befällt — ist eine aus Asien eingeschleppte ektoparasitische Milbe, die heute praktisch jedes Volk der Westlichen Honigbiene in Europa befällt. Das Weibchen ist rotbraun, oval, 1,1 × 1,6 mm groß und saugt am Fettkörper von Puppen und erwachsenen Bienen.\n\nDie Vermehrung findet in der verdeckelten Brut statt: Das Weibchen schlüpft kurz vor der Verdeckelung in die Zelle, legt ein männliches und vier bis fünf weibliche Eier; ins Freie gelangen die fertigen Milben erst, wenn die Jungbiene schlüpft. Drohnenbrut wird bevorzugt, weil deren längere Entwicklungszeit mehr Nachkommen zulässt — genau darauf beruht das Ausschneiden der Drohnenbrut als biotechnische Maßnahme.\n\nUnbehandelt bricht ein Volk in der Regel innerhalb von zwei bis vier Jahren zusammen. Neben dem direkten Schaden schwächt die Milbe die Immunabwehr und überträgt Viren, allen voran das Flügeldeformationsvirus DWV. In Deutschland und Österreich hat sich das Behandlungskonzept aus Sommerbehandlung mit Ameisensäure nach der Abschleuderung und Restentmilbung mit Oxalsäure im brutfreien Winter durchgesetzt; zugelassen sind daneben Thymolpräparate sowie Amitraz- und Pyrethroidstreifen.\n\nDer Befall wird über den natürlichen Milbenfall auf der Bodeneinlage, über die Puderzuckermethode oder die Alkoholauswaschung überwacht. Als Handlungsschwelle gelten im Sommer etwa zehn Milben natürlicher Tagesfall oder rund drei Milben je hundert Bienen.",
     "related": [
       "klestik-vcely",
       "zazimovani",
@@ -3712,7 +3713,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "anc-platba",
       "cap-2024"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Direktzahlung_(Landwirtschaft)",
+    "externalUrl": "https://de.wikipedia.org/wiki/Direktzahlung",
     "externalLabel": "Wikipedia: Direktzahlung",
     "faq": [
       {
@@ -3799,8 +3800,8 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "redistributivni-platba",
       "cap-2024"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Benachteiligtes_Gebiet",
-    "externalLabel": "Wikipedia: Benachteiligtes Gebiet",
+    "externalUrl": "https://de.wikipedia.org/wiki/Ausgleichszulage_f%C3%BCr_Benachteiligte_Gebiete",
+    "externalLabel": "Wikipedia: Ausgleichszulage für Benachteiligte Gebiete",
     "faq": [
       {
         "q": "Wozu dient die Ausgleichszulage?",
@@ -3842,7 +3843,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       },
       {
         "q": "Worin unterscheiden sich Öko-Regelungen von ÖPUL oder AUM?",
-        "a": "Öko-Regelungen gehören zur ersten Säule und gelten immer nur ein Jahr; ÖPUL und die deutschen Agrarumweltmaßnahmen sind mehrjährige Verpflichtungen der zweiten Säule."
+        "a": "Öko-Regelungen gehören zur ersten Säule und gelten immer nur ein Jahr. Die deutschen Agrarumweltmaßnahmen sind mehrjährige Verpflichtungen der zweiten Säule. Das österreichische ÖPUL vereint beides: mehrjährige Maßnahmen der zweiten Säule und die eingebetteten Öko-Regelungen der ersten Säule."
       }
     ]
   },
@@ -3962,7 +3963,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "ozeleneni",
       "redistributivni-platba"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Direktzahlung_(Landwirtschaft)",
+    "externalUrl": "https://de.wikipedia.org/wiki/Direktzahlung",
     "externalLabel": "Wikipedia: Direktzahlung",
     "faq": [
       {
@@ -3995,8 +3996,6 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "prv",
       "cap-2024"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Greening_(Agrarpolitik)",
-    "externalLabel": "Wikipedia: Greening",
     "faq": [
       {
         "q": "Was war Greening in der Landwirtschaft?",
@@ -4303,8 +4302,8 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "predsetova-priprava",
       "osevni-postup"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Hackger%C3%A4t",
-    "externalLabel": "Wikipedia: Hackgerät",
+    "externalUrl": "https://de.wikipedia.org/wiki/Hackmaschine",
+    "externalLabel": "Wikipedia: Hackmaschine",
     "faq": [
       {
         "q": "Wie funktioniert ein Hackgerät?",
@@ -4550,7 +4549,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "hloubkove-kypreni",
       "predsetova-priprava"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Schlupf_(Fahrzeugtechnik)",
+    "externalUrl": "https://de.wikipedia.org/wiki/Schlupf",
     "externalLabel": "Wikipedia: Schlupf",
     "faq": [
       {
@@ -4758,8 +4757,8 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "eroze-pudy",
       "orba"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Mineralisation_(Boden)",
-    "externalLabel": "Wikipedia: Mineralisation",
+    "externalUrl": "https://de.wikipedia.org/wiki/Mineralisierung",
+    "externalLabel": "Wikipedia: Mineralisierung",
     "faq": [
       {
         "q": "Was ist Mineralisierung im Boden?",
@@ -5161,8 +5160,6 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "mineralizace-pudy",
       "npk-hnojivo"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Bl%C3%A4tterd%C3%BCngung",
-    "externalLabel": "Wikipedia: Blattdüngung",
     "faq": [
       {
         "q": "Wie werden Blattdünger ausgebracht?",
@@ -5250,8 +5247,8 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "osevni-postup",
       "moreni-osiva"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Sclerotinia_sclerotiorum",
-    "externalLabel": "Wikipedia: Sclerotinia sclerotiorum",
+    "externalUrl": "https://de.wikipedia.org/wiki/Wei%C3%9Fst%C3%A4ngeligkeit",
+    "externalLabel": "Wikipedia: Weißstängeligkeit",
     "faq": [
       {
         "q": "Wie erkennt man die Weißstängeligkeit?",
@@ -5479,8 +5476,6 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "ucinna-latka",
       "fungicidy"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Wartezeit_(Pflanzenschutz)",
-    "externalLabel": "Wikipedia: Wartezeit",
     "faq": [
       {
         "q": "Wie wird die Wartezeit berechnet?",
@@ -5509,8 +5504,8 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "insekticidy",
       "ucinna-latka"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Beize_(Saatgut)",
-    "externalLabel": "Wikipedia: Saatgutbeize",
+    "externalUrl": "https://de.wikipedia.org/wiki/Beizen_(Pflanzenschutz)",
+    "externalLabel": "Wikipedia: Beizen (Pflanzenschutz)",
     "faq": [
       {
         "q": "Warum wird Saatgut gebeizt?",
@@ -5923,7 +5918,7 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "odchov-telat",
       "krizeni-plemen"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Grovieheinheit",
+    "externalUrl": "https://de.wikipedia.org/wiki/Gro%C3%9Fvieheinheit",
     "externalLabel": "Wikipedia: Großvieheinheit",
     "faq": [
       {
@@ -6102,8 +6097,6 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "vykrm-skotu",
       "krizeni-plemen"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Nutzungsdauer_(Tierhaltung)",
-    "externalLabel": "Wikipedia: Nutzungsdauer",
     "faq": [
       {
         "q": "Was bedeutet Merzung?",
@@ -6426,8 +6419,8 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "bazicka-cena",
       "forwardovy-kontrakt"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Intervention_(Agrarpolitik)",
-    "externalLabel": "Wikipedia: Intervention",
+    "externalUrl": "https://de.wikipedia.org/wiki/Interventionspreis",
+    "externalLabel": "Wikipedia: Interventionspreis",
     "faq": [
       {
         "q": "Wozu dient die öffentliche Intervention?",
@@ -6492,8 +6485,6 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "forwardovy-kontrakt",
       "intervencni-nakup"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Basis_(Terminmarkt)",
-    "externalLabel": "Wikipedia: Basis",
     "faq": [
       {
         "q": "Wie wird die Basis berechnet?",
@@ -6622,8 +6613,6 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "krizeni-plemen",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Nettoenergie-Laktation",
-    "externalLabel": "Wikipedia: Nettoenergie-Laktation",
     "faq": [
       {
         "q": "Was bedeutet NEL?",
@@ -6651,8 +6640,8 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
       "digestat",
       "kejda"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Nutzbares_Rohprotein",
-    "externalLabel": "Wikipedia: Nutzbares Rohprotein",
+    "externalUrl": "https://de.wikipedia.org/wiki/NXP_(Tierern%C3%A4hrung)",
+    "externalLabel": "Wikipedia: NXP (Tierernährung)",
     "faq": [
       {
         "q": "Was ist PDI beziehungsweise nXP?",

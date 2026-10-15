@@ -79,7 +79,7 @@ Nach der Gründung konzentrierte sich die New Holland Machine Company auf mobile
 
 ### Sperry New Holland (1947–1986)
 
-**1947** kaufte die amerikanische **Sperry Corporation** die New Holland Machine Company, und die Marke **Sperry New Holland** entstand. **1964** erwarb Sperry New Holland die Mehrheit am belgischen Unternehmen **Claeys** — einem der größten europäischen Mähdrescherhersteller — und trat damit in den europäischen Markt ein. Das Werk im belgischen Zedelgem fertigt bis heute New-Holland-Mähdrescher.
+Das Jahr **1947** brachte einen neuen Eigentümer — die amerikanische **Sperry Corporation** übernahm das Unternehmen, und die Maschinen wurden weiter unter dem Namen **Sperry New Holland** verkauft. Der Weg nach Europa führte über Belgien: **1964** erwarb Sperry die Mehrheit am Familienbetrieb **Claeys** aus Zedelgem, der damals zur Spitze der europäischen Mähdrescherhersteller gehörte. Zedelgem ist bis heute das Mähdrescherzentrum von New Holland.
 
 ### Ford und die Fordson-Tradition (1917–1986)
 

@@ -5,11 +5,13 @@
 // německy (mirror vzoru /ekoschematy pro pl). Non-de locale → 404.
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { localizePath } from '../../i18n/utils';
+import { localizePath, isLaunchedPath } from '../../i18n/utils';
 import { DE_OER_MAX } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
-if (locale !== 'de') return Astro.rewrite('/404');
+// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de. Od 2026-10-14 stažené, než se
+// opraví sazby a tvrzení podle ověření proti BMLEH/AMA (viz LAUNCHED_PREFIXES.de).
+if (locale !== 'de' || !isLaunchedPath('de', '/oeko-regelungen')) return Astro.rewrite('/404');
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 

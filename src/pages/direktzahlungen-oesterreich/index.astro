@@ -18,11 +18,13 @@
 //    a 230 €/ha pro 21.–40. ha, což je přesně 208 + 44 a 208 + 22.
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { localizePath } from '../../i18n/utils';
+import { localizePath, isLaunchedPath } from '../../i18n/utils';
 import { AT_BASIS_HEIMGUT, AT_BASIS_ALM, AT_UMV_20, AT_UMV_40, AT_JUNG } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
-if (locale !== 'de') return Astro.rewrite('/404');
+// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de. Od 2026-10-14 stažené, než se
+// opraví sazby a tvrzení podle ověření proti BMLEH/AMA (viz LAUNCHED_PREFIXES.de).
+if (locale !== 'de' || !isLaunchedPath('de', '/direktzahlungen-oesterreich')) return Astro.rewrite('/404');
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
@@ -60,9 +62,9 @@ const pageUrl = 'https://agro-svet.cz/de/direktzahlungen-oesterreich/';
 
 const faq = [
   { q: 'Wie hoch ist die Basiseinkommensstützung in Österreich?', a: `Die Basiseinkommensstützung beträgt rund ${fmt(BASIS_HEIMGUT)} €/ha für Heimgutflächen — also Acker, Dauergrünland und Dauerkulturen. Für Almweideflächen gilt ein eigener, deutlich niedrigerer Satz von rund ${fmt(BASIS_ALM)} €/ha. Es handelt sich um Richtwerte des nationalen GAP-Strategieplans für die Periode 2023 bis 2027, nicht um jährlich amtlich bekannt gemachte Einheitsbeträge.` },
-  { q: 'Wie funktioniert die Umverteilungseinkommensstützung?', a: `Sie ist ein Zuschlag auf die ersten 40 Hektar, gestaffelt in zwei Stufen: rund ${fmt(UMV_20)} €/ha für den 1. bis 20. Hektar und rund ${fmt(UMV_40)} €/ha für den 21. bis 40. Hektar. Ab dem 41. Hektar entfällt sie. Damit erhält ein Betrieb auf den ersten 20 Hektar effektiv rund ${fmt(BASIS_HEIMGUT + UMV_20)} €/ha, auf den Hektaren 21 bis 40 rund ${fmt(BASIS_HEIMGUT + UMV_40)} €/ha.` },
-  { q: 'Was bekommen Junglandwirtinnen und Junglandwirte?', a: `Rund ${fmt(JUNG)} €/ha für maximal 40 Hektar förderfähige Fläche und höchstens fünf aufeinanderfolgende Jahre. Voraussetzung: Die Person darf im Jahr der Betriebsgründung das 40. Lebensjahr nicht überschritten haben, muss den Betrieb selbst führen und eine einschlägige Qualifikation nachweisen — Facharbeiterprüfung, einschlägige höhere Schule oder Studium. Der Nachweis kann bis zu zwei Jahre nach Beginn nachgereicht werden.` },
-  { q: 'Was ist die gekoppelte Einkommensstützung für den Almauftrieb?', a: 'Eine an Tiere gebundene Zahlung, die es nur für auf die Alm aufgetriebene Tiere gibt. Für Kühe sowie Zuchtschafe und -ziegen sind es rund 100 € je raufutterverzehrender Großvieheinheit (RGVE), für sonstige Rinder wie Kalbinnen und Ochsen rund 50 € je RGVE. Sie soll die Almbewirtschaftung erhalten, die sonst wirtschaftlich unter Druck steht.' },
+  { q: 'Wie funktioniert die Umverteilungseinkommensstützung?', a: `Kleinere Betriebe sollen je Hektar mehr bekommen als große. Deshalb gibt es auf die ersten 40 Hektar einen Aufschlag in zwei Stufen — rund ${fmt(UMV_20)} €/ha bis zum 20. Hektar, danach nur noch rund ${fmt(UMV_40)} €/ha; jeder weitere Hektar erhält allein die Basiszahlung. Rechnet man beides zusammen, ergeben sich effektiv rund ${fmt(BASIS_HEIMGUT + UMV_20)} €/ha (Hektar 1–20) und rund ${fmt(BASIS_HEIMGUT + UMV_40)} €/ha (Hektar 21–40).` },
+  { q: 'Was bekommen Junglandwirtinnen und Junglandwirte?', a: `Gedacht ist der Zuschlag für alle, die im Jahr der Betriebsgründung höchstens 40 Jahre alt sind und den Hof selbst führen. Sie erhalten rund ${fmt(JUNG)} €/ha obendrauf — angerechnet werden bis zu 40 Hektar, und nach spätestens fünf aufeinanderfolgenden Jahren endet die Zahlung. Eine fachliche Ausbildung gehört dazu, etwa die Facharbeiterprüfung, eine einschlägige höhere Schule oder ein Studium; das Zeugnis darf noch bis zu zwei Jahre nach dem Einstieg nachgereicht werden.` },
+  { q: 'Was ist die gekoppelte Einkommensstützung für den Almauftrieb?', a: 'Eine an Tiere gebundene Zahlung, die es nur für auf die Alm aufgetriebene Tiere gibt. Abgerechnet wird je raufutterverzehrender Großvieheinheit (RGVE): Kühe, Zuchtschafe und Zuchtziegen bringen rund 100 €, Kalbinnen, Ochsen und die übrigen Rinder die Hälfte, also rund 50 €. Sie soll die Almbewirtschaftung erhalten, die sonst wirtschaftlich unter Druck steht.' },
   { q: 'Sind das exakte Beträge?', a: 'Nein. Anders als in Deutschland, wo das BMLEH die endgültigen Einheitsbeträge jährlich im Bundesanzeiger bekannt macht, nennen das österreichische Ministerium und die Landwirtschaftskammer die Sätze ausdrücklich mit „rund" beziehungsweise „etwa". Es sind Richtwerte des GAP-Strategieplans für 2023 bis 2027. Der tatsächlich ausgezahlte Betrag hängt von der beantragten Fläche und dem verfügbaren Budget ab. Verbindlich ist der AMA-Bescheid.' },
   { q: 'Wann zahlt die AMA aus?', a: 'Die Hauptauszahlung der Direktzahlungen erfolgt in der Regel im Dezember des Antragsjahres. Die AMA gibt den genauen Termin jährlich bekannt; Teilzahlungen können früher erfolgen.' },
 ];
@@ -201,7 +203,7 @@ const groups: { title: string; rows: Row[] }[] = [
         <div class="db-explain-grid">
           <div class="db-exp"><h3>Basiseinkommensstützung</h3><p>Die Flächenzahlung auf alle förderfähigen Hektar und die Basis des Systems. Sie ist an die Einhaltung der Konditionalität gebunden. Almweideflächen haben einen eigenen, deutlich niedrigeren Satz, weil ihr Ertragspotenzial nicht mit dem Heimgut vergleichbar ist.</p></div>
           <div class="db-exp"><h3>Umverteilungseinkommensstützung</h3><p>Ein Zuschlag auf die ersten 40 Hektar in zwei Stufen. Er stärkt gezielt kleinere und mittlere Betriebe — in Österreich mit seiner kleinstrukturierten Landwirtschaft ein Instrument mit spürbarer Wirkung. Ab dem 41. Hektar entfällt er.</p></div>
-          <div class="db-exp"><h3>Einkommensstützung für Junglandwirte</h3><p>Ein Zuschlag für Betriebsleiterinnen und Betriebsleiter bis 40 Jahre — für maximal 40 Hektar und höchstens fünf aufeinanderfolgende Jahre. Verlangt wird eine einschlägige Qualifikation, die bis zu zwei Jahre nach Beginn nachgereicht werden kann.</p></div>
+          <div class="db-exp"><h3>Einkommensstützung für Junglandwirte</h3><p>Ein Zuschlag für alle, die mit höchstens 40 Jahren einen Betrieb übernehmen. Er läuft längstens fünf Jahre in Folge, angerechnet werden bis zu 40 Hektar. Eine einschlägige Ausbildung ist Pflicht — das Zeugnis darf aber bis zu zwei Jahre später kommen.</p></div>
           <div class="db-exp"><h3>Gekoppelte Stützung Almauftrieb</h3><p>Eine an die Tierzahl gebundene Zahlung, die es ausschließlich für auf die Alm aufgetriebene Tiere gibt. Gerechnet wird in raufutterverzehrenden Großvieheinheiten (RGVE); Kühe sowie Zuchtschafe und -ziegen erhalten den doppelten Satz gegenüber sonstigen Rindern.</p></div>
         </div>
       </section>

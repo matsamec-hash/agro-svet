@@ -16,7 +16,7 @@ Massey Ferguson gehört zu den ältesten und am weitesten verbreiteten Landtechn
 
 ### Massey-Harris (1847–1953)
 
-**1847** gründete **Daniel Massey** in Newcastle (Provinz Ontario, Kanada) die **Massey Manufacturing Company** für Mähmaschinen und Getreidetechnik. **1891** kam es zur Fusion mit dem Wettbewerber **A. Harris, Son & Company** — es entstand **Massey-Harris**, der dominierende Landtechnikhersteller Kanadas. In den 1920er-Jahren begann Massey-Harris mit dem Traktorenbau.
+Die Spur führt nach Kanada: Mähmaschinen und Getreidetechnik baute **Daniel Massey** ab **1847** in Newcastle in der Provinz Ontario, unter dem Namen **Massey Manufacturing Company**. Aus dem Konkurrenzkampf mit **A. Harris, Son & Company** wurde **1891** eine Fusion, und das neue Unternehmen **Massey-Harris** stieg zum führenden Landtechnikhersteller des Landes auf. Traktoren kamen erst in den 1920er-Jahren ins Programm.
 
 ### Harry Ferguson und das Ferguson-System (1933–1953)
 

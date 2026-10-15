@@ -19,11 +19,13 @@
 //     → sazby jednotlivých měr, výchozí rok 2023
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
-import { localizePath } from '../../i18n/utils';
+import { localizePath, isLaunchedPath } from '../../i18n/utils';
 import { AT_OEPUL_BIO_GRUENLAND_MAX } from '../../data/foerderung-de';
 
 const locale = Astro.locals.locale ?? 'cs';
-if (locale !== 'de') return Astro.rewrite('/404');
+// Mimo LAUNCHED_PREFIXES.de → 404 i pod /de. Od 2026-10-14 stažené, než se
+// opraví sazby a tvrzení podle ověření proti BMLEH/AMA (viz LAUNCHED_PREFIXES.de).
+if (locale !== 'de' || !isLaunchedPath('de', '/oepul')) return Astro.rewrite('/404');
 
 Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800');
 
@@ -80,7 +82,7 @@ const faq = [
   { q: 'Was ist ÖPUL?', a: 'ÖPUL ist das österreichische Programm für umweltgerechte Landwirtschaft — der Agrarumwelt-Teil der zweiten Säule der GAP. Es ist freiwillig: Betriebe verpflichten sich für die Programmperiode zu Maßnahmen, die über die gesetzlichen Mindestanforderungen hinausgehen, und erhalten dafür eine Prämie je Hektar. ÖPUL 2023 läuft in der Periode 2023 bis 2027.' },
   { q: 'Wie hoch ist die UBB-Prämie?', a: `Die Basismodulprämie der Maßnahme „Umweltgerechte und biodiversitätsfördernde Bewirtschaftung" auf Ackerflächen betrug im Jahr 2023 ${fmt(ubb.v2023)} €/ha, 2024 ${fmt(ubb.v2024)} €/ha und 2025 ${fmt(ubb.v2025)} €/ha. Auf das Basismodul kommen je nach Betrieb Zuschläge für einzelne Zusatzleistungen.` },
   { q: 'Wie hoch ist die Bio-Prämie?', a: `Das Basismodul der Maßnahme „Biologische Wirtschaftsweise" auf Ackerflächen lag 2023 bei ${fmt(bio.v2023)} €/ha, 2024 bei ${fmt(bio.v2024)} €/ha und 2025 bei ${fmt(bio.v2025)} €/ha. Im Grünland hängt der Satz von der Tierhaltung ab: Tierhalter bis 1,4 RGVE je Hektar erhalten 215 €/ha, darüber 205 €/ha, Nicht-Tierhalter 70 €/ha.` },
-  { q: 'Warum sind die Prämien seit 2024 höher?', a: 'Mit dem Antragsjahr 2024 trat ein Impulsprogramm für die österreichische Landwirtschaft in Kraft. Sämtliche ÖPUL-Prämiensätze wurden dabei um mindestens 8 Prozent angehoben, bei einem Teil der Maßnahmen kam ab 2025 eine weitere Erhöhung dazu. Ältere Übersichten führen deshalb häufig noch die niedrigeren Ausgangssätze von 2023.' },
+  { q: 'Warum sind die Prämien seit 2024 höher?', a: 'Wer ältere Übersichten liest, findet dort meist noch die Ausgangssätze von 2023. Seither ging es in zwei Schritten nach oben: Das Impulsprogramm hat ab dem Antragsjahr 2024 jeden ÖPUL-Satz um wenigstens 8 Prozent angehoben, und einzelne Maßnahmen bekamen ab 2025 einen weiteren Aufschlag.' },
   { q: 'Was ist ab 2025 neu?', a: 'Neu ist vor allem die Maßnahme „Nichtproduktive Ackerflächen und Agroforststreifen" mit 350 bis 450 €/ha für nichtproduktive Ackerflächen und 600 bis 800 €/ha für Agroforststreifen. Dazu kamen mehrere Zuschläge, etwa für die Neueinsaat von Biodiversitätsflächen (324 €/ha), Pheromonfallen bei Zuckerrüben (150 €/ha), das Belassen von Altgrasflächen (150 €/ha) sowie Untersaaten bei Mais und Sorghum.' },
   { q: 'Kann man UBB und Bio kombinieren?', a: 'Nein, die beiden Basismodule schließen einander aus — ein Betrieb wählt entweder die Maßnahme „Umweltgerechte und biodiversitätsfördernde Bewirtschaftung" oder „Biologische Wirtschaftsweise". Beide lassen sich aber mit zahlreichen weiteren ÖPUL-Maßnahmen und Zuschlägen kombinieren, etwa Begrünung, Erosionsschutz oder Grundwasserschutz.' },
   { q: 'Sind die genannten Beträge verbindlich?', a: 'Nein. Die Sätze stammen aus den Informationsunterlagen der AMA und der Landwirtschaftskammer und gelten für das jeweils angegebene Antragsjahr. Die tatsächliche Auszahlung hängt vom Antragsumfang, der Einhaltung der Auflagen und dem verfügbaren Budget ab. Verbindlich ist allein der Bescheid der AMA; maßgeblich sind die Merkblätter zur jeweiligen Maßnahme.' },
@@ -134,11 +136,11 @@ const groups: { title: string; sub: string; rows: Row[] }[] = [
       </header>
 
       <div class="db-flag">
-        <strong>Achtung bei älteren Übersichten.</strong> Mit dem Antragsjahr 2024 wurden im Rahmen
-        eines Impulsprogramms <em>sämtliche</em> ÖPUL-Prämiensätze um mindestens 8 % angehoben, bei
-        einem Teil der Maßnahmen ab 2025 noch einmal. Viele frei zugängliche Zusammenstellungen
-        führen weiterhin die Ausgangssätze von 2023. Bei jeder Tabelle unten steht deshalb, für
-        welches Jahr der Satz gilt.
+        <strong>Achtung bei älteren Übersichten.</strong> Die Sätze von 2023 gelten nicht mehr: Das
+        Impulsprogramm hat ab dem Antragsjahr 2024 <em>jeden</em> ÖPUL-Prämiensatz um wenigstens 8 %
+        erhöht, einzelne Maßnahmen bekamen 2025 noch einen Aufschlag. Viele frei zugängliche
+        Zusammenstellungen führen trotzdem weiterhin die Ausgangswerte. Bei jeder Tabelle unten steht
+        deshalb, für welches Jahr der Satz gilt.
       </div>
 
       <section class="db-hero-stats" aria-label="Wichtigste Prämien 2025">

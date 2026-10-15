@@ -63,15 +63,15 @@ Fendt aus dem bayerischen Marktoberdorf ist für viele Landwirte das Synonym fü
 
 <h2 id="zakladatel">Gründer: Xaver Fendt</h2>
 
-Die Marke gründete 1930 **Xaver Fendt** im bayerischen Marktoberdorf. Die erste Maschine war der kleine Traktor **Dieselross** mit 4,5 kW (6 PS). 1937 wurde das Unternehmen unter dem Namen **Xaver Fendt & Co.** ins Handelsregister eingetragen; in die Geschäftsführung trat auch Xavers Bruder Hermann ein. Die Dieselross-Modelle — einschließlich des stärkeren F 22 von 1938 — wurden bis 1958 gebaut.
+Den Namen **Dieselross** trugen die Traktoren aus Marktoberdorf fast drei Jahrzehnte lang — die letzten entstanden 1958. Am Anfang stand dabei eine einzige kleine Maschine mit 6-PS-Diesel (4,5 kW), die **Xaver Fendt** 1930 baute. Aus der Familienwerkstatt wurde bald ein Unternehmen: Ab 1937 führte Xaver es gemeinsam mit seinem Bruder Hermann als **Xaver Fendt & Co.**, und schon im Jahr darauf kam der stärkere Dieselross F 22 hinzu.
 
 ## Vario — das bahnbrechende Getriebe
 
-Die wichtigste Technologie von Fendt ist das stufenlose Getriebe **Vario**. Der erste Serientraktor mit diesem Getriebe war der **Favorit 926 Vario**, vorgestellt 1995 auf der Agritechnica; die Serienfertigung begann 1996. Es war überhaupt der erste große Serientraktor mit stufenlosem Getriebe, und die Technologie wurde nach und nach zum Branchenstandard, den praktisch alle Wettbewerber nachahmen. 2016 fertigte Fendt das 250 000. Vario-Getriebe.
+Wer heute einen großen Traktor kauft, setzt ein stufenloses Getriebe als selbstverständlich voraus — und das ist zu einem großen Teil Fendts Verdienst. Auf der Agritechnica 1995 zeigte das Unternehmen den **Favorit 926 Vario**, den ersten großen Traktor mit einem solchen Getriebe; ein Jahr später ging er in Serie. Das **Vario**-Getriebe wurde danach zum Maßstab, an den sich die Konkurrenz nach und nach mit eigenen Lösungen herangearbeitet hat. Wie groß dieser Umbruch war, zeigt eine Zahl aus dem Jahr 2016: Damals lief das 250 000. Vario-Getriebe vom Band.
 
 ## Teil der AGCO-Gruppe
 
-Seit Januar 1997 ist Fendt eine hundertprozentige Marke der amerikanischen **AGCO Corporation** (Sitz Duluth, Georgia; Börse NYSE: AGCO), zu der auch die Marken Massey Ferguson und Valtra gehören. Die leistungsstärkste Baureihe ist der **Fendt 1000 Vario**, dessen Serienfertigung 2015 begann.
+Ein eigenständiges Unternehmen ist Fendt seit Januar 1997 nicht mehr — damals übernahm die amerikanische **AGCO Corporation** (Duluth, Georgia; NYSE: AGCO) die Firma vollständig. Im Konzern spielt Fendt neben Massey Ferguson und Valtra die Rolle der Premiummarke. An der Spitze des Angebots steht seit 2015 die Baureihe **Fendt 1000 Vario**.
 
 ## Fendt in Tschechien
 

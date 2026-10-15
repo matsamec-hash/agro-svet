@@ -44,7 +44,7 @@ const tiere: Row[] = [
 // Vývoj základní sazby — jediná položka, u které mám celou řadu 2023–2027.
 const grundstuetzung: { year: number; v: number; final: boolean }[] = [
   { year: 2023, v: 170.93, final: true },
-  { year: 2024, v: 157.93, final: true },
+  { year: 2024, v: 157.63, final: true },
   { year: 2025, v: DE_GRUNDSTUETZUNG_2025, final: true },
   { year: 2026, v: 147.38, final: false },
   { year: 2027, v: 147.38, final: false },
@@ -66,7 +66,7 @@ const faq = [
   { q: 'Bis zu wie vielen Hektar gibt es die Umverteilungseinkommensstützung?', a: 'Die Umverteilungseinkommensstützung wird für die ersten 60 Hektar gezahlt, gestaffelt in zwei Stufen: für den 1. bis 40. Hektar der höhere Satz, für den 41. bis 60. Hektar der niedrigere. Ab dem 61. Hektar entfällt sie vollständig.' },
   { q: 'Warum sinkt die Einkommensgrundstützung von Jahr zu Jahr?', a: `Der Einheitsbetrag ergibt sich aus dem festen nationalen Finanzrahmen geteilt durch die bundesweit tatsächlich beantragte förderfähige Fläche. Steigt die beantragte Fläche oder wird Geld in andere Instrumente wie die Öko-Regelungen umgeschichtet, sinkt der Betrag je Hektar. Von ${fmt(170.93)} €/ha (2023) ging es auf ${fmt(grund)} €/ha (2025) zurück.` },
   { q: 'Sind die Beträge für 2026 schon sicher?', a: 'Nein. Die Werte für 2026 und 2027 sind geplante Einheitsbeträge. Der tatsächliche Betrag steht erst fest, wenn alle Anträge und Kontrollen ausgewertet sind — er wird üblicherweise Ende November des jeweiligen Jahres berechnet und anschließend im Bundesanzeiger bekannt gemacht.' },
-  { q: 'Wann werden die Direktzahlungen ausgezahlt?', a: 'Die Auszahlung erfolgt in der Regel ab Dezember des Antragsjahres durch die zuständige Landesbehörde. Der genaue Termin unterscheidet sich je Bundesland; einzelne Länder zahlen bereits Teilbeträge früher aus.' },
+  { q: 'Wann werden die Direktzahlungen ausgezahlt?', a: 'Die Auszahlung erfolgt in der Regel ab Dezember des Antragsjahres durch die zuständige Landesbehörde. Der genaue Termin unterscheidet sich je Bundesland.' },
 ];
 
 const jsonLd = {
@@ -251,12 +251,8 @@ const groups: { title: string; rows: Row[] }[] = [
         ))}
       </section>
 
-      <div class="db-related">
-        <a href={localizePath('de', '/oeko-regelungen/')}>→ Öko-Regelungen 2025 — zusätzliche Flächenprämien (Beträge)</a>
-      </div>
-
       <footer class="db-src">
-        <p>Datenquellen: <a href="https://www.landwirtschaft.sachsen.de/entwicklung-direktzahlung-kalkulationshilfe-15699.html" target="_blank" rel="noopener">Landwirtschaft Sachsen — Entwicklung Direktzahlung</a> (finale Beträge 2025, Stand 1. Dezember 2025) und <a href="https://www.lfl.bayern.de/iba/unternehmensfuehrung/371535/index.php" target="_blank" rel="noopener">Bayerische Landesanstalt für Landwirtschaft — GAP-Prämienrechner</a> (Reihe 2023–2027). Die finalen Einheitsbeträge macht das BMLEH jährlich im Bundesanzeiger bekannt. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
+        <p>Datenquellen: <a href="https://www.landwirtschaft.sachsen.de/entwicklung-direktzahlung-kalkulationshilfe-15699.html" target="_blank" rel="noopener">Landwirtschaft Sachsen — Entwicklung Direktzahlung</a> (finale Beträge 2025, Stand 1. Dezember 2025) und <a href="https://www.lfl.bayern.de/iba/unternehmensfuehrung/371535/index.php" target="_blank" rel="noopener">Bayerische Landesanstalt für Landwirtschaft — GAP-Prämienrechner</a> (Reihe 2023–2027). Die finalen Einheitsbeträge macht das BMLEH jährlich im Bundesanzeiger bekannt — für 2025 in <a href="https://www.bundesanzeiger.de/pub/publication/6jX01V1HVYmvLWWWWGS/content/6jX01V1HVYmvLWWWWGS/BAnz%20AT%2001.12.2025%20B6.pdf" target="_blank" rel="noopener">BAnz AT 01.12.2025 B6</a>. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
       </footer>
     </div>
   </main>
