@@ -466,14 +466,8 @@ const articleJsonLd = {
           tabindex="0"
           aria-label={`${t('enc.video.play')}: ${item.data.youtubeTitle ?? item.data.name}`}
         >
-          <img
-            src={`https://i.ytimg.com/vi/${item.data.youtubeId}/hqdefault.jpg`}
-            alt={`${t('enc.video.preview')}: ${item.data.youtubeTitle ?? item.data.name}`}
-            width="1280"
-            height="720"
-            loading="lazy"
-            decoding="async"
-          />
+          {/* Žádný náhled z i.ytimg.com — viz MachineVideo.astro. */}
+          <span class="yt-title">{item.data.youtubeTitle ?? item.data.name}</span>
           <div class="yt-play" aria-hidden="true">
             <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74A8.02 8.02 0 0 0 60.96 2.18C56.06.83 34 .83 34 .83s-22.06 0-26.96 1.35A8.02 8.02 0 0 0 1.48 7.74C.13 12.64.13 24 .13 24s0 11.36 1.35 16.26a8.02 8.02 0 0 0 5.56 5.56C11.94 47.17 34 47.17 34 47.17s22.06 0 26.96-1.35a8.02 8.02 0 0 0 5.56-5.56C67.87 35.36 67.87 24 67.87 24s0-11.36-1.35-16.26z" fill="#ff0000"/><path d="M27.2 33.6L45.6 24 27.2 14.4z" fill="#fff"/></svg>
           </div>
@@ -671,10 +665,10 @@ const articleJsonLd = {
   .video h2 { font-size:1.5rem; font-weight:700; margin:0 0 16px; letter-spacing:-.3px; color:#1a1a1a; }
   .yt-facade {
     position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden;
-    background:#000; cursor:pointer; display:block;
+    background:linear-gradient(135deg,#1a1a1a,#3a3a3a); cursor:pointer; display:block;
   }
-  .yt-facade img { width:100%; height:100%; object-fit:cover; display:block; transition:filter .2s; }
-  .yt-facade:hover img { filter:brightness(.85); }
+  .yt-title { position:absolute; left:20px; right:20px; bottom:18px; color:#fff; font-weight:600; font-size:15px; line-height:1.35; }
+  .yt-facade:hover { background:linear-gradient(135deg,#222,#474747); }
   .yt-play {
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     pointer-events:none;

@@ -1,0 +1,83 @@
+---
+// src/pages/impressum/index.astro
+// DE-only: Anbieterkennzeichnung pro /de. Vzniklo při návratu němčiny 2026-10-14
+// — do té doby web údaje o provozovateli německy rozprostíral po podmínkách,
+// zásadách a DSA stránce, ale stránku „Impressum" neměl. Jméno jednatele
+// schválil vlastník (je veřejně v obchodním rejstříku). Údaje drž ve shodě
+// s podminky-pouziti / dsa-kontakt; ověřené proti ARES 14. 10. 2026.
+// Non-de locale → 404 (stejně jako /direktzahlungen).
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+
+const locale = Astro.locals.locale ?? 'cs';
+if (locale !== 'de') return Astro.rewrite('/404');
+const lp = (path: string) => `/de${path}`;
+---
+<Layout
+  title="Impressum — Agro-svet"
+  description="Impressum von agro-svet.cz: Anbieter Samec Digital s.r.o., Sitz in Katovice (Tschechische Republik), Handelsregister, Kontakt."
+  noHreflang={true}
+>
+  <main class="legal-page">
+    <h1>Impressum</h1>
+    <p class="lead">Anbieterkennzeichnung für agro-svet.cz</p>
+
+    <h2>Anbieter</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong> (Gesellschaft mit beschränkter Haftung nach tschechischem Recht)<br>
+      Na Břehu 378<br>
+      387 11 Katovice<br>
+      Tschechische Republik
+    </p>
+
+    <h2>Vertretungsberechtigt</h2>
+    <p>Matěj Samec, Geschäftsführer (jednatel)</p>
+
+    <h2>Kontakt</h2>
+    <p>E-Mail: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></p>
+
+    <h2>Registereintrag</h2>
+    <p>
+      Handelsregister (obchodní rejstřík) des Kreisgerichts České Budějovice, Abteilung C, Einlage 36598<br>
+      Identifikationsnummer (IČO): 29547539
+    </p>
+
+    <h2>Weitere Angaben</h2>
+    <ul>
+      <li><a href={lp('/podminky-pouziti/')}>Nutzungsbedingungen</a></li>
+      <li><a href={lp('/zpracovani-osobnich-udaju/')}>Datenschutzerklärung</a></li>
+      <li><a href={lp('/dsa-kontakt/')}>Kontaktstelle nach dem Digital Services Act</a></li>
+      <li><a href={lp('/redakce/')}>Redaktion und redaktionelle Grundsätze</a></li>
+    </ul>
+  </main>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.7;
+    color: #222;
+  }
+  .legal-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin: 0 0 12px;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+  }
+  .legal-page .lead { font-size: 16px; color: #444; margin: 0 0 32px; }
+  .legal-page h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 32px 0 12px;
+    letter-spacing: -.01em;
+  }
+  .legal-page ul { padding-left: 22px; margin: 8px 0 16px; }
+  .legal-page li { margin: 4px 0; }
+  .legal-page a { color: #0B7A3B; text-decoration: underline; }
+  .legal-page a:hover { color: #066027; }
+</style>

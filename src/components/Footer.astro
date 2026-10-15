@@ -45,7 +45,11 @@ const columns = getFooterColumns(locale);
         <span aria-hidden="true">·</span>
         <a href={navHref(locale, '/redakce/')}>{tr('footer.editorial')}</a>
         <span aria-hidden="true">·</span>
+        {locale === 'de' && (<><a href="/de/impressum/">Impressum</a>
+        <span aria-hidden="true">·</span></>)}
         <a href={navHref(locale, '/podminky-pouziti/')}>{tr('footer.terms')}</a>
+        <span aria-hidden="true">·</span>
+        <a href={navHref(locale, '/zpracovani-osobnich-udaju/')}>{tr('footer.privacy')}</a>
         <span aria-hidden="true">·</span>
         {showPhotoGdpr && (<><a href="/fotosoutez/gdpr/">{tr('footer.gdpr')}</a>
         <span aria-hidden="true">·</span></>)}
@@ -53,9 +57,9 @@ const columns = getFooterColumns(locale);
         <span aria-hidden="true">·</span>
         {/* Datové rozhraní a licence — cs-only stránky, proto BEZ navHref
             (pod /sk /uk /pl neexistují a odkaz by vedl na 404). */}
-        <a href="/data/licence/">{tr('footer.dataLicense')}</a>
+        <a href="/data/licence/" hreflang={locale === 'cs' ? undefined : 'cs'}>{tr('footer.dataLicense')}</a>
         <span aria-hidden="true">·</span>
-        <a href="/mcp/">MCP</a>
+        <a href="/mcp/" hreflang={locale === 'cs' ? undefined : 'cs'}>MCP</a>
         <span aria-hidden="true">·</span>
         <a href="#" data-cc-reopen>{tr('cc.settings')}</a>
         <span aria-hidden="true">·</span>

@@ -157,7 +157,7 @@ const de: Record<string, string> = {
   'header.expand': 'Aufklappen',
 
   // — footer —
-  'footer.tagline': 'Landtechnik, Nachrichten und Enzyklopädie. Gebrauchtmarkt, Statistiken, Fotowettbewerb — alles für die Landwirtschaft.',
+  'footer.tagline': 'Landtechnik, Nachrichten und Enzyklopädie. Wörterbuch, Rassen, Direktzahlungen — alles für die Landwirtschaft.',
   'footer.content': 'Inhalt',
   'footer.news': 'Nachrichten',
   'footer.events': 'Terminkalender',
@@ -181,6 +181,7 @@ const de: Record<string, string> = {
   'footer.search': 'Suchen',
   'footer.editorial': 'Redaktion',
   'footer.terms': 'Nutzungsbedingungen',
+  'footer.privacy': 'Datenschutz',
   'footer.gdpr': 'DSGVO',
   'footer.dsa': 'DSA',
   'footer.dataLicense': 'Datenlizenz',
@@ -479,7 +480,7 @@ const de: Record<string, string> = {
   'cat.sr.c.ctaBazar': 'Agro-Markt {brand}',
 
   // — cookie consent —
-  'cc.text': 'Wir verwenden Cookies für die Grundfunktionen der Website und&nbsp;(mit Ihrer Einwilligung) für anonyme Analysen über Google Analytics.',
+  'cc.text': 'Notwendige Cookies braucht die Website für den Betrieb. Mit Ihrer Einwilligung kommt eine anonyme Reichweitenmessung hinzu, an der wir erkennen, worüber es sich zu schreiben lohnt.',
   'cc.more': 'Mehr Informationen',
   'cc.essentials': 'Nur notwendige',
   'cc.acceptAll': 'Alle akzeptieren',
@@ -1523,9 +1524,9 @@ const de: Record<string, string> = {
   // — cookie lišta (granulární souhlas, doplněno po merge PR #119) —
   'cc.title': 'Cookies',
   'cc.necessary': 'Notwendig',
-  'cc.necessaryDesc': 'Halten die Website zusammen — gewählte Sprache, Anmeldung und diese Auswahl. Ohne sie funktioniert die Website nicht, deshalb lassen sie sich nicht abschalten.',
+  'cc.necessaryDesc': 'Halten die Website zusammen — Anmeldung, Abstimmungen in Umfragen und das Speichern dieser Auswahl. Ohne sie funktioniert die Website nicht, deshalb lassen sie sich nicht abschalten.',
   'cc.analytics': 'Analyse',
-  'cc.analyticsDesc': 'Google Analytics und Microsoft Clarity — anonyme Besuchsstatistiken und Heatmaps, an denen wir erkennen, welche Seiten niemand zu Ende liest.',
+  'cc.analyticsDesc': 'Google Analytics, Microsoft Clarity und Ahrefs Web Analytics — anonyme Besuchsstatistiken und Heatmaps, an denen wir erkennen, welche Seiten niemand zu Ende liest.',
   'cc.always': 'immer aktiv',
   'cc.back': 'Zurück',
   'cc.save': 'Auswahl speichern',

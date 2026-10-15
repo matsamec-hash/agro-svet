@@ -194,12 +194,6 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
   <!-- Preconnect: hero/article images + bazar listing photos. Šetří ~100ms TLS handshake na 1. requestu. -->
   <link rel="preconnect" href="https://cdn.samecdigital.com" crossorigin />
   {supabaseHost && <link rel="preconnect" href={supabaseHost} crossorigin />}
-  {Astro.url.pathname.startsWith('/encyklopedie/') && (
-    <>
-      <link rel="preconnect" href="https://www.youtube-nocookie.com" />
-      <link rel="preconnect" href="https://i.ytimg.com" />
-    </>
-  )}
 
   <!-- Fonts self-hosted via @fontsource (imported in src/styles/global.css). -->
   <!-- Preload the two most-used Chakra Petch latin weights to cut first paint FOIT. -->
@@ -212,10 +206,14 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
       : <link rel="preload" as="image" href={heroPreload.src} fetchpriority="high" />
   )}
 
-  <script is:inline async src="https://analytics.ahrefs.com/analytics.js" data-key="Z+e1pTc55fQZcn08PcWwtQ"></script>
+  {/* Ahrefs Web Analytics se načítá až po souhlasu s měřením — viz spustMereni() v CookieConsent.astro. */}
   <slot name="head" />
 </head>
 <body>
+  {/* Cloudflare Email Obfuscation přepisuje každý e-mail na „[email protected]" a zpátky
+      ho skládá až JavaScript. Kontakt na provozovatele (právní stránky, patička) má být
+      čitelný i bez JS, proto je obfuskace pro celou stránku vypnutá. */}
+  <Fragment set:html="<!--email_off-->" />
   <a href="#main-content" class="skip-link">{t(locale, 'a11y.skipToContent')}</a>
   <CookieConsent />
   <Header />
@@ -224,5 +222,6 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
   </main>
   <Lightbox />
   <Footer />
+  <Fragment set:html="<!--/email_off-->" />
 </body>
 </html>

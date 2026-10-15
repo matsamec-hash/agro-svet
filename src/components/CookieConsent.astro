@@ -156,6 +156,13 @@ const tr = useTranslations(locale);
       if (nacteno) return;
       nacteno = true;
 
+      // Ahrefs Web Analytics. Dřív stál natvrdo v Layoutu a běžel i bez souhlasu.
+      var ah = document.createElement('script');
+      ah.async = true;
+      ah.src = 'https://analytics.ahrefs.com/analytics.js';
+      ah.setAttribute('data-key', 'Z+e1pTc55fQZcn08PcWwtQ');
+      document.head.appendChild(ah);
+
       if (GA_ID) {
         var ga = document.createElement('script');
         ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;

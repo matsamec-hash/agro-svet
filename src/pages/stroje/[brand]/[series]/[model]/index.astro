@@ -458,7 +458,6 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
             title={model.youtube_title ?? `${brand.name} ${model.name}`}
             heading={tf(locale, 'cat.s.d.videoHeading', { model: model.name })}
             playLabel={tr('cat.s.d.videoPlay')}
-            previewLabel={tr('cat.s.d.videoPreview')}
             note={tr('cat.s.d.videoNote')}
           />
         )}

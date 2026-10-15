@@ -95,12 +95,15 @@ const meta = META[locale] ?? META.cs;
 
     <h2>5. Komu údaje odovzdávame (sprostredkovatelia)</h2>
     <ul>
-      <li><strong>Cloudflare, Inc.</strong> (USA) — hosting, CDN, anti-DDoS. Štandardné zmluvné doložky (SCC) podľa čl. 46 GDPR.</li>
-      <li><strong>Supabase, Inc.</strong> (USA, EU regióny) — databáza a autentizácia. SCC.</li>
+      <li><strong>Cloudflare, Inc.</strong> (USA) — reverzná proxy, CDN, anti-DDoS; prechádzajú ním všetky požiadavky na web. Štandardné zmluvné doložky (SCC) podľa čl. 46 GDPR.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Cyprus) — server s webom a databázou (dátové centrum vo Frankfurte nad Mohanom) a CDN obrázkov <code>cdn.samecdigital.com</code>. Databázu a prihlasovanie prevádzkujeme na vlastnom serveri (open-source Supabase), nie u spoločnosti Supabase, Inc.</li>
       <li><strong>Resend, Inc.</strong> (USA) — odosielanie transakčných a newsletter e-mailov. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Írsko) — Google Analytics 4 (ID merania G-HC3JY466RR), anonymná návštevnosť. Načíta sa <strong>až po vašom súhlase</strong>, s anonymizáciou IP adresy. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Írsko) — Microsoft Clarity (ID projektu ws6puxcjnb), anonymné heatmapy a záznamy pohybu po stránke. Načíta sa <strong>až po vašom súhlase</strong>. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
+      <li><strong>Ahrefs Pte. Ltd.</strong> (Singapur) — Ahrefs Web Analytics, anonymná štatistika návštevnosti. Načíta sa <strong>až po vašom súhlase</strong> s meraním.</li>
+      <li><strong>Google Ireland Limited</strong> (Írsko) — prehrávač YouTube (<code>youtube-nocookie.com</code>) pri videách v katalógu techniky a v encyklopédii. Načíta sa <strong>až po kliknutí</strong> na video, dovtedy sa z YouTube nenačíta nič.</li>
     </ul>
+    <p>Na niektorých stránkach sa váš prehliadač pripája priamo k ďalším službám, ktoré tým dostanú vašu IP adresu: <strong>Open-Meteo</strong> (predpoveď počasia podľa vašej polohy — len keď o ňu kliknutím požiadate), <strong>jsDelivr</strong> a <strong>unpkg</strong> (knižnice pre grafy a mapy), <strong>OpenStreetMap</strong> (mapové podklady v bazári a pri farmách), <strong>esm.sh</strong> (prihlásenie do bazára), <strong>Cloudflare Turnstile</strong> (ochrana formulárov pred robotmi) a <strong>Unsplash</strong> (obrázky v sekcii Médiá). Server navyše používa <strong>Nominatim / OpenStreetMap</strong> na prevod lokality inzerátu na súradnice, <strong>Fio banku</strong> na párovanie platieb za zvýhodnenie inzerátu a služby <strong>OpenAI</strong> a <strong>Anthropic</strong> na strojové spracovanie textu inzerátov, ktoré redakcia prevezme z iných inzertných serverov.</p>
     <p>Vaše osobné údaje nepredávame ani neodovzdávame tretím stranám na marketingové účely.</p>
 
     <h2>6. Vaše práva</h2>
@@ -128,19 +131,19 @@ const meta = META[locale] ?? META.cs;
       Ak sa domnievate, že spracúvaním vašich osobných údajov porušujeme GDPR, môžete podať sťažnosť.
       Keďže prevádzkovateľ je usadený v Českej republike, vedúcim dozorným úradom je
       <strong>Úřad pro ochranu osobních údajů (ČR)</strong>, Pplk. Sochora 27, 170 00 Praha 7,
-      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+      <a href="https://uoou.gov.cz/" rel="noopener">uoou.gov.cz</a>.
       Ako používateľ zo Slovenska sa môžete obrátiť aj na
       <strong>Úrad na ochranu osobných údajov Slovenskej republiky</strong>, Hraničná 4826/12,
       820 07 Bratislava 27, <a href="https://dataprotection.gov.sk" rel="noopener">dataprotection.gov.sk</a>.
     </p>
 
     <h2>9. Cookies</h2>
-    <p><strong>Technicky nevyhnutné cookies</strong> (prihlasovanie, anti-fraud, uloženie vašej voľby o súhlase) sa používajú vždy — bez nich web nefunguje.</p>
-    <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — sa načítajú <strong>len s vaším súhlasom</strong>. Merajú anonymnú návštevnosť a to, ako sa po stránke pohybujete; IP adresa sa anonymizuje. Ak zvolíte „Iba nevyhnutné", nenačíta sa žiadny skript Googlu ani Microsoftu a ich cookies sa z prehliadača vymažú.</p>
+    <p><strong>Technicky nevyhnutné cookies</strong> (prihlásenie, hlasovanie v anketách a vo fotosúťaži) sa používajú vždy — bez nich web nefunguje. Vašu voľbu o súhlase si web pamätá v úložisku prehliadača (<code>localStorage</code>), nie v cookie.</p>
+    <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — sa načítajú <strong>len s vaším súhlasom</strong>. Merajú anonymnú návštevnosť a to, ako sa po stránke pohybujete; IP adresa sa anonymizuje. So súhlasom sa načíta aj Ahrefs Web Analytics (anonymná štatistika návštevnosti). Ak zvolíte „Iba nevyhnutné", nenačíta sa žiadny merací skript (Google, Microsoft ani Ahrefs) a ich cookies sa z prehliadača vymažú.</p>
     <p>Nepoužívame marketingové ani reklamné cookies tretích strán.</p>
     <p>Súhlas môžete kedykoľvek odvolať odkazom <strong>Nastavenia cookies</strong> v pätičke — odvolanie je rovnako jednoduché ako udelenie (čl. 7 ods. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnosť:</strong> 22. augusta 2026</p>
+    <p class="effective"><strong>Účinnosť:</strong> 14. októbra 2026</p>
     </Fragment>
   ) : isPl ? (
     <Fragment>
@@ -178,7 +181,7 @@ const meta = META[locale] ?? META.cs;
     </ul>
 
     <h3>2.4 Fotokonkurs</h3>
-    <p>Dla fotokonkursu obowiązują odrębne <a href="/fotosoutez/gdpr/">zasady przetwarzania</a>.</p>
+    <p>Dla fotokonkursu obowiązują odrębne <a href="/fotosoutez/gdpr/" hreflang="cs">zasady przetwarzania</a> (po czesku).</p>
 
     <h3>2.5 Dane techniczne (wszyscy odwiedzający)</h3>
     <ul>
@@ -217,12 +220,15 @@ const meta = META[locale] ?? META.cs;
 
     <h2>5. Komu przekazujemy dane (podmioty przetwarzające)</h2>
     <ul>
-      <li><strong>Cloudflare, Inc.</strong> (USA) — hosting, CDN, anti-DDoS. Standardowe klauzule umowne (SCC) zgodnie z art. 46 RODO.</li>
-      <li><strong>Supabase, Inc.</strong> (USA, regiony UE) — baza danych i uwierzytelnianie. SCC.</li>
+      <li><strong>Cloudflare, Inc.</strong> (USA) — reverse proxy, CDN, anti-DDoS; przechodzą przez niego wszystkie żądania do serwisu. Standardowe klauzule umowne (SCC) zgodnie z art. 46 RODO.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Cypr) — serwer z serwisem i bazą danych (centrum danych we Frankfurcie nad Menem) oraz CDN obrazów <code>cdn.samecdigital.com</code>. Bazę danych i logowanie prowadzimy na własnym serwerze (open-source Supabase), nie w spółce Supabase, Inc.</li>
       <li><strong>Resend, Inc.</strong> (USA) — wysyłka e-maili transakcyjnych i newsletterowych. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irlandia) — Google Analytics 4 (identyfikator pomiaru G-HC3JY466RR), anonimowa statystyka odwiedzin. Ładuje się <strong>dopiero po Twojej zgodzie</strong>, z anonimizacją adresu IP. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irlandia) — Microsoft Clarity (identyfikator projektu ws6puxcjnb), anonimowe mapy ciepła i nagrania ruchu po stronie. Ładuje się <strong>dopiero po Twojej zgodzie</strong>. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
+      <li><strong>Ahrefs Pte. Ltd.</strong> (Singapur) — Ahrefs Web Analytics, anonimowa statystyka odwiedzin. Ładuje się <strong>dopiero po Twojej zgodzie</strong> na pomiar.</li>
+      <li><strong>Google Ireland Limited</strong> (Irlandia) — odtwarzacz YouTube (<code>youtube-nocookie.com</code>) przy filmach w katalogu maszyn i w encyklopedii. Ładuje się <strong>dopiero po kliknięciu</strong> w film; wcześniej nic nie jest pobierane z YouTube.</li>
     </ul>
+    <p>Na niektórych stronach Twoja przeglądarka łączy się bezpośrednio z innymi usługami, które otrzymują przy tym Twój adres IP: <strong>Open-Meteo</strong> (prognoza pogody dla Twojej lokalizacji — tylko gdy poprosisz o nią kliknięciem), <strong>jsDelivr</strong> i <strong>unpkg</strong> (biblioteki do wykresów i map), <strong>OpenStreetMap</strong> (podkłady mapowe w Agro giełdzie i przy gospodarstwach), <strong>esm.sh</strong> (logowanie do giełdy), <strong>Cloudflare Turnstile</strong> (ochrona formularzy przed botami) oraz <strong>Unsplash</strong> (obrazy w sekcji Media). Serwer korzysta ponadto z <strong>Nominatim / OpenStreetMap</strong> do zamiany lokalizacji ogłoszenia na współrzędne, z <strong>Fio banka</strong> do parowania płatności za wyróżnienie ogłoszenia oraz z usług <strong>OpenAI</strong> i <strong>Anthropic</strong> do maszynowego przetwarzania tekstu ogłoszeń, które redakcja przejmuje z innych serwisów ogłoszeniowych.</p>
     <p>Twoich danych osobowych nie sprzedajemy ani nie przekazujemy stronom trzecim w celach marketingowych.</p>
 
     <h2>6. Twoje prawa</h2>
@@ -250,19 +256,19 @@ const meta = META[locale] ?? META.cs;
       Jeżeli uważasz, że przetwarzając twoje dane osobowe naruszamy RODO, możesz wnieść skargę.
       Ponieważ operator ma siedzibę w Republice Czeskiej, wiodącym organem nadzorczym jest
       <strong>Urząd Ochrony Danych Osobowych (Úřad pro ochranu osobních údajů, Czechy)</strong>, Pplk. Sochora 27, 170 00 Praha 7,
-      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+      <a href="https://uoou.gov.cz/" rel="noopener">uoou.gov.cz</a>.
       Jako użytkownik z Polski możesz zwrócić się także do
       <strong>Prezesa Urzędu Ochrony Danych Osobowych (UODO)</strong>, ul. Stawki 2,
       00-193 Warszawa, <a href="https://uodo.gov.pl" rel="noopener">uodo.gov.pl</a>.
     </p>
 
     <h2>9. Pliki cookie</h2>
-    <p><strong>Technicznie niezbędne pliki cookie</strong> (logowanie, anti-fraud, zapis Twojego wyboru dotyczącego zgody) używane są zawsze — bez nich serwis nie działa.</p>
-    <p><strong>Analityczne pliki cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) i Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — ładują się <strong>wyłącznie za Twoją zgodą</strong>. Mierzą anonimową statystykę odwiedzin oraz sposób poruszania się po stronie; adres IP jest anonimizowany. Jeśli wybierzesz „Tylko niezbędne", nie zostanie wczytany żaden skrypt Google ani Microsoftu, a ich pliki cookie zostaną usunięte z przeglądarki.</p>
+    <p><strong>Technicznie niezbędne pliki cookie</strong> (logowanie, głosowanie w ankietach i w konkursie fotograficznym) używane są zawsze — bez nich serwis nie działa. Twój wybór dotyczący zgody serwis zapamiętuje w pamięci przeglądarki (<code>localStorage</code>), nie w pliku cookie.</p>
+    <p><strong>Analityczne pliki cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) i Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — ładują się <strong>wyłącznie za Twoją zgodą</strong>. Mierzą anonimową statystykę odwiedzin oraz sposób poruszania się po stronie; adres IP jest anonimizowany. Za Twoją zgodą ładuje się również Ahrefs Web Analytics (anonimowa statystyka odwiedzin). Jeśli wybierzesz „Tylko niezbędne", nie zostanie wczytany żaden skrypt pomiarowy (Google, Microsoft ani Ahrefs), a ich pliki cookie zostaną usunięte z przeglądarki.</p>
     <p>Nie używamy marketingowych ani reklamowych plików cookie stron trzecich.</p>
     <p>Zgodę możesz wycofać w dowolnym momencie linkiem <strong>Ustawienia plików cookie</strong> w stopce — wycofanie jest równie łatwe jak wyrażenie zgody (art. 7 ust. 3 RODO).</p>
 
-    <p class="effective"><strong>Data wejścia w życie:</strong> 22 sierpnia 2026</p>
+    <p class="effective"><strong>Data wejścia w życie:</strong> 14 października 2026</p>
     </Fragment>
   ) : isUk ? (
     <Fragment>
@@ -300,7 +306,7 @@ const meta = META[locale] ?? META.cs;
     </ul>
 
     <h3>2.4 Фотоконкурс</h3>
-    <p>Для фотоконкурсу діють окремі <a href="/fotosoutez/gdpr/">засади обробки</a>.</p>
+    <p>Для фотоконкурсу діють окремі <a href="/fotosoutez/gdpr/" hreflang="cs">засади обробки</a> (чеською).</p>
 
     <h3>2.5 Технічні дані (усі відвідувачі)</h3>
     <ul>
@@ -339,12 +345,15 @@ const meta = META[locale] ?? META.cs;
 
     <h2>5. Кому ми передаємо дані (обробники)</h2>
     <ul>
-      <li><strong>Cloudflare, Inc.</strong> (США) — хостинг, CDN, anti-DDoS. Стандартні договірні положення (SCC) відповідно до ст. 46 GDPR.</li>
-      <li><strong>Supabase, Inc.</strong> (США, регіони ЄС) — база даних та автентифікація. SCC.</li>
+      <li><strong>Cloudflare, Inc.</strong> (США) — зворотний проксі, CDN, anti-DDoS; через нього проходять усі запити до сайту. Стандартні договірні положення (SCC) відповідно до ст. 46 GDPR.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Кіпр) — сервер із сайтом і базою даних (дата-центр у Франкфурті-на-Майні) та CDN зображень <code>cdn.samecdigital.com</code>. Базу даних і вхід ми обслуговуємо на власному сервері (open-source Supabase), а не в компанії Supabase, Inc.</li>
       <li><strong>Resend, Inc.</strong> (США) — надсилання транзакційних і розсилкових e-mail. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Ірландія) — Google Analytics 4 (ідентифікатор вимірювання G-HC3JY466RR), анонімна статистика відвідувань. Завантажується <strong>лише після вашої згоди</strong>, з анонімізацією IP-адреси. Передавання до США на підставі EU–US Data Privacy Framework і SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Ірландія) — Microsoft Clarity (ідентифікатор проєкту ws6puxcjnb), анонімні теплові карти та записи руху сторінкою. Завантажується <strong>лише після вашої згоди</strong>. Передавання до США на підставі EU–US Data Privacy Framework і SCC.</li>
+      <li><strong>Ahrefs Pte. Ltd.</strong> (Сінгапур) — Ahrefs Web Analytics, анонімна статистика відвідуваності. Завантажується <strong>лише після вашої згоди</strong> на вимірювання.</li>
+      <li><strong>Google Ireland Limited</strong> (Ірландія) — програвач YouTube (<code>youtube-nocookie.com</code>) для відео в каталозі техніки та енциклопедії. Завантажується <strong>лише після кліку</strong> на відео; до того з YouTube нічого не завантажується.</li>
     </ul>
+    <p>На деяких сторінках ваш браузер підключається безпосередньо до інших сервісів, які при цьому отримують вашу IP-адресу: <strong>Open-Meteo</strong> (прогноз погоди для вашого місцезнаходження — лише коли ви попросите про нього кліком), <strong>jsDelivr</strong> і <strong>unpkg</strong> (бібліотеки для графіків і карт), <strong>OpenStreetMap</strong> (картографічна основа в Агро базарі та біля ферм), <strong>esm.sh</strong> (вхід до базару), <strong>Cloudflare Turnstile</strong> (захист форм від ботів) і <strong>Unsplash</strong> (зображення в розділі Медіа). Сервер також використовує <strong>Nominatim / OpenStreetMap</strong> для перетворення місця оголошення на координати, <strong>Fio banka</strong> для зіставлення платежів за виділення оголошення та сервіси <strong>OpenAI</strong> і <strong>Anthropic</strong> для машинної обробки тексту оголошень, які редакція переймає з інших сайтів оголошень.</p>
     <p>Ваші персональні дані ми не продаємо і не передаємо третім сторонам для маркетингових цілей.</p>
 
     <h2>6. Ваші права</h2>
@@ -372,17 +381,17 @@ const meta = META[locale] ?? META.cs;
       Якщо ви вважаєте, що обробкою ваших персональних даних ми порушуємо GDPR, ви можете подати скаргу.
       Оскільки оператор має осідок у Чеській Республіці, провідним наглядовим органом є
       <strong>Управління із захисту персональних даних (Úřad pro ochranu osobních údajů, Чехія)</strong>, Pplk. Sochora 27, 170 00 Praha 7,
-      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+      <a href="https://uoou.gov.cz/" rel="noopener">uoou.gov.cz</a>.
       Як користувач з іншої країни ЄС ви можете звернутися також до наглядового органу за місцем свого проживання.
     </p>
 
     <h2>9. Файли cookie</h2>
-    <p><strong>Технічно необхідні файли cookie</strong> (вхід, anti-fraud, збереження вашого вибору щодо згоди) використовуються завжди — без них сайт не працює.</p>
-    <p><strong>Аналітичні файли cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) і Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — завантажуються <strong>лише за вашої згоди</strong>. Вони вимірюють анонімну відвідуваність і те, як ви рухаєтесь сторінкою; IP-адреса анонімізується. Якщо ви оберете «Лише необхідні», не завантажиться жоден скрипт Google чи Microsoft, а їхні файли cookie буде видалено з браузера.</p>
+    <p><strong>Технічно необхідні файли cookie</strong> (вхід, голосування в опитуваннях і фотоконкурсі) використовуються завжди — без них сайт не працює. Ваш вибір щодо згоди сайт запам’ятовує в сховищі браузера (<code>localStorage</code>), а не у файлі cookie.</p>
+    <p><strong>Аналітичні файли cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) і Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — завантажуються <strong>лише за вашої згоди</strong>. Вони вимірюють анонімну відвідуваність і те, як ви рухаєтесь сторінкою; IP-адреса анонімізується. За вашої згоди завантажується також Ahrefs Web Analytics (анонімна статистика відвідуваності). Якщо ви оберете «Лише необхідні», не завантажиться жоден вимірювальний скрипт (Google, Microsoft чи Ahrefs), а їхні файли cookie буде видалено з браузера.</p>
     <p>Ми не використовуємо маркетингові чи рекламні файли cookie третіх сторін.</p>
     <p>Згоду можна відкликати будь-коли посиланням <strong>Налаштування cookie</strong> в підвалі — відкликання таке саме просте, як і надання (ст. 7 п. 3 GDPR).</p>
 
-    <p class="effective"><strong>Дата набрання чинності:</strong> 22 серпня 2026</p>
+    <p class="effective"><strong>Дата набрання чинності:</strong> 14 жовтня 2026</p>
     </Fragment>
   ) : isDe ? (
     <Fragment>
@@ -424,7 +433,7 @@ const meta = META[locale] ?? META.cs;
     </ul>
 
     <h3>2.4 Fotowettbewerb</h3>
-    <p>Für den Fotowettbewerb gelten gesonderte <a href="/fotosoutez/gdpr/">Verarbeitungsgrundsätze</a>.</p>
+    <p>Für den Fotowettbewerb gelten gesonderte <a href="/fotosoutez/gdpr/" hreflang="cs">Verarbeitungsgrundsätze</a> (auf Tschechisch).</p>
 
     <h3>2.5 Technische Daten (alle Besucher)</h3>
     <ul>
@@ -465,12 +474,15 @@ const meta = META[locale] ?? META.cs;
 
     <h2>5. An wen wir Daten weitergeben (Auftragsverarbeiter)</h2>
     <ul>
-      <li><strong>Cloudflare, Inc.</strong> (USA) — Hosting, CDN, Anti-DDoS. Standardvertragsklauseln (SCC) nach Art. 46 DSGVO.</li>
-      <li><strong>Supabase, Inc.</strong> (USA, EU-Regionen) — Datenbank und Authentifizierung. SCC.</li>
+      <li><strong>Cloudflare, Inc.</strong> (USA) — Reverse-Proxy, CDN, Anti-DDoS; alle Anfragen an die Website laufen darüber. Standardvertragsklauseln (SCC) nach Art. 46 DSGVO.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Zypern) — Server mit Website und Datenbank (Rechenzentrum in Frankfurt am Main) und Bild-CDN <code>cdn.samecdigital.com</code>. Datenbank und Anmeldung betreiben wir auf eigenem Server (Open-Source-Software Supabase), nicht bei der Supabase, Inc.</li>
       <li><strong>Resend, Inc.</strong> (USA) — Versand von Transaktions- und Newsletter-E-Mails. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irland) — Google Analytics 4 (Mess-ID G-HC3JY466RR), anonyme Besuchsstatistik. Wird <strong>erst nach Ihrer Einwilligung</strong> geladen, mit Anonymisierung der IP-Adresse. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irland) — Microsoft Clarity (Projekt-ID ws6puxcjnb), anonyme Heatmaps und Aufzeichnungen der Bewegung auf der Seite. Wird <strong>erst nach Ihrer Einwilligung</strong> geladen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
+      <li><strong>Ahrefs Pte. Ltd.</strong> (Singapur) — Ahrefs Web Analytics, anonyme Besuchsstatistik. Wird <strong>erst nach Ihrer Einwilligung</strong> in die Reichweitenmessung geladen.</li>
+      <li><strong>Google Ireland Limited</strong> (Irland) — YouTube-Player (<code>youtube-nocookie.com</code>) bei Videos im Maschinenkatalog und in der Enzyklopädie. Wird <strong>erst nach einem Klick</strong> auf das Video geladen; vorher wird nichts von YouTube abgerufen.</li>
     </ul>
+    <p>Auf einigen Seiten verbindet sich Ihr Browser direkt mit weiteren Diensten, die dabei Ihre IP-Adresse erhalten: <strong>Open-Meteo</strong> (Wettervorhersage für Ihren Standort — nur wenn Sie sie per Klick anfordern), <strong>jsDelivr</strong> und <strong>unpkg</strong> (Bibliotheken für Diagramme und Karten), <strong>OpenStreetMap</strong> (Kartenmaterial im Gebrauchtmarkt und bei den Betrieben), <strong>esm.sh</strong> (Anmeldung im Gebrauchtmarkt), <strong>Cloudflare Turnstile</strong> (Schutz von Formularen vor Bots) und <strong>Unsplash</strong> (Bilder im Bereich Medien). Diese Bereiche gibt es derzeit nur auf Tschechisch. Der Server nutzt außerdem <strong>Nominatim / OpenStreetMap</strong>, um den Ort eines Inserats in Koordinaten umzuwandeln, die <strong>Fio banka</strong> zum Abgleich von Zahlungen für hervorgehobene Inserate sowie <strong>OpenAI</strong> und <strong>Anthropic</strong> zur maschinellen Bearbeitung von Inseratstexten, die die Redaktion von anderen Kleinanzeigenportalen übernimmt.</p>
     <p>Wir verkaufen Ihre personenbezogenen Daten nicht und geben sie nicht zu Marketingzwecken an Dritte weiter.</p>
 
     <h2>6. Ihre Rechte</h2>
@@ -500,24 +512,24 @@ const meta = META[locale] ?? META.cs;
       Tschechischen Republik hat, ist federführende Aufsichtsbehörde das
       <strong>Amt für den Schutz personenbezogener Daten (Úřad pro ochranu osobních údajů,
       Tschechien)</strong>, Pplk. Sochora 27, 170 00 Praha 7,
-      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+      <a href="https://uoou.gov.cz/" rel="noopener">uoou.gov.cz</a>.
     </p>
     <p>
       Nach Art. 77 Abs. 1 DSGVO können Sie sich jedoch stets auch an die Aufsichtsbehörde Ihres
       gewöhnlichen Aufenthaltsorts wenden — in <strong>Deutschland</strong> an die
       Landesdatenschutzbeauftragte oder den Landesdatenschutzbeauftragten Ihres Bundeslandes
-      (Übersicht unter <a href="https://www.bfdi.bund.de" rel="noopener">bfdi.bund.de</a>), in
+      (Übersicht unter <a href="https://www.bfdi.bund.de/DE/Service/Anschriften/Laender/Laender-node.html" rel="noopener">bfdi.bund.de</a>), in
       <strong>Österreich</strong> an die <strong>Datenschutzbehörde</strong>, Barichgasse 40–42,
       1030 Wien, <a href="https://www.dsb.gv.at" rel="noopener">dsb.gv.at</a>.
     </p>
 
     <h2>9. Cookies</h2>
-    <p><strong>Technisch notwendige Cookies</strong> (Anmeldung, Betrugsprävention, Speicherung Ihrer Entscheidung zur Einwilligung) werden immer verwendet — ohne sie funktioniert die Website nicht.</p>
-    <p><strong>Analyse-Cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) und Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — werden <strong>ausschließlich mit Ihrer Einwilligung</strong> geladen. Sie messen eine anonyme Besuchsstatistik und die Art der Bewegung auf der Seite; die IP-Adresse wird anonymisiert. Wählen Sie „Nur notwendige", wird kein Skript von Google oder Microsoft geladen und deren Cookies werden aus dem Browser gelöscht.</p>
+    <p><strong>Technisch notwendige Cookies</strong> (Anmeldung, Abstimmungen in Umfragen und im Fotowettbewerb) werden immer verwendet — ohne sie funktioniert die Website nicht. Ihre Entscheidung zur Einwilligung speichert die Website im Browser-Speicher (<code>localStorage</code>), nicht in einem Cookie.</p>
+    <p><strong>Analyse-Cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) und Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — werden <strong>ausschließlich mit Ihrer Einwilligung</strong> geladen. Sie messen eine anonyme Besuchsstatistik und die Art der Bewegung auf der Seite; die IP-Adresse wird anonymisiert. Mit Ihrer Einwilligung wird außerdem Ahrefs Web Analytics (anonyme Besuchsstatistik) geladen. Wählen Sie „Nur notwendige", wird kein Messskript (Google, Microsoft oder Ahrefs) geladen und deren Cookies werden aus dem Browser gelöscht.</p>
     <p>Wir verwenden keine Marketing- oder Werbe-Cookies Dritter.</p>
     <p>Ihre Einwilligung können Sie jederzeit über den Link <strong>Cookie-Einstellungen</strong> in der Fußzeile widerrufen — der Widerruf ist ebenso einfach wie die Erteilung (Art. 7 Abs. 3 DSGVO).</p>
 
-    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 30. August 2026</p>
+    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 14. Oktober 2026</p>
     </Fragment>
   ) : (
     <Fragment>
@@ -594,12 +606,15 @@ const meta = META[locale] ?? META.cs;
 
     <h2>5. Komu údaje předáváme (zpracovatelé)</h2>
     <ul>
-      <li><strong>Cloudflare, Inc.</strong> (USA) — hosting, CDN, anti-DDoS. Standardní smluvní doložky (SCC) podle čl. 46 GDPR.</li>
-      <li><strong>Supabase, Inc.</strong> (USA, EU regiony) — databáze a autentizace. SCC.</li>
+      <li><strong>Cloudflare, Inc.</strong> (USA) — reverzní proxy, CDN, anti-DDoS; procházejí jím všechny požadavky na web. Standardní smluvní doložky (SCC) podle čl. 46 GDPR.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Kypr) — server s webem a databází (datové centrum ve Frankfurtu nad Mohanem) a CDN obrázků <code>cdn.samecdigital.com</code>. Databázi a přihlašování provozujeme na vlastním serveru (open-source Supabase), ne u společnosti Supabase, Inc.</li>
       <li><strong>Resend, Inc.</strong> (USA) — odesílání transakčních a newsletter e-mailů. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irsko) — Google Analytics 4 (měřicí ID G-HC3JY466RR), anonymní návštěvnost. Načte se <strong>až po vašem souhlasu</strong>, s anonymizací IP adresy. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irsko) — Microsoft Clarity (ID projektu ws6puxcjnb), anonymní heatmapy a záznamy pohybu po stránce. Načte se <strong>až po vašem souhlasu</strong>. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
+      <li><strong>Ahrefs Pte. Ltd.</strong> (Singapur) — Ahrefs Web Analytics, anonymní statistika návštěvnosti. Načte se <strong>až po vašem souhlasu</strong> s měřením.</li>
+      <li><strong>Google Ireland Limited</strong> (Irsko) — přehrávač YouTube (<code>youtube-nocookie.com</code>) u videí v katalogu techniky a v encyklopedii. Načte se <strong>až po kliknutí</strong> na video, do té doby se z YouTube nenačítá nic.</li>
     </ul>
+    <p>Na některých stránkách se váš prohlížeč připojuje přímo k dalším službám, které tím dostanou vaši IP adresu: <strong>Open-Meteo</strong> (předpověď počasí podle vaší polohy — jen když o ni kliknutím požádáte), <strong>jsDelivr</strong> a <strong>unpkg</strong> (knihovny pro grafy a mapy), <strong>OpenStreetMap</strong> (mapové podklady v bazaru a u farem), <strong>esm.sh</strong> (přihlášení do bazaru), <strong>Cloudflare Turnstile</strong> (ochrana formulářů před roboty) a <strong>Unsplash</strong> (obrázky v sekci Média). Server navíc používá <strong>Nominatim / OpenStreetMap</strong> k převodu lokality inzerátu na souřadnice, <strong>Fio banku</strong> k párování plateb za zvýhodnění inzerátu a služby <strong>OpenAI</strong> a <strong>Anthropic</strong> ke strojovému zpracování textu inzerátů, které redakce převezme z jiných inzertních serverů.</p>
     <p>Vaše osobní údaje neprodáváme ani nepředáváme třetím stranám pro marketingové účely.</p>
 
     <h2>6. Vaše práva</h2>
@@ -626,16 +641,16 @@ const meta = META[locale] ?? META.cs;
     <p>
       Pokud se domníváte, že zpracováním vašich osobních údajů porušujeme GDPR, můžete podat stížnost u
       <strong>Úřadu pro ochranu osobních údajů</strong>, Pplk. Sochora 27, 170 00 Praha 7,
-      <a href="https://www.uoou.cz" rel="noopener">www.uoou.cz</a>.
+      <a href="https://uoou.gov.cz/" rel="noopener">uoou.gov.cz</a>.
     </p>
 
     <h2>9. Cookies</h2>
-    <p><strong>Technicky nezbytné cookies</strong> (přihlašování, anti-fraud, uložení vaší volby o souhlasu) se používají vždy — bez nich web nefunguje.</p>
-    <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — se načtou <strong>jen s vaším souhlasem</strong>. Měří anonymní návštěvnost a to, jak se po stránce pohybujete; IP adresa se anonymizuje. Pokud zvolíte „Pouze nezbytné", nenačte se žádný skript Google ani Microsoftu a jejich cookies se z prohlížeče smažou.</p>
+    <p><strong>Technicky nezbytné cookies</strong> (přihlášení, hlasování v anketách a ve fotosoutěži) se používají vždy — bez nich web nefunguje. Vaši volbu o souhlasu si web pamatuje v úložišti prohlížeče (<code>localStorage</code>), ne v cookie.</p>
+    <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — se načtou <strong>jen s vaším souhlasem</strong>. Měří anonymní návštěvnost a to, jak se po stránce pohybujete; IP adresa se anonymizuje. Se souhlasem se načte také Ahrefs Web Analytics (anonymní statistika návštěvnosti). Pokud zvolíte „Pouze nezbytné", nenačte se žádný měřicí skript (Google, Microsoft ani Ahrefs) a jejich cookies se z prohlížeče smažou.</p>
     <p>Nepoužíváme marketingové ani reklamní cookies třetích stran.</p>
     <p>Souhlas můžete kdykoli odvolat odkazem <strong>Nastavení cookies</strong> v patičce — odvolání je stejně snadné jako udělení (čl. 7 odst. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnost:</strong> 22. srpna 2026</p>
+    <p class="effective"><strong>Účinnost:</strong> 14. října 2026</p>
     </Fragment>
   )}
   </main>
