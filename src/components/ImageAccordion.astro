@@ -3,7 +3,8 @@
 // a „Přejít na sekci" pod německou hlavičkou, přesně past HomeDe/HomeUk.
 // Teď label z t(), href přes localizeInternalHref (pod nelaunchnutým locale
 // tedy zůstane cs cesta, ne mrtvý odkaz).
-import { getLocaleFromUrl, localizeInternalHref, t } from '../i18n/utils';
+import { getLocaleFromUrl, localizeInternalHref, t, isLaunchedPath } from '../i18n/utils';
+import { isWithdrawnPath } from '../i18n/config';
 import PhotoCredits from './PhotoCredits.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -19,12 +20,17 @@ const items: { label: string; href: string; img?: string; map?: boolean }[] = [
     href: localizeInternalHref(locale, '/plemena/'),
     img: '/images/telata.webp',
   },
-  {
+];
+// Panel s mapou jen tam, kde /svet v té mutaci existuje. Pod de je /svet stažený
+// (licence geometrií, WITHDRAWN_SECTIONS) — náhled by vedl na českou mapu a sám
+// kreslí hranice, jejichž licenci řešíme.
+if (locale === 'cs' || (isLaunchedPath(locale, '/svet') && !isWithdrawnPath(locale, '/svet'))) {
+  items.push({
     label: t(locale, 'nav.svet.map'),
     href: localizeInternalHref(locale, '/svet/mapa/'),
     map: true,
-  },
-];
+  });
+}
 
 const ctaLabel = t(locale, 'ia.cta');
 const previewHint = t(locale, 'ia.preview');

@@ -230,3 +230,10 @@ describe('sekce stažené z de kvůli licenci dat (2026-10-15)', () => {
     }
   });
 });
+
+describe('homepage /de neukazuje mapu Evropy (stažený /svet)', () => {
+  it('ImageAccordion přidává mapu jen tam, kde /svet existuje a není stažený', () => {
+    const ia = read('src/components/ImageAccordion.astro');
+    expect(ia).toMatch(/if \(locale === 'cs' \|\| \(isLaunchedPath\(locale, '\/svet'\) && !isWithdrawnPath\(locale, '\/svet'\)\)\) \{\n\s*items\.push\(\{/);
+  });
+});
