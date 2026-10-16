@@ -29,12 +29,12 @@ export function isRetiredLocale(value: string): boolean {
  *  Samotné vyřazení z LAUNCHED_PREFIXES nestačí: nelaunchnutá cesta se dál
  *  vykreslí (noindex), takže data by byla pořád veřejně vidět.
  *  2026-10-15 (audit licencí, ~/agro-svet/foto-audit/de/rizika/B-licence-dat.md):
- *  /akcie — kurzy z neoficiálního Yahoo Finance, fundamenty z Finnhubu; podmínky
- *           obou zakazují komerční použití a redistribuci.
  *  /svet  — hranice NUTS z GISCO („not for commercial purposes“) a mapa Evropy
- *           z historical-basemaps (GPL-3.0, nejasný původ). */
+ *           z historical-basemaps (GPL-3.0, nejasný původ).
+ *  (/akcie tu bylo 2026-10-15 až 16 kvůli kurzům z Yahoo/Finnhubu; ty jsou pryč
+ *  ve všech jazycích a sekce se vrátila.) */
 export const WITHDRAWN_SECTIONS: Partial<Record<Locale, readonly string[]>> = {
-  de: ['/akcie', '/svet'],
+  de: ['/svet'],
 };
 
 export function isWithdrawnPath(locale: Locale, csPath: string): boolean {

@@ -210,14 +210,14 @@ describe('právní texty po rešerši 2026-10-15', () => {
 });
 
 describe('sekce stažené z de kvůli licenci dat (2026-10-15)', () => {
-  it('/akcie a /svet nejsou launchnuté a vracejí 410, ostatní mutace beze změny', () => {
-    for (const p of ['/akcie', '/akcie/', '/akcie/DE/', '/svet', '/svet/nemecko/', '/svet/mapa/']) {
+  it('/svet je pod de stažený (410); /akcie se vrátilo bez kurzů', () => {
+    for (const p of ['/svet', '/svet/nemecko/', '/svet/mapa/']) {
       expect(isWithdrawnPath('de', p), p).toBe(true);
     }
     expect(isWithdrawnPath('de', '/svetlo')).toBe(false);
     expect(isWithdrawnPath('de', '/stroje/')).toBe(false);
-    expect(isWithdrawnPath('pl', '/akcie/DE/')).toBe(false);
-    expect(isLaunchedPath('de', '/akcie')).toBe(false);
+    expect(isWithdrawnPath('de', '/akcie/DE/')).toBe(false);
+    expect(isLaunchedPath('de', '/akcie')).toBe(true);
     expect(isLaunchedPath('de', '/svet')).toBe(false);
     const mw = read('src/middleware.ts');
     expect(mw).toMatch(/if \(isWithdrawnPath\(locale, strippedPath\)\) \{\n\s*return new Response\(WITHDRAWN_SECTION_BODY, \{\n\s*status: 410/);
@@ -246,5 +246,18 @@ describe('označení AI textů (AI Act čl. 50 odst. 4)', () => {
       expect(src, l).toMatch(/'ai\.notice': '[^']{20,}'/);
       expect(src, l).toMatch(/'ai\.noticeLink': '[^']+'/);
     }
+  });
+});
+
+describe('akcie bez kurzů (Yahoo/Finnhub zakazují komerční použití)', () => {
+  it('žádná stránka ani API nebere kurzy z Yahoo ani data z Finnhubu', () => {
+    for (const f of ['src/pages/akcie/index.astro', 'src/pages/akcie/[ticker]/index.astro']) {
+      const s = read(f);
+      expect(s, f).not.toMatch(/api\/akcie|query1\.finance\.yahoo|finnhub\.io/);
+    }
+    for (const f of ['src/pages/api/akcie/kurzy.json.ts', 'src/pages/api/akcie/sparkliny.json.ts', 'src/pages/api/akcie/[ticker].json.ts', 'src/lib/yahoo-finance.ts']) {
+      expect(fs.existsSync(path.join(process.cwd(), f)), f).toBe(false);
+    }
+    expect(read('src/i18n/akcie.ts')).not.toMatch(/Yahoo|Finnhub|Živé denní kurzy|Tagesaktuelle Kurse/);
   });
 });

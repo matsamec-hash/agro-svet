@@ -189,10 +189,11 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // /akcie — kurzy akcií agro firem. Faktická data (ticker, burza, měna) jsou
     // jazykově neutrální, kurátorské texty má de overlay akcie-agro-de.ts
     // (16/16 tickerů). Žádná jurisdikce — jsou to světové firmy.
-    // ‼️ 2026-10-15 STAŽENO z de: kurzy jdou z neoficiálního endpointu Yahoo
-    // Finance a fundamenty z Finnhubu — podmínky obou zakazují komerční použití
-    // a redistribuci (audit licencí, ~/agro-svet/foto-audit/de/rizika/B-licence-dat.md).
-    // Vrátit až s licencovaným zdrojem kurzů.
+    // ‼️ 2026-10-15 staženo (kurzy z Yahoo Finance a fundamenty z Finnhubu —
+    // podmínky obou zakazují komerční použití a redistribuci). 2026-10-16 kurzy
+    // i fundamenty odstraněné ve všech jazycích, sekce nese jen vlastní profily
+    // firem → vráceno.
+    '/akcie',
     // /plodiny — de YAML overlay (18 plodin v src/data/plodiny/de/). Překládá se
     // JEN próza; slug, skupina, hero_*, seti_mesice/sklizen_mesice a wikipedia
     // zůstávají z cs, protože jsou to klíče (mapování, obrázky, kalendář).

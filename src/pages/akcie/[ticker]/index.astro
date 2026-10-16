@@ -3,6 +3,8 @@
 // který prerendered routy nepokrývá. Proto žádné getStaticPaths — ticker se
 // hledá z Astro.params a neznámý vrací 404.
 export const prerender = false;
+// 2026-10-16: kurz, 52týdenní rozpětí a graf (Yahoo Finance) i fundamenty
+// (Finnhub) pryč — podmínky obou zakazují komerční použití a redistribuci.
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
@@ -10,6 +12,7 @@ import { AKCIE } from '../../../data/akcie-agro';
 import { akcieText } from '../../../data/akcie-agro-pl';
 import { akcieCopy } from '../../../i18n/akcie';
 import { localizeInternalHref } from '../../../i18n/utils';
+import { isWithdrawnPath } from '../../../i18n/config';
 import { AKCIE_DB_ZNACKY, ZNACKA_LABEL, ZNACKA_LOGO, svetSlugProVlajku } from '../../../lib/agro-integrace';
 import PhotoCredits from '../../../components/PhotoCredits.astro';
 
@@ -26,7 +29,8 @@ const canonical = `${SITE_URL}/akcie/${a.ticker}/`;
 const href = (p: string) => localizeInternalHref(locale, p);
 
 const znacky = AKCIE_DB_ZNACKY[a.ticker] ?? [];
-const svetSlug = svetSlugProVlajku(a.zeme);
+// /svet je pod de stažený (licence geometrií map) — odkaz by vedl na 410.
+const svetSlug = isWithdrawnPath(locale, '/svet') ? null : svetSlugProVlajku(a.zeme);
 const kratkyNazev = a.nazev.split(' (')[0];
 // „Zastoupení v ČR“ je informace o českém trhu — pod /pl by to byla rada mimo
 // zemi čtenáře (Polsko má vlastní distributory), tak se mimo cs neukazuje.
@@ -62,7 +66,7 @@ const orgJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
 
-  <main class="ad" data-ticker={a.ticker} data-mena={a.mena} data-numlocale={c.numberLocale} data-bln={c.bln} data-chartaria={c.chartAria} data-periodsuffix={c.chartPeriodSuffix}>
+  <main class="ad">
     <section class="ad-hero">
       <div class="ad-lines"></div>
       <div class="ad-wrap ad-hero-in">
@@ -75,10 +79,6 @@ const orgJsonLd = {
             <h1>{kratkyNazev}</h1>
             <div class="ad-sub"><span class="ad-ticker">{a.ticker}</span> <span class="ad-burza">{a.burza} · {a.mena}</span></div>
           </div>
-          <div class="ad-quote" id="adQuote">
-            <div class="ad-price" id="adPrice">—</div>
-            <div class="ad-chg" id="adChg"></div>
-          </div>
         </div>
       </div>
     </section>
@@ -88,40 +88,6 @@ const orgJsonLd = {
       <div class="ad-disclaimer">
         <strong>{c.detailDisclaimerStrong}</strong> {c.detailDisclaimerText}
       </div>
-
-      <!-- FUNDAMENT -->
-      <section class="ad-block">
-        <h2>{c.metricsTitle}</h2>
-        <div class="ad-metrics" id="adMetrics">
-          <div class="ad-metric"><span class="l">{c.mCap}</span><b id="mCap">—</b></div>
-          <div class="ad-metric"><span class="l">{c.mPe}</span><b id="mPe">—</b></div>
-          <div class="ad-metric"><span class="l">{c.mDiv}</span><b id="mDiv">—</b></div>
-          <div class="ad-metric"><span class="l">{c.mInd}</span><b id="mInd">—</b></div>
-        </div>
-        <div class="ad-range" id="adRange" hidden>
-          <div class="ad-range-head"><span>{c.range52}</span><span id="rVals"></span></div>
-          <div class="ad-range-bar"><span class="ad-range-fill" id="rFill"></span><span class="ad-range-dot" id="rDot"></span></div>
-        </div>
-      </section>
-
-      <!-- GRAF KURZU -->
-      <section class="ad-block ad-chart-block" id="adChartBlock" hidden>
-        <div class="ad-chart-head">
-          <h2>{c.chartTitle}</h2>
-          <div class="ad-chart-ranges" id="adChartRanges" role="group" aria-label={c.chartRangesAria}>
-            <button type="button" data-r="21">1M</button>
-            <button type="button" data-r="126">6M</button>
-            <button type="button" data-r="0" class="active">1R</button>
-          </div>
-        </div>
-        <div class="ad-chart" id="adChart">
-          <span class="ad-chart-cross" id="adCross"></span>
-          <span class="ad-chart-dot" id="adDot"></span>
-          <div class="ad-chart-tip" id="adChartTip" hidden></div>
-          <span class="ad-chart-empty" id="adChartEmpty">{c.chartLoading}</span>
-        </div>
-        <div class="ad-chart-foot"><span id="adChartMeta"></span><span>{c.chartSource}</span></div>
-      </section>
 
       <!-- PROFIL -->
       {a.popis && (
@@ -190,127 +156,6 @@ const orgJsonLd = {
     </div></div>
   </main>
 
-  <script is:inline>
-    (function () {
-      var root = document.querySelector('.ad[data-ticker]');
-      if (!root) return;
-      var t = root.getAttribute('data-ticker');
-      var mena = root.getAttribute('data-mena') || 'USD';
-      var NUM = root.getAttribute('data-numlocale') || 'cs-CZ';
-      var BLN = root.getAttribute('data-bln') || 'mld.';
-      var CHART_ARIA = root.getAttribute('data-chartaria') || '';
-      var PERIOD_SUFFIX = root.getAttribute('data-periodsuffix') || '';
-      function fmt(n, d) { return Number(n).toLocaleString(NUM, { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
-      fetch('/api/akcie/' + encodeURIComponent(t) + '.json/', { headers: { accept: 'application/json' } })
-        .then(function (r) { return r.json(); })
-        .then(function (res) {
-          if (!res || !res.ok) return;
-          if (res.kurz && typeof res.kurz.cena === 'number') {
-            document.getElementById('adPrice').textContent = fmt(res.kurz.cena, 2) + ' ' + mena;
-            var dp = res.kurz.zmenaPct;
-            if (typeof dp === 'number') {
-              var el = document.getElementById('adChg');
-              el.textContent = (dp >= 0 ? '▲ ' : '▼ ') + Math.abs(dp).toFixed(2) + ' %';
-              el.className = 'ad-chg ' + (dp >= 0 ? 'up' : 'dn');
-            }
-          }
-          var p = res.profil || {}, m = res.metriky || {};
-          if (p.marketCap) document.getElementById('mCap').textContent = '≈ ' + fmt(p.marketCap / 1000, 1) + ' ' + BLN + ' ' + (p.mena || 'USD');
-          if (m.pe) document.getElementById('mPe').textContent = fmt(m.pe, 1);
-          if (m.dividendYield) document.getElementById('mDiv').textContent = fmt(m.dividendYield, 2) + ' %';
-          if (p.odvetvi) document.getElementById('mInd').textContent = p.odvetvi;
-          if (m.high52 && m.low52 && res.kurz && res.kurz.cena) {
-            var lo = m.low52, hi = m.high52, cur = res.kurz.cena;
-            var pos = Math.max(0, Math.min(100, ((cur - lo) / (hi - lo)) * 100));
-            document.getElementById('rVals').textContent = fmt(lo, 2) + ' – ' + fmt(hi, 2) + ' ' + mena;
-            document.getElementById('rFill').style.width = pos + '%';
-            document.getElementById('rDot').style.left = pos + '%';
-            document.getElementById('adRange').hidden = false;
-          }
-          initChart(res.historie);
-        })
-        .catch(function () {});
-
-      // ── Interaktivní graf kurzu (Yahoo historie) ──
-      function initChart(hist) {
-        var block = document.getElementById('adChartBlock');
-        var chartEl = document.getElementById('adChart');
-        if (!block || !chartEl) return;
-        if (!hist || !hist.c || hist.c.length < 2) { block.hidden = true; return; }
-        block.hidden = false;
-        var empty = document.getElementById('adChartEmpty');
-        var cross = document.getElementById('adCross');
-        var dot = document.getElementById('adDot');
-        var tip = document.getElementById('adChartTip');
-        var meta = document.getElementById('adChartMeta');
-        var fullT = hist.t, fullC = hist.c;
-        var W = 800, H = 240, padX = 6, padTop = 12, padBot = 20;
-        var st = null;
-
-        function draw(n) {
-          var c = (!n || n >= fullC.length) ? fullC : fullC.slice(-n);
-          var t = (!n || n >= fullT.length) ? fullT : fullT.slice(-n);
-          var min = Math.min.apply(null, c), max = Math.max.apply(null, c);
-          var span = (max - min) || 1;
-          var X = function (i) { return padX + (i / (c.length - 1)) * (W - 2 * padX); };
-          var Y = function (v) { return padTop + (1 - (v - min) / span) * (H - padTop - padBot); };
-          var line = '';
-          for (var i = 0; i < c.length; i++) line += (i === 0 ? 'M' : 'L') + X(i).toFixed(1) + ',' + Y(c[i]).toFixed(1) + ' ';
-          var area = line + 'L' + X(c.length - 1).toFixed(1) + ',' + (H - padBot) + ' L' + X(0).toFixed(1) + ',' + (H - padBot) + ' Z';
-          var up = c[c.length - 1] >= c[0];
-          var stroke = up ? '#2E9E57' : '#C0392B';
-          var fill = up ? 'rgba(46,158,87,.10)' : 'rgba(192,57,43,.10)';
-          var old = chartEl.querySelector('svg'); if (old) old.remove();
-          chartEl.insertAdjacentHTML('afterbegin',
-            '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="' + CHART_ARIA + '" style="display:block;width:100%;height:100%">' +
-            '<path d="' + area + '" fill="' + fill + '"/>' +
-            '<path d="' + line + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>');
-          if (empty) empty.hidden = true;
-          dot.style.background = stroke;
-          st = { t: t, c: c, X: X, Y: Y };
-          var chg = ((c[c.length - 1] - c[0]) / c[0]) * 100;
-          if (meta) meta.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(1) + PERIOD_SUFFIX;
-        }
-
-        function move(ev) {
-          if (!st) return;
-          var rect = chartEl.getBoundingClientRect();
-          var cx = ev.touches ? ev.touches[0].clientX : ev.clientX;
-          var frac = Math.max(0, Math.min(1, (cx - rect.left) / rect.width));
-          var idx = Math.round(frac * (st.c.length - 1));
-          var pxX = (st.X(idx) / W) * rect.width;
-          var pxY = (st.Y(st.c[idx]) / H) * rect.height;
-          cross.style.left = pxX + 'px'; cross.style.opacity = '1';
-          dot.style.left = pxX + 'px'; dot.style.top = pxY + 'px'; dot.style.opacity = '1';
-          var d = new Date(st.t[idx] * 1000);
-          var ds = d.toLocaleDateString(NUM, { day: 'numeric', month: 'short', year: 'numeric' });
-          tip.innerHTML = '<b>' + fmt(st.c[idx], 2) + ' ' + mena + '</b><span>' + ds + '</span>';
-          tip.hidden = false;
-          var tw = tip.offsetWidth;
-          tip.style.left = Math.max(4, Math.min(rect.width - tw - 4, pxX - tw / 2)) + 'px';
-        }
-        function leave() { cross.style.opacity = '0'; dot.style.opacity = '0'; tip.hidden = true; }
-
-        chartEl.addEventListener('mousemove', move);
-        chartEl.addEventListener('mouseleave', leave);
-        chartEl.addEventListener('touchstart', move, { passive: true });
-        chartEl.addEventListener('touchmove', move, { passive: true });
-
-        var ranges = document.getElementById('adChartRanges');
-        if (ranges) ranges.addEventListener('click', function (e) {
-          var btn = e.target.closest ? e.target.closest('button') : null;
-          if (!btn) return;
-          var bs = ranges.querySelectorAll('button');
-          for (var i = 0; i < bs.length; i++) bs[i].classList.remove('active');
-          btn.classList.add('active');
-          leave();
-          draw(parseInt(btn.getAttribute('data-r'), 10) || 0);
-        });
-
-        draw(0);
-      }
-    })();
-  </script>
   {/* Loga značek: většina je PD (text a jednoduché tvary), ale Bednar
       a Joskin jsou CC BY-SA 4.0 a atribuce k nim patří všude, kde se
       ukážou. Blok se vykreslí jen tehdy, když ho něco opravdu vyžaduje. */}
@@ -335,10 +180,6 @@ const orgJsonLd = {
   .ad-sub { display:flex; align-items:center; gap:10px; }
   .ad-ticker { font-size:13px; font-weight:800; color:var(--ink); background:var(--yellow); border-radius:5px; padding:3px 9px; }
   .ad-burza { font-size:13px; color:rgba(255,255,255,.7); }
-  .ad-quote { text-align:right; }
-  .ad-price { font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; }
-  .ad-chg { font-size:14px; font-weight:800; font-variant-numeric:tabular-nums; }
-  .ad-chg.up { color:#7CE0A0; } .ad-chg.dn { color:#FF9B84; }
 
   .ad-body { padding:32px 0 80px; }
   .ad-disclaimer { font-size:13px; line-height:1.6; color:#5a4a00; background:#fffbe6; border:1px solid #ffe66b; border-left:4px solid var(--yellow); border-radius:10px; padding:12px 14px; margin-bottom:30px; }
@@ -347,30 +188,7 @@ const orgJsonLd = {
   .ad-block h2 { font-size:19px; font-weight:800; letter-spacing:-.01em; margin:0 0 14px; padding-bottom:8px; border-bottom:2px solid var(--ink); }
   .ad-text { font-size:15.5px; line-height:1.7; color:#333; margin:0 0 16px; }
 
-  .ad-metrics { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
-  .ad-metric { background:var(--soft); border-radius:10px; padding:12px 14px; }
-  .ad-metric .l { display:block; font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
-  .ad-metric b { font-size:17px; font-variant-numeric:tabular-nums; }
-  .ad-range { margin-top:16px; }
-  .ad-range-head { display:flex; justify-content:space-between; font-size:12.5px; color:var(--muted); margin-bottom:6px; font-variant-numeric:tabular-nums; }
-  .ad-range-bar { position:relative; height:8px; background:var(--soft); border-radius:5px; }
-  .ad-range-fill { position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg,#fff2a8,#ffe11f); border-radius:5px; }
-  .ad-range-dot { position:absolute; top:50%; width:14px; height:14px; border-radius:50%; background:var(--ink); border:2px solid var(--yellow); transform:translate(-50%,-50%); }
 
-  .ad-chart-block h2 { border:none; padding-bottom:0; margin:0; }
-  .ad-chart-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
-  .ad-chart-ranges { display:flex; gap:4px; }
-  .ad-chart-ranges button { font:700 12px 'Chakra Petch',sans-serif; padding:4px 11px; border:1.5px solid var(--line); background:#fff; color:var(--muted); border-radius:6px; cursor:pointer; }
-  .ad-chart-ranges button.active { background:var(--ink); color:#fff; border-color:var(--ink); }
-  .ad-chart { position:relative; width:100%; height:230px; border:1.5px solid var(--line); border-radius:12px; background:var(--soft); overflow:hidden; touch-action:none; }
-  .ad-chart svg { display:block; width:100%; height:100%; }
-  .ad-chart-empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--muted); }
-  .ad-chart-cross { position:absolute; top:0; bottom:0; width:1px; background:rgba(10,10,11,.3); opacity:0; pointer-events:none; transition:opacity .1s; }
-  .ad-chart-dot { position:absolute; width:11px; height:11px; border-radius:50%; background:var(--ink); border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.35); transform:translate(-50%,-50%); opacity:0; pointer-events:none; }
-  .ad-chart-tip { position:absolute; top:8px; background:var(--ink); color:#fff; font-size:12px; line-height:1.35; padding:5px 9px; border-radius:7px; pointer-events:none; white-space:nowrap; z-index:2; box-shadow:0 4px 12px rgba(0,0,0,.25); }
-  .ad-chart-tip b { display:block; font-variant-numeric:tabular-nums; }
-  .ad-chart-tip span { font-size:11px; opacity:.7; }
-  .ad-chart-foot { display:flex; justify-content:space-between; gap:12px; font-size:11.5px; color:var(--muted); margin-top:8px; flex-wrap:wrap; }
 
   .ad-facts { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
   .ad-fact { border:1.5px solid var(--line); border-radius:10px; padding:11px 14px; }
@@ -390,5 +208,5 @@ const orgJsonLd = {
   .ad-cross { font-size:15px; line-height:1.95; }
   .ad-cross a { color:var(--green); text-decoration:underline; }
 
-  @media (max-width:560px) { .ad-head { align-items:flex-start; } .ad-quote { text-align:left; } }
+  @media (max-width:560px) { .ad-head { align-items:flex-start; } }
 </style>

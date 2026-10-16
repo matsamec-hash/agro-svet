@@ -11,10 +11,6 @@
 import type { Locale } from './config';
 
 export interface AkcieCopy {
-  /** Formátování čísel (kurz, kapitalizace) — cs-CZ používá jinou mezeru než pl-PL. */
-  numberLocale: string;
-  /** Zkratka miliardy v „≈ 51 mld. USD" (cs „mld.“ vs pl „mld“). */
-  bln: string;
 
   // ── společné (hub i detail) ──
   crumbAria: string;
@@ -49,20 +45,6 @@ export interface AkcieCopy {
   detailDescriptionTpl: string;
   detailDisclaimerStrong: string;
   detailDisclaimerText: string;
-  metricsTitle: string;
-  mCap: string;
-  mPe: string;
-  mDiv: string;
-  mInd: string;
-  range52: string;
-  chartTitle: string;
-  chartRangesAria: string;
-  chartLoading: string;
-  chartSource: string;
-  /** aria-label SVG grafu. */
-  chartAria: string;
-  /** Přípona za procentem: „+3,4 % za období“. */
-  chartPeriodSuffix: string;
   profileTitle: string;
   factHq: string;
   factFounded: string;
@@ -87,8 +69,6 @@ export interface AkcieCopy {
 }
 
 const cs: AkcieCopy = {
-  numberLocale: 'cs-CZ',
-  bln: 'mld.',
 
   crumbAria: 'Cesta',
   crumbHome: 'Domů',
@@ -103,17 +83,17 @@ const cs: AkcieCopy = {
   h1: 'Akcie zemědělských firem',
   h1mark: 'na burze',
   lede:
-    'Kdo stojí za technikou, osivy a hnojivy na vašich polích — a jak si vedou na burze. Přehled veřejně obchodovaných firem z agrosektoru: výrobci strojů, agrochemie i zpracovatelé komodit, z USA i Evropy.',
+    'Kdo stojí za technikou, osivy a hnojivy na vašich polích. Přehled veřejně obchodovaných firem z agrosektoru: výrobci strojů, agrochemie i zpracovatelé komodit, z USA i Evropy.',
   disclaimerStrong: '⚠️ Není investiční doporučení.',
   disclaimerText:
-    'Tato stránka je informační přehled firem navázaných na zemědělství. Neobsahuje nákupní ani prodejní doporučení. Investice do akcií jsou rizikové; před rozhodnutím se poraďte s licencovaným poradcem. Případné kurzy jsou orientační a zpožděné.',
+    'Tato stránka je informační přehled firem navázaných na zemědělství. Neobsahuje nákupní ani prodejní doporučení. Investice do akcií jsou rizikové; před rozhodnutím se poraďte s licencovaným poradcem.',
   kategorie: {
     technika: 'Zemědělská technika',
     agrochemie: 'Agrochemie, osiva a hnojiva',
     komodity: 'Komodity a zpracování',
   },
   hubNote:
-    '📈 <strong>Živé denní kurzy</strong> a 3měsíční trendy u každé firmy; klikněte na kartu pro <strong>interaktivní graf</strong> vývoje kurzu a klíčové ukazatele.',
+    'Kurzy akcií tu neuvádíme — aktuální najdete na stránkách burzy nebo u svého brokera. Kliknutím na kartu otevřete profil firmy, její značky a milníky.',
   hubCrossSales: 'Prodeje zemědělské techniky',
   hubCrossSalesNote: 'kolik strojů se prodá po zemích',
   hubCrossCountries: 'Profily zemí',
@@ -121,24 +101,12 @@ const cs: AkcieCopy = {
   hubCrossPrices: 'Ceny zemědělských komodit',
   hubCrossData: 'Datová sekce agro-svět',
 
-  detailTitleTpl: '{name} ({ticker}) — akcie, kurz a profil firmy | agro-svět',
+  detailTitleTpl: '{name} ({ticker}) — profil firmy a akcie | agro-svět',
   detailDescriptionTpl:
-    '{name}: kurz akcie, tržní kapitalizace, sídlo, ředitel, obrat a co firma dělá v zemědělství. {profil}',
+    '{name}: sídlo, ředitel, obrat, burzovní symbol a co firma dělá v zemědělství. {profil}',
   detailDisclaimerStrong: '⚠️ Není investiční doporučení.',
   detailDisclaimerText:
-    'Informační profil firmy. Kurz a ukazatele jsou orientační a zpožděné (fundamenty Finnhub, graf kurzu Yahoo Finance). Investice do akcií jsou rizikové.',
-  metricsTitle: 'Klíčové ukazatele',
-  mCap: 'Tržní kapitalizace',
-  mPe: 'P/E (TTM)',
-  mDiv: 'Dividendový výnos',
-  mInd: 'Odvětví',
-  range52: '52týdenní rozpětí',
-  chartTitle: 'Vývoj kurzu',
-  chartRangesAria: 'Období grafu',
-  chartLoading: 'Načítám graf…',
-  chartSource: 'Zdroj: Yahoo Finance · zpožděno',
-  chartAria: 'Graf vývoje kurzu',
-  chartPeriodSuffix: ' % za období',
+    'Informační profil firmy. Kurzy akcií ani finanční ukazatele neuvádíme. Investice do akcií jsou rizikové.',
   profileTitle: 'Co firma dělá',
   factHq: 'Centrála',
   factFounded: 'Založeno',
@@ -161,8 +129,6 @@ const cs: AkcieCopy = {
 };
 
 const pl: AkcieCopy = {
-  numberLocale: 'pl-PL',
-  bln: 'mld',
 
   crumbAria: 'Ścieżka',
   crumbHome: 'Główna',
@@ -177,17 +143,17 @@ const pl: AkcieCopy = {
   h1: 'Akcje spółek rolniczych',
   h1mark: 'na giełdzie',
   lede:
-    'Kto stoi za maszynami, nasionami i nawozami na Twoich polach — i jak radzą sobie na giełdzie. Przegląd spółek notowanych publicznie z sektora rolnego: producenci maszyn, agrochemia i przetwórcy surowców, z USA i z Europy.',
+    'Kto stoi za maszynami, nasionami i nawozami na Twoich polach. Przegląd spółek notowanych publicznie z sektora rolnego: producenci maszyn, agrochemia i przetwórcy surowców, z USA i z Europy.',
   disclaimerStrong: '⚠️ To nie jest rekomendacja inwestycyjna.',
   disclaimerText:
-    'Ta strona to informacyjny przegląd spółek powiązanych z rolnictwem. Nie zawiera rekomendacji kupna ani sprzedaży. Inwestycje w akcje są ryzykowne; przed decyzją skonsultuj się z licencjonowanym doradcą. Podawane kursy mają charakter orientacyjny i są opóźnione.',
+    'Ta strona to informacyjny przegląd spółek powiązanych z rolnictwem. Nie zawiera rekomendacji kupna ani sprzedaży. Inwestycje w akcje są ryzykowne; przed decyzją skonsultuj się z licencjonowanym doradcą.',
   kategorie: {
     technika: 'Maszyny rolnicze',
     agrochemie: 'Agrochemia, nasiona i nawozy',
     komodity: 'Surowce i przetwórstwo',
   },
   hubNote:
-    '📈 <strong>Bieżące kursy dzienne</strong> i 3-miesięczne trendy przy każdej spółce; kliknij kartę, aby zobaczyć <strong>interaktywny wykres</strong> notowań i kluczowe wskaźniki.',
+    'Nie podajemy kursów akcji — aktualne znajdziesz na stronie giełdy lub u swojego brokera. Kliknij kartę, aby zobaczyć profil spółki, jej marki i kamienie milowe.',
   hubCrossSales: 'Sprzedaż maszyn rolniczych',
   hubCrossSalesNote: 'ile maszyn sprzedaje się w poszczególnych krajach',
   hubCrossCountries: 'Profile krajów',
@@ -195,24 +161,12 @@ const pl: AkcieCopy = {
   hubCrossPrices: 'Ceny surowców rolnych',
   hubCrossData: 'Sekcja danych agro-svět.cz',
 
-  detailTitleTpl: '{name} ({ticker}) — akcje, kurs i profil spółki | agro-svět',
+  detailTitleTpl: '{name} ({ticker}) — profil spółki i akcje | agro-svět',
   detailDescriptionTpl:
-    '{name}: kurs akcji, kapitalizacja rynkowa, siedziba, prezes, przychody i czym spółka zajmuje się w rolnictwie. {profil}',
+    '{name}: siedziba, prezes, przychody, symbol giełdowy i czym spółka zajmuje się w rolnictwie. {profil}',
   detailDisclaimerStrong: '⚠️ To nie jest rekomendacja inwestycyjna.',
   detailDisclaimerText:
-    'Informacyjny profil spółki. Kurs i wskaźniki są orientacyjne i opóźnione (dane fundamentalne Finnhub, wykres notowań Yahoo Finance). Inwestycje w akcje są ryzykowne.',
-  metricsTitle: 'Kluczowe wskaźniki',
-  mCap: 'Kapitalizacja rynkowa',
-  mPe: 'C/Z (TTM)',
-  mDiv: 'Stopa dywidendy',
-  mInd: 'Branża',
-  range52: 'Zakres 52-tygodniowy',
-  chartTitle: 'Wykres notowań',
-  chartRangesAria: 'Okres wykresu',
-  chartLoading: 'Wczytuję wykres…',
-  chartSource: 'Źródło: Yahoo Finance · z opóźnieniem',
-  chartAria: 'Wykres notowań akcji',
-  chartPeriodSuffix: ' % w okresie',
+    'Informacyjny profil spółki. Nie podajemy kursów akcji ani wskaźników finansowych. Inwestycje w akcje są ryzykowne.',
   profileTitle: 'Czym zajmuje się spółka',
   factHq: 'Centrala',
   factFounded: 'Założono',
@@ -235,8 +189,6 @@ const pl: AkcieCopy = {
 };
 
 const sk: AkcieCopy = {
-  numberLocale: 'sk-SK',
-  bln: 'mld.',
   crumbAria: 'Cesta',
   crumbHome: 'Domov',
   crumbData: 'Dáta',
@@ -249,41 +201,29 @@ const sk: AkcieCopy = {
   h1: 'Akcie poľnohospodárskych firiem',
   h1mark: 'na burze',
   lede:
-    'Kto stojí za technikou, osivami a hnojivami na vašich poliach — a ako sa im darí na burze. Prehľad verejne obchodovaných firiem z agrosektora: výrobcovia strojov, agrochémie aj spracovatelia komodít, zo Spojených štátov aj Európy.',
+    'Kto stojí za technikou, osivami a hnojivami na vašich poliach. Prehľad verejne obchodovaných firiem z agrosektora: výrobcovia strojov, agrochémie aj spracovatelia komodít, zo Spojených štátov aj Európy.',
   disclaimerStrong: '⚠️ Nie je investičné odporúčanie.',
   disclaimerText:
-    'Táto stránka je informačný prehľad firiem naviazaných na poľnohospodárstvo. Neobsahuje nákupné ani predajné odporúčania. Investície do akcií sú rizikové; pred rozhodnutím sa poraďte s licencovaným poradcom. Prípadné kurzy sú orientačné a oneskorené.',
+    'Táto stránka je informačný prehľad firiem naviazaných na poľnohospodárstvo. Neobsahuje nákupné ani predajné odporúčania. Investície do akcií sú rizikové; pred rozhodnutím sa poraďte s licencovaným poradcom.',
   kategorie: {
     technika: 'Poľnohospodárska technika',
     agrochemie: 'Agrochémia, osivá a hnojivá',
     komodity: 'Komodity a spracovanie',
   },
   hubNote:
-    '📈 <strong>Živé denné kurzy</strong> a 3-mesačné trendy pri každej firme; kliknite na kartu pre <strong>interaktívny graf</strong> vývoja kurzu a kľúčové ukazovatele.',
+    'Kurzy akcií tu neuvádzame — aktuálne nájdete na stránkach burzy alebo u svojho brokera. Kliknutím na kartu otvoríte profil firmy, jej značky a míľniky.',
   hubCrossSales: 'Predaje poľnohospodárskej techniky',
   hubCrossSalesNote: 'koľko strojov sa predá podľa krajín',
   hubCrossCountries: 'Profily krajín',
   hubCrossCountriesNote: 'poľnohospodárstvo jednotlivých trhov',
   hubCrossPrices: 'Ceny poľnohospodárskych komodít',
   hubCrossData: 'Dátová sekcia agro-svět',
-  detailTitleTpl: '{name} ({ticker}) — akcie, kurz a profil spoločnosti | agro-svět',
+  detailTitleTpl: '{name} ({ticker}) — profil spoločnosti a akcie | agro-svět',
   detailDescriptionTpl:
-    '{name}: kurz akcie, trhová kapitalizácia, sídlo, riaditeľ, obrat a čo firma robí v poľnohospodárstve. {profil}',
+    '{name}: sídlo, riaditeľ, obrat, burzový symbol a čo firma robí v poľnohospodárstve. {profil}',
   detailDisclaimerStrong: '⚠️ Nie je investičné odporúčanie.',
   detailDisclaimerText:
-    'Informačný profil firmy. Kurz a ukazovatele sú orientačné a oneskorené (fundamenty Finnhub, graf kurzu Yahoo Finance). Investície do akcií sú rizikové.',
-  metricsTitle: 'Kľúčové ukazovatele',
-  mCap: 'Trhová kapitalizácia',
-  mPe: 'P/E (TTM)',
-  mDiv: 'Dividendový výnos',
-  mInd: 'Odvetvie',
-  range52: '52-týždňové rozpätie',
-  chartTitle: 'Vývoj kurzu',
-  chartRangesAria: 'Obdobie grafu',
-  chartLoading: 'Načítavam graf…',
-  chartSource: 'Zdroj: Yahoo Finance · oneskorené',
-  chartAria: 'Graf vývoja kurzu',
-  chartPeriodSuffix: ' % za obdobie',
+    'Informačný profil firmy. Kurzy akcií ani finančné ukazovatele neuvádzame. Investície do akcií sú rizikové.',
   profileTitle: 'Čo firma robí',
   factHq: 'Centrála',
   factFounded: 'Založené',
@@ -306,8 +246,6 @@ const sk: AkcieCopy = {
 };
 
 const uk: AkcieCopy = {
-  numberLocale: 'uk-UA',
-  bln: 'млрд',
   crumbAria: 'Шлях',
   crumbHome: 'Головна',
   crumbData: 'Дані',
@@ -320,41 +258,29 @@ const uk: AkcieCopy = {
   h1: 'Акції аграрних компаній',
   h1mark: 'на біржі',
   lede:
-    'Хто стоїть за технікою, насінням і добривами на ваших полях — і як вони представлені на біржі. Огляд публічних компаній агросектору: виробники техніки, агрохімії та переробники сировини зі Сполучених Штатів і Європи.',
+    'Хто стоїть за технікою, насінням і добривами на ваших полях. Огляд публічних компаній агросектору: виробники техніки, агрохімії та переробники сировини зі Сполучених Штатів і Європи.',
   disclaimerStrong: '⚠️ Не є інвестиційною порадою.',
   disclaimerText:
-    'Ця сторінка — інформаційний огляд компаній, пов’язаних із сільським господарством. Не містить рекомендацій щодо купівлі чи продажу. Інвестиції в акції ризиковані; перед рішенням проконсультуйтеся з ліцензованим радником. Курси можуть бути орієнтовними та із затримкою.',
+    'Ця сторінка — інформаційний огляд компаній, пов’язаних із сільським господарством. Не містить рекомендацій щодо купівлі чи продажу. Інвестиції в акції ризиковані; перед рішенням проконсультуйтеся з ліцензованим радником.',
   kategorie: {
     technika: 'Сільськогосподарська техніка',
     agrochemie: 'Агрохімія, насіння та добрива',
     komodity: 'Сировина та переробка',
   },
   hubNote:
-    '📈 <strong>Живі денні котирування</strong> і 3-місячні тренди для кожної компанії; натисніть на картку для <strong>інтерактивного графіка</strong> динаміки курсу та ключових показників.',
+    'Курсів акцій ми не наводимо — актуальні дивіться на сайті біржі або у свого брокера. Натисніть на картку, щоб відкрити профіль компанії, її бренди та віхи.',
   hubCrossSales: 'Продажі сільськогосподарської техніки',
   hubCrossSalesNote: 'скільки техніки продається по країнах',
   hubCrossCountries: 'Профілі країн',
   hubCrossCountriesNote: 'агросектор окремих ринків',
   hubCrossPrices: 'Ціни сільськогосподарської сировини',
   hubCrossData: 'Датова секція agro-svět',
-  detailTitleTpl: '{name} ({ticker}) — акції, курс і профіль компанії | agro-svět',
+  detailTitleTpl: '{name} ({ticker}) — профіль компанії та акції | agro-svět',
   detailDescriptionTpl:
-    '{name}: курс акції, ринкова капіталізація, штаб-квартира, директор, обіг і чим займається компанія в агросекторі. {profil}',
+    '{name}: штаб-квартира, директор, обіг, біржовий символ і чим займається компанія в агросекторі. {profil}',
   detailDisclaimerStrong: '⚠️ Не є інвестиційною порадою.',
   detailDisclaimerText:
-    'Інформаційний профіль компанії. Курс і показники орієнтовні та із затримкою (фундаментальні дані Finnhub, графік курсу Yahoo Finance). Інвестиції в акції ризиковані.',
-  metricsTitle: 'Ключові показники',
-  mCap: 'Ринкова капіталізація',
-  mPe: 'P/E (TTM)',
-  mDiv: 'Дивідендна дохідність',
-  mInd: 'Сектор',
-  range52: '52-тижневий діапазон',
-  chartTitle: 'Динаміка курсу',
-  chartRangesAria: 'Період графіка',
-  chartLoading: 'Завантаження графіка…',
-  chartSource: 'Джерело: Yahoo Finance · із затримкою',
-  chartAria: 'Графік динаміки курсу',
-  chartPeriodSuffix: ' % за період',
+    'Інформаційний профіль компанії. Курсів акцій і фінансових показників ми не наводимо. Інвестиції в акції ризиковані.',
   profileTitle: 'Чим займається компанія',
   factHq: 'Штаб-квартира',
   factFounded: 'Засновано',
@@ -377,8 +303,6 @@ const uk: AkcieCopy = {
 };
 
 const de: AkcieCopy = {
-  numberLocale: 'de-DE',
-  bln: 'Mrd.',
 
   crumbAria: 'Pfad',
   crumbHome: 'Startseite',
@@ -393,17 +317,17 @@ const de: AkcieCopy = {
   h1: 'Aktien von Agrarunternehmen',
   h1mark: 'an der Börse',
   lede:
-    'Wer hinter Technik, Saatgut und Dünger auf Ihren Feldern steht — und wie sich diese Unternehmen an der Börse schlagen. Eine Übersicht der börsennotierten Firmen des Agrarsektors: Maschinenbauer, Agrarchemie und Rohstoffverarbeiter aus Europa und den USA.',
+    'Wer hinter Technik, Saatgut und Dünger auf Ihren Feldern steht. Eine Übersicht der börsennotierten Firmen des Agrarsektors: Maschinenbauer, Agrarchemie und Rohstoffverarbeiter aus Europa und den USA.',
   disclaimerStrong: '⚠️ Keine Anlageempfehlung.',
   disclaimerText:
-    'Diese Seite ist eine informative Übersicht über Unternehmen mit Bezug zur Landwirtschaft. Sie enthält weder Kauf- noch Verkaufsempfehlungen. Aktieninvestitionen sind mit Risiken verbunden; holen Sie vor einer Entscheidung den Rat einer zugelassenen Beratung ein. Angezeigte Kurse sind unverbindlich und zeitverzögert.',
+    'Diese Seite ist eine informative Übersicht über Unternehmen mit Bezug zur Landwirtschaft. Sie enthält weder Kauf- noch Verkaufsempfehlungen. Aktieninvestitionen sind mit Risiken verbunden; holen Sie vor einer Entscheidung den Rat einer zugelassenen Beratung ein.',
   kategorie: {
     technika: 'Landtechnik',
     agrochemie: 'Agrarchemie, Saatgut und Dünger',
     komodity: 'Rohstoffe und Verarbeitung',
   },
   hubNote:
-    '📈 <strong>Tagesaktuelle Kurse</strong> und Dreimonatstrends zu jedem Unternehmen; ein Klick auf die Karte öffnet den <strong>interaktiven Kursverlauf</strong> und die wichtigsten Kennzahlen.',
+    'Aktienkurse zeigen wir nicht an — aktuelle Kurse finden Sie bei der Börse oder Ihrer Bank. Ein Klick auf die Karte öffnet das Unternehmensprofil mit Marken und Meilensteinen.',
   hubCrossSales: 'Maschinenverkäufe',
   hubCrossSalesNote: 'wie viele Maschinen je Land verkauft werden',
   hubCrossCountries: 'Länderprofile',
@@ -411,24 +335,12 @@ const de: AkcieCopy = {
   hubCrossPrices: 'Preise für Agrarrohstoffe',
   hubCrossData: 'Datenbereich von agro-svět',
 
-  detailTitleTpl: '{name} ({ticker}) — Aktie, Kurs und Unternehmensprofil | agro-svět',
+  detailTitleTpl: '{name} ({ticker}) — Unternehmensprofil und Aktie | agro-svět',
   detailDescriptionTpl:
-    '{name}: Aktienkurs, Marktkapitalisierung, Sitz, Vorstandsvorsitz, Umsatz und was das Unternehmen in der Landwirtschaft macht. {profil}',
+    '{name}: Sitz, Vorstandsvorsitz, Umsatz, Börsenkürzel und was das Unternehmen in der Landwirtschaft macht. {profil}',
   detailDisclaimerStrong: '⚠️ Keine Anlageempfehlung.',
   detailDisclaimerText:
-    'Informatives Unternehmensprofil. Kurs und Kennzahlen sind unverbindlich und zeitverzögert (Fundamentaldaten von Finnhub, Kursverlauf von Yahoo Finance). Aktieninvestitionen sind mit Risiken verbunden.',
-  metricsTitle: 'Wichtige Kennzahlen',
-  mCap: 'Marktkapitalisierung',
-  mPe: 'KGV (TTM)',
-  mDiv: 'Dividendenrendite',
-  mInd: 'Branche',
-  range52: '52-Wochen-Spanne',
-  chartTitle: 'Kursverlauf',
-  chartRangesAria: 'Zeitraum des Diagramms',
-  chartLoading: 'Diagramm wird geladen…',
-  chartSource: 'Quelle: Yahoo Finance · zeitverzögert',
-  chartAria: 'Diagramm des Kursverlaufs',
-  chartPeriodSuffix: ' % im Zeitraum',
+    'Informatives Unternehmensprofil. Aktienkurse und Finanzkennzahlen zeigen wir nicht an. Aktieninvestitionen sind mit Risiken verbunden.',
   profileTitle: 'Was das Unternehmen macht',
   factHq: 'Hauptsitz',
   factFounded: 'Gegründet',

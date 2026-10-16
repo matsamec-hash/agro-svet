@@ -65,9 +65,9 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // /kalkulacka, /dotace, /svet, /historie) launchnuté nejsou a odfiltruje je
   // isLaunchedPath, takže „Daten" nabízí jen to, co reálně existuje; top-level
   // href se přesměruje na první viditelné dítě.
-  // 2026-10-15: /akcie i /svet z de stažené (licence dat) → `data` nemá žádné
-  // viditelné dítě a top-level „Daten“ by vedl na český /data/. Znovu skrytá.
-  de: ['bazar', 'photo', 'farms', 'data'],
+  // 2026-10-15 byla `data` skrytá (/akcie i /svet stažené kvůli licenci dat);
+  // 2026-10-16 se /akcie vrátilo bez kurzů, takže „Daten“ má zase dítě.
+  de: ['bazar', 'photo', 'farms'],
 };
 
 /** Novinkové KATEGORIE skryté v non-cs locale: jurisdikčně uzamčené (české

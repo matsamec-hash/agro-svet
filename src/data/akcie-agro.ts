@@ -1,7 +1,7 @@
 // Kurátorovaný seznam akcií firem navázaných na zemědělství (US + EU).
-// Statická (kurátorská) pole = ověřená data k ~2024/25; VOLATILNÍ čísla (kurz,
-// tržní kap., P/E, 52t rozpětí) tahá živě Finnhub — nejsou tu natvrdo.
-// Kurzy NEJSOU investiční doporučení (viz disclaimer).
+// Statická (kurátorská) pole = ověřená data k ~2024/25. Kurzy, tržní kapitalizaci,
+// P/E ani 52t rozpětí web od 2026-10-16 neukazuje: Yahoo Finance i Finnhub
+// zakazují komerční použití a redistribuci (audit licencí dat, rizika/B-licence-dat.md).
 
 export interface CzZastoupeni {
   name: string;
@@ -9,7 +9,7 @@ export interface CzZastoupeni {
 }
 
 export interface AgroAkcie {
-  ticker: string;        // primární burzovní symbol (Finnhub)
+  ticker: string;        // primární burzovní symbol
   nazev: string;
   burza: string;
   mena: string;
