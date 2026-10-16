@@ -1280,7 +1280,7 @@ const de: Record<string, string> = {
   'chor.d.latky': 'Wirkstoffe zum Pflanzenschutz',
   // Jurisdikce: cs verze odkazuje na registr ÚKZÚZ. Pro DE/AT se jmenuje i BVL
   // a BAES, ať čtenář neposílá dotaz české autoritě.
-  'chor.d.latkyNote': 'Übersicht üblicherweise zugelassener fungizider Wirkstoffe. Zulassung und Dosierung immer im amtlichen Pflanzenschutzmittelregister prüfen (Deutschland BVL, Österreich BAES, Tschechien ÚKZÚZ).',
+  'chor.d.latkyNote': 'Beispiele fungizider Wirkstoffe gegen diese Krankheit. Ob ein Mittel zugelassen ist und wie es dosiert wird, immer im amtlichen Pflanzenschutzmittelregister prüfen (Deutschland BVL, Österreich BAES, Tschechien ÚKZÚZ).',
   'chor.d.listName': 'Von der Krankheit {name} gefährdete Kulturen',
   'chor.d.metaDesc': '{name}: Symptome, Erreger und Pflanzenschutz. Gefährdet {count} {unit}.',
   'chor.d.cropOne': 'Kultur',

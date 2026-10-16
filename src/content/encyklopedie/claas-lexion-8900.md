@@ -12,7 +12,7 @@ heroImage: "/images/stroje/claas/claas-lexion-8900.jpg"
 powerHp: 790
 powerKw: 581
 weightKg: 22800
-engine: "Mercedes-Benz OM 473, 6-válec 15,6 l, Stage V"
+engine: "MAN D4276, 6-válec 16,2 l, Stage V"
 transmission: "Hydrostatická, max. 30 km/h"
 seriesName: "Lexion 8000"
 lastVerified: 2026-05-02
@@ -33,14 +33,14 @@ recenze:
     - "Plný potenciál se projeví až nad 1 000 ha"
   datum: 2026-05-02
 highlights:
-  - "Motor Mercedes-Benz OM 473, 790 k"
+  - "Motor MAN D4276, 790 k"
   - "Zásobník zrna 18 000 litrů"
   - "Systém CEMOS AUTO — plná automatizace"
   - "Šířka záběru až 12 m"
   - "APS SYNFLOW HYBRID — hybridní mlátění"
 faq:
   - q: "Jaký výkon má CLAAS Lexion 8900?"
-    a: "Lexion 8900 disponuje výkonem 790 koní (581 kW). Motor Mercedes-Benz OM 473 je šestiválec o objemu 15,6 litru a splňuje emisní normu Stage V."
+    a: "Lexion 8900 disponuje výkonem 790 koní (581 kW). Motor MAN D4276 je šestiválec o objemu 16,2 litru a splňuje emisní normu Stage V."
   - q: "Jak velký je zásobník zrna u Lexion 8900?"
     a: "Zásobník pojme 18 000 litrů zrna, což je největší kapacita mezi sériově vyráběnými sklízecími mlátičkami na světě. Kompletní vyprázdnění plného zásobníku trvá přibližně 100 sekund při vykládací rychlosti až 180 litrů za sekundu."
   - q: "Kolik stojí CLAAS Lexion 8900?"
@@ -63,7 +63,7 @@ CLAAS Lexion 8900 představuje absolutní špičku mezi sklízecími mlátičkam
 
 | Parametr | Hodnota |
 | --- | --- |
-| Motor | Mercedes-Benz OM 473, 6válec, 15,6 l |
+| Motor | MAN D4276, 6válec, 16,2 l |
 | Emisní norma | Stage V |
 | Max. výkon | 790 k (581 kW) |
 | Mlátící systém | APS SYNFLOW HYBRID (buben + rotor) |
@@ -77,7 +77,7 @@ CLAAS Lexion 8900 představuje absolutní špičku mezi sklízecími mlátičkam
 
 ## Konstrukce
 
-Srdcem stroje je motor **Mercedes-Benz OM 473** — šestiválec s objemem 15,6 litrů a výkonem 581 kW. Motor splňuje emisní normu Stage V a díky systému stop-and-go snižuje spotřebu při čekání na odvoz zrna.
+Srdcem stroje je motor **MAN D4276** — šestiválec s objemem 16,2 litrů a výkonem 581 kW. Motor splňuje emisní normu Stage V a díky systému stop-and-go snižuje spotřebu při čekání na odvoz zrna.
 
 ### Mlátící ústrojí APS SYNFLOW HYBRID
 

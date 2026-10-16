@@ -400,7 +400,7 @@ const pl: Record<string, string> = {
   'chor.d.skodlivost': 'Szkodliwość i próg ochrony',
   'chor.d.cyklus': 'Cykl życiowy i źródło infekcji',
   'chor.d.latky': 'Substancje czynne do ochrony',
-  'chor.d.latkyNote': 'Przegląd powszechnie zarejestrowanych substancji czynnych fungicydów. Rejestrację i dawkowanie zawsze weryfikuj w Rejestrze środków ochrony roślin ÚKZÚZ.',
+  'chor.d.latkyNote': 'Przykłady substancji czynnych fungicydów przeciw tej chorobie. Czy środek jest zarejestrowany i jak go dawkować, zawsze sprawdzaj w Rejestrze środków ochrony roślin ÚKZÚZ.',
   'chor.d.listName': 'Rośliny zagrożone chorobą {name}',
 
   'chor.d.metaDesc': '{name}: objawy, patogen i ochrona. Zagraża {count} {unit}.',

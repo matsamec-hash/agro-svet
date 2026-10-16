@@ -11,7 +11,7 @@ heroImage: "/images/stroje/claas/claas-lexion-8900.jpg"
 powerHp: 790
 powerKw: 581
 weightKg: 22800
-engine: "Mercedes-Benz OM 473, 6-Zylinder 15,6 l, Stage V"
+engine: "MAN D4276, 6-Zylinder 16,2 l, Stage V"
 transmission: "Hydrostatisch, max. 30 km/h"
 seriesName: "Lexion 8000"
 lastVerified: 2026-05-02
@@ -32,14 +32,14 @@ recenze:
     - "Das volle Potenzial zeigt sich erst über 1 000 ha"
   datum: 2026-05-02
 highlights:
-  - "Motor Mercedes-Benz OM 473, 790 PS"
+  - "Motor MAN D4276, 790 PS"
   - "Korntank mit 18 000 Litern"
   - "System CEMOS AUTO — volle Automatisierung"
   - "Arbeitsbreite bis 12 m"
   - "APS SYNFLOW HYBRID — Hybriddrusch"
 faq:
   - q: "Welche Leistung hat der CLAAS Lexion 8900?"
-    a: "Der Lexion 8900 verfügt über 790 PS (581 kW). Der Motor Mercedes-Benz OM 473 ist ein Sechszylinder mit 15,6 Litern Hubraum und erfüllt die Abgasnorm Stage V."
+    a: "Der Lexion 8900 verfügt über 790 PS (581 kW). Der Motor MAN D4276 ist ein Sechszylinder mit 16,2 Litern Hubraum und erfüllt die Abgasnorm Stage V."
   - q: "Wie groß ist der Korntank des Lexion 8900?"
     a: "Der Tank fasst 18 000 Liter Korn und bietet damit die größte Kapazität unter den in Serie gefertigten Mähdreschern der Welt. Die vollständige Entleerung des gefüllten Tanks dauert bei einer Entladeleistung von bis zu 180 Litern je Sekunde rund 100 Sekunden."
   - q: "Was kostet der CLAAS Lexion 8900?"
@@ -62,7 +62,7 @@ Der CLAAS Lexion 8900 markiert die absolute Spitze unter den Mähdreschern. Dies
 
 | Parameter | Wert |
 | --- | --- |
-| Motor | Mercedes-Benz OM 473, 6-Zylinder, 15,6 l |
+| Motor | MAN D4276, 6-Zylinder, 16,2 l |
 | Abgasnorm | Stage V |
 | Max. Leistung | 790 PS (581 kW) |
 | Dreschsystem | APS SYNFLOW HYBRID (Trommel + Rotor) |
@@ -76,7 +76,7 @@ Der CLAAS Lexion 8900 markiert die absolute Spitze unter den Mähdreschern. Dies
 
 ## Konstruktion
 
-Das Herz der Maschine ist der Motor **Mercedes-Benz OM 473** — ein Sechszylinder mit 15,6 Litern Hubraum und 581 kW. Der Motor erfüllt die Abgasnorm Stage V und senkt dank Stop-and-go-System den Verbrauch beim Warten auf die Kornabfuhr.
+Das Herz der Maschine ist der Motor **MAN D4276** — ein Sechszylinder mit 16,2 Litern Hubraum und 581 kW. Der Motor erfüllt die Abgasnorm Stage V und senkt dank Stop-and-go-System den Verbrauch beim Warten auf die Kornabfuhr.
 
 ### Dreschwerk APS SYNFLOW HYBRID
 

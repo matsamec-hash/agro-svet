@@ -11,7 +11,7 @@ heroImage: /images/stroje/claas/claas-lexion-8900.jpg
 powerHp: 790
 powerKw: 581
 weightKg: 22800
-engine: Mercedes-Benz OM 473, 6-válec 15,6 l, Stage V
+engine: MAN D4276, 6-válec 16,2 l, Stage V
 transmission: Hydrostatická, max. 30 km/h
 seriesName: Lexion 8000
 lastVerified: 2026-05-02
@@ -19,14 +19,14 @@ sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/sklizeci-mlaticky/lexi
 youtubeId: l1UVX6NEB3E
 youtubeTitle: "CLAAS Lexion 8900 — oficiálny walkaround (rad Lexion 8000)"
 highlights:
-- Motor Mercedes-Benz OM 473, 790 k
+- Motor MAN D4276, 790 k
 - Zásobník zrna 18 000 litrov
 - Systém CEMOS AUTO — plná automatizácia
 - Šírka záberu až 12 m
 - APS SYNFLOW HYBRID — hybridné mlátenie
 faq:
 - q: Aký výkon má Claas Lexion 8900?
-  a: Lexion 8900 disponuje výkonom 790 koní (581 kW). Motor Mercedes-Benz OM 473 je šesťvalec s objemom 15,6 litra a spĺňa emisnú normu Stage V.
+  a: Lexion 8900 disponuje výkonom 790 koní (581 kW). Motor MAN D4276 je šesťvalec s objemom 16,2 litra a spĺňa emisnú normu Stage V.
 - q: Aký veľký je zásobník zrna u Lexion 8900?
   a: Zásobník pojme 18 000 litrov zrna, čo je najväčšia kapacita medzi sériovo vyrábanými kombajnmi na svete. Vyloženie plného zásobníka trvá približne 78 sekúnd pri prietoku 230 l/s.
 - q: Čo robí systém CEMOS AUTO?
@@ -41,7 +41,7 @@ Claas Lexion 8900 predstavuje absolútnu špičku medzi kombajnmi. Tento obor o 
 
 ## Konštrukcia
 
-Srdcom stroja je motor **Mercedes-Benz OM 473** — šesťvalec s objemom 15,6 litrov a výkonom 581 kW. Motor spĺňa emisnú normu Stage V a vďaka systému stop-and-go znižuje spotrebu pri čakaní na odvoz zrna.
+Srdcom stroja je motor **MAN D4276** — šesťvalec s objemom 16,2 litrov a výkonom 581 kW. Motor spĺňa emisnú normu Stage V a vďaka systému stop-and-go znižuje spotrebu pri čakaní na odvoz zrna.
 
 ### Mlátacie ústrojenstvo APS SYNFLOW HYBRID
 

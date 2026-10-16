@@ -11,7 +11,7 @@ heroImage: "/images/stroje/claas/claas-lexion-8900.jpg"
 powerHp: 790
 powerKw: 581
 weightKg: 22800
-engine: "Mercedes-Benz OM 473, 6-cylindrowy 15,6 l, Stage V"
+engine: "MAN D4276, 6-cylindrowy 16,2 l, Stage V"
 transmission: "Hydrostatyczna, maks. 30 km/h"
 seriesName: "Lexion 8000"
 lastVerified: 2026-05-02
@@ -32,14 +32,14 @@ recenze:
     - "Pełny potencjał ujawnia się dopiero powyżej 1000 ha"
   datum: 2026-05-02
 highlights:
-  - "Silnik Mercedes-Benz OM 473, 790 KM"
+  - "Silnik MAN D4276, 790 KM"
   - "Zbiornik ziarna 18 000 litrów"
   - "System CEMOS AUTO — pełna automatyzacja"
   - "Szerokość robocza do 12 m"
   - "APS SYNFLOW HYBRID — hybrydowe młócenie"
 faq:
   - q: "Jaką moc ma CLAAS Lexion 8900?"
-    a: "Lexion 8900 dysponuje mocą 790 koni (581 kW). Silnik Mercedes-Benz OM 473 to sześciocylindrowa jednostka o pojemności 15,6 litra spełniająca normę emisji Stage V."
+    a: "Lexion 8900 dysponuje mocą 790 koni (581 kW). Silnik MAN D4276 to sześciocylindrowa jednostka o pojemności 16,2 litra spełniająca normę emisji Stage V."
   - q: "Jak duży jest zbiornik ziarna w Lexion 8900?"
     a: "Zbiornik mieści 18 000 litrów ziarna, co jest największą pojemnością wśród seryjnie produkowanych kombajnów zbożowych na świecie. Kompletne opróżnienie pełnego zbiornika trwa około 100 sekund przy prędkości rozładunku do 180 litrów na sekundę."
   - q: "Ile kosztuje CLAAS Lexion 8900?"
@@ -62,7 +62,7 @@ CLAAS Lexion 8900 stanowi absolutny szczyt wśród kombajnów zbożowych. Ten ol
 
 | Parametr | Wartość |
 | --- | --- |
-| Silnik | Mercedes-Benz OM 473, 6-cylindrowy, 15,6 l |
+| Silnik | MAN D4276, 6-cylindrowy, 16,2 l |
 | Norma emisji | Stage V |
 | Maks. moc | 790 KM (581 kW) |
 | System młócenia | APS SYNFLOW HYBRID (bęben + rotor) |
@@ -76,7 +76,7 @@ CLAAS Lexion 8900 stanowi absolutny szczyt wśród kombajnów zbożowych. Ten ol
 
 ## Konstrukcja
 
-Sercem maszyny jest silnik **Mercedes-Benz OM 473** — sześciocylindrowa jednostka o pojemności 15,6 litra i mocy 581 kW. Silnik spełnia normę emisji Stage V, a dzięki systemowi stop-and-go zmniejsza zużycie podczas oczekiwania na odbiór ziarna.
+Sercem maszyny jest silnik **MAN D4276** — sześciocylindrowa jednostka o pojemności 16,2 litra i mocy 581 kW. Silnik spełnia normę emisji Stage V, a dzięki systemowi stop-and-go zmniejsza zużycie podczas oczekiwania na odbiór ziarna.
 
 ### Zespół młócący APS SYNFLOW HYBRID
 

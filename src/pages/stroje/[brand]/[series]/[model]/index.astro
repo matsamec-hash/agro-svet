@@ -150,7 +150,7 @@ const dimensionSpecs: SpecRow[] = [];
 const otherSpecs: SpecRow[] = [];
 
 const numLocale = bcp47(locale);
-if (model.power_hp) performanceSpecs.push({ label: tr('cat.s.d.specPower'), value: `${model.power_hp} k${model.power_kw ? ` (${model.power_kw} kW)` : ''}` });
+if (model.power_hp) performanceSpecs.push({ label: tr('cat.s.d.specPower'), value: `${model.power_hp} ${tr('cmp.unitHp')}${model.power_kw ? ` (${model.power_kw} kW)` : ''}` });
 if (model.engine) drivetrainSpecs.push({ label: tr('cat.s.d.specEngine'), value: model.engine });
 if (model.transmission) drivetrainSpecs.push({ label: tr('cat.s.d.specTransmission'), value: model.transmission });
 if (model.weight_kg) dimensionSpecs.push({ label: tr('cat.s.d.specWeight'), value: `${model.weight_kg.toLocaleString(numLocale)} kg` });

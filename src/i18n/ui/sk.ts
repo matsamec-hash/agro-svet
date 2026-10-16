@@ -398,7 +398,7 @@ const sk: Record<string, string> = {
   'chor.d.skodlivost': 'Škodlivosť a prah ošetrenia',
   'chor.d.cyklus': 'Životný cyklus a zdroj infekcie',
   'chor.d.latky': 'Účinné látky na ochranu',
-  'chor.d.latkyNote': 'Prehľad bežne registrovaných fungicídnych účinných látok. Registráciu a dávkovanie vždy overte v Registri prípravkov na ochranu rastlín ÚKZÚZ.',
+  'chor.d.latkyNote': 'Príklady fungicídnych účinných látok proti tejto chorobe. Či je prípravok registrovaný a ako ho dávkovať, vždy overte v Registri prípravkov na ochranu rastlín ÚKZÚZ.',
   'chor.d.listName': 'Plodiny ohrozené chorobou {name}',
 
   'chor.d.metaDesc': '{name}: príznaky, pôvodca a ochrana. Ohrozuje {count} {unit}.',
