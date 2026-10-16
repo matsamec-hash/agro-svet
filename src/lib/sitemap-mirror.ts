@@ -9,7 +9,7 @@
 //
 // Gate je proto JEDEN a je per-locale datový, ne větvený: nový jazyk dostane
 // všechny brány automaticky a rozdíly se deklarují daty, ne kopií filtru.
-import { isLaunchedPath, isPrerenderedOnlyPath } from '../i18n/utils';
+import { isLaunchedPath, isPrerenderedOnlyPath, isNoindexPath } from '../i18n/utils';
 import { isLockedSectionPath, HIDDEN_NEWS_CATEGORIES } from '../i18n/nav';
 import { isRetiredLocale } from '../i18n/config';
 
@@ -96,6 +96,8 @@ export function allowInMirror(p: string, locale: MirrorLocale, ctx: MirrorContex
   if (isHiddenCategoryPath(p, locale)) return false;
   if (isDeadArticleForLocale(p, locale, ctx)) return false;
   if (isMissingHowto(p, locale, ctx)) return false;
+  // noindex stránky (de srovnání) do sitemapy nepatří — GSC by hlásil rozpor.
+  if (isNoindexPath(locale, p)) return false;
   // Lock přebíjí launch: zamčené pod-cesty (/kalkulacka/dotace-cap) 307-ují na cs.
   // isPrerenderedOnlyPath drží mimo detaily odrůd a nelokalizované kvízy.
   return isLaunchedPath(locale, p) && !isLockedSectionPath(p) && !isPrerenderedOnlyPath(p);

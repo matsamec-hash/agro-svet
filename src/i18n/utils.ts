@@ -252,6 +252,20 @@ export function isLaunchedPath(locale: Locale, csRootPath: string): boolean {
   return (LAUNCHED_PREFIXES[locale] ?? []).some((p) => csRootPath === p || csRootPath.startsWith(`${p}/`));
 }
 
+/** Cesty, které v dané mutaci fungují, ale nemají se indexovat: noindex, mimo
+ *  sitemapu a bez hreflang alternate (Layout, lib/sitemap-mirror).
+ *  2026-10-16 (rozhodnutí vlastníka): jednotlivá srovnání pod de. Obsahový audit
+ *  (rizika/D-obsah.md kap. 4) našel u 99 % ze 3 826 stránek jen tabulku čísel bez
+ *  jediné vlastní věty — riziko „scaled content abuse“ pro celou doménu. Hub
+ *  /srovnani/ zůstává indexovaný. */
+const NOINDEX_PATHS: Partial<Record<Locale, RegExp[]>> = {
+  de: [/^\/srovnani\/[^/]+\/?$/],
+};
+
+export function isNoindexPath(locale: Locale, csRootPath: string): boolean {
+  return (NOINDEX_PATHS[locale] ?? []).some((r) => r.test(csRootPath));
+}
+
 /** Sekce, do které která skupina výsledků vyhledávání odkazuje. `null` = skupina
  *  je cs-only. `bazar` takový je: inzeráty jsou české texty s cenami v Kč a
  *  českými lokalitami, takže pod ne-cs jde o únik jazyka, ne o překlad — a

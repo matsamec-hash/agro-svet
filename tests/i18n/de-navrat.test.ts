@@ -261,3 +261,21 @@ describe('akcie bez kurzů (Yahoo/Finnhub zakazují komerční použití)', () =
     expect(read('src/i18n/akcie.ts')).not.toMatch(/Yahoo|Finnhub|Živé denní kurzy|Tagesaktuelle Kurse/);
   });
 });
+
+describe('de srovnání: noindex, mimo sitemapu, bez hreflang (2026-10-16)', () => {
+  it('jednotlivá srovnání pod de nejsou k indexaci, hub ano, ostatní jazyky beze změny', async () => {
+    const { isNoindexPath } = await import('../../src/i18n/utils');
+    expect(isNoindexPath('de', '/srovnani/claas-lexion-8900-new-vs-new-holland-cr11/')).toBe(true);
+    expect(isNoindexPath('de', '/srovnani/')).toBe(false);
+    expect(isNoindexPath('de', '/stroje/claas/')).toBe(false);
+    expect(isNoindexPath('cs', '/srovnani/claas-lexion-8900-new-vs-new-holland-cr11/')).toBe(false);
+    expect(isNoindexPath('pl', '/srovnani/claas-lexion-8900-new-vs-new-holland-cr11/')).toBe(false);
+    const { allowInMirror } = await import('../../src/lib/sitemap-mirror');
+    expect(read('src/lib/sitemap-mirror.ts')).toMatch(/if \(isNoindexPath\(locale, p\)\) return false;/);
+    expect(typeof allowInMirror).toBe('function');
+    const layout = read('src/layouts/Layout.astro');
+    expect(layout).toMatch(/const effectiveNoindex = noindex \|\| pathNoindex \|\|/);
+    expect(layout).toMatch(/!isNoindexPath\(l, csRootPath\)/);
+    expect(layout).toMatch(/noHreflang \|\| !csHasContent \|\| pathNoindex \? null/);
+  });
+});
