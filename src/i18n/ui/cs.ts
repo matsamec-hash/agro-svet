@@ -8,6 +8,9 @@ const cs: Record<string, string> = {
   // — brand / přístupnost —
   'brand.name': 'agro-svět.cz',
   'a11y.skipToContent': 'Přeskočit na obsah',
+  // AI Act čl. 50 odst. 4 (od 2. 8. 2026): informace u každého výstupu, ne jen na /redakce.
+  'ai.notice': 'Texty na tomto webu vznikají s pomocí umělé inteligence.',
+  'ai.noticeLink': 'Jak pracujeme',
 
   // — obrázkový rozcestník na homepage (ImageAccordion) —
   'ia.cta': 'Přejít na sekci →',

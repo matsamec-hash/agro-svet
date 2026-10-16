@@ -13,6 +13,7 @@ import { getLocaleFromUrl, t, stripLocale, isLaunchedPath, isPrerenderedOnlyPath
 import { isLockedSectionPath } from '../i18n/nav';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
+import AiNotice from '../components/AiNotice.astro';
 import { getEnvVar } from '../lib/env';
 
 // Supabase host (bazar + fotosoutěž photos) pro preconnect — z env, ať sleduje
@@ -218,6 +219,7 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
   <CookieConsent />
   <Header />
   <main id="main-content" tabindex="-1">
+    <AiNotice />
     <slot />
   </main>
   <Lightbox />

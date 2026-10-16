@@ -1,0 +1,32 @@
+---
+// Označení textu generovaného AI — čl. 50 odst. 4 nařízení (EU) 2024/1689, platí od
+// 2. 8. 2026. Pokyny Komise C(2026) 5054 chtějí informaci u každého výstupu, ne jen
+// v právních textech nebo na /redakce. Texty webu vznikají s pomocí AI (tvorba
+// i překlad) a nejsou jednotlivě věcně kontrolované člověkem, takže výjimka
+// „redakční kontroly“ se nepoužije — štítek je na každé stránce (Layout).
+import { getLocaleFromUrl, useTranslations, navHref } from '../i18n/utils';
+
+const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
+const tr = useTranslations(locale);
+---
+<p class="ai-notice">
+  <span aria-hidden="true">✦</span>
+  {tr('ai.notice')}
+  <a href={navHref(locale, '/redakce/')}>{tr('ai.noticeLink')}</a>
+</p>
+
+<style>
+  .ai-notice {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 8px 24px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #5f5f66;
+  }
+  .ai-notice span { margin-right: 4px; }
+  .ai-notice a { color: inherit; text-decoration: underline; margin-left: 4px; }
+  @media (max-width: 640px) {
+    .ai-notice { padding: 6px 16px; font-size: 12px; }
+  }
+</style>

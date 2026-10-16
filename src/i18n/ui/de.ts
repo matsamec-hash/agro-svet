@@ -15,6 +15,8 @@ const de: Record<string, string> = {
   // — brand / přístupnost —
   'brand.name': 'agro-svět.cz',
   'a11y.skipToContent': 'Zum Inhalt springen',
+  'ai.notice': 'Die Texte auf dieser Website entstehen mit Hilfe künstlicher Intelligenz.',
+  'ai.noticeLink': 'So arbeiten wir',
 
   // — obrázkový rozcestník na homepage (ImageAccordion) —
   'ia.cta': 'Zum Bereich →',
