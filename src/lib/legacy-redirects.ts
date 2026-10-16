@@ -12,6 +12,14 @@ function listedSubcategory(key: string): string | null {
   return getFunctionalGroupForCategory(sub as StrojKategorie) ? sub : null;
 }
 
+/** Sloučená hesla encyklopedie: zrušený duplikát → heslo, které zůstalo.
+ *  2026-10-15 obsahový audit: „Zetor Proxima 120“ výrobce nevede, správně je
+ *  PROXIMA HS 120. Hesla o modelech, které vůbec neexistují (Kubota M6-172,
+ *  M7-192, Zetor Forterra HSX 150), se nepřesměrovávají — vracejí 404. */
+const ENC_MERGED: Record<string, string> = {
+  'zetor-proxima-120': 'zetor-proxima-hs-120',
+};
+
 /**
  * Cílová cs cesta pro legacy URL, nebo null.
  *
@@ -34,5 +42,7 @@ export function legacyRedirectTarget(csPath: string): string | null {
   if (cat && cat[1] in LEGACY_CATEGORY_ALIASES) return `/stroje/${LEGACY_CATEGORY_ALIASES[cat[1]]}/`;
   const wiki = csPath.match(/^\/slovnik\/([^/]+)\/[a-z]{2,3}\.wikipedia\.org(?:\/|$)/);
   if (wiki) return `/slovnik/${wiki[1]}/`;
+  const enc = csPath.match(/^\/encyklopedie\/([^/]+)\/?$/);
+  if (enc && enc[1] in ENC_MERGED) return `/encyklopedie/${ENC_MERGED[enc[1]]}/`;
   return null;
 }

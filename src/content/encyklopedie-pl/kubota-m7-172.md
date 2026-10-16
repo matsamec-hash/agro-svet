@@ -27,7 +27,7 @@ highlights:
   - "Kubota K-Monitor — terminal z ISOBUS i obsługą naprowadzania"
 faq:
   - q: "Jaką moc ma Kubota M7-172?"
-    a: "Kubota M7-172 ma moc znamionową 170 koni (125 kW). Napędza ją czterocylindrowy silnik Kubota V6108 o pojemności 6,1 litra z wtryskiem common-rail, spełniający normę emisji Stage V. W serii M7 to środkowy z trzech modeli (M7-152, M7-172, M7-192)."
+    a: "Kubota M7-172 ma moc znamionową 170 koni (125 kW). Napędza ją czterocylindrowy silnik Kubota V6108 o pojemności 6,1 litra z wtryskiem common-rail, spełniający normę emisji Stage V. W serii M7 to najmocniejszy z trzech modeli (M7-132, M7-152, M7-172)."
   - q: "Dlaczego M7 jest ważna dla marki Kubota?"
     a: "Seria M7 była w 2015 roku pierwszym wejściem Kuboty do kategorii ciągników powyżej 150 koni. Japońska marka była do tej pory znana głównie z ciągników kompaktowych i średniej wielkości. M7 otworzyła jej rynek dużych maszyn row-crop i ustanowiła ją jako pełnoprawnego konkurenta europejskich producentów."
   - q: "Jaka jest różnica między przekładnią Powershift a KVT?"
@@ -63,4 +63,4 @@ Terminal **K-Monitor** łączy sterowanie przekładnią, hydrauliką i narzędzi
 
 ## Pozycja w serii
 
-Seria M7 oferuje trzy stopnie mocy — **M7-152** (150 KM), **M7-172** (170 KM) i **M7-192** (190 KM). Model 172 jest środkowym wyborem: wystarczająco mocy do większości prac polowych przy rozsądnej cenie zakupu i kosztach eksploatacji.
+Seria M7 oferuje trzy stopnie mocy — **M7-132** (130 KM), **M7-152** (150 KM) i **M7-172** (170 KM). Model 172 jest najmocniejszą wersją: wystarczająco mocy do większości prac polowych przy rozsądnej cenie zakupu i kosztach eksploatacji.

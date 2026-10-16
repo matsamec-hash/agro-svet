@@ -3,7 +3,7 @@ name: Joskin
 slug: joskin
 zeme: Belgicko
 zalozena: 1968
-popis: Belgický špecialista na cisterny na kejdu a poľnohospodárske návesy. Cisterny Modulo 2, Quadra a Volumetra, návesy Trans-CAP a Drakkar. Robustná technika na transport a aplikáciu statkových hnojív.
+popis: Belgický špecialista na cisterny na kejdu a poľnohospodárske návesy. Cisterny Modulo 2 a Volumetra, návesy Trans-CAP a Drakkar. Robustná technika na transport a aplikáciu statkových hnojív.
 website: https://www.joskin.com/
 wikipedia: https://fr.wikipedia.org/wiki/Joskin
 wikidata: https://www.wikidata.org/wiki/Q1708740
@@ -22,11 +22,11 @@ Joskin je belgická rodinná firma založená v roku 1968 Victorom Joskinom. Vyp
 
 ## Cisterny a návesy
 
-Joskin stavia cisterny **Modulo 2, Quadra, Volumetra** a **X-Trem** s objemom od niekoľkých tisíc po desiatky tisíc litrov. Poľnohospodárske návesy **Trans-CAP, Trans-SPACE** a **Drakkar** zvládnu transport zberu aj statkových hnojív.
+Joskin stavia cisterny **Modulo 2, Volumetra** a **X-Trem** s objemom od niekoľkých tisíc po desiatky tisíc litrov. Poľnohospodárske návesy **Trans-CAP, Trans-SPACE** a **Drakkar** zvládnu transport zberu aj statkových hnojív.
 
 ## Portfólio
 
-- **Cisterny na kejdu** — Modulo 2, Quadra, Komfort 2, Volumetra, X-Trem
+- **Cisterny na kejdu** — Modulo 2, Komfort 2, Volumetra, X-Trem
 - **Poľnohospodárske návesy** — Trans-CAP, Trans-KTP, Trans-SPACE, Drakkar
 - Aplikačné lišty a vlečné hadice na presné hnojenie
 

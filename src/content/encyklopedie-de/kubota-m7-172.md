@@ -27,7 +27,7 @@ highlights:
   - "Kubota K-Monitor — Terminal mit ISOBUS und Spurführungsunterstützung"
 faq:
   - q: "Welche Leistung hat der Kubota M7-172?"
-    a: "Der Kubota M7-172 hat eine Nennleistung von 170 PS (125 kW). Angetrieben wird er vom Vierzylindermotor Kubota V6108 mit 6,1 Litern Hubraum und Common-Rail-Einspritzung, der die Abgasnorm Stage V erfüllt. In der Baureihe M7 ist er das mittlere von drei Modellen (M7-152, M7-172, M7-192)."
+    a: "Der Kubota M7-172 hat eine Nennleistung von 170 PS (125 kW). Angetrieben wird er vom Vierzylindermotor Kubota V6108 mit 6,1 Litern Hubraum und Common-Rail-Einspritzung, der die Abgasnorm Stage V erfüllt. In der Baureihe M7 ist er das stärkste von drei Modellen (M7-132, M7-152, M7-172)."
   - q: "Warum ist die M7 für die Marke Kubota bedeutsam?"
     a: "Die Baureihe M7 war 2015 der erste Vorstoß von Kubota in die Kategorie der Traktoren über 150 PS. Die japanische Marke war bis dahin vor allem für Kompakt- und Mittelklassetraktoren bekannt. Die M7 öffnete ihr den Markt der großen Row-Crop-Maschinen und etablierte sie als vollwertigen Wettbewerber der europäischen Hersteller."
   - q: "Worin unterscheiden sich Powershift- und KVT-Getriebe?"
@@ -63,4 +63,4 @@ Das Terminal **K-Monitor** bündelt die Bedienung von Getriebe, Hydraulik und IS
 
 ## Position in der Baureihe
 
-Die Baureihe M7 bietet drei Leistungsstufen — **M7-152** (150 PS), **M7-172** (170 PS) und **M7-192** (190 PS). Das Modell 172 ist die mittlere Wahl: genug Leistung für den Großteil der Feldarbeit bei vernünftigem Anschaffungspreis und Betriebskosten.
+Die Baureihe M7 bietet drei Leistungsstufen — **M7-132** (130 PS), **M7-152** (150 PS) und **M7-172** (170 PS). Das Modell 172 ist die stärkste Variante: genug Leistung für den Großteil der Feldarbeit bei vernünftigem Anschaffungspreis und Betriebskosten.

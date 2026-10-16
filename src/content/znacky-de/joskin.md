@@ -3,7 +3,7 @@ name: "Joskin"
 slug: "joskin"
 zeme: "Belgien"
 zalozena: 1968
-popis: "Belgischer Spezialist für Güllefässer und landwirtschaftliche Anhänger. Güllefässer Modulo 2, Quadra und Volumetra, Anhänger Trans-CAP und Drakkar. Robuste Technik für Transport und Ausbringung von Wirtschaftsdüngern."
+popis: "Belgischer Spezialist für Güllefässer und landwirtschaftliche Anhänger. Güllefässer Modulo 2 und Volumetra, Anhänger Trans-CAP und Drakkar. Robuste Technik für Transport und Ausbringung von Wirtschaftsdüngern."
 website: "https://www.joskin.com/"
 wikipedia: "https://fr.wikipedia.org/wiki/Joskin"
 wikidata: "https://www.wikidata.org/wiki/Q1708740"
@@ -21,11 +21,11 @@ Joskin ist ein belgisches Familienunternehmen, das 1968 von Victor Joskin gegrü
 
 ## Güllefässer und Anhänger
 
-Joskin baut die Güllefässer **Modulo 2, Quadra, Volumetra** und **X-Trem** mit Volumina von wenigen Tausend bis zu Zehntausenden Litern. Die landwirtschaftlichen Anhänger **Trans-CAP, Trans-SPACE** und **Drakkar** bewältigen sowohl den Erntetransport als auch Wirtschaftsdünger.
+Joskin baut die Güllefässer **Modulo 2, Volumetra** und **X-Trem** mit Volumina von wenigen Tausend bis zu Zehntausenden Litern. Die landwirtschaftlichen Anhänger **Trans-CAP, Trans-SPACE** und **Drakkar** bewältigen sowohl den Erntetransport als auch Wirtschaftsdünger.
 
 ## Portfolio
 
-- **Güllefässer** — Modulo 2, Quadra, Komfort 2, Volumetra, X-Trem
+- **Güllefässer** — Modulo 2, Komfort 2, Volumetra, X-Trem
 - **Landwirtschaftliche Anhänger** — Trans-CAP, Trans-KTP, Trans-SPACE, Drakkar
 - Schleppschuhverteiler und Schleppschläuche für die präzise Düngung
 

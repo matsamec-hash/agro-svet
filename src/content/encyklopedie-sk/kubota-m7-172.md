@@ -27,7 +27,7 @@ highlights:
 - Kubota K-Monitor — terminál s ISOBUS a podporou navádzania
 faq:
 - q: Aký výkon má Kubota M7-172?
-  a: Kubota M7-172 má menovitý výkon 170 koní (125 kW). Poháňa ho štvorvalcový motor Kubota V6108 s objemom 6,1 litra s common-rail vstrekovaním, spĺňajúci emisnú normu Stage V. V rade M7 ide o prostredný z troch modelov (M7-152, M7-172, M7-192).
+  a: Kubota M7-172 má menovitý výkon 170 koní (125 kW). Poháňa ho štvorvalcový motor Kubota V6108 s objemom 6,1 litra s common-rail vstrekovaním, spĺňajúci emisnú normu Stage V. V rade M7 ide o najvýkonnejší z troch modelov (M7-132, M7-152, M7-172).
 - q: Prečo je M7 významná pre značku Kubota?
   a: Rad M7 bol v roku 2015 prvým vstupom Kuboty do kategórie traktorov nad 150 koní. Japonská značka bola dovtedy známa hlavne kompaktnými a stredne veľkými traktormi. M7 jej otvorila trh veľkých row-crop strojov a etablovala ju ako plnohodnotného konkurenta európskych výrobcov.
 - q: Aký je rozdiel medzi prevodovkou Powershift a KVT?
@@ -63,4 +63,4 @@ Terminál **K-Monitor** združuje ovládanie prevodovky, hydrauliky a ISOBUS ná
 
 ## Postavenie v rade
 
-Rad M7 ponúka tri výkonové stupne — **M7-152** (150 k), **M7-172** (170 k) a **M7-192** (190 k). Model 172 je prostrednou voľbou: dostatok výkonu pre väčšinu poľnej práce pri rozumnej obstarávacej cene aj prevádzkových nákladoch.
+Rad M7 ponúka tri výkonové stupne — **M7-132** (130 k), **M7-152** (150 k) a **M7-172** (170 k). Model 172 je najvýkonnejšou verziou: dostatok výkonu pre väčšinu poľnej práce pri rozumnej obstarávacej cene aj prevádzkových nákladoch.
