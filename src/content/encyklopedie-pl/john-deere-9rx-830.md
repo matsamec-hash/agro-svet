@@ -12,7 +12,7 @@ powerHp: 830
 powerKw: 611
 weightKg: 22000
 engine: "John Deere 18,0 L, 6-cylindrowy, Stage V"
-transmission: "e18 PowerShift 18/6"
+transmission: "e21 PowerShift 21/11"
 seriesName: "9R/9RX"
 lastVerified: 2026-05-15
 sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/tractors/large-tractors/9rx-830-tractor-otkymfjx"
@@ -47,9 +47,9 @@ Z 830 końmi (611 kW) 9RX 830 jest najmocniejszym ciągnikiem, jaki oferuje John
 
 Oznaczenie **9RX** oznacza gąsienicową wersję serii 9R. Zamiast kół ciągnik ma cztery niezależne gumowe gąsienice. Ta konstrukcja zapewnia znacznie większą powierzchnię styku z ziemią niż koła — ciągnik przenosi pełną moc na uciąg, a przy tym minimalnie zagęszcza glebę. Cztery osobne gąsienice dodatkowo lepiej dostosowują się do nierówności terenu i poprawiają stabilność.
 
-## Przekładnia e18 PowerShift
+## Przekładnia e21 PowerShift
 
-W pełni automatyczna przekładnia **e18 PowerShift** z 18 biegami do przodu zmienia biegi pod obciążeniem bez przerwania siły uciągu. Oprogramowanie ocenia obciążenie silnika i wybiera optymalny bieg dla najniższego zużycia.
+W pełni automatyczna przekładnia **e21 PowerShift** z 21 biegami do przodu zmienia biegi pod obciążeniem bez przerwania siły uciągu. Oprogramowanie ocenia obciążenie silnika i wybiera optymalny bieg dla najniższego zużycia.
 
 ## Dla kogo jest 9RX 830
 

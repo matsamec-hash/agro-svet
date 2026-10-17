@@ -59,6 +59,14 @@ export const REMOVED_MODEL_PAGES: Record<string, string> = {
   '/stroje/massey-ferguson/8000/8160': '/stroje/massey-ferguson/8100/8160-8100/',
   '/stroje/massey-ferguson/8000/8110': '/stroje/massey-ferguson/8100/8110/',
   '/stroje/massey-ferguson/8000': '/stroje/massey-ferguson/8100/',
+  // 2026-10-17 John Deere: 6500 → 6506, 9RX 1. generace se jmenovaly 9470RX–9620RX, 6095M → 6095MC, duplikát 7R 350
+  '/stroje/john-deere/6000/6500': '/stroje/john-deere/6000/6506/',
+  '/stroje/john-deere/9rx/9rx-540': '/stroje/john-deere/9rx/9470rx/',
+  '/stroje/john-deere/9rx/9rx-590-gen1': '/stroje/john-deere/9rx/9520rx/',
+  '/stroje/john-deere/9rx/9rx-640-gen1': '/stroje/john-deere/9rx/9570rx/',
+  '/stroje/john-deere/9rx/9rx-740': '/stroje/john-deere/9rx/9620rx/',
+  '/stroje/john-deere/6m/6095m': '/stroje/john-deere/6m/6095mc/',
+  '/stroje/john-deere/7r/7r-350': '/stroje/john-deere/7r-gen3/7r-350-gen3/',
 };
 
 /** Přejmenované slugy modelů → nový slug. Přesměruje i srovnání /srovnani/<a>-vs-<b>/. */
@@ -94,6 +102,14 @@ export const RENAMED_MODEL_SLUGS: Record<string, string> = {
   'massey-ferguson-8140': 'massey-ferguson-8140-8100',
   'massey-ferguson-8150': 'massey-ferguson-8150-8100',
   'massey-ferguson-8160': 'massey-ferguson-8160-8100',
+  // 2026-10-17 John Deere: 6500 → 6506, 9RX 1. generace se jmenovaly 9470RX–9620RX, 6095M → 6095MC, duplikát 7R 350
+  'john-deere-6500': 'john-deere-6506',
+  'john-deere-9rx-540': 'john-deere-9470rx',
+  'john-deere-9rx-590-gen1': 'john-deere-9520rx',
+  'john-deere-9rx-640-gen1': 'john-deere-9570rx',
+  'john-deere-9rx-740': 'john-deere-9620rx',
+  'john-deere-6095m': 'john-deere-6095mc',
+  'john-deere-7r-350': 'john-deere-7r-350-gen3',
 };
 
 const PAIR_DELIMITER = '-vs-';

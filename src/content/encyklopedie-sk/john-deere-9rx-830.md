@@ -12,7 +12,7 @@ powerHp: 830
 powerKw: 611
 weightKg: 22000
 engine: John Deere 18,0 L, 6-válec, Stage V
-transmission: e18 PowerShift 18/6
+transmission: e21 PowerShift 21/11
 seriesName: 9R/9RX
 lastVerified: 2026-05-15
 sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/tractors/large-tractors/9rx-830-tractor-otkymfjx"
@@ -47,9 +47,9 @@ S 830 koňmi (611 kW) je 9RX 830 najvýkonnejším traktorom, aký John Deere po
 
 Označenie **9RX** znamená pásovú verziu rady 9R. Namiesto kolies má traktor štyri nezávislé gumové pásy. Táto konštrukcia poskytuje výrazne väčšiu kontaktnú plochu so zemou než kolesá — traktor prenesie plný výkon do ťahu, a pritom minimálne zhutňuje pôdu. Štyri samostatné pásy sa navyše lepšie prispôsobujú nerovnostiam terénu a zlepšujú stabilitu.
 
-## Prevodovka e18 PowerShift
+## Prevodovka e21 PowerShift
 
-Plne automatická prevodovka **e18 PowerShift** s 18 rýchlosťami vpred radí pod zaťažením bez prerušenia ťahu. Softvér vyhodnocuje zaťaženie motora a volí optimálny rýchlostný stupeň pre najnižšiu spotrebu.
+Plne automatická prevodovka **e21 PowerShift** s 21 rýchlosťami vpred radí pod zaťažením bez prerušenia ťahu. Softvér vyhodnocuje zaťaženie motora a volí optimálny rýchlostný stupeň pre najnižšiu spotrebu.
 
 ## Pre koho je 9RX 830
 

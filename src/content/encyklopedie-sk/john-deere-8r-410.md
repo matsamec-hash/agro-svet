@@ -1,66 +1,60 @@
 ---
-name: John Deere 8R 410
-slug: john-deere-8r-410
-znacka: john-deere
+name: "John Deere 8R 410"
+slug: "john-deere-8r-410"
+znacka: "john-deere"
 kategorie: traktor
-vykon: 410 k (301 kW)
-hmotnost: 14 200 kg
-rok_uvedeni: 2022
-popis: Vlajkový kolesový traktor radu 8R s výkonom 410 koní, automatickým pohonom 4WD a systémom autonómneho riadenia AutoPath.
-heroImage: /images/stroje/john-deere/john-deere-8r-410.jpg
+vykon: "410 k (301 kW)"
+hmotnost: "cca 12 500 kg (prevádzková)"
+rok_uvedeni: 2020
+popis: "Najvýkonnejší kolesový traktor radu 8R: menovitý výkon 410 koní, maximálny 443 koní bez boostu, šesťvalec 9,0 l a prevodovky e23, AutoPowr alebo elektromechanická eAutoPowr."
+heroImage: "/images/stroje/john-deere/john-deere-8r-410.jpg"
 powerHp: 410
 powerKw: 301
-weightKg: 14200
-engine: PowerTech PSX 9.0 L, 6-válec, Stage V
-transmission: DirectDrive 16/5 automatická, max. 40 km/h
-seriesName: 8R
-lastVerified: 2026-05-02
+weightKg: 12500
+engine: "PowerTech PSX 9.0 L, 6-valec, Stage V"
+transmission: "e23 PowerShift, AutoPowr IVT alebo eAutoPowr (EVT)"
+seriesName: "8R"
+lastVerified: 2026-10-17
 sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/tractors/large-tractors/8r-410-tractor-ode2mvjx"
-youtubeId: K3WmtzFIUbA
-youtubeTitle: John Deere 8R 410 eAutoPowr — Power Meets Precision
+youtubeId: "K3WmtzFIUbA"
+youtubeTitle: "John Deere 8R 410 eAutoPowr — Power Meets Precision"
 highlights:
-- Motor PowerTech PSX 9.0 L, 410 k
-- Automatická 16/5 prevodovka DirectDrive
-- Autonómne vedenie AutoPath
-- Kabína CommandView III s 10" dotykovým displejom
-- Hydraulika 435 l/min — 7 ventilov
+  - "Menovitý výkon 410 k, maximálny 443 k bez boostu"
+  - "Šesťvalec 9,0 l (od MY2027 John Deere JD9)"
+  - "Prevodovky e23, AutoPowr a eAutoPowr"
+  - "Hydraulika 227 l/min, s dvoma čerpadlami 318 l/min"
+  - "Kabína CommandView 4"
 faq:
-- q: Aký výkon má John Deere 8R 410?
-  a: John Deere 8R 410 má menovitý výkon 410 koní (301 kW). Pri využití výkonovej rezervy IVT Boost dokáže krátkodobo dosiahnuť 428 koní. Poháňa ho motor PowerTech PSX 9.0 L spĺňajúci normu Stage V.
-- q: Ako funguje systém AutoPath?
-  a: AutoPath ukladá GPS stopy z každého prechodu po poli. Pri ďalších sezónach traktor dodržiava rovnaké jazdné stopy s centimetrovou presnosťou. Výsledkom sú trvalé pojazdové dráhy a minimálne zhutňovanie pôdy mimo nich.
-- q: Pre akú veľkosť farmy sa John Deere 8R 410 hodí?
-  a: 8R 410 je určený pre veľkovýrobné farmy s výmerou nad 500 hektárov, kde sa oplatí investícia do automatizácie a vysokého výkonu. Pre stredné farmy je vhodnejší rad 7R alebo 6R.
-- q: Akú hydrauliku má John Deere 8R 410?
-  a: Priechod hydrauliky 435 l/min patrí k najvyšším vo svojej triede. Sedem elektronicky riadených ventilov umožňuje ovládanie komplexných agregátov. Zadný záves zvládne 12 000 kg, predný 5 500 kg.
-- q: Čo znamená OTA aktualizácia softvéru?
-  a: Over-The-Air aktualizácia umožňuje sťahovanie nových verzií softvéru bezdrôtovo cez mobilnú sieť bez návštevy servisu. John Deere týmto spôsobom distribuuje vylepšenia AutoPath, optimalizácie spotreby a nové funkcie displeja Gen 4 CommandCenter.
+  - q: "Aký výkon má John Deere 8R 410?"
+    a: "Podľa John Deere má 8R 410 menovitý výkon 410 koní (301 kW) a maximálny výkon 443 koní bez boostu. Poháňa ho šesťvalcový motor s objemom 9,0 litra – do modelového roku 2026 PowerTech PSX, od modelového roku 2027 John Deere JD9."
+  - q: "Aké prevodovky má 8R 410?"
+    a: "John Deere ponúka plne radenú prevodovku e23 PowerShift, plynulú AutoPowr IVT a elektromechanickú plynulú prevodovku eAutoPowr, ktorá namiesto hydrostatu používa elektrické motory."
+  - q: "Od kedy sa 8R 410 vyrába?"
+    a: "Model 8R 410 patrí do generácie 8R/8RT/8RX, ktorú John Deere ohlásil v októbri 2019 pre modelový rok 2020."
+  - q: "Akú hydrauliku má John Deere 8R 410?"
+    a: "Základné čerpadlo 85 cm³ dáva 227 l/min, s dvoma čerpadlami (85 + 35 cm³) 318 l/min. Zadný záves s voliteľným ramenom zdvihne až 13 890 kg, predný záves až 5 200 kg."
+  - q: "Pre akú farmu sa 8R 410 hodí?"
+    a: "8R 410 je určený pre veľké podniky, kde sa oplatí vysoký výkon a automatizácia. Pre stredné farmy je vhodnejší rad 7R alebo 6R."
 ---
 
-John Deere 8R 410 je vlajkovou loďou kolesových traktorov amerického výrobcu pre rok 2022. Kombinuje surový výkon s digitálnymi technológiami a strojovým učením.
+John Deere 8R 410 je najvýkonnejším kolesovým traktorom radu 8R. Generáciu 8R/8RT/8RX John Deere ohlásil v októbri 2019 pre modelový rok 2020.
 
-## Motor a pohon
+## Motor
 
-Štvorvalcový motor **PowerTech PSX 9.0 L** s výkonom 301 kW (410 k pri využití výkonovej rezervy IVT Boost: 428 k). Motor spĺňa emisnú normu **Stage V** a je vybavený systémom rekuperácie tepla z výfukových plynov.
+Menovitý výkon je 410 koní (301 kW), maximálny výkon bez boostu 443 koní. Šesťvalec s objemom 9,0 litra niesol do modelového roku 2026 označenie PowerTech PSX, od modelového roku 2027 ide o motor John Deere JD9.
 
-### DirectDrive prevodovka
+## Prevodovky
 
-Šestnásťstupňová automatická prevodovka s 5 reverznými radiacimi stupňami eliminuje straty výkonu pri radení. Plynulá zmena rýchlosti od 0 do 40 km/h bez prerušenia ťahu.
+- **e23 PowerShift** – plne radená prevodovka s 23 stupňami vpred,
+- **AutoPowr IVT** – plynulá hydromechanická prevodovka,
+- **eAutoPowr** – plynulá prevodovka, ktorá namiesto hydrostatu používa elektrické motory.
 
-## Autonómne funkcie
+## Hydraulika a závesy
 
-### AutoPath
+Základné hydraulické čerpadlo dáva 227 l/min, s dvoma čerpadlami 318 l/min. Zadný záves s voliteľným ramenom zdvihne až 13 890 kg, predný záves až 5 200 kg. Priemerná prevádzková hmotnosť je podľa John Deere okolo 12,5 t.
 
-Systém AutoPath učí traktor, kde jazdil v predchádzajúcich sezónach. Pri každom ďalšom prejazde dodržiava stopy z minulého roka na centimetre presne — výsledkom sú trvalé jazdné stopy a minimálne zhutňovanie mimo nich.
+## Kabína a technológie
 
-### Section Control
+Kabína **CommandView 4** a terminál CommandCenter, automatické riadenie AutoTrac a správa dát v John Deere Operations Center.
 
-Automatické vypínanie sekcií pri prekrytí (aplikácia hnojív, postrek, siatie) šetrí vstupy v priemere o 8–14 %.
-
-## Hydraulika a zadný záves
-
-Priechod hydrauliky **435 l/min** patrí k najvyšším v triede. Zadný záves zvládne **12 000 kg**, predný **5 500 kg**. Sedem elektronicky riadených ventilov umožňuje ovládanie komplexných agregátov.
-
-## Kabína CommandView III
-
-Nová kabína z roku 2022 ponúka 360° výhľad, centrálny ovládací panel Gen 4 CommandCenter a bezdrôtové aktualizácie softvéru OTA (over-the-air).
+Údaje vychádzajú z prospektu John Deere radu 8R 280–410.

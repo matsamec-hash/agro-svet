@@ -15,6 +15,8 @@ const ENC_COLLECTIONS = { cs: 'encyklopedie', sk: 'encyklopedieSk', uk: 'encyklo
 const ENC_TO_STROJE_SLUG: Record<string, string> = {
   'case-ih-axial-flow-9250': 'case-ih-9250',
   'john-deere-6r-250': 'john-deere-6r-250-gen3',
+  // 2026-10-17: duplikát john-deere-7r-350 ve staré řadě 7R smazán, zůstal 7R 350 v řadě 7R Gen3
+  'john-deere-7r-350': 'john-deere-7r-350-gen3',
 };
 const STROJE_TO_ENC_SLUG: Record<string, string> = Object.fromEntries(
   Object.entries(ENC_TO_STROJE_SLUG).map(([enc, stroje]) => [stroje, enc]),

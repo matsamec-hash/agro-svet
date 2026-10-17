@@ -3,59 +3,56 @@ name: "John Deere 6R 250"
 slug: "john-deere-6r-250"
 znacka: "john-deere"
 kategorie: traktor
-vykon: "250 k (186 kW)"
-hmotnost: "8 700 kg"
-rok_uvedeni: 2012
-popis: "Nejvýkonnější model prémiové univerzální řady 6R. Motor PowerTech PSS, bezstupňová převodovka AutoPowr IVT nebo Powershift CommandPro, plné odpružení přední nápravy TLS Plus."
+vykon: "250 k (184 kW)"
+hmotnost: "cca 9 300 kg"
+rok_uvedeni: 2022
+popis: "Vrcholný model řady 6R z modelového roku 2022: jmenovitý výkon 250 koní, maximální 275 koní, šestiválec PowerTech PSS 6,8 l a plynulá převodovka AutoPowr IVT."
 heroImage: "/images/stroje/john-deere/john-deere-6r-250k.webp"
 powerHp: 250
-powerKw: 186
-weightKg: 8700
+powerKw: 184
+weightKg: 9300
 engine: "John Deere PowerTech PSS, 6-válec, 6,8 L, Stage V"
-transmission: "AutoPowr IVT (bezstupňová) nebo CommandPro Powershift"
+transmission: "AutoPowr IVT (bezstupňová)"
 seriesName: "6R Series"
-lastVerified: 2026-05-14
+lastVerified: 2026-10-17
 sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/tractors/mid-size-tractors/6r-250-tractor-mejqnew"
 youtubeId: "NtRf8VfCgkY"
 youtubeTitle: "John Deere 6R 250 in Action — Real Work, Real Results"
 highlights:
-  - "Motor PowerTech PSS — 250 k ve vrcholu řady 6R"
-  - "Volba převodovky: AutoPowr IVT bezstupňová nebo CommandPro Powershift"
-  - "Plné odpružení přední nápravy TLS Plus"
-  - "Kabina CommandView III s displeji Generation 4"
-  - "JDLink — telematika a vzdálená správa flotily v ceně"
+  - "Motor PowerTech PSS 6,8 l — 250 k jmenovitý, 275 k maximální výkon"
+  - "Plynulá převodovka AutoPowr IVT"
+  - "Odpružení přední nápravy TLS Plus"
+  - "Ovládání joystickem CommandPRO"
+  - "Telematika JDLink"
 faq:
   - q: "Jaký výkon má John Deere 6R 250?"
-    a: "John Deere 6R 250 má jmenovitý výkon 250 koní (186 kW) a je nejvýkonnějším modelem univerzální řady 6R. Pohání ho šestiválcový motor PowerTech PSS o objemu 6,8 litru splňující emisní normu Stage V. Řada 6R sahá od přibližně 110 do 250 koní."
-  - q: "Jaký je rozdíl mezi AutoPowr a CommandPro?"
-    a: "AutoPowr IVT je bezstupňová převodovka — plynule mění převodový poměr bez definovaných stupňů. CommandPro je pokročilý Powershift ovládaný joystickem, který kombinuje pohodlí automatu s přímým pocitem z řazení. AutoPowr je plynulejší při polní práci, CommandPro oblíbený u dopravy a nakladačové práce."
+    a: "Podle John Deere má 6R 250 jmenovitý výkon 184 kW (250 k) a maximální výkon 202 kW (275 k). Pohání ho šestiválcový motor PowerTech PSS o objemu 6,8 litru, v Evropě ve verzi Stage V."
+  - q: "Jakou převodovku má 6R 250?"
+    a: "6R 250 se dodává s plynulou hydromechanickou převodovkou AutoPowr IVT. Joystick CommandPRO není převodovka, ale ovládací prvek, kterým se nastavuje rychlost a směr jízdy. Menší modely řady 6R se nabízejí i s převodovkami AutoQuad a DirectDrive."
+  - q: "Od kdy se 6R 250 vyrábí?"
+    a: "Model 6R 250 přišel s modernizovanou řadou 6R pro modelový rok 2022 a v nabídce nahradil 6250R."
   - q: "Co je odpružení TLS Plus?"
-    a: "TLS Plus (Triple-Link Suspension) je plné odpružení přední nápravy John Deere. Tlumí rázy z nerovností, takže traktor udrží trakci i komfort při vyšších rychlostech na poli i silnici. Snižuje únavu obsluhy a opotřebení stroje."
+    a: "TLS Plus (Triple Link Suspension) je odpružení přední nápravy John Deere. Tlumí rázy z nerovností, takže traktor udrží trakci i komfort při vyšších rychlostech na poli i silnici."
   - q: "Pro jakou farmu je John Deere 6R 250 vhodný?"
-    a: "John Deere 6R 250 je univerzální traktor pro střední a větší farmy s výměrou 200–500 hektarů. Zvládne orbu, secí kombinace, lisování, postřik i náročnou nakladačovou práci. Je to typický 'všeuměl' — jeden traktor pro většinu úkolů na farmě."
-  - q: "Co nabízí JDLink?"
-    a: "JDLink je telematická platforma John Deere. Sleduje polohu, výkon, spotřebu a stav stroje v reálném čase, umožňuje vzdálenou diagnostiku a sdílení dat o polní práci s agronomem nebo servisem. U řady 6R je součástí standardní výbavy."
+    a: "6R 250 je univerzální traktor pro střední a větší podniky. Zvládne orbu, secí kombinace, lisování, postřik i dopravu."
 ---
 
-Řada **6R** je páteří nabídky John Deere — univerzální traktor pro většinu farem. Model **6R 250** stojí na jejím vrcholu: dost výkonu pro těžkou polní práci, ale stále obratný stroj pro každodenní úkoly.
+Řada **6R** je páteří nabídky John Deere — univerzální traktor pro většinu farem. Model **6R 250** byl jejím vrcholem (pro modelový rok 2027 John Deere ohlásil i 6R 260) a do nabídky přišel s modernizovanou řadou 6R pro modelový rok 2022 jako nástupce 6250R.
 
 ## Motor PowerTech PSS
 
-6R 250 pohání šestiválcový **PowerTech PSS** o objemu 6,8 litru. Označení PSS znamená kombinaci přeplňování — pevný a variabilní turbodmychadlo pracují společně, což zajišťuje plný točivý moment v širokém pásmu otáček. Emisní normu Stage V plní kombinací SCR a filtru pevných částic.
+6R 250 pohání šestiválcový **PowerTech PSS** o objemu 6,8 litru s turbodmychadlem s proměnnou geometrií a druhým turbodmychadlem s pevnou geometrií. Jmenovitý výkon je 184 kW (250 k), maximální 202 kW (275 k). V Evropě motor plní emisní normu Stage V.
 
-## Volba převodovky
+## Převodovka AutoPowr IVT
 
-6R 250 nabízí dvě špičkové převodovky:
-
-- **AutoPowr IVT** — bezstupňová, plynule mění převodový poměr bez definovaných stupňů
-- **CommandPro** — pokročilý Powershift ovládaný joystickem, kombinuje pohodlí automatu s přímým pocitem z řazení
-
-AutoPowr je plynulejší při polní práci s proměnlivou zátěží, CommandPro je oblíbený u dopravy a práce s čelním nakladačem.
+6R 250 se dodává s plynulou hydromechanickou převodovkou **AutoPowr IVT**, která udržuje zvolenou rychlost i při kolísavém zatížení. Rychlost a směr jízdy se ovládají joystickem **CommandPRO**. Menší modely řady 6R se nabízejí i s převodovkami AutoQuad a DirectDrive.
 
 ## Odpružení TLS Plus
 
-Plné odpružení přední nápravy **TLS Plus** (Triple-Link Suspension) tlumí rázy z nerovností. Traktor udrží trakci i komfort při vyšších rychlostech — snižuje únavu obsluhy a opotřebení stroje.
+Odpružení přední nápravy **TLS Plus** (Triple Link Suspension) tlumí rázy z nerovností. Traktor udrží trakci i komfort při vyšších rychlostech.
 
-## Kabina CommandView III
+## Hydraulika, závěs a hmotnost
 
-Kabina **CommandView III** s displeji **Generation 4** patří mezi nejlépe vybavené ve třídě. Telematika **JDLink** je v ceně — sleduje výkon, spotřebu a polohu stroje a umožňuje vzdálenou diagnostiku.
+Základní čerpadlo 85 cm³ dává 160 l/min, zadní závěs kategorie 3/3N zvedne 7 000 kg. Základní hmotnost stroje je podle John Deere 9 300 kg.
+
+Údaje vycházejí ze specifikací John Deere pro 6R 250.

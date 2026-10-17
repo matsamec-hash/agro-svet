@@ -55,7 +55,8 @@ describe('stroje lib — locale-aware rozsahy a labely', () => {
   it('getBrand nemutuje cs data přes locale variantu (žádný sdílený objekt)', () => {
     const pl = getBrand('john-deere', 'pl');
     const cs = getBrand('john-deere', 'cs');
-    const find = (b: any) => b!.categories.traktory.series.find((s: any) => s.slug === '6m');
+    // 6R Gen3 je dosud ve výrobě (6M od 2024 už ne – název řady má uzavřený rozsah)
+    const find = (b: any) => b!.categories.traktory.series.find((s: any) => s.slug === '6r-gen3');
     expect(find(pl)!.name).toContain('obecnie');
     expect(find(cs)!.name).toContain('dosud');
   });

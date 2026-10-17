@@ -6,12 +6,12 @@ kategorie: traktor
 vykon: "350 PS (257 kW)"
 hmotnost: "ca. 11 500 kg"
 rok_uvedeni: 2020
-popis: "Das Spitzenmodell der Row-Crop-Baureihe 7R Gen3 mit 350 PS, Motor PowerTech PSS 9,0 L und optionalem stufenlosem Getriebe AutoPowr IVT."
+popis: "Das Spitzenmodell der Row-Crop-Baureihe 7R Gen3 mit 350 PS, Motor PowerTech PVS 9,0 L und optionalem stufenlosem Getriebe AutoPowr IVT."
 heroImage: "/images/stroje/john-deere/john-deere-7r-350k.webp"
 powerHp: 350
 powerKw: 257
 weightKg: 11500
-engine: "PowerTech PSS 9.0 L, 6-Zylinder, Stage V"
+engine: "PowerTech PVS 9.0 L, 6-Zylinder, Stage V"
 transmission: "e23 PowerShift 23/11 oder AutoPowr IVT, max. 40/50 km/h"
 seriesName: "7R Gen3"
 lastVerified: 2026-05-15
@@ -19,14 +19,14 @@ sourceUrl: "https://www.deere.de/de-de/produkte-und-loesungen/traktoren/grosstra
 youtubeId: "WWryeED9B4Y"
 youtubeTitle: "John Deere 7R 350 Walkaround"
 highlights:
-  - "Motor PowerTech PSS 9,0 L, 350 PS Nennleistung"
+  - "Motor PowerTech PVS 9,0 L, 350 PS Nennleistung"
   - "Getriebewahl e23 PowerShift oder stufenloses AutoPowr IVT"
   - "Kabine CommandView 4 mit Display Gen 4 CommandCenter"
   - "Volle Unterstützung für AutoTrac, AutoPath und JDLink-Telematik"
   - "Spitze der Baureihe 7R — zwischen 6R und den großen 8R"
 faq:
   - q: "Welche Leistung hat der John Deere 7R 350?"
-    a: "Der John Deere 7R 350 hat eine Nennleistung von 350 PS (257 kW). Angetrieben wird er vom Sechszylindermotor PowerTech PSS 9,0 L, der die Abgasnorm Stage V erfüllt. Es ist das stärkste Modell der aktuellen Generation 7R Gen3, die John Deere 2020 eingeführt hat."
+    a: "Der John Deere 7R 350 hat eine Nennleistung von 350 PS (257 kW). Angetrieben wird er vom Sechszylindermotor PowerTech PVS 9,0 L, der die Abgasnorm Stage V erfüllt. Es ist das stärkste Modell der aktuellen Generation 7R Gen3, die John Deere 2020 eingeführt hat."
   - q: "Welches Getriebe hat der 7R 350?"
     a: "Der Kunde wählt zwischen dem vollautomatischen e23 PowerShift mit 23 Vorwärts- und 11 Rückwärtsgängen und dem stufenlosen AutoPowr IVT. AutoPowr bietet eine kontinuierliche Geschwindigkeitsänderung ohne Zugkraftunterbrechung, das e23 ist günstiger und für überwiegende Zugarbeit bewährt."
   - q: "Worin unterscheiden sich die Baureihen 7R und 8R?"
@@ -39,9 +39,9 @@ faq:
 
 Der **John Deere 7R 350** ist das Spitzenmodell der aktuellen Generation 7R Gen3 — eines universellen Row-Crop-Traktors, der im John-Deere-Angebot das Rückgrat zwischen der Mittelbaureihe 6R und den großen Traktoren der 8R bildet.
 
-## Motor PowerTech PSS 9,0 L
+## Motor PowerTech PVS 9,0 L
 
-Den Traktor treibt der Sechszylinder **PowerTech PSS 9,0 L** mit einer Nennleistung von 350 PS (257 kW) an. Der Motor erfüllt die Abgasnorm **Stage V** durch die Kombination aus SCR-Katalysator und Partikelfilter. Der Neun-Liter-Hubraum sichert ein hohes Drehmoment schon bei niedrigen Drehzahlen, was bei Zugarbeiten Kraftstoff spart.
+Den Traktor treibt der Sechszylinder **PowerTech PVS 9,0 L** mit einer Nennleistung von 350 PS (257 kW) an. Der Motor erfüllt die Abgasnorm **Stage V** durch die Kombination aus SCR-Katalysator und Partikelfilter. Der Neun-Liter-Hubraum sichert ein hohes Drehmoment schon bei niedrigen Drehzahlen, was bei Zugarbeiten Kraftstoff spart.
 
 ## Getriebe — e23 oder AutoPowr
 

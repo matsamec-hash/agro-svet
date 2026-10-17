@@ -12,7 +12,7 @@ powerHp: 830
 powerKw: 611
 weightKg: 22000
 engine: "John Deere 18,0 L, 6-Zylinder, Stage V"
-transmission: "e18 PowerShift 18/6"
+transmission: "e21 PowerShift 21/11"
 seriesName: "9R/9RX"
 lastVerified: 2026-05-15
 sourceUrl: "https://www.deere.de/de-de/produkte-und-loesungen/traktoren/grosstraktoren/9rx-830-traktor-otkymfjx"
@@ -47,9 +47,9 @@ Mit 830 PS (611 kW) ist der 9RX 830 der stärkste Traktor, den John Deere anbiet
 
 Die Bezeichnung **9RX** steht für die Raupenversion der Baureihe 9R. Statt Rädern hat der Traktor vier unabhängige Gummilaufwerke. Diese Bauweise bietet eine deutlich größere Bodenaufstandsfläche als Räder — der Traktor setzt die volle Leistung in Zugkraft um und verdichtet dabei den Boden minimal. Vier separate Bänder passen sich zudem Unebenheiten besser an und verbessern die Stabilität.
 
-## Getriebe e18 PowerShift
+## Getriebe e21 PowerShift
 
-Das vollautomatische Getriebe **e18 PowerShift** mit 18 Vorwärtsgängen schaltet unter Last ohne Zugkraftunterbrechung. Die Software wertet die Motorlast aus und wählt die Gangstufe mit dem niedrigsten Verbrauch.
+Das vollautomatische Getriebe **e21 PowerShift** mit 21 Vorwärtsgängen schaltet unter Last ohne Zugkraftunterbrechung. Die Software wertet die Motorlast aus und wählt die Gangstufe mit dem niedrigsten Verbrauch.
 
 ## Für wen der 9RX 830 gedacht ist
 

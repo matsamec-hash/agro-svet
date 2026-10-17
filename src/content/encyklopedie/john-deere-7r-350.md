@@ -6,12 +6,12 @@ kategorie: traktor
 vykon: "350 k (257 kW)"
 hmotnost: "cca 11 500 kg"
 rok_uvedeni: 2020
-popis: "Vrcholný model row-crop řady 7R Gen3 s výkonem 350 koní, motorem PowerTech PSS 9,0 L a volitelnou bezstupňovou převodovkou AutoPowr IVT."
+popis: "Vrcholný model row-crop řady 7R Gen3 s výkonem 350 koní, motorem PowerTech PVS 9,0 L a volitelnou bezstupňovou převodovkou AutoPowr IVT."
 heroImage: "/images/stroje/john-deere/john-deere-7r-350k.webp"
 powerHp: 350
 powerKw: 257
 weightKg: 11500
-engine: "PowerTech PSS 9.0 L, 6-válec, Stage V"
+engine: "PowerTech PVS 9.0 L, 6-válec, Stage V"
 transmission: "e23 PowerShift 23/11 nebo AutoPowr IVT, max. 40/50 km/h"
 seriesName: "7R Gen3"
 lastVerified: 2026-05-15
@@ -19,14 +19,14 @@ sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/tractors/large-
 youtubeId: "WWryeED9B4Y"
 youtubeTitle: "John Deere 7R 350 Walkaround"
 highlights:
-  - "Motor PowerTech PSS 9,0 L, 350 k jmenovitého výkonu"
+  - "Motor PowerTech PVS 9,0 L, 350 k jmenovitého výkonu"
   - "Volba převodovky e23 PowerShift nebo bezstupňová AutoPowr IVT"
   - "Kabina CommandView 4 s displejem Gen 4 CommandCenter"
   - "Plná podpora AutoTrac, AutoPath a JDLink telematiky"
   - "Vrchol řady 7R — mezi 6R a velkými traktory 8R"
 faq:
   - q: "Jaký výkon má John Deere 7R 350?"
-    a: "John Deere 7R 350 má jmenovitý výkon 350 koní (257 kW). Pohání ho šestiválcový motor PowerTech PSS 9,0 L splňující emisní normu Stage V. Jde o nejvýkonnější model aktuální generace 7R Gen3, kterou John Deere uvedl v roce 2020."
+    a: "John Deere 7R 350 má jmenovitý výkon 350 koní (257 kW). Pohání ho šestiválcový motor PowerTech PVS 9,0 L splňující emisní normu Stage V. Jde o nejvýkonnější model aktuální generace 7R Gen3, kterou John Deere uvedl v roce 2020."
   - q: "Jakou převodovku má 7R 350?"
     a: "Zákazník volí mezi plně automatickou e23 PowerShift s 23 rychlostmi vpřed a 11 vzad, nebo bezstupňovou AutoPowr IVT. AutoPowr nabízí plynulou změnu rychlosti bez přerušení tahu, e23 je levnější a osvědčená pro převážně tahové práce."
   - q: "Jaký je rozdíl mezi řadami 7R a 8R?"
@@ -39,9 +39,9 @@ faq:
 
 **John Deere 7R 350** je vrcholným modelem aktuální generace 7R Gen3 — univerzálního row-crop traktoru, který tvoří páteř nabídky John Deere mezi střední řadou 6R a velkými traktory 8R.
 
-## Motor PowerTech PSS 9,0 L
+## Motor PowerTech PVS 9,0 L
 
-Traktor pohání šestiválcový **PowerTech PSS 9,0 L** s jmenovitým výkonem 350 koní (257 kW). Motor splňuje emisní normu **Stage V** kombinací SCR katalyzátoru a filtru pevných částic. Devítilitrový zdvihový objem zajišťuje vysoký točivý moment už při nízkých otáčkách, což šetří palivo při tahových pracích.
+Traktor pohání šestiválcový **PowerTech PVS 9,0 L** s jmenovitým výkonem 350 koní (257 kW). Motor splňuje emisní normu **Stage V** kombinací SCR katalyzátoru a filtru pevných částic. Devítilitrový zdvihový objem zajišťuje vysoký točivý moment už při nízkých otáčkách, což šetří palivo při tahových pracích.
 
 ## Převodovka — e23 nebo AutoPowr
 

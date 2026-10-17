@@ -4,63 +4,57 @@ slug: "john-deere-8r-410"
 znacka: "john-deere"
 kategorie: traktor
 vykon: "410 KM (301 kW)"
-hmotnost: "14 200 kg"
-rok_uvedeni: 2022
-popis: "Flagowy ciągnik kołowy serii 8R o mocy 410 koni, z automatycznym napędem 4WD i systemem autonomicznego prowadzenia AutoPath."
+hmotnost: "ok. 12 500 kg (eksploatacyjna)"
+rok_uvedeni: 2020
+popis: "Najmocniejszy kołowy ciągnik serii 8R: moc znamionowa 410 KM, maksymalna 443 KM bez boostu, sześciocylindrowy silnik 9,0 l i przekładnie e23, AutoPowr lub elektromechaniczna eAutoPowr."
 heroImage: "/images/stroje/john-deere/john-deere-8r-410.jpg"
 powerHp: 410
 powerKw: 301
-weightKg: 14200
+weightKg: 12500
 engine: "PowerTech PSX 9.0 L, 6-cylindrowy, Stage V"
-transmission: "DirectDrive 16/5 automatyczna, maks. 40 km/h"
+transmission: "e23 PowerShift, AutoPowr IVT lub eAutoPowr (EVT)"
 seriesName: "8R"
-lastVerified: 2026-05-02
+lastVerified: 2026-10-17
 sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/tractors/large-tractors/8r-410-tractor-ode2mvjx"
 youtubeId: "K3WmtzFIUbA"
 youtubeTitle: "John Deere 8R 410 eAutoPowr — Power Meets Precision"
 highlights:
-  - "Silnik PowerTech PSX 9.0 L, 410 KM"
-  - "Automatyczna przekładnia 16/5 DirectDrive"
-  - "Autonomiczne prowadzenie AutoPath"
-  - "Kabina CommandView III z 10\" ekranem dotykowym"
-  - "Hydraulika 435 l/min — 7 zaworów"
+  - "Moc znamionowa 410 KM, maksymalna 443 KM bez boostu"
+  - "Sześciocylindrowy silnik 9,0 l (od MY2027 John Deere JD9)"
+  - "Przekładnie e23, AutoPowr i eAutoPowr"
+  - "Hydraulika 227 l/min, z dwiema pompami 318 l/min"
+  - "Kabina CommandView 4"
 faq:
   - q: "Jaką moc ma John Deere 8R 410?"
-    a: "John Deere 8R 410 ma moc znamionową 410 koni (301 kW). Przy wykorzystaniu rezerwy mocy IVT Boost może krótkotrwale osiągnąć 428 koni. Napędza go silnik PowerTech PSX 9.0 L spełniający normę Stage V."
-  - q: "Jak działa system AutoPath?"
-    a: "AutoPath zapisuje ślady GPS z każdego przejazdu po polu. W kolejnych sezonach ciągnik utrzymuje te same tory jazdy z centymetrową dokładnością. Efektem są stałe ścieżki przejazdowe i minimalne zagęszczanie gleby poza nimi."
-  - q: "Dla jakiej wielkości gospodarstwa nadaje się John Deere 8R 410?"
-    a: "8R 410 jest przeznaczony dla wielkotowarowych gospodarstw o areale powyżej 500 hektarów, gdzie opłaca się inwestycja w automatyzację i wysoką moc. Dla średnich gospodarstw odpowiedniejsza jest seria 7R lub 6R."
+    a: "Według John Deere 8R 410 ma moc znamionową 410 KM (301 kW) i maksymalną 443 KM bez boostu. Napędza go sześciocylindrowy silnik o pojemności 9,0 litra – do roku modelowego 2026 PowerTech PSX, od roku modelowego 2027 John Deere JD9."
+  - q: "Jakie przekładnie ma 8R 410?"
+    a: "John Deere oferuje w pełni zmienianą pod obciążeniem przekładnię e23 PowerShift, bezstopniową AutoPowr IVT oraz elektromechaniczną bezstopniową eAutoPowr, która zamiast hydrostatu wykorzystuje silniki elektryczne."
+  - q: "Od kiedy produkowany jest 8R 410?"
+    a: "Model 8R 410 należy do generacji 8R/8RT/8RX, którą John Deere zapowiedział w październiku 2019 na rok modelowy 2020."
   - q: "Jaką hydraulikę ma John Deere 8R 410?"
-    a: "Przepływ hydrauliki 435 l/min należy do najwyższych w swojej klasie. Siedem elektronicznie sterowanych zaworów umożliwia obsługę złożonych agregatów. Tylny podnośnik udźwignie 12 000 kg, przedni 5 500 kg."
-  - q: "Co oznacza aktualizacja oprogramowania OTA?"
-    a: "Aktualizacja Over-The-Air umożliwia pobieranie nowych wersji oprogramowania bezprzewodowo przez sieć komórkową, bez wizyty w serwisie. John Deere w ten sposób dystrybuuje ulepszenia AutoPath, optymalizacje zużycia i nowe funkcje wyświetlacza Gen 4 CommandCenter."
+    a: "Podstawowa pompa 85 cm³ daje 227 l/min, z dwiema pompami (85 + 35 cm³) 318 l/min. Tylny TUZ z opcjonalnym podnośnikiem podnosi do 13 890 kg, przedni do 5 200 kg."
+  - q: "Dla jakiego gospodarstwa nadaje się 8R 410?"
+    a: "8R 410 jest przeznaczony dla dużych gospodarstw, w których opłaca się wysoka moc i automatyzacja. Dla średnich gospodarstw lepsze są serie 7R lub 6R."
 ---
 
-John Deere 8R 410 jest okrętem flagowym ciągników kołowych amerykańskiego producenta na rok 2022. Łączy surową moc z technologiami cyfrowymi i uczeniem maszynowym.
+John Deere 8R 410 to najmocniejszy kołowy ciągnik serii 8R. Generację 8R/8RT/8RX John Deere zapowiedział w październiku 2019 na rok modelowy 2020.
 
-## Silnik i napęd
+## Silnik
 
-Czterocylindrowy silnik **PowerTech PSX 9.0 L** o mocy 301 kW (410 KM przy wykorzystaniu rezerwy mocy IVT Boost: 428 KM). Silnik spełnia normę emisji **Stage V** i jest wyposażony w system rekuperacji ciepła ze spalin wylotowych.
+Moc znamionowa wynosi 410 KM (301 kW), moc maksymalna bez boostu 443 KM. Sześciocylindrowy silnik o pojemności 9,0 litra nosił do roku modelowego 2026 nazwę PowerTech PSX, od roku modelowego 2027 to silnik John Deere JD9.
 
-### Przekładnia DirectDrive
+## Przekładnie
 
-Szesnastobiegowa automatyczna przekładnia z 5 biegami wstecznymi eliminuje straty mocy podczas zmiany biegów. Płynna zmiana prędkości od 0 do 40 km/h bez przerwania siły uciągu.
+- **e23 PowerShift** – przekładnia w pełni zmieniana pod obciążeniem, 23 biegi do przodu,
+- **AutoPowr IVT** – bezstopniowa przekładnia hydromechaniczna,
+- **eAutoPowr** – bezstopniowa przekładnia, która zamiast hydrostatu wykorzystuje silniki elektryczne.
 
-## Funkcje autonomiczne
+## Hydraulika i TUZ
 
-### AutoPath
+Podstawowa pompa hydrauliczna daje 227 l/min, z dwiema pompami 318 l/min. Tylny TUZ z opcjonalnym podnośnikiem podnosi do 13 890 kg, przedni do 5 200 kg. Średnia masa eksploatacyjna według John Deere wynosi ok. 12,5 t.
 
-System AutoPath uczy ciągnik, gdzie jeździł w poprzednich sezonach. Przy każdym kolejnym przejeździe utrzymuje ślady z ubiegłego roku z centymetrową dokładnością — efektem są stałe tory jazdy i minimalne zagęszczanie poza nimi.
+## Kabina i technologie
 
-### Section Control
+Kabina **CommandView 4** z terminalem CommandCenter, automatyczne prowadzenie AutoTrac i zarządzanie danymi w John Deere Operations Center.
 
-Automatyczne wyłączanie sekcji przy nakładaniu się (aplikacja nawozów, oprysk, siew) oszczędza środki średnio o 8–14 %.
-
-## Hydraulika i tylny podnośnik
-
-Przepływ hydrauliki **435 l/min** należy do najwyższych w klasie. Tylny podnośnik udźwignie **12 000 kg**, przedni **5 500 kg**. Siedem elektronicznie sterowanych zaworów umożliwia obsługę złożonych agregatów.
-
-## Kabina CommandView III
-
-Nowa kabina z 2022 roku oferuje widoczność 360°, centralny panel sterowania Gen 4 CommandCenter oraz bezprzewodowe aktualizacje oprogramowania OTA (over-the-air).
+Dane pochodzą z prospektu John Deere serii 8R 280–410.

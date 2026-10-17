@@ -3,59 +3,56 @@ name: "John Deere 6R 250"
 slug: "john-deere-6r-250"
 znacka: "john-deere"
 kategorie: traktor
-vykon: "250 PS (186 kW)"
-hmotnost: "8 700 kg"
-rok_uvedeni: 2012
-popis: "Das stärkste Modell der universellen Premiumbaureihe 6R. Motor PowerTech PSS, stufenloses Getriebe AutoPowr IVT oder Powershift CommandPro, vollwertige Vorderachsfederung TLS Plus."
+vykon: "250 PS (184 kW)"
+hmotnost: "ca. 9 300 kg"
+rok_uvedeni: 2022
+popis: "Das Spitzenmodell der Baureihe 6R des Modelljahres 2022: 250 PS Nennleistung, 275 PS Maximalleistung, Sechszylinder PowerTech PSS mit 6,8 l und stufenloses Getriebe AutoPowr IVT."
 heroImage: "/images/stroje/john-deere/john-deere-6r-250k.webp"
 powerHp: 250
-powerKw: 186
-weightKg: 8700
+powerKw: 184
+weightKg: 9300
 engine: "John Deere PowerTech PSS, 6-Zylinder, 6,8 L, Stage V"
-transmission: "AutoPowr IVT (stufenlos) oder CommandPro Powershift"
+transmission: "AutoPowr IVT (stufenlos)"
 seriesName: "6R Series"
-lastVerified: 2026-05-14
-sourceUrl: "https://www.deere.de/de-de/produkte-und-loesungen/traktoren/mittelgrosse-traktoren/6r-250-traktor-mejqnew"
+lastVerified: 2026-10-17
+sourceUrl: "https://www.deere.co.uk/en-gb/products-and-solutions/tractors/mid-size-tractors/6r-250-tractor-mejqnew"
 youtubeId: "NtRf8VfCgkY"
 youtubeTitle: "John Deere 6R 250 in Action — Real Work, Real Results"
 highlights:
-  - "Motor PowerTech PSS — 250 PS an der Spitze der Baureihe 6R"
-  - "Getriebewahl: stufenloses AutoPowr IVT oder CommandPro Powershift"
-  - "Vollwertige Vorderachsfederung TLS Plus"
-  - "Kabine CommandView III mit Displays der Generation 4"
-  - "JDLink — Telematik und Flottenfernverwaltung inklusive"
+  - "Motor PowerTech PSS 6,8 l — 250 PS Nenn-, 275 PS Maximalleistung"
+  - "Stufenloses Getriebe AutoPowr IVT"
+  - "Vorderachsfederung TLS Plus"
+  - "Joystick-Bedienung CommandPRO"
+  - "Telematik JDLink"
 faq:
   - q: "Welche Leistung hat der John Deere 6R 250?"
-    a: "Der John Deere 6R 250 hat eine Nennleistung von 250 PS (186 kW) und ist das stärkste Modell der universellen Baureihe 6R. Angetrieben wird er vom Sechszylindermotor PowerTech PSS mit 6,8 Litern Hubraum, der die Abgasnorm Stage V erfüllt. Die Baureihe 6R reicht von etwa 110 bis 250 PS."
-  - q: "Worin unterscheiden sich AutoPowr und CommandPro?"
-    a: "AutoPowr IVT ist ein stufenloses Getriebe — es verändert die Übersetzung kontinuierlich ohne feste Gangstufen. CommandPro ist ein weiterentwickeltes, per Joystick bedientes Powershift, das den Komfort einer Automatik mit einem direkten Schaltgefühl verbindet. AutoPowr arbeitet auf dem Feld gleichmäßiger, CommandPro ist im Transport und bei Frontladerarbeit beliebt."
+    a: "Laut John Deere hat der 6R 250 eine Nennleistung von 184 kW (250 PS) und eine Maximalleistung von 202 kW (275 PS). Angetrieben wird er vom Sechszylinder PowerTech PSS mit 6,8 Litern, in Europa in der Version Stufe V."
+  - q: "Welches Getriebe hat der 6R 250?"
+    a: "Der 6R 250 wird mit dem stufenlosen hydromechanischen Getriebe AutoPowr IVT geliefert. Der Joystick CommandPRO ist kein Getriebe, sondern das Bedienelement für Geschwindigkeit und Fahrtrichtung. Kleinere 6R-Modelle gibt es auch mit AutoQuad und DirectDrive."
+  - q: "Seit wann wird der 6R 250 gebaut?"
+    a: "Der 6R 250 kam mit der überarbeiteten Baureihe 6R zum Modelljahr 2022 und ersetzte den 6250R."
   - q: "Was ist die Federung TLS Plus?"
-    a: "TLS Plus (Triple-Link Suspension) ist die vollwertige Vorderachsfederung von John Deere. Sie dämpft Stöße aus Unebenheiten, sodass der Traktor Traktion und Komfort auch bei höheren Geschwindigkeiten auf Feld und Straße behält. Sie verringert die Ermüdung des Fahrers und den Maschinenverschleiß."
+    a: "TLS Plus (Triple Link Suspension) ist die Vorderachsfederung von John Deere. Sie dämpft Stöße von Unebenheiten, sodass der Traktor auch bei höherem Tempo auf Feld und Straße Traktion und Komfort behält."
   - q: "Für welchen Betrieb eignet sich der John Deere 6R 250?"
-    a: "Der John Deere 6R 250 ist ein Universaltraktor für mittlere und größere Betriebe mit 200–500 Hektar. Er bewältigt Pflügen, Sämaschinenkombinationen, Pressen, Pflanzenschutz und anspruchsvolle Frontladerarbeit. Er ist ein typischer Allrounder — ein Traktor für die meisten Aufgaben des Betriebs."
-  - q: "Was bietet JDLink?"
-    a: "JDLink ist die Telematikplattform von John Deere. Sie verfolgt Position, Leistung, Verbrauch und Maschinenzustand in Echtzeit, ermöglicht Ferndiagnose und das Teilen von Feldarbeitsdaten mit Berater oder Werkstatt. Bei der Baureihe 6R gehört sie zur Serienausstattung."
+    a: "Der 6R 250 ist ein Universaltraktor für mittlere und größere Betriebe — für Pflug, Säkombination, Presse, Spritze und Transport."
 ---
 
-Die Baureihe **6R** ist das Rückgrat des John-Deere-Angebots — ein Universaltraktor für die meisten Betriebe. Das Modell **6R 250** steht an ihrer Spitze: genug Leistung für schwere Feldarbeit, aber weiterhin eine wendige Maschine für die täglichen Aufgaben.
+Die Baureihe **6R** ist das Rückgrat des John-Deere-Programms — ein Universaltraktor für die meisten Betriebe. Der **6R 250** war ihr Spitzenmodell (für das Modelljahr 2027 hat John Deere auch den 6R 260 angekündigt); er kam mit der überarbeiteten Baureihe 6R zum Modelljahr 2022 als Nachfolger des 6250R.
 
 ## Motor PowerTech PSS
 
-Den 6R 250 treibt der Sechszylinder **PowerTech PSS** mit 6,8 Litern Hubraum an. Die Bezeichnung PSS steht für eine kombinierte Aufladung — ein fester und ein variabler Turbolader arbeiten zusammen, was über einen breiten Drehzahlbereich volles Drehmoment sichert. Die Abgasnorm Stage V erfüllt er durch die Kombination aus SCR und Partikelfilter.
+Den 6R 250 treibt der Sechszylinder **PowerTech PSS** mit 6,8 Litern an, mit einem Turbolader mit variabler Geometrie und einem zweiten Turbolader mit fester Geometrie. Die Nennleistung beträgt 184 kW (250 PS), die Maximalleistung 202 kW (275 PS). In Europa erfüllt der Motor die Abgasstufe V.
 
-## Getriebewahl
+## Getriebe AutoPowr IVT
 
-Der 6R 250 bietet zwei Spitzengetriebe:
-
-- **AutoPowr IVT** — stufenlos, verändert die Übersetzung kontinuierlich ohne feste Gangstufen
-- **CommandPro** — weiterentwickeltes, per Joystick bedientes Powershift, verbindet Automatikkomfort mit direktem Schaltgefühl
-
-AutoPowr arbeitet bei Feldarbeit mit wechselnder Last gleichmäßiger, CommandPro ist im Transport und bei der Frontladerarbeit beliebt.
+Der 6R 250 wird mit dem stufenlosen hydromechanischen Getriebe **AutoPowr IVT** geliefert, das die gewählte Geschwindigkeit auch bei wechselnder Last hält. Geschwindigkeit und Fahrtrichtung steuert der Joystick **CommandPRO**. Kleinere 6R-Modelle gibt es auch mit AutoQuad und DirectDrive.
 
 ## Federung TLS Plus
 
-Die vollwertige Vorderachsfederung **TLS Plus** (Triple-Link Suspension) dämpft Stöße aus Unebenheiten. Der Traktor behält Traktion und Komfort bei höheren Geschwindigkeiten — das verringert die Ermüdung des Fahrers und den Maschinenverschleiß.
+Die Vorderachsfederung **TLS Plus** (Triple Link Suspension) dämpft Stöße von Unebenheiten. Der Traktor behält auch bei höherem Tempo Traktion und Komfort.
 
-## Kabine CommandView III
+## Hydraulik, Hubwerk und Gewicht
 
-Die Kabine **CommandView III** mit Displays der **Generation 4** gehört zu den bestausgestatteten ihrer Klasse. Die Telematik **JDLink** ist inklusive — sie verfolgt Leistung, Verbrauch und Position der Maschine und ermöglicht Ferndiagnose.
+Die Grundpumpe mit 85 cm³ liefert 160 l/min, das Heckhubwerk der Kategorie 3/3N hebt 7 000 kg. Das Grundgewicht beträgt laut John Deere 9 300 kg.
+
+Die Angaben stammen aus den John-Deere-Spezifikationen für den 6R 250.
