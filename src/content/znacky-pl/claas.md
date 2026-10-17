@@ -23,7 +23,7 @@ Claas został założony w 1913 roku przez Augusta Claasa w Westfalii (siedziba 
 - **2003** — przejęcie **Renault Agriculture** (51% udziałów, wejście w ciągniki)
 - **2008** — Claas przejmuje Renault Agriculture na **100%**
 - **2010** — wprowadzenie ciągnika **Axion 800**
-- **2014** — **Xerion 5000** Traktor Roku
+- **2014** — **Axion 850** Traktor Roku
 - **2019** — całkowicie nowa generacja **Lexion 5000–8000**
 - **2021** — wprowadzenie **Trion** (częściowo zastępuje Tucano)
 

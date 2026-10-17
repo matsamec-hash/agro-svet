@@ -3,7 +3,7 @@ title: Eroze půdy v Česku — proč mizí ornice a co s tím
 popis: 60 % české orné půdy je ohroženo vodní erozí, ročně z polí mizí 21 milionů tun zeminy. Hloubková analýza příčin, dopadů a opatření — od kolektivizace v 50. letech po DZES 7 v roce 2024.
 ---
 
-Česká republika patří mezi nejvíce erozně postižené země EU. Ročně z našich polí zmizí přibližně **21 milionů tun ornice** — to je objem, který by zaplnil 700 tisíc nákladních aut nebo pokryl celé Václavské náměstí vrstvou 30 metrů vysokou. Tato ornice se přírodně netvoří roky ani desetiletí, ale **stovky let** — 1 cm ornice znamená podle různých odhadů 100 až 300 let geologicko-biologického procesu.
+Ročně z našich polí zmizí přibližně **21 milionů tun ornice** — to je objem, který by zaplnil 700 tisíc nákladních aut nebo pokryl celé Václavské náměstí vrstvou 30 metrů vysokou. Tato ornice se přírodně netvoří roky ani desetiletí, ale **stovky let** — 1 cm ornice znamená podle různých odhadů 100 až 300 let geologicko-biologického procesu.
 
 Eroze je největší skrytý dluh českého zemědělství. Většina lidí ji nevidí — pomalu mizící centimetr po centimetru. Ale když po prudkém dešti odplaví celou pole během jedné hodiny nebo zaplaví obec, problém se stane viditelným.
 
@@ -17,7 +17,7 @@ V hektarovém vyjádření: pro každou tunu ztracené ornice na hektaru klesne 
 
 ## Měřítko problému v ČR
 
-Podle Výzkumného ústavu meliorací a ochrany půdy (VÚMOP) je situace v Česku následující:
+Orientační údaje o situaci v Česku:
 
 | Ukazatel | Hodnota |
 |---|---|
@@ -136,7 +136,7 @@ Eroze není jen environmentální problém — je to ekonomická ztráta měřit
 
 ## Protierozní opatření
 
-Účinnost je měřitelná — VÚMOP má dlouhodobé pokusy. Procentuální snížení eroze:
+Účinnost opatření je měřitelná. Orientační procentuální snížení eroze:
 
 ### Organizační opatření
 
@@ -177,35 +177,22 @@ Plus **DZES 5** (minimální půdní pokryv): minimálně 80 % orné půdy v pod
 
 A **DZES 6** (zákaz orby v erozně ohrožených oblastech v určitých termínech): zákaz orby od 1.7. do 31.8. v silně erozních pásmech.
 
-## Zákon č. 41/2023 Sb.
-
-Od 1. ledna 2024 platí **zákon o ochraně zemědělského půdního fondu (novelizace)**, který:
-- Stanovuje povinnost dodržovat DZES 5, 6, 7
-- Zavádí pojem **erozně ohrožená oblast** (EOP) — celkem 1,52 mil. ha
-- Zakazuje pěstování erozně rizikových plodin (kukuřice na zrno, slunečnice, brambory, sója) ve **silně ohrožených** oblastech bez protierozních opatření
-- Stanovuje **sankce SZIF**: 1 % až 100 % krácení dotací podle závažnosti porušení
-- Předepisuje **každoroční evidenci protierozních opatření** v podniku
-
-V roce 2024 SZIF udělil pokuty v celkové výši **~85 mil. Kč** za porušení DZES — o 60 % víc než v roce 2023.
-
 ## Mezinárodní srovnání
 
-ČR patří mezi 5 nejhůře erozně postižených zemí EU. Příčiny: velké pole, podíl orné, sprašové půdy, kontinentální klima s intenzivními bouřkami.
+Odhad Eurostatu pro ztrátu půdy vodní erozí na zemědělské půdě bez pastvin (model RUSLE2015, rok 2016, datová sada aei_pr_soiler):
 
 | Země | Průměrná ztráta zeminy (t/ha/rok) |
 |---|---|
-| Itálie | 9,1 |
-| **Česká republika** | **8,3** |
-| Slovinsko | 7,6 |
-| Slovensko | 5,2 |
-| Rakousko | 4,1 |
-| Bulharsko | 3,6 |
-| Polsko | 1,5 |
-| Německo | 1,2 |
+| Slovinsko | 14,8 |
+| Itálie | 11,2 |
+| Rakousko | 4,9 |
+| Slovensko | 3,8 |
+| EU průměr | 3,6 |
+| Bulharsko | 3,4 |
+| **Česká republika** | **2,7** |
 | Francie | 2,3 |
-| EU průměr | 2,5 |
-
-Polsko má 5× nižší erozi přes podobné klima — průměrná velikost pole je **5,9 ha** (ČR 17 ha) a vysoký podíl rodinných farem. Německo má lesnatější krajinu a podstatně menší pole (průměr **6,3 ha**), navíc striktnější legislativu od 80. let.
+| Německo | 1,9 |
+| Polsko | 1,6 |
 
 ## Co můžete udělat
 
@@ -231,8 +218,7 @@ Polsko má 5× nižší erozi přes podobné klima — průměrná velikost pole
 - **Monitoring eroze** ([monitoringeroze.cz](https://me.vumop.cz/)) — interaktivní mapa erozních událostí, hlášení od veřejnosti
 - **MZe — Strategický plán SZP 2023–2027** — DZES 5/6/7 pravidla
 - **ÚKZÚZ** — kontrolní úřad zemědělský a zkušební
-- **Eurostat — Soil erosion** — mezinárodní srovnání
-- **Zákon č. 41/2023 Sb.** — o ochraně zemědělského půdního fondu
+- **Eurostat — Estimated soil erosion by water** ([aei_pr_soiler](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)) — mezinárodní srovnání
 
 ---
 

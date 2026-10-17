@@ -32,7 +32,7 @@ faq:
   - q: "Was ist die Kabine Protect-U?"
     a: "Protect-U ist die Kabinenlösung der Baureihe 8S, bei der die Kabine durch einen 24 cm breiten Spalt physisch vom Motorbereich getrennt ist. Diese Entkopplung senkt die Übertragung von Lärm, Wärme und Vibrationen aus dem Motor in die Kabine deutlich — die Baureihe 8S gehört zu den leisesten Traktoren ihrer Klasse."
   - q: "Welche Auszeichnungen erhielt der Massey Ferguson 8S?"
-    a: "Die Baureihe 8S erhielt den Titel Tractor of the Year 2021 in der Kategorie Best Design und den renommierten Red Dot Award für Industriedesign. Die Auszeichnungen gelten vor allem dem Kabinenkonzept Protect-U und der Gesamtformgebung der Maschine."
+    a: "Die Baureihe 8S erhielt den Titel Tractor of the Year 2021 und den renommierten Red Dot Award für Industriedesign. Die Auszeichnungen gelten vor allem dem Kabinenkonzept Protect-U und der Gesamtformgebung der Maschine."
   - q: "Für welchen Betrieb eignet sich der MF 8S.305?"
     a: "Der Massey Ferguson 8S.305 ist ein leistungsstarker Row-Crop-Traktor für große Betriebe mit 400–700 Hektar. Er eignet sich für schweres Pflügen, breite Sämaschinenkombinationen, Tiefenlockerer und gezogene Feldspritzen. Das stufenlose Dyna-VT ist auch bei längeren Überfahrten ein Vorteil."
 ---
@@ -59,4 +59,4 @@ Die Bedienung vereint den Joystick **Multipad** und das Touchterminal **Datatron
 
 ## Ausgezeichnetes Design
 
-Die Baureihe 8S erhielt den Titel **Tractor of the Year 2021** in der Kategorie Best Design und den renommierten **Red Dot Award** für Industriedesign. Die Auszeichnungen gelten vor allem dem Kabinenkonzept Protect-U und der Gesamtformgebung der Maschine — bei einem Traktor eine überdurchschnittliche Aufmerksamkeit fürs Design.
+Die Baureihe 8S erhielt den Titel **Tractor of the Year 2021** und den renommierten **Red Dot Award** für Industriedesign. Die Auszeichnungen gelten vor allem dem Kabinenkonzept Protect-U und der Gesamtformgebung der Maschine — bei einem Traktor eine überdurchschnittliche Aufmerksamkeit fürs Design.

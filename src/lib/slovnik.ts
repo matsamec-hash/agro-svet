@@ -993,7 +993,7 @@ Praktické převody:
 - **1 korec ≈ 0,711 akru**
 - **3,5 korce = 1 ha** (zaokrouhleně)
 
-Po metrické reformě v ČSR (zákon č. 268/1919 Sb.) byl korec **oficiálně nahrazen hektarem a arem**. Dnes nemá právní platnost jako jednotka, ale staré zápisy zůstávají právně relevantní.
+Po zavedení metrické soustavy (v Rakousku-Uhersku zákonem z roku 1871 s účinností od 1876) byl korec **oficiálně nahrazen hektarem a arem**. Dnes nemá právní platnost jako jednotka, ale staré zápisy zůstávají právně relevantní.
 
 Viz též [[strych]] (synonymum v některých regionech), [[jitro]], [[lan]], [[hektar]], [[ar]].`,
     related: ['strych', 'jitro', 'lan', 'hektar', 'ar'],
@@ -1028,7 +1028,7 @@ V některých regionech jihovýchodní Moravy a Slovenska byl strych pevně men�
 - **3,48 strychu = 1 ha**
 
 **Dnes ještě potkáme strych:**
-- **Katastr nemovitostí** — staré zápisy před metrickou reformou 1919.
+- **Katastr nemovitostí** — staré zápisy před zavedením metrické soustavy (1876).
 - **Genealogie / rodopis** — matriky a gruntovní knihy uvádějí výměry ve strychích.
 - **Pomístní názvy** — „Strychy", „Na strychu", „Strychová pole" v některých obcích.
 
@@ -1037,7 +1037,7 @@ Praktické převody:
 - **1 strych ≈ 0,712 akru**
 - **3,48 strychu = 1 hektar**
 
-Po metrické reformě v ČSR (1919) byl strych **oficiálně zrušen** jako platná jednotka. Pro pochopení starých dokumentů ale potřeba znát.
+Po zavedení metrické soustavy (1876) byl strych **oficiálně zrušen** jako platná jednotka. Pro pochopení starých dokumentů ale potřeba znát.
 
 Viz též [[korec]] (synonymum), [[jitro]] (= 2 strychy), [[lan]], [[hektar]].`,
     related: ['korec', 'jitro', 'lan', 'hektar'],
@@ -3132,7 +3132,7 @@ Dnes:
 - **Sekáč s kosou**: 0,3 ha/den × 500 ha = **3 roky lidské práce** ekvivalent jednoho moderního kombajnu.
 
 **Kulturní dimenze:**
-- **Žencovské písně** (zachovány lidovou tradicí, např. „Pole, pole, široké pole")
+- **Žencovské písně** (zachovány lidovou tradicí)
 - **„Hostina po žních"** = oslava konce sklizně, štědrá strava, tanec
 - **„Dožínky"** = slavnostní průvod posledního snopu ozdobeného květinami ke statkáři, vrchnosti nebo dnes na slavnostech městyse/obce
 - **„Sklizňový obřad"** v některých krajích (přivolávání úrody) — synkretismus pohanských a křesťanských obřadů
@@ -3192,16 +3192,10 @@ Viz též [[mlat]], [[snop-otep]], [[kombajn-trida]], [[rotor-kombajn]], [[grunt
 - **Marže**: vyšší kvůli nižším nákladům + premium ceny (carbon credits, regen certifikace, Whole Foods/Patagonia kontrakty)
 
 **Slavná regen jména:**
-- **Gabe Brown** (USA, ND) — kniha „Dirt to Soil", farma 2 500 ha bez hnojiv 20+ let
+- **Gabe Brown** (USA, ND) — kniha „Dirt to Soil"
 - **Allan Savory** (Zimbabwe) — „Holistic Management" pro pastvu
 - **Joel Salatin** (USA, VA) — Polyface Farm, multi-species integrované pastviny
 - **Charles Massy** (Austrálie) — „Call of the Reed Warbler", regenerace australských pastvin
-
-**V ČR:**
-- **Jihočeská farma „Kuneš"** (Kestřany) — modelová regen farma
-- **AgroProgress** — konzultace pro převod
-- **Skupina REGAGRI** — sdružení regen farmářů
-- **Carbon credits**: pilotní programy od 2023 (Indigo, Climate Farmers, Soil Capital)
 
 **Risk:**
 - **Přechodové období 3–5 let** — výnosy klesnou, dokud se neobnoví půdní mikrobiom
@@ -3248,7 +3242,6 @@ Viz též [[no-till]], [[ctf]], [[mezi-plodiny]], [[organicka-hmota]], [[karbono
 - **Climate Farmers** (DE) — startup pro EU farmy
 - **Soil Capital** (BE) — payments per t CO₂
 - **eAgronom** (EE) — softwarová platforma pro management
-- **AgroVoltaika certifikace** (SOIL3) — CZ-orientovaná
 
 **Problémy a kritika:**
 - **Additionality** — credit je „validní" jen pokud farma sekvestraci NEDĚLALA by bez něj. Sporné.
@@ -3378,12 +3371,6 @@ V Amazonii (Brazílie) byly objeveny **temně černé úrodné půdy** *Terra Pr
 - **Carbon credits**: 15–25 EUR/t CO₂ × 3 t CO₂/t biouhle = ~1 200 Kč/t biouhle dodatečně
 - **Návratnost**: 5–10 let na biouhel samostatně, 3–5 let s carbon credity
 
-**V ČR:**
-- **Sklizeň-Lanškroun** — největší výrobce, kapacita 5 000 t/rok
-- **Biochar.cz** — distribuce, poradenství
-- **AGRIBO** — výrobce + carbon credit konsultant
-- **Pilotní projekty** na výzkumných ústavech (Bohunice, Lanžhot)
-
 **Limity:**
 - **Vstupní cena** vysoká, return až po letech
 - **Riziko aplikace neaktivovaného uhle** — „hladový" biouhel **VÝRAZNĚ snižuje výnos první 1–2 roky** (saje vlastní živiny z půdy)
@@ -3441,8 +3428,7 @@ Viz též [[organicka-hmota]], [[regenerativni-zemedelstvi]], [[karbonove-zemede
 - **Vápnění příliš vysoké pH** — některé AM houby preferují kyselé pH.
 
 **Mykorhizní preparáty (komerční inokulanty):**
-- **Symbivit** (CZ) — Mendelu, 1 000–2 000 Kč/kg
-- **Mykos** (CZ) — Symbiom (Lanškroun)
+- **Symbivit** (CZ) — Symbiom (Lanškroun), 1 000–2 000 Kč/kg
 - **Glomus intraradices** (zahraniční) — RhizoVital
 - **Aplikace**: namořit osivo, posypat do řádků při setí, namáčet sadbu
 
@@ -3767,7 +3753,6 @@ Viz též [[inseminace]], [[oteleni]], [[jalovice]], [[dojirna]], [[tmr]].`,
 **V ČR 2024:**
 - ~98 % mléčných krav inseminovaných (téměř všechny)
 - ~75 % masných krav inseminovaných (zbylé přírodní páření)
-- **Inseminační stanice**: VŠM (Velký Šariš), Plemenáři Lhota, GeneTPlus, Bohemia Plus
 - **Importované semena**: 60 % US Holstein, 20 % CZ genetika, 20 % EU genetika
 
 **Sexované semeno (sex-sorted):**
@@ -3885,7 +3870,6 @@ Viz též [[oteleni]], [[rijnost]], [[inseminace]], [[usni-znamka]], [[tmr]], [[
 **Legislativní rámec:**
 - **EU nařízení 1760/2000** — povinnost identifikace skotu (po BSE krizi)
 - **EU 21/2004** — ovce a kozy
-- **EU 1/2005** — prasata
 - **CZ zákon 154/2000 Sb.** o plemenitbě
 - **CZ vyhláška 136/2004 Sb.** — technické provedení známek
 
@@ -4253,11 +4237,6 @@ Traktorista 2024 musí umět:
 - **„Mašina"** — kterýkoli traktor obecně
 - **„Šediváč"** — Zetor stará série (slang z 1970s, dnes již nepoužívané)
 
-**Lidská kultura:**
-- **„Babičkovy povídky o traktoristech"** (1968 J. Vodňanský) — kult v lidovém humoru
-- **„Vesnice má svého traktoristu"** (1973 J. Menzel) — společenský film z JZD éry
-- **Lidové písně**: „Padá kosa, padá / když traktorista bez ovládá" (50s)
-
 Viz též [[kombajner]], [[cvt-prevodovka]], [[orba]], [[autonomni-traktor]], [[gps-rtk]].`,
     related: ['kombajner', 'cvt-prevodovka', 'orba', 'autonomni-traktor', 'gps-rtk'],
   },
@@ -4374,8 +4353,6 @@ Viz též [[kombajner]], [[cvt-prevodovka]], [[orba]], [[autonomni-traktor]], [[
 - **„Šrotovník"** — slangově pro „pomalý / zastaralý počítač" („tenhle laptop je šrotovník")
 - **„Šrot"** — používá se jak technicky (krmivo), tak v slangu („pojď, dáme si šrot" = dáme si pivo, slangově staré)
 
-V kultuře: **„Šrotování"** byla v ČS literatuře symbolem podzimní práce (Karel Čapek, B. Hrabal).
-
 Viz též [[zentour]], [[krmne-davky]], [[kukurice-silazni]], [[grunt]], [[tmr]].`,
     related: ['zentour', 'krmne-davky', 'kukurice-silazni', 'grunt', 'tmr'],
   },
@@ -4481,12 +4458,6 @@ Viz též [[zentour]], [[krmne-davky]], [[kukurice-silazni]], [[grunt]], [[tmr]]
 - **„Bramboračka"** (polévka) — chudá rolnická strava povýšená na národní pokrm
 - **„Hozený brambor"** — v UK slang pro nevychovanou novinářskou otázku (= „hot potato")
 
-**Lidové pranostiky:**
-- „Když brambora kvete na svatého Vavřince (10. 8.), nebude úroda" (= pozdní kvetení = malé hlízy)
-- „Mokrý červen, brambor zaplaval" (= příliš dešťů = plíseň)
-
-V kultuře: **„Bramborové pohádky"** (J. Lada), **„Bramborové dni"** (regionální festivaly Vysočiny), **„Pelhřimovské bramborářské slavnosti"** (každoročně).
-
 Viz též [[ozim-jarin]], [[osevni-postup]], [[npk-hnojivo]], [[roundup]], [[plisen-bramborova]], [[mandelinka-bramborova]].`,
     related: ['ozim-jarin', 'osevni-postup', 'npk-hnojivo', 'plisen-bramborova', 'mandelinka-bramborova'],
   },
@@ -4528,7 +4499,7 @@ Viz též [[ozim-jarin]], [[osevni-postup]], [[npk-hnojivo]], [[roundup]], [[pli
 **Boj — fungicidy:**
 
 **Preventivní (kontaktní)**:
-- **Mancozeb** (Dithane, Penncozeb) — bílý prach, 7–10 dní účinek. **Plánovaný zákaz v EU** od 2024 (potenciálně karcinogenní)
+- **Mancozeb** (Dithane, Penncozeb) — bílý prach, 7–10 dní účinek. **V EU již nepovolen** — schválení neobnoveno nařízením (EU) 2020/2087, použití skončilo 4. 1. 2022
 - **Cymoxanil** — velmi efektivní, krátká účinnost (2–3 dny)
 - **Měď** (CuSO₄, Cu hydroxid) — bio i konvenční. **Limit 4 kg Cu/ha/rok** v EU
 - **Folpet** — alternative k mancozebu
@@ -5182,7 +5153,7 @@ Viz též [[fuzarioza]], [[insekticidy]], [[kukurice-silazni]], [[no-till]].`,
 
 - **Mancozeb** (Dithane M-45, Penncozeb)
   - **Mechanismus**: multi-site (nelze vytvořit rezistence)
-  - **EU**: zákaz **2024** (potenciálně karcinogenní podle ECHA classification)
+  - **EU**: schválení neobnoveno prováděcím nařízením (EU) 2020/2087 (toxický pro reprodukci kat. 1B, endokrinní disruptor); povolení zrušena do 4. 7. 2021, lhůta na doprodej a použití skončila 4. 1. 2022
   - **Cena**: 200–500 Kč/ha (levný)
 
 - **Měď** (CuSO₄, Cu hydroxid, oxychlorid)
@@ -6223,7 +6194,6 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
 
 **Historie:**
 - **1875** — první kříženec popsán skotský chovatel Stephen Wilson
-- **1937** — kanadský agronom L.H. Newman vytvořil první funkční tritikale
 - **1960s** — CIMMYT (Mexiko) zahájil systematický šlechtitelský program
 - **1980s** — masové rozšíření v Evropě (Polsko, NSR, ČSSR)
 - **2024** — globální plocha 15 mil. ha (Polsko #1, Německo #2, ČR ~50 000 ha)
@@ -6372,7 +6342,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 **3. Makovice (5 %):**
 - **Sušené makovice** — historicky pro lidovou medicínu (sedativní)
 - **Kvůli opioidům** (morfin, codein) v makovicích — **omezené použití**, regulované
-- **Farmaceutický průmysl** — extraktivní výroba opioidních léků (= **smluvní pěstování pro Zentiva, Pharmos**)
+- **Farmaceutický průmysl** — extraktivní výroba opioidních léků
 
 **Legální a regulační aspekty:**
 - **CZ legislativa**: pěstování máku **legální** pro potravinářské + farmaceutické účely
@@ -6381,8 +6351,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 - **Suché makovice po sklizni** — musí být **zničeny nebo zpracovány** v licencovaném zařízení
 
 **Trh a marketing:**
-- **Burza Bruntál** — týdenní mákový trh, CZ centrum
-- **Spotový trh** vs **kontraktové pěstování** (Pharmos)
+- **Spotový trh** vs **kontraktové pěstování**
 - **Cenová volatilita**: 30 000 ↔ 70 000 Kč/t v rozsahu 2 let
 - **Export**: 70 % české produkce jde do EU + USA
 
@@ -7088,14 +7057,14 @@ Viz též [[oteleni]], [[rijnost]], [[mastitida]], [[ku-kontrola-uzitkovosti]], 
     term: 'Kontrola užitkovosti (KU)',
     alias: ['KU', 'DHIA', 'milk recording'],
     kategorie: 'chov',
-    shortDef: 'Kontrola užitkovosti je systematický monitoring produkce a kvality mléka dojnic. V CZ zajišťuje Český svaz chovatelů — 1× měsíčně analýza mléka per kráva (množství, tuk, bílkoviny, SCC, urea). Klíčové pro selekci, zdraví a šlechtění.',
-    longDef: `Kontrola užitkovosti (KU, anglicky *DHIA — Dairy Herd Improvement Association*, *milk recording*) je **systematický monitoring produkce a kvality mléka jednotlivých dojnic** přes plemenářské služby. V CZ zajišťuje **Český svaz chovatelů**.
+    shortDef: 'Kontrola užitkovosti je systematický monitoring produkce a kvality mléka dojnic. V CZ zajišťuje ČMSCH (Českomoravská společnost chovatelů) — 1× měsíčně analýza mléka per kráva (množství, tuk, bílkoviny, SCC, urea). Klíčové pro selekci, zdraví a šlechtění.',
+    longDef: `Kontrola užitkovosti (KU, anglicky *DHIA — Dairy Herd Improvement Association*, *milk recording*) je **systematický monitoring produkce a kvality mléka jednotlivých dojnic** přes plemenářské služby. V CZ zajišťuje **ČMSCH (Českomoravská společnost chovatelů, a.s.)**.
 
 **Princip:**
 - 1× měsíčně technik na farmu
 - Vzorky mléka z každé krávy (ranní + večerní dojení)
 - Analýza v akreditované laboratoři
-- Výsledky zpracuje svaz + plemenná kniha (viz [[plemenna-kniha]])
+- Výsledky zpracuje ČMSCH + plemenná kniha (viz [[plemenna-kniha]])
 
 **Měřené parametry:**
 
@@ -7146,14 +7115,13 @@ Viz též [[plemenna-kniha]], [[mastitida]], [[bcs-body-condition]], [[oteleni]]
     term: 'Plemenná kniha',
     alias: ['herd book', 'plemenná evidence'],
     kategorie: 'chov',
-    shortDef: 'Plemenná kniha je oficiální registr čistokrevných zvířat plemene s rodokmenem a plemennou hodnotou. Vede ji uznaná plemenářská organizace (v CZ Český svaz chovatelů). Klíčový nástroj šlechtění, EU dotací a obchodu s genetikou.',
+    shortDef: 'Plemenná kniha je oficiální registr čistokrevných zvířat plemene s rodokmenem a plemennou hodnotou. Vede ji uznaná plemenářská organizace (v CZ např. Svaz chovatelů holštýnského skotu ČR). Klíčový nástroj šlechtění, EU dotací a obchodu s genetikou.',
     longDef: `Plemenná kniha (něm. *Herdbuch*, ang. *herd book*) je **oficiální registr čistokrevných zvířat plemene** spravovaný uznanou plemenářskou organizací. Obsahuje rodokmen, plemennou hodnotu, vlastnosti a původ. Klíčový nástroj šlechtění a EU dotací.
 
 **Historie:**
 - 1791 — první (British Thoroughbred koně)
 - 1822 — první pro skot (Shorthorn UK)
 - 1872 — Holstein-Friesian Herd Book (NL/DE)
-- 1898 — Český svaz chovatelů založen
 
 **Sekce:**
 - **A (čistokrevné)**: otec + matka registrovaní, ≥7/8 čistokrevnosti
@@ -7187,9 +7155,8 @@ Klíčové indexy:
 - ČR importuje 60 % semene (USA, Kanada, NL, DK)
 
 **CZ plemenářské organizace:**
-- **ČSCH** — Holstein, černo strakatý
+- **Svaz chovatelů holštýnského skotu ČR** — Holstein, černo strakatý
 - **Svaz chovatelů masného skotu** — Charolais, Limousin, Aberdeen Angus
-- **Plemenáři Lhota, Bohemia Plus** — inseminační stanice
 
 **Plemena v CZ:**
 - Mléčné: Holstein (#1, 70 %), Český strakatý (20 %), Jersey, Montbéliarde
@@ -7668,7 +7635,6 @@ Viz též [[rijnost]], [[mastitida]], [[bcs-body-condition]], [[ku-kontrola-uzit
 
 - **Climate FieldView** (USA, Bayer) — top globální, $500–1 500/farma/rok
 - **OneSoil** (NL) — bezplatná, NDVI ze Sentinel
-- **Mapy.eAgronom** (CZ, EE) — domácí integrace
 - **Yara Atfarm** — N variabilita
 - **Soyl** (UK) — variable rate N + osivo
 - **Agremo** (RS) — drone + satellite kombinace
@@ -7840,7 +7806,6 @@ Viz též [[ndvi]], [[variable-rate]], [[gps-rtk]], [[lpis]], [[karbonove-zemede
 - **Cíl EU**: 3 mld nových stromů do 2030
 
 **CZ právní rámec:**
-- **Vyhláška 314/2017** o stromech v zemědělství
 - **LPIS** musí stromy registrovat
 - **GAEC 8** vyžaduje zachování krajinných prvků
 
@@ -7853,7 +7818,6 @@ Viz též [[ndvi]], [[variable-rate]], [[gps-rtk]], [[lpis]], [[karbonove-zemede
 
 **Příklady úspěšných farem:**
 - **Wakelyns** (UK) — alley cropping pšenice + ořešák, 30+ let
-- **Stilo** (FR) — silvopasture skot + dub
 - **CZ pilotní projekty** — Jihočeská univerzita, Mendelu Brno
 
 **Trend:**
@@ -7964,12 +7928,10 @@ Viz též [[karbonove-zemedelstvi]], [[regenerativni-zemedelstvi]], [[eroze-pudy
 
 **2. Skleníky paprik, okurek:**
 - Podobné rajčatům
-- CZ producenti: BeJa, Frudoma, Magna Czech
 
 **3. Salát a bylinky (NFT, DWC):**
 - **24 hour cycle** — sklizeň každý den
 - **Plant factory** koncept
-- CZ producenti: Salatika, Czech Microgreens
 
 **4. Jahody:**
 - **Hydroponic strawberries** — celoroční sklizeň
@@ -8016,13 +7978,6 @@ Viz též [[karbonove-zemedelstvi]], [[regenerativni-zemedelstvi]], [[eroze-pudy
 - Investice: 100 000–300 000 Kč/m² stavební plochy
 - Vyšší produkce per m² ale dražší investice
 - Návratnost: 5–10 let
-
-**CZ producenti a trh:**
-- **Frudoma** (Olomouc) — rajčata, paprika
-- **BeJa Group** — moderní skleníky
-- **Magna Czech** — sklenikářství
-- **Salatika** — salát, micro-greens
-- **HempFlow** (Praha) — kanabis medicinální
 
 **Trendy 2024:**
 - **LED technology** — efektivnější, cenově dostupné
@@ -8328,9 +8283,7 @@ Viz též [[hydroponie]], [[satelity-zemedelstvi]], [[precision-livestock-farmin
 **Mestská farma:**
 - **Climate FieldView** (Bayer) — top globální
 - **OneSoil** — freemium pro malé farmy
-- **eAgronom** — domácí CZ řešení
-- **AgroIT** (CZ startup) — IoT systémy pro CZ farmy
-- **Agrosoft** — ERP pro farmy
+- **eAgronom** (EE) — estonská platforma pro management farmy
 
 **Big players:**
 - **John Deere Operations Center** — integrovaný systém
@@ -8611,7 +8564,7 @@ Komunikace uvnitř včelstva probíhá feromon-chemickými signály (mateří l�
 
 Zdravotní stav včelstva je základním ukazatelem pro včelaře. Sleduje se množství a charakter plodu (zavíčkovaný vs. otevřený, rozmístění), chování na česnu, množství zimních zásob a přítomnost parazitů (zejména roztoč Varroa destructor). Prohlídka úlu se provádí zpravidla jednou za 7–10 dnů v sezoně.
 
-Silné včelstvo o 60 000–80 000 dělnicích je předpokladem ekonomicky zajímavého medonosného výnosu. Podle dat Českého svazu chovatelů hospodářských zvířat (ČSCHZ) čítal průměrný výnos medu v ČR v roce 2023 přibližně 19 kg na jedno včelstvo.`,
+Silné včelstvo o 60 000–80 000 dělnicích je předpokladem ekonomicky zajímavého medonosného výnosu.`,
     related: ['matka', 'delnice', 'trubec', 'rojeni', 'zazimovani', 'ul-pojem'],
   },
   {
@@ -8864,7 +8817,7 @@ V přírodě (dutý strom, střešní mezera) zakládají roje volná hnízda �
 
 Oddělk se umístí na nové standiště nebo na vzdálené místo, aby létavky se nemohly vrátit zpět. Oddělk bez matky (tzv. sirotčí) přijme přidanou matku nebo si vystaví záchranné matečníky ze zálohy plodu.
 
-Oddělky jsou základem moderní selekce matek — chovatelé matek standardně pracují s tzv. nukleárními (nucleus) úly, do nichž se sází oplozené matky z výběrového chovu. V ČR probíhá hodnocení matek v rámci šlechtitelského programu Českého svazu chovatelů včely medonosné (ČSCHM).
+Oddělky jsou základem moderní selekce matek — chovatelé matek standardně pracují s tzv. nukleárními (nucleus) úly, do nichž se sází oplozené matky z výběrového chovu. V ČR probíhá hodnocení matek v rámci šlechtitelského programu Českého svazu včelařů (ČSV), který je uznaným chovatelským sdružením včely medonosné kraňské.
 
 Oddělk zpravidla v prvním roce nepřinese ekonomický výnos — slouží jako nová zásoba pro příští sezonu. V případě ztráty silného včelstva může oddělk sloužit k urgentnímu posílení nebo spojení.`,
     related: ['rojeni', 'roj', 'matecnik', 'matka', 'oplodnacek'],
@@ -9166,7 +9119,7 @@ Výzkum včelích tanců pokračuje — bylo prokázáno, že souhrnná rozhodov
     alias: ['výtěžnost medu', 'výnos medu'],
     kategorie: 'vcelarstvi',
     shortDef: 'Medný výnos je množství medu sklizeného z jednoho včelstva za sezonu, vyjádřené v kilogramech, jako hlavní ekonomický ukazatel rentability chovu.',
-    longDef: `Medný výnos závisí na kombinaci genetického potenciálu matky, síle včelstva, druhu a dostupnosti snůšky a povětrnostních podmínkách. Průměrný výnos v ČR dosahuje podle dat ČSCHM přibližně 18–22 kg/včelstvo/rok; v příznivých řepkovo-lípových oblastech Polabí nebo jižní Moravy může silné včelstvo přinést 60–80 kg a více.
+    longDef: `Medný výnos závisí na kombinaci genetického potenciálu matky, síle včelstva, druhu a dostupnosti snůšky a povětrnostních podmínkách. Průměrný výnos v ČR se mezi roky výrazně liší; v příznivých řepkovo-lípových oblastech Polabí nebo jižní Moravy může silné včelstvo přinést 60–80 kg a více.
 
 Medonosný potenciál je dán hustotou kvetoucích rostlin v letovém okruhu (3–5 km) a dobou kvetení. V monokulturní krajině (pšenice, kukuřice) je mimo sezonní pastvinu nedostatek pestřejší potravy — moderní zemědělské dotace proto zahrnují agro-environmetální opatření podporující biopásy a kvetoucí pásy.
 
@@ -9202,7 +9155,7 @@ Vytáčení probíhá pomalou rozjezdovou rychlostí (70–100 ot./min.), aby se
 
 Čerstvě vytočený med se přefiltruje přes nerezové síto (≤ 0,5 mm oka) a nechá sedimentovat v uzavřené nádobě 24–48 hodin. Vzduchové bubliny a drobné voskové vločky stoupají na povrch. Pak se stáčí do sklenic nebo sudů.
 
-Před stočením do finálního obalu je třeba změřit obsah vody refraktometrem (Brix nebo index lomu) — med s obsahem vody nad 18 % kvasí. Kvasný med nelze prodávat jako potravinový med dle nařízení Nařízení č. 1308/2013 a vyhlášky 76/2003 Sb.`,
+Před stočením do finálního obalu je třeba změřit obsah vody refraktometrem (Brix nebo index lomu) — med s obsahem vody nad 18 % kvasí. Kvasný med nelze prodávat jako potravinový med dle vyhlášky 76/2003 Sb.`,
     related: ['medomet-pojem', 'zaviceny-med', 'mednik', 'pastovani-medu'],
   },
   {
@@ -9214,8 +9167,6 @@ Před stočením do finálního obalu je třeba změřit obsah vody refraktometr
     longDef: `Tradiční včelín (pavlačový typ) je dřevěná stavba s lodžií, na které stojí úly česny ven. Pavlačový typ je pro chodící (bez kočování) provoz v místech s drsnějším klimatem nebo zimami — chrání úly před deštěm, sněhem a mrazem.
 
 Moderní provoz zpravidla používá volně stojící úly na podstavcích s lehkým přístřeškem nebo plachtou. V podmínkách ČR se považuje za dostačující umístění v jihovýchodní expozici s přirozeným větrem a stínem.
-
-Zákonné podmínky: v ČR stanovuje vzdálenost úlů od hranic sousedních nemovitostí vyhláška č. 136/2004 Sb. a místní stavební předpisy (min. 3 m od hranice pozemku nebo min. 25 m od zastavěné části, v opačném případě je nutná živá nebo pevná zástěna). Chovatelský svaz (ČSCHM) vydává podrobnější doporučení.
 
 Pro komerční nebo hobby provoz je výhodné mít na stanovišti drobný přístřešek s pracovním stolem, kbelíky na med, medometem a dezinfekčními prostředky — splňuje základní hygienické požadavky pro domácí zpracování medu dle hygienické vyhlášky.`,
     related: ['ul-pojem', 'kocovani', 'medomet-pojem'],
@@ -9245,12 +9196,12 @@ Kočovné včelstvo musí být zdravé a ošetřené — SVS vydává kočovací
 
 Hlavní zájmovou organizací sdružující včelaře je Český svaz včelařů (ČSV), který zajišťuje vzdělávání, poradenství, pojištění a zastupování zájmů včelařů vůči státním orgánům. ČSV má krajské a místní organizace po celé ČR.
 
-Šlechtitelský program a vedení plemenné knihy pro včelu medonosnou koordinuje Český svaz chovatelů včely medonosné (ČSCHV) ve spolupráci s ověřovacími stanicemi. Program zahrnuje hodnocení výnosnosti, klidnosti, rojivosti a VSH hygieny (Varroa Sensitive Hygiene).
+Šlechtitelský program pro včelu medonosnou kraňskou koordinuje Český svaz včelařů (ČSV) jako uznané chovatelské sdružení. Program zahrnuje hodnocení výnosnosti, klidnosti, rojivosti a VSH hygieny (Varroa Sensitive Hygiene).
 
 Dotace pro včelaře v ČR jsou spravovány SZIF v rámci národních podpor — zejm. dotace na přezimování včelstev a opatření na boj s varroázou.`,
     related: ['vcelstvo', 'varroaza', 'zazimovani'],
-    externalUrl: 'https://www.cschm.cz/',
-    externalLabel: 'Web ČSCHM',
+    externalUrl: 'https://www.cmsch.cz/',
+    externalLabel: 'Web ČMSCH',
   },
   {
     slug: 'cesno-pojem',

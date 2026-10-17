@@ -23,7 +23,7 @@ Claas wurde 1913 von August Claas in Westfalen gegründet (Sitz heute **Harsewin
 - **2003** — Übernahme von **Renault Agriculture** (51 %, Einstieg in Traktoren)
 - **2008** — Claas übernimmt Renault Agriculture zu **100 %**
 - **2010** — Einführung des Traktors **Axion 800**
-- **2014** — **Xerion 5000** wird Tractor of the Year
+- **2014** — **Axion 850** wird Tractor of the Year
 - **2019** — komplett neue Generation **Lexion 5000–8000**
 - **2021** — Einführung des **Trion** (löst den Tucano teilweise ab)
 

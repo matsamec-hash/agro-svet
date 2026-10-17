@@ -32,7 +32,7 @@ faq:
 - q: Čo je kabína Protect-U?
   a: Protect-U je konštrukčné riešenie kabíny radu 8S, kde je kabína fyzicky oddelená od motorovej časti 24 cm medzerou. Toto oddelenie výrazne znižuje prenos hluku, tepla a vibrácií z motora do kabíny — rad 8S patrí medzi najtichšie traktory vo svojej triede.
 - q: Aké ocenenia získala Massey Ferguson 8S?
-  a: Rad 8S získal titul Tractor of the Year 2021 v kategórii Best Design a prestížnu Red Dot Award za priemyselný dizajn. Ocenenia smerujú hlavne na koncept kabíny Protect-U a celkové tvarovanie stroja.
+  a: Rad 8S získal titul Tractor of the Year 2021 a prestížnu Red Dot Award za priemyselný dizajn. Ocenenia smerujú hlavne na koncept kabíny Protect-U a celkové tvarovanie stroja.
 - q: Pre akú farmu je MF 8S.305 vhodný?
   a: Massey Ferguson 8S.305 je výkonný row-crop traktor pre veľké farmy s výmerou 400–700 hektárov. Hodí sa pre ťažkú orbu, široké siacie kombinácie, hĺbkové kypriče a ťahané postrekovače. Bezstupňová Dyna-VT ho zvýhodňuje aj pri dlhších prechodoch.
 ---
@@ -59,4 +59,4 @@ Ovládanie združuje joystick **Multipad** a dotykový terminál **Datatronic 5*
 
 ## Ocenený dizajn
 
-Rad 8S získal titul **Tractor of the Year 2021** v kategórii Best Design a prestížnu **Red Dot Award** za priemyselný dizajn. Ocenenia smerujú predovšetkým na koncept kabíny Protect-U a celkové tvarovanie stroja — u traktora ide o nadpriemernú pozornosť venovanú dizajnu.
+Rad 8S získal titul **Tractor of the Year 2021** a prestížnu **Red Dot Award** za priemyselný dizajn. Ocenenia smerujú predovšetkým na koncept kabíny Protect-U a celkové tvarovanie stroja — u traktora ide o nadpriemernú pozornosť venovanú dizajnu.

@@ -23,7 +23,7 @@ Claas bol založený v roku 1913 Augustom Claasom vo Vestfálsku (sídlo dnes **
 - **2003** — akvizícia **Renault Agriculture** (51 % podiel, vstup do traktorov)
 - **2008** — Claas preberá Renault Agriculture na **100 %**
 - **2010** — uvedenie traktora **Axion 800**
-- **2014** — **Xerion 5000** Tractor of the Year
+- **2014** — **Axion 850** Tractor of the Year
 - **2019** — kompletne nová generácia **Lexion 5000–8000**
 - **2021** — uvedenie **Trion** (čiastočne nahrádza Tucano)
 

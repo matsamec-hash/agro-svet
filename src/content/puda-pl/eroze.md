@@ -3,7 +3,7 @@ title: Erozja gleby w Polsce i Europie Środkowej — dlaczego znika warstwa orn
 popis: 60 % polskiej gruntów ornych w ŚE jest zagrożonych erozją wodną, rocznie z pól ubywa 21 milionów ton ziemi. Pogłębiona analiza przyczyn, skutków i środków zaradczych — od przemian agrarnych XX wieku po normy GAEC w ramach WPR 2024.
 ---
 
-Polska i Europa Środkowa należą do regionów najsilniej dotkniętych erozją gleby w UE. Rocznie z pól ubywa szacunkowo **21 milionów ton warstwy ornej** — to objętość wystarczająca do zapełnienia 700 tysięcy ciężarówek lub przykrycia dużego placu miejskiego warstwą o wysokości 30 metrów. Warstwa orna nie tworzy się w ciągu lat ani dziesięcioleci, lecz przez **setki lat** — 1 cm gleby ornej odpowiada według różnych szacunków 100–300 latom procesu geologiczno-biologicznego.
+Rocznie z pól ubywa szacunkowo **21 milionów ton warstwy ornej** — to objętość wystarczająca do zapełnienia 700 tysięcy ciężarówek lub przykrycia dużego placu miejskiego warstwą o wysokości 30 metrów. Warstwa orna nie tworzy się w ciągu lat ani dziesięcioleci, lecz przez **setki lat** — 1 cm gleby ornej odpowiada według różnych szacunków 100–300 latom procesu geologiczno-biologicznego.
 
 Erozja to największy ukryty dług rolnictwa. Większość ludzi jej nie dostrzega — znika powoli, centymetr po centymetrze. Gdy jednak po gwałtownym deszczu cała warstwa gleby spływa z pola w ciągu godziny lub zalewa wieś, problem staje się widoczny.
 
@@ -17,7 +17,7 @@ W przeliczeniu na hektar: utrata każdej tony gleby ornej trwale zmniejsza poten
 
 ## Skala problemu w Europie Środkowej
 
-Według Instytutu Melioracji i Ochrony Gleby (odpowiednik VÚMOP) sytuacja w regionie przedstawia się następująco:
+Orientacyjne dane dla Czech:
 
 | Wskaźnik | Wartość |
 |---|---|
@@ -28,7 +28,7 @@ Według Instytutu Melioracji i Ochrony Gleby (odpowiednik VÚMOP) sytuacja w reg
 | Grunty orne ekstremalnie zagrożone (>40 t/ha/rok) | ~8 % (200 tys. ha) |
 | Grunty orne zagrożone erozją wietrzną | ~16 % (405 tys. ha) |
 | Roczny ubytek ziemi z pól | ~21 mln ton |
-| Roczne straty ekonomiczne | 4–10 mld zł |
+| Roczne straty ekonomiczne | 4–10 mld Kč |
 
 Mniej więcej **co trzecie pole** w regionie należy do kategorii, w której bez działań przeciwerozyjnych doszłoby do krytycznej utraty potencjału produkcyjnego w ciągu jednego pokolenia.
 
@@ -177,35 +177,22 @@ Ponadto **GAEC 5** (minimalny pokrywa glebowa): co najmniej 80 % gruntów ornych
 
 Oraz **GAEC 6** (zakaz orki na obszarach silnie erozyjnych w określonych terminach): zakaz orki od 1.7. do 31.8. w strefach silnej erozji.
 
-## Ustawa o ochronie gruntów rolnych i leśnych (oraz przepisy krajowe)
-
-W Polsce kwestie ochrony gruntów reguluje ustawa o ochronie gruntów rolnych i leśnych (t.j. Dz.U. z 2022 r. poz. 2205 z późn. zm.) oraz rozporządzenia wykonawcze do warunkowości WPR. Wymagania te:
-- Zobowiązują do przestrzegania norm GAEC 5, 6, 7
-- Definiują pojęcie **obszarów zagrożonych erozją** — łącznie ok. 1,52 mln ha
-- Zakazują uprawy roślin silnie erozjogennych (kukurydza na ziarno, słonecznik, ziemniaki, soja) w **obszarach silnie zagrożonych** bez stosowania środków przeciwerozyjnych
-- Przewidują **sankcje ARiMR**: redukcja płatności o 1 % do 100 % w zależności od wagi naruszenia
-- Nakładają obowiązek **corocznej ewidencji środków przeciwerozyjnych** w gospodarstwie
-
-Agencja Restrukturyzacji i Modernizacji Rolnictwa (ARiMR) nakładała kary w łącznej wysokości **~85 mln zł** za naruszenia norm GAEC — o 60 % więcej niż rok wcześniej.
-
 ## Porównanie międzynarodowe
 
-Region Europy Środkowej należy do 5 najbardziej dotkniętych erozją krajów UE. Przyczyny: duże pola, wysoki udział gruntów ornych, gleby lessowe, klimat kontynentalny z intensywnymi burzami.
+Szacunek Eurostatu dla utraty gleby wskutek erozji wodnej na użytkach rolnych bez pastwisk (model RUSLE2015, rok 2016, zbiór danych aei_pr_soiler):
 
 | Kraj | Średni ubytek gleby (t/ha/rok) |
 |---|---|
-| Włochy | 9,1 |
-| **Czechy** | **8,3** |
-| Słowenia | 7,6 |
-| Słowacja | 5,2 |
-| Austria | 4,1 |
-| Bułgaria | 3,6 |
-| **Polska** | **1,5** |
-| Niemcy | 1,2 |
+| Słowenia | 14,8 |
+| Włochy | 11,2 |
+| Austria | 4,9 |
+| Słowacja | 3,8 |
+| Średnia UE | 3,6 |
+| Bułgaria | 3,4 |
+| Czechy | 2,7 |
 | Francja | 2,3 |
-| Średnia UE | 2,5 |
-
-Polska osiąga 5× niższą erozję przy podobnym klimacie — przeciętna wielkość pola wynosi **5,9 ha** (Czechy 17 ha), a wysoki udział gospodarstw rodzinnych sprzyja ochronie gleby. Niemcy mają bardziej lesisty krajobraz i znacznie mniejsze pola (przeciętnie **6,3 ha**), a ponadto surowsze przepisy obowiązujące od lat 80.
+| Niemcy | 1,9 |
+| **Polska** | **1,6** |
 
 ## Co można zrobić
 
@@ -231,8 +218,8 @@ Polska osiąga 5× niższą erozję przy podobnym klimacie — przeciętna wielk
 - **Monitoring erozji** — interaktywne mapy zdarzeń erozyjnych
 - **MRiRW — Strategiczny Plan WPR 2023–2027** — normy GAEC 5/6/7
 - **ARiMR** — Agencja Restrukturyzacji i Modernizacji Rolnictwa — kontrola i sankcje
-- **Eurostat — Soil erosion** — porównanie międzynarodowe
-- **Ustawa o ochronie gruntów rolnych i leśnych** (t.j. Dz.U. z 2022 r. poz. 2205)
+- **Eurostat — Estimated soil erosion by water** ([aei_pr_soiler](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)) — porównanie międzynarodowe
+- **Ustawa o ochronie gruntów rolnych i leśnych** (t.j. Dz.U. z 2022 r. poz. 2409)
 
 ---
 
