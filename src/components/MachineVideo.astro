@@ -5,6 +5,10 @@
 // ‼️ Žádný náhled z i.ytimg.com: obrázek z YouTube by se stáhl hned při načtení
 // stránky (IP návštěvníka jde Googlu dřív, než na video klikne) a ukazoval by
 // cizí snímek mimo přehrávač. Do kliknutí je to jen náš tmavý panel s názvem.
+// Upozornění (kdo co dostane) je UVNITŘ panelu a tlačítko říká „načíst z YouTube“,
+// takže klik je informovaný souhlas (§ 25 TDDDG, čl. 6 odst. 1 písm. a GDPR) —
+// rozhodnutí vlastníka 2026-10-17 („ukázkový web“). Poznámka pod panelem nestačila:
+// na mobilu ji člověk uviděl až po kliknutí.
 // Texty přijímá jako props (parent je lokalizuje přes t()).
 interface Props {
   youtubeId: string;
@@ -12,41 +16,66 @@ interface Props {
   heading: string;
   playLabel: string;
   note?: string;
+  privacyHref?: string;
+  privacyLabel?: string;
 }
-const { youtubeId, title, heading, playLabel, note } = Astro.props as Props;
+const { youtubeId, title, heading, playLabel, note, privacyHref, privacyLabel } = Astro.props as Props;
 ---
 <section class="machine-video" aria-labelledby="mvideo-heading">
   <h2 id="mvideo-heading">{heading}</h2>
-  <div
-    class="yt-facade"
-    data-yt-id={youtubeId}
-    data-yt-title={title}
-    role="button"
-    tabindex="0"
-    aria-label={`${playLabel}: ${title}`}
-  >
-    <span class="yt-title">{title}</span>
-    <div class="yt-play" aria-hidden="true">
-      <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74A8.02 8.02 0 0 0 60.96 2.18C56.06.83 34 .83 34 .83s-22.06 0-26.96 1.35A8.02 8.02 0 0 0 1.48 7.74C.13 12.64.13 24 .13 24s0 11.36 1.35 16.26a8.02 8.02 0 0 0 5.56 5.56C11.94 47.17 34 47.17 34 47.17s22.06 0 26.96-1.35a8.02 8.02 0 0 0 5.56-5.56C67.87 35.36 67.87 24 67.87 24s0-11.36-1.35-16.26z" fill="#ff0000"/><path d="M27.2 33.6L45.6 24 27.2 14.4z" fill="#fff"/></svg>
+  <div class="yt-box">
+    <div
+      class="yt-facade"
+      data-yt-id={youtubeId}
+      data-yt-title={title}
+      role="button"
+      tabindex="0"
+      aria-label={`${playLabel}: ${title}`}
+    >
+      <span class="yt-title">{title}</span>
+      <span class="yt-play" aria-hidden="true">
+        <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74A8.02 8.02 0 0 0 60.96 2.18C56.06.83 34 .83 34 .83s-22.06 0-26.96 1.35A8.02 8.02 0 0 0 1.48 7.74C.13 12.64.13 24 .13 24s0 11.36 1.35 16.26a8.02 8.02 0 0 0 5.56 5.56C11.94 47.17 34 47.17 34 47.17s22.06 0 26.96-1.35a8.02 8.02 0 0 0 5.56-5.56C67.87 35.36 67.87 24 67.87 24s0-11.36-1.35-16.26z" fill="#ff0000"/><path d="M27.2 33.6L45.6 24 27.2 14.4z" fill="#fff"/></svg>
+        <span class="yt-play-label">{playLabel}</span>
+      </span>
+      {note && <span class="yt-consent">{note}</span>}
     </div>
   </div>
-  {note && <p class="mvideo-note">{note}</p>}
+  {privacyHref && privacyLabel && (
+    <p class="mvideo-note"><a href={privacyHref}>{privacyLabel}</a></p>
+  )}
 </section>
 
 <style>
   .machine-video { margin:32px 0; }
   .machine-video h2 { font-size:1.4rem; font-weight:700; margin:0 0 16px; letter-spacing:-.3px; color:#1a1a1a; }
-  .yt-facade { position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:linear-gradient(135deg,#1a1a1a,#3a3a3a); cursor:pointer; display:block; }
-  .yt-title { position:absolute; left:20px; right:20px; bottom:18px; color:#fff; font-weight:600; font-size:15px; line-height:1.35; }
+  /* aspect-ratio drží 16:9; když se text na úzkém displeji nevejde, box se protáhne. */
+  .yt-box { aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#1a1a1a; }
+  .yt-facade {
+    box-sizing:border-box; min-height:100%; padding:18px 20px;
+    display:flex; flex-direction:column; justify-content:space-between; gap:14px;
+    background:linear-gradient(135deg,#1a1a1a,#3a3a3a); cursor:pointer; color:#fff;
+  }
   .yt-facade:hover { background:linear-gradient(135deg,#222,#474747); }
-  .yt-play { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  .yt-title { font-weight:600; font-size:15px; line-height:1.35; }
+  .yt-play { display:flex; flex-direction:column; align-items:center; gap:10px; }
   .yt-play svg { filter:drop-shadow(0 2px 4px rgba(0,0,0,.5)); transition:transform .15s; }
   .yt-facade:hover .yt-play svg { transform:scale(1.08); }
-  .yt-facade:focus { outline:3px solid #FFEA00; outline-offset:3px; }
-  .mvideo-note { font-size:12px; color:#888; margin:8px 0 0; }
+  .yt-play-label {
+    font-size:14px; font-weight:600; background:#fff; color:#1a1a1a;
+    padding:6px 14px; border-radius:999px;
+  }
+  .yt-consent { font-size:12.5px; line-height:1.45; color:rgba(255,255,255,.85); }
+  .yt-facade:focus { outline:3px solid #FFEA00; outline-offset:-3px; }
+  .mvideo-note { font-size:12px; color:#666; margin:8px 0 0; }
+  .mvideo-note a { color:inherit; text-decoration:underline; }
+  @media (max-width: 640px) {
+    .yt-facade { padding:14px 16px; gap:10px; }
+    .yt-play svg { width:52px; height:37px; }
+  }
 </style>
 <script is:inline>
   // YouTube facade — iframe až na klik. Idempotentní; jeden listener na dokument.
+  // Iframe nahrazuje facade UVNITŘ .yt-box, takže zdědí poměr 16:9.
   if (!window.__mvFacadeBound) {
     window.__mvFacadeBound = true;
     const activate = (el) => {

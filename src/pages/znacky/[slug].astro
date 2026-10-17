@@ -129,7 +129,9 @@ const jsonLd = {
       '@type': ['Brand', 'Organization'],
       name: znacka.data.name,
       description: znacka.data.popis,
-      url: canonical,
+      // url = web výrobce, ne naše stránka: entita značky nesmí vypadat jako oficiální
+      // web výrobce na agro-svet.cz (audit D, nález 8, 2026-10-16).
+      ...(znacka.data.website && { url: znacka.data.website }),
       ...(sameAsList.length > 0 && { sameAs: sameAsList }),
       ...(logo && { logo: `https://agro-svet.cz${logo}` }),
       ...(znacka.data.zalozena && { foundingDate: String(znacka.data.zalozena) }),

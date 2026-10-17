@@ -80,6 +80,10 @@ const metaDesc = metaDescription(description);
 // Launch je path-scoped a per-locale: indexují se jen přeložené sekce daného
 // locale. cs se nemění (effectiveNoindex == noindex). SK chování beze změny.
 const csRootPath = stripLocale(localizedPathname).path;
+// Preconnect na Supabase jen tam, kde se z prohlížeče opravdu volá (bazar, fotosoutěž,
+// farmy). Jinde by prohlížeč zbytečně otevřel spojení a prozradil IP další adrese
+// (audit A, nález 6, 2026-10-15).
+const needsSupabase = !!supabaseHost && /^\/(bazar|fotosoutez|farmy|akce)(\/|$)/.test(csRootPath);
 // Lock přebíjí launch: zamčené pod-cesty (např. /kalkulacka/dotace-cap) zůstávají
 // noindex i bez reciproč. hreflang, i když jejich prefix (/kalkulacka) je launchnutý.
 const locked = isLockedSectionPath(csRootPath);
@@ -196,7 +200,7 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
 
   <!-- Preconnect: hero/article images + bazar listing photos. Šetří ~100ms TLS handshake na 1. requestu. -->
   <link rel="preconnect" href="https://cdn.samecdigital.com" crossorigin />
-  {supabaseHost && <link rel="preconnect" href={supabaseHost} crossorigin />}
+  {needsSupabase && <link rel="preconnect" href={supabaseHost} crossorigin />}
 
   <!-- Fonts self-hosted via @fontsource (imported in src/styles/global.css). -->
   <!-- Preload the two most-used Chakra Petch latin weights to cut first paint FOIT. -->

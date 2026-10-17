@@ -5,6 +5,16 @@
 // zásadách a DSA stránce, ale stránku „Impressum" neměl. Jméno jednatele
 // schválil vlastník (je veřejně v obchodním rejstříku). Údaje drž ve shodě
 // s podminky-pouziti / dsa-kontakt; ověřené proti ARES 14. 10. 2026.
+//
+// 2026-10-17 (rozhodnutí vlastníka: „ukázkový web, nikomu nedat záminku"):
+// stránka plní VŠECHNY v úvahu připadající povinnosti najednou, bez ohledu na
+// to, jestli na nás díky zásadě země původu dopadají — § 5 DDG (druhá rychlá
+// kontaktní cesta = kontaktní formulář, SDEU C-298/07), § 18 MStV (odpovědná
+// osoba), § 5 ECG + § 25 MedienG (Offenlegung vč. vlastnictví a Blattlinie)
+// a čl. 6 odst. 1 EMFA (vlastníci, státní reklama). Vlastnictví a orgány
+// ověřené v ARES (veřejný rejstřík) 17. 10. 2026: jediný společník a jednatel
+// Matěj Samec, 100 %, základní kapitál 20 000 Kč. Web nemá reklamu ani
+// affiliate (audit A, 15. 10. 2026) → žádné příjmy ze státní reklamy.
 // Non-de locale → 404 (stejně jako /direktzahlungen).
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
@@ -15,14 +25,14 @@ const lp = (path: string) => `/de${path}`;
 ---
 <Layout
   title="Impressum — Agro-svet"
-  description="Impressum von agro-svet.cz: Anbieter Samec Digital s.r.o., Sitz in Katovice (Tschechische Republik), Handelsregister, Kontakt."
+  description="Impressum und Offenlegung von agro-svet.cz: Anbieter Samec Digital s.r.o., Sitz in Katovice (Tschechische Republik), Handelsregister, Kontakt, inhaltlich Verantwortlicher, Eigentumsverhältnisse."
   noHreflang={true}
 >
   <main class="legal-page">
     <h1>Impressum</h1>
-    <p class="lead">Anbieterkennzeichnung für agro-svet.cz</p>
+    <p class="lead">Anbieterkennzeichnung und Offenlegung für agro-svet.cz</p>
 
-    <h2>Anbieter</h2>
+    <h2>Anbieter und Medieninhaber</h2>
     <p>
       <strong>Samec Digital s.r.o.</strong> (Gesellschaft mit beschränkter Haftung nach tschechischem Recht)<br>
       Na Břehu 378<br>
@@ -31,16 +41,47 @@ const lp = (path: string) => `/de${path}`;
     </p>
 
     <h2>Vertretungsberechtigt</h2>
-    <p>Matěj Samec, Geschäftsführer (jednatel)</p>
+    <p>Matěj Samec, Geschäftsführer (jednatel), alleinvertretungsberechtigt</p>
 
     <h2>Kontakt</h2>
-    <p>E-Mail: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a></p>
+    <p>
+      E-Mail: <a href="mailto:info@samecdigital.com">info@samecdigital.com</a><br>
+      Kontaktformular: <a href={lp('/kontakt/')}>agro-svet.cz/de/kontakt/</a>
+    </p>
+    <p>Wir beantworten Anfragen per E-Mail, in der Regel innerhalb von zwei Werktagen.</p>
 
     <h2>Registereintrag</h2>
     <p>
       Handelsregister (obchodní rejstřík) des Kreisgerichts České Budějovice, Abteilung C, Einlage 36598<br>
-      Identifikationsnummer (IČO): 29547539
+      Identifikationsnummer (IČO): 29547539<br>
+      Stammkapital: 20 000 CZK
     </p>
+
+    <h2>Umsatzsteuer</h2>
+    <p>Die Gesellschaft ist nicht zur Mehrwertsteuer registriert und hat daher keine Umsatzsteuer-Identifikationsnummer.</p>
+
+    <h2>Inhaltlich verantwortlich</h2>
+    <p>
+      Für die journalistisch-redaktionellen Inhalte verantwortlich (§ 18 Abs. 2 MStV):<br>
+      Matěj Samec, Na Břehu 378, 387 11 Katovice, Tschechische Republik
+    </p>
+
+    <h2>Offenlegung</h2>
+    <p>Angaben nach § 25 des österreichischen Mediengesetzes und Art. 6 Abs. 1 der Verordnung (EU) 2024/1083 (Europäischer Rechtsakt zur Medienfreiheit):</p>
+    <ul>
+      <li><strong>Medieninhaber:</strong> Samec Digital s.r.o., Na Břehu 378, 387 11 Katovice, Tschechische Republik</li>
+      <li><strong>Unternehmensgegenstand:</strong> Verlagstätigkeit, Betrieb von Webportalen, Software- und IT-Dienstleistungen, Werbung und Marketing sowie weitere Tätigkeiten laut Handelsregister</li>
+      <li><strong>Vertretungsbefugtes Organ:</strong> Matěj Samec, Geschäftsführer. Ein Aufsichtsrat besteht nicht.</li>
+      <li><strong>Eigentumsverhältnisse:</strong> Alleiniger Gesellschafter (100 % der Anteile und Stimmrechte) und wirtschaftlicher Eigentümer ist Matěj Samec, Katovice. Stille Beteiligungen und Treuhandverhältnisse bestehen nicht.</li>
+      <li><strong>Öffentliche Mittel:</strong> Die Website enthält keine Werbung. Die Gesellschaft erhält weder öffentliche Mittel für staatliche Werbung noch Werbeeinnahmen von Behörden oder Stellen aus Drittländern.</li>
+      <li><strong>Grundlegende Richtung (Blattlinie):</strong> agro-svet.cz ist ein unabhängiges, parteipolitisch nicht gebundenes Informationsangebot über Landwirtschaft und Landtechnik: Nachrichten, ein Lexikon und ein Katalog von Landmaschinen, Ratgeber sowie Daten und Statistiken für Landwirte und Interessierte. Wir sind keine Vertretung, kein Händler und kein Partner der genannten Hersteller.</li>
+    </ul>
+
+    <h2>Künstliche Intelligenz</h2>
+    <p>Texte auf dieser Website entstehen mit Hilfe künstlicher Intelligenz und sind als solche gekennzeichnet (Art. 50 Abs. 4 der Verordnung (EU) 2024/1689). Wie wir dabei vorgehen, beschreiben wir unter <a href={lp('/redakce/')}>Redaktion und redaktionelle Grundsätze</a>.</p>
+
+    <h2>Verbraucherstreitbeilegung</h2>
+    <p>Informationen zur außergerichtlichen Beilegung von Verbraucherstreitigkeiten finden Sie in unseren <a href={lp('/podminky-pouziti/')}>Nutzungsbedingungen</a>.</p>
 
     <h2>Weitere Angaben</h2>
     <ul>

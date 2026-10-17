@@ -283,7 +283,8 @@ const brandJsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': ['Brand', 'Organization'],
   name: brand.name,
-  url: brandUrl,
+  // url = web výrobce, ne naše stránka (viz znacky/[slug].astro).
+  ...(brand.website && { url: brand.website }),
   ...(brand.logo && { logo: brand.logo.startsWith('http') ? brand.logo : `https://agro-svet.cz${brand.logo}` }),
   ...(brand.description && { description: brand.description }),
   ...(brand.founded && { foundingDate: String(brand.founded) }),

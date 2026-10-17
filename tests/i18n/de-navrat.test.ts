@@ -279,3 +279,85 @@ describe('de srovnání: noindex, mimo sitemapu, bez hreflang (2026-10-16)', () 
     expect(layout).toMatch(/noHreflang \|\| !csHasContent \|\| pathNoindex \? null/);
   });
 });
+
+describe('„ukázkový web" — nikomu nedat záminku (2026-10-17)', () => {
+  const LOCALES = ['cs', 'sk', 'pl', 'uk', 'de'] as const;
+  const ui = Object.fromEntries(LOCALES.map((l) => [l, read(`src/i18n/ui/${l}.ts`)]));
+  const val = (l: string, k: string) => {
+    const m = ui[l].match(new RegExp(`'${k.replace(/\./g, '\\.')}':\\s*'([^'\\n]*)'`));
+    return m ? m[1] : null;
+  };
+
+  it('Impressum plní § 5 DDG, § 18 MStV, § 25 MedienG a čl. 6 EMFA najednou', () => {
+    const imp = read('src/pages/impressum/index.astro');
+    expect(imp).toContain("lp('/kontakt/')"); // druhá rychlá kontaktní cesta (C-298/07)
+    expect(imp).toContain('§ 18 Abs. 2 MStV');
+    expect(imp).toContain('§ 25 des österreichischen Mediengesetzes');
+    expect(imp).toContain('Verordnung (EU) 2024/1083');
+    expect(imp).toMatch(/100 % der Anteile/);
+    expect(imp).toContain('Grundlegende Richtung');
+    expect(imp).toContain('keine Umsatzsteuer-Identifikationsnummer');
+  });
+
+  it('cookie lišta: odmítnutí vypadá stejně jako souhlas', () => {
+    const cc = read('src/components/CookieConsent.astro');
+    expect(cc).toContain('id="cc-odmitnout" class="cc-btn cc-btn--hlavni"');
+    expect(cc).toContain('id="cc-vse" class="cc-btn cc-btn--hlavni"');
+    expect(cc).toContain('id="cc-odmitnout-vse" class="cc-btn cc-btn--hlavni"');
+    expect(cc).not.toContain('cc-btn--obrys');
+  });
+
+  it('YouTube: upozornění je uvnitř panelu, encyklopedie používá stejný facade', () => {
+    const mv = read('src/components/MachineVideo.astro');
+    expect(mv).toMatch(/<span class="yt-consent">\{note\}<\/span>\}\s*\n\s*<\/div>/);
+    expect(mv).not.toContain('i.ytimg.com/vi');
+    const enc = read('src/pages/encyklopedie/[slug].astro');
+    expect(enc).toContain('<MachineVideo');
+    expect(enc).not.toContain('youtube-nocookie.com/embed');
+    for (const l of LOCALES) {
+      expect(val(l, 'enc.video.play')).toMatch(/YouTube/);
+      expect(val(l, 'cat.s.d.videoPlay')).toMatch(/YouTube/);
+    }
+  });
+
+  it('podpis u článků přiznává AI a netvrdí, že text někdo ověřil', () => {
+    const AI = { cs: /AI/, sk: /AI/, pl: /AI/, uk: /ШІ/, de: /KI/ } as const;
+    for (const l of LOCALES) {
+      for (const k of ['nov.byline', 'enc.byline.pre', 'cat.s.d.ebProcessed']) {
+        expect(val(l, k), `${l} ${k}`).toMatch(AI[l]);
+      }
+      for (const k of ['enc.byline.verified', 'enc.trust.verified', 'cat.zn.d.updated']) {
+        expect(val(l, k), `${l} ${k}`).not.toMatch(/ověřen|overen|zweryfikowan|перевірено|geprüft/i);
+      }
+    }
+  });
+
+  it('podmínky: žádný souhlas mlčky se změnou, užší nárok na práva, DSA čl. 16 odst. 2', () => {
+    const t = read('src/pages/podminky-pouziti.astro');
+    expect(t).not.toMatch(/weiter nutzen, erklären Sie Ihr Einverständnis/);
+    expect(t).not.toMatch(/Pokračováním v užívání webu po změně/);
+    expect(t).not.toMatch(/Pokračovaním v používaní webu po zmene/);
+    expect(t).not.toMatch(/Kontynuując korzystanie z serwisu po zmianie/);
+    expect(t).not.toMatch(/Продовжуючи використання сайту після зміни/);
+    expect(t).toMatch(/wesentlichen Pflicht/);
+    expect(t).toMatch(/Keine Rechte beanspruchen wir an Fakten/);
+    expect(t).not.toMatch(/Mit der Nutzung der Website\s+erklären Sie Ihr Einverständnis/);
+    expect((t.match(/2011\/93\//g) ?? []).length).toBe(5);
+    expect((t.match(/lp\('\/kontakt\/'\)/g) ?? []).length).toBe(5);
+  });
+
+  it('atlas chorob: povinná věta čl. 66 nařízení 1107/2009 ve všech jazycích', () => {
+    expect(val('de', 'chor.d.latkyNote')).toContain('Pflanzenschutzmittel vorsichtig verwenden. Vor Verwendung stets Etikett und Produktinformationen lesen.');
+    expect(val('cs', 'chor.d.latkyNote')).toContain('Používejte přípravky na ochranu rostlin bezpečně.');
+    expect(val('sk', 'chor.d.latkyNote')).toContain('bezpečným spôsobom');
+    expect(val('pl', 'chor.d.latkyNote')).toContain('z zachowaniem bezpieczeństwa');
+    expect(val('uk', 'chor.d.latkyNote')).toContain('безпечно');
+    expect(val('sk', 'chor.d.latkyNote')).toContain('ÚKSÚP');
+  });
+
+  it('JSON-LD značky nemá jako url naši stránku a Supabase preconnect není všude', () => {
+    expect(read('src/pages/znacky/[slug].astro')).not.toMatch(/description: znacka\.data\.popis,\n\s*url: canonical/);
+    expect(read('src/pages/stroje/[brand]/index.astro')).not.toMatch(/name: brand\.name,\n\s*url: brandUrl,/);
+    expect(read('src/layouts/Layout.astro')).toMatch(/\{needsSupabase && <link rel="preconnect"/);
+  });
+});
