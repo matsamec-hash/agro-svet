@@ -1,181 +1,100 @@
 ---
-title: Erózia pôdy v Česku — prečo mizne ornica a čo s tým
-popis: 60 % českej ornej pôdy je ohrozených vodnou eróziou, ročne z polí mizne 21 miliónov ton zeminy. Hĺbková analýza príčin, dopadov a opatrení — od kolektivizácie v 50. rokoch po DZES 7 v roku 2024.
+title: Erózia pôdy na Slovensku — prečo mizne ornica a čo s tým
+popis: Potenciálna vodná erózia ohrozuje vyše polovicu poľnohospodárskej pôdy na Slovensku, aktuálna približne osminu. Ako erózia vzniká, čo ukazujú údaje VÚPOP a Eurostatu, čo hovorí zákon a aké podmienky DPEP platia v roku 2026.
 ---
 
-Ročne z jej polí zmizne približne **21 miliónov ton ornice** — to je objem, ktorý by zaplnil 700-tisíc nákladných áut alebo pokryl celé Václavské námestie vrstvou vysokou 30 metrov. Táto ornica sa prirodzene netvorí roky ani desaťročia, ale **stovky rokov** — 1 cm ornice predstavuje podľa rôznych odhadov 100 až 300 rokov geologicko-biologického procesu.
+Na Slovensku je **potenciálnou vodnou eróziou ohrozených 52,4 % poľnohospodárskej pôdy** a aktuálnou vodnou eróziou 12,3 % ([Kobza, NPPC – VÚPOP, 2025](https://pedologie.czu.cz/akce/dny2025/19.pdf)). Pôda sa pritom obnovuje veľmi pomaly: podľa FAO môže vznik iba 2–3 cm pôdy trvať až 1 000 rokov ([FAO — Soil erosion: key messages](https://www.fao.org/about/meetings/soil-erosion-symposium/key-messages/en/)).
 
-Erózia je najväčší skrytý dlh českého poľnohospodárstva. Väčšina ľudí ju nevidí — centimeter po centimetri pomaly mizne. Keď však po prudkom daždi odplaví celé pole počas jednej hodiny alebo zaplaví obec, problém sa stane viditeľným.
+Erózia je pomalá a väčšinou nenápadná. Viditeľnou sa stáva, až keď prívalový dážď splaví zeminu z poľa na cestu, do potoka alebo do obce.
 
 ## Čo je erózia pôdy
 
-Erózia pôdy je proces, pri ktorom dochádza k odnášaniu vrchnej úrodnej vrstvy — **ornice (humózneho horizontu A)** — vodou, vetrom alebo ľudskou činnosťou. Ide o prirodzený geologický proces, ktorý existuje od vzniku kontinentov. Problémom však je, že **moderné poľnohospodárstvo tento proces zrýchľuje 10× až 1 000×** oproti prirodzenej rýchlosti.
+Erózia pôdy je odnos vrchnej, najúrodnejšej vrstvy pôdy — **ornice** — vodou alebo vetrom. Ide o prirodzený proces, ľudská činnosť ho však podľa FAO dokáže urýchliť až tisícnásobne, najmä intenzívnym poľnohospodárstvom, odlesňovaním a nevhodnými zmenami využívania krajiny ([FAO](https://www.fao.org/about/meetings/soil-erosion-symposium/key-messages/en/)).
 
-Prirodzená rýchlosť tvorby ornice sa odhaduje na **0,5–1 t/ha/rok**. Súčasná rýchlosť straty na ornej pôde v ČR je v priemere **6–10 t/ha/rok**, na svažitých poliach pod monokultúrnou kukuricou presahuje **30 t/ha/rok**. Niektoré špecifické lokality (Hanácka nížina, južné svahy Polabí) vykazujú až **80 t/ha/rok** po jedinej prudkej zrážke.
+Za znesiteľnú sa v európskych podmienkach považuje strata, ktorú stihne nahradiť tvorba novej pôdy — zhruba **0,3–1,4 t/ha za rok**. Skutočná erózia na ornej pôde obrábanej pluhom je podľa toho istého prehľadu v priemere 3× až 40× vyššia ([Verheijen a kol., 2009](https://doi.org/10.1016/j.earscirev.2009.02.003)). Slovenská vyhláška č. 508/2004 Z. z. stanovuje limitné hodnoty odnosu pôdy pri vodnej erózii podľa hĺbky pôdy na **5 až 20 t/ha za rok** a pri veternej erózii na 15 t/ha ([vyhláška 508/2004 Z. z., príloha č. 6](https://static.slov-lex.sk/static/SK/ZZ/2004/508/20130401.html)).
 
-V hektárovom vyjadrení: za každú tonu stratenej ornice na hektári klesne výnosový potenciál o **~3 kg pšenice** trvalo. Pri 10 t/ha/rok to znamená −30 kg pšenice/ha/rok kumulatívne — čo po desiatich rokoch predstavuje stratu produkcie v hodnote tisícov korún na hektár.
+## Rozsah problému na Slovensku
 
-## Rozsah problému v ČR
+Potenciálna erózia vychádza z pôdy, sklonu a zrážok, ako keby pole zostalo bez porastu. Aktuálna erózia započítava aj skutočné využitie pôdy, preto vychádza niekoľkonásobne nižšia.
 
-Orientačné údaje o situácii v Česku:
+| Ukazovateľ | Hodnota | Zdroj |
+|---|---|---|
+| Poľnohospodárska pôda potenciálne ohrozená vodnou eróziou | 52,4 % | NPPC – VÚPOP, 2025 |
+| — z toho extrémna kategória (nad 30 t/ha/rok) | 28,8 % | NPPC – VÚPOP, 2025 |
+| Aktuálna vodná erózia strednej až extrémnej intenzity (2024) | 12,3 % (218 511 ha) | MŽP SR / SAŽP |
+| Poľnohospodárska pôda ohrozená veternou eróziou | 6,1 % | NPPC – VÚPOP, 2025 |
 
-| Ukazovateľ | Hodnota |
-|---|---|
-| Celková výmera poľnohospodárskej pôdy | 4,21 mil. ha |
-| Z toho orná pôda | 2,53 mil. ha |
-| Orná ohrozená vodnou eróziou | ~60 % (1,52 mil. ha) |
-| Orná silne ohrozená (>20 t/ha/rok) | ~18 % (455 tis. ha) |
-| Orná extrémne ohrozená (>40 t/ha/rok) | ~8 % (200 tis. ha) |
-| Orná ohrozená veternou eróziou | ~16 % (405 tis. ha) |
-| Ročná strata zeminy z polí | ~21 mil. ton |
-| Ročná ekonomická škoda | 4–10 mld. Kč |
+Údaj o aktuálnej erózii pochádza zo Správy o stave životného prostredia SR v roku 2024 a vzťahuje sa na pôdu evidovanú v registri PPA ([Správa o stave ŽP SR 2024](https://www.enviroportal.sk/uploads/report/12121.pdf)). Kategórie erózie (žiadna až slabá 0–4, stredná 4–10, vysoká 10–30 a extrémna nad 30 t/ha za rok) a interaktívne mapy zverejňuje VÚPOP na portáli [podnemapy.sk](http://www.podnemapy.sk/portal/verejnost/erozia/vod/vod.aspx).
 
-Zhruba **každé tretie pole** v Česku patrí do kategórie, kde by bez protieróznych opatrení dochádzalo ku kritickej strate produkčného potenciálu počas jednej generácie.
+Európsky model RUSLE2015 odhaduje pre slovenskú poľnohospodársku pôdu bez pasienkov (rok 2016) priemernú stratu **3,8 t/ha za rok**, nad priemerom EÚ (3,6 t/ha). Viac ako 5 t/ha ročne stráca 26,2 % tejto plochy (asi 547-tisíc ha), viac ako 10 t/ha 9,1 %; spolu ide zhruba o 7,9 milióna ton zeminy ročne ([Eurostat — aei_pr_soiler](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)). Európsky model a národné mapy VÚPOP nie sú priamo porovnateľné — počítajú inou metódou a pre iné obdobie.
 
-## Historický kontext: ako sme sa sem dostali
+Ekonomicky: výskumníci Spoločného výskumného centra EÚ (JRC) odhadli, že silnou eróziou (nad 11 t/ha ročne) je na Slovensku zasiahnutých asi 160-tisíc ha, teda 7,6 % poľnohospodárskej plochy, a ušlá úroda zodpovedá zhruba 16,9 milióna eur ročne (údaje za rok 2010) ([Panagos a kol., 2018](https://doi.org/10.1002/ldr.2879)). Oficiálny slovenský odhad škôd spôsobených eróziou sa nám nepodarilo nájsť.
 
-Erózia v dnešnom rozsahu nie je prírodná — je dôsledkom štrukturálnych zmien za posledných 75 rokov.
-
-**Pred rokom 1948**: Krajina ČR mala mozaikovú štruktúru — priemerná veľkosť poľnohospodárskeho pozemku bola **0,5 ha**, polí v celej krajine približne **3,5 milióna**. Medzi nimi sa vinuli medze, remízky, poľné cesty a aleje. Tie fungovali ako prirodzené erózne bariéry.
-
-**1948–1989 — kolektivizácia**: V rámci zlučovania do JRD a štátnych majetkov došlo k **sceľovaniu pozemkov**. Z 3,5 mil. parciel vzniklo približne **50-tisíc veľkých honov** s priemernou veľkosťou **30 ha**. Medze, remízky a poľné cesty boli zničené: celkovo zmizlo podľa odhadov **800 000 km medzných línií**. Veľké pole = dlhší erózny svah = viac odplavenej ornice.
-
-**1970–1990 — éra kukurice**: Pod vplyvom socialistického poľnohospodárstva sa kukurica stala dominantnou silážnou plodinou (kŕmenie hovädzieho dobytka pre JRD). Kukurica je z hľadiska erózie najproblematickejšia — v jarných mesiacoch (apríl–jún, keď prichádzajú prudké zrážky) je pôda takmer holá, pretože rastlina rastie pomaly. **Holá pôda + svah + búrka = strata až 40 t/ha pri jedinej zrážke.**
-
-**1990–2004 — divoká transformácia**: Po novembri 1989 zostali veľké hony, no zmizli družstevné povinnosti. Záujem o krátkodobý zisk viedol k rozšíreniu **repky** (osevné plochy +400 % od roku 1990 do roku 2024) a zachovaniu kukurice. Pôda sa nehnojila statkovými hnojivami (úbytok hovädzieho dobytka), klesal humus, klesala vsakovacia schopnosť — viac vody stekalo po povrchu.
-
-**2004–2023 — vstup do EÚ**: Spoločná poľnohospodárska politika priniesla cross-compliance a prvé požiadavky na DZES (Dobrý poľnohospodársky a environmentálny stav). Tie však boli mäkké — povoľovali bloky až 30 ha jednej plodiny a kontrol bolo málo.
-
-**Od roku 2024 — nový DZES 7**: Strategický plán SPP 2023–2027 zaviedol **konkrétne limity veľkosti blokov jednej plodiny**. Kritickejšie opatrenia sú v kapitole nižšie.
+Konkrétny príklad: v roku 2021 začal Okresný úrad Trnava na návrh pôdnej služby konanie o uložení protieróznych opatrení na 12 dieloch pôdnych blokov s výmerou 562 ha v okolí obce Žlkovce, z ktorých sa pri intenzívnych zrážkach splavovala pôda do obce ([verejná vyhláška OÚ Trnava, 2021](https://www.minv.sk/swift_data/source/miestna_statna_sprava/ou_trnava_plo/oznamy/verejna_vyhl_Zlkovce_OZK.pdf)).
 
 ## Typy erózie
 
 ### Vodná erózia
 
-Najrozšírenejšia forma v ČR — týka sa **60 % ornej pôdy**. Proces:
+Vodná erózia prebieha v niekoľkých stupňoch:
 
-1. **Dažďová kvapka** dopadne na holú pôdu rýchlosťou ~9 m/s a rozbije pôdny agregát (fragment súdržnej pôdy).
-2. Uvoľnené častice sa zachytia v tenkej vrstve vody na povrchu (**splash erosion**).
-3. Voda začne stekať po svahu a unáša častice — **plošná erózia**.
-4. Kde sa voda koncentruje, vznikajú **ryhy** (ryhová erózia).
-5. Pri dlhodobom zanedbávaní sa vytvárajú **výmole** zasahujúce do podorničia — terén sa stane neorateľným.
+1. **Dažďové kvapky** dopadajú na holú pôdu — veľké kvapky rýchlosťou až okolo 9 m/s ([Gunn a Kinzer, 1949](https://doi.org/10.1175/1520-0469%281949%29006%3C0243%3ATTVOFF%3E2.0.CO%3B2)) — a rozbíjajú pôdne agregáty.
+2. Uvoľnené častice odnáša voda stekajúca po povrchu — **plošná erózia**.
+3. Kde sa odtok sústredí, vznikajú **ryhy** (ryhová erózia).
+4. Zo zanedbaných rýh sa stávajú **výmole**, ktoré zasahujú do podornice.
 
-**Geografia**: Najhoršie postihnuté oblasti:
-- **Hanácka nížina + Vyškovsko** — sprašové pôdy, mierne svahy, intenzívna orná pôda
-- **Drahanská vrchovina + Vysočina** — zemiakárska oblasť, väčšie svahy
-- **Polabí** — sprašové pôdy, dlhé polia, kukurica
-- **Stredomoravské vrchoviny** — Železné hory, Žďárske vrchy
+Najrizikovejšie sú svahovité pozemky, na ktorých v období prívalových dažďov zostáva pôda holá — typicky pod širokoriadkovými plodinami.
 
 ### Veterná erózia
 
-Týka sa **16 % ornej pôdy**, sústredená do nížin s ľahšími pôdami:
+Veterná erózia odnáša jemné častice z vysušenej, nepokrytej pôdy, hlavne na ľahších pôdach. Na Slovensku prevláda najmä na západe krajiny, predovšetkým na Záhorí (NPPC – VÚPOP, 2025). Európsky model JRC odhaduje pre ornú pôdu na Slovensku priemernú stratu veternou eróziou **0,39 t/ha za rok**, priemer EÚ je 0,53 t/ha ([Borrelli a kol., 2017](https://doi.org/10.1002/ldr.2588)). Mimo poľa vietor zanáša priekopy a cesty prachom.
 
-- **Južná Morava** (Znojemsko, Hodonínsko, Břeclavsko) — piesčité spraše, suché podnebie, časté vetry
-- **Polabí** (Mělnicko, Roudnicko, Pardubicko) — piesčité a hlinitopiesčité pôdy
-- **Sliezsko a Hornomoravský úval** — lokálne
+## Prečo sa erózia zrýchľuje
 
-V kritických jarných mesiacoch, keď je pôda po orbe obnažená a rastliny ešte nepokryli povrch, **prachové búrky** odnášajú 1–5 t/ha za jediný deň. Negatívny dopad: znečistenie ovzdušia (PM10), poškodenie susedných kultúr, znížená viditeľnosť na cestách.
-
-### Dehumifikácia (skrytá erózia)
-
-Tretí, často prehliadaný typ — pomalá strata organickej hmoty (humusu) v pôde. Nie sú to viditeľné ryhy, ale chemicko-biologická degradácia.
-
-| Obdobie | Priemerný obsah humusu v ornici (%) |
-|---|---|
-| 1950 | 2,8 % |
-| 1990 | 2,3 % |
-| 2024 | 1,9 % (lokálne 1,2 %) |
-
-Pokles o 1 % humusu = strata ~25 ton organickej hmoty na ha. Dôsledky:
-- Znížená vodná nasiakavosť (1 % humusu = 100–200 l vody/m² navyše)
-- Znížená biologická aktivita
-- Vyššia potreba minerálnych hnojív
-- Vyššie riziko vodnej erózie (humus drží pôdu pokope)
-
-Hlavná príčina: **úbytok hovädzieho dobytka v ČR** — z 3,4 mil. ks (1990) na 1,3 mil. ks (2025). Menej dobytka = menej statkových hnojív = menej organického vstupu do pôdy.
-
-## Ekonomický dopad
-
-Erózia nie je len environmentálny problém — je to ekonomická strata merateľná v miliardách korún ročne.
-
-**Priame straty (ČR, ročne)**:
-- Zníženie výnosov v dôsledku straty úrodnej ornice: **2–4 mld. Kč**
-- Vyššie náklady na hnojivá (kompenzácia stratenej úrodnosti): **1–2 mld. Kč**
-- Škody na infraštruktúre (cesty, vodné toky, kanalizácia) po zrážkových eróznych udalostiach: **0,5–1 mld. Kč**
-- Náklady na čistenie vodných zdrojov (sediment v nádržiach): **0,3–0,5 mld. Kč**
-
-**Nepriame straty**:
-- Povodne spôsobené alebo zhoršené eróziou (nižšia absorpcia vody pôdou): **3–5 mld. Kč/rok v priemere**
-- Strata hodnoty pozemkov v dôsledku zhoršenej úrodnosti
-- Náklady na obnovovacie opatrenia (zalesňovanie, retenčné nádrže)
-
-**Celkový konzervatívny odhad**: 8–15 mld. Kč ročne. To je takmer 1 % HDP poľnohospodárstva v ČR.
-
-## Erózne katastrofy v českej histórii
-
-**1997 — Morava**: Bleskové povodne po katastrofálnych zrážkach (300+ mm/24 h). Obec **Troubky** na Hané — voda valiaca sa s odplavenou pôdou zo susedných polí zničila **140 domov**, **9 ľudí zahynulo**. Príčinou nebol len dážď — odlesnené svahové polia nad obcou neabsorbovali zrážky. Na 1 m² ornej pôdy v okolí spadlo viac ako 300 l vody, ornica to neudržala.
-
-**2002 — Čechy**: Povodňová vlna zasiahla Prahu aj menšie obce. Ekonomická škoda 73 mld. Kč. Časť sa pripisuje poľnohospodárskej krajine bez retenčnej schopnosti.
-
-**2010 — Bohuslavice u Hodonína**: Veterná búrka v apríli odniesla z polí viac ako 100 t/ha za 6 hodín, znečistila cestu I/55 a znížila viditeľnosť na 5 m. Miestni poľnohospodári boli pokutovaní za nedodržanie DZES.
-
-**2024 — Bečva, Morava**: Po prudkých júnových zrážkach splavené kukuričné polia zaplavili obec Černotín. Erózia lokálne presiahla 50 t/ha.
-
-## Príčiny erózie v modernom poľnohospodárstve
-
-| Faktor | Dopad |
-|---|---|
-| Veľké bloky jednej plodiny | Dlhšia erózna dĺžka svahu, žiadne medzery na vsakovanie |
-| Rušenie medzí, alejí, poľných ciest | Žiadna prirodzená bariéra |
-| Pestovanie kukurice na svahu | Holá pôda v kritickom jarnom období |
-| Pestovanie repky, slnečnice | Pomalý počiatočný rast, holá pôda |
-| Ťažká mechanizácia | Utuženie pôdy, znížená vsakovacia kapacita |
-| Orba po spáde svahu | Voda steká pozdĺž brázd |
-| Úbytok statkových hnojív | Strata humusu → znížená vsakovacia schopnosť |
-| Klimatická zmena | Intenzívnejšie zrážky, dlhšie obdobia sucha |
+- **Veľké bloky ornej pôdy a málo krajinných prvkov.** Na dlhom neprerušenom svahu naberá stekajúca voda rýchlosť aj silu.
+- **Plodiny s nízkou protieróznou schopnosťou**, ktoré nechávajú pôdu dlho nepokrytú — práve tie podmienka DPEP 5 na silne ohrozených plochách zakazuje.
+- **Úbytok hovädzieho dobytka.** Stavy klesli z 1,56 milióna kusov (koniec roka 1990) na 413-tisíc (koniec roka 2025) ([ŠÚ SR — DATAcube](https://data.statistics.sk/api/v2/dataset/pl2016rs/all/all?lang=sk)). S chovom ubudli statkové hnojivá aj krmoviny, ktoré pôdu kryjú celoročne.
+- **Utužená pôda** po prejazdoch ťažkej techniky horšie vsakuje vodu, takže viac vody steká po povrchu.
+- **Obrábanie a sejba po spádnici** — voda steká pozdĺž riadkov a brázd.
+- **Prívalové zrážky**, ktoré na nepokrytej pôde spôsobujú najväčší odnos.
 
 ## Protierózne opatrenia
 
-Účinnosť opatrení je merateľná. Orientačné percentuálne zníženie erózie:
+Účinnosť opatrení je zmeraná. Súhrn európskych poľných pokusov uvádza tieto mediány zníženia zmyvu oproti bežnému hospodáreniu ([Maetens a kol., 2012](https://doi.org/10.1016/j.earscirev.2012.08.003)); výsledky jednotlivých pokusov sa pritom veľmi líšia.
 
-### Organizačné opatrenia
+### Organizačné a agrotechnické opatrenia
 
-| Opatrenie | Zníženie erózie |
+| Opatrenie | Medián zníženia zmyvu |
 |---|---|
-| Radenie plodín pozdĺž vrstevníc | 30–50 % |
-| Zmenšenie blokov pod 12 ha | 25–40 % |
-| Ponechanie strniska cez zimu | 60–80 % |
-| Bezorbové spracovanie (no-till) | 70–90 % |
+| Ochranné trávnaté pásy | asi 80 % |
+| Mulčovanie (krytie povrchu rastlinnými zvyškami) | asi 79 % |
+| Medziplodiny a krycie plodiny | asi 66 % |
+| Obrábanie po vrstevnici | asi 51 % |
+| Bezorbová sejba (no-till) | asi 47 % |
+| Redukované spracovanie pôdy | asi 38 % |
 
-### Agrotechnické opatrenia
+- **Osevný postup** s plodinami, ktoré kryjú pôdu v období prívalových dažďov.
+- **Zatrávnenie** svahov a dráh sústredeného odtoku. Trvalé trávne porasty majú podľa JRC v priemere asi 2,5× nižší faktor ochranného vplyvu vegetácie ako orná pôda ([Panagos a kol., 2015](https://doi.org/10.1016/j.landusepol.2015.05.021)).
+- Zákon č. 220/2004 Z. z. menuje ako ochranné agrotechnické opatrenia napríklad vrstevnicovú agrotechniku, striedanie plodín s ochranným účinkom, mulčovaciu medziplodinu s bezorbovou agrotechnikou a usporiadanie honov v smere prevládajúcich vetrov.
 
-- **Mulčovanie** (krytie pôdy organickým materiálom) — zníženie vodnej erózie o 60–95 %, závisí od pokrytia
-- **Zatrávnenie** svahov a eróznych rýh — trvalé trávne porasty odolávajú erózii 10× lepšie ako orná pôda
-- **Medziplodiny** (facélia, horčica, reďkev olejná) — rýchlo rastúce, kryjú pôdu pred zimou, zníženie erózie o 40–70 %
-- **Pásové striedanie plodín** — kombinácia plodín s rôznou ochrannou hodnotou v striedajúcich sa pásoch
+### Technické opatrenia
 
-### Technické opatrenia (nákladné, dlhodobé)
+- **Medze, prieľahy, vsakovacie pásy a záchytné priekopy** — spomalia a odvedú sústredený odtok.
+- **Terasy** — v európskych pokusoch znížili zmyv v mediáne asi o 65 % (Maetens a kol., 2012).
+- **Záchytné nádrže a suché poldre** — zadržia splaveninu skôr, ako dotečie do obce alebo vodného toku.
+- **Ochranná zeleň** — výsadbu účelovej poľnohospodárskej a ochrannej zelene uvádza zákon č. 220/2004 Z. z. medzi protieróznymi opatreniami; pásy zelene brzdia vodu aj vietor.
 
-- **Obnova medzí, remízkov, alejí** — investícia 50–200 tis. Kč/ha
-- **Prieľahy a záchytné priekopy** — odvádzajú sústredený odtok mimo ohrozených polí
-- **Protierózne hrádze** — terasovanie svahov
-- **Retenčné nádrže** — zachytávajú splaveniny aj vodu
+## Zákon a podmienky DPEP
 
-V Česku bolo obnovených približne **1 200 km medzí** (2010–2024) z odhadovaných 800 000 km zničených v období 1948–1989. Teda **0,15 %** historicky odstránených línií.
+**Zákon č. 220/2004 Z. z.** ukladá vlastníkovi aj užívateľovi povinnosť „vykonávať trvalú a účinnú protieróznu ochranu poľnohospodárskej pôdy“ (§ 5 ods. 2). Ak pôdna služba zistí eróziu a nečinnosť vlastníka alebo užívateľa, opatrenia na jej návrh uloží orgán ochrany poľnohospodárskej pôdy (§ 5 ods. 3). Právnickej osobe alebo podnikateľovi hrozí za poškodenie pôdy pokuta od 500 do 33 200 eur za každý hektár (§ 26) ([zákon 220/2004 Z. z.](https://static.slov-lex.sk/static/SK/ZZ/2004/220/20250601.html)).
 
-## Štandardy DZES 2024
+**Podmienky DPEP** (dobrý poľnohospodársky a environmentálny stav) sú súčasťou podmienenosti SPP 2023–2027. Znenie podľa prílohy č. 2 nariadenia vlády č. 435/2022 Z. z. účinnej od 1. 7. 2026 ([slov-lex.sk](https://static.slov-lex.sk/pdf/prilohy/SK/ZZ/2022/435/20260701_5856130-2.pdf)):
 
-Strategický plán SPP 2023–2027 zaviedol konkrétne limity. Kľúčový pre eróziu je **DZES 7** (rozdelenie veľkých pôdnych blokov):
+- **DPEP 5 — erózia.** Na silne ohrozených plochách vodnou eróziou sa nesmú pestovať plodiny s nízkou protieróznou schopnosťou a plodiny s vyššou protieróznou schopnosťou len s protieróznymi agrotechnickými opatreniami. Na mierne ohrozených plochách sa plodiny s nízkou protieróznou schopnosťou smú pestovať len s takými opatreniami. Na plochách ohrozených veternou eróziou treba uplatňovať opatrenia proti nej.
+- **DPEP 6 — minimálne pokrytie pôdy.** Od 1. júna do 15. októbra treba zabezpečiť najmenej 80 % vegetačné pokrytie ornej pôdy. Orná pôda so sklonom nad 12° musí mať od 1. novembra do 1. marca 100 % vegetačné pokrytie.
+- **DPEP 7 — striedanie plodín.** Tú istú plodinu nepestovať na tej istej ploche dva roky po sebe (výnimku umožňuje medziplodina), alebo plodiny diverzifikovať: pri 10–30 ha ornej pôdy aspoň dve plodiny a hlavná najviac na 75 % výmery, nad 30 ha aspoň tri plodiny, hlavná najviac na 75 % a dve hlavné spolu najviac na 95 % výmery.
 
-| Sklonitosť svahu | Max. veľkosť bloku jednej plodiny |
-|---|---|
-| 0–7° (rovina, mierny svah) | **30 ha** |
-| 7–12° (svah) | **10 ha** |
-| nad 12° (strmý svah) | **5 ha** |
-
-Plus **DZES 5** (minimálny pôdny pokryv): minimálne 80 % ornej pôdy v podniku musí byť v kritickom období (1. 6.–31. 10.) zakryté (rastlina, mulč, medziplodina). Bez splnenia → krátenie dotácií o 1–10 %.
-
-A **DZES 6** (zákaz orby v erózne ohrozených oblastiach v určitých termínoch): zákaz orby od 1. 7. do 31. 8. v silne eróznych pásmach.
+V dobrovoľnej ekoschéme podľa nariadenia vlády č. 436/2022 Z. z. nesmie súvislá plocha ornej pôdy na jednom diele pôdneho bloku presiahnuť 50 ha ([slov-lex.sk](https://static.slov-lex.sk/static/SK/ZZ/2022/436/20260315.html)).
 
 ## Medzinárodné porovnanie
 
@@ -186,40 +105,31 @@ Odhad Eurostatu pre stratu pôdy vodnou eróziou na poľnohospodárskej pôde be
 | Slovinsko | 14,8 |
 | Taliansko | 11,2 |
 | Rakúsko | 4,9 |
-| Slovensko | 3,8 |
+| **Slovensko** | **3,8** |
 | Priemer EÚ | 3,6 |
 | Bulharsko | 3,4 |
-| **Česká republika** | **2,7** |
+| Česká republika | 2,7 |
 | Francúzsko | 2,3 |
 | Nemecko | 1,9 |
 | Poľsko | 1,6 |
 
-## Čo môžete urobiť
+## Čo môže urobiť poľnohospodár
 
-**Poľnohospodár**:
-- Vyhodnotiť, aký podiel výmery sa nachádza v EOP (mapa VÚMOP)
-- Plánovať osevný postup s protierózne vhodnými plodinami (oziminy, medziplodiny)
-- Zvážiť technológiu no-till (počiatočná investícia, dlhodobá úspora)
-- Požiadať o dotácie AEKO na protierózne opatrenia (ČR vypláca 4–8 tis. Kč/ha/rok podľa typu)
+- **Zistiť eróznu ohrozenosť svojich dielov** — mapy potenciálnej erózie a model na výpočet straty pôdy sú na [podnemapy.sk](http://www.podnemapy.sk/portal/verejnost/erozia/vod/vod.aspx).
+- **Kryť pôdu** v období prívalových dažďov: medziplodiny, podsevy, rastlinné zvyšky na povrchu.
+- **Deliť veľké plochy** ochrannými pásmi alebo pásmi inej plodiny a na svahoch obrábať po vrstevnici.
+- **Na najstrmších svahoch zvážiť zatrávnenie** — orná pôda nad 12° musí byť cez zimu podľa DPEP 6 aj tak úplne pokrytá.
+- **Spolupracovať s obcou a pozemkovým úradom** pri pozemkových úpravách, v ktorých sa navrhujú medze, prieľahy a záchytné nádrže.
 
-**Občan / spotrebiteľ**:
-- Uprednostňovať výrobky z fariem s certifikátom EKO alebo Bio
-- Podporovať miestnych farmárov (kratší dodávateľský reťazec, často menšie polia)
-- Vyvíjať tlak na obecné zastupiteľstvá — mnohé erózne problémy riešia pozemkové úpravy (KPÚ)
+## Zdroje
 
-**Štát**:
-- Urýchliť komplexné pozemkové úpravy (KPÚ) — dnes je hotových len 25 % katastrálnych území
-- Posilniť kontroly DZES na úrovni fariem
-- Investovať do retenčnej infraštruktúry (rybníky, mokrade, remízky)
-
-## Kľúčové zdroje
-
-- **VÚMOP** — Výskumný ústav meliorácií a ochrany pôdy ([vumop.cz](https://www.vumop.cz/)) — hlavná inštitúcia pre mapovanie erózie v ČR
-- **Monitoring erózie** ([monitoringeroze.cz](https://me.vumop.cz/)) — interaktívna mapa eróznych udalostí, hlásenia od verejnosti
-- **MZe — Strategický plán SPP 2023–2027** — pravidlá DZES 5/6/7
-- **ÚKZÚZ** — kontrolný poľnohospodársky a skúšobný ústav
+- **NPPC – VÚPOP** — Kobza, J.: aktuálny stav degradácie pôd na Slovensku, Pedologické dni 2025 ([PDF](https://pedologie.czu.cz/akce/dny2025/19.pdf)); erózne mapy na [podnemapy.sk](http://www.podnemapy.sk/portal/verejnost/erozia/vod/vod.aspx)
+- **MŽP SR / SAŽP — Správa o stave životného prostredia SR v roku 2024** ([PDF](https://www.enviroportal.sk/uploads/report/12121.pdf)) — aktuálna vodná erózia
+- **Zákon č. 220/2004 Z. z.** o ochrane a využívaní poľnohospodárskej pôdy ([slov-lex.sk](https://static.slov-lex.sk/static/SK/ZZ/2004/220/20250601.html)) a **vyhláška č. 508/2004 Z. z.** ([slov-lex.sk](https://static.slov-lex.sk/static/SK/ZZ/2004/508/20130401.html))
+- **Nariadenie vlády č. 435/2022 Z. z.** o podmienenosti, príloha č. 2 ([PDF](https://static.slov-lex.sk/pdf/prilohy/SK/ZZ/2022/435/20260701_5856130-2.pdf)) — DPEP 5, 6, 7
 - **Eurostat — Estimated soil erosion by water** ([aei_pr_soiler](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)) — medzinárodné porovnanie
+- **JRC** — náklady erózie ([Panagos a kol., 2018](https://doi.org/10.1002/ldr.2879)), veterná erózia ([Borrelli a kol., 2017](https://doi.org/10.1002/ldr.2588))
 
 ---
 
-*Erózia je najtichšia kríza českého poľnohospodárstva. Nie je ju vidieť, kým nespôsobí povodeň alebo z poľa neurobí ílovitú púšť. Našťastie sa dá zastaviť — vyžaduje si to však zmenu, ktorú musia urobiť poľnohospodár, štát aj občan spoločne.*
+*Erózia je pomalá a nenápadná, kým po prívalovom daždi neskončí ornica na ceste. Dá sa však brzdiť — pokrytím pôdy, skladbou plodín a opatreniami v krajine.*

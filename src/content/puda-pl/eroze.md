@@ -1,181 +1,98 @@
 ---
-title: Erozja gleby w Polsce i Europie Środkowej — dlaczego znika warstwa orna i co z tym zrobić
-popis: 60 % polskiej gruntów ornych w ŚE jest zagrożonych erozją wodną, rocznie z pól ubywa 21 milionów ton ziemi. Pogłębiona analiza przyczyn, skutków i środków zaradczych — od przemian agrarnych XX wieku po normy GAEC w ramach WPR 2024.
+title: Erozja gleby w Polsce — dlaczego znika warstwa orna i co z tym zrobić
+popis: Erozja wodna potencjalnie zagraża ok. 29 % obszaru Polski, a wietrzna ok. 36 % (IUNG-PIB). Jak powstaje erozja, co pokazują dane Eurostatu, jakie wymogi GAEC obowiązują w 2026 roku i co realnie pomaga.
 ---
 
-Rocznie z pól ubywa szacunkowo **21 milionów ton warstwy ornej** — to objętość wystarczająca do zapełnienia 700 tysięcy ciężarówek lub przykrycia dużego placu miejskiego warstwą o wysokości 30 metrów. Warstwa orna nie tworzy się w ciągu lat ani dziesięcioleci, lecz przez **setki lat** — 1 cm gleby ornej odpowiada według różnych szacunków 100–300 latom procesu geologiczno-biologicznego.
+Według IUNG-PIB **erozja wodna potencjalnie zagraża ok. 29 % obszaru Polski**, w tym 21 % użytków rolnych ([Wawer, Nowocień, IUNG-PIB 2018](https://iung.pl/sir/zeszyt58_5.pdf)). Gleba odnawia się przy tym bardzo powoli: według FAO utworzenie zaledwie 2–3 cm gleby może trwać nawet 1000 lat ([FAO — Soil erosion: key messages](https://www.fao.org/about/meetings/soil-erosion-symposium/key-messages/en/)).
 
-Erozja to największy ukryty dług rolnictwa. Większość ludzi jej nie dostrzega — znika powoli, centymetr po centymetrze. Gdy jednak po gwałtownym deszczu cała warstwa gleby spływa z pola w ciągu godziny lub zalewa wieś, problem staje się widoczny.
+Erozja postępuje powoli i zwykle jest mało widoczna. Dostrzegamy ją dopiero wtedy, gdy ulewa spłucze ziemię z pola na drogę, do rowu albo do wsi.
 
 ## Czym jest erozja gleby
 
-Erozja gleby to proces, w którym dochodzi do wynoszenia wierzchniej żyznej warstwy — **gleby ornej (próchnicznego poziomu A)** — przez wodę, wiatr lub działalność człowieka. Jest to naturalny proces geologiczny, istniejący od początków kontynentów. Problemem jest jednak to, że **nowoczesne rolnictwo przyspiesza ten proces 10× do 1000×** w stosunku do tempa naturalnego.
+Erozja gleby to wynoszenie wierzchniej, najżyźniejszej warstwy gleby — **warstwy ornej** — przez wodę lub wiatr. To proces naturalny, ale według FAO działalność człowieka może go przyspieszyć nawet tysiąckrotnie, głównie przez intensywne rolnictwo, wylesianie i niewłaściwe zmiany użytkowania terenu ([FAO](https://www.fao.org/about/meetings/soil-erosion-symposium/key-messages/en/)).
 
-Naturalne tempo tworzenia gleby ornej szacuje się na **0,5–1 t/ha/rok**. Obecne tempo ubytku na gruntach ornych wynosi przeciętnie **6–10 t/ha/rok**, na pochyłych polach pod monokulturą kukurydzy przekracza **30 t/ha/rok**. W szczególnie narażonych miejscach (niziny lessowe, południowe stoki dolin) odnotowuje się nawet **80 t/ha/rok** po jednym gwałtownym opadzie.
+Za tolerowaną uznaje się w warunkach europejskich stratę, którą nadąża uzupełnić tworzenie się nowej gleby — ok. **0,3–1,4 t/ha rocznie**. Rzeczywista erozja na gruntach ornych uprawianych płużnie jest według tego samego przeglądu przeciętnie 3–40 razy wyższa ([Verheijen i in., 2009](https://doi.org/10.1016/j.earscirev.2009.02.003)).
 
-W przeliczeniu na hektar: utrata każdej tony gleby ornej trwale zmniejsza potencjał plonowania o **~3 kg pszenicy**. Przy stracie 10 t/ha/rok oznacza to -30 kg pszenicy/ha/rok — po dziesięciu latach daje to utratę produkcji wartą tysiące złotych na hektar.
+## Jak duży jest problem w Polsce
 
-## Skala problemu w Europie Środkowej
+Zagrożenie „potencjalne” IUNG-PIB liczy dla gruntu utrzymywanego jako czarny ugór, czyli bez ochrony roślin. Zagrożenie „rzeczywiste” uwzględnia faktyczne użytkowanie ziemi i wychodzi wyraźnie niższe.
 
-Orientacyjne dane dla Czech:
+| Wskaźnik | Wartość | Źródło |
+|---|---|---|
+| Obszar Polski potencjalnie zagrożony erozją wodną | ok. 29 % (21 % użytków rolnych) | IUNG-PIB 2018 |
+| — w stopniu silnym / średnim / słabym | 4 % / 11 % / 14 % | IUNG-PIB 2018 |
+| Rzeczywiste zagrożenie erozją wodną | 16,6–18,4 % powierzchni lądowej | IUNG-PIB 2006 |
+| Obszar potencjalnie zagrożony erozją wietrzną | ok. 36 % | IUNG-PIB 2018 |
+| Średnie roczne straty gleby wskutek erozji wodnej | 76 t/km² (0,76 t/ha) | IUNG-PIB 2023 |
 
-| Wskaźnik | Wartość |
-|---|---|
-| Łączna powierzchnia użytków rolnych | 4,21 mln ha |
-| W tym grunty orne | 2,53 mln ha |
-| Grunty orne zagrożone erozją wodną | ~60 % (1,52 mln ha) |
-| Grunty orne silnie zagrożone (>20 t/ha/rok) | ~18 % (455 tys. ha) |
-| Grunty orne ekstremalnie zagrożone (>40 t/ha/rok) | ~8 % (200 tys. ha) |
-| Grunty orne zagrożone erozją wietrzną | ~16 % (405 tys. ha) |
-| Roczny ubytek ziemi z pól | ~21 mln ton |
-| Roczne straty ekonomiczne | 4–10 mld Kč |
+Rzeczywiste zagrożenie oszacowano na podstawie danych CORINE 2000; w stopniu od średniego do bardzo silnego dotyczy ono 7,1 % powierzchni kraju ([Pamiętnik Puławski 142, 2006](https://iung.pl/wp-content/uploads/2009/10/Z142_47.pdf)). Średnie straty gleby w Polsce (76 t/km² rocznie) są niższe niż w Europie (84,7 t/km²) i wahają się od 2,7 t/km² na Nizinach Środkowopolskich do 280 t/km² w Karpatach fliszowych ([IUNG-PIB 2023](https://www.iung.pl/sir/zeszyt71_8.pdf)).
 
-Mniej więcej **co trzecie pole** w regionie należy do kategorii, w której bez działań przeciwerozyjnych doszłoby do krytycznej utraty potencjału produkcyjnego w ciągu jednego pokolenia.
+Europejski model RUSLE2015 szacuje dla polskich użytków rolnych bez pastwisk (rok 2016) średnią stratę **1,6 t/ha rocznie** — najmniej spośród porównywanych krajów. Ponad 5 t/ha rocznie traci 6,1 % tej powierzchni (ok. 1,03 mln ha), ponad 10 t/ha 2,0 %; łącznie to ok. 27 mln t gleby rocznie ([Eurostat — aei_pr_soiler](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)). Model europejski i krajowe opracowania IUNG-PIB nie są w pełni porównywalne — liczą inną metodą i dla innego okresu.
 
-## Kontekst historyczny: jak do tego doszło
-
-Erozja w dzisiejszej skali nie jest zjawiskiem naturalnym — jest skutkiem strukturalnych przemian ostatnich 75 lat.
-
-**Przed 1948**: Krajobraz Europy Środkowej cechował się mozaikową strukturą — przeciętna powierzchnia działki rolnej wynosiła **0,5 ha**, a liczba pól w skali kraju sięgała ok. **3,5 miliona**. Między nimi ciągnęły się miedze, remizki, drogi polne i aleje. Pełniły one funkcję naturalnych barier przeciwerozyjnych.
-
-**1948–1989 — przemiany agrarne**: W wyniku scalania gruntów i tworzenia wielkich gospodarstw kolektywnych (w Czechosłowacji w ramach JZD i państwowych gospodarstw rolnych; w Polsce kolektywizacja w dużej skali nie doszła do skutku, jednak mechanizacja i komasacja postępowały) z 3,5 mln parceli powstało ok. **50 tysięcy dużych bloków** o przeciętnej powierzchni **30 ha**. Miedze, remizki i drogi polne zostały zniszczone — znikło szacunkowo **800 000 km linii miedzowych**. Duże pole = dłuższy stok erozyjny = więcej spłukiwanej gleby.
-
-**1970–1990 — era kukurydzy**: Pod wpływem intensywnego rolnictwa kukurydza stała się dominującą rośliną paszową. Kukurydza jest najbardziej problematyczna pod względem erozji — w miesiącach wiosennych (kwiecień–czerwiec, kiedy zdarzają się gwałtowne opady) gleba jest niemal odsłonięta, bo roślina rośnie powoli. **Gołe pole + stok + burza = utrata nawet 40 t/ha przy jednym opadzie.**
-
-**1990–2004 — burzliwa transformacja**: Po przemianach ustrojowych pozostały duże bloki pól, znikły jednak obowiązki wynikające z umów spółdzielczych. Dążenie do krótkoterminowego zysku prowadziło do ekspansji **rzepaku** (powierzchnia upraw +400 % od 1990 do 2024) i utrzymania kukurydzy. Gleba była mniej nawożona nawozami organicznymi (spadek pogłowia bydła), zmniejszała się zawartość próchnicy, malała zdolność infiltracji — więcej wody spływało po powierzchni.
-
-**2004–2023 — wejście do UE**: Wspólna Polityka Rolna przyniosła system wzajemnej zgodności (cross-compliance) i pierwsze wymogi GAEC (Dobry Stan Agronomiczny i Środowiskowy). Były one jednak łagodne — dopuszczały bloki do 30 ha jednej rośliny, a kontrole były rzadkie.
-
-**Od 2024 — nowe normy GAEC / warunkowość (WPR)**: Strategiczny Plan WPR 2023–2027 wprowadził **konkretne limity wielkości bloków jednej rośliny**. Szczegółowe środki omówiono w dalszej części artykułu.
+Koszty: naukowcy Wspólnego Centrum Badawczego UE (JRC) oszacowali, że silna erozja (ponad 11 t/ha rocznie) dotyka w Polsce ok. 264 tys. ha, czyli 1,6 % użytków rolnych, a utracone plony są warte ok. 29 mln euro rocznie (dane za 2010 rok) ([Panagos i in., 2018](https://doi.org/10.1002/ldr.2879)). Oficjalnego polskiego szacunku szkód erozyjnych w złotych nie udało nam się znaleźć.
 
 ## Rodzaje erozji
 
 ### Erozja wodna
 
-Najbardziej rozpowszechniona forma — dotyczy **60 % gruntów ornych**. Przebieg procesu:
+Erozja wodna przebiega w kilku etapach:
 
-1. **Kropla deszczu** uderza w gołą glebę z prędkością ~9 m/s i rozbija agregat glebowy (fragment spoistej gleby).
-2. Uwolnione cząsteczki zostają uchwycone przez cienką warstwę wody na powierzchni (**erozja bryzgowa**).
-3. Woda zaczyna spływać po stoku i unosi cząsteczki — **erozja powierzchniowa**.
-4. Tam gdzie woda się koncentruje, tworzą się **żłobiny** (erozja żłobinowa).
-5. Przy długotrwałym zaniedbaniu powstają **wąwozy** sięgające podglebia — teren staje się niezdatny do uprawy.
+1. **Krople deszczu** uderzają w odsłoniętą glebę — duże krople z prędkością sięgającą ok. 9 m/s ([Gunn, Kinzer, 1949](https://doi.org/10.1175/1520-0469%281949%29006%3C0243%3ATTVOFF%3E2.0.CO%3B2)) — i rozbijają agregaty glebowe.
+2. Uwolnione cząstki unosi woda spływająca po powierzchni — **erozja powierzchniowa**.
+3. Tam, gdzie spływ się koncentruje, powstają **żłobiny** (erozja żłobinowa).
+4. Z zaniedbanych żłobin tworzą się **wąwozy** sięgające podglebia.
 
-**Geografia**: Najbardziej narażone obszary:
-- **Niziny lessowe + tereny wyżynne** — gleby lessowe, łagodne stoki, intensywne grunty orne
-- **Wyżyny i tereny podgórskie** — rejonów ziemniaczanych, większe spadki
-- **Doliny rzek** — gleby lessowe, długie pola, kukurydza
-- **Pogórza i wyżyny środkowe** — Wyżyna Małopolska, Sudety Wschodnie
+Według IUNG-PIB najsilniej zagrożone erozją wodną są: Beskid Żywiecki, Góry Świętokrzyskie i Wyżyna Sandomierska, Roztocze i centralny pas Wyżyny Lubelskiej oraz Sudety ([IUNG-PIB 2018](https://iung.pl/sir/zeszyt58_5.pdf)).
 
 ### Erozja wietrzna
 
-Dotyczy **16 % gruntów ornych**, skoncentrowana na nizinach z lżejszymi glebami:
+Erozja wietrzna wynosi drobne cząstki z przesuszonej, nieokrytej gleby, głównie na glebach lekkich. Według IUNG-PIB w najsilniejszych stopniach 3–5 zagraża ona 51,8 % użytków rolnych; najbardziej zagrożone są województwa wielkopolskie, łódzkie i mazowieckie ([IUNG-PIB 2018](https://iung.pl/sir/zeszyt58_5.pdf)). Europejski model JRC szacuje średnią stratę gleby wskutek erozji wietrznej na polskich gruntach ornych na **0,18 t/ha rocznie** przy średniej UE 0,53 t/ha ([Borrelli i in., 2017](https://doi.org/10.1002/ldr.2588)). Poza polem wiatr zasypuje rowy i drogi pyłem.
 
-- **Polska środkowa i zachodnia** (Wielkopolska, Kujawy, Nizina Mazowiecka) — piaski i gleby piaszczysto-gliniaste, suchy klimat, częste wiatry
-- **Doliny rzeczne** (tereny piaszczysto-gliniaste) — lokalnie
-- **Śląsk i Nizina Górnośląska** — lokalnie
+## Dlaczego erozja przyspiesza
 
-W krytycznych miesiącach wiosennych, gdy gleba po orce jest odsłonięta, a rośliny jeszcze nie pokryły powierzchni, **burze pyłowe** odnoszą 1–5 t/ha w ciągu jednego dnia. Negatywne skutki: zanieczyszczenie powietrza (PM10), uszkodzenie sąsiednich upraw, ograniczona widoczność na drogach.
-
-### Dehumifikacja (erozja ukryta)
-
-Trzeci, często pomijany rodzaj — powolna utrata substancji organicznej (próchnicy) w glebie. Nie widać rynien ani wąwozów, lecz dochodzi do chemiczno-biologicznej degradacji.
-
-| Okres | Przeciętna zawartość próchnicy w warstwie ornej (%) |
-|---|---|
-| 1950 | 2,8 % |
-| 1990 | 2,3 % |
-| 2024 | 1,9 % (lokalnie 1,2 %) |
-
-Spadek o 1 % próchnicy = utrata ~25 ton substancji organicznej na ha. Konsekwencje:
-- Zmniejszona retencja wodna (1 % próchnicy = 100–200 l wody/m² więcej)
-- Zmniejszona aktywność biologiczna
-- Wyższe zapotrzebowanie na nawozy mineralne
-- Wyższe ryzyko erozji wodnej (próchnica spaja glebę)
-
-Główna przyczyna: **spadek pogłowia bydła** — z 3,4 mln szt. (1990) do 1,3 mln szt. (2025). Mniej bydła = mniej nawozów organicznych = mniej materii organicznej wprowadzanej do gleby.
-
-## Skutki ekonomiczne
-
-Erozja to nie tylko problem środowiskowy — to mierzalna strata ekonomiczna liczona w miliardach złotych rocznie.
-
-**Straty bezpośrednie (rocznie)**:
-- Obniżenie plonów wskutek utraty żyznej warstwy ornej: **2–4 mld zł**
-- Wyższe koszty nawożenia (rekompensata utraconej żyzności): **1–2 mld zł**
-- Szkody w infrastrukturze (drogi, cieki wodne, kanalizacja) po erozyjnych zdarzeniach opadowych: **0,5–1 mld zł**
-- Koszty oczyszczania ujęć wody (osad w zbiornikach): **0,3–0,5 mld zł**
-
-**Straty pośrednie**:
-- Powodzie wywołane lub nasilone przez erozję (mniejsza absorpcja wody przez glebę): **3–5 mld zł/rok przeciętnie**
-- Utrata wartości gruntów z powodu obniżonej żyzności
-- Koszty działań restoracyjnych (zalesienia, zbiorniki retencyjne)
-
-**Łączna konserwatywna ocena**: 8–15 mld zł rocznie. To niemal 1 % PKB sektora rolnego.
-
-## Katastrofy erozyjne w historii Europy Środkowej
-
-**1997 — Morawy/Sudety**: Błyskawiczne powodzie po katastrofalnych opadach (300+ mm/24 h). Wsie w dolinie rzeki Morawa — woda niosąca spłukaną glebę z sąsiednich pól zniszczyła **140 domów**, **9 osób zginęło**. Przyczyną nie był tylko deszcz — odlesione stoki nad wsią nie wchłonęły opadów. Na 1 m² gruntów ornych w okolicy spadło ponad 300 l wody, a warstwa orna nie była w stanie tego zatrzymać.
-
-**2002 — Czechy**: Fala powodziowa dotknęła Pragę i mniejsze miejscowości. Szkody ekonomiczne sięgnęły 73 mld CZK. Część tej sumy przypisuje się krajobrazowi rolnemu pozbawionemu zdolności retencyjnych.
-
-**2010 — Południowe Morawy**: Burza wietrzna w kwietniu wyniosła z pól ponad 100 t/ha w ciągu 6 godzin, zanieczyszczając drogi i ograniczając widoczność do 5 m. Miejscowi rolnicy zostali ukarani za nieprzestrzeganie norm GAEC.
-
-**2024 — Dolina rzeki Beczwy, Morawy**: Po gwałtownych opadach czerwcowych pola kukurydzy spłukane erozją zalały miejscowość Czernoci. Erozja osiągnęła lokalnie 50 t/ha.
-
-## Przyczyny erozji w nowoczesnym rolnictwie
-
-| Czynnik | Skutek |
-|---|---|
-| Duże bloki jednej rośliny | Dłuższy erozyjny stok, brak przerw wspomagających infiltrację |
-| Likwidacja miedz, remizek, dróg polnych | Brak naturalnych barier |
-| Uprawa kukurydzy na stoku | Gołe pole w krytycznym wiosennym okresie |
-| Uprawa rzepaku, słonecznika | Powolny wzrost początkowy, gołe pole |
-| Ciężki sprzęt mechaniczny | Ugniatanie gleby, zmniejszona zdolność infiltracji |
-| Orka wzdłuż stoku | Woda spływa wzdłuż bruzd |
-| Spadek nawożenia organicznego | Utrata próchnicy → zmniejszona zdolność infiltracji |
-| Zmiany klimatu | Intensywniejsze opady, dłuższe okresy suszy |
+- **Długie, nieprzerwane stoki i mało elementów krajobrazu** — spływająca woda nabiera prędkości i siły.
+- **Rośliny słabo chroniące glebę**, które długo pozostawiają ją odkrytą, zwłaszcza uprawy w redlinach prowadzonych wzdłuż stoku — właśnie je norma GAEC 5 zakazuje na stromych stokach.
+- **Spadek pogłowia bydła.** Pogłowie spadło z 10,0 mln sztuk w 1990 roku ([GUS — Rocznik Statystyczny Rolnictwa 2025](https://stat.gov.pl/obszary-tematyczne/roczniki-statystyczne/roczniki-statystyczne/rocznik-statystyczny-rolnictwa-2025,6,19.html)) do 6,23 mln w czerwcu 2026 roku ([GUS](https://stat.gov.pl/obszary-tematyczne/rolnictwo-lesnictwo/produkcja-zwierzeca-zwierzeta-gospodarskie/poglowie-bydla-wedlug-stanu-w-czerwcu-2026-r-,9,10.html)). Mniej bydła to mniej nawozów naturalnych i mniej upraw paszowych, które okrywają glebę przez cały rok.
+- **Zagęszczona gleba** po przejazdach ciężkiego sprzętu gorzej wchłania wodę, więc więcej jej spływa po powierzchni.
+- **Uprawa i siew wzdłuż stoku** — woda spływa wzdłuż rzędów i bruzd.
+- **Ulewne opady**, które na nieokrytej glebie powodują największe straty.
 
 ## Środki przeciwerozyjne
 
-Skuteczność jest mierzalna — instytuty badawcze prowadzą wieloletnie doświadczenia. Procentowe ograniczenie erozji:
+Skuteczność zabiegów została zmierzona. Zestawienie europejskich doświadczeń polowych podaje następujące mediany ograniczenia zmywu w porównaniu z tradycyjną uprawą ([Maetens i in., 2012](https://doi.org/10.1016/j.earscirev.2012.08.003)); wyniki poszczególnych doświadczeń bardzo się przy tym różnią.
 
-### Środki organizacyjne
+### Środki organizacyjne i agrotechniczne
 
-| Środek | Ograniczenie erozji |
+| Środek | Mediana ograniczenia zmywu |
 |---|---|
-| Układ upraw wzdłuż warstwic | 30–50 % |
-| Zmniejszenie bloków poniżej 12 ha | 25–40 % |
-| Pozostawienie ścierniska na zimę | 60–80 % |
-| Bezorkowe uprawowanie (no-till) | 70–90 % |
+| Pasy ochronne z trawą | ok. 80 % |
+| Mulczowanie (resztki roślinne na powierzchni) | ok. 79 % |
+| Międzyplony i rośliny okrywowe | ok. 66 % |
+| Uprawa w poprzek stoku (wzdłuż warstwic) | ok. 51 % |
+| Siew bezpośredni (no-till) | ok. 47 % |
+| Uprawa uproszczona | ok. 38 % |
 
-### Środki agrotechniczne
+- **Płodozmian** z roślinami, które okrywają glebę w okresie ulewnych opadów.
+- **Zadarnienie** stoków i dróg spływu. Trwałe użytki zielone mają według JRC przeciętnie ok. 2,5 razy niższy współczynnik ochronnego wpływu roślinności niż grunty orne ([Panagos i in., 2015](https://doi.org/10.1016/j.landusepol.2015.05.021)).
 
-- **Mulczowanie** (przykrycie gleby materiałem organicznym) — redukcja erozji wodnej o 60–95 %, zależnie od stopnia pokrycia
-- **Zadarnianie** stoków i rowów erozyjnych — trwałe użytki zielone opierają się erozji 10× lepiej niż grunty orne
-- **Rośliny okrywowe** (facelia, gorczyca, rzodkiew oleista) — szybko rosnące, pokrywają glebę przed zimą, ograniczenie erozji o 40–70 %
-- **Pasowe zmianowanie roślin** — kombinacja roślin o różnej wartości ochronnej w naprzemiennych pasach
+### Środki techniczne
 
-### Środki techniczne (kosztowne, długoterminowe)
+- **Miedze, pasy zadrzewień, rowy i wały przechwytujące** — spowalniają i odprowadzają skoncentrowany spływ.
+- **Tarasy** — w europejskich doświadczeniach ograniczyły zmyw średnio (mediana) o ok. 65 % (Maetens i in., 2012).
+- **Zbiorniki retencyjne i osadniki** — zatrzymują namuły, zanim dotrą do wsi lub cieku.
+- **Scalenia gruntów** — do 2022 roku zrealizowano 305 projektów scaleniowych o łącznej powierzchni ponad 259 tys. ha ([MRiRW, 2022](https://www.gov.pl/web/rolnictwo/46-konkurs-scaleniowy-rozstrzygniety)).
 
-- **Odbudowa miedz, remizek, alej** — inwestycja 50–200 tys. zł/ha
-- **Rowy i nasypy przechwytujące** — odprowadzają skoncentrowaną wodę poza zagrożone pola
-- **Progi przeciwerozyjne** — tarasowanie stoków
-- **Zbiorniki retencyjne** — zatrzymują rumowisko i wodę
+## Wymogi GAEC i przepisy krajowe
 
-W regionie odtworzono szacunkowo **1 200 km miedz** (2010–2024) z szacowanych 800 000 km zniszczonych w latach 1948–1989. To zaledwie **0,15 %** historycznie usuniętych linii.
+Normy dobrej kultury rolnej (GAEC) są częścią warunkowości WPR 2023–2027. Brzmienie według rozporządzenia MRiRW z 10 marca 2023 r. (t.j. [Dz.U. 2025 poz. 1674](https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20250001674); zestawienie norm na 2026 r.: [ARiMR](https://www.gov.pl/web/arimr/normy-gaec-obowiazujace-w-2026-r)):
 
-## Normy GAEC / warunkowość (WPR) 2024
+- **GAEC 5 (§ 3) — erozja.** Grunty orne na stokach o nachyleniu co najmniej 14 % nie mogą być wykorzystywane pod uprawę roślin wymagających utrzymywania redlin wzdłuż stoku ani pozostawać czarnym ugorem od 1 listopada do 15 lutego. Na takich stokach w uprawach wieloletnich i sadach utrzymuje się w międzyrzędziach okrywę roślinną lub ściółkę.
+- **GAEC 6 (§ 4) — okrywa gleby.** Co najmniej 80 % gruntów ornych gospodarstwa musi być okryte co najmniej od zbioru uprawy w plonie głównym do 15 października; dopuszczalne są maksymalnie 4 tygodnie bez okrywy ze względu na siew roślin ozimych lub międzyplonów.
+- **GAEC 7 (§ 5) — zmianowanie.** W gospodarstwach z ponad 10 ha gruntów ornych co najmniej na 40 % gruntów ornych uprawa w plonie głównym musi być inna niż w roku poprzednim, a ta sama uprawa nie może być prowadzona dłużej niż 3 lata. Warunek uznaje się też za spełniony, jeśli na danej powierzchni wprowadzono wsiewkę lub międzyplon i prowadzi się rejestr zabiegów.
 
-Strategiczny Plan WPR 2023–2027 wprowadził konkretne limity. Kluczowa dla erozji jest norma **GAEC 7** (podział dużych bloków glebowych) oraz normy krajowe wynikające z przepisów warunkowości:
+Normy GAEC w Polsce nie ograniczają powierzchni pola jednej uprawy.
 
-| Nachylenie stoku | Maks. wielkość bloku jednej rośliny |
-|---|---|
-| 0–7° (teren płaski, łagodny stok) | **30 ha** |
-| 7–12° (stok) | **10 ha** |
-| powyżej 12° (stromy stok) | **5 ha** |
-
-Ponadto **GAEC 5** (minimalny pokrywa glebowa): co najmniej 80 % gruntów ornych w gospodarstwie musi być w krytycznym okresie (1.6.–31.10.) pokryte (roślina, mulcz, roślina okrywowa). Niespełnienie wymogu → redukcja płatności o 1–10 %.
-
-Oraz **GAEC 6** (zakaz orki na obszarach silnie erozyjnych w określonych terminach): zakaz orki od 1.7. do 31.8. w strefach silnej erozji.
+**Ustawa o ochronie gruntów rolnych i leśnych** (t.j. [Dz.U. 2024 poz. 82](https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20240000082)) w art. 15 zobowiązuje właściciela użytków rolnych do przeciwdziałania degradacji gleb, „w tym szczególnie erozji i ruchom masowym ziemi”. Starosta może ze względu na ochronę gleb przed erozją nakazać w drodze decyzji zalesienie, zadrzewienie lub zakrzewienie gruntów albo założenie trwałych użytków zielonych.
 
 ## Porównanie międzynarodowe
 
@@ -194,33 +111,23 @@ Szacunek Eurostatu dla utraty gleby wskutek erozji wodnej na użytkach rolnych b
 | Niemcy | 1,9 |
 | **Polska** | **1,6** |
 
-## Co można zrobić
+## Co może zrobić rolnik
 
-**Rolnik**:
-- Ocenić, jaki udział powierzchni gospodarstwa leży w obszarach zagrożonych erozją (mapy IUNG-PIB lub regionalnych stacji chemiczno-rolniczych)
-- Zaplanować płodozmian z roślinami przeciwerozyjnymi (oziminy, rośliny okrywowe)
-- Rozważyć technologię no-till (nakłady początkowe, długoterminowe oszczędności)
-- Ubiegać się o płatności AEKO na środki przeciwerozyjne (w Polsce ARiMR wypłaca 4–8 tys. zł/ha/rok w zależności od rodzaju działania)
+- **Sprawdzić nachylenie działek** — na gruntach ornych o spadku co najmniej 14 % obowiązują ograniczenia GAEC 5.
+- **Okrywać glebę** w okresie ulewnych opadów: międzyplony, wsiewki, resztki roślinne na powierzchni.
+- **Skorzystać z ekoschematu „Rolnictwo węglowe i zarządzanie składnikami odżywczymi”.** Stawki za 2025 rok wynoszą m.in. 437,60 zł/ha za międzyplony ozime lub wsiewki śródplonowe, 262,56 zł/ha za uproszczone systemy uprawy i 87,52 zł/ha za wymieszanie słomy z glebą ([ARiMR — stawki za 2025 r.](https://www.gov.pl/web/arimr/stawki-platnosci-bezposrednich-oraz-przejsciowego-wsparcia-krajowego-za-rok-2025)).
+- **Uprawiać w poprzek stoku** i dzielić długie stoki pasami ochronnymi.
+- **Współpracować z gminą i starostwem** przy scaleniach gruntów, w których planuje się zadrzewienia, rowy i zbiorniki.
 
-**Obywatel / konsument**:
-- Preferować produkty z gospodarstw posiadających certyfikat rolnictwa ekologicznego lub integrowanego
-- Wspierać lokalnych rolników (krótszy łańcuch dostaw, często mniejsze pola)
-- Wywierać nacisk na władze gminne — wiele problemów erozyjnych rozwiązują scalenia gruntów (KPÚ / komasacja)
+## Źródła
 
-**Państwo**:
-- Przyspieszyć kompleksowe scalenia gruntów — dotąd zakończone jedynie w 25 % obrębów ewidencyjnych
-- Wzmocnić kontrole norm GAEC na poziomie gospodarstw
-- Inwestować w infrastrukturę retencyjną (stawy, mokradła, remizki)
-
-## Kluczowe źródła
-
-- **IUNG-PIB** — Instytut Uprawy Nawożenia i Gleboznawstwa w Puławach ([iung.pulawy.pl](https://www.iung.pulawy.pl/)) — główna instytucja monitorowania erozji w Polsce
-- **Monitoring erozji** — interaktywne mapy zdarzeń erozyjnych
-- **MRiRW — Strategiczny Plan WPR 2023–2027** — normy GAEC 5/6/7
-- **ARiMR** — Agencja Restrukturyzacji i Modernizacji Rolnictwa — kontrola i sankcje
+- **IUNG-PIB** — Wawer R., Nowocień E.: Erozja wodna i wietrzna w Polsce, Studia i Raporty IUNG-PIB 58, 2018 ([PDF](https://iung.pl/sir/zeszyt58_5.pdf)); Studia i Raporty IUNG-PIB 71, 2023 ([PDF](https://www.iung.pl/sir/zeszyt71_8.pdf)); Pamiętnik Puławski 142, 2006 ([PDF](https://iung.pl/wp-content/uploads/2009/10/Z142_47.pdf))
+- **Rozporządzenie MRiRW w sprawie norm** — t.j. Dz.U. 2025 poz. 1674 ([ISAP](https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20250001674)) — GAEC 5, 6, 7
+- **Ustawa o ochronie gruntów rolnych i leśnych** — t.j. Dz.U. 2024 poz. 82 ([ISAP](https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20240000082))
+- **ARiMR** — normy GAEC 2026 ([gov.pl](https://www.gov.pl/web/arimr/normy-gaec-obowiazujace-w-2026-r)), stawki płatności za 2025 r. ([gov.pl](https://www.gov.pl/web/arimr/stawki-platnosci-bezposrednich-oraz-przejsciowego-wsparcia-krajowego-za-rok-2025))
 - **Eurostat — Estimated soil erosion by water** ([aei_pr_soiler](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)) — porównanie międzynarodowe
-- **Ustawa o ochronie gruntów rolnych i leśnych** (t.j. Dz.U. z 2022 r. poz. 2409)
+- **JRC** — koszty erozji ([Panagos i in., 2018](https://doi.org/10.1002/ldr.2879)), erozja wietrzna ([Borrelli i in., 2017](https://doi.org/10.1002/ldr.2588))
 
 ---
 
-*Erozja to najcichszy kryzys rolnictwa. Nie widać jej, dopóki nie spowoduje powodzi lub nie zamieni pola w twardą glinę. Na szczęście można ją zatrzymać — wymaga to jednak zmiany, którą musi przeprowadzić rolnik, państwo i obywatel wspólnie.*
+*Erozja jest powolna i mało widoczna, dopóki po ulewie warstwa orna nie wyląduje na drodze. Można ją jednak hamować — okrywą gleby, doborem roślin i zabiegami w krajobrazie.*
