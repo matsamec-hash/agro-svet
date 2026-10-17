@@ -135,7 +135,7 @@ const METRIC_NOTES = {
 
 const metrics = [
   { key: 'cap_payments', group: 'Podpory', label: 'Přímé platby CAP (Ø)', unit: '€/ha', currency: true,
-    source: 'Přímé platby: Annex V nařízení (EU) 2021/2115 (rok 2027); zeměd. plocha: World Bank',
+    source: 'Přímé platby: Annex V nařízení (EU) 2021/2115 (rok 2027); zeměd. plocha: The World Bank: World Development Indicators: FAO',
     sourceUrl: 'https://eur-lex.europa.eu/eli/reg/2021/2115/oj',
     note: 'Orientační průměr = roční národní obálka přímých plateb ÷ zemědělská plocha. Skutečná sazba na hektar se u jednotlivých plateb (BISS, eko-schémata, ANC…) liší; non-EU země bez plateb.' },
   ...LAND_METRICS.map((m) => ({ key: m.key, group: m.group, label: m.label, unit: m.unit, currency: true, source: m.source, sourceUrl: m.sourceUrl, note: METRIC_NOTES[m.key] })),

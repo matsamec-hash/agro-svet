@@ -7,13 +7,14 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import IndicatorRow from '../../components/svet/IndicatorRow.astro';
 import RegionMap from '../../components/svet/RegionMap.astro';
+import DataSources from '../../components/svet/DataSources.astro';
 import { groupByPackage, fmtNum, COUNTRY_LOCATIVE } from '../../lib/svet/render';
 import { prodejeProZemi, akcieProZemi } from '../../lib/agro-integrace';
 import { assertCountryProfile } from '../../lib/svet/types';
 import { breadcrumbSchema, datasetSchema } from '../../lib/structured-data';
 import { SITE_URL } from '../../lib/config';
 import { localizePath, t } from '../../i18n/utils';
-import { COUNTRY_NAMES, INDICATOR_LABELS, PACKAGE_LABELS, SVET_REFERENCE, loc, localizeUnit, type SvetLang } from '../../i18n/svet';
+import { COUNTRY_NAMES, INDICATOR_LABELS, PACKAGE_LABELS, SVET_REFERENCE, WDI_URL, loc, localizeUnit, type SvetLang } from '../../i18n/svet';
 import type { Locale } from '../../i18n/config';
 import index from '../../data/svet/index.json';
 import mapData from '../../data/svet/map-metrics.json';
@@ -103,11 +104,16 @@ const years = inds.flatMap((i) => (i.series ?? []).map((p: any) => Number(p.peri
 const temporalCoverage = years.length ? `${Math.min(...years)}/${Math.max(...years)}` : undefined;
 const SOURCE_URLS: Record<string, string> = {
   Eurostat: 'https://ec.europa.eu/eurostat',
-  'World Bank': 'https://data.worldbank.org',
+  'World Bank': WDI_URL,
 };
-const sources = [...new Set(inds.map((i) => i.latest?.source).filter(Boolean))].map((name: string) => ({
-  name, url: SOURCE_URLS[name],
-}));
+const sourceNames = [...new Set(inds.map((i) => i.latest?.source).filter(Boolean))] as string[];
+// JSON-LD creator je organizace → jméno zůstává „World Bank", URL vede na sadu WDI.
+const sources = sourceNames.map((name) => ({ name, url: SOURCE_URLS[name] }));
+// Atribuce: Eurostat i World Bank podle toho, co profil opravdu ukazuje (profil, ref. srovnání
+// i regionální mapa FSS), hranice podle zdroje geometrie regionální mapy.
+const usesEurostat = sourceNames.includes('Eurostat') || (hasMap && /^Eurostat/.test(regionData.source));
+const usesWorldBank = sourceNames.includes('World Bank');
+const mapBoundaries = hasMap && regionGeo.boundarySource ? { source: regionGeo.boundarySource, kind: 'regions' as const } : null;
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: L.bcHome, url: localizePath(locale, '/') },
   { name: L.bcSvet, url: localizePath(locale, '/svet/') },
@@ -189,6 +195,7 @@ const datasetJsonLd = datasetSchema({
       <header class="svet-section-head"><h2>{L.method}</h2></header>
       <p class="svet-method">{L.methodP}</p>
       <p class="svet-method"><a href={localizePath(locale, '/svet/srovnani/')}>{L.compare}</a></p>
+      <DataSources eurostat={usesEurostat} worldBank={usesWorldBank} boundaries={mapBoundaries} />
     </section>
   </div>
 </Layout>

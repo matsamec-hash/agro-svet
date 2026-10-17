@@ -209,10 +209,10 @@ export const METRIC_NOTES: Record<string, T> = {
 // ── Zdroj u cap_payments (YMYL — právní citace přeložena přesně) ──────────────
 export const METRIC_SOURCE: Record<string, T> = {
   cap_payments: {
-    sk: 'Priame platby: Príloha V nariadenia (EÚ) 2021/2115 (rok 2027); poľnohosp. plocha: World Bank',
-    pl: 'Płatności bezpośrednie: Załącznik V rozporządzenia (UE) 2021/2115 (rok 2027); użytki rolne: World Bank',
-    de: 'Direktzahlungen: Anhang V der Verordnung (EU) 2021/2115 (Jahr 2027); landwirtschaftliche Fläche: World Bank',
-    uk: 'Прямі виплати: Додаток V Регламенту (ЄС) 2021/2115 (2027 рік); сільськогосподарські угіддя: World Bank',
+    sk: 'Priame platby: Príloha V nariadenia (EÚ) 2021/2115 (rok 2027); poľnohosp. plocha: The World Bank: World Development Indicators: FAO',
+    pl: 'Płatności bezpośrednie: Załącznik V rozporządzenia (UE) 2021/2115 (rok 2027); użytki rolne: The World Bank: World Development Indicators: FAO',
+    de: 'Direktzahlungen: Anhang V der Verordnung (EU) 2021/2115 (Jahr 2027); landwirtschaftliche Fläche: The World Bank: World Development Indicators: FAO',
+    uk: 'Прямі виплати: Додаток V Регламенту (ЄС) 2021/2115 (2027 рік); сільськогосподарські угіддя: The World Bank: World Development Indicators: FAO',
   },
 };
 
@@ -362,4 +362,157 @@ export function localizeMetric<M extends MetricLike>(m: M, locale: string): M {
 export function localizeCountry<C extends { slug: string; name: string; region?: string; [k: string]: unknown }>(c: C, locale: string): C {
   const name = isSvetLang(locale) ? loc(COUNTRY_NAMES, c.slug, locale, c.name) : c.name;
   return { ...c, name, ...(c.region != null ? { region: regionPhrase(c.region, locale) } : {}) };
+}
+
+// ── Atribuce zdrojů dat a hranic (licenční povinnosti, audit 2026-10-15) ──────────
+// ‼️ Nejsou to kosmetické popisky — každá věta tu plní podmínku licence:
+//  - Eurostat (copyright notice, rozhodnutí 2011/833/EU): uvést zdroj; když data
+//    upravujeme, říct to koncovému uživateli a dodat, že Eurostat za úpravy neodpovídá.
+//  - World Bank WDI (CC BY 4.0 + terms of use for datasets): povinný tvar
+//    „The World Bank: Dataset name: Data source", odkaz na licenci a na podmínky
+//    (podmínky chtějí stejnou povinnost atribuce předat dál — splní to URL podmínek).
+//  - Natural Earth: volné dílo (public domain), kredit nepovinný, uvádíme ho.
+//  - U.S. Census Bureau (volné dílo) přes us-atlas © Mike Bostock, licence ISC —
+//    ta chce copyright notice „in all copies"; plné znění je na /data/licence/.
+export const EUROSTAT_COPYRIGHT_URL = 'https://ec.europa.eu/eurostat/help/copyright-notice';
+export const WDI_URL = 'https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators';
+export const WB_TERMS_URL = 'https://www.worldbank.org/ext/en/legal/terms-conditions/datasets';
+export const CC_BY_40_URL = 'https://creativecommons.org/licenses/by/4.0/';
+export const NATURAL_EARTH_URL = 'https://www.naturalearthdata.com/about/terms-of-use/';
+export const US_ATLAS_URL = 'https://github.com/topojson/us-atlas';
+
+/** „Data source" ukazatelů WDI (pole Source v metadatech World Bank, ověřeno 2026-10-17). */
+export const WDI_PROVIDERS: Record<string, string> = {
+  'AG.YLD.CREL.KG': 'FAO',
+  'AG.LND.AGRI.K2': 'FAO',
+  'AG.LND.ARBL.HA': 'FAO',
+  'AG.CON.FERT.ZS': 'FAO',
+  'NV.AGR.TOTL.ZS': 'national statistical offices, OECD, World Bank staff estimates',
+  'SL.AGR.EMPL.ZS': 'ILO',
+  'SP.POP.TOTL': 'UN Population Division, national statistical offices, Eurostat',
+};
+
+/** Kód ukazatele WDI z URL API World Bank (…/indicator/AG.LND.AGRI.K2?…). */
+export function wdiCode(url: string | undefined): string | null {
+  const m = /\/indicator\/([A-Z0-9.]+)/.exec(url ?? '');
+  return m ? m[1] : null;
+}
+
+/** Citace zdroje ukazatele. World Bank v povinném tvaru WDI, ostatní beze změny.
+ *  Vlastní jména a názvy datových sad se nepřekládají (je to citace). */
+export function sourceCitation(source: string, url?: string): string {
+  if (source !== 'World Bank') return source;
+  const provider = WDI_PROVIDERS[wdiCode(url) ?? ''];
+  return `The World Bank: World Development Indicators${provider ? `: ${provider}` : ''}`;
+}
+
+export type BoundarySource = 'naturalearth' | 'us-census';
+
+type AttributionT = {
+  heading: string;
+  /** Eurostat — zdroj, co jsme s daty udělali, prohlášení o neodpovědnosti. */
+  eurostat: string;
+  eurostatLink: string;
+  /** World Bank — věta kolem odkazů: „The World Bank: <WDI> {wbProviders}, {wbLicense} <CC BY 4.0> (<wbTerms>). {wbChanges}" */
+  wbProviders: string;
+  wbLicense: string;
+  wbTerms: string;
+  wbChanges: string;
+  /** Natural Earth — mapa Evropy (státy) a regionální mapy (régiony NUTS složené ze správních jednotek). */
+  neCountries: string;
+  neRegions: string;
+  usCensus: string;
+  /** Krátké verze pod mapou (regionální mapa / mapa Evropy). */
+  mapEurostat: string;
+  mapEurostatEu: string;
+  mapNe: string;
+  mapUs: string;
+};
+
+export const ATTRIBUTION: Record<Locale, AttributionT> = {
+  cs: {
+    heading: 'Zdroje dat a licence',
+    eurostat: 'Zdroj: Eurostat (© Evropská unie). Data jsme upravili: vybrali řady, přepočítali jednotky a měny, sečetli regiony a dopočítali podíly, hustoty, průměry a srovnání mezi zeměmi. Eurostat za tyto úpravy nenese žádnou odpovědnost.',
+    eurostatLink: 'podmínky Eurostatu',
+    wbProviders: '(původní data: FAO, ILO, OSN, národní statistické úřady, OECD)',
+    wbLicense: 'licence',
+    wbTerms: 'podmínky použití dat World Bank',
+    wbChanges: 'Hodnoty jsme převedli na jiné jednotky a dopočítali z nich srovnání.',
+    neCountries: 'Hranice států: Natural Earth (volné dílo), zjednodušené.',
+    neRegions: 'Hranice regionů: Natural Earth (volné dílo). Regiony NUTS jsme složili ze správních jednotek Natural Earth a zjednodušili, průběh hranic je proto orientační.',
+    usCensus: 'Hranice států USA: U.S. Census Bureau, Cartographic Boundary Files 2017 (volné dílo), v úpravě us-atlas © Mike Bostock (licence ISC).',
+    mapEurostat: 'Data upravená (součty regionů, podíly); Eurostat za úpravy neodpovídá.',
+    mapEurostatEu: 'Data upravená (přepočet měny a jednotek, odchylka od průměru EU); Eurostat ani World Bank za úpravy neodpovídají.',
+    mapNe: 'Hranice: Natural Earth (volné dílo).',
+    mapUs: 'Hranice: U.S. Census Bureau přes us-atlas (© Mike Bostock, ISC).',
+  },
+  sk: {
+    heading: 'Zdroje dát a licencie',
+    eurostat: 'Zdroj: Eurostat (© Európska únia). Dáta sme upravili: vybrali rady, prepočítali jednotky a meny, sčítali regióny a dopočítali podiely, hustoty, priemery a porovnania medzi krajinami. Eurostat za tieto úpravy nenesie žiadnu zodpovednosť.',
+    eurostatLink: 'podmienky Eurostatu',
+    wbProviders: '(pôvodné dáta: FAO, ILO, OSN, národné štatistické úrady, OECD)',
+    wbLicense: 'licencia',
+    wbTerms: 'podmienky používania dát World Bank',
+    wbChanges: 'Hodnoty sme previedli na iné jednotky a dopočítali z nich porovnania.',
+    neCountries: 'Hranice štátov: Natural Earth (voľné dielo), zjednodušené.',
+    neRegions: 'Hranice regiónov: Natural Earth (voľné dielo). Regióny NUTS sme poskladali zo správnych jednotiek Natural Earth a zjednodušili, priebeh hraníc je preto orientačný.',
+    usCensus: 'Hranice štátov USA: U.S. Census Bureau, Cartographic Boundary Files 2017 (voľné dielo), v úprave us-atlas © Mike Bostock (licencia ISC).',
+    mapEurostat: 'Dáta upravené (súčty regiónov, podiely); Eurostat za úpravy nezodpovedá.',
+    mapEurostatEu: 'Dáta upravené (prepočet meny a jednotiek, odchýlka od priemeru EÚ); Eurostat ani World Bank za úpravy nezodpovedajú.',
+    mapNe: 'Hranice: Natural Earth (voľné dielo).',
+    mapUs: 'Hranice: U.S. Census Bureau cez us-atlas (© Mike Bostock, ISC).',
+  },
+  pl: {
+    heading: 'Źródła danych i licencje',
+    eurostat: 'Źródło: Eurostat (© Unia Europejska). Dane zostały przez nas przetworzone: wybór szeregów, przeliczenie jednostek i walut, sumowanie regionów oraz wyliczenie udziałów, gęstości, średnich i porównań między krajami. Eurostat nie ponosi żadnej odpowiedzialności za te zmiany.',
+    eurostatLink: 'warunki Eurostatu',
+    wbProviders: '(dane pierwotne: FAO, MOP, ONZ, krajowe urzędy statystyczne, OECD)',
+    wbLicense: 'licencja',
+    wbTerms: 'warunki korzystania z danych Banku Światowego',
+    wbChanges: 'Wartości przeliczyliśmy na inne jednostki i wyliczyliśmy z nich porównania.',
+    neCountries: 'Granice państw: Natural Earth (domena publiczna), uproszczone.',
+    neRegions: 'Granice regionów: Natural Earth (domena publiczna). Regiony NUTS złożyliśmy z jednostek administracyjnych Natural Earth i uprościliśmy, dlatego przebieg granic jest orientacyjny.',
+    usCensus: 'Granice stanów USA: U.S. Census Bureau, Cartographic Boundary Files 2017 (domena publiczna), w opracowaniu us-atlas © Mike Bostock (licencja ISC).',
+    mapEurostat: 'Dane przetworzone (sumy regionów, udziały); Eurostat nie odpowiada za zmiany.',
+    mapEurostatEu: 'Dane przetworzone (przeliczenie walut i jednostek, odchylenie od średniej UE); Eurostat ani Bank Światowy nie odpowiadają za zmiany.',
+    mapNe: 'Granice: Natural Earth (domena publiczna).',
+    mapUs: 'Granice: U.S. Census Bureau przez us-atlas (© Mike Bostock, ISC).',
+  },
+  de: {
+    heading: 'Datenquellen und Lizenzen',
+    eurostat: 'Quelle: Eurostat (© Europäische Union). Die Daten wurden von uns bearbeitet: Auswahl der Reihen, Umrechnung von Einheiten und Währungen, Zusammenfassung von Regionen sowie berechnete Anteile, Dichten, Durchschnitte und Ländervergleiche. Eurostat übernimmt für diese Bearbeitung keinerlei Verantwortung.',
+    eurostatLink: 'Nutzungsbedingungen von Eurostat',
+    wbProviders: '(Ursprungsdaten: FAO, ILO, UN, nationale Statistikämter, OECD)',
+    wbLicense: 'Lizenz',
+    wbTerms: 'Nutzungsbedingungen der Weltbank für Datensätze',
+    wbChanges: 'Die Werte haben wir in andere Einheiten umgerechnet und daraus Vergleiche berechnet.',
+    neCountries: 'Staatsgrenzen: Natural Earth (gemeinfrei), vereinfacht.',
+    neRegions: 'Regionsgrenzen: Natural Earth (gemeinfrei). Die NUTS-Regionen haben wir aus Verwaltungseinheiten von Natural Earth zusammengesetzt und vereinfacht; der Grenzverlauf ist daher nur ungefähr.',
+    usCensus: 'Grenzen der US-Bundesstaaten: U.S. Census Bureau, Cartographic Boundary Files 2017 (gemeinfrei), aufbereitet von us-atlas © Mike Bostock (ISC-Lizenz).',
+    mapEurostat: 'Daten bearbeitet (Regionssummen, Anteile); Eurostat übernimmt dafür keine Verantwortung.',
+    mapEurostatEu: 'Daten bearbeitet (Währungs- und Einheitenumrechnung, Abweichung vom EU-Durchschnitt); Eurostat und Weltbank übernehmen dafür keine Verantwortung.',
+    mapNe: 'Grenzen: Natural Earth (gemeinfrei).',
+    mapUs: 'Grenzen: U.S. Census Bureau über us-atlas (© Mike Bostock, ISC).',
+  },
+  uk: {
+    heading: 'Джерела даних і ліцензії',
+    eurostat: 'Джерело: Eurostat (© Європейський Союз). Дані опрацьовано нами: відбір рядів, перерахунок одиниць і валют, підсумовування регіонів, розрахунок часток, щільностей, середніх значень і порівнянь між країнами. Eurostat не несе жодної відповідальності за ці зміни.',
+    eurostatLink: 'умови Eurostat',
+    wbProviders: '(первинні дані: ФАО, МОП, ООН, національні статистичні служби, ОЕСР)',
+    wbLicense: 'ліцензія',
+    wbTerms: 'умови використання даних Світового банку',
+    wbChanges: 'Значення ми перерахували в інші одиниці й обчислили з них порівняння.',
+    neCountries: 'Кордони держав: Natural Earth (суспільне надбання), спрощено.',
+    neRegions: 'Межі регіонів: Natural Earth (суспільне надбання). Регіони NUTS ми склали з адміністративних одиниць Natural Earth і спростили, тому межі орієнтовні.',
+    usCensus: 'Межі штатів США: U.S. Census Bureau, Cartographic Boundary Files 2017 (суспільне надбання), в обробці us-atlas © Mike Bostock (ліцензія ISC).',
+    mapEurostat: 'Дані опрацьовано (суми регіонів, частки); Eurostat не відповідає за зміни.',
+    mapEurostatEu: 'Дані опрацьовано (перерахунок валют і одиниць, відхилення від середнього по ЄС); Eurostat і Світовий банк не відповідають за зміни.',
+    mapNe: 'Межі: Natural Earth (суспільне надбання).',
+    mapUs: 'Межі: U.S. Census Bureau через us-atlas (© Mike Bostock, ISC).',
+  },
+};
+
+/** Atribuce pro locale (neznámý locale → cs, ať se povinný text nikdy neztratí). */
+export function attribution(locale: string): AttributionT {
+  return ATTRIBUTION[locale as Locale] ?? ATTRIBUTION.cs;
 }

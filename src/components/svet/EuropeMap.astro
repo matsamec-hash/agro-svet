@@ -9,7 +9,7 @@ import countryIndex from '../../data/svet/index.json';
 import { colorFor, extent } from '../../lib/svet/mapcolor';
 import { pageSlugs } from '../../lib/svet/map';
 import { localizePath, bcp47 } from '../../i18n/utils';
-import { localizeMetric, localizeCountry } from '../../i18n/svet';
+import { localizeMetric, localizeCountry, sourceCitation, attribution } from '../../i18n/svet';
 
 // CTA „Detail země" jen pro země, které profil opravdu mají — jinak by odkaz
 // skončil na 301 zpět na rozcestník. Zdroj pravdy je index.json, viz pageSlugs().
@@ -34,8 +34,13 @@ const MAPUI = {
 const UI = MAPUI[locale as keyof typeof MAPUI] ?? MAPUI.cs;
 const detailBase = localizePath(locale, '/svet/'); // klient složí /svet/<slug>/ s locale prefixem
 
+// Zdroj u metriky: World Bank v povinném tvaru citace WDI (CC BY 4.0), viz sourceCitation.
 const metrics = (mapData.metrics as { key: string; label: string; unit: string; group: string; currency?: boolean; source?: string; sourceUrl?: string }[])
-  .map((m) => localizeMetric(m, locale));
+  .map((m) => localizeMetric(m, locale))
+  .map((m) => (m.source ? { ...m, source: sourceCitation(m.source, m.sourceUrl) } : m));
+// Pod mapou natrvalo: hranice (Natural Earth) a upozornění, že data upravujeme (Δ % vůči
+// průměru EU, přepočet na Kč) a Eurostat za úpravy neodpovídá — podmínka Eurostatu.
+const ATTR = attribution(locale);
 const RATE = 25.3;
 const cur0: 'czk' | 'eur' = locale === 'cs' ? 'czk' : 'eur';
 const countries = Object.fromEntries(
@@ -107,6 +112,7 @@ const payload = { metrics, countries: countriesWithPage };
       </svg>
       <div class="agrimap-legend"><span id="agrimap-lo"></span><div class="agrimap-barwrap"><div class="agrimap-bar"></div><div class="agrimap-tick avg" id="agrimap-tavg"><b>{UI.euAvg}</b></div><div class="agrimap-tick sel" id="agrimap-tsel"><b></b></div></div><span id="agrimap-hi"></span></div>
       <div class="agrimap-src" id="agrimap-src"></div>
+      <div class="agrimap-src agrimap-attrib">{ATTR.mapEurostatEu} {europe.boundarySource === 'naturalearth' ? ATTR.mapNe : ''}</div>
     </div>
 
     <aside class="agrimap-panel">

@@ -104,7 +104,9 @@ export function registerTools(
         "Compare the latest value of one agriculture indicator across countries " +
         "(33 European countries + USA + Ukraine). Each result includes value, " +
         "unit, reference period and the cited source + source URL (Eurostat / " +
-        "World Bank). Sorted by value descending. Indicator keys include " +
+        "World Bank). The `attribution` field lists the credit and licence " +
+        "notices the sources require — keep them when you show or pass on the " +
+        "values. Sorted by value descending. Indicator keys include " +
         "wheat_yield, maize_yield, barley_yield, rapeseed_yield, cereal_yield " +
         "(t/ha), cattle_count, pigs_count, ag_land, arable_land, " +
         "ag_value_added_gdp, ag_employment, fert_use, ag_output_value, " +

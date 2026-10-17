@@ -11,6 +11,7 @@
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { DATA_LICENSE_URL } from '../../../lib/structured-data';
+import { EUROSTAT_COPYRIGHT_URL, WDI_URL, WB_TERMS_URL, CC_BY_40_URL, NATURAL_EARTH_URL, US_ATLAS_URL } from '../../../i18n/svet';
 
 const pageUrl = 'https://agro-svet.cz/data/licence/';
 const rok = new Date().getFullYear();
@@ -47,8 +48,9 @@ const rok = new Date().getFullYear();
     <ul>
       <li>
         <strong>Zdrojová data třetích stran</strong> zůstávají pod licencí svých pořizovatelů —
-        Českého statistického úřadu, Eurostatu, ÚKZÚZ, GUS a dalších. Jejich podmínky mají
-        přednost před našimi; u každé sady uvádíme, odkud pochází.
+        Českého statistického úřadu, Eurostatu, Světové banky, ÚKZÚZ, GUS a dalších. Jejich
+        podmínky mají přednost před našimi; u každé sady uvádíme, odkud pochází. Zdroje sekce
+        <a href="/svet/">/svet/</a> a jejich podmínky jsou rozepsané v další kapitole.
       </li>
       <li>
         <strong>Fotografie a obrázky</strong> — u těch platí licence uvedená u konkrétního
@@ -64,15 +66,79 @@ const rok = new Date().getFullYear();
       </li>
     </ul>
 
-    <h2>3. Jak citovat</h2>
+    <h2 id="svet">3. Zdroje dat a map v sekci Svět</h2>
+    <p>
+      Profily zemí, mapa Evropy, regionální mapy a srovnání na <a href="/svet/">/svet/</a>
+      stojí na těchto zdrojích. Kdo data z /svet/ přebírá, musí kromě nás uvést i je — za
+      podmínek, které stanovili oni:
+    </p>
+    <ul>
+      <li>
+        <strong>Eurostat</strong> (© Evropská unie) — zemědělské statistiky (výnosy, stavy zvířat,
+        počty farem, produkce, ekologické zemědělství, ceny a pachty půdy, regionální data
+        Farm Structure Survey a úřední rozlohy regionů). Opakované použití včetně komerčního
+        Eurostat povoluje s uvedením zdroje („Zdroj: Eurostat"). Data jsme upravili — vybrali
+        řady, přepočítali jednotky a měny, sečetli regiony, dopočítali podíly, hustoty, průměry
+        a srovnání mezi zeměmi. <strong>Eurostat za tyto úpravy nenese žádnou odpovědnost.</strong>
+        Podmínky: <a href={EUROSTAT_COPYRIGHT_URL} target="_blank" rel="noopener">copyright notice Eurostatu</a>
+        (mimo jiné nedovolují komerčně použít data za země mimo EU, ESVO a kandidátské země).
+      </li>
+      <li>
+        <strong>The World Bank: World Development Indicators</strong> — zemědělská a orná půda,
+        výnos obilovin, spotřeba hnojiv (původní zdroj FAO), podíl zemědělství na HDP (národní
+        statistické úřady, OECD), zaměstnanost v zemědělství (ILO) a počet obyvatel (OSN,
+        národní statistické úřady). Licence <a href={CC_BY_40_URL} target="_blank" rel="noopener license">CC BY 4.0</a>
+        s dodatečnými podmínkami Světové banky. Atribuce se uvádí ve tvaru
+        <em>The World Bank: World Development Indicators: [původní zdroj]</em>; kdo data šíří dál,
+        musí stejnou povinnost atribuce předat svým příjemcům —
+        <a href={WB_TERMS_URL} target="_blank" rel="noopener">podmínky použití datových sad Světové banky</a>.
+        Sada: <a href={WDI_URL} target="_blank" rel="noopener">World Development Indicators</a>.
+      </li>
+      <li>
+        <strong>Natural Earth</strong> — hranice států na mapě Evropy a správní jednotky,
+        ze kterých jsme složili regiony NUTS pro regionální mapy. Volné dílo (public domain),
+        <a href={NATURAL_EARTH_URL} target="_blank" rel="noopener">podmínky Natural Earth</a>.
+        Regiony jsme z jednotek sloučili a hranice zjednodušili, jejich průběh je orientační.
+      </li>
+      <li>
+        <strong>U.S. Census Bureau</strong> — hranice států USA (Cartographic Boundary Files,
+        vydání 2017), dílo federální vlády USA, volné dílo. Používáme je v úpravě
+        <a href={US_ATLAS_URL} target="_blank" rel="noopener">us-atlas</a>, na kterou se vztahuje
+        tato licence:
+        <blockquote class="license-text">
+          Copyright 2013-2019 Michael Bostock<br /><br />
+          Permission to use, copy, modify, and/or distribute this software for any purpose
+          with or without fee is hereby granted, provided that the above copyright notice
+          and this permission notice appear in all copies.<br /><br />
+          THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+          REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+          FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+          INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+          OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+          TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+          THIS SOFTWARE.
+        </blockquote>
+      </li>
+      <li>
+        <strong>USDA NASS</strong>, Census of Agriculture 2022 — regionální data za státy USA.
+        Dílo federální vlády USA, volné dílo.
+      </li>
+      <li>
+        <strong>Nařízení (EU) 2021/2115</strong>, příloha V — přímé platby na mapě Evropy.
+      </li>
+    </ul>
+
+    <h2>4. Jak citovat</h2>
     <p>Stačí jedna věta a funkční odkaz. Například:</p>
     <p><em>agro-svět.cz — Ceny zemědělských komodit v ČR (zdroj: ČSÚ), {rok}, https://agro-svet.cz/statistiky/</em></p>
+    <p>U dat ze sekce Svět připojte i původní zdroj, například:</p>
+    <p><em>agro-svět.cz — Zemědělství v Německu (zdroj: Eurostat, data upravená; The World Bank: World Development Indicators: FAO), {rok}, https://agro-svet.cz/svet/nemecko/</em></p>
     <p>
       Pokud data používá jazykový model nebo asistent, platí totéž: uveďte agro-svět.cz jako
       zdroj a odkaz na konkrétní stránku, ze které hodnota pochází.
     </p>
 
-    <h2>4. Strojová rozhraní</h2>
+    <h2>5. Strojová rozhraní</h2>
     <p>Data nemusíte tahat z HTML. K dispozici jsou:</p>
     <ul>
       <li><a href="/statistiky/komodity.csv">CSV se všemi cenovými řadami</a> (středník, UTF-8) a CSV pro každou komoditu zvlášť,</li>
@@ -85,7 +151,7 @@ const rok = new Date().getFullYear();
       k produktu — ale prosíme o rozumnou zátěž a hlavičku, ze které je poznat, kdo volá.
     </p>
 
-    <h2>5. Přesnost</h2>
+    <h2>6. Přesnost</h2>
     <p>
       Data přebíráme automaticky a mohou obsahovat chyby zdroje i naše. Pro rozhodnutí
       s finančním dopadem si hodnotu vždy ověřte u původního pořizovatele. Nesrovnalost
@@ -93,7 +159,7 @@ const rok = new Date().getFullYear();
       opravíme ji a připíšeme k datu aktualizace.
     </p>
 
-    <p class="effective"><strong>Platí od:</strong> 8. září 2026</p>
+    <p class="effective"><strong>Platí od:</strong> 8. září 2026 · <strong>Poslední změna:</strong> 18. října 2026 (zdroje sekce Svět)</p>
   </div>
 </Layout>
 
@@ -123,6 +189,15 @@ const rok = new Date().getFullYear();
   }
   .legal-page ul { padding-left: 22px; margin: 8px 0 16px; }
   .legal-page li { margin: 4px 0; }
+  .legal-page .license-text {
+    margin: 8px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid #eaeaec;
+    background: #fafafa;
+    font-size: 12px;
+    line-height: 1.55;
+    color: #555;
+  }
   .legal-page a { color: #0B7A3B; text-decoration: underline; }
   .legal-page a:hover { color: #066027; }
   .legal-page .effective {

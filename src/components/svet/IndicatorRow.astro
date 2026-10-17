@@ -1,7 +1,7 @@
 ---
 import IndicatorChart from './IndicatorChart.astro';
 import { fmtNum, vsReference } from '../../lib/svet/render';
-import { INDICATOR_LABELS, loc, localizeUnit, type SvetLang } from '../../i18n/svet';
+import { INDICATOR_LABELS, loc, localizeUnit, sourceCitation, type SvetLang } from '../../i18n/svet';
 import type { Indicator, SeriesPoint } from '../../lib/svet/types';
 interface Props {
   indicator: Indicator;
@@ -49,6 +49,7 @@ const staleSuffix = STALE_SUFFIX[locale] ?? STALE_SUFFIX.cs;
   </div>
   <IndicatorChart series={ind.series} refSeries={refSeries} unit={unit} label={label} countryName={countryName} refName={refName} />
   <div class="svet-ind-foot">
-    <a class="svet-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{ind.latest.source} · {ind.latest.referencePeriod}{stale ? staleSuffix : ''}</a>
+    {/* World Bank v povinném tvaru citace WDI (CC BY 4.0) — viz sourceCitation */}
+    <a class="svet-src" href={ind.latest.sourceUrl} target="_blank" rel="noopener noreferrer">{sourceCitation(ind.latest.source, ind.latest.sourceUrl)} · {ind.latest.referencePeriod}{stale ? staleSuffix : ''}</a>
   </div>
 </article>

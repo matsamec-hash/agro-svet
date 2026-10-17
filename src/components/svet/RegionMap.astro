@@ -4,10 +4,10 @@
 // Data: {slug}-geo.json (SVG paths) + {slug}.json (hodnoty metrik per région).
 import { colorFor, extent } from '../../lib/svet/mapcolor';
 import { bcp47 } from '../../i18n/utils';
-import { localizeRegionMetric, REGION_LEVEL_NOTE, REGION_NOTE, isSvetLang } from '../../i18n/svet';
+import { localizeRegionMetric, REGION_LEVEL_NOTE, REGION_NOTE, isSvetLang, attribution, type BoundarySource } from '../../i18n/svet';
 
 interface GeoRegion { code: string; name: string; path: string; }
-interface Geo { viewBox: string; regions: GeoRegion[]; }
+interface Geo { viewBox: string; regions: GeoRegion[]; boundarySource?: BoundarySource; }
 interface Metric { key: string; label: string; unit: string; desc?: string; }
 interface RegionData {
   year: number; source: string; sourceUrl: string;
@@ -37,6 +37,11 @@ const lvl = (data as any).level === 'NUTS1' ? 'NUTS1' : 'NUTS2';
 const dataNote: string | undefined = (data as any).regionNote;
 const levelNote = (dataNote && (isSvetLang(locale) ? REGION_NOTE[(data as any).slug]?.[locale] : dataNote))
   ?? (REGION_LEVEL_NOTE[lvl][locale as 'cs' | 'sk' | 'pl'] ?? REGION_LEVEL_NOTE[lvl].cs);
+// Licenční povinnosti přímo u mapy (podrobně v DataSources pod profilem):
+// Eurostat chce u upravených dat upozornění + že za úpravy neodpovídá; hranice podle zdroje.
+const A = attribution(locale);
+const isEurostat = /^Eurostat/.test(data.source);
+const boundaryNote = geo.boundarySource === 'us-census' ? A.mapUs : geo.boundarySource === 'naturalearth' ? A.mapNe : '';
 ---
 <section class="svet-section svet-map">
   <header class="svet-section-head"><h2>{RU.title} {countryName}</h2></header>
@@ -78,6 +83,9 @@ const levelNote = (dataNote && (isSvetLang(locale) ? REGION_NOTE[(data as any).s
       <p class="svet-cmp-note svet-map-src">
         {RU.source} <a href={data.sourceUrl} rel="nofollow">{data.source}</a> · {levelNote}
       </p>
+      {(isEurostat || boundaryNote) && (
+        <p class="svet-cmp-note svet-map-src svet-map-attrib">{isEurostat ? A.mapEurostat : ''}{isEurostat && boundaryNote ? ' ' : ''}{boundaryNote}</p>
+      )}
     </aside>
   </div>
 

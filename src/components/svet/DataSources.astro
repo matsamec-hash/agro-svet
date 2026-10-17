@@ -1,0 +1,49 @@
+---
+// Blok „Zdroje dat a licence" pro stránky /svet (profil země, mapa Evropy, srovnání).
+// ‼️ Plní licenční podmínky, ne jen informuje — texty a důvody jsou u ATTRIBUTION
+// v i18n/svet.ts. Komponenta jen skládá věty podle toho, co stránka opravdu ukazuje:
+// Eurostat nebo World Bank uveď jen tam, kde jsou jejich data; hranice podle zdroje
+// geometrie (boundarySource v *-geo.json / europe.json).
+import {
+  attribution, EUROSTAT_COPYRIGHT_URL, WDI_URL, WB_TERMS_URL, CC_BY_40_URL,
+  NATURAL_EARTH_URL, US_ATLAS_URL, type BoundarySource,
+} from '../../i18n/svet';
+
+interface Props {
+  eurostat?: boolean;
+  worldBank?: boolean;
+  /** Hranice na stránce: státy (mapa Evropy) nebo régiony (regionální mapa). */
+  boundaries?: { source: BoundarySource; kind: 'countries' | 'regions' } | null;
+}
+const { eurostat = false, worldBank = false, boundaries = null } = Astro.props;
+const A = attribution(Astro.locals.locale ?? 'cs');
+---
+{(eurostat || worldBank || boundaries) && (
+  <div class="svet-attrib">
+    <h3 class="svet-attrib-h">{A.heading}</h3>
+    <ul class="svet-attrib-list">
+      {eurostat && (
+        <li data-src="eurostat">{A.eurostat} <a href={EUROSTAT_COPYRIGHT_URL} target="_blank" rel="noopener nofollow">{A.eurostatLink}</a></li>
+      )}
+      {worldBank && (
+        <li data-src="worldbank">
+          The World Bank: <a href={WDI_URL} target="_blank" rel="noopener nofollow">World Development Indicators</a> {A.wbProviders}, {A.wbLicense} <a href={CC_BY_40_URL} target="_blank" rel="noopener license">CC BY 4.0</a> (<a href={WB_TERMS_URL} target="_blank" rel="noopener nofollow">{A.wbTerms}</a>). {A.wbChanges}
+        </li>
+      )}
+      {boundaries?.source === 'naturalearth' && (
+        <li data-src="naturalearth">{boundaries.kind === 'regions' ? A.neRegions : A.neCountries} <a href={NATURAL_EARTH_URL} target="_blank" rel="noopener nofollow">naturalearthdata.com</a></li>
+      )}
+      {boundaries?.source === 'us-census' && (
+        <li data-src="us-census">{A.usCensus} <a href={US_ATLAS_URL} target="_blank" rel="noopener nofollow">us-atlas</a></li>
+      )}
+    </ul>
+  </div>
+)}
+
+<style>
+  .svet-attrib { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line, #e6e6e0); }
+  .svet-attrib-h { font-size: 13px; font-weight: 700; margin: 0 0 6px; color: #444; letter-spacing: .01em; }
+  .svet-attrib-list { margin: 0; padding-left: 18px; color: #555; font-size: 12.5px; line-height: 1.6; }
+  .svet-attrib-list li { margin: 3px 0; }
+  .svet-attrib-list a { color: inherit; text-decoration: underline; }
+</style>

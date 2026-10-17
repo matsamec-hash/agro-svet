@@ -100,6 +100,14 @@ describe("compareCountries", () => {
     ).toThrow(/Valid keys:.*wheat_yield/);
   });
 
+  it("carries the attribution the sources require (Eurostat disclaimer, World Bank WDI + CC BY 4.0)", () => {
+    const eu = compareCountries(countries, { indicator: "wheat_yield" });
+    expect(eu.attribution.join(" ")).toMatch(/Eurostat has no responsibility/);
+    const wb = compareCountries(countries, { indicator: "ag_land" });
+    expect(wb.results[0].source).toBe("The World Bank: World Development Indicators: FAO");
+    expect(wb.attribution.join(" ")).toMatch(/CC BY 4\.0.*terms-conditions\/datasets/);
+  });
+
   it("lists indicators with labels", () => {
     const keys = listIndicators(countries).map((i) => i.key);
     expect(keys).toContain("wheat_yield");

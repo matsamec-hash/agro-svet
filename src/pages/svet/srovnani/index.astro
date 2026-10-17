@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import DataSources from '../../../components/svet/DataSources.astro';
 import { compareMatrix, fmtNum, vsReference, normalizeValue, normApplies } from '../../../lib/svet/render';
 import { buildColorMap, buildMultiSeriesModel, MULTI_OPTS } from '../../../lib/svet/multichart';
 import populationData from '../../../data/svet/population.json';
@@ -166,6 +167,8 @@ const description = L.description;
         </table>
       </div>
       <p class="svet-cmp-note"><strong>{L.noteStrong}</strong> {L.note}</p>
+      {/* Ukazatele Eurostatu a World Bank (WDI) + přepočet na obyvatele z WDI SP.POP.TOTL */}
+      <DataSources eurostat worldBank />
     </section>
     <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
     <script type="application/json" id="svet-units" set:html={JSON.stringify(units)}></script>

@@ -1,10 +1,12 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import EuropeMap from '../../../components/svet/EuropeMap.astro';
+import DataSources from '../../../components/svet/DataSources.astro';
+import europe from '../../../data/svet/geo/europe.json';
 import mapData from '../../../data/svet/map-metrics.json';
 import countryIndex from '../../../data/svet/index.json';
 import { localizePath, t, bcp47 } from '../../../i18n/utils';
-import { COUNTRY_NAMES, loc, localizeMetric, type SvetLang } from '../../../i18n/svet';
+import { COUNTRY_NAMES, loc, localizeMetric, sourceCitation, type SvetLang } from '../../../i18n/svet';
 import { pageSlugs } from '../../../lib/svet/map';
 import '../../../styles/svet.css';
 
@@ -34,7 +36,11 @@ const TCOLS = L.cols;
 
 const metricsRaw = mapData.metrics as { key: string; label: string; source: string; sourceUrl: string }[];
 const metrics = metricsRaw.map((m) => localizeMetric(m, locale));
-const sources = Array.from(new Map(metrics.filter((m) => m.source).map((m) => [m.source + m.sourceUrl, { source: m.source, url: m.sourceUrl }])).values());
+// World Bank v povinném tvaru citace WDI (CC BY 4.0) — viz sourceCitation.
+const sources = Array.from(new Map(metrics.filter((m) => m.source).map((m) => [m.source + m.sourceUrl, { source: sourceCitation(m.source, m.sourceUrl), url: m.sourceUrl }])).values());
+const usesEurostat = metricsRaw.some((m) => m.source === 'Eurostat');
+const usesWorldBank = metricsRaw.some((m) => /World Bank/.test(m.source ?? ''));
+const boundaries = (europe as { boundarySource?: 'naturalearth' }).boundarySource ? { source: 'naturalearth' as const, kind: 'countries' as const } : null;
 
 // SSR tabulka zemí (crawlovatelný obsah + interní prolinky).
 const tCountries = mapData.countries as Record<string, { slug: string; name: string; flag: string; values: Record<string, number | null> }>;
@@ -98,6 +104,7 @@ const tableRows = Object.entries(tCountries)
           <li><strong>{s.source}</strong>{s.url ? <> — <a href={s.url} rel="nofollow noopener" target="_blank">{L.srcData}</a></> : null}</li>
         ))}
       </ul>
+      <DataSources eurostat={usesEurostat} worldBank={usesWorldBank} boundaries={boundaries} />
     </section>
   </div>
 </Layout>
