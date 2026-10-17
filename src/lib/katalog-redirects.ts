@@ -50,6 +50,15 @@ export const REMOVED_MODEL_PAGES: Record<string, string> = {
   // 2026-10-17 Deutz-Fahr: 5100.4 G / 5110.4 G neexistují, výrobce vede 5100 G a 5110 G (prospekt 5G Tier 3)
   '/stroje/deutz-fahr/5g/5100-4g': '/stroje/deutz-fahr/5g/5100-g/',
   '/stroje/deutz-fahr/5g/5110-4g': '/stroje/deutz-fahr/5g/5110-g/',
+  // 2026-10-17 Massey Ferguson: řada 8000 (1986–2000) neexistovala, 8110–8160 jsou řada 8100 (1995–1999); 4275 v evropské řadě 4200 nebyl
+  '/stroje/massey-ferguson/4200/4275': '/stroje/massey-ferguson/4200/',
+  '/stroje/massey-ferguson/8000/8120': '/stroje/massey-ferguson/8100/8120-8100/',
+  '/stroje/massey-ferguson/8000/8130': '/stroje/massey-ferguson/8100/8130-8100/',
+  '/stroje/massey-ferguson/8000/8140': '/stroje/massey-ferguson/8100/8140-8100/',
+  '/stroje/massey-ferguson/8000/8150': '/stroje/massey-ferguson/8100/8150-8100/',
+  '/stroje/massey-ferguson/8000/8160': '/stroje/massey-ferguson/8100/8160-8100/',
+  '/stroje/massey-ferguson/8000/8110': '/stroje/massey-ferguson/8100/8110/',
+  '/stroje/massey-ferguson/8000': '/stroje/massey-ferguson/8100/',
 };
 
 /** Přejmenované slugy modelů → nový slug. Přesměruje i srovnání /srovnani/<a>-vs-<b>/. */
@@ -79,6 +88,12 @@ export const RENAMED_MODEL_SLUGS: Record<string, string> = {
   // 2026-10-17 Deutz-Fahr: 5100.4 G / 5110.4 G neexistují, výrobce vede 5100 G a 5110 G (prospekt 5G Tier 3)
   'deutz-fahr-5100-4g': 'deutz-fahr-5100-g',
   'deutz-fahr-5110-4g': 'deutz-fahr-5110-g',
+  // 2026-10-17 Massey Ferguson: řada 8000 (1986–2000) neexistovala, 8110–8160 jsou řada 8100 (1995–1999); 4275 v evropské řadě 4200 nebyl
+  'massey-ferguson-8120': 'massey-ferguson-8120-8100',
+  'massey-ferguson-8130': 'massey-ferguson-8130-8100',
+  'massey-ferguson-8140': 'massey-ferguson-8140-8100',
+  'massey-ferguson-8150': 'massey-ferguson-8150-8100',
+  'massey-ferguson-8160': 'massey-ferguson-8160-8100',
 };
 
 const PAIR_DELIMITER = '-vs-';
