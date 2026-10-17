@@ -97,7 +97,7 @@ export const KVIZ_HISTORIE_DE: QuizQuestion[] = [
       { text: `Navigationssystem für Agrardrohnen` },
     ],
     correct: 1,
-    explanation: `ISOBUS nach ISO 11783 ist der internationale Standard für die Kommunikation zwischen Traktor und Anbaugerät. Vor ihm hatte jeder Hersteller eigene Stecker und Protokolle; heute lässt sich eine Lemken-Sämaschine über das Terminal eines Fendt bedienen — ein Kabel, eine Bedienoberfläche.`,
+    explanation: `ISOBUS nach ISO 11783 ist die internationale Norm, über die Traktor und Anbaugerät miteinander Daten austauschen. Vor ihm hatte jeder Hersteller eigene Stecker und Protokolle; heute lässt sich eine Lemken-Sämaschine über das Terminal eines Fendt bedienen — ein Kabel, eine Bedienoberfläche.`,
     sourceUrl: '/slovnik/isobus/',
     sourceLabel: `ISOBUS`,
   },

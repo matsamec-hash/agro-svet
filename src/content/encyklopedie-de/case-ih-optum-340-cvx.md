@@ -28,14 +28,14 @@ faq:
   - q: "Wofür steht CVX im Namen?"
     a: "CVX bezeichnet das stufenlose Getriebe CVXDrive (CVT). Die Geschwindigkeit ändert sich kontinuierlich ohne Schaltstufen und ohne Zugkraftunterbrechung — der Fahrer gibt lediglich die gewünschte Geschwindigkeit vor, und das Getriebe hält den Motor im wirtschaftlichen Drehzahlbereich. Die gesamte Baureihe Optum wird ausschließlich mit diesem Getriebe angeboten."
   - q: "Worin unterscheiden sich die Baureihen Optum, Puma und Magnum?"
-    a: "Der Puma ist die universelle Premiumbaureihe bis 240 PS. Der Optum CVX steht eine Klasse darüber — ein kompakter Row-Crop mit CVT und bis zu 340 PS. Der Magnum ist die Row-Crop-Flaggschiffbaureihe mit der höchsten Leistung. Der Optum 340 füllt die Lücke zwischen dem universellen Puma und dem großen Magnum."
+    a: "Der Puma ist die universelle Premiumbaureihe bis 240 PS. Der Optum CVX steht eine Klasse darüber — ein kompakter Row-Crop mit CVT und bis zu 340 PS. Der Magnum ist die Row-Crop-Flaggschiffbaureihe mit der höchsten Leistung. Damit liegt der Optum 340 leistungsmäßig zwischen dem universellen Puma und dem großen Magnum."
   - q: "Warum gilt der Optum 340 als kompakter Row-Crop?"
     a: "Der Optum 340 bietet eine Leistung, die mit großen Row-Crop-Traktoren vergleichbar ist, jedoch in kompakterer und leichterer Bauweise. Er hat deshalb ein hohes Leistungsgewicht — er zieht breite Geräte, verdichtet dabei den Boden weniger und ist wendiger als schwerere Maschinen."
   - q: "Für welchen Betrieb eignet sich der Case IH Optum 340 CVX?"
     a: "Der Optum 340 CVX richtet sich an größere Betriebe, die hohe Leistung in einem wendigen und relativ leichten Traktor brauchen. Er eignet sich für Tiefenlockerung, Pflügen, Bodenbearbeitung und den Transport schwerer Gespanne, wo das stufenlose Getriebe seine Stärken ausspielt."
 ---
 
-Der **Case IH Optum 340 CVX** ist das Spitzenmodell der Baureihe Optum — eines kompakten Row-Crop-Traktors, der im Case-IH-Angebot die Lücke zwischen der universellen Baureihe Puma und dem Flaggschiff Magnum füllt.
+Der **Case IH Optum 340 CVX** ist das Spitzenmodell der Baureihe Optum — eines kompakten Row-Crop-Traktors, der im Case-IH-Angebot zwischen der universellen Baureihe Puma und dem Flaggschiff Magnum angesiedelt ist.
 
 ## Motor FPT Cursor 9
 
