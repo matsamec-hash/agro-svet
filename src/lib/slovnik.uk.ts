@@ -38,7 +38,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "scr-katalyzator",
       "emisni-normy-stage"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Filtr_pevn%C3%BDch_%C4%8D%C3%A1stic"
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%94%D0%B8%D0%B7%D0%B5%D0%BB%D1%8C%D0%BD%D0%B8%D0%B9_%D1%81%D0%B0%D0%B6%D0%BE%D0%B2%D0%B8%D0%B9_%D1%84%D1%96%D0%BB%D1%8C%D1%82%D1%80"
   },
   {
     "slug": "scr-katalyzator",
@@ -3161,8 +3161,8 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "vceli-plod",
       "vcelstvo"
     ],
-    "externalUrl": "https://www.svscr.cz/zdravi-zviratunemoci-vcely/",
-    "externalLabel": "SVS ČR: хвороби бджіл"
+    "externalUrl": "https://svs.gov.cz/zdravi-zvirat/mor-vceliho-plodu/",
+    "externalLabel": "SVS ČR: американський гнилець"
   },
   {
     "slug": "hniloba-plodu",
@@ -3365,7 +3365,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "nektar-pojem",
       "vcelstvo"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/V%C4%8Del%C3%AD_tanec",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A2%D0%B0%D0%BD%D0%B5%D1%86%D1%8C_%D0%B1%D0%B4%D0%B6%D1%96%D0%BB",
     "externalLabel": "Wikipedia: Бджолиний танець"
   },
   {
@@ -3918,7 +3918,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "hloubkove-kypreni",
       "strniste"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Diskový_podmítač",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9B%D1%83%D1%89%D0%B8%D0%BB%D1%8C%D0%BD%D0%B8%D0%BA",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -3946,7 +3946,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "orba",
       "predsetova-priprava"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Radličkový_kypřič",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9A%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B2%D0%B0%D1%82%D0%BE%D1%80",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -3974,8 +3974,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "telematika",
       "drony-zemedelstvi"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Teleskopický_manipulátor",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що таке телескопічний навантажувач?",
@@ -4002,8 +4000,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "gps-rtk",
       "auto-steering"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Čelní_nakladač",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як використовується фронтальний навантажувач?",
@@ -4030,8 +4026,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "mocovina",
       "adjuvant"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Rozmetadlo_minerálních_hnojiv",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як працює розкидач мінеральних добрив?",
@@ -4058,8 +4052,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "organicka-hmota",
       "strniste"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Cisterna_na_kejdu",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Для чого слугує цистерна для рідкого гною?",
@@ -4087,7 +4079,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "rozmetadlo-hnojiv",
       "hloubkove-kypreni"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Svinovac%C3%AD_lis",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9F%D1%80%D0%B5%D1%81-%D0%BF%D1%96%D0%B4%D0%B1%D0%B8%D1%80%D0%B0%D1%87",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4120,7 +4112,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "cisterna-na-kejdu",
       "hloubkove-kypreni"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Samoj%C3%ADzdn%C3%A1_%C5%99eza%C4%8Dka",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A1%D0%B8%D0%BB%D0%BE%D1%81%D0%BE%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D0%B8%D0%B9_%D0%BA%D0%BE%D0%BC%D0%B1%D0%B0%D0%B9%D0%BD",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4153,7 +4145,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "predsetova-priprava",
       "osevni-postup"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Pneumatick%C3%BD_sec%C3%AD_stroj",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A1%D1%96%D0%B2%D0%B0%D0%BB%D0%BA%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4186,7 +4178,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "predsetova-priprava",
       "osevni-postup"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Ple%C4%8Dka",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9A%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B2%D0%B0%D1%82%D0%BE%D1%80",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4219,7 +4211,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "auto-steering",
       "common-rail"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Planetov%C3%A1_p%C5%99evodovka",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B5%D1%82%D0%B0%D1%80%D0%BD%D0%B0_%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D1%87%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4252,7 +4244,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "common-rail",
       "emisni-normy-stage"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Dvouhmotov%C3%BD_setrva%C4%8Dn%C3%ADk",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9C%D0%B0%D1%85%D0%BE%D0%B2%D0%B5_%D0%BA%D0%BE%D0%BB%D0%B5%D1%81%D0%BE",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4443,7 +4435,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "utuzeni-pudy",
       "diskovy-podmitac"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/V%C3%A1len%C3%AD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9A%D0%BE%D1%82%D0%BE%D0%BA_%D0%BF%D0%BE%D0%BB%D1%8C%D0%BE%D0%B2%D0%B8%D0%B9",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4468,7 +4460,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "pneumaticky-seci-stroj",
       "osevni-postup"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/V%C3%BDsevek",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A1%D1%96%D0%B2%D0%B1%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4493,7 +4485,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "orba",
       "diskovy-podmitac"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Podr%C3%BDv%C3%A1n%C3%AD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%93%D0%BB%D0%B8%D0%B1%D0%BE%D0%BA%D0%BE%D1%80%D0%BE%D0%B7%D0%BF%D1%83%D1%88%D1%83%D0%B2%D0%B0%D1%87",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4518,8 +4510,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "diskovy-podmitac",
       "hloubkove-kypreni"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/P%C5%99edse%C5%A5ov%C3%A1_p%C5%99%C3%ADprava",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що охоплює передпосівний обробіток ґрунту?",
@@ -4543,8 +4533,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "utuzeni-pudy",
       "vysevek"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Se%C5%A5ov%C3%A9_l%C5%AF%C5%BEko",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як готується посівне ложе?",
@@ -4568,7 +4556,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "predsetova-priprava",
       "valeni"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Kapilarita_p%C5%AFdy",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9A%D0%B0%D0%BF%D1%96%D0%BB%D1%8F%D1%80%D0%BD%D1%96%D1%81%D1%82%D1%8C",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4596,8 +4584,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "eroze-pudy",
       "orba"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Mineralizace",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що таке мінералізація ґрунту?",
@@ -4628,8 +4614,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "hloubkove-kypreni",
       "ekoschemata"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Kompakce_p%C5%AFdy",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що спричиняє ущільнення ґрунту?",
@@ -4660,7 +4644,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "osevni-postup",
       "ekoschemata"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Zelen%C3%A9_hnojen%C3%AD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A1%D0%B8%D0%B4%D0%B5%D1%80%D0%B0%D1%82%D0%B8",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4689,7 +4673,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "kapilarita-pudy",
       "predsetova-priprava"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Strni%C5%A1t%C4%9B",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A1%D1%82%D0%B5%D1%80%D0%BD%D1%8F",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4718,7 +4702,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "rozmetadlo-hnojiv",
       "pH-pudy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Superfosf%C3%A1t",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A1%D1%83%D0%BF%D0%B5%D1%80%D1%84%D0%BE%D1%81%D1%84%D0%B0%D1%82",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4750,7 +4734,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "pH-pudy",
       "organicka-hmota"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Chlorid_draseln%C3%BD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A5%D0%BB%D0%BE%D1%80%D0%B8%D0%B4_%D0%BA%D0%B0%D0%BB%D1%96%D1%8E",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4782,7 +4766,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "dolomiticky-vapenec",
       "npk-hnojivo"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Kalimagnesia",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9A%D0%B0%D0%BB%D1%96%D0%BC%D0%B0%D0%B3%D0%BD%D0%B5%D0%B7%D1%96%D1%8F",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4811,7 +4795,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "vapneni",
       "pH-pudy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Dolomit",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%94%D0%BE%D0%BB%D0%BE%D0%BC%D1%96%D1%82",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4840,7 +4824,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "organicka-hmota",
       "cisterna-na-kejdu"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Digest%C3%A1t",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%B5_%D0%B1%D1%80%D0%BE%D0%B4%D1%96%D0%BD%D0%BD%D1%8F",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4869,7 +4853,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "cisterna-na-kejdu",
       "organicka-hmota"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Kejda",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%93%D0%BD%D0%BE%D1%97%D0%B2%D0%BA%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4901,7 +4885,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "organicka-hmota",
       "orba"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Hn%C5%AFj",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%93%D0%BD%D1%96%D0%B9_(%D0%B4%D0%BE%D0%B1%D1%80%D0%B8%D0%B2%D0%BE)",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4930,7 +4914,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "superfosfat",
       "npk-hnojivo"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Kostn%C3%AD_mou%C4%8Dka",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9A%D1%96%D1%81%D1%82%D0%BA%D0%BE%D0%B2%D0%B5_%D0%B1%D0%BE%D1%80%D0%BE%D1%88%D0%BD%D0%BE",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4962,7 +4946,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "mineralizace-pudy",
       "npk-hnojivo"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Hnojivo",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%94%D0%BE%D0%B1%D1%80%D0%B8%D0%B2%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -4990,7 +4974,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "superfosfat",
       "draselna-sul"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/S%C3%ADra",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A1%D1%96%D1%80%D0%BA%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5018,7 +5002,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "repka-ozima",
       "osevni-postup"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Padl%C3%AD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%91%D0%BE%D1%80%D0%BE%D1%88%D0%BD%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%BE%D1%81%D1%8F%D0%BD%D1%96_%D0%B3%D1%80%D0%B8%D0%B1%D0%B8",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5046,8 +5030,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "osevni-postup",
       "moreni-osiva"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Sclerotinia_sclerotiorum",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як проявляється склеротиніоз?",
@@ -5074,7 +5056,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "osevni-postup",
       "predni-vyvodovy-hridel"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/D%C5%99ep%C4%8D%C3%ADk",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%91%D0%BB%D1%96%D1%88%D0%BA%D0%B8_%D0%B7%D0%B5%D0%BC%D0%BB%D1%8F%D0%BD%D1%96",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5102,7 +5084,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "predni-vyvodovy-hridel",
       "psenice-ozima"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/B%C3%A1zlivec_kuku%C5%99i%C4%8Dn%C3%BD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%97%D0%B0%D1%85%D1%96%D0%B4%D0%BD%D0%B8%D0%B9_%D0%BA%D1%83%D0%BA%D1%83%D1%80%D1%83%D0%B4%D0%B7%D1%8F%D0%BD%D0%B8%D0%B9_%D0%B6%D1%83%D0%BA",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5130,7 +5112,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ucinna-latka",
       "rezistence-pesticidy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Svilu%C5%A1ka_chmelov%C3%A1",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9F%D0%B0%D0%B2%D1%83%D1%82%D0%B8%D0%BD%D0%BD%D0%B8%D0%B9_%D0%BA%D0%BB%D1%96%D1%89_%D0%B7%D0%B2%D0%B8%D1%87%D0%B0%D0%B9%D0%BD%D0%B8%D0%B9",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5157,7 +5139,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ucinna-latka",
       "rezistence-pesticidy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Molice_sklen%C3%ADkov%C3%A1",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%91%D1%96%D0%BB%D0%BE%D0%BA%D1%80%D0%B8%D0%BB%D0%BA%D0%B0_%D1%82%D0%B5%D0%BF%D0%BB%D0%B8%D1%87%D0%BD%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5184,7 +5166,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ucinna-latka",
       "padli-travni"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Strupovitost_jablon%C4%9B",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9F%D0%B0%D1%80%D1%88%D0%B0_(%D1%84%D1%96%D1%82%D0%BE%D0%BF%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F)",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5211,7 +5193,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ucinna-latka",
       "rezistence-pesticidy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Obale%C4%8D_jable%C4%8Dn%C3%BD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9F%D0%BB%D0%BE%D0%B4%D0%BE%D0%B6%D0%B5%D1%80%D0%BA%D0%B0_%D1%8F%D0%B1%D0%BB%D1%83%D0%BD%D0%B5%D0%B2%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5239,7 +5221,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ucinna-latka",
       "padli-travni"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Monili%C3%B3za",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9C%D0%BE%D0%BD%D1%96%D0%BB%D1%96%D0%BE%D0%B7",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5263,8 +5245,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "ucinna-latka",
       "fungicidy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Ochrann%C3%A1_lh%C5%AFta",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як обчислюють період очікування?",
@@ -5291,7 +5271,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "insekticidy",
       "ucinna-latka"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Moření_osiva",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D1%82%D1%80%D1%83%D1%8E%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F_%D0%BD%D0%B0%D1%81%D1%96%D0%BD%D0%BD%D1%8F",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5324,8 +5304,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "herbicidy",
       "insekticidy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Adjuvant",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Для чого слугують ад'юванти в землеробстві?",
@@ -5352,8 +5330,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "insekticidy",
       "moreni-osiva"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Rezistence_vůči_pesticidům",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як виникає резистентність до пестицидів?",
@@ -5380,8 +5356,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "insekticidy",
       "adjuvant"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Účinná_látka",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що таке діюча речовина в пестициді?",
@@ -5405,8 +5379,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "moreni-osiva",
       "rezistence-pesticidy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Azoxystrobin",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Для чого використовують азоксистробін?",
@@ -5430,8 +5402,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "moreni-osiva",
       "rezistence-pesticidy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Prothiokonazol",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Які хвороби контролює протіоконазол?",
@@ -5458,7 +5428,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "organicka-hmota",
       "pH-pudy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Jetel_lu%C4%8Dn%C3%AD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%8E%D1%88%D0%B8%D0%BD%D0%B0_%D0%BB%D1%83%D1%87%D0%BD%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5486,7 +5456,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "pH-pudy",
       "hnuj"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Vl%C4%8D%C3%AD_bob",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9B%D1%8E%D0%BF%D0%B8%D0%BD",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5514,7 +5484,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "hnuj",
       "pH-pudy"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Bob_poln%C3%AD",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%91%D1%96%D0%B1_%D0%BA%D1%96%D0%BD%D1%81%D1%8C%D0%BA%D0%B8%D0%B9",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5542,7 +5512,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "pH-pudy",
       "hnuj"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Proso_set%C3%A9",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D1%81%D0%BE_%D0%B7%D0%B2%D0%B8%D1%87%D0%B0%D0%B9%D0%BD%D0%B5",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5570,7 +5540,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "pH-pudy",
       "hnuj"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/%C4%8Cirok",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A1%D0%BE%D1%80%D0%B3%D0%BE",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5598,7 +5568,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "pH-pudy",
       "hnuj"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Pohanka_obecn%C3%A1",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%93%D1%80%D0%B5%D1%87%D0%BA%D0%B0_%D0%B7%D0%B2%D0%B8%D1%87%D0%B0%D0%B9%D0%BD%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5622,7 +5592,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "osevni-postup",
       "organicka-hmota"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Svazenka_vratičolistá",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A4%D0%B0%D1%86%D0%B5%D0%BB%D1%96%D1%8F_%D0%BF%D0%B8%D0%B6%D0%BC%D0%BE%D0%BB%D0%B8%D1%81%D1%82%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5647,7 +5617,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "osevni-postup",
       "organicka-hmota"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Cizrna",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%9D%D1%83%D1%82_(%D1%80%D1%96%D0%B4)",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -5674,8 +5644,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "odchov-telat",
       "krizeni-plemen"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Velká_dobytčí_jednotka",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як обчислюють умовну голову худоби (УВХ)?",
@@ -5778,8 +5746,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "odchov-telat",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Podest%C3%BDlka",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як підтримують глибоку підстилку?",
@@ -5810,8 +5776,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "odchov-telat",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Lakta%C4%8Dn%C3%AD_k%C5%99ivka",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як обчислюють лактаційну криву?",
@@ -5843,8 +5807,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "vykrm-skotu",
       "krizeni-plemen"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Brakace",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як проводять вибракування тварин?",
@@ -5876,8 +5838,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "brakace",
       "inseminace"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/V%C3%BDkrm_skotu",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як проводять відгодівлю великої рогатої худоби?",
@@ -5909,8 +5869,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "vykrm-skotu",
       "brakace"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Odchov_telat",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як проводять вирощування телят?",
@@ -5942,7 +5900,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "odchov-telat",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/K%C5%99%C3%AD%C5%BEen%C3%AD_plemen",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%93%D1%96%D0%B1%D1%80%D0%B8%D0%B4%D0%B8%D0%B7%D0%B0%D1%86%D1%96%D1%8F_(%D0%B1%D1%96%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F)",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -6113,7 +6071,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "bazicka-cena",
       "intervencni-nakup"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/MATIF",
+    "externalUrl": "https://uk.wikipedia.org/wiki/Euronext_Paris",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -6146,8 +6104,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "bazicka-cena",
       "forwardovy-kontrakt"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Interven%C4%8Dn%C3%AD_n%C3%A1kup",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Для чого слугує інтервенційна закупівля?",
@@ -6179,7 +6135,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "bazicka-cena",
       "forwardovy-kontrakt"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Komoditn%C3%AD_burza",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A2%D0%BE%D0%B2%D0%B0%D1%80%D0%BD%D0%B0_%D0%B1%D1%96%D1%80%D0%B6%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -6212,8 +6168,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "forwardovy-kontrakt",
       "intervencni-nakup"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Bazick%C3%A1_cena",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як обчислюють базис?",
@@ -6245,7 +6199,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "bazicka-cena",
       "intervencni-nakup"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Forwardov%C3%BD_kontrakt",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A4%D0%BE%D1%80%D0%B2%D0%B0%D1%80%D0%B4%D0%BD%D0%B8%D0%B9_%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%B0%D0%BA%D1%82",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -6278,8 +6232,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "bazicka-cena",
       "intervencni-nakup"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Skladn%C3%A9",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Що таке плата за зберігання?",
@@ -6309,8 +6261,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "kejda",
       "hnuj"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Su%C5%A1ina",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як вимірюють суху речовину?",
@@ -6337,8 +6287,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "krizeni-plemen",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Netto_energie_laktace",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як обчислюють NEL?",
@@ -6364,8 +6312,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "digestat",
       "kejda"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Straviteln%C3%BD_protein",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як визначають PDI?",
@@ -6391,7 +6337,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "strip-till",
       "mulcovac"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/V%C3%BDnos",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%A3%D1%80%D0%BE%D0%B6%D0%B0%D0%B9%D0%BD%D1%96%D1%81%D1%82%D1%8C",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -6419,7 +6365,7 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "matif",
       "forwardovy-kontrakt"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Objemov%C3%A1_hmotnost",
+    "externalUrl": "https://uk.wikipedia.org/wiki/%D0%93%D1%83%D1%81%D1%82%D0%B8%D0%BD%D0%B0",
     "externalLabel": "Вікіпедія",
     "faq": [
       {
@@ -6447,8 +6393,6 @@ export const SLOVNIK_UK: SlovnikTerm[] = [
       "fungicidy",
       "adjuvant"
     ],
-    "externalUrl": "https://uk.wikipedia.org/wiki/Aplika%C4%8Dn%C3%AD_d%C3%A1vka",
-    "externalLabel": "Вікіпедія",
     "faq": [
       {
         "q": "Як визначають норму внесення в літрах на гектар?",

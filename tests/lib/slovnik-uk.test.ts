@@ -63,4 +63,14 @@ describe('slovnik UK key-parita', () => {
     const cats = new Set(Object.keys(KATEGORIE_LABELS_UK));
     for (const t of SLOVNIK_UK) expect(cats.has(t.kategorie)).toBe(true);
   });
+  // 77 odkazů vedlo na uk.wikipedia s českým názvem článku (taková stránka neexistuje).
+  // Český název poznáme podle české diakritiky nebo podle latinky tam, kde má být cyrilice.
+  it('UK externalUrl na uk.wikipedia nemá český název článku', () => {
+    const bad = SLOVNIK_UK.filter((t) => {
+      if (!t.externalUrl?.startsWith('https://uk.wikipedia.org/wiki/')) return false;
+      const title = decodeURIComponent(t.externalUrl.slice('https://uk.wikipedia.org/wiki/'.length));
+      return /[áčďéěíňóřšťúůýž]/i.test(title);
+    }).map((t) => `${t.slug}: ${t.externalUrl}`);
+    expect(bad).toEqual([]);
+  });
 });

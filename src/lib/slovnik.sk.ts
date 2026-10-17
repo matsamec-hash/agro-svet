@@ -121,7 +121,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "auto-steering",
       "variable-rate"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Real-Time_Kinematic"
+    "externalUrl": "https://cs.wikipedia.org/wiki/Diferenci%C3%A1ln%C3%AD_GPS"
   },
   {
     "slug": "auto-steering",
@@ -3163,8 +3163,8 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "vceli-plod",
       "vcelstvo"
     ],
-    "externalUrl": "https://www.svscr.cz/zdravi-zviratunemoci-vcely/",
-    "externalLabel": "SVS SR: choroby včiel"
+    "externalUrl": "https://svs.gov.cz/zdravi-zvirat/mor-vceliho-plodu/",
+    "externalLabel": "SVS ČR: mor včelieho plodu"
   },
   {
     "slug": "hniloba-plodu",
@@ -3924,7 +3924,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "hloubkove-kypreni",
       "strniste"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Diskový_podmítač",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Podm%C3%ADtka",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -3952,7 +3952,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "orba",
       "predsetova-priprava"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Radličkový_kypřič",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Kyp%C5%99en%C3%AD",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -3980,8 +3980,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "telematika",
       "drony-zemedelstvi"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Teleskopický_manipulátor",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je teleskopický manipulátor?",
@@ -4008,8 +4006,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "gps-rtk",
       "auto-steering"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Čelní_nakladač",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se používá čelní nakladač?",
@@ -4036,7 +4032,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "mocovina",
       "adjuvant"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Rozmetadlo_minerálních_hnojiv",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Rozmetadlo",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4064,7 +4060,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "organicka-hmota",
       "strniste"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Cisterna_na_kejdu",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Kejda",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4093,8 +4089,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "rozmetadlo-hnojiv",
       "hloubkove-kypreni"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Svinovac%C3%AD_lis",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak funguje svinovací lis?",
@@ -4126,7 +4120,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "cisterna-na-kejdu",
       "hloubkove-kypreni"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Samoj%C3%ADzdn%C3%A1_%C5%99eza%C4%8Dka",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Skl%C3%ADzec%C3%AD_%C5%99eza%C4%8Dka",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4159,7 +4153,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "predsetova-priprava",
       "osevni-postup"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Pneumatick%C3%BD_sec%C3%AD_stroj",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Sec%C3%AD_stroj",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4192,8 +4186,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "predsetova-priprava",
       "osevni-postup"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Ple%C4%8Dka",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak funguje plečka?",
@@ -4477,8 +4469,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "pneumaticky-seci-stroj",
       "osevni-postup"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/V%C3%BDsevek",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá výsevek?",
@@ -4503,7 +4493,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "orba",
       "diskovy-podmitac"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Podr%C3%BDv%C3%A1n%C3%AD",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Kyp%C5%99en%C3%AD",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4529,8 +4519,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "diskovy-podmitac",
       "hloubkove-kypreni"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/P%C5%99edse%C5%A5ov%C3%A1_p%C5%99%C3%ADprava",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co zahrnuje předseťová příprava půdy?",
@@ -4555,8 +4543,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "utuzeni-pudy",
       "vysevek"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Se%C5%A5ov%C3%A9_l%C5%AF%C5%BEko",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se připravuje seťové lůžko?",
@@ -4581,7 +4567,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "predsetova-priprava",
       "valeni"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Kapilarita_p%C5%AFdy",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Kapilarita",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4642,7 +4628,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "hloubkove-kypreni",
       "ekoschemata"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Kompakce_p%C5%AFdy",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Zhut%C5%88ov%C3%A1n%C3%AD_p%C5%AFd",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -4798,8 +4784,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "dolomiticky-vapenec",
       "npk-hnojivo"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Kalimagnesia",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží kalimagnesia?",
@@ -4949,8 +4933,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "superfosfat",
       "npk-hnojivo"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Kostn%C3%AD_mou%C4%8Dka",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu se používá kostní moučka?",
@@ -5066,8 +5048,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "osevni-postup",
       "moreni-osiva"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Sclerotinia_sclerotiorum",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se projevuje hlízenka obecná?",
@@ -5094,8 +5074,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "osevni-postup",
       "predni-vyvodovy-hridel"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/D%C5%99ep%C4%8D%C3%ADk",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se projevuje poškození dřepčíky?",
@@ -5283,8 +5261,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "ucinna-latka",
       "fungicidy"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Ochrann%C3%A1_lh%C5%AFta",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá ochranná lhůta?",
@@ -5312,8 +5288,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "insekticidy",
       "ucinna-latka"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Moření_osiva",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Proč se moří osivo?",
@@ -5345,8 +5319,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "herbicidy",
       "insekticidy"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Adjuvant",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží adjuvanty v zemědělství?",
@@ -5373,8 +5345,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "insekticidy",
       "moreni-osiva"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Rezistence_vůči_pesticidům",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak vzniká rezistence vůči pesticidům?",
@@ -5426,7 +5396,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "moreni-osiva",
       "rezistence-pesticidy"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Azoxystrobin",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Strobilurin",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -5452,8 +5422,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "moreni-osiva",
       "rezistence-pesticidy"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Prothiokonazol",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jaké choroby kontroluje prothiokonazol?",
@@ -5537,7 +5505,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "hnuj",
       "pH-pudy"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Bob_poln%C3%AD",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Bob_obecn%C3%BD",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -5699,8 +5667,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "odchov-telat",
       "krizeni-plemen"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Velká_dobytčí_jednotka",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá velká dobytčí jednotka (VDJ)?",
@@ -5804,8 +5770,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "odchov-telat",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Podest%C3%BDlka",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se udržuje hluboká podestýlka?",
@@ -5836,8 +5800,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "odchov-telat",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Lakta%C4%8Dn%C3%AD_k%C5%99ivka",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá laktační křivka?",
@@ -5869,8 +5831,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "vykrm-skotu",
       "krizeni-plemen"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Brakace",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se provádí brakace zvířat?",
@@ -5902,8 +5862,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "brakace",
       "inseminace"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/V%C3%BDkrm_skotu",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se provádí výkrm skotu?",
@@ -5935,8 +5893,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "vykrm-skotu",
       "brakace"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Odchov_telat",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se provádí odchov telat?",
@@ -5968,7 +5924,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "odchov-telat",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/K%C5%99%C3%AD%C5%BEen%C3%AD_plemen",
+    "externalUrl": "https://cs.wikipedia.org/wiki/K%C5%99%C3%AD%C5%BEen%C3%AD",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -6145,7 +6101,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "bazicka-cena",
       "intervencni-nakup"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/MATIF",
+    "externalUrl": "https://cs.wikipedia.org/wiki/Pa%C5%99%C3%AD%C5%BEsk%C3%A1_burza",
     "externalLabel": "Wikipedia",
     "faq": [
       {
@@ -6178,8 +6134,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "bazicka-cena",
       "forwardovy-kontrakt"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Interven%C4%8Dn%C3%AD_n%C3%A1kup",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "K čemu slouží intervenční nákup?",
@@ -6244,8 +6198,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "forwardovy-kontrakt",
       "intervencni-nakup"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Bazick%C3%A1_cena",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá bazická cena?",
@@ -6310,8 +6262,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "bazicka-cena",
       "intervencni-nakup"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Skladn%C3%A9",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Co je skladné?",
@@ -6369,8 +6319,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "krizeni-plemen",
       "vykrm-skotu"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Netto_energie_laktace",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá NEL?",
@@ -6396,8 +6344,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "digestat",
       "kejda"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Straviteln%C3%BD_protein",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se určuje PDI?",
@@ -6423,8 +6369,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "strip-till",
       "mulcovac"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/V%C3%BDnos",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se počítá výnos v tunách na hektar?",
@@ -6479,8 +6423,6 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "fungicidy",
       "adjuvant"
     ],
-    "externalUrl": "https://cs.wikipedia.org/wiki/Aplika%C4%8Dn%C3%AD_d%C3%A1vka",
-    "externalLabel": "Wikipedia",
     "faq": [
       {
         "q": "Jak se určuje aplikační dávka v litrech na hektar?",

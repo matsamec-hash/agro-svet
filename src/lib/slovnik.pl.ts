@@ -4219,8 +4219,8 @@ export const SLOVNIK_PL: SlovnikTerm[] = [
       "common-rail",
       "emisni-normy-stage"
     ],
-    "externalUrl": "https://pl.wikipedia.org/wiki/Dwumasowe_ko%C5%82o_zamachowe",
-    "externalLabel": "Wikipedia: Dwumasowe koło zamachowe",
+    "externalUrl": "https://pl.wikipedia.org/wiki/Ko%C5%82o_zamachowe",
+    "externalLabel": "Wikipedia: Koło zamachowe",
     "faq": [
       {
         "q": "Jak działa dwumasowe koło zamachowe?",
@@ -4727,8 +4727,6 @@ export const SLOVNIK_PL: SlovnikTerm[] = [
       "dolomiticky-vapenec",
       "npk-hnojivo"
     ],
-    "externalUrl": "https://pl.wikipedia.org/wiki/Kalimagnesja",
-    "externalLabel": "Wikipedia: Kalimagnesja",
     "faq": [
       {
         "q": "Do czego służy kalimagnesja?",
@@ -4983,8 +4981,8 @@ export const SLOVNIK_PL: SlovnikTerm[] = [
       "osevni-postup",
       "moreni-osiva"
     ],
-    "externalUrl": "https://pl.wikipedia.org/wiki/Sklerotinia_skleroci%C3%B3w",
-    "externalLabel": "Wikipedia: Twardzik pospolity",
+    "externalUrl": "https://pl.wikipedia.org/wiki/Twardnica_paso%C5%BCytnicza",
+    "externalLabel": "Wikipedia: Twardnica pasożytnicza",
     "faq": [
       {
         "q": "Jak objawia się twardzik pospolity?",

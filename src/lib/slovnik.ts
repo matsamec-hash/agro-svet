@@ -183,7 +183,7 @@ V ČR jsou dostupné komerční RTK sítě: Trimble VRS Now (cca 15 000 Kč/rok)
 
 Alternativa: vlastní base station (50 000–150 000 Kč jednorázově) — vyplatí se pro velké podniky s několika stroji.`,
     related: ['isobus', 'auto-steering', 'variable-rate'],
-    externalUrl: 'https://cs.wikipedia.org/wiki/Real-Time_Kinematic',
+    externalUrl: 'https://cs.wikipedia.org/wiki/Diferenci%C3%A1ln%C3%AD_GPS',
   },
   {
     slug: 'auto-steering',
@@ -8821,8 +8821,8 @@ V ČR je mor včelího plodu chorobou podléhající povinnosti hlášení (zák
 
 Preventivní opatření: dezinfekce nástrojů (louhem sodným 4 %, plamenem), nákup zdravých matek a rodinných oddělků s veterinárním osvědčením, vyhýbání se krmení cizím medem.`,
     related: ['hniloba-plodu', 'vceli-plod', 'vcelstvo'],
-    externalUrl: 'https://www.svscr.cz/zdravi-zviratunemoci-vcely/',
-    externalLabel: 'SVS ČR: nemoci včel',
+    externalUrl: 'https://svs.gov.cz/zdravi-zvirat/mor-vceliho-plodu/',
+    externalLabel: 'SVS ČR: mor včelího plodu',
   },
   {
     slug: 'hniloba-plodu',
