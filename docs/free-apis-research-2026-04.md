@@ -12,7 +12,7 @@ Existující integrace: ČSÚ DataStat (`src/lib/czso.ts`) — ceny komodit, pal
 | # | API | Co přidá | Free? | Use case |
 |---|-----|----------|-------|----------|
 | 1 | **ČSÚ DataStat — další tabulky** | rozšíření existující integrace o úrodu/výnosy z hektaru, mléčnost, drůbež | Free, no auth | `/statistiky/` rozšíření |
-| 2 | **Open-Meteo Forecast + Historical** | aktuální + historické počasí pro 14 krajů ČR, srážky, sucho, soil moisture | Free, no key | `/pocasi/`, dashboard "Počasí dnes" |
+| 2 | ~~**Open-Meteo Forecast + Historical**~~ ‼️ jen nekomerčně, viz 3.1 | aktuální + historické počasí pro 14 krajů ČR, srážky, sucho, soil moisture | Free, no key | `/pocasi/`, dashboard "Počasí dnes" |
 | 3 | **DG AGRI Agri-food Data Portal** | EU ceny mléka/obilí/masa per členský stát, srovnání ČR vs. EU | Free, no auth, REST/JSON | `/statistiky/eu-srovnani/` |
 | 4 | **ČHMÚ OpenData** | české hydro/meteo data, srážky, vodní stav, fenologie | Free, no auth, JSON/CSV | regionální "Sucho v ČR" mapa |
 | 5 | **Eurostat REST/JSON-stat** | dlouhodobé EU řady (apro_cpsh, apro_mt, ef_kvaareg) | Free, no key | long-term trendy, srovnání |
@@ -267,6 +267,8 @@ GET https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apro_cps
 ## 3. Mezinárodní
 
 ### 3.1 Open-Meteo (TOP doporučení)
+
+> ‼️ **2026-10-17: NEPOUŽÍVAT.** Free API Open-Meteo je jen pro nekomerční použití, agro-svet.cz je komerční. Web přešel na MET Norway Locationforecast 2.0 (CC BY 4.0 / NLOD, komerčně OK) — `src/lib/met-norway.ts`.
 
 - **URL**: `https://api.open-meteo.com/v1/forecast`
 - **Historical**: `https://archive-api.open-meteo.com/v1/archive`

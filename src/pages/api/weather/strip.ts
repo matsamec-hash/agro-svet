@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro';
-import { fetchCityStrip } from '../../../lib/open-meteo';
+import { fetchCityStrip } from '../../../lib/met-norway';
 import { runtimeCache } from '../../../lib/runtime-cache';
 
 export const prerender = false;
 
-const CACHE_TTL = 1800; // 30 minutes
+// 30 min. MET (lib/met-norway) má pod tím vlastní cache s Expires/If-Modified-Since.
+const CACHE_TTL = 1800;
 
 async function tryCacheGet(request: Request): Promise<Response | null> {
   try {
@@ -27,6 +28,13 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
   try {
     const cities = await fetchCityStrip();
+    // Prázdný seznam = MET nedostupné. Necacheovat, ať se za 30 min neukazuje nic.
+    if (cities.length === 0) {
+      return new Response(JSON.stringify({ error: 'unavailable' }), {
+        status: 503,
+        headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
+      });
+    }
     const body = JSON.stringify({ cities });
     const response = new Response(body, {
       status: 200,

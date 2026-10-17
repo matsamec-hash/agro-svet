@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro';
-import { fetchAgroWeather } from '../../../lib/open-meteo';
+import { fetchAgroWeather } from '../../../lib/met-norway';
 import { runtimeCache } from '../../../lib/runtime-cache';
 
 export const prerender = false;
 
-const CACHE_TTL = 1800; // 30 minutes
+// 30 min. MET (lib/met-norway) má pod tím vlastní cache s Expires/If-Modified-Since.
+const CACHE_TTL = 1800;
 
 async function tryCacheGet(request: Request): Promise<Response | null> {
   try {
