@@ -88,7 +88,7 @@ const metaDesc = metaZaklad.length > 155 ? metaZaklad.slice(0, 152) + '…' : me
   <script type="application/ld+json" is:inline set:html={JSON.stringify(eventJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
 
-  <main class="akce-detail">
+  <div class="akce-detail">
     <nav class="crumbs" aria-label="Drobečková navigace">
       <a href="/akce/">Kalendář akcí</a>
       <span>›</span>
@@ -203,7 +203,7 @@ const metaDesc = metaZaklad.length > 155 ? metaZaklad.slice(0, 152) + '…' : me
       <p>Pořádáte zemědělskou akci?</p>
       <a href="/akce/pridat/" class="btn-add">+ Přidat akci zdarma</a>
     </div>
-  </main>
+  </div>
 
   {heroImage && (
     <div class="foto-lightbox" id="foto-lightbox" hidden role="dialog" aria-modal="true" aria-label={akce.nazev}>

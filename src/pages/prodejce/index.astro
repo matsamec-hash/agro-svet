@@ -9,7 +9,7 @@ const turnstileSiteKey = getEnvVar('PUBLIC_TURNSTILE_SITE_KEY') ?? '';
 const error = Astro.url.searchParams.get('error');
 ---
 <Layout title="Vaše připravené inzeráty — Agro-svět bazar">
-  <main style="max-width:520px;margin:0 auto;padding:56px 24px 80px;">
+  <div style="max-width:520px;margin:0 auto;padding:56px 24px 80px;">
     <span class="section-label">Agro bazar</span>
     <h1 style="font-size:clamp(1.8rem,4vw,2.5rem);">Zadejte svůj kód</h1>
     <p style="color:#555;margin:12px 0 24px;line-height:1.6;">
@@ -30,6 +30,6 @@ const error = Astro.url.searchParams.get('error');
     <p style="color:#888;font-size:13px;margin-top:20px;">
       Máte odkaz z e-mailu? Stačí na něj kliknout — kód pak nepotřebujete.
     </p>
-  </main>
+  </div>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </Layout>

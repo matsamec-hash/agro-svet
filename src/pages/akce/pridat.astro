@@ -8,7 +8,7 @@ export const prerender = false;
 const kraje = getKraje();
 ---
 <Layout title="Přidat akci — Kalendář akcí | agro-svet.cz" description="Přidejte svou zemědělskou akci — farmářské trhy, polní den, prodej ze dvora. Po schválení se zobrazí v kalendáři.">
-  <main class="pridat">
+  <div class="pridat">
     <h1>Přidat akci do kalendáře</h1>
     <p>Akci po odeslání zkontrolujeme a poté zveřejníme. Vyplnění zabere minutu.</p>
 
@@ -89,7 +89,7 @@ const kraje = getKraje();
       <button type="submit">Odeslat ke schválení</button>
       <p id="form-msg" role="status" aria-live="polite"></p>
     </form>
-  </main>
+  </div>
 
   <script id="kraje-data" type="application/json" set:html={JSON.stringify(kraje)}></script>
   <script type="module">

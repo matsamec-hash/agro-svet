@@ -76,7 +76,7 @@ const heroDeltaTitle = locale === 'sk' ? 'Zmena za zobrazené obdobie (24 mesiac
 ---
 
 <Layout title={c.metaTitle} description={c.metaDesc}>
-  <main class="dh">
+  <div class="dh">
     <!-- HERO -->
     <section class="dh-hero">
       <div class="dh-grid-lines"></div>
@@ -248,7 +248,7 @@ const heroDeltaTitle = locale === 'sk' ? 'Zmena za zobrazené obdobie (24 mesiac
       </section>)}
 
     </div></div>
-  </main>
+  </div>
 
   <script type="application/json" id="dhChartData" set:html={JSON.stringify({ series: heroSeries, numLocale })} />
   <script src="/scripts/data-hub.js" is:inline></script>

@@ -46,7 +46,7 @@ function fmtDate(timestamp: string): string {
 ---
 
 <Layout title="Admin — Články featured" description="Pin článků na HP">
-  <main class="admin-clanky">
+  <div class="admin-clanky">
     <a href="/admin/" class="back-link">← Admin přehled</a>
     <h1>Články — featured na HP</h1>
     <p class="lead">Zaškrtnutý článek se objeví v hero gridu na <a href="/" target="_blank" rel="noopener">úvodní stránce</a>. Více featured = bubblují k vrcholu (newest first).</p>
@@ -101,7 +101,7 @@ function fmtDate(timestamp: string): string {
       <span>Strana {page} / {totalPages || 1}</span>
       {page < totalPages && <a href={`?filter=${filter}${search ? '&q=' + encodeURIComponent(search) : ''}&page=${page + 1}`}>Další →</a>}
     </nav>
-  </main>
+  </div>
 
   <script>
     document.querySelectorAll<HTMLInputElement>('[data-toggle-featured]').forEach((checkbox) => {

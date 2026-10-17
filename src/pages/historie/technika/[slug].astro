@@ -64,7 +64,7 @@ const articleLd = {
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleLd)} />
-  <main class={`hd era-${era}`}>
+  <div class={`hd era-${era}`}>
     <nav class="hd-crumb"><a href="/historie/">Historie</a> · <a href="/historie/technika/">Historická technika</a></nav>
 
     <div class="hd-top">
@@ -143,7 +143,7 @@ const articleLd = {
       <a href="/historie/technika/">← Všechny stroje</a>
       <a href="/stroje/">Dnešní katalog strojů →</a>
     </nav>
-  </main>
+  </div>
 </Layout>
 
 <style>

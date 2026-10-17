@@ -30,7 +30,7 @@ const countryName = (c: { slug: string; nameCs: string }) => (locale === 'cs' ? 
 ---
 
 <Layout title={title} description={description}>
-  <main class="svet-page svet-hub">
+  <div class="svet-page svet-hub">
     <header class="svet-hero">
       <div class="svet-hero-inner">
         <span class="svet-flag">🌍</span>
@@ -52,5 +52,5 @@ const countryName = (c: { slug: string; nameCs: string }) => (locale === 'cs' ? 
       </div>
       <p class="svet-method" style="margin-top:18px"><a href={localizePath(locale, '/svet/srovnani/')}>{L.compare}</a></p>
     </section>
-  </main>
+  </div>
 </Layout>

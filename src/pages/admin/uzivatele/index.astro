@@ -33,7 +33,7 @@ const fmtDate = (iso: string | null) =>
 ---
 
 <Layout title="Registrovaní uživatelé — Admin">
-  <main class="admin-users">
+  <div class="admin-users">
     <p><a href="/admin/hub/" class="back">← Admin rozcestník</a></p>
     <h1>Registrovaní uživatelé <span class="count">{users?.length ?? 0}</span></h1>
 
@@ -64,7 +64,7 @@ const fmtDate = (iso: string | null) =>
       {(!users || users.length === 0) && <p class="empty">Zatím žádní registrovaní uživatelé.</p>}
     </div>
     <p class="hint">Inzeráty: aktivní / celkem. Data jsou jen pro tebe (admin).</p>
-  </main>
+  </div>
 
   <style>
     .admin-users { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }

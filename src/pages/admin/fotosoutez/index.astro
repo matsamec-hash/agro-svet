@@ -21,7 +21,7 @@ const { data: allRounds } = await sb
   .limit(24);
 ---
 <Layout title="Admin — Fotosoutěž" description="Administrace fotosoutěže">
-  <main class="admin-home">
+  <div class="admin-home">
     <h1>Fotosoutěž — admin</h1>
     <div class="grid">
       <a class="tile" href="/admin/fotosoutez/moderace/">
@@ -63,7 +63,7 @@ const { data: allRounds } = await sb
         </ul>
       </section>
     )}
-  </main>
+  </div>
 </Layout>
 
 <style>

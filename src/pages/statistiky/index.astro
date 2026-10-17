@@ -173,7 +173,7 @@ const PILLS = [
   })} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />
 
-  <main class="sp-page">
+  <div class="sp-page">
     <Hero
       datasetCount={datasetCount}
       yearsCovered={yearsCovered}
@@ -208,7 +208,7 @@ const PILLS = [
     <MethodologyFooter lastUpdated={lastUpdated} />
 
     <BottomCTA />
-  </main>
+  </div>
 
   <script type="application/json" id="statI18n" set:html={JSON.stringify({
     numLocale,

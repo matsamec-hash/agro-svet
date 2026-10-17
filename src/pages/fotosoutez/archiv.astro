@@ -30,7 +30,7 @@ if (winnerIds.length > 0) {
 const PHOTO_BASE = contestPhotoBase();
 ---
 <Layout title="Archiv — Fotosoutěž Agro-svět" description="Všechna historická kola a výherci">
-  <main class="archive-page">
+  <div class="archive-page">
     <h1>Archiv kol</h1>
     {(!rounds || rounds.length === 0) && <p class="empty">Archiv je zatím prázdný.</p>}
     <div class="grid">
@@ -48,7 +48,7 @@ const PHOTO_BASE = contestPhotoBase();
         );
       })}
     </div>
-  </main>
+  </div>
 </Layout>
 
 <style>

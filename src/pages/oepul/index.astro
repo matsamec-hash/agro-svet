@@ -122,7 +122,7 @@ const groups: { title: string; sub: string; rows: Row[] }[] = [
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
-  <main class="db">
+  <div class="db">
     <div class="db-wrap">
       <nav class="db-crumb" aria-label="Brotkrumennavigation">
         <a href={localizePath('de', '/')}>Startseite</a>
@@ -242,7 +242,7 @@ const groups: { title: string; sub: string; rows: Row[] }[] = [
         <p>Datenquellen: <a href="https://www.ama.at/media/tp2fbtou/srl_oepul_2023_20261001.pdf" target="_blank" rel="noopener">Sonderrichtlinie ÖPUL 2023 (Fassung 1. Oktober 2026)</a> und die Informationsblätter zu den einzelnen Maßnahmen auf der <a href="https://www.ama.at/fachliche-informationen/oepul/merkblaetter" target="_blank" rel="noopener">AMA-Seite „ÖPUL — Merkblätter"</a>. Verbindlich ist der Bescheid der AMA. Letzte Aktualisierung dieser Seite: <strong>{lastUpdated}</strong>.</p>
       </footer>
     </div>
-  </main>
+  </div>
 </Layout>
 
 <style>

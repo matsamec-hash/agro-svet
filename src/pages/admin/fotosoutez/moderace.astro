@@ -9,7 +9,7 @@ const withUrls = await Promise.all(
 );
 ---
 <Layout title="Moderace — Fotosoutěž admin" description="Moderace čekajících fotek">
-  <main class="moderation-page">
+  <div class="moderation-page">
     <a href="/admin/fotosoutez/" class="back">← Přehled</a>
     <h1>Moderace ({entries.length})</h1>
 
@@ -55,7 +55,7 @@ const withUrls = await Promise.all(
         rejectBtn.addEventListener('click', () => moderate('reject'));
       });
     </script>
-  </main>
+  </div>
 </Layout>
 
 <style>

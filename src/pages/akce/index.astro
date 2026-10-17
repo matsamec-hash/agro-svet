@@ -23,7 +23,7 @@ const akceData = akce.map((a) => ({
 }));
 ---
 <Layout title="Kalendář zemědělských akcí" description="Přehled nadcházejících zemědělských akcí v ČR — farmářské trhy, polní dny, výstavy, prodej ze dvora. Přidejte i svou akci zdarma." noHreflang>
-  <main class="akce-hub">
+  <div class="akce-hub">
     <header class="hub-head">
       <h1>Kalendář zemědělských akcí</h1>
       <p>Nadcházející farmářské trhy, polní dny, výstavy a prodej ze dvora po celé ČR.</p>
@@ -92,7 +92,7 @@ const akceData = akce.map((a) => ({
     <p class="empty" id="empty-filtr" hidden>Žádná akce neodpovídá filtru. <button type="button" id="empty-reset" class="linklike">Zrušit filtry</button></p>
     </div>
     </div>
-  </main>
+  </div>
 
   <script type="application/json" id="akce-data" set:html={JSON.stringify(akceData)}></script>
   <script type="application/json" id="kraje-data" set:html={JSON.stringify(kraje)}></script>

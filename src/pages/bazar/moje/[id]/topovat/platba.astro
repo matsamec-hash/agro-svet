@@ -26,7 +26,7 @@ const qr = await spaydToQrDataUri(spayd);
 const alreadyPaid = order.status === 'paid' || order.status === 'free';
 ---
 <Layout title="Platba za topování" noindex={true}>
-  <main class="pay" style="max-width:520px;margin:0 auto;padding:32px 16px;">
+  <div class="pay" style="max-width:520px;margin:0 auto;padding:32px 16px;">
     <h1>Zaplaťte topování</h1>
     {alreadyPaid ? (
       <p class="ok">Zaplaceno — topování je aktivní. <a href={`/bazar/moje/${id}/`}>Zpět na inzerát</a></p>
@@ -42,7 +42,7 @@ const alreadyPaid = order.status === 'paid' || order.status === 'free';
         <p id="pay-status" class="muted">Čekám na platbu…</p>
       </>
     )}
-  </main>
+  </div>
   {!alreadyPaid && (
     <script type="application/json" id="pay-cfg" set:html={JSON.stringify({ orderId: order.id, backUrl: `/bazar/moje/${id}/` })} />
     <script is:inline>

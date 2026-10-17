@@ -85,7 +85,7 @@ const datasetJsonLd = detailNoindex
 
 <Layout title={title} description={description} noindex={detailNoindex} noHreflang={true}>
   {datasetJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />}
-  <main class="kd">
+  <div class="kd">
     <div class="kd-wrap">
       <nav class="kd-crumb" aria-label={t('a11y.breadcrumb')}>
         <a href={navHref(locale, '/data/')}>{t('nav.data')}</a>
@@ -149,7 +149,7 @@ const datasetJsonLd = detailNoindex
 
       <a class="kd-back" href={navHref(locale, '/statistiky/')}>{t('komodita.back')}</a>
     </div>
-  </main>
+  </div>
 
   <script type="application/json" id="kdData" set:html={JSON.stringify(chartData)} />
   <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>

@@ -47,7 +47,7 @@ const orgJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
 
-  <main class="redakce">
+  <div class="redakce">
   {isUk ? (
     <Fragment>
     <nav class="breadcrumb" aria-label={t(locale, 'a11y.breadcrumb')}>
@@ -321,7 +321,7 @@ const orgJsonLd = {
     </section>
     </Fragment>
   )}
-  </main>
+  </div>
 
   <style>
     .redakce {

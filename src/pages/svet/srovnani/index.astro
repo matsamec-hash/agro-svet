@@ -83,7 +83,7 @@ const title = L.title;
 const description = L.description;
 ---
 <Layout title={title} description={description}>
-  <main class="svet-page svet-cmp">
+  <div class="svet-page svet-cmp">
     <nav class="svet-crumbs" aria-label={t(locale, 'a11y.breadcrumb')}>
       <a href={localizePath(locale, '/')}>{L.bcHome}</a>
       <span aria-hidden="true">›</span>
@@ -327,5 +327,5 @@ const description = L.description;
         render();
       }
     </script>
-  </main>
+  </div>
 </Layout>

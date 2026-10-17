@@ -95,7 +95,7 @@ const groups: { title: string; rows: Row[]; areaUnit: string }[] = [
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
-  <main class="db">
+  <div class="db">
     <div class="db-wrap">
       <nav class="db-crumb" aria-label="Ścieżka nawigacji">
         <a href={localizePath('pl', '/')}>Strona główna</a>
@@ -226,7 +226,7 @@ const groups: { title: string; rows: Row[]; areaUnit: string }[] = [
         <p>Źródło danych: <a href="https://www.gov.pl/web/arimr" target="_blank" rel="noopener">ARiMR / MRiRW</a> — oficjalne stawki płatności bezpośrednich oraz przejściowego wsparcia krajowego za rok 2024 i 2025. Ostatnia aktualizacja: <strong>{lastUpdated}</strong>.</p>
       </footer>
     </div>
-  </main>
+  </div>
 
   <script type="application/json" id="dbRates" set:html={JSON.stringify({ pwd, redys })} />
   <script is:inline>

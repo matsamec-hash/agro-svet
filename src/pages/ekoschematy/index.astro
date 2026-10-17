@@ -107,7 +107,7 @@ const jsonLd = {
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
-  <main class="db">
+  <div class="db">
     <div class="db-wrap">
       <nav class="db-crumb" aria-label="Ścieżka nawigacji">
         <a href={localizePath('pl', '/')}>Strona główna</a>
@@ -233,7 +233,7 @@ const jsonLd = {
         <p>Źródło danych: <a href="https://www.gov.pl/web/rolnictwo" target="_blank" rel="noopener">MRiRW / ARiMR</a> — oficjalne stawki płatności w ramach ekoschematów obszarowych za 2025 r. (aktualizacja). Ostatnia aktualizacja: <strong>{lastUpdated}</strong>.</p>
       </footer>
     </div>
-  </main>
+  </div>
 </Layout>
 
 <style>

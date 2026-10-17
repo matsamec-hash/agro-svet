@@ -128,7 +128,7 @@ const datasetJsonLd = datasetSchema({
 <Layout title={title} description={description} canonical={pageUrl} ogImage={ogImage} ogType="article">
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />
-  <main class="svet-page svet-profile">
+  <div class="svet-page svet-profile">
     <nav class="svet-crumbs" aria-label={t(locale, 'a11y.breadcrumb')}>
       <a href={localizePath(locale, '/')}>{L.bcHome}</a>
       <span aria-hidden="true">›</span>
@@ -190,5 +190,5 @@ const datasetJsonLd = datasetSchema({
       <p class="svet-method">{L.methodP}</p>
       <p class="svet-method"><a href={localizePath(locale, '/svet/srovnani/')}>{L.compare}</a></p>
     </section>
-  </main>
+  </div>
 </Layout>

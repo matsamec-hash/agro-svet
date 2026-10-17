@@ -57,7 +57,7 @@ const topWithUrls = await Promise.all(
 const alreadyAnnounced = round.status === 'announced';
 ---
 <Layout title={`${round.title} — Admin`} description="Administrace kola">
-  <main class="round-admin">
+  <div class="round-admin">
     <a href="/admin/fotosoutez/" class="back">← Přehled</a>
     <h1>{round.title}</h1>
     <p class="meta">{round.theme} · status: <strong>{round.status}</strong></p>
@@ -158,7 +158,7 @@ const alreadyAnnounced = round.status === 'announced';
         });
       }
     </script>
-  </main>
+  </div>
 </Layout>
 
 <style>

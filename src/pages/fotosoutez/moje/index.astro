@@ -19,7 +19,7 @@ const withUrls = await Promise.all(
 );
 ---
 <Layout title="Moje fotky — Fotosoutěž Agro-svět" description="Vaše příspěvky">
-  <main class="moje-page">
+  <div class="moje-page">
     <h1>Moje fotky</h1>
     {entries.length === 0 && (
       <p class="empty">
@@ -46,7 +46,7 @@ const withUrls = await Promise.all(
         );
       })}
     </div>
-  </main>
+  </div>
 </Layout>
 
 <style>

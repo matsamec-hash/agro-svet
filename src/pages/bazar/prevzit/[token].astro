@@ -83,7 +83,7 @@ if (state === 'ok' && prospect) {
 }
 ---
 <Layout title="Zveřejnění inzerátu">
-  <main class="mx-auto max-w-4xl p-6">
+  <div class="mx-auto max-w-4xl p-6">
     {state === 'deleted' && (
       <div class="rounded border border-green-300 bg-green-50 p-4">
         <p class="font-semibold">Inzerát byl smazán.</p>
@@ -169,7 +169,7 @@ if (state === 'ok' && prospect) {
         </form>
       </>
     )}
-  </main>
+  </div>
 </Layout>
 
 <style>

@@ -22,7 +22,7 @@ function fallbackUrl(a: (typeof pending)[number]): string | null {
 }
 ---
 <Layout title="Moderace akcí — admin" description="Schvalování akcí v kalendáři">
-  <main class="mod">
+  <div class="mod">
     <h1>Moderace akcí <span>({pending.length} čeká)</span></h1>
     {pending.length === 0 && <p>Žádné akce nečekají na schválení. 🎉</p>}
     {pending.map((a) => (
@@ -49,7 +49,7 @@ function fallbackUrl(a: (typeof pending)[number]): string | null {
         </article>
       ))}
     </section>
-  </main>
+  </div>
 
   <script>
     // Sdílený POST — pozná tichý redirect na login (vypršelá session) i chybu

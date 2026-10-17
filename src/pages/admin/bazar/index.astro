@@ -53,7 +53,7 @@ function priceText(price: number | null): string {
 ---
 
 <Layout title="Admin — Topování bazaru" description="Admin správa TOP inzerátů">
-  <main class="admin-bazar">
+  <div class="admin-bazar">
     <a href="/admin/" class="back-link">← Admin přehled</a>
     <h1>Topování bazaru</h1>
 
@@ -118,7 +118,7 @@ function priceText(price: number | null): string {
       <span>Strana {page} / {totalPages || 1}</span>
       {page < totalPages && <a href={`?filter=${filter}${search ? '&q=' + encodeURIComponent(search) : ''}&page=${page + 1}`}>Další →</a>}
     </nav>
-  </main>
+  </div>
 
   <dialog id="custom-modal">
     <form method="dialog" class="custom-form">

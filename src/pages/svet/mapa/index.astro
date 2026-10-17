@@ -47,7 +47,7 @@ const tableRows = Object.entries(tCountries)
 ---
 
 <Layout title={title} description={description}>
-  <main class="svet-page">
+  <div class="svet-page">
     <nav class="svet-crumbs" aria-label={t(locale, 'a11y.breadcrumb')} style="font-size:13px;color:#666;margin-bottom:8px;">
       <a href={localizePath(locale, '/')} style="color:#666;text-decoration:none;">{L.bcHome}</a> ·
       <a href={localizePath(locale, '/svet/')} style="color:#666;text-decoration:none;">{L.bcSvet}</a> ·
@@ -99,5 +99,5 @@ const tableRows = Object.entries(tCountries)
         ))}
       </ul>
     </section>
-  </main>
+  </div>
 </Layout>

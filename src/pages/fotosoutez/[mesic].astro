@@ -28,7 +28,7 @@ const leaderboard = await Promise.all(
 );
 ---
 <Layout title={`${round.title} — Fotosoutěž Agro-svět`} description={round.description}>
-  <main class="round-page">
+  <div class="round-page">
     <ContestRoundHeader round={round} />
     <div class="grid">
       <section>
@@ -44,7 +44,7 @@ const leaderboard = await Promise.all(
         <ContestLiveLeaderboard roundSlug={round.slug} initialEntries={leaderboard} />
       )}
     </div>
-  </main>
+  </div>
 </Layout>
 
 <style>
