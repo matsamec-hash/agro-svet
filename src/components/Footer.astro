@@ -65,7 +65,7 @@ const columns = getFooterColumns(locale);
         <span aria-hidden="true">·</span>
         <a href="https://aktualizovano.cz" target="_blank" rel="noopener">aktualizovano.cz</a>
         <span aria-hidden="true">·</span>
-        <a href="mailto:info@samecdigital.com">{tr('footer.contact')}</a>
+        <a href={navHref(locale, '/kontakt/')}>{tr('footer.contact')}</a>
       </div>
     </div>
   </div>

@@ -228,6 +228,7 @@ export async function buildSitemapEntries(): Promise<UrlEntry[]> {
     ['/podminky-pouziti/', 'yearly', '0.3', STATIC_LASTMOD],
     ['/zpracovani-osobnich-udaju/', 'yearly', '0.3', STATIC_LASTMOD],
     ['/dsa-kontakt/', 'yearly', '0.3', STATIC_LASTMOD],
+    ['/kontakt/', 'yearly', '0.3', STATIC_LASTMOD],
     ['/prehled/', 'monthly', '0.7', STATIC_LASTMOD],
     ['/prehled/nejprodavanejsi-traktory-2025/', 'yearly', '0.8', STATIC_LASTMOD],
     ['/prehled/nejprodavanejsi-kombajny-2025/', 'yearly', '0.8', STATIC_LASTMOD],

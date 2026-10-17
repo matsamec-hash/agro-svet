@@ -1,0 +1,237 @@
+---
+// /kontakt/ a /<locale>/kontakt/ — kontaktní formulář.
+// Druhá rychlá a přímá elektronická cesta vedle e-mailu, kterou chce
+// Impressum (§ 5 DDG / § 5 ECG; SDEU C-298/07). Texty v i18n/kontakt.ts,
+// odeslání v api/kontakt.ts. Žádné skripty a nic z cizích domén: formulář
+// funguje čistým HTML POSTem, validace je HTML5 + na serveru.
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import { navHref } from '../i18n/utils';
+import { kontaktCopy, KONTAKT_TOPICS, KONTAKT_LIMITS, KONTAKT_ERRORS, type KontaktError } from '../i18n/kontakt';
+
+const locale = Astro.locals.locale ?? 'cs';
+const c = kontaktCopy(locale);
+
+const ok = Astro.url.searchParams.get('ok') === '1';
+const errParam = Astro.url.searchParams.get('err') ?? '';
+const errMsg = errParam
+  ? ((KONTAKT_ERRORS as readonly string[]).includes(errParam) ? c.errors[errParam as KontaktError] : c.errors.server)
+  : '';
+
+// Bazar existuje jen česky → odkaz bez prefixu a s hreflang="cs" (vzor Footer.astro).
+const csOnlyHreflang = locale === 'cs' ? undefined : 'cs';
+---
+<Layout title={c.metaTitle} description={c.metaDescription}>
+  <main class="legal-page">
+    <h1>{c.h1}</h1>
+    <p class="lead">{c.lead}</p>
+
+    <h2>{c.operatorHeading}</h2>
+    <p>
+      <strong>Samec Digital s.r.o.</strong><br>
+      Na Břehu 378, 387 11 Katovice, {c.country}<br>
+      {c.icoLabel}: 29547539
+    </p>
+
+    <h2>{c.emailHeading}</h2>
+    <p>
+      <a href="mailto:info@samecdigital.com">info@samecdigital.com</a><br>
+      {c.languages}
+    </p>
+
+    <h2 id="formular">{c.formHeading}</h2>
+
+    {ok && (
+      <Fragment>
+        <div class="alert alert-success" role="status">{c.ok}</div>
+        <p><a href={navHref(locale, '/kontakt/')}>{c.again}</a></p>
+      </Fragment>
+    )}
+
+    {errMsg && <div class="alert alert-error" role="alert">{errMsg}</div>}
+
+    {!ok && (
+      <form method="POST" action="/api/kontakt/" class="contact-form">
+        <input type="hidden" name="locale" value={locale} />
+
+        <div class="form-group">
+          <label for="k-topic">{c.topicLabel} *</label>
+          <select id="k-topic" name="topic" class="form-select" required>
+            <option value="">{c.topicPlaceholder}</option>
+            {KONTAKT_TOPICS.map((t) => <option value={t}>{c.topics[t]}</option>)}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="k-name">{c.nameLabel} <span class="optional">{c.optional}</span></label>
+          <input type="text" id="k-name" name="name" class="form-input" autocomplete="name" maxlength={KONTAKT_LIMITS.nameMax} />
+        </div>
+
+        <div class="form-group">
+          <label for="k-email">{c.emailLabel} *</label>
+          <input
+            type="email"
+            id="k-email"
+            name="email"
+            class="form-input"
+            autocomplete="email"
+            required
+            maxlength={KONTAKT_LIMITS.emailMax}
+            aria-describedby="k-email-hint"
+          />
+          <p class="field-hint" id="k-email-hint">{c.emailHint}</p>
+        </div>
+
+        <div class="form-group">
+          <label for="k-url">{c.urlLabel} <span class="optional">{c.optional}</span></label>
+          <input
+            type="url"
+            id="k-url"
+            name="url"
+            class="form-input"
+            inputmode="url"
+            placeholder="https://agro-svet.cz/…"
+            maxlength={KONTAKT_LIMITS.urlMax}
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="k-message">{c.messageLabel} *</label>
+          <textarea
+            id="k-message"
+            name="message"
+            class="form-input"
+            rows="7"
+            required
+            minlength={KONTAKT_LIMITS.messageMin}
+            maxlength={KONTAKT_LIMITS.messageMax}
+            aria-describedby="k-message-hint"
+          ></textarea>
+          <p class="field-hint" id="k-message-hint">{c.messageHint}</p>
+        </div>
+
+        {/* Honeypot — roboti vyplní každé textové pole, i to skryté CSS. */}
+        <div class="hp-field" aria-hidden="true">
+          <label for="k-website">{c.honeypotLabel}</label>
+          <input type="text" id="k-website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <p class="legal-hint">
+          {c.privacyBefore}<a href={navHref(locale, '/zpracovani-osobnich-udaju/')}>{c.privacyLink}</a>{c.privacyAfter}
+        </p>
+
+        <button type="submit" class="btn-primary">{c.submit}</button>
+      </form>
+    )}
+
+    <h2>{c.otherHeading}</h2>
+    <ul>
+      <li><a href="/bazar/nahlasit/" hreflang={csOnlyHreflang}>{c.linkBazar}</a>{c.csOnlyNote}</li>
+      <li><a href={navHref(locale, '/dsa-kontakt/')}>{c.linkDsa}</a></li>
+      <li><a href={navHref(locale, '/zpracovani-osobnich-udaju/')}>{c.linkPrivacy}</a></li>
+      {locale === 'de' && <li><a href="/de/impressum/">Impressum</a></li>}
+    </ul>
+  </main>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.7;
+    color: #222;
+  }
+  .legal-page h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin: 0 0 12px;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+  }
+  .legal-page .lead { font-size: 16px; color: #444; margin: 0 0 32px; }
+  .legal-page h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 32px 0 12px;
+    letter-spacing: -.01em;
+    scroll-margin-top: 80px;
+  }
+  .legal-page ul { padding-left: 22px; margin: 8px 0 16px; }
+  .legal-page li { margin: 4px 0; }
+  .legal-page a { color: #0B7A3B; text-decoration: underline; }
+  .legal-page a:hover { color: #066027; }
+
+  .alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 0 0 20px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .alert-success { background: #e8f5ec; border: 1px solid #0B7A3B; color: #0B7A3B; }
+  .alert-error { background: #fcebe8; border: 1px solid #c0392b; color: #c0392b; }
+
+  .contact-form .form-group { margin: 0 0 18px; }
+  .contact-form label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0 0 6px;
+    color: #1a1a1a;
+  }
+  .contact-form .optional { font-weight: 400; color: #666; }
+  .contact-form .form-input,
+  .contact-form .form-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d6d3c4;
+    border-radius: 8px;
+    font: inherit;
+    background: #fff;
+    box-sizing: border-box;
+  }
+  .contact-form textarea.form-input { resize: vertical; min-height: 140px; }
+  .contact-form .form-input:focus,
+  .contact-form .form-select:focus {
+    outline: 2px solid #0B7A3B;
+    outline-offset: -1px;
+    border-color: #0B7A3B;
+  }
+  .field-hint { font-size: 12px; color: #666; margin: 6px 0 0; line-height: 1.5; }
+
+  .legal-hint {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.55;
+    background: #fafafa;
+    border-left: 3px solid #d6d3c4;
+    padding: 10px 14px;
+    margin: 4px 0 18px;
+  }
+
+  .btn-primary {
+    background: #0B7A3B;
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    padding: 12px 24px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background .15s;
+  }
+  .btn-primary:hover { background: #066027; }
+
+  /* Honeypot — mimo obrazovku, ne display:none (to některé roboty prozradí). */
+  .hp-field {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>

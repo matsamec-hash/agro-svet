@@ -373,7 +373,7 @@ describe.skipIf(DE_RETIRED)('DE homepage a DE-only landingy', () => {
     const hrefs = [...src.matchAll(/href: '(\/de\/[^']*)'/g)].map((m) => m[1].replace(/^\/de/, '').replace(/\/+$/, ''));
     // Právní a redakční stránky patří do patičky, ne na rozcestník; '/' je
     // sama homepage a '/hledat' má lupu v hlavičce.
-    const NOT_ON_HUB = new Set(['/', '/hledat', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/impressum']);
+    const NOT_ON_HUB = new Set(['/', '/hledat', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/kontakt', '/redakce', '/impressum']);
     const missing = LAUNCHED_PREFIXES.de.filter((p) => !NOT_ON_HUB.has(p) && !hrefs.includes(p));
     expect(missing, `launchnuto, ale na homepage neodkázáno: ${missing.join(', ')}`).toEqual([]);
   });

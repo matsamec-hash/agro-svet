@@ -36,13 +36,17 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // article_translations + rozcestník). Byla hotová, ale negatovaná → noindex
   // a mimo sitemapu, takže 7k+ indexovaných /sk URL nemělo vstupní bod.
   // Všechny odkazy z HomeSk míří do launchnutých /sk sekcí (viz sk-launch.test.ts).
-  sk: ['/', '/data', '/svet', '/slovnik', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/hledat', '/zebricky', '/plodiny', '/choroby', '/sezona', '/akcie', '/kviz'],
+  // '/kontakt' (sk, uk, pl, de) — kontaktní formulář, druhá rychlá elektronická
+  // cesta vedle e-mailu, kterou chce Impressum (§ 5 DDG / § 5 ECG, SDEU C-298/07).
+  // Texty všech jazyků jsou v i18n/kontakt.ts; launch i sitemapa se drží
+  // stejných jazyků jako /dsa-kontakt.
+  sk: ['/', '/data', '/svet', '/slovnik', '/stroje', '/znacky', '/srovnani', '/novinky', '/kalkulacka', '/dotace', '/statistiky', '/puda', '/encyklopedie', '/plemena', '/vcelarstvi', '/jak-na-to', '/pruvodce', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/kontakt', '/redakce', '/hledat', '/zebricky', '/plodiny', '/choroby', '/sezona', '/akcie', '/kviz'],
   // '/' = UK homepage (HomeUk.astro — vlastní ukrajinský rozcestník na
   // statistiku, trh s půdou, dotace a slovník). Stejný případ jako sk: byla
   // hotová, ale negatovaná → noindex a mimo sitemapu, takže 6 956 /uk URL
   // nemělo vstupní bod.
   uk: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/jak-na-to', '/slovnik', '/puda', '/statistiky', '/dotace', '/hledat', '/zebricky', '/plodiny', '/choroby', '/akcie', '/kviz',
-    '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce',
+    '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/kontakt', '/redakce',
     '/plemena', '/vcelarstvi',
     // 2026-08-31: /sezona — sezona.uk.ts. Měsíce se NEMĚNÍ (Praha 50°,
     // Kyjev 50,5° = tentýž pás), ale SKLADBA PLODIN ano: kukuřice a slunečnice
@@ -107,7 +111,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // zůstává cs-only: je to úřední popis ÚKZÚZ k odrůdě registrované v ČR,
   // Polsko má vlastní registr (COBORU). Pillar proto pod ne-cs odrůdy nelinkuje
   // a sitemapa detaily do pl mirroru nepouští (isOdrudaDetailPath).
-  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky', '/kviz', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce', '/sezona', '/hledat', '/akcie'],
+  pl: ['/', '/novinky', '/svet', '/stroje', '/znacky', '/srovnani', '/slovnik', '/puda', '/statistiky', '/data', '/kalkulacka/prevody-jednotek', '/kalkulacka/prevody-hmotnost', '/doplaty-bezposrednie', '/ekoschematy', '/encyklopedie', '/plemena', '/poradniki', '/vcelarstvi', '/choroby', '/plodiny', '/zebricky', '/kviz', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/kontakt', '/redakce', '/sezona', '/hledat', '/akcie'],
 
   // DE fáze 1 (trh: Německo + Rakousko). Launchnuté jen NEjurisdikční sekce —
   // katalog techniky je pan-evropský (tytéž značky, tytéž modely, tytéž
@@ -151,7 +155,7 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
   // chybné sazby ÖPUL a ÖR). 2026-10-15 přepsané podle BAnz, GAPDZV, SRL ÖPUL 10/2026
   // a AMA a vrácené. Každá z nich bez záznamu tady vrací 404.
   de: ['/', '/stroje', '/srovnani', '/znacky', '/encyklopedie', '/direktzahlungen', '/oeko-regelungen',
-    '/zebricky', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/redakce',
+    '/zebricky', '/podminky-pouziti', '/zpracovani-osobnich-udaju', '/dsa-kontakt', '/kontakt', '/redakce',
     '/oepul', '/direktzahlungen-oesterreich',
     // /impressum — DE-only Anbieterkennzeichnung (od návratu němčiny 2026-10-14).
     '/impressum',

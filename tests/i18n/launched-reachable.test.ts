@@ -26,6 +26,7 @@ const NOT_REQUIRED = new Set([
   '/dsa-kontakt',
   '/redakce',
   '/impressum',                   // DE-only právní, odkaz v patičce (Footer.astro)
+  '/kontakt',                     // kontaktní formulář, odkaz v patičce (Footer.astro)
 ]);
 
 /** Rozcestník (locale homepage) pro daný jazyk, pokud existuje. */
