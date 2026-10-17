@@ -1,3 +1,5 @@
+// @vitest-environment node
+// (node: Response.redirect má v undici neměnné hlavičky jako v produkci; happy-dom ne)
 import { describe, it, expect } from 'vitest';
 import {
   SECURITY_HEADERS,
@@ -52,6 +54,16 @@ describe('bezpečnostní hlavičky', () => {
 
     const forbidden = applySecurityHeaders(new Response('Forbidden', { status: 403 }), '/admin/');
     expect(forbidden.headers.get('Referrer-Policy')).toBe('strict-origin-when-cross-origin');
+  });
+
+  it('‼️ Response.redirect() (neměnné hlavičky) nespadne — dřív HTTP 500 u 19 endpointů', () => {
+    const original = Response.redirect('https://agro-svet.cz/bazar/nahlasit/?ok=1', 303);
+    expect(() => original.headers.set('X-Test', '1')).toThrow(TypeError); // předpoklad testu
+    const res = applySecurityHeaders(original, '/api/bazar/reports/');
+    expect(res.status).toBe(303);
+    expect(res.headers.get('Location')).toBe('https://agro-svet.cz/bazar/nahlasit/?ok=1');
+    expect(res.headers.get('X-Frame-Options')).toBe('DENY');
+    expect(res.headers.get('Strict-Transport-Security')).toBe('max-age=31536000; includeSubDomains');
   });
 
   it('seznam neobsahuje X-Frame-Options — ten se řeší zvlášť kvůli widgetu', () => {

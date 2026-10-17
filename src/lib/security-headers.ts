@@ -36,9 +36,27 @@ export function isEmbeddablePath(pathname: string): boolean {
   return pathname.startsWith('/widget/');
 }
 
-/** Nasadí hlavičky na hotovou odpověď. Mutuje a vrací tutéž Response. */
-export function applySecurityHeaders(response: Response, pathname: string): Response {
+function setHeaders(response: Response, pathname: string): void {
   for (const [key, value] of SECURITY_HEADERS) response.headers.set(key, value);
   if (!isEmbeddablePath(pathname)) response.headers.set('X-Frame-Options', 'DENY');
-  return response;
+}
+
+/** Nasadí hlavičky na hotovou odpověď. Obvykle mutuje a vrací tutéž Response —
+ *  VŽDY ale používej návratovou hodnotu.
+ *
+ *  ‼️ `Response.redirect()` (a `Response.error()`) vrací odpověď s NEMĚNNÝMI
+ *  hlavičkami — `headers.set` hodí `TypeError: immutable`. Endpointy, které
+ *  ji vracely (19×, mj. /api/bazar/reports — formulář podle DSA čl. 16), tak
+ *  od zavedení hlaviček 18. 9. 2026 končily HTTP 500. Takovou odpověď proto
+ *  zkopírujeme (tělo, status i hlavičky zůstanou) a hlavičky nasadíme na kopii. */
+export function applySecurityHeaders(response: Response, pathname: string): Response {
+  try {
+    setHeaders(response, pathname);
+    return response;
+  } catch (err) {
+    if (!(err instanceof TypeError)) throw err;
+    const copy = new Response(response.body, response);
+    setHeaders(copy, pathname);
+    return copy;
+  }
 }
