@@ -49,7 +49,7 @@ function pageHref(p: number): string {
 ---
 
 <Layout title="Admin — Hlášení bazaru (DSA)" description="Přehled oznámení závadných inzerátů">
-  <main class="admin-reports">
+  <div class="admin-reports">
     <a href="/admin/" class="back-link">← Admin přehled</a>
     <h1>Hlášení závadných inzerátů</h1>
     <p class="intro">
@@ -116,7 +116,7 @@ function pageHref(p: number): string {
       <span>Strana {page} / {totalPages} · celkem {count ?? 0}</span>
       {page < totalPages && <a href={pageHref(page + 1)}>Další →</a>}
     </nav>
-  </main>
+  </div>
 
   <style>
     .admin-reports { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
