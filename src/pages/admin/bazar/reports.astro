@@ -1,0 +1,150 @@
+---
+// Přehled oznámení závadných inzerátů (DSA čl. 16) — jen pro čtení.
+// Stav a poznámku zatím měníte v Supabase studiu (tabulka bazar_reports).
+// Middleware gate-uje /admin/* přes bazar_users.is_admin.
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import { createServerClient } from '../../../lib/supabase';
+import { reasonLabel } from '../../../lib/bazar-report-email';
+
+// Osobní údaje oznamovatelů — nikdy do sdílené cache.
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+
+const STATUSES = ['new', 'reviewed', 'actioned', 'dismissed'] as const;
+const STATUS_LABELS: Record<string, string> = {
+  new: 'Nové',
+  reviewed: 'Posouzeno',
+  actioned: 'Zasaženo',
+  dismissed: 'Zamítnuto',
+};
+
+const url = Astro.url;
+const statusParam = url.searchParams.get('status') ?? 'new';
+const status = (STATUSES as readonly string[]).includes(statusParam) ? statusParam : 'all';
+const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10) || 1);
+const PER_PAGE = 50;
+
+const supabase = createServerClient();
+let q = supabase
+  .from('bazar_reports')
+  .select(
+    'id, listing_id, listing_url, reason, description, reporter_name, reporter_email, good_faith, confirmation_sent_at, status, reviewer_note, created_at, reviewed_at',
+    { count: 'exact' },
+  )
+  .order('created_at', { ascending: false })
+  .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
+if (status !== 'all') q = q.eq('status', status);
+
+const { data: reports, count, error } = await q;
+if (error) console.error('[admin/bazar/reports] load failed', error);
+const totalPages = Math.max(1, Math.ceil((count ?? 0) / PER_PAGE));
+
+function fmt(iso: string | null): string {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('cs-CZ', { timeZone: 'Europe/Prague' });
+}
+function pageHref(p: number): string {
+  return `?status=${status}&page=${p}`;
+}
+---
+
+<Layout title="Admin — Hlášení bazaru (DSA)" description="Přehled oznámení závadných inzerátů">
+  <main class="admin-reports">
+    <a href="/admin/" class="back-link">← Admin přehled</a>
+    <h1>Hlášení závadných inzerátů</h1>
+    <p class="intro">
+      Oznámení podle DSA čl. 16. Rozhodnutí sdělte oznamovateli e-mailem (čl. 16 odst. 5)
+      a inzerentovi s odůvodněním (čl. 17). Stav a poznámku měňte v Supabase studiu,
+      tabulka <code>bazar_reports</code>.
+    </p>
+
+    <nav class="filter-chips">
+      <a href="?status=all" class={`chip ${status === 'all' ? 'chip-active' : ''}`}>Vše</a>
+      {STATUSES.map((s) => (
+        <a href={`?status=${s}`} class={`chip ${status === s ? 'chip-active' : ''}`}>{STATUS_LABELS[s]}</a>
+      ))}
+    </nav>
+
+    {error && <p class="error">Načtení selhalo: {error.message}</p>}
+
+    {reports && reports.length > 0 ? (
+      <div class="cards">
+        {reports.map((r: any) => (
+          <article class="card">
+            <header class="card-head">
+              <span class={`badge badge-${r.status}`}>{STATUS_LABELS[r.status] ?? r.status}</span>
+              <span class="meta">{fmt(r.created_at)}</span>
+              <code class="meta">{r.id}</code>
+            </header>
+            <dl>
+              <dt>Inzerát</dt>
+              <dd>
+                <a href={r.listing_url} target="_blank" rel="noopener">{r.listing_url}</a>
+                {!r.listing_id && <span class="muted"> (inzerát už neexistuje)</span>}
+              </dd>
+              <dt>Důvod</dt>
+              <dd>{reasonLabel(r.reason)}</dd>
+              <dt>Odůvodnění</dt>
+              <dd><pre>{r.description || '(bez popisu)'}</pre></dd>
+              <dt>Oznamovatel</dt>
+              <dd>
+                {r.reporter_name ?? <span class="muted">jméno neuvedeno</span>}
+                {r.reporter_email
+                  ? <> · <a href={`mailto:${r.reporter_email}`}>{r.reporter_email}</a></>
+                  : <span class="muted"> · e-mail neuveden</span>}
+              </dd>
+              <dt>Dobrá víra</dt>
+              <dd>{r.good_faith ? 'ano' : <span class="muted">ne (před 024 se nesbíralo)</span>}</dd>
+              <dt>Potvrzení přijetí</dt>
+              <dd>{r.confirmation_sent_at ? fmt(r.confirmation_sent_at) : <span class="muted">neodesláno</span>}</dd>
+              {(r.reviewer_note || r.reviewed_at) && (
+                <>
+                  <dt>Posouzení</dt>
+                  <dd>{fmt(r.reviewed_at)}{r.reviewer_note ? ` — ${r.reviewer_note}` : ''}</dd>
+                </>
+              )}
+            </dl>
+          </article>
+        ))}
+      </div>
+    ) : (
+      !error && <p class="empty">Žádná hlášení.</p>
+    )}
+
+    <nav class="pagination">
+      {page > 1 && <a href={pageHref(page - 1)}>← Předchozí</a>}
+      <span>Strana {page} / {totalPages} · celkem {count ?? 0}</span>
+      {page < totalPages && <a href={pageHref(page + 1)}>Další →</a>}
+    </nav>
+  </main>
+
+  <style>
+    .admin-reports { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
+    .back-link { font-size: 13px; color: #666; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+    h1 { font-family: 'Chakra Petch', sans-serif; font-size: 2rem; margin: 12px 0 8px; }
+    .intro { font-size: 14px; color: #555; margin: 0 0 20px; line-height: 1.55; }
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+    .chip { display: inline-block; padding: 6px 14px; font-size: 13px; border: 1px solid #e0e0e0; border-radius: 6px; background: #fff; text-decoration: none; color: #555; }
+    .chip:hover { background: #f5f5f5; }
+    .chip-active { background: #FFFF00; border-color: #FFFF00; color: #1a1a1a; font-weight: 600; }
+    .cards { display: grid; gap: 14px; }
+    .card { border: 1px solid #e8e8e8; border-radius: 14px; background: #fff; padding: 16px 18px; }
+    .card-head { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .meta { font-size: 12px; color: #777; }
+    .badge { font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 999px; background: #eee; }
+    .badge-new { background: #fff3cd; color: #7a5b00; }
+    .badge-actioned { background: #e8f5ec; color: #0B7A3B; }
+    .badge-dismissed { background: #f1f1f1; color: #666; }
+    dl { display: grid; grid-template-columns: 150px 1fr; gap: 6px 14px; margin: 0; font-size: 14px; }
+    dt { color: #666; font-weight: 600; }
+    dd { margin: 0; word-break: break-word; }
+    dd a { color: #0B7A3B; }
+    pre { white-space: pre-wrap; word-break: break-word; font-family: inherit; margin: 0; background: #fbfaf4; border: 1px solid #e8e4d2; border-radius: 8px; padding: 8px 10px; }
+    .muted { color: #999; }
+    .error { color: #c0392b; }
+    .empty { color: #666; }
+    .pagination { display: flex; gap: 16px; justify-content: center; margin-top: 24px; font-size: 14px; }
+    @media (max-width: 640px) { dl { grid-template-columns: 1fr; } dt { margin-top: 6px; } }
+  </style>
+</Layout>
