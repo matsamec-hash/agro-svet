@@ -43,6 +43,8 @@ export const REMOVED_MODEL_PAGES: Record<string, string> = {
   '/stroje/amazone/cirrus/cirrus-3503-compact': '/stroje/amazone/cirrus/',
   '/stroje/amazone/cenius/cenius-8003-2tx': '/stroje/amazone/cenius/',
   '/stroje/horsch/tiger/tiger-lt': '/stroje/horsch/tiger/',
+  // 2026-10-17 Case IH: Magnum 435 neexistuje, 435 k je max. výkon Magnum 400 (prospekt Case IH 12/2021)
+  '/stroje/case-ih/magnum/magnum-435': '/stroje/case-ih/magnum/magnum-400/',
 };
 
 /** Přejmenované slugy modelů → nový slug. Přesměruje i srovnání /srovnani/<a>-vs-<b>/. */

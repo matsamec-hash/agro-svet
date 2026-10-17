@@ -4,62 +4,58 @@ slug: "case-ih-magnum-380"
 znacka: "case-ih"
 kategorie: traktor
 vykon: "380 KM (279 kW)"
-hmotnost: "13 600 kg"
-rok_uvedeni: 2006
-popis: "Flagowy ciągnik row-crop Case IH. Silnik FPT Cursor 13 o pojemności 12,9 litra, przekładnia Full Powershift 19/4 lub bezstopniowa CVXDrive. Dostępny również w wersji gąsienicowej Rowtrac."
+hmotnost: "ok. 11 730 kg"
+rok_uvedeni: 2014
+yearTo: 2025
+popis: "Flagowy ciągnik row-crop Case IH (2014–2025 w Europie). Silnik FPT o pojemności 8,7 litra, moc znamionowa 380 KM i maksymalna 417 KM, bezstopniowa przekładnia CVXDrive. Dostępny także w wersji gąsienicowej Rowtrac."
 heroImage: "/images/stroje/case-ih/case-ih-magnum-380k.webp"
 powerHp: 380
 powerKw: 279
-weightKg: 13600
-engine: "FPT Cursor 13, 6-cylindrowy, 12,9 L, Stage V"
-transmission: "Full Powershift 19/4 lub CVXDrive (bezstopniowa)"
+weightKg: 11730
+engine: "FPT Cursor 9, 6-cylindrowy, 8,7 L, Stage V"
+transmission: "CVXDrive (bezstopniowa)"
 seriesName: "Magnum"
-lastVerified: 2026-05-14
-sourceUrl: "https://www.caseih.com/en-gb/europe/products/tractors/magnum-afs-connect/magnum"
+lastVerified: 2026-10-17
+sourceUrl: "https://cnhi-p-001-delivery.sitecorecontenthub.cloud/api/public/content/5018f53ba4604b8da287994cf4e8da0a?v=ef17bd9a"
 youtubeId: "66sq7LgV8jQ"
 youtubeTitle: "Case IH Magnum 380 AFS Connect — testdrive i walkaround"
 highlights:
-  - "Silnik FPT Cursor 13 (12,9 L) — 380 KM mocy znamionowej"
-  - "Wybór przekładni: Full Powershift 19/4 lub bezstopniowa CVXDrive"
-  - "AFS AccuTurn — automatyczne nawracanie na uwrociu"
+  - "Silnik FPT 8,7 L — 380 KM znamionowej, 417 KM maksymalnej mocy (ECE R120)"
+  - "Do 435 KM z Power Management"
+  - "Bezstopniowa przekładnia CVXDrive"
+  - "AFS AccuTurn — automatyczne zawracanie na uwrociu"
   - "Rowtrac — wersja gąsienicowa dla mniejszego ugniatania gleby"
-  - "AFS Connect — telematyka i zdalne zarządzanie flotą"
 faq:
   - q: "Jaką moc ma Case IH Magnum 380?"
-    a: "Case IH Magnum 380 ma moc znamionową 380 koni (279 kW). Napędza go sześciocylindrowy silnik FPT Cursor 13 o pojemności 12,9 litra spełniający normę emisji Stage V. W ramach serii Magnum jest to jeden z najmocniejszych modeli — seria sięga od 180 do 435 koni."
-  - q: "Jaka jest różnica między przekładnią Powershift a CVXDrive?"
-    a: "Full Powershift 19/4 przełącza pod obciążeniem między 19 biegami do przodu bez przerwania siły uciągu — operator wybiera bieg. CVXDrive to przekładnia bezstopniowa, która płynnie zmienia przełożenie i sama dobiera optymalne obroty silnika. Powershift jest zwykle tańszy i lubiany w transporcie, CVXDrive jest płynniejszy w pracy polowej ze zmiennym obciążeniem."
+    a: "Według Case IH Magnum 380 ma moc znamionową 279 kW (379 KM), maksymalną 307 kW (417 KM), a z funkcją Power Management do 320 kW (435 KM), wszystko według ECE R120. Napędza go sześciocylindrowy silnik FPT o pojemności 8,7 litra."
+  - q: "Jaką przekładnię ma Magnum 380?"
+    a: "Magnum 380 jest dostarczany z bezstopniową przekładnią CVXDrive, która płynnie zmienia przełożenie i sama dobiera optymalne obroty silnika. Niższe modele serii (Magnum 250–340) oferowano także z przekładnią PowerDrive."
   - q: "Czym jest Rowtrac i kiedy się opłaca?"
-    a: "Rowtrac to półgąsienicowa wersja Magnuma — oś przednia na kołach, tylna na gumowych gąsienicach. Gąsienice rozkładają masę na większą powierzchnię, dzięki czemu zmniejszają ugniatanie gleby i poprawiają trakcję na zboczach i w mokrym terenie. Opłaca się na ciężkich glebach i przy szerokich agregatach siewnych."
-  - q: "Dla jakiej wielkości gospodarstwa jest odpowiedni Magnum 380?"
-    a: "Magnum 380 to mocny ciągnik dla dużych gospodarstw o areale 400–800 hektarów. Pełny potencjał wykorzysta przy szerokich agregatach siewnych, głębokich spulchniaczach, opryskiwaczach samojezdnych i ciągniętych oraz przy ciężkiej orce."
+    a: "Rowtrac to półgąsienicowa wersja Magnuma — przednia oś na kołach, tylna na gumowych gąsienicach. Gąsienice rozkładają masę na większą powierzchnię, ograniczając ugniatanie gleby i poprawiając trakcję na stokach i w mokrych warunkach. Opłaca się na ciężkich glebach i przy szerokich zestawach siewnych."
+  - q: "Ile waży Magnum 380?"
+    a: "Case IH podaje przybliżoną masę transportową 11 730 kg, z amortyzowaną przednią osią 12 190 kg. Wersja gąsienicowa Rowtrac waży ok. 16 650 kg. Dopuszczalna masa całkowita wersji kołowej wynosi 18 000 kg."
   - q: "Co umożliwia AFS AccuTurn?"
-    a: "AFS AccuTurn automatycznie nawraca ciągnik na uwrociu — operator tylko wjeżdża na uwrocie, a system przejmuje sterowanie nawrotem oraz powrotem na kolejną ścieżkę przejazdową. Oszczędza czas, zmniejsza zmęczenie operatora i zapewnia dokładne łączenie rzędów bez nakładek."
+    a: "AFS AccuTurn automatycznie zawraca ciągnik na uwrociu — operator tylko wjeżdża w uwrocie, a system przejmuje zawracanie i powrót na kolejny ślad. Oszczędza czas, zmniejsza zmęczenie operatora i zapewnia precyzyjne łączenie przejazdów bez nakładek."
 ---
 
-Magnum jest flagową serią row-crop Case IH już od 2006 roku. Podczas gdy przegubowe Steiger i Quadtrac celują w najszersze agregaty, Magnum pozostaje standardowym ciągnikiem ze sztywną ramą — uniwersalnym pojazdem uciągowym dla produkcji wielkotowarowej.
+Magnum jest flagową serią row-crop Case IH od końca lat 80. Podczas gdy przegubowe Steiger i Quadtrac są przeznaczone do najszerszych zestawów, Magnum pozostaje standardowym ciągnikiem ze sztywną ramą — uniwersalnym ciągnikiem dla gospodarstw wielkotowarowych. Model 380 pojawił się w 2014 roku jako najwyższy model generacji Magnum CVX (250–380 KM), w Europie w maju 2025 zastąpiła go nowa seria Magnum 355, 385 i 405.
 
-## Silnik FPT Cursor 13
+## Silnik
 
-Model 380 napędza sześciocylindrowy silnik **FPT Cursor 13** o pojemności 12,9 litra. Normę emisji Stage V spełnia kombinacją SCR i filtra cząstek stałych bez konieczności recyrkulacji spalin, co utrzymuje powietrze doładowujące chłodniejsze i sprzyja trwałości silnika.
+Magnum 380 napędza sześciocylindrowy silnik **FPT** o pojemności **8,7 litra** z elektronicznie sterowanym common railem i turbosprężarką o zmiennej geometrii. Moc znamionowa wynosi 279 kW (379 KM), maksymalna 307 kW (417 KM), a z funkcją Power Management do 320 kW (435 KM). Taką samą pojemność silnika mają też niższe modele serii (Magnum 250–340).
 
-Niższe modele serii (Magnum 250–340) wykorzystują mniejszy **Cursor 9** o pojemności 8,7 litra. Przejście na trzynastolitrowy blok w najmocniejszych wersjach zapewnia moment obrotowy potrzebny do ciągnięcia szerokich narzędzi w ciężkiej glebie.
+## Przekładnia CVXDrive
 
-## Wybór przekładni
-
-Magnum 380 oferuje dwie przekładnie:
-
-- **Full Powershift 19/4** — 19 biegów do przodu, przełączanie pod obciążeniem bez przerwania siły uciągu. Lubiana w gospodarstwach z wysokim udziałem transportu.
-- **CVXDrive** — przekładnia bezstopniowa, płynnie zmienia przełożenie i sama optymalizuje obroty silnika w zależności od obciążenia.
-
-Do pracy polowej ze zmiennym obciążeniem (orka, spulchnianie) płynniejszym wyborem bywa CVXDrive; Powershift jest bardziej przystępny cenowo.
+Magnum 380 jest dostarczany z bezstopniową przekładnią **CVXDrive**. Płynnie zmienia przełożenie i sama dobiera optymalne obroty silnika do obciążenia, co sprawdza się zwłaszcza w pracach polowych o zmiennym oporze (uprawa, siew). Przekładnię PowerDrive Case IH oferował tylko w niższych modelach serii.
 
 ## Rowtrac — wersja gąsienicowa
 
-Magnum dostępny jest również jako **Rowtrac** — oś przednia na kołach, tylna na gumowych gąsienicach. Gąsienice rozkładają masę maszyny na większą powierzchnię styku, dzięki czemu zmniejszają ugniatanie gleby i poprawiają trakcję na zboczach oraz w mokrych warunkach.
+Magnum jest dostępny także jako **Rowtrac** — przednia oś na kołach, tylna na gumowych gąsienicach. Gąsienice rozkładają masę maszyny na większą powierzchnię styku, ograniczając ugniatanie gleby i poprawiając trakcję na stokach i w mokrych warunkach.
 
 ## AFS Connect i AccuTurn
 
-Platforma telematyczna **AFS Connect** łączy ciągnik z biurem — śledzenie położenia, wydajności i zużycia paliwa floty w czasie rzeczywistym, zdalne udostępnianie danych o pracy polowej agronomowi.
+Platforma telematyczna **AFS Connect** łączy ciągnik z biurem — śledzenie pozycji, wydajności i zużycia paliwa floty w czasie rzeczywistym, zdalne udostępnianie danych polowych doradcy.
 
-**AFS AccuTurn** automatyzuje nawracanie na uwrociu: operator wjeżdża na uwrocie, a system przejmuje nawrót oraz precyzyjne łączenie na kolejną ścieżkę przejazdową.
+**AFS AccuTurn** automatyzuje zawracanie na uwrociu: operator wjeżdża w uwrocie, a system przejmuje zawracanie i precyzyjne wejście w kolejny ślad.
+
+Dane pochodzą z prospektu Case IH Magnum AFS Connect (12/2021) i prospektu Magnum (01/2015).
