@@ -4369,27 +4369,30 @@ export const SLOVNIK_PL: SlovnikTerm[] = [
   },
   {
     "slug": "smykovani",
-    "term": "Poślizg",
-    "kategorie": "agrotechnika",
-    "shortDef": "Poślizg to zjawisko, gdy koła lub gąsienice ciągnika tracą przyczepność do powierzchni gleby.",
-    "longDef": "Poślizg to zjawisko, które występuje, gdy koła lub gąsienice ciągnika tracą przyczepność do powierzchni gleby, co prowadzi do nieefektywnego przenoszenia siły i zwiększonego zużycia paliwa. Zjawisko to jest powszechne na mokrej lub luźnej glebie.\n\nPoślizg można mierzyć i kontrolować za pomocą różnych technik, takich jak regulacja ciśnienia w oponach lub stosowanie obciążników. Właściwe zarządzanie poślizgiem jest kluczowe dla minimalizacji zużycia opon i zwiększenia efektywności pracy.\n\nPoślizg jest monitorowany szczególnie w kontekście optymalizacji operacji rolniczych, gdzie może mieć istotny wpływ na produktywność i koszty operacyjne.",
+    "term": "Włókowanie",
     "alias": [
-      "poślizg kół"
+      "włóka"
     ],
+    "kategorie": "agrotechnika",
+    "shortDef": "Włókowanie to najpłytszy zabieg uprawowy: po polu ciągnie się włókę, która wyrównuje powierzchnię po orce, kruszy i wciska bryły oraz niszczy kiełkujące chwasty.",
+    "longDef": "Włókowanie to zabieg uprawy roli wykonywany **włóką** — narzędziem z belek, desek lub szyn bez zębów zagłębiających się w glebę, które ciągnie się po powierzchni pola. Włóka ścina grzbiety skib i wyrównuje bruzdy po orce, kruszy i wciska bryły w glebę, rozbija skorupę i niszczy kiełkujące chwasty.\n\nNajczęściej włókuje się **wiosną orkę przedzimową**, gdy gleba obeschnie na tyle, że się nie maże. Wyrównana i zamknięta powierzchnia mniej paruje, a pole jest przygotowane pod siew roślin jarych. Włókę często łączy się z broną w jeden zestaw.\n\nJako samodzielny zabieg włókowanie jest dziś rzadkie: wyrównanie powierzchni zapewnia przednia belka wyrównująca w agregatach uprawowych, które w jednym przejeździe wyrównują, spulchniają i zagęszczają wierzchnią warstwę.\n\nNie należy go mylić z poślizgiem kół ciągnika — to zupełnie inne pojęcie.",
     "related": [
-      "load-sensing",
-      "auto-steering",
-      "hloubkove-kypreni",
-      "predsetova-priprava"
+      "orba",
+      "predsetova-priprava",
+      "setove-luzko",
+      "valeni",
+      "kompaktomat"
     ],
+    "externalUrl": "https://pl.wikipedia.org/wiki/W%C5%82%C3%B3kowanie",
+    "externalLabel": "Wikipedia: Włókowanie",
     "faq": [
       {
-        "q": "Co to jest poślizg ciągnika?",
-        "a": "Poślizg to zjawisko, gdy koła lub gąsienice ciągnika tracą przyczepność do powierzchni gleby, co może obniżać efektywność pracy."
+        "q": "Kiedy wykonuje się włókowanie?",
+        "a": "Głównie wiosną na orce przedzimowej, gdy gleba obeschnie na tyle, że nie maże się i nie przykleja do narzędzia. Włókuje się płytko, przed dalszą uprawą przedsiewną."
       },
       {
-        "q": "Jak można minimalizować poślizg?",
-        "a": "Poślizg można minimalizować poprzez właściwe ciśnienie w oponach i stosowanie odpowiedniego typu opon lub gąsienic."
+        "q": "Czym włókowanie różni się od bronowania?",
+        "a": "Włóka nie ma zębów zagłębiających się w glebę — przede wszystkim wyrównuje powierzchnię oraz kruszy i wciska bryły. Brona spulchnia glebę zębami. Często oba narzędzia łączy się w jeden zestaw."
       }
     ]
   },

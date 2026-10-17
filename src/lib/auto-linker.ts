@@ -48,6 +48,25 @@ const MAX_LINKS_PER_ARTICLE = 10;
 /** Min term length — filters out ambiguous short tokens like "T4", "CX50", "7110". */
 const MIN_TERM_LENGTH = 5;
 
+/**
+ * Aliasy slovníku, které jsou zároveň běžná slova s jiným významem. Ve slovníku
+ * zůstávají (hledání, FAQ), ale auto-linker je neodkazuje — jinak „plod“ v textu
+ * o plodinách (plod = obilka, lusk…) vedl na /slovnik/vceli-plod/ a německé
+ * „im Rahmen der GAP“ na včelařský rámek. Hlavní název hesla („Včelí plod“)
+ * se odkazuje dál. Porovnává se bez ohledu na velikost písmen.
+ */
+const GENERIC_ALIASES: Partial<Record<Locale, ReadonlySet<string>>> = {
+  cs: new Set(['plod', 'dílo', 'rámek', 'smyk']),
+  sk: new Set(['plod', 'dielo', 'rámek', 'smyk', 'koš', 'box']),
+  pl: new Set(['ramka', 'plastry', 'zabudowa']),
+  uk: new Set(['розплід', 'рамка', 'гніздо']),
+  de: new Set(['brut', 'rahmen']),
+};
+
+export function isGenericAlias(alias: string, locale: Locale): boolean {
+  return GENERIC_ALIASES[locale]?.has(alias.toLowerCase()) ?? false;
+}
+
 // Glosář per locale: termíny se berou z lokalizovaných dat (slovník, plemena,
 // žebříčky), jinak by se na /sk|/pl|/uk stránkách nemělo co potkat. Značky
 // a modely jsou vlastní jména → shodné napříč jazyky.
@@ -122,6 +141,7 @@ function buildGlossary(locale: Locale): GlossaryEntry[] {
     if (term.alias) {
       for (const a of term.alias) {
         if (a.length < 3) continue;
+        if (isGenericAlias(a, locale)) continue;
         entries.push({
           term: a,
           termLower: a.toLowerCase(),

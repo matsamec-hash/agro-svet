@@ -4535,30 +4535,28 @@ export const SLOVNIK_DE: SlovnikTerm[] = [
   },
   {
     "slug": "smykovani",
-    "term": "Schlupf",
+    "term": "Schleppen (Ackerschleppe)",
     "alias": [
-      "Radschlupf",
-      "Triebkraftschlupf"
+      "Ackerschleppe"
     ],
     "kategorie": "agrotechnika",
-    "shortDef": "Schlupf ist der Anteil der Radumdrehung, der nicht in Vortrieb umgesetzt wird — zu wenig kostet Zugkraft, zu viel kostet Diesel und Boden.",
-    "longDef": "Schlupf bezeichnet die Differenz zwischen der theoretischen Wegstrecke aus der Radumdrehung und der tatsächlich zurückgelegten Strecke, angegeben in Prozent. Ein Rad, das sich dreht ohne voranzukommen, hat 100 % Schlupf.\n\nDer wichtigste und am häufigsten missverstandene Punkt: **Schlupf ist nicht per se schlecht.** Der Reifen überträgt seine maximale Zugkraft erst bei einem gewissen Schlupf, weil sich die Stollen dabei in den Boden eingraben. Der **optimale Bereich liegt bei schwerer Zugarbeit zwischen 8 und 15 %**. Wer darunter bleibt, hat den Traktor zu schwer ballastiert und schleppt unnötiges Gewicht durchs Feld; wer darüber liegt, verbrennt Diesel für nichts und schmiert die Bodenoberfläche.\n\n**Was den Schlupf senkt:** niedrigerer Reifeninnendruck als der wichtigste Hebel, denn er vergrößert die Aufstandsfläche; ausreichende, aber nicht übertriebene Ballastierung; Zwillingsräder oder Breitreifen; Allradantrieb; und trockener, tragfähiger Boden.\n\nGemessen wird er von der Traktorelektronik aus dem Vergleich von Radar-Fahrgeschwindigkeit über Grund und Raddrehzahl. Viele Traktoren zeigen ihn im Terminal an oder regeln über die Zugkraftregelung des Hubwerks automatisch die Arbeitstiefe, sobald der eingestellte Grenzwert überschritten wird.",
+    "shortDef": "Beim Schleppen wird eine Ackerschleppe über das Feld gezogen: Sie ebnet die Oberfläche nach dem Pflügen ein, zerdrückt und drückt Kluten an und vernichtet keimende Unkräuter.",
+    "longDef": "Schleppen ist ein sehr flacher Arbeitsgang der Bodenbearbeitung. Hinter dem Traktor wird eine **Ackerschleppe** über das Feld gezogen — ein Gerät aus Balken, Bohlen, Schienen oder Ringen ohne Zinken, die in den Boden eingreifen. Die Schleppe ebnet Kämme und Furchen nach dem Pflügen ein, zerdrückt und drückt Kluten an, lockert die Oberfläche flach und vernichtet keimende Unkräuter.\n\nAm häufigsten wird **im Frühjahr die Winterfurche** abgeschleppt, sobald der Boden so weit abgetrocknet ist, dass er nicht mehr schmiert. Die eingeebnete, geschlossene Oberfläche verliert weniger Wasser, und das Saatbett für Sommerungen wird vorbereitet. Oft wird die Schleppe mit einer Egge zu einer Kombination verbunden.\n\nAls eigener Arbeitsgang ist das Schleppen heute selten: Das Einebnen übernimmt die vordere Planierschiene von Saatbettkombinationen, die in einer Überfahrt einebnen, lockern und rückverfestigen.\n\nNicht zu verwechseln mit dem Radschlupf des Traktors — das ist etwas völlig anderes.",
     "related": [
-      "load-sensing",
-      "auto-steering",
-      "hloubkove-kypreni",
-      "predsetova-priprava"
+      "orba",
+      "predsetova-priprava",
+      "setove-luzko",
+      "valeni",
+      "kompaktomat"
     ],
-    "externalUrl": "https://de.wikipedia.org/wiki/Schlupf",
-    "externalLabel": "Wikipedia: Schlupf",
     "faq": [
       {
-        "q": "Was ist Radschlupf beim Traktor?",
-        "a": "Der Anteil der Radumdrehung, der nicht in Vortrieb umgesetzt wird — die Differenz zwischen theoretischer und tatsächlicher Wegstrecke."
+        "q": "Wann wird geschleppt?",
+        "a": "Vor allem im Frühjahr auf der Winterfurche, sobald der Boden abgetrocknet ist und nicht mehr schmiert oder am Gerät klebt. Geschleppt wird flach, vor der weiteren Saatbettbereitung."
       },
       {
-        "q": "Wie hoch sollte der Schlupf sein?",
-        "a": "Bei schwerer Zugarbeit sind 8 bis 15 % optimal; weniger bedeutet unnötigen Ballast, mehr bedeutet Kraftstoffverlust und Bodenschmieren."
+        "q": "Was unterscheidet Schleppen vom Eggen?",
+        "a": "Die Schleppe hat keine Zinken, die in den Boden greifen — sie ebnet vor allem die Oberfläche ein und zerdrückt Kluten. Die Egge lockert den Boden mit Zinken. Häufig werden beide Geräte kombiniert."
       }
     ]
   },

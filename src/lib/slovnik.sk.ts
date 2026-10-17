@@ -4417,22 +4417,25 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
       "smyk"
     ],
     "kategorie": "agrotechnika",
-    "shortDef": "Smykovanie je jav, kedy kolesá alebo pásy traktora strácajú priľnavosť k povrchu pôdy.",
-    "longDef": "Smykovanie je jav, ktorý nastáva, keď kolesá alebo pásy traktora strácajú priľnavosť k povrchu pôdy, čo vedie k neefektívnemu prenosu sily a zvýšenej spotrebe paliva. Tento jav je bežný na mokrých alebo sypkých pôdach. \n\nSmykovanie môže byť merané a kontrolované pomocou rôznych techník, ako je úprava tlaku v pneumatikách alebo použitie závaží. Správne riadenie smykovania je kľúčové pre minimalizáciu opotrebovania pneumatík a zvýšenie efektivity práce. \n\nNa Slovensku je smykovanie sledované najmä v kontexte optimalizácie poľnohospodárskych operácií, kde môže mať významný vplyv na produktivitu a prevádzkové náklady.",
+    "shortDef": "Smykovanie je plytká operácia spracovania pôdy: po poli sa ťahá smyk, ktorý urovná povrch po orbe, rozdrví a zatlačí hrudy a zničí klíčiace buriny.",
+    "longDef": "Smykovanie je poľnohospodárska operácia pri spracovaní pôdy. Za traktorom sa po poli vlečie **smyk** — náradie z dosiek, koľajníc alebo prstencov, ktoré sa do pôdy nezarezáva, ale kĺže po povrchu. Smyk zarovná hrebene a brázdy po orbe, rozdrví a zatlačí hrudy, plytko prekyprí povrch a zničí klíčiace buriny.\n\nNajčastejšie sa smykuje **na jar na jesennú orbu**, keď pôda obschne natoľko, že sa nemaže. Urovnaný a uzavretý povrch menej vysychá a vzniká základ sejbového lôžka pre jariny. Smyk sa často spája s bránami do jednej súpravy a je prvým krokom predsejbovej prípravy.\n\nAko samostatná operácia dnes smykovanie ustupuje: urovnanie povrchu zabezpečuje predná smyková lišta kompaktorov a kombinátorov, ktoré v jednom prejazde urovnajú, prekypria aj utlačia povrch.\n\nPozor na zámenu: šmyk v doprave znamená stratu priľnavosti kolies. Keď sa kolesá traktora pri ťahu pretáčajú, hovorí sa tomu **preklz**, nie smykovanie.",
     "related": [
-      "load-sensing",
-      "auto-steering",
-      "hloubkove-kypreni",
-      "predsetova-priprava"
+      "orba",
+      "predsetova-priprava",
+      "setove-luzko",
+      "valeni",
+      "kompaktomat"
     ],
+    "externalUrl": "https://cs.wikipedia.org/wiki/Smykov%C3%A1n%C3%AD",
+    "externalLabel": "Wikipedia (česky): Smykování",
     "faq": [
       {
-        "q": "Co je smykování u traktorů?",
-        "a": "Smykování je jev, kdy kola nebo pásy traktoru ztrácejí přilnavost k povrchu půdy, což může snižovat efektivitu práce."
+        "q": "Kedy sa smykuje?",
+        "a": "Hlavne na jar na jesennú orbu, keď pôda obschne natoľko, že sa nemaže a nelepí na náradie. Smykuje sa plytko, pred ďalšou prípravou pôdy na sejbu."
       },
       {
-        "q": "Jak lze minimalizovat smykování?",
-        "a": "Minimalizovat smykování lze správným tlakem v pneumatikách a použitím vhodného typu pneumatik nebo pásů."
+        "q": "Čím sa smykovanie líši od bránenia?",
+        "a": "Smyk nemá zuby, ktoré by zachádzali do pôdy — povrch hlavne urovnáva a hrudy drví a zatláča. Brány pôdu zubami prekyprujú. Často sa oba nástroje spájajú do jednej súpravy."
       }
     ]
   },
