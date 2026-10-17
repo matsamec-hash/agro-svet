@@ -56,6 +56,12 @@ describe('katalog: 301 ze smazaných modelů', () => {
     expect(legacyRedirectTarget('/stroje/claas/lexion-5000-8000/lexion-8900-new/')).toBe('/stroje/claas/lexion-5000-8000/lexion-8900/');
   });
 
+  it('Kubota M8: M8-191/M8-211 → M8-181/M8-201', () => {
+    expect(legacyRedirectTarget('/stroje/kubota/m8/m8-211/')).toBe('/stroje/kubota/m8/m8-201/');
+    expect(legacyRedirectTarget('/stroje/kubota/m8/m8-191/')).toBe('/stroje/kubota/m8/m8-181/');
+    expect(legacyRedirectTarget('/srovnani/john-deere-6r-215-vs-kubota-m8-211/')).toBe('/srovnani/john-deere-6r-215-vs-kubota-m8-201/');
+  });
+
   it('srovnání s přejmenovaným modelem → kanonické srovnání s novým slugem', () => {
     expect(legacyRedirectTarget('/srovnani/claas-lexion-8900-new-vs-new-holland-cr11/')).toBe('/srovnani/claas-lexion-8900-vs-new-holland-cr11/');
     expect(legacyRedirectTarget('/srovnani/case-ih-9250-vs-claas-lexion-8900-new/')).toBe('/srovnani/case-ih-9250-vs-claas-lexion-8900/');

@@ -2,23 +2,29 @@
 // (src/data/stroje/*.yaml). Volá je legacyRedirectTarget s cs cestou, takže
 // platí pro všechny jazykové mutace najednou.
 //
-// Kdy sem model patří: výrobce ho nikdy nevyráběl, nebo šlo o duplikát jiného
-// záznamu. Ověření a zdroj každé položky je v ~/agro-svet/foto-audit/de/rizika/
+// Kdy sem model patří: výrobce ho nikdy nevyráběl, šlo o duplikát jiného
+// záznamu, nebo se model jmenuje jinak (přejmenovaný slug). Ověření a zdroj každé položky je v ~/agro-svet/foto-audit/de/rizika/
 // katalog-opravy.md. Cíl je stránka řady, nebo model, který zůstal.
 // ‼️ Zdroj nesmí být živá stránka a cíl musí existovat — hlídá
 // tests/lib/katalog-redirects.test.ts.
 
-/** cs cesta smazaného modelu (bez koncového lomítka) → cs cíl. */
+/** cs cesta smazaného nebo přejmenovaného modelu (bez koncového lomítka) → cs cíl. */
 export const REMOVED_MODEL_PAGES: Record<string, string> = {
   // 2026-10-17 CLAAS Lexion 8900: duplikát ve staré řadě 400–700 a záznam
   // „Lexion 8900 (new)“ sloučené do jednoho modelu v řadě 5000–8000.
   '/stroje/claas/lexion-400-500-600-700/lexion-8900': '/stroje/claas/lexion-5000-8000/lexion-8900/',
   '/stroje/claas/lexion-5000-8000/lexion-8900-new': '/stroje/claas/lexion-5000-8000/lexion-8900/',
+  // 2026-10-17 Kubota M8: M8-191/M8-211 byla jen označení z představení 2019,
+  // vyrábí se M8-181 a M8-201 (testy OECD 2217/2218 z roku 2020, prospekt Kubota 2021).
+  '/stroje/kubota/m8/m8-191': '/stroje/kubota/m8/m8-181/',
+  '/stroje/kubota/m8/m8-211': '/stroje/kubota/m8/m8-201/',
 };
 
 /** Přejmenované slugy modelů → nový slug. Přesměruje i srovnání /srovnani/<a>-vs-<b>/. */
 export const RENAMED_MODEL_SLUGS: Record<string, string> = {
   'claas-lexion-8900-new': 'claas-lexion-8900',
+  'kubota-m8-191': 'kubota-m8-181',
+  'kubota-m8-211': 'kubota-m8-201',
 };
 
 const PAIR_DELIMITER = '-vs-';
