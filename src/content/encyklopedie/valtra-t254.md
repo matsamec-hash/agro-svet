@@ -5,7 +5,8 @@ znacka: "valtra"
 kategorie: traktor
 vykon: "271 k (199 kW)"
 hmotnost: "9 500 kg"
-rok_uvedeni: 2014
+rok_uvedeni: 2017
+yearTo: 2021
 popis: "Vlajkový model řady T finské Valtry. Motor AGCO Power 7,4 L, na výběr převodovky HiTech, Active, Versu a bezstupňová Direct. Kabina SmartTouch s integrovaným 9\" displejem."
 heroImage: "/images/stroje/valtra/valtra-t-270k.webp"
 powerHp: 271
@@ -26,18 +27,18 @@ highlights:
   - "TwinTrac — reverzní řízení pro práci s couvacím nářadím"
 faq:
   - q: "Jaký výkon má Valtra T254?"
-    a: "Valtra T254 má jmenovitý výkon 271 koní (199 kW) a je nejvýkonnějším modelem řady T. Pohání ho šestiválcový motor AGCO Power o objemu 7,4 litru splňující emisní normu Stage V. Řada T pokrývá rozsah 155–271 koní."
+    a: "Valtra T254 má maximální výkon s boostem 271 koní (199 kW) a byl nejvýkonnějším modelem 4. generace řady T (2017–2021). Pohání ho šestiválcový motor AGCO Power o objemu 7,4 litru splňující emisní normu Stage V. Řada T pokrývá rozsah 155–271 koní."
   - q: "Jaké převodovky Valtra T nabízí?"
     a: "Řada T nabízí čtyři převodovky: HiTech (mechanická s Powershift skupinami), Active (vyšší úroveň automatizace), Versu (plný Powershift 5×5 s řazením pod zatížením) a Direct (bezstupňová CVT). Vlajkové modely se obvykle objednávají s Versu nebo Direct."
   - q: "Co je kabina SmartTouch?"
-    a: "SmartTouch je kabinová platforma Valtry zavedená v roce 2015. Hlavním prvkem je 9\" dotykový displej na pravém sloupku a joystick s programovatelnými OLED symboly, které se mění podle aktuální funkce. Operátor si může rozložení ovládacích prvků přizpůsobit."
+    a: "SmartTouch je kabinová platforma Valtry zavedená v roce 2017. Hlavním prvkem je 9\" dotykový displej na pravém sloupku a joystick s programovatelnými OLED symboly, které se mění podle aktuální funkce. Operátor si může rozložení ovládacích prvků přizpůsobit."
   - q: "Co umožňuje Valtra Unlimited Studio?"
     a: "Unlimited Studio je zakázkové oddělení Valtry. Zákazník si může objednat traktor v libovolné barvě, s nadstandardní výbavou, speciálními světly nebo úpravami pro konkrétní využití. Každý traktor Valtra prochází tímto závodem v Suolahti ve Finsku, kde je možné výbavu doplnit."
   - q: "Pro jakou farmu je Valtra T254 vhodná?"
     a: "Valtra T254 je výkonný univerzální traktor pro střední a velké farmy s výměrou 300–600 hektarů. Zvládne těžkou orbu, široké secí kombinace, lisování i komunální využití. Reverzní řízení TwinTrac z ní dělá vhodný stroj i pro práci s couvacím nářadím — mulčovači nebo sněhovými frézami."
 ---
 
-Řada **T** je páteří nabídky finské Valtry už od roku 2014. Model **T254** stojí na jejím vrcholu — je to nejvýkonnější traktor řady a typický představitel valtraovského přístupu: robustní stroj s důrazem na přizpůsobení potřebám konkrétního zákazníka.
+Řada **T** je páteří nabídky finské Valtry od roku 2002. Model **T254** (2017–2021) stál na vrcholu její 4. generace — byl to nejvýkonnější traktor řady a typický představitel valtraovského přístupu: robustní stroj s důrazem na přizpůsobení potřebám konkrétního zákazníka.
 
 ## Motor AGCO Power
 
@@ -56,7 +57,7 @@ Vlajkové modely jako T254 se obvykle objednávají s **Versu** nebo **Direct**.
 
 ## Kabina SmartTouch
 
-Od roku 2015 mají traktory Valtra kabinu **SmartTouch**. Hlavním prvkem je 9" dotykový displej na pravém sloupku a joystick s programovatelnými **OLED symboly** — ikony na tlačítkách se mění podle aktuální funkce. Operátor si rozložení ovládání přizpůsobí vlastnímu stylu práce.
+Od roku 2017 mají traktory Valtra kabinu **SmartTouch**. Hlavním prvkem je 9" dotykový displej na pravém sloupku a joystick s programovatelnými **OLED symboly** — ikony na tlačítkách se mění podle aktuální funkce. Operátor si rozložení ovládání přizpůsobí vlastnímu stylu práce.
 
 ## Valtra Unlimited Studio
 

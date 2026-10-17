@@ -67,6 +67,18 @@ export const REMOVED_MODEL_PAGES: Record<string, string> = {
   '/stroje/john-deere/9rx/9rx-740': '/stroje/john-deere/9rx/9620rx/',
   '/stroje/john-deere/6m/6095m': '/stroje/john-deere/6m/6095mc/',
   '/stroje/john-deere/7r/7r-350': '/stroje/john-deere/7r-gen3/7r-350-gen3/',
+  // 2026-10-17 Valtra: N144, N161, N195, G145, „6400/6600/6800 HiTech“ a řada „Valtra Direct (2004–2009)“ neexistovaly
+  '/stroje/valtra/hitech/6400': '/stroje/valtra/valmet-6000-8000/valmet-6400/',
+  '/stroje/valtra/hitech/6600': '/stroje/valtra/valmet-6000-8000/valmet-6600/',
+  '/stroje/valtra/hitech/6800': '/stroje/valtra/valmet-6000-8000/valmet-6800/',
+  '/stroje/valtra/direct-legacy/t140-direct': '/stroje/valtra/t-gen1/t140/',
+  '/stroje/valtra/direct-legacy/t160-direct': '/stroje/valtra/t-gen1/t160/',
+  '/stroje/valtra/direct-legacy/t180-direct': '/stroje/valtra/t-gen1/t180/',
+  '/stroje/valtra/n-gen1/n161': '/stroje/valtra/n-gen1/',
+  '/stroje/valtra/n-gen2/n144': '/stroje/valtra/n-gen2/',
+  '/stroje/valtra/n-gen3/n195': '/stroje/valtra/n-gen3/n175/',
+  '/stroje/valtra/g-series/g145': '/stroje/valtra/g-series/g135/',
+  '/stroje/valtra/direct-legacy': '/stroje/valtra/t-gen1/',
 };
 
 /** Přejmenované slugy modelů → nový slug. Přesměruje i srovnání /srovnani/<a>-vs-<b>/. */
@@ -110,6 +122,15 @@ export const RENAMED_MODEL_SLUGS: Record<string, string> = {
   'john-deere-9rx-740': 'john-deere-9620rx',
   'john-deere-6095m': 'john-deere-6095mc',
   'john-deere-7r-350': 'john-deere-7r-350-gen3',
+  // 2026-10-17 Valtra: N144, N161, N195, G145, „6400/6600/6800 HiTech“ a řada „Valtra Direct (2004–2009)“ neexistovaly
+  'valtra-6600': 'valtra-valmet-6600',
+  'valtra-6800': 'valtra-valmet-6800',
+  'valtra-t140-direct': 'valtra-t140',
+  'valtra-t160-direct': 'valtra-t160',
+  'valtra-t180-direct': 'valtra-t180',
+  'valtra-n195': 'valtra-n175',
+  'valtra-g145': 'valtra-g135',
+  'valtra-6400': 'valtra-valmet-6400',
 };
 
 const PAIR_DELIMITER = '-vs-';
