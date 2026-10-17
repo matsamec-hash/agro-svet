@@ -134,19 +134,36 @@ if (Astro.request.method === 'POST') {
     .btn-secondary-full:hover { background: #f0f7f0; }
   </style>
 
-  <script type="module" define:vars={{ supabaseUrl, supabaseKey, postLoginPath }}>
-    const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2.48.1');
-    const supabase = createClient(supabaseUrl, supabaseKey, {
-      auth: { flowType: 'pkce', persistSession: true, detectSessionInUrl: true },
-    });
-    document.getElementById('google-btn')?.addEventListener('click', async () => {
-      // Stash the post-login destination so callback.astro can pick it up
-      // after Google bounces us back through Supabase OAuth.
-      try { sessionStorage.setItem('postLoginRedirect', postLoginPath); } catch {}
-      await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: `${location.origin}/bazar/auth/callback/` },
+  {/* Konfigurace pro zpracovaný <script> níže (define:vars by z něj udělalo
+      is:inline a supabase-js by se nezbundloval z npm). */}
+  <div
+    id="sb-auth-config"
+    data-supabase-url={supabaseUrl}
+    data-supabase-key={supabaseKey}
+    data-post-login-path={postLoginPath}
+    hidden
+  ></div>
+
+  <script>
+    // supabase-js z npm (Vite ho zbundluje do /_astro/) — dřív z cizího CDN, takže
+    // prohlížeč posílal IP návštěvníka cizímu serveru bez souhlasu.
+    import { createClient } from '@supabase/supabase-js';
+
+    const cfg = document.getElementById('sb-auth-config')?.dataset;
+    if (cfg?.supabaseUrl && cfg.supabaseKey) {
+      const postLoginPath = cfg.postLoginPath || '/bazar/moje/';
+      const supabase = createClient(cfg.supabaseUrl, cfg.supabaseKey, {
+        auth: { flowType: 'pkce', persistSession: true, detectSessionInUrl: true },
       });
-    });
+      document.getElementById('google-btn')?.addEventListener('click', async () => {
+        // Stash the post-login destination so callback.astro can pick it up
+        // after Google bounces us back through Supabase OAuth.
+        try { sessionStorage.setItem('postLoginRedirect', postLoginPath); } catch {}
+        await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: `${location.origin}/bazar/auth/callback/` },
+        });
+      });
+    }
   </script>
 </Layout>

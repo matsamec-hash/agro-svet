@@ -23,17 +23,26 @@ const { url: supabaseUrl, anonKey: supabaseKey } = getPublicSupabaseConfig();
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 
-  <script type="module" define:vars={{ supabaseUrl, supabaseKey }}>
-    const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2.48.1');
-    const statusEl = document.getElementById('status');
+  {/* Konfigurace pro zpracovaný <script> níže (define:vars by z něj udělalo
+      is:inline a supabase-js by se nezbundloval z npm). */}
+  <div id="sb-auth-config" data-supabase-url={supabaseUrl} data-supabase-key={supabaseKey} hidden></div>
 
-    function fail(msg) {
-      statusEl.textContent = msg;
+  <script>
+    // supabase-js z npm (Vite ho zbundluje do /_astro/) — dřív z cizího CDN, takže
+    // prohlížeč posílal IP návštěvníka cizímu serveru bez souhlasu.
+    import { createClient } from '@supabase/supabase-js';
+
+    const statusEl = document.getElementById('status');
+    const cfg = document.getElementById('sb-auth-config')?.dataset;
+
+    function fail(msg: string) {
+      if (statusEl) statusEl.textContent = msg;
       setTimeout(() => { window.location.href = '/bazar/prihlaseni/?error=oauth'; }, 1500);
     }
 
     try {
-      const supabase = createClient(supabaseUrl, supabaseKey, {
+      if (!cfg?.supabaseUrl || !cfg.supabaseKey) throw new Error('missing supabase config');
+      const supabase = createClient(cfg.supabaseUrl, cfg.supabaseKey, {
         auth: { detectSessionInUrl: true, flowType: 'pkce', persistSession: true },
       });
 

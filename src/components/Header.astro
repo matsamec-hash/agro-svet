@@ -7,9 +7,9 @@ import LangSwitcher from './LangSwitcher.astro';
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
 // Přihlášení patří k bazaru, který je jen česky. Pod ostatními jazyky by
-// „Anmelden“ vedlo na českou přihlášku, která navíc hned stahuje knihovnu
-// z esm.sh (cizí server, IP návštěvníka bez souhlasu). Přihlášenému se menu
-// ukáže dál — skript skrývá jen odkaz pro hosta.
+// „Anmelden“ vedlo na českou přihlášku. (Knihovnu supabase-js už přihláška
+// netahá z cizího CDN, je zbundlovaná z npm.) Přihlášenému se menu ukáže dál —
+// skript skrývá jen odkaz pro hosta.
 const showLogin = locale === 'cs' || isLaunchedPath(locale, '/bazar');
 const nav = getNav(locale);
 // Active-nav porovnává proti neprefixovaným hrefs, tak strip locale prefix
