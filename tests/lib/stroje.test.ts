@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getEffectiveZaber, getFunctionalGroupForCategory, FUNCTIONAL_GROUPS, applyStrojOverlay, getModelBySlug, getAllBrands, seriesFamily, type StrojKategorie } from '../../src/lib/stroje';
+import { getEffectiveZaber, getFunctionalGroupForCategory, FUNCTIONAL_GROUPS, applyStrojOverlay, getModelBySlug, getAllBrands, seriesFamily, categoryKeyLabel, type StrojKategorie } from '../../src/lib/stroje';
 import { locales } from '../../src/i18n/config';
 
 describe('stroje lib — SK overlay modelů (Fáze stroje-detail)', () => {
@@ -152,5 +152,33 @@ describe('URL rodin řad', () => {
       ),
     );
     expect(kolize).toEqual([]);
+  });
+});
+
+describe('categoryKeyLabel — název klíče kategorie v /stroje/<brand>/rada/<klíč>/', () => {
+  const slugLike = /^[a-z0-9]+(-[a-z0-9]+)+$/;
+
+  it('subkategorie, funkční skupina, traktory a legacy alias mají lidský název ve všech jazycích', () => {
+    expect(categoryKeyLabel('lisy-valcove', 'cs')).toBe('Válcové lisy');
+    expect(categoryKeyLabel('lisy-valcove', 'sk')).toBe('Valcové lisy');
+    expect(categoryKeyLabel('lisy-valcove', 'pl')).toBe('Prasy zwijające');
+    expect(categoryKeyLabel('lisy-valcove', 'uk')).toBe('Рулонні прес-підбирачі');
+    expect(categoryKeyLabel('lisy-valcove', 'de')).toBe('Rundballenpressen');
+    expect(categoryKeyLabel('rezacky', 'cs')).toBe('Samojízdné řezačky');
+    expect(categoryKeyLabel('postrikovace', 'pl')).toBe('Opryskiwacze samojezdne');
+    expect(categoryKeyLabel('seti', 'sk')).toBe('Sejba a sadenie');
+    expect(categoryKeyLabel('traktory', 'cs')).toBe('Traktory');
+  });
+
+  it('žádný top-level klíč z YAML značek nedá v žádném jazyce syrový slug', () => {
+    const keys = new Set(getAllBrands().flatMap((b) => Object.keys(b.categories ?? {})));
+    expect(keys.has('lisy-valcove')).toBe(true);
+    for (const key of keys) {
+      for (const locale of locales) {
+        const label = categoryKeyLabel(key, locale);
+        expect(label, `${locale}:${key}`).not.toBe(key);
+        expect(label, `${locale}:${key}`).not.toMatch(slugLike);
+      }
+    }
   });
 });

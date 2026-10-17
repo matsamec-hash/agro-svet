@@ -86,11 +86,28 @@ describe('stroje — odkaz na výpis kategorie', () => {
     });
   }
 
+  const LISY: Record<string, string> = { cs: 'Válcové lisy', sk: 'Valcové lisy', pl: 'Prasy zwijające', uk: 'Рулонні прес-підбирачі' };
+  for (const [locale, name] of Object.entries(LISY)) {
+    it(`řada nářadí (Krone lisy): title a drobečková navigace s názvem kategorie, ne slugem — ${locale}`, async () => {
+      const { status, html } = await render(RADA, locale, '/stroje/krone/rada/lisy-valcove/bellima/', { brand: 'krone', category: 'lisy-valcove', family: 'bellima' });
+      expect(status).toBe(200);
+      const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '';
+      expect(title).toContain(name.toLowerCase());
+      expect(title).not.toContain('lisy-valcove');
+      const crumbs = html.match(/<nav class="breadcrumb"[\s\S]*?<\/nav>/)?.[0] ?? '';
+      expect(crumbs).toMatch(new RegExp(`>${name}</a>`));
+      expect(crumbs).not.toMatch(/>lisy-valcove</);
+      expect(html).toContain(`"name":"${name}"`);
+    });
+  }
+
   it('legacy kategorie John Deere (rezacky) vede na samojízdné řezačky', async () => {
     const { status, html } = await render(RADA, 'cs', '/stroje/john-deere/rada/rezacky/8/', { brand: 'john-deere', category: 'rezacky', family: '8' });
     expect(status).toBe(200);
     expect(html).toContain('href="/stroje/rezacky-samojizdne/"');
     expect(html).not.toContain('/stroje/zemedelske-stroje/rezacky/');
+    expect(html).toMatch(/<title>[^<]*samojízdné řezačky[^<]*<\/title>/);
+    expect(html).not.toMatch(/>rezacky</);
   });
 
   it('stránka značky: „všechny značky" míří na existující výpis, pod /pl s prefixem', async () => {

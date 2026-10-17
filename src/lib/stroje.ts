@@ -1,6 +1,6 @@
 // YAML imports parsed at compile-time by @modyfi/vite-plugin-yaml — no runtime js-yaml.
 import { localizeEngine, localizeVideoTitle, localizeName, localizeSpecValue } from './stroje-data-i18n';
-import { FUNCTIONAL_GROUPS } from './stroje-skupiny';
+import { FUNCTIONAL_GROUPS, LEGACY_CATEGORY_ALIASES } from './stroje-skupiny';
 
 export type StrojKategorie =
   | 'traktory' | 'kombajny'
@@ -346,6 +346,20 @@ export function functionalGroupLabel(slug: string, locale: string = 'cs'): strin
   const loc = FUNCTIONAL_GROUP_LABELS[locale];
   if (loc && loc[slug]) return loc[slug];
   return (FUNCTIONAL_GROUPS as Record<string, { name: string }>)[slug]?.name ?? slug;
+}
+
+/**
+ * Název pro top-level klíč kategorie značky (= segment `/stroje/<brand>/rada/<klíč>/`).
+ * Klíč bývá traktory/kombajny, funkční skupina (seti), subkategorie (lisy-valcove)
+ * nebo legacy alias John Deere (rezacky → Samojízdné řezačky). Dřív řada nářadí
+ * brala functionalGroupLabel i pro subkategorii → v title a drobečkové navigaci
+ * syrový slug „lisy-valcove".
+ */
+export function categoryKeyLabel(key: string, locale: string = 'cs'): string {
+  if (key in FUNCTIONAL_GROUPS) return functionalGroupLabel(key, locale);
+  const cat = LEGACY_CATEGORY_ALIASES[key] ?? key;
+  if (cat in CATEGORY_LABELS) return categoryLabel(cat as StrojKategorie, locale);
+  return key;
 }
 
 // Vite plugin parses YAML at compile-time → default export is already an object.
