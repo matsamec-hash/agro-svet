@@ -220,10 +220,11 @@ export const LAUNCHED_PREFIXES: Record<Locale, string[]> = {
     // /svet — referenční zemí je Německo, ne Česko (SVET_REFERENCE), a mapa
     // zvýrazňuje DE. Historicky tu byl ternář `locale === 'sk' ? 'SK' : … : 'CZ'`,
     // takže by /de dostalo zvýrazněné Česko.
-    // ‼️ 2026-10-15 STAŽENO z de: regionální mapy kreslí hranice NUTS z GISCO,
-    // jejichž podmínky říkají „will not be used for commercial purposes“, a mapa
-    // Evropy pochází z aourednik/historical-basemaps (GPL-3.0, nejasný původ).
-    // Vrátit po přestavbě geometrií z public-domain zdroje (Natural Earth).
+    // ‼️ 2026-10-15 staženo (hranice NUTS z GISCO — „will not be used for commercial
+    // purposes“ — a mapa Evropy z historical-basemaps, GPL-3.0). 2026-10-17 všechny
+    // geometrie přestavěné z Natural Earth (public domain; USA z U.S. Census Bureau
+    // přes us-atlas) a doplněná atribuce Eurostatu a World Bank → vráceno.
+    '/svet',
     // Fáze 3i: /novinky — výpis se omezuje na REÁLNĚ přeložené články
     // (fetchTranslatedArticleIds), takže žádný český článek do /de neprosákne.
     // ‼️ Feed je zatím úzký (5 strojních novinek: Fendt, Claas, New Holland,

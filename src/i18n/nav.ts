@@ -66,7 +66,9 @@ export const HIDDEN_SECTIONS: Record<Locale, string[]> = {
   // isLaunchedPath, takže „Daten" nabízí jen to, co reálně existuje; top-level
   // href se přesměruje na první viditelné dítě.
   // 2026-10-15 byla `data` skrytá (/akcie i /svet stažené kvůli licenci dat);
-  // 2026-10-16 se /akcie vrátilo bez kurzů, takže „Daten“ má zase dítě.
+  // 2026-10-16 se /akcie vrátilo bez kurzů, takže „Daten“ má zase dítě;
+  // 2026-10-17 se vrátil i /svet (geometrie z Natural Earth) — děti profily,
+  // srovnání a mapa projdou přes isLaunchedPath samy.
   de: ['bazar', 'photo', 'farms'],
 };
 

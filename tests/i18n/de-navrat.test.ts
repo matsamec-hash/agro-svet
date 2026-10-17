@@ -211,15 +211,13 @@ describe('právní texty po rešerši 2026-10-15', () => {
 });
 
 describe('sekce stažené z de kvůli licenci dat (2026-10-15)', () => {
-  it('/svet je pod de stažený (410); /akcie se vrátilo bez kurzů', () => {
-    for (const p of ['/svet', '/svet/nemecko/', '/svet/mapa/']) {
-      expect(isWithdrawnPath('de', p), p).toBe(true);
+  it('/akcie (bez kurzů) i /svet (geometrie z Natural Earth) jsou pod de zpět; 410 mechanismus zůstává', () => {
+    for (const p of ['/svet', '/svet/', '/svet/nemecko/', '/svet/mapa/', '/svet/srovnani/', '/akcie/DE/']) {
+      expect(isWithdrawnPath('de', p), p).toBe(false);
     }
-    expect(isWithdrawnPath('de', '/svetlo')).toBe(false);
-    expect(isWithdrawnPath('de', '/stroje/')).toBe(false);
-    expect(isWithdrawnPath('de', '/akcie/DE/')).toBe(false);
     expect(isLaunchedPath('de', '/akcie')).toBe(true);
-    expect(isLaunchedPath('de', '/svet')).toBe(false);
+    expect(isLaunchedPath('de', '/svet')).toBe(true);
+    expect(isLaunchedPath('de', '/svet/mapa/')).toBe(true);
     const mw = read('src/middleware.ts');
     expect(mw).toMatch(/if \(isWithdrawnPath\(locale, strippedPath\)\) \{\n\s*return new Response\(WITHDRAWN_SECTION_BODY, \{\n\s*status: 410/);
   });
@@ -232,10 +230,14 @@ describe('sekce stažené z de kvůli licenci dat (2026-10-15)', () => {
   });
 });
 
-describe('homepage /de neukazuje mapu Evropy (stažený /svet)', () => {
+describe('homepage /de a mapa Evropy (/svet zpět 2026-10-17)', () => {
   it('ImageAccordion přidává mapu jen tam, kde /svet existuje a není stažený', () => {
     const ia = read('src/components/ImageAccordion.astro');
     expect(ia).toMatch(/if \(locale === 'cs' \|\| \(isLaunchedPath\(locale, '\/svet'\) && !isWithdrawnPath\(locale, '\/svet'\)\)\) \{\n\s*items\.push\(\{/);
+  });
+
+  it('HomeDe má zase dlaždici Länderprofile', () => {
+    expect(read('src/components/home/HomeDe.astro')).toContain("href: '/de/svet/'");
   });
 });
 

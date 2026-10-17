@@ -21,9 +21,10 @@ const items: { label: string; href: string; img?: string; map?: boolean }[] = [
     img: '/images/telata.webp',
   },
 ];
-// Panel s mapou jen tam, kde /svet v té mutaci existuje. Pod de je /svet stažený
-// (licence geometrií, WITHDRAWN_SECTIONS) — náhled by vedl na českou mapu a sám
-// kreslí hranice, jejichž licenci řešíme.
+// Panel s mapou jen tam, kde /svet v té mutaci existuje a není stažený
+// (WITHDRAWN_SECTIONS) — jinak by náhled vedl na českou mapu. Pod de byl /svet
+// 2026-10-15 až 17 stažený kvůli licenci geometrií; náhled teď kreslí hranice
+// z Natural Earth (public domain), takže se pod /de zase ukazuje.
 if (locale === 'cs' || (isLaunchedPath(locale, '/svet') && !isWithdrawnPath(locale, '/svet'))) {
   items.push({
     label: t(locale, 'nav.svet.map'),

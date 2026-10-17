@@ -28,13 +28,14 @@ export function isRetiredLocale(value: string): boolean {
 /** Sekce stažené z jedné jazykové mutace kvůli licenci dat → 410 (middleware).
  *  Samotné vyřazení z LAUNCHED_PREFIXES nestačí: nelaunchnutá cesta se dál
  *  vykreslí (noindex), takže data by byla pořád veřejně vidět.
- *  2026-10-15 (audit licencí, ~/agro-svet/foto-audit/de/rizika/B-licence-dat.md):
- *  /svet  — hranice NUTS z GISCO („not for commercial purposes“) a mapa Evropy
- *           z historical-basemaps (GPL-3.0, nejasný původ).
- *  (/akcie tu bylo 2026-10-15 až 16 kvůli kurzům z Yahoo/Finnhubu; ty jsou pryč
- *  ve všech jazycích a sekce se vrátila.) */
+ *  Historie (audit licencí, ~/agro-svet/foto-audit/de/rizika/B-licence-dat.md):
+ *  - /akcie 2026-10-15 až 16 — kurzy z Yahoo/Finnhubu; pryč ve všech jazycích, vráceno.
+ *  - /svet 2026-10-15 až 17 — hranice NUTS z GISCO („not for commercial purposes“)
+ *    a mapa Evropy z historical-basemaps (GPL-3.0). Geometrie přestavěné z Natural
+ *    Earth (public domain), atribuce Eurostatu a World Bank doplněné → vráceno.
+ *  Mechanismus (middleware 410) zůstává pro příští případ. */
 export const WITHDRAWN_SECTIONS: Partial<Record<Locale, readonly string[]>> = {
-  de: ['/svet'],
+  de: [],
 };
 
 export function isWithdrawnPath(locale: Locale, csPath: string): boolean {
