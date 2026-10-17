@@ -1422,7 +1422,7 @@ Pozor: na alkalické půdě (pH > 7,5) přechází fosfor rychle do nerozpustný
 Použití v CZ:
 - **Úhor před setím** — vyklidí pole od plevele a strniště.
 - **Pre-emergence** před vzejitím plodiny — 1–2 dny před.
-- **Desikace** (vysušení) ozimé řepky a obilovin před sklizní — urychlí dozrávání, ne v ČR oficiálně schváleno pro potraviny.
+- **Desikace** před sklizní — v EU ji od 16. 12. 2023 povolit nelze (prováděcí nařízení (EU) 2023/2660 vylučuje použití k řízení termínu sklizně a k usnadnění výmlatu); v ČR platí zákaz předsklizňového použití u potravinářských plodin už od 2019.
 - **Lesní porosty** — proti pasečnému plevelu.
 
 Cena (2024):
@@ -1430,7 +1430,7 @@ Cena (2024):
 - **Generika** (Glyfogan, Touchdown, Clinic) — 150–220 Kč/l.
 
 Kontroverzy:
-- **EU autorizace** pro glyfosát byla 2023 prodloužena o 10 let (do 2033) — proti silné lobby (Greenpeace, IARC).
+- **Schválení v EU** bylo v roce 2023 obnoveno na 10 let, do 15. 12. 2033 (prováděcí nařízení (EU) 2023/2660), s novými omezeními.
 - **IARC klasifikace** "pravděpodobně karcinogenní pro člověka" (2A) — kontroverzní, EU EFSA klasifikuje jako bezpečný při dodržení dávek.
 - **CZ Maloobchod**: bez restrikcí.
 - **Bio-zemědělství**: striktně zakázán.`,
@@ -1839,8 +1839,9 @@ Doporučujeme zkusit no-till na **části pole 2–3 sezóny** před plnou konve
 **Hlavní účinné látky**:
 - **Pendimethalin** (Stomp) — pro obiloviny, řepku, slunečnici.
 - **Prosulfocarb** (Defi) — proti psárce v obilovinách.
-- **Metribuzin** — pro brambory, sóju.
-- **S-Metolachlor + Mesotrione** — pro kukuřici.
+- **Terbuthylazin, pethoxamid, dimethenamid-P** — pro kukuřici.
+
+Metribuzin a S-metolachlor, dříve běžné v pre-em, už v EU nejsou schválené (S-metolachlor od 2024, prováděcí nařízení (EU) 2024/20; metribuzin od 2024, prováděcí nařízení (EU) 2024/2806).
 
 **Timing**:
 - **0–7 dní po setí** — záleží na rychlosti vzcházení.
@@ -2298,7 +2299,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 - **Setí**: konec dubna – polovina května (po Ledových mužích, půda 10 °C).
 - **Osivo**: 80 000–110 000 zrn/ha = 22–28 kg/ha.
 - **Hnojení**: 150–200 kg N/ha, plus P, K základní hnojení na podzim.
-- **Postřik**: pre-em na klíčící plevele (Lumax, Successor) + post-em na druhá vlna (Callisto, Laudis).
+- **Postřik**: pre-em na klíčící plevele (např. pethoxamid, terbuthylazin) + post-em na druhá vlna (Callisto, Laudis).
 - **Sklizeň**: konec srpna – říjen, vlhkost celé rostliny 30–35 % (optimum pro silážování).
 
 **Výnosy**:
@@ -3422,7 +3423,7 @@ Viz též [[organicka-hmota]], [[regenerativni-zemedelstvi]], [[karbonove-zemede
 **Co mykorhizu poškozuje:**
 - **Orba a hluboké zpracování půdy** — fyzicky rozseká hyfovou síť. **No-till** (viz [[no-till]]) a strip-till (viz [[strip-till]]) hyfy chrání.
 - **Mineralní hnojiva s vysokým P** — rostlina nepotřebuje houbu, symbióza zaniká.
-- **Fungicidy** v půdě (zejm. metalaxyl, propiconazol) — někteří specifické na mykorhizní houby.
+- **Fungicidy** v půdě a mořidla — některé mykorhizním houbám škodí.
 - **Brukvovité v rotaci** — produkují glukosinoláty, mykorhiza klesá.
 - **Holá půda** (žádný kryt) — hyfy odumírají bez hostitele.
 - **Vápnění příliš vysoké pH** — některé AM houby preferují kyselé pH.
@@ -4475,7 +4476,7 @@ Viz též [[ozim-jarin]], [[osevni-postup]], [[npk-hnojivo]], [[roundup]], [[pli
 - **1840s** — patogen poprvé pozorován v Belgii, Holandsku
 - **1845–1849** — Irský hladomor. Brambory tvořily 80 % stravy chudých irských rolníků. Patogen zničil úrodu 3 roky v řadě.
 - **1882** — francouz Pierre Marie Alexis Millardet objevuje **bordeauxskou jíchu** (CuSO₄ + Ca(OH)₂) v Médocu — náhodou, jako prevence proti zlodějům vinné révy. První historický fungicid.
-- **20. století** — postupný vývoj systemických fungicidů (mancozeb, metalaxyl, cymoxanil)
+- **20. století** — postupný vývoj organických fungicidů: kontaktních (mancozeb) i systemických (metalaxyl, cymoxanil)
 - **2000s** — agresivní A2 mating type kmen z Mexika invadní do EU — patogen sexuálně reprodukuje → oospory v půdě → trvalost
 
 **Životní cyklus:**
@@ -4499,25 +4500,25 @@ Viz též [[ozim-jarin]], [[osevni-postup]], [[npk-hnojivo]], [[roundup]], [[pli
 **Boj — fungicidy:**
 
 **Preventivní (kontaktní)**:
-- **Mancozeb** (Dithane, Penncozeb) — bílý prach, 7–10 dní účinek. **V EU již nepovolen** — schválení neobnoveno nařízením (EU) 2020/2087, použití skončilo 4. 1. 2022
+- **Mancozeb** (Dithane, Penncozeb) — dříve nejpoužívanější kontaktní fungicid, **v EU už není schválený** (prováděcí nařízení (EU) 2020/2087, použití skončilo 4. 1. 2022)
 - **Cymoxanil** — velmi efektivní, krátká účinnost (2–3 dny)
-- **Měď** (CuSO₄, Cu hydroxid) — bio i konvenční. **Limit 4 kg Cu/ha/rok** v EU
-- **Folpet** — alternative k mancozebu
+- **Měď** (CuSO₄, Cu hydroxid) — bio i konvenční. **Limit 28 kg Cu/ha za 7 let** (v průměru 4 kg/ha/rok) v EU
+- **Folpet** — kontaktní náhrada za mancozeb
 
 **Systemické (lokálně systémové)**:
 - **Metalaxyl, Metalaxyl-M** (Ridomil) — fenylamid, velmi efektivní. Riziko rezistence (problém od 1990s)
 - **Mandipropamid** (Revus) — CAA fungicid, špička 2020s
-- **Cymoxanil + Mancozeb** kombinace (Curzate)
+- **Cymoxanil** — kurativní účinek krátce po infekci, vždy v kombinaci s jinou účinnou látkou
 - **Fluazinam** (Shirlan) — preventivní, dlouhá perzistence
 - **Pyrimethanil** — komplikované použití
 
 **Postřikový kalendář** (intensivní brambora, 2024 EU):
 - **Klíčící**: žádný postřik
-- **5–10 cm porost**: 1. prevence (mancozeb nebo Cu)
+- **5–10 cm porost**: 1. prevence (kontaktní fungicid, např. fluazinam nebo měď)
 - **Před uzavíráním řádků**: 2. (cymoxanil/metalaxyl)
 - **Květ**: 3.–4. postřik (mandipropamid)
 - **Tvorba hlíz**: 5.–7. postřik (preventivní každých 7–10 dní)
-- **Před sklizní**: 8. desikační (Reglone alternativa)
+- **Před sklizní**: ničení natě (viz [[desikace]]) — mechanicky nebo PPO desikantem; diquat (Reglone) už v EU schválený není
 - **Celkem**: 7–10 postřiků/sezónu, **náklady 4 000–7 000 Kč/ha**
 
 **Rezistentní odrůdy:**
@@ -4670,7 +4671,7 @@ Viz též [[fungicidy]], [[ozim-jarin]], [[osevni-postup]], [[no-till]], [[kukur
 
 **Aktivní látky:**
 - **Triazoly (DMI)**: tebuconazol, prothiokonazol, metconazol — hlavní třída 30 let, **rostoucí rezistence**
-- **SDHI**: fluxapyroxad (Bixafen), benzovindiflupyr (Solatenol), pydiflumetofen — top performery 2020s. Riziko rezistence (mírné, dosud zvládnutelné).
+- **SDHI**: fluxapyroxad, bixafen, benzovindiflupyr (Solatenol) — top performery 2020s. Riziko rezistence (mírné, dosud zvládnutelné).
 - **Strobiluriny (QoI)**: azoxystrobin (Amistar), pyraclostrobin — **dnes prakticky neúčinné na septoriózu** kvůli rezistenci (mutace G143A v cytochromu b). Stále se používají pro jiné choroby.
 - **Inatreq active** (fenpicoxamid) — nová třída, 2021+ na trhu. Zatím low resistance.
 - **Mefentrifluconazole** (Revysol) — nová DMI z BASF s lepší aktivitou na rezistentní izoláty
@@ -4758,7 +4759,7 @@ Viz též [[fuzarioza]], [[rzi]], [[fungicidy]], [[ozim-jarin]], [[osevni-postup
 **Boj — fungicidy:**
 
 **Stejná schémata jako septorióza** (často kombinované postřiky):
-- **Triazoly** — tebuconazol, propiconazol, prothiokonazol — efektivní
+- **Triazoly** — tebuconazol, prothiokonazol, metconazol — efektivní
 - **Strobiluriny** — pyraclostrobin, azoxystrobin — vysoce účinné, **rezistence v některých rasách**
 - **SDHI** — moderní, kombinace s triazolem
 - **Inatreq active** — nová třída 2021+
@@ -4832,13 +4833,12 @@ Viz též [[fuzarioza]], [[septorioza]], [[fungicidy]], [[ozim-jarin]].`,
 **Boj — chemický:**
 
 **Insekticidy:**
-- **Neonikotinoidy**: thiamethoxam, imidacloprid, clothianidin — **ZAKÁZÁNY v EU od 2018** kvůli toxicitě pro včely
+- **Neonikotinoidy**: thiamethoxam, imidacloprid, clothianidin — **v EU zakázané** (venkovní použití od 2018, schválení skončilo 2019–2020) kvůli toxicitě pro včely
 - **Spinosad** (Laser) — biopreparát z *Saccharopolyspora spinosa*, EU povolený, drahý
-- **Spinetoram** (Delegate) — vyšší účinnost než spinosad
 - **Chlorantraniliprole** (Coragen) — moderní, na L1-L3 larvy účinný
 - **Cyantraniliprole** (Verimark) — kořenová aplikace při výsadbě
 - **Pyrethroidy**: lambda-cyhalothrin (Karate) — levné ale rezistence
-- **Indoxakarb** (Steward) — alternative, stárnoucí
+- Spinetoram (Delegate) a indoxakarb (Steward) už v EU schválené nejsou (indoxakarb od 2021, prováděcí nařízení (EU) 2021/2081; spinetoram od 2024).
 
 **Aplikace timing:**
 - **Klíčový moment**: L1–L3 larvy (mladé, lehce kontrolovatelné)
@@ -4954,7 +4954,7 @@ Viz též [[zemak]], [[plisen-bramborova]], [[insekticidy]].`,
 - **Neonikotinoidy** (thiamethoxam, imidacloprid) — **ZAKÁZÁNY v EU pro venkovní použití od 2018** kvůli včelám. Dříve standardní mořidlo cukrovky.
 - **Acetamiprid** (Mospilan) — neonikotinoid stále povolený v EU (jiná chemická struktura)
 - **Flonicamid** (Teppeki) — anti-feedant, **moderní standard 2020s** pro cukrovku
-- **Spirotetramat** (Movento) — systemický, působí i v rubu listů
+- Spirotetramat (Movento) — v EU už není schválený (schválení skončilo 30. 4. 2024).
 - **Pirimicarb** (Aphox) — selektivní mšicid, šetrný k benefitům (ladybugs)
 - **Pyrethroidy** (cypermethrin, deltamethrin) — krátká účinnost, rezistence rychlá
 
@@ -5040,10 +5040,9 @@ Viz též [[insekticidy]], [[mandelinka-bramborova]], [[osevni-postup]].`,
 
 **Insekticidy** (aplikace v larvální stadium, ne dospělce):
 - **Spinosad** (Laser) — bio, fungovaly na L1-L2
-- **Spinetoram** (Delegate) — silnější verze
 - **Chlorantraniliprole** (Coragen) — moderní standard, vysoká účinnost
 - **Cyantraniliprole** (Verimark) — alternativní
-- **Indoxakarb** (Steward) — stárnoucí
+- Spinetoram (Delegate) a indoxakarb (Steward) už v EU schválené nejsou.
 - **Pyrethroidy** (lambda-cyhalothrin) — krátká účinnost
 
 **Aplikace timing — KRITICKÉ:**
@@ -5106,14 +5105,14 @@ Viz též [[fuzarioza]], [[insekticidy]], [[kukurice-silazni]], [[no-till]].`,
     term: 'Fungicidy',
     alias: ['fungicides', 'protihoubové přípravky', 'mykocidní postřiky'],
     kategorie: 'ochrana',
-    shortDef: 'Fungicidy jsou chemické přípravky proti houbovým chorobám rostlin. Klíčové třídy: triazoly (DMI), strobiluriny (QoI), SDHI, kontaktní (mancozeb, měď). Cena v ČR 2024: 500–2 500 Kč/ha za jednu aplikaci.',
+    shortDef: 'Fungicidy jsou chemické přípravky proti houbovým chorobám rostlin. Klíčové třídy: triazoly (DMI), strobiluriny (QoI), SDHI, kontaktní (měď, síra, folpet). Cena v ČR 2024: 500–2 500 Kč/ha za jednu aplikaci.',
     longDef: `Fungicidy (z latinského *fungus* + *caedere* = houba + zabíjet) jsou **chemické přípravky určené pro ochranu rostlin před houbovými chorobami**. V EU regulovány nařízením EC 1107/2009. V CZ schvaluje **ÚKZÚZ** (Ústřední kontrolní a zkušební ústav zemědělský).
 
 **Hlavní třídy fungicidů:**
 
 **1. Triazoly (DMI — DeMethylation Inhibitors):**
 - **Mechanismus**: blokují biosyntézu ergosterolu (membrána houbové buňky)
-- **Hlavní zástupci**: tebuconazol, propiconazol, prothiokonazol (Proline), metconazol, epoxiconazol (vyřazený 2020s)
+- **Hlavní zástupci**: tebuconazol, prothiokonazol (Proline), metconazol, difenoconazol; propiconazol (prováděcí nařízení (EU) 2018/1865) a epoxiconazol (schválení skončilo 30. 4. 2020) už v EU schválené nejsou
 - **Spektrum**: široké — septorióza, rzi, fuzarióza, padlí
 - **Účinnost**: středně-vysoká, **systemicky** (proniká listem)
 - **Rezistence**: po 30 letech používání **slábnou na septoriózu**, ale stále základ
@@ -5131,7 +5130,7 @@ Viz též [[fuzarioza]], [[insekticidy]], [[kukurice-silazni]], [[no-till]].`,
 
 **3. SDHI (Succinate Dehydrogenase Inhibitors):**
 - **Mechanismus**: blokují komplex II mitochondriální dýchání
-- **Hlavní zástupci**: fluxapyroxad (Imtrex), bixafen (Aviator), benzovindiflupyr (Solatenol), pydiflumetofen (Adepidyn)
+- **Hlavní zástupci**: fluxapyroxad (Imtrex), bixafen (Aviator), benzovindiflupyr (Solatenol), fluopyram; pydiflumetofen (Adepidyn) v EU schválený není
 - **Spektrum**: septorióza, fuzarióza, padlí, rzi
 - **Účinnost**: TOP 2020s — silnější než triazoly
 - **Rezistence**: zatím mírná
@@ -5151,14 +5150,13 @@ Viz též [[fuzarioza]], [[insekticidy]], [[kukurice-silazni]], [[no-till]].`,
 
 **6. Kontaktní fungicidy (multisite):**
 
-- **Mancozeb** (Dithane M-45, Penncozeb)
+- **Mancozeb** (Dithane M-45, Penncozeb) — dříve nejrozšířenější levný multisite, **v EU už není schválený**
   - **Mechanismus**: multi-site (nelze vytvořit rezistence)
   - **EU**: schválení neobnoveno prováděcím nařízením (EU) 2020/2087 (toxický pro reprodukci kat. 1B, endokrinní disruptor); povolení zrušena do 4. 7. 2021, lhůta na doprodej a použití skončila 4. 1. 2022
-  - **Cena**: 200–500 Kč/ha (levný)
 
 - **Měď** (CuSO₄, Cu hydroxid, oxychlorid)
   - **Bio i konvenční**: povolená v EU bio
-  - **Limit**: 4 kg Cu/ha/rok od 2019
+  - **Limit**: od 2019 nejvýš 28 kg Cu/ha za 7 let (v průměru 4 kg/ha/rok)
   - **Použití**: plíseň bramborová, plíseň vinné révy, peronospora
   - **Cena**: 300–600 Kč/ha
 
@@ -5167,7 +5165,7 @@ Viz též [[fuzarioza]], [[insekticidy]], [[kukurice-silazni]], [[no-till]].`,
   - **Cena**: 200–400 Kč/ha
 
 - **Folpet**
-  - **Multisite alternative k mancozebu**
+  - **Multisite** (kontaktní), náhrada za mancozeb
   - **Cena**: 400–800 Kč/ha
 
 **7. Anilinopyrimidiny (AP):**
@@ -5177,7 +5175,7 @@ Viz též [[fuzarioza]], [[insekticidy]], [[kukurice-silazni]], [[no-till]].`,
 
 **8. Cymoxanil:**
 - **Krátká účinnost** (3–4 dny)
-- **Vždy v kombinaci** s mancozebem nebo metalaxylem
+- **Vždy v kombinaci** s jinou účinnou látkou (dříve hlavně s mancozebem)
 - **Použití**: plíseň bramborová (kurativní efekt)
 
 **9. Metalaxyl-M (oomyceta-specific):**
@@ -5224,15 +5222,16 @@ Viz též [[fuzarioza]], [[insekticidy]], [[kukurice-silazni]], [[no-till]].`,
 - **Návratnost full program**: 4–6× v rizikovém roce
 
 **EU regulace:**
-- **REACH** — autorizace účinných látek
+- **Nařízení (ES) č. 1107/2009** — schvalování účinných látek v EU; přípravky povoluje každý stát (v ČR ÚKZÚZ)
 - **MRL** (Maximum Residue Limits) — limity zbytků v jídle
 - **Buffer zones** — povinné nepostřikovat 5–20 m od vodních toků
 - **PPE** — povinné OOP (rukavice, respirátor) při aplikaci
-- **Zákazy**:
-  - **Neonikotinoidy** (venkovní) 2018
-  - **Chlorothalonil** 2019
-  - **Glyfosát** (Roundup) — periodicky obnovované, riziko zákazu
-  - **Mancozeb** 2024
+- **Neschválené fungicidy** (příklady):
+  - **Propiconazol** — neschválený od 2018 (prováděcí nařízení (EU) 2018/1865)
+  - **Chlorothalonil** — neschválený od 2019 (prováděcí nařízení (EU) 2019/677)
+  - **Epoxiconazol** — schválení skončilo 2020
+  - **Mancozeb** — neschválený od 2021 (prováděcí nařízení (EU) 2020/2087)
+- Jestli je konkrétní přípravek povolený, vždy ověřte v Registru přípravků na ochranu rostlin ÚKZÚZ
 
 Viz též [[plisen-bramborova]], [[fuzarioza]], [[septorioza]], [[rzi]], [[insekticidy]], [[herbicidy]].`,
     related: ['plisen-bramborova', 'fuzarioza', 'septorioza', 'rzi', 'insekticidy', 'herbicidy'],
@@ -5249,26 +5248,25 @@ Viz též [[plisen-bramborova]], [[fuzarioza]], [[septorioza]], [[rzi]], [[insek
 
 **Totální (neselektivní)** — zabijí všechny rostliny:
 - **Glyfosát** (Roundup) — viz [[roundup]]
-- **Glufosinát** (Basta) — alternative
-- **Diquat** (Reglone) — desikant
+- **Glufosinát** (Basta) — v EU neschválený od 2018
+- **Diquat** (Reglone) — dříve desikant, v EU neschválený (prováděcí nařízení (EU) 2018/1532)
 - **Paraquat** — **zakázáno v EU od 2007**
 
 **Selektivní** — hubí jen určité druhy:
 
 **Dvouděložné (širokolisté plevele) v obilí:**
-- **MCPA, 2,4-D** (Glean, Banvel) — stará třída, levná
+- **MCPA, 2,4-D** — růstové herbicidy, stará a levná třída
 - **Sulfonylmocoviny** (Granstar, Hussar) — moderní, dávky 10–30 g/ha
-- **Triazinony** (metribuzin) — brambory
 
 **Jednoděložné (trávy) v širokolistých plodinách:**
 - **Quizalofop-p-ethyl** (Targa, Leopard) — řepka, sója
 - **Fluazifop-p-butyl** (Fusilade) — alternativa
 - **Clethodim** (Centurion) — sója
 
-**Pro-emergence (před vzejitím):**
+**Pre-emergence (před vzejitím):**
 - **Pendimethalin** (Stomp, Activus) — kořenový herbicid
-- **S-metolachlor** (Dual Gold) — kukuřice
-- **Metribuzin** — brambory
+- **Terbuthylazin, pethoxamid, dimethenamid-P** — kukuřice
+- S-metolachlor (Dual Gold) a metribuzin už v EU schválené nejsou (prováděcí nařízení (EU) 2024/20 a 2024/2806).
 - **Aplikace**: před vzejitím plevelů, 2-7 dnů po setí
 
 **Post-emergence (po vzejitím):**
@@ -5281,8 +5279,8 @@ Viz též [[plisen-bramborova]], [[fuzarioza]], [[septorioza]], [[rzi]], [[insek
 **1. EPSPS inhibitory** (Group 9): glyfosát
 **2. AHAS inhibitory** (Group 2): sulfonylmocoviny, imidazolinony — nejvíc rezistencí
 **3. ACCase inhibitory** (Group 1): graminicidy (Fusilade, Targa) — vysoká rezistence
-**4. PSII inhibitory** (Group 5): triaziny (atrazin — zakázán 2007)
-**5. PPO inhibitory** (Group 14): carfentrazone, sulfentrazone
+**4. PSII inhibitory** (Group 5): terbuthylazin, metamitron; atrazin je v EU neschválený od 2004 (rozhodnutí 2004/248/ES)
+**5. PPO inhibitory** (Group 14): carfentrazone, pyraflufen-ethyl
 **6. HPPD inhibitory** (Group 27): mesotrione, isoxaflutole — kukuřice
 **7. Mitóza inhibitory** (Group 3): pendimethalin
 **8. Cellulose syntéza** (Group 29): isoxaben
@@ -5292,15 +5290,15 @@ Viz [[roundup]] pro plný profil.
 
 - **Mechanismus**: blokuje EPSPS enzym (syntéza aromatických aminokyselin)
 - **Spectrum**: totální (mimo Roundup Ready GMO plodin)
-- **Aplikace**: před setím, **stoolování** (mezi řádky), desikace (zhruba 10 dní před sklizní)
+- **Aplikace**: před setím, na strniště, meziřádkově v sadech a vinicích; k desikaci před sklizní se v EU od prosince 2023 povolovat nesmí
 - **Cena**: 250–500 Kč/ha (jeden z nejlevnějších herbicidů)
 - **Globální trh**: 800 000 t/rok, 30 % všech herbicidů
-- **EU regulace**: schválení obnoveno do 2033
+- **EU regulace**: schválení obnoveno do 15. 12. 2033 (prováděcí nařízení (EU) 2023/2660)
 
 **Klíčové plevele v CZ a jejich herbicidy:**
 
 **V pšenici:**
-- **Svízel přítula** (Galium aparine): Granstar, Hussar OD, Salsa
+- **Svízel přítula** (Galium aparine): Granstar, Hussar OD
 - **Heřmánek pravý** (Matricaria chamomilla): MCPA, sulfonylmocoviny
 - **Chundelka metlice** (Apera spica-venti): Atlantis OD, Pacifica Plus
 - **Lipnice** (Poa annua): Atlantis OD
@@ -5318,8 +5316,9 @@ Viz [[roundup]] pro plný profil.
 - **Pýr**: Fusilade Forte (jen v řepce)
 
 **V cukrovce:**
-- **Merlík, lebeda**: Goltix (metamitron) + Betanal (phenmedipham) + Pyramin
-- **Bér, vlčí mák**: Betanal kombinace
+- **Merlík, lebeda**: metamitron (Goltix) + phenmedipham + ethofumesate, obvykle v několika dělených postřicích
+- **Trávy**: graminicid, např. quizalofop-P nebo cycloxydim
+- Chloridazon (Pyramin) a desmedipham už v EU schválené nejsou.
 
 **Rezistence k herbicidům:**
 
@@ -5336,7 +5335,7 @@ Viz [[roundup]] pro plný profil.
 5. **Manuální** — kontrola hnízd rezistence
 
 **Bioherbicidy:**
-- **Acetate** (Beloukha) — kyselina pelargonová, z přírodních zdrojů
+- **Kyselina pelargonová** (Beloukha) — z přírodních zdrojů
 - **Octová kyselina** (vinegar) — pro malé plochy
 - **Termální** — propanové hořáky pro pásové herbicidy
 - **Cena**: 5–20× dráž než glyfosát
@@ -5350,16 +5349,16 @@ Viz [[roundup]] pro plný profil.
 **Náklady — pro typickou pšenici:**
 - **Pre-emergence**: 600–1 200 Kč/ha
 - **Post-emergence** (jaro): 800–1 500 Kč/ha
-- **Desikace** (před sklizní): 300–500 Kč/ha (Roundup, Reglone)
-- **Sezónně**: 1 700–3 200 Kč/ha
+- **Sezónně**: 1 400–2 700 Kč/ha
 
 **Pro kukuřici:**
-- **Pre-emergence**: 1 200–2 000 Kč/ha (Lumax — typický mix)
-- **Post-emergence**: 1 000–1 800 Kč/ha (Callisto + atrazin alternativa)
+- **Pre-emergence**: 1 200–2 000 Kč/ha
+- **Post-emergence**: 1 000–1 800 Kč/ha (např. mesotrione, foramsulfuron)
 
 **EU regulace:**
-- **Neonikotinoidy a glyfosát**: kontroverzní, ale zatím povolené (s omezeními)
-- **Chlorthal-dimethyl, atrazin, paraquat**: zákazy 2007+
+- **Glyfosát**: schválený do 15. 12. 2033 s omezeními (mj. žádná desikace před sklizní)
+- **Neschválené herbicidy** (příklady): atrazin (2004), paraquat (2007), chlorthal-dimethyl (2009), glufosinát (2018), diquat (2018), S-metolachlor (2024), metribuzin (2024), flufenacet (2025)
+- Jestli je konkrétní přípravek povolený, vždy ověřte v Registru přípravků na ochranu rostlin ÚKZÚZ
 - **MRL** — maximum residue limits v potravinách
 - **Bufferzóny** — 5–10 m od vodních toků
 
@@ -5371,7 +5370,7 @@ Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jari
     term: 'Insekticidy',
     alias: ['insecticides', 'protiherzí přípravky', 'protihmyzné postřiky'],
     kategorie: 'ochrana',
-    shortDef: 'Insekticidy jsou přípravky proti škodlivému hmyzu. Klíčové třídy: pyrethroidy (lambda-cyhalothrin), neonikotinoidy (ZAKÁZANÉ v EU 2018 pro venkovní použití), modernější diamidy a spinosyny. Cena postřiku v ČR 600–2 000 Kč/ha.',
+    shortDef: 'Insekticidy jsou přípravky proti škodlivému hmyzu. Klíčové třídy: pyrethroidy (lambda-cyhalothrin), neonikotinoidy (v EU zůstal schválený jen acetamiprid), modernější diamidy a spinosyny. Cena postřiku v ČR 600–2 000 Kč/ha.',
     longDef: `Insekticidy (z lat. *insectum* + *caedere* = hmyz + zabíjet) jsou **přípravky proti škodlivému hmyzu**. Klíčový segment ochrany rostlin — bez insekticidů by ztráty z mšic, mandelinky, zavíječů byly katastrofální.
 
 **Hlavní třídy insekticidů (IRAC groups):**
@@ -5382,7 +5381,6 @@ Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jari
   - **Lambda-cyhalothrin** (Karate Zeon) — široké spektrum
   - **Deltamethrin** (Decis) — populární
   - **Cypermethrin** (Cyperkill) — levný
-  - **Bifenthrin** — Lambda alternative
   - **Tau-fluvalinate** — selektivnější (vždy med-bee safer)
 - **Spektrum**: široké — mšice, brouci, larvy motýlů, ploštice
 - **Účinnost**: rychlá (knockdown), ale krátká (7-10 dní)
@@ -5393,11 +5391,9 @@ Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jari
 **2. Neonikotinoidy** (Group 4 — nicotinic acetylcholine receptor):
 - **Mechanismus**: agonisté acetylcholin receptorů (jako nikotin u člověka)
 - **Hlavní zástupci**:
-  - **Imidacloprid** (Confidor, Gaucho) — historicky #1
-  - **Thiamethoxam** (Actara, Cruiser)
-  - **Clothianidin** (Poncho) — zejm. v moři osiv kukuřice
-  - **Acetamiprid** (Mospilan) — STÁLE povolený v EU
-- **EU zákaz** — venkovní použití od 2018 pro thiamethoxam, clothianidin, imidacloprid. **Acetamiprid stále povolený**.
+  - **Acetamiprid** (Mospilan) — jediný neonikotinoid, který je v EU dál schválený
+  - **Imidacloprid** (Confidor, Gaucho), **thiamethoxam** (Actara, Cruiser), **clothianidin** (Poncho) — dříve hlavně mořidla osiva, v EU už neschválené
+- **EU**: venkovní použití imidaclopridu, clothianidinu a thiamethoxamu zakázáno od 2018 (prováděcí nařízení (EU) 2018/783, 2018/784 a 2018/785), schválení pak skončilo úplně (2019–2020); thiacloprid neschválen prováděcím nařízením (EU) 2020/23
 - **Důvod zákazu**: vysoká toxicita pro **včely a opylovače**
 - **Cena**: 300–600 Kč/ha (acetamiprid)
 - **Systémové působení**: pohybuje se v rostlině, dlouhodobá ochrana (2-4 týdny)
@@ -5406,8 +5402,8 @@ Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jari
 - **Mechanismus**: stálé otvírání kalciových kanálů v svalech hmyzu → paralýza
 - **Hlavní zástupci**:
   - **Chlorantraniliprole** (Coragen) — kukuřice, brambora
-  - **Cyantraniliprole** (Verimark) — moření osiv, systemicky
-  - **Flubendiamide** (Belt) — některé EU země omezené
+  - **Cyantraniliprole** — i jako mořidlo osiva, systemicky
+  - Flubendiamide (Belt) — v EU už neschválený (schválení skončilo 2024)
 - **Spektrum**: motýli (housenky), brouci (mandelinka), některé mušky
 - **Bezpečnost**: ŠETRNÁ k včelám a benefitům
 - **Cena**: 1 000–2 000 Kč/ha (drahá)
@@ -5418,7 +5414,7 @@ Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jari
 - **Mechanismus**: agonisté acetylcholin receptorů (jiný binding site než neonikotinoidy)
 - **Hlavní zástupci**:
   - **Spinosad** (Laser) — bio i konvenční, z bakterie *Saccharopolyspora spinosa*
-  - **Spinetoram** (Delegate) — silnější verze
+  - Spinetoram (Delegate) — v EU už neschválený (schválení skončilo 2024)
 - **Spektrum**: motýli, mandelinka, vrtule
 - **Bezpečnost**: nízká toxicita pro savce, **střední pro včely** (postřikovat večer)
 - **Cena**: 800–1 500 Kč/ha
@@ -5430,19 +5426,18 @@ Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jari
   - **Cena**: 800–1 200 Kč/ha
   - **Použití**: cukrovka, brambora, ovoce
 
-- **Pymetrozin** (Plenum) — mšice. EU zákaz 2019.
+- **Pymetrozin** (Plenum) — mšice; v EU neschválený od 2019 (prováděcí nařízení (EU) 2018/1501).
 
 - **Buprofezin** (Applaud) — chitin syntéza inhibitor. Růstový regulátor pro nymfální stadia.
 
-- **Indoxakarb** (Steward, Avaunt) — Group 22, sodium channel blocker. Motýli, mandelinka.
-  - **Cena**: 800–1 500 Kč/ha
+- **Indoxakarb** (Steward, Avaunt) — Group 22, blokátor sodíkových kanálů; v EU neschválený od 2021 (prováděcí nařízení (EU) 2021/2081).
 
 **6. Acaricidy (proti roztočům):**
 
 - **Hexythiazox** (Nissorun) — roztočové vajíčka a nymfy
 - **Pyridaben** (Sanmite) — adultní roztoči
 - **Abamectin** (Vertimec) — širší spektrum
-- **Spirodiclofen** (Envidor) — moderní
+- Spirodiclofen (Envidor) — v EU neschválený od 2020
 - **Bifenazate** (Floramite) — selektivní
 
 **7. Bio insekticidy:**
@@ -5465,12 +5460,10 @@ Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jari
 - Jemnější tryska pro lepší pokrytí
 
 **Moření osiv** (seed treatment):
-- **Neonikotinoidy** (clothianidin, imidacloprid) — **EU zákaz od 2018** pro venkovní použití
-- **Acetamiprid moření** — povolené, ale méně účinné
-- **Cyantraniliprole moření** (Verimark) — moderní alternativa
+- **Neonikotinoidy** (clothianidin, imidacloprid, thiamethoxam) — v EU neschválené, venkovní použití zakázáno od 2018
+- **Cyantraniliprole** — moderní mořidlo (např. u řepky)
 
 **Granulát na řádky:**
-- **Fipronil** — fluxax (proti drátovcům, larvám kořenožravců)
 - **Tefluthrin** — Force — kukuřice
 
 **Aplikace timing:**
@@ -5496,7 +5489,8 @@ Viz též [[roundup]], [[fungicidy]], [[insekticidy]], [[desikace]], [[ozim-jari
 **Bezpečnost pro včely a opylovače:**
 
 **EU regulace** (od 2018):
-- Většina neonikotinoidů ZAKÁZANÝCH venkovně
+- Imidacloprid, clothianidin, thiamethoxam a thiacloprid v EU neschválené; acetamiprid schválený
+- Jestli je konkrétní přípravek povolený, vždy ověřte v Registru přípravků na ochranu rostlin ÚKZÚZ
 - Pyrethroidy: NEpostřikovat v rozkvětu plodin
 - Diamidy, spinosyny: ŠETRNÉ
 - Flonicamid: bezpečné
@@ -5543,142 +5537,41 @@ Viz též [[mandelinka-bramborova]], [[msice-repna]], [[zavijec-kukuricny]], [[f
     term: 'Desikace',
     alias: ['desiccation', 'předsklizňové sušení', 'preharvest desiccation'],
     kategorie: 'ochrana',
-    shortDef: 'Desikace je předsklizňové vysušení porostu (řepka, slunečnice, brambory, hrách) chemickou cestou. Sjednocuje dozrávání, snižuje vlhkost zrna a usnadňuje kombajnování. V CZ klíčové pro řepku a brambory.',
-    longDef: `Desikace (z lat. *desiccare* = vysušit) je **chemické předsklizňové vysušení porostu**. Cílem je **sjednotit dozrávání, snížit vlhkost zrna a usnadnit kombajnování**. Klíčová operace pro **řepku, slunečnici, brambory, hrách, mák, len**.
+    shortDef: 'Desikace je předsklizňové umrtvení porostu, které sjednotí dozrávání a usnadní sklizeň. Po konci diquatu a se zákazem desikace glyfosátem v EU jde dnes hlavně o ničení natě brambor.',
+    longDef: `Desikace (z lat. *desiccare* = vysušit) je **cílené umrtvení porostu před sklizní**. Má sjednotit dozrávání, snížit vlhkost sklízeného produktu a usnadnit sklizeň kombajnem nebo sklízečem brambor.
 
-**Účel desikace:**
+**K čemu desikace slouží:**
+1. **Sjednocení dozrávání** — porost dozrává nerovnoměrně, například řepka mezi hlavním stonkem a bočními větvemi
+2. **Nižší vlhkost zrna** a tím nižší náklady na sušení
+3. **Snazší sklizeň** — suchý porost projde mlátičkou rychleji a s menšími ztrátami
+4. **Ničení natě brambor** — aby slupka vyzrála a plíseň bramborová nepřešla z natě na hlízy
+5. **Zničení prorostlých plevelů**
 
-1. **Sjednocení dozrávání**: porost zrne nerovnoměrně (různé fáze květu, terminál vs větvení). Desikace zastaví vegetaci, všechno zrno se „dorovná".
-2. **Snížení vlhkosti zrna**: vlhké zrno (>15 %) nelze prodat na výkup bez sušení (drahé). Desikace srazí vlhkost o 5-15 %.
-3. **Usnadnění kombajnování**: suchý porost prochází mlátičkou rychleji, méně ztrát.
-4. **Sušení slámy / nati**: u brambor podpoří odumírání nati před sklizní (předchází přenosu plísně do hlíz).
-5. **Likvidace plevelů**: vyrostlé plevele v porostu jsou desikovány společně s plodinou.
+**Účinné látky a jejich stav v EU:**
+- **Diquat** (Reglone) — desítky let standard u brambor, řepky a hrachu. **V EU už není schválený** (prováděcí nařízení (EU) 2018/1532), použití skončilo nejpozději 4. 2. 2020
+- **Glufosinát** (Basta) — **v EU neschválený**, schválení skončilo 31. 7. 2018
+- **Karfentrazon-ethyl** a **pyraflufen-ethyl** — PPO inhibitory, na kterých dnes stojí chemické ničení natě brambor. Působí jen kontaktně, potřebují dobré pokrytí a obvykle dva přejezdy
+- **Kyselina pelargonová** — přírodní kontaktní látka, použitelná i v ekologickém zemědělství; velká spotřeba vody a vysoká cena
+- **Glyfosát** — schválený do 15. 12. 2033, ale **k desikaci se v EU povolovat nesmí**: prováděcí nařízení (EU) 2023/2660 vylučuje použití k řízení termínu sklizně a k usnadnění výmlatu (platí od 16. 12. 2023). Předsklizňové ošetření proti vytrvalým plevelům je možné jen tam, kde ho výslovně uvádí povolení přípravku. V ČR navíc platí od roku 2019 zákaz předsklizňového použití glyfosátu u plodin pro potravinářské účely.
 
-**Hlavní desikační přípravky:**
+**Brambory — hlavní případ desikace:**
+Nať se ničí dva až tři týdny před sklizní, aby slupka vyzrála, hlízy se při sklizni nepoškodily a plíseň bramborová nepřešla z odumírající natě na hlízy. Po konci diquatu se ujal **kombinovaný postup**:
+1. **Mechanické drcení natě** jako první krok
+2. **Chemické dočištění** PPO desikantem proti obrůstání a zbytkům stonků
+3. Případně **elektrická desikace** vysokým napětím — bez chemie, vhodná i pro ekologické zemědělství, ale drahá a s malým výkonem
+4. V ekologickém zemědělství **čistě mechanicky** — drcení a vytrhávání natě
 
-**1. Glyfosát (Roundup):**
-- **Spectrum**: totální — všechny zelené rostliny
-- **Použití**: řepka, slunečnice, hrách, obilí
-- **Aplikace**: 10–14 dní před sklizní
-- **Dávka**: 1,5–3 l/ha (záleží na koncentraci přípravku 360 g/l)
-- **Cena**: 250–500 Kč/ha
-- **Výhody**: levný, systémový (vstupuje do plevelů → likviduje i kořeny)
-- **Pozn.**: EU obnoveno povolení do 2033, ale kontroverzní
+Ničení natě je proto dražší a pracnější než v době diquatu.
 
-**2. Diquat (Reglone):**
-- **Mechanismus**: foto-radicalation in chloroplasts (rychlá oxidace)
-- **Spectrum**: kontaktní totální desikant
-- **Použití**: brambory (nať), řepka, hrách, slunečnice
-- **Aplikace**: 7–10 dní před sklizní
-- **Dávka**: 2–3 l/ha
-- **Cena**: 500–900 Kč/ha
-- **Výhody**: velmi rychlý (3-5 dní efekt), univerzální
-- **EU stav**: **Diquat ZAKÁZANÝ v EU od 2019** (toxicita pro savce, ptáky, vodní organismy)
-- **Alternativy**: glyfosát nebo glufosinát
+**Řepka**: ve střední Evropě se obvykle sklízí bez desikace. Proti pukání šešulí se používají **lepidla šešulí**, **odrůdy odolné pukání**, **boční nože na žacím ústrojí** a řepkový adaptér s prodlouženým stolem.
 
-**3. Glufosinát (Basta, Liberty):**
-- **Mechanismus**: glutamine syntheteáza inhibitor
-- **Spectrum**: totální, kontaktní
-- **Použití**: řepka, slunečnice, obilí
-- **Aplikace**: 5–8 dní před sklizní
-- **Dávka**: 4–5 l/ha
-- **Cena**: 700–1 200 Kč/ha (dražší než glyfosát)
-- **EU stav**: **Glufosinát ZAKÁZANÝ v EU od 2018** kvůli reprodukční toxicitě
-- Trh hledá alternativy (kyselina pelargonová, octová)
+**Pšenice a další obilniny**: desikace se nedělá — glyfosát k ní v EU povolit nelze. Dozrávání se řídí volbou odrůdy, termínem setí a vedením porostu.
 
-**4. Pyraflufen-ethyl (Spotlight):**
-- **Mechanismus**: PPO inhibitor (kontaktní)
-- **Použití**: brambory (nať), polní zelenina
-- **Dávka**: 0,2–0,4 l/ha
-- **Cena**: 1 000–1 500 Kč/ha
-- **EU stav**: POVOLENÝ
+**Slunečnice, luskoviny, len**: dozrávají nerovnoměrně, takže tu má předsklizňové ošetření největší odborné opodstatnění — povolení jsou ale úzká a liší se podle plodiny i státu.
 
-**5. Karfentrazon-ethyl (Aurora):**
-- **Mechanismus**: PPO inhibitor
-- **Použití**: brambory, slunečnice
-- **Dávka**: 0,1–0,2 l/ha
-- **EU stav**: POVOLENÝ
+**Právní upozornění**: povolení pro předsklizňové použití jsou **plodinová a národní** a často se mění. Závazný je jen **Registr přípravků na ochranu rostlin ÚKZÚZ** a etiketa přípravku, k tomu ochranné lhůty a maximální limity reziduí. U smluvní produkce rozhodují i podmínky odběratele.
 
-**6. Mechanická desikace (alternativa po EU zákazech):**
-
-- **Drcení nati brambor** — Spedo, Rumptstad — fyzické zničení listů
-- **Tepelná desikace** — propanové hořáky (drahé, pomalu)
-- **Vyhnívání přirozeně** — nechat porost dozrávat (delší sklizňové okno, vyšší riziko počasí)
-
-**Desikace specifických plodin:**
-
-**Řepka ozimá:**
-- **Načasování**: BBCH 87–89 (85+ % šešulí dospělých, 80 % zrna hnědé)
-- **Důvod**: bez desikace **8–15 % ztráta** vinou pukání šešulí
-- **Přípravek**: glyfosát 2 l/ha, alternativa karfentrazon
-- **Načas**: 10–14 dní před sklizní
-- **Cena 2024**: 350–500 Kč/ha
-
-**Slunečnice:**
-- **Načasování**: BBCH 87–89 (zrno hnědé, obálka úzce dělá kulovitou)
-- **Důvod**: spolu s ozimovou řepkou nejlepší ROI
-- **Přípravek**: glyfosát 2,5 l/ha
-- **Cena**: 400–600 Kč/ha
-
-**Brambory:**
-- **Načasování**: 14–21 dní před sklizní hlíz
-- **Důvod**: silně nať = energický kombajn, nemůže projít. Také prevence plíseňového přenosu (P. infestans) do hlíz.
-- **Přípravek (post-Reglone éra)**: pyraflufen-ethyl, mechanické drcení, karfentrazon
-- **Cena**: 1 200–1 800 Kč/ha (vyšší než pre-Reglone éra)
-
-**Hrách jarní:**
-- **Načasování**: BBCH 89 (lusky hnědé)
-- **Důvod**: hrách nedozrává najednou, **nutné sjednotit**
-- **Přípravek**: glyfosát 2 l/ha
-- **Cena**: 400–600 Kč/ha
-
-**Pšenice:**
-- **Načasování**: BBCH 87–89 (zrno tvrdé, mléčný stav minul)
-- **Důvod**: jen u **velmi vlhkých let** (nutnost rychlé sklizně před deštěm)
-- **Přípravek**: glyfosát 2 l/ha
-- **Cena**: 350–500 Kč/ha
-- **Pozn.**: u potravinářské pšenice **omezené použití** kvůli reziduím glyfosátu (MRL)
-
-**Kontroverze glyfosátu při desikaci obilí:**
-- USA EPA a EFSA: **MRL pro glyfosát v pšenici** 10 mg/kg
-- Bayer / Roundup studie ukazují bezpečné dávky, ale **public concern** vyšší
-- **Mnoho EU mlýnů odmítá** zrno z desikovaného porostu
-- Trend: desikace obilí klesá, řepka a brambory zůstávají
-
-**Aplikace technika:**
-
-**Postřikovač**:
-- 200–300 l vody/ha
-- Pozor na **drift** — desikant zničí sousední porosty
-- **Hrubší tryska** (méně driftu)
-
-**Letecky** (postřik z letadla / drone):
-- Pro **těžko dostupné porosty** (rákos, vodní hospodářství)
-- Drahší (1 500–3 000 Kč/ha)
-- Méně regulačně přijatelné
-
-**EU regulace desikantů:**
-
-**Zakázané v EU (2018-2024)**:
-- Diquat (2019)
-- Glufosinát (2018)
-- Mancozeb (2024)
-
-**Riziko zákazu**:
-- **Glyfosát** — pravidelně přezkoumávaný, zatím povoleno do 2033
-
-**Alternativy bez chemie:**
-- **Mechanická desikace** (drcení nati u brambor)
-- **Tepelná desikace** (propanové hořáky — drahé)
-- **Vyhnívání přirozeně** (delší okno sklizně, riziko počasí)
-- **Šlechtění** odrůd s **synchronnějším dozráváním** (řepka)
-
-**Ekonomický dopad:**
-- **Bez desikace u řepky**: 8–15 % ztráta výnosu = 4 000–8 000 Kč/ha
-- **Desikace**: 350–500 Kč/ha náklady
-- **Návratnost**: 8–15× ROI v řepce
-
-Viz též [[roundup]], [[herbicidy]], [[repka-ozima]], [[zemak]], [[plisen-bramborova]].`,
+Viz též [[herbicidy]], [[roundup]], [[repka-ozima]], [[zemak]], [[plisen-bramborova]].`,
     related: ['roundup', 'herbicidy', 'repka-ozima', 'zemak', 'plisen-bramborova'],
   },
 
@@ -5727,7 +5620,7 @@ Viz též [[roundup]], [[herbicidy]], [[repka-ozima]], [[zemak]], [[plisen-bramb
 
 **5. Sklizeň (BBCH 90–99):**
 - **Vlhkost zrna**: 13–15 % optimum (skladovatelné bez sušení)
-- **Desikace** (viz [[desikace]]): u mokrých let glyfosát 10 dní před sklizní
+- **Desikace** (viz [[desikace]]): v pšenici se nedělá — glyfosát k ní v EU od prosince 2023 povolit nelze a v ČR platí zákaz předsklizňového glyfosátu u potravinářských plodin od 2019
 - **Kombajn**: 5–10 ha/h (moderní)
 
 **Výnosy CZ 2024:**
@@ -6411,13 +6304,13 @@ Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
 - **Bor** (B 1 kg/ha) — kritický prvek pro tvorbu úborů
 
 **Ochrana:**
-- **Plevele**: pre-emergence (Stomp, Dual Gold) + post-emergence
+- **Plevele**: pre-emergence (Stomp) + post-emergence
 - **Fungicidy**: bílá hniloba *Sclerotinia*, hnědá hniloba *Phomopsis* — 1–2 postřiky
 - **Insekticidy**: minimální (méně škůdců než řepka)
 
 **Sklizeň:**
 - **Termín**: září–říjen, vlhkost zrna 10–12 %
-- **Desikace** (viz [[desikace]]): glyfosát 2 týdny před sklizní pro sjednocení dozrávání
+- **Desikace** (viz [[desikace]]): glyfosátem ji v EU od prosince 2023 povolit nelze; jestli je pro slunečnici povolený jiný přípravek, ověřte v registru ÚKZÚZ
 - **Kombajn**: speciální slunečnicový žací mech (longer fingers)
 - **Klíčové**: nevybírat příliš nahoru = ztráta
 
@@ -6523,7 +6416,7 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
 
 **Sklizeň:**
 - **Termín**: konec července–srpen, vlhkost 10–12 %
-- **Sjednocení dozrávání**: glyfosát desikace 10 dní před sklizní
+- **Sjednocení dozrávání**: desikaci glyfosátem v EU od prosince 2023 povolit nelze — sklízí se v plné zralosti
 - **Kombajn**: standardní obilní žací mech
 
 **Výnosy:**
@@ -6633,7 +6526,7 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 - **Hnůj v předplodině** — cukrovka miluje organickou hmotu
 
 **Ochrana:**
-- **Plevele**: 3–4 postřiky (Goltix + Betanal + Pyramin) — drahý program
+- **Plevele**: 3–4 postřiky (metamitron, phenmedipham, ethofumesate) — drahý program
 - **Insekticidy**: mšice řepná (BYV vektor, viz [[msice-repna]])
 - **Fungicidy**: 1–2 postřiky (Cercospora, padlí)
 
@@ -6756,13 +6649,13 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[h
 - **Inokulace osiva** Rhizobium leguminosarum bivar. *viceae* = klíčové (zejm. na poli, kde hrach 5+ let nebyl)
 
 **Ochrana:**
-- **Plevele**: pre-emergence (Stomp, Bicarb) + post-emergence (Basagran, Pulsar)
+- **Plevele**: pre-emergence (pendimethalin, clomazone) + post-emergence (Basagran, Pulsar)
 - **Insekticidy**: zrnokaz hrachový (Bruchus pisorum), mšice
 - **Fungicidy**: bílá hniloba *Sclerotinia*, plíseň hrášku (Mycosphaerella pisi)
 
 **Sklizeň zrnového hrachu:**
 - **Termín**: konec července–srpen, vlhkost 14 %
-- **Desikace** (viz [[desikace]]): glyfosát 7–10 dní před sklizní (vyrovnání dozrání)
+- **Desikace** (viz [[desikace]]): glyfosátem ji v EU od prosince 2023 povolit nelze; jestli je pro hrách povolený jiný přípravek, ověřte v registru ÚKZÚZ
 - **Kombajn**: standardní žací mech, ale opatrně (zrno lehce vypadá)
 
 **Výnosy:**
