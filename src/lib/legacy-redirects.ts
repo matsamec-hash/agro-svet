@@ -4,6 +4,7 @@
 // jednorázové redirecty dál patří do astro.config.mjs → `redirects`.
 import { FUNCTIONAL_GROUPS, LEGACY_CATEGORY_ALIASES, getFunctionalGroupForCategory } from './stroje-skupiny';
 import type { StrojKategorie } from './stroje';
+import { catalogRedirectTarget } from './katalog-redirects';
 
 /** Klíč kategorie → slug subkategorie s vlastním výpisem /stroje/<sub>/, jinak null. */
 function listedSubcategory(key: string): string | null {
@@ -31,6 +32,7 @@ const ENC_MERGED: Record<string, string> = {
  *    Legacy klíče kategorií John Deere, na které odkazovala stránka značky.
  * 3. /slovnik/<heslo>/<xx>.wikipedia.org/… → /slovnik/<heslo>/
  *    Odkaz na Wikipedii bez https:// se v prohlížeči složil jako relativní.
+ * 4. Modely smazané z katalogu → řada / model, který zůstal (lib/katalog-redirects.ts).
  */
 export function legacyRedirectTarget(csPath: string): string | null {
   const zem = csPath.match(/^\/stroje\/zemedelske-stroje\/([^/]+)\/?$/);
@@ -44,5 +46,5 @@ export function legacyRedirectTarget(csPath: string): string | null {
   if (wiki) return `/slovnik/${wiki[1]}/`;
   const enc = csPath.match(/^\/encyklopedie\/([^/]+)\/?$/);
   if (enc && enc[1] in ENC_MERGED) return `/encyklopedie/${ENC_MERGED[enc[1]]}/`;
-  return null;
+  return catalogRedirectTarget(csPath);
 }

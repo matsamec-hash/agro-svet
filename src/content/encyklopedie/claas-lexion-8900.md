@@ -4,60 +4,62 @@ slug: "claas-lexion-8900"
 znacka: "claas"
 kategorie: kombajn
 vykon: "790 k (581 kW)"
-hmotnost: "22 800 kg"
-rok_uvedeni: 2020
-popis: "Největší sériová sklízecí mlátička světa: 790 koní, zásobník 18 000 litrů, hybridní mlácení APS SYNFLOW HYBRID a plná automatizace CEMOS AUTO. Kompletní parametry, cena, spotřeba a srovnání s konkurencí."
+hmotnost: "19 900 kg (kola) / 22 400 kg (TERRA TRAC)"
+rok_uvedeni: 2019
+popis: "Vlajková loď CLAAS: 790 koní z motoru MAN 16,2 l, zásobník až 18 000 litrů, hybridní mlácení APS SYNFLOW HYBRID a automatika CEMOS AUTOMATIC. Parametry podle CLAAS, cena, spotřeba a srovnání s konkurencí."
 titulek: "CLAAS Lexion 8900 — 790 k, cena, spotřeba a srovnání"
 heroImage: "/images/stroje/claas/claas-lexion-8900.jpg"
 powerHp: 790
 powerKw: 581
-weightKg: 22800
+weightKg: 19900
 engine: "MAN D4276, 6-válec 16,2 l, Stage V"
-transmission: "Hydrostatická, max. 30 km/h"
+transmission: "Hydrostatický pojezd, 2 rychlostní stupně, až 40 km/h (podle výbavy a země)"
 seriesName: "Lexion 8000"
-lastVerified: 2026-05-02
+lastVerified: 2026-10-17
 sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/sklizeci-mlaticky/lexion-8000"
 youtubeId: "l1UVX6NEB3E"
 youtubeTitle: "CLAAS Lexion 8900 — oficiální walkaround (řada Lexion 8000)"
 recenze:
   hodnoceni: 4.6
-  verdikt: "CLAAS Lexion 8900 je momentálně nejvýkonnější sériová sklízecí mlátička na trhu a pro velkovýrobu nad 1 000 hektarů obilí nemá v propustnosti obdoby. Hybridní systém APS SYNFLOW HYBRID a automatizace CEMOS AUTO z ní dělají stroj, který dokáže naplno využít i méně zkušený operátor. Cenou i provozními náklady je určená výhradně pro největší podniky a sklízecí firmy — pro střední farmy je vhodnější řada Lexion 5000 nebo Trion."
+  verdikt: "CLAAS Lexion 8900 patří k nejvýkonnějším sériovým sklízecím mlátičkám na trhu a míří na velkovýrobu nad 1 000 hektarů obilí. Hybridní systém APS SYNFLOW HYBRID a automatika CEMOS AUTOMATIC pomáhají využít jeho výkon i méně zkušenému operátorovi. Cenou i provozními náklady je určená pro největší podniky a sklízecí firmy — pro střední farmy je vhodnější řada Lexion 5000 nebo Trion."
   plusy:
-    - "Nejvyšší propustnost mezi sériovými mlátičkami"
-    - "Zásobník 18 000 l — nejméně přerušení sklizně"
-    - "CEMOS AUTO výrazně srovnává výkon operátorů"
-    - "Kvalitní sláma díky hybridnímu mlácení"
+    - "Vysoká propustnost díky APS SYNFLOW HYBRID"
+    - "Zásobník až 18 000 l a vykládání až 180 l/s"
+    - "CEMOS AUTOMATIC srovnává výkon operátorů"
+    - "Volitelný pásový podvozek TERRA TRAC"
   minusy:
     - "Pořizovací cena a provozní náklady jen pro největší podniky"
     - "Rozměry a hmotnost kladou nároky na přepravu a půdu"
     - "Plný potenciál se projeví až nad 1 000 ha"
-  datum: 2026-05-02
+  datum: 2026-10-17
 highlights:
-  - "Motor MAN D4276, 790 k"
-  - "Zásobník zrna 18 000 litrů"
-  - "Systém CEMOS AUTO — plná automatizace"
-  - "Šířka záběru až 12 m"
-  - "APS SYNFLOW HYBRID — hybridní mlátění"
+  - "Motor MAN D4276 (16,2 l), 790 k"
+  - "Zásobník zrna až 18 000 litrů"
+  - "CEMOS AUTOMATIC — samoučící nastavení stroje"
+  - "Pojezd až 40 km/h (podle výbavy a země)"
+  - "APS SYNFLOW HYBRID — mlátící bubny a dva rotory ROTO PLUS"
 faq:
   - q: "Jaký výkon má CLAAS Lexion 8900?"
-    a: "Lexion 8900 disponuje výkonem 790 koní (581 kW). Motor MAN D4276 je šestiválec o objemu 16,2 litru a splňuje emisní normu Stage V."
+    a: "Lexion 8900 má podle CLAAS výkon 790 koní (581 kW). Motor MAN D4276 je šestiválec o objemu 16,2 litru a splňuje emisní normu Stage V."
+  - q: "Od kdy se Lexion 8900 vyrábí?"
+    a: "CLAAS představil Lexion 8900 v létě 2019 spolu s novou řadou Lexion 8000/7000 (modelový rok 2020). CLAAS ho nabízí na kolech i s pásovým podvozkem TERRA TRAC (LEXION 8900 TT)."
   - q: "Jak velký je zásobník zrna u Lexion 8900?"
-    a: "Zásobník pojme 18 000 litrů zrna, což je největší kapacita mezi sériově vyráběnými sklízecími mlátičkami na světě. Kompletní vyprázdnění plného zásobníku trvá přibližně 100 sekund při vykládací rychlosti až 180 litrů za sekundu."
+    a: "Zásobník pojme až 18 000 litrů zrna. Vykládací šnek vyprazdňuje až 180 litrů za sekundu, takže plný zásobník je prázdný zhruba za 100 sekund; výkon lze snížit na 90 l/s."
   - q: "Kolik stojí CLAAS Lexion 8900?"
-    a: "CLAAS ceníkové ceny nezveřejňuje — konfigurace se sestavuje individuálně. Orientačně se pořizovací cena nového Lexion 8900 pohybuje kolem 15–20 milionů korun bez DPH podle výbavy, typu pojezdu (kola / pásy TERRA TRAC) a zvoleného adaptéru. Přesnou nabídku poskytne autorizovaný prodejce CLAAS."
+    a: "CLAAS ceníkové ceny nezveřejňuje — konfigurace se sestavuje individuálně. Orientačně se pořizovací cena nového Lexion 8900 pohybuje kolem 15–20 milionů korun bez DPH podle výbavy a zvoleného adaptéru. Přesnou nabídku poskytne autorizovaný prodejce CLAAS."
   - q: "Jaká je spotřeba paliva Lexion 8900?"
-    a: "Spotřeba silně závisí na plodině, výnosu a podmínkách. V obilí se reálná spotřeba pohybuje zhruba mezi 40 a 60 litry nafty na hektar, v kukuřici výše. Systém stop-and-go a CEMOS AUTO pomáhají udržet spotřebu na hektar co nejnižší tím, že stroj jede vždy na optimu propustnosti."
-  - q: "Co dělá systém CEMOS AUTO?"
-    a: "CEMOS AUTO v reálném čase monitoruje vlhkost zrna, ztráty na řešetě, výšku porostu a sklon stroje. Na základě dat automaticky upravuje otáčky bubnu, rychlost jízdy a vzdálenost řešet — operátor pouze řídí."
+    a: "Spotřeba silně závisí na plodině, výnosu a podmínkách. CLAAS u špičkových modelů Lexion uvádí spotřebu kolem 1 litru nafty na tunu sklizeného zrna. Systém DYNAMIC POWER přizpůsobuje výkon motoru zatížení a při částečném zatížení podle CLAAS ušetří až 10 % paliva."
+  - q: "Co dělá systém CEMOS AUTOMATIC?"
+    a: "CEMOS AUTOMATIC je samoučící asistenční systém CLAAS. Během sklizně sám průběžně upravuje nastavení mlátícího ústrojí, separace a čištění podle aktuálních podmínek, takže stroj drží vysoký výkon i bez neustálého zásahu operátora."
   - q: "Pro jakou velikost farmy se Lexion 8900 hodí?"
     a: "Lexion 8900 je určen pro velkovýrobu od přibližně 1 000 hektarů obilí výše. Pro menší hospodářství je vhodnější nižší řada Lexion 5000 nebo Trion."
-  - q: "Jaká je výhoda hybridního systému APS SYNFLOW HYBRID?"
-    a: "Hybridní systém kombinuje tradiční bubnové mlátění s tangenciálním rotorem. Výsledkem je vyšší kapacita při vlhkém obilí, snížení ztrát zrna o 15 % oproti čistě rotorové konstrukci a kvalitnější sláma pro lisování."
+  - q: "Jak funguje systém APS SYNFLOW HYBRID?"
+    a: "Materiál nejdřív projde tangenciálním mláticím ústrojím APS: urychlovací buben o průměru 450 mm, mlátící buben o průměru 755 mm a přiváděcí buben. Zbylé zrno ze slámy pak oddělí dva rotory ROTO PLUS o průměru 445 mm a délce 4 200 mm. Otáčky mlácení a separace se nastavují nezávisle."
   - q: "Jaký je rozdíl mezi Lexion 8900 a John Deere X9 1100?"
-    a: "Oba stroje míří na absolutní špičku propustnosti. Lexion 8900 sází na hybridní mlácení (buben + rotor) a zásobník 18 000 l, John Deere X9 1100 na dvojici rotorů a zásobník 16 200 l. Volba obvykle rozhoduje podle servisní sítě značky v regionu, adaptérů a osobní preference operátorů."
+    a: "Oba stroje míří na absolutní špičku propustnosti. Lexion 8900 sází na hybridní mlácení (tangenciální bubny + dva rotory) a zásobník až 18 000 l, John Deere X9 1100 na dvojici rotorů. Volba obvykle rozhoduje podle servisní sítě značky v regionu, adaptérů a osobní preference operátorů."
 ---
 
-CLAAS Lexion 8900 představuje absolutní špičku mezi sklízecími mlátičkami. Tento obr o výkonu **790 koní** je nejvýkonnějším sériovým kombajnem světa, dominuje polím na celém světě a v České republice se pravidelně objevuje na největších zemědělských podnicích a u profesionálních sklízecích firem.
+CLAAS Lexion 8900 je vrcholný model řady Lexion 8000. S výkonem **790 koní** patří k nejvýkonnějším sériovým kombajnům na trhu a v České republice ho provozují hlavně největší zemědělské podniky a profesionální sklízecí firmy.
 
 ## Technické parametry
 
@@ -66,71 +68,69 @@ CLAAS Lexion 8900 představuje absolutní špičku mezi sklízecími mlátičkam
 | Motor | MAN D4276, 6válec, 16,2 l |
 | Emisní norma | Stage V |
 | Max. výkon | 790 k (581 kW) |
-| Mlátící systém | APS SYNFLOW HYBRID (buben + rotor) |
-| Zásobník zrna | 18 000 l |
+| Mlátící systém | APS SYNFLOW HYBRID (bubny + 2 rotory ROTO PLUS) |
+| Šířka mlátícího kanálu | 1 700 mm |
+| Zásobník zrna | až 18 000 l |
 | Rychlost vykládání | až 180 l/s |
 | Pojezd | kola nebo pásy TERRA TRAC |
-| Max. rychlost | 30 km/h |
-| Provozní hmotnost | cca 22 800 kg |
-| Šířka záběru | až 12 m (podle adaptéru) |
-| Rok uvedení | 2020 |
+| Max. rychlost | až 40 km/h (podle výbavy a předpisů země) |
+| Hmotnost bez adaptéru | 19 900 kg (kola) / 22 400 kg (TERRA TRAC) |
+| Rok uvedení | 2019 |
+
+Údaje vycházejí z webu CLAAS, prospektu LEXION 8000/7000 pro modelový rok 2026 a tiskových zpráv CLAAS z 16. 7. 2024 a 15. 7. 2025. Hmotnost platí bez adaptéru, s drtičem slámy a plnými nádržemi a podle výbavy se liší.
 
 ## Konstrukce
 
-Srdcem stroje je motor **MAN D4276** — šestiválec s objemem 16,2 litrů a výkonem 581 kW. Motor splňuje emisní normu Stage V a díky systému stop-and-go snižuje spotřebu při čekání na odvoz zrna.
+Srdcem stroje je motor **MAN D4276** — šestiválec s objemem 16,2 litru a výkonem 581 kW. Motor splňuje emisní normu Stage V. Systém **DYNAMIC POWER** přizpůsobuje výkonovou křivku zatížení: při částečném zatížení, třeba při sklizni z řádku, ušetří podle CLAAS až 10 % paliva, při plném zatížení drží maximální výkon.
 
 ### Mlátící ústrojí APS SYNFLOW HYBRID
 
-Hybridní systém kombinuje tradiční bubnové mlátení (APS) s tangenciálním rotorem. Výsledkem je:
+Hybridní systém spojuje tangenciální mlácení s rotorovou separací:
 
-- Vyšší kapacita zpracování při vlhkém obilí
-- Nižší ztráty zrna o 15 % oproti čistě rotorové konstrukci
-- Kvalitnější sláma pro lisování
+- urychlovací buben o průměru 450 mm rozběhne tok materiálu až na 20 m/s,
+- mlátící buben má průměr 755 mm, za ním následuje přiváděcí buben,
+- zbylé zrno ze slámy oddělí dva rotory **ROTO PLUS** o průměru 445 mm a délce 4 200 mm.
+
+Otáčky mlácení a separace se nastavují nezávisle na sobě, takže stroj může jet rychle a přitom šetrně zacházet se zrnem.
 
 ## Automatizace CEMOS
 
-CEMOS AUTO monitoruje v reálném čase:
-- Vlhkost zrna
-- Ztráty na řešetu a sítu
-- Výšku porostu
-- Sklonění stroje
-
-Na základě těchto dat automaticky upravuje otáčky bubnu, rychlost jízdy a vzdálenost řešet. Operátor pouze řídí — stroj se stará o optimální výkon. Právě CEMOS AUTO nejvíc srovnává rozdíly mezi zkušeným a méně zkušeným operátorem: i nováček s ním dosáhne výkonů, na které by ručně potřeboval roky praxe.
+**CEMOS AUTOMATIC** je samoučící systém, který během sklizně sám upravuje nastavení mlátícího ústrojí, separace a čištění podle aktuálních podmínek. Doplňuje ho **CEMOS DIALOG**, který operátora provede nastavením krok za krokem. Právě automatika nejvíc srovnává rozdíly mezi zkušeným a méně zkušeným operátorem.
 
 ## Zásobník a vykládání
 
-Zásobník pojme **18 000 litrů** zrna — nejvíc mezi sériově vyráběnými mlátičkami. Vysoká vykládací rychlost **až 180 litrů za sekundu** umožňuje vyprázdnit plný zásobník přibližně za 100 sekund, což minimalizuje počet zastávek a přerušení sklizně.
+Zásobník pojme **až 18 000 litrů** zrna. Vykládání **až 180 litrů za sekundu** vyprázdní plný zásobník zhruba za 100 sekund; výkon lze snížit na 90 l/s, když se plní menší přepravník.
 
 ## Adaptéry
 
-Pro různé plodiny existuje řada adaptérů:
-- **CONVIO FLEX** — klasické obilniny, šířka 7,5–10,5 m
-- **VARIO** — řepka, šířka 5,4–9 m
-- **CONSPEED** — kukuřice, 8–16 řad
+Pro různé plodiny existuje řada adaptérů CLAAS:
+- **VARIO** — žací lišta s plynule nastavitelným stolem; k Lexionu 8900 CLAAS při uvedení nabídl i nový záběr 13,8 m,
+- **CONVIO FLEX** — pásová lišta s flexibilní kosou, v Severní Americe až 15,3 m (CONVIO FLEX 1530),
+- **CORIO** — adaptéry na kukuřici.
 
 ## Kolik stojí CLAAS Lexion 8900
 
 CLAAS ceníkové ceny nezveřejňuje — každý stroj se konfiguruje individuálně podle potřeb podniku. Orientačně se pořizovací cena nového Lexion 8900 pohybuje kolem **15–20 milionů korun bez DPH**, přičemž konečnou částku výrazně ovlivňuje:
 
-- typ pojezdu (kola vs. pásy **TERRA TRAC**),
-- zvolený adaptér (CONVIO FLEX, VARIO nebo CONSPEED),
+- zvolený adaptér (VARIO, CONVIO FLEX nebo CORIO),
+- typ pojezdu (kola, nebo pásy **TERRA TRAC**),
 - úroveň výbavy kabiny, automatizace a telematiky.
 
 Řada podniků stroj pořizuje formou operativního leasingu nebo si sklizeň objednává u specializovaných sklízecích firem, které Lexion 8900 provozují. Přesnou cenovou nabídku poskytne pouze autorizovaný prodejce CLAAS.
 
 ## Spotřeba paliva
 
-Spotřeba silně závisí na plodině, výnosu, vlhkosti a terénu. V obilí se reálná spotřeba obvykle pohybuje zhruba mezi **40 a 60 litry nafty na hektar**, v kukuřici bývá vyšší. Klíčem k nízké spotřebě „na hektar" je držet stroj neustále na optimu propustnosti — o to se stará právě CEMOS AUTO spolu se systémem stop-and-go, který motor odlehčí ve chvílích, kdy stroj nesklízí.
+Spotřeba silně závisí na plodině, výnosu, vlhkosti a terénu. CLAAS u špičkových modelů Lexion uvádí spotřebu kolem **1 litru nafty na tunu** sklizeného zrna při vysoké propustnosti. Nízkou spotřebu na hektar drží hlavně stálý chod stroje na optimu propustnosti, o který se stará CEMOS AUTOMATIC, a systém DYNAMIC POWER, který při částečném zatížení sníží výkon motoru.
 
 ## Srovnání s konkurencí
 
 V nejvyšší třídě „10+" soutěží Lexion 8900 s několika málo stroji na světě:
 
-- **[John Deere X9 1100](/encyklopedie/john-deere-x9-1100/)** — dvojice rotorů, zásobník 16 200 l; hlavní přímý konkurent.
+- **[John Deere X9 1100](/encyklopedie/john-deere-x9-1100/)** — dvojice rotorů; hlavní přímý konkurent.
 - **[New Holland CR11](/encyklopedie/new-holland-cr11/)** — dvourotorová konstrukce Twin Rotor, mimořádná propustnost.
-- **[Fendt IDEAL 10T](/encyklopedie/fendt-ideal-10t/)** — jednorotorová koncepce s pásovým podvozkem.
+- **[Fendt IDEAL 10T](/encyklopedie/fendt-ideal-10t/)** — dvourotorová platforma s pásovým podvozkem.
 
-Oproti čistě rotorovým strojům sází CLAAS na **hybridní mlácení**, které zvládne i vlhké obilí a zanechává kvalitnější slámu pro následné lisování. Pokud hledáte stroj o třídu níž pro střední podnik, zvažte řadu **[CLAAS Trion](/encyklopedie/claas-trion-750/)**.
+Oproti čistě rotorovým strojům sází CLAAS na **hybridní mlácení**: zrno vymlátí tangenciální bubny a rotory slouží až k dodatečné separaci. Pokud hledáte stroj o třídu níž pro střední podnik, zvažte řadu **[CLAAS Trion](/encyklopedie/claas-trion-750/)**.
 
 ## Pro koho je Lexion 8900
 

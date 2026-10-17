@@ -4,59 +4,61 @@ slug: "claas-lexion-8900"
 znacka: "claas"
 kategorie: kombajn
 vykon: "790 PS (581 kW)"
-hmotnost: "22 800 kg"
-rok_uvedeni: 2020
-popis: "Der größte Serienmähdrescher der Welt: 790 PS, 18 000 Liter Korntank, Hybriddrusch APS SYNFLOW HYBRID und volle Automatisierung CEMOS AUTO. Komplette Daten, Preis, Verbrauch und Vergleich mit dem Wettbewerb."
+hmotnost: "19 900 kg (Räder) / 22 400 kg (TERRA TRAC)"
+rok_uvedeni: 2019
+popis: "Das Flaggschiff von CLAAS: 790 PS aus einem 16,2-l-MAN-Motor, Korntank bis 18 000 Liter, Hybriddrusch APS SYNFLOW HYBRID und Automatik CEMOS AUTOMATIC. Daten nach CLAAS, Preis, Verbrauch und Vergleich mit dem Wettbewerb."
 heroImage: "/images/stroje/claas/claas-lexion-8900.jpg"
 powerHp: 790
 powerKw: 581
-weightKg: 22800
+weightKg: 19900
 engine: "MAN D4276, 6-Zylinder 16,2 l, Stage V"
-transmission: "Hydrostatisch, max. 30 km/h"
+transmission: "Hydrostatischer 2-Gang-Fahrantrieb, bis 40 km/h (je nach Ausstattung und Land)"
 seriesName: "Lexion 8000"
-lastVerified: 2026-05-02
-sourceUrl: "https://www.claas.com/cs-cz/zemedelske-stroje/sklizeci-mlaticky/lexion-8000"
+lastVerified: 2026-10-17
+sourceUrl: "https://www.claas.com/de-de/landmaschinen/maehdrescher/lexion-8000"
 youtubeId: "l1UVX6NEB3E"
 youtubeTitle: "CLAAS Lexion 8900 — offizieller Walkaround (Baureihe Lexion 8000)"
 recenze:
   hodnoceni: 4.6
-  verdikt: "Der CLAAS Lexion 8900 ist derzeit der leistungsstärkste Serienmähdrescher am Markt und hat für den Großflächeneinsatz über 1 000 Hektar Getreide beim Durchsatz keine Konkurrenz. Das Hybridsystem APS SYNFLOW HYBRID und die Automatisierung CEMOS AUTO machen ihn zu einer Maschine, die auch ein weniger erfahrener Fahrer voll ausschöpfen kann. Preis und Betriebskosten richten ihn ausschließlich an die größten Betriebe und Lohnunternehmen — für mittlere Betriebe ist die Baureihe Lexion 5000 oder der Trion besser geeignet."
+  verdikt: "Der CLAAS Lexion 8900 gehört zu den leistungsstärksten Serienmähdreschern am Markt und zielt auf den Großflächeneinsatz über 1 000 Hektar Getreide. Das Hybridsystem APS SYNFLOW HYBRID und die Automatik CEMOS AUTOMATIC helfen auch einem weniger erfahrenen Fahrer, die Leistung auszuschöpfen. Preis und Betriebskosten richten ihn an die größten Betriebe und Lohnunternehmen — für mittlere Betriebe ist die Baureihe Lexion 5000 oder der Trion besser geeignet."
   plusy:
-    - "Höchster Durchsatz unter den Serienmähdreschern"
-    - "18 000 l Korntank — die wenigsten Ernteunterbrechungen"
-    - "CEMOS AUTO gleicht Leistungsunterschiede zwischen Fahrern deutlich aus"
-    - "Hochwertiges Stroh dank Hybriddrusch"
+    - "Hoher Durchsatz dank APS SYNFLOW HYBRID"
+    - "Korntank bis 18 000 l und Entladung mit bis zu 180 l/s"
+    - "CEMOS AUTOMATIC gleicht Leistungsunterschiede zwischen Fahrern aus"
+    - "Raupenlaufwerk TERRA TRAC optional"
   minusy:
     - "Anschaffungspreis und Betriebskosten nur für die größten Betriebe"
     - "Abmessungen und Gewicht stellen Anforderungen an Transport und Boden"
     - "Das volle Potenzial zeigt sich erst über 1 000 ha"
-  datum: 2026-05-02
+  datum: 2026-10-17
 highlights:
-  - "Motor MAN D4276, 790 PS"
-  - "Korntank mit 18 000 Litern"
-  - "System CEMOS AUTO — volle Automatisierung"
-  - "Arbeitsbreite bis 12 m"
-  - "APS SYNFLOW HYBRID — Hybriddrusch"
+  - "Motor MAN D4276 (16,2 l), 790 PS"
+  - "Korntank bis 18 000 Liter"
+  - "CEMOS AUTOMATIC — selbstlernende Maschineneinstellung"
+  - "Fahrantrieb bis 40 km/h (je nach Ausstattung und Land)"
+  - "APS SYNFLOW HYBRID — Dreschtrommeln und zwei ROTO PLUS Rotoren"
 faq:
   - q: "Welche Leistung hat der CLAAS Lexion 8900?"
-    a: "Der Lexion 8900 verfügt über 790 PS (581 kW). Der Motor MAN D4276 ist ein Sechszylinder mit 16,2 Litern Hubraum und erfüllt die Abgasnorm Stage V."
+    a: "Der Lexion 8900 leistet laut CLAAS 790 PS (581 kW). Der Motor MAN D4276 ist ein Sechszylinder mit 16,2 Litern Hubraum und erfüllt die Abgasnorm Stage V."
+  - q: "Seit wann wird der Lexion 8900 gebaut?"
+    a: "CLAAS stellte den Lexion 8900 im Sommer 2019 zusammen mit der neuen Baureihe Lexion 8000/7000 vor (Modelljahr 2020). CLAAS bietet ihn auf Rädern und mit Raupenlaufwerk TERRA TRAC (LEXION 8900 TT) an."
   - q: "Wie groß ist der Korntank des Lexion 8900?"
-    a: "Der Tank fasst 18 000 Liter Korn und bietet damit die größte Kapazität unter den in Serie gefertigten Mähdreschern der Welt. Die vollständige Entleerung des gefüllten Tanks dauert bei einer Entladeleistung von bis zu 180 Litern je Sekunde rund 100 Sekunden."
+    a: "Der Korntank fasst bis zu 18 000 Liter. Die Entladeschnecke schafft bis zu 180 Liter je Sekunde, der volle Tank ist damit in rund 100 Sekunden leer; die Leistung lässt sich auf 90 l/s reduzieren."
   - q: "Was kostet der CLAAS Lexion 8900?"
-    a: "CLAAS veröffentlicht keine Listenpreise — die Konfiguration wird individuell zusammengestellt. Als Orientierung vom tschechischen Markt liegt der Anschaffungspreis eines neuen Lexion 8900 je nach Ausstattung, Fahrwerk (Räder / Bänder TERRA TRAC) und gewähltem Vorsatzgerät bei etwa 15–20 Mio. CZK netto (rund 600 000–800 000 €). Ein genaues Angebot erstellt der autorisierte CLAAS-Händler."
+    a: "CLAAS veröffentlicht keine Listenpreise — die Konfiguration wird individuell zusammengestellt. Als Orientierung vom tschechischen Markt liegt der Anschaffungspreis eines neuen Lexion 8900 je nach Ausstattung und Vorsatzgerät bei etwa 15–20 Mio. CZK netto (rund 600 000–800 000 €). Ein genaues Angebot erstellt der autorisierte CLAAS-Händler."
   - q: "Wie hoch ist der Kraftstoffverbrauch des Lexion 8900?"
-    a: "Der Verbrauch hängt stark von Kultur, Ertrag und Bedingungen ab. In Getreide liegt der reale Verbrauch etwa zwischen 40 und 60 Litern Diesel je Hektar, in Mais höher. Das Stop-and-go-System und CEMOS AUTO helfen, den Verbrauch je Hektar möglichst niedrig zu halten, indem die Maschine stets am Durchsatzoptimum fährt."
-  - q: "Was macht das System CEMOS AUTO?"
-    a: "CEMOS AUTO überwacht in Echtzeit die Kornfeuchte, die Verluste an den Sieben, die Bestandeshöhe und die Neigung der Maschine. Auf Basis dieser Daten passt es Trommeldrehzahl, Fahrgeschwindigkeit und Siebabstände automatisch an — der Fahrer lenkt nur noch."
+    a: "Der Verbrauch hängt stark von Kultur, Ertrag und Bedingungen ab. CLAAS nennt für die LEXION-Topmodelle einen Verbrauch von ca. 1 Liter Diesel pro Tonne bei hohem Durchsatz. DYNAMIC POWER passt die Motorleistung dem Bedarf an und spart laut CLAAS bis zu 10 % Kraftstoff im Teillastbetrieb."
+  - q: "Was macht das System CEMOS AUTOMATIC?"
+    a: "CEMOS AUTOMATIC ist ein selbstlernendes Assistenzsystem von CLAAS. Während der Ernte passt es die Einstellungen von Dreschwerk, Abscheidung und Reinigung laufend an die aktuellen Bedingungen an, sodass die Maschine auch ohne ständiges Eingreifen des Fahrers eine hohe Leistung hält."
   - q: "Für welche Betriebsgröße eignet sich der Lexion 8900?"
     a: "Der Lexion 8900 ist für den Großflächeneinsatz ab etwa 1 000 Hektar Getreide gedacht. Für kleinere Betriebe ist die niedrigere Baureihe Lexion 5000 oder der Trion besser geeignet."
-  - q: "Welchen Vorteil hat das Hybridsystem APS SYNFLOW HYBRID?"
-    a: "Das Hybridsystem verbindet den klassischen Trommeldrusch mit einem tangentialen Rotor. Das Ergebnis sind eine höhere Kapazität bei feuchtem Getreide, um 15 % geringere Kornverluste gegenüber einer reinen Rotorbauweise und hochwertigeres Stroh zum Pressen."
+  - q: "Wie funktioniert das System APS SYNFLOW HYBRID?"
+    a: "Das Erntegut durchläuft zuerst das tangentiale Dreschwerk APS: eine Beschleunigertrommel mit 450 mm, eine Dreschtrommel mit 755 mm Durchmesser und eine Zuführtrommel. Die Restkornabscheidung übernehmen zwei ROTO PLUS Rotoren mit 445 mm Durchmesser und 4 200 mm Länge. Drehzahlen von Dreschwerk und Abscheidung werden unabhängig voneinander eingestellt."
   - q: "Worin unterscheiden sich Lexion 8900 und John Deere X9 1100?"
-    a: "Beide Maschinen zielen auf die absolute Spitze des Durchsatzes. Der Lexion 8900 setzt auf Hybriddrusch (Trommel + Rotor) und einen 18 000-l-Tank, der John Deere X9 1100 auf zwei Rotoren und einen 16 200-l-Tank. Die Wahl entscheidet sich meist am Servicenetz der Marke in der Region, an den Vorsatzgeräten und an der Vorliebe der Fahrer."
+    a: "Beide Maschinen zielen auf die absolute Spitze des Durchsatzes. Der Lexion 8900 setzt auf Hybriddrusch (tangentiale Trommeln + zwei Rotoren) und einen Korntank bis 18 000 l, der John Deere X9 1100 auf zwei Rotoren. Die Wahl entscheidet sich meist am Servicenetz der Marke in der Region, an den Vorsatzgeräten und an der Vorliebe der Fahrer."
 ---
 
-Der CLAAS Lexion 8900 markiert die absolute Spitze unter den Mähdreschern. Dieser Gigant mit **790 PS** ist der leistungsstärkste Serienmähdrescher der Welt, dominiert Felder rund um den Globus und ist regelmäßig bei den größten Agrarbetrieben und professionellen Lohnunternehmen im Einsatz.
+Der CLAAS Lexion 8900 ist das Spitzenmodell der Baureihe Lexion 8000. Mit **790 PS** gehört er zu den leistungsstärksten Serienmähdreschern am Markt und ist vor allem bei den größten Agrarbetrieben und professionellen Lohnunternehmen im Einsatz.
 
 ## Technische Daten
 
@@ -65,71 +67,69 @@ Der CLAAS Lexion 8900 markiert die absolute Spitze unter den Mähdreschern. Dies
 | Motor | MAN D4276, 6-Zylinder, 16,2 l |
 | Abgasnorm | Stage V |
 | Max. Leistung | 790 PS (581 kW) |
-| Dreschsystem | APS SYNFLOW HYBRID (Trommel + Rotor) |
-| Korntank | 18 000 l |
+| Dreschsystem | APS SYNFLOW HYBRID (Trommeln + 2 Rotoren ROTO PLUS) |
+| Kanalbreite | 1 700 mm |
+| Korntank | bis 18 000 l |
 | Entladeleistung | bis 180 l/s |
-| Fahrwerk | Räder oder Bänder TERRA TRAC |
-| Höchstgeschwindigkeit | 30 km/h |
-| Betriebsgewicht | ca. 22 800 kg |
-| Arbeitsbreite | bis 12 m (je nach Vorsatzgerät) |
-| Markteinführung | 2020 |
+| Fahrwerk | Räder oder Raupenlaufwerk TERRA TRAC |
+| Höchstgeschwindigkeit | bis 40 km/h (je nach Ausstattung und Land) |
+| Gewicht ohne Vorsatzgerät | 19 900 kg (Räder) / 22 400 kg (TERRA TRAC) |
+| Markteinführung | 2019 |
+
+Die Angaben stammen von der CLAAS-Website, aus dem Prospekt LEXION 8000/7000 für das Modelljahr 2026 und aus CLAAS-Pressemitteilungen vom 16. 7. 2024 und 15. 7. 2025. Das Gewicht gilt ohne Vorsatzgerät, mit Strohhäcksler und vollen Tanks und variiert je nach Ausstattung.
 
 ## Konstruktion
 
-Das Herz der Maschine ist der Motor **MAN D4276** — ein Sechszylinder mit 16,2 Litern Hubraum und 581 kW. Der Motor erfüllt die Abgasnorm Stage V und senkt dank Stop-and-go-System den Verbrauch beim Warten auf die Kornabfuhr.
+Das Herz der Maschine ist der Motor **MAN D4276** — ein Sechszylinder mit 16,2 Litern Hubraum und 581 kW. Der Motor erfüllt die Abgasnorm Stage V. **DYNAMIC POWER** passt die Leistungskurve an die Last an: Im Teillastbetrieb, etwa beim Schwaddrusch, spart das laut CLAAS bis zu 10 % Kraftstoff, unter Volllast bleibt die maximale Motorleistung erhalten.
 
 ### Dreschwerk APS SYNFLOW HYBRID
 
-Das Hybridsystem verbindet den klassischen Trommeldrusch (APS) mit einem tangentialen Rotor. Das Ergebnis:
+Das Hybridsystem verbindet tangentialen Drusch mit Rotorabscheidung:
 
-- Höhere Verarbeitungskapazität bei feuchtem Getreide
-- Um 15 % geringere Kornverluste gegenüber einer reinen Rotorbauweise
-- Hochwertigeres Stroh zum Pressen
+- die Beschleunigertrommel mit 450 mm Durchmesser bringt den Gutfluss auf bis zu 20 m/s,
+- die Dreschtrommel hat 755 mm Durchmesser, danach folgt die Zuführtrommel,
+- die Restkornabscheidung übernehmen zwei **ROTO PLUS** Rotoren mit je 445 mm Durchmesser und 4 200 mm Länge.
+
+Drehzahlen von Dreschwerk und Abscheidung werden unabhängig voneinander eingestellt, sodass die Maschine schnell und zugleich kornschonend arbeiten kann.
 
 ## Automatisierung CEMOS
 
-CEMOS AUTO überwacht in Echtzeit:
-- die Kornfeuchte
-- die Verluste an Sieb und Obersieb
-- die Bestandeshöhe
-- die Neigung der Maschine
-
-Auf Basis dieser Daten passt es Trommeldrehzahl, Fahrgeschwindigkeit und Siebabstände automatisch an. Der Fahrer lenkt nur noch — die Maschine sorgt selbst für die optimale Leistung. Gerade CEMOS AUTO gleicht die Unterschiede zwischen erfahrenen und weniger erfahrenen Fahrern am stärksten aus: auch ein Neuling erreicht damit Leistungen, für die er von Hand jahrelange Praxis bräuchte.
+**CEMOS AUTOMATIC** ist ein selbstlernendes System, das während der Ernte die Einstellungen von Dreschwerk, Abscheidung und Reinigung selbst an die aktuellen Bedingungen anpasst. Ergänzt wird es durch **CEMOS DIALOG**, das den Fahrer Schritt für Schritt durch die Einstellung führt. Gerade die Automatik gleicht die Unterschiede zwischen erfahrenen und weniger erfahrenen Fahrern am stärksten aus.
 
 ## Korntank und Entladung
 
-Der Tank fasst **18 000 Liter** Korn — mehr als bei jedem anderen in Serie gefertigten Mähdrescher. Die hohe Entladeleistung von **bis zu 180 Litern je Sekunde** erlaubt es, den vollen Tank in rund 100 Sekunden zu leeren, was die Zahl der Stopps und Ernteunterbrechungen minimiert.
+Der Tank fasst **bis zu 18 000 Liter** Korn. Mit einer Entladeleistung von **bis zu 180 Litern je Sekunde** ist der volle Tank in rund 100 Sekunden leer; für kleinere Transportfahrzeuge lässt sich die Leistung auf 90 l/s reduzieren.
 
 ## Vorsatzgeräte
 
-Für die verschiedenen Kulturen gibt es eine Reihe von Vorsatzgeräten:
-- **CONVIO FLEX** — klassisches Getreide, Breite 7,5–10,5 m
-- **VARIO** — Raps, Breite 5,4–9 m
-- **CONSPEED** — Mais, 8–16 Reihen
+Für die verschiedenen Kulturen gibt es eine Reihe von CLAAS-Vorsatzgeräten:
+- **VARIO** — Schneidwerk mit stufenlos verstellbarem Tisch; zur Markteinführung des Lexion 8900 bot CLAAS auch eine neue Arbeitsbreite von 13,8 m an,
+- **CONVIO FLEX** — Bandschneidwerk mit flexiblem Messerbalken, in Nordamerika bis 15,3 m (CONVIO FLEX 1530),
+- **CORIO** — Maispflücker.
 
 ## Was kostet der CLAAS Lexion 8900
 
 CLAAS veröffentlicht keine Listenpreise — jede Maschine wird individuell nach den Anforderungen des Betriebs konfiguriert. Als Orientierung vom tschechischen Markt liegt der Anschaffungspreis eines neuen Lexion 8900 bei etwa **15–20 Mio. CZK netto (rund 600 000–800 000 €)**, wobei den Endbetrag deutlich beeinflussen:
 
-- die Fahrwerksart (Räder vs. Bänder **TERRA TRAC**),
-- das gewählte Vorsatzgerät (CONVIO FLEX, VARIO oder CONSPEED),
+- das gewählte Vorsatzgerät (VARIO, CONVIO FLEX oder CORIO),
+- die Fahrwerksart (Räder vs. Raupenlaufwerk **TERRA TRAC**),
 - der Ausstattungsgrad von Kabine, Automatisierung und Telematik.
 
 Viele Betriebe schaffen die Maschine im Operating-Leasing an oder vergeben die Ernte an spezialisierte Lohnunternehmen, die den Lexion 8900 betreiben. Ein genaues Preisangebot erstellt ausschließlich der autorisierte CLAAS-Händler.
 
 ## Kraftstoffverbrauch
 
-Der Verbrauch hängt stark von Kultur, Ertrag, Feuchte und Gelände ab. In Getreide liegt der reale Verbrauch üblicherweise etwa zwischen **40 und 60 Litern Diesel je Hektar**, in Mais höher. Der Schlüssel zu einem niedrigen Verbrauch „je Hektar" ist, die Maschine dauerhaft am Durchsatzoptimum zu halten — dafür sorgen CEMOS AUTO und das Stop-and-go-System, das den Motor entlastet, wenn gerade nicht gedroschen wird.
+Der Verbrauch hängt stark von Kultur, Ertrag, Feuchte und Gelände ab. CLAAS nennt für die LEXION-Topmodelle einen Verbrauch von **ca. 1 Liter Diesel pro Tonne** bei hohem Durchsatz. Niedrig bleibt der Verbrauch je Hektar vor allem, wenn die Maschine dauerhaft am Durchsatzoptimum läuft — dafür sorgen CEMOS AUTOMATIC und DYNAMIC POWER, das im Teillastbetrieb die Motorleistung zurücknimmt.
 
 ## Vergleich mit dem Wettbewerb
 
 In der höchsten Klasse „10+" konkurriert der Lexion 8900 mit nur wenigen Maschinen weltweit:
 
-- **[John Deere X9 1100](/encyklopedie/john-deere-x9-1100/)** — zwei Rotoren, 16 200 l Tank; der wichtigste direkte Wettbewerber.
+- **[John Deere X9 1100](/encyklopedie/john-deere-x9-1100/)** — zwei Rotoren; der wichtigste direkte Wettbewerber.
 - **[New Holland CR11](/encyklopedie/new-holland-cr11/)** — Twin-Rotor-Bauweise, außerordentlicher Durchsatz.
-- **[Fendt IDEAL 10T](/encyklopedie/fendt-ideal-10t/)** — Einrotorkonzept mit Raupenfahrwerk.
+- **[Fendt IDEAL 10T](/encyklopedie/fendt-ideal-10t/)** — Zweirotor-Plattform mit Raupenfahrwerk.
 
-Gegenüber reinen Rotormaschinen setzt CLAAS auf den **Hybriddrusch**, der auch feuchtes Getreide bewältigt und hochwertigeres Stroh für das anschließende Pressen hinterlässt. Wenn Sie eine Maschine eine Klasse darunter für einen mittleren Betrieb suchen, sehen Sie sich die Baureihe **[CLAAS Trion](/encyklopedie/claas-trion-750/)** an.
+Gegenüber reinen Rotormaschinen setzt CLAAS auf den **Hybriddrusch**: Gedroschen wird in tangentialen Trommeln, die Rotoren dienen der Restkornabscheidung. Wenn Sie eine Maschine eine Klasse darunter für einen mittleren Betrieb suchen, sehen Sie sich die Baureihe **[CLAAS Trion](/encyklopedie/claas-trion-750/)** an.
 
 ## Für wen der Lexion 8900 gedacht ist
 
