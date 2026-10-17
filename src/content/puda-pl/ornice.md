@@ -7,28 +7,29 @@ Gleba orna jest najcenniejszym naturalnym zasobem rolnika. Jest to wierzchnia wa
 
 ## Skład gleby ornej
 
-Zdrowa gleba orna składa się z czterech podstawowych składników:
+Gleba składa się z czterech podstawowych składników. Orientacyjne udziały objętościowe według podręcznika [OpenStax Biology 2e](https://openstax.org/books/biology-2e/pages/31-2-the-soil):
 
-| Składnik | Udział (%) | Funkcja |
+| Składnik | Udział w objętości | Funkcja |
 |--------|-----------|--------|
-| Cząstki mineralne | 45 | Podpora fizyczna, źródło składników pokarmowych |
-| Substancja organiczna | 5 | Składniki pokarmowe, pojemność wodna |
-| Powietrze | 25 | Oddychanie korzeni i organizmów glebowych |
-| Woda | 25 | Transport składników pokarmowych, procesy fizjologiczne |
+| Cząstki mineralne | ok. 40–45 % | Podpora fizyczna, źródło składników pokarmowych |
+| Substancja organiczna | ok. 5 % | Składniki pokarmowe, pojemność wodna |
+| Powietrze i woda (pory) | ok. 50 % | Oddychanie korzeni i organizmów, transport składników |
+
+Proporcja powietrza i wody w porach zmienia się z wilgotnością i zagęszczeniem gleby.
 
 ## Substancja organiczna — kluczowy składnik
 
-Zawartość substancji organicznej (próchnicy) jest decydującym wskaźnikiem jakości gleby. Przeciętna polska gleba orna zawiera **2–4 % substancji organicznej**. Przy spadku poniżej 2 % mówi się o degradacji gleby.
+Zawartość substancji organicznej (próchnicy) należy do głównych wskaźników jakości gleby.
 
 Substancja organiczna:
 - Wiąże składniki pokarmowe i stopniowo je udostępnia roślinom
-- Zwiększa pojemność wodną (1 % substancji organicznej wiąże nawet 20× więcej wody)
+- Pomaga glebie zatrzymywać wodę
 - Poprawia strukturę gleby i jej odporność na erozję
 - Wspiera organizmy glebowe — dżdżownice, bakterie, grzyby
 
 ## Zagrożenie erozją
 
-Erozja jest największym zagrożeniem dla gleby ornej. W Polsce **ponad 50 % gruntów rolnych jest zagrożonych erozją wodną** — czyli spłukiwaniem warstwy ornej podczas opadów deszczu. Przeciętna utrata warstwy ornej wynosi 4,3 t/ha/rok, podczas gdy naturalne tempo tworzenia nowej gleby ornej przebiega w tempie 0,1–0,3 t/ha/rok.
+Erozja należy do najpoważniejszych zagrożeń dla gleby ornej. Według IUNG-PIB erozja wodna — spłukiwanie warstwy ornej podczas opadów — potencjalnie zagraża **ok. 29 % obszaru Polski**, w tym 21 % użytków rolnych ([IUNG-PIB 2018](https://iung.pl/sir/zeszyt58_5.pdf)). Europejski model RUSLE2015 szacuje średnią stratę na polskich użytkach rolnych bez pastwisk na 1,6 t/ha rocznie ([Eurostat](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)), a nowa gleba tworzy się w warunkach europejskich w tempie zaledwie ok. 0,3–1,4 t/ha rocznie ([Verheijen i in., 2009](https://doi.org/10.1016/j.earscirev.2009.02.003)).
 
 ### Środki przeciwerozyjne
 
@@ -39,11 +40,6 @@ Erozja jest największym zagrożeniem dla gleby ornej. W Polsce **ponad 50 % gru
 
 ## Uprawa gleby ornej
 
-Głębokość uprawy zależy od uprawianej rośliny:
-
-- **Pszenica ozima:** 20–22 cm
-- **Burak cukrowy:** 28–32 cm
-- **Kukurydza:** 25–28 cm
-- **Rośliny strączkowe:** 22–25 cm
+Głębokość uprawy zależy od uprawianej rośliny i stanowiska — pod okopowe i kukurydzę tradycyjnie uprawia się głębiej niż pod zboża.
 
 Trend ostatniego dziesięciolecia zmierza ku **minimalizacji uprawy** — mniej przejazdów, mniejsza głębokość, zachowanie struktury gleby.

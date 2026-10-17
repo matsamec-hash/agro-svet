@@ -7,28 +7,29 @@ Ornica je najcennejší prírodný zdroj poľnohospodára. Ide o vrchnú vrstvu 
 
 ## Zloženie ornice
 
-Zdravá ornica sa skladá zo štyroch základných zložiek:
+Pôda sa skladá zo štyroch základných zložiek. Orientačné objemové podiely podľa učebnice [OpenStax Biology 2e](https://openstax.org/books/biology-2e/pages/31-2-the-soil):
 
-| Zložka | Podiel (%) | Funkcia |
+| Zložka | Podiel objemu | Funkcia |
 |--------|-----------|--------|
-| Minerálne častice | 45 | Fyzikálna opora, zdroj živín |
-| Organická hmota | 5 | Živiny, vlahová kapacita |
-| Vzduch | 25 | Dýchanie koreňov a pôdnych organizmov |
-| Voda | 25 | Transport živín, fyziologické procesy |
+| Minerálne častice | asi 40–45 % | Fyzikálna opora, zdroj živín |
+| Organická hmota | asi 5 % | Živiny, vlahová kapacita |
+| Vzduch a voda (póry) | asi 50 % | Dýchanie koreňov a organizmov, transport živín |
+
+Pomer vzduchu a vody v póroch sa mení s vlhkosťou a utužením pôdy.
 
 ## Organická hmota — kľúčová zložka
 
-Obsah organickej hmoty (humusu) je rozhodujúcim ukazovateľom kvality pôdy. Priemerná česká ornica obsahuje **2–4 % organickej hmoty**. Pri poklese pod 2 % hovoríme o degradácii pôdy.
+Obsah organickej hmoty (humusu) patrí k hlavným ukazovateľom kvality pôdy.
 
 Organická hmota:
 - Viaže živiny a postupne ich uvoľňuje rastlinám
-- Zvyšuje vlahovú kapacitu (1 % org. hmoty viaže až 20× viac vody)
+- Pomáha pôde zadržať vodu
 - Zlepšuje štruktúru pôdy a jej odolnosť voči erózii
 - Podporuje pôdne organizmy — dážďovky, baktérie, huby
 
 ## Hrozba erózie
 
-Erózia je najväčšou hrozbou pre ornicu. V Českej republike je **53 % poľnohospodárskej pôdy ohrozenej vodnou eróziou** — teda zmyvom ornice pri dažďových zrážkach. Priemerná strata ornice v ČR predstavuje 4,3 t/ha/rok, pričom prirodzená tvorba novej ornice prebieha tempom 0,1–0,3 t/ha/rok.
+Erózia patrí k najvážnejším hrozbám pre ornicu. Na Slovensku je potenciálnou vodnou eróziou — zmyvom ornice pri dažďových zrážkach — ohrozených **52,4 % poľnohospodárskej pôdy** a aktuálnou 12,3 % ([Kobza, NPPC – VÚPOP, 2025](https://pedologie.czu.cz/akce/dny2025/19.pdf)). Európsky model RUSLE2015 odhaduje priemernú stratu na slovenskej poľnohospodárskej pôde bez pasienkov na 3,8 t/ha za rok ([Eurostat](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)), zatiaľ čo nová pôda sa v európskych podmienkach tvorí tempom len asi 0,3–1,4 t/ha za rok ([Verheijen a kol., 2009](https://doi.org/10.1016/j.earscirev.2009.02.003)).
 
 ### Protierózne opatrenia
 
@@ -39,11 +40,6 @@ Erózia je najväčšou hrozbou pre ornicu. V Českej republike je **53 % poľno
 
 ## Spracovanie ornice
 
-Hĺbka spracovania závisí od pestovanej plodiny:
-
-- **Ozimná pšenica:** 20–22 cm
-- **Cukrová repa:** 28–32 cm
-- **Kukurica:** 25–28 cm
-- **Strukoviny:** 22–25 cm
+Hĺbka spracovania závisí od pestovanej plodiny a stanovišťa — pod okopaniny a kukuricu sa tradične spracúva hlbšie ako pod obilniny.
 
 Trend posledného desaťročia smeruje k **minimalizácii spracovania** — menej prejazdov, menšia hĺbka, zachovanie pôdnej štruktúry.

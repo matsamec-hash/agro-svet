@@ -17,7 +17,7 @@ Správna výživa pôdy nie je len o pridávaní hnojív — ide o pochopenie ce
 - Najdôležitejší prvok pre rast nadzemnej biomasy
 - Hojne zastúpený v atmosferickom vzduchu, no rastliny ho prijímajú z pôdy ako NH₄⁺ alebo NO₃⁻
 - Nedostatok: blednutie starých listov, spomalenie rastu
-- Priemerná dávka pre pšenicu: 120–180 kg N/ha
+- Dávka sa počíta z očakávanej úrody, predplodiny a zásoby dusíka v pôde; v zraniteľných oblastiach ju navyše obmedzuje nitrátová smernica
 
 **Fosfor (P)**
 - Kľúčový pre koreňový systém, kvitnutie a tvorbu semien
@@ -47,7 +47,7 @@ Hoci sú potrebné len v malom množstve, ich nedostatok môže výrazne obmedzi
 
 ## Rozbor pôdy
 
-Základom správneho hnojenia je rozbor pôdy. Odporúča sa vykonávať ho každých 3–5 rokov.
+Základom správneho hnojenia je rozbor pôdy. Opakuje sa pravidelne, aby bolo vidieť, ako sa mení pH a zásoba živín.
 
 ### Čo rozbor pôdy zistí?
 
@@ -58,7 +58,7 @@ Základom správneho hnojenia je rozbor pôdy. Odporúča sa vykonávať ho kaž
 
 ### Kde nechať urobiť rozbor?
 
-V Českej republike vykonávajú rozbory pôdy akreditované laboratóriá — napríklad ÚKZÚZ (Ústřední kontrolní a zkušební ústav zemědělský) alebo súkromné agrolaboratóriá. Cena základného rozboru sa pohybuje od 300 do 800 Kč za vzorku.
+Na Slovensku zabezpečuje pravidelné agrochemické skúšanie poľnohospodárskych pôd ÚKSÚP — Ústredný kontrolný a skúšobný ústav poľnohospodársky ([uksup.sk](https://www.uksup.sk/)); rozbory robia aj súkromné akreditované laboratóriá.
 
 ## Organické hnojenie
 
@@ -76,6 +76,6 @@ Organická hmota je srdcom pôdnej úrodnosti. Pravidelné dodávanie organickej
 
 ## Vápnenie
 
-Kyslosť pôdy je jedným z najčastejších problémov českých polí. Nízke pH znižuje dostupnosť živín a potláča činnosť pôdnych mikroorganizmov.
+Kyslosť pôdy je na poliach častým problémom. Nízke pH znižuje dostupnosť živín a potláča činnosť pôdnych mikroorganizmov.
 
-Vápnenie by malo prebiehať na základe rozboru pôdy, približne každých 4–6 rokov. Používa sa poľnohospodársky vápenec (CaCO₃), pálené vápno alebo dolomitický vápenec (obsahuje aj Mg).
+Dávka aj termín vápnenia by mali vychádzať z rozboru pôdy. Používa sa poľnohospodársky vápenec (CaCO₃), pálené vápno alebo dolomitický vápenec (obsahuje aj Mg).

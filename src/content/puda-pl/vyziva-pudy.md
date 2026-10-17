@@ -17,7 +17,7 @@ Prawidłowe odżywianie gleby to nie tylko dodawanie nawozów — chodzi o zrozu
 - Najważniejszy składnik dla wzrostu nadziemnej biomasy
 - Obfity w powietrzu atmosferycznym, ale rośliny pobierają go z gleby jako NH₄⁺ lub NO₃⁻
 - Niedobór: żółknięcie starych liści, spowolnienie wzrostu
-- Przeciętna dawka dla pszenicy: 120–180 kg N/ha
+- Dawkę wylicza się z oczekiwanego plonu, przedplonu i zasobności gleby w azot; dodatkowo ogranicza ją program działań wdrażający dyrektywę azotanową
 
 **Fosfor (P)**
 - Kluczowy dla systemu korzeniowego, kwitnienia i tworzenia nasion
@@ -47,7 +47,7 @@ Choć potrzebne jedynie w małych ilościach, ich niedobór może znacząco ogra
 
 ## Analiza gleby
 
-Podstawą prawidłowego nawożenia jest analiza gleby. Zaleca się jej wykonywanie co 3–5 lat.
+Podstawą prawidłowego nawożenia jest analiza gleby. Powtarza się ją regularnie, aby widzieć, jak zmienia się odczyn i zasobność w składniki pokarmowe.
 
 ### Co pozwala stwierdzić analiza gleby?
 
@@ -58,7 +58,7 @@ Podstawą prawidłowego nawożenia jest analiza gleby. Zaleca się jej wykonywan
 
 ### Gdzie zlecić wykonanie analizy?
 
-W Polsce analizy gleby wykonują akredytowane laboratoria — na przykład Okręgowe Stacje Chemiczno-Rolnicze (OSCh-R) lub prywatne agrolaboratoria. Cena podstawowej analizy waha się od ok. 80 do 200 zł za próbkę.
+W Polsce analizy gleby wykonują akredytowane laboratoria — na przykład Okręgowe Stacje Chemiczno-Rolnicze (OSCh-R) lub prywatne agrolaboratoria.
 
 ## Nawożenie organiczne
 
@@ -78,4 +78,4 @@ Substancja organiczna jest sercem żyzności gleby. Regularne dostarczanie subst
 
 Kwasowość gleby jest jednym z najczęstszych problemów polskich pól. Niskie pH zmniejsza dostępność składników pokarmowych i hamuje działalność mikroorganizmów glebowych.
 
-Wapnowanie powinno być wykonywane na podstawie analizy gleby, mniej więcej co 4–6 lat. Stosuje się wapień rolniczy (CaCO₃), wapno palone lub wapień dolomitowy (zawierający również Mg).
+Dawka i termin wapnowania powinny wynikać z analizy gleby. Stosuje się wapień rolniczy (CaCO₃), wapno palone lub wapień dolomitowy (zawierający również Mg).

@@ -17,7 +17,7 @@ Správná výživa půdy není jen o přidávání hnojiv — jde o pochopení c
 - Nejdůležitější prvek pro růst nadzemní biomasy
 - Přebývá v atmospherickém vzduchu, ale rostliny ho přijímají z půdy jako NH₄⁺ nebo NO₃⁻
 - Nedostatek: blednutí starých listů, zpomalení růstu
-- Průměrná dávka pro pšenici: 120–180 kg N/ha
+- Dávka se počítá z očekávaného výnosu, předplodiny a zásoby dusíku v půdě; na zranitelných oblastech ji navíc omezuje nitrátová směrnice
 
 **Fosfor (P)**
 - Klíčový pro kořenový systém, kvetení a tvorbu semen
@@ -47,7 +47,7 @@ Přestože jsou potřeba jen v malém množství, jejich nedostatek může výra
 
 ## Rozbor půdy
 
-Základ správného hnojení je rozbor půdy. Doporučuje se provádět každé 3–5 let.
+Základ správného hnojení je rozbor půdy. Opakuje se pravidelně, aby bylo vidět, jak se mění pH a zásoba živin.
 
 ### Co rozbor půdy zjistí?
 
@@ -58,7 +58,7 @@ Základ správného hnojení je rozbor půdy. Doporučuje se provádět každé 
 
 ### Kde nechat rozbor udělat?
 
-V ČR provádějí rozbory půdy akreditované laboratoře — například ÚKZÚZ (Ústřední kontrolní a zkušební ústav zemědělský) nebo soukromé agrolaboratoře. Cena základního rozboru se pohybuje od 300 do 800 Kč za vzorek.
+V ČR provádějí rozbory půdy akreditované laboratoře — například ÚKZÚZ (Ústřední kontrolní a zkušební ústav zemědělský) nebo soukromé agrolaboratoře.
 
 ## Organické hnojení
 
@@ -78,4 +78,4 @@ Organická hmota je srdce půdní úrodnosti. Pravidelné dodávání organické
 
 Kyselost půdy je jedním z nejčastějších problémů českých polí. Nízké pH snižuje dostupnost živin a potlačuje činnost půdních mikroorganismů.
 
-Vápnění by mělo probíhat na základě rozboru půdy, přibližně každých 4–6 let. Používá se zemědělský vápenec (CaCO₃), pálené vápno nebo dolomitický vápenec (obsahuje i Mg).
+Dávka i termín vápnění by měly vycházet z rozboru půdy. Používá se zemědělský vápenec (CaCO₃), pálené vápno nebo dolomitický vápenec (obsahuje i Mg).

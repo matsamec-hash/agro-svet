@@ -7,28 +7,29 @@ Ornice je nejcennější přírodní zdroj zemědělce. Jedná se o svrchní vrs
 
 ## Složení ornice
 
-Zdravá ornice se skládá ze čtyř základních složek:
+Půda se skládá ze čtyř základních složek. Orientační objemové podíly podle učebnice [OpenStax Biology 2e](https://openstax.org/books/biology-2e/pages/31-2-the-soil):
 
-| Složka | Podíl (%) | Funkce |
+| Složka | Podíl objemu | Funkce |
 |--------|-----------|--------|
-| Minerální částice | 45 | Fyzikální opora, zdroj živin |
-| Organická hmota | 5 | Živiny, vláhová kapacita |
-| Vzduch | 25 | Dýchání kořenů a půdních organismů |
-| Voda | 25 | Transport živin, fyziologické procesy |
+| Minerální částice | asi 40–45 % | Fyzikální opora, zdroj živin |
+| Organická hmota | asi 5 % | Živiny, vláhová kapacita |
+| Vzduch a voda (póry) | asi 50 % | Dýchání kořenů a organismů, transport živin |
+
+Poměr vzduchu a vody v pórech se mění s vlhkostí a utužením půdy.
 
 ## Organická hmota — klíčová složka
 
-Obsah organické hmoty (humusu) je rozhodujícím ukazatelem kvality půdy. Průměrná česká ornice obsahuje **2–4 % organické hmoty**. Při poklesu pod 2 % hovoříme o degradaci půdy.
+Obsah organické hmoty (humusu) patří k hlavním ukazatelům kvality půdy.
 
 Organická hmota:
 - Váže živiny a postupně je uvolňuje rostlinám
-- Zvyšuje vláhovou kapacitu (1 % org. hmoty váže až 20× více vody)
+- Pomáhá půdě zadržet vodu
 - Zlepšuje strukturu půdy a její odolnost vůči erozi
 - Podporuje půdní organismy — žížaly, bakterie, houby
 
 ## Hrozba eroze
 
-Eroze je největší hrozbou pro ornici. V České republice je **53 % zemědělské půdy ohroženo vodní erozí** — tedy smyvem ornice při dešťových srážkách. Průměrná ztráta ornice v ČR činí 4,3 t/ha/rok, přičemž přirozená tvorba nové ornice probíhá tempem 0,1–0,3 t/ha/rok.
+Eroze je podle MŽP nejzávažnějším způsobem degradace půd v Česku. Vodní erozí — smyvem ornice při dešťových srážkách — je potenciálně ohroženo **52,9 % zemědělského půdního fondu** ([MŽP — Zpráva o životním prostředí ČR 2024](https://www.mzp.gov.cz/system/files/2026-01/OPZPUR_Zprava_o_ZP_2024_WEB-20260119_0.pdf)). Evropský model RUSLE2015 odhaduje průměrnou ztrátu na české zemědělské půdě bez pastvin na 2,7 t/ha za rok ([Eurostat](https://ec.europa.eu/eurostat/databrowser/view/aei_pr_soiler/default/table)), zatímco nová půda se v evropských podmínkách tvoří tempem jen asi 0,3–1,4 t/ha za rok ([Verheijen a kol., 2009](https://doi.org/10.1016/j.earscirev.2009.02.003)).
 
 ### Protierozní opatření
 
@@ -39,11 +40,6 @@ Eroze je největší hrozbou pro ornici. V České republice je **53 % zeměděl
 
 ## Zpracování ornice
 
-Hloubka zpracování závisí na pěstované plodině:
-
-- **Ozimá pšenice:** 20–22 cm
-- **Cukrová řepa:** 28–32 cm
-- **Kukuřice:** 25–28 cm
-- **Luštěniny:** 22–25 cm
+Hloubka zpracování závisí na pěstované plodině a stanovišti — pod okopaniny a kukuřici se tradičně zpracovává hlouběji než pod obilniny.
 
 Trend posledního desetiletí směřuje k **minimalizaci zpracování** — méně přejezdů, menší hloubka, zachování půdní struktury.
