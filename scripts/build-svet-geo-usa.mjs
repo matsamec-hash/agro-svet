@@ -3,7 +3,13 @@
 // (TopoJSON, projekce d3 Albers USA vč. insetů Aljašky/Havaje). Souřadnice jsou
 // PŘED-PROJEKTOVANÉ v rovině ~975×610 → přímý převod na SVG bez projekční matiky.
 //
-// Vstup:  /tmp/states-albers-10m.json  (curl z https://unpkg.com/us-atlas@3/states-albers-10m.json)
+// LICENCE: geometrie = U.S. Census Bureau, cartographic boundary files 2017 (dílo
+// federální vlády USA, public domain); us-atlas je přebalení © Mike Bostock pod ISC.
+// ISC chce copyright + permission notice „in all copies" → kredit u mapy (RegionMap,
+// boundarySource 'us-census') a plné znění na /data/licence/.
+//
+// Vstup:  US_ATLAS=/cesta/states-albers-10m.json, výchozí /tmp/states-albers-10m.json
+//         (curl z https://unpkg.com/us-atlas@3/states-albers-10m.json, verze 3.0.1)
 // Výstup: src/data/svet/regions/usa-geo.json  (formát jako francie-geo.json, departments: [])
 // Spuštění: node scripts/build-svet-geo-usa.mjs
 //
@@ -12,7 +18,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { feature } from 'topojson-client';
 
-const SRC = '/tmp/states-albers-10m.json';
+const SRC = process.env.US_ATLAS || '/tmp/states-albers-10m.json';
 const VIEW_W = 975, VIEW_H = 610;
 const EPS = 0.6; // Douglas-Peucker tolerance v jednotkách albers plánu (~0.6 px)
 
@@ -85,12 +91,13 @@ const regions = fc.features
 
 const out = {
   _comment:
-    'Hranice států USA pro choropleth /svet/. Zdroj: us-atlas@3 states-albers-10m (TopoJSON, d3 Albers USA, ' +
-    'předprojektované vč. insetů AK/HI). SVG paths, kód = poštovní zkratka státu. departments prázdné (bez drill).',
+    'Hranice států USA pro choropleth /svet/. Zdroj: U.S. Census Bureau cartographic boundaries 2017 (public domain) ' +
+    'via us-atlas@3.0.1 states-albers-10m (© Mike Bostock, ISC; d3 Albers USA, předprojektované vč. insetů AK/HI). ' +
+    'SVG paths, kód = poštovní zkratka státu.',
   slug: 'usa',
   viewBox: `0 0 ${VIEW_W} ${VIEW_H}`,
+  boundarySource: 'us-census',
   regions,
-  departments: [],
 };
 
 const outPath = 'src/data/svet/regions/usa-geo.json';

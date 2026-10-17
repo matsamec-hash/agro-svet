@@ -20,13 +20,14 @@ import { colorFor, extent } from '../src/lib/svet/mapcolor.ts';
 const METRIC = 'wheat_yield';
 
 // ‼️ europe.json deklaruje viewBox "0 0 1000 1165", jenže geometrie z něj TEČE VEN:
-// Island má zápornou x (-254), sever a jižní ostrovy přesahují nahoře i dole.
-// Inline <svg> to nevadilo (přetok se jen vykreslil mimo element), ale <img> se
-// ořízne podle viewBoxu — a Island by zmizel. Rozsah níž je změřený render celé
-// sady cest, ne odhad. Kdyby se podklad změnil, guard pod tím to zastaví, aby se
-// přeměřilo znovu místo tichého uříznutí kusu Evropy.
+// Island má zápornou x (-260), sever Norska (-93) a Kanárské ostrovy (1329) přesahují
+// nahoře i dole. Inline <svg> to nevadilo (přetok se jen vykreslil mimo element), ale
+// <img> se ořízne podle viewBoxu — a Island by zmizel. Rozsah níž je změřený rozsah
+// cest (build-svet-europe-geo.mjs ho vypisuje), ne odhad. Kdyby se podklad změnil,
+// guard pod tím to zastaví, aby se přeměřilo znovu místo tichého uříznutí kusu Evropy.
+// 2026-10-17: podklad přestavěný z Natural Earth (dřív historical-basemaps, GPL-3.0).
 const SOURCE_VIEWBOX = '0 0 1000 1165';
-const INK_VIEWBOX = '-254 -86 1237 1416';
+const INK_VIEWBOX = '-262 -95 1247 1426';
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public', 'images', 'agrimap-wheat-yield.svg');
 
 if (europe.viewBox !== SOURCE_VIEWBOX) {

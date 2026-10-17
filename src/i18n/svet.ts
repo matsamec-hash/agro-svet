@@ -298,6 +298,13 @@ export function localizeRegionMetric<M extends { key: string; label: string; uni
 
 // ── Poznámka o granularitě z dat (`regionNote` v regions/<slug>.json je česky) ──
 export const REGION_NOTE: Record<string, Record<SvetLang, string>> = {
+  // PL9 = PL91 + PL92: geometrie Natural Earth nemá hranici mezi nimi (build-svet-geo.mjs)
+  polsko: {
+    sk: 'úroveň vojvodstiev (NUTS-2); Mazovské vojvodstvo súhrnne za PL91 a PL92 (NUTS-1 PL9).',
+    pl: 'poziom województw (NUTS-2); województwo mazowieckie łącznie dla PL91 i PL92 (NUTS-1 PL9).',
+    de: 'Ebene der Woiwodschaften (NUTS-2); Masowien zusammengefasst aus PL91 und PL92 (NUTS-1 PL9).',
+    uk: 'рівень воєводств (NUTS-2); Мазовецьке воєводство сумарно за PL91 і PL92 (NUTS-1 PL9).',
+  },
   usa: {
     sk: 'úroveň štátov (50 štátov). District of Columbia nemá poľnohospodársky census, zobrazuje sa bez dát.',
     pl: 'poziom stanów (50 stanów). Dystrykt Kolumbii nie ma spisu rolnego, wyświetla się bez danych.',
@@ -309,18 +316,18 @@ export const REGION_NOTE: Record<string, Record<SvetLang, string>> = {
 // ── Poznámka o granularitě (NUTS) pro RegionMap default (když data nemají regionNote) ──
 export const REGION_LEVEL_NOTE: Record<'NUTS1' | 'NUTS2', Record<Locale, string>> = {
   NUTS2: {
-    cs: 'úroveň régionů (NUTS-2). Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.',
-    sk: 'úroveň regiónov (NUTS-2). Nižšie jednotky (NUTS-3) nemajú v Eurostate regionálne dáta — pripravené pre nadväzujúce napojenie.',
-    pl: 'poziom regionów (NUTS-2). Niższe jednostki (NUTS-3) nie mają danych regionalnych w Eurostacie — przygotowane do dalszego podłączenia.',
-    de: 'Regionsebene (NUTS-2). Für kleinere Einheiten (NUTS-3) liegen bei Eurostat keine regionalen Daten vor — für eine spätere Anbindung vorbereitet.',
-    uk: 'рівень регіонів (NUTS-2). Для менших одиниць (NUTS-3) Євростат регіональних даних не має — підготовлено для подальшого підключення.',
+    cs: 'úroveň régionů (NUTS-2). Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data.',
+    sk: 'úroveň regiónov (NUTS-2). Nižšie jednotky (NUTS-3) nemajú v Eurostate regionálne dáta.',
+    pl: 'poziom regionów (NUTS-2). Niższe jednostki (NUTS-3) nie mają danych regionalnych w Eurostacie.',
+    de: 'Regionsebene (NUTS-2). Für kleinere Einheiten (NUTS-3) liegen bei Eurostat keine regionalen Daten vor.',
+    uk: 'рівень регіонів (NUTS-2). Для менших одиниць (NUTS-3) Євростат регіональних даних не має.',
   },
   NUTS1: {
-    cs: 'úroveň régionů (NUTS-1), agregováno z NUTS-2. Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data — připraveno pro navazující napojení.',
-    sk: 'úroveň regiónov (NUTS-1), agregované z NUTS-2. Nižšie jednotky (NUTS-3) nemajú v Eurostate regionálne dáta — pripravené pre nadväzujúce napojenie.',
-    pl: 'poziom regionów (NUTS-1), zagregowane z NUTS-2. Niższe jednostki (NUTS-3) nie mają danych regionalnych w Eurostacie — przygotowane do dalszego podłączenia.',
-    de: 'Regionsebene (NUTS-1), aggregiert aus NUTS-2. Für kleinere Einheiten (NUTS-3) liegen bei Eurostat keine regionalen Daten vor — für eine spätere Anbindung vorbereitet.',
-    uk: 'рівень регіонів (NUTS-1), агреговано з NUTS-2. Для менших одиниць (NUTS-3) Євростат регіональних даних не має — підготовлено для подальшого підключення.',
+    cs: 'úroveň régionů (NUTS-1), agregováno z NUTS-2. Nižší jednotky (NUTS-3) nemají v Eurostatu regionální data.',
+    sk: 'úroveň regiónov (NUTS-1), agregované z NUTS-2. Nižšie jednotky (NUTS-3) nemajú v Eurostate regionálne dáta.',
+    pl: 'poziom regionów (NUTS-1), zagregowane z NUTS-2. Niższe jednostki (NUTS-3) nie mają danych regionalnych w Eurostacie.',
+    de: 'Regionsebene (NUTS-1), aggregiert aus NUTS-2. Für kleinere Einheiten (NUTS-3) liegen bei Eurostat keine regionalen Daten vor.',
+    uk: 'рівень регіонів (NUTS-1), агреговано з NUTS-2. Для менших одиниць (NUTS-3) Євростат регіональних даних не має.',
   },
 };
 
