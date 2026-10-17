@@ -697,7 +697,7 @@ const pl: Record<string, string> = {
   'cc.necessary': 'Niezbędne',
   'cc.necessaryDesc': 'Trzymają serwis w całości — logowanie, głosowanie w ankietach i zapamiętanie tego wyboru. Bez nich serwis nie działa, dlatego nie da się ich wyłączyć.',
   'cc.analytics': 'Analityczne',
-  'cc.analyticsDesc': 'Google Analytics, Microsoft Clarity i Ahrefs Web Analytics — statystyki ruchu, mapy ciepła i nagrania wizyt, z których wiemy, których stron nikt nie czyta do końca. Google Analytics przechowuje pliki cookie do 2 lat; Google i Microsoft mogą przekazywać dane do USA.',
+  'cc.analyticsDesc': 'Google Analytics i Microsoft Clarity — statystyki ruchu, mapy ciepła i nagrania wizyt, z których wiemy, których stron nikt nie czyta do końca. Google Analytics przechowuje pliki cookie do 2 lat; Google i Microsoft mogą przekazywać dane do USA.',
   'cc.always': 'zawsze włączone',
   'cc.back': 'Wstecz',
   'cc.save': 'Zapisz wybór',

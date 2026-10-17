@@ -12,4 +12,7 @@ export const BAZAR_TOPOVANI_ENABLED = false;
 // Vynucení retenčních lhůt (/api/cron/data-retention). Ve vypnutém stavu endpoint
 // jen REPORTUJE, co by smazal — mazání je nevratné, takže si čísla nejdřív projdi
 // nasucho a teprve pak přepni na `true`.
-export const DATA_RETENTION_ENABLED = false;
+// 2026-10-17: zapnuto. Job jen maže pokusy o kód starší 30 dní a u oznámení
+// v bazaru nuluje kontakt / otisk IP (řádky zůstávají) — nic, co by šlo
+// potřebovat. Spouští ho .github/workflows/cron-data-retention.yml.
+export const DATA_RETENTION_ENABLED = true;

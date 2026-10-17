@@ -696,7 +696,7 @@ const cs: Record<string, string> = {
   'cc.necessary': 'Nezbytné',
   'cc.necessaryDesc': 'Drží web pohromadě — přihlášení, hlasování v anketách a zapamatování této volby. Bez nich web nefunguje, proto je nejde vypnout.',
   'cc.analytics': 'Analytické',
-  'cc.analyticsDesc': 'Google Analytics, Microsoft Clarity a Ahrefs Web Analytics — statistiky návštěvnosti, heatmapy a záznamy návštěv, ze kterých poznáme, které stránky nikdo nedočte. Google Analytics ukládá cookies až na 2 roky; Google a Microsoft mohou data přenášet do USA.',
+  'cc.analyticsDesc': 'Google Analytics a Microsoft Clarity — statistiky návštěvnosti, heatmapy a záznamy návštěv, ze kterých poznáme, které stránky nikdo nedočte. Google Analytics ukládá cookies až na 2 roky; Google a Microsoft mohou data přenášet do USA.',
   'cc.always': 'vždy zapnuté',
   'cc.back': 'Zpět',
   'cc.save': 'Uložit volbu',

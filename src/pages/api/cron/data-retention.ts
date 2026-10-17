@@ -26,7 +26,37 @@ export const RETENTION = {
   /** Anti-fraud pokusy o zadání kódu — drží se jen IP a čas, po pár minutách
    *  bez hodnoty. Jediná tabulka, která rostla donekonečna. */
   codeAttemptsDays: 30,
+  /** Oznámení závadného inzerátu (DSA čl. 16): jméno a e-mail oznamovatele 6 měsíců
+   *  od sdělení rozhodnutí (lhůta, kdy se proti němu může ohradit), pak je vymažeme. */
+  reportContactDays: 183,
+  /** Otisk IP u oznámení — detekce opakovaných nahlášení, pak bez hodnoty. */
+  reportIpHashDays: 90,
 } as const;
+
+/** Vymaže vybrané sloupce (nastaví NULL) u řádků, které vybere `filter`. Řádek
+ *  zůstává — u oznámení potřebujeme vědět, co se s inzerátem stalo, ne kdo to
+ *  nahlásil. */
+async function scrub(
+  sb: ReturnType<typeof createServerClient>,
+  table: string,
+  label: string,
+  cutoff: string,
+  fields: Record<string, null>,
+  filter: (q: any) => any,
+): Promise<Sweep> {
+  const { count, error } = await filter(sb.from(table).select('*', { count: 'exact', head: true }));
+  if (error) return { table, column: label, cutoff, matched: 0, deleted: 0, note: `count selhal: ${error.message}` };
+  const matched = count ?? 0;
+  if (!DATA_RETENTION_ENABLED || matched === 0) {
+    return { table, column: label, cutoff, matched, deleted: 0, note: DATA_RETENTION_ENABLED ? undefined : 'dry-run' };
+  }
+  const { error: updErr } = await filter(sb.from(table).update(fields));
+  return {
+    table, column: label, cutoff, matched,
+    deleted: updErr ? 0 : matched,
+    note: updErr ? `update selhal: ${updErr.message}` : 'vymazáno (NULL), řádky zůstaly',
+  };
+}
 
 interface Sweep {
   table: string;
@@ -80,6 +110,18 @@ export const GET: APIRoute = async ({ request }) => {
   // po smazání okamžitě pryč. Zásady dřív slibovaly „1 rok archivace pro audit" —
   // to nikdy neplatilo a text byl opraven, ne kód (okamžité smazání je pro
   // uživatele příznivější a nemá smysl zavádět archiv jen kvůli souladu s větou).
+
+  // 2) Oznámení v bazaru: kontakt oznamovatele po uzavřeném oznámení + 6 měsíců,
+  //    otisk IP po 90 dnech (zásady, sekce 4; formulář /bazar/nahlasit/).
+  const contactCutoff = new Date(Date.now() - RETENTION.reportContactDays * DAY_MS).toISOString();
+  sweeps.push(await scrub(sb, 'bazar_reports', 'reporter_name+reporter_email', contactCutoff,
+    { reporter_name: null, reporter_email: null },
+    (q) => q.in('status', ['actioned', 'dismissed']).lt('reviewed_at', contactCutoff)
+      .or('reporter_name.not.is.null,reporter_email.not.is.null')));
+  const ipCutoff = new Date(Date.now() - RETENTION.reportIpHashDays * DAY_MS).toISOString();
+  sweeps.push(await scrub(sb, 'bazar_reports', 'reporter_ip_hash', ipCutoff,
+    { reporter_ip_hash: null },
+    (q) => q.lt('created_at', ipCutoff).not('reporter_ip_hash', 'is', null)));
 
   const body = {
     mode: DATA_RETENTION_ENABLED ? 'delete' : 'dry-run',

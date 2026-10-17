@@ -102,22 +102,23 @@ describe('YouTube se nenačítá bez kliknutí', () => {
 });
 
 describe('právní audit 2026-10-14', () => {
-  it('Ahrefs Web Analytics se načítá až po souhlasu, ne natvrdo v Layoutu', () => {
-    expect(read('src/layouts/Layout.astro')).not.toMatch(/<script[^>]*analytics\.ahrefs\.com/);
+  it('Ahrefs Web Analytics se nenačítá vůbec (2026-10-17: IP do Singapuru bez DPA se SCC)', () => {
+    expect(read('src/layouts/Layout.astro')).not.toContain('analytics.ahrefs.com');
     const cc = read('src/components/CookieConsent.astro');
-    const start = cc.indexOf('function spustMereni()');
-    expect(start).toBeGreaterThan(-1);
-    expect(cc.indexOf('analytics.ahrefs.com', start)).toBeGreaterThan(start);
+    expect(cc).toContain('function spustMereni()');
+    expect(cc).not.toContain('analytics.ahrefs.com');
   });
 
   it('patička odkazuje na zásady zpracování osobních údajů', () => {
     expect(read('src/components/Footer.astro')).toContain("navHref(locale, '/zpracovani-osobnich-udaju/')");
   });
 
-  it('zásady uvádějí skutečné zpracovatele (Hostinger, Ahrefs, YouTube), ne Supabase, Inc. jako hostitele', () => {
+  it('zásady uvádějí skutečné zpracovatele (Hostinger, YouTube), ne Supabase, Inc. jako hostitele', () => {
     const z = read('src/pages/zpracovani-osobnich-udaju.astro');
     expect(z.match(/Hostinger International Ltd\./g)?.length).toBe(5);
-    expect(z.match(/Ahrefs Pte\. Ltd\./g)?.length).toBe(5);
+    expect(z).not.toMatch(/Ahrefs|esm\.sh/);
+    expect(z.match(/<h3>2\.6 /g)?.length).toBe(5); // kontaktní formulář
+    expect(z.match(/DSA (čl\.|art\.|Art\.|ст\.) 16/g)?.length).toBe(5); // oznámení v bazaru
     expect(z.match(/youtube-nocookie\.com/g)?.length).toBe(5);
     expect(z).not.toMatch(/<strong>Supabase, Inc\.<\/strong>/);
   });

@@ -55,10 +55,26 @@ const meta = META[locale] ?? META.cs;
       <li>Kontaktné údaje uvedené v inzeráte</li>
     </ul>
 
-    <h3>2.4 Fotosúťaž</h3>
+    <h3>2.4 Bazár — oznámenie závadného inzerátu</h3>
+    <ul>
+      <li>Meno a e-mail oznamovateľa (pri oznámeniach týkajúcich sa sexuálneho zneužívania detí nepovinné)</li>
+      <li>URL inzerátu, dôvod a odôvodnenie oznámenia, vyhlásenie o dobrej viere</li>
+      <li>Odtlačok (hash) IP adresy odosielateľa — ochrana formulára pred zneužitím</li>
+    </ul>
+
+    <h3>2.5 Fotosúťaž</h3>
     <p>Pre fotosúťaž platia samostatné <a href="/fotosoutez/gdpr/">zásady spracúvania</a>.</p>
 
-    <h3>2.5 Technické údaje (všetci návštevníci)</h3>
+    <h3>2.6 Kontaktný formulár</h3>
+    <ul>
+      <li>E-mailová adresa (aby sme vám mohli odpovedať)</li>
+      <li>Meno, ak ho uvediete</li>
+      <li>Téma, text správy a prípadne adresa stránky, ktorej sa správa týka</li>
+      <li>IP adresa — len na obmedzenie počtu správ (najviac 5 za 15 minút); uchováva sa 15 minút v operačnej pamäti servera a nikam sa neukladá</li>
+    </ul>
+    <p>Správu neukladáme do databázy; doručí sa e-mailom do našej schránky info@samecdigital.com. Na adresu z formulára neposielame nič iné ako odpoveď.</p>
+
+    <h3>2.7 Technické údaje (všetci návštevníci)</h3>
     <ul>
       <li>IP adresa (anonymizovaná v logu, anti-fraud, max 30 dní)</li>
       <li>User-agent prehliadača (štatistika, debugging)</li>
@@ -74,9 +90,11 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Zasielanie newslettera</td><td>Súhlas — ods. 1 písm. a)</td></tr>
         <tr><td>Prevádzka používateľského účtu (bazár)</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
         <tr><td>Zverejňovanie inzerátov</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
-        <tr><td>Meranie návštevnosti (Google Analytics, Microsoft Clarity, Ahrefs)</td><td>Súhlas — ods. 1 písm. a)</td></tr>
+        <tr><td>Meranie návštevnosti (Google Analytics, Microsoft Clarity)</td><td>Súhlas — ods. 1 písm. a)</td></tr>
         <tr><td>Anti-fraud, bezpečnosť prevádzky</td><td>Oprávnený záujem — ods. 1 písm. f)</td></tr>
         <tr><td>Plnenie zákonných povinností (účtovníctvo pri platených službách)</td><td>Právna povinnosť — ods. 1 písm. c)</td></tr>
+        <tr><td>Vybavenie oznámenia závadného obsahu v bazári (DSA čl. 16) vrátane potvrdenia o prijatí a oznámenia rozhodnutia</td><td>Právna povinnosť — ods. 1 písm. c)</td></tr>
+        <tr><td>Vybavenie správy z kontaktného formulára a odpoveď na ňu</td><td>Oprávnený záujem — ods. 1 písm. f) (odpovedať na otázky); ak sa správa týka zmluvy s nami (napr. účtu v bazári), plnenie zmluvy — ods. 1 písm. b); pri žiadostiach podľa GDPR právna povinnosť — ods. 1 písm. c)</td></tr>
       </tbody>
     </table>
 
@@ -90,6 +108,8 @@ const meta = META[locale] ?? META.cs;
         Keď inzerát zmažete, <strong>zmaže sa okamžite a nevratne</strong> — žiadny archív si
         neponechávame.</li>
       <li><strong>IP adresy z anti-fraudu</strong> (pokusy o zadanie kódu): najviac 30 dní.</li>
+      <li><strong>Oznámenia závadného inzerátu:</strong> meno a e-mail oznamovateľa 6 mesiacov od oznámenia rozhodnutia (dovtedy sa proti nemu môžete ohradiť), potom ich mažeme; odtlačok IP adresy 90 dní.</li>
+      <li><strong>Správy z kontaktného formulára:</strong> v e-mailovej schránke počas vybavovania, potom najviac 2 roky od poslednej komunikácie; ak sa správa týka uplatnenia alebo obhajoby právnych nárokov (napr. sťažnosť na porušenie práv), do skončenia veci.</li>
       <li><strong>Prevádzkové logy</strong> vznikajú u poskytovateľov infraštruktúry
         (Cloudflare, hosting) a riadia sa ich lehotami, nie našimi.</li>
     </ul>
@@ -97,14 +117,13 @@ const meta = META[locale] ?? META.cs;
     <h2>5. Komu údaje odovzdávame (sprostredkovatelia)</h2>
     <ul>
       <li><strong>Cloudflare, Inc.</strong> (USA) — reverzná proxy, CDN, anti-DDoS; prechádzajú ním všetky požiadavky na web. Štandardné zmluvné doložky (SCC) podľa čl. 46 GDPR.</li>
-      <li><strong>Hostinger International Ltd.</strong> (Cyprus) — server s webom a databázou (dátové centrum vo Frankfurte nad Mohanom) a CDN obrázkov <code>cdn.samecdigital.com</code>. Databázu a prihlasovanie prevádzkujeme na vlastnom serveri (open-source Supabase), nie u spoločnosti Supabase, Inc.</li>
-      <li><strong>Resend, Inc.</strong> (USA) — odosielanie transakčných a newsletter e-mailov. SCC.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Cyprus) — server s webom a databázou (dátové centrum vo Frankfurte nad Mohanom) a CDN obrázkov <code>cdn.samecdigital.com</code>. Databázu a prihlasovanie prevádzkujeme na vlastnom serveri (open-source Supabase), nie u spoločnosti Supabase, Inc. U Hostingeru je aj naša e-mailová schránka info@samecdigital.com.</li>
+      <li><strong>Resend, Inc.</strong> (USA) — odosielanie transakčných a newsletter e-mailov a doručovanie správ z kontaktného formulára do našej schránky. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Írsko) — Google Analytics 4 (ID merania G-HC3JY466RR), štatistika návštevnosti; cookies <code>_ga</code> a <code>_ga_*</code> ukladajú náhodný identifikátor prehliadača až na 2 roky. Načíta sa <strong>až po vašom súhlase</strong>. Prehliadač pritom Googlu odovzdá vašu IP adresu; podľa Googlu Google Analytics 4 IP adresy neukladá. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Írsko) — Microsoft Clarity (ID projektu ws6puxcjnb), heatmapy a záznamy návštev (pohyb myši, kliknutia, posúvanie). Načíta sa <strong>až po vašom súhlase</strong>. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
-      <li><strong>Ahrefs Pte. Ltd.</strong> (Singapur) — Ahrefs Web Analytics, štatistika návštevnosti bez cookies. Načíta sa <strong>až po vašom súhlase</strong> s meraním.</li>
       <li><strong>Google Ireland Limited</strong> (Írsko) — prehrávač YouTube (<code>youtube-nocookie.com</code>) pri videách v katalógu techniky a v encyklopédii. Načíta sa <strong>až po kliknutí</strong> na video, dovtedy sa z YouTube nenačíta nič. Google pritom dostane vašu IP adresu, prehrávač ukladá údaje do úložiska prehliadača (<code>localStorage</code>, IndexedDB) a údaje môžu ísť do USA (EU–US Data Privacy Framework).</li>
     </ul>
-    <p>Na niektorých stránkach sa váš prehliadač pripája priamo k ďalším službám, ktoré tým dostanú vašu IP adresu: <strong>Open-Meteo</strong> (predpoveď počasia podľa vašej polohy — len keď o ňu kliknutím požiadate), <strong>jsDelivr</strong> a <strong>unpkg</strong> (knižnice pre grafy a mapy), <strong>OpenStreetMap</strong> (mapové podklady v bazári a pri farmách), <strong>esm.sh</strong> (prihlásenie do bazára), <strong>Cloudflare Turnstile</strong> (ochrana formulárov pred robotmi) a <strong>Unsplash</strong> (obrázky v sekcii Médiá). Server navyše používa <strong>Nominatim / OpenStreetMap</strong> na prevod lokality inzerátu na súradnice, <strong>Fio banku</strong> na párovanie platieb za zvýhodnenie inzerátu a služby <strong>OpenAI</strong> a <strong>Anthropic</strong> na strojové spracovanie textu inzerátov, ktoré redakcia prevezme z iných inzertných serverov.</p>
+    <p>Na niektorých stránkach sa váš prehliadač pripája priamo k ďalším službám, ktoré tým dostanú vašu IP adresu: <strong>Open-Meteo</strong> (predpoveď počasia podľa vašej polohy — len keď o ňu kliknutím požiadate), <strong>jsDelivr</strong> a <strong>unpkg</strong> (knižnice pre grafy a mapy), <strong>OpenStreetMap</strong> (mapové podklady v bazári a pri farmách), <strong>Cloudflare Turnstile</strong> (ochrana formulárov pred robotmi) a <strong>Unsplash</strong> (obrázky v sekcii Médiá). Server navyše používa <strong>Nominatim / OpenStreetMap</strong> na prevod lokality inzerátu na súradnice, <strong>Fio banku</strong> na párovanie platieb za zvýhodnenie inzerátu a služby <strong>OpenAI</strong> a <strong>Anthropic</strong> na strojové spracovanie textu inzerátov, ktoré redakcia prevezme z iných inzertných serverov.</p>
     <p>Vaše osobné údaje nepredávame ani neodovzdávame tretím stranám na marketingové účely.</p>
 
     <h2>6. Vaše práva</h2>
@@ -141,11 +160,11 @@ const meta = META[locale] ?? META.cs;
 
     <h2>9. Cookies</h2>
     <p><strong>Technicky nevyhnutné cookies</strong> (prihlásenie, hlasovanie v anketách a vo fotosúťaži) sa používajú vždy — bez nich web nefunguje. Vašu voľbu o súhlase si web pamätá v úložisku prehliadača (<code>localStorage</code>), nie v cookie.</p>
-    <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — sa načítajú <strong>len s vaším súhlasom</strong>. Merajú návštevnosť a to, ako sa po stránke pohybujete. Doba uloženia: <code>_ga</code> a <code>_ga_*</code> až 2 roky, <code>_clck</code> 1 rok, <code>_clsk</code> 1 deň. So súhlasom sa načíta aj Ahrefs Web Analytics (štatistika návštevnosti bez cookies). Ak zvolíte „Iba nevyhnutné", nenačíta sa žiadny merací skript (Google, Microsoft ani Ahrefs) a ich cookies sa z prehliadača vymažú.</p>
+    <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — sa načítajú <strong>len s vaším súhlasom</strong>. Merajú návštevnosť a to, ako sa po stránke pohybujete. Doba uloženia: <code>_ga</code> a <code>_ga_*</code> až 2 roky, <code>_clck</code> 1 rok, <code>_clsk</code> 1 deň. Ak zvolíte „Iba nevyhnutné", nenačíta sa žiadny merací skript (Google ani Microsoft) a ich cookies sa z prehliadača vymažú.</p>
     <p>Nepoužívame marketingové ani reklamné cookies tretích strán.</p>
     <p>Súhlas môžete kedykoľvek odvolať odkazom <strong>Nastavenia cookies</strong> v pätičke — odvolanie je rovnako jednoduché ako udelenie (čl. 7 ods. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnosť:</strong> 15. októbra 2026</p>
+    <p class="effective"><strong>Účinnosť:</strong> 17. októbra 2026</p>
     </Fragment>
   ) : isPl ? (
     <Fragment>
@@ -182,10 +201,26 @@ const meta = META[locale] ?? META.cs;
       <li>Dane kontaktowe podane w ogłoszeniu</li>
     </ul>
 
-    <h3>2.4 Fotokonkurs</h3>
+    <h3>2.4 Bazar — zgłoszenie niedozwolonego ogłoszenia</h3>
+    <ul>
+      <li>Imię i nazwisko oraz e-mail zgłaszającego (przy zgłoszeniach dotyczących wykorzystywania seksualnego dzieci nieobowiązkowe)</li>
+      <li>URL ogłoszenia, powód i uzasadnienie zgłoszenia, oświadczenie o działaniu w dobrej wierze</li>
+      <li>Skrót (hash) adresu IP nadawcy — ochrona formularza przed nadużyciami</li>
+    </ul>
+
+    <h3>2.5 Fotokonkurs</h3>
     <p>Dla fotokonkursu obowiązują odrębne <a href="/fotosoutez/gdpr/" hreflang="cs">zasady przetwarzania</a> (po czesku).</p>
 
-    <h3>2.5 Dane techniczne (wszyscy odwiedzający)</h3>
+    <h3>2.6 Formularz kontaktowy</h3>
+    <ul>
+      <li>Adres e-mail (abyśmy mogli odpowiedzieć)</li>
+      <li>Imię i nazwisko, jeśli je podasz</li>
+      <li>Temat, treść wiadomości i ewentualnie adres strony, której dotyczy wiadomość</li>
+      <li>Adres IP — wyłącznie w celu ograniczenia liczby wiadomości (maksymalnie 5 w ciągu 15 minut); przechowywany przez 15 minut w pamięci operacyjnej serwera i nigdzie nie zapisywany</li>
+    </ul>
+    <p>Wiadomości nie zapisujemy w bazie danych; trafia ona e-mailem do naszej skrzynki info@samecdigital.com. Na adres podany w formularzu wysyłamy wyłącznie odpowiedź.</p>
+
+    <h3>2.7 Dane techniczne (wszyscy odwiedzający)</h3>
     <ul>
       <li>Adres IP (zanonimizowany w logu, anti-fraud, maks. 30 dni)</li>
       <li>User-agent przeglądarki (statystyka, debugowanie)</li>
@@ -201,9 +236,11 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Wysyłka newslettera</td><td>Zgoda — ust. 1 lit. a)</td></tr>
         <tr><td>Prowadzenie konta użytkownika (bazar)</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
         <tr><td>Publikowanie ogłoszeń</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
-        <tr><td>Pomiar ruchu (Google Analytics, Microsoft Clarity, Ahrefs)</td><td>Zgoda — ust. 1 lit. a)</td></tr>
+        <tr><td>Pomiar ruchu (Google Analytics, Microsoft Clarity)</td><td>Zgoda — ust. 1 lit. a)</td></tr>
         <tr><td>Anti-fraud, bezpieczeństwo działania</td><td>Prawnie uzasadniony interes — ust. 1 lit. f)</td></tr>
         <tr><td>Wypełnienie obowiązków ustawowych (księgowość przy usługach płatnych)</td><td>Obowiązek prawny — ust. 1 lit. c)</td></tr>
+        <tr><td>Rozpatrzenie zgłoszenia nielegalnych treści w bazarze (DSA art. 16), w tym potwierdzenie otrzymania i powiadomienie o decyzji</td><td>Obowiązek prawny — ust. 1 lit. c)</td></tr>
+        <tr><td>Rozpatrzenie wiadomości z formularza kontaktowego i udzielenie odpowiedzi</td><td>Prawnie uzasadniony interes — ust. 1 lit. f) (odpowiadanie na zapytania); jeśli wiadomość dotyczy umowy z nami (np. konta w bazarze), wykonanie umowy — ust. 1 lit. b); w przypadku wniosków na podstawie RODO obowiązek prawny — ust. 1 lit. c)</td></tr>
       </tbody>
     </table>
 
@@ -217,6 +254,8 @@ const meta = META[locale] ?? META.cs;
         Gdy usuniesz ogłoszenie, <strong>zostaje usunięte natychmiast i nieodwracalnie</strong> —
         nie zachowujemy archiwum.</li>
       <li><strong>Adresy IP z zabezpieczeń anti-fraud</strong> (próby wpisania kodu): maksymalnie 30 dni.</li>
+      <li><strong>Zgłoszenia niedozwolonych ogłoszeń:</strong> imię i nazwisko oraz e-mail zgłaszającego przez 6 miesięcy od powiadomienia o decyzji (w tym czasie możesz się od niej odwołać), następnie je usuwamy; skrót adresu IP 90 dni.</li>
+      <li><strong>Wiadomości z formularza kontaktowego:</strong> w skrzynce e-mail przez czas rozpatrywania sprawy, a następnie maksymalnie 2 lata od ostatniej korespondencji; jeśli wiadomość dotyczy dochodzenia roszczeń lub obrony przed nimi (np. skarga na naruszenie praw) — do zakończenia sprawy.</li>
       <li><strong>Logi serwerowe</strong> powstają u dostawców infrastruktury (Cloudflare, hosting)
         i podlegają ich terminom, nie naszym.</li>
     </ul>
@@ -224,14 +263,13 @@ const meta = META[locale] ?? META.cs;
     <h2>5. Komu przekazujemy dane (podmioty przetwarzające)</h2>
     <ul>
       <li><strong>Cloudflare, Inc.</strong> (USA) — reverse proxy, CDN, anti-DDoS; przechodzą przez niego wszystkie żądania do serwisu. Standardowe klauzule umowne (SCC) zgodnie z art. 46 RODO.</li>
-      <li><strong>Hostinger International Ltd.</strong> (Cypr) — serwer z serwisem i bazą danych (centrum danych we Frankfurcie nad Menem) oraz CDN obrazów <code>cdn.samecdigital.com</code>. Bazę danych i logowanie prowadzimy na własnym serwerze (open-source Supabase), nie w spółce Supabase, Inc.</li>
-      <li><strong>Resend, Inc.</strong> (USA) — wysyłka e-maili transakcyjnych i newsletterowych. SCC.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Cypr) — serwer z serwisem i bazą danych (centrum danych we Frankfurcie nad Menem) oraz CDN obrazów <code>cdn.samecdigital.com</code>. Bazę danych i logowanie prowadzimy na własnym serwerze (open-source Supabase), nie w spółce Supabase, Inc. W Hostingerze działa też nasza skrzynka e-mail info@samecdigital.com.</li>
+      <li><strong>Resend, Inc.</strong> (USA) — wysyłka e-maili transakcyjnych i newsletterowych oraz dostarczanie wiadomości z formularza kontaktowego do naszej skrzynki. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irlandia) — Google Analytics 4 (identyfikator pomiaru G-HC3JY466RR), statystyka odwiedzin; pliki cookie <code>_ga</code> i <code>_ga_*</code> przechowują losowy identyfikator przeglądarki do 2 lat. Ładuje się <strong>dopiero po Twojej zgodzie</strong>. Przeglądarka przekazuje przy tym Google Twój adres IP; według Google Google Analytics 4 nie przechowuje adresów IP. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irlandia) — Microsoft Clarity (identyfikator projektu ws6puxcjnb), mapy ciepła i nagrania wizyt (ruch myszy, kliknięcia, przewijanie). Ładuje się <strong>dopiero po Twojej zgodzie</strong>. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
-      <li><strong>Ahrefs Pte. Ltd.</strong> (Singapur) — Ahrefs Web Analytics, statystyka odwiedzin bez plików cookie. Ładuje się <strong>dopiero po Twojej zgodzie</strong> na pomiar.</li>
       <li><strong>Google Ireland Limited</strong> (Irlandia) — odtwarzacz YouTube (<code>youtube-nocookie.com</code>) przy filmach w katalogu maszyn i w encyklopedii. Ładuje się <strong>dopiero po kliknięciu</strong> w film; wcześniej nic nie jest pobierane z YouTube. Google otrzymuje przy tym Twój adres IP, odtwarzacz zapisuje dane w pamięci przeglądarki (<code>localStorage</code>, IndexedDB), a dane mogą trafić do USA (EU–US Data Privacy Framework).</li>
     </ul>
-    <p>Na niektórych stronach Twoja przeglądarka łączy się bezpośrednio z innymi usługami, które otrzymują przy tym Twój adres IP: <strong>Open-Meteo</strong> (prognoza pogody dla Twojej lokalizacji — tylko gdy poprosisz o nią kliknięciem), <strong>jsDelivr</strong> i <strong>unpkg</strong> (biblioteki do wykresów i map), <strong>OpenStreetMap</strong> (podkłady mapowe w Agro giełdzie i przy gospodarstwach), <strong>esm.sh</strong> (logowanie do giełdy), <strong>Cloudflare Turnstile</strong> (ochrona formularzy przed botami) oraz <strong>Unsplash</strong> (obrazy w sekcji Media). Serwer korzysta ponadto z <strong>Nominatim / OpenStreetMap</strong> do zamiany lokalizacji ogłoszenia na współrzędne, z <strong>Fio banka</strong> do parowania płatności za wyróżnienie ogłoszenia oraz z usług <strong>OpenAI</strong> i <strong>Anthropic</strong> do maszynowego przetwarzania tekstu ogłoszeń, które redakcja przejmuje z innych serwisów ogłoszeniowych.</p>
+    <p>Na niektórych stronach Twoja przeglądarka łączy się bezpośrednio z innymi usługami, które otrzymują przy tym Twój adres IP: <strong>Open-Meteo</strong> (prognoza pogody dla Twojej lokalizacji — tylko gdy poprosisz o nią kliknięciem), <strong>jsDelivr</strong> i <strong>unpkg</strong> (biblioteki do wykresów i map), <strong>OpenStreetMap</strong> (podkłady mapowe w Agro giełdzie i przy gospodarstwach), <strong>Cloudflare Turnstile</strong> (ochrona formularzy przed botami) oraz <strong>Unsplash</strong> (obrazy w sekcji Media). Serwer korzysta ponadto z <strong>Nominatim / OpenStreetMap</strong> do zamiany lokalizacji ogłoszenia na współrzędne, z <strong>Fio banka</strong> do parowania płatności za wyróżnienie ogłoszenia oraz z usług <strong>OpenAI</strong> i <strong>Anthropic</strong> do maszynowego przetwarzania tekstu ogłoszeń, które redakcja przejmuje z innych serwisów ogłoszeniowych.</p>
     <p>Twoich danych osobowych nie sprzedajemy ani nie przekazujemy stronom trzecim w celach marketingowych.</p>
 
     <h2>6. Twoje prawa</h2>
@@ -268,11 +306,11 @@ const meta = META[locale] ?? META.cs;
 
     <h2>9. Pliki cookie</h2>
     <p><strong>Technicznie niezbędne pliki cookie</strong> (logowanie, głosowanie w ankietach i w konkursie fotograficznym) używane są zawsze — bez nich serwis nie działa. Twój wybór dotyczący zgody serwis zapamiętuje w pamięci przeglądarki (<code>localStorage</code>), nie w pliku cookie.</p>
-    <p><strong>Analityczne pliki cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) i Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — ładują się <strong>wyłącznie za Twoją zgodą</strong>. Mierzą statystykę odwiedzin oraz sposób poruszania się po stronie. Okres przechowywania: <code>_ga</code> i <code>_ga_*</code> do 2 lat, <code>_clck</code> 1 rok, <code>_clsk</code> 1 dzień. Za Twoją zgodą ładuje się również Ahrefs Web Analytics (statystyka odwiedzin bez plików cookie). Jeśli wybierzesz „Tylko niezbędne", nie zostanie wczytany żaden skrypt pomiarowy (Google, Microsoft ani Ahrefs), a ich pliki cookie zostaną usunięte z przeglądarki.</p>
+    <p><strong>Analityczne pliki cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) i Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — ładują się <strong>wyłącznie za Twoją zgodą</strong>. Mierzą statystykę odwiedzin oraz sposób poruszania się po stronie. Okres przechowywania: <code>_ga</code> i <code>_ga_*</code> do 2 lat, <code>_clck</code> 1 rok, <code>_clsk</code> 1 dzień. Jeśli wybierzesz „Tylko niezbędne", nie zostanie wczytany żaden skrypt pomiarowy (Google ani Microsoft), a ich pliki cookie zostaną usunięte z przeglądarki.</p>
     <p>Nie używamy marketingowych ani reklamowych plików cookie stron trzecich.</p>
     <p>Zgodę możesz wycofać w dowolnym momencie linkiem <strong>Ustawienia plików cookie</strong> w stopce — wycofanie jest równie łatwe jak wyrażenie zgody (art. 7 ust. 3 RODO).</p>
 
-    <p class="effective"><strong>Data wejścia w życie:</strong> 15 października 2026</p>
+    <p class="effective"><strong>Data wejścia w życie:</strong> 17 października 2026</p>
     </Fragment>
   ) : isUk ? (
     <Fragment>
@@ -309,10 +347,26 @@ const meta = META[locale] ?? META.cs;
       <li>Контактні дані, зазначені в оголошенні</li>
     </ul>
 
-    <h3>2.4 Фотоконкурс</h3>
+    <h3>2.4 Барахолка — повідомлення про недопустиме оголошення</h3>
+    <ul>
+      <li>Ім'я та e-mail заявника (для повідомлень щодо сексуального насильства над дітьми — необов'язково)</li>
+      <li>URL оголошення, причина та обґрунтування повідомлення, заява про добросовісність</li>
+      <li>Відбиток (хеш) IP-адреси відправника — захист форми від зловживань</li>
+    </ul>
+
+    <h3>2.5 Фотоконкурс</h3>
     <p>Для фотоконкурсу діють окремі <a href="/fotosoutez/gdpr/" hreflang="cs">засади обробки</a> (чеською).</p>
 
-    <h3>2.5 Технічні дані (усі відвідувачі)</h3>
+    <h3>2.6 Контактна форма</h3>
+    <ul>
+      <li>Адреса електронної пошти (щоб ми могли вам відповісти)</li>
+      <li>Ім'я, якщо ви його вкажете</li>
+      <li>Тема, текст повідомлення та, за потреби, адреса сторінки, якої воно стосується</li>
+      <li>IP-адреса — лише для обмеження кількості повідомлень (не більше 5 за 15 хвилин); зберігається 15 хвилин в оперативній пам'яті сервера й ніде не записується</li>
+    </ul>
+    <p>Повідомлення ми не зберігаємо в базі даних; воно надходить електронною поштою до нашої скриньки info@samecdigital.com. На адресу з форми ми не надсилаємо нічого, крім відповіді.</p>
+
+    <h3>2.7 Технічні дані (усі відвідувачі)</h3>
     <ul>
       <li>IP-адреса (анонімізована в лозі, anti-fraud, макс. 30 днів)</li>
       <li>User-agent браузера (статистика, налагодження)</li>
@@ -328,9 +382,11 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Надсилання розсилки</td><td>Згода — ч. 1 п. a)</td></tr>
         <tr><td>Робота облікового запису користувача (барахолка)</td><td>Виконання договору — ч. 1 п. b)</td></tr>
         <tr><td>Публікація оголошень</td><td>Виконання договору — ч. 1 п. b)</td></tr>
-        <tr><td>Вимірювання відвідуваності (Google Analytics, Microsoft Clarity, Ahrefs)</td><td>Згода — ч. 1 п. a)</td></tr>
+        <tr><td>Вимірювання відвідуваності (Google Analytics, Microsoft Clarity)</td><td>Згода — ч. 1 п. a)</td></tr>
         <tr><td>Anti-fraud, безпека роботи</td><td>Законний інтерес — ч. 1 п. f)</td></tr>
         <tr><td>Виконання законодавчих обов'язків (бухгалтерія при платних послугах)</td><td>Правовий обов'язок — ч. 1 п. c)</td></tr>
+        <tr><td>Розгляд повідомлень про незаконний вміст на барахолці (DSA ст. 16), зокрема підтвердження отримання та повідомлення про рішення</td><td>Правовий обов'язок — ч. 1 п. c)</td></tr>
+        <tr><td>Розгляд повідомлення з контактної форми та відповідь на нього</td><td>Законний інтерес — ч. 1 п. f) (відповідати на запитання); якщо повідомлення стосується договору з нами (наприклад, облікового запису на барахолці), виконання договору — ч. 1 п. b); у разі запитів відповідно до GDPR правовий обов'язок — ч. 1 п. c)</td></tr>
       </tbody>
     </table>
 
@@ -344,6 +400,8 @@ const meta = META[locale] ?? META.cs;
         Коли ви видаляєте оголошення, воно <strong>видаляється негайно й безповоротно</strong> —
         архіву не зберігаємо.</li>
       <li><strong>IP-адреси з anti-fraud</strong> (спроби введення коду): щонайбільше 30 днів.</li>
+      <li><strong>Повідомлення про недопустимі оголошення:</strong> ім'я та e-mail заявника — 6 місяців від повідомлення про рішення (протягом цього часу його можна оскаржити), потім видаляємо; відбиток IP-адреси — 90 днів.</li>
+      <li><strong>Повідомлення з контактної форми:</strong> в електронній скриньці на час розгляду, потім не довше 2 років від останнього листування; якщо повідомлення стосується пред'явлення правових вимог або захисту від них (наприклад, скарга на порушення прав), — до завершення справи.</li>
       <li><strong>Технічні логи</strong> виникають у постачальників інфраструктури
         (Cloudflare, хостинг) і підпорядковані їхнім строкам, не нашим.</li>
     </ul>
@@ -351,14 +409,13 @@ const meta = META[locale] ?? META.cs;
     <h2>5. Кому ми передаємо дані (обробники)</h2>
     <ul>
       <li><strong>Cloudflare, Inc.</strong> (США) — зворотний проксі, CDN, anti-DDoS; через нього проходять усі запити до сайту. Стандартні договірні положення (SCC) відповідно до ст. 46 GDPR.</li>
-      <li><strong>Hostinger International Ltd.</strong> (Кіпр) — сервер із сайтом і базою даних (дата-центр у Франкфурті-на-Майні) та CDN зображень <code>cdn.samecdigital.com</code>. Базу даних і вхід ми обслуговуємо на власному сервері (open-source Supabase), а не в компанії Supabase, Inc.</li>
-      <li><strong>Resend, Inc.</strong> (США) — надсилання транзакційних і розсилкових e-mail. SCC.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Кіпр) — сервер із сайтом і базою даних (дата-центр у Франкфурті-на-Майні) та CDN зображень <code>cdn.samecdigital.com</code>. Базу даних і вхід ми обслуговуємо на власному сервері (open-source Supabase), а не в компанії Supabase, Inc. У Hostinger також розміщена наша поштова скринька info@samecdigital.com.</li>
+      <li><strong>Resend, Inc.</strong> (США) — надсилання транзакційних і розсилкових e-mail та доставка повідомлень із контактної форми до нашої скриньки. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Ірландія) — Google Analytics 4 (ідентифікатор вимірювання G-HC3JY466RR), статистика відвідувань; файли cookie <code>_ga</code> і <code>_ga_*</code> зберігають випадковий ідентифікатор браузера до 2 років. Завантажується <strong>лише після вашої згоди</strong>. Браузер при цьому передає Google вашу IP-адресу; за даними Google, Google Analytics 4 IP-адреси не зберігає. Передавання до США на підставі EU–US Data Privacy Framework і SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Ірландія) — Microsoft Clarity (ідентифікатор проєкту ws6puxcjnb), теплові карти та записи відвідувань (рух миші, кліки, прокручування). Завантажується <strong>лише після вашої згоди</strong>. Передавання до США на підставі EU–US Data Privacy Framework і SCC.</li>
-      <li><strong>Ahrefs Pte. Ltd.</strong> (Сінгапур) — Ahrefs Web Analytics, статистика відвідуваності без файлів cookie. Завантажується <strong>лише після вашої згоди</strong> на вимірювання.</li>
       <li><strong>Google Ireland Limited</strong> (Ірландія) — програвач YouTube (<code>youtube-nocookie.com</code>) для відео в каталозі техніки та енциклопедії. Завантажується <strong>лише після кліку</strong> на відео; до того з YouTube нічого не завантажується. Google при цьому отримує вашу IP-адресу, програвач зберігає дані в сховищі браузера (<code>localStorage</code>, IndexedDB), а дані можуть передаватися до США (EU–US Data Privacy Framework).</li>
     </ul>
-    <p>На деяких сторінках ваш браузер підключається безпосередньо до інших сервісів, які при цьому отримують вашу IP-адресу: <strong>Open-Meteo</strong> (прогноз погоди для вашого місцезнаходження — лише коли ви попросите про нього кліком), <strong>jsDelivr</strong> і <strong>unpkg</strong> (бібліотеки для графіків і карт), <strong>OpenStreetMap</strong> (картографічна основа в Агро базарі та біля ферм), <strong>esm.sh</strong> (вхід до базару), <strong>Cloudflare Turnstile</strong> (захист форм від ботів) і <strong>Unsplash</strong> (зображення в розділі Медіа). Сервер також використовує <strong>Nominatim / OpenStreetMap</strong> для перетворення місця оголошення на координати, <strong>Fio banka</strong> для зіставлення платежів за виділення оголошення та сервіси <strong>OpenAI</strong> і <strong>Anthropic</strong> для машинної обробки тексту оголошень, які редакція переймає з інших сайтів оголошень.</p>
+    <p>На деяких сторінках ваш браузер підключається безпосередньо до інших сервісів, які при цьому отримують вашу IP-адресу: <strong>Open-Meteo</strong> (прогноз погоди для вашого місцезнаходження — лише коли ви попросите про нього кліком), <strong>jsDelivr</strong> і <strong>unpkg</strong> (бібліотеки для графіків і карт), <strong>OpenStreetMap</strong> (картографічна основа в Агро базарі та біля ферм), <strong>Cloudflare Turnstile</strong> (захист форм від ботів) і <strong>Unsplash</strong> (зображення в розділі Медіа). Сервер також використовує <strong>Nominatim / OpenStreetMap</strong> для перетворення місця оголошення на координати, <strong>Fio banka</strong> для зіставлення платежів за виділення оголошення та сервіси <strong>OpenAI</strong> і <strong>Anthropic</strong> для машинної обробки тексту оголошень, які редакція переймає з інших сайтів оголошень.</p>
     <p>Ваші персональні дані ми не продаємо і не передаємо третім сторонам для маркетингових цілей.</p>
 
     <h2>6. Ваші права</h2>
@@ -393,11 +450,11 @@ const meta = META[locale] ?? META.cs;
 
     <h2>9. Файли cookie</h2>
     <p><strong>Технічно необхідні файли cookie</strong> (вхід, голосування в опитуваннях і фотоконкурсі) використовуються завжди — без них сайт не працює. Ваш вибір щодо згоди сайт запам’ятовує в сховищі браузера (<code>localStorage</code>), а не у файлі cookie.</p>
-    <p><strong>Аналітичні файли cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) і Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — завантажуються <strong>лише за вашої згоди</strong>. Вони вимірюють відвідуваність і те, як ви рухаєтесь сторінкою. Строк зберігання: <code>_ga</code> і <code>_ga_*</code> до 2 років, <code>_clck</code> 1 рік, <code>_clsk</code> 1 день. За вашої згоди завантажується також Ahrefs Web Analytics (статистика відвідуваності без файлів cookie). Якщо ви оберете «Лише необхідні», не завантажиться жоден вимірювальний скрипт (Google, Microsoft чи Ahrefs), а їхні файли cookie буде видалено з браузера.</p>
+    <p><strong>Аналітичні файли cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) і Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — завантажуються <strong>лише за вашої згоди</strong>. Вони вимірюють відвідуваність і те, як ви рухаєтесь сторінкою. Строк зберігання: <code>_ga</code> і <code>_ga_*</code> до 2 років, <code>_clck</code> 1 рік, <code>_clsk</code> 1 день. Якщо ви оберете «Лише необхідні», не завантажиться жоден вимірювальний скрипт (Google чи Microsoft), а їхні файли cookie буде видалено з браузера.</p>
     <p>Ми не використовуємо маркетингові чи рекламні файли cookie третіх сторін.</p>
     <p>Згоду можна відкликати будь-коли посиланням <strong>Налаштування cookie</strong> в підвалі — відкликання таке саме просте, як і надання (ст. 7 п. 3 GDPR).</p>
 
-    <p class="effective"><strong>Дата набрання чинності:</strong> 15 жовтня 2026</p>
+    <p class="effective"><strong>Дата набрання чинності:</strong> 17 жовтня 2026</p>
     </Fragment>
   ) : isDe ? (
     <Fragment>
@@ -438,10 +495,26 @@ const meta = META[locale] ?? META.cs;
       <li>Im Inserat angegebene Kontaktdaten</li>
     </ul>
 
-    <h3>2.4 Fotowettbewerb</h3>
+    <h3>2.4 Gebrauchtmarkt — Meldung unzulässiger Inserate</h3>
+    <ul>
+      <li>Name und E-Mail-Adresse der meldenden Person (bei Meldungen zu sexuellem Missbrauch von Kindern freiwillig)</li>
+      <li>URL des Inserats, Grund und Begründung der Meldung, Erklärung des guten Glaubens</li>
+      <li>Hash der IP-Adresse des Absenders — Schutz des Formulars vor Missbrauch</li>
+    </ul>
+
+    <h3>2.5 Fotowettbewerb</h3>
     <p>Für den Fotowettbewerb gelten gesonderte <a href="/fotosoutez/gdpr/" hreflang="cs">Verarbeitungsgrundsätze</a> (auf Tschechisch).</p>
 
-    <h3>2.5 Technische Daten (alle Besucher)</h3>
+    <h3>2.6 Kontaktformular</h3>
+    <ul>
+      <li>E-Mail-Adresse (damit wir Ihnen antworten können)</li>
+      <li>Name, sofern Sie ihn angeben</li>
+      <li>Thema, Text der Nachricht und gegebenenfalls die Adresse der betroffenen Seite</li>
+      <li>IP-Adresse — nur zur Begrenzung der Anzahl der Nachrichten (höchstens 5 in 15 Minuten); sie wird 15 Minuten im Arbeitsspeicher des Servers gehalten und nicht dauerhaft gespeichert</li>
+    </ul>
+    <p>Die Nachricht speichern wir nicht in einer Datenbank; sie wird per E-Mail an unser Postfach info@samecdigital.com zugestellt. An die im Formular angegebene Adresse senden wir ausschließlich unsere Antwort.</p>
+
+    <h3>2.7 Technische Daten (alle Besucher)</h3>
     <ul>
       <li>IP-Adresse (im Protokoll anonymisiert, Betrugsprävention, max. 30 Tage)</li>
       <li>User-Agent des Browsers (Statistik, Fehlersuche)</li>
@@ -457,9 +530,11 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Versand des Newsletters</td><td>Einwilligung — Abs. 1 Buchst. a)</td></tr>
         <tr><td>Führung des Nutzerkontos (Gebrauchtmarkt)</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
         <tr><td>Veröffentlichung von Inseraten</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
-        <tr><td>Reichweitenmessung (Google Analytics, Microsoft Clarity, Ahrefs)</td><td>Einwilligung — Abs. 1 Buchst. a)</td></tr>
+        <tr><td>Reichweitenmessung (Google Analytics, Microsoft Clarity)</td><td>Einwilligung — Abs. 1 Buchst. a)</td></tr>
         <tr><td>Betrugsprävention, Betriebssicherheit</td><td>Berechtigtes Interesse — Abs. 1 Buchst. f)</td></tr>
         <tr><td>Erfüllung gesetzlicher Pflichten (Buchhaltung bei kostenpflichtigen Diensten)</td><td>Rechtliche Verpflichtung — Abs. 1 Buchst. c)</td></tr>
+        <tr><td>Bearbeitung von Meldungen rechtswidriger Inhalte im Gebrauchtmarkt (DSA Art. 16) einschließlich Eingangsbestätigung und Mitteilung der Entscheidung</td><td>Rechtliche Verpflichtung — Abs. 1 Buchst. c)</td></tr>
+        <tr><td>Bearbeitung und Beantwortung von Nachrichten aus dem Kontaktformular</td><td>Berechtigtes Interesse — Abs. 1 Buchst. f) (Beantwortung von Anfragen); betrifft die Nachricht einen Vertrag mit uns (z. B. ein Konto im Gebrauchtmarkt), Vertragserfüllung — Abs. 1 Buchst. b); bei Anfragen nach der DSGVO rechtliche Verpflichtung — Abs. 1 Buchst. c)</td></tr>
       </tbody>
     </table>
 
@@ -475,6 +550,8 @@ const meta = META[locale] ?? META.cs;
         Löschen Sie ein Inserat, wird es <strong>sofort und unwiderruflich gelöscht</strong> —
         wir führen kein Archiv.</li>
       <li><strong>IP-Adressen aus der Betrugsprävention</strong> (Versuche der Code-Eingabe): höchstens 30 Tage.</li>
+      <li><strong>Meldungen unzulässiger Inserate:</strong> Name und E-Mail der meldenden Person 6 Monate ab Mitteilung der Entscheidung (so lange können Sie sich dagegen wenden), danach gelöscht; IP-Hash 90 Tage.</li>
+      <li><strong>Nachrichten aus dem Kontaktformular:</strong> im E-Mail-Postfach für die Dauer der Bearbeitung, danach höchstens 2 Jahre ab der letzten Korrespondenz; betrifft die Nachricht die Geltendmachung oder Abwehr von Rechtsansprüchen (z. B. eine Beschwerde wegen Rechtsverletzung), bis zum Abschluss der Angelegenheit.</li>
       <li><strong>Server-Protokolle</strong> entstehen bei den Infrastrukturanbietern (Cloudflare,
         Hosting) und unterliegen deren Fristen, nicht unseren.</li>
     </ul>
@@ -482,14 +559,13 @@ const meta = META[locale] ?? META.cs;
     <h2>5. An wen wir Daten weitergeben (Auftragsverarbeiter)</h2>
     <ul>
       <li><strong>Cloudflare, Inc.</strong> (USA) — Reverse-Proxy, CDN, Anti-DDoS; alle Anfragen an die Website laufen darüber. Standardvertragsklauseln (SCC) nach Art. 46 DSGVO.</li>
-      <li><strong>Hostinger International Ltd.</strong> (Zypern) — Server mit Website und Datenbank (Rechenzentrum in Frankfurt am Main) und Bild-CDN <code>cdn.samecdigital.com</code>. Datenbank und Anmeldung betreiben wir auf eigenem Server (Open-Source-Software Supabase), nicht bei der Supabase, Inc.</li>
-      <li><strong>Resend, Inc.</strong> (USA) — Versand von Transaktions- und Newsletter-E-Mails. SCC.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Zypern) — Server mit Website und Datenbank (Rechenzentrum in Frankfurt am Main) und Bild-CDN <code>cdn.samecdigital.com</code>. Datenbank und Anmeldung betreiben wir auf eigenem Server (Open-Source-Software Supabase), nicht bei der Supabase, Inc. Bei Hostinger liegt auch unser E-Mail-Postfach info@samecdigital.com.</li>
+      <li><strong>Resend, Inc.</strong> (USA) — Versand von Transaktions- und Newsletter-E-Mails sowie Zustellung von Nachrichten aus dem Kontaktformular in unser Postfach. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irland) — Google Analytics 4 (Mess-ID G-HC3JY466RR), Besuchsstatistik; die Cookies <code>_ga</code> und <code>_ga_*</code> speichern eine zufällige Kennung Ihres Browsers für bis zu 2 Jahre. Wird <strong>erst nach Ihrer Einwilligung</strong> geladen. Ihr Browser übermittelt dabei Ihre IP-Adresse an Google; nach Angaben von Google speichert Google Analytics 4 keine IP-Adressen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irland) — Microsoft Clarity (Projekt-ID ws6puxcjnb), Heatmaps und Aufzeichnungen von Besuchen (Mausbewegungen, Klicks, Scrollen). Wird <strong>erst nach Ihrer Einwilligung</strong> geladen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
-      <li><strong>Ahrefs Pte. Ltd.</strong> (Singapur) — Ahrefs Web Analytics, Besuchsstatistik ohne Cookies. Wird <strong>erst nach Ihrer Einwilligung</strong> in die Reichweitenmessung geladen.</li>
       <li><strong>Google Ireland Limited</strong> (Irland) — YouTube-Player (<code>youtube-nocookie.com</code>) bei Videos im Maschinenkatalog und in der Enzyklopädie. Wird <strong>erst nach einem Klick</strong> auf das Video geladen; vorher wird nichts von YouTube abgerufen. Google erhält dabei Ihre IP-Adresse, der Player speichert Daten im Browser-Speicher (<code>localStorage</code>, IndexedDB), und Daten können in die USA übermittelt werden (EU–US Data Privacy Framework).</li>
     </ul>
-    <p>Auf einigen Seiten verbindet sich Ihr Browser direkt mit weiteren Diensten, die dabei Ihre IP-Adresse erhalten: <strong>Open-Meteo</strong> (Wettervorhersage für Ihren Standort — nur wenn Sie sie per Klick anfordern), <strong>jsDelivr</strong> und <strong>unpkg</strong> (Bibliotheken für Diagramme und Karten), <strong>OpenStreetMap</strong> (Kartenmaterial im Gebrauchtmarkt und bei den Betrieben), <strong>esm.sh</strong> (Anmeldung im Gebrauchtmarkt), <strong>Cloudflare Turnstile</strong> (Schutz von Formularen vor Bots) und <strong>Unsplash</strong> (Bilder im Bereich Medien). Diese Bereiche gibt es derzeit nur auf Tschechisch. Der Server nutzt außerdem <strong>Nominatim / OpenStreetMap</strong>, um den Ort eines Inserats in Koordinaten umzuwandeln, die <strong>Fio banka</strong> zum Abgleich von Zahlungen für hervorgehobene Inserate sowie <strong>OpenAI</strong> und <strong>Anthropic</strong> zur maschinellen Bearbeitung von Inseratstexten, die die Redaktion von anderen Kleinanzeigenportalen übernimmt.</p>
+    <p>Auf einigen Seiten verbindet sich Ihr Browser direkt mit weiteren Diensten, die dabei Ihre IP-Adresse erhalten: <strong>Open-Meteo</strong> (Wettervorhersage für Ihren Standort — nur wenn Sie sie per Klick anfordern), <strong>jsDelivr</strong> und <strong>unpkg</strong> (Bibliotheken für Diagramme und Karten), <strong>OpenStreetMap</strong> (Kartenmaterial im Gebrauchtmarkt und bei den Betrieben), <strong>Cloudflare Turnstile</strong> (Schutz von Formularen vor Bots) und <strong>Unsplash</strong> (Bilder im Bereich Medien). Diese Bereiche gibt es derzeit nur auf Tschechisch. Der Server nutzt außerdem <strong>Nominatim / OpenStreetMap</strong>, um den Ort eines Inserats in Koordinaten umzuwandeln, die <strong>Fio banka</strong> zum Abgleich von Zahlungen für hervorgehobene Inserate sowie <strong>OpenAI</strong> und <strong>Anthropic</strong> zur maschinellen Bearbeitung von Inseratstexten, die die Redaktion von anderen Kleinanzeigenportalen übernimmt.</p>
     <p>Wir verkaufen Ihre personenbezogenen Daten nicht und geben sie nicht zu Marketingzwecken an Dritte weiter.</p>
 
     <h2>6. Ihre Rechte</h2>
@@ -533,11 +609,11 @@ const meta = META[locale] ?? META.cs;
 
     <h2>9. Cookies</h2>
     <p><strong>Technisch notwendige Cookies</strong> (Anmeldung, Abstimmungen in Umfragen und im Fotowettbewerb) werden immer verwendet — ohne sie funktioniert die Website nicht. Ihre Entscheidung zur Einwilligung speichert die Website im Browser-Speicher (<code>localStorage</code>), nicht in einem Cookie.</p>
-    <p><strong>Analyse-Cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) und Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — werden <strong>ausschließlich mit Ihrer Einwilligung</strong> geladen. Sie messen die Besuchsstatistik und die Bewegung auf der Seite. Speicherdauer: <code>_ga</code> und <code>_ga_*</code> bis zu 2 Jahre, <code>_clck</code> 1 Jahr, <code>_clsk</code> 1 Tag. Mit Ihrer Einwilligung wird außerdem Ahrefs Web Analytics geladen (Besuchsstatistik ohne Cookies). Wählen Sie „Nur notwendige", wird kein Messskript (Google, Microsoft oder Ahrefs) geladen und deren Cookies werden aus dem Browser gelöscht.</p>
+    <p><strong>Analyse-Cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) und Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — werden <strong>ausschließlich mit Ihrer Einwilligung</strong> geladen. Sie messen die Besuchsstatistik und die Bewegung auf der Seite. Speicherdauer: <code>_ga</code> und <code>_ga_*</code> bis zu 2 Jahre, <code>_clck</code> 1 Jahr, <code>_clsk</code> 1 Tag. Wählen Sie „Nur notwendige", wird kein Messskript (Google oder Microsoft) geladen und deren Cookies werden aus dem Browser gelöscht.</p>
     <p>Wir verwenden keine Marketing- oder Werbe-Cookies Dritter.</p>
     <p>Ihre Einwilligung können Sie jederzeit über den Link <strong>Cookie-Einstellungen</strong> in der Fußzeile widerrufen — der Widerruf ist ebenso einfach wie die Erteilung (Art. 7 Abs. 3 DSGVO).</p>
 
-    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 15. Oktober 2026</p>
+    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 17. Oktober 2026</p>
     </Fragment>
   ) : (
     <Fragment>
@@ -574,10 +650,26 @@ const meta = META[locale] ?? META.cs;
       <li>Kontaktní údaje uvedené v inzerátu</li>
     </ul>
 
-    <h3>2.4 Fotosoutěž</h3>
+    <h3>2.4 Bazar — oznámení závadného inzerátu</h3>
+    <ul>
+      <li>Jméno a e-mail oznamovatele (u oznámení týkajících se sexuálního zneužívání dětí nepovinné)</li>
+      <li>URL inzerátu, důvod a odůvodnění oznámení, prohlášení o dobré víře</li>
+      <li>Otisk (hash) IP adresy odesílatele — ochrana formuláře proti zneužití</li>
+    </ul>
+
+    <h3>2.5 Fotosoutěž</h3>
     <p>Pro fotosoutěž platí samostatné <a href="/fotosoutez/gdpr/">zásady zpracování</a>.</p>
 
-    <h3>2.5 Technické údaje (všichni návštěvníci)</h3>
+    <h3>2.6 Kontaktní formulář</h3>
+    <ul>
+      <li>E-mailová adresa (abychom vám mohli odpovědět)</li>
+      <li>Jméno, pokud ho uvedete</li>
+      <li>Téma, text zprávy a případně adresa stránky, které se zpráva týká</li>
+      <li>IP adresa — jen k omezení počtu zpráv (nejvýše 5 za 15 minut); drží se 15 minut v operační paměti serveru a nikam se neukládá</li>
+    </ul>
+    <p>Zprávu neukládáme do databáze; doručí se e-mailem do naší schránky info@samecdigital.com. Na adresu z formuláře neposíláme nic jiného než odpověď.</p>
+
+    <h3>2.7 Technické údaje (všichni návštěvníci)</h3>
     <ul>
       <li>IP adresa (anonymizovaná v logu, anti-fraud, max 30 dní)</li>
       <li>User-agent prohlížeče (statistika, debugging)</li>
@@ -593,9 +685,11 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Zasílání newsletteru</td><td>Souhlas — odst. 1 písm. a)</td></tr>
         <tr><td>Provoz uživatelského účtu (bazar)</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
         <tr><td>Zveřejňování inzerátů</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
-        <tr><td>Měření návštěvnosti (Google Analytics, Microsoft Clarity, Ahrefs)</td><td>Souhlas — odst. 1 písm. a)</td></tr>
+        <tr><td>Měření návštěvnosti (Google Analytics, Microsoft Clarity)</td><td>Souhlas — odst. 1 písm. a)</td></tr>
         <tr><td>Anti-fraud, bezpečnost provozu</td><td>Oprávněný zájem — odst. 1 písm. f)</td></tr>
         <tr><td>Plnění zákonných povinností (účetnictví u placených služeb)</td><td>Právní povinnost — odst. 1 písm. c)</td></tr>
+        <tr><td>Vyřízení oznámení závadného obsahu v bazaru (DSA čl. 16) včetně potvrzení o přijetí a sdělení rozhodnutí</td><td>Právní povinnost — odst. 1 písm. c)</td></tr>
+        <tr><td>Vyřízení zprávy z kontaktního formuláře a odpověď na ni</td><td>Oprávněný zájem — odst. 1 písm. f) (odpovídat na dotazy); týká-li se zpráva smlouvy s námi (např. účtu v bazaru), plnění smlouvy — odst. 1 písm. b); u žádostí podle GDPR právní povinnost — odst. 1 písm. c)</td></tr>
       </tbody>
     </table>
 
@@ -609,6 +703,8 @@ const meta = META[locale] ?? META.cs;
         Když inzerát smažete, <strong>smaže se okamžitě a nevratně</strong> — žádný archiv
         si neponecháváme.</li>
       <li><strong>IP adresy z anti-fraudu</strong> (pokusy o zadání kódu): nejvýše 30 dní.</li>
+      <li><strong>Oznámení závadného inzerátu:</strong> jméno a e-mail oznamovatele 6 měsíců od sdělení rozhodnutí (po tu dobu se proti němu můžete ohradit), poté je mažeme; otisk IP adresy 90 dní.</li>
+      <li><strong>Zprávy z kontaktního formuláře:</strong> v e-mailové schránce po dobu vyřízení, poté nejdéle 2 roky od poslední komunikace; týká-li se zpráva uplatnění nebo obhajoby právních nároků (např. stížnost na porušení práv), do skončení věci.</li>
       <li><strong>Provozní logy</strong> vznikají u poskytovatelů infrastruktury
         (Cloudflare, hosting) a řídí se jejich lhůtami, ne našimi.</li>
     </ul>
@@ -616,14 +712,13 @@ const meta = META[locale] ?? META.cs;
     <h2>5. Komu údaje předáváme (zpracovatelé)</h2>
     <ul>
       <li><strong>Cloudflare, Inc.</strong> (USA) — reverzní proxy, CDN, anti-DDoS; procházejí jím všechny požadavky na web. Standardní smluvní doložky (SCC) podle čl. 46 GDPR.</li>
-      <li><strong>Hostinger International Ltd.</strong> (Kypr) — server s webem a databází (datové centrum ve Frankfurtu nad Mohanem) a CDN obrázků <code>cdn.samecdigital.com</code>. Databázi a přihlašování provozujeme na vlastním serveru (open-source Supabase), ne u společnosti Supabase, Inc.</li>
-      <li><strong>Resend, Inc.</strong> (USA) — odesílání transakčních a newsletter e-mailů. SCC.</li>
+      <li><strong>Hostinger International Ltd.</strong> (Kypr) — server s webem a databází (datové centrum ve Frankfurtu nad Mohanem) a CDN obrázků <code>cdn.samecdigital.com</code>. Databázi a přihlašování provozujeme na vlastním serveru (open-source Supabase), ne u společnosti Supabase, Inc. U Hostingeru je také naše e-mailová schránka info@samecdigital.com.</li>
+      <li><strong>Resend, Inc.</strong> (USA) — odesílání transakčních a newsletter e-mailů a doručování zpráv z kontaktního formuláře do naší schránky. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irsko) — Google Analytics 4 (měřicí ID G-HC3JY466RR), statistika návštěvnosti; cookies <code>_ga</code> a <code>_ga_*</code> ukládají náhodný identifikátor prohlížeče až na 2 roky. Načte se <strong>až po vašem souhlasu</strong>. Prohlížeč přitom Googlu předá vaši IP adresu; podle Googlu Google Analytics 4 IP adresy neukládá. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irsko) — Microsoft Clarity (ID projektu ws6puxcjnb), heatmapy a záznamy návštěv (pohyb myši, kliknutí, posouvání). Načte se <strong>až po vašem souhlasu</strong>. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
-      <li><strong>Ahrefs Pte. Ltd.</strong> (Singapur) — Ahrefs Web Analytics, statistika návštěvnosti bez cookies. Načte se <strong>až po vašem souhlasu</strong> s měřením.</li>
       <li><strong>Google Ireland Limited</strong> (Irsko) — přehrávač YouTube (<code>youtube-nocookie.com</code>) u videí v katalogu techniky a v encyklopedii. Načte se <strong>až po kliknutí</strong> na video, do té doby se z YouTube nenačítá nic. Google přitom dostane vaši IP adresu, přehrávač ukládá data do úložiště prohlížeče (<code>localStorage</code>, IndexedDB) a data mohou jít do USA (EU–US Data Privacy Framework).</li>
     </ul>
-    <p>Na některých stránkách se váš prohlížeč připojuje přímo k dalším službám, které tím dostanou vaši IP adresu: <strong>Open-Meteo</strong> (předpověď počasí podle vaší polohy — jen když o ni kliknutím požádáte), <strong>jsDelivr</strong> a <strong>unpkg</strong> (knihovny pro grafy a mapy), <strong>OpenStreetMap</strong> (mapové podklady v bazaru a u farem), <strong>esm.sh</strong> (přihlášení do bazaru), <strong>Cloudflare Turnstile</strong> (ochrana formulářů před roboty) a <strong>Unsplash</strong> (obrázky v sekci Média). Server navíc používá <strong>Nominatim / OpenStreetMap</strong> k převodu lokality inzerátu na souřadnice, <strong>Fio banku</strong> k párování plateb za zvýhodnění inzerátu a služby <strong>OpenAI</strong> a <strong>Anthropic</strong> ke strojovému zpracování textu inzerátů, které redakce převezme z jiných inzertních serverů.</p>
+    <p>Na některých stránkách se váš prohlížeč připojuje přímo k dalším službám, které tím dostanou vaši IP adresu: <strong>Open-Meteo</strong> (předpověď počasí podle vaší polohy — jen když o ni kliknutím požádáte), <strong>jsDelivr</strong> a <strong>unpkg</strong> (knihovny pro grafy a mapy), <strong>OpenStreetMap</strong> (mapové podklady v bazaru a u farem), <strong>Cloudflare Turnstile</strong> (ochrana formulářů před roboty) a <strong>Unsplash</strong> (obrázky v sekci Média). Server navíc používá <strong>Nominatim / OpenStreetMap</strong> k převodu lokality inzerátu na souřadnice, <strong>Fio banku</strong> k párování plateb za zvýhodnění inzerátu a služby <strong>OpenAI</strong> a <strong>Anthropic</strong> ke strojovému zpracování textu inzerátů, které redakce převezme z jiných inzertních serverů.</p>
     <p>Vaše osobní údaje neprodáváme ani nepředáváme třetím stranám pro marketingové účely.</p>
 
     <h2>6. Vaše práva</h2>
@@ -656,11 +751,11 @@ const meta = META[locale] ?? META.cs;
 
     <h2>9. Cookies</h2>
     <p><strong>Technicky nezbytné cookies</strong> (přihlášení, hlasování v anketách a ve fotosoutěži) se používají vždy — bez nich web nefunguje. Vaši volbu o souhlasu si web pamatuje v úložišti prohlížeče (<code>localStorage</code>), ne v cookie.</p>
-    <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — se načtou <strong>jen s vaším souhlasem</strong>. Měří návštěvnost a to, jak se po stránce pohybujete. Doba uložení: <code>_ga</code> a <code>_ga_*</code> až 2 roky, <code>_clck</code> 1 rok, <code>_clsk</code> 1 den. Se souhlasem se načte také Ahrefs Web Analytics (statistika návštěvnosti bez cookies). Pokud zvolíte „Pouze nezbytné", nenačte se žádný měřicí skript (Google, Microsoft ani Ahrefs) a jejich cookies se z prohlížeče smažou.</p>
+    <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — se načtou <strong>jen s vaším souhlasem</strong>. Měří návštěvnost a to, jak se po stránce pohybujete. Doba uložení: <code>_ga</code> a <code>_ga_*</code> až 2 roky, <code>_clck</code> 1 rok, <code>_clsk</code> 1 den. Pokud zvolíte „Pouze nezbytné", nenačte se žádný měřicí skript (Google ani Microsoft) a jejich cookies se z prohlížeče smažou.</p>
     <p>Nepoužíváme marketingové ani reklamní cookies třetích stran.</p>
     <p>Souhlas můžete kdykoli odvolat odkazem <strong>Nastavení cookies</strong> v patičce — odvolání je stejně snadné jako udělení (čl. 7 odst. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnost:</strong> 15. října 2026</p>
+    <p class="effective"><strong>Účinnost:</strong> 17. října 2026</p>
     </Fragment>
   )}
   </div>

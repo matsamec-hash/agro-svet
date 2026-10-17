@@ -700,7 +700,7 @@ const uk: Record<string, string> = {
   'cc.necessary': 'Необхідні',
   'cc.necessaryDesc': 'Тримають сайт укупі — вхід, голосування в опитуваннях і збереження цього вибору. Без них сайт не працює, тому вимкнути їх не можна.',
   'cc.analytics': 'Аналітичні',
-  'cc.analyticsDesc': 'Google Analytics, Microsoft Clarity і Ahrefs Web Analytics — статистика відвідуваності, теплові карти та записи відвідувань, з яких видно, які сторінки ніхто не дочитує. Google Analytics зберігає файли cookie до 2 років; Google і Microsoft можуть передавати дані до США.',
+  'cc.analyticsDesc': 'Google Analytics і Microsoft Clarity — статистика відвідуваності, теплові карти та записи відвідувань, з яких видно, які сторінки ніхто не дочитує. Google Analytics зберігає файли cookie до 2 років; Google і Microsoft можуть передавати дані до США.',
   'cc.always': 'завжди увімкнено',
   'cc.back': 'Назад',
   'cc.save': 'Зберегти вибір',

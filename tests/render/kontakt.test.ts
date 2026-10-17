@@ -21,8 +21,9 @@ async function render(locale: string, search = ''): Promise<string> {
 }
 
 function mainOf(html: string): string {
-  const m = html.match(/<main class="legal-page"[^>]*>([\s\S]*?)<\/main>/);
-  expect(m, 'chybí <main class="legal-page">').not.toBeNull();
+  // Jediný <main> je v Layoutu; obsah stránky je <div class="legal-page"> uvnitř něj.
+  const m = html.match(/<div class="legal-page"[^>]*>([\s\S]*?)<\/main>/);
+  expect(m, 'chybí <div class="legal-page">').not.toBeNull();
   return m![1];
 }
 

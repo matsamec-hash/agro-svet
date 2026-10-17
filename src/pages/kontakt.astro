@@ -22,7 +22,7 @@ const errMsg = errParam
 const csOnlyHreflang = locale === 'cs' ? undefined : 'cs';
 ---
 <Layout title={c.metaTitle} description={c.metaDescription}>
-  <main class="legal-page">
+  <div class="legal-page">
     <h1>{c.h1}</h1>
     <p class="lead">{c.lead}</p>
 
@@ -131,7 +131,7 @@ const csOnlyHreflang = locale === 'cs' ? undefined : 'cs';
       <li><a href={navHref(locale, '/zpracovani-osobnich-udaju/')}>{c.linkPrivacy}</a></li>
       {locale === 'de' && <li><a href="/de/impressum/">Impressum</a></li>}
     </ul>
-  </main>
+  </div>
 </Layout>
 
 <style>

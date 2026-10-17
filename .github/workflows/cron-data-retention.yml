@@ -1,0 +1,41 @@
+name: Daily data retention
+
+# Vynucuje retenční lhůty ze zásad zpracování osobních údajů (sekce 4):
+# pokusy o zadání kódu 30 dní, kontakt oznamovatele 6 měsíců po rozhodnutí,
+# otisk IP u oznámení 90 dní. Do 2026-10-17 se endpoint nikde nespouštěl.
+
+on:
+  schedule:
+    # 03:30 UTC — mimo špičku.
+    - cron: '30 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping /api/cron/data-retention
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_SECRET secret not configured in repo settings"
+            exit 1
+          fi
+
+          response=$(curl -sw "\n%{http_code}" \
+            "https://agro-svet.cz/api/cron/data-retention/" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            --max-time 240)
+
+          status=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "HTTP $status"
+          echo "Body: $body"
+
+          if [ "$status" != "200" ]; then
+            echo "::error::Cron endpoint returned HTTP $status (expected 200)"
+            exit 1
+          fi

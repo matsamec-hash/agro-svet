@@ -213,7 +213,6 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
       : <link rel="preload" as="image" href={heroPreload.src} fetchpriority="high" />
   )}
 
-  {/* Ahrefs Web Analytics se načítá až po souhlasu s měřením — viz spustMereni() v CookieConsent.astro. */}
   <slot name="head" />
 </head>
 <body>

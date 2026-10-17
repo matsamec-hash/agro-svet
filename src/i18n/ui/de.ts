@@ -1528,7 +1528,7 @@ const de: Record<string, string> = {
   'cc.necessary': 'Notwendig',
   'cc.necessaryDesc': 'Halten die Website zusammen — Anmeldung, Abstimmungen in Umfragen und das Speichern dieser Auswahl. Ohne sie funktioniert die Website nicht, deshalb lassen sie sich nicht abschalten.',
   'cc.analytics': 'Analyse',
-  'cc.analyticsDesc': 'Google Analytics, Microsoft Clarity und Ahrefs Web Analytics — Besuchsstatistiken, Heatmaps und Aufzeichnungen von Besuchen, an denen wir erkennen, welche Seiten niemand zu Ende liest. Google Analytics setzt Cookies für bis zu 2 Jahre; Google und Microsoft können Daten in die USA übermitteln.',
+  'cc.analyticsDesc': 'Google Analytics und Microsoft Clarity — Besuchsstatistiken, Heatmaps und Aufzeichnungen von Besuchen, an denen wir erkennen, welche Seiten niemand zu Ende liest. Google Analytics setzt Cookies für bis zu 2 Jahre; Google und Microsoft können Daten in die USA übermitteln.',
   'cc.always': 'immer aktiv',
   'cc.back': 'Zurück',
   'cc.save': 'Auswahl speichern',
