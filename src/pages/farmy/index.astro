@@ -33,24 +33,24 @@ const listJsonLd = itemListSchema(
   <script type="application/ld+json" is:inline set:html={JSON.stringify(listJsonLd)} />
   <script type="application/json" id="farmy-labels" is:inline set:html={JSON.stringify({ products: FARM_PRODUCTS, regions: regionLabels })} />
 
-  <!-- Leaflet styles (loaded via unpkg CDN; ~14KB gz). -->
+  <!-- Leaflet: vlastní kopie v /vendor (dřív unpkg = IP návštěvníka cizímu CDN bez souhlasu). -->
   <link
     slot="head"
     rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    href="/vendor/leaflet/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
   <link
     slot="head"
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+    href="/vendor/leaflet-markercluster/MarkerCluster.css"
     crossorigin=""
   />
   <link
     slot="head"
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+    href="/vendor/leaflet-markercluster/MarkerCluster.Default.css"
     crossorigin=""
   />
 
@@ -262,8 +262,8 @@ const listJsonLd = itemListSchema(
     }
 
     async function init() {
-      await loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js');
-      await loadScript('https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js');
+      await loadScript('/vendor/leaflet/leaflet.js');
+      await loadScript('/vendor/leaflet-markercluster/leaflet.markercluster.js');
       const L = (window as any).L;
       if (!L) throw new Error('Leaflet failed to load');
 

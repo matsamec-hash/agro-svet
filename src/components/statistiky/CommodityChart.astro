@@ -92,8 +92,8 @@ const default0 = commodityNames[0] ?? 'Pšenice';
 
     async function ensureChart() {
       if (typeof Chart === 'undefined') {
-        await loadScript('https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js');
-        await loadScript('https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3');
+        await loadScript('/vendor/chartjs/chart-4.5.1.umd.min.js');
+        await loadScript('/vendor/chartjs/chartjs-plugin-annotation-3.1.0.min.js');
       }
       Chart.defaults.font.family = "'Chakra Petch', sans-serif";
       Chart.defaults.font.size = 12;

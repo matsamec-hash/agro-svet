@@ -356,6 +356,17 @@ describe('„ukázkový web" — nikomu nedat záminku (2026-10-17)', () => {
     expect(val('sk', 'chor.d.latkyNote')).toContain('ÚKSÚP');
   });
 
+  it('žádné knihovny z cizích CDN (jsDelivr, unpkg, esm.sh) — IP návštěvníka by šla ven bez souhlasu', () => {
+    const walk = (dir: string): string[] => fs.readdirSync(path.join(process.cwd(), dir), { withFileTypes: true })
+      .flatMap((e) => e.isDirectory() ? walk(`${dir}/${e.name}`) : /\.(astro|ts)$/.test(e.name) ? [`${dir}/${e.name}`] : []);
+    const offenders = [...walk('src/pages'), ...walk('src/components'), ...walk('src/layouts')]
+      .filter((f) => /https:\/\/(cdn\.jsdelivr\.net|unpkg\.com|esm\.sh)\//.test(read(f)));
+    expect(offenders).toEqual([]);
+    for (const f of ['vendor/chartjs/chart-4.5.1.umd.min.js', 'vendor/chartjs/chartjs-plugin-annotation-3.1.0.min.js', 'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css', 'vendor/leaflet/images/marker-icon.png', 'vendor/leaflet-markercluster/leaflet.markercluster.js']) {
+      expect(fs.existsSync(path.join(process.cwd(), 'public', f)), f).toBe(true);
+    }
+  });
+
   it('JSON-LD značky nemá jako url naši stránku a Supabase preconnect není všude', () => {
     expect(read('src/pages/znacky/[slug].astro')).not.toMatch(/description: znacka\.data\.popis,\n\s*url: canonical/);
     expect(read('src/pages/stroje/[brand]/index.astro')).not.toMatch(/name: brand\.name,\n\s*url: brandUrl,/);
