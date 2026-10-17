@@ -366,8 +366,11 @@ categories:
         name: Tiger
         family: tiger
         subcategory: kyprice
-        description: |
-          Tiger MT/AS/LT — hloubkový kypřič pro intenzivní zpracování až do hloubky 35 cm. MT (4 a 6 m) má TerraGrip radličky pro maximální průchodnost organické hmoty, AS (kombinovaný 4–8 m) přidává disky a packer pro plnou přípravu lůžka v jedné jízdě, LT (10 a 12 m) je velkokapacitní tažené provedení pro největší farmy. Nahrazuje pluh v minimum-till systémech.
+        description: >
+          Tiger MT/AS — tažený kypřič pro intenzivní zpracování půdy. Tiger MT (3–8 m) s
+          radličkami TerraGrip pro velké množství organické hmoty, Tiger AS (3–8 m) navíc s
+          disky a pěchem pro přípravu lůžka v jedné jízdě. Nahrazuje pluh v minimalizačních
+          systémech.
         models:
           - slug: tiger-mt
             name: Tiger MT
@@ -380,9 +383,4 @@ categories:
             url: https://www.horsch.com/en/products/soil-cultivation/cultivators/tiger-as
             pracovni_zaber_m: 8
             prikon_traktor_hp_min: 400
-            typ_zavesu: tazeny
-          - slug: tiger-lt
-            name: Tiger LT
-            pracovni_zaber_m: 12
-            prikon_traktor_hp_min: 500
             typ_zavesu: tazeny

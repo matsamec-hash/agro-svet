@@ -98,20 +98,20 @@ categories:
         family: za-m
         subcategory: rozmetadla-mineralni
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/duengetechnik/anbaustreuer/zentrifugalstreuer-za-m-77272
-        description: |
-          ZA-M — vstupní řada nesených rozmetadel s pracovním záběrem 10–36 m a objemem
-          1000–3000 l. Jednoduchá konstrukce s mechanickým nebo hydraulickým ovládáním
-          šoupátek. Vhodné pro menší farmy a komunální nasazení (hnojení parků, sůl
-          v zimě). Cenově nejdostupnější model v portfoliu.
+        description: >
+          ZA-M — nesené dvoukotoučové rozmetadlo minerálních hnojiv se záběrem 10–36 m. Typy
+          ZA-M 1002 Special (1 200–1 700 l), ZA-M 1202 (1 200–2 700 l) a ZA-M 1502 (1 500–3 000
+          l); objem se zvětšuje nástavky. Rozmetací ústrojí z nerezové oceli, bezúdržbové
+          převodovky v olejové lázni s pojistkou proti přetížení.
         models:
-          - slug: za-m-1001
-            name: ZA-M 1001
+          - slug: za-m-1002-special
+            name: "ZA-M 1002 Special"
             pracovni_zaber_m: 36
             specs:
-              tank_capacity_l: 1000
+              tank_capacity_l: 1200
               typ: nesene
-          - slug: za-m-1501
-            name: ZA-M 1501
+          - slug: za-m-1502
+            name: "ZA-M 1502"
             pracovni_zaber_m: 36
             specs:
               tank_capacity_l: 1500
@@ -125,21 +125,13 @@ categories:
         family: zg-ts
         subcategory: rozmetadla-mineralni
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/duengetechnik/anhaengestreuer/anhaengestreuer-zg-ts-76734
-        description: |
-          ZG-TS — tažené velkoplošné rozmetadlo pro nejnáročnější provoz. Objem
-          5500–10500 l, pracovní záběr až 54 m s ArgusTwin a AutoTS. Hydraulický
-          podvozek s odpružením, sekční rozhoz pro variabilní aplikaci dle GPS.
-          Určeno pro farmy nad 500 ha a hnojicí servisy. Možnost ISOBUS Section
-          Control v kombinaci s navigací traktoru.
+        description: >
+          ZG-TS — tažené rozmetadlo minerálních hnojiv s rozmetacím systémem TS a záběrem 15–54
+          m. Typy ZG-TS 7501 (7 500 l) a ZG-TS 10001 (10 000 l). Hraniční rozmetání AutoTS nebo
+          BorderTS, sekční řízení až 128 sekcí přes ISOBUS. Určeno pro velké podniky a služby.
         models:
-          - slug: zg-ts-5500
-            name: ZG-TS 5500
-            pracovni_zaber_m: 54
-            specs:
-              tank_capacity_l: 5500
-              typ: tazene
-          - slug: zg-ts-7500
-            name: ZG-TS 7500
+          - slug: zg-ts-7501
+            name: "ZG-TS 7501"
             pracovni_zaber_m: 54
             specs:
               tank_capacity_l: 7500
@@ -149,7 +141,7 @@ categories:
             url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/duengetechnik/anhaengestreuer/anhaengestreuer-zg-ts-76734
             pracovni_zaber_m: 54
             specs:
-              tank_capacity_l: 10500
+              tank_capacity_l: 10000
               typ: tazene
   ochrana-rostlin:
     name: Ochrana rostlin
@@ -163,26 +155,17 @@ categories:
         family: pantera
         subcategory: postrikovace-samojizdne
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/pflanzenschutztechnik/selbstfahrende-feldspritze/selbstfahrende-feldspritze-pantera-4503-75904
-        description: |
-          Pantera — samojízdný postřikovač s nádrží 4500 l a pracovním záběrem 24–40 m.
-          Verze H s hydropneumatickým podvozkem 1,25 m, W s vyšší světlou výškou pro
-          aplikaci do vzrostlých kultur (kukuřice, slunečnice). Motor Deutz 6válec
-          o výkonu 218 hp (4503) nebo 250 hp (4504). Hydrostatický pohon všech kol,
-          GPS navigace a sekční vypínání AmaSwitch v ceně. Volitelně AmaSelect pro
-          přepínání trysek za jízdy.
+        description: >
+          Pantera 4504 — samojízdný postřikovač s nádrží 4 500 l a záběrem 21–48 m. Motor Deutz,
+          6válec 6,1 l, max. 218 k (160 kW), plynulý hydrostatický pojezd do 50 km/h. Verze H má
+          hydraulicky nastavitelnou světlou výšku 1,25–1,70 m, verze W širší rozchod 2,25–3,00 m
+          (světlá výška 1,15 m), HW spojuje obojí. Větší Pantera 7004 má nádrž 6 600 l.
         models:
-          - slug: pantera-4503
-            name: Pantera 4503
-            power_hp: 218
-            pracovni_zaber_m: 40
-            specs:
-              tank_capacity_l: 4500
-              typ: samojizdny
           - slug: pantera-4504-h
             name: Pantera 4504 H
             url: https://downloadcenter.amazone.de/file/view/printnumber/P0032/language/de-de/doctype/leaflet
-            power_hp: 250
-            pracovni_zaber_m: 40
+            power_hp: 218
+            pracovni_zaber_m: 48
             specs:
               tank_capacity_l: 4500
               typ: samojizdny
@@ -190,12 +173,12 @@ categories:
           - slug: pantera-4504-w
             name: Pantera 4504 W
             url: https://downloadcenter.amazone.de/file/view/printnumber/P0032/language/de-de/doctype/leaflet
-            power_hp: 250
-            pracovni_zaber_m: 40
+            power_hp: 218
+            pracovni_zaber_m: 48
             specs:
               tank_capacity_l: 4500
               typ: samojizdny
-              svetla_vyska_cm: 200
+              svetla_vyska_cm: 115
       - slug: ux
         image_url: /images/stroje/amazone/amazone-ux.webp
         image_credit_url: https://commons.wikimedia.org/wiki/File:Amazone_Ux_7601_super.jpg
@@ -332,13 +315,11 @@ categories:
         family: centaya
         subcategory: seci-stroje-pneumaticke
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/saetechnik/pneumatische-saemaschinen/pneumatische-aufbausaemaschine-centaya-80408
-        description: |
-          Centaya — nesený pneumatický secí stroj se záběrem 3,0–4,0 m pro kombinaci
-          s rotační bránou KE/KG nebo s kompaktomatem KX. Centrální dávkování
-          s distribuční hlavou, botky TwinTeC s tlakem až 70 kg na botku pro spolehlivé
-          uložení do tvrdé půdy. Verze Super s předdávkováním pro plynulé dotáčení
-          souvratí, ISOBUS standard. Centaya 6000-2 Super (variant 2C) je tažená
-          dvouřadá verze pro velké farmy se záběrem 6 m.
+        description: >
+          Centaya — nesený pneumatický secí stroj se záběrem 3,0–4,0 m pro kombinaci s rotační
+          bránou KE nebo rotačním kypřičem KG. Typy Centaya 3000/3500/4000 ve verzích Special a
+          Super, varianty -C s děleným zásobníkem pro osivo a hnojivo. Centrální dávkování s
+          rozdělovací hlavou, ISOBUS.
         models:
           - slug: centaya-3000-special
             name: Centaya 3000 Special
@@ -358,11 +339,6 @@ categories:
             pracovni_zaber_m: 4.0
             specs:
               typ: neseny
-          - slug: centaya-6000-2-super
-            name: Centaya 6000-2 Super
-            pracovni_zaber_m: 6.0
-            specs:
-              typ: tazeny
       - slug: cirrus
         image_url: /images/stroje/amazone/amazone-cirrus.webp
         image_credit_url: https://commons.wikimedia.org/wiki/File:Amazone_Cirrus_8004-2C_Grand_Agritechnica_2025_(DSC05087).jpg
@@ -372,23 +348,16 @@ categories:
         family: cirrus
         subcategory: seci-kombinace
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/saetechnik/pneumatische-saemaschinen/anhaengesaekombination-cirrus-80652
-        description: |
-          Cirrus — tažená univerzální secí kombinace pro mulčované i konvenční setí.
-          Záběr 3–9 m, kotoučové botky TwinTeC se sníženou tažnou silou a tlakem až
-          50 kg/botku. Verze 02 (jednoduchá), 2C (dva zásobníky pro osivo + hnojivo
-          pro Maťkovu aplikaci hnojiva pod patu) a 2CC (kombinace plus mikrogranulát).
-          Aktuální generace 9004-2C a 6004-2C nahradila starší 9003-2 modely.
-          ISOBUS, sekční vypínání, GPS pro variabilní dávku.
+        description: >
+          Cirrus — tažená secí kombinace pro mulčované i konvenční setí se záběrem 3–6 m a
+          zásobníkem 3 000–4 000 l. Typy Cirrus 3003 Compact, 4003 a sklopné 4003-2 a 6003-2;
+          varianty -C mají dvoukomorový tlakový zásobník pro osivo a hnojivo, -CC navíc třetí
+          dávkování. Pro 8–9 m nabízí Amazone Cirrus Grand 8004-2C a 9004-2C.
         models:
           - slug: cirrus-3003-compact
             name: Cirrus 3003 Compact
             url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/saetechnik/pneumatische-saemaschinen/anhaengesaekombination-cirrus-80652
             pracovni_zaber_m: 3.0
-            specs:
-              typ: tazeny
-          - slug: cirrus-3503-compact
-            name: Cirrus 3503 Compact
-            pracovni_zaber_m: 3.5
             specs:
               typ: tazeny
           - slug: cirrus-4003-2
@@ -403,8 +372,8 @@ categories:
             pracovni_zaber_m: 6.0
             specs:
               typ: tazeny
-          - slug: cirrus-6004-2c
-            name: Cirrus 6004-2C
+          - slug: cirrus-6003-2c
+            name: "Cirrus 6003-2C"
             pracovni_zaber_m: 6.0
             specs:
               typ: tazeny
@@ -507,12 +476,11 @@ categories:
         family: catros
         subcategory: podmitace-diskove
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/bodenbearbeitung/kompaktscheibeneggen/kompaktscheibenegge-catros--77454
-        description: |
-          Catros — kompaktní diskový podmítač pro mělké zpracování strniště do
-          hloubky 5–12 cm. Záběr 3–12 m, disky 510 mm v X-uspořádání s vlastním
-          zavěšením každého disku. Bezúdržbové ložisko, válce volitelné (klec, zubový,
-          gumový, dvojitý). Verze 2TX (tažená dvouosá) a 2TS (tažená pro velké záběry
-          s podvozkem). Vhodné pro slámu, řepku a meziplodiny.
+        description: >
+          Catros+ — kompaktní diskový podmítač s disky 510 mm pro mělké zpracování strniště.
+          Nesené pevné typy 2503–4003 (2,5–4 m) a sklopné -2 (4–7 m), tažené -2TS (4–7 m) a
+          velké tažené -2TX (7–12 m). Každý disk má vlastní pryžové odpružení, válce na výběr
+          podle půdy.
         models:
           - slug: catros-3003
             name: Catros 3003
@@ -526,18 +494,18 @@ categories:
             pracovni_zaber_m: 4.0
             specs:
               typ: neseny
-          - slug: catros-6003-2tx
-            name: Catros 6003-2TX
+          - slug: catros-6003-2ts
+            name: "Catros 6003-2TS"
             pracovni_zaber_m: 6.0
             specs:
               typ: tazeny
-          - slug: catros-7503-2tx
-            name: Catros 7503-2TX
-            pracovni_zaber_m: 7.5
+          - slug: catros-7003-2tx
+            name: "Catros 7003-2TX"
+            pracovni_zaber_m: 7.0
             specs:
               typ: tazeny
-          - slug: catros-12003-2ts
-            name: Catros 12003-2TS
+          - slug: catros-12003-2tx
+            name: "Catros 12003-2TX"
             pracovni_zaber_m: 12.0
             specs:
               typ: tazeny
@@ -550,11 +518,10 @@ categories:
         family: catros-xl
         subcategory: podmitace-diskove
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/bodenbearbeitung/kompaktscheibeneggen/anbauscheibenegge-catros-xl-77682
-        description: |
-          Catros XL — verze s většími disky 610 mm pro hlubší zpracování až 15 cm
-          a lepší průnik do tvrdé půdy. Záběr 3–9 m, vyšší tlak na disk pro řezání
-          objemných posklizňových zbytků (kukuřice, slunečnice). Doporučeno pro
-          první podmítku po sklizni nebo zelené hnojení s objemnou hmotou.
+        description: >
+          CatrosXL — diskový podmítač s většími disky 610 mm pro hlubší zpracování a objemné
+          posklizňové zbytky (kukuřice, slunečnice). Nesené typy 3003, 3503 a 4003, tažené -2TS
+          (5–8 m) a -2TX (7–8 m).
         models:
           - slug: catros-xl-3003
             name: Catros XL 3003
@@ -562,19 +529,19 @@ categories:
             pracovni_zaber_m: 3.0
             specs:
               typ: neseny
-          - slug: catros-xl-4003-2
-            name: Catros XL 4003-2
+          - slug: catros-xl-4003
+            name: "Catros XL 4003"
             pracovni_zaber_m: 4.0
             specs:
               typ: neseny
-          - slug: catros-xl-6003-2tx
-            name: Catros XL 6003-2TX
+          - slug: catros-xl-6003-2ts
+            name: "Catros XL 6003-2TS"
             pracovni_zaber_m: 6.0
             specs:
               typ: tazeny
-          - slug: catros-xl-9003-2tx
-            name: Catros XL 9003-2TX
-            pracovni_zaber_m: 9.0
+          - slug: catros-xl-8003-2tx
+            name: "Catros XL 8003-2TX"
+            pracovni_zaber_m: 8.0
             specs:
               typ: tazeny
       - slug: cenius
@@ -586,12 +553,10 @@ categories:
         family: cenius
         subcategory: podmitace-radlickove
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/bodenbearbeitung/grubber/anbaugrubber-cenius-78664
-        description: |
-          Cenius — radličkový podmítač/kypřič pro střední hloubky 5–30 cm. Záběr
-          3–8 m, tříbodový rám s rozteči 28,5 cm. Volitelně bezpečnostní jištění
-          C-Mix Shear (střižný šroub) nebo Cenius Super (vinutá pružina pro kamenité
-          podmínky). Univerzální stroj pro podmítku, předseťovou přípravu i hlubší
-          kypření. Verze 2TX dvouosá tažená pro záběry 4 m a více.
+        description: >
+          Cenius — radličkový kypřič pro podmítku, předseťovou přípravu i hlubší kypření. Nesené
+          typy 3003, 3503 a 4003 ve verzích Special (střižný šroub), Super (pružinové jištění) a
+          Ultra (hydraulické jištění), tažené Cenius-2TX se záběrem 4–7 m.
         models:
           - slug: cenius-3003-special
             name: Cenius 3003 Special
@@ -605,8 +570,8 @@ categories:
             pracovni_zaber_m: 3.0
             specs:
               typ: neseny
-          - slug: cenius-4003-2
-            name: Cenius 4003-2
+          - slug: cenius-4003-super
+            name: "Cenius 4003 Super"
             pracovni_zaber_m: 4.0
             specs:
               typ: neseny
@@ -622,21 +587,15 @@ categories:
             pracovni_zaber_m: 7.0
             specs:
               typ: tazeny
-          - slug: cenius-8003-2tx
-            name: Cenius 8003-2TX
-            pracovni_zaber_m: 8.0
-            specs:
-              typ: tazeny
       - slug: cenio
         name: Cenio
         family: cenio
         subcategory: podmitace-radlickove
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/bodenbearbeitung/grubber/anbaugrubber-cenio-78574
-        description: |
-          Cenio — kompaktní nesený radličkový podmítač představený 2022 jako vstupní
-          model pod Cenius. Záběr 3–4 m, čtyřřadý rám s radličkami pro mělkou podmítku
-          5–15 cm. Verze Special s pevnými radlicemi, Super s pružinovým jištěním
-          C-Mix Pro pro kamenité půdy. Vhodné pro malé a střední farmy.
+        description: >
+          Cenio — kompaktní nesený radličkový kypřič pro mělkou podmítku. Pevné typy Cenio 3000
+          a 3500, sklopné Cenio 4000-2 a 5000-2; verze Special s pevnými radličkami, Super s
+          pružinovým jištěním pro kamenité půdy.
         models:
           - slug: cenio-3000-special
             name: Cenio 3000 Special
@@ -650,8 +609,8 @@ categories:
             pracovni_zaber_m: 3.0
             specs:
               typ: neseny
-          - slug: cenio-4000-super
-            name: Cenio 4000 Super
+          - slug: cenio-4000-2-super
+            name: "Cenio 4000-2 Super"
             pracovni_zaber_m: 4.0
             specs:
               typ: neseny
@@ -683,28 +642,26 @@ categories:
         family: cobra
         subcategory: kyprice
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/bodenbearbeitung/grubber/anhaengeflachgrubber-cobra-2tx-1080006
-        description: |
-          Cobra — hlubinný kypřič pro narušení utuženého podorničí do hloubky 40 cm.
-          Pracovní záběr 3 m, sedm úzkých radlic s nízkým tažným odporem. Šetří
-          strukturu povrchu — narušuje hlubokou vrstvu, ale nemíchá horizonty.
-          Doporučeno pro dlouhodobě bezorebné půdy nebo po sklizni cukrovky.
+        description: >
+          Cobra-2TX — tažený mělký radličkový kypřič (Flachgrubber) se záběrem 6–7 m pro
+          celoplošné mělké zpracování v hloubce 4–13 cm při rychlosti až 16 km/h. Typy Cobra
+          6000-2TX a 7000-2TX, rozteč radlic 13,3 cm, pružinové radlice s vibračním účinkem.
         models:
-          - slug: cobra-3000
-            name: Cobra 3000
-            pracovni_zaber_m: 3.0
+          - slug: cobra-6000-2tx
+            name: "Cobra 6000-2TX"
+            pracovni_zaber_m: 6.0
             specs:
-              typ: neseny
-              hloubka_cm: 40
+              typ: "tazeny"
+              hloubka_cm: 13
       - slug: kg
         name: KG
         family: kg
         subcategory: rotacni-brany
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/bodenbearbeitung/kreiseleggen-kreiselgrubber/kreiselgrubber-kx-78346
-        description: |
-          KG — výkonná rotační brána pro výkonné traktory 130–360 hp. Záběr 3,0–6,0 m,
-          šestihranná převodovka, rotory s rychloupínacími hroty QuickChange. Verze
-          2 (KG 4001-2, KG 6001-2) jsou skládané pro velké záběry. Ideální partner
-          pro Centaya/Cataya při kombinovaném setí.
+        description: >
+          KG Cultimix — nesený rotační kypřič (Kreiselgrubber) pro traktory až 360 k. Pevné typy
+          KG 3001, 3501 a 4001 ve verzích Special a Super, sklopné KG 4002-2, 5002-2 a 6002-2
+          (4–6 m, do 360 k). Častý partner secích strojů Cataya, Centaya a Avant.
         models:
           - slug: kg-3001-super
             name: KG 3001 Super
@@ -713,14 +670,14 @@ categories:
             prikon_traktor_hp_max: 250
             specs:
               typ: neseny
-          - slug: kg-4001-2
-            name: KG 4001-2
+          - slug: kg-4002-2
+            name: "KG 4002-2"
             pracovni_zaber_m: 4.0
-            prikon_traktor_hp_max: 300
+            prikon_traktor_hp_max: 360
             specs:
               typ: neseny
-          - slug: kg-6001-2
-            name: KG 6001-2
+          - slug: kg-6002-2
+            name: "KG 6002-2"
             pracovni_zaber_m: 6.0
             prikon_traktor_hp_max: 360
             specs:
@@ -730,26 +687,26 @@ categories:
         family: ke
         subcategory: rotacni-brany
         url: https://amazone.de/de-de/produkte-digitale-loesungen/landtechnik/bodenbearbeitung/kreiseleggen-kreiselgrubber/kreiselegge-ke-02-rotamix-969956
-        description: |
-          KE — rotační brána pro střední třídu výkonu (do 200 hp). Záběr 3,0–4,0 m,
-          klasické řešení pro kombinaci se secím strojem Cataya nebo Centaya. Verze
-          Special s šoupátkovou převodovkou, Super s plovoucím zavěšením a integrovaným
-          válcem. Označení 190 znamená převodovku pro 190 hp.
+        description: >
+          KE 02 Rotamix — nesená rotační brána. Pevné typy KE 02-150, 02-190 a 02-240 (záběr
+          2,5–4 m, pro traktory do 150, 190 nebo 240 k), sklopné KE 02-2-300 a 02-2-400 (4–6 m,
+          do 300 a 400 k). Číslo za pomlčkou udává maximální výkon traktoru. Kombinuje se se
+          secími stroji Cataya a Centaya.
         models:
-          - slug: ke-3001-special
-            name: KE 3001 Special
+          - slug: ke-3002-150
+            name: "KE 3002-150"
             pracovni_zaber_m: 3.0
-            prikon_traktor_hp_max: 140
+            prikon_traktor_hp_max: 150
             specs:
               typ: neseny
-          - slug: ke-3002-190-super
-            name: KE 3002-190 Super
+          - slug: ke-3002-190
+            name: "KE 3002-190"
             pracovni_zaber_m: 3.0
             prikon_traktor_hp_max: 190
             specs:
               typ: neseny
-          - slug: ke-4002-190-super
-            name: KE 4002-190 Super
+          - slug: ke-4002-190
+            name: "KE 4002-190"
             pracovni_zaber_m: 4.0
             prikon_traktor_hp_max: 190
             specs:

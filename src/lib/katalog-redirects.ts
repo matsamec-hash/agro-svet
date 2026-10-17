@@ -18,6 +18,31 @@ export const REMOVED_MODEL_PAGES: Record<string, string> = {
   // vyrábí se M8-181 a M8-201 (testy OECD 2217/2218 z roku 2020, prospekt Kubota 2021).
   '/stroje/kubota/m8/m8-191': '/stroje/kubota/m8/m8-181/',
   '/stroje/kubota/m8/m8-211': '/stroje/kubota/m8/m8-201/',
+  // 2026-10-17 nářadí: označení podle aktuálních prospektů Amazone (P0023, P0219, P0032, P0228, P0053, P0057, P0284, P0300, P0045, P0293); Horsch Tiger LT už v nabídce není
+  '/stroje/amazone/za-m/za-m-1001': '/stroje/amazone/za-m/za-m-1002-special/',
+  '/stroje/amazone/za-m/za-m-1501': '/stroje/amazone/za-m/za-m-1502/',
+  '/stroje/amazone/zg-ts/zg-ts-7500': '/stroje/amazone/zg-ts/zg-ts-7501/',
+  '/stroje/amazone/cirrus/cirrus-6004-2c': '/stroje/amazone/cirrus/cirrus-6003-2c/',
+  '/stroje/amazone/catros/catros-6003-2tx': '/stroje/amazone/catros/catros-6003-2ts/',
+  '/stroje/amazone/catros/catros-7503-2tx': '/stroje/amazone/catros/catros-7003-2tx/',
+  '/stroje/amazone/catros/catros-12003-2ts': '/stroje/amazone/catros/catros-12003-2tx/',
+  '/stroje/amazone/catros-xl/catros-xl-4003-2': '/stroje/amazone/catros-xl/catros-xl-4003/',
+  '/stroje/amazone/catros-xl/catros-xl-6003-2tx': '/stroje/amazone/catros-xl/catros-xl-6003-2ts/',
+  '/stroje/amazone/catros-xl/catros-xl-9003-2tx': '/stroje/amazone/catros-xl/catros-xl-8003-2tx/',
+  '/stroje/amazone/cenius/cenius-4003-2': '/stroje/amazone/cenius/cenius-4003-super/',
+  '/stroje/amazone/cenio/cenio-4000-super': '/stroje/amazone/cenio/cenio-4000-2-super/',
+  '/stroje/amazone/cobra/cobra-3000': '/stroje/amazone/cobra/cobra-6000-2tx/',
+  '/stroje/amazone/kg/kg-4001-2': '/stroje/amazone/kg/kg-4002-2/',
+  '/stroje/amazone/kg/kg-6001-2': '/stroje/amazone/kg/kg-6002-2/',
+  '/stroje/amazone/ke/ke-3001-special': '/stroje/amazone/ke/ke-3002-150/',
+  '/stroje/amazone/ke/ke-3002-190-super': '/stroje/amazone/ke/ke-3002-190/',
+  '/stroje/amazone/ke/ke-4002-190-super': '/stroje/amazone/ke/ke-4002-190/',
+  '/stroje/amazone/zg-ts/zg-ts-5500': '/stroje/amazone/zg-ts/',
+  '/stroje/amazone/pantera/pantera-4503': '/stroje/amazone/pantera/',
+  '/stroje/amazone/centaya/centaya-6000-2-super': '/stroje/amazone/centaya/',
+  '/stroje/amazone/cirrus/cirrus-3503-compact': '/stroje/amazone/cirrus/',
+  '/stroje/amazone/cenius/cenius-8003-2tx': '/stroje/amazone/cenius/',
+  '/stroje/horsch/tiger/tiger-lt': '/stroje/horsch/tiger/',
 };
 
 /** Přejmenované slugy modelů → nový slug. Přesměruje i srovnání /srovnani/<a>-vs-<b>/. */
@@ -25,6 +50,25 @@ export const RENAMED_MODEL_SLUGS: Record<string, string> = {
   'claas-lexion-8900-new': 'claas-lexion-8900',
   'kubota-m8-191': 'kubota-m8-181',
   'kubota-m8-211': 'kubota-m8-201',
+  // 2026-10-17 nářadí: označení podle aktuálních prospektů Amazone (P0023, P0219, P0032, P0228, P0053, P0057, P0284, P0300, P0045, P0293); Horsch Tiger LT už v nabídce není
+  'za-m-1001': 'za-m-1002-special',
+  'za-m-1501': 'za-m-1502',
+  'zg-ts-7500': 'zg-ts-7501',
+  'cirrus-6004-2c': 'cirrus-6003-2c',
+  'catros-6003-2tx': 'catros-6003-2ts',
+  'catros-7503-2tx': 'catros-7003-2tx',
+  'catros-12003-2ts': 'catros-12003-2tx',
+  'catros-xl-4003-2': 'catros-xl-4003',
+  'catros-xl-6003-2tx': 'catros-xl-6003-2ts',
+  'catros-xl-9003-2tx': 'catros-xl-8003-2tx',
+  'cenius-4003-2': 'cenius-4003-super',
+  'cenio-4000-super': 'cenio-4000-2-super',
+  'cobra-3000': 'cobra-6000-2tx',
+  'kg-4001-2': 'kg-4002-2',
+  'kg-6001-2': 'kg-6002-2',
+  'ke-3001-special': 'ke-3002-150',
+  'ke-3002-190-super': 'ke-3002-190',
+  'ke-4002-190-super': 'ke-4002-190',
 };
 
 const PAIR_DELIMITER = '-vs-';
