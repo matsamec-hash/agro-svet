@@ -12,13 +12,13 @@ powerHp: 263
 powerKw: 193
 weightKg: 10200
 engine: "Deutz TCD 6.1 L, 6-válec, Stage V"
-transmission: "TTV, bezstupňová (CVT) nebo Powershift"
+transmission: "TTV, bezstupňová (CVT)"
 seriesName: "7 Series"
 lastVerified: 2026-05-15
 sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/7-ttv-series"
 highlights:
   - "263 koní z šestiválce Deutz TCD 6.1 L"
-  - "Bezstupňová převodovka TTV nebo Powershift"
+  - "Bezstupňová převodovka TTV"
   - "Design od italského studia Giugiaro"
   - "Prémiová row-crop konstrukce"
   - "Vrcholný model 7 Series"
@@ -26,7 +26,7 @@ faq:
   - q: "Jaký výkon má Deutz-Fahr 7250 TTV?"
     a: "Deutz-Fahr 7250 TTV má výkon 263 koní (193 kW) a je vrcholným modelem řady 7 Series. Pohání ho šestiválcový motor Deutz TCD 6.1 L splňující emisní normu Stage V."
   - q: "Co znamená TTV v názvu?"
-    a: "TTV označuje bezstupňovou převodovku (CVT) Deutz-Fahr. Rychlost se mění plynule bez řadicích stupňů a bez přerušení tahu — obsluha jen zadá požadovanou rychlost a převodovka udržuje motor v ekonomických otáčkách. Řada 7 je dostupná i s Powershift převodovkou."
+    a: "TTV označuje bezstupňovou převodovku (CVT) Deutz-Fahr. Rychlost se mění plynule bez řadicích stupňů a bez přerušení tahu — obsluha jen zadá požadovanou rychlost a převodovka udržuje motor v ekonomických otáčkách."
   - q: "Kdo navrhl design Deutz-Fahr 7250 TTV?"
     a: "Vnější design řady 7 Series vytvořilo italské studio Giugiaro — jedno z nejznámějších designérských studií na světě, proslulé i automobilovým designem. Výsledkem je výrazná a charakteristická linie traktoru."
   - q: "Jaký motor pohání Deutz-Fahr 7250 TTV?"
@@ -43,7 +43,7 @@ faq:
 
 ## Převodovka TTV
 
-Označení **TTV** znamená bezstupňovou převodovku (CVT) Deutz-Fahr. Rychlost se mění plynule bez řadicích stupňů a bez přerušení tahu — obsluha jen zadá požadovanou rychlost a převodovka udržuje motor v ekonomických otáčkách. Řada 7 je dostupná i s klasickou Powershift převodovkou.
+Označení **TTV** znamená bezstupňovou převodovku (CVT) Deutz-Fahr. Rychlost se mění plynule bez řadicích stupňů a bez přerušení tahu — obsluha jen zadá požadovanou rychlost a převodovka udržuje motor v ekonomických otáčkách.
 
 ## Design Giugiaro
 

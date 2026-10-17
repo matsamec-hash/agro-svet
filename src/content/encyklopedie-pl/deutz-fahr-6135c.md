@@ -5,8 +5,8 @@ znacka: "deutz-fahr"
 kategorie: traktor
 vykon: "143 KM (105 kW)"
 hmotnost: "ok. 5 500 kg"
-rok_uvedeni: 2020
-popis: "Topowy model kompaktowej czterocylindrowej serii 6C o mocy 143 koni, z kabiną TopVision, hydrauliką load-sensing i trzema wariantami przekładni."
+rok_uvedeni: 2022
+popis: "Model kompaktowej czterocylindrowej serii 6C o mocy 143 koni, z kabiną TopVision, hydrauliką load-sensing i trzema wariantami przekładni."
 heroImage: "/images/stroje/deutz-fahr/deutz-fahr-6c-143k.webp"
 powerHp: 143
 powerKw: 105
@@ -24,7 +24,7 @@ highlights:
   - "Udźwig tylnego podnośnika 7 000 kg"
 faq:
   - q: "Jaką moc ma Deutz-Fahr 6135 C?"
-    a: "Deutz-Fahr 6135 C ma moc 143 koni (105 kW) i jest topowym modelem kompaktowej serii 6C. Napędza go czterocylindrowy silnik Deutz spełniający normę emisji spalin Stage V. Model został wprowadzony w 2020 roku."
+    a: "Deutz-Fahr 6135 C ma moc 143 koni (105 kW) i należy do kompaktowej serii 6C. Napędza go czterocylindrowy silnik Deutz spełniający normę emisji spalin Stage V. Model został wprowadzony w 2020 roku."
   - q: "Jakie przekładnie oferuje 6135 C?"
     a: "Seria 6C oferuje trzy warianty przekładni: trzystopniowy Powershift jako podstawę, pełny powershift RVshift z 20 biegami do przodu i 16 do tyłu, lub bezstopniową TTV (CVT). Klient wybiera zależnie od zastosowania i budżetu."
   - q: "Jaką hydraulikę ma Deutz-Fahr 6135 C?"
@@ -35,7 +35,7 @@ faq:
     a: "6135 C to kompaktowy ciągnik uniwersalny dla mniejszych i średnich gospodarstw. Czterocylindrowy silnik, kompaktowe wymiary i hydraulika load-sensing czynią z niego dobrego pomocnika do pracy z ładowaczem, transportu, siewu i lżejszych prac polowych."
 ---
 
-**Deutz-Fahr 6135 C** to topowy model kompaktowej serii 6C — czterocylindrowego ciągnika uniwersalnego dla mniejszych i średnich gospodarstw.
+**Deutz-Fahr 6135 C** należy do kompaktowej serii 6C — czterocylindrowego ciągnika uniwersalnego dla mniejszych i średnich gospodarstw.
 
 ## Silnik i moc
 

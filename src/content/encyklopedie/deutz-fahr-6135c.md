@@ -5,8 +5,8 @@ znacka: "deutz-fahr"
 kategorie: traktor
 vykon: "143 k (105 kW)"
 hmotnost: "cca 5 500 kg"
-rok_uvedeni: 2020
-popis: "Vrcholný model kompaktní čtyřválcové řady 6C s výkonem 143 koní, kabinou TopVision, load-sensing hydraulikou a třemi variantami převodovky."
+rok_uvedeni: 2022
+popis: "Model kompaktní čtyřválcové řady 6C s výkonem 143 koní, kabinou TopVision, load-sensing hydraulikou a třemi variantami převodovky."
 heroImage: "/images/stroje/deutz-fahr/deutz-fahr-6c-143k.webp"
 powerHp: 143
 powerKw: 105
@@ -24,7 +24,7 @@ highlights:
   - "Výkon zadního zvedáku 7 000 kg"
 faq:
   - q: "Jaký výkon má Deutz-Fahr 6135 C?"
-    a: "Deutz-Fahr 6135 C má výkon 143 koní (105 kW) a je vrcholným modelem kompaktní řady 6C. Pohání ho čtyřválcový motor Deutz splňující emisní normu Stage V. Model byl uveden v roce 2020."
+    a: "Deutz-Fahr 6135 C má výkon 143 koní (105 kW) a patří do kompaktní řady 6C. Pohání ho čtyřválcový motor Deutz splňující emisní normu Stage V. Model byl uveden v roce 2020."
   - q: "Jaké převodovky nabízí 6135 C?"
     a: "Řada 6C nabízí tři varianty převodovky: třístupňový Powershift jako základ, plný powershift RVshift s 20 rychlostmi vpřed a 16 vzad, nebo bezstupňovou TTV (CVT). Zákazník volí podle nasazení a rozpočtu."
   - q: "Jakou hydrauliku má Deutz-Fahr 6135 C?"
@@ -35,7 +35,7 @@ faq:
     a: "6135 C je kompaktní univerzální traktor pro menší a střední farmy. Čtyřválec, kompaktní rozměry a load-sensing hydraulika z něj dělají dobrého pomocníka na práci s nakladačem, transport, setí i lehčí polní práce."
 ---
 
-**Deutz-Fahr 6135 C** je vrcholným modelem kompaktní řady 6C — čtyřválcového univerzálního traktoru pro menší a střední farmy.
+**Deutz-Fahr 6135 C** patří do kompaktní řady 6C — čtyřválcového univerzálního traktoru pro menší a střední farmy.
 
 ## Motor a výkon
 

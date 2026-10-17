@@ -5,8 +5,8 @@ znacka: "deutz-fahr"
 kategorie: traktor
 vykon: "143 PS (105 kW)"
 hmotnost: "ca. 5 500 kg"
-rok_uvedeni: 2020
-popis: "Das Spitzenmodell der kompakten Vierzylinderbaureihe 6C mit 143 PS, Kabine TopVision, Load-Sensing-Hydraulik und drei Getriebevarianten."
+rok_uvedeni: 2022
+popis: "Ein Modell der kompakten Vierzylinderbaureihe 6C mit 143 PS, Kabine TopVision, Load-Sensing-Hydraulik und drei Getriebevarianten."
 heroImage: "/images/stroje/deutz-fahr/deutz-fahr-6c-143k.webp"
 powerHp: 143
 powerKw: 105
@@ -24,7 +24,7 @@ highlights:
   - "Hubkraft des Heckhubwerks 7 000 kg"
 faq:
   - q: "Welche Leistung hat der Deutz-Fahr 6135 C?"
-    a: "Der Deutz-Fahr 6135 C leistet 143 PS (105 kW) und ist das Spitzenmodell der kompakten Baureihe 6C. Angetrieben wird er von einem Vierzylindermotor von Deutz, der die Abgasnorm Stage V erfüllt. Das Modell wurde 2020 eingeführt."
+    a: "Der Deutz-Fahr 6135 C leistet 143 PS (105 kW) und gehört zur kompakten Baureihe 6C. Angetrieben wird er von einem Vierzylindermotor von Deutz, der die Abgasnorm Stage V erfüllt. Das Modell wurde 2020 eingeführt."
   - q: "Welche Getriebe bietet der 6135 C?"
     a: "Die Baureihe 6C bietet drei Getriebevarianten: den dreistufigen Powershift als Basis, den vollen Powershift RVshift mit 20 Vorwärts- und 16 Rückwärtsgängen oder das stufenlose TTV (CVT). Der Kunde wählt nach Einsatz und Budget."
   - q: "Welche Hydraulik hat der Deutz-Fahr 6135 C?"
@@ -35,7 +35,7 @@ faq:
     a: "Der 6135 C ist ein kompakter Universaltraktor für kleinere und mittlere Betriebe. Vierzylinder, kompakte Abmessungen und Load-Sensing-Hydraulik machen ihn zu einem guten Helfer für Frontladerarbeit, Transport, Aussaat und leichtere Feldarbeiten."
 ---
 
-Der **Deutz-Fahr 6135 C** ist das Spitzenmodell der kompakten Baureihe 6C — eines Vierzylinder-Universaltraktors für kleinere und mittlere Betriebe.
+Der **Deutz-Fahr 6135 C** gehört zur kompakten Baureihe 6C — eines Vierzylinder-Universaltraktors für kleinere und mittlere Betriebe.
 
 ## Motor und Leistung
 

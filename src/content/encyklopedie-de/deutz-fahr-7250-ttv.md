@@ -12,13 +12,13 @@ powerHp: 263
 powerKw: 193
 weightKg: 10200
 engine: "Deutz TCD 6.1 L, 6-Zylinder, Stage V"
-transmission: "TTV, stufenlos (CVT) oder Powershift"
+transmission: "TTV, stufenlos (CVT)"
 seriesName: "7 Series"
 lastVerified: 2026-05-15
 sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/7-ttv-series"
 highlights:
   - "263 PS aus dem Sechszylinder Deutz TCD 6.1 L"
-  - "Stufenloses TTV-Getriebe oder Powershift"
+  - "Stufenloses TTV-Getriebe"
   - "Design vom italienischen Studio Giugiaro"
   - "Premium-Row-Crop-Bauweise"
   - "Spitzenmodell der 7 Series"
@@ -26,7 +26,7 @@ faq:
   - q: "Welche Leistung hat der Deutz-Fahr 7250 TTV?"
     a: "Der Deutz-Fahr 7250 TTV leistet 263 PS (193 kW) und ist das Spitzenmodell der Baureihe 7 Series. Angetrieben wird er vom Sechszylindermotor Deutz TCD 6.1 L, der die Abgasnorm Stage V erfüllt."
   - q: "Wofür steht TTV im Namen?"
-    a: "TTV bezeichnet das stufenlose Getriebe (CVT) von Deutz-Fahr. Die Geschwindigkeit ändert sich kontinuierlich ohne Schaltstufen und ohne Zugkraftunterbrechung — der Fahrer gibt lediglich die gewünschte Geschwindigkeit vor, und das Getriebe hält den Motor im wirtschaftlichen Drehzahlbereich. Die Baureihe 7 ist auch mit Powershift-Getriebe erhältlich."
+    a: "TTV bezeichnet das stufenlose Getriebe (CVT) von Deutz-Fahr. Die Geschwindigkeit ändert sich kontinuierlich ohne Schaltstufen und ohne Zugkraftunterbrechung — der Fahrer gibt lediglich die gewünschte Geschwindigkeit vor, und das Getriebe hält den Motor im wirtschaftlichen Drehzahlbereich."
   - q: "Wer hat das Design des Deutz-Fahr 7250 TTV entworfen?"
     a: "Das Außendesign der 7 Series stammt vom italienischen Studio Giugiaro — einem der bekanntesten Designstudios der Welt, auch berühmt für Automobildesign. Das Ergebnis ist eine markante und charakteristische Linienführung des Traktors."
   - q: "Welcher Motor treibt den Deutz-Fahr 7250 TTV an?"
@@ -43,7 +43,7 @@ Den 7250 TTV treibt der Sechszylinder **Deutz TCD 6.1 L** mit 263 PS (193 kW) an
 
 ## Getriebe TTV
 
-Die Bezeichnung **TTV** steht für das stufenlose Getriebe (CVT) von Deutz-Fahr. Die Geschwindigkeit ändert sich kontinuierlich ohne Schaltstufen und ohne Zugkraftunterbrechung — der Fahrer gibt lediglich die gewünschte Geschwindigkeit vor, und das Getriebe hält den Motor im wirtschaftlichen Drehzahlbereich. Die Baureihe 7 ist auch mit klassischem Powershift-Getriebe erhältlich.
+Die Bezeichnung **TTV** steht für das stufenlose Getriebe (CVT) von Deutz-Fahr. Die Geschwindigkeit ändert sich kontinuierlich ohne Schaltstufen und ohne Zugkraftunterbrechung — der Fahrer gibt lediglich die gewünschte Geschwindigkeit vor, und das Getriebe hält den Motor im wirtschaftlichen Drehzahlbereich.
 
 ## Design von Giugiaro
 

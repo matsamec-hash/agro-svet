@@ -12,13 +12,13 @@ powerHp: 263
 powerKw: 193
 weightKg: 10200
 engine: Deutz TCD 6.1 L, 6-válec, Stage V
-transmission: TTV, bezstupňová (CVT) nebo Powershift
+transmission: TTV, bezstupňová (CVT)
 seriesName: 7 Series
 lastVerified: 2026-05-15
 sourceUrl: "https://www.deutz-fahr.com/en-gb/tractors/7-ttv-series"
 highlights:
 - 263 koní zo šesťvalca Deutz TCD 6.1 L
-- Bezstupňová prevodovka TTV alebo Powershift
+- Bezstupňová prevodovka TTV
 - Dizajn od talianskeho štúdia Giugiaro
 - Prémiová row-crop konštrukcia
 - Vrcholný model 7 Series
@@ -26,7 +26,7 @@ faq:
 - q: Aký výkon má Deutz-Fahr 7250 TTV?
   a: Deutz-Fahr 7250 TTV má výkon 263 koní (193 kW) a je vrcholným modelom radu 7 Series. Poháňa ho šesťvalcový motor Deutz TCD 6.1 L spĺňajúci emisnú normu Stage V.
 - q: Čo znamená TTV v názve?
-  a: TTV označuje bezstupňovú prevodovku (CVT) Deutz-Fahr. Rýchlosť sa mení plynule bez radiacich stupňov a bez prerušenia ťahu — obsluha len zadá požadovanú rýchlosť a prevodovka udržuje motor v ekonomických otáčkach. Rad 7 je dostupný aj s Powershift prevodovkou.
+  a: TTV označuje bezstupňovú prevodovku (CVT) Deutz-Fahr. Rýchlosť sa mení plynule bez radiacich stupňov a bez prerušenia ťahu — obsluha len zadá požadovanú rýchlosť a prevodovka udržuje motor v ekonomických otáčkach.
 - q: Kto navrhol dizajn Deutz-Fahr 7250 TTV?
   a: Vonkajší dizajn radu 7 Series vytvorilo talianske štúdio Giugiaro — jedno z najznámejších dizajnérskych štúdií na svete, preslávené aj automobilovým dizajnom. Výsledkom je výrazná a charakteristická línia traktora.
 - q: Aký motor poháňa Deutz-Fahr 7250 TTV?
@@ -43,7 +43,7 @@ faq:
 
 ## Prevodovka TTV
 
-Označenie **TTV** znamená bezstupňovú prevodovku (CVT) Deutz-Fahr. Rýchlosť sa mení plynule bez radiacich stupňov a bez prerušenia ťahu — obsluha len zadá požadovanú rýchlosť a prevodovka udržuje motor v ekonomických otáčkach. Rad 7 je dostupný aj s klasickou Powershift prevodovkou.
+Označenie **TTV** znamená bezstupňovú prevodovku (CVT) Deutz-Fahr. Rýchlosť sa mení plynule bez radiacich stupňov a bez prerušenia ťahu — obsluha len zadá požadovanú rýchlosť a prevodovka udržuje motor v ekonomických otáčkach.
 
 ## Dizajn Giugiaro
 

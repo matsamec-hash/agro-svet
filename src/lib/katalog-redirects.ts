@@ -3,12 +3,14 @@
 // platí pro všechny jazykové mutace najednou.
 //
 // Kdy sem model patří: výrobce ho nikdy nevyráběl, šlo o duplikát jiného
-// záznamu, nebo se model jmenuje jinak (přejmenovaný slug). Ověření a zdroj každé položky je v ~/agro-svet/foto-audit/de/rizika/
+// záznamu, nebo se model jmenuje jinak (přejmenovaný slug či jiná řada).
+// Stejně tak řada, která u výrobce neexistovala (/stroje/<značka>/<řada>).
+// Ověření a zdroj každé položky je v ~/agro-svet/foto-audit/de/rizika/
 // katalog-opravy.md. Cíl je stránka řady, nebo model, který zůstal.
 // ‼️ Zdroj nesmí být živá stránka a cíl musí existovat — hlídá
 // tests/lib/katalog-redirects.test.ts.
 
-/** cs cesta smazaného nebo přejmenovaného modelu (bez koncového lomítka) → cs cíl. */
+/** cs cesta smazaného nebo přejmenovaného modelu či řady (bez koncového lomítka) → cs cíl. */
 export const REMOVED_MODEL_PAGES: Record<string, string> = {
   // 2026-10-17 CLAAS Lexion 8900: duplikát ve staré řadě 400–700 a záznam
   // „Lexion 8900 (new)“ sloučené do jednoho modelu v řadě 5000–8000.
@@ -45,6 +47,9 @@ export const REMOVED_MODEL_PAGES: Record<string, string> = {
   '/stroje/horsch/tiger/tiger-lt': '/stroje/horsch/tiger/',
   // 2026-10-17 Case IH: Magnum 435 neexistuje, 435 k je max. výkon Magnum 400 (prospekt Case IH 12/2021)
   '/stroje/case-ih/magnum/magnum-435': '/stroje/case-ih/magnum/magnum-400/',
+  // 2026-10-17 Deutz-Fahr: 5100.4 G / 5110.4 G neexistují, výrobce vede 5100 G a 5110 G (prospekt 5G Tier 3)
+  '/stroje/deutz-fahr/5g/5100-4g': '/stroje/deutz-fahr/5g/5100-g/',
+  '/stroje/deutz-fahr/5g/5110-4g': '/stroje/deutz-fahr/5g/5110-g/',
 };
 
 /** Přejmenované slugy modelů → nový slug. Přesměruje i srovnání /srovnani/<a>-vs-<b>/. */
@@ -71,13 +76,16 @@ export const RENAMED_MODEL_SLUGS: Record<string, string> = {
   'ke-3001-special': 'ke-3002-150',
   'ke-3002-190-super': 'ke-3002-190',
   'ke-4002-190-super': 'ke-4002-190',
+  // 2026-10-17 Deutz-Fahr: 5100.4 G / 5110.4 G neexistují, výrobce vede 5100 G a 5110 G (prospekt 5G Tier 3)
+  'deutz-fahr-5100-4g': 'deutz-fahr-5100-g',
+  'deutz-fahr-5110-4g': 'deutz-fahr-5110-g',
 };
 
 const PAIR_DELIMITER = '-vs-';
 
 /** cs cíl pro stránku smazaného modelu nebo srovnání s přejmenovaným modelem, jinak null. */
 export function catalogRedirectTarget(csPath: string): string | null {
-  const model = csPath.match(/^(\/stroje\/[^/]+\/[^/]+\/[^/]+)\/?$/);
+  const model = csPath.match(/^(\/stroje\/[^/]+\/[^/]+(?:\/[^/]+)?)\/?$/);
   if (model && Object.hasOwn(REMOVED_MODEL_PAGES, model[1])) return REMOVED_MODEL_PAGES[model[1]];
 
   const cmp = csPath.match(/^\/srovnani\/([^/]+)\/?$/);

@@ -28,9 +28,11 @@ function livePaths() {
 describe('katalog: 301 ze smazaných modelů', () => {
   const live = livePaths();
 
-  it('zdroj přesměrování už není živá stránka modelu', () => {
+  it('zdroj přesměrování už není živá stránka modelu ani řady', () => {
     for (const from of Object.keys(REMOVED_MODEL_PAGES)) {
       expect(live.models.has(from + '/'), from).toBe(false);
+      expect(live.series.has(from + '/'), from).toBe(false);
+      expect(live.brands.has(from + '/'), from).toBe(false);
     }
   });
 
