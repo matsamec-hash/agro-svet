@@ -3,7 +3,7 @@
 // 13 ze 16 otázek je jazykově neutrálních (historie značek, technika) → přeložené.
 // 3 otázky byly vázané na ČESKOU jurisdikci a jsou NAHRAZENÉ, ne přeložené:
 //   q10  VCS chmel v Kč        -> gekoppelte Einkommensstützung (Mutterkühe/-schafe)
-//   q11  BISS ~2150 Kč/ha      -> Einkommensgrundstützung 152,44 €/ha (2025)
+//   q11  BISS v Kč             -> Einkommensgrundstützung 152,44 €/ha (2025)
 //   q13  LPIS pod ÚKZÚZ/SZIF   -> Feldblock a FLIK v InVeKoS
 // Sazby jsou tytéž jako v tabulce na /de/direktzahlungen/ — kdyby se tam
 // aktualizovaly, musí se změnit i tady, jinak si web protiřečí.

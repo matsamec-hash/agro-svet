@@ -3,8 +3,8 @@
 // 13 z 16 otázek je jazykově neutrálních (historie značek, technologie) → přeložené.
 // 3 otázky byly vázané na ČESKOU jurisdikci (sazba VCS pro chmel v Kč, BISS v Kč,
 // LPIS pod ÚKZÚZ/SZIF). Ty se NEPŘEKLÁDAJÍ — jsou nahrazené polskými ekvivalenty
-// s reálnými sazbami ARiMR 2025 (zdroj: /doplaty-bezposrednie/, tytéž hodnoty jako
-// tamní tabulka): PWD 488,55 zł/ha, pomidory 2097,56 zł/ha, chmiel 1864,49 zł/ha.
+// s reálnými sazbami za rok 2025 (nařízení ministra zemědělství, Dz.U. 2025 poz. 1392,
+// 1394, 1396; vyplácí ARiMR): PWD 488,55 zł/ha, pomidory 2097,56 zł/ha, chmiel 1864,49 zł/ha.
 //
 // Pořadí otázek i index správné odpovědi odpovídají cs — hodnocení a délka kvízu
 // zůstávají stejné.
@@ -147,7 +147,7 @@ export const KVIZ_HISTORIE_PL: QuizQuestion[] = [
       { text: `Ziemniaki skrobiowe (~1581 zł/ha)` },
     ],
     correct: 1,
-    explanation: `Najwyższą stawkę płatności związanej z produkcją mają pomidory — ok. 2098 zł/ha. Dalej chmiel (~1864 zł/ha), ziemniaki skrobiowe (~1581 zł/ha), truskawki (~1496 zł/ha) i buraki cukrowe (~1284 zł/ha). Stawki ustala ARiMR na podstawie koperty krajowej i powierzchni zgłoszonej we wnioskach.`,
+    explanation: `Najwyższą stawkę płatności związanej z produkcją mają pomidory — ok. 2098 zł/ha. Dalej chmiel (~1864 zł/ha), ziemniaki skrobiowe (~1581 zł/ha), truskawki (~1496 zł/ha) i buraki cukrowe (~1284 zł/ha). Stawki na dany rok ustala minister rolnictwa w rozporządzeniu, na podstawie koperty krajowej i powierzchni zgłoszonej we wnioskach; płatności wypłaca ARiMR.`,
     sourceUrl: '/doplaty-bezposrednie/',
     sourceLabel: `Dopłaty bezpośrednie 2025`,
   },
@@ -161,7 +161,7 @@ export const KVIZ_HISTORIE_PL: QuizQuestion[] = [
       { text: `Powiatowy Wskaźnik Dopłat` },
     ],
     correct: 1,
-    explanation: `PWD (podstawowe wsparcie dochodów dla zrównoważoności) to główna płatność bezpośrednia WPR — ok. 489 zł/ha w 2025 r. do wszystkich kwalifikujących się hektarów. Odpowiednik unijnego BISS, który zastąpił wcześniejszy system JPO. Dla gospodarstwa 100 ha to ok. 48 900 zł rocznie, do tego dochodzi płatność redystrybucyjna (~177 zł/ha do pierwszych 30 ha).`,
+    explanation: `PWD (podstawowe wsparcie dochodów do celów zrównoważoności) to główna płatność bezpośrednia WPR — ok. 489 zł/ha w 2025 r. do wszystkich kwalifikujących się hektarów. Odpowiednik unijnego BISS, który zastąpił wcześniejszy system JPO. Dla gospodarstwa 100 ha to ok. 48 900 zł rocznie, do tego dochodzi płatność redystrybucyjna (~177 zł/ha do pierwszych 30 ha).`,
     sourceUrl: '/doplaty-bezposrednie/',
     sourceLabel: `Dopłaty bezpośrednie 2025`,
   },

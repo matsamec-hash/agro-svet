@@ -370,9 +370,9 @@ Pro variabilní vápnění (VRA) podle GPS gridu rozbory v 30×30 m mřížce �
   {
     slug: 'mezi-plodiny',
     term: 'Meziplodiny',
-    alias: ['krycí plodiny', 'cover crops', 'EFA meziplodiny'],
+    alias: ['krycí plodiny', 'cover crops'],
     kategorie: 'agrotechnika',
-    shortDef: 'Meziplodiny jsou rostliny vysévané mezi dvěma hlavními plodinami pro zlepšení půdní úrodnosti, ochranu proti erozi a vázání dusíku. Podmínka EKO režimu CAP 2024.',
+    shortDef: 'Meziplodiny jsou rostliny vysévané mezi dvěma hlavními plodinami pro zlepšení půdní úrodnosti, ochranu proti erozi a vázání dusíku. V ČR se mohou započítat do neprodukčních ploch celofaremní ekoplatby.',
     longDef: `Meziplodiny (cover crops) jsou plodiny vysévané v období mezi sklizní hlavní plodiny a setím další, často přes zimu nebo letní úhor. Slouží k:
 
 1. **Ochraně půdy proti erozi** — pokrývají povrch v období dešťů a větru.
@@ -389,7 +389,7 @@ Typické druhy:
 - **Jetel inkarnát** — vázání N, krmivo.
 - **Pohanka** — pro letní krátkou meziplodinu.
 
-V CAP 2024 jsou meziplodiny součástí EKO režimu (premium sazba 2400 Kč/ha) a EFA (Ecological Focus Areas). Při počítání kompenzace 1 ha meziplodiny = 0,3 ha EFA.`,
+V ČR se meziplodiny v základní celofaremní ekoplatbě (2025) započítávají do neprodukčních ploch varianty B s váhovým koeficientem 0,3. Podle standardu podmíněnosti DZES 6 je osetí meziplodinou jedním ze způsobů, jak po sklizni hlavní plodiny zajistit pokryv půdy. V letech 2015–2022 se meziplodiny mohly počítat do ploch v ekologickém zájmu (EFA) v rámci greeningu, který reforma SZP od roku 2023 zrušila.`,
     related: ['eko-platba', 'biopasy', 'cap-2024'],
   },
   {
@@ -397,21 +397,19 @@ V CAP 2024 jsou meziplodiny součástí EKO režimu (premium sazba 2400 Kč/ha) 
     term: 'Biopásy',
     alias: ['biokoridor', 'krajinné prvky'],
     kategorie: 'agrotechnika',
-    shortDef: 'Biopásy jsou neoseté pruhy mezi hlavními plodinami, určené pro biodiverzitu, hmyz, ptactvo a malou zvěř. Součást EFA a EKO režimu CAP.',
-    longDef: `Biopásy jsou neproduktivní pruhy v polních plochách (typicky 6–20 m široké), které slouží jako útočiště pro divokou faunu — opylovače, drobnou zvěř, ptactvo. Mohou být osety speciálními směskami (medonosné kvetoucí rostliny) nebo ponechány jako autonomní úhor.
+    shortDef: 'Biopásy jsou pruhy zvláštních osevních směsí mezi hlavními plodinami, určené pro opylovače, ptactvo a drobnou zvěř. V ČR je podporuje agroenvironmentálně-klimatické opatření (AEKO) a lze je započítat do neprodukčních ploch ekoplatby.',
+    longDef: `Biopásy jsou neproduktivní pruhy v polních plochách (v AEKO 6–30 m široké), které slouží jako útočiště pro divokou faunu — opylovače, drobnou zvěř, ptactvo. Mohou být osety speciálními směskami (medonosné kvetoucí rostliny) nebo ponechány jako autonomní úhor.
 
 Typy biopásů:
 - **Nektarodárný biopás** — směska kvetoucích rostlin (svazenka, slunečnice, pohanka, jetel, vičence). Klíčový pro včely a divoké opylovače.
 - **Krmný biopás** — pro koroptve, bažanty, zajíce — obiloviny, slunečnice, kukuřice.
 - **Travní pás** — proti erozi, podél vodotečí.
-- **Biopás okraj pole** — 6–12 m široký, povinný pro některé eko-režimy.
 
-V CAP 2024:
-- Biopásy patří do **EFA** (Ecological Focus Areas) — koeficient 1,5 (1 ha biopásu = 1,5 ha EFA).
-- Premium EKO režim vyžaduje min. 7 % výměry v EFA (z toho biopásy + meziplodiny + krajinné prvky).
-- Speciální výzva v PRV: dotace na založení biopásu (typicky 8 000–18 000 Kč/ha podle směsky).
+V ČR (2025):
+- **AEKO biopásy** (nařízení vlády č. 80/2023 Sb.) — krmné 676 EUR/ha, nektarodárné 597 EUR/ha, kombinované 639 EUR/ha; vyplácí se v Kč (za rok 2025 kurzem 25,185 CZK/EUR).
+- Biopás lze započítat do neprodukčních ploch celofaremní ekoplatby; sazba AEKO se pak snižuje.
 
-Praktická pravidla: biopás nesmí být sečený před koncem hnízdění (1.8.), nesmí být postříkán pesticidy, údržba 1× ročně mulčováním nebo sklizní.`,
+Podmínky AEKO (2025): na biopás se nesmějí použít přípravky na ochranu rostlin ani hnojiva; krmný a nektarodárný biopás má souvislou délku aspoň 50 m a zabírá nejvýš 50 % dílu půdního bloku.`,
     related: ['mezi-plodiny', 'eko-platba', 'cap-2024'],
   },
 
@@ -421,20 +419,20 @@ Praktická pravidla: biopás nesmí být sečený před koncem hnízdění (1.8.
     term: 'CAP 2024',
     alias: ['Společná zemědělská politika', 'SZP 2023-2027'],
     kategorie: 'dotace',
-    shortDef: 'CAP 2024 (Common Agricultural Policy, česky SZP) je program přímých plateb EU pro zemědělce v období 2023–2027. Hlavní platby: BISS, CISS, EKO, ANC, VCS.',
-    longDef: `Společná zemědělská politika (SZP, EN: CAP — Common Agricultural Policy) je hlavní finanční nástroj EU pro podporu zemědělství. Aktuální období 2023–2027 přineslo zásadní reformu — víc důrazu na ekologii (greening), redistribuci ve prospěch menších farem a zachování přírodních zdrojů.
+    shortDef: 'Společná zemědělská politika EU (CAP, česky SZP) na období 2023–2027, kterou ČR provádí Strategickým plánem SZP. Hlavní přímé platby: základní platba BISS, redistributivní platba, ekoplatba, platba pro mladé zemědělce a podpora vázaná na produkci (CIS).',
+    longDef: `Společná zemědělská politika (SZP, EN: CAP — Common Agricultural Policy) je hlavní finanční nástroj EU pro podporu zemědělství. Období 2023–2027 přineslo reformu: každý členský stát ji provádí vlastním strategickým plánem, greening nahradila přísnější podmíněnost a ekoschémata a víc peněz směřuje k menším podnikům.
 
-Hlavní složky pro ČR (orientační sazby 2024):
-1. **BISS** (Basic Income Support for Sustainability) — Základní platba, ~2150 Kč/ha na všechnu způsobilou plochu.
-2. **CISS** (Complementary Redistributive Income Support) — Redistributivní platba, ~1450 Kč/ha pro prvních 150 ha. Podporuje malé farmy.
-3. **EKO-platba** (Eco-scheme) — Základní 1300 Kč/ha, premium 2400 Kč/ha za víc eko-praktik (meziplodiny, biopásy, neproduktivní plochy).
-4. **ANC** (Areas with Natural Constraints) — Méně příznivé oblasti, horská 4500 Kč/ha, OA/SV 2000 Kč/ha.
-5. **Mladý zemědělec** — Bonus 1500 Kč/ha pro prvních 150 ha (do 40 let, max 5 let).
-6. **VCS** (Voluntary Coupled Support) — Citlivé sektory: chmel 13000 Kč/ha, polní zelenina 9000 Kč/ha, cukrová řepa 7500 Kč/ha, ovoce 6500 Kč/ha, brambory na škrob 5500 Kč/ha, bílkoviny 2800 Kč/ha, len 4500 Kč/ha, krmné 1100 Kč/ha.
+Přímé platby v ČR — sazby za rok 2025 (MZe, SZIF):
+1. **BISS** (základní podpora příjmu pro udržitelnost) — 1 759,91 Kč/ha způsobilé plochy.
+2. **CRISS** (doplňková redistributivní podpora příjmu) — 3 449,49 Kč/ha na prvních 150 ha každého podniku.
+3. **Celofaremní ekoplatba** — základní 1 578,37 Kč/ha; prémiová 17 521,20 Kč/ha, ale jen na vyčleněné neprodukční plochy a ochranné pásy podél vody.
+4. **Platba pro mladé zemědělce** — 2 378,75 Kč/ha, nejvýš na 90 ha a nejdéle pět let.
+5. **Platba pro malé zemědělce** — 6 883,97 Kč/ha, nejvýš na 4 ha, pro podniky do 10 ha; nahrazuje ostatní přímé platby.
+6. **CIS** (podpora příjmu vázaná na produkci, dříve VCS) — například chmel 14 936,09 Kč/ha, ovoce s velmi vysokou pracností 15 541,10 Kč/ha, škrobové brambory 12 036,09 Kč/ha, cukrová řepa 6 936,20 Kč/ha, bílkovinné plodiny 1 449,39 Kč/ha, dojnice 3 540,01 Kč na kus.
 
-Žádost se podává jednorázově v Jednotné žádosti (typicky duben–červen, podává se elektronicky přes Portál farmáře SZIF). Závazné sazby SZIF zveřejňuje po uzávěrce kampaně.
+Platby pro oblasti s přírodními omezeními (ANC) a agroenvironmentálně-klimatická opatření (AEKO) patří do II. pilíře a řídí se vlastními nařízeními vlády.
 
-Pro orientační výpočet: [Kalkulačka dotací CAP](/kalkulacka/dotace-cap/).`,
+O přímé platby se žádá v Jednotné žádosti elektronicky přes Portál farmáře SZIF (za rok 2025 do 15. května). Sazby za rok 2025 schválil ministr zemědělství v říjnu 2025; výše sazby závisí mimo jiné na tom, na kolik hektarů a zvířat zemědělci požádají.`,
     related: ['eko-platba', 'mezi-plodiny', 'biopasy'],
     externalUrl: 'https://www.szif.cz',
     externalLabel: 'SZIF — Státní zemědělský intervenční fond',
@@ -442,23 +440,21 @@ Pro orientační výpočet: [Kalkulačka dotací CAP](/kalkulacka/dotace-cap/).`
   {
     slug: 'eko-platba',
     term: 'EKO-platba',
-    alias: ['Eco-scheme', 'greening', 'eko režim'],
+    alias: ['Eco-scheme', 'celofaremní ekoplatba', 'ekoschéma'],
     kategorie: 'dotace',
-    shortDef: 'EKO-platba je část CAP 2024 podporující ekologické praktiky. Základní sazba ~1300 Kč/ha, premium ~2400 Kč/ha za víc eko-opatření.',
-    longDef: `EKO-platba (Eco-scheme) je dobrovolná část přímých plateb CAP 2024, která odměňuje zemědělce za environmentálně přínosné praktiky nad rámec povinných kondicionalit.
+    shortDef: 'Celofaremní ekoplatba je české ekoschéma v přímých platbách SZP 2023–2027. Za rok 2025 činila základní sazba 1 578,37 Kč/ha; prémiová (17 521,20 Kč/ha) se vyplácí jen na vyčleněné neprodukční plochy a ochranné pásy podél vody.',
+    longDef: `Celofaremní ekoplatba (EN eco-scheme) je dobrovolná část přímých plateb, která odměňuje postupy prospěšné pro životní prostředí nad rámec povinné podmíněnosti. Žadatel ji plní na celé výměře podniku — kultury ani díly půdních bloků si vybírat nemůže.
 
-Dva režimy v ČR:
-1. **Základní EKO režim** — ~1300 Kč/ha. Povinná opatření jako pestrá rotace plodin, sankce za monokultury, dodržování krajinných prvků.
-2. **Premium EKO režim** — ~2400 Kč/ha. Vyžaduje navíc:
-   - Min. 7 % EFA (Ecological Focus Areas) z orné půdy — meziplodiny + biopásy + krajinné prvky.
-   - Pásová pravidla podél vodotečí (min. 3 m bez pesticidů).
-   - Kvalitní krycí plodiny nebo strniště přes zimu.
+Dvě úrovně (sazby za rok 2025):
+1. **Základní** — 1 578,37 Kč/ha na celou způsobilou výměru. Na orné půdě zahrnuje mimo jiné:
+   - diverzifikaci plodin (nad 10 ha orné půdy aspoň 2 plodiny, nad 30 ha aspoň 3, nad 150 ha aspoň 4; jedna plodina nejvýš na 75 % orné půdy),
+   - hospodaření s organickou hmotou (nad 30 ha orné půdy, podle Modelu OH),
+   - ochranný pás podél vody,
+   - neprodukční plochy: varianta A (aspoň 5 % orné půdy — úhory, krajinné prvky, ochranné pásy, biopásy) nebo varianta B (8 % včetně meziplodin a plodin vázajících dusík, z toho aspoň 3 % z varianty A).
+   Na trvalém travním porostu je podmínkou pastva nebo seč s odklizením biomasy do 31. července.
+2. **Prémiová** — 17 521,20 Kč/ha, ale jen na hektary vyčleněných neprodukčních ploch a prémiových ochranných pásů podél vody. Žadatel musí splnit základní úroveň a vyčlenit 7 % orné půdy jako neprodukční plochy (z toho aspoň 2 % takzvané superprémiové).
 
-Bez aspoň základního EKO režimu farma ztrácí významnou část přímých plateb — proto je v praxi 95+ % zemědělců v EKO režimu.
-
-Pro výpočet: rozdíl mezi základem a premium je 1100 Kč/ha. U farmy 200 ha = 220 000 Kč/rok navíc. Pokud zavedení premium praktik (osivo meziplodin, výsev, sečení biopásů) stojí <1100 Kč/ha, vyplatí se.
-
-V praxi výnos premium praktik jde nahoru (lepší půda, méně erozí ztracené orniční vrstvy) — net pozitivní i bez dotační prémie u dlouhodobé farmy.`,
+Od roku 2025 lze spolu s ekoplatbou žádat i o nové platby: údržba krajinných prvků (38 261,21 Kč/ha), vytváření nových krajinných prvků (10 512,72 Kč/ha), udržitelné hospodaření s živinami (201,49 Kč/ha) a pásové střídání plodin (9 490,65 Kč/ha).`,
     related: ['cap-2024', 'mezi-plodiny', 'biopasy'],
   },
   {
@@ -467,20 +463,20 @@ V praxi výnos premium praktik jde nahoru (lepší půda, méně erozí ztracen�
     alias: ['Land Parcel Identification System', 'evidence půdy'],
     kategorie: 'dotace',
     shortDef: 'LPIS je centrální evidence zemědělské půdy v ČR — každý pole/pozemek má unikátní LPIS blok, na který se vážou dotační žádosti a katastrální údaje.',
-    longDef: `LPIS (Land Parcel Identification System) je veřejná evidence způsobilé zemědělské půdy v ČR, kterou spravuje ÚKZÚZ a používá SZIF pro kontrolu dotací. Každý pozemek používaný k zemědělství má unikátní **LPIS blok** s vlastním kódem (např. "1234/56").
+    longDef: `LPIS (Land Parcel Identification System) je veřejná evidence způsobilé zemědělské půdy v ČR, jejímž správcem je Ministerstvo zemědělství; data aktualizuje SZIF, který LPIS používá i ke kontrole dotací. Každý pozemek používaný k zemědělství má unikátní **LPIS blok** s vlastním kódem (např. "1234/56").
 
 Co LPIS obsahuje:
 - **Hranice půdního bloku** v GIS — přesně podle DPB (díly půdních bloků).
 - **Kulturu** — orná půda, TTP (trvalý travní porost), sad, vinice, chmelnice, ostatní.
 - **Výměru** v ha.
-- **Zařazení do ANC** kategorie (horská H1–H5, OA, SV nebo mimo ANC).
+- **Zařazení do ANC** kategorie (horské H1–H5, ostatní O1–O3, specifické S nebo mimo ANC).
 - **Krajinné prvky** v bloku — solitérní strom, mez, biokoridor.
 - **Erozní ohrožení** — kategorie M (mírně), S (silně) ovlivňuje pravidla pro osetí.
 - **Vlastnické vztahy** — kdo je uživatelem (žadatel o dotace).
 
 LPIS data jsou veřejně dostupná: https://eagri.cz/public/web/mze/farmar/LPIS/ — kdokoliv vidí hranice a kulturu (ne vlastníka).
 
-Aktualizace LPIS: zemědělec hlásí změny (rozdělení, sloučení, změna kultury) ÚKZÚZ. Bez aktuálního LPIS nelze podat žádost o přímé platby ani investiční dotace.`,
+Aktualizace LPIS: změny ve využití půdy (rozdělení, sloučení, změna kultury) hlásí uživatel SZIF. Bez aktuálního LPIS nelze podat žádost o přímé platby ani investiční dotace.`,
     related: ['cap-2024', 'biss', 'dpb'],
     externalUrl: 'https://eagri.cz/public/web/mze/farmar/LPIS/',
   },
@@ -489,20 +485,18 @@ Aktualizace LPIS: zemědělec hlásí změny (rozdělení, sloučení, změna ku
     term: 'BISS',
     alias: ['Basic Income Support for Sustainability', 'Základní platba', 'SAPS'],
     kategorie: 'dotace',
-    shortDef: 'BISS je hlavní přímá platba CAP 2024 — ~2150 Kč/ha na všechnu způsobilou zemědělskou plochu. Nahradila dřívější SAPS.',
-    longDef: `BISS (Basic Income Support for Sustainability) je základní přímá platba CAP 2024 — nahrazuje dřívější SAPS (Single Area Payment Scheme). Vyplácí se na všechnu způsobilou zemědělskou plochu evidovanou v LPIS.
+    shortDef: 'BISS (základní podpora příjmu pro udržitelnost) je hlavní přímá platba SZP 2023–2027 na způsobilou zemědělskou plochu; v ČR za rok 2025 činila 1 759,91 Kč/ha. Navázala na dřívější jednotnou platbu na plochu SAPS.',
+    longDef: `BISS (Basic Income Support for Sustainability, česky základní podpora příjmu pro udržitelnost) je základní přímá platba SZP 2023–2027. Od roku 2023 navázala na jednotnou platbu na plochu (SAPS) a vyplácí se na způsobilou zemědělskou plochu evidovanou v LPIS.
 
-Sazba 2024: ~2150 Kč/ha. Pro farmu 100 ha = 215 000 Kč/rok jen BISS, plus další složky (CISS, EKO, ANC, VCS) dohromady 6 000–15 000 Kč/ha.
+Sazba za rok 2025: 1 759,91 Kč/ha (MZe, SZIF). Farma se 100 ha tak dostala 175 991 Kč jen z BISS. K tomu se přidává redistributivní platba (3 449,49 Kč/ha na prvních 150 ha), u účastníků celofaremní ekoplatby základní ekoplatba (1 578,37 Kč/ha) a případně další platby.
 
-Podmínky pro nárok:
-1. **Aktivní zemědělec** — pravidelná zemědělská činnost, ne jen "držet půdu".
-2. **Žádost přes Jednotnou žádost SZIF** — duben–červen, elektronicky přes Portál farmáře.
-3. **Min. výměra 1 ha** — pod tím se nárok neuplatňuje.
-4. **Kondicionality** — povinné praktiky GAEC + povinné požadavky řízení SMR (welfare, půda, voda).
+Podmínky nároku (Jednotná žádost 2025):
+1. **Aktivní zemědělec** a zemědělský podnikatel.
+2. **Půda evidovaná v LPIS** na žadatele nejméně od podání žádosti do 31. srpna a po celou tu dobu obhospodařovaná.
+3. **Minimální výměra 1 ha**.
+4. **Podmíněnost** — standardy DZES a povinné požadavky na hospodaření (PPH) po celý rok.
 
-Vyplácení: SZIF vyplácí v podzimních termínech (typicky říjen-prosinec) za předchozí kampaň. Při kontrole na místě a zjištění nesrovnalostí může být sankce 1–100 % i s vrácením předchozích plateb.
-
-Pro orientační výpočet vaší celkové dotace: [Kalkulačka dotací CAP](/kalkulacka/dotace-cap/).`,
+Žádá se v Jednotné žádosti přes Portál farmáře SZIF (za rok 2025 do 15. května). V roce 2025 vyplácel SZIF u vybraných podpor zálohy ve výši 70 %.`,
     related: ['cap-2024', 'lpis', 'eko-platba'],
   },
 
@@ -515,16 +509,16 @@ Pro orientační výpočet vaší celkové dotace: [Kalkulačka dotací CAP](/ka
     shortDef: 'DPB (Díl půdního bloku) je nejmenší jednotka v LPIS — souvislá plocha jednoho zemědělce s jednou kulturou. Tvoří základ pro žádost o dotace.',
     longDef: `Díl půdního bloku (DPB) je atomická jednotka evidence v LPIS — souvislá plocha v majetku nebo nájmu jednoho uživatele s jednou kulturou (orná půda, TTP, sad, vinice, chmelnice). Každý DPB má unikátní identifikátor a vlastní GIS polygon.
 
-Příklad: zemědělec hospodaří na 5 polích — každé pole = jeden DPB v LPIS. Pokud část pole je oseta cukrovkou a druhá pšenicí, jsou to dva DPB (stejná kultura "orná půda", ale s různými osevami).
+Příklad: zemědělec hospodaří na 5 polích — každé pole = jeden DPB v LPIS. Pokud je část pole oseta cukrovkou a část pšenicí, zůstává to jeden DPB s kulturou standardní orná půda; plodiny se v žádosti zakreslují zvlášť (zákres plodin).
 
 DPB je zásadní pro:
-- **Žádost o přímé platby** — výměra každého DPB se sčítá pro BISS/CISS.
-- **VCS** — některé VCS sazby se aplikují per DPB (citlivé sektory).
-- **ANC** — zařazení do ANC kategorie je per DPB.
-- **Erozní pravidla** — kategorie erozního ohrožení (M, S) je per DPB.
-- **EFA** — meziplodiny, biopásy se hlásí jako podíl DPB.
+- **Žádost o přímé platby** — výměry DPB se sčítají pro BISS a redistributivní platbu.
+- **CIS** (podpora vázaná na produkci) — plocha plodin se deklaruje na konkrétních DPB.
+- **ANC** — typ oblasti se určuje podle katastrálního území, ve kterém DPB leží.
+- **Erozní pravidla** — erozní ohroženost je v LPIS vymezena na DPB.
+- **Ekoplatba** — neprodukční plochy a ochranné pásy se zakreslují na DPB.
 
-Změny DPB hlásí uživatel přes Portál farmáře nebo na obecním úřadě (rozdělení, sloučení, změna kultury). Bez aktuálního DPB v LPIS nelze podat žádost.
+Změny DPB (rozdělení, sloučení, změna kultury) hlásí uživatel SZIF, například přes Portál farmáře. Bez aktuálního DPB v LPIS nelze podat žádost.
 
 Online: hranice a kultura všech DPB jsou veřejné na https://eagri.cz/public/web/mze/farmar/LPIS/.`,
     related: ['lpis', 'biss', 'cap-2024'],
@@ -537,12 +531,11 @@ Online: hranice a kultura všech DPB jsou veřejné na https://eagri.cz/public/w
     shortDef: 'TTP je trvalý travní porost — louka nebo pastvina, kde se 5+ let nepřesvál. Speciální kategorie v LPIS s vlastními pravidly pro dotace.',
     longDef: `Trvalý travní porost (TTP) je půdní blok osetý travinami nebo travinami s leguminózami, který nebyl pšenicován (orán a osetý jinou plodinou) déle než 5 let. V LPIS je TTP samostatná kultura, odlišná od orné půdy.
 
-Pravidla pro TTP v CAP 2024:
-- **Zákaz orby** — TTP nelze přeorat bez speciálního povolení (= ztráta statusu TTP, sankce za "trvalé znehodnocení permanent grassland").
-- **Citlivé TTP** v Natura 2000 nebo CHKO: úplný zákaz orby.
-- **Min. zatížení dobytkem** (pastevní TTP) — pokud TTP neslouží jako pastva, vyžaduje sečení 1–2× ročně.
-- **EKO režim** — TTP nepotřebuje meziplodiny ani rotaci (jsou per definice "trvalé") — automaticky kvalifikuje na základní EKO sazbu.
-- **ANC** — TTP v horských oblastech (H1–H5) má vysoké ANC sazby (až 7000 Kč/ha za horské pastviny).
+Pravidla pro TTP v ČR (2025):
+- **Ochrana TTP** — podle standardu DZES 1 se celostátní poměr TTP k zemědělské ploše nesmí snížit o víc než 5 % proti roku 2018; na environmentálně citlivých plochách (například 1. a 2. zóna CHKO, národní parky, pás do 12 m od vodního útvaru, silně erozně ohrožená půda) je změna TTP na jinou kulturu zakázaná.
+- **Natura 2000** — podle DZES 9 tam environmentálně citlivé TTP nelze přeměnit ani zorat.
+- **Ekoplatba** — na TTP vyžaduje pastvu nebo seč s odklizením biomasy do 31. července (u dílů ležících aspoň z poloviny v oblasti H1 do 31. srpna).
+- **ANC** — nejvyšší sazba je 216 EUR/ha (oblast H1, podnik s převažující živočišnou výrobou; nařízení vlády č. 61/2023 Sb.).
 
 V ČR je ~25 % zemědělské plochy v TTP (cca 900 000 ha). Hlavně v horských a podhorských oblastech (Jihočeský, Plzeňský, Vysočina, Zlínský, Moravskoslezský kraj).
 
@@ -635,7 +628,7 @@ Olej: hydraulický + převodový společný (UTTO — Universal Tractor Transmis
 
 V zemědělství je hektar základní jednotka pro:
 - **Výměru pole** — celá farma se měří v ha (50 ha, 200 ha, 1000 ha).
-- **Dotace** — Kč/ha (BISS 2150 Kč/ha, CISS 1450 Kč/ha).
+- **Dotace** — Kč/ha (v ČR za rok 2025 BISS 1 759,91 Kč/ha, redistributivní platba 3 449,49 Kč/ha).
 - **Výnos plodin** — t/ha nebo q/ha (1 q = 100 kg = 1 metrický cent).
 - **Spotřeba hnojiv** — kg/ha (200 kg NPK/ha).
 - **Dávkování postřiků** — l/ha (5 l Roundup/ha).
@@ -1441,31 +1434,20 @@ Kontroverzy:
   {
     slug: 'jednotna-zadost',
     term: 'Jednotná žádost',
-    alias: ['JŽ', 'kombinovaná žádost', 'SAPS žádost'],
+    alias: ['JŽ', 'žádost o přímé platby'],
     kategorie: 'dotace',
-    shortDef: 'Jednotná žádost je každoroční formulář podávaný na SZIF přes Portál farmáře, který sdružuje všechny přímé platby CAP — BISS, CISS, EKO, ANC, VCS i Mladý zemědělec.',
-    longDef: `Jednotná žádost (JŽ) je centralizovaný způsob, jakým zemědělec žádá o přímé platby CAP. Před 2014 se podávalo víc samostatných žádostí — JŽ sjednotila proces.
+    shortDef: 'Jednotná žádost je každoroční žádost podávaná SZIF přes Portál farmáře, ve které zemědělec žádá o přímé platby (BISS, redistributivní platba, ekoplatba, CIS, platba pro mladé zemědělce) i o další plošné podpory, například ANC.',
+    longDef: `Jednotná žádost (JŽ) je hlavní formulář, kterým zemědělec každý rok žádá o plošné podpory. Podává se výhradně elektronicky přes Portál farmáře SZIF.
 
-Co obsahuje:
-- **Identifikace žadatele** + IČO.
-- **LPIS bloky** užívané — výměra, kultura, plodiny.
-- **Žádost o BISS** (Základní platba) automaticky.
-- **Žádost o CISS** (Redistributivní) — automaticky, pokud výměra splňuje.
-- **EKO režim** — volba základní / premium + deklarace eko-praktik.
-- **ANC** (méně příznivé oblasti) — automaticky dle LPIS zařazení.
-- **VCS** (citlivé sektory) — deklarace ploch cukrové řepy, brambor, ovoce, zeleniny, chmele, lnu, bílkovin.
-- **Mladý zemědělec** bonus — deklarace věku a roku první žádosti.
-- **AEKO** smlouvy — víceletá agro-environmentální opatření.
+Co v ní žadatel deklaruje:
+- **Díly půdních bloků** z LPIS — výměru, kulturu a zákresy plodin.
+- **Přímé platby** — BISS, redistributivní platbu (CRISS), celofaremní ekoplatbu, platbu pro mladé zemědělce, nebo místo nich zjednodušenou platbu pro malé zemědělce.
+- **CIS** (podpora vázaná na produkci) — plochy chmele, ovoce, zeleniny, cukrové řepy, škrobových brambor a bílkovinných plodin a počty zvířat.
+- **ANC** a další plošná opatření; žádosti o AEKO a ekologické zemědělství se připravují na Portálu farmáře spolu s ní.
 
-Podání:
-- **Termín**: typicky 1. dubna – 15. května (s tolerancí do 9. června s 1 % sankcí/den).
-- **Místo**: elektronicky přes [Portál farmáře](https://eagri.cz/public/web/mze/farmar/portal-farmare/) — vyžaduje datovou schránku nebo certifikát.
-- **Asistence**: regionální pracoviště SZIF zdarma, soukromí poradci 2 000–10 000 Kč.
+Termín (2025): do 15. května. Za pozdní podání se platba krátí o 1 % za každý pracovní den; při zpoždění přes 25 kalendářních dnů (v roce 2025 po 9. červnu) se řízení zastaví a žadatel nedostane nic.
 
-Po podání:
-- **Květen–červen**: SZIF kontroluje deklarace vs LPIS, satelitní monitoring (Copernicus / SISAEC).
-- **Říjen–prosinec**: vyplácení (vyšší zálohy už v říjnu, doplatky v prosinci).
-- **Sankce**: za nesprávnou deklaraci, překročení limitů, porušení greeningu → 1–100 % srážka.`,
+Po podání SZIF žádosti kontroluje administrativně, na místě a satelitním monitoringem ploch (AMS) — výsledky vidí žadatel na portálu AMS. Sazby za rok 2025 schválil ministr zemědělství v říjnu 2025; u vybraných podpor SZIF vyplácel zálohy ve výši 70 %.`,
     related: ['biss', 'cap-2024', 'lpis'],
   },
   {
@@ -1473,55 +1455,49 @@ Po podání:
     term: 'AEKO (Agro-environmentální opatření)',
     alias: ['AEKO', 'agro-environmentální'],
     kategorie: 'dotace',
-    shortDef: 'AEKO jsou víceleté (5-leté) dobrovolné smlouvy s ekologicky šetrnými praktikami — pastva, biopásy, zatravnění, sady ad. Vyšší dotace než EKO režim.',
-    longDef: `AEKO (Agro-environmentálně klimatická opatření) je samostatný dotační program v CAP 2024, který odměňuje 5-leté závazky k ekologicky šetrným praktikám. Vyšší sazby než EKO režim, ale tvrdší pravidla a sankce za porušení.
+    shortDef: 'AEKO (agroenvironmentálně-klimatická opatření) jsou dobrovolné pětileté závazky k šetrnému hospodaření — zatravňování orné půdy, péče o extenzivní travní porosty, biopásy, meziplodiny, krajinotvorné sady a další. V ČR je upravuje nařízení vlády č. 80/2023 Sb.',
+    longDef: `AEKO (agroenvironmentálně-klimatická opatření) jsou intervence II. pilíře Strategického plánu SZP 2023–2027. Žadatel se zavazuje na pět let a každý rok pak žádá o platbu. Sazby stanoví nařízení vlády č. 80/2023 Sb. v EUR na hektar; vyplácí se v Kč (za rok 2025 kurzem 25,185 CZK/EUR).
 
-Hlavní AEKO opatření v ČR 2024:
-- **Ošetřování travních porostů (TTP)** — sečení v pozdějších termínech (po hnízdění ptáků), 2 100–6 000 Kč/ha podle subtypu.
-- **Biopásy** — kvetoucí směsky na poli, ~10 000 Kč/ha (víc než EFA).
-- **Biokoridor** — souvislé linie krajinné zeleně, 8 000 Kč/ha.
-- **Ekologické zemědělství (EZ)** — certifikované bio, dodatečné sazby na hektar podle plodiny.
-- **Trvalá pastva** — 2 800–5 200 Kč/ha podle ANC kategorie.
-- **Vyšší zatravnění orné půdy** — převod orné na TTP, kompenzace ztracených tržeb.
-- **Sady extensivních ovocných druhů** — 5 200 Kč/ha.
+Hlavní podopatření a sazby za rok 2025 (Metodika AEKO 2025):
+- **Zatravňování orné půdy** — běžnou směsí 312 EUR/ha, druhově bohatou směsí 348 EUR/ha, dráhy soustředěného odtoku 482 EUR/ha; regionální směs 1 114 EUR/ha v prvním roce a 237 EUR/ha od druhého roku.
+- **Ošetřování extenzivních travních porostů** — 91–691 EUR/ha podle typu porostu (obecná péče o louky a pastviny 91 EUR/ha, trvale podmáčené a rašelinné louky 691 EUR/ha).
+- **Pěstování meziplodin** — 152–154 EUR/ha.
+- **Biopásy** — 597–676 EUR/ha.
+- **Ochrana čejky chocholaté** — 630 EUR/ha.
+- **Druhově bohaté pokrytí orné půdy** — 417 EUR/ha.
+- **Krajinotvorné sady** — 116 EUR/ha.
+- **Integrovaná produkce** ovoce (460 EUR/ha), révy vinné (334 nebo 672 EUR/ha) a zeleniny, jahodníku či brambor (462 EUR/ha).
+
+Ekologické zemědělství se řídí vlastním nařízením vlády, není podopatřením AEKO. Při souběhu s ekoplatbou a v 1. zóně CHKO nebo v národním parku se některé sazby AEKO snižují.
 
 Pravidla:
-- **5-letá smlouva** — porušení = vrácení dotace za všechny předchozí roky.
-- **Inkompatibility** — některé subtypy nelze kombinovat (např. AEKO TTP + intenzivní pastva).
-- **Kontrola na místě** — SZIF inspekce 5–10 % žadatelů ročně + dálkový průzkum.
-
-Pro CZ farmáře:
-- AEKO se vyplatí, pokud má zemědělec dlouhodobou strategii (zaměření na bio, krajinotvorbu, ochranu vodních zdrojů).
-- Pro klasickou intenzivní farmu bývá ROI horší než EKO premium (víc paperwork, vyšší riziko sankcí).
-- Žadatelům doporučujeme nejprve podat **EKO režim premium** a pak postupně přidávat AEKO subtypy podle možností.`,
+- **Pětiletý závazek** — žádost o zařazení se podává na Portálu farmáře do 15. května prvního roku.
+- **Podmínky** se liší podle podopatření (termíny sečí, zákaz hnojiv nebo přípravků na ochranu rostlin, předepsané osevní směsi); za porušení se platba krátí nebo neposkytne.`,
     related: ['cap-2024', 'eko-platba', 'biopasy'],
   },
   {
     slug: 'gaec',
     term: 'GAEC (Dobrý zemědělský a environmentální stav)',
-    alias: ['GAEC', 'kondicionality', 'cross-compliance'],
+    alias: ['GAEC', 'DZES'],
     kategorie: 'regulace',
-    shortDef: 'GAEC jsou povinné minimální standardy pro každého žadatele o přímé platby CAP — pravidla pro půdu, vodu, krajinu. Porušení = sankce.',
-    longDef: `GAEC (Good Agricultural and Environmental Conditions, česky Dobrý zemědělský a environmentální stav) je sada povinných standardů, které musí splnit každý žadatel o přímé platby CAP. Předtím se jim říkalo "cross-compliance" / "kondicionality".
+    shortDef: 'GAEC (v ČR DZES — standardy dobrého zemědělského a environmentálního stavu) jsou povinné standardy pro každého příjemce přímých plateb a dalších plošných podpor. Spolu s povinnými požadavky na hospodaření tvoří podmíněnost; porušení vede ke krácení plateb.',
+    longDef: `GAEC (Good Agricultural and Environmental Conditions, česky standardy dobrého zemědělského a environmentálního stavu — DZES) jsou součástí podmíněnosti, kterou musí dodržet každý příjemce přímých plateb, plateb AEKO, ANC a Natura 2000. Do roku 2022 se systém nazýval kontrola podmíněnosti (cross-compliance).
 
-GAEC standardy v ČR 2024:
-- **GAEC 1**: Zachování trvalých travních porostů — zákaz orby TTP v Natura 2000 a celostátně nepřekročit 5% pokles z 2018.
-- **GAEC 2**: Ochrana mokřadů a rašelinišť — zákaz odvodňování + omezení orby v záplavovém území.
-- **GAEC 3**: Zákaz vypalování strniště — strniště lze jen mulčovat / zaorat / odstranit balíkem.
-- **GAEC 4**: Ochranné pásmy podél vodotečí — min. 3 m bez hnojiv/pesticidů, podél vodárenských zdrojů 25 m.
-- **GAEC 5**: Tank management proti erozi — povinné protierozní pásy / krycí plodiny na svažité orné nad určitým sklonem.
-- **GAEC 6**: Minimální půdní pokryv — strniště nebo krycí plodina od 1.11. do 28.2.
-- **GAEC 7**: Střídání plodin — max 75 % výměry stejnou plodinou + zákaz monokultury 4+ let.
-- **GAEC 8**: Neproduktivní plochy (EFA) — min. 7 % výměry v krajinných prvcích, biopásech, meziplodinách.
-- **GAEC 9**: Zákaz orby Natura 2000 lokalit.
+Standardy DZES v ČR (2025, nařízení vlády č. 73/2023 Sb.):
+- **DZES 1**: Zachování poměru trvalých travních porostů k zemědělské ploše — celostátně nejvýš o 5 % méně než v roce 2018; na environmentálně citlivých plochách zákaz změny TTP na jinou kulturu.
+- **DZES 2**: Ochrana mokřadů a rašelinišť (od 1. 1. 2025) — na půdě bohaté na uhlík zákaz změny TTP na jinou kulturu, na orné půdě mimo jiné pokryv po sklizni do 31. prosince.
+- **DZES 3**: Zákaz vypalování strnišť na orné půdě.
+- **DZES 4**: Ochranné pásy u vod — aspoň 3 m bez hnojiv a 3 m bez přípravků na ochranu rostlin od břehové čáry; na dílech se sklonitostí nad 7° pás 25 m bez hnojiv s rychle uvolnitelným dusíkem.
+- **DZES 5**: Ochrana před erozí — na erozně ohrožených plochách omezení plodin s nízkou ochrannou funkcí a povinné půdoochranné technologie.
+- **DZES 6**: Minimální pokryv půdy — po sklizni hlavní plodiny aspoň do 31. října na 80 % standardní orné půdy (ozim, meziplodina, strniště, podmítnuté strniště bez orby).
+- **DZES 7A**: Střídání plodin — na aspoň 40 % orné půdy jiná hlavní plodina než v předchozím roce a na celé výměře změna aspoň jednou za 4 roky.
+- **DZES 7B**: Omezení plochy jedné plodiny na 30 ha (na silně erozně ohrožené půdě na 10 ha).
+- **DZES 8**: Zachování krajinných prvků a zákaz ořezu dřevin od 1. dubna do 31. října; povinný podíl neprodukčních ploch od roku 2024 v podmíněnosti není (zůstal v ekoplatbě).
+- **DZES 9**: Zákaz přeměny a orby environmentálně citlivých TTP v lokalitách Natura 2000.
 
-Sankce za porušení:
-- **Drobné** (1× nesplněný GAEC, opraveno do termínu): 1 % srážky.
-- **Standardní**: 3 % srážky z BISS + EKO.
-- **Vážné** (úmyslné porušení): 5–15 % srážky.
-- **Opakované**: 5 % + ztráta jiných dotací.
+Krácení plateb za porušení (2025): zpravidla 3 %, u méně závažného porušení 1 %, u závažného 5 %; při opakovaném porušení 10 % a při úmyslném 15–100 %. Žadatelé s výměrou do 10 ha jsou od roku 2024 z kontrol a sankcí podmíněnosti vyjmuti.
 
-Kontroly: 1–5 % žadatelů ročně formou fyzické inspekce + satelitní monitoring (Copernicus SISAEC, identifikuje porušení GAEC 5/6/7 z dálky).`,
+Kontroly probíhají na místě u vybraných žadatelů; od roku 2023 je doplňuje satelitní monitoring ploch (AMS).`,
     related: ['cap-2024', 'biss', 'mezi-plodiny'],
   },
   {
@@ -1539,14 +1515,12 @@ Dva typy lokalit v ČR:
 Celkem ~14 % výměry ČR. Hlavní lokality: Krkonoše, Šumava, Třeboňsko, Pálava, Beskydy, Krušné hory, Moravský kras.
 
 Pro zemědělce:
-- **Zákaz orby TTP** (trvalé travní porosty) v Natura 2000 — striktnější než celostátní GAEC 1.
-- **Omezení hnojení a pesticidů** — některé EVL zákaz syntetických N, jen organické.
-- **Termíny sečení** — typicky až po 15.6. (po hnízdění chřástala polního).
-- **Povinný plán péče** — souhlas Správy CHKO před zásadní změnou.
+- **Zákaz přeměny a orby TTP** — environmentálně citlivé trvalé travní porosty v lokalitách Natura 2000 nelze přeměnit ani zorat (standard podmíněnosti DZES 9).
+- **Další omezení** (hnojení, termíny sečí) vyplývají z ochrany konkrétní lokality a ze stanovisek orgánů ochrany přírody.
 
-Bonusové dotace:
-- **AEKO subtypy** specificky pro Natura 2000 — vyšší sazby (až +30 %).
-- **Kompenzační platba** za ztrátu výnosů z omezení (typicky 1 000–3 000 Kč/ha).
+Platby v ČR:
+- **Platba Natura 2000 na zemědělské půdě** (nařízení vlády č. 62/2023 Sb.) — na trvalý travní porost 95 EUR/ha v 1. zóně CHKO a 56 EUR/ha v národním parku, vyplácí se v Kč.
+- **AEKO** — například titul ochrana chřástala polního; v 1. zóně CHKO a v národním parku se některé sazby AEKO naopak snižují.
 
 Konflikt: zemědělec vs Správa CHKO může být reálný — vždy si před zakoupením/nájmem půdy v Natura 2000 zkontrolujte LPIS a plán péče lokality (často kompletně mění hospodářský potenciál).`,
     related: ['cap-2024', 'lpis', 'aeko'],
@@ -1610,14 +1584,14 @@ Důsledky:
 - **Eutrofizace vod** — splavený fosfor → květ řas v Brněnské přehradě, Vranově atd.
 - **Zaplavení obcí** — bahno z polí ucpává kanalizace.
 
-Ochrana proti vodní erozi (povinná podle GAEC 5):
+Ochrana proti vodní erozi (na erozně ohrožených plochách ji vyžaduje standard podmíněnosti DZES 5):
 - **Protierozní pásy** — pásy plodin střídavě s TTP/meziplodinou napříč svahem.
 - **Strip-till / no-till** — bez orby, kořeny drží půdu.
 - **Konturní orba** — orba podél vrstevnic, ne po spádnici.
-- **Meziplodiny** přes zimu — povinné na erozně ohrožených DPB.
+- **Meziplodiny** přes zimu — chrání půdu po sklizni.
 - **Vegetační pásy** podél vodotečí.
 
-Pokud zemědělec nesplní GAEC 5 → 3–15 % sankce z BISS + EKO.`,
+Porušení DZES 5 vede ke krácení plateb podle pravidel podmíněnosti — v ČR (2025) zpravidla o 3 %, při opakování o 10 %, při úmyslném porušení o 15–100 %.`,
     related: ['mezi-plodiny', 'organicka-hmota', 'gaec'],
   },
 
@@ -1823,7 +1797,7 @@ Nevýhody:
 V CZ:
 - Hlavně **Jižní Morava + Vysočina** (suché oblasti) — no-till funguje nejlépe v aridních podmínkách.
 - **Severní Čechy + horské oblasti** — orba dominantní (chladnější, vlhčí klima).
-- **EU subvence** preferují no-till přes EKO režim — premium 1100 Kč/ha navíc.
+- **Dotace a pravidla**: bezorebná technologie patří mezi půdoochranné technologie, kterými lze na erozně ohrožených plochách splnit standard DZES 5 (2025). Samostatná platba za no-till mezi přímými platbami ani podopatřeními AEKO za rok 2025 není.
 
 Doporučujeme zkusit no-till na **části pole 2–3 sezóny** před plnou konverzí — výnosy mohou v prvním roce klesnout o 5–10 %, ale stabilizují se a dlouhodobě (5+ let) výrazně rostou.`,
     related: ['orba', 'eroze-pudy'],
@@ -1885,10 +1859,10 @@ Někdy přidáno **5. místo: vojtěška / jetel** (3 roky bez výsevu, regeneru
 - **Zařadit luskovinu** — sója, hrách, vikve = fixují dusík, šetří hnojivo.
 - **Okopanina (cukrovka, brambory)** = "čistič" — narušuje cykly plevele.
 
-**CAP 2024 pravidla**:
-- **GAEC 7**: zákaz monokultury 4+ let za sebou.
-- Maximum 75 % výměry stejnou plodinou v jednom roce.
-- **EKO premium** vyžaduje **min. 4 různé plodiny** na orné půdě.
+**Pravidla v ČR (2025)**:
+- **DZES 7A**: na aspoň 40 % orné půdy jiná hlavní plodina než v předchozím roce; na celé výměře změna plodiny aspoň jednou za 4 roky.
+- **DZES 7B**: plocha jedné plodiny nejvýš 30 ha (na silně erozně ohrožené půdě 10 ha).
+- **Ekoplatba**: diverzifikace — nad 10 ha orné půdy aspoň 2 plodiny, nad 30 ha aspoň 3, nad 150 ha aspoň 4; jedna plodina nejvýš na 75 % orné půdy.
 
 **Konsekvence porušení**:
 - **Kratší rotace** (např. pšenice → pšenice → kukuřice → pšenice) = vyšší výnosy krátkodobě, ale za 5–10 let pokles výnosů o 15–25 % kvůli půdním chorobám.
@@ -2346,7 +2320,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 - **Náklady**: ~25 000 Kč/ha (osivo 4 000 + hnojiva 8 000 + postřiky 6 000 + mech. 7 000).
 - **Marže**: 20 000–30 000 Kč/ha = velmi atraktivní vs obiloviny.
 
-**VCS dotace**: NENÍ (řepka je v EU dlouhodobě konkurenčně silná).
+**Podpora vázaná na produkci (CIS)**: na řepku v ČR není (2025).
 
 **Trh**:
 - **Vykupují**: Komodita Praha, Granaria, Glencore, Agrofert.
@@ -2362,7 +2336,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     alias: ['sója', 'soybean', 'soja'],
     kategorie: 'plodiny',
     shortDef: 'Sója je nejvýznamnější luskovina světa, v ČR menšinová plodina (15–25 tisíc ha) ale rostoucí. Bohatá na bílkoviny (40 %), váže atmosférický N.',
-    longDef: `Sója luštinatá (Glycine max) je nejvýznamnější olejnatá luskovina na světě. V ČR rostoucí plodina (z 5 000 ha v 2010 na ~20 000 ha v 2024), podporovaná VCS dotací 2 800 Kč/ha.
+    longDef: `Sója luštinatá (Glycine max) je nejvýznamnější olejnatá luskovina na světě. V ČR rostoucí plodina (z 5 000 ha v 2010 na ~20 000 ha v 2024), podporovaná mimo jiné podporou vázanou na produkci pro bílkovinné plodiny (CIS, 2025: 1 449,39 Kč/ha).
 
 **Pěstování**:
 - **Setí**: konec dubna – začátek května, půda min. 8 °C.
@@ -2381,14 +2355,14 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 - **20 % oleje** — sójový olej pro potraviny i biopaliva.
 - **Cenovka** (2024): 12 000–16 000 Kč/t.
 
-**Ekonomika** (3 t/ha × 14 000 = 42 000 Kč tržba + 2 800 Kč VCS):
-- Tržba ~44 800 Kč/ha.
+**Ekonomika** (3 t/ha × 14 000 = 42 000 Kč tržba + 1 449 Kč CIS za rok 2025):
+- Tržba ~43 450 Kč/ha.
 - Náklady ~22 000 Kč/ha (osivo + inokulace + hnojiva + postřiky + mech).
-- **Marže ~22 000 Kč/ha** = porovnatelné s řepkou, ale nižší riziko.
+- **Marže ~21 000 Kč/ha** = porovnatelné s řepkou, ale nižší riziko.
 
 **Proč v CZ rostou plochy**:
 - **EU snaha o nezávislost na importu sóji** z Brazílie/Argentiny (kde se odlesní pro pěstování).
-- **VCS bonus 2 800 Kč/ha** = +30 % výnos.
+- **CIS pro bílkovinné plodiny** (2025: 1 449,39 Kč/ha).
 - **Vazba N** zlepšuje strukturu půdy pro následnou plodinu.
 - **Tržní cena** rostoucí kvůli krmnému průmyslu (sójový šrot pro prasata, drůbež).
 
@@ -2437,7 +2411,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 **Trh**:
 - **Cenovka senáž v balíkách**: 1 800–3 000 Kč/t (regionální).
 - **Cenovka granulát**: 4 000–6 000 Kč/t.
-- **CAP**: vojtěška kvalifikuje na EKO režim (zelená plocha) + AEKO travní porosty.
+- **Dotace v ČR (2025)**: vojtěška patří mezi bílkovinné plodiny s podporou vázanou na produkci (CIS, 1 449,39 Kč/ha) a v ekoplatbě se může jako plodina vázající dusík započítat do neprodukčních ploch varianty B.
 
 **Důležité plemena**: Verdor (FR), Power (US), Niagara (FR), domácí Kometa (CZ).`,
     related: ['osevni-postup', 'organicka-hmota', 'mezi-plodiny'],
@@ -2570,45 +2544,29 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     term: 'SP SZP 2023–2027 (Strategický plán)',
     alias: ['Strategický plán SZP', 'Common Agricultural Policy Strategic Plan'],
     kategorie: 'dotace',
-    shortDef: 'SP SZP 2023–2027 je národní implementace EU Společné zemědělské politiky pro ČR. Definuje všechny dotační tituly (přímé platby, AEKO, investice).',
-    longDef: `Strategický plán Společné zemědělské politiky (SP SZP) je závazný dokument schválený EU komisí pro každý členský stát zvlášť pro období 2023–2027. **Pro ČR** definuje rozpočet ~110 mld Kč pro 5leté období a všechny dotační tituly.
+    shortDef: 'Strategický plán SZP 2023–2027 je národní provedení Společné zemědělské politiky EU v ČR. Zahrnuje přímé platby, intervence v sektorech a rozvoj venkova (AEKO, ANC, investice); administruje ho SZIF.',
+    longDef: `Strategický plán Společné zemědělské politiky (SP SZP) je dokument, který každý členský stát předkládá Evropské komisi na období 2023–2027. Komise český plán schválila 24. listopadu 2022 a od té doby schválila několik jeho změn. Celkový rozpočet plánu je přibližně 8 mld EUR, z toho asi 5,6 mld EUR z rozpočtu EU (stručný přehled Evropské komise, 2026).
 
-**Struktura SP SZP ČR**:
+**Přímé platby (I. pilíř)** — sazby za rok 2025:
+- **BISS** (základní platba) 1 759,91 Kč/ha
+- **CRISS** (redistributivní platba) 3 449,49 Kč/ha na prvních 150 ha — připadá na ni 23 % obálky přímých plateb
+- **Celofaremní ekoplatba** základní 1 578,37 Kč/ha, prémiová 17 521,20 Kč/ha jen na neprodukční plochy — ekoschémata tvoří 30 % obálky
+- **Platba pro mladé zemědělce** 2 378,75 Kč/ha (nejvýš 90 ha)
+- **Platba pro malé zemědělce** 6 883,97 Kč/ha (nejvýš 4 ha)
+- **CIS** (podpora vázaná na produkci) — sazby podle komodity
 
-### Pilíř I — Přímé platby (~50 % rozpočtu):
-- **BISS** (Základní platba) ~2150 Kč/ha
-- **CISS** (Redistributivní) ~1450 Kč/ha pro prvních 150 ha
-- **EKO režim** základní 1300 + premium +1100 Kč/ha
-- **ANC** (méně příznivé) 2000–4500 Kč/ha
-- **Mladý zemědělec** +1500 Kč/ha bonus
-- **VCS** (citlivé sektory) — variabilní
-
-### Pilíř II — Rozvoj venkova (PRV):
-- **AEKO** smlouvy (5-leté agro-environmentální)
-- **Investiční tituly** (Intervence 33.73, 37.73, ad.)
-- **LFA** (Less Favoured Areas — překryto s ANC)
-- **Welfare zvířat** zvláštní platby
-- **Bio prémie** pro ekologické zemědělství
-- **Pojištění úrody** (50 % spoluúčast státu)
-
-**Klíčové intervence** (číselné označení v SP SZP):
-- **33.73** — Investice do zemědělských podniků (technika, stavby).
-- **37.73** — Technologie snižující emise (hnojení s nižším NH₃).
-- **47.73** — Pozemkové úpravy.
-- **51.73** — Mladí zemědělci — jednorázová podpora na zahájení.
-- **75.73** — AEKO travní porosty.
+**Rozvoj venkova (II. pilíř)**:
+- **AEKO** — pětileté agroenvironmentálně-klimatické závazky
+- **ANC** — platby pro oblasti s přírodními omezeními (H1–H5, O1–O3, S)
+- **Natura 2000 na zemědělské půdě** a **ekologické zemědělství**
+- **Projektové intervence** — například 33.73 Investice do zemědělských podniků, 37.73 Technologie snižující emise GHG a NH₃, 46.73 Pozemkové úpravy, 49.75 Zahájení činnosti mladého zemědělce
 
 **Dokumentace pro žadatele**:
-- **Hlavní dokument**: https://eagri.cz/web/mze/dotace/sp-szp-2023-2027
-- **SZIF Pravidla** pro každý titul zvlášť — vždy ověřit aktuální verzi (mění se ročně).
-- **Portál farmáře** — elektronické podání všech žádostí.
+- **Plán a jeho změny**: eAGRI (Ministerstvo zemědělství)
+- **Pravidla a výzvy**: SZIF — pro každou intervenci zvlášť, verze se mění
+- **Portál farmáře** — elektronické podání žádostí
 
-**Pro CZ farmáře**:
-- **Jednotná žádost** (duben–červen) pokrývá většinu přímých plateb.
-- **Investiční dotace** mají vlastní kola (typicky 2× ročně).
-- **AEKO smlouvy** se zavírají na 5 let — vstup je dlouhodobé rozhodnutí.
-
-**Kontroly**: SZIF kontroluje 1–5 % žadatelů na místě + satelitní monitoring (Copernicus SISAEC) celého LPIS každý rok.`,
+**Kontroly**: SZIF kontroluje žádosti administrativně, na místě a od roku 2023 satelitním monitoringem ploch (AMS).`,
     related: ['cap-2024', 'biss', 'aeko', 'jednotna-zadost'],
   },
   {
@@ -2616,45 +2574,31 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     term: 'Intervence 33.73 (Investice do zemědělských podniků)',
     alias: ['Investice do zemědělství', 'PRV investice', 'I.33.73'],
     kategorie: 'dotace',
-    shortDef: 'Intervence 33.73 je hlavní investiční dotace v ČR — pokrývá nákup techniky, stavby, technologie. Sazba 50–60 % způsobilých výdajů, 10 % bonus pro mladé zemědělce.',
-    longDef: `Intervence 33.73 je nejdůležitější investiční dotace pro CZ zemědělce. Kryje:
+    shortDef: 'Intervence 33.73 Investice do zemědělských podniků je investiční dotace ze Strategického plánu SZP 2023–2027 na stavby, technologie a techniku. V 6. kole (Pravidla z roku 2025) činí základní míra podpory 40 %, s navýšením pro mladé začínající a ekologické zemědělce nejvýš 60 %.',
+    longDef: `Intervence 33.73 je hlavní investiční dotace pro zemědělské podniky v ČR. Vyhlašuje se v kolech příjmu žádostí; podmínky, způsobilé výdaje a bodování určují Pravidla pro dané kolo.
 
-**Způsobilé výdaje**:
-- **Stroje a technika** — traktory, kombajny, secí stroje, postřikovače, lisy, sklízecí mlátičky, manipulátory.
-- **Stavby pro živočišnou výrobu** — stáje, dojírny, sila.
-- **Stavby pro skladování** — silá, šrotovny, mrazírny.
-- **Technologie precise farming** — GPS, ISOBUS, variable rate aplikace.
-- **Závlahy** — investice do zavlažovacích systémů.
+**Míra podpory** (6. kolo, Pravidla ve verzi z 30. 7. 2025):
+- **40 %** výdajů, ze kterých se stanoví dotace.
+- **+10 %** pro mladé začínající zemědělce.
+- **+10 %** pro žadatele registrované v ekologickém zemědělství, kteří nehospodaří souběžně konvenčně.
+- Nejvýš **60 %** způsobilých výdajů.
 
-**Sazby dotace** (procento ze způsobilých výdajů, 2024):
-- **50 %** — rostlinná výroba.
-- **60 %** — živočišná výroba (welfare bonus).
-- **+10 % pro mladé zemědělce** (do 40 let, prvních 5 let od zahájení činnosti).
-- **+10 % pro zóny ANC** (méně příznivé oblasti).
-- **+5 % pro spolupráci** (mezi farmami / s výzkumem).
-
-Maximální sazba kumulovaně: **80 % způsobilých výdajů**.
-
-**Omezení**:
-- **Mobilní stroje** (traktory, kombajny) — max 49 % způsobilých výdajů z celého projektu. Zbytek musí být stavby / pevná technologie.
-- **Strop dotace per projekt**: 1–10 mil. Kč podle velikosti farmy.
-- **Strop dotace per žadatel za období**: 30 mil. Kč 2023–2027.
+**Limity** (6. kolo): nejvýš 25 mil. Kč dotace na projekt a 200 mil. Kč na podnik nebo skupinu propojených podniků za období 2023–2027.
 
 **Postup žádosti**:
 1. **Příprava projektu** — návrh, podnikatelský plán, ekonomické vyhodnocení.
-2. **Vyhlášení kola** (typicky 2× ročně) — SZIF zveřejní podmínky.
-3. **Podání** přes Portál farmáře v rámci 3-4 týdenního okna.
-4. **Hodnocení** (3–6 měsíců) — bodové hodnocení projektu.
-5. **Rozhodnutí** — pozitivní / odložené / zamítnuté.
-6. **Realizace** (1–3 roky) — nákup techniky, stavba, dokumentace.
-7. **Závěrečná žádost o platbu** — vyplacení dotace po prokázání investice.
+2. **Vyhlášení kola** — SZIF zveřejní Pravidla a termín příjmu.
+3. **Podání** přes Portál farmáře.
+4. **Hodnocení** — administrativní kontrola a bodování projektu.
+5. **Rozhodnutí** o schválení.
+6. **Realizace** — nákup techniky nebo stavba.
+7. **Žádost o platbu** — vyplacení dotace po prokázání investice.
 
 **Praktické tipy**:
-- **Konzultant** specializovaný na PRV výrazně zvyšuje šanci schválení (3 000–15 000 Kč za projekt). Ve smlouvě obvykle 2–5 % z dotace = úspěšnostní bonus.
-- **Časování**: kupujte techniku až **po schválení dotace**, ne před. Před schválení = neuznatelný výdaj.
-- **Dokumentace**: faktury, smlouvy, fotodokumentace průběhu, ekonomická prokazatelnost.
+- **Časování**: výdaje plánujte podle Pravidel daného kola — výdaj vzniklý mimo stanovené období bývá nezpůsobilý.
+- **Dokumentace**: faktury, smlouvy, doklady o úhradě, fotodokumentace průběhu.
 
-**Riziko**: nesplnění podmínek (např. provozování stroje min. 5 let, kvalita stavby) = **vrácení dotace s úroky**. Standardně auditováno SZIF v posledních letech.`,
+**Riziko**: nesplnění podmínek (například doby udržitelnosti projektu) může vést k vrácení dotace.`,
     related: ['sp-szp-2023-2027', 'cap-2024', 'aeko'],
   },
   {
@@ -2804,7 +2748,7 @@ V CZ 2024: cca **70 % farem fishbone/paralel**, **20 % karusel/rapid exit**, **1
     term: 'Úhor',
     alias: ['úhorování', 'ladina', 'pasivní úhor'],
     kategorie: 'historie',
-    shortDef: 'Úhor je dočasně neoseté pole, které se nechává odpočinout, regenerovat živiny a potlačit plevele. V historickém trojhonném systému ležela 1/3 polí ladem každý rok. Dnes přežívá jako „zelený úhor" pro greening a EFA.',
+    shortDef: 'Úhor je dočasně neoseté pole, které se nechává odpočinout, regenerovat živiny a potlačit plevele. V historickém trojhonném systému ležela 1/3 polí ladem každý rok. Dnes se úhor využívá například k plnění neprodukčních ploch celofaremní ekoplatby.',
     longDef: `Úhor (od slovesa „úhořit" = odpočívat) je pole, které se po sklizni **dočasně neosévá**, aby si půda mohla regenerovat živiny, vodu a strukturu. Historicky byl základní součástí evropského zemědělství až do 19. století.
 
 **Trojhonné hospodářství** (= třípolní systém, viz [[trojhonny-system]]):
@@ -2820,14 +2764,13 @@ Třetina polí každý rok ležela ladem. Bez minerálních hnojiv to byl jedin�
 **Konec úhoru:** Mineralní hnojiva (Liebig 1840s, syntéza čpavku Haber-Bosch 1909) odstranila nutnost úhoru. Norfolský 4-honný systém (vojtěška-pšenice-řepa-ječmen) bez úhoru dramaticky zvýšil produktivitu — anglická zemědělská revoluce.
 
 **Moderní typy úhoru:**
-- **Zelený úhor** (greening, EFA — Ecological Focus Area) — povinný v rámci CAP od 2015. Mez plodina, květinový pás nebo prostě neoseté ladem s povolenou seč.
+- **Zelený a nektarodárný úhor** — v ČR jediné druhy úhoru, které se v celofaremní ekoplatbě (2025) započítávají do neprodukčních ploch; zelený úhor je dvouletý závazek. V letech 2015–2022 se úhor mohl počítat do ploch v ekologickém zájmu (EFA) v rámci greeningu.
 - **Černý úhor** — orané, neoseté pole. Dnes spíše ekologicky problematický (eroze).
 - **Aktivní úhor** — pásy nektarodárných rostlin pro opylovače, biopásy, biopas (viz [[biopasy]]).
-- **Půda v zařazení** — pole vyjmuté z osevu na 1-2 roky kvůli regulaci trhu.
 
-V CZ dnes:
-- Z dotace BISS lze do **5 % výměry hospodaření** vykázat jako úhor (EFA), počítá se za "klimatický příspěvek".
-- Plocha úhoru v CZ 2024: ~50 000 ha (1,2 % orné půdy).
+V ČR dnes:
+- Úhor (pro ekoplatbu jen nektarodárný nebo zelený) se započítává do neprodukčních ploch — v základní ekoplatbě (2025) jich musí být aspoň 5 % orné půdy (varianta A).
+- Na úhoru platí od 1. února do 15. srpna zákaz sklizně a pastvy (podmínky ekoplatby 2025).
 
 Etymologie: praslovanské *ǫgorъ* (= pole nechané ladem). Související slova: **ladina** (úhor po více letech), **honitba** (revír na úhoru), **pole** (kontrast: pole = obdělávané, úhor = ne).
 
@@ -2884,7 +2827,7 @@ Viz též [[uhor]], [[osevni-postup]] (moderní), [[mez]], [[lan]].`,
     term: 'Mez',
     alias: ['mezní pás', 'mezník', 'remízek'],
     kategorie: 'historie',
-    shortDef: 'Mez je úzký travnatý nebo křovinatý pás oddělující sousední pole. Historicky vyznačovala hranice mezi vlastníky, dnes je ceněna pro biodiverzitu, ochranu proti erozi a v rámci CAP greening.',
+    shortDef: 'Mez je úzký travnatý nebo křovinatý pás oddělující sousední pole. Historicky vyznačovala hranice mezi vlastníky, dnes je ceněna pro biodiverzitu, ochranu proti erozi a jako krajinný prvek v pravidlech SZP.',
     longDef: `Mez (od staročeského *meža* = hranice) je **úzký travnatý nebo křovinatý pás** mezi dvěma poli. Historicky to byl praktický předěl mezi vlastníky půdy (hranice plužiny) i ochrana proti splachu půdy.
 
 **Funkce historicky:**
@@ -2901,10 +2844,10 @@ JZD a státní statky **sceelovaly pole do obřích bloků** (často 50–200 ha
 - Změny mikroklimatu (sušší krajina, větru otevřená)
 
 **Návrat mezí 1990–dnes:**
-- **CAP greening / EFA**: meze, biopásy, květinové pásy se počítají jako Ecological Focus Area (3–5 % výměry).
-- **AEKO podopatření**: dotace za údržbu mezí (50–80 Kč/m délky/rok).
-- **Erozní kontrola** v erozně ohrožených oblastech (DPB) — GAEC 2 vyžaduje protierozní opatření, meze jsou jedním z nástrojů.
-- **Krajinotvorné prvky** — meze ze zákona chráněné (Zákon č. 114/1992 Sb.).
+- **Ekoplatba**: mez jako krajinný prvek se započítává do neprodukčních ploch celofaremní ekoplatby; od roku 2025 lze žádat i o platbu na údržbu krajinných prvků (2025: 38 261,21 Kč/ha) a na vytváření nových (10 512,72 Kč/ha).
+- **Greening (2015–2022)**: krajinné prvky včetně mezí se dřív počítaly do ploch v ekologickém zájmu (EFA).
+- **Podmíněnost**: krajinné prvky chrání standard DZES 8; proti erozi na ohrožených plochách platí DZES 5.
+- **Evidence** — mez je jedním z typů krajinných prvků evidovaných v LPIS (nařízení vlády č. 307/2014 Sb.).
 
 **Šířka mezí dnes:**
 - **Klasická mez** šíře 1–3 m mezi poli
@@ -3253,8 +3196,7 @@ Viz též [[no-till]], [[ctf]], [[mezi-plodiny]], [[organicka-hmota]], [[karbono
 
 **EU + ČR politika:**
 - **EU CRCF** (Carbon Removals Certification Framework) — nařízení 2024 nastavuje pravidla pro carbon credits ze zemědělství.
-- **Strategický plán SZP 2023–2027** zahrnuje **uhlíkové platby** v rámci EKO a AEKO.
-- **MZe ČR** v 2026 plánuje pilotní „uhlíkové dotace" pro farmy v no-till.
+- **Strategický plán SZP 2023–2027** podporuje ukládání uhlíku v půdě nepřímo — například podmínkou hospodaření s organickou hmotou v celofaremní ekoplatbě nebo zatravňováním orné půdy v AEKO.
 
 **Doporučená literatura:**
 - Lal, R. (2004) „Soil carbon sequestration impacts on global climate change and food security"
@@ -3311,9 +3253,8 @@ Pro úzce setou pšenici (rozteč 12,5 cm) **strip-till nemá smysl** — celá 
 - **John Deere 2510H** (US) — populární v USA, méně v EU
 
 **V ČR**: do roku 2020 marginálni (< 1 % výměry), 2024 už ~5–8 % výměry kukuřice a řepky. Růst poháněný:
-- AEKO platby za snížené zpracování půdy
 - Vysoká cena nafty 2022+
-- GAEC 5 (erozní opatření v erozně ohrožených zónách)
+- DZES 5 — pásové zpracování půdy je jednou z půdoochranných technologií pro erozně ohrožené plochy (2025)
 
 Viz též [[no-till]], [[orba]], [[regenerativni-zemedelstvi]], [[ctf]], [[gps-rtk]], [[eroze-pudy]].`,
     related: ['no-till', 'orba', 'regenerativni-zemedelstvi', 'ctf', 'gps-rtk', 'eroze-pudy'],
@@ -3866,7 +3807,7 @@ Viz též [[oteleni]], [[rijnost]], [[inseminace]], [[usni-znamka]], [[tmr]], [[
     alias: ['ušnice', 'ear tag', 'identifikační známka', 'IZR značení'],
     kategorie: 'chov',
     shortDef: 'Ušní známka je plastová identifikační visačka aplikovaná do ucha hospodářského zvířete povinná v EU. Skot, ovce, kozy, prasata. Obsahuje individuální kód napojený na IZR (Integrovaný zemědělský registr) — bez ní zvíře nesmí opustit farmu ani jít na jatka.',
-    longDef: `Ušní známka (anglicky *ear tag*, oficiálně **identifikační známka**) je **plastová visačka** s individuálním kódem, kterou EU legislativa vyžaduje pro všechna hospodářská zvířata (skot, ovce, kozy, prasata, kůně) jako součást **registračního systému zvířat**. V ČR je vázána na **IZR — Integrovaný zemědělský registr** spravovaný SZIF.
+    longDef: `Ušní známka (anglicky *ear tag*, oficiálně **identifikační známka**) je **plastová visačka** s individuálním kódem, kterou EU legislativa vyžaduje pro všechna hospodářská zvířata (skot, ovce, kozy, prasata, kůně) jako součást **registračního systému zvířat**. V ČR se zvířata evidují v **ústřední evidenci**, kterou z pověření Ministerstva zemědělství vede ČMSCH.
 
 **Legislativní rámec:**
 - **EU nařízení 1760/2000** — povinnost identifikace skotu (po BSE krizi)
@@ -3912,33 +3853,32 @@ Viz též [[oteleni]], [[rijnost]], [[inseminace]], [[usni-znamka]], [[tmr]], [[
 
 **Ztráta známky:**
 - **Skot**: ~3–8 % ročně (zaháčí se o stáj, ostatní krávy)
-- **Postup**: chovatel zjistí ztrátu, objedná **náhradní známku** od SZIF/IZR (stejné individuální číslo), nasadí ji do 7 dní
+- **Postup**: chovatel zjistí ztrátu, objedná **náhradní známku** se stejným číslem u ČMSCH
 - **Cena 1 známky** (2024): 25–50 Kč skot, 8–15 Kč ovce
 - **Roční náklady na známky** pro stádo 100 krav: ~1 500–3 000 Kč
 
 **Sankce za chybějící známky:**
 - **Skot bez známky nesmí opustit farmu** (= nemůže jít na jatka, prodej)
-- **SZIF kontrola** — 1× ročně, pokuta 10 000–500 000 Kč
-- **Dotace BISS / CISS** závislé na řádné identifikaci
+- **Podmíněnost** — od roku 2023 identifikace a evidence skotu, ovcí, koz a prasat nepatří mezi požadavky podmíněnosti přímých plateb (SZIF, 2025)
 - **Riziko AVI / SBV** epidemie — neidentifikované zvíře nelze trasovat
 
 **IZR — Integrovaný zemědělský registr:**
 - **Databáze**: čísla zvířat + historie pohybů + farmáři + jatka
-- **Pohyb zvířete** = nahlásit IZR do 7 dní (původ + cíl)
+- **Pohyb zvířete** = nahlásit do ústřední evidence do 7 dní (původ + cíl)
 - **Otelení** = nahlásit do 7 dní (jiné číslo pro telete + matka)
 - **Úhyn / porážka** = nahlásit do 7 dní
-- **Online systém**: portal.szif.cz, mobilní aplikace „IZR mobile"
+- **Online**: Registr zvířat na Portálu farmáře
 
 **XML hromadné exporty z IZR:**
 Profi farmy používají **XML export pro hromadné hlášení** přesunů (např. po sklizni jater nebo přesun krav mezi stájemi):
 - Generuje se z managment softwaru (CowVision, AgroTronic)
-- Nahraje se na portál SZIF
+- Nahraje se do Registru zvířat na Portálu farmáře
 - Validace XSD schéma, chyby online
 
 **Pasporty (Cattle Passport / Identifikační karta):**
-- **Skot**: každé zvíře má vlastní **identifikační kartu** vystavenou SZIF s historií pohybů
-- **Karta je papírová**, vystavena s první registrací, doplňuje se přesuny
-- **Pas musí cestovat se zvířetem** při transportu (riskuje řidič přepravy)
+- **Skot**: průvodní list skotu (PLS) vydává ČMSCH jako osoba pověřená vedením ústřední evidence
+- **Od 1. 4. 2025** se PLS předává jen při přemístění do jiného státu EU nebo při vývozu; papírové PLS se po narození telete už nezasílají
+- **Tisk PLS**: chovatel si aktuální PLS může kdykoli vytisknout v Registru zvířat na Portálu farmáře (MZe, ČMSCH, 2025)
 
 **Moderní vývoj — biometrika:**
 - **Boluse** (RFID v bachoru, polykané zvířetem) — Mottainai, Cowtronix
@@ -5642,7 +5582,7 @@ Viz též [[herbicidy]], [[roundup]], [[repka-ozima]], [[zemak]], [[plisen-bramb
 - **Náklady** na 1 ha: 28 000–38 000 Kč (osivo, hnojiva, postřiky, palivo, sklizeň)
 - **Výnosy 6,5 t/ha × 5 500 Kč = 35 750 Kč/ha**
 - **Marže**: -2 000 až +5 000 Kč/ha (úzká, citlivá na ceny)
-- **Dotace BISS + CISS + EKO**: ~5 000–7 000 Kč/ha přidává marže
+- **Přímé platby** (BISS, redistributivní platba, ekoplatba) se k marži přičítají — sazby viz níže
 
 **Odrůdy 2024 (CZ trh):**
 - **Bohemia** — toleruje sucho, A třída
@@ -5656,9 +5596,8 @@ Viz též [[herbicidy]], [[roundup]], [[repka-ozima]], [[zemak]], [[plisen-bramb
 **Hlavní škůdci:** mšice (BYDV vektor), kohoutek obilní, hrbáč pšeničný
 
 **EU regulace:**
-- **CAP BISS + CISS**: ~3 600 Kč/ha (2024)
-- **EKO režim** (cover crops, no-till): +1 300 Kč/ha
-- **Pšenice v greening**: počítá se jako „diverzifikace" v 5+ plodinovém osevním postupu
+- **Přímé platby v ČR za rok 2025**: BISS 1 759,91 Kč/ha, redistributivní platba 3 449,49 Kč/ha na prvních 150 ha, základní ekoplatba 1 578,37 Kč/ha
+- **Diverzifikace v ekoplatbě**: pšenice je jednou z povinných 2–4 plodin; ozimá a jarní pšenice se počítají jako jedna plodina
 
 Viz též [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[septorioza]], [[fuzarioza]], [[hektolitr]], [[psenice-jarni]].`,
     related: ['ozim-jarin', 'osevni-postup', 'fungicidy', 'septorioza', 'fuzarioza', 'hektolitr', 'psenice-jarni'],
@@ -5974,8 +5913,8 @@ Viz též [[jecmen-sladovnicky]], [[psenice-ozima]], [[tmr]], [[krmne-davky]], [
 - **Postřiky**: lehčí program než pšenice (1 fungicid)
 
 **EU regulace:**
-- **CAP BISS + CISS** stejné jako pšenice
-- **EKO režim** — bio žito populární u ekologických farem (méně postřiků, robustní)
+- **Přímé platby** (BISS, redistributivní platba) stejné jako u pšenice
+- **Ekologické zemědělství** — žito je oblíbené u ekologických farem (méně postřiků, robustní)
 
 **Kulturní dimenze:**
 - **Žito je „chudobná" plodina** — historicky lidé chudí jedli žitný chléb, bohatí pšeničný
@@ -6067,7 +6006,7 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 - **Náklady**: 18 000–24 000 Kč/ha
 - **Výnos 4,5 t/ha × 4 800 Kč = 21 600 Kč/ha**
 - **Marže**: typicky úzká (-1 000 až +3 000 Kč/ha)
-- **Plus dotace BISS + CISS + EKO**: dělá z toho výhodnější plodinu
+- **Plus přímé platby** (BISS, redistributivní platba, ekoplatba): dělají z toho výhodnější plodinu
 
 **Trh a trendy:**
 - **Plant-based revolution** — ovesné mléko = 2x růst spotřeby 2020s
@@ -6150,7 +6089,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
 - **Rzi** — průměrné tlak (citlivější než žito, méně než pšenice)
 - **Padlí** — méně tlaku
 - **Postřiky**: 1–2 fungicidy (méně intenzivní než pšenice)
-- **EKO režim**: vhodný (méně postřiků)
+- **Ekologické zemědělství**: vhodné (méně postřiků)
 
 **Výhody tritikale:**
 1. **Robust** — toleruje chudé půdy, sucho
@@ -6168,7 +6107,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
 - **Náklady**: 22 000–28 000 Kč/ha
 - **Výnos 7 t/ha × 4 700 Kč = 32 900 Kč/ha**
 - **Marže**: 4 000–10 000 Kč/ha (lepší než pšenice!)
-- **Dotace BISS + CISS + EKO**: standardní
+- **Přímé platby** (BISS, redistributivní platba, ekoplatba): standardní
 
 **Strategicky pro CZ:**
 - **Pro středně velkou farmu** v ANC (Vysočina, Beskydy) — tritikale je často **lepší volba než pšenice**
@@ -6239,9 +6178,9 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 
 **Legální a regulační aspekty:**
 - **CZ legislativa**: pěstování máku **legální** pro potravinářské + farmaceutické účely
-- **Nutné registrace** u SZIF, prostor pod 5 ha bez specifické licence
-- **Kontroly**: ÚKZÚZ, často monitorovaný kvůli zneužití pro výrobu drog
-- **Suché makovice po sklizni** — musí být **zničeny nebo zpracovány** v licencovaném zařízení
+- **Ohlašovací povinnost**: kdo pěstuje mák na celkové ploše nad 100 m², hlásí ÚKZÚZ výměru osevu (do konce května), zneškodnění makoviny (nejpozději 5 dní předem) a sklizeň (do konce prosince) — § 29 zákona č. 167/1998 Sb., o návykových látkách
+- **Podezřelé okolnosti** (nařezané nebo odcizené makovice, vstup cizích osob do porostu) musí pěstitel neprodleně oznámit Policii ČR
+- **Makovina** (nadzemní části kromě semen) se po sklizni zneškodňuje podle zákona; její vývoz a dovoz vyžaduje povolení Ministerstva zdravotnictví
 
 **Trh a marketing:**
 - **Spotový trh** vs **kontraktové pěstování**
@@ -6370,7 +6309,7 @@ Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
 - **Náklady**: 22 000–28 000 Kč/ha
 - **Výnos 3 t × 14 500 Kč = 43 500 Kč/ha**
 - **Marže**: 15 000–20 000 Kč/ha (atraktivní!)
-- **Dotace BISS + CISS + EKO**: standardní
+- **Přímé platby** (BISS, redistributivní platba, ekoplatba): standardní
 
 **Strategický význam pro CZ:**
 - **Růst plochy 2010s** vs řepka — alternativa s nižším postřikovým tlakem
@@ -6438,7 +6377,7 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
   - **Sekvestrace C** — kořeny + biomasa
   - **Suprese plevelů** — hořčice rychle pokryje půdu
   - **Glukosinoláty v půdě** — biofumigace (potlačuje patogeny)
-  - **EU CAP greening** — hořčice = EFA (Ecological Focus Area)
+  - **Ekoplatba** — hořčice jako meziplodina se v ČR (2025) může započítat do neprodukčních ploch varianty B
 - **Cena osiva pro meziplodinu**: 600–1 000 Kč/ha
 
 **3. Olej (5 %):**
@@ -6466,7 +6405,7 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
 **Výhody hořčice:**
 1. **Krátká vegetace** — flexibilní v osevním postupu
 2. **Levné osivo**
-3. **Meziplodina hodnota** — EFA, zelené hnojení, biofumigace
+3. **Meziplodina hodnota** — neprodukční plochy ekoplatby, zelené hnojení, biofumigace
 4. **Robustní** — málo postřiků
 
 **Nevýhody:**
@@ -6479,16 +6418,15 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
 **Pro semeno (1,3 t/ha × 15 000 Kč = 19 500 Kč/ha):**
 - **Náklady**: 12 000–15 000 Kč/ha
 - **Marže**: 4 500–7 500 Kč/ha (mírná)
-- **Plus dotace**: standardní BISS + CISS
+- **Plus přímé platby**: BISS a redistributivní platba
 
 **Pro meziplodinu:**
 - **Náklady**: 1 000–1 500 Kč/ha (osivo + setí)
-- **Benefity**: EFA dotace ~3 000 Kč/ha + půdní benefity neměřitelné finančně
-- **Net pozitivní**: 1 500–2 000 Kč/ha (jen dotace), plus dlouhodobé benefity
+- **Přínos**: hlavně půdní (organická hmota, ochrana před erozí), finančně těžko měřitelný; hořčice se navíc může započítat do neprodukčních ploch ekoplatby
 
-**EU a CAP:**
-- **Meziplodinová schémata** dotované — hořčice je nejpopulárnější
-- **EFA limity** — minimálně 5 % plochy v EFA pro CAP (greening)
+**SZP v ČR:**
+- **Ekoplatba (2025)** — meziplodiny včetně hořčice lze započítat do neprodukčních ploch varianty B
+- **Greening (2015–2022)** — dřív se meziplodiny počítaly do ploch v ekologickém zájmu (EFA), které u podniků nad 15 ha orné půdy musely tvořit 5 % orné půdy
 
 **Klimatická změna:**
 - **Sucho v letní** → meziplodina nevejde
@@ -6596,9 +6534,9 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 **Marže**: 35 000–55 000 Kč/ha (ATRAKTIVNÍ!)
 
 **Plus dotace**:
-- **BISS + CISS**: ~3 600 Kč/ha
-- **VCS pro cukrovku** (citlivý sektor): ~7 500 Kč/ha (specifická CZ dotace pro cukrovku!)
-- **EKO režim**: pokud splní podmínky
+- **BISS a redistributivní platba** (2025): 1 759,91 Kč/ha, resp. 3 449,49 Kč/ha na prvních 150 ha
+- **CIS cukrová řepa** (podpora vázaná na produkci, 2025): 6 936,20 Kč/ha
+- **Ekoplatba**: základní 1 578,37 Kč/ha (2025), pokud podnik splní podmínky
 
 **Trend a budoucnost:**
 - **EU cukrová kvóta** zrušená 2017 → liberalizace trhu → tlak na cenu
@@ -6607,8 +6545,7 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 - **Klimatická změna** — vyšší teploty + sucho = nižší výnos v Polabí
 
 **Strategická plodina:**
-- **VCS dotace** dělá z cukrovky **velmi profitabilní volbu** v cukrovkářských regionech
-- **Mimo VCS regiony** méně atraktivní (sucho na Vysočině nelegální)
+- **CIS** zlepšuje ekonomiku cukrovky v cukrovarnických regionech
 
 Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
     related: ['msice-repna', 'ozim-jarin', 'osevni-postup', 'fungicidy'],
@@ -6715,9 +6652,7 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
 **Plus N pro následující plodinu**: ušetří 60–80 kg N (~1 200–1 600 Kč/ha)
 
 **EU Bílkovinná strategie:**
-- **EU CAP** od 2023 podporuje **bílkovinné plodiny** (hrach, sója, lupina, peluška, vikve, fazol)
-- **VCS pro bílkoviny**: ~2 800 Kč/ha
-- **EU cíl**: zvýšit domácí produkci bílkovin z 30 % na 50 % do 2030
+- **CIS bílkovinné plodiny** (ČR, 2025): 1 449,39 Kč/ha — patří sem hrách včetně pelušky, bob, lupina, sója, vojtěška, jetel, vikev a další vyjmenované druhy
 
 **Klimatická změna:**
 - **Mírné jaro** = pozitivní
@@ -6727,7 +6662,6 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
 **Strategický význam:**
 - **Hrach v osevním postupu** = klíč pro **udržitelnou intenzifikaci**
 - **Plant-based proteiny** = rostoucí trh = vyšší cena
-- **EU bílkovinná podpora** = dotace navíc
 
 Viz též [[sojaova-bob]], [[vojteska]], [[osevni-postup]], [[mezi-plodiny]], [[ozim-jarin]], [[regenerativni-zemedelstvi]].`,
     related: ['sojaova-bob', 'vojteska', 'osevni-postup', 'mezi-plodiny', 'ozim-jarin', 'regenerativni-zemedelstvi'],
@@ -7604,7 +7538,7 @@ Viz též [[ndvi]], [[variable-rate]], [[gps-rtk]], [[lpis]], [[karbonove-zemede
     term: 'Agrolesnictví',
     alias: ['agroforestry', 'agroles', 'silvopasture', 'alley cropping'],
     kategorie: 'precise-farming',
-    shortDef: 'Agrolesnictví je systém pěstování stromů a zemědělských plodin nebo živočichů na stejném pozemku. Klíčové formy: alley cropping (řady stromů mezi plodinami), silvopasture (pastva mezi stromy), forest farming (rozšířený les). V EU rostoucí v rámci CAP 2023+.',
+    shortDef: 'Agrolesnictví je systém pěstování stromů a zemědělských plodin nebo živočichů na stejném pozemku. Klíčové formy: alley cropping (řady stromů mezi plodinami), silvopasture (pastva mezi stromy), forest farming (rozšířený les). V ČR ho podporuje opatření agrolesnictví Strategického plánu SZP 2023–2027.',
     longDef: `Agrolesnictví (anglicky *agroforestry*, „zemědělství s lesem") je **integrovaný systém pěstování stromů + zemědělských plodin nebo živočichů** na stejném pozemku. Synergie stromů a zemědělství zvyšuje produktivitu, biodiverzitu, sekvestraci uhlíku.
 
 **Hlavní formy:**
@@ -7636,7 +7570,6 @@ Viz též [[ndvi]], [[variable-rate]], [[gps-rtk]], [[lpis]], [[karbonove-zemede
 **5. Riparian buffer (břehové porosty):**
 - **Stromy podél vodních toků** (5–30 m)
 - **Účel**: filtrace splavů hnojiv + pesticidů, biodiverzita
-- **EU dotace** v rámci AEKO
 
 **6. Plantážové ovocné sady:**
 - **Klasický sad** je již agroforestry forma
@@ -7647,7 +7580,7 @@ Viz též [[ndvi]], [[variable-rate]], [[gps-rtk]], [[lpis]], [[karbonove-zemede
 
 **1. Sekvestrace uhlíku:**
 - **Stromy ukládají C v dřevě + půdě** — 2–10 t CO₂/ha/rok
-- Pro CAP carbon farming = vysoký kredit (viz [[karbonove-zemedelstvi]])
+- Uhlíkové kredity viz [[karbonove-zemedelstvi]]
 
 **2. Biodiverzita:**
 - **Stromy** = habitat pro ptáky, hmyz, drobné savce
@@ -7685,22 +7618,19 @@ Viz též [[ndvi]], [[variable-rate]], [[gps-rtk]], [[lpis]], [[karbonove-zemede
 
 **EU CAP 2023–2027 a agrolesnictví:**
 
-**1. Eko-režimy (EKO platba):**
-- **Stromy v zemědělství** = bonus +1 300 Kč/ha
-- **Podmínka**: min. 50 stromů/ha, registrace
+**1. Opatření agrolesnictví** (nařízení vlády č. 140/2023 Sb.):
+- **Dotace na založení agrolesnického systému a na péči o něj** — vyplácí SZIF podle sazeb v EUR na hektar
 
-**2. AEKO podopatření:**
-- **Trvalé krajinné prvky** (alej, větrolam) — 50–80 Kč/m/rok
-- **Pastviny s stromy** — vyšší sazba ANC
+**2. Celofaremní ekoplatba:**
+- **Ochranný pás založený v rámci agrolesnictví** se může započítat do neprodukčních ploch
+- **Údržba krajinných prvků** (stromořadí, skupina dřevin, solitérní dřevina) — samostatná platba od roku 2025 (2025: 38 261,21 Kč/ha)
 
-**3. Intervence 4.4** (Strategický plán SZP):
-- **Investiční podpora pro výsadbu** stromů na zemědělské půdě
-- **60–80 % nákladů** dotováno
-- **Cíl EU**: 3 mld nových stromů do 2030
+**3. EU:**
+- **Cíl EU**: 3 mld nových stromů do 2030 (Strategie EU v oblasti biodiverzity do roku 2030)
 
 **CZ právní rámec:**
-- **LPIS** musí stromy registrovat
-- **GAEC 8** vyžaduje zachování krajinných prvků
+- **LPIS** — agrolesnický systém i krajinné prvky se evidují v LPIS
+- **DZES 8** (GAEC 8) vyžaduje zachování krajinných prvků
 
 **Implementační bariéry:**
 1. **Dlouhodobá investice** — návratnost 5–30 let

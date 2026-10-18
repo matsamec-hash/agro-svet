@@ -36,8 +36,8 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "SAPS"
     ],
     "kategorie": "dotace",
-    "shortDef": "SAPS je systém přímých plateb zemědělcům na základě obhospodařované plochy.",
-    "longDef": "SAPS (Single Area Payment Scheme) je systém přímých plateb zemědělcům, který je založen na velikosti obhospodařované zemědělské plochy. Tento systém je určen pro země Evropské unie, které vstoupily do EU po roce 2004.\n\nPlatby v rámci SAPS jsou vypláceny ročně a nejsou vázány na konkrétní produkci, což umožňuje zemědělcům větší flexibilitu v rozhodování o využití půdy.\n\nV České republice je SAPS klíčovým nástrojem pro podporu zemědělství a jeho cílem je zajištění stabilního příjmu pro zemědělce.",
+    "shortDef": "SAPS (jednotná platba na plochu) byl zjednodušený systém přímých plateb podle obhospodařované plochy, který ČR používala od vstupu do EU v roce 2004 do roku 2022. Od roku 2023 na něj navázala platba BISS.",
+    "longDef": "SAPS (Single Area Payment Scheme, česky jednotná platba na plochu) byl systém přímých plateb, ve kterém zemědělec dostával stejnou sazbu na každý hektar způsobilé zemědělské plochy. Mohly ho používat státy, které do EU vstoupily v roce 2004 a později.\n\nPlatba nebyla vázána na konkrétní produkci, takže zemědělci se mohli volně rozhodovat, co budou pěstovat.\n\nV ČR se SAPS vyplácela od vstupu do EU v roce 2004 do roku 2022. Od roku 2023 na ni navázala základní podpora příjmu pro udržitelnost (BISS) — za rok 2025 činila 1 759,91 Kč/ha.",
     "related": [
       "dzes",
       "redistributivni-platba",
@@ -46,12 +46,12 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     ],
     "faq": [
       {
-        "q": "Jak se počítá SAPS?",
-        "a": "SAPS se počítá na základě velikosti obhospodařované plochy zemědělské půdy."
+        "q": "Jak se počítala SAPS?",
+        "a": "Jako jednotná sazba na hektar vynásobená způsobilou výměrou zemědělské půdy."
       },
       {
-        "q": "K čemu slouží SAPS?",
-        "a": "SAPS slouží k finanční podpoře zemědělců v rámci EU."
+        "q": "K čemu sloužila SAPS?",
+        "a": "Stabilizovala příjmy zemědělců v nových členských státech EU; v ČR na ni od roku 2023 navázala platba BISS."
       }
     ]
   },
@@ -59,8 +59,8 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "slug": "redistributivni-platba",
     "term": "Redistributivní platba",
     "kategorie": "dotace",
-    "shortDef": "Redistributivní platba je doplňková platba pro menší a střední zemědělské podniky.",
-    "longDef": "Redistributivní platba je součástí systému přímých plateb, která je určena k podpoře menších a středních zemědělských podniků. Tato platba je poskytována na prvních hektarech obhospodařované půdy, což pomáhá vyrovnávat rozdíly mezi velkými a malými farmami.\n\nCílem redistributivní platby je podpořit diverzifikaci zemědělské produkce a udržitelnost menších podniků, které často čelí větším ekonomickým výzvám.\n\nV České republice je redistributivní platba implementována v rámci Společné zemědělské politiky EU a je klíčovým nástrojem pro podporu menších zemědělců.",
+    "shortDef": "Doplňková redistributivní podpora příjmu (CRISS) je přímá platba na první hektary podniku, která přesouvá peníze k menším a středním farmám. V ČR se vyplácí na prvních 150 ha; za rok 2025 činila 3 449,49 Kč/ha.",
+    "longDef": "Redistributivní platba (EU zkratka CRISS — Complementary Redistributive Income Support for Sustainability) je doplňková přímá platba, kterou podnik dostává jen na první hektary. Malé a střední podniky tak dostanou v přepočtu na hektar víc než velké.\n\nV ČR se poskytuje na prvních 150 hektarů každého podniku a nárok na ni má žadatel, který má nárok na základní platbu BISS. Za rok 2025 činila 3 449,49 Kč/ha. Strategický plán SZP na ni vyčlenil 23 % obálky přímých plateb.\n\nPodle pravidel EU na ni státy vyčleňují nejméně 10 % obálky přímých plateb, pokud potřebu přerozdělení neřeší jinými nástroji.",
     "related": [
       "saps",
       "dzes",
@@ -70,11 +70,11 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "faq": [
       {
         "q": "Jaký je účel redistributivní platby?",
-        "a": "Redistributivní platba podporuje menší a střední zemědělské podniky."
+        "a": "Přesouvá část přímých plateb k menším a středním podnikům — v ČR jde o příplatek na prvních 150 ha."
       },
       {
-        "q": "Jak se liší redistributivní platba od SAPS?",
-        "a": "Redistributivní platba je doplňková k SAPS a zaměřuje se na podporu menších podniků."
+        "q": "Jak se liší redistributivní platba od BISS?",
+        "a": "BISS se platí na všechny způsobilé hektary, redistributivní platba jen na prvních 150 ha podniku a je k BISS doplňková (2025: BISS 1 759,91 Kč/ha, redistributivní platba 3 449,49 Kč/ha)."
       }
     ]
   },
@@ -134,7 +134,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "ANC je platba pro zemědělce v oblastech s přírodními omezeními.",
-    "longDef": "ANC (Areas with Natural Constraints) je platba určená pro zemědělce, kteří hospodaří v oblastech s přírodními omezeními, jako jsou horské oblasti nebo regiony s nepříznivými klimatickými podmínkami. Cílem této platby je kompenzovat dodatečné náklady a ztráty příjmů spojené s obtížnými podmínkami hospodaření.\n\nPlatby ANC pomáhají udržovat zemědělskou činnost v těchto oblastech, což přispívá k udržení krajiny a biodiverzity. Zemědělci v ANC oblastech musí splňovat určité podmínky, aby byli způsobilí pro tuto podporu.\n\nV České republice je ANC platba důležitým nástrojem pro podporu zemědělství v méně příznivých oblastech a je součástí širšího rámce Společné zemědělské politiky EU.",
+    "longDef": "ANC (Areas with Natural Constraints) je platba určená pro zemědělce, kteří hospodaří v oblastech s přírodními omezeními, jako jsou horské oblasti nebo regiony s nepříznivými klimatickými podmínkami. Cílem této platby je kompenzovat dodatečné náklady a ztráty příjmů spojené s obtížnými podmínkami hospodaření.\n\nPlatby ANC pomáhají udržovat zemědělskou činnost v těchto oblastech, což přispívá k udržení krajiny a biodiverzity. Zemědělci v ANC oblastech musí splňovat určité podmínky, aby byli způsobilí pro tuto podporu.\n\nV ČR platby ANC upravuje nařízení vlády č. 61/2023 Sb. Oblasti se dělí na horské (H1–H5), ostatní (O1–O3) a specifické (S). Sazba se liší podle typu oblasti a výrobního zaměření podniku: od 27 EUR/ha (typ S, převažující rostlinná výroba) po 216 EUR/ha (typ H1, převažující živočišná výroba). Vyplácí se v Kč a nad 300 ha se platba postupně snižuje.",
     "related": [
       "saps",
       "dzes",
@@ -148,7 +148,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       },
       {
         "q": "Jaké oblasti jsou způsobilé pro ANC platbu?",
-        "a": "Oblasti s nepříznivými přírodními podmínkami, jako jsou hory nebo sucho."
+        "a": "Oblasti vymezené podle katastrálních území — v ČR horské (H1–H5), ostatní (O1–O3) a specifické (S); jejich seznam je přílohou nařízení vlády č. 61/2023 Sb."
       }
     ]
   },
@@ -160,7 +160,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "Ekoschémata jsou finanční podpory zaměřené na podporu ekologických zemědělských postupů.",
-    "longDef": "Ekoschémata představují soubor opatření v rámci Společné zemědělské politiky EU, která poskytují finanční podporu zemědělcům za implementaci ekologických a udržitelných zemědělských postupů. Cílem je motivovat zemědělce k praktikám, které přispívají k ochraně životního prostředí, biodiverzity a zlepšení kvality půdy. V praxi se jedná například o podporu pro ekologické zemědělství, agrolesnictví nebo ochranu vodních zdrojů. V České republice jsou ekoschémata součástí širšího rámce zemědělských dotací a jejich implementace je koordinována Ministerstvem zemědělství.",
+    "longDef": "Ekoschémata jsou dobrovolné režimy pro klima a životní prostředí v rámci přímých plateb Společné zemědělské politiky EU 2023–2027. Zemědělec, který se zaváže k postupům šetrnějším k životnímu prostředí, dostane příplatek na hektar. Každý stát si ekoschémata navrhuje sám ve svém strategickém plánu.\n\nV ČR má ekoschéma podobu celofaremní ekoplatby, kterou žadatel plní na celé výměře podniku. Za rok 2025 činila základní ekoplatba 1 578,37 Kč/ha; prémiová (17 521,20 Kč/ha) se vyplácí jen na vyčleněné neprodukční plochy a ochranné pásy podél vody. Od roku 2025 přibyly platby na krajinné prvky, udržitelné hospodaření s živinami a pásové střídání plodin. Ekoschémata tvoří 30 % obálky přímých plateb ČR.\n\nEkologické zemědělství a agrolesnictví nejsou v ČR ekoschématy — podporují se samostatnými opatřeními rozvoje venkova.",
     "related": [
       "podminenost",
       "ozeleneni",
@@ -174,7 +174,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       },
       {
         "q": "Jaké podmínky musí být splněny pro získání ekoplatby?",
-        "a": "Zemědělci musí dodržovat specifické ekologické postupy, které jsou definovány v rámci ekoschémat."
+        "a": "V ČR mimo jiné diverzifikaci plodin, hospodaření s organickou hmotou, ochranný pás podél vody a vyčlenění neprodukčních ploch na orné půdě; na trvalém travním porostu pastvu nebo seč do 31. července."
       },
       {
         "q": "Jak se ekoschémata liší od tradičních dotací?",
@@ -220,7 +220,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "Zastropování přímých plateb je omezení maximální výše dotací, které může jeden zemědělský podnik obdržet.",
-    "longDef": "Zastropování přímých plateb je mechanismus v rámci Společné zemědělské politiky EU, který stanovuje maximální částku přímých plateb, kterou může jeden zemědělský podnik získat. Cílem je zajistit spravedlivější rozdělení finančních prostředků mezi menší a střední zemědělské podniky a zabránit koncentraci dotací ve velkých podnicích. Tento systém může zahrnovat různé úrovně redukce plateb nad určité limity a může být kombinován s dalšími opatřeními, jako je redistributivní platba. V České republice se zastropování přímých plateb diskutuje v kontextu národní implementace politiky EU.",
+    "longDef": "Zastropování přímých plateb je omezení částky základní platby, kterou může dostat jeden zemědělský podnik. Pro období 2023–2027 ho upravuje článek 17 nařízení (EU) 2021/2115 a pro členské státy je dobrovolné: stát, který zastropování zavede, sníží částku základní platby nad 100 000 EUR o 100 %. Vedle toho může částky nad 60 000 EUR postupně snižovat až o 85 %. Před výpočtem lze odečíst mzdy a další náklady práce.\n\nCílem je spravedlivější rozdělení peněz mezi menší a větší podniky. Stejného cíle lze dosáhnout redistributivní platbou — český Strategický plán SZP na ni vyčlenil 23 % obálky přímých plateb (prvních 150 ha každého podniku).",
     "related": [
       "prv",
       "redistributivni-platba",
@@ -238,7 +238,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       },
       {
         "q": "Jak se určuje limit pro zastropování plateb?",
-        "a": "Limit je stanoven na základě celkové výše přímých plateb, které podnik obdrží."
+        "a": "Limit stanoví nařízení (EU) 2021/2115: při zastropování se částka základní platby nad 100 000 EUR odebírá celá; od částky se předtím mohou odečíst mzdy a náklady práce."
       }
     ]
   },
@@ -249,8 +249,8 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "PRV"
     ],
     "kategorie": "dotace",
-    "shortDef": "Program rozvoje venkova je soubor opatření na podporu rozvoje venkovských oblastí a zemědělství.",
-    "longDef": "Program rozvoje venkova (PRV) je klíčovým nástrojem Společné zemědělské politiky EU, který se zaměřuje na podporu rozvoje venkovských oblastí a zlepšení konkurenceschopnosti zemědělství. PRV zahrnuje opatření na modernizaci zemědělských podniků, podporu ekologického zemědělství, rozvoj venkovské infrastruktury a zlepšení kvality života na venkově. V České republice je PRV implementován prostřednictvím Ministerstva zemědělství a zahrnuje širokou škálu projektů a iniciativ, které podporují udržitelný rozvoj a inovace v zemědělském sektoru.",
+    "shortDef": "Program rozvoje venkova byl soubor opatření EU na podporu venkovských oblastí a zemědělství; od roku 2023 ho v ČR nahradil Strategický plán SZP 2023–2027.",
+    "longDef": "Program rozvoje venkova (PRV) byl hlavní nástroj Společné zemědělské politiky EU pro rozvoj venkovských oblastí a zemědělství. Zahrnoval opatření na modernizaci zemědělských podniků, podporu ekologického zemědělství, agroenvironmentální opatření a rozvoj venkova. V ČR běžely programy PRV 2007–2013 a 2014–2020. Od roku 2023 spadá rozvoj venkova do Strategického plánu SZP 2023–2027, který administruje SZIF.",
     "related": [
       "ekoschemata",
       "podminenost",
@@ -262,15 +262,15 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "faq": [
       {
         "q": "Co je Program rozvoje venkova?",
-        "a": "Program rozvoje venkova je soubor opatření na podporu rozvoje venkovských oblastí a zemědělství."
+        "a": "Soubor opatření EU na podporu venkovských oblastí a zemědělství; v ČR běžel v obdobích 2007–2013 a 2014–2020."
       },
       {
-        "q": "Jaké cíle má Program rozvoje venkova?",
-        "a": "Cílem je zlepšit konkurenceschopnost zemědělství, podpořit udržitelné hospodaření a zlepšit kvalitu života ve venkovských oblastech."
+        "q": "Jaké cíle měl Program rozvoje venkova?",
+        "a": "Zlepšit konkurenceschopnost zemědělství, podpořit udržitelné hospodaření a zlepšit kvalitu života ve venkovských oblastech."
       },
       {
-        "q": "Jak se financuje Program rozvoje venkova?",
-        "a": "Program je financován z prostředků Evropské unie a národních zdrojů."
+        "q": "Co nahradilo Program rozvoje venkova?",
+        "a": "Od roku 2023 spadá rozvoj venkova do Strategického plánu SZP 2023–2027."
       }
     ]
   },
@@ -278,8 +278,8 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "slug": "platba-pro-mlade-zemedelce",
     "term": "Platba pro mladé zemědělce",
     "kategorie": "dotace",
-    "shortDef": "Platba pro mladé zemědělce je finanční podpora určená pro začínající zemědělce do 40 let.",
-    "longDef": "Platba pro mladé zemědělce je speciální forma finanční podpory v rámci Společné zemědělské politiky EU, která je určena pro mladé zemědělce do 40 let. Cílem této platby je podpořit generační obměnu v zemědělství, usnadnit mladým lidem vstup do zemědělského sektoru a podpořit jejich podnikatelské aktivity. Tato podpora je poskytována jako přímá platba k základní platbě a může být kombinována s dalšími opatřeními, jako je podpora investic do zemědělských podniků. V České republice je tato platba součástí národního plánu rozvoje venkova a je administrována Ministerstvem zemědělství.",
+    "shortDef": "Platba pro mladé zemědělce je doplňková přímá platba pro začínající zemědělce, kteří v roce první žádosti nedosáhli 41 let. V ČR za rok 2025 činila 2 378,75 Kč/ha, nejvýš na 90 ha a po dobu pěti let.",
+    "longDef": "Platba pro mladé zemědělce (doplňková podpora příjmu pro mladé zemědělce, EU zkratka CIS-YF) je přímá platba Společné zemědělské politiky EU, která má usnadnit generační obměnu v zemědělství.\n\nV ČR je určena žadatelům, kteří v prvním roce podání žádosti nedosáhli věku 41 let a poprvé založili zemědělský podnik nebo převzali hospodářství. Podmínkou je nárok na základní platbu BISS a alespoň minimální zemědělská kvalifikace. Žádá se v Jednotné žádosti pět po sobě jdoucích let, nejvýš na 90 ha. Za rok 2025 činila sazba 2 378,75 Kč/ha; platbu administruje SZIF.\n\nVedle ní existuje projektová intervence 49.75 Zahájení činnosti mladého zemědělce — jednorázová paušální podpora na start podniku.",
     "related": [
       "prv",
       "ekoschemata",
@@ -289,11 +289,11 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "faq": [
       {
         "q": "Co je platba pro mladé zemědělce?",
-        "a": "Platba pro mladé zemědělce je finanční podpora určená pro začínající zemědělce do 40 let."
+        "a": "Doplňková přímá platba pro začínající zemědělce do 40 let; v ČR za rok 2025 činila 2 378,75 Kč/ha, nejvýš na 90 ha."
       },
       {
         "q": "Jaké jsou podmínky pro získání platby pro mladé zemědělce?",
-        "a": "Podmínkou je věk do 40 let a zahájení zemědělské činnosti."
+        "a": "Věk do 40 let v roce první žádosti, první založení nebo převzetí podniku, minimální zemědělská kvalifikace a nárok na základní platbu BISS."
       },
       {
         "q": "Proč se poskytuje platba pro mladé zemědělce?",
@@ -308,8 +308,8 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       "greening"
     ],
     "kategorie": "dotace",
-    "shortDef": "Ozelenění je soubor opatření v zemědělství zaměřených na zlepšení ekologické udržitelnosti.",
-    "longDef": "Ozelenění, známé také jako greening, je součástí Společné zemědělské politiky EU, která zahrnuje povinná ekologická opatření, která musí zemědělci dodržovat, aby získali plnou výši přímých plateb. Tato opatření zahrnují diverzifikaci plodin, udržování trvalých travních porostů a vyčlenění ekologických prioritních oblastí. Cílem ozelenění je zlepšit ekologickou udržitelnost zemědělství, chránit biodiverzitu a přispět k boji proti změně klimatu. V České republice je ozelenění implementováno v rámci národních strategií a je kontrolováno příslušnými orgány.",
+    "shortDef": "Ozelenění (greening) byla povinná environmentální složka přímých plateb EU v letech 2015–2022; od roku 2023 ji nahradila přísnější podmíněnost a ekoschémata.",
+    "longDef": "Ozelenění, anglicky greening, byla část přímých plateb Společné zemědělské politiky EU v letech 2015–2022, kterou zemědělec dostal jen tehdy, když splnil tři povinná opatření: diverzifikaci plodin na orné půdě, zachování trvalých travních porostů a vyčlenění ploch v ekologickém zájmu (EFA) — nejméně 5 % orné půdy u podniků s více než 15 ha orné půdy. Na greening šlo 30 % obálky přímých plateb.\n\nEvropský účetní dvůr v roce 2017 zjistil, že greening vedl ke změně hospodaření jen asi na 5 % zemědělské půdy.\n\nOd roku 2023 greening skončil. Jeho povinné prvky přešly do standardů podmíněnosti (DZES) a dobrovolné do ekoschémat — v ČR do celofaremní ekoplatby.",
     "related": [
       "ekoschemata",
       "podminenost",
@@ -319,15 +319,15 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "faq": [
       {
         "q": "Co je ozelenění v zemědělství?",
-        "a": "Ozelenění je soubor opatření v zemědělství zaměřených na zlepšení ekologické udržitelnosti."
+        "a": "Povinná ekologická složka přímých plateb EU v letech 2015–2022 (greening)."
       },
       {
-        "q": "Jaké jsou hlavní prvky ozelenění?",
-        "a": "Hlavními prvky jsou diverzifikace plodin, udržování trvalých travních porostů a ochrana ekologicky významných ploch."
+        "q": "Jaké byly hlavní prvky ozelenění?",
+        "a": "Diverzifikace plodin, zachování trvalých travních porostů a plochy v ekologickém zájmu (EFA)."
       },
       {
-        "q": "Proč je ozelenění důležité?",
-        "a": "Ozelenění přispívá ke snížení negativních dopadů zemědělství na životní prostředí."
+        "q": "Proč greening skončil?",
+        "a": "Reforma SZP od roku 2023 ho nahradila přísnější podmíněností a dobrovolnými ekoschématy; Evropský účetní dvůr (2017) navíc zjistil, že greening změnil hospodaření jen asi na 5 % zemědělské půdy."
       }
     ]
   },
