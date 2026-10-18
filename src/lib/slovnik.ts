@@ -3720,11 +3720,11 @@ Viz též [[rijnost]], [[oteleni]], [[jalovice]], [[usni-znamka]], [[dojirna]].`
   {
     slug: 'jalovice',
     term: 'Jalovice',
-    alias: ['heifer', 'jalůvka', 'sirka'],
+    alias: ['heifer', 'jalůvka'],
     kategorie: 'chov',
     shortDef: 'Jalovice je samice skotu od narození do prvního otelení — typicky 0–24 měsíců. Klíčová investice chovu (12–18 měs. odchovu bez výroby), genetický potenciál nové generace. Po prvním otelení se z ní stává „prvotelka" (cow).',
     titulek: 'Jalovice — samice skotu do 1. otelení, fáze odchovu',
-    longDef: `Jalovice (lidově *jalůvka*, dialekt *sirka*, anglicky *heifer*) je **samice skotu od narození do prvního otelení**. Po prvním otelení už není jalovice ale **kráva** (cow), konkrétně „prvotelka" (= primipara). Doba odchovu jalovice je **klíčovou investicí** chovu — 22–24 měsíců nákladů bez výroby mléka.
+    longDef: `Jalovice (lidově *jalůvka*, anglicky *heifer*) je **samice skotu od narození do prvního otelení**. Po prvním otelení už není jalovice ale **kráva** (cow), konkrétně „prvotelka" (= primipara). Doba odchovu jalovice je **klíčovou investicí** chovu — 22–24 měsíců nákladů bez výroby mléka.
 
 **Fáze odchovu jalovice:**
 
@@ -3794,9 +3794,7 @@ Viz též [[rijnost]], [[oteleni]], [[jalovice]], [[usni-znamka]], [[dojirna]].`
 
 **Stárnoucí stádo:**
 - Průměrný věk krávy v CZ stádech: **3,5 laktace** (= 5–6 let)
-- **Cyklus**: 30–35 % jalovic ročně vstupuje do stáda jako prvotelky, 30–35 % krav odchází (kanibalismus nebo prodej)
-
-**„Sirka"** — slovenský / valašský dialekt pro jalovici, dnes regionálně v Moravě.
+- **Cyklus**: 30–35 % jalovic ročně vstupuje do stáda jako prvotelky, 30–35 % krav odchází (brakace nebo prodej)
 
 Viz též [[oteleni]], [[rijnost]], [[inseminace]], [[usni-znamka]], [[tmr]], [[dojirna]].`,
     related: ['oteleni', 'rijnost', 'inseminace', 'usni-znamka', 'tmr'],
@@ -6489,7 +6487,7 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 - **Cukrovary Hradec Králové** (skupina Tereos) — Polabí
 - **Moravskoslezské cukrovary** (Litovel, Vrbátky) — Haná
 - **Tereos TTD** — Dobrovice (Polabí)
-- **Pfeifer & Langen** (Český Meziříčí)
+- **Pfeifer & Langen** (České Meziříčí)
 
 **Kontrakt** mezi farmou a cukrovarem:
 - **Plocha + odhad výnosu** = množstevní závazek

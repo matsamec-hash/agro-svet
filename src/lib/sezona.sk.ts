@@ -43,7 +43,7 @@ export const SEASON_CONTENT_SK: Record<SeasonSlug, SeasonContent> = {
     lead: `V lete vrcholí zber: ozimný jačmeň (jún), ozimná pšenica, raž, tritikale a hrach (júl), potom repka a jarné obilniny (júl–august). Súbežne prebieha kosba krmovín a balíkovanie slamy a sena.`,
     workLinks: [
       { href: '/pruvodce/jak-vybrat-kombajn-stredni-farma/', label: `Ako vybrať kombajn pre strednú farmu` },
-      { href: '/pruvodce/jak-vybrat-seci-stroj/', label: `Ako vybrať žací stroj` },
+      { href: '/pruvodce/jak-vybrat-seci-stroj/', label: `Ako vybrať sejačku` },
       { href: '/pruvodce/jak-vybrat-lis-na-baliky/', label: `Ako vybrať lis na balíky` },
     ],
     faq: [
