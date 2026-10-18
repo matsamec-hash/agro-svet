@@ -104,7 +104,7 @@ export const GET: APIRoute = async () => {
   lines.push('## Kalkulačky');
   lines.push('');
   lines.push(`- [Hub kalkulaček](${SITE_URL}/kalkulacka/)`);
-  lines.push(`- [Kalkulačka dotací CAP 2024](${SITE_URL}/kalkulacka/dotace-cap/) — BISS + CISS + EKO + ANC + VCS pro citlivé sektory`);
+  lines.push(`- [Kalkulačka přímých plateb 2026](${SITE_URL}/kalkulacka/dotace-cap/) — BISS, redistributivní platba, ekoplatby a CIS podle sazeb MZe za rok 2026 (orientační)`);
   lines.push(`- [Leasing traktoru](${SITE_URL}/kalkulacka/leasing-traktoru/) — měsíční splátka, RPSN`);
   lines.push(`- [Náklady na hektar](${SITE_URL}/kalkulacka/naklady-na-hektar/) — spotřeba nafty + obsluha`);
   lines.push('');

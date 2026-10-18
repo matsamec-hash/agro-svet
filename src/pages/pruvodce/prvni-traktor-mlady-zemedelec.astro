@@ -24,14 +24,14 @@ const breadcrumbJsonLd = breadcrumbSchema([
 ]);
 
 const faqsCs = [
-  { q: 'Co je dotace Mladý zemědělec?', a: 'CAP 2024 bonus pro zemědělce do 40 let — 1500 Kč/ha pro prvních 150 ha, vyplácí se max 5 let od první žádosti. Detail: /slovnik/cap-2024/.' },
+  { q: 'Co je dotace Mladý zemědělec?', a: 'Doplňková přímá platba pro zemědělce, kteří v roce první žádosti nedosáhli 41 let: za rok 2026 činí 2 389,20 Kč/ha, nejvýš na 90 ha a pět let po sobě (MZe, NV 83/2023 Sb.). Detail: /slovnik/platba-pro-mlade-zemedelce/.' },
   { q: 'Jaký rozpočet pro první traktor?', a: 'Pro startovací farmu 30–60 ha doporučujeme 1,5–2,5 mil. Kč (ojetý Zetor Forterra, JD 6M nebo NH T6 5–8 let starý). Plus 200–400 tis. Kč na pluh, secí, vůz, drobné nářadí.' },
   { q: 'Nový nebo ojetý jako první?', a: 'Pro startujícího farmáře téměř vždy ojetý. Nový dělá smysl jen pokud čerpáte investiční dotaci PRV (Intervence 33.73). Ojetý 4–6 let starý s 3000–5000 mh = 50 % ceny nového při 70 % zbývající životnosti.' },
   { q: 'Jak dlouho musím čekat na první dotaci?', a: 'Po podání Jednotné žádosti (duben–červen) vyplácí SZIF v říjnu–prosinci. První rok investiční výdaje hradíte sám, dotace přichází ex-post.' },
 ];
 
 const faqsSk = [
-  { q: "Čo je dotácia Mladý poľnohospodár?", a: "CAP 2024 bonus pre poľnohospodárov do 40 rokov — 1500 Kč/ha pre prvých 150 ha, vypláca sa max 5 rokov od prvej žiadosti. Detail: /slovnik/cap-2024/." },
+  { q: "Čo je dotácia Mladý poľnohospodár?", a: "Komplementárna podpora príjmu pre mladého poľnohospodára do 40 rokov: na Slovensku za rok 2025 108,89 €/ha (PPA), najviac na 100 ha a najviac päť rokov (NV SR 436/2022 Z. z.). Detail: /slovnik/cap-2024/." },
   { q: "Aký rozpočet pre prvý traktor?", a: "Pre štartovaciu farmu 30–60 ha odporúčame 1,5–2,5 mil. Kč (ojazdený Zetor Forterra, JD 6M alebo NH T6 5–8 rokov starý). Plus 200–400 tis. Kč na pluh, sejačku, voz, drobné náradie." },
   { q: "Nový alebo ojazdený ako prvý?", a: "Pre začínajúceho farmára takmer vždy ojazdený. Nový má zmysel len ak čerpáte investičnú dotáciu PRV (Intervencia 33.73). Ojazdený 4–6 rokov starý s 3000–5000 mh = 50 % ceny nového pri 70 % zostávajúcej životnosti." },
   { q: "Ako dlho musím čakať na prvú dotáciu?", a: "Po podaní Jednotnej žiadosti (apríl–jún) vypláca SZIF v októbri–decembri. Prvý rok investičné výdavky hradíte sám, dotácia prichádza ex-post." },
@@ -105,13 +105,13 @@ const articleJsonLd = {
 
     <div class="g-body">
       <h2>1. Špecifiká štartovacej farmy</h2>
-      <p>Mladý farmár (do 40 rokov, prvých 5 rokov od prvej žiadosti SZP) má v CAP 2024 výhody:</p>
+      <p>Mladý farmár (do 40 rokov, najviac 5 rokov od prvej žiadosti) má v SPP 2023–2027 výhody:</p>
       <ul>
-        <li><strong>Bonus 1500 Kč/ha</strong> pre prvých 150 ha — pre 50 ha farmu = 75 000 Kč/rok navyše.</li>
+        <li><strong>Platba pre mladého poľnohospodára 108,89 €/ha</strong> (SR, rok 2025, PPA) najviac na 100 ha — pre 50 ha farmu ≈ 5 445 €/rok navyše.</li>
         <li><strong>Investičné dotácie PRV</strong> s vyšším percentom podpory (50 % namiesto 40 % pre startup).</li>
         <li><strong>Lacnejšie úvery</strong> u niektorých bánk (Komerční banka, ČSOB) vďaka štátnej garancii.</li>
       </ul>
-      <p>→ <a href="/sk/kalkulacka/dotace-cap/">CAP kalkulačka</a> ukáže presnú výšku pre vašu farmu.</p>
+      <p>→ <a href="/sk/kalkulacka/dotace-cap/">Kalkulačka priamych platieb</a> ukáže orientačnú výšku pre vašu farmu.</p>
 
       <h2>2. Rozpočet a stratégia</h2>
       <p>Pre typickú štartovaciu farmu (30–60 ha) odporúčame:</p>
@@ -190,13 +190,13 @@ const articleJsonLd = {
 
     <div class="g-body">
       <h2>1. Specifika startovací farmy</h2>
-      <p>Mladý zemědělec (do 40 let, prvních 5 let od první žádosti SZP) má v CAP 2024 výhody:</p>
+      <p>Mladý zemědělec (v roce první žádosti do 40 let, nejvýš 5 let po sobě) má v SZP 2023–2027 výhody:</p>
       <ul>
-        <li><strong>Bonus 1500 Kč/ha</strong> pro prvních 150 ha — pro 50 ha farmu = 75 000 Kč/rok navíc.</li>
+        <li><strong>Platba pro mladé zemědělce 2 389,20 Kč/ha</strong> (sazba 2026) nejvýš na 90 ha — pro 50ha farmu 119 460 Kč/rok navíc.</li>
         <li><strong>Investiční dotace PRV</strong> s vyšším procentem podpory (50 % místo 40 % pro startup).</li>
         <li><strong>Levnější úvěry</strong> u některých bank (Komerční banka, ČSOB) díky státní garanci.</li>
       </ul>
-      <p>→ <a href="/kalkulacka/dotace-cap/">CAP kalkulačka</a> ukáže přesnou výši pro vaši farmu.</p>
+      <p>→ <a href="/kalkulacka/dotace-cap/">Kalkulačka přímých plateb</a> ukáže orientační výši pro vaši farmu.</p>
 
       <h2>2. Rozpočet a strategie</h2>
       <p>Pro typickou startovací farmu (30–60 ha) doporučujeme:</p>

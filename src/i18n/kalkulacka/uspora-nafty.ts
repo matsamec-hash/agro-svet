@@ -69,7 +69,7 @@ export const content: Partial<Record<Locale, UsporaNaftyContent>> = {
     related: {
       heading: 'Související',
       links: [
-        { href: '/kalkulacka/dotace-cap/', label: 'Kalkulačka dotací CAP 2024' },
+        { href: '/kalkulacka/dotace-cap/', label: 'Kalkulačka přímých plateb 2026' },
         { href: '/kalkulacka/leasing-traktoru/', label: 'Kalkulačka leasingu traktoru' },
         { href: '/kalkulacka/naklady-na-hektar/', label: 'Kalkulačka nákladů na hektar' },
         { href: '/slovnik/adblue/', label: 'Co je AdBlue (slovník)' },

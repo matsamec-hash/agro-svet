@@ -103,7 +103,7 @@ export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
       ],
       contextHeading: 'K čemu jsou jednotlivé jednotky dobré?',
       cards: [
-        { title: 'Hektar (ha)', href: '/slovnik/hektar/', text: 'Standardní jednotka v zemědělství a lesnictví. Používá se pro výměru farem, dotace na hektar (BISS, CISS, EKO), výnosy plodin (t/ha) i ceny postřiků (l/ha). 1 ha = fotbalové hřiště 1,5×.' },
+        { title: 'Hektar (ha)', href: '/slovnik/hektar/', text: 'Standardní jednotka v zemědělství a lesnictví. Používá se pro výměru farem, dotace na hektar (BISS, redistributivní platba, ekoplatba), výnosy plodin (t/ha) i ceny postřiků (l/ha). 1 ha = fotbalové hřiště 1,5×.' },
         { title: 'Ar (a)', href: '/slovnik/ar/', text: 'Jednotka pro drobné pozemky — zahrady, malé parcely, vinice malých vinařů. 1 ar = čtverec 10 × 10 m. V katastru nemovitostí přetrvává v běžné řeči, oficiálně se eviduje v m².' },
         { title: 'Metr čtvereční (m²)', href: '/slovnik/metr-ctvrecni/', text: 'Základní SI jednotka. Oficiální zápis v katastru nemovitostí, sazba daně z nemovitých věcí, výměra stavebních parcel, bytů a hal. Univerzální napříč obory.' },
         { title: 'Akr (acre)', href: '/slovnik/akr/', text: 'Anglosaská jednotka pro USA, UK, Kanadu, Austrálii. Pro CZ farmáře relevantní při čtení USDA dat (výnosy v bu/ac), CBOT cenotvorby a při exportu komodit.' },
@@ -117,7 +117,7 @@ export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
       items: [
         { href: '/slovnik/?kategorie=jednotky', label: '📐 Slovník — všechny jednotky a měření' },
         { href: '/kalkulacka/naklady-na-hektar/', label: '🌾 Kalkulačka nákladů na hektar' },
-        { href: '/kalkulacka/dotace-cap/', label: '💶 Kalkulačka dotací CAP 2024' },
+        { href: '/kalkulacka/dotace-cap/', label: '💶 Kalkulačka přímých plateb 2026' },
         { href: '/slovnik/hektar/', label: '🟨 Hektar (ha) — detail jednotky' },
         { href: '/slovnik/q-cent/', label: '⚖️ Cent (q) — jednotka výnosu' },
       ],

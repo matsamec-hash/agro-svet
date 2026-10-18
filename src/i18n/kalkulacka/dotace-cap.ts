@@ -1,5 +1,5 @@
 import type { Locale } from '../config';
-import { SAZBY } from '../../lib/cap-dotace';
+import { SAZBY, LIMITY, ROK_SAZEB, KURZ_CZK_EUR, ZALOHA_PROCENT, formatSazba, formatKc } from '../../lib/cap-dotace';
 
 export interface DotaceCapFaq { q: string; a: string }
 
@@ -15,43 +15,45 @@ export interface DotaceCapContent {
   faq: DotaceCapFaq[];
 }
 
+const kc = (n: number) => `${formatSazba(n)} Kč/ha`;
+
 const cs: DotaceCapContent = {
-    title: 'Kalkulačka dotací CAP 2024 — BISS, CISS, EKO, ANC, VCS',
-    metaDescription: 'Spočítejte, jaké přímé platby vám připadnou ze Společné zemědělské politiky 2023–2027. Zahrnuje BISS, CISS, EKO, ANC i VCS pro citlivé sektory.',
-    kicker: 'Kalkulačka · CAP 2024',
-    h1: 'Kolik dostanete na dotacích',
-    lede: 'Orientační kalkulátor přímých plateb Společné zemědělské politiky 2023–2027 — sečte BISS, CISS, EKO, ANC a VCS pro citlivé sektory. Sazby vychází z veřejných materiálů SZIF/MZe.',
+    title: `Kalkulačka přímých plateb ${ROK_SAZEB} — BISS, redistributivní platba, ekoplatby, CIS`,
+    metaDescription: `Spočítejte přímé platby SZP v ČR podle sazeb za rok ${ROK_SAZEB} (MZe, 2. 10. 2026): BISS, redistributivní platba, mladý a malý zemědělec, ekoplatby a podpora vázaná na produkci (CIS).`,
+    kicker: `Kalkulačka · sazby ${ROK_SAZEB}`,
+    h1: 'Kolik dostanete na přímých platbách',
+    lede: `Orientační výpočet přímých plateb Společné zemědělské politiky v ČR podle sazeb za rok ${ROK_SAZEB}, které ministr zemědělství schválil 2. 10. 2026. Sečte základní platbu BISS, redistributivní platbu, platbu pro mladé zemědělce, ekoplatby a podporu vázanou na produkci (CIS).`,
     crumbHome: 'Domů',
     crumbHub: 'Kalkulačky',
-    crumbSelf: 'Dotace CAP',
+    crumbSelf: 'Přímé platby SZP',
     faq: [
       {
-        q: 'Jaké dotace mi reálně přijdou na účet?',
-        a: 'Kalkulačka sčítá hlavní přímé platby SZP 2023–2027 (BISS + CISS + EKO + ANC + VCS pro citlivé sektory + bonus Mladý zemědělec). Investiční dotace (Intervence 33.73, 37.73 a další z PRV) jsou samostatné výzvy a nepočítáme je. Pojistné kompenzace, AEKO smlouvy a Welfare zvířat také ne.',
+        q: 'Jaké platby kalkulačka počítá?',
+        a: 'Přímé platby I. pilíře SZP v ČR: základní platbu BISS, redistributivní platbu, platbu pro mladé zemědělce, platbu pro malé zemědělce, ekoplatby (základní, prémiovou, údržbu a vytváření krajinných prvků, hospodaření s živinami, pásové střídání plodin) a podporu vázanou na produkci (CIS) — plodiny na hektar, dojnice, telata masného typu a bahnice s kozami na kus. Platby II. pilíře (ANC, AEKO, ekologické zemědělství, Natura 2000) ani investiční dotace nepočítá.',
       },
       {
         q: 'Jsou sazby aktuální?',
-        a: `Sazby vychází z veřejně dostupných materiálů SZIF / MZe pro rok 2024 (BISS ${SAZBY.biss} Kč/ha, CISS ${SAZBY.ciss} Kč/ha pro prvních ${SAZBY.cissMaxHa} ha, EKO základní ${SAZBY.ekoBasic} Kč/ha). Oficiální sazby pro daný rok SZIF zveřejňuje až po uzávěrce kampaně, takže celková částka se může lišit o ±5–10 %.`,
+        a: `Ano, jde o sazby za rok ${ROK_SAZEB}, které ministr zemědělství schválil 2. 10. 2026 (tisková zpráva MZe). Z eur je MZe přepočetlo kurzem ECB k 30. 9. 2026, tj. ${KURZ_CZK_EUR.toLocaleString('cs-CZ')} Kč/EUR. Například BISS ${kc(SAZBY.biss)}, redistributivní platba ${kc(SAZBY.redistributivni)}, základní ekoplatba ${kc(SAZBY.ekoZakladni)}. SZIF vyplácí zálohy ve výši ${ZALOHA_PROCENT} %.`,
       },
       {
-        q: 'Co je CISS a proč jen na prvních 150 ha?',
-        a: `CISS (Complementary Redistributive Income Support) je redistributivní platba — sníží disproporci mezi malými a velkými farmami. Platí se ${SAZBY.ciss} Kč/ha pouze na prvních ${SAZBY.cissMaxHa} ha. Velká farma s 500 ha dostane CISS jen za prvních ${SAZBY.cissMaxHa} ha, malá s 50 ha dostane CISS na celou výměru.`,
+        q: 'Proč je redistributivní platba jen na prvních 150 ha?',
+        a: `Redistributivní platba přesouvá peníze k menším a středním podnikům. Podle § 9 odst. 3 nařízení vlády č. 83/2023 Sb. se poskytuje nejvýše na ${LIMITY.redistributivniMaxHa} ha (${kc(SAZBY.redistributivni)}), a to jen tomu, kdo má nárok na BISS. Podnik s 500 ha ji dostane na ${LIMITY.redistributivniMaxHa} ha, podnik s 50 ha na celou výměru.`,
       },
       {
-        q: 'Kdy se vyplatí EKO premium?',
-        a: `EKO premium režim platí vyšší sazbu (${SAZBY.ekoPremium} Kč/ha) za víc eko-praktik — meziplodiny, krycí plodiny, biopásy, neproduktivní plochy ad. Vyplatí se vždy, kdy je farma schopná praktiky uskutečnit bez výrazného dopadu na hektarový výnos. Rozdíl proti základnímu EKO (${SAZBY.ekoBasic} Kč/ha) je ${SAZBY.ekoPremium - SAZBY.ekoBasic} Kč/ha.`,
+        q: 'Na co se vyplácí prémiová ekoplatba?',
+        a: `Ne na celou výměru. Prémiová ekoplatba (${kc(SAZBY.ekoPremiova)}) se platí jen na neprodukční plochy — krajinné prvky, nektarodárné liniové úhory, ochranné pásy, biopásy — nejvýš do 10 % výměry orné půdy (standardní orná půda, úhor, travní porost), a na ochranné pásy podél vody typu prémiový (§ 24 nařízení vlády č. 83/2023 Sb.). Podmínkou je základní ekoplatba a vyčlenění aspoň 7 % neprodukčních ploch, z toho aspoň 2 % krajinných prvků, liniových úhorů nebo ochranných pásů.`,
       },
       {
-        q: 'Co je ANC a komu se vyplatí?',
-        a: 'ANC = Areas with Natural Constraints, méně příznivé oblasti. Tři kategorie: horská (H1–H5, nejvyšší sazba ~4500 Kč/ha průměr), ostatní oblast (OA, ~2000 Kč/ha) a oblasti se specifickým omezením (SV, ~2000 Kč/ha). Zařazení LPIS bloku do ANC kategorie je dáno průměrnou nadmořskou výškou, sklonem, půdním typem a podloží — najdete v evidenci LPIS u svého LPIS bloku.',
+        q: 'Vyplatí se platba pro malé zemědělce?',
+        a: `Je jen pro podniky, které mají v LPIS nejvýš ${LIMITY.maliMaxVymeraPodnikuHa} ha zemědělské půdy, a platí se nejvýš na ${LIMITY.maliMaxHa} ha (${kc(SAZBY.maliZemedelci)}, tedy nejvýš ${formatKc(LIMITY.maliMaxHa * SAZBY.maliZemedelci)}). Nahrazuje všechny ostatní přímé platby — kdo o ni žádá, nemůže žádat o BISS, redistributivní platbu, platbu pro mladé zemědělce, CIS ani ekoplatby. Platby II. pilíře (ANC, AEKO) zůstávají možné. U podniku do 10 ha kalkulačka ukáže obě varianty vedle sebe.`,
       },
       {
-        q: 'Vyplatí se VCS u méně známých sektorů?',
-        a: 'Ano, zejména u chmele (~13000 Kč/ha) a polní zeleniny (~9000 Kč/ha) je sazba významná — i 5 ha přidá 45–65 tis. Kč/rok. U krmných plodin (~1100 Kč/ha) je sazba spíš orientační — citelná až od desítek hektarů.',
+        q: 'Proč kalkulačka nepočítá ANC?',
+        a: 'Platba pro oblasti s přírodními omezeními (ANC) není přímá platba, ale opatření II. pilíře podle nařízení vlády č. 61/2023 Sb. Sazba v EUR/ha se liší podle typu oblasti (horské H1–H5, ostatní O1–O3, specifické S) a zaměření podniku a nad 300 ha klesá. Žádá se o ni v Jednotné žádosti u SZIF (szif.gov.cz/cs/jednotna-zadost). Průměrnou sazbu kalkulačka záměrně neuvádí.',
       },
       {
-        q: 'Kalkulačka je závazná?',
-        a: 'NE. Slouží jako orientace pro plánování. Závazné částky stanovuje SZIF (https://www.szif.cz) po uzávěrce roční kampaně a po kontrole LPIS a sankčního systému. Při překročení limitů nebo nesplnění podmínek (např. greening) může být skutečná platba i o desítky procent nižší.',
+        q: 'Je výpočet závazný?',
+        a: 'Ne. Jde o orientační výpočet, závazná jsou rozhodnutí SZIF. Skutečná platba závisí na kontrole ploch a zvířat a na splnění podmínek — podmíněnosti, podmínek ekoplateb a CIS (například minimální výnosy u ovoce a zeleniny). Při porušení se platby krátí nebo neposkytnou.',
       },
     ],
 };

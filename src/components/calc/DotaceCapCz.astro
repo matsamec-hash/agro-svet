@@ -1,5 +1,5 @@
 ---
-import { KRAJE, CITLIVE_SEKTORY, SAZBY } from '../../lib/cap-dotace';
+import { CIS_PLODINY, CIS_ZVIRATA, SAZBY, LIMITY, ROK_SAZEB, KURZ_CZK_EUR, ZALOHA_PROCENT, ZDROJE, formatSazba } from '../../lib/cap-dotace';
 import { getLocaleFromUrl, localizeInternalHref } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { faqItems } = Astro.props;
+const kc = (n: number) => `${formatSazba(n)} Kč/ha`;
 ---
 
 <div class="calc-root">
@@ -17,14 +18,18 @@ const { faqItems } = Astro.props;
       <span aria-hidden="true">›</span>
       <a href={localizeInternalHref(locale, '/kalkulacka/')}>Kalkulačky</a>
       <span aria-hidden="true">›</span>
-      <span class="current">Dotace CAP</span>
+      <span class="current">Přímé platby SZP</span>
     </nav>
 
     <header class="calc-head">
-      <span class="kicker">Kalkulačka · CAP 2024</span>
-      <h1>Kolik dostanete na dotacích</h1>
+      <span class="kicker">Kalkulačka · sazby {ROK_SAZEB}</span>
+      <h1>Kolik dostanete na přímých platbách</h1>
       <p class="lede">
-        Orientační kalkulátor přímých plateb Společné zemědělské politiky 2023–2027 — sečte BISS, CISS, EKO, ANC a VCS pro citlivé sektory. Sazby vychází z veřejných materiálů SZIF/MZe.
+        Orientační výpočet přímých plateb Společné zemědělské politiky v ČR podle sazeb za rok {ROK_SAZEB}, které ministr zemědělství schválil 2. 10. 2026. Sečte základní platbu BISS, redistributivní platbu, platbu pro mladé zemědělce, ekoplatby a podporu vázanou na produkci (CIS).
+      </p>
+      <p class="source-line">
+        Sazby: <a href={ZDROJE.sazby.url} rel="external nofollow">{ZDROJE.sazby.label}</a> (přepočet kurzem ECB k 30. 9. 2026, {KURZ_CZK_EUR.toLocaleString('cs-CZ')} Kč/EUR).
+        Pravidla: <a href={ZDROJE.narizeni.url} rel="external nofollow">{ZDROJE.narizeni.label}</a>, <a href={ZDROJE.prirucka.url} rel="external nofollow">{ZDROJE.prirucka.label}</a>.
       </p>
     </header>
 
@@ -33,105 +38,150 @@ const { faqItems } = Astro.props;
         <legend>Hospodářství</legend>
 
         <label class="field">
-          <span>Celková výměra (ha) <strong class="req">*</strong></span>
-          <input type="number" id="total-ha" name="totalHa" min="0" step="0.1" placeholder="např. 75" required />
+          <span>Způsobilá zemědělská půda v LPIS (ha) <strong class="req">*</strong></span>
+          <input type="number" id="total-ha" name="totalHa" min="0" step="0.01" placeholder="např. 75" required />
+          <span class="field-hint">Orná půda, trvalé travní porosty a trvalé kultury evidované na vás. Jiná kultura, mimoprodukční plocha a rybník se nepočítají.</span>
         </label>
 
         <label class="field">
-          <span>Kraj <em>(pro odhad ANC)</em></span>
-          <select id="kraj" name="kraj">
-            <option value="">— Vyberte —</option>
-            {KRAJE.map((k) => (
-              <option value={k.slug} data-anc-share={k.ancShare}>{k.name}</option>
-            ))}
-          </select>
+          <span>Z toho orná půda (ha)</span>
+          <input type="number" id="orna-ha" name="ornaHa" min="0" step="0.01" placeholder="např. 60" />
+          <span class="field-hint">Standardní orná půda, úhor a travní porost (kultury R, U, G). Potřebné pro prémiovou ekoplatbu, krajinné prvky, živiny a pásové střídání.</span>
         </label>
 
         <label class="field-check">
           <input type="checkbox" id="mlady" name="mlady" />
-          <span><strong>Mladý zemědělec</strong> <em>— bonus {SAZBY.mladyZemedelec} Kč/ha pro prvních {SAZBY.mladyMaxHa} ha (do 40 let, max 5 let od první žádosti).</em></span>
+          <span><strong>Mladý zemědělec</strong> <em>— {kc(SAZBY.mladyZemedelec)}, nejvýše na {LIMITY.mladyMaxHa} ha a pět let po sobě; v roce první žádosti nejvýše 40 let, minimální zemědělská kvalifikace.</em></span>
         </label>
 
         <label class="field-check">
-          <input type="checkbox" id="eko-premium" name="ekoPremium" />
-          <span><strong>EKO premium režim</strong> <em>— víc eko-praktik = {SAZBY.ekoPremium} Kč/ha místo základních {SAZBY.ekoBasic} Kč/ha.</em></span>
+          <input type="checkbox" id="mali" name="mali" />
+          <span><strong>Platba pro malé zemědělce</strong> <em>— {kc(SAZBY.maliZemedelci)}, nejvýše na {LIMITY.maliMaxHa} ha, jen podnik do {LIMITY.maliMaxVymeraPodnikuHa} ha. Nahrazuje všechny ostatní přímé platby.</em></span>
         </label>
       </fieldset>
 
       <fieldset class="fs">
-        <legend>ANC — méně příznivé oblasti</legend>
+        <legend>Ekoplatby</legend>
 
-        <label class="field">
-          <span>Kategorie ANC</span>
-          <select id="anc-cat" name="ancCategory">
-            <option value="none">Žádná (mimo ANC)</option>
-            <option value="horska">Horská (H1–H5) — průměr ~4 500 Kč/ha</option>
-            <option value="oa">Ostatní oblast (OA) — ~2 000 Kč/ha</option>
-            <option value="sv">Specifické omezení (SV) — ~2 000 Kč/ha</option>
-          </select>
+        <label class="field-check">
+          <input type="checkbox" id="eko-zakladni" name="ekoZakladni" checked />
+          <span><strong>Základní celofaremní ekoplatba</strong> <em>— {kc(SAZBY.ekoZakladni)} na celou výměru. Podmínky na všech dílech: mimo jiné diverzifikace plodin, aspoň 5 % neprodukčních ploch na orné půdě, ochranné pásy podél vody, seč nebo pastva TTP do 31. 7.</em></span>
         </label>
 
-        <label class="field">
-          <span>Plocha v ANC (ha)</span>
-          <input type="number" id="anc-ha" name="ancHa" min="0" step="0.1" placeholder="kolik ha vašeho hospodářství je v ANC" disabled />
+        <p class="fs-hint">Následující platby lze dostat jen spolu se základní ekoplatbou. Zadejte jen plochy, které do nich opravdu přihlásíte.</p>
+
+        <div class="cis-grid">
+          <label class="cis-field">
+            <span class="cis-name">Prémiová ekoplatba — neprodukční plochy</span>
+            <span class="cis-rate">{kc(SAZBY.ekoPremiova)}</span>
+            <input type="number" name="ekoPremiovaNpHa" min="0" step="0.01" placeholder="0 ha" />
+            <span class="cis-hint">Krajinné prvky, liniové úhory, ochranné pásy, biopásy; platí se nejvýš do 10 % orné půdy. Podmínka: vyčlenit 7 % neprodukčních ploch.</span>
+          </label>
+          <label class="cis-field">
+            <span class="cis-name">Prémiová ekoplatba — pásy podél vody</span>
+            <span class="cis-rate">{kc(SAZBY.ekoPremiova)}</span>
+            <input type="number" name="ekoPremiovaPasyHa" min="0" step="0.01" placeholder="0 ha" />
+            <span class="cis-hint">Ochranné pásy podél vody typu prémiový (12 m).</span>
+          </label>
+          <label class="cis-field">
+            <span class="cis-name">Údržba krajinných prvků</span>
+            <span class="cis-rate">{kc(SAZBY.udrzbaKrajinnychPrvku)}</span>
+            <input type="number" name="udrzbaKpHa" min="0" step="0.01" placeholder="0 ha" />
+            <span class="cis-hint">Meze, stromořadí, skupiny dřevin, příkopy… na orné půdě a TTP. Ne na plochu v prémiové ekoplatbě.</span>
+          </label>
+          <label class="cis-field">
+            <span class="cis-name">Vytváření nových krajinných prvků</span>
+            <span class="cis-rate">{kc(SAZBY.noveKrajinnePrvky)}</span>
+            <input type="number" name="noveKpHa" min="0" step="0.01" placeholder="0 ha" />
+            <span class="cis-hint">Prvky na orné půdě založené po 1. 1. 2025, nejvýš 50 % orné půdy. Ne na plochu v prémiové ekoplatbě.</span>
+          </label>
+          <label class="cis-field">
+            <span class="cis-name">Pásové střídání plodin</span>
+            <span class="cis-rate">{kc(SAZBY.pasoveStridani)}</span>
+            <input type="number" name="pasoveStridaniHa" min="0" step="0.01" placeholder="0 ha" />
+            <span class="cis-hint">Díly půdních bloků od 4 ha se sklonitostí aspoň 3 %, nejméně 4 pásy plodin.</span>
+          </label>
+        </div>
+
+        <label class="field-check">
+          <input type="checkbox" id="ziviny" name="ziviny" />
+          <span><strong>Udržitelné hospodaření s živinami</strong> <em>— {kc(SAZBY.hospodareniZivinami)} na ornou půdu; bilance dusíku nejvýš 60 kg N/ha a dodání fosforu podle odběru.</em></span>
         </label>
       </fieldset>
 
       <fieldset class="fs">
-        <legend>Citlivé sektory (VCS)</legend>
-        <p class="fs-hint">Vyplňte plochy v jednotlivých citlivých sektorech, na které čerpáte VCS. Nechte 0, pokud sektor nepěstujete.</p>
+        <legend>Podpora vázaná na produkci (CIS)</legend>
+        <p class="fs-hint">Plodiny v hektarech (u každé nejméně {LIMITY.cisMinHa} ha), zvířata v kusech. Nechte prázdné, pokud komoditu nemáte.</p>
 
-        <div class="vcs-grid">
-          {CITLIVE_SEKTORY.map((s) => (
-            <label class="vcs-field">
-              <span class="vcs-name">{s.name}</span>
-              <span class="vcs-rate">{s.sazba.toLocaleString('cs-CZ')} Kč/ha</span>
-              <input type="number" name={`vcs-${s.slug}`} data-vcs={s.slug} min="0" step="0.1" placeholder="0" />
+        <div class="cis-grid">
+          {CIS_PLODINY.map((s) => (
+            <label class="cis-field">
+              <span class="cis-name">{s.name}</span>
+              <span class="cis-rate">{kc(s.sazba)}</span>
+              <input type="number" name={`cis-${s.slug}`} min="0" step="0.01" placeholder="0 ha" />
+              <span class="cis-hint">{s.description}</span>
+            </label>
+          ))}
+          {CIS_ZVIRATA.map((s) => (
+            <label class="cis-field">
+              <span class="cis-name">{s.name}</span>
+              <span class="cis-rate">{formatSazba(s.sazba)} Kč/ks</span>
+              <input type="number" name={`cis-${s.slug}`} min="0" step="1" placeholder="0 ks" />
+              <span class="cis-hint">{s.description}</span>
             </label>
           ))}
         </div>
+
+        <label class="field-check">
+          <input type="checkbox" id="dojnice-kvalita" name="dojniceSchemaKvality" />
+          <span><strong>Hospodářství je zapojené do schématu kvality pro dojnice</strong> <em>— nutné, pokud žádáte na víc než {LIMITY.dojniceMaxBezSchematuKs} dojnic (příloha č. 21 NV 83/2023).</em></span>
+        </label>
       </fieldset>
 
-      <button type="submit" class="calc-btn">Spočítat dotace →</button>
+      <button type="submit" class="calc-btn">Spočítat přímé platby →</button>
     </form>
 
     <div id="result" class="result-card" hidden>
       <header class="result-head">
-        <span class="result-kicker">Orientační výpočet</span>
+        <span class="result-kicker">Orientační výpočet · sazby {ROK_SAZEB}</span>
         <div class="result-total" id="result-total">— Kč/rok</div>
         <div class="result-perha" id="result-perha">— Kč/ha průměrně</div>
       </header>
 
-      <h2>Rozpočet</h2>
+      <h2>Rozpis</h2>
       <table class="result-table">
         <thead>
-          <tr><th>Položka</th><th>Plocha</th><th>Sazba</th><th>Částka</th></tr>
+          <tr><th>Položka</th><th>Množství</th><th>Sazba</th><th>Částka</th></tr>
         </thead>
         <tbody id="result-tbody"></tbody>
       </table>
 
+      <ul class="result-warnings" id="result-warnings" hidden></ul>
+      <p class="result-alt" id="result-alt" hidden></p>
+
       <div class="result-disclaimer">
-        ⚠️ Orientační výpočet podle veřejných sazeb 2024. Závazné částky stanovuje <a href="https://www.szif.cz" rel="external nofollow">SZIF</a> po uzávěrce kampaně. Při překročení limitů nebo nesplnění podmínek (greening, kondicionality) může být skutečná platba nižší.
+        ⚠️ Orientační výpočet, závazná jsou rozhodnutí <a href={ZDROJE.szifJednotnaZadost.url} rel="external nofollow">SZIF</a>. Sazby za rok {ROK_SAZEB} podle <a href={ZDROJE.sazby.url} rel="external nofollow">tiskové zprávy MZe z 2. 10. 2026</a>; SZIF vyplácí zálohy ve výši {ZALOHA_PROCENT} %. Při nesplnění podmínek (podmíněnost, podmínky ekoplateb, CIS) se platby krátí nebo neposkytnou.
       </div>
 
       <div class="result-cta">
-        <a href={localizeInternalHref(locale, '/dotace/')} class="cta-link">Přehled dotací z PRV →</a>
+        <a href={localizeInternalHref(locale, '/dotace/')} class="cta-link">Přehled dotací →</a>
         <a href={localizeInternalHref(locale, '/dotace/kalendar-kol/')} class="cta-link">Kalendář kol →</a>
       </div>
     </div>
 
     <section class="info">
-      <h2>Jak kalkulačka funguje</h2>
-      <p>Tato kalkulačka sčítá hlavní přímé platby Společné zemědělské politiky 2023–2027:</p>
+      <h2>Jak kalkulačka počítá</h2>
+      <p>Sazby za rok {ROK_SAZEB} v Kč, jak je zveřejnilo Ministerstvo zemědělství. Pravidla podle nařízení vlády č. 83/2023 Sb. ve znění pro rok 2026:</p>
       <ul>
-        <li><strong>BISS</strong> — Základní platba ({SAZBY.biss} Kč/ha) na všechnu způsobilou plochu</li>
-        <li><strong>CISS</strong> — Redistributivní platba ({SAZBY.ciss} Kč/ha) pro prvních {SAZBY.cissMaxHa} ha</li>
-        <li><strong>EKO-platba</strong> — Základní {SAZBY.ekoBasic} Kč/ha, premium {SAZBY.ekoPremium} Kč/ha</li>
-        <li><strong>ANC</strong> — Horská ~{SAZBY.ancHorska} Kč/ha, OA/SV ~{SAZBY.ancOA} Kč/ha</li>
-        <li><strong>Mladý zemědělec</strong> — Bonus {SAZBY.mladyZemedelec} Kč/ha pro prvních {SAZBY.mladyMaxHa} ha</li>
-        <li><strong>VCS</strong> — Voluntary Coupled Support pro citlivé sektory: chmel, ovoce, zelenina, cukrová řepa, brambory na škrob, bílkovinné plodiny, len, krmné plodiny</li>
+        <li><strong>BISS</strong> — {kc(SAZBY.biss)} na způsobilou zemědělskou půdu v LPIS, nejméně 1 ha.</li>
+        <li><strong>Redistributivní platba (CRISS)</strong> — {kc(SAZBY.redistributivni)} jen na prvních {LIMITY.redistributivniMaxHa} ha podniku.</li>
+        <li><strong>Mladý zemědělec</strong> — {kc(SAZBY.mladyZemedelec)} nejvýše na {LIMITY.mladyMaxHa} ha, pět let po sobě.</li>
+        <li><strong>Platba pro malé zemědělce</strong> — {kc(SAZBY.maliZemedelci)} nejvýše na {LIMITY.maliMaxHa} ha pro podniky do {LIMITY.maliMaxVymeraPodnikuHa} ha; kdo o ni žádá, nemůže žádat o žádnou jinou přímou platbu. U podniku do 10 ha kalkulačka ukáže obě varianty.</li>
+        <li><strong>Základní ekoplatba</strong> — {kc(SAZBY.ekoZakladni)} na celou výměru. <strong>Prémiová ekoplatba</strong> — {kc(SAZBY.ekoPremiova)}, ale jen na neprodukční plochy (nejvýš 10 % orné půdy) a prémiové ochranné pásy podél vody.</li>
+        <li><strong>Další ekoplatby</strong> (jen se základní ekoplatbou) — údržba krajinných prvků {kc(SAZBY.udrzbaKrajinnychPrvku)}, nové krajinné prvky {kc(SAZBY.noveKrajinnePrvky)}, hospodaření s živinami {kc(SAZBY.hospodareniZivinami)}, pásové střídání plodin {kc(SAZBY.pasoveStridani)}.</li>
+        <li><strong>CIS</strong> (dříve VCS) — plodiny na hektar (chmel, ovoce, zelenina, cukrová řepa, škrobové brambory, bílkovinné plodiny), zvířata na kus (dojnice, telata masného typu, bahnice a kozy).</li>
       </ul>
-      <p>Co kalkulačka <strong>nezapočítává</strong>: investiční dotace z PRV (Intervence 33.73, 37.73 atd.), AEKO smlouvy, Welfare zvířat, BIO prémie a pojistné kompenzace.</p>
+      <p>Co kalkulačka <strong>nezapočítává</strong>: platby pro oblasti s přírodními omezeními (<strong>ANC</strong>) — nejsou přímou platbou, patří do II. pilíře a jejich sazba v EUR/ha závisí na typu oblasti (H1–H5, O1–O3, S) a zaměření podniku podle nařízení vlády č. 61/2023 Sb.; žádá se o ně v <a href={ZDROJE.szifJednotnaZadost.url} rel="external nofollow">Jednotné žádosti u SZIF</a>. Dále AEKO, ekologické zemědělství, Natura 2000, welfare zvířat, investiční dotace a krácení za porušení podmínek.</p>
 
       <h2>Časté dotazy</h2>
       <div class="faqs">
@@ -146,75 +196,77 @@ const { faqItems } = Astro.props;
   </div>
 
   <script>
-    import { calculateCap, formatKc, KRAJE, CITLIVE_SEKTORY } from '../../lib/cap-dotace';
-
-    type AncCategory = 'none' | 'horska' | 'oa' | 'sv';
+    import { calculateCap, formatKc, formatSazba, CIS_PLODINY, CIS_ZVIRATA } from '../../lib/cap-dotace';
 
     const form = document.getElementById('cap-form') as HTMLFormElement;
     const resultEl = document.getElementById('result') as HTMLElement;
     const resultTotal = document.getElementById('result-total') as HTMLElement;
     const resultPerHa = document.getElementById('result-perha') as HTMLElement;
     const resultTbody = document.getElementById('result-tbody') as HTMLElement;
-    const ancCatSel = document.getElementById('anc-cat') as HTMLSelectElement;
-    const ancHaInput = document.getElementById('anc-ha') as HTMLInputElement;
-    const krajSel = document.getElementById('kraj') as HTMLSelectElement;
-
-    function syncAncDisabled() {
-      const enabled = ancCatSel.value !== 'none';
-      ancHaInput.disabled = !enabled;
-      if (!enabled) ancHaInput.value = '';
-    }
-    ancCatSel.addEventListener('change', syncAncDisabled);
-    syncAncDisabled();
-
-    // Kraj → soft hint about ANC. Auto-suggest horska/oa pre-fill when high share.
-    krajSel.addEventListener('change', () => {
-      const opt = krajSel.options[krajSel.selectedIndex] as HTMLOptionElement;
-      const share = opt?.dataset?.ancShare;
-      if (share === 'high' && ancCatSel.value === 'none') {
-        ancCatSel.value = 'horska';
-        syncAncDisabled();
-      }
-    });
+    const resultWarnings = document.getElementById('result-warnings') as HTMLElement;
+    const resultAlt = document.getElementById('result-alt') as HTMLElement;
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const data = new FormData(form);
-      const totalHa = parseFloat(String(data.get('totalHa') ?? '')) || 0;
-      const ancCategory = (String(data.get('ancCategory') ?? 'none')) as AncCategory;
-      const ancHa = ancCategory === 'none' ? 0 : (parseFloat(String(data.get('ancHa') ?? '')) || 0);
-      const mlady = !!data.get('mlady');
-      const ekoPremium = !!data.get('ekoPremium');
+      const num = (k: string) => parseFloat(String(data.get(k) ?? '').replace(',', '.')) || 0;
 
-      const vcsHa: Record<string, number> = {};
-      for (const sektor of CITLIVE_SEKTORY) {
-        const v = parseFloat(String(data.get(`vcs-${sektor.slug}`) ?? '')) || 0;
-        if (v > 0) vcsHa[sektor.slug] = v;
+      const cisHa: Record<string, number> = {};
+      for (const p of CIS_PLODINY) {
+        const v = num(`cis-${p.slug}`);
+        if (v > 0) cisHa[p.slug] = v;
+      }
+      const cisKs: Record<string, number> = {};
+      for (const z of CIS_ZVIRATA) {
+        const v = num(`cis-${z.slug}`);
+        if (v > 0) cisKs[z.slug] = v;
       }
 
       const res = calculateCap({
-        totalHa, ancHa, ancCategory, vcsHa,
-        ekoPremium, mladyZemedelec: mlady,
+        totalHa: num('totalHa'),
+        ornaHa: num('ornaHa'),
+        maliZemedelec: !!data.get('mali'),
+        mladyZemedelec: !!data.get('mlady'),
+        ekoZakladni: !!data.get('ekoZakladni'),
+        ekoPremiovaNpHa: num('ekoPremiovaNpHa'),
+        ekoPremiovaPasyHa: num('ekoPremiovaPasyHa'),
+        noveKpHa: num('noveKpHa'),
+        udrzbaKpHa: num('udrzbaKpHa'),
+        ziviny: !!data.get('ziviny'),
+        pasoveStridaniHa: num('pasoveStridaniHa'),
+        cisHa,
+        cisKs,
+        dojniceSchemaKvality: !!data.get('dojniceSchemaKvality'),
       });
 
-      if (!res.items.length) {
+      if (!res.items.length && !res.warnings.length) {
         alert('Zadejte výměru hospodářství.');
         return;
       }
 
       resultTotal.textContent = `${formatKc(res.total)} / rok`;
-      resultPerHa.textContent = `${formatKc(Math.round(res.perHa))} / ha průměrně`;
+      resultPerHa.textContent = res.perHa > 0 ? `${formatKc(res.perHa)} / ha průměrně` : '';
       resultTbody.innerHTML = res.items.map((it) => `
         <tr>
           <td>
             <strong>${escapeHtml(it.label)}</strong>
             ${it.note ? `<div class="row-note">${escapeHtml(it.note)}</div>` : ''}
           </td>
-          <td class="num">${it.ha.toLocaleString('cs-CZ')}</td>
-          <td class="num">${it.sazba.toLocaleString('cs-CZ')} Kč</td>
+          <td class="num">${it.mnozstvi.toLocaleString('cs-CZ', { maximumFractionDigits: 2 })} ${it.jednotka}</td>
+          <td class="num">${formatSazba(it.sazba)} Kč/${it.jednotka}</td>
           <td class="num strong">${formatKc(it.amount)}</td>
         </tr>
       `).join('');
+
+      resultWarnings.innerHTML = res.warnings.map((w) => `<li>${escapeHtml(w)}</li>`).join('');
+      resultWarnings.hidden = res.warnings.length === 0;
+
+      if (res.alternativa) {
+        resultAlt.textContent = `Pro srovnání — ${res.alternativa.label}: ${formatKc(res.alternativa.total)} / rok.`;
+        resultAlt.hidden = false;
+      } else {
+        resultAlt.hidden = true;
+      }
 
       resultEl.hidden = false;
       resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -246,6 +298,8 @@ const { faqItems } = Astro.props;
     }
     h1 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin: 12px 0 12px; color: #1a1a1a; }
     .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+    .source-line { font-size: 13px; color: #666; line-height: 1.5; margin: 12px 0 0; }
+    .source-line a { color: #0B7A3B; text-decoration: underline; }
 
     .calc-form {
       background: #fff;
@@ -282,20 +336,19 @@ const { faqItems } = Astro.props;
       margin-bottom: 14px;
     }
     .field span { font-size: 13px; color: #333; font-weight: 600; }
-    .field span em { color: #888; font-style: normal; font-weight: 400; }
-    .field input, .field select {
+    .field .field-hint { font-size: 12px; color: #888; font-weight: 400; line-height: 1.4; }
+    .field input {
       padding: 10px 12px;
       border: 1.5px solid #DFDFE3;
       border-radius: 8px;
       font-size: 15px;
       background: #fff;
     }
-    .field input:focus, .field select:focus {
+    .field input:focus {
       outline: none;
       border-color: #FFEA00;
       box-shadow: 0 0 0 3px rgba(255, 234, 0, 0.2);
     }
-    .field input:disabled { background: #f5f5f5; color: #999; cursor: not-allowed; }
     .req { color: #C8102E; }
 
     .field-check {
@@ -305,25 +358,26 @@ const { faqItems } = Astro.props;
       padding: 12px;
       background: #fafafa;
       border-radius: 8px;
-      margin-bottom: 10px;
+      margin: 10px 0;
       cursor: pointer;
     }
     .field-check input[type='checkbox'] {
       margin-top: 2px;
       width: 18px;
       height: 18px;
+      flex-shrink: 0;
       cursor: pointer;
       accent-color: #0B7A3B;
     }
     .field-check strong { display: inline; font-size: 14px; color: #0A0A0B; }
     .field-check em { color: #666; font-style: normal; font-size: 13px; }
 
-    .vcs-grid {
+    .cis-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 10px;
     }
-    .vcs-field {
+    .cis-field {
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -332,9 +386,10 @@ const { faqItems } = Astro.props;
       border-radius: 8px;
       background: #fafafa;
     }
-    .vcs-name { font-size: 14px; font-weight: 600; color: #0A0A0B; }
-    .vcs-rate { font-size: 11px; color: #0B7A3B; font-weight: 700; }
-    .vcs-field input {
+    .cis-name { font-size: 14px; font-weight: 600; color: #0A0A0B; }
+    .cis-rate { font-size: 12px; color: #0B7A3B; font-weight: 700; }
+    .cis-hint { font-size: 12px; color: #777; line-height: 1.4; }
+    .cis-field input {
       margin-top: 4px;
       padding: 6px 8px;
       border: 1px solid #DFDFE3;
@@ -393,6 +448,24 @@ const { faqItems } = Astro.props;
     .result-table td.strong { font-weight: 700; color: #0A0A0B; }
     .row-note { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.4; }
 
+    .result-warnings {
+      margin: 16px 0 0;
+      padding: 12px 16px 12px 32px;
+      background: #fef2f2;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #7f1d1d;
+      line-height: 1.5;
+    }
+    .result-alt {
+      margin: 12px 0 0;
+      padding: 12px 16px;
+      background: #f0fdf4;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #14532d;
+    }
+
     .result-disclaimer {
       margin-top: 16px;
       padding: 12px 16px;
@@ -417,6 +490,7 @@ const { faqItems } = Astro.props;
     .info { margin-top: 40px; }
     .info h2 { font-size: 22px; margin: 32px 0 12px; font-weight: 700; color: #0A0A0B; }
     .info p { font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 14px; }
+    .info p a { color: #0B7A3B; text-decoration: underline; }
     .info ul { padding-left: 22px; margin: 0 0 16px; }
     .info ul li { font-size: 15px; line-height: 1.7; color: #444; }
 
@@ -438,5 +512,12 @@ const { faqItems } = Astro.props;
       font-size: 14px;
       color: #444;
       line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .calc-root { padding: 24px 16px 64px; }
+      .calc-form, .result-card { padding: 16px; }
+      .result-table { font-size: 13px; }
+      .result-table td, .result-table th { padding: 8px 4px; }
     }
   </style>
