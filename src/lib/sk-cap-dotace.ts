@@ -99,6 +99,8 @@ export interface CapResultSk {
   warnings: string[];
 }
 
+const skNum = (n: number) => n.toLocaleString('sk-SK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 export function calculateCapSk(input: CapInputSk): CapResultSk {
   const items: CapBreakdownItemSk[] = [];
   const warnings: string[] = [];
@@ -134,7 +136,7 @@ export function calculateCapSk(input: CapInputSk): CapResultSk {
     ha: crissHa,
     sazba: crissHa > 0 ? crissAmount / crissHa : 0,
     amount: crissAmount,
-    note: `${SAZBY_SK.crissTier1} €/ha do ${SAZBY_SK.crissTier1MaxHa} ha, ${SAZBY_SK.crissTier2} €/ha do ${SAZBY_SK.crissTier2MaxHa} ha; nad ${SAZBY_SK.crissTier2MaxHa} ha sa neposkytuje.`,
+    note: `${skNum(SAZBY_SK.crissTier1)} €/ha do ${skNum(SAZBY_SK.crissTier1MaxHa)} ha, ${skNum(SAZBY_SK.crissTier2)} €/ha od 101 ha do ${skNum(SAZBY_SK.crissTier2MaxHa)} ha; nad ${skNum(SAZBY_SK.crissTier2MaxHa)} ha sa neposkytuje (§ 7).`,
   });
 
   // 3. Ekoschéma — orná pôda v chránenom území vyššou sadzbou, zvyšok nižšou
@@ -147,7 +149,7 @@ export function calculateCapSk(input: CapInputSk): CapResultSk {
     ha,
     sazba: ha > 0 ? ekoAmount / ha : 0,
     amount: ekoAmount,
-    note: `${SAZBY_SK.ekoChvu} €/ha na ornej pôde v chránenom území, ${SAZBY_SK.ekoMimoChvu} €/ha mimo neho; ak podnik dodržiava postupy ekoschémy (§ 10–12).`,
+    note: `${skNum(SAZBY_SK.ekoChvu)} €/ha na ornej pôde v chránenom území, ${skNum(SAZBY_SK.ekoMimoChvu)} €/ha mimo neho; ak podnik dodržiava postupy ekoschémy (§ 10–12).`,
   });
 
   // 4. Mladý poľnohospodár — najviac 100 ha
