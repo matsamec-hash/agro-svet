@@ -253,7 +253,7 @@ export const SLOVNIK_SK: SlovnikTerm[] = [
   },
   {
     "slug": "mezi-plodiny",
-    "term": "Meziplodiny",
+    "term": "Medziplodiny",
     "alias": [
       "krycie plodiny",
       "cover crops",
