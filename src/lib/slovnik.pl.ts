@@ -4968,12 +4968,14 @@ export const SLOVNIK_PL: SlovnikTerm[] = [
   },
   {
     "slug": "hlizenka",
-    "term": "Twardzik pospolity (Sclerotinia)",
+    "term": "Zgnilizna twardzikowa (Sclerotinia)",
     "kategorie": "ochrana",
-    "shortDef": "Twardzik pospolity to choroba grzybowa atakująca szerokie spektrum roślin, w tym rzepak i słonecznik.",
-    "longDef": "Twardzik pospolity, wywoływany przez grzyba Sclerotinia sclerotiorum, jest poważną chorobą grzybową atakującą wiele gatunków roślin, w tym rzepak, słonecznik i rośliny strączkowe. Objawia się gniciem łodyg i liści, co może prowadzić do znacznych strat w plonach. W Czechach twardzik pospolity jest szczególnie problematyczny w obszarach o wilgotnym klimacie. Ochrona przed tą chorobą obejmuje stosowanie fungicydów oraz przestrzeganie właściwych zasad zmianowania.",
+    "shortDef": "Zgnilizna twardzikowa to choroba grzybowa wywoływana przez twardnicę pasożytniczą (Sclerotinia sclerotiorum), atakująca szerokie spektrum roślin, w tym rzepak i słonecznik.",
+    "longDef": "Zgnilizna twardzikowa, wywoływana przez grzyba twardnicę pasożytniczą (*Sclerotinia sclerotiorum*), jest poważną chorobą grzybową atakującą wiele gatunków roślin, w tym rzepak, słonecznik i rośliny strączkowe. Objawia się gniciem łodyg i liści, co może prowadzić do znacznych strat w plonach. W Czechach zgnilizna twardzikowa jest szczególnie problematyczna w obszarach o wilgotnym klimacie. Ochrona przed tą chorobą obejmuje stosowanie fungicydów oraz przestrzeganie właściwych zasad zmianowania.",
     "alias": [
-      "Sclerotinia sclerotiorum"
+      "twardnica pasożytnicza",
+      "Sclerotinia sclerotiorum",
+      "biała zgnilizna"
     ],
     "related": [
       "fungicidy",
@@ -4985,11 +4987,11 @@ export const SLOVNIK_PL: SlovnikTerm[] = [
     "externalLabel": "Wikipedia: Twardnica pasożytnicza",
     "faq": [
       {
-        "q": "Jak objawia się twardzik pospolity?",
-        "a": "Twardzik pospolity objawia się gniciem łodyg i korzeni, często z białą grzybnią."
+        "q": "Jak objawia się zgnilizna twardzikowa?",
+        "a": "Zgnilizna twardzikowa objawia się gniciem łodyg i korzeni, często z białą grzybnią i czarnymi sklerocjami wewnątrz łodyg."
       },
       {
-        "q": "Jak zwalczać twardzika pospolitego?",
+        "q": "Jak zwalczać zgniliznę twardzikową?",
         "a": "Zwalczanie obejmuje zmianowanie roślin i stosowanie fungicydów."
       }
     ]
