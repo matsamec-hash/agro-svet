@@ -389,7 +389,7 @@ Typické druhy:
 - **Jetel inkarnát** — vázání N, krmivo.
 - **Pohanka** — pro letní krátkou meziplodinu.
 
-V ČR se meziplodiny v základní celofaremní ekoplatbě (2025) započítávají do neprodukčních ploch varianty B s váhovým koeficientem 0,3. Podle standardu podmíněnosti DZES 6 je osetí meziplodinou jedním ze způsobů, jak po sklizni hlavní plodiny zajistit pokryv půdy. V letech 2015–2022 se meziplodiny mohly počítat do ploch v ekologickém zájmu (EFA) v rámci greeningu, který reforma SZP od roku 2023 zrušila.`,
+V ČR se meziplodiny v základní celofaremní ekoplatbě (2026) započítávají do neprodukčních ploch s váhovým koeficientem 0,3; aspoň 2 % orné půdy ale musí tvořit jiné neprodukční plochy. Podle standardu podmíněnosti DZES 6 je osetí meziplodinou jedním ze způsobů, jak po sklizni hlavní plodiny zajistit pokryv půdy. V letech 2015–2022 se meziplodiny mohly počítat do ploch v ekologickém zájmu (EFA) v rámci greeningu, který reforma SZP od roku 2023 zrušila.`,
     related: ['eko-platba', 'biopasy', 'cap-2024'],
   },
   {
@@ -422,17 +422,17 @@ Podmínky AEKO (2025): na biopás se nesmějí použít přípravky na ochranu r
     shortDef: 'Společná zemědělská politika EU (CAP, česky SZP) na období 2023–2027, kterou ČR provádí Strategickým plánem SZP. Hlavní přímé platby: základní platba BISS, redistributivní platba, ekoplatba, platba pro mladé zemědělce a podpora vázaná na produkci (CIS).',
     longDef: `Společná zemědělská politika (SZP, EN: CAP — Common Agricultural Policy) je hlavní finanční nástroj EU pro podporu zemědělství. Období 2023–2027 přineslo reformu: každý členský stát ji provádí vlastním strategickým plánem, greening nahradila přísnější podmíněnost a ekoschémata a víc peněz směřuje k menším podnikům.
 
-Přímé platby v ČR — sazby za rok 2025 (MZe, SZIF):
-1. **BISS** (základní podpora příjmu pro udržitelnost) — 1 759,91 Kč/ha způsobilé plochy.
-2. **CRISS** (doplňková redistributivní podpora příjmu) — 3 449,49 Kč/ha na prvních 150 ha každého podniku.
-3. **Celofaremní ekoplatba** — základní 1 578,37 Kč/ha; prémiová 17 521,20 Kč/ha, ale jen na vyčleněné neprodukční plochy a ochranné pásy podél vody.
-4. **Platba pro mladé zemědělce** — 2 378,75 Kč/ha, nejvýš na 90 ha a nejdéle pět let.
-5. **Platba pro malé zemědělce** — 6 883,97 Kč/ha, nejvýš na 4 ha, pro podniky do 10 ha; nahrazuje ostatní přímé platby.
-6. **CIS** (podpora příjmu vázaná na produkci, dříve VCS) — například chmel 14 936,09 Kč/ha, ovoce s velmi vysokou pracností 15 541,10 Kč/ha, škrobové brambory 12 036,09 Kč/ha, cukrová řepa 6 936,20 Kč/ha, bílkovinné plodiny 1 449,39 Kč/ha, dojnice 3 540,01 Kč na kus.
+Přímé platby v ČR — sazby za rok 2026 (MZe, 2. 10. 2026):
+1. **BISS** (základní podpora příjmu pro udržitelnost) — 1 631,69 Kč/ha způsobilé plochy.
+2. **CRISS** (doplňková redistributivní podpora příjmu) — 3 426,29 Kč/ha na prvních 150 ha každého podniku.
+3. **Celofaremní ekoplatba** — základní 1 547,14 Kč/ha; prémiová 18 263,22 Kč/ha, ale jen na vyčleněné neprodukční plochy a ochranné pásy podél vody.
+4. **Platba pro mladé zemědělce** — 2 389,20 Kč/ha, nejvýš na 90 ha a nejdéle pět let.
+5. **Platba pro malé zemědělce** — 6 873,79 Kč/ha, nejvýš na 4 ha, pro podniky do 10 ha; nahrazuje ostatní přímé platby.
+6. **CIS** (podpora příjmu vázaná na produkci, dříve VCS) — například chmel 14 729,01 Kč/ha, ovoce s velmi vysokou pracností 15 696,34 Kč/ha, škrobové brambory 12 701,67 Kč/ha, cukrová řepa 6 477,08 Kč/ha, bílkovinné plodiny 1 428,42 Kč/ha, dojnice 3 415,97 Kč na kus.
 
 Platby pro oblasti s přírodními omezeními (ANC) a agroenvironmentálně-klimatická opatření (AEKO) patří do II. pilíře a řídí se vlastními nařízeními vlády.
 
-O přímé platby se žádá v Jednotné žádosti elektronicky přes Portál farmáře SZIF (za rok 2025 do 15. května). Sazby za rok 2025 schválil ministr zemědělství v říjnu 2025; výše sazby závisí mimo jiné na tom, na kolik hektarů a zvířat zemědělci požádají.`,
+O přímé platby se žádá v Jednotné žádosti elektronicky přes Portál farmáře SZIF (za rok 2026 do 15. května). Sazby za rok 2026 schválil ministr zemědělství 2. října 2026 (přepočet kurzem ECB 24,44 Kč/EUR); výše sazby závisí mimo jiné na tom, na kolik hektarů a zvířat zemědělci požádají.`,
     related: ['eko-platba', 'mezi-plodiny', 'biopasy'],
     externalUrl: 'https://www.szif.cz',
     externalLabel: 'SZIF — Státní zemědělský intervenční fond',
@@ -442,19 +442,19 @@ O přímé platby se žádá v Jednotné žádosti elektronicky přes Portál fa
     term: 'EKO-platba',
     alias: ['Eco-scheme', 'celofaremní ekoplatba', 'ekoschéma'],
     kategorie: 'dotace',
-    shortDef: 'Celofaremní ekoplatba je české ekoschéma v přímých platbách SZP 2023–2027. Za rok 2025 činila základní sazba 1 578,37 Kč/ha; prémiová (17 521,20 Kč/ha) se vyplácí jen na vyčleněné neprodukční plochy a ochranné pásy podél vody.',
+    shortDef: 'Celofaremní ekoplatba je české ekoschéma v přímých platbách SZP 2023–2027. Za rok 2026 činí základní sazba 1 547,14 Kč/ha; prémiová (18 263,22 Kč/ha) se vyplácí jen na vyčleněné neprodukční plochy a ochranné pásy podél vody.',
     longDef: `Celofaremní ekoplatba (EN eco-scheme) je dobrovolná část přímých plateb, která odměňuje postupy prospěšné pro životní prostředí nad rámec povinné podmíněnosti. Žadatel ji plní na celé výměře podniku — kultury ani díly půdních bloků si vybírat nemůže.
 
-Dvě úrovně (sazby za rok 2025):
-1. **Základní** — 1 578,37 Kč/ha na celou způsobilou výměru. Na orné půdě zahrnuje mimo jiné:
+Dvě úrovně (sazby za rok 2026):
+1. **Základní** — 1 547,14 Kč/ha na celou způsobilou výměru. Na orné půdě zahrnuje mimo jiné:
    - diverzifikaci plodin (nad 10 ha orné půdy aspoň 2 plodiny, nad 30 ha aspoň 3, nad 150 ha aspoň 4; jedna plodina nejvýš na 75 % orné půdy),
    - hospodaření s organickou hmotou (nad 30 ha orné půdy, podle Modelu OH),
    - ochranný pás podél vody,
-   - neprodukční plochy: varianta A (aspoň 5 % orné půdy — úhory, krajinné prvky, ochranné pásy, biopásy) nebo varianta B (8 % včetně meziplodin a plodin vázajících dusík, z toho aspoň 3 % z varianty A).
+   - neprodukční plochy: aspoň 5 % výměry orné půdy (standardní orná půda, úhor, travní porost; po přepočtu váhovými koeficienty) — úhory, krajinné prvky, ochranné pásy, biopásy, meziplodiny nebo plodiny vázající dusík; aspoň 2 % musí tvořit jiné plochy než meziplodiny.
    Na trvalém travním porostu je podmínkou pastva nebo seč s odklizením biomasy do 31. července.
-2. **Prémiová** — 17 521,20 Kč/ha, ale jen na hektary vyčleněných neprodukčních ploch a prémiových ochranných pásů podél vody. Žadatel musí splnit základní úroveň a vyčlenit 7 % orné půdy jako neprodukční plochy (z toho aspoň 2 % takzvané superprémiové).
+2. **Prémiová** — 18 263,22 Kč/ha, ale jen na hektary neprodukčních ploch (nejvýš do 10 % orné půdy) a prémiových ochranných pásů podél vody. Žadatel musí splnit základní úroveň a vyčlenit 7 % orné půdy jako neprodukční plochy (z toho aspoň 2 % krajinné prvky, nektarodárné liniové úhory, ochranné pásy nebo biopásy).
 
-Od roku 2025 lze spolu s ekoplatbou žádat i o nové platby: údržba krajinných prvků (38 261,21 Kč/ha), vytváření nových krajinných prvků (10 512,72 Kč/ha), udržitelné hospodaření s živinami (201,49 Kč/ha) a pásové střídání plodin (9 490,65 Kč/ha).`,
+Od roku 2025 lze spolu s ekoplatbou žádat i o nové platby: údržba krajinných prvků (37 882,00 Kč/ha), vytváření nových krajinných prvků (10 558,08 Kč/ha), udržitelné hospodaření s živinami (202,36 Kč/ha) a pásové střídání plodin (7 626,02 Kč/ha).`,
     related: ['cap-2024', 'mezi-plodiny', 'biopasy'],
   },
   {
@@ -485,18 +485,18 @@ Aktualizace LPIS: změny ve využití půdy (rozdělení, sloučení, změna kul
     term: 'BISS',
     alias: ['Basic Income Support for Sustainability', 'Základní platba', 'SAPS'],
     kategorie: 'dotace',
-    shortDef: 'BISS (základní podpora příjmu pro udržitelnost) je hlavní přímá platba SZP 2023–2027 na způsobilou zemědělskou plochu; v ČR za rok 2025 činila 1 759,91 Kč/ha. Navázala na dřívější jednotnou platbu na plochu SAPS.',
+    shortDef: 'BISS (základní podpora příjmu pro udržitelnost) je hlavní přímá platba SZP 2023–2027 na způsobilou zemědělskou plochu; v ČR za rok 2026 činí 1 631,69 Kč/ha. Navázala na dřívější jednotnou platbu na plochu SAPS.',
     longDef: `BISS (Basic Income Support for Sustainability, česky základní podpora příjmu pro udržitelnost) je základní přímá platba SZP 2023–2027. Od roku 2023 navázala na jednotnou platbu na plochu (SAPS) a vyplácí se na způsobilou zemědělskou plochu evidovanou v LPIS.
 
-Sazba za rok 2025: 1 759,91 Kč/ha (MZe, SZIF). Farma se 100 ha tak dostala 175 991 Kč jen z BISS. K tomu se přidává redistributivní platba (3 449,49 Kč/ha na prvních 150 ha), u účastníků celofaremní ekoplatby základní ekoplatba (1 578,37 Kč/ha) a případně další platby.
+Sazba za rok 2026: 1 631,69 Kč/ha (MZe, SZIF). Farma se 100 ha tak dostane 163 169 Kč jen z BISS. K tomu se přidává redistributivní platba (3 426,29 Kč/ha na prvních 150 ha), u účastníků celofaremní ekoplatby základní ekoplatba (1 547,14 Kč/ha) a případně další platby.
 
-Podmínky nároku (Jednotná žádost 2025):
+Podmínky nároku (Jednotná žádost 2026):
 1. **Aktivní zemědělec** a zemědělský podnikatel.
 2. **Půda evidovaná v LPIS** na žadatele nejméně od podání žádosti do 31. srpna a po celou tu dobu obhospodařovaná.
 3. **Minimální výměra 1 ha**.
 4. **Podmíněnost** — standardy DZES a povinné požadavky na hospodaření (PPH) po celý rok.
 
-Žádá se v Jednotné žádosti přes Portál farmáře SZIF (za rok 2025 do 15. května). V roce 2025 vyplácel SZIF u vybraných podpor zálohy ve výši 70 %.`,
+Žádá se v Jednotné žádosti přes Portál farmáře SZIF (za rok 2026 do 15. května). Za rok 2026 vyplácí SZIF zálohy ve výši 75 %.`,
     related: ['cap-2024', 'lpis', 'eko-platba'],
   },
 
@@ -628,7 +628,7 @@ Olej: hydraulický + převodový společný (UTTO — Universal Tractor Transmis
 
 V zemědělství je hektar základní jednotka pro:
 - **Výměru pole** — celá farma se měří v ha (50 ha, 200 ha, 1000 ha).
-- **Dotace** — Kč/ha (v ČR za rok 2025 BISS 1 759,91 Kč/ha, redistributivní platba 3 449,49 Kč/ha).
+- **Dotace** — Kč/ha (v ČR za rok 2026 BISS 1 631,69 Kč/ha, redistributivní platba 3 426,29 Kč/ha).
 - **Výnos plodin** — t/ha nebo q/ha (1 q = 100 kg = 1 metrický cent).
 - **Spotřeba hnojiv** — kg/ha (200 kg NPK/ha).
 - **Dávkování postřiků** — l/ha (5 l Roundup/ha).
@@ -1447,7 +1447,7 @@ Co v ní žadatel deklaruje:
 
 Termín (2025): do 15. května. Za pozdní podání se platba krátí o 1 % za každý pracovní den; při zpoždění přes 25 kalendářních dnů (v roce 2025 po 9. červnu) se řízení zastaví a žadatel nedostane nic.
 
-Po podání SZIF žádosti kontroluje administrativně, na místě a satelitním monitoringem ploch (AMS) — výsledky vidí žadatel na portálu AMS. Sazby za rok 2025 schválil ministr zemědělství v říjnu 2025; u vybraných podpor SZIF vyplácel zálohy ve výši 70 %.`,
+Po podání SZIF žádosti kontroluje administrativně, na místě a satelitním monitoringem ploch (AMS) — výsledky vidí žadatel na portálu AMS. Sazby za rok 2026 schválil ministr zemědělství 2. října 2026; SZIF vyplácí zálohy ve výši 75 %.`,
     related: ['biss', 'cap-2024', 'lpis'],
   },
   {
@@ -2336,7 +2336,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     alias: ['sója', 'soybean', 'soja'],
     kategorie: 'plodiny',
     shortDef: 'Sója je nejvýznamnější luskovina světa, v ČR menšinová plodina (15–25 tisíc ha) ale rostoucí. Bohatá na bílkoviny (40 %), váže atmosférický N.',
-    longDef: `Sója luštinatá (Glycine max) je nejvýznamnější olejnatá luskovina na světě. V ČR rostoucí plodina (z 5 000 ha v 2010 na ~20 000 ha v 2024), podporovaná mimo jiné podporou vázanou na produkci pro bílkovinné plodiny (CIS, 2025: 1 449,39 Kč/ha).
+    longDef: `Sója luštinatá (Glycine max) je nejvýznamnější olejnatá luskovina na světě. V ČR rostoucí plodina (z 5 000 ha v 2010 na ~20 000 ha v 2024), podporovaná mimo jiné podporou vázanou na produkci pro bílkovinné plodiny (CIS, 2026: 1 428,42 Kč/ha).
 
 **Pěstování**:
 - **Setí**: konec dubna – začátek května, půda min. 8 °C.
@@ -2355,14 +2355,14 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 - **20 % oleje** — sójový olej pro potraviny i biopaliva.
 - **Cenovka** (2024): 12 000–16 000 Kč/t.
 
-**Ekonomika** (3 t/ha × 14 000 = 42 000 Kč tržba + 1 449 Kč CIS za rok 2025):
-- Tržba ~43 450 Kč/ha.
+**Ekonomika** (3 t/ha × 14 000 = 42 000 Kč tržba + 1 428 Kč CIS za rok 2026):
+- Tržba ~43 430 Kč/ha.
 - Náklady ~22 000 Kč/ha (osivo + inokulace + hnojiva + postřiky + mech).
 - **Marže ~21 000 Kč/ha** = porovnatelné s řepkou, ale nižší riziko.
 
 **Proč v CZ rostou plochy**:
 - **EU snaha o nezávislost na importu sóji** z Brazílie/Argentiny (kde se odlesní pro pěstování).
-- **CIS pro bílkovinné plodiny** (2025: 1 449,39 Kč/ha).
+- **CIS pro bílkovinné plodiny** (2026: 1 428,42 Kč/ha).
 - **Vazba N** zlepšuje strukturu půdy pro následnou plodinu.
 - **Tržní cena** rostoucí kvůli krmnému průmyslu (sójový šrot pro prasata, drůbež).
 
@@ -2411,7 +2411,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 **Trh**:
 - **Cenovka senáž v balíkách**: 1 800–3 000 Kč/t (regionální).
 - **Cenovka granulát**: 4 000–6 000 Kč/t.
-- **Dotace v ČR (2025)**: vojtěška patří mezi bílkovinné plodiny s podporou vázanou na produkci (CIS, 1 449,39 Kč/ha) a v ekoplatbě se může jako plodina vázající dusík započítat do neprodukčních ploch varianty B.
+- **Dotace v ČR (2026)**: vojtěška patří mezi bílkovinné plodiny s podporou vázanou na produkci (CIS, 1 428,42 Kč/ha) a v ekoplatbě se může jako plodina vázající dusík započítat do neprodukčních ploch.
 
 **Důležité plemena**: Verdor (FR), Power (US), Niagara (FR), domácí Kometa (CZ).`,
     related: ['osevni-postup', 'organicka-hmota', 'mezi-plodiny'],
@@ -2547,12 +2547,12 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     shortDef: 'Strategický plán SZP 2023–2027 je národní provedení Společné zemědělské politiky EU v ČR. Zahrnuje přímé platby, intervence v sektorech a rozvoj venkova (AEKO, ANC, investice); administruje ho SZIF.',
     longDef: `Strategický plán Společné zemědělské politiky (SP SZP) je dokument, který každý členský stát předkládá Evropské komisi na období 2023–2027. Komise český plán schválila 24. listopadu 2022 a od té doby schválila několik jeho změn. Celkový rozpočet plánu je přibližně 8 mld EUR, z toho asi 5,6 mld EUR z rozpočtu EU (stručný přehled Evropské komise, 2026).
 
-**Přímé platby (I. pilíř)** — sazby za rok 2025:
-- **BISS** (základní platba) 1 759,91 Kč/ha
-- **CRISS** (redistributivní platba) 3 449,49 Kč/ha na prvních 150 ha — připadá na ni 23 % obálky přímých plateb
-- **Celofaremní ekoplatba** základní 1 578,37 Kč/ha, prémiová 17 521,20 Kč/ha jen na neprodukční plochy — ekoschémata tvoří 30 % obálky
-- **Platba pro mladé zemědělce** 2 378,75 Kč/ha (nejvýš 90 ha)
-- **Platba pro malé zemědělce** 6 883,97 Kč/ha (nejvýš 4 ha)
+**Přímé platby (I. pilíř)** — sazby za rok 2026:
+- **BISS** (základní platba) 1 631,69 Kč/ha
+- **CRISS** (redistributivní platba) 3 426,29 Kč/ha na prvních 150 ha — připadá na ni 23 % obálky přímých plateb
+- **Celofaremní ekoplatba** základní 1 547,14 Kč/ha, prémiová 18 263,22 Kč/ha jen na neprodukční plochy — ekoschémata tvoří 30 % obálky
+- **Platba pro mladé zemědělce** 2 389,20 Kč/ha (nejvýš 90 ha)
+- **Platba pro malé zemědělce** 6 873,79 Kč/ha (nejvýš 4 ha)
 - **CIS** (podpora vázaná na produkci) — sazby podle komodity
 
 **Rozvoj venkova (II. pilíř)**:
@@ -2769,8 +2769,8 @@ Třetina polí každý rok ležela ladem. Bez minerálních hnojiv to byl jedin�
 - **Aktivní úhor** — pásy nektarodárných rostlin pro opylovače, biopásy, biopas (viz [[biopasy]]).
 
 V ČR dnes:
-- Úhor (pro ekoplatbu jen nektarodárný nebo zelený) se započítává do neprodukčních ploch — v základní ekoplatbě (2025) jich musí být aspoň 5 % orné půdy (varianta A).
-- Na úhoru platí od 1. února do 15. srpna zákaz sklizně a pastvy (podmínky ekoplatby 2025).
+- Úhor (pro ekoplatbu jen nektarodárný nebo zelený) se započítává do neprodukčních ploch — v základní ekoplatbě (2026) jich musí být aspoň 5 % orné půdy (po přepočtu váhovými koeficienty).
+- Na úhoru platí od 1. února do 15. srpna zákaz sklizně a pastvy (podmínky ekoplatby 2026).
 
 Etymologie: praslovanské *ǫgorъ* (= pole nechané ladem). Související slova: **ladina** (úhor po více letech), **honitba** (revír na úhoru), **pole** (kontrast: pole = obdělávané, úhor = ne).
 
@@ -2844,7 +2844,7 @@ JZD a státní statky **sceelovaly pole do obřích bloků** (často 50–200 ha
 - Změny mikroklimatu (sušší krajina, větru otevřená)
 
 **Návrat mezí 1990–dnes:**
-- **Ekoplatba**: mez jako krajinný prvek se započítává do neprodukčních ploch celofaremní ekoplatby; od roku 2025 lze žádat i o platbu na údržbu krajinných prvků (2025: 38 261,21 Kč/ha) a na vytváření nových (10 512,72 Kč/ha).
+- **Ekoplatba**: mez jako krajinný prvek se započítává do neprodukčních ploch celofaremní ekoplatby; od roku 2025 lze žádat i o platbu na údržbu krajinných prvků (2026: 37 882,00 Kč/ha) a na vytváření nových (10 558,08 Kč/ha).
 - **Greening (2015–2022)**: krajinné prvky včetně mezí se dřív počítaly do ploch v ekologickém zájmu (EFA).
 - **Podmíněnost**: krajinné prvky chrání standard DZES 8; proti erozi na ohrožených plochách platí DZES 5.
 - **Evidence** — mez je jedním z typů krajinných prvků evidovaných v LPIS (nařízení vlády č. 307/2014 Sb.).
@@ -5594,7 +5594,7 @@ Viz též [[herbicidy]], [[roundup]], [[repka-ozima]], [[zemak]], [[plisen-bramb
 **Hlavní škůdci:** mšice (BYDV vektor), kohoutek obilní, hrbáč pšeničný
 
 **EU regulace:**
-- **Přímé platby v ČR za rok 2025**: BISS 1 759,91 Kč/ha, redistributivní platba 3 449,49 Kč/ha na prvních 150 ha, základní ekoplatba 1 578,37 Kč/ha
+- **Přímé platby v ČR za rok 2026**: BISS 1 631,69 Kč/ha, redistributivní platba 3 426,29 Kč/ha na prvních 150 ha, základní ekoplatba 1 547,14 Kč/ha
 - **Diverzifikace v ekoplatbě**: pšenice je jednou z povinných 2–4 plodin; ozimá a jarní pšenice se počítají jako jedna plodina
 
 Viz též [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[septorioza]], [[fuzarioza]], [[hektolitr]], [[psenice-jarni]].`,
@@ -6375,7 +6375,7 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
   - **Sekvestrace C** — kořeny + biomasa
   - **Suprese plevelů** — hořčice rychle pokryje půdu
   - **Glukosinoláty v půdě** — biofumigace (potlačuje patogeny)
-  - **Ekoplatba** — hořčice jako meziplodina se v ČR (2025) může započítat do neprodukčních ploch varianty B
+  - **Ekoplatba** — hořčice jako meziplodina se v ČR (2026) může započítat do neprodukčních ploch ekoplatby (koeficient 0,3)
 - **Cena osiva pro meziplodinu**: 600–1 000 Kč/ha
 
 **3. Olej (5 %):**
@@ -6423,7 +6423,7 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
 - **Přínos**: hlavně půdní (organická hmota, ochrana před erozí), finančně těžko měřitelný; hořčice se navíc může započítat do neprodukčních ploch ekoplatby
 
 **SZP v ČR:**
-- **Ekoplatba (2025)** — meziplodiny včetně hořčice lze započítat do neprodukčních ploch varianty B
+- **Ekoplatba (2026)** — meziplodiny včetně hořčice lze započítat do neprodukčních ploch (koeficient 0,3)
 - **Greening (2015–2022)** — dřív se meziplodiny počítaly do ploch v ekologickém zájmu (EFA), které u podniků nad 15 ha orné půdy musely tvořit 5 % orné půdy
 
 **Klimatická změna:**
@@ -6532,9 +6532,9 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 **Marže**: 35 000–55 000 Kč/ha (ATRAKTIVNÍ!)
 
 **Plus dotace**:
-- **BISS a redistributivní platba** (2025): 1 759,91 Kč/ha, resp. 3 449,49 Kč/ha na prvních 150 ha
-- **CIS cukrová řepa** (podpora vázaná na produkci, 2025): 6 936,20 Kč/ha
-- **Ekoplatba**: základní 1 578,37 Kč/ha (2025), pokud podnik splní podmínky
+- **BISS a redistributivní platba** (2026): 1 631,69 Kč/ha, resp. 3 426,29 Kč/ha na prvních 150 ha
+- **CIS cukrová řepa** (podpora vázaná na produkci, 2026): 6 477,08 Kč/ha
+- **Ekoplatba**: základní 1 547,14 Kč/ha (2026), pokud podnik splní podmínky
 
 **Trend a budoucnost:**
 - **EU cukrová kvóta** zrušená 2017 → liberalizace trhu → tlak na cenu
@@ -6650,7 +6650,7 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
 **Plus N pro následující plodinu**: ušetří 60–80 kg N (~1 200–1 600 Kč/ha)
 
 **EU Bílkovinná strategie:**
-- **CIS bílkovinné plodiny** (ČR, 2025): 1 449,39 Kč/ha — patří sem hrách včetně pelušky, bob, lupina, sója, vojtěška, jetel, vikev a další vyjmenované druhy
+- **CIS bílkovinné plodiny** (ČR, 2026): 1 428,42 Kč/ha — patří sem hrách včetně pelušky, bob, lupina, sója, vojtěška, jetel, vikev a další vyjmenované druhy
 
 **Klimatická změna:**
 - **Mírné jaro** = pozitivní
@@ -7621,7 +7621,7 @@ Viz též [[ndvi]], [[variable-rate]], [[gps-rtk]], [[lpis]], [[karbonove-zemede
 
 **2. Celofaremní ekoplatba:**
 - **Ochranný pás založený v rámci agrolesnictví** se může započítat do neprodukčních ploch
-- **Údržba krajinných prvků** (stromořadí, skupina dřevin, solitérní dřevina) — samostatná platba od roku 2025 (2025: 38 261,21 Kč/ha)
+- **Údržba krajinných prvků** (stromořadí, skupina dřevin, solitérní dřevina) — samostatná platba od roku 2025 (2026: 37 882,00 Kč/ha)
 
 **3. EU:**
 - **Cíl EU**: 3 mld nových stromů do 2030 (Strategie EU v oblasti biodiverzity do roku 2030)

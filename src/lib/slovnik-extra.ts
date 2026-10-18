@@ -37,7 +37,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "SAPS (jednotná platba na plochu) byl zjednodušený systém přímých plateb podle obhospodařované plochy, který ČR používala od vstupu do EU v roce 2004 do roku 2022. Od roku 2023 na něj navázala platba BISS.",
-    "longDef": "SAPS (Single Area Payment Scheme, česky jednotná platba na plochu) byl systém přímých plateb, ve kterém zemědělec dostával stejnou sazbu na každý hektar způsobilé zemědělské plochy. Mohly ho používat státy, které do EU vstoupily v roce 2004 a později.\n\nPlatba nebyla vázána na konkrétní produkci, takže zemědělci se mohli volně rozhodovat, co budou pěstovat.\n\nV ČR se SAPS vyplácela od vstupu do EU v roce 2004 do roku 2022. Od roku 2023 na ni navázala základní podpora příjmu pro udržitelnost (BISS) — za rok 2025 činila 1 759,91 Kč/ha.",
+    "longDef": "SAPS (Single Area Payment Scheme, česky jednotná platba na plochu) byl systém přímých plateb, ve kterém zemědělec dostával stejnou sazbu na každý hektar způsobilé zemědělské plochy. Mohly ho používat státy, které do EU vstoupily v roce 2004 a později.\n\nPlatba nebyla vázána na konkrétní produkci, takže zemědělci se mohli volně rozhodovat, co budou pěstovat.\n\nV ČR se SAPS vyplácela od vstupu do EU v roce 2004 do roku 2022. Od roku 2023 na ni navázala základní podpora příjmu pro udržitelnost (BISS) — za rok 2026 činí 1 631,69 Kč/ha.",
     "related": [
       "dzes",
       "redistributivni-platba",
@@ -59,8 +59,8 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "slug": "redistributivni-platba",
     "term": "Redistributivní platba",
     "kategorie": "dotace",
-    "shortDef": "Doplňková redistributivní podpora příjmu (CRISS) je přímá platba na první hektary podniku, která přesouvá peníze k menším a středním farmám. V ČR se vyplácí na prvních 150 ha; za rok 2025 činila 3 449,49 Kč/ha.",
-    "longDef": "Redistributivní platba (EU zkratka CRISS — Complementary Redistributive Income Support for Sustainability) je doplňková přímá platba, kterou podnik dostává jen na první hektary. Malé a střední podniky tak dostanou v přepočtu na hektar víc než velké.\n\nV ČR se poskytuje na prvních 150 hektarů každého podniku a nárok na ni má žadatel, který má nárok na základní platbu BISS. Za rok 2025 činila 3 449,49 Kč/ha. Strategický plán SZP na ni vyčlenil 23 % obálky přímých plateb.\n\nPodle pravidel EU na ni státy vyčleňují nejméně 10 % obálky přímých plateb, pokud potřebu přerozdělení neřeší jinými nástroji.",
+    "shortDef": "Doplňková redistributivní podpora příjmu (CRISS) je přímá platba na první hektary podniku, která přesouvá peníze k menším a středním farmám. V ČR se vyplácí na prvních 150 ha; za rok 2026 činí 3 426,29 Kč/ha.",
+    "longDef": "Redistributivní platba (EU zkratka CRISS — Complementary Redistributive Income Support for Sustainability) je doplňková přímá platba, kterou podnik dostává jen na první hektary. Malé a střední podniky tak dostanou v přepočtu na hektar víc než velké.\n\nV ČR se poskytuje na prvních 150 hektarů každého podniku a nárok na ni má žadatel, který má nárok na základní platbu BISS. Za rok 2026 činí 3 426,29 Kč/ha. Strategický plán SZP na ni vyčlenil 23 % obálky přímých plateb.\n\nPodle pravidel EU na ni státy vyčleňují nejméně 10 % obálky přímých plateb, pokud potřebu přerozdělení neřeší jinými nástroji.",
     "related": [
       "saps",
       "dzes",
@@ -74,7 +74,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
       },
       {
         "q": "Jak se liší redistributivní platba od BISS?",
-        "a": "BISS se platí na všechny způsobilé hektary, redistributivní platba jen na prvních 150 ha podniku a je k BISS doplňková (2025: BISS 1 759,91 Kč/ha, redistributivní platba 3 449,49 Kč/ha)."
+        "a": "BISS se platí na všechny způsobilé hektary, redistributivní platba jen na prvních 150 ha podniku a je k BISS doplňková (2026: BISS 1 631,69 Kč/ha, redistributivní platba 3 426,29 Kč/ha)."
       }
     ]
   },
@@ -160,7 +160,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     ],
     "kategorie": "dotace",
     "shortDef": "Ekoschémata jsou finanční podpory zaměřené na podporu ekologických zemědělských postupů.",
-    "longDef": "Ekoschémata jsou dobrovolné režimy pro klima a životní prostředí v rámci přímých plateb Společné zemědělské politiky EU 2023–2027. Zemědělec, který se zaváže k postupům šetrnějším k životnímu prostředí, dostane příplatek na hektar. Každý stát si ekoschémata navrhuje sám ve svém strategickém plánu.\n\nV ČR má ekoschéma podobu celofaremní ekoplatby, kterou žadatel plní na celé výměře podniku. Za rok 2025 činila základní ekoplatba 1 578,37 Kč/ha; prémiová (17 521,20 Kč/ha) se vyplácí jen na vyčleněné neprodukční plochy a ochranné pásy podél vody. Od roku 2025 přibyly platby na krajinné prvky, udržitelné hospodaření s živinami a pásové střídání plodin. Ekoschémata tvoří 30 % obálky přímých plateb ČR.\n\nEkologické zemědělství a agrolesnictví nejsou v ČR ekoschématy — podporují se samostatnými opatřeními rozvoje venkova.",
+    "longDef": "Ekoschémata jsou dobrovolné režimy pro klima a životní prostředí v rámci přímých plateb Společné zemědělské politiky EU 2023–2027. Zemědělec, který se zaváže k postupům šetrnějším k životnímu prostředí, dostane příplatek na hektar. Každý stát si ekoschémata navrhuje sám ve svém strategickém plánu.\n\nV ČR má ekoschéma podobu celofaremní ekoplatby, kterou žadatel plní na celé výměře podniku. Za rok 2026 činí základní ekoplatba 1 547,14 Kč/ha; prémiová (18 263,22 Kč/ha) se vyplácí jen na vyčleněné neprodukční plochy a ochranné pásy podél vody. Od roku 2025 přibyly platby na krajinné prvky, udržitelné hospodaření s živinami a pásové střídání plodin. Ekoschémata tvoří 30 % obálky přímých plateb ČR.\n\nEkologické zemědělství a agrolesnictví nejsou v ČR ekoschématy — podporují se samostatnými opatřeními rozvoje venkova.",
     "related": [
       "podminenost",
       "ozeleneni",
@@ -278,8 +278,8 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "slug": "platba-pro-mlade-zemedelce",
     "term": "Platba pro mladé zemědělce",
     "kategorie": "dotace",
-    "shortDef": "Platba pro mladé zemědělce je doplňková přímá platba pro začínající zemědělce, kteří v roce první žádosti nedosáhli 41 let. V ČR za rok 2025 činila 2 378,75 Kč/ha, nejvýš na 90 ha a po dobu pěti let.",
-    "longDef": "Platba pro mladé zemědělce (doplňková podpora příjmu pro mladé zemědělce, EU zkratka CIS-YF) je přímá platba Společné zemědělské politiky EU, která má usnadnit generační obměnu v zemědělství.\n\nV ČR je určena žadatelům, kteří v prvním roce podání žádosti nedosáhli věku 41 let a poprvé založili zemědělský podnik nebo převzali hospodářství. Podmínkou je nárok na základní platbu BISS a alespoň minimální zemědělská kvalifikace. Žádá se v Jednotné žádosti pět po sobě jdoucích let, nejvýš na 90 ha. Za rok 2025 činila sazba 2 378,75 Kč/ha; platbu administruje SZIF.\n\nVedle ní existuje projektová intervence 49.75 Zahájení činnosti mladého zemědělce — jednorázová paušální podpora na start podniku.",
+    "shortDef": "Platba pro mladé zemědělce je doplňková přímá platba pro začínající zemědělce, kteří v roce první žádosti nedosáhli 41 let. V ČR za rok 2026 činí 2 389,20 Kč/ha, nejvýš na 90 ha a po dobu pěti let.",
+    "longDef": "Platba pro mladé zemědělce (doplňková podpora příjmu pro mladé zemědělce, EU zkratka CIS-YF) je přímá platba Společné zemědělské politiky EU, která má usnadnit generační obměnu v zemědělství.\n\nV ČR je určena žadatelům, kteří v prvním roce podání žádosti nedosáhli věku 41 let a poprvé založili zemědělský podnik nebo převzali hospodářství. Podmínkou je nárok na základní platbu BISS a alespoň minimální zemědělská kvalifikace. Žádá se v Jednotné žádosti pět po sobě jdoucích let, nejvýš na 90 ha. Za rok 2026 činí sazba 2 389,20 Kč/ha; platbu administruje SZIF.\n\nVedle ní existuje projektová intervence 49.75 Zahájení činnosti mladého zemědělce — jednorázová paušální podpora na start podniku.",
     "related": [
       "prv",
       "ekoschemata",
@@ -289,7 +289,7 @@ export const SLOVNIK_EXTRA: SlovnikTerm[] = [
     "faq": [
       {
         "q": "Co je platba pro mladé zemědělce?",
-        "a": "Doplňková přímá platba pro začínající zemědělce do 40 let; v ČR za rok 2025 činila 2 378,75 Kč/ha, nejvýš na 90 ha."
+        "a": "Doplňková přímá platba pro začínající zemědělce do 40 let; v ČR za rok 2026 činí 2 389,20 Kč/ha, nejvýš na 90 ha."
       },
       {
         "q": "Jaké jsou podmínky pro získání platby pro mladé zemědělce?",
