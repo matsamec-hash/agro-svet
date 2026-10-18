@@ -331,6 +331,25 @@ export const REGION_LEVEL_NOTE: Record<'NUTS1' | 'NUTS2', Record<Locale, string>
   },
 };
 
+// ── Přístupný popisek (aria-label) SVG regionální mapy ─────────────────────────
+// Dřív natvrdo `Mapa ${země} — ${metrika}` v RegionMap.astro (SSR i klientský
+// přepínač metrik): čtečka obrazovky pod /de, /uk, /pl i /sk četla česky —
+// a ani česky to nebylo správně („Mapa Německo"). Tvar „…: země — metrika"
+// obchází skloňování názvu země. `{metric}` doplní server i klient.
+export const REGION_MAP_ARIA: Record<Locale, string> = {
+  cs: 'Regionální mapa: {country} — {metric}',
+  sk: 'Regionálna mapa: {country} — {metric}',
+  pl: 'Mapa regionalna: {country} — {metric}',
+  de: 'Regionalkarte: {country} — {metric}',
+  uk: 'Регіональна карта: {country} — {metric}',
+};
+
+/** aria-label regionální mapy v jazyce stránky (neznámý locale → cs). */
+export function regionMapAria(locale: string, country: string, metric: string): string {
+  const tpl = REGION_MAP_ARIA[locale as Locale] ?? REGION_MAP_ARIA.cs;
+  return tpl.replace('{country}', () => country).replace('{metric}', () => metric);
+}
+
 /** Plná fráze regionu ve zvoleném locale; fallback = holá hodnota.
  *  ‼️ Mapa, ne řetězený ternář — chybějící jazyk pak vrátí undefined (viditelné)
  *  místo tichého pádu do češtiny. */

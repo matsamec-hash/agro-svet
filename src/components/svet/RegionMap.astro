@@ -4,7 +4,7 @@
 // Data: {slug}-geo.json (SVG paths) + {slug}.json (hodnoty metrik per région).
 import { colorFor, extent } from '../../lib/svet/mapcolor';
 import { bcp47 } from '../../i18n/utils';
-import { localizeRegionMetric, REGION_LEVEL_NOTE, REGION_NOTE, isSvetLang, attribution, type BoundarySource } from '../../i18n/svet';
+import { localizeRegionMetric, regionMapAria, REGION_LEVEL_NOTE, REGION_NOTE, isSvetLang, attribution, type BoundarySource } from '../../i18n/svet';
 
 interface GeoRegion { code: string; name: string; path: string; }
 interface Geo { viewBox: string; regions: GeoRegion[]; boundarySource?: BoundarySource; }
@@ -42,13 +42,15 @@ const levelNote = (dataNote && (isSvetLang(locale) ? REGION_NOTE[(data as any).s
 const A = attribution(locale);
 const isEurostat = /^Eurostat/.test(data.source);
 const boundaryNote = geo.boundarySource === 'us-census' ? A.mapUs : geo.boundarySource === 'naturalearth' ? A.mapNe : '';
+// aria-label v jazyce stránky; klient při přepnutí metriky dosadí jen `{metric}`.
+const ariaTpl = regionMapAria(locale, countryName, '{metric}');
 ---
 <section class="svet-section svet-map">
   <header class="svet-section-head"><h2>{RU.title} {countryName}</h2></header>
 
   <div class="svet-map-layout">
     <div class="svet-map-wrap">
-      <svg viewBox={geo.viewBox} class="svet-map-svg" id="svet-map-svg" role="img" data-country={countryName} aria-label={`Mapa ${countryName} — ${m0.label}`}>
+      <svg viewBox={geo.viewBox} class="svet-map-svg" id="svet-map-svg" role="img" aria-label={regionMapAria(locale, countryName, m0.label)}>
         {geo.regions.map((r) => {
           const v = data.regions[r.code]?.[m0.key];
           return (
@@ -89,7 +91,7 @@ const boundaryNote = geo.boundarySource === 'us-census' ? A.mapUs : geo.boundary
     </aside>
   </div>
 
-  <script type="application/json" id="svet-map-data" set:html={JSON.stringify({ regions: data.regions, metrics: metricsL, noData: RU.noData })}></script>
+  <script type="application/json" id="svet-map-data" set:html={JSON.stringify({ regions: data.regions, metrics: metricsL, noData: RU.noData, ariaTpl })}></script>
   <script>
     import { colorFor, extent } from '../../lib/svet/mapcolor';
     interface Metric { key: string; label: string; unit: string; desc?: string; }
@@ -99,7 +101,7 @@ const boundaryNote = geo.boundarySource === 'us-census' ? A.mapUs : geo.boundary
     const tip = document.getElementById('svet-map-tip');
     if (dataEl && svg && modes) {
       const parsed = JSON.parse(dataEl.textContent || '{}') as {
-        regions: Record<string, Record<string, number>>; metrics: Metric[]; noData?: string;
+        regions: Record<string, Record<string, number>>; metrics: Metric[]; noData?: string; ariaTpl?: string;
       };
       const NO_DATA = parsed.noData || 'bez dat';
       const byKey: Record<string, Metric> = Object.fromEntries(parsed.metrics.map((m) => [m.key, m]));
@@ -124,7 +126,8 @@ const boundaryNote = geo.boundarySource === 'us-census' ? A.mapUs : geo.boundary
         if (lmax) lmax.textContent = nf.format(max);
         if (lunit) lunit.textContent = m.unit;
         if (desc) desc.textContent = m.desc || '';
-        svg!.setAttribute('aria-label', `Mapa ${svg!.dataset.country || ''} — ${m.label}`);
+        // Šablona přichází ze serveru už v jazyce stránky (regionMapAria v i18n/svet).
+        if (parsed.ariaTpl) svg!.setAttribute('aria-label', parsed.ariaTpl.replace('{metric}', () => m.label));
         modes!.querySelectorAll('button').forEach((b) =>
           b.classList.toggle('active', b.dataset.metric === key));
       }
