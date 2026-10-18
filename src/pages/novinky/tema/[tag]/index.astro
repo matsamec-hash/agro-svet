@@ -28,6 +28,7 @@ const translatedIds = locale !== 'cs' ? await fetchTranslatedArticleIds(supabase
 const noTranslated = translatedIds !== null && translatedIds.size === 0;
 
 let articles: any[] | null = null;
+let queryFailed = false;
 if (!noTranslated) {
   let articlesQuery = supabase
     .from('articles')
@@ -39,7 +40,9 @@ if (!noTranslated) {
   // Jurisdikčně uzamčené kategorie (CZ dotace/legislativa) se pod /sk nezobrazují.
   if (hiddenCats.length) articlesQuery = articlesQuery.not('category', 'in', `(${hiddenCats.join(',')})`);
   if (translatedIds) articlesQuery = articlesQuery.in('id', [...translatedIds]);
-  articles = (await articlesQuery).data;
+  const res = await articlesQuery;
+  articles = res.data;
+  queryFailed = !!res.error;
 }
 
 let items = articles ?? [];
@@ -47,6 +50,10 @@ if (locale !== 'cs' && items.length) {
   const trMap = buildTranslationMap(await fetchArticleTranslations(supabase, items.map((a) => a.id), locale));
   items = items.map((a) => overlayArticle(a, trMap.get(a.id)));
 }
+
+// Téma bez článků (zaniklý nebo vymyšlený štítek v URL) = 404, ne prázdná stránka s 200
+// („soft 404“). Při chybě DB stránku nechat — výpadek nesmí vyřadit témata z indexu.
+if (!queryFailed && items.length === 0) return Astro.rewrite('/404');
 
 // Categories present under this tag (for faceted nav)
 const catCounts = new Map<string, number>();
