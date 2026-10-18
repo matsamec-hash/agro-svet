@@ -8,6 +8,7 @@ import { SITE_URL } from '../../lib/config';
 import AreaConverter from '../../components/AreaConverter.astro';
 import WeightConverter from '../../components/WeightConverter.astro';
 import { injectLinks, createLinkContext } from '../../lib/auto-linker';
+import { renderWikilinks } from '../../lib/slovnik-wikilinks';
 import { useTranslations, getLocaleFromUrl, tf } from '../../i18n/utils';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
@@ -62,8 +63,8 @@ const faqJsonLd = term.faq && term.faq.length > 0 ? faqPageSchema(term.faq) : nu
 const SLOVNIK_BY_SLUG = new Map(SLOVNIK.map((tt) => [tt.slug, tt.term]));
 
 // Render pipeline pro každý paragraph:
-// 1. `[[slug]]` wikilinks → <a href="/slovnik/slug/">{term.term}</a>
-//    (pokud slug existuje v SLOVNIK; jinak zachová literal)
+// 1. `[[slug]]` / `[[slug|text]]` wikilinks → <a href="/slovnik/slug/">{term.term}</a>
+//    (neznámý slug → prostý text, surové `[[…]]` se do HTML nedostane)
 // 2. `**bold**` → <strong>
 // 3. auto-linker — značky/modely/plemena/další slovník hesla
 //    (sdílený ctx = unikátní link na URL napříč celým article)
@@ -72,11 +73,7 @@ const linkCtx = createLinkContext(pageUrl);
 // Inline transforms (per řádek): wikilinks → <a>, **bold** → <strong>,
 // CS auto-linker (sdílený ctx = unikátní link napříč článkem).
 const inlineFmt = (s: string): string => {
-  const withWikilinks = s.replace(/\[\[([a-z0-9-]+)\]\]/gi, (m, slug) => {
-    const name = SLOVNIK_BY_SLUG.get(slug);
-    if (!name) return m; // unknown slug — leave literal
-    return `<a href="${base}/slovnik/${slug}/">${name}</a>`;
-  });
+  const withWikilinks = renderWikilinks(s, SLOVNIK_BY_SLUG, base);
   const withBold = withWikilinks.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   return locale === 'cs' ? injectLinks(withBold, linkCtx) : withBold;
 };

@@ -3046,7 +3046,7 @@ Viz též [[lan]], [[robota]], [[trojhonny-system]], [[mez]], [[jitro]], [[korec
 - **Středověk**: jen pro vodní mlýny a kovárny (vodní kola, ne žentoury).
 - **16.–18. století**: šíření žentourů s mlátičkami v Anglii, Německu.
 - **1740–1850 v ČR**: každý větší grunt měl žentourovou stodolu.
-- **1850–1900**: parní stroj (lokomobila — viz [[parni-stroj]]) postupně nahradil žentour. Mlátička poháněna parou byla mnohonásobně výkonnější.
+- **1850–1900**: parní stroj (lokomobila) postupně nahradil žentour. Mlátička poháněna parou byla mnohonásobně výkonnější.
 - **1900–1950**: elektrický motor (po elektrifikaci venkova 1920–1950) finálně nahradil i parní stroj.
 - **Dnes**: žentoury jsou muzeální kuriozity (Vlastivědné muzeum Šumperk, Veselý Kopec, skanzeny).
 
@@ -3073,7 +3073,7 @@ Viz též [[grunt]], [[robota]], [[mlat]], [[zne]].`,
 - **Vstupy**: dvě protilehlá vrata (jih i sever), aby se daly „závory" zaplnit z obou stran a aby fungoval **průvan** pro zvedání plev (provívání zrna)
 
 **Mlácení cepem (do ~1850):**
-- **Cep** (viz [[cep]]) — dřevěné nástroj se švihací částí (bidlo + tlučka spojené řemínkem)
+- **Cep** — dřevěné nástroj se švihací částí (bidlo + tlučka spojené řemínkem)
 - **Rytmus**: 4–8 mlátečů v řadě mlátilo rytmicky („čtveřice", „šesterka") — dodnes přežívá v lidové hudbě (rytmus „mlátiček")
 - **Výkon**: 1 mláteč zvládne ~50–80 kg zrna za den
 - **Skladba sezóny**: mlátilo se od listopadu do března — celé 4–5 měsíců zimní práce
@@ -3103,7 +3103,7 @@ Viz též [[grunt]], [[robota]], [[mlat]], [[zne]].`,
 
 Etymologie: praslovanské *mlatъ* (= úder, mlat). Související slova: **mlátit** (= mlátit cepem), **mlátička** (= stroj), **mlatec** (= muž mlátící cepem).
 
-Viz též [[zentour]], [[grunt]], [[zne]], [[cep]], [[rotor-kombajn]].`,
+Viz též [[zentour]], [[grunt]], [[zne]], [[rotor-kombajn]].`,
     related: ['zentour', 'grunt', 'zne', 'rotor-kombajn'],
   },
   {
@@ -3118,7 +3118,7 @@ Viz též [[zentour]], [[grunt]], [[zne]], [[cep]], [[rotor-kombajn]].`,
 - **Nástroje**: **srp** (jednoruční, do 17. století hlavní), **kosa** (od 17. století — větší výkon)
 - **Tempo**: 1 sekáč za den zvládne ~0,3–0,5 ha obilí
 - **Organizace**: rodina + nájemní pomocníci („žencové", „ženkyně")
-- **Žněnská skupina** (= 4–8 lidí): jeden sekáč → odběračka (žne) za ním → snopiči (vazači snopů — viz [[snop-otep]]) → kladači do panáků
+- **Žněnská skupina** (= 4–8 lidí): jeden sekáč → odběračka (žne) za ním → snopiči (vazači snopů) → kladači do panáků
 - **Po sklizni**: snopy stojí v polních **panáčcích** (šokách) k oschnutí 1–2 týdny, pak se převážejí do **stodol** na **mlat** (viz [[mlat]]) k zimnímu mlácení
 
 **Mechanizační milníky:**
@@ -3153,7 +3153,7 @@ Dnes:
 
 **„Otavy"** = druhá sklizeň trávy/sena na podzim (NE obilí — to jde jen jednou).
 
-Viz též [[mlat]], [[snop-otep]], [[kombajn-trida]], [[rotor-kombajn]], [[grunt]].`,
+Viz též [[mlat]], [[kombajn-trida]], [[rotor-kombajn]], [[grunt]].`,
     related: ['mlat', 'kombajn-trida', 'rotor-kombajn', 'grunt'],
   },
 
@@ -3378,7 +3378,7 @@ V Amazonii (Brazílie) byly objeveny **temně černé úrodné půdy** *Terra Pr
 - **Měření efektu** — viditelné jen po 3+ letech, předtím těžko proseditelné
 - **Pozor na kontaminanty** — biouhel z odpadní biomasy může obsahovat těžké kovy, dioxiny. Vyžaduje certifikaci EBC (European Biochar Certificate).
 
-Viz též [[organicka-hmota]], [[regenerativni-zemedelstvi]], [[karbonove-zemedelstvi]], [[ph-pudy]], [[vapneni]], [[hnojivo]].`,
+Viz též [[organicka-hmota]], [[regenerativni-zemedelstvi]], [[karbonove-zemedelstvi]], [[pH-pudy]], [[vapneni]].`,
     related: ['organicka-hmota', 'regenerativni-zemedelstvi', 'karbonove-zemedelstvi', 'pH-pudy', 'vapneni'],
   },
   {
@@ -6610,7 +6610,7 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 - **VCS dotace** dělá z cukrovky **velmi profitabilní volbu** v cukrovkářských regionech
 - **Mimo VCS regiony** méně atraktivní (sucho na Vysočině nelegální)
 
-Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[hnojivo]].`,
+Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
     related: ['msice-repna', 'ozim-jarin', 'osevni-postup', 'fungicidy'],
   },
   {
@@ -8036,7 +8036,7 @@ Viz též [[vertikalni-farma]], [[precision-livestock-farming]], [[npk-hnojivo]]
 - **Polní zemědělství** stále nejekonomičtější pro většinu plodin
 - **Vertical farms = niche** pro městské premium
 
-Viz též [[hydroponie]], [[satelity-zemedelstvi]], [[precision-livestock-farming]], [[ai-zemedelstvi]].`,
+Viz též [[hydroponie]], [[satelity-zemedelstvi]], [[precision-livestock-farming]].`,
     related: ['hydroponie', 'satelity-zemedelstvi', 'precision-livestock-farming'],
   },
   {
