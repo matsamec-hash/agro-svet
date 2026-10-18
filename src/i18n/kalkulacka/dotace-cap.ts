@@ -1,5 +1,6 @@
 import type { Locale } from '../config';
 import { SAZBY, LIMITY, ROK_SAZEB, KURZ_CZK_EUR, ZALOHA_PROCENT, formatSazba, formatKc } from '../../lib/cap-dotace';
+import { SAZBY_SK, ROK_SAZIEB_SK, SADZBY_SK_2026_CIASTOCNE } from '../../lib/sk-cap-dotace';
 
 export interface DotaceCapFaq { q: string; a: string }
 
@@ -58,22 +59,25 @@ const cs: DotaceCapContent = {
     ],
 };
 
+const eur = (n: number) => n.toLocaleString('sk-SK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 const sk: DotaceCapContent = {
-    title: 'Kalkulačka priamych platieb SPP 2024 — BISS, CRISS, ekoschéma, VCS',
-    metaDescription: 'Vypočítajte si, aké priame platby vám pripadnú zo Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku. BISS, redistributívna platba, ekoschéma a viazané platby v EUR.',
-    kicker: 'Kalkulačka · SPP 2024',
+    title: `Kalkulačka priamych platieb SPP — sadzby ${ROK_SAZIEB_SK} (BISS, CRISS, ekoschéma, VCS)`,
+    metaDescription: `Vypočítajte si priame platby zo Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku podľa sadzieb PPA za rok ${ROK_SAZIEB_SK}: BISS, redistributívna platba, ekoschéma, mladý poľnohospodár a viazané platby v EUR.`,
+    kicker: `Kalkulačka · sadzby ${ROK_SAZIEB_SK}`,
     h1: 'Koľko dostanete na priamych platbách',
-    lede: 'Orientačný kalkulátor priamych platieb Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku — spočíta BISS, redistributívnu platbu (CRISS), ekoschému a viazané platby (VCS). Sadzby vychádzajú z oficiálneho Excelu PPA pre rok 2024.',
+    lede: `Orientačný výpočet priamych platieb Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku podľa sadzieb za rok ${ROK_SAZIEB_SK} — spočíta BISS, redistributívnu platbu (CRISS), ekoschému, platbu pre mladých poľnohospodárov a viazané platby (VCS) na plochu.`,
     crumbHome: 'Domov',
     crumbHub: 'Kalkulačky',
     crumbSelf: 'Priame platby SPP',
     faq: [
-      { q: 'Aké platby kalkulačka počíta?', a: 'Sčíta hlavné priame platby SPP 2023–2027: základnú podporu príjmu (BISS), redistributívnu platbu (CRISS), celofarmskú ekoschému a viazané platby (VCS) na vybrané plodiny. Investičné dotácie, AEKO, welfare zvierat a platby na zviera nepočíta.' },
-      { q: 'Sú sadzby aktuálne?', a: 'Vychádzajú z oficiálneho Excelu PPA „Sadzby priamych platieb pre rok 2024" (BISS 103,80 €/ha, CRISS 79 €/ha do 100,99 ha a 40 €/ha do 150 ha, ekoschéma 60,36 €/ha mimo CHVÚ a 110,45 €/ha v CHVÚ). Záväzné sadzby zverejňuje PPA — výsledok je orientačný (±5–10 %).' },
-      { q: 'Čo je CRISS a prečo dva stupne?', a: 'Redistributívna platba podporuje malé a stredné podniky. Vypláca sa 79 €/ha na prvých 100,99 ha a 40 €/ha na plochu 100,99–150 ha; nad 150 ha sa neposkytuje.' },
-      { q: 'Ako funguje ekoschéma a čo je CHVÚ?', a: 'Celofarmská ekoschéma sa vypláca dvoma sadzbami podľa toho, či plocha leží v chránenom vtáčom území (CHVÚ): 110,45 €/ha v CHVÚ a 60,36 €/ha mimo. Zadajte, koľko ha vašej výmery je v CHVÚ.' },
+      { q: 'Aké platby kalkulačka počíta?', a: 'Sčíta hlavné priame platby SPP 2023–2027 na plochu: základnú podporu príjmu (BISS), redistributívnu platbu (CRISS), celofarmovú ekoschému, platbu pre mladých poľnohospodárov a viazané platby (VCS) na vybrané plodiny. Investičné dotácie, AEKO, ANC, podporu pastevného chovu ani viazané platby na zviera nepočíta.' },
+      { q: 'Z ktorého roku sú sadzby?', a: `Z roku ${ROK_SAZIEB_SK} — je to posledný rok, za ktorý PPA zverejnila všetky sadzby (tabuľka „Sadzby priamych platieb pre rok 2025“ z 24. 2. 2026 na apa.sk): BISS ${eur(SAZBY_SK.biss)} €/ha, CRISS ${eur(SAZBY_SK.crissTier1)} €/ha do 100,99 ha a ${eur(SAZBY_SK.crissTier2)} €/ha od 101 ha, ekoschéma ${eur(SAZBY_SK.ekoChvu)} €/ha v chránenom území a ${eur(SAZBY_SK.ekoMimoChvu)} €/ha mimo neho, mladý poľnohospodár ${eur(SAZBY_SK.mlady)} €/ha. Za rok 2026 PPA k 23. 9. 2026 zverejnila zatiaľ len časť sadzieb (napr. BISS ${eur(SADZBY_SK_2026_CIASTOCNE.biss)} €/ha). Výsledok je orientačný.` },
+      { q: 'Čo je CRISS a prečo dva stupne?', a: `Redistributívna platba podporuje malé a stredné podniky. Podľa § 7 nariadenia vlády č. 436/2022 Z. z. sa vypláca na prvých 100,99 ha vyššou sadzbou (za rok 2025 ${eur(SAZBY_SK.crissTier1)} €/ha) a od 101 ha do 150,99 ha nižšou (${eur(SAZBY_SK.crissTier2)} €/ha); nad 150,99 ha sa neposkytuje.` },
+      { q: 'Ako funguje ekoschéma a čo je chránené územie?', a: `Celofarmová ekoschéma má dve sadzby. Vyššia (za rok 2025 ${eur(SAZBY_SK.ekoChvu)} €/ha) platí pre ornú pôdu v chránenom území — súvislú časť ornej pôdy v diele pôdneho bloku, ktorej aspoň 10 % leží v chránenom vtáčom území alebo v území európskeho významu; ostatná plocha dostane ${eur(SAZBY_SK.ekoMimoChvu)} €/ha.` },
+      { q: 'Koľko hektárov sa započíta mladému poľnohospodárovi?', a: `Najviac ${SAZBY_SK.mladyMaxHa} ha (§ 8 ods. 8 nariadenia vlády č. 436/2022 Z. z.), najviac päť rokov a najdlhšie do roku 2027. Žiadateľ má v roku podania žiadosti najviac 40 rokov, zakladá podnik prvýkrát a má odbornú prípravu.` },
       { q: 'Počíta kalkulačka ANC?', a: 'Nie. Podpora pre oblasti s prírodnými obmedzeniami (ANC) sa v SR poskytuje samostatne v rámci rozvoja vidieka, nie ako priama platba — pozrite apa.sk.' },
-      { q: 'Je výpočet záväzný?', a: 'Nie. Slúži na orientáciu pri plánovaní. Záväzné sumy stanovuje Pôdohospodárska platobná agentúra (PPA) po uzávierke kampane a po kontrole.' },
+      { q: 'Je výpočet záväzný?', a: 'Nie. Slúži na orientáciu pri plánovaní. Záväzné sumy stanovuje Pôdohospodárska platobná agentúra (PPA) po kontrole; pri nesplnení podmienok sa platby krátia a pri prekročení národného stropu sa všetky priame platby lineárne znížia.' },
     ],
 };
 

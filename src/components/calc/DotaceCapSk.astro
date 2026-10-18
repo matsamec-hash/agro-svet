@@ -1,5 +1,7 @@
 ---
-import { VCS_SEKTORY_SK, SAZBY_SK } from '../../lib/sk-cap-dotace';
+import { VCS_SEKTORY_SK, SAZBY_SK, ROK_SAZIEB_SK, ZDROJE_SK, SADZBY_SK_2026_CIASTOCNE } from '../../lib/sk-cap-dotace';
+
+const eur = (n: number) => n.toLocaleString('sk-SK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 interface Props {
   faqItems: { q: string; a: string }[];
@@ -18,10 +20,14 @@ const { faqItems } = Astro.props;
     </nav>
 
     <header class="calc-head">
-      <span class="kicker">Kalkulačka · SPP 2024</span>
+      <span class="kicker">Kalkulačka · sadzby {ROK_SAZIEB_SK}</span>
       <h1>Koľko dostanete na priamych platbách</h1>
       <p class="lede">
-        Orientačný kalkulátor priamych platieb Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku — spočíta BISS, redistributívnu platbu (CRISS), ekoschému a viazané platby (VCS). Sadzby vychádzajú z oficiálneho Excelu PPA pre rok 2024.
+        Orientačný výpočet priamych platieb Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku podľa sadzieb za rok {ROK_SAZIEB_SK} — spočíta BISS, redistributívnu platbu (CRISS), ekoschému, platbu pre mladých poľnohospodárov a viazané platby (VCS) na plochu.
+      </p>
+      <p class="source-line">
+        Sadzby: <a href={ZDROJE_SK.sadzby.url} rel="external nofollow">{ZDROJE_SK.sadzby.label}</a>. Pravidlá: <a href={ZDROJE_SK.nariadenie.url} rel="external nofollow">{ZDROJE_SK.nariadenie.label}</a>.
+        Za rok 2026 PPA zatiaľ zverejnila len časť sadzieb (napr. BISS {eur(SADZBY_SK_2026_CIASTOCNE.biss)} €/ha, CRISS {eur(SADZBY_SK_2026_CIASTOCNE.crissTier1)} / {eur(SADZBY_SK_2026_CIASTOCNE.crissTier2)} €/ha).
       </p>
     </header>
 
@@ -35,14 +41,14 @@ const { faqItems } = Astro.props;
         </label>
 
         <label class="field">
-          <span>Plocha v CHVÚ (ha)</span>
+          <span>Orná pôda v chránenom území (ha)</span>
           <input type="number" id="chvu-ha-sk" name="chvuHa" min="0" step="0.1" placeholder="0" />
-          <span class="field-hint">koľko ha vašej výmery leží v chránenom vtáčom území (vyššia sadzba ekoschémy)</span>
+          <span class="field-hint">súvislá orná pôda v diele pôdneho bloku, ktorej aspoň 10 % leží v chránenom vtáčom území alebo v území európskeho významu (vyššia sadzba ekoschémy, § 2 písm. c) NV 436/2022)</span>
         </label>
 
         <label class="field-check">
           <input type="checkbox" id="mlady-sk" name="mlady" />
-          <span><strong>Mladý poľnohospodár</strong> <em>do 40 rokov, prvý podnik — max {SAZBY_SK.mladyMaxHa} ha.</em></span>
+          <span><strong>Mladý poľnohospodár</strong> <em>— {eur(SAZBY_SK.mlady)} €/ha; najviac 40 rokov v roku podania žiadosti, nový podnik, odborná príprava; najviac {SAZBY_SK.mladyMaxHa} ha a päť rokov.</em></span>
         </label>
       </fieldset>
 
@@ -54,7 +60,7 @@ const { faqItems } = Astro.props;
           {VCS_SEKTORY_SK.map((s) => (
             <label class="vcs-field">
               <span class="vcs-name">{s.name}</span>
-              <span class="vcs-rate">{s.sazba.toLocaleString('sk-SK')} €/ha</span>
+              <span class="vcs-rate">{eur(s.sazba)} €/ha</span>
               <input type="number" name={`vcs-${s.slug}`} data-vcs={s.slug} min="0" step="0.1" placeholder="0" />
             </label>
           ))}
@@ -81,8 +87,10 @@ const { faqItems } = Astro.props;
         <tbody id="result-tbody-sk"></tbody>
       </table>
 
+      <ul class="result-warnings" id="result-warnings-sk" hidden></ul>
+
       <div class="result-disclaimer">
-        ⚠️ Orientačný výpočet podľa oficiálnych sadzieb PPA 2024. Záväzné sumy stanovuje <a href="https://www.apa.sk" rel="external nofollow">PPA</a> po uzávierke kampane.
+        ⚠️ Orientačný výpočet podľa sadzieb PPA za rok {ROK_SAZIEB_SK}. Záväzné sú rozhodnutia <a href="https://www.apa.sk" rel="external nofollow">PPA</a>. Ak celková suma priamych platieb prekročí národný strop, PPA ich lineárne zníži; pri nesplnení podmienok sa platby krátia.
       </div>
 
       <div class="result-cta">
@@ -95,13 +103,13 @@ const { faqItems } = Astro.props;
       <h2>Ako kalkulačka funguje</h2>
       <p>Táto kalkulačka sčíta hlavné priame platby Spoločnej poľnohospodárskej politiky 2023–2027 na Slovensku:</p>
       <ul>
-        <li><strong>BISS</strong> — Základná podpora príjmu ({SAZBY_SK.biss} €/ha) na všetku spôsobilú plochu</li>
-        <li><strong>CRISS</strong> — Redistributívna platba ({SAZBY_SK.crissTier1} €/ha do {SAZBY_SK.crissTier1MaxHa} ha, {SAZBY_SK.crissTier2} €/ha do {SAZBY_SK.crissTier2MaxHa} ha)</li>
-        <li><strong>Ekoschéma</strong> — Celofarmská: {SAZBY_SK.ekoChvu} €/ha v CHVÚ, {SAZBY_SK.ekoMimoChvu} €/ha mimo CHVÚ</li>
-        <li><strong>Mladý poľnohospodár</strong> — Platba {SAZBY_SK.mlady} €/ha pre prvých {SAZBY_SK.mladyMaxHa} ha</li>
-        <li><strong>VCS</strong> — Viazané platby na vybrané plodiny: cukrová repa, bielkovinové plodiny, chmeľ, ovocie a prácna zelenina</li>
+        <li><strong>BISS</strong> — základná podpora príjmu {eur(SAZBY_SK.biss)} €/ha na všetku oprávnenú plochu (najmenej {SAZBY_SK.minVymeraHa} ha)</li>
+        <li><strong>CRISS</strong> — redistributívna platba {eur(SAZBY_SK.crissTier1)} €/ha do {SAZBY_SK.crissTier1MaxHa.toLocaleString('sk-SK')} ha a {eur(SAZBY_SK.crissTier2)} €/ha od 101 ha do {SAZBY_SK.crissTier2MaxHa.toLocaleString('sk-SK')} ha</li>
+        <li><strong>Ekoschéma</strong> — celofarmová: {eur(SAZBY_SK.ekoChvu)} €/ha na ornej pôde v chránenom území, {eur(SAZBY_SK.ekoMimoChvu)} €/ha mimo neho</li>
+        <li><strong>Mladý poľnohospodár</strong> — {eur(SAZBY_SK.mlady)} €/ha najviac na {SAZBY_SK.mladyMaxHa} ha</li>
+        <li><strong>VCS</strong> — viazané platby na plochu: cukrová repa, bielkovinové plodiny, chmeľ, ovocie a prácna a vysoko prácna zelenina</li>
       </ul>
-      <p>Čo kalkulačka <strong>nezapočítava</strong>: ANC (poskytuje sa samostatne v rámci rozvoja vidieka), AEKO, welfare zvierat, platby na zviera ani investičné intervencie.</p>
+      <p>Čo kalkulačka <strong>nezapočítava</strong>: ANC (poskytuje sa samostatne v rámci rozvoja vidieka), viazané platby na zviera (za rok 2025 dojnice 276,02 €/ks, ovce a kozy 24,96 €/ks), podporu pastevného chovu, zníženie BISS nad 60 000 €, AEKO ani investičné intervencie.</p>
 
       <h2>Časté otázky</h2>
       <div class="faqs">
@@ -124,6 +132,7 @@ const { faqItems } = Astro.props;
       const resultTotal = document.getElementById('result-total-sk')!;
       const resultPerHa = document.getElementById('result-perha-sk')!;
       const resultTbody = document.getElementById('result-tbody-sk')!;
+      const resultWarnings = document.getElementById('result-warnings-sk')!;
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -139,7 +148,7 @@ const { faqItems } = Astro.props;
           vcsHa,
         });
 
-        if (!res.items.length) {
+        if (!res.items.length && !res.warnings.length) {
           alert('Zadajte celkovú výmeru.');
           return;
         }
@@ -150,9 +159,11 @@ const { faqItems } = Astro.props;
           <tr>
             <td class="strong">${escapeHtml(it.label)}${it.note ? `<div class="row-note">${escapeHtml(it.note)}</div>` : ''}</td>
             <td class="num">${it.ha.toLocaleString('sk-SK', { maximumFractionDigits: 2 })} ha</td>
-            <td class="num">${formatEur(Math.round(it.sazba))}/ha</td>
+            <td class="num">${it.sazba.toLocaleString('sk-SK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €/ha</td>
             <td class="num strong">${formatEur(it.amount)}</td>
           </tr>`).join('');
+        resultWarnings.innerHTML = res.warnings.map((w) => `<li>${escapeHtml(w)}</li>`).join('');
+        resultWarnings.hidden = res.warnings.length === 0;
         resultCard.hidden = false;
         resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
@@ -331,6 +342,18 @@ const { faqItems } = Astro.props;
     .result-table td.num { text-align: right; white-space: nowrap; }
     .result-table td.strong { font-weight: 700; color: #0A0A0B; }
     .row-note { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.4; }
+
+    .source-line { font-size: 13px; color: #666; line-height: 1.5; margin: 12px 0 0; }
+    .source-line a { color: #0B7A3B; text-decoration: underline; }
+    .result-warnings {
+      margin: 16px 0 0;
+      padding: 12px 16px 12px 32px;
+      background: #fef2f2;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #7f1d1d;
+      line-height: 1.5;
+    }
 
     .result-disclaimer {
       margin-top: 16px;
