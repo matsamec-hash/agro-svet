@@ -231,6 +231,13 @@ const handleRequest = defineMiddleware(async (context, next) => {
     return redirect(strippedPath + url.search, 307);
   }
 
+  // Admin nemá jazykové mutace. `/sk/admin/…` by se přes next(strippedPath)
+  // vykreslil jako `/admin/…` a Astro při rewritu middleware znovu nespustí,
+  // takže by kontrola admina níž neproběhla (únik 22. 10. 2026) → 404.
+  if (locale !== 'cs' && ADMIN_PATHS.some((p) => strippedPath.startsWith(p))) {
+    return new Response('Not Found', { status: 404 });
+  }
+
   // ---- Site gate: runs FIRST, above everything else -------------------------
   // To disable: unset SITE_GATE_PASSCODE env var and redeploy.
   const gateOn = gateActive();
@@ -254,7 +261,9 @@ const handleRequest = defineMiddleware(async (context, next) => {
   // Fast path: public route (and gate is off) — skip auth processing entirely.
   // Saves the Supabase setSession round-trip for anonymous traffic on hot pages
   // like /, /novinky/[slug], /bazar/, /bazar/[id].
-  if (!needsAuthContext(url.pathname)) {
+  // Všechny kontroly přístupu nad cestou BEZ jazyka: stránka se vykreslí podle
+  // strippedPath, takže podle ní se musí i hlídat (jinak /sk/bazar/moje projde).
+  if (!needsAuthContext(strippedPath)) {
     locals.user = null;
     const response = await advance();
     if (gateOn) applyGateHeaders(response);
@@ -296,15 +305,15 @@ const handleRequest = defineMiddleware(async (context, next) => {
   }
 
   // Protect routes
-  const isProtected = PROTECTED_PATHS.some(p => url.pathname.startsWith(p));
+  const isProtected = PROTECTED_PATHS.some(p => strippedPath.startsWith(p));
   if (isProtected && !locals.user) {
-    const redirectTarget = url.pathname.startsWith('/fotosoutez')
+    const redirectTarget = strippedPath.startsWith('/fotosoutez')
       ? `/bazar/prihlaseni/?redirect=${encodeURIComponent(url.pathname)}`
       : '/bazar/prihlaseni/';
     return redirect(redirectTarget);
   }
 
-  const isAdmin = ADMIN_PATHS.some(p => url.pathname.startsWith(p));
+  const isAdmin = ADMIN_PATHS.some(p => strippedPath.startsWith(p));
   if (isAdmin) {
     if (!locals.user) {
       return redirect('/bazar/prihlaseni/?redirect=' + encodeURIComponent(url.pathname));
