@@ -2,6 +2,10 @@
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { createServerClient } from '../../../lib/supabase';
+import { requireAdmin } from '../../../lib/require-admin';
+
+const zamitnuto = await requireAdmin(Astro);
+if (zamitnuto) return zamitnuto;
 
 // Middleware gate-uje /admin/* na is_admin=true. Přehled registrovaných účtů bazaru.
 const supabase = createServerClient();

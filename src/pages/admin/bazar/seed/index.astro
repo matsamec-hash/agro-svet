@@ -5,6 +5,10 @@ import { claimUrl } from '../../../../lib/bazar-seed-email';
 import { buildClaimWhatsAppMessage, claimWhatsAppUrl } from '../../../../lib/bazar-claim-whatsapp';
 import { createServerClient } from '../../../../lib/supabase';
 import { listOpenProspects } from '../../../../lib/bazar-seed';
+import { requireAdmin } from '../../../../lib/require-admin';
+
+const zamitnuto = await requireAdmin(Astro);
+if (zamitnuto) return zamitnuto;
 
 // Middleware už gate-uje /admin/* přes is_admin (viz ostatní admin .astro
 // stránky — žádná z nich nedělá vlastní kontrolu, locals.user navíc is_admin

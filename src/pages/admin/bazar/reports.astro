@@ -6,6 +6,10 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { createServerClient } from '../../../lib/supabase';
 import { reasonLabel } from '../../../lib/bazar-report-email';
+import { requireAdmin } from '../../../lib/require-admin';
+
+const zamitnuto = await requireAdmin(Astro);
+if (zamitnuto) return zamitnuto;
 
 // Osobní údaje oznamovatelů — nikdy do sdílené cache.
 Astro.response.headers.set('Cache-Control', 'private, no-store');
