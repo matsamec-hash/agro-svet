@@ -1,4 +1,4 @@
--- 025_zamknout_tabulky_bez_rls.sql
+-- 026_zamknout_tabulky_bez_rls.sql
 -- Tři díry, které šly otevřít veřejným (anon) klíčem — ten je v kódu každého webu:
 --
 -- 1) bazar_users: politika SELECT `true` vydávala e-maily a telefony všech
@@ -9,6 +9,10 @@
 --    i mazat. Obě čte a píše jen server přes service-role klíč.
 -- 3) bazar_next_invoice_number() a bazar_next_vs() šly volat anonymně a pálit
 --    čísla faktur (řada má být bez děr). Volá je jen server (service role).
+--
+-- Aplikováno na prod 22. 10. 2026 večer, PŘED migrací 025 (jiná relace,
+-- 23:04), která bazar_users vzala anon i authenticated úplně (`revoke all`).
+-- Politika z bodu 1 je od té doby jen druhá pojistka.
 --
 -- Tabulky akce_images, bazar_invoice_counters a obě funkce vlastní
 -- supabase_admin → spouštět jako supabase_admin.
