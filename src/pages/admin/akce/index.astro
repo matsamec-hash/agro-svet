@@ -5,6 +5,10 @@ import { listPending, listUpcoming, akceFotoUrl, getAkceImagesMap } from '../../
 import { formatTermin, type TerminInput } from '../../../lib/akce-recurrence';
 import { akceTypLabel, type AkceTyp } from '../../../lib/akce-constants';
 import AdminAkceMedia from '../../../components/admin/AdminAkceMedia.astro';
+import { requireAdmin } from '../../../lib/require-admin';
+
+const zamitnuto = await requireAdmin(Astro);
+if (zamitnuto) return zamitnuto;
 
 export const prerender = false;
 const pending = await listPending();

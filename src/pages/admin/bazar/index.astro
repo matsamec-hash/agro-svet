@@ -3,6 +3,10 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { createServerClient } from '../../../lib/supabase';
 import { isFeaturedActive, formatFeaturedUntil } from '../../../lib/bazar-featured';
+import { requireAdmin } from '../../../lib/require-admin';
+
+const zamitnuto = await requireAdmin(Astro);
+if (zamitnuto) return zamitnuto;
 
 const url = Astro.url;
 const filter = (url.searchParams.get('filter') ?? 'all') as 'all' | 'active' | 'expired' | 'none';

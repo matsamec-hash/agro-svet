@@ -1,6 +1,10 @@
 ---
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
+import { requireAdmin } from '../../lib/require-admin';
+
+const zamitnuto = await requireAdmin(Astro);
+if (zamitnuto) return zamitnuto;
 ---
 
 <Layout title="Admin — agro-svet" description="Admin rozcestník">

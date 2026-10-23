@@ -2,6 +2,10 @@
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { getPendingEntries, getPublicPhotoUrl } from '../../../lib/contest-supabase';
+import { requireAdmin } from '../../../lib/require-admin';
+
+const zamitnuto = await requireAdmin(Astro);
+if (zamitnuto) return zamitnuto;
 
 const entries = await getPendingEntries(50);
 const withUrls = await Promise.all(

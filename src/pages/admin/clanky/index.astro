@@ -3,6 +3,10 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { createServerClient } from '../../../lib/supabase';
 import { AGRO_SVET_SITE_ID } from '../../../lib/config';
+import { requireAdmin } from '../../../lib/require-admin';
+
+const zamitnuto = await requireAdmin(Astro);
+if (zamitnuto) return zamitnuto;
 
 
 const url = Astro.url;
