@@ -33,8 +33,8 @@ export interface PrevodyHmotnostContent extends CalcMeta {
 // a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
 export const content: Partial<Record<Locale, PrevodyHmotnostContent>> = {
   cs: {
-    title: 'Převody jednotek hmotnosti — tuna, q, kg, bušl, libra',
-    metaDescription: 'Online kalkulačka pro převody hmotnosti v zemědělství: tuna ↔ metrický cent (q) ↔ kilogram ↔ bušl (pšenice, kukuřice, sója) ↔ libra. Hodnoty bušlu podle komodity (USDA standard).',
+    title: 'Bušl, q a tuna na kg — převodník hmotnosti plodin',
+    metaDescription: 'Převeďte tuny, metrické centy (q), kg, bušly a libry. 1 t = 10 q = 1 000 kg, 1 bušl pšenice = 27,2 kg. Hmotnost bušlu podle plodiny (USDA).',
     h1: 'Převody jednotek hmotnosti',
     crumb: 'Převody hmotnosti',
     kicker: 'Kalkulačka · jednotky hmotnosti',
@@ -105,8 +105,8 @@ export const content: Partial<Record<Locale, PrevodyHmotnostContent>> = {
     },
   },
   sk: {
-    title: 'Prevody jednotiek hmotnosti — tona, q, kg, bušel, libra',
-    metaDescription: 'Online kalkulačka na prevody hmotnosti v poľnohospodárstve: tona ↔ metrický cent (q) ↔ kilogram ↔ bušel (pšenica, kukurica, sója) ↔ libra. Hodnoty bušla podľa komodity (USDA štandard).',
+    title: 'Bušel, q a tona na kg — prevodník hmotnosti plodín',
+    metaDescription: 'Prepočítajte tony, metrické centy (q), kg, bušle a libry. 1 t = 10 q = 1 000 kg, 1 bušel pšenice = 27,2 kg. Hmotnosť bušla podľa plodiny (USDA).',
     h1: 'Prevody jednotiek hmotnosti',
     crumb: 'Prevody hmotnosti',
     kicker: 'Kalkulačka · jednotky hmotnosti',
@@ -177,8 +177,8 @@ export const content: Partial<Record<Locale, PrevodyHmotnostContent>> = {
     },
   },
   pl: {
-    title: 'Przelicznik jednostek masy — tona, q, kg, buszel, funt',
-    metaDescription: 'Kalkulator online do przeliczania masy w rolnictwie: tona ↔ kwintal (q) ↔ kilogram ↔ buszel (pszenica, kukurydza, soja) ↔ funt. Masa buszla według towaru (standard USDA).',
+    title: 'Buszel, kwintal i tona na kg — przelicznik masy',
+    metaDescription: 'Przelicz tony, kwintale (q), kg, buszle i funty. 1 t = 10 q = 1000 kg, 1 buszel pszenicy = 27,2 kg. Masa buszla zależy od zboża (standard USDA).',
     h1: 'Przeliczniki jednostek masy',
     crumb: 'Jednostki masy',
     kicker: 'Kalkulator · jednostki masy',
@@ -249,8 +249,8 @@ export const content: Partial<Record<Locale, PrevodyHmotnostContent>> = {
   // překládají se jen názvy komodit a popisy. Doppelzentner (dt) je v Německu
   // běžnější zápis než „q", proto je uvedený obojí.
   de: {
-    title: 'Masseeinheiten umrechnen — Tonne, Doppelzentner, kg, Bushel, Pfund',
-    metaDescription: 'Online-Rechner für Massen in der Landwirtschaft: Tonne ↔ Doppelzentner (dt) ↔ Kilogramm ↔ Bushel (Weizen, Mais, Soja) ↔ Pfund. Bushel-Gewicht je Kultur nach USDA-Standard.',
+    title: 'Bushel, Doppelzentner und Tonne in kg umrechnen',
+    metaDescription: 'Tonnen, Doppelzentner (dt), kg, Bushel und Pfund umrechnen. 1 t = 10 dt = 1.000 kg, 1 Bushel Weizen = 27,2 kg. Bushel-Gewicht je Kultur nach USDA.',
     h1: 'Masseeinheiten umrechnen',
     crumb: 'Masseeinheiten',
     kicker: 'Rechner · Masseeinheiten',
@@ -321,8 +321,8 @@ export const content: Partial<Record<Locale, PrevodyHmotnostContent>> = {
   // je zmíněný explicitně. Ceny se v příkladu přepočítávají přes USD/t, ne
   // přes hřivnu — kurz je pohyblivý a stránka by jinak zastarala.
   uk: {
-    title: 'Переведення одиниць маси — тонна, центнер, кг, бушель, фунт',
-    metaDescription: 'Онлайн-калькулятор маси в агросекторі: тонна ↔ центнер (ц) ↔ кілограм ↔ бушель (пшениця, кукурудза, соя) ↔ фунт. Маса бушеля за культурою згідно зі стандартом USDA.',
+    title: 'Бушель, центнер і тонна в кг — переведення маси',
+    metaDescription: 'Переведіть тонни, центнери (ц), кг, бушелі та фунти. 1 т = 10 ц = 1000 кг, 1 бушель пшениці = 27,2 кг. Маса бушеля залежить від культури (USDA).',
     h1: 'Переведення одиниць маси',
     crumb: 'Одиниці маси',
     kicker: 'Калькулятор · одиниці маси',

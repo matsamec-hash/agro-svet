@@ -5,6 +5,7 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
+import { TITLE_MAX } from '../../../lib/head-meta';
 import WeightConverter from '../../../components/WeightConverter.astro';
 import { content } from '../../../i18n/kalkulacka/prevody-hmotnost';
 import { crumbs } from '../../../i18n/kalkulacka/common';
@@ -32,6 +33,7 @@ const faqJsonLd = faqPageSchema(faqItems);
   title={c.title}
   description={c.metaDescription}
   canonical={locale === 'cs' ? canonical : undefined}
+  titleMaxLength={TITLE_MAX}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />

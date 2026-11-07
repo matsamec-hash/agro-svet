@@ -36,9 +36,9 @@ export interface PrevodyJednotekContent extends CalcMeta {
 // a URL vrátí HTTP 500. Deset /uk a /pl kalkulaček takhle padalo na produkci.
 export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
   cs: {
-    title: 'Převody jednotek plochy — hektar, ar, m², akr, jitro, korec',
+    title: 'Hektar na m², ar a akr — převodník plochy online',
     metaDescription:
-      'Online kalkulačka pro převody jednotek plochy: hektar ↔ ar ↔ m² ↔ km² ↔ akr ↔ jitro ↔ korec ↔ strych ↔ morgen. Okamžitý výpočet, vhodné pro zemědělce, geodety i katastr.',
+      'Převeďte hektary na m², ary, akry, jitra a korce. 1 ha = 10 000 m² = 100 arů = 2,471 akru. Online převodník plochy bez registrace, počítá hned při psaní.',
     h1: 'Převody jednotek plochy',
     crumb: 'Převody jednotek',
     kicker: 'Kalkulačka · jednotky a měření',
@@ -124,9 +124,9 @@ export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
     },
   },
   sk: {
-    title: 'Prevody jednotiek plochy — hektár, ár, m², aker, jitro, korec',
+    title: 'Hektár na m², ár a aker — prevodník plochy online',
     metaDescription:
-      'Online kalkulačka na prevody jednotiek plochy: hektár ↔ ár ↔ m² ↔ km² ↔ aker ↔ jitro ↔ korec ↔ strych ↔ morgen. Okamžitý výpočet, vhodné pre poľnohospodárov, geodetov aj kataster.',
+      'Prepočítajte hektáre na m², áre, akre, jutrá a korce. 1 ha = 10 000 m² = 100 árov = 2,471 akra. Online prevodník plochy bez registrácie, počíta hneď pri písaní.',
     h1: 'Prevody jednotiek plochy',
     crumb: 'Prevody jednotiek',
     kicker: 'Kalkulačka · jednotky a meranie',
@@ -217,9 +217,9 @@ export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
     },
   },
   pl: {
-    title: 'Przelicznik jednostek powierzchni — hektar, ar, m², akr, morga',
+    title: 'Hektar na m², ar i akr — przelicznik powierzchni online',
     metaDescription:
-      'Kalkulator online do przeliczania jednostek powierzchni: hektar ↔ ar ↔ m² ↔ km² ↔ akr ↔ morga. Natychmiastowy wynik, dla rolników, geodetów i ewidencji gruntów.',
+      'Przelicz hektary na m², ary, akry i morgi. 1 ha = 10 000 m² = 100 arów = 2,471 akra. Darmowy przelicznik powierzchni online, wynik od razu podczas wpisywania.',
     h1: 'Przeliczniki jednostek powierzchni',
     crumb: 'Jednostki powierzchni',
     kicker: 'Kalkulator · jednostki i pomiary',
@@ -316,9 +316,9 @@ export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
   // takže se tak i jmenuje. Referenční tabulka navíc uvádí Tagwerk, Joch
   // a preußischer Morgen jako informaci, ne jako položku převodníku.
   de: {
-    title: 'Flächeneinheiten umrechnen — Hektar, Ar, m², Acre, Joch, Morgen',
+    title: 'Hektar in m², Ar und Acre umrechnen — Flächenrechner',
     metaDescription:
-      'Online-Rechner für Flächeneinheiten: Hektar ↔ Ar ↔ m² ↔ km² ↔ Acre ↔ Joch ↔ Morgen. Sofortiges Ergebnis, für Landwirte, Vermesser und Grundbuchauszüge in Deutschland und Österreich.',
+      'Hektar in m², Ar, Acre, Joch und Morgen umrechnen. 1 ha = 10.000 m² = 100 Ar = 2,471 Acre. Online-Rechner für Landwirte, sofortiges Ergebnis ohne Anmeldung.',
     h1: 'Flächeneinheiten umrechnen',
     crumb: 'Flächeneinheiten',
     kicker: 'Rechner · Einheiten und Maße',
@@ -415,9 +415,9 @@ export const content: Partial<Record<Locale, PrevodyJednotekContent>> = {
   // není české jitro, ale десятина (1,0925 ha) — ta v převodníku není, tabulka
   // ji proto uvádí jako referenci.
   uk: {
-    title: 'Переведення одиниць площі — гектар, ар, м², акр, десятина',
+    title: 'Гектар у м², ар і акр — онлайн-калькулятор площі',
     metaDescription:
-      'Онлайн-калькулятор переведення одиниць площі: гектар ↔ ар (сотка) ↔ м² ↔ км² ↔ акр. Миттєвий результат — для аграріїв, землевпорядників і роботи з витягами.',
+      'Переведіть гектари в м², ари (сотки), акри й десятини. 1 га = 10 000 м² = 100 ар = 2,471 акра. Миттєвий результат, без реєстрації.',
     h1: 'Переведення одиниць площі',
     crumb: 'Одиниці площі',
     kicker: 'Калькулятор · одиниці та виміри',

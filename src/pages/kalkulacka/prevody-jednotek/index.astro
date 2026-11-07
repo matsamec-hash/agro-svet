@@ -5,6 +5,7 @@ export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
 import { SITE_URL } from '../../../lib/config';
+import { TITLE_MAX } from '../../../lib/head-meta';
 import AreaConverter from '../../../components/AreaConverter.astro';
 import { content } from '../../../i18n/kalkulacka/prevody-jednotek';
 import { crumbs } from '../../../i18n/kalkulacka/common';
@@ -49,6 +50,7 @@ const appJsonLd = {
   title={c.title}
   description={c.metaDescription}
   canonical={locale === 'cs' ? canonical : undefined}
+  titleMaxLength={TITLE_MAX}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
