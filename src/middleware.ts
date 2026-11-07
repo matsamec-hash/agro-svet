@@ -22,6 +22,9 @@ const PROTECTED_PATHS = [
 ];
 
 const ADMIN_PATHS = ['/admin/'];
+// Náhled pro Seznam Newsfeed. Dynamická routa se s `trailingSlash: 'always'` otevře
+// jen s lomítkem na konci (viz sectionSitemapRoute), Seznam chce přímý odkaz na .jpg.
+const SEZNAM_IMAGE_PATH = /^\/rss-seznam\/[^/]+\.jpg$/;
 
 // Routes that may consult locals.user (page-level redirects, ownership checks,
 // or API auth). Anything outside this set is "public" and skips the Supabase
@@ -208,6 +211,7 @@ const handleRequest = defineMiddleware(async (context, next) => {
   const legacyTarget = legacyRedirectTarget(strippedPath);
   if (legacyTarget) return redirect(localizePath(locale, legacyTarget) + url.search, 301);
   const advance = async (): Promise<Response> => {
+    if (SEZNAM_IMAGE_PATH.test(url.pathname)) return next(`${url.pathname}/`);
     if (locale === 'cs') return next();
     try {
       // Ne-cs locale: rewrite na kanonickou cs routu (zachová lokalizovaný URL navenek).

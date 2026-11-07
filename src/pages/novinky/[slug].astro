@@ -11,6 +11,7 @@ import { imgSrcset } from '../../lib/image-variants';
 import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
 import PhotoCredits from '../../components/PhotoCredits.astro';
 import { creditFromArticle } from '../../lib/photo-credit';
+import { photoCreditLine, seznamImageSource, seznamImageUrl } from '../../lib/seznam-feed';
 import { ORG_ID, WEBSITE_ID } from '../../lib/structured-data';
 import { fetchArticleTranslations, fetchArticleLocaleRows, translatedLocales, overlayArticle, buildTranslationMap, hasTranslatedTitle } from '../../lib/articles-i18n';
 import { localizePath, t, tf, localizedCategory, bcp47, ceskaVerzeNebo404 } from '../../i18n/utils';
@@ -243,6 +244,11 @@ const jsonLd = {
   articleSection={articleSectionLabel}
   articleTags={article.tags ?? undefined}
 >
+  {/* ‼️ Seznam Newsfeed článek po prvním načtení aktualizuje z HTML a szn:image má
+      přednost před JSON-LD i og:image. Bez něj by náš webp přebil JPG z /rss-seznam.xml. */}
+  {locale === 'cs' && seznamImageSource(article.featured_image_url) && (
+    <meta slot="head" name="szn:image" content={seznamImageUrl(article.slug)} data-description={photoCreditLine(heroCredit) || undefined} />
+  )}
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
   <!-- Hero image -->
