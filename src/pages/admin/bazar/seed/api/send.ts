@@ -3,6 +3,7 @@ import { createServerClient } from '../../../../../lib/supabase';
 import { getEnvVar } from '../../../../../lib/env';
 import { sendClaimEmail } from '../../../../../lib/bazar-seed-email';
 import { markProspectSent } from '../../../../../lib/bazar-seed';
+import { BAZAR_CLAIM_EMAIL_ENABLED } from '../../../../../lib/config';
 
 export const prerender = false;
 
@@ -13,6 +14,9 @@ function json(body: unknown, status = 200) {
 export const POST: APIRoute = async ({ request, locals }) => {
   const user = locals.user;
   if (!user) return json({ error: 'unauthenticated' }, 401);
+
+  // Claim e-maily jsou vypnuté (adresáti se neregistrovali, bez souhlasu a odhlášení) — viz config.ts.
+  if (!BAZAR_CLAIM_EMAIL_ENABLED) return json({ error: 'claim_email_disabled' }, 403);
 
   const supabase = createServerClient();
 

@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import { SITE_URL } from './config';
+import { SITE_URL, BAZAR_CLAIM_EMAIL_ENABLED } from './config';
 
 const FROM = 'Agro-svět bazar <bazar@mail.agro-svet.cz>';
 
@@ -179,8 +179,12 @@ export function buildClaimEmail(args: ClaimEmailArgs): { subject: string; html: 
   return { subject, html };
 }
 
-/** Odešle claim e-mail přes Resend. Vrací true při úspěchu. */
+/**
+ * Odešle claim e-mail přes Resend. Vrací true při úspěchu.
+ * Při vypnuté vlajce BAZAR_CLAIM_EMAIL_ENABLED (viz config.ts) nic neodesílá a vrací false.
+ */
 export async function sendClaimEmail(apiKey: string, to: string, args: ClaimEmailArgs): Promise<boolean> {
+  if (!BAZAR_CLAIM_EMAIL_ENABLED) return false;
   if (!apiKey) return false;
   const { subject, html } = buildClaimEmail(args);
   const resend = new Resend(apiKey);

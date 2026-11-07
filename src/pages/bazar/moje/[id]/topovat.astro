@@ -95,8 +95,13 @@ const isCurrentlyFeatured = isFeaturedActive(listing);
           <div class="plan-perday">~ {p.perDayCzk} Kč/den</div>
           <p class="plan-desc">{p.description}</p>
           <button type="button" class="plan-btn" data-plan={p.plan} data-listing-id={listing.id}>
-            Požádat o topování →
+            Topovat s povinností platby →
           </button>
+          <p class="plan-terms">
+            Kliknutím se zavazujete zaplatit {fmtCzk(p.priceCzk)}.
+            <a href="/podminky-pouziti/" target="_blank" rel="noopener">Podmínky použití</a> ·
+            <a href="/bazar/pravidla/" target="_blank" rel="noopener">Pravidla bazaru</a>
+          </p>
         </div>
       ))}
     </div>
@@ -236,6 +241,8 @@ const isCurrentlyFeatured = isFeaturedActive(listing);
     }
     .plan-btn:hover:not(:disabled) { background: #2a2a2f; }
     .plan-btn:disabled { opacity: 0.6; cursor: wait; }
+    .plan-terms { font-size: 11.5px; color: #6B6B72; line-height: 1.5; margin: 8px 0 0; text-align: center; }
+    .plan-terms a { color: #444; text-decoration: underline; }
 
     .topo-foot {
       font-size: 12px;

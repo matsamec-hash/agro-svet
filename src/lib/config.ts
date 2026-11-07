@@ -9,6 +9,14 @@ export const SITE_URL = 'https://agro-svet.cz';
 // /bazar/moje/[id]/topovat i API /api/bazar/featured/request se řídí touto vlajkou.
 export const BAZAR_TOPOVANI_ENABLED = false;
 
+// Claim e-maily prodejcům z převzaté (seedované) inzerce („převezměte svůj inzerát")
+// jsou VYPNUTÉ. Adresáti se u nás neregistrovali, nedali souhlas a e-mail nemá
+// odhlášení, takže se nesmí rozesílat. Vypnutí je vratné (jen tato vlajka) a data
+// (bazar_seed_prospects, drafty) se nemažou. Flag řídí sendClaimEmail() — jediné
+// místo, které claim e-mail odesílá — i API /admin/bazar/seed/api/send a tlačítko
+// „Poslat e-mail" v adminu. Zapnout znovu až s právním základem a odhlášením.
+export const BAZAR_CLAIM_EMAIL_ENABLED = false;
+
 // Vynucení retenčních lhůt (/api/cron/data-retention). Ve vypnutém stavu endpoint
 // jen REPORTUJE, co by smazal — mazání je nevratné, takže si čísla nejdřív projdi
 // nasucho a teprve pak přepni na `true`.

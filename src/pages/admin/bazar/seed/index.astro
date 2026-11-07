@@ -2,6 +2,7 @@
 export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import { claimUrl } from '../../../../lib/bazar-seed-email';
+import { BAZAR_CLAIM_EMAIL_ENABLED } from '../../../../lib/config';
 import { buildClaimWhatsAppMessage, claimWhatsAppUrl } from '../../../../lib/bazar-claim-whatsapp';
 import { createServerClient } from '../../../../lib/supabase';
 import { listOpenProspects } from '../../../../lib/bazar-seed';
@@ -229,7 +230,7 @@ const tiles = [
               {preview && <a href={preview} target="_blank" rel="noopener" class="action-pill">👁 Náhled</a>}
               <button type="button" class="copyBtn action-pill" data-url={claimUrl(p.claim_token)}>🔗 Odkaz</button>
               {waUrl && <a href={waUrl} target="_blank" rel="noopener" class="action-pill" style="color:#128c7e;">WhatsApp</a>}
-              {p.email && <button type="button" class="sendBtn action-pill" data-id={p.id}>✉ Poslat e-mail</button>}
+              {BAZAR_CLAIM_EMAIL_ENABLED && p.email && <button type="button" class="sendBtn action-pill" data-id={p.id}>✉ Poslat e-mail</button>}
               <button type="button" class="delBtn action-pill" style="color:#b00020;" data-id={p.id} data-status={p.status}>Smazat</button>
             </div>
 
