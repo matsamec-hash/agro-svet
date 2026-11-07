@@ -142,11 +142,14 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
   <meta name="generator" content={Astro.generator} />
   <meta name="google-site-verification" content="QXiqxpCmcP9HJZMH7M6I3J-X6j7p6U8lhk1aehxG7Io" />
   <meta name="google-site-verification" content="CY_qIX6BN8tWkMXGOKdM8d-k-_le-qmUsk-eoZwS5Eo" />
-  {/* Seznam Webmaster — ověření vlastnictví. Dva tokeny záměrně: H957Fu… je
+  {/* Seznam Webmaster — ověření vlastnictví. Víc tokenů záměrně: H957Fu… je
       původní z 5/2026 (viz eb7a519), tVqSWO… vygenerovaný 8. 9. 2026 pod
-      účtem MatejSamec@seznam.cz. Starý NEMAZAT, dokud není jisté, pod jakým
-      účtem drží ověření — stejně jako u dvou google-site-verification výš. */}
+      účtem MatejSamec@seznam.cz, NPIH7s… vydal Seznam 7. 11. 2026 při dalším
+      pokusu o ověření (každý klik na „Nový metatag“ dělá nový). Staré
+      NEMAZAT, dokud není jisté, pod jakým účtem drží ověření — stejně jako
+      u dvou google-site-verification výš. */}
   <meta name="seznam-wmt" content="tVqSWOTiGDhGkWaul7Nfe0VPw9AezsFq" />
+  <meta name="seznam-wmt" content="NPIH7sP9cq66yhFKJuAbyha7BXjdBRk8" />
   <meta name="msvalidate.01" content="A401032123927401E73FAB1151E94F3D" />
   <meta name="seznam-wmt" content="H957FuP9Pc7eQLHuPaTpuyrG03OUV0FD" />
   <title>{pageTitle(title, { maxLength: titleMaxLength })}</title>
