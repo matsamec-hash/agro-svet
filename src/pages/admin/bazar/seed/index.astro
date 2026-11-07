@@ -52,6 +52,8 @@ const fmtPrice = (p: number | null): string => (p ? `${p.toLocaleString('cs-CZ')
 // WhatsApp deep-link per prospekt s telefonem (klientský odkaz s předvyplněnou
 // claim zprávou; null když tel. nejde normalizovat). Zpráva bere název z PRVNÍHO draftu.
 function waUrlFor(p: { phone?: string | null; name?: string | null; claim_token: string; id: string }): string | null {
+  // Oslovení přes WhatsApp je totéž co claim e-mail — vypnuto stejnou vlajkou.
+  if (!BAZAR_CLAIM_EMAIL_ENABLED) return null;
   const message = buildClaimWhatsAppMessage({
     name: p.name,
     listingTitle: draftsByProspect.get(p.id)?.[0]?.title ?? null,

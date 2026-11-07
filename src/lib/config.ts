@@ -14,7 +14,7 @@ export const BAZAR_TOPOVANI_ENABLED = false;
 // odhlášení, takže se nesmí rozesílat. Vypnutí je vratné (jen tato vlajka) a data
 // (bazar_seed_prospects, drafty) se nemažou. Flag řídí sendClaimEmail() — jediné
 // místo, které claim e-mail odesílá — i API /admin/bazar/seed/api/send a tlačítko
-// „Poslat e-mail" v adminu. Zapnout znovu až s právním základem a odhlášením.
+// „Poslat e-mail" v adminu, i odkaz „WhatsApp" na prodejce. Zapnout znovu až s právním základem a odhlášením.
 export const BAZAR_CLAIM_EMAIL_ENABLED = false;
 
 // Vynucení retenčních lhůt (/api/cron/data-retention). Ve vypnutém stavu endpoint
