@@ -455,6 +455,12 @@ export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
   '/images/hlemyzdi/sneci-maso-escargot-chov.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/13189279/' },
   '/images/hlemyzdi/ulity-vedlejsi-produkty-hlemyzdu.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/7855589/' },
   '/images/hlemyzdi/zivotni-cyklus-rozmnozovani-hlemyzdu.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/36235066/' },
+  // Úvodní fotka článku digitalizace-v-zemedelstvi-technologie-2026. V databázi
+  // je dosud hotlink na images.pexels.com (stejný důvod jako výš: cookies
+  // Cloudflare před souhlasem); soubor je tu připravený pro přepsání adresy
+  // v `articles.featured_image_url`. Autor a odkaz na zdroj jsou v databázi
+  // u článku (`featured_image_credit`), tady jen záložní záznam.
+  '/images/novinky/pexels-5230957.webp': { author: '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', source: 'https://www.pexels.com/photo/5230957/' },
 
   // /plemena — dlaždice druhů (scripts/druhy-zvirat-photos.mjs, Wikimedia Commons).
   // Čtvercová i „wide" varianta jsou výřezy z téhož snímku → týž kredit.
