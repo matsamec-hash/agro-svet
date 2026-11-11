@@ -5,6 +5,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
+import ArticleHero from '../../components/ArticleHero.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, howToSchema, faqPageSchema } from '../../lib/structured-data';
@@ -101,22 +102,6 @@ const articleJsonLd = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
 
-  {item.data.heroImage && (
-    <div style="width:100%; height:clamp(240px,36vh,420px); overflow:hidden; position:relative;">
-      <img
-        src={item.data.heroImage}
-        alt={item.data.title}
-        width="1200"
-        height="600"
-        fetchpriority="high"
-        decoding="async"
-        style="width:100%; height:100%; object-fit:cover;"
-      />
-      <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.4));"></div>
-      <HeroPhotoCredit image={item.data.heroImage} locale={locale} />
-    </div>
-  )}
-
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:24px;">
@@ -143,6 +128,20 @@ const articleJsonLd = {
         </>
       )}
     </div>
+
+    {item.data.heroImage && (
+      <ArticleHero>
+        <img
+          src={item.data.heroImage}
+          alt={item.data.title}
+          width="1200"
+          height="600"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <HeroPhotoCredit image={item.data.heroImage} locale={locale} />
+      </ArticleHero>
+    )}
 
     <!-- Intro body -->
     <div class="prose">

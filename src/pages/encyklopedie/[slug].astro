@@ -11,6 +11,7 @@ import { breadcrumbSchema, machineProductSchema, faqPageSchema, videoObjectSchem
 import { strojeUrlForEncSlug } from '../../lib/machine-crosslink';
 import { licenseUrlFor } from '../../lib/photo-credit';
 import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
+import ArticleHero from '../../components/ArticleHero.astro';
 import MachineVideo from '../../components/MachineVideo.astro';
 import { encSeoTitle } from '../../lib/seo-titles';
 import { TITLE_MAX } from '../../lib/head-meta';
@@ -215,25 +216,6 @@ const articleJsonLd = {
   {videoJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(videoJsonLd)} />}
   {reviewJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(reviewJsonLd)} />}
 
-  {item.data.heroImage && (
-    <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
-      <img
-        src={item.data.heroImage}
-        alt={`${item.data.name} — ${kategLabels[item.data.kategorie] ?? item.data.kategorie}${item.data.powerHp ? `, ${item.data.powerHp} ${t('enc.alt.koni')}` : ''}, ${t('enc.alt.hero')}`}
-        width="1200"
-        height="600"
-        fetchpriority="high"
-        decoding="async"
-        style="width:100%; height:100%; object-fit:cover;"
-      />
-      <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.4));"></div>
-      {/* Kredit: frontmatter ho má jen u pár strojů; u zbytku fotka pochází
-          z /src/data/stroje/*.yaml, kde autor a licence jsou — jen se sem
-          nikdy nepropsaly a stránka fotku ukazovala bez atribuce. */}
-      <HeroPhotoCredit image={media.heroImage} credit={media.heroCredit} locale={locale} />
-    </div>
-  )}
-
   <div style="max-width:980px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:28px;">
@@ -261,6 +243,23 @@ const articleJsonLd = {
         </>
       )}
     </div>
+
+    {item.data.heroImage && (
+      <ArticleHero>
+        <img
+          src={item.data.heroImage}
+          alt={`${item.data.name} — ${kategLabels[item.data.kategorie] ?? item.data.kategorie}${item.data.powerHp ? `, ${item.data.powerHp} ${t('enc.alt.koni')}` : ''}, ${t('enc.alt.hero')}`}
+          width="1200"
+          height="600"
+          fetchpriority="high"
+          decoding="async"
+        />
+        {/* Kredit: frontmatter ho má jen u pár strojů; u zbytku fotka pochází
+            z /src/data/stroje/*.yaml, kde autor a licence jsou — jen se sem
+            nikdy nepropsaly a stránka fotku ukazovala bez atribuce. */}
+        <HeroPhotoCredit image={media.heroImage} credit={media.heroCredit} locale={locale} />
+      </ArticleHero>
+    )}
 
     <!-- Spec grid -->
     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:40px;">

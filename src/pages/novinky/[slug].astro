@@ -9,6 +9,7 @@ import { getAllBrands } from '../../lib/stroje';
 import { getAllPlemena } from '../../lib/plemena';
 import { imgSrcset } from '../../lib/image-variants';
 import HeroPhotoCredit from '../../components/HeroPhotoCredit.astro';
+import ArticleHero from '../../components/ArticleHero.astro';
 import PhotoCredits from '../../components/PhotoCredits.astro';
 import { creditFromArticle } from '../../lib/photo-credit';
 import { photoCreditLine, seznamImageSource, seznamImageUrl } from '../../lib/seznam-feed';
@@ -251,39 +252,6 @@ const jsonLd = {
   )}
   <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
-  <!-- Hero image -->
-  {article.featured_image_url && (() => {
-    // Hero spans 100vw of the viewport — sizes hint covers mobile through
-    // ultrawide. The 2400 w variant only kicks in on retina laptops/desktops.
-    const heroVariants = imgSrcset(article.featured_image_url, '100vw');
-    return (
-    <div style="width:100%; height:clamp(260px,40vh,480px); overflow:hidden; position:relative;">
-      <img
-        src={heroVariants.src}
-        srcset={heroVariants.srcset}
-        sizes={heroVariants.sizes}
-        alt={article.title}
-        width="1600"
-        height="900"
-        fetchpriority="high"
-        decoding="async"
-        style={`width:100%; height:100%; object-fit:cover; object-position: ${article.focal_point?.x ?? 50}% ${article.focal_point?.y ?? 50}%;`}
-      />
-      <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.35));"></div>
-      {/* Zdroj pravdy je sloupec `articles.featured_image_credit` — CMS do něj
-          při výběru fotky zapisuje banku, jméno fotografa a odkaz na originál.
-          (Dřív tu stálo, že to pole v CMS není; mělo ho 28 z 38 článků a web
-          ho jen nečetl.) Registr v lib/photo-credit.ts a hádání banky z názvu
-          souboru zůstávají jako fallback pro starší cover fotky. */}
-      <HeroPhotoCredit
-        image={article.featured_image_url}
-        credit={heroCredit && { author: heroCredit.author, license: heroCredit.license, licenseUrl: heroCredit.licenseUrl, sourceUrl: heroCredit.source }}
-        locale={locale}
-      />
-    </div>
-    );
-  })()}
-
   <div style="max-width:780px; margin:0 auto; padding:48px 32px 96px;">
 
     <!-- Breadcrumb -->
@@ -320,6 +288,37 @@ const jsonLd = {
         </>
       )}
     </div>
+
+    {article.featured_image_url && (() => {
+      // Fotka stojí pod titulkem (ArticleHero): 1000 px na desktopu, šířka
+      // textu na tabletu, od kraje ke kraji na mobilu.
+      const heroVariants = imgSrcset(article.featured_image_url, '(min-width: 1100px) 1000px, (min-width: 640px) calc(100vw - 64px), 100vw');
+      return (
+      <ArticleHero>
+        <img
+          src={heroVariants.src}
+          srcset={heroVariants.srcset}
+          sizes={heroVariants.sizes}
+          alt={article.title}
+          width="1600"
+          height="900"
+          fetchpriority="high"
+          decoding="async"
+          style={`object-position: ${article.focal_point?.x ?? 50}% ${article.focal_point?.y ?? 50}%;`}
+        />
+        {/* Zdroj pravdy je sloupec `articles.featured_image_credit` — CMS do něj
+            při výběru fotky zapisuje banku, jméno fotografa a odkaz na originál.
+            (Dřív tu stálo, že to pole v CMS není; mělo ho 28 z 38 článků a web
+            ho jen nečetl.) Registr v lib/photo-credit.ts a hádání banky z názvu
+            souboru zůstávají jako fallback pro starší cover fotky. */}
+        <HeroPhotoCredit
+          image={article.featured_image_url}
+          credit={heroCredit && { author: heroCredit.author, license: heroCredit.license, licenseUrl: heroCredit.licenseUrl, sourceUrl: heroCredit.source }}
+          locale={locale}
+        />
+      </ArticleHero>
+      );
+    })()}
 
     <p id="article-lead" style="font-size:18px; color:#555; line-height:1.6; margin-bottom:40px; border-bottom:1px solid #ebebeb; padding-bottom:32px;" set:html={injectLinksInText(article.perex, linkCtx, locale)} />
 
