@@ -73,3 +73,21 @@ export async function renderMarkdownWithLinks(markdown: string, excludeUrl?: str
   const linkCtx = createLinkContext(excludeUrl);
   return injectLinks(html, linkCtx, locale);
 }
+
+/** Nadpis sekce zdrojů v návodech (cs, sk, pl, de, uk). */
+const SOURCES_HEADING = /^## (Zdroje|Źródła|Quellen|Джерела)\s*$/m;
+
+/**
+ * Oddělí od těla návodu sekci zdrojů (od jejího nadpisu do konce), aby ji
+ * šablona mohla vypsat až za kroky a FAQ. Bez sekce vrací `sources: null`.
+ */
+export function splitSources(markdown: string): { body: string; sources: string | null } {
+  const m = SOURCES_HEADING.exec(markdown);
+  if (!m) return { body: markdown, sources: null };
+  return { body: markdown.slice(0, m.index).trimEnd(), sources: markdown.slice(m.index) };
+}
+
+/** Render markdown bez auto-linkeru — pro seznam zdrojů, kde vložené odkazy rušily. */
+export async function renderMarkdown(markdown: string): Promise<string> {
+  return String(await processor.process(markdown));
+}

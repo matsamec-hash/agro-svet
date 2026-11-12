@@ -33,8 +33,11 @@ for (const [loc, coll] of Object.entries(HOWTO_COLLECTION) as [Locale, (typeof H
 }
 Astro.locals.availableLocales = availableLocales;
 const { Content } = await render(item);
-import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
-const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/jak-na-to/${slug}/`, locale);
+import { renderMarkdownWithLinks, renderMarkdown, splitSources } from '../../lib/markdown-with-links';
+// Zdroje patří až za kroky a FAQ, ne mezi úvod a postup.
+const { body: bodyMd, sources: sourcesMd } = splitSources(item.body ?? '');
+const contentHtml = await renderMarkdownWithLinks(bodyMd, `${base}/jak-na-to/${slug}/`, locale);
+const sourcesHtml = sourcesMd ? await renderMarkdown(sourcesMd) : null;
 
 const related = items.filter((i) => i.id !== item.id).slice(0, 3);
 
@@ -208,6 +211,8 @@ const articleJsonLd = {
       </section>
     )}
 
+    {sourcesHtml && <section class="prose sources" set:html={sourcesHtml} />}
+
     {related.length > 0 && (
       <section class="related" aria-labelledby="related-heading">
         <h2 id="related-heading">{t('howto.related.h')}</h2>
@@ -281,6 +286,9 @@ const articleJsonLd = {
   .related-tool-cta:hover { background:#1a1a1a; color:#FFFF00; }
 
   .faq { margin-top:48px; padding-top:32px; border-top:1px solid #ebebeb; }
+  .sources { margin-top:48px; padding-top:8px; border-top:1px solid #ebebeb; }
+  .sources :global(h2) { margin-top:1em; }
+  .sources :global(li), .sources :global(p) { font-size:14px; line-height:1.6; color:#555; }
   .faq h2 { font-size:1.5rem; font-weight:700; margin:0 0 20px; letter-spacing:-.3px; color:#1a1a1a; }
   .faq-list { margin:0; padding:0; }
   .faq-item { padding:18px 0; border-bottom:1px dashed #e8e8e8; }

@@ -7,7 +7,7 @@ import ArticleHero from '../../components/ArticleHero.astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL } from '../../lib/config';
 import { breadcrumbSchema, howToSchema, faqPageSchema } from '../../lib/structured-data';
-import { renderMarkdownWithLinks } from '../../lib/markdown-with-links';
+import { renderMarkdownWithLinks, renderMarkdown, splitSources } from '../../lib/markdown-with-links';
 
 const locale = Astro.locals.locale ?? 'cs';
 if (locale !== 'pl') return Astro.rewrite('/404');
@@ -19,7 +19,10 @@ const item = items.find((i) => i.id === slug);
 if (!item) return Astro.rewrite('/404');
 
 const base = '/pl';
-const contentHtml = await renderMarkdownWithLinks(item.body ?? '', `${base}/poradniki/${slug}/`, 'pl');
+// Źródła patří až za kroky a FAQ, ne mezi úvod a postup.
+const { body: bodyMd, sources: sourcesMd } = splitSources(item.body ?? '');
+const contentHtml = await renderMarkdownWithLinks(bodyMd, `${base}/poradniki/${slug}/`, 'pl');
+const sourcesHtml = sourcesMd ? await renderMarkdown(sourcesMd) : null;
 const related = items.filter((i) => i.id !== item.id).slice(0, 3);
 
 const pageUrl = `${SITE_URL}${base}/poradniki/${slug}/`;
@@ -150,6 +153,8 @@ const articleJsonLd = {
       </section>
     )}
 
+    {sourcesHtml && <section class="prose sources" set:html={sourcesHtml} />}
+
     {related.length > 0 && (
       <section class="related" aria-labelledby="related-heading">
         <h2 id="related-heading">Zobacz też</h2>
@@ -201,6 +206,9 @@ const articleJsonLd = {
   .step-body p { font-size:16px; line-height:1.7; color:#333; margin:0; }
 
   .faq { margin-top:48px; padding-top:32px; border-top:1px solid #ebebeb; }
+  .sources { margin-top:48px; padding-top:8px; border-top:1px solid #ebebeb; }
+  .sources :global(h2) { margin-top:1em; }
+  .sources :global(li), .sources :global(p) { font-size:14px; line-height:1.6; color:#555; }
   .faq h2 { font-size:1.5rem; font-weight:700; margin:0 0 20px; letter-spacing:-.3px; color:#1a1a1a; }
   .faq-list { margin:0; padding:0; }
   .faq-item { padding:18px 0; border-bottom:1px dashed #e8e8e8; }
