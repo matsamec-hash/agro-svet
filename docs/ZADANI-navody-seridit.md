@@ -47,4 +47,11 @@ Slovenské soubory mají stejný název i `slug` jako české (overlay). Polské
 - [x] Postřikovač, rozmetadlo, otočný pluh (2, 3, 4) cs/sk/pl.
 - [x] Fotky (jen cs/sk, polská šablona kredit fotky neumí), sekce zdrojů se vykresluje až za FAQ (`splitSources`), oprava auto-linkeru (zkratky plemen D/H/BO dělaly odkazy z „km/h“ a polského „bo“).
 - [x] Commit, nasazení a ověření na produkci: 12. 11. 2026, push `2575aacf..ce3f7586` do master, všech 16 URL vrací 200, marker „Seřízení spojky Zetor 7211“ na produkci
-- [x] UK překlady 4 návodů cs/sk/pl → uk (spojka Zetor, otočný pluh, postřikovač, rozmetadlo), 12. 11. 2026, lokálně, necommitnuto. Čísla porovnána s cs skriptem, vitest 1852 zelených, 4 URL lokálně 200. Test parity de↔uk má výjimku `UK_BEZ_DE` (de překlad zatím není).
+- [x] UK překlady 4 návodů (spojka Zetor, otočný pluh, postřikovač, rozmetadlo): NASAZENO 12. 11. 2026 (`737d5505`), 4× 200 na produkci, v `/sitemap/uk.xml`. Test parity de↔uk má výjimku `UK_BEZ_DE` v `tests/i18n/howto-locale.test.ts` (německý překlad nevznikl). Ukrajinštinu nekontroloval rodilý mluvčí.
+- [x] Prolinkování: věta s odkazem na otočný pluh na konci `jak-seridit-pluh` (cs, sk, uk), NASAZENO 12. 11. 2026 (`7cef71c4`). ⛔ Stránky `/stroje/` se NEMĚNÍ (pravidlo z SEO plánu září: sekce překonává svou pozici o +151 prokliků), proto bez bloku „Návody pro tento stroj“ na modelech Zetor.
+
+## Kde pokračovat
+
+1. **Zetor ventily + předvstřik** (cs/sk/pl): čeká na tvůj úkol `ad6036f2` (český návod k obsluze, kat. č. 222212217, nebo dílenská příručka 10-222-212-208). Bez zdroje čísel článek nevzniká.
+2. **Po 3. 12. 2026** (úkol `065bd6df`): `python3 ~/.gsc/pull.py`, zobrazení a kliky 16 nových URL, podle nich 2. dávka (Ursus brzdy/podnośnik, MTZ-82, sbíhavost kol, žací lišta, kardan, malotraktory) + případně německé překlady. Zároveň ověřit, jestli se nové URL indexují (web má v GSC 5 712 „Objeveno – neindexováno“, úkol `ef90656c`).
+3. Pluh za malotraktor: rozšířit stávající `jak-seridit-pluh`, ne psát nový článek (nekanibalizovat hit 256 kliků).
