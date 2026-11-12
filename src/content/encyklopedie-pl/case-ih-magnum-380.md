@@ -8,7 +8,11 @@ hmotnost: "ok. 11 730 kg"
 rok_uvedeni: 2014
 yearTo: 2025
 popis: "Flagowy ciągnik row-crop Case IH (2014–2025 w Europie). Silnik FPT o pojemności 8,7 litra, moc znamionowa 380 KM i maksymalna 417 KM, bezstopniowa przekładnia CVXDrive. Dostępny także w wersji gąsienicowej Rowtrac."
-heroImage: "/images/stroje/case-ih/case-ih-magnum-380k.webp"
+heroImage: "/images/stroje/case-ih/magnum-380/hero.webp"
+heroCredit:
+  author: "MarcelX42"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Case_IH_Magnum_400_agra_2024_(DSC01741).jpg"
 powerHp: 380
 powerKw: 279
 weightKg: 11730

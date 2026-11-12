@@ -7,7 +7,11 @@ vykon: "270 PS (199 kW)"
 hmotnost: "10 200 kg"
 rok_uvedeni: 2023
 popis: Der New Holland T7.270 ist das Flaggschiff der Baureihe T7 — ein leistungsstarker Ackerschlepper mit der intelligenten Elektronik PLM Intelligence, automatischem Getriebe und präzisen Navigationssystemen. Ausgelegt für Großbetriebe mit hohen Anforderungen an Leistung und Automatisierung.
-heroImage: /images/stroje/new-holland/new-holland-t7-315k.webp
+heroImage: "/images/stroje/new-holland/t7-270/hero.webp"
+heroCredit:
+  author: "Addvisor"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:New_Holland_T7.270_blue.jpg"
 powerHp: 270
 powerKw: 199
 weightKg: 10200

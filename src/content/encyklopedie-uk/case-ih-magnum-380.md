@@ -8,7 +8,11 @@ hmotnost: "бл. 11 730 кг"
 rok_uvedeni: 2014
 yearTo: 2025
 popis: "Флагманський row-crop трактор Case IH (2014–2025 у Європі). Двигун FPT об'ємом 8,7 л, номінальна потужність 380 к.с. і максимальна 417 к.с., безступінчаста трансмісія CVXDrive. Доступний і в гусеничному варіанті Rowtrac."
-heroImage: "/images/stroje/case-ih/case-ih-magnum-380k.webp"
+heroImage: "/images/stroje/case-ih/magnum-380/hero.webp"
+heroCredit:
+  author: "MarcelX42"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Case_IH_Magnum_400_agra_2024_(DSC01741).jpg"
 powerHp: 380
 powerKw: 279
 weightKg: 11730

@@ -8,7 +8,11 @@ hmotnost: "cca 11 730 kg"
 rok_uvedeni: 2014
 yearTo: 2025
 popis: "Vlajkový row-crop traktor Case IH (2014–2025 v Evropě). Motor FPT o objemu 8,7 litru, jmenovitý výkon 380 k a maximální 417 k, bezstupňová převodovka CVXDrive. Dostupný i v pásové variantě Rowtrac."
-heroImage: "/images/stroje/case-ih/case-ih-magnum-380k.webp"
+heroImage: "/images/stroje/case-ih/magnum-380/hero.webp"
+heroCredit:
+  author: "MarcelX42"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Case_IH_Magnum_400_agra_2024_(DSC01741).jpg"
 powerHp: 380
 powerKw: 279
 weightKg: 11730

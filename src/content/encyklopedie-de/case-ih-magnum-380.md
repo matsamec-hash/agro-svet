@@ -8,7 +8,11 @@ hmotnost: "ca. 11 730 kg"
 rok_uvedeni: 2014
 yearTo: 2025
 popis: "Das Row-Crop-Flaggschiff von Case IH (2014–2025 in Europa). FPT-Motor mit 8,7 Litern Hubraum, 380 PS Nenn- und 417 PS Maximalleistung, stufenloses CVXDrive-Getriebe. Auch als Raupenvariante Rowtrac erhältlich."
-heroImage: "/images/stroje/case-ih/case-ih-magnum-380k.webp"
+heroImage: "/images/stroje/case-ih/magnum-380/hero.webp"
+heroCredit:
+  author: "MarcelX42"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Case_IH_Magnum_400_agra_2024_(DSC01741).jpg"
 powerHp: 380
 powerKw: 279
 weightKg: 11730

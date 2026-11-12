@@ -7,7 +7,11 @@ vykon: "270 k (199 kW)"
 hmotnost: "10 200 kg"
 rok_uvedeni: 2023
 popis: New Holland T7.270 je vlajková loď řady T7 — výkonný polní traktor s inteligentní elektronikou PLM Intelligence, automatickým řazením i přesnými navigačními systémy. Určen pro velkovýrobní farmy s náročnými požadavky na výkon a automatizaci.
-heroImage: /images/stroje/new-holland/new-holland-t7-315k.webp
+heroImage: "/images/stroje/new-holland/t7-270/hero.webp"
+heroCredit:
+  author: "Addvisor"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:New_Holland_T7.270_blue.jpg"
 powerHp: 270
 powerKw: 199
 weightKg: 10200

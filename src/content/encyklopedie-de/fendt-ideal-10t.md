@@ -7,7 +7,11 @@ vykon: "ca. 790 PS"
 hmotnost: "ca. 22 000 kg"
 rok_uvedeni: 2017
 popis: "Das Raupen-Spitzenmodell des Mähdreschers Fendt IDEAL — eine über sieben Jahre entwickelte Zweirotorplattform mit Ernteoptimierung durch das System IDEALharvest."
-heroImage: "/images/stroje/fendt/fendt-ideal-10t.jpg"
+heroImage: "/images/stroje/fendt/ideal-10t/hero.webp"
+heroCredit:
+  author: "AGCO-Fendt"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Fendt_IDEAL_2.jpg"
 powerHp: 790
 engine: "MAN, 6-Zylinder, Stage V"
 transmission: "Hydrostatischer Fahrantrieb, Raupenfahrwerk"

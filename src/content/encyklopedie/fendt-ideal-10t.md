@@ -7,7 +7,11 @@ vykon: "cca 790 k"
 hmotnost: "cca 22 000 kg"
 rok_uvedeni: 2017
 popis: "Vrcholný pásový model sklízecí mlátičky Fendt IDEAL — dvourotorová platforma vyvíjená sedm let, optimalizace sklizně pomocí systému IDEALharvest."
-heroImage: "/images/stroje/fendt/fendt-ideal-10t.jpg"
+heroImage: "/images/stroje/fendt/ideal-10t/hero.webp"
+heroCredit:
+  author: "AGCO-Fendt"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Fendt_IDEAL_2.jpg"
 powerHp: 790
 engine: "MAN, 6-válec, Stage V"
 transmission: "Hydrostatický pojezd, pásový podvozek"

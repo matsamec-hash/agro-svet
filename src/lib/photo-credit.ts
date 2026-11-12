@@ -342,6 +342,40 @@ export const ZASTUPNY: PhotoCredit = {
 };
 
 export const EXTRA_CREDITS: Record<string, PhotoCredit> = {
+  // Hero fotky encyklopedie vyměněné 12. 11. 2026 — původní ukazovaly jiný stroj
+  // (Magnum 7210, kolový 9R 640, T7.210) nebo stroj skoro schovaný (strom,
+  // dav na výstavě). Kredit je i ve frontmatteru, tady kvůli registru.
+  // IDEAL 10T má fotku IDEAL 9T: jediný 10T na Commons stojí za davem.
+  '/images/stroje/case-ih/magnum-380/hero.webp': {
+    author: 'MarcelX42',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Case_IH_Magnum_400_agra_2024_(DSC01741).jpg',
+  },
+  '/images/stroje/john-deere/9rx-830/hero.webp': {
+    author: 'JDDeutschland',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:9RX_830.jpg',
+  },
+  '/images/stroje/new-holland/t7-270/hero.webp': {
+    author: 'Addvisor',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:New_Holland_T7.270_blue.jpg',
+  },
+  '/images/stroje/new-holland/t7-315/hero.webp': {
+    author: 'MarcelX42',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:New_Holland_T7.315_HD_Auto_Command_agra_2024_(DSC02740).jpg',
+  },
+  '/images/stroje/fendt/ideal-10t/hero.webp': {
+    author: 'AGCO-Fendt',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Fendt_IDEAL_2.jpg',
+  },
+  '/images/stroje/fendt/724-vario/hero.webp': {
+    author: 'JoachimKohler-HB',
+    license: 'CC BY-SA 4.0',
+    source: 'https://commons.wikimedia.org/wiki/File:Fendt_724_Vario_Traktor_(Weinfelden,_2021).jpg',
+  },
   // Homepage / rozcestníky — ImageAccordion, hero fotky sekcí.
   '/images/telata.webp': {
     author: 'Susanne Nilsson',

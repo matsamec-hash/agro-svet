@@ -7,7 +7,11 @@ vykon: 270 к.с. (199 кВт)
 hmotnost: 10 200 кг
 rok_uvedeni: 2023
 popis: New Holland T7.270 — це флагман серії T7 — потужний польовий трактор з інтелектуальною електронікою PLM Intelligence, автоматичним перемиканням і точними навігаційними системами. Призначений для великих ферм із вимогливими запитами щодо потужності та автоматизації.
-heroImage: /images/stroje/new-holland/new-holland-t7-315k.webp
+heroImage: "/images/stroje/new-holland/t7-270/hero.webp"
+heroCredit:
+  author: "Addvisor"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:New_Holland_T7.270_blue.jpg"
 powerHp: 270
 powerKw: 199
 weightKg: 10200

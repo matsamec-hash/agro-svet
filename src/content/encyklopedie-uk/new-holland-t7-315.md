@@ -7,7 +7,11 @@ vykon: 315 к.с. (235 кВт)
 hmotnost: 11 500 кг
 rok_uvedeni: 2007
 popis: Найпотужніша модель преміальної row-crop серії T7. Двигун FPT, безступінчаста трансмісія Auto Command. Флагманський варіант T7 Heavy Duty з подовженою колісною базою для максимальної стабільності.
-heroImage: /images/stroje/new-holland/new-holland-t7-315k.webp
+heroImage: "/images/stroje/new-holland/t7-315/hero.webp"
+heroCredit:
+  author: "MarcelX42"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:New_Holland_T7.315_HD_Auto_Command_agra_2024_(DSC02740).jpg"
 powerHp: 315
 powerKw: 235
 weightKg: 11500

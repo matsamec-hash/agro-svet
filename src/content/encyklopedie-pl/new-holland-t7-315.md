@@ -7,7 +7,11 @@ vykon: "315 KM (235 kW)"
 hmotnost: "11 500 kg"
 rok_uvedeni: 2007
 popis: "Najmocniejszy model premium serii row-crop T7. Silnik FPT, bezstopniowa przekładnia Auto Command. Flagowy wariant T7 Heavy Duty z wydłużonym rozstawem osi dla maksymalnej stabilności."
-heroImage: "/images/stroje/new-holland/new-holland-t7-315k.webp"
+heroImage: "/images/stroje/new-holland/t7-315/hero.webp"
+heroCredit:
+  author: "MarcelX42"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:New_Holland_T7.315_HD_Auto_Command_agra_2024_(DSC02740).jpg"
 powerHp: 315
 powerKw: 235
 weightKg: 11500

@@ -7,7 +7,11 @@ vykon: "240 PS (176 kW)"
 hmotnost: "9 850 kg"
 rok_uvedeni: 2021
 popis: "Mittelgroßer Traktor mit stufenlosem Vario-Getriebe, ideal für gemischte Betriebe. 240 PS mit Boost auf 260 PS."
-heroImage: "/images/stroje/fendt/fendt-728-vario.jpg"
+heroImage: "/images/stroje/fendt/724-vario/hero.webp"
+heroCredit:
+  author: "JoachimKohler-HB"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Fendt_724_Vario_Traktor_(Weinfelden,_2021).jpg"
 powerHp: 240
 powerKw: 176
 weightKg: 9850

@@ -7,7 +7,11 @@ vykon: 830 к.с. (611 кВт)
 hmotnost: прибл. 22 000 кг
 rok_uvedeni: 2024
 popis: Найпотужніший трактор John Deere — шарнірно-зчленована чотиригусенична машина з 830 кінськими силами, призначена для найважчої оранки та культивації великовиробничих господарств.
-heroImage: /images/stroje/john-deere/john-deere-9r-620k.webp
+heroImage: "/images/stroje/john-deere/9rx-830/hero.webp"
+heroCredit:
+  author: "JDDeutschland"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:9RX_830.jpg"
 powerHp: 830
 powerKw: 611
 weightKg: 22000

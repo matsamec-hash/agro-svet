@@ -7,7 +7,11 @@ vykon: 830 k (611 kW)
 hmotnost: cca 22 000 kg
 rok_uvedeni: 2024
 popis: Najvýkonnejší traktor John Deere — kĺbový štvorkolesový stroj s 830 koňmi, určený pre najnáročnejšiu orbu a kultiváciu veľkovýrobných fariem.
-heroImage: /images/stroje/john-deere/john-deere-9r-620k.webp
+heroImage: "/images/stroje/john-deere/9rx-830/hero.webp"
+heroCredit:
+  author: "JDDeutschland"
+  license: "CC BY-SA 4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:9RX_830.jpg"
 powerHp: 830
 powerKw: 611
 weightKg: 22000
