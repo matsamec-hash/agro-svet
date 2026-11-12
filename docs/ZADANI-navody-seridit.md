@@ -42,8 +42,9 @@ Slovenské soubory mají stejný název i `slug` jako české (overlay). Polské
 
 ## Stav
 
-- [ ] Zetor (7, 8, 9)
-- [ ] Ursus + polský pluh (1, 13, 14, 15)
-- [ ] Postřikovač, rozmetadlo, otočný pluh (2, 3, 4)
-- [ ] Fotky, build, testy, commit
-- [ ] Nasazení a ověření na produkci
+- [x] Zetor: jen spojka (7). Ventily (8) a předvstřik (9) nevznikly, volně dostupný návod výrobce pro 5211–7745 je nemá. Čeká na český návod k obsluze (zetor-shop.cz kat. č. 222212217) nebo dílenskou příručku 10-222-212-208, úkol `ad6036f2`. Spojka stojí na anglickém návodu výrobce, s. 39 (ověřeno proti skenu).
+- [x] Ursus + polský pluh (1, 13, 14, 15). Zdroje: oficiální instrukcje napraw/obsługi na archive.org; C-360 s. C-1 ověřena proti skenu.
+- [x] Postřikovač, rozmetadlo, otočný pluh (2, 3, 4) cs/sk/pl.
+- [x] Fotky (jen cs/sk, polská šablona kredit fotky neumí), sekce zdrojů se vykresluje až za FAQ (`splitSources`), oprava auto-linkeru (zkratky plemen D/H/BO dělaly odkazy z „km/h“ a polského „bo“).
+- [ ] Commit, nasazení a ověření na produkci
+- [ ] UK překlady (slugy v `ZATIM_BEZ_UK` v `tests/i18n/jak-na-to.test.ts`)
