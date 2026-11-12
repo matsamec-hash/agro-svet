@@ -49,3 +49,5 @@ Správně seřízený pluh je rozdíl mezi rovným, kvalitně zaklopeným strni�
 Nejčastější chybou je začínat doladěním hloubky, aniž by byl pluh srovnaný do roviny a měl správně nastavený tažný bod. Výsledkem je nekonečné korigování za jízdy, které nikdy nevede k dobrému výsledku.
 
 Tento návod vás provede seřízením neseného pluhu v logickém pořadí — od přípravy traktoru přes podélnou a příčnou rovinu až po kontrolní brázdu a jemné doladění za provozu.
+
+Seřizujete otočný pluh (obracák)? Má vlastní návod s nastavením dorazů otáčení a tažné linie: [Jak seřídit otočný pluh](/jak-na-to/jak-seridit-otocny-pluh/).

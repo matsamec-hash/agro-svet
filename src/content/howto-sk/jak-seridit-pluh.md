@@ -49,3 +49,5 @@ Správne nastavený pluh je rozdiel medzi rovným, kvalitne zaklopeným strnisko
 Najčastejšou chybou je začínať doladením hĺbky, bez toho aby bol pluh vyrovnaný do roviny a mal správne nastavený ťažný bod. Výsledkom je nekonečné korigovanie za jazdy, ktoré nikdy nevedie k dobrému výsledku.
 
 Tento návod vás prevedie nastavením neseného pluhu v logickom poradí — od prípravy traktora cez pozdĺžnu a priečnu rovinu až po kontrolnú brázdu a jemné doladenie za prevádzky.
+
+Nastavujete otočný pluh? Má vlastný návod s nastavením dorazov otáčania a ťažnej línie: [Ako nastaviť otočný pluh](/sk/jak-na-to/jak-seridit-otocny-pluh/).
