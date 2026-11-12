@@ -46,5 +46,5 @@ Slovenské soubory mají stejný název i `slug` jako české (overlay). Polské
 - [x] Ursus + polský pluh (1, 13, 14, 15). Zdroje: oficiální instrukcje napraw/obsługi na archive.org; C-360 s. C-1 ověřena proti skenu.
 - [x] Postřikovač, rozmetadlo, otočný pluh (2, 3, 4) cs/sk/pl.
 - [x] Fotky (jen cs/sk, polská šablona kredit fotky neumí), sekce zdrojů se vykresluje až za FAQ (`splitSources`), oprava auto-linkeru (zkratky plemen D/H/BO dělaly odkazy z „km/h“ a polského „bo“).
-- [ ] Commit, nasazení a ověření na produkci
-- [ ] UK překlady (slugy v `ZATIM_BEZ_UK` v `tests/i18n/jak-na-to.test.ts`)
+- [x] Commit, nasazení a ověření na produkci: 12. 11. 2026, push `2575aacf..ce3f7586` do master, všech 16 URL vrací 200, marker „Seřízení spojky Zetor 7211“ na produkci
+- [x] UK překlady 4 návodů cs/sk/pl → uk (spojka Zetor, otočný pluh, postřikovač, rozmetadlo), 12. 11. 2026, lokálně, necommitnuto. Čísla porovnána s cs skriptem, vitest 1852 zelených, 4 URL lokálně 200. Test parity de↔uk má výjimku `UK_BEZ_DE` (de překlad zatím není).

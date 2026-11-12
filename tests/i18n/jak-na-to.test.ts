@@ -29,14 +29,9 @@ describe('howto.* i18n parity (jak na to)', () => {
 // Fáze 3: UK overlay kolekce howto-uk. 2 jurisdikční návody (registrace-vcelaru,
 // jak-naplanovat-dotaci-na-techniku) jsou ZÁMĚRNĚ vyřazené (UK jurisdikční fáze).
 const EXCLUDED_UK = ['registrace-vcelaru', 'jak-naplanovat-dotaci-na-techniku'];
-// Servisní návody dávky 1 (docs/ZADANI-navody-seridit.md) vznikají jen cs/sk/pl.
-// UK překlad zatím není — slug sem patří, dokud se nepřeloží (pak ho odtud smazat).
-const ZATIM_BEZ_UK = [
-  'serizeni-spojky-zetor',
-  'jak-kalibrovat-postrikovac',
-  'jak-nastavit-rozmetadlo-hnojiv',
-  'jak-seridit-otocny-pluh',
-];
+// Servisní návody vznikají nejdřív cs/sk/pl. Dokud nemá nový slug UK překlad,
+// patří sem (pak ho odtud smazat).
+const ZATIM_BEZ_UK: string[] = [];
 const slugs = (dir: string) =>
   readdirSync(join(process.cwd(), 'src/content', dir))
     .filter((f) => f.endsWith('.md'))

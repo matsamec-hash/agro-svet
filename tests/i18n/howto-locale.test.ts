@@ -99,6 +99,15 @@ describe('/jak-na-to — overlay kolekce po locale', () => {
   it('de a uk pokrývají stejnou sadu návodů', () => {
     // Obě mutace vynechávají tytéž dva jurisdikční návody — kdyby se sady
     // rozešly, znamená to, že někde chybí soubor nebo přebývá překlad.
-    expect([...slugs(DIR.de)].sort()).toEqual([...slugs(DIR.uk)].sort());
+    // Výjimka: servisní návody dávky 1 (docs/ZADANI-navody-seridit.md) mají
+    // uk překlad, německý zatím ne. Slug odtud smazat, až vznikne de překlad.
+    const UK_BEZ_DE = [
+      'serizeni-spojky-zetor',
+      'jak-kalibrovat-postrikovac',
+      'jak-nastavit-rozmetadlo-hnojiv',
+      'jak-seridit-otocny-pluh',
+    ];
+    const ukBezVyjimek = [...slugs(DIR.uk)].filter((s) => !UK_BEZ_DE.includes(s)).sort();
+    expect([...slugs(DIR.de)].sort()).toEqual(ukBezVyjimek);
   });
 });
