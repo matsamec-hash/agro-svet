@@ -110,6 +110,8 @@ function buildGlossary(locale: Locale): GlossaryEntry[] {
     entries.push(makeEntry(p.name, `/plemena/${p.druh_slug}/${p.slug}/`, 9));
     if (p.alternative_names) {
       for (const alt of p.alternative_names) {
+        // Zkratky typu D, H, BO by se chytaly na „km/h“ nebo polské „bo“.
+        if (alt.length < 3) continue;
         // Alt names are weaker — only link if no canonical name match found first.
         entries.push(makeEntry(alt, `/plemena/${p.druh_slug}/${p.slug}/`, 5));
       }

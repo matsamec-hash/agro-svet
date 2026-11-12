@@ -57,3 +57,18 @@ describe('auto-linker: obecné aliasy slovníku se neodkazují', () => {
     expect(isGenericAlias('varroa', 'cs')).toBe(false);
   });
 });
+
+describe('auto-linker: zkratky plemen se neodkazují', () => {
+  // Plemena prasat mají zkratky D (duroc), H (hampshire) a BO (bílé otcovské).
+  // Linker páruje bez ohledu na velikost písmen, takže „km/h“ vedlo na hampshire
+  // a polské „bo“ (protože) na bílé otcovské prase.
+  it.each(['cs', 'sk', 'pl', 'de', 'uk'] as const)('%s: km/h, D, H, bo zůstanou bez odkazu', (loc) => {
+    const out = injectLinks('<p>Jedziemy 8 km/h, bo wzór D i H.</p>', createLinkContext('/x/'), loc);
+    expect(out).not.toContain('class="auto-link"');
+  });
+
+  it('celý název plemene se dál odkazuje', () => {
+    const out = injectLinks('<p>Chováme prasata plemene duroc.</p>', createLinkContext('/x/'), 'cs');
+    expect(out).toContain('href="/plemena/prasata/duroc/"');
+  });
+});
