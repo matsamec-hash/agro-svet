@@ -142,7 +142,7 @@ const collectionJsonLd = {
 
     {items.length > 0 ? (
       <>
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; margin-bottom:32px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(300px, 100%),1fr)); gap:20px; margin-bottom:32px;">
         {items.map((a: any) => (
           <ArticleCard
             title={a.title}

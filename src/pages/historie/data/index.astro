@@ -110,7 +110,7 @@ const metrics = longRange.map((s, i) => {
   .hda-hero h1 { font-size: clamp(24px, 4vw, 32px); margin: 0 0 12px; line-height: 1.1; }
   .hda-lede { color: #b9cdc0; max-width: 64ch; line-height: 1.6; margin: 0; }
 
-  .hda-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 26px; }
+  .hda-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; margin-bottom: 26px; }
   .metric { border: 1px solid #e2e9e4; border-radius: 14px; padding: 18px 18px 14px; background: #fff; }
   .metric-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
   .metric-title { font-weight: 700; font-size: 16px; color: #0f1c14; }

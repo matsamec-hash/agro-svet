@@ -120,7 +120,7 @@ const quizCopy = (q: (typeof quizzes)[number]) =>
   .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
   h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin: 12px 0 12px; color: #1a1a1a; }
   .lede { font-size: 16px; color: #666; line-height: 1.6; margin: 0; }
-  .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 16px; }
   .quiz-card {
     display: block;
     padding: 24px;

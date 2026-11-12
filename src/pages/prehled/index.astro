@@ -95,7 +95,7 @@ const articles = [
   .kicker { display: inline-block; background: #FFEA00; color: #0A0A0B; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
   h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin: 12px 0 8px; color: #1a1a1a; }
   .lede { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 16px; }
   .card {
     display: block; padding: 24px;
     background: linear-gradient(135deg, #fff 0%, #fffef8 100%);

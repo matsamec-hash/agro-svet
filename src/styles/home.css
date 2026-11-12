@@ -78,7 +78,7 @@
   box-shadow: 3px 3px 0 #0A0A0B; transition: transform .15s, box-shadow .15s, background .15s; white-space: nowrap;
 }
 .home-cta:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #0A0A0B; background: #FFEA00; }
-.home-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.home-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 20px; }
 
 /* Rozcestník sekcí */
 .home-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }

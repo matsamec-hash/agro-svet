@@ -249,12 +249,12 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
   .ch-detail .chip { font-size: 13.5px; font-weight: 600; color: var(--green-dark); background: var(--green-soft); border: 1px solid #cfe0bd; padding: 6px 13px; border-radius: 999px; }
 
   .ch-detail .latky-note { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0 0 16px; }
-  .ch-detail .latky-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .ch-detail .latky-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 10px; }
   .ch-detail .latky-list li { display: flex; flex-direction: column; gap: 3px; background: #F7F7FA; border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 15px; }
   .ch-detail .latka { font-weight: 700; color: var(--ink); font-size: 14.5px; }
   .ch-detail .pripravky { font-size: 12.5px; color: var(--muted); font-style: italic; }
 
-  .ch-detail .plodiny-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+  .ch-detail .plodiny-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; }
   .ch-detail .plodina-link {
     display: flex; align-items: center; gap: 12px;
     background: #F7F7FA; border: 1px solid var(--line); border-radius: var(--r-md);

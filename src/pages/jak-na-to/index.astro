@@ -62,7 +62,7 @@ const collectionJsonLd = {
       </p>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(320px, 100%),1fr)); gap:20px;">
       {sorted.map((item) => (
         <a href={localizePath(locale, `/jak-na-to/${item.id}/`)} class="howto-card">
           {item.data.heroImage && (

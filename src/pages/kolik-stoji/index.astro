@@ -115,7 +115,7 @@ const itemListJsonLd = itemListSchema(
   .ksh-section { margin-top: 30px; }
   .ksh-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
     gap: 16px;
   }
   .ksh-card {

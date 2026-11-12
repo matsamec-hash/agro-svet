@@ -55,7 +55,7 @@ const itemListJsonLd = {
       <p style="font-size:16px; color:#666; max-width:560px; line-height:1.6;">{NL}{tr('cat.zn.intro')}{NL}</p>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(280px, 100%),1fr)); gap:16px;">
       {sorted.map(znacka => (
         <a href={localizeInternalHref(locale, `/znacky/${znacka.id}/`)} style="display:block; text-decoration:none; color:inherit; border:none; border-radius:14px; padding:24px; background:#fff; box-shadow:0 0 10px rgba(0,0,0,.12); transition:box-shadow .2s, transform .2s;" class="brand-card">
           {ZNACKA_LOGO[znacka.id] && (

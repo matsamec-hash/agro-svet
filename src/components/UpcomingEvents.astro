@@ -67,7 +67,7 @@ function dateChip(iso: string | null): { den: string; mesic: string } | null {
   .ue-cta { display: inline-flex; align-items: center; gap: 8px; font: 700 14px 'Chakra Petch', sans-serif; letter-spacing: .02em; color: #0A0A0B; text-decoration: none; background: #FFFF00; padding: 10px 18px; border-radius: 12px; border: 1.5px solid #0A0A0B; box-shadow: 3px 3px 0 #0A0A0B; transition: transform .15s, box-shadow .15s; white-space: nowrap; }
   .ue-cta:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 #0A0A0B; }
 
-  .ue-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .ue-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 12px; }
   .ue-grid a { display: flex; gap: 14px; padding: 14px 16px; border: 1px solid #e8e8e8; border-radius: 12px; text-decoration: none; color: inherit; height: 100%; transition: border-color .15s, transform .15s, box-shadow .15s; }
   .ue-grid a:hover { border-color: #3a7d34; transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.06); }
   .ue-chip { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 10px; background: #eef4ea; color: #2f6a2a; }

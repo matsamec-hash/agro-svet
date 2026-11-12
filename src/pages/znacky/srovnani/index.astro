@@ -82,7 +82,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
 
   .related-cmp { background:var(--bg-cream); border-radius:18px; padding:24px 28px; }
   .related-cmp h2 { font:700 18px 'Chakra Petch',sans-serif; letter-spacing:-.01em; color:var(--ink); margin:0 0 14px; }
-  .related-list { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:8px; }
+  .related-list { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(min(280px, 100%),1fr)); gap:8px; }
   .related-list a { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 16px; background:#fff; border:1px solid var(--line); border-radius:10px; text-decoration:none; color:var(--ink); transition:.15s; }
   .related-list a:hover { background:var(--yellow-soft); border-color:var(--yellow); transform:translateY(-1px); }
   .rl-pair { font:600 14px 'Chakra Petch',sans-serif; letter-spacing:-.005em; }

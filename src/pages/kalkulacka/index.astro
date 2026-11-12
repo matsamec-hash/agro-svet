@@ -93,7 +93,7 @@ const itemListJsonLd = itemListSchema(
   .hero h1 { font:700 clamp(2.2rem,5vw,3.6rem) 'Chakra Petch',sans-serif; color:#fff; letter-spacing:-.03em; margin:18px 0 0; line-height:1.05; position:relative; z-index:2; }
   .hero-lede { color:#c8c8d0; max-width:700px; font-size:16px; line-height:1.6; margin:14px 0 0; position:relative; z-index:2; }
 
-  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:16px; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap:16px; }
   .calc-card { display:flex; gap:18px; padding:24px 26px; background:var(--card); border:1px solid var(--line); border-radius:18px; text-decoration:none; color:inherit; box-shadow:var(--sh-1); transition:.18s; }
   .calc-card:hover { transform:translateY(-2px); border-color:var(--yellow); box-shadow:0 16px 40px -12px rgba(10,10,12,.15); }
   .cc-icon { width:64px; height:64px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:36px; background:var(--yellow-soft); border-radius:14px; }

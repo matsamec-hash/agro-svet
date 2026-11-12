@@ -233,7 +233,7 @@ const itemListJsonLd = sorted.length > 0 ? {
             }),
           })}{hasFilters ? t(locale, 'nov.matchingFilters') : ''}{totalPages > 1 ? tf(locale, 'nov.pageOf', { page, total: totalPages }) : ''}.
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(300px, 100%),1fr)); gap:20px;">
           {sorted.map(article => (
             <ArticleCard
               title={article.title}

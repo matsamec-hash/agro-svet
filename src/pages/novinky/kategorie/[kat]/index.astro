@@ -135,7 +135,7 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
 
     {items.length > 0 ? (
       <>
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(300px, 100%),1fr)); gap:20px;">
         {items.map((a: any) => (
           <ArticleCard
             title={a.title}

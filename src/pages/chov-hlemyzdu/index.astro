@@ -155,7 +155,7 @@ const collectionJsonLd = {
   .hl-hub .section-title-c { color: var(--muted-2); font-weight: 600; }
   .hl-hub .group-desc { font-size: 14px; color: var(--muted); margin: 0; }
 
-  .hl-hub .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .hl-hub .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 16px; }
   .hl-hub .hub-card {
     display: flex; align-items: flex-start; gap: 12px; text-decoration: none; color: var(--body);
     background: var(--card); border-radius: var(--r-md); padding: 18px 20px; box-shadow: var(--sh-1);

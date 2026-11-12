@@ -158,7 +158,7 @@ const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
   .pl-skupina .section-title { font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 4px; display: flex; align-items: center; gap: 10px; }
   .pl-skupina .section-title-c { color: var(--muted-2); font-weight: 600; font-size: 16px; }
 
-  .pl-skupina .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .pl-skupina .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 16px; }
   .pl-skupina .hub-card {
     display: flex; align-items: flex-start; gap: 12px; text-decoration: none; color: var(--body);
     background: var(--card); border-radius: var(--r-md); padding: 18px 20px; box-shadow: var(--sh-1);

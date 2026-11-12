@@ -391,7 +391,7 @@ const js = {
   .gs-count { font:600 12px 'Chakra Petch',sans-serif; color:var(--muted); background:var(--bg-cream); padding:5px 11px; border-radius:8px; }
   .gs-more { font-size:13px; color:var(--muted); margin:14px 0 0; }
 
-  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap:12px; }
   .cmp-card { display:flex; flex-direction:column; gap:10px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; text-decoration:none; color:inherit; transition:.18s; box-shadow:var(--sh-1); }
   .cmp-card:hover { transform:translateY(-2px); border-color:var(--yellow); box-shadow:0 10px 30px -10px rgba(10,10,12,.18); }
   .cc-models { display:grid; grid-template-columns:1fr 32px 1fr; gap:8px; align-items:center; }

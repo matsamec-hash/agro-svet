@@ -206,6 +206,8 @@ h3 {
 .prose th { background: var(--gray-light); font-weight: 700; padding: 10px 14px; border: 1px solid #e0e0e0; text-align: left; }
 .prose td { padding: 10px 14px; border: 1px solid #e0e0e0; vertical-align: top; }
 .prose tbody tr:nth-child(even) { background: #faf9f5; }
+/* Široká tabulka na mobilu: posouvat ji uvnitř, ne roztahovat stránku (data v článcích mívají 4–5 sloupců). */
+@media (max-width: 640px) { .prose table { display: block; overflow-x: auto; } }
 .prose ul, .prose ol { margin: 0 0 1.25em; padding-left: 1.5em; }
 .prose ul { list-style: disc; }
 .prose ol { list-style: decimal; }

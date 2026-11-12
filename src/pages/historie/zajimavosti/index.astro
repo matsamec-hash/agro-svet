@@ -62,7 +62,7 @@ const comparisons = trivia.filter((t) => t.then && t.now).length;
   .hz-hero h1 { font-size: clamp(24px, 4vw, 32px); margin: 0 0 12px; line-height: 1.1; }
   .hz-lede { color: #b9cdc0; max-width: 66ch; line-height: 1.6; margin: 0; }
 
-  .hz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .hz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 16px; }
   .hz-card { position: relative; border: 1px solid #e2e9e4; border-left: 4px solid #1c7c48; border-radius: 12px; padding: 20px; background: #fff; transition: box-shadow .16s, transform .16s; }
   .hz-card:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -16px #0f1c1455; }
   .hz-card.era-prvni-rep { border-left-color: #b8860b; }

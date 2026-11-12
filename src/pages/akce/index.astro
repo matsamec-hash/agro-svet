@@ -228,7 +228,7 @@ const akceData = akce.map((a) => ({
     .mesic { margin: 28px 0 0; }
     .mesic:first-child { margin-top: 0; }
     .mesic-nadpis { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; color: #6b7a1e; border-bottom: 2px solid #eef0e4; padding-bottom: 6px; }
-    .akce-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+    .akce-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; }
     .akce-item { border: 1px solid #e8e8e8; border-radius: 12px; overflow: hidden; transition: border-color .15s, box-shadow .15s; }
     .akce-item:hover { border-color: #3a7d34; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
     .akce-item.zvyrazni { border-color: #3a7d34; box-shadow: 0 0 0 3px rgba(58,125,52,.18); }
