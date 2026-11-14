@@ -33,7 +33,7 @@ const faqsCs = [
 const faqsSk = [
   { q: "Tanierové alebo pneumatické rozmetadlo?", a: "Tanierové (disc spreader) — 95 % CZ fariem. Lacné, robustné, záber 12–36 m. Pneumatické (rameno so vzduchovým rozvodom) — veľmi presné dávkovanie, vhodné pre VRA a úzke pásy, ale 3× drahšie a komplikovanejšia údržba." },
   { q: "Aký objem zásobníka?", a: "Pre farmu 200 ha postačí 1 500–2 500 l (= 1,5–2,5 t hnojiva, jedno plnenie na 5–10 ha pri dávke 250 kg/ha). Pre 500+ ha odporúčame 3 500+ l. Väčší zásobník = menej plnení, ale väčšia hmotnosť (vyššie utuženie)." },
-  { q: "Vyplatí sa Section Control pre rozmetadlo?", a: "Áno, hlavne u tvarovo zložitých polí. Variable Rate Application + Section Control šetrí 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnosť ISOBUS-capable rozmetadla + RTK GPS retrofit za 2–4 sezóny u farmy 200+ ha." },
+  { q: "Vyplatí sa Section Control pre rozmetadlo?", a: "Áno, hlavne u tvarovo zložitých polí. Variable Rate Application + Section Control šetrí 8–15 % hnojiva (cca 40–80 €/ha/rok). Návratnosť ISOBUS-capable rozmetadla + RTK GPS retrofit za 2–4 sezóny u farmy 200+ ha." },
   { q: "Dôležité features?", a: "WeighCell (vážený zásobník) — kalibruje skutočnú dávku počas jazdy, kompenzuje variabilnú hustotu hnojiva. ISOBUS TC-GEO pre VRA. Border Control pre krajné pásy (zabraňuje úniku hnojiva mimo pole). Tronic regulácia (DPAE) pre automatickú kompenzáciu náklonu." },
 ];
 const faqs = isSk ? faqsSk : faqsCs;
@@ -62,7 +62,7 @@ const howToSk = {
     { name: "Rozhodni medzi tanierovým a pneumatickým rozmetadlom", text: "Tanierové (disc spreader) pre 95 % CZ fariem — lacné, robustné, záber 12–36 m. Pneumatické (rameno so vzduchovým rozvodom) extrémne presné dávkovanie pre VRA a úzke pásy, ale 3× drahšie a komplikovanejšia údržba." },
     { name: "Definuj objem zásobníka podľa výmery", text: "200 ha = 1 500–2 500 l (jedno plnenie na 5–10 ha pri dávke 250 kg/ha). 500+ ha = 3 500+ l. Väčší zásobník = menej plnení, ale vyššia hmotnosť a riziko utužovania — kompromis okolo 2 500 l je sweet spot pre väčšinu CZ." },
     { name: "Prejdi top značky 2026", text: "Amazone ZA-V / ZG-TS (CZ štandard), Kuhn Axis, Sulky X-line, Bogballe (premium dánska), Rauch Axera, Bredal F-line (samojazdný). Servisná dostupnosť dealera vo tvojom kraji = kľúčové." },
-    { name: "Investuj do WeighCell + ISOBUS Section Control", text: "WeighCell (vážený zásobník) kalibruje skutočnú dávku počas jazdy, kompenzuje variabilnú hustotu hnojiva. VRA + Section Control šetrí 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnosť ISOBUS-capable retrofit za 2–4 sezóny u 200+ ha." },
+    { name: "Investuj do WeighCell + ISOBUS Section Control", text: "WeighCell (vážený zásobník) kalibruje skutočnú dávku počas jazdy, kompenzuje variabilnú hustotu hnojiva. VRA + Section Control šetrí 8–15 % hnojiva (cca 40–80 €/ha/rok). Návratnosť ISOBUS-capable retrofit za 2–4 sezóny u 200+ ha." },
     { name: "Nezabudni na Border Control a Tronic reguláciu", text: "Border Control pre krajné pásy zabraňuje úniku hnojiva mimo pole (povinné u nitrát-direktívnych zón ČR). Tronic (DPAE) automaticky kompenzuje náklon a tvar poľa — kritické u pahorkatín." },
   ],
 };
@@ -111,7 +111,7 @@ const articleJsonLd = {
       <ul>
         <li><strong>Plusy:</strong> jednoduchá konštrukcia, dlhá životnosť (15+ rokov), lacné, široký záber (12–36 m).</li>
         <li><strong>Mínusy:</strong> nerovnomernosť na okrajoch poľa (cross spreading), citlivosť na vlhkosť hnojiva.</li>
-        <li><strong>Cena:</strong> 60 000 – 500 000 Kč nový.</li>
+        <li><strong>Cena:</strong> 2,5–20 tis. € nový.</li>
       </ul>
 
       <h3>Pneumatické rozmetadlo (boom spreader)</h3>
@@ -119,7 +119,7 @@ const articleJsonLd = {
       <ul>
         <li><strong>Plusy:</strong> extrémne presné dávkovanie, ideálne pre VRA (variable rate), úzke pásy bez cross-spreading, konštantná rovnomernosť.</li>
         <li><strong>Mínusy:</strong> 3–5× drahšie ako tanierové, vyšší príkon ventilátora (vyššia spotreba), zložitejší servis.</li>
-        <li><strong>Cena:</strong> 800 000 – 3 mil. Kč nový.</li>
+        <li><strong>Cena:</strong> 33–125 tis. € nový.</li>
       </ul>
       <p>Pre CZ farmu pneumatické rozmetadlo dáva zmysel len pri <strong>500+ ha</strong> s precision farming setupom (RTK GPS + variabilné dávkovanie).</p>
 
@@ -147,7 +147,7 @@ const articleJsonLd = {
       <h3>WeighCell (vážený zásobník)</h3>
       <p>4 vážiace bunky pod zásobníkom merajú skutočnú aktuálnu hmotnosť. Systém potom <strong>v reálnom čase kalibruje dávkovanie</strong> — kompenzuje variabilnú hustotu hnojiva (čas, vlhkosť) a opotrebenie lopatiek.</p>
       <p><strong>Bez WeighCell</strong>: chyba dávky až ±10 %.<br><strong>S WeighCell</strong>: chyba ±2 %.</p>
-      <p>Cena: +120 000 – 250 000 Kč nad štandard. <strong>Vyplatí sa</strong> pre farmy s nákladom na hnojivá 1+ mil. Kč/sezónu.</p>
+      <p>Cena: +5–10 tis. € nad štandard. <strong>Vyplatí sa</strong> pre farmy s nákladom na hnojivá 40+ tis. €/sezónu.</p>
 
       <h3>Border Control (krajné rozmetávanie)</h3>
       <p>Špeciálna klapka alebo asymetrické lopatky pre <strong>krajné pásy</strong> poľa. Bez nej by hnojivo letelo aj mimo pole (straty + ekologické riziko = porušenie GAEC 4).</p>
@@ -182,20 +182,20 @@ const articleJsonLd = {
 
       <h2>4. Cenová orientácia 2026</h2>
       <ul>
-        <li><strong>Tanierové 1 500 l + 12 m</strong>: 100 000 – 200 000 Kč nový.</li>
-        <li><strong>Tanierové 2 500 l + 18 m + ISOBUS</strong>: 250 000 – 500 000 Kč.</li>
-        <li><strong>Tanierové 3 500 l + 24 m + WeighCell + TC-GEO</strong>: 600 000 – 1 mil. Kč.</li>
-        <li><strong>Tanierové 4 500+ l + premium</strong>: 1–1,8 mil. Kč.</li>
-        <li><strong>Pneumatické</strong>: 800 000 – 3 mil. Kč.</li>
+        <li><strong>Tanierové 1 500 l + 12 m</strong>: 4–8 tis. € nový.</li>
+        <li><strong>Tanierové 2 500 l + 18 m + ISOBUS</strong>: 10–20 tis. €.</li>
+        <li><strong>Tanierové 3 500 l + 24 m + WeighCell + TC-GEO</strong>: 25–41 tis. €.</li>
+        <li><strong>Tanierové 4 500+ l + premium</strong>: 41–74 tis. €.</li>
+        <li><strong>Pneumatické</strong>: 33–125 tis. €.</li>
       </ul>
 
       <h2>5. Ekonomika investície do WeighCell + VRA</h2>
-      <p>Pre farmu <strong>200 ha</strong> s nákladom na hnojivá <strong>4 000 Kč/ha = 800 000 Kč/sezónu</strong>:</p>
+      <p>Pre farmu <strong>200 ha</strong> s nákladom na hnojivá <strong>165 €/ha = 33 000 €/sezónu</strong>:</p>
       <ul>
-        <li>WeighCell úspora ±8 % chyby dávkovania = <strong>64 000 Kč/rok</strong>.</li>
-        <li>VRA úspora 12 % vďaka variabilnému dávkovaniu podľa pH / NDVI = <strong>96 000 Kč/rok</strong>.</li>
-        <li><strong>Celkom 160 000 Kč/rok</strong>.</li>
-        <li>Príplatok WeighCell + ISOBUS TC-GEO: 250 000 – 400 000 Kč.</li>
+        <li>WeighCell úspora ±8 % chyby dávkovania = <strong>2 600 €/rok</strong>.</li>
+        <li>VRA úspora 12 % vďaka variabilnému dávkovaniu podľa pH / NDVI = <strong>3 900 €/rok</strong>.</li>
+        <li><strong>Celkom 6 500 €/rok</strong>.</li>
+        <li>Príplatok WeighCell + ISOBUS TC-GEO: 10–16 tis. €.</li>
         <li><strong>Návratnosť: 1,5–2,5 roka</strong>. Bez VRA iba WeighCell návratnosť 4–6 rokov.</li>
       </ul>
 

@@ -59,11 +59,11 @@ const faqsCs = [
 const faqsSk = [
   {
     q: 'Koľko stojí nový traktor 100–150 koní?',
-    a: 'Cenové rozpätie 2026: od cca 1,9 mil. Kč (Zetor Forterra HSX 140) cez 2,5–3,2 mil. Kč (mid-tier: John Deere 6M 130, NH T6.180, MF 6S 165) až po 3,5–4,5 mil. Kč (prémium s CVT: Fendt 514 Vario, JD 6R 150). Ojazdený 3–5 rokov starý traktor je zvyčajne o 30–50 % lacnejší než nový.',
+    a: 'Cenové rozpätie 2026: od cca 80 tis. € (Zetor Forterra HSX 140) cez 100–130 tis. € (mid-tier: John Deere 6M 130, NH T6.180, MF 6S 165) až po 145–185 tis. € (prémium s CVT: Fendt 514 Vario, JD 6R 150). Ojazdený 3–5 rokov starý traktor je zvyčajne o 30–50 % lacnejší než nový.',
   },
   {
     q: 'Oplatí sa CVT prevodovka v tejto triede?',
-    a: 'CVT (bezstupňová, Fendt Vario / JD AutoPowr / NH Auto Command) pridáva 200–400 tis. Kč k cene. Oplatí sa, ak budete traktor zriedkavejšie radiť a prevažne jazdiť transport + PTO úlohy. Pre väčšinu poľných prác 100–150 koní stačí powershift — robustný, lacnejší, lacnejší servis.',
+    a: 'CVT (bezstupňová, Fendt Vario / JD AutoPowr / NH Auto Command) pridáva 8–16 tis. € k cene. Oplatí sa, ak budete traktor zriedkavejšie radiť a prevažne jazdiť transport + PTO úlohy. Pre väčšinu poľných prác 100–150 koní stačí powershift — robustný, lacnejší, lacnejší servis.',
   },
   {
     q: 'Ako je to s emisnou normou Stage V?',
@@ -75,7 +75,7 @@ const faqsSk = [
   },
   {
     q: 'Mám kúpiť nový alebo ojazdený?',
-    a: 'Ojazdený 3–5 rokov starý s 2500–4000 motohodín = best value (50–60 % ceny nového, 60–75 % zostávajúcej životnosti). Nový sa oplatí, ak čerpáte investičnú dotáciu PRV alebo plánujete 10+ ročné držanie. Pod 100K motohodín (3 roky) je ojazdený takmer ako nový.',
+    a: 'Ojazdený 3–5 rokov starý s 2500–4000 motohodín = best value (50–60 % ceny nového, 60–75 % zostávajúcej životnosti). Nový sa oplatí, ak čerpáte investičnú dotáciu z PPA alebo plánujete 10+ ročné držanie. Pod 100K motohodín (3 roky) je ojazdený takmer ako nový.',
   },
   {
     q: 'Čo je najdôležitejší parameter?',
@@ -114,9 +114,9 @@ const howToSk = {
     { name: 'Over si, že potrebuješ práve triedu 100–150 koní', text: 'Pre farmu 50–200 ha s typickým nasadením 600–1200 motohodín/rok je táto trieda sweet spot. Pod 50 ha zváž 80–100 k, nad 200 ha 160–200 k.' },
     { name: 'Definuj kľúčové parametre', text: 'Hmotnosť 5–7 t pre orbu, typ prevodovky (powershift lacnejší, CVT komfortnejší), trojbod Cat II min 5000 kg, hydraulika min 4 SCV výstupy, ISOBUS ak plánuješ moderné náradie.' },
     { name: 'Prejdi top 8 modelov 2026 v ČR', text: 'Zetor Forterra HSX 140, John Deere 6M 130 / 6R 150, NH T6.180, MF 6S 165, Case IH Puma 165, Fendt 514 Vario, Deutz-Fahr 6135C. Porovnaj cenu, servisnú sieť, dostupnosť náhradných dielov.' },
-    { name: 'Rozhodni nový vs ojazdený', text: 'Ojazdený 3–5 rokov starý s 2500–4000 mth = best value (50–60 % ceny nového, 60–75 % zostávajúcej životnosti). Nový sa oplatí pri čerpaní PRV dotácie alebo 10+ ročnom držaní.' },
+    { name: 'Rozhodni nový vs ojazdený', text: 'Ojazdený 3–5 rokov starý s 2500–4000 mth = best value (50–60 % ceny nového, 60–75 % zostávajúcej životnosti). Nový sa oplatí pri čerpaní investičnej dotácie z PPA alebo 10+ ročnom držaní.' },
     { name: 'Prever ojazdený traktor osobne', text: 'Checklist: motor (kompresný test, AdBlue systém), prevodovka (radenie pod záťažou), hydraulika (tlak SCV), trojbod (vôľa), kabína (klíma), pneumatiky (dezén min 30 %). Dĺžka obhliadky 60 minút.' },
-    { name: 'Vyjednaj cenu a dohodni prevzatie', text: 'Referencia: ojazdený mid-tier 4–5 rokov / 3500 mth = 1,4–1,8 mil. Kč. Vyjednávaj o cenu PHM v nádrži (–10 000 Kč), o náradie (predné závažie, dvojkolie), o servisný balíček (prvý servis zdarma).' },
+    { name: 'Vyjednaj cenu a dohodni prevzatie', text: 'Referencia: ojazdený mid-tier 4–5 rokov / 3500 mth = 55–75 tis. €. Vyjednávaj o cenu PHM v nádrži (–400 €), o náradie (predné závažie, dvojkolie), o servisný balíček (prvý servis zdarma).' },
   ],
 };
 
@@ -208,7 +208,7 @@ const articleJsonLd = {
 
         <h3>Prevodovka — powershift alebo CVT?</h3>
         <p><strong><a href="/sk/slovnik/powershift/">Powershift</a></strong> (radí pod záťažou medzi 4–24 stupňami) je štandardom v tejto triede. Robustný, lacnejší, jednoduchý servis.</p>
-        <p><strong><a href="/sk/slovnik/cvt-prevodovka/">CVT</a></strong> (Vario / AutoPowr / Auto Command) je bezstupňová — komfortnejšia, ale drahšia o 200–400 tis. Kč. Pre 100–150 koní sa oplatí len ak prevažuje transport alebo PTO (sečka, lis).</p>
+        <p><strong><a href="/sk/slovnik/cvt-prevodovka/">CVT</a></strong> (Vario / AutoPowr / Auto Command) je bezstupňová — komfortnejšia, ale drahšia o 8–16 tis. €. Pre 100–150 koní sa oplatí len ak prevažuje transport alebo PTO (sečka, lis).</p>
 
         <h3>Trojbodový záves (Cat II)</h3>
         <p>V tejto triede <strong><a href="/sk/slovnik/tribod/">trojbod Cat II</a></strong> s kapacitou <strong>min. 5 000 kg</strong>. Pre pluh 4-radličný + pôdne stroje to stačí. Pre veľký lis alebo dvojrámový pluh zvážte Cat III (od 130 koní vyššie).</p>
@@ -241,49 +241,49 @@ const articleJsonLd = {
               <tr>
                 <td><strong><a href="/sk/stroje/zetor/forterra-hsx-hd-cl/forterra-hsx-140/">Zetor Forterra HSX 140</a></strong></td>
                 <td>140 k</td>
-                <td>1,9 mil. Kč</td>
+                <td>80 tis. €</td>
                 <td>Synchro 24×24</td>
               </tr>
               <tr>
                 <td><strong><a href="/sk/stroje/zetor/proxima-cl-gp-hs/">Zetor Proxima CL 120</a></strong></td>
                 <td>118 k</td>
-                <td>1,7 mil. Kč</td>
+                <td>70 tis. €</td>
                 <td>Synchro 16×16</td>
               </tr>
               <tr>
                 <td><strong><a href="/sk/stroje/john-deere/">John Deere 6M 130</a></strong></td>
                 <td>130 k</td>
-                <td>2,5 mil. Kč</td>
+                <td>100 tis. €</td>
                 <td>PowrQuad 24×24</td>
               </tr>
               <tr>
                 <td><strong><a href="/sk/stroje/new-holland/">New Holland T6.180</a></strong></td>
                 <td>145 k</td>
-                <td>2,8 mil. Kč</td>
+                <td>115 tis. €</td>
                 <td>Range Command</td>
               </tr>
               <tr>
                 <td><strong><a href="/sk/stroje/case-ih/">Case IH Maxxum 145</a></strong></td>
                 <td>145 k</td>
-                <td>2,9 mil. Kč</td>
+                <td>120 tis. €</td>
                 <td>ActiveDrive 8</td>
               </tr>
               <tr>
                 <td><strong><a href="/sk/stroje/massey-ferguson/">MF 6S 165</a></strong></td>
                 <td>145 k</td>
-                <td>3,1 mil. Kč</td>
+                <td>125 tis. €</td>
                 <td>Dyna-6 powershift</td>
               </tr>
               <tr>
                 <td><strong><a href="/sk/stroje/fendt/">Fendt 514 Vario</a></strong></td>
                 <td>150 k</td>
-                <td>3,8 mil. Kč</td>
+                <td>155 tis. €</td>
                 <td>Vario CVT</td>
               </tr>
               <tr>
                 <td><strong><a href="/sk/stroje/john-deere/">John Deere 6R 150</a></strong></td>
                 <td>150 k</td>
-                <td>4,3 mil. Kč</td>
+                <td>175 tis. €</td>
                 <td>AutoPowr CVT</td>
               </tr>
             </tbody>
@@ -293,9 +293,9 @@ const articleJsonLd = {
 
         <h3>Ako sa rozhodnúť?</h3>
         <ul>
-          <li><strong>Rozpočet do 2,5 mil. Kč</strong> → Zetor Forterra/Proxima alebo ojazdený JD 6M/NH T6 stage IV.</li>
-          <li><strong>Rozpočet 2,5–3,2 mil.</strong> → JD 6M 130 / NH T6.180 / Case Maxxum 145 / MF 6S 165 — všetky si konkurujú, vyberte podľa servisnej siete vo vašom okolí.</li>
-          <li><strong>Rozpočet 3,2+ mil. + chcem CVT</strong> → Fendt 514 Vario (najlepšie CVT na trhu) alebo JD 6R 150 (lepší servis v ČR).</li>
+          <li><strong>Rozpočet do 100 tis. €</strong> → Zetor Forterra/Proxima alebo ojazdený JD 6M/NH T6 stage IV.</li>
+          <li><strong>Rozpočet 100–130 tis. €</strong> → JD 6M 130 / NH T6.180 / Case Maxxum 145 / MF 6S 165 — všetky si konkurujú, vyberte podľa servisnej siete vo vašom okolí.</li>
+          <li><strong>Rozpočet 130+ tis. € + chcem CVT</strong> → Fendt 514 Vario (najlepšie CVT na trhu) alebo JD 6R 150 (lepší servis v ČR).</li>
         </ul>
 
         <p><a href="/sk/srovnani/" class="cta-inline">→ Comparator: porovnajte si dva ľubovoľné modely vedľa seba</a></p>
@@ -307,12 +307,12 @@ const articleJsonLd = {
         <ul>
           <li><strong>50–60 % ceny nového</strong> pri 70–75 % zostávajúcej životnosti.</li>
           <li><strong>Hlavné emisné/elektronické detské choroby vyriešené</strong> — kupujete preverený stroj.</li>
-          <li><strong>Investičná dotácia (PRV)</strong> kryje len nové stroje — ak čerpáte dotáciu, musíte nový.</li>
+          <li><strong>Investičná dotácia (PPA)</strong> kryje len nové stroje — ak čerpáte dotáciu, musíte nový.</li>
         </ul>
 
         <p><strong>Nový</strong> sa oplatí, ak:</p>
         <ul>
-          <li>Čerpáte investičnú dotáciu PRV (Intervencia 33.73 a ďalšie).</li>
+          <li>Čerpáte investičnú dotáciu z PPA (napr. intervencia 4.1).</li>
           <li>Plánujete <strong>10+ ročné držanie</strong> stroja — potom rozpúšťate cenu na dlhšie obdobie.</li>
           <li>Potrebujete <strong>špecifickú konfiguráciu</strong> (napr. CVT + ISOBUS + max SCV), ktorú v bazári nenájdete.</li>
           <li>Cena nafty + servisu starého stroja by za 5 rokov prekročila rozdiel.</li>
@@ -371,7 +371,7 @@ const articleJsonLd = {
         <ol>
           <li><strong>Preverte konkurenciu.</strong> Rovnaký model + ročník + motohodiny na <a href="/sk/bazar/">bazári</a>, Mascus, TractorHouse. Keď je váš o 15+ % drahší, máte argument.</li>
           <li><strong>Nájdite 3 viditeľné nedostatky</strong> — zjazdené pneumatiky, opotrebovaný pedál, drobné korózie. Argumentujte: „za tú cenu očakávam nové gumy".</li>
-          <li><strong>Vyjednajte ND/extras zdarma</strong> — náhradné diely za 30 tis. Kč sú pre dílera marginálne, pre vás reálna úspora.</li>
+          <li><strong>Vyjednajte ND/extras zdarma</strong> — náhradné diely za 1 200 € sú pre dílera marginálne, pre vás reálna úspora.</li>
           <li><strong>Hotovosť vs leasing</strong> — niektorí díleri dajú 3–5 % zľavu pri platbe hotovosťou.</li>
           <li><strong>Koniec mesiaca / kvartálu</strong> — díleri majú kvóty, vyjednajú vám lepšiu cenu posledný týždeň.</li>
         </ol>
