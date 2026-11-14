@@ -66,6 +66,6 @@ const allCta = locale === 'sk' ? 'Všetky novinky →' : locale === 'pl' ? 'Wszy
       />
     ))}
   </div>
-  <PhotoCredits credits={latest.map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={locale} />
+  <PhotoCredits id="fotografie-novinky" credits={latest.map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={locale} />
 </section>
 )}

@@ -20,14 +20,19 @@ interface Props {
    */
   credits?: (PhotoCredit | null | undefined)[];
   locale?: Locale;
+  /**
+   * Na jedné stránce může být bloků víc (rozcestník, hero mřížka, poslední novinky)
+   * a `id` musí být unikátní — druhý a další blok dostane vlastní.
+   */
+  id?: string;
 }
 
-const { images = [], credits: given = [], locale = (Astro.locals.locale ?? 'cs') as Locale } = Astro.props;
+const { images = [], credits: given = [], locale = (Astro.locals.locale ?? 'cs') as Locale, id = 'fotografie' } = Astro.props;
 const credits = creditsFor([...given, ...images]);
 ---
 
 {credits.length > 0 && (
-  <section class="photo-credits" id="fotografie">
+  <section class="photo-credits" id={id}>
     <h2>{t(locale, 'foto.blok.nadpis')}</h2>
     <ul>
       {credits.map((c) => (

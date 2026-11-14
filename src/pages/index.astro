@@ -3,7 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import ImageAccordion from '../components/ImageAccordion.astro';
 import Newsletter from '../components/Newsletter.astro';
 import PhotoCredits from '../components/PhotoCredits.astro';
-import { creditFromArticle } from '../lib/photo-credit';
+import HeroPhotoCredit from '../components/HeroPhotoCredit.astro';
+import { creditFromArticle, requiresAuthor } from '../lib/photo-credit';
 import CommodityChart from '../components/statistiky/CommodityChart.astro';
 import HomeWeather from '../components/HomeWeather.astro';
 import Anketa from '../components/Anketa.astro';
@@ -109,6 +110,16 @@ const homeDescription = 'Zemědělská technika, encyklopedie traktorů a kombaj
 // and understand which articles are currently "above the fold" on the site.
 // Pouze above-fold hero (featured + heroRight) — below-fold listy se rendrují
 // jako server:defer islands a Google je čte přes individuální article URLs.
+// Plaketka „© autor · licence" na hero kartě jen tam, kde licence autora
+// vyžaduje (CC BY / CC BY-SA…) — stejné pravidlo jako souhrnný blok dole.
+// Pexels/Unsplash/CC0 se na kartě nevypisují.
+const cardCredit = (a: any) => {
+  const c = creditFromArticle(a.featured_image_credit, a.featured_image_url);
+  return c && c.author && requiresAuthor(c.license)
+    ? { author: c.author, license: c.license, licenseUrl: c.licenseUrl, sourceUrl: c.source }
+    : null;
+};
+
 const homepageItems = [
   ...(featured ? [featured] : []),
   ...heroRight,
@@ -159,6 +170,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
             <a href={localizeInternalHref(locale, '/novinky/')} class="hero-tag">{localizedCategory(locale, 'novinky')}</a>
             {featured.category && localizedCategory(locale, newsCategorySlug(featured.category)) !== localizedCategory(locale, 'novinky') && <a href={localizeInternalHref(locale, `/novinky/kategorie/${newsCategorySlug(featured.category)}/`)} class="hero-tag">{localizedCategory(locale, newsCategorySlug(featured.category))}</a>}
           </div>
+          <HeroPhotoCredit compact placement="top-right" maxWidth="calc(100% - 190px)" credit={cardCredit(featured)} locale={locale} />
         </div>
       )}
 
@@ -181,6 +193,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
           <a href={localizeInternalHref(locale, article.category ? `/novinky/kategorie/${newsCategorySlug(article.category)}/` : '/novinky/')} class="hero-tag">
             {article.category ? localizedCategory(locale, newsCategorySlug(article.category)) : 'Novinky'}
           </a>
+          <HeroPhotoCredit compact placement="top-right" maxWidth="calc(100% - 130px)" credit={cardCredit(article)} locale={locale} />
         </div>
       ))}
     </div>
@@ -284,9 +297,9 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   </section>
   )}
 
-  <!-- Hero fotky nemají místo na plaketku v rohu (přes ně jde titulek), takže
-       atribuci nese souhrnný blok. ImageAccordion a LatestArticles si kredit
-       vypisují samy, tenhle kryje jen hero mřížku. -->
+  <!-- Hero karty mají „© autor · licence" v pravém horním rohu (dole jde titulek);
+       odkaz na zdroj a poznámku o úpravě nese tenhle souhrnný blok. ImageAccordion
+       a LatestArticles si kredit vypisují samy, tenhle kryje jen hero mřížku. -->
   <PhotoCredits credits={homepageItems.map((a: any) => creditFromArticle(a.featured_image_credit, a.featured_image_url))} locale={locale} />
 
   <!-- Newsletter signup (always last before footer) -->

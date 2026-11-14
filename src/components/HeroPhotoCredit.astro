@@ -14,9 +14,26 @@ interface Props {
   /** `licenseUrl` dodej tam, kde se z názvu licence odvodit nedá (fotobanky). */
   credit?: { author?: string; license?: string; licenseUrl?: string; sourceUrl?: string } | null;
   locale?: Locale;
+  /** Roh fotky. Na kartách s titulkem dole (homepage) je volný jen horní pravý. */
+  placement?: 'bottom-right' | 'top-right';
+  /**
+   * Jen „© autor · licence" (odkaz na text licence). Zdroj a „upraveno" vynechá —
+   * na kartě na ně není místo; ty nese souhrnný blok `PhotoCredits.astro`
+   * pod/za přehledem, který zůstává.
+   */
+  compact?: boolean;
+  /** Strop šířky plaketky (CSS), ať se na úzké kartě zalomí, a nepřekryje štítek kategorie. */
+  maxWidth?: string;
 }
 
-const { image, credit, locale = (Astro.locals.locale ?? 'cs') as Locale } = Astro.props;
+const {
+  image,
+  credit,
+  locale = (Astro.locals.locale ?? 'cs') as Locale,
+  placement = 'bottom-right',
+  compact = false,
+  maxWidth,
+} = Astro.props;
 
 const resolved: PhotoCredit | null = credit?.author
   ? {
@@ -32,7 +49,10 @@ const resolved: PhotoCredit | null = credit?.author
 ---
 
 {resolved && (
-  <div class="hero-photo-credit">
+  <div
+    class:list={['hero-photo-credit', { 'hero-photo-credit--top': placement === 'top-right', 'hero-photo-credit--compact': compact }]}
+    style={maxWidth ? `max-width:${maxWidth}` : undefined}
+  >
     © {resolved.author}
     {resolved.license && (
       <>
@@ -44,7 +64,7 @@ const resolved: PhotoCredit | null = credit?.author
         )}
       </>
     )}
-    {resolved.source && (
+    {!compact && resolved.source && (
       <>
         {' · '}
         <a href={resolved.source} target="_blank" rel="noopener noreferrer nofollow">{t(locale, 'foto.blok.zdroj')}</a>
@@ -52,7 +72,7 @@ const resolved: PhotoCredit | null = credit?.author
     )}
     {/* CC BY i CC BY-SA žádají uvést, že dílo bylo upraveno — hero fotky
         ořezáváme do poměru a převádíme do WebP. */}
-    {' · '}<span title={t(locale, 'foto.blok.upravy')}>{t(locale, 'foto.blok.upravenoKratce')}</span>
+    {!compact && <>{' · '}<span title={t(locale, 'foto.blok.upravy')}>{t(locale, 'foto.blok.upravenoKratce')}</span></>}
   </div>
 )}
 
@@ -71,9 +91,20 @@ const resolved: PhotoCredit | null = credit?.author
     border: 1px solid rgba(255, 255, 255, 0.14);
     backdrop-filter: blur(4px);
   }
+  .hero-photo-credit--top {
+    top: 10px;
+    bottom: auto;
+  }
+  .hero-photo-credit--compact {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
   .hero-photo-credit a {
     color: inherit;
     text-decoration: underline;
+    /* Název licence („CC BY-SA 4.0") se nesmí zalomit uprostřed; na úzké kartě
+       se zalamuje až před ním. */
+    white-space: nowrap;
   }
   .hero-photo-credit:hover {
     background: rgba(10, 10, 11, 0.85);
