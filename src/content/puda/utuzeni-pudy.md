@@ -83,7 +83,7 @@ Utužení není nová fyzika. Je to nová hmotnost.
 | 60. léta | traktor Zetor 4011 | ~2 t |
 | 80. léta | traktor Zetor 16145 | ~5,1 t |
 | 80. léta | sklízecí mlátička E-512 | ~7 t |
-| Dnes | traktor v kategorii 400 k | 14–17 t |
+| Dnes | traktor v kategorii 400 k | 12–16 t |
 | Dnes | kombajn třídy Lexion 8900 (prázdný) | ~22 t |
 | Dnes | tentýž kombajn s plným zásobníkem | přes 35 t |
 | Dnes | tříosá cisterna 30 m³ (plná) | přes 40 t |
@@ -99,9 +99,9 @@ To je jádro problému: **odvětví vyřešilo tu polovinu, kterou vyřešit um�
 
 **Voda.** Rychlost vsaku klesá ze zdravých 50–100 mm/h klidně **pod 10 mm/h**. Voda, která se nevsákne, teče po povrchu — a odnáší ornici. Utužení a eroze nejsou dva problémy, je to jeden problém ve dvou fázích.
 
-**Dusík.** V anaerobních podmínkách se dusičnany redukují a odcházejí do vzduchu. Ztráty v řádu **10–30 kg N/ha** za sezónu z utužených partií pole nejsou nic výjimečného — plus emise N₂O, tedy skleníkového plynu s téměř třísetnásobným účinkem oproti CO₂.
+**Dusík.** V anaerobních podmínkách se dusičnany redukují a odcházejí do vzduchu. V australských měřeních na šesti farmách (Tullberg a kol., 2018) vypouštěla půda, po které jela kola, v průměru 2,2× víc oxidu dusného (N₂O) než půda bez přejezdů. Autoři z toho pro pole, na němž kola přejedou polovinu plochy, orientačně odvozují ztrátu dusíku v řádu **2–11 kg N/ha** za sezónu — většina dusíku totiž odchází jako N₂, který se při měření nezachytí. Samotný N₂O je skleníkový plyn s téměř třísetnásobným účinkem oproti CO₂.
 
-**Nafta.** Tažný odpor v utužené půdě roste o **20–40 %**. Utužení tedy platíte dvakrát: jednou nižším výnosem a podruhé u čerpadla, když ho jdete rozorat.
+**Nafta.** Zpracování půdy, po které nikdy nejelo kolo, vyžaduje výrazně méně energie. V britských pokusech (Chamen a kol., 1992, podle přehledu Godwin a kol., 2015) spotřebovala mělká orba na půdě bez přejezdů 47 MJ/ha místo 107 MJ/ha a následná příprava půdy a setí 79 MJ/ha místo 255 MJ/ha. Utužení tedy platíte dvakrát: jednou nižším výnosem a podruhé u čerpadla, když ho jdete rozorat.
 
 **Kořeny.** Kukuřice zakořeňuje do 1,5–2 m, řepka a vojtěška ještě hlouběji. Utužená vrstva ve 35 cm z toho udělá plodinu s efektivní hloubkou kořenů 30 cm — se všemi důsledky pro sucho.
 
@@ -126,7 +126,7 @@ Doplňkové signály, které vidíte z traktoru: voda stojící v kolejích ješ
 
 **3. Snížit zatížení kola.** Nenaplňovat zásobník kombajnu na mokrém poli do posledního litru. Vykládat na souvrati, ne uprostřed pozemku. Rozdělit jednu velkou cisternu na dvě jízdy s menší. Sundat závaží, které potřebujete jen na orbu. Na vlhké půdě je cílem zůstat **hluboko pod 6 t na kolo** — šest tun už pevnost vlhkého podorničí překračuje (viz výpočet výše), 4,5 t ji nepřekračuje.
 
-**4. Soustředit provoz do stálých kolejí (CTF).** Při náhodném provozu přejede technika za sezónu **60–100 % plochy pozemku** aspoň jednou, kumulativně i několikanásobek. Controlled Traffic Farming s RTK navigací a sladěnými pracovními záběry to srazí na **15–30 %**. Zbytek pole pak nikdy nic nepřejede. Je to nejúčinnější systémové opatření — a zároveň nejtěžší, protože vyžaduje sladit záběry i rozchody napříč celým parkem strojů.
+**4. Soustředit provoz do stálých kolejí (CTF).** Při náhodném provozu přejede podle GPS měření aspoň jedno kolo **85 % plochy pozemku při klasické orbě, 65 % při minimalizaci a 42 % při přímém výsevu** (Kroulík a kol., 2009, podle přehledu Godwin a kol., 2015). Controlled Traffic Farming s RTK navigací a sladěnými pracovními záběry to srazí zhruba na **10–15 %** (u systémů se záběrem 10–12 m; v pokusu se čtyřmetrovým záběrem to bylo 30 %). Zbytek pole pak nikdy nic nepřejede. Je to nejúčinnější systémové opatření — a zároveň nejtěžší, protože vyžaduje sladit záběry i rozchody napříč celým parkem strojů.
 
 **5. Pásy místo kol.** Pásový podvozek zvětší plochu stopy a pomůže ornici. Na podorničí je jeho vliv menší, než se čeká — celkové zatížení zůstává stejné a rozložení tlaku pod pásem není zdaleka rovnoměrné.
 
@@ -142,7 +142,7 @@ Hloubkové kypření je nejčastěji předepisovaný a nejčastěji zbytečný z
 - Po zásahu je **změněný režim přejezdů**. Rozkypřená půda má dočasně nižší únosnost. Když do ní vjedete stejnou technikou jako předtím, utužíte ji zpátky rychleji, než jste ji rozbili.
 - Na rozkypřenou vrstvu jde **hluboko kořenící plodina nebo meziplodina**, která ji kořeny stabilizuje.
 
-Náklad se pohybuje kolem **25–35 litrů nafty na hektar** a efekt bez změny provozu vydrží **jednu až tři sezóny**. Podrývání není léčba, je to odklad.
+Náklad se pohybuje v řádu desítek litrů nafty na hektar a s hloubkou zhruba přímo úměrně roste (pravidlo australského DPIRD: dvojnásobná hloubka, dvojnásobná spotřeba na hektar). Efekt bez změny provozu vydrží **jednu až tři sezóny**. Podrývání není léčba, je to odklad.
 
 **Biologické kypření** je pomalejší, ale levnější a trvalejší. Ředkev olejná (proslulá „biologickým pluhem"), komonice bílá s kůlovým kořenem do 1–2 m a zejména víceletá vojtěška dokážou prorůst vrstvami, které lámou kypřiče, a zanechají po sobě stabilní svislé kanály. Nefunguje to na beton — na skutečně extrémní utužení kořen nestačí — ale na středně těžké případy je to nejlepší poměr ceny a výsledku.
 
@@ -160,7 +160,10 @@ Dobrá zpráva: tři nejúčinnější opatření — počkat na sucho, odfoukno
 - **EU Soil Observatory (JRC)** — evropská data o degradaci půd včetně utužení podorničí
 - **Söhne, W. (1958)** — původní práce o rozložení tlaku v půdě pod pneumatikou, dodnes základ všech modelů
 - **Schjønning, P., Lamandé, M., Thorsøe, M. H. (2019)** — *Soil Compaction – Drivers, Pressures, State, Impacts and Responses*, DCA Report No. 155, Aarhus University ([dcapub.au.dk](https://dcapub.au.dk/djfpublikation/djfpdf/DCArapport155.pdf)) — výpočty napětí v Terranimu a pokusy s koly kolem 6 t
-- **Lhotský, J. a kol. (1984)** — Soustava opatření k zúrodňování zhutnělých půd, Metodika ÚVTIZ 14/1984 — kritické hodnoty objemové hmotnosti a pórovitosti
+- **Tullberg, J., Antille, D. L., Bluett, C., Eberhard, J., Scheer, C. (2018)** — *Controlled traffic farming effects on soil emissions of nitrous oxide and methane*, Soil and Tillage Research 176, 18–25 ([doi.org](https://doi.org/10.1016/j.still.2017.09.014)) — emise N₂O z půdy po přejezdech a podíl plochy v kolejích při CTF
+- **Godwin, R. a kol. (2015)** — *Results from Recent Traffic Systems Research and the Implications for Future Work*, Acta Technologica Agriculturae 3/2015, 57–63 ([doi.org](https://doi.org/10.1515/ata-2015-0013)) — přehled měření podílu přejeté plochy (Kroulík a kol., 2009) a energie na zpracování půdy (Chamen a kol., 1992)
+- **DPIRD** — Department of Primary Industries and Regional Development, Západní Austrálie ([wa.gov.au](https://www.wa.gov.au/government/announcements/fuel-and-fertiliser-deep-ripping-decisions-aided-easydiesel-calculator)) — pravidlo o spotřebě nafty při hlubokém kypření
+- **Lhotský, J. a kol. (1984)** — Soustava opatření k zúrodňování zhutnělých půd, Metodika ÚVTIZ 14/1984 — kritické hodnoty objemové hmotnosti a pórovitosti (hodnoty v textu převzaty z přednášky Mendelovy univerzity; originál metodiky se nepodařilo dohledat)
 - **Vyhláška č. 275/1998 Sb.** a zákon o ochraně zemědělského půdního fondu — legislativní rámec péče o půdu
 
 ---

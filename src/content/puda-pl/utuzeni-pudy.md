@@ -80,10 +80,10 @@ Zagęszczenie to nie nowa fizyka. To nowa masa.
 
 | Okres | Maszyna | Masa eksploatacyjna |
 |---|---|---|
-| Lata 60. | ciągnik Ursus C-330 | ~1,8 t |
-| Lata 70. | ciągnik Ursus C-385 | ~3,7 t |
+| Lata 60. | ciągnik Ursus C-330 | ~1,5 t |
+| Lata 70. | ciągnik Ursus C-385 | ~3,6 t |
 | Lata 80. | kombajn Bizon Z056 | ~7,5 t |
-| Dziś | ciągnik w klasie 400 KM | 14–17 t |
+| Dziś | ciągnik w klasie 400 KM | 12–16 t |
 | Dziś | kombajn klasy Lexion 8900 (pusty) | ~22 t |
 | Dziś | ten sam kombajn z pełnym zbiornikiem | ponad 35 t |
 | Dziś | trzyosiowy wóz asenizacyjny 30 m³ (pełny) | ponad 40 t |
@@ -99,9 +99,9 @@ To jest sedno problemu: **branża rozwiązała tę połowę, którą umiała roz
 
 **Woda.** Prędkość infiltracji spada ze zdrowych 50–100 mm/h spokojnie **poniżej 10 mm/h**. Woda, która nie wsiąknie, płynie po powierzchni — i zabiera warstwę orną. Zagęszczenie i erozja to nie dwa problemy, to jeden problem w dwóch fazach.
 
-**Azot.** W warunkach beztlenowych azotany ulegają redukcji i uchodzą do atmosfery. Straty rzędu **10–30 kg N/ha** w sezonie z zagęszczonych fragmentów pola to nic nadzwyczajnego — plus emisja N₂O, gazu cieplarnianego o prawie trzystukrotnie silniejszym działaniu niż CO₂.
+**Azot.** W warunkach beztlenowych azotany ulegają redukcji i uchodzą do atmosfery. W australijskich pomiarach na sześciu gospodarstwach (Tullberg i in., 2018) gleba, po której jeździły koła, wydzielała średnio 2,2 razy więcej podtlenku azotu (N₂O) niż gleba bez przejazdów. Autorzy szacują na tej podstawie orientacyjnie, że na polu, na którym koła przejeżdżają połowę powierzchni, strata azotu sięga rzędu **2–11 kg N/ha** w sezonie — większość azotu ucieka bowiem jako N₂, którego pomiar nie wychwytuje. Sam N₂O to gaz cieplarniany o prawie trzystukrotnie silniejszym działaniu niż CO₂.
 
-**Paliwo.** Opór roboczy w zagęszczonej glebie rośnie o **20–40 %**. Za zagęszczenie płacisz więc dwa razy: raz niższym plonem, drugi raz na stacji paliw, gdy jedziesz je rozorać.
+**Paliwo.** Uprawa gleby, po której nigdy nie jechało koło, wymaga znacznie mniej energii. W brytyjskich doświadczeniach (Chamen i in., 1992, za przeglądem Godwin i in., 2015) płytka orka na glebie bez przejazdów zużyła 47 MJ/ha zamiast 107 MJ/ha, a kolejne przygotowanie roli i siew 79 MJ/ha zamiast 255 MJ/ha. Za zagęszczenie płacisz więc dwa razy: raz niższym plonem, drugi raz na stacji paliw, gdy jedziesz je rozorać.
 
 **Korzenie.** Kukurydza korzeni się na 1,5–2 m, rzepak i lucerna jeszcze głębiej. Zagęszczona warstwa na 35 cm robi z tego roślinę o efektywnej głębokości korzeni 30 cm — ze wszystkimi konsekwencjami na czas suszy.
 
@@ -126,7 +126,7 @@ Sygnały dodatkowe, widoczne z ciągnika: woda stojąca w koleinach jeszcze drug
 
 **3. Obniżyć nacisk koła.** Nie napełniać zbiornika kombajnu na mokrym polu do ostatniego litra. Rozładowywać na uwrociu, nie pośrodku pola. Podzielić jeden duży wóz asenizacyjny na dwa kursy mniejszym. Zdjąć obciążniki potrzebne wyłącznie do orki. Na mokrej glebie celem jest pozostanie **wyraźnie poniżej 6 t na koło** — sześć ton przekracza już wytrzymałość mokrego podglebia (patrz obliczenie wyżej), 4,5 t jej nie przekracza.
 
-**4. Skupić ruch w stałych ścieżkach (CTF).** Przy ruchu losowym sprzęt przejeżdża w sezonie **60–100 % powierzchni pola** przynajmniej raz, a łącznie nawet kilkakrotność. Controlled Traffic Farming z nawigacją RTK i dopasowanymi szerokościami roboczymi zbija to do **15–30 %**. Reszty pola nie dotyka już nic. To najskuteczniejsze rozwiązanie systemowe — i zarazem najtrudniejsze, bo wymaga uzgodnienia szerokości i rozstawów kół w całym parku maszyn.
+**4. Skupić ruch w stałych ścieżkach (CTF).** Przy ruchu losowym według pomiarów GPS co najmniej jedno koło przejeżdża **85 % powierzchni pola przy orce konwencjonalnej, 65 % przy uprawie uproszczonej i 42 % przy siewie bezpośrednim** (Kroulík i in., 2009, za przeglądem Godwin i in., 2015). Controlled Traffic Farming z nawigacją RTK i dopasowanymi szerokościami roboczymi zbija to do około **10–15 %** (przy systemach o szerokości roboczej 10–12 m; w doświadczeniu z czterometrową szerokością było to 30 %). Reszty pola nie dotyka już nic. To najskuteczniejsze rozwiązanie systemowe — i zarazem najtrudniejsze, bo wymaga uzgodnienia szerokości i rozstawów kół w całym parku maszyn.
 
 **5. Gąsienice zamiast kół.** Podwozie gąsienicowe powiększa ślad i pomaga warstwie ornej. Na podglebie wpływa mniej, niż się oczekuje — obciążenie całkowite zostaje takie samo, a rozkład nacisku pod gąsienicą wcale nie jest równomierny.
 
@@ -142,7 +142,7 @@ Głęboszowanie to najczęściej zalecany i najczęściej niepotrzebny zabieg w 
 - Po zabiegu obowiązuje **zmieniony reżim przejazdów**. Spulchniona gleba ma przejściowo niższą nośność. Jeśli wjedziesz w nią tym samym sprzętem co wcześniej, zagęścisz ją z powrotem szybciej, niż ją rozbiłeś.
 - Na spulchnioną warstwę wchodzi **głęboko korzeniąca się roślina lub międzyplon**, który ustabilizuje ją korzeniami.
 
-Koszt to około **25–35 litrów oleju napędowego na hektar**, a efekt bez zmiany organizacji przejazdów utrzymuje się **jeden do trzech sezonów**. Głęboszowanie nie jest leczeniem, jest odroczeniem.
+Koszt to rząd kilkudziesięciu litrów oleju napędowego na hektar i rośnie mniej więcej wprost proporcjonalnie do głębokości (reguła australijskiego DPIRD: dwa razy głębiej, dwa razy większe zużycie na hektar). Efekt bez zmiany organizacji przejazdów utrzymuje się **jeden do trzech sezonów**. Głęboszowanie nie jest leczeniem, jest odroczeniem.
 
 **Spulchnianie biologiczne** działa wolniej, ale jest tańsze i trwalsze. Rzodkiew oleista (słynny „pług biologiczny"), nostrzyk biały z korzeniem palowym do 1–2 m, a zwłaszcza wieloletnia lucerna potrafią przerosnąć warstwy, na których łamią się głębosze, i zostawiają po sobie trwałe pionowe kanały. Na beton to nie zadziała — przy naprawdę skrajnym zagęszczeniu korzeń nie wystarczy — ale w przypadkach średnio ciężkich to najlepszy stosunek ceny do wyniku.
 
@@ -160,7 +160,10 @@ Dobra wiadomość: trzy najskuteczniejsze działania — poczekać na przeschni�
 - **EU Soil Observatory (JRC)** — europejskie dane o degradacji gleb, w tym zagęszczeniu podglebia
 - **Söhne, W. (1958)** — pierwotna praca o rozkładzie nacisku w glebie pod oponą, do dziś podstawa wszystkich modeli
 - **Schjønning, P., Lamandé, M., Thorsøe, M. H. (2019)** — *Soil Compaction – Drivers, Pressures, State, Impacts and Responses*, DCA Report No. 155, Aarhus University ([dcapub.au.dk](https://dcapub.au.dk/djfpublikation/djfpdf/DCArapport155.pdf)) — obliczenia naprężeń w Terranimo i doświadczenia z naciskami kół około 6 t
-- **Lhotský, J. i in. (1984)** — Soustava opatření k zúrodňování zhutnělých půd, Metodika ÚVTIZ 14/1984 — wartości krytyczne gęstości objętościowej i porowatości
+- **Tullberg, J., Antille, D. L., Bluett, C., Eberhard, J., Scheer, C. (2018)** — *Controlled traffic farming effects on soil emissions of nitrous oxide and methane*, Soil and Tillage Research 176, 18–25 ([doi.org](https://doi.org/10.1016/j.still.2017.09.014)) — emisje N₂O z gleby po przejazdach i udział powierzchni w ścieżkach przy CTF
+- **Godwin, R. i in. (2015)** — *Results from Recent Traffic Systems Research and the Implications for Future Work*, Acta Technologica Agriculturae 3/2015, 57–63 ([doi.org](https://doi.org/10.1515/ata-2015-0013)) — przegląd pomiarów udziału przejechanej powierzchni (Kroulík i in., 2009) i energii uprawy (Chamen i in., 1992)
+- **DPIRD** — Department of Primary Industries and Regional Development, Australia Zachodnia ([wa.gov.au](https://www.wa.gov.au/government/announcements/fuel-and-fertiliser-deep-ripping-decisions-aided-easydiesel-calculator)) — reguła zużycia paliwa przy głębokim spulchnianiu
+- **Lhotský, J. i in. (1984)** — Soustava opatření k zúrodňování zhutnělých půd, Metodika ÚVTIZ 14/1984 — wartości krytyczne gęstości objętościowej i porowatości (wartości w tekście za wykładem Uniwersytetu Mendla w Brnie; oryginału metodyki nie udało się odnaleźć)
 - **Ustawa o ochronie gruntów rolnych i leśnych** — ramy prawne ochrony gleb w Polsce
 
 ---
