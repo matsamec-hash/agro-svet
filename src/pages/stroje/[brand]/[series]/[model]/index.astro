@@ -13,7 +13,7 @@ import { generateModelFaq } from '../../../../../lib/faq-generator';
 import { findCompetitors, useCaseDescription } from '../../../../../lib/competitor-finder';
 import { pairCombo } from '../../../../../lib/comparator';
 import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeInternalHref, bcp47 } from '../../../../../i18n/utils';
-import HeroPhotoCredit from '../../../../../components/HeroPhotoCredit.astro';
+import MachinePoster, { type PosterCell } from '../../../../../components/MachinePoster.astro';
 import { machineSeoTitle, machineSeoDescription } from '../../../../../lib/seo-titles';
 import { TITLE_MAX } from '../../../../../lib/head-meta';
 
@@ -77,20 +77,6 @@ const categoryHero: Record<StrojKategorie, string> = {
   traktory: '/images/traktor.webp',
   kombajny: '/images/kombajn.webp',
 };
-
-const brandColors: Record<string, [string, string]> = {
-  'john-deere': ['#4A9838', '#2E6B22'],
-  fendt: ['#3FA85D', '#0E6730'],
-  claas: ['#9C9532', '#65601A'],
-  'deutz-fahr': ['#2BA84A', '#1a5e2a'],
-  kubota: ['#FF6B1A', '#C24414'],
-  'new-holland': ['#3874AC', '#1A4370'],
-  'case-ih': ['#D62A2A', '#8F1818'],
-  'massey-ferguson': ['#D62A2A', '#8F1818'],
-  valtra: ['#1F1F1F', '#0A0A0A'],
-  zetor: ['#E93A3A', '#A01818'],
-};
-const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
 
 // Live count + cenové rozpětí inzerátů tohoto konkrétního modelu (naplňuje slib „cena")
 let modelBazarCount = 0;
@@ -230,6 +216,44 @@ const heroCreditLicense: string | null = series.image_url ? (series.image_licens
 const wholeSeriesText = '\n' + tf(locale, 'cat.s.d.wholeSeries', { series: seriesNameClean }) + ' ';
 const compareLinkText = '\n' + tr('cat.s.d.compareLink') + '\n';
 const ebProcessedText = '\n' + tr('cat.s.d.ebProcessed') + ' ';
+
+// Plakát nahoře (stejný jako detail stroje v encyklopedii): obří výkon v koních,
+// pod ním až čtyři čísla, vpravo celá fotka. Většina modelů má jen výkon a roky
+// — chybějící údaj buňku vynechá. Řada je v řádku nad titulkem, mezi čísla ne.
+// Nářadí bez výkonu ukáže obří záběr.
+const nf = new Intl.NumberFormat(numLocale);
+const nf1 = new Intl.NumberFormat(numLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const nfM = new Intl.NumberFormat(numLocale, { maximumFractionDigits: 1 });
+const giantIsZaber = !model.power_hp && Boolean(model.pracovni_zaber_m);
+const prikonRange = model.prikon_traktor_hp_min || model.prikon_traktor_hp_max
+  ? (model.prikon_traktor_hp_min && model.prikon_traktor_hp_max
+      ? `${model.prikon_traktor_hp_min}–${model.prikon_traktor_hp_max}`
+      : String(model.prikon_traktor_hp_min ?? model.prikon_traktor_hp_max))
+  : null;
+const posterCells = ([
+  model.power_kw ? { k: tr('enc.spec.vykon'), v: nf.format(model.power_kw), u: 'kW' } : null,
+  model.weight_kg ? { k: tr('enc.spec.hmotnost'), v: nf.format(model.weight_kg), u: 'kg' } : null,
+  category === 'traktory' && model.weight_kg && model.power_hp
+    ? { k: tr('enc.spec.kgNaKone'), v: nf1.format(model.weight_kg / model.power_hp), u: '' }
+    : null,
+  model.grain_tank_l ? { k: tr('cat.s.d.specGrainTank'), v: nf.format(model.grain_tank_l), u: 'l' } : null,
+  model.cutting_width_m ? { k: tr('cat.s.d.specCuttingWidth'), v: nfM.format(model.cutting_width_m), u: 'm' } : null,
+  model.pracovni_zaber_m && !giantIsZaber ? { k: tr('cat.s.d.specZaber'), v: nfM.format(model.pracovni_zaber_m), u: 'm' } : null,
+  prikonRange ? { k: tr('cat.s.d.specPrikonTraktor'), v: prikonRange, u: tr('cmp.unitHp') } : null,
+  yr ? { k: tr('cat.s.d.specYears'), v: yr, u: '' } : null,
+] as (PosterCell | null)[]).filter((c): c is PosterCell => Boolean(c)).slice(0, 4);
+const posterGiant = model.power_hp
+  ? { v: nf.format(model.power_hp), u: tr('enc.alt.koni') }
+  : giantIsZaber ? { v: nfM.format(model.pracovni_zaber_m!), u: `m · ${tr('cat.s.d.specZaber').toLowerCase()}` } : null;
+// Bez roku výroby nevíme, jestli se ještě prodává — radši nic než „Historie".
+const posterStatus = isCurrent
+  ? { label: tr('cat.s.d.tagCurrent'), current: true }
+  : model.year_from ? { label: tr('cat.s.d.tagLegacy'), current: false } : null;
+const posterStrip = [
+  model.engine ? { k: tr('enc.spec.motor'), v: model.engine } : null,
+  model.transmission ? { k: tr('enc.spec.prevodovka'), v: model.transmission } : null,
+].filter((c): c is { k: string; v: string } => Boolean(c));
+const heroLede = showCsEditorial ? (model.overview || model.description) : model.description;
 
 const pageTitle = `${brand.name} ${model.name}`;
 // Redakční bloky (časté závady, obvyklá cena ojetiny) jsou v datech jen česky —
@@ -380,67 +404,31 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
       <span class="current">{model.name}</span>
     </nav>
 
-    <section class="hero" style={`--brand-c1:${brandC1};--brand-c2:${brandC2};`}>
-      <div class="hero-left">
-        <div class="hero-tags">
-          <span class="tag tag-brand">{brand.name}</span>
-          <span class="tag tag-cat">{catDisplayLabel}</span>
-          <span class="tag tag-series">{seriesNameClean}</span>
-          {isCurrent ? (
-            <span class="tag tag-current"><span class="dot"></span>{tr('cat.s.d.tagCurrent')}</span>
-          ) : (
-            <span class="tag tag-legacy">{tr('cat.s.d.tagLegacy')}</span>
-          )}
-        </div>
-        <h1>{model.name}</h1>
-        {yr && <div class="hero-year">{yr}</div>}
+    <MachinePoster
+      badge={catDisplayLabel}
+      meta={`${brand.name.toUpperCase()} · ${seriesNameClean}`}
+      status={posterStatus}
+      title={model.name}
+      lead={heroLede}
+      giant={posterGiant}
+      cells={posterCells}
+      strip={posterStrip}
+      photo={heroPhoto}
+      photoAlt={tf(locale, 'cat.s.d.altPhoto', { model: model.name, category: catDisplayLabel })}
+      credit={heroCreditAuthor && heroCreditUrl ? { author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl } : null}
+      locale={locale}
+    />
 
-        {model.power_hp && (
-          <div class="power-pill">
-            <span class="pp-num">{model.power_hp}</span>
-            <span class="pp-unit">{tr('cmp.unitHp')}</span>
-            {model.power_kw && <span class="pp-kw">· {model.power_kw} kW</span>}
-          </div>
-        )}
-
-        {(showCsEditorial ? (model.overview || model.description) : model.description) && <p class="hero-lede">{showCsEditorial ? (model.overview || model.description) : model.description}</p>}
-
-        <div class="hero-actions">
-          <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`}>
-            {modelBazarCount > 0
-              ? tf(locale, 'cat.s.d.bazarCount', { count: modelBazarCount, unit: plural(locale, modelBazarCount, { one: tr('cat.s.d.adOne'), few: tr('cat.s.d.adFew'), many: tr('cat.s.d.adMany') }) })
-              : tf(locale, 'cat.s.d.bazarSearch', { model: model.name })}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`)}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>{wholeSeriesText}</a>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="hero-photo">
-          <img
-            class="hero-photo-img"
-            src={heroPhoto}
-            alt={tf(locale, 'cat.s.d.altPhoto', { model: model.name, category: catDisplayLabel })}
-            width="800"
-            height="600"
-            fetchpriority="high"
-            decoding="async"
-          />
-          <div class="hero-photo-badge">
-            <span class="n">{model.name}</span>
-            {model.power_hp && <span class="pwr">{model.power_hp} {tr('cmp.unitHp')}</span>}
-          </div>
-          {heroCreditAuthor && heroCreditUrl && (
-            <HeroPhotoCredit image={heroPhoto} credit={{ author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl }} locale={locale} />
-          )}
-          {/* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
-              k ní patří stejně jako k fotce konkrétní řady. */}
-          {!(heroCreditAuthor && heroCreditUrl) && <HeroPhotoCredit image={heroPhoto} />}
-        </div>
-      </div>
-    </section>
+    <div class="hero-actions">
+      <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(model.name)}`}>
+        {modelBazarCount > 0
+          ? tf(locale, 'cat.s.d.bazarCount', { count: modelBazarCount, unit: plural(locale, modelBazarCount, { one: tr('cat.s.d.adOne'), few: tr('cat.s.d.adFew'), many: tr('cat.s.d.adMany') }) })
+          : tf(locale, 'cat.s.d.bazarSearch', { model: model.name })}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/${series.slug}/`)}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>{wholeSeriesText}</a>
+    </div>
 
     <div class="content-grid">
       <div class="content-main">
@@ -793,112 +781,26 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   .model-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2);flex-shrink:0}
   .model-page .breadcrumb .current{color:#000;font-weight:600}
 
-  .model-page .hero{
-    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
-    background:
-      radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
-      radial-gradient(700px 400px at 90% 90%, color-mix(in srgb, var(--brand-c1) 36%, transparent), transparent 60%),
-      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
-    padding:44px 44px 38px;margin-bottom:22px;
-    box-shadow:var(--sh-3);
-    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
-  }
-  .model-page .hero::before{
-    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
-    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-    background-size:48px 48px;
-    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
-  }
-  .model-page .hero-left{position:relative;z-index:2}
-
-  .model-page .hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-  .model-page .tag{
-    display:inline-flex;align-items:center;gap:6px;
-    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.14em;text-transform:uppercase;
-    padding:6px 11px;border-radius:6px;
-  }
-  .model-page .tag-brand{background:var(--yellow);color:#0A0A0B}
-  .model-page .tag-cat{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.16)}
-  .model-page .tag-series{background:rgba(255,255,255,.06);color:#c8c8d0;border:1px solid rgba(255,255,255,.12)}
-  .model-page .tag-current{background:rgba(11,180,90,.16);color:#5cdc8c;border:1px solid rgba(11,180,90,.4)}
-  .model-page .tag-current .dot{width:7px;height:7px;background:#5cdc8c;border-radius:50%;box-shadow:0 0 0 3px rgba(92,220,140,.18)}
-  .model-page .tag-legacy{background:rgba(180,160,80,.16);color:#dccc78;border:1px solid rgba(180,160,80,.32)}
-
-  .model-page .hero h1{
-    font-family:'Chakra Petch',sans-serif;font-weight:700;
-    font-size:clamp(2.4rem,5.5vw,4.4rem);color:#fff;line-height:.96;letter-spacing:-.03em;margin:0;
-  }
-  .model-page .hero-year{margin-top:8px;font:500 16px 'Chakra Petch',sans-serif;color:var(--yellow);letter-spacing:.04em}
-  .model-page .hero-lede{max-width:580px;font-size:15.5px;color:#c8c8d0;margin:14px 0 22px;line-height:1.65}
-
-  .model-page .power-pill{
-    display:inline-flex;align-items:baseline;gap:8px;margin-top:18px;
-    background:rgba(255,234,0,.1);border:1px solid rgba(255,234,0,.4);
-    color:var(--yellow);padding:14px 22px;border-radius:14px;
-    font-family:'Chakra Petch',sans-serif;
-    box-shadow:0 8px 30px -10px rgba(255,234,0,.4), inset 0 0 30px rgba(255,234,0,.08);
-  }
-  .model-page .pp-num{font-size:42px;font-weight:700;letter-spacing:-.04em;line-height:1}
-  .model-page .pp-unit{font-size:18px;font-weight:600}
-  .model-page .pp-kw{font-size:14px;color:#fff;opacity:.7;font-weight:500;margin-left:4px}
-
-  .model-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  /* Tlačítka pod plakátem — na světlém pozadí. */
+  .model-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 22px}
   .model-page .cta-primary{
     display:inline-flex;align-items:center;gap:10px;
     background:var(--yellow);color:#0A0A0B;
     padding:13px 18px;border-radius:12px;text-decoration:none;
     font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
     transition:transform .15s, box-shadow .15s;
-    box-shadow:0 14px 40px -10px var(--yellow-glow);
+    box-shadow:0 10px 28px -12px var(--yellow-glow);
   }
-  .model-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+  .model-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 16px 36px -10px var(--yellow-glow)}
   .model-page .cta-secondary{
     display:inline-flex;align-items:center;gap:8px;
-    color:#c8c8d0;background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
+    color:var(--ink);background:var(--card);
+    border:1px solid var(--line-2);
     padding:13px 16px;border-radius:12px;text-decoration:none;
     font:500 13px 'Chakra Petch',sans-serif;letter-spacing:.02em;
     transition:.15s;
   }
-  .model-page .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
-
-  .model-page .hero-right{position:relative;z-index:1;min-height:300px;display:flex;align-items:center;justify-content:center}
-  .model-page .hero-photo{
-    width:100%;height:100%;min-height:300px;
-    border-radius:18px;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
-    position:relative;overflow:hidden;
-  }
-  .model-page .hero-photo-img{
-    position:absolute;inset:0;z-index:0;
-    width:100%;height:100%;object-fit:cover;object-position:center;
-  }
-  .model-page .hero-photo::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, color-mix(in srgb, var(--brand-c1) 24%, transparent) 100%);
-  }
-  .model-page .hero-photo-badge{
-    position:absolute;left:16px;bottom:16px;right:16px;z-index:2;
-    background:rgba(10,10,11,.78);backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.1);
-    color:#fff;padding:11px 14px;border-radius:10px;
-    display:flex;justify-content:space-between;align-items:center;gap:10px;
-    font-family:'Chakra Petch',sans-serif;
-  }
-  .model-page .hero-photo-badge .n{font-weight:700;font-size:15px}
-  .model-page .hero-photo-badge .pwr{color:var(--yellow);font-weight:700;font-size:14px}
-  .model-page .hero-photo-credit{
-    position:absolute;right:12px;bottom:12px;z-index:2;
-    background:rgba(10,10,11,.6);backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,.08);
-    color:rgba(255,255,255,.78);text-decoration:none;
-    padding:5px 9px;border-radius:7px;
-    font:500 10.5px/1 'Chakra Petch',sans-serif;letter-spacing:.02em;
-    max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    transition:.15s;
-  }
-  .model-page .hero-photo-credit:hover{background:rgba(10,10,11,.85);color:#fff;border-color:rgba(255,255,255,.18)}
+  .model-page .cta-secondary:hover{background:var(--bg-cream);border-color:var(--ink)}
 
   .model-page .content-grid{display:grid;grid-template-columns:1fr 320px;gap:22px}
 
@@ -927,7 +829,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   .model-page .tier-item:hover svg{color:var(--ink)}
   .model-page .usecase-text{margin:0;font-size:16px;line-height:1.7;color:var(--body)}
   .model-page .competitor-lede{margin:0 0 16px;font-size:14px;color:var(--muted);line-height:1.55}
-  .model-page .comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+  .model-page .comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px, 100%),1fr));gap:10px}
   .model-page .comp-card{
     display:block;text-decoration:none;color:inherit;
     background:#FBFAF4;border:1px solid var(--line);border-radius:var(--r-md);
@@ -994,7 +896,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   }
   .model-page .spec-group-label::after{content:"";flex:1;height:1px;background:var(--line)}
   .model-page .spec-list{
-    display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:8px 12px;
+    display:grid;grid-template-columns:repeat(auto-fill, minmax(min(260px, 100%), 1fr));gap:8px 12px;
     margin:0;padding:0;
   }
   /* Parametry jako vyplněné „chipy" — čitelnější než tenké čárkované řádky, každý údaj vizuálně oddělen */
@@ -1021,7 +923,7 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   }
   .model-page .spec-empty p{color:var(--muted);font-style:italic;margin:0}
 
-  .model-page .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+  .model-page .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(180px, 100%),1fr));gap:10px}
   .model-page .rel-card{
     display:block;text-decoration:none;color:inherit;
     background:#FBFAF4;border:1px solid var(--line);border-radius:var(--r-md);
@@ -1104,15 +1006,11 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
   .model-page .aside-link svg{width:14px;height:14px;color:var(--muted);flex-shrink:0}
 
   @media (max-width:960px){
-    .model-page .hero{grid-template-columns:1fr;padding:30px 24px 26px;gap:18px}
-    .model-page .hero-right{min-height:220px;order:2}
-    .model-page .hero-photo{min-height:220px}
-    .model-page .content-grid{grid-template-columns:1fr}
+    .model-page .content-grid{grid-template-columns:minmax(0,1fr)}
     .model-page .content-aside{position:static;top:auto}
   }
   @media (max-width:600px){
     .model-page{padding:20px 16px 60px}
     .model-page .spec-card, .model-page .related-card{padding:18px}
-    .model-page .pp-num{font-size:34px}
   }
 </style>

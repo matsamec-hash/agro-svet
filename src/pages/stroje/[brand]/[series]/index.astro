@@ -1,10 +1,10 @@
 ---
 export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
-import { getSeries, seriesFamily, familyLabel, type StrojKategorie } from '../../../../lib/stroje';
+import { getSeries, seriesFamily, familyLabel, categoryLabel, type StrojKategorie } from '../../../../lib/stroje';
 import { itemListSchema } from '../../../../lib/structured-data';
 import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, localizeInternalHref, bcp47 } from '../../../../i18n/utils';
-import HeroPhotoCredit from '../../../../components/HeroPhotoCredit.astro';
+import MachinePoster, { type PosterCell } from '../../../../components/MachinePoster.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -28,20 +28,6 @@ const categoryHero: Record<StrojKategorie, string> = {
   kombajny: '/images/kombajn.webp',
 };
 
-const brandColors: Record<string, [string, string]> = {
-  'john-deere': ['#4A9838', '#2E6B22'],
-  fendt: ['#3FA85D', '#0E6730'],
-  claas: ['#9C9532', '#65601A'],
-  'deutz-fahr': ['#2BA84A', '#1a5e2a'],
-  kubota: ['#FF6B1A', '#C24414'],
-  'new-holland': ['#3874AC', '#1A4370'],
-  'case-ih': ['#D62A2A', '#8F1818'],
-  'massey-ferguson': ['#D62A2A', '#8F1818'],
-  valtra: ['#1F1F1F', '#0A0A0A'],
-  zetor: ['#E93A3A', '#A01818'],
-};
-const [brandC1, brandC2] = brandColors[brand.slug] ?? ['#2a2a30', '#0a0a0b'];
-
 const family = series.family || seriesFamily(series.slug);
 const familyLab = series.family_label || familyLabel(family, locale);
 
@@ -59,8 +45,6 @@ const hpRange = minHp !== null && maxHp !== null
 // Pull engine/transmission from any model (typically shared within a series)
 const engines = Array.from(new Set(series.models.map((m) => m.engine).filter((x): x is string => !!x)));
 const transmissions = Array.from(new Set(series.models.map((m) => m.transmission).filter((x): x is string => !!x)));
-const sharedEngine = engines.length === 1 ? engines[0] : engines.length > 1 ? tf(locale, 'cat.s.d.s.engineVariants', { count: engines.length }) : '';
-const sharedTransmission = transmissions.length === 1 ? transmissions[0] : transmissions.length > 1 ? tf(locale, 'cat.s.d.s.transmissionVariants', { count: transmissions.length }) : '';
 
 const sortedModels = [...series.models].sort((a, b) => (b.power_hp ?? 0) - (a.power_hp ?? 0));
 const categoryHasGrainTank = category === 'kombajny';
@@ -123,6 +107,29 @@ const heroSearchText = '\n' + tf(locale, 'cat.s.d.s.heroSearch', { series: serie
 const heroAllGenText = '\n' + tf(locale, 'cat.s.d.s.heroAllGen', { fam: familyLab }) + ' ';
 const sibTitleText = tf(locale, 'cat.s.d.s.sibTitle', { fam: familyLab });
 const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
+
+// Plakát nahoře (stejný jako detail modelu): obří rozpětí výkonu, pod ním
+// kW, počet modelů a roky; motor a převodovka v pruhu dole.
+const numLocale = bcp47(locale);
+const nf = new Intl.NumberFormat(numLocale);
+const kwValues = series.models.map((m) => m.power_kw).filter((x): x is number => typeof x === 'number');
+const fmtRange = (a: number, b: number) => (a === b ? nf.format(a) : `${nf.format(a)}–${nf.format(b)}`);
+const posterGiant = minHp !== null && maxHp !== null ? { v: fmtRange(minHp, maxHp), u: tr('enc.alt.koni') } : null;
+const posterCells: PosterCell[] = [
+  kwValues.length ? { k: tr('enc.spec.vykon'), v: fmtRange(Math.min(...kwValues), Math.max(...kwValues)), u: 'kW' } : null,
+  series.models.length ? { k: modelPlural(series.models.length), v: String(series.models.length) } : null,
+  yr ? { k: tr('cat.s.d.specYears'), v: yr } : null,
+].filter((c): c is PosterCell => Boolean(c));
+// Jen když je pro celou řadu jeden — „Motor 3 variant motoru" nic neříká.
+const posterStrip = [
+  engines.length === 1 ? { k: tr('enc.spec.motor'), v: engines[0] } : null,
+  transmissions.length === 1 ? { k: tr('enc.spec.prevodovka'), v: transmissions[0] } : null,
+].filter((c): c is { k: string; v: string } => Boolean(c));
+// Bez roku nevíme, jestli se řada ještě prodává — radši nic než „Historie".
+const posterStatus = isCurrent
+  ? { label: tr('cat.s.d.tagCurrent'), current: true }
+  : series.year_from ? { label: tr('cat.s.d.tagLegacy'), current: false } : null;
+const catDisplayLabel = categoryLabels[category] ?? categoryLabel(series.subcategory ?? category, locale);
 ---
 
 <Layout
@@ -145,51 +152,27 @@ const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
       <span class="current">{seriesNameClean}</span>
     </nav>
 
-    <section class="hero" style={`--brand-c1:${brandC1};--brand-c2:${brandC2};`}>
-      <div class="hero-left">
-        <div class="hero-tags">
-          <span class="tag tag-brand">{brand.name}</span>
-          <span class="tag tag-cat">{categoryLabels[category]}</span>
-          <span class="tag tag-fam">{familyLab}</span>
-          {isCurrent ? (
-            <span class="tag tag-current"><span class="dot"></span>{tr('cat.s.d.tagCurrent')}</span>
-          ) : (
-            <span class="tag tag-legacy">{tr('cat.s.d.tagLegacy')}</span>
-          )}
-        </div>
-        <h1>{seriesNameClean}</h1>
-        {yr && <div class="hero-year">{yr}</div>}
-        {series.description && <p class="hero-lede">{series.description}</p>}
+    <MachinePoster
+      badge={catDisplayLabel}
+      meta={`${brand.name.toUpperCase()} · ${familyLab}`}
+      status={posterStatus}
+      title={seriesNameClean}
+      lead={series.description}
+      giant={posterGiant}
+      cells={posterCells}
+      strip={posterStrip}
+      photo={heroPhoto}
+      photoAlt={`${brand.name} ${seriesNameClean}`}
+      credit={heroCreditAuthor && heroCreditUrl ? { author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl } : null}
+      locale={locale}
+    />
 
-        <div class="hero-stats">
-          <div class="s"><span class="n">{series.models.length}</span><span class="l">{modelPlural(series.models.length)}</span></div>
-          {hpRange && <div class="s"><span class="n">{hpRange}</span><span class="l">{tr('cat.s.d.s.statPower')}</span></div>}
-          {sharedEngine && <div class="s"><span class="n n-text">{engines.length === 1 ? engines[0].split(' ').slice(0, 2).join(' ') : `${engines.length}×`}</span><span class="l">{tr('cat.s.d.s.statEngine')}</span></div>}
-          {sharedTransmission && <div class="s"><span class="n n-text">{transmissions.length === 1 ? transmissions[0].split(' ').slice(0, 2).join(' ') : `${transmissions.length}×`}</span><span class="l">{tr('cat.s.d.s.statTransmission')}</span></div>}
-        </div>
-
-        <div class="hero-actions">
-          <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>{heroSearchText}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/rada/${category}/${family}/`)}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>{heroAllGenText}</a>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="hero-photo" style={`background-image:url('${heroPhoto}')`}>
-          {series.models.length > 0 && (
-            <div class="hero-photo-badge"><span class="n">{series.models.length}</span> {modelPlural(series.models.length)}</div>
-          )}
-          {heroCreditAuthor && heroCreditUrl && (
-            <HeroPhotoCredit image={heroPhoto} credit={{ author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl }} locale={locale} />
-          )}
-          {/* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
-              k ní patří stejně jako k fotce konkrétní řady. */}
-          {!(heroCreditAuthor && heroCreditUrl) && <HeroPhotoCredit image={heroPhoto} />}
-        </div>
-      </div>
-    </section>
+    <div class="hero-actions">
+      <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${category}&q=${encodeURIComponent(seriesNameClean)}`}>{heroSearchText}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/rada/${category}/${family}/`)}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>{heroAllGenText}</a>
+    </div>
 
     <section class="models-section">
       <div class="ms-head">
@@ -322,105 +305,26 @@ const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
   .series-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2);flex-shrink:0}
   .series-page .breadcrumb .current{color:#000;font-weight:600}
 
-  .series-page .hero{
-    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
-    background:
-      radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
-      radial-gradient(700px 400px at 90% 90%, color-mix(in srgb, var(--brand-c1) 36%, transparent), transparent 60%),
-      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
-    padding:44px 44px 38px;margin-bottom:22px;
-    box-shadow:var(--sh-3);
-    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
-  }
-  .series-page .hero::before{
-    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
-    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-    background-size:48px 48px;
-    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
-  }
-  .series-page .hero-left{position:relative;z-index:2}
-
-  .series-page .hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-  .series-page .tag{
-    display:inline-flex;align-items:center;gap:6px;
-    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.14em;text-transform:uppercase;
-    padding:6px 11px;border-radius:6px;
-  }
-  .series-page .tag-brand{background:var(--yellow);color:#0A0A0B}
-  .series-page .tag-cat{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.16)}
-  .series-page .tag-fam{background:rgba(255,255,255,.06);color:#c8c8d0;border:1px solid rgba(255,255,255,.12)}
-  .series-page .tag-current{background:rgba(11,180,90,.16);color:#5cdc8c;border:1px solid rgba(11,180,90,.4)}
-  .series-page .tag-current .dot{width:7px;height:7px;background:#5cdc8c;border-radius:50%;box-shadow:0 0 0 3px rgba(92,220,140,.18)}
-  .series-page .tag-legacy{background:rgba(180,160,80,.16);color:#dccc78;border:1px solid rgba(180,160,80,.32)}
-
-  .series-page .hero h1{
-    font-family:'Chakra Petch',sans-serif;font-weight:700;
-    font-size:clamp(2.1rem,4.6vw,3.6rem);color:#fff;line-height:.98;letter-spacing:-.025em;margin:0;
-  }
-  .series-page .hero-year{
-    margin-top:8px;font:500 16px 'Chakra Petch',sans-serif;color:var(--yellow);letter-spacing:.04em;
-  }
-  .series-page .hero-lede{max-width:580px;font-size:15.5px;color:#c8c8d0;margin:14px 0 22px;line-height:1.6}
-
-  .series-page .hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:22px;font-family:'Chakra Petch',sans-serif}
-  .series-page .hero-stats .s{display:flex;flex-direction:column;gap:3px;min-width:0}
-  .series-page .hero-stats .n{font-size:24px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
-  .series-page .hero-stats .n-text{font-size:14px;font-weight:600;line-height:1.2;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .series-page .hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
-  .series-page .hero-stats .s + .s{padding-left:24px;border-left:1px solid rgba(255,255,255,.12)}
-
-  .series-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+  /* Tlačítka pod plakátem — na světlém pozadí. */
+  .series-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 22px}
   .series-page .cta-primary{
     display:inline-flex;align-items:center;gap:10px;
     background:var(--yellow);color:#0A0A0B;
     padding:13px 18px;border-radius:12px;text-decoration:none;
     font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
     transition:transform .15s, box-shadow .15s;
-    box-shadow:0 14px 40px -10px var(--yellow-glow);
+    box-shadow:0 10px 28px -12px var(--yellow-glow);
   }
-  .series-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+  .series-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 16px 36px -10px var(--yellow-glow)}
   .series-page .cta-secondary{
     display:inline-flex;align-items:center;gap:8px;
-    color:#c8c8d0;background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
+    color:var(--ink);background:#fff;
+    border:1px solid #DFDFE3;
     padding:13px 16px;border-radius:12px;text-decoration:none;
     font:500 13px 'Chakra Petch',sans-serif;letter-spacing:.02em;
     transition:.15s;
   }
-  .series-page .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
-
-  .series-page .hero-right{position:relative;z-index:1;min-height:280px;display:flex;align-items:center;justify-content:center}
-  .series-page .hero-photo{
-    width:100%;height:100%;min-height:280px;
-    background-size:cover;background-position:center;
-    border-radius:18px;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
-    position:relative;overflow:hidden;
-  }
-  .series-page .hero-photo::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, color-mix(in srgb, var(--brand-c1) 24%, transparent) 100%);
-  }
-  .series-page .hero-photo-badge{
-    position:absolute;left:16px;bottom:16px;z-index:2;
-    background:rgba(10,10,11,.72);backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.1);
-    color:#fff;padding:9px 13px;border-radius:10px;
-    font:500 12px 'Chakra Petch',sans-serif;
-  }
-  .series-page .hero-photo-badge .n{font-weight:700;color:var(--yellow)}
-  .series-page .hero-photo-credit{
-    position:absolute;right:12px;bottom:12px;z-index:2;
-    background:rgba(10,10,11,.6);backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,.08);
-    color:rgba(255,255,255,.78);text-decoration:none;
-    padding:5px 9px;border-radius:7px;
-    font:500 10.5px/1 'Chakra Petch',sans-serif;letter-spacing:.02em;
-    max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    transition:.15s;
-  }
-  .series-page .hero-photo-credit:hover{background:rgba(10,10,11,.85);color:#fff;border-color:rgba(255,255,255,.18)}
+  .series-page .cta-secondary:hover{background:#FBFAF4;border-color:var(--ink)}
 
   .series-page .models-section{
     margin:24px 0;background:var(--card);border:1px solid var(--line);
@@ -530,13 +434,9 @@ const ctaOpenText = '\n' + tr('cat.s.d.s.ctaOpen') + '\n';
   .series-page .cta-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(0,0,0,.15))}
 
   @media (max-width:960px){
-    .series-page .hero{grid-template-columns:1fr;padding:30px 24px 26px;gap:18px}
-    .series-page .hero-right{min-height:200px;order:2}
-    .series-page .hero-photo{min-height:200px}
     .series-page .big-cta{grid-template-columns:1fr;padding:28px}
     .series-page .cta-right{min-height:0}
     .series-page .cta-photo{height:180px}
-    .series-page .hero-stats .s + .s{padding-left:0;border-left:0}
   }
   @media (max-width:780px){
     .series-page .mt-head, .series-page .mt-row{

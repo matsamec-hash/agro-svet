@@ -4,8 +4,8 @@
 export const prerender = false;
 import Layout from '../../../../../../layouts/Layout.astro';
 import { getBrand, seriesFamily, familyLabel, categoryKeyLabel, categoryListingPath, type StrojKategorie } from '../../../../../../lib/stroje';
-import { useTranslations, getLocaleFromUrl, tf, plural, localizePath } from '../../../../../../i18n/utils';
-import HeroPhotoCredit from '../../../../../../components/HeroPhotoCredit.astro';
+import { useTranslations, getLocaleFromUrl, tf, plural, localizePath, bcp47 } from '../../../../../../i18n/utils';
+import MachinePoster, { type PosterCell } from '../../../../../../components/MachinePoster.astro';
 
 const locale = Astro.locals.locale ?? getLocaleFromUrl(Astro.url);
 const tr = useTranslations(locale);
@@ -114,9 +114,6 @@ const maxYear = !hasCurrent && allYearsTo.length
 const yearLine = minYear !== null
   ? (hasCurrent ? `${minYear}–${tr('cat.rada.dosud')}` : (maxYear ? `${minYear}–${maxYear}` : `${minYear}`))
   : '';
-const hpLine = minHp !== null && maxHp !== null
-  ? (minHp === maxHp ? `${minHp} ${tr('cmp.unitHp')}` : `${minHp}–${maxHp} ${tr('cmp.unitHp')}`)
-  : '';
 
 // Pick hero photo: first current series with image_url, else any series with image_url, else category fallback
 let heroPhoto: string | null = null;
@@ -134,6 +131,19 @@ if (!heroPhoto) for (const s of matchingSeries) if (s.image_url) { setHeroFrom(s
 if (!heroPhoto) heroPhoto = catHeroFallback;
 
 const lede = seriesData.find((s) => s.description)?.description?.trim() ?? '';
+
+// Plakát nahoře (stejný jako detail modelu): obří rozpětí výkonu celé rodiny,
+// pod ním kW, počet modelů, generací a období.
+const nf = new Intl.NumberFormat(bcp47(locale));
+const fmtRange = (a: number, b: number) => (a === b ? nf.format(a) : `${nf.format(a)}–${nf.format(b)}`);
+const allKw = seriesData.flatMap((s) => s.models.map((r) => r.power_kw)).filter((x): x is number => typeof x === 'number');
+const posterGiant = minHp !== null && maxHp !== null ? { v: fmtRange(minHp, maxHp), u: tr('enc.alt.koni') } : null;
+const posterCells: PosterCell[] = [
+  allKw.length ? { k: tr('enc.spec.vykon'), v: fmtRange(Math.min(...allKw), Math.max(...allKw)), u: 'kW' } : null,
+  { k: tr('cat.statModels'), v: String(totalModels) },
+  { k: plural(locale, seriesData.length, { one: tr('cat.rada.genOne'), few: tr('cat.rada.genFew'), many: tr('cat.rada.genMany') }), v: String(seriesData.length) },
+  yearLine ? { k: tr('cat.rada.statPeriod'), v: yearLine } : null,
+].filter((c): c is PosterCell => Boolean(c));
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -167,54 +177,30 @@ const jsonLd = {
       <span class="current">{label}</span>
     </nav>
 
-    <section class="hero" style={`--brand-c1:${brandC1};--brand-c2:${brandC2};`}>
-      <div class="hero-left">
-        <div class="hero-tags">
-          <span class="tag tag-brand">{brand.name}</span>
-          <span class="tag tag-cat">{catLabel}</span>
-          {hasCurrent && <span class="tag tag-current"><span class="dot"></span>{tr('cat.blockCurrent')}</span>}
-        </div>
-        <h1>{label}</h1>
-        {lede && <p class="hero-lede">{lede}</p>}
+    <MachinePoster
+      badge={catLabel}
+      meta={brand.name.toUpperCase()}
+      status={hasCurrent ? { label: tr('cat.blockCurrent'), current: true } : null}
+      title={label}
+      lead={lede}
+      giant={posterGiant}
+      cells={posterCells}
+      photo={heroPhoto}
+      photoAlt={`${brand.name} ${label}`}
+      credit={heroCreditAuthor && heroCreditUrl ? { author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl } : null}
+      locale={locale}
+    />
 
-        <div class="hero-stats">
-          <div class="s"><span class="n">{totalModels}</span><span class="l">{tr('cat.statModels')}</span></div>
-          <div class="s"><span class="n">{seriesData.length}</span><span class="l">{plural(locale, seriesData.length, { one: tr('cat.rada.genOne'), few: tr('cat.rada.genFew'), many: tr('cat.rada.genMany') })}</span></div>
-          {hpLine && <div class="s"><span class="n">{hpLine}</span><span class="l">{tr('cat.statPower')}</span></div>}
-          {yearLine && <div class="s"><span class="n">{yearLine}</span><span class="l">{tr('cat.rada.statPeriod')}</span></div>}
-        </div>
-
-        <div class="hero-actions">
-          <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${categorySlug}&q=${encodeURIComponent(label)}`}>
-            {tf(locale, 'cat.rada.searchInBazar', { label })}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/`)}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            {tf(locale, 'cat.rada.allAbout', { brand: brand.name })}
-          </a>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="hero-photo" data-has-photo={heroPhoto ? 'true' : 'false'} style={heroPhoto ? `background-image:url('${heroPhoto}')` : `background:linear-gradient(135deg, ${brandC1} 0%, ${brandC2} 100%)`}>
-          {!heroPhoto && (
-            <svg class="hero-photo-silhouette" width="170" height="100" viewBox="0 0 140 80" fill="rgba(255,255,255,.16)" aria-hidden="true">
-              <rect x="20" y="42" width="100" height="22" rx="3"/>
-              <path d="M20 42 Q25 24 50 22 L110 22 Q120 24 120 42 Z"/>
-              <circle cx="40" cy="68" r="8"/><circle cx="100" cy="68" r="8"/>
-            </svg>
-          )}
-          <div class="hero-photo-badge"><span class="n">{seriesData.length}</span> {plural(locale, seriesData.length, { one: tr('cat.rada.genOne'), few: tr('cat.rada.genFew'), many: tr('cat.rada.genMany') })}</div>
-          {heroCreditAuthor && heroCreditUrl && (
-            <HeroPhotoCredit image={heroPhoto} credit={{ author: heroCreditAuthor, license: heroCreditLicense ?? undefined, sourceUrl: heroCreditUrl }} locale={locale} />
-          )}
-          {/* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
-              k ní patří stejně jako k fotce konkrétní řady. */}
-          {!(heroCreditAuthor && heroCreditUrl) && <HeroPhotoCredit image={heroPhoto} />}
-        </div>
-      </div>
-    </section>
+    <div class="hero-actions">
+      <a class="cta-primary" href={`/bazar/?brand=${encodeURIComponent(brand.slug)}&category=${categorySlug}&q=${encodeURIComponent(label)}`}>
+        {tf(locale, 'cat.rada.searchInBazar', { label })}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="cta-secondary" href={localizePath(locale, `/stroje/${brand.slug}/`)}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        {tf(locale, 'cat.rada.allAbout', { brand: brand.name })}
+      </a>
+    </div>
 
     {seriesData.length > 1 && (
       <div class="split-bar">
@@ -358,101 +344,26 @@ const jsonLd = {
   .rada-page .breadcrumb svg{width:14px;height:14px;color:var(--muted-2);flex-shrink:0}
   .rada-page .breadcrumb .current{color:#000;font-weight:600}
 
-  .rada-page .hero{
-    position:relative;overflow:hidden;color:#fff;border-radius:var(--r-xl);
-    background:
-      radial-gradient(600px 300px at 15% 20%, rgba(255,234,0,.18), transparent 60%),
-      radial-gradient(700px 400px at 90% 90%, color-mix(in srgb, var(--brand-c1) 36%, transparent), transparent 60%),
-      linear-gradient(135deg, #0E0E10 0%, #1C1C20 60%, #2A2A2F 100%);
-    padding:44px 44px 38px;margin-bottom:22px;
-    box-shadow:var(--sh-3);
-    display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:center;
-  }
-  .rada-page .hero::before{
-    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
-    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-    background-size:48px 48px;
-    mask-image:radial-gradient(600px 400px at 70% 100%, black, transparent 70%);
-  }
-  .rada-page .hero-left{position:relative;z-index:2}
-
-  .rada-page .hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-  .rada-page .tag{
-    display:inline-flex;align-items:center;gap:6px;
-    font:600 11px/1 'Chakra Petch',sans-serif;letter-spacing:.14em;text-transform:uppercase;
-    padding:6px 11px;border-radius:6px;
-  }
-  .rada-page .tag-brand{background:var(--yellow);color:#0A0A0B}
-  .rada-page .tag-cat{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.16)}
-  .rada-page .tag-current{background:rgba(11,180,90,.16);color:#5cdc8c;border:1px solid rgba(11,180,90,.4)}
-  .rada-page .tag-current .dot{width:7px;height:7px;background:#5cdc8c;border-radius:50%;box-shadow:0 0 0 3px rgba(92,220,140,.18)}
-
-  .rada-page .hero h1{
-    font-family:'Chakra Petch',sans-serif;font-weight:700;
-    font-size:clamp(2.4rem,5.5vw,4.4rem);color:#fff;line-height:.96;letter-spacing:-.03em;margin:0;
-  }
-  .rada-page .hero-lede{max-width:560px;font-size:15.5px;color:#c8c8d0;margin:14px 0 22px;line-height:1.55}
-
-  .rada-page .hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:22px;font-family:'Chakra Petch',sans-serif}
-  .rada-page .hero-stats .s{display:flex;flex-direction:column;gap:3px}
-  .rada-page .hero-stats .n{font-size:24px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
-  .rada-page .hero-stats .l{font-size:11px;color:#8a8a92;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
-  .rada-page .hero-stats .s + .s{padding-left:24px;border-left:1px solid rgba(255,255,255,.12)}
-
-  .rada-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+  /* Tlačítka pod plakátem — na světlém pozadí. */
+  .rada-page .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 22px}
   .rada-page .cta-primary{
     display:inline-flex;align-items:center;gap:10px;
     background:var(--yellow);color:#0A0A0B;
     padding:13px 18px;border-radius:12px;text-decoration:none;
     font:700 14px 'Chakra Petch',sans-serif;letter-spacing:.02em;
     transition:transform .15s, box-shadow .15s;
-    box-shadow:0 14px 40px -10px var(--yellow-glow);
+    box-shadow:0 10px 28px -12px var(--yellow-glow);
   }
-  .rada-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px -8px var(--yellow-glow)}
+  .rada-page .cta-primary:hover{transform:translateY(-1px);box-shadow:0 16px 36px -10px var(--yellow-glow)}
   .rada-page .cta-secondary{
     display:inline-flex;align-items:center;gap:8px;
-    color:#c8c8d0;background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
+    color:var(--ink);background:#fff;
+    border:1px solid #DFDFE3;
     padding:13px 16px;border-radius:12px;text-decoration:none;
     font:500 13px 'Chakra Petch',sans-serif;letter-spacing:.02em;
     transition:.15s;
   }
-  .rada-page .cta-secondary:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
-
-  .rada-page .hero-right{position:relative;z-index:1;min-height:280px;display:flex;align-items:center;justify-content:center}
-  .rada-page .hero-photo{
-    width:100%;height:100%;min-height:280px;
-    background-size:cover;background-position:center;
-    border-radius:18px;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
-    position:relative;overflow:hidden;
-  }
-  .rada-page .hero-photo::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(135deg, rgba(14,14,16,.1) 0%, transparent 40%, color-mix(in srgb, var(--brand-c1) 24%, transparent) 100%);
-  }
-  .rada-page .hero-photo[data-has-photo="false"]{display:flex;align-items:center;justify-content:center}
-  .rada-page .hero-photo-silhouette{position:relative;z-index:1}
-  .rada-page .hero-photo-badge{
-    position:absolute;left:16px;bottom:16px;z-index:2;
-    background:rgba(10,10,11,.72);backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.1);
-    color:#fff;padding:9px 13px;border-radius:10px;
-    font:500 12px 'Chakra Petch',sans-serif;
-  }
-  .rada-page .hero-photo-badge .n{font-weight:700;color:var(--yellow)}
-  .rada-page .hero-photo-credit{
-    position:absolute;right:12px;bottom:12px;z-index:2;
-    background:rgba(10,10,11,.6);backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,.08);
-    color:rgba(255,255,255,.78);text-decoration:none;
-    padding:5px 9px;border-radius:7px;
-    font:500 10.5px/1 'Chakra Petch',sans-serif;letter-spacing:.02em;
-    max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    transition:.15s;
-  }
-  .rada-page .hero-photo-credit:hover{background:rgba(10,10,11,.85);color:#fff;border-color:rgba(255,255,255,.18)}
+  .rada-page .cta-secondary:hover{background:#FBFAF4;border-color:var(--ink)}
 
   .rada-page .split-bar{
     position:sticky;top:88px;z-index:30;
@@ -575,13 +486,9 @@ const jsonLd = {
   .rada-page .cta-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(0,0,0,.15))}
 
   @media (max-width:960px){
-    .rada-page .hero{grid-template-columns:1fr;padding:30px 24px 26px;gap:18px}
-    .rada-page .hero-right{min-height:200px;order:2}
-    .rada-page .hero-photo{min-height:200px}
     .rada-page .big-cta{grid-template-columns:1fr;padding:28px}
     .rada-page .cta-right{min-height:0}
     .rada-page .cta-photo{height:180px}
-    .rada-page .hero-stats .s + .s{padding-left:0;border-left:0}
   }
   @media (max-width:680px){
     .rada-page .st-head{grid-template-columns:1.6fr 1fr auto;gap:10px}

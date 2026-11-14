@@ -151,7 +151,8 @@ describe('atribuce fotek', () => {
         if (!e.name.endsWith('.astro')) continue;
         const txt = readFileSync(p, 'utf8');
         // Kredit smí vypsat souhrnný blok i plaketka v rohu hero fotky.
-        if (/PhotoCredits|HeroPhotoCredit/.test(txt)) continue;
+        // MachinePoster (plakát /stroje/) ji ke své fotce kreslí vždycky.
+        if (/PhotoCredits|HeroPhotoCredit|MachinePoster/.test(txt)) continue;
         const cesty = [...new Set([...txt.matchAll(/(?<![\w.])(\/images\/[A-Za-z0-9._\-/]+\.(?:webp|jpe?g|png))/g)].map((m) => m[1]))];
         const vyzaduji = cesty.filter((c) => {
           const kredit = creditFor(c);

@@ -1,0 +1,123 @@
+---
+// Plakát nahoře na stránkách /stroje/ (model, řada, rodina řad) — stejný vzhled
+// jako detail stroje v encyklopedii: vlevo titulek, obří číslo a až čtyři
+// údaje, vpravo celá fotka 16:9 bez ztmavení, dole pruh motor · převodovka.
+// Chybějící údaje se prostě nevykreslí; bez fotky panel zabere celou šířku.
+import HeroPhotoCredit from './HeroPhotoCredit.astro';
+import type { Locale } from '../i18n/config';
+
+export type PosterCell = { k: string; v: string; u?: string };
+
+interface Props {
+  badge: string;
+  meta: string;
+  status?: { label: string; current: boolean } | null;
+  title: string;
+  lead?: string | null;
+  giant?: { v: string; u: string } | null;
+  cells?: PosterCell[];
+  strip?: { k: string; v: string }[];
+  photo?: string | null;
+  photoAlt?: string;
+  credit?: { author: string; license?: string; sourceUrl: string } | null;
+  locale: Locale;
+}
+
+const { badge, meta, status, title, lead, giant, cells = [], strip = [], photo, photoAlt = '', credit, locale } = Astro.props;
+// Rozpětí „110–350“ se v 84 px na šířku panelu zalomí — rozpětí zmenšit.
+const giantLong = Boolean(giant && (giant.v.includes('–') || giant.v.length > 5));
+---
+
+<section class:list={['poster', { 'no-photo': !photo }]}>
+  <div class="ps-panel">
+    <div class="ps-meta">
+      <span class="ps-badge">{badge}</span>
+      <span>{meta}</span>
+      {status && (
+        <span class:list={['ps-status', { 'ps-current': status.current }]}>{status.current && <span class="dot"></span>}{status.label}</span>
+      )}
+    </div>
+    <h1>{title}</h1>
+    {lead && <p class="ps-lead">{lead}</p>}
+    {giant && <div class:list={['ps-giant', { long: giantLong }]}>{giant.v}<small>{giant.u}</small></div>}
+    {cells.length > 0 && (
+      <dl class="ps-cells">
+        {cells.map((c) => (
+          <div><dt>{c.k}</dt><dd>{c.v}{c.u && <small>{c.u}</small>}</dd></div>
+        ))}
+      </dl>
+    )}
+  </div>
+  {photo && (
+    <div class="ps-photo">
+      <img src={photo} alt={photoAlt} width="1200" height="675" fetchpriority="high" decoding="async" />
+      {credit ? (
+        <HeroPhotoCredit image={photo} credit={credit} locale={locale} />
+      ) : (
+        /* Zástupná hero fotka (traktor/kombajn) je pod CC BY-SA — kredit
+           k ní patří stejně jako k fotce konkrétní řady. */
+        <HeroPhotoCredit image={photo} />
+      )}
+    </div>
+  )}
+  {strip.length > 0 && (
+    <p class="ps-strip">
+      {strip.map((c, i) => (
+        <>{i > 0 && <span aria-hidden="true"> · </span>}<b>{c.k}</b> {c.v}</>
+      ))}
+    </p>
+  )}
+</section>
+
+<style>
+  .poster{
+    display:grid; grid-template-columns:minmax(0,1fr); background:#0A0A0B; color:#fff;
+    border-radius:14px; overflow:hidden; margin:0; container-type:inline-size;
+  }
+  .ps-panel{ padding:26px 28px; display:flex; flex-direction:column; }
+  .ps-meta{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:13px; color:#bdbdbd; margin-bottom:10px; }
+  .ps-badge{ background:#FFFF00; color:#000; font-family:'Chakra Petch',sans-serif; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase; }
+  .ps-status{ display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#9d9d9d; }
+  .ps-current{ color:#5cdc8c; }
+  .ps-current .dot{ width:7px; height:7px; background:#5cdc8c; border-radius:50%; }
+  .poster h1{ font-size:clamp(1.9rem,3.2vw,2.4rem); font-weight:900; letter-spacing:-.5px; line-height:1.1; color:#fff; margin:0 0 8px; }
+  .ps-lead{ font-size:14.5px; line-height:1.5; color:#cfcfcf; margin:0 0 16px; max-width:720px; }
+  .ps-giant{
+    font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:clamp(64px,7vw,84px);
+    line-height:.9; letter-spacing:-2px; color:#FFEA00; margin-top:auto; padding-top:12px;
+  }
+  .ps-giant.long{ font-size:clamp(48px,5vw,60px); letter-spacing:-1.5px; white-space:nowrap; }
+  .ps-giant small{ font-size:24px; letter-spacing:0; color:#fff; margin-left:8px; }
+  .ps-cells{
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 20px; margin:16px 0 0;
+    border-top:1px solid rgba(255,255,255,.18); padding-top:14px;
+  }
+  .ps-cells dt{ font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:#9d9d9d; margin-bottom:2px; }
+  .ps-cells dd{ margin:0; overflow-wrap:anywhere; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:24px; line-height:1.15; color:#fff; }
+  .ps-cells dd small{ font-family:system-ui,-apple-system,'Segoe UI',sans-serif; font-weight:400; font-size:13px; color:#bdbdbd; margin-left:4px; }
+  /* Fotky řad mají různé poměry stran — rám drží 16:9 (na desktopu aspoň 16:9
+     a dorovná výšku panelu), fotka se do něj ořízne, ať nenafukuje kartu. */
+  .ps-photo{ position:relative; order:-1; aspect-ratio:16/9; background:#1a1a1a; }
+  .ps-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .ps-strip{
+    margin:0; padding:12px 28px; font-size:13.5px; line-height:1.55; color:#cfcfcf;
+    border-top:1px solid rgba(255,255,255,.12);
+  }
+  .ps-strip b{ color:#fff; font-weight:600; }
+  /* Stránky /stroje/ mají do 600 px okraj 16 px — plakát jde od kraje ke kraji. */
+  @media (max-width:600px){
+    .poster{ margin-inline:-16px; border-radius:0; }
+    .ps-panel{ padding:20px 16px; }
+    .ps-strip{ padding:12px 16px; }
+  }
+  @media (min-width:640px) and (max-width:1199px){
+    .ps-cells{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+  }
+  @media (min-width:1200px){
+    .poster:not(.no-photo){ grid-template-columns:minmax(0,38fr) minmax(0,62fr); }
+    .no-photo .ps-cells{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+    /* 62 % šířky plakátu × 9/16 — výška fotky 16:9; vyšší panel ji natáhne. */
+    .ps-photo{ order:0; aspect-ratio:auto; min-height:calc(62cqw * 9 / 16); }
+    .ps-strip{ grid-column:1 / -1; }
+  }
+</style>
