@@ -828,7 +828,7 @@ V zemědělství je hl klíčový pro **hektolitrovou váhu** — hmotnost v kil
 Praktické dopady na příjem farmy:
 - Pšenice 78 kg/hl → potravinářská třída A → 5800 Kč/t
 - Pšenice 74 kg/hl → krmná → 4200 Kč/t
-- **Rozdíl 1600 Kč/t** = 80 tis. Kč na 50 ha při výnosu 6 t/ha
+- **Rozdíl 1600 Kč/t** = 480 tis. Kč na 50 ha při výnosu 6 t/ha
 
 Hektolitrovou váhu měří mobilní váhy přímo v kombajnu (yield monitor, viz [[yield-monitor]]) nebo přesně laboratorně po sklizni.
 
@@ -7365,7 +7365,7 @@ Viz též [[plemenna-kniha]], [[inseminace]], [[zito-ozime]], [[kukurice-silazni
 - **Celkem**: 950 000–1 800 000 Kč
 
 **Benefity ročně:**
-- Lepší detekce říje: +50 000–100 000 Kč/krávu × 100 = 50 000 Kč/100 krav... wait, recalc: +1 000–2 000 Kč/kráva = 100 000–200 000 Kč/rok pro 100 krav
+- Lepší detekce říje: +1 000–2 000 Kč/kráva = 100 000–200 000 Kč/rok pro 100 krav
 - Méně mastitid: -50 000–100 000 Kč/rok
 - Lepší welfare = lepší dlouhověkost krav: 100 000–200 000 Kč/rok
 
