@@ -3092,7 +3092,6 @@ Dnes:
 - Pšenice ozimá: 0,78 mil. ha × 6,0 t/ha = **4,6 mil. t**
 - Ječmen: 317 tis. ha × 5,3 t/ha = **1,7 mil. t**
 - Řepka: 343 tis. ha × 2,8 t/ha = **0,95 mil. t**
-- Kombajny v provozu: ~3 500 ks (převažují Claas + JD)
 
 **„Otavy"** = druhá sklizeň trávy/sena na podzim (NE obilí — to jde jen jednou).
 
@@ -3252,7 +3251,7 @@ Pro úzce setou pšenici (rozteč 12,5 cm) **strip-till nemá smysl** — celá 
 - **Horsch Focus TD** (DE) — strip-till + secí stroj v jednom
 - **John Deere 2510H** (US) — populární v USA, méně v EU
 
-**V ČR**: do roku 2020 marginálni (< 1 % výměry), 2024 už ~5–8 % výměry kukuřice a řepky. Růst poháněný:
+**V ČR**: stále menšinová technologie; spolehlivý údaj o podílu výměry se nepodařilo doložit. Zájem roste, poháněný:
 - Vysoká cena nafty 2022+
 - DZES 5 — pásové zpracování půdy je jednou z půdoochranných technologií pro erozně ohrožené plochy (2025)
 
@@ -3464,7 +3463,7 @@ Moderní stádo má **2–4 skupiny dojnic** s různou TMR:
 - **Agralis CCT** (CZ) — dojírny + krmení integrované
 - **CowVision** (NL) — full digital
 
-V ČR: ~80 % stád > 100 dojnic používá TMR (2024 data).
+Ve velkochovech dojnic je TMR běžným standardem krmení.
 
 Viz též [[dojirna]], [[kukurice-silazni]], [[vojteska]], [[siloky-balik]], [[oteleni]], [[rijnost]].`,
     related: ['dojirna', 'kukurice-silazni', 'vojteska', 'siloky-balik', 'oteleni'],
@@ -3635,7 +3634,7 @@ Viz též [[inseminace]], [[oteleni]], [[jalovice]], [[dojirna]], [[tmr]].`,
     term: 'Umělá inseminace',
     alias: ['AI', 'artificial insemination', 'IZR umělé oplodnění'],
     kategorie: 'chov',
-    shortDef: 'Umělá inseminace je metoda reprodukce, kdy se semeno vybraného plemenného býka zmraženě skladuje a dávkovaně aplikuje do dělohy krávy v období říje. Standardní postup v moderním chovu (>95 % v CZ).',
+    shortDef: 'Umělá inseminace je metoda reprodukce, kdy se semeno vybraného plemenného býka zmraženě skladuje a dávkovaně aplikuje do dělohy krávy v období říje. Standardní postup v moderním chovu dojnic (v ČR ~490 tis. prvních inseminací ročně; u masných plemen převažuje přirozená plemenitba).',
     longDef: `Umělá inseminace (AI, *artificial insemination*) je **metoda reprodukce hospodářských zvířat**, kdy se získané a zmrazené semeno plemenného samce aplikuje do dělohy samice **bez přímého páření**. Standardní praxe v moderním chovu skotu, prasat, ovcí, koz.
 
 **Historie:**
@@ -3692,10 +3691,11 @@ Viz též [[inseminace]], [[oteleni]], [[jalovice]], [[dojirna]], [[tmr]].`,
 - **Plusy**: 95 % zabřeznutí, žádné náklady na inseminátora, ne třeba detekovat říji
 - **Mínusy**: 1 býk = 1 genetická linie (vs 20+ AI variant), riziko zranění krávy/býka, zoonózy, geneticky průměrní býci
 
-**V ČR 2024:**
-- ~98 % mléčných krav inseminovaných (téměř všechny)
-- ~75 % masných krav inseminovaných (zbylé přírodní páření)
-- **Importované semena**: 60 % US Holstein, 20 % CZ genetika, 20 % EU genetika
+**V ČR 2023** (ČMSCH, Ročenka chovu skotu):
+- ~488 tis. prvních inseminací ročně (331 tis. krávy, 157 tis. jalovice)
+- Podíl na prvních inseminacích: Holstein ~58 %, Český strakatý ~35 %, masná plemena ~7 %
+- U masných plemen (211 tis. krav) převažuje přirozená plemenitba — inseminace se týká jen menší části z nich
+- Podíl dováženého semene ročenka neuvádí
 
 **Sexované semeno (sex-sorted):**
 - **Princip**: spermie X (jaločky) a Y (býčci) sortrovány průtokovou cytometrií (DNA množství v hlavičce X je ~3,8 % vyšší)
@@ -4071,7 +4071,7 @@ V profesní hierarchii velkých farem existuje neformální rozlišení:
 
 **Specifika ČR (2024):**
 - **Cizí kombajnéři** — mnoho farem si najímá zahraniční řidiče (slovenské, polské, rumunské) jen na sezónu. Ubytování ve farmě.
-- **Sezónní fakta**: cca 3 500 kombajnů v provozu, 1 sezónu 1,2 mil. ha obilí, průměrně ~350 ha/kombajn/sezónu.
+- **Sezónní fakta**: základní obiloviny se v ČR sklízejí na ~1,2 mil. ha (odhad ČSÚ 2024: 1 215 tis. ha).
 - **Genderové zastoupení**: 99 % muži. Posledních 5 let pomalý nárůst žen-kombajnérek (zejm. mladá generace, agronomky).
 
 **Slangové synonymum** v polském zemědělství: *kombajnista*. V německy mluvících oblastech: *Mähdrescherführer*. V anglosaském světě: *combine operator* (nebo jednoduše „farmer running the combine").
@@ -4476,7 +4476,7 @@ Viz též [[ozim-jarin]], [[osevni-postup]], [[npk-hnojivo]], [[roundup]], [[pli
 - **Po prvních symptomech** → lokální „spalování" (zničit infikované rostliny mechanicky/chemicky)
 - **Sklizená brambora** → třídit (žádné napadené do skladu, riziko hniloby celého skladu)
 
-**V ČR 2024**: ztráty z plísně bramborové ~5–15 % výnosu i přes intenzivní postřik. Bez postřiků 50–100 % ztráta.
+**Škody**: závisí na počasí sezóny — ve vlhkých a teplých letech může plíseň bez fungicidní ochrany zničit porost během několika dnů až týdnů.
 
 Viz též [[roundup]], [[fungicidy]], [[zemak]], [[ozim-jarin]], [[osevni-postup]], [[mez]].`,
     related: ['fungicidy', 'zemak', 'mandelinka-bramborova', 'desikace'],
@@ -5605,8 +5605,8 @@ Viz též [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[septorioza]], [[fu
     term: 'Pšenice jarní',
     alias: ['spring wheat', 'jarka pšenice'],
     kategorie: 'plodiny',
-    shortDef: 'Pšenice jarní je doplňková plodina v CZ — 20 000–40 000 ha (záplata po neúspěšném ozimu nebo specializované odrůdy). Seje se v březnu–dubnu, sklízí v srpnu. Výnos 4–6 t/ha (o 1–2 t/ha nižší než ozim).',
-    longDef: `Pšenice jarní (lat. *Triticum aestivum* — varieta jarní, ang. *spring wheat*) je **doplňková plodina** v ČR — v normálních letech jen 20 000–40 000 ha. Většinou jako **náhrada po nedovydařeném ozimu** (vymrznutí, vyplavení v zimě) nebo specializované odrůdy pro pekařskou kvalitu.
+    shortDef: 'Pšenice jarní je doplňková plodina v CZ — v roce 2024 jen ~24 tis. ha (ČSÚ), o třetinu méně než 2023 (záplata po neúspěšném ozimu nebo specializované odrůdy). Seje se v březnu–dubnu, sklízí v srpnu. Výnos 4–6 t/ha (o 1–2 t/ha nižší než ozim).',
+    longDef: `Pšenice jarní (lat. *Triticum aestivum* — varieta jarní, ang. *spring wheat*) je **doplňková plodina** v ČR — podle ČSÚ jen ~24 tis. ha v roce 2024 (o 32 % méně než 2023) a kolem 47 tis. ha v roce 2017 — plocha mezi roky silně kolísá. Většinou jako **náhrada po nedovydařeném ozimu** (vymrznutí, vyplavení v zimě) nebo specializované odrůdy pro pekařskou kvalitu.
 
 **Klíčové rozdíly oproti ozimu (viz [[psenice-ozima]]):**
 
@@ -6977,14 +6977,14 @@ Klíčové indexy:
 
 **Mezinárodní výměna:**
 - **Interbull** — koordinace přes 30+ zemí
-- ČR importuje 60 % semene (USA, Kanada, NL, DK)
+- Semeno zahraničních býků se do ČR dováží (podíl dovozu ročenka ČMSCH neuvádí)
 
 **CZ plemenářské organizace:**
 - **Svaz chovatelů holštýnského skotu ČR** — Holstein, černo strakatý
 - **Svaz chovatelů masného skotu** — Charolais, Limousin, Aberdeen Angus
 
 **Plemena v CZ:**
-- Mléčné: Holstein (#1, 70 %), Český strakatý (20 %), Jersey, Montbéliarde
+- Mléčné: Holstein (#1, ~62 % dojnic v kontrole užitkovosti 2023), Český strakatý (~35 %), Jersey, Montbéliarde
 - Masná: Charolais, Limousin, Aberdeen Angus, Hereford, Simmental, Belgické modré
 
 **Ekonomická hodnota:**
