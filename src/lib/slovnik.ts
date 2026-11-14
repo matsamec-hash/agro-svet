@@ -2299,8 +2299,8 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     term: 'Řepka ozimá',
     alias: ['oilseed rape', 'canola'],
     kategorie: 'plodiny',
-    shortDef: 'Řepka ozimá je strategická CZ olejovina — pěstuje se na 380–420 tisících ha (12 % orné půdy). Výnos 3,5–4,5 t/ha, hlavně pro biopalivový a potravinářský olej.',
-    longDef: `Řepka ozimá (Brassica napus) je nejvýznamnější olejovina v ČR. Pěstuje se na **380–420 tis. ha** = 12 % orné půdy (po pšenici druhá nejrozšířenější plodina).
+    shortDef: 'Řepka ozimá je strategická CZ olejovina — pěstuje se na 340–380 tisících ha (12 % orné půdy). Výnos 3–4,5 t/ha, hlavně pro biopalivový a potravinářský olej.',
+    longDef: `Řepka ozimá (Brassica napus) je nejvýznamnější olejovina v ČR. Pěstuje se na **340–380 tis. ha** = 12 % orné půdy (po pšenici druhá nejrozšířenější plodina).
 
 **Pěstování**:
 - **Setí**: 15. srpna – 5. září (přesně, kratší okno → menší výnos).
@@ -2310,7 +2310,7 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 - **Sklizeň**: konec června – polovina července. Kombajn s řepkovým žacím stolem (Vario lišta).
 
 **Výnosy** (průměr ČR 2024):
-- **3,5 t/ha** běžné průměrné podmínky.
+- **3,0 t/ha** běžné průměrné podmínky.
 - **4,0–4,5 t/ha** dobré roky + premium hybrid.
 - **5+ t/ha** špička (vrcholoví farmáři).
 
@@ -2335,8 +2335,8 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
     term: 'Sója luštinatá',
     alias: ['sója', 'soybean', 'soja'],
     kategorie: 'plodiny',
-    shortDef: 'Sója je nejvýznamnější luskovina světa, v ČR menšinová plodina (15–25 tisíc ha) ale rostoucí. Bohatá na bílkoviny (40 %), váže atmosférický N.',
-    longDef: `Sója luštinatá (Glycine max) je nejvýznamnější olejnatá luskovina na světě. V ČR rostoucí plodina (z 5 000 ha v 2010 na ~20 000 ha v 2024), podporovaná mimo jiné podporou vázanou na produkci pro bílkovinné plodiny (CIS, 2026: 1 428,42 Kč/ha).
+    shortDef: 'Sója je nejvýznamnější luskovina světa, v ČR menšinová plodina (25–30 tisíc ha) ale rostoucí. Bohatá na bílkoviny (40 %), váže atmosférický N.',
+    longDef: `Sója luštinatá (Glycine max) je nejvýznamnější olejnatá luskovina na světě. V ČR rostoucí plodina (z 9 500 ha v 2010 na ~28 000 ha v 2024), podporovaná mimo jiné podporou vázanou na produkci pro bílkovinné plodiny (CIS, 2026: 1 428,42 Kč/ha).
 
 **Pěstování**:
 - **Setí**: konec dubna – začátek května, půda min. 8 °C.
@@ -3089,9 +3089,9 @@ Dnes:
 - **Sucho** — snižuje výnos i hektolitrovou váhu (viz [[hektolitr]])
 
 **Sklizeň 2024 v CZ** (orientačně):
-- Pšenice ozimá: 1,4 mil. ha × 6,2 t/ha = **8,7 mil. t**
-- Ječmen: 320 tis. ha × 5,8 t/ha = **1,85 mil. t**
-- Řepka: 380 tis. ha × 3,2 t/ha = **1,2 mil. t**
+- Pšenice ozimá: 0,78 mil. ha × 6,0 t/ha = **4,6 mil. t**
+- Ječmen: 317 tis. ha × 5,3 t/ha = **1,7 mil. t**
+- Řepka: 343 tis. ha × 2,8 t/ha = **0,95 mil. t**
 - Kombajny v provozu: ~3 500 ks (převažují Claas + JD)
 
 **„Otavy"** = druhá sklizeň trávy/sena na podzim (NE obilí — to jde jen jednou).
@@ -4071,7 +4071,7 @@ V profesní hierarchii velkých farem existuje neformální rozlišení:
 
 **Specifika ČR (2024):**
 - **Cizí kombajnéři** — mnoho farem si najímá zahraniční řidiče (slovenské, polské, rumunské) jen na sezónu. Ubytování ve farmě.
-- **Sezónní fakta**: cca 3 500 kombajnů v provozu, 1 sezónu 2,8 mil. ha obilí, průměrně 800 ha/kombajn/sezónu.
+- **Sezónní fakta**: cca 3 500 kombajnů v provozu, 1 sezónu 1,2 mil. ha obilí, průměrně ~350 ha/kombajn/sezónu.
 - **Genderové zastoupení**: 99 % muži. Posledních 5 let pomalý nárůst žen-kombajnérek (zejm. mladá generace, agronomky).
 
 **Slangové synonymum** v polském zemědělství: *kombajnista*. V německy mluvících oblastech: *Mähdrescherführer*. V anglosaském světě: *combine operator* (nebo jednoduše „farmer running the combine").
@@ -4736,13 +4736,13 @@ Viz též [[fuzarioza]], [[septorioza]], [[fungicidy]], [[ozim-jarin]].`,
     term: 'Mandelinka bramborová',
     alias: ['Colorado potato beetle', 'Leptinotarsa decemlineata', 'mandelinka'],
     kategorie: 'ochrana',
-    shortDef: 'Mandelinka bramborová (Leptinotarsa decemlineata) je invazní brouk z USA, hlavní škůdce brambor v Evropě. Dospělec i larva žerou listy, bez ochrany 100 % defoliace = 80 % ztráta výnosu. V ČR od 1922.',
+    shortDef: 'Mandelinka bramborová (Leptinotarsa decemlineata) je invazní brouk z USA, hlavní škůdce brambor v Evropě. Dospělec i larva žerou listy, bez ochrany 100 % defoliace = 80 % ztráta výnosu. V ČR od 1945.',
     longDef: `Mandelinka bramborová (lat. *Leptinotarsa decemlineata*, ang. *Colorado potato beetle*, CPB) je **invazní brouk** z čeledi *Chrysomelidae*. Původem z **Colorada (USA)**, dnes hlavní škůdce brambor v Evropě, Asii i v původní Severní Americe.
 
 **Historie invaze:**
 - **1859** — první masová epidemie v Colorado (USA). Předtím žila na divokých *Solanum* spp.
 - **1875** — invaze do New Yorku, dále do EU
-- **1922** — první výskyt v CZ (Bordeaux pak Praha)
+- **1945** — první výskyt v ČR (červenec 1945)
 - **1947** — masová invaze do CZ, kampaň proti „americkému brouku"
 - **1950s** — DDT poprvé použit, krátký triumf, pak rezistence
 - **Dnes** — etablovaná po celé Evropě, Severní Asii (Sibiř), Japonsku, Číně
@@ -5519,8 +5519,8 @@ Viz též [[herbicidy]], [[roundup]], [[repka-ozima]], [[zemak]], [[plisen-bramb
     term: 'Pšenice ozimá',
     alias: ['winter wheat', 'Triticum aestivum', 'ozimka'],
     kategorie: 'plodiny',
-    shortDef: 'Pšenice ozimá je nejdůležitější plodina ČR — 800 000+ ha = 30 % orné půdy. Seje se na podzim (září–říjen), sklízí v červenci–srpnu. Výnos 6–8 t/ha, cena 4 500–6 500 Kč/t. Potravinářská třída A/E nebo krmná podle hektolitrové váhy.',
-    longDef: `Pšenice ozimá (lat. *Triticum aestivum*, ang. *winter wheat*) je **nejdůležitější obilnina v ČR** a 2. nejpěstovanější plodina (po kukuřici v plochách). V CZ pokrývá **800–950 tis. ha** ročně, produkce **5–7 mil. t**.
+    shortDef: 'Pšenice ozimá je nejdůležitější plodina ČR — ~800 000 ha = 27 % orné půdy. Seje se na podzim (září–říjen), sklízí v červenci–srpnu. Výnos 6–8 t/ha, cena 4 500–6 500 Kč/t. Potravinářská třída A/E nebo krmná podle hektolitrové váhy.',
+    longDef: `Pšenice ozimá (lat. *Triticum aestivum*, ang. *winter wheat*) je **nejdůležitější obilnina v ČR** a nejpěstovanější plodina vůbec (přes čtvrtinu orné půdy). V CZ pokrývá **780–850 tis. ha** ročně, produkce **4,6–5,3 mil. t**.
 
 **Vlastnosti ozimu vs jarinu (viz [[ozim-jarin]]):**
 - **Setí**: 15. září – 20. října (optimálně do 5. října v CZ)
@@ -5927,8 +5927,8 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
     term: 'Oves jarní',
     alias: ['oats', 'Avena sativa', 'jarní oves'],
     kategorie: 'plodiny',
-    shortDef: 'Oves jarní je obilnina pěstovaná hlavně v severnějších a chladnějších oblastech ČR. Výnos 3,5–5 t/ha, cena 4 000–5 500 Kč/t. Použití: krmivo pro koně, lidská konzumace (vločky, müsli), zelené krmivo.',
-    longDef: `Oves jarní (lat. *Avena sativa*, ang. *oats*) je **jarní obilnina** s tradicí v CZ na chudších a chladnějších půdách. Plocha v CZ 2024: ~35 000 ha. Trend: rostoucí kvůli zdravotnímu pozitivnímu image (ovesné vločky, plant-based).
+    shortDef: 'Oves jarní je obilnina pěstovaná hlavně v severnějších a chladnějších oblastech ČR. Výnos 3–4 t/ha, cena 4 000–5 500 Kč/t. Použití: krmivo pro koně, lidská konzumace (vločky, müsli), zelené krmivo.',
+    longDef: `Oves jarní (lat. *Avena sativa*, ang. *oats*) je **jarní obilnina** s tradicí v CZ na chudších a chladnějších půdách. Plocha v CZ 2024: ~50 000 ha. Trend: rostoucí kvůli zdravotnímu pozitivnímu image (ovesné vločky, plant-based).
 
 **Vlastnosti:**
 
@@ -5950,7 +5950,7 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 - **Klíčové**: NEpřehnojit N
 
 **Výnosy:**
-- **Průměr CZ**: 4,2 t/ha
+- **Průměr CZ**: 3,5 t/ha
 - **Top farmy**: 6+ t/ha
 
 **Použití:**
@@ -6019,14 +6019,14 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
     term: 'Tritikale',
     alias: ['triticale', 'kříženec pšenice a žita', 'pšeničné žito'],
     kategorie: 'plodiny',
-    shortDef: 'Tritikale je obilnina vzniklá křížením pšenice (Triticum) a žita (Secale). Kombinuje vlastnosti obou — výnos pšenice + odolnost žita. Hlavně krmné použití, výnos 6–8 t/ha, cena 4 400–5 200 Kč/t.',
+    shortDef: 'Tritikale je obilnina vzniklá křížením pšenice (Triticum) a žita (Secale). Kombinuje vlastnosti obou — výnos pšenice + odolnost žita. Hlavně krmné použití, výnos 4,5–6 t/ha, cena 4 400–5 200 Kč/t.',
     longDef: `Tritikale (lat. *× Triticosecale*, ang. *triticale*) je **uměle vyšlechtěná obilnina** vzniklá křížením **pšenice** (*Triticum*) × **žita** (*Secale cereale*). Kombinuje vlastnosti obou rodičů: **výnos pšenice + odolnost žita** k chudým půdám a chorobám.
 
 **Historie:**
 - **1875** — první kříženec popsán skotský chovatel Stephen Wilson
 - **1960s** — CIMMYT (Mexiko) zahájil systematický šlechtitelský program
 - **1980s** — masové rozšíření v Evropě (Polsko, NSR, ČSSR)
-- **2024** — globální plocha 15 mil. ha (Polsko #1, Německo #2, ČR ~50 000 ha)
+- **2024** — globální plocha 3,3 mil. ha (Polsko #1, Bělorusko #2, Německo #3, ČR ~44 000 ha)
 
 **Vlastnosti:**
 
@@ -6051,9 +6051,9 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
 - **Polehnutí střední riziko** (mezi pšenicí a žitem)
 
 **Výnosy:**
-- **Průměr CZ**: 6,8 t/ha
+- **Průměr CZ**: 4,9 t/ha
 - **Top farmy**: 9+ t/ha
-- **Lepší než žito** o 1–2 t/ha, **mírně pod pšenicí** o 0,5–1 t/ha
+- **Zhruba jako žito**, **pod pšenicí** o ~1 t/ha
 
 **Použití:**
 
@@ -6103,8 +6103,8 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
 
 **Ekonomika:**
 - **Náklady**: 22 000–28 000 Kč/ha
-- **Výnos 7 t/ha × 4 700 Kč = 32 900 Kč/ha**
-- **Marže**: 4 000–10 000 Kč/ha (lepší než pšenice!)
+- **Výnos 5 t/ha × 4 700 Kč = 23 500 Kč/ha**
+- **Marže**: −4 500 až +1 500 Kč/ha (bez dotací; srovnatelné s pšenicí, záleží na ceně)
 - **Přímé platby** (BISS, redistributivní platba, ekoplatba): standardní
 
 **Strategicky pro CZ:**
@@ -6120,8 +6120,8 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
     term: 'Mák setý',
     alias: ['poppy', 'Papaver somniferum', 'mák modrosemenný'],
     kategorie: 'plodiny',
-    shortDef: 'Mák setý je jarní olejnatá plodina, kde je ČR globální velmoc — produkuje 50–70 % světového potravinářského máku (modré semeno). Výnos 0,8–1,4 t/ha semen, cena 35 000–55 000 Kč/t. Hlavní produkt: pekařské semínko, mákový olej, makovice (omezené kvůli opioidům).',
-    longDef: `Mák setý (lat. *Papaver somniferum*, ang. *opium poppy* nebo *poppy seed*) je **jarní olejnatá plodina** a globálně specifická — **ČR produkuje 50–70 % světového potravinářského máku** (modré semeno pro pekařské použití). Tradiční oblast: Haná, Polabí, Vysočina.
+    shortDef: 'Mák setý je jarní olejnatá plodina, kde je ČR globální velmoc — produkuje ~30 % světového potravinářského máku (modré semeno). Výnos 0,8–1,4 t/ha semen, cena 35 000–55 000 Kč/t. Hlavní produkt: pekařské semínko, mákový olej, makovice (omezené kvůli opioidům).',
+    longDef: `Mák setý (lat. *Papaver somniferum*, ang. *opium poppy* nebo *poppy seed*) je **jarní olejnatá plodina** a globálně specifická — **ČR produkuje ~30 % světového potravinářského máku** (modré semeno pro pekařské použití). Tradiční oblast: Haná, Polabí, Vysočina.
 
 **Plocha v ČR 2024**: 30 000–40 000 ha (kolísá podle ceny)
 **Produkce**: 25 000–35 000 t/rok
@@ -6442,7 +6442,7 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
     longDef: `Cukrová řepa (lat. *Beta vulgaris* var. *altissima*, ang. *sugar beet*) je **jarní okopanina** pěstovaná pro **výrobu cukru** (sacharóza). Bulva obsahuje 17–20 % cukru. CZ dlouhá tradice (od 19. století), oblast: Polabí, Středočesko, Haná.
 
 **Plocha v ČR 2024**: 60 000–70 000 ha
-**Produkce**: 4–5 mil. t bulvy → 600 000–750 000 t cukru
+**Produkce**: 3,7–4,6 mil. t bulvy → 550 000–700 000 t cukru
 
 **Vlastnosti:**
 
@@ -6472,7 +6472,7 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 - **Tzv. „kampaň"**: říjen–prosinec, cukrovary jedou 24/7
 
 **Výnosy:**
-- **Průměr CZ**: 70 t/ha bulvy
+- **Průměr CZ**: 66 t/ha bulvy
 - **Top farmy**: 90+ t/ha
 - **Cukernatost**: 17–20 % (vyšší = vyšší cena!)
 
@@ -6553,17 +6553,17 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
     term: 'Hrách setý',
     alias: ['pea', 'Pisum sativum', 'jarní hrách'],
     kategorie: 'plodiny',
-    shortDef: 'Hrách setý je jarní luskovina pěstovaná pro semeno (zrnový hrách) nebo zelený lusk (konzumní hrášek). CZ plocha 10 000–20 000 ha. Výnos 3–5 t/ha semen, cena 6 500–8 500 Kč/t. Klíčová pro fixaci N (50–100 kg N/ha) a osevní postup po obilovinách.',
+    shortDef: 'Hrách setý je jarní luskovina pěstovaná pro semeno (zrnový hrách) nebo zelený lusk (konzumní hrášek). CZ plocha ~50 000 ha. Výnos 2–4 t/ha semen, cena 6 500–8 500 Kč/t. Klíčová pro fixaci N (50–100 kg N/ha) a osevní postup po obilovinách.',
     longDef: `Hrách setý (lat. *Pisum sativum*, ang. *field pea*) je **jarní luskovina** s klíčovými agronomickými benefity: **fixace dusíku** symbiózou s *Rhizobium leguminosarum* (50–100 kg N/ha) a zlepšení struktury půdy. Hlavní použití: krmivo (zrnový hrách), lidská konzumace (zelený hrášek), průmyslové aplikace.
 
-**Plocha v ČR 2024**: 10 000–20 000 ha (rostoucí trend kvůli plant-based proteinům + EU bílkovinné strategii)
+**Plocha v ČR 2024**: ~50 000 ha (rostoucí trend kvůli plant-based proteinům + EU bílkovinné strategii)
 
 **Typy hrachu:**
 
 **1. Zrnový hrách** (95 % CZ plochy):
 - **Sklizeň**: srpen, zrno suché
 - **Použití**: krmivo, lidská strava (loupaný hrach)
-- **Výnos**: 3–5 t/ha
+- **Výnos**: 2–4 t/ha
 
 **2. Konzervárenský hrášek** (5 %):
 - **Sklizeň**: zelený lusk, červen–červenec
@@ -6594,7 +6594,7 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
 - **Kombajn**: standardní žací mech, ale opatrně (zrno lehce vypadá)
 
 **Výnosy:**
-- **Průměr CZ**: 3,8 t/ha zrnového hrachu
+- **Průměr CZ**: 2,4 t/ha zrnového hrachu
 - **Top farmy**: 5,5+ t/ha
 - **Konzervárenský**: 6 t/ha zelený
 
@@ -6669,12 +6669,12 @@ Viz též [[sojaova-bob]], [[vojteska]], [[osevni-postup]], [[mezi-plodiny]], [[
     term: 'Len setý',
     alias: ['flax', 'Linum usitatissimum', 'olejný len', 'přadný len'],
     kategorie: 'plodiny',
-    shortDef: 'Len setý je dvojí plodina — olejný len pro semínko a lněný olej, přadný len pro vlákno (lněné plátno). CZ plocha 1 500–3 000 ha (klesající). Výnos olejného 1,5–2,5 t/ha semen, cena 12 000–17 000 Kč/t. Historicky klíčový (vlaké plátno do 1900s).',
+    shortDef: 'Len setý je dvojí plodina — olejný len pro semínko a lněný olej, přadný len pro vlákno (lněné plátno). CZ plocha 1 000–1 600 ha (klesající). Výnos olejného 1,5–2,5 t/ha semen, cena 12 000–17 000 Kč/t. Historicky klíčový (vlaké plátno do 1900s).',
     longDef: `Len setý (lat. *Linum usitatissimum*, ang. *flax*) je **jarní plodina dvojího použití**:
 1. **Olejný len** — semínko pro lněný olej (omega-3), pekařské semínko
 2. **Přadný len** — stéblo pro lněné vlákno (textil)
 
-V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 500–3 000 ha dnes.
+V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 
 **Historie:**
 - **Tisíciletí** — len je jedna z nejstarších kulturních rostlin (egyptské mumie, biblické zmínky)
