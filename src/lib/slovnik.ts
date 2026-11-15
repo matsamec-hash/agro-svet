@@ -318,7 +318,7 @@ Důležitá poznámka: P se uvádí jako **P₂O₅** (oxid), K jako **K₂O** �
 - 1 kg P = 2,29 kg P₂O₅
 - 1 kg K = 1,20 kg K₂O
 
-Stopové prvky (S, Mg, Ca, B, Zn, Cu) jsou v NPK plus formách (např. NPK + S, NPK Mikro). Aktuální cena NPK 15-15-15 se pohybuje kolem 13 000–18 000 Kč/t v závislosti na sezóně a původu.
+Stopové prvky (S, Mg, Ca, B, Zn, Cu) jsou v NPK plus formách (např. NPK + S, NPK Mikro). Cena kolísá s trhem s plynem a se sezónou: podle ČSÚ/Eurostatu stálo NPK 17-17-17 v pytlích v ČR v roce 2022 asi 19 600 Kč/t, v roce 2023 asi 15 500 Kč/t a v roce 2024 asi 12 000 Kč/t.
 
 Pro variabilní dávkování (VRA) podle GPS map vyžaduje secí stroj nebo rozmetadlo s ISOBUS TC-GEO.`,
     related: ['variable-rate', 'pH-pudy', 'mocovina'],
@@ -1399,7 +1399,7 @@ Použití:
 Vlastnosti:
 - **Mírně kyselá reakce** v půdě (pH okolo 6) — vhodné pro neutrální až slabě zásadité půdy.
 - **Vysoká vodorozpustnost** — okamžitě dostupný pro plodinu (na rozdíl od MAP).
-- **Cena 2024**: cca 16 000–22 000 Kč/t.
+- **Cena**: DAP samostatně statistika ČSÚ/Eurostat nesleduje; nejbližší sledovaný fosforečný produkt, trojitý superfosfát (46 % P₂O₅), stál v ČR podle Eurostatu v roce 2025 asi 15 500 Kč/t (≈ 34 Kč/kg P₂O₅). U DAP lze čekat podobnou cenovou hladinu — aktuální cenu vždy poptejte u dodavatele.
 
 Pozor: na alkalické půdě (pH > 7,5) přechází fosfor rychle do nerozpustných forem (vápenaté soli) → krátká účinnost. V tom případě lepší použít MAP nebo superfosfát.`,
     related: ['npk-hnojivo', 'pH-pudy'],
@@ -2050,7 +2050,7 @@ Použití:
 - **Pre-em pro jaří plodiny** — 150–250 kg/ha pod kukuřici, slunečnici.
 - **Lepší než močovina za suchého počasí** — močovina vyžaduje vlhko pro hydrolýzu, LAV funguje i v suchu.
 
-Cena (2024): cca 11 000–14 000 Kč/t v IBC bagů 600 kg. O ~15 % dražší per kg N než močovina, ale praktičtější.
+Cena: průměr ČR podle ČSÚ/Eurostatu byl v roce 2024 asi 7 400 Kč/t ledku amonného s vápencem (26 % N, pytle); v roce 2023 asi 10 000 Kč/t a v roce 2022 asi 16 000 Kč/t. Na 1 kg N vychází asi o 15 % dráž než močovina (2024: ~28,5 vs. ~24,5 Kč/kg N), ale je praktičtější.
 
 V CZ dominantní výrobce: Lovochemie (Lovosice) — značky LAV 27. Import z Polska (Yara, Anwil) a Slovenska (Duslo).`,
     related: ['mocovina', 'npk-hnojivo', 'pH-pudy'],
@@ -2082,7 +2082,7 @@ Nevýhody:
 - **Sklon k popálení listu** při horku nad 22 °C nebo přímém slunci.
 - **Korozní k vodárenství** — separátní cisterna a čerpadlo.
 
-Cena (2024): cca 7 500–10 500 Kč/t (= 19–27 Kč/kg N — výrazně levnější než pevná hnojiva za jednotku N).`,
+Cena: Eurostat uvádí pro ČR v roce 2025 průměr ~28 000 Kč za tunu N v roztocích UAN (27–37 % N), tj. asi 8 400 Kč za tunu DAM 390 (30 % N) a ~28 Kč/kg N — podobně jako LAV (~30 Kč/kg N) a o něco dráž než močovina (~27 Kč/kg N).`,
     related: ['mocovina', 'lav-can', 'npk-hnojivo'],
   },
   {
@@ -2103,7 +2103,7 @@ Hlavní produkty:
 - **Hašené vápno (Ca(OH)₂)** — pro extrémně kyselé půdy, velmi rychlý účinek.
 - **Cukrovarnické saturační kaly** — odpadní z výroby cukru, levný zdroj Ca + organické hmoty.
 
-Cena (2024): 800–1 800 Kč/t včetně dovozu (vápenec). Aplikace rozmetadlem 200–400 Kč/ha. Celková investice 4 000–12 000 Kč/ha při běžné dávce.
+Cena: veřejná statistika (ČSÚ, Eurostat) cenu vápence nesleduje a ceník velkoodběru není jednotný — liší se podle lomu, druhu (mletý, granulovaný, dolomitický) a vzdálenosti dopravy. Cenu včetně dopravy a rozmetání poptejte u dodavatele; náklad na hektar je dávka (t/ha) × cena tuny.
 
 Kdy vápnit:
 - **Půdní rozbor 1× za 4 roky** ukáže aktuální pH a saturaci Ca.
@@ -3300,17 +3300,16 @@ V Amazonii (Brazílie) byly objeveny **temně černé úrodné půdy** *Terra Pr
 - **Aktivace**: rozdrtit + namočit + smíchat s kompostem 2–4 týdny před aplikací (aby se nasáklý sytými živinami, ne hladovým dřevěným uhlím)
 - **Frekvence**: jednorázová nebo postupná (1 t/ha/rok)
 
-**Cena 2024:**
-- **Sypaný biouhel CZ**: 4 000–8 000 Kč/t
-- **Pelet (jednodušší aplikace)**: 8 000–15 000 Kč/t
-- **Aktivovaný s mykorhizou (premium)**: 15 000–25 000 Kč/t
-- **Investice na 1 ha**: 12 000–40 000 Kč
+**Cena:**
+- Veřejně vedená cena biouhlu pro zemědělce neexistuje; závisí na surovině, certifikaci (EBC) a dodavateli, proto ji vždy poptejte.
+- Jediný dohledaný údaj je prezentace Masarykovy univerzity z roku 2018 (~4 500 Kč/t pro zemědělce, bez uvedení dodavatele) — dnešní ceny mohou být jiné.
+- **Náklad na 1 ha** = dávka (t/ha) × cena tuny; při dávce 3–5 t/ha a ceně z údaje výše by to bylo ~13 500–22 500 Kč/ha.
 
 **Návratnost:**
 - **Výnosy**: typicky +5–20 % po 1–3 letech
 - **Úspora hnojiv**: -10–25 % díky CEC
-- **Carbon credits**: 15–25 EUR/t CO₂ × 3 t CO₂/t biouhle = ~1 200 Kč/t biouhle dodatečně
-- **Návratnost**: 5–10 let na biouhel samostatně, 3–5 let s carbon credity
+- **Carbon credits**: výnos závisí na certifikované metodice a aktuální ceně kreditů — do kalkulace ho nezapočítávejte jako jistotu
+- **Návratnost**: nelze obecně určit — záleží na ceně biouhlu, dávce a skutečném efektu na konkrétní půdě
 
 **Limity:**
 - **Vstupní cena** vysoká, return až po letech
