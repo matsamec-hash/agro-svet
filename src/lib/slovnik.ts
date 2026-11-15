@@ -1054,7 +1054,7 @@ Převody:
 
 Použití v zemědělství (CZ + EU standard):
 - **Výnosy plodin** — t/ha je dominantní jednotka. Pšenice 5–8 t/ha, kukuřice 8–12 t/ha, řepka 3–4,5 t/ha, ječmen 5–7 t/ha.
-- **Výkupní ceny** — Kč/t. Příklad 2024: pšenice 4 800–5 500 Kč/t, kukuřice 3 800–4 500 Kč/t.
+- **Výkupní ceny** — Kč/t. Příklad 2024 (průměry ČSÚ): pšenice 4 770 Kč/t, kukuřice 4 560 Kč/t.
 - **Hnojiva** — t/ha kejdy (15–25 t/ha), kg/ha NPK, ale balení dnes typicky v t (big-bag 600 kg ≈ 0,6 t, kontejner 1 t).
 - **Kapacita strojů** — návěs 14–24 t, kombajn zásobník 8–13 m³ ≈ 6–10 t obilí.
 - **Mezinárodní obchod** — CBOT, MATIF, FOB ceny v USD/t, EUR/t.
@@ -2314,11 +2314,11 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 - **4,0–4,5 t/ha** dobré roky + premium hybrid.
 - **5+ t/ha** špička (vrcholoví farmáři).
 
-**Cenovka** (2024–2026):
-- **Realizační cena** 11 000–14 000 Kč/t.
-- **Tržba**: 4 t × 12 500 = 50 000 Kč/ha.
-- **Náklady**: ~25 000 Kč/ha (osivo 4 000 + hnojiva 8 000 + postřiky 6 000 + mech. 7 000).
-- **Marže**: 20 000–30 000 Kč/ha = velmi atraktivní vs obiloviny.
+**Cenovka** (ČSÚ 2023–2024; tržba, náklady a marže = příklad-scénář):
+- **Realizační cena (ČSÚ)**: 2024 11 220 Kč/t (2023: 11 900; 2022: 17 130).
+- **Tržba: 3,2 t/ha × 11 220 Kč/t = 35 900 Kč/ha** (průměrný výnos ČR 2019–2024 × průměrná cena 2024)
+- **Náklady** (orientačně): ~25 000 Kč/ha.
+- **Marže bez dotací**: ~+10 900 Kč/ha (při výnosu 4 t/ha ~+19 900 Kč/ha).
 
 **Podpora vázaná na produkci (CIS)**: na řepku v ČR není (2025).
 
@@ -2353,12 +2353,12 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 **Vlastnosti zrna**:
 - **40 % bílkoviny** (vs pšenice 12 %) — nejbohatší rostlinný zdroj.
 - **20 % oleje** — sójový olej pro potraviny i biopaliva.
-- **Cenovka** (2024): 12 000–16 000 Kč/t.
+- **Cena (ČSÚ 2024)**: 10 880 Kč/t.
 
-**Ekonomika** (3 t/ha × 14 000 = 42 000 Kč tržba + 1 428 Kč CIS za rok 2026):
-- Tržba ~43 430 Kč/ha.
-- Náklady ~22 000 Kč/ha (osivo + inokulace + hnojiva + postřiky + mech).
-- **Marže ~21 000 Kč/ha** = porovnatelné s řepkou, ale nižší riziko.
+**Ekonomika (příklad-scénář, ne průměr za ČR):** 2,4 t/ha × 10 880 Kč/t + CIS 1 428 Kč/ha za rok 2026:
+- Tržba ~27 500 Kč/ha (2,4 t/ha × 10 880 Kč/t + CIS).
+- Náklady ~22 000 Kč/ha (orientačně).
+- **Marže (včetně CIS, bez ostatních dotací)**: ~+5 500 Kč/ha (při výnosu 3 t/ha ~+12 100 Kč/ha)
 
 **Proč v CZ rostou plochy**:
 - **EU snaha o nezávislost na importu sóji** z Brazílie/Argentiny (kde se odlesní pro pěstování).
@@ -5519,7 +5519,7 @@ Viz též [[herbicidy]], [[roundup]], [[repka-ozima]], [[zemak]], [[plisen-bramb
     term: 'Pšenice ozimá',
     alias: ['winter wheat', 'Triticum aestivum', 'ozimka'],
     kategorie: 'plodiny',
-    shortDef: 'Pšenice ozimá je nejdůležitější plodina ČR — ~800 000 ha = 27 % orné půdy. Seje se na podzim (září–říjen), sklízí v červenci–srpnu. Výnos 6–8 t/ha, cena 4 500–6 500 Kč/t. Potravinářská třída A/E nebo krmná podle hektolitrové váhy.',
+    shortDef: 'Pšenice ozimá je nejdůležitější plodina ČR — ~800 000 ha = 27 % orné půdy. Seje se na podzim (září–říjen), sklízí v červenci–srpnu. Výnos 6–8 t/ha, cena 2024 ~4 800 Kč/t (2023: ~5 800 Kč/t). Potravinářská třída A/E nebo krmná podle hektolitrové váhy.',
     longDef: `Pšenice ozimá (lat. *Triticum aestivum*, ang. *winter wheat*) je **nejdůležitější obilnina v ČR** a nejpěstovanější plodina vůbec (přes čtvrtinu orné půdy). V CZ pokrývá **780–850 tis. ha** ročně, produkce **4,6–5,3 mil. t**.
 
 **Vlastnosti ozimu vs jarinu (viz [[ozim-jarin]]):**
@@ -5568,7 +5568,7 @@ Viz též [[herbicidy]], [[roundup]], [[repka-ozima]], [[zemak]], [[plisen-bramb
 
 **Kvalitativní třídy** (podle hektolitrové váhy a obsahu N):
 
-| Třída | hl váha | NL (sušina) | Cena (Kč/t 2024) |
+| Třída | hl váha | NL (sušina) | Cena (Kč/t, příklad sezóny 2023/24) |
 |-------|---------|-------------|------------------|
 | **E** (elite) | 82+ | 14+ % | 6 200–6 500 |
 | **A** | 78–82 | 12,5+ % | 5 800–6 200 |
@@ -5576,10 +5576,10 @@ Viz též [[herbicidy]], [[roundup]], [[repka-ozima]], [[zemak]], [[plisen-bramb
 | **C** (krmná) | 74–76 | 10+ % | 4 800–5 200 |
 | **Pod limit** | < 74 | < 10 | 4 200–4 600 |
 
-**Ekonomika 2024:**
-- **Náklady** na 1 ha: 28 000–38 000 Kč (osivo, hnojiva, postřiky, palivo, sklizeň)
-- **Výnosy 6,5 t/ha × 5 500 Kč = 35 750 Kč/ha**
-- **Marže**: -2 000 až +5 000 Kč/ha (úzká, citlivá na ceny)
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
+- **Náklady** (orientačně): 28 000–38 000 Kč/ha
+- **Výnos 6,1 t/ha × 4 770 Kč/t = 29 100 Kč/ha** (průměrný výnos ČR 2019–2024 × průměrná cena 2024)
+- **Marže bez dotací**: −8 900 až +1 100 Kč/ha (úzká, citlivá na ceny)
 - **Přímé platby** (BISS, redistributivní platba, ekoplatba) se k marži přičítají — sazby viz níže
 
 **Odrůdy 2024 (CZ trh):**
@@ -5654,10 +5654,10 @@ Viz též [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [[septorioza]], [[fu
 - **KWS Sharki** — pekařská kvalita
 - **Tybalt** — bio přístup, odolnost
 
-**Ekonomika:**
-- **Náklady**: 22 000–28 000 Kč/ha (nižší než ozim — méně N, méně postřiků)
-- **Výnos**: 4,5 t/ha × 5 200 Kč = 23 400 Kč/ha
-- **Marže**: typicky -2 000 až +3 000 Kč/ha
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
+- **Náklady** (orientačně): 22 000–28 000 Kč/ha
+- **Výnos 4,5 t/ha × 4 770 Kč/t = 21 500 Kč/ha** (předpokládaný výnos × průměrná cena pšenice 2024)
+- **Marže bez dotací**: −6 500 až −500 Kč/ha (při cenách 2024 ztrátová)
 - **Když záplata po ozimu**: alespoň „nějaký výnos" je lepší než nic
 
 **Výzkum a šlechtění:**
@@ -5672,7 +5672,7 @@ Viz též [[psenice-ozima]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [
     term: 'Ječmen sladovnický',
     alias: ['malting barley', 'pivovarský ječmen', 'Hordeum vulgare malt'],
     kategorie: 'plodiny',
-    shortDef: 'Ječmen sladovnický je jarní plodina pěstovaná pro výrobu sladu (pivovarnictví). CZ má 100 000+ ha. Klíčové parametry: hl. váha min. 64 kg, dusík 1,5–1,9 % (NÍZKÝ!), klíčivost 95+ %. Příplatek za kvalitu 800–1 500 Kč/t.',
+    shortDef: 'Ječmen sladovnický je jarní plodina pěstovaná pro výrobu sladu (pivovarnictví). CZ má 100 000+ ha. Klíčové parametry: hl. váha min. 64 kg, dusík 1,5–1,9 % (NÍZKÝ!), klíčivost 95+ %. Sladovnický ječmen byl v roce 2024 o ~2 200 Kč/t dražší než krmný (ČSÚ).',
     longDef: `Ječmen sladovnický (lat. *Hordeum vulgare*, ang. *malting barley*) je **jarní plodina** pěstovaná specifically pro výrobu **sladu** — základní suroviny pro **pivovarnictví**. ČR je tradiční producent (Plzeňský prazdroj, Budvar, Staropramen).
 
 **Klíčový rozdíl od krmného ječmene** (viz [[jecmen-krmny]]):
@@ -5703,7 +5703,7 @@ Viz též [[psenice-ozima]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [
 
 **Kvalitativní parametry sladovnictví** (CZ standard):
 
-| Parametr | Min. | Optimal | Penalizace |
+| Parametr | Min. | Optimal | Srážka (příklad ze smlouvy) |
 |----------|------|---------|-----------|
 | Hl. váha | 64 kg/hl | 68+ | -200 Kč/t pod 64 |
 | Dusík | 1,5–1,9 % | 1,5–1,7 % | -500 Kč/t nad 2,1 % |
@@ -5721,10 +5721,10 @@ Viz též [[psenice-ozima]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]], [
 - **Top farmy**: 7+ t/ha
 - **Odrůdové výnosy** vs krmný: o 0,5–1 t/ha nižší (cena za kvalitu)
 
-**Cena 2024:**
-- **Standard sladovnický**: 5 800–7 000 Kč/t (kontrakt předem)
-- **Přírůstek za top kvalitu** (nízký N, vysoká klíčivost): +800–1 500 Kč/t
-- **Krmný odbyt** (nesplnil limit): 4 800–5 500 Kč/t
+**Cena (ČSÚ, průměr výrobců):**
+- **Sladovnický ječmen**: 2024 5 930 Kč/t (2023: 6 910; 2022: 7 080)
+- **Krmný ječmen**: 2024 3 690 Kč/t (2023: 4 550; 2022: 6 170)
+- Příplatky za kvalitu, bio nebo kontraktní odbyt se sjednávají ve smlouvě a v těchto průměrech nejsou. Cena se meziročně mění o desítky procent — kalkulujte s rozpětím, ne s jedním číslem.
 
 **Odrůdy CZ 2024:**
 - **Bojos** — nejrozšířenější, vysoká hl. váha
@@ -5763,7 +5763,7 @@ Viz též [[jecmen-krmny]], [[psenice-ozima]], [[fungicidy]], [[hektolitr]], [[o
     term: 'Ječmen krmný',
     alias: ['feed barley', 'krmný ječmen ozimý/jarní', 'Hordeum vulgare feed'],
     kategorie: 'plodiny',
-    shortDef: 'Ječmen krmný je ozimá nebo jarní plodina pro krmení skotu, prasat, drůbeže. Vyšší výnos (6–8 t/ha) než sladovnický, vyšší dusík. Cena 4 600–5 400 Kč/t. CZ má 150 000+ ha (kombinace ozim + jarní).',
+    shortDef: 'Ječmen krmný je ozimá nebo jarní plodina pro krmení skotu, prasat, drůbeže. Vyšší výnos (6–8 t/ha) než sladovnický, vyšší dusík. Cena 2024 ~3 700 Kč/t (2023: ~4 550 Kč/t). CZ má 150 000+ ha (kombinace ozim + jarní).',
     longDef: `Ječmen krmný (lat. *Hordeum vulgare*, ang. *feed barley*) je **ozimá nebo jarní plodina** pěstovaná pro **krmení hospodářských zvířat** (skot, prasata, drůbež). Na rozdíl od sladovnického (viz [[jecmen-sladovnicky]]) nemá požadavky na nízký dusík — naopak vyšší N znamená vyšší bílkoviny v krmivu = vyšší hodnota.
 
 **Vlastnosti agronomické:**
@@ -5806,9 +5806,9 @@ Viz též [[jecmen-krmny]], [[psenice-ozima]], [[fungicidy]], [[hektolitr]], [[o
 - **Mlátí se** — 10–20 % krmné směsi (méně než kukuřice — vyšší vláknina ne ideální pro drůbež)
 - **Speciálně pro nosnice** (vyšší vláknina = lepší peristaltika)
 
-**Cena 2024:**
-- **Krmný ječmen**: 4 600–5 400 Kč/t
-- **Rozdíl proti sladovnickému**: -800 až -1 500 Kč/t (záleží na momentální poptávce sladovnictví)
+**Cena (ČSÚ, průměr výrobců):**
+- **Krmný ječmen**: 2024 3 690 Kč/t (2023: 4 550; 2022: 6 170)
+- Příplatky za kvalitu, bio nebo kontraktní odbyt se sjednávají ve smlouvě a v těchto průměrech nejsou. Cena se meziročně mění o desítky procent — kalkulujte s rozpětím, ne s jedním číslem.
 
 **Sklizeň:**
 - **Vlhkost zrna**: 14 % optimum
@@ -5840,7 +5840,7 @@ Viz též [[jecmen-sladovnicky]], [[psenice-ozima]], [[tmr]], [[krmne-davky]], [
     term: 'Žito ozimé',
     alias: ['rye', 'Secale cereale', 'ozimý žitný'],
     kategorie: 'plodiny',
-    shortDef: 'Žito ozimé je obilnina pěstovaná na chudých půdách a v severnějších/horských oblastech ČR. Výnos 5–7 t/ha, cena 4 200–5 200 Kč/t. Hlavní použití: chleba (kvašený žitný chléb), žitné celozrnné pečivo, lihovary, krmivo.',
+    shortDef: 'Žito ozimé je obilnina pěstovaná na chudých půdách a v severnějších/horských oblastech ČR. Výnos 5–7 t/ha, cena 2024 ~4 700 Kč/t (2023: ~5 800 Kč/t). Hlavní použití: chleba (kvašený žitný chléb), žitné celozrnné pečivo, lihovary, krmivo.',
     longDef: `Žito ozimé (lat. *Secale cereale*, ang. *rye*) je **ozimá obilnina**, historicky druhá nejdůležitější po pšenici v ČR. Dnes spíše nicheový — pěstuje se na **chudých písčitých půdách** a v **horských oblastech**, kde pšenice nedává dobré výnosy.
 
 **Plocha v ČR 2024**: ~25 000 ha (klesající trend, v 1950s bylo 400 000+ ha)
@@ -5887,10 +5887,9 @@ Viz též [[jecmen-sladovnicky]], [[psenice-ozima]], [[tmr]], [[krmne-davky]], [
 **4. Bio paliva / bioethanol (5 %):**
 - **Některé EU země** (Německo) dotovaly bioethanol z žita
 
-**Cena 2024:**
-- **Potravinářské žito**: 4 600–5 200 Kč/t
-- **Krmné žito**: 4 200–4 600 Kč/t
-- **Bio žito**: 6 800–8 500 Kč/t (premium pro bio pekařství)
+**Cena (ČSÚ, průměr výrobců):**
+- **Žito**: 2024 4 700 Kč/t (2023: 5 810; 2022: 6 840)
+- Příplatky za kvalitu, bio nebo kontraktní odbyt se sjednávají ve smlouvě a v těchto průměrech nejsou. Cena se meziročně mění o desítky procent — kalkulujte s rozpětím, ne s jedním číslem.
 
 **Hybridní žito** (klíčový technologický skok od 1990s):
 - **KWS** (Germany) dominuje trhem hybridního žita
@@ -5927,7 +5926,7 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
     term: 'Oves jarní',
     alias: ['oats', 'Avena sativa', 'jarní oves'],
     kategorie: 'plodiny',
-    shortDef: 'Oves jarní je obilnina pěstovaná hlavně v severnějších a chladnějších oblastech ČR. Výnos 3–4 t/ha, cena 4 000–5 500 Kč/t. Použití: krmivo pro koně, lidská konzumace (vločky, müsli), zelené krmivo.',
+    shortDef: 'Oves jarní je obilnina pěstovaná hlavně v severnějších a chladnějších oblastech ČR. Výnos 3–4 t/ha, cena 2023–2024 ~7 400–7 900 Kč/t. Použití: krmivo pro koně, lidská konzumace (vločky, müsli), zelené krmivo.',
     longDef: `Oves jarní (lat. *Avena sativa*, ang. *oats*) je **jarní obilnina** s tradicí v CZ na chudších a chladnějších půdách. Plocha v CZ 2024: ~50 000 ha. Trend: rostoucí kvůli zdravotnímu pozitivnímu image (ovesné vločky, plant-based).
 
 **Vlastnosti:**
@@ -5975,10 +5974,10 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 - **Oves jako krycí plodina** — biomasa pro mulč, sekvestraci uhlíku
 - **Oves + vikve smíška** — luskovino-obilná směs pro pícnice
 
-**Cena 2024:**
-- **Potravinářský oves** (premium pro vločky): 5 200–5 800 Kč/t
-- **Krmný oves**: 4 200–4 800 Kč/t
-- **Bio oves**: 7 500–9 500 Kč/t (vysoký premium pro bio müsli)
+**Cena (ČSÚ, průměr výrobců):**
+- **Oves**: 2024 7 930 Kč/t (2023: 7 370; 2022: 7 120)
+- Příplatky za kvalitu, bio nebo kontraktní odbyt se sjednávají ve smlouvě a v těchto průměrech nejsou. Cena se meziročně mění o desítky procent — kalkulujte s rozpětím, ne s jedním číslem.
+- Pozor: průměr ČSÚ pro oves je výrazně nad sousedními zeměmi (Eurostat 2024: SK ~206 €/t, DE ~207 €/t) — před kalkulací si ověřte aktuální nabídku výkupu.
 
 **Odrůdy CZ 2024:**
 - **Atego** — top výnos krmný
@@ -6000,10 +5999,10 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 - **Oves** je ideální pro bio farmu (málo postřiků, robustní)
 - **Bio cena premium** kompenzuje výnos -20 % vs konvenční
 
-**Ekonomika:**
-- **Náklady**: 18 000–24 000 Kč/ha
-- **Výnos 4,5 t/ha × 4 800 Kč = 21 600 Kč/ha**
-- **Marže**: typicky úzká (-1 000 až +3 000 Kč/ha)
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
+- **Náklady** (orientačně): 18 000–24 000 Kč/ha
+- **Výnos 3,5 t/ha × 7 930 Kč/t = 27 800 Kč/ha** (průměrný výnos ČR 2019–2024 × průměrná cena 2024)
+- **Marže bez dotací**: +3 800 až +9 800 Kč/ha (při cenách 2024 kladná)
 - **Plus přímé platby** (BISS, redistributivní platba, ekoplatba): dělají z toho výhodnější plodinu
 
 **Trh a trendy:**
@@ -6019,7 +6018,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
     term: 'Tritikale',
     alias: ['triticale', 'kříženec pšenice a žita', 'pšeničné žito'],
     kategorie: 'plodiny',
-    shortDef: 'Tritikale je obilnina vzniklá křížením pšenice (Triticum) a žita (Secale). Kombinuje vlastnosti obou — výnos pšenice + odolnost žita. Hlavně krmné použití, výnos 4,5–6 t/ha, cena 4 400–5 200 Kč/t.',
+    shortDef: 'Tritikale je obilnina vzniklá křížením pšenice (Triticum) a žita (Secale). Kombinuje vlastnosti obou — výnos pšenice + odolnost žita. Hlavně krmné použití, výnos 4,5–6 t/ha, cena 2024 ~3 900 Kč/t (2023: ~5 000 Kč/t).',
     longDef: `Tritikale (lat. *× Triticosecale*, ang. *triticale*) je **uměle vyšlechtěná obilnina** vzniklá křížením **pšenice** (*Triticum*) × **žita** (*Secale cereale*). Kombinuje vlastnosti obou rodičů: **výnos pšenice + odolnost žita** k chudým půdám a chorobám.
 
 **Historie:**
@@ -6071,10 +6070,9 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
 - **Müsli** směsi
 - **Méně rozvinutá** kategorie
 
-**Cena 2024:**
-- **Krmný tritikale**: 4 400–5 000 Kč/t
-- **Bioethanol kontrakt**: 4 200–4 600 Kč/t
-- **Bio tritikale**: 6 500–8 000 Kč/t
+**Cena (ČSÚ, průměr výrobců):**
+- **Tritikale**: 2024 3 910 Kč/t (2023: 5 030; 2022: 6 110)
+- Příplatky za kvalitu, bio nebo kontraktní odbyt se sjednávají ve smlouvě a v těchto průměrech nejsou. Cena se meziročně mění o desítky procent — kalkulujte s rozpětím, ne s jedním číslem.
 
 **Odrůdy CZ 2024:**
 - **Trisem** — top výnos
@@ -6101,10 +6099,10 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[me
 2. **Limitovaný trh** lidské konzumace
 3. **Méně odrůd** než pšenice/ječmen
 
-**Ekonomika:**
-- **Náklady**: 22 000–28 000 Kč/ha
-- **Výnos 5 t/ha × 4 700 Kč = 23 500 Kč/ha**
-- **Marže**: −4 500 až +1 500 Kč/ha (bez dotací; srovnatelné s pšenicí, záleží na ceně)
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
+- **Náklady** (orientačně): 22 000–28 000 Kč/ha
+- **Výnos 4,9 t/ha × 3 910 Kč/t = 19 200 Kč/ha** (průměrný výnos ČR 2019–2024 × průměrná cena 2024)
+- **Marže bez dotací**: −8 800 až −2 800 Kč/ha (při cenách 2024 ztrátová)
 - **Přímé platby** (BISS, redistributivní platba, ekoplatba): standardní
 
 **Strategicky pro CZ:**
@@ -6120,7 +6118,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
     term: 'Mák setý',
     alias: ['poppy', 'Papaver somniferum', 'mák modrosemenný'],
     kategorie: 'plodiny',
-    shortDef: 'Mák setý je jarní olejnatá plodina, kde je ČR globální velmoc — produkuje ~30 % světového potravinářského máku (modré semeno). Výnos 0,8–1,4 t/ha semen, cena 35 000–55 000 Kč/t. Hlavní produkt: pekařské semínko, mákový olej, makovice (omezené kvůli opioidům).',
+    shortDef: 'Mák setý je jarní olejnatá plodina, kde je ČR globální velmoc — produkuje ~30 % světového potravinářského máku (modré semeno). Výnos 0,8–1,4 t/ha semen, cena silně kolísá (viz níže). Hlavní produkt: pekařské semínko, mákový olej, makovice (omezené kvůli opioidům).',
     longDef: `Mák setý (lat. *Papaver somniferum*, ang. *opium poppy* nebo *poppy seed*) je **jarní olejnatá plodina** a globálně specifická — **ČR produkuje ~30 % světového potravinářského máku** (modré semeno pro pekařské použití). Tradiční oblast: Haná, Polabí, Vysočina.
 
 **Plocha v ČR 2024**: 30 000–40 000 ha (kolísá podle ceny)
@@ -6162,7 +6160,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 **1. Pekařské semínko (modré semeno, 80 %):**
 - **Tradiční CZ pekařství** — buchty s mákem, makový závin, makovic
 - **Export**: Německo, Nizozemsko, USA, Polsko
-- **Cena 2024**: 35 000–55 000 Kč/t (vysoká volatilita)
+- **Cena**: velmi kolísá — spolek Český modrý mák uvádí rekord ~110 Kč/kg (2018) a pokles na ~45–50 Kč/kg; aktuální výkupní cena není ve veřejné statistice a sjednává se ve smlouvě
 
 **2. Mákový olej (10 %):**
 - **Lisování** modrých semen
@@ -6182,7 +6180,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 
 **Trh a marketing:**
 - **Spotový trh** vs **kontraktové pěstování**
-- **Cenová volatilita**: 30 000 ↔ 70 000 Kč/t v rozsahu 2 let
+- **Cenová volatilita**: ceny se v řádu let mění i o více než polovinu (např. ~110 → ~45–50 Kč/kg)
 - **Export**: 70 % české produkce jde do EU + USA
 
 **Odrůdy CZ 2024:**
@@ -6191,10 +6189,10 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 - **Opal** — bílé semeno (export do Asie)
 - **Onyx** — moderní
 
-**Ekonomika:**
-- **Náklady**: 18 000–25 000 Kč/ha
-- **Výnos 1 t × 45 000 Kč = 45 000 Kč/ha**
-- **Marže**: 20 000–27 000 Kč/ha (vysoká!)
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
+- **Náklady** (orientačně): 18 000–25 000 Kč/ha
+- **Výnos 0,8 t/ha × 45–110 Kč/kg = 36 000–88 000 Kč/ha** (rozpětí ceny z let 2018–2019, dnešní cena není ve statistice)
+- **Marže bez dotací**: +11 000 až +70 000 Kč/ha (rozhoduje cena)
 - **Risk**: cenová volatilita + výnosy citlivé na počasí
 
 **Kulturní význam:**
@@ -6219,7 +6217,7 @@ Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
     term: 'Slunečnice roční',
     alias: ['sunflower', 'Helianthus annuus'],
     kategorie: 'plodiny',
-    shortDef: 'Slunečnice je jarní olejnatá plodina s rostoucím významem v CZ (klimatická změna). Plocha 30 000–50 000 ha, výnos 2,5–4 t/ha, cena 13 000–17 000 Kč/t (high oleic premium +2 000). Hlavní použití: olej, krmivo (šrot), bio paliva, ptactvo (semínka).',
+    shortDef: 'Slunečnice je jarní olejnatá plodina s rostoucím významem v CZ (klimatická změna). Plocha 15 000–22 000 ha (2022–2024), výnos 2,5–3 t/ha, cena 2024 ~9 600 Kč/t (2023: ~10 600 Kč/t). Hlavní použití: olej, krmivo (šrot), bio paliva, ptactvo (semínka).',
     longDef: `Slunečnice roční (lat. *Helianthus annuus*, ang. *sunflower*) je **jarní olejnatá plodina** z rodu *Asteraceae*. V CZ dlouho marginální, ale **rostoucí význam** kvůli klimatické změně (vyšší teploty + sucho = vhodné pro slunečnici).
 
 **Plocha v ČR 2024**: 35 000–50 000 ha (10× nárůst od 2010)
@@ -6266,7 +6264,7 @@ Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
 **2. High-oleic odrůdy (15 %):**
 - **Vysoký obsah kyseliny olejové** (oleic acid) — 80+ % místo standardních 30 %
 - **Stabilní při vysokých teplotách** — pro friture, McDonald's, smažení v gastronomii
-- **Premium cena**: +1 500–2 500 Kč/t vs standard
+- **Příplatek**: sjednává se ve smlouvě (veřejná statistika ho nesleduje)
 - **Odrůdy**: NK Neoma (Syngenta), LG 50.270 HO (Limagrain)
 
 **3. Slunečnicový šrot (15 %):**
@@ -6282,10 +6280,9 @@ Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
 - **Bio diesel** z slunečnicového oleje
 - **EU dotované** (RED II Renewable Energy Directive)
 
-**Cena 2024:**
-- **Standard slunečnice**: 13 000–16 000 Kč/t
-- **High-oleic**: +1 500–2 500 Kč/t
-- **Bio slunečnice**: 22 000–28 000 Kč/t
+**Cena (ČSÚ, průměr výrobců):**
+- **Slunečnice**: 2024 9 620 Kč/t (2023: 10 580; 2022: 13 860)
+- Příplatky za kvalitu, bio nebo kontraktní odbyt se sjednávají ve smlouvě a v těchto průměrech nejsou. Cena se meziročně mění o desítky procent — kalkulujte s rozpětím, ne s jedním číslem.
 
 **Odrůdy CZ 2024:**
 - **LG 50.270 HO** (Limagrain) — high oleic, top výnos
@@ -6303,10 +6300,10 @@ Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
 - **Drobní brouci** — menší tlak než řepka
 - **Ptáci** — sníží sklizeň o 5–15 %, zvláště holubi a hejna
 
-**Ekonomika:**
-- **Náklady**: 22 000–28 000 Kč/ha
-- **Výnos 3 t × 14 500 Kč = 43 500 Kč/ha**
-- **Marže**: 15 000–20 000 Kč/ha (atraktivní!)
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
+- **Náklady** (orientačně): 22 000–28 000 Kč/ha
+- **Výnos 2,6 t/ha × 9 620 Kč/t = 25 000 Kč/ha** (průměrný výnos ČR 2019–2024 × průměrná cena 2024)
+- **Marže bez dotací**: −3 000 až +3 000 Kč/ha (úzká, citlivá na ceny)
 - **Přímé platby** (BISS, redistributivní platba, ekoplatba): standardní
 
 **Strategický význam pro CZ:**
@@ -6327,7 +6324,7 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
     term: 'Hořčice setá',
     alias: ['mustard', 'Sinapis alba', 'bílá hořčice', 'Sinapis arvensis'],
     kategorie: 'plodiny',
-    shortDef: 'Hořčice setá (bílá hořčice) je jarní brukvovitá plodina pro výrobu hořčice (kořeněné omáčky) a jako meziplodina pro zelené hnojení. CZ plocha 5 000–15 000 ha. Krátká vegetace 90–110 dní. Výnos 1–2 t/ha semen, cena 13 000–18 000 Kč/t.',
+    shortDef: 'Hořčice setá (bílá hořčice) je jarní brukvovitá plodina pro výrobu hořčice (kořeněné omáčky) a jako meziplodina pro zelené hnojení. CZ plocha 5 000–15 000 ha. Krátká vegetace 90–110 dní. Výnos 1–2 t/ha semen, orientační cena 13 000–18 000 Kč/t.',
     longDef: `Hořčice setá (lat. *Sinapis alba*, „bílá hořčice", ang. *white mustard*) je **jarní brukvovitá plodina** s krátkou vegetační dobou (90–110 dní). Hlavně pro **výrobu hořčice** (jako kořeněná omáčka) a **jako meziplodina** pro zelené hnojení.
 
 **Plocha v ČR 2024**: 5 000–15 000 ha pro semeno + 100 000+ ha jako meziplodina
@@ -6386,7 +6383,7 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
 - **Hořčicový šrot** (po lisování oleje) — pro skot
 - **Pozor**: glukosinoláty mohou způsobit problémy u prasat
 
-**Cena 2024:**
+**Cena (orientačně, kontraktní trh — veřejná statistika není):**
 - **Hořčicové semeno**: 13 000–18 000 Kč/t
 - **Bio hořčice**: 18 000–25 000 Kč/t (Hellmann's bio kontrakt)
 
@@ -6411,7 +6408,7 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
 2. **Marginální plocha** pro semeno
 3. **Cenová volatilita** — citlivá na poptávku potravinářského průmyslu
 
-**Ekonomika:**
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
 
 **Pro semeno (1,3 t/ha × 15 000 Kč = 19 500 Kč/ha):**
 - **Náklady**: 12 000–15 000 Kč/ha
@@ -6438,7 +6435,7 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
     term: 'Cukrová řepa',
     alias: ['sugar beet', 'Beta vulgaris', 'cukrovka'],
     kategorie: 'plodiny',
-    shortDef: 'Cukrová řepa (Beta vulgaris) je jarní okopanina pěstovaná pro výrobu cukru. CZ plocha 60 000–70 000 ha. Výnos 60–80 t/ha bulvy, cukernatost 17–20 %. Cena 1 100–1 600 Kč/t (záleží na cukernatosti). Smluvní pěstování pro cukrovary.',
+    shortDef: 'Cukrová řepa (Beta vulgaris) je jarní okopanina pěstovaná pro výrobu cukru. CZ plocha 60 000–70 000 ha. Výnos 60–80 t/ha bulvy, cukernatost 17–20 %. Cena 2024 ~910 Kč/t (2023: ~870 Kč/t) (záleží na cukernatosti). Smluvní pěstování pro cukrovary.',
     longDef: `Cukrová řepa (lat. *Beta vulgaris* var. *altissima*, ang. *sugar beet*) je **jarní okopanina** pěstovaná pro **výrobu cukru** (sacharóza). Bulva obsahuje 17–20 % cukru. CZ dlouhá tradice (od 19. století), oblast: Polabí, Středočesko, Haná.
 
 **Plocha v ČR 2024**: 60 000–70 000 ha
@@ -6476,10 +6473,9 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 - **Top farmy**: 90+ t/ha
 - **Cukernatost**: 17–20 % (vyšší = vyšší cena!)
 
-**Cena 2024 (smluvní):**
-- **Standardní cukrovka** (17 % cukru): 1 200 Kč/t
-- **High sugar** (19 % cukru): 1 500 Kč/t
-- **Bonus za biopaliva** (kontrakt na bioethanol): +50–100 Kč/t
+**Cena (ČSÚ, průměr výrobců):**
+- **Cukrovka**: 2024 914 Kč/t (2023: 868; 2022: 771)
+- Cena se odvíjí od cukernatosti a sjednává se ve smlouvě s cukrovarem; průměr ČSÚ je za tunu bulvy. Mezi roky se mění o desítky procent — kalkulujte s rozpětím.
 
 **Smluvní pěstování:**
 
@@ -6517,7 +6513,7 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 - **Dřepčíci** (Chaetocnema) — listy
 - **Plžík polní** (Deroceras) — listy
 
-**Ekonomika:**
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
 
 **Náklady na 1 ha** (cukrovka je „drahá" plodina):
 - **Osivo**: 8 000–12 000 Kč/ha (precision sety, drahé pelletované)
@@ -6528,8 +6524,8 @@ Viz též [[mezi-plodiny]], [[repka-ozima]], [[ozim-jarin]], [[regenerativni-zem
 - **Práce a režie**: 6 000–10 000 Kč/ha
 - **Celkem**: 35 000–55 000 Kč/ha
 
-**Výnos**: 70 t/ha × 1 300 Kč = 91 000 Kč/ha
-**Marže**: 35 000–55 000 Kč/ha (ATRAKTIVNÍ!)
+**Výnos 66 t/ha × 914 Kč/t = 60 300 Kč/ha** (průměrný výnos ČR 2019–2024 × průměrná cena 2024)
+**Marže bez dotací**: +5 300 až +25 300 Kč/ha
 
 **Plus dotace**:
 - **BISS a redistributivní platba** (2026): 1 631,69 Kč/ha, resp. 3 426,29 Kč/ha na prvních 150 ha
@@ -6553,7 +6549,7 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
     term: 'Hrách setý',
     alias: ['pea', 'Pisum sativum', 'jarní hrách'],
     kategorie: 'plodiny',
-    shortDef: 'Hrách setý je jarní luskovina pěstovaná pro semeno (zrnový hrách) nebo zelený lusk (konzumní hrášek). CZ plocha ~50 000 ha. Výnos 2–4 t/ha semen, cena 6 500–8 500 Kč/t. Klíčová pro fixaci N (50–100 kg N/ha) a osevní postup po obilovinách.',
+    shortDef: 'Hrách setý je jarní luskovina pěstovaná pro semeno (zrnový hrách) nebo zelený lusk (konzumní hrášek). CZ plocha ~50 000 ha. Výnos 2–4 t/ha semen, cena 2024 ~6 200 Kč/t (2023: ~6 650 Kč/t). Klíčová pro fixaci N (50–100 kg N/ha) a osevní postup po obilovinách.',
     longDef: `Hrách setý (lat. *Pisum sativum*, ang. *field pea*) je **jarní luskovina** s klíčovými agronomickými benefity: **fixace dusíku** symbiózou s *Rhizobium leguminosarum* (50–100 kg N/ha) a zlepšení struktury půdy. Hlavní použití: krmivo (zrnový hrách), lidská konzumace (zelený hrášek), průmyslové aplikace.
 
 **Plocha v ČR 2024**: ~50 000 ha (rostoucí trend kvůli plant-based proteinům + EU bílkovinné strategii)
@@ -6620,10 +6616,9 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
 **4. Bio paliva (5 %):**
 - **Hrachovou ethanol** — vedlejší možnost, marginální
 
-**Cena 2024:**
-- **Krmný zrnový hrach**: 6 500–8 000 Kč/t
-- **Potravinářský hrach** (loupaný): 9 000–12 000 Kč/t
-- **Konzervárenský** (smluvní zelený): 4 500–6 000 Kč/t bruto
+**Cena (ČSÚ, průměr výrobců):**
+- **Hrách**: 2024 6 220 Kč/t (2023: 6 650; 2022: 7 530)
+- Příplatky za kvalitu, bio nebo kontraktní odbyt se sjednávají ve smlouvě a v těchto průměrech nejsou. Cena se meziročně mění o desítky procent — kalkulujte s rozpětím, ne s jedním číslem.
 
 **Odrůdy CZ 2024:**
 - **Eso, Madonna** — bílé květy, krmné, top výnos
@@ -6636,7 +6631,7 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
 3. **Struktura půdy**: hluboké kořeny rozrušují utuženou půdu
 4. **Sekvestrace C**: vyšší organická hmota v půdě po luskovině
 
-**Ekonomika:**
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
 
 **Náklady na 1 ha:**
 - Osivo: 4 500–6 000 Kč
@@ -6645,8 +6640,8 @@ Viz též [[msice-repna]], [[ozim-jarin]], [[osevni-postup]], [[fungicidy]].`,
 - Sklizeň + doprava: 3 000–4 000 Kč
 - Celkem: 13 500–19 000 Kč/ha
 
-**Výnos**: 4 t × 7 200 Kč = **28 800 Kč/ha**
-**Marže**: 9 800–15 300 Kč/ha (atraktivní!)
+**Výnos 2,4 t/ha × 6 220 Kč/t = 14 900 Kč/ha** (průměrný výnos ČR 2019–2024 × průměrná cena 2024)
+**Marže bez dotací**: −4 100 až +1 400 Kč/ha (úzká, citlivá na ceny)
 **Plus N pro následující plodinu**: ušetří 60–80 kg N (~1 200–1 600 Kč/ha)
 
 **EU Bílkovinná strategie:**
@@ -6669,7 +6664,7 @@ Viz též [[sojaova-bob]], [[vojteska]], [[osevni-postup]], [[mezi-plodiny]], [[
     term: 'Len setý',
     alias: ['flax', 'Linum usitatissimum', 'olejný len', 'přadný len'],
     kategorie: 'plodiny',
-    shortDef: 'Len setý je dvojí plodina — olejný len pro semínko a lněný olej, přadný len pro vlákno (lněné plátno). CZ plocha 1 000–1 600 ha (klesající). Výnos olejného 1,5–2,5 t/ha semen, cena 12 000–17 000 Kč/t. Historicky klíčový (vlaké plátno do 1900s).',
+    shortDef: 'Len setý je dvojí plodina — olejný len pro semínko a lněný olej, přadný len pro vlákno (lněné plátno). CZ plocha 1 000–1 600 ha (klesající). Výnos olejného 1–1,5 t/ha semen, orientační cena 12 000–17 000 Kč/t. Historicky klíčový (vlaké plátno do 1900s).',
     longDef: `Len setý (lat. *Linum usitatissimum*, ang. *flax*) je **jarní plodina dvojího použití**:
 1. **Olejný len** — semínko pro lněný olej (omega-3), pekařské semínko
 2. **Přadný len** — stéblo pro lněné vlákno (textil)
@@ -6744,7 +6739,7 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 - **Belgium + France** = EU lněné centrum (80 % EU produkce)
 - **CZ marginální** — odvozené průmyslové dějiny zaniky
 
-**Cena 2024:**
+**Cena (orientačně, kontraktní trh — veřejná statistika není):**
 - **Olejný len** krmný: 12 000–14 000 Kč/t
 - **Olejný len** potravinářský: 18 000–25 000 Kč/t
 - **Bio olejný len**: 28 000–35 000 Kč/t (premium pro bio müsli)
@@ -6759,7 +6754,7 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 - **Plíseň lnu** (Botrytis) — sezónní
 - **Lnu rzi** (Melampsora) — málo
 
-**Ekonomika olejného lnu:**
+**Ekonomika (příklad-scénář, ne průměr za ČR):**
 
 **Náklady na 1 ha**:
 - Osivo: 1 500–2 500 Kč
@@ -6768,8 +6763,8 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 - Sklizeň: 2 500–3 500 Kč
 - Celkem: 9 500–14 500 Kč/ha
 
-**Výnos**: 2 t × 14 000 Kč = **28 000 Kč/ha**
-**Marže**: 13 500–18 500 Kč/ha (atraktivní pro niche!)
+**Výnos 1,2 t/ha × 14 000 Kč/t = 16 800 Kč/ha** (výnos ČR × orientační cena)
+**Marže bez dotací**: +2 300 až +7 300 Kč/ha
 
 **Strategický význam:**
 - **Niche plodina** s vysokou marží
