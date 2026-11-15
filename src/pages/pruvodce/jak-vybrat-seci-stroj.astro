@@ -55,14 +55,14 @@ const howToCs = {
 
 const howToSk = {
   name: "Ako vybrať sejačku",
-  description: "Postup výberu sejačky pre CZ farmu — mechanická vs pneumatická, záber a kompatibilita s traktorom, klasická vs bezorebná, ISOBUS funkcie, top značky.",
+  description: "Postup výberu sejačky pre strednú farmu — mechanická vs pneumatická, záber a kompatibilita s traktorom, klasická vs bezorebná, ISOBUS funkcie, top značky.",
   url: canonical,
   totalTime: 'PT45M',
   steps: [
-    { name: "Rozhodni medzi mechanickou a pneumatickou", text: "Mechanická (gravitačná, výsevný kotúč) je lacná a robustná pre obilniny — štandard CZ. Pneumatická (vzduchový rozvod) je presnejšia pre úzke riadky, ale drahšia a vyžaduje výkonnejší traktor pre pohon ventilátora." },
+    { name: "Rozhodni medzi mechanickou a pneumatickou", text: "Mechanická (gravitačná, výsevný kotúč) je lacná a robustná pre obilniny — bežná voľba. Pneumatická (vzduchový rozvod) je presnejšia pre úzke riadky, ale drahšia a vyžaduje výkonnejší traktor pre pohon ventilátora." },
     { name: "Zladenie záberu s traktorom", text: "3 m záber štandard pre 70–120 koní traktor (vojde sa Zetor Forterra, JD 6M 130). 4 m vyžaduje 130+ koní. 6 m je už pre špeciálne veľké stroje 200+ koní. Pre 150 ha farmu stačí 3 m, pre 300+ ha zvážte 4 m." },
     { name: "Klasická (do pripravenej pôdy) alebo bezorebná (no-till)", text: "Klasická seje do oranej + smykovanej pôdy — najstabilnejší výnos. Bezorebná (disková sejačka Horsch Pronto / Lemken Solitair / Väderstad Tempo) seje priamo do strniska — šetrí 5 operácií, ale vyššie dávky herbicídov." },
-    { name: "Prejdi top značky a modely", text: "Amazone D9 / Cirrus (CZ štandard), Horsch Pronto (veľkofarmy), Lemken Solitair, Väderstad Spirit / Tempo, Pöttinger Vitasem, Sulky DPX, Kuhn Espro. Dostupnosť dealera a náhradných dielov vo tvojom kraji je rozhodujúca." },
+    { name: "Prejdi top značky a modely", text: "Amazone D9 / Cirrus (rozšírený štandard), Horsch Pronto (veľkofarmy), Lemken Solitair, Väderstad Spirit / Tempo, Pöttinger Vitasem, Sulky DPX, Kuhn Espro. Dostupnosť dealera a náhradných dielov vo tvojom kraji je rozhodujúca." },
     { name: "Posúď kľúčové features — ISOBUS, VRA, jednotlivé riadenie riadkov", text: "Pre obilniny ISOBUS nerieš. Pre VRA (variabilné dávkovanie podľa GPS mapy) alebo Section Control áno — potom ISOBUS-capable sejačka + traktor s TC-GEO licenciou. Single Shoot vs Twin Shoot (separátne osivo + hnojivo) zvýš výnos o 5–10 %." },
   ],
 };
@@ -80,7 +80,7 @@ const articleJsonLd = {
 };
 ---
 
-<Layout title={isSk ? "Ako vybrať sejací stroj — mechanický vs pneumatický (2026)" : "Jak vybrat secí stroj — mechanický vs pneumatický (2026)"} description={isSk ? "Sprievodca výberom sejacieho stroja pre CZ farmu. Mechanický, pneumatický, presný. Záber, kompatibilita s traktorom, ISOBUS funkcie, top modely." : "Průvodce výběrem secího stroje pro CZ farmu. Mechanický, pneumatický, přesný. Záběr, kompatibilita s traktorem, ISOBUS funkce, top modely."} canonical={canonical} ogType="article" publishedTime={datePublished}>
+<Layout title={isSk ? "Ako vybrať sejací stroj — mechanický vs pneumatický (2026)" : "Jak vybrat secí stroj — mechanický vs pneumatický (2026)"} description={isSk ? "Sprievodca výberom sejacieho stroja pre strednú farmu. Mechanický, pneumatický, presný. Záber, kompatibilita s traktorom, ISOBUS funkcie, top modely." : "Průvodce výběrem secího stroje pro CZ farmu. Mechanický, pneumatický, přesný. Záběr, kompatibilita s traktorem, ISOBUS funkce, top modely."} canonical={canonical} ogType="article" publishedTime={datePublished}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />

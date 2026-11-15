@@ -24,14 +24,14 @@ const breadcrumbJsonLd = breadcrumbSchema([
 ]);
 
 const faqsCs = [
-  { q: 'Talířové nebo pneumatické rozmetadlo?', a: 'Talířové (disc spreader) — 95 % CZ farem. Levné, robustní, záběr 12–36 m. Pneumatické (rameno se vzduchovým rozvodem) — velmi přesné dávkování, vhodné pro VRA a úzké pásy, ale 3× dražší a komplikovanější údržba.' },
+  { q: 'Talířové nebo pneumatické rozmetadlo?', a: 'Talířové (disc spreader) — nejrozšířenější typ. Levné, robustní, záběr 12–36 m. Pneumatické (rameno se vzduchovým rozvodem) — velmi přesné dávkování, vhodné pro VRA a úzké pásy, ale 3× dražší a komplikovanější údržba.' },
   { q: 'Jaký objem zásobníku?', a: 'Pro farmu 200 ha postačí 1 500–2 500 l (= 1,5–2,5 t hnojiva, jedno plnění na 5–10 ha při dávce 250 kg/ha). Pro 500+ ha doporučujeme 3 500+ l. Větší zásobník = méně plnění, ale větší hmotnost (vyšší utužení).' },
   { q: 'Vyplatí se Section Control pro rozmetadlo?', a: 'Ano, hlavně u tvarově složitých polí. Variable Rate Application + Section Control šetří 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnost ISOBUS-capable rozmetadla + RTK GPS retrofit za 2–4 sezóny u farmy 200+ ha.' },
   { q: 'Důležité features?', a: 'WeighCell (vážený zásobník) — kalibruje skutečnou dávku během jízdy, kompenzuje variabilní hustotu hnojiva. ISOBUS TC-GEO pro VRA. Border Control pro krajní pás (zabraňuje úniku hnojiva mimo pole). Tronic regulace (DPAE) pro automatickou kompenzaci náklonu.' },
 ];
 
 const faqsSk = [
-  { q: "Tanierové alebo pneumatické rozmetadlo?", a: "Tanierové (disc spreader) — 95 % CZ fariem. Lacné, robustné, záber 12–36 m. Pneumatické (rameno so vzduchovým rozvodom) — veľmi presné dávkovanie, vhodné pre VRA a úzke pásy, ale 3× drahšie a komplikovanejšia údržba." },
+  { q: "Tanierové alebo pneumatické rozmetadlo?", a: "Tanierové (disc spreader) — najrozšírenejší typ. Lacné, robustné, záber 12–36 m. Pneumatické (rameno so vzduchovým rozvodom) — veľmi presné dávkovanie, vhodné pre VRA a úzke pásy, ale 3× drahšie a komplikovanejšia údržba." },
   { q: "Aký objem zásobníka?", a: "Pre farmu 200 ha postačí 1 500–2 500 l (= 1,5–2,5 t hnojiva, jedno plnenie na 5–10 ha pri dávke 250 kg/ha). Pre 500+ ha odporúčame 3 500+ l. Väčší zásobník = menej plnení, ale väčšia hmotnosť (vyššie utuženie)." },
   { q: "Vyplatí sa Section Control pre rozmetadlo?", a: "Áno, hlavne u tvarovo zložitých polí. Variable Rate Application + Section Control šetrí 8–15 % hnojiva (cca 40–80 €/ha/rok). Návratnosť ISOBUS-capable rozmetadla + RTK GPS retrofit za 2–4 sezóny u farmy 200+ ha." },
   { q: "Dôležité features?", a: "WeighCell (vážený zásobník) — kalibruje skutočnú dávku počas jazdy, kompenzuje variabilnú hustotu hnojiva. ISOBUS TC-GEO pre VRA. Border Control pre krajné pásy (zabraňuje úniku hnojiva mimo pole). Tronic regulácia (DPAE) pre automatickú kompenzáciu náklonu." },
@@ -45,7 +45,7 @@ const howToCs = {
   url: canonical,
   totalTime: 'PT45M',
   steps: [
-    { name: 'Rozhodni mezi talířovým a pneumatickým rozmetadlem', text: 'Talířové (disc spreader) pro 95 % CZ farem — levné, robustní, záběr 12–36 m. Pneumatické (rameno se vzduchovým rozvodem) extrémně přesné dávkování pro VRA a úzké pásy, ale 3× dražší a komplikovanější údržba.' },
+    { name: 'Rozhodni mezi talířovým a pneumatickým rozmetadlem', text: 'Talířové (disc spreader) pro většinu farem — levné, robustní, záběr 12–36 m. Pneumatické (rameno se vzduchovým rozvodem) extrémně přesné dávkování pro VRA a úzké pásy, ale 3× dražší a komplikovanější údržba.' },
     { name: 'Definuj objem zásobníku podle výměry', text: '200 ha = 1 500–2 500 l (jedno plnění na 5–10 ha při dávce 250 kg/ha). 500+ ha = 3 500+ l. Větší zásobník = méně plnění, ale vyšší hmotnost a riziko utužování — kompromis kolem 2 500 l je sweet spot pro většinu CZ.' },
     { name: 'Projdi top značky 2026', text: 'Amazone ZA-V / ZG-TS (CZ standard), Kuhn Axis, Sulky X-line, Bogballe (premium dánská), Rauch Axera, Bredal F-line (samojízdný). Servisní dostupnost dealera ve tvém kraji = klíčové.' },
     { name: 'Investuj do WeighCell + ISOBUS Section Control', text: 'WeighCell (vážený zásobník) kalibruje skutečnou dávku během jízdy, kompenzuje variabilní hustotu hnojiva. VRA + Section Control šetří 8–15 % hnojiva (cca 1–2 tis. Kč/ha/rok). Návratnost ISOBUS-capable retrofit za 2–4 sezóny u 200+ ha.' },
@@ -55,15 +55,15 @@ const howToCs = {
 
 const howToSk = {
   name: "Ako vybrať rozmetadlo hnojív",
-  description: "Postup výberu rozmetadla pre CZ farmu — od rozhodnutia tanierové vs pneumatické cez kľúčové parametre, top značky až po ekonomiku investície do WeighCell + VRA.",
+  description: "Postup výberu rozmetadla pre strednú farmu — od rozhodnutia tanierové vs pneumatické cez kľúčové parametre, top značky až po ekonomiku investície do WeighCell + VRA.",
   url: canonical,
   totalTime: 'PT45M',
   steps: [
-    { name: "Rozhodni medzi tanierovým a pneumatickým rozmetadlom", text: "Tanierové (disc spreader) pre 95 % CZ fariem — lacné, robustné, záber 12–36 m. Pneumatické (rameno so vzduchovým rozvodom) extrémne presné dávkovanie pre VRA a úzke pásy, ale 3× drahšie a komplikovanejšia údržba." },
-    { name: "Definuj objem zásobníka podľa výmery", text: "200 ha = 1 500–2 500 l (jedno plnenie na 5–10 ha pri dávke 250 kg/ha). 500+ ha = 3 500+ l. Väčší zásobník = menej plnení, ale vyššia hmotnosť a riziko utužovania — kompromis okolo 2 500 l je sweet spot pre väčšinu CZ." },
-    { name: "Prejdi top značky 2026", text: "Amazone ZA-V / ZG-TS (CZ štandard), Kuhn Axis, Sulky X-line, Bogballe (premium dánska), Rauch Axera, Bredal F-line (samojazdný). Servisná dostupnosť dealera vo tvojom kraji = kľúčové." },
+    { name: "Rozhodni medzi tanierovým a pneumatickým rozmetadlom", text: "Tanierové (disc spreader) pre väčšinu fariem — lacné, robustné, záber 12–36 m. Pneumatické (rameno so vzduchovým rozvodom) extrémne presné dávkovanie pre VRA a úzke pásy, ale 3× drahšie a komplikovanejšia údržba." },
+    { name: "Definuj objem zásobníka podľa výmery", text: "200 ha = 1 500–2 500 l (jedno plnenie na 5–10 ha pri dávke 250 kg/ha). 500+ ha = 3 500+ l. Väčší zásobník = menej plnení, ale vyššia hmotnosť a riziko utužovania — kompromis okolo 2 500 l je sweet spot pre väčšinu fariem." },
+    { name: "Prejdi top značky 2026", text: "Amazone ZA-V / ZG-TS (rozšírený štandard), Kuhn Axis, Sulky X-line, Bogballe (premium dánska), Rauch Axera, Bredal F-line (samojazdný). Servisná dostupnosť dealera vo tvojom kraji = kľúčové." },
     { name: "Investuj do WeighCell + ISOBUS Section Control", text: "WeighCell (vážený zásobník) kalibruje skutočnú dávku počas jazdy, kompenzuje variabilnú hustotu hnojiva. VRA + Section Control šetrí 8–15 % hnojiva (cca 40–80 €/ha/rok). Návratnosť ISOBUS-capable retrofit za 2–4 sezóny u 200+ ha." },
-    { name: "Nezabudni na Border Control a Tronic reguláciu", text: "Border Control pre krajné pásy zabraňuje úniku hnojiva mimo pole (povinné u nitrát-direktívnych zón ČR). Tronic (DPAE) automaticky kompenzuje náklon a tvar poľa — kritické u pahorkatín." },
+    { name: "Nezabudni na Border Control a Tronic reguláciu", text: "Border Control pre krajné pásy zabraňuje úniku hnojiva mimo pole (dôležité najmä v zraniteľných oblastiach podľa nitrátovej smernice). Tronic (DPAE) automaticky kompenzuje náklon a tvar poľa — kritické u pahorkatín." },
   ],
 };
 const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
@@ -80,7 +80,7 @@ const articleJsonLd = {
 };
 ---
 
-<Layout title={isSk ? "Ako vybrať rozmetadlo hnojív (2026) — tanierové vs pneumatické" : "Jak vybrat rozmetadlo hnojiv (2026) — talířové vs pneumatické"} description={isSk ? "Sprievodca výberom rozmetadla pre CZ farmu. Tanierové vs pneumatické, zásobník, Section Control, váženie, top značky 2026." : "Průvodce výběrem rozmetadla pro CZ farmu. Talířové vs pneumatické, zásobník, Section Control, vážení, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
+<Layout title={isSk ? "Ako vybrať rozmetadlo hnojív (2026) — tanierové vs pneumatické" : "Jak vybrat rozmetadlo hnojiv (2026) — talířové vs pneumatické"} description={isSk ? "Sprievodca výberom rozmetadla pre strednú farmu. Tanierové vs pneumatické, zásobník, Section Control, váženie, top značky 2026." : "Průvodce výběrem rozmetadla pro CZ farmu. Talířové vs pneumatické, zásobník, Section Control, vážení, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
@@ -107,7 +107,7 @@ const articleJsonLd = {
       <h2>1. Dva hlavné typy rozmetadiel</h2>
 
       <h3>Tanierové rozmetadlo (disc spreader)</h3>
-      <p>2 rotujúce taniere s lopatkami "vystreľujú" hnojivo do strán. <strong>95 % CZ fariem</strong>.</p>
+      <p>2 rotujúce taniere s lopatkami "vystreľujú" hnojivo do strán. <strong>najrozšírenejší typ</strong>.</p>
       <ul>
         <li><strong>Plusy:</strong> jednoduchá konštrukcia, dlhá životnosť (15+ rokov), lacné, široký záber (12–36 m).</li>
         <li><strong>Mínusy:</strong> nerovnomernosť na okrajoch poľa (cross spreading), citlivosť na vlhkosť hnojiva.</li>
@@ -121,7 +121,7 @@ const articleJsonLd = {
         <li><strong>Mínusy:</strong> 3–5× drahšie ako tanierové, vyšší príkon ventilátora (vyššia spotreba), zložitejší servis.</li>
         <li><strong>Cena:</strong> 33–125 tis. € nový.</li>
       </ul>
-      <p>Pre CZ farmu pneumatické rozmetadlo dáva zmysel len pri <strong>500+ ha</strong> s precision farming setupom (RTK GPS + variabilné dávkovanie).</p>
+      <p>Pre strednú farmu pneumatické rozmetadlo dáva zmysel len pri <strong>500+ ha</strong> s precision farming setupom (RTK GPS + variabilné dávkovanie).</p>
 
       <h2>2. Kľúčové parametre tanierového</h2>
 
@@ -130,7 +130,7 @@ const articleJsonLd = {
         <thead><tr><th>Objem</th><th>Odporúčané pre farmu</th></tr></thead>
         <tbody>
           <tr><td>800–1 200 l</td><td>do 50 ha (hobby, sad)</td></tr>
-          <tr><td>1 500–2 500 l</td><td>50–250 ha (stredné CZ)</td></tr>
+          <tr><td>1 500–2 500 l</td><td>50–250 ha (stredné farmy)</td></tr>
           <tr><td>3 000–4 500 l</td><td>250–800 ha (veľké)</td></tr>
           <tr><td>5 000+ l</td><td>800+ ha (veľkofarmy, zberové podniky)</td></tr>
         </tbody>
@@ -140,7 +140,7 @@ const articleJsonLd = {
       <h3>Záber</h3>
       <ul>
         <li><strong>12–18 m</strong>: pre malé / stredné farmy, traktor 80+ koní.</li>
-        <li><strong>18–24 m</strong>: štandard pre CZ farmy 100–500 ha, traktor 130+ koní.</li>
+        <li><strong>18–24 m</strong>: bežná voľba pre farmy 100–500 ha, traktor 130+ koní.</li>
         <li><strong>24–36 m</strong>: veľkofarmy, vyžaduje synchronizáciu so zábermi (musí pasovať so záberom sejačky alebo postrekovača).</li>
       </ul>
 
@@ -171,11 +171,11 @@ const articleJsonLd = {
         <tbody>
           <tr><td><strong>Amazone</strong></td><td>DE</td><td>ZA-V, ZA-TS, ZA-M — prémium s WeighCell, ISOBUS, široká škála</td></tr>
           <tr><td><strong>Sulky</strong></td><td>FR</td><td>X 30/40/50 — kvalitný mid-tier, dobré pre VRA</td></tr>
-          <tr><td><strong>Kuhn</strong></td><td>FR</td><td>Axis, Axent — robustný, široká dealerská sieť v CZ</td></tr>
+          <tr><td><strong>Kuhn</strong></td><td>FR</td><td>Axis, Axent — robustný, široká dealerská sieť</td></tr>
           <tr><td><strong>Bogballe</strong></td><td>DK</td><td>L1, M2, M3, EX — flagship vážených s extrémnou presnosťou</td></tr>
           <tr><td><strong>Rauch</strong></td><td>DE</td><td>Axis, AGT — nemecká kvalita, ISOBUS štandard</td></tr>
           <tr><td><strong>Sulky / Lely</strong></td><td>FR/NL</td><td>Centerliner, X-Tron — pre precision farming</td></tr>
-          <tr><td><strong>Bednar</strong></td><td>CZ</td><td>Fenix — domáca značka, atraktívna cena</td></tr>
+          <tr><td><strong>Bednar</strong></td><td>CZ</td><td>Fenix — česká značka, atraktívna cena</td></tr>
           <tr><td><strong>Vicon</strong></td><td>NO</td><td>RotaFlow RO-XL — pre pneumatické</td></tr>
         </tbody>
       </table>
@@ -240,7 +240,7 @@ const articleJsonLd = {
       <h2>1. Dva hlavní typy rozmetadel</h2>
 
       <h3>Talířové rozmetadlo (disc spreader)</h3>
-      <p>2 rotující talíře se lopatkami "vystřelují" hnojivo do stran. <strong>95 % CZ farem</strong>.</p>
+      <p>2 rotující talíře se lopatkami "vystřelují" hnojivo do stran. <strong>nejrozšířenější typ</strong>.</p>
       <ul>
         <li><strong>Plusy:</strong> jednoduchá konstrukce, dlouhá životnost (15+ let), levné, široký záběr (12–36 m).</li>
         <li><strong>Mínusy:</strong> nerovnoměrnost na okrajích pole (cross spreading), citlivost na vlhkost hnojiva.</li>

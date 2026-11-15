@@ -33,10 +33,10 @@ const faqsCs = [
 
 const faqsSk = [
   { q: "Nesený alebo ťahaný postrekovač?", a: "Nesený (na trojbod) je lacnejší (8–20 tis. €) a manévrovateľnejší, ale objem nádrže obmedzený na 600–1200 l. Ťahaný (5 000–10 000 l) dáva vyšší výkon pre stredné a veľké farmy, ale potrebuje silnejší traktor pre pohon hydrauliky." },
-  { q: "Aký záber ramien pre strednú farmu?", a: "12–18 m je štandard pre CZ farmy 100–500 ha. Záber 21–24 m vyžaduje pravidelné veľké lány bez prekážok. Záber 28+ m je pre veľkofarmy 800+ ha. Pravidlo: záber by nemal prevyšovať 40 % priemernej šírky vašich polí." },
+  { q: "Aký záber ramien pre strednú farmu?", a: "12–18 m je bežná voľba pre farmy 100–500 ha. Záber 21–24 m vyžaduje pravidelné veľké lány bez prekážok. Záber 28+ m je pre veľkofarmy 800+ ha. Pravidlo: záber by nemal prevyšovať 40 % priemernej šírky vašich polí." },
   { q: "ISOBUS / Section Control — vyplatí sa?", a: "Pre postrekovač Section Control šetrí 5–15 % chémie ročne (v súvratiach a prekrytí). U farmy 300 ha s nákladom 200 €/ha/sezónu na chémiu = úspora 3 000–9 000 €/rok. Návratnosť ISOBUS + RTK GPS retrofit (10–20 tis. €) za 2–4 sezóny." },
-  { q: "Trysky — aké zvoliť?", a: "Štandard pre CZ sú injektorové (anti-drift) trysky 03 alebo 04 (3 alebo 4 l/min pri 3 bar). Pre pre-em herbicídy širokopaprskové ploché 110°. Pre listové fungicídy úzkopaprskové. Sady trysiek 160–610 € podľa počtu sekcií." },
-  { q: "Postrek lietadlom alebo dronom namiesto postrekovača?", a: "V EÚ je letecký postrek silne regulovaný (EASA + SUR). Drony pre postrek sú na vzostupe, ale stále vyžadujú špeciálne povolenie a sú drahé ($30 000+ stroj). Pre CZ farmy zatiaľ klasický postrekovač zostáva štandardom." },
+  { q: "Trysky — aké zvoliť?", a: "Bežnou voľbou sú injektorové (anti-drift) trysky 03 alebo 04 (3 alebo 4 l/min pri 3 bar). Pre pre-em herbicídy širokopaprskové ploché 110°. Pre listové fungicídy úzkopaprskové. Sady trysiek 160–610 € podľa počtu sekcií." },
+  { q: "Postrek lietadlom alebo dronom namiesto postrekovača?", a: "V EÚ je letecký postrek silne regulovaný (EASA + SUR). Drony pre postrek sú na vzostupe, ale stále vyžadujú špeciálne povolenie a sú drahé ($30 000+ stroj). Pre bežné farmy zatiaľ klasický postrekovač zostáva štandardom." },
 ];
 const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
@@ -57,13 +57,13 @@ const howToCs = {
 
 const howToSk = {
   name: "Ako vybrať postrekovač",
-  description: "Postup výberu postrekovača pre CZ farmu — od rozhodnutia nesený/ťahaný/samojazdný cez kľúčové parametre, ISOBUS Section Control až po top značky a cenovú orientáciu.",
+  description: "Postup výberu postrekovača pre strednú farmu — od rozhodnutia nesený/ťahaný/samojazdný cez kľúčové parametre, ISOBUS Section Control až po top značky a cenovú orientáciu.",
   url: canonical,
   totalTime: 'PT1H',
   steps: [
     { name: "Rozhodni medzi neseným, ťahaným a samojazdným", text: "Nesený (na trojbod, 600–1200 l, 8–20 tis. €) pre farmy do 100 ha. Ťahaný (5 000–10 000 l, 33–80 tis. €) pre 100–500 ha. Samojazdný (125+ tis. €) pre 500+ ha alebo službovú činnosť." },
-    { name: "Definuj záber ramien podľa tvaru polí", text: "12–18 m štandard pre CZ farmy 100–500 ha. 21–24 m pre veľké lány bez prekážok. 28+ m pre 800+ ha. Pravidlo: záber by nemal prevyšovať 40 % priemernej šírky tvojich polí." },
-    { name: "Prejdi top značky 2026", text: "Amazone (UX/UF nesený, UG ťahaný — štandard CZ), Horsch Leeb (premium ťahaný), John Deere R4 (samojazdný), Berthoud (francúzska kvalita), Lemken Sirius, Hardi, Kuhn Deltis. Servis dealera vo tvojom kraji = kritické pre sezónu." },
+    { name: "Definuj záber ramien podľa tvaru polí", text: "12–18 m bežná voľba pre farmy 100–500 ha. 21–24 m pre veľké lány bez prekážok. 28+ m pre 800+ ha. Pravidlo: záber by nemal prevyšovať 40 % priemernej šírky tvojich polí." },
+    { name: "Prejdi top značky 2026", text: "Amazone (UX/UF nesený, UG ťahaný — rozšírený štandard), Horsch Leeb (premium ťahaný), John Deere R4 (samojazdný), Berthoud (francúzska kvalita), Lemken Sirius, Hardi, Kuhn Deltis. Servis dealera vo tvojom kraji = kritické pre sezónu." },
     { name: "Investuj do ISOBUS Section Control + RTK GPS", text: "Section Control šetrí 5–15 % chémie ročne (súvratia, prekryt). Pre farmu 300 ha s nákladom 200 €/ha/sezónu na chémiu = úspora 3–9 tis. €/rok. Návratnosť retrofit (10–20 tis. €) za 2–4 sezóny." },
     { name: "Vyber správne trysky podľa aplikácie", text: "Injektorové anti-drift 03/04 štandard. Pre-em herbicídy: širokopaprskové ploché 110°. Listové fungicídy: úzkopaprskové. Sady trysiek 160–610 € podľa počtu sekcií. Drift Reduction Technology (DRT) povinná pre nové programy CAP." },
   ],
@@ -73,7 +73,7 @@ const howToJsonLd = howToSchema(isSk ? howToSk : howToCs);
 const articleJsonLd = {
   '@context': 'https://schema.org', '@type': 'Article',
   headline: isSk ? "Ako vybrať postrekovač (2026)" : "Jak vybrat postřikovač (2026)",
-  description: isSk ? "Sprievodca výberom postrekovača pre CZ farmu. Nesený vs ťahaný, záber ramien, ISOBUS, top značky." : "Průvodce výběrem postřikovače pro CZ farmu. Nesený vs tažený, záběr ramen, ISOBUS, top značky.",
+  description: isSk ? "Sprievodca výberom postrekovača pre strednú farmu. Nesený vs ťahaný, záber ramien, ISOBUS, top značky." : "Průvodce výběrem postřikovače pro CZ farmu. Nesený vs tažený, záběr ramen, ISOBUS, top značky.",
   author: { '@type': 'Organization', name: 'Redakce agro-svět.cz', url: 'https://agro-svet.cz/redakce/' },
   publisher: { '@type': 'Organization', name: 'agro-svět.cz', url: 'https://agro-svet.cz', logo: { '@type': 'ImageObject', url: 'https://agro-svet.cz/icon-512.png' } },
   datePublished, dateModified: datePublished,
@@ -82,7 +82,7 @@ const articleJsonLd = {
 };
 ---
 
-<Layout title={isSk ? "Ako vybrať postrekovač (2026) — sprievodca pre CZ farmu" : "Jak vybrat postřikovač (2026) — průvodce pro CZ farmu"} description={isSk ? "Sprievodca výberom postrekovača: nesený vs ťahaný vs samohybný, záber ramien, ISOBUS Section Control, trysky, top značky 2026." : "Průvodce výběrem postřikovače: nesený vs tažený vs samojízdný, záběr ramen, ISOBUS Section Control, trysky, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
+<Layout title={isSk ? "Ako vybrať postrekovač (2026) — sprievodca pre strednú farmu" : "Jak vybrat postřikovač (2026) — průvodce pro CZ farmu"} description={isSk ? "Sprievodca výberom postrekovača: nesený vs ťahaný vs samohybný, záber ramien, ISOBUS Section Control, trysky, top značky 2026." : "Průvodce výběrem postřikovače: nesený vs tažený vs samojízdný, záběr ramen, ISOBUS Section Control, trysky, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
@@ -184,7 +184,7 @@ const articleJsonLd = {
           <tr><td><strong>Hardi</strong></td><td>DK</td><td>Twin Force, Mega — dôraz na anti-drift, robustný</td></tr>
           <tr><td><strong>John Deere</strong></td><td>US</td><td>R, M séria + ExactApply (each-nozzle control) — top precise farming</td></tr>
           <tr><td><strong>Dammann</strong></td><td>DE</td><td>Trailblazer, ANP — extrémny záber (až 51 m), pre najvyspelejších</td></tr>
-          <tr><td><strong>Bednar</strong></td><td>CZ</td><td>FertiNium — domáca značka, atraktívna cena</td></tr>
+          <tr><td><strong>Bednar</strong></td><td>CZ</td><td>FertiNium — česká značka, atraktívna cena</td></tr>
         </tbody>
       </table>
 

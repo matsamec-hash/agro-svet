@@ -31,10 +31,10 @@ const faqsCs = [
 ];
 
 const faqsSk = [
-  { q: "Okrúhly alebo hranolový lis?", a: "Okrúhly (round) je štandardom pre CZ farmy < 500 dojníc — lacnejší, manévrovateľnejší, balík 600–1 000 kg ľahko manipulovateľný traktorom s vidlami. Hranolový (square) dáva hustejší balík (efektívnejšia preprava) ale je 2× drahší a vyžaduje silnejší traktor + špeciálny sťahovák." },
+  { q: "Okrúhly alebo hranolový lis?", a: "Okrúhly (round) je najčastejšia voľba pre farmy do 500 dojníc — lacnejší, manévrovateľnejší, balík 600–1 000 kg ľahko manipulovateľný traktorom s vidlami. Hranolový (square) dáva hustejší balík (efektívnejšia preprava) ale je 2× drahší a vyžaduje silnejší traktor + špeciálny sťahovák." },
   { q: "Vyplatí sa kombi lis + wrapper?", a: "Pre silážne balíky áno. Štandardný postup je: lisovanie + okamžité wrappovanie do 2 hodín (aby fermentácia začala v anaeróbnom prostredí). Kombi stroj (McHale Fusion, Krone Comprima Wrap) urobí oboje v 1 jazde = vyšší výkon, menej prejazdov. Cena +20–41 tis. € vs samostatný lis + wrapper." },
   { q: "Net wrap alebo povrázok (twine)?", a: "Net wrap dnes štandard 90 %+ moderných lisov — rýchlejší (3-5 otočiek vs 18-22 u povrázku), pevnejšia fixácia, menšie straty hmoty. Povrázok lacnejší o 30 %, ale staršie stroje. Pre siláž balíky odporúčame výhradne net wrap." },
-  { q: "Aká veľkosť balíka?", a: "120 × 120 cm (okrúhly, ~600 kg) je najbežnejší pre CZ. 150 × 120 cm (~800–1000 kg) je vyšší výkon, ale potrebuje silnejšiu manipulačnú techniku. Hranolový HD 80 × 90 × 240 cm (~500 kg) je štandard pre export sena." },
+  { q: "Aká veľkosť balíka?", a: "120 × 120 cm (okrúhly, ~600 kg) je najbežnejší. 150 × 120 cm (~800–1000 kg) je vyšší výkon, ale potrebuje silnejšiu manipulačnú techniku. Hranolový HD 80 × 90 × 240 cm (~500 kg) je štandard pre export sena." },
 ];
 const faqs = isSk ? faqsSk : faqsCs;
 const faqJsonLd = faqPageSchema(faqs);
@@ -55,14 +55,14 @@ const howToCs = {
 
 const howToSk = {
   name: "Ako vybrať lis na balíky",
-  description: "Postup výberu lisu na balíky pre CZ farmu — od rozhodnutia okrúhly vs hranolový cez kľúčové parametre, kombi s wrapperom, top značky až po cenovú orientáciu 2026.",
+  description: "Postup výberu lisu na balíky pre strednú farmu — od rozhodnutia okrúhly vs hranolový cez kľúčové parametre, kombi s wrapperom, top značky až po cenovú orientáciu 2026.",
   url: canonical,
   totalTime: 'PT1H',
   steps: [
-    { name: "Rozhodni medzi okrúhlym a hranolovým lisom", text: "Okrúhly (round) je štandard pre CZ farmy do 500 dojníc — balík 600–1000 kg manévrovateľný traktorom s vidlami. Hranolový (square) hustejší balík pre export, ale 2× drahší a vyžaduje silnejší traktor + špeciálny sťahovák." },
-    { name: "Definuj kľúčové parametre — záber, fixáciu, veľkosť balíka", text: "Net wrap (3–5 otočiek) preferuj pred povrázkom (18–22 otočiek) — rýchlejší, pevnejší, pre siláž jediná možnosť. Veľkosť 120×120 cm (okrúhly ~600 kg) je štandard pre CZ." },
+    { name: "Rozhodni medzi okrúhlym a hranolovým lisom", text: "Okrúhly (round) je najčastejšia voľba pre farmy do 500 dojníc — balík 600–1000 kg manévrovateľný traktorom s vidlami. Hranolový (square) hustejší balík pre export, ale 2× drahší a vyžaduje silnejší traktor + špeciálny sťahovák." },
+    { name: "Definuj kľúčové parametre — záber, fixáciu, veľkosť balíka", text: "Net wrap (3–5 otočiek) preferuj pred povrázkom (18–22 otočiek) — rýchlejší, pevnejší, pre siláž jediná možnosť. Veľkosť 120×120 cm (okrúhly ~600 kg) je najbežnejšia." },
     { name: "Zváž kombi lis + wrapper pre silážne balíky", text: "Štandardný postup: lisovanie + okamžité wrappovanie do 2 hodín (aby fermentácia začala anaeróbne). Kombi (McHale Fusion, Krone Comprima Wrap) urobí oboje v 1 jazde, cena +20–41 tis. € vs samostatný lis + wrapper." },
-    { name: "Prejdi top značky 2026", text: "Kuhn (silážny majster v CZ), Pöttinger (rakúska kvalita), McHale (kombi špecialista), Claas Rollant (svaroch štandard), Krone Comprima, John Deere V/F rada, New Holland Roll-Bar. Porovnaj dostupnosť dealera vo tvojom kraji." },
+    { name: "Prejdi top značky 2026", text: "Kuhn (silážny špecialista), Pöttinger (rakúska kvalita), McHale (kombi špecialista), Claas Rollant (svaroch štandard), Krone Comprima, John Deere V/F rada, New Holland Roll-Bar. Porovnaj dostupnosť dealera vo tvojom kraji." },
     { name: "Spočítaj náklady na balík", text: "Sieť 1–2 €/balík, mzda obsluhy + nafta cca 3–5 €/balík, amortizácia stroja 2–4 €/balík (závisí na obrate). Total ~8–11 €/balík vlastnej výroby, porovnaj s nájmom žatevného podniku." },
   ],
 };
@@ -80,7 +80,7 @@ const articleJsonLd = {
 };
 ---
 
-<Layout title={isSk ? "Ako vybrať lis na balíky (2026) — okrúhly vs hranolový" : "Jak vybrat lis na balíky (2026) — kulatý vs hranolový"} description={isSk ? "Sprievodca výberom lisu na balíky pre CZ farmu. Okrúhly vs hranolový, net wrap vs povraz, kombi s wrapperom, top značky 2026." : "Průvodce výběrem lisu na balíky pro CZ farmu. Kulatý vs hranolový, net wrap vs provázek, kombi s wrapperem, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
+<Layout title={isSk ? "Ako vybrať lis na balíky (2026) — okrúhly vs hranolový" : "Jak vybrat lis na balíky (2026) — kulatý vs hranolový"} description={isSk ? "Sprievodca výberom lisu na balíky pre strednú farmu. Okrúhly vs hranolový, net wrap vs povraz, kombi s wrapperom, top značky 2026." : "Průvodce výběrem lisu na balíky pro CZ farmu. Kulatý vs hranolový, net wrap vs provázek, kombi s wrapperem, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
@@ -107,7 +107,7 @@ const articleJsonLd = {
       <h2>1. Dva hlavné typy lisov</h2>
 
       <h3>Guľatý lis (round baler)</h3>
-      <p>Tvorí valcové balíky 1,2 × 1,2 m (600 kg) alebo 1,5 × 1,2 m (800–1000 kg). Štandard pre <a href="/sk/slovnik/siloky-balik/">silážne balíky</a> v CZ.</p>
+      <p>Tvorí valcové balíky 1,2 × 1,2 m (600 kg) alebo 1,5 × 1,2 m (800–1000 kg). Najbežnejšia voľba pre <a href="/sk/slovnik/siloky-balik/">silážne balíky</a>.</p>
       <ul>
         <li><strong>Plusy:</strong> manévrovateľný (lis o hmotnosti 2–4 t), univerzálny (slama, seno, siláž), jednoduchá preprava balíka traktorom s vidlami alebo manipulátorom.</li>
         <li><strong>Mínusy:</strong> menej hutný balík (200–300 kg/m³ vs 400+ u hranolového), horší pre diaľkový transport.</li>
