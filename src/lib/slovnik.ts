@@ -2409,11 +2409,10 @@ ROI: zvýšení pH o 0,5 jednotky obvykle vede k +5–15 % výnosu cereálií dl
 - **Po vojtěšce** typicky pěstuje pšenice ozimá (vysoký výnos díky N + struktuře).
 
 **Trh**:
-- **Cenovka senáž v balíkách**: 1 800–3 000 Kč/t (regionální).
-- **Cenovka granulát**: 4 000–6 000 Kč/t.
+- **Ceny** senáže, sena a sušárenského granulátu veřejná statistika nesleduje, sjednávají se mezi pěstitelem a odběratelem.
 - **Dotace v ČR (2026)**: vojtěška patří mezi bílkovinné plodiny s podporou vázanou na produkci (CIS, 1 428,42 Kč/ha) a v ekoplatbě se může jako plodina vázající dusík započítat do neprodukčních ploch.
 
-**Důležité plemena**: Verdor (FR), Power (US), Niagara (FR), domácí Kometa (CZ).`,
+**Odrůdy**: vybírejte ze seznamu zapsaných odrůd (v ČR ÚKZÚZ, Státní odrůdová kniha).`,
     related: ['osevni-postup', 'organicka-hmota', 'mezi-plodiny'],
   },
 
@@ -6117,11 +6116,11 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
     term: 'Mák setý',
     alias: ['poppy', 'Papaver somniferum', 'mák modrosemenný'],
     kategorie: 'plodiny',
-    shortDef: 'Mák setý je jarní olejnatá plodina, kde je ČR globální velmoc — produkuje ~30 % světového potravinářského máku (modré semeno). Výnos 0,8–1,4 t/ha semen, cena silně kolísá (viz níže). Hlavní produkt: pekařské semínko, mákový olej, makovice (omezené kvůli opioidům).',
+    shortDef: 'Mák setý je jarní olejnatá plodina, kde je ČR globální velmoc — produkuje ~30 % světového potravinářského máku (modré semeno). Výnos v ČR 0,6–0,9 t/ha semen (FAOSTAT 2013–2017), cena silně kolísá (viz níže). Hlavní produkt: pekařské semínko, mákový olej, makovice (omezené kvůli opioidům).',
     longDef: `Mák setý (lat. *Papaver somniferum*, ang. *opium poppy* nebo *poppy seed*) je **jarní olejnatá plodina** a globálně specifická — **ČR produkuje ~30 % světového potravinářského máku** (modré semeno pro pekařské použití). Tradiční oblast: Haná, Polabí, Vysočina.
 
-**Plocha v ČR 2024**: 30 000–40 000 ha (kolísá podle ceny)
-**Produkce**: 25 000–35 000 t/rok
+**Plocha v ČR**: 20–36 tis. ha (FAOSTAT 2013–2017, kolísá podle ceny; novější údaj FAO za ČR neuvádí)
+**Produkce**: 14–29 tis. t/rok (2013–2017)
 
 **Vlastnosti:**
 
@@ -6150,23 +6149,22 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 - **Klíčové**: nevylít semínka při manipulaci
 
 **Výnosy:**
-- **Průměr CZ**: 0,9 t/ha semen
-- **Top farmy**: 1,4 t/ha
-- **Náklady na 1 ha**: 18 000–25 000 Kč
+- **Průměr ČR**: 0,6–0,9 t/ha semen (FAOSTAT 2013–2017)
+- **Náklady na 1 ha** (orientačně): 18 000–25 000 Kč
 
 **Použití:**
 
-**1. Pekařské semínko (modré semeno, 80 %):**
+**1. Pekařské semínko (modré semeno):**
 - **Tradiční CZ pekařství** — buchty s mákem, makový závin, makovic
-- **Export**: Německo, Nizozemsko, USA, Polsko
-- **Cena**: velmi kolísá — spolek Český modrý mák uvádí rekord ~110 Kč/kg (2018) a pokles na ~45–50 Kč/kg; aktuální výkupní cena není ve veřejné statistice a sjednává se ve smlouvě
+- **Export**: významná část úrody se vyváží
+- **Cena**: velmi kolísá — FAOSTAT uvádí průměrnou cenu výrobců v ČR 2022–2024 ~49–57 Kč/kg (2018–2019 ~62–70 Kč/kg); spolek Český modrý mák uvádí rekord ~110 Kč/kg a pokles na ~45–50 Kč/kg; skutečná cena se sjednává ve smlouvě
 
-**2. Mákový olej (10 %):**
+**2. Mákový olej:**
 - **Lisování** modrých semen
 - **Olej** — premium kulinářský olej, vysoká cena
 - **Hladký omega-6 profil**, dobrá chuť
 
-**3. Makovice (5 %):**
+**3. Makovice:**
 - **Sušené makovice** — historicky pro lidovou medicínu (sedativní)
 - **Kvůli opioidům** (morfin, codein) v makovicích — **omezené použití**, regulované
 - **Farmaceutický průmysl** — extraktivní výroba opioidních léků
@@ -6180,17 +6178,15 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 **Trh a marketing:**
 - **Spotový trh** vs **kontraktové pěstování**
 - **Cenová volatilita**: ceny se v řádu let mění i o více než polovinu (např. ~110 → ~45–50 Kč/kg)
-- **Export**: 70 % české produkce jde do EU + USA
 
-**Odrůdy CZ 2024:**
-- **Major** — modré semeno, top výnos
-- **Maratón** — robustnost
-- **Opal** — bílé semeno (export do Asie)
-- **Onyx** — moderní
+**Odrůdy zapsané v ČR (Společný katalog odrůd máku setého 2025, příklady):**
+- **Maratón**
+- **Opal**
+- **Onyx**
 
 **Ekonomika (příklad-scénář, ne průměr za ČR):**
 - **Náklady** (orientačně): 18 000–25 000 Kč/ha
-- **Výnos 0,8 t/ha × 45–110 Kč/kg = 36 000–88 000 Kč/ha** (rozpětí ceny z let 2018–2019, dnešní cena není ve statistice)
+- **Výnos 0,8 t/ha × 45–110 Kč/kg = 36 000–88 000 Kč/ha** (rozpětí ceny podle spolku Český modrý mák; průměr výrobců 2022–2024 podle FAOSTAT ~49–57 Kč/kg)
 - **Marže bez dotací**: +11 000 až +70 000 Kč/ha (rozhoduje cena)
 - **Risk**: cenová volatilita + výnosy citlivé na počasí
 
@@ -6205,8 +6201,7 @@ Viz též [[psenice-ozima]], [[zito-ozime]], [[jecmen-krmny]], [[ozim-jarin]], [
 - **Klíčové**: hluboké kořeny (snáší sucho lépe než pšenice)
 
 **Bio mák:**
-- **Bio mák** = 50–80 % vyšší cena
-- **Trh malý** ale roste (organic premium pro vegetářské/zdravotní pekařství)
+- Příplatek za bio se sjednává ve smlouvě; veřejná statistika ho nesleduje
 
 Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
     related: ['ozim-jarin', 'slunecnice', 'repka-ozima'],
@@ -6219,8 +6214,8 @@ Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
     shortDef: 'Slunečnice je jarní olejnatá plodina s rostoucím významem v CZ (klimatická změna). Plocha 15 000–22 000 ha (2022–2024), výnos 2,5–3 t/ha, cena 2024 ~9 600 Kč/t (2023: ~10 600 Kč/t). Hlavní použití: olej, krmivo (šrot), bio paliva, ptactvo (semínka).',
     longDef: `Slunečnice roční (lat. *Helianthus annuus*, ang. *sunflower*) je **jarní olejnatá plodina** z rodu *Asteraceae*. V CZ dlouho marginální, ale **rostoucí význam** kvůli klimatické změně (vyšší teploty + sucho = vhodné pro slunečnici).
 
-**Plocha v ČR 2024**: 35 000–50 000 ha (10× nárůst od 2010)
-**Produkce**: 110 000–150 000 t/rok
+**Plocha v ČR**: 16–22 tis. ha (FAOSTAT 2022–2024; 2019: 11,8 tis. ha, 2010: 27 tis. ha)
+**Produkce**: 41–60 tis. t/rok (FAOSTAT 2021–2024)
 
 **Vlastnosti:**
 
@@ -6249,7 +6244,7 @@ Viz též [[ozim-jarin]], [[slunecnice]], [[repka-ozima]], [[hrach-set]].`,
 - **Klíčové**: nevybírat příliš nahoru = ztráta
 
 **Výnosy:**
-- **Průměr CZ**: 2,8 t/ha
+- **Průměr ČR**: 2,5–2,9 t/ha (FAOSTAT 2021–2024)
 - **Top farmy** (jižní Morava): 4+ t/ha
 - **EU TOP** (Francie, Maďarsko): 3,5–4,5 t/ha
 
@@ -6323,10 +6318,10 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
     term: 'Hořčice setá',
     alias: ['mustard', 'Sinapis alba', 'bílá hořčice', 'Sinapis arvensis'],
     kategorie: 'plodiny',
-    shortDef: 'Hořčice setá (bílá hořčice) je jarní brukvovitá plodina pro výrobu hořčice (kořeněné omáčky) a jako meziplodina pro zelené hnojení. CZ plocha 5 000–15 000 ha. Krátká vegetace 90–110 dní. Výnos 1–2 t/ha semen, orientační cena 13 000–18 000 Kč/t.',
+    shortDef: 'Hořčice setá (bílá hořčice) je jarní brukvovitá plodina pro výrobu hořčice (kořeněné omáčky) a jako meziplodina pro zelené hnojení. Plocha v ČR 12–18 tis. ha (FAOSTAT 2013–2017, novější údaj FAO neuvádí). Krátká vegetace 90–110 dní. Výnos ~1 t/ha semen, cena výrobců 2022–2024 20–25 tis. Kč/t (FAOSTAT).',
     longDef: `Hořčice setá (lat. *Sinapis alba*, „bílá hořčice", ang. *white mustard*) je **jarní brukvovitá plodina** s krátkou vegetační dobou (90–110 dní). Hlavně pro **výrobu hořčice** (jako kořeněná omáčka) a **jako meziplodina** pro zelené hnojení.
 
-**Plocha v ČR 2024**: 5 000–15 000 ha pro semeno + 100 000+ ha jako meziplodina
+**Plocha v ČR**: 12–18 tis. ha pro semeno (FAOSTAT 2013–2017: 11,8–18,5 tis. ha; novější údaj FAO za ČR neuvádí)
 
 **Vlastnosti:**
 
@@ -6353,18 +6348,16 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
 - **Kombajn**: standardní obilní žací mech
 
 **Výnosy:**
-- **Průměr CZ**: 1,3 t/ha
-- **Top farmy**: 2+ t/ha
+- **Průměr ČR**: ~1,0 t/ha (FAOSTAT 2013–2017: 0,8–1,1 t/ha)
 
 **Použití:**
 
-**1. Hořčice kořenina (60 % výroby):**
+**1. Hořčice kořenina (výroba hořčice):**
 - **Mletá hořčice + ocet + sůl + voda + koření** = kořeněná omáčka
-- **Český národní pokrm** (svíčková, řízek)
+- **Tradiční příloha** k uzeninám a masům
 - **Pražská hořčice, plnotučná hořčice** — typy CZ
-- **Globální značky**: Hellmann's, Heinz, Maille — všechny od slunečnice setí
 
-**2. Meziplodina (30 % ploch — největší užití!):**
+**2. Meziplodina:**
 - **Sklizeň pšenice/ječmene** → ihned setí hořčice → vegetační období do první mrazy → zarytí na podzim nebo na jaře
 - **Účinky**:
   - **Zelené hnojení** — biomasa rozkládá se v půdě
@@ -6372,24 +6365,24 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
   - **Suprese plevelů** — hořčice rychle pokryje půdu
   - **Glukosinoláty v půdě** — biofumigace (potlačuje patogeny)
   - **Ekoplatba** — hořčice jako meziplodina se v ČR (2026) může započítat do neprodukčních ploch ekoplatby (koeficient 0,3)
-- **Cena osiva pro meziplodinu**: 600–1 000 Kč/ha
+- **Cena osiva pro meziplodinu**: orientačně v řádu stovek Kč/ha (8–12 kg osiva/ha; ceník osivářů, veřejná statistika není)
 
-**3. Olej (5 %):**
-- **Hořčicový olej** — specifický východoevropský kulinářský olej (NL, Polsko)
+**3. Olej:**
+- **Hořčicový olej** — okrajové využití (kulinářský olej, tradičně zejména ve východní Evropě)
 - **V CZ vzácné**
 
-**4. Krmivo (5 %):**
+**4. Krmivo:**
 - **Hořčicový šrot** (po lisování oleje) — pro skot
 - **Pozor**: glukosinoláty mohou způsobit problémy u prasat
 
-**Cena (orientačně, kontraktní trh — veřejná statistika není):**
-- **Hořčicové semeno**: 13 000–18 000 Kč/t
-- **Bio hořčice**: 18 000–25 000 Kč/t (Hellmann's bio kontrakt)
+**Cena (FAOSTAT, průměrná cena výrobců v ČR):**
+- **Hořčicové semeno**: 2022–2024 přibližně 20 000–25 000 Kč/t (2024 ≈ 20 400 Kč/t); cena se meziročně mění o desítky procent
+- Příplatky za bio nebo kontraktní odbyt se sjednávají ve smlouvě a v těchto průměrech nejsou.
 
-**Odrůdy CZ 2024:**
-- **Veronica** — výnosná
-- **Severka** — robustní
-- **Andromeda** — moderní
+**Odrůdy zapsané v ČR (příklady):**
+- **Veronika** (BOR, zapsaná 2000)
+- **Severka** (SELGEN, 2002; výběr z odrůdy Salvo, vyrovnané dozrávání)
+- **Andromeda** (SELGEN, 2012)
 
 **Choroby a škůdci:**
 - **Stejné jako řepka** ale méně tlaku (krátká vegetace)
@@ -6403,15 +6396,15 @@ Viz též [[repka-ozima]], [[ozim-jarin]], [[fungicidy]], [[desikace]], [[mak-oz
 4. **Robustní** — málo postřiků
 
 **Nevýhody:**
-1. **Nízký výnos** (1–2 t/ha vs 8 t/ha pšenice)
+1. **Nízký výnos** (~1 t/ha vs ~6 t/ha pšenice)
 2. **Marginální plocha** pro semeno
 3. **Cenová volatilita** — citlivá na poptávku potravinářského průmyslu
 
 **Ekonomika (příklad-scénář, ne průměr za ČR):**
 
-**Pro semeno (1,3 t/ha × 15 000 Kč = 19 500 Kč/ha):**
+**Pro semeno (1,0 t/ha × 20 400 Kč/t = 20 400 Kč/ha; průměrný výnos 2013–2017 × cena 2024):**
 - **Náklady**: 12 000–15 000 Kč/ha
-- **Marže**: 4 500–7 500 Kč/ha (mírná)
+- **Marže**: 5 400–8 400 Kč/ha (mírná, při ceně 2024)
 - **Plus přímé platby**: BISS a redistributivní platba
 
 **Pro meziplodinu:**
@@ -6663,24 +6656,23 @@ Viz též [[sojaova-bob]], [[vojteska]], [[osevni-postup]], [[mezi-plodiny]], [[
     term: 'Len setý',
     alias: ['flax', 'Linum usitatissimum', 'olejný len', 'přadný len'],
     kategorie: 'plodiny',
-    shortDef: 'Len setý je dvojí plodina — olejný len pro semínko a lněný olej, přadný len pro vlákno (lněné plátno). CZ plocha 1 000–1 600 ha (klesající). Výnos olejného 1–1,5 t/ha semen, orientační cena 12 000–17 000 Kč/t. Historicky klíčový (vlaké plátno do 1900s).',
+    shortDef: 'Len setý je dvojí plodina — olejný len pro semínko a lněný olej, přadný len pro vlákno (lněné plátno). Plocha olejného lnu v ČR 1,1–1,9 tis. ha (FAOSTAT 2019–2024, kolísá). Výnos 0,9–1,4 t/ha semen, cena výrobců 2022–2024 14–24 tis. Kč/t (FAOSTAT). Historicky klíčový pro lněné plátno.',
     longDef: `Len setý (lat. *Linum usitatissimum*, ang. *flax*) je **jarní plodina dvojího použití**:
 1. **Olejný len** — semínko pro lněný olej (omega-3), pekařské semínko
 2. **Přadný len** — stéblo pro lněné vlákno (textil)
 
-V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
+V ČR klesající tradice — FAOSTAT eviduje pro celé Československo 46 tis. ha lnu na vlákno v roce 1961 a 25 tis. ha v roce 1990; v samotné ČR 8,5 tis. ha v roce 2000 a jen 13 ha v roce 2010. Olejný len (na semeno) se dnes pěstuje na 1,1–1,9 tis. ha (2019–2024).
 
 **Historie:**
 - **Tisíciletí** — len je jedna z nejstarších kulturních rostlin (egyptské mumie, biblické zmínky)
 - **Středověk** — lněné plátno = standardní textil v EU
 - **18.–19. století** — vrchol pěstování v CZ (Krkonoše, Jeseníky lněné centra)
 - **20. století** — bavlna a synthetika vytlačily lněné plátno
-- **1950s vrchol CZ** — 120 000 ha (státem dotované)
 - **2020s** — niche plodina
 
 **Vlastnosti:**
 
-**Olejný len (95 % CZ ploch):**
+**Olejný len (téměř celá dnešní plocha v ČR):**
 
 **Setí:**
 - **Termín**: 25. března – 20. dubna
@@ -6700,7 +6692,7 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 - **Termín**: konec července–srpen
 - **Vlhkost zrna**: 9–12 %
 - **Kombajn**: standardní
-- **Výnos**: 1,5–2,5 t/ha semen
+- **Výnos**: v ČR 0,9–1,4 t/ha semen (FAOSTAT 2019–2024)
 
 **Použití olejného lnu:**
 
@@ -6708,13 +6700,11 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 - **Celé nebo mleté semínko** — do pečiva, müsli, jogurtů
 - **Vysoký obsah omega-3** (ALA — alfa-linolenová kyselina)
 - **Vláknina** — pozitivní pro trávení
-- **Cena potravinářské semínko**: 18 000–25 000 Kč/t
 
 **2. Lněný olej:**
 - **Lisování** semen
 - **Kulinářský**: salát, müsli (ne smažení — nestabilní)
 - **Léčebný**: omega-3 doplněk
-- **Cena**: 250–400 Kč/100ml v retailu
 
 **3. Krmivo:**
 - **Lněný šrot** (po lisování oleje) — krmivo pro skot, koně
@@ -6724,7 +6714,7 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 - **Lněný olej technický** (sušící olej) — pro nátěry, lakové výrobky, linoleum
 - **Linoleum** etymology: linum oleum = lněný olej
 
-**Přadný len (5 % CZ ploch):**
+**Přadný len (v ČR dnes téměř nepěstovaný):**
 
 **Specifický pro vlákno:**
 - **Hustší setí** (1 500 zrn/m²) — tenké, dlouhé stéblo
@@ -6735,18 +6725,17 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 
 **Lněné plátno**:
 - **Premium materiál** — luxusní oblečení, ručníky, ubrusy
-- **Belgium + France** = EU lněné centrum (80 % EU produkce)
-- **CZ marginální** — odvozené průmyslové dějiny zaniky
+- **Francie, Belgie a Nizozemsko** = centrum lněného vlákna (FAOSTAT 2024: ~90 % světové produkce, Francie sama ~82 %)
+- **ČR marginální** — pěstování lnu na vlákno prakticky zaniklo
 
-**Cena (orientačně, kontraktní trh — veřejná statistika není):**
-- **Olejný len** krmný: 12 000–14 000 Kč/t
-- **Olejný len** potravinářský: 18 000–25 000 Kč/t
-- **Bio olejný len**: 28 000–35 000 Kč/t (premium pro bio müsli)
+**Cena (FAOSTAT, průměrná cena výrobců v ČR):**
+- **Olejný len**: 2022–2024 přibližně 14 000–24 000 Kč/t (2024 ≈ 14 400 Kč/t); cena se meziročně mění o desítky procent
+- Příplatky za potravinářskou kvalitu nebo bio se sjednávají ve smlouvě a v těchto průměrech nejsou.
 
-**Odrůdy CZ 2024:**
-- **Lola** — olejný, top výnos
-- **Recital** — robustní
-- **Niagara** — přadný (Belgické import)
+**Odrůdy zapsané v ČR (příklady):**
+- **Lola** (Limagrain, zapsaná 1999, hnědé semeno)
+- **Skylark** (SAATBAU, 2024, hnědé semeno)
+- **Gilbert** (SAATBAU, 2025, žluté semeno)
 
 **Choroby:**
 - **Bílá hniloba** (Sclerotinia) — vlhká léta
@@ -6755,20 +6744,20 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 
 **Ekonomika (příklad-scénář, ne průměr za ČR):**
 
-**Náklady na 1 ha**:
+**Náklady na 1 ha (orientačně)**:
 - Osivo: 1 500–2 500 Kč
 - Hnojiva: 2 500–3 500 Kč
 - Postřiky: 3 000–5 000 Kč
 - Sklizeň: 2 500–3 500 Kč
 - Celkem: 9 500–14 500 Kč/ha
 
-**Výnos 1,2 t/ha × 14 000 Kč/t = 16 800 Kč/ha** (výnos ČR × orientační cena)
-**Marže bez dotací**: +2 300 až +7 300 Kč/ha
+**Výnos 1,2 t/ha × 14 400 Kč/t = 17 300 Kč/ha** (průměrný výnos ČR 2019–2024 × cena 2024)
+**Marže bez dotací**: +2 800 až +7 800 Kč/ha
 
 **Strategický význam:**
-- **Niche plodina** s vysokou marží
+- **Niche plodina** — v příkladu výše jen mírná marže
 - **Plant-based omega-3** trend = rostoucí poptávka
-- **Bio kontrakty** pro pekařský průmysl
+- **Bio a potravinářské kontrakty** (příplatek podle smlouvy)
 
 **Klimatická změna:**
 - **Sucho v květnu–červnu** = pozitivní (len nesnáší vlhko)
@@ -6778,7 +6767,6 @@ V CZ klesající tradice — z 100 000+ ha v 1950s na ~1 000–1 600 ha dnes.
 **Renaissance lnu?**
 - **Plant-based food** trend = trh roste
 - **Lokální producenti** mohou cílit na premium pekařský trh
-- **Bio kontrakty** pro Hipp, Bauer dětskou výživu
 
 Viz též [[ozim-jarin]], [[sojaova-bob]], [[mak-ozimy]], [[osevni-postup]].`,
     related: ['ozim-jarin', 'mak-ozimy', 'osevni-postup'],
