@@ -14,6 +14,25 @@ const productOptions = (Object.keys(FARM_PRODUCTS) as (keyof typeof FARM_PRODUCT
 const regionOptions = KRAJE.filter((k) => farms.some((f) => f.region === k.slug));
 const regionLabels = Object.fromEntries(KRAJE.map((k) => [k.slug, k.name]));
 
+// „Přidat farmu“ — odpověď e-mailem (kontaktní formulář nemá přílohy, a fotku chceme).
+// Tělo mailto je předvyplněná osnova, ať si žadatel nemusí pamatovat, co poslat.
+const ADD_FARM_EMAIL = 'info@samecdigital.com';
+const addFarmBody = [
+  'Název farmy:',
+  'Druh (farma, včelařství, mlékárna, ovocný sad…):',
+  'Obec, kraj a adresa místa prodeje:',
+  'Co prodáváme:',
+  'Ekologické hospodaření (ano/ne, číslo certifikátu):',
+  'Krátký popis farmy a způsobu prodeje (2–3 věty):',
+  'Otevírací doba nebo způsob objednání:',
+  'Web, telefon, e-mail pro zákazníky (zveřejníme jen to, co sem napíšete):',
+  'Autor fotky: (fotku přiložte k e-mailu)',
+  '',
+  'Souhlasím se zveřejněním těchto údajů a přiložené fotky na agro-svet.cz.',
+].join('\r\n');
+const addFarmMailto =
+  `mailto:${ADD_FARM_EMAIL}?subject=${encodeURIComponent('Přidat farmu na agro-svet.cz')}&body=${encodeURIComponent(addFarmBody)}`;
+
 const breadcrumbJsonLd = breadcrumbSchema([
   { name: 'Domů', url: '/' },
   { name: 'Farmy', url: '/farmy/' },
@@ -63,6 +82,7 @@ const listJsonLd = itemListSchema(
       </nav>
       <h1>Farmy — prodej ze dvora</h1>
       <p class="lede">Ručně vybrané farmy, které prodávají své produkty přímo ze dvora — brambory, zeleninu, mléko, maso, med a další. Filtrujte podle kraje, produktu nebo ekologického hospodaření a najděte pěstitele ve svém okolí.</p>
+      <p class="add-farm-hint">Prodáváte ze dvora a nejste tu? <a href="#pridat-farmu">Chcete přidat svou farmu? Napište nám ↓</a></p>
     </header>
 
     <div class="farmy-filters" role="toolbar" aria-label="Filtry farem">
@@ -141,6 +161,24 @@ const listJsonLd = itemListSchema(
         </ul>
       </section>
     )}
+
+    <section class="add-farm" id="pridat-farmu" aria-labelledby="add-farm-h">
+      <h2 id="add-farm-h">Chcete přidat svou farmu?</h2>
+      <p>Napište nám na <a href={`mailto:${ADD_FARM_EMAIL}`}>{ADD_FARM_EMAIL}</a>. Pošlete prosím:</p>
+      <ul class="add-farm-list">
+        <li><strong>název farmy</strong> a druh (farma, včelařství, mlékárna, ovocný sad…)</li>
+        <li><strong>adresu místa prodeje</strong> — obec a kraj, nejlépe i ulici, ať ji správně umístíme na mapu</li>
+        <li><strong>co prodáváte</strong> (brambory, zelenina, mléko, maso, med…) a zda hospodaříte ekologicky, případně číslo certifikátu</li>
+        <li><strong>krátký popis</strong> — 2–3 věty o farmě a o tom, jak prodej probíhá</li>
+        <li><strong>otevírací dobu</strong> nebo způsob objednání</li>
+        <li><strong>kontakt pro zákazníky</strong> — web, telefon, e-mail; zveřejníme jen to, co napíšete</li>
+        <li><strong>aspoň jednu fotku</strong> farmy nebo produktů — přiložte ji k e-mailu, nejlépe na šířku a v dobrém rozlišení (od 1200 px na šířku). Napište, kdo je autor, a že ji smíme zveřejnit.</li>
+      </ul>
+      <p>
+        <a class="add-farm-btn" href={addFarmMailto}>Napsat e-mail s předvyplněnou osnovou</a>
+      </p>
+      <p class="add-farm-note">Odesláním souhlasíte se zveřejněním poslaných údajů a fotky na stránce vaší farmy. Farmy zařazujeme ručně, ozveme se vám e-mailem.</p>
+    </section>
   </div>
 
   <script>
@@ -488,6 +526,35 @@ const listJsonLd = itemListSchema(
     }
     .region-list a:hover { border-color: #0A0A0B; }
     .region-count { color: #999; }
+
+    .add-farm-hint { margin: 10px 0 0; font-size: 14px; color: #444; }
+    .add-farm-hint a { color: #0A0A0B; font-weight: 600; }
+
+    .add-farm {
+      margin-top: 48px;
+      padding: 24px;
+      background: #fafafa;
+      border: 1px solid #eaeaec;
+      border-radius: 10px;
+      scroll-margin-top: 16px;
+    }
+    .add-farm h2 { font-size: 1.2rem; margin: 0 0 10px; }
+    .add-farm p { margin: 0 0 12px; font-size: 14px; line-height: 1.55; color: #333; }
+    .add-farm a { color: #0A0A0B; }
+    .add-farm-list { margin: 0 0 16px; padding-left: 20px; font-size: 14px; line-height: 1.55; color: #333; }
+    .add-farm-list li { margin-bottom: 6px; }
+    .add-farm-btn {
+      display: inline-block;
+      background: #FFEA00;
+      color: #0A0A0B;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .add-farm-btn:hover { background: #F2DE00; }
+    .add-farm .add-farm-note { margin: 0; font-size: 12px; color: #666; }
 
     @media (max-width: 640px) {
       .farmy-filters { flex-direction: column; align-items: stretch; }
