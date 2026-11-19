@@ -242,8 +242,12 @@ describe('homepage /de a mapa Evropy (/svet zpět 2026-10-17)', () => {
 });
 
 describe('označení AI textů (AI Act čl. 50 odst. 4)', () => {
-  it('Layout vkládá štítek na začátek každé stránky a má ho každý jazyk', () => {
-    expect(read('src/layouts/Layout.astro')).toMatch(/<main id="main-content" tabindex="-1">\n\s*<AiNotice \/>\n\s*<slot \/>/);
+  it('patička (vkládá ji Layout na každé stránce) nese štítek a má ho každý jazyk', () => {
+    expect(read('src/layouts/Layout.astro')).toMatch(/<Footer \/>/);
+    expect(read('src/layouts/Layout.astro')).not.toContain('AiNotice');
+    const footer = read('src/components/Footer.astro');
+    expect(footer).toContain("tr('ai.notice')");
+    expect(footer).toContain("tr('ai.noticeLink')");
     for (const l of ['cs', 'sk', 'pl', 'uk', 'de']) {
       const src = read(`src/i18n/ui/${l}.ts`);
       expect(src, l).toMatch(/'ai\.notice': '[^']{20,}'/);

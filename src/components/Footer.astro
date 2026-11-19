@@ -68,6 +68,14 @@ const columns = getFooterColumns(locale);
         <a href={navHref(locale, '/kontakt/')}>{tr('footer.contact')}</a>
       </div>
     </div>
+    {/* Označení textu generovaného AI — čl. 50 odst. 4 nařízení (EU) 2024/1689, platí od
+        2. 8. 2026. Štítek je v patičce, tedy na každé stránce (Layout vkládá Footer vždy).
+        Dřív byl pruh nad obsahem (AiNotice) — na přání přesunuto sem. */}
+    <p class="footer-ai">
+      <span aria-hidden="true">✦</span>
+      {tr('ai.notice')}
+      <a href={navHref(locale, '/redakce/')}>{tr('ai.noticeLink')}</a>
+    </p>
   </div>
 </footer>
 
@@ -180,6 +188,20 @@ const columns = getFooterColumns(locale);
   .footer-bottom-links span {
     color: #555;
   }
+
+  .footer-ai {
+    margin: 16px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #999;
+  }
+  .footer-ai span { margin-right: 4px; }
+  .footer-ai a {
+    color: #bbb;
+    text-decoration: underline;
+    margin-left: 4px;
+  }
+  .footer-ai a:hover { color: #FFFF00; }
 
   @media (max-width: 860px) {
     .footer-grid {
