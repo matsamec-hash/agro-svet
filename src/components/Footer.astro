@@ -65,6 +65,9 @@ const columns = getFooterColumns(locale);
         <span aria-hidden="true">·</span>
         <a href="https://aktualizovano.cz" target="_blank" rel="noopener">aktualizovano.cz</a>
         <span aria-hidden="true">·</span>
+        {/* Adresář farem je jen česky (/farmy/ nemá sk/pl/uk/de variantu) → odkaz jen v cs. */}
+        {locale === 'cs' && (<><a href="/farmy/#pridat-farmu">Přidat farmu</a>
+        <span aria-hidden="true">·</span></>)}
         <a href={navHref(locale, '/kontakt/')}>{tr('footer.contact')}</a>
       </div>
     </div>
