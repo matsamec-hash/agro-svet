@@ -11,6 +11,11 @@ import { cropBox16x9, seznamImageSource, type FocalPoint } from '../../lib/sezna
 const WIDTH = 800;
 const HEIGHT = 450;
 const FETCH_TIMEOUT_MS = 10_000;
+// Covery jsou JPG/PNG/WebP. Dekodéry s historií RCE (AVIF/HEIF, SVG, GIF, TIFF, VIPS)
+// v procesu vypnout, ať je nespustí ani podvržený soubor ze zdroje (GHSA advisory sharp).
+sharp.block({
+  operation: ['VipsForeignLoadHeif', 'VipsForeignLoadSvg', 'VipsForeignLoadNsgif', 'VipsForeignLoadTiff', 'VipsForeignLoadVips'],
+});
 // ‼️ Slug z URL, ne z params: middleware sem přepisuje přes next() a Astro pak endpointu
 // nechá params z původní cesty, tedy prázdné. Pod /sk/ tenhle vzor nesedne, takže 404.
 const IMAGE_PATH = /^\/rss-seznam\/([^/]+)\.jpg\/?$/;

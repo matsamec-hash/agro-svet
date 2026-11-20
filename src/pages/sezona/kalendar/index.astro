@@ -48,7 +48,7 @@ const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
   <div class="sezona-root">
     <nav class="breadcrumb" aria-label="Cesta">
-      <a href="/"{tr('cat.bc.home')}/a> <span aria-hidden="true">›</span>
+      <a href={localizeInternalHref(locale, '/')}>{tr('cat.bc.home')}</a> <span aria-hidden="true">›</span>
       <a href={localizeInternalHref(locale, '/sezona/')}>Sezóna</a> <span aria-hidden="true">›</span>
       <span class="current">{tr('sez.cal')}</span>
     </nav>

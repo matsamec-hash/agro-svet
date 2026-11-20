@@ -141,6 +141,12 @@ a{color:#0A0A0B;font-weight:700}
 const handleRequest = defineMiddleware(async (context, next) => {
   const { cookies, url, locals, redirect } = context;
 
+  // Vestavěný image endpoint Astro nikdo nepoužívá (žádné astro:assets) a pouští
+  // sharp na libovolné w/h/f/q. Zavřený, ať není zbytečná plocha pro libvips.
+  if (url.pathname === '/_image' || url.pathname.startsWith('/_image/')) {
+    return new Response('Not Found', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+  }
+
   // CSRF: blokuj cross-site nebezpečné POSTy (host-based, viz výše).
   // Výjimka: /api/mcp je veřejné read-only MCP rozhraní (jen public reference
   // data, žádný cookie-based state) určené pro programové cross-origin klienty
@@ -211,7 +217,8 @@ const handleRequest = defineMiddleware(async (context, next) => {
   const legacyTarget = legacyRedirectTarget(strippedPath);
   if (legacyTarget) return redirect(localizePath(locale, legacyTarget) + url.search, 301);
   const advance = async (): Promise<Response> => {
-    if (SEZNAM_IMAGE_PATH.test(url.pathname)) return next(`${url.pathname}/`);
+    // Astro 7: dynamické souborové endpointy (`[slug].jpg.ts`) se matchují BEZ lomítka.
+    if (SEZNAM_IMAGE_PATH.test(url.pathname)) return next();
     if (locale === 'cs') return next();
     try {
       // Ne-cs locale: rewrite na kanonickou cs routu (zachová lokalizovaný URL navenek).

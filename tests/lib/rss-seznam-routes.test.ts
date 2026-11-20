@@ -142,11 +142,12 @@ describe('/rss-seznam/<slug>.jpg', () => {
 });
 
 describe('adresa obrázku končí .jpg, ne .jpg/', () => {
-  // Dynamická routa se s `trailingSlash: 'always'` otevře jen s lomítkem na konci
-  // (viz sectionSitemapRoute). Ověřeno na buildu: bez přepisu v middleware je to 404.
+  // Astro 7: dynamická souborová routa (`[slug].jpg.ts`) se s `trailingSlash: 'always'`
+  // matchuje BEZ lomítka (v 6.x naopak jen s ním). Middleware proto nesmí lomítko přidávat,
+  // jinak je to 404. Ověřeno na buildu.
   const middleware = fs.readFileSync(path.join(process.cwd(), 'src/middleware.ts'), 'utf8');
 
-  it('middleware přepisuje /rss-seznam/<slug>.jpg na routu s lomítkem', () => {
+  it('middleware pouští /rss-seznam/<slug>.jpg dál bez lomítka', () => {
     const rule = middleware.match(/SEZNAM_IMAGE_PATH = (\/.*\/);/)?.[1];
     expect(rule, 'chybí pravidlo SEZNAM_IMAGE_PATH').toBeTruthy();
     const re = new RegExp(rule!.slice(1, -1));
@@ -154,6 +155,7 @@ describe('adresa obrázku končí .jpg, ne .jpg/', () => {
     expect(re.test('/rss-seznam/clanek-1.jpg/')).toBe(false);
     expect(re.test('/sk/rss-seznam/clanek-1.jpg')).toBe(false);
     expect(re.test('/rss-seznam/a/b.jpg')).toBe(false);
-    expect(middleware).toContain('if (SEZNAM_IMAGE_PATH.test(url.pathname)) return next(`${url.pathname}/`);');
+    expect(middleware).toContain('if (SEZNAM_IMAGE_PATH.test(url.pathname)) return next();');
+    expect(middleware).not.toContain('return next(`${url.pathname}/`)');
   });
 });

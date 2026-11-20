@@ -3,8 +3,12 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import node from '@astrojs/node';
 import yaml from '@modyfi/vite-plugin-yaml';
+import { unified } from '@astrojs/markdown-remark';
 
 export default defineConfig({
+  // Astro 7: zachovat chování 6.x (mezery mezi inline prvky, remark/rehype Markdown)
+  compressHTML: true,
+  markdown: { processor: unified() },
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   site: 'https://agro-svet.cz',
