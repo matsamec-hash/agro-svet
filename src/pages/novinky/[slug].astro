@@ -276,16 +276,11 @@ const jsonLd = {
       {article.title}
     </h1>
 
-    <!-- Author byline (E-E-A-T signal above the fold) -->
+    <!-- Datum aktualizace pod titulkem. Štítek „Vytvořeno s pomocí AI · vydává redakce“ je až
+         na konci článku (.article-ai-note) — na přání; AI štítek webu je navíc v patičce. -->
     <div class="byline" style="display:flex; gap:10px; align-items:center; font-size:13.5px; color:#5a5a62; margin-bottom:28px;">
-      <span>
-        {t(locale, 'nov.byline')} <a href={localizePath(locale, '/redakce/')} style="color:#0A0A0B; font-weight:600; text-decoration:underline; text-decoration-color:#FFEA00; text-decoration-thickness:2px; text-underline-offset:3px;">{t(locale, 'nov.editorial')}</a>
-      </span>
       {article.updated_at && article.updated_at !== article.published_at && (
-        <>
-          <span style="color:#c0c0c8;" aria-hidden="true">·</span>
-          <span>{t(locale, 'nov.updated')} <time datetime={article.updated_at}>{new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.updated_at))}</time></span>
-        </>
+        <span>{t(locale, 'nov.updated')} <time datetime={article.updated_at}>{new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(article.updated_at))}</time></span>
       )}
     </div>
 
@@ -390,6 +385,12 @@ const jsonLd = {
       </a>
     </div>
 
+    {/* Označení textu vytvořeného s pomocí AI (čl. 50 odst. 4 nařízení (EU) 2024/1689) — úplně
+        na konci článku, menším písmem, ale čitelně (kontrast #6b6b73 na bílé ≈ 5:1). */}
+    <p class="article-ai-note">
+      {t(locale, 'nov.byline')} <a href={localizePath(locale, '/redakce/')}>{t(locale, 'nov.editorial')}</a>
+    </p>
+
   </div>
 
   <!-- Related articles (topical clustering signal for Google) -->
@@ -490,6 +491,22 @@ const jsonLd = {
   }
 
   /* Related articles section */
+  .article-ai-note {
+    margin: 32px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid #ebebeb;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6b6b73;
+  }
+  .article-ai-note a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: #FFEA00;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
   .related-section {
     background: #FBFAF4;
     border-top: 2px dashed #EAEAEC;
