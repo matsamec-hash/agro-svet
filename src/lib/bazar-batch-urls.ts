@@ -18,6 +18,18 @@ export function isBazosUrl(url: string): boolean {
 }
 
 /**
+ * Single-import režim: z těla požadavku vytáhne jednu URL, nebo `null`, když to
+ * není (string a) platný odkaz na bazos.cz. Server si tu adresu pak sám stáhne,
+ * takže kontrola musí jít přes `isBazosUrl` (host ukotvený od začátku), ne přes
+ * volný regex — `^https?://.*bazos\.cz` pouštěl i `http://cokoli/?bazos.cz` (SSRF).
+ */
+export function parseSingleUrl(input: unknown): string | null {
+  if (typeof input !== 'string') return null;
+  const url = input.trim();
+  return url && isBazosUrl(url) ? url : null;
+}
+
+/**
  * Parse a pasted blob into a clean list of bazos URLs.
  * - splits on any whitespace or commas
  * - trims, drops empties and non-bazos tokens

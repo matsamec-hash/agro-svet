@@ -5,7 +5,7 @@ import { parseBazosListing } from '../../../../../lib/bazar-import-parse';
 import { suggestCategory, matchBrand } from '../../../../../lib/bazar-import-category';
 import { structureListing } from '../../../../../lib/bazar-import-structure';
 import { createProspectWithDraft, addDraftListing } from '../../../../../lib/bazar-seed';
-import { parseBatchUrls } from '../../../../../lib/bazar-batch-urls';
+import { parseBatchUrls, parseSingleUrl } from '../../../../../lib/bazar-batch-urls';
 import { attributesForCategory } from '../../../../../lib/bazar-attributes';
 
 export const prerender = false;
@@ -183,8 +183,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   // Single režim (zpětně kompatibilní — identická odpověď jako dřív).
-  const url = typeof body?.url === 'string' ? body.url.trim() : '';
-  if (!/^https?:\/\/.*bazos\.cz/i.test(url)) return json({ error: 'Zadejte platný odkaz na bazos.cz' }, 400);
+  const url = parseSingleUrl(body?.url);
+  if (!url) return json({ error: 'Zadejte platný odkaz na bazos.cz' }, 400);
   const r = await importOne(supabase, url, contact, user.id, targetProspectId);
   return r.ok ? json(r) : json({ error: r.error }, r.status);
 };
