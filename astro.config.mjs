@@ -20,7 +20,18 @@ export default defineConfig({
   // login, registrace, foto upload, akce). Vypínáme vestavěnou kontrolu a děláme
   // vlastní CSRF check v middleware.ts (host-based, schéma-necitlivý). NEvypínat
   // bez té middleware kontroly.
-  security: { checkOrigin: false },
+  security: {
+    checkOrigin: false,
+    // ‼️ Astro 7: bez allowedDomains bere request.url jako host `localhost:PORT` a
+    // X-Forwarded-Host/-Proto ignoruje. Naše isCrossSite() v middleware.ts by pak
+    // vrátilo 403 na KAŽDÝ same-origin POST (login, newsletter, upload, kontakt) a
+    // new URL(request.url).origin v e-mailových odkazech by mířil na localhost.
+    // Ověřeno na buildu 20. 11. 2026. Vyžaduje X-Forwarded-Proto: https od Traefiku.
+    allowedDomains: [
+      { hostname: 'agro-svet.cz', protocol: 'https' },
+      { hostname: 'www.agro-svet.cz', protocol: 'https' },
+    ],
+  },
   // 301 redirecty pro legacy URL (Ahrefs 404 report 2026-08-06). Cíle ověřeny 200 na produ.
   // /srovnani/top/* byl starý název žebříčků → dnes /zebricky/* (slugy 1:1).
   redirects: {
@@ -56,5 +67,8 @@ export default defineConfig({
   build: { inlineStylesheets: 'always' },
   vite: {
     plugins: [tailwindcss(), yaml()],
+    // Vite 8 bere výchozí cíl 'baseline-widely-available': místo (min-width:…) píše
+    // (width>=…) a ubírá -webkit- prefixy (starší Safari). Držíme cíl jako v Astro 6.
+    build: { cssTarget: ['chrome107', 'edge107', 'firefox104', 'safari16'] },
   },
 });
