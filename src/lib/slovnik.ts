@@ -2061,10 +2061,10 @@ V CZ dominantní výrobce: Lovochemie (Lovosice) — značky LAV 27. Import z Po
     alias: ['DAM', 'UAN', 'Urea Ammonium Nitrate solution'],
     kategorie: 'hnojivo',
     shortDef: 'DAM 390 je kapalné dusíkaté hnojivo s 30 % N (mix močoviny + ledku amonného + vody). Aplikace přes postřikovač — rychlé, rovnoměrné, bez prachu.',
-    longDef: `DAM 390 (ang. UAN 32 — Urea Ammonium Nitrate solution) je nejpoužívanější kapalné dusíkaté hnojivo v EU. **30 % N v 1 litru = 390 g N/l** (proto "DAM 390"). Složení:
-- 50 % močovina (15 % N celkem)
-- 25 % ledek amonný (7,5 % N celkem)
-- 25 % voda (7,5 % N v amid + nitrát formách)
+    longDef: `DAM 390 (ang. UAN 30 — Urea Ammonium Nitrate solution) je nejpoužívanější kapalné dusíkaté hnojivo v EU. **30 % N hmotnostně, 1 litr váží ~1,3 kg = 390 g N/l** (proto "DAM 390"). Složení podle datového listu výrobce (hmotnostně):
+- ~42 % ledek amonný (dusičnan amonný) — dává 7,5 % amonného a 7,5 % nitrátového N
+- ~33 % močovina — dává 15 % amidického N, tedy polovinu veškerého dusíku
+- ~25 % voda
 
 Aplikace:
 - **Postřikovač s trubkovými tryskami** (ne klasické rozprašovače — DAM by spálil list).
@@ -3262,7 +3262,7 @@ Viz též [[no-till]], [[orba]], [[regenerativni-zemedelstvi]], [[ctf]], [[gps-r
     term: 'Biouhel (biochar)',
     alias: ['biochar', 'agrouhel', 'pyrouhel'],
     kategorie: 'hnojivo',
-    shortDef: 'Biouhel je porézní uhlí získané pyrolýzou biomasy (dřeva, slámy, rostlinných zbytků) bez kyslíku. Přidává se do půdy pro zvýšení úrodnosti, vázání živin a dlouhodobou sekvestraci uhlíku (1000+ let).',
+    shortDef: 'Biouhel je porézní uhlí získané pyrolýzou biomasy (dřeva, slámy, rostlinných zbytků) bez kyslíku. Přidává se do půdy pro zlepšení jejích vlastností, vázání živin a dlouhodobou sekvestraci uhlíku (1000+ let).',
     longDef: `Biouhel (anglicky *biochar*, řec. *bios* + *char* = život + uhlí) je **uhlíkatý materiál vyrobený pyrolýzou** (zahřátím bez kyslíku) biomasy — dřevěné štěpky, sláma, slupky, hnůj, ovocné pecky. Vyzařuje **75–90 % uhlíku** z původní biomasy, který je v půdě **stabilní stovky až tisíce let** — proto silný nástroj sekvestrace CO₂.
 
 **Vznik a inspirace — *Terra Preta*:**
@@ -3305,8 +3305,8 @@ V Amazonii (Brazílie) byly objeveny **temně černé úrodné půdy** *Terra Pr
 - **Náklad na 1 ha** = dávka (t/ha) × cena tuny; při dávce 3–5 t/ha a ceně z údaje výše by to bylo ~13 500–22 500 Kč/ha.
 
 **Návratnost:**
-- **Výnosy**: typicky +5–20 % po 1–3 letech
-- **Úspora hnojiv**: -10–25 % díky CEC
+- **Výnosy**: záleží na půdě. Celosvětová metaanalýza (Jeffery a kol. 2017, přes 1 000 pozorování) našla v mírném pásu v průměru žádný výnosový efekt a v tropických kyselých půdách zhruba +25 %. Biouhel sám výnos nezvýšil ani podle metaanalýzy Ye a kol. (2020); spolu s minerálním hnojivem dal v jednoletých polních pokusech o 15 % víc než samotné hnojivo (interval 11–19 %), z části díky vápnicímu účinku. Pro podmínky ČR doložený efekt nemáme — s ním nekalkulujte.
+- **Úspora hnojiv**: doložená čísla nejsou. Ye a kol. (2020) srovnávají biouhel jako doplněk k hnojivu, ne jako jeho náhradu (efekt záležel hlavně na dodávce dusíku) — úsporu do kalkulace nezapočítávejte.
 - **Carbon credits**: výnos závisí na certifikované metodice a aktuální ceně kreditů — do kalkulace ho nezapočítávejte jako jistotu
 - **Návratnost**: nelze obecně určit — záleží na ceně biouhlu, dávce a skutečném efektu na konkrétní půdě
 
@@ -5952,23 +5952,23 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 
 **Použití:**
 
-**1. Lidská konzumace (45 %):**
+**1. Lidská konzumace:**
 - **Ovesné vločky** (rolled oats) — pařené + válcované zrno
 - **Müsli, granola** — populární zdravá snídaně
 - **Ovesné mléko** (oat milk) — silný trend 2020s, plant-based náhrada
 - **Pekařství** — celozrnný chléb s ovesem
 - **Diet** — oves má **β-glukan** (vláknina, snižuje cholesterol)
 
-**2. Krmivo pro koně (35 %):**
+**2. Krmivo pro koně:**
 - **Tradiční koňské krmivo** — energie + vláknina + dobrá stravitelnost
 - **2–6 kg/kůň/den** podle zatížení
 - **Dostihoví koně** — vyšší podíl ovsa
 
-**3. Krmivo pro skot (15 %):**
+**3. Krmivo pro skot:**
 - **Méně časté** než ječmen
 - **Pro mladé telata** — lehce stravitelné
 
-**4. Zelená pícnina / cover crop (5 %):**
+**4. Zelená pícnina / cover crop:**
 - **Oves jako krycí plodina** — biomasa pro mulč, sekvestraci uhlíku
 - **Oves + vikve smíška** — luskovino-obilná směs pro pícnice
 
@@ -5995,7 +5995,6 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 
 **Bio přístup:**
 - **Oves** je ideální pro bio farmu (málo postřiků, robustní)
-- **Bio cena premium** kompenzuje výnos -20 % vs konvenční
 
 **Ekonomika (příklad-scénář, ne průměr za ČR):**
 - **Náklady** (orientačně): 18 000–24 000 Kč/ha
@@ -6006,7 +6005,6 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 **Trh a trendy:**
 - **Plant-based revolution** — ovesné mléko = 2x růst spotřeby 2020s
 - **Oat milk vs almond milk** — oat má lepší enviromentální stopu, šíření v EU
-- **Bio oves**: rostoucí poptávka pro Hipp dětskou výživu, Müsli zdroje
 
 Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[mezi-plodiny]].`,
     related: ['psenice-ozima', 'zito-ozime', 'ozim-jarin', 'hektolitr', 'mezi-plodiny'],
