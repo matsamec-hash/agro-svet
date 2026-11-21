@@ -3263,7 +3263,7 @@ Viz též [[no-till]], [[orba]], [[regenerativni-zemedelstvi]], [[ctf]], [[gps-r
     alias: ['biochar', 'agrouhel', 'pyrouhel'],
     kategorie: 'hnojivo',
     shortDef: 'Biouhel je porézní uhlí získané pyrolýzou biomasy (dřeva, slámy, rostlinných zbytků) bez kyslíku. Přidává se do půdy pro zlepšení jejích vlastností, vázání živin a dlouhodobou sekvestraci uhlíku (stovky let).',
-    longDef: `Biouhel (anglicky *biochar*, řec. *bios* + *char* = život + uhlí) je **uhlíkatý materiál vyrobený pyrolýzou** (zahřátím bez kyslíku) biomasy — dřevěné štěpky, sláma, slupky, hnůj, ovocné pecky. Při pomalé pyrolýze v něm zůstane zhruba **polovina uhlíku** z původní biomasy (Lehmann a kol. 2006; záleží hlavně na surovině) a převážná část z něj je v půdě **stabilní stovky let** (metaanalýza Wang a kol. 2016: 97 % uhlíku biouhlu s průměrnou dobou setrvání ~556 let) — proto nástroj sekvestrace CO₂.
+    longDef: `Biouhel (anglicky *biochar*, řec. *bios* + *char* = život + uhlí) je **uhlíkatý materiál vyrobený pyrolýzou** (zahřátím bez kyslíku) biomasy — dřevěné štěpky, sláma, slupky, hnůj, ovocné pecky. Při pyrolýze za 350–500 °C v něm zůstane zhruba **polovina uhlíku** z původní biomasy (Lehmann a kol. 2006; záleží hlavně na surovině, u zařízení na bio-olej bývá jen 25–44 %) a převážná část z něj je v půdě **stabilní stovky let** (metaanalýza Wang a kol. 2016: 97 % uhlíku biouhlu s průměrnou dobou setrvání ~556 let) — proto nástroj sekvestrace CO₂.
 
 **Vznik a inspirace — *Terra Preta*:**
 V Amazonii (Brazílie) byly objeveny **temně černé úrodné půdy** *Terra Preta de Índio* obsahující až 80 t/ha biouhle ze starých indiánských ohnišť. **Stáří 500–2000 let**, dodnes mnohonásobně úrodnější než okolní červené latosoly. Inspirace pro moderní biochar.
@@ -5925,7 +5925,7 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
     alias: ['oats', 'Avena sativa', 'jarní oves'],
     kategorie: 'plodiny',
     shortDef: 'Oves jarní je obilnina pěstovaná hlavně v severnějších a chladnějších oblastech ČR. Výnos 3–4 t/ha, cena 2023–2024 ~7 400–7 900 Kč/t. Použití: krmivo pro koně, lidská konzumace (vločky, müsli), zelené krmivo.',
-    longDef: `Oves jarní (lat. *Avena sativa*, ang. *oats*) je **jarní obilnina** s tradicí v CZ na chudších a chladnějších půdách. Plocha v CZ 2024: ~50 000 ha. Trend: rostoucí kvůli zdravotnímu pozitivnímu image (ovesné vločky, plant-based).
+    longDef: `Oves jarní (lat. *Avena sativa*, ang. *oats*) je **jarní obilnina** s tradicí v CZ na chudších a chladnějších půdách. Plocha v CZ 2024: ~53 000 ha (Eurostat); dlouhodobě kolísá (2016–2024 mezi 38 a 58 tis. ha), stálý růst data nepotvrzují.
 
 **Vlastnosti:**
 
@@ -6003,7 +6003,7 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 
 **Trh a trendy:**
 - **Plant-based trend** — ovesné mléko patří mezi rostlinné náhrady mléka; spolehlivé číslo o růstu jeho spotřeby nemáme
-- **Oat milk vs almond milk** — oat má lepší enviromentální stopu, šíření v EU
+- **Oat milk vs almond milk** — na litr spotřebuje ovesné mléko zhruba 8× méně vody než mandlové (48 vs 371 l), ale emise (0,9 vs 0,7 kg CO₂e) i zábor půdy (0,8 vs 0,5 m²) má o něco vyšší; proti kravskému mléku (3,2 kg CO₂e, 9 m² na litr) je výrazně šetrnější (Poore & Nemecek 2018, Science 360:987–992; data Our World in Data)
 
 Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[mezi-plodiny]].`,
     related: ['psenice-ozima', 'zito-ozime', 'ozim-jarin', 'hektolitr', 'mezi-plodiny'],
